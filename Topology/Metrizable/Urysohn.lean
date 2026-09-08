@@ -34,184 +34,106 @@ section RegularSpace
 
 variable (X : Type*) [TopologicalSpace X] [RegularSpace X] [SecondCountableTopology X]
 
-/--
-theorem `exists_isInducing_l_infty` / 定理 `exists_isInducing_l_infty`
+/-- For a regular topological space with second countable topology,
+there exists an inducing map to `l^∞ = ℕ →ᵇ ℝ`. -/
+/-
+**TopologicalSpace.exists_isInducing_l_infty** 是 Mathlib 中的一个定理，位于命名空间 `Topologi
+calSpace`。
+形式化陈述：exists_isInducing_l_infty : exists f : X -> Nat ->ᵇ Real, IsInducing f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.exists_countable_basis`：exists_countable_basis [SecondC
+ountableTopology α] : exists b : Set (Set α), b.Countable ∧ ∅ ∉ b ∧ IsTopologica
+lBasis b
+· 使用定理 `Set.Countable.mono`：∀ {α : Type u} {s₁ s₂ : Set α}, s₁ ⊆ s₂ → s₂.Countab
+le → s₁.Countable
+· 使用定理 `Set.sep_subset`：sep_subset (s : Set α) (p : α -> Prop) : { x in s | p x 
+} subseteq s
+· 使用定理 `Set.Countable.prod`：∀ {α : Type u} {β : Type v} {s : Set α} {t : Set β},
+ s.Countable → t.Countable → (s ×ˢ t).Countable
+· 使用定理 `Disjoint.mono_right`：Disjoint.mono_right (h : b <= c) : Disjoint a c -> 
+Disjoint a b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.compl_subset_compl`：compl_subset_compl : sᶜ subseteq tᶜ ↔ t subseteq
+ s
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `disjoint_compl_right`：disjoint_compl_right : Disjoint a aᶜ
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `le_hasSum`：∀ {ι : Type u_1} {α : Type u_3} {L : SummationFilter ι} [inst
+ : AddCommMonoid α] [inst_1 : Preorder α]   [IsOrderedAddMonoid α] [inst_3 : To…
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `SummationFilter.instNeBotUnconditional`：∀ (β : Type u_2), (SummationFilt
+er.unconditional β).NeBot
+· 使用定理 `SummationFilter.instLeAtTopUnconditional`：∀ (β : Type u_2), (SummationFi
+lter.unconditional β).LeAtTop
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Summable.tendsto_cofinite_zero`：∀ {α : Type u_1} {G : Type u_4} [inst : 
+TopologicalSpace G] [inst_1 : AddCommGroup G] [IsTopologicalAddGroup G]   {f : α
+ → G}, Summable f → …
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
+· 使用定理 `HasSum.summable`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid α
+] [inst_1 : TopologicalSpace α] {L : SummationFilter β}   {f : β → α} {a : α}, H
+asSum…
+· 使用定理 `exists_continuous_zero_one_of_isClosed`：exists_continuous_zero_one_of_is
+Closed [NormalSpace X] {s t : Set X} (hs : IsClosed s) (ht : IsClosed t) (hd : D
+isjoint s t) : exists f : C(…
+· 使用定理 `CompletelyNormalSpace.toNormalSpace`：∀ {X : Type u_1} [inst : Topologica
+lSpace X] [CompletelyNormalSpace X], NormalSpace X
+· 使用定理 `CompletelyNormalSpace.of_regularSpace_secondCountableTopology`：∀ {X : Ty
+pe u_1} [inst : TopologicalSpace X] [RegularSpace X] [SecondCountableTopology X]
+, CompletelyNormalSpace X
+· 使用定理 `isClosed_closure`：isClosed_closure : IsClosed (closure s)
+· 使用定理 `IsOpen.isClosed_compl`：∀ {X : Type u} [inst : TopologicalSpace X] {s : S
+et X}, IsOpen s → IsClosed sᶜ
+· 使用定理 `TopologicalSpace.IsTopologicalBasis.isOpen`：∀ {α : Type u} [t : Topologi
+calSpace α] {s : Set α} {b : Set (Set α)},   TopologicalSpace.IsTopologicalBasis
+ b → s ∈ b → IsOpen s
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+（共 81 条，此处仅展示前 30 条）
 
-English:
-theorem exists_isInducing_l_infty
-  statement: exists f : X -> Nat ->ᵇ Real, IsInducing f
-  proof: by
-  -- Choose a countable basis, and consider the set `s` of pairs of set `(U, V)` such that `U ∈ B`,
-  -- `V ∈ B`, and `closure U ⊆ V`.
-  rcases exists_countable_basis X with ⟨B, hBc, -, hB⟩
-  let s : Set (Set X × Set X) := { UV in B ×ˢ B | closure UV.1 subseteq UV.2 }
-  -- `s` is a countable set.
-  have : Encodable s := ((hBc.prod hBc).mono (sep_subset _ _)).toEncodable
-  -- We don't have the space of bounded (possibly discontinuous) functions, so we equip `s`
-  -- with the discrete topology and deal with `s →ᵇ ℝ` instead.
-  let : TopologicalSpace s := ⊥
-  have : DiscreteTopology s := ⟨rfl⟩
-  rsuffices ⟨f, hf⟩ : exists f : X -> s ->ᵇ Real, IsInducing f
-  · exact ⟨fun x => (f x).extend (Encodable.encode' s) 0,
-      (BoundedContinuousFunction.isometry_extend (Encodable.encode' s)
-        (0 : Nat ->ᵇ Real)).isEmbedding.isInducing.comp hf⟩
-  have hd : forall UV : s, Disjoint (closure UV.1.1) UV.1.2ᶜ :=
-    fun UV => disjoint_compl_right.mono_right (compl_subset_compl.2 UV.2.2)
-  -- Choose a sequence of `εₙ > 0`, `n : s`, that is bounded above by `1` and tends to zero
-  -- along the `cofinite` filter.
-  obtain ⟨ε, ε01, hε⟩ : exists ε : s -> Real, (forall UV, ε UV in Ioc (0 : Real) 1) ∧ Tendsto ε cofinite (𝓝 0) := by
-    rcases posSumOfEncodable zero_lt_one s with ⟨ε, ε0, c, hεc, hc1⟩
-    refine ⟨ε, fun UV => ⟨ε0 UV, ?_⟩, hεc.summable.tendsto_cofinite_zero⟩
-    exact (le_hasSum hεc UV fun _ _ => (ε0 _).le).trans hc1
-  /- For each `UV = (U, V) ∈ s` we use Urysohn's lemma to choose a function `f UV` that is equal to
-    zero on `U` and is equal to `ε UV` on the complement to `V`. -/
-  have : forall UV : s, exists f : C(X, Real),
-      EqOn f 0 UV.1.1 ∧ EqOn f (fun _ => ε UV) UV.1.2ᶜ ∧ forall x, f x in Icc 0 (ε UV) := by
-    intro UV
-    rcases exists_continuous_zero_one_of_isClosed isClosed_closure
-        (hB.isOpen UV.2.1.2).isClosed_compl (hd UV) with
-      ⟨f, hf₀, hf₁, hf01⟩
-    exact ⟨ε UV • f, fun x hx => by simp [hf₀ (subset_closure hx)], fun x hx => by simp [hf₁ hx],
-      fun x => ⟨mul_nonneg (ε01 _).1.le (hf01 _).1, mul_le_of_le_one_right (ε01 _).1.le (hf01 _).2⟩⟩
-  choose f hf0 hfε hf0ε using this
-  have hf01 : forall UV x, f UV x in Icc (0 : Real) 1 :=
-    fun UV x => Icc_subset_Icc_right (ε01 _).2 (hf0ε _ _)
-  -- The embedding is given by `F x UV = f UV x`.
-  set F : X -> s ->ᵇ Real := fun x =>
-    ⟨⟨fun UV => f UV x, continuous_of_discreteTopology⟩, 1,
-      fun UV₁ UV₂ => Real.dist_le_of_mem_Icc_01 (hf01 _ _) (hf01 _ _)⟩
-  have hF : forall x UV, F x UV = f UV x := fun _ _ => rfl
-  refine ⟨F, isInducing_iff_nhds.2 fun x => le_antisymm ?_ ?_⟩
-  · /- First we prove that `F` is continuous. Given `δ > 0`, consider the set `T` of `(U, V) ∈ s`
-    such that `ε (U, V) ≥ δ`. Since `ε` tends to zero, `T` is finite. Since each `f` is continuous,
-    we can choose a neighborhood such that `dist (F y (U, V)) (F x (U, V)) ≤ δ` for any
-    `(U, V) ∈ T`. For `(U, V) ∉ T`, the same inequality is true because both `F y (U, V)` and
-    `F x (U, V)` belong to the interval `[0, ε (U, V)]`. -/
-    refine (nhds_basis_closedBall.comap _).ge_iff.2 fun δ δ0 => ?_
-    have h_fin : { UV : s | δ <= ε UV }.Finite := by simpa only [← not_lt] using! hε (gt_mem_nhds δ0)
-    have : forallᶠ y in 𝓝 x, forall UV, δ <= ε UV -> dist (F y UV) (F x UV) <= δ := by
-      refine (eventually_all_finite h_fin).2 fun UV _ => ?_
-      exact (f UV).continuous.tendsto x (closedBall_mem_nhds _ δ0)
-    refine this.mono fun y hy => (BoundedContinuousFunction.dist_le δ0.le).2 fun UV => ?_
-    rcases le_total δ (ε UV) with hle | hle
-    exacts [hy _ hle, (Real.dist_le_of_mem_Icc (hf0ε _ _) (hf0ε _ _)).trans (by rwa [sub_zero])]
-  · /- Finally, we prove that each neighborhood `V` of `x : X`
-    includes a preimage of a neighborhood of `F x` under `F`.
-    Without loss of generality, `V` belongs to `B`.
-    Choose `U ∈ B` such that `x ∈ V` and `closure V ⊆ U`.
-    Then the preimage of the `(ε (U, V))`-neighborhood of `F x` is included by `V`. -/
-    refine ((nhds_basis_ball.comap _).le_basis_iff hB.nhds_hasBasis).2 ?_
-    rintro V ⟨hVB, hxV⟩
-    rcases hB.exists_closure_subset (hB.mem_nhds hVB hxV) with ⟨U, hUB, hxU, hUV⟩
-    set UV : ↥s := ⟨(U, V), ⟨hUB, hVB⟩, hUV⟩
-    refine ⟨ε UV, (ε01 UV).1, fun y (hy : dist (F y) (F x) < ε UV) => ?_⟩
-    replace hy : dist (F y UV) (F x UV) < ε UV :=
-      (BoundedContinuousFunction.dist_coe_le_dist _).trans_lt hy
-    contrapose! hy
-    rw [hF]; rw [hF]; rw [hfε UV hy]; rw [hf0 UV hxU]; rw [Pi.zero_apply]; rw [dist_zero_right]
-    exact le_abs_self _
-
-中文:
-定理 存在_isInducing_l_infty
-  结论: 存在 f : X -> 自然数 ->ᵇ 实数, 是Inducing f
-  证明: by
-  -- Choose a countable basis, and consider the set `s` of pairs of set `(U, V)` such that `U ∈ B`,
-  -- `V ∈ B`, and `closure U ⊆ V`.
-  rcases exists_countable_basis X with ⟨B, hBc, -, hB⟩
-  let s : Set (Set X × Set X) := { UV in B ×ˢ B | closure UV.1 subseteq UV.2 }
-  -- `s` is a countable set.
-  have : Encodable s := ((hBc.prod hBc).mono (sep_subset _ _)).toEncodable
-  -- We don't have the space of bounded (possibly discontinuous) functions, so we equip `s`
-  -- with the discrete topology and deal with `s →ᵇ ℝ` instead.
-  let : TopologicalSpace s := ⊥
-  have : DiscreteTopology s := ⟨rfl⟩
-  rsuffices ⟨f, hf⟩ : exists f : X -> s ->ᵇ Real, IsInducing f
-  · exact ⟨fun x => (f x).extend (Encodable.encode' s) 0,
-      (BoundedContinuousFunction.isometry_extend (Encodable.encode' s)
-        (0 : Nat ->ᵇ Real)).isEmbedding.isInducing.comp hf⟩
-  have hd : forall UV : s, Disjoint (closure UV.1.1) UV.1.2ᶜ :=
-    fun UV => disjoint_compl_right.mono_right (compl_subset_compl.2 UV.2.2)
-  -- Choose a sequence of `εₙ > 0`, `n : s`, that is bounded above by `1` and tends to zero
-  -- along the `cofinite` filter.
-  obtain ⟨ε, ε01, hε⟩ : exists ε : s -> Real, (forall UV, ε UV in Ioc (0 : Real) 1) ∧ Tendsto ε cofinite (𝓝 0) := by
-    rcases posSumOfEncodable zero_lt_one s with ⟨ε, ε0, c, hεc, hc1⟩
-    refine ⟨ε, fun UV => ⟨ε0 UV, ?_⟩, hεc.summable.tendsto_cofinite_zero⟩
-    exact (le_hasSum hεc UV fun _ _ => (ε0 _).le).trans hc1
-  /- For each `UV = (U, V) ∈ s` we use Urysohn's lemma to choose a function `f UV` that is equal to
-    zero on `U` and is equal to `ε UV` on the complement to `V`. -/
-  have : forall UV : s, exists f : C(X, Real),
-      EqOn f 0 UV.1.1 ∧ EqOn f (fun _ => ε UV) UV.1.2ᶜ ∧ forall x, f x in Icc 0 (ε UV) := by
-    intro UV
-    rcases exists_continuous_zero_one_of_isClosed isClosed_closure
-        (hB.isOpen UV.2.1.2).isClosed_compl (hd UV) with
-      ⟨f, hf₀, hf₁, hf01⟩
-    exact ⟨ε UV • f, fun x hx => by simp [hf₀ (subset_closure hx)], fun x hx => by simp [hf₁ hx],
-      fun x => ⟨mul_nonneg (ε01 _).1.le (hf01 _).1, mul_le_of_le_one_right (ε01 _).1.le (hf01 _).2⟩⟩
-  choose f hf0 hfε hf0ε using this
-  have hf01 : forall UV x, f UV x in Icc (0 : Real) 1 :=
-    fun UV x => Icc_subset_Icc_right (ε01 _).2 (hf0ε _ _)
-  -- The embedding is given by `F x UV = f UV x`.
-  set F : X -> s ->ᵇ Real := fun x =>
-    ⟨⟨fun UV => f UV x, continuous_of_discreteTopology⟩, 1,
-      fun UV₁ UV₂ => Real.dist_le_of_mem_Icc_01 (hf01 _ _) (hf01 _ _)⟩
-  have hF : forall x UV, F x UV = f UV x := fun _ _ => rfl
-  refine ⟨F, isInducing_iff_nhds.2 fun x => le_antisymm ?_ ?_⟩
-  · /- First we prove that `F` is continuous. Given `δ > 0`, consider the set `T` of `(U, V) ∈ s`
-    such that `ε (U, V) ≥ δ`. Since `ε` tends to zero, `T` is finite. Since each `f` is continuous,
-    we can choose a neighborhood such that `dist (F y (U, V)) (F x (U, V)) ≤ δ` for any
-    `(U, V) ∈ T`. For `(U, V) ∉ T`, the same inequality is true because both `F y (U, V)` and
-    `F x (U, V)` belong to the interval `[0, ε (U, V)]`. -/
-    refine (nhds_basis_closedBall.comap _).ge_iff.2 fun δ δ0 => ?_
-    have h_fin : { UV : s | δ <= ε UV }.Finite := by simpa only [← not_lt] using! hε (gt_mem_nhds δ0)
-    have : forallᶠ y in 𝓝 x, forall UV, δ <= ε UV -> dist (F y UV) (F x UV) <= δ := by
-      refine (eventually_all_finite h_fin).2 fun UV _ => ?_
-      exact (f UV).continuous.tendsto x (closedBall_mem_nhds _ δ0)
-    refine this.mono fun y hy => (BoundedContinuousFunction.dist_le δ0.le).2 fun UV => ?_
-    rcases le_total δ (ε UV) with hle | hle
-    exacts [hy _ hle, (Real.dist_le_of_mem_Icc (hf0ε _ _) (hf0ε _ _)).trans (by rwa [sub_zero])]
-  · /- Finally, we prove that each neighborhood `V` of `x : X`
-    includes a preimage of a neighborhood of `F x` under `F`.
-    Without loss of generality, `V` belongs to `B`.
-    Choose `U ∈ B` such that `x ∈ V` and `closure V ⊆ U`.
-    Then the preimage of the `(ε (U, V))`-neighborhood of `F x` is included by `V`. -/
-    refine ((nhds_basis_ball.comap _).le_basis_iff hB.nhds_hasBasis).2 ?_
-    rintro V ⟨hVB, hxV⟩
-    rcases hB.exists_closure_subset (hB.mem_nhds hVB hxV) with ⟨U, hUB, hxU, hUV⟩
-    set UV : ↥s := ⟨(U, V), ⟨hUB, hVB⟩, hUV⟩
-    refine ⟨ε UV, (ε01 UV).1, fun y (hy : dist (F y) (F x) < ε UV) => ?_⟩
-    replace hy : dist (F y UV) (F x UV) < ε UV :=
-      (BoundedContinuousFunction.dist_coe_le_dist _).trans_lt hy
-    contrapose! hy
-    rw [hF]; rw [hF]; rw [hfε UV hy]; rw [hf0 UV hxU]; rw [Pi.zero_apply]; rw [dist_zero_right]
-    exact le_abs_self _
+--- 原说明 ---
+For a regular topological space with second countable topology,
+there exists an inducing map to `l^∞ = ℕ →ᵇ ℝ`.
 -/
-theorem exists_isInducing_l_infty : exists f : X -> Nat ->ᵇ Real, IsInducing f := by
+theorem exists_isInducing_l_infty : ∃ f : X → ℕ →ᵇ ℝ, IsInducing f := by
   -- Choose a countable basis, and consider the set `s` of pairs of set `(U, V)` such that `U ∈ B`,
   -- `V ∈ B`, and `closure U ⊆ V`.
   rcases exists_countable_basis X with ⟨B, hBc, -, hB⟩
-  let s : Set (Set X × Set X) := { UV in B ×ˢ B | closure UV.1 subseteq UV.2 }
+  let s : Set (Set X × Set X) := { UV ∈ B ×ˢ B | closure UV.1 ⊆ UV.2 }
   -- `s` is a countable set.
   have : Encodable s := ((hBc.prod hBc).mono (sep_subset _ _)).toEncodable
   -- We don't have the space of bounded (possibly discontinuous) functions, so we equip `s`
   -- with the discrete topology and deal with `s →ᵇ ℝ` instead.
   let : TopologicalSpace s := ⊥
   have : DiscreteTopology s := ⟨rfl⟩
-  rsuffices ⟨f, hf⟩ : exists f : X -> s ->ᵇ Real, IsInducing f
+  rsuffices ⟨f, hf⟩ : ∃ f : X → s →ᵇ ℝ, IsInducing f
   · exact ⟨fun x => (f x).extend (Encodable.encode' s) 0,
       (BoundedContinuousFunction.isometry_extend (Encodable.encode' s)
-        (0 : Nat ->ᵇ Real)).isEmbedding.isInducing.comp hf⟩
-  have hd : forall UV : s, Disjoint (closure UV.1.1) UV.1.2ᶜ :=
+        (0 : ℕ →ᵇ ℝ)).isEmbedding.isInducing.comp hf⟩
+  have hd : ∀ UV : s, Disjoint (closure UV.1.1) UV.1.2ᶜ :=
     fun UV => disjoint_compl_right.mono_right (compl_subset_compl.2 UV.2.2)
   -- Choose a sequence of `εₙ > 0`, `n : s`, that is bounded above by `1` and tends to zero
   -- along the `cofinite` filter.
-  obtain ⟨ε, ε01, hε⟩ : exists ε : s -> Real, (forall UV, ε UV in Ioc (0 : Real) 1) ∧ Tendsto ε cofinite (𝓝 0) := by
+  obtain ⟨ε, ε01, hε⟩ : ∃ ε : s → ℝ, (∀ UV, ε UV ∈ Ioc (0 : ℝ) 1) ∧ Tendsto ε cofinite (𝓝 0) := by
     rcases posSumOfEncodable zero_lt_one s with ⟨ε, ε0, c, hεc, hc1⟩
     refine ⟨ε, fun UV => ⟨ε0 UV, ?_⟩, hεc.summable.tendsto_cofinite_zero⟩
     exact (le_hasSum hεc UV fun _ _ => (ε0 _).le).trans hc1
   /- For each `UV = (U, V) ∈ s` we use Urysohn's lemma to choose a function `f UV` that is equal to
     zero on `U` and is equal to `ε UV` on the complement to `V`. -/
-  have : forall UV : s, exists f : C(X, Real),
-      EqOn f 0 UV.1.1 ∧ EqOn f (fun _ => ε UV) UV.1.2ᶜ ∧ forall x, f x in Icc 0 (ε UV) := by
+  have : ∀ UV : s, ∃ f : C(X, ℝ),
+      EqOn f 0 UV.1.1 ∧ EqOn f (fun _ => ε UV) UV.1.2ᶜ ∧ ∀ x, f x ∈ Icc 0 (ε UV) := by
     intro UV
     rcases exists_continuous_zero_one_of_isClosed isClosed_closure
         (hB.isOpen UV.2.1.2).isClosed_compl (hd UV) with
@@ -219,13 +141,13 @@ theorem exists_isInducing_l_infty : exists f : X -> Nat ->ᵇ Real, IsInducing f
     exact ⟨ε UV • f, fun x hx => by simp [hf₀ (subset_closure hx)], fun x hx => by simp [hf₁ hx],
       fun x => ⟨mul_nonneg (ε01 _).1.le (hf01 _).1, mul_le_of_le_one_right (ε01 _).1.le (hf01 _).2⟩⟩
   choose f hf0 hfε hf0ε using this
-  have hf01 : forall UV x, f UV x in Icc (0 : Real) 1 :=
+  have hf01 : ∀ UV x, f UV x ∈ Icc (0 : ℝ) 1 :=
     fun UV x => Icc_subset_Icc_right (ε01 _).2 (hf0ε _ _)
   -- The embedding is given by `F x UV = f UV x`.
-  set F : X -> s ->ᵇ Real := fun x =>
+  set F : X → s →ᵇ ℝ := fun x =>
     ⟨⟨fun UV => f UV x, continuous_of_discreteTopology⟩, 1,
       fun UV₁ UV₂ => Real.dist_le_of_mem_Icc_01 (hf01 _ _) (hf01 _ _)⟩
-  have hF : forall x UV, F x UV = f UV x := fun _ _ => rfl
+  have hF : ∀ x UV, F x UV = f UV x := fun _ _ => rfl
   refine ⟨F, isInducing_iff_nhds.2 fun x => le_antisymm ?_ ?_⟩
   · /- First we prove that `F` is continuous. Given `δ > 0`, consider the set `T` of `(U, V) ∈ s`
     such that `ε (U, V) ≥ δ`. Since `ε` tends to zero, `T` is finite. Since each `f` is continuous,
@@ -233,8 +155,8 @@ theorem exists_isInducing_l_infty : exists f : X -> Nat ->ᵇ Real, IsInducing f
     `(U, V) ∈ T`. For `(U, V) ∉ T`, the same inequality is true because both `F y (U, V)` and
     `F x (U, V)` belong to the interval `[0, ε (U, V)]`. -/
     refine (nhds_basis_closedBall.comap _).ge_iff.2 fun δ δ0 => ?_
-    have h_fin : { UV : s | δ <= ε UV }.Finite := by simpa only [← not_lt] using! hε (gt_mem_nhds δ0)
-    have : forallᶠ y in 𝓝 x, forall UV, δ <= ε UV -> dist (F y UV) (F x UV) <= δ := by
+    have h_fin : { UV : s | δ ≤ ε UV }.Finite := by simpa only [← not_lt] using! hε (gt_mem_nhds δ0)
+    have : ∀ᶠ y in 𝓝 x, ∀ UV, δ ≤ ε UV → dist (F y UV) (F x UV) ≤ δ := by
       refine (eventually_all_finite h_fin).2 fun UV _ => ?_
       exact (f UV).continuous.tendsto x (closedBall_mem_nhds _ δ0)
     refine this.mono fun y hy => (BoundedContinuousFunction.dist_le δ0.le).2 fun UV => ?_
@@ -253,12 +175,22 @@ theorem exists_isInducing_l_infty : exists f : X -> Nat ->ᵇ Real, IsInducing f
     replace hy : dist (F y UV) (F x UV) < ε UV :=
       (BoundedContinuousFunction.dist_coe_le_dist _).trans_lt hy
     contrapose! hy
-    rw [hF]; rw [hF]; rw [hfε UV hy]; rw [hf0 UV hxU]; rw [Pi.zero_apply]; rw [dist_zero_right]
+    rw [hF, hF, hfε UV hy, hf0 UV hxU, Pi.zero_apply, dist_zero_right]
     exact le_abs_self _
 
 /-- *Urysohn's metrization theorem* (Tychonoff's version):
 a regular topological space with second countable topology `X` is metrizable,
 i.e., there exists a pseudometric space structure that generates the same topology. -/
+/-
+**TopologicalSpace.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+*Urysohn's metrization theorem* (Tychonoff's version):
+a regular topological space with second countable topology `X` is metrizable,
+i.e., there exists a pseudometric space structure that generates the same topolo
+gy.
+-/
 instance (priority := 90) PseudoMetrizableSpace.of_regularSpace_secondCountableTopology :
     PseudoMetrizableSpace X :=
   let ⟨_, hf⟩ := exists_isInducing_l_infty X
@@ -268,29 +200,47 @@ end RegularSpace
 
 variable (X : Type*) [TopologicalSpace X] [T3Space X] [SecondCountableTopology X]
 
-/--
-theorem `exists_embedding_l_infty` / 定理 `exists_embedding_l_infty`
+/-- A T₃ topological space with second countable topology can be embedded into `l^∞ = ℕ →ᵇ ℝ`. -/
+/-
+**TopologicalSpace.exists_embedding_l_infty** 是 Mathlib 中的一个定理，位于命名空间 `Topologic
+alSpace`。
+形式化陈述：exists_embedding_l_infty : exists f : X -> Nat ->ᵇ Real, IsEmbedding f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.exists_isInducing_l_infty`：exists_isInducing_l_infty : 
+exists f : X -> Nat ->ᵇ Real, IsInducing f
+· 使用定理 `T3Space.toRegularSpace`：∀ {X : Type u} {inst : TopologicalSpace X} [self
+ : T3Space X], RegularSpace X
+· 使用定理 `Topology.IsInducing.isEmbedding`：∀ {X : Type u_1} {Y : Type u_2} [inst :
+ TopologicalSpace X] [inst_1 : TopologicalSpace Y] [T0Space X] {f : X → Y},   To
+pology.IsInducing f →…
+· 使用定理 `T3Space.toT0Space`：∀ {X : Type u} {inst : TopologicalSpace X} [self : T3
+Space X], T0Space X
 
-English:
-theorem exists_embedding_l_infty
-  statement: exists f : X -> Nat ->ᵇ Real, IsEmbedding f
-  proof: let ⟨f, hf⟩ := exists_isInducing_l_infty X; ⟨f, hf.isEmbedding⟩
-
-中文:
-定理 存在_embedding_l_infty
-  结论: 存在 f : X -> 自然数 ->ᵇ 实数, 是嵌入 f
-  证明: let ⟨f, hf⟩ := exists_isInducing_l_infty X; ⟨f, hf.isEmbedding⟩
-
-Depends on / 依赖: exists_isInducing_l_infty, hf.isEmbedding, isEmbedding
+--- 原说明 ---
+A T₃ topological space with second countable topology can be embedded into `l^∞ 
+= ℕ →ᵇ ℝ`.
 -/
-theorem exists_embedding_l_infty : exists f : X -> Nat ->ᵇ Real, IsEmbedding f :=
+theorem exists_embedding_l_infty : ∃ f : X → ℕ →ᵇ ℝ, IsEmbedding f :=
   let ⟨f, hf⟩ := exists_isInducing_l_infty X; ⟨f, hf.isEmbedding⟩
 
 /-- *Urysohn's metrization theorem* (Tychonoff's version): a T₃ topological space with second
 countable topology `X` is metrizable, i.e., there exists a metric space structure that generates the
 same topology. -/
+/-
+**TopologicalSpace.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+*Urysohn's metrization theorem* (Tychonoff's version): a T₃ topological space wi
+th second
+countable topology `X` is metrizable, i.e., there exists a metric space structur
+e that generates the
+same topology.
+-/
 instance (priority := 90) metrizableSpace_of_t3_secondCountable : MetrizableSpace X :=
   let ⟨_, hf⟩ := exists_embedding_l_infty X
   hf.metrizableSpace
 
 end TopologicalSpace
+

@@ -34,477 +34,364 @@ Among the basic results, we show that
 namespace Group
 open Subgroup
 
-variable {G G' : Type*} [Group G] [Group G'] {H K : Subgroup G} (f : G ->* G')
+variable {G G' : Type*} [Group G] [Group G'] {H K : Subgroup G} (f : G →* G')
 
 variable (G) in
-/--
-Definition of `IsPerfect` / `IsPerfect` 的定义
+/-- A group `G` is perfect if `G` equals its commutator subgroup `⁅G, G⁆`. -/
+/-
+**Group.IsPerfect** 是 Mathlib 中的一个归纳类型，位于命名空间 `Group`。
+形式化陈述：(G : Type u_1) → [Group G] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsPerfect
-  parameters: where
-  axioms and operations (1):
-    - commutator_eq_top : commutator G = (⊤ : Subgroup G)
-
-中文:
-类 是完美
-  参数: where
-  公理与运算 (1 个):
-    - commutator_eq_top : commutator G = (⊤ : 子群 G)
+--- 原说明 ---
+A group `G` is perfect if `G` equals its commutator subgroup `⁅G, G⁆`.
 -/
 class IsPerfect where
   /-- The commutator of the group `G` with itself is the whole group `G`. -/
   commutator_eq_top : commutator G = (⊤ : Subgroup G)
 
 attribute [simp] IsPerfect.commutator_eq_top
-
-/--
-lemma `isPerfect_def` / 引理 `isPerfect_def`
-
-English:
-lemma isPerfect_def
-  statement: IsPerfect G ↔ commutator G = ⊤
-  proof: ⟨fun h => h.commutator_eq_top, fun h => ⟨h⟩⟩
-
-中文:
-引理 isPerfect_def
-  结论: 是完美 G ↔ commutator G = ⊤
-  证明: ⟨fun h => h.commutator_eq_top, fun h => ⟨h⟩⟩
-
-Depends on / 依赖: commutator_eq_top, h.commutator_eq_top
+/-
+**Group.isPerfect_def** 是 Mathlib 中的一个引理，位于命名空间 `Group`。
+形式化陈述：isPerfect_def : IsPerfect G ↔ commutator G = ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Group.IsPerfect.commutator_eq_top`：∀ {G : Type u_1} {inst : Group G} [se
+lf : Group.IsPerfect G], commutator G = ⊤
 -/
 lemma isPerfect_def : IsPerfect G ↔ commutator G = ⊤ :=
-  ⟨fun h => h.commutator_eq_top, fun h => ⟨h⟩⟩
-
-/--
-lemma `_root_.Subgroup.isPerfect_iff` / 引理 `_root_.Subgroup.isPerfect_iff`
-
-English:
-lemma _root_.Subgroup.isPerfect_iff
-  statement: IsPerfect H ↔ ⁅H, H⁆ = H
-  proof: by
-  rw [Group.isPerfect_def]; rw [← map_subtype_inj]; rw [map_subtype_commutator]; rw [← MonoidHom.range_eq_map]; rw [range_subtype]
-
-中文:
-引理 _root_.子群.isPerfect_iff
-  结论: 是完美 H ↔ ⁅H, H⁆ = H
-  证明: by
-  rw [Group.isPerfect_def]; rw [← map_subtype_inj]; rw [map_subtype_commutator]; rw [← MonoidHom.range_eq_map]; rw [range_subtype]
-
-Depends on / 依赖: Group.isPerfect_def, MonoidHom, MonoidHom.range_eq_map, isPerfect_def, map_subtype_commutator, map_subtype_inj, range_eq_map, range_subtype
+  ⟨fun h ↦ h.commutator_eq_top, fun h ↦ ⟨h⟩⟩
+/-
+**Group._root_.Subgroup.isPerfect_iff** 是 Mathlib 中的一个引理，位于命名空间 `Group`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.Subgroup.isPerfect_iff : IsPerfect H ↔ ⁅H, H⁆ = H := by
-  rw [Group.isPerfect_def]; rw [← map_subtype_inj]; rw [map_subtype_commutator]; rw [← MonoidHom.range_eq_map]; rw [range_subtype]
-
-/--
-lemma `_root_.Subgroup.commutator_eq_self` / 引理 `_root_.Subgroup.commutator_eq_self`
-
-English:
-lemma _root_.Subgroup.commutator_eq_self
-  given: [hH : IsPerfect H]
-  statement: ⁅H, H⁆ = H
-  proof: isPerfect_iff.mp hH
-
-中文:
-引理 _root_.子群.commutator_eq_self
-  条件: [hH : 是完美 H]
-  结论: ⁅H, H⁆ = H
-  证明: isPerfect_iff.mp hH
-
-Depends on / 依赖: isPerfect_iff, isPerfect_iff.mp
+  rw [Group.isPerfect_def, ← map_subtype_inj,
+    map_subtype_commutator, ← MonoidHom.range_eq_map, range_subtype]
+/-
+**Group._root_.Subgroup.commutator_eq_self** 是 Mathlib 中的一个引理，位于命名空间 `Group`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.Subgroup.commutator_eq_self [hH : IsPerfect H] : ⁅H, H⁆ = H :=
   isPerfect_iff.mp hH
 
 namespace IsPerfect
 
-/--
-lemma `mem_commutator` / 引理 `mem_commutator`
-
-English:
-lemma mem_commutator
-  given: [hP : IsPerfect G] {g : G}
-  statement: g in commutator G
-  proof: by
-  simp
-
-中文:
-引理 mem_commutator
-  条件: [hP : 是完美 G] {g : G}
-  结论: g in commutator G
-  证明: by
-  simp
+/-
+**Group.IsPerfect.mem_commutator** 是 Mathlib 中的一个引理，位于命名空间 `Group.IsPerfect`。
+形式化陈述：mem_commutator [hP : IsPerfect G] {g : G} : g in commutator G
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Group.IsPerfect.commutator_eq_top`：∀ {G : Type u_1} {inst : Group G} [se
+lf : Group.IsPerfect G], commutator G = ⊤
 -/
-lemma mem_commutator [hP : IsPerfect G] {g : G} : g in commutator G := by
+lemma mem_commutator [hP : IsPerfect G] {g : G} : g ∈ commutator G := by
   simp
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The trivial group is perfect. -/
+/-
+**Group.IsPerfect.** 是 Mathlib 中的一个实例，位于命名空间 `Group.IsPerfect`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [Subsingleton
-  signature: G] : IsPerfect G where
-  body: Subsingleton.elim _ _
-
-中文:
-实例 [子单例
-  签名: G] : 是完美 G where
-  定义体: Subsingleton.elim _ _
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim
+--- 原说明 ---
+The trivial group is perfect.
 -/
 instance [Subsingleton G] : IsPerfect G where
   commutator_eq_top := Subsingleton.elim _ _
-
-/--
-theorem `top_iff` / 定理 `top_iff`
-
-English:
-theorem top_iff
-  statement: IsPerfect (⊤ : Subgroup G) ↔ IsPerfect G
-  proof: by
-  rw [isPerfect_def]; rw [isPerfect_def]; rw [← map_subtype_inj]; rw [map_subtype_commutator]; rw [← MonoidHom.range_eq_map]; rw [subtype_range]; rw [commutator_def]
-
-中文:
-定理 top_iff
-  结论: 是完美 (⊤ : 子群 G) ↔ 是完美 G
-  证明: by
-  rw [isPerfect_def]; rw [isPerfect_def]; rw [← map_subtype_inj]; rw [map_subtype_commutator]; rw [← MonoidHom.range_eq_map]; rw [subtype_range]; rw [commutator_def]
-
-Depends on / 依赖: MonoidHom, MonoidHom.range_eq_map, commutator_def, isPerfect_def, map_subtype_commutator, map_subtype_inj, range_eq_map, subtype_range
+/-
+**Group.IsPerfect.top_iff** 是 Mathlib 中的一个定理，位于命名空间 `Group.IsPerfect`。
+形式化陈述：top_iff : IsPerfect (⊤ : Subgroup G) ↔ IsPerfect G
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Group.isPerfect_def`：isPerfect_def : IsPerfect G ↔ commutator G = ⊤
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subgroup.map_subtype_inj`：map_subtype_inj {H : Subgroup G} {K L : Subgro
+up H} : K.map H.subtype = L.map H.subtype ↔ K = L
+· 使用引理 `Subgroup.map_subtype_commutator`：Subgroup.map_subtype_commutator (H : Su
+bgroup G) : (_root_.commutator H).map H.subtype = ⁅H, H⁆
+· 使用定理 `MonoidHom.range_eq_map`：range_eq_map (f : G ->* N) : f.range = (⊤ : Subg
+roup G).map f
+· 使用定理 `Subgroup.subtype_range`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup 
+G), H.subtype.range = H
+· 使用引理 `commutator_def`：commutator_def : commutator G = ⁅(⊤ : Subgroup G), ⊤⁆
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem top_iff : IsPerfect (⊤ : Subgroup G) ↔ IsPerfect G := by
-  rw [isPerfect_def]; rw [isPerfect_def]; rw [← map_subtype_inj]; rw [map_subtype_commutator]; rw [← MonoidHom.range_eq_map]; rw [subtype_range]; rw [commutator_def]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsPerfect
-  signature: G] : IsPerfect (⊤
-  body: top_iff.mpr inferInstance
-
-中文:
-实例 [是完美
-  签名: G] : 是完美 (⊤
-  定义体: top_iff.mpr inferInstance
-
-Depends on / 依赖: top_iff, top_iff.mpr
+  rw [isPerfect_def, isPerfect_def, ← map_subtype_inj,
+    map_subtype_commutator, ← MonoidHom.range_eq_map, subtype_range, commutator_def]
+/-
+**Group.IsPerfect.** 是 Mathlib 中的一个实例，位于命名空间 `Group.IsPerfect`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsPerfect G] : IsPerfect (⊤ : Subgroup G) :=
   top_iff.mpr inferInstance
 
 variable (G) in
-/--
-lemma `not_isSolvable` / 引理 `not_isSolvable`
-
-English:
-lemma not_isSolvable
-  given: [Nontrivial G] [IsPerfect G]
-  statement: ¬ IsSolvable G
-  proof: by
-  intro h
-  exact (h.commutator_lt_top_of_nontrivial G).ne commutator_eq_top
-
-中文:
-引理 not_isSolvable
-  条件: [非平凡 G] [是完美 G]
-  结论: ¬ 是可解 G
-  证明: by
-  intro h
-  exact (h.commutator_lt_top_of_nontrivial G).ne commutator_eq_top
-
-Depends on / 依赖: commutator_eq_top, commutator_lt_top_of_nontrivial, h.commutator_lt_top_of_nontrivial
+/-
+**Group.IsPerfect.not_isSolvable** 是 Mathlib 中的一个引理，位于命名空间 `Group.IsPerfect`。
+形式化陈述：not_isSolvable [Nontrivial G] [IsPerfect G] : ¬ IsSolvable G
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `Group.IsSolvable.commutator_lt_top_of_nontrivial`：∀ (G : Type u_1) [inst
+ : Group G] [hG : Group.IsSolvable G] [Nontrivial G], commutator G < ⊤
+· 使用定理 `Group.IsPerfect.commutator_eq_top`：∀ {G : Type u_1} {inst : Group G} [se
+lf : Group.IsPerfect G], commutator G = ⊤
 -/
 lemma not_isSolvable [Nontrivial G] [IsPerfect G] : ¬ IsSolvable G := by
   intro h
   exact (h.commutator_lt_top_of_nontrivial G).ne commutator_eq_top
 
 variable (G) in
-/--
-lemma `not_isNilpotent` / 引理 `not_isNilpotent`
-
-English:
-lemma not_isNilpotent
-  given: [Nontrivial G] [IsPerfect G]
-  statement: ¬ IsNilpotent G
-  proof: fun _ => (not_isSolvable G) IsNilpotent.to_isSolvable
-
-中文:
-引理 not_isNilpotent
-  条件: [非平凡 G] [是完美 G]
-  结论: ¬ 是幂零 G
-  证明: fun _ => (not_isSolvable G) IsNilpotent.to_isSolvable
-
-Depends on / 依赖: IsNilpotent, IsNilpotent.to_isSolvable, not_isSolvable, to_isSolvable
+/-
+**Group.IsPerfect.not_isNilpotent** 是 Mathlib 中的一个引理，位于命名空间 `Group.IsPerfect`。
+形式化陈述：not_isNilpotent [Nontrivial G] [IsPerfect G] : ¬ IsNilpotent G
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Group.IsPerfect.not_isSolvable`：not_isSolvable [Nontrivial G] [IsPerfect
+ G] : ¬ IsSolvable G
+· 使用定理 `IsNilpotent.to_isSolvable`：∀ {G : Type u_1} [inst : Group G] [h : Group.
+IsNilpotent G], Group.IsSolvable G
 -/
 lemma not_isNilpotent [Nontrivial G] [IsPerfect G] : ¬ IsNilpotent G :=
-  fun _ => (not_isSolvable G) IsNilpotent.to_isSolvable
+  fun _ ↦ (not_isSolvable G) IsNilpotent.to_isSolvable
 
 open scoped IsMulCommutative in
 variable (G) in
-/--
-lemma `not_isMulCommutative` / 引理 `not_isMulCommutative`
-
-English:
-lemma not_isMulCommutative
-  given: [Nontrivial G] [IsPerfect G]
-  statement: ¬ IsMulCommutative G
-  proof: fun _ => (not_isSolvable G) inferInstance
-
-中文:
-引理 not_isMulCommutative
-  条件: [非平凡 G] [是完美 G]
-  结论: ¬ 是MulCommutative G
-  证明: fun _ => (not_isSolvable G) inferInstance
-
-Depends on / 依赖: not_isSolvable
+/-
+**Group.IsPerfect.not_isMulCommutative** 是 Mathlib 中的一个引理，位于命名空间 `Group.IsPerfec
+t`。
+形式化陈述：not_isMulCommutative [Nontrivial G] [IsPerfect G] : ¬ IsMulCommutative G
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Group.IsPerfect.not_isSolvable`：not_isSolvable [Nontrivial G] [IsPerfect
+ G] : ¬ IsSolvable G
+· 使用定理 `IsNilpotent.to_isSolvable`：∀ {G : Type u_1} [inst : Group G] [h : Group.
+IsNilpotent G], Group.IsSolvable G
+· 使用定理 `CommGroup.isNilpotent`：∀ {G : Type u_2} [inst : CommGroup G], Group.IsNi
+lpotent G
 -/
 lemma not_isMulCommutative [Nontrivial G] [IsPerfect G] : ¬ IsMulCommutative G :=
-  fun _ => (not_isSolvable G) inferInstance
-
-/--
-Instance `subsingleton_of_isMulCommutative` / 实例 `subsingleton_of_isMulCommutative`
-
-English:
-instance subsingleton_of_isMulCommutative
-  body: by
-  by_contra! h_not_subsingleton
-  exact not_isMulCommutative G h_comm
-
-中文:
-实例 subsingleton_of_isMulCommutative
-  定义体: by
-  by_contra! h_not_subsingleton
-  exact not_isMulCommutative G h_comm
-
-Depends on / 依赖: h_comm, h_not_subsingleton, not_isMulCommutative
+  fun _ ↦ (not_isSolvable G) inferInstance
+/-
+**Group.IsPerfect.subsingleton_of_isMulCommutative** 是 Mathlib 中的一个实例，位于命名空间 `Gr
+oup.IsPerfect`。
+形式化陈述：subsingleton_of_isMulCommutative [hG : IsPerfect G] [h_comm : IsMulCommuta
+tive G] : Subsingleton G
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用引理 `Group.IsPerfect.not_isMulCommutative`：not_isMulCommutative [Nontrivial G
+] [IsPerfect G] : ¬ IsMulCommutative G
 -/
 instance subsingleton_of_isMulCommutative
     [hG : IsPerfect G] [h_comm : IsMulCommutative G] : Subsingleton G := by
   by_contra! h_not_subsingleton
   exact not_isMulCommutative G h_comm
-
-/--
-lemma `map` / 引理 `map`
-
-English:
-lemma map
-  given: [IsPerfect H]
-  statement: IsPerfect (H.map f)
-  proof: by
-  rw [isPerfect_iff]; rw [← map_commutator]; rw [commutator_eq_self]
-
-中文:
-引理 map
-  条件: [是完美 H]
-  结论: 是完美 (H.map f)
-  证明: by
-  rw [isPerfect_iff]; rw [← map_commutator]; rw [commutator_eq_self]
+/-
+**Group.IsPerfect.map** 是 Mathlib 中的一个定理，位于命名空间 `Group.IsPerfect`。
+形式化陈述：∀ {G : Type u_1} {G' : Type u_2} [inst : Group G] [inst_1 : Group G'] {H :
+ Subgroup G} (f : G →* G')   [Group.IsPerfect ↥H], Group.IsPerfect ↥(Subgroup.ma
+p f H)
+参数：f : G →* G'；Subgroup.map f H。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.isPerfect_iff`：∀ {G : Type u_1} [inst : Group G] {H : Subgroup 
+G}, Group.IsPerfect ↥H ↔ ⁅H, H⁆ = H
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subgroup.map_commutator`：map_commutator (f : G ->* G') : map f ⁅H₁, H₂⁆ 
+= ⁅map f H₁, map f H₂⁆
+· 使用定理 `Subgroup.commutator_eq_self`：∀ {G : Type u_1} [inst : Group G] {H : Subg
+roup G} [hH : Group.IsPerfect ↥H], ⁅H, H⁆ = H
 -/
 protected lemma map [IsPerfect H] : IsPerfect (H.map f) := by
-  rw [isPerfect_iff]; rw [← map_commutator]; rw [commutator_eq_self]
-
-/--
-lemma `range` / 引理 `range`
-
-English:
-lemma range
-  given: [IsPerfect G]
-  statement: IsPerfect f.range
-  proof: by
-  rw [MonoidHom.range_eq_map]
-  exact IsPerfect.map _
-
-中文:
-引理 range
-  条件: [是完美 G]
-  结论: 是完美 f.range
-  证明: by
-  rw [MonoidHom.range_eq_map]
-  exact IsPerfect.map _
+  rw [isPerfect_iff, ← map_commutator, commutator_eq_self]
+/-
+**Group.IsPerfect.range** 是 Mathlib 中的一个定理，位于命名空间 `Group.IsPerfect`。
+形式化陈述：∀ {G : Type u_1} {G' : Type u_2} [inst : Group G] [inst_1 : Group G'] (f :
+ G →* G') [Group.IsPerfect G],   Group.IsPerfect ↥f.range
+参数：f : G →* G'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonoidHom.range_eq_map`：range_eq_map (f : G ->* N) : f.range = (⊤ : Subg
+roup G).map f
+· 使用定理 `Group.IsPerfect.map`：∀ {G : Type u_1} {G' : Type u_2} [inst : Group G] [
+inst_1 : Group G'] {H : Subgroup G} (f : G →* G')   [Group.IsPerfect ↥H], Group.
+IsPerfect…
+· 使用定理 `Group.IsPerfect.instSubtypeMemSubgroupTop`：∀ {G : Type u_1} [inst : Grou
+p G] [Group.IsPerfect G], Group.IsPerfect ↥⊤
 -/
 protected lemma range [IsPerfect G] : IsPerfect f.range := by
   rw [MonoidHom.range_eq_map]
   exact IsPerfect.map _
 
 variable {f} in
-/--
-lemma `ofSurjective` / 引理 `ofSurjective`
-
-English:
-lemma ofSurjective
-  given: [IsPerfect G] (hf : Function.Surjective f)
-  statement: IsPerfect G'
-  proof: by
-  rw [← top_iff]; rw [← MonoidHom.range_eq_top_of_surjective f hf]
-  exact IsPerfect.range f
-
-中文:
-引理 ofSurjective
-  条件: [是完美 G] (hf : 函数.满射 f)
-  结论: 是完美 G'
-  证明: by
-  rw [← top_iff]; rw [← MonoidHom.range_eq_top_of_surjective f hf]
-  exact IsPerfect.range f
-
-Depends on / 依赖: IsPerfect, IsPerfect.range, MonoidHom, MonoidHom.range_eq_top_of_surjective, range_eq_top_of_surjective, top_iff
+/-
+**Group.IsPerfect.ofSurjective** 是 Mathlib 中的一个引理，位于命名空间 `Group.IsPerfect`。
+形式化陈述：ofSurjective [IsPerfect G] (hf : Function.Surjective f) : IsPerfect G'
+参数：hf : Function.Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Group.IsPerfect.top_iff`：top_iff : IsPerfect (⊤ : Subgroup G) ↔ IsPerfec
+t G
+· 使用定理 `MonoidHom.range_eq_top_of_surjective`：range_eq_top_of_surjective {N} [Gr
+oup N] (f : G ->* N) (hf : Function.Surjective f) : f.range = (⊤ : Subgroup N)
+· 使用定理 `Group.IsPerfect.range`：∀ {G : Type u_1} {G' : Type u_2} [inst : Group G]
+ [inst_1 : Group G'] (f : G →* G') [Group.IsPerfect G],   Group.IsPerfect ↥f.ran
+ge
 -/
 lemma ofSurjective [IsPerfect G] (hf : Function.Surjective f) : IsPerfect G' := by
-  rw [← top_iff]; rw [← MonoidHom.range_eq_top_of_surjective f hf]
+  rw [← top_iff, ← MonoidHom.range_eq_top_of_surjective f hf]
   exact IsPerfect.range f
-
-/--
-Instance `instQuotientSubgroup` / 实例 `instQuotientSubgroup`
-
-English:
-instance instQuotientSubgroup
-  signature: [H.Normal] [IsPerfect G]
-  body: ofSurjective (QuotientGroup.mk'_surjective H)
-
-中文:
-实例 instQuotientSubgroup
-  签名: [H.正规] [是完美 G]
-  定义体: ofSurjective (QuotientGroup.mk'_surjective H)
-
-Depends on / 依赖: QuotientGroup, QuotientGroup.mk, _surjective, ofSurjective
+/-
+**Group.IsPerfect.instQuotientSubgroup** 是 Mathlib 中的一个实例，位于命名空间 `Group.IsPerfec
+t`。
+形式化陈述：instQuotientSubgroup [H.Normal] [IsPerfect G] : IsPerfect (G ⧸ H)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `Group.IsPerfect.ofSurjective`：ofSurjective [IsPerfect G] (hf : Function.
+Surjective f) : IsPerfect G'
+· 使用定理 `QuotientGroup.mk'_surjective`：∀ {G : Type u_1} [inst : Group G] (N : Sub
+group G) [nN : N.Normal], Function.Surjective ⇑(QuotientGroup.mk' N)
 -/
 instance instQuotientSubgroup [H.Normal] [IsPerfect G] : IsPerfect (G ⧸ H) :=
   ofSurjective (QuotientGroup.mk'_surjective H)
 
 variable (G) in
 @[simp]
-/--
-theorem `derivedSeries_eq_top` / 定理 `derivedSeries_eq_top`
-
-English:
-theorem derivedSeries_eq_top
-  given: [IsPerfect G] (n : Nat)
-  statement: derivedSeries G n = ⊤
-  proof: by
-  match n with
-  | 0 => simp
-  | n + 1 =>
-    rw [derivedSeries_succ]; rw [derivedSeries_eq_top]; rw [commutator_eq_self]
-
-@[simp]
-
-中文:
-定理 derivedSeries_eq_top
-  条件: [是完美 G] (n : 自然数)
-  结论: derivedSeries G n = ⊤
-  证明: by
-  match n with
-  | 0 => simp
-  | n + 1 =>
-    rw [derivedSeries_succ]; rw [derivedSeries_eq_top]; rw [commutator_eq_self]
-
-@[simp]
-
-Depends on / 依赖: commutator_eq_self, derivedSeries_eq_top, derivedSeries_succ
+/-
+**Group.IsPerfect.derivedSeries_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `Group.IsPerfec
+t`。
+形式化陈述：derivedSeries_eq_top [IsPerfect G] (n : Nat) : derivedSeries G n = ⊤
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem derivedSeries_eq_top [IsPerfect G] (n : Nat) : derivedSeries G n = ⊤ := by
+theorem derivedSeries_eq_top [IsPerfect G] (n : ℕ) : derivedSeries G n = ⊤ := by
   match n with
   | 0 => simp
   | n + 1 =>
-    rw [derivedSeries_succ]; rw [derivedSeries_eq_top]; rw [commutator_eq_self]
+    rw [derivedSeries_succ, derivedSeries_eq_top, commutator_eq_self]
 
 @[simp]
-/--
-theorem `lowerCentralSeries_eq_top` / 定理 `lowerCentralSeries_eq_top`
-
-English:
-theorem lowerCentralSeries_eq_top
-  given: (H : Subgroup G) [IsPerfect H] (n : Nat)
-  proof: by
-  match n with
-  | 0 => simp
-  | n + 1 =>
-    rw [Subgroup.lowerCentralSeries_succ]; rw [lowerCentralSeries_eq_top]; rw [commutator_eq_self]
-
-中文:
-定理 lowerCentralSeries_eq_top
-  条件: (H : 子群 G) [是完美 H] (n : 自然数)
-  证明: by
-  match n with
-  | 0 => simp
-  | n + 1 =>
-    rw [Subgroup.lowerCentralSeries_succ]; rw [lowerCentralSeries_eq_top]; rw [commutator_eq_self]
-
-Depends on / 依赖: Subgroup, Subgroup.lowerCentralSeries_succ, commutator_eq_self, lowerCentralSeries_eq_top, lowerCentralSeries_succ
+/-
+**Group.IsPerfect.lowerCentralSeries_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `Group.IsP
+erfect`。
+形式化陈述：lowerCentralSeries_eq_top (H : Subgroup G) [IsPerfect H] (n : Nat) : H.low
+erCentralSeries n = H
+参数：H : Subgroup G；n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lowerCentralSeries_eq_top (H : Subgroup G) [IsPerfect H] (n : Nat) :
+theorem lowerCentralSeries_eq_top (H : Subgroup G) [IsPerfect H] (n : ℕ) :
     H.lowerCentralSeries n = H := by
   match n with
   | 0 => simp
   | n + 1 =>
-    rw [Subgroup.lowerCentralSeries_succ]; rw [lowerCentralSeries_eq_top]; rw [commutator_eq_self]
+    rw [Subgroup.lowerCentralSeries_succ, lowerCentralSeries_eq_top, commutator_eq_self]
 
 variable (G) in
 @[simp]
-/--
-theorem `upperCentralSeries_eq_center` / 定理 `upperCentralSeries_eq_center`
-
-English:
-theorem upperCentralSeries_eq_center
-  given: [IsPerfect G] {n : Nat} (hn : n != 0)
-  proof: by
-  rw [← Subgroup.upperCentralSeries_one]; rw [eq_comm]
-apply Subgroup.upperCentralSeries.eq_ge_of_eq_succ by lia
-apply le_antisymm Subgroup.upperCentralSeries_mono G one_le_two
-  rw [Subgroup.upperCentralSeries_one]; rw [← commutator_top_right_eq_bot_iff_le_center]; rw [← commutator_eq_top]; rw [commutator_comm]; rw [commutator_def]
-  suffices ⁅⁅Subgroup.upperCentralSeries G 2, ⊤⁆, ⊤⁆ = ⊥ from
-    commutator_commutator_eq_bot_of_rotate (by simpa [commutator_comm]) this
-  rw [commutator_top_right_eq_bot_iff_le_center]; rw [← Subgroup.upperCentralSeries_one]
-  apply commutator_upperCentralSeries_top_le
-
-中文:
-定理 upperCentralSeries_eq_center
-  条件: [是完美 G] {n : 自然数} (hn : n != 0)
-  证明: by
-  rw [← Subgroup.upperCentralSeries_one]; rw [eq_comm]
-apply Subgroup.upperCentralSeries.eq_ge_of_eq_succ by lia
-apply le_antisymm Subgroup.upperCentralSeries_mono G one_le_two
-  rw [Subgroup.upperCentralSeries_one]; rw [← commutator_top_right_eq_bot_iff_le_center]; rw [← commutator_eq_top]; rw [commutator_comm]; rw [commutator_def]
-  suffices ⁅⁅Subgroup.upperCentralSeries G 2, ⊤⁆, ⊤⁆ = ⊥ from
-    commutator_commutator_eq_bot_of_rotate (by simpa [commutator_comm]) this
-  rw [commutator_top_right_eq_bot_iff_le_center]; rw [← Subgroup.upperCentralSeries_one]
-  apply commutator_upperCentralSeries_top_le
-
-Depends on / 依赖: Subgroup, Subgroup.upperCentralSeries, Subgroup.upperCentralSeries.eq_ge_of_eq_succ, Subgroup.upperCentralSeries_mono, Subgroup.upperCentralSeries_one, commutator_comm, commutator_commutator_eq_bot_of_rotate, commutator_def, commutator_eq_top, commutator_top_right_eq_bot_i, commutator_top_right_eq_bot_iff_le_center, eq_comm, eq_ge_of_eq_succ, le_antisymm, one_le_two, upperCentralSeries, upperCentralSeries_mono, upperCentralSeries_one
+/-
+**Group.IsPerfect.upperCentralSeries_eq_center** 是 Mathlib 中的一个定理，位于命名空间 `Group.
+IsPerfect`。
+形式化陈述：upperCentralSeries_eq_center [IsPerfect G] {n : Nat} (hn : n != 0) : Subgr
+oup.upperCentralSeries G n = center G
+参数：hn : n != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subgroup.upperCentralSeries_one`：upperCentralSeries_one : upperCentralSe
+ries G 1 = center G
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Subgroup.upperCentralSeries.eq_ge_of_eq_succ`：∀ {G : Type u_1} [inst : G
+roup G] {a b : ℕ},   a ≤ b →     Subgroup.upperCentralSeries G a = Subgroup.uppe
+rCentralSeries G (a + 1) →       S…
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Subgroup.upperCentralSeries_mono`：upperCentralSeries_mono : Monotone (up
+perCentralSeries G)
+· 使用引理 `one_le_two`：one_le_two [LE α] [ZeroLEOneClass α] [AddLeftMono α] : (1 : 
+α) <= 2
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Subgroup.commutator_top_right_eq_bot_iff_le_center`：commutator_top_right
+_eq_bot_iff_le_center : ⁅H, (⊤ : Subgroup G)⁆ = ⊥ ↔ H <= center G
+· 使用定理 `Group.IsPerfect.commutator_eq_top`：∀ {G : Type u_1} {inst : Group G} [se
+lf : Group.IsPerfect G], commutator G = ⊤
+· 使用定理 `Subgroup.commutator_comm`：commutator_comm : ⁅H₁, H₂⁆ = ⁅H₂, H₁⁆
+· 使用引理 `commutator_def`：commutator_def : commutator G = ⁅(⊤ : Subgroup G), ⊤⁆
+· 使用定理 `Subgroup.commutator_upperCentralSeries_top_le`：commutator_upperCentralSe
+ries_top_le (n : Nat) : ⁅upperCentralSeries G (n + 1), ⊤⁆ <= upperCentralSeries 
+G n
+· 使用定理 `Subgroup.commutator_commutator_eq_bot_of_rotate`：commutator_commutator_e
+q_bot_of_rotate (h1 : ⁅⁅H₂, H₃⁆, H₁⁆ = ⊥) (h2 : ⁅⁅H₃, H₁⁆, H₂⁆ = ⊥) : ⁅⁅H₁, H₂⁆,
+ H₃⁆ = ⊥
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
-theorem upperCentralSeries_eq_center [IsPerfect G] {n : Nat} (hn : n != 0) :
+theorem upperCentralSeries_eq_center [IsPerfect G] {n : ℕ} (hn : n ≠ 0) :
     Subgroup.upperCentralSeries G n = center G := by
-  rw [← Subgroup.upperCentralSeries_one]; rw [eq_comm]
-apply Subgroup.upperCentralSeries.eq_ge_of_eq_succ by lia
-apply le_antisymm Subgroup.upperCentralSeries_mono G one_le_two
-  rw [Subgroup.upperCentralSeries_one]; rw [← commutator_top_right_eq_bot_iff_le_center]; rw [← commutator_eq_top]; rw [commutator_comm]; rw [commutator_def]
+  rw [← Subgroup.upperCentralSeries_one, eq_comm]
+  apply Subgroup.upperCentralSeries.eq_ge_of_eq_succ <| by lia
+  apply le_antisymm <| Subgroup.upperCentralSeries_mono G one_le_two
+  rw [Subgroup.upperCentralSeries_one, ← commutator_top_right_eq_bot_iff_le_center,
+    ← commutator_eq_top, commutator_comm, commutator_def]
   suffices ⁅⁅Subgroup.upperCentralSeries G 2, ⊤⁆, ⊤⁆ = ⊥ from
     commutator_commutator_eq_bot_of_rotate (by simpa [commutator_comm]) this
-  rw [commutator_top_right_eq_bot_iff_le_center]; rw [← Subgroup.upperCentralSeries_one]
+  rw [commutator_top_right_eq_bot_iff_le_center, ← Subgroup.upperCentralSeries_one]
   apply commutator_upperCentralSeries_top_le
 
 variable (G) in
-/--
-theorem `center_quotient_center_eq_bot` / 定理 `center_quotient_center_eq_bot`
+/-- **Grün's lemma** -/
+/-
+**Group.IsPerfect.center_quotient_center_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 `Group
+.IsPerfect`。
+形式化陈述：center_quotient_center_eq_bot [IsPerfect G] : center (G ⧸ center G) = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subgroup.upperCentralSeries_one`：upperCentralSeries_one : upperCentralSe
+ries G 1 = center G
+· 使用定理 `Subgroup.comap_eq_ker_of_surjective`：comap_eq_ker_of_surjective {f : G -
+>* N} (hf : Surjective f) {H : Subgroup N} : H.comap f = f.ker ↔ H = ⊥
+· 使用定理 `QuotientGroup.mk'_surjective`：∀ {G : Type u_1} [inst : Group G] (N : Sub
+group G) [nN : N.Normal], Function.Surjective ⇑(QuotientGroup.mk' N)
+· 使用定理 `QuotientGroup.ker_mk'`：ker_mk' : MonoidHom.ker (QuotientGroup.mk' N : G 
+->* G ⧸ N) = N
+· 使用定理 `Subgroup.comap_upperCentralSeries_quotient_center`：comap_upperCentralSer
+ies_quotient_center (n : Nat) : comap (mk' (center G)) (upperCentralSeries (G ⧸ 
+center G) n) = upperCentralSeries G n.s…
+· 使用定理 `Group.IsPerfect.upperCentralSeries_eq_center`：upperCentralSeries_eq_cent
+er [IsPerfect G] {n : Nat} (hn : n != 0) : Subgroup.upperCentralSeries G n = cen
+ter G
 
-English:
-theorem center_quotient_center_eq_bot
-  given: [IsPerfect G]
-  statement: center (G ⧸ center G) = ⊥
-  proof: by
-  rw [← Subgroup.upperCentralSeries_one (G ⧸ center G)]; rw [← comap_eq_ker_of_surjective QuotientGroup.mk'_surjective _]; rw [QuotientGroup.ker_mk']; rw [Subgroup.comap_upperCentralSeries_quotient_center]; rw [upperCentralSeries_eq_center G by lia]
-
-中文:
-定理 center_quotient_center_eq_bot
-  条件: [是完美 G]
-  结论: center (G ⧸ center G) = ⊥
-  证明: by
-  rw [← Subgroup.upperCentralSeries_one (G ⧸ center G)]; rw [← comap_eq_ker_of_surjective QuotientGroup.mk'_surjective _]; rw [QuotientGroup.ker_mk']; rw [Subgroup.comap_upperCentralSeries_quotient_center]; rw [upperCentralSeries_eq_center G by lia]
-
-Depends on / 依赖: QuotientGroup, QuotientGroup.ker_mk, QuotientGroup.mk, Subgroup, Subgroup.comap_upperCentralSeries_quotient_center, Subgroup.upperCentralSeries_one, _surjective, center, comap_eq_ker_of_surjective, comap_upperCentralSeries_quotient_center, ker_mk, upperCentralSeries_eq_center, upperCentralSeries_one
+--- 原说明 ---
+**Grün's lemma**
 -/
 theorem center_quotient_center_eq_bot [IsPerfect G] : center (G ⧸ center G) = ⊥ := by
-  rw [← Subgroup.upperCentralSeries_one (G ⧸ center G)]; rw [← comap_eq_ker_of_surjective QuotientGroup.mk'_surjective _]; rw [QuotientGroup.ker_mk']; rw [Subgroup.comap_upperCentralSeries_quotient_center]; rw [upperCentralSeries_eq_center G by lia]
+  rw [← Subgroup.upperCentralSeries_one (G ⧸ center G),
+    ← comap_eq_ker_of_surjective <| QuotientGroup.mk'_surjective _, QuotientGroup.ker_mk',
+    Subgroup.comap_upperCentralSeries_quotient_center, upperCentralSeries_eq_center G <| by lia]
 
 end Group.IsPerfect
+

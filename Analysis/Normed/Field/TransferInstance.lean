@@ -24,23 +24,20 @@ variable {α β : Type*}
 
 namespace Equiv
 
-/--
-Definition of `normedField` / `normedField` 的定义
+/-- Transfer a `NormedField` across an `Equiv` -/
+/-
+**Equiv.normedField** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → [NormedField β] → α ≃ β → NormedField α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 
-English:
-abbreviation normedField
-  signature: [NormedField β] (e : α ≃ β)
-  body: letI := e.field
-  .induced α β e.ringEquiv e.injective
-
-中文:
-缩写 normedField
-  签名: [赋范域 β] (e : α ≃ β)
-  定义体: letI := e.field
-  .induced α β e.ringEquiv e.injective
+--- 原说明 ---
+Transfer a `NormedField` across an `Equiv`
 -/
 protected abbrev normedField [NormedField β] (e : α ≃ β) : NormedField α :=
   letI := e.field
   .induced α β e.ringEquiv e.injective
 
 end Equiv
+

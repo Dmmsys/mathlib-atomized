@@ -27,41 +27,19 @@ variable {X Y : Type*}
   [TopologicalSpace X] [WeaklyLocallyCompactSpace X] [SigmaCompactSpace X]
   [TopologicalSpace Y]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [PseudoMetrizableSpace
-  signature: Y] : PseudoMetrizableSpace C(X, Y)
-  body: let := pseudoMetrizableSpaceUniformity Y
-  have := pseudoMetrizableSpaceUniformity_countably_generated Y
-  inferInstance
-
-中文:
-实例 [PseudoMetrizable空间
-  签名: Y] : PseudoMetrizable空间 C(X, Y)
-  定义体: let := pseudoMetrizableSpaceUniformity Y
-  have := pseudoMetrizableSpaceUniformity_countably_generated Y
-  inferInstance
-
-Depends on / 依赖: pseudoMetrizableSpaceUniformity, pseudoMetrizableSpaceUniformity_countably_generated
+/-
+**ContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [PseudoMetrizableSpace Y] : PseudoMetrizableSpace C(X, Y) :=
   let := pseudoMetrizableSpaceUniformity Y
   have := pseudoMetrizableSpaceUniformity_countably_generated Y
   inferInstance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [MetrizableSpace
-  signature: Y] : MetrizableSpace C(X, Y) where
-
-中文:
-实例 [Metrizable空间
-  签名: Y] : Metrizable空间 C(X, Y) where
+/-
+**ContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [MetrizableSpace Y] : MetrizableSpace C(X, Y) where
 
 end ContinuousMap
+

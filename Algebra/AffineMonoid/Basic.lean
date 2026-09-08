@@ -16,38 +16,31 @@ monoids.
 
 public section
 
-/--
-Definition of `abbrev` / `abbrev` 的定义
+/-- An affine monoid is a finitely generated cancellative torsion-free commutative monoid. -/
+/-
+**abbrev** 是 Mathlib 中的一个类，位于命名空间 ``。
+形式化陈述：abbrev IsAffineAddMonoid (M : Type*) [AddCommMonoid M] : Prop
+参数：M : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class abbrev
-  parameters: IsAffineAddMonoid (M : Type*) [AddCommMonoid M]
-  (no additional axioms)
-
-中文:
-类 abbrev
-  参数: IsAffineAddMonoid (M : 类型) [加法交换幺半群 M]
-  (无附加公理)
-
-Depends on / 依赖: AddMonoid, AddMonoid.FG, IsAddTorsionFree, IsCancelAdd
+--- 原说明 ---
+An affine monoid is a finitely generated cancellative torsion-free commutative m
+onoid.
 -/
 class abbrev IsAffineAddMonoid (M : Type*) [AddCommMonoid M] : Prop :=
   IsCancelAdd M, AddMonoid.FG M, IsAddTorsionFree M
 
 /-- An affine monoid is a finitely generated cancellative torsion-free commutative monoid. -/
 @[to_additive]
-/--
-Definition of `abbrev` / `abbrev` 的定义
+/-
+**abbrev** 是 Mathlib 中的一个类，位于命名空间 ``。
+形式化陈述：abbrev IsAffineAddMonoid (M : Type*) [AddCommMonoid M] : Prop
+参数：M : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class abbrev
-  parameters: IsAffineMonoid (M : Type*) [CommMonoid M]
-  (no additional axioms)
-
-中文:
-类 abbrev
-  参数: IsAffineMonoid (M : 类型) [交换幺半群 M]
-  (无附加公理)
+--- 原说明 ---
+An affine monoid is a finitely generated cancellative torsion-free commutative m
+onoid.
 -/
 class abbrev IsAffineMonoid (M : Type*) [CommMonoid M] : Prop :=
   IsCancelMul M, Monoid.FG M, IsMulTorsionFree M

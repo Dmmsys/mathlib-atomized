@@ -42,108 +42,58 @@ Actions on the opposite type just act on the underlying type.
 
 namespace MulOpposite
 
-/--
-Instance `instSMulZeroClass` / 实例 `instSMulZeroClass`
-
-English:
-instance instSMulZeroClass
-  signature: [AddMonoid α] [SMulZeroClass M α]
-  body: unop_injective smul_zero _
-
-中文:
-实例 instSMulZeroClass
-  签名: [加法幺半群 α] [SMulZero类 M α]
-  定义体: unop_injective smul_zero _
-
-Depends on / 依赖: smul_zero, unop_injective
+/-
+**MulOpposite.instSMulZeroClass** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instSMulZeroClass [AddMonoid α] [SMulZeroClass M α] : SMulZeroClass M αᵐᵒᵖ
+ where smul_zero _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSMulZeroClass [AddMonoid α] [SMulZeroClass M α] : SMulZeroClass M αᵐᵒᵖ where
-smul_zero _ := unop_injective smul_zero _
-
-/--
-Instance `instSMulWithZero` / 实例 `instSMulWithZero`
-
-English:
-instance instSMulWithZero
-  signature: [MonoidWithZero M] [AddMonoid α] [SMulWithZero M α]
-  body: unop_injective zero_smul _ _
-
-中文:
-实例 instSMulWithZero
-  签名: [带零幺半群 M] [加法幺半群 α] [带零标量乘法 M α]
-  定义体: unop_injective zero_smul _ _
-
-Depends on / 依赖: unop_injective, zero_smul
+  smul_zero _ := unop_injective <| smul_zero _
+/-
+**MulOpposite.instSMulWithZero** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instSMulWithZero [MonoidWithZero M] [AddMonoid α] [SMulWithZero M α] : SMu
+lWithZero M αᵐᵒᵖ where zero_smul _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSMulWithZero [MonoidWithZero M] [AddMonoid α] [SMulWithZero M α] :
     SMulWithZero M αᵐᵒᵖ where
-zero_smul _ := unop_injective zero_smul _ _
-
-/--
-Instance `instMulActionWithZero` / 实例 `instMulActionWithZero`
-
-English:
-instance instMulActionWithZero
-  signature: [MonoidWithZero M] [AddMonoid α] [MulActionWithZero M α]
-  body: unop_injective smul_zero _
-zero_smul _ := unop_injective zero_smul _ _
-
-中文:
-实例 instMulActionWithZero
-  签名: [带零幺半群 M] [加法幺半群 α] [带零乘法作用 M α]
-  定义体: unop_injective smul_zero _
-zero_smul _ := unop_injective zero_smul _ _
-
-Depends on / 依赖: smul_zero, unop_injective
+  zero_smul _ := unop_injective <| zero_smul _ _
+/-
+**MulOpposite.instMulActionWithZero** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instMulActionWithZero [MonoidWithZero M] [AddMonoid α] [MulActionWithZero 
+M α] : MulActionWithZero M αᵐᵒᵖ where smul_zero _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMulActionWithZero [MonoidWithZero M] [AddMonoid α] [MulActionWithZero M α] :
     MulActionWithZero M αᵐᵒᵖ where
-smul_zero _ := unop_injective smul_zero _
-zero_smul _ := unop_injective zero_smul _ _
-
-/--
-Instance `instDistribMulAction` / 实例 `instDistribMulAction`
-
-English:
-instance instDistribMulAction
-  signature: [Monoid M] [AddMonoid α] [DistribMulAction M α]
-  body: unop_injective smul_add _ _ _
-smul_zero _ := unop_injective smul_zero _
-
-中文:
-实例 instDistribMulAction
-  签名: [幺半群 M] [加法幺半群 α] [分配乘法作用 M α]
-  定义体: unop_injective smul_add _ _ _
-smul_zero _ := unop_injective smul_zero _
-
-Depends on / 依赖: smul_add, unop_injective
+  smul_zero _ := unop_injective <| smul_zero _
+  zero_smul _ := unop_injective <| zero_smul _ _
+/-
+**MulOpposite.instDistribMulAction** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instDistribMulAction [Monoid M] [AddMonoid α] [DistribMulAction M α] : Dis
+tribMulAction M αᵐᵒᵖ where smul_add _ _ _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instDistribMulAction [Monoid M] [AddMonoid α] [DistribMulAction M α] :
     DistribMulAction M αᵐᵒᵖ where
-smul_add _ _ _ := unop_injective smul_add _ _ _
-smul_zero _ := unop_injective smul_zero _
-
-/--
-Instance `instMulDistribMulAction` / 实例 `instMulDistribMulAction`
-
-English:
-instance instMulDistribMulAction
-  signature: [Monoid M] [Monoid α] [MulDistribMulAction M α]
-  body: unop_injective smul_mul' _ _ _
-smul_one _ := unop_injective smul_one _
-
-中文:
-实例 instMulDistribMulAction
-  签名: [幺半群 M] [幺半群 α] [MulDistribMul作用 M α]
-  定义体: unop_injective smul_mul' _ _ _
-smul_one _ := unop_injective smul_one _
-
-Depends on / 依赖: smul_mul, unop_injective
+  smul_add _ _ _ := unop_injective <| smul_add _ _ _
+  smul_zero _ := unop_injective <| smul_zero _
+/-
+**MulOpposite.instMulDistribMulAction** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+形式化陈述：instMulDistribMulAction [Monoid M] [Monoid α] [MulDistribMulAction M α] : 
+MulDistribMulAction M αᵐᵒᵖ where smul_mul _ _ _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instMulDistribMulAction [Monoid M] [Monoid α] [MulDistribMulAction M α] :
     MulDistribMulAction M αᵐᵒᵖ where
-smul_mul _ _ _ := unop_injective smul_mul' _ _ _
-smul_one _ := unop_injective smul_one _
+  smul_mul _ _ _ := unop_injective <| smul_mul' _ _ _
+  smul_one _ := unop_injective <| smul_one _
 
 end MulOpposite
 
@@ -157,30 +107,30 @@ reversed.
 
 open MulOpposite
 
-/--
-Instance `IsLeftCancelMulZero.toFaithfulSMul_opposite` / 实例 `IsLeftCancelMulZero.toFaithfulSMul_opposite`
+/-- `Monoid.toOppositeMulAction` is faithful on nontrivial cancellative monoids with zero. -/
+/-
+**IsLeftCancelMulZero.toFaithfulSMul_opposite** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：IsLeftCancelMulZero.toFaithfulSMul_opposite [MonoidWithZero α] [IsLeftCanc
+elMulZero α] : FaithfulSMul αᵐᵒᵖ α where eq_of_smul_eq_smul h
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `subsingleton_or_nontrivial`：subsingleton_or_nontrivial (α : Type*) : Sub
+singleton α ∨ Nontrivial α
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `MulOpposite.unop_injective`：unop_injective : Injective (unop : αᵐᵒᵖ -> α
+)
+· 使用定理 `mul_left_cancel₀`：mul_left_cancel₀ (ha : a != 0) (h : a * b = a * c) : b
+ = c
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
 
-English:
-instance IsLeftCancelMulZero.toFaithfulSMul_opposite
-  signature: [MonoidWithZero α] [IsLeftCancelMulZero α]
-  body: by
-    cases subsingleton_or_nontrivial α
-    · exact Subsingleton.elim ..
-· exact unop_injective mul_left_cancel₀ one_ne_zero (h 1)
-
-中文:
-实例 是左消去MulZero.toFaithfulSMul_opposite
-  签名: [带零幺半群 α] [是左消去MulZero α]
-  定义体: by
-    cases subsingleton_or_nontrivial α
-    · exact Subsingleton.elim ..
-· exact unop_injective mul_left_cancel₀ one_ne_zero (h 1)
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim, one_ne_zero, subsingleton_or_nontrivial, unop_injective
+--- 原说明 ---
+`Monoid.toOppositeMulAction` is faithful on nontrivial cancellative monoids with
+ zero.
 -/
 instance IsLeftCancelMulZero.toFaithfulSMul_opposite [MonoidWithZero α] [IsLeftCancelMulZero α] :
     FaithfulSMul αᵐᵒᵖ α where
   eq_of_smul_eq_smul h := by
     cases subsingleton_or_nontrivial α
     · exact Subsingleton.elim ..
-· exact unop_injective mul_left_cancel₀ one_ne_zero (h 1)
+    · exact unop_injective <| mul_left_cancel₀ one_ne_zero (h 1)

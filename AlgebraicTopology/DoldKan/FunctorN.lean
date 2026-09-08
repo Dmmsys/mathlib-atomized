@@ -49,30 +49,16 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The functor `SimplicialObject C ⥤ Karoubi (ChainComplex C ℕ)` which maps
 `X` to the formal direct factor of `K[X]` defined by `PInfty`. -/
 @[simps, implicit_reducible]
-/--
-Definition of `N₁` / `N₁` 的定义
+/-
+**AlgebraicTopology.DoldKan.N** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicTopology.DoldK
+an`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition N₁
-  signature: : SimplicialObject C ⥤ Karoubi (ChainComplex C Nat) where
-  body: { X := AlternatingFaceMapComplex.obj X
-      p := PInfty
-      idem := PInfty_idem }
-  map f :=
-    { f := PInfty ≫ AlternatingFaceMapComplex.map f }
-
-中文:
-定义 N₁
-  签名: : SimplicialObject C ⥤ Karoubi (链复形 C 自然数) where
-  定义体: { X := AlternatingFaceMapComplex.obj X
-      p := PInfty
-      idem := PInfty_idem }
-  map f :=
-    { f := PInfty ≫ AlternatingFaceMapComplex.map f }
-
-Depends on / 依赖: AlternatingFaceMapComplex, AlternatingFaceMapComplex.map, AlternatingFaceMapComplex.obj, PInfty, PInfty_idem
+--- 原说明 ---
+The functor `SimplicialObject C ⥤ Karoubi (ChainComplex C ℕ)` which maps
+`X` to the formal direct factor of `K[X]` defined by `PInfty`.
 -/
-def N₁ : SimplicialObject C ⥤ Karoubi (ChainComplex C Nat) where
+def N₁ : SimplicialObject C ⥤ Karoubi (ChainComplex C ℕ) where
   obj X :=
     { X := AlternatingFaceMapComplex.obj X
       p := PInfty
@@ -82,76 +68,43 @@ def N₁ : SimplicialObject C ⥤ Karoubi (ChainComplex C Nat) where
 
 /-- The extension of `N₁` to the Karoubi envelope of `SimplicialObject C`. -/
 @[simps!]
-/--
-Definition of `N₂` / `N₂` 的定义
+/-
+**AlgebraicTopology.DoldKan.N** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicTopology.DoldK
+an`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition N₂
-  signature: : Karoubi (SimplicialObject C) ⥤ Karoubi (ChainComplex C Nat)
-  body: (functorExtension₁ _ _).obj N₁
-
-中文:
-定义 N₂
-  签名: : Karoubi (SimplicialObject C) ⥤ Karoubi (链复形 C 自然数)
-  定义体: (functorExtension₁ _ _).obj N₁
+--- 原说明 ---
+The extension of `N₁` to the Karoubi envelope of `SimplicialObject C`.
 -/
-def N₂ : Karoubi (SimplicialObject C) ⥤ Karoubi (ChainComplex C Nat) :=
+def N₂ : Karoubi (SimplicialObject C) ⥤ Karoubi (ChainComplex C ℕ) :=
   (functorExtension₁ _ _).obj N₁
 
-/--
-Definition of `toKaroubiCompN₂IsoN₁` / `toKaroubiCompN₂IsoN₁` 的定义
+/-- The canonical isomorphism `toKaroubi (SimplicialObject C) ⋙ N₂ ≅ N₁`. -/
+/-
+**AlgebraicTopology.DoldKan.toKaroubiCompN** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicT
+opology.DoldKan`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toKaroubiCompN₂IsoN₁
-  signature: : toKaroubi (SimplicialObject C) ⋙ N₂ ≅ N₁
-  body: (functorExtension₁CompWhiskeringLeftToKaroubiIso _ _).app N₁
-
-@[simp]
-
-中文:
-定义 toKaroubiCompN₂IsoN₁
-  签名: : toKaroubi (SimplicialObject C) ⋙ N₂ ≅ N₁
-  定义体: (functorExtension₁CompWhiskeringLeftToKaroubiIso _ _).app N₁
-
-@[simp]
+--- 原说明 ---
+The canonical isomorphism `toKaroubi (SimplicialObject C) ⋙ N₂ ≅ N₁`.
 -/
 def toKaroubiCompN₂IsoN₁ : toKaroubi (SimplicialObject C) ⋙ N₂ ≅ N₁ :=
   (functorExtension₁CompWhiskeringLeftToKaroubiIso _ _).app N₁
 
 @[simp]
-/--
-lemma `toKaroubiCompN₂IsoN₁_hom_app` / 引理 `toKaroubiCompN₂IsoN₁_hom_app`
-
-English:
-lemma toKaroubiCompN₂IsoN₁_hom_app
-  given: (X : SimplicialObject C)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toKaroubiCompN₂IsoN₁_hom_app
-  条件: (X : SimplicialObject C)
-  证明: rfl
-
-@[simp]
+/-
+**AlgebraicTopology.DoldKan.toKaroubiCompN** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicT
+opology.DoldKan`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toKaroubiCompN₂IsoN₁_hom_app (X : SimplicialObject C) :
     (toKaroubiCompN₂IsoN₁.hom.app X).f = PInfty := rfl
 
 @[simp]
-/--
-lemma `toKaroubiCompN₂IsoN₁_inv_app` / 引理 `toKaroubiCompN₂IsoN₁_inv_app`
-
-English:
-lemma toKaroubiCompN₂IsoN₁_inv_app
-  given: (X : SimplicialObject C)
-  proof: rfl
-
-中文:
-引理 toKaroubiCompN₂IsoN₁_inv_app
-  条件: (X : SimplicialObject C)
-  证明: rfl
+/-
+**AlgebraicTopology.DoldKan.toKaroubiCompN** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicT
+opology.DoldKan`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toKaroubiCompN₂IsoN₁_inv_app (X : SimplicialObject C) :
     (toKaroubiCompN₂IsoN₁.inv.app X).f = PInfty := rfl
@@ -159,3 +112,4 @@ lemma toKaroubiCompN₂IsoN₁_inv_app (X : SimplicialObject C) :
 end DoldKan
 
 end AlgebraicTopology
+

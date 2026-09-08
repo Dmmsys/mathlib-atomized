@@ -31,22 +31,19 @@ It is naturally endowed with a topology (the Zariski topology),
 and a sheaf of commutative rings (see `Mathlib/AlgebraicGeometry/StructureSheaf.lean`).
 It is a fundamental building block in algebraic geometry. -/
 @[ext]
-/--
-Definition of `PrimeSpectrum` / `PrimeSpectrum` 的定义
+/-
+**PrimeSpectrum** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_1) → [CommSemiring R] → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure PrimeSpectrum
-  parameters: (R : Type*) [CommSemiring R]
-  axioms and operations (2):
-    - asIdeal : Ideal R
-    - isPrime : asIdeal.IsPrime
+--- 原说明 ---
+The prime spectrum of a commutative (semi)ring `R` is the type of all prime idea
+ls of `R`.
 
-中文:
-结构 素谱
-  参数: (R : 类型) [交换半环 R]
-  公理与运算 (2 个):
-    - asIdeal : 理想 R
-    - isPrime : asIdeal.是素
+It is naturally endowed with a topology (the Zariski topology),
+and a sheaf of commutative rings (see `Mathlib/AlgebraicGeometry/StructureSheaf.
+lean`).
+It is a fundamental building block in algebraic geometry.
 -/
 structure PrimeSpectrum (R : Type*) [CommSemiring R] where
   asIdeal : Ideal R
@@ -66,88 +63,40 @@ See the corresponding section at `Mathlib/RingTheory/Spectrum/Prime/Topology.lea
 
 variable {R : Type*} [CommSemiring R]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Coe (PrimeSpectrum R) (Ideal R)
-  body: P.asIdeal
-
-中文:
-实例 :
-  签名: Coe (素谱 R) (理想 R)
-  定义体: P.asIdeal
-
-Depends on / 依赖: P.asIdeal, asIdeal
+/-
+**PrimeSpectrum.** 是 Mathlib 中的一个实例，位于命名空间 `PrimeSpectrum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Coe (PrimeSpectrum R) (Ideal R) where
   coe P := P.asIdeal
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (PrimeSpectrum R)
-  body: PartialOrder.lift asIdeal (@PrimeSpectrum.ext _ _)
-
-@[simp]
-
-中文:
-实例 :
-  签名: 偏序 (素谱 R)
-  定义体: PartialOrder.lift asIdeal (@PrimeSpectrum.ext _ _)
-
-@[simp]
-
-Depends on / 依赖: PartialOrder, PartialOrder.lift, PrimeSpectrum, PrimeSpectrum.ext, asIdeal
+/-
+**PrimeSpectrum.** 是 Mathlib 中的一个实例，位于命名空间 `PrimeSpectrum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (PrimeSpectrum R) :=
   PartialOrder.lift asIdeal (@PrimeSpectrum.ext _ _)
 
 @[simp]
-/--
-theorem `asIdeal_le_asIdeal` / 定理 `asIdeal_le_asIdeal`
-
-English:
-theorem asIdeal_le_asIdeal
-  given: (x y : PrimeSpectrum R)
-  statement: x.asIdeal <= y.asIdeal ↔ x <= y
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 asIdeal_le_asIdeal
-  条件: (x y : 素谱 R)
-  结论: x.asIdeal <= y.asIdeal ↔ x <= y
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**PrimeSpectrum.asIdeal_le_asIdeal** 是 Mathlib 中的一个定理，位于命名空间 `PrimeSpectrum`。
+形式化陈述：asIdeal_le_asIdeal (x y : PrimeSpectrum R) : x.asIdeal <= y.asIdeal ↔ x <=
+ y
+参数：x y : PrimeSpectrum R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem asIdeal_le_asIdeal (x y : PrimeSpectrum R) : x.asIdeal <= y.asIdeal ↔ x <= y :=
+theorem asIdeal_le_asIdeal (x y : PrimeSpectrum R) : x.asIdeal ≤ y.asIdeal ↔ x ≤ y :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `asIdeal_lt_asIdeal` / 定理 `asIdeal_lt_asIdeal`
-
-English:
-theorem asIdeal_lt_asIdeal
-  given: (x y : PrimeSpectrum R)
-  statement: x.asIdeal < y.asIdeal ↔ x < y
-  proof: Iff.rfl
-
-中文:
-定理 asIdeal_lt_asIdeal
-  条件: (x y : 素谱 R)
-  结论: x.asIdeal < y.asIdeal ↔ x < y
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**PrimeSpectrum.asIdeal_lt_asIdeal** 是 Mathlib 中的一个定理，位于命名空间 `PrimeSpectrum`。
+形式化陈述：asIdeal_lt_asIdeal (x y : PrimeSpectrum R) : x.asIdeal < y.asIdeal ↔ x < y
+参数：x y : PrimeSpectrum R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem asIdeal_lt_asIdeal (x y : PrimeSpectrum R) : x.asIdeal < y.asIdeal ↔ x < y :=
   Iff.rfl
@@ -155,24 +104,16 @@ theorem asIdeal_lt_asIdeal (x y : PrimeSpectrum R) : x.asIdeal < y.asIdeal ↔ x
 variable (R) in
 /-- The prime spectrum is in bijection with the set of prime ideals. -/
 @[simps]
-/--
-Definition of `equivSubtype` / `equivSubtype` 的定义
+/-
+**PrimeSpectrum.equivSubtype** 是 Mathlib 中的一个定义，位于命名空间 `PrimeSpectrum`。
+形式化陈述：equivSubtype : PrimeSpectrum R ≃o {I : Ideal R // I.IsPrime} where toFun I
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PrimeSpectrum.isPrime`：∀ {R : Type u_1} [inst : CommSemiring R] (self : 
+PrimeSpectrum R), self.asIdeal.IsPrime
 
-English:
-definition equivSubtype
-  signature: : PrimeSpectrum R ≃o {I : Ideal R // I.IsPrime} where
-  body: ⟨I.asIdeal, I.2⟩
-  invFun I := ⟨I, I.2⟩
-  map_rel_iff' := .rfl
-
-中文:
-定义 equivSubtype
-  签名: : 素谱 R ≃o {I : 理想 R // I.是素} where
-  定义体: ⟨I.asIdeal, I.2⟩
-  invFun I := ⟨I, I.2⟩
-  map_rel_iff' := .rfl
-
-Depends on / 依赖: I.asIdeal, asIdeal
+--- 原说明 ---
+The prime spectrum is in bijection with the set of prime ideals.
 -/
 def equivSubtype : PrimeSpectrum R ≃o {I : Ideal R // I.IsPrime} where
   toFun I := ⟨I.asIdeal, I.2⟩
@@ -180,3 +121,4 @@ def equivSubtype : PrimeSpectrum R ≃o {I : Ideal R // I.IsPrime} where
   map_rel_iff' := .rfl
 
 end PrimeSpectrum
+

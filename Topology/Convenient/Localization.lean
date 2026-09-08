@@ -32,74 +32,44 @@ open CategoryTheory MorphismProperty
 
 namespace TopCat
 
-variable {ι : Type t} (X : ι -> Type u) [forall i, TopologicalSpace (X i)]
+variable {ι : Type t} (X : ι → Type u) [∀ i, TopologicalSpace (X i)]
 
-/--
-Definition of `morphismPropertyWithGeneratedByTopologyEquiv` / `morphismPropertyWithGeneratedByTopologyEquiv` 的定义
+/-- Given a family of topological spaces `X`, this is the family of morphisms in `TopCat`
+corresponding to the continuous maps `WithGeneratedByTopology X Z → Z` for
+all topological spaces `Z`. -/
+/-
+**TopCat.morphismPropertyWithGeneratedByTopologyEquiv** 是 Mathlib 中的一个定义，位于命名空间 
+`TopCat`。
+形式化陈述：morphismPropertyWithGeneratedByTopologyEquiv : MorphismProperty TopCat.{v}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition morphismPropertyWithGeneratedByTopologyEquiv
-  signature: : MorphismProperty TopCat.{v}
-  body: MorphismProperty.ofHoms (GeneratedByTopCat.adjCounit (X := X)).app
-
-中文:
-定义 morphismPropertyWithGeneratedByTopologyEquiv
-  签名: : MorphismProperty 顶元素范畴.{v}
-  定义体: MorphismProperty.ofHoms (GeneratedByTopCat.adjCounit (X := X)).app
-
-Depends on / 依赖: GeneratedByTopCat, GeneratedByTopCat.adjCounit, MorphismProperty, MorphismProperty.ofHoms, adjCounit, ofHoms
+--- 原说明 ---
+Given a family of topological spaces `X`, this is the family of morphisms in `To
+pCat`
+corresponding to the continuous maps `WithGeneratedByTopology X Z → Z` for
+all topological spaces `Z`.
 -/
 def morphismPropertyWithGeneratedByTopologyEquiv : MorphismProperty TopCat.{v} :=
   MorphismProperty.ofHoms (GeneratedByTopCat.adjCounit (X := X)).app
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (TopCat.toContinuousGeneratedByCat.{v} X).IsLocalization
-  body: ContinuousGeneratedByCat.adj.isLocalization_rightAdjoint _
-    (by rintro _ _ _ ⟨Z⟩; infer_instance)
-    (fun _ => by constructor)
-
-中文:
-实例 :
-  签名: (顶元素范畴.toContinuousGeneratedByCat.{v} X).是Localization
-  定义体: ContinuousGeneratedByCat.adj.isLocalization_rightAdjoint _
-    (by rintro _ _ _ ⟨Z⟩; infer_instance)
-    (fun _ => by constructor)
-
-Depends on / 依赖: ContinuousGeneratedByCat, ContinuousGeneratedByCat.adj.isLocalization_rightAdjoint, infer_instance, isLocalization_rightAdjoint
+/-
+**TopCat.** 是 Mathlib 中的一个实例，位于命名空间 `TopCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (TopCat.toContinuousGeneratedByCat.{v} X).IsLocalization
     (TopCat.morphismPropertyWithGeneratedByTopologyEquiv X) :=
   ContinuousGeneratedByCat.adj.isLocalization_rightAdjoint _
     (by rintro _ _ _ ⟨Z⟩; infer_instance)
-    (fun _ => by constructor)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (TopCat.toGeneratedByTopCat.{v} (X := X)).IsLocalization
-  body: GeneratedByTopCat.adj.isLocalization_rightAdjoint _
-    (by rintro _ _ _ ⟨Z⟩; infer_instance)
-    (fun _ => by constructor)
-
-中文:
-实例 :
-  签名: (顶元素范畴.toGeneratedByTopCat.{v} (X := X)).是Localization
-  定义体: GeneratedByTopCat.adj.isLocalization_rightAdjoint _
-    (by rintro _ _ _ ⟨Z⟩; infer_instance)
-    (fun _ => by constructor)
-
-Depends on / 依赖: IsLocalization
+    (fun _ ↦ by constructor)
+/-
+**TopCat.** 是 Mathlib 中的一个实例，位于命名空间 `TopCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (TopCat.toGeneratedByTopCat.{v} (X := X)).IsLocalization
     (TopCat.morphismPropertyWithGeneratedByTopologyEquiv X) :=
   GeneratedByTopCat.adj.isLocalization_rightAdjoint _
     (by rintro _ _ _ ⟨Z⟩; infer_instance)
-    (fun _ => by constructor)
+    (fun _ ↦ by constructor)
 
 end TopCat
+

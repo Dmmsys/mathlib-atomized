@@ -52,35 +52,32 @@ universe u v w w'
 namespace DirectSum
 open scoped DirectSum
 
-/--
-theorem `induction_lon` / 定理 `induction_lon`
+/-- A variant of `DirectSum.induction_on` that uses `DirectSum.lof` instead of `.of` -/
+/-
+**DirectSum.induction_lon** 是 Mathlib 中的一个定理，位于命名空间 `DirectSum`。
+形式化陈述：induction_lon {R : Type*} [Semiring R] {ι : Type*} [DecidableEq ι] {M : ι 
+-> Type*} [(i : ι) -> AddCommMonoid <| M i] [(i : ι) -> Module R (M i)] {motive 
+: (⨁ i, M i) -> Prop} (x : ⨁ i, M i) (zero : motive 0) (lof : forall i (x : M i)
+, motive (lof R ι M i x)) (add : forall (x y : ⨁ i, M i), motive x -> motive y -
+> motive (x + y)) : motive x
+参数：i : ι；i : ι；M i；⨁ i, M i；x : ⨁ i, M i；zero : motive 0；lof : forall i (x : M i
+), motive (lof R ι M i x)；add : forall (x y : ⨁ i, M i), motive x -> motive y ->
+ motive (x + y)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DirectSum.induction_on`：∀ {ι : Type v} {β : ι → Type w} [inst : (i : ι) 
+→ AddCommMonoid (β i)] [inst_1 : DecidableEq ι]   {motive : (DirectSum ι fun i =
+> β i) → Pro…
 
-English:
-theorem induction_lon
-  statement: {R : Type*} [Semiring R] {ι : Type*} [DecidableEq ι]
-  proof: by
-  induction x using DirectSum.induction_on with
-  | zero => exact zero
-  | of => exact lof _ _
-  | add x y hx hy => exact add x y hx hy
-
-中文:
-定理 induction_lon
-  结论: {R : 类型} [半环 R] {ι : 类型} [DecidableEq ι]
-  证明: by
-  induction x using DirectSum.induction_on with
-  | zero => exact zero
-  | of => exact lof _ _
-  | add x y hx hy => exact add x y hx hy
-
-Depends on / 依赖: DirectSum, DirectSum.induction_on, induction_on
+--- 原说明 ---
+A variant of `DirectSum.induction_on` that uses `DirectSum.lof` instead of `.of`
 -/
 theorem induction_lon {R : Type*} [Semiring R] {ι : Type*} [DecidableEq ι]
-    {M : ι -> Type*} [(i : ι) -> AddCommMonoid <| M i] [(i : ι) -> Module R (M i)]
-    {motive : (⨁ i, M i) -> Prop} (x : ⨁ i, M i)
+    {M : ι → Type*} [(i : ι) → AddCommMonoid <| M i] [(i : ι) → Module R (M i)]
+    {motive : (⨁ i, M i) → Prop} (x : ⨁ i, M i)
     (zero : motive 0)
-    (lof : forall i (x : M i), motive (lof R ι M i x))
-    (add : forall (x y : ⨁ i, M i), motive x -> motive y -> motive (x + y)) : motive x := by
+    (lof : ∀ i (x : M i), motive (lof R ι M i x))
+    (add : ∀ (x y : ⨁ i, M i), motive x → motive y → motive (x + y)) : motive x := by
   induction x using DirectSum.induction_on with
   | zero => exact zero
   | of => exact lof _ _
@@ -92,455 +89,420 @@ open TensorAlgebra DirectSum TensorPower
 
 variable {I : Type u} [DecidableEq I] {i : I} -- The type of the indexing set
   (R : Type v) [CommSemiring R] -- The commutative semiring `R`
-  (A : I -> Type w) [forall i, Semiring (A i)] [forall i, Algebra R (A i)] -- The collection of `R`-algebras
+  (A : I → Type w) [∀ i, Semiring (A i)] [∀ i, Algebra R (A i)] -- The collection of `R`-algebras
   {B : Type w'} [Semiring B] [Algebra R B] -- Another `R`-algebra
-  (maps : {i : I} -> A i ->ₐ[R] B) -- A family of `R`algebra homomorphisms
+  (maps : {i : I} → A i →ₐ[R] B) -- A family of `R`algebra homomorphisms
 
 namespace LinearAlgebra.FreeProduct
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Module R (⨁ i, A i)
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 模 R (⨁ i, A i)
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**LinearAlgebra.FreeProduct.** 是 Mathlib 中的一个实例，位于命名空间 `LinearAlgebra.FreeProduc
+t`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Module R (⨁ i, A i) := by infer_instance
 
-/--
-Definition of `FreeTensorAlgebra` / `FreeTensorAlgebra` 的定义
+/-- The free tensor algebra over a direct sum of `R`-algebras, before
+taking the quotient by the free product relation -/
+/-
+**LinearAlgebra.FreeProduct.FreeTensorAlgebra** 是 Mathlib 中的一个缩写定义，位于命名空间 `Linea
+rAlgebra.FreeProduct`。
+形式化陈述：FreeTensorAlgebra
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation FreeTensorAlgebra
-  body: TensorAlgebra R (⨁ i, A i)
-
-中文:
-缩写 FreeTensorAlgebra
-  定义体: TensorAlgebra R (⨁ i, A i)
-
-Depends on / 依赖: TensorAlgebra
+--- 原说明 ---
+The free tensor algebra over a direct sum of `R`-algebras, before
+taking the quotient by the free product relation
 -/
 abbrev FreeTensorAlgebra := TensorAlgebra R (⨁ i, A i)
 
-/--
-Definition of `PowerAlgebra` / `PowerAlgebra` 的定义
+/-- The direct sum of tensor powers of a direct sum of `R`-algebras,
+before taking the quotient by the free product relation -/
+/-
+**LinearAlgebra.FreeProduct.PowerAlgebra** 是 Mathlib 中的一个缩写定义，位于命名空间 `LinearAlge
+bra.FreeProduct`。
+形式化陈述：PowerAlgebra
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation PowerAlgebra
-  body: ⨁ (n : Nat), TensorPower R n (⨁ i, A i)
-
-中文:
-缩写 PowerAlgebra
-  定义体: ⨁ (n : Nat), TensorPower R n (⨁ i, A i)
-
-Depends on / 依赖: TensorPower
+--- 原说明 ---
+The direct sum of tensor powers of a direct sum of `R`-algebras,
+before taking the quotient by the free product relation
 -/
-abbrev PowerAlgebra := ⨁ (n : Nat), TensorPower R n (⨁ i, A i)
+abbrev PowerAlgebra := ⨁ (n : ℕ), TensorPower R n (⨁ i, A i)
 
-/--
-Definition of `powerAlgebraEquivFreeTensorAlgebra` / `powerAlgebraEquivFreeTensorAlgebra` 的定义
+/-- The free tensor algebra and its representation as an infinite direct sum
+of tensor powers are (noncomputably) equivalent as `R`-algebras. -/
+/-
+**LinearAlgebra.FreeProduct.powerAlgebraEquivFreeTensorAlgebra** 是 Mathlib 中的一个定
+义，位于命名空间 `LinearAlgebra.FreeProduct`。
+形式化陈述：{I : Type u} →   (R : Type v) →     [inst : CommSemiring R] →       (A : I
+ → Type w) →         [inst_1 : (i : I) → Semiring (A i)] →           [inst_2 : (
+i : I) → Algebra R (A i)] →             LinearAlgebra.FreeProduct.PowerAlgebra R
+ A ≃ₐ[R] LinearAlgebra.FreeProduct.FreeTensorAlgebra R A
+参数：R : Type v；A : I → Type w；i : I；A i；i : I；A i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition powerAlgebraEquivFreeTensorAlgebra
-  signature: :
-  body: TensorAlgebra.equivDirectSum.symm
-
-中文:
-定义 powerAlgebraEquivFreeTensorAlgebra
-  签名: :
-  定义体: TensorAlgebra.equivDirectSum.symm
+--- 原说明 ---
+The free tensor algebra and its representation as an infinite direct sum
+of tensor powers are (noncomputably) equivalent as `R`-algebras.
 -/
 @[reducible] noncomputable def powerAlgebraEquivFreeTensorAlgebra :
     PowerAlgebra R A ≃ₐ[R] FreeTensorAlgebra R A :=
   TensorAlgebra.equivDirectSum.symm
 
-/--
-Inductive type `rel` / 归纳类型 `rel`
+/-- The generating equivalence relation for elements of the free tensor algebra
+that are identified in the free product -/
+/-
+**LinearAlgebra.FreeProduct.rel** 是 Mathlib 中的一个归纳类型，位于命名空间 `LinearAlgebra.FreeP
+roduct`。
+形式化陈述：{I : Type u} →   [DecidableEq I] →     (R : Type v) →       [inst : CommSe
+miring R] →         (A : I → Type w) →           [inst_1 : (i : I) → Semiring (A
+ i)] →             [inst_2 : (i : I) → Algebra R (A i)] →               LinearAl
+gebra.FreeProduct.FreeTensorAlgebra R A → LinearAlgebra.FreeProduct.FreeTensorAl
+gebra R A → Prop
+参数：R : Type v；A : I → Type w；i : I；A i；i : I；A i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive rel
-  parameters: : FreeTensorAlgebra R A -> FreeTensorAlgebra R A -> Prop
-  constructors (2):
-    - id: forall {i : I}, rel (ι R <| lof R I A i 1) 1
-    - prod: forall {i : I} {a₁ a₂ : A i}, rel (tprod R (⨁ i, A i) 2 (fun | 0 => lof R I A i a₁ | 1 => lof R I A i a₂)) (ι R <| lof R I A i (a₁ * a₂))
-
-中文:
-归纳类型 rel
-  参数: : FreeTensorAlgebra R A -> FreeTensorAlgebra R A -> 命题
-  构造子 (2 个):
-    - id: 对任意 {i : I}, rel (ι R <| lof R I A i 1) 1
-    - prod: 对任意 {i : I} {a₁ a₂ : A i}, rel (tprod R (⨁ i, A i) 2 (fun | 0 => lof R I A i a₁ | 1 => lof R I A i a₂)) (ι R <| lof R I A i (a₁ * a₂))
+--- 原说明 ---
+The generating equivalence relation for elements of the free tensor algebra
+that are identified in the free product
 -/
-inductive rel : FreeTensorAlgebra R A -> FreeTensorAlgebra R A -> Prop
-  | id : forall {i : I}, rel (ι R <| lof R I A i 1) 1
-  | prod : forall {i : I} {a₁ a₂ : A i},
+inductive rel : FreeTensorAlgebra R A → FreeTensorAlgebra R A → Prop
+  | id : ∀ {i : I}, rel (ι R <| lof R I A i 1) 1
+  | prod : ∀ {i : I} {a₁ a₂ : A i},
       rel
         (tprod R (⨁ i, A i) 2 (fun | 0 => lof R I A i a₁ | 1 => lof R I A i a₂))
         (ι R <| lof R I A i (a₁ * a₂))
 
-/--
-Definition of `ringCon` / `ringCon` 的定义
+/-- `rel` as a ring congruence. -/
+/-
+**LinearAlgebra.FreeProduct.ringCon** 是 Mathlib 中的一个定义，位于命名空间 `LinearAlgebra.Fre
+eProduct`。
+形式化陈述：ringCon : RingCon (FreeTensorAlgebra R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ringCon
-  signature: : RingCon (FreeTensorAlgebra R A)
-  body: ringConGen (rel R A)
-
-中文:
-定义 ringCon
-  签名: : RingCon (FreeTensorAlgebra R A)
-  定义体: ringConGen (rel R A)
-
-Depends on / 依赖: ringConGen
+--- 原说明 ---
+`rel` as a ring congruence.
 -/
 def ringCon : RingCon (FreeTensorAlgebra R A) := ringConGen (rel R A)
 
 open scoped Function
 
-/--
-Definition of `rel'` / `rel'` 的定义
+/-- The generating equivalence relation for elements of the power algebra
+that are identified in the free product -/
+/-
+**LinearAlgebra.FreeProduct.rel'** 是 Mathlib 中的一个定义，位于命名空间 `LinearAlgebra.FreePr
+oduct`。
+形式化陈述：{I : Type u} →   [DecidableEq I] →     (R : Type v) →       [inst : CommSe
+miring R] →         (A : I → Type w) →           [inst_1 : (i : I) → Semiring (A
+ i)] →             [inst_2 : (i : I) → Algebra R (A i)] →               (DirectS
+um ℕ fun n => TensorPower R n (DirectSum I fun i => A i)) →                 (Dir
+ectSum ℕ fun n => TensorPower R n (DirectSum I fun i => A i)) → Prop
+参数：R : Type v；A : I → Type w；i : I；A i；i : I；A i；DirectSum ℕ fun n => TensorPowe
+r R n (DirectSum I fun i => A i)；DirectSum ℕ fun n => TensorPower R n (DirectSum
+ I fun i => A i)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rel'
-  body: rel R A on ofDirectSum
-
-中文:
-定义 rel'
-  定义体: rel R A on ofDirectSum
+--- 原说明 ---
+The generating equivalence relation for elements of the power algebra
+that are identified in the free product
 -/
 @[reducible, simp] def rel' := rel R A on ofDirectSum
 
-/--
-Definition of `ringCon'` / `ringCon'` 的定义
+/-- `rel'` as a ring congruence. -/
+/-
+**LinearAlgebra.FreeProduct.ringCon'** 是 Mathlib 中的一个定义，位于命名空间 `LinearAlgebra.Fr
+eeProduct`。
+形式化陈述：ringCon' : RingCon (PowerAlgebra R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ringCon'
-  signature: : RingCon (PowerAlgebra R A)
-  body: ringConGen (rel' R A)
-
-中文:
-定义 ringCon'
-  签名: : RingCon (PowerAlgebra R A)
-  定义体: ringConGen (rel' R A)
-
-Depends on / 依赖: ringConGen
+--- 原说明 ---
+`rel'` as a ring congruence.
 -/
 def ringCon' : RingCon (PowerAlgebra R A) := ringConGen (rel' R A)
-
-/--
-theorem `rel_id` / 定理 `rel_id`
-
-English:
-theorem rel_id
-  given: (i : I)
-  statement: rel R A (ι R <| lof R I A i 1) 1
-  proof: rel.id
-
-中文:
-定理 rel_id
-  条件: (i : I)
-  结论: rel R A (ι R <| lof R I A i 1) 1
-  证明: rel.id
-
-Depends on / 依赖: rel.id
+/-
+**LinearAlgebra.FreeProduct.rel_id** 是 Mathlib 中的一个定理，位于命名空间 `LinearAlgebra.Free
+Product`。
+形式化陈述：rel_id (i : I) : rel R A (ι R <| lof R I A i 1) 1
+参数：i : I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem rel_id (i : I) : rel R A (ι R <| lof R I A i 1) 1 := rel.id
 
 
 /-- The free product of the collection of `R`-algebras `A i`, as a quotient of
 `FreeTensorAlgebra R A` -/
-.Quotient @[reducible] def _root_.LinearAlgebra.FreeProduct := FreeProduct.ringCon R A
+/-
+**LinearAlgebra.FreeProduct._root_.LinearAlgebra.FreeProduct** 是 Mathlib 中的一个定义，
+位于命名空间 `LinearAlgebra.FreeProduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The free product of the collection of `R`-algebras `A i`, as a quotient of
+`FreeTensorAlgebra R A`
+-/
+@[reducible] def _root_.LinearAlgebra.FreeProduct := FreeProduct.ringCon R A |>.Quotient
 
 /-- The free product of the collection of `R`-algebras `A i`,
 as a quotient of `PowerAlgebra R A` -/
-.Quotient @[reducible] def asPowers := FreeProduct.ringCon' R A
+/-
+**LinearAlgebra.FreeProduct.asPowers** 是 Mathlib 中的一个定义，位于命名空间 `LinearAlgebra.Fr
+eeProduct`。
+形式化陈述：{I : Type u} →   [DecidableEq I] →     (R : Type v) →       [inst : CommSe
+miring R] →         (A : I → Type w) → [inst_1 : (i : I) → Semiring (A i)] → [(i
+ : I) → Algebra R (A i)] → Type (max (max u v) w)
+参数：R : Type v；A : I → Type w；i : I；A i；i : I；A i；max (max u v) w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-Definition of `asPowersEquiv` / `asPowersEquiv` 的定义
+--- 原说明 ---
+The free product of the collection of `R`-algebras `A i`,
+as a quotient of `PowerAlgebra R A`
+-/
+@[reducible] def asPowers := FreeProduct.ringCon' R A |>.Quotient
 
-English:
-definition asPowersEquiv
-  signature: : asPowers R A ≃ₐ[R] FreeProduct R A
-  body: RingCon.congrₐ _
-    (powerAlgebraEquivFreeTensorAlgebra R A |>.symm) (by
-      rw [ringCon']; rw [ringCon]; rw [rel']
-      erw [RingCon.comap_ringConGen_ringEquiv]
-      congr
-      ext i x
-      simp [Function.onFun])
-.symm
+/-- The `R`-algebra equivalence relating `FreeProduct` and `FreeProduct.asPowers`. -/
+/-
+**LinearAlgebra.FreeProduct.asPowersEquiv** 是 Mathlib 中的一个定义，位于命名空间 `LinearAlgeb
+ra.FreeProduct`。
+形式化陈述：asPowersEquiv : asPowers R A ≃ₐ[R] FreeProduct R A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 asPowersEquiv
-  签名: : asPowers R A ≃ₐ[R] 自由积 R A
-  定义体: RingCon.congrₐ _
-    (powerAlgebraEquivFreeTensorAlgebra R A |>.symm) (by
-      rw [ringCon']; rw [ringCon]; rw [rel']
-      erw [RingCon.comap_ringConGen_ringEquiv]
-      congr
-      ext i x
-      simp [Function.onFun])
-.symm
-
-Depends on / 依赖: Function, Function.onFun, RingCon, RingCon.comap_ringConGen_ringEquiv, RingCon.congr, comap_ringConGen_ringEquiv, powerAlgebraEquivFreeTensorAlgebra, ringCon
+--- 原说明 ---
+The `R`-algebra equivalence relating `FreeProduct` and `FreeProduct.asPowers`.
 -/
 noncomputable def asPowersEquiv : asPowers R A ≃ₐ[R] FreeProduct R A :=
   RingCon.congrₐ _
     (powerAlgebraEquivFreeTensorAlgebra R A |>.symm) (by
-      rw [ringCon']; rw [ringCon]; rw [rel']
+      rw [ringCon', ringCon, rel']
       erw [RingCon.comap_ringConGen_ringEquiv]
       congr
       ext i x
       simp [Function.onFun])
-.symm
+  |>.symm
 
 open Function
 
 local infixr:60 " ∘ₐ " => AlgHom.comp
-
-/--
-Instance `instSemiring` / 实例 `instSemiring`
-
-English:
-instance instSemiring
-  signature: : Semiring (FreeProduct R A)
-  body: by infer_instance
-
-中文:
-实例 instSemiring
-  签名: : 半环 (自由积 R A)
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**LinearAlgebra.FreeProduct.instSemiring** 是 Mathlib 中的一个实例，位于命名空间 `LinearAlgebr
+a.FreeProduct`。
+形式化陈述：instSemiring : Semiring (FreeProduct R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSemiring : Semiring (FreeProduct R A) := by infer_instance
-/--
-Instance `instAlgebra` / 实例 `instAlgebra`
-
-English:
-instance instAlgebra
-  signature: : Algebra R (FreeProduct R A)
-  body: by infer_instance
-
-中文:
-实例 instAlgebra
-  签名: : 代数 R (自由积 R A)
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**LinearAlgebra.FreeProduct.instAlgebra** 是 Mathlib 中的一个实例，位于命名空间 `LinearAlgebra
+.FreeProduct`。
+形式化陈述：instAlgebra : Algebra R (FreeProduct R A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAlgebra : Algebra R (FreeProduct R A) := by infer_instance
 
-/--
-Definition of `mkAlgHom` / `mkAlgHom` 的定义
+/-- The canonical quotient map `FreeTensorAlgebra R A →ₐ[R] FreeProduct R A`,
+as an `R`-algebra homomorphism -/
+/-
+**LinearAlgebra.FreeProduct.mkAlgHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `LinearAlgebra.
+FreeProduct`。
+形式化陈述：mkAlgHom : FreeTensorAlgebra R A ->ₐ[R] FreeProduct R A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mkAlgHom
-  signature: : FreeTensorAlgebra R A ->ₐ[R] FreeProduct R A
-  body: RingCon.mkₐ _ _
-
-中文:
-缩写 mkAlgHom
-  签名: : FreeTensorAlgebra R A ->ₐ[R] 自由积 R A
-  定义体: RingCon.mkₐ _ _
-
-Depends on / 依赖: RingCon, RingCon.mk
+--- 原说明 ---
+The canonical quotient map `FreeTensorAlgebra R A →ₐ[R] FreeProduct R A`,
+as an `R`-algebra homomorphism
 -/
-abbrev mkAlgHom : FreeTensorAlgebra R A ->ₐ[R] FreeProduct R A :=
+abbrev mkAlgHom : FreeTensorAlgebra R A →ₐ[R] FreeProduct R A :=
   RingCon.mkₐ _ _
 
-/--
-Definition of `ι'` / `ι'` 的定义
+/-- The canonical linear map from the direct sum of the `A i` to the free product -/
+/-
+**LinearAlgebra.FreeProduct.** 是 Mathlib 中的一个定义，位于命名空间 `LinearAlgebra.FreeProduc
+t`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ι'
-  signature: : (⨁ i, A i) ->ₗ[R] FreeProduct R A
-  body: (mkAlgHom R A).toLinearMap ∘ₗ TensorAlgebra.ι R (M := ⨁ i, A i)
-
-中文:
-定义 ι'
-  签名: : (⨁ i, A i) ->ₗ[R] 自由积 R A
-  定义体: (mkAlgHom R A).toLinearMap ∘ₗ TensorAlgebra.ι R (M := ⨁ i, A i)
-
-Depends on / 依赖: TensorAlgebra, mkAlgHom, toLinearMap
+--- 原说明 ---
+The canonical linear map from the direct sum of the `A i` to the free product
 -/
-def ι' : (⨁ i, A i) ->ₗ[R] FreeProduct R A :=
+def ι' : (⨁ i, A i) →ₗ[R] FreeProduct R A :=
   (mkAlgHom R A).toLinearMap ∘ₗ TensorAlgebra.ι R (M := ⨁ i, A i)
-
-/--
-theorem `ι_apply` / 定理 `ι_apply`
-
-English:
-theorem ι_apply
-  given: (x : ⨁ i, A i)
-  proof: by
-  aesop (add simp [ι', mkAlgHom])
-
-中文:
-定理 ι_apply
-  条件: (x : ⨁ i, A i)
-  证明: by
-  aesop (add simp [ι', mkAlgHom])
+/-
+**LinearAlgebra.FreeProduct.** 是 Mathlib 中的一个定理，位于命名空间 `LinearAlgebra.FreeProduc
+t`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem ι_apply (x : ⨁ i, A i) :
     ↑(TensorAlgebra.ι R x) = ι' R A x := by
   aesop (add simp [ι', mkAlgHom])
 
-/--
-theorem `identify_one` / 定理 `identify_one`
+/-- The injection into the free product of any `1 : A i` is the 1 of the free product. -/
+/-
+**LinearAlgebra.FreeProduct.identify_one** 是 Mathlib 中的一个定理，位于命名空间 `LinearAlgebr
+a.FreeProduct`。
+形式化陈述：identify_one (i : I) : ι' R A (DirectSum.lof R I A i 1) = 1
+参数：i : I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DirectSum.instIsScalarTower`：∀ {R : Type u} [inst : Semiring R] {ι : Typ
+e v} {M : ι → Type w} [inst_1 : (i : ι) → AddCommMonoid (M i)]   [inst_2 : (i : 
+ι) → _root_.Modul…
+· 使用定理 `Quotient.sound`：∀ {α : Sort u} {s : Setoid α} {a b : α}, a ≈ b → ⟦a⟧ = ⟦
+b⟧
+· 使用定理 `RingCon.le_ringConGen`：le_ringConGen {r : R -> R -> Prop} : r <= ⇑(ringC
+onGen r)
+· 使用定理 `LinearAlgebra.FreeProduct.rel_id`：rel_id (i : I) : rel R A (ι R <| lof R
+ I A i 1) 1
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `RingCon.mkₐ_apply`：∀ (α : Type u_1) {R : Type u_3} [inst : CommSemiring 
+α] [inst_1 : Semiring R] [inst_2 : Algebra α R] (c : RingCon R)   (r : R), (Ring
+Con.mkₐ…
 
-English:
-theorem identify_one
-  given: (i : I)
-  statement: ι' R A (DirectSum.lof R I A i 1) = 1
-  proof: by
-  suffices ι' R A (DirectSum.lof R I A i 1) = mkAlgHom R A 1 by simpa [← ι_apply]
-exact Quotient.sound RingCon.le_ringConGen _ _ rel_id R A (i := i)
-
-中文:
-定理 identify_one
-  条件: (i : I)
-  结论: ι' R A (直和.lof R I A i 1) = 1
-  证明: by
-  suffices ι' R A (DirectSum.lof R I A i 1) = mkAlgHom R A 1 by simpa [← ι_apply]
-exact Quotient.sound RingCon.le_ringConGen _ _ rel_id R A (i := i)
-
-Depends on / 依赖: DirectSum, DirectSum.lof, Quotient, Quotient.sound, RingCon, RingCon.le_ringConGen, le_ringConGen, mkAlgHom, rel_id
+--- 原说明 ---
+The injection into the free product of any `1 : A i` is the 1 of the free produc
+t.
 -/
 theorem identify_one (i : I) : ι' R A (DirectSum.lof R I A i 1) = 1 := by
   suffices ι' R A (DirectSum.lof R I A i 1) = mkAlgHom R A 1 by simpa [← ι_apply]
-exact Quotient.sound RingCon.le_ringConGen _ _ rel_id R A (i := i)
+  exact Quotient.sound <| RingCon.le_ringConGen _ _ <| rel_id R A (i := i)
 
-/--
-theorem `mul_injections` / 定理 `mul_injections`
+/-- Multiplication in the free product of the injections of any two `aᵢ aᵢ': A i` for
+the same `i` is just the injection of multiplication `aᵢ * aᵢ'` in `A i`. -/
+/-
+**LinearAlgebra.FreeProduct.mul_injections** 是 Mathlib 中的一个定理，位于命名空间 `LinearAlge
+bra.FreeProduct`。
+形式化陈述：mul_injections (a₁ a₂ : A i) : ι' R A (DirectSum.lof R I A i a₁) * ι' R A 
+(DirectSum.lof R I A i a₂) = ι' R A (DirectSum.lof R I A i (a₁ * a₂))
+参数：a₁ a₂ : A i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearAlgebra.FreeProduct.ι_apply`：∀ {I : Type u} [inst : DecidableEq I]
+ (R : Type v) [inst_1 : CommSemiring R] (A : I → Type w)   [inst_2 : (i : I) → S
+emiring (A i)] [inst_3 …
+· 使用定理 `RingCon.coe_mul`：coe_mul (x y : R) : (↑(x * y) : c.Quotient) = ↑x * ↑y
+· 使用定理 `Quotient.sound`：∀ {α : Sort u} {s : Setoid α} {a b : α}, a ≈ b → ⟦a⟧ = ⟦
+b⟧
+· 使用定理 `RingCon.le_ringConGen`：le_ringConGen {r : R -> R -> Prop} : r <= ⇑(ringC
+onGen r)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Lean.Meta.FastSubsingleton.elim`：∀ {α : Sort u} [h : Meta.FastSubsinglet
+on α] (a b : α), a = b
+· 使用定理 `Lean.Meta.instFastSubsingletonForall`：∀ {α : Sort u} {β : α → Sort v} [i
+nst : ∀ (x : α), Meta.FastSubsingleton (β x)], Meta.FastSubsingleton ((x : α) → 
+β x)
+· 使用定理 `Lean.Meta.instFastSubsingletonDecidable`：∀ {p : Prop}, Meta.FastSubsingl
+eton (Decidable p)
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `List.ofFn_succ`：∀ {α : Type u_1} {n : ℕ} {f : Fin (n + 1) → α}, List.ofF
+n f = f 0 :: List.ofFn fun i => f i.succ
+· 使用定理 `List.ofFn_zero`：∀ {α : Type u_1} {f : Fin 0 → α}, List.ofFn f = []
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem mul_injections
-  given: (a₁ a₂ : A i)
-  proof: by
-  rw [← ι_apply]; rw [← ι_apply]; rw [← RingCon.coe_mul]
-refine Quotient.sound RingCon.le_ringConGen _ _ ?_
-  convert! rel.prod
-  simp
-
-中文:
-定理 mul_injections
-  条件: (a₁ a₂ : A i)
-  证明: by
-  rw [← ι_apply]; rw [← ι_apply]; rw [← RingCon.coe_mul]
-refine Quotient.sound RingCon.le_ringConGen _ _ ?_
-  convert! rel.prod
-  simp
-
-Depends on / 依赖: Quotient, Quotient.sound, RingCon, RingCon.coe_mul, RingCon.le_ringConGen, coe_mul, convert, le_ringConGen, rel.prod
+--- 原说明 ---
+Multiplication in the free product of the injections of any two `aᵢ aᵢ': A i` fo
+r
+the same `i` is just the injection of multiplication `aᵢ * aᵢ'` in `A i`.
 -/
 theorem mul_injections (a₁ a₂ : A i) :
     ι' R A (DirectSum.lof R I A i a₁) * ι' R A (DirectSum.lof R I A i a₂)
       = ι' R A (DirectSum.lof R I A i (a₁ * a₂)) := by
-  rw [← ι_apply]; rw [← ι_apply]; rw [← RingCon.coe_mul]
-refine Quotient.sound RingCon.le_ringConGen _ _ ?_
+  rw [← ι_apply, ← ι_apply, ← RingCon.coe_mul]
+  refine Quotient.sound <| RingCon.le_ringConGen _ _ <| ?_
   convert! rel.prod
   simp
 
-/--
-Definition of `lof` / `lof` 的定义
+/-- The `i`th canonical injection, from `A i` to the free product, as
+a linear map -/
+/-
+**LinearAlgebra.FreeProduct.lof** 是 Mathlib 中的一个缩写定义，位于命名空间 `LinearAlgebra.FreeP
+roduct`。
+形式化陈述：lof (i : I) : A i ->ₗ[R] FreeProduct R A
+参数：i : I。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation lof
-  signature: (i : I)
-  body: ι' R A ∘ₗ DirectSum.lof R I A i
-
-中文:
-缩写 lof
-  签名: (i : I)
-  定义体: ι' R A ∘ₗ DirectSum.lof R I A i
-
-Depends on / 依赖: DirectSum, DirectSum.lof
+--- 原说明 ---
+The `i`th canonical injection, from `A i` to the free product, as
+a linear map
 -/
-abbrev lof (i : I) : A i ->ₗ[R] FreeProduct R A :=
+abbrev lof (i : I) : A i →ₗ[R] FreeProduct R A :=
   ι' R A ∘ₗ DirectSum.lof R I A i
 
-/--
-theorem `lof_map_one` / 定理 `lof_map_one`
+/-- `lof R A i 1 = 1` for all `i`. -/
+/-
+**LinearAlgebra.FreeProduct.lof_map_one** 是 Mathlib 中的一个定理，位于命名空间 `LinearAlgebra
+.FreeProduct`。
+形式化陈述：lof_map_one (i : I) : lof R A i 1 = 1
+参数：i : I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearAlgebra.FreeProduct.lof.eq_1`：∀ {I : Type u} [inst : DecidableEq I
+] (R : Type v) [inst_1 : CommSemiring R] (A : I → Type w)   [inst_2 : (i : I) → 
+Semiring (A i)] [inst_3 …
+· 使用定理 `LinearAlgebra.FreeProduct.identify_one`：identify_one (i : I) : ι' R A (D
+irectSum.lof R I A i 1) = 1
 
-English:
-theorem lof_map_one
-  given: (i : I)
-  statement: lof R A i 1 = 1
-  proof: by
-  rw [lof]; dsimp [mkAlgHom]; exact identify_one R A i
-
-中文:
-定理 lof_map_one
-  条件: (i : I)
-  结论: lof R A i 1 = 1
-  证明: by
-  rw [lof]; dsimp [mkAlgHom]; exact identify_one R A i
-
-Depends on / 依赖: identify_one, mkAlgHom
+--- 原说明 ---
+`lof R A i 1 = 1` for all `i`.
 -/
 theorem lof_map_one (i : I) : lof R A i 1 = 1 := by
   rw [lof]; dsimp [mkAlgHom]; exact identify_one R A i
 
 /-- The `i`th canonical injection, from `A i` to the free product -/
-irreducible_def ι (i : I) : A i ->ₐ[R] FreeProduct R A :=
+irreducible_def ι (i : I) : A i →ₐ[R] FreeProduct R A :=
   AlgHom.ofLinearMap (ι' R A ∘ₗ DirectSum.lof R I A i)
     (lof_map_one R A i) (mul_injections R A · · |>.symm)
 
 /-- The family of canonical injection maps, with `i` left implicit -/
-irreducible_def of {i : I} : A i ->ₐ[R] FreeProduct R A := ι R A i
+irreducible_def of {i : I} : A i →ₐ[R] FreeProduct R A := ι R A i
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `lift` / `lift` 的定义
+/-- Universal property of the free product of algebras:
+for every `R`-algebra `B`, every family of maps `maps : (i : I) → (A i →ₐ[R] B)` lifts
+to a unique arrow `π` from `FreeProduct R A` such that  `π ∘ ι i = maps i`. -/
+/-
+**LinearAlgebra.FreeProduct.lift** 是 Mathlib 中的一个定义，位于命名空间 `LinearAlgebra.FreePr
+oduct`。
+形式化陈述：{I : Type u} →   [inst : DecidableEq I] →     (R : Type v) →       [inst_1
+ : CommSemiring R] →         (A : I → Type w) →           [inst_2 : (i : I) → Se
+miring (A i)] →             [inst_3 : (i : I) → Algebra R (A i)] →              
+ {B : Type w'} →                 [inst_4 : Semiring B] →                   [inst
+_5 : Algebra R B] → ({i : I} → A i →ₐ[R] B) ≃ (LinearAlgebra.FreeProduct R A →ₐ[
+R] B)
+参数：R : Type v；A : I → Type w；i : I；A i；i : I；A i；{i : I} → A i →ₐ[R] B；LinearAlg
+ebra.FreeProduct R A →ₐ[R] B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: : ({i : I} -> A i ->ₐ[R] B) ≃ (FreeProduct R A ->ₐ[R] B) where
-  body: RingCon.liftₐ _
-      (TensorAlgebra.lift R <| DirectSum.toModule R I B <| (@maps · |>.toLinearMap))
- RingCon.ringConGen_le.2 fun x y r => by
-          cases r with
-          | id => simp
-          | prod => simp
-  invFun π i := π ∘ₐ ι R A i
-  left_inv π := by
-    ext i aᵢ
-    simp [ι, ← ι_apply]
-  right_inv maps := by
-    ext i a
-    simp [ι, ← ι_apply]
-
-中文:
-定义 lift
-  签名: : ({i : I} -> A i ->ₐ[R] B) ≃ (自由积 R A ->ₐ[R] B) where
-  定义体: RingCon.liftₐ _
-      (TensorAlgebra.lift R <| DirectSum.toModule R I B <| (@maps · |>.toLinearMap))
- RingCon.ringConGen_le.2 fun x y r => by
-          cases r with
-          | id => simp
-          | prod => simp
-  invFun π i := π ∘ₐ ι R A i
-  left_inv π := by
-    ext i aᵢ
-    simp [ι, ← ι_apply]
-  right_inv maps := by
-    ext i a
-    simp [ι, ← ι_apply]
+--- 原说明 ---
+Universal property of the free product of algebras:
+for every `R`-algebra `B`, every family of maps `maps : (i : I) → (A i →ₐ[R] B)`
+ lifts
+to a unique arrow `π` from `FreeProduct R A` such that  `π ∘ ι i = maps i`.
 -/
-@[simps] def lift : ({i : I} -> A i ->ₐ[R] B) ≃ (FreeProduct R A ->ₐ[R] B) where
+@[simps] def lift : ({i : I} → A i →ₐ[R] B) ≃ (FreeProduct R A →ₐ[R] B) where
   toFun maps :=
     RingCon.liftₐ _
       (TensorAlgebra.lift R <| DirectSum.toModule R I B <| (@maps · |>.toLinearMap))
- RingCon.ringConGen_le.2 fun x y r => by
+        <| RingCon.ringConGen_le.2 fun x y r ↦ by
           cases r with
           | id => simp
           | prod => simp
@@ -553,67 +515,110 @@ definition lift
     simp [ι, ← ι_apply]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `lift_comp_ι` / 定理 `lift_comp_ι`
+/-- Universal property of the free product of algebras, property:
+for every `R`-algebra `B`, every family of maps `maps : (i : I) → (A i →ₐ[R] B)` lifts
+to a unique arrow `π` from `FreeProduct R A` such that  `π ∘ ι i = maps i`. -/
+/-
+**LinearAlgebra.FreeProduct.lift_comp_** 是 Mathlib 中的一个定理，位于命名空间 `LinearAlgebra.
+FreeProduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem lift_comp_ι
-  statement: lift R A maps ∘ₐ ι R A i = maps
-  proof: by
-  ext a
-  simp [lift_apply, ι, ← ι_apply]
-
-中文:
-定理 lift_comp_ι
-  结论: lift R A maps ∘ₐ ι R A i = maps
-  证明: by
-  ext a
-  simp [lift_apply, ι, ← ι_apply]
+--- 原说明 ---
+Universal property of the free product of algebras, property:
+for every `R`-algebra `B`, every family of maps `maps : (i : I) → (A i →ₐ[R] B)`
+ lifts
+to a unique arrow `π` from `FreeProduct R A` such that  `π ∘ ι i = maps i`.
 -/
 @[simp↓] theorem lift_comp_ι : lift R A maps ∘ₐ ι R A i = maps := by
   ext a
   simp [lift_apply, ι, ← ι_apply]
-
-/--
-theorem `lift_algebraMap` / 定理 `lift_algebraMap`
-
-English:
-theorem lift_algebraMap
-  given: (r : R)
-  statement: lift R A maps (algebraMap R _ r) = algebraMap R _ r
-  proof: by
-  rw [lift_apply]; rw [AlgHom.commutes]
-
-中文:
-定理 lift_algebraMap
-  条件: (r : R)
-  结论: lift R A maps (algebraMap R _ r) = algebraMap R _ r
-  证明: by
-  rw [lift_apply]; rw [AlgHom.commutes]
+/-
+**LinearAlgebra.FreeProduct.lift_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `LinearAlg
+ebra.FreeProduct`。
+形式化陈述：∀ {I : Type u} [inst : DecidableEq I] (R : Type v) [inst_1 : CommSemiring 
+R] (A : I → Type w)   [inst_2 : (i : I) → Semiring (A i)] [inst_3 : (i : I) → Al
+gebra R (A i)] {B : Type w'} [inst_4 : Semiring B]   [inst_5 : Algebra R B] (map
+s : {i : I} → A i →ₐ[R] B) (r : R),   ((LinearAlgebra.FreeProduct.lift R A) fun 
+{i} => maps) ((algebraMap R (LinearAlgebra.FreeProduct R A)) r) =     (algebraMa
+p R B) r
+参数：R : Type v；A : I → Type w；i : I；A i；i : I；A i；maps : {i : I} → A i →ₐ[R] B；r 
+: R；(LinearAlgebra.FreeProduct.lift R A) fun {i} => maps；(algebraMap R (LinearAl
+gebra.FreeProduct R A)) r；algebraMap R B。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearAlgebra.FreeProduct.lift_apply`：∀ {I : Type u} [inst : DecidableEq
+ I] (R : Type v) [inst_1 : CommSemiring R] (A : I → Type w)   [inst_2 : (i : I) 
+→ Semiring (A i)] [inst_3 …
+· 使用定理 `AlgHom.commutes`：commutes (r : R) : φ (algebraMap R A r) = algebraMap R 
+B r
 -/
 @[simp↓] theorem lift_algebraMap (r : R) : lift R A maps (algebraMap R _ r) = algebraMap R _ r := by
-  rw [lift_apply]; rw [AlgHom.commutes]
+  rw [lift_apply, AlgHom.commutes]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `lift_unique` / 定理 `lift_unique`
-
-English:
-theorem lift_unique
-  proof: by
-  ext i a; simp_rw [AlgHom.ext_iff] at h; specialize h i a
-  simp [h.symm, ι, ← ι_apply]
-
-中文:
-定理 lift_unique
-  证明: by
-  ext i a; simp_rw [AlgHom.ext_iff] at h; specialize h i a
-  simp [h.symm, ι, ← ι_apply]
+/-
+**LinearAlgebra.FreeProduct.lift_unique** 是 Mathlib 中的一个定理，位于命名空间 `LinearAlgebra
+.FreeProduct`。
+形式化陈述：∀ {I : Type u} [inst : DecidableEq I] (R : Type v) [inst_1 : CommSemiring 
+R] (A : I → Type w)   [inst_2 : (i : I) → Semiring (A i)] [inst_3 : (i : I) → Al
+gebra R (A i)] {B : Type w'} [inst_4 : Semiring B]   [inst_5 : Algebra R B] (map
+s : {i : I} → A i →ₐ[R] B) (f : LinearAlgebra.FreeProduct R A →ₐ[R] B),   (∀ (i 
+: I), f.comp (LinearAlgebra.FreeProduct.ι R A i) = maps) →     f = (LinearAlgebr
+a.FreeProduct.lift R A) fun {i} => maps
+参数：R : Type v；A : I → Type w；i : I；A i；i : I；A i；maps : {i : I} → A i →ₐ[R] B；f 
+: LinearAlgebra.FreeProduct R A →ₐ[R] B；∀ (i : I), f.comp (LinearAlgebra.FreePro
+duct.ι R A i) = maps；LinearAlgebra.FreeProduct.lift R A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingCon.Quotient.hom_extₐ`：∀ {M : Type u_1} {P : Type u_3} {R : Type u_4
+} [inst : CommSemiring R] [inst_1 : Semiring M] [inst_2 : Algebra R M]   [inst_3
+ : Semiring P] …
+· 使用定理 `TensorAlgebra.hom_ext`：hom_ext {A : Type*} [Semiring A] [Algebra R A] {f
+ g : TensorAlgebra R M ->ₐ[R] A} (w : f.toLinearMap.comp (ι R) = g.toLinearMap.c
+omp (ι R)) …
+· 使用定理 `DirectSum.linearMap_ext`：linearMap_ext ⦃ψ ψ' : (⨁ i, M i) ->ₗ[R] N⦄ (H :
+ forall i, ψ.comp (lof R ι M i) = ψ'.comp (lof R ι M i)) : ψ = ψ'
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RingCon.mkₐ_apply`：∀ (α : Type u_1) {R : Type u_3} [inst : CommSemiring 
+α] [inst_1 : Semiring R] [inst_2 : Algebra α R] (c : RingCon R)   (r : R), (Ring
+Con.mkₐ…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LinearMap.comp.congr_simp`：∀ {R₁ : Type u_2} {R₂ : Type u_3} {R₃ : Type 
+u_4} {M₁ : Type u_9} {M₂ : Type u_10} {M₃ : Type u_11} [inst : Semiring R₁]   [i
+nst_1 : Semirin…
+· 使用定理 `LinearAlgebra.FreeProduct.lift_apply`：∀ {I : Type u} [inst : DecidableEq
+ I] (R : Type v) [inst_1 : CommSemiring R] (A : I → Type w)   [inst_2 : (i : I) 
+→ Semiring (A i)] [inst_3 …
+· 使用定理 `TensorAlgebra.lift_ι_apply`：lift_ι_apply {A : Type*} [Semiring A] [Algeb
+ra R A] (f : M ->ₗ[R] A) (x) : lift R f (ι R x) = f x
+· 使用定理 `DirectSum.toModule_lof`：toModule_lof (i) (x : M i) : toModule R ι N φ (l
+of R ι M i x) = φ i x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `LinearAlgebra.FreeProduct.lof_map_one`：lof_map_one (i : I) : lof R A i 1
+ = 1
+· 使用定理 `LinearAlgebra.FreeProduct.ι_def`：∀ {I : Type u_1} [inst : DecidableEq I]
+ (R : Type u_2) [inst_1 : CommSemiring R] (A : I → Type u_3)   [inst_2 : (i : I)
+ → Semiring (A i)] [i…
+· 使用定理 `AlgHom.ofLinearMap_apply`：∀ {R : Type u} {A : Type v} {B : Type w} [inst
+ : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algeb
+ra R A] [inst_…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[aesop safe destruct] theorem lift_unique
-    (f : FreeProduct R A ->ₐ[R] B) (h : forall i, f ∘ₐ ι R A i = maps) :
+    (f : FreeProduct R A →ₐ[R] B) (h : ∀ i, f ∘ₐ ι R A i = maps) :
     f = lift R A maps := by
   ext i a; simp_rw [AlgHom.ext_iff] at h; specialize h i a
   simp [h.symm, ι, ← ι_apply]
 
 end LinearAlgebra.FreeProduct
+

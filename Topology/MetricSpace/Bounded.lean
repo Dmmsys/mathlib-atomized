@@ -48,82 +48,61 @@ variable {α : Type u} {β : Type v} {X ι : Type*}
 section UniformSpace
 variable [UniformSpace α] [Preorder α] [CompactIccSpace α]
 
-/--
-lemma `totallyBounded_Icc` / 引理 `totallyBounded_Icc`
-
-English:
-lemma totallyBounded_Icc
-  given: (a b : α)
-  statement: TotallyBounded (Icc a b)
-  proof: isCompact_Icc.totallyBounded
-
-中文:
-引理 totallyBounded_Icc
-  条件: (a b : α)
-  结论: 全有界 (闭区间 a b)
-  证明: isCompact_Icc.totallyBounded
-
-Depends on / 依赖: isCompact_Icc, isCompact_Icc.totallyBounded, totallyBounded
+/-
+**totallyBounded_Icc** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：totallyBounded_Icc (a b : α) : TotallyBounded (Icc a b)
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCompact.totallyBounded`：∀ {α : Type u} [uniformSpace : UniformSpace α]
+ {s : Set α}, IsCompact s → TotallyBounded s
+· 使用定理 `CompactIccSpace.isCompact_Icc`：∀ {α : Type u_1} {inst : TopologicalSpace
+ α} {inst_1 : Preorder α} [self : CompactIccSpace α] {a b : α},   IsCompact (Set
+.Icc a b)
 -/
 lemma totallyBounded_Icc (a b : α) : TotallyBounded (Icc a b) :=
   isCompact_Icc.totallyBounded
-
-/--
-lemma `totallyBounded_Ico` / 引理 `totallyBounded_Ico`
-
-English:
-lemma totallyBounded_Ico
-  given: (a b : α)
-  statement: TotallyBounded (Ico a b)
-  proof: (totallyBounded_Icc a b).subset Ico_subset_Icc_self
-
-中文:
-引理 totallyBounded_Ico
-  条件: (a b : α)
-  结论: 全有界 (左闭右开区间 a b)
-  证明: (totallyBounded_Icc a b).subset Ico_subset_Icc_self
-
-Depends on / 依赖: Ico_subset_Icc_self, subset, totallyBounded_Icc
+/-
+**totallyBounded_Ico** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：totallyBounded_Ico (a b : α) : TotallyBounded (Ico a b)
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TotallyBounded.subset`：TotallyBounded.subset {s₁ s₂ : Set α} (hs : s₁ su
+bseteq s₂) (h : TotallyBounded s₂) : TotallyBounded s₁
+· 使用定理 `Set.Ico_subset_Icc_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Ico b a ⊆ Set.Icc b a
+· 使用引理 `totallyBounded_Icc`：totallyBounded_Icc (a b : α) : TotallyBounded (Icc a
+ b)
 -/
 lemma totallyBounded_Ico (a b : α) : TotallyBounded (Ico a b) :=
   (totallyBounded_Icc a b).subset Ico_subset_Icc_self
-
-/--
-lemma `totallyBounded_Ioc` / 引理 `totallyBounded_Ioc`
-
-English:
-lemma totallyBounded_Ioc
-  given: (a b : α)
-  statement: TotallyBounded (Ioc a b)
-  proof: (totallyBounded_Icc a b).subset Ioc_subset_Icc_self
-
-中文:
-引理 totallyBounded_Ioc
-  条件: (a b : α)
-  结论: 全有界 (左开右闭区间 a b)
-  证明: (totallyBounded_Icc a b).subset Ioc_subset_Icc_self
-
-Depends on / 依赖: Ioc_subset_Icc_self, subset, totallyBounded_Icc
+/-
+**totallyBounded_Ioc** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：totallyBounded_Ioc (a b : α) : TotallyBounded (Ioc a b)
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TotallyBounded.subset`：TotallyBounded.subset {s₁ s₂ : Set α} (hs : s₁ su
+bseteq s₂) (h : TotallyBounded s₂) : TotallyBounded s₁
+· 使用定理 `Set.Ioc_subset_Icc_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Ioc a b ⊆ Set.Icc a b
+· 使用引理 `totallyBounded_Icc`：totallyBounded_Icc (a b : α) : TotallyBounded (Icc a
+ b)
 -/
 lemma totallyBounded_Ioc (a b : α) : TotallyBounded (Ioc a b) :=
   (totallyBounded_Icc a b).subset Ioc_subset_Icc_self
-
-/--
-lemma `totallyBounded_Ioo` / 引理 `totallyBounded_Ioo`
-
-English:
-lemma totallyBounded_Ioo
-  given: (a b : α)
-  statement: TotallyBounded (Ioo a b)
-  proof: (totallyBounded_Icc a b).subset Ioo_subset_Icc_self
-
-中文:
-引理 totallyBounded_Ioo
-  条件: (a b : α)
-  结论: 全有界 (开区间 a b)
-  证明: (totallyBounded_Icc a b).subset Ioo_subset_Icc_self
-
-Depends on / 依赖: Ioo_subset_Icc_self, subset, totallyBounded_Icc
+/-
+**totallyBounded_Ioo** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：totallyBounded_Ioo (a b : α) : TotallyBounded (Ioo a b)
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TotallyBounded.subset`：TotallyBounded.subset {s₁ s₂ : Set α} (hs : s₁ su
+bseteq s₂) (h : TotallyBounded s₂) : TotallyBounded s₁
+· 使用定理 `Set.Ioo_subset_Icc_self`：Ioo_subset_Icc_self : Ioo a b subseteq Icc a b
+· 使用引理 `totallyBounded_Icc`：totallyBounded_Icc (a b : α) : TotallyBounded (Icc a
+ b)
 -/
 lemma totallyBounded_Ioo (a b : α) : TotallyBounded (Ioo a b) :=
   (totallyBounded_Icc a b).subset Ioo_subset_Icc_self
@@ -134,577 +113,542 @@ namespace Metric
 
 section Bounded
 
-variable {x : α} {s t : Set α} {r : Real}
+variable {x : α} {s t : Set α} {r : ℝ}
 variable [PseudoMetricSpace α]
 
-/--
-theorem `isBounded_closedBall` / 定理 `isBounded_closedBall`
+/-- Closed balls are bounded -/
+/-
+**Metric.isBounded_closedBall** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：isBounded_closedBall : IsBounded (closedBall x r)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Metric.isBounded_iff`：isBounded_iff {s : Set α} : IsBounded s ↔ exists C
+ : Real, forall ⦃x⦄, x in s -> forall ⦃y⦄, y in s -> dist x y <= C
+· 使用定理 `dist_triangle_right`：dist_triangle_right (x y z : α) : dist x y <= dist 
+x z + dist y z
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
 
-English:
-theorem isBounded_closedBall
-  statement: IsBounded (closedBall x r)
-  proof: isBounded_iff.2 ⟨r + r, fun y hy z hz =>
-    calc dist y z <= dist y x + dist z x := dist_triangle_right _ _ _
-    _ <= r + r := add_le_add hy hz⟩
-
-中文:
-定理 isBounded_closedBall
-  结论: IsBounded (closedBall x r)
-  证明: isBounded_iff.2 ⟨r + r, fun y hy z hz =>
-    calc dist y z <= dist y x + dist z x := dist_triangle_right _ _ _
-    _ <= r + r := add_le_add hy hz⟩
-
-Depends on / 依赖: add_le_add, dist_triangle_right, isBounded_iff
+--- 原说明 ---
+Closed balls are bounded
 -/
 theorem isBounded_closedBall : IsBounded (closedBall x r) :=
   isBounded_iff.2 ⟨r + r, fun y hy z hz =>
-    calc dist y z <= dist y x + dist z x := dist_triangle_right _ _ _
-    _ <= r + r := add_le_add hy hz⟩
+    calc dist y z ≤ dist y x + dist z x := dist_triangle_right _ _ _
+    _ ≤ r + r := add_le_add hy hz⟩
 
-/--
-theorem `isBounded_ball` / 定理 `isBounded_ball`
+/-- Open balls are bounded -/
+/-
+**Metric.isBounded_ball** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：isBounded_ball : IsBounded (ball x r)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Bornology.IsBounded.subset`：∀ {α : Type u_2} {x : Bornology α} {s t : Se
+t α}, Bornology.IsBounded t → s ⊆ t → Bornology.IsBounded s
+· 使用定理 `Metric.isBounded_closedBall`：isBounded_closedBall : IsBounded (closedBal
+l x r)
+· 使用定理 `Metric.ball_subset_closedBall`：ball_subset_closedBall : ball x ε subsete
+q closedBall x ε
 
-English:
-theorem isBounded_ball
-  statement: IsBounded (ball x r)
-  proof: isBounded_closedBall.subset ball_subset_closedBall
-
-中文:
-定理 isBounded_ball
-  结论: IsBounded (ball x r)
-  证明: isBounded_closedBall.subset ball_subset_closedBall
-
-Depends on / 依赖: ball_subset_closedBall, isBounded_closedBall, isBounded_closedBall.subset, subset
+--- 原说明 ---
+Open balls are bounded
 -/
 theorem isBounded_ball : IsBounded (ball x r) :=
   isBounded_closedBall.subset ball_subset_closedBall
 
-/--
-theorem `eq_countable_union_of_isBounded_of_isOpen` / 定理 `eq_countable_union_of_isBounded_of_isOpen`
+/-- Every open set in a metric space is a countable union of bounded open sets. -/
+/-
+**Metric.eq_countable_union_of_isBounded_of_isOpen** 是 Mathlib 中的一个定理，位于命名空间 `Me
+tric`。
+形式化陈述：eq_countable_union_of_isBounded_of_isOpen {U : Set α} (hU : IsOpen U) : ex
+ists f : Nat -> Set α, Monotone f ∧ ⋃ i, f i = U ∧ forall i, IsBounded (f i) ∧ I
+sOpen (f i)
+参数：hU : IsOpen U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `monotone_const`：monotone_const [Preorder α] [Preorder β] {c : β} : Monot
+one fun _ : α => c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.iUnion_empty`：iUnion_empty : (⋃ _ : ι, ∅ : Set α) = ∅
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.inter_subset_inter_right`：inter_subset_inter_right {s t : Set α} (u 
+: Set α) (H : s subseteq t) : u inter s subseteq u inter t
+· 使用定理 `Metric.ball_subset_ball`：ball_subset_ball (h : ε₁ <= ε₂) : ball x ε₁ sub
+seteq ball x ε₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.cast_le`：cast_le : (m : α) <= n ↔ m <= n
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Metric.iUnion_ball_nat`：iUnion_ball_nat (x : α) : ⋃ n : Nat, ball x n = 
+univ
+· 使用定理 `Set.inter_univ`：inter_univ (a : Set α) : a inter univ = a
+· 使用定理 `Bornology.IsBounded.subset`：∀ {α : Type u_2} {x : Bornology α} {s t : Se
+t α}, Bornology.IsBounded t → s ⊆ t → Bornology.IsBounded s
+· 使用定理 `Metric.isBounded_ball`：isBounded_ball : IsBounded (ball x r)
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
+· 使用定理 `IsOpen.inter`：IsOpen.inter (s t : Set α) : IsOpen α s -> IsOpen α t -> I
+sOpen α (s inter t)
+· 使用定理 `Metric.isOpen_ball`：∀ {α : Type u} [inst : PseudoMetricSpace α] {x : α} 
+{ε : ℝ}, IsOpen (Metric.ball x ε)
 
-English:
-theorem eq_countable_union_of_isBounded_of_isOpen
-  given: {U : Set α} (hU : IsOpen U)
-  proof: by
-  obtain rfl | ⟨x, -⟩ := U.eq_empty_or_nonempty
-  · exact ⟨fun i => ∅, monotone_const, by simp_all⟩
-  refine ⟨fun i => U inter ball x i, fun i j hij => ?_, ?_, fun i => ⟨?_, hU.inter isOpen_ball⟩⟩
-  · exact inter_subset_inter_right _ (ball_subset_ball (Nat.cast_le.2 hij))
-  · simp [← inter_iUnion]
-  · exact isBounded_ball.subset inter_subset_right
-
-中文:
-定理 eq_countable_union_of_isBounded_of_isOpen
-  条件: {U : 集合 α} (hU : 是开集 U)
-  证明: by
-  obtain rfl | ⟨x, -⟩ := U.eq_empty_or_nonempty
-  · exact ⟨fun i => ∅, monotone_const, by simp_all⟩
-  refine ⟨fun i => U inter ball x i, fun i j hij => ?_, ?_, fun i => ⟨?_, hU.inter isOpen_ball⟩⟩
-  · exact inter_subset_inter_right _ (ball_subset_ball (Nat.cast_le.2 hij))
-  · simp [← inter_iUnion]
-  · exact isBounded_ball.subset inter_subset_right
-
-Depends on / 依赖: Nat.cast_le, U.eq_empty_or_nonempty, ball_subset_ball, cast_le, eq_empty_or_nonempty, hU.inter, inter_iUnion, inter_subset_inter_right, inter_subset_right, isBounded_ball, isBounded_ball.subset, isOpen_ball, monotone_const, subset
+--- 原说明 ---
+Every open set in a metric space is a countable union of bounded open sets.
 -/
 theorem eq_countable_union_of_isBounded_of_isOpen {U : Set α} (hU : IsOpen U) :
-    exists f : Nat -> Set α, Monotone f ∧ ⋃ i, f i = U ∧ forall i, IsBounded (f i) ∧ IsOpen (f i) := by
+    ∃ f : ℕ → Set α, Monotone f ∧ ⋃ i, f i = U ∧ ∀ i, IsBounded (f i) ∧ IsOpen (f i) := by
   obtain rfl | ⟨x, -⟩ := U.eq_empty_or_nonempty
-  · exact ⟨fun i => ∅, monotone_const, by simp_all⟩
-  refine ⟨fun i => U inter ball x i, fun i j hij => ?_, ?_, fun i => ⟨?_, hU.inter isOpen_ball⟩⟩
+  · exact ⟨fun i ↦ ∅, monotone_const, by simp_all⟩
+  refine ⟨fun i ↦ U ∩ ball x i, fun i j hij ↦ ?_, ?_, fun i ↦ ⟨?_, hU.inter isOpen_ball⟩⟩
   · exact inter_subset_inter_right _ (ball_subset_ball (Nat.cast_le.2 hij))
   · simp [← inter_iUnion]
   · exact isBounded_ball.subset inter_subset_right
 
-/--
-theorem `isBounded_sphere` / 定理 `isBounded_sphere`
+/-- Spheres are bounded -/
+/-
+**Metric.isBounded_sphere** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：isBounded_sphere : IsBounded (sphere x r)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Bornology.IsBounded.subset`：∀ {α : Type u_2} {x : Bornology α} {s t : Se
+t α}, Bornology.IsBounded t → s ⊆ t → Bornology.IsBounded s
+· 使用定理 `Metric.isBounded_closedBall`：isBounded_closedBall : IsBounded (closedBal
+l x r)
+· 使用定理 `Metric.sphere_subset_closedBall`：sphere_subset_closedBall : sphere x ε s
+ubseteq closedBall x ε
 
-English:
-theorem isBounded_sphere
-  statement: IsBounded (sphere x r)
-  proof: isBounded_closedBall.subset sphere_subset_closedBall
-
-中文:
-定理 isBounded_sphere
-  结论: IsBounded (sphere x r)
-  证明: isBounded_closedBall.subset sphere_subset_closedBall
-
-Depends on / 依赖: isBounded_closedBall, isBounded_closedBall.subset, sphere_subset_closedBall, subset
+--- 原说明 ---
+Spheres are bounded
 -/
 theorem isBounded_sphere : IsBounded (sphere x r) :=
   isBounded_closedBall.subset sphere_subset_closedBall
 
-/--
-theorem `isBounded_iff_subset_closedBall` / 定理 `isBounded_iff_subset_closedBall`
+/-- Given a point, a bounded subset is included in some ball around this point -/
+/-
+**Metric.isBounded_iff_subset_closedBall** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：isBounded_iff_subset_closedBall (c : α) : IsBounded s ↔ exists r, s subset
+eq closedBall c r
+参数：c : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `Set.mem_insert`：mem_insert (x : α) (s : Set α) : x in insert x s
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Metric.isBounded_iff`：isBounded_iff {s : Set α} : IsBounded s ↔ exists C
+ : Real, forall ⦃x⦄, x in s -> forall ⦃y⦄, y in s -> dist x y <= C
+· 使用定理 `Bornology.IsBounded.insert`：∀ {α : Type u_2} {x : Bornology α} {s : Set 
+α}, Bornology.IsBounded s → ∀ (x_1 : α), Bornology.IsBounded (insert x_1 s)
+· 使用定理 `Bornology.IsBounded.subset`：∀ {α : Type u_2} {x : Bornology α} {s t : Se
+t α}, Bornology.IsBounded t → s ⊆ t → Bornology.IsBounded s
+· 使用定理 `Metric.isBounded_closedBall`：isBounded_closedBall : IsBounded (closedBal
+l x r)
 
-English:
-theorem isBounded_iff_subset_closedBall
-  given: (c : α)
-  statement: IsBounded s ↔ exists r, s subseteq closedBall c r
-  proof: ⟨fun h => (isBounded_iff.1 (h.insert c)).imp fun _r hr _x hx => hr (.inr hx) (mem_insert _ _),
-    fun ⟨_r, hr⟩ => isBounded_closedBall.subset hr⟩
-
-中文:
-定理 isBounded_iff_subset_closedBall
-  条件: (c : α)
-  结论: IsBounded s ↔ 存在 r, s subseteq closedBall c r
-  证明: ⟨fun h => (isBounded_iff.1 (h.insert c)).imp fun _r hr _x hx => hr (.inr hx) (mem_insert _ _),
-    fun ⟨_r, hr⟩ => isBounded_closedBall.subset hr⟩
-
-Depends on / 依赖: h.insert, insert, isBounded_closedBall, isBounded_closedBall.subset, isBounded_iff, mem_insert, subset
+--- 原说明 ---
+Given a point, a bounded subset is included in some ball around this point
 -/
-theorem isBounded_iff_subset_closedBall (c : α) : IsBounded s ↔ exists r, s subseteq closedBall c r :=
-  ⟨fun h => (isBounded_iff.1 (h.insert c)).imp fun _r hr _x hx => hr (.inr hx) (mem_insert _ _),
-    fun ⟨_r, hr⟩ => isBounded_closedBall.subset hr⟩
-
-/--
-theorem `_root_.Bornology.IsBounded.subset_closedBall` / 定理 `_root_.Bornology.IsBounded.subset_closedBall`
-
-English:
-theorem _root_.Bornology.IsBounded.subset_closedBall
-  given: (h : IsBounded s) (c : α)
-  proof: (isBounded_iff_subset_closedBall c).1 h
-
-中文:
-定理 _root_.有界结构.IsBounded.subset_closedBall
-  条件: (h : IsBounded s) (c : α)
-  证明: (isBounded_iff_subset_closedBall c).1 h
-
-Depends on / 依赖: isBounded_iff_subset_closedBall
+theorem isBounded_iff_subset_closedBall (c : α) : IsBounded s ↔ ∃ r, s ⊆ closedBall c r :=
+  ⟨fun h ↦ (isBounded_iff.1 (h.insert c)).imp fun _r hr _x hx ↦ hr (.inr hx) (mem_insert _ _),
+    fun ⟨_r, hr⟩ ↦ isBounded_closedBall.subset hr⟩
+/-
+**Metric._root_.Bornology.IsBounded.subset_closedBall** 是 Mathlib 中的一个定理，位于命名空间 
+`Metric`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Bornology.IsBounded.subset_closedBall (h : IsBounded s) (c : α) :
-    exists r, s subseteq closedBall c r :=
+    ∃ r, s ⊆ closedBall c r :=
   (isBounded_iff_subset_closedBall c).1 h
-
-/--
-theorem `_root_.Bornology.IsBounded.subset_ball_lt` / 定理 `_root_.Bornology.IsBounded.subset_ball_lt`
-
-English:
-theorem _root_.Bornology.IsBounded.subset_ball_lt
-  given: (h : IsBounded s) (a : Real) (c : α)
-  proof: let ⟨r, hr⟩ := h.subset_closedBall c
-⟨max r a + 1, (le_max_right _ _).trans_lt (lt_add_one _), hr.trans closedBall_subset_ball
-    (le_max_left _ _).trans_lt (lt_add_one _)⟩
-
-中文:
-定理 _root_.有界结构.IsBounded.subset_ball_lt
-  条件: (h : IsBounded s) (a : 实数) (c : α)
-  证明: let ⟨r, hr⟩ := h.subset_closedBall c
-⟨max r a + 1, (le_max_right _ _).trans_lt (lt_add_one _), hr.trans closedBall_subset_ball
-    (le_max_left _ _).trans_lt (lt_add_one _)⟩
-
-Depends on / 依赖: closedBall_subset_ball, h.subset_closedBall, hr.trans, le_max_left, le_max_right, lt_add_one, subset_closedBall, trans_lt
+/-
+**Metric._root_.Bornology.IsBounded.subset_ball_lt** 是 Mathlib 中的一个定理，位于命名空间 `Me
+tric`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Bornology.IsBounded.subset_ball_lt (h : IsBounded s) (a : Real) (c : α) :
-    exists r, a < r ∧ s subseteq ball c r :=
+theorem _root_.Bornology.IsBounded.subset_ball_lt (h : IsBounded s) (a : ℝ) (c : α) :
+    ∃ r, a < r ∧ s ⊆ ball c r :=
   let ⟨r, hr⟩ := h.subset_closedBall c
-⟨max r a + 1, (le_max_right _ _).trans_lt (lt_add_one _), hr.trans closedBall_subset_ball
+  ⟨max r a + 1, (le_max_right _ _).trans_lt (lt_add_one _), hr.trans <| closedBall_subset_ball <|
     (le_max_left _ _).trans_lt (lt_add_one _)⟩
-
-/--
-theorem `_root_.Bornology.IsBounded.subset_ball` / 定理 `_root_.Bornology.IsBounded.subset_ball`
-
-English:
-theorem _root_.Bornology.IsBounded.subset_ball
-  given: (h : IsBounded s) (c : α)
-  statement: exists r, s subseteq ball c r
-  proof: (h.subset_ball_lt 0 c).imp fun _ => And.right
-
-中文:
-定理 _root_.有界结构.IsBounded.subset_ball
-  条件: (h : IsBounded s) (c : α)
-  结论: 存在 r, s subseteq ball c r
-  证明: (h.subset_ball_lt 0 c).imp fun _ => And.right
-
-Depends on / 依赖: And.right, h.subset_ball_lt, subset_ball_lt
+/-
+**Metric._root_.Bornology.IsBounded.subset_ball** 是 Mathlib 中的一个定理，位于命名空间 `Metri
+c`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Bornology.IsBounded.subset_ball (h : IsBounded s) (c : α) : exists r, s subseteq ball c r :=
-  (h.subset_ball_lt 0 c).imp fun _ => And.right
-
-/--
-theorem `isBounded_iff_subset_ball` / 定理 `isBounded_iff_subset_ball`
-
-English:
-theorem isBounded_iff_subset_ball
-  given: (c : α)
-  statement: IsBounded s ↔ exists r, s subseteq ball c r
-  proof: ⟨(IsBounded.subset_ball · c), fun ⟨_r, hr⟩ => isBounded_ball.subset hr⟩
-
-中文:
-定理 isBounded_iff_subset_ball
-  条件: (c : α)
-  结论: IsBounded s ↔ 存在 r, s subseteq ball c r
-  证明: ⟨(IsBounded.subset_ball · c), fun ⟨_r, hr⟩ => isBounded_ball.subset hr⟩
-
-Depends on / 依赖: IsBounded, IsBounded.subset_ball, isBounded_ball, isBounded_ball.subset, subset, subset_ball
+theorem _root_.Bornology.IsBounded.subset_ball (h : IsBounded s) (c : α) : ∃ r, s ⊆ ball c r :=
+  (h.subset_ball_lt 0 c).imp fun _ ↦ And.right
+/-
+**Metric.isBounded_iff_subset_ball** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：isBounded_iff_subset_ball (c : α) : IsBounded s ↔ exists r, s subseteq bal
+l c r
+参数：c : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Bornology.IsBounded.subset_ball`：∀ {α : Type u} {s : Set α} [inst : Pseu
+doMetricSpace α], Bornology.IsBounded s → ∀ (c : α), ∃ r, s ⊆ Metric.ball c r
+· 使用定理 `Bornology.IsBounded.subset`：∀ {α : Type u_2} {x : Bornology α} {s t : Se
+t α}, Bornology.IsBounded t → s ⊆ t → Bornology.IsBounded s
+· 使用定理 `Metric.isBounded_ball`：isBounded_ball : IsBounded (ball x r)
 -/
-theorem isBounded_iff_subset_ball (c : α) : IsBounded s ↔ exists r, s subseteq ball c r :=
-  ⟨(IsBounded.subset_ball · c), fun ⟨_r, hr⟩ => isBounded_ball.subset hr⟩
-
-/--
-theorem `_root_.Bornology.IsBounded.subset_closedBall_lt` / 定理 `_root_.Bornology.IsBounded.subset_closedBall_lt`
-
-English:
-theorem _root_.Bornology.IsBounded.subset_closedBall_lt
-  given: (h : IsBounded s) (a : Real) (c : α)
-  proof: let ⟨r, har, hr⟩ := h.subset_ball_lt a c
-  ⟨r, har, hr.trans ball_subset_closedBall⟩
-
-中文:
-定理 _root_.有界结构.IsBounded.subset_closedBall_lt
-  条件: (h : IsBounded s) (a : 实数) (c : α)
-  证明: let ⟨r, har, hr⟩ := h.subset_ball_lt a c
-  ⟨r, har, hr.trans ball_subset_closedBall⟩
-
-Depends on / 依赖: ball_subset_closedBall, h.subset_ball_lt, hr.trans, subset_ball_lt
+theorem isBounded_iff_subset_ball (c : α) : IsBounded s ↔ ∃ r, s ⊆ ball c r :=
+  ⟨(IsBounded.subset_ball · c), fun ⟨_r, hr⟩ ↦ isBounded_ball.subset hr⟩
+/-
+**Metric._root_.Bornology.IsBounded.subset_closedBall_lt** 是 Mathlib 中的一个定理，位于命名
+空间 `Metric`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Bornology.IsBounded.subset_closedBall_lt (h : IsBounded s) (a : Real) (c : α) :
-    exists r, a < r ∧ s subseteq closedBall c r :=
+theorem _root_.Bornology.IsBounded.subset_closedBall_lt (h : IsBounded s) (a : ℝ) (c : α) :
+    ∃ r, a < r ∧ s ⊆ closedBall c r :=
   let ⟨r, har, hr⟩ := h.subset_ball_lt a c
   ⟨r, har, hr.trans ball_subset_closedBall⟩
-
-/--
-theorem `isBounded_closure_of_isBounded` / 定理 `isBounded_closure_of_isBounded`
-
-English:
-theorem isBounded_closure_of_isBounded
-  given: (h : IsBounded s)
-  statement: IsBounded (closure s)
-  proof: let ⟨C, h⟩ := isBounded_iff.1 h
-isBounded_iff.2 ⟨C, fun _a ha _b hb => isClosed_Iic.closure_subset
-    map_mem_closure₂ continuous_dist ha hb h⟩
-
-中文:
-定理 isBounded_closure_of_isBounded
-  条件: (h : IsBounded s)
-  结论: IsBounded (closure s)
-  证明: let ⟨C, h⟩ := isBounded_iff.1 h
-isBounded_iff.2 ⟨C, fun _a ha _b hb => isClosed_Iic.closure_subset
-    map_mem_closure₂ continuous_dist ha hb h⟩
-
-Depends on / 依赖: closure_subset, continuous_dist, isBounded_iff, isClosed_Iic, isClosed_Iic.closure_subset
+/-
+**Metric.isBounded_closure_of_isBounded** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：isBounded_closure_of_isBounded (h : IsBounded s) : IsBounded (closure s)
+参数：h : IsBounded s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Metric.isBounded_iff`：isBounded_iff {s : Set α} : IsBounded s ↔ exists C
+ : Real, forall ⦃x⦄, x in s -> forall ⦃y⦄, y in s -> dist x y <= C
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsClosed.closure_subset`：IsClosed.closure_subset (hs : IsClosed s) : clo
+sure s subseteq s
+· 使用定理 `isClosed_Iic`：isClosed_Iic : IsClosed (Iic a)
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `map_mem_closure₂`：map_mem_closure₂ {f : X -> Y -> Z} {x : X} {y : Y} {s 
+: Set X} {t : Set Y} {u : Set Z} (hf : Continuous (uncurry f)) (hx : x in closur
+e s) (…
+· 使用引理 `continuous_dist`：continuous_dist : Continuous fun p : α × α => dist p.1 
+p.2
 -/
 theorem isBounded_closure_of_isBounded (h : IsBounded s) : IsBounded (closure s) :=
   let ⟨C, h⟩ := isBounded_iff.1 h
-isBounded_iff.2 ⟨C, fun _a ha _b hb => isClosed_Iic.closure_subset
+  isBounded_iff.2 ⟨C, fun _a ha _b hb => isClosed_Iic.closure_subset <|
     map_mem_closure₂ continuous_dist ha hb h⟩
-
-/--
-theorem `_root_.Bornology.IsBounded.closure` / 定理 `_root_.Bornology.IsBounded.closure`
-
-English:
-theorem _root_.Bornology.IsBounded.closure
-  given: (h : IsBounded s)
-  statement: IsBounded (closure s)
-  proof: isBounded_closure_of_isBounded h
-
-@[simp]
-
-中文:
-定理 _root_.有界结构.IsBounded.closure
-  条件: (h : IsBounded s)
-  结论: IsBounded (closure s)
-  证明: isBounded_closure_of_isBounded h
-
-@[simp]
+/-
+**Metric._root_.Bornology.IsBounded.closure** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem _root_.Bornology.IsBounded.closure (h : IsBounded s) : IsBounded (closure s) :=
   isBounded_closure_of_isBounded h
 
 @[simp]
-/--
-theorem `isBounded_closure_iff` / 定理 `isBounded_closure_iff`
-
-English:
-theorem isBounded_closure_iff
-  statement: IsBounded (closure s) ↔ IsBounded s
-  proof: ⟨fun h => h.subset subset_closure, fun h => h.closure⟩
-
-中文:
-定理 isBounded_closure_iff
-  结论: IsBounded (closure s) ↔ IsBounded s
-  证明: ⟨fun h => h.subset subset_closure, fun h => h.closure⟩
-
-Depends on / 依赖: closure, h.closure, h.subset, subset, subset_closure
+/-
+**Metric.isBounded_closure_iff** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：isBounded_closure_iff : IsBounded (closure s) ↔ IsBounded s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Bornology.IsBounded.subset`：∀ {α : Type u_2} {x : Bornology α} {s t : Se
+t α}, Bornology.IsBounded t → s ⊆ t → Bornology.IsBounded s
+· 使用定理 `subset_closure`：subset_closure : s subseteq closure s
+· 使用定理 `Bornology.IsBounded.closure`：∀ {α : Type u} {s : Set α} [inst : PseudoMe
+tricSpace α], Bornology.IsBounded s → Bornology.IsBounded (closure s)
 -/
 theorem isBounded_closure_iff : IsBounded (closure s) ↔ IsBounded s :=
   ⟨fun h => h.subset subset_closure, fun h => h.closure⟩
-
-/--
-theorem `hasBasis_nhds_isOpen_isBounded` / 定理 `hasBasis_nhds_isOpen_isBounded`
-
-English:
-theorem hasBasis_nhds_isOpen_isBounded
-  given: (x : α)
-  proof: by
-  simp_rw [← and_assoc]
-  apply (nhds_basis_opens x).restrict fun s hs => ?_
-  exact ⟨s inter Metric.ball x 1,
-    by aesop (add safe apply IsOpen.inter),
-    by simpa using Metric.isBounded_ball.subset Set.inter_subset_right⟩
-
-中文:
-定理 hasBasis_nhds_isOpen_isBounded
-  条件: (x : α)
-  证明: by
-  simp_rw [← and_assoc]
-  apply (nhds_basis_opens x).restrict fun s hs => ?_
-  exact ⟨s inter Metric.ball x 1,
-    by aesop (add safe apply IsOpen.inter),
-    by simpa using Metric.isBounded_ball.subset Set.inter_subset_right⟩
-
-Depends on / 依赖: IsOpen, IsOpen.inter, Metric, Metric.ball, Metric.isBounded_ball.subset, Set.inter_subset_right, and_assoc, inter_subset_right, isBounded_ball, nhds_basis_opens, restrict, simp_rw, subset
+/-
+**Metric.hasBasis_nhds_isOpen_isBounded** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：hasBasis_nhds_isOpen_isBounded (x : α) : (𝓝 x).HasBasis (fun a => x in a ∧
+ IsOpen a ∧ Bornology.IsBounded a) id
+参数：x : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Filter.HasBasis.restrict`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter α}
+ {p : ι → Prop} {s : ι → Set α},   l.HasBasis p s → ∀ {q : ι → Prop}, (∀ (i : ι)
+, p i → ∃ j, p…
+· 使用定理 `nhds_basis_opens`：nhds_basis_opens (x : X) : (𝓝 x).HasBasis (fun s : Set
+ X => x in s ∧ IsOpen s) fun s => s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `dist_self`：dist_self (x : α) : dist x x = 0
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `IsOpen.inter`：IsOpen.inter (s t : Set α) : IsOpen α s -> IsOpen α t -> I
+sOpen α (s inter t)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `Bornology.IsBounded.subset`：∀ {α : Type u_2} {x : Bornology α} {s t : Se
+t α}, Bornology.IsBounded t → s ⊆ t → Bornology.IsBounded s
+· 使用定理 `Metric.isBounded_ball`：isBounded_ball : IsBounded (ball x r)
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
 -/
 theorem hasBasis_nhds_isOpen_isBounded (x : α) :
-    (𝓝 x).HasBasis (fun a => x in a ∧ IsOpen a ∧ Bornology.IsBounded a) id := by
+    (𝓝 x).HasBasis (fun a ↦ x ∈ a ∧ IsOpen a ∧ Bornology.IsBounded a) id := by
   simp_rw [← and_assoc]
-  apply (nhds_basis_opens x).restrict fun s hs => ?_
-  exact ⟨s inter Metric.ball x 1,
+  apply (nhds_basis_opens x).restrict fun s hs ↦ ?_
+  exact ⟨s ∩ Metric.ball x 1,
     by aesop (add safe apply IsOpen.inter),
     by simpa using Metric.isBounded_ball.subset Set.inter_subset_right⟩
-
-/--
-theorem `hasBasis_cobounded_compl_closedBall` / 定理 `hasBasis_cobounded_compl_closedBall`
-
-English:
-theorem hasBasis_cobounded_compl_closedBall
-  given: (c : α)
-  proof: ⟨compl_surjective.forall.2 fun _ => (isBounded_iff_subset_closedBall c).trans by simp⟩
-
-中文:
-定理 hasBasis_cobounded_compl_closedBall
-  条件: (c : α)
-  证明: ⟨compl_surjective.forall.2 fun _ => (isBounded_iff_subset_closedBall c).trans by simp⟩
-
-Depends on / 依赖: compl_surjective, compl_surjective.forall, isBounded_iff_subset_closedBall
+/-
+**Metric.hasBasis_cobounded_compl_closedBall** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：hasBasis_cobounded_compl_closedBall (c : α) : (cobounded α).HasBasis (fun 
+_ => True) (fun r => (closedBall c r)ᶜ)
+参数：c : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `compl_surjective`：compl_surjective : Function.Surjective (compl : α -> α
+)
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Metric.isBounded_iff_subset_closedBall`：isBounded_iff_subset_closedBall 
+(c : α) : IsBounded s ↔ exists r, s subseteq closedBall c r
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem hasBasis_cobounded_compl_closedBall (c : α) :
-    (cobounded α).HasBasis (fun _ => True) (fun r => (closedBall c r)ᶜ) :=
-⟨compl_surjective.forall.2 fun _ => (isBounded_iff_subset_closedBall c).trans by simp⟩
-
-/--
-theorem `hasAntitoneBasis_cobounded_compl_closedBall` / 定理 `hasAntitoneBasis_cobounded_compl_closedBall`
-
-English:
-theorem hasAntitoneBasis_cobounded_compl_closedBall
-  given: (c : α)
-  proof: ⟨Metric.hasBasis_cobounded_compl_closedBall _, fun _ _ hr _ => by simpa using hr.trans_lt⟩
-
-中文:
-定理 hasAntitoneBasis_cobounded_compl_closedBall
-  条件: (c : α)
-  证明: ⟨Metric.hasBasis_cobounded_compl_closedBall _, fun _ _ hr _ => by simpa using hr.trans_lt⟩
-
-Depends on / 依赖: Metric, Metric.hasBasis_cobounded_compl_closedBall, hasBasis_cobounded_compl_closedBall, hr.trans_lt, trans_lt
+    (cobounded α).HasBasis (fun _ ↦ True) (fun r ↦ (closedBall c r)ᶜ) :=
+  ⟨compl_surjective.forall.2 fun _ ↦ (isBounded_iff_subset_closedBall c).trans <| by simp⟩
+/-
+**Metric.hasAntitoneBasis_cobounded_compl_closedBall** 是 Mathlib 中的一个定理，位于命名空间 `
+Metric`。
+形式化陈述：hasAntitoneBasis_cobounded_compl_closedBall (c : α) : (cobounded α).HasAnt
+itoneBasis (fun r => (closedBall c r)ᶜ)
+参数：c : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.hasBasis_cobounded_compl_closedBall`：hasBasis_cobounded_compl_clo
+sedBall (c : α) : (cobounded α).HasBasis (fun _ => True) (fun r => (closedBall c
+ r)ᶜ)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
 -/
 theorem hasAntitoneBasis_cobounded_compl_closedBall (c : α) :
-    (cobounded α).HasAntitoneBasis (fun r => (closedBall c r)ᶜ) :=
-  ⟨Metric.hasBasis_cobounded_compl_closedBall _, fun _ _ hr _ => by simpa using hr.trans_lt⟩
-
-/--
-theorem `hasBasis_cobounded_compl_ball` / 定理 `hasBasis_cobounded_compl_ball`
-
-English:
-theorem hasBasis_cobounded_compl_ball
-  given: (c : α)
-  proof: ⟨compl_surjective.forall.2 fun _ => (isBounded_iff_subset_ball c).trans by simp⟩
-
-中文:
-定理 hasBasis_cobounded_compl_ball
-  条件: (c : α)
-  证明: ⟨compl_surjective.forall.2 fun _ => (isBounded_iff_subset_ball c).trans by simp⟩
-
-Depends on / 依赖: compl_surjective, compl_surjective.forall, isBounded_iff_subset_ball
+    (cobounded α).HasAntitoneBasis (fun r ↦ (closedBall c r)ᶜ) :=
+  ⟨Metric.hasBasis_cobounded_compl_closedBall _, fun _ _ hr _ ↦ by simpa using hr.trans_lt⟩
+/-
+**Metric.hasBasis_cobounded_compl_ball** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：hasBasis_cobounded_compl_ball (c : α) : (cobounded α).HasBasis (fun _ => T
+rue) (fun r => (ball c r)ᶜ)
+参数：c : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `compl_surjective`：compl_surjective : Function.Surjective (compl : α -> α
+)
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Metric.isBounded_iff_subset_ball`：isBounded_iff_subset_ball (c : α) : Is
+Bounded s ↔ exists r, s subseteq ball c r
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem hasBasis_cobounded_compl_ball (c : α) :
-    (cobounded α).HasBasis (fun _ => True) (fun r => (ball c r)ᶜ) :=
-⟨compl_surjective.forall.2 fun _ => (isBounded_iff_subset_ball c).trans by simp⟩
-
-/--
-theorem `hasAntitoneBasis_cobounded_compl_ball` / 定理 `hasAntitoneBasis_cobounded_compl_ball`
-
-English:
-theorem hasAntitoneBasis_cobounded_compl_ball
-  given: (c : α)
-  proof: ⟨Metric.hasBasis_cobounded_compl_ball _, fun _ _ hr _ => by simpa using hr.trans⟩
-
-@[simp]
-
-中文:
-定理 hasAntitoneBasis_cobounded_compl_ball
-  条件: (c : α)
-  证明: ⟨Metric.hasBasis_cobounded_compl_ball _, fun _ _ hr _ => by simpa using hr.trans⟩
-
-@[simp]
-
-Depends on / 依赖: Metric, Metric.hasBasis_cobounded_compl_ball, hasBasis_cobounded_compl_ball, hr.trans
+    (cobounded α).HasBasis (fun _ ↦ True) (fun r ↦ (ball c r)ᶜ) :=
+  ⟨compl_surjective.forall.2 fun _ ↦ (isBounded_iff_subset_ball c).trans <| by simp⟩
+/-
+**Metric.hasAntitoneBasis_cobounded_compl_ball** 是 Mathlib 中的一个定理，位于命名空间 `Metric
+`。
+形式化陈述：hasAntitoneBasis_cobounded_compl_ball (c : α) : (cobounded α).HasAntitoneB
+asis (fun r => (ball c r)ᶜ)
+参数：c : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.hasBasis_cobounded_compl_ball`：hasBasis_cobounded_compl_ball (c :
+ α) : (cobounded α).HasBasis (fun _ => True) (fun r => (ball c r)ᶜ)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
 -/
 theorem hasAntitoneBasis_cobounded_compl_ball (c : α) :
-    (cobounded α).HasAntitoneBasis (fun r => (ball c r)ᶜ) :=
-  ⟨Metric.hasBasis_cobounded_compl_ball _, fun _ _ hr _ => by simpa using hr.trans⟩
+    (cobounded α).HasAntitoneBasis (fun r ↦ (ball c r)ᶜ) :=
+  ⟨Metric.hasBasis_cobounded_compl_ball _, fun _ _ hr _ ↦ by simpa using hr.trans⟩
 
 @[simp]
-/--
-theorem `comap_dist_right_atTop` / 定理 `comap_dist_right_atTop`
-
-English:
-theorem comap_dist_right_atTop
-  given: (c : α)
-  statement: comap (dist · c) atTop = cobounded α
-  proof: (atTop_basis.comap _).eq_of_same_basis by
-    simpa only [compl_def, mem_ball, not_lt] using! hasBasis_cobounded_compl_ball c
-
-@[simp]
-
-中文:
-定理 comap_dist_right_atTop
-  条件: (c : α)
-  结论: comap (dist · c) atTop = cobounded α
-  证明: (atTop_basis.comap _).eq_of_same_basis by
-    simpa only [compl_def, mem_ball, not_lt] using! hasBasis_cobounded_compl_ball c
-
-@[simp]
-
-Depends on / 依赖: atTop_basis, atTop_basis.comap, compl_def, eq_of_same_basis, hasBasis_cobounded_compl_ball, mem_ball, not_lt
+/-
+**Metric.comap_dist_right_atTop** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：comap_dist_right_atTop (c : α) : comap (dist · c) atTop = cobounded α
+参数：c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasBasis.eq_of_same_basis`：∀ {α : Type u_1} {ι : Sort u_4} {l l' 
+: Filter α} {p : ι → Prop} {s : ι → Set α},   l.HasBasis p s → l'.HasBasis p s →
+ l = l'
+· 使用定理 `Filter.HasBasis.comap`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} {l
+ : Filter α} {p : ι → Prop} {s : ι → Set α} (f : β → α),   l.HasBasis p s → (Fil
+ter.comap f…
+· 使用定理 `Filter.atTop_basis`：atTop_basis [Nonempty α] : (@atTop α _).HasBasis (fu
+n _ => True) Ici
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Metric.hasBasis_cobounded_compl_ball`：hasBasis_cobounded_compl_ball (c :
+ α) : (cobounded α).HasBasis (fun _ => True) (fun r => (ball c r)ᶜ)
 -/
 theorem comap_dist_right_atTop (c : α) : comap (dist · c) atTop = cobounded α :=
-(atTop_basis.comap _).eq_of_same_basis by
+  (atTop_basis.comap _).eq_of_same_basis <| by
     simpa only [compl_def, mem_ball, not_lt] using! hasBasis_cobounded_compl_ball c
 
 @[simp]
-/--
-theorem `comap_dist_left_atTop` / 定理 `comap_dist_left_atTop`
-
-English:
-theorem comap_dist_left_atTop
-  given: (c : α)
-  statement: comap (dist c) atTop = cobounded α
-  proof: by
-  simpa only [dist_comm _ c] using comap_dist_right_atTop c
-
-@[simp]
-
-中文:
-定理 comap_dist_left_atTop
-  条件: (c : α)
-  结论: comap (dist c) atTop = cobounded α
-  证明: by
-  simpa only [dist_comm _ c] using comap_dist_right_atTop c
-
-@[simp]
-
-Depends on / 依赖: comap_dist_right_atTop, dist_comm
+/-
+**Metric.comap_dist_left_atTop** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：comap_dist_left_atTop (c : α) : comap (dist c) atTop = cobounded α
+参数：c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `dist_comm`：dist_comm (x y : α) : dist x y = dist y x
+· 使用定理 `Metric.comap_dist_right_atTop`：comap_dist_right_atTop (c : α) : comap (d
+ist · c) atTop = cobounded α
 -/
 theorem comap_dist_left_atTop (c : α) : comap (dist c) atTop = cobounded α := by
   simpa only [dist_comm _ c] using comap_dist_right_atTop c
 
 @[simp]
-/--
-theorem `tendsto_dist_right_atTop_iff` / 定理 `tendsto_dist_right_atTop_iff`
-
-English:
-theorem tendsto_dist_right_atTop_iff
-  given: (c : α) {f : β -> α} {l : Filter β}
-  proof: by
-  rw [← comap_dist_right_atTop c]; rw [tendsto_comap_iff]; rw [Function.comp_def]
-
-@[simp]
-
-中文:
-定理 tendsto_dist_right_atTop_iff
-  条件: (c : α) {f : β -> α} {l : 滤子 β}
-  证明: by
-  rw [← comap_dist_right_atTop c]; rw [tendsto_comap_iff]; rw [Function.comp_def]
-
-@[simp]
-
-Depends on / 依赖: Function, Function.comp_def, comap_dist_right_atTop, comp_def, tendsto_comap_iff
+/-
+**Metric.tendsto_dist_right_atTop_iff** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：tendsto_dist_right_atTop_iff (c : α) {f : β -> α} {l : Filter β} : Tendsto
+ (fun x => dist (f x) c) l atTop ↔ Tendsto f l (cobounded α)
+参数：c : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Metric.comap_dist_right_atTop`：comap_dist_right_atTop (c : α) : comap (d
+ist · c) atTop = cobounded α
+· 使用定理 `Filter.tendsto_comap_iff`：tendsto_comap_iff {f : α -> β} {g : β -> γ} {a
+ : Filter α} {c : Filter γ} : Tendsto f a (c.comap g) ↔ Tendsto (g ∘ f) a c
+· 使用定理 `Function.comp_def`：∀ {α : Sort u_1} {β : Sort u_2} {δ : Sort u_3} (f : β
+ → δ) (g : α → β), f ∘ g = fun x => f (g x)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem tendsto_dist_right_atTop_iff (c : α) {f : β -> α} {l : Filter β} :
-    Tendsto (fun x => dist (f x) c) l atTop ↔ Tendsto f l (cobounded α) := by
-  rw [← comap_dist_right_atTop c]; rw [tendsto_comap_iff]; rw [Function.comp_def]
+theorem tendsto_dist_right_atTop_iff (c : α) {f : β → α} {l : Filter β} :
+    Tendsto (fun x ↦ dist (f x) c) l atTop ↔ Tendsto f l (cobounded α) := by
+  rw [← comap_dist_right_atTop c, tendsto_comap_iff, Function.comp_def]
 
 @[simp]
-/--
-theorem `tendsto_dist_left_atTop_iff` / 定理 `tendsto_dist_left_atTop_iff`
-
-English:
-theorem tendsto_dist_left_atTop_iff
-  given: (c : α) {f : β -> α} {l : Filter β}
-  proof: by
-  simp only [dist_comm c, tendsto_dist_right_atTop_iff]
-
-中文:
-定理 tendsto_dist_left_atTop_iff
-  条件: (c : α) {f : β -> α} {l : 滤子 β}
-  证明: by
-  simp only [dist_comm c, tendsto_dist_right_atTop_iff]
-
-Depends on / 依赖: dist_comm, tendsto_dist_right_atTop_iff
+/-
+**Metric.tendsto_dist_left_atTop_iff** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：tendsto_dist_left_atTop_iff (c : α) {f : β -> α} {l : Filter β} : Tendsto 
+(fun x => dist c (f x)) l atTop ↔ Tendsto f l (cobounded α)
+参数：c : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `dist_comm`：dist_comm (x y : α) : dist x y = dist y x
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem tendsto_dist_left_atTop_iff (c : α) {f : β -> α} {l : Filter β} :
-    Tendsto (fun x => dist c (f x)) l atTop ↔ Tendsto f l (cobounded α) := by
+theorem tendsto_dist_left_atTop_iff (c : α) {f : β → α} {l : Filter β} :
+    Tendsto (fun x ↦ dist c (f x)) l atTop ↔ Tendsto f l (cobounded α) := by
   simp only [dist_comm c, tendsto_dist_right_atTop_iff]
-
-/--
-theorem `tendsto_dist_right_cobounded_atTop` / 定理 `tendsto_dist_right_cobounded_atTop`
-
-English:
-theorem tendsto_dist_right_cobounded_atTop
-  given: (c : α)
-  statement: Tendsto (dist · c) (cobounded α) atTop
-  proof: tendsto_iff_comap.2 (comap_dist_right_atTop c).ge
-
-中文:
-定理 tendsto_dist_right_cobounded_atTop
-  条件: (c : α)
-  结论: 收敛 (dist · c) (cobounded α) atTop
-  证明: tendsto_iff_comap.2 (comap_dist_right_atTop c).ge
-
-Depends on / 依赖: comap_dist_right_atTop, tendsto_iff_comap
+/-
+**Metric.tendsto_dist_right_cobounded_atTop** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：tendsto_dist_right_cobounded_atTop (c : α) : Tendsto (dist · c) (cobounded
+ α) atTop
+参数：c : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.tendsto_iff_comap`：tendsto_iff_comap {f : α -> β} {l₁ : Filter α}
+ {l₂ : Filter β} : Tendsto f l₁ l₂ ↔ l₁ <= l₂.comap f
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Metric.comap_dist_right_atTop`：comap_dist_right_atTop (c : α) : comap (d
+ist · c) atTop = cobounded α
 -/
 theorem tendsto_dist_right_cobounded_atTop (c : α) : Tendsto (dist · c) (cobounded α) atTop :=
   tendsto_iff_comap.2 (comap_dist_right_atTop c).ge
-
-/--
-theorem `tendsto_dist_left_cobounded_atTop` / 定理 `tendsto_dist_left_cobounded_atTop`
-
-English:
-theorem tendsto_dist_left_cobounded_atTop
-  given: (c : α)
-  statement: Tendsto (dist c) (cobounded α) atTop
-  proof: tendsto_iff_comap.2 (comap_dist_left_atTop c).ge
-
-中文:
-定理 tendsto_dist_left_cobounded_atTop
-  条件: (c : α)
-  结论: 收敛 (dist c) (cobounded α) atTop
-  证明: tendsto_iff_comap.2 (comap_dist_left_atTop c).ge
-
-Depends on / 依赖: comap_dist_left_atTop, tendsto_iff_comap
+/-
+**Metric.tendsto_dist_left_cobounded_atTop** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：tendsto_dist_left_cobounded_atTop (c : α) : Tendsto (dist c) (cobounded α)
+ atTop
+参数：c : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.tendsto_iff_comap`：tendsto_iff_comap {f : α -> β} {l₁ : Filter α}
+ {l₂ : Filter β} : Tendsto f l₁ l₂ ↔ l₁ <= l₂.comap f
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Metric.comap_dist_left_atTop`：comap_dist_left_atTop (c : α) : comap (dis
+t c) atTop = cobounded α
 -/
 theorem tendsto_dist_left_cobounded_atTop (c : α) : Tendsto (dist c) (cobounded α) atTop :=
   tendsto_iff_comap.2 (comap_dist_left_atTop c).ge
 
-/--
-theorem `_root_.TotallyBounded.isBounded` / 定理 `_root_.TotallyBounded.isBounded`
+/-- A totally bounded set is bounded -/
+/-
+**Metric._root_.TotallyBounded.isBounded** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.TotallyBounded.isBounded
-  given: {s : Set α} (h : TotallyBounded s)
-  statement: IsBounded s
-  proof: -- We cover the totally bounded set by finitely many balls of radius 1,
-  -- and then argue that a finite union of bounded sets is bounded
-  let ⟨_t, fint, subs⟩ := (totallyBounded_iff.mp h) 1 zero_lt_one
-  ((isBounded_biUnion fint).2 fun _ _ => isBounded_ball).subset subs
-
-中文:
-定理 _root_.全有界.isBounded
-  条件: {s : 集合 α} (h : 全有界 s)
-  结论: IsBounded s
-  证明: -- We cover the totally bounded set by finitely many balls of radius 1,
-  -- and then argue that a finite union of bounded sets is bounded
-  let ⟨_t, fint, subs⟩ := (totallyBounded_iff.mp h) 1 zero_lt_one
-  ((isBounded_biUnion fint).2 fun _ _ => isBounded_ball).subset subs
+--- 原说明 ---
+A totally bounded set is bounded
 -/
 theorem _root_.TotallyBounded.isBounded {s : Set α} (h : TotallyBounded s) : IsBounded s :=
   -- We cover the totally bounded set by finitely many balls of radius 1,
@@ -714,571 +658,593 @@ theorem _root_.TotallyBounded.isBounded {s : Set α} (h : TotallyBounded s) : Is
 
 /-- A compact set is bounded -/
 @[aesop 50% apply, grind ←]
-/--
-theorem `_root_.IsCompact.isBounded` / 定理 `_root_.IsCompact.isBounded`
+/-
+**Metric._root_.IsCompact.isBounded** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.IsCompact.isBounded
-  given: {s : Set α} (h : IsCompact s)
-  statement: IsBounded s
-  proof: -- A compact set is totally bounded, thus bounded
-  h.totallyBounded.isBounded
-
-中文:
-定理 _root_.是紧集.isBounded
-  条件: {s : 集合 α} (h : 是紧集 s)
-  结论: IsBounded s
-  证明: -- A compact set is totally bounded, thus bounded
-  h.totallyBounded.isBounded
+--- 原说明 ---
+A compact set is bounded
 -/
 theorem _root_.IsCompact.isBounded {s : Set α} (h : IsCompact s) : IsBounded s :=
   -- A compact set is totally bounded, thus bounded
   h.totallyBounded.isBounded
-
-instance (priority := low) [CompactSpace α] : BoundedSpace α := ⟨isCompact_univ.isBounded⟩
-
-/--
-theorem `cobounded_le_cocompact` / 定理 `cobounded_le_cocompact`
-
-English:
-theorem cobounded_le_cocompact
-  statement: cobounded α <= cocompact α
-  proof: hasBasis_cocompact.ge_iff.2 fun _s hs => hs.isBounded
-
-中文:
-定理 cobounded_le_cocompact
-  结论: cobounded α <= cocompact α
-  证明: hasBasis_cocompact.ge_iff.2 fun _s hs => hs.isBounded
-
-Depends on / 依赖: ge_iff, hasBasis_cocompact, hasBasis_cocompact.ge_iff, hs.isBounded, isBounded
+/-
+**Metric.** 是 Mathlib 中的一个实例，位于命名空间 `Metric`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem cobounded_le_cocompact : cobounded α <= cocompact α :=
-  hasBasis_cocompact.ge_iff.2 fun _s hs => hs.isBounded
-
-/--
-theorem `isCobounded_iff_closedBall_compl_subset` / 定理 `isCobounded_iff_closedBall_compl_subset`
-
-English:
-theorem isCobounded_iff_closedBall_compl_subset
-  given: {s : Set α} (c : α)
-  proof: by
-  rw [← isBounded_compl_iff]; rw [isBounded_iff_subset_closedBall c]
-  apply exists_congr
-  intro r
-  rw [compl_subset_comm]
-
-中文:
-定理 isCobounded_iff_closedBall_compl_subset
-  条件: {s : 集合 α} (c : α)
-  证明: by
-  rw [← isBounded_compl_iff]; rw [isBounded_iff_subset_closedBall c]
-  apply exists_congr
-  intro r
-  rw [compl_subset_comm]
-
-Depends on / 依赖: compl_subset_comm, exists_congr, isBounded_compl_iff, isBounded_iff_subset_closedBall
+instance (priority := low) [CompactSpace α] : BoundedSpace α := ⟨isCompact_univ.isBounded⟩
+/-
+**Metric.cobounded_le_cocompact** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：cobounded_le_cocompact : cobounded α <= cocompact α
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.HasBasis.ge_iff`：∀ {α : Type u_1} {ι' : Sort u_5} {l l' : Filter 
+α} {p' : ι' → Prop} {s' : ι' → Set α},   l'.HasBasis p' s' → (l ≤ l' ↔ ∀ (i' : ι
+'), p' i' → …
+· 使用定理 `Filter.hasBasis_cocompact`：hasBasis_cocompact : (cocompact X).HasBasis I
+sCompact compl
+· 使用定理 `IsCompact.isBounded`：∀ {α : Type u} [inst : PseudoMetricSpace α] {s : Se
+t α}, IsCompact s → Bornology.IsBounded s
+-/
+theorem cobounded_le_cocompact : cobounded α ≤ cocompact α :=
+  hasBasis_cocompact.ge_iff.2 fun _s hs ↦ hs.isBounded
+/-
+**Metric.isCobounded_iff_closedBall_compl_subset** 是 Mathlib 中的一个定理，位于命名空间 `Metr
+ic`。
+形式化陈述：isCobounded_iff_closedBall_compl_subset {s : Set α} (c : α) : IsCobounded 
+s ↔ exists (r : Real), (Metric.closedBall c r)ᶜ subseteq s
+参数：c : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Bornology.isBounded_compl_iff`：isBounded_compl_iff : IsBounded sᶜ ↔ IsCo
+bounded s
+· 使用定理 `Metric.isBounded_iff_subset_closedBall`：isBounded_iff_subset_closedBall 
+(c : α) : IsBounded s ↔ exists r, s subseteq closedBall c r
+· 使用定理 `exists_congr`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a) 
+→ ((∃ a, p a) ↔ ∃ a, q a)
+· 使用定理 `Set.compl_subset_comm`：compl_subset_comm : sᶜ subseteq t ↔ tᶜ subseteq s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem isCobounded_iff_closedBall_compl_subset {s : Set α} (c : α) :
-    IsCobounded s ↔ exists (r : Real), (Metric.closedBall c r)ᶜ subseteq s := by
-  rw [← isBounded_compl_iff]; rw [isBounded_iff_subset_closedBall c]
+    IsCobounded s ↔ ∃ (r : ℝ), (Metric.closedBall c r)ᶜ ⊆ s := by
+  rw [← isBounded_compl_iff, isBounded_iff_subset_closedBall c]
   apply exists_congr
   intro r
   rw [compl_subset_comm]
-
-/--
-theorem `_root_.Bornology.IsCobounded.closedBall_compl_subset` / 定理 `_root_.Bornology.IsCobounded.closedBall_compl_subset`
-
-English:
-theorem _root_.Bornology.IsCobounded.closedBall_compl_subset
-  statement: {s : Set α} (hs : IsCobounded s)
-  proof: (isCobounded_iff_closedBall_compl_subset c).mp hs
-
-中文:
-定理 _root_.有界结构.IsCobounded.closedBall_compl_subset
-  结论: {s : 集合 α} (hs : IsCobounded s)
-  证明: (isCobounded_iff_closedBall_compl_subset c).mp hs
-
-Depends on / 依赖: isCobounded_iff_closedBall_compl_subset
+/-
+**Metric._root_.Bornology.IsCobounded.closedBall_compl_subset** 是 Mathlib 中的一个定理
+，位于命名空间 `Metric`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Bornology.IsCobounded.closedBall_compl_subset {s : Set α} (hs : IsCobounded s)
-    (c : α) : exists (r : Real), (Metric.closedBall c r)ᶜ subseteq s :=
+    (c : α) : ∃ (r : ℝ), (Metric.closedBall c r)ᶜ ⊆ s :=
   (isCobounded_iff_closedBall_compl_subset c).mp hs
-
-/--
-theorem `closedBall_compl_subset_of_mem_cocompact` / 定理 `closedBall_compl_subset_of_mem_cocompact`
-
-English:
-theorem closedBall_compl_subset_of_mem_cocompact
-  given: {s : Set α} (hs : s in cocompact α) (c : α)
-  proof: IsCobounded.closedBall_compl_subset (cobounded_le_cocompact hs) c
-
-中文:
-定理 closedBall_compl_subset_of_mem_cocompact
-  条件: {s : 集合 α} (hs : s in cocompact α) (c : α)
-  证明: IsCobounded.closedBall_compl_subset (cobounded_le_cocompact hs) c
-
-Depends on / 依赖: IsCobounded, IsCobounded.closedBall_compl_subset, closedBall_compl_subset, cobounded_le_cocompact
+/-
+**Metric.closedBall_compl_subset_of_mem_cocompact** 是 Mathlib 中的一个定理，位于命名空间 `Met
+ric`。
+形式化陈述：closedBall_compl_subset_of_mem_cocompact {s : Set α} (hs : s in cocompact 
+α) (c : α) : exists (r : Real), (Metric.closedBall c r)ᶜ subseteq s
+参数：hs : s in cocompact α；c : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Bornology.IsCobounded.closedBall_compl_subset`：∀ {α : Type u} [inst : Ps
+eudoMetricSpace α] {s : Set α},   Bornology.IsCobounded s → ∀ (c : α), ∃ r, (Met
+ric.closedBall c r)ᶜ ⊆ s
+· 使用定理 `Metric.cobounded_le_cocompact`：cobounded_le_cocompact : cobounded α <= c
+ocompact α
 -/
-theorem closedBall_compl_subset_of_mem_cocompact {s : Set α} (hs : s in cocompact α) (c : α) :
-    exists (r : Real), (Metric.closedBall c r)ᶜ subseteq s :=
+theorem closedBall_compl_subset_of_mem_cocompact {s : Set α} (hs : s ∈ cocompact α) (c : α) :
+    ∃ (r : ℝ), (Metric.closedBall c r)ᶜ ⊆ s :=
   IsCobounded.closedBall_compl_subset (cobounded_le_cocompact hs) c
-
-/--
-theorem `mem_cocompact_of_closedBall_compl_subset` / 定理 `mem_cocompact_of_closedBall_compl_subset`
-
-English:
-theorem mem_cocompact_of_closedBall_compl_subset
-  statement: [ProperSpace α] (c : α)
-  proof: by
-  rcases h with ⟨r, h⟩
-  rw [Filter.mem_cocompact]
-  exact ⟨closedBall c r, isCompact_closedBall c r, h⟩
-
-中文:
-定理 mem_cocompact_of_closedBall_compl_subset
-  结论: [真空间 α] (c : α)
-  证明: by
-  rcases h with ⟨r, h⟩
-  rw [Filter.mem_cocompact]
-  exact ⟨closedBall c r, isCompact_closedBall c r, h⟩
-
-Depends on / 依赖: Filter, Filter.mem_cocompact, closedBall, isCompact_closedBall, mem_cocompact
+/-
+**Metric.mem_cocompact_of_closedBall_compl_subset** 是 Mathlib 中的一个定理，位于命名空间 `Met
+ric`。
+形式化陈述：mem_cocompact_of_closedBall_compl_subset [ProperSpace α] (c : α) (h : exis
+ts r, (closedBall c r)ᶜ subseteq s) : s in cocompact α
+参数：c : α；h : exists r, (closedBall c r)ᶜ subseteq s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.mem_cocompact`：mem_cocompact : s in cocompact X ↔ exists t, IsCom
+pact t ∧ tᶜ subseteq s
+· 使用定理 `ProperSpace.isCompact_closedBall`：∀ {α : Type u} {inst : PseudoMetricSpa
+ce α} [self : ProperSpace α] (x : α) (r : ℝ), IsCompact (Metric.closedBall x r)
 -/
 theorem mem_cocompact_of_closedBall_compl_subset [ProperSpace α] (c : α)
-    (h : exists r, (closedBall c r)ᶜ subseteq s) : s in cocompact α := by
+    (h : ∃ r, (closedBall c r)ᶜ ⊆ s) : s ∈ cocompact α := by
   rcases h with ⟨r, h⟩
   rw [Filter.mem_cocompact]
   exact ⟨closedBall c r, isCompact_closedBall c r, h⟩
-
-/--
-theorem `mem_cocompact_iff_closedBall_compl_subset` / 定理 `mem_cocompact_iff_closedBall_compl_subset`
-
-English:
-theorem mem_cocompact_iff_closedBall_compl_subset
-  given: [ProperSpace α] (c : α)
-  proof: ⟨(closedBall_compl_subset_of_mem_cocompact · _), mem_cocompact_of_closedBall_compl_subset _⟩
-
-中文:
-定理 mem_cocompact_iff_closedBall_compl_subset
-  条件: [真空间 α] (c : α)
-  证明: ⟨(closedBall_compl_subset_of_mem_cocompact · _), mem_cocompact_of_closedBall_compl_subset _⟩
-
-Depends on / 依赖: closedBall_compl_subset_of_mem_cocompact, mem_cocompact_of_closedBall_compl_subset
+/-
+**Metric.mem_cocompact_iff_closedBall_compl_subset** 是 Mathlib 中的一个定理，位于命名空间 `Me
+tric`。
+形式化陈述：mem_cocompact_iff_closedBall_compl_subset [ProperSpace α] (c : α) : s in c
+ocompact α ↔ exists r, (closedBall c r)ᶜ subseteq s
+参数：c : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.closedBall_compl_subset_of_mem_cocompact`：closedBall_compl_subset
+_of_mem_cocompact {s : Set α} (hs : s in cocompact α) (c : α) : exists (r : Real
+), (Metric.closedBall c r)ᶜ subseteq …
+· 使用定理 `Metric.mem_cocompact_of_closedBall_compl_subset`：mem_cocompact_of_closed
+Ball_compl_subset [ProperSpace α] (c : α) (h : exists r, (closedBall c r)ᶜ subse
+teq s) : s in cocompact α
 -/
 theorem mem_cocompact_iff_closedBall_compl_subset [ProperSpace α] (c : α) :
-    s in cocompact α ↔ exists r, (closedBall c r)ᶜ subseteq s :=
+    s ∈ cocompact α ↔ ∃ r, (closedBall c r)ᶜ ⊆ s :=
   ⟨(closedBall_compl_subset_of_mem_cocompact · _), mem_cocompact_of_closedBall_compl_subset _⟩
 
-/--
-theorem `isBounded_range_iff` / 定理 `isBounded_range_iff`
+/-- Characterization of the boundedness of the range of a function -/
+/-
+**Metric.isBounded_range_iff** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：isBounded_range_iff {f : β -> α} : IsBounded (range f) ↔ exists C, forall 
+x y, dist (f x) (f y) <= C
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Metric.isBounded_iff`：isBounded_iff {s : Set α} : IsBounded s ↔ exists C
+ : Real, forall ⦃x⦄, x in s -> forall ⦃y⦄, y in s -> dist x y <= C
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem isBounded_range_iff
-  given: {f : β -> α}
-  statement: IsBounded (range f) ↔ exists C, forall x y, dist (f x) (f y) <= C
-  proof: isBounded_iff.trans by simp only [forall_mem_range]
-
-中文:
-定理 isBounded_range_iff
-  条件: {f : β -> α}
-  结论: IsBounded (range f) ↔ 存在 C, 对任意 x y, dist (f x) (f y) <= C
-  证明: isBounded_iff.trans by simp only [forall_mem_range]
-
-Depends on / 依赖: forall_mem_range, isBounded_iff, isBounded_iff.trans
+--- 原说明 ---
+Characterization of the boundedness of the range of a function
 -/
-theorem isBounded_range_iff {f : β -> α} : IsBounded (range f) ↔ exists C, forall x y, dist (f x) (f y) <= C :=
-isBounded_iff.trans by simp only [forall_mem_range]
-
-/--
-theorem `isBounded_image_iff` / 定理 `isBounded_image_iff`
-
-English:
-theorem isBounded_image_iff
-  given: {f : β -> α} {s : Set β}
-  proof: isBounded_iff.trans by simp only [forall_mem_image]
-
-中文:
-定理 isBounded_image_iff
-  条件: {f : β -> α} {s : 集合 β}
-  证明: isBounded_iff.trans by simp only [forall_mem_image]
-
-Depends on / 依赖: forall_mem_image, isBounded_iff, isBounded_iff.trans
+theorem isBounded_range_iff {f : β → α} : IsBounded (range f) ↔ ∃ C, ∀ x y, dist (f x) (f y) ≤ C :=
+  isBounded_iff.trans <| by simp only [forall_mem_range]
+/-
+**Metric.isBounded_image_iff** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：isBounded_image_iff {f : β -> α} {s : Set β} : IsBounded (f '' s) ↔ exists
+ C, forall x in s, forall y in s, dist (f x) (f y) <= C
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Metric.isBounded_iff`：isBounded_iff {s : Set α} : IsBounded s ↔ exists C
+ : Real, forall ⦃x⦄, x in s -> forall ⦃y⦄, y in s -> dist x y <= C
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem isBounded_image_iff {f : β -> α} {s : Set β} :
-    IsBounded (f '' s) ↔ exists C, forall x in s, forall y in s, dist (f x) (f y) <= C :=
-isBounded_iff.trans by simp only [forall_mem_image]
-
-/--
-theorem `isBounded_range_of_tendsto_cofinite_uniformity` / 定理 `isBounded_range_of_tendsto_cofinite_uniformity`
-
-English:
-theorem isBounded_range_of_tendsto_cofinite_uniformity
-  statement: {f : β -> α}
-  proof: by
-  rcases (hasBasis_cofinite.prod_self.tendsto_iff uniformity_basis_dist).1 hf 1 zero_lt_one with
-    ⟨s, hsf, hs1⟩
-  rw [← image_union_image_compl_eq_range]
-  refine (hsf.image f).isBounded.union (isBounded_image_iff.2 ⟨1, fun x hx y hy => ?_⟩)
-  exact le_of_lt (hs1 (x, y) ⟨hx, hy⟩)
-
-中文:
-定理 isBounded_range_of_tendsto_cofinite_uniformity
-  结论: {f : β -> α}
-  证明: by
-  rcases (hasBasis_cofinite.prod_self.tendsto_iff uniformity_basis_dist).1 hf 1 zero_lt_one with
-    ⟨s, hsf, hs1⟩
-  rw [← image_union_image_compl_eq_range]
-  refine (hsf.image f).isBounded.union (isBounded_image_iff.2 ⟨1, fun x hx y hy => ?_⟩)
-  exact le_of_lt (hs1 (x, y) ⟨hx, hy⟩)
-
-Depends on / 依赖: hasBasis_cofinite, hasBasis_cofinite.prod_self.tendsto_iff, hsf.image, image_union_image_compl_eq_range, isBounded, isBounded.union, isBounded_image_iff, le_of_lt, prod_self, tendsto_iff, uniformity_basis_dist, zero_lt_one
+theorem isBounded_image_iff {f : β → α} {s : Set β} :
+    IsBounded (f '' s) ↔ ∃ C, ∀ x ∈ s, ∀ y ∈ s, dist (f x) (f y) ≤ C :=
+  isBounded_iff.trans <| by simp only [forall_mem_image]
+/-
+**Metric.isBounded_range_of_tendsto_cofinite_uniformity** 是 Mathlib 中的一个定理，位于命名空
+间 `Metric`。
+形式化陈述：isBounded_range_of_tendsto_cofinite_uniformity {f : β -> α} (hf : Tendsto 
+(Prod.map f f) (.cofinite ×ˢ .cofinite) (𝓤 α)) : IsBounded (range f)
+参数：hf : Tendsto (Prod.map f f) (.cofinite ×ˢ .cofinite) (𝓤 α)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.HasBasis.tendsto_iff`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u
+_4} {ι' : Sort u_5} {la : Filter α} {pa : ι → Prop} {sa : ι → Set α}   {lb : Fil
+ter β} {pb : ι' →…
+· 使用定理 `Filter.HasBasis.prod_self`：∀ {α : Type u_1} {ι : Sort u_4} {la : Filter 
+α} {pa : ι → Prop} {sa : ι → Set α},   la.HasBasis pa sa → (la ×ˢ la).HasBasis p
+a fun i => sa i…
+· 使用定理 `Filter.hasBasis_cofinite`：hasBasis_cofinite : HasBasis cofinite (fun s :
+ Set α => s.Finite) compl
+· 使用定理 `Metric.uniformity_basis_dist`：uniformity_basis_dist : (𝓤 α).HasBasis (fu
+n ε : Real => 0 < ε) fun ε => { p : α × α | dist p.1 p.2 < ε }
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_union_image_compl_eq_range`：image_union_image_compl_eq_range (
+f : α -> β) : f '' s union f '' sᶜ = range f
+· 使用定理 `Bornology.IsBounded.union`：∀ {α : Type u_2} {x : Bornology α} {s t : Set
+ α},   Bornology.IsBounded s → Bornology.IsBounded t → Bornology.IsBounded (s ∪ 
+t)
+· 使用定理 `Set.Finite.isBounded`：Set.Finite.isBounded [Bornology α] {s : Set α} (hs
+ : s.Finite) : IsBounded s
+· 使用定理 `Set.Finite.image`：∀ {α : Type u} {β : Type v} {s : Set α} (f : α → β), s
+.Finite → (f '' s).Finite
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Metric.isBounded_image_iff`：isBounded_image_iff {f : β -> α} {s : Set β}
+ : IsBounded (f '' s) ↔ exists C, forall x in s, forall y in s, dist (f x) (f y)
+ <= C
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
-theorem isBounded_range_of_tendsto_cofinite_uniformity {f : β -> α}
+theorem isBounded_range_of_tendsto_cofinite_uniformity {f : β → α}
     (hf : Tendsto (Prod.map f f) (.cofinite ×ˢ .cofinite) (𝓤 α)) : IsBounded (range f) := by
   rcases (hasBasis_cofinite.prod_self.tendsto_iff uniformity_basis_dist).1 hf 1 zero_lt_one with
     ⟨s, hsf, hs1⟩
   rw [← image_union_image_compl_eq_range]
-  refine (hsf.image f).isBounded.union (isBounded_image_iff.2 ⟨1, fun x hx y hy => ?_⟩)
+  refine (hsf.image f).isBounded.union (isBounded_image_iff.2 ⟨1, fun x hx y hy ↦ ?_⟩)
   exact le_of_lt (hs1 (x, y) ⟨hx, hy⟩)
-
-/--
-theorem `isBounded_range_of_cauchy_map_cofinite` / 定理 `isBounded_range_of_cauchy_map_cofinite`
-
-English:
-theorem isBounded_range_of_cauchy_map_cofinite
-  given: {f : β -> α} (hf : Cauchy (map f cofinite))
-  proof: isBounded_range_of_tendsto_cofinite_uniformity (cauchy_map_iff.1 hf).2
-
-中文:
-定理 isBounded_range_of_cauchy_map_cofinite
-  条件: {f : β -> α} (hf : Cauchy (map f cofinite))
-  证明: isBounded_range_of_tendsto_cofinite_uniformity (cauchy_map_iff.1 hf).2
-
-Depends on / 依赖: cauchy_map_iff, isBounded_range_of_tendsto_cofinite_uniformity
+/-
+**Metric.isBounded_range_of_cauchy_map_cofinite** 是 Mathlib 中的一个定理，位于命名空间 `Metri
+c`。
+形式化陈述：isBounded_range_of_cauchy_map_cofinite {f : β -> α} (hf : Cauchy (map f co
+finite)) : IsBounded (range f)
+参数：hf : Cauchy (map f cofinite)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.isBounded_range_of_tendsto_cofinite_uniformity`：isBounded_range_o
+f_tendsto_cofinite_uniformity {f : β -> α} (hf : Tendsto (Prod.map f f) (.cofini
+te ×ˢ .cofinite) (𝓤 α)) : IsBounded (range …
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `cauchy_map_iff`：cauchy_map_iff {l : Filter β} {f : β -> α} : Cauchy (l.m
+ap f) ↔ NeBot l ∧ Tendsto (fun p : β × β => (f p.1, f p.2)) (l ×ˢ l) (𝓤 α)
 -/
-theorem isBounded_range_of_cauchy_map_cofinite {f : β -> α} (hf : Cauchy (map f cofinite)) :
+theorem isBounded_range_of_cauchy_map_cofinite {f : β → α} (hf : Cauchy (map f cofinite)) :
     IsBounded (range f) :=
-isBounded_range_of_tendsto_cofinite_uniformity (cauchy_map_iff.1 hf).2
-
-/--
-theorem `_root_.CauchySeq.isBounded_range` / 定理 `_root_.CauchySeq.isBounded_range`
-
-English:
-theorem _root_.CauchySeq.isBounded_range
-  given: {f : Nat -> α} (hf : CauchySeq f)
-  statement: IsBounded (range f)
-  proof: isBounded_range_of_cauchy_map_cofinite by rwa [Nat.cofinite_eq_atTop]
-
-中文:
-定理 _root_.CauchySeq.isBounded_range
-  条件: {f : 自然数 -> α} (hf : CauchySeq f)
-  结论: IsBounded (range f)
-  证明: isBounded_range_of_cauchy_map_cofinite by rwa [Nat.cofinite_eq_atTop]
-
-Depends on / 依赖: Nat.cofinite_eq_atTop, cofinite_eq_atTop, isBounded_range_of_cauchy_map_cofinite
+  isBounded_range_of_tendsto_cofinite_uniformity <| (cauchy_map_iff.1 hf).2
+/-
+**Metric._root_.CauchySeq.isBounded_range** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.CauchySeq.isBounded_range {f : Nat -> α} (hf : CauchySeq f) : IsBounded (range f) :=
-isBounded_range_of_cauchy_map_cofinite by rwa [Nat.cofinite_eq_atTop]
-
-/--
-theorem `isBounded_range_of_tendsto_cofinite` / 定理 `isBounded_range_of_tendsto_cofinite`
-
-English:
-theorem isBounded_range_of_tendsto_cofinite
-  given: {f : β -> α} {a : α} (hf : Tendsto f cofinite (𝓝 a))
-  proof: isBounded_range_of_tendsto_cofinite_uniformity
-(hf.prodMap hf).mono_right nhds_prod_eq.symm.trans_le (nhds_le_uniformity a)
-
-中文:
-定理 isBounded_range_of_tendsto_cofinite
-  条件: {f : β -> α} {a : α} (hf : 收敛 f cofinite (𝓝 a))
-  证明: isBounded_range_of_tendsto_cofinite_uniformity
-(hf.prodMap hf).mono_right nhds_prod_eq.symm.trans_le (nhds_le_uniformity a)
-
-Depends on / 依赖: hf.prodMap, isBounded_range_of_tendsto_cofinite_uniformity, mono_right, nhds_le_uniformity, nhds_prod_eq, nhds_prod_eq.symm.trans_le, prodMap, trans_le
+theorem _root_.CauchySeq.isBounded_range {f : ℕ → α} (hf : CauchySeq f) : IsBounded (range f) :=
+  isBounded_range_of_cauchy_map_cofinite <| by rwa [Nat.cofinite_eq_atTop]
+/-
+**Metric.isBounded_range_of_tendsto_cofinite** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：isBounded_range_of_tendsto_cofinite {f : β -> α} {a : α} (hf : Tendsto f c
+ofinite (𝓝 a)) : IsBounded (range f)
+参数：hf : Tendsto f cofinite (𝓝 a)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.isBounded_range_of_tendsto_cofinite_uniformity`：isBounded_range_o
+f_tendsto_cofinite_uniformity {f : β -> α} (hf : Tendsto (Prod.map f f) (.cofini
+te ×ˢ .cofinite) (𝓤 α)) : IsBounded (range …
+· 使用定理 `Filter.Tendsto.mono_right`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {
+x : Filter α} {y z : Filter β},   Filter.Tendsto f x y → y ≤ z → Filter.Tendsto 
+f x z
+· 使用定理 `Filter.Tendsto.prodMap`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {
+δ : Type u_6} {f : α → γ} {g : β → δ} {a : Filter α} {b : Filter β}   {c : Filte
+r γ} {d : Fi…
+· 使用定理 `Eq.trans_le`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a = b → b ≤ c →
+ a ≤ c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `nhds_prod_eq`：nhds_prod_eq {x : X} {y : Y} : 𝓝 (x, y) = 𝓝 x ×ˢ 𝓝 y
+· 使用定理 `nhds_le_uniformity`：nhds_le_uniformity (x : α) : 𝓝 (x, x) <= 𝓤 α
 -/
-theorem isBounded_range_of_tendsto_cofinite {f : β -> α} {a : α} (hf : Tendsto f cofinite (𝓝 a)) :
+theorem isBounded_range_of_tendsto_cofinite {f : β → α} {a : α} (hf : Tendsto f cofinite (𝓝 a)) :
     IsBounded (range f) :=
-isBounded_range_of_tendsto_cofinite_uniformity
-(hf.prodMap hf).mono_right nhds_prod_eq.symm.trans_le (nhds_le_uniformity a)
+  isBounded_range_of_tendsto_cofinite_uniformity <|
+    (hf.prodMap hf).mono_right <| nhds_prod_eq.symm.trans_le (nhds_le_uniformity a)
 
-/--
-theorem `isBounded_of_compactSpace` / 定理 `isBounded_of_compactSpace`
+/-- In a compact space, all sets are bounded -/
+/-
+**Metric.isBounded_of_compactSpace** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：isBounded_of_compactSpace [CompactSpace α] : IsBounded s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Bornology.IsBounded.subset`：∀ {α : Type u_2} {x : Bornology α} {s t : Se
+t α}, Bornology.IsBounded t → s ⊆ t → Bornology.IsBounded s
+· 使用定理 `IsCompact.isBounded`：∀ {α : Type u} [inst : PseudoMetricSpace α] {s : Se
+t α}, IsCompact s → Bornology.IsBounded s
+· 使用定理 `isCompact_univ`：isCompact_univ [h : CompactSpace X] : IsCompact (univ : 
+Set X)
+· 使用定理 `Set.subset_univ`：subset_univ (s : Set α) : s subseteq univ
 
-English:
-theorem isBounded_of_compactSpace
-  given: [CompactSpace α]
-  statement: IsBounded s
-  proof: isCompact_univ.isBounded.subset (subset_univ _)
-
-中文:
-定理 isBounded_of_compactSpace
-  条件: [紧空间 α]
-  结论: IsBounded s
-  证明: isCompact_univ.isBounded.subset (subset_univ _)
-
-Depends on / 依赖: isBounded, isCompact_univ, isCompact_univ.isBounded.subset, subset, subset_univ
+--- 原说明 ---
+In a compact space, all sets are bounded
 -/
 theorem isBounded_of_compactSpace [CompactSpace α] : IsBounded s :=
   isCompact_univ.isBounded.subset (subset_univ _)
-
-/--
-theorem `isBounded_range_of_tendsto` / 定理 `isBounded_range_of_tendsto`
-
-English:
-theorem isBounded_range_of_tendsto
-  given: (u : Nat -> α) {x : α} (hu : Tendsto u atTop (𝓝 x))
-  proof: hu.cauchySeq.isBounded_range
-
-中文:
-定理 isBounded_range_of_tendsto
-  条件: (u : 自然数 -> α) {x : α} (hu : 收敛 u atTop (𝓝 x))
-  证明: hu.cauchySeq.isBounded_range
-
-Depends on / 依赖: cauchySeq, hu.cauchySeq.isBounded_range, isBounded_range
+/-
+**Metric.isBounded_range_of_tendsto** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：isBounded_range_of_tendsto (u : Nat -> α) {x : α} (hu : Tendsto u atTop (𝓝
+ x)) : IsBounded (range u)
+参数：u : Nat -> α；hu : Tendsto u atTop (𝓝 x)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CauchySeq.isBounded_range`：∀ {α : Type u} [inst : PseudoMetricSpace α] {
+f : ℕ → α}, CauchySeq f → Bornology.IsBounded (Set.range f)
+· 使用定理 `Filter.Tendsto.cauchySeq`：Filter.Tendsto.cauchySeq [SemilatticeSup β] [N
+onempty β] {f : β -> α} {x} (hx : Tendsto f atTop (𝓝 x)) : CauchySeq f
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
 -/
-theorem isBounded_range_of_tendsto (u : Nat -> α) {x : α} (hu : Tendsto u atTop (𝓝 x)) :
+theorem isBounded_range_of_tendsto (u : ℕ → α) {x : α} (hu : Tendsto u atTop (𝓝 x)) :
     IsBounded (range u) :=
   hu.cauchySeq.isBounded_range
-
-/--
-theorem `disjoint_nhds_cobounded` / 定理 `disjoint_nhds_cobounded`
-
-English:
-theorem disjoint_nhds_cobounded
-  given: (x : α)
-  statement: Disjoint (𝓝 x) (cobounded α)
-  proof: disjoint_of_disjoint_of_mem disjoint_compl_right (ball_mem_nhds _ one_pos) isBounded_ball
-
-中文:
-定理 disjoint_nhds_cobounded
-  条件: (x : α)
-  结论: Disjoint (𝓝 x) (cobounded α)
-  证明: disjoint_of_disjoint_of_mem disjoint_compl_right (ball_mem_nhds _ one_pos) isBounded_ball
-
-Depends on / 依赖: ball_mem_nhds, disjoint_compl_right, disjoint_of_disjoint_of_mem, isBounded_ball, one_pos
+/-
+**Metric.disjoint_nhds_cobounded** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：disjoint_nhds_cobounded (x : α) : Disjoint (𝓝 x) (cobounded α)
+参数：x : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.disjoint_of_disjoint_of_mem`：disjoint_of_disjoint_of_mem {f g : F
+ilter α} {s t : Set α} (h : Disjoint s t) (hs : s in f) (ht : t in g) : Disjoint
+ f g
+· 使用定理 `disjoint_compl_right`：disjoint_compl_right : Disjoint a aᶜ
+· 使用定理 `Metric.ball_mem_nhds`：ball_mem_nhds (x : α) {ε : Real} (ε0 : 0 < ε) : ba
+ll x ε in 𝓝 x
+· 使用定理 `one_pos`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 : Par
+tialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Metric.isBounded_ball`：isBounded_ball : IsBounded (ball x r)
 -/
 theorem disjoint_nhds_cobounded (x : α) : Disjoint (𝓝 x) (cobounded α) :=
   disjoint_of_disjoint_of_mem disjoint_compl_right (ball_mem_nhds _ one_pos) isBounded_ball
-
-/--
-theorem `disjoint_cobounded_nhds` / 定理 `disjoint_cobounded_nhds`
-
-English:
-theorem disjoint_cobounded_nhds
-  given: (x : α)
-  statement: Disjoint (cobounded α) (𝓝 x)
-  proof: (disjoint_nhds_cobounded x).symm
-
-中文:
-定理 disjoint_cobounded_nhds
-  条件: (x : α)
-  结论: Disjoint (cobounded α) (𝓝 x)
-  证明: (disjoint_nhds_cobounded x).symm
-
-Depends on / 依赖: disjoint_nhds_cobounded
+/-
+**Metric.disjoint_cobounded_nhds** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：disjoint_cobounded_nhds (x : α) : Disjoint (cobounded α) (𝓝 x)
+参数：x : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Disjoint.symm`：Disjoint.symm (x y : Finmap β) (h : Disjoint x y) : Disjo
+int y x
+· 使用定理 `Metric.disjoint_nhds_cobounded`：disjoint_nhds_cobounded (x : α) : Disjoi
+nt (𝓝 x) (cobounded α)
 -/
 theorem disjoint_cobounded_nhds (x : α) : Disjoint (cobounded α) (𝓝 x) :=
   (disjoint_nhds_cobounded x).symm
-
-/--
-theorem `disjoint_nhdsSet_cobounded` / 定理 `disjoint_nhdsSet_cobounded`
-
-English:
-theorem disjoint_nhdsSet_cobounded
-  given: {s : Set α} (hs : IsCompact s)
-  statement: Disjoint (𝓝ˢ s) (cobounded α)
-  proof: hs.disjoint_nhdsSet_left.2 fun _ _ => disjoint_nhds_cobounded _
-
-中文:
-定理 disjoint_nhdsSet_cobounded
-  条件: {s : 集合 α} (hs : 是紧集 s)
-  结论: Disjoint (𝓝ˢ s) (cobounded α)
-  证明: hs.disjoint_nhdsSet_left.2 fun _ _ => disjoint_nhds_cobounded _
-
-Depends on / 依赖: disjoint_nhdsSet_left, disjoint_nhds_cobounded, hs.disjoint_nhdsSet_left
+/-
+**Metric.disjoint_nhdsSet_cobounded** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：disjoint_nhdsSet_cobounded {s : Set α} (hs : IsCompact s) : Disjoint (𝓝ˢ s
+) (cobounded α)
+参数：hs : IsCompact s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsCompact.disjoint_nhdsSet_left`：IsCompact.disjoint_nhdsSet_left {l : Fi
+lter X} (hs : IsCompact s) : Disjoint (𝓝ˢ s) l ↔ forall x in s, Disjoint (𝓝 x) l
+· 使用定理 `Metric.disjoint_nhds_cobounded`：disjoint_nhds_cobounded (x : α) : Disjoi
+nt (𝓝 x) (cobounded α)
 -/
 theorem disjoint_nhdsSet_cobounded {s : Set α} (hs : IsCompact s) : Disjoint (𝓝ˢ s) (cobounded α) :=
-  hs.disjoint_nhdsSet_left.2 fun _ _ => disjoint_nhds_cobounded _
-
-/--
-theorem `disjoint_cobounded_nhdsSet` / 定理 `disjoint_cobounded_nhdsSet`
-
-English:
-theorem disjoint_cobounded_nhdsSet
-  given: {s : Set α} (hs : IsCompact s)
-  statement: Disjoint (cobounded α) (𝓝ˢ s)
-  proof: (disjoint_nhdsSet_cobounded hs).symm
-
-中文:
-定理 disjoint_cobounded_nhdsSet
-  条件: {s : 集合 α} (hs : 是紧集 s)
-  结论: Disjoint (cobounded α) (𝓝ˢ s)
-  证明: (disjoint_nhdsSet_cobounded hs).symm
-
-Depends on / 依赖: disjoint_nhdsSet_cobounded
+  hs.disjoint_nhdsSet_left.2 fun _ _ ↦ disjoint_nhds_cobounded _
+/-
+**Metric.disjoint_cobounded_nhdsSet** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：disjoint_cobounded_nhdsSet {s : Set α} (hs : IsCompact s) : Disjoint (cobo
+unded α) (𝓝ˢ s)
+参数：hs : IsCompact s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Disjoint.symm`：Disjoint.symm (x y : Finmap β) (h : Disjoint x y) : Disjo
+int y x
+· 使用定理 `Metric.disjoint_nhdsSet_cobounded`：disjoint_nhdsSet_cobounded {s : Set α
+} (hs : IsCompact s) : Disjoint (𝓝ˢ s) (cobounded α)
 -/
 theorem disjoint_cobounded_nhdsSet {s : Set α} (hs : IsCompact s) : Disjoint (cobounded α) (𝓝ˢ s) :=
   (disjoint_nhdsSet_cobounded hs).symm
-
-/--
-theorem `exists_isBounded_image_of_tendsto` / 定理 `exists_isBounded_image_of_tendsto`
-
-English:
-theorem exists_isBounded_image_of_tendsto
-  statement: {α β : Type*} [PseudoMetricSpace β]
-  proof: (l.basis_sets.map f).disjoint_iff_left.mp (disjoint_nhds_cobounded x).mono_left hf
-
-中文:
-定理 存在_isBounded_image_of_tendsto
-  结论: {α β : 类型} [伪度量空间 β]
-  证明: (l.basis_sets.map f).disjoint_iff_left.mp (disjoint_nhds_cobounded x).mono_left hf
-
-Depends on / 依赖: basis_sets, disjoint_iff_left, disjoint_iff_left.mp, disjoint_nhds_cobounded, l.basis_sets.map, mono_left
+/-
+**Metric.exists_isBounded_image_of_tendsto** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：exists_isBounded_image_of_tendsto {α β : Type*} [PseudoMetricSpace β] {l :
+ Filter α} {f : α -> β} {x : β} (hf : Tendsto f l (𝓝 x)) : exists s in l, IsBoun
+ded (f '' s)
+参数：hf : Tendsto f l (𝓝 x)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.HasBasis.disjoint_iff_left`：∀ {α : Type u_1} {ι : Sort u_4} {l l'
+ : Filter α} {p : ι → Prop} {s : ι → Set α},   l.HasBasis p s → (Disjoint l l' ↔
+ ∃ i, p i ∧ (s i)ᶜ ∈ l'…
+· 使用定理 `Filter.HasBasis.map`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} {l :
+ Filter α} {p : ι → Prop} {s : ι → Set α} (f : α → β),   l.HasBasis p s → (Filte
+r.map f l…
+· 使用定理 `Filter.basis_sets`：basis_sets (l : Filter α) : l.HasBasis (fun s : Set α
+ => s in l) id
+· 使用定理 `Disjoint.mono_left`：Disjoint.mono_left (h : a <= b) : Disjoint b c -> Di
+sjoint a c
+· 使用定理 `Metric.disjoint_nhds_cobounded`：disjoint_nhds_cobounded (x : α) : Disjoi
+nt (𝓝 x) (cobounded α)
 -/
 theorem exists_isBounded_image_of_tendsto {α β : Type*} [PseudoMetricSpace β]
-    {l : Filter α} {f : α -> β} {x : β} (hf : Tendsto f l (𝓝 x)) :
-    exists s in l, IsBounded (f '' s) :=
-(l.basis_sets.map f).disjoint_iff_left.mp (disjoint_nhds_cobounded x).mono_left hf
+    {l : Filter α} {f : α → β} {x : β} (hf : Tendsto f l (𝓝 x)) :
+    ∃ s ∈ l, IsBounded (f '' s) :=
+  (l.basis_sets.map f).disjoint_iff_left.mp <| (disjoint_nhds_cobounded x).mono_left hf
 
-/--
-theorem `exists_isOpen_isBounded_image_inter_of_isCompact_of_forall_continuousWithinAt` / 定理 `exists_isOpen_isBounded_image_inter_of_isCompact_of_forall_continuousWithinAt`
+/-- If a function is continuous within a set `s` at every point of a compact set `k`, then it is
+bounded on some open neighborhood of `k` in `s`. -/
+/-
+**Metric.exists_isOpen_isBounded_image_inter_of_isCompact_of_forall_continuousWi
+thinAt** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：exists_isOpen_isBounded_image_inter_of_isCompact_of_forall_continuousWithi
+nAt [TopologicalSpace β] {k s : Set β} {f : β -> α} (hk : IsCompact k) (hf : for
+all x in k, ContinuousWithinAt f s x) : exists t, k subseteq t ∧ IsOpen t ∧ IsBo
+unded (f '' (t inter s))
+参数：hk : IsCompact k；hf : forall x in k, ContinuousWithinAt f s x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `disjoint_assoc`：disjoint_assoc : Disjoint (a ⊓ b) c ↔ Disjoint a (b ⊓ c)
+· 使用定理 `inf_comm`：∀ {α : Type u} [inst : SemilatticeInf α] (a b : α), a ⊓ b = b 
+⊓ a
+· 使用定理 `IsCompact.disjoint_nhdsSet_left`：IsCompact.disjoint_nhdsSet_left {l : Fi
+lter X} (hs : IsCompact s) : Disjoint (𝓝ˢ s) l ↔ forall x in s, Disjoint (𝓝 x) l
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `disjoint_left_comm`：disjoint_left_comm : Disjoint a (b ⊓ c) ↔ Disjoint b
+ (a ⊓ c)
+· 使用定理 `Filter.Tendsto.disjoint`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {la
+₁ la₂ : Filter α} {lb₁ lb₂ : Filter β},   Filter.Tendsto f la₁ lb₁ → Disjoint lb
+₁ lb₂ → Filte…
+· 使用定理 `Filter.tendsto_comap`：tendsto_comap {f : α -> β} {x : Filter β} : Tendst
+o f (comap f x) x
+· 使用定理 `Metric.disjoint_cobounded_nhds`：disjoint_cobounded_nhds (x : α) : Disjoi
+nt (cobounded α) (𝓝 x)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.HasBasis.disjoint_iff`：∀ {α : Type u_1} {ι : Sort u_4} {ι' : Sort
+ u_5} {l l' : Filter α} {p : ι → Prop} {s : ι → Set α} {p' : ι' → Prop}   {s' : 
+ι' → Set α},   l.H…
+· 使用定理 `Filter.HasBasis.inf_principal`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filt
+er α} {p : ι → Prop} {s : ι → Set α},   l.HasBasis p s → ∀ (s' : Set α), (l ⊓ Fi
+lter.principal s').…
+· 使用定理 `hasBasis_nhdsSet`：hasBasis_nhdsSet (s : Set X) : (𝓝ˢ s).HasBasis (fun U 
+=> IsOpen U ∧ s subseteq U) fun U => U
+· 使用定理 `Filter.HasBasis.comap`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} {l
+ : Filter α} {p : ι → Prop} {s : ι → Set α} (f : β → α),   l.HasBasis p s → (Fil
+ter.comap f…
+· 使用定理 `Filter.basis_sets`：basis_sets (l : Filter α) : l.HasBasis (fun s : Set α
+ => s in l) id
+· 使用定理 `Bornology.IsBounded.subset`：∀ {α : Type u_2} {x : Bornology α} {s t : Se
+t α}, Bornology.IsBounded t → s ⊆ t → Bornology.IsBounded s
+· 使用定理 `Bornology.isBounded_compl_iff`：isBounded_compl_iff : IsBounded sᶜ ↔ IsCo
+bounded s
+· 使用定理 `Set.image_subset_iff`：image_subset_iff {s : Set α} {t : Set β} {f : α ->
+ β} : f '' s subseteq t ↔ s subseteq f ⁻¹' t
+· 使用定理 `Set.preimage_compl`：preimage_compl {s : Set β} : f ⁻¹' sᶜ = (f ⁻¹' s)ᶜ
+· 使用引理 `Set.subset_compl_iff_disjoint_right`：subset_compl_iff_disjoint_right : s
+ subseteq tᶜ ↔ Disjoint s t
 
-English:
-theorem exists_isOpen_isBounded_image_inter_of_isCompact_of_forall_continuousWithinAt
-  proof: by
-  have : Disjoint (𝓝ˢ k ⊓ 𝓟 s) (comap f (cobounded α)) := by
-    rw [disjoint_assoc]; rw [inf_comm]; rw [hk.disjoint_nhdsSet_left]
-exact fun x hx => disjoint_left_comm.2
-      tendsto_comap.disjoint (disjoint_cobounded_nhds _) (hf x hx)
-  rcases ((((hasBasis_nhdsSet _).inf_principal _)).disjoint_iff ((basis_sets _).comap _)).1 this
-    with ⟨U, ⟨hUo, hkU⟩, t, ht, hd⟩
-  refine ⟨U, hkU, hUo, (isBounded_compl_iff.2 ht).subset ?_⟩
-  rwa [image_subset_iff, preimage_compl, subset_compl_iff_disjoint_right]
-
-中文:
-定理 存在_isOpen_isBounded_image_inter_of_isCompact_of_对任意_continuousWithinAt
-  证明: by
-  have : Disjoint (𝓝ˢ k ⊓ 𝓟 s) (comap f (cobounded α)) := by
-    rw [disjoint_assoc]; rw [inf_comm]; rw [hk.disjoint_nhdsSet_left]
-exact fun x hx => disjoint_left_comm.2
-      tendsto_comap.disjoint (disjoint_cobounded_nhds _) (hf x hx)
-  rcases ((((hasBasis_nhdsSet _).inf_principal _)).disjoint_iff ((basis_sets _).comap _)).1 this
-    with ⟨U, ⟨hUo, hkU⟩, t, ht, hd⟩
-  refine ⟨U, hkU, hUo, (isBounded_compl_iff.2 ht).subset ?_⟩
-  rwa [image_subset_iff, preimage_compl, subset_compl_iff_disjoint_right]
-
-Depends on / 依赖: Disjoint, basis_sets, cobounded, disjoint, disjoint_assoc, disjoint_cobounded_nhds, disjoint_iff, disjoint_left_comm, disjoint_nhdsSet_left, hasBasis_nhdsSet, hk.disjoint_nhdsSet_left, image_subset_iff, inf_comm, inf_principal, isBounded_compl_iff, preimage_compl, subset, subset_compl_iff_disjoint_right, tendsto_comap, tendsto_comap.disjoint
+--- 原说明 ---
+If a function is continuous within a set `s` at every point of a compact set `k`
+, then it is
+bounded on some open neighborhood of `k` in `s`.
 -/
 theorem exists_isOpen_isBounded_image_inter_of_isCompact_of_forall_continuousWithinAt
-    [TopologicalSpace β] {k s : Set β} {f : β -> α} (hk : IsCompact k)
-    (hf : forall x in k, ContinuousWithinAt f s x) :
-    exists t, k subseteq t ∧ IsOpen t ∧ IsBounded (f '' (t inter s)) := by
+    [TopologicalSpace β] {k s : Set β} {f : β → α} (hk : IsCompact k)
+    (hf : ∀ x ∈ k, ContinuousWithinAt f s x) :
+    ∃ t, k ⊆ t ∧ IsOpen t ∧ IsBounded (f '' (t ∩ s)) := by
   have : Disjoint (𝓝ˢ k ⊓ 𝓟 s) (comap f (cobounded α)) := by
-    rw [disjoint_assoc]; rw [inf_comm]; rw [hk.disjoint_nhdsSet_left]
-exact fun x hx => disjoint_left_comm.2
+    rw [disjoint_assoc, inf_comm, hk.disjoint_nhdsSet_left]
+    exact fun x hx ↦ disjoint_left_comm.2 <|
       tendsto_comap.disjoint (disjoint_cobounded_nhds _) (hf x hx)
   rcases ((((hasBasis_nhdsSet _).inf_principal _)).disjoint_iff ((basis_sets _).comap _)).1 this
     with ⟨U, ⟨hUo, hkU⟩, t, ht, hd⟩
   refine ⟨U, hkU, hUo, (isBounded_compl_iff.2 ht).subset ?_⟩
   rwa [image_subset_iff, preimage_compl, subset_compl_iff_disjoint_right]
 
-/--
-theorem `exists_isOpen_isBounded_image_of_isCompact_of_forall_continuousAt` / 定理 `exists_isOpen_isBounded_image_of_isCompact_of_forall_continuousAt`
+/-- If a function is continuous at every point of a compact set `k`, then it is bounded on
+some open neighborhood of `k`. -/
+/-
+**Metric.exists_isOpen_isBounded_image_of_isCompact_of_forall_continuousAt** 是 M
+athlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：exists_isOpen_isBounded_image_of_isCompact_of_forall_continuousAt [Topolog
+icalSpace β] {k : Set β} {f : β -> α} (hk : IsCompact k) (hf : forall x in k, Co
+ntinuousAt f x) : exists t, k subseteq t ∧ IsOpen t ∧ IsBounded (f '' t)
+参数：hk : IsCompact k；hf : forall x in k, ContinuousAt f x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.inter_univ`：inter_univ (a : Set α) : a inter univ = a
+· 使用定理 `Metric.exists_isOpen_isBounded_image_inter_of_isCompact_of_forall_contin
+uousWithinAt`：exists_isOpen_isBounded_image_inter_of_isCompact_of_forall_continu
+ousWithinAt [TopologicalSpace β] {k s : Set β} {f : β -> α} (hk : IsCompac…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 
-English:
-theorem exists_isOpen_isBounded_image_of_isCompact_of_forall_continuousAt
-  statement: [TopologicalSpace β]
-  proof: by
-  simp_rw [← continuousWithinAt_univ] at hf
-  simpa only [inter_univ] using
-    exists_isOpen_isBounded_image_inter_of_isCompact_of_forall_continuousWithinAt hk hf
-
-中文:
-定理 存在_isOpen_isBounded_image_of_isCompact_of_对任意_continuousAt
-  结论: [拓扑空间 β]
-  证明: by
-  simp_rw [← continuousWithinAt_univ] at hf
-  simpa only [inter_univ] using
-    exists_isOpen_isBounded_image_inter_of_isCompact_of_forall_continuousWithinAt hk hf
-
-Depends on / 依赖: continuousWithinAt_univ, exists_isOpen_isBounded_image_inter_of_isCompact_of_forall_continuousWithinAt, inter_univ, simp_rw
+--- 原说明 ---
+If a function is continuous at every point of a compact set `k`, then it is boun
+ded on
+some open neighborhood of `k`.
 -/
 theorem exists_isOpen_isBounded_image_of_isCompact_of_forall_continuousAt [TopologicalSpace β]
-    {k : Set β} {f : β -> α} (hk : IsCompact k) (hf : forall x in k, ContinuousAt f x) :
-    exists t, k subseteq t ∧ IsOpen t ∧ IsBounded (f '' t) := by
+    {k : Set β} {f : β → α} (hk : IsCompact k) (hf : ∀ x ∈ k, ContinuousAt f x) :
+    ∃ t, k ⊆ t ∧ IsOpen t ∧ IsBounded (f '' t) := by
   simp_rw [← continuousWithinAt_univ] at hf
   simpa only [inter_univ] using
     exists_isOpen_isBounded_image_inter_of_isCompact_of_forall_continuousWithinAt hk hf
 
-/--
-theorem `exists_isOpen_isBounded_image_inter_of_isCompact_of_continuousOn` / 定理 `exists_isOpen_isBounded_image_inter_of_isCompact_of_continuousOn`
+/-- If a function is continuous on a set `s` containing a compact set `k`, then it is bounded on
+some open neighborhood of `k` in `s`. -/
+/-
+**Metric.exists_isOpen_isBounded_image_inter_of_isCompact_of_continuousOn** 是 Ma
+thlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：exists_isOpen_isBounded_image_inter_of_isCompact_of_continuousOn [Topologi
+calSpace β] {k s : Set β} {f : β -> α} (hk : IsCompact k) (hks : k subseteq s) (
+hf : ContinuousOn f s) : exists t, k subseteq t ∧ IsOpen t ∧ IsBounded (f '' (t 
+inter s))
+参数：hk : IsCompact k；hks : k subseteq s；hf : ContinuousOn f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.exists_isOpen_isBounded_image_inter_of_isCompact_of_forall_contin
+uousWithinAt`：exists_isOpen_isBounded_image_inter_of_isCompact_of_forall_continu
+ousWithinAt [TopologicalSpace β] {k s : Set β} {f : β -> α} (hk : IsCompac…
 
-English:
-theorem exists_isOpen_isBounded_image_inter_of_isCompact_of_continuousOn
-  statement: [TopologicalSpace β]
-  proof: exists_isOpen_isBounded_image_inter_of_isCompact_of_forall_continuousWithinAt hk fun x hx =>
-    hf x (hks hx)
-
-中文:
-定理 存在_isOpen_isBounded_image_inter_of_isCompact_of_continuousOn
-  结论: [拓扑空间 β]
-  证明: exists_isOpen_isBounded_image_inter_of_isCompact_of_forall_continuousWithinAt hk fun x hx =>
-    hf x (hks hx)
-
-Depends on / 依赖: exists_isOpen_isBounded_image_inter_of_isCompact_of_forall_continuousWithinAt
+--- 原说明 ---
+If a function is continuous on a set `s` containing a compact set `k`, then it i
+s bounded on
+some open neighborhood of `k` in `s`.
 -/
 theorem exists_isOpen_isBounded_image_inter_of_isCompact_of_continuousOn [TopologicalSpace β]
-    {k s : Set β} {f : β -> α} (hk : IsCompact k) (hks : k subseteq s) (hf : ContinuousOn f s) :
-    exists t, k subseteq t ∧ IsOpen t ∧ IsBounded (f '' (t inter s)) :=
+    {k s : Set β} {f : β → α} (hk : IsCompact k) (hks : k ⊆ s) (hf : ContinuousOn f s) :
+    ∃ t, k ⊆ t ∧ IsOpen t ∧ IsBounded (f '' (t ∩ s)) :=
   exists_isOpen_isBounded_image_inter_of_isCompact_of_forall_continuousWithinAt hk fun x hx =>
     hf x (hks hx)
 
-/--
-theorem `exists_isOpen_isBounded_image_of_isCompact_of_continuousOn` / 定理 `exists_isOpen_isBounded_image_of_isCompact_of_continuousOn`
+/-- If a function is continuous on a neighborhood of a compact set `k`, then it is bounded on
+some open neighborhood of `k`. -/
+/-
+**Metric.exists_isOpen_isBounded_image_of_isCompact_of_continuousOn** 是 Mathlib 
+中的一个定理，位于命名空间 `Metric`。
+形式化陈述：exists_isOpen_isBounded_image_of_isCompact_of_continuousOn [TopologicalSpa
+ce β] {k s : Set β} {f : β -> α} (hk : IsCompact k) (hs : IsOpen s) (hks : k sub
+seteq s) (hf : ContinuousOn f s) : exists t, k subseteq t ∧ IsOpen t ∧ IsBounded
+ (f '' t)
+参数：hk : IsCompact k；hs : IsOpen s；hks : k subseteq s；hf : ContinuousOn f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.exists_isOpen_isBounded_image_of_isCompact_of_forall_continuousAt
+`：exists_isOpen_isBounded_image_of_isCompact_of_forall_continuousAt [Topological
+Space β] {k : Set β} {f : β -> α} (hk : IsCompact k) (hf : for…
+· 使用定理 `ContinuousOn.continuousAt`：ContinuousOn.continuousAt (h : ContinuousOn f
+ s) (hx : s in 𝓝 x) : ContinuousAt f x
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
 
-English:
-theorem exists_isOpen_isBounded_image_of_isCompact_of_continuousOn
-  statement: [TopologicalSpace β]
-  proof: exists_isOpen_isBounded_image_of_isCompact_of_forall_continuousAt hk fun _x hx =>
-    hf.continuousAt (hs.mem_nhds (hks hx))
-
-中文:
-定理 存在_isOpen_isBounded_image_of_isCompact_of_continuousOn
-  结论: [拓扑空间 β]
-  证明: exists_isOpen_isBounded_image_of_isCompact_of_forall_continuousAt hk fun _x hx =>
-    hf.continuousAt (hs.mem_nhds (hks hx))
-
-Depends on / 依赖: continuousAt, exists_isOpen_isBounded_image_of_isCompact_of_forall_continuousAt, hf.continuousAt, hs.mem_nhds, mem_nhds
+--- 原说明 ---
+If a function is continuous on a neighborhood of a compact set `k`, then it is b
+ounded on
+some open neighborhood of `k`.
 -/
 theorem exists_isOpen_isBounded_image_of_isCompact_of_continuousOn [TopologicalSpace β]
-    {k s : Set β} {f : β -> α} (hk : IsCompact k) (hs : IsOpen s) (hks : k subseteq s)
-    (hf : ContinuousOn f s) : exists t, k subseteq t ∧ IsOpen t ∧ IsBounded (f '' t) :=
+    {k s : Set β} {f : β → α} (hk : IsCompact k) (hs : IsOpen s) (hks : k ⊆ s)
+    (hf : ContinuousOn f s) : ∃ t, k ⊆ t ∧ IsOpen t ∧ IsBounded (f '' t) :=
   exists_isOpen_isBounded_image_of_isCompact_of_forall_continuousAt hk fun _x hx =>
     hf.continuousAt (hs.mem_nhds (hks hx))
 
-/--
-theorem `isCompact_of_isClosed_isBounded` / 定理 `isCompact_of_isClosed_isBounded`
+/-- The **Heine–Borel theorem**: In a proper space, a closed bounded set is compact. -/
+/-
+**Metric.isCompact_of_isClosed_isBounded** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：isCompact_of_isClosed_isBounded [ProperSpace α] (hc : IsClosed s) (hb : Is
+Bounded s) : IsCompact s
+参数：hc : IsClosed s；hb : IsBounded s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `isCompact_empty`：isCompact_empty : IsCompact (∅ : Set X)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Bornology.IsBounded.subset_closedBall`：∀ {α : Type u} {s : Set α} [inst 
+: PseudoMetricSpace α],   Bornology.IsBounded s → ∀ (c : α), ∃ r, s ⊆ Metric.clo
+sedBall c r
+· 使用定理 `IsCompact.of_isClosed_subset`：IsCompact.of_isClosed_subset (hs : IsCompa
+ct s) (ht : IsClosed t) (h : t subseteq s) : IsCompact t
+· 使用定理 `ProperSpace.isCompact_closedBall`：∀ {α : Type u} {inst : PseudoMetricSpa
+ce α} [self : ProperSpace α] (x : α) (r : ℝ), IsCompact (Metric.closedBall x r)
 
-English:
-theorem isCompact_of_isClosed_isBounded
-  given: [ProperSpace α] (hc : IsClosed s) (hb : IsBounded s)
-  proof: by
-  rcases eq_empty_or_nonempty s with (rfl | ⟨x, -⟩)
-  · exact isCompact_empty
-  · rcases hb.subset_closedBall x with ⟨r, hr⟩
-    exact (isCompact_closedBall x r).of_isClosed_subset hc hr
-
-中文:
-定理 isCompact_of_isClosed_isBounded
-  条件: [真空间 α] (hc : 是闭集 s) (hb : IsBounded s)
-  证明: by
-  rcases eq_empty_or_nonempty s with (rfl | ⟨x, -⟩)
-  · exact isCompact_empty
-  · rcases hb.subset_closedBall x with ⟨r, hr⟩
-    exact (isCompact_closedBall x r).of_isClosed_subset hc hr
-
-Depends on / 依赖: eq_empty_or_nonempty, hb.subset_closedBall, isCompact_closedBall, isCompact_empty, of_isClosed_subset, subset_closedBall
+--- 原说明 ---
+The **Heine–Borel theorem**: In a proper space, a closed bounded set is compact.
 -/
 theorem isCompact_of_isClosed_isBounded [ProperSpace α] (hc : IsClosed s) (hb : IsBounded s) :
     IsCompact s := by
@@ -1287,20 +1253,15 @@ theorem isCompact_of_isClosed_isBounded [ProperSpace α] (hc : IsClosed s) (hb :
   · rcases hb.subset_closedBall x with ⟨r, hr⟩
     exact (isCompact_closedBall x r).of_isClosed_subset hc hr
 
-/--
-theorem `_root_.Bornology.IsBounded.isCompact_closure` / 定理 `_root_.Bornology.IsBounded.isCompact_closure`
+/-- The **Heine–Borel theorem**: In a proper space, the closure of a bounded set is compact. -/
+/-
+**Metric._root_.Bornology.IsBounded.isCompact_closure** 是 Mathlib 中的一个定理，位于命名空间 
+`Metric`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.Bornology.IsBounded.isCompact_closure
-  given: [ProperSpace α] (h : IsBounded s)
-  proof: isCompact_of_isClosed_isBounded isClosed_closure h.closure
-
-中文:
-定理 _root_.有界结构.IsBounded.isCompact_closure
-  条件: [真空间 α] (h : IsBounded s)
-  证明: isCompact_of_isClosed_isBounded isClosed_closure h.closure
-
-Depends on / 依赖: closure, h.closure, isClosed_closure, isCompact_of_isClosed_isBounded
+--- 原说明 ---
+The **Heine–Borel theorem**: In a proper space, the closure of a bounded set is 
+compact.
 -/
 theorem _root_.Bornology.IsBounded.isCompact_closure [ProperSpace α] (h : IsBounded s) :
     IsCompact (closure s) :=
@@ -1309,39 +1270,52 @@ theorem _root_.Bornology.IsBounded.isCompact_closure [ProperSpace α] (h : IsBou
 /-- The **Heine–Borel theorem**:
 In a proper metric space, a set is compact if and only if it is closed and bounded. -/
 @[wikidata Q253214]
-/--
-theorem `isCompact_iff_isClosed_bounded` / 定理 `isCompact_iff_isClosed_bounded`
+/-
+**Metric.isCompact_iff_isClosed_bounded** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：isCompact_iff_isClosed_bounded {α : Type*} {s : Set α} [MetricSpace α] [Pr
+operSpace α] : IsCompact s ↔ IsClosed s ∧ IsBounded s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCompact.isClosed`：IsCompact.isClosed [T2Space X] {s : Set X} (hs : IsC
+ompact s) : IsClosed s
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `TopologicalSpace.PseudoMetrizableSpace.toMetrizableSpace`：∀ {X : Type u_
+2} [inst : TopologicalSpace X] [T0Space X] [h : TopologicalSpace.PseudoMetrizabl
+eSpace X],   TopologicalSpace.MetrizableSpace …
+· 使用定理 `MetricSpace.instT0Space`：∀ {γ : Type w} [inst : MetricSpace γ], T0Space 
+γ
+· 使用定理 `UniformSpace.pseudoMetrizableSpace`：∀ {X : Type u_5} [u : UniformSpace X
+] [hu : (uniformity X).IsCountablyGenerated],   TopologicalSpace.PseudoMetrizabl
+eSpace X
+· 使用定理 `EMetric.instIsCountablyGeneratedUniformity`：∀ {α : Type u} [inst : Pseud
+oEMetricSpace α], (uniformity α).IsCountablyGenerated
+· 使用定理 `IsCompact.isBounded`：∀ {α : Type u} [inst : PseudoMetricSpace α] {s : Se
+t α}, IsCompact s → Bornology.IsBounded s
+· 使用定理 `Metric.isCompact_of_isClosed_isBounded`：isCompact_of_isClosed_isBounded 
+[ProperSpace α] (hc : IsClosed s) (hb : IsBounded s) : IsCompact s
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-theorem isCompact_iff_isClosed_bounded
-  given: {α : Type*} {s : Set α} [MetricSpace α] [ProperSpace α]
-  proof: ⟨fun h => ⟨h.isClosed, h.isBounded⟩, fun h => isCompact_of_isClosed_isBounded h.1 h.2⟩
-
-中文:
-定理 isCompact_iff_isClosed_bounded
-  条件: {α : 类型} {s : 集合 α} [度量空间 α] [真空间 α]
-  证明: ⟨fun h => ⟨h.isClosed, h.isBounded⟩, fun h => isCompact_of_isClosed_isBounded h.1 h.2⟩
-
-Depends on / 依赖: h.isBounded, h.isClosed, isBounded, isClosed, isCompact_of_isClosed_isBounded
+--- 原说明 ---
+The **Heine–Borel theorem**:
+In a proper metric space, a set is compact if and only if it is closed and bound
+ed.
 -/
 theorem isCompact_iff_isClosed_bounded {α : Type*} {s : Set α} [MetricSpace α] [ProperSpace α] :
     IsCompact s ↔ IsClosed s ∧ IsBounded s :=
   ⟨fun h => ⟨h.isClosed, h.isBounded⟩, fun h => isCompact_of_isClosed_isBounded h.1 h.2⟩
-
-/--
-theorem `compactSpace_iff_isBounded_univ` / 定理 `compactSpace_iff_isBounded_univ`
-
-English:
-theorem compactSpace_iff_isBounded_univ
-  given: [ProperSpace α]
-  proof: ⟨@isBounded_of_compactSpace α _ _, fun hb => ⟨isCompact_of_isClosed_isBounded isClosed_univ hb⟩⟩
-
-中文:
-定理 compactSpace_iff_isBounded_univ
-  条件: [真空间 α]
-  证明: ⟨@isBounded_of_compactSpace α _ _, fun hb => ⟨isCompact_of_isClosed_isBounded isClosed_univ hb⟩⟩
-
-Depends on / 依赖: isBounded_of_compactSpace, isClosed_univ, isCompact_of_isClosed_isBounded
+/-
+**Metric.compactSpace_iff_isBounded_univ** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：compactSpace_iff_isBounded_univ [ProperSpace α] : CompactSpace α ↔ IsBound
+ed (univ : Set α)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.isBounded_of_compactSpace`：isBounded_of_compactSpace [CompactSpac
+e α] : IsBounded s
+· 使用定理 `Metric.isCompact_of_isClosed_isBounded`：isCompact_of_isClosed_isBounded 
+[ProperSpace α] (hc : IsClosed s) (hb : IsBounded s) : IsCompact s
+· 使用定理 `isClosed_univ`：isClosed_univ : IsClosed (univ : Set X)
 -/
 theorem compactSpace_iff_isBounded_univ [ProperSpace α] :
     CompactSpace α ↔ IsBounded (univ : Set α) :=
@@ -1351,104 +1325,80 @@ section CompactIccSpace
 
 variable [Preorder α] [CompactIccSpace α]
 
-/--
-theorem `isBounded_Icc` / 定理 `isBounded_Icc`
-
-English:
-theorem isBounded_Icc
-  given: (a b : α)
-  statement: IsBounded (Icc a b)
-  proof: (totallyBounded_Icc a b).isBounded
-
-中文:
-定理 isBounded_Icc
-  条件: (a b : α)
-  结论: IsBounded (闭区间 a b)
-  证明: (totallyBounded_Icc a b).isBounded
-
-Depends on / 依赖: isBounded, totallyBounded_Icc
+/-
+**Metric.isBounded_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：isBounded_Icc (a b : α) : IsBounded (Icc a b)
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TotallyBounded.isBounded`：∀ {α : Type u} [inst : PseudoMetricSpace α] {s
+ : Set α}, TotallyBounded s → Bornology.IsBounded s
+· 使用引理 `totallyBounded_Icc`：totallyBounded_Icc (a b : α) : TotallyBounded (Icc a
+ b)
 -/
 theorem isBounded_Icc (a b : α) : IsBounded (Icc a b) :=
   (totallyBounded_Icc a b).isBounded
-
-/--
-theorem `isBounded_Ico` / 定理 `isBounded_Ico`
-
-English:
-theorem isBounded_Ico
-  given: (a b : α)
-  statement: IsBounded (Ico a b)
-  proof: (totallyBounded_Ico a b).isBounded
-
-中文:
-定理 isBounded_Ico
-  条件: (a b : α)
-  结论: IsBounded (左闭右开区间 a b)
-  证明: (totallyBounded_Ico a b).isBounded
-
-Depends on / 依赖: isBounded, totallyBounded_Ico
+/-
+**Metric.isBounded_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：isBounded_Ico (a b : α) : IsBounded (Ico a b)
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TotallyBounded.isBounded`：∀ {α : Type u} [inst : PseudoMetricSpace α] {s
+ : Set α}, TotallyBounded s → Bornology.IsBounded s
+· 使用引理 `totallyBounded_Ico`：totallyBounded_Ico (a b : α) : TotallyBounded (Ico a
+ b)
 -/
 theorem isBounded_Ico (a b : α) : IsBounded (Ico a b) :=
   (totallyBounded_Ico a b).isBounded
-
-/--
-theorem `isBounded_Ioc` / 定理 `isBounded_Ioc`
-
-English:
-theorem isBounded_Ioc
-  given: (a b : α)
-  statement: IsBounded (Ioc a b)
-  proof: (totallyBounded_Ioc a b).isBounded
-
-中文:
-定理 isBounded_Ioc
-  条件: (a b : α)
-  结论: IsBounded (左开右闭区间 a b)
-  证明: (totallyBounded_Ioc a b).isBounded
-
-Depends on / 依赖: isBounded, totallyBounded_Ioc
+/-
+**Metric.isBounded_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：isBounded_Ioc (a b : α) : IsBounded (Ioc a b)
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TotallyBounded.isBounded`：∀ {α : Type u} [inst : PseudoMetricSpace α] {s
+ : Set α}, TotallyBounded s → Bornology.IsBounded s
+· 使用引理 `totallyBounded_Ioc`：totallyBounded_Ioc (a b : α) : TotallyBounded (Ioc a
+ b)
 -/
 theorem isBounded_Ioc (a b : α) : IsBounded (Ioc a b) :=
   (totallyBounded_Ioc a b).isBounded
-
-/--
-theorem `isBounded_Ioo` / 定理 `isBounded_Ioo`
-
-English:
-theorem isBounded_Ioo
-  given: (a b : α)
-  statement: IsBounded (Ioo a b)
-  proof: (totallyBounded_Ioo a b).isBounded
-
-中文:
-定理 isBounded_Ioo
-  条件: (a b : α)
-  结论: IsBounded (开区间 a b)
-  证明: (totallyBounded_Ioo a b).isBounded
-
-Depends on / 依赖: isBounded, totallyBounded_Ioo
+/-
+**Metric.isBounded_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：isBounded_Ioo (a b : α) : IsBounded (Ioo a b)
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TotallyBounded.isBounded`：∀ {α : Type u} [inst : PseudoMetricSpace α] {s
+ : Set α}, TotallyBounded s → Bornology.IsBounded s
+· 使用引理 `totallyBounded_Ioo`：totallyBounded_Ioo (a b : α) : TotallyBounded (Ioo a
+ b)
 -/
 theorem isBounded_Ioo (a b : α) : IsBounded (Ioo a b) :=
   (totallyBounded_Ioo a b).isBounded
 
-/--
-theorem `isBounded_of_bddAbove_of_bddBelow` / 定理 `isBounded_of_bddAbove_of_bddBelow`
+/-- In a pseudometric space with a conditionally complete linear order such that the order and the
+metric structure give the same topology, any order-bounded set is metric-bounded. -/
+/-
+**Metric.isBounded_of_bddAbove_of_bddBelow** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：isBounded_of_bddAbove_of_bddBelow {s : Set α} (h₁ : BddAbove s) (h₂ : BddB
+elow s) : IsBounded s
+参数：h₁ : BddAbove s；h₂ : BddBelow s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Bornology.IsBounded.subset`：∀ {α : Type u_2} {x : Bornology α} {s t : Se
+t α}, Bornology.IsBounded t → s ⊆ t → Bornology.IsBounded s
+· 使用定理 `Metric.isBounded_Icc`：isBounded_Icc (a b : α) : IsBounded (Icc a b)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.mem_Icc`：∀ {α : Type u_1} [inst : Preorder α] {a b x : α}, x ∈ Set.I
+cc a b ↔ a ≤ x ∧ x ≤ b
 
-English:
-theorem isBounded_of_bddAbove_of_bddBelow
-  given: {s : Set α} (h₁ : BddAbove s) (h₂ : BddBelow s)
-  proof: let ⟨u, hu⟩ := h₁
-  let ⟨l, hl⟩ := h₂
-  (isBounded_Icc l u).subset (fun _x hx => mem_Icc.mpr ⟨hl hx, hu hx⟩)
-
-中文:
-定理 isBounded_of_bddAbove_of_bddBelow
-  条件: {s : 集合 α} (h₁ : BddAbove s) (h₂ : BddBelow s)
-  证明: let ⟨u, hu⟩ := h₁
-  let ⟨l, hl⟩ := h₂
-  (isBounded_Icc l u).subset (fun _x hx => mem_Icc.mpr ⟨hl hx, hu hx⟩)
-
-Depends on / 依赖: isBounded_Icc, mem_Icc, mem_Icc.mpr, subset
+--- 原说明 ---
+In a pseudometric space with a conditionally complete linear order such that the
+ order and the
+metric structure give the same topology, any order-bounded set is metric-bounded
+.
 -/
 theorem isBounded_of_bddAbove_of_bddBelow {s : Set α} (h₁ : BddAbove s) (h₂ : BddBelow s) :
     IsBounded s :=
@@ -1457,34 +1407,16 @@ theorem isBounded_of_bddAbove_of_bddBelow {s : Set α} (h₁ : BddAbove s) (h₂
   (isBounded_Icc l u).subset (fun _x hx => mem_Icc.mpr ⟨hl hx, hu hx⟩)
 
 open Metric in
-/--
-lemma `_root_.IsOrderBornology.of_isCompactIcc` / 引理 `_root_.IsOrderBornology.of_isCompactIcc`
-
-English:
-lemma _root_.IsOrderBornology.of_isCompactIcc
-  statement: (x : α)
-  proof: by
-    refine ⟨?_, fun hs => Metric.isBounded_of_bddAbove_of_bddBelow hs.2 hs.1⟩
-    rw [Metric.isBounded_iff_subset_closedBall x]
-    rintro ⟨r, hr⟩
-    exact ⟨(bddBelow_ball _).mono hr, (bddAbove_ball _).mono hr⟩
-
-中文:
-引理 _root_.是OrderBornology.of_isCompactIcc
-  结论: (x : α)
-  证明: by
-    refine ⟨?_, fun hs => Metric.isBounded_of_bddAbove_of_bddBelow hs.2 hs.1⟩
-    rw [Metric.isBounded_iff_subset_closedBall x]
-    rintro ⟨r, hr⟩
-    exact ⟨(bddBelow_ball _).mono hr, (bddAbove_ball _).mono hr⟩
-
-Depends on / 依赖: Metric, Metric.isBounded_iff_subset_closedBall, Metric.isBounded_of_bddAbove_of_bddBelow, bddAbove_ball, bddBelow_ball, isBounded_iff_subset_closedBall, isBounded_of_bddAbove_of_bddBelow
+/-
+**Metric._root_.IsOrderBornology.of_isCompactIcc** 是 Mathlib 中的一个引理，位于命名空间 `Metr
+ic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.IsOrderBornology.of_isCompactIcc (x : α)
-    (bddBelow_ball : forall r, BddBelow (closedBall x r))
-    (bddAbove_ball : forall r, BddAbove (closedBall x r)) : IsOrderBornology α where
+    (bddBelow_ball : ∀ r, BddBelow (closedBall x r))
+    (bddAbove_ball : ∀ r, BddAbove (closedBall x r)) : IsOrderBornology α where
   isBounded_iff_bddBelow_bddAbove s := by
-    refine ⟨?_, fun hs => Metric.isBounded_of_bddAbove_of_bddBelow hs.2 hs.1⟩
+    refine ⟨?_, fun hs ↦ Metric.isBounded_of_bddAbove_of_bddBelow hs.2 hs.1⟩
     rw [Metric.isBounded_iff_subset_closedBall x]
     rintro ⟨r, hr⟩
     exact ⟨(bddBelow_ball _).mono hr, (bddAbove_ball _).mono hr⟩
@@ -1496,56 +1428,58 @@ section CompactIccSpace_abs
 variable {α : Type*} [AddCommGroup α] [LinearOrder α] [IsOrderedAddMonoid α] [PseudoMetricSpace α]
   [CompactIccSpace α]
 
-/--
-lemma `isBounded_of_abs_le` / 引理 `isBounded_of_abs_le`
-
-English:
-lemma isBounded_of_abs_le
-  given: (C : α)
-  statement: Bornology.IsBounded {x : α | |x| <= C}
-  proof: by
-  convert! Metric.isBounded_Icc (-C) C
-  ext1 x
-  simp [abs_le]
-
-中文:
-引理 isBounded_of_abs_le
-  条件: (C : α)
-  结论: 有界结构.IsBounded {x : α | |x| <= C}
-  证明: by
-  convert! Metric.isBounded_Icc (-C) C
-  ext1 x
-  simp [abs_le]
-
-Depends on / 依赖: Metric, Metric.isBounded_Icc, abs_le, convert, isBounded_Icc
+/-
+**Metric.isBounded_of_abs_le** 是 Mathlib 中的一个引理，位于命名空间 `Metric`。
+形式化陈述：isBounded_of_abs_le (C : α) : Bornology.IsBounded {x : α | |x| <= C}
+参数：C : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Metric.isBounded_Icc`：isBounded_Icc (a b : α) : IsBounded (Icc a b)
 -/
-lemma isBounded_of_abs_le (C : α) : Bornology.IsBounded {x : α | |x| <= C} := by
+lemma isBounded_of_abs_le (C : α) : Bornology.IsBounded {x : α | |x| ≤ C} := by
   convert! Metric.isBounded_Icc (-C) C
   ext1 x
   simp [abs_le]
-
-/--
-lemma `isBounded_of_abs_lt` / 引理 `isBounded_of_abs_lt`
-
-English:
-lemma isBounded_of_abs_lt
-  given: (C : α)
-  statement: Bornology.IsBounded {x : α | |x| < C}
-  proof: by
-  convert! Metric.isBounded_Ioo (-C) C
-  ext1 x
-  simp [abs_lt]
-
-中文:
-引理 isBounded_of_abs_lt
-  条件: (C : α)
-  结论: 有界结构.IsBounded {x : α | |x| < C}
-  证明: by
-  convert! Metric.isBounded_Ioo (-C) C
-  ext1 x
-  simp [abs_lt]
-
-Depends on / 依赖: Metric, Metric.isBounded_Ioo, abs_lt, convert, isBounded_Ioo
+/-
+**Metric.isBounded_of_abs_lt** 是 Mathlib 中的一个引理，位于命名空间 `Metric`。
+形式化陈述：isBounded_of_abs_lt (C : α) : Bornology.IsBounded {x : α | |x| < C}
+参数：C : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Metric.isBounded_Ioo`：isBounded_Ioo (a b : α) : IsBounded (Ioo a b)
 -/
 lemma isBounded_of_abs_lt (C : α) : Bornology.IsBounded {x : α | |x| < C} := by
   convert! Metric.isBounded_Ioo (-C) C
@@ -1563,646 +1497,598 @@ variable {s : Set α} {x y z : α}
 section PseudoMetricSpace
 variable [PseudoMetricSpace α]
 
-/--
-Definition of `diam` / `diam` 的定义
+/-- The diameter of a set in a metric space. To get controllable behavior even when the diameter
+should be infinite, we express it in terms of the `ediam` -/
+/-
+**Metric.diam** 是 Mathlib 中的一个定义，位于命名空间 `Metric`。
+形式化陈述：diam (s : Set α) : Real
+参数：s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition diam
-  signature: (s : Set α)
-  body: ENNReal.toReal (ediam s)
-
-中文:
-定义 diam
-  签名: (s : 集合 α)
-  定义体: ENNReal.toReal (ediam s)
-
-Depends on / 依赖: ENNReal, ENNReal.toReal, toReal
+--- 原说明 ---
+The diameter of a set in a metric space. To get controllable behavior even when 
+the diameter
+should be infinite, we express it in terms of the `ediam`
 -/
-noncomputable def diam (s : Set α) : Real :=
+noncomputable def diam (s : Set α) : ℝ :=
   ENNReal.toReal (ediam s)
 
-/--
-theorem `diam_nonneg` / 定理 `diam_nonneg`
+/-- The diameter of a set is always nonnegative -/
+/-
+**Metric.diam_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：diam_nonneg : 0 <= diam s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ENNReal.toReal_nonneg`：∀ {a : ENNReal}, 0 ≤ a.toReal
 
-English:
-theorem diam_nonneg
-  statement: 0 <= diam s
-  proof: ENNReal.toReal_nonneg
-
-中文:
-定理 diam_nonneg
-  结论: 0 <= diam s
-  证明: ENNReal.toReal_nonneg
-
-Depends on / 依赖: ENNReal, ENNReal.toReal_nonneg, toReal_nonneg
+--- 原说明 ---
+The diameter of a set is always nonnegative
 -/
-theorem diam_nonneg : 0 <= diam s :=
+theorem diam_nonneg : 0 ≤ diam s :=
   ENNReal.toReal_nonneg
-
-/--
-theorem `diam_subsingleton` / 定理 `diam_subsingleton`
-
-English:
-theorem diam_subsingleton
-  given: (hs : s.Subsingleton)
-  statement: diam s = 0
-  proof: by
-  simp [diam, ediam_subsingleton hs]
-
-中文:
-定理 diam_subsingleton
-  条件: (hs : s.子单例)
-  结论: diam s = 0
-  证明: by
-  simp [diam, ediam_subsingleton hs]
-
-Depends on / 依赖: ediam_subsingleton
+/-
+**Metric.diam_subsingleton** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：diam_subsingleton (hs : s.Subsingleton) : diam s = 0
+参数：hs : s.Subsingleton。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.ediam_subsingleton`：ediam_subsingleton (hs : s.Subsingleton) : ed
+iam s = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem diam_subsingleton (hs : s.Subsingleton) : diam s = 0 := by
   simp [diam, ediam_subsingleton hs]
 
 /-- The empty set has zero diameter -/
 @[simp]
-/--
-theorem `diam_empty` / 定理 `diam_empty`
+/-
+**Metric.diam_empty** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：diam_empty : diam (∅ : Set α) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.diam_subsingleton`：diam_subsingleton (hs : s.Subsingleton) : diam
+ s = 0
+· 使用定理 `Set.subsingleton_empty`：subsingleton_empty : (∅ : Set α).Subsingleton
 
-English:
-theorem diam_empty
-  statement: diam (∅ : Set α) = 0
-  proof: diam_subsingleton subsingleton_empty
-
-中文:
-定理 diam_empty
-  结论: diam (∅ : 集合 α) = 0
-  证明: diam_subsingleton subsingleton_empty
-
-Depends on / 依赖: diam_subsingleton, subsingleton_empty
+--- 原说明 ---
+The empty set has zero diameter
 -/
 theorem diam_empty : diam (∅ : Set α) = 0 :=
   diam_subsingleton subsingleton_empty
 
 /-- A singleton has zero diameter -/
 @[simp]
-/--
-theorem `diam_singleton` / 定理 `diam_singleton`
+/-
+**Metric.diam_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：diam_singleton : diam ({x} : Set α) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.diam_subsingleton`：diam_subsingleton (hs : s.Subsingleton) : diam
+ s = 0
+· 使用定理 `Set.subsingleton_singleton`：subsingleton_singleton {a} : ({a} : Set α).S
+ubsingleton
 
-English:
-theorem diam_singleton
-  statement: diam ({x} : Set α) = 0
-  proof: diam_subsingleton subsingleton_singleton
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 diam_singleton
-  结论: diam ({x} : 集合 α) = 0
-  证明: diam_subsingleton subsingleton_singleton
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: diam_subsingleton, subsingleton_singleton
+--- 原说明 ---
+A singleton has zero diameter
 -/
 theorem diam_singleton : diam ({x} : Set α) = 0 :=
   diam_subsingleton subsingleton_singleton
 
 @[to_additive (attr := simp)]
-/--
-theorem `diam_one` / 定理 `diam_one`
-
-English:
-theorem diam_one
-  given: [One α]
-  statement: diam (1 : Set α) = 0
-  proof: diam_singleton
-
-中文:
-定理 diam_one
-  条件: [幺 α]
-  结论: diam (1 : 集合 α) = 0
-  证明: diam_singleton
-
-Depends on / 依赖: diam_singleton
+/-
+**Metric.diam_one** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：diam_one [One α] : diam (1 : Set α) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.diam_singleton`：diam_singleton : diam ({x} : Set α) = 0
 -/
 theorem diam_one [One α] : diam (1 : Set α) = 0 :=
   diam_singleton
 
 -- Does not work as a simp-lemma, since {x, y} reduces to (insert y {x})
-/--
-theorem `diam_pair` / 定理 `diam_pair`
-
-English:
-theorem diam_pair
-  statement: diam ({x, y} : Set α) = dist x y
-  proof: by
-  simp only [diam, ediam_pair, dist_edist]
-
-中文:
-定理 diam_pair
-  结论: diam ({x, y} : 集合 α) = dist x y
-  证明: by
-  simp only [diam, ediam_pair, dist_edist]
-
-Depends on / 依赖: dist_edist, ediam_pair
+/-
+**Metric.diam_pair** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：diam_pair : diam ({x, y} : Set α) = dist x y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.ediam_pair`：ediam_pair : ediam {x, y} = edist x y
+· 使用定理 `dist_edist`：dist_edist (x y : α) : dist x y = (edist x y).toReal
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem diam_pair : diam ({x, y} : Set α) = dist x y := by
   simp only [diam, ediam_pair, dist_edist]
 
 -- Does not work as a simp-lemma, since {x, y, z} reduces to (insert z (insert y {x}))
-/--
-theorem `diam_triple` / 定理 `diam_triple`
-
-English:
-theorem diam_triple
-  proof: by
-  simp only [diam, ediam_triple, dist_edist]
-  rw [ENNReal.toReal_max]; rw [ENNReal.toReal_max] <;> apply_rules [ne_of_lt, edist_lt_top, max_lt]
-
-中文:
-定理 diam_triple
-  证明: by
-  simp only [diam, ediam_triple, dist_edist]
-  rw [ENNReal.toReal_max]; rw [ENNReal.toReal_max] <;> apply_rules [ne_of_lt, edist_lt_top, max_lt]
-
-Depends on / 依赖: ENNReal, ENNReal.toReal_max, apply_rules, dist_edist, ediam_triple, edist_lt_top, max_lt, ne_of_lt, toReal_max
+/-
+**Metric.diam_triple** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：diam_triple : diam ({x, y, z} : Set α) = max (max (dist x y) (dist x z)) (
+dist y z)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.ediam_triple`：ediam_triple : ediam {x, y, z} = max (max (edist x 
+y) (edist x z)) (edist y z)
+· 使用定理 `dist_edist`：dist_edist (x y : α) : dist x y = (edist x y).toReal
+· 使用定理 `ENNReal.toReal_max`：toReal_max (hr : a != ∞) (hp : b != ∞) : ENNReal.toR
+eal (max a b) = max (ENNReal.toReal a) (ENNReal.toReal b)
+· 使用引理 `ne_of_lt`：ne_of_lt (h : a < b) : a != b
+· 使用定理 `max_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b c : α}, b < a → c <
+ a → max b c < a
+· 使用定理 `edist_lt_top`：edist_lt_top {α : Type*} [PseudoMetricSpace α] (x y : α) :
+ edist x y < ⊤
 -/
 theorem diam_triple :
     diam ({x, y, z} : Set α) = max (max (dist x y) (dist x z)) (dist y z) := by
   simp only [diam, ediam_triple, dist_edist]
-  rw [ENNReal.toReal_max]; rw [ENNReal.toReal_max] <;> apply_rules [ne_of_lt, edist_lt_top, max_lt]
+  rw [ENNReal.toReal_max, ENNReal.toReal_max] <;> apply_rules [ne_of_lt, edist_lt_top, max_lt]
 
-/--
-theorem `ediam_le_of_forall_dist_le` / 定理 `ediam_le_of_forall_dist_le`
+/-- If the distance between any two points in a set is bounded by some constant `C`,
+then `ENNReal.ofReal C` bounds the emetric diameter of this set. -/
+/-
+**Metric.ediam_le_of_forall_dist_le** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：ediam_le_of_forall_dist_le {C : Real} (h : forall x in s, forall y in s, d
+ist x y <= C) : ediam s <= ENNReal.ofReal C
+参数：h : forall x in s, forall y in s, dist x y <= C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.ediam_le`：ediam_le {d : Real>=0∞} (h : forall x in s, forall y in
+ s, edist x y <= d) : ediam s <= d
+· 使用定理 `ENNReal.ofReal_le_ofReal`：ofReal_le_ofReal {p q : Real} (h : p <= q) : E
+NNReal.ofReal p <= ENNReal.ofReal q
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `edist_dist`：edist_dist (x y : α) : edist x y = ENNReal.ofReal (dist x y)
 
-English:
-theorem ediam_le_of_forall_dist_le
-  given: {C : Real} (h : forall x in s, forall y in s, dist x y <= C)
-  proof: ediam_le fun x hx y hy => (edist_dist x y).symm ▸ ENNReal.ofReal_le_ofReal (h x hx y hy)
-
-中文:
-定理 ediam_le_of_对任意_dist_le
-  条件: {C : 实数} (h : 对任意 x in s, 对任意 y in s, dist x y <= C)
-  证明: ediam_le fun x hx y hy => (edist_dist x y).symm ▸ ENNReal.ofReal_le_ofReal (h x hx y hy)
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal_le_ofReal, ediam_le, edist_dist, ofReal_le_ofReal
+--- 原说明 ---
+If the distance between any two points in a set is bounded by some constant `C`,
+then `ENNReal.ofReal C` bounds the emetric diameter of this set.
 -/
-theorem ediam_le_of_forall_dist_le {C : Real} (h : forall x in s, forall y in s, dist x y <= C) :
-    ediam s <= ENNReal.ofReal C :=
+theorem ediam_le_of_forall_dist_le {C : ℝ} (h : ∀ x ∈ s, ∀ y ∈ s, dist x y ≤ C) :
+    ediam s ≤ ENNReal.ofReal C :=
   ediam_le fun x hx y hy => (edist_dist x y).symm ▸ ENNReal.ofReal_le_ofReal (h x hx y hy)
 
-/--
-theorem `diam_le_of_forall_dist_le` / 定理 `diam_le_of_forall_dist_le`
+/-- If the distance between any two points in a set is bounded by some non-negative constant,
+this constant bounds the diameter. -/
+/-
+**Metric.diam_le_of_forall_dist_le** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：diam_le_of_forall_dist_le {C : Real} (h₀ : 0 <= C) (h : forall x in s, for
+all y in s, dist x y <= C) : diam s <= C
+参数：h₀ : 0 <= C；h : forall x in s, forall y in s, dist x y <= C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ENNReal.toReal_le_of_le_ofReal`：toReal_le_of_le_ofReal {a : Real>=0∞} {b
+ : Real} (hb : 0 <= b) (h : a <= ENNReal.ofReal b) : ENNReal.toReal a <= b
+· 使用定理 `Metric.ediam_le_of_forall_dist_le`：ediam_le_of_forall_dist_le {C : Real}
+ (h : forall x in s, forall y in s, dist x y <= C) : ediam s <= ENNReal.ofReal C
 
-English:
-theorem diam_le_of_forall_dist_le
-  given: {C : Real} (h₀ : 0 <= C) (h : forall x in s, forall y in s, dist x y <= C)
-  proof: ENNReal.toReal_le_of_le_ofReal h₀ (ediam_le_of_forall_dist_le h)
-
-中文:
-定理 diam_le_of_对任意_dist_le
-  条件: {C : 实数} (h₀ : 0 <= C) (h : 对任意 x in s, 对任意 y in s, dist x y <= C)
-  证明: ENNReal.toReal_le_of_le_ofReal h₀ (ediam_le_of_forall_dist_le h)
-
-Depends on / 依赖: ENNReal, ENNReal.toReal_le_of_le_ofReal, ediam_le_of_forall_dist_le, toReal_le_of_le_ofReal
+--- 原说明 ---
+If the distance between any two points in a set is bounded by some non-negative 
+constant,
+this constant bounds the diameter.
 -/
-theorem diam_le_of_forall_dist_le {C : Real} (h₀ : 0 <= C) (h : forall x in s, forall y in s, dist x y <= C) :
-    diam s <= C :=
+theorem diam_le_of_forall_dist_le {C : ℝ} (h₀ : 0 ≤ C) (h : ∀ x ∈ s, ∀ y ∈ s, dist x y ≤ C) :
+    diam s ≤ C :=
   ENNReal.toReal_le_of_le_ofReal h₀ (ediam_le_of_forall_dist_le h)
 
-/--
-theorem `diam_le_of_forall_dist_le_of_nonempty` / 定理 `diam_le_of_forall_dist_le_of_nonempty`
+/-- If the distance between any two points in a nonempty set is bounded by some constant,
+this constant bounds the diameter. -/
+/-
+**Metric.diam_le_of_forall_dist_le_of_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Metric
+`。
+形式化陈述：diam_le_of_forall_dist_le_of_nonempty (hs : s.Nonempty) {C : Real} (h : fo
+rall x in s, forall y in s, dist x y <= C) : diam s <= C
+参数：hs : s.Nonempty；h : forall x in s, forall y in s, dist x y <= C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `dist_nonneg`：dist_nonneg {x y : α} : 0 <= dist x y
+· 使用定理 `Metric.diam_le_of_forall_dist_le`：diam_le_of_forall_dist_le {C : Real} (
+h₀ : 0 <= C) (h : forall x in s, forall y in s, dist x y <= C) : diam s <= C
 
-English:
-theorem diam_le_of_forall_dist_le_of_nonempty
-  statement: (hs : s.Nonempty) {C : Real}
-  proof: have h₀ : 0 <= C :=
+--- 原说明 ---
+If the distance between any two points in a nonempty set is bounded by some cons
+tant,
+this constant bounds the diameter.
+-/
+theorem diam_le_of_forall_dist_le_of_nonempty (hs : s.Nonempty) {C : ℝ}
+    (h : ∀ x ∈ s, ∀ y ∈ s, dist x y ≤ C) : diam s ≤ C :=
+  have h₀ : 0 ≤ C :=
     let ⟨x, hx⟩ := hs
     le_trans dist_nonneg (h x hx x hx)
   diam_le_of_forall_dist_le h₀ h
 
-中文:
-定理 diam_le_of_对任意_dist_le_of_nonempty
-  结论: (hs : s.非空) {C : 实数}
-  证明: have h₀ : 0 <= C :=
-    let ⟨x, hx⟩ := hs
-    le_trans dist_nonneg (h x hx x hx)
-  diam_le_of_forall_dist_le h₀ h
+/-- The distance between two points in a set is controlled by the diameter of the set. -/
+/-
+**Metric.dist_le_diam_of_mem'** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：dist_le_diam_of_mem' (h : ediam s != ⊤) (hx : x in s) (hy : y in s) : dist
+ x y <= diam s
+参数：h : ediam s != ⊤；hx : x in s；hy : y in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.diam.eq_1`：∀ {α : Type u} [inst : PseudoMetricSpace α] (s : Set α
+), Metric.diam s = (Metric.ediam s).toReal
+· 使用定理 `dist_edist`：dist_edist (x y : α) : dist x y = (edist x y).toReal
+· 使用定理 `ENNReal.toReal_mono`：toReal_mono (hb : b != ∞) (h : a <= b) : a.toReal <
+= b.toReal
+· 使用定理 `Metric.edist_le_ediam_of_mem`：edist_le_ediam_of_mem (hx : x in s) (hy : 
+y in s) : edist x y <= ediam s
 
-Depends on / 依赖: diam_le_of_forall_dist_le, dist_nonneg, le_trans
+--- 原说明 ---
+The distance between two points in a set is controlled by the diameter of the se
+t.
 -/
-theorem diam_le_of_forall_dist_le_of_nonempty (hs : s.Nonempty) {C : Real}
-    (h : forall x in s, forall y in s, dist x y <= C) : diam s <= C :=
-  have h₀ : 0 <= C :=
-    let ⟨x, hx⟩ := hs
-    le_trans dist_nonneg (h x hx x hx)
-  diam_le_of_forall_dist_le h₀ h
+theorem dist_le_diam_of_mem' (h : ediam s ≠ ⊤) (hx : x ∈ s) (hy : y ∈ s) :
+    dist x y ≤ diam s := by
+  rw [diam, dist_edist]
+  exact ENNReal.toReal_mono h <| edist_le_ediam_of_mem hx hy
 
-/--
-theorem `dist_le_diam_of_mem'` / 定理 `dist_le_diam_of_mem'`
+/-- Characterize the boundedness of a set in terms of the finiteness of its emetric.diameter. -/
+/-
+**Metric.isBounded_iff_ediam_ne_top** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：isBounded_iff_ediam_ne_top : IsBounded s ↔ ediam s != ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Metric.isBounded_iff`：isBounded_iff {s : Set α} : IsBounded s ↔ exists C
+ : Real, forall ⦃x⦄, x in s -> forall ⦃y⦄, y in s -> dist x y <= C
+· 使用定理 `ne_top_of_le_ne_top`：ne_top_of_le_ne_top (hb : b != ⊤) (hab : a <= b) : 
+a != ⊤
+· 使用定理 `ENNReal.ofReal_ne_top`：ofReal_ne_top {r : Real} : ENNReal.ofReal r != ∞
+· 使用定理 `Metric.ediam_le_of_forall_dist_le`：ediam_le_of_forall_dist_le {C : Real}
+ (h : forall x in s, forall y in s, dist x y <= C) : ediam s <= ENNReal.ofReal C
+· 使用定理 `Metric.dist_le_diam_of_mem'`：dist_le_diam_of_mem' (h : ediam s != ⊤) (hx
+ : x in s) (hy : y in s) : dist x y <= diam s
 
-English:
-theorem dist_le_diam_of_mem'
-  given: (h : ediam s != ⊤) (hx : x in s) (hy : y in s)
-  proof: by
-  rw [diam]; rw [dist_edist]
-exact ENNReal.toReal_mono h edist_le_ediam_of_mem hx hy
-
-中文:
-定理 dist_le_diam_of_mem'
-  条件: (h : ediam s != ⊤) (hx : x in s) (hy : y in s)
-  证明: by
-  rw [diam]; rw [dist_edist]
-exact ENNReal.toReal_mono h edist_le_ediam_of_mem hx hy
-
-Depends on / 依赖: ENNReal, ENNReal.toReal_mono, dist_edist, edist_le_ediam_of_mem, toReal_mono
+--- 原说明 ---
+Characterize the boundedness of a set in terms of the finiteness of its emetric.
+diameter.
 -/
-theorem dist_le_diam_of_mem' (h : ediam s != ⊤) (hx : x in s) (hy : y in s) :
-    dist x y <= diam s := by
-  rw [diam]; rw [dist_edist]
-exact ENNReal.toReal_mono h edist_le_ediam_of_mem hx hy
-
-/--
-theorem `isBounded_iff_ediam_ne_top` / 定理 `isBounded_iff_ediam_ne_top`
-
-English:
-theorem isBounded_iff_ediam_ne_top
-  statement: IsBounded s ↔ ediam s != ⊤
-  proof: isBounded_iff.trans Iff.intro
+theorem isBounded_iff_ediam_ne_top : IsBounded s ↔ ediam s ≠ ⊤ :=
+  isBounded_iff.trans <| Iff.intro
     (fun ⟨_C, hC⟩ => ne_top_of_le_ne_top ENNReal.ofReal_ne_top <| ediam_le_of_forall_dist_le hC)
     fun h => ⟨diam s, fun _x hx _y hy => dist_le_diam_of_mem' h hx hy⟩
 
 alias ⟨_root_.Bornology.IsBounded.ediam_ne_top, _⟩ := isBounded_iff_ediam_ne_top
-
-中文:
-定理 isBounded_iff_ediam_ne_top
-  结论: IsBounded s ↔ ediam s != ⊤
-  证明: isBounded_iff.trans Iff.intro
-    (fun ⟨_C, hC⟩ => ne_top_of_le_ne_top ENNReal.ofReal_ne_top <| ediam_le_of_forall_dist_le hC)
-    fun h => ⟨diam s, fun _x hx _y hy => dist_le_diam_of_mem' h hx hy⟩
-
-alias ⟨_root_.Bornology.IsBounded.ediam_ne_top, _⟩ := isBounded_iff_ediam_ne_top
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal_ne_top, Iff.intro, dist_le_diam_of_mem, ediam_le_of_forall_dist_le, isBounded_iff, isBounded_iff.trans, ne_top_of_le_ne_top, ofReal_ne_top
--/
-theorem isBounded_iff_ediam_ne_top : IsBounded s ↔ ediam s != ⊤ :=
-isBounded_iff.trans Iff.intro
-    (fun ⟨_C, hC⟩ => ne_top_of_le_ne_top ENNReal.ofReal_ne_top <| ediam_le_of_forall_dist_le hC)
-    fun h => ⟨diam s, fun _x hx _y hy => dist_le_diam_of_mem' h hx hy⟩
-
-alias ⟨_root_.Bornology.IsBounded.ediam_ne_top, _⟩ := isBounded_iff_ediam_ne_top
-
-/--
-theorem `ediam_eq_top_iff_unbounded` / 定理 `ediam_eq_top_iff_unbounded`
-
-English:
-theorem ediam_eq_top_iff_unbounded
-  statement: ediam s = ⊤ ↔ ¬IsBounded s
-  proof: isBounded_iff_ediam_ne_top.not_left.symm
-
-中文:
-定理 ediam_eq_top_iff_unbounded
-  结论: ediam s = ⊤ ↔ ¬IsBounded s
-  证明: isBounded_iff_ediam_ne_top.not_left.symm
-
-Depends on / 依赖: isBounded_iff_ediam_ne_top, isBounded_iff_ediam_ne_top.not_left.symm, not_left
+/-
+**Metric.ediam_eq_top_iff_unbounded** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：ediam_eq_top_iff_unbounded : ediam s = ⊤ ↔ ¬IsBounded s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Iff.not_left`：Iff.not_left (h : a ↔ ¬b) : ¬a ↔ b
+· 使用定理 `Metric.isBounded_iff_ediam_ne_top`：isBounded_iff_ediam_ne_top : IsBounde
+d s ↔ ediam s != ⊤
 -/
 theorem ediam_eq_top_iff_unbounded : ediam s = ⊤ ↔ ¬IsBounded s :=
   isBounded_iff_ediam_ne_top.not_left.symm
-
-/--
-theorem `ediam_univ_eq_top_iff_noncompact` / 定理 `ediam_univ_eq_top_iff_noncompact`
-
-English:
-theorem ediam_univ_eq_top_iff_noncompact
-  given: [ProperSpace α]
-  proof: by
-  rw [← not_compactSpace_iff]; rw [compactSpace_iff_isBounded_univ]; rw [isBounded_iff_ediam_ne_top]; rw [Classical.not_not]
-
-@[simp]
-
-中文:
-定理 ediam_univ_eq_top_iff_noncompact
-  条件: [真空间 α]
-  证明: by
-  rw [← not_compactSpace_iff]; rw [compactSpace_iff_isBounded_univ]; rw [isBounded_iff_ediam_ne_top]; rw [Classical.not_not]
-
-@[simp]
-
-Depends on / 依赖: Classical, Classical.not_not, compactSpace_iff_isBounded_univ, isBounded_iff_ediam_ne_top, not_compactSpace_iff, not_not
+/-
+**Metric.ediam_univ_eq_top_iff_noncompact** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：ediam_univ_eq_top_iff_noncompact [ProperSpace α] : ediam (univ : Set α) = 
+∞ ↔ NoncompactSpace α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_compactSpace_iff`：not_compactSpace_iff : ¬CompactSpace X ↔ Noncompac
+tSpace X
+· 使用定理 `Metric.compactSpace_iff_isBounded_univ`：compactSpace_iff_isBounded_univ 
+[ProperSpace α] : CompactSpace α ↔ IsBounded (univ : Set α)
+· 使用定理 `Metric.isBounded_iff_ediam_ne_top`：isBounded_iff_ediam_ne_top : IsBounde
+d s ↔ ediam s != ⊤
+· 使用定理 `Classical.not_not`：∀ {a : Prop}, ¬¬a ↔ a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem ediam_univ_eq_top_iff_noncompact [ProperSpace α] :
     ediam (univ : Set α) = ∞ ↔ NoncompactSpace α := by
-  rw [← not_compactSpace_iff]; rw [compactSpace_iff_isBounded_univ]; rw [isBounded_iff_ediam_ne_top]; rw [Classical.not_not]
+  rw [← not_compactSpace_iff, compactSpace_iff_isBounded_univ, isBounded_iff_ediam_ne_top,
+    Classical.not_not]
 
 @[simp]
-/--
-theorem `ediam_univ_of_noncompact` / 定理 `ediam_univ_of_noncompact`
-
-English:
-theorem ediam_univ_of_noncompact
-  given: [ProperSpace α] [NoncompactSpace α]
-  proof: ediam_univ_eq_top_iff_noncompact.mpr ‹_›
-
-@[simp]
-
-中文:
-定理 ediam_univ_of_noncompact
-  条件: [真空间 α] [Noncompact空间 α]
-  证明: ediam_univ_eq_top_iff_noncompact.mpr ‹_›
-
-@[simp]
-
-Depends on / 依赖: ediam_univ_eq_top_iff_noncompact, ediam_univ_eq_top_iff_noncompact.mpr
+/-
+**Metric.ediam_univ_of_noncompact** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：ediam_univ_of_noncompact [ProperSpace α] [NoncompactSpace α] : ediam (univ
+ : Set α) = ∞
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Metric.ediam_univ_eq_top_iff_noncompact`：ediam_univ_eq_top_iff_noncompac
+t [ProperSpace α] : ediam (univ : Set α) = ∞ ↔ NoncompactSpace α
 -/
 theorem ediam_univ_of_noncompact [ProperSpace α] [NoncompactSpace α] :
     ediam (univ : Set α) = ∞ :=
   ediam_univ_eq_top_iff_noncompact.mpr ‹_›
 
 @[simp]
-/--
-theorem `diam_univ_of_noncompact` / 定理 `diam_univ_of_noncompact`
-
-English:
-theorem diam_univ_of_noncompact
-  given: [ProperSpace α] [NoncompactSpace α]
-  statement: diam (univ : Set α) = 0
-  proof: by
-  simp [diam]
-
-中文:
-定理 diam_univ_of_noncompact
-  条件: [真空间 α] [Noncompact空间 α]
-  结论: diam (univ : 集合 α) = 0
-  证明: by
-  simp [diam]
+/-
+**Metric.diam_univ_of_noncompact** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：diam_univ_of_noncompact [ProperSpace α] [NoncompactSpace α] : diam (univ :
+ Set α) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.ediam_univ_of_noncompact`：ediam_univ_of_noncompact [ProperSpace α
+] [NoncompactSpace α] : ediam (univ : Set α) = ∞
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem diam_univ_of_noncompact [ProperSpace α] [NoncompactSpace α] : diam (univ : Set α) = 0 := by
   simp [diam]
 
-/--
-theorem `dist_le_diam_of_mem` / 定理 `dist_le_diam_of_mem`
+/-- The distance between two points in a set is controlled by the diameter of the set. -/
+/-
+**Metric.dist_le_diam_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：dist_le_diam_of_mem (h : IsBounded s) (hx : x in s) (hy : y in s) : dist x
+ y <= diam s
+参数：h : IsBounded s；hx : x in s；hy : y in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.dist_le_diam_of_mem'`：dist_le_diam_of_mem' (h : ediam s != ⊤) (hx
+ : x in s) (hy : y in s) : dist x y <= diam s
+· 使用定理 `Bornology.IsBounded.ediam_ne_top`：∀ {α : Type u} {s : Set α} [inst : Pse
+udoMetricSpace α], Bornology.IsBounded s → Metric.ediam s ≠ ⊤
 
-English:
-theorem dist_le_diam_of_mem
-  given: (h : IsBounded s) (hx : x in s) (hy : y in s)
-  statement: dist x y <= diam s
-  proof: dist_le_diam_of_mem' h.ediam_ne_top hx hy
-
-中文:
-定理 dist_le_diam_of_mem
-  条件: (h : IsBounded s) (hx : x in s) (hy : y in s)
-  结论: dist x y <= diam s
-  证明: dist_le_diam_of_mem' h.ediam_ne_top hx hy
-
-Depends on / 依赖: dist_le_diam_of_mem, ediam_ne_top, h.ediam_ne_top
+--- 原说明 ---
+The distance between two points in a set is controlled by the diameter of the se
+t.
 -/
-theorem dist_le_diam_of_mem (h : IsBounded s) (hx : x in s) (hy : y in s) : dist x y <= diam s :=
+theorem dist_le_diam_of_mem (h : IsBounded s) (hx : x ∈ s) (hy : y ∈ s) : dist x y ≤ diam s :=
   dist_le_diam_of_mem' h.ediam_ne_top hx hy
-
-/--
-theorem `ediam_of_unbounded` / 定理 `ediam_of_unbounded`
-
-English:
-theorem ediam_of_unbounded
-  given: (h : ¬IsBounded s)
-  statement: ediam s = ∞
-  proof: ediam_eq_top_iff_unbounded.2 h
-
-中文:
-定理 ediam_of_unbounded
-  条件: (h : ¬IsBounded s)
-  结论: ediam s = ∞
-  证明: ediam_eq_top_iff_unbounded.2 h
-
-Depends on / 依赖: ediam_eq_top_iff_unbounded
+/-
+**Metric.ediam_of_unbounded** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：ediam_of_unbounded (h : ¬IsBounded s) : ediam s = ∞
+参数：h : ¬IsBounded s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Metric.ediam_eq_top_iff_unbounded`：ediam_eq_top_iff_unbounded : ediam s 
+= ⊤ ↔ ¬IsBounded s
 -/
 theorem ediam_of_unbounded (h : ¬IsBounded s) : ediam s = ∞ := ediam_eq_top_iff_unbounded.2 h
 
-/--
-theorem `diam_eq_zero_of_unbounded` / 定理 `diam_eq_zero_of_unbounded`
+/-- An unbounded set has zero diameter. If you would prefer to get the value ∞, use `ediam`.
+This lemma makes it possible to avoid side conditions in some situations -/
+/-
+**Metric.diam_eq_zero_of_unbounded** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：diam_eq_zero_of_unbounded (h : ¬IsBounded s) : diam s = 0
+参数：h : ¬IsBounded s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.diam.eq_1`：∀ {α : Type u} [inst : PseudoMetricSpace α] (s : Set α
+), Metric.diam s = (Metric.ediam s).toReal
+· 使用定理 `Metric.ediam_of_unbounded`：ediam_of_unbounded (h : ¬IsBounded s) : ediam
+ s = ∞
+· 使用定理 `ENNReal.toReal_top`：⊤.toReal = 0
 
-English:
-theorem diam_eq_zero_of_unbounded
-  given: (h : ¬IsBounded s)
-  statement: diam s = 0
-  proof: by
-  rw [diam]; rw [ediam_of_unbounded h]; rw [ENNReal.toReal_top]
-
-中文:
-定理 diam_eq_zero_of_unbounded
-  条件: (h : ¬IsBounded s)
-  结论: diam s = 0
-  证明: by
-  rw [diam]; rw [ediam_of_unbounded h]; rw [ENNReal.toReal_top]
-
-Depends on / 依赖: ENNReal, ENNReal.toReal_top, ediam_of_unbounded, toReal_top
+--- 原说明 ---
+An unbounded set has zero diameter. If you would prefer to get the value ∞, use 
+`ediam`.
+This lemma makes it possible to avoid side conditions in some situations
 -/
 theorem diam_eq_zero_of_unbounded (h : ¬IsBounded s) : diam s = 0 := by
-  rw [diam]; rw [ediam_of_unbounded h]; rw [ENNReal.toReal_top]
+  rw [diam, ediam_of_unbounded h, ENNReal.toReal_top]
 
-/--
-theorem `diam_mono` / 定理 `diam_mono`
+/-- If `s ⊆ t`, then the diameter of `s` is bounded by that of `t`, provided `t` is bounded. -/
+/-
+**Metric.diam_mono** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：diam_mono {s t : Set α} (h : s subseteq t) (ht : IsBounded t) : diam s <= 
+diam t
+参数：h : s subseteq t；ht : IsBounded t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ENNReal.toReal_mono`：toReal_mono (hb : b != ∞) (h : a <= b) : a.toReal <
+= b.toReal
+· 使用定理 `Bornology.IsBounded.ediam_ne_top`：∀ {α : Type u} {s : Set α} [inst : Pse
+udoMetricSpace α], Bornology.IsBounded s → Metric.ediam s ≠ ⊤
+· 使用定理 `Metric.ediam_mono`：ediam_mono (h : s subseteq t) : ediam s <= ediam t
 
-English:
-theorem diam_mono
-  given: {s t : Set α} (h : s subseteq t) (ht : IsBounded t)
-  statement: diam s <= diam t
-  proof: ENNReal.toReal_mono ht.ediam_ne_top ediam_mono h
-
-中文:
-定理 diam_mono
-  条件: {s t : 集合 α} (h : s subseteq t) (ht : IsBounded t)
-  结论: diam s <= diam t
-  证明: ENNReal.toReal_mono ht.ediam_ne_top ediam_mono h
-
-Depends on / 依赖: ENNReal, ENNReal.toReal_mono, ediam_mono, ediam_ne_top, ht.ediam_ne_top, toReal_mono
+--- 原说明 ---
+If `s ⊆ t`, then the diameter of `s` is bounded by that of `t`, provided `t` is 
+bounded.
 -/
-theorem diam_mono {s t : Set α} (h : s subseteq t) (ht : IsBounded t) : diam s <= diam t :=
-ENNReal.toReal_mono ht.ediam_ne_top ediam_mono h
+theorem diam_mono {s t : Set α} (h : s ⊆ t) (ht : IsBounded t) : diam s ≤ diam t :=
+  ENNReal.toReal_mono ht.ediam_ne_top <| ediam_mono h
 
-/--
-theorem `diam_union` / 定理 `diam_union`
+/-- The diameter of a union is controlled by the sum of the diameters, and the distance between
+any two points in each of the sets. This lemma is true without any side condition, since it is
+obviously true if `s ∪ t` is unbounded. -/
+/-
+**Metric.diam_union** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：diam_union {t : Set α} (xs : x in s) (yt : y in t) : diam (s union t) <= d
+iam s + dist x y + diam t
+参数：xs : x in s；yt : y in t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dist_edist`：dist_edist (x y : α) : dist x y = (edist x y).toReal
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `ENNReal.toReal_le_add'`：toReal_le_add' (hle : a <= b + c) (hb : b = ∞ ->
+ a = ∞) (hc : c = ∞ -> a = ∞) : a.toReal <= b.toReal + c.toReal
+· 使用定理 `Metric.ediam_union_le_add_edist`：ediam_union_le_add_edist (xs : x in s) 
+(yt : y in t) : ediam (s union t) <= ediam s + edist x y + ediam t
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `top_unique`：top_unique (h : ⊤ <= a) : a = ⊤
+· 使用定理 `Metric.ediam_mono`：ediam_mono (h : s subseteq t) : ediam s <= ediam t
+· 使用定理 `Set.subset_union_left`：subset_union_left {s t : Set α} : s subseteq s un
+ion t
+· 使用定理 `Set.subset_union_right`：subset_union_right {s t : Set α} : t subseteq s 
+union t
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `ENNReal.toReal_add_le`：toReal_add_le : (a + b).toReal <= a.toReal + b.to
+Real
 
-English:
-theorem diam_union
-  given: {t : Set α} (xs : x in s) (yt : y in t)
-  proof: by
+--- 原说明 ---
+The diameter of a union is controlled by the sum of the diameters, and the dista
+nce between
+any two points in each of the sets. This lemma is true without any side conditio
+n, since it is
+obviously true if `s ∪ t` is unbounded.
+-/
+theorem diam_union {t : Set α} (xs : x ∈ s) (yt : y ∈ t) :
+    diam (s ∪ t) ≤ diam s + dist x y + diam t := by
   simp only [diam, dist_edist]
   grw [ENNReal.toReal_le_add' (ediam_union_le_add_edist xs yt), ENNReal.toReal_add_le]
   · simp only [ENNReal.add_eq_top, edist_ne_top, or_false]
-exact fun h => top_unique h ▸ ediam_mono subset_union_left
-· exact fun h => top_unique h ▸ ediam_mono subset_union_right
+    exact fun h ↦ top_unique <| h ▸ ediam_mono subset_union_left
+  · exact fun h ↦ top_unique <| h ▸ ediam_mono subset_union_right
 
-中文:
-定理 diam_union
-  条件: {t : 集合 α} (xs : x in s) (yt : y in t)
-  证明: by
-  simp only [diam, dist_edist]
-  grw [ENNReal.toReal_le_add' (ediam_union_le_add_edist xs yt), ENNReal.toReal_add_le]
-  · simp only [ENNReal.add_eq_top, edist_ne_top, or_false]
-exact fun h => top_unique h ▸ ediam_mono subset_union_left
-· exact fun h => top_unique h ▸ ediam_mono subset_union_right
+/-- If two sets intersect, the diameter of the union is bounded by the sum of the diameters. -/
+/-
+**Metric.diam_union'** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：diam_union' {t : Set α} (h : (s inter t).Nonempty) : diam (s union t) <= d
+iam s + diam t
+参数：h : (s inter t).Nonempty。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `dist_self`：dist_self (x : α) : dist x x = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Metric.diam_union`：diam_union {t : Set α} (xs : x in s) (yt : y in t) : 
+diam (s union t) <= diam s + dist x y + diam t
 
-Depends on / 依赖: ENNReal, ENNReal.add_eq_top, ENNReal.toReal_add_le, ENNReal.toReal_le_add, add_eq_top, dist_edist, ediam_mono, ediam_union_le_add_edist, edist_ne_top, or_false, subset_union_left, subset_union_right, toReal_add_le, toReal_le_add, top_unique
+--- 原说明 ---
+If two sets intersect, the diameter of the union is bounded by the sum of the di
+ameters.
 -/
-theorem diam_union {t : Set α} (xs : x in s) (yt : y in t) :
-    diam (s union t) <= diam s + dist x y + diam t := by
-  simp only [diam, dist_edist]
-  grw [ENNReal.toReal_le_add' (ediam_union_le_add_edist xs yt), ENNReal.toReal_add_le]
-  · simp only [ENNReal.add_eq_top, edist_ne_top, or_false]
-exact fun h => top_unique h ▸ ediam_mono subset_union_left
-· exact fun h => top_unique h ▸ ediam_mono subset_union_right
-
-/--
-theorem `diam_union'` / 定理 `diam_union'`
-
-English:
-theorem diam_union'
-  given: {t : Set α} (h : (s inter t).Nonempty)
-  statement: diam (s union t) <= diam s + diam t
-  proof: by
+theorem diam_union' {t : Set α} (h : (s ∩ t).Nonempty) : diam (s ∪ t) ≤ diam s + diam t := by
   rcases h with ⟨x, ⟨xs, xt⟩⟩
   simpa using diam_union xs xt
-
-中文:
-定理 diam_union'
-  条件: {t : 集合 α} (h : (s inter t).非空)
-  结论: diam (s union t) <= diam s + diam t
-  证明: by
-  rcases h with ⟨x, ⟨xs, xt⟩⟩
-  simpa using diam_union xs xt
-
-Depends on / 依赖: diam_union
+/-
+**Metric.diam_le_of_subset_closedBall** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：diam_le_of_subset_closedBall {r : Real} (hr : 0 <= r) (h : s subseteq clos
+edBall x r) : diam s <= 2 * r
+参数：hr : 0 <= r；h : s subseteq closedBall x r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.diam_le_of_forall_dist_le`：diam_le_of_forall_dist_le {C : Real} (
+h₀ : 0 <= C) (h : forall x in s, forall y in s, dist x y <= C) : diam s <= C
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `mul_nonneg`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 :
+ Preorder α] [PosMulMono α], 0 ≤ a → 0 ≤ b → 0 ≤ a * b
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用引理 `zero_le_two`：zero_le_two [Preorder α] [ZeroLEOneClass α] [AddLeftMono α]
+ : (0 : α) <= 2
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `dist_triangle_right`：dist_triangle_right (x y z : α) : dist x y <= dist 
+x z + dist y z
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `mul_two`：mul_two (n : α) : n * 2 = n + n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem diam_union' {t : Set α} (h : (s inter t).Nonempty) : diam (s union t) <= diam s + diam t := by
-  rcases h with ⟨x, ⟨xs, xt⟩⟩
-  simpa using diam_union xs xt
-
-/--
-theorem `diam_le_of_subset_closedBall` / 定理 `diam_le_of_subset_closedBall`
-
-English:
-theorem diam_le_of_subset_closedBall
-  given: {r : Real} (hr : 0 <= r) (h : s subseteq closedBall x r)
-  proof: diam_le_of_forall_dist_le (mul_nonneg zero_le_two hr) fun a ha b hb =>
-    calc
-      dist a b <= dist a x + dist b x := dist_triangle_right _ _ _
-      _ <= r + r := add_le_add (h ha) (h hb)
-      _ = 2 * r := by simp [mul_two, mul_comm]
-
-中文:
-定理 diam_le_of_subset_closedBall
-  条件: {r : 实数} (hr : 0 <= r) (h : s subseteq closedBall x r)
-  证明: diam_le_of_forall_dist_le (mul_nonneg zero_le_two hr) fun a ha b hb =>
-    calc
-      dist a b <= dist a x + dist b x := dist_triangle_right _ _ _
-      _ <= r + r := add_le_add (h ha) (h hb)
-      _ = 2 * r := by simp [mul_two, mul_comm]
-
-Depends on / 依赖: add_le_add, diam_le_of_forall_dist_le, dist_triangle_right, mul_comm, mul_nonneg, mul_two, zero_le_two
--/
-theorem diam_le_of_subset_closedBall {r : Real} (hr : 0 <= r) (h : s subseteq closedBall x r) :
-    diam s <= 2 * r :=
+theorem diam_le_of_subset_closedBall {r : ℝ} (hr : 0 ≤ r) (h : s ⊆ closedBall x r) :
+    diam s ≤ 2 * r :=
   diam_le_of_forall_dist_le (mul_nonneg zero_le_two hr) fun a ha b hb =>
     calc
-      dist a b <= dist a x + dist b x := dist_triangle_right _ _ _
-      _ <= r + r := add_le_add (h ha) (h hb)
+      dist a b ≤ dist a x + dist b x := dist_triangle_right _ _ _
+      _ ≤ r + r := add_le_add (h ha) (h hb)
       _ = 2 * r := by simp [mul_two, mul_comm]
 
-/--
-theorem `diam_closedBall` / 定理 `diam_closedBall`
+/-- The diameter of a closed ball of radius `r` is at most `2 r`. -/
+/-
+**Metric.diam_closedBall** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：diam_closedBall {r : Real} (h : 0 <= r) : diam (closedBall x r) <= 2 * r
+参数：h : 0 <= r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.diam_le_of_subset_closedBall`：diam_le_of_subset_closedBall {r : R
+eal} (hr : 0 <= r) (h : s subseteq closedBall x r) : diam s <= 2 * r
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
 
-English:
-theorem diam_closedBall
-  given: {r : Real} (h : 0 <= r)
-  statement: diam (closedBall x r) <= 2 * r
-  proof: diam_le_of_subset_closedBall h Subset.rfl
-
-中文:
-定理 diam_closedBall
-  条件: {r : 实数} (h : 0 <= r)
-  结论: diam (closedBall x r) <= 2 * r
-  证明: diam_le_of_subset_closedBall h Subset.rfl
-
-Depends on / 依赖: Subset, Subset.rfl, diam_le_of_subset_closedBall
+--- 原说明 ---
+The diameter of a closed ball of radius `r` is at most `2 r`.
 -/
-theorem diam_closedBall {r : Real} (h : 0 <= r) : diam (closedBall x r) <= 2 * r :=
+theorem diam_closedBall {r : ℝ} (h : 0 ≤ r) : diam (closedBall x r) ≤ 2 * r :=
   diam_le_of_subset_closedBall h Subset.rfl
 
-/--
-theorem `diam_ball` / 定理 `diam_ball`
+/-- The diameter of a ball of radius `r` is at most `2 r`. -/
+/-
+**Metric.diam_ball** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：diam_ball {r : Real} (h : 0 <= r) : diam (ball x r) <= 2 * r
+参数：h : 0 <= r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.diam_le_of_subset_closedBall`：diam_le_of_subset_closedBall {r : R
+eal} (hr : 0 <= r) (h : s subseteq closedBall x r) : diam s <= 2 * r
+· 使用定理 `Metric.ball_subset_closedBall`：ball_subset_closedBall : ball x ε subsete
+q closedBall x ε
 
-English:
-theorem diam_ball
-  given: {r : Real} (h : 0 <= r)
-  statement: diam (ball x r) <= 2 * r
-  proof: diam_le_of_subset_closedBall h ball_subset_closedBall
-
-中文:
-定理 diam_ball
-  条件: {r : 实数} (h : 0 <= r)
-  结论: diam (ball x r) <= 2 * r
-  证明: diam_le_of_subset_closedBall h ball_subset_closedBall
-
-Depends on / 依赖: ball_subset_closedBall, diam_le_of_subset_closedBall
+--- 原说明 ---
+The diameter of a ball of radius `r` is at most `2 r`.
 -/
-theorem diam_ball {r : Real} (h : 0 <= r) : diam (ball x r) <= 2 * r :=
+theorem diam_ball {r : ℝ} (h : 0 ≤ r) : diam (ball x r) ≤ 2 * r :=
   diam_le_of_subset_closedBall h ball_subset_closedBall
 
-/--
-theorem `_root_.IsComplete.nonempty_iInter_of_nonempty_biInter` / 定理 `_root_.IsComplete.nonempty_iInter_of_nonempty_biInter`
+/-- If a family of complete sets with diameter tending to `0` is such that each finite intersection
+is nonempty, then the total intersection is also nonempty. -/
+/-
+**Metric._root_.IsComplete.nonempty_iInter_of_nonempty_biInter** 是 Mathlib 中的一个定
+理，位于命名空间 `Metric`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.IsComplete.nonempty_iInter_of_nonempty_biInter
-  statement: {s : Nat -> Set α}
-  proof: by
-  let u N := (h N).some
-  have I : forall n N, n <= N -> u N in s n := by
-    intro n N hn
-    apply mem_of_subset_of_mem _ (h N).choose_spec
-    intro x hx
-    simp only [mem_iInter] at hx
-    exact hx n hn
-  have : CauchySeq u := by
-    apply cauchySeq_of_le_tendsto_0 _ _ h'
-    intro m n N hm hn
-    exact dist_le_diam_of_mem (h's N) (I _ _ hm) (I _ _ hn)
-  obtain ⟨x, -, xlim⟩ : exists x in s 0, Tendsto (fun n : Nat => u n) atTop (𝓝 x) :=
-    cauchySeq_tendsto_of_isComplete h0 (fun n => I 0 n zero_le) this
-  refine ⟨x, mem_iInter.2 fun n => ?_⟩
-  apply (hs n).mem_of_tendsto xlim
-  filter_upwards [Ici_mem_atTop n] with p hp
-  exact I n p hp
-
-中文:
-定理 _root_.是完备.nonempty_i整数er_of_nonempty_bi整数er
-  结论: {s : 自然数 -> 集合 α}
-  证明: by
-  let u N := (h N).some
-  have I : forall n N, n <= N -> u N in s n := by
-    intro n N hn
-    apply mem_of_subset_of_mem _ (h N).choose_spec
-    intro x hx
-    simp only [mem_iInter] at hx
-    exact hx n hn
-  have : CauchySeq u := by
-    apply cauchySeq_of_le_tendsto_0 _ _ h'
-    intro m n N hm hn
-    exact dist_le_diam_of_mem (h's N) (I _ _ hm) (I _ _ hn)
-  obtain ⟨x, -, xlim⟩ : exists x in s 0, Tendsto (fun n : Nat => u n) atTop (𝓝 x) :=
-    cauchySeq_tendsto_of_isComplete h0 (fun n => I 0 n zero_le) this
-  refine ⟨x, mem_iInter.2 fun n => ?_⟩
-  apply (hs n).mem_of_tendsto xlim
-  filter_upwards [Ici_mem_atTop n] with p hp
-  exact I n p hp
-
-Depends on / 依赖: CauchySeq, Tendsto, cauchySeq_of_le_tendsto_0, cauchySeq_tendsto_of_isComplete, choose_spec, dist_le_diam_of_mem, mem_iInter, mem_of_subset_of_mem, zero_le
+--- 原说明 ---
+If a family of complete sets with diameter tending to `0` is such that each fini
+te intersection
+is nonempty, then the total intersection is also nonempty.
 -/
-theorem _root_.IsComplete.nonempty_iInter_of_nonempty_biInter {s : Nat -> Set α}
-    (h0 : IsComplete (s 0)) (hs : forall n, IsClosed (s n)) (h's : forall n, IsBounded (s n))
-    (h : forall N, (⋂ n <= N, s n).Nonempty) (h' : Tendsto (fun n => diam (s n)) atTop (𝓝 0)) :
+theorem _root_.IsComplete.nonempty_iInter_of_nonempty_biInter {s : ℕ → Set α}
+    (h0 : IsComplete (s 0)) (hs : ∀ n, IsClosed (s n)) (h's : ∀ n, IsBounded (s n))
+    (h : ∀ N, (⋂ n ≤ N, s n).Nonempty) (h' : Tendsto (fun n => diam (s n)) atTop (𝓝 0)) :
     (⋂ n, s n).Nonempty := by
   let u N := (h N).some
-  have I : forall n N, n <= N -> u N in s n := by
+  have I : ∀ n N, n ≤ N → u N ∈ s n := by
     intro n N hn
     apply mem_of_subset_of_mem _ (h N).choose_spec
     intro x hx
@@ -2212,30 +2098,38 @@ theorem _root_.IsComplete.nonempty_iInter_of_nonempty_biInter {s : Nat -> Set α
     apply cauchySeq_of_le_tendsto_0 _ _ h'
     intro m n N hm hn
     exact dist_le_diam_of_mem (h's N) (I _ _ hm) (I _ _ hn)
-  obtain ⟨x, -, xlim⟩ : exists x in s 0, Tendsto (fun n : Nat => u n) atTop (𝓝 x) :=
+  obtain ⟨x, -, xlim⟩ : ∃ x ∈ s 0, Tendsto (fun n : ℕ => u n) atTop (𝓝 x) :=
     cauchySeq_tendsto_of_isComplete h0 (fun n => I 0 n zero_le) this
   refine ⟨x, mem_iInter.2 fun n => ?_⟩
   apply (hs n).mem_of_tendsto xlim
   filter_upwards [Ici_mem_atTop n] with p hp
   exact I n p hp
 
-/--
-theorem `nonempty_iInter_of_nonempty_biInter` / 定理 `nonempty_iInter_of_nonempty_biInter`
+/-- In a complete space, if a family of closed sets with diameter tending to `0` is such that each
+finite intersection is nonempty, then the total intersection is also nonempty. -/
+/-
+**Metric.nonempty_iInter_of_nonempty_biInter** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：nonempty_iInter_of_nonempty_biInter [CompleteSpace α] {s : Nat -> Set α} (
+hs : forall n, IsClosed (s n)) (h's : forall n, IsBounded (s n)) (h : forall N, 
+(⋂ n <= N, s n).Nonempty) (h' : Tendsto (fun n => diam (s n)) atTop (𝓝 0)) : (⋂ 
+n, s n).Nonempty
+参数：hs : forall n, IsClosed (s n)；h's : forall n, IsBounded (s n)；h : forall N, (
+⋂ n <= N, s n).Nonempty；h' : Tendsto (fun n => diam (s n)) atTop (𝓝 0)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsComplete.nonempty_iInter_of_nonempty_biInter`：∀ {α : Type u} [inst : P
+seudoMetricSpace α] {s : ℕ → Set α},   IsComplete (s 0) →     (∀ (n : ℕ), IsClos
+ed (s n)) →       (∀ (n : ℕ), Bornol…
+· 使用定理 `IsClosed.isComplete`：IsClosed.isComplete [CompleteSpace α] {s : Set α} (
+h : IsClosed s) : IsComplete s
 
-English:
-theorem nonempty_iInter_of_nonempty_biInter
-  statement: [CompleteSpace α] {s : Nat -> Set α}
-  proof: (hs 0).isComplete.nonempty_iInter_of_nonempty_biInter hs h's h h'
-
-中文:
-定理 nonempty_i整数er_of_nonempty_bi整数er
-  结论: [完备空间 α] {s : 自然数 -> 集合 α}
-  证明: (hs 0).isComplete.nonempty_iInter_of_nonempty_biInter hs h's h h'
-
-Depends on / 依赖: isComplete, isComplete.nonempty_iInter_of_nonempty_biInter, nonempty_iInter_of_nonempty_biInter
+--- 原说明 ---
+In a complete space, if a family of closed sets with diameter tending to `0` is 
+such that each
+finite intersection is nonempty, then the total intersection is also nonempty.
 -/
-theorem nonempty_iInter_of_nonempty_biInter [CompleteSpace α] {s : Nat -> Set α}
-    (hs : forall n, IsClosed (s n)) (h's : forall n, IsBounded (s n)) (h : forall N, (⋂ n <= N, s n).Nonempty)
+theorem nonempty_iInter_of_nonempty_biInter [CompleteSpace α] {s : ℕ → Set α}
+    (hs : ∀ n, IsClosed (s n)) (h's : ∀ n, IsBounded (s n)) (h : ∀ N, (⋂ n ≤ N, s n).Nonempty)
     (h' : Tendsto (fun n => diam (s n)) atTop (𝓝 0)) : (⋂ n, s n).Nonempty :=
   (hs 0).isComplete.nonempty_iInter_of_nonempty_biInter hs h's h h'
 
@@ -2243,30 +2137,23 @@ end PseudoMetricSpace
 
 section MetricSpace
 
-/--
-theorem `diam_pos` / 定理 `diam_pos`
-
-English:
-theorem diam_pos
-  given: [MetricSpace α] (hs1 : s.Nontrivial) (hs2 : IsBounded s)
-  statement: 0 < diam s
-  proof: by
-  rcases hs1 with ⟨x, hx, y, hy, hxy⟩
-exact (dist_pos.mpr hxy).trans_le Metric.dist_le_diam_of_mem hs2 hx hy
-
-中文:
-定理 diam_pos
-  条件: [度量空间 α] (hs1 : s.非平凡) (hs2 : IsBounded s)
-  结论: 0 < diam s
-  证明: by
-  rcases hs1 with ⟨x, hx, y, hy, hxy⟩
-exact (dist_pos.mpr hxy).trans_le Metric.dist_le_diam_of_mem hs2 hx hy
-
-Depends on / 依赖: Metric, Metric.dist_le_diam_of_mem, dist_le_diam_of_mem, dist_pos, dist_pos.mpr, trans_le
+/-
+**Metric.diam_pos** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：diam_pos [MetricSpace α] (hs1 : s.Nontrivial) (hs2 : IsBounded s) : 0 < di
+am s
+参数：hs1 : s.Nontrivial；hs2 : IsBounded s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `dist_pos`：dist_pos {x y : γ} : 0 < dist x y ↔ x != y
+· 使用定理 `Metric.dist_le_diam_of_mem`：dist_le_diam_of_mem (h : IsBounded s) (hx : 
+x in s) (hy : y in s) : dist x y <= diam s
 -/
 theorem diam_pos [MetricSpace α] (hs1 : s.Nontrivial) (hs2 : IsBounded s) : 0 < diam s := by
   rcases hs1 with ⟨x, hx, y, hy, hxy⟩
-exact (dist_pos.mpr hxy).trans_le Metric.dist_le_diam_of_mem hs2 hx hy
+  exact (dist_pos.mpr hxy).trans_le <| Metric.dist_le_diam_of_mem hs2 hx hy
 
 end MetricSpace
 
@@ -2283,7 +2170,7 @@ open Lean Meta Qq Function
 meta def evalDiam : PositivityExt where eval {u α} _zα pα? e :=
   match pα? with | none => pure .none | some _ => do
   match u, α, e with
-  | 0, ~q(Real), ~q(@Metric.diam _ $inst $s) =>
+  | 0, ~q(ℝ), ~q(@Metric.diam _ $inst $s) =>
     assertInstancesCommute
     pure (.nonnegative q(Metric.diam_nonneg))
   | _, _, _ => throwError "not ‖ · ‖"
@@ -2296,132 +2183,156 @@ open Metric
 
 variable [PseudoMetricSpace α]
 
-/--
-theorem `Metric.cobounded_eq_cocompact` / 定理 `Metric.cobounded_eq_cocompact`
-
-English:
-theorem Metric.cobounded_eq_cocompact
-  given: [ProperSpace α]
-  statement: cobounded α = cocompact α
-  proof: by
-  nontriviality α; inhabit α
-exact cobounded_le_cocompact.antisymm (hasBasis_cobounded_compl_closedBall default).ge_iff.2
-    fun _ _ => (isCompact_closedBall _ _).compl_mem_cocompact
-
-中文:
-定理 Metric.cobounded_eq_cocompact
-  条件: [真空间 α]
-  结论: cobounded α = cocompact α
-  证明: by
-  nontriviality α; inhabit α
-exact cobounded_le_cocompact.antisymm (hasBasis_cobounded_compl_closedBall default).ge_iff.2
-    fun _ _ => (isCompact_closedBall _ _).compl_mem_cocompact
-
-Depends on / 依赖: antisymm, cobounded_le_cocompact, cobounded_le_cocompact.antisymm, compl_mem_cocompact, ge_iff, hasBasis_cobounded_compl_closedBall, inhabit, isCompact_closedBall, nontriviality
+/-
+**Metric.cobounded_eq_cocompact** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Metric.cobounded_eq_cocompact [ProperSpace α] : cobounded α = cocompact α
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.Nontriviality.subsingleton_or_nontrivial_elim`：subsinglet
+on_or_nontrivial_elim {p : Prop} {α : Type u} (h₁ : Subsingleton α -> p) (h₂ : N
+ontrivial α -> p) : p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Bornology.cobounded_eq_bot`：cobounded_eq_bot : cobounded α = ⊥
+· 使用定理 `Metric.instBoundedSpaceOfCompactSpace`：∀ {α : Type u} [inst : PseudoMetr
+icSpace α] [CompactSpace α], BoundedSpace α
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyOfSubsingleton`：∀ {α : Type u} [inst : Topological
+Space α] [Subsingleton α], IndiscreteTopology α
+· 使用定理 `Filter.cocompact_eq_bot`：Filter.cocompact_eq_bot [CompactSpace X] : Filt
+er.cocompact X = ⊥
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Metric.cobounded_le_cocompact`：cobounded_le_cocompact : cobounded α <= c
+ocompact α
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nontrivial.to_nonempty`：∀ {α : Type u_1} [Nontrivial α], Nonempty α
+· 使用定理 `Filter.HasBasis.ge_iff`：∀ {α : Type u_1} {ι' : Sort u_5} {l l' : Filter 
+α} {p' : ι' → Prop} {s' : ι' → Set α},   l'.HasBasis p' s' → (l ≤ l' ↔ ∀ (i' : ι
+'), p' i' → …
+· 使用定理 `Metric.hasBasis_cobounded_compl_closedBall`：hasBasis_cobounded_compl_clo
+sedBall (c : α) : (cobounded α).HasBasis (fun _ => True) (fun r => (closedBall c
+ r)ᶜ)
+· 使用定理 `IsCompact.compl_mem_cocompact`：∀ {X : Type u} [inst : TopologicalSpace X
+] {s : Set X}, IsCompact s → sᶜ ∈ Filter.cocompact X
+· 使用定理 `ProperSpace.isCompact_closedBall`：∀ {α : Type u} {inst : PseudoMetricSpa
+ce α} [self : ProperSpace α] (x : α) (r : ℝ), IsCompact (Metric.closedBall x r)
 -/
 theorem Metric.cobounded_eq_cocompact [ProperSpace α] : cobounded α = cocompact α := by
   nontriviality α; inhabit α
-exact cobounded_le_cocompact.antisymm (hasBasis_cobounded_compl_closedBall default).ge_iff.2
-    fun _ _ => (isCompact_closedBall _ _).compl_mem_cocompact
-
-/--
-theorem `tendsto_dist_right_cocompact_atTop` / 定理 `tendsto_dist_right_cocompact_atTop`
-
-English:
-theorem tendsto_dist_right_cocompact_atTop
-  given: [ProperSpace α] (x : α)
-  proof: (tendsto_dist_right_cobounded_atTop x).mono_left cobounded_eq_cocompact.ge
-
-中文:
-定理 tendsto_dist_right_cocompact_atTop
-  条件: [真空间 α] (x : α)
-  证明: (tendsto_dist_right_cobounded_atTop x).mono_left cobounded_eq_cocompact.ge
-
-Depends on / 依赖: cobounded_eq_cocompact, cobounded_eq_cocompact.ge, mono_left, tendsto_dist_right_cobounded_atTop
+  exact cobounded_le_cocompact.antisymm <| (hasBasis_cobounded_compl_closedBall default).ge_iff.2
+    fun _ _ ↦ (isCompact_closedBall _ _).compl_mem_cocompact
+/-
+**tendsto_dist_right_cocompact_atTop** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tendsto_dist_right_cocompact_atTop [ProperSpace α] (x : α) : Tendsto (dist
+ · x) (cocompact α) atTop
+参数：x : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.mono_left`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {x
+ y : Filter α} {z : Filter β},   Filter.Tendsto f x z → y ≤ x → Filter.Tendsto f
+ y z
+· 使用定理 `Metric.tendsto_dist_right_cobounded_atTop`：tendsto_dist_right_cobounded_
+atTop (c : α) : Tendsto (dist · c) (cobounded α) atTop
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Metric.cobounded_eq_cocompact`：Metric.cobounded_eq_cocompact [ProperSpac
+e α] : cobounded α = cocompact α
 -/
 theorem tendsto_dist_right_cocompact_atTop [ProperSpace α] (x : α) :
     Tendsto (dist · x) (cocompact α) atTop :=
   (tendsto_dist_right_cobounded_atTop x).mono_left cobounded_eq_cocompact.ge
-
-/--
-theorem `tendsto_dist_left_cocompact_atTop` / 定理 `tendsto_dist_left_cocompact_atTop`
-
-English:
-theorem tendsto_dist_left_cocompact_atTop
-  given: [ProperSpace α] (x : α)
-  proof: (tendsto_dist_left_cobounded_atTop x).mono_left cobounded_eq_cocompact.ge
-
-中文:
-定理 tendsto_dist_left_cocompact_atTop
-  条件: [真空间 α] (x : α)
-  证明: (tendsto_dist_left_cobounded_atTop x).mono_left cobounded_eq_cocompact.ge
-
-Depends on / 依赖: cobounded_eq_cocompact, cobounded_eq_cocompact.ge, mono_left, tendsto_dist_left_cobounded_atTop
+/-
+**tendsto_dist_left_cocompact_atTop** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tendsto_dist_left_cocompact_atTop [ProperSpace α] (x : α) : Tendsto (dist 
+x) (cocompact α) atTop
+参数：x : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.mono_left`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {x
+ y : Filter α} {z : Filter β},   Filter.Tendsto f x z → y ≤ x → Filter.Tendsto f
+ y z
+· 使用定理 `Metric.tendsto_dist_left_cobounded_atTop`：tendsto_dist_left_cobounded_at
+Top (c : α) : Tendsto (dist c) (cobounded α) atTop
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Metric.cobounded_eq_cocompact`：Metric.cobounded_eq_cocompact [ProperSpac
+e α] : cobounded α = cocompact α
 -/
 theorem tendsto_dist_left_cocompact_atTop [ProperSpace α] (x : α) :
     Tendsto (dist x) (cocompact α) atTop :=
   (tendsto_dist_left_cobounded_atTop x).mono_left cobounded_eq_cocompact.ge
-
-/--
-theorem `comap_dist_left_atTop_eq_cocompact` / 定理 `comap_dist_left_atTop_eq_cocompact`
-
-English:
-theorem comap_dist_left_atTop_eq_cocompact
-  given: [ProperSpace α] (x : α)
-  proof: by simp [cobounded_eq_cocompact]
-
-中文:
-定理 comap_dist_left_atTop_eq_cocompact
-  条件: [真空间 α] (x : α)
-  证明: by simp [cobounded_eq_cocompact]
-
-Depends on / 依赖: cobounded_eq_cocompact
+/-
+**comap_dist_left_atTop_eq_cocompact** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：comap_dist_left_atTop_eq_cocompact [ProperSpace α] (x : α) : comap (dist x
+) atTop = cocompact α
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.comap_dist_left_atTop`：comap_dist_left_atTop (c : α) : comap (dis
+t c) atTop = cobounded α
+· 使用定理 `Metric.cobounded_eq_cocompact`：Metric.cobounded_eq_cocompact [ProperSpac
+e α] : cobounded α = cocompact α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem comap_dist_left_atTop_eq_cocompact [ProperSpace α] (x : α) :
     comap (dist x) atTop = cocompact α := by simp [cobounded_eq_cocompact]
-
-/--
-theorem `tendsto_cocompact_of_tendsto_dist_comp_atTop` / 定理 `tendsto_cocompact_of_tendsto_dist_comp_atTop`
-
-English:
-theorem tendsto_cocompact_of_tendsto_dist_comp_atTop
-  statement: {f : β -> α} {l : Filter β} (x : α)
-  proof: ((tendsto_dist_right_atTop_iff _).1 h).mono_right cobounded_le_cocompact
-
-中文:
-定理 tendsto_cocompact_of_tendsto_dist_comp_atTop
-  结论: {f : β -> α} {l : 滤子 β} (x : α)
-  证明: ((tendsto_dist_right_atTop_iff _).1 h).mono_right cobounded_le_cocompact
-
-Depends on / 依赖: cobounded_le_cocompact, mono_right, tendsto_dist_right_atTop_iff
+/-
+**tendsto_cocompact_of_tendsto_dist_comp_atTop** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tendsto_cocompact_of_tendsto_dist_comp_atTop {f : β -> α} {l : Filter β} (
+x : α) (h : Tendsto (fun y => dist (f y) x) l atTop) : Tendsto f l (cocompact α)
+参数：x : α；h : Tendsto (fun y => dist (f y) x) l atTop。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.mono_right`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {
+x : Filter α} {y z : Filter β},   Filter.Tendsto f x y → y ≤ z → Filter.Tendsto 
+f x z
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Metric.tendsto_dist_right_atTop_iff`：tendsto_dist_right_atTop_iff (c : α
+) {f : β -> α} {l : Filter β} : Tendsto (fun x => dist (f x) c) l atTop ↔ Tendst
+o f l (cobounded α)
+· 使用定理 `Metric.cobounded_le_cocompact`：cobounded_le_cocompact : cobounded α <= c
+ocompact α
 -/
-theorem tendsto_cocompact_of_tendsto_dist_comp_atTop {f : β -> α} {l : Filter β} (x : α)
+theorem tendsto_cocompact_of_tendsto_dist_comp_atTop {f : β → α} {l : Filter β} (x : α)
     (h : Tendsto (fun y => dist (f y) x) l atTop) : Tendsto f l (cocompact α) :=
   ((tendsto_dist_right_atTop_iff _).1 h).mono_right cobounded_le_cocompact
-
-/--
-theorem `Metric.finite_isBounded_inter_isClosed` / 定理 `Metric.finite_isBounded_inter_isClosed`
-
-English:
-theorem Metric.finite_isBounded_inter_isClosed
-  statement: [ProperSpace α] {K s : Set α} (hsd : IsDiscrete s)
-  proof: by
-  refine (IsCompact.finite ?_ ?_).subset (Set.inter_subset_inter_left s subset_closure)
-  · exact hK.isCompact_closure.inter_right hs
-  · exact hsd.mono Set.inter_subset_right
-
-中文:
-定理 Metric.finite_isBounded_inter_isClosed
-  结论: [真空间 α] {K s : 集合 α} (hsd : 是离散 s)
-  证明: by
-  refine (IsCompact.finite ?_ ?_).subset (Set.inter_subset_inter_left s subset_closure)
-  · exact hK.isCompact_closure.inter_right hs
-  · exact hsd.mono Set.inter_subset_right
-
-Depends on / 依赖: IsCompact, IsCompact.finite, Set.inter_subset_inter_left, Set.inter_subset_right, finite, hK.isCompact_closure.inter_right, hsd.mono, inter_right, inter_subset_inter_left, inter_subset_right, isCompact_closure, subset, subset_closure
+/-
+**Metric.finite_isBounded_inter_isClosed** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Metric.finite_isBounded_inter_isClosed [ProperSpace α] {K s : Set α} (hsd 
+: IsDiscrete s) (hK : IsBounded K) (hs : IsClosed s) : Set.Finite (K inter s)
+参数：hsd : IsDiscrete s；hK : IsBounded K；hs : IsClosed s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用定理 `IsCompact.finite`：IsCompact.finite (hs : IsCompact s) (hs' : IsDiscrete 
+s) : s.Finite
+· 使用定理 `IsCompact.inter_right`：IsCompact.inter_right (hs : IsCompact s) (ht : Is
+Closed t) : IsCompact (s inter t)
+· 使用定理 `Bornology.IsBounded.isCompact_closure`：∀ {α : Type u} {s : Set α} [inst 
+: PseudoMetricSpace α] [ProperSpace α], Bornology.IsBounded s → IsCompact (closu
+re s)
+· 使用引理 `IsDiscrete.mono`：IsDiscrete.mono {t : Set X} (hs : IsDiscrete s) (hst : 
+t subseteq s) : IsDiscrete t
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
+· 使用定理 `Set.inter_subset_inter_left`：inter_subset_inter_left {s t : Set α} (u : 
+Set α) (H : s subseteq t) : s inter u subseteq t inter u
+· 使用定理 `subset_closure`：subset_closure : s subseteq closure s
 -/
 theorem Metric.finite_isBounded_inter_isClosed [ProperSpace α] {K s : Set α} (hsd : IsDiscrete s)
-    (hK : IsBounded K) (hs : IsClosed s) : Set.Finite (K inter s) := by
+    (hK : IsBounded K) (hs : IsClosed s) : Set.Finite (K ∩ s) := by
   refine (IsCompact.finite ?_ ?_).subset (Set.inter_subset_inter_left s subset_closure)
   · exact hK.isCompact_closure.inter_right hs
   · exact hsd.mono Set.inter_subset_right
@@ -2433,61 +2344,94 @@ namespace Continuous
 variable {α β : Type*} [LinearOrder α] [TopologicalSpace α] [OrderClosedTopology α]
   [PseudoMetricSpace β] [ProperSpace β]
 
-/--
-theorem `exists_forall_le_of_isBounded` / 定理 `exists_forall_le_of_isBounded`
+/-- A version of the **Extreme Value Theorem**: if the set where a continuous function `f`
+into a linearly ordered space takes values `≤ f x₀` is bounded for some `x₀`,
+then `f` has a global minimum (under suitable topological assumptions).
 
-English:
-theorem exists_forall_le_of_isBounded
-  statement: {f : β -> α} (hf : Continuous f) (x₀ : β)
-  proof: by
-  refine hf.exists_forall_le' (x₀ := x₀) ?_
-  have hU : {x : β | f x₀ < f x} in Filter.cocompact β := by
-    refine Filter.mem_cocompact'.mpr ⟨_, ?_, fun ⦃_⦄ a => a⟩
-    simp only [Set.compl_ofPred, not_lt]
-    exact Metric.isCompact_of_isClosed_isBounded (isClosed_le (by fun_prop) (by fun_prop)) h
-  filter_upwards [hU] with x hx using hx.le
+This is a convenient combination of `Continuous.exists_forall_le'` and
+`Metric.isCompact_of_isClosed_isBounded`. -/
+/-
+**Continuous.exists_forall_le_of_isBounded** 是 Mathlib 中的一个定理，位于命名空间 `Continuous
+`。
+形式化陈述：exists_forall_le_of_isBounded {f : β -> α} (hf : Continuous f) (x₀ : β) (h
+ : Bornology.IsBounded {x : β | f x <= f x₀}) : exists x, forall y, f x <= f y
+参数：hf : Continuous f；x₀ : β；h : Bornology.IsBounded {x : β | f x <= f x₀}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.exists_forall_le'`：Continuous.exists_forall_le' [ClosedIicTop
+ology α] {f : β -> α} (hf : Continuous f) (x₀ : β) (h : forallᶠ x in cocompact β
+, f x₀ <= f x) : e…
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.mem_cocompact'`：mem_cocompact' : s in cocompact X ↔ exists t, IsC
+ompact t ∧ sᶜ subseteq t
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Metric.isCompact_of_isClosed_isBounded`：isCompact_of_isClosed_isBounded 
+[ProperSpace α] (hc : IsClosed s) (hb : IsBounded s) : IsCompact s
+· 使用定理 `isClosed_le`：isClosed_le [TopologicalSpace β] {f g : β -> α} (hf : Conti
+nuous f) (hg : Continuous g) : IsClosed { b | f b <= g b }
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 
-中文:
-定理 存在_对任意_le_of_isBounded
-  结论: {f : β -> α} (hf : 连续 f) (x₀ : β)
-  证明: by
-  refine hf.exists_forall_le' (x₀ := x₀) ?_
-  have hU : {x : β | f x₀ < f x} in Filter.cocompact β := by
-    refine Filter.mem_cocompact'.mpr ⟨_, ?_, fun ⦃_⦄ a => a⟩
-    simp only [Set.compl_ofPred, not_lt]
-    exact Metric.isCompact_of_isClosed_isBounded (isClosed_le (by fun_prop) (by fun_prop)) h
-  filter_upwards [hU] with x hx using hx.le
+--- 原说明 ---
+A version of the **Extreme Value Theorem**: if the set where a continuous functi
+on `f`
+into a linearly ordered space takes values `≤ f x₀` is bounded for some `x₀`,
+then `f` has a global minimum (under suitable topological assumptions).
 
-Depends on / 依赖: Filter, Filter.cocompact, Filter.mem_cocompact, Metric, Metric.isCompact_of_isClosed_isBounded, Set.compl_ofPred, cocompact, compl_ofPred, exists_forall_le, filter_upwards, fun_prop, hf.exists_forall_le, hx.le, isClosed_le, isCompact_of_isClosed_isBounded, mem_cocompact, not_lt
+This is a convenient combination of `Continuous.exists_forall_le'` and
+`Metric.isCompact_of_isClosed_isBounded`.
 -/
-theorem exists_forall_le_of_isBounded {f : β -> α} (hf : Continuous f) (x₀ : β)
-    (h : Bornology.IsBounded {x : β | f x <= f x₀}) :
-    exists x, forall y, f x <= f y := by
+theorem exists_forall_le_of_isBounded {f : β → α} (hf : Continuous f) (x₀ : β)
+    (h : Bornology.IsBounded {x : β | f x ≤ f x₀}) :
+    ∃ x, ∀ y, f x ≤ f y := by
   refine hf.exists_forall_le' (x₀ := x₀) ?_
-  have hU : {x : β | f x₀ < f x} in Filter.cocompact β := by
-    refine Filter.mem_cocompact'.mpr ⟨_, ?_, fun ⦃_⦄ a => a⟩
+  have hU : {x : β | f x₀ < f x} ∈ Filter.cocompact β := by
+    refine Filter.mem_cocompact'.mpr ⟨_, ?_, fun ⦃_⦄ a ↦ a⟩
     simp only [Set.compl_ofPred, not_lt]
     exact Metric.isCompact_of_isClosed_isBounded (isClosed_le (by fun_prop) (by fun_prop)) h
   filter_upwards [hU] with x hx using hx.le
 
-/--
-theorem `exists_forall_ge_of_isBounded` / 定理 `exists_forall_ge_of_isBounded`
+/-- A version of the **Extreme Value Theorem**: if the set where a continuous function `f`
+into a linearly ordered space takes values `≥ f x₀` is bounded for some `x₀`,
+then `f` has a global maximum (under suitable topological assumptions).
 
-English:
-theorem exists_forall_ge_of_isBounded
-  statement: {f : β -> α} (hf : Continuous f) (x₀ : β)
-  proof: hf.exists_forall_le_of_isBounded (α := αᵒᵈ) x₀ h
+This is a convenient combination of `Continuous.exists_forall_ge'` and
+`Metric.isCompact_of_isClosed_isBounded`. -/
+/-
+**Continuous.exists_forall_ge_of_isBounded** 是 Mathlib 中的一个定理，位于命名空间 `Continuous
+`。
+形式化陈述：exists_forall_ge_of_isBounded {f : β -> α} (hf : Continuous f) (x₀ : β) (h
+ : Bornology.IsBounded {x : β | f x₀ <= f x}) : exists x, forall y, f y <= f x
+参数：hf : Continuous f；x₀ : β；h : Bornology.IsBounded {x : β | f x₀ <= f x}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.exists_forall_le_of_isBounded`：exists_forall_le_of_isBounded 
+{f : β -> α} (hf : Continuous f) (x₀ : β) (h : Bornology.IsBounded {x : β | f x 
+<= f x₀}) : exists x, forall y…
+· 使用定理 `instOrderClosedTopologyOrderDual`：∀ {α : Type u} [inst : TopologicalSpac
+e α] [inst_1 : Preorder α] [t : OrderClosedTopology α], OrderClosedTopology αᵒᵈ
 
-中文:
-定理 存在_对任意_ge_of_isBounded
-  结论: {f : β -> α} (hf : 连续 f) (x₀ : β)
-  证明: hf.exists_forall_le_of_isBounded (α := αᵒᵈ) x₀ h
+--- 原说明 ---
+A version of the **Extreme Value Theorem**: if the set where a continuous functi
+on `f`
+into a linearly ordered space takes values `≥ f x₀` is bounded for some `x₀`,
+then `f` has a global maximum (under suitable topological assumptions).
 
-Depends on / 依赖: exists_forall_le_of_isBounded, hf.exists_forall_le_of_isBounded
+This is a convenient combination of `Continuous.exists_forall_ge'` and
+`Metric.isCompact_of_isClosed_isBounded`.
 -/
-theorem exists_forall_ge_of_isBounded {f : β -> α} (hf : Continuous f) (x₀ : β)
-    (h : Bornology.IsBounded {x : β | f x₀ <= f x}) :
-    exists x, forall y, f y <= f x :=
+theorem exists_forall_ge_of_isBounded {f : β → α} (hf : Continuous f) (x₀ : β)
+    (h : Bornology.IsBounded {x : β | f x₀ ≤ f x}) :
+    ∃ x, ∀ y, f y ≤ f x :=
   hf.exists_forall_le_of_isBounded (α := αᵒᵈ) x₀ h
 
 end Continuous
+

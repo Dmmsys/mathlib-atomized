@@ -22,108 +22,90 @@ open Lean Meta Qq
 meta section
 
 /--
-Definition of `Matrix.matchVecConsPrefixQ` / `Matrix.matchVecConsPrefixQ` 的定义
-
-English:
-definition Matrix.matchVecConsPrefixQ
-  signature: {u : Level} {α : Q(Type u)} {n : Q(Nat)}
-  body: do
-  let (l, m, vec) ← Matrix.matchVecConsPrefix n vec
-  let l ← l.toArray.mapM fun a => do
-    let some aQ ← checkTypeQ a q($α) | throwError m!"Expected {a} to have type {α}"
-    return aQ
-  let some vecQ ← checkTypeQ vec q(Fin $m -> $α)
-    | throwError m!"Expected {vec} to have type {q(Fin $m -> $α)}"
-  return (l, ⟨m, vecQ⟩)
-
-中文:
-定义 矩阵.matchVecConsPrefixQ
-  签名: {u : Level} {α : Q(类型u)} {n : Q(自然数)}
-  定义体: do
-  let (l, m, vec) ← Matrix.matchVecConsPrefix n vec
-  let l ← l.toArray.mapM fun a => do
-    let some aQ ← checkTypeQ a q($α) | throwError m!"Expected {a} to have type {α}"
-    return aQ
-  let some vecQ ← checkTypeQ vec q(Fin $m -> $α)
-    | throwError m!"Expected {vec} to have type {q(Fin $m -> $α)}"
-  return (l, ⟨m, vecQ⟩)
+Takes an expression representing a vector `Fin n → α` and returns the corresponding
+array `Array α`.
 -/
-partial def Matrix.matchVecConsPrefixQ {u : Level} {α : Q(Type u)} {n : Q(Nat)}
-    (vec : Q(Fin $n -> $α)) : MetaM (Array Q($α) × (m : Q(Nat)) × Q(Fin $m -> $α)) := do
+/-
+**Mathlib.Tactic.FinVec.Matrix.matchVecConsPrefixQ** 是 Mathlib 中的一个定义，位于命名空间 `Ma
+thlib.Tactic.FinVec`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Takes an expression representing a vector `Fin n → α` and returns the correspond
+ing
+array `Array α`.
+-/
+partial def Matrix.matchVecConsPrefixQ {u : Level} {α : Q(Type u)} {n : Q(ℕ)}
+    (vec : Q(Fin $n → $α)) : MetaM (Array Q($α) × (m : Q(Nat)) × Q(Fin $m → $α)) := do
   let (l, m, vec) ← Matrix.matchVecConsPrefix n vec
-  let l ← l.toArray.mapM fun a => do
+  let l ← l.toArray.mapM fun a ↦ do
     let some aQ ← checkTypeQ a q($α) | throwError m!"Expected {a} to have type {α}"
     return aQ
-  let some vecQ ← checkTypeQ vec q(Fin $m -> $α)
-    | throwError m!"Expected {vec} to have type {q(Fin $m -> $α)}"
+  let some vecQ ← checkTypeQ vec q(Fin $m → $α)
+    | throwError m!"Expected {vec} to have type {q(Fin $m → $α)}"
   return (l, ⟨m, vecQ⟩)
 
 /--
-Definition of `permArray` / `permArray` 的定义
+Given a list `l` of elements of type `α` and a list `perm` of indices (as natural numbers), outputs
+the list whose `i`th entry is `l[perm[i]]`.
+In the case where `perm ~ [0, ..., l.length-1]`, this is just computing the permutation of `l`
+represented by `perm`.
+-/
+/-
+**Mathlib.Tactic.FinVec.permArray** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.FinV
+ec`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition permArray
-  signature: {α : Type*} [Inhabited α] (vec : Array α) (perm : Array Nat)
-  body: perm.map (vec[·]!)
-
-中文:
-定义 permArray
-  签名: {α : 类型} [可居 α] (vec : 数组 α) (perm : 数组 自然数)
-  定义体: perm.map (vec[·]!)
+--- 原说明 ---
+Given a list `l` of elements of type `α` and a list `perm` of indices (as natura
+l numbers), outputs
+the list whose `i`th entry is `l[perm[i]]`.
+In the case where `perm ~ [0, ..., l.length-1]`, this is just computing the perm
+utation of `l`
+represented by `perm`.
 -/
 private def permArray {α : Type*} [Inhabited α] (vec : Array α) (perm : Array Nat) : Array α :=
   perm.map (vec[·]!)
 
-/--
-Definition of `mkFin` / `mkFin` 的定义
+/-- Helper function to produce a term of type `Fin m` given by `n` (and a proof that `n < m` via
+`decide`.)
+Note: this could be inlined below, but this seems to produce a strange Qq bug. -/
+/-
+**Mathlib.Tactic.FinVec.mkFin** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.FinVec`。
+形式化陈述：mkFin (n m : Q(Nat)) : MetaM Q(Fin $m)
+参数：n m : Q(Nat)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkFin
-  signature: (n m : Q(Nat))
-  body: do
-  return q(⟨$n, $(← mkDecideProofQ q($n < $m))⟩)
-
-中文:
-定义 mkFin
-  签名: (n m : Q(自然数))
-  定义体: do
-  return q(⟨$n, $(← mkDecideProofQ q($n < $m))⟩)
+--- 原说明 ---
+Helper function to produce a term of type `Fin m` given by `n` (and a proof that
+ `n < m` via
+`decide`.)
+Note: this could be inlined below, but this seems to produce a strange Qq bug.
 -/
 def mkFin (n m : Q(Nat)) : MetaM Q(Fin $m) := do
   return q(⟨$n, $(← mkDecideProofQ q($n < $m))⟩)
 
-/--
-Definition of `arrayOfVecFinQ` / `arrayOfVecFinQ` 的定义
+/-- Given an expression representing a vector `perm : Fin n → Fin n`, computes the corresponding
+list of term of type `Fin n`. This is meant to be used when `perm` corresponds to a permutation
+of `Fin n`, e.g. `perm = Equiv.swap 0 1`, etc. -/
+/-
+**Mathlib.Tactic.FinVec.arrayOfVecFinQ** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.FinVec`。
+形式化陈述：arrayOfVecFinQ (n : Q(Nat)) (vn : Nat) (perm : Q(Fin $n -> Fin $n)) : Simp
+M (Option <| Array Nat)
+参数：n : Q(Nat)；vn : Nat；perm : Q(Fin $n -> Fin $n)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition arrayOfVecFinQ
-  signature: (n : Q(Nat)) (vn : Nat) (perm : Q(Fin $n -> Fin $n))
-  body: do
-  let mut out : Array Nat := #[]
-  for idx in *...vn do
-    let idxQ := mkNatLitQ idx
-    let idxQNew ← mkFin idxQ n
-    let outIdxQ := q(($perm $idxQNew : Nat))
-    let outIdxExpr ← Lean.Meta.Simp.dsimp outIdxQ
-    let some outIdx ← Lean.Meta.getNatValue? outIdxExpr | return none
-    out := out.push outIdx
-  return out
-
-中文:
-定义 arrayOfVecFinQ
-  签名: (n : Q(自然数)) (vn : 自然数) (perm : Q(有限集 $n -> 有限集 $n))
-  定义体: do
-  let mut out : Array Nat := #[]
-  for idx in *...vn do
-    let idxQ := mkNatLitQ idx
-    let idxQNew ← mkFin idxQ n
-    let outIdxQ := q(($perm $idxQNew : Nat))
-    let outIdxExpr ← Lean.Meta.Simp.dsimp outIdxQ
-    let some outIdx ← Lean.Meta.getNatValue? outIdxExpr | return none
-    out := out.push outIdx
-  return out
+--- 原说明 ---
+Given an expression representing a vector `perm : Fin n → Fin n`, computes the c
+orresponding
+list of term of type `Fin n`. This is meant to be used when `perm` corresponds t
+o a permutation
+of `Fin n`, e.g. `perm = Equiv.swap 0 1`, etc.
 -/
-def arrayOfVecFinQ (n : Q(Nat)) (vn : Nat) (perm : Q(Fin $n -> Fin $n)) :
+def arrayOfVecFinQ (n : Q(ℕ)) (vn : ℕ) (perm : Q(Fin $n → Fin $n)) :
     SimpM (Option <| Array Nat) := do
   let mut out : Array Nat := #[]
   for idx in *...vn do
@@ -134,25 +116,16 @@ def arrayOfVecFinQ (n : Q(Nat)) (vn : Nat) (perm : Q(Fin $n -> Fin $n)) :
     let some outIdx ← Lean.Meta.getNatValue? outIdxExpr | return none
     out := out.push outIdx
   return out
-
-/--
-theorem `eq_etaExpand` / 定理 `eq_etaExpand`
-
-English:
-theorem eq_etaExpand
-  given: {α : Type*} {m : Nat} (v : Fin m -> α)
-  statement: v = FinVec.etaExpand v
-  proof: (FinVec.etaExpand_eq _).symm
-
-中文:
-定理 eq_etaExpand
-  条件: {α : 类型} {m : 自然数} (v : 有限集 m -> α)
-  结论: v = FinVec.etaExpand v
-  证明: (FinVec.etaExpand_eq _).symm
-
-Depends on / 依赖: FinVec, FinVec.etaExpand_eq, etaExpand_eq
+/-
+**Mathlib.Tactic.FinVec.eq_etaExpand** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.F
+inVec`。
+形式化陈述：eq_etaExpand {α : Type*} {m : Nat} (v : Fin m -> α) : v = FinVec.etaExpand
+ v
+参数：v : Fin m -> α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eq_etaExpand {α : Type*} {m : Nat} (v : Fin m -> α) : v = FinVec.etaExpand v :=
+theorem eq_etaExpand {α : Type*} {m : ℕ} (v : Fin m → α) : v = FinVec.etaExpand v :=
   (FinVec.etaExpand_eq _).symm
 
 end
@@ -169,8 +142,8 @@ example {a b c : Nat} : ![a, b, c] ∘ Equiv.swap 0 1 = ![b, a, c] := by
 Note that for this simproc to work, dsimp needs to be able to simplify the individual applications
 of the permutation.
 -/
-simproc_decl vecPerm (_ ∘ (_ : Fin _ -> Fin _)) := fun e => do
-  let ⟨_, ~q(Fin $n -> $α), ~q(($v) ∘ ($p : _ -> Fin $n'))⟩ ← inferTypeQ' e | return .continue
+simproc_decl vecPerm (_ ∘ (_ : Fin _ → Fin _)) := fun e ↦ do
+  let ⟨_, ~q(Fin $n → $α), ~q(($v) ∘ ($p : _ → Fin $n'))⟩ ← inferTypeQ' e | return .continue
   let .defEq _ ← isDefEqQ q($n) q($n') | return .continue
   let (unperm, ⟨m, _⟩) ← Matrix.matchVecConsPrefixQ v
   unless ← isDefEq m q(0) do return .continue
@@ -178,8 +151,9 @@ simproc_decl vecPerm (_ ∘ (_ : Fin _ -> Fin _)) := fun e => do
   let out := permArray unperm perm
   let out := PiFin.mkLiteralQ (n := out.size) (out[·]!)
   let pf ← mkAppM ``FinVec.eq_etaExpand #[e]
-return .continue some { expr := out, proof? := pf }
+  return .continue <| some { expr := out, proof? := pf }
 
 end
 
 end Mathlib.Tactic.FinVec
+

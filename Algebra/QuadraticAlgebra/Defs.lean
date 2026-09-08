@@ -35,22 +35,17 @@ universe u
 a structure with two fields, `re` and `im`. When `R` is a commutative ring, this is isomorphic to
 `R[X]/(X^2-b*X-a)`. -/
 @[ext]
-/--
-Definition of `QuadraticAlgebra` / `QuadraticAlgebra` 的定义
+/-
+**QuadraticAlgebra** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u) → R → R → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure QuadraticAlgebra
-  parameters: (R : Type u) (a b : R)
-  axioms and operations (2):
-    - re : R
-    - im : R
-
-中文:
-结构 二次代数
-  参数: (R : 类型u) (a b : R)
-  公理与运算 (2 个):
-    - re : R
-    - im : R
+--- 原说明 ---
+Quadratic algebra over a type with fixed coefficient where $i^2 = a + bi$, imple
+mented as
+a structure with two fields, `re` and `im`. When `R` is a commutative ring, this
+ is isomorphic to
+`R[X]/(X^2-b*X-a)`.
 -/
 structure QuadraticAlgebra (R : Type u) (a b : R) : Type u where
   /-- Real part of an element in quadratic algebra -/
@@ -66,386 +61,199 @@ namespace QuadraticAlgebra
 
 /-- The equivalence between quadratic algebra over `R` and `R × R`. -/
 @[simps symm_apply]
-/--
-Definition of `equivProd` / `equivProd` 的定义
+/-
+**QuadraticAlgebra.equivProd** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：equivProd (a b : R) : QuadraticAlgebra R a b ≃ R × R where toFun z
+参数：a b : R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivProd
-  signature: (a b : R)
-  body: (z.re, z.im)
-  invFun p := ⟨p.1, p.2⟩
-
-@[simp]
-
-中文:
-定义 equivProd
-  签名: (a b : R)
-  定义体: (z.re, z.im)
-  invFun p := ⟨p.1, p.2⟩
-
-@[simp]
-
-Depends on / 依赖: z.im, z.re
+--- 原说明 ---
+The equivalence between quadratic algebra over `R` and `R × R`.
 -/
 def equivProd (a b : R) : QuadraticAlgebra R a b ≃ R × R where
   toFun z := (z.re, z.im)
   invFun p := ⟨p.1, p.2⟩
 
 @[simp]
-/--
-theorem `mk_eta` / 定理 `mk_eta`
-
-English:
-theorem mk_eta
-  given: {a b} (z : QuadraticAlgebra R a b)
-  proof: rfl
-
-中文:
-定理 mk_eta
-  条件: {a b} (z : 二次代数 R a b)
-  证明: rfl
+/-
+**QuadraticAlgebra.mk_eta** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：mk_eta {a b} (z : QuadraticAlgebra R a b) : mk z.re z.im = z
+参数：z : QuadraticAlgebra R a b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_eta {a b} (z : QuadraticAlgebra R a b) :
     mk z.re z.im = z := rfl
 
 variable {S T : Type*} {a b} (r : R) (x y : QuadraticAlgebra R a b)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Subsingleton
-  signature: R] : Subsingleton (QuadraticAlgebra R a b)
-  body: (equivProd a b).subsingleton
-
-中文:
-实例 [子单例
-  签名: R] : 子单例 (二次代数 R a b)
-  定义体: (equivProd a b).subsingleton
-
-Depends on / 依赖: equivProd, subsingleton
+/-
+**QuadraticAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Subsingleton R] : Subsingleton (QuadraticAlgebra R a b) := (equivProd a b).subsingleton
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nontrivial
-  signature: R] : Nontrivial (QuadraticAlgebra R a b)
-  body: (equivProd a b).nontrivial
-
-中文:
-实例 [非平凡
-  签名: R] : 非平凡 (二次代数 R a b)
-  定义体: (equivProd a b).nontrivial
-
-Depends on / 依赖: equivProd, nontrivial
+/-
+**QuadraticAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Nontrivial R] : Nontrivial (QuadraticAlgebra R a b) := (equivProd a b).nontrivial
 
 section Zero
 variable [Zero R]
 
-/--
-Definition of `C` / `C` 的定义
+/-- The natural function `R → QuadraticAlgebra R a b`.
 
-English:
-definition C
-  signature: (x : R)
-  body: ⟨x, 0⟩
+Note that, if `R` is a ring, you should use `algebraMap` instead of `C`. -/
+/-
+**QuadraticAlgebra.C** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：{R : Type u_1} → {a b : R} → [Zero R] → R → QuadraticAlgebra R a b
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+The natural function `R → QuadraticAlgebra R a b`.
 
-中文:
-定义 C
-  签名: (x : R)
-  定义体: ⟨x, 0⟩
-
-@[simp]
+Note that, if `R` is a ring, you should use `algebraMap` instead of `C`.
 -/
 protected def C (x : R) : QuadraticAlgebra R a b := ⟨x, 0⟩
 
 @[simp]
-/--
-theorem `re_C` / 定理 `re_C`
-
-English:
-theorem re_C
-  statement: (.C r : QuadraticAlgebra R a b).re = r
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 re_C
-  结论: (.C r : 二次代数 R a b).re = r
-  证明: rfl
-
-@[simp]
+/-
+**QuadraticAlgebra.re_C** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：re_C : (.C r : QuadraticAlgebra R a b).re = r
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem re_C : (.C r : QuadraticAlgebra R a b).re = r := rfl
 
 @[simp]
-/--
-theorem `im_C` / 定理 `im_C`
-
-English:
-theorem im_C
-  statement: (.C r : QuadraticAlgebra R a b).im = 0
-  proof: rfl
-
-中文:
-定理 im_C
-  结论: (.C r : 二次代数 R a b).im = 0
-  证明: rfl
+/-
+**QuadraticAlgebra.im_C** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：im_C : (.C r : QuadraticAlgebra R a b).im = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem im_C : (.C r : QuadraticAlgebra R a b).im = 0 := rfl
-
-/--
-theorem `C_injective` / 定理 `C_injective`
-
-English:
-theorem C_injective
-  statement: Function.Injective (.C : R -> QuadraticAlgebra R a b)
-  proof: fun _ _ h => congr_arg re h
-
-@[simp]
-
-中文:
-定理 C_injective
-  结论: 函数.单射 (.C : R -> 二次代数 R a b)
-  证明: fun _ _ h => congr_arg re h
-
-@[simp]
-
-Depends on / 依赖: congr_arg
+/-
+**QuadraticAlgebra.C_injective** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：C_injective : Function.Injective (.C : R -> QuadraticAlgebra R a b)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
-theorem C_injective : Function.Injective (.C : R -> QuadraticAlgebra R a b) :=
+theorem C_injective : Function.Injective (.C : R → QuadraticAlgebra R a b) :=
   fun _ _ h => congr_arg re h
 
 @[simp]
-/--
-theorem `C_inj` / 定理 `C_inj`
-
-English:
-theorem C_inj
-  given: {x y : R}
-  statement: (.C x : QuadraticAlgebra R a b) = .C y ↔ x = y
-  proof: C_injective.eq_iff
-
-中文:
-定理 C_inj
-  条件: {x y : R}
-  结论: (.C x : 二次代数 R a b) = .C y ↔ x = y
-  证明: C_injective.eq_iff
-
-Depends on / 依赖: C_injective, C_injective.eq_iff, eq_iff
+/-
+**QuadraticAlgebra.C_inj** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：C_inj {x y : R} : (.C x : QuadraticAlgebra R a b) = .C y ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `QuadraticAlgebra.C_injective`：C_injective : Function.Injective (.C : R -
+> QuadraticAlgebra R a b)
 -/
 theorem C_inj {x y : R} : (.C x : QuadraticAlgebra R a b) = .C y ↔ x = y :=
   C_injective.eq_iff
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Zero (QuadraticAlgebra R a b)
-  body: ⟨⟨0, 0⟩⟩
-
-中文:
-实例 :
-  签名: 零 (二次代数 R a b)
-  定义体: ⟨⟨0, 0⟩⟩
+/-
+**QuadraticAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Zero (QuadraticAlgebra R a b) := ⟨⟨0, 0⟩⟩
-
-/--
-theorem `re_zero` / 定理 `re_zero`
-
-English:
-theorem re_zero
-  statement: (0 : QuadraticAlgebra R a b).re = 0
-  proof: rfl
-
-中文:
-定理 re_zero
-  结论: (0 : 二次代数 R a b).re = 0
-  证明: rfl
+/-
+**QuadraticAlgebra.re_zero** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：∀ {R : Type u_1} {a b : R} [inst : Zero R], QuadraticAlgebra.re 0 = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem re_zero : (0 : QuadraticAlgebra R a b).re = 0 := rfl
-
-/--
-theorem `im_zero` / 定理 `im_zero`
-
-English:
-theorem im_zero
-  statement: (0 : QuadraticAlgebra R a b).im = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 im_zero
-  结论: (0 : 二次代数 R a b).im = 0
-  证明: rfl
-
-@[simp]
+/-
+**QuadraticAlgebra.im_zero** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：∀ {R : Type u_1} {a b : R} [inst : Zero R], QuadraticAlgebra.im 0 = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem im_zero : (0 : QuadraticAlgebra R a b).im = 0 := rfl
 
 @[simp]
-/--
-theorem `C_zero` / 定理 `C_zero`
-
-English:
-theorem C_zero
-  statement: (.C 0 : QuadraticAlgebra R a b) = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 C_zero
-  结论: (.C 0 : 二次代数 R a b) = 0
-  证明: rfl
-
-@[simp]
+/-
+**QuadraticAlgebra.C_zero** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：C_zero : (.C 0 : QuadraticAlgebra R a b) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem C_zero : (.C 0 : QuadraticAlgebra R a b) = 0 := rfl
 
 @[simp]
-/--
-theorem `C_eq_zero_iff` / 定理 `C_eq_zero_iff`
-
-English:
-theorem C_eq_zero_iff
-  given: {r : R}
-  statement: (.C r : QuadraticAlgebra R a b) = 0 ↔ r = 0
-  proof: by
-  rw [← C_zero]; rw [C_inj]
-
-中文:
-定理 C_eq_zero_iff
-  条件: {r : R}
-  结论: (.C r : 二次代数 R a b) = 0 ↔ r = 0
-  证明: by
-  rw [← C_zero]; rw [C_inj]
-
-Depends on / 依赖: C_inj, C_zero
+/-
+**QuadraticAlgebra.C_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：C_eq_zero_iff {r : R} : (.C r : QuadraticAlgebra R a b) = 0 ↔ r = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `QuadraticAlgebra.C_zero`：C_zero : (.C 0 : QuadraticAlgebra R a b) = 0
+· 使用定理 `QuadraticAlgebra.C_inj`：C_inj {x y : R} : (.C x : QuadraticAlgebra R a b
+) = .C y ↔ x = y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem C_eq_zero_iff {r : R} : (.C r : QuadraticAlgebra R a b) = 0 ↔ r = 0 := by
-  rw [← C_zero]; rw [C_inj]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (QuadraticAlgebra R a b)
-  body: ⟨0⟩
-
-中文:
-实例 :
-  签名: 可居 (二次代数 R a b)
-  定义体: ⟨0⟩
+  rw [← C_zero, C_inj]
+/-
+**QuadraticAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (QuadraticAlgebra R a b) := ⟨0⟩
 
 section One
 variable [One R]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: One (QuadraticAlgebra R a b)
-  body: ⟨⟨1, 0⟩⟩
-
-中文:
-实例 :
-  签名: 幺 (二次代数 R a b)
-  定义体: ⟨⟨1, 0⟩⟩
+/-
+**QuadraticAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : One (QuadraticAlgebra R a b) := ⟨⟨1, 0⟩⟩
-
-/--
-theorem `re_one` / 定理 `re_one`
-
-English:
-theorem re_one
-  statement: (1 : QuadraticAlgebra R a b).re = 1
-  proof: rfl
-
-中文:
-定理 re_one
-  结论: (1 : 二次代数 R a b).re = 1
-  证明: rfl
+/-
+**QuadraticAlgebra.re_one** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：∀ {R : Type u_1} {a b : R} [inst : Zero R] [inst_1 : One R], QuadraticAlge
+bra.re 1 = 1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[scoped simp] theorem re_one : (1 : QuadraticAlgebra R a b).re = 1 := rfl
-
-/--
-theorem `im_one` / 定理 `im_one`
-
-English:
-theorem im_one
-  statement: (1 : QuadraticAlgebra R a b).im = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 im_one
-  结论: (1 : 二次代数 R a b).im = 0
-  证明: rfl
-
-@[simp]
+/-
+**QuadraticAlgebra.im_one** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：∀ {R : Type u_1} {a b : R} [inst : Zero R] [inst_1 : One R], QuadraticAlge
+bra.im 1 = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[scoped simp] theorem im_one : (1 : QuadraticAlgebra R a b).im = 0 := rfl
 
 @[simp]
-/--
-theorem `C_one` / 定理 `C_one`
-
-English:
-theorem C_one
-  statement: (.C 1 : QuadraticAlgebra R a b) = 1
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 C_one
-  结论: (.C 1 : 二次代数 R a b) = 1
-  证明: rfl
-
-@[simp]
+/-
+**QuadraticAlgebra.C_one** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：C_one : (.C 1 : QuadraticAlgebra R a b) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem C_one : (.C 1 : QuadraticAlgebra R a b) = 1 := rfl
 
 @[simp]
-/--
-theorem `C_eq_one_iff` / 定理 `C_eq_one_iff`
-
-English:
-theorem C_eq_one_iff
-  given: {r : R}
-  statement: (.C r : QuadraticAlgebra R a b) = 1 ↔ r = 1
-  proof: by
-  rw [← C_one]; rw [C_inj]
-
-中文:
-定理 C_eq_one_iff
-  条件: {r : R}
-  结论: (.C r : 二次代数 R a b) = 1 ↔ r = 1
-  证明: by
-  rw [← C_one]; rw [C_inj]
-
-Depends on / 依赖: C_inj, C_one
+/-
+**QuadraticAlgebra.C_eq_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：C_eq_one_iff {r : R} : (.C r : QuadraticAlgebra R a b) = 1 ↔ r = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `QuadraticAlgebra.C_one`：C_one : (.C 1 : QuadraticAlgebra R a b) = 1
+· 使用定理 `QuadraticAlgebra.C_inj`：C_inj {x y : R} : (.C x : QuadraticAlgebra R a b
+) = .C y ↔ x = y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem C_eq_one_iff {r : R} : (.C r : QuadraticAlgebra R a b) = 1 ↔ r = 1 := by
-  rw [← C_one]; rw [C_inj]
+  rw [← C_one, C_inj]
 
 end One
 
@@ -454,73 +262,39 @@ end Zero
 section Add
 variable [Add R]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Add (QuadraticAlgebra R a b)
-  body: ⟨z.re + w.re, z.im + w.im⟩
-
-中文:
-实例 :
-  签名: 加法 (二次代数 R a b)
-  定义体: ⟨z.re + w.re, z.im + w.im⟩
-
-Depends on / 依赖: w.im, w.re, z.im, z.re
+/-
+**QuadraticAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Add (QuadraticAlgebra R a b) where
   add z w := ⟨z.re + w.re, z.im + w.im⟩
-
-/--
-theorem `re_add` / 定理 `re_add`
-
-English:
-theorem re_add
-  given: (z w : QuadraticAlgebra R a b)
-  proof: rfl
-
-中文:
-定理 re_add
-  条件: (z w : 二次代数 R a b)
-  证明: rfl
+/-
+**QuadraticAlgebra.re_add** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：∀ {R : Type u_1} {a b : R} [inst : Add R] (z w : QuadraticAlgebra R a b), 
+(z + w).re = z.re + w.re
+参数：z w : QuadraticAlgebra R a b；z + w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem re_add (z w : QuadraticAlgebra R a b) :
     (z + w).re = z.re + w.re := rfl
-
-/--
-theorem `im_add` / 定理 `im_add`
-
-English:
-theorem im_add
-  given: (z w : QuadraticAlgebra R a b)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 im_add
-  条件: (z w : 二次代数 R a b)
-  证明: rfl
-
-@[simp]
+/-
+**QuadraticAlgebra.im_add** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：∀ {R : Type u_1} {a b : R} [inst : Add R] (z w : QuadraticAlgebra R a b), 
+(z + w).im = z.im + w.im
+参数：z w : QuadraticAlgebra R a b；z + w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem im_add (z w : QuadraticAlgebra R a b) :
     (z + w).im = z.im + w.im := rfl
 
 @[simp]
-/--
-theorem `mk_add_mk` / 定理 `mk_add_mk`
-
-English:
-theorem mk_add_mk
-  given: (z w : QuadraticAlgebra R a b)
-  proof: rfl
-
-中文:
-定理 mk_add_mk
-  条件: (z w : 二次代数 R a b)
-  证明: rfl
+/-
+**QuadraticAlgebra.mk_add_mk** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：mk_add_mk (z w : QuadraticAlgebra R a b) : mk z.re z.im + mk w.re w.im = (
+mk (z.re + w.re) (z.im + w.im) : QuadraticAlgebra R a b)
+参数：z w : QuadraticAlgebra R a b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_add_mk (z w : QuadraticAlgebra R a b) :
     mk z.re z.im + mk w.re w.im = (mk (z.re + w.re) (z.im + w.im) : QuadraticAlgebra R a b) := rfl
@@ -531,22 +305,20 @@ section AddZeroClass
 variable [AddZeroClass R]
 
 @[simp]
-/--
-theorem `C_add` / 定理 `C_add`
-
-English:
-theorem C_add
-  given: (x y : R)
-  statement: (.C (x + y) : QuadraticAlgebra R a b) = .C x + .C y
-  proof: by
-  ext <;> simp
-
-中文:
-定理 C_add
-  条件: (x y : R)
-  结论: (.C (x + y) : 二次代数 R a b) = .C x + .C y
-  证明: by
-  ext <;> simp
+/-
+**QuadraticAlgebra.C_add** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：C_add (x y : R) : (.C (x + y) : QuadraticAlgebra R a b) = .C x + .C y
+参数：x y : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticAlgebra.ext`：∀ {R : Type u} {a b : R} {x y : QuadraticAlgebra R
+ a b}, x.re = y.re → x.im = y.im → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 -/
 theorem C_add (x y : R) : (.C (x + y) : QuadraticAlgebra R a b) = .C x + .C y := by
   ext <;> simp
@@ -556,74 +328,35 @@ end AddZeroClass
 section Neg
 variable [Neg R]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Neg (QuadraticAlgebra R a b)
-  body: ⟨-z.re, -z.im⟩
-
-中文:
-实例 :
-  签名: 取负 (二次代数 R a b)
-  定义体: ⟨-z.re, -z.im⟩
-
-Depends on / 依赖: z.im, z.re
+/-
+**QuadraticAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Neg (QuadraticAlgebra R a b) where neg z := ⟨-z.re, -z.im⟩
-
-/--
-theorem `re_neg` / 定理 `re_neg`
-
-English:
-theorem re_neg
-  given: (z : QuadraticAlgebra R a b)
-  statement: (-z).re = -z.re
-  proof: rfl
-
-中文:
-定理 re_neg
-  条件: (z : 二次代数 R a b)
-  结论: (-z).re = -z.re
-  证明: rfl
+/-
+**QuadraticAlgebra.re_neg** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：∀ {R : Type u_1} {a b : R} [inst : Neg R] (z : QuadraticAlgebra R a b), (-
+z).re = -z.re
+参数：z : QuadraticAlgebra R a b；-z。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem re_neg (z : QuadraticAlgebra R a b) : (-z).re = -z.re := rfl
-
-/--
-theorem `im_neg` / 定理 `im_neg`
-
-English:
-theorem im_neg
-  given: (z : QuadraticAlgebra R a b)
-  statement: (-z).im = -z.im
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 im_neg
-  条件: (z : 二次代数 R a b)
-  结论: (-z).im = -z.im
-  证明: rfl
-
-@[simp]
+/-
+**QuadraticAlgebra.im_neg** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：∀ {R : Type u_1} {a b : R} [inst : Neg R] (z : QuadraticAlgebra R a b), (-
+z).im = -z.im
+参数：z : QuadraticAlgebra R a b；-z。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem im_neg (z : QuadraticAlgebra R a b) : (-z).im = -z.im := rfl
 
 @[simp]
-/--
-theorem `neg_mk` / 定理 `neg_mk`
-
-English:
-theorem neg_mk
-  given: (x y : R)
-  proof: rfl
-
-中文:
-定理 neg_mk
-  条件: (x y : R)
-  证明: rfl
+/-
+**QuadraticAlgebra.neg_mk** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：neg_mk (x y : R) : -(mk x y : QuadraticAlgebra R a b) = ⟨-x, -y⟩
+参数：x y : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem neg_mk (x y : R) :
     -(mk x y : QuadraticAlgebra R a b) = ⟨-x, -y⟩ := rfl
@@ -633,116 +366,73 @@ end Neg
 section AddGroup
 
 @[simp]
-/--
-theorem `C_neg` / 定理 `C_neg`
-
-English:
-theorem C_neg
-  given: [NegZeroClass R] (x : R)
-  statement: (.C (-x) : QuadraticAlgebra R a b) = -.C x
-  proof: by
-  ext <;> simp
-
-中文:
-定理 C_neg
-  条件: [NegZero类 R] (x : R)
-  结论: (.C (-x) : 二次代数 R a b) = -.C x
-  证明: by
-  ext <;> simp
+/-
+**QuadraticAlgebra.C_neg** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：C_neg [NegZeroClass R] (x : R) : (.C (-x) : QuadraticAlgebra R a b) = -.C 
+x
+参数：x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticAlgebra.ext`：∀ {R : Type u} {a b : R} {x y : QuadraticAlgebra R
+ a b}, x.re = y.re → x.im = y.im → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
 -/
 theorem C_neg [NegZeroClass R] (x : R) : (.C (-x) : QuadraticAlgebra R a b) = -.C x := by
   ext <;> simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Sub
-  signature: R] : Sub (QuadraticAlgebra R a b) where
-  body: ⟨z.re - w.re, z.im - w.im⟩
-
-中文:
-实例 [减法
-  签名: R] : 减法 (二次代数 R a b) where
-  定义体: ⟨z.re - w.re, z.im - w.im⟩
-
-Depends on / 依赖: w.im, w.re, z.im, z.re
+/-
+**QuadraticAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Sub R] : Sub (QuadraticAlgebra R a b) where
   sub z w := ⟨z.re - w.re, z.im - w.im⟩
-
-/--
-theorem `re_sub` / 定理 `re_sub`
-
-English:
-theorem re_sub
-  given: [Sub R] (z w : QuadraticAlgebra R a b)
-  proof: rfl
-
-中文:
-定理 re_sub
-  条件: [减法 R] (z w : 二次代数 R a b)
-  证明: rfl
+/-
+**QuadraticAlgebra.re_sub** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：∀ {R : Type u_1} {a b : R} [inst : Sub R] (z w : QuadraticAlgebra R a b), 
+(z - w).re = z.re - w.re
+参数：z w : QuadraticAlgebra R a b；z - w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem re_sub [Sub R] (z w : QuadraticAlgebra R a b) :
     (z - w).re = z.re - w.re := rfl
-
-/--
-theorem `im_sub` / 定理 `im_sub`
-
-English:
-theorem im_sub
-  given: [Sub R] (z w : QuadraticAlgebra R a b)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 im_sub
-  条件: [减法 R] (z w : 二次代数 R a b)
-  证明: rfl
-
-@[simp]
+/-
+**QuadraticAlgebra.im_sub** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：∀ {R : Type u_1} {a b : R} [inst : Sub R] (z w : QuadraticAlgebra R a b), 
+(z - w).im = z.im - w.im
+参数：z w : QuadraticAlgebra R a b；z - w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem im_sub [Sub R] (z w : QuadraticAlgebra R a b) :
     (z - w).im = z.im - w.im := rfl
 
 @[simp]
-/--
-theorem `mk_sub_mk` / 定理 `mk_sub_mk`
-
-English:
-theorem mk_sub_mk
-  given: [Sub R] (x1 y1 x2 y2 : R)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk_sub_mk
-  条件: [减法 R] (x1 y1 x2 y2 : R)
-  证明: rfl
-
-@[simp]
+/-
+**QuadraticAlgebra.mk_sub_mk** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：mk_sub_mk [Sub R] (x1 y1 x2 y2 : R) : (mk x1 y1 : QuadraticAlgebra R a b) 
+- mk x2 y2 = mk (x1 - x2) (y1 - y2)
+参数：x1 y1 x2 y2 : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_sub_mk [Sub R] (x1 y1 x2 y2 : R) :
     (mk x1 y1 : QuadraticAlgebra R a b) - mk x2 y2 = mk (x1 - x2) (y1 - y2) := rfl
 
 @[simp]
-/--
-theorem `C_sub` / 定理 `C_sub`
-
-English:
-theorem C_sub
-  given: (r1 r2 : R) [SubNegZeroMonoid R]
-  proof: QuadraticAlgebra.ext rfl zero_sub_zero.symm
-
-中文:
-定理 C_sub
-  条件: (r1 r2 : R) [SubNegZero幺半群 R]
-  证明: QuadraticAlgebra.ext rfl zero_sub_zero.symm
-
-Depends on / 依赖: QuadraticAlgebra, QuadraticAlgebra.ext, zero_sub_zero, zero_sub_zero.symm
+/-
+**QuadraticAlgebra.C_sub** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：C_sub (r1 r2 : R) [SubNegZeroMonoid R] : (.C (r1 - r2) : QuadraticAlgebra 
+R a b) = .C r1 - .C r2
+参数：r1 r2 : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticAlgebra.ext`：∀ {R : Type u} {a b : R} {x y : QuadraticAlgebra R
+ a b}, x.re = y.re → x.im = y.im → x = y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `zero_sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G], 0 - 0 = 0
 -/
 theorem C_sub (r1 r2 : R) [SubNegZeroMonoid R] :
     (.C (r1 - r2) : QuadraticAlgebra R a b) = .C r1 - .C r2 :=
@@ -753,71 +443,39 @@ end AddGroup
 section Mul
 variable [Mul R] [Add R]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mul (QuadraticAlgebra R a b)
-  body: ⟨z.1 * w.1 + a * z.2 * w.2, z.1 * w.2 + z.2 * w.1 + b * z.2 * w.2⟩
-
-中文:
-实例 :
-  签名: 乘法 (二次代数 R a b)
-  定义体: ⟨z.1 * w.1 + a * z.2 * w.2, z.1 * w.2 + z.2 * w.1 + b * z.2 * w.2⟩
+/-
+**QuadraticAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mul (QuadraticAlgebra R a b) where
   mul z w := ⟨z.1 * w.1 + a * z.2 * w.2, z.1 * w.2 + z.2 * w.1 + b * z.2 * w.2⟩
-
-/--
-theorem `re_mul` / 定理 `re_mul`
-
-English:
-theorem re_mul
-  given: (z w : QuadraticAlgebra R a b)
-  proof: rfl
-
-中文:
-定理 re_mul
-  条件: (z w : 二次代数 R a b)
-  证明: rfl
+/-
+**QuadraticAlgebra.re_mul** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：∀ {R : Type u_1} {a b : R} [inst : Mul R] [inst_1 : Add R] (z w : Quadrati
+cAlgebra R a b),   (z * w).re = z.re * w.re + a * z.im * w.im
+参数：z w : QuadraticAlgebra R a b；z * w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem re_mul (z w : QuadraticAlgebra R a b) :
     (z * w).re = z.re * w.re + a * z.im * w.im := rfl
-
-/--
-theorem `im_mul` / 定理 `im_mul`
-
-English:
-theorem im_mul
-  given: (z w : QuadraticAlgebra R a b)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 im_mul
-  条件: (z w : 二次代数 R a b)
-  证明: rfl
-
-@[simp]
+/-
+**QuadraticAlgebra.im_mul** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：∀ {R : Type u_1} {a b : R} [inst : Mul R] [inst_1 : Add R] (z w : Quadrati
+cAlgebra R a b),   (z * w).im = z.re * w.im + z.im * w.re + b * z.im * w.im
+参数：z w : QuadraticAlgebra R a b；z * w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem im_mul (z w : QuadraticAlgebra R a b) :
     (z * w).im = z.re * w.im + z.im * w.re + b * z.im * w.im := rfl
 
 @[simp]
-/--
-theorem `mk_mul_mk` / 定理 `mk_mul_mk`
-
-English:
-theorem mk_mul_mk
-  given: (x1 y1 x2 y2 : R)
-  proof: rfl
-
-中文:
-定理 mk_mul_mk
-  条件: (x1 y1 x2 y2 : R)
-  证明: rfl
+/-
+**QuadraticAlgebra.mk_mul_mk** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：mk_mul_mk (x1 y1 x2 y2 : R) : (mk x1 y1 : QuadraticAlgebra R a b) * mk x2 
+y2 = mk (x1 * x2 + a * y1 * y2) (x1 * y2 + y1 * x2 + b * y1 * y2)
+参数：x1 y1 x2 y2 : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_mul_mk (x1 y1 x2 y2 : R) :
     (mk x1 y1 : QuadraticAlgebra R a b) * mk x2 y2 =
@@ -828,128 +486,54 @@ end Mul
 section SMul
 variable [SMul S R] [SMul T R] (s : S)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMul S (QuadraticAlgebra R a b)
-  body: ⟨s • z.re, s • z.im⟩
-
-中文:
-实例 :
-  签名: 标量乘法 S (二次代数 R a b)
-  定义体: ⟨s • z.re, s • z.im⟩
-
-Depends on / 依赖: z.im, z.re
+/-
+**QuadraticAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SMul S (QuadraticAlgebra R a b) where smul s z := ⟨s • z.re, s • z.im⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: S T] [IsScalarTower S T R] : IsScalarTower S T (QuadraticAlgebra R a b) where
-  body: by ext <;> exact smul_assoc _ _ _
-
-中文:
-实例 [标量乘法
-  签名: S T] [标量塔 S T R] : 标量塔 S T (二次代数 R a b) where
-  定义体: by ext <;> exact smul_assoc _ _ _
-
-Depends on / 依赖: smul_assoc
+/-
+**QuadraticAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul S T] [IsScalarTower S T R] : IsScalarTower S T (QuadraticAlgebra R a b) where
   smul_assoc s t z := by ext <;> exact smul_assoc _ _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMulCommClass
-  signature: S T R] : SMulCommClass S T (QuadraticAlgebra R a b) where
-  body: by ext <;> exact smul_comm _ _ _
-
-中文:
-实例 [标量交换类
-  签名: S T R] : 标量交换类 S T (二次代数 R a b) where
-  定义体: by ext <;> exact smul_comm _ _ _
-
-Depends on / 依赖: smul_comm
+/-
+**QuadraticAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMulCommClass S T R] : SMulCommClass S T (QuadraticAlgebra R a b) where
   smul_comm s t z := by ext <;> exact smul_comm _ _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: Sᵐᵒᵖ R] [IsCentralScalar S R] : IsCentralScalar S (QuadraticAlgebra R a b) where
-  body: by ext <;> exact op_smul_eq_smul _ _
-
-中文:
-实例 [标量乘法
-  签名: Sᵐᵒᵖ R] [中心标量 S R] : 中心标量 S (二次代数 R a b) where
-  定义体: by ext <;> exact op_smul_eq_smul _ _
-
-Depends on / 依赖: op_smul_eq_smul
+/-
+**QuadraticAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul Sᵐᵒᵖ R] [IsCentralScalar S R] : IsCentralScalar S (QuadraticAlgebra R a b) where
   op_smul_eq_smul s z := by ext <;> exact op_smul_eq_smul _ _
-
-/--
-theorem `re_smul` / 定理 `re_smul`
-
-English:
-theorem re_smul
-  given: (s : S) (z : QuadraticAlgebra R a b)
-  statement: (s • z).re = s • z.re
-  proof: rfl
-
-中文:
-定理 re_smul
-  条件: (s : S) (z : 二次代数 R a b)
-  结论: (s • z).re = s • z.re
-  证明: rfl
+/-
+**QuadraticAlgebra.re_smul** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：∀ {R : Type u_1} {S : Type u_2} {a b : R} [inst : SMul S R] (s : S) (z : Q
+uadraticAlgebra R a b), (s • z).re = s • z.re
+参数：s : S；z : QuadraticAlgebra R a b；s • z。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem re_smul (s : S) (z : QuadraticAlgebra R a b) : (s • z).re = s • z.re := rfl
-
-/--
-theorem `im_smul` / 定理 `im_smul`
-
-English:
-theorem im_smul
-  given: (s : S) (z : QuadraticAlgebra R a b)
-  statement: (s • z).im = s • z.im
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 im_smul
-  条件: (s : S) (z : 二次代数 R a b)
-  结论: (s • z).im = s • z.im
-  证明: rfl
-
-@[simp]
+/-
+**QuadraticAlgebra.im_smul** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：∀ {R : Type u_1} {S : Type u_2} {a b : R} [inst : SMul S R] (s : S) (z : Q
+uadraticAlgebra R a b), (s • z).im = s • z.im
+参数：s : S；z : QuadraticAlgebra R a b；s • z。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem im_smul (s : S) (z : QuadraticAlgebra R a b) : (s • z).im = s • z.im := rfl
 
 @[simp]
-/--
-theorem `smul_mk` / 定理 `smul_mk`
-
-English:
-theorem smul_mk
-  given: (s : S) (x y : R)
-  proof: rfl
-
-中文:
-定理 smul_mk
-  条件: (s : S) (x y : R)
-  证明: rfl
+/-
+**QuadraticAlgebra.smul_mk** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：smul_mk (s : S) (x y : R) : s • (mk x y : QuadraticAlgebra R a b) = mk (s 
+• x) (s • y)
+参数：s : S；x y : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_mk (s : S) (x y : R) :
     s • (mk x y : QuadraticAlgebra R a b) = mk (s • x) (s • y) := rfl
@@ -958,22 +542,9 @@ end SMul
 
 section MulAction
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: S] [MulAction S R] : MulAction S (QuadraticAlgebra R a b) where
-  body: by ext <;> simp
-  mul_smul _ _ _ := by ext <;> simp [mul_smul]
-
-中文:
-实例 [幺半群
-  签名: S] [乘法作用 S R] : 乘法作用 S (二次代数 R a b) where
-  定义体: by ext <;> simp
-  mul_smul _ _ _ := by ext <;> simp [mul_smul]
-
-Depends on / 依赖: mul_smul
+/-
+**QuadraticAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid S] [MulAction S R] : MulAction S (QuadraticAlgebra R a b) where
   one_smul _ := by ext <;> simp
@@ -982,164 +553,66 @@ instance [Monoid S] [MulAction S R] : MulAction S (QuadraticAlgebra R a b) where
 end MulAction
 
 @[simp]
-/--
-theorem `C_smul` / 定理 `C_smul`
-
-English:
-theorem C_smul
-  given: [Zero R] [SMulZeroClass S R] (s : S) (r : R)
-  proof: QuadraticAlgebra.ext rfl (smul_zero _).symm
-
-中文:
-定理 C_smul
-  条件: [零 R] [SMulZero类 S R] (s : S) (r : R)
-  证明: QuadraticAlgebra.ext rfl (smul_zero _).symm
-
-Depends on / 依赖: QuadraticAlgebra, QuadraticAlgebra.ext, smul_zero
+/-
+**QuadraticAlgebra.C_smul** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：C_smul [Zero R] [SMulZeroClass S R] (s : S) (r : R) : (.C (s • r) : Quadra
+ticAlgebra R a b) = s • .C r
+参数：s : S；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticAlgebra.ext`：∀ {R : Type u} {a b : R} {x y : QuadraticAlgebra R
+ a b}, x.re = y.re → x.im = y.im → x = y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
 -/
 theorem C_smul [Zero R] [SMulZeroClass S R] (s : S) (r : R) :
     (.C (s • r) : QuadraticAlgebra R a b) = s • .C r :=
   QuadraticAlgebra.ext rfl (smul_zero _).symm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddMonoid
-  signature: R] : AddMonoid (QuadraticAlgebra R a b)
-  body: fast_instance% by
-  refine (equivProd a b).injective.addMonoid _ rfl ?_ ?_ <;> intros <;> rfl
-
-中文:
-实例 [加法幺半群
-  签名: R] : 加法幺半群 (二次代数 R a b)
-  定义体: fast_instance% by
-  refine (equivProd a b).injective.addMonoid _ rfl ?_ ?_ <;> intros <;> rfl
-
-Depends on / 依赖: addMonoid, equivProd, fast_instance, injective, injective.addMonoid, intros
+/-
+**QuadraticAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddMonoid R] : AddMonoid (QuadraticAlgebra R a b) := fast_instance% by
   refine (equivProd a b).injective.addMonoid _ rfl ?_ ?_ <;> intros <;> rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: S] [AddMonoid R] [DistribMulAction S R] :
-  body: by ext <;> simp
-  smul_add _ _ _ := by ext <;> simp
-
-中文:
-实例 [幺半群
-  签名: S] [加法幺半群 R] [分配乘法作用 S R] :
-  定义体: by ext <;> simp
-  smul_add _ _ _ := by ext <;> simp
-
-Depends on / 依赖: smul_add
+/-
+**QuadraticAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid S] [AddMonoid R] [DistribMulAction S R] :
     DistribMulAction S (QuadraticAlgebra R a b) where
   smul_zero _ := by ext <;> simp
   smul_add _ _ _ := by ext <;> simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCommMonoid
-  signature: R] : AddCommMonoid (QuadraticAlgebra R a b)
-  body: fast_instance% by
-  refine (equivProd a b).injective.addCommMonoid _ rfl ?_ ?_ <;> intros <;> rfl
-
-中文:
-实例 [加法交换幺半群
-  签名: R] : 加法交换幺半群 (二次代数 R a b)
-  定义体: fast_instance% by
-  refine (equivProd a b).injective.addCommMonoid _ rfl ?_ ?_ <;> intros <;> rfl
-
-Depends on / 依赖: addCommMonoid, equivProd, fast_instance, injective, injective.addCommMonoid, intros
+/-
+**QuadraticAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddCommMonoid R] : AddCommMonoid (QuadraticAlgebra R a b) := fast_instance% by
   refine (equivProd a b).injective.addCommMonoid _ rfl ?_ ?_ <;> intros <;> rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Semiring
-  signature: S] [AddCommMonoid R] [Module S R] : Module S (QuadraticAlgebra R a b) where
-  body: by ext <;> simp [add_smul]
-  zero_smul x := by ext <;> simp
-
-中文:
-实例 [半环
-  签名: S] [加法交换幺半群 R] [模 S R] : 模 S (二次代数 R a b) where
-  定义体: by ext <;> simp [add_smul]
-  zero_smul x := by ext <;> simp
-
-Depends on / 依赖: add_smul, zero_smul
+/-
+**QuadraticAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Semiring S] [AddCommMonoid R] [Module S R] : Module S (QuadraticAlgebra R a b) where
   add_smul r s x := by ext <;> simp [add_smul]
   zero_smul x := by ext <;> simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddGroup
-  signature: R] : AddGroup (QuadraticAlgebra R a b)
-  body: fast_instance% by
-  refine (equivProd a b).injective.addGroup _ rfl ?_ ?_ ?_ ?_ ?_ <;> intros <;> rfl
-
-中文:
-实例 [加法群
-  签名: R] : 加法群 (二次代数 R a b)
-  定义体: fast_instance% by
-  refine (equivProd a b).injective.addGroup _ rfl ?_ ?_ ?_ ?_ ?_ <;> intros <;> rfl
-
-Depends on / 依赖: addGroup, equivProd, fast_instance, injective, injective.addGroup, intros
+/-
+**QuadraticAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddGroup R] : AddGroup (QuadraticAlgebra R a b) := fast_instance% by
   refine (equivProd a b).injective.addGroup _ rfl ?_ ?_ ?_ ?_ ?_ <;> intros <;> rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCommGroup
-  signature: R] : AddCommGroup (QuadraticAlgebra R a b) where
-
-中文:
-实例 [加法交换群
-  签名: R] : 加法交换群 (二次代数 R a b) where
+/-
+**QuadraticAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddCommGroup R] : AddCommGroup (QuadraticAlgebra R a b) where
 
 section AddCommMonoidWithOne
 variable [AddCommMonoidWithOne R]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddCommMonoidWithOne (QuadraticAlgebra R a b)
-  body: .C n
-  natCast_zero := by ext <;> simp
-  natCast_succ n := by ext <;> simp
-
-@[simp]
-
-中文:
-实例 :
-  签名: 加法交换带幺幺半群 (二次代数 R a b)
-  定义体: .C n
-  natCast_zero := by ext <;> simp
-  natCast_succ n := by ext <;> simp
-
-@[simp]
+/-
+**QuadraticAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : AddCommMonoidWithOne (QuadraticAlgebra R a b) where
   natCast n := .C n
@@ -1147,155 +620,78 @@ instance : AddCommMonoidWithOne (QuadraticAlgebra R a b) where
   natCast_succ n := by ext <;> simp
 
 @[simp]
-/--
-theorem `C_ofNat` / 定理 `C_ofNat`
-
-English:
-theorem C_ofNat
-  given: (n : Nat) [n.AtLeastTwo]
-  proof: by
-  ext <;> rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 C_of自然数
-  条件: (n : 自然数) [n.AtLeastTwo]
-  证明: by
-  ext <;> rfl
-
-@[simp, norm_cast]
+/-
+**QuadraticAlgebra.C_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：C_ofNat (n : Nat) [n.AtLeastTwo] : (.C (ofNat(n) : R) : QuadraticAlgebra R
+ a b) = ofNat(n)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticAlgebra.ext`：∀ {R : Type u} {a b : R} {x y : QuadraticAlgebra R
+ a b}, x.re = y.re → x.im = y.im → x = y
 -/
-theorem C_ofNat (n : Nat) [n.AtLeastTwo] :
+theorem C_ofNat (n : ℕ) [n.AtLeastTwo] :
     (.C (ofNat(n) : R) : QuadraticAlgebra R a b) = ofNat(n) := by
   ext <;> rfl
 
 @[simp, norm_cast]
-/--
-theorem `re_natCast` / 定理 `re_natCast`
-
-English:
-theorem re_natCast
-  given: (n : Nat)
-  statement: (n : QuadraticAlgebra R a b).re = n
-  proof: rfl
+/-
+**QuadraticAlgebra.re_natCast** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：re_natCast (n : Nat) : (n : QuadraticAlgebra R a b).re = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem re_natCast (n : ℕ) : (n : QuadraticAlgebra R a b).re = n := rfl
 
 @[simp, norm_cast]
-
-中文:
-定理 re_natCast
-  条件: (n : 自然数)
-  结论: (n : 二次代数 R a b).re = n
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**QuadraticAlgebra.im_natCast** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：im_natCast (n : Nat) : (n : QuadraticAlgebra R a b).im = 0
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem re_natCast (n : Nat) : (n : QuadraticAlgebra R a b).re = n := rfl
-
-@[simp, norm_cast]
-/--
-theorem `im_natCast` / 定理 `im_natCast`
-
-English:
-theorem im_natCast
-  given: (n : Nat)
-  statement: (n : QuadraticAlgebra R a b).im = 0
-  proof: rfl
-
-中文:
-定理 im_natCast
-  条件: (n : 自然数)
-  结论: (n : 二次代数 R a b).im = 0
-  证明: rfl
+theorem im_natCast (n : ℕ) : (n : QuadraticAlgebra R a b).im = 0 := rfl
+/-
+**QuadraticAlgebra.C_natCast** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：C_natCast (n : Nat) : .C (n : R) = (↑n : QuadraticAlgebra R a b)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem im_natCast (n : Nat) : (n : QuadraticAlgebra R a b).im = 0 := rfl
-
-/--
-theorem `C_natCast` / 定理 `C_natCast`
-
-English:
-theorem C_natCast
-  given: (n : Nat)
-  statement: .C (n : R) = (↑n : QuadraticAlgebra R a b)
-  proof: rfl
+theorem C_natCast (n : ℕ) : .C (n : R) = (↑n : QuadraticAlgebra R a b) := rfl
 
 @[scoped simp]
-
-中文:
-定理 C_natCast
-  条件: (n : 自然数)
-  结论: .C (n : R) = (↑n : 二次代数 R a b)
-  证明: rfl
-
-@[scoped simp]
+/-
+**QuadraticAlgebra.re_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：re_ofNat (n : Nat) [n.AtLeastTwo] : (ofNat(n) : QuadraticAlgebra R a b).re
+ = ofNat(n)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem C_natCast (n : Nat) : .C (n : R) = (↑n : QuadraticAlgebra R a b) := rfl
+theorem re_ofNat (n : ℕ) [n.AtLeastTwo] : (ofNat(n) : QuadraticAlgebra R a b).re = ofNat(n) := rfl
 
 @[scoped simp]
-/--
-theorem `re_ofNat` / 定理 `re_ofNat`
-
-English:
-theorem re_ofNat
-  given: (n : Nat) [n.AtLeastTwo]
-  statement: (ofNat(n) : QuadraticAlgebra R a b).re = ofNat(n)
-  proof: rfl
-
-@[scoped simp]
-
-中文:
-定理 re_of自然数
-  条件: (n : 自然数) [n.AtLeastTwo]
-  结论: (of自然数(n) : 二次代数 R a b).re = of自然数(n)
-  证明: rfl
-
-@[scoped simp]
+/-
+**QuadraticAlgebra.im_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：im_ofNat (n : Nat) [n.AtLeastTwo] : (ofNat(n) : QuadraticAlgebra R a b).im
+ = 0
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem re_ofNat (n : Nat) [n.AtLeastTwo] : (ofNat(n) : QuadraticAlgebra R a b).re = ofNat(n) := rfl
-
-@[scoped simp]
-/--
-theorem `im_ofNat` / 定理 `im_ofNat`
-
-English:
-theorem im_ofNat
-  given: (n : Nat) [n.AtLeastTwo]
-  statement: (ofNat(n) : QuadraticAlgebra R a b).im = 0
-  proof: rfl
-
-中文:
-定理 im_of自然数
-  条件: (n : 自然数) [n.AtLeastTwo]
-  结论: (of自然数(n) : 二次代数 R a b).im = 0
-  证明: rfl
--/
-theorem im_ofNat (n : Nat) [n.AtLeastTwo] : (ofNat(n) : QuadraticAlgebra R a b).im = 0 := rfl
+theorem im_ofNat (n : ℕ) [n.AtLeastTwo] : (ofNat(n) : QuadraticAlgebra R a b).im = 0 := rfl
 
 end AddCommMonoidWithOne
 
 section AddCommGroupWithOne
 variable [AddCommGroupWithOne R]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddCommGroupWithOne (QuadraticAlgebra R a b)
-  body: .C n
-  intCast_ofNat n := by norm_cast
-  intCast_negSucc n := by rw [Int.negSucc_eq, Int.cast_neg, C_neg]; norm_cast
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 加法交换带幺群 (二次代数 R a b)
-  定义体: .C n
-  intCast_ofNat n := by norm_cast
-  intCast_negSucc n := by rw [Int.negSucc_eq, Int.cast_neg, C_neg]; norm_cast
-
-@[simp, norm_cast]
+/-
+**QuadraticAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : AddCommGroupWithOne (QuadraticAlgebra R a b) where
   intCast n := .C n
@@ -1303,136 +699,102 @@ instance : AddCommGroupWithOne (QuadraticAlgebra R a b) where
   intCast_negSucc n := by rw [Int.negSucc_eq, Int.cast_neg, C_neg]; norm_cast
 
 @[simp, norm_cast]
-/--
-theorem `re_intCast` / 定理 `re_intCast`
-
-English:
-theorem re_intCast
-  given: (n : Int)
-  statement: (n : QuadraticAlgebra R a b).re = n
-  proof: rfl
+/-
+**QuadraticAlgebra.re_intCast** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：re_intCast (n : Int) : (n : QuadraticAlgebra R a b).re = n
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem re_intCast (n : ℤ) : (n : QuadraticAlgebra R a b).re = n := rfl
 
 @[simp, norm_cast]
-
-中文:
-定理 re_intCast
-  条件: (n : 整数)
-  结论: (n : 二次代数 R a b).re = n
-  证明: rfl
-
-@[simp, norm_cast]
-
-Depends on / 依赖: SetLike, SetLike.coe_mem, coe_mem, isStarNormal_of_mem
+/-
+**QuadraticAlgebra.im_intCast** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：im_intCast (n : Int) : (n : QuadraticAlgebra R a b).im = 0
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem re_intCast (n : Int) : (n : QuadraticAlgebra R a b).re = n := rfl
-
-@[simp, norm_cast]
-/--
-theorem `im_intCast` / 定理 `im_intCast`
-
-English:
-theorem im_intCast
-  given: (n : Int)
-  statement: (n : QuadraticAlgebra R a b).im = 0
-  proof: rfl
-
-中文:
-定理 im_intCast
-  条件: (n : 整数)
-  结论: (n : 二次代数 R a b).im = 0
-  证明: rfl
+theorem im_intCast (n : ℤ) : (n : QuadraticAlgebra R a b).im = 0 := rfl
+/-
+**QuadraticAlgebra.C_intCast** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：C_intCast (n : Int) : .C (n : R) = (n : QuadraticAlgebra R a b)
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem im_intCast (n : Int) : (n : QuadraticAlgebra R a b).im = 0 := rfl
-
-/--
-theorem `C_intCast` / 定理 `C_intCast`
-
-English:
-theorem C_intCast
-  given: (n : Int)
-  statement: .C (n : R) = (n : QuadraticAlgebra R a b)
-  proof: rfl
-
-中文:
-定理 C_intCast
-  条件: (n : 整数)
-  结论: .C (n : R) = (n : 二次代数 R a b)
-  证明: rfl
--/
-theorem C_intCast (n : Int) : .C (n : R) = (n : QuadraticAlgebra R a b) := rfl
+theorem C_intCast (n : ℤ) : .C (n : R) = (n : QuadraticAlgebra R a b) := rfl
 
 end AddCommGroupWithOne
 
 section NonUnitalNonAssocSemiring
 variable [NonUnitalNonAssocSemiring R]
 
-/--
-Instance `instNonUnitalNonAssocSemiring` / 实例 `instNonUnitalNonAssocSemiring`
-
-English:
-instance instNonUnitalNonAssocSemiring
-  signature: : NonUnitalNonAssocSemiring (QuadraticAlgebra R a b) where
-  body: by ext <;> simp [mul_add] <;> abel
-  right_distrib _ _ _ := by ext <;> simp [mul_add, add_mul] <;> abel
-  zero_mul _ := by ext <;> simp
-  mul_zero _ := by ext <;> simp
-
-中文:
-实例 instNonUnitalNonAssocSemiring
-  签名: : 非幺非结合半环 (二次代数 R a b) where
-  定义体: by ext <;> simp [mul_add] <;> abel
-  right_distrib _ _ _ := by ext <;> simp [mul_add, add_mul] <;> abel
-  zero_mul _ := by ext <;> simp
-  mul_zero _ := by ext <;> simp
-
-Depends on / 依赖: add_mul, mul_add, mul_zero, right_distrib, zero_mul
+/-
+**QuadraticAlgebra.instNonUnitalNonAssocSemiring** 是 Mathlib 中的一个实例，位于命名空间 `Quad
+raticAlgebra`。
+形式化陈述：instNonUnitalNonAssocSemiring : NonUnitalNonAssocSemiring (QuadraticAlgebr
+a R a b) where left_distrib _ _ _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonUnitalNonAssocSemiring : NonUnitalNonAssocSemiring (QuadraticAlgebra R a b) where
   left_distrib _ _ _ := by ext <;> simp [mul_add] <;> abel
   right_distrib _ _ _ := by ext <;> simp [mul_add, add_mul] <;> abel
   zero_mul _ := by ext <;> simp
   mul_zero _ := by ext <;> simp
-
-/--
-theorem `C_mul_eq_smul` / 定理 `C_mul_eq_smul`
-
-English:
-theorem C_mul_eq_smul
-  given: (r : R) (x : QuadraticAlgebra R a b)
-  proof: by
-  ext <;> simp
-
-@[simp]
-
-中文:
-定理 C_mul_eq_smul
-  条件: (r : R) (x : 二次代数 R a b)
-  证明: by
-  ext <;> simp
-
-@[simp]
+/-
+**QuadraticAlgebra.C_mul_eq_smul** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：C_mul_eq_smul (r : R) (x : QuadraticAlgebra R a b) : (.C r * x : Quadratic
+Algebra R a b) = r • x
+参数：r : R；x : QuadraticAlgebra R a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticAlgebra.ext`：∀ {R : Type u} {a b : R} {x y : QuadraticAlgebra R
+ a b}, x.re = y.re → x.im = y.im → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
 -/
 theorem C_mul_eq_smul (r : R) (x : QuadraticAlgebra R a b) :
     (.C r * x : QuadraticAlgebra R a b) = r • x := by
   ext <;> simp
 
 @[simp]
-/--
-theorem `C_mul` / 定理 `C_mul`
-
-English:
-theorem C_mul
-  given: (x y : R)
-  statement: .C (x * y) = (.C x * .C y : QuadraticAlgebra R a b)
-  proof: by
-  ext <;> simp
-
-中文:
-定理 C_mul
-  条件: (x y : R)
-  结论: .C (x * y) = (.C x * .C y : 二次代数 R a b)
-  证明: by
-  ext <;> simp
+/-
+**QuadraticAlgebra.C_mul** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：C_mul (x y : R) : .C (x * y) = (.C x * .C y : QuadraticAlgebra R a b)
+参数：x y : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticAlgebra.ext`：∀ {R : Type u} {a b : R} {x y : QuadraticAlgebra R
+ a b}, x.re = y.re → x.im = y.im → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
 -/
 theorem C_mul (x y : R) : .C (x * y) = (.C x * .C y : QuadraticAlgebra R a b) := by
   ext <;> simp
@@ -1442,48 +804,44 @@ end NonUnitalNonAssocSemiring
 section NonAssocSemiring
 variable [NonAssocSemiring R]
 
-/--
-Instance `instNonAssocSemiring` / 实例 `instNonAssocSemiring`
-
-English:
-instance instNonAssocSemiring
-  signature: : NonAssocSemiring (QuadraticAlgebra R a b) where
-  body: by ext <;> simp
-  mul_one _ := by ext <;> simp
-
-@[simp]
-
-中文:
-实例 instNonAssocSemiring
-  签名: : 非结合半环 (二次代数 R a b) where
-  定义体: by ext <;> simp
-  mul_one _ := by ext <;> simp
-
-@[simp]
-
-Depends on / 依赖: mul_one
+/-
+**QuadraticAlgebra.instNonAssocSemiring** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlge
+bra`。
+形式化陈述：instNonAssocSemiring : NonAssocSemiring (QuadraticAlgebra R a b) where one
+_mul _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonAssocSemiring : NonAssocSemiring (QuadraticAlgebra R a b) where
   one_mul _ := by ext <;> simp
   mul_one _ := by ext <;> simp
 
 @[simp]
-/--
-theorem `nsmul_mk` / 定理 `nsmul_mk`
-
-English:
-theorem nsmul_mk
-  given: (n : Nat) (x y : R)
-  proof: by
-  ext <;> simp
-
-中文:
-定理 nsmul_mk
-  条件: (n : 自然数) (x y : R)
-  证明: by
-  ext <;> simp
+/-
+**QuadraticAlgebra.nsmul_mk** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：nsmul_mk (n : Nat) (x y : R) : (n : QuadraticAlgebra R a b) * ⟨x, y⟩ = ⟨n 
+* x, n * y⟩
+参数：n : Nat；x y : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticAlgebra.ext`：∀ {R : Type u} {a b : R} {x y : QuadraticAlgebra R
+ a b}, x.re = y.re → x.im = y.im → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
 -/
-theorem nsmul_mk (n : Nat) (x y : R) :
+theorem nsmul_mk (n : ℕ) (x y : R) :
     (n : QuadraticAlgebra R a b) * ⟨x, y⟩ = ⟨n * x, n * y⟩ := by
   ext <;> simp
 
@@ -1494,233 +852,155 @@ variable (a b) [Semiring R]
 
 /-- `QuadraticAlgebra.re` as a `LinearMap` -/
 @[simps]
-/--
-Definition of `reₗ` / `reₗ` 的定义
+/-
+**QuadraticAlgebra.re** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：{R : Type u} → {a b : R} → QuadraticAlgebra R a b → R
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reₗ
-  signature: : QuadraticAlgebra R a b ->ₗ[R] R where
-  body: re
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-
-中文:
-定义 reₗ
-  签名: : 二次代数 R a b ->ₗ[R] R where
-  定义体: re
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-
-Depends on / 依赖: StarMul, TrivialStar, TrivialStar.isStarNormal, isStarNormal
+--- 原说明 ---
+`QuadraticAlgebra.re` as a `LinearMap`
 -/
-def reₗ : QuadraticAlgebra R a b ->ₗ[R] R where
+def reₗ : QuadraticAlgebra R a b →ₗ[R] R where
   toFun := re
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
 
 /-- `QuadraticAlgebra.im` as a `LinearMap` -/
 @[simps]
-/--
-Definition of `imₗ` / `imₗ` 的定义
+/-
+**QuadraticAlgebra.im** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：{R : Type u} → {a b : R} → QuadraticAlgebra R a b → R
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition imₗ
-  signature: : QuadraticAlgebra R a b ->ₗ[R] R where
-  body: im
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-
-中文:
-定义 imₗ
-  签名: : 二次代数 R a b ->ₗ[R] R where
-  定义体: im
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-
-Depends on / 依赖: CommMonoid, CommMonoid.isStarNormal, StarMul, isStarNormal
+--- 原说明 ---
+`QuadraticAlgebra.im` as a `LinearMap`
 -/
-def imₗ : QuadraticAlgebra R a b ->ₗ[R] R where
+def imₗ : QuadraticAlgebra R a b →ₗ[R] R where
   toFun := im
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
 
-/--
-Definition of `linearEquivTuple` / `linearEquivTuple` 的定义
+/-- `QuadraticAlgebra.equivTuple` as a `LinearEquiv` -/
+/-
+**QuadraticAlgebra.linearEquivTuple** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticAlgebra`
+。
+形式化陈述：linearEquivTuple : QuadraticAlgebra R a b ≃ₗ[R] (Fin 2 -> R) where .trans 
+.symm finTwoArrowEquiv _ __
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition linearEquivTuple
-  signature: : QuadraticAlgebra R a b ≃ₗ[R] (Fin 2 -> R) where
-  body: equivProd a b
-map_add' _ _ := funext Fin.forall_fin_two.2 ⟨rfl, rfl⟩
-map_smul' _ _ := funext Fin.forall_fin_two.2 ⟨rfl, rfl⟩
-
-@[simp]
-
-中文:
-定义 linearEquivTuple
-  签名: : 二次代数 R a b ≃ₗ[R] (有限集 2 -> R) where
-  定义体: equivProd a b
-map_add' _ _ := funext Fin.forall_fin_two.2 ⟨rfl, rfl⟩
-map_smul' _ _ := funext Fin.forall_fin_two.2 ⟨rfl, rfl⟩
-
-@[simp]
-
-Depends on / 依赖: equivProd
+--- 原说明 ---
+`QuadraticAlgebra.equivTuple` as a `LinearEquiv`
 -/
-def linearEquivTuple : QuadraticAlgebra R a b ≃ₗ[R] (Fin 2 -> R) where
-.trans .symm finTwoArrowEquiv _ __ := equivProd a b
-map_add' _ _ := funext Fin.forall_fin_two.2 ⟨rfl, rfl⟩
-map_smul' _ _ := funext Fin.forall_fin_two.2 ⟨rfl, rfl⟩
+def linearEquivTuple : QuadraticAlgebra R a b ≃ₗ[R] (Fin 2 → R) where
+  __ := equivProd a b |>.trans <| finTwoArrowEquiv _ |>.symm
+  map_add' _ _ := funext <| Fin.forall_fin_two.2 ⟨rfl, rfl⟩
+  map_smul' _ _ := funext <| Fin.forall_fin_two.2 ⟨rfl, rfl⟩
 
 @[simp]
-/--
-lemma `linearEquivTuple_apply` / 引理 `linearEquivTuple_apply`
-
-English:
-lemma linearEquivTuple_apply
-  given: (z : QuadraticAlgebra R a b)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 linearEquivTuple_apply
-  条件: (z : 二次代数 R a b)
-  证明: rfl
-
-@[simp]
+/-
+**QuadraticAlgebra.linearEquivTuple_apply** 是 Mathlib 中的一个引理，位于命名空间 `QuadraticAl
+gebra`。
+形式化陈述：linearEquivTuple_apply (z : QuadraticAlgebra R a b) : (linearEquivTuple a 
+b) z = ![z.re, z.im]
+参数：z : QuadraticAlgebra R a b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma linearEquivTuple_apply (z : QuadraticAlgebra R a b) :
     (linearEquivTuple a b) z = ![z.re, z.im] := rfl
 
 @[simp]
-/--
-lemma `linearEquivTuple_symm_apply` / 引理 `linearEquivTuple_symm_apply`
-
-English:
-lemma linearEquivTuple_symm_apply
-  given: (x : Fin 2 -> R)
-  proof: rfl
-
-中文:
-引理 linearEquivTuple_symm_apply
-  条件: (x : 有限集 2 -> R)
-  证明: rfl
+/-
+**QuadraticAlgebra.linearEquivTuple_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 `Quadra
+ticAlgebra`。
+形式化陈述：linearEquivTuple_symm_apply (x : Fin 2 -> R) : (linearEquivTuple a b).symm
+ x = ⟨x 0, x 1⟩
+参数：x : Fin 2 -> R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma linearEquivTuple_symm_apply (x : Fin 2 -> R) :
+lemma linearEquivTuple_symm_apply (x : Fin 2 → R) :
     (linearEquivTuple a b).symm x = ⟨x 0, x 1⟩ := rfl
 
-/--
-Definition of `basis` / `basis` 的定义
+/-- `QuadraticAlgebra R a b` has a basis over `R` given by `1` and `i` -/
+/-
+**QuadraticAlgebra.basis** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：basis : Module.Basis (Fin 2) R (QuadraticAlgebra R a b)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition basis
-  signature: : Module.Basis (Fin 2) R (QuadraticAlgebra R a b)
-  body: .ofEquivFun linearEquivTuple a b
-
-@[simp]
-
-中文:
-定义 basis
-  签名: : 模.基 (有限集 2) R (二次代数 R a b)
-  定义体: .ofEquivFun linearEquivTuple a b
-
-@[simp]
-
-Depends on / 依赖: linearEquivTuple, ofEquivFun
+--- 原说明 ---
+`QuadraticAlgebra R a b` has a basis over `R` given by `1` and `i`
 -/
 noncomputable def basis : Module.Basis (Fin 2) R (QuadraticAlgebra R a b) :=
-.ofEquivFun linearEquivTuple a b
+  .ofEquivFun <| linearEquivTuple a b
 
 @[simp]
-/--
-theorem `basis_repr_apply` / 定理 `basis_repr_apply`
-
-English:
-theorem basis_repr_apply
-  given: (x : QuadraticAlgebra R a b)
-  proof: rfl
-
-中文:
-定理 basis_repr_apply
-  条件: (x : 二次代数 R a b)
-  证明: rfl
+/-
+**QuadraticAlgebra.basis_repr_apply** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`
+。
+形式化陈述：basis_repr_apply (x : QuadraticAlgebra R a b) : (basis a b).repr x = ![x.r
+e, x.im]
+参数：x : QuadraticAlgebra R a b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem basis_repr_apply (x : QuadraticAlgebra R a b) :
     (basis a b).repr x = ![x.re, x.im] := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Module.Finite R (QuadraticAlgebra R a b)
-  body: .of_basis (basis a b)
-
-中文:
-实例 :
-  签名: 模.有限 R (二次代数 R a b)
-  定义体: .of_basis (basis a b)
-
-Depends on / 依赖: of_basis
+/-
+**QuadraticAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Module.Finite R (QuadraticAlgebra R a b) := .of_basis (basis a b)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Module.Free R (QuadraticAlgebra R a b)
-  body: .of_basis (basis a b)
-
-中文:
-实例 :
-  签名: 模.自由 R (二次代数 R a b)
-  定义体: .of_basis (basis a b)
-
-Depends on / 依赖: of_basis
+/-
+**QuadraticAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Module.Free R (QuadraticAlgebra R a b) := .of_basis (basis a b)
-
-/--
-theorem `rank_eq_two` / 定理 `rank_eq_two`
-
-English:
-theorem rank_eq_two
-  given: [StrongRankCondition R]
-  statement: Module.rank R (QuadraticAlgebra R a b) = 2
-  proof: by
-  simp [rank_eq_card_basis (basis a b)]
-
-中文:
-定理 rank_eq_two
-  条件: [StrongRankCondition R]
-  结论: 模.rank R (二次代数 R a b) = 2
-  证明: by
-  simp [rank_eq_card_basis (basis a b)]
-
-Depends on / 依赖: rank_eq_card_basis
+/-
+**QuadraticAlgebra.rank_eq_two** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：rank_eq_two [StrongRankCondition R] : Module.rank R (QuadraticAlgebra R a 
+b) = 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `rank_eq_card_basis`：rank_eq_card_basis {ι : Type w} [Fintype ι] (h : Bas
+is ι R M) : Module.rank R M = Fintype.card ι
+· 使用定理 `Fintype.card_fin`：Fintype.card_fin (n : Nat) : Fintype.card (Fin n) = n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem rank_eq_two [StrongRankCondition R] : Module.rank R (QuadraticAlgebra R a b) = 2 := by
   simp [rank_eq_card_basis (basis a b)]
-
-/--
-theorem `finrank_eq_two` / 定理 `finrank_eq_two`
-
-English:
-theorem finrank_eq_two
-  given: [StrongRankCondition R]
-  proof: by
-  simp [Module.finrank, rank_eq_two]
-
-中文:
-定理 finrank_eq_two
-  条件: [StrongRankCondition R]
-  证明: by
-  simp [Module.finrank, rank_eq_two]
-
-Depends on / 依赖: Module, Module.finrank, finrank, rank_eq_two
+/-
+**QuadraticAlgebra.finrank_eq_two** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：finrank_eq_two [StrongRankCondition R] : Module.finrank R (QuadraticAlgebr
+a R a b) = 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `QuadraticAlgebra.rank_eq_two`：rank_eq_two [StrongRankCondition R] : Modu
+le.rank R (QuadraticAlgebra R a b) = 2
+· 使用定理 `Cardinal.toNat_ofNat`：toNat_ofNat (n : Nat) [n.AtLeastTwo] : Cardinal.to
+Nat ofNat(n) = OfNat.ofNat n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem finrank_eq_two [StrongRankCondition R] :
     Module.finrank R (QuadraticAlgebra R a b) = 2 := by
@@ -1731,53 +1011,20 @@ end Semiring
 section CommSemiring
 variable [CommSemiring R]
 
-/--
-Instance `instCommSemiring` / 实例 `instCommSemiring`
-
-English:
-instance instCommSemiring
-  signature: : CommSemiring (QuadraticAlgebra R a b) where
-  body: by ext <;> simp <;> ring
-  mul_comm _ _ := by ext <;> simp <;> ring
-
-中文:
-实例 instCommSemiring
-  签名: : 交换半环 (二次代数 R a b) where
-  定义体: by ext <;> simp <;> ring
-  mul_comm _ _ := by ext <;> simp <;> ring
-
-Depends on / 依赖: mul_comm
+/-
+**QuadraticAlgebra.instCommSemiring** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`
+。
+形式化陈述：instCommSemiring : CommSemiring (QuadraticAlgebra R a b) where mul_assoc _
+ _ _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCommSemiring : CommSemiring (QuadraticAlgebra R a b) where
   mul_assoc _ _ _ := by ext <;> simp <;> ring
   mul_comm _ _ := by ext <;> simp <;> ring
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CommSemiring
-  signature: S] [Algebra S R] : Algebra S (QuadraticAlgebra R a b) where
-  body: .C (algebraMap S R s)
-  algebraMap.map_one' := by ext <;> simp
-  algebraMap.map_mul' x y := by ext <;> simp
-  algebraMap.map_zero' := by ext <;> simp
-  algebraMap.map_add' x y := by ext <;> simp
-  commutes' s z := by ext <;> simp [Algebra.commutes]
-  smul_def' s x := by ext <;> simp [Algebra.smul_def]
-
-中文:
-实例 [交换半环
-  签名: S] [代数 S R] : 代数 S (二次代数 R a b) where
-  定义体: .C (algebraMap S R s)
-  algebraMap.map_one' := by ext <;> simp
-  algebraMap.map_mul' x y := by ext <;> simp
-  algebraMap.map_zero' := by ext <;> simp
-  algebraMap.map_add' x y := by ext <;> simp
-  commutes' s z := by ext <;> simp [Algebra.commutes]
-  smul_def' s x := by ext <;> simp [Algebra.smul_def]
-
-Depends on / 依赖: algebraMap
+/-
+**QuadraticAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CommSemiring S] [Algebra S R] : Algebra S (QuadraticAlgebra R a b) where
   algebraMap.toFun s := .C (algebraMap S R s)
@@ -1787,239 +1034,154 @@ instance [CommSemiring S] [Algebra S R] : Algebra S (QuadraticAlgebra R a b) whe
   algebraMap.map_add' x y := by ext <;> simp
   commutes' s z := by ext <;> simp [Algebra.commutes]
   smul_def' s x := by ext <;> simp [Algebra.smul_def]
-
-/--
-theorem `algebraMap_eq` / 定理 `algebraMap_eq`
-
-English:
-theorem algebraMap_eq
-  given: (r : R)
-  statement: algebraMap R (QuadraticAlgebra R a b) r = ⟨r, 0⟩
-  proof: rfl
-
-中文:
-定理 algebraMap_eq
-  条件: (r : R)
-  结论: algebraMap R (二次代数 R a b) r = ⟨r, 0⟩
-  证明: rfl
+/-
+**QuadraticAlgebra.algebraMap_eq** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：algebraMap_eq (r : R) : algebraMap R (QuadraticAlgebra R a b) r = ⟨r, 0⟩
+参数：r : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algebraMap_eq (r : R) : algebraMap R (QuadraticAlgebra R a b) r = ⟨r, 0⟩ := rfl
-
-/--
-theorem `algebraMap_injective` / 定理 `algebraMap_injective`
-
-English:
-theorem algebraMap_injective
-  statement: (algebraMap R (QuadraticAlgebra R a b) : _ -> _).Injective
-  proof: fun _ _ => by simp [algebraMap_eq]
-
-@[simp]
-
-中文:
-定理 algebraMap_injective
-  结论: (algebraMap R (二次代数 R a b) : _ -> _).单射
-  证明: fun _ _ => by simp [algebraMap_eq]
-
-@[simp]
-
-Depends on / 依赖: algebraMap_eq
+/-
+**QuadraticAlgebra.algebraMap_injective** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlge
+bra`。
+形式化陈述：algebraMap_injective : (algebraMap R (QuadraticAlgebra R a b) : _ -> _).In
+jective
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `QuadraticAlgebra.mk.injEq`：∀ {R : Type u} {a b : R} (re im re_1 im_1 : R
+),   ({ re := re, im := im } = { re := re_1, im := im_1 }) = (re = re_1 ∧ im = i
+m_1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
 -/
-theorem algebraMap_injective : (algebraMap R (QuadraticAlgebra R a b) : _ -> _).Injective :=
-  fun _ _ => by simp [algebraMap_eq]
+theorem algebraMap_injective : (algebraMap R (QuadraticAlgebra R a b) : _ → _).Injective :=
+  fun _ _ ↦ by simp [algebraMap_eq]
 
 @[simp]
-/--
-theorem `algebraMap_inj` / 定理 `algebraMap_inj`
-
-English:
-theorem algebraMap_inj
-  given: {x y : R}
-  proof: algebraMap_injective.eq_iff
-
-@[simp]
-
-中文:
-定理 algebraMap_inj
-  条件: {x y : R}
-  证明: algebraMap_injective.eq_iff
-
-@[simp]
-
-Depends on / 依赖: algebraMap_injective, algebraMap_injective.eq_iff, eq_iff
+/-
+**QuadraticAlgebra.algebraMap_inj** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：algebraMap_inj {x y : R} : algebraMap R (QuadraticAlgebra R a b) x = algeb
+raMap _ _ y ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `QuadraticAlgebra.algebraMap_injective`：algebraMap_injective : (algebraMa
+p R (QuadraticAlgebra R a b) : _ -> _).Injective
 -/
 theorem algebraMap_inj {x y : R} :
     algebraMap R (QuadraticAlgebra R a b) x = algebraMap _ _ y ↔ x = y :=
   algebraMap_injective.eq_iff
 
 @[simp]
-/--
-theorem `algebraMap_re` / 定理 `algebraMap_re`
-
-English:
-theorem algebraMap_re
-  statement: (algebraMap R (QuadraticAlgebra R a b) r).re = r
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 algebraMap_re
-  结论: (algebraMap R (二次代数 R a b) r).re = r
-  证明: rfl
-
-@[simp]
+/-
+**QuadraticAlgebra.algebraMap_re** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：algebraMap_re : (algebraMap R (QuadraticAlgebra R a b) r).re = r
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algebraMap_re : (algebraMap R (QuadraticAlgebra R a b) r).re = r := rfl
 
 @[simp]
-/--
-theorem `algebraMap_im` / 定理 `algebraMap_im`
-
-English:
-theorem algebraMap_im
-  statement: (algebraMap R (QuadraticAlgebra R a b) r).im = 0
-  proof: rfl
-
-中文:
-定理 algebraMap_im
-  结论: (algebraMap R (二次代数 R a b) r).im = 0
-  证明: rfl
+/-
+**QuadraticAlgebra.algebraMap_im** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：algebraMap_im : (algebraMap R (QuadraticAlgebra R a b) r).im = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algebraMap_im : (algebraMap R (QuadraticAlgebra R a b) r).im = 0 := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Semiring
-  signature: S] [Module S R] [Module.IsTorsionFree S R] :
-  body: (linearEquivTuple ..).injective.moduleIsTorsionFree _ (by simp)
-
-@[simp]
-
-中文:
-实例 [半环
-  签名: S] [模 S R] [模.是无挠 S R] :
-  定义体: (linearEquivTuple ..).injective.moduleIsTorsionFree _ (by simp)
-
-@[simp]
-
-Depends on / 依赖: injective, injective.moduleIsTorsionFree, linearEquivTuple, moduleIsTorsionFree
+/-
+**QuadraticAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Semiring S] [Module S R] [Module.IsTorsionFree S R] :
     Module.IsTorsionFree S (QuadraticAlgebra R a b) :=
   (linearEquivTuple ..).injective.moduleIsTorsionFree _ (by simp)
 
 @[simp]
-/--
-theorem `C_pow` / 定理 `C_pow`
-
-English:
-theorem C_pow
-  given: (n : Nat) (r : R)
-  statement: (.C (r ^ n : R) : QuadraticAlgebra R a b) = (.C r) ^ n
-  proof: (algebraMap R (QuadraticAlgebra R a b)).map_pow r n
-
-中文:
-定理 C_pow
-  条件: (n : 自然数) (r : R)
-  结论: (.C (r ^ n : R) : 二次代数 R a b) = (.C r) ^ n
-  证明: (algebraMap R (QuadraticAlgebra R a b)).map_pow r n
-
-Depends on / 依赖: QuadraticAlgebra, algebraMap, map_pow
+/-
+**QuadraticAlgebra.C_pow** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：C_pow (n : Nat) (r : R) : (.C (r ^ n : R) : QuadraticAlgebra R a b) = (.C 
+r) ^ n
+参数：n : Nat；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.map_pow`：∀ {α : Type u_2} {β : Type u_3} [inst : Semiring α] [in
+st_1 : Semiring β] (f : α →+* β) (a : α) (n : ℕ),   f (a ^ n) = f a ^ n
 -/
-theorem C_pow (n : Nat) (r : R) : (.C (r ^ n : R) : QuadraticAlgebra R a b) = (.C r) ^ n :=
+theorem C_pow (n : ℕ) (r : R) : (.C (r ^ n : R) : QuadraticAlgebra R a b) = (.C r) ^ n :=
   (algebraMap R (QuadraticAlgebra R a b)).map_pow r n
-
-/--
-theorem `mul_C_eq_smul` / 定理 `mul_C_eq_smul`
-
-English:
-theorem mul_C_eq_smul
-  given: (r : R) (x : QuadraticAlgebra R a b)
-  proof: by
-  rw [mul_comm]; rw [C_mul_eq_smul r x]
-
-@[simp]
-
-中文:
-定理 mul_C_eq_smul
-  条件: (r : R) (x : 二次代数 R a b)
-  证明: by
-  rw [mul_comm]; rw [C_mul_eq_smul r x]
-
-@[simp]
-
-Depends on / 依赖: C_mul_eq_smul, mul_comm
+/-
+**QuadraticAlgebra.mul_C_eq_smul** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：mul_C_eq_smul (r : R) (x : QuadraticAlgebra R a b) : (x * .C r : Quadratic
+Algebra R a b) = r • x
+参数：r : R；x : QuadraticAlgebra R a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `QuadraticAlgebra.C_mul_eq_smul`：C_mul_eq_smul (r : R) (x : QuadraticAlge
+bra R a b) : (.C r * x : QuadraticAlgebra R a b) = r • x
 -/
 theorem mul_C_eq_smul (r : R) (x : QuadraticAlgebra R a b) :
     (x * .C r : QuadraticAlgebra R a b) = r • x := by
-  rw [mul_comm]; rw [C_mul_eq_smul r x]
+  rw [mul_comm, C_mul_eq_smul r x]
 
 @[simp]
-/--
-theorem `C_eq_algebraMap` / 定理 `C_eq_algebraMap`
-
-English:
-theorem C_eq_algebraMap
-  statement: QuadraticAlgebra.C = (algebraMap R (QuadraticAlgebra R a b))
-  proof: rfl
-
-中文:
-定理 C_eq_algebraMap
-  结论: 二次代数.C = (algebraMap R (二次代数 R a b))
-  证明: rfl
+/-
+**QuadraticAlgebra.C_eq_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：C_eq_algebraMap : QuadraticAlgebra.C = (algebraMap R (QuadraticAlgebra R a
+ b))
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem C_eq_algebraMap : QuadraticAlgebra.C = (algebraMap R (QuadraticAlgebra R a b)) := rfl
-
-/--
-theorem `smul_C` / 定理 `smul_C`
-
-English:
-theorem smul_C
-  given: (r1 r2 : R)
-  proof: by rw [C_mul, C_mul_eq_smul]
-
-中文:
-定理 smul_C
-  条件: (r1 r2 : R)
-  证明: by rw [C_mul, C_mul_eq_smul]
-
-Depends on / 依赖: C_mul, C_mul_eq_smul
+/-
+**QuadraticAlgebra.smul_C** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：smul_C (r1 r2 : R) : r1 • (.C r2 : QuadraticAlgebra R a b) = .C (r1 * r2)
+参数：r1 r2 : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `QuadraticAlgebra.C_mul`：C_mul (x y : R) : .C (x * y) = (.C x * .C y : Qu
+adraticAlgebra R a b)
+· 使用定理 `QuadraticAlgebra.C_mul_eq_smul`：C_mul_eq_smul (r : R) (x : QuadraticAlge
+bra R a b) : (.C r * x : QuadraticAlgebra R a b) = r • x
 -/
 theorem smul_C (r1 r2 : R) :
     r1 • (.C r2 : QuadraticAlgebra R a b) = .C (r1 * r2) := by rw [C_mul, C_mul_eq_smul]
-
-/--
-theorem `algebraMap_dvd_iff` / 定理 `algebraMap_dvd_iff`
-
-English:
-theorem algebraMap_dvd_iff
-  given: {r : R} {z : QuadraticAlgebra R a b}
-  proof: by
-  constructor
-  · rintro ⟨x, rfl⟩
-    simp
-  · rintro ⟨⟨r, hr⟩, ⟨i, hi⟩⟩
-    use ⟨r, i⟩
-    simp [QuadraticAlgebra.ext_iff, hr, hi, ← C_eq_algebraMap]
-
-@[simp]
-
-中文:
-定理 algebraMap_dvd_iff
-  条件: {r : R} {z : 二次代数 R a b}
-  证明: by
-  constructor
-  · rintro ⟨x, rfl⟩
-    simp
-  · rintro ⟨⟨r, hr⟩, ⟨i, hi⟩⟩
-    use ⟨r, i⟩
-    simp [QuadraticAlgebra.ext_iff, hr, hi, ← C_eq_algebraMap]
-
-@[simp]
-
-Depends on / 依赖: C_eq_algebraMap, QuadraticAlgebra, QuadraticAlgebra.ext_iff, ext_iff
+/-
+**QuadraticAlgebra.algebraMap_dvd_iff** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebr
+a`。
+形式化陈述：algebraMap_dvd_iff {r : R} {z : QuadraticAlgebra R a b} : (algebraMap R (Q
+uadraticAlgebra R a b) r) ∣ z ↔ r ∣ z.re ∧ r ∣ z.im
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem algebraMap_dvd_iff {r : R} {z : QuadraticAlgebra R a b} :
     (algebraMap R (QuadraticAlgebra R a b) r) ∣ z ↔ r ∣ z.re ∧ r ∣ z.im := by
@@ -2031,24 +1193,24 @@ theorem algebraMap_dvd_iff {r : R} {z : QuadraticAlgebra R a b} :
     simp [QuadraticAlgebra.ext_iff, hr, hi, ← C_eq_algebraMap]
 
 @[simp]
-/--
-theorem `algebraMap_dvd_iff_dvd` / 定理 `algebraMap_dvd_iff_dvd`
-
-English:
-theorem algebraMap_dvd_iff_dvd
-  given: {z w : R}
-  proof: by
-  rw [algebraMap_dvd_iff]
-  simp
-
-中文:
-定理 algebraMap_dvd_iff_dvd
-  条件: {z w : R}
-  证明: by
-  rw [algebraMap_dvd_iff]
-  simp
-
-Depends on / 依赖: algebraMap_dvd_iff
+/-
+**QuadraticAlgebra.algebraMap_dvd_iff_dvd** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAl
+gebra`。
+形式化陈述：algebraMap_dvd_iff_dvd {z w : R} : algebraMap R (QuadraticAlgebra R a b) z
+ ∣ algebraMap R (QuadraticAlgebra R a b) w ↔ z ∣ w
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `QuadraticAlgebra.algebraMap_dvd_iff`：algebraMap_dvd_iff {r : R} {z : Qua
+draticAlgebra R a b} : (algebraMap R (QuadraticAlgebra R a b) r) ∣ z ↔ r ∣ z.re 
+∧ r ∣ z.im
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem algebraMap_dvd_iff_dvd {z w : R} :
     algebraMap R (QuadraticAlgebra R a b) z ∣ algebraMap R (QuadraticAlgebra R a b) w ↔ z ∣ w := by
@@ -2061,64 +1223,52 @@ section CommRing
 
 variable [CommRing R]
 
-/--
-Instance `instCommRing` / 实例 `instCommRing`
-
-English:
-instance instCommRing
-  signature: : CommRing (QuadraticAlgebra R a b) where
-
-中文:
-实例 instCommRing
-  签名: : 交换环 (二次代数 R a b) where
+/-
+**QuadraticAlgebra.instCommRing** 是 Mathlib 中的一个定义，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：{R : Type u_1} → {a b : R} → [CommRing R] → CommRing (QuadraticAlgebra R a
+ b)
+参数：QuadraticAlgebra R a b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instCommRing : CommRing (QuadraticAlgebra R a b) where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CharZero
-  signature: R] : CharZero (QuadraticAlgebra R a b) where
-  body: by
-    simp [QuadraticAlgebra.ext_iff]
-
-@[simp]
-
-中文:
-实例 [特征零
-  签名: R] : 特征零 (二次代数 R a b) where
-  定义体: by
-    simp [QuadraticAlgebra.ext_iff]
-
-@[simp]
-
-Depends on / 依赖: QuadraticAlgebra, QuadraticAlgebra.ext_iff, ext_iff
+/-
+**QuadraticAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `QuadraticAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CharZero R] : CharZero (QuadraticAlgebra R a b) where
   cast_injective m n := by
     simp [QuadraticAlgebra.ext_iff]
 
 @[simp]
-/--
-theorem `zsmul_val` / 定理 `zsmul_val`
-
-English:
-theorem zsmul_val
-  given: (n : Int) (x y : R)
-  proof: by
-  ext <;> simp
-
-中文:
-定理 zsmul_val
-  条件: (n : 整数) (x y : R)
-  证明: by
-  ext <;> simp
+/-
+**QuadraticAlgebra.zsmul_val** 是 Mathlib 中的一个定理，位于命名空间 `QuadraticAlgebra`。
+形式化陈述：zsmul_val (n : Int) (x y : R) : (n : QuadraticAlgebra R a b) * ⟨x, y⟩ = ⟨n
+ * x, n * y⟩
+参数：n : Int；x y : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuadraticAlgebra.ext`：∀ {R : Type u} {a b : R} {x y : QuadraticAlgebra R
+ a b}, x.re = y.re → x.im = y.im → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
 -/
-theorem zsmul_val (n : Int) (x y : R) :
+theorem zsmul_val (n : ℤ) (x y : R) :
     (n : QuadraticAlgebra R a b) * ⟨x, y⟩ = ⟨n * x, n * y⟩ := by
   ext <;> simp
 
 end CommRing
 
 end QuadraticAlgebra
+

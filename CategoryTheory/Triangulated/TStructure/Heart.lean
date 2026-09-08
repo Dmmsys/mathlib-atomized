@@ -36,44 +36,41 @@ namespace CategoryTheory.Triangulated.TStructure
 
 open Pretriangulated Limits
 
-variable {C : Type u} [Category.{v} C] [Preadditive C] [HasZeroObject C] [HasShift C Int]
-  [forall (n : Int), (shiftFunctor C n).Additive] [Pretriangulated C]
+variable {C : Type u} [Category.{v} C] [Preadditive C] [HasZeroObject C] [HasShift C ℤ]
+  [∀ (n : ℤ), (shiftFunctor C n).Additive] [Pretriangulated C]
   (t : TStructure C)
 
-/--
-Definition of `heart` / `heart` 的定义
+/-- The heart of a t-structure, as the property of objects
+that are both `≤ 0` and `≥ 0`. -/
+/-
+**CategoryTheory.Triangulated.TStructure.heart** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Triangulated.TStructure`。
+形式化陈述：heart : ObjectProperty C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition heart
-  signature: : ObjectProperty C
-  body: t.le 0 ⊓ t.ge 0
-  deriving ObjectProperty.IsClosedUnderIsomorphisms
-
-中文:
-定义 heart
-  签名: : ObjectProperty C
-  定义体: t.le 0 ⊓ t.ge 0
-  deriving ObjectProperty.IsClosedUnderIsomorphisms
-
-Depends on / 依赖: t.ge, t.le
+--- 原说明 ---
+The heart of a t-structure, as the property of objects
+that are both `≤ 0` and `≥ 0`.
 -/
 def heart : ObjectProperty C := t.le 0 ⊓ t.ge 0
   deriving ObjectProperty.IsClosedUnderIsomorphisms
-
-/--
-lemma `mem_heart_iff` / 引理 `mem_heart_iff`
-
-English:
-lemma mem_heart_iff
-  given: (X : C)
-  proof: by
-  simp [heart]
-
-中文:
-引理 mem_heart_iff
-  条件: (X : C)
-  证明: by
-  simp [heart]
+/-
+**CategoryTheory.Triangulated.TStructure.mem_heart_iff** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：mem_heart_iff (X : C) : t.heart X ↔ t.IsLE X 0 ∧ t.IsGE X 0
+参数：X : C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma mem_heart_iff (X : C) :
     t.heart X ↔ t.IsLE X 0 ∧ t.IsGE X 0 := by
@@ -81,30 +78,22 @@ lemma mem_heart_iff (X : C) :
 
 variable (H : Type u') [Category.{v'} H] [Preadditive H]
 
-/--
-Definition of `Heart` / `Heart` 的定义
+/-- Given `t : TStructure C` and a preadditive category `H`, this typeclass
+contains the data of a fully faithful additive functor `H ⥤ C` which identifies
+`H` to the full subcategory of `C` consisting of the objects satisfying
+the property `t.heart`. -/
+/-
+**CategoryTheory.Triangulated.TStructure.Heart** 是 Mathlib 中的一个类，位于命名空间 `Categor
+yTheory.Triangulated.TStructure`。
+形式化陈述：Heart where /-- The inclusion functor. -/ ι : H ⥤ C additive_ι : ι.Additiv
+e
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Heart
-  parameters: where
-  axioms and operations (5):
-    - ι : H ⥤ C
-    - additive_ι : ι.Additive  [default: by infer_instance]
-    - full_ι : ι.Full  [default: by infer_instance]
-    - faithful_ι : ι.Faithful  [default: by infer_instance]
-    - essImage_eq_heart : ι.essImage = t.heart  [default: by simp]
-
-中文:
-类 Heart
-  参数: where
-  公理与运算 (5 个):
-    - ι : H ⥤ C
-    - additive_ι : ι.加性  [默认: by infer_instance]
-    - full_ι : ι.满  [默认: by infer_instance]
-    - faithful_ι : ι.忠实  [默认: by infer_instance]
-    - essImage_eq_heart : ι.essImage = t.heart  [默认: by simp]
-
-Depends on / 依赖: Faithful, essImage, essImage_eq_heart, infer_instance, t.heart
+--- 原说明 ---
+Given `t : TStructure C` and a preadditive category `H`, this typeclass
+contains the data of a fully faithful additive functor `H ⥤ C` which identifies
+`H` to the full subcategory of `C` consisting of the objects satisfying
+the property `t.heart`.
 -/
 class Heart where
   /-- The inclusion functor. -/
@@ -117,155 +106,89 @@ class Heart where
 /-- Unless a better candidate category is available, the full subcategory
 of objects satisfying `t.heart` can be chosen as the heart of a t-structure `t`. -/
 @[instance_reducible]
-/--
-Definition of `hasHeartFullSubcategory` / `hasHeartFullSubcategory` 的定义
+/-
+**CategoryTheory.Triangulated.TStructure.hasHeartFullSubcategory** 是 Mathlib 中的一
+个定义，位于命名空间 `CategoryTheory.Triangulated.TStructure`。
+形式化陈述：hasHeartFullSubcategory : t.Heart t.heart.FullSubcategory where ι
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition hasHeartFullSubcategory
-  signature: : t.Heart t.heart.FullSubcategory where
-  body: t.heart.ι
-  essImage_eq_heart := by
-    ext X
-    exact ⟨fun ⟨⟨Y, hY⟩, ⟨e⟩⟩ => t.heart.prop_of_iso e hY,
-      fun hX => ⟨⟨X, hX⟩, ⟨Iso.refl _⟩⟩⟩
-
-中文:
-定义 hasHeartFullSubcategory
-  签名: : t.Heart t.heart.满子范畴 where
-  定义体: t.heart.ι
-  essImage_eq_heart := by
-    ext X
-    exact ⟨fun ⟨⟨Y, hY⟩, ⟨e⟩⟩ => t.heart.prop_of_iso e hY,
-      fun hX => ⟨⟨X, hX⟩, ⟨Iso.refl _⟩⟩⟩
-
-Depends on / 依赖: t.heart
+--- 原说明 ---
+Unless a better candidate category is available, the full subcategory
+of objects satisfying `t.heart` can be chosen as the heart of a t-structure `t`.
 -/
 def hasHeartFullSubcategory : t.Heart t.heart.FullSubcategory where
   ι := t.heart.ι
   essImage_eq_heart := by
     ext X
-    exact ⟨fun ⟨⟨Y, hY⟩, ⟨e⟩⟩ => t.heart.prop_of_iso e hY,
-      fun hX => ⟨⟨X, hX⟩, ⟨Iso.refl _⟩⟩⟩
+    exact ⟨fun ⟨⟨Y, hY⟩, ⟨e⟩⟩ ↦ t.heart.prop_of_iso e hY,
+      fun hX ↦ ⟨⟨X, hX⟩, ⟨Iso.refl _⟩⟩⟩
 
 variable [t.Heart H]
 
 variable {H} in
-/--
-Definition of `ιHeart` / `ιHeart` 的定义
+/-- The inclusion `H ⥤ C` when `H` is the heart of a t-structure `t` on `C`. -/
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ιHeart
-  signature: : H ⥤ C
-  body: Heart.ι t
-
-中文:
-定义 ιHeart
-  签名: : H ⥤ C
-  定义体: Heart.ι t
+--- 原说明 ---
+The inclusion `H ⥤ C` when `H` is the heart of a t-structure `t` on `C`.
 -/
 def ιHeart : H ⥤ C := Heart.ι t
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (t.ιHeart (H := H)).Additive
-  body: Heart.additive_ι
-
-中文:
-实例 :
-  签名: (t.ιHeart (H := H)).加性
-  定义体: Heart.additive_ι
-
-Depends on / 依赖: Additive, Heart.additive_
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (t.ιHeart (H := H)).Additive := Heart.additive_ι
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (t.ιHeart (H := H)).Full
-  body: Heart.full_ι
-
-中文:
-实例 :
-  签名: (t.ιHeart (H := H)).满
-  定义体: Heart.full_ι
-
-Depends on / 依赖: Heart.full_
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (t.ιHeart (H := H)).Full := Heart.full_ι
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (t.ιHeart (H := H)).Faithful
-  body: Heart.faithful_ι
-
-@[simp]
-
-中文:
-实例 :
-  签名: (t.ιHeart (H := H)).忠实
-  定义体: Heart.faithful_ι
-
-@[simp]
-
-Depends on / 依赖: Faithful, Heart.faithful_
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (t.ιHeart (H := H)).Faithful := Heart.faithful_ι
 
 @[simp]
-/--
-lemma `essImage_ιHeart` / 引理 `essImage_ιHeart`
-
-English:
-lemma essImage_ιHeart
-  proof: Heart.essImage_eq_heart
-
-中文:
-引理 essImage_ιHeart
-  证明: Heart.essImage_eq_heart
-
-Depends on / 依赖: essImage, t.heart
+/-
+**CategoryTheory.Triangulated.TStructure.essImage_** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma essImage_ιHeart :
     (t.ιHeart (H := H)).essImage = t.heart :=
   Heart.essImage_eq_heart
 
 variable {H} in
-/--
-lemma `ιHeart_obj_mem` / 引理 `ιHeart_obj_mem`
-
-English:
-lemma ιHeart_obj_mem
-  given: (X : H)
-  statement: t.heart (t.ιHeart.obj X)
-  proof: by
-  rw [← t.essImage_ιHeart H]
-  exact t.ιHeart.obj_mem_essImage X
-
-中文:
-引理 ιHeart_obj_mem
-  条件: (X : H)
-  结论: t.heart (t.ιHeart.obj X)
-  证明: by
-  rw [← t.essImage_ιHeart H]
-  exact t.ιHeart.obj_mem_essImage X
-
-Depends on / 依赖: Heart.obj_mem_essImage, obj_mem_essImage, t.essImage_
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ιHeart_obj_mem (X : H) : t.heart (t.ιHeart.obj X) := by
   rw [← t.essImage_ιHeart H]
   exact t.ιHeart.obj_mem_essImage X
-
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : H) : t.IsLE (t.ιHeart.obj X) 0 :=
   ⟨(t.ιHeart_obj_mem X).1⟩
-
+/-
+**CategoryTheory.Triangulated.TStructure.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Triangulated.TStructure`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : H) : t.IsGE (t.ιHeart.obj X) 0 :=
   ⟨(t.ιHeart_obj_mem X).2⟩
 
 end CategoryTheory.Triangulated.TStructure
+

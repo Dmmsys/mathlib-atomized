@@ -37,7 +37,7 @@ Linter that checks whether a structure should be in Prop.
     -- remark: using `Lean.Meta.isProp` doesn't suffice here, because it doesn't (always?)
     -- recognize predicates as propositional.
     let isProp ← forallTelescopeReducing (← inferType (← mkConstWithLevelParams declName))
-      fun _ ty => return ty == .sort .zero
+      fun _ ty ↦ return ty == .sort .zero
     if isProp then return none
     let projs := (getStructureInfo? (← getEnv) declName).get!.fieldNames
     if projs.isEmpty then return none -- don't flag empty structures
@@ -86,68 +86,14 @@ namespace DupNamespaceLinter
 open Lean Parser Elab Command Meta Linter
 
 @[inherit_doc linter.dupNamespace]
-/--
-Definition of `dupNamespace` / `dupNamespace` 的定义
-
-English:
-definition dupNamespace
-  signature: : Linter where run
-  body: withSetOptionIn fun stx => do
-  if getLinterValue linter.dupNamespace (← getLinterOptions) then
-    let mut aliases := #[]
-    if let some exp := stx.find? (·.isOfKind `Lean.Parser.Command.export) then
-      aliases ← getAliasSyntax exp
-    for id in (← getNamesFrom (stx.getPos?.getD default)) ++ aliases do
-      let declName := id.getId
-      -- We intentionally *do* lint deprecated declarations:
-      -- this is important since people can forget to add a `_root_` when adding deprecations.
-      if declName.hasMacroScopes || isPrivateName declName then continue
-      let nm := declName.components
-      -- Collect distinct components which appear more than once.
-let duplicated := List.eraseDups nm.filter (fun comp => nm.count comp > 1)
-      match duplicated with
-      | [] => continue
-      | [ns] =>
-        Linter.logLint linter.dupNamespace id
-          m!"The namespace `{ns}` is duplicated in the declaration \
-          `{.ofConstName (fullNames := true) declName}`."
-      | dup =>
-        let ns := MessageData.andList (duplicated.map (m!"`{·}`"))
-        Linter.logLint linter.dupNamespace id
-          m!"The namespaces {ns} are duplicated in the declaration \
-          `{.ofConstName (fullNames := true) declName}`."
-
-中文:
-定义 dupNamespace
-  签名: : Linter where run
-  定义体: withSetOptionIn fun stx => do
-  if getLinterValue linter.dupNamespace (← getLinterOptions) then
-    let mut aliases := #[]
-    if let some exp := stx.find? (·.isOfKind `Lean.Parser.Command.export) then
-      aliases ← getAliasSyntax exp
-    for id in (← getNamesFrom (stx.getPos?.getD default)) ++ aliases do
-      let declName := id.getId
-      -- We intentionally *do* lint deprecated declarations:
-      -- this is important since people can forget to add a `_root_` when adding deprecations.
-      if declName.hasMacroScopes || isPrivateName declName then continue
-      let nm := declName.components
-      -- Collect distinct components which appear more than once.
-let duplicated := List.eraseDups nm.filter (fun comp => nm.count comp > 1)
-      match duplicated with
-      | [] => continue
-      | [ns] =>
-        Linter.logLint linter.dupNamespace id
-          m!"The namespace `{ns}` is duplicated in the declaration \
-          `{.ofConstName (fullNames := true) declName}`."
-      | dup =>
-        let ns := MessageData.andList (duplicated.map (m!"`{·}`"))
-        Linter.logLint linter.dupNamespace id
-          m!"The namespaces {ns} are duplicated in the declaration \
-          `{.ofConstName (fullNames := true) declName}`."
-
-Depends on / 依赖: withSetOptionIn
+/-
+**Mathlib.Linter.DupNamespaceLinter.dupNamespace** 是 Mathlib 中的一个定义，位于命名空间 `Math
+lib.Linter.DupNamespaceLinter`。
+形式化陈述：dupNamespace : Linter where run
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def dupNamespace : Linter where run := withSetOptionIn fun stx => do
+def dupNamespace : Linter where run := withSetOptionIn fun stx ↦ do
   if getLinterValue linter.dupNamespace (← getLinterOptions) then
     let mut aliases := #[]
     if let some exp := stx.find? (·.isOfKind `Lean.Parser.Command.export) then
@@ -159,7 +105,7 @@ def dupNamespace : Linter where run := withSetOptionIn fun stx => do
       if declName.hasMacroScopes || isPrivateName declName then continue
       let nm := declName.components
       -- Collect distinct components which appear more than once.
-let duplicated := List.eraseDups nm.filter (fun comp => nm.count comp > 1)
+      let duplicated := List.eraseDups <| nm.filter (fun comp ↦ nm.count comp > 1)
       match duplicated with
       | [] => continue
       | [ns] =>
@@ -175,3 +121,4 @@ let duplicated := List.eraseDups nm.filter (fun comp => nm.count comp > 1)
 initialize addLinter dupNamespace
 
 end Mathlib.Linter.DupNamespaceLinter
+

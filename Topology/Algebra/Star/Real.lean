@@ -19,41 +19,20 @@ assert_not_exists IsTopologicalRing UniformContinuousConstSMul UniformOnFun
 
 noncomputable section
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ContinuousStar Real
-  body: ⟨continuous_id⟩
-
-中文:
-实例 :
-  签名: 余ntinuousStar 实数
-  定义体: ⟨continuous_id⟩
-
-Depends on / 依赖: continuous_id
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ContinuousStar Real := ⟨continuous_id⟩
+instance : ContinuousStar ℝ := ⟨continuous_id⟩
 
 namespace NNReal
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ContinuousStar Real>=0
-  body: continuous_id
-
-中文:
-实例 :
-  签名: 余ntinuousStar 实数>=0
-  定义体: continuous_id
-
-Depends on / 依赖: continuous_id
+/-
+**NNReal.** 是 Mathlib 中的一个实例，位于命名空间 `NNReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ContinuousStar Real>=0 where
+instance : ContinuousStar ℝ≥0 where
   continuous_star := continuous_id
 
 end NNReal
+

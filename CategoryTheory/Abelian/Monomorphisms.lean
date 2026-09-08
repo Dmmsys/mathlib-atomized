@@ -27,52 +27,22 @@ variable {C : Type u} [Category.{v} C] [Abelian C]
 
 open MorphismProperty
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (monomorphisms C).IsStableUnderCobaseChange
-  body: IsStableUnderCobaseChange.mk' (fun _ _ _ f g _ hf => by
-    simp only [monomorphisms.iff] at hf ⊢
-    infer_instance)
-
-中文:
-实例 :
-  签名: (monomorphisms C).是StableUnderCobaseChange
-  定义体: IsStableUnderCobaseChange.mk' (fun _ _ _ f g _ hf => by
-    simp only [monomorphisms.iff] at hf ⊢
-    infer_instance)
-
-Depends on / 依赖: IsStableUnderCobaseChange, IsStableUnderCobaseChange.mk, infer_instance, monomorphisms, monomorphisms.iff
+/-
+**CategoryTheory.Abelian.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Abelian`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (monomorphisms C).IsStableUnderCobaseChange :=
-  IsStableUnderCobaseChange.mk' (fun _ _ _ f g _ hf => by
+  IsStableUnderCobaseChange.mk' (fun _ _ _ f g _ hf ↦ by
     simp only [monomorphisms.iff] at hf ⊢
     infer_instance)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (epimorphisms C).IsStableUnderBaseChange
-  body: IsStableUnderBaseChange.mk' (fun _ _ _ f g _ hf => by
-    simp only [epimorphisms.iff] at hf ⊢
-    infer_instance)
-
-中文:
-实例 :
-  签名: (epimorphisms C).是StableUnderBaseChange
-  定义体: IsStableUnderBaseChange.mk' (fun _ _ _ f g _ hf => by
-    simp only [epimorphisms.iff] at hf ⊢
-    infer_instance)
-
-Depends on / 依赖: IsStableUnderBaseChange, IsStableUnderBaseChange.mk, epimorphisms, epimorphisms.iff, infer_instance
+/-
+**CategoryTheory.Abelian.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Abelian`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (epimorphisms C).IsStableUnderBaseChange :=
-  IsStableUnderBaseChange.mk' (fun _ _ _ f g _ hf => by
+  IsStableUnderBaseChange.mk' (fun _ _ _ f g _ hf ↦ by
     simp only [epimorphisms.iff] at hf ⊢
     infer_instance)
 
 end CategoryTheory.Abelian
+

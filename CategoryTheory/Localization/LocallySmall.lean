@@ -34,20 +34,21 @@ a `HasLocalization.{w} W` instance by shrinking the morphisms in `D`.
 (This version assumes that the types of objects of the categories
 `C` and `D` are in the same universe.) -/
 @[instance_reducible]
-/--
-Definition of `hasLocalizationOfLocallySmall` / `hasLocalizationOfLocallySmall` 的定义
+/-
+**CategoryTheory.MorphismProperty.hasLocalizationOfLocallySmall** 是 Mathlib 中的一个
+定义，位于命名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：hasLocalizationOfLocallySmall {D : Type u₁} [Category.{v₂} D] [LocallySmal
+l.{w} D] (L : C ⥤ D) [L.IsLocalization W] : HasLocalization.{w} W where D
+参数：L : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition hasLocalizationOfLocallySmall
-  body: ShrinkHoms D
-  L := L ⋙ (ShrinkHoms.equivalence D).functor
-
-中文:
-定义 hasLocalizationOfLocallySmall
-  定义体: ShrinkHoms D
-  L := L ⋙ (ShrinkHoms.equivalence D).functor
-
-Depends on / 依赖: ShrinkHoms
+--- 原说明 ---
+If `L : C ⥤ D` is a localization functor for a class of morphisms
+`W : MorphismProperty C`, and `D` is locally `w`-small, we may obtain
+a `HasLocalization.{w} W` instance by shrinking the morphisms in `D`.
+(This version assumes that the types of objects of the categories
+`C` and `D` are in the same universe.)
 -/
 noncomputable def hasLocalizationOfLocallySmall
     {D : Type u₁} [Category.{v₂} D] [LocallySmall.{w} D]
@@ -68,12 +69,12 @@ noncomputable irreducible_def hasLocalizationOfLocallySmall'
     (L : C ⥤ D) [L.IsLocalization W] :
     HasLocalization.{w} W := by
   have : LocallySmall.{w} (InducedCategory _ L.obj) :=
-    ⟨fun X Y => small_of_injective InducedCategory.homEquiv.injective⟩
+    ⟨fun X Y ↦ small_of_injective InducedCategory.homEquiv.injective⟩
   let L' : C ⥤ (InducedCategory _ L.obj) :=
     { obj X := X
       map f := InducedCategory.homMk (L.map f) }
   have := Localization.essSurj L W
-  have : (inducedFunctor L.obj).EssSurj := ⟨fun Y => ⟨_, ⟨L.objObjPreimageIso Y⟩⟩⟩
+  have : (inducedFunctor L.obj).EssSurj := ⟨fun Y ↦ ⟨_, ⟨L.objObjPreimageIso Y⟩⟩⟩
   have : (inducedFunctor L.obj).IsEquivalence := { }
   let e := (inducedFunctor L.obj).asEquivalence
   let e' : (L' ⋙ e.functor) ⋙ e.inverse ≅ L' :=
@@ -82,27 +83,42 @@ noncomputable irreducible_def hasLocalizationOfLocallySmall'
     Functor.IsLocalization.of_iso W (L₁ := L ⋙ e.inverse) e'
   exact hasLocalizationOfLocallySmall.{w} W L'
 
-/--
-lemma `locallySmall_of_hasLocalization` / 引理 `locallySmall_of_hasLocalization`
+/-- If a class of morphisms `W : MorphismProperty C` satisfies `HasLocalization.{w} W`,
+then any localized category for `W` (i.e. any target of a localization functor
+`L : C ⥤ D` for `W`) is locally `w`-small. -/
+/-
+**CategoryTheory.MorphismProperty.locallySmall_of_hasLocalization** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：locallySmall_of_hasLocalization {D : Type u₂} [Category.{v₂} D] (L : C ⥤ D
+) [L.IsLocalization W] [HasLocalization.{w} W] : LocallySmall.{w} D where hom_sm
+all _ _
+参数：L : C ⥤ D。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_of_injective`：small_of_injective {α : Type v} {β : Type w} [Small.
+{u} β] {f : α -> β} (hf : Function.Injective f) : Small.{u} α
+· 使用定理 `CategoryTheory.MorphismProperty.instIsLocalizationLocalization'Q'`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C] (W : CategoryTheory.Morphism
+Property C)   [inst_1 : W.HasLocalization], W.Q'.IsLoca…
+· 使用定理 `CategoryTheory.instSmallHomOfLocallySmall`：∀ (C : Type u) [inst : Catego
+ryTheory.Category.{v, u} C] [CategoryTheory.LocallySmall.{w, v, u} C] (X Y : C),
+   Small.{w, v} (X ⟶ Y)
+· 使用定理 `CategoryTheory.locallySmall_of_univLE`：∀ (C : Type u) [inst : CategoryTh
+eory.Category.{v, u} C] [UnivLE.{v, w}], CategoryTheory.LocallySmall.{w, v, u} C
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
 
-English:
-lemma locallySmall_of_hasLocalization
-  statement: {D : Type u₂} [Category.{v₂} D]
-  proof: small_of_injective (fun _ _ h =>
-    (Localization.uniq L W.Q' W).functor.map_injective h)
-
-中文:
-引理 locallySmall_of_hasLocalization
-  结论: {D : 类型u₂} [范畴.{v₂} D]
-  证明: small_of_injective (fun _ _ h =>
-    (Localization.uniq L W.Q' W).functor.map_injective h)
-
-Depends on / 依赖: small_of_injective
+--- 原说明 ---
+If a class of morphisms `W : MorphismProperty C` satisfies `HasLocalization.{w} 
+W`,
+then any localized category for `W` (i.e. any target of a localization functor
+`L : C ⥤ D` for `W`) is locally `w`-small.
 -/
 lemma locallySmall_of_hasLocalization {D : Type u₂} [Category.{v₂} D]
     (L : C ⥤ D) [L.IsLocalization W] [HasLocalization.{w} W] :
     LocallySmall.{w} D where
-  hom_small _ _ := small_of_injective (fun _ _ h =>
+  hom_small _ _ := small_of_injective (fun _ _ h ↦
     (Localization.uniq L W.Q' W).functor.map_injective h)
 
 end CategoryTheory.MorphismProperty
+

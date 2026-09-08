@@ -26,117 +26,157 @@ namespace CategoryTheory
 
 open Category Limits
 
-variable {C : Type*} [Category C] {I : Type*} {D : I -> Type*} [forall i, Category (D i)]
+variable {C : Type*} [Category C] {I : Type*} {D : I → Type*} [∀ i, Category (D i)]
 
-/--
-Definition of `JointlyReflectIsomorphisms` / `JointlyReflectIsomorphisms` 的定义
+/-- A family of functors jointly reflects isomorphisms if for every morphism `f : X ⟶ Y`
+such that the image of `f` under all `F i` is an isomorphism, then `f` is an isomorphism. -/
+/-
+**CategoryTheory.JointlyReflectIsomorphisms** 是 Mathlib 中的一个归纳类型，位于命名空间 `Categor
+yTheory`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{u_4, u_1} C] →     {I 
+: Type u_2} →       {D : I → Type u_3} →         [inst_1 : (i : I) → CategoryThe
+ory.Category.{u_5, u_3} (D i)] →           ((i : I) → CategoryTheory.Functor C (
+D i)) → Prop
+参数：i : I；D i；(i : I) → CategoryTheory.Functor C (D i)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure JointlyReflectIsomorphisms
-  parameters: (F : forall i, C ⥤ D i)
-  axioms and operations (1):
-    - isIso({X Y : C} (f : X ⟶ Y) [forall i, IsIso ((F i).map f)]) : IsIso f
-
-中文:
-结构 JointlyReflectIsomorphisms
-  参数: (F : 对任意 i, C ⥤ D i)
-  公理与运算 (1 个):
-    - isIso({X Y : C} (f : X ⟶ Y) [对任意 i, 是同构 ((F i).map f)]) : 是同构 f
+--- 原说明 ---
+A family of functors jointly reflects isomorphisms if for every morphism `f : X 
+⟶ Y`
+such that the image of `f` under all `F i` is an isomorphism, then `f` is an iso
+morphism.
 -/
-structure JointlyReflectIsomorphisms (F : forall i, C ⥤ D i) : Prop where
-  isIso {X Y : C} (f : X ⟶ Y) [forall i, IsIso ((F i).map f)] : IsIso f
+structure JointlyReflectIsomorphisms (F : ∀ i, C ⥤ D i) : Prop where
+  isIso {X Y : C} (f : X ⟶ Y) [∀ i, IsIso ((F i).map f)] : IsIso f
 
-/--
-Definition of `JointlyReflectMonomorphisms` / `JointlyReflectMonomorphisms` 的定义
+/-- A family of functors jointly reflects monomorphisms if for every morphism `f : X ⟶ Y`
+such that the image of `f` under all `F i` is an monomorphism, then `f` is an monomorphism. -/
+/-
+**CategoryTheory.JointlyReflectMonomorphisms** 是 Mathlib 中的一个归纳类型，位于命名空间 `Catego
+ryTheory`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{u_4, u_1} C] →     {I 
+: Type u_2} →       {D : I → Type u_3} →         [inst_1 : (i : I) → CategoryThe
+ory.Category.{u_5, u_3} (D i)] →           ((i : I) → CategoryTheory.Functor C (
+D i)) → Prop
+参数：i : I；D i；(i : I) → CategoryTheory.Functor C (D i)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure JointlyReflectMonomorphisms
-  parameters: (F : forall i, C ⥤ D i)
-  axioms and operations (1):
-    - mono({X Y : C} (f : X ⟶ Y) [forall i, Mono ((F i).map f)]) : Mono f
-
-中文:
-结构 JointlyReflectMonomorphisms
-  参数: (F : 对任意 i, C ⥤ D i)
-  公理与运算 (1 个):
-    - mono({X Y : C} (f : X ⟶ Y) [对任意 i, 单态射 ((F i).map f)]) : 单态射 f
+--- 原说明 ---
+A family of functors jointly reflects monomorphisms if for every morphism `f : X
+ ⟶ Y`
+such that the image of `f` under all `F i` is an monomorphism, then `f` is an mo
+nomorphism.
 -/
-structure JointlyReflectMonomorphisms (F : forall i, C ⥤ D i) : Prop where
-  mono {X Y : C} (f : X ⟶ Y) [forall i, Mono ((F i).map f)] : Mono f
+structure JointlyReflectMonomorphisms (F : ∀ i, C ⥤ D i) : Prop where
+  mono {X Y : C} (f : X ⟶ Y) [∀ i, Mono ((F i).map f)] : Mono f
 
-/--
-Definition of `JointlyReflectEpimorphisms` / `JointlyReflectEpimorphisms` 的定义
+/-- A family of functors jointly reflects epimorphisms if for every morphism `f : X ⟶ Y`
+such that the image of `f` under all `F i` is an epimorphism, then `f` is an epimorphism. -/
+/-
+**CategoryTheory.JointlyReflectEpimorphisms** 是 Mathlib 中的一个归纳类型，位于命名空间 `Categor
+yTheory`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{u_4, u_1} C] →     {I 
+: Type u_2} →       {D : I → Type u_3} →         [inst_1 : (i : I) → CategoryThe
+ory.Category.{u_5, u_3} (D i)] →           ((i : I) → CategoryTheory.Functor C (
+D i)) → Prop
+参数：i : I；D i；(i : I) → CategoryTheory.Functor C (D i)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure JointlyReflectEpimorphisms
-  parameters: (F : forall i, C ⥤ D i)
-  axioms and operations (1):
-    - epi({X Y : C} (f : X ⟶ Y) [forall i, Epi ((F i).map f)]) : Epi f
-
-中文:
-结构 JointlyReflectEpimorphisms
-  参数: (F : 对任意 i, C ⥤ D i)
-  公理与运算 (1 个):
-    - epi({X Y : C} (f : X ⟶ Y) [对任意 i, 满态射 ((F i).map f)]) : 满态射 f
+--- 原说明 ---
+A family of functors jointly reflects epimorphisms if for every morphism `f : X 
+⟶ Y`
+such that the image of `f` under all `F i` is an epimorphism, then `f` is an epi
+morphism.
 -/
-structure JointlyReflectEpimorphisms (F : forall i, C ⥤ D i) : Prop where
-  epi {X Y : C} (f : X ⟶ Y) [forall i, Epi ((F i).map f)] : Epi f
+structure JointlyReflectEpimorphisms (F : ∀ i, C ⥤ D i) : Prop where
+  epi {X Y : C} (f : X ⟶ Y) [∀ i, Epi ((F i).map f)] : Epi f
 
-/--
-Definition of `JointlyFaithful` / `JointlyFaithful` 的定义
+/-- A family of functors is jointly faithful if whenever two morphisms `f : X ⟶ Y`
+and `g : X ⟶ Y` become equal after applying all functors `F i`, then `f = g`. -/
+/-
+**CategoryTheory.JointlyFaithful** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{u_4, u_1} C] →     {I 
+: Type u_2} →       {D : I → Type u_3} →         [inst_1 : (i : I) → CategoryThe
+ory.Category.{u_5, u_3} (D i)] →           ((i : I) → CategoryTheory.Functor C (
+D i)) → Prop
+参数：i : I；D i；(i : I) → CategoryTheory.Functor C (D i)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure JointlyFaithful
-  parameters: (F : forall i, C ⥤ D i)
-  axioms and operations (1):
-    - map_injective({X Y : C} {f g : X ⟶ Y} (h : forall i, (F i).map f = (F i).map g)) : f = g
-
-中文:
-结构 联合忠实
-  参数: (F : 对任意 i, C ⥤ D i)
-  公理与运算 (1 个):
-    - map_injective({X Y : C} {f g : X ⟶ Y} (h : 对任意 i, (F i).map f = (F i).map g)) : f = g
+--- 原说明 ---
+A family of functors is jointly faithful if whenever two morphisms `f : X ⟶ Y`
+and `g : X ⟶ Y` become equal after applying all functors `F i`, then `f = g`.
 -/
-structure JointlyFaithful (F : forall i, C ⥤ D i) : Prop where
-  map_injective {X Y : C} {f g : X ⟶ Y} (h : forall i, (F i).map f = (F i).map g) : f = g
+structure JointlyFaithful (F : ∀ i, C ⥤ D i) : Prop where
+  map_injective {X Y : C} {f g : X ⟶ Y} (h : ∀ i, (F i).map f = (F i).map g) : f = g
 
-variable {F : forall i, C ⥤ D i}
+variable {F : ∀ i, C ⥤ D i}
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `JointlyFaithful.of_jointly_reflects_isIso_of_mono` / 引理 `JointlyFaithful.of_jointly_reflects_isIso_of_mono`
-
-English:
-lemma JointlyFaithful.of_jointly_reflects_isIso_of_mono
-  statement: [HasEqualizers C]
-  proof: have :=
-      hF (equalizer.ι f g) (fun i => by
-        let hc := isLimitForkMapOfIsLimit (F i) _ (equalizerIsEqualizer f g)
-        obtain ⟨l, hl⟩ := Fork.IsLimit.lift' hc (𝟙 _) (by simpa using hfg i)
-        exact ⟨l, Fork.IsLimit.hom_ext hc (by cat_disch), by cat_disch⟩)
-    eq_of_epi_equalizer
-
-中文:
-引理 联合忠实.of_jointly_reflects_isIso_of_mono
-  结论: [HasEqualizers C]
-  证明: have :=
-      hF (equalizer.ι f g) (fun i => by
-        let hc := isLimitForkMapOfIsLimit (F i) _ (equalizerIsEqualizer f g)
-        obtain ⟨l, hl⟩ := Fork.IsLimit.lift' hc (𝟙 _) (by simpa using hfg i)
-        exact ⟨l, Fork.IsLimit.hom_ext hc (by cat_disch), by cat_disch⟩)
-    eq_of_epi_equalizer
-
-Depends on / 依赖: Fork.IsLimit.hom_ext, Fork.IsLimit.lift, IsLimit, cat_disch, eq_of_epi_equalizer, equalizer, equalizerIsEqualizer, hom_ext, isLimitForkMapOfIsLimit
+/-
+**CategoryTheory.JointlyFaithful.of_jointly_reflects_isIso_of_mono** 是 Mathlib 中
+的一个定理，位于命名空间 `CategoryTheory.JointlyFaithful`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{u_4, u_1} C] {I : Type u
+_2} {D : I → Type u_3}   [inst_1 : (i : I) → CategoryTheory.Category.{u_5, u_3} 
+(D i)] {F : (i : I) → CategoryTheory.Functor C (D i)}   [CategoryTheory.Limits.H
+asEqualizers C]   [∀ (i : I), CategoryTheory.Limits.PreservesLimitsOfShape Categ
+oryTheory.Limits.WalkingParallelPair (F i)],   (∀ ⦃X Y : C⦄ (f : X ⟶ Y) [Categor
+yTheory.Mono f],       (∀ (i : I), CategoryTheory.IsIso ((F i).map f)) → Categor
+yTheory.IsIso f) →     CategoryTheory.JointlyFaithful F
+参数：i : I；D i；i : I；D i；i : I；F i；∀ ⦃X Y : C⦄ (f : X ⟶ Y) [CategoryTheory.Mono f]
+,       (∀ (i : I), CategoryTheory.IsIso ((F i).map f)) → CategoryTheory.IsIso f
+。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.equalizer.ι_mono`：∀ {C : Type u} {X Y : C} [inst :
+ CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.Limi
+ts.HasEqualizer f g], Catego…
+· 使用定理 `CategoryTheory.Limits.equalizer.condition`：∀ {C : Type u} {X Y : C} [ins
+t : CategoryTheory.Category.{v, u} C] (f g : X ⟶ Y)   [inst_1 : CategoryTheory.L
+imits.HasEqualizer f g],   Cate…
+· 使用定理 `CategoryTheory.Limits.PreservesLimitsOfShape.preservesLimit`：∀ {C : Type
+ u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Categor
+yTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Limits.Fork.IsLimit.hom_ext`：∀ {C : Type u} {X Y : C} [in
+st : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y} {s : CategoryTheory.Limits.
+Fork f g}   (hs : CategoryTheory…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Limits.eq_of_epi_equalizer`：eq_of_epi_equalizer [HasEqual
+izer f g] [Epi (equalizer.ι f g)] : f = g
+· 使用定理 `CategoryTheory.StrongEpi.epi`：∀ {C : Type u} {inst : CategoryTheory.Cate
+gory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongEpi f],   Cate
+goryTheory.Epi f
+· 使用定理 `CategoryTheory.strongEpi_of_isIso`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {P Q : C} (f : P ⟶ Q) [CategoryTheory.IsIso f],   CategoryTh
+eory.StrongEpi f
 -/
 lemma JointlyFaithful.of_jointly_reflects_isIso_of_mono [HasEqualizers C]
-    [forall i, PreservesLimitsOfShape WalkingParallelPair (F i)]
-    (hF : forall ⦃X Y : C⦄ (f : X ⟶ Y) [Mono f],
-      (forall i, IsIso ((F i).map f)) -> IsIso f) :
+    [∀ i, PreservesLimitsOfShape WalkingParallelPair (F i)]
+    (hF : ∀ ⦃X Y : C⦄ (f : X ⟶ Y) [Mono f],
+      (∀ i, IsIso ((F i).map f)) → IsIso f) :
     JointlyFaithful F where
   map_injective {X Y} f g hfg :=
     have :=
-      hF (equalizer.ι f g) (fun i => by
+      hF (equalizer.ι f g) (fun i ↦ by
         let hc := isLimitForkMapOfIsLimit (F i) _ (equalizerIsEqualizer f g)
         obtain ⟨l, hl⟩ := Fork.IsLimit.lift' hc (𝟙 _) (by simpa using hfg i)
         exact ⟨l, Fork.IsLimit.hom_ext hc (by cat_disch), by cat_disch⟩)
@@ -148,257 +188,270 @@ variable (h : JointlyReflectIsomorphisms F)
 
 include h
 
-/--
-lemma `isIso_iff` / 引理 `isIso_iff`
-
-English:
-lemma isIso_iff
-  given: {X Y : C} (f : X ⟶ Y)
-  proof: ⟨fun _ _ => inferInstance, fun _ => h.isIso f⟩
-
-中文:
-引理 isIso_iff
-  条件: {X Y : C} (f : X ⟶ Y)
-  证明: ⟨fun _ _ => inferInstance, fun _ => h.isIso f⟩
-
-Depends on / 依赖: h.isIso
+/-
+**CategoryTheory.JointlyReflectIsomorphisms.isIso_iff** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.JointlyReflectIsomorphisms`。
+形式化陈述：isIso_iff {X Y : C} (f : X ⟶ Y) : IsIso f ↔ forall i, IsIso ((F i).map f)
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.JointlyReflectIsomorphisms.isIso`：∀ {C : Type u_1} [inst 
+: CategoryTheory.Category.{u_4, u_1} C] {I : Type u_2} {D : I → Type u_3}   [ins
+t_1 : (i : I) → CategoryTheory.Catego…
 -/
 lemma isIso_iff {X Y : C} (f : X ⟶ Y) :
-    IsIso f ↔ forall i, IsIso ((F i).map f) :=
-  ⟨fun _ _ => inferInstance, fun _ => h.isIso f⟩
-
-/--
-lemma `mono` / 引理 `mono`
-
-English:
-lemma mono
-  statement: {X Y : C} (f : X ⟶ Y) [hf : forall i, Mono ((F i).map f)]
-  proof: by
-  have hc := pullbackIsPullback f f
-  rw [mono_iff_isIso_fst hc]; rw [h.isIso_iff]
-  intro i
-  exact (mono_iff_isIso_fst ((isLimitMapConePullbackConeEquiv (F i) pullback.condition).1
-    (isLimitOfPreserves (F i) hc))).1 (hf i)
-
-中文:
-引理 mono
-  结论: {X Y : C} (f : X ⟶ Y) [hf : 对任意 i, 单态射 ((F i).map f)]
-  证明: by
-  have hc := pullbackIsPullback f f
-  rw [mono_iff_isIso_fst hc]; rw [h.isIso_iff]
-  intro i
-  exact (mono_iff_isIso_fst ((isLimitMapConePullbackConeEquiv (F i) pullback.condition).1
-    (isLimitOfPreserves (F i) hc))).1 (hf i)
-
-Depends on / 依赖: condition, h.isIso_iff, isIso_iff, isLimitMapConePullbackConeEquiv, isLimitOfPreserves, mono_iff_isIso_fst, pullback, pullback.condition, pullbackIsPullback
+    IsIso f ↔ ∀ i, IsIso ((F i).map f) :=
+  ⟨fun _ _ ↦ inferInstance, fun _ ↦ h.isIso f⟩
+/-
+**CategoryTheory.JointlyReflectIsomorphisms.mono** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.JointlyReflectIsomorphisms`。
+形式化陈述：mono {X Y : C} (f : X ⟶ Y) [hf : forall i, Mono ((F i).map f)] [forall i, 
+PreservesLimit (cospan f f) (F i)] [HasPullback f f] : Mono f
+参数：f : X ⟶ Y；(F i).map f；cospan f f；F i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.pullback.condition`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categ
+oryTheory.Limits.HasPullback f…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.mono_iff_isIso_fst`：mono_iff_isIso_fst (hc : IsLimit c) :
+ Mono f ↔ IsIso c.fst
+· 使用引理 `CategoryTheory.JointlyReflectIsomorphisms.isIso_iff`：isIso_iff {X Y : C}
+ (f : X ⟶ Y) : IsIso f ↔ forall i, IsIso ((F i).map f)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 -/
-lemma mono {X Y : C} (f : X ⟶ Y) [hf : forall i, Mono ((F i).map f)]
-    [forall i, PreservesLimit (cospan f f) (F i)] [HasPullback f f] :
+lemma mono {X Y : C} (f : X ⟶ Y) [hf : ∀ i, Mono ((F i).map f)]
+    [∀ i, PreservesLimit (cospan f f) (F i)] [HasPullback f f] :
     Mono f := by
   have hc := pullbackIsPullback f f
-  rw [mono_iff_isIso_fst hc]; rw [h.isIso_iff]
+  rw [mono_iff_isIso_fst hc, h.isIso_iff]
   intro i
   exact (mono_iff_isIso_fst ((isLimitMapConePullbackConeEquiv (F i) pullback.condition).1
     (isLimitOfPreserves (F i) hc))).1 (hf i)
-
-/--
-lemma `jointlyReflectMonomorphisms` / 引理 `jointlyReflectMonomorphisms`
-
-English:
-lemma jointlyReflectMonomorphisms
-  statement: [forall i, PreservesLimitsOfShape WalkingCospan (F i)]
-  proof: h.mono f
-
-中文:
-引理 jointlyReflectMonomorphisms
-  结论: [对任意 i, 保持形状极限 WalkingCospan (F i)]
-  证明: h.mono f
-
-Depends on / 依赖: h.mono
+/-
+**CategoryTheory.JointlyReflectIsomorphisms.jointlyReflectMonomorphisms** 是 Math
+lib 中的一个引理，位于命名空间 `CategoryTheory.JointlyReflectIsomorphisms`。
+形式化陈述：jointlyReflectMonomorphisms [forall i, PreservesLimitsOfShape WalkingCospa
+n (F i)] [HasPullbacks C] : JointlyReflectMonomorphisms F where mono f _
+参数：F i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.JointlyReflectIsomorphisms.mono`：mono {X Y : C} (f : X ⟶ 
+Y) [hf : forall i, Mono ((F i).map f)] [forall i, PreservesLimit (cospan f f) (F
+ i)] [HasPullback f f] : Mono f
+· 使用定理 `CategoryTheory.Limits.PreservesLimitsOfShape.preservesLimit`：∀ {C : Type
+ u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Categor
+yTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
 -/
-lemma jointlyReflectMonomorphisms [forall i, PreservesLimitsOfShape WalkingCospan (F i)]
+lemma jointlyReflectMonomorphisms [∀ i, PreservesLimitsOfShape WalkingCospan (F i)]
     [HasPullbacks C] :
     JointlyReflectMonomorphisms F where
   mono f _ := h.mono f
-
-/--
-lemma `epi` / 引理 `epi`
-
-English:
-lemma epi
-  statement: {X Y : C} (f : X ⟶ Y) [hf : forall i, Epi ((F i).map f)]
-  proof: by
-  have hc := pushoutIsPushout f f
-  rw [epi_iff_isIso_inl hc]; rw [h.isIso_iff]
-  intro i
-  exact (epi_iff_isIso_inl ((isColimitMapCoconePushoutCoconeEquiv (F i) pushout.condition).1
-    (isColimitOfPreserves (F i) hc))).1 (hf i)
-
-中文:
-引理 epi
-  结论: {X Y : C} (f : X ⟶ Y) [hf : 对任意 i, 满态射 ((F i).map f)]
-  证明: by
-  have hc := pushoutIsPushout f f
-  rw [epi_iff_isIso_inl hc]; rw [h.isIso_iff]
-  intro i
-  exact (epi_iff_isIso_inl ((isColimitMapCoconePushoutCoconeEquiv (F i) pushout.condition).1
-    (isColimitOfPreserves (F i) hc))).1 (hf i)
-
-Depends on / 依赖: condition, epi_iff_isIso_inl, h.isIso_iff, isColimitMapCoconePushoutCoconeEquiv, isColimitOfPreserves, isIso_iff, pushout, pushout.condition, pushoutIsPushout
+/-
+**CategoryTheory.JointlyReflectIsomorphisms.epi** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.JointlyReflectIsomorphisms`。
+形式化陈述：epi {X Y : C} (f : X ⟶ Y) [hf : forall i, Epi ((F i).map f)] [forall i, Pr
+eservesColimit (span f f) (F i)] [HasPushout f f] : Epi f
+参数：f : X ⟶ Y；(F i).map f；span f f；F i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.pushout.condition`：∀ {C : Type u} [inst : Category
+Theory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z}   [inst_1 : Catego
+ryTheory.Limits.HasPushout f …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.epi_iff_isIso_inl`：epi_iff_isIso_inl (hc : IsColimit c) :
+ Epi f ↔ IsIso c.inl
+· 使用引理 `CategoryTheory.JointlyReflectIsomorphisms.isIso_iff`：isIso_iff {X Y : C}
+ (f : X ⟶ Y) : IsIso f ↔ forall i, IsIso ((F i).map f)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 -/
-lemma epi {X Y : C} (f : X ⟶ Y) [hf : forall i, Epi ((F i).map f)]
-    [forall i, PreservesColimit (span f f) (F i)] [HasPushout f f] : Epi f := by
+lemma epi {X Y : C} (f : X ⟶ Y) [hf : ∀ i, Epi ((F i).map f)]
+    [∀ i, PreservesColimit (span f f) (F i)] [HasPushout f f] : Epi f := by
   have hc := pushoutIsPushout f f
-  rw [epi_iff_isIso_inl hc]; rw [h.isIso_iff]
+  rw [epi_iff_isIso_inl hc, h.isIso_iff]
   intro i
   exact (epi_iff_isIso_inl ((isColimitMapCoconePushoutCoconeEquiv (F i) pushout.condition).1
     (isColimitOfPreserves (F i) hc))).1 (hf i)
-
-/--
-lemma `jointlyReflectEpimorphisms` / 引理 `jointlyReflectEpimorphisms`
-
-English:
-lemma jointlyReflectEpimorphisms
-  statement: [forall i, PreservesColimitsOfShape WalkingSpan (F i)]
-  proof: h.epi f
-
-中文:
-引理 jointlyReflectEpimorphisms
-  结论: [对任意 i, 保持形状余极限 WalkingSpan (F i)]
-  证明: h.epi f
-
-Depends on / 依赖: h.epi
+/-
+**CategoryTheory.JointlyReflectIsomorphisms.jointlyReflectEpimorphisms** 是 Mathl
+ib 中的一个引理，位于命名空间 `CategoryTheory.JointlyReflectIsomorphisms`。
+形式化陈述：jointlyReflectEpimorphisms [forall i, PreservesColimitsOfShape WalkingSpan
+ (F i)] [HasPushouts C] : JointlyReflectEpimorphisms F where epi f _
+参数：F i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.JointlyReflectIsomorphisms.epi`：epi {X Y : C} (f : X ⟶ Y)
+ [hf : forall i, Epi ((F i).map f)] [forall i, PreservesColimit (span f f) (F i)
+] [HasPushout f f] : Epi f
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
 -/
-lemma jointlyReflectEpimorphisms [forall i, PreservesColimitsOfShape WalkingSpan (F i)]
+lemma jointlyReflectEpimorphisms [∀ i, PreservesColimitsOfShape WalkingSpan (F i)]
     [HasPushouts C] :
     JointlyReflectEpimorphisms F where
   epi f _ := h.epi f
-
-/--
-lemma `jointlyFaithful` / 引理 `jointlyFaithful`
-
-English:
-lemma jointlyFaithful
-  given: [forall i, PreservesLimitsOfShape WalkingParallelPair (F i)] [HasEqualizers C]
-  proof: .of_jointly_reflects_isIso_of_mono (fun _ _ _ _ _ => h.isIso _)
-
-中文:
-引理 jointlyFaithful
-  条件: [对任意 i, 保持形状极限 WalkingParallelPair (F i)] [HasEqualizers C]
-  证明: .of_jointly_reflects_isIso_of_mono (fun _ _ _ _ _ => h.isIso _)
-
-Depends on / 依赖: h.isIso, of_jointly_reflects_isIso_of_mono
+/-
+**CategoryTheory.JointlyReflectIsomorphisms.jointlyFaithful** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.JointlyReflectIsomorphisms`。
+形式化陈述：jointlyFaithful [forall i, PreservesLimitsOfShape WalkingParallelPair (F i
+)] [HasEqualizers C] : JointlyFaithful F
+参数：F i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.JointlyFaithful.of_jointly_reflects_isIso_of_mono`：∀ {C :
+ Type u_1} [inst : CategoryTheory.Category.{u_4, u_1} C] {I : Type u_2} {D : I →
+ Type u_3}   [inst_1 : (i : I) → CategoryTheory.Catego…
+· 使用定理 `CategoryTheory.JointlyReflectIsomorphisms.isIso`：∀ {C : Type u_1} [inst 
+: CategoryTheory.Category.{u_4, u_1} C] {I : Type u_2} {D : I → Type u_3}   [ins
+t_1 : (i : I) → CategoryTheory.Catego…
 -/
-lemma jointlyFaithful [forall i, PreservesLimitsOfShape WalkingParallelPair (F i)] [HasEqualizers C] :
+lemma jointlyFaithful [∀ i, PreservesLimitsOfShape WalkingParallelPair (F i)] [HasEqualizers C] :
     JointlyFaithful F :=
-  .of_jointly_reflects_isIso_of_mono (fun _ _ _ _ _ => h.isIso _)
+  .of_jointly_reflects_isIso_of_mono (fun _ _ _ _ _ ↦ h.isIso _)
 
 end JointlyReflectIsomorphisms
 
-/--
-lemma `JointlyReflectMonomorphisms.mono_iff` / 引理 `JointlyReflectMonomorphisms.mono_iff`
-
-English:
-lemma JointlyReflectMonomorphisms.mono_iff
-  statement: (h : JointlyReflectMonomorphisms F)
-  proof: ⟨fun _ _ => inferInstance, fun _ => h.mono f⟩
-
-中文:
-引理 JointlyReflectMonomorphisms.mono_iff
-  结论: (h : JointlyReflectMonomorphisms F)
-  证明: ⟨fun _ _ => inferInstance, fun _ => h.mono f⟩
-
-Depends on / 依赖: h.mono
+/-
+**CategoryTheory.JointlyReflectMonomorphisms.mono_iff** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.JointlyReflectMonomorphisms`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{u_4, u_1} C] {I : Type u
+_2} {D : I → Type u_3}   [inst_1 : (i : I) → CategoryTheory.Category.{u_5, u_3} 
+(D i)] {F : (i : I) → CategoryTheory.Functor C (D i)},   CategoryTheory.JointlyR
+eflectMonomorphisms F →     ∀ [∀ (i : I), (F i).PreservesMonomorphisms] {X Y : C
+} (f : X ⟶ Y),       CategoryTheory.Mono f ↔ ∀ (i : I), CategoryTheory.Mono ((F 
+i).map f)
+参数：i : I；D i；i : I；D i；i : I；F i；f : X ⟶ Y；i : I；(F i).map f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_mono`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.JointlyReflectMonomorphisms.mono`：∀ {C : Type u_1} [inst 
+: CategoryTheory.Category.{u_4, u_1} C] {I : Type u_2} {D : I → Type u_3}   [ins
+t_1 : (i : I) → CategoryTheory.Catego…
 -/
 lemma JointlyReflectMonomorphisms.mono_iff (h : JointlyReflectMonomorphisms F)
-    [forall i, (F i).PreservesMonomorphisms] {X Y : C} (f : X ⟶ Y) :
-    Mono f ↔ forall i, Mono ((F i).map f) :=
-  ⟨fun _ _ => inferInstance, fun _ => h.mono f⟩
-
-/--
-lemma `JointlyReflectEpimorphisms.epi_iff` / 引理 `JointlyReflectEpimorphisms.epi_iff`
-
-English:
-lemma JointlyReflectEpimorphisms.epi_iff
-  statement: (h : JointlyReflectEpimorphisms F)
-  proof: ⟨fun _ _ => inferInstance, fun _ => h.epi f⟩
-
-中文:
-引理 JointlyReflectEpimorphisms.epi_iff
-  结论: (h : JointlyReflectEpimorphisms F)
-  证明: ⟨fun _ _ => inferInstance, fun _ => h.epi f⟩
-
-Depends on / 依赖: h.epi
+    [∀ i, (F i).PreservesMonomorphisms] {X Y : C} (f : X ⟶ Y) :
+    Mono f ↔ ∀ i, Mono ((F i).map f) :=
+  ⟨fun _ _ ↦ inferInstance, fun _ ↦ h.mono f⟩
+/-
+**CategoryTheory.JointlyReflectEpimorphisms.epi_iff** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.JointlyReflectEpimorphisms`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{u_4, u_1} C] {I : Type u
+_2} {D : I → Type u_3}   [inst_1 : (i : I) → CategoryTheory.Category.{u_5, u_3} 
+(D i)] {F : (i : I) → CategoryTheory.Functor C (D i)},   CategoryTheory.JointlyR
+eflectEpimorphisms F →     ∀ [∀ (i : I), (F i).PreservesEpimorphisms] {X Y : C} 
+(f : X ⟶ Y),       CategoryTheory.Epi f ↔ ∀ (i : I), CategoryTheory.Epi ((F i).m
+ap f)
+参数：i : I；D i；i : I；D i；i : I；F i；f : X ⟶ Y；i : I；(F i).map f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.JointlyReflectEpimorphisms.epi`：∀ {C : Type u_1} [inst : 
+CategoryTheory.Category.{u_4, u_1} C] {I : Type u_2} {D : I → Type u_3}   [inst_
+1 : (i : I) → CategoryTheory.Catego…
 -/
 lemma JointlyReflectEpimorphisms.epi_iff (h : JointlyReflectEpimorphisms F)
-    [forall i, (F i).PreservesEpimorphisms] {X Y : C} (f : X ⟶ Y) :
-    Epi f ↔ forall i, Epi ((F i).map f) :=
-  ⟨fun _ _ => inferInstance, fun _ => h.epi f⟩
+    [∀ i, (F i).PreservesEpimorphisms] {X Y : C} (f : X ⟶ Y) :
+    Epi f ↔ ∀ i, Epi ((F i).map f) :=
+  ⟨fun _ _ ↦ inferInstance, fun _ ↦ h.epi f⟩
 
 namespace JointlyFaithful
 
-/--
-lemma `jointlyReflectMonomorphisms` / 引理 `jointlyReflectMonomorphisms`
-
-English:
-lemma jointlyReflectMonomorphisms
-  given: (h : JointlyFaithful F)
-  proof: ⟨fun {Z} g₁ g₂ hg => h.map_injective (fun i => by
-    simp only [← cancel_mono ((F i).map f), ← Functor.map_comp, hg])⟩
-
-中文:
-引理 jointlyReflectMonomorphisms
-  条件: (h : 联合忠实 F)
-  证明: ⟨fun {Z} g₁ g₂ hg => h.map_injective (fun i => by
-    simp only [← cancel_mono ((F i).map f), ← Functor.map_comp, hg])⟩
-
-Depends on / 依赖: Functor, Functor.map_comp, cancel_mono, h.map_injective, map_comp, map_injective
+/-
+**CategoryTheory.JointlyFaithful.jointlyReflectMonomorphisms** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.JointlyFaithful`。
+形式化陈述：jointlyReflectMonomorphisms (h : JointlyFaithful F) : JointlyReflectMonomo
+rphisms F where mono {X Y} f _
+参数：h : JointlyFaithful F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.JointlyFaithful.map_injective`：∀ {C : Type u_1} [inst : C
+ategoryTheory.Category.{u_4, u_1} C] {I : Type u_2} {D : I → Type u_3}   [inst_1
+ : (i : I) → CategoryTheory.Catego…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma jointlyReflectMonomorphisms (h : JointlyFaithful F) :
     JointlyReflectMonomorphisms F where
-  mono {X Y} f _ := ⟨fun {Z} g₁ g₂ hg => h.map_injective (fun i => by
+  mono {X Y} f _ := ⟨fun {Z} g₁ g₂ hg ↦ h.map_injective (fun i ↦ by
     simp only [← cancel_mono ((F i).map f), ← Functor.map_comp, hg])⟩
-
-/--
-lemma `jointlyReflectEpimorphisms` / 引理 `jointlyReflectEpimorphisms`
-
-English:
-lemma jointlyReflectEpimorphisms
-  given: (h : JointlyFaithful F)
-  proof: ⟨fun {Z} g₁ g₂ hg => h.map_injective (fun i => by
-    simp only [← cancel_epi ((F i).map f), ← Functor.map_comp, hg])⟩
-
-中文:
-引理 jointlyReflectEpimorphisms
-  条件: (h : 联合忠实 F)
-  证明: ⟨fun {Z} g₁ g₂ hg => h.map_injective (fun i => by
-    simp only [← cancel_epi ((F i).map f), ← Functor.map_comp, hg])⟩
-
-Depends on / 依赖: Functor, Functor.map_comp, cancel_epi, h.map_injective, map_comp, map_injective
+/-
+**CategoryTheory.JointlyFaithful.jointlyReflectEpimorphisms** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.JointlyFaithful`。
+形式化陈述：jointlyReflectEpimorphisms (h : JointlyFaithful F) : JointlyReflectEpimorp
+hisms F where epi {X Y} f _
+参数：h : JointlyFaithful F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.JointlyFaithful.map_injective`：∀ {C : Type u_1} [inst : C
+ategoryTheory.Category.{u_4, u_1} C] {I : Type u_2} {D : I → Type u_3}   [inst_1
+ : (i : I) → CategoryTheory.Catego…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma jointlyReflectEpimorphisms (h : JointlyFaithful F) :
     JointlyReflectEpimorphisms F where
-  epi {X Y} f _ := ⟨fun {Z} g₁ g₂ hg => h.map_injective (fun i => by
+  epi {X Y} f _ := ⟨fun {Z} g₁ g₂ hg ↦ h.map_injective (fun i ↦ by
     simp only [← cancel_epi ((F i).map f), ← Functor.map_comp, hg])⟩
-
-/--
-lemma `jointlyReflectsIsomorphisms` / 引理 `jointlyReflectsIsomorphisms`
-
-English:
-lemma jointlyReflectsIsomorphisms
-  given: [Balanced C] (h : JointlyFaithful F)
-  proof: have := h.jointlyReflectMonomorphisms.mono f
-    have := h.jointlyReflectEpimorphisms.epi f
-    Balanced.isIso_of_mono_of_epi f
-
-中文:
-引理 jointlyReflectsIsomorphisms
-  条件: [Balanced C] (h : 联合忠实 F)
-  证明: have := h.jointlyReflectMonomorphisms.mono f
-    have := h.jointlyReflectEpimorphisms.epi f
-    Balanced.isIso_of_mono_of_epi f
-
-Depends on / 依赖: Balanced, Balanced.isIso_of_mono_of_epi, h.jointlyReflectEpimorphisms.epi, h.jointlyReflectMonomorphisms.mono, isIso_of_mono_of_epi, jointlyReflectEpimorphisms, jointlyReflectMonomorphisms
+/-
+**CategoryTheory.JointlyFaithful.jointlyReflectsIsomorphisms** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.JointlyFaithful`。
+形式化陈述：jointlyReflectsIsomorphisms [Balanced C] (h : JointlyFaithful F) : Jointly
+ReflectIsomorphisms F where isIso f _
+参数：h : JointlyFaithful F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.JointlyReflectMonomorphisms.mono`：∀ {C : Type u_1} [inst 
+: CategoryTheory.Category.{u_4, u_1} C] {I : Type u_2} {D : I → Type u_3}   [ins
+t_1 : (i : I) → CategoryTheory.Catego…
+· 使用引理 `CategoryTheory.JointlyFaithful.jointlyReflectMonomorphisms`：jointlyRefle
+ctMonomorphisms (h : JointlyFaithful F) : JointlyReflectMonomorphisms F where mo
+no {X Y} f _
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
+· 使用定理 `CategoryTheory.JointlyReflectEpimorphisms.epi`：∀ {C : Type u_1} [inst : 
+CategoryTheory.Category.{u_4, u_1} C] {I : Type u_2} {D : I → Type u_3}   [inst_
+1 : (i : I) → CategoryTheory.Catego…
+· 使用引理 `CategoryTheory.JointlyFaithful.jointlyReflectEpimorphisms`：jointlyReflec
+tEpimorphisms (h : JointlyFaithful F) : JointlyReflectEpimorphisms F where epi {
+X Y} f _
+· 使用定理 `CategoryTheory.StrongEpi.epi`：∀ {C : Type u} {inst : CategoryTheory.Cate
+gory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongEpi f],   Cate
+goryTheory.Epi f
+· 使用定理 `CategoryTheory.strongEpi_of_isIso`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] {P Q : C} (f : P ⟶ Q) [CategoryTheory.IsIso f],   CategoryTh
+eory.StrongEpi f
+· 使用定理 `CategoryTheory.Balanced.isIso_of_mono_of_epi`：∀ {C : Type u} {inst : Cat
+egoryTheory.Category.{v, u} C} [self : CategoryTheory.Balanced C] {X Y : C} (f :
+ X ⟶ Y)   [CategoryTheory.Mono f] …
 -/
 lemma jointlyReflectsIsomorphisms [Balanced C] (h : JointlyFaithful F) :
     JointlyReflectIsomorphisms F where
@@ -410,3 +463,4 @@ lemma jointlyReflectsIsomorphisms [Balanced C] (h : JointlyFaithful F) :
 end JointlyFaithful
 
 end CategoryTheory
+

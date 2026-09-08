@@ -57,20 +57,14 @@ open Finset (antidiagonal mem_antidiagonal)
 
 /-- Formal power series over a coefficient type `R` -/
 @[wikidata Q1003025]
-/--
-Definition of `PowerSeries` / `PowerSeries` 的定义
+/-
+**PowerSeries** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：PowerSeries (R : Type*)
+参数：R : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation PowerSeries
-  signature: (R : Type*)
-  body: MvPowerSeries Unit R
-
-中文:
-缩写 幂级数
-  签名: (R : 类型)
-  定义体: MvPowerSeries Unit R
-
-Depends on / 依赖: MvPowerSeries
+--- 原说明 ---
+Formal power series over a coefficient type `R`
 -/
 abbrev PowerSeries (R : Type*) :=
   MvPowerSeries Unit R
@@ -91,1509 +85,1044 @@ section Semiring
 
 variable [Semiring R]
 
-/--
-Definition of `coeff` / `coeff` 的定义
+/-- The `n`th coefficient of a formal power series. -/
+/-
+**PowerSeries.coeff** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries`。
+形式化陈述：coeff (n : Nat) : R⟦X⟧ ->ₗ[R] R
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coeff
-  signature: (n : Nat)
-  body: MvPowerSeries.coeff (single () n)
-
-中文:
-定义 coeff
-  签名: (n : 自然数)
-  定义体: MvPowerSeries.coeff (single () n)
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.coeff, single
+--- 原说明 ---
+The `n`th coefficient of a formal power series.
 -/
-def coeff (n : Nat) : R⟦X⟧ ->ₗ[R] R :=
+def coeff (n : ℕ) : R⟦X⟧ →ₗ[R] R :=
   MvPowerSeries.coeff (single () n)
 
-/--
-Definition of `monomial` / `monomial` 的定义
+/-- The `n`th monomial with coefficient `a` as formal power series. -/
+/-
+**PowerSeries.monomial** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries`。
+形式化陈述：monomial (n : Nat) : R ->ₗ[R] R⟦X⟧
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition monomial
-  signature: (n : Nat)
-  body: MvPowerSeries.monomial (single () n)
-
-中文:
-定义 monomial
-  签名: (n : 自然数)
-  定义体: MvPowerSeries.monomial (single () n)
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.monomial, monomial, single
+--- 原说明 ---
+The `n`th monomial with coefficient `a` as formal power series.
 -/
-def monomial (n : Nat) : R ->ₗ[R] R⟦X⟧ :=
+def monomial (n : ℕ) : R →ₗ[R] R⟦X⟧ :=
   MvPowerSeries.monomial (single () n)
-
-/--
-theorem `coeff_def` / 定理 `coeff_def`
-
-English:
-theorem coeff_def
-  given: {s : Unit ->₀ Nat} {n : Nat} (h : s () = n)
-  proof: by
-  rw [coeff]; rw [← h]; rw [← Finsupp.unique_single s]
-
-@[simp]
-
-中文:
-定理 coeff_def
-  条件: {s : 单元 ->₀ 自然数} {n : 自然数} (h : s () = n)
-  证明: by
-  rw [coeff]; rw [← h]; rw [← Finsupp.unique_single s]
-
-@[simp]
-
-Depends on / 依赖: Finsupp, Finsupp.unique_single, MvPowerSeries, MvPowerSeries.coeff, unique_single
+/-
+**PowerSeries.coeff_def** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_def {s : Unit ->₀ Nat} {n : Nat} (h : s () = n) : coeff (R
+参数：h : s () = n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.coeff.eq_1`：∀ {R : Type u_1} [inst : Semiring R] (n : ℕ), Po
+werSeries.coeff n = MvPowerSeries.coeff fun₀ | () => n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finsupp.unique_single`：unique_single [Unique α] (x : α ->₀ M) : x = sing
+le default (x default)
 -/
-theorem coeff_def {s : Unit ->₀ Nat} {n : Nat} (h : s () = n) :
+theorem coeff_def {s : Unit →₀ ℕ} {n : ℕ} (h : s () = n) :
     coeff (R := R) n = MvPowerSeries.coeff s := by
-  rw [coeff]; rw [← h]; rw [← Finsupp.unique_single s]
+  rw [coeff, ← h, ← Finsupp.unique_single s]
 
 @[simp]
-/--
-lemma `coeff_coeToMvPowerSeries` / 引理 `coeff_coeToMvPowerSeries`
-
-English:
-lemma coeff_coeToMvPowerSeries
-  given: {f : R⟦X⟧} (n : Nat)
-  proof: rfl
-
-中文:
-引理 coeff_coeToMvPowerSeries
-  条件: {f : R⟦X⟧} (n : 自然数)
-  证明: rfl
+/-
+**PowerSeries.coeff_coeToMvPowerSeries** 是 Mathlib 中的一个引理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_coeToMvPowerSeries {f : R⟦X⟧} (n : Nat) : MvPowerSeries.coeff (Finsu
+pp.single () n) f = f.coeff n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coeff_coeToMvPowerSeries {f : R⟦X⟧} (n : Nat) :
+lemma coeff_coeToMvPowerSeries {f : R⟦X⟧} (n : ℕ) :
     MvPowerSeries.coeff (Finsupp.single () n) f = f.coeff n := rfl
 
 /-- Two formal power series are equal if all their coefficients are equal. -/
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
+/-
+**PowerSeries.ext** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：ext {φ ψ : R⟦X⟧} (h : forall n, coeff n φ = coeff n ψ) : φ = ψ
+参数：h : forall n, coeff n φ = coeff n ψ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.ext`：ext {φ ψ : MvPowerSeries σ R} (h : forall n : σ ->₀ N
+at, coeff n φ = coeff n ψ) : φ = ψ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PowerSeries.coeff_def`：coeff_def {s : Unit ->₀ Nat} {n : Nat} (h : s () 
+= n) : coeff (R
 
-English:
-theorem ext
-  given: {φ ψ : R⟦X⟧} (h : forall n, coeff n φ = coeff n ψ)
-  statement: φ = ψ
-  proof: MvPowerSeries.ext fun n => by
-    rw [← coeff_def]
-    · apply h
-    rfl
-
-@[simp]
-
-中文:
-定理 ext
-  条件: {φ ψ : R⟦X⟧} (h : 对任意 n, coeff n φ = coeff n ψ)
-  结论: φ = ψ
-  证明: MvPowerSeries.ext fun n => by
-    rw [← coeff_def]
-    · apply h
-    rfl
-
-@[simp]
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.ext, coeff_def
+--- 原说明 ---
+Two formal power series are equal if all their coefficients are equal.
 -/
-theorem ext {φ ψ : R⟦X⟧} (h : forall n, coeff n φ = coeff n ψ) : φ = ψ :=
+theorem ext {φ ψ : R⟦X⟧} (h : ∀ n, coeff n φ = coeff n ψ) : φ = ψ :=
   MvPowerSeries.ext fun n => by
     rw [← coeff_def]
     · apply h
     rfl
 
 @[simp]
-/--
-theorem `forall_coeff_eq_zero` / 定理 `forall_coeff_eq_zero`
-
-English:
-theorem forall_coeff_eq_zero
-  given: (φ : R⟦X⟧)
-  statement: (forall n, coeff n φ = 0) ↔ φ = 0
-  proof: ⟨fun h => ext h, fun h => by simp [h]⟩
-
-中文:
-定理 对任意_coeff_eq_zero
-  条件: (φ : R⟦X⟧)
-  结论: (对任意 n, coeff n φ = 0) ↔ φ = 0
-  证明: ⟨fun h => ext h, fun h => by simp [h]⟩
+/-
+**PowerSeries.forall_coeff_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：forall_coeff_eq_zero (φ : R⟦X⟧) : (forall n, coeff n φ = 0) ↔ φ = 0
+参数：φ : R⟦X⟧。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.ext`：ext {φ ψ : R⟦X⟧} (h : forall n, coeff n φ = coeff n ψ) 
+: φ = ψ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem forall_coeff_eq_zero (φ : R⟦X⟧) : (forall n, coeff n φ = 0) ↔ φ = 0 :=
+theorem forall_coeff_eq_zero (φ : R⟦X⟧) : (∀ n, coeff n φ = 0) ↔ φ = 0 :=
   ⟨fun h => ext h, fun h => by simp [h]⟩
 
 /-- Two formal power series are equal if all their coefficients are equal. -/
 add_decl_doc PowerSeries.ext_iff
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Subsingleton
-  signature: R] : Subsingleton R⟦X⟧
-  body: by
-  simp only [subsingleton_iff, PowerSeries.ext_iff]
-  subsingleton
-
-中文:
-实例 [子单例
-  签名: R] : 子单例 R⟦X⟧
-  定义体: by
-  simp only [subsingleton_iff, PowerSeries.ext_iff]
-  subsingleton
-
-Depends on / 依赖: PowerSeries, PowerSeries.ext_iff, ext_iff, subsingleton, subsingleton_iff
+/-
+**PowerSeries.** 是 Mathlib 中的一个实例，位于命名空间 `PowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Subsingleton R] : Subsingleton R⟦X⟧ := by
   simp only [subsingleton_iff, PowerSeries.ext_iff]
   subsingleton
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- Constructor for formal power series. -/
+/-
+**PowerSeries.mk** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries`。
+形式化陈述：mk {R} (f : Nat -> R) : R⟦X⟧
+参数：f : Nat -> R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk
-  signature: {R} (f : Nat -> R)
-  body: fun s => f (s ())
-
-@[simp]
-
-中文:
-定义 mk
-  签名: {R} (f : 自然数 -> R)
-  定义体: fun s => f (s ())
-
-@[simp]
+--- 原说明 ---
+Constructor for formal power series.
 -/
-def mk {R} (f : Nat -> R) : R⟦X⟧ := fun s => f (s ())
+def mk {R} (f : ℕ → R) : R⟦X⟧ := fun s => f (s ())
 
 @[simp]
-/--
-theorem `coeff_mk` / 定理 `coeff_mk`
-
-English:
-theorem coeff_mk
-  given: (n : Nat) (f : Nat -> R)
-  statement: coeff n (mk f) = f n
-  proof: congr_arg f Finsupp.single_eq_same
-
-中文:
-定理 coeff_mk
-  条件: (n : 自然数) (f : 自然数 -> R)
-  结论: coeff n (mk f) = f n
-  证明: congr_arg f Finsupp.single_eq_same
-
-Depends on / 依赖: Finsupp, Finsupp.single_eq_same, congr_arg, single_eq_same
+/-
+**PowerSeries.coeff_mk** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_mk (n : Nat) (f : Nat -> R) : coeff n (mk f) = f n
+参数：n : Nat；f : Nat -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Finsupp.single_eq_same`：single_eq_same : (single a b : α ->₀ M) a = b
 -/
-theorem coeff_mk (n : Nat) (f : Nat -> R) : coeff n (mk f) = f n :=
+theorem coeff_mk (n : ℕ) (f : ℕ → R) : coeff n (mk f) = f n :=
   congr_arg f Finsupp.single_eq_same
-
-/--
-theorem `coeff_monomial` / 定理 `coeff_monomial`
-
-English:
-theorem coeff_monomial
-  given: (m n : Nat) (a : R)
-  statement: coeff m (monomial n a) = if m = n then a else 0
-  proof: calc
-    coeff m (monomial n a) = _ := MvPowerSeries.coeff_monomial _ _ _
-    _ = if m = n then a else 0 := by simp only [Finsupp.unique_single_eq_iff]
-
-中文:
-定理 coeff_monomial
-  条件: (m n : 自然数) (a : R)
-  结论: coeff m (monomial n a) = if m = n then a else 0
-  证明: calc
-    coeff m (monomial n a) = _ := MvPowerSeries.coeff_monomial _ _ _
-    _ = if m = n then a else 0 := by simp only [Finsupp.unique_single_eq_iff]
-
-Depends on / 依赖: BaireSpace, BaireSpace.of_t2Space_locallyCompactSpace, Finsupp, Finsupp.unique_single_eq_iff, MvPowerSeries, MvPowerSeries.coeff_monomial, coeff_monomial, monomial, of_t2Space_locallyCompactSpace, unique_single_eq_iff
+/-
+**PowerSeries.coeff_monomial** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_monomial (m n : Nat) (a : R) : coeff m (monomial n a) = if m = n the
+n a else 0
+参数：m n : Nat；a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.coeff_monomial`：coeff_monomial [DecidableEq σ] (m n : σ ->
+₀ Nat) (a : R) : coeff m (monomial n a) = if m = n then a else 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem coeff_monomial (m n : Nat) (a : R) : coeff m (monomial n a) = if m = n then a else 0 :=
+theorem coeff_monomial (m n : ℕ) (a : R) : coeff m (monomial n a) = if m = n then a else 0 :=
   calc
     coeff m (monomial n a) = _ := MvPowerSeries.coeff_monomial _ _ _
     _ = if m = n then a else 0 := by simp only [Finsupp.unique_single_eq_iff]
-
-/--
-theorem `monomial_eq_mk` / 定理 `monomial_eq_mk`
-
-English:
-theorem monomial_eq_mk
-  given: (n : Nat) (a : R)
-  statement: monomial n a = mk fun m => if m = n then a else 0
-  proof: ext fun m => by rw [coeff_monomial, coeff_mk]
-
-@[simp]
-
-中文:
-定理 monomial_eq_mk
-  条件: (n : 自然数) (a : R)
-  结论: monomial n a = mk fun m => if m = n then a else 0
-  证明: ext fun m => by rw [coeff_monomial, coeff_mk]
-
-@[simp]
-
-Depends on / 依赖: coeff_mk, coeff_monomial
+/-
+**PowerSeries.monomial_eq_mk** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：monomial_eq_mk (n : Nat) (a : R) : monomial n a = mk fun m => if m = n the
+n a else 0
+参数：n : Nat；a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.ext`：ext {φ ψ : R⟦X⟧} (h : forall n, coeff n φ = coeff n ψ) 
+: φ = ψ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.coeff_monomial`：coeff_monomial (m n : Nat) (a : R) : coeff m
+ (monomial n a) = if m = n then a else 0
+· 使用定理 `PowerSeries.coeff_mk`：coeff_mk (n : Nat) (f : Nat -> R) : coeff n (mk f)
+ = f n
 -/
-theorem monomial_eq_mk (n : Nat) (a : R) : monomial n a = mk fun m => if m = n then a else 0 :=
+theorem monomial_eq_mk (n : ℕ) (a : R) : monomial n a = mk fun m => if m = n then a else 0 :=
   ext fun m => by rw [coeff_monomial, coeff_mk]
 
 @[simp]
-/--
-theorem `coeff_monomial_same` / 定理 `coeff_monomial_same`
-
-English:
-theorem coeff_monomial_same
-  given: (n : Nat) (a : R)
-  statement: coeff n (monomial n a) = a
-  proof: MvPowerSeries.coeff_monomial_same _ _
-
-@[simp]
-
-中文:
-定理 coeff_monomial_same
-  条件: (n : 自然数) (a : R)
-  结论: coeff n (monomial n a) = a
-  证明: MvPowerSeries.coeff_monomial_same _ _
-
-@[simp]
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.coeff_monomial_same, coeff_monomial_same
+/-
+**PowerSeries.coeff_monomial_same** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_monomial_same (n : Nat) (a : R) : coeff n (monomial n a) = a
+参数：n : Nat；a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.coeff_monomial_same`：coeff_monomial_same (n : σ ->₀ Nat) (
+a : R) : coeff n (monomial n a) = a
 -/
-theorem coeff_monomial_same (n : Nat) (a : R) : coeff n (monomial n a) = a :=
+theorem coeff_monomial_same (n : ℕ) (a : R) : coeff n (monomial n a) = a :=
   MvPowerSeries.coeff_monomial_same _ _
 
 @[simp]
-/--
-theorem `coeff_comp_monomial` / 定理 `coeff_comp_monomial`
-
-English:
-theorem coeff_comp_monomial
-  given: (n : Nat)
-  statement: (coeff (R := R) n).comp (monomial n) = LinearMap.id
-  proof: LinearMap.ext coeff_monomial_same n
-
-中文:
-定理 coeff_comp_monomial
-  条件: (n : 自然数)
-  结论: (coeff (R := R) n).comp (monomial n) = 线性映射.id
-  证明: LinearMap.ext coeff_monomial_same n
-
-Depends on / 依赖: LinearMap, LinearMap.id, monomial
+/-
+**PowerSeries.coeff_comp_monomial** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_comp_monomial (n : Nat) : (coeff (R
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `PowerSeries.coeff_monomial_same`：coeff_monomial_same (n : Nat) (a : R) :
+ coeff n (monomial n a) = a
 -/
-theorem coeff_comp_monomial (n : Nat) : (coeff (R := R) n).comp (monomial n) = LinearMap.id :=
-LinearMap.ext coeff_monomial_same n
-
-/--
-theorem `monomial_mul_monomial` / 定理 `monomial_mul_monomial`
-
-English:
-theorem monomial_mul_monomial
-  given: (m n : Nat) (a b : R)
-  proof: by
-  simpa [monomial] using
-    MvPowerSeries.monomial_mul_monomial (Finsupp.single () m) (Finsupp.single () n) a b
-
-中文:
-定理 monomial_mul_monomial
-  条件: (m n : 自然数) (a b : R)
-  证明: by
-  simpa [monomial] using
-    MvPowerSeries.monomial_mul_monomial (Finsupp.single () m) (Finsupp.single () n) a b
-
-Depends on / 依赖: Finsupp, Finsupp.single, MvPowerSeries, MvPowerSeries.monomial_mul_monomial, monomial, monomial_mul_monomial, single
+theorem coeff_comp_monomial (n : ℕ) : (coeff (R := R) n).comp (monomial n) = LinearMap.id :=
+  LinearMap.ext <| coeff_monomial_same n
+/-
+**PowerSeries.monomial_mul_monomial** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：monomial_mul_monomial (m n : Nat) (a b : R) : monomial m a * monomial n b 
+= monomial (m + n) (a * b)
+参数：m n : Nat；a b : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Finsupp.single_add`：single_add (a : ι) (b₁ b₂ : M) : single a (b₁ + b₂) 
+= single a b₁ + single a b₂
+· 使用定理 `MvPowerSeries.monomial_mul_monomial`：monomial_mul_monomial (m n : σ ->₀ 
+Nat) (a b : R) : monomial m a * monomial n b = monomial (m + n) (a * b)
 -/
-theorem monomial_mul_monomial (m n : Nat) (a b : R) :
+theorem monomial_mul_monomial (m n : ℕ) (a b : R) :
     monomial m a * monomial n b = monomial (m + n) (a * b) := by
   simpa [monomial] using
     MvPowerSeries.monomial_mul_monomial (Finsupp.single () m) (Finsupp.single () n) a b
 
-/--
-Definition of `constantCoeff` / `constantCoeff` 的定义
+/-- The constant coefficient of a formal power series. -/
+/-
+**PowerSeries.constantCoeff** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries`。
+形式化陈述：constantCoeff : R⟦X⟧ ->+* R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition constantCoeff
-  signature: : R⟦X⟧ ->+* R
-  body: MvPowerSeries.constantCoeff
-
-中文:
-定义 constantCoeff
-  签名: : R⟦X⟧ ->+* R
-  定义体: MvPowerSeries.constantCoeff
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.constantCoeff, constantCoeff
+--- 原说明 ---
+The constant coefficient of a formal power series.
 -/
-def constantCoeff : R⟦X⟧ ->+* R :=
+def constantCoeff : R⟦X⟧ →+* R :=
   MvPowerSeries.constantCoeff
-
-/--
-theorem `constantCoeff_eq` / 定理 `constantCoeff_eq`
-
-English:
-theorem constantCoeff_eq
-  given: (f : R⟦X⟧)
-  proof: rfl
-
-中文:
-定理 constantCoeff_eq
-  条件: (f : R⟦X⟧)
-  证明: rfl
+/-
+**PowerSeries.constantCoeff_eq** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：constantCoeff_eq (f : R⟦X⟧) : constantCoeff f = MvPowerSeries.constantCoef
+f f
+参数：f : R⟦X⟧。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem constantCoeff_eq (f : R⟦X⟧) :
     constantCoeff f = MvPowerSeries.constantCoeff f := rfl
 
-/--
-Definition of `C` / `C` 的定义
+/-- The constant formal power series. -/
+/-
+**PowerSeries.C** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries`。
+形式化陈述：C : R ->+* R⟦X⟧
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition C
-  signature: : R ->+* R⟦X⟧
-  body: MvPowerSeries.C
-
-中文:
-定义 C
-  签名: : R ->+* R⟦X⟧
-  定义体: MvPowerSeries.C
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.C
+--- 原说明 ---
+The constant formal power series.
 -/
-def C : R ->+* R⟦X⟧ :=
+def C : R →+* R⟦X⟧ :=
   MvPowerSeries.C
-
-/--
-lemma `C_apply` / 引理 `C_apply`
-
-English:
-lemma C_apply
-  given: {r : R}
-  statement: C r = MvPowerSeries.C r
-  proof: rfl
-
-中文:
-引理 C_apply
-  条件: {r : R}
-  结论: C r = MvPowerSeries.C r
-  证明: rfl
+/-
+**PowerSeries.C_apply** 是 Mathlib 中的一个引理，位于命名空间 `PowerSeries`。
+形式化陈述：C_apply {r : R} : C r = MvPowerSeries.C r
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma C_apply {r : R} : C r = MvPowerSeries.C r := rfl
-
-/--
-lemma `algebraMap_eq` / 引理 `algebraMap_eq`
-
-English:
-lemma algebraMap_eq
-  given: {R : Type*} [CommSemiring R]
-  statement: algebraMap R R⟦X⟧ = C
-  proof: rfl
-
-中文:
-引理 algebraMap_eq
-  条件: {R : 类型} [交换半环 R]
-  结论: algebraMap R R⟦X⟧ = C
-  证明: rfl
+/-
+**PowerSeries.algebraMap_eq** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：∀ {R : Type u_2} [inst : CommSemiring R], algebraMap R (PowerSeries R) = P
+owerSeries.C
+参数：PowerSeries R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma algebraMap_eq {R : Type*} [CommSemiring R] : algebraMap R R⟦X⟧ = C := rfl
 
-/--
-Definition of `X` / `X` 的定义
+/-- The variable of the formal power series ring. -/
+/-
+**PowerSeries.X** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries`。
+形式化陈述：X : R⟦X⟧
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition X
-  signature: : R⟦X⟧
-  body: MvPowerSeries.X ()
-
-中文:
-定义 X
-  签名: : R⟦X⟧
-  定义体: MvPowerSeries.X ()
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.X
+--- 原说明 ---
+The variable of the formal power series ring.
 -/
 def X : R⟦X⟧ :=
   MvPowerSeries.X ()
-
-/--
-lemma `X_apply` / 引理 `X_apply`
-
-English:
-lemma X_apply
-  statement: X (R := R) = MvPowerSeries.X ()
-  proof: rfl
-
-中文:
-引理 X_apply
-  结论: X (R := R) = MvPowerSeries.X ()
-  证明: rfl
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.X
+/-
+**PowerSeries.X_apply** 是 Mathlib 中的一个引理，位于命名空间 `PowerSeries`。
+形式化陈述：X_apply : X (R
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma X_apply : X (R := R) = MvPowerSeries.X () := rfl
-
-/--
-theorem `commute_X` / 定理 `commute_X`
-
-English:
-theorem commute_X
-  given: (φ : R⟦X⟧)
-  statement: Commute φ X
-  proof: MvPowerSeries.commute_X _ _
-
-中文:
-定理 commute_X
-  条件: (φ : R⟦X⟧)
-  结论: Commute φ X
-  证明: MvPowerSeries.commute_X _ _
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.commute_X, commute_X
+/-
+**PowerSeries.commute_X** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：commute_X (φ : R⟦X⟧) : Commute φ X
+参数：φ : R⟦X⟧。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.commute_X`：commute_X (φ : MvPowerSeries σ R) (s : σ) : Com
+mute φ (X s)
 -/
 theorem commute_X (φ : R⟦X⟧) : Commute φ X :=
   MvPowerSeries.commute_X _ _
-
-/--
-theorem `X_mul` / 定理 `X_mul`
-
-English:
-theorem X_mul
-  given: {φ : R⟦X⟧}
-  statement: X * φ = φ * X
-  proof: MvPowerSeries.X_mul
-
-中文:
-定理 X_mul
-  条件: {φ : R⟦X⟧}
-  结论: X * φ = φ * X
-  证明: MvPowerSeries.X_mul
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.X_mul, X_mul
+/-
+**PowerSeries.X_mul** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：X_mul {φ : R⟦X⟧} : X * φ = φ * X
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.X_mul`：X_mul {φ : MvPowerSeries σ R} {s : σ} : X s * φ = φ
+ * X s
 -/
 theorem X_mul {φ : R⟦X⟧} : X * φ = φ * X :=
   MvPowerSeries.X_mul
-
-/--
-theorem `commute_X_pow` / 定理 `commute_X_pow`
-
-English:
-theorem commute_X_pow
-  given: (φ : R⟦X⟧) (n : Nat)
-  statement: Commute φ (X ^ n)
-  proof: MvPowerSeries.commute_X_pow _ _ _
-
-中文:
-定理 commute_X_pow
-  条件: (φ : R⟦X⟧) (n : 自然数)
-  结论: Commute φ (X ^ n)
-  证明: MvPowerSeries.commute_X_pow _ _ _
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.commute_X_pow, commute_X_pow
+/-
+**PowerSeries.commute_X_pow** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：commute_X_pow (φ : R⟦X⟧) (n : Nat) : Commute φ (X ^ n)
+参数：φ : R⟦X⟧；n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.commute_X_pow`：commute_X_pow (φ : MvPowerSeries σ R) (s : 
+σ) (n : Nat) : Commute φ (X s ^ n)
 -/
-theorem commute_X_pow (φ : R⟦X⟧) (n : Nat) : Commute φ (X ^ n) :=
+theorem commute_X_pow (φ : R⟦X⟧) (n : ℕ) : Commute φ (X ^ n) :=
   MvPowerSeries.commute_X_pow _ _ _
-
-/--
-theorem `X_pow_mul` / 定理 `X_pow_mul`
-
-English:
-theorem X_pow_mul
-  given: {φ : R⟦X⟧} {n : Nat}
-  statement: X ^ n * φ = φ * X ^ n
-  proof: MvPowerSeries.X_pow_mul
-
-@[simp]
-
-中文:
-定理 X_pow_mul
-  条件: {φ : R⟦X⟧} {n : 自然数}
-  结论: X ^ n * φ = φ * X ^ n
-  证明: MvPowerSeries.X_pow_mul
-
-@[simp]
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.X_pow_mul, X_pow_mul
+/-
+**PowerSeries.X_pow_mul** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：X_pow_mul {φ : R⟦X⟧} {n : Nat} : X ^ n * φ = φ * X ^ n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.X_pow_mul`：X_pow_mul {φ : MvPowerSeries σ R} {s : σ} {n : 
+Nat} : X s ^ n * φ = φ * X s ^ n
 -/
-theorem X_pow_mul {φ : R⟦X⟧} {n : Nat} : X ^ n * φ = φ * X ^ n :=
+theorem X_pow_mul {φ : R⟦X⟧} {n : ℕ} : X ^ n * φ = φ * X ^ n :=
   MvPowerSeries.X_pow_mul
 
 @[simp]
-/--
-theorem `coeff_zero_eq_constantCoeff` / 定理 `coeff_zero_eq_constantCoeff`
-
-English:
-theorem coeff_zero_eq_constantCoeff
-  statement: ⇑(coeff (R := R) 0) = constantCoeff
-  proof: by
-  rw [coeff]; rw [Finsupp.single_zero]
-  rfl
-
-中文:
-定理 coeff_zero_eq_constantCoeff
-  结论: ⇑(coeff (R := R) 0) = constantCoeff
-  证明: by
-  rw [coeff]; rw [Finsupp.single_zero]
-  rfl
-
-Depends on / 依赖: Finsupp, Finsupp.single_zero, constantCoeff, single_zero
+/-
+**PowerSeries.coeff_zero_eq_constantCoeff** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries
+`。
+形式化陈述：coeff_zero_eq_constantCoeff : ⇑(coeff (R
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.coeff.eq_1`：∀ {R : Type u_1} [inst : Semiring R] (n : ℕ), Po
+werSeries.coeff n = MvPowerSeries.coeff fun₀ | () => n
+· 使用定理 `Finsupp.single_zero`：single_zero (a : α) : (single a 0 : α ->₀ M) = 0
 -/
 theorem coeff_zero_eq_constantCoeff : ⇑(coeff (R := R) 0) = constantCoeff := by
-  rw [coeff]; rw [Finsupp.single_zero]
+  rw [coeff, Finsupp.single_zero]
   rfl
-
-/--
-theorem `coeff_zero_eq_constantCoeff_apply` / 定理 `coeff_zero_eq_constantCoeff_apply`
-
-English:
-theorem coeff_zero_eq_constantCoeff_apply
-  given: (φ : R⟦X⟧)
-  statement: coeff 0 φ = constantCoeff φ
-  proof: by
-  rw [coeff_zero_eq_constantCoeff]
-
-@[simp]
-
-中文:
-定理 coeff_zero_eq_constantCoeff_apply
-  条件: (φ : R⟦X⟧)
-  结论: coeff 0 φ = constantCoeff φ
-  证明: by
-  rw [coeff_zero_eq_constantCoeff]
-
-@[simp]
-
-Depends on / 依赖: coeff_zero_eq_constantCoeff
+/-
+**PowerSeries.coeff_zero_eq_constantCoeff_apply** 是 Mathlib 中的一个定理，位于命名空间 `Power
+Series`。
+形式化陈述：coeff_zero_eq_constantCoeff_apply (φ : R⟦X⟧) : coeff 0 φ = constantCoeff φ
+参数：φ : R⟦X⟧。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.coeff_zero_eq_constantCoeff`：coeff_zero_eq_constantCoeff : ⇑
+(coeff (R
 -/
 theorem coeff_zero_eq_constantCoeff_apply (φ : R⟦X⟧) : coeff 0 φ = constantCoeff φ := by
   rw [coeff_zero_eq_constantCoeff]
 
 @[simp]
-/--
-theorem `monomial_zero_eq_C` / 定理 `monomial_zero_eq_C`
-
-English:
-theorem monomial_zero_eq_C
-  statement: ⇑(monomial (R := R) 0) = C
-  proof: by
-  -- This used to be `rw`, but we need `rw; rfl` after https://github.com/leanprover/lean4/pull/2644
-  rw [monomial]; rw [Finsupp.single_zero]; rw [MvPowerSeries.monomial_zero_eq_C]
-  rfl
-
-中文:
-定理 monomial_zero_eq_C
-  结论: ⇑(monomial (R := R) 0) = C
-  证明: by
-  -- This used to be `rw`, but we need `rw; rfl` after https://github.com/leanprover/lean4/pull/2644
-  rw [monomial]; rw [Finsupp.single_zero]; rw [MvPowerSeries.monomial_zero_eq_C]
-  rfl
+/-
+**PowerSeries.monomial_zero_eq_C** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：monomial_zero_eq_C : ⇑(monomial (R
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.monomial.eq_1`：∀ {R : Type u_1} [inst : Semiring R] (n : ℕ),
+ PowerSeries.monomial n = MvPowerSeries.monomial fun₀ | () => n
+· 使用定理 `Finsupp.single_zero`：single_zero (a : α) : (single a 0 : α ->₀ M) = 0
+· 使用定理 `MvPowerSeries.monomial_zero_eq_C`：monomial_zero_eq_C : ⇑(monomial (R
 -/
 theorem monomial_zero_eq_C : ⇑(monomial (R := R) 0) = C := by
   -- This used to be `rw`, but we need `rw; rfl` after https://github.com/leanprover/lean4/pull/2644
-  rw [monomial]; rw [Finsupp.single_zero]; rw [MvPowerSeries.monomial_zero_eq_C]
+  rw [monomial, Finsupp.single_zero, MvPowerSeries.monomial_zero_eq_C]
   rfl
-
-/--
-theorem `monomial_zero_eq_C_apply` / 定理 `monomial_zero_eq_C_apply`
-
-English:
-theorem monomial_zero_eq_C_apply
-  given: (a : R)
-  statement: monomial 0 a = C a
-  proof: by simp
-
-中文:
-定理 monomial_zero_eq_C_apply
-  条件: (a : R)
-  结论: monomial 0 a = C a
-  证明: by simp
+/-
+**PowerSeries.monomial_zero_eq_C_apply** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：monomial_zero_eq_C_apply (a : R) : monomial 0 a = C a
+参数：a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `PowerSeries.monomial_zero_eq_C`：monomial_zero_eq_C : ⇑(monomial (R
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem monomial_zero_eq_C_apply (a : R) : monomial 0 a = C a := by simp
-
-/--
-theorem `coeff_C` / 定理 `coeff_C`
-
-English:
-theorem coeff_C
-  given: (n : Nat) (a : R)
-  statement: coeff n (C a : R⟦X⟧) = if n = 0 then a else 0
-  proof: by
-  rw [← monomial_zero_eq_C_apply]; rw [coeff_monomial]
-
-@[simp]
-
-中文:
-定理 coeff_C
-  条件: (n : 自然数) (a : R)
-  结论: coeff n (C a : R⟦X⟧) = if n = 0 then a else 0
-  证明: by
-  rw [← monomial_zero_eq_C_apply]; rw [coeff_monomial]
-
-@[simp]
-
-Depends on / 依赖: coeff_monomial, monomial_zero_eq_C_apply
+/-
+**PowerSeries.coeff_C** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_C (n : Nat) (a : R) : coeff n (C a : R⟦X⟧) = if n = 0 then a else 0
+参数：n : Nat；a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PowerSeries.monomial_zero_eq_C_apply`：monomial_zero_eq_C_apply (a : R) :
+ monomial 0 a = C a
+· 使用定理 `PowerSeries.coeff_monomial`：coeff_monomial (m n : Nat) (a : R) : coeff m
+ (monomial n a) = if m = n then a else 0
 -/
-theorem coeff_C (n : Nat) (a : R) : coeff n (C a : R⟦X⟧) = if n = 0 then a else 0 := by
-  rw [← monomial_zero_eq_C_apply]; rw [coeff_monomial]
+theorem coeff_C (n : ℕ) (a : R) : coeff n (C a : R⟦X⟧) = if n = 0 then a else 0 := by
+  rw [← monomial_zero_eq_C_apply, coeff_monomial]
 
 @[simp]
-/--
-theorem `coeff_zero_C` / 定理 `coeff_zero_C`
-
-English:
-theorem coeff_zero_C
-  given: (a : R)
-  statement: coeff 0 (C a) = a
-  proof: by
-  rw [coeff_C]; rw [if_pos rfl]
-
-中文:
-定理 coeff_zero_C
-  条件: (a : R)
-  结论: coeff 0 (C a) = a
-  证明: by
-  rw [coeff_C]; rw [if_pos rfl]
-
-Depends on / 依赖: coeff_C, if_pos
+/-
+**PowerSeries.coeff_zero_C** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_zero_C (a : R) : coeff 0 (C a) = a
+参数：a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.coeff_C`：coeff_C (n : Nat) (a : R) : coeff n (C a : R⟦X⟧) = 
+if n = 0 then a else 0
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
 theorem coeff_zero_C (a : R) : coeff 0 (C a) = a := by
-  rw [coeff_C]; rw [if_pos rfl]
-
-/--
-theorem `coeff_C_of_ne_zero` / 定理 `coeff_C_of_ne_zero`
-
-English:
-theorem coeff_C_of_ne_zero
-  given: {a : R} {n : Nat} (h : n != 0)
-  statement: coeff n (C a) = 0
-  proof: by
-  rw [coeff_C]; rw [if_neg h]
-
-@[deprecated (since := "2026-05-20")] alias coeff_ne_zero_C := coeff_C_of_ne_zero
-
-@[simp]
-
-中文:
-定理 coeff_C_of_ne_zero
-  条件: {a : R} {n : 自然数} (h : n != 0)
-  结论: coeff n (C a) = 0
-  证明: by
-  rw [coeff_C]; rw [if_neg h]
-
-@[deprecated (since := "2026-05-20")] alias coeff_ne_zero_C := coeff_C_of_ne_zero
-
-@[simp]
-
-Depends on / 依赖: coeff_C, if_neg
+  rw [coeff_C, if_pos rfl]
+/-
+**PowerSeries.coeff_C_of_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_C_of_ne_zero {a : R} {n : Nat} (h : n != 0) : coeff n (C a) = 0
+参数：h : n != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.coeff_C`：coeff_C (n : Nat) (a : R) : coeff n (C a : R⟦X⟧) = 
+if n = 0 then a else 0
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
 -/
-theorem coeff_C_of_ne_zero {a : R} {n : Nat} (h : n != 0) : coeff n (C a) = 0 := by
-  rw [coeff_C]; rw [if_neg h]
+theorem coeff_C_of_ne_zero {a : R} {n : ℕ} (h : n ≠ 0) : coeff n (C a) = 0 := by
+  rw [coeff_C, if_neg h]
 
 @[deprecated (since := "2026-05-20")] alias coeff_ne_zero_C := coeff_C_of_ne_zero
 
 @[simp]
-/--
-theorem `coeff_succ_C` / 定理 `coeff_succ_C`
-
-English:
-theorem coeff_succ_C
-  given: {a : R} {n : Nat}
-  statement: coeff (n + 1) (C a) = 0
-  proof: coeff_C_of_ne_zero n.succ_ne_zero
-
-@[grind inj]
-
-中文:
-定理 coeff_succ_C
-  条件: {a : R} {n : 自然数}
-  结论: coeff (n + 1) (C a) = 0
-  证明: coeff_C_of_ne_zero n.succ_ne_zero
-
-@[grind inj]
-
-Depends on / 依赖: coeff_C_of_ne_zero, n.succ_ne_zero, succ_ne_zero
+/-
+**PowerSeries.coeff_succ_C** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_succ_C {a : R} {n : Nat} : coeff (n + 1) (C a) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.coeff_C_of_ne_zero`：coeff_C_of_ne_zero {a : R} {n : Nat} (h 
+: n != 0) : coeff n (C a) = 0
+· 使用定理 `Nat.succ_ne_zero`：∀ (n : ℕ), n.succ ≠ 0
 -/
-theorem coeff_succ_C {a : R} {n : Nat} : coeff (n + 1) (C a) = 0 :=
+theorem coeff_succ_C {a : R} {n : ℕ} : coeff (n + 1) (C a) = 0 :=
   coeff_C_of_ne_zero n.succ_ne_zero
 
 @[grind inj]
-/--
-theorem `C_injective` / 定理 `C_injective`
-
-English:
-theorem C_injective
-  statement: Function.Injective (C (R := R))
-  proof: MvPowerSeries.C_injective
-
-中文:
-定理 C_injective
-  结论: 函数.单射 (C (R := R))
-  证明: MvPowerSeries.C_injective
-
-Depends on / 依赖: C_injective, MvPowerSeries, MvPowerSeries.C_injective
+/-
+**PowerSeries.C_injective** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：C_injective : Function.Injective (C (R
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.C_injective`：C_injective : Function.Injective (C : R -> Mv
+PowerSeries σ R)
 -/
 theorem C_injective : Function.Injective (C (R := R)) := MvPowerSeries.C_injective
-
-/--
-theorem `subsingleton_iff` / 定理 `subsingleton_iff`
-
-English:
-theorem subsingleton_iff
-  statement: Subsingleton R⟦X⟧ ↔ Subsingleton R
-  proof: by
-  refine ⟨fun h => ?_, fun _ => inferInstance⟩
-  rw [subsingleton_iff] at h ⊢
-  exact fun a b => C_injective (h (C a) (C b))
-
-中文:
-定理 subsingleton_iff
-  结论: 子单例 R⟦X⟧ ↔ 子单例 R
-  证明: by
-  refine ⟨fun h => ?_, fun _ => inferInstance⟩
-  rw [subsingleton_iff] at h ⊢
-  exact fun a b => C_injective (h (C a) (C b))
+/-
+**PowerSeries.subsingleton_iff** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：∀ {R : Type u_1} [Semiring R], Subsingleton (PowerSeries R) ↔ Subsingleton
+ R
+参数：PowerSeries R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `subsingleton_iff`：subsingleton_iff : Subsingleton α ↔ forall x y : α, x 
+= y
+· 使用定理 `PowerSeries.C_injective`：C_injective : Function.Injective (C (R
+· 使用定理 `PowerSeries.instSubsingleton`：∀ {R : Type u_1} [Semiring R] [Subsingleto
+n R], Subsingleton (PowerSeries R)
 -/
 protected theorem subsingleton_iff : Subsingleton R⟦X⟧ ↔ Subsingleton R := by
-  refine ⟨fun h => ?_, fun _ => inferInstance⟩
+  refine ⟨fun h ↦ ?_, fun _ ↦ inferInstance⟩
   rw [subsingleton_iff] at h ⊢
-  exact fun a b => C_injective (h (C a) (C b))
-
-/--
-theorem `X_eq` / 定理 `X_eq`
-
-English:
-theorem X_eq
-  statement: (X : R⟦X⟧) = monomial 1 1
-  proof: rfl
-
-中文:
-定理 X_eq
-  结论: (X : R⟦X⟧) = monomial 1 1
-  证明: rfl
+  exact fun a b ↦ C_injective (h (C a) (C b))
+/-
+**PowerSeries.X_eq** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：X_eq : (X : R⟦X⟧) = monomial 1 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem X_eq : (X : R⟦X⟧) = monomial 1 1 :=
   rfl
-
-/--
-theorem `coeff_X` / 定理 `coeff_X`
-
-English:
-theorem coeff_X
-  given: (n : Nat)
-  statement: coeff n (X : R⟦X⟧) = if n = 1 then 1 else 0
-  proof: by
-  rw [X_eq]; rw [coeff_monomial]
-
-@[simp]
-
-中文:
-定理 coeff_X
-  条件: (n : 自然数)
-  结论: coeff n (X : R⟦X⟧) = if n = 1 then 1 else 0
-  证明: by
-  rw [X_eq]; rw [coeff_monomial]
-
-@[simp]
-
-Depends on / 依赖: X_eq, coeff_monomial
+/-
+**PowerSeries.coeff_X** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_X (n : Nat) : coeff n (X : R⟦X⟧) = if n = 1 then 1 else 0
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.X_eq`：X_eq : (X : R⟦X⟧) = monomial 1 1
+· 使用定理 `PowerSeries.coeff_monomial`：coeff_monomial (m n : Nat) (a : R) : coeff m
+ (monomial n a) = if m = n then a else 0
 -/
-theorem coeff_X (n : Nat) : coeff n (X : R⟦X⟧) = if n = 1 then 1 else 0 := by
-  rw [X_eq]; rw [coeff_monomial]
+theorem coeff_X (n : ℕ) : coeff n (X : R⟦X⟧) = if n = 1 then 1 else 0 := by
+  rw [X_eq, coeff_monomial]
 
 @[simp]
-/--
-theorem `coeff_zero_X` / 定理 `coeff_zero_X`
-
-English:
-theorem coeff_zero_X
-  statement: coeff 0 (X : R⟦X⟧) = 0
-  proof: by
-  rw [coeff]; rw [Finsupp.single_zero]; rw [X]; rw [MvPowerSeries.coeff_zero_X]
-
-@[simp]
-
-中文:
-定理 coeff_zero_X
-  结论: coeff 0 (X : R⟦X⟧) = 0
-  证明: by
-  rw [coeff]; rw [Finsupp.single_zero]; rw [X]; rw [MvPowerSeries.coeff_zero_X]
-
-@[simp]
-
-Depends on / 依赖: Finsupp, Finsupp.single_zero, MvPowerSeries, MvPowerSeries.coeff_zero_X, coeff_zero_X, single_zero
+/-
+**PowerSeries.coeff_zero_X** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_zero_X : coeff 0 (X : R⟦X⟧) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.coeff.eq_1`：∀ {R : Type u_1} [inst : Semiring R] (n : ℕ), Po
+werSeries.coeff n = MvPowerSeries.coeff fun₀ | () => n
+· 使用定理 `Finsupp.single_zero`：single_zero (a : α) : (single a 0 : α ->₀ M) = 0
+· 使用定理 `PowerSeries.X.eq_1`：∀ {R : Type u_1} [inst : Semiring R], PowerSeries.X 
+= MvPowerSeries.X ()
+· 使用定理 `MvPowerSeries.coeff_zero_X`：coeff_zero_X (s : σ) : coeff (0 : σ ->₀ Nat)
+ (X s : MvPowerSeries σ R) = 0
 -/
 theorem coeff_zero_X : coeff 0 (X : R⟦X⟧) = 0 := by
-  rw [coeff]; rw [Finsupp.single_zero]; rw [X]; rw [MvPowerSeries.coeff_zero_X]
+  rw [coeff, Finsupp.single_zero, X, MvPowerSeries.coeff_zero_X]
 
 @[simp]
-/--
-theorem `coeff_one_X` / 定理 `coeff_one_X`
-
-English:
-theorem coeff_one_X
-  statement: coeff 1 (X : R⟦X⟧) = 1
-  proof: by rw [coeff_X, if_pos rfl]
-
-@[simp]
-
-中文:
-定理 coeff_one_X
-  结论: coeff 1 (X : R⟦X⟧) = 1
-  证明: by rw [coeff_X, if_pos rfl]
-
-@[simp]
-
-Depends on / 依赖: coeff_X, if_pos
+/-
+**PowerSeries.coeff_one_X** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_one_X : coeff 1 (X : R⟦X⟧) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.coeff_X`：coeff_X (n : Nat) : coeff n (X : R⟦X⟧) = if n = 1 t
+hen 1 else 0
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
 theorem coeff_one_X : coeff 1 (X : R⟦X⟧) = 1 := by rw [coeff_X, if_pos rfl]
 
 @[simp]
-/--
-theorem `X_ne_zero` / 定理 `X_ne_zero`
-
-English:
-theorem X_ne_zero
-  given: [Nontrivial R]
-  statement: (X : R⟦X⟧) != 0
-  proof: fun H => by
-  simpa only [coeff_one_X, one_ne_zero, map_zero] using congr_arg (coeff 1) H
-
-中文:
-定理 X_ne_zero
-  条件: [非平凡 R]
-  结论: (X : R⟦X⟧) != 0
-  证明: fun H => by
-  simpa only [coeff_one_X, one_ne_zero, map_zero] using congr_arg (coeff 1) H
-
-Depends on / 依赖: coeff_one_X, congr_arg, map_zero, one_ne_zero
+/-
+**PowerSeries.X_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：X_ne_zero [Nontrivial R] : (X : R⟦X⟧) != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.coeff_one_X`：coeff_one_X : coeff 1 (X : R⟦X⟧) = 1
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
-theorem X_ne_zero [Nontrivial R] : (X : R⟦X⟧) != 0 := fun H => by
+theorem X_ne_zero [Nontrivial R] : (X : R⟦X⟧) ≠ 0 := fun H => by
   simpa only [coeff_one_X, one_ne_zero, map_zero] using congr_arg (coeff 1) H
-
-/--
-theorem `X_pow_eq` / 定理 `X_pow_eq`
-
-English:
-theorem X_pow_eq
-  given: (n : Nat)
-  statement: (X : R⟦X⟧) ^ n = monomial n 1
-  proof: MvPowerSeries.X_pow_eq _ n
-
-@[simp, grind =]
-
-中文:
-定理 X_pow_eq
-  条件: (n : 自然数)
-  结论: (X : R⟦X⟧) ^ n = monomial n 1
-  证明: MvPowerSeries.X_pow_eq _ n
-
-@[simp, grind =]
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.X_pow_eq, X_pow_eq
+/-
+**PowerSeries.X_pow_eq** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：X_pow_eq (n : Nat) : (X : R⟦X⟧) ^ n = monomial n 1
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.X_pow_eq`：X_pow_eq (s : σ) (n : Nat) : (X s : MvPowerSerie
+s σ R) ^ n = monomial (single s n) 1
 -/
-theorem X_pow_eq (n : Nat) : (X : R⟦X⟧) ^ n = monomial n 1 :=
+theorem X_pow_eq (n : ℕ) : (X : R⟦X⟧) ^ n = monomial n 1 :=
   MvPowerSeries.X_pow_eq _ n
 
 @[simp, grind =]
-/--
-theorem `coeff_X_pow` / 定理 `coeff_X_pow`
-
-English:
-theorem coeff_X_pow
-  given: (m n : Nat)
-  statement: coeff m ((X : R⟦X⟧) ^ n) = if m = n then 1 else 0
-  proof: by
-  rw [X_pow_eq]; rw [coeff_monomial]
-
-中文:
-定理 coeff_X_pow
-  条件: (m n : 自然数)
-  结论: coeff m ((X : R⟦X⟧) ^ n) = if m = n then 1 else 0
-  证明: by
-  rw [X_pow_eq]; rw [coeff_monomial]
-
-Depends on / 依赖: X_pow_eq, coeff_monomial
+/-
+**PowerSeries.coeff_X_pow** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_X_pow (m n : Nat) : coeff m ((X : R⟦X⟧) ^ n) = if m = n then 1 else 
+0
+参数：m n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.X_pow_eq`：X_pow_eq (n : Nat) : (X : R⟦X⟧) ^ n = monomial n 1
+· 使用定理 `PowerSeries.coeff_monomial`：coeff_monomial (m n : Nat) (a : R) : coeff m
+ (monomial n a) = if m = n then a else 0
 -/
-theorem coeff_X_pow (m n : Nat) : coeff m ((X : R⟦X⟧) ^ n) = if m = n then 1 else 0 := by
-  rw [X_pow_eq]; rw [coeff_monomial]
-
-/--
-theorem `coeff_X_pow_self` / 定理 `coeff_X_pow_self`
-
-English:
-theorem coeff_X_pow_self
-  given: (n : Nat)
-  statement: coeff n ((X : R⟦X⟧) ^ n) = 1
-  proof: by
+theorem coeff_X_pow (m n : ℕ) : coeff m ((X : R⟦X⟧) ^ n) = if m = n then 1 else 0 := by
+  rw [X_pow_eq, coeff_monomial]
+/-
+**PowerSeries.coeff_X_pow_self** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_X_pow_self (n : Nat) : coeff n ((X : R⟦X⟧) ^ n) = 1
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.coeff_X_pow`：coeff_X_pow (m n : Nat) : coeff m ((X : R⟦X⟧) ^
+ n) = if m = n then 1 else 0
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem coeff_X_pow_self (n : ℕ) : coeff n ((X : R⟦X⟧) ^ n) = 1 := by
   simp
 
 @[simp]
-
-中文:
-定理 coeff_X_pow_self
-  条件: (n : 自然数)
-  结论: coeff n ((X : R⟦X⟧) ^ n) = 1
-  证明: by
-  simp
-
-@[simp]
+/-
+**PowerSeries.coeff_one** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_one (n : Nat) : coeff n (1 : R⟦X⟧) = if n = 0 then 1 else 0
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.coeff_C`：coeff_C (n : Nat) (a : R) : coeff n (C a : R⟦X⟧) = 
+if n = 0 then a else 0
 -/
-theorem coeff_X_pow_self (n : Nat) : coeff n ((X : R⟦X⟧) ^ n) = 1 := by
-  simp
-
-@[simp]
-/--
-theorem `coeff_one` / 定理 `coeff_one`
-
-English:
-theorem coeff_one
-  given: (n : Nat)
-  statement: coeff n (1 : R⟦X⟧) = if n = 0 then 1 else 0
-  proof: coeff_C n 1
-
-中文:
-定理 coeff_one
-  条件: (n : 自然数)
-  结论: coeff n (1 : R⟦X⟧) = if n = 0 then 1 else 0
-  证明: coeff_C n 1
-
-Depends on / 依赖: coeff_C
--/
-theorem coeff_one (n : Nat) : coeff n (1 : R⟦X⟧) = if n = 0 then 1 else 0 :=
+theorem coeff_one (n : ℕ) : coeff n (1 : R⟦X⟧) = if n = 0 then 1 else 0 :=
   coeff_C n 1
-
-/--
-theorem `coeff_zero_one` / 定理 `coeff_zero_one`
-
-English:
-theorem coeff_zero_one
-  statement: coeff 0 (1 : R⟦X⟧) = 1
-  proof: coeff_zero_C 1
-
-中文:
-定理 coeff_zero_one
-  结论: coeff 0 (1 : R⟦X⟧) = 1
-  证明: coeff_zero_C 1
-
-Depends on / 依赖: coeff_zero_C
+/-
+**PowerSeries.coeff_zero_one** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_zero_one : coeff 0 (1 : R⟦X⟧) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.coeff_zero_C`：coeff_zero_C (a : R) : coeff 0 (C a) = a
 -/
 theorem coeff_zero_one : coeff 0 (1 : R⟦X⟧) = 1 :=
   coeff_zero_C 1
-
-/--
-theorem `coeff_mul` / 定理 `coeff_mul`
-
-English:
-theorem coeff_mul
-  given: (n : Nat) (φ ψ : R⟦X⟧)
-  proof: by
-  -- `rw` can't see that `PowerSeries = MvPowerSeries Unit`, so use `.trans`
-  refine (MvPowerSeries.coeff_mul _ φ ψ).trans ?_
-  rw [Finsupp.antidiagonal_single]; rw [Finset.sum_map]
-  rfl
-
-@[simp]
-
-中文:
-定理 coeff_mul
-  条件: (n : 自然数) (φ ψ : R⟦X⟧)
-  证明: by
-  -- `rw` can't see that `PowerSeries = MvPowerSeries Unit`, so use `.trans`
-  refine (MvPowerSeries.coeff_mul _ φ ψ).trans ?_
-  rw [Finsupp.antidiagonal_single]; rw [Finset.sum_map]
-  rfl
-
-@[simp]
+/-
+**PowerSeries.coeff_mul** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_mul (n : Nat) (φ ψ : R⟦X⟧) : coeff n (φ * ψ) = ∑ p in antidiagonal n
+, coeff p.1 φ * coeff p.2 ψ
+参数：n : Nat；φ ψ : R⟦X⟧。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MvPowerSeries.coeff_mul`：coeff_mul [DecidableEq σ] : coeff n (φ * ψ) = ∑
+ p in antidiagonal n, coeff p.1 φ * coeff p.2 ψ
+· 使用定理 `Finsupp.single_injective`：single_injective (a : α) : Function.Injective 
+(single a : M -> α ->₀ M)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.antidiagonal_single`：antidiagonal_single (a : α) (n : Nat) : ant
+idiagonal (single a n) = (antidiagonal n).map (Function.Embedding.prodMap ⟨_, si
+ngle_injective a⟩…
+· 使用定理 `Finset.sum_map`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst : A
+ddCommMonoid M] (s : Finset ι) (e : ι ↪ κ) (f : κ → M),   ∑ x ∈ Finset.map e s, 
+f x …
 -/
-theorem coeff_mul (n : Nat) (φ ψ : R⟦X⟧) :
-    coeff n (φ * ψ) = ∑ p in antidiagonal n, coeff p.1 φ * coeff p.2 ψ := by
+theorem coeff_mul (n : ℕ) (φ ψ : R⟦X⟧) :
+    coeff n (φ * ψ) = ∑ p ∈ antidiagonal n, coeff p.1 φ * coeff p.2 ψ := by
   -- `rw` can't see that `PowerSeries = MvPowerSeries Unit`, so use `.trans`
   refine (MvPowerSeries.coeff_mul _ φ ψ).trans ?_
-  rw [Finsupp.antidiagonal_single]; rw [Finset.sum_map]
+  rw [Finsupp.antidiagonal_single, Finset.sum_map]
   rfl
 
 @[simp]
-/--
-theorem `coeff_mul_C` / 定理 `coeff_mul_C`
-
-English:
-theorem coeff_mul_C
-  given: (n : Nat) (φ : R⟦X⟧) (a : R)
-  statement: coeff n (φ * C a) = coeff n φ * a
-  proof: MvPowerSeries.coeff_mul_C _ φ a
-
-@[simp]
-
-中文:
-定理 coeff_mul_C
-  条件: (n : 自然数) (φ : R⟦X⟧) (a : R)
-  结论: coeff n (φ * C a) = coeff n φ * a
-  证明: MvPowerSeries.coeff_mul_C _ φ a
-
-@[simp]
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.coeff_mul_C, coeff_mul_C
+/-
+**PowerSeries.coeff_mul_C** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_mul_C (n : Nat) (φ : R⟦X⟧) (a : R) : coeff n (φ * C a) = coeff n φ *
+ a
+参数：n : Nat；φ : R⟦X⟧；a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.coeff_mul_C`：coeff_mul_C (n : σ ->₀ Nat) (φ : MvPowerSerie
+s σ R) (a : R) : coeff n (φ * C a) = coeff n φ * a
 -/
-theorem coeff_mul_C (n : Nat) (φ : R⟦X⟧) (a : R) : coeff n (φ * C a) = coeff n φ * a :=
+theorem coeff_mul_C (n : ℕ) (φ : R⟦X⟧) (a : R) : coeff n (φ * C a) = coeff n φ * a :=
   MvPowerSeries.coeff_mul_C _ φ a
 
 @[simp]
-/--
-theorem `coeff_C_mul` / 定理 `coeff_C_mul`
-
-English:
-theorem coeff_C_mul
-  given: (n : Nat) (φ : R⟦X⟧) (a : R)
-  statement: coeff n (C a * φ) = a * coeff n φ
-  proof: MvPowerSeries.coeff_C_mul _ φ a
-
-@[simp]
-
-中文:
-定理 coeff_C_mul
-  条件: (n : 自然数) (φ : R⟦X⟧) (a : R)
-  结论: coeff n (C a * φ) = a * coeff n φ
-  证明: MvPowerSeries.coeff_C_mul _ φ a
-
-@[simp]
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.coeff_C_mul, coeff_C_mul
+/-
+**PowerSeries.coeff_C_mul** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_C_mul (n : Nat) (φ : R⟦X⟧) (a : R) : coeff n (C a * φ) = a * coeff n
+ φ
+参数：n : Nat；φ : R⟦X⟧；a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.coeff_C_mul`：coeff_C_mul (n : σ ->₀ Nat) (φ : MvPowerSerie
+s σ R) (a : R) : coeff n (C a * φ) = a * coeff n φ
 -/
-theorem coeff_C_mul (n : Nat) (φ : R⟦X⟧) (a : R) : coeff n (C a * φ) = a * coeff n φ :=
+theorem coeff_C_mul (n : ℕ) (φ : R⟦X⟧) (a : R) : coeff n (C a * φ) = a * coeff n φ :=
   MvPowerSeries.coeff_C_mul _ φ a
 
 @[simp]
-/--
-theorem `coeff_smul` / 定理 `coeff_smul`
-
-English:
-theorem coeff_smul
-  given: {S : Type*} [Semiring S] [Module R S] (n : Nat) (φ : PowerSeries S) (a : R)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coeff_smul
-  条件: {S : 类型} [半环 S] [模 R S] (n : 自然数) (φ : 幂级数 S) (a : R)
-  证明: rfl
-
-@[simp]
+/-
+**PowerSeries.coeff_smul** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_smul {S : Type*} [Semiring S] [Module R S] (n : Nat) (φ : PowerSerie
+s S) (a : R) : coeff n (a • φ) = a • coeff n φ
+参数：n : Nat；φ : PowerSeries S；a : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coeff_smul {S : Type*} [Semiring S] [Module R S] (n : Nat) (φ : PowerSeries S) (a : R) :
+theorem coeff_smul {S : Type*} [Semiring S] [Module R S] (n : ℕ) (φ : PowerSeries S) (a : R) :
     coeff n (a • φ) = a • coeff n φ :=
   rfl
 
 @[simp]
-/--
-theorem `constantCoeff_smul` / 定理 `constantCoeff_smul`
-
-English:
-theorem constantCoeff_smul
-  given: {S : Type*} [Semiring S] [Module R S] (φ : PowerSeries S) (a : R)
-  proof: rfl
-
-中文:
-定理 constantCoeff_smul
-  条件: {S : 类型} [半环 S] [模 R S] (φ : 幂级数 S) (a : R)
-  证明: rfl
+/-
+**PowerSeries.constantCoeff_smul** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：constantCoeff_smul {S : Type*} [Semiring S] [Module R S] (φ : PowerSeries 
+S) (a : R) : constantCoeff (a • φ) = a • constantCoeff φ
+参数：φ : PowerSeries S；a : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem constantCoeff_smul {S : Type*} [Semiring S] [Module R S] (φ : PowerSeries S) (a : R) :
     constantCoeff (a • φ) = a • constantCoeff φ :=
   rfl
-
-/--
-theorem `smul_eq_C_mul` / 定理 `smul_eq_C_mul`
-
-English:
-theorem smul_eq_C_mul
-  given: (f : R⟦X⟧) (a : R)
-  statement: a • f = C a * f
-  proof: by
-  ext
-  simp
-
-@[simp]
-
-中文:
-定理 smul_eq_C_mul
-  条件: (f : R⟦X⟧) (a : R)
-  结论: a • f = C a * f
-  证明: by
-  ext
-  simp
-
-@[simp]
+/-
+**PowerSeries.smul_eq_C_mul** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：smul_eq_C_mul (f : R⟦X⟧) (a : R) : a • f = C a * f
+参数：f : R⟦X⟧；a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.ext`：ext {φ ψ : R⟦X⟧} (h : forall n, coeff n φ = coeff n ψ) 
+: φ = ψ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `PowerSeries.coeff_C_mul`：coeff_C_mul (n : Nat) (φ : R⟦X⟧) (a : R) : coef
+f n (C a * φ) = a * coeff n φ
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem smul_eq_C_mul (f : R⟦X⟧) (a : R) : a • f = C a * f := by
   ext
   simp
 
 @[simp]
-/--
-theorem `coeff_succ_mul_X` / 定理 `coeff_succ_mul_X`
-
-English:
-theorem coeff_succ_mul_X
-  given: (n : Nat) (φ : R⟦X⟧)
-  statement: coeff (n + 1) (φ * X) = coeff n φ
-  proof: by
-  simp only [coeff, Finsupp.single_add]
-  convert! φ.coeff_add_mul_monomial (single () n) (single () 1) _
-  rw [mul_one]
-
-@[simp]
-
-中文:
-定理 coeff_succ_mul_X
-  条件: (n : 自然数) (φ : R⟦X⟧)
-  结论: coeff (n + 1) (φ * X) = coeff n φ
-  证明: by
-  simp only [coeff, Finsupp.single_add]
-  convert! φ.coeff_add_mul_monomial (single () n) (single () 1) _
-  rw [mul_one]
-
-@[simp]
-
-Depends on / 依赖: Finsupp, Finsupp.single_add, coeff_add_mul_monomial, convert, mul_one, single, single_add
+/-
+**PowerSeries.coeff_succ_mul_X** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_succ_mul_X (n : Nat) (φ : R⟦X⟧) : coeff (n + 1) (φ * X) = coeff n φ
+参数：n : Nat；φ : R⟦X⟧。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Finsupp.single_add`：single_add (a : ι) (b₁ b₂ : M) : single a (b₁ + b₂) 
+= single a b₁ + single a b₂
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `MvPowerSeries.coeff_add_mul_monomial`：coeff_add_mul_monomial (a : R) : c
+oeff (m + n) (φ * monomial n a) = coeff m φ * a
 -/
-theorem coeff_succ_mul_X (n : Nat) (φ : R⟦X⟧) : coeff (n + 1) (φ * X) = coeff n φ := by
+theorem coeff_succ_mul_X (n : ℕ) (φ : R⟦X⟧) : coeff (n + 1) (φ * X) = coeff n φ := by
   simp only [coeff, Finsupp.single_add]
   convert! φ.coeff_add_mul_monomial (single () n) (single () 1) _
   rw [mul_one]
 
 @[simp]
-/--
-theorem `coeff_succ_X_mul` / 定理 `coeff_succ_X_mul`
-
-English:
-theorem coeff_succ_X_mul
-  given: (n : Nat) (φ : R⟦X⟧)
-  statement: coeff (n + 1) (X * φ) = coeff n φ
-  proof: by
-  simp only [coeff, Finsupp.single_add, add_comm n 1]
-  convert! φ.coeff_add_monomial_mul (single () 1) (single () n) _
-  rw [one_mul]
-
-中文:
-定理 coeff_succ_X_mul
-  条件: (n : 自然数) (φ : R⟦X⟧)
-  结论: coeff (n + 1) (X * φ) = coeff n φ
-  证明: by
-  simp only [coeff, Finsupp.single_add, add_comm n 1]
-  convert! φ.coeff_add_monomial_mul (single () 1) (single () n) _
-  rw [one_mul]
-
-Depends on / 依赖: Finsupp, Finsupp.single_add, add_comm, coeff_add_monomial_mul, convert, one_mul, single, single_add
+/-
+**PowerSeries.coeff_succ_X_mul** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_succ_X_mul (n : Nat) (φ : R⟦X⟧) : coeff (n + 1) (X * φ) = coeff n φ
+参数：n : Nat；φ : R⟦X⟧。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用引理 `Finsupp.single_add`：single_add (a : ι) (b₁ b₂ : M) : single a (b₁ + b₂) 
+= single a b₁ + single a b₂
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `MvPowerSeries.coeff_add_monomial_mul`：coeff_add_monomial_mul (a : R) : c
+oeff (m + n) (monomial m a * φ) = a * coeff n φ
 -/
-theorem coeff_succ_X_mul (n : Nat) (φ : R⟦X⟧) : coeff (n + 1) (X * φ) = coeff n φ := by
+theorem coeff_succ_X_mul (n : ℕ) (φ : R⟦X⟧) : coeff (n + 1) (X * φ) = coeff n φ := by
   simp only [coeff, Finsupp.single_add, add_comm n 1]
   convert! φ.coeff_add_monomial_mul (single () 1) (single () n) _
   rw [one_mul]
-
-/--
-theorem `mul_X_cancel` / 定理 `mul_X_cancel`
-
-English:
-theorem mul_X_cancel
-  given: {φ ψ : R⟦X⟧} (h : φ * X = ψ * X)
-  statement: φ = ψ
-  proof: by
-  rw [PowerSeries.ext_iff] at h ⊢
-  intro n
-  simpa using h (n + 1)
-
-中文:
-定理 mul_X_cancel
-  条件: {φ ψ : R⟦X⟧} (h : φ * X = ψ * X)
-  结论: φ = ψ
-  证明: by
-  rw [PowerSeries.ext_iff] at h ⊢
-  intro n
-  simpa using h (n + 1)
-
-Depends on / 依赖: PowerSeries, PowerSeries.ext_iff, ext_iff
+/-
+**PowerSeries.mul_X_cancel** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：mul_X_cancel {φ ψ : R⟦X⟧} (h : φ * X = ψ * X) : φ = ψ
+参数：h : φ * X = ψ * X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.ext_iff`：∀ {R : Type u_1} [inst : Semiring R] {φ ψ : PowerSe
+ries R},   φ = ψ ↔ ∀ (n : ℕ), (PowerSeries.coeff n) φ = (PowerSeries.coeff n) ψ
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `PowerSeries.coeff_succ_mul_X`：coeff_succ_mul_X (n : Nat) (φ : R⟦X⟧) : co
+eff (n + 1) (φ * X) = coeff n φ
 -/
 theorem mul_X_cancel {φ ψ : R⟦X⟧} (h : φ * X = ψ * X) : φ = ψ := by
   rw [PowerSeries.ext_iff] at h ⊢
   intro n
   simpa using h (n + 1)
-
-/--
-theorem `mul_X_injective` / 定理 `mul_X_injective`
-
-English:
-theorem mul_X_injective
-  statement: Function.Injective (· * X : R⟦X⟧ -> R⟦X⟧)
-  proof: fun _ _ => mul_X_cancel
-
-中文:
-定理 mul_X_injective
-  结论: 函数.单射 (· * X : R⟦X⟧ -> R⟦X⟧)
-  证明: fun _ _ => mul_X_cancel
-
-Depends on / 依赖: mul_X_cancel
+/-
+**PowerSeries.mul_X_injective** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：mul_X_injective : Function.Injective (· * X : R⟦X⟧ -> R⟦X⟧)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.mul_X_cancel`：mul_X_cancel {φ ψ : R⟦X⟧} (h : φ * X = ψ * X) 
+: φ = ψ
 -/
-theorem mul_X_injective : Function.Injective (· * X : R⟦X⟧ -> R⟦X⟧) :=
-  fun _ _ => mul_X_cancel
-
-/--
-theorem `mul_X_inj` / 定理 `mul_X_inj`
-
-English:
-theorem mul_X_inj
-  given: {φ ψ : R⟦X⟧}
-  statement: φ * X = ψ * X ↔ φ = ψ
-  proof: mul_X_injective.eq_iff
-
-中文:
-定理 mul_X_inj
-  条件: {φ ψ : R⟦X⟧}
-  结论: φ * X = ψ * X ↔ φ = ψ
-  证明: mul_X_injective.eq_iff
-
-Depends on / 依赖: eq_iff, mul_X_injective, mul_X_injective.eq_iff
+theorem mul_X_injective : Function.Injective (· * X : R⟦X⟧ → R⟦X⟧) :=
+  fun _ _ ↦ mul_X_cancel
+/-
+**PowerSeries.mul_X_inj** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：mul_X_inj {φ ψ : R⟦X⟧} : φ * X = ψ * X ↔ φ = ψ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `PowerSeries.mul_X_injective`：mul_X_injective : Function.Injective (· * X
+ : R⟦X⟧ -> R⟦X⟧)
 -/
 theorem mul_X_inj {φ ψ : R⟦X⟧} : φ * X = ψ * X ↔ φ = ψ :=
   mul_X_injective.eq_iff
-
-/--
-theorem `X_mul_cancel` / 定理 `X_mul_cancel`
-
-English:
-theorem X_mul_cancel
-  given: {φ ψ : R⟦X⟧} (h : X * φ = X * ψ)
-  statement: φ = ψ
-  proof: by
-  rw [PowerSeries.ext_iff] at h ⊢
-  intro n
-  simpa using h (n + 1)
-
-中文:
-定理 X_mul_cancel
-  条件: {φ ψ : R⟦X⟧} (h : X * φ = X * ψ)
-  结论: φ = ψ
-  证明: by
-  rw [PowerSeries.ext_iff] at h ⊢
-  intro n
-  simpa using h (n + 1)
-
-Depends on / 依赖: PowerSeries, PowerSeries.ext_iff, ext_iff
+/-
+**PowerSeries.X_mul_cancel** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：X_mul_cancel {φ ψ : R⟦X⟧} (h : X * φ = X * ψ) : φ = ψ
+参数：h : X * φ = X * ψ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.ext_iff`：∀ {R : Type u_1} [inst : Semiring R] {φ ψ : PowerSe
+ries R},   φ = ψ ↔ ∀ (n : ℕ), (PowerSeries.coeff n) φ = (PowerSeries.coeff n) ψ
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `PowerSeries.coeff_succ_X_mul`：coeff_succ_X_mul (n : Nat) (φ : R⟦X⟧) : co
+eff (n + 1) (X * φ) = coeff n φ
 -/
 theorem X_mul_cancel {φ ψ : R⟦X⟧} (h : X * φ = X * ψ) : φ = ψ := by
   rw [PowerSeries.ext_iff] at h ⊢
   intro n
   simpa using h (n + 1)
-
-/--
-theorem `X_mul_injective` / 定理 `X_mul_injective`
-
-English:
-theorem X_mul_injective
-  statement: Function.Injective (X * · : R⟦X⟧ -> R⟦X⟧)
-  proof: fun _ _ => X_mul_cancel
-
-中文:
-定理 X_mul_injective
-  结论: 函数.单射 (X * · : R⟦X⟧ -> R⟦X⟧)
-  证明: fun _ _ => X_mul_cancel
-
-Depends on / 依赖: X_mul_cancel
+/-
+**PowerSeries.X_mul_injective** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：X_mul_injective : Function.Injective (X * · : R⟦X⟧ -> R⟦X⟧)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.X_mul_cancel`：X_mul_cancel {φ ψ : R⟦X⟧} (h : X * φ = X * ψ) 
+: φ = ψ
 -/
-theorem X_mul_injective : Function.Injective (X * · : R⟦X⟧ -> R⟦X⟧) :=
-  fun _ _ => X_mul_cancel
-
-/--
-theorem `X_mul_inj` / 定理 `X_mul_inj`
-
-English:
-theorem X_mul_inj
-  given: {φ ψ : R⟦X⟧}
-  statement: X * φ = X * ψ ↔ φ = ψ
-  proof: X_mul_injective.eq_iff
-
-@[simp]
-
-中文:
-定理 X_mul_inj
-  条件: {φ ψ : R⟦X⟧}
-  结论: X * φ = X * ψ ↔ φ = ψ
-  证明: X_mul_injective.eq_iff
-
-@[simp]
-
-Depends on / 依赖: X_mul_injective, X_mul_injective.eq_iff, eq_iff
+theorem X_mul_injective : Function.Injective (X * · : R⟦X⟧ → R⟦X⟧) :=
+  fun _ _ ↦ X_mul_cancel
+/-
+**PowerSeries.X_mul_inj** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：X_mul_inj {φ ψ : R⟦X⟧} : X * φ = X * ψ ↔ φ = ψ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `PowerSeries.X_mul_injective`：X_mul_injective : Function.Injective (X * ·
+ : R⟦X⟧ -> R⟦X⟧)
 -/
 theorem X_mul_inj {φ ψ : R⟦X⟧} : X * φ = X * ψ ↔ φ = ψ :=
   X_mul_injective.eq_iff
 
 @[simp]
-/--
-theorem `constantCoeff_C` / 定理 `constantCoeff_C`
-
-English:
-theorem constantCoeff_C
-  given: (a : R)
-  statement: constantCoeff (C a) = a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 constantCoeff_C
-  条件: (a : R)
-  结论: constantCoeff (C a) = a
-  证明: rfl
-
-@[simp]
+/-
+**PowerSeries.constantCoeff_C** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：constantCoeff_C (a : R) : constantCoeff (C a) = a
+参数：a : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem constantCoeff_C (a : R) : constantCoeff (C a) = a :=
   rfl
 
 @[simp]
-/--
-theorem `constantCoeff_comp_C` / 定理 `constantCoeff_comp_C`
-
-English:
-theorem constantCoeff_comp_C
-  statement: constantCoeff.comp C = RingHom.id R
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 constantCoeff_comp_C
-  结论: constantCoeff.comp C = 环态射.id R
-  证明: rfl
-
-@[simp]
+/-
+**PowerSeries.constantCoeff_comp_C** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：constantCoeff_comp_C : constantCoeff.comp C = RingHom.id R
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem constantCoeff_comp_C : constantCoeff.comp C = RingHom.id R :=
   rfl
 
 @[simp]
-/--
-theorem `constantCoeff_zero` / 定理 `constantCoeff_zero`
-
-English:
-theorem constantCoeff_zero
-  statement: constantCoeff (R := R) 0 = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 constantCoeff_zero
-  结论: constantCoeff (R := R) 0 = 0
-  证明: rfl
-
-@[simp]
+/-
+**PowerSeries.constantCoeff_zero** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：constantCoeff_zero : constantCoeff (R
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem constantCoeff_zero : constantCoeff (R := R) 0 = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `constantCoeff_one` / 定理 `constantCoeff_one`
-
-English:
-theorem constantCoeff_one
-  statement: constantCoeff (R := R) 1 = 1
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 constantCoeff_one
-  结论: constantCoeff (R := R) 1 = 1
-  证明: rfl
-
-@[simp]
+/-
+**PowerSeries.constantCoeff_one** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：constantCoeff_one : constantCoeff (R
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem constantCoeff_one : constantCoeff (R := R) 1 = 1 :=
   rfl
 
 @[simp]
-/--
-theorem `constantCoeff_X` / 定理 `constantCoeff_X`
-
-English:
-theorem constantCoeff_X
-  statement: constantCoeff (R := R) X = 0
-  proof: MvPowerSeries.coeff_zero_X _
-
-@[simp]
-
-中文:
-定理 constantCoeff_X
-  结论: constantCoeff (R := R) X = 0
-  证明: MvPowerSeries.coeff_zero_X _
-
-@[simp]
+/-
+**PowerSeries.constantCoeff_X** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：constantCoeff_X : constantCoeff (R
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.coeff_zero_X`：coeff_zero_X (s : σ) : coeff (0 : σ ->₀ Nat)
+ (X s : MvPowerSeries σ R) = 0
 -/
 theorem constantCoeff_X : constantCoeff (R := R) X = 0 :=
   MvPowerSeries.coeff_zero_X _
 
 @[simp]
-/--
-theorem `constantCoeff_mk` / 定理 `constantCoeff_mk`
-
-English:
-theorem constantCoeff_mk
-  given: {f : Nat -> R}
-  statement: constantCoeff (mk f) = f 0
-  proof: rfl
-
-中文:
-定理 constantCoeff_mk
-  条件: {f : 自然数 -> R}
-  结论: constantCoeff (mk f) = f 0
-  证明: rfl
+/-
+**PowerSeries.constantCoeff_mk** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：constantCoeff_mk {f : Nat -> R} : constantCoeff (mk f) = f 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem constantCoeff_mk {f : Nat -> R} : constantCoeff (mk f) = f 0 := rfl
-
-/--
-theorem `coeff_zero_mul_X` / 定理 `coeff_zero_mul_X`
-
-English:
-theorem coeff_zero_mul_X
-  given: (φ : R⟦X⟧)
-  statement: coeff 0 (φ * X) = 0
-  proof: by simp
-
-中文:
-定理 coeff_zero_mul_X
-  条件: (φ : R⟦X⟧)
-  结论: coeff 0 (φ * X) = 0
-  证明: by simp
+theorem constantCoeff_mk {f : ℕ → R} : constantCoeff (mk f) = f 0 := rfl
+/-
+**PowerSeries.coeff_zero_mul_X** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_zero_mul_X (φ : R⟦X⟧) : coeff 0 (φ * X) = 0
+参数：φ : R⟦X⟧。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `PowerSeries.coeff_zero_eq_constantCoeff`：coeff_zero_eq_constantCoeff : ⇑
+(coeff (R
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `PowerSeries.constantCoeff_X`：constantCoeff_X : constantCoeff (R
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem coeff_zero_mul_X (φ : R⟦X⟧) : coeff 0 (φ * X) = 0 := by simp
-
-/--
-theorem `coeff_zero_X_mul` / 定理 `coeff_zero_X_mul`
-
-English:
-theorem coeff_zero_X_mul
-  given: (φ : R⟦X⟧)
-  statement: coeff 0 (X * φ) = 0
-  proof: by simp
-
-中文:
-定理 coeff_zero_X_mul
-  条件: (φ : R⟦X⟧)
-  结论: coeff 0 (X * φ) = 0
-  证明: by simp
+/-
+**PowerSeries.coeff_zero_X_mul** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_zero_X_mul (φ : R⟦X⟧) : coeff 0 (X * φ) = 0
+参数：φ : R⟦X⟧。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `PowerSeries.coeff_zero_eq_constantCoeff`：coeff_zero_eq_constantCoeff : ⇑
+(coeff (R
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `PowerSeries.constantCoeff_X`：constantCoeff_X : constantCoeff (R
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem coeff_zero_X_mul (φ : R⟦X⟧) : coeff 0 (X * φ) = 0 := by simp
-
-/--
-theorem `constantCoeff_surj` / 定理 `constantCoeff_surj`
-
-English:
-theorem constantCoeff_surj
-  statement: Function.Surjective (constantCoeff (R := R))
-  proof: fun r => ⟨C r, constantCoeff_C r⟩
-
-中文:
-定理 constantCoeff_surj
-  结论: 函数.满射 (constantCoeff (R := R))
-  证明: fun r => ⟨C r, constantCoeff_C r⟩
+/-
+**PowerSeries.constantCoeff_surj** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：constantCoeff_surj : Function.Surjective (constantCoeff (R
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.constantCoeff_C`：constantCoeff_C (a : R) : constantCoeff (C 
+a) = a
 -/
 theorem constantCoeff_surj : Function.Surjective (constantCoeff (R := R)) :=
   fun r => ⟨C r, constantCoeff_C r⟩
@@ -1602,381 +1131,441 @@ theorem constantCoeff_surj : Function.Surjective (constantCoeff (R := R)) :=
 -- to keep up to date with that
 section
 
-/--
-theorem `coeff_C_mul_X_pow` / 定理 `coeff_C_mul_X_pow`
-
-English:
-theorem coeff_C_mul_X_pow
-  given: (x : R) (k n : Nat)
-  proof: by
-  simp [X_pow_eq, coeff_monomial]
-
-@[simp]
-
-中文:
-定理 coeff_C_mul_X_pow
-  条件: (x : R) (k n : 自然数)
-  证明: by
-  simp [X_pow_eq, coeff_monomial]
-
-@[simp]
-
-Depends on / 依赖: X_pow_eq, coeff_monomial
+/-
+**PowerSeries.coeff_C_mul_X_pow** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_C_mul_X_pow (x : R) (k n : Nat) : coeff n (C x * X ^ k : R⟦X⟧) = if 
+n = k then x else 0
+参数：x : R；k n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.X_pow_eq`：X_pow_eq (n : Nat) : (X : R⟦X⟧) ^ n = monomial n 1
+· 使用定理 `PowerSeries.coeff_C_mul`：coeff_C_mul (n : Nat) (φ : R⟦X⟧) (a : R) : coef
+f n (C a * φ) = a * coeff n φ
+· 使用定理 `PowerSeries.coeff_monomial`：coeff_monomial (m n : Nat) (a : R) : coeff m
+ (monomial n a) = if m = n then a else 0
+· 使用引理 `mul_ite`：mul_ite (a b c : α) : (a * if P then b else c) = if P then a * 
+b else a * c
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem coeff_C_mul_X_pow (x : R) (k n : Nat) :
+theorem coeff_C_mul_X_pow (x : R) (k n : ℕ) :
     coeff n (C x * X ^ k : R⟦X⟧) = if n = k then x else 0 := by
   simp [X_pow_eq, coeff_monomial]
 
 @[simp]
-/--
-theorem `coeff_mul_X_pow` / 定理 `coeff_mul_X_pow`
-
-English:
-theorem coeff_mul_X_pow
-  given: (p : R⟦X⟧) (n d : Nat)
-  proof: by
-  rw [coeff_mul]; rw [Finset.sum_eq_single (d]; rw [n)]; rw [coeff_X_pow]; rw [if_pos rfl]; rw [mul_one]
-  · rintro ⟨i, j⟩ h1 h2
-    rw [coeff_X_pow]; rw [if_neg]; rw [mul_zero]
-    rintro rfl
-    apply h2
-    rw [mem_antidiagonal]; rw [add_right_cancel_iff] at h1
-    subst h1
-    rfl
-  · exact fun h1 => (h1 (mem_antidiagonal.2 rfl)).elim
-
-@[simp]
-
-中文:
-定理 coeff_mul_X_pow
-  条件: (p : R⟦X⟧) (n d : 自然数)
-  证明: by
-  rw [coeff_mul]; rw [Finset.sum_eq_single (d]; rw [n)]; rw [coeff_X_pow]; rw [if_pos rfl]; rw [mul_one]
-  · rintro ⟨i, j⟩ h1 h2
-    rw [coeff_X_pow]; rw [if_neg]; rw [mul_zero]
-    rintro rfl
-    apply h2
-    rw [mem_antidiagonal]; rw [add_right_cancel_iff] at h1
-    subst h1
-    rfl
-  · exact fun h1 => (h1 (mem_antidiagonal.2 rfl)).elim
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.sum_eq_single, add_right_cancel_iff, coeff_X_pow, coeff_mul, if_neg, if_pos, mem_antidiagonal, mul_one, mul_zero, sum_eq_single
+/-
+**PowerSeries.coeff_mul_X_pow** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_mul_X_pow (p : R⟦X⟧) (n d : Nat) : coeff (d + n) (p * X ^ n) = coeff
+ d p
+参数：p : R⟦X⟧；n d : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.coeff_mul`：coeff_mul (n : Nat) (φ ψ : R⟦X⟧) : coeff n (φ * ψ
+) = ∑ p in antidiagonal n, coeff p.1 φ * coeff p.2 ψ
+· 使用定理 `Finset.sum_eq_single`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] {s : Finset ι} {f : ι → M} (a : ι),   (∀ b ∈ s, b ≠ a → f b = 0) → (a ∉ s
+ → f a = 0…
+· 使用定理 `PowerSeries.coeff_X_pow`：coeff_X_pow (m n : Nat) : coeff m ((X : R⟦X⟧) ^
+ n) = if m = n then 1 else 0
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `add_right_cancel_iff`：∀ {G : Type u_1} [inst : Add G] [IsRightCancelAdd 
+G] {a b c : G}, b + a = c + a ↔ b = c
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Finset.HasAntidiagonal.mem_antidiagonal`：∀ {A : Type u_1} {inst : AddMon
+oid A} [self : Finset.HasAntidiagonal A] {n : A} {a : A × A},   a ∈ Finset.HasAn
+tidiagonal.antidiagonal n ↔ a…
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
-theorem coeff_mul_X_pow (p : R⟦X⟧) (n d : Nat) :
+theorem coeff_mul_X_pow (p : R⟦X⟧) (n d : ℕ) :
     coeff (d + n) (p * X ^ n) = coeff d p := by
-  rw [coeff_mul]; rw [Finset.sum_eq_single (d]; rw [n)]; rw [coeff_X_pow]; rw [if_pos rfl]; rw [mul_one]
+  rw [coeff_mul, Finset.sum_eq_single (d, n), coeff_X_pow, if_pos rfl, mul_one]
   · rintro ⟨i, j⟩ h1 h2
-    rw [coeff_X_pow]; rw [if_neg]; rw [mul_zero]
+    rw [coeff_X_pow, if_neg, mul_zero]
     rintro rfl
     apply h2
-    rw [mem_antidiagonal]; rw [add_right_cancel_iff] at h1
+    rw [mem_antidiagonal, add_right_cancel_iff] at h1
     subst h1
     rfl
   · exact fun h1 => (h1 (mem_antidiagonal.2 rfl)).elim
 
 @[simp]
-/--
-theorem `coeff_X_pow_mul` / 定理 `coeff_X_pow_mul`
-
-English:
-theorem coeff_X_pow_mul
-  given: (p : R⟦X⟧) (n d : Nat)
-  proof: by
-  rw [coeff_mul]; rw [Finset.sum_eq_single (n]; rw [d)]; rw [coeff_X_pow]; rw [if_pos rfl]; rw [one_mul]
-  · rintro ⟨i, j⟩ h1 h2
-    rw [coeff_X_pow]; rw [if_neg]; rw [zero_mul]
-    rintro rfl
-    apply h2
-    rw [mem_antidiagonal]; rw [add_comm]; rw [add_right_cancel_iff] at h1
-    subst h1
-    rfl
-  · rw [add_comm]
-    exact fun h1 => (h1 (mem_antidiagonal.2 rfl)).elim
-
-中文:
-定理 coeff_X_pow_mul
-  条件: (p : R⟦X⟧) (n d : 自然数)
-  证明: by
-  rw [coeff_mul]; rw [Finset.sum_eq_single (n]; rw [d)]; rw [coeff_X_pow]; rw [if_pos rfl]; rw [one_mul]
-  · rintro ⟨i, j⟩ h1 h2
-    rw [coeff_X_pow]; rw [if_neg]; rw [zero_mul]
-    rintro rfl
-    apply h2
-    rw [mem_antidiagonal]; rw [add_comm]; rw [add_right_cancel_iff] at h1
-    subst h1
-    rfl
-  · rw [add_comm]
-    exact fun h1 => (h1 (mem_antidiagonal.2 rfl)).elim
-
-Depends on / 依赖: Finset, Finset.sum_eq_single, add_comm, add_right_cancel_iff, coeff_X_pow, coeff_mul, if_neg, if_pos, mem_antidiagonal, one_mul, sum_eq_single, zero_mul
+/-
+**PowerSeries.coeff_X_pow_mul** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_X_pow_mul (p : R⟦X⟧) (n d : Nat) : coeff (d + n) (X ^ n * p) = coeff
+ d p
+参数：p : R⟦X⟧；n d : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.coeff_mul`：coeff_mul (n : Nat) (φ ψ : R⟦X⟧) : coeff n (φ * ψ
+) = ∑ p in antidiagonal n, coeff p.1 φ * coeff p.2 ψ
+· 使用定理 `Finset.sum_eq_single`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] {s : Finset ι} {f : ι → M} (a : ι),   (∀ b ∈ s, b ≠ a → f b = 0) → (a ∉ s
+ → f a = 0…
+· 使用定理 `PowerSeries.coeff_X_pow`：coeff_X_pow (m n : Nat) : coeff m ((X : R⟦X⟧) ^
+ n) = if m = n then 1 else 0
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `add_right_cancel_iff`：∀ {G : Type u_1} [inst : Add G] [IsRightCancelAdd 
+G] {a b c : G}, b + a = c + a ↔ b = c
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Finset.HasAntidiagonal.mem_antidiagonal`：∀ {A : Type u_1} {inst : AddMon
+oid A} [self : Finset.HasAntidiagonal A] {n : A} {a : A × A},   a ∈ Finset.HasAn
+tidiagonal.antidiagonal n ↔ a…
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
-theorem coeff_X_pow_mul (p : R⟦X⟧) (n d : Nat) :
+theorem coeff_X_pow_mul (p : R⟦X⟧) (n d : ℕ) :
     coeff (d + n) (X ^ n * p) = coeff d p := by
-  rw [coeff_mul]; rw [Finset.sum_eq_single (n]; rw [d)]; rw [coeff_X_pow]; rw [if_pos rfl]; rw [one_mul]
+  rw [coeff_mul, Finset.sum_eq_single (n, d), coeff_X_pow, if_pos rfl, one_mul]
   · rintro ⟨i, j⟩ h1 h2
-    rw [coeff_X_pow]; rw [if_neg]; rw [zero_mul]
+    rw [coeff_X_pow, if_neg, zero_mul]
     rintro rfl
     apply h2
-    rw [mem_antidiagonal]; rw [add_comm]; rw [add_right_cancel_iff] at h1
+    rw [mem_antidiagonal, add_comm, add_right_cancel_iff] at h1
     subst h1
     rfl
   · rw [add_comm]
     exact fun h1 => (h1 (mem_antidiagonal.2 rfl)).elim
-
-/--
-theorem `mul_X_pow_cancel` / 定理 `mul_X_pow_cancel`
-
-English:
-theorem mul_X_pow_cancel
-  given: {k : Nat} {φ ψ : R⟦X⟧} (h : φ * X ^ k = ψ * X ^ k)
-  proof: by
-  rw [PowerSeries.ext_iff] at h ⊢
-  intro n
-  simpa using h (n + k)
-
-中文:
-定理 mul_X_pow_cancel
-  条件: {k : 自然数} {φ ψ : R⟦X⟧} (h : φ * X ^ k = ψ * X ^ k)
-  证明: by
-  rw [PowerSeries.ext_iff] at h ⊢
-  intro n
-  simpa using h (n + k)
-
-Depends on / 依赖: PowerSeries, PowerSeries.ext_iff, ext_iff
+/-
+**PowerSeries.mul_X_pow_cancel** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：mul_X_pow_cancel {k : Nat} {φ ψ : R⟦X⟧} (h : φ * X ^ k = ψ * X ^ k) : φ = 
+ψ
+参数：h : φ * X ^ k = ψ * X ^ k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.ext_iff`：∀ {R : Type u_1} [inst : Semiring R] {φ ψ : PowerSe
+ries R},   φ = ψ ↔ ∀ (n : ℕ), (PowerSeries.coeff n) φ = (PowerSeries.coeff n) ψ
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `PowerSeries.coeff_mul_X_pow`：coeff_mul_X_pow (p : R⟦X⟧) (n d : Nat) : co
+eff (d + n) (p * X ^ n) = coeff d p
 -/
-theorem mul_X_pow_cancel {k : Nat} {φ ψ : R⟦X⟧} (h : φ * X ^ k = ψ * X ^ k) :
+theorem mul_X_pow_cancel {k : ℕ} {φ ψ : R⟦X⟧} (h : φ * X ^ k = ψ * X ^ k) :
     φ = ψ := by
   rw [PowerSeries.ext_iff] at h ⊢
   intro n
   simpa using h (n + k)
-
-/--
-theorem `mul_X_pow_injective` / 定理 `mul_X_pow_injective`
-
-English:
-theorem mul_X_pow_injective
-  given: {k : Nat}
-  statement: Function.Injective (· * X ^ k : R⟦X⟧ -> R⟦X⟧)
-  proof: fun _ _ => mul_X_pow_cancel
-
-中文:
-定理 mul_X_pow_injective
-  条件: {k : 自然数}
-  结论: 函数.单射 (· * X ^ k : R⟦X⟧ -> R⟦X⟧)
-  证明: fun _ _ => mul_X_pow_cancel
-
-Depends on / 依赖: mul_X_pow_cancel
+/-
+**PowerSeries.mul_X_pow_injective** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：mul_X_pow_injective {k : Nat} : Function.Injective (· * X ^ k : R⟦X⟧ -> R⟦
+X⟧)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.mul_X_pow_cancel`：mul_X_pow_cancel {k : Nat} {φ ψ : R⟦X⟧} (h
+ : φ * X ^ k = ψ * X ^ k) : φ = ψ
 -/
-theorem mul_X_pow_injective {k : Nat} : Function.Injective (· * X ^ k : R⟦X⟧ -> R⟦X⟧) :=
-  fun _ _ => mul_X_pow_cancel
-
-/--
-theorem `mul_X_pow_inj` / 定理 `mul_X_pow_inj`
-
-English:
-theorem mul_X_pow_inj
-  given: {k : Nat} {φ ψ : R⟦X⟧}
-  proof: mul_X_pow_injective.eq_iff
-
-中文:
-定理 mul_X_pow_inj
-  条件: {k : 自然数} {φ ψ : R⟦X⟧}
-  证明: mul_X_pow_injective.eq_iff
-
-Depends on / 依赖: eq_iff, mul_X_pow_injective, mul_X_pow_injective.eq_iff
+theorem mul_X_pow_injective {k : ℕ} : Function.Injective (· * X ^ k : R⟦X⟧ → R⟦X⟧) :=
+  fun _ _ ↦ mul_X_pow_cancel
+/-
+**PowerSeries.mul_X_pow_inj** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：mul_X_pow_inj {k : Nat} {φ ψ : R⟦X⟧} : φ * X ^ k = ψ * X ^ k ↔ φ = ψ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `PowerSeries.mul_X_pow_injective`：mul_X_pow_injective {k : Nat} : Functio
+n.Injective (· * X ^ k : R⟦X⟧ -> R⟦X⟧)
 -/
-theorem mul_X_pow_inj {k : Nat} {φ ψ : R⟦X⟧} :
+theorem mul_X_pow_inj {k : ℕ} {φ ψ : R⟦X⟧} :
     φ * X ^ k = ψ * X ^ k ↔ φ = ψ :=
   mul_X_pow_injective.eq_iff
-
-/--
-theorem `X_pow_mul_cancel` / 定理 `X_pow_mul_cancel`
-
-English:
-theorem X_pow_mul_cancel
-  given: {k : Nat} {φ ψ : R⟦X⟧} (h : X ^ k * φ = X ^ k * ψ)
-  proof: by
-  rw [PowerSeries.ext_iff] at h ⊢
-  intro n
-  simpa using h (n + k)
-
-中文:
-定理 X_pow_mul_cancel
-  条件: {k : 自然数} {φ ψ : R⟦X⟧} (h : X ^ k * φ = X ^ k * ψ)
-  证明: by
-  rw [PowerSeries.ext_iff] at h ⊢
-  intro n
-  simpa using h (n + k)
-
-Depends on / 依赖: PowerSeries, PowerSeries.ext_iff, ext_iff
+/-
+**PowerSeries.X_pow_mul_cancel** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：X_pow_mul_cancel {k : Nat} {φ ψ : R⟦X⟧} (h : X ^ k * φ = X ^ k * ψ) : φ = 
+ψ
+参数：h : X ^ k * φ = X ^ k * ψ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.ext_iff`：∀ {R : Type u_1} [inst : Semiring R] {φ ψ : PowerSe
+ries R},   φ = ψ ↔ ∀ (n : ℕ), (PowerSeries.coeff n) φ = (PowerSeries.coeff n) ψ
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `PowerSeries.coeff_X_pow_mul`：coeff_X_pow_mul (p : R⟦X⟧) (n d : Nat) : co
+eff (d + n) (X ^ n * p) = coeff d p
 -/
-theorem X_pow_mul_cancel {k : Nat} {φ ψ : R⟦X⟧} (h : X ^ k * φ = X ^ k * ψ) :
+theorem X_pow_mul_cancel {k : ℕ} {φ ψ : R⟦X⟧} (h : X ^ k * φ = X ^ k * ψ) :
     φ = ψ := by
   rw [PowerSeries.ext_iff] at h ⊢
   intro n
   simpa using h (n + k)
-
-/--
-theorem `X_pow_mul_injective` / 定理 `X_pow_mul_injective`
-
-English:
-theorem X_pow_mul_injective
-  given: {k : Nat}
-  statement: Function.Injective (X ^ k * · : R⟦X⟧ -> R⟦X⟧)
-  proof: fun _ _ => X_pow_mul_cancel
-
-中文:
-定理 X_pow_mul_injective
-  条件: {k : 自然数}
-  结论: 函数.单射 (X ^ k * · : R⟦X⟧ -> R⟦X⟧)
-  证明: fun _ _ => X_pow_mul_cancel
-
-Depends on / 依赖: X_pow_mul_cancel
+/-
+**PowerSeries.X_pow_mul_injective** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：X_pow_mul_injective {k : Nat} : Function.Injective (X ^ k * · : R⟦X⟧ -> R⟦
+X⟧)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.X_pow_mul_cancel`：X_pow_mul_cancel {k : Nat} {φ ψ : R⟦X⟧} (h
+ : X ^ k * φ = X ^ k * ψ) : φ = ψ
 -/
-theorem X_pow_mul_injective {k : Nat} : Function.Injective (X ^ k * · : R⟦X⟧ -> R⟦X⟧) :=
-  fun _ _ => X_pow_mul_cancel
-
-/--
-theorem `X_pow_mul_inj` / 定理 `X_pow_mul_inj`
-
-English:
-theorem X_pow_mul_inj
-  given: {k : Nat} {φ ψ : R⟦X⟧}
-  proof: X_pow_mul_injective.eq_iff
-
-中文:
-定理 X_pow_mul_inj
-  条件: {k : 自然数} {φ ψ : R⟦X⟧}
-  证明: X_pow_mul_injective.eq_iff
-
-Depends on / 依赖: X_pow_mul_injective, X_pow_mul_injective.eq_iff, eq_iff
+theorem X_pow_mul_injective {k : ℕ} : Function.Injective (X ^ k * · : R⟦X⟧ → R⟦X⟧) :=
+  fun _ _ ↦ X_pow_mul_cancel
+/-
+**PowerSeries.X_pow_mul_inj** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：X_pow_mul_inj {k : Nat} {φ ψ : R⟦X⟧} : X ^ k * φ = X ^ k * ψ ↔ φ = ψ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `PowerSeries.X_pow_mul_injective`：X_pow_mul_injective {k : Nat} : Functio
+n.Injective (X ^ k * · : R⟦X⟧ -> R⟦X⟧)
 -/
-theorem X_pow_mul_inj {k : Nat} {φ ψ : R⟦X⟧} :
+theorem X_pow_mul_inj {k : ℕ} {φ ψ : R⟦X⟧} :
     X ^ k * φ = X ^ k * ψ ↔ φ = ψ :=
   X_pow_mul_injective.eq_iff
-
-/--
-theorem `coeff_mul_X_pow'` / 定理 `coeff_mul_X_pow'`
-
-English:
-theorem coeff_mul_X_pow'
-  given: (p : R⟦X⟧) (n d : Nat)
-  proof: by
-  split_ifs with h
-  · rw [← tsub_add_cancel_of_le h, coeff_mul_X_pow, add_tsub_cancel_right]
-  · refine (coeff_mul _ _ _).trans (Finset.sum_eq_zero fun x hx => ?_)
-    rw [coeff_X_pow]; rw [if_neg]; rw [mul_zero]
-    exact ((le_of_add_le_right (mem_antidiagonal.mp hx).le).trans_lt <| not_le.mp h).ne
-
-中文:
-定理 coeff_mul_X_pow'
-  条件: (p : R⟦X⟧) (n d : 自然数)
-  证明: by
-  split_ifs with h
-  · rw [← tsub_add_cancel_of_le h, coeff_mul_X_pow, add_tsub_cancel_right]
-  · refine (coeff_mul _ _ _).trans (Finset.sum_eq_zero fun x hx => ?_)
-    rw [coeff_X_pow]; rw [if_neg]; rw [mul_zero]
-    exact ((le_of_add_le_right (mem_antidiagonal.mp hx).le).trans_lt <| not_le.mp h).ne
-
-Depends on / 依赖: Finset, Finset.sum_eq_zero, add_tsub_cancel_right, coeff_X_pow, coeff_mul, coeff_mul_X_pow, if_neg, le_of_add_le_right, mem_antidiagonal, mem_antidiagonal.mp, mul_zero, not_le, not_le.mp, split_ifs, sum_eq_zero, trans_lt, tsub_add_cancel_of_le
+/-
+**PowerSeries.coeff_mul_X_pow'** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_mul_X_pow' (p : R⟦X⟧) (n d : Nat) : coeff d (p * X ^ n) = ite (n <= 
+d) (coeff (d - n) p) 0
+参数：p : R⟦X⟧；n d : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `tsub_add_cancel_of_le`：tsub_add_cancel_of_le (h : a <= b) : b - a + a = 
+b
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `PowerSeries.coeff_mul_X_pow`：coeff_mul_X_pow (p : R⟦X⟧) (n d : Nat) : co
+eff (d + n) (p * X ^ n) = coeff d p
+· 使用定理 `add_tsub_cancel_right`：add_tsub_cancel_right (a b : α) : a + b - b = a
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `PowerSeries.coeff_mul`：coeff_mul (n : Nat) (φ ψ : R⟦X⟧) : coeff n (φ * ψ
+) = ∑ p in antidiagonal n, coeff p.1 φ * coeff p.2 ψ
+· 使用定理 `Finset.sum_eq_zero`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst
+ : AddCommMonoid M] {f : ι → M},   (∀ x ∈ s, f x = 0) → ∑ x ∈ s, f x = 0
+· 使用定理 `PowerSeries.coeff_X_pow`：coeff_X_pow (m n : Nat) : coeff m ((X : R⟦X⟧) ^
+ n) = if m = n then 1 else 0
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `le_of_add_le_right`：∀ {α : Type u} [inst : Add α] [inst_1 : Preorder α] 
+[CanonicallyOrderedAdd α] {a b c : α}, a + b ≤ c → b ≤ c
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.HasAntidiagonal.mem_antidiagonal`：∀ {A : Type u_1} {inst : AddMon
+oid A} [self : Finset.HasAntidiagonal A] {n : A} {a : A × A},   a ∈ Finset.HasAn
+tidiagonal.antidiagonal n ↔ a…
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
-theorem coeff_mul_X_pow' (p : R⟦X⟧) (n d : Nat) :
-    coeff d (p * X ^ n) = ite (n <= d) (coeff (d - n) p) 0 := by
+theorem coeff_mul_X_pow' (p : R⟦X⟧) (n d : ℕ) :
+    coeff d (p * X ^ n) = ite (n ≤ d) (coeff (d - n) p) 0 := by
   split_ifs with h
   · rw [← tsub_add_cancel_of_le h, coeff_mul_X_pow, add_tsub_cancel_right]
   · refine (coeff_mul _ _ _).trans (Finset.sum_eq_zero fun x hx => ?_)
-    rw [coeff_X_pow]; rw [if_neg]; rw [mul_zero]
+    rw [coeff_X_pow, if_neg, mul_zero]
     exact ((le_of_add_le_right (mem_antidiagonal.mp hx).le).trans_lt <| not_le.mp h).ne
-
-/--
-theorem `coeff_X_pow_mul'` / 定理 `coeff_X_pow_mul'`
-
-English:
-theorem coeff_X_pow_mul'
-  given: (p : R⟦X⟧) (n d : Nat)
-  proof: by
-  split_ifs with h
-  · rw [← tsub_add_cancel_of_le h, coeff_X_pow_mul]
-    simp
-  · refine (coeff_mul _ _ _).trans (Finset.sum_eq_zero fun x hx => ?_)
-    rw [coeff_X_pow]; rw [if_neg]; rw [zero_mul]
-    have := mem_antidiagonal.mp hx
-    rw [add_comm] at this
-    exact ((le_of_add_le_right this.le).trans_lt <| not_le.mp h).ne
-
-中文:
-定理 coeff_X_pow_mul'
-  条件: (p : R⟦X⟧) (n d : 自然数)
-  证明: by
-  split_ifs with h
-  · rw [← tsub_add_cancel_of_le h, coeff_X_pow_mul]
-    simp
-  · refine (coeff_mul _ _ _).trans (Finset.sum_eq_zero fun x hx => ?_)
-    rw [coeff_X_pow]; rw [if_neg]; rw [zero_mul]
-    have := mem_antidiagonal.mp hx
-    rw [add_comm] at this
-    exact ((le_of_add_le_right this.le).trans_lt <| not_le.mp h).ne
-
-Depends on / 依赖: Finset, Finset.sum_eq_zero, add_comm, bot_le, coeff_X_pow, coeff_X_pow_mul, coeff_mul, if_neg, le_of_add_le_right, mem_antidiagonal, mem_antidiagonal.mp, not_le, not_le.mp, split_ifs, sum_eq_zero, this.le, trans_lt, tsub_add_cancel_of_le, zero_mul
+/-
+**PowerSeries.coeff_X_pow_mul'** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_X_pow_mul' (p : R⟦X⟧) (n d : Nat) : coeff d (X ^ n * p) = ite (n <= 
+d) (coeff (d - n) p) 0
+参数：p : R⟦X⟧；n d : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `tsub_add_cancel_of_le`：tsub_add_cancel_of_le (h : a <= b) : b - a + a = 
+b
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `PowerSeries.coeff_X_pow_mul`：coeff_X_pow_mul (p : R⟦X⟧) (n d : Nat) : co
+eff (d + n) (X ^ n * p) = coeff d p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `add_tsub_cancel_right`：add_tsub_cancel_right (a b : α) : a + b - b = a
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `PowerSeries.coeff_mul`：coeff_mul (n : Nat) (φ ψ : R⟦X⟧) : coeff n (φ * ψ
+) = ∑ p in antidiagonal n, coeff p.1 φ * coeff p.2 ψ
+· 使用定理 `Finset.sum_eq_zero`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst
+ : AddCommMonoid M] {f : ι → M},   (∀ x ∈ s, f x = 0) → ∑ x ∈ s, f x = 0
+· 使用定理 `PowerSeries.coeff_X_pow`：coeff_X_pow (m n : Nat) : coeff m ((X : R⟦X⟧) ^
+ n) = if m = n then 1 else 0
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.HasAntidiagonal.mem_antidiagonal`：∀ {A : Type u_1} {inst : AddMon
+oid A} [self : Finset.HasAntidiagonal A] {n : A} {a : A × A},   a ∈ Finset.HasAn
+tidiagonal.antidiagonal n ↔ a…
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `le_of_add_le_right`：∀ {α : Type u} [inst : Add α] [inst_1 : Preorder α] 
+[CanonicallyOrderedAdd α] {a b c : α}, a + b ≤ c → b ≤ c
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
 -/
-theorem coeff_X_pow_mul' (p : R⟦X⟧) (n d : Nat) :
-    coeff d (X ^ n * p) = ite (n <= d) (coeff (d - n) p) 0 := by
+theorem coeff_X_pow_mul' (p : R⟦X⟧) (n d : ℕ) :
+    coeff d (X ^ n * p) = ite (n ≤ d) (coeff (d - n) p) 0 := by
   split_ifs with h
   · rw [← tsub_add_cancel_of_le h, coeff_X_pow_mul]
     simp
   · refine (coeff_mul _ _ _).trans (Finset.sum_eq_zero fun x hx => ?_)
-    rw [coeff_X_pow]; rw [if_neg]; rw [zero_mul]
+    rw [coeff_X_pow, if_neg, zero_mul]
     have := mem_antidiagonal.mp hx
     rw [add_comm] at this
     exact ((le_of_add_le_right this.le).trans_lt <| not_le.mp h).ne
 
 end
 
-/--
-theorem `isUnit_constantCoeff` / 定理 `isUnit_constantCoeff`
+/-- If a formal power series is invertible, then so is its constant coefficient. -/
+/-
+**PowerSeries.isUnit_constantCoeff** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：isUnit_constantCoeff (φ : R⟦X⟧) (h : IsUnit φ) : IsUnit (constantCoeff φ)
+参数：φ : R⟦X⟧；h : IsUnit φ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.isUnit_constantCoeff`：isUnit_constantCoeff (φ : MvPowerSer
+ies σ R) (h : IsUnit φ) : IsUnit (constantCoeff φ)
 
-English:
-theorem isUnit_constantCoeff
-  given: (φ : R⟦X⟧) (h : IsUnit φ)
-  statement: IsUnit (constantCoeff φ)
-  proof: MvPowerSeries.isUnit_constantCoeff φ h
-
-中文:
-定理 isUnit_constantCoeff
-  条件: (φ : R⟦X⟧) (h : 是单位 φ)
-  结论: 是单位 (constantCoeff φ)
-  证明: MvPowerSeries.isUnit_constantCoeff φ h
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.isUnit_constantCoeff, isUnit_constantCoeff
+--- 原说明 ---
+If a formal power series is invertible, then so is its constant coefficient.
 -/
 theorem isUnit_constantCoeff (φ : R⟦X⟧) (h : IsUnit φ) : IsUnit (constantCoeff φ) :=
   MvPowerSeries.isUnit_constantCoeff φ h
 
-/--
-theorem `eq_shift_mul_X_add_const` / 定理 `eq_shift_mul_X_add_const`
+/-- Split off the constant coefficient. -/
+/-
+**PowerSeries.eq_shift_mul_X_add_const** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：eq_shift_mul_X_add_const (φ : R⟦X⟧) : φ = (mk fun p => coeff (p + 1) φ) * 
+X + C (constantCoeff φ)
+参数：φ : R⟦X⟧。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.ext`：ext {φ ψ : R⟦X⟧} (h : forall n, coeff n φ = coeff n ψ) 
+: φ = ψ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `PowerSeries.coeff_zero_eq_constantCoeff`：coeff_zero_eq_constantCoeff : ⇑
+(coeff (R
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `PowerSeries.constantCoeff_X`：constantCoeff_X : constantCoeff (R
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `PowerSeries.coeff_succ_mul_X`：coeff_succ_mul_X (n : Nat) (φ : R⟦X⟧) : co
+eff (n + 1) (φ * X) = coeff n φ
+· 使用定理 `PowerSeries.coeff_mk`：coeff_mk (n : Nat) (f : Nat -> R) : coeff n (mk f)
+ = f n
+· 使用定理 `PowerSeries.coeff_C`：coeff_C (n : Nat) (a : R) : coeff n (C a : R⟦X⟧) = 
+if n = 0 then a else 0
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Nat.succ_ne_zero`：∀ (n : ℕ), n.succ ≠ 0
+· 使用定理 `if_false`：∀ {α : Sort u_1} {x : Decidable False} (t e : α), (if False th
+en t else e) = e
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 
-English:
-theorem eq_shift_mul_X_add_const
-  given: (φ : R⟦X⟧)
-  proof: by
-  ext (_ | n)
-  · simp
-  · simp only [coeff_succ_mul_X, coeff_mk, map_add, coeff_C, n.succ_ne_zero,
-      if_false, add_zero]
-
-中文:
-定理 eq_shift_mul_X_add_const
-  条件: (φ : R⟦X⟧)
-  证明: by
-  ext (_ | n)
-  · simp
-  · simp only [coeff_succ_mul_X, coeff_mk, map_add, coeff_C, n.succ_ne_zero,
-      if_false, add_zero]
-
-Depends on / 依赖: Bornology, BoundedSpace, BoundedSpace.of_finite, Finite, add_zero, coeff_C, coeff_mk, coeff_succ_mul_X, if_false, map_add, n.succ_ne_zero, of_finite, succ_ne_zero
+--- 原说明 ---
+Split off the constant coefficient.
 -/
 theorem eq_shift_mul_X_add_const (φ : R⟦X⟧) :
     φ = (mk fun p => coeff (p + 1) φ) * X + C (constantCoeff φ) := by
@@ -1985,28 +1574,68 @@ theorem eq_shift_mul_X_add_const (φ : R⟦X⟧) :
   · simp only [coeff_succ_mul_X, coeff_mk, map_add, coeff_C, n.succ_ne_zero,
       if_false, add_zero]
 
-/--
-theorem `eq_X_mul_shift_add_const` / 定理 `eq_X_mul_shift_add_const`
+/-- Split off the constant coefficient. -/
+/-
+**PowerSeries.eq_X_mul_shift_add_const** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：eq_X_mul_shift_add_const (φ : R⟦X⟧) : φ = (X * mk fun p => coeff (p + 1) φ
+) + C (constantCoeff φ)
+参数：φ : R⟦X⟧。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.ext`：ext {φ ψ : R⟦X⟧} (h : forall n, coeff n φ = coeff n ψ) 
+: φ = ψ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `PowerSeries.coeff_zero_eq_constantCoeff`：coeff_zero_eq_constantCoeff : ⇑
+(coeff (R
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `PowerSeries.constantCoeff_X`：constantCoeff_X : constantCoeff (R
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `PowerSeries.coeff_succ_X_mul`：coeff_succ_X_mul (n : Nat) (φ : R⟦X⟧) : co
+eff (n + 1) (X * φ) = coeff n φ
+· 使用定理 `PowerSeries.coeff_mk`：coeff_mk (n : Nat) (f : Nat -> R) : coeff n (mk f)
+ = f n
+· 使用定理 `PowerSeries.coeff_C`：coeff_C (n : Nat) (a : R) : coeff n (C a : R⟦X⟧) = 
+if n = 0 then a else 0
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Nat.succ_ne_zero`：∀ (n : ℕ), n.succ ≠ 0
+· 使用定理 `if_false`：∀ {α : Sort u_1} {x : Decidable False} (t e : α), (if False th
+en t else e) = e
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 
-English:
-theorem eq_X_mul_shift_add_const
-  given: (φ : R⟦X⟧)
-  proof: by
-  ext (_ | n)
-  · simp
-  · simp only [coeff_succ_X_mul, coeff_mk, map_add, coeff_C, n.succ_ne_zero,
-      if_false, add_zero]
-
-中文:
-定理 eq_X_mul_shift_add_const
-  条件: (φ : R⟦X⟧)
-  证明: by
-  ext (_ | n)
-  · simp
-  · simp only [coeff_succ_X_mul, coeff_mk, map_add, coeff_C, n.succ_ne_zero,
-      if_false, add_zero]
-
-Depends on / 依赖: add_zero, coeff_C, coeff_mk, coeff_succ_X_mul, if_false, map_add, n.succ_ne_zero, succ_ne_zero
+--- 原说明 ---
+Split off the constant coefficient.
 -/
 theorem eq_X_mul_shift_add_const (φ : R⟦X⟧) :
     φ = (X * mk fun p => coeff (p + 1) φ) + C (constantCoeff φ) := by
@@ -2018,294 +1647,237 @@ theorem eq_X_mul_shift_add_const (φ : R⟦X⟧) :
 section Map
 
 variable {S : Type*} {T : Type*} [Semiring S] [Semiring T]
-variable (f : R ->+* S) (g : S ->+* T)
+variable (f : R →+* S) (g : S →+* T)
 
-/--
-Definition of `map` / `map` 的定义
+/-- The map between formal power series induced by a map on the coefficients. -/
+/-
+**PowerSeries.map** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries`。
+形式化陈述：map : R⟦X⟧ ->+* S⟦X⟧
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: : R⟦X⟧ ->+* S⟦X⟧
-  body: MvPowerSeries.map f
-
-@[simp]
-
-中文:
-定义 map
-  签名: : R⟦X⟧ ->+* S⟦X⟧
-  定义体: MvPowerSeries.map f
-
-@[simp]
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.map
+--- 原说明 ---
+The map between formal power series induced by a map on the coefficients.
 -/
-def map : R⟦X⟧ ->+* S⟦X⟧ :=
+def map : R⟦X⟧ →+* S⟦X⟧ :=
   MvPowerSeries.map f
 
 @[simp]
-/--
-theorem `map_id` / 定理 `map_id`
-
-English:
-theorem map_id
-  statement: (map (RingHom.id R) : R⟦X⟧ -> R⟦X⟧) = id
-  proof: rfl
-
-中文:
-定理 map_id
-  结论: (map (环态射.id R) : R⟦X⟧ -> R⟦X⟧) = id
-  证明: rfl
+/-
+**PowerSeries.map_id** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：map_id : (map (RingHom.id R) : R⟦X⟧ -> R⟦X⟧) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_id : (map (RingHom.id R) : R⟦X⟧ -> R⟦X⟧) = id :=
+theorem map_id : (map (RingHom.id R) : R⟦X⟧ → R⟦X⟧) = id :=
   rfl
-
-/--
-theorem `map_comp` / 定理 `map_comp`
-
-English:
-theorem map_comp
-  statement: map (g.comp f) = (map g).comp (map f)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 map_comp
-  结论: map (g.comp f) = (map g).comp (map f)
-  证明: rfl
-
-@[simp]
+/-
+**PowerSeries.map_comp** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：map_comp : map (g.comp f) = (map g).comp (map f)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem map_comp : map (g.comp f) = (map g).comp (map f) :=
   rfl
 
 @[simp]
-/--
-theorem `coeff_map` / 定理 `coeff_map`
-
-English:
-theorem coeff_map
-  given: (n : Nat) (φ : R⟦X⟧)
-  statement: coeff n (map f φ) = f (coeff n φ)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coeff_map
-  条件: (n : 自然数) (φ : R⟦X⟧)
-  结论: coeff n (map f φ) = f (coeff n φ)
-  证明: rfl
-
-@[simp]
+/-
+**PowerSeries.coeff_map** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_map (n : Nat) (φ : R⟦X⟧) : coeff n (map f φ) = f (coeff n φ)
+参数：n : Nat；φ : R⟦X⟧。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coeff_map (n : Nat) (φ : R⟦X⟧) : coeff n (map f φ) = f (coeff n φ) :=
+theorem coeff_map (n : ℕ) (φ : R⟦X⟧) : coeff n (map f φ) = f (coeff n φ) :=
   rfl
 
 @[simp]
-/--
-theorem `map_C` / 定理 `map_C`
-
-English:
-theorem map_C
-  given: (r : R)
-  statement: map f (C r) = C (f r)
-  proof: by
-  ext
-  simp [coeff_C, apply_ite f]
-
-@[simp]
-
-中文:
-定理 map_C
-  条件: (r : R)
-  结论: map f (C r) = C (f r)
-  证明: by
-  ext
-  simp [coeff_C, apply_ite f]
-
-@[simp]
-
-Depends on / 依赖: apply_ite, coeff_C
+/-
+**PowerSeries.map_C** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：map_C (r : R) : map f (C r) = C (f r)
+参数：r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.ext`：ext {φ ψ : R⟦X⟧} (h : forall n, coeff n φ = coeff n ψ) 
+: φ = ψ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.coeff_C`：coeff_C (n : Nat) (a : R) : coeff n (C a : R⟦X⟧) = 
+if n = 0 then a else 0
+· 使用定理 `apply_ite`：∀ {α : Sort u_1} {β : Sort u_2} (f : α → β) (P : Prop) [inst 
+: Decidable P] (x y : α),   f (if P then x else y) = if P then f x else f y
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem map_C (r : R) : map f (C r) = C (f r) := by
   ext
   simp [coeff_C, apply_ite f]
 
 @[simp]
-/--
-theorem `map_X` / 定理 `map_X`
-
-English:
-theorem map_X
-  statement: map f X = X
-  proof: by
-  ext
-  simp [coeff_X, apply_ite f]
-
-中文:
-定理 map_X
-  结论: map f X = X
-  证明: by
-  ext
-  simp [coeff_X, apply_ite f]
-
-Depends on / 依赖: apply_ite, coeff_X
+/-
+**PowerSeries.map_X** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：map_X : map f X = X
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.ext`：ext {φ ψ : R⟦X⟧} (h : forall n, coeff n φ = coeff n ψ) 
+: φ = ψ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.coeff_X`：coeff_X (n : Nat) : coeff n (X : R⟦X⟧) = if n = 1 t
+hen 1 else 0
+· 使用定理 `apply_ite`：∀ {α : Sort u_1} {β : Sort u_2} (f : α → β) (P : Prop) [inst 
+: Decidable P] (x y : α),   f (if P then x else y) = if P then f x else f y
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem map_X : map f X = X := by
   ext
   simp [coeff_X, apply_ite f]
-
-/--
-theorem `map_surjective` / 定理 `map_surjective`
-
-English:
-theorem map_surjective
-  given: (f : S ->+* T) (hf : Function.Surjective f)
-  proof: by
-  intro g
-  use PowerSeries.mk fun k => Function.surjInv hf (PowerSeries.coeff k g)
-  ext k
-  simp only [Function.surjInv, coeff_map, coeff_mk]
-  exact Classical.choose_spec (hf (coeff k g))
-
-中文:
-定理 map_surjective
-  条件: (f : S ->+* T) (hf : 函数.满射 f)
-  证明: by
-  intro g
-  use PowerSeries.mk fun k => Function.surjInv hf (PowerSeries.coeff k g)
-  ext k
-  simp only [Function.surjInv, coeff_map, coeff_mk]
-  exact Classical.choose_spec (hf (coeff k g))
-
-Depends on / 依赖: Classical, Classical.choose_spec, Function, Function.surjInv, PowerSeries, PowerSeries.coeff, PowerSeries.mk, choose_spec, coeff_map, coeff_mk, surjInv
+/-
+**PowerSeries.map_surjective** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：map_surjective (f : S ->+* T) (hf : Function.Surjective f) : Function.Surj
+ective (PowerSeries.map f)
+参数：f : S ->+* T；hf : Function.Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.ext`：ext {φ ψ : R⟦X⟧} (h : forall n, coeff n φ = coeff n ψ) 
+: φ = ψ
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.coeff_mk`：coeff_mk (n : Nat) (f : Nat -> R) : coeff n (mk f)
+ = f n
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
-theorem map_surjective (f : S ->+* T) (hf : Function.Surjective f) :
+theorem map_surjective (f : S →+* T) (hf : Function.Surjective f) :
     Function.Surjective (PowerSeries.map f) := by
   intro g
-  use PowerSeries.mk fun k => Function.surjInv hf (PowerSeries.coeff k g)
+  use PowerSeries.mk fun k ↦ Function.surjInv hf (PowerSeries.coeff k g)
   ext k
   simp only [Function.surjInv, coeff_map, coeff_mk]
   exact Classical.choose_spec (hf (coeff k g))
-
-/--
-theorem `map_injective` / 定理 `map_injective`
-
-English:
-theorem map_injective
-  given: (f : S ->+* T) (hf : Function.Injective ⇑f)
-  proof: by
-  intro u v huv
-  ext k
-  apply hf
-  rw [← PowerSeries.coeff_map]; rw [← PowerSeries.coeff_map]; rw [huv]
-
-中文:
-定理 map_injective
-  条件: (f : S ->+* T) (hf : 函数.单射 ⇑f)
-  证明: by
-  intro u v huv
-  ext k
-  apply hf
-  rw [← PowerSeries.coeff_map]; rw [← PowerSeries.coeff_map]; rw [huv]
-
-Depends on / 依赖: PowerSeries, PowerSeries.coeff_map, coeff_map
+/-
+**PowerSeries.map_injective** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：map_injective (f : S ->+* T) (hf : Function.Injective ⇑f) : Function.Injec
+tive (PowerSeries.map f)
+参数：f : S ->+* T；hf : Function.Injective ⇑f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.ext`：ext {φ ψ : R⟦X⟧} (h : forall n, coeff n φ = coeff n ψ) 
+: φ = ψ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PowerSeries.coeff_map`：coeff_map (n : Nat) (φ : R⟦X⟧) : coeff n (map f φ
+) = f (coeff n φ)
 -/
-theorem map_injective (f : S ->+* T) (hf : Function.Injective ⇑f) :
+theorem map_injective (f : S →+* T) (hf : Function.Injective ⇑f) :
     Function.Injective (PowerSeries.map f) := by
   intro u v huv
   ext k
   apply hf
-  rw [← PowerSeries.coeff_map]; rw [← PowerSeries.coeff_map]; rw [huv]
+  rw [← PowerSeries.coeff_map, ← PowerSeries.coeff_map, huv]
 
 end Map
 
 @[simp]
-/--
-theorem `map_eq_zero` / 定理 `map_eq_zero`
-
-English:
-theorem map_eq_zero
-  statement: {R S : Type*} [DivisionSemiring R] [Semiring S] [Nontrivial S] (φ : R⟦X⟧)
-  proof: MvPowerSeries.map_eq_zero _ _
-
-中文:
-定理 map_eq_zero
-  结论: {R S : 类型} [除半环 R] [半环 S] [非平凡 S] (φ : R⟦X⟧)
-  证明: MvPowerSeries.map_eq_zero _ _
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.map_eq_zero, map_eq_zero
+/-
+**PowerSeries.map_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：map_eq_zero {R S : Type*} [DivisionSemiring R] [Semiring S] [Nontrivial S]
+ (φ : R⟦X⟧) (f : R ->+* S) : φ.map f = 0 ↔ φ = 0
+参数：φ : R⟦X⟧；f : R ->+* S。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.map_eq_zero`：map_eq_zero {S : Type*} [DivisionSemiring R] 
+[Semiring S] [Nontrivial S] (φ : MvPowerSeries σ R) (f : R ->+* S) : φ.map f = 0
+ ↔ φ = 0
 -/
 theorem map_eq_zero {R S : Type*} [DivisionSemiring R] [Semiring S] [Nontrivial S] (φ : R⟦X⟧)
-    (f : R ->+* S) : φ.map f = 0 ↔ φ = 0 :=
+    (f : R →+* S) : φ.map f = 0 ↔ φ = 0 :=
   MvPowerSeries.map_eq_zero _ _
-
-/--
-theorem `X_pow_dvd_iff` / 定理 `X_pow_dvd_iff`
-
-English:
-theorem X_pow_dvd_iff
-  given: {n : Nat} {φ : R⟦X⟧}
-  proof: by
-  convert! @MvPowerSeries.X_pow_dvd_iff Unit R _ () n φ
-  constructor <;> intro h m hm
-  · rw [Finsupp.unique_single m]
-    convert! h _ hm
-  · apply h
-    simpa only [Finsupp.single_eq_same] using hm
-
-中文:
-定理 X_pow_dvd_iff
-  条件: {n : 自然数} {φ : R⟦X⟧}
-  证明: by
-  convert! @MvPowerSeries.X_pow_dvd_iff Unit R _ () n φ
-  constructor <;> intro h m hm
-  · rw [Finsupp.unique_single m]
-    convert! h _ hm
-  · apply h
-    simpa only [Finsupp.single_eq_same] using hm
-
-Depends on / 依赖: Finsupp, Finsupp.single_eq_same, Finsupp.unique_single, MvPowerSeries, MvPowerSeries.X_pow_dvd_iff, X_pow_dvd_iff, convert, single_eq_same, unique_single
+/-
+**PowerSeries.X_pow_dvd_iff** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：X_pow_dvd_iff {n : Nat} {φ : R⟦X⟧} : (X : R⟦X⟧) ^ n ∣ φ ↔ forall m, m < n 
+-> coeff m φ = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.unique_single`：unique_single [Unique α] (x : α ->₀ M) : x = sing
+le default (x default)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finsupp.single_eq_same`：single_eq_same : (single a b : α ->₀ M) a = b
+· 使用定理 `MvPowerSeries.X_pow_dvd_iff`：X_pow_dvd_iff {s : σ} {n : Nat} {φ : MvPowe
+rSeries σ R} : (X s : MvPowerSeries σ R) ^ n ∣ φ ↔ forall m : σ ->₀ Nat, m s < n
+ -> coeff m φ = 0
 -/
-theorem X_pow_dvd_iff {n : Nat} {φ : R⟦X⟧} :
-    (X : R⟦X⟧) ^ n ∣ φ ↔ forall m, m < n -> coeff m φ = 0 := by
+theorem X_pow_dvd_iff {n : ℕ} {φ : R⟦X⟧} :
+    (X : R⟦X⟧) ^ n ∣ φ ↔ ∀ m, m < n → coeff m φ = 0 := by
   convert! @MvPowerSeries.X_pow_dvd_iff Unit R _ () n φ
   constructor <;> intro h m hm
   · rw [Finsupp.unique_single m]
     convert! h _ hm
   · apply h
     simpa only [Finsupp.single_eq_same] using hm
-
-/--
-theorem `X_dvd_iff` / 定理 `X_dvd_iff`
-
-English:
-theorem X_dvd_iff
-  given: {φ : R⟦X⟧}
-  statement: (X : R⟦X⟧) ∣ φ ↔ constantCoeff φ = 0
-  proof: by
-  rw [← pow_one (X : R⟦X⟧)]; rw [X_pow_dvd_iff]; rw [← coeff_zero_eq_constantCoeff_apply]
-  constructor <;> intro h
-  · exact h 0 zero_lt_one
-  · intro m hm
-    rwa [Nat.eq_zero_of_le_zero (Nat.le_of_succ_le_succ hm)]
-
-中文:
-定理 X_dvd_iff
-  条件: {φ : R⟦X⟧}
-  结论: (X : R⟦X⟧) ∣ φ ↔ constantCoeff φ = 0
-  证明: by
-  rw [← pow_one (X : R⟦X⟧)]; rw [X_pow_dvd_iff]; rw [← coeff_zero_eq_constantCoeff_apply]
-  constructor <;> intro h
-  · exact h 0 zero_lt_one
-  · intro m hm
-    rwa [Nat.eq_zero_of_le_zero (Nat.le_of_succ_le_succ hm)]
-
-Depends on / 依赖: Nat.eq_zero_of_le_zero, Nat.le_of_succ_le_succ, X_pow_dvd_iff, coeff_zero_eq_constantCoeff_apply, eq_zero_of_le_zero, le_of_succ_le_succ, pow_one, zero_lt_one
+/-
+**PowerSeries.X_dvd_iff** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：X_dvd_iff {φ : R⟦X⟧} : (X : R⟦X⟧) ∣ φ ↔ constantCoeff φ = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `PowerSeries.X_pow_dvd_iff`：X_pow_dvd_iff {n : Nat} {φ : R⟦X⟧} : (X : R⟦X
+⟧) ^ n ∣ φ ↔ forall m, m < n -> coeff m φ = 0
+· 使用定理 `PowerSeries.coeff_zero_eq_constantCoeff_apply`：coeff_zero_eq_constantCoe
+ff_apply (φ : R⟦X⟧) : coeff 0 φ = constantCoeff φ
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Nat.eq_zero_of_le_zero`：∀ {n : ℕ}, n ≤ 0 → n = 0
+· 使用定理 `Nat.le_of_succ_le_succ`：∀ {n m : ℕ}, n.succ ≤ m.succ → n ≤ m
 -/
 theorem X_dvd_iff {φ : R⟦X⟧} : (X : R⟦X⟧) ∣ φ ↔ constantCoeff φ = 0 := by
-  rw [← pow_one (X : R⟦X⟧)]; rw [X_pow_dvd_iff]; rw [← coeff_zero_eq_constantCoeff_apply]
+  rw [← pow_one (X : R⟦X⟧), X_pow_dvd_iff, ← coeff_zero_eq_constantCoeff_apply]
   constructor <;> intro h
   · exact h 0 zero_lt_one
   · intro m hm
@@ -2315,92 +1887,71 @@ end Semiring
 
 section toSubring
 
-variable [Ring R] (p : PowerSeries R) (T : Subring R) (hp : forall n, p.coeff n in T)
+variable [Ring R] (p : PowerSeries R) (T : Subring R) (hp : ∀ n, p.coeff n ∈ T)
 
-/--
-Definition of `toSubring` / `toSubring` 的定义
+/-- Given a formal power series `p` and a subring `T` that contains the
+coefficients of `p`, return the corresponding formal power series
+whose coefficients are in `T`. -/
+/-
+**PowerSeries.toSubring** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries`。
+形式化陈述：toSubring : PowerSeries T
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toSubring
-  signature: : PowerSeries T
-  body: mk fun n => ⟨p.coeff n, hp n⟩
-
-@[simp]
-
-中文:
-定义 toSubring
-  签名: : 幂级数 T
-  定义体: mk fun n => ⟨p.coeff n, hp n⟩
-
-@[simp]
-
-Depends on / 依赖: p.coeff
+--- 原说明 ---
+Given a formal power series `p` and a subring `T` that contains the
+coefficients of `p`, return the corresponding formal power series
+whose coefficients are in `T`.
 -/
 def toSubring : PowerSeries T := mk fun n => ⟨p.coeff n, hp n⟩
 
 @[simp]
-/--
-theorem `coeff_toSubring` / 定理 `coeff_toSubring`
-
-English:
-theorem coeff_toSubring
-  given: {n : Nat}
-  statement: (p.toSubring T hp).coeff n = p.coeff n
-  proof: by
-  rw [toSubring]; rw [coeff_mk]
-
-@[simp]
-
-中文:
-定理 coeff_toSubring
-  条件: {n : 自然数}
-  结论: (p.toSubring T hp).coeff n = p.coeff n
-  证明: by
-  rw [toSubring]; rw [coeff_mk]
-
-@[simp]
-
-Depends on / 依赖: coeff_mk, toSubring
+/-
+**PowerSeries.coeff_toSubring** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_toSubring {n : Nat} : (p.toSubring T hp).coeff n = p.coeff n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.toSubring.eq_1`：∀ {R : Type u_1} [inst : Ring R] (p : PowerS
+eries R) (T : Subring R) (hp : ∀ (n : ℕ), (PowerSeries.coeff n) p ∈ T),   p.toSu
+bring T hp = Pow…
+· 使用定理 `PowerSeries.coeff_mk`：coeff_mk (n : Nat) (f : Nat -> R) : coeff n (mk f)
+ = f n
 -/
-theorem coeff_toSubring {n : Nat} : (p.toSubring T hp).coeff n = p.coeff n := by
-  rw [toSubring]; rw [coeff_mk]
+theorem coeff_toSubring {n : ℕ} : (p.toSubring T hp).coeff n = p.coeff n := by
+  rw [toSubring, coeff_mk]
 
 @[simp]
-/--
-theorem `constantCoeff_toSubring` / 定理 `constantCoeff_toSubring`
-
-English:
-theorem constantCoeff_toSubring
-  statement: (p.toSubring T hp).constantCoeff = p.constantCoeff
-  proof: coeff_zero_eq_constantCoeff_apply p
-
-@[simp]
-
-中文:
-定理 constantCoeff_toSubring
-  结论: (p.toSubring T hp).constantCoeff = p.constantCoeff
-  证明: coeff_zero_eq_constantCoeff_apply p
-
-@[simp]
-
-Depends on / 依赖: coeff_zero_eq_constantCoeff_apply
+/-
+**PowerSeries.constantCoeff_toSubring** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：constantCoeff_toSubring : (p.toSubring T hp).constantCoeff = p.constantCoe
+ff
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.coeff_zero_eq_constantCoeff_apply`：coeff_zero_eq_constantCoe
+ff_apply (φ : R⟦X⟧) : coeff 0 φ = constantCoeff φ
 -/
 theorem constantCoeff_toSubring : (p.toSubring T hp).constantCoeff = p.constantCoeff :=
   coeff_zero_eq_constantCoeff_apply p
 
 @[simp]
-/--
-theorem `map_toSubring` / 定理 `map_toSubring`
-
-English:
-theorem map_toSubring
-  statement: (p.toSubring T hp).map T.subtype = p
-  proof: ext fun n => by simp
-
-中文:
-定理 map_toSubring
-  结论: (p.toSubring T hp).map T.subtype = p
-  证明: ext fun n => by simp
+/-
+**PowerSeries.map_toSubring** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：map_toSubring : (p.toSubring T hp).map T.subtype = p
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.ext`：ext {φ ψ : R⟦X⟧} (h : forall n, coeff n φ = coeff n ψ) 
+: φ = ψ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.coeff_toSubring`：coeff_toSubring {n : Nat} : (p.toSubring T 
+hp).coeff n = p.coeff n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem map_toSubring : (p.toSubring T hp).map T.subtype = p := ext fun n => by simp
 
@@ -2412,66 +1963,18 @@ variable [CommSemiring R]
 
 open Finset Nat
 
-/--
-Definition of `rescale` / `rescale` 的定义
+/-- The ring homomorphism taking a power series `f(X)` to `f(aX)`. -/
+/-
+**PowerSeries.rescale** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries`。
+形式化陈述：rescale (a : R) : R⟦X⟧ ->+* R⟦X⟧ where toFun f
+参数：a : R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rescale
-  signature: (a : R)
-  body: PowerSeries.mk fun n => a ^ n * PowerSeries.coeff n f
-  map_zero' := by
-    ext
-    simp only [map_zero, PowerSeries.coeff_mk, mul_zero]
-  map_one' := by
-    ext1
-    simp only [mul_boole, PowerSeries.coeff_mk, PowerSeries.coeff_one]
-    split_ifs with h
-    · rw [h, pow_zero a]
-    rfl
-  map_add' := by
-    intros
-    ext
-    exact mul_add _ _ _
-  map_mul' f g := by
-    ext
-    rw [PowerSeries.coeff_mul]; rw [PowerSeries.coeff_mk]; rw [PowerSeries.coeff_mul]; rw [Finset.mul_sum]
-    apply sum_congr rfl
-    simp only [coeff_mk, Prod.forall, mem_antidiagonal]
-    intro b c H
-    rw [← H]; rw [pow_add]; rw [mul_mul_mul_comm]
-
-@[simp]
-
-中文:
-定义 rescale
-  签名: (a : R)
-  定义体: PowerSeries.mk fun n => a ^ n * PowerSeries.coeff n f
-  map_zero' := by
-    ext
-    simp only [map_zero, PowerSeries.coeff_mk, mul_zero]
-  map_one' := by
-    ext1
-    simp only [mul_boole, PowerSeries.coeff_mk, PowerSeries.coeff_one]
-    split_ifs with h
-    · rw [h, pow_zero a]
-    rfl
-  map_add' := by
-    intros
-    ext
-    exact mul_add _ _ _
-  map_mul' f g := by
-    ext
-    rw [PowerSeries.coeff_mul]; rw [PowerSeries.coeff_mk]; rw [PowerSeries.coeff_mul]; rw [Finset.mul_sum]
-    apply sum_congr rfl
-    simp only [coeff_mk, Prod.forall, mem_antidiagonal]
-    intro b c H
-    rw [← H]; rw [pow_add]; rw [mul_mul_mul_comm]
-
-@[simp]
-
-Depends on / 依赖: PowerSeries, PowerSeries.coeff, PowerSeries.mk
+--- 原说明 ---
+The ring homomorphism taking a power series `f(X)` to `f(aX)`.
 -/
-noncomputable def rescale (a : R) : R⟦X⟧ ->+* R⟦X⟧ where
+noncomputable def rescale (a : R) : R⟦X⟧ →+* R⟦X⟧ where
   toFun f := PowerSeries.mk fun n => a ^ n * PowerSeries.coeff n f
   map_zero' := by
     ext
@@ -2488,235 +1991,247 @@ noncomputable def rescale (a : R) : R⟦X⟧ ->+* R⟦X⟧ where
     exact mul_add _ _ _
   map_mul' f g := by
     ext
-    rw [PowerSeries.coeff_mul]; rw [PowerSeries.coeff_mk]; rw [PowerSeries.coeff_mul]; rw [Finset.mul_sum]
+    rw [PowerSeries.coeff_mul, PowerSeries.coeff_mk, PowerSeries.coeff_mul, Finset.mul_sum]
     apply sum_congr rfl
     simp only [coeff_mk, Prod.forall, mem_antidiagonal]
     intro b c H
-    rw [← H]; rw [pow_add]; rw [mul_mul_mul_comm]
+    rw [← H, pow_add, mul_mul_mul_comm]
 
 @[simp]
-/--
-theorem `coeff_rescale` / 定理 `coeff_rescale`
-
-English:
-theorem coeff_rescale
-  given: (f : R⟦X⟧) (a : R) (n : Nat)
-  proof: coeff_mk n (fun n => a ^ n * coeff n f)
-
-@[simp]
-
-中文:
-定理 coeff_rescale
-  条件: (f : R⟦X⟧) (a : R) (n : 自然数)
-  证明: coeff_mk n (fun n => a ^ n * coeff n f)
-
-@[simp]
-
-Depends on / 依赖: coeff_mk
+/-
+**PowerSeries.coeff_rescale** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_rescale (f : R⟦X⟧) (a : R) (n : Nat) : coeff n (rescale a f) = a ^ n
+ * coeff n f
+参数：f : R⟦X⟧；a : R；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.coeff_mk`：coeff_mk (n : Nat) (f : Nat -> R) : coeff n (mk f)
+ = f n
 -/
-theorem coeff_rescale (f : R⟦X⟧) (a : R) (n : Nat) :
+theorem coeff_rescale (f : R⟦X⟧) (a : R) (n : ℕ) :
     coeff n (rescale a f) = a ^ n * coeff n f :=
-  coeff_mk n (fun n => a ^ n * coeff n f)
+  coeff_mk n (fun n ↦ a ^ n * coeff n f)
 
 @[simp]
-/--
-theorem `rescale_zero` / 定理 `rescale_zero`
-
-English:
-theorem rescale_zero
-  statement: rescale 0 = (C (R := R)).comp constantCoeff
-  proof: by
-  ext x n
-  simp only [Function.comp_apply, RingHom.coe_comp, rescale, RingHom.coe_mk,
-    coeff_C]
-  split_ifs with h <;> simp [h]
-
-中文:
-定理 rescale_zero
-  结论: rescale 0 = (C (R := R)).comp constantCoeff
-  证明: by
-  ext x n
-  simp only [Function.comp_apply, RingHom.coe_comp, rescale, RingHom.coe_mk,
-    coeff_C]
-  split_ifs with h <;> simp [h]
-
-Depends on / 依赖: Function, Function.comp_apply, RingHom, RingHom.coe_comp, RingHom.coe_mk, coe_comp, coe_mk, coeff_C, comp_apply, constantCoeff, rescale, split_ifs
+/-
+**PowerSeries.rescale_zero** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：rescale_zero : rescale 0 = (C (R
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `PowerSeries.ext`：ext {φ ψ : R⟦X⟧} (h : forall n, coeff n φ = coeff n ψ) 
+: φ = ψ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.coeff_C`：coeff_C (n : Nat) (a : R) : coeff n (C a : R⟦X⟧) = 
+if n = 0 then a else 0
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `PowerSeries.coeff_mk`：coeff_mk (n : Nat) (f : Nat -> R) : coeff n (mk f)
+ = f n
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `PowerSeries.coeff_zero_eq_constantCoeff`：coeff_zero_eq_constantCoeff : ⇑
+(coeff (R
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `zero_pow`：zero_pow {b : Nat} (_ : 0 < b) : (0 : R) ^ b = 0
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
 -/
 theorem rescale_zero : rescale 0 = (C (R := R)).comp constantCoeff := by
   ext x n
   simp only [Function.comp_apply, RingHom.coe_comp, rescale, RingHom.coe_mk,
     coeff_C]
   split_ifs with h <;> simp [h]
-
-/--
-theorem `rescale_zero_apply` / 定理 `rescale_zero_apply`
-
-English:
-theorem rescale_zero_apply
-  given: (f : R⟦X⟧)
-  statement: rescale 0 f = C (constantCoeff f)
-  proof: by simp
-
-@[simp]
-
-中文:
-定理 rescale_zero_apply
-  条件: (f : R⟦X⟧)
-  结论: rescale 0 f = C (constantCoeff f)
-  证明: by simp
-
-@[simp]
+/-
+**PowerSeries.rescale_zero_apply** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：rescale_zero_apply (f : R⟦X⟧) : rescale 0 f = C (constantCoeff f)
+参数：f : R⟦X⟧。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.rescale_zero`：rescale_zero : rescale 0 = (C (R
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem rescale_zero_apply (f : R⟦X⟧) : rescale 0 f = C (constantCoeff f) := by simp
 
 @[simp]
-/--
-theorem `rescale_one` / 定理 `rescale_one`
-
-English:
-theorem rescale_one
-  statement: rescale 1 = RingHom.id R⟦X⟧
-  proof: by
-  ext
-  simp [coeff_rescale]
-
-中文:
-定理 rescale_one
-  结论: rescale 1 = 环态射.id R⟦X⟧
-  证明: by
-  ext
-  simp [coeff_rescale]
-
-Depends on / 依赖: coeff_rescale
+/-
+**PowerSeries.rescale_one** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：rescale_one : rescale 1 = RingHom.id R⟦X⟧
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `PowerSeries.ext`：ext {φ ψ : R⟦X⟧} (h : forall n, coeff n φ = coeff n ψ) 
+: φ = ψ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.coeff_rescale`：coeff_rescale (f : R⟦X⟧) (a : R) (n : Nat) : 
+coeff n (rescale a f) = a ^ n * coeff n f
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem rescale_one : rescale 1 = RingHom.id R⟦X⟧ := by
   ext
   simp [coeff_rescale]
-
-/--
-theorem `rescale_mk` / 定理 `rescale_mk`
-
-English:
-theorem rescale_mk
-  given: (f : Nat -> R) (a : R)
-  statement: rescale a (mk f) = mk fun n : Nat => a ^ n * f n
-  proof: by
-  ext
-  rw [coeff_rescale]; rw [coeff_mk]; rw [coeff_mk]
-
-中文:
-定理 rescale_mk
-  条件: (f : 自然数 -> R) (a : R)
-  结论: rescale a (mk f) = mk fun n : 自然数 => a ^ n * f n
-  证明: by
-  ext
-  rw [coeff_rescale]; rw [coeff_mk]; rw [coeff_mk]
-
-Depends on / 依赖: coeff_mk, coeff_rescale
+/-
+**PowerSeries.rescale_mk** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：rescale_mk (f : Nat -> R) (a : R) : rescale a (mk f) = mk fun n : Nat => a
+ ^ n * f n
+参数：f : Nat -> R；a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.ext`：ext {φ ψ : R⟦X⟧} (h : forall n, coeff n φ = coeff n ψ) 
+: φ = ψ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.coeff_rescale`：coeff_rescale (f : R⟦X⟧) (a : R) (n : Nat) : 
+coeff n (rescale a f) = a ^ n * coeff n f
+· 使用定理 `PowerSeries.coeff_mk`：coeff_mk (n : Nat) (f : Nat -> R) : coeff n (mk f)
+ = f n
 -/
-theorem rescale_mk (f : Nat -> R) (a : R) : rescale a (mk f) = mk fun n : Nat => a ^ n * f n := by
+theorem rescale_mk (f : ℕ → R) (a : R) : rescale a (mk f) = mk fun n : ℕ => a ^ n * f n := by
   ext
-  rw [coeff_rescale]; rw [coeff_mk]; rw [coeff_mk]
-
-/--
-theorem `rescale_rescale` / 定理 `rescale_rescale`
-
-English:
-theorem rescale_rescale
-  given: (f : R⟦X⟧) (a b : R)
-  proof: by
-  ext n
-  simp_rw [coeff_rescale]
-  rw [mul_pow]; rw [mul_comm _ (b ^ n)]; rw [mul_assoc]
-
-中文:
-定理 rescale_rescale
-  条件: (f : R⟦X⟧) (a b : R)
-  证明: by
-  ext n
-  simp_rw [coeff_rescale]
-  rw [mul_pow]; rw [mul_comm _ (b ^ n)]; rw [mul_assoc]
-
-Depends on / 依赖: coeff_rescale, mul_assoc, mul_comm, mul_pow, simp_rw
+  rw [coeff_rescale, coeff_mk, coeff_mk]
+/-
+**PowerSeries.rescale_rescale** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：rescale_rescale (f : R⟦X⟧) (a b : R) : rescale b (rescale a f) = rescale (
+a * b) f
+参数：f : R⟦X⟧；a b : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.ext`：ext {φ ψ : R⟦X⟧} (h : forall n, coeff n φ = coeff n ψ) 
+: φ = ψ
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `PowerSeries.coeff_rescale`：coeff_rescale (f : R⟦X⟧) (a : R) (n : Nat) : 
+coeff n (rescale a f) = a ^ n * coeff n f
+· 使用定理 `mul_pow`：mul_pow {ea₁ b c₁ : Nat} {xa₁ : R} (_ : ea₁ * b = c₁) (_ : a₂ ^
+ b = c₂) : (xa₁ ^ ea₁ * a₂ : R) ^ b = xa₁ ^ c₁ * c₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 -/
 theorem rescale_rescale (f : R⟦X⟧) (a b : R) :
     rescale b (rescale a f) = rescale (a * b) f := by
   ext n
   simp_rw [coeff_rescale]
-  rw [mul_pow]; rw [mul_comm _ (b ^ n)]; rw [mul_assoc]
-
-/--
-theorem `rescale_mul` / 定理 `rescale_mul`
-
-English:
-theorem rescale_mul
-  given: (a b : R)
-  statement: rescale (a * b) = (rescale b).comp (rescale a)
-  proof: by
-  ext
-  simp [← rescale_rescale]
-
-中文:
-定理 rescale_mul
-  条件: (a b : R)
-  结论: rescale (a * b) = (rescale b).comp (rescale a)
-  证明: by
-  ext
-  simp [← rescale_rescale]
-
-Depends on / 依赖: rescale_rescale
+  rw [mul_pow, mul_comm _ (b ^ n), mul_assoc]
+/-
+**PowerSeries.rescale_mul** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：rescale_mul (a b : R) : rescale (a * b) = (rescale b).comp (rescale a)
+参数：a b : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `PowerSeries.ext`：ext {φ ψ : R⟦X⟧} (h : forall n, coeff n φ = coeff n ψ) 
+: φ = ψ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.coeff_rescale`：coeff_rescale (f : R⟦X⟧) (a : R) (n : Nat) : 
+coeff n (rescale a f) = a ^ n * coeff n f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem rescale_mul (a b : R) : rescale (a * b) = (rescale b).comp (rescale a) := by
   ext
   simp [← rescale_rescale]
-
-/--
-theorem `rescale_map` / 定理 `rescale_map`
-
-English:
-theorem rescale_map
-  given: {S : Type*} [CommSemiring S] (φ : R ->+* S) (r : R) (f : R⟦X⟧)
-  proof: by
-  ext n
-  simp [coeff_rescale, coeff_map, map_mul, map_pow]
-
-中文:
-定理 rescale_map
-  条件: {S : 类型} [交换半环 S] (φ : R ->+* S) (r : R) (f : R⟦X⟧)
-  证明: by
-  ext n
-  simp [coeff_rescale, coeff_map, map_mul, map_pow]
-
-Depends on / 依赖: coeff_map, coeff_rescale, map_mul, map_pow
+/-
+**PowerSeries.rescale_map** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：rescale_map {S : Type*} [CommSemiring S] (φ : R ->+* S) (r : R) (f : R⟦X⟧)
+ : rescale (φ r) (f.map φ) = (rescale r f).map (φ : R ->+* S)
+参数：φ : R ->+* S；r : R；f : R⟦X⟧。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.ext`：ext {φ ψ : R⟦X⟧} (h : forall n, coeff n φ = coeff n ψ) 
+: φ = ψ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.coeff_rescale`：coeff_rescale (f : R⟦X⟧) (a : R) (n : Nat) : 
+coeff n (rescale a f) = a ^ n * coeff n f
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem rescale_map {S : Type*} [CommSemiring S] (φ : R ->+* S) (r : R) (f : R⟦X⟧) :
-    rescale (φ r) (f.map φ) = (rescale r f).map (φ : R ->+* S) := by
+theorem rescale_map {S : Type*} [CommSemiring S] (φ : R →+* S) (r : R) (f : R⟦X⟧) :
+    rescale (φ r) (f.map φ) = (rescale r f).map (φ : R →+* S) := by
   ext n
   simp [coeff_rescale, coeff_map, map_mul, map_pow]
-
-/--
-theorem `rescale_algebraMap_map` / 定理 `rescale_algebraMap_map`
-
-English:
-theorem rescale_algebraMap_map
-  statement: {A S : Type*} [CommSemiring A] [Algebra A R] [CommSemiring S]
-  proof: by
-  convert! rescale_map (φ : R ->+* S) _ _
-  simp
-
-中文:
-定理 rescale_algebraMap_map
-  结论: {A S : 类型} [交换半环 A] [代数 A R] [交换半环 S]
-  证明: by
-  convert! rescale_map (φ : R ->+* S) _ _
-  simp
-
-Depends on / 依赖: Bornology, Bornology.induced, Subtype, Subtype.val, convert, induced, rescale_map
+/-
+**PowerSeries.rescale_algebraMap_map** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：rescale_algebraMap_map {A S : Type*} [CommSemiring A] [Algebra A R] [CommS
+emiring S] [Algebra A S] (φ : R ->ₐ[A] S) (a : A) (f : R⟦X⟧) : rescale (algebraM
+ap A S a) (f.map φ) = (rescale (algebraMap A R a) f).map φ
+参数：φ : R ->ₐ[A] S；a : A；f : R⟦X⟧。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgHom.commutes`：commutes (r : R) : φ (algebraMap R A r) = algebraMap R 
+B r
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `PowerSeries.rescale_map`：rescale_map {S : Type*} [CommSemiring S] (φ : R
+ ->+* S) (r : R) (f : R⟦X⟧) : rescale (φ r) (f.map φ) = (rescale r f).map (φ : R
+ ->+* S)
 -/
 theorem rescale_algebraMap_map {A S : Type*} [CommSemiring A] [Algebra A R] [CommSemiring S]
-    [Algebra A S] (φ : R ->ₐ[A] S) (a : A) (f : R⟦X⟧) :
+    [Algebra A S] (φ : R →ₐ[A] S) (a : A) (f : R⟦X⟧) :
     rescale (algebraMap A S a) (f.map φ) = (rescale (algebraMap A R a) f).map φ := by
-  convert! rescale_map (φ : R ->+* S) _ _
+  convert! rescale_map (φ : R →+* S) _ _
   simp
 
 end CommSemiring
@@ -2727,221 +2242,231 @@ open Finset.HasAntidiagonal Finset
 
 variable {R : Type*} [CommSemiring R] {ι : Type*}
 
-/--
-theorem `coeff_prod` / 定理 `coeff_prod`
+/-- Coefficients of a product of power series -/
+/-
+**PowerSeries.coeff_prod** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_prod [DecidableEq ι] (f : ι -> PowerSeries R) (d : Nat) (s : Finset 
+ι) : coeff d (∏ j in s, f j) = ∑ l in finsuppAntidiag s d, ∏ i in s, coeff (l i)
+ (f i)
+参数：f : ι -> PowerSeries R；d : Nat；s : Finset ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPowerSeries.coeff_prod`：coeff_prod [DecidableEq ι] [DecidableEq σ] (f 
+: ι -> MvPowerSeries σ R) (d : σ ->₀ Nat) (s : Finset ι) : coeff d (∏ j in s, f 
+j) = ∑ l in fi…
+· 使用定理 `instSubsingletonPUnit`：Subsingleton PUnit.{u_1}
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finsupp.uniqueAddEquiv_symm_apply`：∀ {ι : Type u_1} {M : Type u_3} [inst
+ : AddZeroClass M] (i : ι) [inst_1 : Subsingleton ι] (b : M),   (Finsupp.uniqueA
+ddEquiv i).symm b = fun…
+· 使用引理 `Finset.mapRange_finsuppAntidiag_eq`：mapRange_finsuppAntidiag_eq {e : μ ≃
++ μ'} {s : Finset ι} {n : μ} : (finsuppAntidiag s n).map (mapRange.addEquiv e).t
+oEmbedding = finsuppAnti…
+· 使用定理 `Finset.sum_map`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst : A
+ddCommMonoid M] (s : Finset ι) (e : ι ↪ κ) (f : κ → M),   ∑ x ∈ Finset.map e s, 
+f x …
 
-English:
-theorem coeff_prod
-  given: [DecidableEq ι] (f : ι -> PowerSeries R) (d : Nat) (s : Finset ι)
-  proof: by
-  simp only [coeff]
-  rw [MvPowerSeries.coeff_prod]; rw [← Finsupp.uniqueAddEquiv_symm_apply _ d]; rw [← mapRange_finsuppAntidiag_eq]; rw [sum_map]
-  rfl
-
-中文:
-定理 coeff_prod
-  条件: [DecidableEq ι] (f : ι -> 幂级数 R) (d : 自然数) (s : 有限集 ι)
-  证明: by
-  simp only [coeff]
-  rw [MvPowerSeries.coeff_prod]; rw [← Finsupp.uniqueAddEquiv_symm_apply _ d]; rw [← mapRange_finsuppAntidiag_eq]; rw [sum_map]
-  rfl
-
-Depends on / 依赖: Finsupp, Finsupp.uniqueAddEquiv_symm_apply, MvPowerSeries, MvPowerSeries.coeff_prod, coeff_prod, mapRange_finsuppAntidiag_eq, sum_map, uniqueAddEquiv_symm_apply
+--- 原说明 ---
+Coefficients of a product of power series
 -/
-theorem coeff_prod [DecidableEq ι] (f : ι -> PowerSeries R) (d : Nat) (s : Finset ι) :
-    coeff d (∏ j in s, f j) = ∑ l in finsuppAntidiag s d, ∏ i in s, coeff (l i) (f i) := by
+theorem coeff_prod [DecidableEq ι] (f : ι → PowerSeries R) (d : ℕ) (s : Finset ι) :
+    coeff d (∏ j ∈ s, f j) = ∑ l ∈ finsuppAntidiag s d, ∏ i ∈ s, coeff (l i) (f i) := by
   simp only [coeff]
-  rw [MvPowerSeries.coeff_prod]; rw [← Finsupp.uniqueAddEquiv_symm_apply _ d]; rw [← mapRange_finsuppAntidiag_eq]; rw [sum_map]
+  rw [MvPowerSeries.coeff_prod, ← Finsupp.uniqueAddEquiv_symm_apply _ d,
+    ← mapRange_finsuppAntidiag_eq, sum_map]
   rfl
-
-/--
-theorem `prod_monomial` / 定理 `prod_monomial`
-
-English:
-theorem prod_monomial
-  given: (f : ι -> Nat) (g : ι -> R) (s : Finset ι)
-  proof: by
-  simpa [monomial, Finsupp.single_finsetSum] using
-    MvPowerSeries.prod_monomial (fun i => Finsupp.single () (f i)) g s
-
-中文:
-定理 prod_monomial
-  条件: (f : ι -> 自然数) (g : ι -> R) (s : 有限集 ι)
-  证明: by
-  simpa [monomial, Finsupp.single_finsetSum] using
-    MvPowerSeries.prod_monomial (fun i => Finsupp.single () (f i)) g s
-
-Depends on / 依赖: Finsupp, Finsupp.single, Finsupp.single_finsetSum, MvPowerSeries, MvPowerSeries.prod_monomial, monomial, prod_monomial, single, single_finsetSum
+/-
+**PowerSeries.prod_monomial** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：prod_monomial (f : ι -> Nat) (g : ι -> R) (s : Finset ι) : ∏ i in s, monom
+ial (f i) (g i) = monomial (∑ i in s, f i) (∏ i in s, g i)
+参数：f : ι -> Nat；g : ι -> R；s : Finset ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finsupp.single_finsetSum`：single_finsetSum [AddCommMonoid M] (s : Finset
+ ι) (f : ι -> M) (a : α) : single a (∑ b in s, f b) = ∑ b in s, single a (f b)
+· 使用定理 `MvPowerSeries.prod_monomial`：prod_monomial (f : ι -> σ ->₀ Nat) (g : ι -
+> R) (s : Finset ι) : ∏ i in s, monomial (f i) (g i) = monomial (∑ i in s, f i) 
+(∏ i in s, g i)
 -/
-theorem prod_monomial (f : ι -> Nat) (g : ι -> R) (s : Finset ι) :
-    ∏ i in s, monomial (f i) (g i) = monomial (∑ i in s, f i) (∏ i in s, g i) := by
+theorem prod_monomial (f : ι → ℕ) (g : ι → R) (s : Finset ι) :
+    ∏ i ∈ s, monomial (f i) (g i) = monomial (∑ i ∈ s, f i) (∏ i ∈ s, g i) := by
   simpa [monomial, Finsupp.single_finsetSum] using
-    MvPowerSeries.prod_monomial (fun i => Finsupp.single () (f i)) g s
-
-/--
-theorem `monomial_pow` / 定理 `monomial_pow`
-
-English:
-theorem monomial_pow
-  given: (m : Nat) (a : R) (n : Nat)
-  statement: (monomial m a) ^ n = monomial (n * m) (a ^ n)
-  proof: by
+    MvPowerSeries.prod_monomial (fun i ↦ Finsupp.single () (f i)) g s
+/-
+**PowerSeries.monomial_pow** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：monomial_pow (m : Nat) (a : R) (n : Nat) : (monomial m a) ^ n = monomial (
+n * m) (a ^ n)
+参数：m : Nat；a : R；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finsupp.smul_single`：smul_single [Zero M] [SMulZeroClass R M] (c : R) (a
+ : α) (b : M) : c • Finsupp.single a b = Finsupp.single a (c • b)
+· 使用定理 `MvPowerSeries.monomial_pow`：monomial_pow (m : σ ->₀ Nat) (a : R) (n : Na
+t) : (monomial m a) ^ n = monomial (n • m) (a ^ n)
+-/
+theorem monomial_pow (m : ℕ) (a : R) (n : ℕ) : (monomial m a) ^ n = monomial (n * m) (a ^ n) := by
   simpa [monomial] using MvPowerSeries.monomial_pow (Finsupp.single () m) a n
 
-中文:
-定理 monomial_pow
-  条件: (m : 自然数) (a : R) (n : 自然数)
-  结论: (monomial m a) ^ n = monomial (n * m) (a ^ n)
-  证明: by
-  simpa [monomial] using MvPowerSeries.monomial_pow (Finsupp.single () m) a n
+/-- The `n`-th coefficient of the `k`-th power of a power series. -/
+/-
+**PowerSeries.coeff_pow** 是 Mathlib 中的一个引理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_pow (k n : Nat) (φ : R⟦X⟧) : coeff n (φ ^ k) = ∑ l in finsuppAntidia
+g (range k) n, ∏ i in range k, coeff (l i) φ
+参数：k n : Nat；φ : R⟦X⟧。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.prod_range_induction`：prod_range_induction (f s : Nat -> M) (base
+ : s 0 = 1) (n : Nat) (step : forall k < n, s (k + 1) = s k * f k) : ∏ k in Fins
+et.range n, f k =…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PowerSeries.coeff_prod`：coeff_prod [DecidableEq ι] (f : ι -> PowerSeries
+ R) (d : Nat) (s : Finset ι) : coeff d (∏ j in s, f j) = ∑ l in finsuppAntidiag 
+s d, ∏ i in …
 
-Depends on / 依赖: Finsupp, Finsupp.single, MvPowerSeries, MvPowerSeries.monomial_pow, monomial, monomial_pow, single
+--- 原说明 ---
+The `n`-th coefficient of the `k`-th power of a power series.
 -/
-theorem monomial_pow (m : Nat) (a : R) (n : Nat) : (monomial m a) ^ n = monomial (n * m) (a ^ n) := by
-  simpa [monomial] using MvPowerSeries.monomial_pow (Finsupp.single () m) a n
-
-/--
-lemma `coeff_pow` / 引理 `coeff_pow`
-
-English:
-lemma coeff_pow
-  given: (k n : Nat) (φ : R⟦X⟧)
-  proof: by
-  have h₁ (i : Nat) : Function.const Nat φ i = φ := rfl
-  have h₂ (i : Nat) : ∏ j in range i, Function.const Nat φ j = φ ^ i := by
+lemma coeff_pow (k n : ℕ) (φ : R⟦X⟧) :
+    coeff n (φ ^ k) = ∑ l ∈ finsuppAntidiag (range k) n, ∏ i ∈ range k, coeff (l i) φ := by
+  have h₁ (i : ℕ) : Function.const ℕ φ i = φ := rfl
+  have h₂ (i : ℕ) : ∏ j ∈ range i, Function.const ℕ φ j = φ ^ i := by
     apply prod_range_induction (fun _ => φ) (fun i => φ ^ i) rfl i (fun _ => congrFun rfl)
-  rw [← h₂]; rw [← h₁ k]
-  apply coeff_prod (f := Function.const Nat φ) (d := n) (s := range k)
+  rw [← h₂, ← h₁ k]
+  apply coeff_prod (f := Function.const ℕ φ) (d := n) (s := range k)
 
-中文:
-引理 coeff_pow
-  条件: (k n : 自然数) (φ : R⟦X⟧)
-  证明: by
-  have h₁ (i : Nat) : Function.const Nat φ i = φ := rfl
-  have h₂ (i : Nat) : ∏ j in range i, Function.const Nat φ j = φ ^ i := by
-    apply prod_range_induction (fun _ => φ) (fun i => φ ^ i) rfl i (fun _ => congrFun rfl)
-  rw [← h₂]; rw [← h₁ k]
-  apply coeff_prod (f := Function.const Nat φ) (d := n) (s := range k)
+/-- First coefficient of the product of two power series. -/
+/-
+**PowerSeries.coeff_one_mul** 是 Mathlib 中的一个引理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_one_mul (φ ψ : R⟦X⟧) : coeff 1 (φ * ψ) = coeff 1 φ * constantCoeff ψ
+ + coeff 1 ψ * constantCoeff φ
+参数：φ ψ : R⟦X⟧。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.coeff_mul`：coeff_mul (n : Nat) (φ ψ : R⟦X⟧) : coeff n (φ * ψ
+) = ∑ p in antidiagonal n, coeff p.1 φ * coeff p.2 ψ
+· 使用定理 `Finset.sum_insert`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι
+} [inst : AddCommMonoid M] {f : ι → M} [inst_1 : DecidableEq ι],   a ∉ s → ∑ x ∈
+ insert…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Prod.mk.injEq`：∀ {α : Type u} {β : Type v} (fst : α) (snd : β) (fst_1 : 
+α) (snd_1 : β),   ((fst, snd) = (fst_1, snd_1)) = (fst = fst_1 ∧ snd = snd_1)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Finset.sum_singleton`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] (f : ι → M) (a : ι), ∑ x ∈ {a}, f x = f a
+· 使用定理 `PowerSeries.coeff_zero_eq_constantCoeff`：coeff_zero_eq_constantCoeff : ⇑
+(coeff (R
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
 
-Depends on / 依赖: Function, Function.const, coeff_prod, prod_range_induction
--/
-lemma coeff_pow (k n : Nat) (φ : R⟦X⟧) :
-    coeff n (φ ^ k) = ∑ l in finsuppAntidiag (range k) n, ∏ i in range k, coeff (l i) φ := by
-  have h₁ (i : Nat) : Function.const Nat φ i = φ := rfl
-  have h₂ (i : Nat) : ∏ j in range i, Function.const Nat φ j = φ ^ i := by
-    apply prod_range_induction (fun _ => φ) (fun i => φ ^ i) rfl i (fun _ => congrFun rfl)
-  rw [← h₂]; rw [← h₁ k]
-  apply coeff_prod (f := Function.const Nat φ) (d := n) (s := range k)
-
-/--
-lemma `coeff_one_mul` / 引理 `coeff_one_mul`
-
-English:
-lemma coeff_one_mul
-  given: (φ ψ : R⟦X⟧)
-  statement: coeff 1 (φ * ψ) =
-  proof: by
-  have : Finset.antidiagonal 1 = {(0, 1), (1, 0)} := by exact rfl
-  rw [coeff_mul]; rw [this]; rw [Finset.sum_insert]; rw [Finset.sum_singleton]; rw [coeff_zero_eq_constantCoeff]; rw [mul_comm]; rw [add_comm]
-  simp
-
-中文:
-引理 coeff_one_mul
-  条件: (φ ψ : R⟦X⟧)
-  结论: coeff 1 (φ * ψ) =
-  证明: by
-  have : Finset.antidiagonal 1 = {(0, 1), (1, 0)} := by exact rfl
-  rw [coeff_mul]; rw [this]; rw [Finset.sum_insert]; rw [Finset.sum_singleton]; rw [coeff_zero_eq_constantCoeff]; rw [mul_comm]; rw [add_comm]
-  simp
-
-Depends on / 依赖: Finset, Finset.antidiagonal, Finset.sum_insert, Finset.sum_singleton, add_comm, antidiagonal, coeff_mul, coeff_zero_eq_constantCoeff, mul_comm, sum_insert, sum_singleton
+--- 原说明 ---
+First coefficient of the product of two power series.
 -/
 lemma coeff_one_mul (φ ψ : R⟦X⟧) : coeff 1 (φ * ψ) =
     coeff 1 φ * constantCoeff ψ + coeff 1 ψ * constantCoeff φ := by
   have : Finset.antidiagonal 1 = {(0, 1), (1, 0)} := by exact rfl
-  rw [coeff_mul]; rw [this]; rw [Finset.sum_insert]; rw [Finset.sum_singleton]; rw [coeff_zero_eq_constantCoeff]; rw [mul_comm]; rw [add_comm]
+  rw [coeff_mul, this, Finset.sum_insert, Finset.sum_singleton, coeff_zero_eq_constantCoeff,
+    mul_comm, add_comm]
   simp
 
-/--
-lemma `coeff_one_pow` / 引理 `coeff_one_pow`
+/-- First coefficient of the `n`-th power of a power series. -/
+/-
+**PowerSeries.coeff_one_pow** 是 Mathlib 中的一个引理，位于命名空间 `PowerSeries`。
+形式化陈述：coeff_one_pow (n : Nat) (φ : R⟦X⟧) : coeff 1 (φ ^ n) = n * coeff 1 φ * (co
+nstantCoeff φ) ^ (n - 1)
+参数：n : Nat；φ : R⟦X⟧。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.eq_zero_or_pos`：∀ (n : ℕ), n = 0 ∨ n > 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `PowerSeries.coeff_one`：coeff_one (n : Nat) : coeff n (1 : R⟦X⟧) = if n =
+ 0 then 1 else 0
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `zero_tsub`：zero_tsub (a : α) : 0 - a = 0
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PowerSeries.coeff_mul`：coeff_mul (n : Nat) (φ ψ : R⟦X⟧) : coeff n (φ * ψ
+) = ∑ p in antidiagonal n, coeff p.1 φ * coeff p.2 ψ
+· 使用定理 `Finset.sum_insert`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι
+} [inst : AddCommMonoid M] {f : ι → M} [inst_1 : DecidableEq ι],   a ∉ s → ∑ x ∈
+ insert…
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `Finset.sum_singleton`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] (f : ι → M) (a : ι), ∑ x ∈ {a}, f x = f a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `PowerSeries.coeff_zero_eq_constantCoeff`：coeff_zero_eq_constantCoeff : ⇑
+(coeff (R
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `add_tsub_cancel_right`：add_tsub_cancel_right (a b : α) : a + b - b = a
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+（共 72 条，此处仅展示前 30 条）
 
-English:
-lemma coeff_one_pow
-  given: (n : Nat) (φ : R⟦X⟧)
-  proof: by
-  rcases Nat.eq_zero_or_pos n with (rfl | hn)
-  · simp
-  induction n with
-  | zero => lia
-  | succ n' ih =>
-      have h₁ (m : Nat) : φ ^ (m + 1) = φ ^ m * φ := by exact rfl
-      have h₂ : Finset.antidiagonal 1 = {(0, 1), (1, 0)} := by exact rfl
-      rw [h₁]; rw [coeff_mul]; rw [h₂]; rw [Finset.sum_insert]; rw [Finset.sum_singleton]
-      · simp only [coeff_zero_eq_constantCoeff, map_pow, Nat.cast_add, Nat.cast_one,
-          add_tsub_cancel_right]
-        have h₀ : n' = 0 ∨ 1 <= n' := by lia
-        rcases h₀ with h' | h'
-        · by_contra h''
-          rw [h'] at h''
-          simp only [pow_zero, one_mul, coeff_one, one_ne_zero, ↓reduceIte, zero_mul, add_zero,
-            mul_one] at h''
-          norm_num at h''
-        · rw [ih]
-          · conv => lhs; arg 2; rw [mul_comm, ← mul_assoc]
-            move_mul [← constantCoeff φ ^ (n' - 1)]
-            conv => enter [1, 2, 1, 1, 2]; rw [← pow_one (a := constantCoeff φ)]
-            rw [← pow_add (a := constantCoeff φ)]
-            conv => enter [1, 2, 1, 1]; rw [Nat.sub_add_cancel h']
-            ring
-          exact h'
-      · decide
-
-中文:
-引理 coeff_one_pow
-  条件: (n : 自然数) (φ : R⟦X⟧)
-  证明: by
-  rcases Nat.eq_zero_or_pos n with (rfl | hn)
-  · simp
-  induction n with
-  | zero => lia
-  | succ n' ih =>
-      have h₁ (m : Nat) : φ ^ (m + 1) = φ ^ m * φ := by exact rfl
-      have h₂ : Finset.antidiagonal 1 = {(0, 1), (1, 0)} := by exact rfl
-      rw [h₁]; rw [coeff_mul]; rw [h₂]; rw [Finset.sum_insert]; rw [Finset.sum_singleton]
-      · simp only [coeff_zero_eq_constantCoeff, map_pow, Nat.cast_add, Nat.cast_one,
-          add_tsub_cancel_right]
-        have h₀ : n' = 0 ∨ 1 <= n' := by lia
-        rcases h₀ with h' | h'
-        · by_contra h''
-          rw [h'] at h''
-          simp only [pow_zero, one_mul, coeff_one, one_ne_zero, ↓reduceIte, zero_mul, add_zero,
-            mul_one] at h''
-          norm_num at h''
-        · rw [ih]
-          · conv => lhs; arg 2; rw [mul_comm, ← mul_assoc]
-            move_mul [← constantCoeff φ ^ (n' - 1)]
-            conv => enter [1, 2, 1, 1, 2]; rw [← pow_one (a := constantCoeff φ)]
-            rw [← pow_add (a := constantCoeff φ)]
-            conv => enter [1, 2, 1, 1]; rw [Nat.sub_add_cancel h']
-            ring
-          exact h'
-      · decide
-
-Depends on / 依赖: Finset, Finset.antidiagonal, Finset.sum_insert, Finset.sum_singleton, Nat.cast_add, Nat.cast_one, Nat.eq_zero_or_pos, add_tsub_cancel_right, antidiagonal, cast_add, cast_one, coeff_mul, coeff_zero_eq_constantCoeff, eq_zero_or_pos, map_pow, sum_insert, sum_singleton
+--- 原说明 ---
+First coefficient of the `n`-th power of a power series.
 -/
-lemma coeff_one_pow (n : Nat) (φ : R⟦X⟧) :
+lemma coeff_one_pow (n : ℕ) (φ : R⟦X⟧) :
     coeff 1 (φ ^ n) = n * coeff 1 φ * (constantCoeff φ) ^ (n - 1) := by
   rcases Nat.eq_zero_or_pos n with (rfl | hn)
   · simp
   induction n with
   | zero => lia
   | succ n' ih =>
-      have h₁ (m : Nat) : φ ^ (m + 1) = φ ^ m * φ := by exact rfl
+      have h₁ (m : ℕ) : φ ^ (m + 1) = φ ^ m * φ := by exact rfl
       have h₂ : Finset.antidiagonal 1 = {(0, 1), (1, 0)} := by exact rfl
-      rw [h₁]; rw [coeff_mul]; rw [h₂]; rw [Finset.sum_insert]; rw [Finset.sum_singleton]
+      rw [h₁, coeff_mul, h₂, Finset.sum_insert, Finset.sum_singleton]
       · simp only [coeff_zero_eq_constantCoeff, map_pow, Nat.cast_add, Nat.cast_one,
           add_tsub_cancel_right]
-        have h₀ : n' = 0 ∨ 1 <= n' := by lia
+        have h₀ : n' = 0 ∨ 1 ≤ n' := by lia
         rcases h₀ with h' | h'
         · by_contra h''
           rw [h'] at h''
@@ -2964,46 +2489,43 @@ section CommRing
 
 variable {A : Type*} [CommRing A]
 
-/--
-theorem `not_isField` / 定理 `not_isField`
-
-English:
-theorem not_isField
-  statement: ¬IsField A⟦X⟧
-  proof: by
-  by_cases hA : Subsingleton A
-  · exact not_isField_of_subsingleton _
-  · nontriviality A
-    rw [Ring.not_isField_iff_exists_ideal_bot_lt_and_lt_top]
-    use Ideal.span {X}
-    constructor
-    · rw [bot_lt_iff_ne_bot, Ne, Ideal.span_singleton_eq_bot]
-      exact X_ne_zero
-    · rw [lt_top_iff_ne_top, Ne, Ideal.eq_top_iff_one, Ideal.mem_span_singleton,
-        X_dvd_iff, constantCoeff_one]
-      exact one_ne_zero
-
-@[simp]
-
-中文:
-定理 not_isField
-  结论: ¬是域 A⟦X⟧
-  证明: by
-  by_cases hA : Subsingleton A
-  · exact not_isField_of_subsingleton _
-  · nontriviality A
-    rw [Ring.not_isField_iff_exists_ideal_bot_lt_and_lt_top]
-    use Ideal.span {X}
-    constructor
-    · rw [bot_lt_iff_ne_bot, Ne, Ideal.span_singleton_eq_bot]
-      exact X_ne_zero
-    · rw [lt_top_iff_ne_top, Ne, Ideal.eq_top_iff_one, Ideal.mem_span_singleton,
-        X_dvd_iff, constantCoeff_one]
-      exact one_ne_zero
-
-@[simp]
-
-Depends on / 依赖: Ideal.eq_top_iff_one, Ideal.mem_span_singleton, Ideal.span, Ideal.span_singleton_eq_bot, Ring.not_isField_iff_exists_ideal_bot_lt_and_lt_top, Subsingleton, X_dvd_iff, X_ne_zero, bot_lt_iff_ne_bot, constantCoeff_one, eq_top_iff_one, lt_top_iff_ne_top, mem_span_singleton, nontriviality, not_isField_iff_exists_ideal_bot_lt_and_lt_top, not_isField_of_subsingleton, one_ne_zero, span_singleton_eq_bot
+/-
+**PowerSeries.not_isField** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：not_isField : ¬IsField A⟦X⟧
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_isField_of_subsingleton`：not_isField_of_subsingleton (R : Type u) [S
+emiring R] [Subsingleton R] : ¬IsField R
+· 使用定理 `PowerSeries.instSubsingleton`：∀ {R : Type u_1} [Semiring R] [Subsingleto
+n R], Subsingleton (PowerSeries R)
+· 使用定理 `Mathlib.Tactic.Nontriviality.subsingleton_or_nontrivial_elim`：subsinglet
+on_or_nontrivial_elim {p : Prop} {α : Type u} (h₁ : Subsingleton α -> p) (h₂ : N
+ontrivial α -> p) : p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Ring.not_isField_iff_exists_ideal_bot_lt_and_lt_top`：not_isField_iff_exi
+sts_ideal_bot_lt_and_lt_top [Nontrivial R] : ¬IsField R ↔ exists I : Ideal R, ⊥ 
+< I ∧ I < ⊤
+· 使用定理 `MvPowerSeries.instNontrivial`：∀ {σ : Type u_1} {R : Type u_2} [Nontrivia
+l R], Nontrivial (MvPowerSeries σ R)
+· 使用定理 `bot_lt_iff_ne_bot`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : Orde
+rBot α] {a : α}, ⊥ < a ↔ a ≠ ⊥
+· 使用定理 `Ne.eq_1`：∀ {α : Sort u} (a b : α), (a ≠ b) = ¬a = b
+· 使用定理 `Ideal.span_singleton_eq_bot`：span_singleton_eq_bot {x} : span ({x} : Set
+ α) = ⊥ ↔ x = 0
+· 使用定理 `PowerSeries.X_ne_zero`：X_ne_zero [Nontrivial R] : (X : R⟦X⟧) != 0
+· 使用定理 `lt_top_iff_ne_top`：lt_top_iff_ne_top : a < ⊤ ↔ a != ⊤
+· 使用定理 `Ideal.eq_top_iff_one`：eq_top_iff_one : I = ⊤ ↔ (1 : α) in I
+· 使用定理 `Ideal.mem_span_singleton`：mem_span_singleton {x y : α} : x in span ({y} 
+: Set α) ↔ y ∣ x
+· 使用定理 `PowerSeries.X_dvd_iff`：X_dvd_iff {φ : R⟦X⟧} : (X : R⟦X⟧) ∣ φ ↔ constantC
+oeff φ = 0
+· 使用定理 `PowerSeries.constantCoeff_one`：constantCoeff_one : constantCoeff (R
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
 -/
 theorem not_isField : ¬IsField A⟦X⟧ := by
   by_cases hA : Subsingleton A
@@ -3019,91 +2541,91 @@ theorem not_isField : ¬IsField A⟦X⟧ := by
       exact one_ne_zero
 
 @[simp]
-/--
-theorem `rescale_X` / 定理 `rescale_X`
-
-English:
-theorem rescale_X
-  given: (a : A)
-  statement: rescale a X = C a * X
-  proof: by
-  ext
-  simp only [coeff_rescale, coeff_C_mul, coeff_X]
-  split_ifs with h <;> simp [h]
-
-中文:
-定理 rescale_X
-  条件: (a : A)
-  结论: rescale a X = C a * X
-  证明: by
-  ext
-  simp only [coeff_rescale, coeff_C_mul, coeff_X]
-  split_ifs with h <;> simp [h]
-
-Depends on / 依赖: coeff_C_mul, coeff_X, coeff_rescale, split_ifs
+/-
+**PowerSeries.rescale_X** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：rescale_X (a : A) : rescale a X = C a * X
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.ext`：ext {φ ψ : R⟦X⟧} (h : forall n, coeff n φ = coeff n ψ) 
+: φ = ψ
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `PowerSeries.coeff_rescale`：coeff_rescale (f : R⟦X⟧) (a : R) (n : Nat) : 
+coeff n (rescale a f) = a ^ n * coeff n f
+· 使用定理 `PowerSeries.coeff_X`：coeff_X (n : Nat) : coeff n (X : R⟦X⟧) = if n = 1 t
+hen 1 else 0
+· 使用定理 `PowerSeries.coeff_C_mul`：coeff_C_mul (n : Nat) (φ : R⟦X⟧) (a : R) : coef
+f n (C a * φ) = a * coeff n φ
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
 theorem rescale_X (a : A) : rescale a X = C a * X := by
   ext
   simp only [coeff_rescale, coeff_C_mul, coeff_X]
   split_ifs with h <;> simp [h]
-
-/--
-theorem `rescale_neg_one_X` / 定理 `rescale_neg_one_X`
-
-English:
-theorem rescale_neg_one_X
-  statement: rescale (-1 : A) X = -X
-  proof: by
-  rw [rescale_X]; rw [map_neg]; rw [map_one]; rw [neg_one_mul]
-
-中文:
-定理 rescale_neg_one_X
-  结论: rescale (-1 : A) X = -X
-  证明: by
-  rw [rescale_X]; rw [map_neg]; rw [map_one]; rw [neg_one_mul]
-
-Depends on / 依赖: map_neg, map_one, neg_one_mul, rescale_X
+/-
+**PowerSeries.rescale_neg_one_X** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：rescale_neg_one_X : rescale (-1 : A) X = -X
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.rescale_X`：rescale_X (a : A) : rescale a X = C a * X
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `neg_one_mul`：neg_one_mul (a : α) : -1 * a = -a
 -/
 theorem rescale_neg_one_X : rescale (-1 : A) X = -X := by
-  rw [rescale_X]; rw [map_neg]; rw [map_one]; rw [neg_one_mul]
+  rw [rescale_X, map_neg, map_one, neg_one_mul]
 
-/--
-Definition of `evalNegHom` / `evalNegHom` 的定义
+/-- The ring homomorphism taking a power series `f(X)` to `f(-X)`. -/
+/-
+**PowerSeries.evalNegHom** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries`。
+形式化陈述：evalNegHom : A⟦X⟧ ->+* A⟦X⟧
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalNegHom
-  signature: : A⟦X⟧ ->+* A⟦X⟧
-  body: rescale (-1 : A)
-
-@[simp]
-
-中文:
-定义 evalNegHom
-  签名: : A⟦X⟧ ->+* A⟦X⟧
-  定义体: rescale (-1 : A)
-
-@[simp]
-
-Depends on / 依赖: rescale
+--- 原说明 ---
+The ring homomorphism taking a power series `f(X)` to `f(-X)`.
 -/
-noncomputable def evalNegHom : A⟦X⟧ ->+* A⟦X⟧ :=
+noncomputable def evalNegHom : A⟦X⟧ →+* A⟦X⟧ :=
   rescale (-1 : A)
 
 @[simp]
-/--
-theorem `evalNegHom_X` / 定理 `evalNegHom_X`
-
-English:
-theorem evalNegHom_X
-  statement: evalNegHom (X : A⟦X⟧) = -X
-  proof: rescale_neg_one_X
-
-中文:
-定理 evalNegHom_X
-  结论: evalNegHom (X : A⟦X⟧) = -X
-  证明: rescale_neg_one_X
-
-Depends on / 依赖: rescale_neg_one_X
+/-
+**PowerSeries.evalNegHom_X** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：evalNegHom_X : evalNegHom (X : A⟦X⟧) = -X
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.rescale_neg_one_X`：rescale_neg_one_X : rescale (-1 : A) X = 
+-X
 -/
 theorem evalNegHom_X : evalNegHom (X : A⟦X⟧) = -X :=
   rescale_neg_one_X
@@ -3114,97 +2636,55 @@ section Algebra
 
 variable {A B : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
 
-/--
-theorem `C_eq_algebraMap` / 定理 `C_eq_algebraMap`
-
-English:
-theorem C_eq_algebraMap
-  given: {r : R}
-  statement: C r = (algebraMap R R⟦X⟧) r
-  proof: rfl
-
-中文:
-定理 C_eq_algebraMap
-  条件: {r : R}
-  结论: C r = (algebraMap R R⟦X⟧) r
-  证明: rfl
+/-
+**PowerSeries.C_eq_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：C_eq_algebraMap {r : R} : C r = (algebraMap R R⟦X⟧) r
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem C_eq_algebraMap {r : R} : C r = (algebraMap R R⟦X⟧) r :=
   rfl
-
-/--
-theorem `algebraMap_apply` / 定理 `algebraMap_apply`
-
-English:
-theorem algebraMap_apply
-  given: {r : R}
-  statement: algebraMap R A⟦X⟧ r = C (algebraMap R A r)
-  proof: MvPowerSeries.algebraMap_apply
-
-中文:
-定理 algebraMap_apply
-  条件: {r : R}
-  结论: algebraMap R A⟦X⟧ r = C (algebraMap R A r)
-  证明: MvPowerSeries.algebraMap_apply
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.algebraMap_apply, algebraMap_apply
+/-
+**PowerSeries.algebraMap_apply** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：algebraMap_apply {r : R} : algebraMap R A⟦X⟧ r = C (algebraMap R A r)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.algebraMap_apply`：algebraMap_apply {r : R} : algebraMap R 
+(MvPowerSeries σ A) r = C (algebraMap R A r)
 -/
 theorem algebraMap_apply {r : R} : algebraMap R A⟦X⟧ r = C (algebraMap R A r) :=
   MvPowerSeries.algebraMap_apply
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nontrivial
-  signature: R] : Nontrivial (Subalgebra R R⟦X⟧)
-  body: { (inferInstance : Nontrivial <| Subalgebra R <| MvPowerSeries Unit R) with }
-
-中文:
-实例 [非平凡
-  签名: R] : 非平凡 (子代数 R R⟦X⟧)
-  定义体: { (inferInstance : Nontrivial <| Subalgebra R <| MvPowerSeries Unit R) with }
-
-Depends on / 依赖: MvPowerSeries, Nontrivial, Subalgebra
+/-
+**PowerSeries.** 是 Mathlib 中的一个实例，位于命名空间 `PowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Nontrivial R] : Nontrivial (Subalgebra R R⟦X⟧) :=
   { (inferInstance : Nontrivial <| Subalgebra R <| MvPowerSeries Unit R) with }
 
-/--
-Definition of `mapAlgHom` / `mapAlgHom` 的定义
+/-- Change of coefficients in power series, as an `AlgHom` -/
+/-
+**PowerSeries.mapAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries`。
+形式化陈述：mapAlgHom (φ : A ->ₐ[R] B) : PowerSeries A ->ₐ[R] PowerSeries B
+参数：φ : A ->ₐ[R] B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapAlgHom
-  signature: (φ : A ->ₐ[R] B)
-  body: MvPowerSeries.mapAlgHom φ
-
-中文:
-定义 mapAlgHom
-  签名: (φ : A ->ₐ[R] B)
-  定义体: MvPowerSeries.mapAlgHom φ
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.mapAlgHom, mapAlgHom
+--- 原说明 ---
+Change of coefficients in power series, as an `AlgHom`
 -/
-def mapAlgHom (φ : A ->ₐ[R] B) :
-    PowerSeries A ->ₐ[R] PowerSeries B :=
+def mapAlgHom (φ : A →ₐ[R] B) :
+    PowerSeries A →ₐ[R] PowerSeries B :=
   MvPowerSeries.mapAlgHom φ
-
-/--
-theorem `mapAlgHom_apply` / 定理 `mapAlgHom_apply`
-
-English:
-theorem mapAlgHom_apply
-  given: (φ : A ->ₐ[R] B) (f : A⟦X⟧)
-  proof: MvPowerSeries.mapAlgHom_apply φ f
-
-中文:
-定理 mapAlgHom_apply
-  条件: (φ : A ->ₐ[R] B) (f : A⟦X⟧)
-  证明: MvPowerSeries.mapAlgHom_apply φ f
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.mapAlgHom_apply, mapAlgHom_apply
+/-
+**PowerSeries.mapAlgHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：mapAlgHom_apply (φ : A ->ₐ[R] B) (f : A⟦X⟧) : mapAlgHom φ f = f.map φ
+参数：φ : A ->ₐ[R] B；f : A⟦X⟧。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.mapAlgHom_apply`：mapAlgHom_apply (φ : A ->ₐ[R] B) (f : MvP
+owerSeries σ A) : mapAlgHom (σ
 -/
-theorem mapAlgHom_apply (φ : A ->ₐ[R] B) (f : A⟦X⟧) :
+theorem mapAlgHom_apply (φ : A →ₐ[R] B) (f : A⟦X⟧) :
     mapAlgHom φ f = f.map φ :=
   MvPowerSeries.mapAlgHom_apply φ f
 
@@ -3221,448 +2701,328 @@ variable {R : Type*} [Semiring R] (φ ψ : R[X])
 
 /-- The natural inclusion from polynomials into formal power series. -/
 @[coe]
-/--
-Definition of `toPowerSeries` / `toPowerSeries` 的定义
+/-
+**Polynomial.toPowerSeries** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：toPowerSeries : R[X] -> PowerSeries R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toPowerSeries
-  signature: : R[X] -> PowerSeries R
-  body: fun φ =>
-  PowerSeries.mk fun n => coeff φ n
-
-中文:
-定义 toPowerSeries
-  签名: : R[X] -> 幂级数 R
-  定义体: fun φ =>
-  PowerSeries.mk fun n => coeff φ n
+--- 原说明 ---
+The natural inclusion from polynomials into formal power series.
 -/
-def toPowerSeries : R[X] -> PowerSeries R := fun φ =>
+def toPowerSeries : R[X] → PowerSeries R := fun φ =>
   PowerSeries.mk fun n => coeff φ n
 
-/--
-Instance `coeToPowerSeries` / 实例 `coeToPowerSeries`
+/-- The natural inclusion from polynomials into formal power series. -/
+/-
+**Polynomial.coeToPowerSeries** 是 Mathlib 中的一个实例，位于命名空间 `Polynomial`。
+形式化陈述：coeToPowerSeries : Coe R[X] (PowerSeries R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance coeToPowerSeries
-  signature: : Coe R[X] (PowerSeries R)
-  body: ⟨toPowerSeries⟩
-
-中文:
-实例 coeToPowerSeries
-  签名: : Coe R[X] (幂级数 R)
-  定义体: ⟨toPowerSeries⟩
-
-Depends on / 依赖: toPowerSeries
+--- 原说明 ---
+The natural inclusion from polynomials into formal power series.
 -/
 instance coeToPowerSeries : Coe R[X] (PowerSeries R) :=
   ⟨toPowerSeries⟩
-
-/--
-theorem `coe_def` / 定理 `coe_def`
-
-English:
-theorem coe_def
-  statement: (φ : PowerSeries R) = PowerSeries.mk (coeff φ)
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_def
-  结论: (φ : 幂级数 R) = 幂级数.mk (coeff φ)
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**Polynomial.coe_def** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：coe_def : (φ : PowerSeries R) = PowerSeries.mk (coeff φ)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_def : (φ : PowerSeries R) = PowerSeries.mk (coeff φ) :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coeff_coe` / 定理 `coeff_coe`
-
-English:
-theorem coeff_coe
-  given: (n)
-  statement: PowerSeries.coeff n φ = coeff φ n
-  proof: congr_arg (coeff φ) Finsupp.single_eq_same
-
-@[simp, norm_cast]
-
-中文:
-定理 coeff_coe
-  条件: (n)
-  结论: 幂级数.coeff n φ = coeff φ n
-  证明: congr_arg (coeff φ) Finsupp.single_eq_same
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Finsupp, Finsupp.single_eq_same, congr_arg, single_eq_same
+/-
+**Polynomial.coeff_coe** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：coeff_coe (n) : PowerSeries.coeff n φ = coeff φ n
+参数：n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Finsupp.single_eq_same`：single_eq_same : (single a b : α ->₀ M) a = b
 -/
 theorem coeff_coe (n) : PowerSeries.coeff n φ = coeff φ n :=
   congr_arg (coeff φ) Finsupp.single_eq_same
 
 @[simp, norm_cast]
-/--
-theorem `coe_monomial` / 定理 `coe_monomial`
-
-English:
-theorem coe_monomial
-  given: (n : Nat) (a : R)
-  proof: by
-  ext
-  simp [coeff_coe, PowerSeries.coeff_monomial, Polynomial.coeff_monomial, eq_comm]
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_monomial
-  条件: (n : 自然数) (a : R)
-  证明: by
-  ext
-  simp [coeff_coe, PowerSeries.coeff_monomial, Polynomial.coeff_monomial, eq_comm]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Polynomial, Polynomial.coeff_monomial, PowerSeries, PowerSeries.coeff_monomial, coeff_coe, coeff_monomial, eq_comm
+/-
+**Polynomial.coe_monomial** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：coe_monomial (n : Nat) (a : R) : (monomial n a : PowerSeries R) = PowerSer
+ies.monomial n a
+参数：n : Nat；a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.ext`：ext {φ ψ : R⟦X⟧} (h : forall n, coeff n φ = coeff n ψ) 
+: φ = ψ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.coeff_coe`：coeff_coe (n) : PowerSeries.coeff n φ = coeff φ n
+· 使用定理 `Polynomial.coeff_monomial`：coeff_monomial : coeff (monomial n a) m = if 
+n = m then a else 0
+· 使用定理 `PowerSeries.coeff_monomial`：coeff_monomial (m n : Nat) (a : R) : coeff m
+ (monomial n a) = if m = n then a else 0
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem coe_monomial (n : Nat) (a : R) :
+theorem coe_monomial (n : ℕ) (a : R) :
     (monomial n a : PowerSeries R) = PowerSeries.monomial n a := by
   ext
   simp [coeff_coe, PowerSeries.coeff_monomial, Polynomial.coeff_monomial, eq_comm]
 
 @[simp, norm_cast]
-/--
-theorem `coe_zero` / 定理 `coe_zero`
-
-English:
-theorem coe_zero
-  statement: ((0 : R[X]) : PowerSeries R) = 0
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_zero
-  结论: ((0 : R[X]) : 幂级数 R) = 0
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**Polynomial.coe_zero** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：coe_zero : ((0 : R[X]) : PowerSeries R) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_zero : ((0 : R[X]) : PowerSeries R) = 0 :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_one` / 定理 `coe_one`
-
-English:
-theorem coe_one
-  statement: ((1 : R[X]) : PowerSeries R) = 1
-  proof: by
-  have := coe_monomial 0 (1 : R)
-  rwa [PowerSeries.monomial_zero_eq_C_apply] at this
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_one
-  结论: ((1 : R[X]) : 幂级数 R) = 1
-  证明: by
-  have := coe_monomial 0 (1 : R)
-  rwa [PowerSeries.monomial_zero_eq_C_apply] at this
-
-@[simp, norm_cast]
-
-Depends on / 依赖: PowerSeries, PowerSeries.monomial_zero_eq_C_apply, coe_monomial, monomial_zero_eq_C_apply
+/-
+**Polynomial.coe_one** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：coe_one : ((1 : R[X]) : PowerSeries R) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.coe_monomial`：coe_monomial (n : Nat) (a : R) : (monomial n a 
+: PowerSeries R) = PowerSeries.monomial n a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.monomial_zero_eq_C_apply`：monomial_zero_eq_C_apply (a : R) :
+ monomial 0 a = C a
 -/
 theorem coe_one : ((1 : R[X]) : PowerSeries R) = 1 := by
   have := coe_monomial 0 (1 : R)
   rwa [PowerSeries.monomial_zero_eq_C_apply] at this
 
 @[simp, norm_cast]
-/--
-theorem `coe_add` / 定理 `coe_add`
-
-English:
-theorem coe_add
-  statement: ((φ + ψ : R[X]) : PowerSeries R) = φ + ψ
-  proof: by
-  ext
-  simp
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_add
-  结论: ((φ + ψ : R[X]) : 幂级数 R) = φ + ψ
-  证明: by
-  ext
-  simp
-
-@[simp, norm_cast]
+/-
+**Polynomial.coe_add** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：coe_add : ((φ + ψ : R[X]) : PowerSeries R) = φ + ψ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.ext`：ext {φ ψ : R⟦X⟧} (h : forall n, coeff n φ = coeff n ψ) 
+: φ = ψ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.coeff_coe`：coeff_coe (n) : PowerSeries.coeff n φ = coeff φ n
+· 使用定理 `Polynomial.coeff_add`：coeff_add (p q : R[X]) (n : Nat) : coeff (p + q) n
+ = coeff p n + coeff q n
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem coe_add : ((φ + ψ : R[X]) : PowerSeries R) = φ + ψ := by
   ext
   simp
 
 @[simp, norm_cast]
-/--
-theorem `coe_mul` / 定理 `coe_mul`
-
-English:
-theorem coe_mul
-  statement: ((φ * ψ : R[X]) : PowerSeries R) = φ * ψ
-  proof: PowerSeries.ext fun n => by simp only [coeff_coe, PowerSeries.coeff_mul, coeff_mul]
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_mul
-  结论: ((φ * ψ : R[X]) : 幂级数 R) = φ * ψ
-  证明: PowerSeries.ext fun n => by simp only [coeff_coe, PowerSeries.coeff_mul, coeff_mul]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: PowerSeries, PowerSeries.coeff_mul, PowerSeries.ext, coeff_coe, coeff_mul
+/-
+**Polynomial.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：coe_mul : ((φ * ψ : R[X]) : PowerSeries R) = φ * ψ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.ext`：ext {φ ψ : R⟦X⟧} (h : forall n, coeff n φ = coeff n ψ) 
+: φ = ψ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.coeff_coe`：coeff_coe (n) : PowerSeries.coeff n φ = coeff φ n
+· 使用定理 `Polynomial.coeff_mul`：coeff_mul (p q : R[X]) (n : Nat) : coeff (p * q) n
+ = ∑ x in antidiagonal n, coeff p x.1 * coeff q x.2
+· 使用定理 `PowerSeries.coeff_mul`：coeff_mul (n : Nat) (φ ψ : R⟦X⟧) : coeff n (φ * ψ
+) = ∑ p in antidiagonal n, coeff p.1 φ * coeff p.2 ψ
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem coe_mul : ((φ * ψ : R[X]) : PowerSeries R) = φ * ψ :=
   PowerSeries.ext fun n => by simp only [coeff_coe, PowerSeries.coeff_mul, coeff_mul]
 
 @[simp, norm_cast]
-/--
-lemma `coe_smul` / 引理 `coe_smul`
-
-English:
-lemma coe_smul
-  given: (φ : R[X]) (r : R)
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-引理 coe_smul
-  条件: (φ : R[X]) (r : R)
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**Polynomial.coe_smul** 是 Mathlib 中的一个引理，位于命名空间 `Polynomial`。
+形式化陈述：coe_smul (φ : R[X]) (r : R) : (r • φ : Polynomial R) = r • (φ : PowerSerie
+s R)
+参数：φ : R[X]；r : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_smul (φ : R[X]) (r : R) :
     (r • φ : Polynomial R) = r • (φ : PowerSeries R) := rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_C` / 定理 `coe_C`
-
-English:
-theorem coe_C
-  given: (a : R)
-  statement: ((C a : R[X]) : PowerSeries R) = PowerSeries.C a
-  proof: by
-  have := coe_monomial 0 a
-  rwa [PowerSeries.monomial_zero_eq_C_apply] at this
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_C
-  条件: (a : R)
-  结论: ((C a : R[X]) : 幂级数 R) = 幂级数.C a
-  证明: by
-  have := coe_monomial 0 a
-  rwa [PowerSeries.monomial_zero_eq_C_apply] at this
-
-@[simp, norm_cast]
-
-Depends on / 依赖: PowerSeries, PowerSeries.monomial_zero_eq_C_apply, coe_monomial, monomial_zero_eq_C_apply
+/-
+**Polynomial.coe_C** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：coe_C (a : R) : ((C a : R[X]) : PowerSeries R) = PowerSeries.C a
+参数：a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.coe_monomial`：coe_monomial (n : Nat) (a : R) : (monomial n a 
+: PowerSeries R) = PowerSeries.monomial n a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.monomial_zero_eq_C_apply`：monomial_zero_eq_C_apply (a : R) :
+ monomial 0 a = C a
 -/
 theorem coe_C (a : R) : ((C a : R[X]) : PowerSeries R) = PowerSeries.C a := by
   have := coe_monomial 0 a
   rwa [PowerSeries.monomial_zero_eq_C_apply] at this
 
 @[simp, norm_cast]
-/--
-theorem `coe_X` / 定理 `coe_X`
-
-English:
-theorem coe_X
-  statement: ((X : R[X]) : PowerSeries R) = PowerSeries.X
-  proof: coe_monomial _ _
-
-@[simp]
-
-中文:
-定理 coe_X
-  结论: ((X : R[X]) : 幂级数 R) = 幂级数.X
-  证明: coe_monomial _ _
-
-@[simp]
-
-Depends on / 依赖: coe_monomial
+/-
+**Polynomial.coe_X** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：coe_X : ((X : R[X]) : PowerSeries R) = PowerSeries.X
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.coe_monomial`：coe_monomial (n : Nat) (a : R) : (monomial n a 
+: PowerSeries R) = PowerSeries.monomial n a
 -/
 theorem coe_X : ((X : R[X]) : PowerSeries R) = PowerSeries.X :=
   coe_monomial _ _
 
 @[simp]
-/--
-lemma `polynomial_map_coe` / 引理 `polynomial_map_coe`
-
-English:
-lemma polynomial_map_coe
-  statement: {U V : Type*} [CommSemiring U] [CommSemiring V] {φ : U ->+* V}
-  proof: by
-  ext
-  simp
-
-@[simp]
-
-中文:
-引理 polynomial_map_coe
-  结论: {U V : 类型} [交换半环 U] [交换半环 V] {φ : U ->+* V}
-  证明: by
-  ext
-  simp
-
-@[simp]
+/-
+**Polynomial.polynomial_map_coe** 是 Mathlib 中的一个引理，位于命名空间 `Polynomial`。
+形式化陈述：polynomial_map_coe {U V : Type*} [CommSemiring U] [CommSemiring V] {φ : U 
+->+* V} {f : Polynomial U} : Polynomial.map φ f = PowerSeries.map φ f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.ext`：ext {φ ψ : R⟦X⟧} (h : forall n, coeff n φ = coeff n ψ) 
+: φ = ψ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.coeff_coe`：coeff_coe (n) : PowerSeries.coeff n φ = coeff φ n
+· 使用定理 `Polynomial.coeff_map`：coeff_map (n : Nat) : coeff (p.map f) n = f (coeff
+ p n)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma polynomial_map_coe {U V : Type*} [CommSemiring U] [CommSemiring V] {φ : U ->+* V}
+lemma polynomial_map_coe {U V : Type*} [CommSemiring U] [CommSemiring V] {φ : U →+* V}
     {f : Polynomial U} : Polynomial.map φ f = PowerSeries.map φ f := by
   ext
   simp
 
 @[simp]
-/--
-theorem `constantCoeff_coe` / 定理 `constantCoeff_coe`
-
-English:
-theorem constantCoeff_coe
-  statement: PowerSeries.constantCoeff φ = φ.coeff 0
-  proof: rfl
-
-中文:
-定理 constantCoeff_coe
-  结论: 幂级数.constantCoeff φ = φ.coeff 0
-  证明: rfl
+/-
+**Polynomial.constantCoeff_coe** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：constantCoeff_coe : PowerSeries.constantCoeff φ = φ.coeff 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem constantCoeff_coe : PowerSeries.constantCoeff φ = φ.coeff 0 :=
   rfl
 
 variable (R)
-
-/--
-theorem `coe_injective` / 定理 `coe_injective`
-
-English:
-theorem coe_injective
-  statement: Function.Injective ((↑) : R[X] -> PowerSeries R)
-  proof: fun x y h => by
-  ext
-  simp_rw [← coeff_coe, h]
-
-中文:
-定理 coe_injective
-  结论: 函数.单射 ((↑) : R[X] -> 幂级数 R)
-  证明: fun x y h => by
-  ext
-  simp_rw [← coeff_coe, h]
-
-Depends on / 依赖: coeff_coe, simp_rw
+/-
+**Polynomial.coe_injective** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：coe_injective : Function.Injective ((↑) : R[X] -> PowerSeries R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.ext`：ext {p q : R[X]} : (forall n, coeff p n = coeff q n) -> 
+p = q
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem coe_injective : Function.Injective ((↑) : R[X] -> PowerSeries R) := fun x y h => by
+theorem coe_injective : Function.Injective ((↑) : R[X] → PowerSeries R) := fun x y h => by
   ext
   simp_rw [← coeff_coe, h]
 
 variable {R φ ψ}
 
 @[simp, norm_cast]
-/--
-theorem `coe_inj` / 定理 `coe_inj`
-
-English:
-theorem coe_inj
-  statement: (φ : PowerSeries R) = ψ ↔ φ = ψ
-  proof: (coe_injective R).eq_iff
-
-@[simp]
-
-中文:
-定理 coe_inj
-  结论: (φ : 幂级数 R) = ψ ↔ φ = ψ
-  证明: (coe_injective R).eq_iff
-
-@[simp]
-
-Depends on / 依赖: coe_injective, eq_iff
+/-
+**Polynomial.coe_inj** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：coe_inj : (φ : PowerSeries R) = ψ ↔ φ = ψ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Polynomial.coe_injective`：coe_injective : Function.Injective ((↑) : R[X]
+ -> PowerSeries R)
 -/
 theorem coe_inj : (φ : PowerSeries R) = ψ ↔ φ = ψ :=
   (coe_injective R).eq_iff
 
 @[simp]
-/--
-theorem `coe_eq_zero_iff` / 定理 `coe_eq_zero_iff`
-
-English:
-theorem coe_eq_zero_iff
-  statement: (φ : PowerSeries R) = 0 ↔ φ = 0
-  proof: by rw [← coe_zero, coe_inj]
-
-@[simp]
-
-中文:
-定理 coe_eq_zero_iff
-  结论: (φ : 幂级数 R) = 0 ↔ φ = 0
-  证明: by rw [← coe_zero, coe_inj]
-
-@[simp]
-
-Depends on / 依赖: coe_inj, coe_zero
+/-
+**Polynomial.coe_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：coe_eq_zero_iff : (φ : PowerSeries R) = 0 ↔ φ = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.coe_zero`：coe_zero : ((0 : R[X]) : PowerSeries R) = 0
+· 使用定理 `Polynomial.coe_inj`：coe_inj : (φ : PowerSeries R) = ψ ↔ φ = ψ
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem coe_eq_zero_iff : (φ : PowerSeries R) = 0 ↔ φ = 0 := by rw [← coe_zero, coe_inj]
 
 @[simp]
-/--
-theorem `coe_eq_one_iff` / 定理 `coe_eq_one_iff`
-
-English:
-theorem coe_eq_one_iff
-  statement: (φ : PowerSeries R) = 1 ↔ φ = 1
-  proof: by rw [← coe_one, coe_inj]
-
-中文:
-定理 coe_eq_one_iff
-  结论: (φ : 幂级数 R) = 1 ↔ φ = 1
-  证明: by rw [← coe_one, coe_inj]
-
-Depends on / 依赖: coe_inj, coe_one
+/-
+**Polynomial.coe_eq_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：coe_eq_one_iff : (φ : PowerSeries R) = 1 ↔ φ = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.coe_one`：coe_one : ((1 : R[X]) : PowerSeries R) = 1
+· 使用定理 `Polynomial.coe_inj`：coe_inj : (φ : PowerSeries R) = ψ ↔ φ = ψ
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem coe_eq_one_iff : (φ : PowerSeries R) = 1 ↔ φ = 1 := by rw [← coe_one, coe_inj]
 
-/--
-Definition of `coeToPowerSeries.ringHom` / `coeToPowerSeries.ringHom` 的定义
-
-English:
-definition coeToPowerSeries.ringHom
-  signature: : R[X] ->+* PowerSeries R where
-  body: (↑)
-  map_zero' := coe_zero
-  map_one' := coe_one
-  map_add' := coe_add
-  map_mul' := coe_mul
-
-@[simp]
-
-中文:
-定义 coeToPowerSeries.ringHom
-  签名: : R[X] ->+* 幂级数 R where
-  定义体: (↑)
-  map_zero' := coe_zero
-  map_one' := coe_one
-  map_add' := coe_add
-  map_mul' := coe_mul
-
-@[simp]
+/-- The coercion from polynomials to power series
+as a ring homomorphism.
 -/
-def coeToPowerSeries.ringHom : R[X] ->+* PowerSeries R where
+/-
+**Polynomial.coeToPowerSeries.ringHom** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial.coeT
+oPowerSeries`。
+形式化陈述：{R : Type u_1} → [inst : Semiring R] → Polynomial R →+* PowerSeries R
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.coe_one`：coe_one : ((1 : R[X]) : PowerSeries R) = 1
+· 使用定理 `Polynomial.coe_mul`：coe_mul : ((φ * ψ : R[X]) : PowerSeries R) = φ * ψ
+· 使用定理 `Polynomial.coe_zero`：coe_zero : ((0 : R[X]) : PowerSeries R) = 0
+· 使用定理 `Polynomial.coe_add`：coe_add : ((φ + ψ : R[X]) : PowerSeries R) = φ + ψ
+
+--- 原说明 ---
+The coercion from polynomials to power series
+as a ring homomorphism.
+-/
+def coeToPowerSeries.ringHom : R[X] →+* PowerSeries R where
   toFun := (↑)
   map_zero' := coe_zero
   map_one' := coe_one
@@ -3670,78 +3030,43 @@ def coeToPowerSeries.ringHom : R[X] ->+* PowerSeries R where
   map_mul' := coe_mul
 
 @[simp]
-/--
-theorem `coeToPowerSeries.ringHom_apply` / 定理 `coeToPowerSeries.ringHom_apply`
-
-English:
-theorem coeToPowerSeries.ringHom_apply
-  statement: coeToPowerSeries.ringHom φ = φ
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 coeToPowerSeries.ringHom_apply
-  结论: coeToPowerSeries.ringHom φ = φ
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**Polynomial.coeToPowerSeries.ringHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `Polynomia
+l.coeToPowerSeries`。
+形式化陈述：∀ {R : Type u_1} [inst : Semiring R] {φ : Polynomial R}, Polynomial.coeToP
+owerSeries.ringHom φ = ↑φ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coeToPowerSeries.ringHom_apply : coeToPowerSeries.ringHom φ = φ :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_pow` / 定理 `coe_pow`
-
-English:
-theorem coe_pow
-  given: (n : Nat)
-  statement: ((φ ^ n : R[X]) : PowerSeries R) = (φ : PowerSeries R) ^ n
-  proof: coeToPowerSeries.ringHom.map_pow _ _
-
-中文:
-定理 coe_pow
-  条件: (n : 自然数)
-  结论: ((φ ^ n : R[X]) : 幂级数 R) = (φ : 幂级数 R) ^ n
-  证明: coeToPowerSeries.ringHom.map_pow _ _
-
-Depends on / 依赖: coeToPowerSeries, coeToPowerSeries.ringHom.map_pow, map_pow, ringHom
+/-
+**Polynomial.coe_pow** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：coe_pow (n : Nat) : ((φ ^ n : R[X]) : PowerSeries R) = (φ : PowerSeries R)
+ ^ n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.map_pow`：∀ {α : Type u_2} {β : Type u_3} [inst : Semiring α] [in
+st_1 : Semiring β] (f : α →+* β) (a : α) (n : ℕ),   f (a ^ n) = f a ^ n
 -/
-theorem coe_pow (n : Nat) : ((φ ^ n : R[X]) : PowerSeries R) = (φ : PowerSeries R) ^ n :=
+theorem coe_pow (n : ℕ) : ((φ ^ n : R[X]) : PowerSeries R) = (φ : PowerSeries R) ^ n :=
   coeToPowerSeries.ringHom.map_pow _ _
-
-/--
-theorem `eval₂_C_X_eq_coe` / 定理 `eval₂_C_X_eq_coe`
-
-English:
-theorem eval₂_C_X_eq_coe
-  statement: φ.eval₂ PowerSeries.C PowerSeries.X = ↑φ
-  proof: by
-  nth_rw 2 [← eval₂_C_X (p := φ)]
-  rw [← coeToPowerSeries.ringHom_apply]; rw [eval₂_eq_sum_range]; rw [eval₂_eq_sum_range]; rw [map_sum]
-  apply Finset.sum_congr rfl
-  intros
-  rw [map_mul]; rw [map_pow]; rw [coeToPowerSeries.ringHom_apply]; rw [coeToPowerSeries.ringHom_apply]; rw [coe_C]; rw [coe_X]
-
-中文:
-定理 eval₂_C_X_eq_coe
-  结论: φ.eval₂ 幂级数.C 幂级数.X = ↑φ
-  证明: by
-  nth_rw 2 [← eval₂_C_X (p := φ)]
-  rw [← coeToPowerSeries.ringHom_apply]; rw [eval₂_eq_sum_range]; rw [eval₂_eq_sum_range]; rw [map_sum]
-  apply Finset.sum_congr rfl
-  intros
-  rw [map_mul]; rw [map_pow]; rw [coeToPowerSeries.ringHom_apply]; rw [coeToPowerSeries.ringHom_apply]; rw [coe_C]; rw [coe_X]
-
-Depends on / 依赖: Finset, Finset.sum_congr, coeToPowerSeries, coeToPowerSeries.ringHom_apply, coe_C, coe_X, intros, map_mul, map_pow, map_sum, nth_rw, ringHom_apply, sum_congr
+/-
+**Polynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：eval (x : R) (p : R[X]) : R
+参数：x : R；p : R[X]。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval₂_C_X_eq_coe : φ.eval₂ PowerSeries.C PowerSeries.X = ↑φ := by
   nth_rw 2 [← eval₂_C_X (p := φ)]
-  rw [← coeToPowerSeries.ringHom_apply]; rw [eval₂_eq_sum_range]; rw [eval₂_eq_sum_range]; rw [map_sum]
+  rw [← coeToPowerSeries.ringHom_apply, eval₂_eq_sum_range, eval₂_eq_sum_range, map_sum]
   apply Finset.sum_congr rfl
   intros
-  rw [map_mul]; rw [map_pow]; rw [coeToPowerSeries.ringHom_apply]; rw [coeToPowerSeries.ringHom_apply]; rw [coe_C]; rw [coe_X]
+  rw [map_mul, map_pow, coeToPowerSeries.ringHom_apply,
+    coeToPowerSeries.ringHom_apply, coe_C, coe_X]
 
 end Semiring
 
@@ -3749,36 +3074,10 @@ section CommSemiring
 
 variable {R : Type*} [CommSemiring R] (φ ψ : R[X])
 
-/--
-theorem `_root_.MvPolynomial.toMvPowerSeries_pUnitAlgEquiv` / 定理 `_root_.MvPolynomial.toMvPowerSeries_pUnitAlgEquiv`
-
-English:
-theorem _root_.MvPolynomial.toMvPowerSeries_pUnitAlgEquiv
-  given: {f : MvPolynomial PUnit R}
-  proof: by
-  induction f using MvPolynomial.induction_on' with
-  | monomial d r =>
-    --Note: this `have` should be a generic `simp` lemma for a `Unique` type with `()` replaced
-    --by any element.
-    have : single () (d ()) = d := by ext; simp
-    simp only [MvPolynomial.coe_monomial, MvPolynomial.uniqueAlgEquiv_monomial,
-      Polynomial.coe_monomial, PowerSeries.monomial, this]
-  | add f g hf hg => simp [hf, hg]
-
-中文:
-定理 _root_.多元多项式.toMvPowerSeries_pUnitAlgEquiv
-  条件: {f : 多元多项式 命题单元 R}
-  证明: by
-  induction f using MvPolynomial.induction_on' with
-  | monomial d r =>
-    --Note: this `have` should be a generic `simp` lemma for a `Unique` type with `()` replaced
-    --by any element.
-    have : single () (d ()) = d := by ext; simp
-    simp only [MvPolynomial.coe_monomial, MvPolynomial.uniqueAlgEquiv_monomial,
-      Polynomial.coe_monomial, PowerSeries.monomial, this]
-  | add f g hf hg => simp [hf, hg]
-
-Depends on / 依赖: MvPolynomial, MvPolynomial.induction_on, induction_on, monomial
+/-
+**Polynomial._root_.MvPolynomial.toMvPowerSeries_pUnitAlgEquiv** 是 Mathlib 中的一个定
+理，位于命名空间 `Polynomial`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.MvPolynomial.toMvPowerSeries_pUnitAlgEquiv {f : MvPolynomial PUnit R} :
     (f.toMvPowerSeries : PowerSeries R) =
@@ -3791,73 +3090,63 @@ theorem _root_.MvPolynomial.toMvPowerSeries_pUnitAlgEquiv {f : MvPolynomial PUni
     simp only [MvPolynomial.coe_monomial, MvPolynomial.uniqueAlgEquiv_monomial,
       Polynomial.coe_monomial, PowerSeries.monomial, this]
   | add f g hf hg => simp [hf, hg]
-
-/--
-theorem `pUnitAlgEquiv_symm_toPowerSeries` / 定理 `pUnitAlgEquiv_symm_toPowerSeries`
-
-English:
-theorem pUnitAlgEquiv_symm_toPowerSeries
-  given: {f : Polynomial R}
-  proof: by
-  set g := (MvPolynomial.uniqueAlgEquiv R PUnit).symm f
-  have : f = MvPolynomial.uniqueAlgEquiv R PUnit g := by simp only [g, AlgEquiv.apply_symm_apply]
-  rw [this]; rw [MvPolynomial.toMvPowerSeries_pUnitAlgEquiv]
-
-中文:
-定理 pUnitAlgEquiv_symm_toPowerSeries
-  条件: {f : 多项式 R}
-  证明: by
-  set g := (MvPolynomial.uniqueAlgEquiv R PUnit).symm f
-  have : f = MvPolynomial.uniqueAlgEquiv R PUnit g := by simp only [g, AlgEquiv.apply_symm_apply]
-  rw [this]; rw [MvPolynomial.toMvPowerSeries_pUnitAlgEquiv]
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.apply_symm_apply, MvPolynomial, MvPolynomial.toMvPowerSeries_pUnitAlgEquiv, MvPolynomial.uniqueAlgEquiv, apply_symm_apply, toMvPowerSeries_pUnitAlgEquiv, uniqueAlgEquiv
+/-
+**Polynomial.pUnitAlgEquiv_symm_toPowerSeries** 是 Mathlib 中的一个定理，位于命名空间 `Polynom
+ial`。
+形式化陈述：pUnitAlgEquiv_symm_toPowerSeries {f : Polynomial R} : ((f.toPowerSeries) :
+ MvPowerSeries PUnit R) = ((MvPolynomial.uniqueAlgEquiv R PUnit).symm f).toMvPow
+erSeries
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `AlgEquiv.apply_symm_apply`：apply_symm_apply (e : A₁ ≃ₐ[R] A₂) : forall x
+, e (e.symm x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MvPolynomial.toMvPowerSeries_pUnitAlgEquiv`：∀ {R : Type u_1} [inst : Com
+mSemiring R] {f : MvPolynomial PUnit.{1} R},   ↑f = ↑((MvPolynomial.uniqueAlgEqu
+iv R PUnit.{1}) f)
 -/
 theorem pUnitAlgEquiv_symm_toPowerSeries {f : Polynomial R} :
     ((f.toPowerSeries) : MvPowerSeries PUnit R)
       = ((MvPolynomial.uniqueAlgEquiv R PUnit).symm f).toMvPowerSeries := by
   set g := (MvPolynomial.uniqueAlgEquiv R PUnit).symm f
   have : f = MvPolynomial.uniqueAlgEquiv R PUnit g := by simp only [g, AlgEquiv.apply_symm_apply]
-  rw [this]; rw [MvPolynomial.toMvPowerSeries_pUnitAlgEquiv]
+  rw [this, MvPolynomial.toMvPowerSeries_pUnitAlgEquiv]
 
 variable (A : Type*) [Semiring A] [Algebra R A]
 
-/--
-Definition of `coeToPowerSeries.algHom` / `coeToPowerSeries.algHom` 的定义
-
-English:
-definition coeToPowerSeries.algHom
-  signature: : R[X] ->ₐ[R] PowerSeries A
-  body: { (PowerSeries.map (algebraMap R A)).comp coeToPowerSeries.ringHom with
-    commutes' := fun r => by simp [PowerSeries.algebraMap_apply] }
-
-@[simp]
-
-中文:
-定义 coeToPowerSeries.algHom
-  签名: : R[X] ->ₐ[R] 幂级数 A
-  定义体: { (PowerSeries.map (algebraMap R A)).comp coeToPowerSeries.ringHom with
-    commutes' := fun r => by simp [PowerSeries.algebraMap_apply] }
-
-@[simp]
-
-Depends on / 依赖: PowerSeries, PowerSeries.algebraMap_apply, PowerSeries.map, algebraMap, algebraMap_apply, coeToPowerSeries, coeToPowerSeries.ringHom, commutes, ringHom
+/-- The coercion from polynomials to power series
+as an algebra homomorphism.
 -/
-def coeToPowerSeries.algHom : R[X] ->ₐ[R] PowerSeries A :=
+/-
+**Polynomial.coeToPowerSeries.algHom** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial.coeTo
+PowerSeries`。
+形式化陈述：{R : Type u_1} →   [inst : CommSemiring R] →     (A : Type u_2) → [inst_1 
+: Semiring A] → [inst_2 : Algebra R A] → Polynomial R →ₐ[R] PowerSeries A
+参数：A : Type u_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The coercion from polynomials to power series
+as an algebra homomorphism.
+-/
+def coeToPowerSeries.algHom : R[X] →ₐ[R] PowerSeries A :=
   { (PowerSeries.map (algebraMap R A)).comp coeToPowerSeries.ringHom with
     commutes' := fun r => by simp [PowerSeries.algebraMap_apply] }
 
 @[simp]
-/--
-theorem `coeToPowerSeries.algHom_apply` / 定理 `coeToPowerSeries.algHom_apply`
-
-English:
-theorem coeToPowerSeries.algHom_apply
-  proof: rfl
-
-中文:
-定理 coeToPowerSeries.algHom_apply
-  证明: rfl
+/-
+**Polynomial.coeToPowerSeries.algHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial
+.coeToPowerSeries`。
+形式化陈述：∀ {R : Type u_1} [inst : CommSemiring R] (φ : Polynomial R) (A : Type u_2)
+ [inst_1 : Semiring A] [inst_2 : Algebra R A],   (Polynomial.coeToPowerSeries.al
+gHom A) φ = (PowerSeries.map (algebraMap R A)) ↑φ
+参数：φ : Polynomial R；A : Type u_2；Polynomial.coeToPowerSeries.algHom A；PowerSerie
+s.map (algebraMap R A)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coeToPowerSeries.algHom_apply :
     coeToPowerSeries.algHom A φ = PowerSeries.map (algebraMap R A) ↑φ :=
@@ -3869,47 +3158,27 @@ section CommRing
 variable {R : Type*} [CommRing R]
 
 @[simp, norm_cast]
-/--
-lemma `coe_neg` / 引理 `coe_neg`
-
-English:
-lemma coe_neg
-  given: (p : R[X])
-  statement: ((-p : R[X]) : PowerSeries R) = -p
-  proof: coeToPowerSeries.ringHom.map_neg p
-
-@[simp, norm_cast]
-
-中文:
-引理 coe_neg
-  条件: (p : R[X])
-  结论: ((-p : R[X]) : 幂级数 R) = -p
-  证明: coeToPowerSeries.ringHom.map_neg p
-
-@[simp, norm_cast]
-
-Depends on / 依赖: coeToPowerSeries, coeToPowerSeries.ringHom.map_neg, map_neg, ringHom
+/-
+**Polynomial.coe_neg** 是 Mathlib 中的一个引理，位于命名空间 `Polynomial`。
+形式化陈述：coe_neg (p : R[X]) : ((-p : R[X]) : PowerSeries R) = -p
+参数：p : R[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.map_neg`：∀ {α : Type u_2} {β : Type u_3} [inst : NonAssocRing α]
+ [inst_1 : NonAssocRing β] (f : α →+* β) (x : α), f (-x) = -f x
 -/
 lemma coe_neg (p : R[X]) : ((-p : R[X]) : PowerSeries R) = -p :=
   coeToPowerSeries.ringHom.map_neg p
 
 @[simp, norm_cast]
-/--
-lemma `coe_sub` / 引理 `coe_sub`
-
-English:
-lemma coe_sub
-  given: (p q : R[X])
-  statement: ((p - q : R[X]) : PowerSeries R) = p - q
-  proof: coeToPowerSeries.ringHom.map_sub p q
-
-中文:
-引理 coe_sub
-  条件: (p q : R[X])
-  结论: ((p - q : R[X]) : 幂级数 R) = p - q
-  证明: coeToPowerSeries.ringHom.map_sub p q
-
-Depends on / 依赖: coeToPowerSeries, coeToPowerSeries.ringHom.map_sub, map_sub, ringHom
+/-
+**Polynomial.coe_sub** 是 Mathlib 中的一个引理，位于命名空间 `Polynomial`。
+形式化陈述：coe_sub (p q : R[X]) : ((p - q : R[X]) : PowerSeries R) = p - q
+参数：p q : R[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.map_sub`：∀ {α : Type u_2} {β : Type u_3} [inst : NonAssocRing α]
+ [inst_1 : NonAssocRing β] (f : α →+* β) (x y : α),   f (x - y) = f x - f y
 -/
 lemma coe_sub (p q : R[X]) : ((p - q : R[X]) : PowerSeries R) = p - q :=
   coeToPowerSeries.ringHom.map_sub p q
@@ -3926,77 +3195,48 @@ open Polynomial
 
 variable {R A : Type*} [CommSemiring R] [CommSemiring A] [Algebra R A] (f : R⟦X⟧)
 
-/--
-Instance `algebraPolynomial` / 实例 `algebraPolynomial`
-
-English:
-instance algebraPolynomial
-  signature: : Algebra R[X] A⟦X⟧
-  body: RingHom.toAlgebra (Polynomial.coeToPowerSeries.algHom A).toRingHom
-
-中文:
-实例 algebraPolynomial
-  签名: : 代数 R[X] A⟦X⟧
-  定义体: RingHom.toAlgebra (Polynomial.coeToPowerSeries.algHom A).toRingHom
-
-Depends on / 依赖: Polynomial, Polynomial.coeToPowerSeries.algHom, RingHom, RingHom.toAlgebra, algHom, coeToPowerSeries, toAlgebra, toRingHom
+/-
+**PowerSeries.algebraPolynomial** 是 Mathlib 中的一个实例，位于命名空间 `PowerSeries`。
+形式化陈述：algebraPolynomial : Algebra R[X] A⟦X⟧
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance algebraPolynomial : Algebra R[X] A⟦X⟧ :=
   RingHom.toAlgebra (Polynomial.coeToPowerSeries.algHom A).toRingHom
-
-/--
-Instance `algebraPowerSeries` / 实例 `algebraPowerSeries`
-
-English:
-instance algebraPowerSeries
-  signature: : Algebra R⟦X⟧ A⟦X⟧
-  body: (map (algebraMap R A)).toAlgebra
-
-中文:
-实例 algebraPowerSeries
-  签名: : 代数 R⟦X⟧ A⟦X⟧
-  定义体: (map (algebraMap R A)).toAlgebra
-
-Depends on / 依赖: algebraMap, toAlgebra
+/-
+**PowerSeries.algebraPowerSeries** 是 Mathlib 中的一个实例，位于命名空间 `PowerSeries`。
+形式化陈述：algebraPowerSeries : Algebra R⟦X⟧ A⟦X⟧
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance algebraPowerSeries : Algebra R⟦X⟧ A⟦X⟧ :=
   (map (algebraMap R A)).toAlgebra
 
 -- see Note [lower instance priority]
+/-
+**PowerSeries.** 是 Mathlib 中的一个实例，位于命名空间 `PowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) algebraPolynomial' {A : Type*} [CommSemiring A] [Algebra R A[X]] :
     Algebra R A⟦X⟧ :=
-RingHom.toAlgebra Polynomial.coeToPowerSeries.ringHom.comp (algebraMap R A[X])
+  RingHom.toAlgebra <| Polynomial.coeToPowerSeries.ringHom.comp (algebraMap R A[X])
 
 variable (A)
-
-/--
-theorem `algebraMap_apply'` / 定理 `algebraMap_apply'`
-
-English:
-theorem algebraMap_apply'
-  given: (p : R[X])
-  statement: algebraMap R[X] A⟦X⟧ p = map (algebraMap R A) p
-  proof: rfl
-
-中文:
-定理 algebraMap_apply'
-  条件: (p : R[X])
-  结论: algebraMap R[X] A⟦X⟧ p = map (algebraMap R A) p
-  证明: rfl
+/-
+**PowerSeries.algebraMap_apply'** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：algebraMap_apply' (p : R[X]) : algebraMap R[X] A⟦X⟧ p = map (algebraMap R 
+A) p
+参数：p : R[X]。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algebraMap_apply' (p : R[X]) : algebraMap R[X] A⟦X⟧ p = map (algebraMap R A) p :=
   rfl
-
-/--
-theorem `algebraMap_apply''` / 定理 `algebraMap_apply''`
-
-English:
-theorem algebraMap_apply''
-  proof: rfl
-
-中文:
-定理 algebraMap_apply''
-  证明: rfl
+/-
+**PowerSeries.algebraMap_apply''** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：algebraMap_apply'' : algebraMap R⟦X⟧ A⟦X⟧ f = map (algebraMap R A) f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algebraMap_apply'' :
     algebraMap R⟦X⟧ A⟦X⟧ f = map (algebraMap R A) f :=
@@ -4007,3 +3247,4 @@ end Algebra
 end PowerSeries
 
 end
+

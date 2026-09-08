@@ -23,166 +23,60 @@ open Lean Elab Command
 
 namespace Mathlib.WhatsNew
 
-/--
-Definition of `throwUnknownId` / `throwUnknownId` 的定义
-
-English:
-definition throwUnknownId
-  signature: (id : Name)
-  body: throwError "unknown identifier '{mkConst id}'"
-
-中文:
-定义 throwUnknownId
-  签名: (id : Name)
-  定义体: throwError "unknown identifier '{mkConst id}'"
+/-
+**Mathlib.WhatsNew.throwUnknownId** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.WhatsNew`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private def throwUnknownId (id : Name) : CommandElabM Unit :=
   throwError "unknown identifier '{mkConst id}'"
-
-/--
-Definition of `levelParamsToMessageData` / `levelParamsToMessageData` 的定义
-
-English:
-definition levelParamsToMessageData
-  signature: (levelParams : List Name)
-  body: match levelParams with
-  | [] => ""
-  | u::us => Id.run do
-    let mut m := m!".\{{u}"
-    for u in us do
-      m := m ++ ", " ++ toMessageData u
-    return m ++ "}"
-
-中文:
-定义 levelParamsToMessageData
-  签名: (levelParams : 列表 Name)
-  定义体: match levelParams with
-  | [] => ""
-  | u::us => Id.run do
-    let mut m := m!".\{{u}"
-    for u in us do
-      m := m ++ ", " ++ toMessageData u
-    return m ++ "}"
+/-
+**Mathlib.WhatsNew.levelParamsToMessageData** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.W
+hatsNew`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private def levelParamsToMessageData (levelParams : List Name) : MessageData :=
   match levelParams with
-  | [] => ""
+  | []    => ""
   | u::us => Id.run do
     let mut m := m!".\{{u}"
     for u in us do
       m := m ++ ", " ++ toMessageData u
     return m ++ "}"
-
-/--
-Definition of `mkHeader` / `mkHeader` 的定义
-
-English:
-definition mkHeader
-  signature: (kind : String) (id : Name) (levelParams : List Name) (type : Expr)
-  body: do
-  let m : MessageData :=
-    match safety with
-    | DefinitionSafety.unsafe => "unsafe "
-    | DefinitionSafety.partial => "partial "
-    | DefinitionSafety.safe => ""
-  let m := if isProtected (← getEnv) id then m ++ "protected " else m
-  let (m, id) := match privateToUserName? id with
-    | some id => (m ++ "private ", id)
-    | none => (m, id)
-  let m := m ++ kind ++ " " ++ id ++ levelParamsToMessageData levelParams ++ " : " ++ type
-  pure m
-
-中文:
-定义 mkHeader
-  签名: (kind : String) (id : Name) (levelParams : 列表 Name) (type : Expr)
-  定义体: do
-  let m : MessageData :=
-    match safety with
-    | DefinitionSafety.unsafe => "unsafe "
-    | DefinitionSafety.partial => "partial "
-    | DefinitionSafety.safe => ""
-  let m := if isProtected (← getEnv) id then m ++ "protected " else m
-  let (m, id) := match privateToUserName? id with
-    | some id => (m ++ "private ", id)
-    | none => (m, id)
-  let m := m ++ kind ++ " " ++ id ++ levelParamsToMessageData levelParams ++ " : " ++ type
-  pure m
+/-
+**Mathlib.WhatsNew.mkHeader** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.WhatsNew`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private def mkHeader (kind : String) (id : Name) (levelParams : List Name) (type : Expr)
     (safety : DefinitionSafety) : CoreM MessageData := do
   let m : MessageData :=
     match safety with
-    | DefinitionSafety.unsafe => "unsafe "
+    | DefinitionSafety.unsafe  => "unsafe "
     | DefinitionSafety.partial => "partial "
-    | DefinitionSafety.safe => ""
+    | DefinitionSafety.safe    => ""
   let m := if isProtected (← getEnv) id then m ++ "protected " else m
   let (m, id) := match privateToUserName? id with
     | some id => (m ++ "private ", id)
-    | none => (m, id)
+    | none    => (m, id)
   let m := m ++ kind ++ " " ++ id ++ levelParamsToMessageData levelParams ++ " : " ++ type
   pure m
-
-/--
-Definition of `mkHeader'` / `mkHeader'` 的定义
-
-English:
-definition mkHeader'
-  signature: (kind : String) (id : Name) (levelParams : List Name) (type : Expr)
-  body: mkHeader kind id levelParams type
-    (if isUnsafe then DefinitionSafety.unsafe else DefinitionSafety.safe)
-
-中文:
-定义 mkHeader'
-  签名: (kind : String) (id : Name) (levelParams : 列表 Name) (type : Expr)
-  定义体: mkHeader kind id levelParams type
-    (if isUnsafe then DefinitionSafety.unsafe else DefinitionSafety.safe)
+/-
+**Mathlib.WhatsNew.mkHeader'** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.WhatsNew`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private def mkHeader' (kind : String) (id : Name) (levelParams : List Name) (type : Expr)
     (isUnsafe : Bool) : CoreM MessageData :=
   mkHeader kind id levelParams type
     (if isUnsafe then DefinitionSafety.unsafe else DefinitionSafety.safe)
-
-/--
-Definition of `printDefLike` / `printDefLike` 的定义
-
-English:
-definition printDefLike
-  signature: (kind : String) (id : Name) (levelParams : List Name) (type : Expr)
-  body: return (← mkHeader kind id levelParams type safety) ++ " :=" ++ Format.line ++ value
-
-中文:
-定义 printDefLike
-  签名: (kind : String) (id : Name) (levelParams : 列表 Name) (type : Expr)
-  定义体: return (← mkHeader kind id levelParams type safety) ++ " :=" ++ Format.line ++ value
+/-
+**Mathlib.WhatsNew.printDefLike** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.WhatsNew`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private def printDefLike (kind : String) (id : Name) (levelParams : List Name) (type : Expr)
     (value : Expr) (safety := DefinitionSafety.safe) : CoreM MessageData :=
   return (← mkHeader kind id levelParams type safety) ++ " :=" ++ Format.line ++ value
-
-/--
-Definition of `printInduct` / `printInduct` 的定义
-
-English:
-definition printInduct
-  signature: (id : Name) (levelParams : List Name) (_numParams : Nat) (_numIndices : Nat)
-  body: do
-  let mut m ← mkHeader' "inductive" id levelParams type isUnsafe
-  m := m ++ Format.line ++ "constructors:"
-  for ctor in ctors do
-    let cinfo ← getConstInfo ctor
-    m := m ++ Format.line ++ ctor ++ " : " ++ cinfo.type
-  pure m
-
-中文:
-定义 printInduct
-  签名: (id : Name) (levelParams : 列表 Name) (_numParams : 自然数) (_numIndices : 自然数)
-  定义体: do
-  let mut m ← mkHeader' "inductive" id levelParams type isUnsafe
-  m := m ++ Format.line ++ "constructors:"
-  for ctor in ctors do
-    let cinfo ← getConstInfo ctor
-    m := m ++ Format.line ++ ctor ++ " : " ++ cinfo.type
-  pure m
+/-
+**Mathlib.WhatsNew.printInduct** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.WhatsNew`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private def printInduct (id : Name) (levelParams : List Name) (_numParams : Nat) (_numIndices : Nat)
     (type : Expr) (ctors : List Name) (isUnsafe : Bool) : CoreM MessageData := do
@@ -192,19 +86,11 @@ private def printInduct (id : Name) (levelParams : List Name) (_numParams : Nat)
     let cinfo ← getConstInfo ctor
     m := m ++ Format.line ++ ctor ++ " : " ++ cinfo.type
   pure m
-
-/--
-Definition of `printIdCore` / `printIdCore` 的定义
-
-English:
-definition printIdCore
-  signature: (id : Name)
-
-中文:
-定义 printIdCore
-  签名: (id : Name)
+/-
+**Mathlib.WhatsNew.printIdCore** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.WhatsNew`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private def printIdCore (id : Name) : ConstantInfo -> CoreM MessageData
+private def printIdCore (id : Name) : ConstantInfo → CoreM MessageData
   | ConstantInfo.axiomInfo { levelParams := us, type := t, isUnsafe := u, .. } =>
     mkHeader' "axiom" id us t u
   | ConstantInfo.defnInfo { levelParams := us, type := t, value := v, safety := s, .. } =>
@@ -222,41 +108,14 @@ private def printIdCore (id : Name) : ConstantInfo -> CoreM MessageData
   | ConstantInfo.inductInfo
       { levelParams := us, numParams, numIndices, type := t, ctors, isUnsafe := u, .. } =>
     printInduct id us numParams numIndices t ctors u
-
-/--
-Definition of `diffExtension` / `diffExtension` 的定义
-
-English:
-definition diffExtension
-  signature: (old new : Environment)
-  body: unsafe do
-  let mut asyncMode := ext.toEnvExtension.asyncMode
-  if asyncMode matches .async .. then
-    -- allow for diffing async extensions by bumping mode to sync
-    asyncMode := .sync
-  let oldSt := ext.toEnvExtension.getState (asyncMode := asyncMode) old
-  let newSt := ext.toEnvExtension.getState (asyncMode := asyncMode) new
-  if ptrAddrUnsafe oldSt == ptrAddrUnsafe newSt then return none
-  let oldEntries := (ext.exportEntriesFn (← getEnv) oldSt.state).private
-  let newEntries := (ext.exportEntriesFn (← getEnv) newSt.state).private
-  pure m!"-- {ext.name} extension: {(newEntries.size - oldEntries.size : Int)} new entries"
-
-中文:
-定义 diffExtension
-  签名: (old new : Environment)
-  定义体: unsafe do
-  let mut asyncMode := ext.toEnvExtension.asyncMode
-  if asyncMode matches .async .. then
-    -- allow for diffing async extensions by bumping mode to sync
-    asyncMode := .sync
-  let oldSt := ext.toEnvExtension.getState (asyncMode := asyncMode) old
-  let newSt := ext.toEnvExtension.getState (asyncMode := asyncMode) new
-  if ptrAddrUnsafe oldSt == ptrAddrUnsafe newSt then return none
-  let oldEntries := (ext.exportEntriesFn (← getEnv) oldSt.state).private
-  let newEntries := (ext.exportEntriesFn (← getEnv) newSt.state).private
-  pure m!"-- {ext.name} extension: {(newEntries.size - oldEntries.size : Int)} new entries"
-
-Depends on / 依赖: unsafe
+/-
+**Mathlib.WhatsNew.diffExtension** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.WhatsNew`。
+形式化陈述：diffExtension (old new : Environment) (ext : PersistentEnvExtension EnvExt
+ensionEntry EnvExtensionEntry EnvExtensionState) : CoreM (Option MessageData)
+参数：old new : Environment；ext : PersistentEnvExtension EnvExtensionEntry EnvExten
+sionEntry EnvExtensionState。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def diffExtension (old new : Environment)
     (ext : PersistentEnvExtension EnvExtensionEntry EnvExtensionEntry EnvExtensionState) :
@@ -271,45 +130,12 @@ def diffExtension (old new : Environment)
   let oldEntries := (ext.exportEntriesFn (← getEnv) oldSt.state).private
   let newEntries := (ext.exportEntriesFn (← getEnv) newSt.state).private
   pure m!"-- {ext.name} extension: {(newEntries.size - oldEntries.size : Int)} new entries"
-
-/--
-Definition of `whatsNew` / `whatsNew` 的定义
-
-English:
-definition whatsNew
-  signature: (old new : Environment)
-  body: do
-  let mut diffs := #[]
-
-  for (c, i) in new.constants.map₂.toList do
-    unless old.constants.map₂.contains c do
-      diffs := diffs.push (← printIdCore c i)
-
-  for ext in ← persistentEnvExtensionsRef.get do
-    if let some diff ← diffExtension old new ext then
-      diffs := diffs.push diff
-
-  if diffs.isEmpty then return "no new constants"
-
-pure MessageData.joinSep diffs.toList "\n\n"
-
-中文:
-定义 whatsNew
-  签名: (old new : Environment)
-  定义体: do
-  let mut diffs := #[]
-
-  for (c, i) in new.constants.map₂.toList do
-    unless old.constants.map₂.contains c do
-      diffs := diffs.push (← printIdCore c i)
-
-  for ext in ← persistentEnvExtensionsRef.get do
-    if let some diff ← diffExtension old new ext then
-      diffs := diffs.push diff
-
-  if diffs.isEmpty then return "no new constants"
-
-pure MessageData.joinSep diffs.toList "\n\n"
+/-
+**Mathlib.WhatsNew.whatsNew** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.WhatsNew`。
+形式化陈述：whatsNew (old new : Environment) : CoreM MessageData
+参数：old new : Environment。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def whatsNew (old new : Environment) : CoreM MessageData := do
   let mut diffs := #[]
@@ -324,7 +150,7 @@ def whatsNew (old new : Environment) : CoreM MessageData := do
 
   if diffs.isEmpty then return "no new constants"
 
-pure MessageData.joinSep diffs.toList "\n\n"
+  pure <| MessageData.joinSep diffs.toList "\n\n"
 
 /-- `#whats_new in` executes the following command and then prints the
 declarations that were added to the environment. -/
@@ -344,3 +170,4 @@ macro (name := oldStx) "whatsnew " "in" ppLine cmd:command : command =>
 deprecated_syntax oldStx "use `#whats_new` instead of `whatsnew`" (since := "2026-08-07")
 
 end Mathlib.WhatsNew
+

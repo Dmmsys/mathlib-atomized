@@ -15,61 +15,24 @@ In this file we provide instances for `Encodable (Π₀ i, α i)` and `Countable
 
 public section
 
-variable {ι : Type*} {α : ι -> Type*} [forall i, Zero (α i)]
+variable {ι : Type*} {α : ι → Type*} [∀ i, Zero (α i)]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Encodable
-  signature: ι] [forall i, Encodable (α i)] [forall i (x : α i), Decidable (x != 0)] :
-  body: letI : DecidableEq ι := Encodable.decidableEqOfEncodable _
-  letI : forall s : Finset ι, Encodable (forall i : s, {x : α i // x != 0}) := fun _ =>
-.ofEquiv _ .piCongrLeft' _ Encodable.fintypeEquivFin
-  .ofEquiv _ DFinsupp.sigmaFinsetFunEquiv
-
-中文:
-实例 [可编码
-  签名: ι] [对任意 i, 可编码 (α i)] [对任意 i (x : α i), 可判定 (x != 0)] :
-  定义体: letI : DecidableEq ι := Encodable.decidableEqOfEncodable _
-  letI : forall s : Finset ι, Encodable (forall i : s, {x : α i // x != 0}) := fun _ =>
-.ofEquiv _ .piCongrLeft' _ Encodable.fintypeEquivFin
-  .ofEquiv _ DFinsupp.sigmaFinsetFunEquiv
-
-Depends on / 依赖: DFinsupp, DFinsupp.sigmaFinsetFunEquiv, DecidableEq, Encodable, Encodable.decidableEqOfEncodable, Encodable.fintypeEquivFin, Finset, decidableEqOfEncodable, fintypeEquivFin, ofEquiv, piCongrLeft, sigmaFinsetFunEquiv
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Encodable ι] [forall i, Encodable (α i)] [forall i (x : α i), Decidable (x != 0)] :
+instance [Encodable ι] [∀ i, Encodable (α i)] [∀ i (x : α i), Decidable (x ≠ 0)] :
     Encodable (Π₀ i, α i) :=
   letI : DecidableEq ι := Encodable.decidableEqOfEncodable _
-  letI : forall s : Finset ι, Encodable (forall i : s, {x : α i // x != 0}) := fun _ =>
-.ofEquiv _ .piCongrLeft' _ Encodable.fintypeEquivFin
+  letI : ∀ s : Finset ι, Encodable (∀ i : s, {x : α i // x ≠ 0}) := fun _ ↦
+    .ofEquiv _ <| .piCongrLeft' _ Encodable.fintypeEquivFin
   .ofEquiv _ DFinsupp.sigmaFinsetFunEquiv
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Countable
-  signature: ι] [forall i, Countable (α i)] : Countable (Π₀ i, α i)
-  body: by
-  classical
-    let _ := Encodable.ofCountable ι
-    let _ := fun i => Encodable.ofCountable (α i)
-    infer_instance
-
-中文:
-实例 [可数
-  签名: ι] [对任意 i, 可数 (α i)] : 可数 (Π₀ i, α i)
-  定义体: by
-  classical
-    let _ := Encodable.ofCountable ι
-    let _ := fun i => Encodable.ofCountable (α i)
-    infer_instance
-
-Depends on / 依赖: Encodable, Encodable.ofCountable, classical, infer_instance, ofCountable
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Countable ι] [forall i, Countable (α i)] : Countable (Π₀ i, α i) := by
+instance [Countable ι] [∀ i, Countable (α i)] : Countable (Π₀ i, α i) := by
   classical
     let _ := Encodable.ofCountable ι
-    let _ := fun i => Encodable.ofCountable (α i)
+    let _ := fun i ↦ Encodable.ofCountable (α i)
     infer_instance

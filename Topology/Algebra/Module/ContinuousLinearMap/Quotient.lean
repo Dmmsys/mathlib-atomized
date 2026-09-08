@@ -33,211 +33,129 @@ namespace Submodule
 
 section Ring
 
-variable {R R₂ : Type*} [Ring R] [Ring R₂] {σ : R ->+* R₂} {M M₂ : Type*}
+variable {R R₂ : Type*} [Ring R] [Ring R₂] {σ : R →+* R₂} {M M₂ : Type*}
   [TopologicalSpace M] [AddCommGroup M] [Module R M]
   [TopologicalSpace M₂] [AddCommGroup M₂] [Module R₂ M₂]
   (S : Submodule R M)
 
 open ContinuousLinearMap
 
-/--
-Definition of `mkQL` / `mkQL` 的定义
+/-- `Submodule.mkQ` as a `ContinuousLinearMap`. -/
+/-
+**Submodule.mkQL** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：mkQL : M ->L[R] M ⧸ S where toLinearMap
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkQL
-  signature: : M ->L[R] M ⧸ S where
-  body: S.mkQ
-  cont := continuous_quot_mk
-
-@[simp, norm_cast]
-
-中文:
-定义 mkQL
-  签名: : M ->L[R] M ⧸ S where
-  定义体: S.mkQ
-  cont := continuous_quot_mk
-
-@[simp, norm_cast]
-
-Depends on / 依赖: S.mkQ
+--- 原说明 ---
+`Submodule.mkQ` as a `ContinuousLinearMap`.
 -/
-def mkQL : M ->L[R] M ⧸ S where
+def mkQL : M →L[R] M ⧸ S where
   toLinearMap := S.mkQ
   cont := continuous_quot_mk
 
 @[simp, norm_cast]
-/--
-theorem `toLinearMap_mkQL` / 定理 `toLinearMap_mkQL`
-
-English:
-theorem toLinearMap_mkQL
-  statement: (S.mkQL : M ->ₗ[R] M ⧸ S) = S.mkQ
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toLinearMap_mkQL
-  结论: (S.mkQL : M ->ₗ[R] M ⧸ S) = S.mkQ
-  证明: rfl
-
-@[simp]
+/-
+**Submodule.toLinearMap_mkQL** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：toLinearMap_mkQL : (S.mkQL : M ->ₗ[R] M ⧸ S) = S.mkQ
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toLinearMap_mkQL : (S.mkQL : M ->ₗ[R] M ⧸ S) = S.mkQ := rfl
+theorem toLinearMap_mkQL : (S.mkQL : M →ₗ[R] M ⧸ S) = S.mkQ := rfl
 
 @[simp]
-/--
-theorem `coe_mkQL` / 定理 `coe_mkQL`
-
-English:
-theorem coe_mkQL
-  statement: ⇑S.mkQL = S.mkQ
-  proof: rfl
-
-中文:
-定理 coe_mkQL
-  结论: ⇑S.mkQL = S.mkQ
-  证明: rfl
+/-
+**Submodule.coe_mkQL** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：coe_mkQL : ⇑S.mkQL = S.mkQ
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mkQL : ⇑S.mkQL = S.mkQ := rfl
-
-/--
-theorem `mkQL_apply` / 定理 `mkQL_apply`
-
-English:
-theorem mkQL_apply
-  given: (x : M)
-  statement: S.mkQL x = S.mkQ x
-  proof: by simp
-
-中文:
-定理 mkQL_apply
-  条件: (x : M)
-  结论: S.mkQL x = S.mkQ x
-  证明: by simp
+/-
+**Submodule.mkQL_apply** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：mkQL_apply (x : M) : S.mkQL x = S.mkQ x
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem mkQL_apply (x : M) : S.mkQL x = S.mkQ x := by simp
-
-/--
-theorem `isQuotientMap_mkQL` / 定理 `isQuotientMap_mkQL`
-
-English:
-theorem isQuotientMap_mkQL
-  statement: IsQuotientMap S.mkQL
-  proof: isQuotientMap_quot_mk
-
-中文:
-定理 isQuotientMap_mkQL
-  结论: 是商映射 S.mkQL
-  证明: isQuotientMap_quot_mk
-
-Depends on / 依赖: isQuotientMap_quot_mk
+/-
+**Submodule.isQuotientMap_mkQL** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：isQuotientMap_mkQL : IsQuotientMap S.mkQL
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isQuotientMap_quot_mk`：isQuotientMap_quot_mk : IsQuotientMap (@Quot.mk X
+ r)
 -/
 theorem isQuotientMap_mkQL : IsQuotientMap S.mkQL := isQuotientMap_quot_mk
-
-/--
-theorem `isOpenQuotientMap_mkQL` / 定理 `isOpenQuotientMap_mkQL`
-
-English:
-theorem isOpenQuotientMap_mkQL
-  given: [ContinuousAdd M]
-  statement: IsOpenQuotientMap S.mkQL
-  proof: S.isOpenQuotientMap_mkQ
-
-中文:
-定理 isOpenQuotientMap_mkQL
-  条件: [连续加法 M]
-  结论: 是OpenQuotient映射 S.mkQL
-  证明: S.isOpenQuotientMap_mkQ
-
-Depends on / 依赖: S.isOpenQuotientMap_mkQ, isOpenQuotientMap_mkQ
+/-
+**Submodule.isOpenQuotientMap_mkQL** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：isOpenQuotientMap_mkQL [ContinuousAdd M] : IsOpenQuotientMap S.mkQL
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.isOpenQuotientMap_mkQ`：isOpenQuotientMap_mkQ [ContinuousAdd M]
+ : IsOpenQuotientMap S.mkQ
 -/
 theorem isOpenQuotientMap_mkQL [ContinuousAdd M] : IsOpenQuotientMap S.mkQL :=
   S.isOpenQuotientMap_mkQ
 
-/--
-Definition of `liftQL` / `liftQL` 的定义
+/-- `Submodule.liftQ` as a `ContinuousLinearMap`. -/
+/-
+**Submodule.liftQL** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：liftQL (f : M ->SL[σ] M₂) (h : S <= f.ker) : M ⧸ S ->SL[σ] M₂ where toLine
+arMap
+参数：f : M ->SL[σ] M₂；h : S <= f.ker。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftQL
-  signature: (f : M ->SL[σ] M₂) (h : S <= f.ker)
-  body: S.liftQ f h
-  cont := continuous_quot_lift _ f.continuous
-
-@[simp, norm_cast]
-
-中文:
-定义 liftQL
-  签名: (f : M ->SL[σ] M₂) (h : S <= f.ker)
-  定义体: S.liftQ f h
-  cont := continuous_quot_lift _ f.continuous
-
-@[simp, norm_cast]
-
-Depends on / 依赖: S.liftQ
+--- 原说明 ---
+`Submodule.liftQ` as a `ContinuousLinearMap`.
 -/
-def liftQL (f : M ->SL[σ] M₂) (h : S <= f.ker) : M ⧸ S ->SL[σ] M₂ where
+def liftQL (f : M →SL[σ] M₂) (h : S ≤ f.ker) : M ⧸ S →SL[σ] M₂ where
   toLinearMap := S.liftQ f h
   cont := continuous_quot_lift _ f.continuous
 
 @[simp, norm_cast]
-/--
-theorem `toLinearMap_liftQL` / 定理 `toLinearMap_liftQL`
-
-English:
-theorem toLinearMap_liftQL
-  given: (f : M ->SL[σ] M₂) (h : S <= f.ker)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toLinearMap_liftQL
-  条件: (f : M ->SL[σ] M₂) (h : S <= f.ker)
-  证明: rfl
-
-@[simp]
+/-
+**Submodule.toLinearMap_liftQL** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：toLinearMap_liftQL (f : M ->SL[σ] M₂) (h : S <= f.ker) : (S.liftQL f h).to
+LinearMap = S.liftQ f.toLinearMap h
+参数：f : M ->SL[σ] M₂；h : S <= f.ker。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toLinearMap_liftQL (f : M ->SL[σ] M₂) (h : S <= f.ker) :
+theorem toLinearMap_liftQL (f : M →SL[σ] M₂) (h : S ≤ f.ker) :
     (S.liftQL f h).toLinearMap = S.liftQ f.toLinearMap h := rfl
 
 @[simp]
-/--
-theorem `coe_liftQL` / 定理 `coe_liftQL`
-
-English:
-theorem coe_liftQL
-  given: (f : M ->SL[σ] M₂) (h : S <= f.ker)
-  proof: rfl
-
-中文:
-定理 coe_liftQL
-  条件: (f : M ->SL[σ] M₂) (h : S <= f.ker)
-  证明: rfl
+/-
+**Submodule.coe_liftQL** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：coe_liftQL (f : M ->SL[σ] M₂) (h : S <= f.ker) : ⇑(S.liftQL f h) = S.liftQ
+ f.toLinearMap h
+参数：f : M ->SL[σ] M₂；h : S <= f.ker。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_liftQL (f : M ->SL[σ] M₂) (h : S <= f.ker) :
+theorem coe_liftQL (f : M →SL[σ] M₂) (h : S ≤ f.ker) :
     ⇑(S.liftQL f h) = S.liftQ f.toLinearMap h :=
   rfl
-
-/--
-theorem `liftQL_apply` / 定理 `liftQL_apply`
-
-English:
-theorem liftQL_apply
-  given: (f : M ->SL[σ] M₂) (h : S <= f.ker) (x : M ⧸ S)
-  proof: by
-  simp
-
-中文:
-定理 liftQL_apply
-  条件: (f : M ->SL[σ] M₂) (h : S <= f.ker) (x : M ⧸ S)
-  证明: by
-  simp
+/-
+**Submodule.liftQL_apply** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：liftQL_apply (f : M ->SL[σ] M₂) (h : S <= f.ker) (x : M ⧸ S) : S.liftQL f 
+h x = S.liftQ f.toLinearMap h x
+参数：f : M ->SL[σ] M₂；h : S <= f.ker；x : M ⧸ S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem liftQL_apply (f : M ->SL[σ] M₂) (h : S <= f.ker) (x : M ⧸ S) :
+theorem liftQL_apply (f : M →SL[σ] M₂) (h : S ≤ f.ker) (x : M ⧸ S) :
     S.liftQL f h x = S.liftQ f.toLinearMap h x := by
   simp
 
 end Ring
 
 end Submodule
+

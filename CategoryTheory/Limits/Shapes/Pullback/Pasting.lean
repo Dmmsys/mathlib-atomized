@@ -13,9 +13,9 @@ public import Mathlib.CategoryTheory.Limits.Shapes.Pullback.HasPullback
 This file proves the pasting lemma for pullbacks. That is, given the following diagram:
 ```
   X₁ - f₁ -> X₂ - f₂ -> X₃
-  | | |
-  i₁ i₂ i₃
-  ∨ ∨ ∨
+  |          |          |
+  i₁         i₂         i₃
+  ∨          ∨          ∨
   Y₁ - g₁ -> Y₂ - g₂ -> Y₃
 ```
 if the right square is a pullback, then the left square is a pullback iff the big square is a
@@ -49,9 +49,9 @@ section PastePullbackHoriz
 /- Let's consider the following diagram
 ```
 X₁ - f₁ -> X₂ - f₂ -> X₃
-| | |
-i₁ i₂ i₃
-↓ ↓ ↓
+|          |          |
+i₁         i₂         i₃
+↓          ↓          ↓
 Y₁ - g₁ -> Y₂ - g₂ -> Y₃
 ```
 where `t₁` denotes the cone corresponding to the left square, and `t₂` denotes the cone
@@ -60,20 +60,22 @@ corresponding to the right square.
 
 variable {X₃ Y₁ Y₂ Y₃ : C} {g₁ : Y₁ ⟶ Y₂} {g₂ : Y₂ ⟶ Y₃} {i₃ : X₃ ⟶ Y₃}
 
-/--
-Definition of `PullbackCone.pasteHoriz` / `PullbackCone.pasteHoriz` 的定义
+/-- The `PullbackCone` obtained by pasting two `PullbackCone`'s horizontally -/
+/-
+**CategoryTheory.Limits.PullbackCone.pasteHoriz** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits.PullbackCone`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {X₃ Y₁ Y₂
+ Y₃ : C} →       {g₁ : Y₁ ⟶ Y₂} →         {g₂ : Y₂ ⟶ Y₃} →           {i₃ : X₃ ⟶ 
+Y₃} →             (t₂ : CategoryTheory.Limits.PullbackCone g₂ i₃) →             
+  {i₂ : t₂.pt ⟶ Y₂} →                 CategoryTheory.Limits.PullbackCone g₁ i₂ →
+                   i₂ = t₂.fst → CategoryTheory.Limits.PullbackCone (CategoryThe
+ory.CategoryStruct.comp g₁ g₂) i₃
+参数：t₂ : CategoryTheory.Limits.PullbackCone g₂ i₃；CategoryTheory.CategoryStruct.c
+omp g₁ g₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation PullbackCone.pasteHoriz
-  body: PullbackCone.mk t₁.fst (t₁.snd ≫ t₂.snd)
-    (by rw [reassoc_of% t₁.condition, Category.assoc, ← t₂.condition, ← hi₂])
-
-中文:
-缩写 PullbackCone.pasteHoriz
-  定义体: PullbackCone.mk t₁.fst (t₁.snd ≫ t₂.snd)
-    (by rw [reassoc_of% t₁.condition, Category.assoc, ← t₂.condition, ← hi₂])
-
-Depends on / 依赖: Category, Category.assoc, PullbackCone, PullbackCone.mk, condition, reassoc_of
+--- 原说明 ---
+The `PullbackCone` obtained by pasting two `PullbackCone`'s horizontally
 -/
 abbrev PullbackCone.pasteHoriz
     (t₂ : PullbackCone g₂ i₃) {i₂ : t₂.pt ⟶ Y₂} (t₁ : PullbackCone g₁ i₂) (hi₂ : i₂ = t₂.fst) :
@@ -92,48 +94,35 @@ variable {t₁} {t₂}
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `pasteHorizIsPullback` / `pasteHorizIsPullback` 的定义
+/-- Given
+```
+X₁ - f₁ -> X₂ - f₂ -> X₃
+|          |          |
+i₁         i₂         i₃
+↓          ↓          ↓
+Y₁ - g₁ -> Y₂ - g₂ -> Y₃
+```
+Then the big square is a pullback if both the small squares are.
+-/
+/-
+**CategoryTheory.Limits.pasteHorizIsPullback** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Limits`。
+形式化陈述：pasteHorizIsPullback (H : IsLimit t₂) (H' : IsLimit t₁) : IsLimit (t₂.past
+eHoriz t₁ hi₂)
+参数：H : IsLimit t₂；H' : IsLimit t₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pasteHorizIsPullback
-  signature: (H : IsLimit t₂) (H' : IsLimit t₁)
-  body: by
-  apply PullbackCone.isLimitAux'
-  intro s
-  -- Obtain the lift from lifting from both the small squares consecutively.
-  obtain ⟨l₂, hl₂, hl₂'⟩ := PullbackCone.IsLimit.lift' H (s.fst ≫ g₁) s.snd
-    (by rw [← s.condition, Category.assoc])
-  obtain ⟨l₁, hl₁, hl₁'⟩ := PullbackCone.IsLimit.lift' H' s.fst l₂ (by rw [← hl₂, hi₂])
-  refine ⟨l₁, hl₁, by simp [reassoc_of% hl₁', hl₂'], ?_⟩
-  -- Uniqueness also follows from the universal property of both the small squares.
-  intro m hm₁ hm₂
-  apply PullbackCone.IsLimit.hom_ext H' (by simpa [hl₁] using hm₁)
-  apply PullbackCone.IsLimit.hom_ext H
-  · dsimp at hm₁
-    rw [Category.assoc]; rw [← hi₂]; rw [← t₁.condition]; rw [reassoc_of% hm₁]; rw [hl₁']; rw [hi₂]; rw [hl₂]
-  · simpa [hl₁', hl₂'] using hm₂
-
-中文:
-定义 pasteHorizIsPullback
-  签名: (H : 是极限 t₂) (H' : 是极限 t₁)
-  定义体: by
-  apply PullbackCone.isLimitAux'
-  intro s
-  -- Obtain the lift from lifting from both the small squares consecutively.
-  obtain ⟨l₂, hl₂, hl₂'⟩ := PullbackCone.IsLimit.lift' H (s.fst ≫ g₁) s.snd
-    (by rw [← s.condition, Category.assoc])
-  obtain ⟨l₁, hl₁, hl₁'⟩ := PullbackCone.IsLimit.lift' H' s.fst l₂ (by rw [← hl₂, hi₂])
-  refine ⟨l₁, hl₁, by simp [reassoc_of% hl₁', hl₂'], ?_⟩
-  -- Uniqueness also follows from the universal property of both the small squares.
-  intro m hm₁ hm₂
-  apply PullbackCone.IsLimit.hom_ext H' (by simpa [hl₁] using hm₁)
-  apply PullbackCone.IsLimit.hom_ext H
-  · dsimp at hm₁
-    rw [Category.assoc]; rw [← hi₂]; rw [← t₁.condition]; rw [reassoc_of% hm₁]; rw [hl₁']; rw [hi₂]; rw [hl₂]
-  · simpa [hl₁', hl₂'] using hm₂
-
-Depends on / 依赖: PullbackCone, PullbackCone.isLimitAux, isLimitAux
+--- 原说明 ---
+Given
+```
+X₁ - f₁ -> X₂ - f₂ -> X₃
+|          |          |
+i₁         i₂         i₃
+↓          ↓          ↓
+Y₁ - g₁ -> Y₂ - g₂ -> Y₃
+```
+Then the big square is a pullback if both the small squares are.
 -/
 def pasteHorizIsPullback (H : IsLimit t₂) (H' : IsLimit t₁) : IsLimit (t₂.pasteHoriz t₁ hi₂) := by
   apply PullbackCone.isLimitAux'
@@ -148,57 +137,42 @@ def pasteHorizIsPullback (H : IsLimit t₂) (H' : IsLimit t₁) : IsLimit (t₂.
   apply PullbackCone.IsLimit.hom_ext H' (by simpa [hl₁] using hm₁)
   apply PullbackCone.IsLimit.hom_ext H
   · dsimp at hm₁
-    rw [Category.assoc]; rw [← hi₂]; rw [← t₁.condition]; rw [reassoc_of% hm₁]; rw [hl₁']; rw [hi₂]; rw [hl₂]
+    rw [Category.assoc, ← hi₂, ← t₁.condition, reassoc_of% hm₁, hl₁', hi₂, hl₂]
   · simpa [hl₁', hl₂'] using hm₂
 
 variable (t₁)
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `leftSquareIsPullback` / `leftSquareIsPullback` 的定义
+/-- Given
+```
+X₁ - f₁ -> X₂ - f₂ -> X₃
+|          |          |
+i₁         i₂         i₃
+↓          ↓          ↓
+Y₁ - g₁ -> Y₂ - g₂ -> Y₃
+```
+Then the left square is a pullback if the right square and the big square are.
+-/
+/-
+**CategoryTheory.Limits.leftSquareIsPullback** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Limits`。
+形式化陈述：leftSquareIsPullback (H : IsLimit t₂) (H' : IsLimit (t₂.pasteHoriz t₁ hi₂)
+) : IsLimit t₁
+参数：H : IsLimit t₂；H' : IsLimit (t₂.pasteHoriz t₁ hi₂)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftSquareIsPullback
-  signature: (H : IsLimit t₂) (H' : IsLimit (t₂.pasteHoriz t₁ hi₂))
-  body: by
-  apply PullbackCone.isLimitAux'
-  intro s
-  -- Obtain the induced morphism from the universal property of the big square
-  obtain ⟨l, hl, hl'⟩ := PullbackCone.IsLimit.lift' H' s.fst (s.snd ≫ f₂)
-    (by rw [Category.assoc, ← t₂.condition, reassoc_of% s.condition, ← hi₂])
-  refine ⟨l, hl, ?_, ?_⟩
-  -- To check that `l` is compatible with the projections, we use the universal property of `t₂`
-  · apply PullbackCone.IsLimit.hom_ext H
-    · simp [← s.condition, ← hl, ← t₁.condition, ← hi₂]
-    · simpa using hl'
-  -- Uniqueness of the lift follows from the universal property of the big square
-  · intro m hm₁ hm₂
-    apply PullbackCone.IsLimit.hom_ext H'
-    · simpa [hm₁] using hl.symm
-    · simpa [← hm₂] using hl'.symm
-
-中文:
-定义 leftSquareIsPullback
-  签名: (H : 是极限 t₂) (H' : 是极限 (t₂.pasteHoriz t₁ hi₂))
-  定义体: by
-  apply PullbackCone.isLimitAux'
-  intro s
-  -- Obtain the induced morphism from the universal property of the big square
-  obtain ⟨l, hl, hl'⟩ := PullbackCone.IsLimit.lift' H' s.fst (s.snd ≫ f₂)
-    (by rw [Category.assoc, ← t₂.condition, reassoc_of% s.condition, ← hi₂])
-  refine ⟨l, hl, ?_, ?_⟩
-  -- To check that `l` is compatible with the projections, we use the universal property of `t₂`
-  · apply PullbackCone.IsLimit.hom_ext H
-    · simp [← s.condition, ← hl, ← t₁.condition, ← hi₂]
-    · simpa using hl'
-  -- Uniqueness of the lift follows from the universal property of the big square
-  · intro m hm₁ hm₂
-    apply PullbackCone.IsLimit.hom_ext H'
-    · simpa [hm₁] using hl.symm
-    · simpa [← hm₂] using hl'.symm
-
-Depends on / 依赖: PullbackCone, PullbackCone.isLimitAux, isLimitAux
+--- 原说明 ---
+Given
+```
+X₁ - f₁ -> X₂ - f₂ -> X₃
+|          |          |
+i₁         i₂         i₃
+↓          ↓          ↓
+Y₁ - g₁ -> Y₂ - g₂ -> Y₃
+```
+Then the left square is a pullback if the right square and the big square are.
 -/
 def leftSquareIsPullback (H : IsLimit t₂) (H' : IsLimit (t₂.pasteHoriz t₁ hi₂)) : IsLimit t₁ := by
   apply PullbackCone.isLimitAux'
@@ -217,26 +191,21 @@ def leftSquareIsPullback (H : IsLimit t₂) (H' : IsLimit (t₂.pasteHoriz t₁ 
     · simpa [hm₁] using hl.symm
     · simpa [← hm₂] using hl'.symm
 
-/--
-Definition of `pasteHorizIsPullbackEquiv` / `pasteHorizIsPullbackEquiv` 的定义
+/-- Given that the right square is a pullback, the pasted square is a pullback iff the left
+square is. -/
+/-
+**CategoryTheory.Limits.pasteHorizIsPullbackEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Limits`。
+形式化陈述：pasteHorizIsPullbackEquiv (H : IsLimit t₂) : IsLimit (t₂.pasteHoriz t₁ hi₂
+) ≃ IsLimit t₁ where toFun H'
+参数：H : IsLimit t₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pasteHorizIsPullbackEquiv
-  signature: (H : IsLimit t₂)
-  body: leftSquareIsPullback t₁ _ H H'
-  invFun H' := pasteHorizIsPullback _ H H'
-  left_inv _ := Subsingleton.elim _ _
-  right_inv _ := Subsingleton.elim _ _
-
-中文:
-定义 pasteHorizIsPullbackEquiv
-  签名: (H : 是极限 t₂)
-  定义体: leftSquareIsPullback t₁ _ H H'
-  invFun H' := pasteHorizIsPullback _ H H'
-  left_inv _ := Subsingleton.elim _ _
-  right_inv _ := Subsingleton.elim _ _
-
-Depends on / 依赖: leftSquareIsPullback
+--- 原说明 ---
+Given that the right square is a pullback, the pasted square is a pullback iff t
+he left
+square is.
 -/
 def pasteHorizIsPullbackEquiv (H : IsLimit t₂) : IsLimit (t₂.pasteHoriz t₁ hi₂) ≃ IsLimit t₁ where
   toFun H' := leftSquareIsPullback t₁ _ H H'
@@ -251,13 +220,13 @@ section PastePullbackVert
 /- Let's consider the following diagram
 ```
 Y₃ - i₃ -> X₃
-| |
-g₂ f₂
-∨ ∨
+|          |
+g₂         f₂
+∨          ∨
 Y₂ - i₂ -> X₂
-| |
-g₁ f₁
-∨ ∨
+|          |
+g₁         f₁
+∨          ∨
 Y₁ - i₁ -> X₁
 ```
 Let `t₁` denote the cone corresponding to the bottom square, and `t₂` denote the cone corresponding
@@ -266,20 +235,22 @@ to the top square.
 -/
 variable {X₁ X₂ X₃ Y₁ : C} {f₁ : X₂ ⟶ X₁} {f₂ : X₃ ⟶ X₂} {i₁ : Y₁ ⟶ X₁}
 
-/--
-Definition of `PullbackCone.pasteVert` / `PullbackCone.pasteVert` 的定义
+/-- The `PullbackCone` obtained by pasting two `PullbackCone`'s vertically -/
+/-
+**CategoryTheory.Limits.PullbackCone.pasteVert** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Limits.PullbackCone`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {X₁ X₂ X₃
+ Y₁ : C} →       {f₁ : X₂ ⟶ X₁} →         {f₂ : X₃ ⟶ X₂} →           {i₁ : Y₁ ⟶ 
+X₁} →             (t₁ : CategoryTheory.Limits.PullbackCone i₁ f₁) →             
+  {i₂ : t₁.pt ⟶ X₂} →                 CategoryTheory.Limits.PullbackCone i₂ f₂ →
+                   i₂ = t₁.snd → CategoryTheory.Limits.PullbackCone i₁ (Category
+Theory.CategoryStruct.comp f₂ f₁)
+参数：t₁ : CategoryTheory.Limits.PullbackCone i₁ f₁；CategoryTheory.CategoryStruct.c
+omp f₂ f₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation PullbackCone.pasteVert
-  body: PullbackCone.mk (t₂.fst ≫ t₁.fst) t₂.snd
-    (by rw [← reassoc_of% t₂.condition, Category.assoc, t₁.condition, ← hi₂])
-
-中文:
-缩写 PullbackCone.pasteVert
-  定义体: PullbackCone.mk (t₂.fst ≫ t₁.fst) t₂.snd
-    (by rw [← reassoc_of% t₂.condition, Category.assoc, t₁.condition, ← hi₂])
-
-Depends on / 依赖: Category, Category.assoc, PullbackCone, PullbackCone.mk, condition, reassoc_of
+--- 原说明 ---
+The `PullbackCone` obtained by pasting two `PullbackCone`'s vertically
 -/
 abbrev PullbackCone.pasteVert
     (t₁ : PullbackCone i₁ f₁) {i₂ : t₁.pt ⟶ X₂} (t₂ : PullbackCone i₂ f₂) (hi₂ : i₂ = t₁.snd) :
@@ -297,92 +268,132 @@ local notation "g₂" => t₂.fst
 local notation "i₃" => t₂.snd
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `PullbackCone.pasteVertFlip` / `PullbackCone.pasteVertFlip` 的定义
+/-- Pasting two pullback cones vertically is isomorphic to the pullback cone obtained by flipping
+them, pasting horizontally, and then flipping the result again. -/
+/-
+**CategoryTheory.Limits.PullbackCone.pasteVertFlip** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Limits.PullbackCone`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {X₁ X₂ X₃
+ Y₁ : C} →       {f₁ : X₂ ⟶ X₁} →         {f₂ : X₃ ⟶ X₂} →           {i₁ : Y₁ ⟶ 
+X₁} →             (t₁ : CategoryTheory.Limits.PullbackCone i₁ f₁) →             
+  {i₂ : t₁.pt ⟶ X₂} →                 (t₂ : CategoryTheory.Limits.PullbackCone i
+₂ f₂) →                   (hi₂ : i₂ = t₁.snd) → (t₁.pasteVert t₂ hi₂).flip ≅ t₁.
+flip.pasteHoriz t₂.flip hi₂
+参数：t₁ : CategoryTheory.Limits.PullbackCone i₁ f₁；t₂ : CategoryTheory.Limits.Pull
+backCone i₂ f₂；hi₂ : i₂ = t₁.snd；t₁.pasteVert t₂ hi₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PullbackCone.pasteVertFlip
-  signature: : (t₁.pasteVert t₂ hi₂).flip ≅ (t₁.flip.pasteHoriz t₂.flip hi₂)
-  body: PullbackCone.ext (Iso.refl _) (by simp) (by simp)
-
-中文:
-定义 PullbackCone.pasteVertFlip
-  签名: : (t₁.pasteVert t₂ hi₂).flip ≅ (t₁.flip.pasteHoriz t₂.flip hi₂)
-  定义体: PullbackCone.ext (Iso.refl _) (by simp) (by simp)
-
-Depends on / 依赖: Iso.refl, PullbackCone, PullbackCone.ext
+--- 原说明 ---
+Pasting two pullback cones vertically is isomorphic to the pullback cone obtaine
+d by flipping
+them, pasting horizontally, and then flipping the result again.
 -/
 def PullbackCone.pasteVertFlip : (t₁.pasteVert t₂ hi₂).flip ≅ (t₁.flip.pasteHoriz t₂.flip hi₂) :=
   PullbackCone.ext (Iso.refl _) (by simp) (by simp)
 
 variable {t₁} {t₂}
 
-/--
-Definition of `pasteVertIsPullback` / `pasteVertIsPullback` 的定义
+/-- Given
+```
+Y₃ - i₃ -> X₃
+|          |
+g₂         f₂
+∨          ∨
+Y₂ - i₂ -> X₂
+|          |
+g₁         f₁
+∨          ∨
+Y₁ - i₁ -> X₁
+```
+The big square is a pullback if both the small squares are.
+-/
+/-
+**CategoryTheory.Limits.pasteVertIsPullback** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Limits`。
+形式化陈述：pasteVertIsPullback (H₁ : IsLimit t₁) (H₂ : IsLimit t₂) : IsLimit (t₁.past
+eVert t₂ hi₂)
+参数：H₁ : IsLimit t₁；H₂ : IsLimit t₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pasteVertIsPullback
-  signature: (H₁ : IsLimit t₁) (H₂ : IsLimit t₂)
-  body: by
-apply PullbackCone.isLimitOfFlip IsLimit.ofIsoLimit _ (t₁.pasteVertFlip t₂ hi₂).symm
-  exact pasteHorizIsPullback hi₂ (PullbackCone.flipIsLimit H₁) (PullbackCone.flipIsLimit H₂)
-
-中文:
-定义 pasteVertIsPullback
-  签名: (H₁ : 是极限 t₁) (H₂ : 是极限 t₂)
-  定义体: by
-apply PullbackCone.isLimitOfFlip IsLimit.ofIsoLimit _ (t₁.pasteVertFlip t₂ hi₂).symm
-  exact pasteHorizIsPullback hi₂ (PullbackCone.flipIsLimit H₁) (PullbackCone.flipIsLimit H₂)
-
-Depends on / 依赖: IsLimit, IsLimit.ofIsoLimit, PullbackCone, PullbackCone.flipIsLimit, PullbackCone.isLimitOfFlip, flipIsLimit, isLimitOfFlip, ofIsoLimit, pasteHorizIsPullback, pasteVertFlip
+--- 原说明 ---
+Given
+```
+Y₃ - i₃ -> X₃
+|          |
+g₂         f₂
+∨          ∨
+Y₂ - i₂ -> X₂
+|          |
+g₁         f₁
+∨          ∨
+Y₁ - i₁ -> X₁
+```
+The big square is a pullback if both the small squares are.
 -/
 def pasteVertIsPullback (H₁ : IsLimit t₁) (H₂ : IsLimit t₂) : IsLimit (t₁.pasteVert t₂ hi₂) := by
-apply PullbackCone.isLimitOfFlip IsLimit.ofIsoLimit _ (t₁.pasteVertFlip t₂ hi₂).symm
+  apply PullbackCone.isLimitOfFlip <| IsLimit.ofIsoLimit _ (t₁.pasteVertFlip t₂ hi₂).symm
   exact pasteHorizIsPullback hi₂ (PullbackCone.flipIsLimit H₁) (PullbackCone.flipIsLimit H₂)
 
 variable (t₂)
 
-/--
-Definition of `topSquareIsPullback` / `topSquareIsPullback` 的定义
+/-- Given
+```
+Y₃ - i₃ -> X₃
+|          |
+g₂         f₂
+∨          ∨
+Y₂ - i₂ -> X₂
+|          |
+g₁         f₁
+∨          ∨
+Y₁ - i₁ -> X₁
+```
+The top square is a pullback if the bottom square and the big square are.
+-/
+/-
+**CategoryTheory.Limits.topSquareIsPullback** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Limits`。
+形式化陈述：topSquareIsPullback (H₁ : IsLimit t₁) (H₂ : IsLimit (t₁.pasteVert t₂ hi₂))
+ : IsLimit t₂
+参数：H₁ : IsLimit t₁；H₂ : IsLimit (t₁.pasteVert t₂ hi₂)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition topSquareIsPullback
-  signature: (H₁ : IsLimit t₁) (H₂ : IsLimit (t₁.pasteVert t₂ hi₂))
-  body: PullbackCone.isLimitOfFlip
-    (leftSquareIsPullback _ hi₂ (PullbackCone.flipIsLimit H₁) (PullbackCone.flipIsLimit H₂))
-
-中文:
-定义 topSquareIsPullback
-  签名: (H₁ : 是极限 t₁) (H₂ : 是极限 (t₁.pasteVert t₂ hi₂))
-  定义体: PullbackCone.isLimitOfFlip
-    (leftSquareIsPullback _ hi₂ (PullbackCone.flipIsLimit H₁) (PullbackCone.flipIsLimit H₂))
-
-Depends on / 依赖: PullbackCone, PullbackCone.flipIsLimit, PullbackCone.isLimitOfFlip, flipIsLimit, isLimitOfFlip, leftSquareIsPullback
+--- 原说明 ---
+Given
+```
+Y₃ - i₃ -> X₃
+|          |
+g₂         f₂
+∨          ∨
+Y₂ - i₂ -> X₂
+|          |
+g₁         f₁
+∨          ∨
+Y₁ - i₁ -> X₁
+```
+The top square is a pullback if the bottom square and the big square are.
 -/
 def topSquareIsPullback (H₁ : IsLimit t₁) (H₂ : IsLimit (t₁.pasteVert t₂ hi₂)) : IsLimit t₂ :=
   PullbackCone.isLimitOfFlip
     (leftSquareIsPullback _ hi₂ (PullbackCone.flipIsLimit H₁) (PullbackCone.flipIsLimit H₂))
 
-/--
-Definition of `pasteVertIsPullbackEquiv` / `pasteVertIsPullbackEquiv` 的定义
+/-- Given that the bottom square is a pullback, the pasted square is a pullback iff the top
+square is. -/
+/-
+**CategoryTheory.Limits.pasteVertIsPullbackEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Limits`。
+形式化陈述：pasteVertIsPullbackEquiv (H : IsLimit t₁) : IsLimit (t₁.pasteVert t₂ hi₂) 
+≃ IsLimit t₂ where toFun H'
+参数：H : IsLimit t₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pasteVertIsPullbackEquiv
-  signature: (H : IsLimit t₁)
-  body: topSquareIsPullback t₂ _ H H'
-  invFun H' := pasteVertIsPullback _ H H'
-  left_inv _ := Subsingleton.elim _ _
-  right_inv _ := Subsingleton.elim _ _
-
-中文:
-定义 pasteVertIsPullbackEquiv
-  签名: (H : 是极限 t₁)
-  定义体: topSquareIsPullback t₂ _ H H'
-  invFun H' := pasteVertIsPullback _ H H'
-  left_inv _ := Subsingleton.elim _ _
-  right_inv _ := Subsingleton.elim _ _
-
-Depends on / 依赖: topSquareIsPullback
+--- 原说明 ---
+Given that the bottom square is a pullback, the pasted square is a pullback iff 
+the top
+square is.
 -/
 def pasteVertIsPullbackEquiv (H : IsLimit t₁) : IsLimit (t₁.pasteVert t₂ hi₂) ≃ IsLimit t₂ where
   toFun H' := topSquareIsPullback t₂ _ H H'
@@ -397,29 +408,31 @@ section PastePushoutHoriz
 /- Let's consider the following diagram
 ```
 X₁ - f₁ -> X₂ - f₂ -> X₃
-| | |
-i₁ i₂ i₃
-∨ ∨ ∨
+|          |          |
+i₁         i₂         i₃
+∨          ∨          ∨
 Y₁ - g₁ -> Y₂ - g₂ -> Y₃
 ```
 where `t₁` denotes the left pushout cocone, and `t₂` denotes the right pushout cocone.
 -/
 variable {X₁ X₂ X₃ Y₁ : C} {f₁ : X₁ ⟶ X₂} {f₂ : X₂ ⟶ X₃} {i₁ : X₁ ⟶ Y₁}
 
-/--
-Definition of `PushoutCocone.pasteHoriz` / `PushoutCocone.pasteHoriz` 的定义
+/-- The pushout cocone obtained by pasting two pushout cocones horizontally. -/
+/-
+**CategoryTheory.Limits.PushoutCocone.pasteHoriz** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Limits.PushoutCocone`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {X₁ X₂ X₃
+ Y₁ : C} →       {f₁ : X₁ ⟶ X₂} →         {f₂ : X₂ ⟶ X₃} →           {i₁ : X₁ ⟶ 
+Y₁} →             (t₁ : CategoryTheory.Limits.PushoutCocone i₁ f₁) →            
+   {i₂ : X₂ ⟶ t₁.pt} →                 CategoryTheory.Limits.PushoutCocone i₂ f₂
+ →                   i₂ = t₁.inr → CategoryTheory.Limits.PushoutCocone i₁ (Categ
+oryTheory.CategoryStruct.comp f₁ f₂)
+参数：t₁ : CategoryTheory.Limits.PushoutCocone i₁ f₁；CategoryTheory.CategoryStruct.
+comp f₁ f₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation PushoutCocone.pasteHoriz
-  body: PushoutCocone.mk (t₁.inl ≫ t₂.inl) t₂.inr
-    (by rw [reassoc_of% t₁.condition, Category.assoc, ← t₂.condition, ← hi₂])
-
-中文:
-缩写 PushoutCocone.pasteHoriz
-  定义体: PushoutCocone.mk (t₁.inl ≫ t₂.inl) t₂.inr
-    (by rw [reassoc_of% t₁.condition, Category.assoc, ← t₂.condition, ← hi₂])
-
-Depends on / 依赖: Category, Category.assoc, PushoutCocone, PushoutCocone.mk, condition, reassoc_of
+--- 原说明 ---
+The pushout cocone obtained by pasting two pushout cocones horizontally.
 -/
 abbrev PushoutCocone.pasteHoriz
     (t₁ : PushoutCocone i₁ f₁) {i₂ : X₂ ⟶ t₁.pt} (t₂ : PushoutCocone i₂ f₂) (hi₂ : i₂ = t₁.inr) :
@@ -440,48 +453,35 @@ variable {t₁} {t₂}
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `pasteHorizIsPushout` / `pasteHorizIsPushout` 的定义
+/-- Given
+```
+X₁ - f₁ -> X₂ - f₂ -> X₃
+|          |          |
+i₁         i₂         i₃
+∨          ∨          ∨
+Y₁ - g₁ -> Y₂ - g₂ -> Y₃
+```
+Then the big square is a pushout if both the small squares are.
+-/
+/-
+**CategoryTheory.Limits.pasteHorizIsPushout** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Limits`。
+形式化陈述：pasteHorizIsPushout (H : IsColimit t₁) (H' : IsColimit t₂) : IsColimit (t₁
+.pasteHoriz t₂ hi₂)
+参数：H : IsColimit t₁；H' : IsColimit t₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pasteHorizIsPushout
-  signature: (H : IsColimit t₁) (H' : IsColimit t₂)
-  body: by
-  apply PushoutCocone.isColimitAux'
-  intro s
-  -- Obtain the induced map from descending from both the small squares consecutively.
-  obtain ⟨l₁, hl₁, hl₁'⟩ := PushoutCocone.IsColimit.desc' H s.inl (f₂ ≫ s.inr)
-    (by rw [s.condition, Category.assoc])
-  obtain ⟨l₂, hl₂, hl₂'⟩ := PushoutCocone.IsColimit.desc' H' l₁ s.inr (by rw [← hl₁', hi₂])
-  refine ⟨l₂, by simp [hl₂, hl₁], hl₂', ?_⟩
-  -- Uniqueness also follows from the universal property of both the small squares.
-  intro m hm₁ hm₂
-  apply PushoutCocone.IsColimit.hom_ext H' _ (by simpa [hl₂'] using hm₂)
-  simp only [PushoutCocone.mk_pt, PushoutCocone.mk_ι_app, Category.assoc] at hm₁ hm₂
-  apply PushoutCocone.IsColimit.hom_ext H
-  · rw [hm₁, ← hl₁, hl₂]
-  · rw [← hi₂, reassoc_of% t₂.condition, reassoc_of% t₂.condition, hm₂, hl₂']
-
-中文:
-定义 pasteHorizIsPushout
-  签名: (H : 是余极限 t₁) (H' : 是余极限 t₂)
-  定义体: by
-  apply PushoutCocone.isColimitAux'
-  intro s
-  -- Obtain the induced map from descending from both the small squares consecutively.
-  obtain ⟨l₁, hl₁, hl₁'⟩ := PushoutCocone.IsColimit.desc' H s.inl (f₂ ≫ s.inr)
-    (by rw [s.condition, Category.assoc])
-  obtain ⟨l₂, hl₂, hl₂'⟩ := PushoutCocone.IsColimit.desc' H' l₁ s.inr (by rw [← hl₁', hi₂])
-  refine ⟨l₂, by simp [hl₂, hl₁], hl₂', ?_⟩
-  -- Uniqueness also follows from the universal property of both the small squares.
-  intro m hm₁ hm₂
-  apply PushoutCocone.IsColimit.hom_ext H' _ (by simpa [hl₂'] using hm₂)
-  simp only [PushoutCocone.mk_pt, PushoutCocone.mk_ι_app, Category.assoc] at hm₁ hm₂
-  apply PushoutCocone.IsColimit.hom_ext H
-  · rw [hm₁, ← hl₁, hl₂]
-  · rw [← hi₂, reassoc_of% t₂.condition, reassoc_of% t₂.condition, hm₂, hl₂']
-
-Depends on / 依赖: PushoutCocone, PushoutCocone.isColimitAux, isColimitAux
+--- 原说明 ---
+Given
+```
+X₁ - f₁ -> X₂ - f₂ -> X₃
+|          |          |
+i₁         i₂         i₃
+∨          ∨          ∨
+Y₁ - g₁ -> Y₂ - g₂ -> Y₃
+```
+Then the big square is a pushout if both the small squares are.
 -/
 def pasteHorizIsPushout (H : IsColimit t₁) (H' : IsColimit t₂) :
     IsColimit (t₁.pasteHoriz t₂ hi₂) := by
@@ -504,50 +504,35 @@ variable (t₂)
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `rightSquareIsPushout` / `rightSquareIsPushout` 的定义
+/-- Given
 
-English:
-definition rightSquareIsPushout
-  signature: (H : IsColimit t₁) (H' : IsColimit (t₁.pasteHoriz t₂ hi₂))
-  body: by
-  apply PushoutCocone.isColimitAux'
-  intro s
-  -- Obtain the induced morphism from the universal property of the big square
-  obtain ⟨l, hl, hl'⟩ := PushoutCocone.IsColimit.desc' H' (g₁ ≫ s.inl) s.inr
-    (by rw [reassoc_of% t₁.condition, ← hi₂, s.condition, Category.assoc])
-  refine ⟨l, ?_, hl', ?_⟩
-  -- To check that `l` is compatible with the projections, we use the universal property of `t₁`
-  · simp only [PushoutCocone.mk_pt, PushoutCocone.mk_ι_app, Category.assoc] at hl hl'
-    apply PushoutCocone.IsColimit.hom_ext H hl
-    rw [← Category.assoc]; rw [← hi₂]; rw [t₂.condition]; rw [s.condition]; rw [Category.assoc]; rw [hl']
-  -- Uniqueness of the lift follows from the universal property of the big square
-  · intro m hm₁ hm₂
-    apply PushoutCocone.IsColimit.hom_ext H'
-    · simpa [← hm₁] using hl.symm
-    · simpa [← hm₂] using hl'.symm
+X₁ - f₁ -> X₂ - f₂ -> X₃
+|          |          |
+i₁         i₂         i₃
+∨          ∨          ∨
+Y₁ - g₁ -> Y₂ - g₂ -> Y₃
 
-中文:
-定义 rightSquareIsPushout
-  签名: (H : 是余极限 t₁) (H' : 是余极限 (t₁.pasteHoriz t₂ hi₂))
-  定义体: by
-  apply PushoutCocone.isColimitAux'
-  intro s
-  -- Obtain the induced morphism from the universal property of the big square
-  obtain ⟨l, hl, hl'⟩ := PushoutCocone.IsColimit.desc' H' (g₁ ≫ s.inl) s.inr
-    (by rw [reassoc_of% t₁.condition, ← hi₂, s.condition, Category.assoc])
-  refine ⟨l, ?_, hl', ?_⟩
-  -- To check that `l` is compatible with the projections, we use the universal property of `t₁`
-  · simp only [PushoutCocone.mk_pt, PushoutCocone.mk_ι_app, Category.assoc] at hl hl'
-    apply PushoutCocone.IsColimit.hom_ext H hl
-    rw [← Category.assoc]; rw [← hi₂]; rw [t₂.condition]; rw [s.condition]; rw [Category.assoc]; rw [hl']
-  -- Uniqueness of the lift follows from the universal property of the big square
-  · intro m hm₁ hm₂
-    apply PushoutCocone.IsColimit.hom_ext H'
-    · simpa [← hm₁] using hl.symm
-    · simpa [← hm₂] using hl'.symm
+Then the right square is a pushout if the left square and the big square are.
+-/
+/-
+**CategoryTheory.Limits.rightSquareIsPushout** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Limits`。
+形式化陈述：rightSquareIsPushout (H : IsColimit t₁) (H' : IsColimit (t₁.pasteHoriz t₂ 
+hi₂)) : IsColimit t₂
+参数：H : IsColimit t₁；H' : IsColimit (t₁.pasteHoriz t₂ hi₂)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: PushoutCocone, PushoutCocone.isColimitAux, isColimitAux
+--- 原说明 ---
+Given
+
+X₁ - f₁ -> X₂ - f₂ -> X₃
+|          |          |
+i₁         i₂         i₃
+∨          ∨          ∨
+Y₁ - g₁ -> Y₂ - g₂ -> Y₃
+
+Then the right square is a pushout if the left square and the big square are.
 -/
 def rightSquareIsPushout (H : IsColimit t₁) (H' : IsColimit (t₁.pasteHoriz t₂ hi₂)) :
     IsColimit t₂ := by
@@ -560,33 +545,27 @@ def rightSquareIsPushout (H : IsColimit t₁) (H' : IsColimit (t₁.pasteHoriz t
   -- To check that `l` is compatible with the projections, we use the universal property of `t₁`
   · simp only [PushoutCocone.mk_pt, PushoutCocone.mk_ι_app, Category.assoc] at hl hl'
     apply PushoutCocone.IsColimit.hom_ext H hl
-    rw [← Category.assoc]; rw [← hi₂]; rw [t₂.condition]; rw [s.condition]; rw [Category.assoc]; rw [hl']
+    rw [← Category.assoc, ← hi₂, t₂.condition, s.condition, Category.assoc, hl']
   -- Uniqueness of the lift follows from the universal property of the big square
   · intro m hm₁ hm₂
     apply PushoutCocone.IsColimit.hom_ext H'
     · simpa [← hm₁] using hl.symm
     · simpa [← hm₂] using hl'.symm
 
-/--
-Definition of `pasteHorizIsPushoutEquiv` / `pasteHorizIsPushoutEquiv` 的定义
+/-- Given that the left square is a pushout, the pasted square is a pushout iff the right square is.
+-/
+/-
+**CategoryTheory.Limits.pasteHorizIsPushoutEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Limits`。
+形式化陈述：pasteHorizIsPushoutEquiv (H : IsColimit t₁) : IsColimit (t₁.pasteHoriz t₂ 
+hi₂) ≃ IsColimit t₂ where toFun H'
+参数：H : IsColimit t₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pasteHorizIsPushoutEquiv
-  signature: (H : IsColimit t₁)
-  body: rightSquareIsPushout t₂ _ H H'
-  invFun H' := pasteHorizIsPushout _ H H'
-  left_inv _ := Subsingleton.elim _ _
-  right_inv _ := Subsingleton.elim _ _
-
-中文:
-定义 pasteHorizIsPushoutEquiv
-  签名: (H : 是余极限 t₁)
-  定义体: rightSquareIsPushout t₂ _ H H'
-  invFun H' := pasteHorizIsPushout _ H H'
-  left_inv _ := Subsingleton.elim _ _
-  right_inv _ := Subsingleton.elim _ _
-
-Depends on / 依赖: rightSquareIsPushout
+--- 原说明 ---
+Given that the left square is a pushout, the pasted square is a pushout iff the 
+right square is.
 -/
 def pasteHorizIsPushoutEquiv (H : IsColimit t₁) :
     IsColimit (t₁.pasteHoriz t₂ hi₂) ≃ IsColimit t₂ where
@@ -602,13 +581,13 @@ section PastePushoutVert
 /- Let's consider the following diagram
 ```
 Y₃ - i₃ -> X₃
-| |
-g₂ f₂
-∨ ∨
+|          |
+g₂         f₂
+∨          ∨
 Y₂ - i₂ -> X₂
-| |
-g₁ f₁
-∨ ∨
+|          |
+g₁         f₁
+∨          ∨
 Y₁ - i₁ -> X₁
 ```
 Let `t₁` denote the cone corresponding to the bottom square, and `t₂` denote the cone corresponding
@@ -618,34 +597,22 @@ variable {Y₃ Y₂ Y₁ X₃ : C} {g₂ : Y₃ ⟶ Y₂} {g₁ : Y₂ ⟶ Y₁}
 variable (t₁ : PushoutCocone g₂ i₃) {i₂ : Y₂ ⟶ t₁.pt} (t₂ : PushoutCocone g₁ i₂)
   (hi₂ : i₂ = t₁.inl)
 
-/--
-Definition of `PushoutCocone.pasteVert` / `PushoutCocone.pasteVert` 的定义
+/-- The `PullbackCone` obtained by pasting two `PullbackCone`'s vertically -/
+/-
+**CategoryTheory.Limits.PushoutCocone.pasteVert** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits.PushoutCocone`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {Y₃ Y₂ Y₁
+ X₃ : C} →       {g₂ : Y₃ ⟶ Y₂} →         {g₁ : Y₂ ⟶ Y₁} →           {i₃ : Y₃ ⟶ 
+X₃} →             (t₁ : CategoryTheory.Limits.PushoutCocone g₂ i₃) →            
+   {i₂ : Y₂ ⟶ t₁.pt} →                 CategoryTheory.Limits.PushoutCocone g₁ i₂
+ →                   i₂ = t₁.inl → CategoryTheory.Limits.PushoutCocone (Category
+Theory.CategoryStruct.comp g₂ g₁) i₃
+参数：t₁ : CategoryTheory.Limits.PushoutCocone g₂ i₃；CategoryTheory.CategoryStruct.
+comp g₂ g₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation PushoutCocone.pasteVert
-  body: PushoutCocone.mk t₂.inl (t₁.inr ≫ t₂.inr)
-    (by rw [← reassoc_of% t₁.condition, Category.assoc, t₂.condition, ← hi₂])
-
-local notation "X₂" => t₁.pt
-local notation "f₂" => t₁.inr
-local notation "i₂" => t₁.inl
-local notation "X₁" => t₂.pt
-local notation "f₁" => t₂.inr
-local notation "i₁" => t₂.inl
-
-中文:
-缩写 PushoutCocone.pasteVert
-  定义体: PushoutCocone.mk t₂.inl (t₁.inr ≫ t₂.inr)
-    (by rw [← reassoc_of% t₁.condition, Category.assoc, t₂.condition, ← hi₂])
-
-local notation "X₂" => t₁.pt
-local notation "f₂" => t₁.inr
-local notation "i₂" => t₁.inl
-local notation "X₁" => t₂.pt
-local notation "f₁" => t₂.inr
-local notation "i₁" => t₂.inl
-
-Depends on / 依赖: Category, Category.assoc, PushoutCocone, PushoutCocone.mk, condition, reassoc_of
+--- 原说明 ---
+The `PullbackCone` obtained by pasting two `PullbackCone`'s vertically
 -/
 abbrev PushoutCocone.pasteVert
     (t₁ : PushoutCocone g₂ i₃) {i₂ : Y₂ ⟶ t₁.pt} (t₂ : PushoutCocone g₁ i₂) (hi₂ : i₂ = t₁.inl) :
@@ -661,93 +628,132 @@ local notation "f₁" => t₂.inr
 local notation "i₁" => t₂.inl
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `PushoutCocone.pasteVertFlip` / `PushoutCocone.pasteVertFlip` 的定义
+/-- Pasting two pushout cocones vertically is isomorphic to the pushout cocone obtained by flipping
+them, pasting horizontally, and then flipping the result again. -/
+/-
+**CategoryTheory.Limits.PushoutCocone.pasteVertFlip** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Limits.PushoutCocone`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {Y₃ Y₂ Y₁
+ X₃ : C} →       {g₂ : Y₃ ⟶ Y₂} →         {g₁ : Y₂ ⟶ Y₁} →           {i₃ : Y₃ ⟶ 
+X₃} →             (t₁ : CategoryTheory.Limits.PushoutCocone g₂ i₃) →            
+   {i₂ : Y₂ ⟶ t₁.pt} →                 (t₂ : CategoryTheory.Limits.PushoutCocone
+ g₁ i₂) →                   (hi₂ : i₂ = t₁.inl) → (t₁.pasteVert t₂ hi₂).flip ≅ t
+₁.flip.pasteHoriz t₂.flip hi₂
+参数：t₁ : CategoryTheory.Limits.PushoutCocone g₂ i₃；t₂ : CategoryTheory.Limits.Pus
+houtCocone g₁ i₂；hi₂ : i₂ = t₁.inl；t₁.pasteVert t₂ hi₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PushoutCocone.pasteVertFlip
-  signature: : (t₁.pasteVert t₂ hi₂).flip ≅ (t₁.flip.pasteHoriz t₂.flip hi₂)
-  body: PushoutCocone.ext (Iso.refl _) (by simp) (by simp)
-
-中文:
-定义 PushoutCocone.pasteVertFlip
-  签名: : (t₁.pasteVert t₂ hi₂).flip ≅ (t₁.flip.pasteHoriz t₂.flip hi₂)
-  定义体: PushoutCocone.ext (Iso.refl _) (by simp) (by simp)
-
-Depends on / 依赖: Iso.refl, PushoutCocone, PushoutCocone.ext
+--- 原说明 ---
+Pasting two pushout cocones vertically is isomorphic to the pushout cocone obtai
+ned by flipping
+them, pasting horizontally, and then flipping the result again.
 -/
 def PushoutCocone.pasteVertFlip : (t₁.pasteVert t₂ hi₂).flip ≅ (t₁.flip.pasteHoriz t₂.flip hi₂) :=
   PushoutCocone.ext (Iso.refl _) (by simp) (by simp)
 
 variable {t₁} {t₂}
 
-/--
-Definition of `pasteVertIsPushout` / `pasteVertIsPushout` 的定义
+/-- Given
+```
+Y₃ - i₃ -> X₃
+|          |
+g₂         f₂
+∨          ∨
+Y₂ - i₂ -> X₂
+|          |
+g₁         f₁
+∨          ∨
+Y₁ - i₁ -> X₁
+```
+The big square is a pushout if both the small squares are.
+-/
+/-
+**CategoryTheory.Limits.pasteVertIsPushout** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Limits`。
+形式化陈述：pasteVertIsPushout (H₁ : IsColimit t₁) (H₂ : IsColimit t₂) : IsColimit (t₁
+.pasteVert t₂ hi₂)
+参数：H₁ : IsColimit t₁；H₂ : IsColimit t₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pasteVertIsPushout
-  signature: (H₁ : IsColimit t₁) (H₂ : IsColimit t₂)
-  body: by
-apply PushoutCocone.isColimitOfFlip IsColimit.ofIsoColimit _ (t₁.pasteVertFlip t₂ hi₂).symm
-  exact pasteHorizIsPushout hi₂ (PushoutCocone.flipIsColimit H₁) (PushoutCocone.flipIsColimit H₂)
-
-中文:
-定义 pasteVertIsPushout
-  签名: (H₁ : 是余极限 t₁) (H₂ : 是余极限 t₂)
-  定义体: by
-apply PushoutCocone.isColimitOfFlip IsColimit.ofIsoColimit _ (t₁.pasteVertFlip t₂ hi₂).symm
-  exact pasteHorizIsPushout hi₂ (PushoutCocone.flipIsColimit H₁) (PushoutCocone.flipIsColimit H₂)
-
-Depends on / 依赖: IsColimit, IsColimit.ofIsoColimit, PushoutCocone, PushoutCocone.flipIsColimit, PushoutCocone.isColimitOfFlip, flipIsColimit, isColimitOfFlip, ofIsoColimit, pasteHorizIsPushout, pasteVertFlip
+--- 原说明 ---
+Given
+```
+Y₃ - i₃ -> X₃
+|          |
+g₂         f₂
+∨          ∨
+Y₂ - i₂ -> X₂
+|          |
+g₁         f₁
+∨          ∨
+Y₁ - i₁ -> X₁
+```
+The big square is a pushout if both the small squares are.
 -/
 def pasteVertIsPushout (H₁ : IsColimit t₁) (H₂ : IsColimit t₂) :
     IsColimit (t₁.pasteVert t₂ hi₂) := by
-apply PushoutCocone.isColimitOfFlip IsColimit.ofIsoColimit _ (t₁.pasteVertFlip t₂ hi₂).symm
+  apply PushoutCocone.isColimitOfFlip <| IsColimit.ofIsoColimit _ (t₁.pasteVertFlip t₂ hi₂).symm
   exact pasteHorizIsPushout hi₂ (PushoutCocone.flipIsColimit H₁) (PushoutCocone.flipIsColimit H₂)
 
 variable (t₂)
 
-/--
-Definition of `botSquareIsPushout` / `botSquareIsPushout` 的定义
+/-- Given
+```
+Y₃ - i₃ -> X₃
+|          |
+g₂         f₂
+∨          ∨
+Y₂ - i₂ -> X₂
+|          |
+g₁         f₁
+∨          ∨
+Y₁ - i₁ -> X₁
+```
+The bottom square is a pushout if the top square and the big square are.
+-/
+/-
+**CategoryTheory.Limits.botSquareIsPushout** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Limits`。
+形式化陈述：botSquareIsPushout (H₁ : IsColimit t₁) (H₂ : IsColimit (t₁.pasteVert t₂ hi
+₂)) : IsColimit t₂
+参数：H₁ : IsColimit t₁；H₂ : IsColimit (t₁.pasteVert t₂ hi₂)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition botSquareIsPushout
-  signature: (H₁ : IsColimit t₁) (H₂ : IsColimit (t₁.pasteVert t₂ hi₂))
-  body: PushoutCocone.isColimitOfFlip
-    (rightSquareIsPushout _ hi₂ (PushoutCocone.flipIsColimit H₁) (PushoutCocone.flipIsColimit H₂))
-
-中文:
-定义 botSquareIsPushout
-  签名: (H₁ : 是余极限 t₁) (H₂ : 是余极限 (t₁.pasteVert t₂ hi₂))
-  定义体: PushoutCocone.isColimitOfFlip
-    (rightSquareIsPushout _ hi₂ (PushoutCocone.flipIsColimit H₁) (PushoutCocone.flipIsColimit H₂))
-
-Depends on / 依赖: PushoutCocone, PushoutCocone.flipIsColimit, PushoutCocone.isColimitOfFlip, flipIsColimit, isColimitOfFlip, rightSquareIsPushout
+--- 原说明 ---
+Given
+```
+Y₃ - i₃ -> X₃
+|          |
+g₂         f₂
+∨          ∨
+Y₂ - i₂ -> X₂
+|          |
+g₁         f₁
+∨          ∨
+Y₁ - i₁ -> X₁
+```
+The bottom square is a pushout if the top square and the big square are.
 -/
 def botSquareIsPushout (H₁ : IsColimit t₁) (H₂ : IsColimit (t₁.pasteVert t₂ hi₂)) : IsColimit t₂ :=
   PushoutCocone.isColimitOfFlip
     (rightSquareIsPushout _ hi₂ (PushoutCocone.flipIsColimit H₁) (PushoutCocone.flipIsColimit H₂))
 
-/--
-Definition of `pasteVertIsPushoutEquiv` / `pasteVertIsPushoutEquiv` 的定义
+/-- Given that the top square is a pushout, the pasted square is a pushout iff the bottom square is.
+-/
+/-
+**CategoryTheory.Limits.pasteVertIsPushoutEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits`。
+形式化陈述：pasteVertIsPushoutEquiv (H : IsColimit t₁) : IsColimit (t₁.pasteVert t₂ hi
+₂) ≃ IsColimit t₂ where toFun H'
+参数：H : IsColimit t₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pasteVertIsPushoutEquiv
-  signature: (H : IsColimit t₁)
-  body: botSquareIsPushout t₂ _ H H'
-  invFun H' := pasteVertIsPushout _ H H'
-  left_inv _ := Subsingleton.elim _ _
-  right_inv _ := Subsingleton.elim _ _
-
-中文:
-定义 pasteVertIsPushoutEquiv
-  签名: (H : 是余极限 t₁)
-  定义体: botSquareIsPushout t₂ _ H H'
-  invFun H' := pasteVertIsPushout _ H H'
-  left_inv _ := Subsingleton.elim _ _
-  right_inv _ := Subsingleton.elim _ _
-
-Depends on / 依赖: botSquareIsPushout
+--- 原说明 ---
+Given that the top square is a pushout, the pasted square is a pushout iff the b
+ottom square is.
 -/
 def pasteVertIsPushoutEquiv (H : IsColimit t₁) :
     IsColimit (t₁.pasteVert t₂ hi₂) ≃ IsColimit t₂ where
@@ -764,10 +770,10 @@ section
 /- Let's consider the following diagram of pullbacks
 ```
 W ×[X] (X ×[Z] Y) --snd--> X ×[Z] Y --snd--> Y
-  | | |
- fst fst g
-  v v v
-  W --------- f' ---------> X ---- f ---> Y
+  |                           |              |
+ fst                         fst             g
+  v                           v              v
+  W --------- f' --------->   X  ---- f ---> Y
 ```
 In this section we show that `W ×[X] (X ×[Z] Y) ≅ W ×[Z] Y`.
 -/
@@ -775,28 +781,15 @@ In this section we show that `W ×[X] (X ×[Z] Y) ≅ W ×[Z] Y`.
 variable {W X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) (f' : W ⟶ X)
 variable [HasPullback f g] [HasPullback f' (pullback.fst f g)]
 
-/--
-Instance `hasPullbackHorizPaste` / 实例 `hasPullbackHorizPaste`
-
-English:
-instance hasPullbackHorizPaste
-  signature: : HasPullback (f' ≫ f) g
-  body: HasLimit.mk {
-    cone := (pullback.cone f g).pasteHoriz (pullback.cone f' (pullback.fst f g)) rfl
-    isLimit := pasteHorizIsPullback rfl (pullback.isLimit f g)
-      (pullback.isLimit f' (pullback.fst f g))
-  }
-
-中文:
-实例 hasPullbackHorizPaste
-  签名: : HasPullback (f' ≫ f) g
-  定义体: HasLimit.mk {
-    cone := (pullback.cone f g).pasteHoriz (pullback.cone f' (pullback.fst f g)) rfl
-    isLimit := pasteHorizIsPullback rfl (pullback.isLimit f g)
-      (pullback.isLimit f' (pullback.fst f g))
-  }
-
-Depends on / 依赖: HasLimit, HasLimit.mk, isLimit, pasteHoriz, pasteHorizIsPullback, pullback, pullback.cone, pullback.fst, pullback.isLimit
+/-
+**CategoryTheory.Limits.hasPullbackHorizPaste** 是 Mathlib 中的一个实例，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：hasPullbackHorizPaste : HasPullback (f' ≫ f) g
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasLimit.mk`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C] 
+  {F : CategoryTheory.F…
 -/
 instance hasPullbackHorizPaste : HasPullback (f' ≫ f) g :=
   HasLimit.mk {
@@ -805,28 +798,17 @@ instance hasPullbackHorizPaste : HasPullback (f' ≫ f) g :=
       (pullback.isLimit f' (pullback.fst f g))
   }
 
-/--
-Definition of `pullbackRightPullbackFstIso` / `pullbackRightPullbackFstIso` 的定义
+/-- The canonical isomorphism `W ×[X] (X ×[Z] Y) ≅ W ×[Z] Y` -/
+/-
+**CategoryTheory.Limits.pullbackRightPullbackFstIso** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Limits`。
+形式化陈述：pullbackRightPullbackFstIso : pullback f' (pullback.fst f g) ≅ pullback (f
+' ≫ f) g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pullbackRightPullbackFstIso
-  signature: :
-  body: IsLimit.conePointUniqueUpToIso
-    (pasteHorizIsPullback rfl (pullback.isLimit f g) (pullback.isLimit f' (pullback.fst f g)))
-    (pullback.isLimit (f' ≫ f) g)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 pullbackRightPullbackFstIso
-  签名: :
-  定义体: IsLimit.conePointUniqueUpToIso
-    (pasteHorizIsPullback rfl (pullback.isLimit f g) (pullback.isLimit f' (pullback.fst f g)))
-    (pullback.isLimit (f' ≫ f) g)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso, conePointUniqueUpToIso, isLimit, pasteHorizIsPullback, pullback, pullback.fst, pullback.isLimit
+--- 原说明 ---
+The canonical isomorphism `W ×[X] (X ×[Z] Y) ≅ W ×[Z] Y`
 -/
 noncomputable def pullbackRightPullbackFstIso :
     pullback f' (pullback.fst f g) ≅ pullback (f' ≫ f) g :=
@@ -835,22 +817,16 @@ noncomputable def pullbackRightPullbackFstIso :
     (pullback.isLimit (f' ≫ f) g)
 
 @[reassoc (attr := simp)]
-/--
-theorem `pullbackRightPullbackFstIso_hom_fst` / 定理 `pullbackRightPullbackFstIso_hom_fst`
-
-English:
-theorem pullbackRightPullbackFstIso_hom_fst
-  proof: IsLimit.conePointUniqueUpToIso_hom_comp _ _ WalkingCospan.left
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 pullbackRightPullbackFstIso_hom_fst
-  证明: IsLimit.conePointUniqueUpToIso_hom_comp _ _ WalkingCospan.left
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso_hom_comp, WalkingCospan, WalkingCospan.left, conePointUniqueUpToIso_hom_comp
+/-
+**CategoryTheory.Limits.pullbackRightPullbackFstIso_hom_fst** 是 Mathlib 中的一个定理，位
+于命名空间 `CategoryTheory.Limits`。
+形式化陈述：pullbackRightPullbackFstIso_hom_fst : (pullbackRightPullbackFstIso f g f')
+.hom ≫ pullback.fst (f' ≫ f) g = pullback.fst f' (pullback.fst f g)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso_hom_comp`：conePoint
+UniqueUpToIso_hom_comp {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J) : 
+(conePointUniqueUpToIso P Q).hom ≫ t.π.app j = s.π.…
 -/
 theorem pullbackRightPullbackFstIso_hom_fst :
     (pullbackRightPullbackFstIso f g f').hom ≫ pullback.fst (f' ≫ f) g =
@@ -858,22 +834,16 @@ theorem pullbackRightPullbackFstIso_hom_fst :
   IsLimit.conePointUniqueUpToIso_hom_comp _ _ WalkingCospan.left
 
 @[reassoc (attr := simp)]
-/--
-theorem `pullbackRightPullbackFstIso_hom_snd` / 定理 `pullbackRightPullbackFstIso_hom_snd`
-
-English:
-theorem pullbackRightPullbackFstIso_hom_snd
-  proof: IsLimit.conePointUniqueUpToIso_hom_comp _ _ WalkingCospan.right
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 pullbackRightPullbackFstIso_hom_snd
-  证明: IsLimit.conePointUniqueUpToIso_hom_comp _ _ WalkingCospan.right
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso_hom_comp, WalkingCospan, WalkingCospan.right, conePointUniqueUpToIso_hom_comp
+/-
+**CategoryTheory.Limits.pullbackRightPullbackFstIso_hom_snd** 是 Mathlib 中的一个定理，位
+于命名空间 `CategoryTheory.Limits`。
+形式化陈述：pullbackRightPullbackFstIso_hom_snd : (pullbackRightPullbackFstIso f g f')
+.hom ≫ pullback.snd _ _ = pullback.snd f' (pullback.fst f g) ≫ pullback.snd f g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso_hom_comp`：conePoint
+UniqueUpToIso_hom_comp {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J) : 
+(conePointUniqueUpToIso P Q).hom ≫ t.π.app j = s.π.…
 -/
 theorem pullbackRightPullbackFstIso_hom_snd :
     (pullbackRightPullbackFstIso f g f').hom ≫ pullback.snd _ _ =
@@ -881,22 +851,16 @@ theorem pullbackRightPullbackFstIso_hom_snd :
   IsLimit.conePointUniqueUpToIso_hom_comp _ _ WalkingCospan.right
 
 @[reassoc (attr := simp)]
-/--
-theorem `pullbackRightPullbackFstIso_inv_fst` / 定理 `pullbackRightPullbackFstIso_inv_fst`
-
-English:
-theorem pullbackRightPullbackFstIso_inv_fst
-  proof: IsLimit.conePointUniqueUpToIso_inv_comp _ _ WalkingCospan.left
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 pullbackRightPullbackFstIso_inv_fst
-  证明: IsLimit.conePointUniqueUpToIso_inv_comp _ _ WalkingCospan.left
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso_inv_comp, WalkingCospan, WalkingCospan.left, conePointUniqueUpToIso_inv_comp
+/-
+**CategoryTheory.Limits.pullbackRightPullbackFstIso_inv_fst** 是 Mathlib 中的一个定理，位
+于命名空间 `CategoryTheory.Limits`。
+形式化陈述：pullbackRightPullbackFstIso_inv_fst : (pullbackRightPullbackFstIso f g f')
+.inv ≫ pullback.fst f' (pullback.fst f g) = pullback.fst (f' ≫ f) g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso_inv_comp`：conePoint
+UniqueUpToIso_inv_comp {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J) : 
+(conePointUniqueUpToIso P Q).inv ≫ s.π.app j = t.π.…
 -/
 theorem pullbackRightPullbackFstIso_inv_fst :
     (pullbackRightPullbackFstIso f g f').inv ≫ pullback.fst f' (pullback.fst f g) =
@@ -904,22 +868,16 @@ theorem pullbackRightPullbackFstIso_inv_fst :
   IsLimit.conePointUniqueUpToIso_inv_comp _ _ WalkingCospan.left
 
 @[reassoc (attr := simp)]
-/--
-theorem `pullbackRightPullbackFstIso_inv_snd_snd` / 定理 `pullbackRightPullbackFstIso_inv_snd_snd`
-
-English:
-theorem pullbackRightPullbackFstIso_inv_snd_snd
-  proof: IsLimit.conePointUniqueUpToIso_inv_comp _ _ WalkingCospan.right
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 pullbackRightPullbackFstIso_inv_snd_snd
-  证明: IsLimit.conePointUniqueUpToIso_inv_comp _ _ WalkingCospan.right
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso_inv_comp, WalkingCospan, WalkingCospan.right, conePointUniqueUpToIso_inv_comp
+/-
+**CategoryTheory.Limits.pullbackRightPullbackFstIso_inv_snd_snd** 是 Mathlib 中的一个
+定理，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：pullbackRightPullbackFstIso_inv_snd_snd : (pullbackRightPullbackFstIso f g
+ f').inv ≫ pullback.snd _ _ ≫ pullback.snd _ _ = pullback.snd _ _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso_inv_comp`：conePoint
+UniqueUpToIso_inv_comp {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J) : 
+(conePointUniqueUpToIso P Q).inv ≫ s.π.app j = t.π.…
 -/
 theorem pullbackRightPullbackFstIso_inv_snd_snd :
     (pullbackRightPullbackFstIso f g f').inv ≫ pullback.snd _ _ ≫ pullback.snd _ _ =
@@ -927,22 +885,22 @@ theorem pullbackRightPullbackFstIso_inv_snd_snd :
   IsLimit.conePointUniqueUpToIso_inv_comp _ _ WalkingCospan.right
 
 @[reassoc (attr := simp)]
-/--
-theorem `pullbackRightPullbackFstIso_inv_snd_fst` / 定理 `pullbackRightPullbackFstIso_inv_snd_fst`
-
-English:
-theorem pullbackRightPullbackFstIso_inv_snd_fst
-  proof: by
-  rw [← pullback.condition]
-  exact pullbackRightPullbackFstIso_inv_fst_assoc f g f' _
-
-中文:
-定理 pullbackRightPullbackFstIso_inv_snd_fst
-  证明: by
-  rw [← pullback.condition]
-  exact pullbackRightPullbackFstIso_inv_fst_assoc f g f' _
-
-Depends on / 依赖: Nonempty, condition, pullback, pullback.condition, pullbackRightPullbackFstIso_inv_fst_assoc
+/-
+**CategoryTheory.Limits.pullbackRightPullbackFstIso_inv_snd_fst** 是 Mathlib 中的一个
+定理，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：pullbackRightPullbackFstIso_inv_snd_fst : (pullbackRightPullbackFstIso f g
+ f').inv ≫ pullback.snd _ _ ≫ pullback.fst _ _ = pullback.fst _ _ ≫ f'
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.pullback.condition`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categ
+oryTheory.Limits.HasPullback f…
+· 使用定理 `CategoryTheory.Limits.pullbackRightPullbackFstIso_inv_fst_assoc`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] {W X Y Z : C} (f : X ⟶ Z) (g :
+ Y ⟶ Z) (f' : W ⟶ X)   [inst_1 : CategoryTheory.Limit…
 -/
 theorem pullbackRightPullbackFstIso_inv_snd_fst :
     (pullbackRightPullbackFstIso f g f').inv ≫ pullback.snd _ _ ≫ pullback.fst _ _ =
@@ -955,13 +913,13 @@ section
 /- Let's consider the following diagram of pullbacks
 ```
 (X ×[Z] Y) ×[Y] W --snd--> W
-    | |
-   fst g'
-    v v
- (X ×[Z] Y) --- snd ---> Y
-    | |
-   fst g
-    v v
+    |                      |
+   fst                     g'
+    v                      v
+ (X ×[Z] Y) --- snd --->   Y
+    |                      |
+   fst                     g
+    v                      v
     X -------- f --------> Z
 
 ```
@@ -972,28 +930,15 @@ In this section we show that `(X ×[Z] Y) ×[Y] W ≅ X ×[Z] W`.
 variable {W X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) (g' : W ⟶ Y)
 variable [HasPullback f g] [HasPullback (pullback.snd f g) g']
 
-/--
-Instance `hasPullbackVertPaste` / 实例 `hasPullbackVertPaste`
-
-English:
-instance hasPullbackVertPaste
-  signature: : HasPullback f (g' ≫ g)
-  body: HasLimit.mk {
-    cone := (pullback.cone f g).pasteVert (pullback.cone (pullback.snd f g) g') rfl
-    isLimit := pasteVertIsPullback rfl (pullback.isLimit f g)
-      (pullback.isLimit (pullback.snd f g) g')
-  }
-
-中文:
-实例 hasPullbackVertPaste
-  签名: : HasPullback f (g' ≫ g)
-  定义体: HasLimit.mk {
-    cone := (pullback.cone f g).pasteVert (pullback.cone (pullback.snd f g) g') rfl
-    isLimit := pasteVertIsPullback rfl (pullback.isLimit f g)
-      (pullback.isLimit (pullback.snd f g) g')
-  }
-
-Depends on / 依赖: HasLimit, HasLimit.mk, isLimit, pasteVert, pasteVertIsPullback, pullback, pullback.cone, pullback.isLimit, pullback.snd
+/-
+**CategoryTheory.Limits.hasPullbackVertPaste** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.Limits`。
+形式化陈述：hasPullbackVertPaste : HasPullback f (g' ≫ g)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasLimit.mk`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C] 
+  {F : CategoryTheory.F…
 -/
 instance hasPullbackVertPaste : HasPullback f (g' ≫ g) :=
   HasLimit.mk {
@@ -1002,28 +947,17 @@ instance hasPullbackVertPaste : HasPullback f (g' ≫ g) :=
       (pullback.isLimit (pullback.snd f g) g')
   }
 
-/--
-Definition of `pullbackLeftPullbackSndIso` / `pullbackLeftPullbackSndIso` 的定义
+/-- The canonical isomorphism `(X ×[Z] Y) ×[Y] W ≅ X ×[Z] W` -/
+/-
+**CategoryTheory.Limits.pullbackLeftPullbackSndIso** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Limits`。
+形式化陈述：pullbackLeftPullbackSndIso : pullback (pullback.snd f g) g' ≅ pullback f (
+g' ≫ g)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pullbackLeftPullbackSndIso
-  signature: :
-  body: IsLimit.conePointUniqueUpToIso
-      (pasteVertIsPullback rfl (pullback.isLimit f g) (pullback.isLimit (pullback.snd f g) g'))
-      (pullback.isLimit f (g' ≫ g))
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 pullbackLeftPullbackSndIso
-  签名: :
-  定义体: IsLimit.conePointUniqueUpToIso
-      (pasteVertIsPullback rfl (pullback.isLimit f g) (pullback.isLimit (pullback.snd f g) g'))
-      (pullback.isLimit f (g' ≫ g))
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso, conePointUniqueUpToIso, isLimit, pasteVertIsPullback, pullback, pullback.isLimit, pullback.snd
+--- 原说明 ---
+The canonical isomorphism `(X ×[Z] Y) ×[Y] W ≅ X ×[Z] W`
 -/
 def pullbackLeftPullbackSndIso :
     pullback (pullback.snd f g) g' ≅ pullback f (g' ≫ g) :=
@@ -1032,22 +966,16 @@ def pullbackLeftPullbackSndIso :
       (pullback.isLimit f (g' ≫ g))
 
 @[reassoc (attr := simp)]
-/--
-theorem `pullbackLeftPullbackSndIso_hom_fst` / 定理 `pullbackLeftPullbackSndIso_hom_fst`
-
-English:
-theorem pullbackLeftPullbackSndIso_hom_fst
-  proof: IsLimit.conePointUniqueUpToIso_hom_comp _ _ WalkingCospan.left
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 pullbackLeftPullbackSndIso_hom_fst
-  证明: IsLimit.conePointUniqueUpToIso_hom_comp _ _ WalkingCospan.left
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso_hom_comp, WalkingCospan, WalkingCospan.left, conePointUniqueUpToIso_hom_comp
+/-
+**CategoryTheory.Limits.pullbackLeftPullbackSndIso_hom_fst** 是 Mathlib 中的一个定理，位于
+命名空间 `CategoryTheory.Limits`。
+形式化陈述：pullbackLeftPullbackSndIso_hom_fst : (pullbackLeftPullbackSndIso f g g').h
+om ≫ pullback.fst _ _ = pullback.fst _ _ ≫ pullback.fst _ _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso_hom_comp`：conePoint
+UniqueUpToIso_hom_comp {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J) : 
+(conePointUniqueUpToIso P Q).hom ≫ t.π.app j = s.π.…
 -/
 theorem pullbackLeftPullbackSndIso_hom_fst :
     (pullbackLeftPullbackSndIso f g g').hom ≫ pullback.fst _ _ =
@@ -1055,44 +983,32 @@ theorem pullbackLeftPullbackSndIso_hom_fst :
   IsLimit.conePointUniqueUpToIso_hom_comp _ _ WalkingCospan.left
 
 @[reassoc (attr := simp)]
-/--
-theorem `pullbackLeftPullbackSndIso_hom_snd` / 定理 `pullbackLeftPullbackSndIso_hom_snd`
-
-English:
-theorem pullbackLeftPullbackSndIso_hom_snd
-  proof: IsLimit.conePointUniqueUpToIso_hom_comp _ _ WalkingCospan.right
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 pullbackLeftPullbackSndIso_hom_snd
-  证明: IsLimit.conePointUniqueUpToIso_hom_comp _ _ WalkingCospan.right
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso_hom_comp, WalkingCospan, WalkingCospan.right, conePointUniqueUpToIso_hom_comp
+/-
+**CategoryTheory.Limits.pullbackLeftPullbackSndIso_hom_snd** 是 Mathlib 中的一个定理，位于
+命名空间 `CategoryTheory.Limits`。
+形式化陈述：pullbackLeftPullbackSndIso_hom_snd : (pullbackLeftPullbackSndIso f g g').h
+om ≫ pullback.snd _ _ = pullback.snd _ _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso_hom_comp`：conePoint
+UniqueUpToIso_hom_comp {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J) : 
+(conePointUniqueUpToIso P Q).hom ≫ t.π.app j = s.π.…
 -/
 theorem pullbackLeftPullbackSndIso_hom_snd :
     (pullbackLeftPullbackSndIso f g g').hom ≫ pullback.snd _ _ = pullback.snd _ _ :=
   IsLimit.conePointUniqueUpToIso_hom_comp _ _ WalkingCospan.right
 
 @[reassoc (attr := simp)]
-/--
-theorem `pullbackLeftPullbackSndIso_inv_fst` / 定理 `pullbackLeftPullbackSndIso_inv_fst`
-
-English:
-theorem pullbackLeftPullbackSndIso_inv_fst
-  proof: IsLimit.conePointUniqueUpToIso_inv_comp _ _ WalkingCospan.left
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 pullbackLeftPullbackSndIso_inv_fst
-  证明: IsLimit.conePointUniqueUpToIso_inv_comp _ _ WalkingCospan.left
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso_inv_comp, WalkingCospan, WalkingCospan.left, conePointUniqueUpToIso_inv_comp
+/-
+**CategoryTheory.Limits.pullbackLeftPullbackSndIso_inv_fst** 是 Mathlib 中的一个定理，位于
+命名空间 `CategoryTheory.Limits`。
+形式化陈述：pullbackLeftPullbackSndIso_inv_fst : (pullbackLeftPullbackSndIso f g g').i
+nv ≫ pullback.fst _ _ ≫ pullback.fst _ _ = pullback.fst _ _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso_inv_comp`：conePoint
+UniqueUpToIso_inv_comp {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J) : 
+(conePointUniqueUpToIso P Q).inv ≫ s.π.app j = t.π.…
 -/
 theorem pullbackLeftPullbackSndIso_inv_fst :
     (pullbackLeftPullbackSndIso f g g').inv ≫ pullback.fst _ _ ≫ pullback.fst _ _ =
@@ -1100,44 +1016,37 @@ theorem pullbackLeftPullbackSndIso_inv_fst :
   IsLimit.conePointUniqueUpToIso_inv_comp _ _ WalkingCospan.left
 
 @[reassoc (attr := simp)]
-/--
-theorem `pullbackLeftPullbackSndIso_inv_snd_snd` / 定理 `pullbackLeftPullbackSndIso_inv_snd_snd`
-
-English:
-theorem pullbackLeftPullbackSndIso_inv_snd_snd
-  proof: IsLimit.conePointUniqueUpToIso_inv_comp _ _ WalkingCospan.right
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 pullbackLeftPullbackSndIso_inv_snd_snd
-  证明: IsLimit.conePointUniqueUpToIso_inv_comp _ _ WalkingCospan.right
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso_inv_comp, P.prop_arbitrary, P.prop_map_obj, WalkingCospan, WalkingCospan.right, conePointUniqueUpToIso_inv_comp, nonempty_of_prop, prop_arbitrary, prop_map_obj
+/-
+**CategoryTheory.Limits.pullbackLeftPullbackSndIso_inv_snd_snd** 是 Mathlib 中的一个定
+理，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：pullbackLeftPullbackSndIso_inv_snd_snd : (pullbackLeftPullbackSndIso f g g
+').inv ≫ pullback.snd _ _ = pullback.snd _ _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.conePointUniqueUpToIso_inv_comp`：conePoint
+UniqueUpToIso_inv_comp {s t : Cone F} (P : IsLimit s) (Q : IsLimit t) (j : J) : 
+(conePointUniqueUpToIso P Q).inv ≫ s.π.app j = t.π.…
 -/
 theorem pullbackLeftPullbackSndIso_inv_snd_snd :
     (pullbackLeftPullbackSndIso f g g').inv ≫ pullback.snd _ _ = pullback.snd _ _ :=
   IsLimit.conePointUniqueUpToIso_inv_comp _ _ WalkingCospan.right
 
 @[reassoc (attr := simp)]
-/--
-theorem `pullbackLeftPullbackSndIso_inv_fst_snd` / 定理 `pullbackLeftPullbackSndIso_inv_fst_snd`
-
-English:
-theorem pullbackLeftPullbackSndIso_inv_fst_snd
-  proof: by
-  rw [pullback.condition]
-  exact pullbackLeftPullbackSndIso_inv_snd_snd_assoc f g g' g'
-
-中文:
-定理 pullbackLeftPullbackSndIso_inv_fst_snd
-  证明: by
-  rw [pullback.condition]
-  exact pullbackLeftPullbackSndIso_inv_snd_snd_assoc f g g' g'
-
-Depends on / 依赖: condition, pullback, pullback.condition, pullbackLeftPullbackSndIso_inv_snd_snd_assoc
+/-
+**CategoryTheory.Limits.pullbackLeftPullbackSndIso_inv_fst_snd** 是 Mathlib 中的一个定
+理，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：pullbackLeftPullbackSndIso_inv_fst_snd : (pullbackLeftPullbackSndIso f g g
+').inv ≫ pullback.fst _ _ ≫ pullback.snd _ _ = pullback.snd _ _ ≫ g'
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.pullback.condition`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categ
+oryTheory.Limits.HasPullback f…
+· 使用定理 `CategoryTheory.Limits.pullbackLeftPullbackSndIso_inv_snd_snd_assoc`：∀ {C
+ : Type u} [inst : CategoryTheory.Category.{v, u} C] {W X Y Z : C} (f : X ⟶ Z) (
+g : Y ⟶ Z) (g' : W ⟶ Y)   [inst_1 : CategoryTheory.Limit…
 -/
 theorem pullbackLeftPullbackSndIso_inv_fst_snd :
     (pullbackLeftPullbackSndIso f g g').inv ≫ pullback.fst _ _ ≫ pullback.snd _ _ =
@@ -1152,9 +1061,9 @@ section
 /- Let's consider the following diagram of pushouts
 ```
 X ---- g ----> Z ----- g' -----> W
-| | |
-f inr inr
-v v v
+|              |                 |
+f             inr               inr
+v              v                 v
 Y - inl -> Y ⨿[X] Z --inl--> (Y ⨿[X] Z) ⨿[Z] W
 ```
 In this section we show that `(Y ⨿[X] Z) ⨿[Z] W ≅ Y ⨿[X] W`.
@@ -1162,28 +1071,9 @@ In this section we show that `(Y ⨿[X] Z) ⨿[Z] W ≅ Y ⨿[X] W`.
 variable {W X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) (g' : Z ⟶ W)
 variable [HasPushout f g] [HasPushout (pushout.inr f g) g']
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasPushout f (g ≫ g')
-  body: HasColimit.mk {
-    cocone := (pushout.cocone f g).pasteHoriz (pushout.cocone (pushout.inr f g) g') rfl
-    isColimit := pasteHorizIsPushout rfl (pushout.isColimit f g)
-      (pushout.isColimit (pushout.inr f g) g')
-  }
-
-中文:
-实例 :
-  签名: HasPushout f (g ≫ g')
-  定义体: HasColimit.mk {
-    cocone := (pushout.cocone f g).pasteHoriz (pushout.cocone (pushout.inr f g) g') rfl
-    isColimit := pasteHorizIsPushout rfl (pushout.isColimit f g)
-      (pushout.isColimit (pushout.inr f g) g')
-  }
-
-Depends on / 依赖: HasColimit, HasColimit.mk, cocone, isColimit, pasteHoriz, pasteHorizIsPushout, pushout, pushout.cocone, pushout.inr, pushout.isColimit
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasPushout f (g ≫ g') :=
   HasColimit.mk {
@@ -1192,28 +1082,20 @@ instance : HasPushout f (g ≫ g') :=
       (pushout.isColimit (pushout.inr f g) g')
   }
 
-/--
-Definition of `pushoutLeftPushoutInrIso` / `pushoutLeftPushoutInrIso` 的定义
+/-- The canonical isomorphism `(Y ⨿[X] Z) ⨿[Z] W ≅ Y ⨿[X] W` -/
+/-
+**CategoryTheory.Limits.pushoutLeftPushoutInrIso** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Limits`。
+形式化陈述：pushoutLeftPushoutInrIso : pushout (pushout.inr f g) g' ≅ pushout f (g ≫ g
+')
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasPushoutComp`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {W X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) (g' : Z ⟶ W)   
+[inst_1 : CategoryTheory.Limit…
 
-English:
-definition pushoutLeftPushoutInrIso
-  signature: :
-  body: IsColimit.coconePointUniqueUpToIso
-    (pasteHorizIsPushout rfl (pushout.isColimit f g) (pushout.isColimit (pushout.inr f g) g'))
-    (pushout.isColimit f (g ≫ g'))
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 pushoutLeftPushoutInrIso
-  签名: :
-  定义体: IsColimit.coconePointUniqueUpToIso
-    (pasteHorizIsPushout rfl (pushout.isColimit f g) (pushout.isColimit (pushout.inr f g) g'))
-    (pushout.isColimit f (g ≫ g'))
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsColimit, IsColimit.coconePointUniqueUpToIso, coconePointUniqueUpToIso, isColimit, pasteHorizIsPushout, pushout, pushout.inr, pushout.isColimit
+--- 原说明 ---
+The canonical isomorphism `(Y ⨿[X] Z) ⨿[Z] W ≅ Y ⨿[X] W`
 -/
 noncomputable def pushoutLeftPushoutInrIso :
     pushout (pushout.inr f g) g' ≅ pushout f (g ≫ g') :=
@@ -1222,22 +1104,20 @@ noncomputable def pushoutLeftPushoutInrIso :
     (pushout.isColimit f (g ≫ g'))
 
 @[reassoc (attr := simp)]
-/--
-theorem `inl_pushoutLeftPushoutInrIso_inv` / 定理 `inl_pushoutLeftPushoutInrIso_inv`
-
-English:
-theorem inl_pushoutLeftPushoutInrIso_inv
-  proof: IsColimit.comp_coconePointUniqueUpToIso_inv _ _ WalkingSpan.left
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 inl_pushoutLeftPushoutInrIso_inv
-  证明: IsColimit.comp_coconePointUniqueUpToIso_inv _ _ WalkingSpan.left
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsColimit, IsColimit.comp_coconePointUniqueUpToIso_inv, P.prop_arbitrary, P.strictMap_obj, WalkingSpan, WalkingSpan.left, comp_coconePointUniqueUpToIso_inv, nonempty_of_prop, prop_arbitrary, strictMap_obj
+/-
+**CategoryTheory.Limits.inl_pushoutLeftPushoutInrIso_inv** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.Limits`。
+形式化陈述：inl_pushoutLeftPushoutInrIso_inv : (pushout.inl f (g ≫ g')) ≫ (pushoutLeft
+PushoutInrIso f g g').inv = (pushout.inl f g) ≫ (pushout.inl (pushout.inr f g) g
+')
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsColimit.comp_coconePointUniqueUpToIso_inv`：∀ {J 
+: Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : C
+ategoryTheory.Category.{v₃, u₃} C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.instHasPushoutComp`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {W X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) (g' : Z ⟶ W)   
+[inst_1 : CategoryTheory.Limit…
 -/
 theorem inl_pushoutLeftPushoutInrIso_inv :
     (pushout.inl f (g ≫ g')) ≫ (pushoutLeftPushoutInrIso f g g').inv =
@@ -1245,22 +1125,19 @@ theorem inl_pushoutLeftPushoutInrIso_inv :
   IsColimit.comp_coconePointUniqueUpToIso_inv _ _ WalkingSpan.left
 
 @[reassoc (attr := simp)]
-/--
-theorem `inr_pushoutLeftPushoutInrIso_hom` / 定理 `inr_pushoutLeftPushoutInrIso_hom`
-
-English:
-theorem inr_pushoutLeftPushoutInrIso_hom
-  proof: IsColimit.comp_coconePointUniqueUpToIso_hom (pasteHorizIsPushout _ _ _) _ WalkingSpan.right
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 inr_pushoutLeftPushoutInrIso_hom
-  证明: IsColimit.comp_coconePointUniqueUpToIso_hom (pasteHorizIsPushout _ _ _) _ WalkingSpan.right
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsColimit, IsColimit.comp_coconePointUniqueUpToIso_hom, WalkingSpan, WalkingSpan.right, comp_coconePointUniqueUpToIso_hom, pasteHorizIsPushout
+/-
+**CategoryTheory.Limits.inr_pushoutLeftPushoutInrIso_hom** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.Limits`。
+形式化陈述：inr_pushoutLeftPushoutInrIso_hom : (pushout.inr (pushout.inr f g) g') ≫ (p
+ushoutLeftPushoutInrIso f g g').hom = (pushout.inr f (g ≫ g'))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsColimit.comp_coconePointUniqueUpToIso_hom`：∀ {J 
+: Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : C
+ategoryTheory.Category.{v₃, u₃} C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.instHasPushoutComp`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {W X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) (g' : Z ⟶ W)   
+[inst_1 : CategoryTheory.Limit…
 -/
 theorem inr_pushoutLeftPushoutInrIso_hom :
     (pushout.inr (pushout.inr f g) g') ≫ (pushoutLeftPushoutInrIso f g g').hom =
@@ -1268,22 +1145,19 @@ theorem inr_pushoutLeftPushoutInrIso_hom :
   IsColimit.comp_coconePointUniqueUpToIso_hom (pasteHorizIsPushout _ _ _) _ WalkingSpan.right
 
 @[reassoc (attr := simp)]
-/--
-theorem `inr_pushoutLeftPushoutInrIso_inv` / 定理 `inr_pushoutLeftPushoutInrIso_inv`
-
-English:
-theorem inr_pushoutLeftPushoutInrIso_inv
-  proof: IsColimit.comp_coconePointUniqueUpToIso_inv _ _ WalkingSpan.right
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 inr_pushoutLeftPushoutInrIso_inv
-  证明: IsColimit.comp_coconePointUniqueUpToIso_inv _ _ WalkingSpan.right
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsColimit, IsColimit.comp_coconePointUniqueUpToIso_inv, WalkingSpan, WalkingSpan.right, comp_coconePointUniqueUpToIso_inv
+/-
+**CategoryTheory.Limits.inr_pushoutLeftPushoutInrIso_inv** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.Limits`。
+形式化陈述：inr_pushoutLeftPushoutInrIso_inv : (pushout.inr f (g ≫ g')) ≫ (pushoutLeft
+PushoutInrIso f g g').inv = (pushout.inr (pushout.inr f g) g')
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsColimit.comp_coconePointUniqueUpToIso_inv`：∀ {J 
+: Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : C
+ategoryTheory.Category.{v₃, u₃} C]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.instHasPushoutComp`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {W X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) (g' : Z ⟶ W)   
+[inst_1 : CategoryTheory.Limit…
 -/
 theorem inr_pushoutLeftPushoutInrIso_inv :
     (pushout.inr f (g ≫ g')) ≫ (pushoutLeftPushoutInrIso f g g').inv =
@@ -1291,26 +1165,26 @@ theorem inr_pushoutLeftPushoutInrIso_inv :
   IsColimit.comp_coconePointUniqueUpToIso_inv _ _ WalkingSpan.right
 
 @[reassoc (attr := simp)]
-/--
-theorem `inl_inl_pushoutLeftPushoutInrIso_hom` / 定理 `inl_inl_pushoutLeftPushoutInrIso_hom`
-
-English:
-theorem inl_inl_pushoutLeftPushoutInrIso_hom
-  proof: by
-  rw [← Category.assoc]
-  apply IsColimit.comp_coconePointUniqueUpToIso_hom (pasteHorizIsPushout _ _ _) _ WalkingSpan.left
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 inl_inl_pushoutLeftPushoutInrIso_hom
-  证明: by
-  rw [← Category.assoc]
-  apply IsColimit.comp_coconePointUniqueUpToIso_hom (pasteHorizIsPushout _ _ _) _ WalkingSpan.left
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Category, Category.assoc, IsColimit, IsColimit.comp_coconePointUniqueUpToIso_hom, WalkingSpan, WalkingSpan.left, comp_coconePointUniqueUpToIso_hom, pasteHorizIsPushout
+/-
+**CategoryTheory.Limits.inl_inl_pushoutLeftPushoutInrIso_hom** 是 Mathlib 中的一个定理，
+位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：inl_inl_pushoutLeftPushoutInrIso_hom : (pushout.inl f g) ≫ (pushout.inl (p
+ushout.inr f g) g') ≫ (pushoutLeftPushoutInrIso f g g').hom = (pushout.inl f (g 
+≫ g'))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasPushoutComp`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {W X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) (g' : Z ⟶ W)   
+[inst_1 : CategoryTheory.Limit…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.IsColimit.comp_coconePointUniqueUpToIso_hom`：∀ {J 
+: Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : C
+ategoryTheory.Category.{v₃, u₃} C]   {F : CategoryTheor…
 -/
 theorem inl_inl_pushoutLeftPushoutInrIso_hom :
     (pushout.inl f g) ≫ (pushout.inl (pushout.inr f g) g') ≫
@@ -1319,25 +1193,37 @@ theorem inl_inl_pushoutLeftPushoutInrIso_hom :
   apply IsColimit.comp_coconePointUniqueUpToIso_hom (pasteHorizIsPushout _ _ _) _ WalkingSpan.left
 
 @[reassoc (attr := simp)]
-/--
-theorem `inr_inl_pushoutLeftPushoutInrIso_hom` / 定理 `inr_inl_pushoutLeftPushoutInrIso_hom`
-
-English:
-theorem inr_inl_pushoutLeftPushoutInrIso_hom
-  proof: by
-  rw [← Category.assoc]; rw [← Iso.eq_comp_inv]; rw [Category.assoc]; rw [inr_pushoutLeftPushoutInrIso_inv]; rw [pushout.condition]
-
-中文:
-定理 inr_inl_pushoutLeftPushoutInrIso_hom
-  证明: by
-  rw [← Category.assoc]; rw [← Iso.eq_comp_inv]; rw [Category.assoc]; rw [inr_pushoutLeftPushoutInrIso_inv]; rw [pushout.condition]
-
-Depends on / 依赖: Category, Category.assoc, Iso.eq_comp_inv, condition, eq_comp_inv, inr_pushoutLeftPushoutInrIso_inv, pushout, pushout.condition
+/-
+**CategoryTheory.Limits.inr_inl_pushoutLeftPushoutInrIso_hom** 是 Mathlib 中的一个定理，
+位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：inr_inl_pushoutLeftPushoutInrIso_hom : pushout.inr f g ≫ pushout.inl (push
+out.inr f g) g' ≫ (pushoutLeftPushoutInrIso f g g').hom = g' ≫ pushout.inr f (g 
+≫ g')
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasPushoutComp`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {W X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) (g' : Z ⟶ W)   
+[inst_1 : CategoryTheory.Limit…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.eq_comp_inv`：eq_comp_inv (α : X ≅ Y) {f : Z ⟶ Y} {g :
+ Z ⟶ X} : g = f ≫ α.inv ↔ g ≫ α.hom = f
+· 使用定理 `CategoryTheory.Limits.inr_pushoutLeftPushoutInrIso_inv`：inr_pushoutLeftP
+ushoutInrIso_inv : (pushout.inr f (g ≫ g')) ≫ (pushoutLeftPushoutInrIso f g g').
+inv = (pushout.inr (pushout.inr f g) g')
+· 使用定理 `CategoryTheory.Limits.pushout.condition`：∀ {C : Type u} [inst : Category
+Theory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z}   [inst_1 : Catego
+ryTheory.Limits.HasPushout f …
 -/
 theorem inr_inl_pushoutLeftPushoutInrIso_hom :
     pushout.inr f g ≫ pushout.inl (pushout.inr f g) g' ≫ (pushoutLeftPushoutInrIso f g g').hom =
       g' ≫ pushout.inr f (g ≫ g') := by
-  rw [← Category.assoc]; rw [← Iso.eq_comp_inv]; rw [Category.assoc]; rw [inr_pushoutLeftPushoutInrIso_inv]; rw [pushout.condition]
+  rw [← Category.assoc, ← Iso.eq_comp_inv, Category.assoc, inr_pushoutLeftPushoutInrIso_inv,
+    pushout.condition]
 
 end
 section
@@ -1345,13 +1231,13 @@ section
 /- Let's consider the diagram of pushouts
 ```
 X ---- g ----> Z
-| |
-f inr
-v v
+|              |
+f             inr
+v              v
 Y - inl -> Y ⨿[X] Z
-| |
-f' inr
-v v
+|              |
+f'            inr
+v              v
 W - inl -> W ⨿[Y] (Y ⨿[X] Z)
 ```
 
@@ -1361,28 +1247,15 @@ In this section we will construct the isomorphism `W ⨿[Y] (Y ⨿[X] Z) ≅ W �
 variable {W X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z) (f' : Y ⟶ W)
 variable [HasPushout f g] [HasPushout f' (pushout.inl f g)]
 
-/--
-Instance `hasPushoutVertPaste` / 实例 `hasPushoutVertPaste`
-
-English:
-instance hasPushoutVertPaste
-  signature: : HasPushout (f ≫ f') g
-  body: HasColimit.mk {
-    cocone := (pushout.cocone f g).pasteVert (pushout.cocone f' (pushout.inl f g)) rfl
-    isColimit := pasteVertIsPushout rfl (pushout.isColimit f g)
-      (pushout.isColimit f' (pushout.inl f g))
-  }
-
-中文:
-实例 hasPushoutVertPaste
-  签名: : HasPushout (f ≫ f') g
-  定义体: HasColimit.mk {
-    cocone := (pushout.cocone f g).pasteVert (pushout.cocone f' (pushout.inl f g)) rfl
-    isColimit := pasteVertIsPushout rfl (pushout.isColimit f g)
-      (pushout.isColimit f' (pushout.inl f g))
-  }
-
-Depends on / 依赖: HasColimit, HasColimit.mk, cocone, isColimit, pasteVert, pasteVertIsPushout, pushout, pushout.cocone, pushout.inl, pushout.isColimit
+/-
+**CategoryTheory.Limits.hasPushoutVertPaste** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory.Limits`。
+形式化陈述：hasPushoutVertPaste : HasPushout (f ≫ f') g
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasColimit.mk`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
 -/
 instance hasPushoutVertPaste : HasPushout (f ≫ f') g :=
   HasColimit.mk {
@@ -1391,28 +1264,17 @@ instance hasPushoutVertPaste : HasPushout (f ≫ f') g :=
       (pushout.isColimit f' (pushout.inl f g))
   }
 
-/--
-Definition of `pushoutRightPushoutInlIso` / `pushoutRightPushoutInlIso` 的定义
+/-- The canonical isomorphism `W ⨿[Y] (Y ⨿[X] Z) ≅ W ⨿[X] Z` -/
+/-
+**CategoryTheory.Limits.pushoutRightPushoutInlIso** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Limits`。
+形式化陈述：pushoutRightPushoutInlIso : pushout f' (pushout.inl f g) ≅ pushout (f ≫ f'
+) g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pushoutRightPushoutInlIso
-  signature: :
-  body: IsColimit.coconePointUniqueUpToIso
-    (pasteVertIsPushout rfl (pushout.isColimit f g) (pushout.isColimit f' (pushout.inl f g)))
-    (pushout.isColimit (f ≫ f') g)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 pushoutRightPushoutInlIso
-  签名: :
-  定义体: IsColimit.coconePointUniqueUpToIso
-    (pasteVertIsPushout rfl (pushout.isColimit f g) (pushout.isColimit f' (pushout.inl f g)))
-    (pushout.isColimit (f ≫ f') g)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsColimit, IsColimit.coconePointUniqueUpToIso, coconePointUniqueUpToIso, isColimit, pasteVertIsPushout, pushout, pushout.inl, pushout.isColimit
+--- 原说明 ---
+The canonical isomorphism `W ⨿[Y] (Y ⨿[X] Z) ≅ W ⨿[X] Z`
 -/
 noncomputable def pushoutRightPushoutInlIso :
     pushout f' (pushout.inl f g) ≅ pushout (f ≫ f') g :=
@@ -1421,48 +1283,38 @@ noncomputable def pushoutRightPushoutInlIso :
     (pushout.isColimit (f ≫ f') g)
 
 @[reassoc (attr := simp)]
-/--
-theorem `inl_pushoutRightPushoutInlIso_inv` / 定理 `inl_pushoutRightPushoutInlIso_inv`
-
-English:
-theorem inl_pushoutRightPushoutInlIso_inv
-  proof: IsColimit.comp_coconePointUniqueUpToIso_inv _ _ WalkingSpan.left
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 inl_pushoutRightPushoutInlIso_inv
-  证明: IsColimit.comp_coconePointUniqueUpToIso_inv _ _ WalkingSpan.left
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsColimit, IsColimit.comp_coconePointUniqueUpToIso_inv, WalkingSpan, WalkingSpan.left, comp_coconePointUniqueUpToIso_inv
+/-
+**CategoryTheory.Limits.inl_pushoutRightPushoutInlIso_inv** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory.Limits`。
+形式化陈述：inl_pushoutRightPushoutInlIso_inv : pushout.inl _ _ ≫ (pushoutRightPushout
+InlIso f g f').inv = pushout.inl _ _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsColimit.comp_coconePointUniqueUpToIso_inv`：∀ {J 
+: Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : C
+ategoryTheory.Category.{v₃, u₃} C]   {F : CategoryTheor…
 -/
 theorem inl_pushoutRightPushoutInlIso_inv :
     pushout.inl _ _ ≫ (pushoutRightPushoutInlIso f g f').inv = pushout.inl _ _ :=
   IsColimit.comp_coconePointUniqueUpToIso_inv _ _ WalkingSpan.left
 
 @[reassoc (attr := simp)]
-/--
-theorem `inr_inr_pushoutRightPushoutInlIso_hom` / 定理 `inr_inr_pushoutRightPushoutInlIso_hom`
-
-English:
-theorem inr_inr_pushoutRightPushoutInlIso_hom
-  proof: by
-  rw [← Category.assoc]
-  apply IsColimit.comp_coconePointUniqueUpToIso_hom (pasteVertIsPushout rfl _ _) _ WalkingSpan.right
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 inr_inr_pushoutRightPushoutInlIso_hom
-  证明: by
-  rw [← Category.assoc]
-  apply IsColimit.comp_coconePointUniqueUpToIso_hom (pasteVertIsPushout rfl _ _) _ WalkingSpan.right
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Category, Category.assoc, IsColimit, IsColimit.comp_coconePointUniqueUpToIso_hom, WalkingSpan, WalkingSpan.right, comp_coconePointUniqueUpToIso_hom, pasteVertIsPushout
+/-
+**CategoryTheory.Limits.inr_inr_pushoutRightPushoutInlIso_hom** 是 Mathlib 中的一个定理
+，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：inr_inr_pushoutRightPushoutInlIso_hom : pushout.inr _ _ ≫ pushout.inr _ _ 
+≫ (pushoutRightPushoutInlIso f g f').hom = pushout.inr _ _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.IsColimit.comp_coconePointUniqueUpToIso_hom`：∀ {J 
+: Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : C
+ategoryTheory.Category.{v₃, u₃} C]   {F : CategoryTheor…
 -/
 theorem inr_inr_pushoutRightPushoutInlIso_hom :
     pushout.inr _ _ ≫ pushout.inr _ _ ≫ (pushoutRightPushoutInlIso f g f').hom =
@@ -1471,22 +1323,16 @@ theorem inr_inr_pushoutRightPushoutInlIso_hom :
   apply IsColimit.comp_coconePointUniqueUpToIso_hom (pasteVertIsPushout rfl _ _) _ WalkingSpan.right
 
 @[reassoc (attr := simp)]
-/--
-theorem `inr_pushoutRightPushoutInlIso_inv` / 定理 `inr_pushoutRightPushoutInlIso_inv`
-
-English:
-theorem inr_pushoutRightPushoutInlIso_inv
-  proof: IsColimit.comp_coconePointUniqueUpToIso_inv _ _ WalkingSpan.right
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 inr_pushoutRightPushoutInlIso_inv
-  证明: IsColimit.comp_coconePointUniqueUpToIso_inv _ _ WalkingSpan.right
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsColimit, IsColimit.comp_coconePointUniqueUpToIso_inv, WalkingSpan, WalkingSpan.right, comp_coconePointUniqueUpToIso_inv
+/-
+**CategoryTheory.Limits.inr_pushoutRightPushoutInlIso_inv** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory.Limits`。
+形式化陈述：inr_pushoutRightPushoutInlIso_inv : pushout.inr _ _ ≫ (pushoutRightPushout
+InlIso f g f').inv = pushout.inr _ _ ≫ pushout.inr _ _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsColimit.comp_coconePointUniqueUpToIso_inv`：∀ {J 
+: Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : C
+ategoryTheory.Category.{v₃, u₃} C]   {F : CategoryTheor…
 -/
 theorem inr_pushoutRightPushoutInlIso_inv :
     pushout.inr _ _ ≫ (pushoutRightPushoutInlIso f g f').inv =
@@ -1494,48 +1340,48 @@ theorem inr_pushoutRightPushoutInlIso_inv :
   IsColimit.comp_coconePointUniqueUpToIso_inv _ _ WalkingSpan.right
 
 @[reassoc (attr := simp)]
-/--
-theorem `inl_pushoutRightPushoutInlIso_hom` / 定理 `inl_pushoutRightPushoutInlIso_hom`
-
-English:
-theorem inl_pushoutRightPushoutInlIso_hom
-  proof: IsColimit.comp_coconePointUniqueUpToIso_hom (pasteVertIsPushout rfl _ _) _ WalkingSpan.left
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 inl_pushoutRightPushoutInlIso_hom
-  证明: IsColimit.comp_coconePointUniqueUpToIso_hom (pasteVertIsPushout rfl _ _) _ WalkingSpan.left
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsColimit, IsColimit.comp_coconePointUniqueUpToIso_hom, WalkingSpan, WalkingSpan.left, comp_coconePointUniqueUpToIso_hom, pasteVertIsPushout
+/-
+**CategoryTheory.Limits.inl_pushoutRightPushoutInlIso_hom** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory.Limits`。
+形式化陈述：inl_pushoutRightPushoutInlIso_hom : pushout.inl _ _ ≫ (pushoutRightPushout
+InlIso f g f').hom = pushout.inl _ _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsColimit.comp_coconePointUniqueUpToIso_hom`：∀ {J 
+: Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : C
+ategoryTheory.Category.{v₃, u₃} C]   {F : CategoryTheor…
 -/
 theorem inl_pushoutRightPushoutInlIso_hom :
     pushout.inl _ _ ≫ (pushoutRightPushoutInlIso f g f').hom = pushout.inl _ _ :=
   IsColimit.comp_coconePointUniqueUpToIso_hom (pasteVertIsPushout rfl _ _) _ WalkingSpan.left
 
 @[reassoc (attr := simp)]
-/--
-theorem `inr_inl_pushoutRightPushoutInlIso_hom` / 定理 `inr_inl_pushoutRightPushoutInlIso_hom`
-
-English:
-theorem inr_inl_pushoutRightPushoutInlIso_hom
-  proof: by
-  rw [← Category.assoc]; rw [← pushout.condition]; rw [Category.assoc]; rw [inl_pushoutRightPushoutInlIso_hom]
-
-中文:
-定理 inr_inl_pushoutRightPushoutInlIso_hom
-  证明: by
-  rw [← Category.assoc]; rw [← pushout.condition]; rw [Category.assoc]; rw [inl_pushoutRightPushoutInlIso_hom]
-
-Depends on / 依赖: Category, Category.assoc, condition, inl_pushoutRightPushoutInlIso_hom, pushout, pushout.condition
+/-
+**CategoryTheory.Limits.inr_inl_pushoutRightPushoutInlIso_hom** 是 Mathlib 中的一个定理
+，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：inr_inl_pushoutRightPushoutInlIso_hom : pushout.inl _ _ ≫ pushout.inr _ _ 
+≫ (pushoutRightPushoutInlIso f g f').hom = f' ≫ pushout.inl _ _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.pushout.condition`：∀ {C : Type u} [inst : Category
+Theory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z}   [inst_1 : Catego
+ryTheory.Limits.HasPushout f …
+· 使用定理 `CategoryTheory.Limits.inl_pushoutRightPushoutInlIso_hom`：inl_pushoutRigh
+tPushoutInlIso_hom : pushout.inl _ _ ≫ (pushoutRightPushoutInlIso f g f').hom = 
+pushout.inl _ _
 -/
 theorem inr_inl_pushoutRightPushoutInlIso_hom :
     pushout.inl _ _ ≫ pushout.inr _ _ ≫ (pushoutRightPushoutInlIso f g f').hom =
       f' ≫ pushout.inl _ _ := by
-  rw [← Category.assoc]; rw [← pushout.condition]; rw [Category.assoc]; rw [inl_pushoutRightPushoutInlIso_hom]
+  rw [← Category.assoc, ← pushout.condition, Category.assoc, inl_pushoutRightPushoutInlIso_hom]
 
 end
 
 end CategoryTheory.Limits
+

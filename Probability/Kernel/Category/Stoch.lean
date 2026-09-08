@@ -45,148 +45,77 @@ open scoped MonoidalCategory SFinKer ComonObj
 
 universe u
 
-/--
-Definition of `StochHom` / `StochHom` 的定义
+/-- Morphism property selecting Markov kernels in `SFinKer`. -/
+/-
+**StochHom** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：StochHom : MorphismProperty SFinKer
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation StochHom
-  signature: : MorphismProperty SFinKer
-  body: fun _ _ κ => IsMarkovKernel κ.1
-
-中文:
-缩写 StochHom
-  签名: : MorphismProperty SFinKer
-  定义体: fun _ _ κ => IsMarkovKernel κ.1
-
-Depends on / 依赖: IsMarkovKernel
+--- 原说明 ---
+Morphism property selecting Markov kernels in `SFinKer`.
 -/
 abbrev StochHom : MorphismProperty SFinKer := fun _ _ κ => IsMarkovKernel κ.1
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: StochHom.IsStableUnderBraiding
-  body: by dsimp [StochHom]; infer_instance
-  comp_mem κ η hκ hη := by dsimp [StochHom]; infer_instance
-  whiskerLeft X Y Z κ hκ := by dsimp [StochHom]; infer_instance
-  whiskerRight κ hκ Y := by dsimp [StochHom]; infer_instance
-associator_hom_mem X Y Z := isMarkovKernel_deterministic MeasurableEquiv.measurable _
-associator_inv_mem X Y Z := isMarkovKernel_deterministic MeasurableEquiv.measurable _
-  leftUnitor_hom_mem X := IsMarkovKernel.map Kernel.id (by fun_prop)
-  leftUnitor_inv_mem X := IsMarkovKernel.map Kernel.id (by fun_prop)
-  rightUnitor_hom_mem X := IsMarkovKernel.map Kernel.id (by fun_prop)
-  rightUnitor_inv_mem X := IsMarkovKernel.map Kernel.id (by fun_prop)
-  braiding_hom_mem X Y := instIsMarkovKernelProdSwap
-  braiding_inv_mem X Y := instIsMarkovKernelProdSwap
-
-中文:
-实例 :
-  签名: StochHom.是StableUnderBraiding
-  定义体: by dsimp [StochHom]; infer_instance
-  comp_mem κ η hκ hη := by dsimp [StochHom]; infer_instance
-  whiskerLeft X Y Z κ hκ := by dsimp [StochHom]; infer_instance
-  whiskerRight κ hκ Y := by dsimp [StochHom]; infer_instance
-associator_hom_mem X Y Z := isMarkovKernel_deterministic MeasurableEquiv.measurable _
-associator_inv_mem X Y Z := isMarkovKernel_deterministic MeasurableEquiv.measurable _
-  leftUnitor_hom_mem X := IsMarkovKernel.map Kernel.id (by fun_prop)
-  leftUnitor_inv_mem X := IsMarkovKernel.map Kernel.id (by fun_prop)
-  rightUnitor_hom_mem X := IsMarkovKernel.map Kernel.id (by fun_prop)
-  rightUnitor_inv_mem X := IsMarkovKernel.map Kernel.id (by fun_prop)
-  braiding_hom_mem X Y := instIsMarkovKernelProdSwap
-  braiding_inv_mem X Y := instIsMarkovKernelProdSwap
-
-Depends on / 依赖: IsMarkovKernel, IsMarkovKernel.map, Kernel, Kernel.id, MeasurableEquiv, MeasurableEquiv.measurable, StochHom, associator_hom_mem, associator_inv_mem, comp_mem, fun_prop, infer_instance, isMarkovKernel_deterministic, leftUnitor_hom_mem, leftUnitor_inv_mem, measurable, whiskerLeft, whiskerRight
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : StochHom.IsStableUnderBraiding where
   id_mem X := by dsimp [StochHom]; infer_instance
   comp_mem κ η hκ hη := by dsimp [StochHom]; infer_instance
   whiskerLeft X Y Z κ hκ := by dsimp [StochHom]; infer_instance
   whiskerRight κ hκ Y := by dsimp [StochHom]; infer_instance
-associator_hom_mem X Y Z := isMarkovKernel_deterministic MeasurableEquiv.measurable _
-associator_inv_mem X Y Z := isMarkovKernel_deterministic MeasurableEquiv.measurable _
+  associator_hom_mem X Y Z := isMarkovKernel_deterministic <| MeasurableEquiv.measurable _
+  associator_inv_mem X Y Z := isMarkovKernel_deterministic <| MeasurableEquiv.measurable _
   leftUnitor_hom_mem X := IsMarkovKernel.map Kernel.id (by fun_prop)
   leftUnitor_inv_mem X := IsMarkovKernel.map Kernel.id (by fun_prop)
   rightUnitor_hom_mem X := IsMarkovKernel.map Kernel.id (by fun_prop)
   rightUnitor_inv_mem X := IsMarkovKernel.map Kernel.id (by fun_prop)
   braiding_hom_mem X Y := instIsMarkovKernelProdSwap
   braiding_inv_mem X Y := instIsMarkovKernelProdSwap
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X} : StochHom.IsStableUnderComonoid X where
   counit_mem := by dsimp [StochHom]; infer_instance
   comul_mem := by dsimp [StochHom]; infer_instance
 
-/--
-Definition of `Stoch` / `Stoch` 的定义
+/-- `Stoch` is the wide subcategory of `SFinKer` with Markov-kernel morphisms. -/
+/-
+**Stoch** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：Stoch
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Stoch
-  body: WideSubcategory StochHom
-
-中文:
-缩写 Stoch
-  定义体: WideSubcategory StochHom
-
-Depends on / 依赖: StochHom, WideSubcategory
+--- 原说明 ---
+`Stoch` is the wide subcategory of `SFinKer` with Markov-kernel morphisms.
 -/
 abbrev Stoch := WideSubcategory StochHom
 
 variable {X Y : Stoch} (κ : X ⟶ Y)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Deterministic
-  signature: κ.hom] : Deterministic κ where
-
-中文:
-实例 [确定性
-  签名: κ.hom] : 确定性 κ where
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Deterministic κ.hom] : Deterministic κ where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Deterministic (Δ[X])
-
-中文:
-实例 :
-  签名: 确定性 (Δ[X])
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Deterministic (Δ[X]) where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Deterministic (ε[X])
-  body: by
-    ext : 1
-    simp only [WideSubcategory.comp_def, MorphismProperty.counit_hom]
-    cat_disch
-
-中文:
-实例 :
-  签名: 确定性 (ε[X])
-  定义体: by
-    ext : 1
-    simp only [WideSubcategory.comp_def, MorphismProperty.counit_hom]
-    cat_disch
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.counit_hom, WideSubcategory, WideSubcategory.comp_def, cat_disch, comp_def, counit_hom
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Deterministic (ε[X]) where
   hom_comul := by
     ext : 1
     simp only [WideSubcategory.comp_def, MorphismProperty.counit_hom]
     cat_disch
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X Y : Stoch) (κ : Kernel X.obj Y.obj) [IsDeterministic κ] [IsMarkovKernel κ] :
     Deterministic (X := X) (Y := Y) (⟨⟨κ, inferInstance⟩, inferInstance⟩ : X ⟶ Y) where
   hom_comul := by
@@ -195,63 +124,20 @@ instance (X Y : Stoch) (κ : Kernel X.obj Y.obj) [IsDeterministic κ] [IsMarkovK
 
 section PositiveCategory
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsMarkovKernel κ.hom.hom
-  body: κ.2
-
-中文:
-实例 :
-  签名: 是MarkovKernel κ.hom.hom
-  定义体: κ.2
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsMarkovKernel κ.hom.hom := κ.2
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Deterministic
-  signature: κ] : Deterministic κ.hom where
-  body: WideSubcategory.hom_ext_iff.mp Deterministic.copy_natural κ
-
-中文:
-实例 [确定性
-  签名: κ] : 确定性 κ.hom where
-  定义体: WideSubcategory.hom_ext_iff.mp Deterministic.copy_natural κ
-
-Depends on / 依赖: Deterministic, Deterministic.copy_natural, WideSubcategory, WideSubcategory.hom_ext_iff.mp, copy_natural, hom_ext_iff
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Deterministic κ] : Deterministic κ.hom where
-hom_comul := WideSubcategory.hom_ext_iff.mp Deterministic.copy_natural κ
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Deterministic
-  signature: κ] : IsDeterministic κ.hom.hom where
-  body: by
-    have := Deterministic.copy_natural κ.hom
-    rw [SFinKer.Hom.ext_iff] at this
-    dsimp at this
-    rw [id_parallelComp_comp_parallelComp_id] at this
-    exact this.symm
-
-中文:
-实例 [确定性
-  签名: κ] : 是确定性 κ.hom.hom where
-  定义体: by
-    have := Deterministic.copy_natural κ.hom
-    rw [SFinKer.Hom.ext_iff] at this
-    dsimp at this
-    rw [id_parallelComp_comp_parallelComp_id] at this
-    exact this.symm
-
-Depends on / 依赖: Deterministic, Deterministic.copy_natural, SFinKer, SFinKer.Hom.ext_iff, copy_natural, ext_iff, id_parallelComp_comp_parallelComp_id, this.symm
+  hom_comul := WideSubcategory.hom_ext_iff.mp <| Deterministic.copy_natural κ
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Deterministic κ] : IsDeterministic κ.hom.hom where
   parallelComp_self_comp_copy' := by
@@ -260,33 +146,9 @@ instance [Deterministic κ] : IsDeterministic κ.hom.hom where
     dsimp at this
     rw [id_parallelComp_comp_parallelComp_id] at this
     exact this.symm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PositiveCategory Stoch.{u}
-  body: by ext : 2; simp
-  copy_comp_natural κ η _ := by
-    ext : 2
-    dsimp
-    simp only [id_parallelComp_id, id_comp, id_parallelComp_comp_parallelComp_id]
-    have : IsDeterministic (κ ≫ η).hom.hom := inferInstance
-    exact (comp_parallelComp_comp_copy).symm
-
-中文:
-实例 :
-  签名: 正范畴 Stoch.{u}
-  定义体: by ext : 2; simp
-  copy_comp_natural κ η _ := by
-    ext : 2
-    dsimp
-    simp only [id_parallelComp_id, id_comp, id_parallelComp_comp_parallelComp_id]
-    have : IsDeterministic (κ ≫ η).hom.hom := inferInstance
-    exact (comp_parallelComp_comp_copy).symm
-
-Depends on / 依赖: IsDeterministic, comp_parallelComp_comp_copy, copy_comp_natural, hom.hom, id_comp, id_parallelComp_comp_parallelComp_id, id_parallelComp_id
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : PositiveCategory Stoch.{u} where
   discard_natural κ := by ext : 2; simp
@@ -298,3 +160,4 @@ noncomputable instance : PositiveCategory Stoch.{u} where
     exact (comp_parallelComp_comp_copy).symm
 
 end PositiveCategory
+

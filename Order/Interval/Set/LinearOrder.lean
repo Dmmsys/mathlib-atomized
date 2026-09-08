@@ -25,399 +25,250 @@ namespace Set
 variable {α : Type*} [LinearOrder α] {a a₁ a₂ b b₁ b₂ c d : α}
 
 @[to_dual]
-/--
-theorem `notMem_Ici` / 定理 `notMem_Ici`
-
-English:
-theorem notMem_Ici
-  statement: c ∉ Ici a ↔ c < a
-  proof: not_le
-
-@[to_dual]
-
-中文:
-定理 notMem_Ici
-  结论: c ∉ 左闭右无界区间 a ↔ c < a
-  证明: not_le
-
-@[to_dual]
-
-Depends on / 依赖: not_le
+/-
+**Set.notMem_Ici** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：notMem_Ici : c ∉ Ici a ↔ c < a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
 -/
 theorem notMem_Ici : c ∉ Ici a ↔ c < a :=
   not_le
 
 @[to_dual]
-/--
-theorem `notMem_Ioi` / 定理 `notMem_Ioi`
-
-English:
-theorem notMem_Ioi
-  statement: c ∉ Ioi a ↔ c <= a
-  proof: not_lt
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 notMem_Ioi
-  结论: c ∉ 左开右无界区间 a ↔ c <= a
-  证明: not_lt
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: not_lt
+/-
+**Set.notMem_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：notMem_Ioi : c ∉ Ioi a ↔ c <= a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
 -/
-theorem notMem_Ioi : c ∉ Ioi a ↔ c <= a :=
+theorem notMem_Ioi : c ∉ Ioi a ↔ c ≤ a :=
   not_lt
 
 @[to_dual (attr := simp)]
-/--
-theorem `compl_Iic` / 定理 `compl_Iic`
-
-English:
-theorem compl_Iic
-  statement: (Iic a)ᶜ = Ioi a
-  proof: ext fun _ => not_le
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 compl_Iic
-  结论: (左无界右闭区间 a)ᶜ = 左开右无界区间 a
-  证明: ext fun _ => not_le
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: not_le
+/-
+**Set.compl_Iic** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：compl_Iic : (Iic a)ᶜ = Ioi a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
 -/
 theorem compl_Iic : (Iic a)ᶜ = Ioi a :=
   ext fun _ => not_le
 
 @[to_dual (attr := simp)]
-/--
-theorem `compl_Iio` / 定理 `compl_Iio`
-
-English:
-theorem compl_Iio
-  statement: (Iio a)ᶜ = Ici a
-  proof: ext fun _ => not_lt
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 compl_Iio
-  结论: (左无界右开区间 a)ᶜ = 左闭右无界区间 a
-  证明: ext fun _ => not_lt
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: not_lt
+/-
+**Set.compl_Iio** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：compl_Iio : (Iio a)ᶜ = Ici a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
 -/
 theorem compl_Iio : (Iio a)ᶜ = Ici a :=
   ext fun _ => not_lt
 
 @[to_dual (attr := simp)]
-/--
-theorem `Ici_sdiff_Ici` / 定理 `Ici_sdiff_Ici`
-
-English:
-theorem Ici_sdiff_Ici
-  statement: Ici a \ Ici b = Ico a b
-  proof: by rw [sdiff_eq, compl_Ici, Ici_inter_Iio]
-
-@[deprecated (since := "2026-06-03")] alias Ici_diff_Ici := Ici_sdiff_Ici
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 Ici_sdiff_Ici
-  结论: 左闭右无界区间 a \ 左闭右无界区间 b = 左闭右开区间 a b
-  证明: by rw [sdiff_eq, compl_Ici, Ici_inter_Iio]
-
-@[deprecated (since := "2026-06-03")] alias Ici_diff_Ici := Ici_sdiff_Ici
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: Ici_inter_Iio, compl_Ici, sdiff_eq
+/-
+**Set.Ici_sdiff_Ici** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ici_sdiff_Ici : Ici a \ Ici b = Ico a b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.sdiff_eq`：sdiff_eq (s t : Set α) : s \ t = s inter tᶜ
+· 使用定理 `Set.compl_Ici`：∀ {α : Type u_1} [inst : LinearOrder α] {a : α}, (Set.Ici
+ a)ᶜ = Set.Iio a
+· 使用定理 `Set.Ici_inter_Iio`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, Set.I
+ci a ∩ Set.Iio b = Set.Ico a b
 -/
 theorem Ici_sdiff_Ici : Ici a \ Ici b = Ico a b := by rw [sdiff_eq, compl_Ici, Ici_inter_Iio]
 
 @[deprecated (since := "2026-06-03")] alias Ici_diff_Ici := Ici_sdiff_Ici
 
 @[to_dual (attr := simp)]
-/--
-theorem `Ici_sdiff_Ioi` / 定理 `Ici_sdiff_Ioi`
-
-English:
-theorem Ici_sdiff_Ioi
-  statement: Ici a \ Ioi b = Icc a b
-  proof: by rw [sdiff_eq, compl_Ioi, Ici_inter_Iic]
-
-@[deprecated (since := "2026-06-03")] alias Ici_diff_Ioi := Ici_sdiff_Ioi
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 Ici_sdiff_Ioi
-  结论: 左闭右无界区间 a \ 左开右无界区间 b = 闭区间 a b
-  证明: by rw [sdiff_eq, compl_Ioi, Ici_inter_Iic]
-
-@[deprecated (since := "2026-06-03")] alias Ici_diff_Ioi := Ici_sdiff_Ioi
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: Ici_inter_Iic, compl_Ioi, sdiff_eq
+/-
+**Set.Ici_sdiff_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ici_sdiff_Ioi : Ici a \ Ioi b = Icc a b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.sdiff_eq`：sdiff_eq (s t : Set α) : s \ t = s inter tᶜ
+· 使用定理 `Set.compl_Ioi`：∀ {α : Type u_1} [inst : LinearOrder α] {a : α}, (Set.Ioi
+ a)ᶜ = Set.Iic a
+· 使用定理 `Set.Ici_inter_Iic`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, Set.I
+ci a ∩ Set.Iic b = Set.Icc a b
 -/
 theorem Ici_sdiff_Ioi : Ici a \ Ioi b = Icc a b := by rw [sdiff_eq, compl_Ioi, Ici_inter_Iic]
 
 @[deprecated (since := "2026-06-03")] alias Ici_diff_Ioi := Ici_sdiff_Ioi
 
 @[to_dual (attr := simp)]
-/--
-theorem `Ioi_sdiff_Ioi` / 定理 `Ioi_sdiff_Ioi`
-
-English:
-theorem Ioi_sdiff_Ioi
-  statement: Ioi a \ Ioi b = Ioc a b
-  proof: by rw [sdiff_eq, compl_Ioi, Ioi_inter_Iic]
-
-@[deprecated (since := "2026-06-03")] alias Ioi_diff_Ioi := Ioi_sdiff_Ioi
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 Ioi_sdiff_Ioi
-  结论: 左开右无界区间 a \ 左开右无界区间 b = 左开右闭区间 a b
-  证明: by rw [sdiff_eq, compl_Ioi, Ioi_inter_Iic]
-
-@[deprecated (since := "2026-06-03")] alias Ioi_diff_Ioi := Ioi_sdiff_Ioi
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: Ioi_inter_Iic, compl_Ioi, sdiff_eq
+/-
+**Set.Ioi_sdiff_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioi_sdiff_Ioi : Ioi a \ Ioi b = Ioc a b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.sdiff_eq`：sdiff_eq (s t : Set α) : s \ t = s inter tᶜ
+· 使用定理 `Set.compl_Ioi`：∀ {α : Type u_1} [inst : LinearOrder α] {a : α}, (Set.Ioi
+ a)ᶜ = Set.Iic a
+· 使用定理 `Set.Ioi_inter_Iic`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, Set.I
+oi a ∩ Set.Iic b = Set.Ioc a b
 -/
 theorem Ioi_sdiff_Ioi : Ioi a \ Ioi b = Ioc a b := by rw [sdiff_eq, compl_Ioi, Ioi_inter_Iic]
 
 @[deprecated (since := "2026-06-03")] alias Ioi_diff_Ioi := Ioi_sdiff_Ioi
 
 @[to_dual (attr := simp)]
-/--
-theorem `Ioi_sdiff_Ici` / 定理 `Ioi_sdiff_Ici`
-
-English:
-theorem Ioi_sdiff_Ici
-  statement: Ioi a \ Ici b = Ioo a b
-  proof: by rw [sdiff_eq, compl_Ici, Ioi_inter_Iio]
-
-@[deprecated (since := "2026-06-03")] alias Ioi_diff_Ici := Ioi_sdiff_Ici
-
-@[to_dual]
-
-中文:
-定理 Ioi_sdiff_Ici
-  结论: 左开右无界区间 a \ 左闭右无界区间 b = 开区间 a b
-  证明: by rw [sdiff_eq, compl_Ici, Ioi_inter_Iio]
-
-@[deprecated (since := "2026-06-03")] alias Ioi_diff_Ici := Ioi_sdiff_Ici
-
-@[to_dual]
-
-Depends on / 依赖: Ioi_inter_Iio, compl_Ici, sdiff_eq
+/-
+**Set.Ioi_sdiff_Ici** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioi_sdiff_Ici : Ioi a \ Ici b = Ioo a b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.sdiff_eq`：sdiff_eq (s t : Set α) : s \ t = s inter tᶜ
+· 使用定理 `Set.compl_Ici`：∀ {α : Type u_1} [inst : LinearOrder α] {a : α}, (Set.Ici
+ a)ᶜ = Set.Iio a
+· 使用定理 `Set.Ioi_inter_Iio`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, Set.I
+oi a ∩ Set.Iio b = Set.Ioo a b
 -/
 theorem Ioi_sdiff_Ici : Ioi a \ Ici b = Ioo a b := by rw [sdiff_eq, compl_Ici, Ioi_inter_Iio]
 
 @[deprecated (since := "2026-06-03")] alias Ioi_diff_Ici := Ioi_sdiff_Ici
 
 @[to_dual]
-/--
-theorem `Ioi_injective` / 定理 `Ioi_injective`
-
-English:
-theorem Ioi_injective
-  statement: Injective (Ioi : α -> Set α)
-  proof: fun _ _ =>
-  eq_of_forall_gt_iff ∘ Set.ext_iff.1
-
-@[to_dual]
-
-中文:
-定理 Ioi_injective
-  结论: 单射 (左开右无界区间 : α -> 集合 α)
-  证明: fun _ _ =>
-  eq_of_forall_gt_iff ∘ Set.ext_iff.1
-
-@[to_dual]
+/-
+**Set.Ioi_injective** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioi_injective : Injective (Ioi : α -> Set α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_forall_gt_iff`：∀ {α : Type u_2} [inst : LinearOrder α] {a b : α}, 
+(∀ (c : α), a < c ↔ b < c) → a = b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.ext_iff`：∀ {α : Type u} {a b : Set α}, a = b ↔ ∀ (x : α), x ∈ a ↔ x 
+∈ b
 -/
-theorem Ioi_injective : Injective (Ioi : α -> Set α) := fun _ _ =>
+theorem Ioi_injective : Injective (Ioi : α → Set α) := fun _ _ =>
   eq_of_forall_gt_iff ∘ Set.ext_iff.1
 
 @[to_dual]
-/--
-theorem `Ioi_inj` / 定理 `Ioi_inj`
-
-English:
-theorem Ioi_inj
-  statement: Ioi a = Ioi b ↔ a = b
-  proof: Ioi_injective.eq_iff
-
-中文:
-定理 Ioi_inj
-  结论: 左开右无界区间 a = 左开右无界区间 b ↔ a = b
-  证明: Ioi_injective.eq_iff
-
-Depends on / 依赖: Ioi_injective, Ioi_injective.eq_iff, eq_iff
+/-
+**Set.Ioi_inj** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioi_inj : Ioi a = Ioi b ↔ a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Set.Ioi_injective`：Ioi_injective : Injective (Ioi : α -> Set α)
 -/
 theorem Ioi_inj : Ioi a = Ioi b ↔ a = b :=
   Ioi_injective.eq_iff
-
-/--
-theorem `Ico_subset_Ico_iff` / 定理 `Ico_subset_Ico_iff`
-
-English:
-theorem Ico_subset_Ico_iff
-  given: (h₁ : a₁ < b₁)
-  statement: Ico a₁ b₁ subseteq Ico a₂ b₂ ↔ a₂ <= a₁ ∧ b₁ <= b₂
-  proof: ⟨fun h =>
-    have : a₂ <= a₁ ∧ a₁ < b₂ := h ⟨le_rfl, h₁⟩
-    ⟨this.1, le_of_not_gt fun h' => lt_irrefl b₂ (h ⟨this.2.le, h'⟩).2⟩,
-    fun ⟨h₁, h₂⟩ => Ico_subset_Ico h₁ h₂⟩
-
-中文:
-定理 Ico_subset_Ico_iff
-  条件: (h₁ : a₁ < b₁)
-  结论: 左闭右开区间 a₁ b₁ subseteq 左闭右开区间 a₂ b₂ ↔ a₂ <= a₁ ∧ b₁ <= b₂
-  证明: ⟨fun h =>
-    have : a₂ <= a₁ ∧ a₁ < b₂ := h ⟨le_rfl, h₁⟩
-    ⟨this.1, le_of_not_gt fun h' => lt_irrefl b₂ (h ⟨this.2.le, h'⟩).2⟩,
-    fun ⟨h₁, h₂⟩ => Ico_subset_Ico h₁ h₂⟩
-
-Depends on / 依赖: Ico_subset_Ico, le_of_not_gt, le_rfl, lt_irrefl
+/-
+**Set.Ico_subset_Ico_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ico_subset_Ico_iff (h₁ : a₁ < b₁) : Ico a₁ b₁ subseteq Ico a₂ b₂ ↔ a₂ <= a
+₁ ∧ b₁ <= b₂
+参数：h₁ : a₁ < b₁。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
+· 使用引理 `lt_irrefl`：lt_irrefl (a : α) : ¬a < a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Set.Ico_subset_Ico`：Ico_subset_Ico (ha : a₂ <= a₁) (hb : b₁ <= b₂) : Ico
+ a₁ b₁ subseteq Ico a₂ b₂
 -/
-theorem Ico_subset_Ico_iff (h₁ : a₁ < b₁) : Ico a₁ b₁ subseteq Ico a₂ b₂ ↔ a₂ <= a₁ ∧ b₁ <= b₂ :=
+theorem Ico_subset_Ico_iff (h₁ : a₁ < b₁) : Ico a₁ b₁ ⊆ Ico a₂ b₂ ↔ a₂ ≤ a₁ ∧ b₁ ≤ b₂ :=
   ⟨fun h =>
-    have : a₂ <= a₁ ∧ a₁ < b₂ := h ⟨le_rfl, h₁⟩
+    have : a₂ ≤ a₁ ∧ a₁ < b₂ := h ⟨le_rfl, h₁⟩
     ⟨this.1, le_of_not_gt fun h' => lt_irrefl b₂ (h ⟨this.2.le, h'⟩).2⟩,
     fun ⟨h₁, h₂⟩ => Ico_subset_Ico h₁ h₂⟩
-
-/--
-theorem `Ioc_subset_Ioc_iff` / 定理 `Ioc_subset_Ioc_iff`
-
-English:
-theorem Ioc_subset_Ioc_iff
-  given: (h₁ : a₁ < b₁)
-  statement: Ioc a₁ b₁ subseteq Ioc a₂ b₂ ↔ b₁ <= b₂ ∧ a₂ <= a₁
-  proof: by
-  convert! @Ico_subset_Ico_iff αᵒᵈ _ b₁ b₂ a₁ a₂ h₁ using 2 <;> exact (@Ico_toDual α _ _ _).symm
-
-中文:
-定理 Ioc_subset_Ioc_iff
-  条件: (h₁ : a₁ < b₁)
-  结论: 左开右闭区间 a₁ b₁ subseteq 左开右闭区间 a₂ b₂ ↔ b₁ <= b₂ ∧ a₂ <= a₁
-  证明: by
-  convert! @Ico_subset_Ico_iff αᵒᵈ _ b₁ b₂ a₁ a₂ h₁ using 2 <;> exact (@Ico_toDual α _ _ _).symm
-
-Depends on / 依赖: Ico_subset_Ico_iff, Ico_toDual, convert
+/-
+**Set.Ioc_subset_Ioc_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioc_subset_Ioc_iff (h₁ : a₁ < b₁) : Ioc a₁ b₁ subseteq Ioc a₂ b₂ ↔ b₁ <= b
+₂ ∧ a₂ <= a₁
+参数：h₁ : a₁ < b₁。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `Set.Ico_toDual`：Ico_toDual : Ico (toDual a) (toDual b) = ofDual ⁻¹' Ioc 
+b a
+· 使用定理 `Set.Ico_subset_Ico_iff`：Ico_subset_Ico_iff (h₁ : a₁ < b₁) : Ico a₁ b₁ su
+bseteq Ico a₂ b₂ ↔ a₂ <= a₁ ∧ b₁ <= b₂
 -/
-theorem Ioc_subset_Ioc_iff (h₁ : a₁ < b₁) : Ioc a₁ b₁ subseteq Ioc a₂ b₂ ↔ b₁ <= b₂ ∧ a₂ <= a₁ := by
+theorem Ioc_subset_Ioc_iff (h₁ : a₁ < b₁) : Ioc a₁ b₁ ⊆ Ioc a₂ b₂ ↔ b₁ ≤ b₂ ∧ a₂ ≤ a₁ := by
   convert! @Ico_subset_Ico_iff αᵒᵈ _ b₁ b₂ a₁ a₂ h₁ using 2 <;> exact (@Ico_toDual α _ _ _).symm
-
-/--
-theorem `Ico_eq_Ico_iff` / 定理 `Ico_eq_Ico_iff`
-
-English:
-theorem Ico_eq_Ico_iff
-  given: (h : a < b ∨ c < d)
-  statement: Ico a b = Ico c d ↔ a = c ∧ b = d
-  proof: by
-  refine ⟨fun h => ?_, by grind⟩
-  have : c <= a ∧ b <= d := (Ico_subset_Ico_iff (show a < b by grind [Set.nonempty_Ico])).1 h.subset
-  have : a <= c ∧ d <= b := (Ico_subset_Ico_iff (show c < d by grind)).1 h.superset
-  grind
-
-中文:
-定理 Ico_eq_Ico_iff
-  条件: (h : a < b ∨ c < d)
-  结论: 左闭右开区间 a b = 左闭右开区间 c d ↔ a = c ∧ b = d
-  证明: by
-  refine ⟨fun h => ?_, by grind⟩
-  have : c <= a ∧ b <= d := (Ico_subset_Ico_iff (show a < b by grind [Set.nonempty_Ico])).1 h.subset
-  have : a <= c ∧ d <= b := (Ico_subset_Ico_iff (show c < d by grind)).1 h.superset
-  grind
-
-Depends on / 依赖: Ico_subset_Ico_iff, Set.nonempty_Ico, h.subset, h.superset, nonempty_Ico, subset, superset
+/-
+**Set.Ico_eq_Ico_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ico_eq_Ico_iff (h : a < b ∨ c < d) : Ico a b = Ico c d ↔ a = c ∧ b = d
+参数：h : a < b ∨ c < d。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.Ico_subset_Ico_iff`：Ico_subset_Ico_iff (h₁ : a₁ < b₁) : Ico a₁ b₁ su
+bseteq Ico a₂ b₂ ↔ a₂ <= a₁ ∧ b₁ <= b₂
+· 使用定理 `Eq.subset`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorder
+ α] {a b : α}, a = b → a ⊆ b
+· 使用定理 `Eq.superset`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preord
+er α] {a b : α}, a = b → b ⊆ a
 -/
 theorem Ico_eq_Ico_iff (h : a < b ∨ c < d) : Ico a b = Ico c d ↔ a = c ∧ b = d := by
-  refine ⟨fun h => ?_, by grind⟩
-  have : c <= a ∧ b <= d := (Ico_subset_Ico_iff (show a < b by grind [Set.nonempty_Ico])).1 h.subset
-  have : a <= c ∧ d <= b := (Ico_subset_Ico_iff (show c < d by grind)).1 h.superset
+  refine ⟨fun h ↦ ?_, by grind⟩
+  have : c ≤ a ∧ b ≤ d := (Ico_subset_Ico_iff (show a < b by grind [Set.nonempty_Ico])).1 h.subset
+  have : a ≤ c ∧ d ≤ b := (Ico_subset_Ico_iff (show c < d by grind)).1 h.superset
   grind
-
-/--
-theorem `Ioc_eq_Ioc_iff` / 定理 `Ioc_eq_Ioc_iff`
-
-English:
-theorem Ioc_eq_Ioc_iff
-  given: (hab : a < b ∨ c < d)
-  statement: Ioc a b = Ioc c d ↔ a = c ∧ b = d
-  proof: by
-  refine ⟨fun h => ?_, by grind⟩
-  have : b <= d ∧ c <= a := (Ioc_subset_Ioc_iff (show a < b by grind [Set.nonempty_Ioc])).1 h.subset
-  have : d <= b ∧ a <= c := (Ioc_subset_Ioc_iff (show c < d by grind)).1 h.superset
-  grind
-
-中文:
-定理 Ioc_eq_Ioc_iff
-  条件: (hab : a < b ∨ c < d)
-  结论: 左开右闭区间 a b = 左开右闭区间 c d ↔ a = c ∧ b = d
-  证明: by
-  refine ⟨fun h => ?_, by grind⟩
-  have : b <= d ∧ c <= a := (Ioc_subset_Ioc_iff (show a < b by grind [Set.nonempty_Ioc])).1 h.subset
-  have : d <= b ∧ a <= c := (Ioc_subset_Ioc_iff (show c < d by grind)).1 h.superset
-  grind
-
-Depends on / 依赖: Ioc_subset_Ioc_iff, Set.nonempty_Ioc, h.subset, h.superset, nonempty_Ioc, subset, superset
+/-
+**Set.Ioc_eq_Ioc_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioc_eq_Ioc_iff (hab : a < b ∨ c < d) : Ioc a b = Ioc c d ↔ a = c ∧ b = d
+参数：hab : a < b ∨ c < d。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.Ioc_subset_Ioc_iff`：Ioc_subset_Ioc_iff (h₁ : a₁ < b₁) : Ioc a₁ b₁ su
+bseteq Ioc a₂ b₂ ↔ b₁ <= b₂ ∧ a₂ <= a₁
+· 使用定理 `Eq.subset`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorder
+ α] {a b : α}, a = b → a ⊆ b
+· 使用定理 `Eq.superset`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preord
+er α] {a b : α}, a = b → b ⊆ a
 -/
 theorem Ioc_eq_Ioc_iff (hab : a < b ∨ c < d) : Ioc a b = Ioc c d ↔ a = c ∧ b = d := by
-  refine ⟨fun h => ?_, by grind⟩
-  have : b <= d ∧ c <= a := (Ioc_subset_Ioc_iff (show a < b by grind [Set.nonempty_Ioc])).1 h.subset
-  have : d <= b ∧ a <= c := (Ioc_subset_Ioc_iff (show c < d by grind)).1 h.superset
+  refine ⟨fun h ↦ ?_, by grind⟩
+  have : b ≤ d ∧ c ≤ a := (Ioc_subset_Ioc_iff (show a < b by grind [Set.nonempty_Ioc])).1 h.subset
+  have : d ≤ b ∧ a ≤ c := (Ioc_subset_Ioc_iff (show c < d by grind)).1 h.superset
   grind
-
-/--
-theorem `Ioo_subset_Ioo_iff` / 定理 `Ioo_subset_Ioo_iff`
-
-English:
-theorem Ioo_subset_Ioo_iff
-  given: [DenselyOrdered α] (h₁ : a₁ < b₁)
-  proof: ⟨fun h => by
-    rcases exists_between h₁ with ⟨x, xa, xb⟩
-    constructor <;> refine le_of_not_gt fun h' => ?_
-    · have ab := (h ⟨xa, xb⟩).1.trans xb
-      exact lt_irrefl _ (h ⟨h', ab⟩).1
-    · have ab := xa.trans (h ⟨xa, xb⟩).2
-      exact lt_irrefl _ (h ⟨ab, h'⟩).2,
-    fun ⟨h₁, h₂⟩ => Ioo_subset_Ioo h₁ h₂⟩
-
-@[to_dual]
-
-中文:
-定理 Ioo_subset_Ioo_iff
-  条件: [稠密序 α] (h₁ : a₁ < b₁)
-  证明: ⟨fun h => by
-    rcases exists_between h₁ with ⟨x, xa, xb⟩
-    constructor <;> refine le_of_not_gt fun h' => ?_
-    · have ab := (h ⟨xa, xb⟩).1.trans xb
-      exact lt_irrefl _ (h ⟨h', ab⟩).1
-    · have ab := xa.trans (h ⟨xa, xb⟩).2
-      exact lt_irrefl _ (h ⟨ab, h'⟩).2,
-    fun ⟨h₁, h₂⟩ => Ioo_subset_Ioo h₁ h₂⟩
-
-@[to_dual]
-
-Depends on / 依赖: Ioo_subset_Ioo, exists_between, le_of_not_gt, lt_irrefl, xa.trans
+/-
+**Set.Ioo_subset_Ioo_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioo_subset_Ioo_iff [DenselyOrdered α] (h₁ : a₁ < b₁) : Ioo a₁ b₁ subseteq 
+Ioo a₂ b₂ ↔ a₂ <= a₁ ∧ b₁ <= b₂
+参数：h₁ : a₁ < b₁。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_between`：exists_between [LT α] [DenselyOrdered α] {a₁ a₂ : α} : a
+₁ < a₂ -> exists a, a₁ < a ∧ a < a₂
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `lt_irrefl`：lt_irrefl (a : α) : ¬a < a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Set.Ioo_subset_Ioo`：Ioo_subset_Ioo (ha : a₂ <= a₁) (hb : b₁ <= b₂) : Ioo
+ a₁ b₁ subseteq Ioo a₂ b₂
 -/
 theorem Ioo_subset_Ioo_iff [DenselyOrdered α] (h₁ : a₁ < b₁) :
-    Ioo a₁ b₁ subseteq Ioo a₂ b₂ ↔ a₂ <= a₁ ∧ b₁ <= b₂ :=
+    Ioo a₁ b₁ ⊆ Ioo a₂ b₂ ↔ a₂ ≤ a₁ ∧ b₁ ≤ b₂ :=
   ⟨fun h => by
     rcases exists_between h₁ with ⟨x, xa, xb⟩
     constructor <;> refine le_of_not_gt fun h' => ?_
@@ -428,100 +279,71 @@ theorem Ioo_subset_Ioo_iff [DenselyOrdered α] (h₁ : a₁ < b₁) :
     fun ⟨h₁, h₂⟩ => Ioo_subset_Ioo h₁ h₂⟩
 
 @[to_dual]
-/--
-lemma `Ici_eq_singleton_iff_isTop` / 引理 `Ici_eq_singleton_iff_isTop`
-
-English:
-lemma Ici_eq_singleton_iff_isTop
-  given: {x : α}
-  statement: (Ici x = {x}) ↔ IsTop x
-  proof: by
-  refine ⟨fun h y => ?_, fun h => by ext y; simp [(h y).ge_iff_eq]⟩
-  by_contra! H
-  have : y in Ici x := H.le
-  rw [h]; rw [mem_singleton_iff] at this
-  exact lt_irrefl y (this.le.trans_lt H)
-
-@[to_dual (attr := simp)]
-
-中文:
-引理 Ici_eq_singleton_iff_isTop
-  条件: {x : α}
-  结论: (左闭右无界区间 x = {x}) ↔ IsTop x
-  证明: by
-  refine ⟨fun h y => ?_, fun h => by ext y; simp [(h y).ge_iff_eq]⟩
-  by_contra! H
-  have : y in Ici x := H.le
-  rw [h]; rw [mem_singleton_iff] at this
-  exact lt_irrefl y (this.le.trans_lt H)
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: H.le, ge_iff_eq, lt_irrefl, mem_singleton_iff, this.le.trans_lt, trans_lt
+/-
+**Set.Ici_eq_singleton_iff_isTop** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：Ici_eq_singleton_iff_isTop {x : α} : (Ici x = {x}) ↔ IsTop x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用引理 `lt_irrefl`：lt_irrefl (a : α) : ¬a < a
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mem_singleton_iff`：mem_singleton_iff {a b : α} : a in ({b} : Set α) 
+↔ a = b
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `LE.le.ge_iff_eq`：ge_iff_eq (h : a <= b) : b <= a ↔ a = b
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma Ici_eq_singleton_iff_isTop {x : α} : (Ici x = {x}) ↔ IsTop x := by
-  refine ⟨fun h y => ?_, fun h => by ext y; simp [(h y).ge_iff_eq]⟩
+  refine ⟨fun h y ↦ ?_, fun h ↦ by ext y; simp [(h y).ge_iff_eq]⟩
   by_contra! H
-  have : y in Ici x := H.le
-  rw [h]; rw [mem_singleton_iff] at this
+  have : y ∈ Ici x := H.le
+  rw [h, mem_singleton_iff] at this
   exact lt_irrefl y (this.le.trans_lt H)
 
 @[to_dual (attr := simp)]
-/--
-theorem `Ioi_subset_Ioi_iff` / 定理 `Ioi_subset_Ioi_iff`
-
-English:
-theorem Ioi_subset_Ioi_iff
-  statement: Ioi b subseteq Ioi a ↔ a <= b
-  proof: by
-  refine ⟨fun h => ?_, Ioi_subset_Ioi⟩
-  by_contra ba
-  exact lt_irrefl _ (h (not_le.mp ba))
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 Ioi_subset_Ioi_iff
-  结论: 左开右无界区间 b subseteq 左开右无界区间 a ↔ a <= b
-  证明: by
-  refine ⟨fun h => ?_, Ioi_subset_Ioi⟩
-  by_contra ba
-  exact lt_irrefl _ (h (not_le.mp ba))
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: Ioi_subset_Ioi, lt_irrefl, not_le, not_le.mp
+/-
+**Set.Ioi_subset_Ioi_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioi_subset_Ioi_iff : Ioi b subseteq Ioi a ↔ a <= b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用引理 `lt_irrefl`：lt_irrefl (a : α) : ¬a < a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `Set.Ioi_subset_Ioi`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b ≤ 
+a → Set.Ioi a ⊆ Set.Ioi b
 -/
-theorem Ioi_subset_Ioi_iff : Ioi b subseteq Ioi a ↔ a <= b := by
+theorem Ioi_subset_Ioi_iff : Ioi b ⊆ Ioi a ↔ a ≤ b := by
   refine ⟨fun h => ?_, Ioi_subset_Ioi⟩
   by_contra ba
   exact lt_irrefl _ (h (not_le.mp ba))
 
 @[to_dual (attr := simp)]
-/--
-theorem `Ioi_ssubset_Ioi_iff` / 定理 `Ioi_ssubset_Ioi_iff`
-
-English:
-theorem Ioi_ssubset_Ioi_iff
-  statement: Ioi b ⊂ Ioi a ↔ a < b
-  proof: by
-  refine ⟨fun h => ?_, Ioi_ssubset_Ioi⟩
-  obtain ⟨_, c, ac, cb⟩ := ssubset_iff_exists.mp h
-  exact ac.trans_le (le_of_not_gt cb)
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 Ioi_ssubset_Ioi_iff
-  结论: 左开右无界区间 b ⊂ 左开右无界区间 a ↔ a < b
-  证明: by
-  refine ⟨fun h => ?_, Ioi_ssubset_Ioi⟩
-  obtain ⟨_, c, ac, cb⟩ := ssubset_iff_exists.mp h
-  exact ac.trans_le (le_of_not_gt cb)
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: Ioi_ssubset_Ioi, ac.trans_le, le_of_not_gt, ssubset_iff_exists, ssubset_iff_exists.mp, trans_le
+/-
+**Set.Ioi_ssubset_Ioi_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioi_ssubset_Ioi_iff : Ioi b ⊂ Ioi a ↔ a < b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.ssubset_iff_exists`：ssubset_iff_exists {s t : Set α} : s ⊂ t ↔ s sub
+seteq t ∧ exists x in t, x ∉ s
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
+· 使用定理 `Set.Ioi_ssubset_Ioi`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b <
+ a → Set.Ioi a ⊂ Set.Ioi b
 -/
 theorem Ioi_ssubset_Ioi_iff : Ioi b ⊂ Ioi a ↔ a < b := by
   refine ⟨fun h => ?_, Ioi_ssubset_Ioi⟩
@@ -529,1364 +351,913 @@ theorem Ioi_ssubset_Ioi_iff : Ioi b ⊂ Ioi a ↔ a < b := by
   exact ac.trans_le (le_of_not_gt cb)
 
 @[to_dual (attr := simp)]
-/--
-theorem `Ioi_subset_Ici_iff` / 定理 `Ioi_subset_Ici_iff`
-
-English:
-theorem Ioi_subset_Ici_iff
-  given: [DenselyOrdered α]
-  statement: Ioi b subseteq Ici a ↔ a <= b
-  proof: by
-  refine ⟨fun h => ?_, Ioi_subset_Ici⟩
-  by_contra ba
-  obtain ⟨c, bc, ca⟩ : exists c, b < c ∧ c < a := exists_between (not_le.mp ba)
-  exact lt_irrefl _ (ca.trans_le (h bc))
-
-中文:
-定理 Ioi_subset_Ici_iff
-  条件: [稠密序 α]
-  结论: 左开右无界区间 b subseteq 左闭右无界区间 a ↔ a <= b
-  证明: by
-  refine ⟨fun h => ?_, Ioi_subset_Ici⟩
-  by_contra ba
-  obtain ⟨c, bc, ca⟩ : exists c, b < c ∧ c < a := exists_between (not_le.mp ba)
-  exact lt_irrefl _ (ca.trans_le (h bc))
-
-Depends on / 依赖: Ioi_subset_Ici, ca.trans_le, exists_between, lt_irrefl, not_le, not_le.mp, trans_le
+/-
+**Set.Ioi_subset_Ici_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioi_subset_Ici_iff [DenselyOrdered α] : Ioi b subseteq Ici a ↔ a <= b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `exists_between`：exists_between [LT α] [DenselyOrdered α] {a₁ a₂ : α} : a
+₁ < a₂ -> exists a, a₁ < a ∧ a < a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用引理 `lt_irrefl`：lt_irrefl (a : α) : ¬a < a
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Set.Ioi_subset_Ici`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b ≤ 
+a → Set.Ioi a ⊆ Set.Ici b
 -/
-theorem Ioi_subset_Ici_iff [DenselyOrdered α] : Ioi b subseteq Ici a ↔ a <= b := by
+theorem Ioi_subset_Ici_iff [DenselyOrdered α] : Ioi b ⊆ Ici a ↔ a ≤ b := by
   refine ⟨fun h => ?_, Ioi_subset_Ici⟩
   by_contra ba
-  obtain ⟨c, bc, ca⟩ : exists c, b < c ∧ c < a := exists_between (not_le.mp ba)
+  obtain ⟨c, bc, ca⟩ : ∃ c, b < c ∧ c < a := exists_between (not_le.mp ba)
   exact lt_irrefl _ (ca.trans_le (h bc))
 
 /-! ### Two infinite intervals -/
 
 @[to_dual]
-/--
-theorem `Iic_union_Ioi_of_le` / 定理 `Iic_union_Ioi_of_le`
+/-
+**Set.Iic_union_Ioi_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iic_union_Ioi_of_le (h : a <= b) : Iic b union Ioi a = univ
+参数：h : a <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_univ_of_forall`：eq_univ_of_forall {s : Set α} : (forall x, x in s
+) -> s = univ
+· 使用定理 `Or.symm`：∀ {a b : Prop}, a ∨ b → b ∨ a
+· 使用引理 `LE.le.gt_or_le`：gt_or_le (h : a <= b) (c : α) : a < c ∨ c <= b
 
-English:
-theorem Iic_union_Ioi_of_le
-  given: (h : a <= b)
-  statement: Iic b union Ioi a = univ
-  proof: eq_univ_of_forall fun x => (h.gt_or_le x).symm
-
-@[to_dual]
-
-中文:
-定理 Iic_union_Ioi_of_le
-  条件: (h : a <= b)
-  结论: 左无界右闭区间 b union 左开右无界区间 a = univ
-  证明: eq_univ_of_forall fun x => (h.gt_or_le x).symm
-
-@[to_dual]
-
-Depends on / 依赖: eq_univ_of_forall, gt_or_le, h.gt_or_le
+--- 原说明 ---
+### Two infinite intervals
 -/
-theorem Iic_union_Ioi_of_le (h : a <= b) : Iic b union Ioi a = univ :=
+theorem Iic_union_Ioi_of_le (h : a ≤ b) : Iic b ∪ Ioi a = univ :=
   eq_univ_of_forall fun x => (h.gt_or_le x).symm
 
 @[to_dual]
-/--
-theorem `Iio_union_Ici_of_le` / 定理 `Iio_union_Ici_of_le`
-
-English:
-theorem Iio_union_Ici_of_le
-  given: (h : a <= b)
-  statement: Iio b union Ici a = univ
-  proof: eq_univ_of_forall fun x => (h.ge_or_lt x).symm
-
-@[to_dual]
-
-中文:
-定理 Iio_union_Ici_of_le
-  条件: (h : a <= b)
-  结论: 左无界右开区间 b union 左闭右无界区间 a = univ
-  证明: eq_univ_of_forall fun x => (h.ge_or_lt x).symm
-
-@[to_dual]
-
-Depends on / 依赖: eq_univ_of_forall, ge_or_lt, h.ge_or_lt
+/-
+**Set.Iio_union_Ici_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iio_union_Ici_of_le (h : a <= b) : Iio b union Ici a = univ
+参数：h : a <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_univ_of_forall`：eq_univ_of_forall {s : Set α} : (forall x, x in s
+) -> s = univ
+· 使用定理 `Or.symm`：∀ {a b : Prop}, a ∨ b → b ∨ a
+· 使用引理 `LE.le.ge_or_lt`：ge_or_lt (h : a <= b) (c : α) : a <= c ∨ c < b
 -/
-theorem Iio_union_Ici_of_le (h : a <= b) : Iio b union Ici a = univ :=
+theorem Iio_union_Ici_of_le (h : a ≤ b) : Iio b ∪ Ici a = univ :=
   eq_univ_of_forall fun x => (h.ge_or_lt x).symm
 
 @[to_dual]
-/--
-theorem `Iic_union_Ici_of_le` / 定理 `Iic_union_Ici_of_le`
-
-English:
-theorem Iic_union_Ici_of_le
-  given: (h : a <= b)
-  statement: Iic b union Ici a = univ
-  proof: eq_univ_of_forall fun x => (h.ge_or_le x).symm
-
-@[to_dual]
-
-中文:
-定理 Iic_union_Ici_of_le
-  条件: (h : a <= b)
-  结论: 左无界右闭区间 b union 左闭右无界区间 a = univ
-  证明: eq_univ_of_forall fun x => (h.ge_or_le x).symm
-
-@[to_dual]
-
-Depends on / 依赖: eq_univ_of_forall, ge_or_le, h.ge_or_le
+/-
+**Set.Iic_union_Ici_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iic_union_Ici_of_le (h : a <= b) : Iic b union Ici a = univ
+参数：h : a <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_univ_of_forall`：eq_univ_of_forall {s : Set α} : (forall x, x in s
+) -> s = univ
+· 使用定理 `Or.symm`：∀ {a b : Prop}, a ∨ b → b ∨ a
+· 使用引理 `LE.le.ge_or_le`：ge_or_le (h : a <= b) (c : α) : a <= c ∨ c <= b
 -/
-theorem Iic_union_Ici_of_le (h : a <= b) : Iic b union Ici a = univ :=
+theorem Iic_union_Ici_of_le (h : a ≤ b) : Iic b ∪ Ici a = univ :=
   eq_univ_of_forall fun x => (h.ge_or_le x).symm
 
 @[to_dual]
-/--
-theorem `Iio_union_Ioi_of_lt` / 定理 `Iio_union_Ioi_of_lt`
-
-English:
-theorem Iio_union_Ioi_of_lt
-  given: (h : a < b)
-  statement: Iio b union Ioi a = univ
-  proof: eq_univ_of_forall fun x => (h.gt_or_lt x).symm
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 Iio_union_Ioi_of_lt
-  条件: (h : a < b)
-  结论: 左无界右开区间 b union 左开右无界区间 a = univ
-  证明: eq_univ_of_forall fun x => (h.gt_or_lt x).symm
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: eq_univ_of_forall, gt_or_lt, h.gt_or_lt
+/-
+**Set.Iio_union_Ioi_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iio_union_Ioi_of_lt (h : a < b) : Iio b union Ioi a = univ
+参数：h : a < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_univ_of_forall`：eq_univ_of_forall {s : Set α} : (forall x, x in s
+) -> s = univ
+· 使用定理 `Or.symm`：∀ {a b : Prop}, a ∨ b → b ∨ a
+· 使用引理 `LT.lt.gt_or_lt`：gt_or_lt (h : a < b) (c : α) : a < c ∨ c < b
 -/
-theorem Iio_union_Ioi_of_lt (h : a < b) : Iio b union Ioi a = univ :=
+theorem Iio_union_Ioi_of_lt (h : a < b) : Iio b ∪ Ioi a = univ :=
   eq_univ_of_forall fun x => (h.gt_or_lt x).symm
 
 @[to_dual (attr := simp)]
-/--
-theorem `Iic_union_Ici` / 定理 `Iic_union_Ici`
-
-English:
-theorem Iic_union_Ici
-  statement: Iic a union Ici a = univ
-  proof: Iic_union_Ici_of_le le_rfl
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 Iic_union_Ici
-  结论: 左无界右闭区间 a union 左闭右无界区间 a = univ
-  证明: Iic_union_Ici_of_le le_rfl
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: Iic_union_Ici_of_le, le_rfl
+/-
+**Set.Iic_union_Ici** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iic_union_Ici : Iic a union Ici a = univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Iic_union_Ici_of_le`：Iic_union_Ici_of_le (h : a <= b) : Iic b union 
+Ici a = univ
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem Iic_union_Ici : Iic a union Ici a = univ :=
+theorem Iic_union_Ici : Iic a ∪ Ici a = univ :=
   Iic_union_Ici_of_le le_rfl
 
 @[to_dual (attr := simp)]
-/--
-theorem `Iio_union_Ici` / 定理 `Iio_union_Ici`
-
-English:
-theorem Iio_union_Ici
-  statement: Iio a union Ici a = univ
-  proof: Iio_union_Ici_of_le le_rfl
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 Iio_union_Ici
-  结论: 左无界右开区间 a union 左闭右无界区间 a = univ
-  证明: Iio_union_Ici_of_le le_rfl
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: Iio_union_Ici_of_le, le_rfl
+/-
+**Set.Iio_union_Ici** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iio_union_Ici : Iio a union Ici a = univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Iio_union_Ici_of_le`：Iio_union_Ici_of_le (h : a <= b) : Iio b union 
+Ici a = univ
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem Iio_union_Ici : Iio a union Ici a = univ :=
+theorem Iio_union_Ici : Iio a ∪ Ici a = univ :=
   Iio_union_Ici_of_le le_rfl
 
 @[to_dual (attr := simp)]
-/--
-theorem `Iic_union_Ioi` / 定理 `Iic_union_Ioi`
-
-English:
-theorem Iic_union_Ioi
-  statement: Iic a union Ioi a = univ
-  proof: Iic_union_Ioi_of_le le_rfl
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 Iic_union_Ioi
-  结论: 左无界右闭区间 a union 左开右无界区间 a = univ
-  证明: Iic_union_Ioi_of_le le_rfl
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: Iic_union_Ioi_of_le, le_rfl
+/-
+**Set.Iic_union_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iic_union_Ioi : Iic a union Ioi a = univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Iic_union_Ioi_of_le`：Iic_union_Ioi_of_le (h : a <= b) : Iic b union 
+Ioi a = univ
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem Iic_union_Ioi : Iic a union Ioi a = univ :=
+theorem Iic_union_Ioi : Iic a ∪ Ioi a = univ :=
   Iic_union_Ioi_of_le le_rfl
 
 @[to_dual (attr := simp)]
-/--
-theorem `Iio_union_Ioi` / 定理 `Iio_union_Ioi`
-
-English:
-theorem Iio_union_Ioi
-  statement: Iio a union Ioi a = {a}ᶜ
-  proof: ext fun _ => lt_or_lt_iff_ne
-
-中文:
-定理 Iio_union_Ioi
-  结论: 左无界右开区间 a union 左开右无界区间 a = {a}ᶜ
-  证明: ext fun _ => lt_or_lt_iff_ne
-
-Depends on / 依赖: lt_or_lt_iff_ne
+/-
+**Set.Iio_union_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iio_union_Ioi : Iio a union Ioi a = {a}ᶜ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `lt_or_lt_iff_ne`：lt_or_lt_iff_ne : a < b ∨ b < a ↔ a != b
 -/
-theorem Iio_union_Ioi : Iio a union Ioi a = {a}ᶜ :=
+theorem Iio_union_Ioi : Iio a ∪ Ioi a = {a}ᶜ :=
   ext fun _ => lt_or_lt_iff_ne
 
+/-! ### A finite and an infinite interval -/
 
-/--
-theorem `Ioo_union_Ioi` / 定理 `Ioo_union_Ioi`
+/-
+**Set.Ioo_union_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioo_union_Ioi (h : c < max a b) : Ioo a b union Ioi c = Ioi (min a c)
+参数：h : c < max a b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem Ioo_union_Ioi
-  given: (h : c < max a b)
-  statement: Ioo a b union Ioi c = Ioi (min a c)
-  proof: by
-  grind
-
-@[deprecated Ioo_union_Ioi (since := "2026-02-22")]
-
-中文:
-定理 Ioo_union_Ioi
-  条件: (h : c < 最大值 a b)
-  结论: 开区间 a b union 左开右无界区间 c = 左开右无界区间 (最小值 a c)
-  证明: by
-  grind
-
-@[deprecated Ioo_union_Ioi (since := "2026-02-22")]
+--- 原说明 ---
+### A finite and an infinite interval
 -/
-theorem Ioo_union_Ioi (h : c < max a b) : Ioo a b union Ioi c = Ioi (min a c) := by
+theorem Ioo_union_Ioi (h : c < max a b) : Ioo a b ∪ Ioi c = Ioi (min a c) := by
   grind
 
 @[deprecated Ioo_union_Ioi (since := "2026-02-22")]
-/--
-theorem `Ioo_union_Ioi'` / 定理 `Ioo_union_Ioi'`
-
-English:
-theorem Ioo_union_Ioi'
-  given: (h₁ : c < b)
-  statement: Ioo a b union Ioi c = Ioi (min a c)
-  proof: Ioo_union_Ioi (h₁.trans_le (le_max_right ..))
-
-中文:
-定理 Ioo_union_Ioi'
-  条件: (h₁ : c < b)
-  结论: 开区间 a b union 左开右无界区间 c = 左开右无界区间 (最小值 a c)
-  证明: Ioo_union_Ioi (h₁.trans_le (le_max_right ..))
-
-Depends on / 依赖: Ioo_union_Ioi, le_max_right, trans_le
+/-
+**Set.Ioo_union_Ioi'** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioo_union_Ioi' (h₁ : c < b) : Ioo a b union Ioi c = Ioi (min a c)
+参数：h₁ : c < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Ioo_union_Ioi`：Ioo_union_Ioi (h : c < max a b) : Ioo a b union Ioi c
+ = Ioi (min a c)
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `le_max_right`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), b ≤ max
+ a b
 -/
-theorem Ioo_union_Ioi' (h₁ : c < b) : Ioo a b union Ioi c = Ioi (min a c) :=
+theorem Ioo_union_Ioi' (h₁ : c < b) : Ioo a b ∪ Ioi c = Ioi (min a c) :=
   Ioo_union_Ioi (h₁.trans_le (le_max_right ..))
-
-/--
-theorem `Ioi_subset_Ioo_union_Ici` / 定理 `Ioi_subset_Ioo_union_Ici`
-
-English:
-theorem Ioi_subset_Ioo_union_Ici
-  statement: Ioi a subseteq Ioo a b union Ici b
-  proof: fun x hx =>
-  (lt_or_ge x b).elim (fun hxb => Or.inl ⟨hx, hxb⟩) fun hxb => Or.inr hxb
-
-@[simp]
-
-中文:
-定理 Ioi_subset_Ioo_union_Ici
-  结论: 左开右无界区间 a subseteq 开区间 a b union 左闭右无界区间 b
-  证明: fun x hx =>
-  (lt_or_ge x b).elim (fun hxb => Or.inl ⟨hx, hxb⟩) fun hxb => Or.inr hxb
-
-@[simp]
+/-
+**Set.Ioi_subset_Ioo_union_Ici** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioi_subset_Ioo_union_Ici : Ioi a subseteq Ioo a b union Ici b
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `lt_or_ge`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a < b ∨ b ≤
+ a
 -/
-theorem Ioi_subset_Ioo_union_Ici : Ioi a subseteq Ioo a b union Ici b := fun x hx =>
+theorem Ioi_subset_Ioo_union_Ici : Ioi a ⊆ Ioo a b ∪ Ici b := fun x hx =>
   (lt_or_ge x b).elim (fun hxb => Or.inl ⟨hx, hxb⟩) fun hxb => Or.inr hxb
 
 @[simp]
-/--
-theorem `Ioo_union_Ici_eq_Ioi` / 定理 `Ioo_union_Ici_eq_Ioi`
-
-English:
-theorem Ioo_union_Ici_eq_Ioi
-  given: (h : a < b)
-  statement: Ioo a b union Ici b = Ioi a
-  proof: Subset.antisymm (fun _ hx => hx.elim And.left h.trans_le) Ioi_subset_Ioo_union_Ici
-
-中文:
-定理 Ioo_union_Ici_eq_Ioi
-  条件: (h : a < b)
-  结论: 开区间 a b union 左闭右无界区间 b = 左开右无界区间 a
-  证明: Subset.antisymm (fun _ hx => hx.elim And.left h.trans_le) Ioi_subset_Ioo_union_Ici
-
-Depends on / 依赖: And.left, Ioi_subset_Ioo_union_Ici, Subset, Subset.antisymm, antisymm, h.trans_le, hx.elim, trans_le
+/-
+**Set.Ioo_union_Ici_eq_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioo_union_Ici_eq_Ioi (h : a < b) : Ioo a b union Ici b = Ioi a
+参数：h : a < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Set.Ioi_subset_Ioo_union_Ici`：Ioi_subset_Ioo_union_Ici : Ioi a subseteq 
+Ioo a b union Ici b
 -/
-theorem Ioo_union_Ici_eq_Ioi (h : a < b) : Ioo a b union Ici b = Ioi a :=
+theorem Ioo_union_Ici_eq_Ioi (h : a < b) : Ioo a b ∪ Ici b = Ioi a :=
   Subset.antisymm (fun _ hx => hx.elim And.left h.trans_le) Ioi_subset_Ioo_union_Ici
-
-/--
-theorem `Ici_subset_Ico_union_Ici` / 定理 `Ici_subset_Ico_union_Ici`
-
-English:
-theorem Ici_subset_Ico_union_Ici
-  statement: Ici a subseteq Ico a b union Ici b
-  proof: fun x hx =>
-  (lt_or_ge x b).elim (fun hxb => Or.inl ⟨hx, hxb⟩) fun hxb => Or.inr hxb
-
-@[simp]
-
-中文:
-定理 Ici_subset_Ico_union_Ici
-  结论: 左闭右无界区间 a subseteq 左闭右开区间 a b union 左闭右无界区间 b
-  证明: fun x hx =>
-  (lt_or_ge x b).elim (fun hxb => Or.inl ⟨hx, hxb⟩) fun hxb => Or.inr hxb
-
-@[simp]
+/-
+**Set.Ici_subset_Ico_union_Ici** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ici_subset_Ico_union_Ici : Ici a subseteq Ico a b union Ici b
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `lt_or_ge`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a < b ∨ b ≤
+ a
 -/
-theorem Ici_subset_Ico_union_Ici : Ici a subseteq Ico a b union Ici b := fun x hx =>
+theorem Ici_subset_Ico_union_Ici : Ici a ⊆ Ico a b ∪ Ici b := fun x hx =>
   (lt_or_ge x b).elim (fun hxb => Or.inl ⟨hx, hxb⟩) fun hxb => Or.inr hxb
 
 @[simp]
-/--
-theorem `Ico_union_Ici_eq_Ici` / 定理 `Ico_union_Ici_eq_Ici`
-
-English:
-theorem Ico_union_Ici_eq_Ici
-  given: (h : a <= b)
-  statement: Ico a b union Ici b = Ici a
-  proof: Subset.antisymm (fun _ hx => hx.elim And.left h.trans) Ici_subset_Ico_union_Ici
-
-中文:
-定理 Ico_union_Ici_eq_Ici
-  条件: (h : a <= b)
-  结论: 左闭右开区间 a b union 左闭右无界区间 b = 左闭右无界区间 a
-  证明: Subset.antisymm (fun _ hx => hx.elim And.left h.trans) Ici_subset_Ico_union_Ici
-
-Depends on / 依赖: And.left, Ici_subset_Ico_union_Ici, Subset, Subset.antisymm, antisymm, h.trans, hx.elim
+/-
+**Set.Ico_union_Ici_eq_Ici** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ico_union_Ici_eq_Ici (h : a <= b) : Ico a b union Ici b = Ici a
+参数：h : a <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Set.Ici_subset_Ico_union_Ici`：Ici_subset_Ico_union_Ici : Ici a subseteq 
+Ico a b union Ici b
 -/
-theorem Ico_union_Ici_eq_Ici (h : a <= b) : Ico a b union Ici b = Ici a :=
+theorem Ico_union_Ici_eq_Ici (h : a ≤ b) : Ico a b ∪ Ici b = Ici a :=
   Subset.antisymm (fun _ hx => hx.elim And.left h.trans) Ici_subset_Ico_union_Ici
-
-/--
-theorem `Ico_union_Ici` / 定理 `Ico_union_Ici`
-
-English:
-theorem Ico_union_Ici
-  given: (h : c <= max a b)
-  statement: Ico a b union Ici c = Ici (min a c)
-  proof: by
-  grind
-
-@[deprecated Ico_union_Ici (since := "2026-02-22")]
-
-中文:
-定理 Ico_union_Ici
-  条件: (h : c <= 最大值 a b)
-  结论: 左闭右开区间 a b union 左闭右无界区间 c = 左闭右无界区间 (最小值 a c)
-  证明: by
-  grind
-
-@[deprecated Ico_union_Ici (since := "2026-02-22")]
+/-
+**Set.Ico_union_Ici** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ico_union_Ici (h : c <= max a b) : Ico a b union Ici c = Ici (min a c)
+参数：h : c <= max a b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Ico_union_Ici (h : c <= max a b) : Ico a b union Ici c = Ici (min a c) := by
+theorem Ico_union_Ici (h : c ≤ max a b) : Ico a b ∪ Ici c = Ici (min a c) := by
   grind
 
 @[deprecated Ico_union_Ici (since := "2026-02-22")]
-/--
-theorem `Ico_union_Ici'` / 定理 `Ico_union_Ici'`
-
-English:
-theorem Ico_union_Ici'
-  given: (h₁ : c <= b)
-  statement: Ico a b union Ici c = Ici (min a c)
-  proof: Ico_union_Ici (h₁.trans (le_max_right ..))
-
-中文:
-定理 Ico_union_Ici'
-  条件: (h₁ : c <= b)
-  结论: 左闭右开区间 a b union 左闭右无界区间 c = 左闭右无界区间 (最小值 a c)
-  证明: Ico_union_Ici (h₁.trans (le_max_right ..))
-
-Depends on / 依赖: Ico_union_Ici, le_max_right
+/-
+**Set.Ico_union_Ici'** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ico_union_Ici' (h₁ : c <= b) : Ico a b union Ici c = Ici (min a c)
+参数：h₁ : c <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Ico_union_Ici`：Ico_union_Ici (h : c <= max a b) : Ico a b union Ici 
+c = Ici (min a c)
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `le_max_right`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), b ≤ max
+ a b
 -/
-theorem Ico_union_Ici' (h₁ : c <= b) : Ico a b union Ici c = Ici (min a c) :=
+theorem Ico_union_Ici' (h₁ : c ≤ b) : Ico a b ∪ Ici c = Ici (min a c) :=
   Ico_union_Ici (h₁.trans (le_max_right ..))
-
-/--
-theorem `Ioi_subset_Ioc_union_Ioi` / 定理 `Ioi_subset_Ioc_union_Ioi`
-
-English:
-theorem Ioi_subset_Ioc_union_Ioi
-  statement: Ioi a subseteq Ioc a b union Ioi b
-  proof: fun x hx =>
-  (le_or_gt x b).elim (fun hxb => Or.inl ⟨hx, hxb⟩) fun hxb => Or.inr hxb
-
-@[simp]
-
-中文:
-定理 Ioi_subset_Ioc_union_Ioi
-  结论: 左开右无界区间 a subseteq 左开右闭区间 a b union 左开右无界区间 b
-  证明: fun x hx =>
-  (le_or_gt x b).elim (fun hxb => Or.inl ⟨hx, hxb⟩) fun hxb => Or.inr hxb
-
-@[simp]
+/-
+**Set.Ioi_subset_Ioc_union_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioi_subset_Ioc_union_Ioi : Ioi a subseteq Ioc a b union Ioi b
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `le_or_gt`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b <
+ a
 -/
-theorem Ioi_subset_Ioc_union_Ioi : Ioi a subseteq Ioc a b union Ioi b := fun x hx =>
+theorem Ioi_subset_Ioc_union_Ioi : Ioi a ⊆ Ioc a b ∪ Ioi b := fun x hx =>
   (le_or_gt x b).elim (fun hxb => Or.inl ⟨hx, hxb⟩) fun hxb => Or.inr hxb
 
 @[simp]
-/--
-theorem `Ioc_union_Ioi_eq_Ioi` / 定理 `Ioc_union_Ioi_eq_Ioi`
-
-English:
-theorem Ioc_union_Ioi_eq_Ioi
-  given: (h : a <= b)
-  statement: Ioc a b union Ioi b = Ioi a
-  proof: Subset.antisymm (fun _ hx => hx.elim And.left h.trans_lt) Ioi_subset_Ioc_union_Ioi
-
-中文:
-定理 Ioc_union_Ioi_eq_Ioi
-  条件: (h : a <= b)
-  结论: 左开右闭区间 a b union 左开右无界区间 b = 左开右无界区间 a
-  证明: Subset.antisymm (fun _ hx => hx.elim And.left h.trans_lt) Ioi_subset_Ioc_union_Ioi
-
-Depends on / 依赖: And.left, Ioi_subset_Ioc_union_Ioi, Subset, Subset.antisymm, antisymm, h.trans_lt, hx.elim, trans_lt
+/-
+**Set.Ioc_union_Ioi_eq_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioc_union_Ioi_eq_Ioi (h : a <= b) : Ioc a b union Ioi b = Ioi a
+参数：h : a <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Set.Ioi_subset_Ioc_union_Ioi`：Ioi_subset_Ioc_union_Ioi : Ioi a subseteq 
+Ioc a b union Ioi b
 -/
-theorem Ioc_union_Ioi_eq_Ioi (h : a <= b) : Ioc a b union Ioi b = Ioi a :=
+theorem Ioc_union_Ioi_eq_Ioi (h : a ≤ b) : Ioc a b ∪ Ioi b = Ioi a :=
   Subset.antisymm (fun _ hx => hx.elim And.left h.trans_lt) Ioi_subset_Ioc_union_Ioi
-
-/--
-theorem `Ioc_union_Ioi` / 定理 `Ioc_union_Ioi`
-
-English:
-theorem Ioc_union_Ioi
-  given: (h : c <= max a b)
-  statement: Ioc a b union Ioi c = Ioi (min a c)
-  proof: by
-  grind
-
-@[deprecated Ioc_union_Ioi (since := "2026-02-22")]
-
-中文:
-定理 Ioc_union_Ioi
-  条件: (h : c <= 最大值 a b)
-  结论: 左开右闭区间 a b union 左开右无界区间 c = 左开右无界区间 (最小值 a c)
-  证明: by
-  grind
-
-@[deprecated Ioc_union_Ioi (since := "2026-02-22")]
+/-
+**Set.Ioc_union_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioc_union_Ioi (h : c <= max a b) : Ioc a b union Ioi c = Ioi (min a c)
+参数：h : c <= max a b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Ioc_union_Ioi (h : c <= max a b) : Ioc a b union Ioi c = Ioi (min a c) := by
+theorem Ioc_union_Ioi (h : c ≤ max a b) : Ioc a b ∪ Ioi c = Ioi (min a c) := by
   grind
 
 @[deprecated Ioc_union_Ioi (since := "2026-02-22")]
-/--
-theorem `Ioc_union_Ioi'` / 定理 `Ioc_union_Ioi'`
-
-English:
-theorem Ioc_union_Ioi'
-  given: (h₁ : c <= b)
-  statement: Ioc a b union Ioi c = Ioi (min a c)
-  proof: Ioc_union_Ioi (h₁.trans (le_max_right ..))
-
-中文:
-定理 Ioc_union_Ioi'
-  条件: (h₁ : c <= b)
-  结论: 左开右闭区间 a b union 左开右无界区间 c = 左开右无界区间 (最小值 a c)
-  证明: Ioc_union_Ioi (h₁.trans (le_max_right ..))
-
-Depends on / 依赖: Ioc_union_Ioi, le_max_right
+/-
+**Set.Ioc_union_Ioi'** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioc_union_Ioi' (h₁ : c <= b) : Ioc a b union Ioi c = Ioi (min a c)
+参数：h₁ : c <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Ioc_union_Ioi`：Ioc_union_Ioi (h : c <= max a b) : Ioc a b union Ioi 
+c = Ioi (min a c)
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `le_max_right`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), b ≤ max
+ a b
 -/
-theorem Ioc_union_Ioi' (h₁ : c <= b) : Ioc a b union Ioi c = Ioi (min a c) :=
+theorem Ioc_union_Ioi' (h₁ : c ≤ b) : Ioc a b ∪ Ioi c = Ioi (min a c) :=
   Ioc_union_Ioi (h₁.trans (le_max_right ..))
-
-/--
-theorem `Ici_subset_Icc_union_Ioi` / 定理 `Ici_subset_Icc_union_Ioi`
-
-English:
-theorem Ici_subset_Icc_union_Ioi
-  statement: Ici a subseteq Icc a b union Ioi b
-  proof: fun x hx =>
-  (le_or_gt x b).elim (fun hxb => Or.inl ⟨hx, hxb⟩) fun hxb => Or.inr hxb
-
-@[simp]
-
-中文:
-定理 Ici_subset_Icc_union_Ioi
-  结论: 左闭右无界区间 a subseteq 闭区间 a b union 左开右无界区间 b
-  证明: fun x hx =>
-  (le_or_gt x b).elim (fun hxb => Or.inl ⟨hx, hxb⟩) fun hxb => Or.inr hxb
-
-@[simp]
+/-
+**Set.Ici_subset_Icc_union_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ici_subset_Icc_union_Ioi : Ici a subseteq Icc a b union Ioi b
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `le_or_gt`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b <
+ a
 -/
-theorem Ici_subset_Icc_union_Ioi : Ici a subseteq Icc a b union Ioi b := fun x hx =>
+theorem Ici_subset_Icc_union_Ioi : Ici a ⊆ Icc a b ∪ Ioi b := fun x hx =>
   (le_or_gt x b).elim (fun hxb => Or.inl ⟨hx, hxb⟩) fun hxb => Or.inr hxb
 
 @[simp]
-/--
-theorem `Icc_union_Ioi_eq_Ici` / 定理 `Icc_union_Ioi_eq_Ici`
-
-English:
-theorem Icc_union_Ioi_eq_Ici
-  given: (h : a <= b)
-  statement: Icc a b union Ioi b = Ici a
-  proof: Subset.antisymm (fun _ hx => (hx.elim And.left) fun hx' => h.trans <| le_of_lt hx')
-    Ici_subset_Icc_union_Ioi
-
-中文:
-定理 Icc_union_Ioi_eq_Ici
-  条件: (h : a <= b)
-  结论: 闭区间 a b union 左开右无界区间 b = 左闭右无界区间 a
-  证明: Subset.antisymm (fun _ hx => (hx.elim And.left) fun hx' => h.trans <| le_of_lt hx')
-    Ici_subset_Icc_union_Ioi
-
-Depends on / 依赖: And.left, Ici_subset_Icc_union_Ioi, Subset, Subset.antisymm, antisymm, h.trans, hx.elim, le_of_lt
+/-
+**Set.Icc_union_Ioi_eq_Ici** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Icc_union_Ioi_eq_Ici (h : a <= b) : Icc a b union Ioi b = Ici a
+参数：h : a <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Set.Ici_subset_Icc_union_Ioi`：Ici_subset_Icc_union_Ioi : Ici a subseteq 
+Icc a b union Ioi b
 -/
-theorem Icc_union_Ioi_eq_Ici (h : a <= b) : Icc a b union Ioi b = Ici a :=
+theorem Icc_union_Ioi_eq_Ici (h : a ≤ b) : Icc a b ∪ Ioi b = Ici a :=
   Subset.antisymm (fun _ hx => (hx.elim And.left) fun hx' => h.trans <| le_of_lt hx')
     Ici_subset_Icc_union_Ioi
-
-/--
-theorem `Ioi_subset_Ioc_union_Ici` / 定理 `Ioi_subset_Ioc_union_Ici`
-
-English:
-theorem Ioi_subset_Ioc_union_Ici
-  statement: Ioi a subseteq Ioc a b union Ici b
-  proof: Subset.trans Ioi_subset_Ioo_union_Ici (union_subset_union_left _ Ioo_subset_Ioc_self)
-
-@[simp]
-
-中文:
-定理 Ioi_subset_Ioc_union_Ici
-  结论: 左开右无界区间 a subseteq 左开右闭区间 a b union 左闭右无界区间 b
-  证明: Subset.trans Ioi_subset_Ioo_union_Ici (union_subset_union_left _ Ioo_subset_Ioc_self)
-
-@[simp]
-
-Depends on / 依赖: Ioi_subset_Ioo_union_Ici, Ioo_subset_Ioc_self, Subset, Subset.trans, union_subset_union_left
+/-
+**Set.Ioi_subset_Ioc_union_Ici** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioi_subset_Ioc_union_Ici : Ioi a subseteq Ioc a b union Ici b
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `Set.Ioi_subset_Ioo_union_Ici`：Ioi_subset_Ioo_union_Ici : Ioi a subseteq 
+Ioo a b union Ici b
+· 使用定理 `Set.union_subset_union_left`：union_subset_union_left {s₁ s₂ : Set α} (t)
+ (h : s₁ subseteq s₂) : s₁ union t subseteq s₂ union t
+· 使用定理 `Set.Ioo_subset_Ioc_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Ioo b a ⊆ Set.Ioc b a
 -/
-theorem Ioi_subset_Ioc_union_Ici : Ioi a subseteq Ioc a b union Ici b :=
+theorem Ioi_subset_Ioc_union_Ici : Ioi a ⊆ Ioc a b ∪ Ici b :=
   Subset.trans Ioi_subset_Ioo_union_Ici (union_subset_union_left _ Ioo_subset_Ioc_self)
 
 @[simp]
-/--
-theorem `Ioc_union_Ici_eq_Ioi` / 定理 `Ioc_union_Ici_eq_Ioi`
-
-English:
-theorem Ioc_union_Ici_eq_Ioi
-  given: (h : a < b)
-  statement: Ioc a b union Ici b = Ioi a
-  proof: Subset.antisymm (fun _ hx => hx.elim And.left h.trans_le) Ioi_subset_Ioc_union_Ici
-
-中文:
-定理 Ioc_union_Ici_eq_Ioi
-  条件: (h : a < b)
-  结论: 左开右闭区间 a b union 左闭右无界区间 b = 左开右无界区间 a
-  证明: Subset.antisymm (fun _ hx => hx.elim And.left h.trans_le) Ioi_subset_Ioc_union_Ici
-
-Depends on / 依赖: And.left, Ioi_subset_Ioc_union_Ici, Subset, Subset.antisymm, antisymm, h.trans_le, hx.elim, trans_le
+/-
+**Set.Ioc_union_Ici_eq_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioc_union_Ici_eq_Ioi (h : a < b) : Ioc a b union Ici b = Ioi a
+参数：h : a < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Set.Ioi_subset_Ioc_union_Ici`：Ioi_subset_Ioc_union_Ici : Ioi a subseteq 
+Ioc a b union Ici b
 -/
-theorem Ioc_union_Ici_eq_Ioi (h : a < b) : Ioc a b union Ici b = Ioi a :=
+theorem Ioc_union_Ici_eq_Ioi (h : a < b) : Ioc a b ∪ Ici b = Ioi a :=
   Subset.antisymm (fun _ hx => hx.elim And.left h.trans_le) Ioi_subset_Ioc_union_Ici
-
-/--
-theorem `Ici_subset_Icc_union_Ici` / 定理 `Ici_subset_Icc_union_Ici`
-
-English:
-theorem Ici_subset_Icc_union_Ici
-  statement: Ici a subseteq Icc a b union Ici b
-  proof: Subset.trans Ici_subset_Ico_union_Ici (union_subset_union_left _ Ico_subset_Icc_self)
-
-@[simp]
-
-中文:
-定理 Ici_subset_Icc_union_Ici
-  结论: 左闭右无界区间 a subseteq 闭区间 a b union 左闭右无界区间 b
-  证明: Subset.trans Ici_subset_Ico_union_Ici (union_subset_union_left _ Ico_subset_Icc_self)
-
-@[simp]
-
-Depends on / 依赖: Ici_subset_Ico_union_Ici, Ico_subset_Icc_self, Subset, Subset.trans, union_subset_union_left
+/-
+**Set.Ici_subset_Icc_union_Ici** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ici_subset_Icc_union_Ici : Ici a subseteq Icc a b union Ici b
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `Set.Ici_subset_Ico_union_Ici`：Ici_subset_Ico_union_Ici : Ici a subseteq 
+Ico a b union Ici b
+· 使用定理 `Set.union_subset_union_left`：union_subset_union_left {s₁ s₂ : Set α} (t)
+ (h : s₁ subseteq s₂) : s₁ union t subseteq s₂ union t
+· 使用定理 `Set.Ico_subset_Icc_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Ico b a ⊆ Set.Icc b a
 -/
-theorem Ici_subset_Icc_union_Ici : Ici a subseteq Icc a b union Ici b :=
+theorem Ici_subset_Icc_union_Ici : Ici a ⊆ Icc a b ∪ Ici b :=
   Subset.trans Ici_subset_Ico_union_Ici (union_subset_union_left _ Ico_subset_Icc_self)
 
 @[simp]
-/--
-theorem `Icc_union_Ici_eq_Ici` / 定理 `Icc_union_Ici_eq_Ici`
-
-English:
-theorem Icc_union_Ici_eq_Ici
-  given: (h : a <= b)
-  statement: Icc a b union Ici b = Ici a
-  proof: Subset.antisymm (fun _ hx => hx.elim And.left h.trans) Ici_subset_Icc_union_Ici
-
-中文:
-定理 Icc_union_Ici_eq_Ici
-  条件: (h : a <= b)
-  结论: 闭区间 a b union 左闭右无界区间 b = 左闭右无界区间 a
-  证明: Subset.antisymm (fun _ hx => hx.elim And.left h.trans) Ici_subset_Icc_union_Ici
-
-Depends on / 依赖: And.left, Ici_subset_Icc_union_Ici, Subset, Subset.antisymm, antisymm, h.trans, hx.elim
+/-
+**Set.Icc_union_Ici_eq_Ici** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Icc_union_Ici_eq_Ici (h : a <= b) : Icc a b union Ici b = Ici a
+参数：h : a <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Set.Ici_subset_Icc_union_Ici`：Ici_subset_Icc_union_Ici : Ici a subseteq 
+Icc a b union Ici b
 -/
-theorem Icc_union_Ici_eq_Ici (h : a <= b) : Icc a b union Ici b = Ici a :=
+theorem Icc_union_Ici_eq_Ici (h : a ≤ b) : Icc a b ∪ Ici b = Ici a :=
   Subset.antisymm (fun _ hx => hx.elim And.left h.trans) Ici_subset_Icc_union_Ici
-
-/--
-theorem `Icc_union_Ici` / 定理 `Icc_union_Ici`
-
-English:
-theorem Icc_union_Ici
-  given: (h : c <= max a b)
-  statement: Icc a b union Ici c = Ici (min a c)
-  proof: by
-  grind
-
-@[deprecated Icc_union_Ici (since := "2026-02-22")]
-
-中文:
-定理 Icc_union_Ici
-  条件: (h : c <= 最大值 a b)
-  结论: 闭区间 a b union 左闭右无界区间 c = 左闭右无界区间 (最小值 a c)
-  证明: by
-  grind
-
-@[deprecated Icc_union_Ici (since := "2026-02-22")]
+/-
+**Set.Icc_union_Ici** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Icc_union_Ici (h : c <= max a b) : Icc a b union Ici c = Ici (min a c)
+参数：h : c <= max a b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Icc_union_Ici (h : c <= max a b) : Icc a b union Ici c = Ici (min a c) := by
+theorem Icc_union_Ici (h : c ≤ max a b) : Icc a b ∪ Ici c = Ici (min a c) := by
   grind
 
 @[deprecated Icc_union_Ici (since := "2026-02-22")]
-/--
-theorem `Icc_union_Ici'` / 定理 `Icc_union_Ici'`
-
-English:
-theorem Icc_union_Ici'
-  given: (h₁ : c <= b)
-  statement: Icc a b union Ici c = Ici (min a c)
-  proof: Icc_union_Ici (h₁.trans (le_max_right ..))
-
-中文:
-定理 Icc_union_Ici'
-  条件: (h₁ : c <= b)
-  结论: 闭区间 a b union 左闭右无界区间 c = 左闭右无界区间 (最小值 a c)
-  证明: Icc_union_Ici (h₁.trans (le_max_right ..))
-
-Depends on / 依赖: Icc_union_Ici, le_max_right
+/-
+**Set.Icc_union_Ici'** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Icc_union_Ici' (h₁ : c <= b) : Icc a b union Ici c = Ici (min a c)
+参数：h₁ : c <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Icc_union_Ici`：Icc_union_Ici (h : c <= max a b) : Icc a b union Ici 
+c = Ici (min a c)
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `le_max_right`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), b ≤ max
+ a b
 -/
-theorem Icc_union_Ici' (h₁ : c <= b) : Icc a b union Ici c = Ici (min a c) :=
+theorem Icc_union_Ici' (h₁ : c ≤ b) : Icc a b ∪ Ici c = Ici (min a c) :=
   Icc_union_Ici (h₁.trans (le_max_right ..))
 
+/-! ### An infinite and a finite interval -/
 
-/--
-theorem `Iic_subset_Iio_union_Icc` / 定理 `Iic_subset_Iio_union_Icc`
+/-
+**Set.Iic_subset_Iio_union_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iic_subset_Iio_union_Icc : Iic b subseteq Iio a union Icc a b
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `lt_or_ge`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a < b ∨ b ≤
+ a
 
-English:
-theorem Iic_subset_Iio_union_Icc
-  statement: Iic b subseteq Iio a union Icc a b
-  proof: fun x hx =>
-  (lt_or_ge x a).elim (fun hxa => Or.inl hxa) fun hxa => Or.inr ⟨hxa, hx⟩
-
-@[simp]
-
-中文:
-定理 Iic_subset_Iio_union_Icc
-  结论: 左无界右闭区间 b subseteq 左无界右开区间 a union 闭区间 a b
-  证明: fun x hx =>
-  (lt_or_ge x a).elim (fun hxa => Or.inl hxa) fun hxa => Or.inr ⟨hxa, hx⟩
-
-@[simp]
+--- 原说明 ---
+### An infinite and a finite interval
 -/
-theorem Iic_subset_Iio_union_Icc : Iic b subseteq Iio a union Icc a b := fun x hx =>
+theorem Iic_subset_Iio_union_Icc : Iic b ⊆ Iio a ∪ Icc a b := fun x hx =>
   (lt_or_ge x a).elim (fun hxa => Or.inl hxa) fun hxa => Or.inr ⟨hxa, hx⟩
 
 @[simp]
-/--
-theorem `Iio_union_Icc_eq_Iic` / 定理 `Iio_union_Icc_eq_Iic`
-
-English:
-theorem Iio_union_Icc_eq_Iic
-  given: (h : a <= b)
-  statement: Iio a union Icc a b = Iic b
-  proof: Subset.antisymm (fun _ hx => hx.elim (fun hx => (le_of_lt hx).trans h) And.right)
-    Iic_subset_Iio_union_Icc
-
-中文:
-定理 Iio_union_Icc_eq_Iic
-  条件: (h : a <= b)
-  结论: 左无界右开区间 a union 闭区间 a b = 左无界右闭区间 b
-  证明: Subset.antisymm (fun _ hx => hx.elim (fun hx => (le_of_lt hx).trans h) And.right)
-    Iic_subset_Iio_union_Icc
-
-Depends on / 依赖: And.right, Iic_subset_Iio_union_Icc, Subset, Subset.antisymm, antisymm, hx.elim, le_of_lt
+/-
+**Set.Iio_union_Icc_eq_Iic** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iio_union_Icc_eq_Iic (h : a <= b) : Iio a union Icc a b = Iic b
+参数：h : a <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Set.Iic_subset_Iio_union_Icc`：Iic_subset_Iio_union_Icc : Iic b subseteq 
+Iio a union Icc a b
 -/
-theorem Iio_union_Icc_eq_Iic (h : a <= b) : Iio a union Icc a b = Iic b :=
+theorem Iio_union_Icc_eq_Iic (h : a ≤ b) : Iio a ∪ Icc a b = Iic b :=
   Subset.antisymm (fun _ hx => hx.elim (fun hx => (le_of_lt hx).trans h) And.right)
     Iic_subset_Iio_union_Icc
-
-/--
-theorem `Iio_subset_Iio_union_Ico` / 定理 `Iio_subset_Iio_union_Ico`
-
-English:
-theorem Iio_subset_Iio_union_Ico
-  statement: Iio b subseteq Iio a union Ico a b
-  proof: fun x hx =>
-  (lt_or_ge x a).elim (fun hxa => Or.inl hxa) fun hxa => Or.inr ⟨hxa, hx⟩
-
-@[simp]
-
-中文:
-定理 Iio_subset_Iio_union_Ico
-  结论: 左无界右开区间 b subseteq 左无界右开区间 a union 左闭右开区间 a b
-  证明: fun x hx =>
-  (lt_or_ge x a).elim (fun hxa => Or.inl hxa) fun hxa => Or.inr ⟨hxa, hx⟩
-
-@[simp]
+/-
+**Set.Iio_subset_Iio_union_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iio_subset_Iio_union_Ico : Iio b subseteq Iio a union Ico a b
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `lt_or_ge`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a < b ∨ b ≤
+ a
 -/
-theorem Iio_subset_Iio_union_Ico : Iio b subseteq Iio a union Ico a b := fun x hx =>
+theorem Iio_subset_Iio_union_Ico : Iio b ⊆ Iio a ∪ Ico a b := fun x hx =>
   (lt_or_ge x a).elim (fun hxa => Or.inl hxa) fun hxa => Or.inr ⟨hxa, hx⟩
 
 @[simp]
-/--
-theorem `Iio_union_Ico_eq_Iio` / 定理 `Iio_union_Ico_eq_Iio`
-
-English:
-theorem Iio_union_Ico_eq_Iio
-  given: (h : a <= b)
-  statement: Iio a union Ico a b = Iio b
-  proof: Subset.antisymm (fun _ hx => hx.elim (fun hx' => lt_of_lt_of_le hx' h) And.right)
-    Iio_subset_Iio_union_Ico
-
-中文:
-定理 Iio_union_Ico_eq_Iio
-  条件: (h : a <= b)
-  结论: 左无界右开区间 a union 左闭右开区间 a b = 左无界右开区间 b
-  证明: Subset.antisymm (fun _ hx => hx.elim (fun hx' => lt_of_lt_of_le hx' h) And.right)
-    Iio_subset_Iio_union_Ico
-
-Depends on / 依赖: And.right, Iio_subset_Iio_union_Ico, Subset, Subset.antisymm, antisymm, hx.elim, lt_of_lt_of_le
+/-
+**Set.Iio_union_Ico_eq_Iio** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iio_union_Ico_eq_Iio (h : a <= b) : Iio a union Ico a b = Iio b
+参数：h : a <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用引理 `lt_of_lt_of_le`：lt_of_lt_of_le (hab : a < b) (hbc : b <= c) : a < c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Set.Iio_subset_Iio_union_Ico`：Iio_subset_Iio_union_Ico : Iio b subseteq 
+Iio a union Ico a b
 -/
-theorem Iio_union_Ico_eq_Iio (h : a <= b) : Iio a union Ico a b = Iio b :=
+theorem Iio_union_Ico_eq_Iio (h : a ≤ b) : Iio a ∪ Ico a b = Iio b :=
   Subset.antisymm (fun _ hx => hx.elim (fun hx' => lt_of_lt_of_le hx' h) And.right)
     Iio_subset_Iio_union_Ico
-
-/--
-theorem `Iio_union_Ico` / 定理 `Iio_union_Ico`
-
-English:
-theorem Iio_union_Ico
-  given: (h : min c d <= b)
-  statement: Iio b union Ico c d = Iio (max b d)
-  proof: by
-  grind
-
-@[deprecated Iio_union_Ico (since := "2026-02-22")]
-
-中文:
-定理 Iio_union_Ico
-  条件: (h : 最小值 c d <= b)
-  结论: 左无界右开区间 b union 左闭右开区间 c d = 左无界右开区间 (最大值 b d)
-  证明: by
-  grind
-
-@[deprecated Iio_union_Ico (since := "2026-02-22")]
+/-
+**Set.Iio_union_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iio_union_Ico (h : min c d <= b) : Iio b union Ico c d = Iio (max b d)
+参数：h : min c d <= b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Iio_union_Ico (h : min c d <= b) : Iio b union Ico c d = Iio (max b d) := by
+theorem Iio_union_Ico (h : min c d ≤ b) : Iio b ∪ Ico c d = Iio (max b d) := by
   grind
 
 @[deprecated Iio_union_Ico (since := "2026-02-22")]
-/--
-theorem `Iio_union_Ico'` / 定理 `Iio_union_Ico'`
-
-English:
-theorem Iio_union_Ico'
-  given: (h₁ : c <= b)
-  statement: Iio b union Ico c d = Iio (max b d)
-  proof: Iio_union_Ico ((min_le_left ..).trans h₁)
-
-中文:
-定理 Iio_union_Ico'
-  条件: (h₁ : c <= b)
-  结论: 左无界右开区间 b union 左闭右开区间 c d = 左无界右开区间 (最大值 b d)
-  证明: Iio_union_Ico ((min_le_left ..).trans h₁)
-
-Depends on / 依赖: Iio_union_Ico, min_le_left
+/-
+**Set.Iio_union_Ico'** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iio_union_Ico' (h₁ : c <= b) : Iio b union Ico c d = Iio (max b d)
+参数：h₁ : c <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Iio_union_Ico`：Iio_union_Ico (h : min c d <= b) : Iio b union Ico c 
+d = Iio (max b d)
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `min_le_left`：min_le_left (a b : α) : min a b <= a
 -/
-theorem Iio_union_Ico' (h₁ : c <= b) : Iio b union Ico c d = Iio (max b d) :=
+theorem Iio_union_Ico' (h₁ : c ≤ b) : Iio b ∪ Ico c d = Iio (max b d) :=
   Iio_union_Ico ((min_le_left ..).trans h₁)
-
-/--
-theorem `Iic_subset_Iic_union_Ioc` / 定理 `Iic_subset_Iic_union_Ioc`
-
-English:
-theorem Iic_subset_Iic_union_Ioc
-  statement: Iic b subseteq Iic a union Ioc a b
-  proof: fun x hx =>
-  (le_or_gt x a).elim (fun hxa => Or.inl hxa) fun hxa => Or.inr ⟨hxa, hx⟩
-
-@[simp]
-
-中文:
-定理 Iic_subset_Iic_union_Ioc
-  结论: 左无界右闭区间 b subseteq 左无界右闭区间 a union 左开右闭区间 a b
-  证明: fun x hx =>
-  (le_or_gt x a).elim (fun hxa => Or.inl hxa) fun hxa => Or.inr ⟨hxa, hx⟩
-
-@[simp]
+/-
+**Set.Iic_subset_Iic_union_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iic_subset_Iic_union_Ioc : Iic b subseteq Iic a union Ioc a b
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `le_or_gt`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b <
+ a
 -/
-theorem Iic_subset_Iic_union_Ioc : Iic b subseteq Iic a union Ioc a b := fun x hx =>
+theorem Iic_subset_Iic_union_Ioc : Iic b ⊆ Iic a ∪ Ioc a b := fun x hx =>
   (le_or_gt x a).elim (fun hxa => Or.inl hxa) fun hxa => Or.inr ⟨hxa, hx⟩
 
 @[simp]
-/--
-theorem `Iic_union_Ioc_eq_Iic` / 定理 `Iic_union_Ioc_eq_Iic`
-
-English:
-theorem Iic_union_Ioc_eq_Iic
-  given: (h : a <= b)
-  statement: Iic a union Ioc a b = Iic b
-  proof: Subset.antisymm (fun _ hx => hx.elim (fun hx' => le_trans hx' h) And.right)
-    Iic_subset_Iic_union_Ioc
-
-中文:
-定理 Iic_union_Ioc_eq_Iic
-  条件: (h : a <= b)
-  结论: 左无界右闭区间 a union 左开右闭区间 a b = 左无界右闭区间 b
-  证明: Subset.antisymm (fun _ hx => hx.elim (fun hx' => le_trans hx' h) And.right)
-    Iic_subset_Iic_union_Ioc
-
-Depends on / 依赖: And.right, Iic_subset_Iic_union_Ioc, Subset, Subset.antisymm, antisymm, hx.elim, le_trans
+/-
+**Set.Iic_union_Ioc_eq_Iic** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iic_union_Ioc_eq_Iic (h : a <= b) : Iic a union Ioc a b = Iic b
+参数：h : a <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Set.Iic_subset_Iic_union_Ioc`：Iic_subset_Iic_union_Ioc : Iic b subseteq 
+Iic a union Ioc a b
 -/
-theorem Iic_union_Ioc_eq_Iic (h : a <= b) : Iic a union Ioc a b = Iic b :=
+theorem Iic_union_Ioc_eq_Iic (h : a ≤ b) : Iic a ∪ Ioc a b = Iic b :=
   Subset.antisymm (fun _ hx => hx.elim (fun hx' => le_trans hx' h) And.right)
     Iic_subset_Iic_union_Ioc
-
-/--
-theorem `Iic_union_Ioc` / 定理 `Iic_union_Ioc`
-
-English:
-theorem Iic_union_Ioc
-  given: (h : min c d < b)
-  statement: Iic b union Ioc c d = Iic (max b d)
-  proof: by
-  grind
-
-@[deprecated Iic_union_Ioc (since := "2026-02-22")]
-
-中文:
-定理 Iic_union_Ioc
-  条件: (h : 最小值 c d < b)
-  结论: 左无界右闭区间 b union 左开右闭区间 c d = 左无界右闭区间 (最大值 b d)
-  证明: by
-  grind
-
-@[deprecated Iic_union_Ioc (since := "2026-02-22")]
+/-
+**Set.Iic_union_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iic_union_Ioc (h : min c d < b) : Iic b union Ioc c d = Iic (max b d)
+参数：h : min c d < b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Iic_union_Ioc (h : min c d < b) : Iic b union Ioc c d = Iic (max b d) := by
+theorem Iic_union_Ioc (h : min c d < b) : Iic b ∪ Ioc c d = Iic (max b d) := by
   grind
 
 @[deprecated Iic_union_Ioc (since := "2026-02-22")]
-/--
-theorem `Iic_union_Ioc'` / 定理 `Iic_union_Ioc'`
-
-English:
-theorem Iic_union_Ioc'
-  given: (h₁ : c < b)
-  statement: Iic b union Ioc c d = Iic (max b d)
-  proof: Iic_union_Ioc ((min_le_left ..).trans_lt h₁)
-
-中文:
-定理 Iic_union_Ioc'
-  条件: (h₁ : c < b)
-  结论: 左无界右闭区间 b union 左开右闭区间 c d = 左无界右闭区间 (最大值 b d)
-  证明: Iic_union_Ioc ((min_le_left ..).trans_lt h₁)
-
-Depends on / 依赖: Iic_union_Ioc, min_le_left, trans_lt
+/-
+**Set.Iic_union_Ioc'** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iic_union_Ioc' (h₁ : c < b) : Iic b union Ioc c d = Iic (max b d)
+参数：h₁ : c < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Iic_union_Ioc`：Iic_union_Ioc (h : min c d < b) : Iic b union Ioc c d
+ = Iic (max b d)
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用引理 `min_le_left`：min_le_left (a b : α) : min a b <= a
 -/
-theorem Iic_union_Ioc' (h₁ : c < b) : Iic b union Ioc c d = Iic (max b d) :=
+theorem Iic_union_Ioc' (h₁ : c < b) : Iic b ∪ Ioc c d = Iic (max b d) :=
   Iic_union_Ioc ((min_le_left ..).trans_lt h₁)
-
-/--
-theorem `Iio_subset_Iic_union_Ioo` / 定理 `Iio_subset_Iic_union_Ioo`
-
-English:
-theorem Iio_subset_Iic_union_Ioo
-  statement: Iio b subseteq Iic a union Ioo a b
-  proof: fun x hx =>
-  (le_or_gt x a).elim (fun hxa => Or.inl hxa) fun hxa => Or.inr ⟨hxa, hx⟩
-
-@[simp]
-
-中文:
-定理 Iio_subset_Iic_union_Ioo
-  结论: 左无界右开区间 b subseteq 左无界右闭区间 a union 开区间 a b
-  证明: fun x hx =>
-  (le_or_gt x a).elim (fun hxa => Or.inl hxa) fun hxa => Or.inr ⟨hxa, hx⟩
-
-@[simp]
+/-
+**Set.Iio_subset_Iic_union_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iio_subset_Iic_union_Ioo : Iio b subseteq Iic a union Ioo a b
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `le_or_gt`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b <
+ a
 -/
-theorem Iio_subset_Iic_union_Ioo : Iio b subseteq Iic a union Ioo a b := fun x hx =>
+theorem Iio_subset_Iic_union_Ioo : Iio b ⊆ Iic a ∪ Ioo a b := fun x hx =>
   (le_or_gt x a).elim (fun hxa => Or.inl hxa) fun hxa => Or.inr ⟨hxa, hx⟩
 
 @[simp]
-/--
-theorem `Iic_union_Ioo_eq_Iio` / 定理 `Iic_union_Ioo_eq_Iio`
-
-English:
-theorem Iic_union_Ioo_eq_Iio
-  given: (h : a < b)
-  statement: Iic a union Ioo a b = Iio b
-  proof: Subset.antisymm (fun _ hx => hx.elim (fun hx' => lt_of_le_of_lt hx' h) And.right)
-    Iio_subset_Iic_union_Ioo
-
-中文:
-定理 Iic_union_Ioo_eq_Iio
-  条件: (h : a < b)
-  结论: 左无界右闭区间 a union 开区间 a b = 左无界右开区间 b
-  证明: Subset.antisymm (fun _ hx => hx.elim (fun hx' => lt_of_le_of_lt hx' h) And.right)
-    Iio_subset_Iic_union_Ioo
-
-Depends on / 依赖: And.right, Iio_subset_Iic_union_Ioo, Subset, Subset.antisymm, antisymm, hx.elim, lt_of_le_of_lt
+/-
+**Set.Iic_union_Ioo_eq_Iio** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iic_union_Ioo_eq_Iio (h : a < b) : Iic a union Ioo a b = Iio b
+参数：h : a < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Set.Iio_subset_Iic_union_Ioo`：Iio_subset_Iic_union_Ioo : Iio b subseteq 
+Iic a union Ioo a b
 -/
-theorem Iic_union_Ioo_eq_Iio (h : a < b) : Iic a union Ioo a b = Iio b :=
+theorem Iic_union_Ioo_eq_Iio (h : a < b) : Iic a ∪ Ioo a b = Iio b :=
   Subset.antisymm (fun _ hx => hx.elim (fun hx' => lt_of_le_of_lt hx' h) And.right)
     Iio_subset_Iic_union_Ioo
-
-/--
-theorem `Iio_union_Ioo` / 定理 `Iio_union_Ioo`
-
-English:
-theorem Iio_union_Ioo
-  given: (h : min c d < b)
-  statement: Iio b union Ioo c d = Iio (max b d)
-  proof: by
-  grind
-
-@[deprecated Iio_union_Ioo (since := "2026-02-22")]
-
-中文:
-定理 Iio_union_Ioo
-  条件: (h : 最小值 c d < b)
-  结论: 左无界右开区间 b union 开区间 c d = 左无界右开区间 (最大值 b d)
-  证明: by
-  grind
-
-@[deprecated Iio_union_Ioo (since := "2026-02-22")]
+/-
+**Set.Iio_union_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iio_union_Ioo (h : min c d < b) : Iio b union Ioo c d = Iio (max b d)
+参数：h : min c d < b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Iio_union_Ioo (h : min c d < b) : Iio b union Ioo c d = Iio (max b d) := by
+theorem Iio_union_Ioo (h : min c d < b) : Iio b ∪ Ioo c d = Iio (max b d) := by
   grind
 
 @[deprecated Iio_union_Ioo (since := "2026-02-22")]
-/--
-theorem `Iio_union_Ioo'` / 定理 `Iio_union_Ioo'`
-
-English:
-theorem Iio_union_Ioo'
-  given: (h₁ : c < b)
-  statement: Iio b union Ioo c d = Iio (max b d)
-  proof: Iio_union_Ioo ((min_le_left ..).trans_lt h₁)
-
-中文:
-定理 Iio_union_Ioo'
-  条件: (h₁ : c < b)
-  结论: 左无界右开区间 b union 开区间 c d = 左无界右开区间 (最大值 b d)
-  证明: Iio_union_Ioo ((min_le_left ..).trans_lt h₁)
-
-Depends on / 依赖: Iio_union_Ioo, min_le_left, trans_lt
+/-
+**Set.Iio_union_Ioo'** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iio_union_Ioo' (h₁ : c < b) : Iio b union Ioo c d = Iio (max b d)
+参数：h₁ : c < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Iio_union_Ioo`：Iio_union_Ioo (h : min c d < b) : Iio b union Ioo c d
+ = Iio (max b d)
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用引理 `min_le_left`：min_le_left (a b : α) : min a b <= a
 -/
-theorem Iio_union_Ioo' (h₁ : c < b) : Iio b union Ioo c d = Iio (max b d) :=
+theorem Iio_union_Ioo' (h₁ : c < b) : Iio b ∪ Ioo c d = Iio (max b d) :=
   Iio_union_Ioo ((min_le_left ..).trans_lt h₁)
-
-/--
-theorem `Iic_subset_Iic_union_Icc` / 定理 `Iic_subset_Iic_union_Icc`
-
-English:
-theorem Iic_subset_Iic_union_Icc
-  statement: Iic b subseteq Iic a union Icc a b
-  proof: Subset.trans Iic_subset_Iic_union_Ioc (union_subset_union_right _ Ioc_subset_Icc_self)
-
-@[simp]
-
-中文:
-定理 Iic_subset_Iic_union_Icc
-  结论: 左无界右闭区间 b subseteq 左无界右闭区间 a union 闭区间 a b
-  证明: Subset.trans Iic_subset_Iic_union_Ioc (union_subset_union_right _ Ioc_subset_Icc_self)
-
-@[simp]
-
-Depends on / 依赖: Iic_subset_Iic_union_Ioc, Ioc_subset_Icc_self, Subset, Subset.trans, union_subset_union_right
+/-
+**Set.Iic_subset_Iic_union_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iic_subset_Iic_union_Icc : Iic b subseteq Iic a union Icc a b
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `Set.Iic_subset_Iic_union_Ioc`：Iic_subset_Iic_union_Ioc : Iic b subseteq 
+Iic a union Ioc a b
+· 使用定理 `Set.union_subset_union_right`：union_subset_union_right (s) {t₁ t₂ : Set 
+α} (h : t₁ subseteq t₂) : s union t₁ subseteq s union t₂
+· 使用定理 `Set.Ioc_subset_Icc_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Ioc a b ⊆ Set.Icc a b
 -/
-theorem Iic_subset_Iic_union_Icc : Iic b subseteq Iic a union Icc a b :=
+theorem Iic_subset_Iic_union_Icc : Iic b ⊆ Iic a ∪ Icc a b :=
   Subset.trans Iic_subset_Iic_union_Ioc (union_subset_union_right _ Ioc_subset_Icc_self)
 
 @[simp]
-/--
-theorem `Iic_union_Icc_eq_Iic` / 定理 `Iic_union_Icc_eq_Iic`
-
-English:
-theorem Iic_union_Icc_eq_Iic
-  given: (h : a <= b)
-  statement: Iic a union Icc a b = Iic b
-  proof: Subset.antisymm (fun _ hx => hx.elim (fun hx' => le_trans hx' h) And.right)
-    Iic_subset_Iic_union_Icc
-
-中文:
-定理 Iic_union_Icc_eq_Iic
-  条件: (h : a <= b)
-  结论: 左无界右闭区间 a union 闭区间 a b = 左无界右闭区间 b
-  证明: Subset.antisymm (fun _ hx => hx.elim (fun hx' => le_trans hx' h) And.right)
-    Iic_subset_Iic_union_Icc
-
-Depends on / 依赖: And.right, Iic_subset_Iic_union_Icc, Subset, Subset.antisymm, antisymm, hx.elim, le_trans
+/-
+**Set.Iic_union_Icc_eq_Iic** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iic_union_Icc_eq_Iic (h : a <= b) : Iic a union Icc a b = Iic b
+参数：h : a <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Set.Iic_subset_Iic_union_Icc`：Iic_subset_Iic_union_Icc : Iic b subseteq 
+Iic a union Icc a b
 -/
-theorem Iic_union_Icc_eq_Iic (h : a <= b) : Iic a union Icc a b = Iic b :=
+theorem Iic_union_Icc_eq_Iic (h : a ≤ b) : Iic a ∪ Icc a b = Iic b :=
   Subset.antisymm (fun _ hx => hx.elim (fun hx' => le_trans hx' h) And.right)
     Iic_subset_Iic_union_Icc
-
-/--
-theorem `Iic_union_Icc` / 定理 `Iic_union_Icc`
-
-English:
-theorem Iic_union_Icc
-  given: (h : min c d <= b)
-  statement: Iic b union Icc c d = Iic (max b d)
-  proof: by
-  grind
-
-@[deprecated Iic_union_Icc (since := "2026-02-22")]
-
-中文:
-定理 Iic_union_Icc
-  条件: (h : 最小值 c d <= b)
-  结论: 左无界右闭区间 b union 闭区间 c d = 左无界右闭区间 (最大值 b d)
-  证明: by
-  grind
-
-@[deprecated Iic_union_Icc (since := "2026-02-22")]
+/-
+**Set.Iic_union_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iic_union_Icc (h : min c d <= b) : Iic b union Icc c d = Iic (max b d)
+参数：h : min c d <= b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Iic_union_Icc (h : min c d <= b) : Iic b union Icc c d = Iic (max b d) := by
+theorem Iic_union_Icc (h : min c d ≤ b) : Iic b ∪ Icc c d = Iic (max b d) := by
   grind
 
 @[deprecated Iic_union_Icc (since := "2026-02-22")]
-/--
-theorem `Iic_union_Icc'` / 定理 `Iic_union_Icc'`
-
-English:
-theorem Iic_union_Icc'
-  given: (h₁ : c <= b)
-  statement: Iic b union Icc c d = Iic (max b d)
-  proof: Iic_union_Icc ((min_le_left ..).trans h₁)
-
-中文:
-定理 Iic_union_Icc'
-  条件: (h₁ : c <= b)
-  结论: 左无界右闭区间 b union 闭区间 c d = 左无界右闭区间 (最大值 b d)
-  证明: Iic_union_Icc ((min_le_left ..).trans h₁)
-
-Depends on / 依赖: Iic_union_Icc, min_le_left
+/-
+**Set.Iic_union_Icc'** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iic_union_Icc' (h₁ : c <= b) : Iic b union Icc c d = Iic (max b d)
+参数：h₁ : c <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Iic_union_Icc`：Iic_union_Icc (h : min c d <= b) : Iic b union Icc c 
+d = Iic (max b d)
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `min_le_left`：min_le_left (a b : α) : min a b <= a
 -/
-theorem Iic_union_Icc' (h₁ : c <= b) : Iic b union Icc c d = Iic (max b d) :=
+theorem Iic_union_Icc' (h₁ : c ≤ b) : Iic b ∪ Icc c d = Iic (max b d) :=
   Iic_union_Icc ((min_le_left ..).trans h₁)
-
-/--
-theorem `Iio_subset_Iic_union_Ico` / 定理 `Iio_subset_Iic_union_Ico`
-
-English:
-theorem Iio_subset_Iic_union_Ico
-  statement: Iio b subseteq Iic a union Ico a b
-  proof: Subset.trans Iio_subset_Iic_union_Ioo (union_subset_union_right _ Ioo_subset_Ico_self)
-
-@[simp]
-
-中文:
-定理 Iio_subset_Iic_union_Ico
-  结论: 左无界右开区间 b subseteq 左无界右闭区间 a union 左闭右开区间 a b
-  证明: Subset.trans Iio_subset_Iic_union_Ioo (union_subset_union_right _ Ioo_subset_Ico_self)
-
-@[simp]
-
-Depends on / 依赖: Iio_subset_Iic_union_Ioo, Ioo_subset_Ico_self, Subset, Subset.trans, union_subset_union_right
+/-
+**Set.Iio_subset_Iic_union_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iio_subset_Iic_union_Ico : Iio b subseteq Iic a union Ico a b
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `Set.Iio_subset_Iic_union_Ioo`：Iio_subset_Iic_union_Ioo : Iio b subseteq 
+Iic a union Ioo a b
+· 使用定理 `Set.union_subset_union_right`：union_subset_union_right (s) {t₁ t₂ : Set 
+α} (h : t₁ subseteq t₂) : s union t₁ subseteq s union t₂
+· 使用定理 `Set.Ioo_subset_Ico_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Ioo a b ⊆ Set.Ico a b
 -/
-theorem Iio_subset_Iic_union_Ico : Iio b subseteq Iic a union Ico a b :=
+theorem Iio_subset_Iic_union_Ico : Iio b ⊆ Iic a ∪ Ico a b :=
   Subset.trans Iio_subset_Iic_union_Ioo (union_subset_union_right _ Ioo_subset_Ico_self)
 
 @[simp]
-/--
-theorem `Iic_union_Ico_eq_Iio` / 定理 `Iic_union_Ico_eq_Iio`
-
-English:
-theorem Iic_union_Ico_eq_Iio
-  given: (h : a < b)
-  statement: Iic a union Ico a b = Iio b
-  proof: Subset.antisymm (fun _ hx => hx.elim (fun hx' => lt_of_le_of_lt hx' h) And.right)
-    Iio_subset_Iic_union_Ico
-
-中文:
-定理 Iic_union_Ico_eq_Iio
-  条件: (h : a < b)
-  结论: 左无界右闭区间 a union 左闭右开区间 a b = 左无界右开区间 b
-  证明: Subset.antisymm (fun _ hx => hx.elim (fun hx' => lt_of_le_of_lt hx' h) And.right)
-    Iio_subset_Iic_union_Ico
-
-Depends on / 依赖: And.right, Iio_subset_Iic_union_Ico, Subset, Subset.antisymm, antisymm, hx.elim, lt_of_le_of_lt
+/-
+**Set.Iic_union_Ico_eq_Iio** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iic_union_Ico_eq_Iio (h : a < b) : Iic a union Ico a b = Iio b
+参数：h : a < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Set.Iio_subset_Iic_union_Ico`：Iio_subset_Iic_union_Ico : Iio b subseteq 
+Iic a union Ico a b
 -/
-theorem Iic_union_Ico_eq_Iio (h : a < b) : Iic a union Ico a b = Iio b :=
+theorem Iic_union_Ico_eq_Iio (h : a < b) : Iic a ∪ Ico a b = Iio b :=
   Subset.antisymm (fun _ hx => hx.elim (fun hx' => lt_of_le_of_lt hx' h) And.right)
     Iio_subset_Iic_union_Ico
 
+/-! ### Two finite intervals, `I?o` and `Ic?` -/
 
-/--
-theorem `Ioo_subset_Ioo_union_Ico` / 定理 `Ioo_subset_Ioo_union_Ico`
+/-
+**Set.Ioo_subset_Ioo_union_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioo_subset_Ioo_union_Ico : Ioo a c subseteq Ioo a b union Ico b c
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `lt_or_ge`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a < b ∨ b ≤
+ a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-theorem Ioo_subset_Ioo_union_Ico
-  statement: Ioo a c subseteq Ioo a b union Ico b c
-  proof: fun x hx =>
-  (lt_or_ge x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
-
-@[simp]
-
-中文:
-定理 Ioo_subset_Ioo_union_Ico
-  结论: 开区间 a c subseteq 开区间 a b union 左闭右开区间 b c
-  证明: fun x hx =>
-  (lt_or_ge x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
-
-@[simp]
+--- 原说明 ---
+### Two finite intervals, `I?o` and `Ic?`
 -/
-theorem Ioo_subset_Ioo_union_Ico : Ioo a c subseteq Ioo a b union Ico b c := fun x hx =>
+theorem Ioo_subset_Ioo_union_Ico : Ioo a c ⊆ Ioo a b ∪ Ico b c := fun x hx =>
   (lt_or_ge x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
 
 @[simp]
-/--
-theorem `Ioo_union_Ico_eq_Ioo` / 定理 `Ioo_union_Ico_eq_Ioo`
-
-English:
-theorem Ioo_union_Ico_eq_Ioo
-  given: (h₁ : a < b) (h₂ : b <= c)
-  statement: Ioo a b union Ico b c = Ioo a c
-  proof: Subset.antisymm
-    (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans_le h₂⟩) fun hx => ⟨h₁.trans_le hx.1, hx.2⟩)
-    Ioo_subset_Ioo_union_Ico
-
-中文:
-定理 Ioo_union_Ico_eq_Ioo
-  条件: (h₁ : a < b) (h₂ : b <= c)
-  结论: 开区间 a b union 左闭右开区间 b c = 开区间 a c
-  证明: Subset.antisymm
-    (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans_le h₂⟩) fun hx => ⟨h₁.trans_le hx.1, hx.2⟩)
-    Ioo_subset_Ioo_union_Ico
-
-Depends on / 依赖: Ioo_subset_Ioo_union_Ico, Subset, Subset.antisymm, antisymm, hx.elim, trans_le
+/-
+**Set.Ioo_union_Ico_eq_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioo_union_Ico_eq_Ioo (h₁ : a < b) (h₂ : b <= c) : Ioo a b union Ico b c = 
+Ioo a c
+参数：h₁ : a < b；h₂ : b <= c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Set.Ioo_subset_Ioo_union_Ico`：Ioo_subset_Ioo_union_Ico : Ioo a c subsete
+q Ioo a b union Ico b c
 -/
-theorem Ioo_union_Ico_eq_Ioo (h₁ : a < b) (h₂ : b <= c) : Ioo a b union Ico b c = Ioo a c :=
+theorem Ioo_union_Ico_eq_Ioo (h₁ : a < b) (h₂ : b ≤ c) : Ioo a b ∪ Ico b c = Ioo a c :=
   Subset.antisymm
     (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans_le h₂⟩) fun hx => ⟨h₁.trans_le hx.1, hx.2⟩)
     Ioo_subset_Ioo_union_Ico
-
-/--
-theorem `Ico_subset_Ico_union_Ico` / 定理 `Ico_subset_Ico_union_Ico`
-
-English:
-theorem Ico_subset_Ico_union_Ico
-  statement: Ico a c subseteq Ico a b union Ico b c
-  proof: fun x hx =>
-  (lt_or_ge x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
-
-@[simp]
-
-中文:
-定理 Ico_subset_Ico_union_Ico
-  结论: 左闭右开区间 a c subseteq 左闭右开区间 a b union 左闭右开区间 b c
-  证明: fun x hx =>
-  (lt_or_ge x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
-
-@[simp]
+/-
+**Set.Ico_subset_Ico_union_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ico_subset_Ico_union_Ico : Ico a c subseteq Ico a b union Ico b c
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `lt_or_ge`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a < b ∨ b ≤
+ a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem Ico_subset_Ico_union_Ico : Ico a c subseteq Ico a b union Ico b c := fun x hx =>
+theorem Ico_subset_Ico_union_Ico : Ico a c ⊆ Ico a b ∪ Ico b c := fun x hx =>
   (lt_or_ge x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
 
 @[simp]
-/--
-theorem `Ico_union_Ico_eq_Ico` / 定理 `Ico_union_Ico_eq_Ico`
-
-English:
-theorem Ico_union_Ico_eq_Ico
-  given: (h₁ : a <= b) (h₂ : b <= c)
-  statement: Ico a b union Ico b c = Ico a c
-  proof: Subset.antisymm
-    (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans_le h₂⟩) fun hx => ⟨h₁.trans hx.1, hx.2⟩)
-    Ico_subset_Ico_union_Ico
-
-中文:
-定理 Ico_union_Ico_eq_Ico
-  条件: (h₁ : a <= b) (h₂ : b <= c)
-  结论: 左闭右开区间 a b union 左闭右开区间 b c = 左闭右开区间 a c
-  证明: Subset.antisymm
-    (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans_le h₂⟩) fun hx => ⟨h₁.trans hx.1, hx.2⟩)
-    Ico_subset_Ico_union_Ico
-
-Depends on / 依赖: Ico_subset_Ico_union_Ico, Subset, Subset.antisymm, antisymm, hx.elim, trans_le
+/-
+**Set.Ico_union_Ico_eq_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ico_union_Ico_eq_Ico (h₁ : a <= b) (h₂ : b <= c) : Ico a b union Ico b c =
+ Ico a c
+参数：h₁ : a <= b；h₂ : b <= c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Set.Ico_subset_Ico_union_Ico`：Ico_subset_Ico_union_Ico : Ico a c subsete
+q Ico a b union Ico b c
 -/
-theorem Ico_union_Ico_eq_Ico (h₁ : a <= b) (h₂ : b <= c) : Ico a b union Ico b c = Ico a c :=
+theorem Ico_union_Ico_eq_Ico (h₁ : a ≤ b) (h₂ : b ≤ c) : Ico a b ∪ Ico b c = Ico a c :=
   Subset.antisymm
     (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans_le h₂⟩) fun hx => ⟨h₁.trans hx.1, hx.2⟩)
     Ico_subset_Ico_union_Ico
-
-/--
-theorem `Ico_union_Ico` / 定理 `Ico_union_Ico`
-
-English:
-theorem Ico_union_Ico
-  given: (h₁ : min a b <= max c d) (h₂ : min c d <= max a b)
-  proof: by
-  grind
-
-中文:
-定理 Ico_union_Ico
-  条件: (h₁ : 最小值 a b <= 最大值 c d) (h₂ : 最小值 c d <= 最大值 a b)
-  证明: by
-  grind
+/-
+**Set.Ico_union_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ico_union_Ico (h₁ : min a b <= max c d) (h₂ : min c d <= max a b) : Ico a 
+b union Ico c d = Ico (min a c) (max b d)
+参数：h₁ : min a b <= max c d；h₂ : min c d <= max a b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Ico_union_Ico (h₁ : min a b <= max c d) (h₂ : min c d <= max a b) :
-    Ico a b union Ico c d = Ico (min a c) (max b d) := by
+theorem Ico_union_Ico (h₁ : min a b ≤ max c d) (h₂ : min c d ≤ max a b) :
+    Ico a b ∪ Ico c d = Ico (min a c) (max b d) := by
   grind
 
-/--
-theorem `Ico_union_Ico'` / 定理 `Ico_union_Ico'`
+/-- This is a special case of `Ico_union_Ico` -/
+/-
+**Set.Ico_union_Ico'** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ico_union_Ico' (h₁ : c <= b) (h₂ : a <= d) : Ico a b union Ico c d = Ico (
+min a c) (max b d)
+参数：h₁ : c <= b；h₂ : a <= d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Ico_union_Ico`：Ico_union_Ico (h₁ : min a b <= max c d) (h₂ : min c d
+ <= max a b) : Ico a b union Ico c d = Ico (min a c) (max b d)
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `min_le_left`：min_le_left (a b : α) : min a b <= a
+· 使用定理 `le_max_right`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), b ≤ max
+ a b
 
-English:
-theorem Ico_union_Ico'
-  given: (h₁ : c <= b) (h₂ : a <= d)
-  statement: Ico a b union Ico c d = Ico (min a c) (max b d)
-  proof: Ico_union_Ico
-    ((min_le_left ..).trans (h₂.trans (le_max_right ..)))
-    ((min_le_left ..).trans (h₁.trans (le_max_right ..)))
-
-中文:
-定理 Ico_union_Ico'
-  条件: (h₁ : c <= b) (h₂ : a <= d)
-  结论: 左闭右开区间 a b union 左闭右开区间 c d = 左闭右开区间 (最小值 a c) (最大值 b d)
-  证明: Ico_union_Ico
-    ((min_le_left ..).trans (h₂.trans (le_max_right ..)))
-    ((min_le_left ..).trans (h₁.trans (le_max_right ..)))
-
-Depends on / 依赖: Ico_union_Ico, le_max_right, min_le_left
+--- 原说明 ---
+This is a special case of `Ico_union_Ico`
 -/
-theorem Ico_union_Ico' (h₁ : c <= b) (h₂ : a <= d) : Ico a b union Ico c d = Ico (min a c) (max b d) :=
+theorem Ico_union_Ico' (h₁ : c ≤ b) (h₂ : a ≤ d) : Ico a b ∪ Ico c d = Ico (min a c) (max b d) :=
   Ico_union_Ico
     ((min_le_left ..).trans (h₂.trans (le_max_right ..)))
     ((min_le_left ..).trans (h₁.trans (le_max_right ..)))
-
-/--
-theorem `Icc_subset_Ico_union_Icc` / 定理 `Icc_subset_Ico_union_Icc`
-
-English:
-theorem Icc_subset_Ico_union_Icc
-  statement: Icc a c subseteq Ico a b union Icc b c
-  proof: fun x hx =>
-  (lt_or_ge x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
-
-@[simp]
-
-中文:
-定理 Icc_subset_Ico_union_Icc
-  结论: 闭区间 a c subseteq 左闭右开区间 a b union 闭区间 b c
-  证明: fun x hx =>
-  (lt_or_ge x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
-
-@[simp]
+/-
+**Set.Icc_subset_Ico_union_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Icc_subset_Ico_union_Icc : Icc a c subseteq Ico a b union Icc b c
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `lt_or_ge`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a < b ∨ b ≤
+ a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem Icc_subset_Ico_union_Icc : Icc a c subseteq Ico a b union Icc b c := fun x hx =>
+theorem Icc_subset_Ico_union_Icc : Icc a c ⊆ Ico a b ∪ Icc b c := fun x hx =>
   (lt_or_ge x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
 
 @[simp]
-/--
-theorem `Ico_union_Icc_eq_Icc` / 定理 `Ico_union_Icc_eq_Icc`
-
-English:
-theorem Ico_union_Icc_eq_Icc
-  given: (h₁ : a <= b) (h₂ : b <= c)
-  statement: Ico a b union Icc b c = Icc a c
-  proof: Subset.antisymm
-    (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.le.trans h₂⟩) fun hx => ⟨h₁.trans hx.1, hx.2⟩)
-    Icc_subset_Ico_union_Icc
-
-中文:
-定理 Ico_union_Icc_eq_Icc
-  条件: (h₁ : a <= b) (h₂ : b <= c)
-  结论: 左闭右开区间 a b union 闭区间 b c = 闭区间 a c
-  证明: Subset.antisymm
-    (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.le.trans h₂⟩) fun hx => ⟨h₁.trans hx.1, hx.2⟩)
-    Icc_subset_Ico_union_Icc
-
-Depends on / 依赖: Icc_subset_Ico_union_Icc, Subset, Subset.antisymm, antisymm, hx.elim, le.trans
+/-
+**Set.Ico_union_Icc_eq_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ico_union_Icc_eq_Icc (h₁ : a <= b) (h₂ : b <= c) : Ico a b union Icc b c =
+ Icc a c
+参数：h₁ : a <= b；h₂ : b <= c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Set.Icc_subset_Ico_union_Icc`：Icc_subset_Ico_union_Icc : Icc a c subsete
+q Ico a b union Icc b c
 -/
-theorem Ico_union_Icc_eq_Icc (h₁ : a <= b) (h₂ : b <= c) : Ico a b union Icc b c = Icc a c :=
+theorem Ico_union_Icc_eq_Icc (h₁ : a ≤ b) (h₂ : b ≤ c) : Ico a b ∪ Icc b c = Icc a c :=
   Subset.antisymm
     (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.le.trans h₂⟩) fun hx => ⟨h₁.trans hx.1, hx.2⟩)
     Icc_subset_Ico_union_Icc
-
-/--
-theorem `Ioc_subset_Ioo_union_Icc` / 定理 `Ioc_subset_Ioo_union_Icc`
-
-English:
-theorem Ioc_subset_Ioo_union_Icc
-  statement: Ioc a c subseteq Ioo a b union Icc b c
-  proof: fun x hx =>
-  (lt_or_ge x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
-
-@[simp]
-
-中文:
-定理 Ioc_subset_Ioo_union_Icc
-  结论: 左开右闭区间 a c subseteq 开区间 a b union 闭区间 b c
-  证明: fun x hx =>
-  (lt_or_ge x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
-
-@[simp]
+/-
+**Set.Ioc_subset_Ioo_union_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioc_subset_Ioo_union_Icc : Ioc a c subseteq Ioo a b union Icc b c
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `lt_or_ge`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a < b ∨ b ≤
+ a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem Ioc_subset_Ioo_union_Icc : Ioc a c subseteq Ioo a b union Icc b c := fun x hx =>
+theorem Ioc_subset_Ioo_union_Icc : Ioc a c ⊆ Ioo a b ∪ Icc b c := fun x hx =>
   (lt_or_ge x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
 
 @[simp]
-/--
-theorem `Ioo_union_Icc_eq_Ioc` / 定理 `Ioo_union_Icc_eq_Ioc`
-
-English:
-theorem Ioo_union_Icc_eq_Ioc
-  given: (h₁ : a < b) (h₂ : b <= c)
-  statement: Ioo a b union Icc b c = Ioc a c
-  proof: Subset.antisymm
-    (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.le.trans h₂⟩) fun hx => ⟨h₁.trans_le hx.1, hx.2⟩)
-    Ioc_subset_Ioo_union_Icc
-
-中文:
-定理 Ioo_union_Icc_eq_Ioc
-  条件: (h₁ : a < b) (h₂ : b <= c)
-  结论: 开区间 a b union 闭区间 b c = 左开右闭区间 a c
-  证明: Subset.antisymm
-    (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.le.trans h₂⟩) fun hx => ⟨h₁.trans_le hx.1, hx.2⟩)
-    Ioc_subset_Ioo_union_Icc
-
-Depends on / 依赖: Ioc_subset_Ioo_union_Icc, Subset, Subset.antisymm, antisymm, hx.elim, le.trans, trans_le
+/-
+**Set.Ioo_union_Icc_eq_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioo_union_Icc_eq_Ioc (h₁ : a < b) (h₂ : b <= c) : Ioo a b union Icc b c = 
+Ioc a c
+参数：h₁ : a < b；h₂ : b <= c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Set.Ioc_subset_Ioo_union_Icc`：Ioc_subset_Ioo_union_Icc : Ioc a c subsete
+q Ioo a b union Icc b c
 -/
-theorem Ioo_union_Icc_eq_Ioc (h₁ : a < b) (h₂ : b <= c) : Ioo a b union Icc b c = Ioc a c :=
+theorem Ioo_union_Icc_eq_Ioc (h₁ : a < b) (h₂ : b ≤ c) : Ioo a b ∪ Icc b c = Ioc a c :=
   Subset.antisymm
     (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.le.trans h₂⟩) fun hx => ⟨h₁.trans_le hx.1, hx.2⟩)
     Ioc_subset_Ioo_union_Icc
@@ -1894,248 +1265,189 @@ theorem Ioo_union_Icc_eq_Ioc (h₁ : a < b) (h₂ : b <= c) : Ioo a b union Icc 
 /-! ### Two finite intervals, `I?c` and `Io?` -/
 
 @[to_dual none]
-/--
-theorem `Ioo_subset_Ioc_union_Ioo` / 定理 `Ioo_subset_Ioc_union_Ioo`
+/-
+**Set.Ioo_subset_Ioc_union_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioo_subset_Ioc_union_Ioo : Ioo a c subseteq Ioc a b union Ioo b c
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `le_or_gt`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b <
+ a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-theorem Ioo_subset_Ioc_union_Ioo
-  statement: Ioo a c subseteq Ioc a b union Ioo b c
-  proof: fun x hx =>
-  (le_or_gt x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
-
-@[simp]
-
-中文:
-定理 Ioo_subset_Ioc_union_Ioo
-  结论: 开区间 a c subseteq 左开右闭区间 a b union 开区间 b c
-  证明: fun x hx =>
-  (le_or_gt x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
-
-@[simp]
+--- 原说明 ---
+### Two finite intervals, `I?c` and `Io?`
 -/
-theorem Ioo_subset_Ioc_union_Ioo : Ioo a c subseteq Ioc a b union Ioo b c := fun x hx =>
+theorem Ioo_subset_Ioc_union_Ioo : Ioo a c ⊆ Ioc a b ∪ Ioo b c := fun x hx =>
   (le_or_gt x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
 
 @[simp]
-/--
-theorem `Ioc_union_Ioo_eq_Ioo` / 定理 `Ioc_union_Ioo_eq_Ioo`
-
-English:
-theorem Ioc_union_Ioo_eq_Ioo
-  given: (h₁ : a <= b) (h₂ : b < c)
-  statement: Ioc a b union Ioo b c = Ioo a c
-  proof: Subset.antisymm
-    (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans_lt h₂⟩) fun hx => ⟨h₁.trans_lt hx.1, hx.2⟩)
-    Ioo_subset_Ioc_union_Ioo
-
-@[to_dual none]
-
-中文:
-定理 Ioc_union_Ioo_eq_Ioo
-  条件: (h₁ : a <= b) (h₂ : b < c)
-  结论: 左开右闭区间 a b union 开区间 b c = 开区间 a c
-  证明: Subset.antisymm
-    (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans_lt h₂⟩) fun hx => ⟨h₁.trans_lt hx.1, hx.2⟩)
-    Ioo_subset_Ioc_union_Ioo
-
-@[to_dual none]
-
-Depends on / 依赖: Ioo_subset_Ioc_union_Ioo, Subset, Subset.antisymm, antisymm, hx.elim, trans_lt
+/-
+**Set.Ioc_union_Ioo_eq_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioc_union_Ioo_eq_Ioo (h₁ : a <= b) (h₂ : b < c) : Ioc a b union Ioo b c = 
+Ioo a c
+参数：h₁ : a <= b；h₂ : b < c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Set.Ioo_subset_Ioc_union_Ioo`：Ioo_subset_Ioc_union_Ioo : Ioo a c subsete
+q Ioc a b union Ioo b c
 -/
-theorem Ioc_union_Ioo_eq_Ioo (h₁ : a <= b) (h₂ : b < c) : Ioc a b union Ioo b c = Ioo a c :=
+theorem Ioc_union_Ioo_eq_Ioo (h₁ : a ≤ b) (h₂ : b < c) : Ioc a b ∪ Ioo b c = Ioo a c :=
   Subset.antisymm
     (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans_lt h₂⟩) fun hx => ⟨h₁.trans_lt hx.1, hx.2⟩)
     Ioo_subset_Ioc_union_Ioo
 
 @[to_dual none]
-/--
-theorem `Ico_subset_Icc_union_Ioo` / 定理 `Ico_subset_Icc_union_Ioo`
-
-English:
-theorem Ico_subset_Icc_union_Ioo
-  statement: Ico a c subseteq Icc a b union Ioo b c
-  proof: fun x hx =>
+/-
+**Set.Ico_subset_Icc_union_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ico_subset_Icc_union_Ioo : Ico a c subseteq Icc a b union Ioo b c
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `le_or_gt`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b <
+ a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+-/
+theorem Ico_subset_Icc_union_Ioo : Ico a c ⊆ Icc a b ∪ Ioo b c := fun x hx =>
   (le_or_gt x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
 
 @[simp, to_dual none]
-
-中文:
-定理 Ico_subset_Icc_union_Ioo
-  结论: 左闭右开区间 a c subseteq 闭区间 a b union 开区间 b c
-  证明: fun x hx =>
-  (le_or_gt x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
-
-@[simp, to_dual none]
+/-
+**Set.Icc_union_Ioo_eq_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Icc_union_Ioo_eq_Ico (h₁ : a <= b) (h₂ : b < c) : Icc a b union Ioo b c = 
+Ico a c
+参数：h₁ : a <= b；h₂ : b < c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Set.Ico_subset_Icc_union_Ioo`：Ico_subset_Icc_union_Ioo : Ico a c subsete
+q Icc a b union Ioo b c
 -/
-theorem Ico_subset_Icc_union_Ioo : Ico a c subseteq Icc a b union Ioo b c := fun x hx =>
-  (le_or_gt x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
-
-@[simp, to_dual none]
-/--
-theorem `Icc_union_Ioo_eq_Ico` / 定理 `Icc_union_Ioo_eq_Ico`
-
-English:
-theorem Icc_union_Ioo_eq_Ico
-  given: (h₁ : a <= b) (h₂ : b < c)
-  statement: Icc a b union Ioo b c = Ico a c
-  proof: Subset.antisymm
-    (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans_lt h₂⟩) fun hx => ⟨h₁.trans hx.1.le, hx.2⟩)
-    Ico_subset_Icc_union_Ioo
-
-中文:
-定理 Icc_union_Ioo_eq_Ico
-  条件: (h₁ : a <= b) (h₂ : b < c)
-  结论: 闭区间 a b union 开区间 b c = 左闭右开区间 a c
-  证明: Subset.antisymm
-    (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans_lt h₂⟩) fun hx => ⟨h₁.trans hx.1.le, hx.2⟩)
-    Ico_subset_Icc_union_Ioo
-
-Depends on / 依赖: Ico_subset_Icc_union_Ioo, Subset, Subset.antisymm, antisymm, hx.elim, trans_lt
--/
-theorem Icc_union_Ioo_eq_Ico (h₁ : a <= b) (h₂ : b < c) : Icc a b union Ioo b c = Ico a c :=
+theorem Icc_union_Ioo_eq_Ico (h₁ : a ≤ b) (h₂ : b < c) : Icc a b ∪ Ioo b c = Ico a c :=
   Subset.antisymm
     (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans_lt h₂⟩) fun hx => ⟨h₁.trans hx.1.le, hx.2⟩)
     Ico_subset_Icc_union_Ioo
-
-/--
-theorem `Icc_subset_Icc_union_Ioc` / 定理 `Icc_subset_Icc_union_Ioc`
-
-English:
-theorem Icc_subset_Icc_union_Ioc
-  statement: Icc a c subseteq Icc a b union Ioc b c
-  proof: fun x hx =>
-  (le_or_gt x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
-
-@[simp]
-
-中文:
-定理 Icc_subset_Icc_union_Ioc
-  结论: 闭区间 a c subseteq 闭区间 a b union 左开右闭区间 b c
-  证明: fun x hx =>
-  (le_or_gt x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
-
-@[simp]
+/-
+**Set.Icc_subset_Icc_union_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Icc_subset_Icc_union_Ioc : Icc a c subseteq Icc a b union Ioc b c
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `le_or_gt`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b <
+ a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem Icc_subset_Icc_union_Ioc : Icc a c subseteq Icc a b union Ioc b c := fun x hx =>
+theorem Icc_subset_Icc_union_Ioc : Icc a c ⊆ Icc a b ∪ Ioc b c := fun x hx =>
   (le_or_gt x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
 
 @[simp]
-/--
-theorem `Icc_union_Ioc_eq_Icc` / 定理 `Icc_union_Ioc_eq_Icc`
-
-English:
-theorem Icc_union_Ioc_eq_Icc
-  given: (h₁ : a <= b) (h₂ : b <= c)
-  statement: Icc a b union Ioc b c = Icc a c
-  proof: Subset.antisymm
-    (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans h₂⟩) fun hx => ⟨h₁.trans hx.1.le, hx.2⟩)
-    Icc_subset_Icc_union_Ioc
-
-中文:
-定理 Icc_union_Ioc_eq_Icc
-  条件: (h₁ : a <= b) (h₂ : b <= c)
-  结论: 闭区间 a b union 左开右闭区间 b c = 闭区间 a c
-  证明: Subset.antisymm
-    (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans h₂⟩) fun hx => ⟨h₁.trans hx.1.le, hx.2⟩)
-    Icc_subset_Icc_union_Ioc
-
-Depends on / 依赖: Icc_subset_Icc_union_Ioc, Subset, Subset.antisymm, antisymm, hx.elim
+/-
+**Set.Icc_union_Ioc_eq_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Icc_union_Ioc_eq_Icc (h₁ : a <= b) (h₂ : b <= c) : Icc a b union Ioc b c =
+ Icc a c
+参数：h₁ : a <= b；h₂ : b <= c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Set.Icc_subset_Icc_union_Ioc`：Icc_subset_Icc_union_Ioc : Icc a c subsete
+q Icc a b union Ioc b c
 -/
-theorem Icc_union_Ioc_eq_Icc (h₁ : a <= b) (h₂ : b <= c) : Icc a b union Ioc b c = Icc a c :=
+theorem Icc_union_Ioc_eq_Icc (h₁ : a ≤ b) (h₂ : b ≤ c) : Icc a b ∪ Ioc b c = Icc a c :=
   Subset.antisymm
     (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans h₂⟩) fun hx => ⟨h₁.trans hx.1.le, hx.2⟩)
     Icc_subset_Icc_union_Ioc
-
-/--
-theorem `Ioc_subset_Ioc_union_Ioc` / 定理 `Ioc_subset_Ioc_union_Ioc`
-
-English:
-theorem Ioc_subset_Ioc_union_Ioc
-  statement: Ioc a c subseteq Ioc a b union Ioc b c
-  proof: fun x hx =>
-  (le_or_gt x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
-
-@[simp]
-
-中文:
-定理 Ioc_subset_Ioc_union_Ioc
-  结论: 左开右闭区间 a c subseteq 左开右闭区间 a b union 左开右闭区间 b c
-  证明: fun x hx =>
-  (le_or_gt x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
-
-@[simp]
+/-
+**Set.Ioc_subset_Ioc_union_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioc_subset_Ioc_union_Ioc : Ioc a c subseteq Ioc a b union Ioc b c
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `le_or_gt`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b <
+ a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem Ioc_subset_Ioc_union_Ioc : Ioc a c subseteq Ioc a b union Ioc b c := fun x hx =>
+theorem Ioc_subset_Ioc_union_Ioc : Ioc a c ⊆ Ioc a b ∪ Ioc b c := fun x hx =>
   (le_or_gt x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
 
 @[simp]
-/--
-theorem `Ioc_union_Ioc_eq_Ioc` / 定理 `Ioc_union_Ioc_eq_Ioc`
-
-English:
-theorem Ioc_union_Ioc_eq_Ioc
-  given: (h₁ : a <= b) (h₂ : b <= c)
-  statement: Ioc a b union Ioc b c = Ioc a c
-  proof: Subset.antisymm
-    (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans h₂⟩) fun hx => ⟨h₁.trans_lt hx.1, hx.2⟩)
-    Ioc_subset_Ioc_union_Ioc
-
-中文:
-定理 Ioc_union_Ioc_eq_Ioc
-  条件: (h₁ : a <= b) (h₂ : b <= c)
-  结论: 左开右闭区间 a b union 左开右闭区间 b c = 左开右闭区间 a c
-  证明: Subset.antisymm
-    (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans h₂⟩) fun hx => ⟨h₁.trans_lt hx.1, hx.2⟩)
-    Ioc_subset_Ioc_union_Ioc
-
-Depends on / 依赖: Ioc_subset_Ioc_union_Ioc, Subset, Subset.antisymm, antisymm, hx.elim, trans_lt
+/-
+**Set.Ioc_union_Ioc_eq_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioc_union_Ioc_eq_Ioc (h₁ : a <= b) (h₂ : b <= c) : Ioc a b union Ioc b c =
+ Ioc a c
+参数：h₁ : a <= b；h₂ : b <= c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Set.Ioc_subset_Ioc_union_Ioc`：Ioc_subset_Ioc_union_Ioc : Ioc a c subsete
+q Ioc a b union Ioc b c
 -/
-theorem Ioc_union_Ioc_eq_Ioc (h₁ : a <= b) (h₂ : b <= c) : Ioc a b union Ioc b c = Ioc a c :=
+theorem Ioc_union_Ioc_eq_Ioc (h₁ : a ≤ b) (h₂ : b ≤ c) : Ioc a b ∪ Ioc b c = Ioc a c :=
   Subset.antisymm
     (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans h₂⟩) fun hx => ⟨h₁.trans_lt hx.1, hx.2⟩)
     Ioc_subset_Ioc_union_Ioc
-
-/--
-theorem `Ioc_union_Ioc` / 定理 `Ioc_union_Ioc`
-
-English:
-theorem Ioc_union_Ioc
-  given: (h₁ : min a b <= max c d) (h₂ : min c d <= max a b)
-  proof: by
-  grind
-
-中文:
-定理 Ioc_union_Ioc
-  条件: (h₁ : 最小值 a b <= 最大值 c d) (h₂ : 最小值 c d <= 最大值 a b)
-  证明: by
-  grind
+/-
+**Set.Ioc_union_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioc_union_Ioc (h₁ : min a b <= max c d) (h₂ : min c d <= max a b) : Ioc a 
+b union Ioc c d = Ioc (min a c) (max b d)
+参数：h₁ : min a b <= max c d；h₂ : min c d <= max a b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Ioc_union_Ioc (h₁ : min a b <= max c d) (h₂ : min c d <= max a b) :
-    Ioc a b union Ioc c d = Ioc (min a c) (max b d) := by
+theorem Ioc_union_Ioc (h₁ : min a b ≤ max c d) (h₂ : min c d ≤ max a b) :
+    Ioc a b ∪ Ioc c d = Ioc (min a c) (max b d) := by
   grind
 
-/--
-theorem `Ioc_union_Ioc'` / 定理 `Ioc_union_Ioc'`
+/-- This is a special case of `Ioc_union_Ioc` -/
+/-
+**Set.Ioc_union_Ioc'** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioc_union_Ioc' (h₁ : c <= b) (h₂ : a <= d) : Ioc a b union Ioc c d = Ioc (
+min a c) (max b d)
+参数：h₁ : c <= b；h₂ : a <= d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Ioc_union_Ioc`：Ioc_union_Ioc (h₁ : min a b <= max c d) (h₂ : min c d
+ <= max a b) : Ioc a b union Ioc c d = Ioc (min a c) (max b d)
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `min_le_left`：min_le_left (a b : α) : min a b <= a
+· 使用定理 `le_max_right`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), b ≤ max
+ a b
 
-English:
-theorem Ioc_union_Ioc'
-  given: (h₁ : c <= b) (h₂ : a <= d)
-  statement: Ioc a b union Ioc c d = Ioc (min a c) (max b d)
-  proof: Ioc_union_Ioc
-    ((min_le_left ..).trans (h₂.trans (le_max_right ..)))
-    ((min_le_left ..).trans (h₁.trans (le_max_right ..)))
-
-中文:
-定理 Ioc_union_Ioc'
-  条件: (h₁ : c <= b) (h₂ : a <= d)
-  结论: 左开右闭区间 a b union 左开右闭区间 c d = 左开右闭区间 (最小值 a c) (最大值 b d)
-  证明: Ioc_union_Ioc
-    ((min_le_left ..).trans (h₂.trans (le_max_right ..)))
-    ((min_le_left ..).trans (h₁.trans (le_max_right ..)))
-
-Depends on / 依赖: Ioc_union_Ioc, le_max_right, min_le_left
+--- 原说明 ---
+This is a special case of `Ioc_union_Ioc`
 -/
-theorem Ioc_union_Ioc' (h₁ : c <= b) (h₂ : a <= d) : Ioc a b union Ioc c d = Ioc (min a c) (max b d) :=
+theorem Ioc_union_Ioc' (h₁ : c ≤ b) (h₂ : a ≤ d) : Ioc a b ∪ Ioc c d = Ioc (min a c) (max b d) :=
   Ioc_union_Ioc
     ((min_le_left ..).trans (h₂.trans (le_max_right ..)))
     ((min_le_left ..).trans (h₁.trans (le_max_right ..)))
@@ -2143,525 +1455,338 @@ theorem Ioc_union_Ioc' (h₁ : c <= b) (h₂ : a <= d) : Ioc a b union Ioc c d =
 /-! ### Two finite intervals with a common point -/
 
 @[to_dual none]
-/--
-theorem `Ioo_subset_Ioc_union_Ico` / 定理 `Ioo_subset_Ioc_union_Ico`
+/-
+**Set.Ioo_subset_Ioc_union_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioo_subset_Ioc_union_Ico : Ioo a c subseteq Ioc a b union Ico b c
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `Set.Ioo_subset_Ioc_union_Ioo`：Ioo_subset_Ioc_union_Ioo : Ioo a c subsete
+q Ioc a b union Ioo b c
+· 使用定理 `Set.union_subset_union_right`：union_subset_union_right (s) {t₁ t₂ : Set 
+α} (h : t₁ subseteq t₂) : s union t₁ subseteq s union t₂
+· 使用定理 `Set.Ioo_subset_Ico_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Ioo a b ⊆ Set.Ico a b
 
-English:
-theorem Ioo_subset_Ioc_union_Ico
-  statement: Ioo a c subseteq Ioc a b union Ico b c
-  proof: Subset.trans Ioo_subset_Ioc_union_Ioo (union_subset_union_right _ Ioo_subset_Ico_self)
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 Ioo_subset_Ioc_union_Ico
-  结论: 开区间 a c subseteq 左开右闭区间 a b union 左闭右开区间 b c
-  证明: Subset.trans Ioo_subset_Ioc_union_Ioo (union_subset_union_right _ Ioo_subset_Ico_self)
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: Ioo_subset_Ico_self, Ioo_subset_Ioc_union_Ioo, Subset, Subset.trans, union_subset_union_right
+--- 原说明 ---
+### Two finite intervals with a common point
 -/
-theorem Ioo_subset_Ioc_union_Ico : Ioo a c subseteq Ioc a b union Ico b c :=
+theorem Ioo_subset_Ioc_union_Ico : Ioo a c ⊆ Ioc a b ∪ Ico b c :=
   Subset.trans Ioo_subset_Ioc_union_Ioo (union_subset_union_right _ Ioo_subset_Ico_self)
 
 @[to_dual (attr := simp)]
-/--
-theorem `Ioc_union_Ico_eq_Ioo` / 定理 `Ioc_union_Ico_eq_Ioo`
-
-English:
-theorem Ioc_union_Ico_eq_Ioo
-  given: (h₁ : a < b) (h₂ : b < c)
-  statement: Ioc a b union Ico b c = Ioo a c
-  proof: Subset.antisymm
-    (fun _ hx =>
-      hx.elim (fun hx' => ⟨hx'.1, hx'.2.trans_lt h₂⟩) fun hx' => ⟨h₁.trans_le hx'.1, hx'.2⟩)
-    Ioo_subset_Ioc_union_Ico
-
-中文:
-定理 Ioc_union_Ico_eq_Ioo
-  条件: (h₁ : a < b) (h₂ : b < c)
-  结论: 左开右闭区间 a b union 左闭右开区间 b c = 开区间 a c
-  证明: Subset.antisymm
-    (fun _ hx =>
-      hx.elim (fun hx' => ⟨hx'.1, hx'.2.trans_lt h₂⟩) fun hx' => ⟨h₁.trans_le hx'.1, hx'.2⟩)
-    Ioo_subset_Ioc_union_Ico
-
-Depends on / 依赖: Ioo_subset_Ioc_union_Ico, Subset, Subset.antisymm, antisymm, hx.elim, trans_le, trans_lt
+/-
+**Set.Ioc_union_Ico_eq_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioc_union_Ico_eq_Ioo (h₁ : a < b) (h₂ : b < c) : Ioc a b union Ico b c = I
+oo a c
+参数：h₁ : a < b；h₂ : b < c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Set.Ioo_subset_Ioc_union_Ico`：Ioo_subset_Ioc_union_Ico : Ioo a c subsete
+q Ioc a b union Ico b c
 -/
-theorem Ioc_union_Ico_eq_Ioo (h₁ : a < b) (h₂ : b < c) : Ioc a b union Ico b c = Ioo a c :=
+theorem Ioc_union_Ico_eq_Ioo (h₁ : a < b) (h₂ : b < c) : Ioc a b ∪ Ico b c = Ioo a c :=
   Subset.antisymm
     (fun _ hx =>
       hx.elim (fun hx' => ⟨hx'.1, hx'.2.trans_lt h₂⟩) fun hx' => ⟨h₁.trans_le hx'.1, hx'.2⟩)
     Ioo_subset_Ioc_union_Ico
-
-/--
-theorem `Ico_subset_Icc_union_Ico` / 定理 `Ico_subset_Icc_union_Ico`
-
-English:
-theorem Ico_subset_Icc_union_Ico
-  statement: Ico a c subseteq Icc a b union Ico b c
-  proof: Subset.trans Ico_subset_Icc_union_Ioo (union_subset_union_right _ Ioo_subset_Ico_self)
-
-@[simp]
-
-中文:
-定理 Ico_subset_Icc_union_Ico
-  结论: 左闭右开区间 a c subseteq 闭区间 a b union 左闭右开区间 b c
-  证明: Subset.trans Ico_subset_Icc_union_Ioo (union_subset_union_right _ Ioo_subset_Ico_self)
-
-@[simp]
-
-Depends on / 依赖: Ico_subset_Icc_union_Ioo, Ioo_subset_Ico_self, Subset, Subset.trans, union_subset_union_right
+/-
+**Set.Ico_subset_Icc_union_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ico_subset_Icc_union_Ico : Ico a c subseteq Icc a b union Ico b c
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `Set.Ico_subset_Icc_union_Ioo`：Ico_subset_Icc_union_Ioo : Ico a c subsete
+q Icc a b union Ioo b c
+· 使用定理 `Set.union_subset_union_right`：union_subset_union_right (s) {t₁ t₂ : Set 
+α} (h : t₁ subseteq t₂) : s union t₁ subseteq s union t₂
+· 使用定理 `Set.Ioo_subset_Ico_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Ioo a b ⊆ Set.Ico a b
 -/
-theorem Ico_subset_Icc_union_Ico : Ico a c subseteq Icc a b union Ico b c :=
+theorem Ico_subset_Icc_union_Ico : Ico a c ⊆ Icc a b ∪ Ico b c :=
   Subset.trans Ico_subset_Icc_union_Ioo (union_subset_union_right _ Ioo_subset_Ico_self)
 
 @[simp]
-/--
-theorem `Icc_union_Ico_eq_Ico` / 定理 `Icc_union_Ico_eq_Ico`
-
-English:
-theorem Icc_union_Ico_eq_Ico
-  given: (h₁ : a <= b) (h₂ : b < c)
-  statement: Icc a b union Ico b c = Ico a c
-  proof: Subset.antisymm
-    (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans_lt h₂⟩) fun hx => ⟨h₁.trans hx.1, hx.2⟩)
-    Ico_subset_Icc_union_Ico
-
-中文:
-定理 Icc_union_Ico_eq_Ico
-  条件: (h₁ : a <= b) (h₂ : b < c)
-  结论: 闭区间 a b union 左闭右开区间 b c = 左闭右开区间 a c
-  证明: Subset.antisymm
-    (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans_lt h₂⟩) fun hx => ⟨h₁.trans hx.1, hx.2⟩)
-    Ico_subset_Icc_union_Ico
-
-Depends on / 依赖: Ico_subset_Icc_union_Ico, Subset, Subset.antisymm, antisymm, hx.elim, trans_lt
+/-
+**Set.Icc_union_Ico_eq_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Icc_union_Ico_eq_Ico (h₁ : a <= b) (h₂ : b < c) : Icc a b union Ico b c = 
+Ico a c
+参数：h₁ : a <= b；h₂ : b < c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Set.Ico_subset_Icc_union_Ico`：Ico_subset_Icc_union_Ico : Ico a c subsete
+q Icc a b union Ico b c
 -/
-theorem Icc_union_Ico_eq_Ico (h₁ : a <= b) (h₂ : b < c) : Icc a b union Ico b c = Ico a c :=
+theorem Icc_union_Ico_eq_Ico (h₁ : a ≤ b) (h₂ : b < c) : Icc a b ∪ Ico b c = Ico a c :=
   Subset.antisymm
     (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans_lt h₂⟩) fun hx => ⟨h₁.trans hx.1, hx.2⟩)
     Ico_subset_Icc_union_Ico
-
-/--
-theorem `Icc_subset_Icc_union_Icc` / 定理 `Icc_subset_Icc_union_Icc`
-
-English:
-theorem Icc_subset_Icc_union_Icc
-  statement: Icc a c subseteq Icc a b union Icc b c
-  proof: Subset.trans Icc_subset_Icc_union_Ioc (union_subset_union_right _ Ioc_subset_Icc_self)
-
-@[simp]
-
-中文:
-定理 Icc_subset_Icc_union_Icc
-  结论: 闭区间 a c subseteq 闭区间 a b union 闭区间 b c
-  证明: Subset.trans Icc_subset_Icc_union_Ioc (union_subset_union_right _ Ioc_subset_Icc_self)
-
-@[simp]
-
-Depends on / 依赖: Icc_subset_Icc_union_Ioc, Ioc_subset_Icc_self, Subset, Subset.trans, union_subset_union_right
+/-
+**Set.Icc_subset_Icc_union_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Icc_subset_Icc_union_Icc : Icc a c subseteq Icc a b union Icc b c
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `Set.Icc_subset_Icc_union_Ioc`：Icc_subset_Icc_union_Ioc : Icc a c subsete
+q Icc a b union Ioc b c
+· 使用定理 `Set.union_subset_union_right`：union_subset_union_right (s) {t₁ t₂ : Set 
+α} (h : t₁ subseteq t₂) : s union t₁ subseteq s union t₂
+· 使用定理 `Set.Ioc_subset_Icc_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Ioc a b ⊆ Set.Icc a b
 -/
-theorem Icc_subset_Icc_union_Icc : Icc a c subseteq Icc a b union Icc b c :=
+theorem Icc_subset_Icc_union_Icc : Icc a c ⊆ Icc a b ∪ Icc b c :=
   Subset.trans Icc_subset_Icc_union_Ioc (union_subset_union_right _ Ioc_subset_Icc_self)
 
 @[simp]
-/--
-theorem `Icc_union_Icc_eq_Icc` / 定理 `Icc_union_Icc_eq_Icc`
-
-English:
-theorem Icc_union_Icc_eq_Icc
-  given: (h₁ : a <= b) (h₂ : b <= c)
-  statement: Icc a b union Icc b c = Icc a c
-  proof: Subset.antisymm
-    (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans h₂⟩) fun hx => ⟨h₁.trans hx.1, hx.2⟩)
-    Icc_subset_Icc_union_Icc
-
-中文:
-定理 Icc_union_Icc_eq_Icc
-  条件: (h₁ : a <= b) (h₂ : b <= c)
-  结论: 闭区间 a b union 闭区间 b c = 闭区间 a c
-  证明: Subset.antisymm
-    (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans h₂⟩) fun hx => ⟨h₁.trans hx.1, hx.2⟩)
-    Icc_subset_Icc_union_Icc
-
-Depends on / 依赖: Icc_subset_Icc_union_Icc, Subset, Subset.antisymm, antisymm, hx.elim
+/-
+**Set.Icc_union_Icc_eq_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Icc_union_Icc_eq_Icc (h₁ : a <= b) (h₂ : b <= c) : Icc a b union Icc b c =
+ Icc a c
+参数：h₁ : a <= b；h₂ : b <= c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Set.Icc_subset_Icc_union_Icc`：Icc_subset_Icc_union_Icc : Icc a c subsete
+q Icc a b union Icc b c
 -/
-theorem Icc_union_Icc_eq_Icc (h₁ : a <= b) (h₂ : b <= c) : Icc a b union Icc b c = Icc a c :=
+theorem Icc_union_Icc_eq_Icc (h₁ : a ≤ b) (h₂ : b ≤ c) : Icc a b ∪ Icc b c = Icc a c :=
   Subset.antisymm
     (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans h₂⟩) fun hx => ⟨h₁.trans hx.1, hx.2⟩)
     Icc_subset_Icc_union_Icc
-
-/--
-theorem `Icc_union_Icc'` / 定理 `Icc_union_Icc'`
-
-English:
-theorem Icc_union_Icc'
-  given: (h₁ : c <= b) (h₂ : a <= d)
-  statement: Icc a b union Icc c d = Icc (min a c) (max b d)
-  proof: by
-  grind
-
-中文:
-定理 Icc_union_Icc'
-  条件: (h₁ : c <= b) (h₂ : a <= d)
-  结论: 闭区间 a b union 闭区间 c d = 闭区间 (最小值 a c) (最大值 b d)
-  证明: by
-  grind
+/-
+**Set.Icc_union_Icc'** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Icc_union_Icc' (h₁ : c <= b) (h₂ : a <= d) : Icc a b union Icc c d = Icc (
+min a c) (max b d)
+参数：h₁ : c <= b；h₂ : a <= d。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Icc_union_Icc' (h₁ : c <= b) (h₂ : a <= d) : Icc a b union Icc c d = Icc (min a c) (max b d) := by
+theorem Icc_union_Icc' (h₁ : c ≤ b) (h₂ : a ≤ d) : Icc a b ∪ Icc c d = Icc (min a c) (max b d) := by
   grind
 
-/--
-theorem `Icc_union_Icc` / 定理 `Icc_union_Icc`
+/-- We cannot replace `<` by `≤` in the hypotheses.
+Otherwise for `b < a = d < c` the l.h.s. is `∅` and the r.h.s. is `{a}`.
+-/
+/-
+**Set.Icc_union_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Icc_union_Icc (h₁ : min a b < max c d) (h₂ : min c d < max a b) : Icc a b 
+union Icc c d = Icc (min a c) (max b d)
+参数：h₁ : min a b < max c d；h₂ : min c d < max a b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem Icc_union_Icc
-  given: (h₁ : min a b < max c d) (h₂ : min c d < max a b)
-  proof: by
-  grind
-
-中文:
-定理 Icc_union_Icc
-  条件: (h₁ : 最小值 a b < 最大值 c d) (h₂ : 最小值 c d < 最大值 a b)
-  证明: by
-  grind
+--- 原说明 ---
+We cannot replace `<` by `≤` in the hypotheses.
+Otherwise for `b < a = d < c` the l.h.s. is `∅` and the r.h.s. is `{a}`.
 -/
 theorem Icc_union_Icc (h₁ : min a b < max c d) (h₂ : min c d < max a b) :
-    Icc a b union Icc c d = Icc (min a c) (max b d) := by
+    Icc a b ∪ Icc c d = Icc (min a c) (max b d) := by
   grind
-
-/--
-theorem `Ioc_subset_Ioc_union_Icc` / 定理 `Ioc_subset_Ioc_union_Icc`
-
-English:
-theorem Ioc_subset_Ioc_union_Icc
-  statement: Ioc a c subseteq Ioc a b union Icc b c
-  proof: Subset.trans Ioc_subset_Ioc_union_Ioc (union_subset_union_right _ Ioc_subset_Icc_self)
-
-@[simp]
-
-中文:
-定理 Ioc_subset_Ioc_union_Icc
-  结论: 左开右闭区间 a c subseteq 左开右闭区间 a b union 闭区间 b c
-  证明: Subset.trans Ioc_subset_Ioc_union_Ioc (union_subset_union_right _ Ioc_subset_Icc_self)
-
-@[simp]
-
-Depends on / 依赖: Ioc_subset_Icc_self, Ioc_subset_Ioc_union_Ioc, Subset, Subset.trans, union_subset_union_right
+/-
+**Set.Ioc_subset_Ioc_union_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioc_subset_Ioc_union_Icc : Ioc a c subseteq Ioc a b union Icc b c
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `Set.Ioc_subset_Ioc_union_Ioc`：Ioc_subset_Ioc_union_Ioc : Ioc a c subsete
+q Ioc a b union Ioc b c
+· 使用定理 `Set.union_subset_union_right`：union_subset_union_right (s) {t₁ t₂ : Set 
+α} (h : t₁ subseteq t₂) : s union t₁ subseteq s union t₂
+· 使用定理 `Set.Ioc_subset_Icc_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Ioc a b ⊆ Set.Icc a b
 -/
-theorem Ioc_subset_Ioc_union_Icc : Ioc a c subseteq Ioc a b union Icc b c :=
+theorem Ioc_subset_Ioc_union_Icc : Ioc a c ⊆ Ioc a b ∪ Icc b c :=
   Subset.trans Ioc_subset_Ioc_union_Ioc (union_subset_union_right _ Ioc_subset_Icc_self)
 
 @[simp]
-/--
-theorem `Ioc_union_Icc_eq_Ioc` / 定理 `Ioc_union_Icc_eq_Ioc`
-
-English:
-theorem Ioc_union_Icc_eq_Ioc
-  given: (h₁ : a < b) (h₂ : b <= c)
-  statement: Ioc a b union Icc b c = Ioc a c
-  proof: Subset.antisymm
-    (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans h₂⟩) fun hx => ⟨h₁.trans_le hx.1, hx.2⟩)
-    Ioc_subset_Ioc_union_Icc
-
-中文:
-定理 Ioc_union_Icc_eq_Ioc
-  条件: (h₁ : a < b) (h₂ : b <= c)
-  结论: 左开右闭区间 a b union 闭区间 b c = 左开右闭区间 a c
-  证明: Subset.antisymm
-    (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans h₂⟩) fun hx => ⟨h₁.trans_le hx.1, hx.2⟩)
-    Ioc_subset_Ioc_union_Icc
-
-Depends on / 依赖: Ioc_subset_Ioc_union_Icc, Subset, Subset.antisymm, antisymm, hx.elim, trans_le
+/-
+**Set.Ioc_union_Icc_eq_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioc_union_Icc_eq_Ioc (h₁ : a < b) (h₂ : b <= c) : Ioc a b union Icc b c = 
+Ioc a c
+参数：h₁ : a < b；h₂ : b <= c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Set.Ioc_subset_Ioc_union_Icc`：Ioc_subset_Ioc_union_Icc : Ioc a c subsete
+q Ioc a b union Icc b c
 -/
-theorem Ioc_union_Icc_eq_Ioc (h₁ : a < b) (h₂ : b <= c) : Ioc a b union Icc b c = Ioc a c :=
+theorem Ioc_union_Icc_eq_Ioc (h₁ : a < b) (h₂ : b ≤ c) : Ioc a b ∪ Icc b c = Ioc a c :=
   Subset.antisymm
     (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans h₂⟩) fun hx => ⟨h₁.trans_le hx.1, hx.2⟩)
     Ioc_subset_Ioc_union_Icc
-
-/--
-theorem `Ioo_union_Ioo'` / 定理 `Ioo_union_Ioo'`
-
-English:
-theorem Ioo_union_Ioo'
-  given: (h₁ : c < b) (h₂ : a < d)
-  statement: Ioo a b union Ioo c d = Ioo (min a c) (max b d)
-  proof: by
-  grind
-
-中文:
-定理 Ioo_union_Ioo'
-  条件: (h₁ : c < b) (h₂ : a < d)
-  结论: 开区间 a b union 开区间 c d = 开区间 (最小值 a c) (最大值 b d)
-  证明: by
-  grind
+/-
+**Set.Ioo_union_Ioo'** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioo_union_Ioo' (h₁ : c < b) (h₂ : a < d) : Ioo a b union Ioo c d = Ioo (mi
+n a c) (max b d)
+参数：h₁ : c < b；h₂ : a < d。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Ioo_union_Ioo' (h₁ : c < b) (h₂ : a < d) : Ioo a b union Ioo c d = Ioo (min a c) (max b d) := by
+theorem Ioo_union_Ioo' (h₁ : c < b) (h₂ : a < d) : Ioo a b ∪ Ioo c d = Ioo (min a c) (max b d) := by
   grind
-
-/--
-theorem `Ioo_union_Ioo` / 定理 `Ioo_union_Ioo`
-
-English:
-theorem Ioo_union_Ioo
-  given: (h₁ : min a b < max c d) (h₂ : min c d < max a b)
-  proof: by
-  grind
-
-中文:
-定理 Ioo_union_Ioo
-  条件: (h₁ : 最小值 a b < 最大值 c d) (h₂ : 最小值 c d < 最大值 a b)
-  证明: by
-  grind
+/-
+**Set.Ioo_union_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioo_union_Ioo (h₁ : min a b < max c d) (h₂ : min c d < max a b) : Ioo a b 
+union Ioo c d = Ioo (min a c) (max b d)
+参数：h₁ : min a b < max c d；h₂ : min c d < max a b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Ioo_union_Ioo (h₁ : min a b < max c d) (h₂ : min c d < max a b) :
-    Ioo a b union Ioo c d = Ioo (min a c) (max b d) := by
+    Ioo a b ∪ Ioo c d = Ioo (min a c) (max b d) := by
   grind
-
-/--
-theorem `Ioo_subset_Ioo_union_Ioo` / 定理 `Ioo_subset_Ioo_union_Ioo`
-
-English:
-theorem Ioo_subset_Ioo_union_Ioo
-  given: (h₁ : a <= a₁) (h₂ : c < b) (h₃ : b₁ <= d)
-  proof: fun x hx =>
-  (lt_or_ge x b).elim (fun hxb => Or.inl ⟨lt_of_le_of_lt h₁ hx.1, hxb⟩)
-    fun hxb => Or.inr ⟨lt_of_lt_of_le h₂ hxb, lt_of_lt_of_le hx.2 h₃⟩
-
-中文:
-定理 Ioo_subset_Ioo_union_Ioo
-  条件: (h₁ : a <= a₁) (h₂ : c < b) (h₃ : b₁ <= d)
-  证明: fun x hx =>
-  (lt_or_ge x b).elim (fun hxb => Or.inl ⟨lt_of_le_of_lt h₁ hx.1, hxb⟩)
-    fun hxb => Or.inr ⟨lt_of_lt_of_le h₂ hxb, lt_of_lt_of_le hx.2 h₃⟩
+/-
+**Set.Ioo_subset_Ioo_union_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioo_subset_Ioo_union_Ioo (h₁ : a <= a₁) (h₂ : c < b) (h₃ : b₁ <= d) : Ioo 
+a₁ b₁ subseteq Ioo a b union Ioo c d
+参数：h₁ : a <= a₁；h₂ : c < b；h₃ : b₁ <= d。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `lt_or_ge`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a < b ∨ b ≤
+ a
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `lt_of_lt_of_le`：lt_of_lt_of_le (hab : a < b) (hbc : b <= c) : a < c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem Ioo_subset_Ioo_union_Ioo (h₁ : a <= a₁) (h₂ : c < b) (h₃ : b₁ <= d) :
-    Ioo a₁ b₁ subseteq Ioo a b union Ioo c d := fun x hx =>
+theorem Ioo_subset_Ioo_union_Ioo (h₁ : a ≤ a₁) (h₂ : c < b) (h₃ : b₁ ≤ d) :
+    Ioo a₁ b₁ ⊆ Ioo a b ∪ Ioo c d := fun x hx =>
   (lt_or_ge x b).elim (fun hxb => Or.inl ⟨lt_of_le_of_lt h₁ hx.1, hxb⟩)
     fun hxb => Or.inr ⟨lt_of_lt_of_le h₂ hxb, lt_of_lt_of_le hx.2 h₃⟩
 
 /-! ### Intersection, difference, complement -/
 
 @[to_dual (attr := simp)]
-/--
-theorem `Ioi_inter_Ioi` / 定理 `Ioi_inter_Ioi`
+/-
+**Set.Ioi_inter_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioi_inter_Ioi : Ioi a inter Ioi b = Ioi (a ⊔ b)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `sup_lt_iff`：sup_lt_iff : b ⊔ c < a ↔ b < a ∧ c < a
 
-English:
-theorem Ioi_inter_Ioi
-  statement: Ioi a inter Ioi b = Ioi (a ⊔ b)
-  proof: ext fun _ => sup_lt_iff.symm
-
-@[to_dual]
-
-中文:
-定理 Ioi_inter_Ioi
-  结论: 左开右无界区间 a inter 左开右无界区间 b = 左开右无界区间 (a ⊔ b)
-  证明: ext fun _ => sup_lt_iff.symm
-
-@[to_dual]
-
-Depends on / 依赖: sup_lt_iff, sup_lt_iff.symm
+--- 原说明 ---
+### Intersection, difference, complement
 -/
-theorem Ioi_inter_Ioi : Ioi a inter Ioi b = Ioi (a ⊔ b) :=
+theorem Ioi_inter_Ioi : Ioi a ∩ Ioi b = Ioi (a ⊔ b) :=
   ext fun _ => sup_lt_iff.symm
 
 @[to_dual]
-/--
-theorem `Ico_inter_Ico` / 定理 `Ico_inter_Ico`
-
-English:
-theorem Ico_inter_Ico
-  statement: Ico a₁ b₁ inter Ico a₂ b₂ = Ico (a₁ ⊔ a₂) (b₁ ⊓ b₂)
-  proof: by
+/-
+**Set.Ico_inter_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ico_inter_Ico : Ico a₁ b₁ inter Ico a₂ b₂ = Ico (a₁ ⊔ a₂) (b₁ ⊓ b₂)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem Ico_inter_Ico : Ico a₁ b₁ ∩ Ico a₂ b₂ = Ico (a₁ ⊔ a₂) (b₁ ⊓ b₂) := by
   grind
 
 @[to_dual self]
-
-中文:
-定理 Ico_inter_Ico
-  结论: 左闭右开区间 a₁ b₁ inter 左闭右开区间 a₂ b₂ = 左闭右开区间 (a₁ ⊔ a₂) (b₁ ⊓ b₂)
-  证明: by
-  grind
-
-@[to_dual self]
+/-
+**Set.Ioo_inter_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioo_inter_Ioo : Ioo a₁ b₁ inter Ioo a₂ b₂ = Ioo (a₁ ⊔ a₂) (b₁ ⊓ b₂)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Ico_inter_Ico : Ico a₁ b₁ inter Ico a₂ b₂ = Ico (a₁ ⊔ a₂) (b₁ ⊓ b₂) := by
-  grind
-
-@[to_dual self]
-/--
-theorem `Ioo_inter_Ioo` / 定理 `Ioo_inter_Ioo`
-
-English:
-theorem Ioo_inter_Ioo
-  statement: Ioo a₁ b₁ inter Ioo a₂ b₂ = Ioo (a₁ ⊔ a₂) (b₁ ⊓ b₂)
-  proof: by
+theorem Ioo_inter_Ioo : Ioo a₁ b₁ ∩ Ioo a₂ b₂ = Ioo (a₁ ⊔ a₂) (b₁ ⊓ b₂) := by
   grind
 
 @[to_dual]
-
-中文:
-定理 Ioo_inter_Ioo
-  结论: 开区间 a₁ b₁ inter 开区间 a₂ b₂ = 开区间 (a₁ ⊔ a₂) (b₁ ⊓ b₂)
-  证明: by
+/-
+**Set.Ioo_inter_Iio** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioo_inter_Iio : Ioo a b inter Iio c = Ioo a (min b c)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem Ioo_inter_Iio : Ioo a b ∩ Iio c = Ioo a (min b c) := by
   grind
 
 @[to_dual]
+/-
+**Set.Iio_inter_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iio_inter_Ioo : Iio a inter Ioo b c = Ioo b (min a c)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Ioo_inter_Ioo : Ioo a₁ b₁ inter Ioo a₂ b₂ = Ioo (a₁ ⊔ a₂) (b₁ ⊓ b₂) := by
+theorem Iio_inter_Ioo : Iio a ∩ Ioo b c = Ioo b (min a c) := by
   grind
-
-@[to_dual]
-/--
-theorem `Ioo_inter_Iio` / 定理 `Ioo_inter_Iio`
-
-English:
-theorem Ioo_inter_Iio
-  statement: Ioo a b inter Iio c = Ioo a (min b c)
-  proof: by
-  grind
-
-@[to_dual]
-
-中文:
-定理 Ioo_inter_Iio
-  结论: 开区间 a b inter 左无界右开区间 c = 开区间 a (最小值 b c)
-  证明: by
-  grind
-
-@[to_dual]
+/-
+**Set.Ioc_inter_Ioo_of_left_lt** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioc_inter_Ioo_of_left_lt (h : b₁ < b₂) : Ioc a₁ b₁ inter Ioo a₂ b₂ = Ioc (
+max a₁ a₂) b₁
+参数：h : b₁ < b₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Ioo_inter_Iio : Ioo a b inter Iio c = Ioo a (min b c) := by
+theorem Ioc_inter_Ioo_of_left_lt (h : b₁ < b₂) : Ioc a₁ b₁ ∩ Ioo a₂ b₂ = Ioc (max a₁ a₂) b₁ := by
   grind
-
-@[to_dual]
-/--
-theorem `Iio_inter_Ioo` / 定理 `Iio_inter_Ioo`
-
-English:
-theorem Iio_inter_Ioo
-  statement: Iio a inter Ioo b c = Ioo b (min a c)
-  proof: by
-  grind
-
-中文:
-定理 Iio_inter_Ioo
-  结论: 左无界右开区间 a inter 开区间 b c = 开区间 b (最小值 a c)
-  证明: by
-  grind
+/-
+**Set.Ioc_inter_Ioo_of_right_le** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioc_inter_Ioo_of_right_le (h : b₂ <= b₁) : Ioc a₁ b₁ inter Ioo a₂ b₂ = Ioo
+ (max a₁ a₂) b₂
+参数：h : b₂ <= b₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Iio_inter_Ioo : Iio a inter Ioo b c = Ioo b (min a c) := by
+theorem Ioc_inter_Ioo_of_right_le (h : b₂ ≤ b₁) : Ioc a₁ b₁ ∩ Ioo a₂ b₂ = Ioo (max a₁ a₂) b₂ := by
   grind
-
-/--
-theorem `Ioc_inter_Ioo_of_left_lt` / 定理 `Ioc_inter_Ioo_of_left_lt`
-
-English:
-theorem Ioc_inter_Ioo_of_left_lt
-  given: (h : b₁ < b₂)
-  statement: Ioc a₁ b₁ inter Ioo a₂ b₂ = Ioc (max a₁ a₂) b₁
-  proof: by
-  grind
-
-中文:
-定理 Ioc_inter_Ioo_of_left_lt
-  条件: (h : b₁ < b₂)
-  结论: 左开右闭区间 a₁ b₁ inter 开区间 a₂ b₂ = 左开右闭区间 (最大值 a₁ a₂) b₁
-  证明: by
-  grind
+/-
+**Set.Ioo_inter_Ioc_of_left_le** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioo_inter_Ioc_of_left_le (h : b₁ <= b₂) : Ioo a₁ b₁ inter Ioc a₂ b₂ = Ioo 
+(max a₁ a₂) b₁
+参数：h : b₁ <= b₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Ioc_inter_Ioo_of_left_lt (h : b₁ < b₂) : Ioc a₁ b₁ inter Ioo a₂ b₂ = Ioc (max a₁ a₂) b₁ := by
+theorem Ioo_inter_Ioc_of_left_le (h : b₁ ≤ b₂) : Ioo a₁ b₁ ∩ Ioc a₂ b₂ = Ioo (max a₁ a₂) b₁ := by
   grind
-
-/--
-theorem `Ioc_inter_Ioo_of_right_le` / 定理 `Ioc_inter_Ioo_of_right_le`
-
-English:
-theorem Ioc_inter_Ioo_of_right_le
-  given: (h : b₂ <= b₁)
-  statement: Ioc a₁ b₁ inter Ioo a₂ b₂ = Ioo (max a₁ a₂) b₂
-  proof: by
-  grind
-
-中文:
-定理 Ioc_inter_Ioo_of_right_le
-  条件: (h : b₂ <= b₁)
-  结论: 左开右闭区间 a₁ b₁ inter 开区间 a₂ b₂ = 开区间 (最大值 a₁ a₂) b₂
-  证明: by
-  grind
+/-
+**Set.Ioo_inter_Ioc_of_right_lt** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioo_inter_Ioc_of_right_lt (h : b₂ < b₁) : Ioo a₁ b₁ inter Ioc a₂ b₂ = Ioc 
+(max a₁ a₂) b₂
+参数：h : b₂ < b₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Ioc_inter_Ioo_of_right_le (h : b₂ <= b₁) : Ioc a₁ b₁ inter Ioo a₂ b₂ = Ioo (max a₁ a₂) b₂ := by
-  grind
-
-/--
-theorem `Ioo_inter_Ioc_of_left_le` / 定理 `Ioo_inter_Ioc_of_left_le`
-
-English:
-theorem Ioo_inter_Ioc_of_left_le
-  given: (h : b₁ <= b₂)
-  statement: Ioo a₁ b₁ inter Ioc a₂ b₂ = Ioo (max a₁ a₂) b₁
-  proof: by
-  grind
-
-中文:
-定理 Ioo_inter_Ioc_of_left_le
-  条件: (h : b₁ <= b₂)
-  结论: 开区间 a₁ b₁ inter 左开右闭区间 a₂ b₂ = 开区间 (最大值 a₁ a₂) b₁
-  证明: by
-  grind
--/
-theorem Ioo_inter_Ioc_of_left_le (h : b₁ <= b₂) : Ioo a₁ b₁ inter Ioc a₂ b₂ = Ioo (max a₁ a₂) b₁ := by
-  grind
-
-/--
-theorem `Ioo_inter_Ioc_of_right_lt` / 定理 `Ioo_inter_Ioc_of_right_lt`
-
-English:
-theorem Ioo_inter_Ioc_of_right_lt
-  given: (h : b₂ < b₁)
-  statement: Ioo a₁ b₁ inter Ioc a₂ b₂ = Ioc (max a₁ a₂) b₂
-  proof: by
+theorem Ioo_inter_Ioc_of_right_lt (h : b₂ < b₁) : Ioo a₁ b₁ ∩ Ioc a₂ b₂ = Ioc (max a₁ a₂) b₂ := by
   grind
 
 @[simp]
-
-中文:
-定理 Ioo_inter_Ioc_of_right_lt
-  条件: (h : b₂ < b₁)
-  结论: 开区间 a₁ b₁ inter 左开右闭区间 a₂ b₂ = 左开右闭区间 (最大值 a₁ a₂) b₂
-  证明: by
-  grind
-
-@[simp]
--/
-theorem Ioo_inter_Ioc_of_right_lt (h : b₂ < b₁) : Ioo a₁ b₁ inter Ioc a₂ b₂ = Ioc (max a₁ a₂) b₂ := by
-  grind
-
-@[simp]
-/--
-theorem `Ico_sdiff_Iio` / 定理 `Ico_sdiff_Iio`
-
-English:
-theorem Ico_sdiff_Iio
-  statement: Ico a b \ Iio c = Ico (max a c) b
-  proof: by
-  grind
-
-@[deprecated (since := "2026-06-03")] alias Ico_diff_Iio := Ico_sdiff_Iio
-
-@[simp]
-
-中文:
-定理 Ico_sdiff_Iio
-  结论: 左闭右开区间 a b \ 左无界右开区间 c = 左闭右开区间 (最大值 a c) b
-  证明: by
-  grind
-
-@[deprecated (since := "2026-06-03")] alias Ico_diff_Iio := Ico_sdiff_Iio
-
-@[simp]
+/-
+**Set.Ico_sdiff_Iio** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ico_sdiff_Iio : Ico a b \ Iio c = Ico (max a c) b
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Ico_sdiff_Iio : Ico a b \ Iio c = Ico (max a c) b := by
   grind
@@ -2669,28 +1794,11 @@ theorem Ico_sdiff_Iio : Ico a b \ Iio c = Ico (max a c) b := by
 @[deprecated (since := "2026-06-03")] alias Ico_diff_Iio := Ico_sdiff_Iio
 
 @[simp]
-/--
-theorem `Ioc_sdiff_Ioi` / 定理 `Ioc_sdiff_Ioi`
-
-English:
-theorem Ioc_sdiff_Ioi
-  statement: Ioc a b \ Ioi c = Ioc a (min b c)
-  proof: by
-  grind
-
-@[deprecated (since := "2026-06-03")] alias Ioc_diff_Ioi := Ioc_sdiff_Ioi
-
-@[simp]
-
-中文:
-定理 Ioc_sdiff_Ioi
-  结论: 左开右闭区间 a b \ 左开右无界区间 c = 左开右闭区间 a (最小值 b c)
-  证明: by
-  grind
-
-@[deprecated (since := "2026-06-03")] alias Ioc_diff_Ioi := Ioc_sdiff_Ioi
-
-@[simp]
+/-
+**Set.Ioc_sdiff_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioc_sdiff_Ioi : Ioc a b \ Ioi c = Ioc a (min b c)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Ioc_sdiff_Ioi : Ioc a b \ Ioi c = Ioc a (min b c) := by
   grind
@@ -2698,116 +1806,49 @@ theorem Ioc_sdiff_Ioi : Ioc a b \ Ioi c = Ioc a (min b c) := by
 @[deprecated (since := "2026-06-03")] alias Ioc_diff_Ioi := Ioc_sdiff_Ioi
 
 @[simp]
-/--
-theorem `Ioc_inter_Ioi` / 定理 `Ioc_inter_Ioi`
-
-English:
-theorem Ioc_inter_Ioi
-  statement: Ioc a b inter Ioi c = Ioc (a ⊔ c) b
-  proof: by
-  grind
-
-@[simp]
-
-中文:
-定理 Ioc_inter_Ioi
-  结论: 左开右闭区间 a b inter 左开右无界区间 c = 左开右闭区间 (a ⊔ c) b
-  证明: by
-  grind
-
-@[simp]
+/-
+**Set.Ioc_inter_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioc_inter_Ioi : Ioc a b inter Ioi c = Ioc (a ⊔ c) b
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Ioc_inter_Ioi : Ioc a b inter Ioi c = Ioc (a ⊔ c) b := by
+theorem Ioc_inter_Ioi : Ioc a b ∩ Ioi c = Ioc (a ⊔ c) b := by
   grind
 
 @[simp]
-/--
-theorem `Ico_inter_Iio` / 定理 `Ico_inter_Iio`
-
-English:
-theorem Ico_inter_Iio
-  statement: Ico a b inter Iio c = Ico a (min b c)
-  proof: by
-  grind
-
-@[simp]
-
-中文:
-定理 Ico_inter_Iio
-  结论: 左闭右开区间 a b inter 左无界右开区间 c = 左闭右开区间 a (最小值 b c)
-  证明: by
-  grind
-
-@[simp]
+/-
+**Set.Ico_inter_Iio** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ico_inter_Iio : Ico a b inter Iio c = Ico a (min b c)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Ico_inter_Iio : Ico a b inter Iio c = Ico a (min b c) := by
+theorem Ico_inter_Iio : Ico a b ∩ Iio c = Ico a (min b c) := by
   grind
 
 @[simp]
-/--
-theorem `Ioc_sdiff_Iic` / 定理 `Ioc_sdiff_Iic`
-
-English:
-theorem Ioc_sdiff_Iic
-  statement: Ioc a b \ Iic c = Ioc (max a c) b
-  proof: by
-  grind
-
-@[deprecated (since := "2026-06-03")] alias Ioc_diff_Iic := Ioc_sdiff_Iic
-
-中文:
-定理 Ioc_sdiff_Iic
-  结论: 左开右闭区间 a b \ 左无界右闭区间 c = 左开右闭区间 (最大值 a c) b
-  证明: by
-  grind
-
-@[deprecated (since := "2026-06-03")] alias Ioc_diff_Iic := Ioc_sdiff_Iic
+/-
+**Set.Ioc_sdiff_Iic** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioc_sdiff_Iic : Ioc a b \ Iic c = Ioc (max a c) b
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Ioc_sdiff_Iic : Ioc a b \ Iic c = Ioc (max a c) b := by
   grind
 
 @[deprecated (since := "2026-06-03")] alias Ioc_diff_Iic := Ioc_sdiff_Iic
-
-/--
-theorem `compl_Ioc` / 定理 `compl_Ioc`
-
-English:
-theorem compl_Ioc
-  statement: (Ioc a b)ᶜ = Iic a union Ioi b
-  proof: by
-  grind
-
-中文:
-定理 compl_Ioc
-  结论: (左开右闭区间 a b)ᶜ = 左无界右闭区间 a union 左开右无界区间 b
-  证明: by
-  grind
+/-
+**Set.compl_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：compl_Ioc : (Ioc a b)ᶜ = Iic a union Ioi b
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem compl_Ioc : (Ioc a b)ᶜ = Iic a union Ioi b := by
+theorem compl_Ioc : (Ioc a b)ᶜ = Iic a ∪ Ioi b := by
   grind
-
-/--
-theorem `Iic_sdiff_Ioc` / 定理 `Iic_sdiff_Ioc`
-
-English:
-theorem Iic_sdiff_Ioc
-  statement: Iic b \ Ioc a b = Iic (a ⊓ b)
-  proof: by
-  grind
-
-@[deprecated (since := "2026-06-03")] alias Iic_diff_Ioc := Iic_sdiff_Ioc
-
-@[simp]
-
-中文:
-定理 Iic_sdiff_Ioc
-  结论: 左无界右闭区间 b \ 左开右闭区间 a b = 左无界右闭区间 (a ⊓ b)
-  证明: by
-  grind
-
-@[deprecated (since := "2026-06-03")] alias Iic_diff_Ioc := Iic_sdiff_Ioc
-
-@[simp]
+/-
+**Set.Iic_sdiff_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iic_sdiff_Ioc : Iic b \ Ioc a b = Iic (a ⊓ b)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Iic_sdiff_Ioc : Iic b \ Ioc a b = Iic (a ⊓ b) := by
   grind
@@ -2815,145 +1856,69 @@ theorem Iic_sdiff_Ioc : Iic b \ Ioc a b = Iic (a ⊓ b) := by
 @[deprecated (since := "2026-06-03")] alias Iic_diff_Ioc := Iic_sdiff_Ioc
 
 @[simp]
-/--
-theorem `Ioi_sdiff_Ioc` / 定理 `Ioi_sdiff_Ioc`
-
-English:
-theorem Ioi_sdiff_Ioc
-  statement: Ioi a \ Ioc a b = Ioi (max a b)
-  proof: by
-  grind
-
-@[deprecated (since := "2026-06-03")] alias Ioi_diff_Ioc := Ioi_sdiff_Ioc
-
-中文:
-定理 Ioi_sdiff_Ioc
-  结论: 左开右无界区间 a \ 左开右闭区间 a b = 左开右无界区间 (最大值 a b)
-  证明: by
-  grind
-
-@[deprecated (since := "2026-06-03")] alias Ioi_diff_Ioc := Ioi_sdiff_Ioc
+/-
+**Set.Ioi_sdiff_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioi_sdiff_Ioc : Ioi a \ Ioc a b = Ioi (max a b)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Ioi_sdiff_Ioc : Ioi a \ Ioc a b = Ioi (max a b) := by
   grind
 
 @[deprecated (since := "2026-06-03")] alias Ioi_diff_Ioc := Ioi_sdiff_Ioc
-
-/--
-theorem `Iic_sdiff_Ioc_self_of_le` / 定理 `Iic_sdiff_Ioc_self_of_le`
-
-English:
-theorem Iic_sdiff_Ioc_self_of_le
-  given: (hab : a <= b)
-  statement: Iic b \ Ioc a b = Iic a
-  proof: by
+/-
+**Set.Iic_sdiff_Ioc_self_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Iic_sdiff_Ioc_self_of_le (hab : a <= b) : Iic b \ Ioc a b = Iic a
+参数：hab : a <= b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem Iic_sdiff_Ioc_self_of_le (hab : a ≤ b) : Iic b \ Ioc a b = Iic a := by
   grind
 
 @[deprecated (since := "2026-06-03")] alias Iic_diff_Ioc_self_of_le := Iic_sdiff_Ioc_self_of_le
 
 @[simp]
-
-中文:
-定理 Iic_sdiff_Ioc_self_of_le
-  条件: (hab : a <= b)
-  结论: 左无界右闭区间 b \ 左开右闭区间 a b = 左无界右闭区间 a
-  证明: by
-  grind
-
-@[deprecated (since := "2026-06-03")] alias Iic_diff_Ioc_self_of_le := Iic_sdiff_Ioc_self_of_le
-
-@[simp]
+/-
+**Set.Ioc_union_Ioc_right** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioc_union_Ioc_right : Ioc a b union Ioc a c = Ioc a (max b c)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Iic_sdiff_Ioc_self_of_le (hab : a <= b) : Iic b \ Ioc a b = Iic a := by
-  grind
-
-@[deprecated (since := "2026-06-03")] alias Iic_diff_Ioc_self_of_le := Iic_sdiff_Ioc_self_of_le
-
-@[simp]
-/--
-theorem `Ioc_union_Ioc_right` / 定理 `Ioc_union_Ioc_right`
-
-English:
-theorem Ioc_union_Ioc_right
-  statement: Ioc a b union Ioc a c = Ioc a (max b c)
-  proof: by
+theorem Ioc_union_Ioc_right : Ioc a b ∪ Ioc a c = Ioc a (max b c) := by
   grind
 
 @[simp]
-
-中文:
-定理 Ioc_union_Ioc_right
-  结论: 左开右闭区间 a b union 左开右闭区间 a c = 左开右闭区间 a (最大值 b c)
-  证明: by
-  grind
-
-@[simp]
+/-
+**Set.Ioc_union_Ioc_left** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioc_union_Ioc_left : Ioc a c union Ioc b c = Ioc (min a b) c
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Ioc_union_Ioc_right : Ioc a b union Ioc a c = Ioc a (max b c) := by
+theorem Ioc_union_Ioc_left : Ioc a c ∪ Ioc b c = Ioc (min a b) c := by
   grind
 
 @[simp]
-/--
-theorem `Ioc_union_Ioc_left` / 定理 `Ioc_union_Ioc_left`
-
-English:
-theorem Ioc_union_Ioc_left
-  statement: Ioc a c union Ioc b c = Ioc (min a b) c
-  proof: by
-  grind
-
-@[simp]
-
-中文:
-定理 Ioc_union_Ioc_left
-  结论: 左开右闭区间 a c union 左开右闭区间 b c = 左开右闭区间 (最小值 a b) c
-  证明: by
-  grind
-
-@[simp]
+/-
+**Set.Ioc_union_Ioc_symm** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioc_union_Ioc_symm : Ioc a b union Ioc b a = Ioc (min a b) (max a b)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Ioc_union_Ioc_left : Ioc a c union Ioc b c = Ioc (min a b) c := by
+theorem Ioc_union_Ioc_symm : Ioc a b ∪ Ioc b a = Ioc (min a b) (max a b) := by
   grind
 
 @[simp]
-/--
-theorem `Ioc_union_Ioc_symm` / 定理 `Ioc_union_Ioc_symm`
-
-English:
-theorem Ioc_union_Ioc_symm
-  statement: Ioc a b union Ioc b a = Ioc (min a b) (max a b)
-  proof: by
-  grind
-
-@[simp]
-
-中文:
-定理 Ioc_union_Ioc_symm
-  结论: 左开右闭区间 a b union 左开右闭区间 b a = 左开右闭区间 (最小值 a b) (最大值 a b)
-  证明: by
-  grind
-
-@[simp]
--/
-theorem Ioc_union_Ioc_symm : Ioc a b union Ioc b a = Ioc (min a b) (max a b) := by
-  grind
-
-@[simp]
-/--
-theorem `Ioc_union_Ioc_union_Ioc_cycle` / 定理 `Ioc_union_Ioc_union_Ioc_cycle`
-
-English:
-theorem Ioc_union_Ioc_union_Ioc_cycle
-  proof: by
-  grind
-
-中文:
-定理 Ioc_union_Ioc_union_Ioc_cycle
-  证明: by
-  grind
+/-
+**Set.Ioc_union_Ioc_union_Ioc_cycle** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：Ioc_union_Ioc_union_Ioc_cycle : Ioc a b union Ioc b c union Ioc c a = Ioc 
+(min a (min b c)) (max a (max b c))
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Ioc_union_Ioc_union_Ioc_cycle :
-    Ioc a b union Ioc b c union Ioc c a = Ioc (min a (min b c)) (max a (max b c)) := by
+    Ioc a b ∪ Ioc b c ∪ Ioc c a = Ioc (min a (min b c)) (max a (max b c)) := by
   grind
 
 end Set
+

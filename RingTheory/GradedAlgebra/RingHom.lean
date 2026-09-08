@@ -41,30 +41,28 @@ open Graded
 
 section SetLike
 
-/--
-Definition of `GradedRingHom` / `GradedRingHom` 的定义
+/-- Bundled graded (semi)ring homomorphisms. Use `GradedRingHom` for the namespace and other
+identifiers, and `𝒜 →+*ᵍ ℬ` for the notation. -/
+/-
+**GradedRingHom** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{ι : Type u_1} →   {A : Type u_2} →     {B : Type u_3} →       {σ : Type u
+_6} →         {τ : Type u_7} →           [Semiring A] → [Semiring B] → [SetLike 
+σ A] → [SetLike τ B] → (ι → σ) → (ι → τ) → Type (max u_2 u_3)
+参数：ι → σ；ι → τ；max u_2 u_3。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure GradedRingHom
-  parameters: (𝒜 : ι -> σ) (ℬ : ι -> τ)
-  extends: A ->+* B
-  axioms and operations (1):
-    - map_mem({i : ι} {x : A}) : x in 𝒜 i -> toRingHom x in ℬ i
-
-中文:
-结构 分次环态射
-  参数: (𝒜 : ι -> σ) (ℬ : ι -> τ)
-  继承: A ->+* B
-  公理与运算 (1 个):
-    - map_mem({i : ι} {x : A}) : x in 𝒜 i -> toRingHom x in ℬ i
+--- 原说明 ---
+Bundled graded (semi)ring homomorphisms. Use `GradedRingHom` for the namespace a
+nd other
+identifiers, and `𝒜 →+*ᵍ ℬ` for the notation.
 -/
-structure GradedRingHom (𝒜 : ι -> σ) (ℬ : ι -> τ) extends A ->+* B where
-  protected map_mem {i : ι} {x : A} : x in 𝒜 i -> toRingHom x in ℬ i
+structure GradedRingHom (𝒜 : ι → σ) (ℬ : ι → τ) extends A →+* B where
+  protected map_mem {i : ι} {x : A} : x ∈ 𝒜 i → toRingHom x ∈ ℬ i
 
-variable {𝒜 : ι -> σ} {ℬ : ι -> τ} {𝒞 : ι -> ψ} {𝒟 : ι -> ω}
+variable {𝒜 : ι → σ} {ℬ : ι → τ} {𝒞 : ι → ψ} {𝒟 : ι → ω}
 
 @[inherit_doc]
-notation:25 𝒜 " ->+*ᵍ " ℬ => GradedRingHom 𝒜 ℬ
+notation:25 𝒜 " →+*ᵍ " ℬ => GradedRingHom 𝒜 ℬ
 
 namespace GradedRingHom
 
@@ -77,57 +75,36 @@ variable {F : Type*} [FunLike F A B] [GradedFunLike F 𝒜 ℬ] [RingHomClass F 
 This should not be used directly. In the future, Mathlib will prefer structural projections over
 these general constructions from hom classes. -/
 @[coe]
-/--
-Definition of `ofClass` / `ofClass` 的定义
+/-
+**GradedRingHom.ofClass** 是 Mathlib 中的一个定义，位于命名空间 `GradedRingHom`。
+形式化陈述：ofClass (f : F) : 𝒜 ->+*ᵍ ℬ where __
+参数：f : F。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `Graded.map_mem`：Graded.map_mem (f : F) {i x} (h : x in 𝒜 i) : f x in ℬ i
 
-English:
-definition ofClass
-  signature: (f : F)
-  body: (f : A ->+* B)
-  map_mem := map_mem f
+--- 原说明 ---
+Turn an element of a type `F` satisfying
+`[FunLike F A B] [GradedFunLike F 𝒜 ℬ] [RingHomClass F A B]` into an actual `Gra
+dedRingHom`.
 
-中文:
-定义 ofClass
-  签名: (f : F)
-  定义体: (f : A ->+* B)
-  map_mem := map_mem f
+This should not be used directly. In the future, Mathlib will prefer structural 
+projections over
+these general constructions from hom classes.
 -/
-def ofClass (f : F) : 𝒜 ->+*ᵍ ℬ where
-  __ := (f : A ->+* B)
+def ofClass (f : F) : 𝒜 →+*ᵍ ℬ where
+  __ := (f : A →+* B)
   map_mem := map_mem f
 
 end ofClass
 
 section coe
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (𝒜 ->+*ᵍ ℬ) A B
-  body: f.toFun
-  coe_injective f g h := by
-    cases f
-    cases g
-    congr
-    apply DFunLike.coe_injective
-    exact h
-
-中文:
-实例 :
-  签名: 函数状 (𝒜 ->+*ᵍ ℬ) A B
-  定义体: f.toFun
-  coe_injective f g h := by
-    cases f
-    cases g
-    congr
-    apply DFunLike.coe_injective
-    exact h
-
-Depends on / 依赖: f.toFun
+/-
+**GradedRingHom.** 是 Mathlib 中的一个实例，位于命名空间 `GradedRingHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : FunLike (𝒜 ->+*ᵍ ℬ) A B where
+instance : FunLike (𝒜 →+*ᵍ ℬ) A B where
   coe f := f.toFun
   coe_injective f g h := by
     cases f
@@ -135,423 +112,310 @@ instance : FunLike (𝒜 ->+*ᵍ ℬ) A B where
     congr
     apply DFunLike.coe_injective
     exact h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: GradedFunLike (𝒜 ->+*ᵍ ℬ) 𝒜 ℬ
-  body: f.map_mem
-
-中文:
-实例 :
-  签名: GradedFunLike (𝒜 ->+*ᵍ ℬ) 𝒜 ℬ
-  定义体: f.map_mem
-
-Depends on / 依赖: f.map_mem, map_mem
+/-
+**GradedRingHom.** 是 Mathlib 中的一个实例，位于命名空间 `GradedRingHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : GradedFunLike (𝒜 ->+*ᵍ ℬ) 𝒜 ℬ where
+instance : GradedFunLike (𝒜 →+*ᵍ ℬ) 𝒜 ℬ where
   map_mem f := f.map_mem
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: RingHomClass (𝒜 ->+*ᵍ ℬ) A B
-  body: f.map_add'
-  map_zero f := f.map_zero'
-  map_mul f := f.map_mul'
-  map_one f := f.map_one'
-
-initialize_simps_projections GradedRingHom (toFun -> apply)
-
-中文:
-实例 :
-  签名: 环态射类 (𝒜 ->+*ᵍ ℬ) A B
-  定义体: f.map_add'
-  map_zero f := f.map_zero'
-  map_mul f := f.map_mul'
-  map_one f := f.map_one'
-
-initialize_simps_projections GradedRingHom (toFun -> apply)
-
-Depends on / 依赖: f.map_add, map_add
+/-
+**GradedRingHom.** 是 Mathlib 中的一个实例，位于命名空间 `GradedRingHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : RingHomClass (𝒜 ->+*ᵍ ℬ) A B where
+instance : RingHomClass (𝒜 →+*ᵍ ℬ) A B where
   map_add f := f.map_add'
   map_zero f := f.map_zero'
   map_mul f := f.map_mul'
   map_one f := f.map_one'
 
-initialize_simps_projections GradedRingHom (toFun -> apply)
+initialize_simps_projections GradedRingHom (toFun → apply)
 
 attribute [coe] GradedRingHom.toRingHom
 
 @[simp]
-/--
-theorem `toRingHom_eq_toRingHom` / 定理 `toRingHom_eq_toRingHom`
-
-English:
-theorem toRingHom_eq_toRingHom
-  given: (f : 𝒜 ->+*ᵍ ℬ)
-  statement: RingHomClass.toRingHom f = f.toRingHom
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toRingHom_eq_toRingHom
-  条件: (f : 𝒜 ->+*ᵍ ℬ)
-  结论: 环态射类.toRingHom f = f.toRingHom
-  证明: rfl
-
-@[simp]
+/-
+**GradedRingHom.toRingHom_eq_toRingHom** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`
+。
+形式化陈述：toRingHom_eq_toRingHom (f : 𝒜 ->+*ᵍ ℬ) : RingHomClass.toRingHom f = f.toRi
+ngHom
+参数：f : 𝒜 ->+*ᵍ ℬ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GradedRingHom.instRingHomClass`：∀ {ι : Type u_1} {A : Type u_2} {B : Typ
+e u_3} {σ : Type u_6} {τ : Type u_7} [inst : Semiring A] [inst_1 : Semiring B]  
+ [inst_2 : SetLike σ…
 -/
-theorem toRingHom_eq_toRingHom (f : 𝒜 ->+*ᵍ ℬ) : RingHomClass.toRingHom f = f.toRingHom := rfl
+theorem toRingHom_eq_toRingHom (f : 𝒜 →+*ᵍ ℬ) : RingHomClass.toRingHom f = f.toRingHom := rfl
 
 @[simp]
-/--
-theorem `coe_toRingHom` / 定理 `coe_toRingHom`
-
-English:
-theorem coe_toRingHom
-  given: (f : 𝒜 ->+*ᵍ ℬ)
-  statement: ⇑f.toRingHom = f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_toRingHom
-  条件: (f : 𝒜 ->+*ᵍ ℬ)
-  结论: ⇑f.toRingHom = f
-  证明: rfl
-
-@[simp]
+/-
+**GradedRingHom.coe_toRingHom** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：coe_toRingHom (f : 𝒜 ->+*ᵍ ℬ) : ⇑f.toRingHom = f
+参数：f : 𝒜 ->+*ᵍ ℬ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_toRingHom (f : 𝒜 ->+*ᵍ ℬ) : ⇑f.toRingHom = f := rfl
+theorem coe_toRingHom (f : 𝒜 →+*ᵍ ℬ) : ⇑f.toRingHom = f := rfl
 
 @[simp]
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: (f : A ->+* B) (h)
-  statement: ((⟨f, h⟩ : 𝒜 ->+*ᵍ ℬ) : A -> B) = f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_mk
-  条件: (f : A ->+* B) (h)
-  结论: ((⟨f, h⟩ : 𝒜 ->+*ᵍ ℬ) : A -> B) = f
-  证明: rfl
-
-@[simp]
+/-
+**GradedRingHom.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：coe_mk (f : A ->+* B) (h) : ((⟨f, h⟩ : 𝒜 ->+*ᵍ ℬ) : A -> B) = f
+参数：f : A ->+* B；h。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mk (f : A ->+* B) (h) : ((⟨f, h⟩ : 𝒜 ->+*ᵍ ℬ) : A -> B) = f := rfl
+theorem coe_mk (f : A →+* B) (h) : ((⟨f, h⟩ : 𝒜 →+*ᵍ ℬ) : A → B) = f := rfl
 
 @[simp]
-/--
-theorem `coe_ofClass` / 定理 `coe_ofClass`
-
-English:
-theorem coe_ofClass
-  statement: {F : Type*} [FunLike F A B] [GradedFunLike F 𝒜 ℬ] [RingHomClass F A B]
-  proof: rfl
-
-中文:
-定理 coe_ofClass
-  结论: {F : 类型} [函数状 F A B] [GradedFunLike F 𝒜 ℬ] [环态射类 F A B]
-  证明: rfl
+/-
+**GradedRingHom.coe_ofClass** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：coe_ofClass {F : Type*} [FunLike F A B] [GradedFunLike F 𝒜 ℬ] [RingHomClas
+s F A B] (f : F) : ((.ofClass f : 𝒜 ->+*ᵍ ℬ) : A -> B) = f
+参数：f : F。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_ofClass {F : Type*} [FunLike F A B] [GradedFunLike F 𝒜 ℬ] [RingHomClass F A B]
-    (f : F) : ((.ofClass f : 𝒜 ->+*ᵍ ℬ) : A -> B) = f := rfl
-
-/--
-Instance `coeToRingHom` / 实例 `coeToRingHom`
-
-English:
-instance coeToRingHom
-  signature: : CoeOut (𝒜 ->+*ᵍ ℬ) (A ->+* B)
-  body: ⟨GradedRingHom.toRingHom⟩
-
-中文:
-实例 coeToRingHom
-  签名: : CoeOut (𝒜 ->+*ᵍ ℬ) (A ->+* B)
-  定义体: ⟨GradedRingHom.toRingHom⟩
-
-Depends on / 依赖: GradedRingHom, GradedRingHom.toRingHom, toRingHom
+    (f : F) : ((.ofClass f : 𝒜 →+*ᵍ ℬ) : A → B) = f := rfl
+/-
+**GradedRingHom.coeToRingHom** 是 Mathlib 中的一个实例，位于命名空间 `GradedRingHom`。
+形式化陈述：coeToRingHom : CoeOut (𝒜 ->+*ᵍ ℬ) (A ->+* B)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance coeToRingHom : CoeOut (𝒜 ->+*ᵍ ℬ) (A ->+* B) :=
+instance coeToRingHom : CoeOut (𝒜 →+*ᵍ ℬ) (A →+* B) :=
   ⟨GradedRingHom.toRingHom⟩
 
-/--
-Definition of `copy` / `copy` 的定义
+/-- Copy of a `GradedRingHom` with a new `toFun` equal to the old one. Useful to fix definitional
+equalities. -/
+/-
+**GradedRingHom.copy** 是 Mathlib 中的一个定义，位于命名空间 `GradedRingHom`。
+形式化陈述：copy (f : 𝒜 ->+*ᵍ ℬ) (f' : A -> B) (h : f' = f) : 𝒜 ->+*ᵍ ℬ where __
+参数：f : 𝒜 ->+*ᵍ ℬ；f' : A -> B；h : f' = f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copy
-  signature: (f : 𝒜 ->+*ᵍ ℬ) (f' : A -> B) (h : f' = f)
-  body: f.toRingHom.copy f' h
-map_mem hx := congr($h _ in ℬ _).to_iff.mpr map_mem f hx
-
-@[simp]
-
-中文:
-定义 copy
-  签名: (f : 𝒜 ->+*ᵍ ℬ) (f' : A -> B) (h : f' = f)
-  定义体: f.toRingHom.copy f' h
-map_mem hx := congr($h _ in ℬ _).to_iff.mpr map_mem f hx
-
-@[simp]
-
-Depends on / 依赖: f.toRingHom.copy, toRingHom
+--- 原说明 ---
+Copy of a `GradedRingHom` with a new `toFun` equal to the old one. Useful to fix
+ definitional
+equalities.
 -/
-def copy (f : 𝒜 ->+*ᵍ ℬ) (f' : A -> B) (h : f' = f) : 𝒜 ->+*ᵍ ℬ where
+def copy (f : 𝒜 →+*ᵍ ℬ) (f' : A → B) (h : f' = f) : 𝒜 →+*ᵍ ℬ where
   __ := f.toRingHom.copy f' h
-map_mem hx := congr($h _ in ℬ _).to_iff.mpr map_mem f hx
+  map_mem hx := congr($h _ ∈ ℬ _).to_iff.mpr <| map_mem f hx
 
 @[simp]
-/--
-theorem `coe_copy` / 定理 `coe_copy`
-
-English:
-theorem coe_copy
-  given: (f : 𝒜 ->+*ᵍ ℬ) (f' : A -> B) (h : f' = f)
-  statement: ⇑(f.copy f' h) = f'
-  proof: rfl
-
-中文:
-定理 coe_copy
-  条件: (f : 𝒜 ->+*ᵍ ℬ) (f' : A -> B) (h : f' = f)
-  结论: ⇑(f.copy f' h) = f'
-  证明: rfl
+/-
+**GradedRingHom.coe_copy** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：coe_copy (f : 𝒜 ->+*ᵍ ℬ) (f' : A -> B) (h : f' = f) : ⇑(f.copy f' h) = f'
+参数：f : 𝒜 ->+*ᵍ ℬ；f' : A -> B；h : f' = f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_copy (f : 𝒜 ->+*ᵍ ℬ) (f' : A -> B) (h : f' = f) : ⇑(f.copy f' h) = f' :=
+theorem coe_copy (f : 𝒜 →+*ᵍ ℬ) (f' : A → B) (h : f' = f) : ⇑(f.copy f' h) = f' :=
   rfl
-
-/--
-theorem `copy_eq` / 定理 `copy_eq`
-
-English:
-theorem copy_eq
-  given: (f : 𝒜 ->+*ᵍ ℬ) (f' : A -> B) (h : f' = f)
-  statement: f.copy f' h = f
-  proof: DFunLike.ext' h
-
-中文:
-定理 copy_eq
-  条件: (f : 𝒜 ->+*ᵍ ℬ) (f' : A -> B) (h : f' = f)
-  结论: f.copy f' h = f
-  证明: DFunLike.ext' h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**GradedRingHom.copy_eq** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：copy_eq (f : 𝒜 ->+*ᵍ ℬ) (f' : A -> B) (h : f' = f) : f.copy f' h = f
+参数：f : 𝒜 ->+*ᵍ ℬ；f' : A -> B；h : f' = f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext'`：ext' {f g : F} (h : (f : forall a : α, β a) = (g : forall
+ a : α, β a)) : f = g
 -/
-theorem copy_eq (f : 𝒜 ->+*ᵍ ℬ) (f' : A -> B) (h : f' = f) : f.copy f' h = f :=
+theorem copy_eq (f : 𝒜 →+*ᵍ ℬ) (f' : A → B) (h : f' = f) : f.copy f' h = f :=
   DFunLike.ext' h
 
 end coe
 
 section
 
-variable (f : 𝒜 ->+*ᵍ ℬ)
+variable (f : 𝒜 →+*ᵍ ℬ)
 
-/--
-theorem `congr_fun` / 定理 `congr_fun`
-
-English:
-theorem congr_fun
-  given: {f g : 𝒜 ->+*ᵍ ℬ} (h : f = g) (x : A)
-  statement: f x = g x
-  proof: DFunLike.congr_fun h x
-
-中文:
-定理 congr_fun
-  条件: {f g : 𝒜 ->+*ᵍ ℬ} (h : f = g) (x : A)
-  结论: f x = g x
-  证明: DFunLike.congr_fun h x
+/-
+**GradedRingHom.congr_fun** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：∀ {ι : Type u_1} {A : Type u_2} {B : Type u_3} {σ : Type u_6} {τ : Type u_
+7} [inst : Semiring A] [inst_1 : Semiring B]   [inst_2 : SetLike σ A] [inst_3 : 
+SetLike τ B] {𝒜 : ι → σ} {ℬ : ι → τ} {f g : 𝒜 →+*ᵍ ℬ}, f = g → ∀ (x : A), f x = 
+g x
+参数：x : A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 -/
-protected theorem congr_fun {f g : 𝒜 ->+*ᵍ ℬ} (h : f = g) (x : A) : f x = g x :=
+protected theorem congr_fun {f g : 𝒜 →+*ᵍ ℬ} (h : f = g) (x : A) : f x = g x :=
   DFunLike.congr_fun h x
-
-/--
-theorem `congr_arg` / 定理 `congr_arg`
-
-English:
-theorem congr_arg
-  given: (f : 𝒜 ->+*ᵍ ℬ) {x y : A} (h : x = y)
-  statement: f x = f y
-  proof: DFunLike.congr_arg f h
-
-中文:
-定理 congr_arg
-  条件: (f : 𝒜 ->+*ᵍ ℬ) {x y : A} (h : x = y)
-  结论: f x = f y
-  证明: DFunLike.congr_arg f h
+/-
+**GradedRingHom.congr_arg** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：∀ {ι : Type u_1} {A : Type u_2} {B : Type u_3} {σ : Type u_6} {τ : Type u_
+7} [inst : Semiring A] [inst_1 : Semiring B]   [inst_2 : SetLike σ A] [inst_3 : 
+SetLike τ B] {𝒜 : ι → σ} {ℬ : ι → τ} (f : 𝒜 →+*ᵍ ℬ) {x y : A}, x = y → f x = f y
+参数：f : 𝒜 →+*ᵍ ℬ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.congr_arg`：∀ {F : Sort u_1} {α : Sort u_2} {β : Sort u_3} [i : 
+FunLike F α β] (f : F) {x y : α}, x = y → f x = f y
 -/
-protected theorem congr_arg (f : 𝒜 ->+*ᵍ ℬ) {x y : A} (h : x = y) : f x = f y :=
+protected theorem congr_arg (f : 𝒜 →+*ᵍ ℬ) {x y : A} (h : x = y) : f x = f y :=
   DFunLike.congr_arg f h
-
-/--
-theorem `coe_inj` / 定理 `coe_inj`
-
-English:
-theorem coe_inj
-  given: ⦃f g
-  statement: 𝒜 ->+*ᵍ ℬ⦄ (h : (f : A -> B) = g) : f = g
-  proof: DFunLike.coe_injective h
-
-@[ext]
-
-中文:
-定理 coe_inj
-  条件: ⦃f g
-  结论: 𝒜 ->+*ᵍ ℬ⦄ (h : (f : A -> B) = g) : f = g
-  证明: DFunLike.coe_injective h
-
-@[ext]
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
+/-
+**GradedRingHom.coe_inj** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：coe_inj ⦃f g : 𝒜 ->+*ᵍ ℬ⦄ (h : (f : A -> B) = g) : f = g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
-theorem coe_inj ⦃f g : 𝒜 ->+*ᵍ ℬ⦄ (h : (f : A -> B) = g) : f = g :=
+theorem coe_inj ⦃f g : 𝒜 →+*ᵍ ℬ⦄ (h : (f : A → B) = g) : f = g :=
   DFunLike.coe_injective h
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: ⦃f g
-  statement: 𝒜 ->+*ᵍ ℬ⦄ : (forall x, f x = g x) -> f = g
-  proof: DFunLike.ext _ _
-
-@[simp]
-
-中文:
-定理 ext
-  条件: ⦃f g
-  结论: 𝒜 ->+*ᵍ ℬ⦄ : (对任意 x, f x = g x) -> f = g
-  证明: DFunLike.ext _ _
-
-@[simp]
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**GradedRingHom.ext** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：ext ⦃f g : 𝒜 ->+*ᵍ ℬ⦄ : (forall x, f x = g x) -> f = g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext ⦃f g : 𝒜 ->+*ᵍ ℬ⦄ : (forall x, f x = g x) -> f = g :=
+theorem ext ⦃f g : 𝒜 →+*ᵍ ℬ⦄ : (∀ x, f x = g x) → f = g :=
   DFunLike.ext _ _
 
 @[simp]
-/--
-theorem `mk_coe` / 定理 `mk_coe`
-
-English:
-theorem mk_coe
-  given: (f : 𝒜 ->+*ᵍ ℬ) (h₁ h₂ h₃ h₄ h₅)
-  statement: .mk ⟨⟨⟨f, h₁⟩, h₂⟩, h₃, h₄⟩ h₅ = f
-  proof: ext fun _ => rfl
-
-中文:
-定理 mk_coe
-  条件: (f : 𝒜 ->+*ᵍ ℬ) (h₁ h₂ h₃ h₄ h₅)
-  结论: .mk ⟨⟨⟨f, h₁⟩, h₂⟩, h₃, h₄⟩ h₅ = f
-  证明: ext fun _ => rfl
+/-
+**GradedRingHom.mk_coe** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：mk_coe (f : 𝒜 ->+*ᵍ ℬ) (h₁ h₂ h₃ h₄ h₅) : .mk ⟨⟨⟨f, h₁⟩, h₂⟩, h₃, h₄⟩ h₅ =
+ f
+参数：f : 𝒜 ->+*ᵍ ℬ；h₁ h₂ h₃ h₄ h₅。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GradedRingHom.ext`：ext ⦃f g : 𝒜 ->+*ᵍ ℬ⦄ : (forall x, f x = g x) -> f = 
+g
 -/
-theorem mk_coe (f : 𝒜 ->+*ᵍ ℬ) (h₁ h₂ h₃ h₄ h₅) : .mk ⟨⟨⟨f, h₁⟩, h₂⟩, h₃, h₄⟩ h₅ = f :=
+theorem mk_coe (f : 𝒜 →+*ᵍ ℬ) (h₁ h₂ h₃ h₄ h₅) : .mk ⟨⟨⟨f, h₁⟩, h₂⟩, h₃, h₄⟩ h₅ = f :=
   ext fun _ => rfl
-
-/--
-theorem `coe_ringHom_injective` / 定理 `coe_ringHom_injective`
-
-English:
-theorem coe_ringHom_injective
-  statement: (fun f : 𝒜 ->+*ᵍ ℬ => (f : A ->+* B)).Injective
-  proof: fun _ _ h =>
-ext DFunLike.congr_fun (F := A ->+* B) h
-
-中文:
-定理 coe_ringHom_injective
-  结论: (fun f : 𝒜 ->+*ᵍ ℬ => (f : A ->+* B)).单射
-  证明: fun _ _ h =>
-ext DFunLike.congr_fun (F := A ->+* B) h
+/-
+**GradedRingHom.coe_ringHom_injective** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：coe_ringHom_injective : (fun f : 𝒜 ->+*ᵍ ℬ => (f : A ->+* B)).Injective
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GradedRingHom.instRingHomClass`：∀ {ι : Type u_1} {A : Type u_2} {B : Typ
+e u_3} {σ : Type u_6} {τ : Type u_7} [inst : Semiring A] [inst_1 : Semiring B]  
+ [inst_2 : SetLike σ…
+· 使用定理 `GradedRingHom.ext`：ext ⦃f g : 𝒜 ->+*ᵍ ℬ⦄ : (forall x, f x = g x) -> f = 
+g
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 -/
-theorem coe_ringHom_injective : (fun f : 𝒜 ->+*ᵍ ℬ => (f : A ->+* B)).Injective := fun _ _ h =>
-ext DFunLike.congr_fun (F := A ->+* B) h
+theorem coe_ringHom_injective : (fun f : 𝒜 →+*ᵍ ℬ => (f : A →+* B)).Injective := fun _ _ h =>
+  ext <| DFunLike.congr_fun (F := A →+* B) h
 
-/--
-theorem `map_zero` / 定理 `map_zero`
+/-- Graded ring homomorphisms map zero to zero. -/
+/-
+**GradedRingHom.map_zero** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：∀ {ι : Type u_1} {A : Type u_2} {B : Type u_3} {σ : Type u_6} {τ : Type u_
+7} [inst : Semiring A] [inst_1 : Semiring B]   [inst_2 : SetLike σ A] [inst_3 : 
+SetLike τ B] {𝒜 : ι → σ} {ℬ : ι → τ} (f : 𝒜 →+*ᵍ ℬ), f 0 = 0
+参数：f : 𝒜 →+*ᵍ ℬ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `GradedRingHom.instRingHomClass`：∀ {ι : Type u_1} {A : Type u_2} {B : Typ
+e u_3} {σ : Type u_6} {τ : Type u_7} [inst : Semiring A] [inst_1 : Semiring B]  
+ [inst_2 : SetLike σ…
 
-English:
-theorem map_zero
-  given: (f : 𝒜 ->+*ᵍ ℬ)
-  statement: f 0 = 0
-  proof: map_zero f
-
-中文:
-定理 map_zero
-  条件: (f : 𝒜 ->+*ᵍ ℬ)
-  结论: f 0 = 0
-  证明: map_zero f
+--- 原说明 ---
+Graded ring homomorphisms map zero to zero.
 -/
-protected theorem map_zero (f : 𝒜 ->+*ᵍ ℬ) : f 0 = 0 :=
+protected theorem map_zero (f : 𝒜 →+*ᵍ ℬ) : f 0 = 0 :=
   map_zero f
 
-/--
-theorem `map_one` / 定理 `map_one`
+/-- Graded ring homomorphisms map one to one. -/
+/-
+**GradedRingHom.map_one** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：∀ {ι : Type u_1} {A : Type u_2} {B : Type u_3} {σ : Type u_6} {τ : Type u_
+7} [inst : Semiring A] [inst_1 : Semiring B]   [inst_2 : SetLike σ A] [inst_3 : 
+SetLike τ B] {𝒜 : ι → σ} {ℬ : ι → τ} (f : 𝒜 →+*ᵍ ℬ), f 1 = 1
+参数：f : 𝒜 →+*ᵍ ℬ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `GradedRingHom.instRingHomClass`：∀ {ι : Type u_1} {A : Type u_2} {B : Typ
+e u_3} {σ : Type u_6} {τ : Type u_7} [inst : Semiring A] [inst_1 : Semiring B]  
+ [inst_2 : SetLike σ…
 
-English:
-theorem map_one
-  given: (f : 𝒜 ->+*ᵍ ℬ)
-  statement: f 1 = 1
-  proof: map_one f
-
-中文:
-定理 map_one
-  条件: (f : 𝒜 ->+*ᵍ ℬ)
-  结论: f 1 = 1
-  证明: map_one f
+--- 原说明 ---
+Graded ring homomorphisms map one to one.
 -/
-protected theorem map_one (f : 𝒜 ->+*ᵍ ℬ) : f 1 = 1 :=
+protected theorem map_one (f : 𝒜 →+*ᵍ ℬ) : f 1 = 1 :=
   map_one f
 
-/--
-theorem `map_add` / 定理 `map_add`
+/-- Graded ring homomorphisms preserve addition. -/
+/-
+**GradedRingHom.map_add** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：∀ {ι : Type u_1} {A : Type u_2} {B : Type u_3} {σ : Type u_6} {τ : Type u_
+7} [inst : Semiring A] [inst_1 : Semiring B]   [inst_2 : SetLike σ A] [inst_3 : 
+SetLike τ B] {𝒜 : ι → σ} {ℬ : ι → τ} (f : 𝒜 →+*ᵍ ℬ) (a b : A), f (a + b) = f a +
+ f b
+参数：f : 𝒜 →+*ᵍ ℬ；a b : A；a + b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `GradedRingHom.instRingHomClass`：∀ {ι : Type u_1} {A : Type u_2} {B : Typ
+e u_3} {σ : Type u_6} {τ : Type u_7} [inst : Semiring A] [inst_1 : Semiring B]  
+ [inst_2 : SetLike σ…
 
-English:
-theorem map_add
-  given: (f : 𝒜 ->+*ᵍ ℬ) (a b : A)
-  statement: f (a + b) = f a + f b
-  proof: map_add ..
-
-中文:
-定理 map_add
-  条件: (f : 𝒜 ->+*ᵍ ℬ) (a b : A)
-  结论: f (a + b) = f a + f b
-  证明: map_add ..
+--- 原说明 ---
+Graded ring homomorphisms preserve addition.
 -/
-protected theorem map_add (f : 𝒜 ->+*ᵍ ℬ) (a b : A) : f (a + b) = f a + f b :=
+protected theorem map_add (f : 𝒜 →+*ᵍ ℬ) (a b : A) : f (a + b) = f a + f b :=
   map_add ..
 
-/--
-theorem `map_mul` / 定理 `map_mul`
+/-- Graded ring homomorphisms preserve multiplication. -/
+/-
+**GradedRingHom.map_mul** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：∀ {ι : Type u_1} {A : Type u_2} {B : Type u_3} {σ : Type u_6} {τ : Type u_
+7} [inst : Semiring A] [inst_1 : Semiring B]   [inst_2 : SetLike σ A] [inst_3 : 
+SetLike τ B] {𝒜 : ι → σ} {ℬ : ι → τ} (f : 𝒜 →+*ᵍ ℬ) (a b : A), f (a * b) = f a *
+ f b
+参数：f : 𝒜 →+*ᵍ ℬ；a b : A；a * b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `GradedRingHom.instRingHomClass`：∀ {ι : Type u_1} {A : Type u_2} {B : Typ
+e u_3} {σ : Type u_6} {τ : Type u_7} [inst : Semiring A] [inst_1 : Semiring B]  
+ [inst_2 : SetLike σ…
 
-English:
-theorem map_mul
-  given: (f : 𝒜 ->+*ᵍ ℬ) (a b : A)
-  statement: f (a * b) = f a * f b
-  proof: map_mul ..
-
-中文:
-定理 map_mul
-  条件: (f : 𝒜 ->+*ᵍ ℬ) (a b : A)
-  结论: f (a * b) = f a * f b
-  证明: map_mul ..
+--- 原说明 ---
+Graded ring homomorphisms preserve multiplication.
 -/
-protected theorem map_mul (f : 𝒜 ->+*ᵍ ℬ) (a b : A) : f (a * b) = f a * f b :=
+protected theorem map_mul (f : 𝒜 →+*ᵍ ℬ) (a b : A) : f (a * b) = f a * f b :=
   map_mul ..
 
 end
@@ -559,491 +423,343 @@ end
 section Ring
 variable {A B σ τ : Type*}
 variable [Ring A] [Ring B] [SetLike σ A] [SetLike τ B]
-variable (𝒜 : ι -> σ) (ℬ : ι -> τ)
+variable (𝒜 : ι → σ) (ℬ : ι → τ)
 
-/--
-theorem `map_neg` / 定理 `map_neg`
+/-- Graded ring homomorphisms preserve additive inverse. -/
+/-
+**GradedRingHom.map_neg** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：∀ {ι : Type u_1} {A : Type u_10} {B : Type u_11} {σ : Type u_12} {τ : Type
+ u_13} [inst : Ring A] [inst_1 : Ring B]   [inst_2 : SetLike σ A] [inst_3 : SetL
+ike τ B] (𝒜 : ι → σ) (ℬ : ι → τ) (f : 𝒜 →+*ᵍ ℬ) (x : A), f (-x) = -f x
+参数：𝒜 : ι → σ；ℬ : ι → τ；f : 𝒜 →+*ᵍ ℬ；x : A；-x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `GradedRingHom.instRingHomClass`：∀ {ι : Type u_1} {A : Type u_2} {B : Typ
+e u_3} {σ : Type u_6} {τ : Type u_7} [inst : Semiring A] [inst_1 : Semiring B]  
+ [inst_2 : SetLike σ…
 
-English:
-theorem map_neg
-  given: (f : 𝒜 ->+*ᵍ ℬ) (x : A)
-  statement: f (-x) = -f x
-  proof: map_neg f x
-
-中文:
-定理 map_neg
-  条件: (f : 𝒜 ->+*ᵍ ℬ) (x : A)
-  结论: f (-x) = -f x
-  证明: map_neg f x
+--- 原说明 ---
+Graded ring homomorphisms preserve additive inverse.
 -/
-protected theorem map_neg (f : 𝒜 ->+*ᵍ ℬ) (x : A) : f (-x) = -f x :=
+protected theorem map_neg (f : 𝒜 →+*ᵍ ℬ) (x : A) : f (-x) = -f x :=
   map_neg f x
 
-/--
-theorem `map_sub` / 定理 `map_sub`
+/-- Graded ring homomorphisms preserve subtraction. -/
+/-
+**GradedRingHom.map_sub** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：∀ {ι : Type u_1} {A : Type u_10} {B : Type u_11} {σ : Type u_12} {τ : Type
+ u_13} [inst : Ring A] [inst_1 : Ring B]   [inst_2 : SetLike σ A] [inst_3 : SetL
+ike τ B] (𝒜 : ι → σ) (ℬ : ι → τ) (f : 𝒜 →+*ᵍ ℬ) (x y : A), f (x - y) = f x - f y
+参数：𝒜 : ι → σ；ℬ : ι → τ；f : 𝒜 →+*ᵍ ℬ；x y : A；x - y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `GradedRingHom.instRingHomClass`：∀ {ι : Type u_1} {A : Type u_2} {B : Typ
+e u_3} {σ : Type u_6} {τ : Type u_7} [inst : Semiring A] [inst_1 : Semiring B]  
+ [inst_2 : SetLike σ…
 
-English:
-theorem map_sub
-  given: (f : 𝒜 ->+*ᵍ ℬ) (x y : A)
-  proof: map_sub f x y
-
-中文:
-定理 map_sub
-  条件: (f : 𝒜 ->+*ᵍ ℬ) (x y : A)
-  证明: map_sub f x y
+--- 原说明 ---
+Graded ring homomorphisms preserve subtraction.
 -/
-protected theorem map_sub (f : 𝒜 ->+*ᵍ ℬ) (x y : A) :
+protected theorem map_sub (f : 𝒜 →+*ᵍ ℬ) (x y : A) :
     f (x - y) = f x - f y :=
   map_sub f x y
 
 end Ring
 
 variable (𝒜) in
-/--
-Definition of `id` / `id` 的定义
+/-- The identity graded ring homomorphism from a graded ring to itself. -/
+/-
+**GradedRingHom.id** 是 Mathlib 中的一个定义，位于命名空间 `GradedRingHom`。
+形式化陈述：id : 𝒜 ->+*ᵍ 𝒜 where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : 𝒜 ->+*ᵍ 𝒜 where
-  body: RingHom.id _
-  map_mem h := h
-
-@[simp, norm_cast]
-
-中文:
-定义 id
-  签名: : 𝒜 ->+*ᵍ 𝒜 where
-  定义体: RingHom.id _
-  map_mem h := h
-
-@[simp, norm_cast]
-
-Depends on / 依赖: RingHom, RingHom.id
+--- 原说明 ---
+The identity graded ring homomorphism from a graded ring to itself.
 -/
-def id : 𝒜 ->+*ᵍ 𝒜 where
+def id : 𝒜 →+*ᵍ 𝒜 where
   __ := RingHom.id _
   map_mem h := h
 
 @[simp, norm_cast]
-/--
-theorem `coe_id` / 定理 `coe_id`
-
-English:
-theorem coe_id
-  statement: ⇑(GradedRingHom.id 𝒜) = _root_.id
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_id
-  结论: ⇑(分次环态射.id 𝒜) = _root_.id
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: Inhabited, Result
+/-
+**GradedRingHom.coe_id** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：coe_id : ⇑(GradedRingHom.id 𝒜) = _root_.id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_id : ⇑(GradedRingHom.id 𝒜) = _root_.id := rfl
 
 @[simp]
-/--
-theorem `id_apply` / 定理 `id_apply`
-
-English:
-theorem id_apply
-  given: (x : A)
-  statement: GradedRingHom.id 𝒜 x = x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 id_apply
-  条件: (x : A)
-  结论: 分次环态射.id 𝒜 x = x
-  证明: rfl
-
-@[simp]
+/-
+**GradedRingHom.id_apply** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：id_apply (x : A) : GradedRingHom.id 𝒜 x = x
+参数：x : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_apply (x : A) : GradedRingHom.id 𝒜 x = x :=
   rfl
 
 @[simp]
-/--
-theorem `toRingHom_id` / 定理 `toRingHom_id`
-
-English:
-theorem toRingHom_id
-  statement: (id 𝒜).toRingHom = RingHom.id A
-  proof: rfl
-
-中文:
-定理 toRingHom_id
-  结论: (id 𝒜).toRingHom = 环态射.id A
-  证明: rfl
+/-
+**GradedRingHom.toRingHom_id** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：toRingHom_id : (id 𝒜).toRingHom = RingHom.id A
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toRingHom_id : (id 𝒜).toRingHom = RingHom.id A :=
   rfl
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- Composition of graded ring homomorphisms is a graded ring homomorphism. -/
+/-
+**GradedRingHom.comp** 是 Mathlib 中的一个定义，位于命名空间 `GradedRingHom`。
+形式化陈述：comp (g : ℬ ->+*ᵍ 𝒞) (f : 𝒜 ->+*ᵍ ℬ) : 𝒜 ->+*ᵍ 𝒞 where __
+参数：g : ℬ ->+*ᵍ 𝒞；f : 𝒜 ->+*ᵍ ℬ。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `GradedRingHom.instRingHomClass`：∀ {ι : Type u_1} {A : Type u_2} {B : Typ
+e u_3} {σ : Type u_6} {τ : Type u_7} [inst : Semiring A] [inst_1 : Semiring B]  
+ [inst_2 : SetLike σ…
 
-English:
-definition comp
-  signature: (g : ℬ ->+*ᵍ 𝒞) (f : 𝒜 ->+*ᵍ ℬ)
-  body: g.toRingHom.comp f
-  map_mem := g.map_mem ∘ f.map_mem
-
-中文:
-定义 comp
-  签名: (g : ℬ ->+*ᵍ 𝒞) (f : 𝒜 ->+*ᵍ ℬ)
-  定义体: g.toRingHom.comp f
-  map_mem := g.map_mem ∘ f.map_mem
-
-Depends on / 依赖: g.toRingHom.comp, toRingHom
+--- 原说明 ---
+Composition of graded ring homomorphisms is a graded ring homomorphism.
 -/
-def comp (g : ℬ ->+*ᵍ 𝒞) (f : 𝒜 ->+*ᵍ ℬ) : 𝒜 ->+*ᵍ 𝒞 where
+def comp (g : ℬ →+*ᵍ 𝒞) (f : 𝒜 →+*ᵍ ℬ) : 𝒜 →+*ᵍ 𝒞 where
   __ := g.toRingHom.comp f
   map_mem := g.map_mem ∘ f.map_mem
 
-/--
-theorem `comp_assoc` / 定理 `comp_assoc`
+/-- Composition of graded ring homomorphisms is associative. -/
+/-
+**GradedRingHom.comp_assoc** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：comp_assoc (h : 𝒞 ->+*ᵍ 𝒟) (g : ℬ ->+*ᵍ 𝒞) (f : 𝒜 ->+*ᵍ ℬ) : (h.comp g).co
+mp f = h.comp (g.comp f)
+参数：h : 𝒞 ->+*ᵍ 𝒟；g : ℬ ->+*ᵍ 𝒞；f : 𝒜 ->+*ᵍ ℬ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem comp_assoc
-  given: (h : 𝒞 ->+*ᵍ 𝒟) (g : ℬ ->+*ᵍ 𝒞) (f : 𝒜 ->+*ᵍ ℬ)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_assoc
-  条件: (h : 𝒞 ->+*ᵍ 𝒟) (g : ℬ ->+*ᵍ 𝒞) (f : 𝒜 ->+*ᵍ ℬ)
-  证明: rfl
-
-@[simp]
+--- 原说明 ---
+Composition of graded ring homomorphisms is associative.
 -/
-theorem comp_assoc (h : 𝒞 ->+*ᵍ 𝒟) (g : ℬ ->+*ᵍ 𝒞) (f : 𝒜 ->+*ᵍ ℬ) :
+theorem comp_assoc (h : 𝒞 →+*ᵍ 𝒟) (g : ℬ →+*ᵍ 𝒞) (f : 𝒜 →+*ᵍ ℬ) :
     (h.comp g).comp f = h.comp (g.comp f) :=
   rfl
 
 @[simp]
-/--
-theorem `coe_comp` / 定理 `coe_comp`
-
-English:
-theorem coe_comp
-  given: (hnp : ℬ ->+*ᵍ 𝒞) (hmn : 𝒜 ->+*ᵍ ℬ)
-  statement: (hnp.comp hmn : A -> C) = hnp ∘ hmn
-  proof: rfl
-
-中文:
-定理 coe_comp
-  条件: (hnp : ℬ ->+*ᵍ 𝒞) (hmn : 𝒜 ->+*ᵍ ℬ)
-  结论: (hnp.comp hmn : A -> C) = hnp ∘ hmn
-  证明: rfl
+/-
+**GradedRingHom.coe_comp** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：coe_comp (hnp : ℬ ->+*ᵍ 𝒞) (hmn : 𝒜 ->+*ᵍ ℬ) : (hnp.comp hmn : A -> C) = h
+np ∘ hmn
+参数：hnp : ℬ ->+*ᵍ 𝒞；hmn : 𝒜 ->+*ᵍ ℬ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_comp (hnp : ℬ ->+*ᵍ 𝒞) (hmn : 𝒜 ->+*ᵍ ℬ) : (hnp.comp hmn : A -> C) = hnp ∘ hmn :=
+theorem coe_comp (hnp : ℬ →+*ᵍ 𝒞) (hmn : 𝒜 →+*ᵍ ℬ) : (hnp.comp hmn : A → C) = hnp ∘ hmn :=
   rfl
-
-/--
-theorem `comp_apply` / 定理 `comp_apply`
-
-English:
-theorem comp_apply
-  given: (hnp : ℬ ->+*ᵍ 𝒞) (hmn : 𝒜 ->+*ᵍ ℬ) (x : A)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_apply
-  条件: (hnp : ℬ ->+*ᵍ 𝒞) (hmn : 𝒜 ->+*ᵍ ℬ) (x : A)
-  证明: rfl
-
-@[simp]
+/-
+**GradedRingHom.comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：comp_apply (hnp : ℬ ->+*ᵍ 𝒞) (hmn : 𝒜 ->+*ᵍ ℬ) (x : A) : (hnp.comp hmn : A
+ -> C) x = hnp (hmn x)
+参数：hnp : ℬ ->+*ᵍ 𝒞；hmn : 𝒜 ->+*ᵍ ℬ；x : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp_apply (hnp : ℬ ->+*ᵍ 𝒞) (hmn : 𝒜 ->+*ᵍ ℬ) (x : A) :
-    (hnp.comp hmn : A -> C) x = hnp (hmn x) :=
+theorem comp_apply (hnp : ℬ →+*ᵍ 𝒞) (hmn : 𝒜 →+*ᵍ ℬ) (x : A) :
+    (hnp.comp hmn : A → C) x = hnp (hmn x) :=
   rfl
 
 @[simp]
-/--
-theorem `comp_id` / 定理 `comp_id`
-
-English:
-theorem comp_id
-  given: (f : 𝒜 ->+*ᵍ ℬ)
-  statement: f.comp (id 𝒜) = f
-  proof: ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 comp_id
-  条件: (f : 𝒜 ->+*ᵍ ℬ)
-  结论: f.comp (id 𝒜) = f
-  证明: ext fun _ => rfl
-
-@[simp]
+/-
+**GradedRingHom.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：comp_id (f : 𝒜 ->+*ᵍ ℬ) : f.comp (id 𝒜) = f
+参数：f : 𝒜 ->+*ᵍ ℬ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GradedRingHom.ext`：ext ⦃f g : 𝒜 ->+*ᵍ ℬ⦄ : (forall x, f x = g x) -> f = 
+g
 -/
-theorem comp_id (f : 𝒜 ->+*ᵍ ℬ) : f.comp (id 𝒜) = f :=
+theorem comp_id (f : 𝒜 →+*ᵍ ℬ) : f.comp (id 𝒜) = f :=
   ext fun _ => rfl
 
 @[simp]
-/--
-theorem `id_comp` / 定理 `id_comp`
-
-English:
-theorem id_comp
-  given: (f : 𝒜 ->+*ᵍ ℬ)
-  statement: (id ℬ).comp f = f
-  proof: ext fun _ => rfl
-
-中文:
-定理 id_comp
-  条件: (f : 𝒜 ->+*ᵍ ℬ)
-  结论: (id ℬ).comp f = f
-  证明: ext fun _ => rfl
+/-
+**GradedRingHom.id_comp** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：id_comp (f : 𝒜 ->+*ᵍ ℬ) : (id ℬ).comp f = f
+参数：f : 𝒜 ->+*ᵍ ℬ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GradedRingHom.ext`：ext ⦃f g : 𝒜 ->+*ᵍ ℬ⦄ : (forall x, f x = g x) -> f = 
+g
 -/
-theorem id_comp (f : 𝒜 ->+*ᵍ ℬ) : (id ℬ).comp f = f :=
+theorem id_comp (f : 𝒜 →+*ᵍ ℬ) : (id ℬ).comp f = f :=
   ext fun _ => rfl
-
-/--
-Instance `instOne` / 实例 `instOne`
-
-English:
-instance instOne
-  signature: : One (𝒜 ->+*ᵍ 𝒜) where one
-  body: id _
-
-中文:
-实例 instOne
-  签名: : 幺 (𝒜 ->+*ᵍ 𝒜) where one
-  定义体: id _
+/-
+**GradedRingHom.instOne** 是 Mathlib 中的一个实例，位于命名空间 `GradedRingHom`。
+形式化陈述：instOne : One (𝒜 ->+*ᵍ 𝒜) where one
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instOne : One (𝒜 ->+*ᵍ 𝒜) where one := id _
-/--
-Instance `instMul` / 实例 `instMul`
-
-English:
-instance instMul
-  signature: : Mul (𝒜 ->+*ᵍ 𝒜) where mul
-  body: comp
-
-中文:
-实例 instMul
-  签名: : 乘法 (𝒜 ->+*ᵍ 𝒜) where mul
-  定义体: comp
+instance instOne : One (𝒜 →+*ᵍ 𝒜) where one := id _
+/-
+**GradedRingHom.instMul** 是 Mathlib 中的一个实例，位于命名空间 `GradedRingHom`。
+形式化陈述：instMul : Mul (𝒜 ->+*ᵍ 𝒜) where mul
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instMul : Mul (𝒜 ->+*ᵍ 𝒜) where mul := comp
-
-/--
-lemma `one_def` / 引理 `one_def`
-
-English:
-lemma one_def
-  statement: (1 : 𝒜 ->+*ᵍ 𝒜) = id 𝒜
-  proof: rfl
-
-中文:
-引理 one_def
-  结论: (1 : 𝒜 ->+*ᵍ 𝒜) = id 𝒜
-  证明: rfl
+instance instMul : Mul (𝒜 →+*ᵍ 𝒜) where mul := comp
+/-
+**GradedRingHom.one_def** 是 Mathlib 中的一个引理，位于命名空间 `GradedRingHom`。
+形式化陈述：one_def : (1 : 𝒜 ->+*ᵍ 𝒜) = id 𝒜
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma one_def : (1 : 𝒜 ->+*ᵍ 𝒜) = id 𝒜 := rfl
-
-/--
-lemma `mul_def` / 引理 `mul_def`
-
-English:
-lemma mul_def
-  given: (f g : 𝒜 ->+*ᵍ 𝒜)
-  statement: f * g = f.comp g
-  proof: rfl
-
-中文:
-引理 mul_def
-  条件: (f g : 𝒜 ->+*ᵍ 𝒜)
-  结论: f * g = f.comp g
-  证明: rfl
+lemma one_def : (1 : 𝒜 →+*ᵍ 𝒜) = id 𝒜 := rfl
+/-
+**GradedRingHom.mul_def** 是 Mathlib 中的一个引理，位于命名空间 `GradedRingHom`。
+形式化陈述：mul_def (f g : 𝒜 ->+*ᵍ 𝒜) : f * g = f.comp g
+参数：f g : 𝒜 ->+*ᵍ 𝒜。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma mul_def (f g : 𝒜 ->+*ᵍ 𝒜) : f * g = f.comp g := rfl
-
-/--
-lemma `coe_one` / 引理 `coe_one`
-
-English:
-lemma coe_one
-  statement: ⇑(1 : 𝒜 ->+*ᵍ 𝒜) = _root_.id
-  proof: rfl
-
-中文:
-引理 coe_one
-  结论: ⇑(1 : 𝒜 ->+*ᵍ 𝒜) = _root_.id
-  证明: rfl
+lemma mul_def (f g : 𝒜 →+*ᵍ 𝒜) : f * g = f.comp g := rfl
+/-
+**GradedRingHom.coe_one** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：∀ {ι : Type u_1} {A : Type u_2} {σ : Type u_6} [inst : Semiring A] [inst_1
+ : SetLike σ A] {𝒜 : ι → σ}, ⇑1 = id
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_one : ⇑(1 : 𝒜 ->+*ᵍ 𝒜) = _root_.id := rfl
-
-/--
-lemma `coe_mul` / 引理 `coe_mul`
-
-English:
-lemma coe_mul
-  given: (f g : 𝒜 ->+*ᵍ 𝒜)
-  statement: ⇑(f * g) = f ∘ g
-  proof: rfl
-
-中文:
-引理 coe_mul
-  条件: (f g : 𝒜 ->+*ᵍ 𝒜)
-  结论: ⇑(f * g) = f ∘ g
-  证明: rfl
+@[simp, norm_cast] lemma coe_one : ⇑(1 : 𝒜 →+*ᵍ 𝒜) = _root_.id := rfl
+/-
+**GradedRingHom.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：∀ {ι : Type u_1} {A : Type u_2} {σ : Type u_6} [inst : Semiring A] [inst_1
+ : SetLike σ A] {𝒜 : ι → σ} (f g : 𝒜 →+*ᵍ 𝒜),   ⇑(f * g) = ⇑f ∘ ⇑g
+参数：f g : 𝒜 →+*ᵍ 𝒜；f * g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_mul (f g : 𝒜 ->+*ᵍ 𝒜) : ⇑(f * g) = f ∘ g := rfl
-
-/--
-Instance `instMonoid` / 实例 `instMonoid`
-
-English:
-instance instMonoid
-  signature: : Monoid (𝒜 ->+*ᵍ 𝒜) where
-  body: comp_id
-  one_mul := id_comp
-  mul_assoc _ _ _ := comp_assoc _ _ _
-npow n f := (npowRec n f).copy f^[n] by induction n <;> simp [npowRec, *]
-npow_succ _ _ := DFunLike.coe_injective Function.iterate_succ _ _
-
-中文:
-实例 instMonoid
-  签名: : 幺半群 (𝒜 ->+*ᵍ 𝒜) where
-  定义体: comp_id
-  one_mul := id_comp
-  mul_assoc _ _ _ := comp_assoc _ _ _
-npow n f := (npowRec n f).copy f^[n] by induction n <;> simp [npowRec, *]
-npow_succ _ _ := DFunLike.coe_injective Function.iterate_succ _ _
-
-Depends on / 依赖: comp_id
+@[simp, norm_cast] lemma coe_mul (f g : 𝒜 →+*ᵍ 𝒜) : ⇑(f * g) = f ∘ g := rfl
+/-
+**GradedRingHom.instMonoid** 是 Mathlib 中的一个实例，位于命名空间 `GradedRingHom`。
+形式化陈述：instMonoid : Monoid (𝒜 ->+*ᵍ 𝒜) where mul_one
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `GradedRingHom.comp_assoc`：comp_assoc (h : 𝒞 ->+*ᵍ 𝒟) (g : ℬ ->+*ᵍ 𝒞) (f 
+: 𝒜 ->+*ᵍ ℬ) : (h.comp g).comp f = h.comp (g.comp f)
+· 使用定理 `GradedRingHom.id_comp`：id_comp (f : 𝒜 ->+*ᵍ ℬ) : (id ℬ).comp f = f
+· 使用定理 `GradedRingHom.comp_id`：comp_id (f : 𝒜 ->+*ᵍ ℬ) : f.comp (id 𝒜) = f
 -/
-instance instMonoid : Monoid (𝒜 ->+*ᵍ 𝒜) where
+instance instMonoid : Monoid (𝒜 →+*ᵍ 𝒜) where
   mul_one := comp_id
   one_mul := id_comp
   mul_assoc _ _ _ := comp_assoc _ _ _
-npow n f := (npowRec n f).copy f^[n] by induction n <;> simp [npowRec, *]
-npow_succ _ _ := DFunLike.coe_injective Function.iterate_succ _ _
-
-/--
-lemma `coe_pow` / 引理 `coe_pow`
-
-English:
-lemma coe_pow
-  given: (f : 𝒜 ->+*ᵍ 𝒜) (n : Nat)
-  statement: ⇑(f ^ n) = f^[n]
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_pow
-  条件: (f : 𝒜 ->+*ᵍ 𝒜) (n : 自然数)
-  结论: ⇑(f ^ n) = f^[n]
-  证明: rfl
-
-@[simp]
+  npow n f := (npowRec n f).copy f^[n] <| by induction n <;> simp [npowRec, *]
+  npow_succ _ _ := DFunLike.coe_injective <| Function.iterate_succ _ _
+/-
+**GradedRingHom.coe_pow** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：∀ {ι : Type u_1} {A : Type u_2} {σ : Type u_6} [inst : Semiring A] [inst_1
+ : SetLike σ A] {𝒜 : ι → σ} (f : 𝒜 →+*ᵍ 𝒜)   (n : ℕ), ⇑(f ^ n) = (⇑f)^[n]
+参数：f : 𝒜 →+*ᵍ 𝒜；n : ℕ；f ^ n；⇑f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_pow (f : 𝒜 ->+*ᵍ 𝒜) (n : Nat) : ⇑(f ^ n) = f^[n] := rfl
+@[simp, norm_cast] lemma coe_pow (f : 𝒜 →+*ᵍ 𝒜) (n : ℕ) : ⇑(f ^ n) = f^[n] := rfl
 
 @[simp]
-/--
-theorem `cancel_right` / 定理 `cancel_right`
-
-English:
-theorem cancel_right
-  given: {g₁ g₂ : ℬ ->+*ᵍ 𝒞} {f : 𝒜 ->+*ᵍ ℬ} (hf : Function.Surjective f)
-  proof: ⟨fun h => ext hf.forall.2 (GradedRingHom.ext_iff.1 h), fun h => h ▸ rfl⟩
-
-@[simp]
-
-中文:
-定理 cancel_right
-  条件: {g₁ g₂ : ℬ ->+*ᵍ 𝒞} {f : 𝒜 ->+*ᵍ ℬ} (hf : 函数.满射 f)
-  证明: ⟨fun h => ext hf.forall.2 (GradedRingHom.ext_iff.1 h), fun h => h ▸ rfl⟩
-
-@[simp]
-
-Depends on / 依赖: GradedRingHom, GradedRingHom.ext_iff, ext_iff, hf.forall
+/-
+**GradedRingHom.cancel_right** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：cancel_right {g₁ g₂ : ℬ ->+*ᵍ 𝒞} {f : 𝒜 ->+*ᵍ ℬ} (hf : Function.Surjective
+ f) : g₁.comp f = g₂.comp f ↔ g₁ = g₂
+参数：hf : Function.Surjective f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GradedRingHom.ext`：ext ⦃f g : 𝒜 ->+*ᵍ ℬ⦄ : (forall x, f x = g x) -> f = 
+g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `GradedRingHom.ext_iff`：∀ {ι : Type u_1} {A : Type u_2} {B : Type u_3} {σ
+ : Type u_6} {τ : Type u_7} [inst : Semiring A] [inst_1 : Semiring B]   [inst_2 
+: SetLike σ…
 -/
-theorem cancel_right {g₁ g₂ : ℬ ->+*ᵍ 𝒞} {f : 𝒜 ->+*ᵍ ℬ} (hf : Function.Surjective f) :
+theorem cancel_right {g₁ g₂ : ℬ →+*ᵍ 𝒞} {f : 𝒜 →+*ᵍ ℬ} (hf : Function.Surjective f) :
     g₁.comp f = g₂.comp f ↔ g₁ = g₂ :=
-⟨fun h => ext hf.forall.2 (GradedRingHom.ext_iff.1 h), fun h => h ▸ rfl⟩
+  ⟨fun h => ext <| hf.forall.2 (GradedRingHom.ext_iff.1 h), fun h => h ▸ rfl⟩
 
 @[simp]
-/--
-theorem `cancel_left` / 定理 `cancel_left`
-
-English:
-theorem cancel_left
-  given: {g : ℬ ->+*ᵍ 𝒞} {f₁ f₂ : 𝒜 ->+*ᵍ ℬ} (hg : Function.Injective g)
-  proof: ⟨fun h => ext fun x => hg by rw [← comp_apply, h, comp_apply], fun h => h ▸ rfl⟩
-
-中文:
-定理 cancel_left
-  条件: {g : ℬ ->+*ᵍ 𝒞} {f₁ f₂ : 𝒜 ->+*ᵍ ℬ} (hg : 函数.单射 g)
-  证明: ⟨fun h => ext fun x => hg by rw [← comp_apply, h, comp_apply], fun h => h ▸ rfl⟩
-
-Depends on / 依赖: comp_apply
+/-
+**GradedRingHom.cancel_left** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`。
+形式化陈述：cancel_left {g : ℬ ->+*ᵍ 𝒞} {f₁ f₂ : 𝒜 ->+*ᵍ ℬ} (hg : Function.Injective g
+) : g.comp f₁ = g.comp f₂ ↔ f₁ = f₂
+参数：hg : Function.Injective g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GradedRingHom.ext`：ext ⦃f g : 𝒜 ->+*ᵍ ℬ⦄ : (forall x, f x = g x) -> f = 
+g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `GradedRingHom.comp_apply`：comp_apply (hnp : ℬ ->+*ᵍ 𝒞) (hmn : 𝒜 ->+*ᵍ ℬ)
+ (x : A) : (hnp.comp hmn : A -> C) x = hnp (hmn x)
 -/
-theorem cancel_left {g : ℬ ->+*ᵍ 𝒞} {f₁ f₂ : 𝒜 ->+*ᵍ ℬ} (hg : Function.Injective g) :
+theorem cancel_left {g : ℬ →+*ᵍ 𝒞} {f₁ f₂ : 𝒜 →+*ᵍ ℬ} (hg : Function.Injective g) :
     g.comp f₁ = g.comp f₂ ↔ f₁ = f₂ :=
-⟨fun h => ext fun x => hg by rw [← comp_apply, h, comp_apply], fun h => h ▸ rfl⟩
+  ⟨fun h => ext fun x => hg <| by rw [← comp_apply, h, comp_apply], fun h => h ▸ rfl⟩
 
 -- Note: if `GradedAddHom` is added later, then the assumptions can be relaxed.
-/--
-Definition of `gradedAddHom` / `gradedAddHom` 的定义
+/-- A graded ring homomorphism descends to an additive homomorphism on each indexed component. -/
+/-
+**GradedRingHom.gradedAddHom** 是 Mathlib 中的一个定义，位于命名空间 `GradedRingHom`。
+形式化陈述：{ι : Type u_1} →   {A : Type u_2} →     {B : Type u_3} →       {σ : Type u
+_6} →         {τ : Type u_7} →           [inst : Semiring A] →             [inst
+_1 : Semiring B] →               [inst_2 : SetLike σ A] →                 [inst_
+3 : SetLike τ B] →                   {𝒜 : ι → σ} →                     {ℬ : ι → 
+τ} →                       [inst_4 : AddSubmonoidClass σ A] →                   
+      [inst_5 : AddSubmonoidClass τ B] → (𝒜 →+*ᵍ ℬ) → (i : ι) → ↥(𝒜 i) →+ ↥(ℬ i)
+参数：𝒜 →+*ᵍ ℬ；i : ι；𝒜 i；ℬ i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition gradedAddHom
-  signature: [AddSubmonoidClass σ A] [AddSubmonoidClass τ B]
-  body: ⟨f x, map_mem f x.2⟩
-  map_zero' := by ext; simp
-  map_add' x y := by ext; simp
-
-中文:
-定义 gradedAddHom
-  签名: [加法子幺半群类 σ A] [加法子幺半群类 τ B]
-  定义体: ⟨f x, map_mem f x.2⟩
-  map_zero' := by ext; simp
-  map_add' x y := by ext; simp
+--- 原说明 ---
+A graded ring homomorphism descends to an additive homomorphism on each indexed 
+component.
 -/
 @[simps!] def gradedAddHom [AddSubmonoidClass σ A] [AddSubmonoidClass τ B]
-    (f : 𝒜 ->+*ᵍ ℬ) (i : ι) : 𝒜 i ->+ ℬ i where
+    (f : 𝒜 →+*ᵍ ℬ) (i : ι) : 𝒜 i →+ ℬ i where
   toFun x := ⟨f x, map_mem f x.2⟩
   map_zero' := by ext; simp
   map_add' x y := by ext; simp
 
-/--
-Definition of `gradedZeroRingHom` / `gradedZeroRingHom` 的定义
+/-- A graded ring homomorphism descends to a ring homomorphism on the zeroth component. -/
+/-
+**GradedRingHom.gradedZeroRingHom** 是 Mathlib 中的一个定义，位于命名空间 `GradedRingHom`。
+形式化陈述：{ι : Type u_1} →   {A : Type u_2} →     {B : Type u_3} →       {σ : Type u
+_6} →         {τ : Type u_7} →           [inst : Semiring A] →             [inst
+_1 : Semiring B] →               [inst_2 : SetLike σ A] →                 [inst_
+3 : SetLike τ B] →                   {𝒜 : ι → σ} →                     {ℬ : ι → 
+τ} →                       [inst_4 : AddSubmonoidClass σ A] →                   
+      [inst_5 : AddSubmonoidClass τ B] →                           [inst_6 : Add
+Monoid ι] →                             [inst_7 : SetLike.GradedMonoid 𝒜] →     
+                          [inst_8 : SetLike.GradedMonoid ℬ] → (𝒜 →+*ᵍ ℬ) → ↥(𝒜 0
+) →+* ↥(ℬ 0)
+参数：𝒜 →+*ᵍ ℬ；𝒜 0；ℬ 0。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition gradedZeroRingHom
-  signature: [AddSubmonoidClass σ A] [AddSubmonoidClass τ B] [AddMonoid ι]
-  body: f.gradedAddHom 0
-map_one' := Subtype.ext map_one _
-map_mul' _ _ := Subtype.ext map_mul ..
-
-中文:
-定义 gradedZeroRingHom
-  签名: [加法子幺半群类 σ A] [加法子幺半群类 τ B] [加法幺半群 ι]
-  定义体: f.gradedAddHom 0
-map_one' := Subtype.ext map_one _
-map_mul' _ _ := Subtype.ext map_mul ..
+--- 原说明 ---
+A graded ring homomorphism descends to a ring homomorphism on the zeroth compone
+nt.
 -/
 @[simps!] def gradedZeroRingHom [AddSubmonoidClass σ A] [AddSubmonoidClass τ B] [AddMonoid ι]
-    [SetLike.GradedMonoid 𝒜] [SetLike.GradedMonoid ℬ] (f : 𝒜 ->+*ᵍ ℬ) : 𝒜 0 ->+* ℬ 0 where
+    [SetLike.GradedMonoid 𝒜] [SetLike.GradedMonoid ℬ] (f : 𝒜 →+*ᵍ ℬ) : 𝒜 0 →+* ℬ 0 where
   __ := f.gradedAddHom 0
-map_one' := Subtype.ext map_one _
-map_mul' _ _ := Subtype.ext map_mul ..
+  map_one' := Subtype.ext <| map_one _
+  map_mul' _ _ := Subtype.ext <| map_mul ..
 
 end GradedRingHom
 
@@ -1051,82 +767,114 @@ end SetLike
 
 section GradedRing
 variable [DecidableEq ι] [AddMonoid ι] [AddSubmonoidClass σ A] [AddSubmonoidClass τ B]
-variable (𝒜 : ι -> σ) (ℬ : ι -> τ) [GradedRing 𝒜] [GradedRing ℬ]
+variable (𝒜 : ι → σ) (ℬ : ι → τ) [GradedRing 𝒜] [GradedRing ℬ]
 variable {F : Type*} [FunLike F A B] [GradedFunLike F 𝒜 ℬ] [RingHomClass F A B]
 
 -- not simp because `𝒜` cannot be inferred
-/--
-lemma `DirectSum.decompose_map` / 引理 `DirectSum.decompose_map`
-
-English:
-lemma DirectSum.decompose_map
-  given: (f : F) {x : A}
-  proof: by
-  classical
-  rw [← DirectSum.sum_support_decompose 𝒜 x]; rw [map_sum]; rw [DirectSum.decompose_sum]; rw [DirectSum.decompose_sum]; rw [map_sum]
-  congr 1
-  simp [DirectSum.decompose_of_mem _ (map_mem f (Subtype.prop _)),
-    DirectSum.decompose_of_mem _ (Subtype.prop _), DirectSum.map_of, GradedRingHom.gradedAddHom]
-
-中文:
-引理 直和.decompose_map
-  条件: (f : F) {x : A}
-  证明: by
-  classical
-  rw [← DirectSum.sum_support_decompose 𝒜 x]; rw [map_sum]; rw [DirectSum.decompose_sum]; rw [DirectSum.decompose_sum]; rw [map_sum]
-  congr 1
-  simp [DirectSum.decompose_of_mem _ (map_mem f (Subtype.prop _)),
-    DirectSum.decompose_of_mem _ (Subtype.prop _), DirectSum.map_of, GradedRingHom.gradedAddHom]
-
-Depends on / 依赖: DirectSum, DirectSum.decompose_of_mem, DirectSum.decompose_sum, DirectSum.map_of, DirectSum.sum_support_decompose, GradedRingHom, GradedRingHom.gradedAddHom, Subtype, Subtype.prop, classical, decompose_of_mem, decompose_sum, gradedAddHom, map_mem, map_of, map_sum, sum_support_decompose
+/-
+**DirectSum.decompose_map** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：DirectSum.decompose_map (f : F) {x : A} : DirectSum.decompose ℬ (f x) = .m
+ap (GradedRingHom.gradedAddHom <| .ofClass f) (.decompose 𝒜 x)
+参数：f : F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `DirectSum.sum_support_decompose`：sum_support_decompose [forall (i) (x : 
+ℳ i), Decidable (x != 0)] (r : M) : (∑ i in (decompose ℳ r).support, (decompose 
+ℳ r i : M)) = r
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `DirectSum.decompose_sum`：decompose_sum {ι'} (s : Finset ι') (f : ι' -> M
+) : decompose ℳ (∑ i in s, f i) = ∑ i in s, decompose ℳ (f i)
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Graded.map_mem`：Graded.map_mem (f : F) {i x} (h : x in 𝒜 i) : f x in ℬ i
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `DirectSum.decompose_of_mem`：decompose_of_mem {x : M} {i : ι} (hx : x in 
+ℳ i) : decompose ℳ x = DirectSum.of (fun i => ℳ i) i ⟨x, hx⟩
+· 使用定理 `Subtype.coe_eta`：coe_eta (a : { a // p a }) (h : p a) : mk (↑a) h = a
+· 使用定理 `DirectSum.map_of`：∀ {ι : Type u_3} {α : ι → Type u_4} {β : ι → Type u_5}
+ [inst : (i : ι) → AddCommMonoid (α i)]   [inst_1 : (i : ι) → AddCommMonoid (β i
+)] (f …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma DirectSum.decompose_map (f : F) {x : A} :
     DirectSum.decompose ℬ (f x) =
       .map (GradedRingHom.gradedAddHom <| .ofClass f) (.decompose 𝒜 x) := by
   classical
-  rw [← DirectSum.sum_support_decompose 𝒜 x]; rw [map_sum]; rw [DirectSum.decompose_sum]; rw [DirectSum.decompose_sum]; rw [map_sum]
+  rw [← DirectSum.sum_support_decompose 𝒜 x, map_sum, DirectSum.decompose_sum,
+    DirectSum.decompose_sum, map_sum]
   congr 1
   simp [DirectSum.decompose_of_mem _ (map_mem f (Subtype.prop _)),
     DirectSum.decompose_of_mem _ (Subtype.prop _), DirectSum.map_of, GradedRingHom.gradedAddHom]
 
 -- not simp because `ℬ` cannot be inferred
 -- for every concrete instance of GradedFunLike, we need one simp lemma
-/--
-lemma `map_directSumDecompose` / 引理 `map_directSumDecompose`
-
-English:
-lemma map_directSumDecompose
-  given: (f : F) {x : A} {i : ι}
-  proof: by
-  simp [DirectSum.decompose_map 𝒜]
-
-中文:
-引理 map_directSumDecompose
-  条件: (f : F) {x : A} {i : ι}
-  证明: by
-  simp [DirectSum.decompose_map 𝒜]
-
-Depends on / 依赖: DirectSum, DirectSum.decompose_map, decompose_map
+/-
+**map_directSumDecompose** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：map_directSumDecompose (f : F) {x : A} {i : ι} : f (DirectSum.decompose 𝒜 
+x i) = DirectSum.decompose ℬ (f x) i
+参数：f : F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `DirectSum.decompose_map`：DirectSum.decompose_map (f : F) {x : A} : Direc
+tSum.decompose ℬ (f x) = .map (GradedRingHom.gradedAddHom <| .ofClass f) (.decom
+pose 𝒜 x)
+· 使用定理 `DirectSum.map_apply`：∀ {ι : Type u_3} {α : ι → Type u_4} {β : ι → Type u
+_5} [inst : (i : ι) → AddCommMonoid (α i)]   [inst_1 : (i : ι) → AddCommMonoid (
+β i)] (f …
+· 使用定理 `GradedRingHom.gradedAddHom_apply_coe`：∀ {ι : Type u_1} {A : Type u_2} {B
+ : Type u_3} {σ : Type u_6} {τ : Type u_7} [inst : Semiring A] [inst_1 : Semirin
+g B]   [inst_2 : SetLike σ…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma map_directSumDecompose (f : F) {x : A} {i : ι} :
     f (DirectSum.decompose 𝒜 x i) = DirectSum.decompose ℬ (f x) i := by
   simp [DirectSum.decompose_map 𝒜]
-
-/--
-lemma `GradedRingHom.map_directSumDecompose` / 引理 `GradedRingHom.map_directSumDecompose`
-
-English:
-lemma GradedRingHom.map_directSumDecompose
-  given: (f : 𝒜 ->+*ᵍ ℬ) {x : A} {i : ι}
-  proof: _root_.map_directSumDecompose ..
-
-中文:
-引理 分次环态射.map_directSumDecompose
-  条件: (f : 𝒜 ->+*ᵍ ℬ) {x : A} {i : ι}
-  证明: _root_.map_directSumDecompose ..
+/-
+**GradedRingHom.map_directSumDecompose** 是 Mathlib 中的一个定理，位于命名空间 `GradedRingHom`
+。
+形式化陈述：∀ {ι : Type u_1} {A : Type u_2} {B : Type u_3} {σ : Type u_6} {τ : Type u_
+7} [inst : Semiring A] [inst_1 : Semiring B]   [inst_2 : SetLike σ A] [inst_3 : 
+SetLike τ B] [inst_4 : DecidableEq ι] [inst_5 : AddMonoid ι]   [inst_6 : AddSubm
+onoidClass σ A] [inst_7 : AddSubmonoidClass τ B] (𝒜 : ι → σ) (ℬ : ι → τ) [inst_8
+ : GradedRing 𝒜]   [inst_9 : GradedRing ℬ] (f : 𝒜 →+*ᵍ ℬ) {x : A} {i : ι},   f ↑
+(((DirectSum.decompose 𝒜) x) i) = ↑(((DirectSum.decompose ℬ) (f x)) i)
+参数：𝒜 : ι → σ；ℬ : ι → τ；f : 𝒜 →+*ᵍ ℬ；((DirectSum.decompose 𝒜) x) i；((DirectSum.de
+compose ℬ) (f x)) i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `map_directSumDecompose`：map_directSumDecompose (f : F) {x : A} {i : ι} :
+ f (DirectSum.decompose 𝒜 x i) = DirectSum.decompose ℬ (f x) i
+· 使用定理 `GradedRingHom.instGradedFunLike`：∀ {ι : Type u_1} {A : Type u_2} {B : Ty
+pe u_3} {σ : Type u_6} {τ : Type u_7} [inst : Semiring A] [inst_1 : Semiring B] 
+  [inst_2 : SetLike σ…
+· 使用定理 `GradedRingHom.instRingHomClass`：∀ {ι : Type u_1} {A : Type u_2} {B : Typ
+e u_3} {σ : Type u_6} {τ : Type u_7} [inst : Semiring A] [inst_1 : Semiring B]  
+ [inst_2 : SetLike σ…
 -/
-@[simp] lemma GradedRingHom.map_directSumDecompose (f : 𝒜 ->+*ᵍ ℬ) {x : A} {i : ι} :
+@[simp] lemma GradedRingHom.map_directSumDecompose (f : 𝒜 →+*ᵍ ℬ) {x : A} {i : ι} :
     f (DirectSum.decompose 𝒜 x i) = DirectSum.decompose ℬ (f x) i :=
   _root_.map_directSumDecompose ..
 
 end GradedRing
+

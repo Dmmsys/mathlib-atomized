@@ -59,142 +59,111 @@ open Function
 -/
 
 
-/--
-Definition of `Distrib` / `Distrib` 的定义
+/-- A typeclass stating that multiplication is left and right distributive
+over addition. -/
+/-
+**Distrib** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Distrib
-  parameters: (R : Type*)
-  extends: Mul R, Add R
-  axioms and operations (2):
-    - left_distrib : forall a b c : R, a * (b + c) = a * b + a * c
-    - right_distrib : forall a b c : R, (a + b) * c = a * c + b * c
-
-中文:
-类 Distrib
-  参数: (R : 类型)
-  继承: 乘法 R, 加法 R
-  公理与运算 (2 个):
-    - left_distrib : 对任意 a b c : R, a * (b + c) = a * b + a * c
-    - right_distrib : 对任意 a b c : R, (a + b) * c = a * c + b * c
+--- 原说明 ---
+A typeclass stating that multiplication is left and right distributive
+over addition.
 -/
 class Distrib (R : Type*) extends Mul R, Add R where
   /-- Multiplication is left distributive over addition -/
-  protected left_distrib : forall a b c : R, a * (b + c) = a * b + a * c
+  protected left_distrib : ∀ a b c : R, a * (b + c) = a * b + a * c
   /-- Multiplication is right distributive over addition -/
-  protected right_distrib : forall a b c : R, (a + b) * c = a * c + b * c
+  protected right_distrib : ∀ a b c : R, (a + b) * c = a * c + b * c
 
-/--
-Definition of `LeftDistribClass` / `LeftDistribClass` 的定义
+/-- A typeclass stating that multiplication is left distributive over addition. -/
+/-
+**LeftDistribClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_1) → [Mul R] → [Add R] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class LeftDistribClass
-  parameters: (R : Type*) [Mul R] [Add R]
-  axioms and operations (1):
-    - left_distrib : forall a b c : R, a * (b + c) = a * b + a * c
-
-中文:
-类 LeftDistrib类
-  参数: (R : 类型) [乘法 R] [加法 R]
-  公理与运算 (1 个):
-    - left_distrib : 对任意 a b c : R, a * (b + c) = a * b + a * c
+--- 原说明 ---
+A typeclass stating that multiplication is left distributive over addition.
 -/
 class LeftDistribClass (R : Type*) [Mul R] [Add R] : Prop where
   /-- Multiplication is left distributive over addition -/
-  protected left_distrib : forall a b c : R, a * (b + c) = a * b + a * c
+  protected left_distrib : ∀ a b c : R, a * (b + c) = a * b + a * c
 
-/--
-Definition of `RightDistribClass` / `RightDistribClass` 的定义
+/-- A typeclass stating that multiplication is right distributive over addition. -/
+/-
+**RightDistribClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_1) → [Mul R] → [Add R] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class RightDistribClass
-  parameters: (R : Type*) [Mul R] [Add R]
-  axioms and operations (1):
-    - right_distrib : forall a b c : R, (a + b) * c = a * c + b * c
-
-中文:
-类 RightDistrib类
-  参数: (R : 类型) [乘法 R] [加法 R]
-  公理与运算 (1 个):
-    - right_distrib : 对任意 a b c : R, (a + b) * c = a * c + b * c
+--- 原说明 ---
+A typeclass stating that multiplication is right distributive over addition.
 -/
 class RightDistribClass (R : Type*) [Mul R] [Add R] : Prop where
   /-- Multiplication is right distributive over addition -/
-  protected right_distrib : forall a b c : R, (a + b) * c = a * c + b * c
+  protected right_distrib : ∀ a b c : R, (a + b) * c = a * c + b * c
 
 -- see Note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) Distrib.leftDistribClass (R : Type*) [Distrib R] : LeftDistribClass R :=
   ⟨Distrib.left_distrib⟩
 
 -- see Note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) Distrib.rightDistribClass (R : Type*) [Distrib R] :
     RightDistribClass R :=
   ⟨Distrib.right_distrib⟩
-
-/--
-theorem `left_distrib` / 定理 `left_distrib`
-
-English:
-theorem left_distrib
-  given: [Mul R] [Add R] [LeftDistribClass R] (a b c : R)
-  proof: LeftDistribClass.left_distrib a b c
-
-alias mul_add := left_distrib
-
-中文:
-定理 left_distrib
-  条件: [乘法 R] [加法 R] [LeftDistrib类 R] (a b c : R)
-  证明: LeftDistribClass.left_distrib a b c
-
-alias mul_add := left_distrib
-
-Depends on / 依赖: LeftDistribClass, LeftDistribClass.left_distrib, left_distrib
+/-
+**left_distrib** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：left_distrib [Mul R] [Add R] [LeftDistribClass R] (a b c : R) : a * (b + c
+) = a * b + a * c
+参数：a b c : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LeftDistribClass.left_distrib`：∀ {R : Type u_1} {inst : Mul R} {inst_1 :
+ Add R} [self : LeftDistribClass R] (a b c : R), a * (b + c) = a * b + a * c
 -/
 theorem left_distrib [Mul R] [Add R] [LeftDistribClass R] (a b c : R) :
     a * (b + c) = a * b + a * c :=
   LeftDistribClass.left_distrib a b c
 
 alias mul_add := left_distrib
-
-/--
-theorem `right_distrib` / 定理 `right_distrib`
-
-English:
-theorem right_distrib
-  given: [Mul R] [Add R] [RightDistribClass R] (a b c : R)
-  proof: RightDistribClass.right_distrib a b c
-
-alias add_mul := right_distrib
-
-中文:
-定理 right_distrib
-  条件: [乘法 R] [加法 R] [RightDistrib类 R] (a b c : R)
-  证明: RightDistribClass.right_distrib a b c
-
-alias add_mul := right_distrib
-
-Depends on / 依赖: RightDistribClass, RightDistribClass.right_distrib, right_distrib
+/-
+**right_distrib** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：right_distrib [Mul R] [Add R] [RightDistribClass R] (a b c : R) : (a + b) 
+* c = a * c + b * c
+参数：a b c : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RightDistribClass.right_distrib`：∀ {R : Type u_1} {inst : Mul R} {inst_1
+ : Add R} [self : RightDistribClass R] (a b c : R), (a + b) * c = a * c + b * c
 -/
 theorem right_distrib [Mul R] [Add R] [RightDistribClass R] (a b c : R) :
     (a + b) * c = a * c + b * c :=
   RightDistribClass.right_distrib a b c
 
 alias add_mul := right_distrib
-
-/--
-theorem `distrib_three_right` / 定理 `distrib_three_right`
-
-English:
-theorem distrib_three_right
-  given: [Mul R] [Add R] [RightDistribClass R] (a b c d : R)
-  proof: by simp [right_distrib]
-
-中文:
-定理 distrib_three_right
-  条件: [乘法 R] [加法 R] [RightDistrib类 R] (a b c d : R)
-  证明: by simp [right_distrib]
-
-Depends on / 依赖: right_distrib
+/-
+**distrib_three_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：distrib_three_right [Mul R] [Add R] [RightDistribClass R] (a b c d : R) : 
+(a + b + c) * d = a * d + b * d + c * d
+参数：a b c d : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `right_distrib`：right_distrib [Mul R] [Add R] [RightDistribClass R] (a b 
+c : R) : (a + b) * c = a * c + b * c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem distrib_three_right [Mul R] [Add R] [RightDistribClass R] (a b c d : R) :
     (a + b + c) * d = a * d + b * d + c * d := by simp [right_distrib]
@@ -213,188 +182,124 @@ that `Semiring -> NonAssocSemiring` is tried before `NonAssocRing -> NonAssocSem
 TODO: clean this once https://github.com/leanprover/lean4/issues/2115 is fixed
 -/
 
-/--
-Definition of `NonUnitalNonAssocSemiring` / `NonUnitalNonAssocSemiring` 的定义
+/-- A not-necessarily-unital, not-necessarily-associative semiring. See `CommutatorRing` and the
+  documentation thereof in case you need a `NonUnitalNonAssocSemiring` instance on a Lie ring
+  or a Lie algebra. -/
+/-
+**NonUnitalNonAssocSemiring** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class NonUnitalNonAssocSemiring
-  parameters: (α : Type u)
-  extends: AddCommMonoid α, Distrib α, MulZeroClass α
-  (no additional axioms)
-
-中文:
-类 非幺非结合半环
-  参数: (α : 类型u)
-  继承: 加法交换幺半群 α, Distrib α, 乘零类 α
-  (无附加公理)
+--- 原说明 ---
+A not-necessarily-unital, not-necessarily-associative semiring. See `CommutatorR
+ing` and the
+  documentation thereof in case you need a `NonUnitalNonAssocSemiring` instance 
+on a Lie ring
+  or a Lie algebra.
 -/
 class NonUnitalNonAssocSemiring (α : Type u) extends AddCommMonoid α, Distrib α, MulZeroClass α
 
-/--
-Definition of `NonUnitalSemiring` / `NonUnitalSemiring` 的定义
+/-- An associative but not-necessarily unital semiring. -/
+/-
+**NonUnitalSemiring** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class NonUnitalSemiring
-  parameters: (α : Type u)
-  extends: NonUnitalNonAssocSemiring α, SemigroupWithZero α
-  (no additional axioms)
-
-中文:
-类 非幺半环
-  参数: (α : 类型u)
-  继承: 非幺非结合半环 α, 带零半群 α
-  (无附加公理)
+--- 原说明 ---
+An associative but not-necessarily unital semiring.
 -/
 class NonUnitalSemiring (α : Type u) extends NonUnitalNonAssocSemiring α, SemigroupWithZero α
 
-/--
-Definition of `NonAssocSemiring` / `NonAssocSemiring` 的定义
+/-- A unital but not-necessarily-associative semiring. -/
+/-
+**NonAssocSemiring** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class NonAssocSemiring
-  parameters: (α : Type u)
-  extends: NonUnitalNonAssocSemiring α, MulZeroOneClass α, 
-  (no additional axioms)
-
-中文:
-类 非结合半环
-  参数: (α : 类型u)
-  继承: 非幺非结合半环 α, 乘零幺类 α, 
-  (无附加公理)
+--- 原说明 ---
+A unital but not-necessarily-associative semiring.
 -/
 class NonAssocSemiring (α : Type u) extends NonUnitalNonAssocSemiring α, MulZeroOneClass α,
     AddCommMonoidWithOne α
 
-/--
-Definition of `NonUnitalNonAssocRing` / `NonUnitalNonAssocRing` 的定义
+/-- A not-necessarily-unital, not-necessarily-associative ring. -/
+/-
+**NonUnitalNonAssocRing** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class NonUnitalNonAssocRing
-  parameters: (α : Type u)
-  extends: AddCommGroup α, NonUnitalNonAssocSemiring α
-  (no additional axioms)
-
-中文:
-类 非幺非结合环
-  参数: (α : 类型u)
-  继承: 加法交换群 α, 非幺非结合半环 α
-  (无附加公理)
+--- 原说明 ---
+A not-necessarily-unital, not-necessarily-associative ring.
 -/
 class NonUnitalNonAssocRing (α : Type u) extends AddCommGroup α, NonUnitalNonAssocSemiring α
 
-/--
-Definition of `NonUnitalRing` / `NonUnitalRing` 的定义
+/-- An associative but not-necessarily unital ring. -/
+/-
+**NonUnitalRing** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class NonUnitalRing
-  parameters: (α : Type*)
-  extends: NonUnitalNonAssocRing α, NonUnitalSemiring α
-  (no additional axioms)
-
-中文:
-类 非幺环
-  参数: (α : 类型)
-  继承: 非幺非结合环 α, 非幺半环 α
-  (无附加公理)
+--- 原说明 ---
+An associative but not-necessarily unital ring.
 -/
 class NonUnitalRing (α : Type*) extends NonUnitalNonAssocRing α, NonUnitalSemiring α
 
-/--
-Definition of `NonAssocRing` / `NonAssocRing` 的定义
+/-- A unital but not-necessarily-associative ring. -/
+/-
+**NonAssocRing** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class NonAssocRing
-  parameters: (α : Type*)
-  extends: NonUnitalNonAssocRing α, NonAssocSemiring α, 
-  (no additional axioms)
-
-中文:
-类 非结合环
-  参数: (α : 类型)
-  继承: 非幺非结合环 α, 非结合半环 α, 
-  (无附加公理)
+--- 原说明 ---
+A unital but not-necessarily-associative ring.
 -/
 class NonAssocRing (α : Type*) extends NonUnitalNonAssocRing α, NonAssocSemiring α,
     AddCommGroupWithOne α
 
-/--
-Definition of `Semiring` / `Semiring` 的定义
+/-- A `Semiring` is a type with addition, multiplication, a `0` and a `1` where addition is
+commutative and associative, multiplication is associative and left and right distributive over
+addition, and `0` and `1` are additive and multiplicative identities. -/
+/-
+**Semiring** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Semiring
-  parameters: (α : Type u)
-  extends: AddCommMonoid α, MonoidWithZero α, NonUnitalSemiring α, 
-  (no additional axioms)
-
-中文:
-类 半环
-  参数: (α : 类型u)
-  继承: 加法交换幺半群 α, 带零幺半群 α, 非幺半环 α, 
-  (无附加公理)
+--- 原说明 ---
+A `Semiring` is a type with addition, multiplication, a `0` and a `1` where addi
+tion is
+commutative and associative, multiplication is associative and left and right di
+stributive over
+addition, and `0` and `1` are additive and multiplicative identities.
 -/
 class Semiring (α : Type u) extends AddCommMonoid α, MonoidWithZero α, NonUnitalSemiring α,
   NonAssocSemiring α
 
 /-- A `Ring` is a `Semiring` with negation making it an additive group. -/
 @[wikidata Q161172]
-/--
-Definition of `Ring` / `Ring` 的定义
+/-
+**Ring** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Ring
-  parameters: (R : Type u)
-  extends: Semiring R, AddCommGroup R, AddGroupWithOne R
-  (no additional axioms)
-
-中文:
-类 环
-  参数: (R : 类型u)
-  继承: 半环 R, 加法交换群 R, 加法带幺群 R
-  (无附加公理)
+--- 原说明 ---
+A `Ring` is a `Semiring` with negation making it an additive group.
 -/
 class Ring (R : Type u) extends Semiring R, AddCommGroup R, AddGroupWithOne R
 
 -- Add some short-cut instances to avoid going through the less used ring type classes.
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Semiring
-  signature: α] : Distrib α
-  body: inferInstance
-
-中文:
-实例 [半环
-  签名: α] : Distrib α
-  定义体: inferInstance
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Semiring α] : Distrib α := inferInstance
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Semiring
-  signature: α] : MulZeroClass α
-  body: inferInstance
-
-中文:
-实例 [半环
-  签名: α] : 乘零类 α
-  定义体: inferInstance
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Semiring α] : MulZeroClass α := inferInstance
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Semiring
-  signature: α] : MulZeroOneClass α
-  body: inferInstance
-
-中文:
-实例 [半环
-  签名: α] : 乘零幺类 α
-  定义体: inferInstance
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Semiring α] : MulZeroOneClass α := inferInstance
 attribute [instance] Semiring.toAddCommMonoid Semiring.toMonoid
@@ -407,93 +312,62 @@ section DistribMulOneClass
 
 variable [Add α] [MulOneClass α]
 
-/--
-theorem `add_one_mul` / 定理 `add_one_mul`
-
-English:
-theorem add_one_mul
-  given: [RightDistribClass α] (a b : α)
-  statement: (a + 1) * b = a * b + b
-  proof: by
-  rw [add_mul]; rw [one_mul]
-
-中文:
-定理 add_one_mul
-  条件: [RightDistrib类 α] (a b : α)
-  结论: (a + 1) * b = a * b + b
-  证明: by
-  rw [add_mul]; rw [one_mul]
-
-Depends on / 依赖: add_mul, one_mul
+/-
+**add_one_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：add_one_mul [RightDistribClass α] (a b : α) : (a + 1) * b = a * b + b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
 theorem add_one_mul [RightDistribClass α] (a b : α) : (a + 1) * b = a * b + b := by
-  rw [add_mul]; rw [one_mul]
-
-/--
-theorem `mul_add_one` / 定理 `mul_add_one`
-
-English:
-theorem mul_add_one
-  given: [LeftDistribClass α] (a b : α)
-  statement: a * (b + 1) = a * b + a
-  proof: by
-  rw [mul_add]; rw [mul_one]
-
-中文:
-定理 mul_add_one
-  条件: [LeftDistrib类 α] (a b : α)
-  结论: a * (b + 1) = a * b + a
-  证明: by
-  rw [mul_add]; rw [mul_one]
-
-Depends on / 依赖: mul_add, mul_one
+  rw [add_mul, one_mul]
+/-
+**mul_add_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_add_one [LeftDistribClass α] (a b : α) : a * (b + 1) = a * b + a
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
 theorem mul_add_one [LeftDistribClass α] (a b : α) : a * (b + 1) = a * b + a := by
-  rw [mul_add]; rw [mul_one]
-
-/--
-theorem `one_add_mul` / 定理 `one_add_mul`
-
-English:
-theorem one_add_mul
-  given: [RightDistribClass α] (a b : α)
-  statement: (1 + a) * b = b + a * b
-  proof: by
-  rw [add_mul]; rw [one_mul]
-
-中文:
-定理 one_add_mul
-  条件: [RightDistrib类 α] (a b : α)
-  结论: (1 + a) * b = b + a * b
-  证明: by
-  rw [add_mul]; rw [one_mul]
-
-Depends on / 依赖: add_mul, one_mul
+  rw [mul_add, mul_one]
+/-
+**one_add_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：one_add_mul [RightDistribClass α] (a b : α) : (1 + a) * b = b + a * b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
 theorem one_add_mul [RightDistribClass α] (a b : α) : (1 + a) * b = b + a * b := by
-  rw [add_mul]; rw [one_mul]
-
-/--
-theorem `mul_one_add` / 定理 `mul_one_add`
-
-English:
-theorem mul_one_add
-  given: [LeftDistribClass α] (a b : α)
-  statement: a * (1 + b) = a + a * b
-  proof: by
-  rw [mul_add]; rw [mul_one]
-
-中文:
-定理 mul_one_add
-  条件: [LeftDistrib类 α] (a b : α)
-  结论: a * (1 + b) = a + a * b
-  证明: by
-  rw [mul_add]; rw [mul_one]
-
-Depends on / 依赖: mul_add, mul_one
+  rw [add_mul, one_mul]
+/-
+**mul_one_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_one_add [LeftDistribClass α] (a b : α) : a * (1 + b) = a + a * b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
 theorem mul_one_add [LeftDistribClass α] (a b : α) : a * (1 + b) = a + a * b := by
-  rw [mul_add]; rw [mul_one]
+  rw [mul_add, mul_one]
 
 end DistribMulOneClass
 
@@ -501,68 +375,75 @@ section NonAssocSemiring
 
 variable [NonAssocSemiring α]
 
-/--
-theorem `two_mul` / 定理 `two_mul`
-
-English:
-theorem two_mul
-  given: (n : α)
-  statement: 2 * n = n + n
-  proof: (congrArg₂ _ one_add_one_eq_two.symm rfl).trans (right_distrib 1 1 n).trans (by rw [one_mul])
-
-中文:
-定理 two_mul
-  条件: (n : α)
-  结论: 2 * n = n + n
-  证明: (congrArg₂ _ one_add_one_eq_two.symm rfl).trans (right_distrib 1 1 n).trans (by rw [one_mul])
-
-Depends on / 依赖: AlgebraicGeometry, Scheme, _root_, _root_.AlgebraicGeometry.Scheme.compactSpace_of_isAffine, compactSpace_of_isAffine, one_add_one_eq_two, one_add_one_eq_two.symm, one_mul, right_distrib
+/-
+**two_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：two_mul (n : α) : 2 * n = n + n
+参数：n : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg₂`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} (f : α → β → γ
+) {x x' : α} {y y' : β}, x = x' → y = y' → f x y = f x' y'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `one_add_one_eq_two`：one_add_one_eq_two [AddMonoidWithOne R] : 1 + 1 = (2
+ : R)
+· 使用定理 `right_distrib`：right_distrib [Mul R] [Add R] [RightDistribClass R] (a b 
+c : R) : (a + b) * c = a * c + b * c
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
 theorem two_mul (n : α) : 2 * n = n + n :=
-(congrArg₂ _ one_add_one_eq_two.symm rfl).trans (right_distrib 1 1 n).trans (by rw [one_mul])
-
-/--
-theorem `mul_two` / 定理 `mul_two`
-
-English:
-theorem mul_two
-  given: (n : α)
-  statement: n * 2 = n + n
-  proof: (congrArg₂ _ rfl one_add_one_eq_two.symm).trans (left_distrib n 1 1).trans (by rw [mul_one])
-
-中文:
-定理 mul_two
-  条件: (n : α)
-  结论: n * 2 = n + n
-  证明: (congrArg₂ _ rfl one_add_one_eq_two.symm).trans (left_distrib n 1 1).trans (by rw [mul_one])
-
-Depends on / 依赖: left_distrib, mul_one, one_add_one_eq_two, one_add_one_eq_two.symm
+  (congrArg₂ _ one_add_one_eq_two.symm rfl).trans <| (right_distrib 1 1 n).trans (by rw [one_mul])
+/-
+**mul_two** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_two (n : α) : n * 2 = n + n
+参数：n : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg₂`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} (f : α → β → γ
+) {x x' : α} {y y' : β}, x = x' → y = y' → f x y = f x' y'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `one_add_one_eq_two`：one_add_one_eq_two [AddMonoidWithOne R] : 1 + 1 = (2
+ : R)
+· 使用定理 `left_distrib`：left_distrib [Mul R] [Add R] [LeftDistribClass R] (a b c :
+ R) : a * (b + c) = a * b + a * c
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
 theorem mul_two (n : α) : n * 2 = n + n :=
-(congrArg₂ _ rfl one_add_one_eq_two.symm).trans (left_distrib n 1 1).trans (by rw [mul_one])
-
-/--
-lemma `nsmul_eq_mul` / 引理 `nsmul_eq_mul`
-
-English:
-lemma nsmul_eq_mul
-  given: (n : Nat) (a : α)
-  statement: n • a = n * a
-  proof: by
-  induction n with
-  | zero => rw [zero_nsmul, Nat.cast_zero, zero_mul]
-  | succ n ih => rw [succ_nsmul, ih, Nat.cast_succ, add_mul, one_mul]
-
-中文:
-引理 nsmul_eq_mul
-  条件: (n : 自然数) (a : α)
-  结论: n • a = n * a
-  证明: by
-  induction n with
-  | zero => rw [zero_nsmul, Nat.cast_zero, zero_mul]
-  | succ n ih => rw [succ_nsmul, ih, Nat.cast_succ, add_mul, one_mul]
+  (congrArg₂ _ rfl one_add_one_eq_two.symm).trans <| (left_distrib n 1 1).trans (by rw [mul_one])
+/-
+**nsmul_eq_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u} [inst : NonAssocSemiring α] (n : ℕ) (a : α), n • a = ↑n * a
+参数：n : ℕ；a : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 0 • a = 0
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `succ_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M) (n : ℕ), (n + 
+1) • a = n • a + a
+· 使用定理 `Nat.cast_succ`：cast_succ (n : Nat) : ((succ n : Nat) : R) = n + 1
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
-@[simp] lemma nsmul_eq_mul (n : Nat) (a : α) : n • a = n * a := by
+@[simp] lemma nsmul_eq_mul (n : ℕ) (a : α) : n • a = n * a := by
   induction n with
   | zero => rw [zero_nsmul, Nat.cast_zero, zero_mul]
   | succ n ih => rw [succ_nsmul, ih, Nat.cast_succ, add_mul, one_mul]
@@ -572,158 +453,178 @@ end NonAssocSemiring
 section MulZeroClass
 variable [MulZeroClass α] (P Q : Prop) [Decidable P] [Decidable Q] (a b : α)
 
-/--
-lemma `ite_zero_mul` / 引理 `ite_zero_mul`
-
-English:
-lemma ite_zero_mul
-  statement: ite P a 0 * b = ite P (a * b) 0
-  proof: by simp
-
-中文:
-引理 ite_zero_mul
-  结论: ite P a 0 * b = ite P (a * b) 0
-  证明: by simp
+/-
+**ite_zero_mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：ite_zero_mul : ite P a 0 * b = ite P (a * b) 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ite_mul`：ite_mul (a b c : α) : (if P then a else b) * c = if P then a * 
+c else b * c
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma ite_zero_mul : ite P a 0 * b = ite P (a * b) 0 := by simp
-
-/--
-lemma `mul_ite_zero` / 引理 `mul_ite_zero`
-
-English:
-lemma mul_ite_zero
-  statement: a * ite P b 0 = ite P (a * b) 0
-  proof: by simp
-
-中文:
-引理 mul_ite_zero
-  结论: a * ite P b 0 = ite P (a * b) 0
-  证明: by simp
+/-
+**mul_ite_zero** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：mul_ite_zero : a * ite P b 0 = ite P (a * b) 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `mul_ite`：mul_ite (a b c : α) : (a * if P then b else c) = if P then a * 
+b else a * c
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mul_ite_zero : a * ite P b 0 = ite P (a * b) 0 := by simp
-
-/--
-lemma `ite_zero_mul_ite_zero` / 引理 `ite_zero_mul_ite_zero`
-
-English:
-lemma ite_zero_mul_ite_zero
-  statement: ite P a 0 * ite Q b 0 = ite (P ∧ Q) (a * b) 0
-  proof: by
-  simp only [← ite_and, ite_mul, mul_ite, mul_zero, zero_mul, and_comm]
-
-中文:
-引理 ite_zero_mul_ite_zero
-  结论: ite P a 0 * ite Q b 0 = ite (P ∧ Q) (a * b) 0
-  证明: by
-  simp only [← ite_and, ite_mul, mul_ite, mul_zero, zero_mul, and_comm]
-
-Depends on / 依赖: and_comm, ite_and, ite_mul, mul_ite, mul_zero, zero_mul
+/-
+**ite_zero_mul_ite_zero** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：ite_zero_mul_ite_zero : ite P a 0 * ite Q b 0 = ite (P ∧ Q) (a * b) 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `mul_ite`：mul_ite (a b c : α) : (a * if P then b else c) = if P then a * 
+b else a * c
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用引理 `ite_mul`：ite_mul (a b c : α) : (if P then a else b) * c = if P then a * 
+c else b * c
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma ite_zero_mul_ite_zero : ite P a 0 * ite Q b 0 = ite (P ∧ Q) (a * b) 0 := by
   simp only [← ite_and, ite_mul, mul_ite, mul_zero, zero_mul, and_comm]
 
 end MulZeroClass
 
-/--
-theorem `mul_boole` / 定理 `mul_boole`
-
-English:
-theorem mul_boole
-  given: {α} [MulZeroOneClass α] (P : Prop) [Decidable P] (a : α)
-  proof: by simp
-
-中文:
-定理 mul_boole
-  条件: {α} [乘零幺类 α] (P : 命题) [可判定 P] (a : α)
-  证明: by simp
+/-
+**mul_boole** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_boole {α} [MulZeroOneClass α] (P : Prop) [Decidable P] (a : α) : (a * 
+if P then 1 else 0) = if P then a else 0
+参数：P : Prop；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `mul_ite`：mul_ite (a b c : α) : (a * if P then b else c) = if P then a * 
+b else a * c
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem mul_boole {α} [MulZeroOneClass α] (P : Prop) [Decidable P] (a : α) :
     (a * if P then 1 else 0) = if P then a else 0 := by simp
-
-/--
-theorem `boole_mul` / 定理 `boole_mul`
-
-English:
-theorem boole_mul
-  given: {α} [MulZeroOneClass α] (P : Prop) [Decidable P] (a : α)
-  proof: by simp
-
-中文:
-定理 boole_mul
-  条件: {α} [乘零幺类 α] (P : 命题) [可判定 P] (a : α)
-  证明: by simp
+/-
+**boole_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：boole_mul {α} [MulZeroOneClass α] (P : Prop) [Decidable P] (a : α) : (if P
+ then 1 else 0) * a = if P then a else 0
+参数：P : Prop；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ite_mul`：ite_mul (a b c : α) : (if P then a else b) * c = if P then a * 
+c else b * c
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem boole_mul {α} [MulZeroOneClass α] (P : Prop) [Decidable P] (a : α) :
     (if P then 1 else 0) * a = if P then a else 0 := by simp
 
-/--
-Definition of `NonUnitalNonAssocCommSemiring` / `NonUnitalNonAssocCommSemiring` 的定义
+/-- A not-necessarily-unital, not-necessarily-associative, but commutative semiring. -/
+/-
+**NonUnitalNonAssocCommSemiring** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class NonUnitalNonAssocCommSemiring
-  parameters: (α : Type u)
-  extends: NonUnitalNonAssocSemiring α, CommMagma α
-  (no additional axioms)
-
-中文:
-类 非幺非结合交换半环
-  参数: (α : 类型u)
-  继承: 非幺非结合半环 α, 交换原群 α
-  (无附加公理)
+--- 原说明 ---
+A not-necessarily-unital, not-necessarily-associative, but commutative semiring.
 -/
 class NonUnitalNonAssocCommSemiring (α : Type u) extends NonUnitalNonAssocSemiring α, CommMagma α
 
 attribute [instance 100] NonUnitalNonAssocCommSemiring.toNonUnitalNonAssocSemiring
 
-/--
-Definition of `NonUnitalCommSemiring` / `NonUnitalCommSemiring` 的定义
+/-- A non-unital commutative semiring is a `NonUnitalSemiring` with commutative multiplication.
+In other words, it is a type with the following structures: additive commutative monoid
+(`AddCommMonoid`), commutative semigroup (`CommSemigroup`), distributive laws (`Distrib`), and
+multiplication by zero law (`MulZeroClass`). -/
+/-
+**NonUnitalCommSemiring** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class NonUnitalCommSemiring
-  parameters: (α : Type u)
-  extends: NonUnitalSemiring α, CommSemigroup α
-  (no additional axioms)
-
-中文:
-类 非幺交换半环
-  参数: (α : 类型u)
-  继承: 非幺半环 α, 交换半群 α
-  (无附加公理)
+--- 原说明 ---
+A non-unital commutative semiring is a `NonUnitalSemiring` with commutative mult
+iplication.
+In other words, it is a type with the following structures: additive commutative
+ monoid
+(`AddCommMonoid`), commutative semigroup (`CommSemigroup`), distributive laws (`
+Distrib`), and
+multiplication by zero law (`MulZeroClass`).
 -/
 class NonUnitalCommSemiring (α : Type u) extends NonUnitalSemiring α, CommSemigroup α
 
-/--
-Definition of `NonAssocCommSemiring` / `NonAssocCommSemiring` 的定义
+/-- A non-associative commutative semiring is a `NonAssocSemiring` with commutative
+multiplication. -/
+/-
+**NonAssocCommSemiring** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class NonAssocCommSemiring
-  parameters: (α : Type u)
-  extends: NonAssocSemiring α, NonUnitalNonAssocCommSemiring α
-  (no additional axioms)
-
-中文:
-类 非结合交换半环
-  参数: (α : 类型u)
-  继承: 非结合半环 α, 非幺非结合交换半环 α
-  (无附加公理)
+--- 原说明 ---
+A non-associative commutative semiring is a `NonAssocSemiring` with commutative
+multiplication.
 -/
 class NonAssocCommSemiring (α : Type u)
   extends NonAssocSemiring α, NonUnitalNonAssocCommSemiring α
 
-/--
-Definition of `CommSemiring` / `CommSemiring` 的定义
+/-- A commutative semiring is a semiring with commutative multiplication. -/
+/-
+**CommSemiring** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class CommSemiring
-  parameters: (R : Type u)
-  extends: Semiring R, CommMonoid R
-  (no additional axioms)
-
-中文:
-类 交换半环
-  参数: (R : 类型u)
-  继承: 半环 R, 交换幺半群 R
-  (无附加公理)
+--- 原说明 ---
+A commutative semiring is a semiring with commutative multiplication.
 -/
 class CommSemiring (R : Type u) extends Semiring R, CommMonoid R
 
@@ -731,19 +632,35 @@ attribute [instance 100] NonAssocCommSemiring.toNonAssocSemiring
 attribute [instance 100] NonAssocCommSemiring.toNonUnitalNonAssocCommSemiring
 
 -- see Note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) NonUnitalCommSemiring.toNonUnitalNonAssocCommSemiring
     [NonUnitalCommSemiring α] : NonUnitalNonAssocCommSemiring α where
 
 -- see Note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) CommSemiring.toNonAssocCommSemiring [CommSemiring α] :
     NonAssocCommSemiring α where
 
 -- see Note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) CommSemiring.toNonUnitalCommSemiring [CommSemiring α] :
     NonUnitalCommSemiring α :=
   { (inferInstance : CommMonoid α), (inferInstance : CommSemiring α) with }
 
 -- see Note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) CommSemiring.toCommMonoidWithZero [CommSemiring α] :
     CommMonoidWithZero α :=
   { (inferInstance : CommMonoid α), (inferInstance : CommSemiring α) with }
@@ -752,75 +669,79 @@ section CommSemiring
 
 variable [CommSemiring α]
 
-/--
-theorem `add_mul_self_eq` / 定理 `add_mul_self_eq`
-
-English:
-theorem add_mul_self_eq
-  given: (a b : α)
-  statement: (a + b) * (a + b) = a * a + 2 * a * b + b * b
-  proof: by
-  simp only [two_mul, add_mul, mul_add, add_assoc, mul_comm b]
-
-中文:
-定理 add_mul_self_eq
-  条件: (a b : α)
-  结论: (a + b) * (a + b) = a * a + 2 * a * b + b * b
-  证明: by
-  simp only [two_mul, add_mul, mul_add, add_assoc, mul_comm b]
-
-Depends on / 依赖: add_assoc, add_mul, mul_add, mul_comm, two_mul
+/-
+**add_mul_self_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：add_mul_self_eq (a b : α) : (a + b) * (a + b) = a * a + 2 * a * b + b * b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `two_mul`：two_mul (n : α) : 2 * n = n + n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem add_mul_self_eq (a b : α) : (a + b) * (a + b) = a * a + 2 * a * b + b * b := by
   simp only [two_mul, add_mul, mul_add, add_assoc, mul_comm b]
-
-/--
-lemma `add_sq` / 引理 `add_sq`
-
-English:
-lemma add_sq
-  given: (a b : α)
-  statement: (a + b) ^ 2 = a ^ 2 + 2 * a * b + b ^ 2
-  proof: by
-  simp only [sq, add_mul_self_eq]
-
-中文:
-引理 add_sq
-  条件: (a b : α)
-  结论: (a + b) ^ 2 = a ^ 2 + 2 * a * b + b ^ 2
-  证明: by
-  simp only [sq, add_mul_self_eq]
-
-Depends on / 依赖: Algebra, Spec.structureSheaf, add_mul_self_eq, presheaf, presheaf.obj, structureSheaf
+/-
+**add_sq** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：add_sq (a b : α) : (a + b) ^ 2 = a ^ 2 + 2 * a * b + b ^ 2
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sq`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
+· 使用定理 `add_mul_self_eq`：add_mul_self_eq (a b : α) : (a + b) * (a + b) = a * a +
+ 2 * a * b + b * b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma add_sq (a b : α) : (a + b) ^ 2 = a ^ 2 + 2 * a * b + b ^ 2 := by
   simp only [sq, add_mul_self_eq]
-
-/--
-lemma `add_sq'` / 引理 `add_sq'`
-
-English:
-lemma add_sq'
-  given: (a b : α)
-  statement: (a + b) ^ 2 = a ^ 2 + b ^ 2 + 2 * a * b
-  proof: by
-  rw [add_sq]; rw [add_assoc]; rw [add_comm _ (b ^ 2)]; rw [add_assoc]
-
-alias add_pow_two := add_sq
-
-中文:
-引理 add_sq'
-  条件: (a b : α)
-  结论: (a + b) ^ 2 = a ^ 2 + b ^ 2 + 2 * a * b
-  证明: by
-  rw [add_sq]; rw [add_assoc]; rw [add_comm _ (b ^ 2)]; rw [add_assoc]
-
-alias add_pow_two := add_sq
-
-Depends on / 依赖: add_assoc, add_comm, add_sq
+/-
+**add_sq'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：add_sq' (a b : α) : (a + b) ^ 2 = a ^ 2 + b ^ 2 + 2 * a * b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `add_sq`：add_sq (a b : α) : (a + b) ^ 2 = a ^ 2 + 2 * a * b + b ^ 2
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
 -/
 lemma add_sq' (a b : α) : (a + b) ^ 2 = a ^ 2 + b ^ 2 + 2 * a * b := by
-  rw [add_sq]; rw [add_assoc]; rw [add_comm _ (b ^ 2)]; rw [add_assoc]
+  rw [add_sq, add_assoc, add_comm _ (b ^ 2), add_assoc]
 
 alias add_pow_two := add_sq
 
@@ -828,154 +749,112 @@ end CommSemiring
 
 section HasDistribNeg
 
-/--
-Definition of `HasDistribNeg` / `HasDistribNeg` 的定义
+/-- Typeclass for a negation operator that distributes across multiplication.
 
-English:
-class HasDistribNeg
-  parameters: (α : Type*) [Mul α]
-  extends: InvolutiveNeg α
-  axioms and operations (2):
-    - neg_mul : forall x y : α, -x * y = -(x * y)
-    - mul_neg : forall x y : α, x * -y = -(x * y)
+This is useful for dealing with submonoids of a ring that contain `-1` without having to duplicate
+lemmas. -/
+/-
+**HasDistribNeg** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_1) → [Mul α] → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 有DistribNeg
-  参数: (α : 类型) [乘法 α]
-  继承: InvolutiveNeg α
-  公理与运算 (2 个):
-    - neg_mul : 对任意 x y : α, -x * y = -(x * y)
-    - mul_neg : 对任意 x y : α, x * -y = -(x * y)
+--- 原说明 ---
+Typeclass for a negation operator that distributes across multiplication.
 
-Depends on / 依赖: IsLocalization, IsLocalization.Away, PrimeSpectrum, PrimeSpectrum.basicOpen, Spec.structureSheaf, basicOpen, obj.obj, structureSheaf
+This is useful for dealing with submonoids of a ring that contain `-1` without h
+aving to duplicate
+lemmas.
 -/
 class HasDistribNeg (α : Type*) [Mul α] extends InvolutiveNeg α where
   /-- Negation is left distributive over multiplication -/
-  neg_mul : forall x y : α, -x * y = -(x * y)
+  neg_mul : ∀ x y : α, -x * y = -(x * y)
   /-- Negation is right distributive over multiplication -/
-  mul_neg : forall x y : α, x * -y = -(x * y)
+  mul_neg : ∀ x y : α, x * -y = -(x * y)
 
 section Mul
 
 variable [Mul α] [HasDistribNeg α]
 
 @[simp]
-/--
-theorem `neg_mul` / 定理 `neg_mul`
-
-English:
-theorem neg_mul
-  given: (a b : α)
-  statement: -a * b = -(a * b)
-  proof: HasDistribNeg.neg_mul _ _
-
-@[simp]
-
-中文:
-定理 neg_mul
-  条件: (a b : α)
-  结论: -a * b = -(a * b)
-  证明: HasDistribNeg.neg_mul _ _
-
-@[simp]
-
-Depends on / 依赖: HasDistribNeg, HasDistribNeg.neg_mul, neg_mul
+/-
+**neg_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：neg_mul (a b : α) : -a * b = -(a * b)
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDistribNeg.neg_mul`：∀ {α : Type u_1} {inst : Mul α} [self : HasDistri
+bNeg α] (x y : α), -x * y = -(x * y)
 -/
 theorem neg_mul (a b : α) : -a * b = -(a * b) :=
   HasDistribNeg.neg_mul _ _
 
 @[simp]
-/--
-theorem `mul_neg` / 定理 `mul_neg`
-
-English:
-theorem mul_neg
-  given: (a b : α)
-  statement: a * -b = -(a * b)
-  proof: HasDistribNeg.mul_neg _ _
-
-中文:
-定理 mul_neg
-  条件: (a b : α)
-  结论: a * -b = -(a * b)
-  证明: HasDistribNeg.mul_neg _ _
-
-Depends on / 依赖: HasDistribNeg, HasDistribNeg.mul_neg, mul_neg
+/-
+**mul_neg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_neg (a b : α) : a * -b = -(a * b)
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasDistribNeg.mul_neg`：∀ {α : Type u_1} {inst : Mul α} [self : HasDistri
+bNeg α] (x y : α), x * -y = -(x * y)
 -/
 theorem mul_neg (a b : α) : a * -b = -(a * b) :=
   HasDistribNeg.mul_neg _ _
-
-/--
-theorem `neg_mul_neg` / 定理 `neg_mul_neg`
-
-English:
-theorem neg_mul_neg
-  given: (a b : α)
-  statement: -a * -b = a * b
-  proof: by simp
-
-中文:
-定理 neg_mul_neg
-  条件: (a b : α)
-  结论: -a * -b = a * b
-  证明: by simp
+/-
+**neg_mul_neg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：neg_mul_neg (a b : α) : -a * -b = a * b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem neg_mul_neg (a b : α) : -a * -b = a * b := by simp
-
-/--
-theorem `neg_mul_eq_neg_mul` / 定理 `neg_mul_eq_neg_mul`
-
-English:
-theorem neg_mul_eq_neg_mul
-  given: (a b : α)
-  statement: -(a * b) = -a * b
-  proof: (neg_mul _ _).symm
-
-中文:
-定理 neg_mul_eq_neg_mul
-  条件: (a b : α)
-  结论: -(a * b) = -a * b
-  证明: (neg_mul _ _).symm
-
-Depends on / 依赖: neg_mul
+/-
+**neg_mul_eq_neg_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：neg_mul_eq_neg_mul (a b : α) : -(a * b) = -a * b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
 -/
 theorem neg_mul_eq_neg_mul (a b : α) : -(a * b) = -a * b :=
   (neg_mul _ _).symm
-
-/--
-theorem `neg_mul_eq_mul_neg` / 定理 `neg_mul_eq_mul_neg`
-
-English:
-theorem neg_mul_eq_mul_neg
-  given: (a b : α)
-  statement: -(a * b) = a * -b
-  proof: (mul_neg _ _).symm
-
-中文:
-定理 neg_mul_eq_mul_neg
-  条件: (a b : α)
-  结论: -(a * b) = a * -b
-  证明: (mul_neg _ _).symm
-
-Depends on / 依赖: mul_neg
+/-
+**neg_mul_eq_mul_neg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：neg_mul_eq_mul_neg (a b : α) : -(a * b) = a * -b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
 -/
 theorem neg_mul_eq_mul_neg (a b : α) : -(a * b) = a * -b :=
   (mul_neg _ _).symm
-
-/--
-theorem `neg_mul_comm` / 定理 `neg_mul_comm`
-
-English:
-theorem neg_mul_comm
-  given: (a b : α)
-  statement: -a * b = a * -b
-  proof: by simp
-
-中文:
-定理 neg_mul_comm
-  条件: (a b : α)
-  结论: -a * b = a * -b
-  证明: by simp
+/-
+**neg_mul_comm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：neg_mul_comm (a b : α) : -a * b = a * -b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem neg_mul_comm (a b : α) : -a * b = a * -b := by simp
 
@@ -985,54 +864,69 @@ section MulOneClass
 
 variable [MulOneClass α] [HasDistribNeg α]
 
-/--
-theorem `neg_eq_neg_one_mul` / 定理 `neg_eq_neg_one_mul`
-
-English:
-theorem neg_eq_neg_one_mul
-  given: (a : α)
-  statement: -a = -1 * a
-  proof: by simp
-
-中文:
-定理 neg_eq_neg_one_mul
-  条件: (a : α)
-  结论: -a = -1 * a
-  证明: by simp
+/-
+**neg_eq_neg_one_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：neg_eq_neg_one_mul (a : α) : -a = -1 * a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem neg_eq_neg_one_mul (a : α) : -a = -1 * a := by simp
 
-/--
-theorem `mul_neg_one` / 定理 `mul_neg_one`
+/-- An element of a ring multiplied by the additive inverse of one is the element's additive
+  inverse. -/
+/-
+**mul_neg_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_neg_one (a : α) : a * -1 = -a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem mul_neg_one
-  given: (a : α)
-  statement: a * -1 = -a
-  proof: by simp
-
-中文:
-定理 mul_neg_one
-  条件: (a : α)
-  结论: a * -1 = -a
-  证明: by simp
+--- 原说明 ---
+An element of a ring multiplied by the additive inverse of one is the element's 
+additive
+  inverse.
 -/
 theorem mul_neg_one (a : α) : a * -1 = -a := by simp
 
-/--
-theorem `neg_one_mul` / 定理 `neg_one_mul`
+/-- The additive inverse of one multiplied by an element of a ring is the element's additive
+  inverse. -/
+/-
+**neg_one_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：neg_one_mul (a : α) : -1 * a = -a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem neg_one_mul
-  given: (a : α)
-  statement: -1 * a = -a
-  proof: by simp
-
-中文:
-定理 neg_one_mul
-  条件: (a : α)
-  结论: -1 * a = -a
-  证明: by simp
+--- 原说明 ---
+The additive inverse of one multiplied by an element of a ring is the element's 
+additive
+  inverse.
 -/
 theorem neg_one_mul (a : α) : -1 * a = -a := by simp
 
@@ -1042,6 +936,10 @@ section MulZeroClass
 
 variable [MulZeroClass α] [HasDistribNeg α]
 
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) MulZeroClass.negZeroClass : NegZeroClass α where
   __ := (inferInstance : Zero α); __ := (inferInstance : InvolutiveNeg α)
   neg_zero := by rw [← zero_mul (0 : α), ← neg_mul, mul_zero, mul_zero]
@@ -1058,61 +956,57 @@ section NonUnitalNonAssocRing
 
 variable [NonUnitalNonAssocRing α]
 
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) NonUnitalNonAssocRing.toHasDistribNeg : HasDistribNeg α where
   neg_neg := neg_neg
-neg_mul a b := eq_neg_of_add_eq_zero_left by rw [← right_distrib, neg_add_cancel, zero_mul]
-mul_neg a b := eq_neg_of_add_eq_zero_left by rw [← left_distrib, neg_add_cancel, mul_zero]
-
-/--
-theorem `mul_sub_left_distrib` / 定理 `mul_sub_left_distrib`
-
-English:
-theorem mul_sub_left_distrib
-  given: (a b c : α)
-  statement: a * (b - c) = a * b - a * c
-  proof: by
-  simpa only [sub_eq_add_neg, neg_mul_eq_mul_neg] using mul_add a b (-c)
-
-alias mul_sub := mul_sub_left_distrib
-
-中文:
-定理 mul_sub_left_distrib
-  条件: (a b c : α)
-  结论: a * (b - c) = a * b - a * c
-  证明: by
-  simpa only [sub_eq_add_neg, neg_mul_eq_mul_neg] using mul_add a b (-c)
-
-alias mul_sub := mul_sub_left_distrib
-
-Depends on / 依赖: mul_add, neg_mul_eq_mul_neg, sub_eq_add_neg
+  neg_mul a b := eq_neg_of_add_eq_zero_left <| by rw [← right_distrib, neg_add_cancel, zero_mul]
+  mul_neg a b := eq_neg_of_add_eq_zero_left <| by rw [← left_distrib, neg_add_cancel, mul_zero]
+/-
+**mul_sub_left_distrib** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_sub_left_distrib (a b c : α) : a * (b - c) = a * b - a * c
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `neg_mul_eq_mul_neg`：neg_mul_eq_mul_neg (a b : α) : -(a * b) = a * -b
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
 -/
 theorem mul_sub_left_distrib (a b c : α) : a * (b - c) = a * b - a * c := by
   simpa only [sub_eq_add_neg, neg_mul_eq_mul_neg] using mul_add a b (-c)
 
 alias mul_sub := mul_sub_left_distrib
-
-/--
-theorem `mul_sub_right_distrib` / 定理 `mul_sub_right_distrib`
-
-English:
-theorem mul_sub_right_distrib
-  given: (a b c : α)
-  statement: (a - b) * c = a * c - b * c
-  proof: by
-  simpa only [sub_eq_add_neg, neg_mul_eq_neg_mul] using add_mul a (-b) c
-
-alias sub_mul := mul_sub_right_distrib
-
-中文:
-定理 mul_sub_right_distrib
-  条件: (a b c : α)
-  结论: (a - b) * c = a * c - b * c
-  证明: by
-  simpa only [sub_eq_add_neg, neg_mul_eq_neg_mul] using add_mul a (-b) c
-
-alias sub_mul := mul_sub_right_distrib
-
-Depends on / 依赖: add_mul, neg_mul_eq_neg_mul, sub_eq_add_neg
+/-
+**mul_sub_right_distrib** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_sub_right_distrib (a b c : α) : (a - b) * c = a * c - b * c
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `neg_mul_eq_neg_mul`：neg_mul_eq_neg_mul (a b : α) : -(a * b) = -a * b
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
 -/
 theorem mul_sub_right_distrib (a b c : α) : (a - b) * c = a * c - b * c := by
   simpa only [sub_eq_add_neg, neg_mul_eq_neg_mul] using add_mul a (-b) c
@@ -1125,103 +1019,72 @@ section NonAssocRing
 
 variable [NonAssocRing α]
 
-/--
-theorem `sub_one_mul` / 定理 `sub_one_mul`
-
-English:
-theorem sub_one_mul
-  given: (a b : α)
-  statement: (a - 1) * b = a * b - b
-  proof: by rw [sub_mul, one_mul]
-
-中文:
-定理 sub_one_mul
-  条件: (a b : α)
-  结论: (a - 1) * b = a * b - b
-  证明: by rw [sub_mul, one_mul]
-
-Depends on / 依赖: one_mul, sub_mul
+/-
+**sub_one_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：sub_one_mul (a b : α) : (a - 1) * b = a * b - b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_mul`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), (a
+ - b) * c = a * c - b * c
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
 theorem sub_one_mul (a b : α) : (a - 1) * b = a * b - b := by rw [sub_mul, one_mul]
-
-/--
-theorem `mul_sub_one` / 定理 `mul_sub_one`
-
-English:
-theorem mul_sub_one
-  given: (a b : α)
-  statement: a * (b - 1) = a * b - a
-  proof: by rw [mul_sub, mul_one]
-
-中文:
-定理 mul_sub_one
-  条件: (a b : α)
-  结论: a * (b - 1) = a * b - a
-  证明: by rw [mul_sub, mul_one]
-
-Depends on / 依赖: mul_one, mul_sub
+/-
+**mul_sub_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_sub_one (a b : α) : a * (b - 1) = a * b - a
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_sub`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), a 
+* (b - c) = a * b - a * c
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
 theorem mul_sub_one (a b : α) : a * (b - 1) = a * b - a := by rw [mul_sub, mul_one]
-
-/--
-theorem `one_sub_mul` / 定理 `one_sub_mul`
-
-English:
-theorem one_sub_mul
-  given: (a b : α)
-  statement: (1 - a) * b = b - a * b
-  proof: by rw [sub_mul, one_mul]
-
-中文:
-定理 one_sub_mul
-  条件: (a b : α)
-  结论: (1 - a) * b = b - a * b
-  证明: by rw [sub_mul, one_mul]
-
-Depends on / 依赖: one_mul, sub_mul
+/-
+**one_sub_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：one_sub_mul (a b : α) : (1 - a) * b = b - a * b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_mul`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), (a
+ - b) * c = a * c - b * c
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
 theorem one_sub_mul (a b : α) : (1 - a) * b = b - a * b := by rw [sub_mul, one_mul]
-
-/--
-theorem `mul_one_sub` / 定理 `mul_one_sub`
-
-English:
-theorem mul_one_sub
-  given: (a b : α)
-  statement: a * (1 - b) = a - a * b
-  proof: by rw [mul_sub, mul_one]
-
-中文:
-定理 mul_one_sub
-  条件: (a b : α)
-  结论: a * (1 - b) = a - a * b
-  证明: by rw [mul_sub, mul_one]
-
-Depends on / 依赖: mul_one, mul_sub
+/-
+**mul_one_sub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_one_sub (a b : α) : a * (1 - b) = a - a * b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_sub`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), a 
+* (b - c) = a * b - a * c
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
 theorem mul_one_sub (a b : α) : a * (1 - b) = a - a * b := by rw [mul_sub, mul_one]
-
-/--
-lemma `mul_one_sub_mul` / 引理 `mul_one_sub_mul`
-
-English:
-lemma mul_one_sub_mul
-  given: (a b c : α)
-  statement: a * (1 - b) * c = a * c - a * b * c
-  proof: by
-  rw [mul_one_sub]; rw [sub_mul]
-
-中文:
-引理 mul_one_sub_mul
-  条件: (a b c : α)
-  结论: a * (1 - b) * c = a * c - a * b * c
-  证明: by
-  rw [mul_one_sub]; rw [sub_mul]
-
-Depends on / 依赖: mul_one_sub, sub_mul
+/-
+**mul_one_sub_mul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：mul_one_sub_mul (a b c : α) : a * (1 - b) * c = a * c - a * b * c
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_one_sub`：mul_one_sub (a b : α) : a * (1 - b) = a - a * b
+· 使用定理 `sub_mul`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), (a
+ - b) * c = a * c - b * c
 -/
 lemma mul_one_sub_mul (a b c : α) : a * (1 - b) * c = a * c - a * b * c := by
-  rw [mul_one_sub]; rw [sub_mul]
+  rw [mul_one_sub, sub_mul]
 
 end NonAssocRing
 
@@ -1231,65 +1094,60 @@ variable [Ring α]
 
 -- A (unital, associative) ring is a not-necessarily-unital ring
 -- see Note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) Ring.toNonUnitalRing : NonUnitalRing α :=
   { ‹Ring α› with }
 
 -- A (unital, associative) ring is a not-necessarily-associative ring
 -- see Note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) Ring.toNonAssocRing : NonAssocRing α :=
   { ‹Ring α› with }
 
 end Ring
 
-/--
-Definition of `NonUnitalNonAssocCommRing` / `NonUnitalNonAssocCommRing` 的定义
+/-- A non-unital non-associative commutative ring is a `NonUnitalNonAssocRing` with commutative
+multiplication. -/
+/-
+**NonUnitalNonAssocCommRing** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class NonUnitalNonAssocCommRing
-  parameters: (α : Type u)
-  extends: NonUnitalNonAssocRing α, NonUnitalNonAssocCommSemiring α
-  (no additional axioms)
-
-中文:
-类 非幺非结合交换环
-  参数: (α : 类型u)
-  继承: 非幺非结合环 α, 非幺非结合交换半环 α
-  (无附加公理)
+--- 原说明 ---
+A non-unital non-associative commutative ring is a `NonUnitalNonAssocRing` with 
+commutative
+multiplication.
 -/
 class NonUnitalNonAssocCommRing (α : Type u)
   extends NonUnitalNonAssocRing α, NonUnitalNonAssocCommSemiring α
 
-/--
-Definition of `NonUnitalCommRing` / `NonUnitalCommRing` 的定义
+/-- A non-unital commutative ring is a `NonUnitalRing` with commutative multiplication. -/
+/-
+**NonUnitalCommRing** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class NonUnitalCommRing
-  parameters: (α : Type u)
-  extends: NonUnitalRing α, NonUnitalNonAssocCommRing α
-  (no additional axioms)
-
-中文:
-类 非幺交换环
-  参数: (α : 类型u)
-  继承: 非幺环 α, 非幺非结合交换环 α
-  (无附加公理)
+--- 原说明 ---
+A non-unital commutative ring is a `NonUnitalRing` with commutative multiplicati
+on.
 -/
 class NonUnitalCommRing (α : Type u) extends NonUnitalRing α, NonUnitalNonAssocCommRing α
 
-/--
-Definition of `NonAssocCommRing` / `NonAssocCommRing` 的定义
+/-- A non-associative commutative ring is a `NonAssocRing` with commutative multiplication. -/
+/-
+**NonAssocCommRing** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class NonAssocCommRing
-  parameters: (α : Type u)
-  extends: NonAssocRing α, NonUnitalNonAssocCommRing α, NonAssocCommSemiring α
-  (no additional axioms)
-
-中文:
-类 非结合交换环
-  参数: (α : 类型u)
-  继承: 非结合环 α, 非幺非结合交换环 α, 非结合交换半环 α
-  (无附加公理)
+--- 原说明 ---
+A non-associative commutative ring is a `NonAssocRing` with commutative multipli
+cation.
 -/
 class NonAssocCommRing (α : Type u)
   extends NonAssocRing α, NonUnitalNonAssocCommRing α, NonAssocCommSemiring α
@@ -1299,39 +1157,50 @@ attribute [instance 100] NonAssocCommRing.toNonUnitalNonAssocCommRing
 attribute [instance 100] NonAssocCommRing.toNonAssocCommSemiring
 
 -- see Note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) NonUnitalCommRing.toNonUnitalCommSemiring [s : NonUnitalCommRing α] :
     NonUnitalCommSemiring α :=
   { s with }
 
 /-- A commutative ring is a ring with commutative multiplication. -/
 @[wikidata Q858656]
-/--
-Definition of `CommRing` / `CommRing` 的定义
+/-
+**CommRing** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class CommRing
-  parameters: (α : Type u)
-  extends: Ring α, CommMonoid α
-  (no additional axioms)
-
-中文:
-类 交换环
-  参数: (α : 类型u)
-  继承: 环 α, 交换幺半群 α
-  (无附加公理)
+--- 原说明 ---
+A commutative ring is a ring with commutative multiplication.
 -/
 class CommRing (α : Type u) extends Ring α, CommMonoid α
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) CommRing.toNonAssocCommRing [CommRing α] : NonAssocCommRing α where
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) CommRing.toCommSemiring [s : CommRing α] : CommSemiring α :=
   { s with }
 
 -- see Note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) CommRing.toNonUnitalCommRing [s : CommRing α] : NonUnitalCommRing α :=
   { s with }
 
 -- see Note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) CommRing.toAddCommGroupWithOne [s : CommRing α] :
     AddCommGroupWithOne α :=
   { s with }
@@ -1344,20 +1213,20 @@ is cancellative on both sides. In other words, a nontrivial semiring `R` satisfy
 This is implemented as a mixin for `Semiring α`.
 To obtain an integral domain use `[CommRing α] [IsDomain α]`. -/
 @[stacks 09FE]
-/--
-Definition of `IsDomain` / `IsDomain` 的定义
+/-
+**IsDomain** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u) → [Semiring α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsDomain
-  parameters: (α : Type u) [Semiring α]
-  extends: IsCancelMulZero α, Nontrivial α
-  (no additional axioms)
+--- 原说明 ---
+A domain is a nontrivial semiring such that multiplication by a nonzero element
+is cancellative on both sides. In other words, a nontrivial semiring `R` satisfy
+ing
+`∀ {a b c : R}, a ≠ 0 → a * b = a * c → b = c` and
+`∀ {a b c : R}, b ≠ 0 → a * b = c * b → a = c`.
 
-中文:
-类 是整环
-  参数: (α : 类型u) [半环 α]
-  继承: 是乘零消去 α, 非平凡 α
-  (无附加公理)
+This is implemented as a mixin for `Semiring α`.
+To obtain an integral domain use `[CommRing α] [IsDomain α]`.
 -/
 class IsDomain (α : Type u) [Semiring α] : Prop extends IsCancelMulZero α, Nontrivial α
 
@@ -1371,6 +1240,24 @@ subobjects in a noncommutative ambient type. As such this is only available insi
 commutativity.
 
 See note [commutative subobjects]. -/
+/-
+**IsMulCommutative.** 是 Mathlib 中的一个实例，位于命名空间 `IsMulCommutative`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A `NonUnitalNonAssocSemiring` which `IsMulCommutative` is a `NonUnitalNonAssocCo
+mmSemiring`.
+
+This is primarily used to deduce the bundled version from the unbundled one for 
+commutative
+subobjects in a noncommutative ambient type. As such this is only available insi
+de the
+`IsMulCommutative` scope so as to avoid deleterious effects to type class synthe
+sis for bundled
+commutativity.
+
+See note [commutative subobjects].
+-/
 scoped instance (priority := 50) [NonUnitalNonAssocSemiring R] [IsMulCommutative R] :
     NonUnitalNonAssocCommSemiring R where
 
@@ -1382,6 +1269,23 @@ subobjects in a noncommutative ambient type. As such this is only available insi
 commutativity.
 
 See note [commutative subobjects]. -/
+/-
+**IsMulCommutative.** 是 Mathlib 中的一个实例，位于命名空间 `IsMulCommutative`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A `NonUnitalSemiring` which `IsMulCommutative` is a `NonUnitalCommSemiring`.
+
+This is primarily used to deduce the bundled version from the unbundled one for 
+commutative
+subobjects in a noncommutative ambient type. As such this is only available insi
+de the
+`IsMulCommutative` scope so as to avoid deleterious effects to type class synthe
+sis for bundled
+commutativity.
+
+See note [commutative subobjects].
+-/
 scoped instance (priority := 50) [NonUnitalSemiring R] [IsMulCommutative R] :
     NonUnitalCommSemiring R where
 
@@ -1393,6 +1297,24 @@ subobjects in a noncommutative ambient type. As such this is only available insi
 commutativity.
 
 See note [commutative subobjects]. -/
+/-
+**IsMulCommutative.** 是 Mathlib 中的一个实例，位于命名空间 `IsMulCommutative`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A `NonUnitalNonAssocRing` which `IsMulCommutative` is a `NonUnitalNonAssocCommRi
+ng`.
+
+This is primarily used to deduce the bundled version from the unbundled one for 
+commutative
+subobjects in a noncommutative ambient type. As such this is only available insi
+de the
+`IsMulCommutative` scope so as to avoid deleterious effects to type class synthe
+sis for bundled
+commutativity.
+
+See note [commutative subobjects].
+-/
 scoped instance (priority := 50) [NonUnitalNonAssocRing R] [IsMulCommutative R] :
     NonUnitalNonAssocCommRing R where
 
@@ -1404,6 +1326,23 @@ subobjects in a noncommutative ambient type. As such this is only available insi
 commutativity.
 
 See note [commutative subobjects]. -/
+/-
+**IsMulCommutative.** 是 Mathlib 中的一个实例，位于命名空间 `IsMulCommutative`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A `NonUnitalRing` which `IsMulCommutative` is a `NonUnitalCommRing`.
+
+This is primarily used to deduce the bundled version from the unbundled one for 
+commutative
+subobjects in a noncommutative ambient type. As such this is only available insi
+de the
+`IsMulCommutative` scope so as to avoid deleterious effects to type class synthe
+sis for bundled
+commutativity.
+
+See note [commutative subobjects].
+-/
 scoped instance (priority := 50) [NonUnitalRing R] [IsMulCommutative R] :
     NonUnitalCommRing R where
 
@@ -1415,6 +1354,23 @@ subobjects in a noncommutative ambient type. As such this is only available insi
 commutativity.
 
 See note [commutative subobjects]. -/
+/-
+**IsMulCommutative.** 是 Mathlib 中的一个实例，位于命名空间 `IsMulCommutative`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A `NonAssocSemiring` which `IsMulCommutative` is a `NonAssocCommSemiring`.
+
+This is primarily used to deduce the bundled version from the unbundled one for 
+commutative
+subobjects in a noncommutative ambient type. As such this is only available insi
+de the
+`IsMulCommutative` scope so as to avoid deleterious effects to type class synthe
+sis for bundled
+commutativity.
+
+See note [commutative subobjects].
+-/
 scoped instance (priority := 50) [NonAssocSemiring R] [IsMulCommutative R] :
     NonAssocCommSemiring R where
 
@@ -1426,6 +1382,23 @@ subobjects in a noncommutative ambient type. As such this is only available insi
 commutativity.
 
 See note [commutative subobjects]. -/
+/-
+**IsMulCommutative.** 是 Mathlib 中的一个实例，位于命名空间 `IsMulCommutative`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A `Semiring` which `IsMulCommutative` is a `CommSemiring`.
+
+This is primarily used to deduce the bundled version from the unbundled one for 
+commutative
+subobjects in a noncommutative ambient type. As such this is only available insi
+de the
+`IsMulCommutative` scope so as to avoid deleterious effects to type class synthe
+sis for bundled
+commutativity.
+
+See note [commutative subobjects].
+-/
 scoped instance (priority := 50) [Semiring R] [IsMulCommutative R] :
     CommSemiring R where
 
@@ -1437,6 +1410,23 @@ subobjects in a noncommutative ambient type. As such this is only available insi
 commutativity.
 
 See note [commutative subobjects]. -/
+/-
+**IsMulCommutative.** 是 Mathlib 中的一个实例，位于命名空间 `IsMulCommutative`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A `NonAssocRing` which `IsMulCommutative` is a `NonAssocCommRing`.
+
+This is primarily used to deduce the bundled version from the unbundled one for 
+commutative
+subobjects in a noncommutative ambient type. As such this is only available insi
+de the
+`IsMulCommutative` scope so as to avoid deleterious effects to type class synthe
+sis for bundled
+commutativity.
+
+See note [commutative subobjects].
+-/
 scoped instance (priority := 50) [NonAssocRing R] [IsMulCommutative R] :
     NonAssocCommRing R where
 
@@ -1448,7 +1438,25 @@ subobjects in a noncommutative ambient type. As such this is only available insi
 commutativity.
 
 See note [commutative subobjects]. -/
+/-
+**IsMulCommutative.** 是 Mathlib 中的一个实例，位于命名空间 `IsMulCommutative`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A `Ring` which `IsMulCommutative` is a `CommRing`.
+
+This is primarily used to deduce the bundled version from the unbundled one for 
+commutative
+subobjects in a noncommutative ambient type. As such this is only available insi
+de the
+`IsMulCommutative` scope so as to avoid deleterious effects to type class synthe
+sis for bundled
+commutativity.
+
+See note [commutative subobjects].
+-/
 scoped instance (priority := 50) [Ring R] [IsMulCommutative R] :
     CommRing R where
 
 end IsMulCommutative
+

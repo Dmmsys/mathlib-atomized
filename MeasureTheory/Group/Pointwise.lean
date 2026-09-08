@@ -23,74 +23,66 @@ open scoped Pointwise
 open Set
 
 @[to_additive]
-/--
-theorem `MeasurableSet.const_smul` / 定理 `MeasurableSet.const_smul`
-
-English:
-theorem MeasurableSet.const_smul
-  statement: {G α : Type*} [Group G] [MulAction G α]
-  proof: by
-  rw [← preimage_smul_inv]
-  exact measurable_const_smul _ hs
-
-中文:
-定理 可测集.const_smul
-  结论: {G α : 类型} [群 G] [乘法作用 G α]
-  证明: by
-  rw [← preimage_smul_inv]
-  exact measurable_const_smul _ hs
-
-Depends on / 依赖: measurable_const_smul, preimage_smul_inv
+/-
+**MeasurableSet.const_smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MeasurableSet.const_smul {G α : Type*} [Group G] [MulAction G α] [Measurab
+leSpace α] [MeasurableConstSMul G α] {s : Set α} (hs : MeasurableSet s) (a : G) 
+: MeasurableSet (a • s)
+参数：hs : MeasurableSet s；a : G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.preimage_smul_inv`：preimage_smul_inv (a : α) (t : Set β) : (fun x =>
+ a⁻¹ • x) ⁻¹' t = a • t
+· 使用定理 `MeasurableConstSMul.measurable_const_smul`：∀ {M : Type u_2} {α : Type u_
+3} {inst : SMul M α} {inst_1 : MeasurableSpace α} [self : MeasurableConstSMul M 
+α] (c : M),   Measurable fun x …
 -/
 theorem MeasurableSet.const_smul {G α : Type*} [Group G] [MulAction G α]
     [MeasurableSpace α] [MeasurableConstSMul G α] {s : Set α} (hs : MeasurableSet s) (a : G) :
     MeasurableSet (a • s) := by
   rw [← preimage_smul_inv]
   exact measurable_const_smul _ hs
-
-/--
-theorem `MeasurableSet.const_smul_of_ne_zero` / 定理 `MeasurableSet.const_smul_of_ne_zero`
-
-English:
-theorem MeasurableSet.const_smul_of_ne_zero
-  statement: {G₀ α : Type*} [GroupWithZero G₀] [MulAction G₀ α]
-  proof: by
-  rw [← preimage_smul_inv₀ ha]
-  exact measurable_const_smul _ hs
-
-中文:
-定理 可测集.const_smul_of_ne_zero
-  结论: {G₀ α : 类型} [带零群 G₀] [乘法作用 G₀ α]
-  证明: by
-  rw [← preimage_smul_inv₀ ha]
-  exact measurable_const_smul _ hs
-
-Depends on / 依赖: measurable_const_smul
+/-
+**MeasurableSet.const_smul_of_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MeasurableSet.const_smul_of_ne_zero {G₀ α : Type*} [GroupWithZero G₀] [Mul
+Action G₀ α] [MeasurableSpace α] [MeasurableConstSMul G₀ α] {s : Set α} (hs : Me
+asurableSet s) {a : G₀} (ha : a != 0) : MeasurableSet (a • s)
+参数：hs : MeasurableSet s；ha : a != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Set.preimage_smul_inv₀`：preimage_smul_inv₀ (ha : a != 0) (t : Set β) : (
+fun x => a⁻¹ • x) ⁻¹' t = a • t
+· 使用定理 `MeasurableConstSMul.measurable_const_smul`：∀ {M : Type u_2} {α : Type u_
+3} {inst : SMul M α} {inst_1 : MeasurableSpace α} [self : MeasurableConstSMul M 
+α] (c : M),   Measurable fun x …
 -/
 theorem MeasurableSet.const_smul_of_ne_zero {G₀ α : Type*} [GroupWithZero G₀] [MulAction G₀ α]
     [MeasurableSpace α] [MeasurableConstSMul G₀ α] {s : Set α}
-    (hs : MeasurableSet s) {a : G₀} (ha : a != 0) : MeasurableSet (a • s) := by
+    (hs : MeasurableSet s) {a : G₀} (ha : a ≠ 0) : MeasurableSet (a • s) := by
   rw [← preimage_smul_inv₀ ha]
   exact measurable_const_smul _ hs
-
-/--
-theorem `MeasurableSet.const_smul₀` / 定理 `MeasurableSet.const_smul₀`
-
-English:
-theorem MeasurableSet.const_smul₀
-  statement: {G₀ α : Type*} [GroupWithZero G₀] [Zero α]
-  proof: by
-  rcases eq_or_ne a 0 with (rfl | ha)
-  exacts [(subsingleton_zero_smul_set s).measurableSet, hs.const_smul_of_ne_zero ha]
-
-中文:
-定理 可测集.const_smul₀
-  结论: {G₀ α : 类型} [带零群 G₀] [零 α]
-  证明: by
-  rcases eq_or_ne a 0 with (rfl | ha)
-  exacts [(subsingleton_zero_smul_set s).measurableSet, hs.const_smul_of_ne_zero ha]
-
-Depends on / 依赖: const_smul_of_ne_zero, eq_or_ne, exacts, hs.const_smul_of_ne_zero, measurableSet, subsingleton_zero_smul_set
+/-
+**MeasurableSet.const_smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MeasurableSet.const_smul {G α : Type*} [Group G] [MulAction G α] [Measurab
+leSpace α] [MeasurableConstSMul G α] {s : Set α} (hs : MeasurableSet s) (a : G) 
+: MeasurableSet (a • s)
+参数：hs : MeasurableSet s；a : G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.preimage_smul_inv`：preimage_smul_inv (a : α) (t : Set β) : (fun x =>
+ a⁻¹ • x) ⁻¹' t = a • t
+· 使用定理 `MeasurableConstSMul.measurable_const_smul`：∀ {M : Type u_2} {α : Type u_
+3} {inst : SMul M α} {inst_1 : MeasurableSpace α} [self : MeasurableConstSMul M 
+α] (c : M),   Measurable fun x …
 -/
 theorem MeasurableSet.const_smul₀ {G₀ α : Type*} [GroupWithZero G₀] [Zero α]
     [MulActionWithZero G₀ α] [MeasurableSpace α] [MeasurableConstSMul G₀ α]

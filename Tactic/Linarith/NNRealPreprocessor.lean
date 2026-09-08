@@ -25,45 +25,34 @@ namespace Mathlib.Tactic.Linarith
 open Lean Meta
 
 /--
-Definition of `isNNRealProp` / `isNNRealProp` 的定义
+`isNNRealProp tp` is true iff `tp` is an inequality or equality between nonnegative real numbers
+or the negation thereof.
+-/
+/-
+**Mathlib.Tactic.Linarith.isNNRealProp** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.Linarith`。
+形式化陈述：Expr → MetaM Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isNNRealProp
-  signature: (e : Expr)
-  body: succeeds do
-  let (_, _, .const ``NNReal _, _, _) ← e.ineqOrNotIneq? | failure
-
-中文:
-定义 isNN实数Prop
-  签名: (e : Expr)
-  定义体: succeeds do
-  let (_, _, .const ``NNReal _, _, _) ← e.ineqOrNotIneq? | failure
+--- 原说明 ---
+`isNNRealProp tp` is true iff `tp` is an inequality or equality between nonnegat
+ive real numbers
+or the negation thereof.
 -/
 partial def isNNRealProp (e : Expr) : MetaM Bool := succeeds do
   let (_, _, .const ``NNReal _, _, _) ← e.ineqOrNotIneq? | failure
 
-/--
-Definition of `getNNRealToRealArg?` / `getNNRealToRealArg?` 的定义
+/-- If `e` is of the form `((x : ℝ≥0) : ℝ)`, `NNReal.toReal e` returns `x`. -/
+/-
+**Mathlib.Tactic.Linarith.getNNRealToRealArg** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.Linarith`。
+形式化陈述：getNNRealToRealArg? (e : Expr) : Option Expr
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getNNRealToRealArg?
-  signature: (e : Expr)
-  body: match e with
-  | .app (.const ``NNReal.toReal _) n => some n
-  | _ => none
-
-@[deprecated (since := "2026-05-27")] alias isNNRealtoReal := getNNRealToRealArg?
-
-中文:
-定义 getNN实数To实数Arg?
-  签名: (e : Expr)
-  定义体: match e with
-  | .app (.const ``NNReal.toReal _) n => some n
-  | _ => none
-
-@[deprecated (since := "2026-05-27")] alias isNNRealtoReal := getNNRealToRealArg?
-
-Depends on / 依赖: NNReal, NNReal.toReal, toReal
+--- 原说明 ---
+If `e` is of the form `((x : ℝ≥0) : ℝ)`, `NNReal.toReal e` returns `x`.
 -/
 def getNNRealToRealArg? (e : Expr) : Option Expr :=
   match e with
@@ -73,33 +62,17 @@ def getNNRealToRealArg? (e : Expr) : Option Expr :=
 @[deprecated (since := "2026-05-27")] alias isNNRealtoReal := getNNRealToRealArg?
 
 /--
-Definition of `getNNRealCoes` / `getNNRealCoes` 的定义
+`getNNRealComparisons e` returns a list of all subexpressions of `e` of the form `(x : ℝ)`.
+-/
+/-
+**Mathlib.Tactic.Linarith.getNNRealCoes** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Ta
+ctic.Linarith`。
+形式化陈述：Expr → List Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getNNRealCoes
-  signature: (e : Expr)
-  body: match getNNRealToRealArg? e with
-  | some x => [x]
-  | none => match e.getAppFnArgs with
-    | (``HAdd.hAdd, #[_, _, _, _, a, b]) => getNNRealCoes a ++ getNNRealCoes b
-    | (``HMul.hMul, #[_, _, _, _, a, b]) => getNNRealCoes a ++ getNNRealCoes b
-    | (``HSub.hSub, #[_, _, _, _, a, b]) => getNNRealCoes a ++ getNNRealCoes b
-    | (``HDiv.hDiv, #[_, _, _, _, a, _]) => getNNRealCoes a
-    | (``Neg.neg, #[_, _, a]) => getNNRealCoes a
-    | _ => []
-
-中文:
-定义 getNN实数Coes
-  签名: (e : Expr)
-  定义体: match getNNRealToRealArg? e with
-  | some x => [x]
-  | none => match e.getAppFnArgs with
-    | (``HAdd.hAdd, #[_, _, _, _, a, b]) => getNNRealCoes a ++ getNNRealCoes b
-    | (``HMul.hMul, #[_, _, _, _, a, b]) => getNNRealCoes a ++ getNNRealCoes b
-    | (``HSub.hSub, #[_, _, _, _, a, b]) => getNNRealCoes a ++ getNNRealCoes b
-    | (``HDiv.hDiv, #[_, _, _, _, a, _]) => getNNRealCoes a
-    | (``Neg.neg, #[_, _, a]) => getNNRealCoes a
-    | _ => []
+--- 原说明 ---
+`getNNRealComparisons e` returns a list of all subexpressions of `e` of the form
+ `(x : ℝ)`.
 -/
 partial def getNNRealCoes (e : Expr) : List Expr :=
   match getNNRealToRealArg? e with
@@ -112,30 +85,17 @@ partial def getNNRealCoes (e : Expr) : List Expr :=
     | (``Neg.neg, #[_, _, a]) => getNNRealCoes a
     | _ => []
 
-/--
-Definition of `mkToRealNonnegProof?` / `mkToRealNonnegProof?` 的定义
+/-- If `e : ℝ≥0`, returns a proof of `0 ≤ (e : ℝ)`. -/
+/-
+**Mathlib.Tactic.Linarith.mkToRealNonnegProof** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Tactic.Linarith`。
+形式化陈述：mkToRealNonnegProof? (e : Expr) : MetaM (Option Expr)
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkToRealNonnegProof?
-  signature: (e : Expr)
-  body: try commitIfNoEx (mkAppM ``NNReal.coe_nonneg #[e])
-  catch e => do
-    trace[linarith] "Got exception when using `coe_nonneg` {e.toMessageData}"
-    return none
-
-@[deprecated (since := "2026-05-27")] alias mk_toReal_nonneg_prf := mkToRealNonnegProof?
-
-中文:
-定义 mkTo实数NonnegProof?
-  签名: (e : Expr)
-  定义体: try commitIfNoEx (mkAppM ``NNReal.coe_nonneg #[e])
-  catch e => do
-    trace[linarith] "Got exception when using `coe_nonneg` {e.toMessageData}"
-    return none
-
-@[deprecated (since := "2026-05-27")] alias mk_toReal_nonneg_prf := mkToRealNonnegProof?
-
-Depends on / 依赖: NNReal, NNReal.coe_nonneg, coe_nonneg, commitIfNoEx, e.toMessageData, exception, mkAppM, return, toMessageData
+--- 原说明 ---
+If `e : ℝ≥0`, returns a proof of `0 ≤ (e : ℝ)`.
 -/
 def mkToRealNonnegProof? (e : Expr) : MetaM (Option Expr) :=
   try commitIfNoEx (mkAppM ``NNReal.coe_nonneg #[e])
@@ -152,13 +112,14 @@ initialize nnrealToRealTransform.set fun l => do
       return (← Rify.rifyProof e t).1
     else
       return e
-let atoms : List Expr ← withNewMCtxDepth AtomM.run .reducible do
+  let atoms : List Expr ← withNewMCtxDepth <| AtomM.run .reducible do
     for e in l do
       let (_, _, a, b) ← (← inferType e).ineq?
-discard (getNNRealCoes a).mapM AtomM.addAtom
-discard (getNNRealCoes b).mapM AtomM.addAtom
+      discard <| (getNNRealCoes a).mapM AtomM.addAtom
+      discard <| (getNNRealCoes b).mapM AtomM.addAtom
     return (← get).atoms.toList
   let nonnegProofs : List Expr ← atoms.filterMapM mkToRealNonnegProof?
   return nonnegProofs ++ l
 
-end Mathlib.Tactic.Linarith
+end  Mathlib.Tactic.Linarith
+

@@ -34,71 +34,68 @@ public register_option linter.ppRoundtrip : Bool := {
   descr := "enable the ppRoundtrip linter"
 }
 
-/--
-Definition of `polishPP` / `polishPP` 的定义
+/-- `polishPP s` takes as input a `String` `s`, assuming that it is the output of
+pretty-printing a lean command.
+The main intent is to convert `s` to a reasonable candidate for a desirable source code format.
+The function first replaces consecutive whitespace sequences into a single space (` `), in an
+attempt to side-step line-break differences.
+After that, it applies some pre-emptive changes:
+* doc-module beginnings tend to have some whitespace following them, so we add a space back in;
+* name quotations such as ``` ``Nat``` get pretty-printed as ``` `` Nat```, so we remove a space
+  after double back-ticks, but take care of adding one more for triple (or more) back-ticks;
+* `notation3` is not followed by a pretty-printer space, so we add it here (https://github.com/leanprover-community/mathlib4/pull/15515).
+-/
+/-
+**Mathlib.Linter.polishPP** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Linter`。
+形式化陈述：polishPP (s : String) : String
+参数：s : String。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition polishPP
-  signature: (s : String)
-  body: let s := s.splitToList (·.isWhitespace)
-  (" ".intercalate (s.filter (!·.isEmpty)))
-.replace " /-!" "/-! "
-    |>.replace "``` " "``` " -- avoid losing an existing space after the triple back-ticks
-                              -- as a consequence of the following replacement
-    |>.replace "`` " "``" -- weird pp ```#eval ``«Nat»``` pretty-prints as ```#eval `` «Nat»```
-    |>.replace "notation3(" "notation3 ("
-    |>.replace "notation3\"" "notation3 \""
-
-中文:
-定义 polishPP
-  签名: (s : String)
-  定义体: let s := s.splitToList (·.isWhitespace)
-  (" ".intercalate (s.filter (!·.isEmpty)))
-.replace " /-!" "/-! "
-    |>.replace "``` " "``` " -- avoid losing an existing space after the triple back-ticks
-                              -- as a consequence of the following replacement
-    |>.replace "`` " "``" -- weird pp ```#eval ``«Nat»``` pretty-prints as ```#eval `` «Nat»```
-    |>.replace "notation3(" "notation3 ("
-    |>.replace "notation3\"" "notation3 \""
-
-Depends on / 依赖: existing, filter, intercalate, isEmpty, isWhitespace, losing, replace, s.filter, s.splitToList, splitToList, triple
+--- 原说明 ---
+`polishPP s` takes as input a `String` `s`, assuming that it is the output of
+pretty-printing a lean command.
+The main intent is to convert `s` to a reasonable candidate for a desirable sour
+ce code format.
+The function first replaces consecutive whitespace sequences into a single space
+ (` `), in an
+attempt to side-step line-break differences.
+After that, it applies some pre-emptive changes:
+* doc-module beginnings tend to have some whitespace following them, so we add a
+ space back in;
+* name quotations such as ``` ``Nat``` get pretty-printed as ``` `` Nat```, so w
+e remove a space
+  after double back-ticks, but take care of adding one more for triple (or more)
+ back-ticks;
+* `notation3` is not followed by a pretty-printer space, so we add it here (http
+s://github.com/leanprover-community/mathlib4/pull/15515).
 -/
 def polishPP (s : String) : String :=
   let s := s.splitToList (·.isWhitespace)
   (" ".intercalate (s.filter (!·.isEmpty)))
-.replace " /-!" "/-! "
-    |>.replace "``` " "``` " -- avoid losing an existing space after the triple back-ticks
+    |>.replace "/-!" "/-! "
+    |>.replace "``` " "```  " -- avoid losing an existing space after the triple back-ticks
                               -- as a consequence of the following replacement
     |>.replace "`` " "``" -- weird pp ```#eval ``«Nat»``` pretty-prints as ```#eval `` «Nat»```
     |>.replace "notation3(" "notation3 ("
     |>.replace "notation3\"" "notation3 \""
 
-/--
-Definition of `polishSource` / `polishSource` 的定义
+/-- `polishSource s` is similar to `polishPP s`, but expects the input to be actual source code.
+For this reason, `polishSource s` performs more conservative changes:
+it only replace all whitespace starting from a linebreak (`\n`) with a single whitespace. -/
+/-
+**Mathlib.Linter.polishSource** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Linter`。
+形式化陈述：polishSource (s : String) : String × Array Nat
+参数：s : String。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition polishSource
-  signature: (s : String)
-  body: let split := s.splitToList (· == '\n')
-  let preWS := split.foldl (init := #[]) fun p q =>
-    let txt := q.trimAsciiStart.copy.length
-    (p.push (q.length - txt)).push txt
-  let preWS := preWS.eraseIdxIfInBounds 0
-  let s := (split.map String.trimAsciiStart).filter (· != "".toSlice)
-  (" ".toSlice.intercalate (s.filter (!·.isEmpty)), preWS)
-
-中文:
-定义 polishSource
-  签名: (s : String)
-  定义体: let split := s.splitToList (· == '\n')
-  let preWS := split.foldl (init := #[]) fun p q =>
-    let txt := q.trimAsciiStart.copy.length
-    (p.push (q.length - txt)).push txt
-  let preWS := preWS.eraseIdxIfInBounds 0
-  let s := (split.map String.trimAsciiStart).filter (· != "".toSlice)
-  (" ".toSlice.intercalate (s.filter (!·.isEmpty)), preWS)
-
-Depends on / 依赖: String.trimAsciiStart, eraseIdxIfInBounds, filter, intercalate, isEmpty, length, p.push, preWS.eraseIdxIfInBounds, q.length, q.trimAsciiStart.copy.length, s.filter, s.splitToList, split.foldl, split.map, splitToList, toSlice, toSlice.intercalate, trimAsciiStart
+--- 原说明 ---
+`polishSource s` is similar to `polishPP s`, but expects the input to be actual 
+source code.
+For this reason, `polishSource s` performs more conservative changes:
+it only replace all whitespace starting from a linebreak (`\n`) with a single wh
+itespace.
 -/
 def polishSource (s : String) : String × Array Nat :=
   let split := s.splitToList (· == '\n')
@@ -109,38 +106,30 @@ def polishSource (s : String) : String × Array Nat :=
   let s := (split.map String.trimAsciiStart).filter (· != "".toSlice)
   (" ".toSlice.intercalate (s.filter (!·.isEmpty)), preWS)
 
-/--
-Definition of `posToShiftedPos` / `posToShiftedPos` 的定义
+/-- `posToShiftedPos lths diff` takes as input an array `lths` of natural numbers,
+and one further natural number `diff`.
+It adds up the elements of `lths` occupying the odd positions, as long as the sum of the
+elements in the even positions does not exceed `diff`.
+It returns the sum of the accumulated odds and `diff`.
+This is useful to figure out the difference between the output of `polishSource s` and `s` itself.
+It plays a role similar to the `fileMap`. -/
+/-
+**Mathlib.Linter.posToShiftedPos** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Linter`。
+形式化陈述：posToShiftedPos (lths : Array Nat) (diff : Nat) : Nat
+参数：lths : Array Nat；diff : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition posToShiftedPos
-  signature: (lths : Array Nat) (diff : Nat)
-  body: Id.run do
-  let mut (ws, noWS) := (diff, 0)
-  for con in [:lths.size / 2] do
-    let curr := lths[2 * con]!
-    if noWS + curr < diff then
-      noWS := noWS + curr
-      ws := ws + lths[2 * con + 1]!
-    else
-      break
-  return ws
-
-中文:
-定义 posToShiftedPos
-  签名: (lths : 数组 自然数) (diff : 自然数)
-  定义体: Id.run do
-  let mut (ws, noWS) := (diff, 0)
-  for con in [:lths.size / 2] do
-    let curr := lths[2 * con]!
-    if noWS + curr < diff then
-      noWS := noWS + curr
-      ws := ws + lths[2 * con + 1]!
-    else
-      break
-  return ws
-
-Depends on / 依赖: Id.run
+--- 原说明 ---
+`posToShiftedPos lths diff` takes as input an array `lths` of natural numbers,
+and one further natural number `diff`.
+It adds up the elements of `lths` occupying the odd positions, as long as the su
+m of the
+elements in the even positions does not exceed `diff`.
+It returns the sum of the accumulated odds and `diff`.
+This is useful to figure out the difference between the output of `polishSource 
+s` and `s` itself.
+It plays a role similar to the `fileMap`.
 -/
 def posToShiftedPos (lths : Array Nat) (diff : Nat) : Nat := Id.run do
   let mut (ws, noWS) := (diff, 0)
@@ -153,48 +142,36 @@ def posToShiftedPos (lths : Array Nat) (diff : Nat) : Nat := Id.run do
       break
   return ws
 
-/--
-Definition of `zoomString` / `zoomString` 的定义
+/-- `zoomString str centre offset` returns the substring of `str` consisting of the `offset`
+characters around the `centre`th character. -/
+/-
+**Mathlib.Linter.zoomString** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Linter`。
+形式化陈述：zoomString (str : String) (centre offset : Nat) : Substring.Raw
+参数：str : String；centre offset : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition zoomString
-  signature: (str : String) (centre offset : Nat)
-  body: { str := str, startPos := ⟨centre - offset⟩, stopPos := ⟨centre + offset⟩ }
-
-中文:
-定义 zoomString
-  签名: (str : String) (centre offset : 自然数)
-  定义体: { str := str, startPos := ⟨centre - offset⟩, stopPos := ⟨centre + offset⟩ }
-
-Depends on / 依赖: centre, offset, startPos, stopPos
+--- 原说明 ---
+`zoomString str centre offset` returns the substring of `str` consisting of the 
+`offset`
+characters around the `centre`th character.
 -/
 def zoomString (str : String) (centre offset : Nat) : Substring.Raw :=
   { str := str, startPos := ⟨centre - offset⟩, stopPos := ⟨centre + offset⟩ }
 
-/--
-Definition of `capSourceInfo` / `capSourceInfo` 的定义
+/-- `capSourceInfo s p` "shortens" all end-position information in the `SourceInfo` `s` to be
+at most `p`, trimming down also the relevant substrings. -/
+/-
+**Mathlib.Linter.capSourceInfo** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Linter`。
+形式化陈述：capSourceInfo (s : SourceInfo) (p : Nat) : SourceInfo
+参数：s : SourceInfo；p : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition capSourceInfo
-  signature: (s : SourceInfo) (p : Nat)
-  body: match s with
-    | .original leading pos trailing endPos =>
-      .original leading pos {trailing with stopPos := ⟨min endPos.1 p⟩} ⟨min endPos.1 p⟩
-    | .synthetic pos endPos canonical =>
-      .synthetic pos ⟨min endPos.1 p⟩ canonical
-    | .none => s
-
-中文:
-定义 capSourceInfo
-  签名: (s : SourceInfo) (p : 自然数)
-  定义体: match s with
-    | .original leading pos trailing endPos =>
-      .original leading pos {trailing with stopPos := ⟨min endPos.1 p⟩} ⟨min endPos.1 p⟩
-    | .synthetic pos endPos canonical =>
-      .synthetic pos ⟨min endPos.1 p⟩ canonical
-    | .none => s
-
-Depends on / 依赖: canonical, endPos, leading, original, stopPos, synthetic, trailing
+--- 原说明 ---
+`capSourceInfo s p` "shortens" all end-position information in the `SourceInfo` 
+`s` to be
+at most `p`, trimming down also the relevant substrings.
 -/
 def capSourceInfo (s : SourceInfo) (p : Nat) : SourceInfo :=
   match s with
@@ -211,28 +188,12 @@ This is used to trim away all "fluff" that follows a command: comments and white
 a command get removed with `capSyntax stx stx.getTailPos?.get!`.
 -/
 partial
-/--
-Definition of `capSyntax` / `capSyntax` 的定义
-
-English:
-definition capSyntax
-  signature: (stx : Syntax) (p : Nat)
-  body: match stx with
-    | .node si k args => .node (capSourceInfo si p) k (args.map (capSyntax · p))
-    | .atom si val => .atom (capSourceInfo si p) (val.take p).copy
-    | .ident si r v pr => .ident (capSourceInfo si p) { r with stopPos := ⟨min r.stopPos.1 p⟩ } v pr
-    | s => s
-
-中文:
-定义 capSyntax
-  签名: (stx : Syntax) (p : 自然数)
-  定义体: match stx with
-    | .node si k args => .node (capSourceInfo si p) k (args.map (capSyntax · p))
-    | .atom si val => .atom (capSourceInfo si p) (val.take p).copy
-    | .ident si r v pr => .ident (capSourceInfo si p) { r with stopPos := ⟨min r.stopPos.1 p⟩ } v pr
-    | s => s
-
-Depends on / 依赖: args.map, capSourceInfo, capSyntax, r.stopPos, stopPos, val.take
+/-
+**Mathlib.Linter.capSyntax** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Linter`。
+形式化陈述：capSyntax (stx : Syntax) (p : Nat) : Syntax
+参数：stx : Syntax；p : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def capSyntax (stx : Syntax) (p : Nat) : Syntax :=
   match stx with
@@ -244,68 +205,14 @@ def capSyntax (stx : Syntax) (p : Nat) : Syntax :=
 namespace PPRoundtrip
 
 @[inherit_doc Mathlib.Linter.linter.ppRoundtrip]
-/--
-Definition of `ppRoundtrip` / `ppRoundtrip` 的定义
-
-English:
-definition ppRoundtrip
-  signature: : Linter where run
-  body: withSetOptionIn fun stx => do
-    unless getLinterValue linter.ppRoundtrip (← getLinterOptions) do
-      return
-    if (← MonadState.get).messages.hasErrors then
-      return
-    let stx := capSyntax stx (stx.getTailPos?.getD default).1
-    let origSubstring := stx.getSubstring?.getD default
-    let (real, lths) := polishSource origSubstring.toString
-    let fmt ← (liftCoreM do PrettyPrinter.ppCategory `command stx <|> (do
-      Linter.logLint linter.ppRoundtrip stx
-        m!"The ppRoundtrip linter had some parsing issues: \
-           feel free to silence it with `set_option linter.ppRoundtrip false in` \
-           and report this error!"
-      return real))
-    let st := polishPP fmt.pretty
-    if st != real then
-      let diff := real.firstDiffPos st
-      let pos := posToShiftedPos lths diff.1 + origSubstring.startPos.1
-      let f := origSubstring.str.drop (pos)
-      let extraLth := (f.takeWhile (· != diff.get st)).copy.length
-      let srcCtxt := zoomString real diff.1 5
-      let ppCtxt := zoomString st diff.1 5
-      Linter.logLint linter.ppRoundtrip (.ofRange ⟨⟨pos⟩, ⟨pos + extraLth + 1⟩⟩)
-        m!"source context\n'{srcCtxt}'\n'{ppCtxt}'\npretty-printed context"
-
-中文:
-定义 ppRoundtrip
-  签名: : Linter where run
-  定义体: withSetOptionIn fun stx => do
-    unless getLinterValue linter.ppRoundtrip (← getLinterOptions) do
-      return
-    if (← MonadState.get).messages.hasErrors then
-      return
-    let stx := capSyntax stx (stx.getTailPos?.getD default).1
-    let origSubstring := stx.getSubstring?.getD default
-    let (real, lths) := polishSource origSubstring.toString
-    let fmt ← (liftCoreM do PrettyPrinter.ppCategory `command stx <|> (do
-      Linter.logLint linter.ppRoundtrip stx
-        m!"The ppRoundtrip linter had some parsing issues: \
-           feel free to silence it with `set_option linter.ppRoundtrip false in` \
-           and report this error!"
-      return real))
-    let st := polishPP fmt.pretty
-    if st != real then
-      let diff := real.firstDiffPos st
-      let pos := posToShiftedPos lths diff.1 + origSubstring.startPos.1
-      let f := origSubstring.str.drop (pos)
-      let extraLth := (f.takeWhile (· != diff.get st)).copy.length
-      let srcCtxt := zoomString real diff.1 5
-      let ppCtxt := zoomString st diff.1 5
-      Linter.logLint linter.ppRoundtrip (.ofRange ⟨⟨pos⟩, ⟨pos + extraLth + 1⟩⟩)
-        m!"source context\n'{srcCtxt}'\n'{ppCtxt}'\npretty-printed context"
-
-Depends on / 依赖: withSetOptionIn
+/-
+**Mathlib.Linter.PPRoundtrip.ppRoundtrip** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Lint
+er.PPRoundtrip`。
+形式化陈述：ppRoundtrip : Linter where run
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def ppRoundtrip : Linter where run := withSetOptionIn fun stx => do
+def ppRoundtrip : Linter where run := withSetOptionIn fun stx ↦ do
     unless getLinterValue linter.ppRoundtrip (← getLinterOptions) do
       return
     if (← MonadState.get).messages.hasErrors then
@@ -326,10 +233,11 @@ def ppRoundtrip : Linter where run := withSetOptionIn fun stx => do
       let f := origSubstring.str.drop (pos)
       let extraLth := (f.takeWhile (· != diff.get st)).copy.length
       let srcCtxt := zoomString real diff.1 5
-      let ppCtxt := zoomString st diff.1 5
+      let ppCtxt  := zoomString st diff.1 5
       Linter.logLint linter.ppRoundtrip (.ofRange ⟨⟨pos⟩, ⟨pos + extraLth + 1⟩⟩)
         m!"source context\n'{srcCtxt}'\n'{ppCtxt}'\npretty-printed context"
 
 initialize addLinter ppRoundtrip
 
 end Mathlib.Linter.PPRoundtrip
+

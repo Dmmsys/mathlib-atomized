@@ -35,37 +35,38 @@ public section
 
 namespace Sigma
 
-variable {ι : Type*} {α : ι -> Type*} {r r₁ r₂ : ι -> ι -> Prop} {s s₁ s₂ : forall i, α i -> α i -> Prop}
+variable {ι : Type*} {α : ι → Type*} {r r₁ r₂ : ι → ι → Prop} {s s₁ s₂ : ∀ i, α i → α i → Prop}
   {a b : Σ i, α i}
 
-/--
-Inductive type `Lex` / 归纳类型 `Lex`
+/-- The lexicographical order on a sigma type. It takes in a relation on the index type and a
+relation for each summand. `a` is related to `b` iff their summands are related or they are in the
+same summand and are related through the summand's relation. -/
+/-
+**Sigma.Lex** 是 Mathlib 中的一个归纳类型，位于命名空间 `Sigma`。
+形式化陈述：{ι : Type u_1} →   {α : ι → Type u_2} → (ι → ι → Prop) → ((i : ι) → α i → 
+α i → Prop) → (i : ι) × α i → (i : ι) × α i → Prop
+参数：ι → ι → Prop；(i : ι) → α i → α i → Prop；i : ι；i : ι。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Lex
-  parameters: (r : ι -> ι -> Prop) (s : forall i, α i -> α i -> Prop)
-  constructors (2):
-    - left: {i j : ι} (a : α i) (b : α j) : r i j -> Lex r s ⟨i, a⟩ ⟨j, b⟩
-    - right: {i : ι} (a b : α i) : s i a b -> Lex r s ⟨i, a⟩ ⟨i, b⟩
-
-中文:
-归纳类型 Lex
-  参数: (r : ι -> ι -> 命题) (s : 对任意 i, α i -> α i -> 命题)
-  构造子 (2 个):
-    - left: {i j : ι} (a : α i) (b : α j) : r i j -> Lex r s ⟨i, a⟩ ⟨j, b⟩
-    - right: {i : ι} (a b : α i) : s i a b -> Lex r s ⟨i, a⟩ ⟨i, b⟩
+--- 原说明 ---
+The lexicographical order on a sigma type. It takes in a relation on the index t
+ype and a
+relation for each summand. `a` is related to `b` iff their summands are related 
+or they are in the
+same summand and are related through the summand's relation.
 -/
-inductive Lex (r : ι -> ι -> Prop) (s : forall i, α i -> α i -> Prop) : forall _ _ : Σ i, α i, Prop
-  | left {i j : ι} (a : α i) (b : α j) : r i j -> Lex r s ⟨i, a⟩ ⟨j, b⟩
-  | right {i : ι} (a b : α i) : s i a b -> Lex r s ⟨i, a⟩ ⟨i, b⟩
-
-/--
-theorem `lex_iff` / 定理 `lex_iff`
-
-English:
-theorem lex_iff
-  statement: Lex r s a b ↔ r a.1 b.1 ∨ exists h : a.1 = b.1, s b.1 (h.rec a.2) b.2
-  proof: by
+inductive Lex (r : ι → ι → Prop) (s : ∀ i, α i → α i → Prop) : ∀ _ _ : Σ i, α i, Prop
+  | left {i j : ι} (a : α i) (b : α j) : r i j → Lex r s ⟨i, a⟩ ⟨j, b⟩
+  | right {i : ι} (a b : α i) : s i a b → Lex r s ⟨i, a⟩ ⟨i, b⟩
+/-
+**Sigma.lex_iff** 是 Mathlib 中的一个定理，位于命名空间 `Sigma`。
+形式化陈述：lex_iff : Lex r s a b ↔ r a.1 b.1 ∨ exists h : a.1 = b.1, s b.1 (h.rec a.2
+) b.2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+-/
+theorem lex_iff : Lex r s a b ↔ r a.1 b.1 ∨ ∃ h : a.1 = b.1, s b.1 (h.rec a.2) b.2 := by
   constructor
   · rintro (⟨a, b, hij⟩ | ⟨a, b, hab⟩)
     · exact Or.inl hij
@@ -75,321 +76,127 @@ theorem lex_iff
     rintro (h | ⟨rfl, h⟩)
     · exact Lex.left _ _ h
     · exact Lex.right _ _ h
-
-中文:
-定理 lex_iff
-  结论: Lex r s a b ↔ r a.1 b.1 ∨ 存在 h : a.1 = b.1, s b.1 (h.rec a.2) b.2
-  证明: by
-  constructor
-  · rintro (⟨a, b, hij⟩ | ⟨a, b, hab⟩)
-    · exact Or.inl hij
-    · exact Or.inr ⟨rfl, hab⟩
-  · obtain ⟨i, a⟩ := a
-    dsimp only
-    rintro (h | ⟨rfl, h⟩)
-    · exact Lex.left _ _ h
-    · exact Lex.right _ _ h
-
-Depends on / 依赖: Lex.left, Lex.right, Or.inl, Or.inr
+/-
+**Sigma.Lex.decidable** 是 Mathlib 中的一个定义，位于命名空间 `Sigma.Lex`。
+形式化陈述：{ι : Type u_1} →   {α : ι → Type u_2} →     (r : ι → ι → Prop) →       (s 
+: (i : ι) → α i → α i → Prop) →         [DecidableEq ι] → [DecidableRel r] → [(i
+ : ι) → DecidableRel (s i)] → DecidableRel (Sigma.Lex r s)
+参数：r : ι → ι → Prop；s : (i : ι) → α i → α i → Prop；i : ι；s i；Sigma.Lex r s。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lex_iff : Lex r s a b ↔ r a.1 b.1 ∨ exists h : a.1 = b.1, s b.1 (h.rec a.2) b.2 := by
-  constructor
-  · rintro (⟨a, b, hij⟩ | ⟨a, b, hab⟩)
-    · exact Or.inl hij
-    · exact Or.inr ⟨rfl, hab⟩
-  · obtain ⟨i, a⟩ := a
-    dsimp only
-    rintro (h | ⟨rfl, h⟩)
-    · exact Lex.left _ _ h
-    · exact Lex.right _ _ h
-
-/--
-Instance `Lex.decidable` / 实例 `Lex.decidable`
-
-English:
-instance Lex.decidable
-  signature: (r : ι -> ι -> Prop) (s : forall i, α i -> α i -> Prop) [DecidableEq ι]
-  body: fun _ _ =>
+instance Lex.decidable (r : ι → ι → Prop) (s : ∀ i, α i → α i → Prop) [DecidableEq ι]
+    [DecidableRel r] [∀ i, DecidableRel (s i)] : DecidableRel (Lex r s) := fun _ _ =>
   decidable_of_decidable_of_iff lex_iff.symm
-
-中文:
-实例 Lex.decidable
-  签名: (r : ι -> ι -> 命题) (s : 对任意 i, α i -> α i -> 命题) [DecidableEq ι]
-  定义体: fun _ _ =>
-  decidable_of_decidable_of_iff lex_iff.symm
+/-
+**Sigma.Lex.mono** 是 Mathlib 中的一个定理，位于命名空间 `Sigma.Lex`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} {r₁ r₂ : ι → ι → Prop} {s₁ s₂ : (i : ι
+) → α i → α i → Prop},   (∀ (a b : ι), r₁ a b → r₂ a b) →     (∀ (i : ι) (a b : 
+α i), s₁ i a b → s₂ i a b) → ∀ {a b : (i : ι) × α i}, Sigma.Lex r₁ s₁ a b → Sigm
+a.Lex r₂ s₂ a b
+参数：i : ι；∀ (a b : ι), r₁ a b → r₂ a b；∀ (i : ι) (a b : α i), s₁ i a b → s₂ i a b
+；i : ι。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-instance Lex.decidable (r : ι -> ι -> Prop) (s : forall i, α i -> α i -> Prop) [DecidableEq ι]
-    [DecidableRel r] [forall i, DecidableRel (s i)] : DecidableRel (Lex r s) := fun _ _ =>
-  decidable_of_decidable_of_iff lex_iff.symm
-
-/--
-theorem `Lex.mono` / 定理 `Lex.mono`
-
-English:
-theorem Lex.mono
-  statement: (hr : forall a b, r₁ a b -> r₂ a b) (hs : forall i a b, s₁ i a b -> s₂ i a b) {a b : Σ i, α i}
-  proof: by
-  obtain ⟨a, b, hij⟩ | ⟨a, b, hab⟩ := h
-  · exact Lex.left _ _ (hr _ _ hij)
-  · exact Lex.right _ _ (hs _ _ _ hab)
-
-中文:
-定理 Lex.mono
-  结论: (hr : 对任意 a b, r₁ a b -> r₂ a b) (hs : 对任意 i a b, s₁ i a b -> s₂ i a b) {a b : Σ i, α i}
-  证明: by
-  obtain ⟨a, b, hij⟩ | ⟨a, b, hab⟩ := h
-  · exact Lex.left _ _ (hr _ _ hij)
-  · exact Lex.right _ _ (hs _ _ _ hab)
-
-Depends on / 依赖: Lex.left, Lex.right
--/
-theorem Lex.mono (hr : forall a b, r₁ a b -> r₂ a b) (hs : forall i a b, s₁ i a b -> s₂ i a b) {a b : Σ i, α i}
+theorem Lex.mono (hr : ∀ a b, r₁ a b → r₂ a b) (hs : ∀ i a b, s₁ i a b → s₂ i a b) {a b : Σ i, α i}
     (h : Lex r₁ s₁ a b) : Lex r₂ s₂ a b := by
   obtain ⟨a, b, hij⟩ | ⟨a, b, hab⟩ := h
   · exact Lex.left _ _ (hr _ _ hij)
   · exact Lex.right _ _ (hs _ _ _ hab)
-
-/--
-theorem `Lex.mono_left` / 定理 `Lex.mono_left`
-
-English:
-theorem Lex.mono_left
-  given: (hr : forall a b, r₁ a b -> r₂ a b) {a b : Σ i, α i} (h : Lex r₁ s a b)
-  proof: h.mono hr fun _ _ _ => id
-
-中文:
-定理 Lex.mono_left
-  条件: (hr : 对任意 a b, r₁ a b -> r₂ a b) {a b : Σ i, α i} (h : Lex r₁ s a b)
-  证明: h.mono hr fun _ _ _ => id
-
-Depends on / 依赖: h.mono
+/-
+**Sigma.Lex.mono_left** 是 Mathlib 中的一个定理，位于命名空间 `Sigma.Lex`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} {r₁ r₂ : ι → ι → Prop} {s : (i : ι) → 
+α i → α i → Prop},   (∀ (a b : ι), r₁ a b → r₂ a b) → ∀ {a b : (i : ι) × α i}, S
+igma.Lex r₁ s a b → Sigma.Lex r₂ s a b
+参数：i : ι；∀ (a b : ι), r₁ a b → r₂ a b；i : ι。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sigma.Lex.mono`：∀ {ι : Type u_1} {α : ι → Type u_2} {r₁ r₂ : ι → ι → Pro
+p} {s₁ s₂ : (i : ι) → α i → α i → Prop},   (∀ (a b : ι), r₁ a b → r₂ a b) →     
+(∀ (…
 -/
-theorem Lex.mono_left (hr : forall a b, r₁ a b -> r₂ a b) {a b : Σ i, α i} (h : Lex r₁ s a b) :
+theorem Lex.mono_left (hr : ∀ a b, r₁ a b → r₂ a b) {a b : Σ i, α i} (h : Lex r₁ s a b) :
     Lex r₂ s a b :=
   h.mono hr fun _ _ _ => id
-
-/--
-theorem `Lex.mono_right` / 定理 `Lex.mono_right`
-
-English:
-theorem Lex.mono_right
-  given: (hs : forall i a b, s₁ i a b -> s₂ i a b) {a b : Σ i, α i} (h : Lex r s₁ a b)
-  proof: h.mono (fun _ _ => id) hs
-
-中文:
-定理 Lex.mono_right
-  条件: (hs : 对任意 i a b, s₁ i a b -> s₂ i a b) {a b : Σ i, α i} (h : Lex r s₁ a b)
-  证明: h.mono (fun _ _ => id) hs
-
-Depends on / 依赖: h.mono
+/-
+**Sigma.Lex.mono_right** 是 Mathlib 中的一个定理，位于命名空间 `Sigma.Lex`。
+形式化陈述：∀ {ι : Type u_1} {α : ι → Type u_2} {r : ι → ι → Prop} {s₁ s₂ : (i : ι) → 
+α i → α i → Prop},   (∀ (i : ι) (a b : α i), s₁ i a b → s₂ i a b) → ∀ {a b : (i 
+: ι) × α i}, Sigma.Lex r s₁ a b → Sigma.Lex r s₂ a b
+参数：i : ι；∀ (i : ι) (a b : α i), s₁ i a b → s₂ i a b；i : ι。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sigma.Lex.mono`：∀ {ι : Type u_1} {α : ι → Type u_2} {r₁ r₂ : ι → ι → Pro
+p} {s₁ s₂ : (i : ι) → α i → α i → Prop},   (∀ (a b : ι), r₁ a b → r₂ a b) →     
+(∀ (…
 -/
-theorem Lex.mono_right (hs : forall i a b, s₁ i a b -> s₂ i a b) {a b : Σ i, α i} (h : Lex r s₁ a b) :
+theorem Lex.mono_right (hs : ∀ i a b, s₁ i a b → s₂ i a b) {a b : Σ i, α i} (h : Lex r s₁ a b) :
     Lex r s₂ a b :=
   h.mono (fun _ _ => id) hs
-
-/--
-theorem `lex_swap` / 定理 `lex_swap`
-
-English:
-theorem lex_swap
-  statement: Lex (Function.swap r) s a b ↔ Lex r (fun i => Function.swap (s i)) b a
-  proof: by
-  constructor <;>
-    · rintro (⟨a, b, h⟩ | ⟨a, b, h⟩)
-      · exact Lex.left _ _ h
-      · exact Lex.right _ _ h
-
-中文:
-定理 lex_swap
-  结论: Lex (函数.swap r) s a b ↔ Lex r (fun i => 函数.swap (s i)) b a
-  证明: by
-  constructor <;>
-    · rintro (⟨a, b, h⟩ | ⟨a, b, h⟩)
-      · exact Lex.left _ _ h
-      · exact Lex.right _ _ h
-
-Depends on / 依赖: Lex.left, Lex.right
+/-
+**Sigma.lex_swap** 是 Mathlib 中的一个定理，位于命名空间 `Sigma`。
+形式化陈述：lex_swap : Lex (Function.swap r) s a b ↔ Lex r (fun i => Function.swap (s 
+i)) b a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem lex_swap : Lex (Function.swap r) s a b ↔ Lex r (fun i => Function.swap (s i)) b a := by
   constructor <;>
     · rintro (⟨a, b, h⟩ | ⟨a, b, h⟩)
       · exact Lex.left _ _ h
       · exact Lex.right _ _ h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: i, Std.Refl (s i)] : Std.Refl (Lex r s)
-  body: ⟨fun ⟨_, _⟩ => Lex.right _ _ refl _⟩
-
-中文:
-实例 [对任意
-  签名: i, Std.Refl (s i)] : Std.Refl (Lex r s)
-  定义体: ⟨fun ⟨_, _⟩ => Lex.right _ _ refl _⟩
-
-Depends on / 依赖: Lex.right
+/-
+**Sigma.** 是 Mathlib 中的一个实例，位于命名空间 `Sigma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall i, Std.Refl (s i)] : Std.Refl (Lex r s) :=
-⟨fun ⟨_, _⟩ => Lex.right _ _ refl _⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Std.Irrefl
-  signature: r] [forall i, Std.Irrefl (s i)] : Std.Irrefl (Lex r s)
-  body: ⟨by
-    rintro _ (⟨a, b, hi⟩ | ⟨a, b, ha⟩)
-    · exact irrefl _ hi
-    · exact irrefl _ ha
-      ⟩
-
-中文:
-实例 [Std.Irrefl
-  签名: r] [对任意 i, Std.Irrefl (s i)] : Std.Irrefl (Lex r s)
-  定义体: ⟨by
-    rintro _ (⟨a, b, hi⟩ | ⟨a, b, ha⟩)
-    · exact irrefl _ hi
-    · exact irrefl _ ha
-      ⟩
-
-Depends on / 依赖: Finite, FiniteIndex, finiteIndex_of_finite, irrefl
+instance [∀ i, Std.Refl (s i)] : Std.Refl (Lex r s) :=
+  ⟨fun ⟨_, _⟩ => Lex.right _ _ <| refl _⟩
+/-
+**Sigma.** 是 Mathlib 中的一个实例，位于命名空间 `Sigma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Std.Irrefl r] [forall i, Std.Irrefl (s i)] : Std.Irrefl (Lex r s) :=
+instance [Std.Irrefl r] [∀ i, Std.Irrefl (s i)] : Std.Irrefl (Lex r s) :=
   ⟨by
     rintro _ (⟨a, b, hi⟩ | ⟨a, b, ha⟩)
     · exact irrefl _ hi
     · exact irrefl _ ha
       ⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsTrans
-  signature: ι r] [forall i, IsTrans (α i) (s i)] : IsTrans _ (Lex r s)
-  body: ⟨by
-    rintro _ _ _ (⟨a, b, hij⟩ | ⟨a, b, hab⟩) (⟨_, c, hk⟩ | ⟨_, c, hc⟩)
-    · exact Lex.left _ _ (_root_.trans hij hk)
-    · exact Lex.left _ _ hij
-    · exact Lex.left _ _ hk
-    · exact Lex.right _ _ (_root_.trans hab hc)⟩
-
-中文:
-实例 [是Trans
-  签名: ι r] [对任意 i, 是Trans (α i) (s i)] : 是Trans _ (Lex r s)
-  定义体: ⟨by
-    rintro _ _ _ (⟨a, b, hij⟩ | ⟨a, b, hab⟩) (⟨_, c, hk⟩ | ⟨_, c, hc⟩)
-    · exact Lex.left _ _ (_root_.trans hij hk)
-    · exact Lex.left _ _ hij
-    · exact Lex.left _ _ hk
-    · exact Lex.right _ _ (_root_.trans hab hc)⟩
-
-Depends on / 依赖: Lex.left, Lex.right, _root_, _root_.trans
+/-
+**Sigma.** 是 Mathlib 中的一个实例，位于命名空间 `Sigma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [IsTrans ι r] [forall i, IsTrans (α i) (s i)] : IsTrans _ (Lex r s) :=
+instance [IsTrans ι r] [∀ i, IsTrans (α i) (s i)] : IsTrans _ (Lex r s) :=
   ⟨by
     rintro _ _ _ (⟨a, b, hij⟩ | ⟨a, b, hab⟩) (⟨_, c, hk⟩ | ⟨_, c, hc⟩)
     · exact Lex.left _ _ (_root_.trans hij hk)
     · exact Lex.left _ _ hij
     · exact Lex.left _ _ hk
     · exact Lex.right _ _ (_root_.trans hab hc)⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Std.Symm
-  signature: r] [forall i, Std.Symm (s i)] : Std.Symm (Lex r s)
-  body: ⟨by
-    rintro _ _ (⟨a, b, hij⟩ | ⟨a, b, hab⟩)
-    · exact Lex.left _ _ (symm hij)
-    · exact Lex.right _ _ (symm hab)
-      ⟩
-
-中文:
-实例 [Std.Symm
-  签名: r] [对任意 i, Std.Symm (s i)] : Std.Symm (Lex r s)
-  定义体: ⟨by
-    rintro _ _ (⟨a, b, hij⟩ | ⟨a, b, hab⟩)
-    · exact Lex.left _ _ (symm hij)
-    · exact Lex.right _ _ (symm hab)
-      ⟩
-
-Depends on / 依赖: Lex.left, Lex.right
+/-
+**Sigma.** 是 Mathlib 中的一个实例，位于命名空间 `Sigma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Std.Symm r] [forall i, Std.Symm (s i)] : Std.Symm (Lex r s) :=
+instance [Std.Symm r] [∀ i, Std.Symm (s i)] : Std.Symm (Lex r s) :=
   ⟨by
     rintro _ _ (⟨a, b, hij⟩ | ⟨a, b, hab⟩)
     · exact Lex.left _ _ (symm hij)
     · exact Lex.right _ _ (symm hab)
       ⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Std.Asymm
-  signature: r] [forall i, Std.Antisymm (s i)] : Std.Antisymm (Lex r s)
-  body: ⟨by
-    rintro _ _ (⟨a, b, hij⟩ | ⟨a, b, hab⟩) (⟨_, _, hji⟩ | ⟨_, _, hba⟩)
-    · exact (asymm hij hji).elim
-    · exact (irrefl _ hij).elim
-    · exact (irrefl _ hji).elim
-· exact congr_arg (Sigma.mk _ ·) antisymm hab hba⟩
-
-中文:
-实例 [Std.Asymm
-  签名: r] [对任意 i, Std.反对称 (s i)] : Std.反对称 (Lex r s)
-  定义体: ⟨by
-    rintro _ _ (⟨a, b, hij⟩ | ⟨a, b, hab⟩) (⟨_, _, hji⟩ | ⟨_, _, hba⟩)
-    · exact (asymm hij hji).elim
-    · exact (irrefl _ hij).elim
-    · exact (irrefl _ hji).elim
-· exact congr_arg (Sigma.mk _ ·) antisymm hab hba⟩
-
-Depends on / 依赖: Sigma.mk, antisymm, congr_arg, irrefl
+/-
+**Sigma.** 是 Mathlib 中的一个实例，位于命名空间 `Sigma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Std.Asymm r] [forall i, Std.Antisymm (s i)] : Std.Antisymm (Lex r s) :=
+instance [Std.Asymm r] [∀ i, Std.Antisymm (s i)] : Std.Antisymm (Lex r s) :=
   ⟨by
     rintro _ _ (⟨a, b, hij⟩ | ⟨a, b, hab⟩) (⟨_, _, hji⟩ | ⟨_, _, hba⟩)
     · exact (asymm hij hji).elim
     · exact (irrefl _ hij).elim
     · exact (irrefl _ hji).elim
-· exact congr_arg (Sigma.mk _ ·) antisymm hab hba⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Std.Trichotomous
-  signature: r] [forall i, Std.Total (s i)] : Std.Total (Lex r s)
-  body: ⟨by
-    rintro ⟨i, a⟩ ⟨j, b⟩
-    obtain hij | rfl | hji := trichotomous_of r i j
-    · exact Or.inl (Lex.left _ _ hij)
-    · obtain hab | hba := total_of (s i) a b
-      · exact Or.inl (Lex.right _ _ hab)
-      · exact Or.inr (Lex.right _ _ hba)
-    · exact Or.inr (Lex.left _ _ hji)⟩
-
-中文:
-实例 [Std.三歧
-  签名: r] [对任意 i, Std.全 (s i)] : Std.全 (Lex r s)
-  定义体: ⟨by
-    rintro ⟨i, a⟩ ⟨j, b⟩
-    obtain hij | rfl | hji := trichotomous_of r i j
-    · exact Or.inl (Lex.left _ _ hij)
-    · obtain hab | hba := total_of (s i) a b
-      · exact Or.inl (Lex.right _ _ hab)
-      · exact Or.inr (Lex.right _ _ hba)
-    · exact Or.inr (Lex.left _ _ hji)⟩
-
-Depends on / 依赖: Lex.left, Lex.right, Or.inl, Or.inr, total_of, trichotomous_of
+    · exact congr_arg (Sigma.mk _ ·) <| antisymm hab hba⟩
+/-
+**Sigma.** 是 Mathlib 中的一个实例，位于命名空间 `Sigma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Std.Trichotomous r] [forall i, Std.Total (s i)] : Std.Total (Lex r s) :=
+instance [Std.Trichotomous r] [∀ i, Std.Total (s i)] : Std.Total (Lex r s) :=
   ⟨by
     rintro ⟨i, a⟩ ⟨j, b⟩
     obtain hij | rfl | hji := trichotomous_of r i j
@@ -398,40 +205,12 @@ instance [Std.Trichotomous r] [forall i, Std.Total (s i)] : Std.Total (Lex r s) 
       · exact Or.inl (Lex.right _ _ hab)
       · exact Or.inr (Lex.right _ _ hba)
     · exact Or.inr (Lex.left _ _ hji)⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Std.Trichotomous
-  signature: r] [forall i, Std.Trichotomous (s i)] : Std.Trichotomous (Lex r s)
-  body: Std.trichotomous_of_rel_or_eq_or_rel_swap by
-    rintro ⟨i, a⟩ ⟨j, b⟩
-    obtain hij | rfl | hji := trichotomous_of r i j
-    · exact Or.inl (Lex.left _ _ hij)
-    · obtain hab | rfl | hba := trichotomous_of (s i) a b
-      · exact Or.inl (Lex.right _ _ hab)
-      · exact Or.inr (Or.inl rfl)
-      · exact Or.inr (Or.inr <| Lex.right _ _ hba)
-    · exact Or.inr (Or.inr <| Lex.left _ _ hji)
-
-中文:
-实例 [Std.三歧
-  签名: r] [对任意 i, Std.三歧 (s i)] : Std.三歧 (Lex r s)
-  定义体: Std.trichotomous_of_rel_or_eq_or_rel_swap by
-    rintro ⟨i, a⟩ ⟨j, b⟩
-    obtain hij | rfl | hji := trichotomous_of r i j
-    · exact Or.inl (Lex.left _ _ hij)
-    · obtain hab | rfl | hba := trichotomous_of (s i) a b
-      · exact Or.inl (Lex.right _ _ hab)
-      · exact Or.inr (Or.inl rfl)
-      · exact Or.inr (Or.inr <| Lex.right _ _ hba)
-    · exact Or.inr (Or.inr <| Lex.left _ _ hji)
-
-Depends on / 依赖: Lex.left, Lex.right, Or.inl, Or.inr, Std.trichotomous_of_rel_or_eq_or_rel_swap, trichotomous_of, trichotomous_of_rel_or_eq_or_rel_swap
+/-
+**Sigma.** 是 Mathlib 中的一个实例，位于命名空间 `Sigma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Std.Trichotomous r] [forall i, Std.Trichotomous (s i)] : Std.Trichotomous (Lex r s) :=
-Std.trichotomous_of_rel_or_eq_or_rel_swap by
+instance [Std.Trichotomous r] [∀ i, Std.Trichotomous (s i)] : Std.Trichotomous (Lex r s) :=
+  Std.trichotomous_of_rel_or_eq_or_rel_swap <| by
     rintro ⟨i, a⟩ ⟨j, b⟩
     obtain hij | rfl | hji := trichotomous_of r i j
     · exact Or.inl (Lex.left _ _ hij)
@@ -448,43 +227,18 @@ end Sigma
 
 namespace PSigma
 
-variable {ι : Sort*} {α : ι -> Sort*} {r : ι -> ι -> Prop} {s : forall i, α i -> α i -> Prop}
+variable {ι : Sort*} {α : ι → Sort*} {r : ι → ι → Prop} {s : ∀ i, α i → α i → Prop}
 
-/--
-theorem `lex_iff` / 定理 `lex_iff`
-
-English:
-theorem lex_iff
-  given: {a b : Σ' i, α i}
-  proof: by
-  constructor
-  · rintro (⟨a, b, hij⟩ | ⟨i, hab⟩)
-    · exact Or.inl hij
-    · exact Or.inr ⟨rfl, hab⟩
-  · obtain ⟨i, a⟩ := a
-    dsimp only
-    rintro (h | ⟨rfl, h⟩)
-    · exact Lex.left _ _ h
-    · exact Lex.right _ h
-
-中文:
-定理 lex_iff
-  条件: {a b : Σ' i, α i}
-  证明: by
-  constructor
-  · rintro (⟨a, b, hij⟩ | ⟨i, hab⟩)
-    · exact Or.inl hij
-    · exact Or.inr ⟨rfl, hab⟩
-  · obtain ⟨i, a⟩ := a
-    dsimp only
-    rintro (h | ⟨rfl, h⟩)
-    · exact Lex.left _ _ h
-    · exact Lex.right _ h
-
-Depends on / 依赖: Lex.left, Lex.right, Or.inl, Or.inr
+/-
+**PSigma.lex_iff** 是 Mathlib 中的一个定理，位于命名空间 `PSigma`。
+形式化陈述：lex_iff {a b : Σ' i, α i} : Lex r s a b ↔ r a.1 b.1 ∨ exists h : a.1 = b.1
+, s b.1 (h.rec a.2) b.2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem lex_iff {a b : Σ' i, α i} :
-    Lex r s a b ↔ r a.1 b.1 ∨ exists h : a.1 = b.1, s b.1 (h.rec a.2) b.2 := by
+    Lex r s a b ↔ r a.1 b.1 ∨ ∃ h : a.1 = b.1, s b.1 (h.rec a.2) b.2 := by
   constructor
   · rintro (⟨a, b, hij⟩ | ⟨i, hab⟩)
     · exact Or.inl hij
@@ -494,84 +248,62 @@ theorem lex_iff {a b : Σ' i, α i} :
     rintro (h | ⟨rfl, h⟩)
     · exact Lex.left _ _ h
     · exact Lex.right _ h
-
-/--
-Instance `Lex.decidable` / 实例 `Lex.decidable`
-
-English:
-instance Lex.decidable
-  signature: (r : ι -> ι -> Prop) (s : forall i, α i -> α i -> Prop) [DecidableEq ι]
-  body: fun _ _ =>
-  decidable_of_decidable_of_iff lex_iff.symm
-
-中文:
-实例 Lex.decidable
-  签名: (r : ι -> ι -> 命题) (s : 对任意 i, α i -> α i -> 命题) [DecidableEq ι]
-  定义体: fun _ _ =>
-  decidable_of_decidable_of_iff lex_iff.symm
+/-
+**PSigma.Lex.decidable** 是 Mathlib 中的一个定义，位于命名空间 `PSigma.Lex`。
+形式化陈述：{ι : Sort u_1} →   {α : ι → Sort u_2} →     (r : ι → ι → Prop) →       (s 
+: (i : ι) → α i → α i → Prop) →         [DecidableEq ι] → [DecidableRel r] → [(i
+ : ι) → DecidableRel (s i)] → DecidableRel (PSigma.Lex r s)
+参数：r : ι → ι → Prop；s : (i : ι) → α i → α i → Prop；i : ι；s i；PSigma.Lex r s。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Lex.decidable (r : ι -> ι -> Prop) (s : forall i, α i -> α i -> Prop) [DecidableEq ι]
-    [DecidableRel r] [forall i, DecidableRel (s i)] : DecidableRel (Lex r s) := fun _ _ =>
+instance Lex.decidable (r : ι → ι → Prop) (s : ∀ i, α i → α i → Prop) [DecidableEq ι]
+    [DecidableRel r] [∀ i, DecidableRel (s i)] : DecidableRel (Lex r s) := fun _ _ =>
   decidable_of_decidable_of_iff lex_iff.symm
-
-/--
-theorem `Lex.mono` / 定理 `Lex.mono`
-
-English:
-theorem Lex.mono
-  statement: {r₁ r₂ : ι -> ι -> Prop} {s₁ s₂ : forall i, α i -> α i -> Prop}
-  proof: by
-  obtain ⟨a, b, hij⟩ | ⟨i, hab⟩ := h
-  · exact Lex.left _ _ (hr _ _ hij)
-  · exact Lex.right _ (hs _ _ _ hab)
-
-中文:
-定理 Lex.mono
-  结论: {r₁ r₂ : ι -> ι -> 命题} {s₁ s₂ : 对任意 i, α i -> α i -> 命题}
-  证明: by
-  obtain ⟨a, b, hij⟩ | ⟨i, hab⟩ := h
-  · exact Lex.left _ _ (hr _ _ hij)
-  · exact Lex.right _ (hs _ _ _ hab)
+/-
+**PSigma.Lex.mono** 是 Mathlib 中的一个定理，位于命名空间 `PSigma.Lex`。
+形式化陈述：∀ {ι : Sort u_1} {α : ι → Sort u_2} {r₁ r₂ : ι → ι → Prop} {s₁ s₂ : (i : ι
+) → α i → α i → Prop},   (∀ (a b : ι), r₁ a b → r₂ a b) →     (∀ (i : ι) (a b : 
+α i), s₁ i a b → s₂ i a b) → ∀ {a b : (i : ι) ×' α i}, PSigma.Lex r₁ s₁ a b → PS
+igma.Lex r₂ s₂ a b
+参数：i : ι；∀ (a b : ι), r₁ a b → r₂ a b；∀ (i : ι) (a b : α i), s₁ i a b → s₂ i a b
+；i : ι。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem Lex.mono {r₁ r₂ : ι -> ι -> Prop} {s₁ s₂ : forall i, α i -> α i -> Prop}
-    (hr : forall a b, r₁ a b -> r₂ a b) (hs : forall i a b, s₁ i a b -> s₂ i a b) {a b : Σ' i, α i}
+theorem Lex.mono {r₁ r₂ : ι → ι → Prop} {s₁ s₂ : ∀ i, α i → α i → Prop}
+    (hr : ∀ a b, r₁ a b → r₂ a b) (hs : ∀ i a b, s₁ i a b → s₂ i a b) {a b : Σ' i, α i}
     (h : Lex r₁ s₁ a b) : Lex r₂ s₂ a b := by
   obtain ⟨a, b, hij⟩ | ⟨i, hab⟩ := h
   · exact Lex.left _ _ (hr _ _ hij)
   · exact Lex.right _ (hs _ _ _ hab)
-
-/--
-theorem `Lex.mono_left` / 定理 `Lex.mono_left`
-
-English:
-theorem Lex.mono_left
-  statement: {r₁ r₂ : ι -> ι -> Prop} {s : forall i, α i -> α i -> Prop}
-  proof: h.mono hr fun _ _ _ => id
-
-中文:
-定理 Lex.mono_left
-  结论: {r₁ r₂ : ι -> ι -> 命题} {s : 对任意 i, α i -> α i -> 命题}
-  证明: h.mono hr fun _ _ _ => id
+/-
+**PSigma.Lex.mono_left** 是 Mathlib 中的一个定理，位于命名空间 `PSigma.Lex`。
+形式化陈述：∀ {ι : Sort u_1} {α : ι → Sort u_2} {r₁ r₂ : ι → ι → Prop} {s : (i : ι) → 
+α i → α i → Prop},   (∀ (a b : ι), r₁ a b → r₂ a b) → ∀ {a b : (i : ι) ×' α i}, 
+PSigma.Lex r₁ s a b → PSigma.Lex r₂ s a b
+参数：i : ι；∀ (a b : ι), r₁ a b → r₂ a b；i : ι。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PSigma.Lex.mono`：∀ {ι : Sort u_1} {α : ι → Sort u_2} {r₁ r₂ : ι → ι → Pr
+op} {s₁ s₂ : (i : ι) → α i → α i → Prop},   (∀ (a b : ι), r₁ a b → r₂ a b) →    
+ (∀ (…
 -/
-theorem Lex.mono_left {r₁ r₂ : ι -> ι -> Prop} {s : forall i, α i -> α i -> Prop}
-    (hr : forall a b, r₁ a b -> r₂ a b) {a b : Σ' i, α i} (h : Lex r₁ s a b) : Lex r₂ s a b :=
+theorem Lex.mono_left {r₁ r₂ : ι → ι → Prop} {s : ∀ i, α i → α i → Prop}
+    (hr : ∀ a b, r₁ a b → r₂ a b) {a b : Σ' i, α i} (h : Lex r₁ s a b) : Lex r₂ s a b :=
   h.mono hr fun _ _ _ => id
-
-/--
-theorem `Lex.mono_right` / 定理 `Lex.mono_right`
-
-English:
-theorem Lex.mono_right
-  statement: {r : ι -> ι -> Prop} {s₁ s₂ : forall i, α i -> α i -> Prop}
-  proof: h.mono (fun _ _ => id) hs
-
-中文:
-定理 Lex.mono_right
-  结论: {r : ι -> ι -> 命题} {s₁ s₂ : 对任意 i, α i -> α i -> 命题}
-  证明: h.mono (fun _ _ => id) hs
+/-
+**PSigma.Lex.mono_right** 是 Mathlib 中的一个定理，位于命名空间 `PSigma.Lex`。
+形式化陈述：∀ {ι : Sort u_1} {α : ι → Sort u_2} {r : ι → ι → Prop} {s₁ s₂ : (i : ι) → 
+α i → α i → Prop},   (∀ (i : ι) (a b : α i), s₁ i a b → s₂ i a b) → ∀ {a b : (i 
+: ι) ×' α i}, PSigma.Lex r s₁ a b → PSigma.Lex r s₂ a b
+参数：i : ι；∀ (i : ι) (a b : α i), s₁ i a b → s₂ i a b；i : ι。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PSigma.Lex.mono`：∀ {ι : Sort u_1} {α : ι → Sort u_2} {r₁ r₂ : ι → ι → Pr
+op} {s₁ s₂ : (i : ι) → α i → α i → Prop},   (∀ (a b : ι), r₁ a b → r₂ a b) →    
+ (∀ (…
 -/
-theorem Lex.mono_right {r : ι -> ι -> Prop} {s₁ s₂ : forall i, α i -> α i -> Prop}
-    (hs : forall i a b, s₁ i a b -> s₂ i a b) {a b : Σ' i, α i} (h : Lex r s₁ a b) : Lex r s₂ a b :=
+theorem Lex.mono_right {r : ι → ι → Prop} {s₁ s₂ : ∀ i, α i → α i → Prop}
+    (hs : ∀ i a b, s₁ i a b → s₂ i a b) {a b : Σ' i, α i} (h : Lex r s₁ a b) : Lex r s₂ a b :=
   h.mono (fun _ _ => id) hs
 
 end PSigma
+

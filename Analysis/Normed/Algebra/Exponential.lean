@@ -71,7 +71,7 @@ import Mathlib
 
 open Real
 
-#time example (x : ℝ) : 0 < exp x := exp_pos _ -- 250ms
+#time example (x : ℝ) : 0 < exp x      := exp_pos _ -- 250ms
 #time example (x : ℝ) : 0 < Real.exp x := exp_pos _ -- 2ms
 ```
 This is because `exp x` tries the `NormedSpace.exp 𝕂 : 𝔸 → 𝔸` function previously defined here,
@@ -102,42 +102,55 @@ section TopologicalAlgebra
 
 variable (𝕂 𝔸 : Type*) [Field 𝕂] [Ring 𝔸] [Algebra 𝕂 𝔸] [TopologicalSpace 𝔸] [IsTopologicalRing 𝔸]
 
-/--
-Definition of `expSeries` / `expSeries` 的定义
+/-- `expSeries 𝕂 𝔸` is the `FormalMultilinearSeries` whose `n`-th term is the map
+`(xᵢ) : 𝔸ⁿ ↦ (1/n! : 𝕂) • ∏ xᵢ`. Its sum is the exponential map `NormedSpace.exp : 𝔸 → 𝔸`. -/
+/-
+**NormedSpace.expSeries** 是 Mathlib 中的一个定义，位于命名空间 `NormedSpace`。
+形式化陈述：expSeries : FormalMultilinearSeries 𝕂 𝔸 𝔸
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition expSeries
-  signature: : FormalMultilinearSeries 𝕂 𝔸 𝔸
-  body: fun n =>
-  (n !⁻¹ : 𝕂) • ContinuousMultilinearMap.mkPiAlgebraFin 𝕂 n 𝔸
-
-中文:
-定义 expSeries
-  签名: : FormalMultilinearSeries 𝕂 𝔸 𝔸
-  定义体: fun n =>
-  (n !⁻¹ : 𝕂) • ContinuousMultilinearMap.mkPiAlgebraFin 𝕂 n 𝔸
+--- 原说明 ---
+`expSeries 𝕂 𝔸` is the `FormalMultilinearSeries` whose `n`-th term is the map
+`(xᵢ) : 𝔸ⁿ ↦ (1/n! : 𝕂) • ∏ xᵢ`. Its sum is the exponential map `NormedSpace.exp
+ : 𝔸 → 𝔸`.
 -/
 def expSeries : FormalMultilinearSeries 𝕂 𝔸 𝔸 := fun n =>
   (n !⁻¹ : 𝕂) • ContinuousMultilinearMap.mkPiAlgebraFin 𝕂 n 𝔸
 
-/--
-theorem `expSeries_eq_ofScalars` / 定理 `expSeries_eq_ofScalars`
+/-- The exponential series as an `ofScalars` series. -/
+/-
+**NormedSpace.expSeries_eq_ofScalars** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：expSeries_eq_ofScalars : expSeries 𝕂 𝔸 = ofScalars 𝔸 fun n => (n !⁻¹ : 𝕂)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `SMulCommClass.continuousConstSMul`：∀ {R : Type u_6} {A : Type u_7} [inst
+ : Monoid A] [inst_1 : SMul R A] [SMulCommClass R A A]   [inst_3 : TopologicalSp
+ace A] [SeparatelyConti…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 
-English:
-theorem expSeries_eq_ofScalars
-  statement: expSeries 𝕂 𝔸 = ofScalars 𝔸 fun n => (n !⁻¹ : 𝕂)
-  proof: by
-  simp_rw [FormalMultilinearSeries.ext_iff, expSeries, ofScalars, implies_true]
-
-中文:
-定理 expSeries_eq_ofScalars
-  结论: expSeries 𝕂 𝔸 = ofScalars 𝔸 fun n => (n !⁻¹ : 𝕂)
-  证明: by
-  simp_rw [FormalMultilinearSeries.ext_iff, expSeries, ofScalars, implies_true]
-
-Depends on / 依赖: FormalMultilinearSeries, FormalMultilinearSeries.ext_iff, expSeries, ext_iff, implies_true, ofScalars, simp_rw
+--- 原说明 ---
+The exponential series as an `ofScalars` series.
 -/
-theorem expSeries_eq_ofScalars : expSeries 𝕂 𝔸 = ofScalars 𝔸 fun n => (n !⁻¹ : 𝕂) := by
+theorem expSeries_eq_ofScalars : expSeries 𝕂 𝔸 = ofScalars 𝔸 fun n ↦ (n !⁻¹ : 𝕂) := by
   simp_rw [FormalMultilinearSeries.ext_iff, expSeries, ofScalars, implies_true]
 
 variable {𝕂 𝔸}
@@ -154,264 +167,325 @@ Note that when `𝔸 = Matrix n n 𝕂`, this is the **Matrix Exponential**; see
 `Mathlib/Analysis/Normed/Algebra/MatrixExponential.lean` for lemmas
 specific to that case. -/
 noncomputable irreducible_def exp (x : 𝔸) : 𝔸 :=
-  if h : Nonempty (Algebra Rat 𝔸) then
+  if h : Nonempty (Algebra ℚ 𝔸) then
     letI _ := h.some
-    (NormedSpace.expSeries Rat 𝔸).sum x
+    (NormedSpace.expSeries ℚ 𝔸).sum x
   else
     1
 
 /-- The junk value when `𝔸` can't be equipped with a `ℚ`-algebra structure. -/
 @[simp]
-/--
-theorem `exp_of_isEmpty_algebra_rat` / 定理 `exp_of_isEmpty_algebra_rat`
+/-
+**NormedSpace.exp_of_isEmpty_algebra_rat** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`
+。
+形式化陈述：exp_of_isEmpty_algebra_rat [IsEmpty (Algebra Rat 𝔸)] (x : 𝔸) : exp x = 1
+参数：Algebra Rat 𝔸；x : 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NormedSpace.exp_def`：∀ {𝔸 : Type u_3} [inst : Ring 𝔸] [inst_1 : Topologi
+calSpace 𝔸] [inst_2 : IsTopologicalRing 𝔸] (x : 𝔸),   NormedSpace.exp x = if h :
+ Nonempty…
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `not_nonempty_iff`：not_nonempty_iff : ¬Nonempty α ↔ IsEmpty α
 
-English:
-theorem exp_of_isEmpty_algebra_rat
-  given: [IsEmpty (Algebra Rat 𝔸)] (x : 𝔸)
-  statement: exp x = 1
-  proof: by
-  rw [exp]; rw [dif_neg (not_nonempty_iff.mpr ‹_›)]
-
-中文:
-定理 exp_of_isEmpty_algebra_rat
-  条件: [是空 (代数 有理数 𝔸)] (x : 𝔸)
-  结论: exp x = 1
-  证明: by
-  rw [exp]; rw [dif_neg (not_nonempty_iff.mpr ‹_›)]
-
-Depends on / 依赖: dif_neg, not_nonempty_iff, not_nonempty_iff.mpr
+--- 原说明 ---
+The junk value when `𝔸` can't be equipped with a `ℚ`-algebra structure.
 -/
-theorem exp_of_isEmpty_algebra_rat [IsEmpty (Algebra Rat 𝔸)] (x : 𝔸) : exp x = 1 := by
-  rw [exp]; rw [dif_neg (not_nonempty_iff.mpr ‹_›)]
-
-/--
-theorem `expSeries_apply_eq` / 定理 `expSeries_apply_eq`
-
-English:
-theorem expSeries_apply_eq
-  given: (x : 𝔸) (n : Nat)
-  proof: by simp [expSeries]
-
-中文:
-定理 expSeries_apply_eq
-  条件: (x : 𝔸) (n : 自然数)
-  证明: by simp [expSeries]
-
-Depends on / 依赖: expSeries
+theorem exp_of_isEmpty_algebra_rat [IsEmpty (Algebra ℚ 𝔸)] (x : 𝔸) : exp x = 1 := by
+  rw [exp, dif_neg (not_nonempty_iff.mpr ‹_›)]
+/-
+**NormedSpace.expSeries_apply_eq** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：expSeries_apply_eq (x : 𝔸) (n : Nat) : (expSeries 𝕂 𝔸 n fun _ => x) = (n !
+⁻¹ : 𝕂) • x ^ n
+参数：x : 𝔸；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `smul_apply`：∀ {M : Type u_1} {F : Type u_2} {α : outParam (Type u_3)} {β
+ : outParam (Type u_4)} {inst : FunLike F α β}   {inst_1 : SMul M β} {inst_2 : S
+…
+· 使用定理 `ContinuousMultilinearMap.instIsSMulApplyForall`：∀ {ι : Type v} {M₁ : ι →
+ Type w₁} {M₂ : Type w₂} [inst : (i : ι) → AddCommMonoid (M₁ i)] [inst_1 : AddCo
+mmMonoid M₂]   [inst_2 : (i : ι) → T…
+· 使用定理 `List.ofFn_const`：∀ {α : Type u} (n : ℕ) (c : α), (List.ofFn fun x => c) 
+= List.replicate n c
+· 使用定理 `List.prod_replicate`：prod_replicate (n : Nat) (a : M) : (replicate n a).
+prod = a ^ n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem expSeries_apply_eq (x : 𝔸) (n : Nat) :
+theorem expSeries_apply_eq (x : 𝔸) (n : ℕ) :
     (expSeries 𝕂 𝔸 n fun _ => x) = (n !⁻¹ : 𝕂) • x ^ n := by simp [expSeries]
-
-/--
-theorem `expSeries_apply_eq'` / 定理 `expSeries_apply_eq'`
-
-English:
-theorem expSeries_apply_eq'
-  given: (x : 𝔸)
-  proof: funext (expSeries_apply_eq x)
-
-中文:
-定理 expSeries_apply_eq'
-  条件: (x : 𝔸)
-  证明: funext (expSeries_apply_eq x)
-
-Depends on / 依赖: expSeries_apply_eq
+/-
+**NormedSpace.expSeries_apply_eq'** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：expSeries_apply_eq' (x : 𝔸) : (fun n => expSeries 𝕂 𝔸 n fun _ => x) = fun 
+n => (n !⁻¹ : 𝕂) • x ^ n
+参数：x : 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `NormedSpace.expSeries_apply_eq`：expSeries_apply_eq (x : 𝔸) (n : Nat) : (
+expSeries 𝕂 𝔸 n fun _ => x) = (n !⁻¹ : 𝕂) • x ^ n
 -/
 theorem expSeries_apply_eq' (x : 𝔸) :
     (fun n => expSeries 𝕂 𝔸 n fun _ => x) = fun n => (n !⁻¹ : 𝕂) • x ^ n :=
   funext (expSeries_apply_eq x)
-
-/--
-theorem `expSeries_sum_eq` / 定理 `expSeries_sum_eq`
-
-English:
-theorem expSeries_sum_eq
-  given: (x : 𝔸)
-  statement: (expSeries 𝕂 𝔸).sum x = ∑' n : Nat, (n !⁻¹ : 𝕂) • x ^ n
-  proof: tsum_congr fun n => expSeries_apply_eq x n
-
-中文:
-定理 expSeries_sum_eq
-  条件: (x : 𝔸)
-  结论: (expSeries 𝕂 𝔸).求和 x = ∑' n : 自然数, (n !⁻¹ : 𝕂) • x ^ n
-  证明: tsum_congr fun n => expSeries_apply_eq x n
-
-Depends on / 依赖: expSeries_apply_eq, tsum_congr
+/-
+**NormedSpace.expSeries_sum_eq** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：expSeries_sum_eq (x : 𝔸) : (expSeries 𝕂 𝔸).sum x = ∑' n : Nat, (n !⁻¹ : 𝕂)
+ • x ^ n
+参数：x : 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `tsum_congr`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid α] [in
+st_1 : TopologicalSpace α] {L : SummationFilter β}   {f g : β → α}, (∀ (b : β), 
+…
+· 使用定理 `NormedSpace.expSeries_apply_eq`：expSeries_apply_eq (x : 𝔸) (n : Nat) : (
+expSeries 𝕂 𝔸 n fun _ => x) = (n !⁻¹ : 𝕂) • x ^ n
 -/
-theorem expSeries_sum_eq (x : 𝔸) : (expSeries 𝕂 𝔸).sum x = ∑' n : Nat, (n !⁻¹ : 𝕂) • x ^ n :=
+theorem expSeries_sum_eq (x : 𝔸) : (expSeries 𝕂 𝔸).sum x = ∑' n : ℕ, (n !⁻¹ : 𝕂) • x ^ n :=
   tsum_congr fun n => expSeries_apply_eq x n
-
-/--
-theorem `expSeries_sum_eq_rat` / 定理 `expSeries_sum_eq_rat`
-
-English:
-theorem expSeries_sum_eq_rat
-  given: [Algebra Rat 𝔸]
-  statement: (expSeries 𝕂 𝔸).sum = (expSeries Rat 𝔸).sum
-  proof: by
-  ext; simp_rw [expSeries_sum_eq, inv_natCast_smul_eq 𝕂 Rat]
-
-中文:
-定理 expSeries_sum_eq_rat
-  条件: [代数 有理数 𝔸]
-  结论: (expSeries 𝕂 𝔸).求和 = (expSeries 有理数 𝔸).求和
-  证明: by
-  ext; simp_rw [expSeries_sum_eq, inv_natCast_smul_eq 𝕂 Rat]
-
-Depends on / 依赖: expSeries_sum_eq, inv_natCast_smul_eq, simp_rw
+/-
+**NormedSpace.expSeries_sum_eq_rat** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：expSeries_sum_eq_rat [Algebra Rat 𝔸] : (expSeries 𝕂 𝔸).sum = (expSeries Ra
+t 𝔸).sum
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `SMulCommClass.continuousConstSMul`：∀ {R : Type u_6} {A : Type u_7} [inst
+ : Monoid A] [inst_1 : SMul R A] [SMulCommClass R A A]   [inst_3 : TopologicalSp
+ace A] [SeparatelyConti…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NormedSpace.expSeries_sum_eq`：expSeries_sum_eq (x : 𝔸) : (expSeries 𝕂 𝔸)
+.sum x = ∑' n : Nat, (n !⁻¹ : 𝕂) • x ^ n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `inv_natCast_smul_eq`：inv_natCast_smul_eq {E : Type*} (R S : Type*) [AddC
+ommMonoid E] [DivisionSemiring R] [DivisionSemiring S] [Module R E] [Module S E]
+ (n : Nat…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem expSeries_sum_eq_rat [Algebra Rat 𝔸] : (expSeries 𝕂 𝔸).sum = (expSeries Rat 𝔸).sum := by
-  ext; simp_rw [expSeries_sum_eq, inv_natCast_smul_eq 𝕂 Rat]
-
-/--
-theorem `expSeries_eq_expSeries_rat` / 定理 `expSeries_eq_expSeries_rat`
-
-English:
-theorem expSeries_eq_expSeries_rat
-  given: [Algebra Rat 𝔸] (n : Nat)
-  proof: by
-  ext c
-  simp [expSeries, inv_natCast_smul_eq 𝕂 Rat]
-
-中文:
-定理 expSeries_eq_expSeries_rat
-  条件: [代数 有理数 𝔸] (n : 自然数)
-  证明: by
-  ext c
-  simp [expSeries, inv_natCast_smul_eq 𝕂 Rat]
-
-Depends on / 依赖: expSeries, inv_natCast_smul_eq
+theorem expSeries_sum_eq_rat [Algebra ℚ 𝔸] : (expSeries 𝕂 𝔸).sum = (expSeries ℚ 𝔸).sum := by
+  ext; simp_rw [expSeries_sum_eq, inv_natCast_smul_eq 𝕂 ℚ]
+/-
+**NormedSpace.expSeries_eq_expSeries_rat** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`
+。
+形式化陈述：expSeries_eq_expSeries_rat [Algebra Rat 𝔸] (n : Nat) : ⇑(expSeries 𝕂 𝔸 n) 
+= expSeries Rat 𝔸 n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `SMulCommClass.continuousConstSMul`：∀ {R : Type u_6} {A : Type u_7} [inst
+ : Monoid A] [inst_1 : SMul R A] [SMulCommClass R A A]   [inst_3 : TopologicalSp
+ace A] [SeparatelyConti…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `inv_natCast_smul_eq`：inv_natCast_smul_eq {E : Type*} (R S : Type*) [AddC
+ommMonoid E] [DivisionSemiring R] [DivisionSemiring S] [Module R E] [Module S E]
+ (n : Nat…
+· 使用定理 `smul_apply`：∀ {M : Type u_1} {F : Type u_2} {α : outParam (Type u_3)} {β
+ : outParam (Type u_4)} {inst : FunLike F α β}   {inst_1 : SMul M β} {inst_2 : S
+…
+· 使用定理 `ContinuousMultilinearMap.instIsSMulApplyForall`：∀ {ι : Type v} {M₁ : ι →
+ Type w₁} {M₂ : Type w₂} [inst : (i : ι) → AddCommMonoid (M₁ i)] [inst_1 : AddCo
+mmMonoid M₂]   [inst_2 : (i : ι) → T…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem expSeries_eq_expSeries_rat [Algebra Rat 𝔸] (n : Nat) :
-    ⇑(expSeries 𝕂 𝔸 n) = expSeries Rat 𝔸 n := by
+theorem expSeries_eq_expSeries_rat [Algebra ℚ 𝔸] (n : ℕ) :
+    ⇑(expSeries 𝕂 𝔸 n) = expSeries ℚ 𝔸 n := by
   ext c
-  simp [expSeries, inv_natCast_smul_eq 𝕂 Rat]
+  simp [expSeries, inv_natCast_smul_eq 𝕂 ℚ]
 
 variable (𝕂) in
-/--
-theorem `exp_eq_expSeries_sum` / 定理 `exp_eq_expSeries_sum`
-
-English:
-theorem exp_eq_expSeries_sum
-  given: [CharZero 𝕂]
-  statement: exp = (expSeries 𝕂 𝔸).sum
-  proof: by
-  ext x
-  rw [exp]; rw [dif_pos ⟨RestrictScalars.algebra Rat 𝕂 𝔸⟩]; rw [← @expSeries_sum_eq_rat (𝕂 := 𝕂)]
-
-中文:
-定理 exp_eq_expSeries_sum
-  条件: [特征零 𝕂]
-  结论: exp = (expSeries 𝕂 𝔸).求和
-  证明: by
-  ext x
-  rw [exp]; rw [dif_pos ⟨RestrictScalars.algebra Rat 𝕂 𝔸⟩]; rw [← @expSeries_sum_eq_rat (𝕂 := 𝕂)]
-
-Depends on / 依赖: RestrictScalars, RestrictScalars.algebra, algebra, dif_pos, expSeries_sum_eq_rat
+/-
+**NormedSpace.exp_eq_expSeries_sum** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：exp_eq_expSeries_sum [CharZero 𝕂] : exp = (expSeries 𝕂 𝔸).sum
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `SMulCommClass.continuousConstSMul`：∀ {R : Type u_6} {A : Type u_7} [inst
+ : Monoid A] [inst_1 : SMul R A] [SMulCommClass R A A]   [inst_3 : TopologicalSp
+ace A] [SeparatelyConti…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NormedSpace.exp_def`：∀ {𝔸 : Type u_3} [inst : Ring 𝔸] [inst_1 : Topologi
+calSpace 𝔸] [inst_2 : IsTopologicalRing 𝔸] (x : 𝔸),   NormedSpace.exp x = if h :
+ Nonempty…
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NormedSpace.expSeries_sum_eq_rat`：expSeries_sum_eq_rat [Algebra Rat 𝔸] :
+ (expSeries 𝕂 𝔸).sum = (expSeries Rat 𝔸).sum
 -/
 theorem exp_eq_expSeries_sum [CharZero 𝕂] : exp = (expSeries 𝕂 𝔸).sum := by
   ext x
-  rw [exp]; rw [dif_pos ⟨RestrictScalars.algebra Rat 𝕂 𝔸⟩]; rw [← @expSeries_sum_eq_rat (𝕂 := 𝕂)]
+  rw [exp, dif_pos ⟨RestrictScalars.algebra ℚ 𝕂 𝔸⟩, ← @expSeries_sum_eq_rat (𝕂 := 𝕂)]
 
 variable (𝕂) in
-/--
-theorem `exp_eq_tsum` / 定理 `exp_eq_tsum`
-
-English:
-theorem exp_eq_tsum
-  given: [CharZero 𝕂]
-  statement: exp = fun x : 𝔸 => ∑' n : Nat, (n !⁻¹ : 𝕂) • x ^ n
-  proof: by
-  rw [exp_eq_expSeries_sum 𝕂]
-  ext x
-  exact expSeries_sum_eq x
-
-中文:
-定理 exp_eq_tsum
-  条件: [特征零 𝕂]
-  结论: exp = fun x : 𝔸 => ∑' n : 自然数, (n !⁻¹ : 𝕂) • x ^ n
-  证明: by
-  rw [exp_eq_expSeries_sum 𝕂]
-  ext x
-  exact expSeries_sum_eq x
-
-Depends on / 依赖: expSeries_sum_eq, exp_eq_expSeries_sum
+/-
+**NormedSpace.exp_eq_tsum** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：exp_eq_tsum [CharZero 𝕂] : exp = fun x : 𝔸 => ∑' n : Nat, (n !⁻¹ : 𝕂) • x 
+^ n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `SMulCommClass.continuousConstSMul`：∀ {R : Type u_6} {A : Type u_7} [inst
+ : Monoid A] [inst_1 : SMul R A] [SMulCommClass R A A]   [inst_3 : TopologicalSp
+ace A] [SeparatelyConti…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NormedSpace.exp_eq_expSeries_sum`：exp_eq_expSeries_sum [CharZero 𝕂] : ex
+p = (expSeries 𝕂 𝔸).sum
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `NormedSpace.expSeries_sum_eq`：expSeries_sum_eq (x : 𝔸) : (expSeries 𝕂 𝔸)
+.sum x = ∑' n : Nat, (n !⁻¹ : 𝕂) • x ^ n
 -/
-theorem exp_eq_tsum [CharZero 𝕂] : exp = fun x : 𝔸 => ∑' n : Nat, (n !⁻¹ : 𝕂) • x ^ n := by
+theorem exp_eq_tsum [CharZero 𝕂] : exp = fun x : 𝔸 => ∑' n : ℕ, (n !⁻¹ : 𝕂) • x ^ n := by
   rw [exp_eq_expSeries_sum 𝕂]
   ext x
   exact expSeries_sum_eq x
-
-/--
-theorem `exp_eq_tsum_rat` / 定理 `exp_eq_tsum_rat`
-
-English:
-theorem exp_eq_tsum_rat
-  given: [Algebra Rat 𝔸]
-  statement: exp = fun x : 𝔸 => ∑' n : Nat, (n !⁻¹ : Rat) • x ^ n
-  proof: exp_eq_tsum Rat
-
-中文:
-定理 exp_eq_tsum_rat
-  条件: [代数 有理数 𝔸]
-  结论: exp = fun x : 𝔸 => ∑' n : 自然数, (n !⁻¹ : 有理数) • x ^ n
-  证明: exp_eq_tsum Rat
-
-Depends on / 依赖: exp_eq_tsum
+/-
+**NormedSpace.exp_eq_tsum_rat** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：exp_eq_tsum_rat [Algebra Rat 𝔸] : exp = fun x : 𝔸 => ∑' n : Nat, (n !⁻¹ : 
+Rat) • x ^ n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NormedSpace.exp_eq_tsum`：exp_eq_tsum [CharZero 𝕂] : exp = fun x : 𝔸 => ∑
+' n : Nat, (n !⁻¹ : 𝕂) • x ^ n
 -/
-theorem exp_eq_tsum_rat [Algebra Rat 𝔸] : exp = fun x : 𝔸 => ∑' n : Nat, (n !⁻¹ : Rat) • x ^ n :=
-  exp_eq_tsum Rat
+theorem exp_eq_tsum_rat [Algebra ℚ 𝔸] : exp = fun x : 𝔸 => ∑' n : ℕ, (n !⁻¹ : ℚ) • x ^ n :=
+  exp_eq_tsum ℚ
 
 variable (𝕂) in
-/--
-theorem `exp_eq_ofScalarsSum` / 定理 `exp_eq_ofScalarsSum`
+/-- The exponential sum as an `ofScalarsSum`. -/
+/-
+**NormedSpace.exp_eq_ofScalarsSum** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：exp_eq_ofScalarsSum [CharZero 𝕂] : exp = ofScalarsSum (E
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NormedSpace.exp_eq_tsum`：exp_eq_tsum [CharZero 𝕂] : exp = fun x : 𝔸 => ∑
+' n : Nat, (n !⁻¹ : 𝕂) • x ^ n
+· 使用定理 `FormalMultilinearSeries.ofScalarsSum_eq_tsum`：ofScalarsSum_eq_tsum : ofS
+calarsSum c = fun (x : E) => ∑' n : Nat, c n • x ^ n
 
-English:
-theorem exp_eq_ofScalarsSum
-  given: [CharZero 𝕂]
-  proof: by
-  rw [exp_eq_tsum 𝕂]; rw [ofScalarsSum_eq_tsum]
-
-中文:
-定理 exp_eq_ofScalarsSum
-  条件: [特征零 𝕂]
-  证明: by
-  rw [exp_eq_tsum 𝕂]; rw [ofScalarsSum_eq_tsum]
-
-Depends on / 依赖: exp_eq_tsum, ofScalarsSum_eq_tsum
+--- 原说明 ---
+The exponential sum as an `ofScalarsSum`.
 -/
 theorem exp_eq_ofScalarsSum [CharZero 𝕂] :
-    exp = ofScalarsSum (E := 𝔸) fun n => (n !⁻¹ : 𝕂) := by
-  rw [exp_eq_tsum 𝕂]; rw [ofScalarsSum_eq_tsum]
-
-/--
-theorem `expSeries_apply_zero` / 定理 `expSeries_apply_zero`
-
-English:
-theorem expSeries_apply_zero
-  given: (n : Nat)
-  proof: by
-  rw [expSeries_apply_eq]
-  rcases n with - | n
-  · simp
-  · rw [zero_pow (Nat.succ_ne_zero _), smul_zero, Pi.single_eq_of_ne n.succ_ne_zero]
-
-@[simp]
-
-中文:
-定理 expSeries_apply_zero
-  条件: (n : 自然数)
-  证明: by
-  rw [expSeries_apply_eq]
-  rcases n with - | n
-  · simp
-  · rw [zero_pow (Nat.succ_ne_zero _), smul_zero, Pi.single_eq_of_ne n.succ_ne_zero]
-
-@[simp]
-
-Depends on / 依赖: Nat.succ_ne_zero, Pi.single_eq_of_ne, expSeries_apply_eq, n.succ_ne_zero, single_eq_of_ne, smul_zero, succ_ne_zero, zero_pow
+    exp = ofScalarsSum (E := 𝔸) fun n ↦ (n !⁻¹ : 𝕂) := by
+  rw [exp_eq_tsum 𝕂, ofScalarsSum_eq_tsum]
+/-
+**NormedSpace.expSeries_apply_zero** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：expSeries_apply_zero (n : Nat) : expSeries 𝕂 𝔸 n (fun _ => (0 : 𝔸)) = Pi.s
+ingle (M
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NormedSpace.expSeries_apply_eq`：expSeries_apply_eq (x : 𝔸) (n : Nat) : (
+expSeries 𝕂 𝔸 n fun _ => x) = (n !⁻¹ : 𝕂) • x ^ n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `Pi.single_eq_same`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) →
+ Zero (M i)] [inst_1 : DecidableEq ι] (i : ι) (x : M i),   Pi.single i x i = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `zero_pow`：zero_pow {b : Nat} (_ : 0 < b) : (0 : R) ^ b = 0
+· 使用定理 `Nat.succ_ne_zero`：∀ (n : ℕ), n.succ ≠ 0
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `Pi.single_eq_of_ne`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) 
+→ Zero (M i)] [inst_1 : DecidableEq ι] {i i' : ι},   i' ≠ i → ∀ (x : M i), Pi.si
+ngle i x…
 -/
-theorem expSeries_apply_zero (n : Nat) :
+theorem expSeries_apply_zero (n : ℕ) :
     expSeries 𝕂 𝔸 n (fun _ => (0 : 𝔸)) = Pi.single (M := fun _ => 𝔸) 0 1 n := by
   rw [expSeries_apply_eq]
   rcases n with - | n
@@ -419,32 +493,34 @@ theorem expSeries_apply_zero (n : Nat) :
   · rw [zero_pow (Nat.succ_ne_zero _), smul_zero, Pi.single_eq_of_ne n.succ_ne_zero]
 
 @[simp]
-/--
-theorem `exp_zero` / 定理 `exp_zero`
-
-English:
-theorem exp_zero
-  statement: exp (0 : 𝔸) = 1
-  proof: by
-  rw [exp]
-  split_ifs
-  · simp_rw [expSeries_sum_eq, ← expSeries_apply_eq, expSeries_apply_zero, tsum_pi_single]
-  · rfl
-
-@[simp]
-
-中文:
-定理 exp_zero
-  结论: exp (0 : 𝔸) = 1
-  证明: by
-  rw [exp]
-  split_ifs
-  · simp_rw [expSeries_sum_eq, ← expSeries_apply_eq, expSeries_apply_zero, tsum_pi_single]
-  · rfl
-
-@[simp]
-
-Depends on / 依赖: expSeries_apply_eq, expSeries_apply_zero, expSeries_sum_eq, simp_rw, split_ifs, tsum_pi_single
+/-
+**NormedSpace.exp_zero** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：exp_zero : exp (0 : 𝔸) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NormedSpace.exp_def`：∀ {𝔸 : Type u_3} [inst : Ring 𝔸] [inst_1 : Topologi
+calSpace 𝔸] [inst_2 : IsTopologicalRing 𝔸] (x : 𝔸),   NormedSpace.exp x = if h :
+ Nonempty…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `NormedSpace.expSeries_sum_eq`：expSeries_sum_eq (x : 𝔸) : (expSeries 𝕂 𝔸)
+.sum x = ∑' n : Nat, (n !⁻¹ : 𝕂) • x ^ n
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `NormedSpace.expSeries_apply_zero`：expSeries_apply_zero (n : Nat) : expSe
+ries 𝕂 𝔸 n (fun _ => (0 : 𝔸)) = Pi.single (M
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `tsum_pi_single`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid α]
+ [inst_1 : TopologicalSpace α] [inst_2 : DecidableEq β] (b : β)   (a : α), ∑' (b
+' : …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
 -/
 theorem exp_zero : exp (0 : 𝔸) = 1 := by
   rw [exp]
@@ -453,203 +529,169 @@ theorem exp_zero : exp (0 : 𝔸) = 1 := by
   · rfl
 
 @[simp]
-/--
-theorem `exp_op` / 定理 `exp_op`
-
-English:
-theorem exp_op
-  given: [T2Space 𝔸] (x : 𝔸)
-  proof: by
-  obtain h | ⟨⟨_⟩⟩ := isEmpty_or_nonempty (Algebra Rat 𝔸)
-· have : IsEmpty (Algebra Rat 𝔸ᵐᵒᵖ) := ⟨fun _ => h.elim (RingEquiv.opOp 𝔸).algebra Rat⟩
-    simp
-  · rw [exp_eq_tsum Rat, exp_eq_tsum Rat]
-    simp_rw [← MulOpposite.op_pow, ← MulOpposite.op_smul, tsum_op]
-
-@[simp]
-
-中文:
-定理 exp_op
-  条件: [T2空间 𝔸] (x : 𝔸)
-  证明: by
-  obtain h | ⟨⟨_⟩⟩ := isEmpty_or_nonempty (Algebra Rat 𝔸)
-· have : IsEmpty (Algebra Rat 𝔸ᵐᵒᵖ) := ⟨fun _ => h.elim (RingEquiv.opOp 𝔸).algebra Rat⟩
-    simp
-  · rw [exp_eq_tsum Rat, exp_eq_tsum Rat]
-    simp_rw [← MulOpposite.op_pow, ← MulOpposite.op_smul, tsum_op]
-
-@[simp]
-
-Depends on / 依赖: Algebra, IsEmpty, MulOpposite, MulOpposite.op_pow, MulOpposite.op_smul, RingEquiv, RingEquiv.opOp, algebra, exp_eq_tsum, h.elim, isEmpty_or_nonempty, op_pow, op_smul, simp_rw, tsum_op
+/-
+**NormedSpace.exp_op** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：exp_op [T2Space 𝔸] (x : 𝔸) : exp (MulOpposite.op x) = MulOpposite.op (exp 
+x)
+参数：x : 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsTopologicalRingMulOpposite`：∀ {R : Type u_1} [inst : NonUnitalNonA
+ssocRing R] [inst_1 : TopologicalSpace R] [IsTopologicalRing R],   IsTopological
+Ring Rᵐᵒᵖ
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NormedSpace.exp_of_isEmpty_algebra_rat`：exp_of_isEmpty_algebra_rat [IsEm
+pty (Algebra Rat 𝔸)] (x : 𝔸) : exp x = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `NormedSpace.exp_eq_tsum`：exp_eq_tsum [CharZero 𝕂] : exp = fun x : 𝔸 => ∑
+' n : Nat, (n !⁻¹ : 𝕂) • x ^ n
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `tsum_op`：tsum_op [T2Space α] : ∑'[L] x, op (f x) = op (∑'[L] x, f x)
 -/
 theorem exp_op [T2Space 𝔸] (x : 𝔸) :
     exp (MulOpposite.op x) = MulOpposite.op (exp x) := by
-  obtain h | ⟨⟨_⟩⟩ := isEmpty_or_nonempty (Algebra Rat 𝔸)
-· have : IsEmpty (Algebra Rat 𝔸ᵐᵒᵖ) := ⟨fun _ => h.elim (RingEquiv.opOp 𝔸).algebra Rat⟩
+  obtain h | ⟨⟨_⟩⟩ := isEmpty_or_nonempty (Algebra ℚ 𝔸)
+  · have : IsEmpty (Algebra ℚ 𝔸ᵐᵒᵖ) := ⟨fun _ => h.elim <| (RingEquiv.opOp 𝔸).algebra ℚ⟩
     simp
-  · rw [exp_eq_tsum Rat, exp_eq_tsum Rat]
+  · rw [exp_eq_tsum ℚ, exp_eq_tsum ℚ]
     simp_rw [← MulOpposite.op_pow, ← MulOpposite.op_smul, tsum_op]
 
 @[simp]
-/--
-theorem `exp_unop` / 定理 `exp_unop`
-
-English:
-theorem exp_unop
-  given: [T2Space 𝔸] (x : 𝔸ᵐᵒᵖ)
-  proof: by
-  induction x; simp
-
-中文:
-定理 exp_unop
-  条件: [T2空间 𝔸] (x : 𝔸ᵐᵒᵖ)
-  证明: by
-  induction x; simp
+/-
+**NormedSpace.exp_unop** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：exp_unop [T2Space 𝔸] (x : 𝔸ᵐᵒᵖ) : exp (MulOpposite.unop x) = MulOpposite.u
+nop (exp x)
+参数：x : 𝔸ᵐᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsTopologicalRingMulOpposite`：∀ {R : Type u_1} [inst : NonUnitalNonA
+ssocRing R] [inst_1 : TopologicalSpace R] [IsTopologicalRing R],   IsTopological
+Ring Rᵐᵒᵖ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NormedSpace.exp_op`：exp_op [T2Space 𝔸] (x : 𝔸) : exp (MulOpposite.op x) 
+= MulOpposite.op (exp x)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem exp_unop [T2Space 𝔸] (x : 𝔸ᵐᵒᵖ) :
     exp (MulOpposite.unop x) = MulOpposite.unop (exp x) := by
   induction x; simp
-
-/--
-theorem `star_exp` / 定理 `star_exp`
-
-English:
-theorem star_exp
-  given: [T2Space 𝔸] [StarRing 𝔸] [ContinuousStar 𝔸] (x : 𝔸)
-  proof: by
-  obtain _ | ⟨⟨_⟩⟩ := isEmpty_or_nonempty (Algebra Rat 𝔸)
-  · simp
-  · simp_rw [exp_eq_tsum Rat, ← star_pow, ← star_inv_natCast_smul, ← tsum_star]
-
-中文:
-定理 star_exp
-  条件: [T2空间 𝔸] [对合环 𝔸] [余ntinuousStar 𝔸] (x : 𝔸)
-  证明: by
-  obtain _ | ⟨⟨_⟩⟩ := isEmpty_or_nonempty (Algebra Rat 𝔸)
-  · simp
-  · simp_rw [exp_eq_tsum Rat, ← star_pow, ← star_inv_natCast_smul, ← tsum_star]
-
-Depends on / 依赖: Algebra, exp_eq_tsum, isEmpty_or_nonempty, simp_rw, star_inv_natCast_smul, star_pow, tsum_star
+/-
+**NormedSpace.star_exp** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：star_exp [T2Space 𝔸] [StarRing 𝔸] [ContinuousStar 𝔸] (x : 𝔸) : star (exp x
+) = exp (star x)
+参数：x : 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NormedSpace.exp_of_isEmpty_algebra_rat`：exp_of_isEmpty_algebra_rat [IsEm
+pty (Algebra Rat 𝔸)] (x : 𝔸) : exp x = 1
+· 使用定理 `star_one`：star_one [MulOneClass R] [StarMul R] : star (1 : R) = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `NormedSpace.exp_eq_tsum`：exp_eq_tsum [CharZero 𝕂] : exp = fun x : 𝔸 => ∑
+' n : Nat, (n !⁻¹ : 𝕂) • x ^ n
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 theorem star_exp [T2Space 𝔸] [StarRing 𝔸] [ContinuousStar 𝔸] (x : 𝔸) :
     star (exp x) = exp (star x) := by
-  obtain _ | ⟨⟨_⟩⟩ := isEmpty_or_nonempty (Algebra Rat 𝔸)
+  obtain _ | ⟨⟨_⟩⟩ := isEmpty_or_nonempty (Algebra ℚ 𝔸)
   · simp
-  · simp_rw [exp_eq_tsum Rat, ← star_pow, ← star_inv_natCast_smul, ← tsum_star]
+  · simp_rw [exp_eq_tsum ℚ, ← star_pow, ← star_inv_natCast_smul, ← tsum_star]
 
-/--
-theorem `exp_mem` / 定理 `exp_mem`
+/-- A subalgebra of `𝔸` that is closed topologically and under `ℚ`-scaling is closed under `exp`. -/
+/-
+**NormedSpace.exp_mem** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：exp_mem {R S : Type*} [Monoid R] [SMul Rat R] [MulAction R 𝔸] [Algebra Rat
+ 𝔸] [IsScalarTower Rat R 𝔸] [SetLike S 𝔸] [SubsemiringClass S 𝔸] [SMulMemClass S
+ R 𝔸] {s : S} (h_closed : IsClosed (s : Set 𝔸)) {x : 𝔸} (h : x in s) : exp x in 
+s
+参数：h_closed : IsClosed (s : Set 𝔸)；h : x in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SMulMemClass.ofIsScalarTower`：∀ (S : Type u_1) (M : Type u_2) (N : Type 
+u_3) (α : Type u_4) [inst : SetLike S α] [inst_1 : SMul M N]   [inst_2 : SMul M 
+α] [inst_3 : Monoi…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NormedSpace.exp_eq_tsum`：exp_eq_tsum [CharZero 𝕂] : exp = fun x : 𝔸 => ∑
+' n : Nat, (n !⁻¹ : 𝕂) • x ^ n
+· 使用定理 `tsum_mem`：∀ {α : Type u_1} [inst : AddCommMonoid α] [inst_1 : Topologica
+lSpace α] {ι : Type u_4} {S : Type u_5} {s : S}   [inst_2 : SetLike S α] [AddS…
+· 使用定理 `SubsemiringClass.toAddSubmonoidClass`：∀ {S : Type u_1} {R : outParam (Ty
+pe u)} {inst : NonAssocSemiring R} {inst_1 : SetLike S R}   [self : SubsemiringC
+lass S R], AddSubmonoidCla…
+· 使用定理 `SMulMemClass.smul_mem`：∀ {S : Type u_1} {R : outParam (Type u_2)} {M : T
+ype u_3} {inst : SMul R M} {inst_1 : SetLike S M}   [self : SMulMemClass S R M] 
+{s : S} (r …
+· 使用定理 `pow_mem`：∀ {M : Type u_3} {A : Type u_4} [inst : Monoid M] [inst_1 : Set
+Like A M] [SubmonoidClass A M] {S : A} {x : M},   x ∈ S → ∀ (n : ℕ), x ^ n ∈ …
+· 使用定理 `SubsemiringClass.toSubmonoidClass`：∀ {S : Type u_1} {R : outParam (Type 
+u)} {inst : NonAssocSemiring R} {inst_1 : SetLike S R}   [self : SubsemiringClas
+s S R], SubmonoidClass …
 
-English:
-theorem exp_mem
-  proof: by
-  have := SMulMemClass.ofIsScalarTower S Rat R 𝔸
-  rw [exp_eq_tsum Rat]
-exact tsum_mem h_closed fun i => SMulMemClass.smul_mem _ pow_mem h _
-
-中文:
-定理 exp_mem
-  证明: by
-  have := SMulMemClass.ofIsScalarTower S Rat R 𝔸
-  rw [exp_eq_tsum Rat]
-exact tsum_mem h_closed fun i => SMulMemClass.smul_mem _ pow_mem h _
-
-Depends on / 依赖: SMulMemClass, SMulMemClass.ofIsScalarTower, SMulMemClass.smul_mem, exp_eq_tsum, h_closed, ofIsScalarTower, pow_mem, smul_mem, tsum_mem
+--- 原说明 ---
+A subalgebra of `𝔸` that is closed topologically and under `ℚ`-scaling is closed
+ under `exp`.
 -/
 theorem exp_mem
-    {R S : Type*} [Monoid R] [SMul Rat R] [MulAction R 𝔸] [Algebra Rat 𝔸] [IsScalarTower Rat R 𝔸]
+    {R S : Type*} [Monoid R] [SMul ℚ R] [MulAction R 𝔸] [Algebra ℚ 𝔸] [IsScalarTower ℚ R 𝔸]
     [SetLike S 𝔸] [SubsemiringClass S 𝔸] [SMulMemClass S R 𝔸] {s : S}
-    (h_closed : IsClosed (s : Set 𝔸)) {x : 𝔸} (h : x in s) :
-    exp x in s := by
-  have := SMulMemClass.ofIsScalarTower S Rat R 𝔸
-  rw [exp_eq_tsum Rat]
-exact tsum_mem h_closed fun i => SMulMemClass.smul_mem _ pow_mem h _
+    (h_closed : IsClosed (s : Set 𝔸)) {x : 𝔸} (h : x ∈ s) :
+    exp x ∈ s := by
+  have := SMulMemClass.ofIsScalarTower S ℚ R 𝔸
+  rw [exp_eq_tsum ℚ]
+  exact tsum_mem h_closed fun i => SMulMemClass.smul_mem _ <| pow_mem h _
 
 variable (𝕂)
 
 @[aesop safe apply]
-/--
-theorem `_root_.IsSelfAdjoint.exp` / 定理 `_root_.IsSelfAdjoint.exp`
-
-English:
-theorem _root_.IsSelfAdjoint.exp
-  statement: [T2Space 𝔸] [StarRing 𝔸] [ContinuousStar 𝔸] {x : 𝔸}
-  proof: (star_exp x).trans h.symm ▸ rfl
-
-中文:
-定理 _root_.IsSelfAdjoint.exp
-  结论: [T2空间 𝔸] [对合环 𝔸] [余ntinuousStar 𝔸] {x : 𝔸}
-  证明: (star_exp x).trans h.symm ▸ rfl
-
-Depends on / 依赖: h.symm, star_exp
+/-
+**NormedSpace._root_.IsSelfAdjoint.exp** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.IsSelfAdjoint.exp [T2Space 𝔸] [StarRing 𝔸] [ContinuousStar 𝔸] {x : 𝔸}
     (h : IsSelfAdjoint x) : IsSelfAdjoint (exp x) :=
-(star_exp x).trans h.symm ▸ rfl
-
-/--
-theorem `_root_.Commute.exp_right` / 定理 `_root_.Commute.exp_right`
-
-English:
-theorem _root_.Commute.exp_right
-  given: [T2Space 𝔸] {x y : 𝔸} (h : Commute x y)
-  proof: by
-  obtain _ | ⟨⟨_⟩⟩ := isEmpty_or_nonempty (Algebra Rat 𝔸)
-  · simp
-  · rw [exp_eq_tsum Rat]
-    exact Commute.tsum_right x fun n => (h.pow_right n).smul_right _
-
-中文:
-定理 _root_.Commute.exp_right
-  条件: [T2空间 𝔸] {x y : 𝔸} (h : Commute x y)
-  证明: by
-  obtain _ | ⟨⟨_⟩⟩ := isEmpty_or_nonempty (Algebra Rat 𝔸)
-  · simp
-  · rw [exp_eq_tsum Rat]
-    exact Commute.tsum_right x fun n => (h.pow_right n).smul_right _
-
-Depends on / 依赖: Algebra, Commute, Commute.tsum_right, exp_eq_tsum, h.pow_right, isEmpty_or_nonempty, pow_right, smul_right, tsum_right
+  (star_exp x).trans <| h.symm ▸ rfl
+/-
+**NormedSpace._root_.Commute.exp_right** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Commute.exp_right [T2Space 𝔸] {x y : 𝔸} (h : Commute x y) :
     Commute x (exp y) := by
-  obtain _ | ⟨⟨_⟩⟩ := isEmpty_or_nonempty (Algebra Rat 𝔸)
+  obtain _ | ⟨⟨_⟩⟩ := isEmpty_or_nonempty (Algebra ℚ 𝔸)
   · simp
-  · rw [exp_eq_tsum Rat]
+  · rw [exp_eq_tsum ℚ]
     exact Commute.tsum_right x fun n => (h.pow_right n).smul_right _
-
-/--
-theorem `_root_.Commute.exp_left` / 定理 `_root_.Commute.exp_left`
-
-English:
-theorem _root_.Commute.exp_left
-  given: [T2Space 𝔸] {x y : 𝔸} (h : Commute x y)
-  proof: h.symm.exp_right.symm
-
-中文:
-定理 _root_.Commute.exp_left
-  条件: [T2空间 𝔸] {x y : 𝔸} (h : Commute x y)
-  证明: h.symm.exp_right.symm
-
-Depends on / 依赖: exp_right, h.symm.exp_right.symm
+/-
+**NormedSpace._root_.Commute.exp_left** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Commute.exp_left [T2Space 𝔸] {x y : 𝔸} (h : Commute x y) :
     Commute (exp x) y :=
   h.symm.exp_right.symm
-
-/--
-theorem `_root_.Commute.exp` / 定理 `_root_.Commute.exp`
-
-English:
-theorem _root_.Commute.exp
-  given: [T2Space 𝔸] {x y : 𝔸} (h : Commute x y)
-  proof: h.exp_left.exp_right
-
-中文:
-定理 _root_.Commute.exp
-  条件: [T2空间 𝔸] {x y : 𝔸} (h : Commute x y)
-  证明: h.exp_left.exp_right
-
-Depends on / 依赖: exp_left, exp_right, h.exp_left.exp_right
+/-
+**NormedSpace._root_.Commute.exp** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Commute.exp [T2Space 𝔸] {x y : 𝔸} (h : Commute x y) :
     Commute (exp x) (exp y) :=
@@ -662,92 +704,94 @@ section TopologicalDivisionAlgebra
 variable {𝕂 𝔸 : Type*} [Field 𝕂] [DivisionRing 𝔸] [Algebra 𝕂 𝔸] [TopologicalSpace 𝔸]
   [IsTopologicalRing 𝔸]
 
-/--
-theorem `expSeries_apply_eq_div` / 定理 `expSeries_apply_eq_div`
-
-English:
-theorem expSeries_apply_eq_div
-  given: (x : 𝔸) (n : Nat)
-  statement: (expSeries 𝕂 𝔸 n fun _ => x) = x ^ n / n !
-  proof: by
-  rw [div_eq_mul_inv]; rw [← (Nat.cast_commute n ! (x ^ n)).inv_left₀.eq]; rw [← smul_eq_mul]; rw [expSeries_apply_eq]; rw [inv_natCast_smul_eq 𝕂 𝔸]
-
-中文:
-定理 expSeries_apply_eq_div
-  条件: (x : 𝔸) (n : 自然数)
-  结论: (expSeries 𝕂 𝔸 n fun _ => x) = x ^ n / n !
-  证明: by
-  rw [div_eq_mul_inv]; rw [← (Nat.cast_commute n ! (x ^ n)).inv_left₀.eq]; rw [← smul_eq_mul]; rw [expSeries_apply_eq]; rw [inv_natCast_smul_eq 𝕂 𝔸]
-
-Depends on / 依赖: Nat.cast_commute, cast_commute, div_eq_mul_inv, expSeries_apply_eq, inv_natCast_smul_eq, smul_eq_mul
+/-
+**NormedSpace.expSeries_apply_eq_div** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：expSeries_apply_eq_div (x : 𝔸) (n : Nat) : (expSeries 𝕂 𝔸 n fun _ => x) = 
+x ^ n / n !
+参数：x : 𝔸；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Commute.eq`：∀ {S : Type u_3} [inst : Mul S] {a b : S}, Commute a b → a *
+ b = b * a
+· 使用定理 `Commute.inv_left₀`：inv_left₀ (h : Commute a b) : Commute a⁻¹ b
+· 使用定理 `Nat.cast_commute`：cast_commute (n : Nat) (x : α) : Commute (n : α) x
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `NormedSpace.expSeries_apply_eq`：expSeries_apply_eq (x : 𝔸) (n : Nat) : (
+expSeries 𝕂 𝔸 n fun _ => x) = (n !⁻¹ : 𝕂) • x ^ n
+· 使用定理 `inv_natCast_smul_eq`：inv_natCast_smul_eq {E : Type*} (R S : Type*) [AddC
+ommMonoid E] [DivisionSemiring R] [DivisionSemiring S] [Module R E] [Module S E]
+ (n : Nat…
 -/
-theorem expSeries_apply_eq_div (x : 𝔸) (n : Nat) : (expSeries 𝕂 𝔸 n fun _ => x) = x ^ n / n ! := by
-  rw [div_eq_mul_inv]; rw [← (Nat.cast_commute n ! (x ^ n)).inv_left₀.eq]; rw [← smul_eq_mul]; rw [expSeries_apply_eq]; rw [inv_natCast_smul_eq 𝕂 𝔸]
-
-/--
-theorem `expSeries_apply_eq_div'` / 定理 `expSeries_apply_eq_div'`
-
-English:
-theorem expSeries_apply_eq_div'
-  given: (x : 𝔸)
-  proof: funext (expSeries_apply_eq_div x)
-
-中文:
-定理 expSeries_apply_eq_div'
-  条件: (x : 𝔸)
-  证明: funext (expSeries_apply_eq_div x)
-
-Depends on / 依赖: expSeries_apply_eq_div
+theorem expSeries_apply_eq_div (x : 𝔸) (n : ℕ) : (expSeries 𝕂 𝔸 n fun _ => x) = x ^ n / n ! := by
+  rw [div_eq_mul_inv, ← (Nat.cast_commute n ! (x ^ n)).inv_left₀.eq, ← smul_eq_mul,
+    expSeries_apply_eq, inv_natCast_smul_eq 𝕂 𝔸]
+/-
+**NormedSpace.expSeries_apply_eq_div'** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：expSeries_apply_eq_div' (x : 𝔸) : (fun n => expSeries 𝕂 𝔸 n fun _ => x) = 
+fun n => x ^ n / n !
+参数：x : 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `NormedSpace.expSeries_apply_eq_div`：expSeries_apply_eq_div (x : 𝔸) (n : 
+Nat) : (expSeries 𝕂 𝔸 n fun _ => x) = x ^ n / n !
 -/
 theorem expSeries_apply_eq_div' (x : 𝔸) :
     (fun n => expSeries 𝕂 𝔸 n fun _ => x) = fun n => x ^ n / n ! :=
   funext (expSeries_apply_eq_div x)
-
-/--
-theorem `expSeries_sum_eq_div` / 定理 `expSeries_sum_eq_div`
-
-English:
-theorem expSeries_sum_eq_div
-  given: (x : 𝔸)
-  statement: (expSeries 𝕂 𝔸).sum x = ∑' n : Nat, x ^ n / n !
-  proof: tsum_congr (expSeries_apply_eq_div x)
-
-中文:
-定理 expSeries_sum_eq_div
-  条件: (x : 𝔸)
-  结论: (expSeries 𝕂 𝔸).求和 x = ∑' n : 自然数, x ^ n / n !
-  证明: tsum_congr (expSeries_apply_eq_div x)
-
-Depends on / 依赖: expSeries_apply_eq_div, tsum_congr
+/-
+**NormedSpace.expSeries_sum_eq_div** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：expSeries_sum_eq_div (x : 𝔸) : (expSeries 𝕂 𝔸).sum x = ∑' n : Nat, x ^ n /
+ n !
+参数：x : 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `tsum_congr`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid α] [in
+st_1 : TopologicalSpace α] {L : SummationFilter β}   {f g : β → α}, (∀ (b : β), 
+…
+· 使用定理 `NormedSpace.expSeries_apply_eq_div`：expSeries_apply_eq_div (x : 𝔸) (n : 
+Nat) : (expSeries 𝕂 𝔸 n fun _ => x) = x ^ n / n !
 -/
-theorem expSeries_sum_eq_div (x : 𝔸) : (expSeries 𝕂 𝔸).sum x = ∑' n : Nat, x ^ n / n ! :=
+theorem expSeries_sum_eq_div (x : 𝔸) : (expSeries 𝕂 𝔸).sum x = ∑' n : ℕ, x ^ n / n ! :=
   tsum_congr (expSeries_apply_eq_div x)
-
-/--
-theorem `exp_eq_tsum_div` / 定理 `exp_eq_tsum_div`
-
-English:
-theorem exp_eq_tsum_div
-  given: [CharZero 𝔸]
-  statement: exp = fun x : 𝔸 => ∑' n : Nat, x ^ n / n !
-  proof: by
-  rw [exp_eq_expSeries_sum Rat]
-  ext x
-  exact expSeries_sum_eq_div x
-
-中文:
-定理 exp_eq_tsum_div
-  条件: [特征零 𝔸]
-  结论: exp = fun x : 𝔸 => ∑' n : 自然数, x ^ n / n !
-  证明: by
-  rw [exp_eq_expSeries_sum Rat]
-  ext x
-  exact expSeries_sum_eq_div x
-
-Depends on / 依赖: expSeries_sum_eq_div, exp_eq_expSeries_sum
+/-
+**NormedSpace.exp_eq_tsum_div** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：exp_eq_tsum_div [CharZero 𝔸] : exp = fun x : 𝔸 => ∑' n : Nat, x ^ n / n !
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `SMulCommClass.continuousConstSMul`：∀ {R : Type u_6} {A : Type u_7} [inst
+ : Monoid A] [inst_1 : SMul R A] [SMulCommClass R A A]   [inst_3 : TopologicalSp
+ace A] [SeparatelyConti…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NormedSpace.exp_eq_expSeries_sum`：exp_eq_expSeries_sum [CharZero 𝕂] : ex
+p = (expSeries 𝕂 𝔸).sum
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `NormedSpace.expSeries_sum_eq_div`：expSeries_sum_eq_div (x : 𝔸) : (expSer
+ies 𝕂 𝔸).sum x = ∑' n : Nat, x ^ n / n !
 -/
-theorem exp_eq_tsum_div [CharZero 𝔸] : exp = fun x : 𝔸 => ∑' n : Nat, x ^ n / n ! := by
-  rw [exp_eq_expSeries_sum Rat]
+theorem exp_eq_tsum_div [CharZero 𝔸] : exp = fun x : 𝔸 => ∑' n : ℕ, x ^ n / n ! := by
+  rw [exp_eq_expSeries_sum ℚ]
   ext x
   exact expSeries_sum_eq_div x
 
@@ -760,49 +804,45 @@ section AnyFieldAnyAlgebra
 variable {𝕂 𝔸 𝔹 : Type*} [NontriviallyNormedField 𝕂]
 variable [NormedRing 𝔸] [NormedRing 𝔹] [NormedAlgebra 𝕂 𝔸]
 
-/--
-theorem `norm_expSeries_summable_of_mem_ball` / 定理 `norm_expSeries_summable_of_mem_ball`
-
-English:
-theorem norm_expSeries_summable_of_mem_ball
-  statement: (x : 𝔸)
-  proof: (expSeries 𝕂 𝔸).summable_norm_apply hx
-
-中文:
-定理 norm_expSeries_summable_of_mem_ball
-  结论: (x : 𝔸)
-  证明: (expSeries 𝕂 𝔸).summable_norm_apply hx
-
-Depends on / 依赖: expSeries, summable_norm_apply
+/-
+**NormedSpace.norm_expSeries_summable_of_mem_ball** 是 Mathlib 中的一个定理，位于命名空间 `Nor
+medSpace`。
+形式化陈述：norm_expSeries_summable_of_mem_ball (x : 𝔸) (hx : x in Metric.eball (0 : 𝔸
+) (expSeries 𝕂 𝔸).radius) : Summable fun n => ‖expSeries 𝕂 𝔸 n fun _ => x‖
+参数：x : 𝔸；hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `FormalMultilinearSeries.summable_norm_apply`：summable_norm_apply (p : Fo
+rmalMultilinearSeries 𝕜 E F) {x : E} (hx : x in Metric.eball (0 : E) p.radius) :
+ Summable fun n : Nat => ‖p n fun…
 -/
 theorem norm_expSeries_summable_of_mem_ball (x : 𝔸)
-    (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) :
+    (hx : x ∈ Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) :
     Summable fun n => ‖expSeries 𝕂 𝔸 n fun _ => x‖ :=
   (expSeries 𝕂 𝔸).summable_norm_apply hx
-
-/--
-theorem `norm_expSeries_summable_of_mem_ball'` / 定理 `norm_expSeries_summable_of_mem_ball'`
-
-English:
-theorem norm_expSeries_summable_of_mem_ball'
-  statement: (x : 𝔸)
-  proof: by
-  change Summable (norm ∘ _)
-  rw [← expSeries_apply_eq']
-  exact norm_expSeries_summable_of_mem_ball x hx
-
-中文:
-定理 norm_expSeries_summable_of_mem_ball'
-  结论: (x : 𝔸)
-  证明: by
-  change Summable (norm ∘ _)
-  rw [← expSeries_apply_eq']
-  exact norm_expSeries_summable_of_mem_ball x hx
-
-Depends on / 依赖: Summable, expSeries_apply_eq, norm_expSeries_summable_of_mem_ball
+/-
+**NormedSpace.norm_expSeries_summable_of_mem_ball'** 是 Mathlib 中的一个定理，位于命名空间 `No
+rmedSpace`。
+形式化陈述：norm_expSeries_summable_of_mem_ball' (x : 𝔸) (hx : x in Metric.eball (0 : 
+𝔸) (expSeries 𝕂 𝔸).radius) : Summable fun n => ‖(n !⁻¹ : 𝕂) • x ^ n‖
+参数：x : 𝔸；hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NormedSpace.expSeries_apply_eq'`：expSeries_apply_eq' (x : 𝔸) : (fun n =>
+ expSeries 𝕂 𝔸 n fun _ => x) = fun n => (n !⁻¹ : 𝕂) • x ^ n
+· 使用定理 `NormedSpace.norm_expSeries_summable_of_mem_ball`：norm_expSeries_summable
+_of_mem_ball (x : 𝔸) (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : S
+ummable fun n => ‖expSeries 𝕂 𝔸 n fun…
 -/
 theorem norm_expSeries_summable_of_mem_ball' (x : 𝔸)
-    (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) :
+    (hx : x ∈ Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) :
     Summable fun n => ‖(n !⁻¹ : 𝕂) • x ^ n‖ := by
   change Summable (norm ∘ _)
   rw [← expSeries_apply_eq']
@@ -812,388 +852,531 @@ section CompleteAlgebra
 
 variable [CompleteSpace 𝔸]
 
-/--
-theorem `expSeries_summable_of_mem_ball` / 定理 `expSeries_summable_of_mem_ball`
-
-English:
-theorem expSeries_summable_of_mem_ball
-  statement: (x : 𝔸)
-  proof: (norm_expSeries_summable_of_mem_ball x hx).of_norm
-
-中文:
-定理 expSeries_summable_of_mem_ball
-  结论: (x : 𝔸)
-  证明: (norm_expSeries_summable_of_mem_ball x hx).of_norm
-
-Depends on / 依赖: norm_expSeries_summable_of_mem_ball, of_norm
+/-
+**NormedSpace.expSeries_summable_of_mem_ball** 是 Mathlib 中的一个定理，位于命名空间 `NormedSp
+ace`。
+形式化陈述：expSeries_summable_of_mem_ball (x : 𝔸) (hx : x in Metric.eball (0 : 𝔸) (ex
+pSeries 𝕂 𝔸).radius) : Summable fun n => expSeries 𝕂 𝔸 n fun _ => x
+参数：x : 𝔸；hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `Summable.of_norm`：Summable.of_norm {f : ι -> E} (hf : Summable fun a => 
+‖f a‖) : Summable f
+· 使用定理 `NormedSpace.norm_expSeries_summable_of_mem_ball`：norm_expSeries_summable
+_of_mem_ball (x : 𝔸) (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : S
+ummable fun n => ‖expSeries 𝕂 𝔸 n fun…
 -/
 theorem expSeries_summable_of_mem_ball (x : 𝔸)
-    (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) :
+    (hx : x ∈ Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) :
     Summable fun n => expSeries 𝕂 𝔸 n fun _ => x :=
   (norm_expSeries_summable_of_mem_ball x hx).of_norm
-
-/--
-theorem `expSeries_summable_of_mem_ball'` / 定理 `expSeries_summable_of_mem_ball'`
-
-English:
-theorem expSeries_summable_of_mem_ball'
-  statement: (x : 𝔸)
-  proof: (norm_expSeries_summable_of_mem_ball' x hx).of_norm
-
-中文:
-定理 expSeries_summable_of_mem_ball'
-  结论: (x : 𝔸)
-  证明: (norm_expSeries_summable_of_mem_ball' x hx).of_norm
-
-Depends on / 依赖: norm_expSeries_summable_of_mem_ball, of_norm
+/-
+**NormedSpace.expSeries_summable_of_mem_ball'** 是 Mathlib 中的一个定理，位于命名空间 `NormedS
+pace`。
+形式化陈述：expSeries_summable_of_mem_ball' (x : 𝔸) (hx : x in Metric.eball (0 : 𝔸) (e
+xpSeries 𝕂 𝔸).radius) : Summable fun n => (n !⁻¹ : 𝕂) • x ^ n
+参数：x : 𝔸；hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `Summable.of_norm`：Summable.of_norm {f : ι -> E} (hf : Summable fun a => 
+‖f a‖) : Summable f
+· 使用定理 `NormedSpace.norm_expSeries_summable_of_mem_ball'`：norm_expSeries_summabl
+e_of_mem_ball' (x : 𝔸) (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) :
+ Summable fun n => ‖(n !⁻¹ : 𝕂) • x ^ …
 -/
 theorem expSeries_summable_of_mem_ball' (x : 𝔸)
-    (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) :
+    (hx : x ∈ Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) :
     Summable fun n => (n !⁻¹ : 𝕂) • x ^ n :=
   (norm_expSeries_summable_of_mem_ball' x hx).of_norm
-
-/--
-theorem `expSeries_hasSum_exp_of_mem_ball` / 定理 `expSeries_hasSum_exp_of_mem_ball`
-
-English:
-theorem expSeries_hasSum_exp_of_mem_ball
-  statement: [CharZero 𝕂] (x : 𝔸)
-  proof: by
-  simpa only [exp_eq_expSeries_sum 𝕂, expSeries_sum_eq_rat] using
-    FormalMultilinearSeries.hasSum (expSeries 𝕂 𝔸) hx
-
-中文:
-定理 expSeries_hasSum_exp_of_mem_ball
-  结论: [特征零 𝕂] (x : 𝔸)
-  证明: by
-  simpa only [exp_eq_expSeries_sum 𝕂, expSeries_sum_eq_rat] using
-    FormalMultilinearSeries.hasSum (expSeries 𝕂 𝔸) hx
-
-Depends on / 依赖: FormalMultilinearSeries, FormalMultilinearSeries.hasSum, expSeries, expSeries_sum_eq_rat, exp_eq_expSeries_sum, hasSum
+/-
+**NormedSpace.expSeries_hasSum_exp_of_mem_ball** 是 Mathlib 中的一个定理，位于命名空间 `Normed
+Space`。
+形式化陈述：expSeries_hasSum_exp_of_mem_ball [CharZero 𝕂] (x : 𝔸) (hx : x in Metric.eb
+all (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : HasSum (fun n => expSeries 𝕂 𝔸 n fun _ => 
+x) (exp x)
+参数：x : 𝔸；hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `SMulCommClass.continuousConstSMul`：∀ {R : Type u_6} {A : Type u_7} [inst
+ : Monoid A] [inst_1 : SMul R A] [SMulCommClass R A A]   [inst_3 : TopologicalSp
+ace A] [SeparatelyConti…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `NormedSpace.exp_eq_expSeries_sum`：exp_eq_expSeries_sum [CharZero 𝕂] : ex
+p = (expSeries 𝕂 𝔸).sum
+· 使用定理 `FormalMultilinearSeries.hasSum`：∀ {𝕜 : Type u_1} {E : Type u_3} {F : Typ
+e u_4} [inst : NontriviallyNormedField 𝕜] [inst_1 : NormedAddCommGroup E]   [ins
+t_2 : NormedSpace 𝕜 …
 -/
 theorem expSeries_hasSum_exp_of_mem_ball [CharZero 𝕂] (x : 𝔸)
-    (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) :
+    (hx : x ∈ Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) :
     HasSum (fun n => expSeries 𝕂 𝔸 n fun _ => x) (exp x) := by
   simpa only [exp_eq_expSeries_sum 𝕂, expSeries_sum_eq_rat] using
     FormalMultilinearSeries.hasSum (expSeries 𝕂 𝔸) hx
-
-/--
-theorem `expSeries_hasSum_exp_of_mem_ball'` / 定理 `expSeries_hasSum_exp_of_mem_ball'`
-
-English:
-theorem expSeries_hasSum_exp_of_mem_ball'
-  statement: [CharZero 𝕂] (x : 𝔸)
-  proof: by
-  rw [← expSeries_apply_eq']
-  exact expSeries_hasSum_exp_of_mem_ball x hx
-
-中文:
-定理 expSeries_hasSum_exp_of_mem_ball'
-  结论: [特征零 𝕂] (x : 𝔸)
-  证明: by
-  rw [← expSeries_apply_eq']
-  exact expSeries_hasSum_exp_of_mem_ball x hx
-
-Depends on / 依赖: expSeries_apply_eq, expSeries_hasSum_exp_of_mem_ball
+/-
+**NormedSpace.expSeries_hasSum_exp_of_mem_ball'** 是 Mathlib 中的一个定理，位于命名空间 `Norme
+dSpace`。
+形式化陈述：expSeries_hasSum_exp_of_mem_ball' [CharZero 𝕂] (x : 𝔸) (hx : x in Metric.e
+ball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : HasSum (fun n => (n !⁻¹ : 𝕂) • x ^ n) (ex
+p x)
+参数：x : 𝔸；hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NormedSpace.expSeries_apply_eq'`：expSeries_apply_eq' (x : 𝔸) : (fun n =>
+ expSeries 𝕂 𝔸 n fun _ => x) = fun n => (n !⁻¹ : 𝕂) • x ^ n
+· 使用定理 `NormedSpace.expSeries_hasSum_exp_of_mem_ball`：expSeries_hasSum_exp_of_me
+m_ball [CharZero 𝕂] (x : 𝔸) (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radi
+us) : HasSum (fun n => expSeries 𝕂…
 -/
 theorem expSeries_hasSum_exp_of_mem_ball' [CharZero 𝕂] (x : 𝔸)
-    (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) :
+    (hx : x ∈ Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) :
     HasSum (fun n => (n !⁻¹ : 𝕂) • x ^ n) (exp x) := by
   rw [← expSeries_apply_eq']
   exact expSeries_hasSum_exp_of_mem_ball x hx
-
-/--
-theorem `hasFPowerSeriesOnBall_exp_of_radius_pos` / 定理 `hasFPowerSeriesOnBall_exp_of_radius_pos`
-
-English:
-theorem hasFPowerSeriesOnBall_exp_of_radius_pos
-  given: [CharZero 𝕂] (h : 0 < (expSeries 𝕂 𝔸).radius)
-  proof: by
-  simpa only [exp_eq_expSeries_sum 𝕂, expSeries_sum_eq_rat] using
-    (expSeries 𝕂 𝔸).hasFPowerSeriesOnBall h
-
-中文:
-定理 hasFPowerSeriesOnBall_exp_of_radius_pos
-  条件: [特征零 𝕂] (h : 0 < (expSeries 𝕂 𝔸).radius)
-  证明: by
-  simpa only [exp_eq_expSeries_sum 𝕂, expSeries_sum_eq_rat] using
-    (expSeries 𝕂 𝔸).hasFPowerSeriesOnBall h
-
-Depends on / 依赖: expSeries, expSeries_sum_eq_rat, exp_eq_expSeries_sum, hasFPowerSeriesOnBall
+/-
+**NormedSpace.hasFPowerSeriesOnBall_exp_of_radius_pos** 是 Mathlib 中的一个定理，位于命名空间 
+`NormedSpace`。
+形式化陈述：hasFPowerSeriesOnBall_exp_of_radius_pos [CharZero 𝕂] (h : 0 < (expSeries 𝕂
+ 𝔸).radius) : HasFPowerSeriesOnBall exp (expSeries 𝕂 𝔸) 0 (expSeries 𝕂 𝔸).radius
+参数：h : 0 < (expSeries 𝕂 𝔸).radius。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `SMulCommClass.continuousConstSMul`：∀ {R : Type u_6} {A : Type u_7} [inst
+ : Monoid A] [inst_1 : SMul R A] [SMulCommClass R A A]   [inst_3 : TopologicalSp
+ace A] [SeparatelyConti…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `NormedSpace.exp_eq_expSeries_sum`：exp_eq_expSeries_sum [CharZero 𝕂] : ex
+p = (expSeries 𝕂 𝔸).sum
+· 使用定理 `FormalMultilinearSeries.hasFPowerSeriesOnBall`：∀ {𝕜 : Type u_1} {E : Typ
+e u_2} {F : Type u_3} [inst : NontriviallyNormedField 𝕜] [inst_1 : NormedAddComm
+Group E]   [inst_2 : NormedSpace 𝕜 …
 -/
 theorem hasFPowerSeriesOnBall_exp_of_radius_pos [CharZero 𝕂] (h : 0 < (expSeries 𝕂 𝔸).radius) :
     HasFPowerSeriesOnBall exp (expSeries 𝕂 𝔸) 0 (expSeries 𝕂 𝔸).radius := by
   simpa only [exp_eq_expSeries_sum 𝕂, expSeries_sum_eq_rat] using
     (expSeries 𝕂 𝔸).hasFPowerSeriesOnBall h
-
-/--
-theorem `hasFPowerSeriesAt_exp_zero_of_radius_pos` / 定理 `hasFPowerSeriesAt_exp_zero_of_radius_pos`
-
-English:
-theorem hasFPowerSeriesAt_exp_zero_of_radius_pos
-  given: [CharZero 𝕂] (h : 0 < (expSeries 𝕂 𝔸).radius)
-  proof: by
-  simpa only [exp, expSeries_sum_eq_rat] using
-    (hasFPowerSeriesOnBall_exp_of_radius_pos h).hasFPowerSeriesAt
-
-中文:
-定理 hasFPowerSeriesAt_exp_zero_of_radius_pos
-  条件: [特征零 𝕂] (h : 0 < (expSeries 𝕂 𝔸).radius)
-  证明: by
-  simpa only [exp, expSeries_sum_eq_rat] using
-    (hasFPowerSeriesOnBall_exp_of_radius_pos h).hasFPowerSeriesAt
-
-Depends on / 依赖: expSeries_sum_eq_rat, hasFPowerSeriesAt, hasFPowerSeriesOnBall_exp_of_radius_pos
+/-
+**NormedSpace.hasFPowerSeriesAt_exp_zero_of_radius_pos** 是 Mathlib 中的一个定理，位于命名空间
+ `NormedSpace`。
+形式化陈述：hasFPowerSeriesAt_exp_zero_of_radius_pos [CharZero 𝕂] (h : 0 < (expSeries 
+𝕂 𝔸).radius) : HasFPowerSeriesAt exp (expSeries 𝕂 𝔸) 0
+参数：h : 0 < (expSeries 𝕂 𝔸).radius。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `HasFPowerSeriesOnBall.hasFPowerSeriesAt`：HasFPowerSeriesOnBall.hasFPower
+SeriesAt (hf : HasFPowerSeriesOnBall f p x r) : HasFPowerSeriesAt f p x
+· 使用定理 `NormedSpace.hasFPowerSeriesOnBall_exp_of_radius_pos`：hasFPowerSeriesOnBa
+ll_exp_of_radius_pos [CharZero 𝕂] (h : 0 < (expSeries 𝕂 𝔸).radius) : HasFPowerSe
+riesOnBall exp (expSeries 𝕂 𝔸) 0 (expSeri…
 -/
 theorem hasFPowerSeriesAt_exp_zero_of_radius_pos [CharZero 𝕂] (h : 0 < (expSeries 𝕂 𝔸).radius) :
     HasFPowerSeriesAt exp (expSeries 𝕂 𝔸) 0 := by
   simpa only [exp, expSeries_sum_eq_rat] using
     (hasFPowerSeriesOnBall_exp_of_radius_pos h).hasFPowerSeriesAt
-
-/--
-theorem `continuousOn_exp` / 定理 `continuousOn_exp`
-
-English:
-theorem continuousOn_exp
-  given: [CharZero 𝕂]
-  proof: by
-  have := FormalMultilinearSeries.continuousOn (p := expSeries 𝕂 𝔸)
-  simpa only [exp_eq_expSeries_sum 𝕂, expSeries_sum_eq_rat] using this
-
-中文:
-定理 continuousOn_exp
-  条件: [特征零 𝕂]
-  证明: by
-  have := FormalMultilinearSeries.continuousOn (p := expSeries 𝕂 𝔸)
-  simpa only [exp_eq_expSeries_sum 𝕂, expSeries_sum_eq_rat] using this
-
-Depends on / 依赖: FormalMultilinearSeries, FormalMultilinearSeries.continuousOn, continuousOn, expSeries, expSeries_sum_eq_rat, exp_eq_expSeries_sum
+/-
+**NormedSpace.continuousOn_exp** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：continuousOn_exp [CharZero 𝕂] : ContinuousOn (exp : 𝔸 -> 𝔸) (Metric.eball 
+0 (expSeries 𝕂 𝔸).radius)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `FormalMultilinearSeries.continuousOn`：∀ {𝕜 : Type u_1} {E : Type u_2} {F
+ : Type u_3} [inst : NontriviallyNormedField 𝕜] [inst_1 : NormedAddCommGroup E] 
+  [inst_2 : NormedSpace 𝕜 …
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `SMulCommClass.continuousConstSMul`：∀ {R : Type u_6} {A : Type u_7} [inst
+ : Monoid A] [inst_1 : SMul R A] [SMulCommClass R A A]   [inst_3 : TopologicalSp
+ace A] [SeparatelyConti…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NormedSpace.exp_eq_expSeries_sum`：exp_eq_expSeries_sum [CharZero 𝕂] : ex
+p = (expSeries 𝕂 𝔸).sum
 -/
 theorem continuousOn_exp [CharZero 𝕂] :
-    ContinuousOn (exp : 𝔸 -> 𝔸) (Metric.eball 0 (expSeries 𝕂 𝔸).radius) := by
+    ContinuousOn (exp : 𝔸 → 𝔸) (Metric.eball 0 (expSeries 𝕂 𝔸).radius) := by
   have := FormalMultilinearSeries.continuousOn (p := expSeries 𝕂 𝔸)
   simpa only [exp_eq_expSeries_sum 𝕂, expSeries_sum_eq_rat] using this
-
-/--
-theorem `analyticAt_exp_of_mem_ball` / 定理 `analyticAt_exp_of_mem_ball`
-
-English:
-theorem analyticAt_exp_of_mem_ball
-  statement: [CharZero 𝕂] (x : 𝔸)
-  proof: by
-  by_cases h : (expSeries 𝕂 𝔸).radius = 0
-  · rw [h] at hx; exact (ENNReal.not_lt_zero hx).elim
-  · have h := pos_iff_ne_zero.mpr h
-    exact (hasFPowerSeriesOnBall_exp_of_radius_pos h).analyticAt_of_mem hx
-
-中文:
-定理 analyticAt_exp_of_mem_ball
-  结论: [特征零 𝕂] (x : 𝔸)
-  证明: by
-  by_cases h : (expSeries 𝕂 𝔸).radius = 0
-  · rw [h] at hx; exact (ENNReal.not_lt_zero hx).elim
-  · have h := pos_iff_ne_zero.mpr h
-    exact (hasFPowerSeriesOnBall_exp_of_radius_pos h).analyticAt_of_mem hx
-
-Depends on / 依赖: ENNReal, ENNReal.not_lt_zero, analyticAt_of_mem, expSeries, hasFPowerSeriesOnBall_exp_of_radius_pos, not_lt_zero, pos_iff_ne_zero, pos_iff_ne_zero.mpr, radius
+/-
+**NormedSpace.analyticAt_exp_of_mem_ball** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`
+。
+形式化陈述：analyticAt_exp_of_mem_ball [CharZero 𝕂] (x : 𝔸) (hx : x in Metric.eball (0
+ : 𝔸) (expSeries 𝕂 𝔸).radius) : AnalyticAt 𝕂 exp x
+参数：x : 𝔸；hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `ENNReal.not_lt_zero`：not_lt_zero : ¬a < 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `pos_iff_ne_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [inst_
+1 : Zero α] [IsBotZeroClass α], 0 < a ↔ a ≠ 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `HasFPowerSeriesOnBall.analyticAt_of_mem`：HasFPowerSeriesOnBall.analyticA
+t_of_mem (hf : HasFPowerSeriesOnBall f p x r) (h : y in Metric.eball x r) : Anal
+yticAt 𝕜 f y
+· 使用定理 `NormedSpace.hasFPowerSeriesOnBall_exp_of_radius_pos`：hasFPowerSeriesOnBa
+ll_exp_of_radius_pos [CharZero 𝕂] (h : 0 < (expSeries 𝕂 𝔸).radius) : HasFPowerSe
+riesOnBall exp (expSeries 𝕂 𝔸) 0 (expSeri…
 -/
 theorem analyticAt_exp_of_mem_ball [CharZero 𝕂] (x : 𝔸)
-    (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : AnalyticAt 𝕂 exp x := by
+    (hx : x ∈ Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : AnalyticAt 𝕂 exp x := by
   by_cases h : (expSeries 𝕂 𝔸).radius = 0
   · rw [h] at hx; exact (ENNReal.not_lt_zero hx).elim
   · have h := pos_iff_ne_zero.mpr h
     exact (hasFPowerSeriesOnBall_exp_of_radius_pos h).analyticAt_of_mem hx
 
-/--
-theorem `exp_add_of_commute_of_mem_ball` / 定理 `exp_add_of_commute_of_mem_ball`
+/-- In a Banach-algebra `𝔸` over a normed field `𝕂` of characteristic zero, if `x` and `y` are
+in the disk of convergence and commute, then
+`NormedSpace.exp (x + y) = (NormedSpace.exp x) * (NormedSpace.exp y)`. -/
+/-
+**NormedSpace.exp_add_of_commute_of_mem_ball** 是 Mathlib 中的一个定理，位于命名空间 `NormedSp
+ace`。
+形式化陈述：exp_add_of_commute_of_mem_ball [CharZero 𝕂] {x y : 𝔸} (hxy : Commute x y) 
+(hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) (hy : y in Metric.eball 
+(0 : 𝔸) (expSeries 𝕂 𝔸).radius) : exp (x + y) = exp x * exp y
+参数：hxy : Commute x y；hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius；hy : 
+y in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NormedSpace.exp_eq_tsum`：exp_eq_tsum [CharZero 𝕂] : exp = fun x : 𝔸 => ∑
+' n : Nat, (n !⁻¹ : 𝕂) • x ^ n
+· 使用定理 `tsum_mul_tsum_eq_tsum_sum_antidiagonal_of_summable_norm`：tsum_mul_tsum_e
+q_tsum_sum_antidiagonal_of_summable_norm [CompleteSpace R] {f g : Nat -> R} (hf 
+: Summable fun x => ‖f x‖) (hg : Summable fun…
+· 使用定理 `NormedSpace.norm_expSeries_summable_of_mem_ball'`：norm_expSeries_summabl
+e_of_mem_ball' (x : 𝔸) (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) :
+ Summable fun n => ‖(n !⁻¹ : 𝕂) • x ^ …
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Commute.add_pow'`：add_pow' (h : Commute x y) (n : Nat) : (x + y) ^ n = ∑
+ m in antidiagonal n, n.choose m.1 • (x ^ m.1 * y ^ m.2)
+· 使用定理 `Finset.smul_sum`：Finset.smul_sum {f : γ -> N} {s : Finset γ} : (r • ∑ x 
+in s, f x) = ∑ x in s, r • f x
+· 使用定理 `tsum_congr`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid α] [in
+st_1 : TopologicalSpace α] {L : SummationFilter β}   {f g : β → α}, (∀ (b : β), 
+…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用引理 `smul_mul_smul_comm`：smul_mul_smul_comm [Mul α] [Mul β] [SMul α β] [IsSca
+larTower α β β] [IsScalarTower α α β] [SMulCommClass α β β] (a : α) (b : β) (c :
+ α) (d :…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.HasAntidiagonal.mem_antidiagonal`：∀ {A : Type u_1} {inst : AddMon
+oid A} [self : Finset.HasAntidiagonal A] {n : A} {a : A × A},   a ∈ Finset.HasAn
+tidiagonal.antidiagonal n ↔ a…
+· 使用定理 `Nat.cast_add_choose`：cast_add_choose {a b : Nat} : ((a + b).choose a : K
+) = (a + b)! / (a ! * b !)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr_arg₂`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} (f : α → β → 
+γ) {x x' : α} {y y' : β}, x = x' → y = y' → f x y = f x' y'
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.mul_eq_eval`：mul_eq_eval [GroupWithZero M] {
+l₁ l₂ l : NF M} {x₁ x₂ : M} (hx₁ : x₁ = l₁.eval) (hx₂ : x₂ = l₂.eval) (h : l₁.ev
+al * l₂.eval = l.eval) : x₁ *…
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.inv_eq_eval`：inv_eq_eval [CommGroupWithZero 
+M] {l : NF M} {x : M} (h : x = l.eval) : x⁻¹ = (l⁻¹).eval
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.atom_eq_eval`：atom_eq_eval [GroupWithZero M]
+ (x : M) : x = NF.eval [(1, x)]
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.div_eq_eval`：div_eq_eval [GroupWithZero M] {
+l₁ l₂ l : NF M} {x₁ x₂ : M} (hx₁ : x₁ = l₁.eval) (hx₂ : x₂ = l₂.eval) (h : l₁.ev
+al / l₂.eval = l.eval) : x₁ /…
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.mul_eq_eval₃`：mul_eq_eval₃ [CommGroupWithZer
+o M] {a₁ : Int × M} (a₂ : Int × M) {l₁ l₂ l : NF M} (h : (a₁ ::ᵣ l₁).eval * l₂.e
+val = l.eval) : (a₁ ::ᵣ l₁).ev…
+（共 46 条，此处仅展示前 30 条）
 
-English:
-theorem exp_add_of_commute_of_mem_ball
-  statement: [CharZero 𝕂] {x y : 𝔸} (hxy : Commute x y)
-  proof: by
-  rw [exp_eq_tsum 𝕂]; rw [tsum_mul_tsum_eq_tsum_sum_antidiagonal_of_summable_norm
-      (norm_expSeries_summable_of_mem_ball' x hx) (norm_expSeries_summable_of_mem_ball' y hy)]
-  dsimp only
-  conv_lhs =>
-    congr
-    ext
-    rw [hxy.add_pow' _]; rw [Finset.smul_sum]
-  refine tsum_congr fun n => Finset.sum_congr rfl fun kl hkl => ?_
-  rw [← Nat.cast_smul_eq_nsmul 𝕂]; rw [smul_smul]; rw [smul_mul_smul_comm]; rw [← Finset.mem_antidiagonal.mp hkl]; rw [Nat.cast_add_choose]; rw [Finset.mem_antidiagonal.mp hkl]
-  field_simp [n.factorial_ne_zero]
-
-中文:
-定理 exp_add_of_commute_of_mem_ball
-  结论: [特征零 𝕂] {x y : 𝔸} (hxy : Commute x y)
-  证明: by
-  rw [exp_eq_tsum 𝕂]; rw [tsum_mul_tsum_eq_tsum_sum_antidiagonal_of_summable_norm
-      (norm_expSeries_summable_of_mem_ball' x hx) (norm_expSeries_summable_of_mem_ball' y hy)]
-  dsimp only
-  conv_lhs =>
-    congr
-    ext
-    rw [hxy.add_pow' _]; rw [Finset.smul_sum]
-  refine tsum_congr fun n => Finset.sum_congr rfl fun kl hkl => ?_
-  rw [← Nat.cast_smul_eq_nsmul 𝕂]; rw [smul_smul]; rw [smul_mul_smul_comm]; rw [← Finset.mem_antidiagonal.mp hkl]; rw [Nat.cast_add_choose]; rw [Finset.mem_antidiagonal.mp hkl]
-  field_simp [n.factorial_ne_zero]
-
-Depends on / 依赖: Finset, Finset.mem_antidiagonal.mp, Finset.smul_sum, Finset.sum_congr, Nat.cast_add_choose, Nat.cast_smul_eq_nsmul, add_pow, cast_add_choose, cast_smul_eq_nsmul, conv_lhs, exp_eq_tsum, hxy.add_pow, mem_antidiagonal, norm_expSeries_summable_of_mem_ball, smul_mul_smul_comm, smul_smul, smul_sum, sum_congr, tsum_congr, tsum_mul_tsum_eq_tsum_sum_antidiagonal_of_summable_norm
+--- 原说明 ---
+In a Banach-algebra `𝔸` over a normed field `𝕂` of characteristic zero, if `x` a
+nd `y` are
+in the disk of convergence and commute, then
+`NormedSpace.exp (x + y) = (NormedSpace.exp x) * (NormedSpace.exp y)`.
 -/
 theorem exp_add_of_commute_of_mem_ball [CharZero 𝕂] {x y : 𝔸} (hxy : Commute x y)
-    (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius)
-    (hy : y in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : exp (x + y) = exp x * exp y := by
-  rw [exp_eq_tsum 𝕂]; rw [tsum_mul_tsum_eq_tsum_sum_antidiagonal_of_summable_norm
+    (hx : x ∈ Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius)
+    (hy : y ∈ Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : exp (x + y) = exp x * exp y := by
+  rw [exp_eq_tsum 𝕂,
+    tsum_mul_tsum_eq_tsum_sum_antidiagonal_of_summable_norm
       (norm_expSeries_summable_of_mem_ball' x hx) (norm_expSeries_summable_of_mem_ball' y hy)]
   dsimp only
   conv_lhs =>
     congr
     ext
-    rw [hxy.add_pow' _]; rw [Finset.smul_sum]
+    rw [hxy.add_pow' _, Finset.smul_sum]
   refine tsum_congr fun n => Finset.sum_congr rfl fun kl hkl => ?_
-  rw [← Nat.cast_smul_eq_nsmul 𝕂]; rw [smul_smul]; rw [smul_mul_smul_comm]; rw [← Finset.mem_antidiagonal.mp hkl]; rw [Nat.cast_add_choose]; rw [Finset.mem_antidiagonal.mp hkl]
+  rw [← Nat.cast_smul_eq_nsmul 𝕂, smul_smul, smul_mul_smul_comm, ← Finset.mem_antidiagonal.mp hkl,
+    Nat.cast_add_choose, Finset.mem_antidiagonal.mp hkl]
   field_simp [n.factorial_ne_zero]
 
 /-- `NormedSpace.exp x` has explicit two-sided inverse `NormedSpace.exp (-x)`. -/
 @[instance_reducible]
-/--
-Definition of `invertibleExpOfMemBall` / `invertibleExpOfMemBall` 的定义
+/-
+**NormedSpace.invertibleExpOfMemBall** 是 Mathlib 中的一个定义，位于命名空间 `NormedSpace`。
+形式化陈述：invertibleExpOfMemBall [CharZero 𝕂] {x : 𝔸} (hx : x in Metric.eball (0 : 𝔸
+) (expSeries 𝕂 𝔸).radius) : Invertible (exp x) where invOf
+参数：hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition invertibleExpOfMemBall
-  signature: [CharZero 𝕂] {x : 𝔸}
-  body: exp (-x)
-  invOf_mul_self := by
-    have hnx : -x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius := by
-      rw [Metric.mem_eball]; rw [← neg_zero]; rw [edist_neg_neg]
-      exact hx
-    rw [← exp_add_of_commute_of_mem_ball (Commute.neg_left <| Commute.refl x) hnx hx]; rw [neg_add_cancel]; rw [exp_zero]
-  mul_invOf_self := by
-    have hnx : -x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius := by
-      rw [Metric.mem_eball]; rw [← neg_zero]; rw [edist_neg_neg]
-      exact hx
-    rw [← exp_add_of_commute_of_mem_ball (Commute.neg_right <| Commute.refl x) hx hnx]; rw [add_neg_cancel]; rw [exp_zero]
-
-中文:
-定义 invertibleExpOfMemBall
-  签名: [特征零 𝕂] {x : 𝔸}
-  定义体: exp (-x)
-  invOf_mul_self := by
-    have hnx : -x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius := by
-      rw [Metric.mem_eball]; rw [← neg_zero]; rw [edist_neg_neg]
-      exact hx
-    rw [← exp_add_of_commute_of_mem_ball (Commute.neg_left <| Commute.refl x) hnx hx]; rw [neg_add_cancel]; rw [exp_zero]
-  mul_invOf_self := by
-    have hnx : -x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius := by
-      rw [Metric.mem_eball]; rw [← neg_zero]; rw [edist_neg_neg]
-      exact hx
-    rw [← exp_add_of_commute_of_mem_ball (Commute.neg_right <| Commute.refl x) hx hnx]; rw [add_neg_cancel]; rw [exp_zero]
+--- 原说明 ---
+`NormedSpace.exp x` has explicit two-sided inverse `NormedSpace.exp (-x)`.
 -/
 noncomputable def invertibleExpOfMemBall [CharZero 𝕂] {x : 𝔸}
-    (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : Invertible (exp x)
+    (hx : x ∈ Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : Invertible (exp x)
     where
   invOf := exp (-x)
   invOf_mul_self := by
-    have hnx : -x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius := by
-      rw [Metric.mem_eball]; rw [← neg_zero]; rw [edist_neg_neg]
+    have hnx : -x ∈ Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius := by
+      rw [Metric.mem_eball, ← neg_zero, edist_neg_neg]
       exact hx
-    rw [← exp_add_of_commute_of_mem_ball (Commute.neg_left <| Commute.refl x) hnx hx]; rw [neg_add_cancel]; rw [exp_zero]
+    rw [← exp_add_of_commute_of_mem_ball (Commute.neg_left <| Commute.refl x) hnx hx,
+      neg_add_cancel, exp_zero]
   mul_invOf_self := by
-    have hnx : -x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius := by
-      rw [Metric.mem_eball]; rw [← neg_zero]; rw [edist_neg_neg]
+    have hnx : -x ∈ Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius := by
+      rw [Metric.mem_eball, ← neg_zero, edist_neg_neg]
       exact hx
-    rw [← exp_add_of_commute_of_mem_ball (Commute.neg_right <| Commute.refl x) hx hnx]; rw [add_neg_cancel]; rw [exp_zero]
-
-/--
-theorem `isUnit_exp_of_mem_ball` / 定理 `isUnit_exp_of_mem_ball`
-
-English:
-theorem isUnit_exp_of_mem_ball
-  statement: [CharZero 𝕂] {x : 𝔸}
-  proof: @isUnit_of_invertible _ _ _ (invertibleExpOfMemBall hx)
-
-中文:
-定理 isUnit_exp_of_mem_ball
-  结论: [特征零 𝕂] {x : 𝔸}
-  证明: @isUnit_of_invertible _ _ _ (invertibleExpOfMemBall hx)
-
-Depends on / 依赖: invertibleExpOfMemBall, isUnit_of_invertible
+    rw [← exp_add_of_commute_of_mem_ball (Commute.neg_right <| Commute.refl x) hx hnx,
+      add_neg_cancel, exp_zero]
+/-
+**NormedSpace.isUnit_exp_of_mem_ball** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：isUnit_exp_of_mem_ball [CharZero 𝕂] {x : 𝔸} (hx : x in Metric.eball (0 : 𝔸
+) (expSeries 𝕂 𝔸).radius) : IsUnit (exp x)
+参数：hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `isUnit_of_invertible`：isUnit_of_invertible [Monoid α] (a : α) [Invertibl
+e a] : IsUnit a
 -/
 theorem isUnit_exp_of_mem_ball [CharZero 𝕂] {x : 𝔸}
-    (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : IsUnit (exp x) :=
+    (hx : x ∈ Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : IsUnit (exp x) :=
   @isUnit_of_invertible _ _ _ (invertibleExpOfMemBall hx)
-
-/--
-theorem `invOf_exp_of_mem_ball` / 定理 `invOf_exp_of_mem_ball`
-
-English:
-theorem invOf_exp_of_mem_ball
-  statement: [CharZero 𝕂] {x : 𝔸}
-  proof: by
-  let := invertibleExpOfMemBall hx; convert! (rfl : ⅟(exp x) = _)
-
-中文:
-定理 invOf_exp_of_mem_ball
-  结论: [特征零 𝕂] {x : 𝔸}
-  证明: by
-  let := invertibleExpOfMemBall hx; convert! (rfl : ⅟(exp x) = _)
-
-Depends on / 依赖: convert, invertibleExpOfMemBall
+/-
+**NormedSpace.invOf_exp_of_mem_ball** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：invOf_exp_of_mem_ball [CharZero 𝕂] {x : 𝔸} (hx : x in Metric.eball (0 : 𝔸)
+ (expSeries 𝕂 𝔸).radius) [Invertible (exp x)] : ⅟(exp x) = exp (-x)
+参数：hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius；exp x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Invertible.congr`：Invertible.congr [Invertible a] [Invertible b] (h : a 
+= b) : ⅟a = ⅟b
 -/
 theorem invOf_exp_of_mem_ball [CharZero 𝕂] {x : 𝔸}
-    (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) [Invertible (exp x)] :
+    (hx : x ∈ Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) [Invertible (exp x)] :
     ⅟(exp x) = exp (-x) := by
   let := invertibleExpOfMemBall hx; convert! (rfl : ⅟(exp x) = _)
 
-/--
-theorem `map_exp_of_mem_ball` / 定理 `map_exp_of_mem_ball`
+/-- Any continuous ring homomorphism commutes with `NormedSpace.exp`. -/
+/-
+**NormedSpace.map_exp_of_mem_ball** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：map_exp_of_mem_ball [Algebra 𝕂 𝔹] [CharZero 𝕂] {F} [FunLike F 𝔸 𝔹] [RingHo
+mClass F 𝔸 𝔹] (f : F) (hf : Continuous f) (x : 𝔸) (hx : x in Metric.eball (0 : 𝔸
+) (expSeries 𝕂 𝔸).radius) : f (exp x) = exp (f x)
+参数：f : F；hf : Continuous f；x : 𝔸；hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).
+radius。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NormedSpace.exp_eq_tsum`：exp_eq_tsum [CharZero 𝕂] : exp = fun x : 𝔸 => ∑
+' n : Nat, (n !⁻¹ : 𝕂) • x ^ n
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `HasSum.tsum_eq`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid α]
+ [inst_1 : TopologicalSpace α] {L : SummationFilter β}   {f : β → α} {a : α} [T2
+Spac…
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `SummationFilter.instNeBotUnconditional`：∀ (β : Type u_2), (SummationFilt
+er.unconditional β).NeBot
+· 使用定理 `HasSum.map`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} [inst : AddCo
+mmMonoid α] [inst_1 : TopologicalSpace α] {f : β → α}   {a : α} {L : SummationFi
+…
+· 使用定理 `Summable.hasSum`：∀ {α : Type u_1} {β : Type u_2} [inst : AddCommMonoid α
+] [inst_1 : TopologicalSpace α] {L : SummationFilter β}   {f : β → α}, Summable 
+f L →…
+· 使用定理 `NormedSpace.expSeries_summable_of_mem_ball'`：expSeries_summable_of_mem_b
+all' (x : 𝔸) (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : Summable 
+fun n => (n !⁻¹ : 𝕂) • x ^ n
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `map_inv_natCast_smul`：map_inv_natCast_smul [AddCommMonoid M] [AddCommMon
+oid M₂] {F : Type*} [FunLike F M M₂] [AddMonoidHomClass F M M₂] (f : F) (R S : T
+ype*) [Div…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem map_exp_of_mem_ball
-  statement: [Algebra 𝕂 𝔹] [CharZero 𝕂] {F} [FunLike F 𝔸 𝔹] [RingHomClass F 𝔸 𝔹]
-  proof: by
-  rw [exp_eq_tsum 𝕂]; rw [exp_eq_tsum 𝕂]
-  refine ((expSeries_summable_of_mem_ball' _ hx).hasSum.map f hf).tsum_eq.symm.trans ?_
-  dsimp only [Function.comp_def]
-  simp_rw [map_inv_natCast_smul f 𝕂 𝕂, map_pow]
-
-中文:
-定理 map_exp_of_mem_ball
-  结论: [代数 𝕂 𝔹] [特征零 𝕂] {F} [函数状 F 𝔸 𝔹] [环态射类 F 𝔸 𝔹]
-  证明: by
-  rw [exp_eq_tsum 𝕂]; rw [exp_eq_tsum 𝕂]
-  refine ((expSeries_summable_of_mem_ball' _ hx).hasSum.map f hf).tsum_eq.symm.trans ?_
-  dsimp only [Function.comp_def]
-  simp_rw [map_inv_natCast_smul f 𝕂 𝕂, map_pow]
-
-Depends on / 依赖: Function, Function.comp_def, comp_def, expSeries_summable_of_mem_ball, exp_eq_tsum, hasSum, hasSum.map, map_inv_natCast_smul, map_pow, simp_rw, tsum_eq, tsum_eq.symm.trans
+--- 原说明 ---
+Any continuous ring homomorphism commutes with `NormedSpace.exp`.
 -/
 theorem map_exp_of_mem_ball [Algebra 𝕂 𝔹] [CharZero 𝕂] {F} [FunLike F 𝔸 𝔹] [RingHomClass F 𝔸 𝔹]
-    (f : F) (hf : Continuous f) (x : 𝔸) (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) :
+    (f : F) (hf : Continuous f) (x : 𝔸) (hx : x ∈ Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) :
     f (exp x) = exp (f x) := by
-  rw [exp_eq_tsum 𝕂]; rw [exp_eq_tsum 𝕂]
+  rw [exp_eq_tsum 𝕂, exp_eq_tsum 𝕂]
   refine ((expSeries_summable_of_mem_ball' _ hx).hasSum.map f hf).tsum_eq.symm.trans ?_
   dsimp only [Function.comp_def]
   simp_rw [map_inv_natCast_smul f 𝕂 𝕂, map_pow]
 
 end CompleteAlgebra
 
-/--
-theorem `algebraMap_exp_comm_of_mem_ball` / 定理 `algebraMap_exp_comm_of_mem_ball`
-
-English:
-theorem algebraMap_exp_comm_of_mem_ball
-  statement: [CharZero 𝕂] [CompleteSpace 𝕂] (x : 𝕂)
-  proof: map_exp_of_mem_ball (algebraMap _ _) (algebraMapCLM _ _).continuous _ hx
-
-中文:
-定理 algebraMap_exp_comm_of_mem_ball
-  结论: [特征零 𝕂] [完备空间 𝕂] (x : 𝕂)
-  证明: map_exp_of_mem_ball (algebraMap _ _) (algebraMapCLM _ _).continuous _ hx
-
-Depends on / 依赖: algebraMap, algebraMapCLM, continuous, map_exp_of_mem_ball
+/-
+**NormedSpace.algebraMap_exp_comm_of_mem_ball** 是 Mathlib 中的一个定理，位于命名空间 `NormedS
+pace`。
+形式化陈述：algebraMap_exp_comm_of_mem_ball [CharZero 𝕂] [CompleteSpace 𝕂] (x : 𝕂) (hx
+ : x in Metric.eball (0 : 𝕂) (expSeries 𝕂 𝕂).radius) : algebraMap 𝕂 𝔸 (exp x) = 
+exp (algebraMap 𝕂 𝔸 x)
+参数：x : 𝕂；hx : x in Metric.eball (0 : 𝕂) (expSeries 𝕂 𝕂).radius。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `NormedSpace.map_exp_of_mem_ball`：map_exp_of_mem_ball [Algebra 𝕂 𝔹] [Char
+Zero 𝕂] {F} [FunLike F 𝔸 𝔹] [RingHomClass F 𝔸 𝔹] (f : F) (hf : Continuous f) (x 
+: 𝔸) (hx : x in Metri…
+· 使用定理 `ContinuousLinearMap.continuous`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst 
+: Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [inst_
+2 : TopologicalSpace…
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
 -/
 theorem algebraMap_exp_comm_of_mem_ball [CharZero 𝕂] [CompleteSpace 𝕂] (x : 𝕂)
-    (hx : x in Metric.eball (0 : 𝕂) (expSeries 𝕂 𝕂).radius) :
+    (hx : x ∈ Metric.eball (0 : 𝕂) (expSeries 𝕂 𝕂).radius) :
     algebraMap 𝕂 𝔸 (exp x) = exp (algebraMap 𝕂 𝔸 x) :=
   map_exp_of_mem_ball (algebraMap _ _) (algebraMapCLM _ _).continuous _ hx
 
@@ -1204,97 +1387,100 @@ section AnyFieldDivisionAlgebra
 variable {𝕂 𝔸 : Type*} [NontriviallyNormedField 𝕂] [NormedDivisionRing 𝔸] [NormedAlgebra 𝕂 𝔸]
 variable (𝕂)
 
-/--
-theorem `norm_expSeries_div_summable_of_mem_ball` / 定理 `norm_expSeries_div_summable_of_mem_ball`
-
-English:
-theorem norm_expSeries_div_summable_of_mem_ball
-  statement: (x : 𝔸)
-  proof: by
-  change Summable (norm ∘ _)
-  rw [← expSeries_apply_eq_div' (𝕂 := 𝕂) x]
-  exact norm_expSeries_summable_of_mem_ball x hx
-
-中文:
-定理 norm_expSeries_div_summable_of_mem_ball
-  结论: (x : 𝔸)
-  证明: by
-  change Summable (norm ∘ _)
-  rw [← expSeries_apply_eq_div' (𝕂 := 𝕂) x]
-  exact norm_expSeries_summable_of_mem_ball x hx
-
-Depends on / 依赖: Summable, expSeries_apply_eq_div, norm_expSeries_summable_of_mem_ball
+/-
+**NormedSpace.norm_expSeries_div_summable_of_mem_ball** 是 Mathlib 中的一个定理，位于命名空间 
+`NormedSpace`。
+形式化陈述：norm_expSeries_div_summable_of_mem_ball (x : 𝔸) (hx : x in Metric.eball (0
+ : 𝔸) (expSeries 𝕂 𝔸).radius) : Summable fun n => ‖x ^ n / (n !)‖
+参数：x : 𝔸；hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NormedSpace.expSeries_apply_eq_div'`：expSeries_apply_eq_div' (x : 𝔸) : (
+fun n => expSeries 𝕂 𝔸 n fun _ => x) = fun n => x ^ n / n !
+· 使用定理 `NormedSpace.norm_expSeries_summable_of_mem_ball`：norm_expSeries_summable
+_of_mem_ball (x : 𝔸) (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : S
+ummable fun n => ‖expSeries 𝕂 𝔸 n fun…
 -/
 theorem norm_expSeries_div_summable_of_mem_ball (x : 𝔸)
-    (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) :
+    (hx : x ∈ Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) :
     Summable fun n => ‖x ^ n / (n !)‖ := by
   change Summable (norm ∘ _)
   rw [← expSeries_apply_eq_div' (𝕂 := 𝕂) x]
   exact norm_expSeries_summable_of_mem_ball x hx
-
-/--
-theorem `expSeries_div_summable_of_mem_ball` / 定理 `expSeries_div_summable_of_mem_ball`
-
-English:
-theorem expSeries_div_summable_of_mem_ball
-  statement: [CompleteSpace 𝔸] (x : 𝔸)
-  proof: (norm_expSeries_div_summable_of_mem_ball 𝕂 x hx).of_norm
-
-中文:
-定理 expSeries_div_summable_of_mem_ball
-  结论: [完备空间 𝔸] (x : 𝔸)
-  证明: (norm_expSeries_div_summable_of_mem_ball 𝕂 x hx).of_norm
-
-Depends on / 依赖: norm_expSeries_div_summable_of_mem_ball, of_norm
+/-
+**NormedSpace.expSeries_div_summable_of_mem_ball** 是 Mathlib 中的一个定理，位于命名空间 `Norm
+edSpace`。
+形式化陈述：expSeries_div_summable_of_mem_ball [CompleteSpace 𝔸] (x : 𝔸) (hx : x in Me
+tric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : Summable fun n => x ^ n / n !
+参数：x : 𝔸；hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `Summable.of_norm`：Summable.of_norm {f : ι -> E} (hf : Summable fun a => 
+‖f a‖) : Summable f
+· 使用定理 `NormedSpace.norm_expSeries_div_summable_of_mem_ball`：norm_expSeries_div_
+summable_of_mem_ball (x : 𝔸) (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).rad
+ius) : Summable fun n => ‖x ^ n / (n !)‖
 -/
 theorem expSeries_div_summable_of_mem_ball [CompleteSpace 𝔸] (x : 𝔸)
-    (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : Summable fun n => x ^ n / n ! :=
+    (hx : x ∈ Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : Summable fun n => x ^ n / n ! :=
   (norm_expSeries_div_summable_of_mem_ball 𝕂 x hx).of_norm
-
-/--
-theorem `expSeries_div_hasSum_exp_of_mem_ball` / 定理 `expSeries_div_hasSum_exp_of_mem_ball`
-
-English:
-theorem expSeries_div_hasSum_exp_of_mem_ball
-  statement: [CharZero 𝕂] [CompleteSpace 𝔸] (x : 𝔸)
-  proof: by
-  rw [← expSeries_apply_eq_div' (𝕂 := 𝕂) x]
-  exact expSeries_hasSum_exp_of_mem_ball x hx
-
-中文:
-定理 expSeries_div_hasSum_exp_of_mem_ball
-  结论: [特征零 𝕂] [完备空间 𝔸] (x : 𝔸)
-  证明: by
-  rw [← expSeries_apply_eq_div' (𝕂 := 𝕂) x]
-  exact expSeries_hasSum_exp_of_mem_ball x hx
-
-Depends on / 依赖: expSeries_apply_eq_div, expSeries_hasSum_exp_of_mem_ball
+/-
+**NormedSpace.expSeries_div_hasSum_exp_of_mem_ball** 是 Mathlib 中的一个定理，位于命名空间 `No
+rmedSpace`。
+形式化陈述：expSeries_div_hasSum_exp_of_mem_ball [CharZero 𝕂] [CompleteSpace 𝔸] (x : 𝔸
+) (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : HasSum (fun n => x ^
+ n / n !) (exp x)
+参数：x : 𝔸；hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NormedSpace.expSeries_apply_eq_div'`：expSeries_apply_eq_div' (x : 𝔸) : (
+fun n => expSeries 𝕂 𝔸 n fun _ => x) = fun n => x ^ n / n !
+· 使用定理 `NormedSpace.expSeries_hasSum_exp_of_mem_ball`：expSeries_hasSum_exp_of_me
+m_ball [CharZero 𝕂] (x : 𝔸) (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radi
+us) : HasSum (fun n => expSeries 𝕂…
 -/
 theorem expSeries_div_hasSum_exp_of_mem_ball [CharZero 𝕂] [CompleteSpace 𝔸] (x : 𝔸)
-    (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) :
+    (hx : x ∈ Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) :
     HasSum (fun n => x ^ n / n !) (exp x) := by
   rw [← expSeries_apply_eq_div' (𝕂 := 𝕂) x]
   exact expSeries_hasSum_exp_of_mem_ball x hx
-
-/--
-theorem `exp_neg_of_mem_ball` / 定理 `exp_neg_of_mem_ball`
-
-English:
-theorem exp_neg_of_mem_ball
-  statement: [CharZero 𝕂] [CompleteSpace 𝔸] {x : 𝔸}
-  proof: letI := invertibleExpOfMemBall hx
-  invOf_eq_inv (exp x)
-
-中文:
-定理 exp_neg_of_mem_ball
-  结论: [特征零 𝕂] [完备空间 𝔸] {x : 𝔸}
-  证明: letI := invertibleExpOfMemBall hx
-  invOf_eq_inv (exp x)
-
-Depends on / 依赖: invOf_eq_inv, invertibleExpOfMemBall
+/-
+**NormedSpace.exp_neg_of_mem_ball** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：exp_neg_of_mem_ball [CharZero 𝕂] [CompleteSpace 𝔸] {x : 𝔸} (hx : x in Metr
+ic.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : exp (-x) = (exp x)⁻¹
+参数：hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `invOf_eq_inv`：invOf_eq_inv (a : α) [Invertible a] : ⅟a = a⁻¹
 -/
 theorem exp_neg_of_mem_ball [CharZero 𝕂] [CompleteSpace 𝔸] {x : 𝔸}
-    (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : exp (-x) = (exp x)⁻¹ :=
+    (hx : x ∈ Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : exp (-x) = (exp x)⁻¹ :=
   letI := invertibleExpOfMemBall hx
   invOf_eq_inv (exp x)
 
@@ -1305,68 +1491,115 @@ section AnyFieldCommAlgebra
 variable {𝕂 𝔸 : Type*} [NontriviallyNormedField 𝕂] [NormedCommRing 𝔸] [NormedAlgebra 𝕂 𝔸]
   [CompleteSpace 𝔸]
 
-/--
-theorem `exp_add_of_mem_ball` / 定理 `exp_add_of_mem_ball`
+/-- In a commutative Banach-algebra `𝔸` over a normed field `𝕂` of characteristic zero,
+`NormedSpace.exp (x+y) = (NormedSpace.exp x) * (NormedSpace.exp y)`
+for all `x`, `y` in the disk of convergence. -/
+/-
+**NormedSpace.exp_add_of_mem_ball** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：exp_add_of_mem_ball [CharZero 𝕂] {x y : 𝔸} (hx : x in Metric.eball (0 : 𝔸)
+ (expSeries 𝕂 𝔸).radius) (hy : y in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius)
+ : exp (x + y) = exp x * exp y
+参数：hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius；hy : y in Metric.eball 
+(0 : 𝔸) (expSeries 𝕂 𝔸).radius。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `NormedSpace.exp_add_of_commute_of_mem_ball`：exp_add_of_commute_of_mem_ba
+ll [CharZero 𝕂] {x y : 𝔸} (hxy : Commute x y) (hx : x in Metric.eball (0 : 𝔸) (e
+xpSeries 𝕂 𝔸).radius) (hy : y in…
+· 使用定理 `Commute.all`：∀ {S : Type u_3} [inst : CommMagma S] (a b : S), Commute a 
+b
 
-English:
-theorem exp_add_of_mem_ball
-  statement: [CharZero 𝕂] {x y : 𝔸}
-  proof: exp_add_of_commute_of_mem_ball (Commute.all x y) hx hy
-
-中文:
-定理 exp_add_of_mem_ball
-  结论: [特征零 𝕂] {x y : 𝔸}
-  证明: exp_add_of_commute_of_mem_ball (Commute.all x y) hx hy
-
-Depends on / 依赖: Commute, Commute.all, exp_add_of_commute_of_mem_ball
+--- 原说明 ---
+In a commutative Banach-algebra `𝔸` over a normed field `𝕂` of characteristic ze
+ro,
+`NormedSpace.exp (x+y) = (NormedSpace.exp x) * (NormedSpace.exp y)`
+for all `x`, `y` in the disk of convergence.
 -/
 theorem exp_add_of_mem_ball [CharZero 𝕂] {x y : 𝔸}
-    (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius)
-    (hy : y in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : exp (x + y) = exp x * exp y :=
+    (hx : x ∈ Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius)
+    (hy : y ∈ Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : exp (x + y) = exp x * exp y :=
   exp_add_of_commute_of_mem_ball (Commute.all x y) hx hy
 
 end AnyFieldCommAlgebra
 
 section AnyAlgebra
 
-variable (𝕂 𝔸 : Type*) [NontriviallyNormedField 𝕂] [CharZero 𝕂] [ContinuousSMul Rat 𝕂]
+variable (𝕂 𝔸 : Type*) [NontriviallyNormedField 𝕂] [CharZero 𝕂] [ContinuousSMul ℚ 𝕂]
 variable [NormedRing 𝔸] [NormedAlgebra 𝕂 𝔸]
 
-/--
-theorem `expSeries_radius_eq_top` / 定理 `expSeries_radius_eq_top`
+/-- In a normed algebra `𝔸` over `𝕂 = ℝ` or `𝕂 = ℂ`, the series defining the exponential map
+has an infinite radius of convergence. -/
+/-
+**NormedSpace.expSeries_radius_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：expSeries_radius_eq_top : (expSeries 𝕂 𝔸).radius = ∞
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.cast_ne_zero`：cast_ne_zero {n : Nat} : (n : R) != 0 ↔ n != 0
+· 使用定理 `Nat.factorial_ne_zero`：factorial_ne_zero (n : Nat) : n ! != 0
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `SMulCommClass.continuousConstSMul`：∀ {R : Type u_6} {A : Type u_7} [inst
+ : Monoid A] [inst_1 : SMul R A] [SMulCommClass R A A]   [inst_3 : TopologicalSp
+ace A] [SeparatelyConti…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `FormalMultilinearSeries.ofScalars_radius_eq_top_of_tendsto`：ofScalars_ra
+dius_eq_top_of_tendsto (hc : forallᶠ n in atTop, c n != 0) (hc' : Tendsto (fun n
+ => ‖c n.succ‖ / ‖c n‖) atTop (𝓝 0)) : (ofScalar…
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NormedSpace.expSeries_eq_ofScalars`：expSeries_eq_ofScalars : expSeries 𝕂
+ 𝔸 = ofScalars 𝔸 fun n => (n !⁻¹ : 𝕂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Nat.cast_mul`：∀ {α : Type u_1} [inst : NonAssocSemiring α] (m n : ℕ), ↑(
+m * n) = ↑m * ↑n
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `mul_div_right_comm`：mul_div_right_comm : a * b / c = a / c * b
+· 使用定理 `inv_div_inv`：inv_div_inv : a⁻¹ / b⁻¹ = b / a
+· 使用定理 `norm_mul`：∀ {α : Type u_2} [inst : Norm α] [inst_1 : Mul α] [NormMulClas
+s α] (a b : α), ‖a * b‖ = ‖a‖ * ‖b‖
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `div_self`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] {a : G₀}, a ≠ 0 → 
+a / a = 1
+· 使用定理 `NormOneClass.norm_one`：∀ {α : Type u_5} {inst : Norm α} {inst_1 : One α}
+ [self : NormOneClass α], ‖1‖ = 1
+· 使用定理 `NormedDivisionRing.to_normOneClass`：∀ {α : Type u_2} [inst : NormedDivis
+ionRing α], NormOneClass α
+（共 36 条，此处仅展示前 30 条）
 
-English:
-theorem expSeries_radius_eq_top
-  statement: (expSeries 𝕂 𝔸).radius = ∞
-  proof: by
-  have {n : Nat} : (Nat.factorial n : 𝕂) != 0 := Nat.cast_ne_zero.mpr (Nat.factorial_ne_zero n)
-  apply expSeries_eq_ofScalars 𝕂 𝔸 ▸
-    ofScalars_radius_eq_top_of_tendsto 𝔸 _ (Eventually.of_forall fun n => ?_)
-  · simp_rw [← norm_div, Nat.factorial_succ, Nat.cast_mul, mul_inv_rev, mul_div_right_comm,
-      inv_div_inv, norm_mul, div_self this, norm_one, one_mul]
-    apply norm_zero (E := 𝕂) ▸ Filter.Tendsto.norm
-    apply (Filter.tendsto_add_atTop_iff_nat (f := fun n => (n : 𝕂)⁻¹) 1).mpr
-    exact tendsto_inv_atTop_nhds_zero_nat
-  · simp [this]
-
-中文:
-定理 expSeries_radius_eq_top
-  结论: (expSeries 𝕂 𝔸).radius = ∞
-  证明: by
-  have {n : Nat} : (Nat.factorial n : 𝕂) != 0 := Nat.cast_ne_zero.mpr (Nat.factorial_ne_zero n)
-  apply expSeries_eq_ofScalars 𝕂 𝔸 ▸
-    ofScalars_radius_eq_top_of_tendsto 𝔸 _ (Eventually.of_forall fun n => ?_)
-  · simp_rw [← norm_div, Nat.factorial_succ, Nat.cast_mul, mul_inv_rev, mul_div_right_comm,
-      inv_div_inv, norm_mul, div_self this, norm_one, one_mul]
-    apply norm_zero (E := 𝕂) ▸ Filter.Tendsto.norm
-    apply (Filter.tendsto_add_atTop_iff_nat (f := fun n => (n : 𝕂)⁻¹) 1).mpr
-    exact tendsto_inv_atTop_nhds_zero_nat
-  · simp [this]
-
-Depends on / 依赖: Eventually, Eventually.of_forall, Filter, Filter.Tendsto.norm, Filter.tendsto_add_atTop_iff_nat, Nat.cast_mul, Nat.cast_ne_zero.mpr, Nat.factorial, Nat.factorial_ne_zero, Nat.factorial_succ, Tendsto, cast_mul, cast_ne_zero, div_self, expSeries_eq_ofScalars, factorial, factorial_ne_zero, factorial_succ, inv_div_inv, mul_div_right_comm
+--- 原说明 ---
+In a normed algebra `𝔸` over `𝕂 = ℝ` or `𝕂 = ℂ`, the series defining the exponen
+tial map
+has an infinite radius of convergence.
 -/
 theorem expSeries_radius_eq_top : (expSeries 𝕂 𝔸).radius = ∞ := by
-  have {n : Nat} : (Nat.factorial n : 𝕂) != 0 := Nat.cast_ne_zero.mpr (Nat.factorial_ne_zero n)
+  have {n : ℕ} : (Nat.factorial n : 𝕂) ≠ 0 := Nat.cast_ne_zero.mpr (Nat.factorial_ne_zero n)
   apply expSeries_eq_ofScalars 𝕂 𝔸 ▸
     ofScalars_radius_eq_top_of_tendsto 𝔸 _ (Eventually.of_forall fun n => ?_)
   · simp_rw [← norm_div, Nat.factorial_succ, Nat.cast_mul, mul_inv_rev, mul_div_right_comm,
@@ -1375,225 +1608,202 @@ theorem expSeries_radius_eq_top : (expSeries 𝕂 𝔸).radius = ∞ := by
     apply (Filter.tendsto_add_atTop_iff_nat (f := fun n => (n : 𝕂)⁻¹) 1).mpr
     exact tendsto_inv_atTop_nhds_zero_nat
   · simp [this]
-
-/--
-theorem `expSeries_radius_pos` / 定理 `expSeries_radius_pos`
-
-English:
-theorem expSeries_radius_pos
-  statement: 0 < (expSeries 𝕂 𝔸).radius
-  proof: by
-  rw [expSeries_radius_eq_top]
-  exact WithTop.top_pos
-
-中文:
-定理 expSeries_radius_pos
-  结论: 0 < (expSeries 𝕂 𝔸).radius
-  证明: by
-  rw [expSeries_radius_eq_top]
-  exact WithTop.top_pos
-
-Depends on / 依赖: WithTop, WithTop.top_pos, expSeries_radius_eq_top, top_pos
+/-
+**NormedSpace.expSeries_radius_pos** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：expSeries_radius_pos : 0 < (expSeries 𝕂 𝔸).radius
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NormedSpace.expSeries_radius_eq_top`：expSeries_radius_eq_top : (expSerie
+s 𝕂 𝔸).radius = ∞
+· 使用定理 `WithTop.top_pos`：∀ {α : Type u} [inst : Zero α] [inst_1 : LT α], 0 < ⊤
 -/
 theorem expSeries_radius_pos : 0 < (expSeries 𝕂 𝔸).radius := by
   rw [expSeries_radius_eq_top]
   exact WithTop.top_pos
 
 variable {𝕂 𝔸}
-
-/--
-theorem `norm_expSeries_summable` / 定理 `norm_expSeries_summable`
-
-English:
-theorem norm_expSeries_summable
-  given: (x : 𝔸)
-  statement: Summable fun n => ‖expSeries 𝕂 𝔸 n fun _ => x‖
-  proof: norm_expSeries_summable_of_mem_ball x ((expSeries_radius_eq_top 𝕂 𝔸).symm ▸ edist_lt_top _ _)
-
-中文:
-定理 norm_expSeries_summable
-  条件: (x : 𝔸)
-  结论: Summable fun n => ‖expSeries 𝕂 𝔸 n fun _ => x‖
-  证明: norm_expSeries_summable_of_mem_ball x ((expSeries_radius_eq_top 𝕂 𝔸).symm ▸ edist_lt_top _ _)
-
-Depends on / 依赖: edist_lt_top, expSeries_radius_eq_top, norm_expSeries_summable_of_mem_ball
+/-
+**NormedSpace.norm_expSeries_summable** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：norm_expSeries_summable (x : 𝔸) : Summable fun n => ‖expSeries 𝕂 𝔸 n fun _
+ => x‖
+参数：x : 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NormedSpace.norm_expSeries_summable_of_mem_ball`：norm_expSeries_summable
+_of_mem_ball (x : 𝔸) (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : S
+ummable fun n => ‖expSeries 𝕂 𝔸 n fun…
+· 使用定理 `edist_lt_top`：edist_lt_top {α : Type*} [PseudoMetricSpace α] (x y : α) :
+ edist x y < ⊤
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NormedSpace.expSeries_radius_eq_top`：expSeries_radius_eq_top : (expSerie
+s 𝕂 𝔸).radius = ∞
 -/
 theorem norm_expSeries_summable (x : 𝔸) : Summable fun n => ‖expSeries 𝕂 𝔸 n fun _ => x‖ :=
   norm_expSeries_summable_of_mem_ball x ((expSeries_radius_eq_top 𝕂 𝔸).symm ▸ edist_lt_top _ _)
-
-/--
-theorem `norm_expSeries_summable'` / 定理 `norm_expSeries_summable'`
-
-English:
-theorem norm_expSeries_summable'
-  given: (x : 𝔸)
-  statement: Summable fun n => ‖(n !⁻¹ : 𝕂) • x ^ n‖
-  proof: norm_expSeries_summable_of_mem_ball' x ((expSeries_radius_eq_top 𝕂 𝔸).symm ▸ edist_lt_top _ _)
-
-中文:
-定理 norm_expSeries_summable'
-  条件: (x : 𝔸)
-  结论: Summable fun n => ‖(n !⁻¹ : 𝕂) • x ^ n‖
-  证明: norm_expSeries_summable_of_mem_ball' x ((expSeries_radius_eq_top 𝕂 𝔸).symm ▸ edist_lt_top _ _)
-
-Depends on / 依赖: edist_lt_top, expSeries_radius_eq_top, norm_expSeries_summable_of_mem_ball
+/-
+**NormedSpace.norm_expSeries_summable'** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：norm_expSeries_summable' (x : 𝔸) : Summable fun n => ‖(n !⁻¹ : 𝕂) • x ^ n‖
+参数：x : 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NormedSpace.norm_expSeries_summable_of_mem_ball'`：norm_expSeries_summabl
+e_of_mem_ball' (x : 𝔸) (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) :
+ Summable fun n => ‖(n !⁻¹ : 𝕂) • x ^ …
+· 使用定理 `edist_lt_top`：edist_lt_top {α : Type*} [PseudoMetricSpace α] (x y : α) :
+ edist x y < ⊤
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NormedSpace.expSeries_radius_eq_top`：expSeries_radius_eq_top : (expSerie
+s 𝕂 𝔸).radius = ∞
 -/
 theorem norm_expSeries_summable' (x : 𝔸) : Summable fun n => ‖(n !⁻¹ : 𝕂) • x ^ n‖ :=
   norm_expSeries_summable_of_mem_ball' x ((expSeries_radius_eq_top 𝕂 𝔸).symm ▸ edist_lt_top _ _)
-
-/--
-theorem `algebraMap_exp_comm` / 定理 `algebraMap_exp_comm`
-
-English:
-theorem algebraMap_exp_comm
-  given: [CompleteSpace 𝕂] (x : 𝕂)
-  proof: algebraMap_exp_comm_of_mem_ball x (expSeries_radius_eq_top 𝕂 𝕂).symm ▸ edist_lt_top _ _
-
-中文:
-定理 algebraMap_exp_comm
-  条件: [完备空间 𝕂] (x : 𝕂)
-  证明: algebraMap_exp_comm_of_mem_ball x (expSeries_radius_eq_top 𝕂 𝕂).symm ▸ edist_lt_top _ _
-
-Depends on / 依赖: algebraMap_exp_comm_of_mem_ball, edist_lt_top, expSeries_radius_eq_top
+/-
+**NormedSpace.algebraMap_exp_comm** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：algebraMap_exp_comm [CompleteSpace 𝕂] (x : 𝕂) : algebraMap 𝕂 𝔸 (exp x) = e
+xp (algebraMap 𝕂 𝔸 x)
+参数：x : 𝕂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NormedSpace.algebraMap_exp_comm_of_mem_ball`：algebraMap_exp_comm_of_mem_
+ball [CharZero 𝕂] [CompleteSpace 𝕂] (x : 𝕂) (hx : x in Metric.eball (0 : 𝕂) (exp
+Series 𝕂 𝕂).radius) : algebraMap …
+· 使用定理 `edist_lt_top`：edist_lt_top {α : Type*} [PseudoMetricSpace α] (x y : α) :
+ edist x y < ⊤
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NormedSpace.expSeries_radius_eq_top`：expSeries_radius_eq_top : (expSerie
+s 𝕂 𝔸).radius = ∞
 -/
 theorem algebraMap_exp_comm [CompleteSpace 𝕂] (x : 𝕂) :
     algebraMap 𝕂 𝔸 (exp x) = exp (algebraMap 𝕂 𝔸 x) :=
-algebraMap_exp_comm_of_mem_ball x (expSeries_radius_eq_top 𝕂 𝕂).symm ▸ edist_lt_top _ _
+  algebraMap_exp_comm_of_mem_ball x <| (expSeries_radius_eq_top 𝕂 𝕂).symm ▸ edist_lt_top _ _
 
 variable [CompleteSpace 𝔸]
-
-/--
-theorem `expSeries_summable` / 定理 `expSeries_summable`
-
-English:
-theorem expSeries_summable
-  given: (x : 𝔸)
-  statement: Summable fun n => expSeries 𝕂 𝔸 n fun _ => x
-  proof: (norm_expSeries_summable x).of_norm
-
-中文:
-定理 expSeries_summable
-  条件: (x : 𝔸)
-  结论: Summable fun n => expSeries 𝕂 𝔸 n fun _ => x
-  证明: (norm_expSeries_summable x).of_norm
-
-Depends on / 依赖: norm_expSeries_summable, of_norm
+/-
+**NormedSpace.expSeries_summable** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：expSeries_summable (x : 𝔸) : Summable fun n => expSeries 𝕂 𝔸 n fun _ => x
+参数：x : 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Summable.of_norm`：Summable.of_norm {f : ι -> E} (hf : Summable fun a => 
+‖f a‖) : Summable f
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `NormedSpace.norm_expSeries_summable`：norm_expSeries_summable (x : 𝔸) : S
+ummable fun n => ‖expSeries 𝕂 𝔸 n fun _ => x‖
 -/
 theorem expSeries_summable (x : 𝔸) : Summable fun n => expSeries 𝕂 𝔸 n fun _ => x :=
   (norm_expSeries_summable x).of_norm
-
-/--
-theorem `expSeries_summable'` / 定理 `expSeries_summable'`
-
-English:
-theorem expSeries_summable'
-  given: (x : 𝔸)
-  statement: Summable fun n => (n !⁻¹ : 𝕂) • x ^ n
-  proof: (norm_expSeries_summable' x).of_norm
-
-中文:
-定理 expSeries_summable'
-  条件: (x : 𝔸)
-  结论: Summable fun n => (n !⁻¹ : 𝕂) • x ^ n
-  证明: (norm_expSeries_summable' x).of_norm
-
-Depends on / 依赖: norm_expSeries_summable, of_norm
+/-
+**NormedSpace.expSeries_summable'** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：expSeries_summable' (x : 𝔸) : Summable fun n => (n !⁻¹ : 𝕂) • x ^ n
+参数：x : 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Summable.of_norm`：Summable.of_norm {f : ι -> E} (hf : Summable fun a => 
+‖f a‖) : Summable f
+· 使用定理 `NormedSpace.norm_expSeries_summable'`：norm_expSeries_summable' (x : 𝔸) :
+ Summable fun n => ‖(n !⁻¹ : 𝕂) • x ^ n‖
 -/
 theorem expSeries_summable' (x : 𝔸) : Summable fun n => (n !⁻¹ : 𝕂) • x ^ n :=
   (norm_expSeries_summable' x).of_norm
-
-/--
-theorem `expSeries_hasSum_exp` / 定理 `expSeries_hasSum_exp`
-
-English:
-theorem expSeries_hasSum_exp
-  given: (x : 𝔸)
-  statement: HasSum (fun n => expSeries 𝕂 𝔸 n fun _ => x) (exp x)
-  proof: expSeries_hasSum_exp_of_mem_ball x ((expSeries_radius_eq_top 𝕂 𝔸).symm ▸ edist_lt_top _ _)
-
-中文:
-定理 expSeries_hasSum_exp
-  条件: (x : 𝔸)
-  结论: HasSum (fun n => expSeries 𝕂 𝔸 n fun _ => x) (exp x)
-  证明: expSeries_hasSum_exp_of_mem_ball x ((expSeries_radius_eq_top 𝕂 𝔸).symm ▸ edist_lt_top _ _)
-
-Depends on / 依赖: edist_lt_top, expSeries_hasSum_exp_of_mem_ball, expSeries_radius_eq_top
+/-
+**NormedSpace.expSeries_hasSum_exp** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：expSeries_hasSum_exp (x : 𝔸) : HasSum (fun n => expSeries 𝕂 𝔸 n fun _ => x
+) (exp x)
+参数：x : 𝔸。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NormedSpace.expSeries_hasSum_exp_of_mem_ball`：expSeries_hasSum_exp_of_me
+m_ball [CharZero 𝕂] (x : 𝔸) (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radi
+us) : HasSum (fun n => expSeries 𝕂…
+· 使用定理 `edist_lt_top`：edist_lt_top {α : Type*} [PseudoMetricSpace α] (x y : α) :
+ edist x y < ⊤
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NormedSpace.expSeries_radius_eq_top`：expSeries_radius_eq_top : (expSerie
+s 𝕂 𝔸).radius = ∞
 -/
 theorem expSeries_hasSum_exp (x : 𝔸) : HasSum (fun n => expSeries 𝕂 𝔸 n fun _ => x) (exp x) :=
   expSeries_hasSum_exp_of_mem_ball x ((expSeries_radius_eq_top 𝕂 𝔸).symm ▸ edist_lt_top _ _)
-
-/--
-theorem `exp_series_hasSum_exp'` / 定理 `exp_series_hasSum_exp'`
-
-English:
-theorem exp_series_hasSum_exp'
-  given: (x : 𝔸)
-  statement: HasSum (fun n => (n !⁻¹ : 𝕂) • x ^ n) (exp x)
-  proof: expSeries_hasSum_exp_of_mem_ball' x ((expSeries_radius_eq_top 𝕂 𝔸).symm ▸ edist_lt_top _ _)
-
-中文:
-定理 exp_series_hasSum_exp'
-  条件: (x : 𝔸)
-  结论: HasSum (fun n => (n !⁻¹ : 𝕂) • x ^ n) (exp x)
-  证明: expSeries_hasSum_exp_of_mem_ball' x ((expSeries_radius_eq_top 𝕂 𝔸).symm ▸ edist_lt_top _ _)
-
-Depends on / 依赖: edist_lt_top, expSeries_hasSum_exp_of_mem_ball, expSeries_radius_eq_top
+/-
+**NormedSpace.exp_series_hasSum_exp'** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：exp_series_hasSum_exp' (x : 𝔸) : HasSum (fun n => (n !⁻¹ : 𝕂) • x ^ n) (ex
+p x)
+参数：x : 𝔸。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NormedSpace.expSeries_hasSum_exp_of_mem_ball'`：expSeries_hasSum_exp_of_m
+em_ball' [CharZero 𝕂] (x : 𝔸) (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).ra
+dius) : HasSum (fun n => (n !⁻¹ : 𝕂…
+· 使用定理 `edist_lt_top`：edist_lt_top {α : Type*} [PseudoMetricSpace α] (x y : α) :
+ edist x y < ⊤
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NormedSpace.expSeries_radius_eq_top`：expSeries_radius_eq_top : (expSerie
+s 𝕂 𝔸).radius = ∞
 -/
 theorem exp_series_hasSum_exp' (x : 𝔸) : HasSum (fun n => (n !⁻¹ : 𝕂) • x ^ n) (exp x) :=
   expSeries_hasSum_exp_of_mem_ball' x ((expSeries_radius_eq_top 𝕂 𝔸).symm ▸ edist_lt_top _ _)
-
-/--
-theorem `exp_hasFPowerSeriesOnBall` / 定理 `exp_hasFPowerSeriesOnBall`
-
-English:
-theorem exp_hasFPowerSeriesOnBall
-  statement: HasFPowerSeriesOnBall exp (expSeries 𝕂 𝔸) 0 ∞
-  proof: expSeries_radius_eq_top 𝕂 𝔸 ▸ hasFPowerSeriesOnBall_exp_of_radius_pos (expSeries_radius_pos _ _)
-
-中文:
-定理 exp_hasFPowerSeriesOnBall
-  结论: 有FPowerSeriesOnBall exp (expSeries 𝕂 𝔸) 0 ∞
-  证明: expSeries_radius_eq_top 𝕂 𝔸 ▸ hasFPowerSeriesOnBall_exp_of_radius_pos (expSeries_radius_pos _ _)
-
-Depends on / 依赖: expSeries_radius_eq_top, expSeries_radius_pos, hasFPowerSeriesOnBall_exp_of_radius_pos
+/-
+**NormedSpace.exp_hasFPowerSeriesOnBall** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：exp_hasFPowerSeriesOnBall : HasFPowerSeriesOnBall exp (expSeries 𝕂 𝔸) 0 ∞
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `NormedSpace.hasFPowerSeriesOnBall_exp_of_radius_pos`：hasFPowerSeriesOnBa
+ll_exp_of_radius_pos [CharZero 𝕂] (h : 0 < (expSeries 𝕂 𝔸).radius) : HasFPowerSe
+riesOnBall exp (expSeries 𝕂 𝔸) 0 (expSeri…
+· 使用定理 `NormedSpace.expSeries_radius_pos`：expSeries_radius_pos : 0 < (expSeries 
+𝕂 𝔸).radius
+· 使用定理 `NormedSpace.expSeries_radius_eq_top`：expSeries_radius_eq_top : (expSerie
+s 𝕂 𝔸).radius = ∞
 -/
 theorem exp_hasFPowerSeriesOnBall : HasFPowerSeriesOnBall exp (expSeries 𝕂 𝔸) 0 ∞ :=
   expSeries_radius_eq_top 𝕂 𝔸 ▸ hasFPowerSeriesOnBall_exp_of_radius_pos (expSeries_radius_pos _ _)
-
-/--
-theorem `exp_hasFPowerSeriesAt_zero` / 定理 `exp_hasFPowerSeriesAt_zero`
-
-English:
-theorem exp_hasFPowerSeriesAt_zero
-  statement: HasFPowerSeriesAt exp (expSeries 𝕂 𝔸) 0
-  proof: exp_hasFPowerSeriesOnBall.hasFPowerSeriesAt
-
-中文:
-定理 exp_hasFPowerSeriesAt_zero
-  结论: HasFPowerSeriesAt exp (expSeries 𝕂 𝔸) 0
-  证明: exp_hasFPowerSeriesOnBall.hasFPowerSeriesAt
-
-Depends on / 依赖: exp_hasFPowerSeriesOnBall, exp_hasFPowerSeriesOnBall.hasFPowerSeriesAt, hasFPowerSeriesAt
+/-
+**NormedSpace.exp_hasFPowerSeriesAt_zero** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`
+。
+形式化陈述：exp_hasFPowerSeriesAt_zero : HasFPowerSeriesAt exp (expSeries 𝕂 𝔸) 0
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasFPowerSeriesOnBall.hasFPowerSeriesAt`：HasFPowerSeriesOnBall.hasFPower
+SeriesAt (hf : HasFPowerSeriesOnBall f p x r) : HasFPowerSeriesAt f p x
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `NormedSpace.exp_hasFPowerSeriesOnBall`：exp_hasFPowerSeriesOnBall : HasFP
+owerSeriesOnBall exp (expSeries 𝕂 𝔸) 0 ∞
 -/
 theorem exp_hasFPowerSeriesAt_zero : HasFPowerSeriesAt exp (expSeries 𝕂 𝔸) 0 :=
   exp_hasFPowerSeriesOnBall.hasFPowerSeriesAt
-
-/--
-theorem `exp_analytic` / 定理 `exp_analytic`
-
-English:
-theorem exp_analytic
-  given: (x : 𝔸)
-  statement: AnalyticAt 𝕂 exp x
-  proof: analyticAt_exp_of_mem_ball x ((expSeries_radius_eq_top 𝕂 𝔸).symm ▸ edist_lt_top _ _)
-
-中文:
-定理 exp_analytic
-  条件: (x : 𝔸)
-  结论: AnalyticAt 𝕂 exp x
-  证明: analyticAt_exp_of_mem_ball x ((expSeries_radius_eq_top 𝕂 𝔸).symm ▸ edist_lt_top _ _)
-
-Depends on / 依赖: analyticAt_exp_of_mem_ball, edist_lt_top, expSeries_radius_eq_top
+/-
+**NormedSpace.exp_analytic** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：exp_analytic (x : 𝔸) : AnalyticAt 𝕂 exp x
+参数：x : 𝔸。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NormedSpace.analyticAt_exp_of_mem_ball`：analyticAt_exp_of_mem_ball [Char
+Zero 𝕂] (x : 𝔸) (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : Analyt
+icAt 𝕂 exp x
+· 使用定理 `edist_lt_top`：edist_lt_top {α : Type*} [PseudoMetricSpace α] (x y : α) :
+ edist x y < ⊤
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NormedSpace.expSeries_radius_eq_top`：expSeries_radius_eq_top : (expSerie
+s 𝕂 𝔸).radius = ∞
 -/
 theorem exp_analytic (x : 𝔸) : AnalyticAt 𝕂 exp x :=
   analyticAt_exp_of_mem_ball x ((expSeries_radius_eq_top 𝕂 𝔸).symm ▸ edist_lt_top _ _)
@@ -1601,231 +1811,209 @@ theorem exp_analytic (x : 𝔸) : AnalyticAt 𝕂 exp x :=
 end AnyAlgebra
 
 section Rat
-variable {𝔸 𝔹 : Type*} [NormedRing 𝔸] [NormedAlgebra Rat 𝔸] [CompleteSpace 𝔸] [NormedRing 𝔹]
+variable {𝔸 𝔹 : Type*} [NormedRing 𝔸] [NormedAlgebra ℚ 𝔸] [CompleteSpace 𝔸] [NormedRing 𝔹]
 
 @[continuity, fun_prop]
-/--
-theorem `exp_continuous` / 定理 `exp_continuous`
-
-English:
-theorem exp_continuous
-  statement: Continuous (exp : 𝔸 -> 𝔸)
-  proof: by
-  rw [← continuousOn_univ]; rw [← Metric.eball_top_eq_univ (0 : 𝔸)]; rw [←
-    expSeries_radius_eq_top Rat 𝔸]
-  exact continuousOn_exp
-
-中文:
-定理 exp_continuous
-  结论: 连续 (exp : 𝔸 -> 𝔸)
-  证明: by
-  rw [← continuousOn_univ]; rw [← Metric.eball_top_eq_univ (0 : 𝔸)]; rw [←
-    expSeries_radius_eq_top Rat 𝔸]
-  exact continuousOn_exp
-
-Depends on / 依赖: Metric, Metric.eball_top_eq_univ, continuousOn_exp, continuousOn_univ, eball_top_eq_univ, expSeries_radius_eq_top
+/-
+**NormedSpace.exp_continuous** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：exp_continuous : Continuous (exp : 𝔸 -> 𝔸)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `continuousOn_univ`：continuousOn_univ {f : α -> β} : ContinuousOn f univ 
+↔ Continuous f
+· 使用定理 `Metric.eball_top_eq_univ`：Metric.eball_top_eq_univ (x : α) : eball x ∞ =
+ Set.univ
+· 使用定理 `NormedSpace.expSeries_radius_eq_top`：expSeries_radius_eq_top : (expSerie
+s 𝕂 𝔸).radius = ∞
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `Rat.instIsTopologicalRing`：IsTopologicalRing ℚ
+· 使用定理 `NormedSpace.continuousOn_exp`：continuousOn_exp [CharZero 𝕂] : Continuous
+On (exp : 𝔸 -> 𝔸) (Metric.eball 0 (expSeries 𝕂 𝔸).radius)
 -/
-theorem exp_continuous : Continuous (exp : 𝔸 -> 𝔸) := by
-  rw [← continuousOn_univ]; rw [← Metric.eball_top_eq_univ (0 : 𝔸)]; rw [←
-    expSeries_radius_eq_top Rat 𝔸]
+theorem exp_continuous : Continuous (exp : 𝔸 → 𝔸) := by
+  rw [← continuousOn_univ, ← Metric.eball_top_eq_univ (0 : 𝔸), ←
+    expSeries_radius_eq_top ℚ 𝔸]
   exact continuousOn_exp
 
 open Topology in
-/--
-lemma `_root_.Filter.Tendsto.exp` / 引理 `_root_.Filter.Tendsto.exp`
-
-English:
-lemma _root_.Filter.Tendsto.exp
-  statement: {α : Type*} {l : Filter α} {f : α -> 𝔸} {a : 𝔸}
-  proof: (exp_continuous.tendsto _).comp hf
-
-中文:
-引理 _root_.滤子.收敛.exp
-  结论: {α : 类型} {l : 滤子 α} {f : α -> 𝔸} {a : 𝔸}
-  证明: (exp_continuous.tendsto _).comp hf
-
-Depends on / 依赖: exp_continuous, exp_continuous.tendsto, tendsto
+/-
+**NormedSpace._root_.Filter.Tendsto.exp** 是 Mathlib 中的一个引理，位于命名空间 `NormedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.Filter.Tendsto.exp {α : Type*} {l : Filter α} {f : α -> 𝔸} {a : 𝔸}
+lemma _root_.Filter.Tendsto.exp {α : Type*} {l : Filter α} {f : α → 𝔸} {a : 𝔸}
     (hf : Tendsto f l (𝓝 a)) :
     Tendsto (fun x => exp (f x)) l (𝓝 (exp a)) :=
   (exp_continuous.tendsto _).comp hf
 
-/--
-theorem `exp_add_of_commute` / 定理 `exp_add_of_commute`
+/-- In a Banach-algebra `𝔸` over `𝕂 = ℝ` or `𝕂 = ℂ`, if `x` and `y` commute, then
+`NormedSpace.exp (x+y) = (NormedSpace.exp x) * (NormedSpace.exp y)`. -/
+/-
+**NormedSpace.exp_add_of_commute** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：exp_add_of_commute {x y : 𝔸} (hxy : Commute x y) : exp (x + y) = exp x * e
+xp y
+参数：hxy : Commute x y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NormedSpace.exp_add_of_commute_of_mem_ball`：exp_add_of_commute_of_mem_ba
+ll [CharZero 𝕂] {x y : 𝔸} (hxy : Commute x y) (hx : x in Metric.eball (0 : 𝔸) (e
+xpSeries 𝕂 𝔸).radius) (hy : y in…
+· 使用定理 `edist_lt_top`：edist_lt_top {α : Type*} [PseudoMetricSpace α] (x y : α) :
+ edist x y < ⊤
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NormedSpace.expSeries_radius_eq_top`：expSeries_radius_eq_top : (expSerie
+s 𝕂 𝔸).radius = ∞
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `Rat.instIsTopologicalRing`：IsTopologicalRing ℚ
 
-English:
-theorem exp_add_of_commute
-  given: {x y : 𝔸} (hxy : Commute x y)
-  statement: exp (x + y) = exp x * exp y
-  proof: exp_add_of_commute_of_mem_ball hxy ((expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _)
-    ((expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _)
-
-中文:
-定理 exp_add_of_commute
-  条件: {x y : 𝔸} (hxy : Commute x y)
-  结论: exp (x + y) = exp x * exp y
-  证明: exp_add_of_commute_of_mem_ball hxy ((expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _)
-    ((expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _)
-
-Depends on / 依赖: edist_lt_top, expSeries_radius_eq_top, exp_add_of_commute_of_mem_ball
+--- 原说明 ---
+In a Banach-algebra `𝔸` over `𝕂 = ℝ` or `𝕂 = ℂ`, if `x` and `y` commute, then
+`NormedSpace.exp (x+y) = (NormedSpace.exp x) * (NormedSpace.exp y)`.
 -/
 theorem exp_add_of_commute {x y : 𝔸} (hxy : Commute x y) : exp (x + y) = exp x * exp y :=
-  exp_add_of_commute_of_mem_ball hxy ((expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _)
-    ((expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _)
+  exp_add_of_commute_of_mem_ball hxy ((expSeries_radius_eq_top ℚ 𝔸).symm ▸ edist_lt_top _ _)
+    ((expSeries_radius_eq_top ℚ 𝔸).symm ▸ edist_lt_top _ _)
 
 /-- `NormedSpace.exp x` has explicit two-sided inverse `NormedSpace.exp (-x)`. -/
 @[instance_reducible]
-/--
-Definition of `invertibleExp` / `invertibleExp` 的定义
+/-
+**NormedSpace.invertibleExp** 是 Mathlib 中的一个定义，位于命名空间 `NormedSpace`。
+形式化陈述：invertibleExp (x : 𝔸) : Invertible (exp x)
+参数：x : 𝔸。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition invertibleExp
-  signature: (x : 𝔸)
-  body: invertibleExpOfMemBall (expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _
-
-中文:
-定义 invertibleExp
-  签名: (x : 𝔸)
-  定义体: invertibleExpOfMemBall (expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _
-
-Depends on / 依赖: edist_lt_top, expSeries_radius_eq_top, invertibleExpOfMemBall
+--- 原说明 ---
+`NormedSpace.exp x` has explicit two-sided inverse `NormedSpace.exp (-x)`.
 -/
 noncomputable def invertibleExp (x : 𝔸) : Invertible (exp x) :=
-invertibleExpOfMemBall (expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _
-
-/--
-theorem `isUnit_exp` / 定理 `isUnit_exp`
-
-English:
-theorem isUnit_exp
-  given: (x : 𝔸)
-  statement: IsUnit (exp x)
-  proof: isUnit_exp_of_mem_ball (expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _
-
-中文:
-定理 isUnit_exp
-  条件: (x : 𝔸)
-  结论: 是单位 (exp x)
-  证明: isUnit_exp_of_mem_ball (expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _
-
-Depends on / 依赖: edist_lt_top, expSeries_radius_eq_top, isUnit_exp_of_mem_ball
+  invertibleExpOfMemBall <| (expSeries_radius_eq_top ℚ 𝔸).symm ▸ edist_lt_top _ _
+/-
+**NormedSpace.isUnit_exp** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：isUnit_exp (x : 𝔸) : IsUnit (exp x)
+参数：x : 𝔸。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NormedSpace.isUnit_exp_of_mem_ball`：isUnit_exp_of_mem_ball [CharZero 𝕂] 
+{x : 𝔸} (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : IsUnit (exp x)
+· 使用定理 `edist_lt_top`：edist_lt_top {α : Type*} [PseudoMetricSpace α] (x y : α) :
+ edist x y < ⊤
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NormedSpace.expSeries_radius_eq_top`：expSeries_radius_eq_top : (expSerie
+s 𝕂 𝔸).radius = ∞
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `Rat.instIsTopologicalRing`：IsTopologicalRing ℚ
 -/
 theorem isUnit_exp (x : 𝔸) : IsUnit (exp x) :=
-isUnit_exp_of_mem_ball (expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _
-
-/--
-theorem `invOf_exp` / 定理 `invOf_exp`
-
-English:
-theorem invOf_exp
-  given: (x : 𝔸) [Invertible (exp x)]
-  statement: ⅟(exp x) = exp (-x)
-  proof: invOf_exp_of_mem_ball (expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _
-
-中文:
-定理 invOf_exp
-  条件: (x : 𝔸) [可逆 (exp x)]
-  结论: ⅟(exp x) = exp (-x)
-  证明: invOf_exp_of_mem_ball (expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _
-
-Depends on / 依赖: edist_lt_top, expSeries_radius_eq_top, invOf_exp_of_mem_ball
+  isUnit_exp_of_mem_ball <| (expSeries_radius_eq_top ℚ 𝔸).symm ▸ edist_lt_top _ _
+/-
+**NormedSpace.invOf_exp** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：invOf_exp (x : 𝔸) [Invertible (exp x)] : ⅟(exp x) = exp (-x)
+参数：x : 𝔸；exp x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `NormedSpace.invOf_exp_of_mem_ball`：invOf_exp_of_mem_ball [CharZero 𝕂] {x
+ : 𝔸} (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) [Invertible (exp x
+)] : ⅟(exp x) = exp (-x…
+· 使用定理 `edist_lt_top`：edist_lt_top {α : Type*} [PseudoMetricSpace α] (x y : α) :
+ edist x y < ⊤
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NormedSpace.expSeries_radius_eq_top`：expSeries_radius_eq_top : (expSerie
+s 𝕂 𝔸).radius = ∞
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `Rat.instIsTopologicalRing`：IsTopologicalRing ℚ
 -/
 theorem invOf_exp (x : 𝔸) [Invertible (exp x)] : ⅟(exp x) = exp (-x) :=
-invOf_exp_of_mem_ball (expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _
-
-/--
-theorem `_root_.Ring.inverse_exp` / 定理 `_root_.Ring.inverse_exp`
-
-English:
-theorem _root_.Ring.inverse_exp
-  given: (x : 𝔸)
-  statement: (exp x)⁻¹ʳ = exp (-x)
-  proof: letI := invertibleExp x
-  Ring.inverse_invertible _
-
-中文:
-定理 _root_.环.inverse_exp
-  条件: (x : 𝔸)
-  结论: (exp x)⁻¹ʳ = exp (-x)
-  证明: letI := invertibleExp x
-  Ring.inverse_invertible _
-
-Depends on / 依赖: Ring.inverse_invertible, inverse_invertible, invertibleExp
+  invOf_exp_of_mem_ball <| (expSeries_radius_eq_top ℚ 𝔸).symm ▸ edist_lt_top _ _
+/-
+**NormedSpace._root_.Ring.inverse_exp** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Ring.inverse_exp (x : 𝔸) : (exp x)⁻¹ʳ = exp (-x) :=
   letI := invertibleExp x
   Ring.inverse_invertible _
-
-/--
-theorem `exp_mem_unitary_of_mem_skewAdjoint` / 定理 `exp_mem_unitary_of_mem_skewAdjoint`
-
-English:
-theorem exp_mem_unitary_of_mem_skewAdjoint
-  statement: [StarRing 𝔸] [ContinuousStar 𝔸] {x : 𝔸}
-  proof: by
-  rw [Unitary.mem_iff]; rw [star_exp]; rw [skewAdjoint.mem_iff.mp h]; rw [←
-    exp_add_of_commute (Commute.refl x).neg_left]; rw [← exp_add_of_commute (Commute.refl x).neg_right]; rw [neg_add_cancel]; rw [add_neg_cancel]; rw [exp_zero]; rw [and_self_iff]
-
-中文:
-定理 exp_mem_unitary_of_mem_skewAdjoint
-  结论: [对合环 𝔸] [余ntinuousStar 𝔸] {x : 𝔸}
-  证明: by
-  rw [Unitary.mem_iff]; rw [star_exp]; rw [skewAdjoint.mem_iff.mp h]; rw [←
-    exp_add_of_commute (Commute.refl x).neg_left]; rw [← exp_add_of_commute (Commute.refl x).neg_right]; rw [neg_add_cancel]; rw [add_neg_cancel]; rw [exp_zero]; rw [and_self_iff]
-
-Depends on / 依赖: Commute, Commute.refl, Unitary, Unitary.mem_iff, add_neg_cancel, and_self_iff, exp_add_of_commute, exp_zero, mem_iff, neg_add_cancel, neg_left, neg_right, skewAdjoint, skewAdjoint.mem_iff.mp, star_exp
+/-
+**NormedSpace.exp_mem_unitary_of_mem_skewAdjoint** 是 Mathlib 中的一个定理，位于命名空间 `Norm
+edSpace`。
+形式化陈述：exp_mem_unitary_of_mem_skewAdjoint [StarRing 𝔸] [ContinuousStar 𝔸] {x : 𝔸}
+ (h : x in skewAdjoint 𝔸) : exp x in unitary 𝔸
+参数：h : x in skewAdjoint 𝔸。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Unitary.mem_iff`：mem_iff {U : R} : U in unitary R ↔ star U * U = 1 ∧ U *
+ star U = 1
+· 使用定理 `NormedSpace.star_exp`：star_exp [T2Space 𝔸] [StarRing 𝔸] [ContinuousStar 
+𝔸] (x : 𝔸) : star (exp x) = exp (star x)
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `skewAdjoint.mem_iff`：mem_iff {x : R} : x in skewAdjoint R ↔ star x = -x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NormedSpace.exp_add_of_commute`：exp_add_of_commute {x y : 𝔸} (hxy : Comm
+ute x y) : exp (x + y) = exp x * exp y
+· 使用定理 `Commute.neg_left`：neg_left : Commute a b -> Commute (-a) b
+· 使用定理 `Commute.refl`：∀ {S : Type u_3} [inst : Mul S] (a : S), Commute a a
+· 使用定理 `Commute.neg_right`：neg_right : Commute a b -> Commute a (-b)
+· 使用定理 `neg_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), -a + a = 0
+· 使用定理 `add_neg_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a + -a = 0
+· 使用定理 `NormedSpace.exp_zero`：exp_zero : exp (0 : 𝔸) = 1
+· 使用定理 `and_self_iff`：∀ {a : Prop}, a ∧ a ↔ a
 -/
 theorem exp_mem_unitary_of_mem_skewAdjoint [StarRing 𝔸] [ContinuousStar 𝔸] {x : 𝔸}
-    (h : x in skewAdjoint 𝔸) : exp x in unitary 𝔸 := by
-  rw [Unitary.mem_iff]; rw [star_exp]; rw [skewAdjoint.mem_iff.mp h]; rw [←
-    exp_add_of_commute (Commute.refl x).neg_left]; rw [← exp_add_of_commute (Commute.refl x).neg_right]; rw [neg_add_cancel]; rw [add_neg_cancel]; rw [exp_zero]; rw [and_self_iff]
-
-/--
-lemma `_root_.SemiconjBy.exp_right` / 引理 `_root_.SemiconjBy.exp_right`
-
-English:
-lemma _root_.SemiconjBy.exp_right
-  given: {x a b : 𝔸} (h : SemiconjBy x a b)
-  proof: by
-  rw [exp_eq_tsum Rat]
-  apply SemiconjBy.tsum_right x (expSeries_summable' _) (expSeries_summable' _)
-.smul_right _ exact fun _ => h.pow_right _
-
-中文:
-引理 _root_.SemiconjBy.exp_right
-  条件: {x a b : 𝔸} (h : SemiconjBy x a b)
-  证明: by
-  rw [exp_eq_tsum Rat]
-  apply SemiconjBy.tsum_right x (expSeries_summable' _) (expSeries_summable' _)
-.smul_right _ exact fun _ => h.pow_right _
-
-Depends on / 依赖: SemiconjBy, SemiconjBy.tsum_right, expSeries_summable, exp_eq_tsum, h.pow_right, pow_right, smul_right, tsum_right
+    (h : x ∈ skewAdjoint 𝔸) : exp x ∈ unitary 𝔸 := by
+  rw [Unitary.mem_iff, star_exp, skewAdjoint.mem_iff.mp h, ←
+    exp_add_of_commute (Commute.refl x).neg_left, ← exp_add_of_commute (Commute.refl x).neg_right,
+    neg_add_cancel, add_neg_cancel, exp_zero, and_self_iff]
+/-
+**NormedSpace._root_.SemiconjBy.exp_right** 是 Mathlib 中的一个引理，位于命名空间 `NormedSpace
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.SemiconjBy.exp_right {x a b : 𝔸} (h : SemiconjBy x a b) :
     SemiconjBy x (exp a) (exp b) := by
-  rw [exp_eq_tsum Rat]
+  rw [exp_eq_tsum ℚ]
   apply SemiconjBy.tsum_right x (expSeries_summable' _) (expSeries_summable' _)
-.smul_right _ exact fun _ => h.pow_right _
-
-/--
-lemma `_root_.SemiconjBy.exp_neg_mul_mul_exp_eq_self` / 引理 `_root_.SemiconjBy.exp_neg_mul_mul_exp_eq_self`
-
-English:
-lemma _root_.SemiconjBy.exp_neg_mul_mul_exp_eq_self
-  given: {x a b : 𝔸} (h : SemiconjBy x a b)
-  proof: by
-  let := invertibleExp b
-  simpa [← invOf_exp, mul_assoc, invOf_mul_eq_iff_eq_mul_left] using! h.exp_right
-
-中文:
-引理 _root_.SemiconjBy.exp_neg_mul_mul_exp_eq_self
-  条件: {x a b : 𝔸} (h : SemiconjBy x a b)
-  证明: by
-  let := invertibleExp b
-  simpa [← invOf_exp, mul_assoc, invOf_mul_eq_iff_eq_mul_left] using! h.exp_right
-
-Depends on / 依赖: exp_right, h.exp_right, invOf_exp, invOf_mul_eq_iff_eq_mul_left, invertibleExp, mul_assoc
+  exact fun _ ↦ h.pow_right _ |>.smul_right _
+/-
+**NormedSpace._root_.SemiconjBy.exp_neg_mul_mul_exp_eq_self** 是 Mathlib 中的一个引理，位
+于命名空间 `NormedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.SemiconjBy.exp_neg_mul_mul_exp_eq_self {x a b : 𝔸} (h : SemiconjBy x a b) :
     exp (-b) * x * exp a = x := by
@@ -1834,273 +2022,234 @@ lemma _root_.SemiconjBy.exp_neg_mul_mul_exp_eq_self {x a b : 𝔸} (h : Semiconj
 
 set_option backward.isDefEq.respectTransparency false in
 open scoped Function in -- required for scoped `on` notation
-/--
-theorem `exp_sum_of_commute` / 定理 `exp_sum_of_commute`
+/-- In a Banach-algebra `𝔸` over `𝕂 = ℝ` or `𝕂 = ℂ`, if a family of elements `f i` mutually
+commute then `NormedSpace.exp (∑ i, f i) = ∏ i, NormedSpace.exp (f i)`. -/
+/-
+**NormedSpace.exp_sum_of_commute** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：exp_sum_of_commute {ι} (s : Finset ι) (f : ι -> 𝔸) (h : (s : Set ι).Pairwi
+se (Commute on f)) : exp (∑ i in s, f i) = s.noncommProd (fun i => exp (f i)) fu
+n _ hi _ hj _ => (h.of_refl hi hj).exp
+参数：s : Finset ι；f : ι -> 𝔸；h : (s : Set ι).Pairwise (Commute on f)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.induction_on`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst :
+ DecidableEq α] (s : Finset α),   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → 
+motive s …
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `Commute.exp`：∀ {𝔸 : Type u_2} [inst : Ring 𝔸] [inst_1 : TopologicalSpace
+ 𝔸] [inst_2 : IsTopologicalRing 𝔸] [T2Space 𝔸] {x y : 𝔸},   Commute x y → Commut
+e…
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `Set.Pairwise.of_refl`：∀ {α : Type u_1} {r : α → α → Prop} {s : Set α} [S
+td.Refl r], s.Pairwise r → ∀ ⦃a : α⦄, a ∈ s → ∀ ⦃b : α⦄, b ∈ s → r a b
+· 使用定理 `Commute.instRefl`：∀ {S : Type u_3} [inst : Mul S], Std.Refl Commute
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NormedSpace.exp_zero`：exp_zero : exp (0 : 𝔸) = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Set.Pairwise.mono`：∀ {α : Type u_1} {r : α → α → Prop} {s t : Set α}, t 
+⊆ s → s.Pairwise r → t.Pairwise r
+· 使用定理 `Finset.mem_insert_of_mem`：mem_insert_of_mem (h : a in s) : a in insert b
+ s
+· 使用定理 `Finset.noncommProd_insert_of_notMem`：noncommProd_insert_of_notMem [Decid
+ableEq α] (s : Finset α) (a : α) (f : α -> β) (comm) (ha : a ∉ s) : noncommProd 
+(insert a s) f comm = f a…
+· 使用定理 `Finset.sum_insert`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι
+} [inst : AddCommMonoid M] {f : ι → M} [inst_1 : DecidableEq ι],   a ∉ s → ∑ x ∈
+ insert…
+· 使用定理 `NormedSpace.exp_add_of_commute`：exp_add_of_commute {x y : 𝔸} (hxy : Comm
+ute x y) : exp (x + y) = exp x * exp y
+· 使用定理 `Commute.sum_right`：∀ {ι : Type u_1} {R : Type u_4} [inst : NonUnitalNonA
+ssocSemiring R] (s : Finset ι) (f : ι → R) (b : R),   (∀ i ∈ s, Commute b (f i))
+ → Comm…
+· 使用定理 `Finset.mem_insert_self`：mem_insert_self (a : α) (s : Finset α) : a in in
+sert a s
+· 使用定理 `Finset.subset_insert`：∀ {α : Type u_1} [inst : DecidableEq α] (a : α) (s
+ : Finset α), s ⊆ insert a s
 
-English:
-theorem exp_sum_of_commute
-  statement: {ι} (s : Finset ι) (f : ι -> 𝔸)
-  proof: by
-  classical
-  induction s using Finset.induction_on with
-  | empty => simp
-  | insert a s ha ih =>
-    rw [Finset.noncommProd_insert_of_notMem _ _ _ _ ha]; rw [Finset.sum_insert ha]; rw [exp_add_of_commute]; rw [ih (h.mono <| Finset.subset_insert _ _)]
-    refine Commute.sum_right _ _ _ fun i hi => ?_
-    exact h.of_refl (Finset.mem_insert_self _ _) (Finset.mem_insert_of_mem hi)
-
-中文:
-定理 exp_sum_of_commute
-  结论: {ι} (s : 有限集 ι) (f : ι -> 𝔸)
-  证明: by
-  classical
-  induction s using Finset.induction_on with
-  | empty => simp
-  | insert a s ha ih =>
-    rw [Finset.noncommProd_insert_of_notMem _ _ _ _ ha]; rw [Finset.sum_insert ha]; rw [exp_add_of_commute]; rw [ih (h.mono <| Finset.subset_insert _ _)]
-    refine Commute.sum_right _ _ _ fun i hi => ?_
-    exact h.of_refl (Finset.mem_insert_self _ _) (Finset.mem_insert_of_mem hi)
-
-Depends on / 依赖: Commute, Commute.sum_right, Finset, Finset.induction_on, Finset.mem_insert_of_mem, Finset.mem_insert_self, Finset.noncommProd_insert_of_notMem, Finset.subset_insert, Finset.sum_insert, classical, exp_add_of_commute, h.mono, h.of_refl, induction_on, insert, mem_insert_of_mem, mem_insert_self, noncommProd_insert_of_notMem, of_refl, subset_insert
+--- 原说明 ---
+In a Banach-algebra `𝔸` over `𝕂 = ℝ` or `𝕂 = ℂ`, if a family of elements `f i` m
+utually
+commute then `NormedSpace.exp (∑ i, f i) = ∏ i, NormedSpace.exp (f i)`.
 -/
-theorem exp_sum_of_commute {ι} (s : Finset ι) (f : ι -> 𝔸)
+theorem exp_sum_of_commute {ι} (s : Finset ι) (f : ι → 𝔸)
     (h : (s : Set ι).Pairwise (Commute on f)) :
-    exp (∑ i in s, f i) =
+    exp (∑ i ∈ s, f i) =
       s.noncommProd (fun i => exp (f i)) fun _ hi _ hj _ => (h.of_refl hi hj).exp := by
   classical
   induction s using Finset.induction_on with
   | empty => simp
   | insert a s ha ih =>
-    rw [Finset.noncommProd_insert_of_notMem _ _ _ _ ha]; rw [Finset.sum_insert ha]; rw [exp_add_of_commute]; rw [ih (h.mono <| Finset.subset_insert _ _)]
+    rw [Finset.noncommProd_insert_of_notMem _ _ _ _ ha, Finset.sum_insert ha, exp_add_of_commute,
+      ih (h.mono <| Finset.subset_insert _ _)]
     refine Commute.sum_right _ _ _ fun i hi => ?_
     exact h.of_refl (Finset.mem_insert_self _ _) (Finset.mem_insert_of_mem hi)
-
-/--
-theorem `exp_nsmul` / 定理 `exp_nsmul`
-
-English:
-theorem exp_nsmul
-  given: (n : Nat) (x : 𝔸)
-  statement: exp (n • x) = exp x ^ n
-  proof: by
-  induction n with
-  | zero => rw [zero_smul, pow_zero, exp_zero]
-  | succ n ih => rw [succ_nsmul, pow_succ, exp_add_of_commute ((Commute.refl x).smul_left n), ih]
-
-中文:
-定理 exp_nsmul
-  条件: (n : 自然数) (x : 𝔸)
-  结论: exp (n • x) = exp x ^ n
-  证明: by
-  induction n with
-  | zero => rw [zero_smul, pow_zero, exp_zero]
-  | succ n ih => rw [succ_nsmul, pow_succ, exp_add_of_commute ((Commute.refl x).smul_left n), ih]
-
-Depends on / 依赖: Commute, Commute.refl, exp_add_of_commute, exp_zero, pow_succ, pow_zero, smul_left, succ_nsmul, zero_smul
+/-
+**NormedSpace.exp_nsmul** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：exp_nsmul (n : Nat) (x : 𝔸) : exp (n • x) = exp x ^ n
+参数：n : Nat；x : 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `NormedSpace.exp_zero`：exp_zero : exp (0 : 𝔸) = 1
+· 使用定理 `succ_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M) (n : ℕ), (n + 
+1) • a = n • a + a
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `NormedSpace.exp_add_of_commute`：exp_add_of_commute {x y : 𝔸} (hxy : Comm
+ute x y) : exp (x + y) = exp x * exp y
+· 使用引理 `Commute.smul_left`：Commute.smul_left [Mul α] [SMulCommClass M α α] [IsSc
+alarTower M α α] {a b : α} (h : Commute a b) (r : M) : Commute (r • a) b
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Commute.refl`：∀ {S : Type u_3} [inst : Mul S] (a : S), Commute a a
 -/
-theorem exp_nsmul (n : Nat) (x : 𝔸) : exp (n • x) = exp x ^ n := by
+theorem exp_nsmul (n : ℕ) (x : 𝔸) : exp (n • x) = exp x ^ n := by
   induction n with
   | zero => rw [zero_smul, pow_zero, exp_zero]
   | succ n ih => rw [succ_nsmul, pow_succ, exp_add_of_commute ((Commute.refl x).smul_left n), ih]
 
-/--
-theorem `map_exp` / 定理 `map_exp`
+/-- Any continuous ring homomorphism commutes with `NormedSpace.exp`. -/
+/-
+**NormedSpace.map_exp** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：map_exp [Algebra Rat 𝔹] {F} [FunLike F 𝔸 𝔹] [RingHomClass F 𝔸 𝔹] (f : F) (
+hf : Continuous f) (x : 𝔸) : f (exp x) = exp (f x)
+参数：f : F；hf : Continuous f；x : 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NormedSpace.map_exp_of_mem_ball`：map_exp_of_mem_ball [Algebra 𝕂 𝔹] [Char
+Zero 𝕂] {F} [FunLike F 𝔸 𝔹] [RingHomClass F 𝔸 𝔹] (f : F) (hf : Continuous f) (x 
+: 𝔸) (hx : x in Metri…
+· 使用定理 `edist_lt_top`：edist_lt_top {α : Type*} [PseudoMetricSpace α] (x y : α) :
+ edist x y < ⊤
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NormedSpace.expSeries_radius_eq_top`：expSeries_radius_eq_top : (expSerie
+s 𝕂 𝔸).radius = ∞
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `Rat.instIsTopologicalRing`：IsTopologicalRing ℚ
 
-English:
-theorem map_exp
-  statement: [Algebra Rat 𝔹]
-  proof: map_exp_of_mem_ball f hf x (expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _
-
-中文:
-定理 map_exp
-  结论: [代数 有理数 𝔹]
-  证明: map_exp_of_mem_ball f hf x (expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _
-
-Depends on / 依赖: edist_lt_top, expSeries_radius_eq_top, map_exp_of_mem_ball
+--- 原说明 ---
+Any continuous ring homomorphism commutes with `NormedSpace.exp`.
 -/
-theorem map_exp [Algebra Rat 𝔹]
+theorem map_exp [Algebra ℚ 𝔹]
     {F} [FunLike F 𝔸 𝔹] [RingHomClass F 𝔸 𝔹] (f : F) (hf : Continuous f) (x : 𝔸) :
     f (exp x) = exp (f x) :=
-map_exp_of_mem_ball f hf x (expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _
-
-/--
-theorem `exp_smul` / 定理 `exp_smul`
-
-English:
-theorem exp_smul
-  given: {G} [Monoid G] [MulSemiringAction G 𝔸] [ContinuousConstSMul G 𝔸] (g : G) (x : 𝔸)
-  proof: (map_exp (MulSemiringAction.toRingHom G 𝔸 g) (continuous_const_smul g) x).symm
-
-中文:
-定理 exp_smul
-  条件: {G} [幺半群 G] [MulSemiring作用 G 𝔸] [连续常数标量乘法 G 𝔸] (g : G) (x : 𝔸)
-  证明: (map_exp (MulSemiringAction.toRingHom G 𝔸 g) (continuous_const_smul g) x).symm
-
-Depends on / 依赖: MulSemiringAction, MulSemiringAction.toRingHom, continuous_const_smul, map_exp, toRingHom
+  map_exp_of_mem_ball f hf x <| (expSeries_radius_eq_top ℚ 𝔸).symm ▸ edist_lt_top _ _
+/-
+**NormedSpace.exp_smul** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：exp_smul {G} [Monoid G] [MulSemiringAction G 𝔸] [ContinuousConstSMul G 𝔸] 
+(g : G) (x : 𝔸) : exp (g • x) = g • exp x
+参数：g : G；x : 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `NormedSpace.map_exp`：map_exp [Algebra Rat 𝔹] {F} [FunLike F 𝔸 𝔹] [RingHo
+mClass F 𝔸 𝔹] (f : F) (hf : Continuous f) (x : 𝔸) : f (exp x) = exp (f x)
+· 使用定理 `ContinuousConstSMul.continuous_const_smul`：∀ {Γ : Type u_1} {T : Type u_
+2} {inst : TopologicalSpace T} {inst_1 : SMul Γ T} [self : ContinuousConstSMul Γ
+ T]   (γ : Γ), Continuous fun x…
 -/
 theorem exp_smul {G} [Monoid G] [MulSemiringAction G 𝔸] [ContinuousConstSMul G 𝔸] (g : G) (x : 𝔸) :
     exp (g • x) = g • exp x :=
   (map_exp (MulSemiringAction.toRingHom G 𝔸 g) (continuous_const_smul g) x).symm
-
-/--
-theorem `exp_units_conj` / 定理 `exp_units_conj`
-
-English:
-theorem exp_units_conj
-  given: (y : 𝔸ˣ) (x : 𝔸)
-  statement: exp (y * x * ↑y⁻¹ : 𝔸) = y * exp x * ↑y⁻¹
-  proof: exp_smul (ConjAct.toConjAct y) x
-
-中文:
-定理 exp_units_conj
-  条件: (y : 𝔸ˣ) (x : 𝔸)
-  结论: exp (y * x * ↑y⁻¹ : 𝔸) = y * exp x * ↑y⁻¹
-  证明: exp_smul (ConjAct.toConjAct y) x
-
-Depends on / 依赖: ConjAct, ConjAct.toConjAct, exp_smul, toConjAct
+/-
+**NormedSpace.exp_units_conj** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：exp_units_conj (y : 𝔸ˣ) (x : 𝔸) : exp (y * x * ↑y⁻¹ : 𝔸) = y * exp x * ↑y⁻
+¹
+参数：y : 𝔸ˣ；x : 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NormedSpace.exp_smul`：exp_smul {G} [Monoid G] [MulSemiringAction G 𝔸] [C
+ontinuousConstSMul G 𝔸] (g : G) (x : 𝔸) : exp (g • x) = g • exp x
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
 -/
 theorem exp_units_conj (y : 𝔸ˣ) (x : 𝔸) : exp (y * x * ↑y⁻¹ : 𝔸) = y * exp x * ↑y⁻¹ :=
   exp_smul (ConjAct.toConjAct y) x
-
-/--
-theorem `exp_units_conj'` / 定理 `exp_units_conj'`
-
-English:
-theorem exp_units_conj'
-  given: (y : 𝔸ˣ) (x : 𝔸)
-  statement: exp (↑y⁻¹ * x * y) = ↑y⁻¹ * exp x * y
-  proof: exp_units_conj _ _
-
-@[simp]
-
-中文:
-定理 exp_units_conj'
-  条件: (y : 𝔸ˣ) (x : 𝔸)
-  结论: exp (↑y⁻¹ * x * y) = ↑y⁻¹ * exp x * y
-  证明: exp_units_conj _ _
-
-@[simp]
-
-Depends on / 依赖: exp_units_conj
+/-
+**NormedSpace.exp_units_conj'** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：exp_units_conj' (y : 𝔸ˣ) (x : 𝔸) : exp (↑y⁻¹ * x * y) = ↑y⁻¹ * exp x * y
+参数：y : 𝔸ˣ；x : 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NormedSpace.exp_units_conj`：exp_units_conj (y : 𝔸ˣ) (x : 𝔸) : exp (y * x
+ * ↑y⁻¹ : 𝔸) = y * exp x * ↑y⁻¹
 -/
 theorem exp_units_conj' (y : 𝔸ˣ) (x : 𝔸) : exp (↑y⁻¹ * x * y) = ↑y⁻¹ * exp x * y :=
   exp_units_conj _ _
 
 @[simp]
-/--
-theorem `_root_.Prod.fst_exp` / 定理 `_root_.Prod.fst_exp`
-
-English:
-theorem _root_.Prod.fst_exp
-  given: [NormedAlgebra Rat 𝔹] [CompleteSpace 𝔹] (x : 𝔸 × 𝔹)
-  proof: map_exp (RingHom.fst 𝔸 𝔹) continuous_fst x
-
-@[simp]
-
-中文:
-定理 _root_.积类型.fst_exp
-  条件: [赋范代数 有理数 𝔹] [完备空间 𝔹] (x : 𝔸 × 𝔹)
-  证明: map_exp (RingHom.fst 𝔸 𝔹) continuous_fst x
-
-@[simp]
-
-Depends on / 依赖: RingHom, RingHom.fst, continuous_fst, map_exp
+/-
+**NormedSpace._root_.Prod.fst_exp** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Prod.fst_exp [NormedAlgebra Rat 𝔹] [CompleteSpace 𝔹] (x : 𝔸 × 𝔹) :
+theorem _root_.Prod.fst_exp [NormedAlgebra ℚ 𝔹] [CompleteSpace 𝔹] (x : 𝔸 × 𝔹) :
     (exp x).fst = exp x.fst :=
   map_exp (RingHom.fst 𝔸 𝔹) continuous_fst x
 
 @[simp]
-/--
-theorem `_root_.Prod.snd_exp` / 定理 `_root_.Prod.snd_exp`
-
-English:
-theorem _root_.Prod.snd_exp
-  given: [NormedAlgebra Rat 𝔹] [CompleteSpace 𝔹] (x : 𝔸 × 𝔹)
-  proof: map_exp (RingHom.snd 𝔸 𝔹) continuous_snd x
-
-@[simp]
-
-中文:
-定理 _root_.积类型.snd_exp
-  条件: [赋范代数 有理数 𝔹] [完备空间 𝔹] (x : 𝔸 × 𝔹)
-  证明: map_exp (RingHom.snd 𝔸 𝔹) continuous_snd x
-
-@[simp]
-
-Depends on / 依赖: RingHom, RingHom.snd, continuous_snd, map_exp
+/-
+**NormedSpace._root_.Prod.snd_exp** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Prod.snd_exp [NormedAlgebra Rat 𝔹] [CompleteSpace 𝔹] (x : 𝔸 × 𝔹) :
+theorem _root_.Prod.snd_exp [NormedAlgebra ℚ 𝔹] [CompleteSpace 𝔹] (x : 𝔸 × 𝔹) :
     (exp x).snd = exp x.snd :=
   map_exp (RingHom.snd 𝔸 𝔹) continuous_snd x
 
 @[simp]
-/--
-theorem `_root_.Pi.coe_exp` / 定理 `_root_.Pi.coe_exp`
-
-English:
-theorem _root_.Pi.coe_exp
-  statement: {ι : Type*} {𝔸 : ι -> Type*} [Finite ι] [forall i, NormedRing (𝔸 i)]
-  proof: let ⟨_⟩ := nonempty_fintype ι
-  map_exp (Pi.evalRingHom 𝔸 i) (continuous_apply _) x
-
-中文:
-定理 _root_.依赖函数类型.coe_exp
-  结论: {ι : 类型} {𝔸 : ι -> 类型} [有限 ι] [对任意 i, 赋范环 (𝔸 i)]
-  证明: let ⟨_⟩ := nonempty_fintype ι
-  map_exp (Pi.evalRingHom 𝔸 i) (continuous_apply _) x
-
-Depends on / 依赖: Pi.evalRingHom, continuous_apply, evalRingHom, map_exp, nonempty_fintype
+/-
+**NormedSpace._root_.Pi.coe_exp** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Pi.coe_exp {ι : Type*} {𝔸 : ι -> Type*} [Finite ι] [forall i, NormedRing (𝔸 i)]
-    [forall i, NormedAlgebra Rat (𝔸 i)] [forall i, CompleteSpace (𝔸 i)] (x : forall i, 𝔸 i) (i : ι) :
+theorem _root_.Pi.coe_exp {ι : Type*} {𝔸 : ι → Type*} [Finite ι] [∀ i, NormedRing (𝔸 i)]
+    [∀ i, NormedAlgebra ℚ (𝔸 i)] [∀ i, CompleteSpace (𝔸 i)] (x : ∀ i, 𝔸 i) (i : ι) :
     exp x i = exp (x i) :=
   let ⟨_⟩ := nonempty_fintype ι
   map_exp (Pi.evalRingHom 𝔸 i) (continuous_apply _) x
-
-/--
-theorem `_root_.Pi.exp_def` / 定理 `_root_.Pi.exp_def`
-
-English:
-theorem _root_.Pi.exp_def
-  statement: {ι : Type*} {𝔸 : ι -> Type*} [Finite ι] [forall i, NormedRing (𝔸 i)]
-  proof: funext Pi.coe_exp x
-
-中文:
-定理 _root_.依赖函数类型.exp_def
-  结论: {ι : 类型} {𝔸 : ι -> 类型} [有限 ι] [对任意 i, 赋范环 (𝔸 i)]
-  证明: funext Pi.coe_exp x
-
-Depends on / 依赖: Pi.coe_exp, coe_exp
+/-
+**NormedSpace._root_.Pi.exp_def** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Pi.exp_def {ι : Type*} {𝔸 : ι -> Type*} [Finite ι] [forall i, NormedRing (𝔸 i)]
-    [forall i, NormedAlgebra Rat (𝔸 i)] [forall i, CompleteSpace (𝔸 i)] (x : forall i, 𝔸 i) :
+theorem _root_.Pi.exp_def {ι : Type*} {𝔸 : ι → Type*} [Finite ι] [∀ i, NormedRing (𝔸 i)]
+    [∀ i, NormedAlgebra ℚ (𝔸 i)] [∀ i, CompleteSpace (𝔸 i)] (x : ∀ i, 𝔸 i) :
     exp x = fun i => exp (x i) :=
-funext Pi.coe_exp x
-
-/--
-theorem `_root_.Function.update_exp` / 定理 `_root_.Function.update_exp`
-
-English:
-theorem _root_.Function.update_exp
-  statement: {ι : Type*} {𝔸 : ι -> Type*} [Finite ι] [DecidableEq ι]
-  proof: by
-  ext i
-  simp_rw [Pi.exp_def]
-  exact (Function.apply_update (fun i => exp) x j xj i).symm
-
-中文:
-定理 _root_.函数.update_exp
-  结论: {ι : 类型} {𝔸 : ι -> 类型} [有限 ι] [DecidableEq ι]
-  证明: by
-  ext i
-  simp_rw [Pi.exp_def]
-  exact (Function.apply_update (fun i => exp) x j xj i).symm
-
-Depends on / 依赖: Function, Function.apply_update, Pi.exp_def, apply_update, exp_def, simp_rw
+  funext <| Pi.coe_exp x
+/-
+**NormedSpace._root_.Function.update_exp** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Function.update_exp {ι : Type*} {𝔸 : ι -> Type*} [Finite ι] [DecidableEq ι]
-    [forall i, NormedRing (𝔸 i)] [forall i, NormedAlgebra Rat (𝔸 i)] [forall i, CompleteSpace (𝔸 i)] (x : forall i, 𝔸 i)
+theorem _root_.Function.update_exp {ι : Type*} {𝔸 : ι → Type*} [Finite ι] [DecidableEq ι]
+    [∀ i, NormedRing (𝔸 i)] [∀ i, NormedAlgebra ℚ (𝔸 i)] [∀ i, CompleteSpace (𝔸 i)] (x : ∀ i, 𝔸 i)
     (j : ι) (xj : 𝔸 j) :
     Function.update (exp x) j (exp xj) = exp (Function.update x j xj) := by
   ext i
@@ -2111,213 +2260,237 @@ end Rat
 
 section DivisionAlgebra
 
-variable {𝔸 : Type*} [NormedDivisionRing 𝔸] [NormedAlgebra Rat 𝔸]
+variable {𝔸 : Type*} [NormedDivisionRing 𝔸] [NormedAlgebra ℚ 𝔸]
 
-/--
-theorem `norm_expSeries_div_summable` / 定理 `norm_expSeries_div_summable`
-
-English:
-theorem norm_expSeries_div_summable
-  given: (x : 𝔸)
-  statement: Summable fun n => ‖(x ^ n / n ! : 𝔸)‖
-  proof: norm_expSeries_div_summable_of_mem_ball Rat x
-    ((expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _)
-
-中文:
-定理 norm_expSeries_div_summable
-  条件: (x : 𝔸)
-  结论: Summable fun n => ‖(x ^ n / n ! : 𝔸)‖
-  证明: norm_expSeries_div_summable_of_mem_ball Rat x
-    ((expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _)
-
-Depends on / 依赖: edist_lt_top, expSeries_radius_eq_top, norm_expSeries_div_summable_of_mem_ball
+/-
+**NormedSpace.norm_expSeries_div_summable** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace
+`。
+形式化陈述：norm_expSeries_div_summable (x : 𝔸) : Summable fun n => ‖(x ^ n / n ! : 𝔸)
+‖
+参数：x : 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NormedSpace.norm_expSeries_div_summable_of_mem_ball`：norm_expSeries_div_
+summable_of_mem_ball (x : 𝔸) (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).rad
+ius) : Summable fun n => ‖x ^ n / (n !)‖
+· 使用定理 `edist_lt_top`：edist_lt_top {α : Type*} [PseudoMetricSpace α] (x y : α) :
+ edist x y < ⊤
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NormedSpace.expSeries_radius_eq_top`：expSeries_radius_eq_top : (expSerie
+s 𝕂 𝔸).radius = ∞
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `Rat.instIsTopologicalRing`：IsTopologicalRing ℚ
 -/
 theorem norm_expSeries_div_summable (x : 𝔸) : Summable fun n => ‖(x ^ n / n ! : 𝔸)‖ :=
-  norm_expSeries_div_summable_of_mem_ball Rat x
-    ((expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _)
+  norm_expSeries_div_summable_of_mem_ball ℚ x
+    ((expSeries_radius_eq_top ℚ 𝔸).symm ▸ edist_lt_top _ _)
 
 variable [CompleteSpace 𝔸]
-
-/--
-theorem `expSeries_div_summable` / 定理 `expSeries_div_summable`
-
-English:
-theorem expSeries_div_summable
-  given: (x : 𝔸)
-  statement: Summable fun n => x ^ n / n !
-  proof: (norm_expSeries_div_summable x).of_norm
-
-中文:
-定理 expSeries_div_summable
-  条件: (x : 𝔸)
-  结论: Summable fun n => x ^ n / n !
-  证明: (norm_expSeries_div_summable x).of_norm
-
-Depends on / 依赖: norm_expSeries_div_summable, of_norm
+/-
+**NormedSpace.expSeries_div_summable** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：expSeries_div_summable (x : 𝔸) : Summable fun n => x ^ n / n !
+参数：x : 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Summable.of_norm`：Summable.of_norm {f : ι -> E} (hf : Summable fun a => 
+‖f a‖) : Summable f
+· 使用定理 `NormedSpace.norm_expSeries_div_summable`：norm_expSeries_div_summable (x 
+: 𝔸) : Summable fun n => ‖(x ^ n / n ! : 𝔸)‖
 -/
 theorem expSeries_div_summable (x : 𝔸) : Summable fun n => x ^ n / n ! :=
   (norm_expSeries_div_summable x).of_norm
-
-/--
-theorem `expSeries_div_hasSum_exp` / 定理 `expSeries_div_hasSum_exp`
-
-English:
-theorem expSeries_div_hasSum_exp
-  given: (x : 𝔸)
-  statement: HasSum (fun n => x ^ n / n !) (exp x)
-  proof: expSeries_div_hasSum_exp_of_mem_ball Rat x ((expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _)
-
-中文:
-定理 expSeries_div_hasSum_exp
-  条件: (x : 𝔸)
-  结论: HasSum (fun n => x ^ n / n !) (exp x)
-  证明: expSeries_div_hasSum_exp_of_mem_ball Rat x ((expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _)
-
-Depends on / 依赖: edist_lt_top, expSeries_div_hasSum_exp_of_mem_ball, expSeries_radius_eq_top
+/-
+**NormedSpace.expSeries_div_hasSum_exp** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：expSeries_div_hasSum_exp (x : 𝔸) : HasSum (fun n => x ^ n / n !) (exp x)
+参数：x : 𝔸。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NormedSpace.expSeries_div_hasSum_exp_of_mem_ball`：expSeries_div_hasSum_e
+xp_of_mem_ball [CharZero 𝕂] [CompleteSpace 𝔸] (x : 𝔸) (hx : x in Metric.eball (0
+ : 𝔸) (expSeries 𝕂 𝔸).radius) : HasSum…
+· 使用定理 `edist_lt_top`：edist_lt_top {α : Type*} [PseudoMetricSpace α] (x y : α) :
+ edist x y < ⊤
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NormedSpace.expSeries_radius_eq_top`：expSeries_radius_eq_top : (expSerie
+s 𝕂 𝔸).radius = ∞
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `Rat.instIsTopologicalRing`：IsTopologicalRing ℚ
 -/
 theorem expSeries_div_hasSum_exp (x : 𝔸) : HasSum (fun n => x ^ n / n !) (exp x) :=
-  expSeries_div_hasSum_exp_of_mem_ball Rat x ((expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _)
-
-/--
-theorem `exp_neg` / 定理 `exp_neg`
-
-English:
-theorem exp_neg
-  given: (x : 𝔸)
-  statement: exp (-x) = (exp x)⁻¹
-  proof: exp_neg_of_mem_ball Rat (expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _
-
-中文:
-定理 exp_neg
-  条件: (x : 𝔸)
-  结论: exp (-x) = (exp x)⁻¹
-  证明: exp_neg_of_mem_ball Rat (expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _
-
-Depends on / 依赖: edist_lt_top, expSeries_radius_eq_top, exp_neg_of_mem_ball
+  expSeries_div_hasSum_exp_of_mem_ball ℚ x ((expSeries_radius_eq_top ℚ 𝔸).symm ▸ edist_lt_top _ _)
+/-
+**NormedSpace.exp_neg** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：exp_neg (x : 𝔸) : exp (-x) = (exp x)⁻¹
+参数：x : 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NormedSpace.exp_neg_of_mem_ball`：exp_neg_of_mem_ball [CharZero 𝕂] [Compl
+eteSpace 𝔸] {x : 𝔸} (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) : ex
+p (-x) = (exp x)⁻¹
+· 使用定理 `edist_lt_top`：edist_lt_top {α : Type*} [PseudoMetricSpace α] (x y : α) :
+ edist x y < ⊤
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NormedSpace.expSeries_radius_eq_top`：expSeries_radius_eq_top : (expSerie
+s 𝕂 𝔸).radius = ∞
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `Rat.instIsTopologicalRing`：IsTopologicalRing ℚ
 -/
 theorem exp_neg (x : 𝔸) : exp (-x) = (exp x)⁻¹ :=
-exp_neg_of_mem_ball Rat (expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _
-
-/--
-theorem `exp_zsmul` / 定理 `exp_zsmul`
-
-English:
-theorem exp_zsmul
-  given: (z : Int) (x : 𝔸)
-  statement: exp (z • x) = exp x ^ z
-  proof: by
-  obtain ⟨n, rfl | rfl⟩ := z.eq_nat_or_neg
-  · rw [zpow_natCast, natCast_zsmul, exp_nsmul]
-  · rw [zpow_neg, zpow_natCast, neg_smul, exp_neg, natCast_zsmul, exp_nsmul]
-
-中文:
-定理 exp_zsmul
-  条件: (z : 整数) (x : 𝔸)
-  结论: exp (z • x) = exp x ^ z
-  证明: by
-  obtain ⟨n, rfl | rfl⟩ := z.eq_nat_or_neg
-  · rw [zpow_natCast, natCast_zsmul, exp_nsmul]
-  · rw [zpow_neg, zpow_natCast, neg_smul, exp_neg, natCast_zsmul, exp_nsmul]
-
-Depends on / 依赖: eq_nat_or_neg, exp_neg, exp_nsmul, natCast_zsmul, neg_smul, z.eq_nat_or_neg, zpow_natCast, zpow_neg
+  exp_neg_of_mem_ball ℚ <| (expSeries_radius_eq_top ℚ 𝔸).symm ▸ edist_lt_top _ _
+/-
+**NormedSpace.exp_zsmul** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：exp_zsmul (z : Int) (x : 𝔸) : exp (z • x) = exp x ^ z
+参数：z : Int；x : 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `Int.eq_nat_or_neg`：∀ (a : ℤ), ∃ n, a = ↑n ∨ a = -↑n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `natCast_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G) (n : ℕ),
+ ↑n • a = n • a
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `NormedSpace.exp_nsmul`：exp_nsmul (n : Nat) (x : 𝔸) : exp (n • x) = exp x
+ ^ n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `zpow_neg`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a 
+^ (-n) = (a ^ n)⁻¹
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `NormedSpace.exp_neg`：exp_neg (x : 𝔸) : exp (-x) = (exp x)⁻¹
 -/
-theorem exp_zsmul (z : Int) (x : 𝔸) : exp (z • x) = exp x ^ z := by
+theorem exp_zsmul (z : ℤ) (x : 𝔸) : exp (z • x) = exp x ^ z := by
   obtain ⟨n, rfl | rfl⟩ := z.eq_nat_or_neg
   · rw [zpow_natCast, natCast_zsmul, exp_nsmul]
   · rw [zpow_neg, zpow_natCast, neg_smul, exp_neg, natCast_zsmul, exp_nsmul]
-
-/--
-theorem `exp_conj` / 定理 `exp_conj`
-
-English:
-theorem exp_conj
-  given: (y : 𝔸) (x : 𝔸) (hy : y != 0)
-  statement: exp (y * x * y⁻¹) = y * exp x * y⁻¹
-  proof: exp_units_conj (Units.mk0 y hy) x
-
-中文:
-定理 exp_conj
-  条件: (y : 𝔸) (x : 𝔸) (hy : y != 0)
-  结论: exp (y * x * y⁻¹) = y * exp x * y⁻¹
-  证明: exp_units_conj (Units.mk0 y hy) x
-
-Depends on / 依赖: Units.mk0, exp_units_conj
+/-
+**NormedSpace.exp_conj** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：exp_conj (y : 𝔸) (x : 𝔸) (hy : y != 0) : exp (y * x * y⁻¹) = y * exp x * y
+⁻¹
+参数：y : 𝔸；x : 𝔸；hy : y != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NormedSpace.exp_units_conj`：exp_units_conj (y : 𝔸ˣ) (x : 𝔸) : exp (y * x
+ * ↑y⁻¹ : 𝔸) = y * exp x * ↑y⁻¹
 -/
-theorem exp_conj (y : 𝔸) (x : 𝔸) (hy : y != 0) : exp (y * x * y⁻¹) = y * exp x * y⁻¹ :=
+theorem exp_conj (y : 𝔸) (x : 𝔸) (hy : y ≠ 0) : exp (y * x * y⁻¹) = y * exp x * y⁻¹ :=
   exp_units_conj (Units.mk0 y hy) x
-
-/--
-theorem `exp_conj'` / 定理 `exp_conj'`
-
-English:
-theorem exp_conj'
-  given: (y : 𝔸) (x : 𝔸) (hy : y != 0)
-  statement: exp (y⁻¹ * x * y) = y⁻¹ * exp x * y
-  proof: exp_units_conj' (Units.mk0 y hy) x
-
-中文:
-定理 exp_conj'
-  条件: (y : 𝔸) (x : 𝔸) (hy : y != 0)
-  结论: exp (y⁻¹ * x * y) = y⁻¹ * exp x * y
-  证明: exp_units_conj' (Units.mk0 y hy) x
-
-Depends on / 依赖: Units.mk0, exp_units_conj
+/-
+**NormedSpace.exp_conj'** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：exp_conj' (y : 𝔸) (x : 𝔸) (hy : y != 0) : exp (y⁻¹ * x * y) = y⁻¹ * exp x 
+* y
+参数：y : 𝔸；x : 𝔸；hy : y != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NormedSpace.exp_units_conj'`：exp_units_conj' (y : 𝔸ˣ) (x : 𝔸) : exp (↑y⁻
+¹ * x * y) = ↑y⁻¹ * exp x * y
 -/
-theorem exp_conj' (y : 𝔸) (x : 𝔸) (hy : y != 0) : exp (y⁻¹ * x * y) = y⁻¹ * exp x * y :=
+theorem exp_conj' (y : 𝔸) (x : 𝔸) (hy : y ≠ 0) : exp (y⁻¹ * x * y) = y⁻¹ * exp x * y :=
   exp_units_conj' (Units.mk0 y hy) x
 
 end DivisionAlgebra
 
 section CommAlgebra
 
-variable {𝕂 𝔸 : Type*} [NormedCommRing 𝔸] [NormedAlgebra Rat 𝔸] [CompleteSpace 𝔸]
+variable {𝕂 𝔸 : Type*} [NormedCommRing 𝔸] [NormedAlgebra ℚ 𝔸] [CompleteSpace 𝔸]
 
-/--
-theorem `exp_add` / 定理 `exp_add`
+/-- In a commutative Banach-algebra `𝔸` over `𝕂 = ℝ` or `𝕂 = ℂ`,
+`NormedSpace.exp (x+y) = (NormedSpace.exp x) * (NormedSpace.exp y)`. -/
+/-
+**NormedSpace.exp_add** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：exp_add {x y : 𝔸} : exp (x + y) = exp x * exp y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NormedSpace.exp_add_of_mem_ball`：exp_add_of_mem_ball [CharZero 𝕂] {x y :
+ 𝔸} (hx : x in Metric.eball (0 : 𝔸) (expSeries 𝕂 𝔸).radius) (hy : y in Metric.eb
+all (0 : 𝔸) (expSerie…
+· 使用定理 `edist_lt_top`：edist_lt_top {α : Type*} [PseudoMetricSpace α] (x y : α) :
+ edist x y < ⊤
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NormedSpace.expSeries_radius_eq_top`：expSeries_radius_eq_top : (expSerie
+s 𝕂 𝔸).radius = ∞
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `Rat.instIsTopologicalRing`：IsTopologicalRing ℚ
 
-English:
-theorem exp_add
-  given: {x y : 𝔸}
-  statement: exp (x + y) = exp x * exp y
-  proof: exp_add_of_mem_ball ((expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _)
-    ((expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _)
-
-中文:
-定理 exp_add
-  条件: {x y : 𝔸}
-  结论: exp (x + y) = exp x * exp y
-  证明: exp_add_of_mem_ball ((expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _)
-    ((expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _)
-
-Depends on / 依赖: edist_lt_top, expSeries_radius_eq_top, exp_add_of_mem_ball
+--- 原说明 ---
+In a commutative Banach-algebra `𝔸` over `𝕂 = ℝ` or `𝕂 = ℂ`,
+`NormedSpace.exp (x+y) = (NormedSpace.exp x) * (NormedSpace.exp y)`.
 -/
 theorem exp_add {x y : 𝔸} : exp (x + y) = exp x * exp y :=
-  exp_add_of_mem_ball ((expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _)
-    ((expSeries_radius_eq_top Rat 𝔸).symm ▸ edist_lt_top _ _)
+  exp_add_of_mem_ball ((expSeries_radius_eq_top ℚ 𝔸).symm ▸ edist_lt_top _ _)
+    ((expSeries_radius_eq_top ℚ 𝔸).symm ▸ edist_lt_top _ _)
 
-/--
-theorem `exp_sum` / 定理 `exp_sum`
+/-- A version of `NormedSpace.exp_sum_of_commute` for a commutative Banach-algebra. -/
+/-
+**NormedSpace.exp_sum** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：exp_sum {ι} (s : Finset ι) (f : ι -> 𝔸) : exp (∑ i in s, f i) = ∏ i in s, 
+exp (f i)
+参数：s : Finset ι；f : ι -> 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalSeminormedRing.toIsTopologicalRing`：∀ {α : Type u_1} [inst : No
+nUnitalSeminormedRing α], IsTopologicalRing α
+· 使用定理 `Commute.exp`：∀ {𝔸 : Type u_2} [inst : Ring 𝔸] [inst_1 : TopologicalSpace
+ 𝔸] [inst_2 : IsTopologicalRing 𝔸] [T2Space 𝔸] {x y : 𝔸},   Commute x y → Commut
+e…
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `Set.Pairwise.of_refl`：∀ {α : Type u_1} {r : α → α → Prop} {s : Set α} [S
+td.Refl r], s.Pairwise r → ∀ ⦃a : α⦄, a ∈ s → ∀ ⦃b : α⦄, b ∈ s → r a b
+· 使用定理 `Commute.instRefl`：∀ {S : Type u_3} [inst : Mul S], Std.Refl Commute
+· 使用定理 `Commute.all`：∀ {S : Type u_3} [inst : CommMagma S] (a b : S), Commute a 
+b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NormedSpace.exp_sum_of_commute`：exp_sum_of_commute {ι} (s : Finset ι) (f
+ : ι -> 𝔸) (h : (s : Set ι).Pairwise (Commute on f)) : exp (∑ i in s, f i) = s.n
+oncommProd (fun i =>…
+· 使用定理 `Finset.noncommProd_eq_prod`：noncommProd_eq_prod {β : Type*} [CommMonoid 
+β] (s : Finset α) (f : α -> β) : (noncommProd s f fun _ _ _ _ _ => Commute.all _
+ _) = s.prod f
 
-English:
-theorem exp_sum
-  given: {ι} (s : Finset ι) (f : ι -> 𝔸)
-  statement: exp (∑ i in s, f i) = ∏ i in s, exp (f i)
-  proof: by
-  rw [exp_sum_of_commute]; rw [Finset.noncommProd_eq_prod]
-  exact fun i _hi j _hj _ => Commute.all _ _
-
-中文:
-定理 exp_sum
-  条件: {ι} (s : 有限集 ι) (f : ι -> 𝔸)
-  结论: exp (∑ i in s, f i) = ∏ i in s, exp (f i)
-  证明: by
-  rw [exp_sum_of_commute]; rw [Finset.noncommProd_eq_prod]
-  exact fun i _hi j _hj _ => Commute.all _ _
-
-Depends on / 依赖: Commute, Commute.all, Finset, Finset.noncommProd_eq_prod, exp_sum_of_commute, noncommProd_eq_prod
+--- 原说明 ---
+A version of `NormedSpace.exp_sum_of_commute` for a commutative Banach-algebra.
 -/
-theorem exp_sum {ι} (s : Finset ι) (f : ι -> 𝔸) : exp (∑ i in s, f i) = ∏ i in s, exp (f i) := by
-  rw [exp_sum_of_commute]; rw [Finset.noncommProd_eq_prod]
+theorem exp_sum {ι} (s : Finset ι) (f : ι → 𝔸) : exp (∑ i ∈ s, f i) = ∏ i ∈ s, exp (f i) := by
+  rw [exp_sum_of_commute, Finset.noncommProd_eq_prod]
   exact fun i _hi j _hj _ => Commute.all _ _
 
 end CommAlgebra
@@ -2329,49 +2502,45 @@ section ScalarTower
 variable (𝕂 𝕂' 𝔸 : Type*) [Field 𝕂] [Field 𝕂'] [Ring 𝔸] [Algebra 𝕂 𝔸] [Algebra 𝕂' 𝔸]
   [TopologicalSpace 𝔸] [IsTopologicalRing 𝔸]
 
-/--
-theorem `expSeries_eq_expSeries` / 定理 `expSeries_eq_expSeries`
+/-- If a normed ring `𝔸` is a normed algebra over two fields, then they define the same
+`expSeries` on `𝔸`. -/
+/-
+**NormedSpace.expSeries_eq_expSeries** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+形式化陈述：expSeries_eq_expSeries (n : Nat) (x : 𝔸) : (expSeries 𝕂 𝔸 n fun _ => x) = 
+expSeries 𝕂' 𝔸 n fun _ => x
+参数：n : Nat；x : 𝔸。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NormedSpace.expSeries_apply_eq`：expSeries_apply_eq (x : 𝔸) (n : Nat) : (
+expSeries 𝕂 𝔸 n fun _ => x) = (n !⁻¹ : 𝕂) • x ^ n
+· 使用定理 `inv_natCast_smul_eq`：inv_natCast_smul_eq {E : Type*} (R S : Type*) [AddC
+ommMonoid E] [DivisionSemiring R] [DivisionSemiring S] [Module R E] [Module S E]
+ (n : Nat…
 
-English:
-theorem expSeries_eq_expSeries
-  given: (n : Nat) (x : 𝔸)
-  proof: by
-  rw [expSeries_apply_eq]; rw [expSeries_apply_eq]; rw [inv_natCast_smul_eq 𝕂 𝕂']
-
-中文:
-定理 expSeries_eq_expSeries
-  条件: (n : 自然数) (x : 𝔸)
-  证明: by
-  rw [expSeries_apply_eq]; rw [expSeries_apply_eq]; rw [inv_natCast_smul_eq 𝕂 𝕂']
-
-Depends on / 依赖: expSeries_apply_eq, inv_natCast_smul_eq
+--- 原说明 ---
+If a normed ring `𝔸` is a normed algebra over two fields, then they define the s
+ame
+`expSeries` on `𝔸`.
 -/
-theorem expSeries_eq_expSeries (n : Nat) (x : 𝔸) :
+theorem expSeries_eq_expSeries (n : ℕ) (x : 𝔸) :
     (expSeries 𝕂 𝔸 n fun _ => x) = expSeries 𝕂' 𝔸 n fun _ => x := by
-  rw [expSeries_apply_eq]; rw [expSeries_apply_eq]; rw [inv_natCast_smul_eq 𝕂 𝕂']
+  rw [expSeries_apply_eq, expSeries_apply_eq, inv_natCast_smul_eq 𝕂 𝕂']
 
 /-- A version of `Complex.ofReal_exp` for `NormedSpace.exp` instead of `Complex.exp` -/
 @[simp, norm_cast]
-/--
-theorem `ofReal_exp_Real_Real` / 定理 `ofReal_exp_Real_Real`
+/-
+**NormedSpace.ofReal_exp_** 是 Mathlib 中的一个定理，位于命名空间 `NormedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem ofReal_exp_Real_Real
-  given: (r : Real)
-  statement: ↑(exp r) = exp (r : Complex)
-  proof: map_exp (algebraMap Real Complex) (continuous_algebraMap _ _) r
-
-中文:
-定理 of实数_exp_实数_实数
-  条件: (r : 实数)
-  结论: ↑(exp r) = exp (r : 复形)
-  证明: map_exp (algebraMap Real Complex) (continuous_algebraMap _ _) r
-
-Depends on / 依赖: algebraMap, continuous_algebraMap, map_exp
+--- 原说明 ---
+A version of `Complex.ofReal_exp` for `NormedSpace.exp` instead of `Complex.exp`
 -/
-theorem ofReal_exp_Real_Real (r : Real) : ↑(exp r) = exp (r : Complex) :=
-  map_exp (algebraMap Real Complex) (continuous_algebraMap _ _) r
+theorem ofReal_exp_ℝ_ℝ (r : ℝ) : ↑(exp r) = exp (r : ℂ) :=
+  map_exp (algebraMap ℝ ℂ) (continuous_algebraMap _ _) r
 
 end ScalarTower
 
 end NormedSpace
+

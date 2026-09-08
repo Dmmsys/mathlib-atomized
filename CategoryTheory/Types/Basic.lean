@@ -36,7 +36,7 @@ We define `uliftFunctor`, from `Type u` to `Type (max u v)`, and show that it is
 (but not, of course, essentially surjective).
 
 We prove some basic facts about the category `Type`:
-* epimorphisms are surjections and monomorphisms are injections,
+*  epimorphisms are surjections and monomorphisms are injections,
 * `Iso` is both `Iso` and `Equiv` to `Equiv` (at least within a fixed universe),
 * every type level `IsLawfulFunctor` gives a categorical functor `Type ⥤ Type`
   (the corresponding fact about monads is in `Mathlib/CategoryTheory/Monad/Types.lean`).
@@ -51,151 +51,84 @@ namespace TypeCat
 
 /-- A one-field structure wrapping a function between types. -/
 @[ext]
-/--
-Definition of `Fun` / `Fun` 的定义
+/-
+**TypeCat.Fun** 是 Mathlib 中的一个归纳类型，位于命名空间 `TypeCat`。
+形式化陈述：Type u_1 → Type u_2 → Type (max u_1 u_2)
+参数：max u_1 u_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Fun
-  parameters: (X Y : Type*)
-  axioms and operations (1):
-    - toFun : X -> Y
-
-中文:
-结构 Fun
-  参数: (X Y : 类型)
-  公理与运算 (1 个):
-    - toFun : X -> Y
+--- 原说明 ---
+A one-field structure wrapping a function between types.
 -/
 structure Fun (X Y : Type*) where
   /-- The underlying function. -/
-  toFun : X -> Y
-
-/--
-Instance `instFunLikeFun` / 实例 `instFunLikeFun`
-
-English:
-instance instFunLikeFun
-  signature: {X Y : Type*}
-  body: f.toFun x
-  coe_injective _ := by aesop
-
-initialize_simps_projections Fun (toFun -> apply)
-
-中文:
-实例 instFunLikeFun
-  签名: {X Y : 类型}
-  定义体: f.toFun x
-  coe_injective _ := by aesop
-
-initialize_simps_projections Fun (toFun -> apply)
-
-Depends on / 依赖: f.toFun
+  toFun : X → Y
+/-
+**TypeCat.instFunLikeFun** 是 Mathlib 中的一个实例，位于命名空间 `TypeCat`。
+形式化陈述：instFunLikeFun {X Y : Type*} : FunLike (Fun X Y) X Y where coe f x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instFunLikeFun {X Y : Type*} : FunLike (Fun X Y) X Y where
   coe f x := f.toFun x
   coe_injective _ := by aesop
 
-initialize_simps_projections Fun (toFun -> apply)
-
-/--
-lemma `Fun.mk_apply` / 引理 `Fun.mk_apply`
-
-English:
-lemma Fun.mk_apply
-  given: {X Y : Type*} (f : X -> Y) (x : X)
-  statement: (Fun.mk f) x = f x
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 Fun.mk_apply
-  条件: {X Y : 类型} (f : X -> Y) (x : X)
-  结论: (Fun.mk f) x = f x
-  证明: rfl
-
-@[simp]
+initialize_simps_projections Fun (toFun → apply)
+/-
+**TypeCat.Fun.mk_apply** 是 Mathlib 中的一个定理，位于命名空间 `TypeCat.Fun`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} (f : X → Y) (x : X), { toFun := f } x = f 
+x
+参数：f : X → Y；x : X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma Fun.mk_apply {X Y : Type*} (f : X -> Y) (x : X) : (Fun.mk f) x = f x :=
+lemma Fun.mk_apply {X Y : Type*} (f : X → Y) (x : X) : (Fun.mk f) x = f x :=
   rfl
 
 @[simp]
-/--
-lemma `Fun.coe_mk` / 引理 `Fun.coe_mk`
-
-English:
-lemma Fun.coe_mk
-  given: {X Y : Type*} (f : X -> Y)
-  statement: (Fun.mk f : X -> Y) = f
-  proof: rfl
-
-中文:
-引理 Fun.coe_mk
-  条件: {X Y : 类型} (f : X -> Y)
-  结论: (Fun.mk f : X -> Y) = f
-  证明: rfl
+/-
+**TypeCat.Fun.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `TypeCat.Fun`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} (f : X → Y), ⇑{ toFun := f } = f
+参数：f : X → Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma Fun.coe_mk {X Y : Type*} (f : X -> Y) : (Fun.mk f : X -> Y) = f :=
+lemma Fun.coe_mk {X Y : Type*} (f : X → Y) : (Fun.mk f : X → Y) = f :=
   rfl
 
 /-- The identity function as a `Fun`. -/
 @[simps! +dsimpLhs]
-/--
-Definition of `Fun.id` / `Fun.id` 的定义
+/-
+**TypeCat.Fun.id** 是 Mathlib 中的一个定义，位于命名空间 `TypeCat.Fun`。
+形式化陈述：(X : Type u_1) → TypeCat.Fun X X
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Fun.id
-  signature: (X : Type*)
-  body: Fun.mk _root_.id
-
-中文:
-定义 Fun.id
-  签名: (X : 类型)
-  定义体: Fun.mk _root_.id
-
-Depends on / 依赖: Fun.mk, _root_, _root_.id
+--- 原说明 ---
+The identity function as a `Fun`.
 -/
 def Fun.id (X : Type*) : Fun X X := Fun.mk _root_.id
 
 /-- Composition of `Fun`s. -/
 @[simps! +dsimpLhs]
-/--
-Definition of `Fun.comp` / `Fun.comp` 的定义
+/-
+**TypeCat.Fun.comp** 是 Mathlib 中的一个定义，位于命名空间 `TypeCat.Fun`。
+形式化陈述：{X : Type u_1} → {Y : Type u_2} → {Z : Type u_3} → TypeCat.Fun Y Z → TypeC
+at.Fun X Y → TypeCat.Fun X Z
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Fun.comp
-  signature: {X Y Z : Type*} (f : Fun Y Z) (g : Fun X Y)
-  body: mk (f.toFun ∘ g.toFun)
-
-中文:
-定义 Fun.comp
-  签名: {X Y Z : 类型} (f : Fun Y Z) (g : Fun X Y)
-  定义体: mk (f.toFun ∘ g.toFun)
-
-Depends on / 依赖: f.toFun, g.toFun
+--- 原说明 ---
+Composition of `Fun`s.
 -/
 def Fun.comp {X Y Z : Type*} (f : Fun Y Z) (g : Fun X Y) : Fun X Z := mk (f.toFun ∘ g.toFun)
 
-/--
-Definition of `Fun.homEquiv` / `Fun.homEquiv` 的定义
+/-- The equivalence between `Fun`s and functions between types. -/
+/-
+**TypeCat.Fun.homEquiv** 是 Mathlib 中的一个定义，位于命名空间 `TypeCat.Fun`。
+形式化陈述：(X Y : Type u) → TypeCat.Fun X Y ≃ (X → Y)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Fun.homEquiv
-  signature: (X Y : Type u)
-  body: f
-  invFun f := ⟨f⟩
-  left_inv := by intro; rfl
-  right_inv := by intro; rfl
-
-中文:
-定义 Fun.homEquiv
-  签名: (X Y : 类型u)
-  定义体: f
-  invFun f := ⟨f⟩
-  left_inv := by intro; rfl
-  right_inv := by intro; rfl
+--- 原说明 ---
+The equivalence between `Fun`s and functions between types.
 -/
-def Fun.homEquiv (X Y : Type u) : (Fun X Y) ≃ (X -> Y) where
+def Fun.homEquiv (X Y : Type u) : (Fun X Y) ≃ (X → Y) where
   toFun f := f
   invFun f := ⟨f⟩
   left_inv := by intro; rfl
@@ -203,22 +136,13 @@ def Fun.homEquiv (X Y : Type u) : (Fun X Y) ≃ (X -> Y) where
 
 /-- The type of morphisms in `Type`. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**TypeCat.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `TypeCat`。
+形式化陈述：Type u → Type u → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (X Y : Type u)
-  axioms and operations (2):
-    - private(mk) : :
-    - hom' : Fun X Y
-
-中文:
-结构 态射
-  参数: (X Y : 类型u)
-  公理与运算 (2 个):
-    - private(mk) : :
-    - hom' : Fun X Y
+--- 原说明 ---
+The type of morphisms in `Type`.
 -/
 structure Hom (X Y : Type u) where
   private mk ::
@@ -231,121 +155,88 @@ open TypeCat CategoryTheory
 
 set_option backward.privateInPublic true in
 @[to_additive_do_translate] -- Expressions involving this instance can still be additivized.
-/--
-Instance `CategoryTheory.types` / 实例 `CategoryTheory.types`
-
-English:
-instance CategoryTheory.types
-  signature: : Category.{u} (Type u) where
-  body: Hom
-id X := .mk .id X
-comp f g := .mk g.hom'.comp f.hom'
-
-中文:
-实例 范畴论.types
-  签名: : 范畴.{u} (类型u) where
-  定义体: Hom
-id X := .mk .id X
-comp f g := .mk g.hom'.comp f.hom'
+/-
+**CategoryTheory.types** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：CategoryTheory.types : Category.{u} (Type u) where Hom
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance CategoryTheory.types : Category.{u} (Type u) where
   Hom := Hom
-id X := .mk .id X
-comp f g := .mk g.hom'.comp f.hom'
+  id X := .mk <| .id X
+  comp f g := .mk <| g.hom'.comp f.hom'
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
 /--
-Instance `_anonymous_` / 实例 `_anonymous_`
+The concrete category instance on `Type u`.
 
-English:
-instance :
-  signature: ConcreteCategory.{u} (Type u) Fun
-  body: Hom.hom'
-  ofHom := Hom.mk
+Note: sometimes one needs to specify explicitly `(CC := fun X ↦ X)` to help typeclass inference.
+-/
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-example (X Y : Type u) (f : X ⟶ Y) : (f : X -> Y) = (ConcreteCategory.hom f : X -> Y) := by
-  with_reducible rfl
+--- 原说明 ---
+The concrete category instance on `Type u`.
 
-example (X Y : Type u) (f : X ⟶ Y) (x : X) : f x = (f : X -> Y) x := by
-  with_reducible rfl
-
-example (X Y : Type*) (f : Fun X Y) : (f : X -> Y) = f := by
-  with_reducible rfl
-
-example (X Y : Type*) (f : Fun X Y) (x : X) : f x = (f : X -> Y) x := by
-  with_reducible rfl
-
-中文:
-实例 :
-  签名: 余ncrete范畴.{u} (类型u) Fun
-  定义体: Hom.hom'
-  ofHom := Hom.mk
-
-example (X Y : Type u) (f : X ⟶ Y) : (f : X -> Y) = (ConcreteCategory.hom f : X -> Y) := by
-  with_reducible rfl
-
-example (X Y : Type u) (f : X ⟶ Y) (x : X) : f x = (f : X -> Y) x := by
-  with_reducible rfl
-
-example (X Y : Type*) (f : Fun X Y) : (f : X -> Y) = f := by
-  with_reducible rfl
-
-example (X Y : Type*) (f : Fun X Y) (x : X) : f x = (f : X -> Y) x := by
-  with_reducible rfl
-
-Depends on / 依赖: Hom.hom
+Note: sometimes one needs to specify explicitly `(CC := fun X ↦ X)` to help type
+class inference.
 -/
 instance : ConcreteCategory.{u} (Type u) Fun where
   hom := Hom.hom'
   ofHom := Hom.mk
-
-example (X Y : Type u) (f : X ⟶ Y) : (f : X -> Y) = (ConcreteCategory.hom f : X -> Y) := by
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example (X Y : Type u) (f : X ⟶ Y) : (f : X → Y) = (ConcreteCategory.hom f : X → Y) := by
   with_reducible rfl
-
-example (X Y : Type u) (f : X ⟶ Y) (x : X) : f x = (f : X -> Y) x := by
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example (X Y : Type u) (f : X ⟶ Y) (x : X) : f x = (f : X → Y) x := by
   with_reducible rfl
-
-example (X Y : Type*) (f : Fun X Y) : (f : X -> Y) = f := by
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example (X Y : Type*) (f : Fun X Y) : (f : X → Y) = f := by
   with_reducible rfl
-
-example (X Y : Type*) (f : Fun X Y) (x : X) : f x = (f : X -> Y) x := by
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example (X Y : Type*) (f : Fun X Y) (x : X) : f x = (f : X → Y) x := by
   with_reducible rfl
 
 namespace TypeCat
 
-/--
-Definition of `Hom.hom` / `Hom.hom` 的定义
+/-- Turn a morphism in `Type` back into a function. -/
+/-
+**TypeCat.Hom.hom** 是 Mathlib 中的一个定义，位于命名空间 `TypeCat.Hom`。
+形式化陈述：{X Y : Type u} → TypeCat.Hom X Y → TypeCat.Fun X Y
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.hom
-  signature: {X Y : Type u} (f : Hom X Y)
-  body: ConcreteCategory.hom (C := Type u) f
-
-中文:
-缩写 态射.hom
-  签名: {X Y : 类型u} (f : 态射 X Y)
-  定义体: ConcreteCategory.hom (C := Type u) f
+--- 原说明 ---
+Turn a morphism in `Type` back into a function.
 -/
 abbrev Hom.hom {X Y : Type u} (f : Hom X Y) : Fun X Y :=
   ConcreteCategory.hom (C := Type u) f
 
-/--
-Definition of `ofHom` / `ofHom` 的定义
+/-- Typecheck a function as a morphism in `Type`. -/
+/-
+**TypeCat.ofHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `TypeCat`。
+形式化陈述：ofHom {X Y : Type u} (f : X -> Y) : X ⟶ Y
+参数：f : X -> Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofHom
-  signature: {X Y : Type u} (f : X -> Y)
-  body: ConcreteCategory.ofHom (Fun.mk f)
-
-中文:
-缩写 ofHom
-  签名: {X Y : 类型u} (f : X -> Y)
-  定义体: ConcreteCategory.ofHom (Fun.mk f)
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, Fun.mk
+--- 原说明 ---
+Typecheck a function as a morphism in `Type`.
 -/
-abbrev ofHom {X Y : Type u} (f : X -> Y) : X ⟶ Y :=
+abbrev ofHom {X Y : Type u} (f : X → Y) : X ⟶ Y :=
   ConcreteCategory.ofHom (Fun.mk f)
 
 end TypeCat
@@ -359,224 +250,126 @@ end CategoryTheory
 
 namespace TypeCat
 
-/--
-Definition of `Hom.Simps.hom` / `Hom.Simps.hom` 的定义
+/-- Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas. -/
+/-
+**TypeCat.Hom.Simps.hom** 是 Mathlib 中的一个定义，位于命名空间 `TypeCat.Hom.Simps`。
+形式化陈述：(X Y : Type u) → (X ⟶ Y) → TypeCat.Fun X Y
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.Simps.hom
-  signature: (X Y : Type u) (f : X ⟶ Y)
-  body: ConcreteCategory.hom f
-
-initialize_simps_projections Hom (hom' -> hom)
-
-@[simp]
-
-中文:
-定义 态射.Simps.hom
-  签名: (X Y : 类型u) (f : X ⟶ Y)
-  定义体: ConcreteCategory.hom f
-
-initialize_simps_projections Hom (hom' -> hom)
-
-@[simp]
+--- 原说明 ---
+Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas.
 -/
 def Hom.Simps.hom (X Y : Type u) (f : X ⟶ Y) :=
   ConcreteCategory.hom f
 
-initialize_simps_projections Hom (hom' -> hom)
+initialize_simps_projections Hom (hom' → hom)
 
 @[simp]
-/--
-lemma `Fun.toFun_apply` / 引理 `Fun.toFun_apply`
-
-English:
-lemma Fun.toFun_apply
-  given: {X Y : Type u} (f : Fun X Y) (x : X)
-  statement: f.toFun x = f x
-  proof: rfl
-
-example (X : Type u) : CategoryTheory.ToType X = X := by with_reducible rfl
-
-@[simp]
-
-中文:
-引理 Fun.toFun_apply
-  条件: {X Y : 类型u} (f : Fun X Y) (x : X)
-  结论: f.toFun x = f x
-  证明: rfl
-
-example (X : Type u) : CategoryTheory.ToType X = X := by with_reducible rfl
-
-@[simp]
+/-
+**TypeCat.Fun.toFun_apply** 是 Mathlib 中的一个定理，位于命名空间 `TypeCat.Fun`。
+形式化陈述：∀ {X Y : Type u} (f : TypeCat.Fun X Y) (x : X), f.toFun x = f x
+参数：f : TypeCat.Fun X Y；x : X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Fun.toFun_apply {X Y : Type u} (f : Fun X Y) (x : X) : f.toFun x = f x :=
   rfl
-
+/-
+**TypeCat.** 是 Mathlib 中的一个示例，位于命名空间 `TypeCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example (X : Type u) : CategoryTheory.ToType X = X := by with_reducible rfl
 
 @[simp]
-/--
-lemma `ofHom_eq` / 引理 `ofHom_eq`
-
-English:
-lemma ofHom_eq
-  given: {X Y : Type u} (f : X ⟶ Y)
-  statement: ofHom f = f
-  proof: rfl
-
-@[simp high]
-
-中文:
-引理 ofHom_eq
-  条件: {X Y : 类型u} (f : X ⟶ Y)
-  结论: ofHom f = f
-  证明: rfl
-
-@[simp high]
+/-
+**TypeCat.ofHom_eq** 是 Mathlib 中的一个引理，位于命名空间 `TypeCat`。
+形式化陈述：ofHom_eq {X Y : Type u} (f : X ⟶ Y) : ofHom f = f
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_eq {X Y : Type u} (f : X ⟶ Y) : ofHom f = f :=
   rfl
 
 @[simp high]
-/--
-lemma `hom_ofHom` / 引理 `hom_ofHom`
-
-English:
-lemma hom_ofHom
-  given: {X Y : Type u} (f : X -> Y)
-  statement: Hom.hom (ofHom f) = Fun.mk f
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 hom_ofHom
-  条件: {X Y : 类型u} (f : X -> Y)
-  结论: 态射.hom (ofHom f) = Fun.mk f
-  证明: rfl
-
-@[simp]
+/-
+**TypeCat.hom_ofHom** 是 Mathlib 中的一个引理，位于命名空间 `TypeCat`。
+形式化陈述：hom_ofHom {X Y : Type u} (f : X -> Y) : Hom.hom (ofHom f) = Fun.mk f
+参数：f : X -> Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma hom_ofHom {X Y : Type u} (f : X -> Y) : Hom.hom (ofHom f) = Fun.mk f := rfl
+lemma hom_ofHom {X Y : Type u} (f : X → Y) : Hom.hom (ofHom f) = Fun.mk f := rfl
 
 @[simp]
-/--
-lemma `ofHom_hom` / 引理 `ofHom_hom`
-
-English:
-lemma ofHom_hom
-  given: {X Y : Type u} (f : X ⟶ Y)
-  statement: ofHom (Hom.hom f) = f
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ofHom_hom
-  条件: {X Y : 类型u} (f : X ⟶ Y)
-  结论: ofHom (态射.hom f) = f
-  证明: rfl
-
-@[simp]
+/-
+**TypeCat.ofHom_hom** 是 Mathlib 中的一个引理，位于命名空间 `TypeCat`。
+形式化陈述：ofHom_hom {X Y : Type u} (f : X ⟶ Y) : ofHom (Hom.hom f) = f
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_hom {X Y : Type u} (f : X ⟶ Y) : ofHom (Hom.hom f) = f := rfl
 
 @[simp]
-/--
-lemma `ofHom_apply` / 引理 `ofHom_apply`
-
-English:
-lemma ofHom_apply
-  given: {X Y : Type u} (f : X -> Y) (x : X)
-  proof: rfl
-
-中文:
-引理 ofHom_apply
-  条件: {X Y : 类型u} (f : X -> Y) (x : X)
-  证明: rfl
+/-
+**TypeCat.ofHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `TypeCat`。
+形式化陈述：ofHom_apply {X Y : Type u} (f : X -> Y) (x : X) : (↾f) x = f x
+参数：f : X -> Y；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma ofHom_apply {X Y : Type u} (f : X -> Y) (x : X) :
+lemma ofHom_apply {X Y : Type u} (f : X → Y) (x : X) :
     (↾f) x = f x :=
   rfl
 
-/--
-Definition of `homEquiv` / `homEquiv` 的定义
+/-- `TypeCat.Hom.hom` bundled as an `Equiv`. -/
+/-
+**TypeCat.homEquiv** 是 Mathlib 中的一个定义，位于命名空间 `TypeCat`。
+形式化陈述：homEquiv {X Y : Type u} : (X ⟶ Y) ≃ (X -> Y)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition homEquiv
-  signature: {X Y : Type u}
-  body: (ConcreteCategory.homEquiv (C := Type u)).trans (Fun.homEquiv _ _)
-
-@[simp]
-
-中文:
-定义 homEquiv
-  签名: {X Y : 类型u}
-  定义体: (ConcreteCategory.homEquiv (C := Type u)).trans (Fun.homEquiv _ _)
-
-@[simp]
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.homEquiv, Fun.homEquiv, homEquiv
+--- 原说明 ---
+`TypeCat.Hom.hom` bundled as an `Equiv`.
 -/
-def homEquiv {X Y : Type u} : (X ⟶ Y) ≃ (X -> Y) :=
+def homEquiv {X Y : Type u} : (X ⟶ Y) ≃ (X → Y) :=
   (ConcreteCategory.homEquiv (C := Type u)).trans (Fun.homEquiv _ _)
 
 @[simp]
-/--
-lemma `homEquiv_apply` / 引理 `homEquiv_apply`
-
-English:
-lemma homEquiv_apply
-  given: {X Y : Type u} (f : X ⟶ Y)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 homEquiv_apply
-  条件: {X Y : 类型u} (f : X ⟶ Y)
-  证明: rfl
-
-@[simp]
+/-
+**TypeCat.homEquiv_apply** 是 Mathlib 中的一个引理，位于命名空间 `TypeCat`。
+形式化陈述：homEquiv_apply {X Y : Type u} (f : X ⟶ Y) : homEquiv f = f
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma homEquiv_apply {X Y : Type u} (f : X ⟶ Y) :
     homEquiv f = f :=
   rfl
 
 @[simp]
-/--
-lemma `homEquiv_symm_apply` / 引理 `homEquiv_symm_apply`
-
-English:
-lemma homEquiv_symm_apply
-  given: {X Y : Type u} (f : X -> Y)
-  proof: rfl
-
-中文:
-引理 homEquiv_symm_apply
-  条件: {X Y : 类型u} (f : X -> Y)
-  证明: rfl
+/-
+**TypeCat.homEquiv_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 `TypeCat`。
+形式化陈述：homEquiv_symm_apply {X Y : Type u} (f : X -> Y) : homEquiv.symm f = ofHom 
+f
+参数：f : X -> Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-lemma homEquiv_symm_apply {X Y : Type u} (f : X -> Y) :
+lemma homEquiv_symm_apply {X Y : Type u} (f : X → Y) :
     homEquiv.symm f = ofHom f :=
   rfl
-
-/--
-lemma `congr_arg` / 引理 `congr_arg`
-
-English:
-lemma congr_arg
-  given: {X Y : Type u} (f : X ⟶ Y) {x x' : X} (h : x = x')
-  statement: f x = f x'
-  proof: by
-  rw [h]
-
-中文:
-引理 congr_arg
-  条件: {X Y : 类型u} (f : X ⟶ Y) {x x' : X} (h : x = x')
-  结论: f x = f x'
-  证明: by
-  rw [h]
+/-
+**TypeCat.congr_arg** 是 Mathlib 中的一个引理，位于命名空间 `TypeCat`。
+形式化陈述：congr_arg {X Y : Type u} (f : X ⟶ Y) {x x' : X} (h : x = x') : f x = f x'
+参数：f : X ⟶ Y；h : x = x'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 lemma congr_arg {X Y : Type u} (f : X ⟶ Y) {x x' : X} (h : x = x') : f x = f x' := by
   rw [h]
@@ -585,115 +378,61 @@ end TypeCat
 
 namespace CategoryTheory
 
-/--
-theorem `types_id` / 定理 `types_id`
-
-English:
-theorem types_id
-  given: (X : Type u)
-  statement: (𝟙 X : _ -> _) = id
-  proof: rfl
-
-中文:
-定理 types_id
-  条件: (X : 类型u)
-  结论: (𝟙 X : _ -> _) = id
-  证明: rfl
+/-
+**CategoryTheory.types_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：types_id (X : Type u) : (𝟙 X : _ -> _) = id
+参数：X : Type u。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem types_id (X : Type u) : (𝟙 X : _ -> _) = id :=
+theorem types_id (X : Type u) : (𝟙 X : _ → _) = id :=
   rfl
-
-/--
-theorem `types_comp` / 定理 `types_comp`
-
-English:
-theorem types_comp
-  given: {X Y Z : Type u} (f : X ⟶ Y) (g : Y ⟶ Z)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 types_comp
-  条件: {X Y Z : 类型u} (f : X ⟶ Y) (g : Y ⟶ Z)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.types_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：types_comp {X Y Z : Type u} (f : X ⟶ Y) (g : Y ⟶ Z) : ConcreteCategory.hom
+ (f ≫ g) = g ∘ f
+参数：f : X ⟶ Y；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem types_comp {X Y Z : Type u} (f : X ⟶ Y) (g : Y ⟶ Z) :
     ConcreteCategory.hom (f ≫ g) = g ∘ f :=
   rfl
 
 @[simp]
-/--
-lemma `types_id_apply` / 引理 `types_id_apply`
-
-English:
-lemma types_id_apply
-  given: (X : Type u) (x : X)
-  statement: 𝟙 X x = x
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 types_id_apply
-  条件: (X : 类型u) (x : X)
-  结论: 𝟙 X x = x
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.types_id_apply** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：types_id_apply (X : Type u) (x : X) : 𝟙 X x = x
+参数：X : Type u；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma types_id_apply (X : Type u) (x : X) : 𝟙 X x = x :=
   rfl
 
 @[simp]
-/--
-lemma `types_comp_apply` / 引理 `types_comp_apply`
-
-English:
-lemma types_comp_apply
-  given: {X Y Z : Type u} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
-  proof: rfl
-
-@[congr]
-
-中文:
-引理 types_comp_apply
-  条件: {X Y Z : 类型u} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
-  证明: rfl
-
-@[congr]
+/-
+**CategoryTheory.types_comp_apply** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：types_comp_apply {X Y Z : Type u} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X) : (f ≫ g
+) x = g (f x)
+参数：f : X ⟶ Y；g : Y ⟶ Z；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma types_comp_apply {X Y Z : Type u} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X) :
     (f ≫ g) x = g (f x) :=
   rfl
 
 @[congr]
-/--
-lemma `types_congr_hom` / 引理 `types_congr_hom`
-
-English:
-lemma types_congr_hom
-  given: {X Y : Type u} {f g : X ⟶ Y} (h : f = g) (x : X)
-  statement: f x = g x
-  proof: ConcreteCategory.congr_hom h x
-
-@[deprecated (since := "2026-02-09")] alias hom_inv_id_apply := Iso.hom_inv_id_apply
-@[deprecated (since := "2026-02-09")] alias inv_hom_id_apply := Iso.inv_hom_id_apply
-@[deprecated (since := "2026-02-09")] alias asHom := ofHom
-
-中文:
-引理 types_congr_hom
-  条件: {X Y : 类型u} {f g : X ⟶ Y} (h : f = g) (x : X)
-  结论: f x = g x
-  证明: ConcreteCategory.congr_hom h x
-
-@[deprecated (since := "2026-02-09")] alias hom_inv_id_apply := Iso.hom_inv_id_apply
-@[deprecated (since := "2026-02-09")] alias inv_hom_id_apply := Iso.inv_hom_id_apply
-@[deprecated (since := "2026-02-09")] alias asHom := ofHom
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, congr_hom
+/-
+**CategoryTheory.types_congr_hom** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：types_congr_hom {X Y : Type u} {f g : X ⟶ Y} (h : f = g) (x : X) : f x = g
+ x
+参数：h : f = g；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ConcreteCategory.congr_hom`：congr_hom {X Y : C} {f g : X 
+⟶ Y} (h : f = g) (x : ToType X) : f x = g x
 -/
 lemma types_congr_hom {X Y : Type u} {f g : X ⟶ Y} (h : f = g) (x : X) : f x = g x :=
   ConcreteCategory.congr_hom h x
@@ -706,94 +445,78 @@ namespace Functor
 
 variable {J : Type u} [Category.{v} J]
 
-/--
-Definition of `sections` / `sections` 的定义
+/-- The sections of a functor `F : J ⥤ Type` are
+the choices of a point `u j : F.obj j` for each `j`,
+such that `F.map f (u j) = u j'` for every morphism `f : j ⟶ j'`.
 
-English:
-definition sections
-  signature: (F : J ⥤ Type w)
-  body: { u | forall {j j'} (f : j ⟶ j'), F.map f (u j) = u j' }
-
-@[simp]
-
-中文:
-定义 sections
-  签名: (F : J ⥤ 类型 w)
-  定义体: { u | forall {j j'} (f : j ⟶ j'), F.map f (u j) = u j' }
-
-@[simp]
-
-Depends on / 依赖: F.map
+We later use these to define limits in `Type` and in many concrete categories.
 -/
-def sections (F : J ⥤ Type w) : Set (forall j, F.obj j) :=
-  { u | forall {j j'} (f : j ⟶ j'), F.map f (u j) = u j' }
+/-
+**CategoryTheory.Functor.sections** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Func
+tor`。
+形式化陈述：sections (F : J ⥤ Type w) : Set (forall j, F.obj j)
+参数：F : J ⥤ Type w。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The sections of a functor `F : J ⥤ Type` are
+the choices of a point `u j : F.obj j` for each `j`,
+such that `F.map f (u j) = u j'` for every morphism `f : j ⟶ j'`.
+
+We later use these to define limits in `Type` and in many concrete categories.
+-/
+def sections (F : J ⥤ Type w) : Set (∀ j, F.obj j) :=
+  { u | ∀ {j j'} (f : j ⟶ j'), F.map f (u j) = u j' }
 
 @[simp]
-/--
-lemma `sections_property` / 引理 `sections_property`
-
-English:
-lemma sections_property
-  statement: {F : J ⥤ Type w} (s : F.sections)
-  proof: s.property f
-
-中文:
-引理 sections_property
-  结论: {F : J ⥤ 类型 w} (s : F.sections)
-  证明: s.property f
-
-Depends on / 依赖: property, s.property
+/-
+**CategoryTheory.Functor.sections_property** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.Functor`。
+形式化陈述：sections_property {F : J ⥤ Type w} (s : F.sections) {j j' : J} (f : j ⟶ j'
+) : F.map f (s.val j) = s.val j'
+参数：s : F.sections；f : j ⟶ j'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 lemma sections_property {F : J ⥤ Type w} (s : F.sections)
     {j j' : J} (f : j ⟶ j') : F.map f (s.val j) = s.val j' :=
   s.property f
-
-/--
-lemma `sections_ext_iff` / 引理 `sections_ext_iff`
-
-English:
-lemma sections_ext_iff
-  given: {F : J ⥤ Type w} {x y : F.sections}
-  statement: x = y ↔ forall j, x.val j = y.val j
-  proof: Subtype.ext_iff.trans funext_iff
-
-中文:
-引理 sections_ext_iff
-  条件: {F : J ⥤ 类型 w} {x y : F.sections}
-  结论: x = y ↔ 对任意 j, x.val j = y.val j
-  证明: Subtype.ext_iff.trans funext_iff
-
-Depends on / 依赖: Subtype, Subtype.ext_iff.trans, ext_iff, funext_iff
+/-
+**CategoryTheory.Functor.sections_ext_iff** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Functor`。
+形式化陈述：sections_ext_iff {F : J ⥤ Type w} {x y : F.sections} : x = y ↔ forall j, x
+.val j = y.val j
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
+· 使用定理 `funext_iff`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g
+ ↔ ∀ (x : α), f x = g x
 -/
-lemma sections_ext_iff {F : J ⥤ Type w} {x y : F.sections} : x = y ↔ forall j, x.val j = y.val j :=
+lemma sections_ext_iff {F : J ⥤ Type w} {x y : F.sections} : x = y ↔ ∀ j, x.val j = y.val j :=
   Subtype.ext_iff.trans funext_iff
 
 variable (J)
 
 /-- The functor which sends a functor to types to its sections. -/
 @[simps]
-/--
-Definition of `sectionsFunctor` / `sectionsFunctor` 的定义
+/-
+**CategoryTheory.Functor.sectionsFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Functor`。
+形式化陈述：sectionsFunctor : (J ⥤ Type w) ⥤ Type max u w where obj F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sectionsFunctor
-  signature: : (J ⥤ Type w) ⥤ Type max u w where
-  body: F.sections
-  map {F G} φ := ↾fun x => ⟨fun j => φ.app j (x.1 j), fun {j j'} f =>
-    by simp [← NatTrans.naturality_apply, x.2 f]⟩
-
-中文:
-定义 sectionsFunctor
-  签名: : (J ⥤ 类型 w) ⥤ 类型 最大值 u w where
-  定义体: F.sections
-  map {F G} φ := ↾fun x => ⟨fun j => φ.app j (x.1 j), fun {j j'} f =>
-    by simp [← NatTrans.naturality_apply, x.2 f]⟩
-
-Depends on / 依赖: F.sections, sections
+--- 原说明 ---
+The functor which sends a functor to types to its sections.
 -/
 def sectionsFunctor : (J ⥤ Type w) ⥤ Type max u w where
   obj F := F.sections
-  map {F G} φ := ↾fun x => ⟨fun j => φ.app j (x.1 j), fun {j j'} f =>
+  map {F G} φ := ↾fun x ↦ ⟨fun j => φ.app j (x.1 j), fun {j j'} f =>
     by simp [← NatTrans.naturality_apply, x.2 f]⟩
 
 end Functor
@@ -806,54 +529,33 @@ variable (σ : F ⟶ G) (τ : G ⟶ H)
 attribute [elementwise nosimp] Functor.map_comp Functor.map_id NatTrans.comp_app
 
 @[deprecated Functor.map_comp_apply (since := "2026-03-09")]
-/--
-theorem `map_comp_apply` / 定理 `map_comp_apply`
-
-English:
-theorem map_comp_apply
-  given: (f : X ⟶ Y) (g : Y ⟶ Z) (a : F.obj X)
-  proof: F.map_comp_apply f g a
-
-@[deprecated Functor.map_id_apply (since := "2026-03-09")]
-
-中文:
-定理 map_comp_apply
-  条件: (f : X ⟶ Y) (g : Y ⟶ Z) (a : F.obj X)
-  证明: F.map_comp_apply f g a
-
-@[deprecated Functor.map_id_apply (since := "2026-03-09")]
-
-Depends on / 依赖: F.map_comp_apply, map_comp_apply
+/-
+**CategoryTheory.FunctorToTypes.map_comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.FunctorToTypes`。
+形式化陈述：map_comp_apply (f : X ⟶ Y) (g : Y ⟶ Z) (a : F.obj X) : (F.map (f ≫ g)) a =
+ (F.map g) ((F.map f) a)
+参数：f : X ⟶ Y；g : Y ⟶ Z；a : F.obj X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_comp_apply`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, 
+u₂} D]   (self : CategoryTh…
 -/
 theorem map_comp_apply (f : X ⟶ Y) (g : Y ⟶ Z) (a : F.obj X) :
     (F.map (f ≫ g)) a = (F.map g) ((F.map f) a) :=
   F.map_comp_apply f g a
 
 @[deprecated Functor.map_id_apply (since := "2026-03-09")]
-/--
-theorem `map_id_apply` / 定理 `map_id_apply`
-
-English:
-theorem map_id_apply
-  given: (a : F.obj X)
-  statement: (F.map (𝟙 X)) a = a
-  proof: F.map_id_apply X a
-
-@[deprecated (since := "2026-02-09")] alias naturality := NatTrans.naturality_apply
-
-@[deprecated NatTrans.comp_app_apply (since := "2026-03-09")]
-
-中文:
-定理 map_id_apply
-  条件: (a : F.obj X)
-  结论: (F.map (𝟙 X)) a = a
-  证明: F.map_id_apply X a
-
-@[deprecated (since := "2026-02-09")] alias naturality := NatTrans.naturality_apply
-
-@[deprecated NatTrans.comp_app_apply (since := "2026-03-09")]
-
-Depends on / 依赖: F.map_id_apply, map_id_apply
+/-
+**CategoryTheory.FunctorToTypes.map_id_apply** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.FunctorToTypes`。
+形式化陈述：map_id_apply (a : F.obj X) : (F.map (𝟙 X)) a = a
+参数：a : F.obj X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.map_id_apply`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂
+} D]   (self : CategoryTh…
 -/
 theorem map_id_apply (a : F.obj X) : (F.map (𝟙 X)) a = a :=
   F.map_id_apply X a
@@ -861,22 +563,16 @@ theorem map_id_apply (a : F.obj X) : (F.map (𝟙 X)) a = a :=
 @[deprecated (since := "2026-02-09")] alias naturality := NatTrans.naturality_apply
 
 @[deprecated NatTrans.comp_app_apply (since := "2026-03-09")]
-/--
-theorem `comp` / 定理 `comp`
-
-English:
-theorem comp
-  given: (x : F.obj X)
-  statement: (σ ≫ τ).app X x = τ.app X (σ.app X x)
-  proof: σ.comp_app_apply τ X x
-
-中文:
-定理 comp
-  条件: (x : F.obj X)
-  结论: (σ ≫ τ).app X x = τ.app X (σ.app X x)
-  证明: σ.comp_app_apply τ X x
-
-Depends on / 依赖: comp_app_apply
+/-
+**CategoryTheory.FunctorToTypes.comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.F
+unctorToTypes`。
+形式化陈述：comp (x : F.obj X) : (σ ≫ τ).app X x = τ.app X (σ.app X x)
+参数：x : F.obj X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.comp_app_apply`：∀ {C : Type u₁} [inst : Category
+Theory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂,
+ u₂} D]   {F G H : CategoryT…
 -/
 theorem comp (x : F.obj X) : (σ ≫ τ).app X x = τ.app X (σ.app X x) :=
   σ.comp_app_apply τ X x
@@ -884,22 +580,29 @@ theorem comp (x : F.obj X) : (σ ≫ τ).app X x = τ.app X (σ.app X x) :=
 attribute [elementwise (attr := simp)] eqToHom_map_comp
 
 @[deprecated "Use `elementwise_of% eqToHom_map_comp` instead" (since := "2026-02-09")]
-/--
-theorem `eqToHom_map_comp_apply` / 定理 `eqToHom_map_comp_apply`
-
-English:
-theorem eqToHom_map_comp_apply
-  given: (p : X = Y) (q : Y = Z) (x : F.obj X)
-  proof: by
-  cat_disch
-
-中文:
-定理 eqToHom_map_comp_apply
-  条件: (p : X = Y) (q : Y = Z) (x : F.obj X)
-  证明: by
-  cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.FunctorToTypes.eqToHom_map_comp_apply** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.FunctorToTypes`。
+形式化陈述：eqToHom_map_comp_apply (p : X = Y) (q : Y = Z) (x : F.obj X) : F.map (eqTo
+Hom q) (F.map (eqToHom p) x) = F.map (eqToHom <| p.trans q) x
+参数：p : X = Y；q : Y = Z；x : F.obj X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.id_apply`：∀ {C : Type u} [inst : CategoryTheory.Category.
+{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → FunL
+ike (FC X Y) …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem eqToHom_map_comp_apply (p : X = Y) (q : Y = Z) (x : F.obj X) :
     F.map (eqToHom q) (F.map (eqToHom p) x) = F.map (eqToHom <| p.trans q) x := by
@@ -908,20 +611,14 @@ theorem eqToHom_map_comp_apply (p : X = Y) (q : Y = Z) (x : F.obj X) :
 variable {D : Type u'} [𝒟 : Category.{u'} D] (I J : D ⥤ C) (ρ : I ⟶ J) {W : D}
 
 @[deprecated "No replacement" (since := "2026-02-09")]
-/--
-theorem `hcomp` / 定理 `hcomp`
-
-English:
-theorem hcomp
-  given: (x : (I ⋙ F).obj W)
-  statement: (ρ ◫ σ).app W x = (G.map (ρ.app W)) (σ.app (I.obj W) x)
-  proof: rfl
-
-中文:
-定理 hcomp
-  条件: (x : (I ⋙ F).obj W)
-  结论: (ρ ◫ σ).app W x = (G.map (ρ.app W)) (σ.app (I.obj W) x)
-  证明: rfl
+/-
+**CategoryTheory.FunctorToTypes.hcomp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+FunctorToTypes`。
+形式化陈述：hcomp (x : (I ⋙ F).obj W) : (ρ ◫ σ).app W x = (G.map (ρ.app W)) (σ.app (I.
+obj W) x)
+参数：x : (I ⋙ F).obj W。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem hcomp (x : (I ⋙ F).obj W) : (ρ ◫ σ).app W x = (G.map (ρ.app W)) (σ.app (I.obj W) x) :=
   rfl
@@ -937,36 +634,37 @@ attribute [elementwise (attr := simp)] Iso.hom_inv_id_app Iso.inv_hom_id_app
 
 @[deprecated (since := "2026-02-09")] alias hom_inv_id_app_apply := Iso.hom_inv_id_app_apply
 @[deprecated (since := "2026-02-09")] alias inv_hom_id_app_apply := Iso.inv_hom_id_app_apply
-
-/--
-lemma `naturality_symm` / 引理 `naturality_symm`
-
-English:
-lemma naturality_symm
-  statement: {F G : C ⥤ Type*} (e : forall j, F.obj j ≃ G.obj j)
-  proof: by
-  ext x
-  obtain ⟨y, rfl⟩ := (e j).surjective x
-  apply (e j').injective
-  dsimp
-  simp only [Equiv.apply_symm_apply, Equiv.symm_apply_apply]
-  exact (congr_fun (naturality f) y).symm
-
-中文:
-引理 naturality_symm
-  结论: {F G : C ⥤ 类型} (e : 对任意 j, F.obj j ≃ G.obj j)
-  证明: by
-  ext x
-  obtain ⟨y, rfl⟩ := (e j).surjective x
-  apply (e j').injective
-  dsimp
-  simp only [Equiv.apply_symm_apply, Equiv.symm_apply_apply]
-  exact (congr_fun (naturality f) y).symm
-
-Depends on / 依赖: Equiv.apply_symm_apply, Equiv.symm_apply_apply, apply_symm_apply, congr_fun, injective, naturality, surjective, symm_apply_apply
+/-
+**CategoryTheory.FunctorToTypes.naturality_symm** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.FunctorToTypes`。
+形式化陈述：naturality_symm {F G : C ⥤ Type*} (e : forall j, F.obj j ≃ G.obj j) (natur
+ality : forall {j j'} (f : j ⟶ j'), e j' ∘ F.map f = G.map f ∘ e j) {j j' : C} (
+f : j ⟶ j') : (e j').symm ∘ G.map f = F.map f ∘ (e j).symm
+参数：e : forall j, F.obj j ≃ G.obj j；naturality : forall {j j'} (f : j ⟶ j'), e j'
+ ∘ F.map f = G.map f ∘ e j；f : j ⟶ j'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
 -/
-lemma naturality_symm {F G : C ⥤ Type*} (e : forall j, F.obj j ≃ G.obj j)
-    (naturality : forall {j j'} (f : j ⟶ j'), e j' ∘ F.map f = G.map f ∘ e j) {j j' : C}
+lemma naturality_symm {F G : C ⥤ Type*} (e : ∀ j, F.obj j ≃ G.obj j)
+    (naturality : ∀ {j j'} (f : j ⟶ j'), e j' ∘ F.map f = G.map f ∘ e j) {j j' : C}
     (f : j ⟶ j') :
     (e j').symm ∘ G.map f = F.map f ∘ (e j).symm := by
   ext x
@@ -978,289 +676,260 @@ lemma naturality_symm {F G : C ⥤ Type*} (e : forall j, F.obj j ≃ G.obj j)
 
 end FunctorToTypes
 
-/--
-Definition of `uliftTrivial` / `uliftTrivial` 的定义
+/-- The isomorphism between a `Type` which has been `ULift`ed to the same universe,
+and the original type.
+-/
+/-
+**CategoryTheory.uliftTrivial** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：uliftTrivial (V : Type u) : ULift.{u} V ≅ V where hom
+参数：V : Type u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uliftTrivial
-  signature: (V : Type u)
-  body: ofHom fun a => a.1
-  inv := ofHom fun a => .up a
-
-中文:
-定义 uliftTrivial
-  签名: (V : 类型u)
-  定义体: ofHom fun a => a.1
-  inv := ofHom fun a => .up a
+--- 原说明 ---
+The isomorphism between a `Type` which has been `ULift`ed to the same universe,
+and the original type.
 -/
 def uliftTrivial (V : Type u) : ULift.{u} V ≅ V where
-  hom := ofHom fun a => a.1
-  inv := ofHom fun a => .up a
+  hom := ofHom fun a ↦ a.1
+  inv := ofHom fun a ↦ .up a
 
 /-- The functor embedding `Type u` into `Type (max u v)`.
 Write this as `uliftFunctor.{5, 2}` to get `Type 2 ⥤ Type 5`.
 -/
 @[pp_with_univ, simps obj map]
-/--
-Definition of `uliftFunctor` / `uliftFunctor` 的定义
+/-
+**CategoryTheory.uliftFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：uliftFunctor : Type u ⥤ Type max u v where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uliftFunctor
-  signature: : Type u ⥤ Type max u v where
-  body: ULift.{v} X
-  map {X} {_} f := ofHom fun x : ULift.{v} X => ULift.up (f x.down)
-
-中文:
-定义 uliftFunctor
-  签名: : 类型u ⥤ 类型 最大值 u v where
-  定义体: ULift.{v} X
-  map {X} {_} f := ofHom fun x : ULift.{v} X => ULift.up (f x.down)
+--- 原说明 ---
+The functor embedding `Type u` into `Type (max u v)`.
+Write this as `uliftFunctor.{5, 2}` to get `Type 2 ⥤ Type 5`.
 -/
 def uliftFunctor : Type u ⥤ Type max u v where
   obj X := ULift.{v} X
   map {X} {_} f := ofHom fun x : ULift.{v} X => ULift.up (f x.down)
 
-/--
-Definition of `fullyFaithfulULiftFunctor` / `fullyFaithfulULiftFunctor` 的定义
+/-- `uliftFunctor : Type u ⥤ Type max u v` is fully faithful. -/
+/-
+**CategoryTheory.fullyFaithfulULiftFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory`。
+形式化陈述：fullyFaithfulULiftFunctor : (uliftFunctor.{v, u}).FullyFaithful where prei
+mage f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithfulULiftFunctor
-  signature: : (uliftFunctor.{v, u}).FullyFaithful where
-  body: ofHom fun x => (f (ULift.up x)).down
-
-中文:
-定义 fullyFaithfulULiftFunctor
-  签名: : (uliftFunctor.{v, u}).满忠实 where
-  定义体: ofHom fun x => (f (ULift.up x)).down
-
-Depends on / 依赖: ULift.up
+--- 原说明 ---
+`uliftFunctor : Type u ⥤ Type max u v` is fully faithful.
 -/
 def fullyFaithfulULiftFunctor : (uliftFunctor.{v, u}).FullyFaithful where
-  preimage f := ofHom fun x => (f (ULift.up x)).down
-
-/--
-Instance `uliftFunctor_full` / 实例 `uliftFunctor_full`
-
-English:
-instance uliftFunctor_full
-  signature: : (uliftFunctor.{v, u}).Full
-  body: fullyFaithfulULiftFunctor.full
-
-中文:
-实例 uliftFunctor_full
-  签名: : (uliftFunctor.{v, u}).满
-  定义体: fullyFaithfulULiftFunctor.full
-
-Depends on / 依赖: fullyFaithfulULiftFunctor, fullyFaithfulULiftFunctor.full
+  preimage f := ofHom fun x ↦ (f (ULift.up x)).down
+/-
+**CategoryTheory.uliftFunctor_full** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+形式化陈述：uliftFunctor_full : (uliftFunctor.{v, u}).Full
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.full`：full : F.Full where map_surje
+ctive
 -/
 instance uliftFunctor_full : (uliftFunctor.{v, u}).Full :=
   fullyFaithfulULiftFunctor.full
-
-/--
-Instance `uliftFunctor_faithful` / 实例 `uliftFunctor_faithful`
-
-English:
-instance uliftFunctor_faithful
-  signature: : uliftFunctor.{v, u}.Faithful
-  body: fullyFaithfulULiftFunctor.faithful
-
-中文:
-实例 uliftFunctor_faithful
-  签名: : uliftFunctor.{v, u}.忠实
-  定义体: fullyFaithfulULiftFunctor.faithful
-
-Depends on / 依赖: faithful, fullyFaithfulULiftFunctor, fullyFaithfulULiftFunctor.faithful
+/-
+**CategoryTheory.uliftFunctor_faithful** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory
+`。
+形式化陈述：uliftFunctor_faithful : uliftFunctor.{v, u}.Faithful
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.faithful`：faithful : F.Faithful whe
+re map_injective
 -/
 instance uliftFunctor_faithful : uliftFunctor.{v, u}.Faithful :=
   fullyFaithfulULiftFunctor.faithful
 
-/--
-Definition of `uliftFunctorTrivial` / `uliftFunctorTrivial` 的定义
+/-- The functor embedding `Type u` into `Type u` via `ULift` is isomorphic to the identity functor.
+-/
+/-
+**CategoryTheory.uliftFunctorTrivial** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：uliftFunctorTrivial : uliftFunctor.{u, u} ≅ 𝟭 _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uliftFunctorTrivial
-  signature: : uliftFunctor.{u, u} ≅ 𝟭 _
-  body: NatIso.ofComponents uliftTrivial
-
-中文:
-定义 uliftFunctorTrivial
-  签名: : uliftFunctor.{u, u} ≅ 𝟭 _
-  定义体: NatIso.ofComponents uliftTrivial
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, ofComponents, uliftTrivial
+--- 原说明 ---
+The functor embedding `Type u` into `Type u` via `ULift` is isomorphic to the id
+entity functor.
 -/
 def uliftFunctorTrivial : uliftFunctor.{u, u} ≅ 𝟭 _ :=
   NatIso.ofComponents uliftTrivial
 
 -- TODO We should connect this to a general story about concrete categories
 -- whose forgetful functor is representable.
-/--
-Definition of `homOfElement` / `homOfElement` 的定义
+/-- Any term `x` of a type `X` corresponds to a morphism `PUnit ⟶ X`. -/
+/-
+**CategoryTheory.homOfElement** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：homOfElement {X : Type u} (x : X) : PUnit ⟶ X
+参数：x : X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homOfElement
-  signature: {X : Type u} (x : X)
-  body: ofHom fun _ => x
-
-中文:
-定义 homOfElement
-  签名: {X : 类型u} (x : X)
-  定义体: ofHom fun _ => x
+--- 原说明 ---
+Any term `x` of a type `X` corresponds to a morphism `PUnit ⟶ X`.
 -/
 def homOfElement {X : Type u} (x : X) : PUnit ⟶ X := ofHom fun _ => x
-
-/--
-theorem `homOfElement_eq_iff` / 定理 `homOfElement_eq_iff`
-
-English:
-theorem homOfElement_eq_iff
-  given: {X : Type u} (x y : X)
-  statement: homOfElement x = homOfElement y ↔ x = y
-  proof: ⟨fun H => ConcreteCategory.congr_hom H PUnit.unit, by simp_all⟩
-
-中文:
-定理 homOfElement_eq_iff
-  条件: {X : 类型u} (x y : X)
-  结论: homOfElement x = homOfElement y ↔ x = y
-  证明: ⟨fun H => ConcreteCategory.congr_hom H PUnit.unit, by simp_all⟩
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, PUnit.unit, congr_hom
+/-
+**CategoryTheory.homOfElement_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：homOfElement_eq_iff {X : Type u} (x y : X) : homOfElement x = homOfElement
+ y ↔ x = y
+参数：x y : X。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ConcreteCategory.congr_hom`：congr_hom {X Y : C} {f g : X 
+⟶ Y} (h : f = g) (x : ToType X) : f x = g x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem homOfElement_eq_iff {X : Type u} (x y : X) : homOfElement x = homOfElement y ↔ x = y :=
   ⟨fun H => ConcreteCategory.congr_hom H PUnit.unit, by simp_all⟩
 
 /-- A morphism in `Type` is a monomorphism if and only if it is injective. -/
 @[stacks 003C]
-/--
-theorem `ofHom_mono_iff_injective` / 定理 `ofHom_mono_iff_injective`
+/-
+**CategoryTheory.ofHom_mono_iff_injective** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory`。
+形式化陈述：ofHom_mono_iff_injective {X Y : Type u} (f : X -> Y) : Mono (ofHom f) ↔ Fu
+nction.Injective f
+参数：f : X -> Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.homOfElement_eq_iff`：homOfElement_eq_iff {X : Type u} (x 
+y : X) : homOfElement x = homOfElement y ↔ x = y
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ext`：hom_ext {X Y : C} (f g : X ⟶ Y)
+ (w : forall x, f x = g x) : f = g
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Function.Injective.comp_left`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort 
+u_3} {g : β → γ}, Function.Injective g → Function.Injective fun x => g ∘ x
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.ConcreteCategory.congr_hom`：congr_hom {X Y : C} {f g : X 
+⟶ Y} (h : f = g) (x : ToType X) : f x = g x
 
-English:
-theorem ofHom_mono_iff_injective
-  given: {X Y : Type u} (f : X -> Y)
-  proof: by
-  constructor
-  · intro H x x' h
-    rw [← homOfElement_eq_iff] at h ⊢
-    exact (cancel_mono (ofHom f)).mp h
-  · refine fun H => ⟨fun g g' h => ConcreteCategory.hom_ext _ _ fun x =>
-      congrFun (H.comp_left ?_) x⟩
-    ext y
-    exact ConcreteCategory.congr_hom h y
-
-中文:
-定理 ofHom_mono_iff_injective
-  条件: {X Y : 类型u} (f : X -> Y)
-  证明: by
-  constructor
-  · intro H x x' h
-    rw [← homOfElement_eq_iff] at h ⊢
-    exact (cancel_mono (ofHom f)).mp h
-  · refine fun H => ⟨fun g g' h => ConcreteCategory.hom_ext _ _ fun x =>
-      congrFun (H.comp_left ?_) x⟩
-    ext y
-    exact ConcreteCategory.congr_hom h y
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, ConcreteCategory.hom_ext, H.comp_left, cancel_mono, comp_left, congr_hom, homOfElement_eq_iff, hom_ext
+--- 原说明 ---
+A morphism in `Type` is a monomorphism if and only if it is injective.
 -/
-theorem ofHom_mono_iff_injective {X Y : Type u} (f : X -> Y) :
+theorem ofHom_mono_iff_injective {X Y : Type u} (f : X → Y) :
     Mono (ofHom f) ↔ Function.Injective f := by
   constructor
   · intro H x x' h
     rw [← homOfElement_eq_iff] at h ⊢
     exact (cancel_mono (ofHom f)).mp h
-  · refine fun H => ⟨fun g g' h => ConcreteCategory.hom_ext _ _ fun x =>
+  · refine fun H => ⟨fun g g' h => ConcreteCategory.hom_ext _ _ fun x ↦
       congrFun (H.comp_left ?_) x⟩
     ext y
     exact ConcreteCategory.congr_hom h y
 
 /-- A morphism in `Type` is a monomorphism if and only if it is injective. -/
 @[stacks 003C]
-/--
-theorem `mono_iff_injective` / 定理 `mono_iff_injective`
+/-
+**CategoryTheory.mono_iff_injective** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：mono_iff_injective {X Y : Type u} (f : X ⟶ Y) : Mono f ↔ Function.Injectiv
+e f
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem mono_iff_injective
-  given: {X Y : Type u} (f : X ⟶ Y)
-  statement: Mono f ↔ Function.Injective f
-  proof: by
-  simp [← ofHom_mono_iff_injective]
-
-中文:
-定理 mono_iff_injective
-  条件: {X Y : 类型u} (f : X ⟶ Y)
-  结论: 单态射 f ↔ 函数.单射 f
-  证明: by
-  simp [← ofHom_mono_iff_injective]
-
-Depends on / 依赖: ofHom_mono_iff_injective
+--- 原说明 ---
+A morphism in `Type` is a monomorphism if and only if it is injective.
 -/
 theorem mono_iff_injective {X Y : Type u} (f : X ⟶ Y) : Mono f ↔ Function.Injective f := by
   simp [← ofHom_mono_iff_injective]
-
-/--
-theorem `injective_of_mono` / 定理 `injective_of_mono`
-
-English:
-theorem injective_of_mono
-  given: {X Y : Type u} (f : X ⟶ Y) [hf : Mono f]
-  statement: Function.Injective f
-  proof: (mono_iff_injective f).1 hf
-
-中文:
-定理 injective_of_mono
-  条件: {X Y : 类型u} (f : X ⟶ Y) [hf : 单态射 f]
-  结论: 函数.单射 f
-  证明: (mono_iff_injective f).1 hf
-
-Depends on / 依赖: mono_iff_injective
+/-
+**CategoryTheory.injective_of_mono** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：injective_of_mono {X Y : Type u} (f : X ⟶ Y) [hf : Mono f] : Function.Inje
+ctive f
+参数：f : X ⟶ Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.mono_iff_injective`：mono_iff_injective {X Y : Type u} (f 
+: X ⟶ Y) : Mono f ↔ Function.Injective f
 -/
 theorem injective_of_mono {X Y : Type u} (f : X ⟶ Y) [hf : Mono f] : Function.Injective f :=
   (mono_iff_injective f).1 hf
 
 /-- A morphism in `Type _` is an epimorphism if and only if it is surjective. -/
 @[stacks 003C]
-/--
-theorem `ofHom_epi_iff_surjective` / 定理 `ofHom_epi_iff_surjective`
+/-
+**CategoryTheory.ofHom_epi_iff_surjective** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory`。
+形式化陈述：ofHom_epi_iff_surjective {X Y : Type u} (f : X -> Y) : Epi (ofHom f) ↔ Fun
+ction.Surjective f
+参数：f : X -> Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.surjective_of_right_cancellable_Prop`：surjective_of_right_cance
+llable_Prop (h : forall g₁ g₂ : β -> Prop, g₁ ∘ f = g₂ ∘ f -> g₁ = g₂) : Surject
+ive f
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Function.Injective.comp_left`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort 
+u_3} {g : β → γ}, Function.Injective g → Function.Injective fun x => g ∘ x
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ext`：hom_ext {X Y : C} (f g : X ⟶ Y)
+ (w : forall x, f x = g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `CategoryTheory.types_congr_hom`：types_congr_hom {X Y : Type u} {f g : X 
+⟶ Y} (h : f = g) (x : X) : f x = g x
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.ulift_symm_apply`：∀ {α : Type v}, ⇑Equiv.ulift.symm = ULift.up
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Function.Surjective.injective_comp_right`：∀ {α : Sort u_1} {β : Sort u_2
+} {γ : Sort u_3} {f : α → β}, Function.Surjective f → Function.Injective fun g =
+> g ∘ f
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.ConcreteCategory.congr_hom`：congr_hom {X Y : C} {f g : X 
+⟶ Y} (h : f = g) (x : ToType X) : f x = g x
 
-English:
-theorem ofHom_epi_iff_surjective
-  given: {X Y : Type u} (f : X -> Y)
-  proof: by
-  constructor
-  · rintro ⟨H⟩
-    refine Function.surjective_of_right_cancellable_Prop fun g₁ g₂ hg => ?_
-    rw [← Equiv.ulift.{u}.symm.injective.comp_left.eq_iff]
-    apply TypeCat.homEquiv.symm.injective
-    apply H
-    apply ConcreteCategory.hom_ext
-    intro x
-    simp [dsimp% congrFun hg x]
-  · refine fun H => ⟨fun g g' h => ConcreteCategory.hom_ext _ _ fun x =>
-      congrFun (H.injective_comp_right ?_) x⟩
-    ext y
-    exact ConcreteCategory.congr_hom h y
-
-中文:
-定理 ofHom_epi_iff_surjective
-  条件: {X Y : 类型u} (f : X -> Y)
-  证明: by
-  constructor
-  · rintro ⟨H⟩
-    refine Function.surjective_of_right_cancellable_Prop fun g₁ g₂ hg => ?_
-    rw [← Equiv.ulift.{u}.symm.injective.comp_left.eq_iff]
-    apply TypeCat.homEquiv.symm.injective
-    apply H
-    apply ConcreteCategory.hom_ext
-    intro x
-    simp [dsimp% congrFun hg x]
-  · refine fun H => ⟨fun g g' h => ConcreteCategory.hom_ext _ _ fun x =>
-      congrFun (H.injective_comp_right ?_) x⟩
-    ext y
-    exact ConcreteCategory.congr_hom h y
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, ConcreteCategory.hom_ext, Equiv.ulift, Function, Function.surjective_of_right_cancellable_Prop, H.injective_comp_right, TypeCat, TypeCat.homEquiv.symm.injective, comp_left, congr_hom, eq_iff, homEquiv, hom_ext, injective, injective_comp_right, surjective_of_right_cancellable_Prop, symm.injective.comp_left.eq_iff
+--- 原说明 ---
+A morphism in `Type _` is an epimorphism if and only if it is surjective.
 -/
-theorem ofHom_epi_iff_surjective {X Y : Type u} (f : X -> Y) :
+theorem ofHom_epi_iff_surjective {X Y : Type u} (f : X → Y) :
     Epi (ofHom f) ↔ Function.Surjective f := by
   constructor
   · rintro ⟨H⟩
@@ -1271,51 +940,41 @@ theorem ofHom_epi_iff_surjective {X Y : Type u} (f : X -> Y) :
     apply ConcreteCategory.hom_ext
     intro x
     simp [dsimp% congrFun hg x]
-  · refine fun H => ⟨fun g g' h => ConcreteCategory.hom_ext _ _ fun x =>
+  · refine fun H => ⟨fun g g' h =>  ConcreteCategory.hom_ext _ _ fun x ↦
       congrFun (H.injective_comp_right ?_) x⟩
     ext y
     exact ConcreteCategory.congr_hom h y
 
 /-- A morphism in `Type` is an epimorphism if and only if it is surjective. -/
 @[stacks 003C]
-/--
-theorem `epi_iff_surjective` / 定理 `epi_iff_surjective`
+/-
+**CategoryTheory.epi_iff_surjective** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：epi_iff_surjective {X Y : Type u} (f : X ⟶ Y) : Epi f ↔ Function.Surjectiv
+e f
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem epi_iff_surjective
-  given: {X Y : Type u} (f : X ⟶ Y)
-  statement: Epi f ↔ Function.Surjective f
-  proof: by
-  simp [← ofHom_epi_iff_surjective]
-
-中文:
-定理 epi_iff_surjective
-  条件: {X Y : 类型u} (f : X ⟶ Y)
-  结论: 满态射 f ↔ 函数.满射 f
-  证明: by
-  simp [← ofHom_epi_iff_surjective]
-
-Depends on / 依赖: ofHom_epi_iff_surjective
+--- 原说明 ---
+A morphism in `Type` is an epimorphism if and only if it is surjective.
 -/
 theorem epi_iff_surjective {X Y : Type u} (f : X ⟶ Y) : Epi f ↔ Function.Surjective f := by
   simp [← ofHom_epi_iff_surjective]
-
-/--
-theorem `surjective_of_epi` / 定理 `surjective_of_epi`
-
-English:
-theorem surjective_of_epi
-  given: {X Y : Type u} (f : X ⟶ Y) [hf : Epi f]
-  statement: Function.Surjective f
-  proof: (epi_iff_surjective f).1 hf
-
-中文:
-定理 surjective_of_epi
-  条件: {X Y : 类型u} (f : X ⟶ Y) [hf : 满态射 f]
-  结论: 函数.满射 f
-  证明: (epi_iff_surjective f).1 hf
-
-Depends on / 依赖: epi_iff_surjective
+/-
+**CategoryTheory.surjective_of_epi** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：surjective_of_epi {X Y : Type u} (f : X ⟶ Y) [hf : Epi f] : Function.Surje
+ctive f
+参数：f : X ⟶ Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.epi_iff_surjective`：epi_iff_surjective {X Y : Type u} (f 
+: X ⟶ Y) : Epi f ↔ Function.Surjective f
 -/
 theorem surjective_of_epi {X Y : Type u} (f : X ⟶ Y) [hf : Epi f] : Function.Surjective f :=
   (epi_iff_surjective f).1 hf
@@ -1325,30 +984,20 @@ section
 /-- `ofTypeFunctor m` converts from Lean's `Type`-based `Category` to `CategoryTheory`. This
 allows us to use these functors in category theory. -/
 @[simps obj map]
-/--
-Definition of `ofTypeFunctor` / `ofTypeFunctor` 的定义
+/-
+**CategoryTheory.ofTypeFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：ofTypeFunctor (m : Type u -> Type v) [_root_.Functor m] [LawfulFunctor m] 
+: Type u ⥤ Type v where obj x
+参数：m : Type u -> Type v。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofTypeFunctor
-  signature: (m : Type u -> Type v) [_root_.Functor m] [LawfulFunctor m]
-  body: m x
-  map f := ofHom (_root_.Functor.map f.hom)
-  map_id := fun α => by ext X; apply id_map
-  map_comp f g := by
-    ext x
-    exact comp_map (f := m) f.hom g.hom x
-
-中文:
-定义 ofTypeFunctor
-  签名: (m : 类型u -> 类型v) [_root_.函子 m] [Lawful函子 m]
-  定义体: m x
-  map f := ofHom (_root_.Functor.map f.hom)
-  map_id := fun α => by ext X; apply id_map
-  map_comp f g := by
-    ext x
-    exact comp_map (f := m) f.hom g.hom x
+--- 原说明 ---
+`ofTypeFunctor m` converts from Lean's `Type`-based `Category` to `CategoryTheor
+y`. This
+allows us to use these functors in category theory.
 -/
-def ofTypeFunctor (m : Type u -> Type v) [_root_.Functor m] [LawfulFunctor m] :
+def ofTypeFunctor (m : Type u → Type v) [_root_.Functor m] [LawfulFunctor m] :
     Type u ⥤ Type v where
   obj x := m x
   map f := ofHom (_root_.Functor.map f.hom)
@@ -1370,30 +1019,21 @@ variable {X Y : Type u}
 a categorical isomorphism between those types.
 -/
 @[simps!]
-/--
-Definition of `toIso` / `toIso` 的定义
+/-
+**Equiv.toIso** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：toIso (e : X ≃ Y) : X ≅ Y where hom
+参数：e : X ≃ Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition toIso
-  signature: (e : X ≃ Y)
-  body: ofHom fun x => e x
-  inv := ofHom fun x => e.symm x
-
-@[deprecated (since := "2026-03-20")] alias toIso_hom := toIso_hom_hom_apply
-@[deprecated (since := "2026-03-20")] alias toIso_inv := toIso_inv_hom_apply
-
-中文:
-定义 toIso
-  签名: (e : X ≃ Y)
-  定义体: ofHom fun x => e x
-  inv := ofHom fun x => e.symm x
-
-@[deprecated (since := "2026-03-20")] alias toIso_hom := toIso_hom_hom_apply
-@[deprecated (since := "2026-03-20")] alias toIso_inv := toIso_inv_hom_apply
+--- 原说明 ---
+Any equivalence between types in the same universe gives
+a categorical isomorphism between those types.
 -/
 def toIso (e : X ≃ Y) : X ≅ Y where
-  hom := ofHom fun x => e x
-  inv := ofHom fun x => e.symm x
+  hom := ofHom fun x ↦ e x
+  inv := ofHom fun x ↦ e.symm x
 
 @[deprecated (since := "2026-03-20")] alias toIso_hom := toIso_hom_hom_apply
 @[deprecated (since := "2026-03-20")] alias toIso_inv := toIso_inv_hom_apply
@@ -1408,109 +1048,63 @@ variable {X Y : Type u}
 
 /-- Any isomorphism between types gives an equivalence. -/
 @[simps]
-/--
-Definition of `toEquiv` / `toEquiv` 的定义
+/-
+**CategoryTheory.Iso.toEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Iso`。
+形式化陈述：toEquiv (i : X ≅ Y) : X ≃ Y where toFun
+参数：i : X ≅ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toEquiv
-  signature: (i : X ≅ Y)
-  body: i.hom
-  invFun := i.inv
-  left_inv x := by simp
-  right_inv y := by simp
-
-中文:
-定义 toEquiv
-  签名: (i : X ≅ Y)
-  定义体: i.hom
-  invFun := i.inv
-  left_inv x := by simp
-  right_inv y := by simp
-
-Depends on / 依赖: i.hom
+--- 原说明 ---
+Any isomorphism between types gives an equivalence.
 -/
 def toEquiv (i : X ≅ Y) : X ≃ Y where
   toFun := i.hom
   invFun := i.inv
   left_inv x := by simp
   right_inv y := by simp
-
-/--
-theorem `toEquiv_fun` / 定理 `toEquiv_fun`
-
-English:
-theorem toEquiv_fun
-  given: (i : X ≅ Y)
-  statement: (i.toEquiv : X -> Y) = i.hom
-  proof: rfl
-
-中文:
-定理 toEquiv_fun
-  条件: (i : X ≅ Y)
-  结论: (i.toEquiv : X -> Y) = i.hom
-  证明: rfl
+/-
+**CategoryTheory.Iso.toEquiv_fun** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Iso`。
+形式化陈述：toEquiv_fun (i : X ≅ Y) : (i.toEquiv : X -> Y) = i.hom
+参数：i : X ≅ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toEquiv_fun (i : X ≅ Y) : (i.toEquiv : X -> Y) = i.hom :=
+theorem toEquiv_fun (i : X ≅ Y) : (i.toEquiv : X → Y) = i.hom :=
   rfl
-
-/--
-theorem `toEquiv_symm_fun` / 定理 `toEquiv_symm_fun`
-
-English:
-theorem toEquiv_symm_fun
-  given: (i : X ≅ Y)
-  statement: (i.toEquiv.symm :) = (ConcreteCategory.hom i.inv).toFun
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toEquiv_symm_fun
-  条件: (i : X ≅ Y)
-  结论: (i.toEquiv.symm :) = (余ncrete范畴.hom i.inv).toFun
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Iso.toEquiv_symm_fun** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Iso`。
+形式化陈述：toEquiv_symm_fun (i : X ≅ Y) : (i.toEquiv.symm :) = (ConcreteCategory.hom 
+i.inv).toFun
+参数：i : X ≅ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem toEquiv_symm_fun (i : X ≅ Y) : (i.toEquiv.symm :) = (ConcreteCategory.hom i.inv).toFun :=
   rfl
 
 @[simp]
-/--
-theorem `toEquiv_id` / 定理 `toEquiv_id`
-
-English:
-theorem toEquiv_id
-  given: (X : Type u)
-  statement: (Iso.refl X).toEquiv = Equiv.refl X
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toEquiv_id
-  条件: (X : 类型u)
-  结论: (同构.refl X).toEquiv = 等价.refl X
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Iso.toEquiv_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Iso`。
+形式化陈述：toEquiv_id (X : Type u) : (Iso.refl X).toEquiv = Equiv.refl X
+参数：X : Type u。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toEquiv_id (X : Type u) : (Iso.refl X).toEquiv = Equiv.refl X :=
   rfl
 
 @[simp]
-/--
-theorem `toEquiv_comp` / 定理 `toEquiv_comp`
-
-English:
-theorem toEquiv_comp
-  given: {X Y Z : Type u} (f : X ≅ Y) (g : Y ≅ Z)
-  proof: rfl
-
-中文:
-定理 toEquiv_comp
-  条件: {X Y Z : 类型u} (f : X ≅ Y) (g : Y ≅ Z)
-  证明: rfl
+/-
+**CategoryTheory.Iso.toEquiv_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Iso`
+。
+形式化陈述：toEquiv_comp {X Y Z : Type u} (f : X ≅ Y) (g : Y ≅ Z) : (f ≪≫ g).toEquiv =
+ f.toEquiv.trans g.toEquiv
+参数：f : X ≅ Y；g : Y ≅ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toEquiv_comp {X Y Z : Type u} (f : X ≅ Y) (g : Y ≅ Z) :
     (f ≪≫ g).toEquiv = f.toEquiv.trans g.toEquiv :=
@@ -1520,98 +1114,72 @@ end CategoryTheory.Iso
 
 namespace CategoryTheory
 
-/--
-theorem `isIso_iff_bijective` / 定理 `isIso_iff_bijective`
+/-- A morphism in `Type u` is an isomorphism if and only if it is bijective. -/
+/-
+**CategoryTheory.isIso_iff_bijective** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：isIso_iff_bijective {X Y : Type u} (f : X ⟶ Y) : IsIso f ↔ Function.Biject
+ive f
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 
-English:
-theorem isIso_iff_bijective
-  given: {X Y : Type u} (f : X ⟶ Y)
-  statement: IsIso f ↔ Function.Bijective f
-  proof: Iff.intro (fun _ => (asIso f : X ≅ Y).toEquiv.bijective) fun b =>
-    (Equiv.ofBijective f b).toIso.isIso_hom
-
-中文:
-定理 isIso_iff_bijective
-  条件: {X Y : 类型u} (f : X ⟶ Y)
-  结论: 是同构 f ↔ 函数.双射 f
-  证明: Iff.intro (fun _ => (asIso f : X ≅ Y).toEquiv.bijective) fun b =>
-    (Equiv.ofBijective f b).toIso.isIso_hom
-
-Depends on / 依赖: Equiv.ofBijective, Iff.intro, bijective, isIso_hom, ofBijective, toEquiv, toEquiv.bijective, toIso.isIso_hom
+--- 原说明 ---
+A morphism in `Type u` is an isomorphism if and only if it is bijective.
 -/
 theorem isIso_iff_bijective {X Y : Type u} (f : X ⟶ Y) : IsIso f ↔ Function.Bijective f :=
   Iff.intro (fun _ => (asIso f : X ≅ Y).toEquiv.bijective) fun b =>
     (Equiv.ofBijective f b).toIso.isIso_hom
-
-/--
-theorem `bijective_iff_isIso_ofHom` / 定理 `bijective_iff_isIso_ofHom`
-
-English:
-theorem bijective_iff_isIso_ofHom
-  given: {X Y : Type u} (f : X -> Y)
-  proof: Iff.intro (fun b => (Equiv.ofBijective f b).toIso.isIso_hom)
-    fun _ => (asIso (ofHom f) : X ≅ Y).toEquiv.bijective
-
-中文:
-定理 bijective_iff_isIso_ofHom
-  条件: {X Y : 类型u} (f : X -> Y)
-  证明: Iff.intro (fun b => (Equiv.ofBijective f b).toIso.isIso_hom)
-    fun _ => (asIso (ofHom f) : X ≅ Y).toEquiv.bijective
-
-Depends on / 依赖: Equiv.ofBijective, Iff.intro, bijective, isIso_hom, ofBijective, toEquiv, toEquiv.bijective, toIso.isIso_hom
+/-
+**CategoryTheory.bijective_iff_isIso_ofHom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory`。
+形式化陈述：bijective_iff_isIso_ofHom {X Y : Type u} (f : X -> Y) : Function.Bijective
+ f ↔ IsIso (ofHom f)
+参数：f : X -> Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
 -/
-theorem bijective_iff_isIso_ofHom {X Y : Type u} (f : X -> Y) :
+theorem bijective_iff_isIso_ofHom {X Y : Type u} (f : X → Y) :
     Function.Bijective f ↔ IsIso (ofHom f) :=
   Iff.intro (fun b => (Equiv.ofBijective f b).toIso.isIso_hom)
     fun _ => (asIso (ofHom f) : X ≅ Y).toEquiv.bijective
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SplitEpiCategory (Type u)
-  body: IsSplitEpi.mk'
-      { section_ := ofHom <| Function.surjInv <| (epi_iff_surjective f).1 hf
-        id := by
-          ext x
-          exact (Function.rightInverse_surjInv <| (epi_iff_surjective f).1 hf) x }
-
-中文:
-实例 :
-  签名: 分裂满态射范畴 (类型u)
-  定义体: IsSplitEpi.mk'
-      { section_ := ofHom <| Function.surjInv <| (epi_iff_surjective f).1 hf
-        id := by
-          ext x
-          exact (Function.rightInverse_surjInv <| (epi_iff_surjective f).1 hf) x }
-
-Depends on / 依赖: Function, Function.rightInverse_surjInv, Function.surjInv, IsSplitEpi, IsSplitEpi.mk, epi_iff_surjective, rightInverse_surjInv, section_, surjInv
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SplitEpiCategory (Type u) where
   isSplitEpi_of_epi f hf :=
-IsSplitEpi.mk'
+    IsSplitEpi.mk' <|
       { section_ := ofHom <| Function.surjInv <| (epi_iff_surjective f).1 hf
         id := by
           ext x
           exact (Function.rightInverse_surjInv <| (epi_iff_surjective f).1 hf) x }
-
-/--
-theorem `isSplitEpi_iff_surjective` / 定理 `isSplitEpi_iff_surjective`
-
-English:
-theorem isSplitEpi_iff_surjective
-  given: {X Y : Type u} (f : X ⟶ Y)
-  proof: Iff.intro (fun _ => surjective_of_epi _)
-    fun hf => (by simp only [(epi_iff_surjective f).mpr hf, isSplitEpi_of_epi])
-
-中文:
-定理 isSplitEpi_iff_surjective
-  条件: {X Y : 类型u} (f : X ⟶ Y)
-  证明: Iff.intro (fun _ => surjective_of_epi _)
-    fun hf => (by simp only [(epi_iff_surjective f).mpr hf, isSplitEpi_of_epi])
-
-Depends on / 依赖: Iff.intro, epi_iff_surjective, isSplitEpi_of_epi, surjective_of_epi
+/-
+**CategoryTheory.isSplitEpi_iff_surjective** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory`。
+形式化陈述：isSplitEpi_iff_surjective {X Y : Type u} (f : X ⟶ Y) : IsSplitEpi f ↔ Func
+tion.Surjective f
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.surjective_of_epi`：surjective_of_epi {X Y : Type u} (f : 
+X ⟶ Y) [hf : Epi f] : Function.Surjective f
+· 使用定理 `CategoryTheory.IsSplitEpi.epi`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [hf : CategoryTheory.IsSplitEpi f],   C
+ategoryTheory.Epi f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.instSplitEpiCategoryType`：CategoryTheory.SplitEpiCategory
+ (Type u)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `CategoryTheory.epi_iff_surjective`：epi_iff_surjective {X Y : Type u} (f 
+: X ⟶ Y) : Epi f ↔ Function.Surjective f
 -/
 theorem isSplitEpi_iff_surjective {X Y : Type u} (f : X ⟶ Y) :
     IsSplitEpi f ↔ Function.Surjective f :=
@@ -1625,87 +1193,57 @@ end CategoryTheory
 /-- Equivalences (between types in the same universe) are the same as (isomorphic to) isomorphisms
 of types. -/
 @[simps]
-/--
-Definition of `equivIsoIso` / `equivIsoIso` 的定义
+/-
+**equivIsoIso** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：equivIsoIso {X Y : Type u} : (X ≃ Y) ≅ (X ≅ Y) where hom
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivIsoIso
-  signature: {X Y : Type u}
-  body: ofHom fun e => e.toIso
-  inv := ofHom fun i => i.toEquiv
-
-中文:
-定义 equivIsoIso
-  签名: {X Y : 类型u}
-  定义体: ofHom fun e => e.toIso
-  inv := ofHom fun i => i.toEquiv
-
-Depends on / 依赖: e.toIso
+--- 原说明 ---
+Equivalences (between types in the same universe) are the same as (isomorphic to
+) isomorphisms
+of types.
 -/
 def equivIsoIso {X Y : Type u} : (X ≃ Y) ≅ (X ≅ Y) where
-  hom := ofHom fun e => e.toIso
-  inv := ofHom fun i => i.toEquiv
+  hom := ofHom fun e ↦ e.toIso
+  inv := ofHom fun i ↦ i.toEquiv
 
-/--
-Definition of `equivEquivIso` / `equivEquivIso` 的定义
+/-- Equivalences (between types in the same universe) are the same as (equivalent to) isomorphisms
+of types. -/
+/-
+**equivEquivIso** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：equivEquivIso {X Y : Type u} : X ≃ Y ≃ (X ≅ Y)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivEquivIso
-  signature: {X Y : Type u}
-  body: equivIsoIso.toEquiv
-
-@[simp]
-
-中文:
-定义 equivEquivIso
-  签名: {X Y : 类型u}
-  定义体: equivIsoIso.toEquiv
-
-@[simp]
-
-Depends on / 依赖: equivIsoIso, equivIsoIso.toEquiv, toEquiv
+--- 原说明 ---
+Equivalences (between types in the same universe) are the same as (equivalent to
+) isomorphisms
+of types.
 -/
 def equivEquivIso {X Y : Type u} : X ≃ Y ≃ (X ≅ Y) :=
   equivIsoIso.toEquiv
 
 @[simp]
-/--
-theorem `equivEquivIso_hom` / 定理 `equivEquivIso_hom`
-
-English:
-theorem equivEquivIso_hom
-  given: {X Y : Type u} (e : X ≃ Y)
-  statement: equivEquivIso e = e.toIso
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 equivEquivIso_hom
-  条件: {X Y : 类型u} (e : X ≃ Y)
-  结论: equivEquivIso e = e.toIso
-  证明: rfl
-
-@[simp]
+/-
+**equivEquivIso_hom** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：equivEquivIso_hom {X Y : Type u} (e : X ≃ Y) : equivEquivIso e = e.toIso
+参数：e : X ≃ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem equivEquivIso_hom {X Y : Type u} (e : X ≃ Y) : equivEquivIso e = e.toIso :=
   rfl
 
 @[simp]
-/--
-theorem `equivEquivIso_inv` / 定理 `equivEquivIso_inv`
-
-English:
-theorem equivEquivIso_inv
-  given: {X Y : Type u} (e : X ≅ Y)
-  statement: equivEquivIso.symm e = e.toEquiv
-  proof: rfl
-
-中文:
-定理 equivEquivIso_inv
-  条件: {X Y : 类型u} (e : X ≅ Y)
-  结论: equivEquivIso.symm e = e.toEquiv
-  证明: rfl
+/-
+**equivEquivIso_inv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：equivEquivIso_inv {X Y : Type u} (e : X ≅ Y) : equivEquivIso.symm e = e.to
+Equiv
+参数：e : X ≅ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem equivEquivIso_inv {X Y : Type u} (e : X ≅ Y) : equivEquivIso.symm e = e.toEquiv :=
   rfl

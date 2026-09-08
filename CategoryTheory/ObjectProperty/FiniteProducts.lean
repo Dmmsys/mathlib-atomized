@@ -34,250 +34,234 @@ open Limits
 
 variable {C : Type*} [Category* C] (P : ObjectProperty C)
 
-/--
-Definition of `IsClosedUnderBinaryProducts` / `IsClosedUnderBinaryProducts` 的定义
+/-- The typeclass saying that `P : ObjectProperty C` is stable under binary products. -/
+/-
+**CategoryTheory.ObjectProperty.IsClosedUnderBinaryProducts** 是 Mathlib 中的一个缩写定义
+，位于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：IsClosedUnderBinaryProducts
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsClosedUnderBinaryProducts
-  body: P.IsClosedUnderLimitsOfShape (Discrete WalkingPair)
-
-中文:
-缩写 IsClosedUnderBinaryProducts
-  定义体: P.IsClosedUnderLimitsOfShape (Discrete WalkingPair)
-
-Depends on / 依赖: Discrete, IsClosedUnderLimitsOfShape, P.IsClosedUnderLimitsOfShape, WalkingPair
+--- 原说明 ---
+The typeclass saying that `P : ObjectProperty C` is stable under binary products
+.
 -/
 abbrev IsClosedUnderBinaryProducts :=
   P.IsClosedUnderLimitsOfShape (Discrete WalkingPair)
-
-/--
-lemma `prop_of_isLimit_binaryFan` / 引理 `prop_of_isLimit_binaryFan`
-
-English:
-lemma prop_of_isLimit_binaryFan
-  statement: [P.IsClosedUnderBinaryProducts] {X Y : C} {B : BinaryFan X Y}
-  proof: P.prop_of_isLimit hB (by rintro ⟨_ | _⟩ <;> assumption)
-
-中文:
-引理 prop_of_isLimit_binaryFan
-  结论: [P.IsClosedUnderBinaryProducts] {X Y : C} {B : BinaryFan X Y}
-  证明: P.prop_of_isLimit hB (by rintro ⟨_ | _⟩ <;> assumption)
-
-Depends on / 依赖: P.prop_of_isLimit, prop_of_isLimit
+/-
+**CategoryTheory.ObjectProperty.prop_of_isLimit_binaryFan** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：prop_of_isLimit_binaryFan [P.IsClosedUnderBinaryProducts] {X Y : C} {B : B
+inaryFan X Y} (hB : IsLimit B) (hX : P X) (hY : P Y) : P B.pt
+参数：hB : IsLimit B；hX : P X；hY : P Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.prop_of_isLimit`：prop_of_isLimit {F : J ⥤ 
+C} {c : Cone F} (hc : IsLimit c) (hF : forall (j : J), P (F.obj j)) : P c.pt
 -/
 lemma prop_of_isLimit_binaryFan [P.IsClosedUnderBinaryProducts] {X Y : C} {B : BinaryFan X Y}
     (hB : IsLimit B) (hX : P X) (hY : P Y) :
     P B.pt :=
   P.prop_of_isLimit hB (by rintro ⟨_ | _⟩ <;> assumption)
-
-/--
-lemma `prop_prod` / 引理 `prop_prod`
-
-English:
-lemma prop_prod
-  statement: [P.IsClosedUnderBinaryProducts] (X Y : C) [HasBinaryProduct X Y]
-  proof: P.prop_of_isLimit_binaryFan (limit.isLimit _) hX hY
-
-中文:
-引理 prop_prod
-  结论: [P.IsClosedUnderBinaryProducts] (X Y : C) [HasBinaryProduct X Y]
-  证明: P.prop_of_isLimit_binaryFan (limit.isLimit _) hX hY
-
-Depends on / 依赖: P.prop_of_isLimit_binaryFan, isLimit, limit.isLimit, prop_of_isLimit_binaryFan
+/-
+**CategoryTheory.ObjectProperty.prop_prod** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.ObjectProperty`。
+形式化陈述：prop_prod [P.IsClosedUnderBinaryProducts] (X Y : C) [HasBinaryProduct X Y]
+ (hX : P X) (hY : P Y) : P (X ⨯ Y)
+参数：X Y : C；hX : P X；hY : P Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.prop_of_isLimit_binaryFan`：prop_of_isLimit
+_binaryFan [P.IsClosedUnderBinaryProducts] {X Y : C} {B : BinaryFan X Y} (hB : I
+sLimit B) (hX : P X) (hY : P Y) : P B.pt
 -/
 lemma prop_prod [P.IsClosedUnderBinaryProducts] (X Y : C) [HasBinaryProduct X Y]
     (hX : P X) (hY : P Y) :
     P (X ⨯ Y) :=
   P.prop_of_isLimit_binaryFan (limit.isLimit _) hX hY
-
-/--
-lemma `prop_of_isTerminal` / 引理 `prop_of_isTerminal`
-
-English:
-lemma prop_of_isTerminal
-  statement: [P.IsClosedUnderLimitsOfShape (Discrete.{0} PEmpty)]
-  proof: P.prop_of_isLimit hX (by rintro ⟨⟨⟩⟩)
-
-中文:
-引理 prop_of_isTerminal
-  结论: [P.是ClosedUnderLimitsOfShape (离散.{0} 命题空)]
-  证明: P.prop_of_isLimit hX (by rintro ⟨⟨⟩⟩)
-
-Depends on / 依赖: P.prop_of_isLimit, prop_of_isLimit
+/-
+**CategoryTheory.ObjectProperty.prop_of_isTerminal** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.ObjectProperty`。
+形式化陈述：prop_of_isTerminal [P.IsClosedUnderLimitsOfShape (Discrete.{0} PEmpty)] (X
+ : C) (hX : IsTerminal X) : P X
+参数：Discrete.{0} PEmpty；X : C；hX : IsTerminal X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.prop_of_isLimit`：prop_of_isLimit {F : J ⥤ 
+C} {c : Cone F} (hc : IsLimit c) (hF : forall (j : J), P (F.obj j)) : P c.pt
 -/
 lemma prop_of_isTerminal [P.IsClosedUnderLimitsOfShape (Discrete.{0} PEmpty)]
     (X : C) (hX : IsTerminal X) :
     P X :=
   P.prop_of_isLimit hX (by rintro ⟨⟨⟩⟩)
-
-/--
-lemma `prop_terminal` / 引理 `prop_terminal`
-
-English:
-lemma prop_terminal
-  given: [P.IsClosedUnderLimitsOfShape (Discrete.{0} PEmpty)] [HasTerminal C]
-  proof: P.prop_of_isTerminal _ terminalIsTerminal
-
-中文:
-引理 prop_terminal
-  条件: [P.是ClosedUnderLimitsOfShape (离散.{0} 命题空)] [有终止 C]
-  证明: P.prop_of_isTerminal _ terminalIsTerminal
-
-Depends on / 依赖: P.prop_of_isTerminal, prop_of_isTerminal, terminalIsTerminal
+/-
+**CategoryTheory.ObjectProperty.prop_terminal** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.ObjectProperty`。
+形式化陈述：prop_terminal [P.IsClosedUnderLimitsOfShape (Discrete.{0} PEmpty)] [HasTer
+minal C] : P (⊤_ C)
+参数：Discrete.{0} PEmpty。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.prop_of_isTerminal`：prop_of_isTerminal [P.
+IsClosedUnderLimitsOfShape (Discrete.{0} PEmpty)] (X : C) (hX : IsTerminal X) : 
+P X
 -/
 lemma prop_terminal [P.IsClosedUnderLimitsOfShape (Discrete.{0} PEmpty)] [HasTerminal C] :
     P (⊤_ C) :=
   P.prop_of_isTerminal _ terminalIsTerminal
 
 -- see Note [lower instance priority]
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) [P.IsClosedUnderLimitsOfShape (Discrete.{0} PEmpty)] [HasTerminal C] :
     P.Nonempty :=
   nonempty_of_prop P.prop_terminal
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `IsClosedUnderBinaryProducts.closedUnderIsomorphisms` / 引理 `IsClosedUnderBinaryProducts.closedUnderIsomorphisms`
-
-English:
-lemma IsClosedUnderBinaryProducts.closedUnderIsomorphisms
-  statement: [HasTerminal C]
-  proof: by
-    let h : IsLimit (BinaryFan.mk (terminal.from Y) e.inv) :=
-      BinaryFan.IsLimit.mk _ (fun _ f => f ≫ e.hom) (by cat_disch) (by simp) (by cat_disch)
-    exact P.prop_of_isLimit_binaryFan h P.prop_terminal hX
-
-中文:
-引理 IsClosedUnderBinaryProducts.closedUnderIsomorphisms
-  结论: [有终止 C]
-  证明: by
-    let h : IsLimit (BinaryFan.mk (terminal.from Y) e.inv) :=
-      BinaryFan.IsLimit.mk _ (fun _ f => f ≫ e.hom) (by cat_disch) (by simp) (by cat_disch)
-    exact P.prop_of_isLimit_binaryFan h P.prop_terminal hX
-
-Depends on / 依赖: BinaryFan, BinaryFan.IsLimit.mk, BinaryFan.mk, IsLimit, P.prop_of_isLimit_binaryFan, P.prop_terminal, cat_disch, e.hom, e.inv, prop_of_isLimit_binaryFan, prop_terminal, terminal, terminal.from
+/-
+**CategoryTheory.ObjectProperty.IsClosedUnderBinaryProducts.closedUnderIsomorphi
+sms** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.ObjectProperty.IsClosedUnderBinary
+Products`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (P : Catego
+ryTheory.ObjectProperty C)   [CategoryTheory.Limits.HasTerminal C] [P.IsClosedUn
+derLimitsOfShape (CategoryTheory.Discrete PEmpty.{1})]   [P.IsClosedUnderBinaryP
+roducts], P.IsClosedUnderIsomorphisms
+参数：P : CategoryTheory.ObjectProperty C；CategoryTheory.Discrete PEmpty.{1}。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.terminal.comp_from`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Limits.HasTerminal C] {P 
+Q : C}   (f : P ⟶ Q),   Catego…
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用引理 `CategoryTheory.ObjectProperty.prop_of_isLimit_binaryFan`：prop_of_isLimit
+_binaryFan [P.IsClosedUnderBinaryProducts] {X Y : C} {B : BinaryFan X Y} (hB : I
+sLimit B) (hX : P X) (hY : P Y) : P B.pt
+· 使用引理 `CategoryTheory.ObjectProperty.prop_terminal`：prop_terminal [P.IsClosedUn
+derLimitsOfShape (Discrete.{0} PEmpty)] [HasTerminal C] : P (⊤_ C)
 -/
 lemma IsClosedUnderBinaryProducts.closedUnderIsomorphisms [HasTerminal C]
     [P.IsClosedUnderLimitsOfShape (Discrete.{0} PEmpty)] [P.IsClosedUnderBinaryProducts] :
     P.IsClosedUnderIsomorphisms where
   of_iso {X Y} e hX := by
     let h : IsLimit (BinaryFan.mk (terminal.from Y) e.inv) :=
-      BinaryFan.IsLimit.mk _ (fun _ f => f ≫ e.hom) (by cat_disch) (by simp) (by cat_disch)
+      BinaryFan.IsLimit.mk _ (fun _ f ↦ f ≫ e.hom) (by cat_disch) (by simp) (by cat_disch)
     exact P.prop_of_isLimit_binaryFan h P.prop_terminal hX
 
-/--
-Definition of `binaryProductsClosure` / `binaryProductsClosure` 的定义
+/-- All objects that are binary products of objects in `P`. -/
+/-
+**CategoryTheory.ObjectProperty.binaryProductsClosure** 是 Mathlib 中的一个缩写定义，位于命名空
+间 `CategoryTheory.ObjectProperty`。
+形式化陈述：binaryProductsClosure (P : ObjectProperty C) : ObjectProperty C
+参数：P : ObjectProperty C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation binaryProductsClosure
-  signature: (P : ObjectProperty C)
-  body: P.limitClosure (Discrete WalkingPair)
-
-中文:
-缩写 binaryProductsClosure
-  签名: (P : ObjectProperty C)
-  定义体: P.limitClosure (Discrete WalkingPair)
-
-Depends on / 依赖: Discrete, NatTrans, NatTrans.isIso_iff_isIso_app, P.limitClosure, WalkingPair, isIso_iff_isIso_app, limitClosure, natTransTruncLTOfLE, someOctahedron, t.isIso, t.natTransTruncLTOfLE, t.triangleLTGE_distinguished, t.triangleLTLTGELT_distinguished, t.truncGELT, t.truncLT, triangleLTGE_distinguished, triangleLTLTGELT_distinguished, truncGELT, truncLT
+--- 原说明 ---
+All objects that are binary products of objects in `P`.
 -/
 abbrev binaryProductsClosure (P : ObjectProperty C) : ObjectProperty C :=
   P.limitClosure (Discrete WalkingPair)
-
-/--
-lemma `binaryProductsClosure_le_iff` / 引理 `binaryProductsClosure_le_iff`
-
-English:
-lemma binaryProductsClosure_le_iff
-  statement: [HasTerminal C] {P Q : ObjectProperty C}
-  proof: by
-  refine ⟨fun h => (P.le_limitsClosure _).trans h, fun h => ?_⟩
-  let : Q.IsClosedUnderIsomorphisms := IsClosedUnderBinaryProducts.closedUnderIsomorphisms Q
-  exact limitsClosure_le h
-
-中文:
-引理 binaryProductsClosure_le_iff
-  结论: [有终止 C] {P Q : ObjectProperty C}
-  证明: by
-  refine ⟨fun h => (P.le_limitsClosure _).trans h, fun h => ?_⟩
-  let : Q.IsClosedUnderIsomorphisms := IsClosedUnderBinaryProducts.closedUnderIsomorphisms Q
-  exact limitsClosure_le h
-
-Depends on / 依赖: IsClosedUnderBinaryProducts, IsClosedUnderBinaryProducts.closedUnderIsomorphisms, IsClosedUnderIsomorphisms, P.le_limitsClosure, Q.IsClosedUnderIsomorphisms, closedUnderIsomorphisms, infer_instance, le_limitsClosure, limitsClosure_le, t.truncLT_map_truncGE_map_truncLT
+/-
+**CategoryTheory.ObjectProperty.binaryProductsClosure_le_iff** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：binaryProductsClosure_le_iff [HasTerminal C] {P Q : ObjectProperty C} [Q.I
+sClosedUnderBinaryProducts] [Q.IsClosedUnderLimitsOfShape (Discrete.{0} PEmpty)]
+ : P.binaryProductsClosure <= Q ↔ P <= Q
+参数：Discrete.{0} PEmpty。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `CategoryTheory.ObjectProperty.le_limitsClosure`：le_limitsClosure : P <= 
+P.limitsClosure J
+· 使用定理 `CategoryTheory.ObjectProperty.IsClosedUnderBinaryProducts.closedUnderIso
+morphisms`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (P : C
+ategoryTheory.ObjectProperty C)   [CategoryTheory.Limits.HasTerminal C]…
+· 使用引理 `CategoryTheory.ObjectProperty.limitsClosure_le`：limitsClosure_le {Q : Ob
+jectProperty C} [Q.IsClosedUnderIsomorphisms] [forall (a : α), Q.IsClosedUnderLi
+mitsOfShape (J a)] (h : P <= Q) : P.…
 -/
 lemma binaryProductsClosure_le_iff [HasTerminal C] {P Q : ObjectProperty C}
     [Q.IsClosedUnderBinaryProducts] [Q.IsClosedUnderLimitsOfShape (Discrete.{0} PEmpty)] :
-    P.binaryProductsClosure <= Q ↔ P <= Q := by
-  refine ⟨fun h => (P.le_limitsClosure _).trans h, fun h => ?_⟩
+    P.binaryProductsClosure ≤ Q ↔ P ≤ Q := by
+  refine ⟨fun h ↦ (P.le_limitsClosure _).trans h, fun h ↦ ?_⟩
   let : Q.IsClosedUnderIsomorphisms := IsClosedUnderBinaryProducts.closedUnderIsomorphisms Q
   exact limitsClosure_le h
 
-/--
-Definition of `IsClosedUnderFiniteProducts` / `IsClosedUnderFiniteProducts` 的定义
+/-- The typeclass saying that `P : ObjectProperty C` is stable under finite products. -/
+/-
+**CategoryTheory.ObjectProperty.IsClosedUnderFiniteProducts** 是 Mathlib 中的一个类，位于
+命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：IsClosedUnderFiniteProducts : Prop where isClosedUnderLimitsOfShape (J : T
+ype) [Finite J] : P.IsClosedUnderLimitsOfShape (Discrete J)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsClosedUnderFiniteProducts
-  parameters: : Prop where
-  axioms and operations (1):
-    - isClosedUnderLimitsOfShape((J : Type) [Finite J]) : P.IsClosedUnderLimitsOfShape (Discrete J)  [default: by infer_instance]
-
-中文:
-类 是ClosedUnderFiniteProducts
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - isClosedUnderLimitsOfShape((J : 类型) [有限 J]) : P.是ClosedUnderLimitsOfShape (离散 J)  [默认: by infer_instance]
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+The typeclass saying that `P : ObjectProperty C` is stable under finite products
+.
 -/
 class IsClosedUnderFiniteProducts : Prop where
   isClosedUnderLimitsOfShape (J : Type) [Finite J] :
     P.IsClosedUnderLimitsOfShape (Discrete J) := by infer_instance
 
 variable {P} in
-/--
-lemma `IsClosedUnderFiniteProducts.of_isClosedUnderLimitsOfShape` / 引理 `IsClosedUnderFiniteProducts.of_isClosedUnderLimitsOfShape`
+/-- `IsClosedUnderFiniteProducts` may be checked at any universe. -/
+/-
+**CategoryTheory.ObjectProperty.IsClosedUnderFiniteProducts.of_isClosedUnderLimi
+tsOfShape** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.ObjectProperty.IsClosedUnder
+FiniteProducts`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {P : Catego
+ryTheory.ObjectProperty C},   (∀ (J : Type w) [Finite J], P.IsClosedUnderLimitsO
+fShape (CategoryTheory.Discrete J)) → P.IsClosedUnderFiniteProducts
+参数：∀ (J : Type w) [Finite J], P.IsClosedUnderLimitsOfShape (CategoryTheory.Discr
+ete J)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.ObjectProperty.isClosedUnderLimitsOfShape_iff_of_equivale
+nce`：isClosedUnderLimitsOfShape_iff_of_equivalence (e : J ≌ J') : P.IsClosedUnde
+rLimitsOfShape J ↔ P.IsClosedUnderLimitsOfShape J'
 
-English:
-lemma IsClosedUnderFiniteProducts.of_isClosedUnderLimitsOfShape
-  proof: by
-    rw [P.isClosedUnderLimitsOfShape_iff_of_equivalence (Discrete.equivalence (equivShrink.{w} _))]
-    exact H _
-
-中文:
-引理 是ClosedUnderFiniteProducts.of_isClosedUnderLimitsOfShape
-  证明: by
-    rw [P.isClosedUnderLimitsOfShape_iff_of_equivalence (Discrete.equivalence (equivShrink.{w} _))]
-    exact H _
-
-Depends on / 依赖: Discrete, Discrete.equivalence, P.isClosedUnderLimitsOfShape_iff_of_equivalence, equivShrink, equivalence, isClosedUnderLimitsOfShape_iff_of_equivalence
+--- 原说明 ---
+`IsClosedUnderFiniteProducts` may be checked at any universe.
 -/
 lemma IsClosedUnderFiniteProducts.of_isClosedUnderLimitsOfShape
-    (H : forall (J : Type w) [Finite J], P.IsClosedUnderLimitsOfShape (Discrete J)) :
+    (H : ∀ (J : Type w) [Finite J], P.IsClosedUnderLimitsOfShape (Discrete J)) :
     P.IsClosedUnderFiniteProducts where
   isClosedUnderLimitsOfShape J _ := by
     rw [P.isClosedUnderLimitsOfShape_iff_of_equivalence (Discrete.equivalence (equivShrink.{w} _))]
     exact H _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P.IsClosedUnderFiniteProducts]
-  signature: (J : Type*) [Finite J]
-  body: by
-  obtain ⟨n, ⟨e⟩⟩ := Finite.exists_equiv_fin J
-  have : P.IsClosedUnderLimitsOfShape (Discrete (Fin n)) :=
-    IsClosedUnderFiniteProducts.isClosedUnderLimitsOfShape _
-  exact IsClosedUnderLimitsOfShape.of_equivalence (Discrete.equivalence e.symm)
-
-中文:
-实例 [P.是ClosedUnderFiniteProducts]
-  签名: (J : 类型) [有限 J]
-  定义体: by
-  obtain ⟨n, ⟨e⟩⟩ := Finite.exists_equiv_fin J
-  have : P.IsClosedUnderLimitsOfShape (Discrete (Fin n)) :=
-    IsClosedUnderFiniteProducts.isClosedUnderLimitsOfShape _
-  exact IsClosedUnderLimitsOfShape.of_equivalence (Discrete.equivalence e.symm)
-
-Depends on / 依赖: Discrete, Discrete.equivalence, Finite, Finite.exists_equiv_fin, IsClosedUnderFiniteProducts, IsClosedUnderFiniteProducts.isClosedUnderLimitsOfShape, IsClosedUnderLimitsOfShape, IsClosedUnderLimitsOfShape.of_equivalence, P.IsClosedUnderLimitsOfShape, e.symm, equivalence, exists_equiv_fin, isClosedUnderLimitsOfShape, of_equivalence
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [P.IsClosedUnderFiniteProducts] (J : Type*) [Finite J] :
     P.IsClosedUnderLimitsOfShape (Discrete J) := by
@@ -285,92 +269,53 @@ instance [P.IsClosedUnderFiniteProducts] (J : Type*) [Finite J] :
   have : P.IsClosedUnderLimitsOfShape (Discrete (Fin n)) :=
     IsClosedUnderFiniteProducts.isClosedUnderLimitsOfShape _
   exact IsClosedUnderLimitsOfShape.of_equivalence (Discrete.equivalence e.symm)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasFiniteProducts
-  signature: C] [P.IsClosedUnderFiniteProducts] :
-  body: inferInstance
-
-中文:
-实例 [有FiniteProducts
-  签名: C] [P.是ClosedUnderFiniteProducts] :
-  定义体: inferInstance
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasFiniteProducts C] [P.IsClosedUnderFiniteProducts] :
     HasFiniteProducts P.FullSubcategory where
   out _ := inferInstance
-
-/--
-lemma `prop_of_isLimit_fan` / 引理 `prop_of_isLimit_fan`
-
-English:
-lemma prop_of_isLimit_fan
-  statement: [P.IsClosedUnderFiniteProducts] {J : Type*} [Finite J] {f : J -> C}
-  proof: P.prop_of_isLimit hF (by intro ⟨j⟩; exact h j)
-
-中文:
-引理 prop_of_isLimit_fan
-  结论: [P.是ClosedUnderFiniteProducts] {J : 类型} [有限 J] {f : J -> C}
-  证明: P.prop_of_isLimit hF (by intro ⟨j⟩; exact h j)
-
-Depends on / 依赖: P.prop_of_isLimit, prop_of_isLimit
+/-
+**CategoryTheory.ObjectProperty.prop_of_isLimit_fan** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.ObjectProperty`。
+形式化陈述：prop_of_isLimit_fan [P.IsClosedUnderFiniteProducts] {J : Type*} [Finite J]
+ {f : J -> C} {F : Fan f} (hF : IsLimit F) (h : forall j, P (f j)) : P F.pt
+参数：hF : IsLimit F；h : forall j, P (f j)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.prop_of_isLimit`：prop_of_isLimit {F : J ⥤ 
+C} {c : Cone F} (hc : IsLimit c) (hF : forall (j : J), P (F.obj j)) : P c.pt
+· 使用定理 `CategoryTheory.ObjectProperty.instIsClosedUnderLimitsOfShapeDiscreteOfIs
+ClosedUnderFiniteProductsOfFinite`：∀ {C : Type u_1} [inst : CategoryTheory.Categ
+ory.{v_1, u_1} C] (P : CategoryTheory.ObjectProperty C)   [P.IsClosedUnderFinite
+Products] (J : …
 -/
-lemma prop_of_isLimit_fan [P.IsClosedUnderFiniteProducts] {J : Type*} [Finite J] {f : J -> C}
-    {F : Fan f} (hF : IsLimit F) (h : forall j, P (f j)) :
+lemma prop_of_isLimit_fan [P.IsClosedUnderFiniteProducts] {J : Type*} [Finite J] {f : J → C}
+    {F : Fan f} (hF : IsLimit F) (h : ∀ j, P (f j)) :
     P F.pt :=
   P.prop_of_isLimit hF (by intro ⟨j⟩; exact h j)
-
-/--
-lemma `prop_product` / 引理 `prop_product`
-
-English:
-lemma prop_product
-  statement: [P.IsClosedUnderFiniteProducts] {J : Type*} [Finite J] {f : J -> C}
-  proof: P.prop_of_isLimit_fan (limit.isLimit (Discrete.functor f)) h
-
-中文:
-引理 prop_product
-  结论: [P.是ClosedUnderFiniteProducts] {J : 类型} [有限 J] {f : J -> C}
-  证明: P.prop_of_isLimit_fan (limit.isLimit (Discrete.functor f)) h
-
-Depends on / 依赖: Discrete, Discrete.functor, P.prop_of_isLimit_fan, functor, isLimit, limit.isLimit, prop_of_isLimit_fan
+/-
+**CategoryTheory.ObjectProperty.prop_product** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.ObjectProperty`。
+形式化陈述：prop_product [P.IsClosedUnderFiniteProducts] {J : Type*} [Finite J] {f : J
+ -> C} [HasProduct f] (h : forall j, P (f j)) : P (∏ᶜ f)
+参数：h : forall j, P (f j)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.prop_of_isLimit_fan`：prop_of_isLimit_fan [
+P.IsClosedUnderFiniteProducts] {J : Type*} [Finite J] {f : J -> C} {F : Fan f} (
+hF : IsLimit F) (h : forall j, P (f j))…
 -/
-lemma prop_product [P.IsClosedUnderFiniteProducts] {J : Type*} [Finite J] {f : J -> C}
-    [HasProduct f] (h : forall j, P (f j)) :
+lemma prop_product [P.IsClosedUnderFiniteProducts] {J : Type*} [Finite J] {f : J → C}
+    [HasProduct f] (h : ∀ j, P (f j)) :
     P (∏ᶜ f) :=
   P.prop_of_isLimit_fan (limit.isLimit (Discrete.functor f)) h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P.ContainsZero]
-  signature: [P.IsClosedUnderIsomorphisms]
-  body: by
-    rintro X ⟨p⟩
-    obtain ⟨Z, hZ, hZ₂⟩ := P.exists_prop_of_containsZero
-    have hX : IsTerminal X :=
-      (IsLimit.equivOfNatIsoOfIso p.diag.uniqueFromEmpty _ _
-        (by exact Cone.ext (Iso.refl _) (by rintro ⟨⟨⟩⟩))).1 p.isLimit
-    exact P.prop_of_isZero (IsZero.of_iso hZ
-      (IsLimit.conePointUniqueUpToIso hX (IsZero.isTerminal hZ)))
-
-中文:
-实例 [P.余ntainsZero]
-  签名: [P.在同构下封闭]
-  定义体: by
-    rintro X ⟨p⟩
-    obtain ⟨Z, hZ, hZ₂⟩ := P.exists_prop_of_containsZero
-    have hX : IsTerminal X :=
-      (IsLimit.equivOfNatIsoOfIso p.diag.uniqueFromEmpty _ _
-        (by exact Cone.ext (Iso.refl _) (by rintro ⟨⟨⟩⟩))).1 p.isLimit
-    exact P.prop_of_isZero (IsZero.of_iso hZ
-      (IsLimit.conePointUniqueUpToIso hX (IsZero.isTerminal hZ)))
-
-Depends on / 依赖: Cone.ext, IsLimit, IsLimit.conePointUniqueUpToIso, IsLimit.equivOfNatIsoOfIso, IsTerminal, IsZero, IsZero.isTerminal, IsZero.of_iso, Iso.refl, P.exists_prop_of_containsZero, P.prop_of_isZero, conePointUniqueUpToIso, equivOfNatIsoOfIso, exists_prop_of_containsZero, isLimit, isTerminal, of_iso, p.diag.uniqueFromEmpty, p.isLimit, prop_of_isZero
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [P.ContainsZero] [P.IsClosedUnderIsomorphisms] :
     P.IsClosedUnderLimitsOfShape (Discrete.{0} PEmpty) where
@@ -384,28 +329,33 @@ instance [P.ContainsZero] [P.IsClosedUnderIsomorphisms] :
       (IsLimit.conePointUniqueUpToIso hX (IsZero.isTerminal hZ)))
 
 variable {P} in
-/--
-lemma `IsClosedUnderFiniteProducts.mk'` / 引理 `IsClosedUnderFiniteProducts.mk'`
-
-English:
-lemma IsClosedUnderFiniteProducts.mk'
-  statement: [HasFiniteProducts C]
-  proof: by
-  have := IsClosedUnderBinaryProducts.closedUnderIsomorphisms P
-  have := hasFiniteProducts_of_has_binary_and_terminal (C := P.FullSubcategory)
-  have := PreservesFiniteProducts.of_preserves_binary_and_terminal P.ι
-  exact ⟨fun J _ => P.isClosedUnderLimitsOfShape_of_preservesLimitsOfShape_ι _⟩
-
-中文:
-引理 是ClosedUnderFiniteProducts.mk'
-  结论: [有FiniteProducts C]
-  证明: by
-  have := IsClosedUnderBinaryProducts.closedUnderIsomorphisms P
-  have := hasFiniteProducts_of_has_binary_and_terminal (C := P.FullSubcategory)
-  have := PreservesFiniteProducts.of_preserves_binary_and_terminal P.ι
-  exact ⟨fun J _ => P.isClosedUnderLimitsOfShape_of_preservesLimitsOfShape_ι _⟩
-
-Depends on / 依赖: FullSubcategory, IsClosedUnderBinaryProducts, IsClosedUnderBinaryProducts.closedUnderIsomorphisms, P.FullSubcategory, P.isClosedUnderLimitsOfShape_of_preservesLimitsOfShape_, PreservesFiniteProducts, PreservesFiniteProducts.of_preserves_binary_and_terminal, closedUnderIsomorphisms, hasFiniteProducts_of_has_binary_and_terminal, of_preserves_binary_and_terminal
+/-
+**CategoryTheory.ObjectProperty.IsClosedUnderFiniteProducts.mk'** 是 Mathlib 中的一个
+定理，位于命名空间 `CategoryTheory.ObjectProperty.IsClosedUnderFiniteProducts`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {P : Catego
+ryTheory.ObjectProperty C}   [CategoryTheory.Limits.HasFiniteProducts C] [P.IsCl
+osedUnderLimitsOfShape (CategoryTheory.Discrete PEmpty.{1})]   [P.IsClosedUnderB
+inaryProducts], P.IsClosedUnderFiniteProducts
+参数：CategoryTheory.Discrete PEmpty.{1}。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.IsClosedUnderBinaryProducts.closedUnderIso
+morphisms`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (P : C
+ategoryTheory.ObjectProperty C)   [CategoryTheory.Limits.HasTerminal C]…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.hasFiniteProducts_of_has_binary_and_terminal`：hasFinitePr
+oducts_of_has_binary_and_terminal : HasFiniteProducts C
+· 使用定理 `CategoryTheory.Limits.PreservesFiniteProducts.of_preserves_binary_and_te
+rminal`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {D : Type u'} [
+inst_1 : CategoryTheory.Category.{v', u'} D]   (F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.preservesLimitOfShape_of_createsLimitsOfShape_and_hasLimi
+tsOfShape`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type
+ u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用引理 `CategoryTheory.ObjectProperty.isClosedUnderLimitsOfShape_of_preservesLim
+itsOfShape_ι`：isClosedUnderLimitsOfShape_of_preservesLimitsOfShape_ι [HasLimitsO
+fShape J P.FullSubcategory] [P.IsClosedUnderIsomorphisms] [PreservesLimits…
+· 使用定理 `CategoryTheory.Limits.instPreservesLimitsOfShapeDiscreteOfFiniteOfPreser
+vesFiniteProducts`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {
+D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
 -/
 lemma IsClosedUnderFiniteProducts.mk' [HasFiniteProducts C]
     [P.IsClosedUnderLimitsOfShape (Discrete.{0} PEmpty)]
@@ -414,256 +364,234 @@ lemma IsClosedUnderFiniteProducts.mk' [HasFiniteProducts C]
   have := IsClosedUnderBinaryProducts.closedUnderIsomorphisms P
   have := hasFiniteProducts_of_has_binary_and_terminal (C := P.FullSubcategory)
   have := PreservesFiniteProducts.of_preserves_binary_and_terminal P.ι
-  exact ⟨fun J _ => P.isClosedUnderLimitsOfShape_of_preservesLimitsOfShape_ι _⟩
+  exact ⟨fun J _ ↦ P.isClosedUnderLimitsOfShape_of_preservesLimitsOfShape_ι _⟩
 
-/--
-Definition of `IsClosedUnderBinaryCoproducts` / `IsClosedUnderBinaryCoproducts` 的定义
+/-- The typeclass saying that `P : ObjectProperty C` is stable under binary coproducts. -/
+/-
+**CategoryTheory.ObjectProperty.IsClosedUnderBinaryCoproducts** 是 Mathlib 中的一个缩写
+定义，位于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：IsClosedUnderBinaryCoproducts
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsClosedUnderBinaryCoproducts
-  body: P.IsClosedUnderColimitsOfShape (Discrete WalkingPair)
-
-中文:
-缩写 IsClosedUnderBinaryCoproducts
-  定义体: P.IsClosedUnderColimitsOfShape (Discrete WalkingPair)
-
-Depends on / 依赖: Discrete, IsClosedUnderColimitsOfShape, P.IsClosedUnderColimitsOfShape, WalkingPair
+--- 原说明 ---
+The typeclass saying that `P : ObjectProperty C` is stable under binary coproduc
+ts.
 -/
 abbrev IsClosedUnderBinaryCoproducts :=
   P.IsClosedUnderColimitsOfShape (Discrete WalkingPair)
-
-/--
-lemma `prop_of_isColimit_binaryCofan` / 引理 `prop_of_isColimit_binaryCofan`
-
-English:
-lemma prop_of_isColimit_binaryCofan
-  statement: [P.IsClosedUnderBinaryCoproducts] {X Y : C}
-  proof: P.prop_of_isColimit hB (by rintro ⟨_ | _⟩ <;> assumption)
-
-中文:
-引理 prop_of_isColimit_binaryCofan
-  结论: [P.IsClosedUnderBinaryCoproducts] {X Y : C}
-  证明: P.prop_of_isColimit hB (by rintro ⟨_ | _⟩ <;> assumption)
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom, P.prop_of_isColimit, prop_of_isColimit
+/-
+**CategoryTheory.ObjectProperty.prop_of_isColimit_binaryCofan** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：prop_of_isColimit_binaryCofan [P.IsClosedUnderBinaryCoproducts] {X Y : C} 
+{B : BinaryCofan X Y} (hB : IsColimit B) (hX : P X) (hY : P Y) : P B.pt
+参数：hB : IsColimit B；hX : P X；hY : P Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.prop_of_isColimit`：prop_of_isColimit {F : 
+J ⥤ C} {c : Cocone F} (hc : IsColimit c) (hF : forall (j : J), P (F.obj j)) : P 
+c.pt
 -/
 lemma prop_of_isColimit_binaryCofan [P.IsClosedUnderBinaryCoproducts] {X Y : C}
     {B : BinaryCofan X Y} (hB : IsColimit B) (hX : P X) (hY : P Y) :
     P B.pt :=
   P.prop_of_isColimit hB (by rintro ⟨_ | _⟩ <;> assumption)
-
-/--
-lemma `prop_coprod` / 引理 `prop_coprod`
-
-English:
-lemma prop_coprod
-  statement: [P.IsClosedUnderBinaryCoproducts] (X Y : C) [HasBinaryCoproduct X Y]
-  proof: P.prop_of_isColimit_binaryCofan (colimit.isColimit (Limits.pair X Y)) hX hY
-
-中文:
-引理 prop_coprod
-  结论: [P.IsClosedUnderBinaryCoproducts] (X Y : C) [HasBinaryCoproduct X Y]
-  证明: P.prop_of_isColimit_binaryCofan (colimit.isColimit (Limits.pair X Y)) hX hY
-
-Depends on / 依赖: Limits, Limits.pair, P.prop_of_isColimit_binaryCofan, colimit, colimit.isColimit, isColimit, prop_of_isColimit_binaryCofan
+/-
+**CategoryTheory.ObjectProperty.prop_coprod** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.ObjectProperty`。
+形式化陈述：prop_coprod [P.IsClosedUnderBinaryCoproducts] (X Y : C) [HasBinaryCoproduc
+t X Y] (hX : P X) (hY : P Y) : P (X ⨿ Y)
+参数：X Y : C；hX : P X；hY : P Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.prop_of_isColimit_binaryCofan`：prop_of_isC
+olimit_binaryCofan [P.IsClosedUnderBinaryCoproducts] {X Y : C} {B : BinaryCofan 
+X Y} (hB : IsColimit B) (hX : P X) (hY : P Y) : P…
 -/
 lemma prop_coprod [P.IsClosedUnderBinaryCoproducts] (X Y : C) [HasBinaryCoproduct X Y]
     (hX : P X) (hY : P Y) :
     P (X ⨿ Y) :=
   P.prop_of_isColimit_binaryCofan (colimit.isColimit (Limits.pair X Y)) hX hY
-
-/--
-lemma `prop_of_isInitial` / 引理 `prop_of_isInitial`
-
-English:
-lemma prop_of_isInitial
-  statement: [P.IsClosedUnderColimitsOfShape (Discrete.{0} PEmpty)]
-  proof: P.prop_of_isColimit hX (by rintro ⟨⟨⟩⟩)
-
-中文:
-引理 prop_of_isInitial
-  结论: [P.是ClosedUnderColimitsOfShape (离散.{0} 命题空)]
-  证明: P.prop_of_isColimit hX (by rintro ⟨⟨⟩⟩)
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom, P.prop_of_isColimit, prop_of_isColimit
+/-
+**CategoryTheory.ObjectProperty.prop_of_isInitial** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.ObjectProperty`。
+形式化陈述：prop_of_isInitial [P.IsClosedUnderColimitsOfShape (Discrete.{0} PEmpty)] (
+X : C) (hX : IsInitial X) : P X
+参数：Discrete.{0} PEmpty；X : C；hX : IsInitial X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.prop_of_isColimit`：prop_of_isColimit {F : 
+J ⥤ C} {c : Cocone F} (hc : IsColimit c) (hF : forall (j : J), P (F.obj j)) : P 
+c.pt
 -/
 lemma prop_of_isInitial [P.IsClosedUnderColimitsOfShape (Discrete.{0} PEmpty)]
     (X : C) (hX : IsInitial X) :
     P X :=
   P.prop_of_isColimit hX (by rintro ⟨⟨⟩⟩)
-
-/--
-lemma `prop_initial` / 引理 `prop_initial`
-
-English:
-lemma prop_initial
-  given: [P.IsClosedUnderColimitsOfShape (Discrete.{0} PEmpty)] [HasInitial C]
-  proof: P.prop_of_isInitial _ initialIsInitial
-
-中文:
-引理 prop_initial
-  条件: [P.是ClosedUnderColimitsOfShape (离散.{0} 命题空)] [HasInitial C]
-  证明: P.prop_of_isInitial _ initialIsInitial
-
-Depends on / 依赖: P.prop_of_isInitial, initialIsInitial, prop_of_isInitial
+/-
+**CategoryTheory.ObjectProperty.prop_initial** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.ObjectProperty`。
+形式化陈述：prop_initial [P.IsClosedUnderColimitsOfShape (Discrete.{0} PEmpty)] [HasIn
+itial C] : P (⊥_ C)
+参数：Discrete.{0} PEmpty。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.prop_of_isInitial`：prop_of_isInitial [P.Is
+ClosedUnderColimitsOfShape (Discrete.{0} PEmpty)] (X : C) (hX : IsInitial X) : P
+ X
 -/
 lemma prop_initial [P.IsClosedUnderColimitsOfShape (Discrete.{0} PEmpty)] [HasInitial C] :
     P (⊥_ C) :=
   P.prop_of_isInitial _ initialIsInitial
 
 -- see Note [lower instance priority]
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) [P.IsClosedUnderColimitsOfShape (Discrete.{0} PEmpty)] [HasInitial C] :
     P.Nonempty :=
   nonempty_of_prop P.prop_initial
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `IsClosedUnderBinaryCoproducts.closedUnderIsomorphisms` / 引理 `IsClosedUnderBinaryCoproducts.closedUnderIsomorphisms`
-
-English:
-lemma IsClosedUnderBinaryCoproducts.closedUnderIsomorphisms
-  statement: [HasInitial C]
-  proof: by
-    let h : IsColimit (BinaryCofan.mk (initial.to Y) e.hom) :=
-      BinaryCofan.IsColimit.mk _ (fun _ f => e.inv ≫ f) (by cat_disch) (by simp) (by cat_disch)
-    exact P.prop_of_isColimit_binaryCofan h P.prop_initial hX
-
-中文:
-引理 IsClosedUnderBinaryCoproducts.closedUnderIsomorphisms
-  结论: [HasInitial C]
-  证明: by
-    let h : IsColimit (BinaryCofan.mk (initial.to Y) e.hom) :=
-      BinaryCofan.IsColimit.mk _ (fun _ f => e.inv ≫ f) (by cat_disch) (by simp) (by cat_disch)
-    exact P.prop_of_isColimit_binaryCofan h P.prop_initial hX
-
-Depends on / 依赖: BinaryCofan, BinaryCofan.IsColimit.mk, BinaryCofan.mk, IsColimit, P.prop_initial, P.prop_of_isColimit_binaryCofan, cat_disch, e.hom, e.inv, initial, initial.to, prop_initial, prop_of_isColimit_binaryCofan
+/-
+**CategoryTheory.ObjectProperty.IsClosedUnderBinaryCoproducts.closedUnderIsomorp
+hisms** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.ObjectProperty.IsClosedUnderBina
+ryCoproducts`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (P : Catego
+ryTheory.ObjectProperty C)   [CategoryTheory.Limits.HasInitial C] [P.IsClosedUnd
+erColimitsOfShape (CategoryTheory.Discrete PEmpty.{1})]   [P.IsClosedUnderBinary
+Coproducts], P.IsClosedUnderIsomorphisms
+参数：P : CategoryTheory.ObjectProperty C；CategoryTheory.Discrete PEmpty.{1}。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.initial.to_comp`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Limits.HasInitial C] {P Q : 
+C}   (f : P ⟶ Q),   Categor…
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用引理 `CategoryTheory.ObjectProperty.prop_of_isColimit_binaryCofan`：prop_of_isC
+olimit_binaryCofan [P.IsClosedUnderBinaryCoproducts] {X Y : C} {B : BinaryCofan 
+X Y} (hB : IsColimit B) (hX : P X) (hY : P Y) : P…
+· 使用引理 `CategoryTheory.ObjectProperty.prop_initial`：prop_initial [P.IsClosedUnde
+rColimitsOfShape (Discrete.{0} PEmpty)] [HasInitial C] : P (⊥_ C)
 -/
 lemma IsClosedUnderBinaryCoproducts.closedUnderIsomorphisms [HasInitial C]
     [P.IsClosedUnderColimitsOfShape (Discrete.{0} PEmpty)] [P.IsClosedUnderBinaryCoproducts] :
     P.IsClosedUnderIsomorphisms where
   of_iso {X Y} e hX := by
     let h : IsColimit (BinaryCofan.mk (initial.to Y) e.hom) :=
-      BinaryCofan.IsColimit.mk _ (fun _ f => e.inv ≫ f) (by cat_disch) (by simp) (by cat_disch)
+      BinaryCofan.IsColimit.mk _ (fun _ f ↦ e.inv ≫ f) (by cat_disch) (by simp) (by cat_disch)
     exact P.prop_of_isColimit_binaryCofan h P.prop_initial hX
 
-/--
-Definition of `binaryCoproductsClosure` / `binaryCoproductsClosure` 的定义
+/-- All objects that are binary coproducts of objects in `P`. -/
+/-
+**CategoryTheory.ObjectProperty.binaryCoproductsClosure** 是 Mathlib 中的一个缩写定义，位于命
+名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：binaryCoproductsClosure (P : ObjectProperty C) : ObjectProperty C
+参数：P : ObjectProperty C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation binaryCoproductsClosure
-  signature: (P : ObjectProperty C)
-  body: P.colimitClosure (Discrete WalkingPair)
-
-中文:
-缩写 binaryCoproductsClosure
-  签名: (P : ObjectProperty C)
-  定义体: P.colimitClosure (Discrete WalkingPair)
-
-Depends on / 依赖: Discrete, P.colimitClosure, WalkingPair, colimitClosure
+--- 原说明 ---
+All objects that are binary coproducts of objects in `P`.
 -/
 abbrev binaryCoproductsClosure (P : ObjectProperty C) : ObjectProperty C :=
   P.colimitClosure (Discrete WalkingPair)
-
-/--
-lemma `binaryCoproductsClosure_le_iff` / 引理 `binaryCoproductsClosure_le_iff`
-
-English:
-lemma binaryCoproductsClosure_le_iff
-  statement: [HasInitial C] {P Q : ObjectProperty C}
-  proof: by
-  refine ⟨fun h => (P.le_colimitsClosure _).trans h, fun h => ?_⟩
-  let : Q.IsClosedUnderIsomorphisms := IsClosedUnderBinaryCoproducts.closedUnderIsomorphisms Q
-  exact colimitsClosure_le h
-
-中文:
-引理 binaryCoproductsClosure_le_iff
-  结论: [HasInitial C] {P Q : ObjectProperty C}
-  证明: by
-  refine ⟨fun h => (P.le_colimitsClosure _).trans h, fun h => ?_⟩
-  let : Q.IsClosedUnderIsomorphisms := IsClosedUnderBinaryCoproducts.closedUnderIsomorphisms Q
-  exact colimitsClosure_le h
-
-Depends on / 依赖: IsClosedUnderBinaryCoproducts, IsClosedUnderBinaryCoproducts.closedUnderIsomorphisms, IsClosedUnderIsomorphisms, P.le_colimitsClosure, Q.IsClosedUnderIsomorphisms, closedUnderIsomorphisms, colimitsClosure_le, le_colimitsClosure
+/-
+**CategoryTheory.ObjectProperty.binaryCoproductsClosure_le_iff** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：binaryCoproductsClosure_le_iff [HasInitial C] {P Q : ObjectProperty C} [Q.
+IsClosedUnderBinaryCoproducts] [Q.IsClosedUnderColimitsOfShape (Discrete.{0} PEm
+pty)] : P.binaryCoproductsClosure <= Q ↔ P <= Q
+参数：Discrete.{0} PEmpty。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `CategoryTheory.ObjectProperty.le_colimitsClosure`：le_colimitsClosure : P
+ <= P.colimitsClosure J
+· 使用定理 `CategoryTheory.ObjectProperty.IsClosedUnderBinaryCoproducts.closedUnderI
+somorphisms`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (P :
+ CategoryTheory.ObjectProperty C)   [CategoryTheory.Limits.HasInitial C] …
+· 使用引理 `CategoryTheory.ObjectProperty.colimitsClosure_le`：colimitsClosure_le {Q 
+: ObjectProperty C} [Q.IsClosedUnderIsomorphisms] [forall (a : α), Q.IsClosedUnd
+erColimitsOfShape (J a)] (h : P <= Q) …
 -/
 lemma binaryCoproductsClosure_le_iff [HasInitial C] {P Q : ObjectProperty C}
     [Q.IsClosedUnderBinaryCoproducts] [Q.IsClosedUnderColimitsOfShape (Discrete.{0} PEmpty)] :
-    P.binaryCoproductsClosure <= Q ↔ P <= Q := by
-  refine ⟨fun h => (P.le_colimitsClosure _).trans h, fun h => ?_⟩
+    P.binaryCoproductsClosure ≤ Q ↔ P ≤ Q := by
+  refine ⟨fun h ↦ (P.le_colimitsClosure _).trans h, fun h ↦ ?_⟩
   let : Q.IsClosedUnderIsomorphisms := IsClosedUnderBinaryCoproducts.closedUnderIsomorphisms Q
   exact colimitsClosure_le h
 
-/--
-Definition of `IsClosedUnderFiniteCoproducts` / `IsClosedUnderFiniteCoproducts` 的定义
+/-- The typeclass saying that `P : ObjectProperty C` is stable under finite coproducts. -/
+/-
+**CategoryTheory.ObjectProperty.IsClosedUnderFiniteCoproducts** 是 Mathlib 中的一个类，
+位于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：IsClosedUnderFiniteCoproducts : Prop where isClosedUnderColimitsOfShape (J
+ : Type) [Finite J] : P.IsClosedUnderColimitsOfShape (Discrete J)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsClosedUnderFiniteCoproducts
-  parameters: : Prop where
-  axioms and operations (1):
-    - isClosedUnderColimitsOfShape((J : Type) [Finite J]) : P.IsClosedUnderColimitsOfShape (Discrete J)  [default: by infer_instance]
-
-中文:
-类 是ClosedUnderFiniteCoproducts
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - isClosedUnderColimitsOfShape((J : 类型) [有限 J]) : P.是ClosedUnderColimitsOfShape (离散 J)  [默认: by infer_instance]
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+The typeclass saying that `P : ObjectProperty C` is stable under finite coproduc
+ts.
 -/
 class IsClosedUnderFiniteCoproducts : Prop where
   isClosedUnderColimitsOfShape (J : Type) [Finite J] :
     P.IsClosedUnderColimitsOfShape (Discrete J) := by infer_instance
 
 variable {P} in
-/--
-lemma `IsClosedUnderFiniteCoproducts.of_isClosedUnderColimitsOfShape` / 引理 `IsClosedUnderFiniteCoproducts.of_isClosedUnderColimitsOfShape`
+/-- `IsClosedUnderFiniteProducts` may be checked at any universe. -/
+/-
+**CategoryTheory.ObjectProperty.IsClosedUnderFiniteCoproducts.of_isClosedUnderCo
+limitsOfShape** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.ObjectProperty.IsClosedU
+nderFiniteCoproducts`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {P : Catego
+ryTheory.ObjectProperty C},   (∀ (J : Type w) [Finite J], P.IsClosedUnderColimit
+sOfShape (CategoryTheory.Discrete J)) →     P.IsClosedUnderFiniteCoproducts
+参数：∀ (J : Type w) [Finite J], P.IsClosedUnderColimitsOfShape (CategoryTheory.Dis
+crete J)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.ObjectProperty.isClosedUnderColimitsOfShape_iff_of_equiva
+lence`：isClosedUnderColimitsOfShape_iff_of_equivalence (e : J ≌ J') : P.IsClosed
+UnderColimitsOfShape J ↔ P.IsClosedUnderColimitsOfShape J'
 
-English:
-lemma IsClosedUnderFiniteCoproducts.of_isClosedUnderColimitsOfShape
-  proof: by
-    rw [P.isClosedUnderColimitsOfShape_iff_of_equivalence
-      (Discrete.equivalence (equivShrink.{w} _))]
-    exact H _
-
-中文:
-引理 是ClosedUnderFiniteCoproducts.of_isClosedUnderColimitsOfShape
-  证明: by
-    rw [P.isClosedUnderColimitsOfShape_iff_of_equivalence
-      (Discrete.equivalence (equivShrink.{w} _))]
-    exact H _
-
-Depends on / 依赖: Discrete, Discrete.equivalence, P.isClosedUnderColimitsOfShape_iff_of_equivalence, equivShrink, equivalence, isClosedUnderColimitsOfShape_iff_of_equivalence
+--- 原说明 ---
+`IsClosedUnderFiniteProducts` may be checked at any universe.
 -/
 lemma IsClosedUnderFiniteCoproducts.of_isClosedUnderColimitsOfShape
-    (H : forall (J : Type w) [Finite J], P.IsClosedUnderColimitsOfShape (Discrete J)) :
+    (H : ∀ (J : Type w) [Finite J], P.IsClosedUnderColimitsOfShape (Discrete J)) :
     P.IsClosedUnderFiniteCoproducts where
   isClosedUnderColimitsOfShape J _ := by
     rw [P.isClosedUnderColimitsOfShape_iff_of_equivalence
       (Discrete.equivalence (equivShrink.{w} _))]
     exact H _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P.IsClosedUnderFiniteCoproducts]
-  signature: (J : Type*) [Finite J]
-  body: by
-  obtain ⟨n, ⟨e⟩⟩ := Finite.exists_equiv_fin J
-  have : P.IsClosedUnderColimitsOfShape (Discrete (Fin n)) :=
-    IsClosedUnderFiniteCoproducts.isClosedUnderColimitsOfShape _
-  exact IsClosedUnderColimitsOfShape.of_equivalence (Discrete.equivalence e.symm)
-
-中文:
-实例 [P.是ClosedUnderFiniteCoproducts]
-  签名: (J : 类型) [有限 J]
-  定义体: by
-  obtain ⟨n, ⟨e⟩⟩ := Finite.exists_equiv_fin J
-  have : P.IsClosedUnderColimitsOfShape (Discrete (Fin n)) :=
-    IsClosedUnderFiniteCoproducts.isClosedUnderColimitsOfShape _
-  exact IsClosedUnderColimitsOfShape.of_equivalence (Discrete.equivalence e.symm)
-
-Depends on / 依赖: Discrete, Discrete.equivalence, Finite, Finite.exists_equiv_fin, IsClosedUnderColimitsOfShape, IsClosedUnderColimitsOfShape.of_equivalence, IsClosedUnderFiniteCoproducts, IsClosedUnderFiniteCoproducts.isClosedUnderColimitsOfShape, P.IsClosedUnderColimitsOfShape, e.symm, equivalence, exists_equiv_fin, isClosedUnderColimitsOfShape, of_equivalence
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [P.IsClosedUnderFiniteCoproducts] (J : Type*) [Finite J] :
     P.IsClosedUnderColimitsOfShape (Discrete J) := by
@@ -671,92 +599,55 @@ instance [P.IsClosedUnderFiniteCoproducts] (J : Type*) [Finite J] :
   have : P.IsClosedUnderColimitsOfShape (Discrete (Fin n)) :=
     IsClosedUnderFiniteCoproducts.isClosedUnderColimitsOfShape _
   exact IsClosedUnderColimitsOfShape.of_equivalence (Discrete.equivalence e.symm)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasFiniteCoproducts
-  signature: C] [P.IsClosedUnderFiniteCoproducts] :
-  body: inferInstance
-
-中文:
-实例 [有FiniteCoproducts
-  签名: C] [P.是ClosedUnderFiniteCoproducts] :
-  定义体: inferInstance
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasFiniteCoproducts C] [P.IsClosedUnderFiniteCoproducts] :
     HasFiniteCoproducts P.FullSubcategory where
   out _ := inferInstance
-
-/--
-lemma `prop_of_isColimit_cofan` / 引理 `prop_of_isColimit_cofan`
-
-English:
-lemma prop_of_isColimit_cofan
-  statement: [P.IsClosedUnderFiniteCoproducts] {J : Type*} [Finite J] {f : J -> C}
-  proof: P.prop_of_isColimit hF (by intro ⟨j⟩; exact h j)
-
-中文:
-引理 prop_of_isColimit_cofan
-  结论: [P.是ClosedUnderFiniteCoproducts] {J : 类型} [有限 J] {f : J -> C}
-  证明: P.prop_of_isColimit hF (by intro ⟨j⟩; exact h j)
-
-Depends on / 依赖: P.prop_of_isColimit, prop_of_isColimit
+/-
+**CategoryTheory.ObjectProperty.prop_of_isColimit_cofan** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.ObjectProperty`。
+形式化陈述：prop_of_isColimit_cofan [P.IsClosedUnderFiniteCoproducts] {J : Type*} [Fin
+ite J] {f : J -> C} {F : Cofan f} (hF : IsColimit F) (h : forall j, P (f j)) : P
+ F.pt
+参数：hF : IsColimit F；h : forall j, P (f j)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.prop_of_isColimit`：prop_of_isColimit {F : 
+J ⥤ C} {c : Cocone F} (hc : IsColimit c) (hF : forall (j : J), P (F.obj j)) : P 
+c.pt
+· 使用定理 `CategoryTheory.ObjectProperty.instIsClosedUnderColimitsOfShapeDiscreteOf
+IsClosedUnderFiniteCoproductsOfFinite`：∀ {C : Type u_1} [inst : CategoryTheory.C
+ategory.{v_1, u_1} C] (P : CategoryTheory.ObjectProperty C)   [P.IsClosedUnderFi
+niteCoproducts] (J …
 -/
-lemma prop_of_isColimit_cofan [P.IsClosedUnderFiniteCoproducts] {J : Type*} [Finite J] {f : J -> C}
-    {F : Cofan f} (hF : IsColimit F) (h : forall j, P (f j)) :
+lemma prop_of_isColimit_cofan [P.IsClosedUnderFiniteCoproducts] {J : Type*} [Finite J] {f : J → C}
+    {F : Cofan f} (hF : IsColimit F) (h : ∀ j, P (f j)) :
     P F.pt :=
   P.prop_of_isColimit hF (by intro ⟨j⟩; exact h j)
-
-/--
-lemma `prop_coproduct` / 引理 `prop_coproduct`
-
-English:
-lemma prop_coproduct
-  statement: [P.IsClosedUnderFiniteCoproducts] {J : Type*} [Finite J] {f : J -> C}
-  proof: P.prop_of_isColimit_cofan (colimit.isColimit (Discrete.functor f)) h
-
-中文:
-引理 prop_coproduct
-  结论: [P.是ClosedUnderFiniteCoproducts] {J : 类型} [有限 J] {f : J -> C}
-  证明: P.prop_of_isColimit_cofan (colimit.isColimit (Discrete.functor f)) h
-
-Depends on / 依赖: Discrete, Discrete.functor, P.prop_of_isColimit_cofan, colimit, colimit.isColimit, functor, isColimit, prop_of_isColimit_cofan
+/-
+**CategoryTheory.ObjectProperty.prop_coproduct** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.ObjectProperty`。
+形式化陈述：prop_coproduct [P.IsClosedUnderFiniteCoproducts] {J : Type*} [Finite J] {f
+ : J -> C} [HasCoproduct f] (h : forall j, P (f j)) : P (∐ f)
+参数：h : forall j, P (f j)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.prop_of_isColimit_cofan`：prop_of_isColimit
+_cofan [P.IsClosedUnderFiniteCoproducts] {J : Type*} [Finite J] {f : J -> C} {F 
+: Cofan f} (hF : IsColimit F) (h : forall j…
 -/
-lemma prop_coproduct [P.IsClosedUnderFiniteCoproducts] {J : Type*} [Finite J] {f : J -> C}
-    [HasCoproduct f] (h : forall j, P (f j)) :
+lemma prop_coproduct [P.IsClosedUnderFiniteCoproducts] {J : Type*} [Finite J] {f : J → C}
+    [HasCoproduct f] (h : ∀ j, P (f j)) :
     P (∐ f) :=
   P.prop_of_isColimit_cofan (colimit.isColimit (Discrete.functor f)) h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P.ContainsZero]
-  signature: [P.IsClosedUnderIsomorphisms]
-  body: by
-    rintro X ⟨p⟩
-    obtain ⟨Z, hZ, hZ₂⟩ := P.exists_prop_of_containsZero
-    have hX : IsInitial X :=
-      (IsColimit.equivOfNatIsoOfIso p.diag.uniqueFromEmpty _ _
-        (by exact Cocone.ext (Iso.refl _) (by rintro ⟨⟨⟩⟩))).1 p.isColimit
-    exact P.prop_of_isZero (IsZero.of_iso hZ
-      (IsColimit.coconePointUniqueUpToIso hX (IsZero.isInitial hZ)))
-
-中文:
-实例 [P.余ntainsZero]
-  签名: [P.在同构下封闭]
-  定义体: by
-    rintro X ⟨p⟩
-    obtain ⟨Z, hZ, hZ₂⟩ := P.exists_prop_of_containsZero
-    have hX : IsInitial X :=
-      (IsColimit.equivOfNatIsoOfIso p.diag.uniqueFromEmpty _ _
-        (by exact Cocone.ext (Iso.refl _) (by rintro ⟨⟨⟩⟩))).1 p.isColimit
-    exact P.prop_of_isZero (IsZero.of_iso hZ
-      (IsColimit.coconePointUniqueUpToIso hX (IsZero.isInitial hZ)))
-
-Depends on / 依赖: Cocone, Cocone.ext, IsColimit, IsColimit.coconePointUniqueUpToIso, IsColimit.equivOfNatIsoOfIso, IsInitial, IsZero, IsZero.isInitial, IsZero.of_iso, Iso.refl, P.exists_prop_of_containsZero, P.prop_of_isZero, coconePointUniqueUpToIso, equivOfNatIsoOfIso, exists_prop_of_containsZero, isColimit, isInitial, of_iso, p.diag.uniqueFromEmpty, p.isColimit
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [P.ContainsZero] [P.IsClosedUnderIsomorphisms] :
     P.IsClosedUnderColimitsOfShape (Discrete.{0} PEmpty) where
@@ -770,28 +661,30 @@ instance [P.ContainsZero] [P.IsClosedUnderIsomorphisms] :
       (IsColimit.coconePointUniqueUpToIso hX (IsZero.isInitial hZ)))
 
 variable {P} in
-/--
-lemma `IsClosedUnderFiniteCoproducts.mk'` / 引理 `IsClosedUnderFiniteCoproducts.mk'`
-
-English:
-lemma IsClosedUnderFiniteCoproducts.mk'
-  statement: [HasFiniteCoproducts C]
-  proof: by
-  have := IsClosedUnderBinaryCoproducts.closedUnderIsomorphisms P
-  have := hasFiniteCoproducts_of_has_binary_and_initial (C := P.FullSubcategory)
-  have := PreservesFiniteCoproducts.of_preserves_binary_and_initial P.ι
-  exact ⟨fun J _ => P.isClosedUnderColimitsOfShape_of_preservesColimitsOfShape_ι _⟩
-
-中文:
-引理 是ClosedUnderFiniteCoproducts.mk'
-  结论: [有FiniteCoproducts C]
-  证明: by
-  have := IsClosedUnderBinaryCoproducts.closedUnderIsomorphisms P
-  have := hasFiniteCoproducts_of_has_binary_and_initial (C := P.FullSubcategory)
-  have := PreservesFiniteCoproducts.of_preserves_binary_and_initial P.ι
-  exact ⟨fun J _ => P.isClosedUnderColimitsOfShape_of_preservesColimitsOfShape_ι _⟩
-
-Depends on / 依赖: FullSubcategory, IsClosedUnderBinaryCoproducts, IsClosedUnderBinaryCoproducts.closedUnderIsomorphisms, P.FullSubcategory, P.isClosedUnderColimitsOfShape_of_preservesColimitsOfShape_, PreservesFiniteCoproducts, PreservesFiniteCoproducts.of_preserves_binary_and_initial, closedUnderIsomorphisms, hasFiniteCoproducts_of_has_binary_and_initial, of_preserves_binary_and_initial
+/-
+**CategoryTheory.ObjectProperty.IsClosedUnderFiniteCoproducts.mk'** 是 Mathlib 中的
+一个定理，位于命名空间 `CategoryTheory.ObjectProperty.IsClosedUnderFiniteCoproducts`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {P : Catego
+ryTheory.ObjectProperty C}   [CategoryTheory.Limits.HasFiniteCoproducts C] [P.Is
+ClosedUnderColimitsOfShape (CategoryTheory.Discrete PEmpty.{1})]   [P.IsClosedUn
+derBinaryCoproducts], P.IsClosedUnderFiniteCoproducts
+参数：CategoryTheory.Discrete PEmpty.{1}。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.IsClosedUnderBinaryCoproducts.closedUnderI
+somorphisms`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (P :
+ CategoryTheory.ObjectProperty C)   [CategoryTheory.Limits.HasInitial C] …
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `CategoryTheory.hasFiniteCoproducts_of_has_binary_and_initial`：hasFiniteC
+oproducts_of_has_binary_and_initial : HasFiniteCoproducts C
+· 使用定理 `CategoryTheory.PreservesFiniteCoproducts.of_preserves_binary_and_initial
+`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {D : Type u'} [inst_1
+ : CategoryTheory.Category.{v', u'} D]   (F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.preservesColimitOfShape_of_createsColimitsOfShape_and_has
+ColimitsOfShape`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D 
+: Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用引理 `CategoryTheory.ObjectProperty.isClosedUnderColimitsOfShape_of_preservesC
+olimitsOfShape_ι`：isClosedUnderColimitsOfShape_of_preservesColimitsOfShape_ι [Ha
+sColimitsOfShape J P.FullSubcategory] [P.IsClosedUnderIsomorphisms] [Preserves…
 -/
 lemma IsClosedUnderFiniteCoproducts.mk' [HasFiniteCoproducts C]
     [P.IsClosedUnderColimitsOfShape (Discrete.{0} PEmpty)]
@@ -800,6 +693,7 @@ lemma IsClosedUnderFiniteCoproducts.mk' [HasFiniteCoproducts C]
   have := IsClosedUnderBinaryCoproducts.closedUnderIsomorphisms P
   have := hasFiniteCoproducts_of_has_binary_and_initial (C := P.FullSubcategory)
   have := PreservesFiniteCoproducts.of_preserves_binary_and_initial P.ι
-  exact ⟨fun J _ => P.isClosedUnderColimitsOfShape_of_preservesColimitsOfShape_ι _⟩
+  exact ⟨fun J _ ↦ P.isClosedUnderColimitsOfShape_of_preservesColimitsOfShape_ι _⟩
 
 end CategoryTheory.ObjectProperty
+

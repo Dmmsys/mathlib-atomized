@@ -34,75 +34,49 @@ open scoped Topology
 
 /-! ### Definition -/
 
-/--
-Definition of `expGrowthInf` / `expGrowthInf` 的定义
+/-- Lower exponential growth of a sequence of extended nonnegative real numbers. -/
+/-
+**ExpGrowth.expGrowthInf** 是 Mathlib 中的一个定义，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthInf (u : Nat -> Real>=0∞) : EReal
+参数：u : Nat -> Real>=0∞。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition expGrowthInf
-  signature: (u : Nat -> Real>=0∞)
-  body: liminf (fun n => log (u n) / n) atTop
-
-中文:
-定义 expGrowthInf
-  签名: (u : 自然数 -> 实数>=0∞)
-  定义体: liminf (fun n => log (u n) / n) atTop
-
-Depends on / 依赖: liminf
+--- 原说明 ---
+Lower exponential growth of a sequence of extended nonnegative real numbers.
 -/
-noncomputable def expGrowthInf (u : Nat -> Real>=0∞) : EReal := liminf (fun n => log (u n) / n) atTop
+noncomputable def expGrowthInf (u : ℕ → ℝ≥0∞) : EReal := liminf (fun n ↦ log (u n) / n) atTop
 
-/--
-Definition of `expGrowthSup` / `expGrowthSup` 的定义
+/-- Upper exponential growth of a sequence of extended nonnegative real numbers. -/
+/-
+**ExpGrowth.expGrowthSup** 是 Mathlib 中的一个定义，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthSup (u : Nat -> Real>=0∞) : EReal
+参数：u : Nat -> Real>=0∞。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition expGrowthSup
-  signature: (u : Nat -> Real>=0∞)
-  body: limsup (fun n => log (u n) / n) atTop
-
-中文:
-定义 expGrowthSup
-  签名: (u : 自然数 -> 实数>=0∞)
-  定义体: limsup (fun n => log (u n) / n) atTop
-
-Depends on / 依赖: limsup
+--- 原说明 ---
+Upper exponential growth of a sequence of extended nonnegative real numbers.
 -/
-noncomputable def expGrowthSup (u : Nat -> Real>=0∞) : EReal := limsup (fun n => log (u n) / n) atTop
-
-/--
-lemma `expGrowthInf_def` / 引理 `expGrowthInf_def`
-
-English:
-lemma expGrowthInf_def
-  given: {u : Nat -> Real>=0∞}
-  proof: by
-  rfl
-
-中文:
-引理 expGrowthInf_def
-  条件: {u : 自然数 -> 实数>=0∞}
-  证明: by
-  rfl
+noncomputable def expGrowthSup (u : ℕ → ℝ≥0∞) : EReal := limsup (fun n ↦ log (u n) / n) atTop
+/-
+**ExpGrowth.expGrowthInf_def** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthInf_def {u : Nat -> Real>=0∞} : expGrowthInf u = linearGrowthInf 
+(log ∘ u)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma expGrowthInf_def {u : Nat -> Real>=0∞} :
+lemma expGrowthInf_def {u : ℕ → ℝ≥0∞} :
     expGrowthInf u = linearGrowthInf (log ∘ u) := by
   rfl
-
-/--
-lemma `expGrowthSup_def` / 引理 `expGrowthSup_def`
-
-English:
-lemma expGrowthSup_def
-  given: {u : Nat -> Real>=0∞}
-  proof: by
-  rfl
-
-中文:
-引理 expGrowthSup_def
-  条件: {u : 自然数 -> 实数>=0∞}
-  证明: by
-  rfl
+/-
+**ExpGrowth.expGrowthSup_def** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthSup_def {u : Nat -> Real>=0∞} : expGrowthSup u = linearGrowthSup 
+(log ∘ u)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma expGrowthSup_def {u : Nat -> Real>=0∞} :
+lemma expGrowthSup_def {u : ℕ → ℝ≥0∞} :
     expGrowthSup u = linearGrowthSup (log ∘ u) := by
   rfl
 
@@ -110,906 +84,1101 @@ lemma expGrowthSup_def {u : Nat -> Real>=0∞} :
 
 section basic_properties
 
-variable {u v : Nat -> Real>=0∞} {a : EReal} {b : Real>=0∞}
+variable {u v : ℕ → ℝ≥0∞} {a : EReal} {b : ℝ≥0∞}
 
-/--
-lemma `expGrowthInf_congr` / 引理 `expGrowthInf_congr`
-
-English:
-lemma expGrowthInf_congr
-  given: (h : u =ᶠ[atTop] v)
-  proof: liminf_congr (h.mono fun _ uv => uv ▸ rfl)
-
-中文:
-引理 expGrowthInf_congr
-  条件: (h : u =ᶠ[atTop] v)
-  证明: liminf_congr (h.mono fun _ uv => uv ▸ rfl)
-
-Depends on / 依赖: h.mono, liminf_congr
+/-
+**ExpGrowth.expGrowthInf_congr** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthInf_congr (h : u =ᶠ[atTop] v) : expGrowthInf u = expGrowthInf v
+参数：h : u =ᶠ[atTop] v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.liminf_congr`：liminf_congr {α : Type*} [ConditionallyCompleteLatt
+ice β] {f : Filter α} {u v : α -> β} (h : forallᶠ a in f, u a = v a) : liminf u 
+f = limin…
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
 -/
 lemma expGrowthInf_congr (h : u =ᶠ[atTop] v) :
     expGrowthInf u = expGrowthInf v :=
-  liminf_congr (h.mono fun _ uv => uv ▸ rfl)
-
-/--
-lemma `expGrowthSup_congr` / 引理 `expGrowthSup_congr`
-
-English:
-lemma expGrowthSup_congr
-  given: (h : u =ᶠ[atTop] v)
-  proof: limsup_congr (h.mono fun _ uv => uv ▸ rfl)
-
-中文:
-引理 expGrowthSup_congr
-  条件: (h : u =ᶠ[atTop] v)
-  证明: limsup_congr (h.mono fun _ uv => uv ▸ rfl)
-
-Depends on / 依赖: h.mono, limsup_congr
+  liminf_congr (h.mono fun _ uv ↦ uv ▸ rfl)
+/-
+**ExpGrowth.expGrowthSup_congr** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthSup_congr (h : u =ᶠ[atTop] v) : expGrowthSup u = expGrowthSup v
+参数：h : u =ᶠ[atTop] v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.limsup_congr`：limsup_congr {α : Type*} [ConditionallyCompleteLatt
+ice β] {f : Filter α} {u v : α -> β} (h : forallᶠ a in f, u a = v a) : limsup u 
+f = limsu…
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
 -/
 lemma expGrowthSup_congr (h : u =ᶠ[atTop] v) :
     expGrowthSup u = expGrowthSup v :=
-  limsup_congr (h.mono fun _ uv => uv ▸ rfl)
-
-/--
-lemma `expGrowthInf_eventually_monotone` / 引理 `expGrowthInf_eventually_monotone`
-
-English:
-lemma expGrowthInf_eventually_monotone
-  given: (h : u <=ᶠ[atTop] v)
-  proof: liminf_le_liminf (h.mono fun n uv => monotone_div_right_of_nonneg n.cast_nonneg' (log_monotone uv))
-
-中文:
-引理 expGrowthInf_eventually_monotone
-  条件: (h : u <=ᶠ[atTop] v)
-  证明: liminf_le_liminf (h.mono fun n uv => monotone_div_right_of_nonneg n.cast_nonneg' (log_monotone uv))
-
-Depends on / 依赖: cast_nonneg, h.mono, liminf_le_liminf, log_monotone, monotone_div_right_of_nonneg, n.cast_nonneg
+  limsup_congr (h.mono fun _ uv ↦ uv ▸ rfl)
+/-
+**ExpGrowth.expGrowthInf_eventually_monotone** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowt
+h`。
+形式化陈述：expGrowthInf_eventually_monotone (h : u <=ᶠ[atTop] v) : expGrowthInf u <= 
+expGrowthInf v
+参数：h : u <=ᶠ[atTop] v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.liminf_le_liminf`：liminf_le_liminf {α : Type*} [ConditionallyComp
+leteLattice β] {f : Filter α} {u v : α -> β} (h : forallᶠ a in f, u a <= v a) (h
+u : f.IsBound…
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用引理 `EReal.monotone_div_right_of_nonneg`：monotone_div_right_of_nonneg (h : 0 
+<= b) : Monotone fun a => a / b
+· 使用定理 `Nat.cast_nonneg'`：cast_nonneg' (n : Nat) : 0 <= (n : α)
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `instIsOrderedAddMonoidEReal`：IsOrderedAddMonoid EReal
+· 使用定理 `instZeroLEOneClassEReal`：ZeroLEOneClass EReal
+· 使用定理 `ENNReal.log_monotone`：log_monotone : Monotone log
+· 使用定理 `Filter.isBounded_ge_of_bot`：∀ {α : Type u_1} [inst : LE α] [OrderBot α] 
+{f : Filter α}, Filter.IsBounded (fun x1 x2 => x2 ≤ x1) f
+· 使用定理 `Filter.isCobounded_ge_of_top`：∀ {α : Type u_1} [inst : LE α] [OrderTop α
+] {f : Filter α}, Filter.IsCobounded (fun x1 x2 => x2 ≤ x1) f
 -/
-lemma expGrowthInf_eventually_monotone (h : u <=ᶠ[atTop] v) :
-    expGrowthInf u <= expGrowthInf v :=
-  liminf_le_liminf (h.mono fun n uv => monotone_div_right_of_nonneg n.cast_nonneg' (log_monotone uv))
-
-/--
-lemma `expGrowthInf_monotone` / 引理 `expGrowthInf_monotone`
-
-English:
-lemma expGrowthInf_monotone
-  statement: Monotone expGrowthInf
-  proof: fun _ _ uv => expGrowthInf_eventually_monotone (Eventually.of_forall uv)
-
-中文:
-引理 expGrowthInf_monotone
-  结论: 递增 expGrowthInf
-  证明: fun _ _ uv => expGrowthInf_eventually_monotone (Eventually.of_forall uv)
-
-Depends on / 依赖: Eventually, Eventually.of_forall, expGrowthInf_eventually_monotone, of_forall
+lemma expGrowthInf_eventually_monotone (h : u ≤ᶠ[atTop] v) :
+    expGrowthInf u ≤ expGrowthInf v :=
+  liminf_le_liminf (h.mono fun n uv ↦ monotone_div_right_of_nonneg n.cast_nonneg' (log_monotone uv))
+/-
+**ExpGrowth.expGrowthInf_monotone** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthInf_monotone : Monotone expGrowthInf
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ExpGrowth.expGrowthInf_eventually_monotone`：expGrowthInf_eventually_mono
+tone (h : u <=ᶠ[atTop] v) : expGrowthInf u <= expGrowthInf v
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
 -/
 lemma expGrowthInf_monotone : Monotone expGrowthInf :=
-  fun _ _ uv => expGrowthInf_eventually_monotone (Eventually.of_forall uv)
-
-/--
-lemma `expGrowthSup_eventually_monotone` / 引理 `expGrowthSup_eventually_monotone`
-
-English:
-lemma expGrowthSup_eventually_monotone
-  given: (h : u <=ᶠ[atTop] v)
-  proof: limsup_le_limsup (h.mono fun n uv => monotone_div_right_of_nonneg n.cast_nonneg' (log_monotone uv))
-
-中文:
-引理 expGrowthSup_eventually_monotone
-  条件: (h : u <=ᶠ[atTop] v)
-  证明: limsup_le_limsup (h.mono fun n uv => monotone_div_right_of_nonneg n.cast_nonneg' (log_monotone uv))
-
-Depends on / 依赖: cast_nonneg, h.mono, limsup_le_limsup, log_monotone, monotone_div_right_of_nonneg, n.cast_nonneg
+  fun _ _ uv ↦ expGrowthInf_eventually_monotone (Eventually.of_forall uv)
+/-
+**ExpGrowth.expGrowthSup_eventually_monotone** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowt
+h`。
+形式化陈述：expGrowthSup_eventually_monotone (h : u <=ᶠ[atTop] v) : expGrowthSup u <= 
+expGrowthSup v
+参数：h : u <=ᶠ[atTop] v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.limsup_le_limsup`：limsup_le_limsup {α : Type*} [ConditionallyComp
+leteLattice β] {f : Filter α} {u v : α -> β} (h : u <=ᶠ[f] v) (hu : f.IsCobounde
+dUnder (· <= …
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用引理 `EReal.monotone_div_right_of_nonneg`：monotone_div_right_of_nonneg (h : 0 
+<= b) : Monotone fun a => a / b
+· 使用定理 `Nat.cast_nonneg'`：cast_nonneg' (n : Nat) : 0 <= (n : α)
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `instIsOrderedAddMonoidEReal`：IsOrderedAddMonoid EReal
+· 使用定理 `instZeroLEOneClassEReal`：ZeroLEOneClass EReal
+· 使用定理 `ENNReal.log_monotone`：log_monotone : Monotone log
+· 使用定理 `Filter.isCobounded_le_of_bot`：isCobounded_le_of_bot [LE α] [OrderBot α] 
+{f : Filter α} : f.IsCobounded (· <= ·)
+· 使用定理 `Filter.isBounded_le_of_top`：isBounded_le_of_top [LE α] [OrderTop α] {f :
+ Filter α} : f.IsBounded (· <= ·)
 -/
-lemma expGrowthSup_eventually_monotone (h : u <=ᶠ[atTop] v) :
-    expGrowthSup u <= expGrowthSup v :=
-  limsup_le_limsup (h.mono fun n uv => monotone_div_right_of_nonneg n.cast_nonneg' (log_monotone uv))
-
-/--
-lemma `expGrowthSup_monotone` / 引理 `expGrowthSup_monotone`
-
-English:
-lemma expGrowthSup_monotone
-  statement: Monotone expGrowthSup
-  proof: fun _ _ uv => expGrowthSup_eventually_monotone (Eventually.of_forall uv)
-
-中文:
-引理 expGrowthSup_monotone
-  结论: 递增 expGrowthSup
-  证明: fun _ _ uv => expGrowthSup_eventually_monotone (Eventually.of_forall uv)
-
-Depends on / 依赖: Eventually, Eventually.of_forall, expGrowthSup_eventually_monotone, of_forall
+lemma expGrowthSup_eventually_monotone (h : u ≤ᶠ[atTop] v) :
+    expGrowthSup u ≤ expGrowthSup v :=
+  limsup_le_limsup (h.mono fun n uv ↦ monotone_div_right_of_nonneg n.cast_nonneg' (log_monotone uv))
+/-
+**ExpGrowth.expGrowthSup_monotone** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthSup_monotone : Monotone expGrowthSup
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ExpGrowth.expGrowthSup_eventually_monotone`：expGrowthSup_eventually_mono
+tone (h : u <=ᶠ[atTop] v) : expGrowthSup u <= expGrowthSup v
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
 -/
 lemma expGrowthSup_monotone : Monotone expGrowthSup :=
-  fun _ _ uv => expGrowthSup_eventually_monotone (Eventually.of_forall uv)
-
-/--
-lemma `expGrowthInf_le_expGrowthSup` / 引理 `expGrowthInf_le_expGrowthSup`
-
-English:
-lemma expGrowthInf_le_expGrowthSup
-  statement: expGrowthInf u <= expGrowthSup u
-  proof: liminf_le_limsup
-
-中文:
-引理 expGrowthInf_le_expGrowthSup
-  结论: expGrowthInf u <= expGrowthSup u
-  证明: liminf_le_limsup
-
-Depends on / 依赖: liminf_le_limsup
+  fun _ _ uv ↦ expGrowthSup_eventually_monotone (Eventually.of_forall uv)
+/-
+**ExpGrowth.expGrowthInf_le_expGrowthSup** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthInf_le_expGrowthSup : expGrowthInf u <= expGrowthSup u
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.liminf_le_limsup`：liminf_le_limsup {f : Filter β} [NeBot f] {u : 
+β -> α} (h : f.IsBoundedUnder (· <= ·) u
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Filter.isBounded_le_of_top`：isBounded_le_of_top [LE α] [OrderTop α] {f :
+ Filter α} : f.IsBounded (· <= ·)
+· 使用定理 `Filter.isBounded_ge_of_bot`：∀ {α : Type u_1} [inst : LE α] [OrderBot α] 
+{f : Filter α}, Filter.IsBounded (fun x1 x2 => x2 ≤ x1) f
 -/
-lemma expGrowthInf_le_expGrowthSup : expGrowthInf u <= expGrowthSup u := liminf_le_limsup
-
-/--
-lemma `expGrowthInf_le_expGrowthSup_of_frequently_le` / 引理 `expGrowthInf_le_expGrowthSup_of_frequently_le`
-
-English:
-lemma expGrowthInf_le_expGrowthSup_of_frequently_le
-  given: (h : existsᶠ n in atTop, u n <= v n)
-  proof: liminf_le_limsup_of_frequently_le h.mono fun n u_v => by gcongr
-
-中文:
-引理 expGrowthInf_le_expGrowthSup_of_frequently_le
-  条件: (h : 存在ᶠ n in atTop, u n <= v n)
-  证明: liminf_le_limsup_of_frequently_le h.mono fun n u_v => by gcongr
-
-Depends on / 依赖: h.mono, liminf_le_limsup_of_frequently_le
+lemma expGrowthInf_le_expGrowthSup : expGrowthInf u ≤ expGrowthSup u := liminf_le_limsup
+/-
+**ExpGrowth.expGrowthInf_le_expGrowthSup_of_frequently_le** 是 Mathlib 中的一个引理，位于命
+名空间 `ExpGrowth`。
+形式化陈述：expGrowthInf_le_expGrowthSup_of_frequently_le (h : existsᶠ n in atTop, u n
+ <= v n) : expGrowthInf u <= expGrowthSup v
+参数：h : existsᶠ n in atTop, u n <= v n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Filter.liminf_le_limsup_of_frequently_le`：liminf_le_limsup_of_frequently
+_le {v : α -> β} (h : existsᶠ x in f, u x <= v x) (h₁ : f.IsBoundedUnder (· >= ·
+) u
+· 使用定理 `Filter.Frequently.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∃ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∃ᶠ (x : α) in f, q x
+· 使用引理 `EReal.div_le_div_right_of_nonneg`：div_le_div_right_of_nonneg (h : 0 <= c
+) (h' : a <= b) : a / c <= b / c
+· 使用定理 `Nat.cast_nonneg'`：cast_nonneg' (n : Nat) : 0 <= (n : α)
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `instIsOrderedAddMonoidEReal`：IsOrderedAddMonoid EReal
+· 使用定理 `instZeroLEOneClassEReal`：ZeroLEOneClass EReal
+· 使用定理 `ENNReal.log_le_log`：∀ {x y : ENNReal}, x ≤ y → x.log ≤ y.log
+· 使用定理 `Filter.isBounded_ge_of_bot`：∀ {α : Type u_1} [inst : LE α] [OrderBot α] 
+{f : Filter α}, Filter.IsBounded (fun x1 x2 => x2 ≤ x1) f
+· 使用定理 `Filter.isBounded_le_of_top`：isBounded_le_of_top [LE α] [OrderTop α] {f :
+ Filter α} : f.IsBounded (· <= ·)
 -/
-lemma expGrowthInf_le_expGrowthSup_of_frequently_le (h : existsᶠ n in atTop, u n <= v n) :
-    expGrowthInf u <= expGrowthSup v :=
-liminf_le_limsup_of_frequently_le h.mono fun n u_v => by gcongr
-
-/--
-lemma `expGrowthInf_le_iff` / 引理 `expGrowthInf_le_iff`
-
-English:
-lemma expGrowthInf_le_iff
-  proof: by
-  rw [expGrowthInf]; rw [liminf_le_iff']
-  refine forall₂_congr fun b _ => frequently_congr (eventually_atTop.2 ⟨1, fun n _ => ?_⟩)
-  rw [div_le_iff_le_mul (by norm_cast) (natCast_ne_top n)]; rw [← log_exp (n * b)]; rw [mul_comm _ b]
-  exact logOrderIso.le_iff_le
-
-中文:
-引理 expGrowthInf_le_iff
-  证明: by
-  rw [expGrowthInf]; rw [liminf_le_iff']
-  refine forall₂_congr fun b _ => frequently_congr (eventually_atTop.2 ⟨1, fun n _ => ?_⟩)
-  rw [div_le_iff_le_mul (by norm_cast) (natCast_ne_top n)]; rw [← log_exp (n * b)]; rw [mul_comm _ b]
-  exact logOrderIso.le_iff_le
-
-Depends on / 依赖: div_le_iff_le_mul, eventually_atTop, expGrowthInf, frequently_congr, le_iff_le, liminf_le_iff, logOrderIso, logOrderIso.le_iff_le, log_exp, mul_comm, natCast_ne_top
+lemma expGrowthInf_le_expGrowthSup_of_frequently_le (h : ∃ᶠ n in atTop, u n ≤ v n) :
+    expGrowthInf u ≤ expGrowthSup v :=
+  liminf_le_limsup_of_frequently_le <| h.mono fun n u_v ↦ by gcongr
+/-
+**ExpGrowth.expGrowthInf_le_iff** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthInf_le_iff : expGrowthInf u <= a ↔ forall b > a, existsᶠ n : Nat 
+in atTop, u n <= exp (b * n)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ExpGrowth.expGrowthInf.eq_1`：∀ (u : ℕ → ENNReal), ExpGrowth.expGrowthInf
+ u = Filter.liminf (fun n => (u n).log / ↑n) Filter.atTop
+· 使用定理 `Filter.liminf_le_iff'`：liminf_le_iff' [DenselyOrdered β] {x : β} (h₁ : f
+.IsCoboundedUnder (· >= ·) u
+· 使用定理 `instDenselyOrderedEReal`：DenselyOrdered EReal
+· 使用定理 `Filter.isCobounded_ge_of_top`：∀ {α : Type u_1} [inst : LE α] [OrderTop α
+] {f : Filter α}, Filter.IsCobounded (fun x1 x2 => x2 ≤ x1) f
+· 使用定理 `Filter.isBounded_ge_of_bot`：∀ {α : Type u_1} [inst : LE α] [OrderBot α] 
+{f : Filter α}, Filter.IsBounded (fun x1 x2 => x2 ≤ x1) f
+· 使用定理 `forall₂_congr`：∀ {α : Sort u_1} {β : α → Sort u_2} {p q : (a : α) → β a 
+→ Prop},   (∀ (a : α) (b : β a), p a b ↔ q a b) → ((∀ (a : α) (b : β a), p a b) 
+↔ ∀…
+· 使用引理 `Filter.frequently_congr`：frequently_congr {p q : α -> Prop} {f : Filter 
+α} (h : forallᶠ x in f, p x ↔ q x) : (existsᶠ x in f, p x) ↔ existsᶠ x in f, q x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Filter.eventually_atTop`：eventually_atTop : (forallᶠ x in atTop, p x) ↔ 
+exists a, forall b, a <= b -> p b
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用引理 `EReal.div_le_iff_le_mul`：div_le_iff_le_mul (h : 0 < b) (h' : b != ⊤) : a
+ / b <= c ↔ a <= b * c
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `instIsOrderedAddMonoidEReal`：IsOrderedAddMonoid EReal
+· 使用定理 `instZeroLEOneClassEReal`：ZeroLEOneClass EReal
+· 使用定理 `instCharZeroEReal`：CharZero EReal
+· 使用定理 `EReal.natCast_ne_top`：natCast_ne_top (n : Nat) : (n : EReal) != ⊤
+· 使用定理 `EReal.log_exp`：∀ (x : EReal), x.exp.log = x
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `OrderIso.le_iff_le`：le_iff_le (e : α ≃o β) {x y : α} : e x <= e y ↔ x <=
+ y
 -/
 lemma expGrowthInf_le_iff :
-    expGrowthInf u <= a ↔ forall b > a, existsᶠ n : Nat in atTop, u n <= exp (b * n) := by
-  rw [expGrowthInf]; rw [liminf_le_iff']
-  refine forall₂_congr fun b _ => frequently_congr (eventually_atTop.2 ⟨1, fun n _ => ?_⟩)
-  rw [div_le_iff_le_mul (by norm_cast) (natCast_ne_top n)]; rw [← log_exp (n * b)]; rw [mul_comm _ b]
+    expGrowthInf u ≤ a ↔ ∀ b > a, ∃ᶠ n : ℕ in atTop, u n ≤ exp (b * n) := by
+  rw [expGrowthInf, liminf_le_iff']
+  refine forall₂_congr fun b _ ↦ frequently_congr (eventually_atTop.2 ⟨1, fun n _ ↦ ?_⟩)
+  rw [div_le_iff_le_mul (by norm_cast) (natCast_ne_top n), ← log_exp (n * b), mul_comm _ b]
   exact logOrderIso.le_iff_le
-
-/--
-lemma `le_expGrowthInf_iff` / 引理 `le_expGrowthInf_iff`
-
-English:
-lemma le_expGrowthInf_iff
-  proof: by
-  rw [expGrowthInf]; rw [le_liminf_iff']
-  refine forall₂_congr fun b _ => eventually_congr (eventually_atTop.2 ⟨1, fun n _ => ?_⟩)
-  nth_rw 1 [le_div_iff_mul_le (by norm_cast) (natCast_ne_top n), ← log_exp (b * n)]
-  exact logOrderIso.le_iff_le
-
-中文:
-引理 le_expGrowthInf_iff
-  证明: by
-  rw [expGrowthInf]; rw [le_liminf_iff']
-  refine forall₂_congr fun b _ => eventually_congr (eventually_atTop.2 ⟨1, fun n _ => ?_⟩)
-  nth_rw 1 [le_div_iff_mul_le (by norm_cast) (natCast_ne_top n), ← log_exp (b * n)]
-  exact logOrderIso.le_iff_le
-
-Depends on / 依赖: eventually_atTop, eventually_congr, expGrowthInf, le_div_iff_mul_le, le_iff_le, le_liminf_iff, logOrderIso, logOrderIso.le_iff_le, log_exp, natCast_ne_top, nth_rw
+/-
+**ExpGrowth.le_expGrowthInf_iff** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：le_expGrowthInf_iff : a <= expGrowthInf u ↔ forall b < a, forallᶠ n : Nat 
+in atTop, exp (b * n) <= u n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ExpGrowth.expGrowthInf.eq_1`：∀ (u : ℕ → ENNReal), ExpGrowth.expGrowthInf
+ u = Filter.liminf (fun n => (u n).log / ↑n) Filter.atTop
+· 使用定理 `Filter.le_liminf_iff'`：le_liminf_iff' [DenselyOrdered β] {x : β} (h₁ : f
+.IsCoboundedUnder (· >= ·) u
+· 使用定理 `instDenselyOrderedEReal`：DenselyOrdered EReal
+· 使用定理 `Filter.isCobounded_ge_of_top`：∀ {α : Type u_1} [inst : LE α] [OrderTop α
+] {f : Filter α}, Filter.IsCobounded (fun x1 x2 => x2 ≤ x1) f
+· 使用定理 `Filter.isBounded_ge_of_bot`：∀ {α : Type u_1} [inst : LE α] [OrderBot α] 
+{f : Filter α}, Filter.IsBounded (fun x1 x2 => x2 ≤ x1) f
+· 使用定理 `forall₂_congr`：∀ {α : Sort u_1} {β : α → Sort u_2} {p q : (a : α) → β a 
+→ Prop},   (∀ (a : α) (b : β a), p a b ↔ q a b) → ((∀ (a : α) (b : β a), p a b) 
+↔ ∀…
+· 使用定理 `Filter.eventually_congr`：eventually_congr {f : Filter α} {p q : α -> Pro
+p} (h : forallᶠ x in f, p x ↔ q x) : (forallᶠ x in f, p x) ↔ forallᶠ x in f, q x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Filter.eventually_atTop`：eventually_atTop : (forallᶠ x in atTop, p x) ↔ 
+exists a, forall b, a <= b -> p b
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用引理 `EReal.le_div_iff_mul_le`：le_div_iff_mul_le (h : b > 0) (h' : b != ⊤) : a
+ <= c / b ↔ a * b <= c
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `instIsOrderedAddMonoidEReal`：IsOrderedAddMonoid EReal
+· 使用定理 `instZeroLEOneClassEReal`：ZeroLEOneClass EReal
+· 使用定理 `instCharZeroEReal`：CharZero EReal
+· 使用定理 `EReal.natCast_ne_top`：natCast_ne_top (n : Nat) : (n : EReal) != ⊤
+· 使用定理 `EReal.log_exp`：∀ (x : EReal), x.exp.log = x
+· 使用定理 `OrderIso.le_iff_le`：le_iff_le (e : α ≃o β) {x y : α} : e x <= e y ↔ x <=
+ y
 -/
 lemma le_expGrowthInf_iff :
-    a <= expGrowthInf u ↔ forall b < a, forallᶠ n : Nat in atTop, exp (b * n) <= u n := by
-  rw [expGrowthInf]; rw [le_liminf_iff']
-  refine forall₂_congr fun b _ => eventually_congr (eventually_atTop.2 ⟨1, fun n _ => ?_⟩)
+    a ≤ expGrowthInf u ↔ ∀ b < a, ∀ᶠ n : ℕ in atTop, exp (b * n) ≤ u n := by
+  rw [expGrowthInf, le_liminf_iff']
+  refine forall₂_congr fun b _ ↦ eventually_congr (eventually_atTop.2 ⟨1, fun n _ ↦ ?_⟩)
   nth_rw 1 [le_div_iff_mul_le (by norm_cast) (natCast_ne_top n), ← log_exp (b * n)]
   exact logOrderIso.le_iff_le
-
-/--
-lemma `expGrowthSup_le_iff` / 引理 `expGrowthSup_le_iff`
-
-English:
-lemma expGrowthSup_le_iff
-  proof: by
-  rw [expGrowthSup]; rw [limsup_le_iff']
-  refine forall₂_congr fun b _ => eventually_congr (eventually_atTop.2 ⟨1, fun n _ => ?_⟩)
-  rw [div_le_iff_le_mul (by norm_cast) (natCast_ne_top n)]; rw [← log_exp (n * b)]; rw [mul_comm _ b]
-  exact logOrderIso.le_iff_le
-
-中文:
-引理 expGrowthSup_le_iff
-  证明: by
-  rw [expGrowthSup]; rw [limsup_le_iff']
-  refine forall₂_congr fun b _ => eventually_congr (eventually_atTop.2 ⟨1, fun n _ => ?_⟩)
-  rw [div_le_iff_le_mul (by norm_cast) (natCast_ne_top n)]; rw [← log_exp (n * b)]; rw [mul_comm _ b]
-  exact logOrderIso.le_iff_le
-
-Depends on / 依赖: div_le_iff_le_mul, eventually_atTop, eventually_congr, expGrowthSup, le_iff_le, limsup_le_iff, logOrderIso, logOrderIso.le_iff_le, log_exp, mul_comm, natCast_ne_top
+/-
+**ExpGrowth.expGrowthSup_le_iff** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthSup_le_iff : expGrowthSup u <= a ↔ forall b > a, forallᶠ n : Nat 
+in atTop, u n <= exp (b * n)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ExpGrowth.expGrowthSup.eq_1`：∀ (u : ℕ → ENNReal), ExpGrowth.expGrowthSup
+ u = Filter.limsup (fun n => (u n).log / ↑n) Filter.atTop
+· 使用引理 `Filter.limsup_le_iff'`：limsup_le_iff' [DenselyOrdered β] {x : β} (h₁ : I
+sCoboundedUnder (· <= ·) f u
+· 使用定理 `instDenselyOrderedEReal`：DenselyOrdered EReal
+· 使用定理 `Filter.isCobounded_le_of_bot`：isCobounded_le_of_bot [LE α] [OrderBot α] 
+{f : Filter α} : f.IsCobounded (· <= ·)
+· 使用定理 `Filter.isBounded_le_of_top`：isBounded_le_of_top [LE α] [OrderTop α] {f :
+ Filter α} : f.IsBounded (· <= ·)
+· 使用定理 `forall₂_congr`：∀ {α : Sort u_1} {β : α → Sort u_2} {p q : (a : α) → β a 
+→ Prop},   (∀ (a : α) (b : β a), p a b ↔ q a b) → ((∀ (a : α) (b : β a), p a b) 
+↔ ∀…
+· 使用定理 `Filter.eventually_congr`：eventually_congr {f : Filter α} {p q : α -> Pro
+p} (h : forallᶠ x in f, p x ↔ q x) : (forallᶠ x in f, p x) ↔ forallᶠ x in f, q x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Filter.eventually_atTop`：eventually_atTop : (forallᶠ x in atTop, p x) ↔ 
+exists a, forall b, a <= b -> p b
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用引理 `EReal.div_le_iff_le_mul`：div_le_iff_le_mul (h : 0 < b) (h' : b != ⊤) : a
+ / b <= c ↔ a <= b * c
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `instIsOrderedAddMonoidEReal`：IsOrderedAddMonoid EReal
+· 使用定理 `instZeroLEOneClassEReal`：ZeroLEOneClass EReal
+· 使用定理 `instCharZeroEReal`：CharZero EReal
+· 使用定理 `EReal.natCast_ne_top`：natCast_ne_top (n : Nat) : (n : EReal) != ⊤
+· 使用定理 `EReal.log_exp`：∀ (x : EReal), x.exp.log = x
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `OrderIso.le_iff_le`：le_iff_le (e : α ≃o β) {x y : α} : e x <= e y ↔ x <=
+ y
 -/
 lemma expGrowthSup_le_iff :
-    expGrowthSup u <= a ↔ forall b > a, forallᶠ n : Nat in atTop, u n <= exp (b * n) := by
-  rw [expGrowthSup]; rw [limsup_le_iff']
-  refine forall₂_congr fun b _ => eventually_congr (eventually_atTop.2 ⟨1, fun n _ => ?_⟩)
-  rw [div_le_iff_le_mul (by norm_cast) (natCast_ne_top n)]; rw [← log_exp (n * b)]; rw [mul_comm _ b]
+    expGrowthSup u ≤ a ↔ ∀ b > a, ∀ᶠ n : ℕ in atTop, u n ≤ exp (b * n) := by
+  rw [expGrowthSup, limsup_le_iff']
+  refine forall₂_congr fun b _ ↦ eventually_congr (eventually_atTop.2 ⟨1, fun n _ ↦ ?_⟩)
+  rw [div_le_iff_le_mul (by norm_cast) (natCast_ne_top n), ← log_exp (n * b), mul_comm _ b]
   exact logOrderIso.le_iff_le
-
-/--
-lemma `le_expGrowthSup_iff` / 引理 `le_expGrowthSup_iff`
-
-English:
-lemma le_expGrowthSup_iff
-  proof: by
-  rw [expGrowthSup]; rw [le_limsup_iff']
-  refine forall₂_congr fun b _ => frequently_congr (eventually_atTop.2 ⟨1, fun n _ => ?_⟩)
-  nth_rw 1 [le_div_iff_mul_le (by norm_cast) (natCast_ne_top n), ← log_exp (b * n)]
-  exact logOrderIso.le_iff_le
-
-中文:
-引理 le_expGrowthSup_iff
-  证明: by
-  rw [expGrowthSup]; rw [le_limsup_iff']
-  refine forall₂_congr fun b _ => frequently_congr (eventually_atTop.2 ⟨1, fun n _ => ?_⟩)
-  nth_rw 1 [le_div_iff_mul_le (by norm_cast) (natCast_ne_top n), ← log_exp (b * n)]
-  exact logOrderIso.le_iff_le
-
-Depends on / 依赖: eventually_atTop, expGrowthSup, frequently_congr, le_div_iff_mul_le, le_iff_le, le_limsup_iff, logOrderIso, logOrderIso.le_iff_le, log_exp, natCast_ne_top, nth_rw
+/-
+**ExpGrowth.le_expGrowthSup_iff** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：le_expGrowthSup_iff : a <= expGrowthSup u ↔ forall b < a, existsᶠ n : Nat 
+in atTop, exp (b * n) <= u n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ExpGrowth.expGrowthSup.eq_1`：∀ (u : ℕ → ENNReal), ExpGrowth.expGrowthSup
+ u = Filter.limsup (fun n => (u n).log / ↑n) Filter.atTop
+· 使用引理 `Filter.le_limsup_iff'`：le_limsup_iff' [DenselyOrdered β] {x : β} (h₁ : f
+.IsCoboundedUnder (· <= ·) u
+· 使用定理 `instDenselyOrderedEReal`：DenselyOrdered EReal
+· 使用定理 `Filter.isCobounded_le_of_bot`：isCobounded_le_of_bot [LE α] [OrderBot α] 
+{f : Filter α} : f.IsCobounded (· <= ·)
+· 使用定理 `Filter.isBounded_le_of_top`：isBounded_le_of_top [LE α] [OrderTop α] {f :
+ Filter α} : f.IsBounded (· <= ·)
+· 使用定理 `forall₂_congr`：∀ {α : Sort u_1} {β : α → Sort u_2} {p q : (a : α) → β a 
+→ Prop},   (∀ (a : α) (b : β a), p a b ↔ q a b) → ((∀ (a : α) (b : β a), p a b) 
+↔ ∀…
+· 使用引理 `Filter.frequently_congr`：frequently_congr {p q : α -> Prop} {f : Filter 
+α} (h : forallᶠ x in f, p x ↔ q x) : (existsᶠ x in f, p x) ↔ existsᶠ x in f, q x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Filter.eventually_atTop`：eventually_atTop : (forallᶠ x in atTop, p x) ↔ 
+exists a, forall b, a <= b -> p b
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用引理 `EReal.le_div_iff_mul_le`：le_div_iff_mul_le (h : b > 0) (h' : b != ⊤) : a
+ <= c / b ↔ a * b <= c
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `instIsOrderedAddMonoidEReal`：IsOrderedAddMonoid EReal
+· 使用定理 `instZeroLEOneClassEReal`：ZeroLEOneClass EReal
+· 使用定理 `instCharZeroEReal`：CharZero EReal
+· 使用定理 `EReal.natCast_ne_top`：natCast_ne_top (n : Nat) : (n : EReal) != ⊤
+· 使用定理 `EReal.log_exp`：∀ (x : EReal), x.exp.log = x
+· 使用定理 `OrderIso.le_iff_le`：le_iff_le (e : α ≃o β) {x y : α} : e x <= e y ↔ x <=
+ y
 -/
 lemma le_expGrowthSup_iff :
-    a <= expGrowthSup u ↔ forall b < a, existsᶠ n : Nat in atTop, exp (b * n) <= u n := by
-  rw [expGrowthSup]; rw [le_limsup_iff']
-  refine forall₂_congr fun b _ => frequently_congr (eventually_atTop.2 ⟨1, fun n _ => ?_⟩)
+    a ≤ expGrowthSup u ↔ ∀ b < a, ∃ᶠ n : ℕ in atTop, exp (b * n) ≤ u n := by
+  rw [expGrowthSup, le_limsup_iff']
+  refine forall₂_congr fun b _ ↦ frequently_congr (eventually_atTop.2 ⟨1, fun n _ ↦ ?_⟩)
   nth_rw 1 [le_div_iff_mul_le (by norm_cast) (natCast_ne_top n), ← log_exp (b * n)]
   exact logOrderIso.le_iff_le
 
-/--
-lemma `frequently_le_exp` / 引理 `frequently_le_exp`
+/- Forward direction of `expGrowthInf_le_iff`. -/
+/-
+**ExpGrowth.frequently_le_exp** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：frequently_le_exp (h : expGrowthInf u < a) : existsᶠ n : Nat in atTop, u n
+ <= exp (a * n)
+参数：h : expGrowthInf u < a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `ExpGrowth.expGrowthInf_le_iff`：expGrowthInf_le_iff : expGrowthInf u <= a
+ ↔ forall b > a, existsᶠ n : Nat in atTop, u n <= exp (b * n)
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 
-English:
-lemma frequently_le_exp
-  given: (h : expGrowthInf u < a)
-  proof: expGrowthInf_le_iff.1 (le_refl (expGrowthInf u)) a h
-
-中文:
-引理 frequently_le_exp
-  条件: (h : expGrowthInf u < a)
-  证明: expGrowthInf_le_iff.1 (le_refl (expGrowthInf u)) a h
-
-Depends on / 依赖: expGrowthInf, expGrowthInf_le_iff, le_refl
+--- 原说明 ---
+Forward direction of `expGrowthInf_le_iff`.
 -/
 lemma frequently_le_exp (h : expGrowthInf u < a) :
-    existsᶠ n : Nat in atTop, u n <= exp (a * n) :=
+    ∃ᶠ n : ℕ in atTop, u n ≤ exp (a * n) :=
   expGrowthInf_le_iff.1 (le_refl (expGrowthInf u)) a h
 
-/--
-lemma `eventually_exp_le` / 引理 `eventually_exp_le`
+/- Forward direction of `le_expGrowthInf_iff`. -/
+/-
+**ExpGrowth.eventually_exp_le** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：eventually_exp_le (h : a < expGrowthInf u) : forallᶠ n : Nat in atTop, exp
+ (a * n) <= u n
+参数：h : a < expGrowthInf u。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `ExpGrowth.le_expGrowthInf_iff`：le_expGrowthInf_iff : a <= expGrowthInf u
+ ↔ forall b < a, forallᶠ n : Nat in atTop, exp (b * n) <= u n
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 
-English:
-lemma eventually_exp_le
-  given: (h : a < expGrowthInf u)
-  proof: le_expGrowthInf_iff.1 (le_refl (expGrowthInf u)) a h
-
-中文:
-引理 eventually_exp_le
-  条件: (h : a < expGrowthInf u)
-  证明: le_expGrowthInf_iff.1 (le_refl (expGrowthInf u)) a h
-
-Depends on / 依赖: expGrowthInf, le_expGrowthInf_iff, le_refl
+--- 原说明 ---
+Forward direction of `le_expGrowthInf_iff`.
 -/
 lemma eventually_exp_le (h : a < expGrowthInf u) :
-    forallᶠ n : Nat in atTop, exp (a * n) <= u n :=
+    ∀ᶠ n : ℕ in atTop, exp (a * n) ≤ u n :=
   le_expGrowthInf_iff.1 (le_refl (expGrowthInf u)) a h
 
-/--
-lemma `eventually_le_exp` / 引理 `eventually_le_exp`
+/- Forward direction of `expGrowthSup_le_iff`. -/
+/-
+**ExpGrowth.eventually_le_exp** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：eventually_le_exp (h : expGrowthSup u < a) : forallᶠ n : Nat in atTop, u n
+ <= exp (a * n)
+参数：h : expGrowthSup u < a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `ExpGrowth.expGrowthSup_le_iff`：expGrowthSup_le_iff : expGrowthSup u <= a
+ ↔ forall b > a, forallᶠ n : Nat in atTop, u n <= exp (b * n)
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 
-English:
-lemma eventually_le_exp
-  given: (h : expGrowthSup u < a)
-  proof: expGrowthSup_le_iff.1 (le_refl (expGrowthSup u)) a h
-
-中文:
-引理 eventually_le_exp
-  条件: (h : expGrowthSup u < a)
-  证明: expGrowthSup_le_iff.1 (le_refl (expGrowthSup u)) a h
-
-Depends on / 依赖: expGrowthSup, expGrowthSup_le_iff, le_refl
+--- 原说明 ---
+Forward direction of `expGrowthSup_le_iff`.
 -/
 lemma eventually_le_exp (h : expGrowthSup u < a) :
-    forallᶠ n : Nat in atTop, u n <= exp (a * n) :=
+    ∀ᶠ n : ℕ in atTop, u n ≤ exp (a * n) :=
   expGrowthSup_le_iff.1 (le_refl (expGrowthSup u)) a h
 
-/--
-lemma `frequently_exp_le` / 引理 `frequently_exp_le`
+/- Forward direction of `le_expGrowthSup_iff`. -/
+/-
+**ExpGrowth.frequently_exp_le** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：frequently_exp_le (h : a < expGrowthSup u) : existsᶠ n : Nat in atTop, exp
+ (a * n) <= u n
+参数：h : a < expGrowthSup u。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `ExpGrowth.le_expGrowthSup_iff`：le_expGrowthSup_iff : a <= expGrowthSup u
+ ↔ forall b < a, existsᶠ n : Nat in atTop, exp (b * n) <= u n
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 
-English:
-lemma frequently_exp_le
-  given: (h : a < expGrowthSup u)
-  proof: le_expGrowthSup_iff.1 (le_refl (expGrowthSup u)) a h
-
-中文:
-引理 frequently_exp_le
-  条件: (h : a < expGrowthSup u)
-  证明: le_expGrowthSup_iff.1 (le_refl (expGrowthSup u)) a h
-
-Depends on / 依赖: expGrowthSup, le_expGrowthSup_iff, le_refl
+--- 原说明 ---
+Forward direction of `le_expGrowthSup_iff`.
 -/
 lemma frequently_exp_le (h : a < expGrowthSup u) :
-    existsᶠ n : Nat in atTop, exp (a * n) <= u n :=
+    ∃ᶠ n : ℕ in atTop, exp (a * n) ≤ u n :=
   le_expGrowthSup_iff.1 (le_refl (expGrowthSup u)) a h
-
-/--
-lemma `_root_.Frequently.expGrowthInf_le` / 引理 `_root_.Frequently.expGrowthInf_le`
-
-English:
-lemma _root_.Frequently.expGrowthInf_le
-  given: (h : existsᶠ n : Nat in atTop, u n <= exp (a * n))
-  proof: by
-  apply expGrowthInf_le_iff.2 fun c c_u => h.mono fun n hn => hn.trans ?_
+/-
+**ExpGrowth._root_.Frequently.expGrowthInf_le** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrow
+th`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+lemma _root_.Frequently.expGrowthInf_le (h : ∃ᶠ n : ℕ in atTop, u n ≤ exp (a * n)) :
+    expGrowthInf u ≤ a := by
+  apply expGrowthInf_le_iff.2 fun c c_u ↦ h.mono fun n hn ↦ hn.trans ?_
   gcongr
-
-中文:
-引理 _root_.Frequently.expGrowthInf_le
-  条件: (h : 存在ᶠ n : 自然数 in atTop, u n <= exp (a * n))
-  证明: by
-  apply expGrowthInf_le_iff.2 fun c c_u => h.mono fun n hn => hn.trans ?_
-  gcongr
-
-Depends on / 依赖: expGrowthInf_le_iff, h.mono, hn.trans
+/-
+**ExpGrowth._root_.Eventually.le_expGrowthInf** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrow
+th`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.Frequently.expGrowthInf_le (h : existsᶠ n : Nat in atTop, u n <= exp (a * n)) :
-    expGrowthInf u <= a := by
-  apply expGrowthInf_le_iff.2 fun c c_u => h.mono fun n hn => hn.trans ?_
-  gcongr
-
-/--
-lemma `_root_.Eventually.le_expGrowthInf` / 引理 `_root_.Eventually.le_expGrowthInf`
-
-English:
-lemma _root_.Eventually.le_expGrowthInf
-  given: (h : forallᶠ n : Nat in atTop, exp (a * n) <= u n)
-  proof: le_expGrowthInf_iff.2 fun c c_u => h.mono fun n hn => hn.trans' by gcongr
-
-中文:
-引理 _root_.Eventually.le_expGrowthInf
-  条件: (h : 对任意ᶠ n : 自然数 in atTop, exp (a * n) <= u n)
-  证明: le_expGrowthInf_iff.2 fun c c_u => h.mono fun n hn => hn.trans' by gcongr
-
-Depends on / 依赖: h.mono, hn.trans, le_expGrowthInf_iff
+lemma _root_.Eventually.le_expGrowthInf (h : ∀ᶠ n : ℕ in atTop, exp (a * n) ≤ u n) :
+    a ≤ expGrowthInf u :=
+  le_expGrowthInf_iff.2 fun c c_u ↦ h.mono fun n hn ↦ hn.trans' <| by gcongr
+/-
+**ExpGrowth._root_.Eventually.expGrowthSup_le** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrow
+th`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.Eventually.le_expGrowthInf (h : forallᶠ n : Nat in atTop, exp (a * n) <= u n) :
-    a <= expGrowthInf u :=
-le_expGrowthInf_iff.2 fun c c_u => h.mono fun n hn => hn.trans' by gcongr
-
-/--
-lemma `_root_.Eventually.expGrowthSup_le` / 引理 `_root_.Eventually.expGrowthSup_le`
-
-English:
-lemma _root_.Eventually.expGrowthSup_le
-  given: (h : forallᶠ n : Nat in atTop, u n <= exp (a * n))
-  proof: expGrowthSup_le_iff.2 fun c c_u => h.mono fun n hn => hn.trans by gcongr
-
-中文:
-引理 _root_.Eventually.expGrowthSup_le
-  条件: (h : 对任意ᶠ n : 自然数 in atTop, u n <= exp (a * n))
-  证明: expGrowthSup_le_iff.2 fun c c_u => h.mono fun n hn => hn.trans by gcongr
-
-Depends on / 依赖: expGrowthSup_le_iff, h.mono, hn.trans
+lemma _root_.Eventually.expGrowthSup_le (h : ∀ᶠ n : ℕ in atTop, u n ≤ exp (a * n)) :
+    expGrowthSup u ≤ a :=
+  expGrowthSup_le_iff.2 fun c c_u ↦ h.mono fun n hn ↦ hn.trans <| by gcongr
+/-
+**ExpGrowth._root_.Frequently.le_expGrowthSup** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrow
+th`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.Eventually.expGrowthSup_le (h : forallᶠ n : Nat in atTop, u n <= exp (a * n)) :
-    expGrowthSup u <= a :=
-expGrowthSup_le_iff.2 fun c c_u => h.mono fun n hn => hn.trans by gcongr
+lemma _root_.Frequently.le_expGrowthSup (h : ∃ᶠ n : ℕ in atTop, exp (a * n) ≤ u n) :
+    a ≤ expGrowthSup u :=
+  le_expGrowthSup_iff.2 fun c c_u ↦ h.mono fun n hn ↦ hn.trans' <| by gcongr
 
-/--
-lemma `_root_.Frequently.le_expGrowthSup` / 引理 `_root_.Frequently.le_expGrowthSup`
+/-! ### Special cases -/
 
-English:
-lemma _root_.Frequently.le_expGrowthSup
-  given: (h : existsᶠ n : Nat in atTop, exp (a * n) <= u n)
-  proof: le_expGrowthSup_iff.2 fun c c_u => h.mono fun n hn => hn.trans' by gcongr
+/-
+**ExpGrowth.expGrowthSup_zero** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthSup_zero : expGrowthSup 0 = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `LinearGrowth.linearGrowthSup_bot`：linearGrowthSup_bot : linearGrowthSup 
+(⊥ : Nat -> EReal) = (⊥ : EReal)
+· 使用引理 `ExpGrowth.expGrowthSup_def`：expGrowthSup_def {u : Nat -> Real>=0∞} : exp
+GrowthSup u = linearGrowthSup (log ∘ u)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
+· 使用定理 `Pi.zero_apply`：∀ {ι : Type u_1} {M : ι → Type u_5} [inst : (i : ι) → Zer
+o (M i)] (i : ι), 0 i = 0
+· 使用定理 `Pi.bot_apply`：bot_apply [forall i, Bot (α' i)] (i : ι) : (⊥ : forall i, 
+α' i) i = ⊥
+· 使用定理 `ENNReal.log_zero`：ENNReal.log 0 = ⊥
 
-中文:
-引理 _root_.Frequently.le_expGrowthSup
-  条件: (h : 存在ᶠ n : 自然数 in atTop, exp (a * n) <= u n)
-  证明: le_expGrowthSup_iff.2 fun c c_u => h.mono fun n hn => hn.trans' by gcongr
-
-Depends on / 依赖: h.mono, hn.trans, le_expGrowthSup_iff
--/
-lemma _root_.Frequently.le_expGrowthSup (h : existsᶠ n : Nat in atTop, exp (a * n) <= u n) :
-    a <= expGrowthSup u :=
-le_expGrowthSup_iff.2 fun c c_u => h.mono fun n hn => hn.trans' by gcongr
-
-
-/--
-lemma `expGrowthSup_zero` / 引理 `expGrowthSup_zero`
-
-English:
-lemma expGrowthSup_zero
-  statement: expGrowthSup 0 = ⊥
-  proof: by
-  rw [← linearGrowthSup_bot]; rw [expGrowthSup_def]
-  congr 1
-  ext _
-  rw [comp_apply]; rw [Pi.zero_apply]; rw [Pi.bot_apply]; rw [log_zero]
-
-中文:
-引理 expGrowthSup_zero
-  结论: expGrowthSup 0 = ⊥
-  证明: by
-  rw [← linearGrowthSup_bot]; rw [expGrowthSup_def]
-  congr 1
-  ext _
-  rw [comp_apply]; rw [Pi.zero_apply]; rw [Pi.bot_apply]; rw [log_zero]
-
-Depends on / 依赖: Pi.bot_apply, Pi.zero_apply, bot_apply, comp_apply, expGrowthSup_def, linearGrowthSup_bot, log_zero, zero_apply
+--- 原说明 ---
+### Special cases
 -/
 lemma expGrowthSup_zero : expGrowthSup 0 = ⊥ := by
-  rw [← linearGrowthSup_bot]; rw [expGrowthSup_def]
+  rw [← linearGrowthSup_bot, expGrowthSup_def]
   congr 1
   ext _
-  rw [comp_apply]; rw [Pi.zero_apply]; rw [Pi.bot_apply]; rw [log_zero]
-
-/--
-lemma `expGrowthInf_zero` / 引理 `expGrowthInf_zero`
-
-English:
-lemma expGrowthInf_zero
-  statement: expGrowthInf 0 = ⊥
-  proof: by
-  apply le_bot_iff.1
-  rw [← expGrowthSup_zero]
-  exact expGrowthInf_le_expGrowthSup
-
-中文:
-引理 expGrowthInf_zero
-  结论: expGrowthInf 0 = ⊥
-  证明: by
-  apply le_bot_iff.1
-  rw [← expGrowthSup_zero]
-  exact expGrowthInf_le_expGrowthSup
-
-Depends on / 依赖: expGrowthInf_le_expGrowthSup, expGrowthSup_zero, le_bot_iff
+  rw [comp_apply, Pi.zero_apply, Pi.bot_apply, log_zero]
+/-
+**ExpGrowth.expGrowthInf_zero** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthInf_zero : expGrowthInf 0 = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `le_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a ≤ ⊥ ↔ a = ⊥
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `ExpGrowth.expGrowthSup_zero`：expGrowthSup_zero : expGrowthSup 0 = ⊥
+· 使用引理 `ExpGrowth.expGrowthInf_le_expGrowthSup`：expGrowthInf_le_expGrowthSup : e
+xpGrowthInf u <= expGrowthSup u
 -/
 lemma expGrowthInf_zero : expGrowthInf 0 = ⊥ := by
   apply le_bot_iff.1
   rw [← expGrowthSup_zero]
   exact expGrowthInf_le_expGrowthSup
-
-/--
-lemma `expGrowthInf_top` / 引理 `expGrowthInf_top`
-
-English:
-lemma expGrowthInf_top
-  statement: expGrowthInf ⊤ = ⊤
-  proof: by
-  rw [← linearGrowthInf_top]; rw [expGrowthInf_def]
-  rfl
-
-中文:
-引理 expGrowthInf_top
-  结论: expGrowthInf ⊤ = ⊤
-  证明: by
-  rw [← linearGrowthInf_top]; rw [expGrowthInf_def]
-  rfl
-
-Depends on / 依赖: expGrowthInf_def, linearGrowthInf_top
+/-
+**ExpGrowth.expGrowthInf_top** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthInf_top : expGrowthInf ⊤ = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `LinearGrowth.linearGrowthInf_top`：linearGrowthInf_top : linearGrowthInf 
+⊤ = (⊤ : EReal)
+· 使用引理 `ExpGrowth.expGrowthInf_def`：expGrowthInf_def {u : Nat -> Real>=0∞} : exp
+GrowthInf u = linearGrowthInf (log ∘ u)
 -/
 lemma expGrowthInf_top : expGrowthInf ⊤ = ⊤ := by
-  rw [← linearGrowthInf_top]; rw [expGrowthInf_def]
+  rw [← linearGrowthInf_top, expGrowthInf_def]
   rfl
-
-/--
-lemma `expGrowthSup_top` / 引理 `expGrowthSup_top`
-
-English:
-lemma expGrowthSup_top
-  statement: expGrowthSup ⊤ = ⊤
-  proof: by
-  apply top_le_iff.1
-  rw [← expGrowthInf_top]
-  exact expGrowthInf_le_expGrowthSup
-
-中文:
-引理 expGrowthSup_top
-  结论: expGrowthSup ⊤ = ⊤
-  证明: by
-  apply top_le_iff.1
-  rw [← expGrowthInf_top]
-  exact expGrowthInf_le_expGrowthSup
-
-Depends on / 依赖: expGrowthInf_le_expGrowthSup, expGrowthInf_top, top_le_iff
+/-
+**ExpGrowth.expGrowthSup_top** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthSup_top : expGrowthSup ⊤ = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `top_le_iff`：top_le_iff : ⊤ <= a ↔ a = ⊤
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `ExpGrowth.expGrowthInf_top`：expGrowthInf_top : expGrowthInf ⊤ = ⊤
+· 使用引理 `ExpGrowth.expGrowthInf_le_expGrowthSup`：expGrowthInf_le_expGrowthSup : e
+xpGrowthInf u <= expGrowthSup u
 -/
 lemma expGrowthSup_top : expGrowthSup ⊤ = ⊤ := by
   apply top_le_iff.1
   rw [← expGrowthInf_top]
   exact expGrowthInf_le_expGrowthSup
-
-/--
-lemma `expGrowthInf_const` / 引理 `expGrowthInf_const`
-
-English:
-lemma expGrowthInf_const
-  given: (h : b != 0) (h' : b != ∞)
-  statement: expGrowthInf (fun _ => b) = 0
-  proof: (tendsto_const_div_atTop_nhds_zero_nat (fun k => h (log_eq_bot_iff.1 k))
-    (fun k => h' (log_eq_top_iff.1 k))).liminf_eq
-
-中文:
-引理 expGrowthInf_const
-  条件: (h : b != 0) (h' : b != ∞)
-  结论: expGrowthInf (fun _ => b) = 0
-  证明: (tendsto_const_div_atTop_nhds_zero_nat (fun k => h (log_eq_bot_iff.1 k))
-    (fun k => h' (log_eq_top_iff.1 k))).liminf_eq
-
-Depends on / 依赖: liminf_eq, log_eq_bot_iff, log_eq_top_iff, tendsto_const_div_atTop_nhds_zero_nat
+/-
+**ExpGrowth.expGrowthInf_const** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthInf_const (h : b != 0) (h' : b != ∞) : expGrowthInf (fun _ => b) 
+= 0
+参数：h : b != 0；h' : b != ∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.liminf_eq`：Filter.Tendsto.liminf_eq {f : Filter β} {u : β
+ -> α} {a : α} [NeBot f] (h : Tendsto u f (𝓝 a)) : liminf u f = a
+· 使用定理 `EReal.instOrderTopology`：OrderTopology EReal
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `EReal.tendsto_const_div_atTop_nhds_zero_nat`：EReal.tendsto_const_div_atT
+op_nhds_zero_nat {C : EReal} (h : C != ⊥) (h' : C != ⊤) : Tendsto (fun n : Nat =
+> C / n) atTop (𝓝 0)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `ENNReal.log_eq_bot_iff`：∀ {x : ENNReal}, x.log = ⊥ ↔ x = 0
+· 使用定理 `ENNReal.log_eq_top_iff`：∀ {x : ENNReal}, x.log = ⊤ ↔ x = ⊤
 -/
-lemma expGrowthInf_const (h : b != 0) (h' : b != ∞) : expGrowthInf (fun _ => b) = 0 :=
-  (tendsto_const_div_atTop_nhds_zero_nat (fun k => h (log_eq_bot_iff.1 k))
-    (fun k => h' (log_eq_top_iff.1 k))).liminf_eq
-
-/--
-lemma `expGrowthSup_const` / 引理 `expGrowthSup_const`
-
-English:
-lemma expGrowthSup_const
-  given: (h : b != 0) (h' : b != ∞)
-  statement: expGrowthSup (fun _ => b) = 0
-  proof: (tendsto_const_div_atTop_nhds_zero_nat (fun k => h (log_eq_bot_iff.1 k))
-    (fun k => h' (log_eq_top_iff.1 k))).limsup_eq
-
-中文:
-引理 expGrowthSup_const
-  条件: (h : b != 0) (h' : b != ∞)
-  结论: expGrowthSup (fun _ => b) = 0
-  证明: (tendsto_const_div_atTop_nhds_zero_nat (fun k => h (log_eq_bot_iff.1 k))
-    (fun k => h' (log_eq_top_iff.1 k))).limsup_eq
-
-Depends on / 依赖: limsup_eq, log_eq_bot_iff, log_eq_top_iff, tendsto_const_div_atTop_nhds_zero_nat
+lemma expGrowthInf_const (h : b ≠ 0) (h' : b ≠ ∞) : expGrowthInf (fun _ ↦ b) = 0 :=
+  (tendsto_const_div_atTop_nhds_zero_nat (fun k ↦ h (log_eq_bot_iff.1 k))
+    (fun k ↦ h' (log_eq_top_iff.1 k))).liminf_eq
+/-
+**ExpGrowth.expGrowthSup_const** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthSup_const (h : b != 0) (h' : b != ∞) : expGrowthSup (fun _ => b) 
+= 0
+参数：h : b != 0；h' : b != ∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.limsup_eq`：Filter.Tendsto.limsup_eq {f : Filter β} {u : β
+ -> α} {a : α} [NeBot f] (h : Tendsto u f (𝓝 a)) : limsup u f = a
+· 使用定理 `EReal.instOrderTopology`：OrderTopology EReal
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `EReal.tendsto_const_div_atTop_nhds_zero_nat`：EReal.tendsto_const_div_atT
+op_nhds_zero_nat {C : EReal} (h : C != ⊥) (h' : C != ⊤) : Tendsto (fun n : Nat =
+> C / n) atTop (𝓝 0)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `ENNReal.log_eq_bot_iff`：∀ {x : ENNReal}, x.log = ⊥ ↔ x = 0
+· 使用定理 `ENNReal.log_eq_top_iff`：∀ {x : ENNReal}, x.log = ⊤ ↔ x = ⊤
 -/
-lemma expGrowthSup_const (h : b != 0) (h' : b != ∞) : expGrowthSup (fun _ => b) = 0 :=
-  (tendsto_const_div_atTop_nhds_zero_nat (fun k => h (log_eq_bot_iff.1 k))
-    (fun k => h' (log_eq_top_iff.1 k))).limsup_eq
-
-/--
-lemma `expGrowthInf_pow` / 引理 `expGrowthInf_pow`
-
-English:
-lemma expGrowthInf_pow
-  statement: expGrowthInf (fun n => b ^ n) = log b
-  proof: by
-  rw [expGrowthInf]; rw [← liminf_const (f := atTop (α := Nat)) (log b)]
-  refine liminf_congr (eventually_atTop.2 ⟨1, fun n n_1 => ?_⟩)
-  rw [EReal.div_eq_iff (natCast_ne_bot n) (natCast_ne_top n)
-    (zero_lt_one.trans_le (Nat.one_le_cast.2 n_1)).ne.symm]; rw [log_pow]; rw [mul_comm]
-
-中文:
-引理 expGrowthInf_pow
-  结论: expGrowthInf (fun n => b ^ n) = log b
-  证明: by
-  rw [expGrowthInf]; rw [← liminf_const (f := atTop (α := Nat)) (log b)]
-  refine liminf_congr (eventually_atTop.2 ⟨1, fun n n_1 => ?_⟩)
-  rw [EReal.div_eq_iff (natCast_ne_bot n) (natCast_ne_top n)
-    (zero_lt_one.trans_le (Nat.one_le_cast.2 n_1)).ne.symm]; rw [log_pow]; rw [mul_comm]
-
-Depends on / 依赖: EReal.div_eq_iff, Nat.one_le_cast, div_eq_iff, eventually_atTop, expGrowthInf, liminf_congr, liminf_const, log_pow, mul_comm, natCast_ne_bot, natCast_ne_top, ne.symm, one_le_cast, trans_le, zero_lt_one, zero_lt_one.trans_le
+lemma expGrowthSup_const (h : b ≠ 0) (h' : b ≠ ∞) : expGrowthSup (fun _ ↦ b) = 0 :=
+  (tendsto_const_div_atTop_nhds_zero_nat (fun k ↦ h (log_eq_bot_iff.1 k))
+    (fun k ↦ h' (log_eq_top_iff.1 k))).limsup_eq
+/-
+**ExpGrowth.expGrowthInf_pow** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthInf_pow : expGrowthInf (fun n => b ^ n) = log b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ExpGrowth.expGrowthInf.eq_1`：∀ (u : ℕ → ENNReal), ExpGrowth.expGrowthInf
+ u = Filter.liminf (fun n => (u n).log / ↑n) Filter.atTop
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Filter.liminf_const`：liminf_const {α : Type*} [ConditionallyCompleteLatt
+ice β] {f : Filter α} [NeBot f] (b : β) : liminf (fun _ => b) f = b
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Filter.liminf_congr`：liminf_congr {α : Type*} [ConditionallyCompleteLatt
+ice β] {f : Filter α} {u v : α -> β} (h : forallᶠ a in f, u a = v a) : liminf u 
+f = limin…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Filter.eventually_atTop`：eventually_atTop : (forallᶠ x in atTop, p x) ↔ 
+exists a, forall b, a <= b -> p b
+· 使用引理 `EReal.div_eq_iff`：div_eq_iff (hbot : b != ⊥) (htop : b != ⊤) (hzero : b 
+!= 0) : c / b = a ↔ c = a * b
+· 使用定理 `EReal.natCast_ne_bot`：natCast_ne_bot (n : Nat) : (n : EReal) != ⊥
+· 使用定理 `EReal.natCast_ne_top`：natCast_ne_top (n : Nat) : (n : EReal) != ⊤
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `instZeroLEOneClassEReal`：ZeroLEOneClass EReal
+· 使用定理 `instCharZeroEReal`：CharZero EReal
+· 使用定理 `Nat.one_le_cast`：one_le_cast : 1 <= (n : α) ↔ 1 <= n
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `instIsOrderedAddMonoidEReal`：IsOrderedAddMonoid EReal
+· 使用定理 `ENNReal.log_pow`：log_pow {x : Real>=0∞} {n : Nat} : log (x ^ n) = n * lo
+g x
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
-lemma expGrowthInf_pow : expGrowthInf (fun n => b ^ n) = log b := by
-  rw [expGrowthInf]; rw [← liminf_const (f := atTop (α := Nat)) (log b)]
-  refine liminf_congr (eventually_atTop.2 ⟨1, fun n n_1 => ?_⟩)
+lemma expGrowthInf_pow : expGrowthInf (fun n ↦ b ^ n) = log b := by
+  rw [expGrowthInf, ← liminf_const (f := atTop (α := ℕ)) (log b)]
+  refine liminf_congr (eventually_atTop.2 ⟨1, fun n n_1 ↦ ?_⟩)
   rw [EReal.div_eq_iff (natCast_ne_bot n) (natCast_ne_top n)
-    (zero_lt_one.trans_le (Nat.one_le_cast.2 n_1)).ne.symm]; rw [log_pow]; rw [mul_comm]
-
-/--
-lemma `expGrowthSup_pow` / 引理 `expGrowthSup_pow`
-
-English:
-lemma expGrowthSup_pow
-  statement: expGrowthSup (fun n => b ^ n) = log b
-  proof: by
-  rw [expGrowthSup]; rw [← limsup_const (f := atTop (α := Nat)) (log b)]
-  refine limsup_congr (eventually_atTop.2 ⟨1, fun n n_1 => ?_⟩)
-  rw [EReal.div_eq_iff (natCast_ne_bot n) (natCast_ne_top n)
-    (zero_lt_one.trans_le (Nat.one_le_cast.2 n_1)).ne.symm]; rw [log_pow]; rw [mul_comm]
-
-中文:
-引理 expGrowthSup_pow
-  结论: expGrowthSup (fun n => b ^ n) = log b
-  证明: by
-  rw [expGrowthSup]; rw [← limsup_const (f := atTop (α := Nat)) (log b)]
-  refine limsup_congr (eventually_atTop.2 ⟨1, fun n n_1 => ?_⟩)
-  rw [EReal.div_eq_iff (natCast_ne_bot n) (natCast_ne_top n)
-    (zero_lt_one.trans_le (Nat.one_le_cast.2 n_1)).ne.symm]; rw [log_pow]; rw [mul_comm]
-
-Depends on / 依赖: EReal.div_eq_iff, Nat.one_le_cast, div_eq_iff, eventually_atTop, expGrowthSup, limsup_congr, limsup_const, log_pow, mul_comm, natCast_ne_bot, natCast_ne_top, ne.symm, one_le_cast, trans_le, zero_lt_one, zero_lt_one.trans_le
+    (zero_lt_one.trans_le (Nat.one_le_cast.2 n_1)).ne.symm, log_pow, mul_comm]
+/-
+**ExpGrowth.expGrowthSup_pow** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthSup_pow : expGrowthSup (fun n => b ^ n) = log b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ExpGrowth.expGrowthSup.eq_1`：∀ (u : ℕ → ENNReal), ExpGrowth.expGrowthSup
+ u = Filter.limsup (fun n => (u n).log / ↑n) Filter.atTop
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Filter.limsup_const`：limsup_const {α : Type*} [ConditionallyCompleteLatt
+ice β] {f : Filter α} [NeBot f] (b : β) : limsup (fun _ => b) f = b
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Filter.limsup_congr`：limsup_congr {α : Type*} [ConditionallyCompleteLatt
+ice β] {f : Filter α} {u v : α -> β} (h : forallᶠ a in f, u a = v a) : limsup u 
+f = limsu…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Filter.eventually_atTop`：eventually_atTop : (forallᶠ x in atTop, p x) ↔ 
+exists a, forall b, a <= b -> p b
+· 使用引理 `EReal.div_eq_iff`：div_eq_iff (hbot : b != ⊥) (htop : b != ⊤) (hzero : b 
+!= 0) : c / b = a ↔ c = a * b
+· 使用定理 `EReal.natCast_ne_bot`：natCast_ne_bot (n : Nat) : (n : EReal) != ⊥
+· 使用定理 `EReal.natCast_ne_top`：natCast_ne_top (n : Nat) : (n : EReal) != ⊤
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `instZeroLEOneClassEReal`：ZeroLEOneClass EReal
+· 使用定理 `instCharZeroEReal`：CharZero EReal
+· 使用定理 `Nat.one_le_cast`：one_le_cast : 1 <= (n : α) ↔ 1 <= n
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `instIsOrderedAddMonoidEReal`：IsOrderedAddMonoid EReal
+· 使用定理 `ENNReal.log_pow`：log_pow {x : Real>=0∞} {n : Nat} : log (x ^ n) = n * lo
+g x
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
-lemma expGrowthSup_pow : expGrowthSup (fun n => b ^ n) = log b := by
-  rw [expGrowthSup]; rw [← limsup_const (f := atTop (α := Nat)) (log b)]
-  refine limsup_congr (eventually_atTop.2 ⟨1, fun n n_1 => ?_⟩)
+lemma expGrowthSup_pow : expGrowthSup (fun n ↦ b ^ n) = log b := by
+  rw [expGrowthSup, ← limsup_const (f := atTop (α := ℕ)) (log b)]
+  refine limsup_congr (eventually_atTop.2 ⟨1, fun n n_1 ↦ ?_⟩)
   rw [EReal.div_eq_iff (natCast_ne_bot n) (natCast_ne_top n)
-    (zero_lt_one.trans_le (Nat.one_le_cast.2 n_1)).ne.symm]; rw [log_pow]; rw [mul_comm]
-
-/--
-lemma `expGrowthInf_exp` / 引理 `expGrowthInf_exp`
-
-English:
-lemma expGrowthInf_exp
-  statement: expGrowthInf (fun n => exp (a * n)) = a
-  proof: le_antisymm (Frequently.expGrowthInf_le (Frequently.of_forall fun _ => le_refl _))
-    (Eventually.le_expGrowthInf (Eventually.of_forall fun _ => le_refl _))
-
-中文:
-引理 expGrowthInf_exp
-  结论: expGrowthInf (fun n => exp (a * n)) = a
-  证明: le_antisymm (Frequently.expGrowthInf_le (Frequently.of_forall fun _ => le_refl _))
-    (Eventually.le_expGrowthInf (Eventually.of_forall fun _ => le_refl _))
-
-Depends on / 依赖: Eventually, Eventually.le_expGrowthInf, Eventually.of_forall, Frequently, Frequently.expGrowthInf_le, Frequently.of_forall, expGrowthInf_le, le_antisymm, le_expGrowthInf, le_refl, of_forall
+    (zero_lt_one.trans_le (Nat.one_le_cast.2 n_1)).ne.symm, log_pow, mul_comm]
+/-
+**ExpGrowth.expGrowthInf_exp** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthInf_exp : expGrowthInf (fun n => exp (a * n)) = a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Frequently.expGrowthInf_le`：∀ {u : ℕ → ENNReal} {a : EReal}, (∃ᶠ (n : ℕ)
+ in Filter.atTop, u n ≤ (a * ↑n).exp) → ExpGrowth.expGrowthInf u ≤ a
+· 使用定理 `Filter.Frequently.of_forall`：∀ {α : Type u} {f : Filter α} [f.NeBot] {p 
+: α → Prop}, (∀ (x : α), p x) → ∃ᶠ (x : α) in f, p x
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `Eventually.le_expGrowthInf`：∀ {u : ℕ → ENNReal} {a : EReal}, (∀ᶠ (n : ℕ)
+ in Filter.atTop, (a * ↑n).exp ≤ u n) → a ≤ ExpGrowth.expGrowthInf u
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
 -/
-lemma expGrowthInf_exp : expGrowthInf (fun n => exp (a * n)) = a :=
-  le_antisymm (Frequently.expGrowthInf_le (Frequently.of_forall fun _ => le_refl _))
-    (Eventually.le_expGrowthInf (Eventually.of_forall fun _ => le_refl _))
-
-/--
-lemma `expGrowthSup_exp` / 引理 `expGrowthSup_exp`
-
-English:
-lemma expGrowthSup_exp
-  statement: expGrowthSup (fun n => exp (a * n)) = a
-  proof: le_antisymm (Eventually.expGrowthSup_le (Eventually.of_forall fun _ => le_refl _))
-    (Frequently.le_expGrowthSup (Frequently.of_forall fun _ => le_refl _))
-
-中文:
-引理 expGrowthSup_exp
-  结论: expGrowthSup (fun n => exp (a * n)) = a
-  证明: le_antisymm (Eventually.expGrowthSup_le (Eventually.of_forall fun _ => le_refl _))
-    (Frequently.le_expGrowthSup (Frequently.of_forall fun _ => le_refl _))
-
-Depends on / 依赖: Eventually, Eventually.expGrowthSup_le, Eventually.of_forall, Frequently, Frequently.le_expGrowthSup, Frequently.of_forall, expGrowthSup_le, le_antisymm, le_expGrowthSup, le_refl, of_forall
+lemma expGrowthInf_exp : expGrowthInf (fun n ↦ exp (a * n)) = a :=
+  le_antisymm (Frequently.expGrowthInf_le (Frequently.of_forall fun _ ↦ le_refl _))
+    (Eventually.le_expGrowthInf (Eventually.of_forall fun _ ↦ le_refl _))
+/-
+**ExpGrowth.expGrowthSup_exp** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthSup_exp : expGrowthSup (fun n => exp (a * n)) = a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Eventually.expGrowthSup_le`：∀ {u : ℕ → ENNReal} {a : EReal}, (∀ᶠ (n : ℕ)
+ in Filter.atTop, u n ≤ (a * ↑n).exp) → ExpGrowth.expGrowthSup u ≤ a
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `Frequently.le_expGrowthSup`：∀ {u : ℕ → ENNReal} {a : EReal}, (∃ᶠ (n : ℕ)
+ in Filter.atTop, (a * ↑n).exp ≤ u n) → a ≤ ExpGrowth.expGrowthSup u
+· 使用定理 `Filter.Frequently.of_forall`：∀ {α : Type u} {f : Filter α} [f.NeBot] {p 
+: α → Prop}, (∀ (x : α), p x) → ∃ᶠ (x : α) in f, p x
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
 -/
-lemma expGrowthSup_exp : expGrowthSup (fun n => exp (a * n)) = a :=
-  le_antisymm (Eventually.expGrowthSup_le (Eventually.of_forall fun _ => le_refl _))
-    (Frequently.le_expGrowthSup (Frequently.of_forall fun _ => le_refl _))
+lemma expGrowthSup_exp : expGrowthSup (fun n ↦ exp (a * n)) = a :=
+  le_antisymm (Eventually.expGrowthSup_le (Eventually.of_forall fun _ ↦ le_refl _))
+    (Frequently.le_expGrowthSup (Frequently.of_forall fun _ ↦ le_refl _))
 
+/-! ### Multiplication and inversion -/
 
-/--
-lemma `le_expGrowthInf_mul` / 引理 `le_expGrowthInf_mul`
+/-
+**ExpGrowth.le_expGrowthInf_mul** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：le_expGrowthInf_mul : expGrowthInf u + expGrowthInf v <= expGrowthInf (u *
+ v)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用引理 `EReal.le_liminf_add`：le_liminf_add : (liminf u f) + (liminf v f) <= limi
+nf (u + v) f
+· 使用定理 `Filter.liminf_congr`：liminf_congr {α : Type*} [ConditionallyCompleteLatt
+ice β] {f : Filter α} {u v : α -> β} (h : forallᶠ a in f, u a = v a) : liminf u 
+f = limin…
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Pi.add_apply`：∀ {ι : Type u_1} {M : ι → Type u_5} [inst : (i : ι) → Add 
+(M i)] (f g : (i : ι) → M i) (i : ι), (f + g) i = f i + g i
+· 使用引理 `Pi.mul_apply`：mul_apply (f g : forall i, M i) (i : ι) : (f * g) i = f i 
+* g i
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `EReal.add_div_of_nonneg_right`：add_div_of_nonneg_right (h : 0 <= c) : (a
+ + b) / c = a / c + b / c
+· 使用定理 `Nat.cast_nonneg'`：cast_nonneg' (n : Nat) : 0 <= (n : α)
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `instIsOrderedAddMonoidEReal`：IsOrderedAddMonoid EReal
+· 使用定理 `instZeroLEOneClassEReal`：ZeroLEOneClass EReal
+· 使用定理 `ENNReal.log_mul_add`：log_mul_add {x y : Real>=0∞} : log (x * y) = log x 
++ log y
 
-English:
-lemma le_expGrowthInf_mul
-  proof: by
-  refine le_liminf_add.trans_eq (liminf_congr (Eventually.of_forall fun n => ?_))
-  rw [Pi.add_apply]; rw [Pi.mul_apply]; rw [← add_div_of_nonneg_right n.cast_nonneg']; rw [log_mul_add]
-
-中文:
-引理 le_expGrowthInf_mul
-  证明: by
-  refine le_liminf_add.trans_eq (liminf_congr (Eventually.of_forall fun n => ?_))
-  rw [Pi.add_apply]; rw [Pi.mul_apply]; rw [← add_div_of_nonneg_right n.cast_nonneg']; rw [log_mul_add]
-
-Depends on / 依赖: Eventually, Eventually.of_forall, Pi.add_apply, Pi.mul_apply, add_apply, add_div_of_nonneg_right, cast_nonneg, le_liminf_add, le_liminf_add.trans_eq, liminf_congr, log_mul_add, mul_apply, n.cast_nonneg, of_forall, trans_eq
+--- 原说明 ---
+### Multiplication and inversion
 -/
 lemma le_expGrowthInf_mul :
-    expGrowthInf u + expGrowthInf v <= expGrowthInf (u * v) := by
-  refine le_liminf_add.trans_eq (liminf_congr (Eventually.of_forall fun n => ?_))
-  rw [Pi.add_apply]; rw [Pi.mul_apply]; rw [← add_div_of_nonneg_right n.cast_nonneg']; rw [log_mul_add]
+    expGrowthInf u + expGrowthInf v ≤ expGrowthInf (u * v) := by
+  refine le_liminf_add.trans_eq (liminf_congr (Eventually.of_forall fun n ↦ ?_))
+  rw [Pi.add_apply, Pi.mul_apply, ← add_div_of_nonneg_right n.cast_nonneg', log_mul_add]
 
-/--
-lemma `expGrowthInf_mul_le` / 引理 `expGrowthInf_mul_le`
+/-- See `expGrowthInf_mul_le'` for a version with swapped argument `u` and `v`. -/
+/-
+**ExpGrowth.expGrowthInf_mul_le** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthInf_mul_le (h : expGrowthSup u != ⊥ ∨ expGrowthInf v != ⊤) (h' : 
+expGrowthSup u != ⊤ ∨ expGrowthInf v != ⊥) : expGrowthInf (u * v) <= expGrowthSu
+p u + expGrowthInf v
+参数：h : expGrowthSup u != ⊥ ∨ expGrowthInf v != ⊤；h' : expGrowthSup u != ⊤ ∨ expG
+rowthInf v != ⊥。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_eq'`：∀ {α : Type u_1} {a b c : α} [inst : LE α], b ≤ a → b =
+ c → c ≤ a
+· 使用引理 `EReal.liminf_add_le`：liminf_add_le (h : limsup u f != ⊥ ∨ liminf v f != 
+⊤) (h' : limsup u f != ⊤ ∨ liminf v f != ⊥) : liminf (u + v) f <= (limsup u f) +
+ (liminf …
+· 使用定理 `Filter.liminf_congr`：liminf_congr {α : Type*} [ConditionallyCompleteLatt
+ice β] {f : Filter α} {u v : α -> β} (h : forallᶠ a in f, u a = v a) : liminf u 
+f = limin…
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Pi.add_apply`：∀ {ι : Type u_1} {M : ι → Type u_5} [inst : (i : ι) → Add 
+(M i)] (f g : (i : ι) → M i) (i : ι), (f + g) i = f i + g i
+· 使用引理 `Pi.mul_apply`：mul_apply (f g : forall i, M i) (i : ι) : (f * g) i = f i 
+* g i
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `EReal.add_div_of_nonneg_right`：add_div_of_nonneg_right (h : 0 <= c) : (a
+ + b) / c = a / c + b / c
+· 使用定理 `Nat.cast_nonneg'`：cast_nonneg' (n : Nat) : 0 <= (n : α)
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `instIsOrderedAddMonoidEReal`：IsOrderedAddMonoid EReal
+· 使用定理 `instZeroLEOneClassEReal`：ZeroLEOneClass EReal
+· 使用定理 `ENNReal.log_mul_add`：log_mul_add {x y : Real>=0∞} : log (x * y) = log x 
++ log y
 
-English:
-lemma expGrowthInf_mul_le
-  statement: (h : expGrowthSup u != ⊥ ∨ expGrowthInf v != ⊤)
-  proof: by
-  refine (liminf_add_le h h').trans_eq' (liminf_congr (Eventually.of_forall fun n => ?_))
-  rw [Pi.add_apply]; rw [Pi.mul_apply]; rw [← add_div_of_nonneg_right n.cast_nonneg']; rw [log_mul_add]
-
-中文:
-引理 expGrowthInf_mul_le
-  结论: (h : expGrowthSup u != ⊥ ∨ expGrowthInf v != ⊤)
-  证明: by
-  refine (liminf_add_le h h').trans_eq' (liminf_congr (Eventually.of_forall fun n => ?_))
-  rw [Pi.add_apply]; rw [Pi.mul_apply]; rw [← add_div_of_nonneg_right n.cast_nonneg']; rw [log_mul_add]
-
-Depends on / 依赖: Eventually, Eventually.of_forall, Pi.add_apply, Pi.mul_apply, add_apply, add_div_of_nonneg_right, cast_nonneg, liminf_add_le, liminf_congr, log_mul_add, mul_apply, n.cast_nonneg, of_forall, trans_eq
+--- 原说明 ---
+See `expGrowthInf_mul_le'` for a version with swapped argument `u` and `v`.
 -/
-lemma expGrowthInf_mul_le (h : expGrowthSup u != ⊥ ∨ expGrowthInf v != ⊤)
-    (h' : expGrowthSup u != ⊤ ∨ expGrowthInf v != ⊥) :
-    expGrowthInf (u * v) <= expGrowthSup u + expGrowthInf v := by
-  refine (liminf_add_le h h').trans_eq' (liminf_congr (Eventually.of_forall fun n => ?_))
-  rw [Pi.add_apply]; rw [Pi.mul_apply]; rw [← add_div_of_nonneg_right n.cast_nonneg']; rw [log_mul_add]
+lemma expGrowthInf_mul_le (h : expGrowthSup u ≠ ⊥ ∨ expGrowthInf v ≠ ⊤)
+    (h' : expGrowthSup u ≠ ⊤ ∨ expGrowthInf v ≠ ⊥) :
+    expGrowthInf (u * v) ≤ expGrowthSup u + expGrowthInf v := by
+  refine (liminf_add_le h h').trans_eq' (liminf_congr (Eventually.of_forall fun n ↦ ?_))
+  rw [Pi.add_apply, Pi.mul_apply, ← add_div_of_nonneg_right n.cast_nonneg', log_mul_add]
 
-/--
-lemma `expGrowthInf_mul_le'` / 引理 `expGrowthInf_mul_le'`
+/-- See `expGrowthInf_mul_le` for a version with swapped argument `u` and `v`. -/
+/-
+**ExpGrowth.expGrowthInf_mul_le'** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthInf_mul_le' (h : expGrowthInf u != ⊥ ∨ expGrowthSup v != ⊤) (h' :
+ expGrowthInf u != ⊤ ∨ expGrowthSup v != ⊥) : expGrowthInf (u * v) <= expGrowthI
+nf u + expGrowthSup v
+参数：h : expGrowthInf u != ⊥ ∨ expGrowthSup v != ⊤；h' : expGrowthInf u != ⊤ ∨ expG
+rowthSup v != ⊥。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用引理 `ExpGrowth.expGrowthInf_mul_le`：expGrowthInf_mul_le (h : expGrowthSup u !
+= ⊥ ∨ expGrowthInf v != ⊤) (h' : expGrowthSup u != ⊤ ∨ expGrowthInf v != ⊥) : ex
+pGrowthInf (u * v) …
+· 使用定理 `Or.symm`：∀ {a b : Prop}, a ∨ b → b ∨ a
 
-English:
-lemma expGrowthInf_mul_le'
-  statement: (h : expGrowthInf u != ⊥ ∨ expGrowthSup v != ⊤)
-  proof: by
-  rw [mul_comm]; rw [add_comm]
+--- 原说明 ---
+See `expGrowthInf_mul_le` for a version with swapped argument `u` and `v`.
+-/
+lemma expGrowthInf_mul_le' (h : expGrowthInf u ≠ ⊥ ∨ expGrowthSup v ≠ ⊤)
+    (h' : expGrowthInf u ≠ ⊤ ∨ expGrowthSup v ≠ ⊥) :
+    expGrowthInf (u * v) ≤ expGrowthInf u + expGrowthSup v := by
+  rw [mul_comm, add_comm]
   exact expGrowthInf_mul_le h'.symm h.symm
 
-中文:
-引理 expGrowthInf_mul_le'
-  结论: (h : expGrowthInf u != ⊥ ∨ expGrowthSup v != ⊤)
-  证明: by
-  rw [mul_comm]; rw [add_comm]
-  exact expGrowthInf_mul_le h'.symm h.symm
+/-- See `le_expGrowthSup_mul'` for a version with swapped argument `u` and `v`. -/
+/-
+**ExpGrowth.le_expGrowthSup_mul** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：le_expGrowthSup_mul : expGrowthSup u + expGrowthInf v <= expGrowthSup (u *
+ v)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用引理 `EReal.le_limsup_add`：le_limsup_add : (limsup u f) + (liminf v f) <= lims
+up (u + v) f
+· 使用定理 `Filter.limsup_congr`：limsup_congr {α : Type*} [ConditionallyCompleteLatt
+ice β] {f : Filter α} {u v : α -> β} (h : forallᶠ a in f, u a = v a) : limsup u 
+f = limsu…
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Pi.add_apply`：∀ {ι : Type u_1} {M : ι → Type u_5} [inst : (i : ι) → Add 
+(M i)] (f g : (i : ι) → M i) (i : ι), (f + g) i = f i + g i
+· 使用引理 `Pi.mul_apply`：mul_apply (f g : forall i, M i) (i : ι) : (f * g) i = f i 
+* g i
+· 使用定理 `ENNReal.log_mul_add`：log_mul_add {x y : Real>=0∞} : log (x * y) = log x 
++ log y
+· 使用引理 `EReal.add_div_of_nonneg_right`：add_div_of_nonneg_right (h : 0 <= c) : (a
+ + b) / c = a / c + b / c
+· 使用定理 `Nat.cast_nonneg'`：cast_nonneg' (n : Nat) : 0 <= (n : α)
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `instIsOrderedAddMonoidEReal`：IsOrderedAddMonoid EReal
+· 使用定理 `instZeroLEOneClassEReal`：ZeroLEOneClass EReal
 
-Depends on / 依赖: add_comm, expGrowthInf_mul_le, h.symm, mul_comm
+--- 原说明 ---
+See `le_expGrowthSup_mul'` for a version with swapped argument `u` and `v`.
 -/
-lemma expGrowthInf_mul_le' (h : expGrowthInf u != ⊥ ∨ expGrowthSup v != ⊤)
-    (h' : expGrowthInf u != ⊤ ∨ expGrowthSup v != ⊥) :
-    expGrowthInf (u * v) <= expGrowthInf u + expGrowthSup v := by
-  rw [mul_comm]; rw [add_comm]
-  exact expGrowthInf_mul_le h'.symm h.symm
+lemma le_expGrowthSup_mul : expGrowthSup u + expGrowthInf v ≤ expGrowthSup (u * v) := by
+  refine le_limsup_add.trans_eq (limsup_congr (Eventually.of_forall fun n ↦ ?_))
+  rw [Pi.add_apply, Pi.mul_apply, log_mul_add, add_div_of_nonneg_right n.cast_nonneg']
 
-/--
-lemma `le_expGrowthSup_mul` / 引理 `le_expGrowthSup_mul`
+/-- See `le_expGrowthSup_mul` for a version with swapped argument `u` and `v`. -/
+/-
+**ExpGrowth.le_expGrowthSup_mul'** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：le_expGrowthSup_mul' : expGrowthInf u + expGrowthSup v <= expGrowthSup (u 
+* v)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用引理 `ExpGrowth.le_expGrowthSup_mul`：le_expGrowthSup_mul : expGrowthSup u + ex
+pGrowthInf v <= expGrowthSup (u * v)
 
-English:
-lemma le_expGrowthSup_mul
-  statement: expGrowthSup u + expGrowthInf v <= expGrowthSup (u * v)
-  proof: by
-  refine le_limsup_add.trans_eq (limsup_congr (Eventually.of_forall fun n => ?_))
-  rw [Pi.add_apply]; rw [Pi.mul_apply]; rw [log_mul_add]; rw [add_div_of_nonneg_right n.cast_nonneg']
-
-中文:
-引理 le_expGrowthSup_mul
-  结论: expGrowthSup u + expGrowthInf v <= expGrowthSup (u * v)
-  证明: by
-  refine le_limsup_add.trans_eq (limsup_congr (Eventually.of_forall fun n => ?_))
-  rw [Pi.add_apply]; rw [Pi.mul_apply]; rw [log_mul_add]; rw [add_div_of_nonneg_right n.cast_nonneg']
-
-Depends on / 依赖: Eventually, Eventually.of_forall, Pi.add_apply, Pi.mul_apply, add_apply, add_div_of_nonneg_right, cast_nonneg, le_limsup_add, le_limsup_add.trans_eq, limsup_congr, log_mul_add, mul_apply, n.cast_nonneg, of_forall, trans_eq
+--- 原说明 ---
+See `le_expGrowthSup_mul` for a version with swapped argument `u` and `v`.
 -/
-lemma le_expGrowthSup_mul : expGrowthSup u + expGrowthInf v <= expGrowthSup (u * v) := by
-  refine le_limsup_add.trans_eq (limsup_congr (Eventually.of_forall fun n => ?_))
-  rw [Pi.add_apply]; rw [Pi.mul_apply]; rw [log_mul_add]; rw [add_div_of_nonneg_right n.cast_nonneg']
-
-/--
-lemma `le_expGrowthSup_mul'` / 引理 `le_expGrowthSup_mul'`
-
-English:
-lemma le_expGrowthSup_mul'
-  statement: expGrowthInf u + expGrowthSup v <= expGrowthSup (u * v)
-  proof: by
-  rw [mul_comm]; rw [add_comm]
+lemma le_expGrowthSup_mul' : expGrowthInf u + expGrowthSup v ≤ expGrowthSup (u * v) := by
+  rw [mul_comm, add_comm]
   exact le_expGrowthSup_mul
-
-中文:
-引理 le_expGrowthSup_mul'
-  结论: expGrowthInf u + expGrowthSup v <= expGrowthSup (u * v)
-  证明: by
-  rw [mul_comm]; rw [add_comm]
-  exact le_expGrowthSup_mul
-
-Depends on / 依赖: add_comm, le_expGrowthSup_mul, mul_comm
+/-
+**ExpGrowth.expGrowthSup_mul_le** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthSup_mul_le (h : expGrowthSup u != ⊥ ∨ expGrowthSup v != ⊤) (h' : 
+expGrowthSup u != ⊤ ∨ expGrowthSup v != ⊥) : expGrowthSup (u * v) <= expGrowthSu
+p u + expGrowthSup v
+参数：h : expGrowthSup u != ⊥ ∨ expGrowthSup v != ⊤；h' : expGrowthSup u != ⊤ ∨ expG
+rowthSup v != ⊥。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_eq'`：∀ {α : Type u_1} {a b c : α} [inst : LE α], b ≤ a → b =
+ c → c ≤ a
+· 使用引理 `EReal.limsup_add_le`：limsup_add_le (h : limsup u f != ⊥ ∨ limsup v f != 
+⊤) (h' : limsup u f != ⊤ ∨ limsup v f != ⊥) : limsup (u + v) f <= (limsup u f) +
+ (limsup …
+· 使用定理 `Filter.limsup_congr`：limsup_congr {α : Type*} [ConditionallyCompleteLatt
+ice β] {f : Filter α} {u v : α -> β} (h : forallᶠ a in f, u a = v a) : limsup u 
+f = limsu…
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Pi.add_apply`：∀ {ι : Type u_1} {M : ι → Type u_5} [inst : (i : ι) → Add 
+(M i)] (f g : (i : ι) → M i) (i : ι), (f + g) i = f i + g i
+· 使用引理 `Pi.mul_apply`：mul_apply (f g : forall i, M i) (i : ι) : (f * g) i = f i 
+* g i
+· 使用定理 `ENNReal.log_mul_add`：log_mul_add {x y : Real>=0∞} : log (x * y) = log x 
++ log y
+· 使用引理 `EReal.add_div_of_nonneg_right`：add_div_of_nonneg_right (h : 0 <= c) : (a
+ + b) / c = a / c + b / c
+· 使用定理 `Nat.cast_nonneg'`：cast_nonneg' (n : Nat) : 0 <= (n : α)
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `instIsOrderedAddMonoidEReal`：IsOrderedAddMonoid EReal
+· 使用定理 `instZeroLEOneClassEReal`：ZeroLEOneClass EReal
 -/
-lemma le_expGrowthSup_mul' : expGrowthInf u + expGrowthSup v <= expGrowthSup (u * v) := by
-  rw [mul_comm]; rw [add_comm]
-  exact le_expGrowthSup_mul
-
-/--
-lemma `expGrowthSup_mul_le` / 引理 `expGrowthSup_mul_le`
-
-English:
-lemma expGrowthSup_mul_le
-  statement: (h : expGrowthSup u != ⊥ ∨ expGrowthSup v != ⊤)
-  proof: by
-  refine (limsup_add_le h h').trans_eq' (limsup_congr (Eventually.of_forall fun n => ?_))
-  rw [Pi.add_apply]; rw [Pi.mul_apply]; rw [log_mul_add]; rw [add_div_of_nonneg_right n.cast_nonneg']
-
-中文:
-引理 expGrowthSup_mul_le
-  结论: (h : expGrowthSup u != ⊥ ∨ expGrowthSup v != ⊤)
-  证明: by
-  refine (limsup_add_le h h').trans_eq' (limsup_congr (Eventually.of_forall fun n => ?_))
-  rw [Pi.add_apply]; rw [Pi.mul_apply]; rw [log_mul_add]; rw [add_div_of_nonneg_right n.cast_nonneg']
-
-Depends on / 依赖: Eventually, Eventually.of_forall, Pi.add_apply, Pi.mul_apply, add_apply, add_div_of_nonneg_right, cast_nonneg, limsup_add_le, limsup_congr, log_mul_add, mul_apply, n.cast_nonneg, of_forall, trans_eq
--/
-lemma expGrowthSup_mul_le (h : expGrowthSup u != ⊥ ∨ expGrowthSup v != ⊤)
-    (h' : expGrowthSup u != ⊤ ∨ expGrowthSup v != ⊥) :
-    expGrowthSup (u * v) <= expGrowthSup u + expGrowthSup v := by
-  refine (limsup_add_le h h').trans_eq' (limsup_congr (Eventually.of_forall fun n => ?_))
-  rw [Pi.add_apply]; rw [Pi.mul_apply]; rw [log_mul_add]; rw [add_div_of_nonneg_right n.cast_nonneg']
-
-/--
-lemma `expGrowthInf_inv` / 引理 `expGrowthInf_inv`
-
-English:
-lemma expGrowthInf_inv
-  statement: expGrowthInf u⁻¹ = - expGrowthSup u
-  proof: by
-  rw [expGrowthSup]; rw [← liminf_neg]
-  refine liminf_congr (Eventually.of_forall fun n => ?_)
-  rw [Pi.neg_apply]; rw [Pi.inv_apply]; rw [div_eq_mul_inv]; rw [div_eq_mul_inv]; rw [← EReal.neg_mul]; rw [log_inv]
-
-中文:
-引理 expGrowthInf_inv
-  结论: expGrowthInf u⁻¹ = - expGrowthSup u
-  证明: by
-  rw [expGrowthSup]; rw [← liminf_neg]
-  refine liminf_congr (Eventually.of_forall fun n => ?_)
-  rw [Pi.neg_apply]; rw [Pi.inv_apply]; rw [div_eq_mul_inv]; rw [div_eq_mul_inv]; rw [← EReal.neg_mul]; rw [log_inv]
-
-Depends on / 依赖: EReal.neg_mul, Eventually, Eventually.of_forall, Pi.inv_apply, Pi.neg_apply, div_eq_mul_inv, expGrowthSup, inv_apply, liminf_congr, liminf_neg, log_inv, neg_apply, neg_mul, of_forall
+lemma expGrowthSup_mul_le (h : expGrowthSup u ≠ ⊥ ∨ expGrowthSup v ≠ ⊤)
+    (h' : expGrowthSup u ≠ ⊤ ∨ expGrowthSup v ≠ ⊥) :
+    expGrowthSup (u * v) ≤ expGrowthSup u + expGrowthSup v := by
+  refine (limsup_add_le h h').trans_eq' (limsup_congr (Eventually.of_forall fun n ↦ ?_))
+  rw [Pi.add_apply, Pi.mul_apply, log_mul_add, add_div_of_nonneg_right n.cast_nonneg']
+/-
+**ExpGrowth.expGrowthInf_inv** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthInf_inv : expGrowthInf u⁻¹ = - expGrowthSup u
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ExpGrowth.expGrowthSup.eq_1`：∀ (u : ℕ → ENNReal), ExpGrowth.expGrowthSup
+ u = Filter.limsup (fun n => (u n).log / ↑n) Filter.atTop
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `EReal.liminf_neg`：liminf_neg : liminf (-v) f = -limsup v f
+· 使用定理 `Filter.liminf_congr`：liminf_congr {α : Type*} [ConditionallyCompleteLatt
+ice β] {f : Filter α} {u v : α -> β} (h : forallᶠ a in f, u a = v a) : liminf u 
+f = limin…
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
+· 使用定理 `Pi.neg_apply`：∀ {ι : Type u_1} {G : ι → Type u_4} [inst : (i : ι) → Neg 
+(G i)] (f : (i : ι) → G i) (i : ι), (-f) i = -f i
+· 使用引理 `Pi.inv_apply`：inv_apply (f : forall i, G i) (i : ι) : f⁻¹ i = (f i)⁻¹
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `EReal.neg_mul`：∀ (x y : EReal), -x * y = -(x * y)
+· 使用引理 `ENNReal.log_inv`：log_inv {x : Real>=0∞} : log x⁻¹ = - log x
 -/
 lemma expGrowthInf_inv : expGrowthInf u⁻¹ = - expGrowthSup u := by
-  rw [expGrowthSup]; rw [← liminf_neg]
-  refine liminf_congr (Eventually.of_forall fun n => ?_)
-  rw [Pi.neg_apply]; rw [Pi.inv_apply]; rw [div_eq_mul_inv]; rw [div_eq_mul_inv]; rw [← EReal.neg_mul]; rw [log_inv]
-
-/--
-lemma `expGrowthSup_inv` / 引理 `expGrowthSup_inv`
-
-English:
-lemma expGrowthSup_inv
-  statement: expGrowthSup u⁻¹ = - expGrowthInf u
-  proof: by
-  rw [expGrowthInf]; rw [← limsup_neg]
-  refine limsup_congr (Eventually.of_forall fun n => ?_)
-  rw [Pi.neg_apply]; rw [Pi.inv_apply]; rw [div_eq_mul_inv]; rw [div_eq_mul_inv]; rw [← EReal.neg_mul]; rw [log_inv]
-
-中文:
-引理 expGrowthSup_inv
-  结论: expGrowthSup u⁻¹ = - expGrowthInf u
-  证明: by
-  rw [expGrowthInf]; rw [← limsup_neg]
-  refine limsup_congr (Eventually.of_forall fun n => ?_)
-  rw [Pi.neg_apply]; rw [Pi.inv_apply]; rw [div_eq_mul_inv]; rw [div_eq_mul_inv]; rw [← EReal.neg_mul]; rw [log_inv]
-
-Depends on / 依赖: EReal.neg_mul, Eventually, Eventually.of_forall, Pi.inv_apply, Pi.neg_apply, div_eq_mul_inv, expGrowthInf, inv_apply, limsup_congr, limsup_neg, log_inv, neg_apply, neg_mul, of_forall
+  rw [expGrowthSup, ← liminf_neg]
+  refine liminf_congr (Eventually.of_forall fun n ↦ ?_)
+  rw [Pi.neg_apply, Pi.inv_apply, div_eq_mul_inv, div_eq_mul_inv, ← EReal.neg_mul, log_inv]
+/-
+**ExpGrowth.expGrowthSup_inv** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthSup_inv : expGrowthSup u⁻¹ = - expGrowthInf u
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ExpGrowth.expGrowthInf.eq_1`：∀ (u : ℕ → ENNReal), ExpGrowth.expGrowthInf
+ u = Filter.liminf (fun n => (u n).log / ↑n) Filter.atTop
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `EReal.limsup_neg`：limsup_neg : limsup (-v) f = -liminf v f
+· 使用定理 `Filter.limsup_congr`：limsup_congr {α : Type*} [ConditionallyCompleteLatt
+ice β] {f : Filter α} {u v : α -> β} (h : forallᶠ a in f, u a = v a) : limsup u 
+f = limsu…
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
+· 使用定理 `Pi.neg_apply`：∀ {ι : Type u_1} {G : ι → Type u_4} [inst : (i : ι) → Neg 
+(G i)] (f : (i : ι) → G i) (i : ι), (-f) i = -f i
+· 使用引理 `Pi.inv_apply`：inv_apply (f : forall i, G i) (i : ι) : f⁻¹ i = (f i)⁻¹
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `EReal.neg_mul`：∀ (x y : EReal), -x * y = -(x * y)
+· 使用引理 `ENNReal.log_inv`：log_inv {x : Real>=0∞} : log x⁻¹ = - log x
 -/
 lemma expGrowthSup_inv : expGrowthSup u⁻¹ = - expGrowthInf u := by
-  rw [expGrowthInf]; rw [← limsup_neg]
-  refine limsup_congr (Eventually.of_forall fun n => ?_)
-  rw [Pi.neg_apply]; rw [Pi.inv_apply]; rw [div_eq_mul_inv]; rw [div_eq_mul_inv]; rw [← EReal.neg_mul]; rw [log_inv]
+  rw [expGrowthInf, ← limsup_neg]
+  refine limsup_congr (Eventually.of_forall fun n ↦ ?_)
+  rw [Pi.neg_apply, Pi.inv_apply, div_eq_mul_inv, div_eq_mul_inv, ← EReal.neg_mul, log_inv]
 
+/-! ### Comparison -/
 
 -- Bound on `expGrowthInf` under a `IsBigO` hypothesis. However, `ℝ≥0∞` is not normed, so the
 -- `IsBigO` property is spelt out.
-/--
-lemma `expGrowthInf_le_of_eventually_le` / 引理 `expGrowthInf_le_of_eventually_le`
-
-English:
-lemma expGrowthInf_le_of_eventually_le
-  given: (hb : b != ∞) (h : forallᶠ n in atTop, u n <= b * v n)
-  proof: by
-  apply (expGrowthInf_eventually_monotone h).trans
-  rcases eq_zero_or_pos b with rfl | b_pos
-  · simp only [zero_mul, ← Pi.zero_def, expGrowthInf_zero, bot_le]
-  · apply (expGrowthInf_mul_le _ _).trans_eq <;> rw [expGrowthSup_const b_pos.ne' hb]
-    · exact zero_add (expGrowthInf v)
-    · exact .inl zero_ne_bot
-    · exact .inl zero_ne_top
-
-中文:
-引理 expGrowthInf_le_of_eventually_le
-  条件: (hb : b != ∞) (h : 对任意ᶠ n in atTop, u n <= b * v n)
-  证明: by
-  apply (expGrowthInf_eventually_monotone h).trans
-  rcases eq_zero_or_pos b with rfl | b_pos
-  · simp only [zero_mul, ← Pi.zero_def, expGrowthInf_zero, bot_le]
-  · apply (expGrowthInf_mul_le _ _).trans_eq <;> rw [expGrowthSup_const b_pos.ne' hb]
-    · exact zero_add (expGrowthInf v)
-    · exact .inl zero_ne_bot
-    · exact .inl zero_ne_top
-
-Depends on / 依赖: Pi.zero_def, b_pos, b_pos.ne, bot_le, eq_zero_or_pos, expGrowthInf, expGrowthInf_eventually_monotone, expGrowthInf_mul_le, expGrowthInf_zero, expGrowthSup_const, trans_eq, zero_add, zero_def, zero_mul, zero_ne_bot, zero_ne_top
+/-
+**ExpGrowth.expGrowthInf_le_of_eventually_le** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowt
+h`。
+形式化陈述：expGrowthInf_le_of_eventually_le (hb : b != ∞) (h : forallᶠ n in atTop, u 
+n <= b * v n) : expGrowthInf u <= expGrowthInf v
+参数：hb : b != ∞；h : forallᶠ n in atTop, u n <= b * v n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `ExpGrowth.expGrowthInf_eventually_monotone`：expGrowthInf_eventually_mono
+tone (h : u <=ᶠ[atTop] v) : expGrowthInf u <= expGrowthInf v
+· 使用定理 `eq_zero_or_pos`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Zero 
+α] [IsBotZeroClass α] (a : α), a = 0 ∨ 0 < a
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用引理 `ExpGrowth.expGrowthInf_zero`：expGrowthInf_zero : expGrowthInf 0 = ⊥
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用引理 `ExpGrowth.expGrowthInf_mul_le`：expGrowthInf_mul_le (h : expGrowthSup u !
+= ⊥ ∨ expGrowthInf v != ⊤) (h' : expGrowthSup u != ⊤ ∨ expGrowthInf v != ⊥) : ex
+pGrowthInf (u * v) …
+· 使用引理 `ExpGrowth.expGrowthSup_const`：expGrowthSup_const (h : b != 0) (h' : b !=
+ ∞) : expGrowthSup (fun _ => b) = 0
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `EReal.zero_ne_bot`：zero_ne_bot : (0 : EReal) != ⊥
+· 使用定理 `EReal.zero_ne_top`：zero_ne_top : (0 : EReal) != ⊤
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
 -/
-lemma expGrowthInf_le_of_eventually_le (hb : b != ∞) (h : forallᶠ n in atTop, u n <= b * v n) :
-    expGrowthInf u <= expGrowthInf v := by
+lemma expGrowthInf_le_of_eventually_le (hb : b ≠ ∞) (h : ∀ᶠ n in atTop, u n ≤ b * v n) :
+    expGrowthInf u ≤ expGrowthInf v := by
   apply (expGrowthInf_eventually_monotone h).trans
   rcases eq_zero_or_pos b with rfl | b_pos
   · simp only [zero_mul, ← Pi.zero_def, expGrowthInf_zero, bot_le]
@@ -1020,13 +1189,49 @@ lemma expGrowthInf_le_of_eventually_le (hb : b != ∞) (h : forallᶠ n in atTop
 
 -- Bound on `expGrowthSup` under a `IsBigO` hypothesis. However, `ℝ≥0∞` is not normed, so the
 -- `IsBigO` property is spelt out.
-/--
-lemma `expGrowthSup_le_of_eventually_le` / 引理 `expGrowthSup_le_of_eventually_le`
-
-English:
-lemma expGrowthSup_le_of_eventually_le
-  given: (hb : b != ∞) (h : forallᶠ n in atTop, u n <= b * v n)
-  proof: by
+/-
+**ExpGrowth.expGrowthSup_le_of_eventually_le** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowt
+h`。
+形式化陈述：expGrowthSup_le_of_eventually_le (hb : b != ∞) (h : forallᶠ n in atTop, u 
+n <= b * v n) : expGrowthSup u <= expGrowthSup v
+参数：hb : b != ∞；h : forallᶠ n in atTop, u n <= b * v n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `ExpGrowth.expGrowthSup_eventually_monotone`：expGrowthSup_eventually_mono
+tone (h : u <=ᶠ[atTop] v) : expGrowthSup u <= expGrowthSup v
+· 使用定理 `eq_zero_or_pos`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Zero 
+α] [IsBotZeroClass α] (a : α), a = 0 ∨ 0 < a
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用引理 `ExpGrowth.expGrowthSup_zero`：expGrowthSup_zero : expGrowthSup 0 = ⊥
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用引理 `ExpGrowth.expGrowthSup_mul_le`：expGrowthSup_mul_le (h : expGrowthSup u !
+= ⊥ ∨ expGrowthSup v != ⊤) (h' : expGrowthSup u != ⊤ ∨ expGrowthSup v != ⊥) : ex
+pGrowthSup (u * v) …
+· 使用引理 `ExpGrowth.expGrowthSup_const`：expGrowthSup_const (h : b != 0) (h' : b !=
+ ∞) : expGrowthSup (fun _ => b) = 0
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `EReal.zero_ne_bot`：zero_ne_bot : (0 : EReal) != ⊥
+· 使用定理 `EReal.zero_ne_top`：zero_ne_top : (0 : EReal) != ⊤
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+-/
+lemma expGrowthSup_le_of_eventually_le (hb : b ≠ ∞) (h : ∀ᶠ n in atTop, u n ≤ b * v n) :
+    expGrowthSup u ≤ expGrowthSup v := by
   apply (expGrowthSup_eventually_monotone h).trans
   rcases eq_zero_or_pos b with rfl | b_pos
   · simp only [zero_mul, ← Pi.zero_def, expGrowthSup_zero, bot_le]
@@ -1034,386 +1239,436 @@ lemma expGrowthSup_le_of_eventually_le
     · exact zero_add (expGrowthSup v)
     · exact .inl zero_ne_bot
     · exact .inl zero_ne_top
-
-中文:
-引理 expGrowthSup_le_of_eventually_le
-  条件: (hb : b != ∞) (h : 对任意ᶠ n in atTop, u n <= b * v n)
-  证明: by
-  apply (expGrowthSup_eventually_monotone h).trans
-  rcases eq_zero_or_pos b with rfl | b_pos
-  · simp only [zero_mul, ← Pi.zero_def, expGrowthSup_zero, bot_le]
-  · apply (expGrowthSup_mul_le _ _).trans_eq <;> rw [expGrowthSup_const b_pos.ne' hb]
-    · exact zero_add (expGrowthSup v)
-    · exact .inl zero_ne_bot
-    · exact .inl zero_ne_top
-
-Depends on / 依赖: Pi.zero_def, b_pos, b_pos.ne, bot_le, eq_zero_or_pos, expGrowthSup, expGrowthSup_const, expGrowthSup_eventually_monotone, expGrowthSup_mul_le, expGrowthSup_zero, trans_eq, zero_add, zero_def, zero_mul, zero_ne_bot, zero_ne_top
+/-
+**ExpGrowth.expGrowthInf_of_eventually_ge** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthInf_of_eventually_ge (hb : b != 0) (h : forallᶠ n in atTop, b * u
+ n <= v n) : expGrowthInf u <= expGrowthInf v
+参数：hb : b != 0；h : forallᶠ n in atTop, b * u n <= v n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans'`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, b ≤ a → 
+c ≤ b → c ≤ a
+· 使用引理 `ExpGrowth.expGrowthInf_eventually_monotone`：expGrowthInf_eventually_mono
+tone (h : u <=ᶠ[atTop] v) : expGrowthInf u <= expGrowthInf v
+· 使用引理 `ExpGrowth.le_expGrowthInf_mul`：le_expGrowthInf_mul : expGrowthInf u + ex
+pGrowthInf v <= expGrowthInf (u * v)
+· 使用定理 `eq_top_or_lt_top`：eq_top_or_lt_top (a : α) : a = ⊤ ∨ a < ⊤
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Pi.top_def`：∀ {ι : Type u_1} {α' : ι → Type u_2} [inst : (i : ι) → Top (
+α' i)], ⊤ = fun x => ⊤
+· 使用引理 `ExpGrowth.expGrowthInf_top`：expGrowthInf_top : expGrowthInf ⊤ = ⊤
+· 使用定理 `le_add_of_nonneg_left`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1 
+: LE α] [AddRightMono α] {a b : α}, 0 ≤ b → a ≤ b + a
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `instIsOrderedAddMonoidEReal`：IsOrderedAddMonoid EReal
+· 使用定理 `le_top`：le_top : a <= ⊤
+· 使用引理 `ExpGrowth.expGrowthInf_const`：expGrowthInf_const (h : b != 0) (h' : b !=
+ ∞) : expGrowthInf (fun _ => b) = 0
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-lemma expGrowthSup_le_of_eventually_le (hb : b != ∞) (h : forallᶠ n in atTop, u n <= b * v n) :
-    expGrowthSup u <= expGrowthSup v := by
-  apply (expGrowthSup_eventually_monotone h).trans
-  rcases eq_zero_or_pos b with rfl | b_pos
-  · simp only [zero_mul, ← Pi.zero_def, expGrowthSup_zero, bot_le]
-  · apply (expGrowthSup_mul_le _ _).trans_eq <;> rw [expGrowthSup_const b_pos.ne' hb]
-    · exact zero_add (expGrowthSup v)
-    · exact .inl zero_ne_bot
-    · exact .inl zero_ne_top
-
-/--
-lemma `expGrowthInf_of_eventually_ge` / 引理 `expGrowthInf_of_eventually_ge`
-
-English:
-lemma expGrowthInf_of_eventually_ge
-  given: (hb : b != 0) (h : forallᶠ n in atTop, b * u n <= v n)
-  proof: by
+lemma expGrowthInf_of_eventually_ge (hb : b ≠ 0) (h : ∀ᶠ n in atTop, b * u n ≤ v n) :
+    expGrowthInf u ≤ expGrowthInf v := by
   apply (expGrowthInf_eventually_monotone h).trans' (le_expGrowthInf_mul.trans' _)
   rcases eq_top_or_lt_top b with rfl | b_top
   · rw [← Pi.top_def, expGrowthInf_top]
     exact le_add_of_nonneg_left le_top
   · rw [expGrowthInf_const hb b_top.ne, zero_add]
-
-中文:
-引理 expGrowthInf_of_eventually_ge
-  条件: (hb : b != 0) (h : 对任意ᶠ n in atTop, b * u n <= v n)
-  证明: by
-  apply (expGrowthInf_eventually_monotone h).trans' (le_expGrowthInf_mul.trans' _)
-  rcases eq_top_or_lt_top b with rfl | b_top
-  · rw [← Pi.top_def, expGrowthInf_top]
-    exact le_add_of_nonneg_left le_top
-  · rw [expGrowthInf_const hb b_top.ne, zero_add]
-
-Depends on / 依赖: Pi.top_def, b_top, b_top.ne, eq_top_or_lt_top, expGrowthInf_const, expGrowthInf_eventually_monotone, expGrowthInf_top, le_add_of_nonneg_left, le_expGrowthInf_mul, le_expGrowthInf_mul.trans, le_top, top_def, zero_add
+/-
+**ExpGrowth.expGrowthSup_of_eventually_ge** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthSup_of_eventually_ge (hb : b != 0) (h : forallᶠ n in atTop, b * u
+ n <= v n) : expGrowthSup u <= expGrowthSup v
+参数：hb : b != 0；h : forallᶠ n in atTop, b * u n <= v n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans'`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, b ≤ a → 
+c ≤ b → c ≤ a
+· 使用引理 `ExpGrowth.expGrowthSup_eventually_monotone`：expGrowthSup_eventually_mono
+tone (h : u <=ᶠ[atTop] v) : expGrowthSup u <= expGrowthSup v
+· 使用引理 `ExpGrowth.le_expGrowthSup_mul'`：le_expGrowthSup_mul' : expGrowthInf u + 
+expGrowthSup v <= expGrowthSup (u * v)
+· 使用定理 `eq_top_or_lt_top`：eq_top_or_lt_top (a : α) : a = ⊤ ∨ a < ⊤
+· 使用定理 `le_add_of_nonneg_left`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1 
+: LE α] [AddRightMono α] {a b : α}, 0 ≤ b → a ≤ b + a
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `instIsOrderedAddMonoidEReal`：IsOrderedAddMonoid EReal
+· 使用定理 `le_top`：le_top : a <= ⊤
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `ExpGrowth.expGrowthInf_top`：expGrowthInf_top : expGrowthInf ⊤ = ⊤
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ExpGrowth.expGrowthInf_const`：expGrowthInf_const (h : b != 0) (h' : b !=
+ ∞) : expGrowthInf (fun _ => b) = 0
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-lemma expGrowthInf_of_eventually_ge (hb : b != 0) (h : forallᶠ n in atTop, b * u n <= v n) :
-    expGrowthInf u <= expGrowthInf v := by
-  apply (expGrowthInf_eventually_monotone h).trans' (le_expGrowthInf_mul.trans' _)
-  rcases eq_top_or_lt_top b with rfl | b_top
-  · rw [← Pi.top_def, expGrowthInf_top]
-    exact le_add_of_nonneg_left le_top
-  · rw [expGrowthInf_const hb b_top.ne, zero_add]
-
-/--
-lemma `expGrowthSup_of_eventually_ge` / 引理 `expGrowthSup_of_eventually_ge`
-
-English:
-lemma expGrowthSup_of_eventually_ge
-  given: (hb : b != 0) (h : forallᶠ n in atTop, b * u n <= v n)
-  proof: by
+lemma expGrowthSup_of_eventually_ge (hb : b ≠ 0) (h : ∀ᶠ n in atTop, b * u n ≤ v n) :
+    expGrowthSup u ≤ expGrowthSup v := by
   apply (expGrowthSup_eventually_monotone h).trans' (le_expGrowthSup_mul'.trans' _)
   rcases eq_top_or_lt_top b with rfl | b_top
   · exact expGrowthInf_top ▸ le_add_of_nonneg_left le_top
   · rw [expGrowthInf_const hb b_top.ne, zero_add]
 
-中文:
-引理 expGrowthSup_of_eventually_ge
-  条件: (hb : b != 0) (h : 对任意ᶠ n in atTop, b * u n <= v n)
-  证明: by
-  apply (expGrowthSup_eventually_monotone h).trans' (le_expGrowthSup_mul'.trans' _)
-  rcases eq_top_or_lt_top b with rfl | b_top
-  · exact expGrowthInf_top ▸ le_add_of_nonneg_left le_top
-  · rw [expGrowthInf_const hb b_top.ne, zero_add]
+/-! ### Infimum and supremum -/
 
-Depends on / 依赖: b_top, b_top.ne, eq_top_or_lt_top, expGrowthInf_const, expGrowthInf_top, expGrowthSup_eventually_monotone, le_add_of_nonneg_left, le_expGrowthSup_mul, le_top, zero_add
--/
-lemma expGrowthSup_of_eventually_ge (hb : b != 0) (h : forallᶠ n in atTop, b * u n <= v n) :
-    expGrowthSup u <= expGrowthSup v := by
-  apply (expGrowthSup_eventually_monotone h).trans' (le_expGrowthSup_mul'.trans' _)
-  rcases eq_top_or_lt_top b with rfl | b_top
-  · exact expGrowthInf_top ▸ le_add_of_nonneg_left le_top
-  · rw [expGrowthInf_const hb b_top.ne, zero_add]
+/-
+**ExpGrowth.expGrowthInf_inf** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthInf_inf : expGrowthInf (u ⊓ v) = expGrowthInf u ⊓ expGrowthInf v
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ExpGrowth.expGrowthInf.eq_1`：∀ (u : ℕ → ENNReal), ExpGrowth.expGrowthInf
+ u = Filter.liminf (fun n => (u n).log / ↑n) Filter.atTop
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `liminf_min`：liminf_min [ConditionallyCompleteLinearOrder β] {f : Filter 
+α} {u v : α -> β} (h₁ : f.IsCoboundedUnder (· >= ·) u
+· 使用定理 `Filter.isCobounded_ge_of_top`：∀ {α : Type u_1} [inst : LE α] [OrderTop α
+] {f : Filter α}, Filter.IsCobounded (fun x1 x2 => x2 ≤ x1) f
+· 使用定理 `Filter.isBounded_ge_of_bot`：∀ {α : Type u_1} [inst : LE α] [OrderBot α] 
+{f : Filter α}, Filter.IsBounded (fun x1 x2 => x2 ≤ x1) f
+· 使用定理 `Filter.liminf_congr`：liminf_congr {α : Type*} [ConditionallyCompleteLatt
+ice β] {f : Filter α} {u v : α -> β} (h : forallᶠ a in f, u a = v a) : liminf u 
+f = limin…
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
+· 使用定理 `Pi.inf_apply`：∀ {ι : Type u_1} {α' : ι → Type u_2} [inst : (i : ι) → Min
+ (α' i)] (f g : (i : ι) → α' i) (i : ι), (f ⊓ g) i = f i ⊓ g i
+· 使用定理 `Monotone.map_min`：∀ {α : Type u} {β : Type v} [inst : LinearOrder α] [in
+st_1 : LinearOrder β] {f : α → β} {a b : α},   Monotone f → f (min a b) = min (f
+ a) (f…
+· 使用定理 `ENNReal.log_monotone`：log_monotone : Monotone log
+· 使用引理 `EReal.monotone_div_right_of_nonneg`：monotone_div_right_of_nonneg (h : 0 
+<= b) : Monotone fun a => a / b
+· 使用定理 `Nat.cast_nonneg'`：cast_nonneg' (n : Nat) : 0 <= (n : α)
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `instIsOrderedAddMonoidEReal`：IsOrderedAddMonoid EReal
+· 使用定理 `instZeroLEOneClassEReal`：ZeroLEOneClass EReal
 
-
-/--
-lemma `expGrowthInf_inf` / 引理 `expGrowthInf_inf`
-
-English:
-lemma expGrowthInf_inf
-  statement: expGrowthInf (u ⊓ v) = expGrowthInf u ⊓ expGrowthInf v
-  proof: by
-  rw [expGrowthInf]; rw [expGrowthInf]; rw [expGrowthInf]; rw [← liminf_min]
-  refine liminf_congr (Eventually.of_forall fun n => ?_)
-  rw [Pi.inf_apply]; rw [log_monotone.map_min]
-  exact (monotone_div_right_of_nonneg n.cast_nonneg').map_min
-
-中文:
-引理 expGrowthInf_inf
-  结论: expGrowthInf (u ⊓ v) = expGrowthInf u ⊓ expGrowthInf v
-  证明: by
-  rw [expGrowthInf]; rw [expGrowthInf]; rw [expGrowthInf]; rw [← liminf_min]
-  refine liminf_congr (Eventually.of_forall fun n => ?_)
-  rw [Pi.inf_apply]; rw [log_monotone.map_min]
-  exact (monotone_div_right_of_nonneg n.cast_nonneg').map_min
-
-Depends on / 依赖: Eventually, Eventually.of_forall, Pi.inf_apply, cast_nonneg, expGrowthInf, inf_apply, liminf_congr, liminf_min, log_monotone, log_monotone.map_min, map_min, monotone_div_right_of_nonneg, n.cast_nonneg, of_forall
+--- 原说明 ---
+### Infimum and supremum
 -/
 lemma expGrowthInf_inf : expGrowthInf (u ⊓ v) = expGrowthInf u ⊓ expGrowthInf v := by
-  rw [expGrowthInf]; rw [expGrowthInf]; rw [expGrowthInf]; rw [← liminf_min]
-  refine liminf_congr (Eventually.of_forall fun n => ?_)
-  rw [Pi.inf_apply]; rw [log_monotone.map_min]
+  rw [expGrowthInf, expGrowthInf, expGrowthInf, ← liminf_min]
+  refine liminf_congr (Eventually.of_forall fun n ↦ ?_)
+  rw [Pi.inf_apply, log_monotone.map_min]
   exact (monotone_div_right_of_nonneg n.cast_nonneg').map_min
 
-/--
-Definition of `expGrowthInfTopHom` / `expGrowthInfTopHom` 的定义
+/-- Lower exponential growth as an `InfTopHom`. -/
+/-
+**ExpGrowth.expGrowthInfTopHom** 是 Mathlib 中的一个定义，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthInfTopHom : InfTopHom (Nat -> Real>=0∞) EReal where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `ExpGrowth.expGrowthInf_inf`：expGrowthInf_inf : expGrowthInf (u ⊓ v) = ex
+pGrowthInf u ⊓ expGrowthInf v
+· 使用引理 `ExpGrowth.expGrowthInf_top`：expGrowthInf_top : expGrowthInf ⊤ = ⊤
 
-English:
-definition expGrowthInfTopHom
-  signature: : InfTopHom (Nat -> Real>=0∞) EReal where
-  body: expGrowthInf
-  map_inf' _ _ := expGrowthInf_inf
-  map_top' := expGrowthInf_top
-
-中文:
-定义 expGrowthInfTopHom
-  签名: : InfTop态射 (自然数 -> 实数>=0∞) E实数 where
-  定义体: expGrowthInf
-  map_inf' _ _ := expGrowthInf_inf
-  map_top' := expGrowthInf_top
-
-Depends on / 依赖: expGrowthInf
+--- 原说明 ---
+Lower exponential growth as an `InfTopHom`.
 -/
-noncomputable def expGrowthInfTopHom : InfTopHom (Nat -> Real>=0∞) EReal where
+noncomputable def expGrowthInfTopHom : InfTopHom (ℕ → ℝ≥0∞) EReal where
   toFun := expGrowthInf
   map_inf' _ _ := expGrowthInf_inf
   map_top' := expGrowthInf_top
-
-/--
-lemma `expGrowthInf_biInf` / 引理 `expGrowthInf_biInf`
-
-English:
-lemma expGrowthInf_biInf
-  given: {α : Type*} (u : α -> Nat -> Real>=0∞) {s : Set α} (hs : s.Finite)
-  proof: by
-  have := map_finset_inf expGrowthInfTopHom hs.toFinset u
-  simpa only [expGrowthInfTopHom, InfTopHom.coe_mk, InfHom.coe_mk, Finset.inf_eq_iInf,
-    hs.mem_toFinset, comp_apply]
-
-中文:
-引理 expGrowthInf_biInf
-  条件: {α : 类型} (u : α -> 自然数 -> 实数>=0∞) {s : 集合 α} (hs : s.有限)
-  证明: by
-  have := map_finset_inf expGrowthInfTopHom hs.toFinset u
-  simpa only [expGrowthInfTopHom, InfTopHom.coe_mk, InfHom.coe_mk, Finset.inf_eq_iInf,
-    hs.mem_toFinset, comp_apply]
-
-Depends on / 依赖: Finset, Finset.inf_eq_iInf, InfHom, InfHom.coe_mk, InfTopHom, InfTopHom.coe_mk, coe_mk, comp_apply, expGrowthInfTopHom, hs.mem_toFinset, hs.toFinset, inf_eq_iInf, map_finset_inf, mem_toFinset, toFinset
+/-
+**ExpGrowth.expGrowthInf_biInf** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthInf_biInf {α : Type*} (u : α -> Nat -> Real>=0∞) {s : Set α} (hs 
+: s.Finite) : expGrowthInf (⨅ x in s, u x) = ⨅ x in s, expGrowthInf (u x)
+参数：u : α -> Nat -> Real>=0∞；hs : s.Finite。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_finset_inf`：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} {ι : Type
+ u_5} [inst : SemilatticeInf α] [inst_1 : OrderTop α]   [inst_2 : SemilatticeInf
+ β] …
+· 使用定理 `InfTopHom.instInfTopHomClass`：∀ {α : Type u_2} {β : Type u_3} [inst : Mi
+n α] [inst_1 : Top α] [inst_2 : Min β] [inst_3 : Top β],   InfTopHomClass (InfTo
+pHom α β) α β
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ExpGrowth.expGrowthInf_inf`：expGrowthInf_inf : expGrowthInf (u ⊓ v) = ex
+pGrowthInf u ⊓ expGrowthInf v
+· 使用引理 `ExpGrowth.expGrowthInf_top`：expGrowthInf_top : expGrowthInf ⊤ = ⊤
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.inf_eq_iInf`：∀ {α : Type u_2} {β : Type u_3} [inst : CompleteLatt
+ice β] (s : Finset α) (f : α → β), s.inf f = ⨅ a ∈ s, f a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.Finite.mem_toFinset`：∀ {α : Type u} {s : Set α} {a : α} (hs : s.Fini
+te), a ∈ hs.toFinset ↔ a ∈ s
 -/
-lemma expGrowthInf_biInf {α : Type*} (u : α -> Nat -> Real>=0∞) {s : Set α} (hs : s.Finite) :
-    expGrowthInf (⨅ x in s, u x) = ⨅ x in s, expGrowthInf (u x) := by
+lemma expGrowthInf_biInf {α : Type*} (u : α → ℕ → ℝ≥0∞) {s : Set α} (hs : s.Finite) :
+    expGrowthInf (⨅ x ∈ s, u x) = ⨅ x ∈ s, expGrowthInf (u x) := by
   have := map_finset_inf expGrowthInfTopHom hs.toFinset u
   simpa only [expGrowthInfTopHom, InfTopHom.coe_mk, InfHom.coe_mk, Finset.inf_eq_iInf,
     hs.mem_toFinset, comp_apply]
-
-/--
-lemma `expGrowthInf_iInf` / 引理 `expGrowthInf_iInf`
-
-English:
-lemma expGrowthInf_iInf
-  given: {ι : Type*} [Finite ι] (u : ι -> Nat -> Real>=0∞)
-  proof: by
-  rw [← iInf_univ]; rw [expGrowthInf_biInf u Set.finite_univ]; rw [iInf_univ]
-
-中文:
-引理 expGrowthInf_iInf
-  条件: {ι : 类型} [有限 ι] (u : ι -> 自然数 -> 实数>=0∞)
-  证明: by
-  rw [← iInf_univ]; rw [expGrowthInf_biInf u Set.finite_univ]; rw [iInf_univ]
-
-Depends on / 依赖: Set.finite_univ, expGrowthInf_biInf, finite_univ, iInf_univ
+/-
+**ExpGrowth.expGrowthInf_iInf** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthInf_iInf {ι : Type*} [Finite ι] (u : ι -> Nat -> Real>=0∞) : expG
+rowthInf (⨅ i, u i) = ⨅ i, expGrowthInf (u i)
+参数：u : ι -> Nat -> Real>=0∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `iInf_univ`：∀ {α : Type u_1} {β : Type u_2} [inst : CompleteLattice α] {f
+ : β → α}, ⨅ x ∈ Set.univ, f x = ⨅ x, f x
+· 使用引理 `ExpGrowth.expGrowthInf_biInf`：expGrowthInf_biInf {α : Type*} (u : α -> N
+at -> Real>=0∞) {s : Set α} (hs : s.Finite) : expGrowthInf (⨅ x in s, u x) = ⨅ x
+ in s, expGrowthIn…
+· 使用定理 `Set.finite_univ`：∀ {α : Type u} [Finite α], Set.univ.Finite
 -/
-lemma expGrowthInf_iInf {ι : Type*} [Finite ι] (u : ι -> Nat -> Real>=0∞) :
+lemma expGrowthInf_iInf {ι : Type*} [Finite ι] (u : ι → ℕ → ℝ≥0∞) :
     expGrowthInf (⨅ i, u i) = ⨅ i, expGrowthInf (u i) := by
-  rw [← iInf_univ]; rw [expGrowthInf_biInf u Set.finite_univ]; rw [iInf_univ]
-
-/--
-lemma `expGrowthSup_sup` / 引理 `expGrowthSup_sup`
-
-English:
-lemma expGrowthSup_sup
-  statement: expGrowthSup (u ⊔ v) = expGrowthSup u ⊔ expGrowthSup v
-  proof: by
-  rw [expGrowthSup]; rw [expGrowthSup]; rw [expGrowthSup]; rw [← limsup_max]
-  refine limsup_congr (Eventually.of_forall fun n => ?_)
-  rw [Pi.sup_apply]; rw [log_monotone.map_max]
-  exact (monotone_div_right_of_nonneg n.cast_nonneg').map_max
-
-中文:
-引理 expGrowthSup_sup
-  结论: expGrowthSup (u ⊔ v) = expGrowthSup u ⊔ expGrowthSup v
-  证明: by
-  rw [expGrowthSup]; rw [expGrowthSup]; rw [expGrowthSup]; rw [← limsup_max]
-  refine limsup_congr (Eventually.of_forall fun n => ?_)
-  rw [Pi.sup_apply]; rw [log_monotone.map_max]
-  exact (monotone_div_right_of_nonneg n.cast_nonneg').map_max
-
-Depends on / 依赖: Eventually, Eventually.of_forall, Pi.sup_apply, cast_nonneg, expGrowthSup, limsup_congr, limsup_max, log_monotone, log_monotone.map_max, map_max, monotone_div_right_of_nonneg, n.cast_nonneg, of_forall, sup_apply
+  rw [← iInf_univ, expGrowthInf_biInf u Set.finite_univ, iInf_univ]
+/-
+**ExpGrowth.expGrowthSup_sup** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthSup_sup : expGrowthSup (u ⊔ v) = expGrowthSup u ⊔ expGrowthSup v
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ExpGrowth.expGrowthSup.eq_1`：∀ (u : ℕ → ENNReal), ExpGrowth.expGrowthSup
+ u = Filter.limsup (fun n => (u n).log / ↑n) Filter.atTop
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `limsup_max`：limsup_max [ConditionallyCompleteLinearOrder β] {f : Filter 
+α} {u v : α -> β} (h₁ : f.IsCoboundedUnder (· <= ·) u
+· 使用定理 `Filter.isCobounded_le_of_bot`：isCobounded_le_of_bot [LE α] [OrderBot α] 
+{f : Filter α} : f.IsCobounded (· <= ·)
+· 使用定理 `Filter.isBounded_le_of_top`：isBounded_le_of_top [LE α] [OrderTop α] {f :
+ Filter α} : f.IsBounded (· <= ·)
+· 使用定理 `Filter.limsup_congr`：limsup_congr {α : Type*} [ConditionallyCompleteLatt
+ice β] {f : Filter α} {u v : α -> β} (h : forallᶠ a in f, u a = v a) : limsup u 
+f = limsu…
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
+· 使用定理 `Pi.sup_apply`：sup_apply [forall i, Max (α' i)] (f g : forall i, α' i) (i
+ : ι) : (f ⊔ g) i = f i ⊔ g i
+· 使用定理 `Monotone.map_max`：Monotone.map_max (hf : Monotone f) : f (max a b) = max
+ (f a) (f b)
+· 使用定理 `ENNReal.log_monotone`：log_monotone : Monotone log
+· 使用引理 `EReal.monotone_div_right_of_nonneg`：monotone_div_right_of_nonneg (h : 0 
+<= b) : Monotone fun a => a / b
+· 使用定理 `Nat.cast_nonneg'`：cast_nonneg' (n : Nat) : 0 <= (n : α)
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `instIsOrderedAddMonoidEReal`：IsOrderedAddMonoid EReal
+· 使用定理 `instZeroLEOneClassEReal`：ZeroLEOneClass EReal
 -/
 lemma expGrowthSup_sup : expGrowthSup (u ⊔ v) = expGrowthSup u ⊔ expGrowthSup v := by
-  rw [expGrowthSup]; rw [expGrowthSup]; rw [expGrowthSup]; rw [← limsup_max]
-  refine limsup_congr (Eventually.of_forall fun n => ?_)
-  rw [Pi.sup_apply]; rw [log_monotone.map_max]
+  rw [expGrowthSup, expGrowthSup, expGrowthSup, ← limsup_max]
+  refine limsup_congr (Eventually.of_forall fun n ↦ ?_)
+  rw [Pi.sup_apply, log_monotone.map_max]
   exact (monotone_div_right_of_nonneg n.cast_nonneg').map_max
 
-/--
-Definition of `expGrowthSupBotHom` / `expGrowthSupBotHom` 的定义
+/-- Upper exponential growth as a `SupBotHom`. -/
+/-
+**ExpGrowth.expGrowthSupBotHom** 是 Mathlib 中的一个定义，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthSupBotHom : SupBotHom (Nat -> Real>=0∞) EReal where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `ExpGrowth.expGrowthSup_sup`：expGrowthSup_sup : expGrowthSup (u ⊔ v) = ex
+pGrowthSup u ⊔ expGrowthSup v
+· 使用引理 `ExpGrowth.expGrowthSup_zero`：expGrowthSup_zero : expGrowthSup 0 = ⊥
 
-English:
-definition expGrowthSupBotHom
-  signature: : SupBotHom (Nat -> Real>=0∞) EReal where
-  body: expGrowthSup
-  map_sup' _ _ := expGrowthSup_sup
-  map_bot' := expGrowthSup_zero
-
-中文:
-定义 expGrowthSupBotHom
-  签名: : SupBot态射 (自然数 -> 实数>=0∞) E实数 where
-  定义体: expGrowthSup
-  map_sup' _ _ := expGrowthSup_sup
-  map_bot' := expGrowthSup_zero
-
-Depends on / 依赖: expGrowthSup
+--- 原说明 ---
+Upper exponential growth as a `SupBotHom`.
 -/
-noncomputable def expGrowthSupBotHom : SupBotHom (Nat -> Real>=0∞) EReal where
+noncomputable def expGrowthSupBotHom : SupBotHom (ℕ → ℝ≥0∞) EReal where
   toFun := expGrowthSup
   map_sup' _ _ := expGrowthSup_sup
   map_bot' := expGrowthSup_zero
-
-/--
-lemma `expGrowthSup_biSup` / 引理 `expGrowthSup_biSup`
-
-English:
-lemma expGrowthSup_biSup
-  given: {α : Type*} (u : α -> Nat -> Real>=0∞) {s : Set α} (hs : s.Finite)
-  proof: by
-  have := map_finset_sup expGrowthSupBotHom hs.toFinset u
-  simpa only [expGrowthSupBotHom, SupBotHom.coe_mk, SupHom.coe_mk, Finset.sup_eq_iSup,
-    hs.mem_toFinset, comp_apply]
-
-中文:
-引理 expGrowthSup_biSup
-  条件: {α : 类型} (u : α -> 自然数 -> 实数>=0∞) {s : 集合 α} (hs : s.有限)
-  证明: by
-  have := map_finset_sup expGrowthSupBotHom hs.toFinset u
-  simpa only [expGrowthSupBotHom, SupBotHom.coe_mk, SupHom.coe_mk, Finset.sup_eq_iSup,
-    hs.mem_toFinset, comp_apply]
-
-Depends on / 依赖: Finset, Finset.sup_eq_iSup, SupBotHom, SupBotHom.coe_mk, SupHom, SupHom.coe_mk, coe_mk, comp_apply, expGrowthSupBotHom, hs.mem_toFinset, hs.toFinset, map_finset_sup, mem_toFinset, sup_eq_iSup, toFinset
+/-
+**ExpGrowth.expGrowthSup_biSup** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthSup_biSup {α : Type*} (u : α -> Nat -> Real>=0∞) {s : Set α} (hs 
+: s.Finite) : expGrowthSup (⨆ x in s, u x) = ⨆ x in s, expGrowthSup (u x)
+参数：u : α -> Nat -> Real>=0∞；hs : s.Finite。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_finset_sup`：∀ {F : Type u_1} {α : Type u_2} {β : Type u_3} {ι : Type
+ u_5} [inst : SemilatticeSup α] [inst_1 : OrderBot α]   [inst_2 : SemilatticeSup
+ β] …
+· 使用定理 `SupBotHom.instSupBotHomClass`：∀ {α : Type u_2} {β : Type u_3} [inst : Ma
+x α] [inst_1 : Bot α] [inst_2 : Max β] [inst_3 : Bot β],   SupBotHomClass (SupBo
+tHom α β) α β
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ExpGrowth.expGrowthSup_sup`：expGrowthSup_sup : expGrowthSup (u ⊔ v) = ex
+pGrowthSup u ⊔ expGrowthSup v
+· 使用引理 `ExpGrowth.expGrowthSup_zero`：expGrowthSup_zero : expGrowthSup 0 = ⊥
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.sup_eq_iSup`：sup_eq_iSup [CompleteLattice β] (s : Finset α) (f : 
+α -> β) : s.sup f = ⨆ a in s, f a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iSup_congr_Prop`：iSup_congr_Prop {p q : Prop} {f₁ : p -> α} {f₂ : q -> α
+} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iSup f₁ = iSup f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.Finite.mem_toFinset`：∀ {α : Type u} {s : Set α} {a : α} (hs : s.Fini
+te), a ∈ hs.toFinset ↔ a ∈ s
 -/
-lemma expGrowthSup_biSup {α : Type*} (u : α -> Nat -> Real>=0∞) {s : Set α} (hs : s.Finite) :
-    expGrowthSup (⨆ x in s, u x) = ⨆ x in s, expGrowthSup (u x) := by
+lemma expGrowthSup_biSup {α : Type*} (u : α → ℕ → ℝ≥0∞) {s : Set α} (hs : s.Finite) :
+    expGrowthSup (⨆ x ∈ s, u x) = ⨆ x ∈ s, expGrowthSup (u x) := by
   have := map_finset_sup expGrowthSupBotHom hs.toFinset u
   simpa only [expGrowthSupBotHom, SupBotHom.coe_mk, SupHom.coe_mk, Finset.sup_eq_iSup,
     hs.mem_toFinset, comp_apply]
-
-/--
-lemma `expGrowthSup_iSup` / 引理 `expGrowthSup_iSup`
-
-English:
-lemma expGrowthSup_iSup
-  given: {ι : Type*} [Finite ι] (u : ι -> Nat -> Real>=0∞)
-  proof: by
-  rw [← iSup_univ]; rw [expGrowthSup_biSup u Set.finite_univ]; rw [iSup_univ]
-
-中文:
-引理 expGrowthSup_iSup
-  条件: {ι : 类型} [有限 ι] (u : ι -> 自然数 -> 实数>=0∞)
-  证明: by
-  rw [← iSup_univ]; rw [expGrowthSup_biSup u Set.finite_univ]; rw [iSup_univ]
-
-Depends on / 依赖: Set.finite_univ, expGrowthSup_biSup, finite_univ, iSup_univ
+/-
+**ExpGrowth.expGrowthSup_iSup** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthSup_iSup {ι : Type*} [Finite ι] (u : ι -> Nat -> Real>=0∞) : expG
+rowthSup (⨆ i, u i) = ⨆ i, expGrowthSup (u i)
+参数：u : ι -> Nat -> Real>=0∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `iSup_univ`：iSup_univ {f : β -> α} : ⨆ x in (univ : Set β), f x = ⨆ x, f 
+x
+· 使用引理 `ExpGrowth.expGrowthSup_biSup`：expGrowthSup_biSup {α : Type*} (u : α -> N
+at -> Real>=0∞) {s : Set α} (hs : s.Finite) : expGrowthSup (⨆ x in s, u x) = ⨆ x
+ in s, expGrowthSu…
+· 使用定理 `Set.finite_univ`：∀ {α : Type u} [Finite α], Set.univ.Finite
 -/
-lemma expGrowthSup_iSup {ι : Type*} [Finite ι] (u : ι -> Nat -> Real>=0∞) :
+lemma expGrowthSup_iSup {ι : Type*} [Finite ι] (u : ι → ℕ → ℝ≥0∞) :
     expGrowthSup (⨆ i, u i) = ⨆ i, expGrowthSup (u i) := by
-  rw [← iSup_univ]; rw [expGrowthSup_biSup u Set.finite_univ]; rw [iSup_univ]
+  rw [← iSup_univ, expGrowthSup_biSup u Set.finite_univ, iSup_univ]
 
+/-! ### Addition -/
 
-/--
-lemma `le_expGrowthInf_add` / 引理 `le_expGrowthInf_add`
+/-
+**ExpGrowth.le_expGrowthInf_add** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：le_expGrowthInf_add : expGrowthInf u ⊔ expGrowthInf v <= expGrowthInf (u +
+ v)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_le`：sup_le : a <= c -> b <= c -> a ⊔ b <= c
+· 使用引理 `ExpGrowth.expGrowthInf_monotone`：expGrowthInf_monotone : Monotone expGro
+wthInf
+· 使用定理 `le_self_add`：∀ {α : Type u} [inst : Add α] [inst_1 : LE α] [CanonicallyO
+rderedAdd α] {a b : α}, a ≤ a + b
+· 使用定理 `Pi.instCanonicallyOrderedAddForall`：∀ {ι : Type u_6} {Z : ι → Type u_7} 
+[inst : (i : ι) → AddMonoid (Z i)] [inst_1 : (i : ι) → PartialOrder (Z i)]   [∀ 
+(i : ι), CanonicallyOrde…
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `le_add_self`：∀ {α : Type u} [inst : Add α] [inst_1 : LE α] [CanonicallyO
+rderedAdd α] {a b : α}, a ≤ b + a
 
-English:
-lemma le_expGrowthInf_add
-  statement: expGrowthInf u ⊔ expGrowthInf v <= expGrowthInf (u + v)
-  proof: sup_le (expGrowthInf_monotone le_self_add) (expGrowthInf_monotone le_add_self)
-
-中文:
-引理 le_expGrowthInf_add
-  结论: expGrowthInf u ⊔ expGrowthInf v <= expGrowthInf (u + v)
-  证明: sup_le (expGrowthInf_monotone le_self_add) (expGrowthInf_monotone le_add_self)
-
-Depends on / 依赖: expGrowthInf_monotone, le_add_self, le_self_add, sup_le
+--- 原说明 ---
+### Addition
 -/
-lemma le_expGrowthInf_add : expGrowthInf u ⊔ expGrowthInf v <= expGrowthInf (u + v) :=
+lemma le_expGrowthInf_add : expGrowthInf u ⊔ expGrowthInf v ≤ expGrowthInf (u + v) :=
   sup_le (expGrowthInf_monotone le_self_add) (expGrowthInf_monotone le_add_self)
-
-/--
-lemma `expGrowthSup_add` / 引理 `expGrowthSup_add`
-
-English:
-lemma expGrowthSup_add
-  statement: expGrowthSup (u + v) = expGrowthSup u ⊔ expGrowthSup v
-  proof: by
-  rw [← expGrowthSup_sup]
-  apply le_antisymm
-  · refine expGrowthSup_le_of_eventually_le (b := 2) ofNat_ne_top (Eventually.of_forall fun n => ?_)
-    rw [Pi.sup_apply u v n]; rw [Pi.add_apply u v n]; rw [two_mul]
-    exact add_le_add (le_max_left (u n) (v n)) (le_max_right (u n) (v n))
-  · refine expGrowthSup_monotone fun n => ?_
-    exact sup_le (self_le_add_right (u n) (v n)) (self_le_add_left (v n) (u n))
-
-中文:
-引理 expGrowthSup_add
-  结论: expGrowthSup (u + v) = expGrowthSup u ⊔ expGrowthSup v
-  证明: by
-  rw [← expGrowthSup_sup]
-  apply le_antisymm
-  · refine expGrowthSup_le_of_eventually_le (b := 2) ofNat_ne_top (Eventually.of_forall fun n => ?_)
-    rw [Pi.sup_apply u v n]; rw [Pi.add_apply u v n]; rw [two_mul]
-    exact add_le_add (le_max_left (u n) (v n)) (le_max_right (u n) (v n))
-  · refine expGrowthSup_monotone fun n => ?_
-    exact sup_le (self_le_add_right (u n) (v n)) (self_le_add_left (v n) (u n))
-
-Depends on / 依赖: Eventually, Eventually.of_forall, Pi.add_apply, Pi.sup_apply, add_apply, add_le_add, expGrowthSup_le_of_eventually_le, expGrowthSup_monotone, expGrowthSup_sup, le_antisymm, le_max_left, le_max_right, ofNat_ne_top, of_forall, self_le_add_left, self_le_add_right, sup_apply, sup_le, two_mul
+/-
+**ExpGrowth.expGrowthSup_add** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthSup_add : expGrowthSup (u + v) = expGrowthSup u ⊔ expGrowthSup v
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `ExpGrowth.expGrowthSup_sup`：expGrowthSup_sup : expGrowthSup (u ⊔ v) = ex
+pGrowthSup u ⊔ expGrowthSup v
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `ExpGrowth.expGrowthSup_le_of_eventually_le`：expGrowthSup_le_of_eventuall
+y_le (hb : b != ∞) (h : forallᶠ n in atTop, u n <= b * v n) : expGrowthSup u <= 
+expGrowthSup v
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用引理 `ENNReal.ofNat_ne_top`：ofNat_ne_top {n : Nat} [Nat.AtLeastTwo n] : ofNat(
+n) != ∞
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
+· 使用定理 `Pi.sup_apply`：sup_apply [forall i, Max (α' i)] (f g : forall i, α' i) (i
+ : ι) : (f ⊔ g) i = f i ⊔ g i
+· 使用定理 `Pi.add_apply`：∀ {ι : Type u_1} {M : ι → Type u_5} [inst : (i : ι) → Add 
+(M i)] (f g : (i : ι) → M i) (i : ι), (f + g) i = f i + g i
+· 使用定理 `two_mul`：two_mul (n : α) : 2 * n = n + n
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `ENNReal.instIsOrderedAddMonoid`：IsOrderedAddMonoid ENNReal
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `le_max_left`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ max 
+a b
+· 使用定理 `le_max_right`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), b ≤ max
+ a b
+· 使用引理 `ExpGrowth.expGrowthSup_monotone`：expGrowthSup_monotone : Monotone expGro
+wthSup
+· 使用定理 `sup_le`：sup_le : a <= c -> b <= c -> a ⊔ b <= c
+· 使用定理 `self_le_add_right`：∀ {α : Type u} [inst : Add α] [inst_1 : LE α] [Canoni
+callyOrderedAdd α] (a b : α), a ≤ a + b
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `self_le_add_left`：∀ {α : Type u} [inst : Add α] [inst_1 : LE α] [Canonic
+allyOrderedAdd α] (a b : α), a ≤ b + a
 -/
 lemma expGrowthSup_add : expGrowthSup (u + v) = expGrowthSup u ⊔ expGrowthSup v := by
   rw [← expGrowthSup_sup]
   apply le_antisymm
-  · refine expGrowthSup_le_of_eventually_le (b := 2) ofNat_ne_top (Eventually.of_forall fun n => ?_)
-    rw [Pi.sup_apply u v n]; rw [Pi.add_apply u v n]; rw [two_mul]
+  · refine expGrowthSup_le_of_eventually_le (b := 2) ofNat_ne_top (Eventually.of_forall fun n ↦ ?_)
+    rw [Pi.sup_apply u v n, Pi.add_apply u v n, two_mul]
     exact add_le_add (le_max_left (u n) (v n)) (le_max_right (u n) (v n))
-  · refine expGrowthSup_monotone fun n => ?_
+  · refine expGrowthSup_monotone fun n ↦ ?_
     exact sup_le (self_le_add_right (u n) (v n)) (self_le_add_left (v n) (u n))
 
 -- By lemma `expGrowthSup_add`, `expGrowthSup` is an `AddMonoidHom` from `ℕ → ℝ≥0∞` to
 -- `Tropical ERealᵒᵈ`. Lemma `expGrowthSup_sum` is exactly `Finset.trop_inf`. We prove it from
 -- scratch to reduce imports.
-/--
-lemma `expGrowthSup_sum` / 引理 `expGrowthSup_sum`
-
-English:
-lemma expGrowthSup_sum
-  given: {α : Type*} (u : α -> Nat -> Real>=0∞) (s : Finset α)
-  proof: by
-  classical
-  induction s using Finset.induction_on with
-  | empty => rw [Finset.sum_empty, ← Finset.iSup_coe, Finset.coe_empty, iSup_emptyset,
-    expGrowthSup_zero]
-  | insert a t a_t ha => rw [Finset.sum_insert a_t, expGrowthSup_add, ← Finset.iSup_coe,
-    Finset.coe_insert a t, iSup_insert, Finset.iSup_coe, ha]
-
-中文:
-引理 expGrowthSup_sum
-  条件: {α : 类型} (u : α -> 自然数 -> 实数>=0∞) (s : 有限集 α)
-  证明: by
-  classical
-  induction s using Finset.induction_on with
-  | empty => rw [Finset.sum_empty, ← Finset.iSup_coe, Finset.coe_empty, iSup_emptyset,
-    expGrowthSup_zero]
-  | insert a t a_t ha => rw [Finset.sum_insert a_t, expGrowthSup_add, ← Finset.iSup_coe,
-    Finset.coe_insert a t, iSup_insert, Finset.iSup_coe, ha]
-
-Depends on / 依赖: Finset, Finset.coe_empty, Finset.coe_insert, Finset.iSup_coe, Finset.induction_on, Finset.sum_empty, Finset.sum_insert, classical, coe_empty, coe_insert, expGrowthSup_add, expGrowthSup_zero, iSup_coe, iSup_emptyset, iSup_insert, induction_on, insert, sum_empty, sum_insert
+/-
+**ExpGrowth.expGrowthSup_sum** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthSup_sum {α : Type*} (u : α -> Nat -> Real>=0∞) (s : Finset α) : e
+xpGrowthSup (∑ x in s, u x) = ⨆ x in s, expGrowthSup (u x)
+参数：u : α -> Nat -> Real>=0∞；s : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.induction_on`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst :
+ DecidableEq α] (s : Finset α),   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → 
+motive s …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_empty`：∀ {ι : Type u_1} {M : Type u_3} {f : ι → M} [inst : Ad
+dCommMonoid M], ∑ x ∈ ∅, f x = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.iSup_coe`：iSup_coe [SupSet β] (f : α -> β) (s : Finset α) : ⨆ x i
+n (↑s : Set α), f x = ⨆ x in s, f x
+· 使用定理 `Finset.coe_empty`：coe_empty : ((∅ : Finset α) : Set α) = ∅
+· 使用定理 `iSup_emptyset`：iSup_emptyset {f : β -> α} : ⨆ x in (∅ : Set β), f x = ⊥
+· 使用引理 `ExpGrowth.expGrowthSup_zero`：expGrowthSup_zero : expGrowthSup 0 = ⊥
+· 使用定理 `Finset.sum_insert`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι
+} [inst : AddCommMonoid M] {f : ι → M} [inst_1 : DecidableEq ι],   a ∉ s → ∑ x ∈
+ insert…
+· 使用引理 `ExpGrowth.expGrowthSup_add`：expGrowthSup_add : expGrowthSup (u + v) = ex
+pGrowthSup u ⊔ expGrowthSup v
+· 使用定理 `Finset.coe_insert`：coe_insert (a : α) (s : Finset α) : ↑(insert a s) = (
+insert a s : Set α)
+· 使用定理 `iSup_insert`：iSup_insert {f : β -> α} {s : Set β} {b : β} : ⨆ x in inser
+t b s, f x = f b ⊔ ⨆ x in s, f x
 -/
-lemma expGrowthSup_sum {α : Type*} (u : α -> Nat -> Real>=0∞) (s : Finset α) :
-    expGrowthSup (∑ x in s, u x) = ⨆ x in s, expGrowthSup (u x) := by
+lemma expGrowthSup_sum {α : Type*} (u : α → ℕ → ℝ≥0∞) (s : Finset α) :
+    expGrowthSup (∑ x ∈ s, u x) = ⨆ x ∈ s, expGrowthSup (u x) := by
   classical
   induction s using Finset.induction_on with
   | empty => rw [Finset.sum_empty, ← Finset.iSup_coe, Finset.coe_empty, iSup_emptyset,
@@ -1427,273 +1682,181 @@ end basic_properties
 
 section composition
 
-variable {u : Nat -> Real>=0∞} {v : Nat -> Nat}
+variable {u : ℕ → ℝ≥0∞} {v : ℕ → ℕ}
 
-/--
-lemma `le_expGrowthInf_comp` / 引理 `le_expGrowthInf_comp`
-
-English:
-lemma le_expGrowthInf_comp
-  given: (hu : 1 <=ᶠ[atTop] u) (hv : Tendsto v atTop atTop)
-  proof: by
-  apply le_linearGrowthInf_comp (hu.mono fun n h => ?_) hv
-  rw [Pi.one_apply] at h
-  rwa [Pi.zero_apply, zero_le_log_iff]
-
-中文:
-引理 le_expGrowthInf_comp
-  条件: (hu : 1 <=ᶠ[atTop] u) (hv : 收敛 v atTop atTop)
-  证明: by
-  apply le_linearGrowthInf_comp (hu.mono fun n h => ?_) hv
-  rw [Pi.one_apply] at h
-  rwa [Pi.zero_apply, zero_le_log_iff]
-
-Depends on / 依赖: Pi.one_apply, Pi.zero_apply, hu.mono, le_linearGrowthInf_comp, one_apply, zero_apply, zero_le_log_iff
+/-
+**ExpGrowth.le_expGrowthInf_comp** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：le_expGrowthInf_comp (hu : 1 <=ᶠ[atTop] u) (hv : Tendsto v atTop atTop) : 
+(linearGrowthInf fun n => v n : EReal) * expGrowthInf u <= expGrowthInf (u ∘ v)
+参数：hu : 1 <=ᶠ[atTop] u；hv : Tendsto v atTop atTop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `LinearGrowth.le_linearGrowthInf_comp`：le_linearGrowthInf_comp (hu : 0 <=
+ᶠ[atTop] u) (hv : Tendsto v atTop atTop) : (linearGrowthInf fun n => v n : EReal
+) * linearGrowthInf u <= l…
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Pi.zero_apply`：∀ {ι : Type u_1} {M : ι → Type u_5} [inst : (i : ι) → Zer
+o (M i)] (i : ι), 0 i = 0
+· 使用定理 `ENNReal.zero_le_log_iff`：∀ {x : ENNReal}, 0 ≤ x.log ↔ 1 ≤ x
+· 使用引理 `Pi.one_apply`：one_apply (i : ι) : (1 : forall i, M i) i = 1
 -/
-lemma le_expGrowthInf_comp (hu : 1 <=ᶠ[atTop] u) (hv : Tendsto v atTop atTop) :
-    (linearGrowthInf fun n => v n : EReal) * expGrowthInf u <= expGrowthInf (u ∘ v) := by
-  apply le_linearGrowthInf_comp (hu.mono fun n h => ?_) hv
+lemma le_expGrowthInf_comp (hu : 1 ≤ᶠ[atTop] u) (hv : Tendsto v atTop atTop) :
+    (linearGrowthInf fun n ↦ v n : EReal) * expGrowthInf u ≤ expGrowthInf (u ∘ v) := by
+  apply le_linearGrowthInf_comp (hu.mono fun n h ↦ ?_) hv
   rw [Pi.one_apply] at h
   rwa [Pi.zero_apply, zero_le_log_iff]
-
-/--
-lemma `expGrowthSup_comp_le` / 引理 `expGrowthSup_comp_le`
-
-English:
-lemma expGrowthSup_comp_le
-  statement: (hu : existsᶠ n in atTop, 1 <= u n)
-  proof: by
-  apply linearGrowthSup_comp_le (u := log ∘ u) (hu.mono fun n h => ?_) hv₀ hv₁ hv₂
-  rwa [comp_apply, zero_le_log_iff]
-
-中文:
-引理 expGrowthSup_comp_le
-  结论: (hu : 存在ᶠ n in atTop, 1 <= u n)
-  证明: by
-  apply linearGrowthSup_comp_le (u := log ∘ u) (hu.mono fun n h => ?_) hv₀ hv₁ hv₂
-  rwa [comp_apply, zero_le_log_iff]
-
-Depends on / 依赖: comp_apply, hu.mono, linearGrowthSup_comp_le, zero_le_log_iff
+/-
+**ExpGrowth.expGrowthSup_comp_le** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthSup_comp_le (hu : existsᶠ n in atTop, 1 <= u n) (hv₀ : (linearGro
+wthSup fun n => v n : EReal) != 0) (hv₁ : (linearGrowthSup fun n => v n : EReal)
+ != ⊤) (hv₂ : Tendsto v atTop atTop) : expGrowthSup (u ∘ v) <= (linearGrowthSup 
+fun n => v n : EReal) * expGrowthSup u
+参数：hu : existsᶠ n in atTop, 1 <= u n；hv₀ : (linearGrowthSup fun n => v n : EReal
+) != 0；hv₁ : (linearGrowthSup fun n => v n : EReal) != ⊤；hv₂ : Tendsto v atTop a
+tTop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `LinearGrowth.linearGrowthSup_comp_le`：linearGrowthSup_comp_le (hu : exis
+tsᶠ n in atTop, 0 <= u n) (hv₀ : (linearGrowthSup fun n => v n : EReal) != 0) (h
+v₁ : (linearGrowthSup fun …
+· 使用定理 `Filter.Frequently.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∃ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∃ᶠ (x : α) in f, q x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
+· 使用定理 `ENNReal.zero_le_log_iff`：∀ {x : ENNReal}, 0 ≤ x.log ↔ 1 ≤ x
 -/
-lemma expGrowthSup_comp_le (hu : existsᶠ n in atTop, 1 <= u n)
-    (hv₀ : (linearGrowthSup fun n => v n : EReal) != 0)
-    (hv₁ : (linearGrowthSup fun n => v n : EReal) != ⊤) (hv₂ : Tendsto v atTop atTop) :
-    expGrowthSup (u ∘ v) <= (linearGrowthSup fun n => v n : EReal) * expGrowthSup u := by
-  apply linearGrowthSup_comp_le (u := log ∘ u) (hu.mono fun n h => ?_) hv₀ hv₁ hv₂
+lemma expGrowthSup_comp_le (hu : ∃ᶠ n in atTop, 1 ≤ u n)
+    (hv₀ : (linearGrowthSup fun n ↦ v n : EReal) ≠ 0)
+    (hv₁ : (linearGrowthSup fun n ↦ v n : EReal) ≠ ⊤) (hv₂ : Tendsto v atTop atTop) :
+    expGrowthSup (u ∘ v) ≤ (linearGrowthSup fun n ↦ v n : EReal) * expGrowthSup u := by
+  apply linearGrowthSup_comp_le (u := log ∘ u) (hu.mono fun n h ↦ ?_) hv₀ hv₁ hv₂
   rwa [comp_apply, zero_le_log_iff]
 
+/-! ### Monotone sequences -/
 
-/--
-lemma `_root_.Monotone.expGrowthInf_nonneg` / 引理 `_root_.Monotone.expGrowthInf_nonneg`
+/-
+**ExpGrowth._root_.Monotone.expGrowthInf_nonneg** 是 Mathlib 中的一个引理，位于命名空间 `ExpGr
+owth`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma _root_.Monotone.expGrowthInf_nonneg
-  given: (h : Monotone u) (h' : u != 0)
-  proof: by
+--- 原说明 ---
+### Monotone sequences
+-/
+lemma _root_.Monotone.expGrowthInf_nonneg (h : Monotone u) (h' : u ≠ 0) :
+    0 ≤ expGrowthInf u := by
   apply (log_monotone.comp h).linearGrowthInf_nonneg
   simp only [ne_eq, funext_iff, comp_apply, Pi.bot_apply, log_eq_bot_iff, Pi.zero_apply] at h' ⊢
   exact h'
-
-中文:
-引理 _root_.递增.expGrowthInf_nonneg
-  条件: (h : 递增 u) (h' : u != 0)
-  证明: by
-  apply (log_monotone.comp h).linearGrowthInf_nonneg
-  simp only [ne_eq, funext_iff, comp_apply, Pi.bot_apply, log_eq_bot_iff, Pi.zero_apply] at h' ⊢
-  exact h'
-
-Depends on / 依赖: Pi.bot_apply, Pi.zero_apply, bot_apply, comp_apply, funext_iff, linearGrowthInf_nonneg, log_eq_bot_iff, log_monotone, log_monotone.comp, ne_eq, zero_apply
+/-
+**ExpGrowth._root_.Monotone.expGrowthSup_nonneg** 是 Mathlib 中的一个引理，位于命名空间 `ExpGr
+owth`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.Monotone.expGrowthInf_nonneg (h : Monotone u) (h' : u != 0) :
-    0 <= expGrowthInf u := by
-  apply (log_monotone.comp h).linearGrowthInf_nonneg
-  simp only [ne_eq, funext_iff, comp_apply, Pi.bot_apply, log_eq_bot_iff, Pi.zero_apply] at h' ⊢
-  exact h'
-
-/--
-lemma `_root_.Monotone.expGrowthSup_nonneg` / 引理 `_root_.Monotone.expGrowthSup_nonneg`
-
-English:
-lemma _root_.Monotone.expGrowthSup_nonneg
-  given: (h : Monotone u) (h' : u != 0)
-  proof: (h.expGrowthInf_nonneg h').trans expGrowthInf_le_expGrowthSup
-
-中文:
-引理 _root_.递增.expGrowthSup_nonneg
-  条件: (h : 递增 u) (h' : u != 0)
-  证明: (h.expGrowthInf_nonneg h').trans expGrowthInf_le_expGrowthSup
-
-Depends on / 依赖: expGrowthInf_le_expGrowthSup, expGrowthInf_nonneg, h.expGrowthInf_nonneg
--/
-lemma _root_.Monotone.expGrowthSup_nonneg (h : Monotone u) (h' : u != 0) :
-    0 <= expGrowthSup u :=
+lemma _root_.Monotone.expGrowthSup_nonneg (h : Monotone u) (h' : u ≠ 0) :
+    0 ≤ expGrowthSup u :=
   (h.expGrowthInf_nonneg h').trans expGrowthInf_le_expGrowthSup
-
-/--
-lemma `expGrowthInf_comp_nonneg` / 引理 `expGrowthInf_comp_nonneg`
-
-English:
-lemma expGrowthInf_comp_nonneg
-  given: (h : Monotone u) (h' : u != 0) (hv : Tendsto v atTop atTop)
-  proof: by
-  apply linearGrowthInf_comp_nonneg (u := log ∘ u) (log_monotone.comp h) _ hv
-  simp only [ne_eq, funext_iff, comp_apply, Pi.bot_apply, log_eq_bot_iff, Pi.zero_apply] at h' ⊢
-  exact h'
-
-中文:
-引理 expGrowthInf_comp_nonneg
-  条件: (h : 递增 u) (h' : u != 0) (hv : 收敛 v atTop atTop)
-  证明: by
-  apply linearGrowthInf_comp_nonneg (u := log ∘ u) (log_monotone.comp h) _ hv
-  simp only [ne_eq, funext_iff, comp_apply, Pi.bot_apply, log_eq_bot_iff, Pi.zero_apply] at h' ⊢
-  exact h'
-
-Depends on / 依赖: Pi.bot_apply, Pi.zero_apply, bot_apply, comp_apply, funext_iff, linearGrowthInf_comp_nonneg, log_eq_bot_iff, log_monotone, log_monotone.comp, ne_eq, zero_apply
+/-
+**ExpGrowth.expGrowthInf_comp_nonneg** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthInf_comp_nonneg (h : Monotone u) (h' : u != 0) (hv : Tendsto v at
+Top atTop) : 0 <= expGrowthInf (u ∘ v)
+参数：h : Monotone u；h' : u != 0；hv : Tendsto v atTop atTop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `LinearGrowth.linearGrowthInf_comp_nonneg`：linearGrowthInf_comp_nonneg (h
+ : Monotone u) (h' : u != ⊥) (hv : Tendsto v atTop atTop) : 0 <= linearGrowthInf
+ (u ∘ v)
+· 使用定理 `Monotone.comp`：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preorder
+ α] [inst_1 : Preorder β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β}, Monot
+one…
+· 使用定理 `ENNReal.log_monotone`：log_monotone : Monotone log
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
 -/
-lemma expGrowthInf_comp_nonneg (h : Monotone u) (h' : u != 0) (hv : Tendsto v atTop atTop) :
-    0 <= expGrowthInf (u ∘ v) := by
+lemma expGrowthInf_comp_nonneg (h : Monotone u) (h' : u ≠ 0) (hv : Tendsto v atTop atTop) :
+    0 ≤ expGrowthInf (u ∘ v) := by
   apply linearGrowthInf_comp_nonneg (u := log ∘ u) (log_monotone.comp h) _ hv
   simp only [ne_eq, funext_iff, comp_apply, Pi.bot_apply, log_eq_bot_iff, Pi.zero_apply] at h' ⊢
   exact h'
-
-/--
-lemma `expGrowthSup_comp_nonneg` / 引理 `expGrowthSup_comp_nonneg`
-
-English:
-lemma expGrowthSup_comp_nonneg
-  given: (h : Monotone u) (h' : u != 0) (hv : Tendsto v atTop atTop)
-  proof: (expGrowthInf_comp_nonneg h h' hv).trans expGrowthInf_le_expGrowthSup
-
-中文:
-引理 expGrowthSup_comp_nonneg
-  条件: (h : 递增 u) (h' : u != 0) (hv : 收敛 v atTop atTop)
-  证明: (expGrowthInf_comp_nonneg h h' hv).trans expGrowthInf_le_expGrowthSup
-
-Depends on / 依赖: expGrowthInf_comp_nonneg, expGrowthInf_le_expGrowthSup
+/-
+**ExpGrowth.expGrowthSup_comp_nonneg** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrowth`。
+形式化陈述：expGrowthSup_comp_nonneg (h : Monotone u) (h' : u != 0) (hv : Tendsto v at
+Top atTop) : 0 <= expGrowthSup (u ∘ v)
+参数：h : Monotone u；h' : u != 0；hv : Tendsto v atTop atTop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `ExpGrowth.expGrowthInf_comp_nonneg`：expGrowthInf_comp_nonneg (h : Monoto
+ne u) (h' : u != 0) (hv : Tendsto v atTop atTop) : 0 <= expGrowthInf (u ∘ v)
+· 使用引理 `ExpGrowth.expGrowthInf_le_expGrowthSup`：expGrowthInf_le_expGrowthSup : e
+xpGrowthInf u <= expGrowthSup u
 -/
-lemma expGrowthSup_comp_nonneg (h : Monotone u) (h' : u != 0) (hv : Tendsto v atTop atTop) :
-    0 <= expGrowthSup (u ∘ v) :=
+lemma expGrowthSup_comp_nonneg (h : Monotone u) (h' : u ≠ 0) (hv : Tendsto v atTop atTop) :
+    0 ≤ expGrowthSup (u ∘ v) :=
   (expGrowthInf_comp_nonneg h h' hv).trans expGrowthInf_le_expGrowthSup
-
-/--
-lemma `_root_.Monotone.expGrowthInf_comp_le` / 引理 `_root_.Monotone.expGrowthInf_comp_le`
-
-English:
-lemma _root_.Monotone.expGrowthInf_comp_le
-  statement: (h : Monotone u)
-  proof: (log_monotone.comp h).linearGrowthInf_comp_le hv₀ hv₁
-
-中文:
-引理 _root_.递增.expGrowthInf_comp_le
-  结论: (h : 递增 u)
-  证明: (log_monotone.comp h).linearGrowthInf_comp_le hv₀ hv₁
-
-Depends on / 依赖: linearGrowthInf_comp_le, log_monotone, log_monotone.comp
+/-
+**ExpGrowth._root_.Monotone.expGrowthInf_comp_le** 是 Mathlib 中的一个引理，位于命名空间 `ExpG
+rowth`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.Monotone.expGrowthInf_comp_le (h : Monotone u)
-    (hv₀ : (linearGrowthSup fun n => v n : EReal) != 0)
-    (hv₁ : (linearGrowthSup fun n => v n : EReal) != ⊤) :
-    expGrowthInf (u ∘ v) <= (linearGrowthSup fun n => v n : EReal) * expGrowthInf u :=
+    (hv₀ : (linearGrowthSup fun n ↦ v n : EReal) ≠ 0)
+    (hv₁ : (linearGrowthSup fun n ↦ v n : EReal) ≠ ⊤) :
+    expGrowthInf (u ∘ v) ≤ (linearGrowthSup fun n ↦ v n : EReal) * expGrowthInf u :=
   (log_monotone.comp h).linearGrowthInf_comp_le hv₀ hv₁
-
-/--
-lemma `_root_.Monotone.le_expGrowthSup_comp` / 引理 `_root_.Monotone.le_expGrowthSup_comp`
-
-English:
-lemma _root_.Monotone.le_expGrowthSup_comp
-  statement: (h : Monotone u)
-  proof: (log_monotone.comp h).le_linearGrowthSup_comp hv
-
-中文:
-引理 _root_.递增.le_expGrowthSup_comp
-  结论: (h : 递增 u)
-  证明: (log_monotone.comp h).le_linearGrowthSup_comp hv
-
-Depends on / 依赖: le_linearGrowthSup_comp, log_monotone, log_monotone.comp
+/-
+**ExpGrowth._root_.Monotone.le_expGrowthSup_comp** 是 Mathlib 中的一个引理，位于命名空间 `ExpG
+rowth`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.Monotone.le_expGrowthSup_comp (h : Monotone u)
-    (hv : (linearGrowthInf fun n => v n : EReal) != 0) :
-    (linearGrowthInf fun n => v n : EReal) * expGrowthSup u <= expGrowthSup (u ∘ v) :=
+    (hv : (linearGrowthInf fun n ↦ v n : EReal) ≠ 0) :
+    (linearGrowthInf fun n ↦ v n : EReal) * expGrowthSup u ≤ expGrowthSup (u ∘ v) :=
   (log_monotone.comp h).le_linearGrowthSup_comp hv
-
-/--
-lemma `_root_.Monotone.expGrowthInf_comp` / 引理 `_root_.Monotone.expGrowthInf_comp`
-
-English:
-lemma _root_.Monotone.expGrowthInf_comp
-  statement: {a : EReal} (h : Monotone u)
-  proof: (log_monotone.comp h).linearGrowthInf_comp hv ha ha'
-
-中文:
-引理 _root_.递增.expGrowthInf_comp
-  结论: {a : E实数} (h : 递增 u)
-  证明: (log_monotone.comp h).linearGrowthInf_comp hv ha ha'
-
-Depends on / 依赖: linearGrowthInf_comp, log_monotone, log_monotone.comp
+/-
+**ExpGrowth._root_.Monotone.expGrowthInf_comp** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrow
+th`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.Monotone.expGrowthInf_comp {a : EReal} (h : Monotone u)
-    (hv : Tendsto (fun n => (v n : EReal) / n) atTop (𝓝 a)) (ha : a != 0) (ha' : a != ⊤) :
+    (hv : Tendsto (fun n ↦ (v n : EReal) / n) atTop (𝓝 a)) (ha : a ≠ 0) (ha' : a ≠ ⊤) :
     expGrowthInf (u ∘ v) = a * expGrowthInf u :=
   (log_monotone.comp h).linearGrowthInf_comp hv ha ha'
-
-/--
-lemma `_root_.Monotone.expGrowthSup_comp` / 引理 `_root_.Monotone.expGrowthSup_comp`
-
-English:
-lemma _root_.Monotone.expGrowthSup_comp
-  statement: {a : EReal} (h : Monotone u)
-  proof: (log_monotone.comp h).linearGrowthSup_comp hv ha ha'
-
-中文:
-引理 _root_.递增.expGrowthSup_comp
-  结论: {a : E实数} (h : 递增 u)
-  证明: (log_monotone.comp h).linearGrowthSup_comp hv ha ha'
-
-Depends on / 依赖: linearGrowthSup_comp, log_monotone, log_monotone.comp
+/-
+**ExpGrowth._root_.Monotone.expGrowthSup_comp** 是 Mathlib 中的一个引理，位于命名空间 `ExpGrow
+th`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.Monotone.expGrowthSup_comp {a : EReal} (h : Monotone u)
-    (hv : Tendsto (fun n => (v n : EReal) / n) atTop (𝓝 a)) (ha : a != 0) (ha' : a != ⊤) :
+    (hv : Tendsto (fun n ↦ (v n : EReal) / n) atTop (𝓝 a)) (ha : a ≠ 0) (ha' : a ≠ ⊤) :
     expGrowthSup (u ∘ v) = a * expGrowthSup u :=
   (log_monotone.comp h).linearGrowthSup_comp hv ha ha'
-
-/--
-lemma `_root_.Monotone.expGrowthInf_comp_mul` / 引理 `_root_.Monotone.expGrowthInf_comp_mul`
-
-English:
-lemma _root_.Monotone.expGrowthInf_comp_mul
-  given: {m : Nat} (h : Monotone u) (hm : m != 0)
-  proof: (log_monotone.comp h).linearGrowthInf_comp_mul hm
-
-中文:
-引理 _root_.递增.expGrowthInf_comp_mul
-  条件: {m : 自然数} (h : 递增 u) (hm : m != 0)
-  证明: (log_monotone.comp h).linearGrowthInf_comp_mul hm
-
-Depends on / 依赖: linearGrowthInf_comp_mul, log_monotone, log_monotone.comp
+/-
+**ExpGrowth._root_.Monotone.expGrowthInf_comp_mul** 是 Mathlib 中的一个引理，位于命名空间 `Exp
+Growth`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.Monotone.expGrowthInf_comp_mul {m : Nat} (h : Monotone u) (hm : m != 0) :
-    expGrowthInf (fun n => u (m * n)) = m * expGrowthInf u :=
+lemma _root_.Monotone.expGrowthInf_comp_mul {m : ℕ} (h : Monotone u) (hm : m ≠ 0) :
+    expGrowthInf (fun n ↦ u (m * n)) = m * expGrowthInf u :=
   (log_monotone.comp h).linearGrowthInf_comp_mul hm
-
-/--
-lemma `_root_.Monotone.expGrowthSup_comp_mul` / 引理 `_root_.Monotone.expGrowthSup_comp_mul`
-
-English:
-lemma _root_.Monotone.expGrowthSup_comp_mul
-  given: {m : Nat} (h : Monotone u) (hm : m != 0)
-  proof: (log_monotone.comp h).linearGrowthSup_comp_mul hm
-
-中文:
-引理 _root_.递增.expGrowthSup_comp_mul
-  条件: {m : 自然数} (h : 递增 u) (hm : m != 0)
-  证明: (log_monotone.comp h).linearGrowthSup_comp_mul hm
-
-Depends on / 依赖: linearGrowthSup_comp_mul, log_monotone, log_monotone.comp
+/-
+**ExpGrowth._root_.Monotone.expGrowthSup_comp_mul** 是 Mathlib 中的一个引理，位于命名空间 `Exp
+Growth`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.Monotone.expGrowthSup_comp_mul {m : Nat} (h : Monotone u) (hm : m != 0) :
-    expGrowthSup (fun n => u (m * n)) = m * expGrowthSup u :=
+lemma _root_.Monotone.expGrowthSup_comp_mul {m : ℕ} (h : Monotone u) (hm : m ≠ 0) :
+    expGrowthSup (fun n ↦ u (m * n)) = m * expGrowthSup u :=
   (log_monotone.comp h).linearGrowthSup_comp_mul hm
 
 end composition
 
 end ExpGrowth
+

@@ -28,522 +28,299 @@ variable {ι : Sort*} {G : Type*} [Group G]
 
 namespace Subgroup
 
-/--
-Instance `instSMul` / 实例 `instSMul`
+/-- We redeclare this instance to get keys
+`SMul (@Subtype (MulOpposite _) (@Membership.mem (MulOpposite _)
+  (Subgroup (MulOpposite _) _) _ (@Subgroup.op _ _ _))) _`
+compared to the keys for `Submonoid.smul`
+`SMul (@Subtype _ (@Membership.mem _ (Submonoid _ _) _ _)) _` -/
+/-
+**Subgroup.instSMul** 是 Mathlib 中的一个定义，位于命名空间 `Subgroup`。
+形式化陈述：{G : Type u_2} → [inst : Group G] → (H : Subgroup G) → SMul (↥H.op) G
+参数：H : Subgroup G；↥H.op。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instSMul
-  signature: (H : Subgroup G)
-  body: Submonoid.smul ..
-
-中文:
-实例 instSMul
-  签名: (H : 子群 G)
-  定义体: Submonoid.smul ..
+--- 原说明 ---
+We redeclare this instance to get keys
+`SMul (@Subtype (MulOpposite _) (@Membership.mem (MulOpposite _)
+  (Subgroup (MulOpposite _) _) _ (@Subgroup.op _ _ _))) _`
+compared to the keys for `Submonoid.smul`
+`SMul (@Subtype _ (@Membership.mem _ (Submonoid _ _) _ _)) _`
 -/
 @[to_additive] instance instSMul (H : Subgroup G) : SMul H.op G := Submonoid.smul ..
 
 /-! ### Lattice results -/
 
 @[to_additive (attr := simp)]
-/--
-theorem `op_bot` / 定理 `op_bot`
+/-
+**Subgroup.op_bot** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：op_bot : (⊥ : Subgroup G).op = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_bot`：OrderIso.map_bot [LE α] [PartialOrder β] [OrderBot α] 
+[OrderBot β] (f : α ≃o β) : f ⊥ = ⊥
 
-English:
-theorem op_bot
-  statement: (⊥ : Subgroup G).op = ⊥
-  proof: opEquiv.map_bot
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 op_bot
-  结论: (⊥ : 子群 G).op = ⊥
-  证明: opEquiv.map_bot
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: map_bot, opEquiv, opEquiv.map_bot
+--- 原说明 ---
+### Lattice results
 -/
 theorem op_bot : (⊥ : Subgroup G).op = ⊥ := opEquiv.map_bot
 
 @[to_additive (attr := simp)]
-/--
-theorem `op_eq_bot` / 定理 `op_eq_bot`
-
-English:
-theorem op_eq_bot
-  given: {S : Subgroup G}
-  statement: S.op = ⊥ ↔ S = ⊥
-  proof: op_injective.eq_iff' op_bot
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 op_eq_bot
-  条件: {S : 子群 G}
-  结论: S.op = ⊥ ↔ S = ⊥
-  证明: op_injective.eq_iff' op_bot
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: eq_iff, op_bot, op_injective, op_injective.eq_iff
+/-
+**Subgroup.op_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：op_eq_bot {S : Subgroup G} : S.op = ⊥ ↔ S = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+ Function.Injective f → ∀ {a b : α} {c : β}, f b = c → (f a = c ↔ a = b)
+· 使用定理 `Subgroup.op_injective`：op_injective : (@Subgroup.op G _).Injective
+· 使用定理 `Subgroup.op_bot`：op_bot : (⊥ : Subgroup G).op = ⊥
 -/
 theorem op_eq_bot {S : Subgroup G} : S.op = ⊥ ↔ S = ⊥ := op_injective.eq_iff' op_bot
 
 @[to_additive (attr := simp)]
-/--
-theorem `unop_bot` / 定理 `unop_bot`
-
-English:
-theorem unop_bot
-  statement: (⊥ : Subgroup Gᵐᵒᵖ).unop = ⊥
-  proof: opEquiv.symm.map_bot
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 unop_bot
-  结论: (⊥ : 子群 Gᵐᵒᵖ).unop = ⊥
-  证明: opEquiv.symm.map_bot
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: map_bot, opEquiv, opEquiv.symm.map_bot
+/-
+**Subgroup.unop_bot** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：unop_bot : (⊥ : Subgroup Gᵐᵒᵖ).unop = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_bot`：OrderIso.map_bot [LE α] [PartialOrder β] [OrderBot α] 
+[OrderBot β] (f : α ≃o β) : f ⊥ = ⊥
 -/
 theorem unop_bot : (⊥ : Subgroup Gᵐᵒᵖ).unop = ⊥ := opEquiv.symm.map_bot
 
 @[to_additive (attr := simp)]
-/--
-theorem `unop_eq_bot` / 定理 `unop_eq_bot`
-
-English:
-theorem unop_eq_bot
-  given: {S : Subgroup Gᵐᵒᵖ}
-  statement: S.unop = ⊥ ↔ S = ⊥
-  proof: unop_injective.eq_iff' unop_bot
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 unop_eq_bot
-  条件: {S : 子群 Gᵐᵒᵖ}
-  结论: S.unop = ⊥ ↔ S = ⊥
-  证明: unop_injective.eq_iff' unop_bot
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: eq_iff, unop_bot, unop_injective, unop_injective.eq_iff
+/-
+**Subgroup.unop_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：unop_eq_bot {S : Subgroup Gᵐᵒᵖ} : S.unop = ⊥ ↔ S = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+ Function.Injective f → ∀ {a b : α} {c : β}, f b = c → (f a = c ↔ a = b)
+· 使用定理 `Subgroup.unop_injective`：unop_injective : (@Subgroup.unop G _).Injective
+· 使用定理 `Subgroup.unop_bot`：unop_bot : (⊥ : Subgroup Gᵐᵒᵖ).unop = ⊥
 -/
 theorem unop_eq_bot {S : Subgroup Gᵐᵒᵖ} : S.unop = ⊥ ↔ S = ⊥ := unop_injective.eq_iff' unop_bot
 
 @[to_additive (attr := simp)]
-/--
-theorem `op_top` / 定理 `op_top`
-
-English:
-theorem op_top
-  statement: (⊤ : Subgroup G).op = ⊤
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 op_top
-  结论: (⊤ : 子群 G).op = ⊤
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Subgroup.op_top** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：op_top : (⊤ : Subgroup G).op = ⊤
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem op_top : (⊤ : Subgroup G).op = ⊤ := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `op_eq_top` / 定理 `op_eq_top`
-
-English:
-theorem op_eq_top
-  given: {S : Subgroup G}
-  statement: S.op = ⊤ ↔ S = ⊤
-  proof: op_injective.eq_iff' op_top
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 op_eq_top
-  条件: {S : 子群 G}
-  结论: S.op = ⊤ ↔ S = ⊤
-  证明: op_injective.eq_iff' op_top
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: eq_iff, op_injective, op_injective.eq_iff, op_top
+/-
+**Subgroup.op_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：op_eq_top {S : Subgroup G} : S.op = ⊤ ↔ S = ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+ Function.Injective f → ∀ {a b : α} {c : β}, f b = c → (f a = c ↔ a = b)
+· 使用定理 `Subgroup.op_injective`：op_injective : (@Subgroup.op G _).Injective
+· 使用定理 `Subgroup.op_top`：op_top : (⊤ : Subgroup G).op = ⊤
 -/
 theorem op_eq_top {S : Subgroup G} : S.op = ⊤ ↔ S = ⊤ := op_injective.eq_iff' op_top
 
 @[to_additive (attr := simp)]
-/--
-theorem `unop_top` / 定理 `unop_top`
-
-English:
-theorem unop_top
-  statement: (⊤ : Subgroup Gᵐᵒᵖ).unop = ⊤
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 unop_top
-  结论: (⊤ : 子群 Gᵐᵒᵖ).unop = ⊤
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Subgroup.unop_top** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：unop_top : (⊤ : Subgroup Gᵐᵒᵖ).unop = ⊤
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem unop_top : (⊤ : Subgroup Gᵐᵒᵖ).unop = ⊤ := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `unop_eq_top` / 定理 `unop_eq_top`
-
-English:
-theorem unop_eq_top
-  given: {S : Subgroup Gᵐᵒᵖ}
-  statement: S.unop = ⊤ ↔ S = ⊤
-  proof: unop_injective.eq_iff' unop_top
-
-@[to_additive]
-
-中文:
-定理 unop_eq_top
-  条件: {S : 子群 Gᵐᵒᵖ}
-  结论: S.unop = ⊤ ↔ S = ⊤
-  证明: unop_injective.eq_iff' unop_top
-
-@[to_additive]
-
-Depends on / 依赖: eq_iff, unop_injective, unop_injective.eq_iff, unop_top
+/-
+**Subgroup.unop_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：unop_eq_top {S : Subgroup Gᵐᵒᵖ} : S.unop = ⊤ ↔ S = ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+ Function.Injective f → ∀ {a b : α} {c : β}, f b = c → (f a = c ↔ a = b)
+· 使用定理 `Subgroup.unop_injective`：unop_injective : (@Subgroup.unop G _).Injective
+· 使用定理 `Subgroup.unop_top`：unop_top : (⊤ : Subgroup Gᵐᵒᵖ).unop = ⊤
 -/
 theorem unop_eq_top {S : Subgroup Gᵐᵒᵖ} : S.unop = ⊤ ↔ S = ⊤ := unop_injective.eq_iff' unop_top
 
 @[to_additive]
-/--
-theorem `op_sup` / 定理 `op_sup`
-
-English:
-theorem op_sup
-  given: (S₁ S₂ : Subgroup G)
-  statement: (S₁ ⊔ S₂).op = S₁.op ⊔ S₂.op
-  proof: opEquiv.map_sup _ _
-
-@[to_additive]
-
-中文:
-定理 op_sup
-  条件: (S₁ S₂ : 子群 G)
-  结论: (S₁ ⊔ S₂).op = S₁.op ⊔ S₂.op
-  证明: opEquiv.map_sup _ _
-
-@[to_additive]
-
-Depends on / 依赖: CanLift, Subsemigroup, map_sup, opEquiv, opEquiv.map_sup
+/-
+**Subgroup.op_sup** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：op_sup (S₁ S₂ : Subgroup G) : (S₁ ⊔ S₂).op = S₁.op ⊔ S₂.op
+参数：S₁ S₂ : Subgroup G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_sup`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeSup
+ α] [inst_1 : SemilatticeSup β] (f : α ≃o β) (x y : α),   f (x ⊔ y) = f x ⊔ f y
 -/
 theorem op_sup (S₁ S₂ : Subgroup G) : (S₁ ⊔ S₂).op = S₁.op ⊔ S₂.op :=
   opEquiv.map_sup _ _
 
 @[to_additive]
-/--
-theorem `unop_sup` / 定理 `unop_sup`
-
-English:
-theorem unop_sup
-  given: (S₁ S₂ : Subgroup Gᵐᵒᵖ)
-  statement: (S₁ ⊔ S₂).unop = S₁.unop ⊔ S₂.unop
-  proof: opEquiv.symm.map_sup _ _
-
-@[to_additive]
-
-中文:
-定理 unop_sup
-  条件: (S₁ S₂ : 子群 Gᵐᵒᵖ)
-  结论: (S₁ ⊔ S₂).unop = S₁.unop ⊔ S₂.unop
-  证明: opEquiv.symm.map_sup _ _
-
-@[to_additive]
-
-Depends on / 依赖: map_sup, opEquiv, opEquiv.symm.map_sup
+/-
+**Subgroup.unop_sup** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：unop_sup (S₁ S₂ : Subgroup Gᵐᵒᵖ) : (S₁ ⊔ S₂).unop = S₁.unop ⊔ S₂.unop
+参数：S₁ S₂ : Subgroup Gᵐᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_sup`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeSup
+ α] [inst_1 : SemilatticeSup β] (f : α ≃o β) (x y : α),   f (x ⊔ y) = f x ⊔ f y
 -/
 theorem unop_sup (S₁ S₂ : Subgroup Gᵐᵒᵖ) : (S₁ ⊔ S₂).unop = S₁.unop ⊔ S₂.unop :=
   opEquiv.symm.map_sup _ _
 
 @[to_additive]
-/--
-theorem `op_inf` / 定理 `op_inf`
-
-English:
-theorem op_inf
-  given: (S₁ S₂ : Subgroup G)
-  statement: (S₁ ⊓ S₂).op = S₁.op ⊓ S₂.op
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 op_inf
-  条件: (S₁ S₂ : 子群 G)
-  结论: (S₁ ⊓ S₂).op = S₁.op ⊓ S₂.op
-  证明: rfl
-
-@[to_additive]
+/-
+**Subgroup.op_inf** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：op_inf (S₁ S₂ : Subgroup G) : (S₁ ⊓ S₂).op = S₁.op ⊓ S₂.op
+参数：S₁ S₂ : Subgroup G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem op_inf (S₁ S₂ : Subgroup G) : (S₁ ⊓ S₂).op = S₁.op ⊓ S₂.op := rfl
 
 @[to_additive]
-/--
-theorem `unop_inf` / 定理 `unop_inf`
-
-English:
-theorem unop_inf
-  given: (S₁ S₂ : Subgroup Gᵐᵒᵖ)
-  statement: (S₁ ⊓ S₂).unop = S₁.unop ⊓ S₂.unop
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 unop_inf
-  条件: (S₁ S₂ : 子群 Gᵐᵒᵖ)
-  结论: (S₁ ⊓ S₂).unop = S₁.unop ⊓ S₂.unop
-  证明: rfl
-
-@[to_additive]
+/-
+**Subgroup.unop_inf** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：unop_inf (S₁ S₂ : Subgroup Gᵐᵒᵖ) : (S₁ ⊓ S₂).unop = S₁.unop ⊓ S₂.unop
+参数：S₁ S₂ : Subgroup Gᵐᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem unop_inf (S₁ S₂ : Subgroup Gᵐᵒᵖ) : (S₁ ⊓ S₂).unop = S₁.unop ⊓ S₂.unop := rfl
 
 @[to_additive]
-/--
-theorem `op_sSup` / 定理 `op_sSup`
-
-English:
-theorem op_sSup
-  given: (S : Set (Subgroup G))
-  statement: (sSup S).op = sSup (.unop ⁻¹' S)
-  proof: opEquiv.map_sSup_eq_sSup_symm_preimage _
-
-@[to_additive]
-
-中文:
-定理 op_sSup
-  条件: (S : 集合 (子群 G))
-  结论: (sSup S).op = sSup (.unop ⁻¹' S)
-  证明: opEquiv.map_sSup_eq_sSup_symm_preimage _
-
-@[to_additive]
-
-Depends on / 依赖: map_sSup_eq_sSup_symm_preimage, opEquiv, opEquiv.map_sSup_eq_sSup_symm_preimage
+/-
+**Subgroup.op_sSup** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：op_sSup (S : Set (Subgroup G)) : (sSup S).op = sSup (.unop ⁻¹' S)
+参数：S : Set (Subgroup G)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_sSup_eq_sSup_symm_preimage`：OrderIso.map_sSup_eq_sSup_symm_
+preimage [CompleteLattice β] (f : α ≃o β) (s : Set α) : f (sSup s) = sSup (f.sym
+m ⁻¹' s)
 -/
 theorem op_sSup (S : Set (Subgroup G)) : (sSup S).op = sSup (.unop ⁻¹' S) :=
   opEquiv.map_sSup_eq_sSup_symm_preimage _
 
 @[to_additive]
-/--
-theorem `unop_sSup` / 定理 `unop_sSup`
-
-English:
-theorem unop_sSup
-  given: (S : Set (Subgroup Gᵐᵒᵖ))
-  statement: (sSup S).unop = sSup (.op ⁻¹' S)
-  proof: opEquiv.symm.map_sSup_eq_sSup_symm_preimage _
-
-@[to_additive]
-
-中文:
-定理 unop_sSup
-  条件: (S : 集合 (子群 Gᵐᵒᵖ))
-  结论: (sSup S).unop = sSup (.op ⁻¹' S)
-  证明: opEquiv.symm.map_sSup_eq_sSup_symm_preimage _
-
-@[to_additive]
-
-Depends on / 依赖: map_sSup_eq_sSup_symm_preimage, opEquiv, opEquiv.symm.map_sSup_eq_sSup_symm_preimage
+/-
+**Subgroup.unop_sSup** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：unop_sSup (S : Set (Subgroup Gᵐᵒᵖ)) : (sSup S).unop = sSup (.op ⁻¹' S)
+参数：S : Set (Subgroup Gᵐᵒᵖ)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_sSup_eq_sSup_symm_preimage`：OrderIso.map_sSup_eq_sSup_symm_
+preimage [CompleteLattice β] (f : α ≃o β) (s : Set α) : f (sSup s) = sSup (f.sym
+m ⁻¹' s)
 -/
 theorem unop_sSup (S : Set (Subgroup Gᵐᵒᵖ)) : (sSup S).unop = sSup (.op ⁻¹' S) :=
   opEquiv.symm.map_sSup_eq_sSup_symm_preimage _
 
 @[to_additive]
-/--
-theorem `op_sInf` / 定理 `op_sInf`
-
-English:
-theorem op_sInf
-  given: (S : Set (Subgroup G))
-  statement: (sInf S).op = sInf (.unop ⁻¹' S)
-  proof: opEquiv.map_sInf_eq_sInf_symm_preimage _
-
-@[to_additive]
-
-中文:
-定理 op_sInf
-  条件: (S : 集合 (子群 G))
-  结论: (sInf S).op = sInf (.unop ⁻¹' S)
-  证明: opEquiv.map_sInf_eq_sInf_symm_preimage _
-
-@[to_additive]
-
-Depends on / 依赖: map_sInf_eq_sInf_symm_preimage, opEquiv, opEquiv.map_sInf_eq_sInf_symm_preimage
+/-
+**Subgroup.op_sInf** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：op_sInf (S : Set (Subgroup G)) : (sInf S).op = sInf (.unop ⁻¹' S)
+参数：S : Set (Subgroup G)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_sInf_eq_sInf_symm_preimage`：∀ {α : Type u_1} {β : Type u_2}
+ [inst : CompleteLattice α] [inst_1 : CompleteLattice β] (f : α ≃o β) (s : Set α
+),   f (sInf s) = sInf (⇑f.sy…
 -/
 theorem op_sInf (S : Set (Subgroup G)) : (sInf S).op = sInf (.unop ⁻¹' S) :=
   opEquiv.map_sInf_eq_sInf_symm_preimage _
 
 @[to_additive]
-/--
-theorem `unop_sInf` / 定理 `unop_sInf`
-
-English:
-theorem unop_sInf
-  given: (S : Set (Subgroup Gᵐᵒᵖ))
-  statement: (sInf S).unop = sInf (.op ⁻¹' S)
-  proof: opEquiv.symm.map_sInf_eq_sInf_symm_preimage _
-
-@[to_additive]
-
-中文:
-定理 unop_sInf
-  条件: (S : 集合 (子群 Gᵐᵒᵖ))
-  结论: (sInf S).unop = sInf (.op ⁻¹' S)
-  证明: opEquiv.symm.map_sInf_eq_sInf_symm_preimage _
-
-@[to_additive]
-
-Depends on / 依赖: map_sInf_eq_sInf_symm_preimage, opEquiv, opEquiv.symm.map_sInf_eq_sInf_symm_preimage
+/-
+**Subgroup.unop_sInf** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：unop_sInf (S : Set (Subgroup Gᵐᵒᵖ)) : (sInf S).unop = sInf (.op ⁻¹' S)
+参数：S : Set (Subgroup Gᵐᵒᵖ)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_sInf_eq_sInf_symm_preimage`：∀ {α : Type u_1} {β : Type u_2}
+ [inst : CompleteLattice α] [inst_1 : CompleteLattice β] (f : α ≃o β) (s : Set α
+),   f (sInf s) = sInf (⇑f.sy…
 -/
 theorem unop_sInf (S : Set (Subgroup Gᵐᵒᵖ)) : (sInf S).unop = sInf (.op ⁻¹' S) :=
   opEquiv.symm.map_sInf_eq_sInf_symm_preimage _
 
 @[to_additive]
-/--
-theorem `op_iSup` / 定理 `op_iSup`
-
-English:
-theorem op_iSup
-  given: (S : ι -> Subgroup G)
-  statement: (iSup S).op = ⨆ i, (S i).op
-  proof: opEquiv.map_iSup _
-
-@[to_additive]
-
-中文:
-定理 op_iSup
-  条件: (S : ι -> 子群 G)
-  结论: (iSup S).op = ⨆ i, (S i).op
-  证明: opEquiv.map_iSup _
-
-@[to_additive]
-
-Depends on / 依赖: map_iSup, opEquiv, opEquiv.map_iSup
+/-
+**Subgroup.op_iSup** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：op_iSup (S : ι -> Subgroup G) : (iSup S).op = ⨆ i, (S i).op
+参数：S : ι -> Subgroup G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_iSup`：OrderIso.map_iSup [CompleteLattice β] (f : α ≃o β) (x
+ : ι -> α) : f (⨆ i, x i) = ⨆ i, f (x i)
 -/
-theorem op_iSup (S : ι -> Subgroup G) : (iSup S).op = ⨆ i, (S i).op := opEquiv.map_iSup _
+theorem op_iSup (S : ι → Subgroup G) : (iSup S).op = ⨆ i, (S i).op := opEquiv.map_iSup _
 
 @[to_additive]
-/--
-theorem `unop_iSup` / 定理 `unop_iSup`
-
-English:
-theorem unop_iSup
-  given: (S : ι -> Subgroup Gᵐᵒᵖ)
-  statement: (iSup S).unop = ⨆ i, (S i).unop
-  proof: opEquiv.symm.map_iSup _
-
-@[to_additive]
-
-中文:
-定理 unop_iSup
-  条件: (S : ι -> 子群 Gᵐᵒᵖ)
-  结论: (iSup S).unop = ⨆ i, (S i).unop
-  证明: opEquiv.symm.map_iSup _
-
-@[to_additive]
-
-Depends on / 依赖: map_iSup, opEquiv, opEquiv.symm.map_iSup
+/-
+**Subgroup.unop_iSup** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：unop_iSup (S : ι -> Subgroup Gᵐᵒᵖ) : (iSup S).unop = ⨆ i, (S i).unop
+参数：S : ι -> Subgroup Gᵐᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_iSup`：OrderIso.map_iSup [CompleteLattice β] (f : α ≃o β) (x
+ : ι -> α) : f (⨆ i, x i) = ⨆ i, f (x i)
 -/
-theorem unop_iSup (S : ι -> Subgroup Gᵐᵒᵖ) : (iSup S).unop = ⨆ i, (S i).unop :=
+theorem unop_iSup (S : ι → Subgroup Gᵐᵒᵖ) : (iSup S).unop = ⨆ i, (S i).unop :=
   opEquiv.symm.map_iSup _
 
 @[to_additive]
-/--
-theorem `op_iInf` / 定理 `op_iInf`
-
-English:
-theorem op_iInf
-  given: (S : ι -> Subgroup G)
-  statement: (iInf S).op = ⨅ i, (S i).op
-  proof: opEquiv.map_iInf _
-
-@[to_additive]
-
-中文:
-定理 op_iInf
-  条件: (S : ι -> 子群 G)
-  结论: (iInf S).op = ⨅ i, (S i).op
-  证明: opEquiv.map_iInf _
-
-@[to_additive]
-
-Depends on / 依赖: map_iInf, opEquiv, opEquiv.map_iInf
+/-
+**Subgroup.op_iInf** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：op_iInf (S : ι -> Subgroup G) : (iInf S).op = ⨅ i, (S i).op
+参数：S : ι -> Subgroup G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_iInf`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} [inst 
+: CompleteLattice α] [inst_1 : CompleteLattice β] (f : α ≃o β)   (x : ι → α), f 
+(⨅ i, x…
 -/
-theorem op_iInf (S : ι -> Subgroup G) : (iInf S).op = ⨅ i, (S i).op := opEquiv.map_iInf _
+theorem op_iInf (S : ι → Subgroup G) : (iInf S).op = ⨅ i, (S i).op := opEquiv.map_iInf _
 
 @[to_additive]
-/--
-theorem `unop_iInf` / 定理 `unop_iInf`
-
-English:
-theorem unop_iInf
-  given: (S : ι -> Subgroup Gᵐᵒᵖ)
-  statement: (iInf S).unop = ⨅ i, (S i).unop
-  proof: opEquiv.symm.map_iInf _
-
-@[to_additive]
-
-中文:
-定理 unop_iInf
-  条件: (S : ι -> 子群 Gᵐᵒᵖ)
-  结论: (iInf S).unop = ⨅ i, (S i).unop
-  证明: opEquiv.symm.map_iInf _
-
-@[to_additive]
-
-Depends on / 依赖: map_iInf, opEquiv, opEquiv.symm.map_iInf
+/-
+**Subgroup.unop_iInf** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：unop_iInf (S : ι -> Subgroup Gᵐᵒᵖ) : (iInf S).unop = ⨅ i, (S i).unop
+参数：S : ι -> Subgroup Gᵐᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.map_iInf`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} [inst 
+: CompleteLattice α] [inst_1 : CompleteLattice β] (f : α ≃o β)   (x : ι → α), f 
+(⨅ i, x…
 -/
-theorem unop_iInf (S : ι -> Subgroup Gᵐᵒᵖ) : (iInf S).unop = ⨅ i, (S i).unop :=
+theorem unop_iInf (S : ι → Subgroup Gᵐᵒᵖ) : (iInf S).unop = ⨅ i, (S i).unop :=
   opEquiv.symm.map_iInf _
 
 @[to_additive]
-/--
-theorem `op_closure` / 定理 `op_closure`
-
-English:
-theorem op_closure
-  given: (s : Set G)
-  statement: (closure s).op = closure (MulOpposite.unop ⁻¹' s)
-  proof: by
-  simp_rw [closure, op_sInf, Set.preimage_ofPred_eq, Subgroup.coe_unop]
-  congr with a
-  exact MulOpposite.unop_surjective.forall
-
-@[to_additive]
-
-中文:
-定理 op_closure
-  条件: (s : 集合 G)
-  结论: (closure s).op = closure (MulOpposite.unop ⁻¹' s)
-  证明: by
-  simp_rw [closure, op_sInf, Set.preimage_ofPred_eq, Subgroup.coe_unop]
-  congr with a
-  exact MulOpposite.unop_surjective.forall
-
-@[to_additive]
-
-Depends on / 依赖: MulOpposite, MulOpposite.unop_surjective.forall, Set.preimage_ofPred_eq, Subgroup, Subgroup.coe_unop, closure, coe_unop, op_sInf, preimage_ofPred_eq, simp_rw, unop_surjective
+/-
+**Subgroup.op_closure** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：op_closure (s : Set G) : (closure s).op = closure (MulOpposite.unop ⁻¹' s)
+参数：s : Set G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.op_sInf`：op_sInf (S : Set (Subgroup G)) : (sInf S).op = sInf (.
+unop ⁻¹' S)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Subgroup.coe_unop`：∀ {G : Type u_2} [inst : Group G] (H : Subgroup Gᵐᵒᵖ)
+, ↑H.unop = MulOpposite.op ⁻¹' ↑H
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `MulOpposite.unop_surjective`：unop_surjective : Surjective (unop : αᵐᵒᵖ -
+> α)
 -/
 theorem op_closure (s : Set G) : (closure s).op = closure (MulOpposite.unop ⁻¹' s) := by
   simp_rw [closure, op_sInf, Set.preimage_ofPred_eq, Subgroup.coe_unop]
@@ -551,94 +328,74 @@ theorem op_closure (s : Set G) : (closure s).op = closure (MulOpposite.unop ⁻�
   exact MulOpposite.unop_surjective.forall
 
 @[to_additive]
-/--
-theorem `unop_closure` / 定理 `unop_closure`
-
-English:
-theorem unop_closure
-  given: (s : Set Gᵐᵒᵖ)
-  statement: (closure s).unop = closure (MulOpposite.op ⁻¹' s)
-  proof: by
-  rw [← op_inj]; rw [op_unop]; rw [op_closure]
-  simp_rw [Set.preimage_preimage, MulOpposite.op_unop, Set.preimage_id']
-
-@[to_additive]
-
-中文:
-定理 unop_closure
-  条件: (s : 集合 Gᵐᵒᵖ)
-  结论: (closure s).unop = closure (MulOpposite.op ⁻¹' s)
-  证明: by
-  rw [← op_inj]; rw [op_unop]; rw [op_closure]
-  simp_rw [Set.preimage_preimage, MulOpposite.op_unop, Set.preimage_id']
-
-@[to_additive]
-
-Depends on / 依赖: MulOpposite, MulOpposite.op_unop, Set.preimage_id, Set.preimage_preimage, op_closure, op_inj, op_unop, preimage_id, preimage_preimage, simp_rw
+/-
+**Subgroup.unop_closure** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：unop_closure (s : Set Gᵐᵒᵖ) : (closure s).unop = closure (MulOpposite.op ⁻
+¹' s)
+参数：s : Set Gᵐᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subgroup.op_inj`：op_inj {S T : Subgroup G} : S.op = T.op ↔ S = T
+· 使用定理 `Subgroup.op_unop`：op_unop (S : Subgroup Gᵐᵒᵖ) : S.unop.op = S
+· 使用定理 `Subgroup.op_closure`：op_closure (s : Set G) : (closure s).op = closure (
+MulOpposite.unop ⁻¹' s)
+· 使用定理 `Set.preimage_preimage`：preimage_preimage {g : β -> γ} {f : α -> β} {s : 
+Set γ} : f ⁻¹' g ⁻¹' s = (fun x => g (f x)) ⁻¹' s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem unop_closure (s : Set Gᵐᵒᵖ) : (closure s).unop = closure (MulOpposite.op ⁻¹' s) := by
-  rw [← op_inj]; rw [op_unop]; rw [op_closure]
+  rw [← op_inj, op_unop, op_closure]
   simp_rw [Set.preimage_preimage, MulOpposite.op_unop, Set.preimage_id']
 
 @[to_additive]
+/-
+**Subgroup.** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (H : Subgroup G) [Encodable H] : Encodable H.op :=
   Encodable.ofEquiv H H.equivOp.symm
 
 @[to_additive]
+/-
+**Subgroup.** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (H : Subgroup G) [Countable H] : Countable H.op :=
   Countable.of_equiv H H.equivOp
 
 @[to_additive]
-/--
-theorem `smul_opposite_mul` / 定理 `smul_opposite_mul`
-
-English:
-theorem smul_opposite_mul
-  given: {H : Subgroup G} (x g : G) (h : H.op)
-  proof: mul_assoc _ _ _
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 smul_opposite_mul
-  条件: {H : 子群 G} (x g : G) (h : H.op)
-  证明: mul_assoc _ _ _
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: mul_assoc
+/-
+**Subgroup.smul_opposite_mul** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：smul_opposite_mul {H : Subgroup G} (x g : G) (h : H.op) : h • (g * x) = g 
+* h • x
+参数：x g : G；h : H.op。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 -/
 theorem smul_opposite_mul {H : Subgroup G} (x g : G) (h : H.op) :
     h • (g * x) = g * h • x :=
   mul_assoc _ _ _
 
 @[to_additive (attr := simp)]
-/--
-theorem `normal_op` / 定理 `normal_op`
-
-English:
-theorem normal_op
-  given: {H : Subgroup G}
-  statement: H.op.Normal ↔ H.Normal
-  proof: by
-  simp only [← normalizer_eq_top_iff, ← op_normalizer, op_eq_top]
-
-@[to_additive] alias ⟨Normal.of_op, Normal.op⟩ := normal_op
-
-@[to_additive]
-
-中文:
-定理 normal_op
-  条件: {H : 子群 G}
-  结论: H.op.正规 ↔ H.正规
-  证明: by
-  simp only [← normalizer_eq_top_iff, ← op_normalizer, op_eq_top]
-
-@[to_additive] alias ⟨Normal.of_op, Normal.op⟩ := normal_op
-
-@[to_additive]
-
-Depends on / 依赖: normalizer_eq_top_iff, op_eq_top, op_normalizer
+/-
+**Subgroup.normal_op** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：normal_op {H : Subgroup G} : H.op.Normal ↔ H.Normal
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem normal_op {H : Subgroup G} : H.op.Normal ↔ H.Normal := by
   simp only [← normalizer_eq_top_iff, ← op_normalizer, op_eq_top]
@@ -646,72 +403,43 @@ theorem normal_op {H : Subgroup G} : H.op.Normal ↔ H.Normal := by
 @[to_additive] alias ⟨Normal.of_op, Normal.op⟩ := normal_op
 
 @[to_additive]
-/--
-Instance `op.instNormal` / 实例 `op.instNormal`
-
-English:
-instance op.instNormal
-  signature: {H : Subgroup G} [H.Normal]
-  body: .op ‹_›
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 op.instNormal
-  签名: {H : 子群 G} [H.正规]
-  定义体: .op ‹_›
-
-@[to_additive (attr := simp)]
+/-
+**Subgroup.op.instNormal** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup.op`。
+形式化陈述：∀ {G : Type u_2} [inst : Group G] {H : Subgroup G} [H.Normal], H.op.Normal
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.Normal.op`：∀ {G : Type u_2} [inst : Group G] {H : Subgroup G}, 
+H.Normal → H.op.Normal
 -/
 instance op.instNormal {H : Subgroup G} [H.Normal] : H.op.Normal := .op ‹_›
 
 @[to_additive (attr := simp)]
-/--
-theorem `normal_unop` / 定理 `normal_unop`
-
-English:
-theorem normal_unop
-  given: {H : Subgroup Gᵐᵒᵖ}
-  statement: H.unop.Normal ↔ H.Normal
-  proof: by
-  rw [← normal_op]; rw [op_unop]
-
-@[to_additive] alias ⟨Normal.of_unop, Normal.unop⟩ := normal_unop
-
-@[to_additive]
-
-中文:
-定理 normal_unop
-  条件: {H : 子群 Gᵐᵒᵖ}
-  结论: H.unop.正规 ↔ H.正规
-  证明: by
-  rw [← normal_op]; rw [op_unop]
-
-@[to_additive] alias ⟨Normal.of_unop, Normal.unop⟩ := normal_unop
-
-@[to_additive]
-
-Depends on / 依赖: normal_op, op_unop
+/-
+**Subgroup.normal_unop** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：normal_unop {H : Subgroup Gᵐᵒᵖ} : H.unop.Normal ↔ H.Normal
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subgroup.normal_op`：normal_op {H : Subgroup G} : H.op.Normal ↔ H.Normal
+· 使用定理 `Subgroup.op_unop`：op_unop (S : Subgroup Gᵐᵒᵖ) : S.unop.op = S
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem normal_unop {H : Subgroup Gᵐᵒᵖ} : H.unop.Normal ↔ H.Normal := by
-  rw [← normal_op]; rw [op_unop]
+  rw [← normal_op, op_unop]
 
 @[to_additive] alias ⟨Normal.of_unop, Normal.unop⟩ := normal_unop
 
 @[to_additive]
-/--
-Instance `unop.instNormal` / 实例 `unop.instNormal`
-
-English:
-instance unop.instNormal
-  signature: {H : Subgroup Gᵐᵒᵖ} [H.Normal]
-  body: .unop ‹_›
-
-中文:
-实例 unop.instNormal
-  签名: {H : 子群 Gᵐᵒᵖ} [H.正规]
-  定义体: .unop ‹_›
+/-
+**Subgroup.unop.instNormal** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup.unop`。
+形式化陈述：∀ {G : Type u_2} [inst : Group G] {H : Subgroup Gᵐᵒᵖ} [H.Normal], H.unop.N
+ormal
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.Normal.unop`：∀ {G : Type u_2} [inst : Group G] {H : Subgroup Gᵐ
+ᵒᵖ}, H.Normal → H.unop.Normal
 -/
 instance unop.instNormal {H : Subgroup Gᵐᵒᵖ} [H.Normal] : H.unop.Normal := .unop ‹_›
 
 end Subgroup
+

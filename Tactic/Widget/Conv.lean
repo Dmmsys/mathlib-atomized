@@ -60,17 +60,19 @@ public inductive Path where
   | body (name : Name) (next : Path) : Path
 
 /--
-Definition of `Path.ofSubExprPosArray` / `Path.ofSubExprPosArray` 的定义
+Given an `e : Expr` and `pos : SubExpr.Pos`, `Path.ofSubExprPosArray expr pos.toArray` generates
+the `Path` corresponding to traversing `pos` starting at the reference expression `e`.
+-/
+/-
+**Mathlib.Tactic.Conv.Path.ofSubExprPosArray** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.Conv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Path.ofSubExprPosArray
-  signature: (expr : Expr) (pos : Array Nat)
-  body: go expr 0
-
-中文:
-定义 道路.ofSubExprPosArray
-  签名: (expr : Expr) (pos : 数组 自然数)
-  定义体: go expr 0
+--- 原说明 ---
+Given an `e : Expr` and `pos : SubExpr.Pos`, `Path.ofSubExprPosArray expr pos.to
+Array` generates
+the `Path` corresponding to traversing `pos` starting at the reference expressio
+n `e`.
 -/
 partial def Path.ofSubExprPosArray (expr : Expr) (pos : Array Nat) : MetaM Path :=
   go expr 0
@@ -107,7 +109,7 @@ where
             throwError m!"conv mode does not support entering let expressions \
               for which the type-correctness of the body depends on the let value \n\
               failed to abstract let-expression, result is not type correct{indentExpr expr}"
-Path.body n < > go e i.succ
+          Path.body n <$> go e i.succ
       else throwError err
     | .forallE n t b bi =>
       if pos[i] = 0 then do -- forall binder type
@@ -115,7 +117,7 @@ Path.body n < > go e i.succ
           throwError m!"conv mode only supports rewriting forall binder types \
             when the binder type is a proposition or when the body of the forall \
             does not depend on the value of the bound variable{indentExpr expr}"
-Path.type < > go t i.succ
+        Path.type <$> go t i.succ
       else if pos[i] = 1 then -- forall body
         withLocalDeclNoLocalInstanceUpdate n bi t fun fvar =>
           (Path.body n <$> go (b.instantiate1 fvar) i.succ)
@@ -161,10 +163,10 @@ Path.type < > go t i.succ
         if bis[n]? == some .default then -- explicit argument
           -- find the number of explicit arguments between the head and this arg (inclusive)
           arg ((bis.take n).count .default + 1)
-false < > go acc[n] i
-else arg (n + 1) true < > go acc[n] i-- implicit argument
+            false <$> go acc[n] i
+        else arg (n + 1) true <$> go acc[n] i -- implicit argument
       else -- ran out of `Expr.app` nodes
-arg 0 false < > go expr i
+        arg 0 false <$> go expr i
 
 /--
 Given an `e : Expr` and `pos : SubExpr.Pos`, `Path.ofSubExprPos expr pos` generates
@@ -263,7 +265,7 @@ public def insertEnter (locations : Array Lean.SubExpr.GoalsLocation) (goalType 
   -- highlight trailing `skip` after insertion
   let trailingSkipRange? : Option (String.Pos.Raw × String.Pos.Raw) :=
     let trimmed := enterString.trimAsciiEnd
-.map (·.rawEndPos, trimmed.rawEndPos) trimmed.dropSuffix? "skip"
+    trimmed.dropSuffix? "skip" |>.map (·.rawEndPos, trimmed.rawEndPos)
   return ("Generate conv", enterString, trailingSkipRange?)
 
 /-- Rpc function for the conv widget. -/
@@ -287,3 +289,4 @@ elab stx:"conv?" : tactic => do
     (pure <| json% { replaceRange: $(replaceRange) }) stx
 
 end Mathlib.Tactic.Conv
+

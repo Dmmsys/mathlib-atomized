@@ -63,50 +63,31 @@ universe u v w
 noncomputable section
 
 variable (R : Type u) {B : Type v} [CommRing R]
-variable (CM : Matrix B B Int)
+variable (CM : Matrix B B ℤ)
 
 namespace CartanMatrix
 
 variable (B)
 
-/--
-Inductive type `Generators` / 归纳类型 `Generators`
+/-- The generators of the free Lie algebra from which we construct the Lie algebra of a Cartan
+matrix as a quotient. -/
+/-
+**CartanMatrix.Generators** 是 Mathlib 中的一个归纳类型，位于命名空间 `CartanMatrix`。
+形式化陈述：Type v → Type v
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Generators
-  constructors (3):
-    - H: B -> Generators
-    - E: B -> Generators
-    - F: B -> Generators
-
-中文:
-归纳类型 生成元
-  构造子 (3 个):
-    - H: B -> 生成元
-    - E: B -> 生成元
-    - F: B -> 生成元
-
-Depends on / 依赖: congr_arg, one_smul
+--- 原说明 ---
+The generators of the free Lie algebra from which we construct the Lie algebra o
+f a Cartan
+matrix as a quotient.
 -/
 inductive Generators
-  | H : B -> Generators
-  | E : B -> Generators
-  | F : B -> Generators
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: B] : Inhabited (Generators B)
-  body: ⟨Generators.H default⟩
-
-中文:
-实例 [可居
-  签名: B] : 可居 (生成元 B)
-  定义体: ⟨Generators.H default⟩
-
-Depends on / 依赖: Generators, Generators.H
+  | H : B → Generators
+  | E : B → Generators
+  | F : B → Generators
+/-
+**CartanMatrix.** 是 Mathlib 中的一个实例，位于命名空间 `CartanMatrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited B] : Inhabited (Generators B) :=
   ⟨Generators.H default⟩
@@ -122,201 +103,129 @@ local notation "E" => FreeLieAlgebra.of R ∘ Generators.E
 local notation "F" => FreeLieAlgebra.of R ∘ Generators.F
 local notation "ad" => LieAlgebra.ad R (FreeLieAlgebra R (Generators B))
 
-/--
-Definition of `HH` / `HH` 的定义
+/-- The terms corresponding to the `⁅H, H⁆`-relations. -/
+/-
+**CartanMatrix.Relations.HH** 是 Mathlib 中的一个定义，位于命名空间 `CartanMatrix.Relations`。
+形式化陈述：HH : B × B -> FreeLieAlgebra R (Generators B)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HH
-  signature: : B × B -> FreeLieAlgebra R (Generators B)
-  body: uncurry fun i j => ⁅H i, H j⁆
-
-中文:
-定义 HH
-  签名: : B × B -> FreeLieAlgebra R (生成元 B)
-  定义体: uncurry fun i j => ⁅H i, H j⁆
-
-Depends on / 依赖: uncurry
+--- 原说明 ---
+The terms corresponding to the `⁅H, H⁆`-relations.
 -/
-def HH : B × B -> FreeLieAlgebra R (Generators B) :=
+def HH : B × B → FreeLieAlgebra R (Generators B) :=
   uncurry fun i j => ⁅H i, H j⁆
 
-/--
-Definition of `EF` / `EF` 的定义
+/-- The terms corresponding to the `⁅E, F⁆`-relations. -/
+/-
+**CartanMatrix.Relations.EF** 是 Mathlib 中的一个定义，位于命名空间 `CartanMatrix.Relations`。
+形式化陈述：EF [DecidableEq B] : B × B -> FreeLieAlgebra R (Generators B)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition EF
-  signature: [DecidableEq B]
-  body: uncurry fun i j => if i = j then ⁅E i, F i⁆ - H i else ⁅E i, F j⁆
-
-中文:
-定义 EF
-  签名: [DecidableEq B]
-  定义体: uncurry fun i j => if i = j then ⁅E i, F i⁆ - H i else ⁅E i, F j⁆
-
-Depends on / 依赖: uncurry
+--- 原说明 ---
+The terms corresponding to the `⁅E, F⁆`-relations.
 -/
-def EF [DecidableEq B] : B × B -> FreeLieAlgebra R (Generators B) :=
+def EF [DecidableEq B] : B × B → FreeLieAlgebra R (Generators B) :=
   uncurry fun i j => if i = j then ⁅E i, F i⁆ - H i else ⁅E i, F j⁆
 
-/--
-Definition of `HE` / `HE` 的定义
+/-- The terms corresponding to the `⁅H, E⁆`-relations. -/
+/-
+**CartanMatrix.Relations.HE** 是 Mathlib 中的一个定义，位于命名空间 `CartanMatrix.Relations`。
+形式化陈述：HE : B × B -> FreeLieAlgebra R (Generators B)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HE
-  signature: : B × B -> FreeLieAlgebra R (Generators B)
-  body: uncurry fun i j => ⁅H i, E j⁆ - CM i j • E j
-
-中文:
-定义 HE
-  签名: : B × B -> FreeLieAlgebra R (生成元 B)
-  定义体: uncurry fun i j => ⁅H i, E j⁆ - CM i j • E j
-
-Depends on / 依赖: uncurry
+--- 原说明 ---
+The terms corresponding to the `⁅H, E⁆`-relations.
 -/
-def HE : B × B -> FreeLieAlgebra R (Generators B) :=
+def HE : B × B → FreeLieAlgebra R (Generators B) :=
   uncurry fun i j => ⁅H i, E j⁆ - CM i j • E j
 
-/--
-Definition of `HF` / `HF` 的定义
+/-- The terms corresponding to the `⁅H, F⁆`-relations. -/
+/-
+**CartanMatrix.Relations.HF** 是 Mathlib 中的一个定义，位于命名空间 `CartanMatrix.Relations`。
+形式化陈述：HF : B × B -> FreeLieAlgebra R (Generators B)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HF
-  signature: : B × B -> FreeLieAlgebra R (Generators B)
-  body: uncurry fun i j => ⁅H i, F j⁆ + CM i j • F j
-
-中文:
-定义 HF
-  签名: : B × B -> FreeLieAlgebra R (生成元 B)
-  定义体: uncurry fun i j => ⁅H i, F j⁆ + CM i j • F j
-
-Depends on / 依赖: uncurry
+--- 原说明 ---
+The terms corresponding to the `⁅H, F⁆`-relations.
 -/
-def HF : B × B -> FreeLieAlgebra R (Generators B) :=
+def HF : B × B → FreeLieAlgebra R (Generators B) :=
   uncurry fun i j => ⁅H i, F j⁆ + CM i j • F j
 
-/--
-Definition of `adE` / `adE` 的定义
+/-- The terms corresponding to the `ad E`-relations. -/
+/-
+**CartanMatrix.Relations.adE** 是 Mathlib 中的一个定义，位于命名空间 `CartanMatrix.Relations`。
+形式化陈述：adE : B × B -> FreeLieAlgebra R (Generators B)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition adE
-  signature: : B × B -> FreeLieAlgebra R (Generators B)
-  body: uncurry fun i j => ad (E i) ^ (-CM i j).toNat ⁅E i, E j⁆
-
-中文:
-定义 adE
-  签名: : B × B -> FreeLieAlgebra R (生成元 B)
-  定义体: uncurry fun i j => ad (E i) ^ (-CM i j).toNat ⁅E i, E j⁆
-
-Depends on / 依赖: uncurry
+--- 原说明 ---
+The terms corresponding to the `ad E`-relations.
 -/
-def adE : B × B -> FreeLieAlgebra R (Generators B) :=
-uncurry fun i j => ad (E i) ^ (-CM i j).toNat ⁅E i, E j⁆
+def adE : B × B → FreeLieAlgebra R (Generators B) :=
+  uncurry fun i j => ad (E i) ^ (-CM i j).toNat <| ⁅E i, E j⁆
 
-/--
-Definition of `adF` / `adF` 的定义
+/-- The terms corresponding to the `ad F`-relations. -/
+/-
+**CartanMatrix.Relations.adF** 是 Mathlib 中的一个定义，位于命名空间 `CartanMatrix.Relations`。
+形式化陈述：adF : B × B -> FreeLieAlgebra R (Generators B)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition adF
-  signature: : B × B -> FreeLieAlgebra R (Generators B)
-  body: uncurry fun i j => ad (F i) ^ (-CM i j).toNat ⁅F i, F j⁆
-
-中文:
-定义 adF
-  签名: : B × B -> FreeLieAlgebra R (生成元 B)
-  定义体: uncurry fun i j => ad (F i) ^ (-CM i j).toNat ⁅F i, F j⁆
-
-Depends on / 依赖: uncurry
+--- 原说明 ---
+The terms corresponding to the `ad F`-relations.
 -/
-def adF : B × B -> FreeLieAlgebra R (Generators B) :=
-uncurry fun i j => ad (F i) ^ (-CM i j).toNat ⁅F i, F j⁆
-
-/--
-theorem `adE_of_eq_eq_zero` / 定理 `adE_of_eq_eq_zero`
-
-English:
-theorem adE_of_eq_eq_zero
-  given: (i : B) (h : CM i i = 2)
-  statement: adE R CM ⟨i, i⟩ = 0
-  proof: by
-  have h' : (-2 : Int).toNat = 0 := rfl
-  simp [adE, h, h']
-
-中文:
-定理 adE_of_eq_eq_zero
-  条件: (i : B) (h : CM i i = 2)
-  结论: adE R CM ⟨i, i⟩ = 0
-  证明: by
-  have h' : (-2 : Int).toNat = 0 := rfl
-  simp [adE, h, h']
+def adF : B × B → FreeLieAlgebra R (Generators B) :=
+  uncurry fun i j => ad (F i) ^ (-CM i j).toNat <| ⁅F i, F j⁆
+/-
+**CartanMatrix.Relations.adE_of_eq_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `CartanMatr
+ix.Relations`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem adE_of_eq_eq_zero (i : B) (h : CM i i = 2) : adE R CM ⟨i, i⟩ = 0 := by
-  have h' : (-2 : Int).toNat = 0 := rfl
+  have h' : (-2 : ℤ).toNat = 0 := rfl
   simp [adE, h, h']
-
-/--
-theorem `adF_of_eq_eq_zero` / 定理 `adF_of_eq_eq_zero`
-
-English:
-theorem adF_of_eq_eq_zero
-  given: (i : B) (h : CM i i = 2)
-  statement: adF R CM ⟨i, i⟩ = 0
-  proof: by
-  have h' : (-2 : Int).toNat = 0 := rfl
-  simp [adF, h, h']
-
-中文:
-定理 adF_of_eq_eq_zero
-  条件: (i : B) (h : CM i i = 2)
-  结论: adF R CM ⟨i, i⟩ = 0
-  证明: by
-  have h' : (-2 : Int).toNat = 0 := rfl
-  simp [adF, h, h']
+/-
+**CartanMatrix.Relations.adF_of_eq_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `CartanMatr
+ix.Relations`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem adF_of_eq_eq_zero (i : B) (h : CM i i = 2) : adF R CM ⟨i, i⟩ = 0 := by
-  have h' : (-2 : Int).toNat = 0 := rfl
+  have h' : (-2 : ℤ).toNat = 0 := rfl
   simp [adF, h, h']
 
-/--
-Definition of `toSet` / `toSet` 的定义
+/-- The union of all the relations as a subset of the free Lie algebra. -/
+/-
+**CartanMatrix.Relations.toSet** 是 Mathlib 中的一个定义，位于命名空间 `CartanMatrix.Relations
+`。
+形式化陈述：toSet [DecidableEq B] : Set (FreeLieAlgebra R (Generators B))
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toSet
-  signature: [DecidableEq B]
-  body: (Set.range <| HH R) union (Set.range <| EF R) union (Set.range <| HE R CM) union (Set.range <| HF R CM) union
-    (Set.range <| adE R CM) union
-    (Set.range <| adF R CM)
-
-中文:
-定义 toSet
-  签名: [DecidableEq B]
-  定义体: (Set.range <| HH R) union (Set.range <| EF R) union (Set.range <| HE R CM) union (Set.range <| HF R CM) union
-    (Set.range <| adE R CM) union
-    (Set.range <| adF R CM)
-
-Depends on / 依赖: FunLike, SemilinearMapClass, Set.range, instAddMonoidHomClass
+--- 原说明 ---
+The union of all the relations as a subset of the free Lie algebra.
 -/
 def toSet [DecidableEq B] : Set (FreeLieAlgebra R (Generators B)) :=
-  (Set.range <| HH R) union (Set.range <| EF R) union (Set.range <| HE R CM) union (Set.range <| HF R CM) union
-    (Set.range <| adE R CM) union
+  (Set.range <| HH R) ∪ (Set.range <| EF R) ∪ (Set.range <| HE R CM) ∪ (Set.range <| HF R CM) ∪
+    (Set.range <| adE R CM) ∪
     (Set.range <| adF R CM)
 
-/--
-Definition of `toIdeal` / `toIdeal` 的定义
+/-- The ideal of the free Lie algebra generated by the relations. -/
+/-
+**CartanMatrix.Relations.toIdeal** 是 Mathlib 中的一个定义，位于命名空间 `CartanMatrix.Relatio
+ns`。
+形式化陈述：toIdeal [DecidableEq B] : LieIdeal R (FreeLieAlgebra R (Generators B))
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toIdeal
-  signature: [DecidableEq B]
-  body: LieSubmodule.lieSpan R _ toSet R CM
-
-中文:
-定义 toIdeal
-  签名: [DecidableEq B]
-  定义体: LieSubmodule.lieSpan R _ toSet R CM
-
-Depends on / 依赖: LieSubmodule, LieSubmodule.lieSpan, distribMulActionSemiHomClass, lieSpan
+--- 原说明 ---
+The ideal of the free Lie algebra generated by the relations.
 -/
 def toIdeal [DecidableEq B] : LieIdeal R (FreeLieAlgebra R (Generators B)) :=
-LieSubmodule.lieSpan R _ toSet R CM
+  LieSubmodule.lieSpan R _ <| toSet R CM
 
 end Relations
 
@@ -324,20 +233,21 @@ end CartanMatrix
 
 variable [DecidableEq B]
 
-/--
-Definition of `Matrix.ToLieAlgebra` / `Matrix.ToLieAlgebra` 的定义
+/-- The Lie algebra corresponding to a Cartan matrix.
 
-English:
-definition Matrix.ToLieAlgebra
-  body: FreeLieAlgebra R _ ⧸ CartanMatrix.Relations.toIdeal R CM
-deriving LieRing, Inhabited, LieAlgebra R
+Note that it is defined for any matrix of integers. Its value for non-Cartan matrices should be
+regarded as junk. -/
+/-
+**Matrix.ToLieAlgebra** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Matrix.ToLieAlgebra
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 矩阵.ToLieAlgebra
-  定义体: FreeLieAlgebra R _ ⧸ CartanMatrix.Relations.toIdeal R CM
-deriving LieRing, Inhabited, LieAlgebra R
+--- 原说明 ---
+The Lie algebra corresponding to a Cartan matrix.
 
-Depends on / 依赖: CartanMatrix, CartanMatrix.Relations.toIdeal, FreeLieAlgebra, Relations, toIdeal
+Note that it is defined for any matrix of integers. Its value for non-Cartan mat
+rices should be
+regarded as junk.
 -/
 def Matrix.ToLieAlgebra :=
   FreeLieAlgebra R _ ⧸ CartanMatrix.Relations.toIdeal R CM
@@ -345,78 +255,53 @@ deriving LieRing, Inhabited, LieAlgebra R
 
 namespace LieAlgebra
 
-/--
-Definition of `e₆` / `e₆` 的定义
+/-- The exceptional split Lie algebra of type e₆. -/
+/-
+**LieAlgebra.e** 是 Mathlib 中的一个缩写定义，位于命名空间 `LieAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation e₆
-  body: Matrix.ToLieAlgebra R CartanMatrix.E₆
-
-中文:
-缩写 e₆
-  定义体: Matrix.ToLieAlgebra R CartanMatrix.E₆
-
-Depends on / 依赖: CartanMatrix, CartanMatrix.E, Matrix, Matrix.ToLieAlgebra, ToLieAlgebra
+--- 原说明 ---
+The exceptional split Lie algebra of type e₆.
 -/
 abbrev e₆ := Matrix.ToLieAlgebra R CartanMatrix.E₆
 
-/--
-Definition of `e₇` / `e₇` 的定义
+/-- The exceptional split Lie algebra of type e₇. -/
+/-
+**LieAlgebra.e** 是 Mathlib 中的一个缩写定义，位于命名空间 `LieAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation e₇
-  body: Matrix.ToLieAlgebra R CartanMatrix.E₇
-
-中文:
-缩写 e₇
-  定义体: Matrix.ToLieAlgebra R CartanMatrix.E₇
-
-Depends on / 依赖: CartanMatrix, CartanMatrix.E, Matrix, Matrix.ToLieAlgebra, ToLieAlgebra
+--- 原说明 ---
+The exceptional split Lie algebra of type e₇.
 -/
 abbrev e₇ := Matrix.ToLieAlgebra R CartanMatrix.E₇
 
-/--
-Definition of `e₈` / `e₈` 的定义
+/-- The exceptional split Lie algebra of type e₈. -/
+/-
+**LieAlgebra.e** 是 Mathlib 中的一个缩写定义，位于命名空间 `LieAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation e₈
-  body: Matrix.ToLieAlgebra R CartanMatrix.E₈
-
-中文:
-缩写 e₈
-  定义体: Matrix.ToLieAlgebra R CartanMatrix.E₈
-
-Depends on / 依赖: CartanMatrix, CartanMatrix.E, Matrix, Matrix.ToLieAlgebra, ToLieAlgebra
+--- 原说明 ---
+The exceptional split Lie algebra of type e₈.
 -/
 abbrev e₈ := Matrix.ToLieAlgebra R CartanMatrix.E₈
 
-/--
-Definition of `f₄` / `f₄` 的定义
+/-- The exceptional split Lie algebra of type f₄. -/
+/-
+**LieAlgebra.f** 是 Mathlib 中的一个缩写定义，位于命名空间 `LieAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation f₄
-  body: Matrix.ToLieAlgebra R CartanMatrix.F₄
-
-中文:
-缩写 f₄
-  定义体: Matrix.ToLieAlgebra R CartanMatrix.F₄
-
-Depends on / 依赖: CartanMatrix, CartanMatrix.F, Matrix, Matrix.ToLieAlgebra, ToLieAlgebra
+--- 原说明 ---
+The exceptional split Lie algebra of type f₄.
 -/
 abbrev f₄ := Matrix.ToLieAlgebra R CartanMatrix.F₄
 
-/--
-Definition of `g₂` / `g₂` 的定义
+/-- The exceptional split Lie algebra of type g₂. -/
+/-
+**LieAlgebra.g** 是 Mathlib 中的一个缩写定义，位于命名空间 `LieAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation g₂
-  body: Matrix.ToLieAlgebra R CartanMatrix.G₂
-
-中文:
-缩写 g₂
-  定义体: Matrix.ToLieAlgebra R CartanMatrix.G₂
-
-Depends on / 依赖: CartanMatrix, CartanMatrix.G, Matrix, Matrix.ToLieAlgebra, ToLieAlgebra
+--- 原说明 ---
+The exceptional split Lie algebra of type g₂.
 -/
 abbrev g₂ := Matrix.ToLieAlgebra R CartanMatrix.G₂
 
@@ -428,72 +313,46 @@ namespace CartanMatrix
 
 variable (R : Type*) [CommRing R]
 
-/--
-Definition of `aₙ` / `aₙ` 的定义
+/-- The Lie algebra of type Aₙ₋₁, isomorphic to sl(n). -/
+/-
+**CartanMatrix.a** 是 Mathlib 中的一个缩写定义，位于命名空间 `CartanMatrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation aₙ
-  signature: (n : Nat)
-  body: Matrix.ToLieAlgebra R (CartanMatrix.A n)
-
-中文:
-缩写 aₙ
-  签名: (n : 自然数)
-  定义体: Matrix.ToLieAlgebra R (CartanMatrix.A n)
-
-Depends on / 依赖: CartanMatrix, CartanMatrix.A, Matrix, Matrix.ToLieAlgebra, ToLieAlgebra
+--- 原说明 ---
+The Lie algebra of type Aₙ₋₁, isomorphic to sl(n).
 -/
-noncomputable abbrev aₙ (n : Nat) := Matrix.ToLieAlgebra R (CartanMatrix.A n)
+noncomputable abbrev aₙ (n : ℕ) := Matrix.ToLieAlgebra R (CartanMatrix.A n)
 
-/--
-Definition of `bₙ` / `bₙ` 的定义
+/-- The Lie algebra of type Bₙ, isomorphic to so(2n+1). -/
+/-
+**CartanMatrix.b** 是 Mathlib 中的一个缩写定义，位于命名空间 `CartanMatrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation bₙ
-  signature: (n : Nat)
-  body: Matrix.ToLieAlgebra R (CartanMatrix.B n)
-
-中文:
-缩写 bₙ
-  签名: (n : 自然数)
-  定义体: Matrix.ToLieAlgebra R (CartanMatrix.B n)
-
-Depends on / 依赖: CartanMatrix, CartanMatrix.B, Matrix, Matrix.ToLieAlgebra, ToLieAlgebra
+--- 原说明 ---
+The Lie algebra of type Bₙ, isomorphic to so(2n+1).
 -/
-noncomputable abbrev bₙ (n : Nat) := Matrix.ToLieAlgebra R (CartanMatrix.B n)
+noncomputable abbrev bₙ (n : ℕ) := Matrix.ToLieAlgebra R (CartanMatrix.B n)
 
-/--
-Definition of `cₙ` / `cₙ` 的定义
+/-- The Lie algebra of type Cₙ, isomorphic to sp(2n). -/
+/-
+**CartanMatrix.c** 是 Mathlib 中的一个缩写定义，位于命名空间 `CartanMatrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation cₙ
-  signature: (n : Nat)
-  body: Matrix.ToLieAlgebra R (CartanMatrix.C n)
-
-中文:
-缩写 cₙ
-  签名: (n : 自然数)
-  定义体: Matrix.ToLieAlgebra R (CartanMatrix.C n)
-
-Depends on / 依赖: CartanMatrix, CartanMatrix.C, Matrix, Matrix.ToLieAlgebra, ToLieAlgebra
+--- 原说明 ---
+The Lie algebra of type Cₙ, isomorphic to sp(2n).
 -/
-noncomputable abbrev cₙ (n : Nat) := Matrix.ToLieAlgebra R (CartanMatrix.C n)
+noncomputable abbrev cₙ (n : ℕ) := Matrix.ToLieAlgebra R (CartanMatrix.C n)
 
-/--
-Definition of `dₙ` / `dₙ` 的定义
+/-- The Lie algebra of type Dₙ, isomorphic to so(2n). Requires n ≥ 4 for non-degenerate behavior. -/
+/-
+**CartanMatrix.d** 是 Mathlib 中的一个缩写定义，位于命名空间 `CartanMatrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation dₙ
-  signature: (n : Nat)
-  body: Matrix.ToLieAlgebra R (CartanMatrix.D n)
-
-中文:
-缩写 dₙ
-  签名: (n : 自然数)
-  定义体: Matrix.ToLieAlgebra R (CartanMatrix.D n)
-
-Depends on / 依赖: CartanMatrix, CartanMatrix.D, Matrix, Matrix.ToLieAlgebra, ToLieAlgebra
+--- 原说明 ---
+The Lie algebra of type Dₙ, isomorphic to so(2n). Requires n ≥ 4 for non-degener
+ate behavior.
 -/
-noncomputable abbrev dₙ (n : Nat) := Matrix.ToLieAlgebra R (CartanMatrix.D n)
+noncomputable abbrev dₙ (n : ℕ) := Matrix.ToLieAlgebra R (CartanMatrix.D n)
 
 end CartanMatrix
+

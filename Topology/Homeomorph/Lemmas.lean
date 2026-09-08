@@ -34,103 +34,96 @@ variable [TopologicalSpace X] [TopologicalSpace Y] [TopologicalSpace W] [Topolog
 
 namespace Homeomorph
 
-/--
-theorem `secondCountableTopology` / 定理 `secondCountableTopology`
-
-English:
-theorem secondCountableTopology
-  statement: [SecondCountableTopology Y]
-  proof: h.isInducing.secondCountableTopology
-
-中文:
-定理 secondCountableTopology
-  结论: [第二可数拓扑 Y]
-  证明: h.isInducing.secondCountableTopology
+/-
+**Homeomorph.secondCountableTopology** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] [SecondCountableTopology Y]   (h : X ≃ₜ Y), SecondCountableTopol
+ogy X
+参数：h : X ≃ₜ Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsInducing.secondCountableTopology`：∀ {α : Type u_1} {β : Type 
+u_2} [inst : TopologicalSpace α] {f : α → β} [inst_1 : TopologicalSpace β]   [Se
+condCountableTopology β], Topolog…
+· 使用引理 `Homeomorph.isInducing`：isInducing (h : X ≃ₜ Y) : IsInducing h
 -/
 protected theorem secondCountableTopology [SecondCountableTopology Y]
     (h : X ≃ₜ Y) : SecondCountableTopology X :=
   h.isInducing.secondCountableTopology
-
-/--
-theorem `baireSpace` / 定理 `baireSpace`
-
-English:
-theorem baireSpace
-  given: [BaireSpace X] (f : X ≃ₜ Y)
-  statement: BaireSpace Y
-  proof: f.isOpenQuotientMap.baireSpace
-
-中文:
-定理 baireSpace
-  条件: [Baire空间 X] (f : X ≃ₜ Y)
-  结论: Baire空间 Y
-  证明: f.isOpenQuotientMap.baireSpace
+/-
+**Homeomorph.baireSpace** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] [BaireSpace X] (f : X ≃ₜ Y),   BaireSpace Y
+参数：f : X ≃ₜ Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOpenQuotientMap.baireSpace`：IsOpenQuotientMap.baireSpace {Y : Type*} [
+TopologicalSpace Y] {f : X -> Y} (hf : IsOpenQuotientMap f) : BaireSpace Y
+· 使用定理 `Homeomorph.isOpenQuotientMap`：∀ {X : Type u_1} {Y : Type u_2} [inst : To
+pologicalSpace X] [inst_1 : TopologicalSpace Y] (h : X ≃ₜ Y),   IsOpenQuotientMa
+p ⇑h
 -/
 protected theorem baireSpace [BaireSpace X] (f : X ≃ₜ Y) : BaireSpace Y :=
   f.isOpenQuotientMap.baireSpace
 
 /-- If `h : X → Y` is a homeomorphism, `h(s)` is compact iff `s` is. -/
 @[simp]
-/--
-theorem `isCompact_image` / 定理 `isCompact_image`
+/-
+**Homeomorph.isCompact_image** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：isCompact_image {s : Set X} (h : X ≃ₜ Y) : IsCompact (h '' s) ↔ IsCompact 
+s
+参数：h : X ≃ₜ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Topology.IsEmbedding.isCompact_iff`：Topology.IsEmbedding.isCompact_iff {
+f : X -> Y} (hf : IsEmbedding f) : IsCompact s ↔ IsCompact (f '' s)
+· 使用定理 `Homeomorph.isEmbedding`：isEmbedding (h : X ≃ₜ Y) : IsEmbedding h
 
-English:
-theorem isCompact_image
-  given: {s : Set X} (h : X ≃ₜ Y)
-  statement: IsCompact (h '' s) ↔ IsCompact s
-  proof: h.isEmbedding.isCompact_iff.symm
-
-中文:
-定理 isCompact_image
-  条件: {s : 集合 X} (h : X ≃ₜ Y)
-  结论: 是紧集 (h '' s) ↔ 是紧集 s
-  证明: h.isEmbedding.isCompact_iff.symm
-
-Depends on / 依赖: h.isEmbedding.isCompact_iff.symm, isCompact_iff, isEmbedding
+--- 原说明 ---
+If `h : X → Y` is a homeomorphism, `h(s)` is compact iff `s` is.
 -/
 theorem isCompact_image {s : Set X} (h : X ≃ₜ Y) : IsCompact (h '' s) ↔ IsCompact s :=
   h.isEmbedding.isCompact_iff.symm
 
 /-- If `h : X → Y` is a homeomorphism, `h⁻¹(s)` is compact iff `s` is. -/
 @[simp]
-/--
-theorem `isCompact_preimage` / 定理 `isCompact_preimage`
+/-
+**Homeomorph.isCompact_preimage** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：isCompact_preimage {s : Set Y} (h : X ≃ₜ Y) : IsCompact (h ⁻¹' s) ↔ IsComp
+act s
+参数：h : X ≃ₜ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Homeomorph.image_symm`：image_symm (h : X ≃ₜ Y) : image h.symm = preimage
+ h
+· 使用定理 `Homeomorph.isCompact_image`：isCompact_image {s : Set X} (h : X ≃ₜ Y) : I
+sCompact (h '' s) ↔ IsCompact s
 
-English:
-theorem isCompact_preimage
-  given: {s : Set Y} (h : X ≃ₜ Y)
-  statement: IsCompact (h ⁻¹' s) ↔ IsCompact s
-  proof: by
-  rw [← image_symm]; exact h.symm.isCompact_image
-
-中文:
-定理 isCompact_preimage
-  条件: {s : 集合 Y} (h : X ≃ₜ Y)
-  结论: 是紧集 (h ⁻¹' s) ↔ 是紧集 s
-  证明: by
-  rw [← image_symm]; exact h.symm.isCompact_image
-
-Depends on / 依赖: h.symm.isCompact_image, image_symm, isCompact_image
+--- 原说明 ---
+If `h : X → Y` is a homeomorphism, `h⁻¹(s)` is compact iff `s` is.
 -/
 theorem isCompact_preimage {s : Set Y} (h : X ≃ₜ Y) : IsCompact (h ⁻¹' s) ↔ IsCompact s := by
   rw [← image_symm]; exact h.symm.isCompact_image
 
 /-- If `h : X → Y` is a homeomorphism, `s` is σ-compact iff `h(s)` is. -/
 @[simp]
-/--
-theorem `isSigmaCompact_image` / 定理 `isSigmaCompact_image`
+/-
+**Homeomorph.isSigmaCompact_image** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：isSigmaCompact_image {s : Set X} (h : X ≃ₜ Y) : IsSigmaCompact (h '' s) ↔ 
+IsSigmaCompact s
+参数：h : X ≃ₜ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用引理 `Topology.IsEmbedding.isSigmaCompact_iff`：Topology.IsEmbedding.isSigmaCom
+pact_iff {f : X -> Y} {s : Set X} (hf : IsEmbedding f) : IsSigmaCompact s ↔ IsSi
+gmaCompact (f '' s)
+· 使用定理 `Homeomorph.isEmbedding`：isEmbedding (h : X ≃ₜ Y) : IsEmbedding h
 
-English:
-theorem isSigmaCompact_image
-  given: {s : Set X} (h : X ≃ₜ Y)
-  proof: h.isEmbedding.isSigmaCompact_iff.symm
-
-中文:
-定理 isSigmaCompact_image
-  条件: {s : 集合 X} (h : X ≃ₜ Y)
-  证明: h.isEmbedding.isSigmaCompact_iff.symm
-
-Depends on / 依赖: h.isEmbedding.isSigmaCompact_iff.symm, isEmbedding, isSigmaCompact_iff
+--- 原说明 ---
+If `h : X → Y` is a homeomorphism, `s` is σ-compact iff `h(s)` is.
 -/
 theorem isSigmaCompact_image {s : Set X} (h : X ≃ₜ Y) :
     IsSigmaCompact (h '' s) ↔ IsSigmaCompact s :=
@@ -138,161 +131,150 @@ theorem isSigmaCompact_image {s : Set X} (h : X ≃ₜ Y) :
 
 /-- If `h : X → Y` is a homeomorphism, `h⁻¹(s)` is σ-compact iff `s` is. -/
 @[simp]
-/--
-theorem `isSigmaCompact_preimage` / 定理 `isSigmaCompact_preimage`
+/-
+**Homeomorph.isSigmaCompact_preimage** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：isSigmaCompact_preimage {s : Set Y} (h : X ≃ₜ Y) : IsSigmaCompact (h ⁻¹' s
+) ↔ IsSigmaCompact s
+参数：h : X ≃ₜ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Homeomorph.image_symm`：image_symm (h : X ≃ₜ Y) : image h.symm = preimage
+ h
+· 使用定理 `Homeomorph.isSigmaCompact_image`：isSigmaCompact_image {s : Set X} (h : X
+ ≃ₜ Y) : IsSigmaCompact (h '' s) ↔ IsSigmaCompact s
 
-English:
-theorem isSigmaCompact_preimage
-  given: {s : Set Y} (h : X ≃ₜ Y)
-  proof: by
-  rw [← image_symm]; exact h.symm.isSigmaCompact_image
-
-@[simp]
-
-中文:
-定理 isSigmaCompact_preimage
-  条件: {s : 集合 Y} (h : X ≃ₜ Y)
-  证明: by
-  rw [← image_symm]; exact h.symm.isSigmaCompact_image
-
-@[simp]
-
-Depends on / 依赖: h.symm.isSigmaCompact_image, image_symm, isSigmaCompact_image
+--- 原说明 ---
+If `h : X → Y` is a homeomorphism, `h⁻¹(s)` is σ-compact iff `s` is.
 -/
 theorem isSigmaCompact_preimage {s : Set Y} (h : X ≃ₜ Y) :
     IsSigmaCompact (h ⁻¹' s) ↔ IsSigmaCompact s := by
   rw [← image_symm]; exact h.symm.isSigmaCompact_image
 
 @[simp]
-/--
-theorem `isPreconnected_image` / 定理 `isPreconnected_image`
-
-English:
-theorem isPreconnected_image
-  given: {s : Set X} (h : X ≃ₜ Y)
-  proof: ⟨fun hs => by simpa only [image_symm, preimage_image]
-    using hs.image _ h.symm.continuous.continuousOn,
-    fun hs => hs.image _ h.continuous.continuousOn⟩
-
-@[simp]
-
-中文:
-定理 isPreconnected_image
-  条件: {s : 集合 X} (h : X ≃ₜ Y)
-  证明: ⟨fun hs => by simpa only [image_symm, preimage_image]
-    using hs.image _ h.symm.continuous.continuousOn,
-    fun hs => hs.image _ h.continuous.continuousOn⟩
-
-@[simp]
-
-Depends on / 依赖: continuous, continuousOn, h.continuous.continuousOn, h.symm.continuous.continuousOn, hs.image, image_symm, preimage_image
+/-
+**Homeomorph.isPreconnected_image** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：isPreconnected_image {s : Set X} (h : X ≃ₜ Y) : IsPreconnected (h '' s) ↔ 
+IsPreconnected s
+参数：h : X ≃ₜ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Homeomorph.image_symm`：image_symm (h : X ≃ₜ Y) : image h.symm = preimage
+ h
+· 使用定理 `Homeomorph.preimage_image`：preimage_image (h : X ≃ₜ Y) (s : Set X) : h ⁻
+¹' h '' s = s
+· 使用定理 `IsPreconnected.image`：∀ {α : Type u} {β : Type v} [inst : TopologicalSpa
+ce α] [inst_1 : TopologicalSpace β] {s : Set α},   IsPreconnected s → ∀ (f : α →
+ β), Conti…
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
+· 使用定理 `Homeomorph.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologic
+alSpace X] [inst_1 : TopologicalSpace Y] (h : X ≃ₜ Y), Continuous ⇑h
 -/
 theorem isPreconnected_image {s : Set X} (h : X ≃ₜ Y) :
     IsPreconnected (h '' s) ↔ IsPreconnected s :=
-  ⟨fun hs => by simpa only [image_symm, preimage_image]
+  ⟨fun hs ↦ by simpa only [image_symm, preimage_image]
     using hs.image _ h.symm.continuous.continuousOn,
-    fun hs => hs.image _ h.continuous.continuousOn⟩
+    fun hs ↦ hs.image _ h.continuous.continuousOn⟩
 
 @[simp]
-/--
-theorem `isPreconnected_preimage` / 定理 `isPreconnected_preimage`
-
-English:
-theorem isPreconnected_preimage
-  given: {s : Set Y} (h : X ≃ₜ Y)
-  proof: by
-  rw [← image_symm]; rw [isPreconnected_image]
-
-@[simp]
-
-中文:
-定理 isPreconnected_preimage
-  条件: {s : 集合 Y} (h : X ≃ₜ Y)
-  证明: by
-  rw [← image_symm]; rw [isPreconnected_image]
-
-@[simp]
-
-Depends on / 依赖: image_symm, isPreconnected_image
+/-
+**Homeomorph.isPreconnected_preimage** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：isPreconnected_preimage {s : Set Y} (h : X ≃ₜ Y) : IsPreconnected (h ⁻¹' s
+) ↔ IsPreconnected s
+参数：h : X ≃ₜ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Homeomorph.image_symm`：image_symm (h : X ≃ₜ Y) : image h.symm = preimage
+ h
+· 使用定理 `Homeomorph.isPreconnected_image`：isPreconnected_image {s : Set X} (h : X
+ ≃ₜ Y) : IsPreconnected (h '' s) ↔ IsPreconnected s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem isPreconnected_preimage {s : Set Y} (h : X ≃ₜ Y) :
     IsPreconnected (h ⁻¹' s) ↔ IsPreconnected s := by
-  rw [← image_symm]; rw [isPreconnected_image]
+  rw [← image_symm, isPreconnected_image]
 
 @[simp]
-/--
-theorem `isConnected_image` / 定理 `isConnected_image`
-
-English:
-theorem isConnected_image
-  given: {s : Set X} (h : X ≃ₜ Y)
-  proof: image_nonempty.and h.isPreconnected_image
-
-@[simp]
-
-中文:
-定理 isConnected_image
-  条件: {s : 集合 X} (h : X ≃ₜ Y)
-  证明: image_nonempty.and h.isPreconnected_image
-
-@[simp]
-
-Depends on / 依赖: h.isPreconnected_image, image_nonempty, image_nonempty.and, isPreconnected_image
+/-
+**Homeomorph.isConnected_image** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：isConnected_image {s : Set X} (h : X ≃ₜ Y) : IsConnected (h '' s) ↔ IsConn
+ected s
+参数：h : X ≃ₜ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.and`：∀ {a c b d : Prop}, (a ↔ c) → (b ↔ d) → (a ∧ b ↔ c ∧ d)
+· 使用定理 `Set.image_nonempty`：image_nonempty {f : α -> β} {s : Set α} : (f '' s).N
+onempty ↔ s.Nonempty
+· 使用定理 `Homeomorph.isPreconnected_image`：isPreconnected_image {s : Set X} (h : X
+ ≃ₜ Y) : IsPreconnected (h '' s) ↔ IsPreconnected s
 -/
 theorem isConnected_image {s : Set X} (h : X ≃ₜ Y) :
     IsConnected (h '' s) ↔ IsConnected s :=
   image_nonempty.and h.isPreconnected_image
 
 @[simp]
-/--
-theorem `isConnected_preimage` / 定理 `isConnected_preimage`
-
-English:
-theorem isConnected_preimage
-  given: {s : Set Y} (h : X ≃ₜ Y)
-  proof: by
-  rw [← image_symm]; rw [isConnected_image]
-
-中文:
-定理 isConnected_preimage
-  条件: {s : 集合 Y} (h : X ≃ₜ Y)
-  证明: by
-  rw [← image_symm]; rw [isConnected_image]
-
-Depends on / 依赖: image_symm, isConnected_image
+/-
+**Homeomorph.isConnected_preimage** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：isConnected_preimage {s : Set Y} (h : X ≃ₜ Y) : IsConnected (h ⁻¹' s) ↔ Is
+Connected s
+参数：h : X ≃ₜ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Homeomorph.image_symm`：image_symm (h : X ≃ₜ Y) : image h.symm = preimage
+ h
+· 使用定理 `Homeomorph.isConnected_image`：isConnected_image {s : Set X} (h : X ≃ₜ Y)
+ : IsConnected (h '' s) ↔ IsConnected s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem isConnected_preimage {s : Set Y} (h : X ≃ₜ Y) :
     IsConnected (h ⁻¹' s) ↔ IsConnected s := by
-  rw [← image_symm]; rw [isConnected_image]
-
-/--
-theorem `image_connectedComponentIn` / 定理 `image_connectedComponentIn`
-
-English:
-theorem image_connectedComponentIn
-  given: {s : Set X} (h : X ≃ₜ Y) {x : X} (hx : x in s)
-  proof: by
-  refine (h.continuous.continuousOn.image_connectedComponentIn_subset hx).antisymm ?_
-  have := h.symm.continuous.continuousOn.image_connectedComponentIn_subset (mem_image_of_mem h hx)
-  rwa [image_subset_iff, h.preimage_symm, h.image_symm, h.preimage_image, h.symm_apply_apply]
-    at this
-
-@[simp]
-
-中文:
-定理 image_connectedComponentIn
-  条件: {s : 集合 X} (h : X ≃ₜ Y) {x : X} (hx : x in s)
-  证明: by
-  refine (h.continuous.continuousOn.image_connectedComponentIn_subset hx).antisymm ?_
-  have := h.symm.continuous.continuousOn.image_connectedComponentIn_subset (mem_image_of_mem h hx)
-  rwa [image_subset_iff, h.preimage_symm, h.image_symm, h.preimage_image, h.symm_apply_apply]
-    at this
-
-@[simp]
-
-Depends on / 依赖: antisymm, continuous, continuousOn, h.continuous.continuousOn.image_connectedComponentIn_subset, h.image_symm, h.preimage_image, h.preimage_symm, h.symm.continuous.continuousOn.image_connectedComponentIn_subset, h.symm_apply_apply, image_connectedComponentIn_subset, image_subset_iff, image_symm, mem_image_of_mem, preimage_image, preimage_symm, symm_apply_apply
+  rw [← image_symm, isConnected_image]
+/-
+**Homeomorph.image_connectedComponentIn** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：image_connectedComponentIn {s : Set X} (h : X ≃ₜ Y) {x : X} (hx : x in s) 
+: h '' connectedComponentIn s x = connectedComponentIn (h '' s) (h x)
+参数：h : X ≃ₜ Y；hx : x in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `ContinuousOn.image_connectedComponentIn_subset`：ContinuousOn.image_conne
+ctedComponentIn_subset [TopologicalSpace β] {f : α -> β} {s : Set α} {a : α} (hf
+ : ContinuousOn f s) (hx : a in s) :…
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
+· 使用定理 `Homeomorph.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologic
+alSpace X] [inst_1 : TopologicalSpace Y] (h : X ≃ₜ Y), Continuous ⇑h
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Homeomorph.symm_apply_apply`：symm_apply_apply (h : X ≃ₜ Y) (x : X) : h.s
+ymm (h x) = x
+· 使用定理 `Homeomorph.preimage_image`：preimage_image (h : X ≃ₜ Y) (s : Set X) : h ⁻
+¹' h '' s = s
+· 使用定理 `Homeomorph.image_symm`：image_symm (h : X ≃ₜ Y) : image h.symm = preimage
+ h
+· 使用定理 `Homeomorph.preimage_symm`：preimage_symm (h : X ≃ₜ Y) : preimage h.symm =
+ image h
+· 使用定理 `Set.image_subset_iff`：image_subset_iff {s : Set α} {t : Set β} {f : α ->
+ β} : f '' s subseteq t ↔ s subseteq f ⁻¹' t
 -/
-theorem image_connectedComponentIn {s : Set X} (h : X ≃ₜ Y) {x : X} (hx : x in s) :
+theorem image_connectedComponentIn {s : Set X} (h : X ≃ₜ Y) {x : X} (hx : x ∈ s) :
     h '' connectedComponentIn s x = connectedComponentIn (h '' s) (h x) := by
   refine (h.continuous.continuousOn.image_connectedComponentIn_subset hx).antisymm ?_
   have := h.symm.continuous.continuousOn.image_connectedComponentIn_subset (mem_image_of_mem h hx)
@@ -300,115 +282,104 @@ theorem image_connectedComponentIn {s : Set X} (h : X ≃ₜ Y) {x : X} (hx : x 
     at this
 
 @[simp]
-/--
-theorem `comap_cocompact` / 定理 `comap_cocompact`
-
-English:
-theorem comap_cocompact
-  given: (h : X ≃ₜ Y)
-  statement: comap h (cocompact Y) = cocompact X
-  proof: (comap_cocompact_le h.continuous).antisymm
-    (hasBasis_cocompact.le_basis_iff (hasBasis_cocompact.comap h)).2 fun K hK =>
-      ⟨h ⁻¹' K, h.isCompact_preimage.2 hK, Subset.rfl⟩
-
-@[simp]
-
-中文:
-定理 comap_cocompact
-  条件: (h : X ≃ₜ Y)
-  结论: comap h (cocompact Y) = cocompact X
-  证明: (comap_cocompact_le h.continuous).antisymm
-    (hasBasis_cocompact.le_basis_iff (hasBasis_cocompact.comap h)).2 fun K hK =>
-      ⟨h ⁻¹' K, h.isCompact_preimage.2 hK, Subset.rfl⟩
-
-@[simp]
-
-Depends on / 依赖: Subset, Subset.rfl, antisymm, comap_cocompact_le, continuous, h.continuous, h.isCompact_preimage, hasBasis_cocompact, hasBasis_cocompact.comap, hasBasis_cocompact.le_basis_iff, isCompact_preimage, le_basis_iff
+/-
+**Homeomorph.comap_cocompact** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：comap_cocompact (h : X ≃ₜ Y) : comap h (cocompact Y) = cocompact X
+参数：h : X ≃ₜ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Filter.comap_cocompact_le`：Filter.comap_cocompact_le {f : X -> Y} (hf : 
+Continuous f) : (Filter.cocompact Y).comap f <= Filter.cocompact X
+· 使用定理 `Homeomorph.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologic
+alSpace X] [inst_1 : TopologicalSpace Y] (h : X ≃ₜ Y), Continuous ⇑h
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.HasBasis.le_basis_iff`：∀ {α : Type u_1} {ι : Sort u_4} {ι' : Sort
+ u_5} {l l' : Filter α} {p : ι → Prop} {s : ι → Set α} {p' : ι' → Prop}   {s' : 
+ι' → Set α}, l.Has…
+· 使用定理 `Filter.hasBasis_cocompact`：hasBasis_cocompact : (cocompact X).HasBasis I
+sCompact compl
+· 使用定理 `Filter.HasBasis.comap`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} {l
+ : Filter α} {p : ι → Prop} {s : ι → Set α} (f : β → α),   l.HasBasis p s → (Fil
+ter.comap f…
+· 使用定理 `Homeomorph.isCompact_preimage`：isCompact_preimage {s : Set Y} (h : X ≃ₜ 
+Y) : IsCompact (h ⁻¹' s) ↔ IsCompact s
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
 -/
 theorem comap_cocompact (h : X ≃ₜ Y) : comap h (cocompact Y) = cocompact X :=
-(comap_cocompact_le h.continuous).antisymm
+  (comap_cocompact_le h.continuous).antisymm <|
     (hasBasis_cocompact.le_basis_iff (hasBasis_cocompact.comap h)).2 fun K hK =>
       ⟨h ⁻¹' K, h.isCompact_preimage.2 hK, Subset.rfl⟩
 
 @[simp]
-/--
-theorem `map_cocompact` / 定理 `map_cocompact`
-
-English:
-theorem map_cocompact
-  given: (h : X ≃ₜ Y)
-  statement: map h (cocompact X) = cocompact Y
-  proof: by
-  rw [← h.comap_cocompact]; rw [map_comap_of_surjective h.surjective]
-
-中文:
-定理 map_cocompact
-  条件: (h : X ≃ₜ Y)
-  结论: map h (cocompact X) = cocompact Y
-  证明: by
-  rw [← h.comap_cocompact]; rw [map_comap_of_surjective h.surjective]
-
-Depends on / 依赖: comap_cocompact, h.comap_cocompact, h.surjective, map_comap_of_surjective, surjective
+/-
+**Homeomorph.map_cocompact** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：map_cocompact (h : X ≃ₜ Y) : map h (cocompact X) = cocompact Y
+参数：h : X ≃ₜ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Homeomorph.comap_cocompact`：comap_cocompact (h : X ≃ₜ Y) : comap h (coco
+mpact Y) = cocompact X
+· 使用定理 `Filter.map_comap_of_surjective`：map_comap_of_surjective {f : α -> β} (hf
+ : Surjective f) (l : Filter β) : map f (comap f l) = l
+· 使用定理 `Homeomorph.surjective`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologic
+alSpace X] [inst_1 : TopologicalSpace Y] (h : X ≃ₜ Y),   Function.Surjective ⇑h
 -/
 theorem map_cocompact (h : X ≃ₜ Y) : map h (cocompact X) = cocompact Y := by
-  rw [← h.comap_cocompact]; rw [map_comap_of_surjective h.surjective]
-
-/--
-theorem `compactSpace` / 定理 `compactSpace`
-
-English:
-theorem compactSpace
-  given: [CompactSpace X] (h : X ≃ₜ Y)
-  statement: CompactSpace Y where
-  proof: h.symm.isCompact_preimage.2 isCompact_univ
-
-中文:
-定理 compactSpace
-  条件: [紧空间 X] (h : X ≃ₜ Y)
-  结论: 紧空间 Y where
-  证明: h.symm.isCompact_preimage.2 isCompact_univ
+  rw [← h.comap_cocompact, map_comap_of_surjective h.surjective]
+/-
+**Homeomorph.compactSpace** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] [CompactSpace X] (h : X ≃ₜ Y),   CompactSpace Y
+参数：h : X ≃ₜ Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Homeomorph.isCompact_preimage`：isCompact_preimage {s : Set Y} (h : X ≃ₜ 
+Y) : IsCompact (h ⁻¹' s) ↔ IsCompact s
+· 使用定理 `isCompact_univ`：isCompact_univ [h : CompactSpace X] : IsCompact (univ : 
+Set X)
 -/
 protected theorem compactSpace [CompactSpace X] (h : X ≃ₜ Y) : CompactSpace Y where
   isCompact_univ := h.symm.isCompact_preimage.2 isCompact_univ
-
-/--
-theorem `isDenseEmbedding` / 定理 `isDenseEmbedding`
-
-English:
-theorem isDenseEmbedding
-  given: (h : X ≃ₜ Y)
-  statement: IsDenseEmbedding h
-  proof: { h.isEmbedding with dense := h.surjective.denseRange }
-
-中文:
-定理 isDenseEmbedding
-  条件: (h : X ≃ₜ Y)
-  结论: 是稠密嵌入 h
-  证明: { h.isEmbedding with dense := h.surjective.denseRange }
-
-Depends on / 依赖: denseRange, h.isEmbedding, h.surjective.denseRange, isEmbedding, surjective
+/-
+**Homeomorph.isDenseEmbedding** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：isDenseEmbedding (h : X ≃ₜ Y) : IsDenseEmbedding h
+参数：h : X ≃ₜ Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.isEmbedding`：isEmbedding (h : X ≃ₜ Y) : IsEmbedding h
+· 使用定理 `Topology.IsEmbedding.toIsInducing`：∀ {X : Type u_1} {Y : Type u_2} [tX :
+ TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsEmbeddi
+ng f → Topology.IsInduc…
+· 使用定理 `Function.Surjective.denseRange`：Function.Surjective.denseRange (hf : Fun
+ction.Surjective f) : DenseRange f
+· 使用定理 `Homeomorph.surjective`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologic
+alSpace X] [inst_1 : TopologicalSpace Y] (h : X ≃ₜ Y),   Function.Surjective ⇑h
+· 使用定理 `Topology.IsEmbedding.injective`：∀ {X : Type u_1} {Y : Type u_2} [tX : To
+pologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsEmbedding 
+f → Function.Injecti…
 -/
 theorem isDenseEmbedding (h : X ≃ₜ Y) : IsDenseEmbedding h :=
   { h.isEmbedding with dense := h.surjective.denseRange }
-
-/--
-lemma `totallyDisconnectedSpace` / 引理 `totallyDisconnectedSpace`
-
-English:
-lemma totallyDisconnectedSpace
-  given: (h : X ≃ₜ Y) [tdc : TotallyDisconnectedSpace X]
-  proof: (totallyDisconnectedSpace_iff Y).mpr
-    (h.range_coe ▸ ((IsEmbedding.isTotallyDisconnected_range h.isEmbedding).mpr tdc))
-
-@[simp]
-
-中文:
-引理 totallyDisconnectedSpace
-  条件: (h : X ≃ₜ Y) [tdc : 全不连通空间 X]
-  证明: (totallyDisconnectedSpace_iff Y).mpr
-    (h.range_coe ▸ ((IsEmbedding.isTotallyDisconnected_range h.isEmbedding).mpr tdc))
-
-@[simp]
+/-
+**Homeomorph.totallyDisconnectedSpace** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] (h : X ≃ₜ Y)   [tdc : TotallyDisconnectedSpace X], TotallyDiscon
+nectedSpace Y
+参数：h : X ≃ₜ Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `totallyDisconnectedSpace_iff`：∀ (α : Type u) [inst : TopologicalSpace α]
+, TotallyDisconnectedSpace α ↔ IsTotallyDisconnected Set.univ
+· 使用引理 `Topology.IsEmbedding.isTotallyDisconnected_range`：Topology.IsEmbedding.i
+sTotallyDisconnected_range [TopologicalSpace β] {f : α -> β} (hf : IsEmbedding f
+) : IsTotallyDisconnected (range f) ↔ …
+· 使用定理 `Homeomorph.isEmbedding`：isEmbedding (h : X ≃ₜ Y) : IsEmbedding h
+· 使用定理 `Homeomorph.range_coe`：range_coe (h : X ≃ₜ Y) : range h = univ
 -/
 protected lemma totallyDisconnectedSpace (h : X ≃ₜ Y) [tdc : TotallyDisconnectedSpace X] :
     TotallyDisconnectedSpace Y :=
@@ -416,144 +387,155 @@ protected lemma totallyDisconnectedSpace (h : X ≃ₜ Y) [tdc : TotallyDisconne
     (h.range_coe ▸ ((IsEmbedding.isTotallyDisconnected_range h.isEmbedding).mpr tdc))
 
 @[simp]
-/--
-theorem `map_punctured_nhds_eq` / 定理 `map_punctured_nhds_eq`
-
-English:
-theorem map_punctured_nhds_eq
-  given: (h : X ≃ₜ Y) (x : X)
-  statement: map h (𝓝[!=] x) = 𝓝[!=] (h x)
-  proof: by
-  convert! h.isEmbedding.map_nhdsWithin_eq ({ x }ᶜ) x
-  rw [h.image_compl]; rw [Set.image_singleton]
-
-@[simp]
-
-中文:
-定理 map_punctured_nhds_eq
-  条件: (h : X ≃ₜ Y) (x : X)
-  结论: map h (𝓝[!=] x) = 𝓝[!=] (h x)
-  证明: by
-  convert! h.isEmbedding.map_nhdsWithin_eq ({ x }ᶜ) x
-  rw [h.image_compl]; rw [Set.image_singleton]
-
-@[simp]
-
-Depends on / 依赖: Set.image_singleton, convert, h.image_compl, h.isEmbedding.map_nhdsWithin_eq, image_compl, image_singleton, isEmbedding, map_nhdsWithin_eq
+/-
+**Homeomorph.map_punctured_nhds_eq** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：map_punctured_nhds_eq (h : X ≃ₜ Y) (x : X) : map h (𝓝[!=] x) = 𝓝[!=] (h x)
+参数：h : X ≃ₜ Y；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Homeomorph.image_compl`：image_compl (h : X ≃ₜ Y) (s : Set X) : h '' (sᶜ)
+ = (h '' s)ᶜ
+· 使用定理 `Set.image_singleton`：image_singleton {f : α -> β} {a : α} : f '' {a} = {
+f a}
+· 使用引理 `Topology.IsEmbedding.map_nhdsWithin_eq`：Topology.IsEmbedding.map_nhdsWit
+hin_eq {f : α -> β} (hf : IsEmbedding f) (s : Set α) (x : α) : map f (𝓝[s] x) = 
+𝓝[f '' s] f x
+· 使用定理 `Homeomorph.isEmbedding`：isEmbedding (h : X ≃ₜ Y) : IsEmbedding h
 -/
-theorem map_punctured_nhds_eq (h : X ≃ₜ Y) (x : X) : map h (𝓝[!=] x) = 𝓝[!=] (h x) := by
+theorem map_punctured_nhds_eq (h : X ≃ₜ Y) (x : X) : map h (𝓝[≠] x) = 𝓝[≠] (h x) := by
   convert! h.isEmbedding.map_nhdsWithin_eq ({ x }ᶜ) x
-  rw [h.image_compl]; rw [Set.image_singleton]
+  rw [h.image_compl, Set.image_singleton]
 
 @[simp]
-/--
-theorem `comap_coclosedCompact` / 定理 `comap_coclosedCompact`
-
-English:
-theorem comap_coclosedCompact
-  given: (h : X ≃ₜ Y)
-  statement: comap h (coclosedCompact Y) = coclosedCompact X
-  proof: (hasBasis_coclosedCompact.comap h).eq_of_same_basis by
-    simpa [comp_def] using hasBasis_coclosedCompact.comp_surjective h.injective.preimage_surjective
-
-@[simp]
-
-中文:
-定理 comap_coclosedCompact
-  条件: (h : X ≃ₜ Y)
-  结论: comap h (coclosedCompact Y) = coclosedCompact X
-  证明: (hasBasis_coclosedCompact.comap h).eq_of_same_basis by
-    simpa [comp_def] using hasBasis_coclosedCompact.comp_surjective h.injective.preimage_surjective
-
-@[simp]
-
-Depends on / 依赖: comp_def, comp_surjective, eq_of_same_basis, h.injective.preimage_surjective, hasBasis_coclosedCompact, hasBasis_coclosedCompact.comap, hasBasis_coclosedCompact.comp_surjective, injective, preimage_surjective
+/-
+**Homeomorph.comap_coclosedCompact** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：comap_coclosedCompact (h : X ≃ₜ Y) : comap h (coclosedCompact Y) = coclose
+dCompact X
+参数：h : X ≃ₜ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasBasis.eq_of_same_basis`：∀ {α : Type u_1} {ι : Sort u_4} {l l' 
+: Filter α} {p : ι → Prop} {s : ι → Set α},   l.HasBasis p s → l'.HasBasis p s →
+ l = l'
+· 使用定理 `Filter.HasBasis.comap`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} {l
+ : Filter α} {p : ι → Prop} {s : ι → Set α} (f : β → α),   l.HasBasis p s → (Fil
+ter.comap f…
+· 使用定理 `Filter.hasBasis_coclosedCompact`：hasBasis_coclosedCompact : (Filter.cocl
+osedCompact X).HasBasis (fun s => IsClosed s ∧ IsCompact s) compl
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Filter.HasBasis.comp_surjective`：∀ {α : Type u_1} {ι : Sort u_4} {ι' : S
+ort u_5} {l : Filter α} {p : ι → Prop} {s : ι → Set α},   l.HasBasis p s → ∀ {g 
+: ι' → ι}, Function.S…
+· 使用定理 `Function.Injective.preimage_surjective`：∀ {α : Type u_1} {β : Type u_2} 
+{f : α → β}, Function.Injective f → Function.Surjective (Set.preimage f)
+· 使用定理 `Homeomorph.injective`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologica
+lSpace X] [inst_1 : TopologicalSpace Y] (h : X ≃ₜ Y),   Function.Injective ⇑h
 -/
 theorem comap_coclosedCompact (h : X ≃ₜ Y) : comap h (coclosedCompact Y) = coclosedCompact X :=
-(hasBasis_coclosedCompact.comap h).eq_of_same_basis by
+  (hasBasis_coclosedCompact.comap h).eq_of_same_basis <| by
     simpa [comp_def] using hasBasis_coclosedCompact.comp_surjective h.injective.preimage_surjective
 
 @[simp]
-/--
-theorem `map_coclosedCompact` / 定理 `map_coclosedCompact`
-
-English:
-theorem map_coclosedCompact
-  given: (h : X ≃ₜ Y)
-  statement: map h (coclosedCompact X) = coclosedCompact Y
-  proof: by
-  rw [← h.comap_coclosedCompact]; rw [map_comap_of_surjective h.surjective]
-
-中文:
-定理 map_coclosedCompact
-  条件: (h : X ≃ₜ Y)
-  结论: map h (coclosedCompact X) = coclosedCompact Y
-  证明: by
-  rw [← h.comap_coclosedCompact]; rw [map_comap_of_surjective h.surjective]
-
-Depends on / 依赖: comap_coclosedCompact, h.comap_coclosedCompact, h.surjective, map_comap_of_surjective, surjective
+/-
+**Homeomorph.map_coclosedCompact** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：map_coclosedCompact (h : X ≃ₜ Y) : map h (coclosedCompact X) = coclosedCom
+pact Y
+参数：h : X ≃ₜ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Homeomorph.comap_coclosedCompact`：comap_coclosedCompact (h : X ≃ₜ Y) : c
+omap h (coclosedCompact Y) = coclosedCompact X
+· 使用定理 `Filter.map_comap_of_surjective`：map_comap_of_surjective {f : α -> β} (hf
+ : Surjective f) (l : Filter β) : map f (comap f l) = l
+· 使用定理 `Homeomorph.surjective`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologic
+alSpace X] [inst_1 : TopologicalSpace Y] (h : X ≃ₜ Y),   Function.Surjective ⇑h
 -/
 theorem map_coclosedCompact (h : X ≃ₜ Y) : map h (coclosedCompact X) = coclosedCompact Y := by
-  rw [← h.comap_coclosedCompact]; rw [map_comap_of_surjective h.surjective]
+  rw [← h.comap_coclosedCompact, map_comap_of_surjective h.surjective]
 
-/--
-theorem `locallyConnectedSpace` / 定理 `locallyConnectedSpace`
+/-- If the codomain of a homeomorphism is a locally connected space, then the domain is also
+a locally connected space. -/
+/-
+**Homeomorph.locallyConnectedSpace** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：locallyConnectedSpace [i : LocallyConnectedSpace Y] (h : X ≃ₜ Y) : Locally
+ConnectedSpace X
+参数：h : X ≃ₜ Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Homeomorph.symm_map_nhds_eq`：symm_map_nhds_eq (h : X ≃ₜ Y) (x : X) : map
+ h.symm (𝓝 (h x)) = 𝓝 x
+· 使用定理 `Filter.HasBasis.map`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} {l :
+ Filter α} {p : ι → Prop} {s : ι → Set α} (f : α → β),   l.HasBasis p s → (Filte
+r.map f l…
+· 使用定理 `LocallyConnectedSpace.open_connected_basis`：∀ {α : Type u_3} {inst : Top
+ologicalSpace α} [self : LocallyConnectedSpace α] (x : α),   (nhds x).HasBasis (
+fun s => IsOpen s ∧ x ∈ s ∧ IsCo…
+· 使用定理 `locallyConnectedSpace_of_connected_bases`：locallyConnectedSpace_of_conne
+cted_bases {ι : Type*} (b : α -> ι -> Set α) (p : α -> ι -> Prop) (hbasis : fora
+ll x, (𝓝 x).HasBasis (p x) (b …
+· 使用定理 `IsPreconnected.image`：∀ {α : Type u} {β : Type v} [inst : TopologicalSpa
+ce α] [inst_1 : TopologicalSpace β] {s : Set α},   IsPreconnected s → ∀ (f : α →
+ β), Conti…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
+· 使用定理 `Homeomorph.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologic
+alSpace X] [inst_1 : TopologicalSpace Y] (h : X ≃ₜ Y), Continuous ⇑h
 
-English:
-theorem locallyConnectedSpace
-  given: [i : LocallyConnectedSpace Y] (h : X ≃ₜ Y)
-  proof: by
-  have : forall x, (𝓝 x).HasBasis (fun s => IsOpen s ∧ h x in s ∧ IsConnected s)
-      (h.symm '' ·) := fun x => by
-    rw [← h.symm_map_nhds_eq]
-    exact (i.1 _).map _
-  refine locallyConnectedSpace_of_connected_bases _ _ this fun _ _ hs => ?_
-  exact hs.2.2.2.image _ h.symm.continuous.continuousOn
-
-中文:
-定理 locallyConnectedSpace
-  条件: [i : 局部连通空间 Y] (h : X ≃ₜ Y)
-  证明: by
-  have : forall x, (𝓝 x).HasBasis (fun s => IsOpen s ∧ h x in s ∧ IsConnected s)
-      (h.symm '' ·) := fun x => by
-    rw [← h.symm_map_nhds_eq]
-    exact (i.1 _).map _
-  refine locallyConnectedSpace_of_connected_bases _ _ this fun _ _ hs => ?_
-  exact hs.2.2.2.image _ h.symm.continuous.continuousOn
-
-Depends on / 依赖: HasBasis, IsConnected, IsOpen, continuous, continuousOn, h.symm, h.symm.continuous.continuousOn, h.symm_map_nhds_eq, locallyConnectedSpace_of_connected_bases, symm_map_nhds_eq
+--- 原说明 ---
+If the codomain of a homeomorphism is a locally connected space, then the domain
+ is also
+a locally connected space.
 -/
 theorem locallyConnectedSpace [i : LocallyConnectedSpace Y] (h : X ≃ₜ Y) :
     LocallyConnectedSpace X := by
-  have : forall x, (𝓝 x).HasBasis (fun s => IsOpen s ∧ h x in s ∧ IsConnected s)
-      (h.symm '' ·) := fun x => by
+  have : ∀ x, (𝓝 x).HasBasis (fun s ↦ IsOpen s ∧ h x ∈ s ∧ IsConnected s)
+      (h.symm '' ·) := fun x ↦ by
     rw [← h.symm_map_nhds_eq]
     exact (i.1 _).map _
-  refine locallyConnectedSpace_of_connected_bases _ _ this fun _ _ hs => ?_
+  refine locallyConnectedSpace_of_connected_bases _ _ this fun _ _ hs ↦ ?_
   exact hs.2.2.2.image _ h.symm.continuous.continuousOn
 
-/--
-theorem `locallyCompactSpace_iff` / 定理 `locallyCompactSpace_iff`
+/-- The codomain of a homeomorphism is a locally compact space if and only if
+the domain is a locally compact space. -/
+/-
+**Homeomorph.locallyCompactSpace_iff** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：locallyCompactSpace_iff (h : X ≃ₜ Y) : LocallyCompactSpace X ↔ LocallyComp
+actSpace Y
+参数：h : X ≃ₜ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsOpenEmbedding.locallyCompactSpace`：∀ {X : Type u_1} {Y : Type
+ u_2} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y] [LocallyCompactS
+pace Y]   {f : X → Y}, Topology.Is…
+· 使用定理 `Homeomorph.isOpenEmbedding`：isOpenEmbedding (h : X ≃ₜ Y) : IsOpenEmbeddi
+ng h
+· 使用定理 `Topology.IsClosedEmbedding.locallyCompactSpace`：∀ {X : Type u_1} {Y : Ty
+pe u_2} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y] [LocallyCompac
+tSpace Y]   {f : X → Y}, Topology.Is…
+· 使用定理 `Homeomorph.isClosedEmbedding`：isClosedEmbedding (h : X ≃ₜ Y) : IsClosedE
+mbedding h
 
-English:
-theorem locallyCompactSpace_iff
-  given: (h : X ≃ₜ Y)
-  proof: by
-  exact ⟨fun _ => h.symm.isOpenEmbedding.locallyCompactSpace,
-    fun _ => h.isClosedEmbedding.locallyCompactSpace⟩
-
-@[simp]
-
-中文:
-定理 locallyCompactSpace_iff
-  条件: (h : X ≃ₜ Y)
-  证明: by
-  exact ⟨fun _ => h.symm.isOpenEmbedding.locallyCompactSpace,
-    fun _ => h.isClosedEmbedding.locallyCompactSpace⟩
-
-@[simp]
-
-Depends on / 依赖: h.isClosedEmbedding.locallyCompactSpace, h.symm.isOpenEmbedding.locallyCompactSpace, isClosedEmbedding, isOpenEmbedding, locallyCompactSpace
+--- 原说明 ---
+The codomain of a homeomorphism is a locally compact space if and only if
+the domain is a locally compact space.
 -/
 theorem locallyCompactSpace_iff (h : X ≃ₜ Y) :
     LocallyCompactSpace X ↔ LocallyCompactSpace Y := by
@@ -561,41 +543,35 @@ theorem locallyCompactSpace_iff (h : X ≃ₜ Y) :
     fun _ => h.isClosedEmbedding.locallyCompactSpace⟩
 
 @[simp]
-/--
-theorem `comp_continuousOn_iff` / 定理 `comp_continuousOn_iff`
-
-English:
-theorem comp_continuousOn_iff
-  given: (h : X ≃ₜ Y) (f : Z -> X) (s : Set Z)
-  proof: h.isInducing.continuousOn_iff.symm
-
-中文:
-定理 comp_continuousOn_iff
-  条件: (h : X ≃ₜ Y) (f : Z -> X) (s : 集合 Z)
-  证明: h.isInducing.continuousOn_iff.symm
-
-Depends on / 依赖: continuousOn_iff, h.isInducing.continuousOn_iff.symm, isInducing
+/-
+**Homeomorph.comp_continuousOn_iff** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：comp_continuousOn_iff (h : X ≃ₜ Y) (f : Z -> X) (s : Set Z) : ContinuousOn
+ (h ∘ f) s ↔ ContinuousOn f s
+参数：h : X ≃ₜ Y；f : Z -> X；s : Set Z。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用引理 `Topology.IsInducing.continuousOn_iff`：Topology.IsInducing.continuousOn_i
+ff {f : α -> β} {g : β -> γ} (hg : IsInducing g) {s : Set α} : ContinuousOn f s 
+↔ ContinuousOn (g ∘ f) s
+· 使用引理 `Homeomorph.isInducing`：isInducing (h : X ≃ₜ Y) : IsInducing h
 -/
-theorem comp_continuousOn_iff (h : X ≃ₜ Y) (f : Z -> X) (s : Set Z) :
+theorem comp_continuousOn_iff (h : X ≃ₜ Y) (f : Z → X) (s : Set Z) :
     ContinuousOn (h ∘ f) s ↔ ContinuousOn f s :=
   h.isInducing.continuousOn_iff.symm
-
-/--
-theorem `comp_continuousWithinAt_iff` / 定理 `comp_continuousWithinAt_iff`
-
-English:
-theorem comp_continuousWithinAt_iff
-  given: (h : X ≃ₜ Y) (f : Z -> X) (s : Set Z) (z : Z)
-  proof: h.isInducing.continuousWithinAt_iff
-
-中文:
-定理 comp_continuousWithinAt_iff
-  条件: (h : X ≃ₜ Y) (f : Z -> X) (s : 集合 Z) (z : Z)
-  证明: h.isInducing.continuousWithinAt_iff
-
-Depends on / 依赖: continuousWithinAt_iff, h.isInducing.continuousWithinAt_iff, isInducing
+/-
+**Homeomorph.comp_continuousWithinAt_iff** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：comp_continuousWithinAt_iff (h : X ≃ₜ Y) (f : Z -> X) (s : Set Z) (z : Z) 
+: ContinuousWithinAt f s z ↔ ContinuousWithinAt (h ∘ f) s z
+参数：h : X ≃ₜ Y；f : Z -> X；s : Set Z；z : Z。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Topology.IsInducing.continuousWithinAt_iff`：Topology.IsInducing.continuo
+usWithinAt_iff {f : α -> β} {g : β -> γ} (hg : IsInducing g) {s : Set α} {x : α}
+ : ContinuousWithinAt f s x ↔ Co…
+· 使用引理 `Homeomorph.isInducing`：isInducing (h : X ≃ₜ Y) : IsInducing h
 -/
-theorem comp_continuousWithinAt_iff (h : X ≃ₜ Y) (f : Z -> X) (s : Set Z) (z : Z) :
+theorem comp_continuousWithinAt_iff (h : X ≃ₜ Y) (f : Z → X) (s : Set Z) (z : Z) :
     ContinuousWithinAt f s z ↔ ContinuousWithinAt (h ∘ f) s z :=
   h.isInducing.continuousWithinAt_iff
 
@@ -603,81 +579,65 @@ set_option backward.defeqAttrib.useBackward true in
 /-- A homeomorphism `h : X ≃ₜ Y` lifts to a homeomorphism between subtypes corresponding to
 predicates `p : X → Prop` and `q : Y → Prop` so long as `p = q ∘ h`. -/
 @[simps!]
-/--
-Definition of `subtype` / `subtype` 的定义
+/-
+**Homeomorph.subtype** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph`。
+形式化陈述：subtype {p : X -> Prop} {q : Y -> Prop} (h : X ≃ₜ Y) (h_iff : forall x, p 
+x ↔ q (h x)) : {x // p x} ≃ₜ {y // q y} where __
+参数：h : X ≃ₜ Y；h_iff : forall x, p x ↔ q (h x)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition subtype
-  signature: {p : X -> Prop} {q : Y -> Prop} (h : X ≃ₜ Y) (h_iff : forall x, p x ↔ q (h x))
-  body: h.subtypeEquiv h_iff
-
-@[simp]
-
-中文:
-定义 subtype
-  签名: {p : X -> 命题} {q : Y -> 命题} (h : X ≃ₜ Y) (h_iff : 对任意 x, p x ↔ q (h x))
-  定义体: h.subtypeEquiv h_iff
-
-@[simp]
-
-Depends on / 依赖: h.subtypeEquiv, h_iff, subtypeEquiv
+--- 原说明 ---
+A homeomorphism `h : X ≃ₜ Y` lifts to a homeomorphism between subtypes correspon
+ding to
+predicates `p : X → Prop` and `q : Y → Prop` so long as `p = q ∘ h`.
 -/
-def subtype {p : X -> Prop} {q : Y -> Prop} (h : X ≃ₜ Y) (h_iff : forall x, p x ↔ q (h x)) :
+def subtype {p : X → Prop} {q : Y → Prop} (h : X ≃ₜ Y) (h_iff : ∀ x, p x ↔ q (h x)) :
     {x // p x} ≃ₜ {y // q y} where
   __ := h.subtypeEquiv h_iff
 
 @[simp]
-/--
-lemma `subtype_toEquiv` / 引理 `subtype_toEquiv`
-
-English:
-lemma subtype_toEquiv
-  given: {p : X -> Prop} {q : Y -> Prop} (h : X ≃ₜ Y) (h_iff : forall x, p x ↔ q (h x))
-  proof: rfl
-
-中文:
-引理 subtype_toEquiv
-  条件: {p : X -> 命题} {q : Y -> 命题} (h : X ≃ₜ Y) (h_iff : 对任意 x, p x ↔ q (h x))
-  证明: rfl
+/-
+**Homeomorph.subtype_toEquiv** 是 Mathlib 中的一个引理，位于命名空间 `Homeomorph`。
+形式化陈述：subtype_toEquiv {p : X -> Prop} {q : Y -> Prop} (h : X ≃ₜ Y) (h_iff : fora
+ll x, p x ↔ q (h x)) : (h.subtype h_iff).toEquiv = h.toEquiv.subtypeEquiv h_iff
+参数：h : X ≃ₜ Y；h_iff : forall x, p x ↔ q (h x)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma subtype_toEquiv {p : X -> Prop} {q : Y -> Prop} (h : X ≃ₜ Y) (h_iff : forall x, p x ↔ q (h x)) :
+lemma subtype_toEquiv {p : X → Prop} {q : Y → Prop} (h : X ≃ₜ Y) (h_iff : ∀ x, p x ↔ q (h x)) :
     (h.subtype h_iff).toEquiv = h.toEquiv.subtypeEquiv h_iff :=
   rfl
 
-/--
-Definition of `sets` / `sets` 的定义
+/-- A homeomorphism `h : X ≃ₜ Y` lifts to a homeomorphism between sets `s : Set X` and `t : Set Y`
+whenever `h` maps `s` onto `t`. -/
+/-
+**Homeomorph.sets** 是 Mathlib 中的一个缩写定义，位于命名空间 `Homeomorph`。
+形式化陈述：sets {s : Set X} {t : Set Y} (h : X ≃ₜ Y) (h_eq : s = h ⁻¹' t) : s ≃ₜ t
+参数：h : X ≃ₜ Y；h_eq : s = h ⁻¹' t。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation sets
-  signature: {s : Set X} {t : Set Y} (h : X ≃ₜ Y) (h_eq : s = h ⁻¹' t)
-  body: h.subtype Set.ext_iff.mp h_eq
-
-中文:
-缩写 sets
-  签名: {s : 集合 X} {t : 集合 Y} (h : X ≃ₜ Y) (h_eq : s = h ⁻¹' t)
-  定义体: h.subtype Set.ext_iff.mp h_eq
-
-Depends on / 依赖: Set.ext_iff.mp, ext_iff, h.subtype, h_eq, subtype
+--- 原说明 ---
+A homeomorphism `h : X ≃ₜ Y` lifts to a homeomorphism between sets `s : Set X` a
+nd `t : Set Y`
+whenever `h` maps `s` onto `t`.
 -/
 abbrev sets {s : Set X} {t : Set Y} (h : X ≃ₜ Y) (h_eq : s = h ⁻¹' t) : s ≃ₜ t :=
-h.subtype Set.ext_iff.mp h_eq
+  h.subtype <| Set.ext_iff.mp h_eq
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `setCongr` / `setCongr` 的定义
+/-- If two sets are equal, then they are homeomorphic. -/
+/-
+**Homeomorph.setCongr** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph`。
+形式化陈述：setCongr {s t : Set X} (h : s = t) : s ≃ₜ t where toEquiv
+参数：h : s = t。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition setCongr
-  signature: {s t : Set X} (h : s = t)
-  body: Equiv.setCongr h
-
-中文:
-定义 setCongr
-  签名: {s t : 集合 X} (h : s = t)
-  定义体: Equiv.setCongr h
-
-Depends on / 依赖: Equiv.setCongr, setCongr
+--- 原说明 ---
+If two sets are equal, then they are homeomorphic.
 -/
 def setCongr {s t : Set X} (h : s = t) : s ≃ₜ t where
   toEquiv := Equiv.setCongr h
@@ -688,103 +648,79 @@ variable (X Y W Z)
 
 /-- `X × {*}` is homeomorphic to `X`. -/
 @[simps! symm_apply_snd]
-/--
-Definition of `prodUnique` / `prodUnique` 的定义
+/-
+**Homeomorph.prodUnique** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph`。
+形式化陈述：prodUnique [Unique Y] : X × Y ≃ₜ X where toEquiv
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodUnique
-  signature: [Unique Y]
-  body: Equiv.prodUnique X Y
-
-中文:
-定义 prodUnique
-  签名: [唯一 Y]
-  定义体: Equiv.prodUnique X Y
-
-Depends on / 依赖: Equiv.prodUnique, prodUnique
+--- 原说明 ---
+`X × {*}` is homeomorphic to `X`.
 -/
 def prodUnique [Unique Y] :
     X × Y ≃ₜ X where
   toEquiv := Equiv.prodUnique X Y
-
-/--
-theorem `coe_prodUnique` / 定理 `coe_prodUnique`
-
-English:
-theorem coe_prodUnique
-  given: [Unique Y]
-  statement: ⇑(prodUnique X Y) = Prod.fst
-  proof: rfl
-
-中文:
-定理 coe_prodUnique
-  条件: [唯一 Y]
-  结论: ⇑(prodUnique X Y) = 积类型.fst
-  证明: rfl
+/-
+**Homeomorph.coe_prodUnique** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：∀ (X : Type u_1) (Y : Type u_2) [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] [inst_2 : Unique Y],   ⇑(Homeomorph.prodUnique X Y) = Prod.fst
+参数：X : Type u_1；Y : Type u_2；Homeomorph.prodUnique X Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem coe_prodUnique [Unique Y] : ⇑(prodUnique X Y) = Prod.fst := rfl
 
 /-- `X × {*}` is homeomorphic to `X`. -/
 @[simps! symm_apply_snd]
-/--
-Definition of `uniqueProd` / `uniqueProd` 的定义
+/-
+**Homeomorph.uniqueProd** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph`。
+形式化陈述：uniqueProd (X Y : Type*) [TopologicalSpace X] [TopologicalSpace Y] [Unique
+ X] : X × Y ≃ₜ Y
+参数：X Y : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uniqueProd
-  signature: (X Y : Type*) [TopologicalSpace X] [TopologicalSpace Y] [Unique X]
-  body: (prodComm _ _).trans (prodUnique Y X)
-
-中文:
-定义 uniqueProd
-  签名: (X Y : 类型) [拓扑空间 X] [拓扑空间 Y] [唯一 X]
-  定义体: (prodComm _ _).trans (prodUnique Y X)
-
-Depends on / 依赖: prodComm, prodUnique
+--- 原说明 ---
+`X × {*}` is homeomorphic to `X`.
 -/
 def uniqueProd (X Y : Type*) [TopologicalSpace X] [TopologicalSpace Y] [Unique X] :
     X × Y ≃ₜ Y :=
   (prodComm _ _).trans (prodUnique Y X)
-
-/--
-theorem `coe_uniqueProd` / 定理 `coe_uniqueProd`
-
-English:
-theorem coe_uniqueProd
-  given: [Unique X]
-  statement: ⇑(uniqueProd X Y) = Prod.snd
-  proof: rfl
-
-中文:
-定理 coe_uniqueProd
-  条件: [唯一 X]
-  结论: ⇑(uniqueProd X Y) = 积类型.snd
-  证明: rfl
+/-
+**Homeomorph.coe_uniqueProd** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：∀ (X : Type u_1) (Y : Type u_2) [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] [inst_2 : Unique X],   ⇑(Homeomorph.uniqueProd X Y) = Prod.snd
+参数：X : Type u_1；Y : Type u_2；Homeomorph.uniqueProd X Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem coe_uniqueProd [Unique X] : ⇑(uniqueProd X Y) = Prod.snd := rfl
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `sumPiEquivProdPi` / `sumPiEquivProdPi` 的定义
+/-- The product over `S ⊕ T` of a family of topological spaces
+is homeomorphic to the product of (the product over `S`) and (the product over `T`).
 
-English:
-definition sumPiEquivProdPi
-  signature: (S T : Type*) (A : S oplus T -> Type*)
-  body: Equiv.sumPiEquivProdPi _
-continuous_invFun := continuous_pi by rintro (s | t) <;> dsimp <;> fun_prop
-
-中文:
-定义 sumPiEquivProdPi
-  签名: (S T : 类型) (A : S oplus T -> 类型)
-  定义体: Equiv.sumPiEquivProdPi _
-continuous_invFun := continuous_pi by rintro (s | t) <;> dsimp <;> fun_prop
-
-Depends on / 依赖: Equiv.sumPiEquivProdPi, sumPiEquivProdPi
+This is `Equiv.sumPiEquivProdPi` as a `Homeomorph`.
 -/
-def sumPiEquivProdPi (S T : Type*) (A : S oplus T -> Type*)
-    [forall st, TopologicalSpace (A st)] :
-    (Π (st : S oplus T), A st) ≃ₜ (Π (s : S), A (.inl s)) × (Π (t : T), A (.inr t)) where
+/-
+**Homeomorph.sumPiEquivProdPi** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph`。
+形式化陈述：sumPiEquivProdPi (S T : Type*) (A : S oplus T -> Type*) [forall st, Topolo
+gicalSpace (A st)] : (Π (st : S oplus T), A st) ≃ₜ (Π (s : S), A (.inl s)) × (Π 
+(t : T), A (.inr t)) where __
+参数：S T : Type*；A : S oplus T -> Type*；A st。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The product over `S ⊕ T` of a family of topological spaces
+is homeomorphic to the product of (the product over `S`) and (the product over `
+T`).
+
+This is `Equiv.sumPiEquivProdPi` as a `Homeomorph`.
+-/
+def sumPiEquivProdPi (S T : Type*) (A : S ⊕ T → Type*)
+    [∀ st, TopologicalSpace (A st)] :
+    (Π (st : S ⊕ T), A st) ≃ₜ (Π (s : S), A (.inl s)) × (Π (t : T), A (.inr t)) where
   __ := Equiv.sumPiEquivProdPi _
-continuous_invFun := continuous_pi by rintro (s | t) <;> dsimp <;> fun_prop
+  continuous_invFun := continuous_pi <| by rintro (s | t) <;> dsimp <;> fun_prop
 
 /-- The product `Π t : α, f t` of a family of topological spaces is homeomorphic to the
 space `f ⬝` when `α` only contains `⬝`.
@@ -792,22 +728,22 @@ space `f ⬝` when `α` only contains `⬝`.
 This is `Equiv.piUnique` as a `Homeomorph`.
 -/
 @[simps! -fullyApplied]
-/--
-Definition of `piUnique` / `piUnique` 的定义
+/-
+**Homeomorph.piUnique** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph`。
+形式化陈述：piUnique {α : Type*} [Unique α] (f : α -> Type*) [forall x, TopologicalSpa
+ce (f x)] : (Π t, f t) ≃ₜ f default
+参数：f : α -> Type*；f x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piUnique
-  signature: {α : Type*} [Unique α] (f : α -> Type*) [forall x, TopologicalSpace (f x)]
-  body: (Equiv.piUnique f).toHomeomorphOfContinuousOpen (continuous_apply default) (isOpenMap_eval _)
+--- 原说明 ---
+The product `Π t : α, f t` of a family of topological spaces is homeomorphic to 
+the
+space `f ⬝` when `α` only contains `⬝`.
 
-中文:
-定义 piUnique
-  签名: {α : 类型} [唯一 α] (f : α -> 类型) [对任意 x, 拓扑空间 (f x)]
-  定义体: (Equiv.piUnique f).toHomeomorphOfContinuousOpen (continuous_apply default) (isOpenMap_eval _)
-
-Depends on / 依赖: Equiv.piUnique, continuous_apply, isOpenMap_eval, piUnique, toHomeomorphOfContinuousOpen
+This is `Equiv.piUnique` as a `Homeomorph`.
 -/
-def piUnique {α : Type*} [Unique α] (f : α -> Type*) [forall x, TopologicalSpace (f x)] :
+def piUnique {α : Type*} [Unique α] (f : α → Type*) [∀ x, TopologicalSpace (f x)] :
     (Π t, f t) ≃ₜ f default :=
   (Equiv.piUnique f).toHomeomorphOfContinuousOpen (continuous_apply default) (isOpenMap_eval _)
 
@@ -816,145 +752,102 @@ end prod
 /-- `Equiv.piCongrLeft` as a homeomorphism: this is the natural homeomorphism
 `Π i, Y (e i) ≃ₜ Π j, Y j` obtained from a bijection `ι ≃ ι'`. -/
 @[simps +simpRhs toEquiv, simps! -isSimp apply]
-/--
-Definition of `piCongrLeft` / `piCongrLeft` 的定义
+/-
+**Homeomorph.piCongrLeft** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph`。
+形式化陈述：piCongrLeft {ι ι' : Type*} {Y : ι' -> Type*} [forall j, TopologicalSpace (
+Y j)] (e : ι ≃ ι') : (forall i, Y (e i)) ≃ₜ forall j, Y j where continuous_toFun
+参数：Y j；e : ι ≃ ι'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piCongrLeft
-  signature: {ι ι' : Type*} {Y : ι' -> Type*} [forall j, TopologicalSpace (Y j)]
-  body: continuous_pi e.forall_congr_right.mp fun i => by
-    simpa only [Equiv.toFun_as_coe, Equiv.piCongrLeft_apply_apply] using continuous_apply i
-  continuous_invFun := Pi.continuous_precomp' e
-  toEquiv := Equiv.piCongrLeft _ e
-
-@[simp]
-
-中文:
-定义 piCongrLeft
-  签名: {ι ι' : 类型} {Y : ι' -> 类型} [对任意 j, 拓扑空间 (Y j)]
-  定义体: continuous_pi e.forall_congr_right.mp fun i => by
-    simpa only [Equiv.toFun_as_coe, Equiv.piCongrLeft_apply_apply] using continuous_apply i
-  continuous_invFun := Pi.continuous_precomp' e
-  toEquiv := Equiv.piCongrLeft _ e
-
-@[simp]
-
-Depends on / 依赖: Equiv.piCongrLeft, Equiv.piCongrLeft_apply_apply, Equiv.toFun_as_coe, Pi.continuous_precomp, continuous_apply, continuous_invFun, continuous_pi, continuous_precomp, e.forall_congr_right.mp, forall_congr_right, piCongrLeft, piCongrLeft_apply_apply, toEquiv, toFun_as_coe
+--- 原说明 ---
+`Equiv.piCongrLeft` as a homeomorphism: this is the natural homeomorphism
+`Π i, Y (e i) ≃ₜ Π j, Y j` obtained from a bijection `ι ≃ ι'`.
 -/
-def piCongrLeft {ι ι' : Type*} {Y : ι' -> Type*} [forall j, TopologicalSpace (Y j)]
-    (e : ι ≃ ι') : (forall i, Y (e i)) ≃ₜ forall j, Y j where
-continuous_toFun := continuous_pi e.forall_congr_right.mp fun i => by
+def piCongrLeft {ι ι' : Type*} {Y : ι' → Type*} [∀ j, TopologicalSpace (Y j)]
+    (e : ι ≃ ι') : (∀ i, Y (e i)) ≃ₜ ∀ j, Y j where
+  continuous_toFun := continuous_pi <| e.forall_congr_right.mp fun i ↦ by
     simpa only [Equiv.toFun_as_coe, Equiv.piCongrLeft_apply_apply] using continuous_apply i
   continuous_invFun := Pi.continuous_precomp' e
   toEquiv := Equiv.piCongrLeft _ e
 
 @[simp]
-/--
-lemma `piCongrLeft_refl` / 引理 `piCongrLeft_refl`
-
-English:
-lemma piCongrLeft_refl
-  given: {ι : Type*} {X : ι -> Type*} [forall i, TopologicalSpace (X i)]
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 piCongrLeft_refl
-  条件: {ι : 类型} {X : ι -> 类型} [对任意 i, 拓扑空间 (X i)]
-  证明: rfl
-
-@[simp]
+/-
+**Homeomorph.piCongrLeft_refl** 是 Mathlib 中的一个引理，位于命名空间 `Homeomorph`。
+形式化陈述：piCongrLeft_refl {ι : Type*} {X : ι -> Type*} [forall i, TopologicalSpace 
+(X i)] : piCongrLeft (.refl ι) = .refl (forall i, X i)
+参数：X i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
-lemma piCongrLeft_refl {ι : Type*} {X : ι -> Type*} [forall i, TopologicalSpace (X i)] :
-    piCongrLeft (.refl ι) = .refl (forall i, X i) :=
+lemma piCongrLeft_refl {ι : Type*} {X : ι → Type*} [∀ i, TopologicalSpace (X i)] :
+    piCongrLeft (.refl ι) = .refl (∀ i, X i) :=
   rfl
 
 @[simp]
-/--
-lemma `piCongrLeft_symm_apply` / 引理 `piCongrLeft_symm_apply`
-
-English:
-lemma piCongrLeft_symm_apply
-  statement: {ι ι' : Type*} {Y : ι' -> Type*} [forall j, TopologicalSpace (Y j)]
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 piCongrLeft_symm_apply
-  结论: {ι ι' : 类型} {Y : ι' -> 类型} [对任意 j, 拓扑空间 (Y j)]
-  证明: rfl
-
-@[simp]
+/-
+**Homeomorph.piCongrLeft_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 `Homeomorph`。
+形式化陈述：piCongrLeft_symm_apply {ι ι' : Type*} {Y : ι' -> Type*} [forall j, Topolog
+icalSpace (Y j)] (e : ι ≃ ι') : ⇑(piCongrLeft (Y
+参数：Y j；e : ι ≃ ι'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma piCongrLeft_symm_apply {ι ι' : Type*} {Y : ι' -> Type*} [forall j, TopologicalSpace (Y j)]
+lemma piCongrLeft_symm_apply {ι ι' : Type*} {Y : ι' → Type*} [∀ j, TopologicalSpace (Y j)]
     (e : ι ≃ ι') : ⇑(piCongrLeft (Y := Y) e).symm = (· <| e ·) :=
   rfl
 
 @[simp]
-/--
-lemma `piCongrLeft_apply_apply` / 引理 `piCongrLeft_apply_apply`
-
-English:
-lemma piCongrLeft_apply_apply
-  statement: {ι ι' : Type*} {Y : ι' -> Type*} [forall j, TopologicalSpace (Y j)]
-  proof: Equiv.piCongrLeft_apply_apply ..
-
-中文:
-引理 piCongrLeft_apply_apply
-  结论: {ι ι' : 类型} {Y : ι' -> 类型} [对任意 j, 拓扑空间 (Y j)]
-  证明: Equiv.piCongrLeft_apply_apply ..
-
-Depends on / 依赖: Equiv.piCongrLeft_apply_apply, piCongrLeft_apply_apply
+/-
+**Homeomorph.piCongrLeft_apply_apply** 是 Mathlib 中的一个引理，位于命名空间 `Homeomorph`。
+形式化陈述：piCongrLeft_apply_apply {ι ι' : Type*} {Y : ι' -> Type*} [forall j, Topolo
+gicalSpace (Y j)] (e : ι ≃ ι') (x : forall i, Y (e i)) (i : ι) : piCongrLeft e x
+ (e i) = x i
+参数：Y j；e : ι ≃ ι'；x : forall i, Y (e i)；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Equiv.piCongrLeft_apply_apply`：piCongrLeft_apply_apply (f : forall a, P 
+(e a)) (a : α) : (piCongrLeft P e) f (e a) = f a
 -/
-lemma piCongrLeft_apply_apply {ι ι' : Type*} {Y : ι' -> Type*} [forall j, TopologicalSpace (Y j)]
-    (e : ι ≃ ι') (x : forall i, Y (e i)) (i : ι) : piCongrLeft e x (e i) = x i :=
+lemma piCongrLeft_apply_apply {ι ι' : Type*} {Y : ι' → Type*} [∀ j, TopologicalSpace (Y j)]
+    (e : ι ≃ ι') (x : ∀ i, Y (e i)) (i : ι) : piCongrLeft e x (e i) = x i :=
   Equiv.piCongrLeft_apply_apply ..
 
 set_option backward.defeqAttrib.useBackward true in
 /-- `Equiv.piCongrRight` as a homeomorphism: this is the natural homeomorphism
 `Π i, Y₁ i ≃ₜ Π j, Y₂ i` obtained from homeomorphisms `Y₁ i ≃ₜ Y₂ i` for each `i`. -/
 @[simps! apply toEquiv]
-/--
-Definition of `piCongrRight` / `piCongrRight` 的定义
+/-
+**Homeomorph.piCongrRight** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph`。
+形式化陈述：piCongrRight {ι : Type*} {Y₁ Y₂ : ι -> Type*} [forall i, TopologicalSpace 
+(Y₁ i)] [forall i, TopologicalSpace (Y₂ i)] (F : forall i, Y₁ i ≃ₜ Y₂ i) : (fora
+ll i, Y₁ i) ≃ₜ forall i, Y₂ i where toEquiv
+参数：Y₁ i；Y₂ i；F : forall i, Y₁ i ≃ₜ Y₂ i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piCongrRight
-  signature: {ι : Type*} {Y₁ Y₂ : ι -> Type*} [forall i, TopologicalSpace (Y₁ i)]
-  body: Equiv.piCongrRight fun i => (F i).toEquiv
-
-@[simp]
-
-中文:
-定义 piCongrRight
-  签名: {ι : 类型} {Y₁ Y₂ : ι -> 类型} [对任意 i, 拓扑空间 (Y₁ i)]
-  定义体: Equiv.piCongrRight fun i => (F i).toEquiv
-
-@[simp]
-
-Depends on / 依赖: Equiv.piCongrRight, piCongrRight, toEquiv
+--- 原说明 ---
+`Equiv.piCongrRight` as a homeomorphism: this is the natural homeomorphism
+`Π i, Y₁ i ≃ₜ Π j, Y₂ i` obtained from homeomorphisms `Y₁ i ≃ₜ Y₂ i` for each `i
+`.
 -/
-def piCongrRight {ι : Type*} {Y₁ Y₂ : ι -> Type*} [forall i, TopologicalSpace (Y₁ i)]
-    [forall i, TopologicalSpace (Y₂ i)] (F : forall i, Y₁ i ≃ₜ Y₂ i) : (forall i, Y₁ i) ≃ₜ forall i, Y₂ i where
+def piCongrRight {ι : Type*} {Y₁ Y₂ : ι → Type*} [∀ i, TopologicalSpace (Y₁ i)]
+    [∀ i, TopologicalSpace (Y₂ i)] (F : ∀ i, Y₁ i ≃ₜ Y₂ i) : (∀ i, Y₁ i) ≃ₜ ∀ i, Y₂ i where
   toEquiv := Equiv.piCongrRight fun i => (F i).toEquiv
 
 @[simp]
-/--
-theorem `piCongrRight_symm` / 定理 `piCongrRight_symm`
-
-English:
-theorem piCongrRight_symm
-  statement: {ι : Type*} {Y₁ Y₂ : ι -> Type*} [forall i, TopologicalSpace (Y₁ i)]
-  proof: rfl
-
-中文:
-定理 piCongrRight_symm
-  结论: {ι : 类型} {Y₁ Y₂ : ι -> 类型} [对任意 i, 拓扑空间 (Y₁ i)]
-  证明: rfl
+/-
+**Homeomorph.piCongrRight_symm** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：piCongrRight_symm {ι : Type*} {Y₁ Y₂ : ι -> Type*} [forall i, TopologicalS
+pace (Y₁ i)] [forall i, TopologicalSpace (Y₂ i)] (F : forall i, Y₁ i ≃ₜ Y₂ i) : 
+(piCongrRight F).symm = piCongrRight fun i => (F i).symm
+参数：Y₁ i；Y₂ i；F : forall i, Y₁ i ≃ₜ Y₂ i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem piCongrRight_symm {ι : Type*} {Y₁ Y₂ : ι -> Type*} [forall i, TopologicalSpace (Y₁ i)]
-    [forall i, TopologicalSpace (Y₂ i)] (F : forall i, Y₁ i ≃ₜ Y₂ i) :
+theorem piCongrRight_symm {ι : Type*} {Y₁ Y₂ : ι → Type*} [∀ i, TopologicalSpace (Y₁ i)]
+    [∀ i, TopologicalSpace (Y₂ i)] (F : ∀ i, Y₁ i ≃ₜ Y₂ i) :
     (piCongrRight F).symm = piCongrRight fun i => (F i).symm :=
   rfl
 
@@ -962,40 +855,33 @@ theorem piCongrRight_symm {ι : Type*} {Y₁ Y₂ : ι -> Type*} [forall i, Topo
 `Π i₁, Y₁ i ≃ₜ Π i₂, Y₂ i₂` obtained from a bijection `ι₁ ≃ ι₂` and homeomorphisms
 `Y₁ i₁ ≃ₜ Y₂ (e i₁)` for each `i₁ : ι₁`. -/
 @[simps! apply toEquiv]
-/--
-Definition of `piCongr` / `piCongr` 的定义
+/-
+**Homeomorph.piCongr** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph`。
+形式化陈述：piCongr {ι₁ ι₂ : Type*} {Y₁ : ι₁ -> Type*} {Y₂ : ι₂ -> Type*} [forall i₁, 
+TopologicalSpace (Y₁ i₁)] [forall i₂, TopologicalSpace (Y₂ i₂)] (e : ι₁ ≃ ι₂) (F
+ : forall i₁, Y₁ i₁ ≃ₜ Y₂ (e i₁)) : (forall i₁, Y₁ i₁) ≃ₜ forall i₂, Y₂ i₂
+参数：Y₁ i₁；Y₂ i₂；e : ι₁ ≃ ι₂；F : forall i₁, Y₁ i₁ ≃ₜ Y₂ (e i₁)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piCongr
-  signature: {ι₁ ι₂ : Type*} {Y₁ : ι₁ -> Type*} {Y₂ : ι₂ -> Type*}
-  body: (Homeomorph.piCongrRight F).trans (Homeomorph.piCongrLeft e)
-
-中文:
-定义 piCongr
-  签名: {ι₁ ι₂ : 类型} {Y₁ : ι₁ -> 类型} {Y₂ : ι₂ -> 类型}
-  定义体: (Homeomorph.piCongrRight F).trans (Homeomorph.piCongrLeft e)
-
-Depends on / 依赖: Homeomorph, Homeomorph.piCongrLeft, Homeomorph.piCongrRight, piCongrLeft, piCongrRight
+--- 原说明 ---
+`Equiv.piCongr` as a homeomorphism: this is the natural homeomorphism
+`Π i₁, Y₁ i ≃ₜ Π i₂, Y₂ i₂` obtained from a bijection `ι₁ ≃ ι₂` and homeomorphis
+ms
+`Y₁ i₁ ≃ₜ Y₂ (e i₁)` for each `i₁ : ι₁`.
 -/
-def piCongr {ι₁ ι₂ : Type*} {Y₁ : ι₁ -> Type*} {Y₂ : ι₂ -> Type*}
-    [forall i₁, TopologicalSpace (Y₁ i₁)] [forall i₂, TopologicalSpace (Y₂ i₂)]
-    (e : ι₁ ≃ ι₂) (F : forall i₁, Y₁ i₁ ≃ₜ Y₂ (e i₁)) : (forall i₁, Y₁ i₁) ≃ₜ forall i₂, Y₂ i₂ :=
+def piCongr {ι₁ ι₂ : Type*} {Y₁ : ι₁ → Type*} {Y₂ : ι₂ → Type*}
+    [∀ i₁, TopologicalSpace (Y₁ i₁)] [∀ i₂, TopologicalSpace (Y₂ i₂)]
+    (e : ι₁ ≃ ι₂) (F : ∀ i₁, Y₁ i₁ ≃ₜ Y₂ (e i₁)) : (∀ i₁, Y₁ i₁) ≃ₜ ∀ i₂, Y₂ i₂ :=
   (Homeomorph.piCongrRight F).trans (Homeomorph.piCongrLeft e)
 
-/--
-Definition of `ulift.` / `ulift.` 的定义
+/-- `ULift X` is homeomorphic to `X`. -/
+/-
+**Homeomorph.ulift.** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ulift.{u,
-  signature: v} {X
-  body: Equiv.ulift
-
-中文:
-定义 ulift.{u,
-  签名: v} {X
-  定义体: Equiv.ulift
-
-Depends on / 依赖: Equiv.ulift
+--- 原说明 ---
+`ULift X` is homeomorphic to `X`.
 -/
 def ulift.{u, v} {X : Type v} [TopologicalSpace X] : ULift.{u, v} X ≃ₜ X where
   toEquiv := Equiv.ulift
@@ -1004,95 +890,44 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The natural homeomorphism `(ι ⊕ ι' → X) ≃ₜ (ι → X) × (ι' → X)`.
 `Equiv.sumArrowEquivProdArrow` as a homeomorphism. -/
 @[simps!]
-/--
-Definition of `sumArrowHomeomorphProdArrow` / `sumArrowHomeomorphProdArrow` 的定义
+/-
+**Homeomorph.sumArrowHomeomorphProdArrow** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph`。
+形式化陈述：sumArrowHomeomorphProdArrow {ι ι' : Type*} : (ι oplus ι' -> X) ≃ₜ (ι -> X)
+ × (ι' -> X) where toEquiv
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sumArrowHomeomorphProdArrow
-  signature: {ι ι' : Type*}
-  body: Equiv.sumArrowEquivProdArrow _ _ _
-  continuous_toFun := by
-    dsimp [Equiv.sumArrowEquivProdArrow]
-    fun_prop
-  continuous_invFun := continuous_pi fun i => match i with
-    | .inl i => by apply (continuous_apply _).comp' continuous_fst
-    | .inr i => by apply (continuous_apply _).comp' continuous_snd
-
-中文:
-定义 sumArrowHomeomorphProdArrow
-  签名: {ι ι' : 类型}
-  定义体: Equiv.sumArrowEquivProdArrow _ _ _
-  continuous_toFun := by
-    dsimp [Equiv.sumArrowEquivProdArrow]
-    fun_prop
-  continuous_invFun := continuous_pi fun i => match i with
-    | .inl i => by apply (continuous_apply _).comp' continuous_fst
-    | .inr i => by apply (continuous_apply _).comp' continuous_snd
-
-Depends on / 依赖: Equiv.sumArrowEquivProdArrow, sumArrowEquivProdArrow
+--- 原说明 ---
+The natural homeomorphism `(ι ⊕ ι' → X) ≃ₜ (ι → X) × (ι' → X)`.
+`Equiv.sumArrowEquivProdArrow` as a homeomorphism.
 -/
-def sumArrowHomeomorphProdArrow {ι ι' : Type*} : (ι oplus ι' -> X) ≃ₜ (ι -> X) × (ι' -> X) where
+def sumArrowHomeomorphProdArrow {ι ι' : Type*} : (ι ⊕ ι' → X) ≃ₜ (ι → X) × (ι' → X) where
   toEquiv := Equiv.sumArrowEquivProdArrow _ _ _
   continuous_toFun := by
     dsimp [Equiv.sumArrowEquivProdArrow]
     fun_prop
-  continuous_invFun := continuous_pi fun i => match i with
+  continuous_invFun := continuous_pi fun i ↦ match i with
     | .inl i => by apply (continuous_apply _).comp' continuous_fst
     | .inr i => by apply (continuous_apply _).comp' continuous_snd
-
-/--
-theorem `_root_.Fin.appendEquiv_eq_homeomorph` / 定理 `_root_.Fin.appendEquiv_eq_homeomorph`
-
-English:
-theorem _root_.Fin.appendEquiv_eq_homeomorph
-  given: (m n : Nat)
-  statement: Fin.appendEquiv m n =
-  proof: by
-  apply Equiv.symm_bijective.injective
-  ext x i <;> simp
-
-@[fun_prop]
-
-中文:
-定理 _root_.有限集.appendEquiv_eq_homeomorph
-  条件: (m n : 自然数)
-  结论: 有限集.appendEquiv m n =
-  证明: by
-  apply Equiv.symm_bijective.injective
-  ext x i <;> simp
-
-@[fun_prop]
+/-
+**Homeomorph._root_.Fin.appendEquiv_eq_homeomorph** 是 Mathlib 中的一个定理，位于命名空间 `Hom
+eomorph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem _root_.Fin.appendEquiv_eq_homeomorph (m n : Nat) : Fin.appendEquiv m n =
+private theorem _root_.Fin.appendEquiv_eq_homeomorph (m n : ℕ) : Fin.appendEquiv m n =
     (sumArrowHomeomorphProdArrow.symm.trans
-    (piCongrLeft (Y := fun _ => X) finSumFinEquiv)).toEquiv := by
+    (piCongrLeft (Y := fun _ ↦ X) finSumFinEquiv)).toEquiv := by
   apply Equiv.symm_bijective.injective
   ext x i <;> simp
 
 @[fun_prop]
-/--
-theorem `_root_.Fin.continuous_append` / 定理 `_root_.Fin.continuous_append`
-
-English:
-theorem _root_.Fin.continuous_append
-  given: (m n : Nat)
-  proof: by
-  suffices Continuous (Fin.appendEquiv m n) by exact this
-  rw [Fin.appendEquiv_eq_homeomorph]
-  exact Homeomorph.continuous_toFun _
-
-中文:
-定理 _root_.有限集.continuous_append
-  条件: (m n : 自然数)
-  证明: by
-  suffices Continuous (Fin.appendEquiv m n) by exact this
-  rw [Fin.appendEquiv_eq_homeomorph]
-  exact Homeomorph.continuous_toFun _
-
-Depends on / 依赖: Continuous, Fin.appendEquiv, Fin.appendEquiv_eq_homeomorph, Homeomorph, Homeomorph.continuous_toFun, appendEquiv, appendEquiv_eq_homeomorph, continuous_toFun
+/-
+**Homeomorph._root_.Fin.continuous_append** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Fin.continuous_append (m n : Nat) :
-    Continuous fun (p : (Fin m -> X) × (Fin n -> X)) => Fin.append p.1 p.2 := by
+theorem _root_.Fin.continuous_append (m n : ℕ) :
+    Continuous fun (p : (Fin m → X) × (Fin n → X)) ↦ Fin.append p.1 p.2 := by
   suffices Continuous (Fin.appendEquiv m n) by exact this
   rw [Fin.appendEquiv_eq_homeomorph]
   exact Homeomorph.continuous_toFun _
@@ -1100,77 +935,46 @@ theorem _root_.Fin.continuous_append (m n : Nat) :
 /-- The natural homeomorphism between `(Fin m → X) × (Fin n → X)` and `Fin (m + n) → X`.
 `Fin.appendEquiv` as a homeomorphism -/
 @[simps!]
-/--
-Definition of `_root_.Fin.appendHomeomorph` / `_root_.Fin.appendHomeomorph` 的定义
+/-
+**Homeomorph._root_.Fin.appendHomeomorph** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.Fin.appendHomeomorph
-  signature: (m n : Nat)
-  body: Fin.appendEquiv m n
-
-@[simp]
-
-中文:
-定义 _root_.有限集.appendHomeomorph
-  签名: (m n : 自然数)
-  定义体: Fin.appendEquiv m n
-
-@[simp]
-
-Depends on / 依赖: Fin.appendEquiv, appendEquiv
+--- 原说明 ---
+The natural homeomorphism between `(Fin m → X) × (Fin n → X)` and `Fin (m + n) →
+ X`.
+`Fin.appendEquiv` as a homeomorphism
 -/
-def _root_.Fin.appendHomeomorph (m n : Nat) : (Fin m -> X) × (Fin n -> X) ≃ₜ (Fin (m + n) -> X) where
+def _root_.Fin.appendHomeomorph (m n : ℕ) : (Fin m → X) × (Fin n → X) ≃ₜ (Fin (m + n) → X) where
   toEquiv := Fin.appendEquiv m n
 
 @[simp]
-/--
-theorem `_root_.Fin.appendHomeomorph_toEquiv` / 定理 `_root_.Fin.appendHomeomorph_toEquiv`
-
-English:
-theorem _root_.Fin.appendHomeomorph_toEquiv
-  given: (m n : Nat)
-  proof: rfl
-
-中文:
-定理 _root_.有限集.appendHomeomorph_toEquiv
-  条件: (m n : 自然数)
-  证明: rfl
-
-Depends on / 依赖: Fin.appendEquiv, appendEquiv, toEquiv
+/-
+**Homeomorph._root_.Fin.appendHomeomorph_toEquiv** 是 Mathlib 中的一个定理，位于命名空间 `Home
+omorph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Fin.appendHomeomorph_toEquiv (m n : Nat) :
+theorem _root_.Fin.appendHomeomorph_toEquiv (m n : ℕ) :
     (Fin.appendHomeomorph (X := X) m n).toEquiv = Fin.appendEquiv m n :=
   rfl
 
 section Distrib
 
-variable {ι : Type*} {X : ι -> Type*} [forall i, TopologicalSpace (X i)]
+variable {ι : Type*} {X : ι → Type*} [∀ i, TopologicalSpace (X i)]
 
 /-- `(Σ i, X i) × Y` is homeomorphic to `Σ i, (X i × Y)`. -/
 @[simps! apply symm_apply toEquiv]
-/--
-Definition of `sigmaProdDistrib` / `sigmaProdDistrib` 的定义
+/-
+**Homeomorph.sigmaProdDistrib** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph`。
+形式化陈述：sigmaProdDistrib : (Σ i, X i) × Y ≃ₜ Σ i, X i × Y
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition sigmaProdDistrib
-  signature: : (Σ i, X i) × Y ≃ₜ Σ i, X i × Y
-  body: Homeomorph.symm
-    (Equiv.sigmaProdDistrib X Y).symm.toHomeomorphOfContinuousOpen
-      (continuous_sigma fun _ => continuous_sigmaMk.fst'.prodMk continuous_snd)
-      (isOpenMap_sigma.2 fun _ => isOpenMap_sigmaMk.prodMap IsOpenMap.id)
-
-中文:
-定义 sigmaProdDistrib
-  签名: : (Σ i, X i) × Y ≃ₜ Σ i, X i × Y
-  定义体: Homeomorph.symm
-    (Equiv.sigmaProdDistrib X Y).symm.toHomeomorphOfContinuousOpen
-      (continuous_sigma fun _ => continuous_sigmaMk.fst'.prodMk continuous_snd)
-      (isOpenMap_sigma.2 fun _ => isOpenMap_sigmaMk.prodMap IsOpenMap.id)
-
-Depends on / 依赖: Equiv.sigmaProdDistrib, Homeomorph, Homeomorph.symm, IsOpenMap, IsOpenMap.id, continuous_sigma, continuous_sigmaMk, continuous_sigmaMk.fst, continuous_snd, isOpenMap_sigma, isOpenMap_sigmaMk, isOpenMap_sigmaMk.prodMap, prodMap, prodMk, sigmaProdDistrib, symm.toHomeomorphOfContinuousOpen, toHomeomorphOfContinuousOpen
+--- 原说明 ---
+`(Σ i, X i) × Y` is homeomorphic to `Σ i, (X i × Y)`.
 -/
 def sigmaProdDistrib : (Σ i, X i) × Y ≃ₜ Σ i, X i × Y :=
-Homeomorph.symm
+  Homeomorph.symm <|
     (Equiv.sigmaProdDistrib X Y).symm.toHomeomorphOfContinuousOpen
       (continuous_sigma fun _ => continuous_sigmaMk.fst'.prodMk continuous_snd)
       (isOpenMap_sigma.2 fun _ => isOpenMap_sigmaMk.prodMap IsOpenMap.id)
@@ -1180,85 +984,60 @@ end Distrib
 set_option backward.defeqAttrib.useBackward true in
 /-- If `ι` has a unique element, then `ι → X` is homeomorphic to `X`. -/
 @[simps! -fullyApplied]
-/--
-Definition of `funUnique` / `funUnique` 的定义
+/-
+**Homeomorph.funUnique** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph`。
+形式化陈述：funUnique (ι X : Type*) [Unique ι] [TopologicalSpace X] : (ι -> X) ≃ₜ X wh
+ere toEquiv
+参数：ι X : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition funUnique
-  signature: (ι X : Type*) [Unique ι] [TopologicalSpace X]
-  body: Equiv.funUnique ι X
-
-中文:
-定义 funUnique
-  签名: (ι X : 类型) [唯一 ι] [拓扑空间 X]
-  定义体: Equiv.funUnique ι X
-
-Depends on / 依赖: Equiv.funUnique, funUnique
+--- 原说明 ---
+If `ι` has a unique element, then `ι → X` is homeomorphic to `X`.
 -/
-def funUnique (ι X : Type*) [Unique ι] [TopologicalSpace X] : (ι -> X) ≃ₜ X where
+def funUnique (ι X : Type*) [Unique ι] [TopologicalSpace X] : (ι → X) ≃ₜ X where
   toEquiv := Equiv.funUnique ι X
 
 /-- Homeomorphism between dependent functions `Π i : Fin 2, X i` and `X 0 × X 1`. -/
 @[simps! -fullyApplied]
-/--
-Definition of `piFinTwo.` / `piFinTwo.` 的定义
+/-
+**Homeomorph.piFinTwo.** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piFinTwo.{u}
-  signature: (X : Fin 2 -> Type u) [forall i, TopologicalSpace (X i)]
-  body: piFinTwoEquiv X
-
-中文:
-定义 piFinTwo.{u}
-  签名: (X : 有限集 2 -> 类型u) [对任意 i, 拓扑空间 (X i)]
-  定义体: piFinTwoEquiv X
-
-Depends on / 依赖: piFinTwoEquiv
+--- 原说明 ---
+Homeomorphism between dependent functions `Π i : Fin 2, X i` and `X 0 × X 1`.
 -/
-def piFinTwo.{u} (X : Fin 2 -> Type u) [forall i, TopologicalSpace (X i)] : (forall i, X i) ≃ₜ X 0 × X 1 where
+def piFinTwo.{u} (X : Fin 2 → Type u) [∀ i, TopologicalSpace (X i)] : (∀ i, X i) ≃ₜ X 0 × X 1 where
   toEquiv := piFinTwoEquiv X
 
 /-- Homeomorphism between `X² = Fin 2 → X` and `X × X`. -/
 @[simps! -fullyApplied]
-/--
-Definition of `finTwoArrow` / `finTwoArrow` 的定义
+/-
+**Homeomorph.finTwoArrow** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph`。
+形式化陈述：finTwoArrow : (Fin 2 -> X) ≃ₜ X × X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finTwoArrow
-  signature: : (Fin 2 -> X) ≃ₜ X × X
-  body: { piFinTwo fun _ => X with toEquiv := finTwoArrowEquiv X }
-
-中文:
-定义 finTwoArrow
-  签名: : (有限集 2 -> X) ≃ₜ X × X
-  定义体: { piFinTwo fun _ => X with toEquiv := finTwoArrowEquiv X }
-
-Depends on / 依赖: finTwoArrowEquiv, piFinTwo, toEquiv
+--- 原说明 ---
+Homeomorphism between `X² = Fin 2 → X` and `X × X`.
 -/
-def finTwoArrow : (Fin 2 -> X) ≃ₜ X × X :=
+def finTwoArrow : (Fin 2 → X) ≃ₜ X × X :=
   { piFinTwo fun _ => X with toEquiv := finTwoArrowEquiv X }
 
 /-- A subset of a topological space is homeomorphic to its image under a homeomorphism.
 -/
 @[simps!]
-/--
-Definition of `image` / `image` 的定义
+/-
+**Homeomorph.image** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph`。
+形式化陈述：image (e : X ≃ₜ Y) (s : Set X) : s ≃ₜ e '' s where -- TODO: by continuity!
+ continuous_toFun
+参数：e : X ≃ₜ Y；s : Set X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition image
-  signature: (e : X ≃ₜ Y) (s : Set X)
-  body: e.continuous.continuousOn.mapsToRestrict (mapsTo_image _ _)
-  continuous_invFun := (e.symm.continuous.comp continuous_subtype_val).codRestrict _
-  toEquiv := e.toEquiv.image s
-
-中文:
-定义 像
-  签名: (e : X ≃ₜ Y) (s : 集合 X)
-  定义体: e.continuous.continuousOn.mapsToRestrict (mapsTo_image _ _)
-  continuous_invFun := (e.symm.continuous.comp continuous_subtype_val).codRestrict _
-  toEquiv := e.toEquiv.image s
-
-Depends on / 依赖: continuous, continuousOn, e.continuous.continuousOn.mapsToRestrict, mapsToRestrict, mapsTo_image
+--- 原说明 ---
+A subset of a topological space is homeomorphic to its image under a homeomorphi
+sm.
 -/
 def image (e : X ≃ₜ Y) (s : Set X) : s ≃ₜ e '' s where
   -- TODO: by continuity!
@@ -1268,44 +1047,28 @@ def image (e : X ≃ₜ Y) (s : Set X) : s ≃ₜ e '' s where
 
 /-- `Set.univ X` is homeomorphic to `X`. -/
 @[simps! -fullyApplied]
-/--
-Definition of `Set.univ` / `Set.univ` 的定义
+/-
+**Homeomorph.Set.univ** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph.Set`。
+形式化陈述：(X : Type u_7) → [inst : TopologicalSpace X] → ↑Set.univ ≃ₜ X
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Set.univ
-  signature: (X : Type*) [TopologicalSpace X]
-  body: Equiv.Set.univ X
-
-中文:
-定义 集合.univ
-  签名: (X : 类型) [拓扑空间 X]
-  定义体: Equiv.Set.univ X
+--- 原说明 ---
+`Set.univ X` is homeomorphic to `X`.
 -/
 def Set.univ (X : Type*) [TopologicalSpace X] : (univ : Set X) ≃ₜ X where
   toEquiv := Equiv.Set.univ X
 
 /-- `s ×ˢ t` is homeomorphic to `s × t`. -/
 @[simps!]
-/--
-Definition of `Set.prod` / `Set.prod` 的定义
+/-
+**Homeomorph.Set.prod** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph.Set`。
+形式化陈述：{X : Type u_1} →   {Y : Type u_2} →     [inst : TopologicalSpace X] → [ins
+t_1 : TopologicalSpace Y] → (s : Set X) → (t : Set Y) → ↑(s ×ˢ t) ≃ₜ ↑s × ↑t
+参数：s : Set X；t : Set Y；s ×ˢ t。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Set.prod
-  signature: (s : Set X) (t : Set Y)
-  body: Equiv.Set.prod s t
-  continuous_toFun :=
-    (continuous_subtype_val.fst.subtype_mk _).prodMk (continuous_subtype_val.snd.subtype_mk _)
-  continuous_invFun :=
-    (continuous_subtype_val.fst'.prodMk continuous_subtype_val.snd').subtype_mk _
-
-中文:
-定义 集合.乘积
-  签名: (s : 集合 X) (t : 集合 Y)
-  定义体: Equiv.Set.prod s t
-  continuous_toFun :=
-    (continuous_subtype_val.fst.subtype_mk _).prodMk (continuous_subtype_val.snd.subtype_mk _)
-  continuous_invFun :=
-    (continuous_subtype_val.fst'.prodMk continuous_subtype_val.snd').subtype_mk _
+--- 原说明 ---
+`s ×ˢ t` is homeomorphic to `s × t`.
 -/
 def Set.prod (s : Set X) (t : Set Y) : ↥(s ×ˢ t) ≃ₜ s × t where
   toEquiv := Equiv.Set.prod s t
@@ -1321,31 +1084,22 @@ variable {ι : Type*}
 /-- The topological space `Π i, Y i` can be split as a product by separating the indices in ι
   depending on whether they satisfy a predicate p or not. -/
 @[simps!]
-/--
-Definition of `piEquivPiSubtypeProd` / `piEquivPiSubtypeProd` 的定义
+/-
+**Homeomorph.piEquivPiSubtypeProd** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph`。
+形式化陈述：piEquivPiSubtypeProd (p : ι -> Prop) (Y : ι -> Type*) [forall i, Topologic
+alSpace (Y i)] [DecidablePred p] : (forall i, Y i) ≃ₜ (forall i : { x // p x }, 
+Y i) × forall i : { x // ¬p x }, Y i where toEquiv
+参数：p : ι -> Prop；Y : ι -> Type*；Y i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piEquivPiSubtypeProd
-  signature: (p : ι -> Prop) (Y : ι -> Type*) [forall i, TopologicalSpace (Y i)]
-  body: Equiv.piEquivPiSubtypeProd p Y
-  continuous_invFun :=
-    continuous_pi fun j => by
-      dsimp only [Equiv.piEquivPiSubtypeProd]; split_ifs
-      exacts [(continuous_apply _).comp continuous_fst, (continuous_apply _).comp continuous_snd]
-
-中文:
-定义 piEquivPiSubtypeProd
-  签名: (p : ι -> 命题) (Y : ι -> 类型) [对任意 i, 拓扑空间 (Y i)]
-  定义体: Equiv.piEquivPiSubtypeProd p Y
-  continuous_invFun :=
-    continuous_pi fun j => by
-      dsimp only [Equiv.piEquivPiSubtypeProd]; split_ifs
-      exacts [(continuous_apply _).comp continuous_fst, (continuous_apply _).comp continuous_snd]
-
-Depends on / 依赖: Equiv.piEquivPiSubtypeProd, piEquivPiSubtypeProd
+--- 原说明 ---
+The topological space `Π i, Y i` can be split as a product by separating the ind
+ices in ι
+  depending on whether they satisfy a predicate p or not.
 -/
-def piEquivPiSubtypeProd (p : ι -> Prop) (Y : ι -> Type*) [forall i, TopologicalSpace (Y i)]
-    [DecidablePred p] : (forall i, Y i) ≃ₜ (forall i : { x // p x }, Y i) × forall i : { x // ¬p x }, Y i where
+def piEquivPiSubtypeProd (p : ι → Prop) (Y : ι → Type*) [∀ i, TopologicalSpace (Y i)]
+    [DecidablePred p] : (∀ i, Y i) ≃ₜ (∀ i : { x // p x }, Y i) × ∀ i : { x // ¬p x }, Y i where
   toEquiv := Equiv.piEquivPiSubtypeProd p Y
   continuous_invFun :=
     continuous_pi fun j => by
@@ -1357,37 +1111,21 @@ variable [DecidableEq ι] (i : ι)
 /-- A product of topological spaces can be split as the binary product of one of the spaces and
   the product of all the remaining spaces. -/
 @[simps!]
-/--
-Definition of `piSplitAt` / `piSplitAt` 的定义
+/-
+**Homeomorph.piSplitAt** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph`。
+形式化陈述：piSplitAt (Y : ι -> Type*) [forall j, TopologicalSpace (Y j)] : (forall j,
+ Y j) ≃ₜ Y i × forall j : { j // j != i }, Y j where toEquiv
+参数：Y : ι -> Type*；Y j。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piSplitAt
-  signature: (Y : ι -> Type*) [forall j, TopologicalSpace (Y j)]
-  body: Equiv.piSplitAt i Y
-  continuous_invFun :=
-    continuous_pi fun j => by
-      dsimp only [Equiv.piSplitAt]
-      split_ifs with h
-      · subst h
-        exact continuous_fst
-      · exact (continuous_apply _).comp continuous_snd
-
-中文:
-定义 piSplitAt
-  签名: (Y : ι -> 类型) [对任意 j, 拓扑空间 (Y j)]
-  定义体: Equiv.piSplitAt i Y
-  continuous_invFun :=
-    continuous_pi fun j => by
-      dsimp only [Equiv.piSplitAt]
-      split_ifs with h
-      · subst h
-        exact continuous_fst
-      · exact (continuous_apply _).comp continuous_snd
-
-Depends on / 依赖: Equiv.piSplitAt, piSplitAt
+--- 原说明 ---
+A product of topological spaces can be split as the binary product of one of the
+ spaces and
+  the product of all the remaining spaces.
 -/
-def piSplitAt (Y : ι -> Type*) [forall j, TopologicalSpace (Y j)] :
-    (forall j, Y j) ≃ₜ Y i × forall j : { j // j != i }, Y j where
+def piSplitAt (Y : ι → Type*) [∀ j, TopologicalSpace (Y j)] :
+    (∀ j, Y j) ≃ₜ Y i × ∀ j : { j // j ≠ i }, Y j where
   toEquiv := Equiv.piSplitAt i Y
   continuous_invFun :=
     continuous_pi fun j => by
@@ -1402,22 +1140,18 @@ variable (Y)
 /-- A product of copies of a topological space can be split as the binary product of one copy and
   the product of all the remaining copies. -/
 @[simps!]
-/--
-Definition of `funSplitAt` / `funSplitAt` 的定义
+/-
+**Homeomorph.funSplitAt** 是 Mathlib 中的一个定义，位于命名空间 `Homeomorph`。
+形式化陈述：funSplitAt : (ι -> Y) ≃ₜ Y × ({ j // j != i } -> Y)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition funSplitAt
-  signature: : (ι -> Y) ≃ₜ Y × ({ j // j != i } -> Y)
-  body: piSplitAt i _
-
-中文:
-定义 funSplitAt
-  签名: : (ι -> Y) ≃ₜ Y × ({ j // j != i } -> Y)
-  定义体: piSplitAt i _
-
-Depends on / 依赖: piSplitAt
+--- 原说明 ---
+A product of copies of a topological space can be split as the binary product of
+ one copy and
+  the product of all the remaining copies.
 -/
-def funSplitAt : (ι -> Y) ≃ₜ Y × ({ j // j != i } -> Y) :=
+def funSplitAt : (ι → Y) ≃ₜ Y × ({ j // j ≠ i } → Y) :=
   piSplitAt i _
 
 end
@@ -1428,188 +1162,174 @@ namespace Topology.IsEmbedding
 
 /-- Homeomorphism given an embedding. -/
 @[simps! apply_coe]
-/--
-Definition of `toHomeomorph` / `toHomeomorph` 的定义
+/-
+**Topology.IsEmbedding.toHomeomorph** 是 Mathlib 中的一个定义，位于命名空间 `Topology.IsEmbedd
+ing`。
+形式化陈述：toHomeomorph {f : X -> Y} (hf : IsEmbedding f) : X ≃ₜ Set.range f
+参数：hf : IsEmbedding f。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsEmbedding.injective`：∀ {X : Type u_1} {Y : Type u_2} [tX : To
+pologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsEmbedding 
+f → Function.Injecti…
 
-English:
-definition toHomeomorph
-  signature: {f : X -> Y} (hf : IsEmbedding f)
-  body: .toHomeomorphOfIsInducing Equiv.ofInjective f hf.injective
-    IsInducing.subtypeVal.of_comp_iff.mp hf.toIsInducing
-
-@[simp]
-
-中文:
-定义 toHomeomorph
-  签名: {f : X -> Y} (hf : 是嵌入 f)
-  定义体: .toHomeomorphOfIsInducing Equiv.ofInjective f hf.injective
-    IsInducing.subtypeVal.of_comp_iff.mp hf.toIsInducing
-
-@[simp]
-
-Depends on / 依赖: Equiv.ofInjective, IsInducing, IsInducing.subtypeVal.of_comp_iff.mp, hf.injective, hf.toIsInducing, injective, ofInjective, of_comp_iff, subtypeVal, toHomeomorphOfIsInducing, toIsInducing
+--- 原说明 ---
+Homeomorphism given an embedding.
 -/
-noncomputable def toHomeomorph {f : X -> Y} (hf : IsEmbedding f) :
+noncomputable def toHomeomorph {f : X → Y} (hf : IsEmbedding f) :
     X ≃ₜ Set.range f :=
-.toHomeomorphOfIsInducing Equiv.ofInjective f hf.injective
+  Equiv.ofInjective f hf.injective |>.toHomeomorphOfIsInducing <|
     IsInducing.subtypeVal.of_comp_iff.mp hf.toIsInducing
 
 @[simp]
-/--
-lemma `toHomeomorph_symm_apply` / 引理 `toHomeomorph_symm_apply`
-
-English:
-lemma toHomeomorph_symm_apply
-  given: {f : X -> Y} (hf : IsEmbedding f) (x : X)
-  proof: hf.toHomeomorph.injective (by ext; simp)
-
-中文:
-引理 toHomeomorph_symm_apply
-  条件: {f : X -> Y} (hf : 是嵌入 f) (x : X)
-  证明: hf.toHomeomorph.injective (by ext; simp)
-
-Depends on / 依赖: hf.toHomeomorph.injective, injective, toHomeomorph
+/-
+**Topology.IsEmbedding.toHomeomorph_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 `Topolo
+gy.IsEmbedding`。
+形式化陈述：toHomeomorph_symm_apply {f : X -> Y} (hf : IsEmbedding f) (x : X) : hf.toH
+omeomorph.symm ⟨f x, by simp⟩ = x
+参数：hf : IsEmbedding f；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.injective`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologica
+lSpace X] [inst_1 : TopologicalSpace Y] (h : X ≃ₜ Y),   Function.Injective ⇑h
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Homeomorph.apply_symm_apply`：apply_symm_apply (h : X ≃ₜ Y) (y : Y) : h (
+h.symm y) = y
+· 使用定理 `Topology.IsEmbedding.toHomeomorph_apply_coe`：∀ {X : Type u_1} {Y : Type 
+u_2} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y}   (hf
+ : Topology.IsEmbedding f) (a : X…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma toHomeomorph_symm_apply {f : X -> Y} (hf : IsEmbedding f) (x : X) :
+lemma toHomeomorph_symm_apply {f : X → Y} (hf : IsEmbedding f) (x : X) :
     hf.toHomeomorph.symm ⟨f x, by simp⟩ = x :=
   hf.toHomeomorph.injective (by ext; simp)
 
 /-- A surjective embedding is a homeomorphism. -/
 @[simps! apply]
-/--
-Definition of `toHomeomorphOfSurjective` / `toHomeomorphOfSurjective` 的定义
+/-
+**Topology.IsEmbedding.toHomeomorphOfSurjective** 是 Mathlib 中的一个定义，位于命名空间 `Topol
+ogy.IsEmbedding`。
+形式化陈述：toHomeomorphOfSurjective {f : X -> Y} (hf : IsEmbedding f) (hsurj : Functi
+on.Surjective f) : X ≃ₜ Y
+参数：hf : IsEmbedding f；hsurj : Function.Surjective f。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsEmbedding.toIsInducing`：∀ {X : Type u_1} {Y : Type u_2} [tX :
+ TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsEmbeddi
+ng f → Topology.IsInduc…
 
-English:
-definition toHomeomorphOfSurjective
-  signature: {f : X -> Y}
-  body: .toHomeomorphOfIsInducing hf.toIsInducing Equiv.ofBijective f ⟨hf.injective, hsurj⟩
-
-中文:
-定义 toHomeomorphOfSurjective
-  签名: {f : X -> Y}
-  定义体: .toHomeomorphOfIsInducing hf.toIsInducing Equiv.ofBijective f ⟨hf.injective, hsurj⟩
-
-Depends on / 依赖: Equiv.ofBijective, hf.injective, hf.toIsInducing, injective, ofBijective, toHomeomorphOfIsInducing, toIsInducing
+--- 原说明 ---
+A surjective embedding is a homeomorphism.
 -/
-noncomputable def toHomeomorphOfSurjective {f : X -> Y}
+noncomputable def toHomeomorphOfSurjective {f : X → Y}
     (hf : IsEmbedding f) (hsurj : Function.Surjective f) : X ≃ₜ Y :=
-.toHomeomorphOfIsInducing hf.toIsInducing Equiv.ofBijective f ⟨hf.injective, hsurj⟩
+  Equiv.ofBijective f ⟨hf.injective, hsurj⟩ |>.toHomeomorphOfIsInducing hf.toIsInducing
 
-/--
-Definition of `homeomorphImage` / `homeomorphImage` 的定义
+/-- A set is homeomorphic to its image under any embedding. -/
+/-
+**Topology.IsEmbedding.homeomorphImage** 是 Mathlib 中的一个定义，位于命名空间 `Topology.IsEmb
+edding`。
+形式化陈述：homeomorphImage {f : X -> Y} (hf : IsEmbedding f) (s : Set X) : s ≃ₜ f '' 
+s
+参数：hf : IsEmbedding f；s : Set X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homeomorphImage
-  signature: {f : X -> Y} (hf : IsEmbedding f) (s : Set X)
-  body: (hf.comp .subtypeVal).toHomeomorph.trans .setCongr by simp [Set.range_comp]
-
-中文:
-定义 homeomorphImage
-  签名: {f : X -> Y} (hf : 是嵌入 f) (s : 集合 X)
-  定义体: (hf.comp .subtypeVal).toHomeomorph.trans .setCongr by simp [Set.range_comp]
-
-Depends on / 依赖: Set.range_comp, hf.comp, range_comp, setCongr, subtypeVal, toHomeomorph, toHomeomorph.trans
+--- 原说明 ---
+A set is homeomorphic to its image under any embedding.
 -/
-noncomputable def homeomorphImage {f : X -> Y} (hf : IsEmbedding f) (s : Set X) : s ≃ₜ f '' s :=
-(hf.comp .subtypeVal).toHomeomorph.trans .setCongr by simp [Set.range_comp]
+noncomputable def homeomorphImage {f : X → Y} (hf : IsEmbedding f) (s : Set X) : s ≃ₜ f '' s :=
+  (hf.comp .subtypeVal).toHomeomorph.trans <| .setCongr <| by simp [Set.range_comp]
 
-/--
-Definition of `homeomorphOfSubsetRange` / `homeomorphOfSubsetRange` 的定义
+/-- An embedding restricts to a homeomorphism between the preimage and any subset of its range. -/
+/-
+**Topology.IsEmbedding.homeomorphOfSubsetRange** 是 Mathlib 中的一个定义，位于命名空间 `Topolo
+gy.IsEmbedding`。
+形式化陈述：homeomorphOfSubsetRange {f : X -> Y} (hf : IsEmbedding f) {s : Set Y} (hs 
+: s subseteq Set.range f) : (f ⁻¹' s) ≃ₜ s
+参数：hf : IsEmbedding f；hs : s subseteq Set.range f。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image_preimage_eq_of_subset`：image_preimage_eq_of_subset {f : α -> β
+} {s : Set β} (hs : s subseteq range f) : f '' f ⁻¹' s = s
 
-English:
-definition homeomorphOfSubsetRange
-  signature: {f : X -> Y} (hf : IsEmbedding f)
-  body: .trans .setCongr Set.image_preimage_eq_of_subset hs hf.homeomorphImage (f ⁻¹' s)
+--- 原说明 ---
+An embedding restricts to a homeomorphism between the preimage and any subset of
+ its range.
+-/
+noncomputable def homeomorphOfSubsetRange {f : X → Y} (hf : IsEmbedding f)
+    {s : Set Y} (hs : s ⊆ Set.range f) : (f ⁻¹' s) ≃ₜ s :=
+  hf.homeomorphImage (f ⁻¹' s) |>.trans <| .setCongr <| Set.image_preimage_eq_of_subset hs
 
 @[simp]
-
-中文:
-定义 homeomorphOfSubsetRange
-  签名: {f : X -> Y} (hf : 是嵌入 f)
-  定义体: .trans .setCongr Set.image_preimage_eq_of_subset hs hf.homeomorphImage (f ⁻¹' s)
-
-@[simp]
-
-Depends on / 依赖: Set.image_preimage_eq_of_subset, hf.homeomorphImage, homeomorphImage, image_preimage_eq_of_subset, setCongr
+/-
+**Topology.IsEmbedding.homeomorphOfSubsetRange_apply_coe** 是 Mathlib 中的一个定理，位于命名
+空间 `Topology.IsEmbedding`。
+形式化陈述：homeomorphOfSubsetRange_apply_coe {f : X -> Y} (hf : IsEmbedding f) {s : S
+et Y} (hs : s subseteq Set.range f) (x : f ⁻¹' s) : ↑(hf.homeomorphOfSubsetRange
+ hs x) = f ↑x
+参数：hf : IsEmbedding f；hs : s subseteq Set.range f；x : f ⁻¹' s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable def homeomorphOfSubsetRange {f : X -> Y} (hf : IsEmbedding f)
-    {s : Set Y} (hs : s subseteq Set.range f) : (f ⁻¹' s) ≃ₜ s :=
-.trans .setCongr Set.image_preimage_eq_of_subset hs hf.homeomorphImage (f ⁻¹' s)
-
-@[simp]
-/--
-theorem `homeomorphOfSubsetRange_apply_coe` / 定理 `homeomorphOfSubsetRange_apply_coe`
-
-English:
-theorem homeomorphOfSubsetRange_apply_coe
-  statement: {f : X -> Y} (hf : IsEmbedding f)
-  proof: rfl
-
-中文:
-定理 homeomorphOfSubsetRange_apply_coe
-  结论: {f : X -> Y} (hf : 是嵌入 f)
-  证明: rfl
--/
-theorem homeomorphOfSubsetRange_apply_coe {f : X -> Y} (hf : IsEmbedding f)
-    {s : Set Y} (hs : s subseteq Set.range f) (x : f ⁻¹' s) :
+theorem homeomorphOfSubsetRange_apply_coe {f : X → Y} (hf : IsEmbedding f)
+    {s : Set Y} (hs : s ⊆ Set.range f) (x : f ⁻¹' s) :
     ↑(hf.homeomorphOfSubsetRange hs x) = f ↑x := rfl
 
 end Topology.IsEmbedding
 
-/--
-lemma `Topology.IsEmbedding.uliftMap` / 引理 `Topology.IsEmbedding.uliftMap`
-
-English:
-lemma Topology.IsEmbedding.uliftMap
-  given: {f : X -> Y} (hf : IsEmbedding f)
-  proof: .comp Homeomorph.ulift.symm.isEmbedding (.comp hf <| Homeomorph.ulift.isEmbedding)
-
-中文:
-引理 拓扑.是嵌入.uliftMap
-  条件: {f : X -> Y} (hf : 是嵌入 f)
-  证明: .comp Homeomorph.ulift.symm.isEmbedding (.comp hf <| Homeomorph.ulift.isEmbedding)
-
-Depends on / 依赖: Homeomorph, Homeomorph.ulift.isEmbedding, Homeomorph.ulift.symm.isEmbedding, isEmbedding
+/-
+**Topology.IsEmbedding.uliftMap** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Topology.IsEmbedding.uliftMap {f : X -> Y} (hf : IsEmbedding f) : IsEmbedd
+ing (ULift.map f)
+参数：hf : IsEmbedding f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsEmbedding.comp`：∀ {X : Type u_1} {Y : Type u_2} {Z : Type u_3
+} {f : X → Y} {g : Y → Z} [inst : TopologicalSpace X]   [inst_1 : TopologicalSpa
+ce Y] [inst_2 :…
+· 使用定理 `Homeomorph.isEmbedding`：isEmbedding (h : X ≃ₜ Y) : IsEmbedding h
 -/
-lemma Topology.IsEmbedding.uliftMap {f : X -> Y} (hf : IsEmbedding f) :
+lemma Topology.IsEmbedding.uliftMap {f : X → Y} (hf : IsEmbedding f) :
     IsEmbedding (ULift.map f) :=
   .comp Homeomorph.ulift.symm.isEmbedding (.comp hf <| Homeomorph.ulift.isEmbedding)
-
-/--
-lemma `Topology.IsOpenEmbedding.uliftMap` / 引理 `Topology.IsOpenEmbedding.uliftMap`
-
-English:
-lemma Topology.IsOpenEmbedding.uliftMap
-  given: {f : X -> Y} (hf : IsOpenEmbedding f)
-  proof: .comp Homeomorph.ulift.symm.isOpenEmbedding (.comp hf <| Homeomorph.ulift.isOpenEmbedding)
-
-中文:
-引理 拓扑.是开嵌入.uliftMap
-  条件: {f : X -> Y} (hf : 是开嵌入 f)
-  证明: .comp Homeomorph.ulift.symm.isOpenEmbedding (.comp hf <| Homeomorph.ulift.isOpenEmbedding)
-
-Depends on / 依赖: Homeomorph, Homeomorph.ulift.isOpenEmbedding, Homeomorph.ulift.symm.isOpenEmbedding, isOpenEmbedding
+/-
+**Topology.IsOpenEmbedding.uliftMap** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Topology.IsOpenEmbedding.uliftMap {f : X -> Y} (hf : IsOpenEmbedding f) : 
+IsOpenEmbedding (ULift.map f)
+参数：hf : IsOpenEmbedding f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsOpenEmbedding.comp`：∀ {X : Type u_1} {Y : Type u_2} {Z : Type
+ u_3} {f : X → Y} {g : Y → Z} [inst : TopologicalSpace X]   [inst_1 : Topologica
+lSpace Y] [inst_2 :…
+· 使用定理 `Homeomorph.isOpenEmbedding`：isOpenEmbedding (h : X ≃ₜ Y) : IsOpenEmbeddi
+ng h
 -/
-lemma Topology.IsOpenEmbedding.uliftMap {f : X -> Y} (hf : IsOpenEmbedding f) :
+lemma Topology.IsOpenEmbedding.uliftMap {f : X → Y} (hf : IsOpenEmbedding f) :
     IsOpenEmbedding (ULift.map f) :=
   .comp Homeomorph.ulift.symm.isOpenEmbedding (.comp hf <| Homeomorph.ulift.isOpenEmbedding)
-
-/--
-lemma `Topology.IsClosedEmbedding.uliftMap` / 引理 `Topology.IsClosedEmbedding.uliftMap`
-
-English:
-lemma Topology.IsClosedEmbedding.uliftMap
-  given: {f : X -> Y} (hf : IsClosedEmbedding f)
-  proof: .comp Homeomorph.ulift.symm.isClosedEmbedding (.comp hf <| Homeomorph.ulift.isClosedEmbedding)
-
-中文:
-引理 拓扑.是闭嵌入.uliftMap
-  条件: {f : X -> Y} (hf : 是闭嵌入 f)
-  证明: .comp Homeomorph.ulift.symm.isClosedEmbedding (.comp hf <| Homeomorph.ulift.isClosedEmbedding)
-
-Depends on / 依赖: Homeomorph, Homeomorph.ulift.isClosedEmbedding, Homeomorph.ulift.symm.isClosedEmbedding, isClosedEmbedding
+/-
+**Topology.IsClosedEmbedding.uliftMap** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Topology.IsClosedEmbedding.uliftMap {f : X -> Y} (hf : IsClosedEmbedding f
+) : IsClosedEmbedding (ULift.map f)
+参数：hf : IsClosedEmbedding f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsClosedEmbedding.comp`：∀ {X : Type u_1} {Y : Type u_2} {Z : Ty
+pe u_3} {f : X → Y} {g : Y → Z} [inst : TopologicalSpace X]   [inst_1 : Topologi
+calSpace Y] [inst_2 :…
+· 使用定理 `Homeomorph.isClosedEmbedding`：isClosedEmbedding (h : X ≃ₜ Y) : IsClosedE
+mbedding h
 -/
-lemma Topology.IsClosedEmbedding.uliftMap {f : X -> Y} (hf : IsClosedEmbedding f) :
+lemma Topology.IsClosedEmbedding.uliftMap {f : X → Y} (hf : IsClosedEmbedding f) :
     IsClosedEmbedding (ULift.map f) :=
   .comp Homeomorph.ulift.symm.isClosedEmbedding (.comp hf <| Homeomorph.ulift.isClosedEmbedding)
 
@@ -1619,28 +1339,27 @@ namespace Continuous
 
 variable [TopologicalSpace X] [TopologicalSpace Y]
 
-/--
-theorem `continuous_symm_of_equiv_compact_to_t2` / 定理 `continuous_symm_of_equiv_compact_to_t2`
-
-English:
-theorem continuous_symm_of_equiv_compact_to_t2
-  statement: [CompactSpace X] [T2Space Y] {f : X ≃ Y}
-  proof: by
-  rw [continuous_iff_isClosed]
-  intro C hC
-  have hC' : IsClosed (f '' C) := (hC.isCompact.image hf).isClosed
-  rwa [Equiv.image_eq_preimage_symm] at hC'
-
-中文:
-定理 continuous_symm_of_equiv_compact_to_t2
-  结论: [紧空间 X] [T2空间 Y] {f : X ≃ Y}
-  证明: by
-  rw [continuous_iff_isClosed]
-  intro C hC
-  have hC' : IsClosed (f '' C) := (hC.isCompact.image hf).isClosed
-  rwa [Equiv.image_eq_preimage_symm] at hC'
-
-Depends on / 依赖: Equiv.image_eq_preimage_symm, IsClosed, continuous_iff_isClosed, hC.isCompact.image, image_eq_preimage_symm, isClosed, isCompact
+/-
+**Continuous.continuous_symm_of_equiv_compact_to_t2** 是 Mathlib 中的一个定理，位于命名空间 `C
+ontinuous`。
+形式化陈述：continuous_symm_of_equiv_compact_to_t2 [CompactSpace X] [T2Space Y] {f : X
+ ≃ Y} (hf : Continuous f) : Continuous f.symm
+参数：hf : Continuous f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `continuous_iff_isClosed`：continuous_iff_isClosed : Continuous f ↔ forall
+ s, IsClosed s -> IsClosed (f ⁻¹' s)
+· 使用定理 `IsCompact.isClosed`：IsCompact.isClosed [T2Space X] {s : Set X} (hs : IsC
+ompact s) : IsClosed s
+· 使用定理 `IsCompact.image`：IsCompact.image {f : X -> Y} (hs : IsCompact s) (hf : C
+ontinuous f) : IsCompact (f '' s)
+· 使用定理 `IsClosed.isCompact`：IsClosed.isCompact [CompactSpace X] (h : IsClosed s)
+ : IsCompact s
+· 使用引理 `Equiv.image_eq_preimage_symm`：image_eq_preimage_symm (e : α ≃ β) (s : Se
+t α) : e '' s = e.symm ⁻¹' s
 -/
 theorem continuous_symm_of_equiv_compact_to_t2 [CompactSpace X] [T2Space Y] {f : X ≃ Y}
     (hf : Continuous f) : Continuous f.symm := by
@@ -1654,24 +1373,22 @@ theorem continuous_symm_of_equiv_compact_to_t2 [CompactSpace X] [T2Space Y] {f :
 This is not true when T2 is weakened to T1
 (see `Continuous.homeoOfEquivCompactToT2.t1_counterexample`). -/
 @[simps toEquiv]
-/--
-Definition of `homeoOfEquivCompactToT2` / `homeoOfEquivCompactToT2` 的定义
+/-
+**Continuous.homeoOfEquivCompactToT2** 是 Mathlib 中的一个定义，位于命名空间 `Continuous`。
+形式化陈述：homeoOfEquivCompactToT2 [CompactSpace X] [T2Space Y] {f : X ≃ Y} (hf : Con
+tinuous f) : X ≃ₜ Y
+参数：hf : Continuous f。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.continuous_symm_of_equiv_compact_to_t2`：continuous_symm_of_eq
+uiv_compact_to_t2 [CompactSpace X] [T2Space Y] {f : X ≃ Y} (hf : Continuous f) :
+ Continuous f.symm
 
-English:
-definition homeoOfEquivCompactToT2
-  signature: [CompactSpace X] [T2Space Y] {f : X ≃ Y} (hf : Continuous f)
-  body: { f with
-    continuous_toFun := hf
-    continuous_invFun := hf.continuous_symm_of_equiv_compact_to_t2 }
+--- 原说明 ---
+Continuous equivalences from a compact space to a T2 space are homeomorphisms.
 
-中文:
-定义 homeoOfEquivCompactToT2
-  签名: [紧空间 X] [T2空间 Y] {f : X ≃ Y} (hf : 连续 f)
-  定义体: { f with
-    continuous_toFun := hf
-    continuous_invFun := hf.continuous_symm_of_equiv_compact_to_t2 }
-
-Depends on / 依赖: continuous_invFun, continuous_symm_of_equiv_compact_to_t2, continuous_toFun, hf.continuous_symm_of_equiv_compact_to_t2
+This is not true when T2 is weakened to T1
+(see `Continuous.homeoOfEquivCompactToT2.t1_counterexample`).
 -/
 def homeoOfEquivCompactToT2 [CompactSpace X] [T2Space Y] {f : X ≃ Y} (hf : Continuous f) : X ≃ₜ Y :=
   { f with
@@ -1681,409 +1398,420 @@ def homeoOfEquivCompactToT2 [CompactSpace X] [T2Space Y] {f : X ≃ Y} (hf : Con
 end Continuous
 
 variable [TopologicalSpace X] [TopologicalSpace Y] [TopologicalSpace Z]
-  {W : Type*} [TopologicalSpace W] {f : X -> Y}
+  {W : Type*} [TopologicalSpace W] {f : X → Y}
 
 namespace IsHomeomorph
 variable (hf : IsHomeomorph f)
 include hf
 
-/--
-lemma `isClosedMap` / 引理 `isClosedMap`
-
-English:
-lemma isClosedMap
-  statement: IsClosedMap f
-  proof: (hf.homeomorph f).isClosedMap
-
-中文:
-引理 isClosedMap
-  结论: 是闭映射 f
-  证明: (hf.homeomorph f).isClosedMap
+/-
+**IsHomeomorph.isClosedMap** 是 Mathlib 中的一个定理，位于命名空间 `IsHomeomorph`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace X] [inst_1 : Topo
+logicalSpace Y] {f : X → Y},   IsHomeomorph f → IsClosedMap f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.isClosedMap`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologi
+calSpace X] [inst_1 : TopologicalSpace Y] (h : X ≃ₜ Y), IsClosedMap ⇑h
 -/
 protected lemma isClosedMap : IsClosedMap f := (hf.homeomorph f).isClosedMap
-/--
-lemma `isInducing` / 引理 `isInducing`
-
-English:
-lemma isInducing
-  statement: IsInducing f
-  proof: (hf.homeomorph f).isInducing
-
-中文:
-引理 isInducing
-  结论: 是Inducing f
-  证明: (hf.homeomorph f).isInducing
-
-Depends on / 依赖: hf.homeomorph, homeomorph, isInducing
+/-
+**IsHomeomorph.isInducing** 是 Mathlib 中的一个引理，位于命名空间 `IsHomeomorph`。
+形式化陈述：isInducing : IsInducing f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Homeomorph.isInducing`：isInducing (h : X ≃ₜ Y) : IsInducing h
 -/
 lemma isInducing : IsInducing f := (hf.homeomorph f).isInducing
-/--
-lemma `isQuotientMap` / 引理 `isQuotientMap`
-
-English:
-lemma isQuotientMap
-  statement: IsQuotientMap f
-  proof: (hf.homeomorph f).isQuotientMap
-
-中文:
-引理 isQuotientMap
-  结论: 是商映射 f
-  证明: (hf.homeomorph f).isQuotientMap
-
-Depends on / 依赖: hf.homeomorph, homeomorph, isQuotientMap
+/-
+**IsHomeomorph.isQuotientMap** 是 Mathlib 中的一个引理，位于命名空间 `IsHomeomorph`。
+形式化陈述：isQuotientMap : IsQuotientMap f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.isQuotientMap`：isQuotientMap (h : X ≃ₜ Y) : IsQuotientMap h
 -/
 lemma isQuotientMap : IsQuotientMap f := (hf.homeomorph f).isQuotientMap
-/--
-lemma `isEmbedding` / 引理 `isEmbedding`
-
-English:
-lemma isEmbedding
-  statement: IsEmbedding f
-  proof: (hf.homeomorph f).isEmbedding
-
-中文:
-引理 isEmbedding
-  结论: 是嵌入 f
-  证明: (hf.homeomorph f).isEmbedding
-
-Depends on / 依赖: hf.homeomorph, homeomorph, isEmbedding
+/-
+**IsHomeomorph.isEmbedding** 是 Mathlib 中的一个引理，位于命名空间 `IsHomeomorph`。
+形式化陈述：isEmbedding : IsEmbedding f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.isEmbedding`：isEmbedding (h : X ≃ₜ Y) : IsEmbedding h
 -/
 lemma isEmbedding : IsEmbedding f := (hf.homeomorph f).isEmbedding
-/--
-lemma `isOpenEmbedding` / 引理 `isOpenEmbedding`
-
-English:
-lemma isOpenEmbedding
-  statement: IsOpenEmbedding f
-  proof: (hf.homeomorph f).isOpenEmbedding
-
-中文:
-引理 isOpenEmbedding
-  结论: 是开嵌入 f
-  证明: (hf.homeomorph f).isOpenEmbedding
-
-Depends on / 依赖: hf.homeomorph, homeomorph, isOpenEmbedding
+/-
+**IsHomeomorph.isOpenEmbedding** 是 Mathlib 中的一个引理，位于命名空间 `IsHomeomorph`。
+形式化陈述：isOpenEmbedding : IsOpenEmbedding f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.isOpenEmbedding`：isOpenEmbedding (h : X ≃ₜ Y) : IsOpenEmbeddi
+ng h
 -/
 lemma isOpenEmbedding : IsOpenEmbedding f := (hf.homeomorph f).isOpenEmbedding
-/--
-lemma `isClosedEmbedding` / 引理 `isClosedEmbedding`
-
-English:
-lemma isClosedEmbedding
-  statement: IsClosedEmbedding f
-  proof: (hf.homeomorph f).isClosedEmbedding
-
-中文:
-引理 isClosedEmbedding
-  结论: 是闭嵌入 f
-  证明: (hf.homeomorph f).isClosedEmbedding
-
-Depends on / 依赖: hf.homeomorph, homeomorph, isClosedEmbedding
+/-
+**IsHomeomorph.isClosedEmbedding** 是 Mathlib 中的一个引理，位于命名空间 `IsHomeomorph`。
+形式化陈述：isClosedEmbedding : IsClosedEmbedding f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.isClosedEmbedding`：isClosedEmbedding (h : X ≃ₜ Y) : IsClosedE
+mbedding h
 -/
 lemma isClosedEmbedding : IsClosedEmbedding f := (hf.homeomorph f).isClosedEmbedding
-/--
-lemma `isDenseEmbedding` / 引理 `isDenseEmbedding`
-
-English:
-lemma isDenseEmbedding
-  statement: IsDenseEmbedding f
-  proof: (hf.homeomorph f).isDenseEmbedding
-
-中文:
-引理 isDenseEmbedding
-  结论: 是稠密嵌入 f
-  证明: (hf.homeomorph f).isDenseEmbedding
-
-Depends on / 依赖: hf.homeomorph, homeomorph, isDenseEmbedding
+/-
+**IsHomeomorph.isDenseEmbedding** 是 Mathlib 中的一个引理，位于命名空间 `IsHomeomorph`。
+形式化陈述：isDenseEmbedding : IsDenseEmbedding f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.isDenseEmbedding`：isDenseEmbedding (h : X ≃ₜ Y) : IsDenseEmbe
+dding h
 -/
 lemma isDenseEmbedding : IsDenseEmbedding f := (hf.homeomorph f).isDenseEmbedding
 
 end IsHomeomorph
 
-/--
-lemma `isHomeomorph_iff_exists_homeomorph` / 引理 `isHomeomorph_iff_exists_homeomorph`
+/-- A map is a homeomorphism iff it is the map underlying a bundled homeomorphism `h : X ≃ₜ Y`. -/
+/-
+**isHomeomorph_iff_exists_homeomorph** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isHomeomorph_iff_exists_homeomorph : IsHomeomorph f ↔ exists h : X ≃ₜ Y, h
+ = f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.isHomeomorph`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolog
+icalSpace X] [inst_1 : TopologicalSpace Y] (h : X ≃ₜ Y), IsHomeomorph ⇑h
 
-English:
-lemma isHomeomorph_iff_exists_homeomorph
-  statement: IsHomeomorph f ↔ exists h : X ≃ₜ Y, h = f
-  proof: ⟨fun hf => ⟨hf.homeomorph f, rfl⟩, fun ⟨h, h'⟩ => h' ▸ h.isHomeomorph⟩
-
-中文:
-引理 isHomeomorph_iff_存在_homeomorph
-  结论: 是同胚 f ↔ 存在 h : X ≃ₜ Y, h = f
-  证明: ⟨fun hf => ⟨hf.homeomorph f, rfl⟩, fun ⟨h, h'⟩ => h' ▸ h.isHomeomorph⟩
-
-Depends on / 依赖: h.isHomeomorph, hf.homeomorph, homeomorph, isHomeomorph
+--- 原说明 ---
+A map is a homeomorphism iff it is the map underlying a bundled homeomorphism `h
+ : X ≃ₜ Y`.
 -/
-lemma isHomeomorph_iff_exists_homeomorph : IsHomeomorph f ↔ exists h : X ≃ₜ Y, h = f :=
+lemma isHomeomorph_iff_exists_homeomorph : IsHomeomorph f ↔ ∃ h : X ≃ₜ Y, h = f :=
   ⟨fun hf => ⟨hf.homeomorph f, rfl⟩, fun ⟨h, h'⟩ => h' ▸ h.isHomeomorph⟩
 
-/--
-lemma `isHomeomorph_iff_exists_inverse` / 引理 `isHomeomorph_iff_exists_inverse`
+/-- A map is a homeomorphism iff it is continuous and has a continuous inverse. -/
+/-
+**isHomeomorph_iff_exists_inverse** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isHomeomorph_iff_exists_inverse : IsHomeomorph f ↔ Continuous f ∧ exists g
+ : Y -> X, LeftInverse g f ∧ RightInverse g f ∧ Continuous g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsHomeomorph.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolog
+icalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   IsHomeomorph f → Conti
+nuous f
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
+· 使用定理 `Homeomorph.continuous_invFun`：∀ {X : Type u_5} {Y : Type u_6} [inst : To
+pologicalSpace X] [inst_1 : TopologicalSpace Y] (self : X ≃ₜ Y),   Continuous se
+lf.invFun
+· 使用定理 `Homeomorph.isHomeomorph`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolog
+icalSpace X] [inst_1 : TopologicalSpace Y] (h : X ≃ₜ Y), IsHomeomorph ⇑h
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-lemma isHomeomorph_iff_exists_inverse
-  statement: IsHomeomorph f ↔ Continuous f ∧ exists g : Y -> X,
-  proof: by
-  refine ⟨fun hf => ⟨hf.continuous, ?_⟩, fun ⟨hf, g, hg⟩ => ?_⟩
-  · let h := hf.homeomorph f
-    exact ⟨h.symm, h.left_inv, h.right_inv, h.continuous_invFun⟩
-  · exact (Homeomorph.mk ⟨f, g, hg.1, hg.2.1⟩ hf hg.2.2).isHomeomorph
-
-中文:
-引理 isHomeomorph_iff_存在_inverse
-  结论: 是同胚 f ↔ 连续 f ∧ 存在 g : Y -> X,
-  证明: by
-  refine ⟨fun hf => ⟨hf.continuous, ?_⟩, fun ⟨hf, g, hg⟩ => ?_⟩
-  · let h := hf.homeomorph f
-    exact ⟨h.symm, h.left_inv, h.right_inv, h.continuous_invFun⟩
-  · exact (Homeomorph.mk ⟨f, g, hg.1, hg.2.1⟩ hf hg.2.2).isHomeomorph
-
-Depends on / 依赖: Homeomorph, Homeomorph.mk, continuous, continuous_invFun, h.continuous_invFun, h.left_inv, h.right_inv, h.symm, hf.continuous, hf.homeomorph, homeomorph, isHomeomorph, left_inv, right_inv
+--- 原说明 ---
+A map is a homeomorphism iff it is continuous and has a continuous inverse.
 -/
-lemma isHomeomorph_iff_exists_inverse : IsHomeomorph f ↔ Continuous f ∧ exists g : Y -> X,
+lemma isHomeomorph_iff_exists_inverse : IsHomeomorph f ↔ Continuous f ∧ ∃ g : Y → X,
     LeftInverse g f ∧ RightInverse g f ∧ Continuous g := by
-  refine ⟨fun hf => ⟨hf.continuous, ?_⟩, fun ⟨hf, g, hg⟩ => ?_⟩
+  refine ⟨fun hf ↦ ⟨hf.continuous, ?_⟩, fun ⟨hf, g, hg⟩ ↦ ?_⟩
   · let h := hf.homeomorph f
     exact ⟨h.symm, h.left_inv, h.right_inv, h.continuous_invFun⟩
   · exact (Homeomorph.mk ⟨f, g, hg.1, hg.2.1⟩ hf hg.2.2).isHomeomorph
 
-/--
-theorem `Equiv.isHomeomorph_iff` / 定理 `Equiv.isHomeomorph_iff`
+/-- An equivalence between topological spaces is a homeomorphism iff it is continuous in both
+directions. -/
+/-
+**Equiv.isHomeomorph_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Equiv.isHomeomorph_iff (e : X ≃ Y) : IsHomeomorph e ↔ Continuous e ∧ Conti
+nuous e.symm
+参数：e : X ≃ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Equiv.continuous_symm_iff`：Equiv.continuous_symm_iff (e : X ≃ Y) : Conti
+nuous e.symm ↔ IsOpenMap e
+· 使用定理 `IsHomeomorph.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolog
+icalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   IsHomeomorph f → Conti
+nuous f
+· 使用定理 `IsHomeomorph.isOpenMap`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologi
+calSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   IsHomeomorph f → IsOpen
+Map f
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
 
-English:
-theorem Equiv.isHomeomorph_iff
-  given: (e : X ≃ Y)
-  proof: by
-  rw [e.continuous_symm_iff]
-  exact ⟨fun h => ⟨h.continuous, h.isOpenMap⟩, fun ⟨hc, ho⟩ => ⟨hc, ho, e.bijective⟩⟩
-
-中文:
-定理 等价.isHomeomorph_iff
-  条件: (e : X ≃ Y)
-  证明: by
-  rw [e.continuous_symm_iff]
-  exact ⟨fun h => ⟨h.continuous, h.isOpenMap⟩, fun ⟨hc, ho⟩ => ⟨hc, ho, e.bijective⟩⟩
-
-Depends on / 依赖: bijective, continuous, continuous_symm_iff, e.bijective, e.continuous_symm_iff, h.continuous, h.isOpenMap, isOpenMap
+--- 原说明 ---
+An equivalence between topological spaces is a homeomorphism iff it is continuou
+s in both
+directions.
 -/
 theorem Equiv.isHomeomorph_iff (e : X ≃ Y) :
     IsHomeomorph e ↔ Continuous e ∧ Continuous e.symm := by
   rw [e.continuous_symm_iff]
-  exact ⟨fun h => ⟨h.continuous, h.isOpenMap⟩, fun ⟨hc, ho⟩ => ⟨hc, ho, e.bijective⟩⟩
+  exact ⟨fun h ↦ ⟨h.continuous, h.isOpenMap⟩, fun ⟨hc, ho⟩ ↦ ⟨hc, ho, e.bijective⟩⟩
 
-/--
-lemma `isHomeomorph_iff_isEmbedding_surjective` / 引理 `isHomeomorph_iff_isEmbedding_surjective`
+/-- A map is a homeomorphism iff it is a surjective embedding. -/
+/-
+**isHomeomorph_iff_isEmbedding_surjective** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isHomeomorph_iff_isEmbedding_surjective : IsHomeomorph f ↔ IsEmbedding f ∧
+ Surjective f where mp hf
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsHomeomorph.isEmbedding`：isEmbedding : IsEmbedding f
+· 使用定理 `IsHomeomorph.surjective`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolog
+icalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   IsHomeomorph f → Funct
+ion.Surjectiv…
+· 使用定理 `Topology.IsEmbedding.continuous`：∀ {X : Type u_1} {Y : Type u_2} {f : X 
+→ Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.IsEmb
+edding f → Continuous…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Topology.IsOpenEmbedding.isOpenMap`：∀ {X : Type u_1} {Y : Type u_2} {f :
+ X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.Is
+OpenEmbedding f → IsOpen…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Topology.isOpenEmbedding_iff`：∀ {X : Type u_1} {Y : Type u_2} [tX : Topo
+logicalSpace X] [tY : TopologicalSpace Y] (f : X → Y),   Topology.IsOpenEmbeddin
+g f ↔ Topology.IsE…
+· 使用定理 `isOpen_univ`：∀ {X : Type u} [inst : TopologicalSpace X], IsOpen Set.univ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Surjective.range_eq`：∀ {α : Type u_1} {ι : Sort u_4} {f : ι → α
+}, Function.Surjective f → Set.range f = Set.univ
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Topology.IsEmbedding.injective`：∀ {X : Type u_1} {Y : Type u_2} [tX : To
+pologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsEmbedding 
+f → Function.Injecti…
 
-English:
-lemma isHomeomorph_iff_isEmbedding_surjective
-  statement: IsHomeomorph f ↔ IsEmbedding f ∧ Surjective f where
-  proof: ⟨hf.isEmbedding, hf.surjective⟩
-  mpr h := ⟨h.1.continuous, ((isOpenEmbedding_iff f).2 ⟨h.1, h.2.range_eq ▸ isOpen_univ⟩).isOpenMap,
-    h.1.injective, h.2⟩
-
-中文:
-引理 isHomeomorph_iff_isEmbedding_surjective
-  结论: 是同胚 f ↔ 是嵌入 f ∧ 满射 f where
-  证明: ⟨hf.isEmbedding, hf.surjective⟩
-  mpr h := ⟨h.1.continuous, ((isOpenEmbedding_iff f).2 ⟨h.1, h.2.range_eq ▸ isOpen_univ⟩).isOpenMap,
-    h.1.injective, h.2⟩
-
-Depends on / 依赖: hf.isEmbedding, hf.surjective, isEmbedding, surjective
+--- 原说明 ---
+A map is a homeomorphism iff it is a surjective embedding.
 -/
 lemma isHomeomorph_iff_isEmbedding_surjective : IsHomeomorph f ↔ IsEmbedding f ∧ Surjective f where
   mp hf := ⟨hf.isEmbedding, hf.surjective⟩
   mpr h := ⟨h.1.continuous, ((isOpenEmbedding_iff f).2 ⟨h.1, h.2.range_eq ▸ isOpen_univ⟩).isOpenMap,
     h.1.injective, h.2⟩
 
-/--
-lemma `isHomeomorph_iff_isQuotientMap_injective` / 引理 `isHomeomorph_iff_isQuotientMap_injective`
+/-- A map is a homeomorphism iff it is a quotient map and injective. -/
+/-
+**isHomeomorph_iff_isQuotientMap_injective** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isHomeomorph_iff_isQuotientMap_injective {f : X -> Y} : IsHomeomorph f ↔ I
+sQuotientMap f ∧ Injective f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsHomeomorph.isQuotientMap`：isQuotientMap : IsQuotientMap f
+· 使用定理 `IsHomeomorph.injective`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologi
+calSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   IsHomeomorph f → Functi
+on.Injective…
+· 使用定理 `Topology.IsQuotientMap.continuous`：∀ {X : Type u_1} {Y : Type u_2} {f : 
+X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.IsQ
+uotientMap f → Continuo…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Topology.IsCoinducing.isOpen_preimage`：∀ {X : Type u_1} {Y : Type u_2} {
+f : X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology
+.IsCoinducing f → ∀ {s : Se…
+· 使用定理 `Topology.IsQuotientMap.isCoinducing`：∀ {X : Type u_3} {Y : Type u_4} [in
+st : TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   Topology.I
+sQuotientMap f → Topology…
+· 使用定理 `Set.preimage_image_eq`：preimage_image_eq {f : α -> β} (s : Set α) (h : I
+njective f) : f ⁻¹' f '' s = s
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Topology.IsQuotientMap.surjective`：∀ {X : Type u_3} {Y : Type u_4} [inst
+ : TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   Topology.IsQ
+uotientMap f → Function…
 
-English:
-lemma isHomeomorph_iff_isQuotientMap_injective
-  given: {f : X -> Y}
-  proof: by
-  refine ⟨fun h => ⟨h.isQuotientMap, h.injective⟩,
-    fun h => ⟨h.1.continuous, fun s hs => ?_, h.2, h.1.surjective⟩⟩
-  rwa [← h.1.isOpen_preimage, Set.preimage_image_eq _ h.2]
-
-中文:
-引理 isHomeomorph_iff_isQuotientMap_injective
-  条件: {f : X -> Y}
-  证明: by
-  refine ⟨fun h => ⟨h.isQuotientMap, h.injective⟩,
-    fun h => ⟨h.1.continuous, fun s hs => ?_, h.2, h.1.surjective⟩⟩
-  rwa [← h.1.isOpen_preimage, Set.preimage_image_eq _ h.2]
-
-Depends on / 依赖: Set.preimage_image_eq, continuous, h.injective, h.isQuotientMap, injective, isOpen_preimage, isQuotientMap, preimage_image_eq, surjective
+--- 原说明 ---
+A map is a homeomorphism iff it is a quotient map and injective.
 -/
-lemma isHomeomorph_iff_isQuotientMap_injective {f : X -> Y} :
+lemma isHomeomorph_iff_isQuotientMap_injective {f : X → Y} :
     IsHomeomorph f ↔ IsQuotientMap f ∧ Injective f := by
-  refine ⟨fun h => ⟨h.isQuotientMap, h.injective⟩,
-    fun h => ⟨h.1.continuous, fun s hs => ?_, h.2, h.1.surjective⟩⟩
+  refine ⟨fun h ↦ ⟨h.isQuotientMap, h.injective⟩,
+    fun h ↦ ⟨h.1.continuous, fun s hs ↦ ?_, h.2, h.1.surjective⟩⟩
   rwa [← h.1.isOpen_preimage, Set.preimage_image_eq _ h.2]
 
-/--
-lemma `isHomeomorph_iff_continuous_isClosedMap_bijective` / 引理 `isHomeomorph_iff_continuous_isClosedMap_bijective`
+/-- A map is a homeomorphism iff it is continuous, closed and bijective. -/
+/-
+**isHomeomorph_iff_continuous_isClosedMap_bijective** 是 Mathlib 中的一个引理，位于命名空间 ``
+。
+形式化陈述：isHomeomorph_iff_continuous_isClosedMap_bijective : IsHomeomorph f ↔ Conti
+nuous f ∧ IsClosedMap f ∧ Function.Bijective f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsHomeomorph.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolog
+icalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   IsHomeomorph f → Conti
+nuous f
+· 使用定理 `IsHomeomorph.isClosedMap`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   IsHomeomorph f → IsCl
+osedMap f
+· 使用定理 `IsHomeomorph.bijective`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologi
+calSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   IsHomeomorph f → Functi
+on.Bijective…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isClosed_compl_iff`：isClosed_compl_iff {s : Set X} : IsClosed sᶜ ↔ IsOpe
+n s
+· 使用定理 `IsOpen.isClosed_compl`：∀ {X : Type u} [inst : TopologicalSpace X] {s : S
+et X}, IsOpen s → IsClosed sᶜ
+· 使用定理 `Set.image_compl_eq`：image_compl_eq {f : α -> β} {s : Set α} (H : Bijecti
+ve f) : f '' sᶜ = (f '' s)ᶜ
 
-English:
-lemma isHomeomorph_iff_continuous_isClosedMap_bijective
-  statement: IsHomeomorph f ↔
-  proof: ⟨fun hf => ⟨hf.continuous, hf.isClosedMap, hf.bijective⟩, fun ⟨hf, hf', hf''⟩ =>
-    ⟨hf, fun _ hu => isClosed_compl_iff.1 (image_compl_eq hf'' ▸ hf' _ hu.isClosed_compl), hf''⟩⟩
-
-中文:
-引理 isHomeomorph_iff_continuous_isClosedMap_bijective
-  结论: 是同胚 f ↔
-  证明: ⟨fun hf => ⟨hf.continuous, hf.isClosedMap, hf.bijective⟩, fun ⟨hf, hf', hf''⟩ =>
-    ⟨hf, fun _ hu => isClosed_compl_iff.1 (image_compl_eq hf'' ▸ hf' _ hu.isClosed_compl), hf''⟩⟩
-
-Depends on / 依赖: bijective, continuous, hf.bijective, hf.continuous, hf.isClosedMap, hu.isClosed_compl, image_compl_eq, isClosedMap, isClosed_compl, isClosed_compl_iff
+--- 原说明 ---
+A map is a homeomorphism iff it is continuous, closed and bijective.
 -/
 lemma isHomeomorph_iff_continuous_isClosedMap_bijective : IsHomeomorph f ↔
     Continuous f ∧ IsClosedMap f ∧ Function.Bijective f :=
   ⟨fun hf => ⟨hf.continuous, hf.isClosedMap, hf.bijective⟩, fun ⟨hf, hf', hf''⟩ =>
     ⟨hf, fun _ hu => isClosed_compl_iff.1 (image_compl_eq hf'' ▸ hf' _ hu.isClosed_compl), hf''⟩⟩
 
-/--
-lemma `isHomeomorph_iff_continuous_bijective` / 引理 `isHomeomorph_iff_continuous_bijective`
+/-- A map from a compact space to a T2 space is a homeomorphism iff it is continuous and
+  bijective. -/
+/-
+**isHomeomorph_iff_continuous_bijective** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isHomeomorph_iff_continuous_bijective [CompactSpace X] [T2Space Y] : IsHom
+eomorph f ↔ Continuous f ∧ Bijective f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `isHomeomorph_iff_continuous_isClosedMap_bijective`：isHomeomorph_iff_cont
+inuous_isClosedMap_bijective : IsHomeomorph f ↔ Continuous f ∧ IsClosedMap f ∧ F
+unction.Bijective f
+· 使用定理 `and_congr_right`：∀ {a b c : Prop}, (a → (b ↔ c)) → (a ∧ b ↔ a ∧ c)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Continuous.isClosedMap`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologi
+calSpace X] [inst_1 : TopologicalSpace Y] [CompactSpace X] [T2Space Y]   {f : X 
+→ Y}, Contin…
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-lemma isHomeomorph_iff_continuous_bijective
-  given: [CompactSpace X] [T2Space Y]
-  proof: by
-  rw [isHomeomorph_iff_continuous_isClosedMap_bijective]
-  refine and_congr_right fun hf => ?_
-  rw [eq_true hf.isClosedMap]; rw [true_and]
-
-中文:
-引理 isHomeomorph_iff_continuous_bijective
-  条件: [紧空间 X] [T2空间 Y]
-  证明: by
-  rw [isHomeomorph_iff_continuous_isClosedMap_bijective]
-  refine and_congr_right fun hf => ?_
-  rw [eq_true hf.isClosedMap]; rw [true_and]
-
-Depends on / 依赖: and_congr_right, eq_true, hf.isClosedMap, isClosedMap, isHomeomorph_iff_continuous_isClosedMap_bijective, true_and
+--- 原说明 ---
+A map from a compact space to a T2 space is a homeomorphism iff it is continuous
+ and
+  bijective.
 -/
 lemma isHomeomorph_iff_continuous_bijective [CompactSpace X] [T2Space Y] :
     IsHomeomorph f ↔ Continuous f ∧ Bijective f := by
   rw [isHomeomorph_iff_continuous_isClosedMap_bijective]
-  refine and_congr_right fun hf => ?_
-  rw [eq_true hf.isClosedMap]; rw [true_and]
-
-/--
-lemma `IsHomeomorph.sumMap` / 引理 `IsHomeomorph.sumMap`
-
-English:
-lemma IsHomeomorph.sumMap
-  given: {g : Z -> W} (hf : IsHomeomorph f) (hg : IsHomeomorph g)
-  proof: ⟨hf.1.sumMap hg.1, hf.2.sumMap hg.2, hf.3.sumMap hg.3⟩
-
-中文:
-引理 是同胚.sumMap
-  条件: {g : Z -> W} (hf : 是同胚 f) (hg : 是同胚 g)
-  证明: ⟨hf.1.sumMap hg.1, hf.2.sumMap hg.2, hf.3.sumMap hg.3⟩
-
-Depends on / 依赖: sumMap
+  refine and_congr_right fun hf ↦ ?_
+  rw [eq_true hf.isClosedMap, true_and]
+/-
+**IsHomeomorph.sumMap** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsHomeomorph.sumMap {g : Z -> W} (hf : IsHomeomorph f) (hg : IsHomeomorph 
+g) : IsHomeomorph (Sum.map f g)
+参数：hf : IsHomeomorph f；hg : IsHomeomorph g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.sumMap`：Continuous.sumMap {f : X -> Y} {g : Z -> W} (hf : Con
+tinuous f) (hg : Continuous g) : Continuous (Sum.map f g)
+· 使用定理 `IsHomeomorph.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolog
+icalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   IsHomeomorph f → Conti
+nuous f
+· 使用定理 `IsOpenMap.sumMap`：IsOpenMap.sumMap {f : X -> Y} {g : Z -> W} (hf : IsOpe
+nMap f) (hg : IsOpenMap g) : IsOpenMap (Sum.map f g)
+· 使用定理 `IsHomeomorph.isOpenMap`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologi
+calSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   IsHomeomorph f → IsOpen
+Map f
+· 使用定理 `Function.Bijective.sumMap`：∀ {α : Type u} {α' : Type w} {β : Type v} {β'
+ : Type x} {f : α → β} {g : α' → β'},   Function.Bijective f → Function.Bijectiv
+e g → Function.…
+· 使用定理 `IsHomeomorph.bijective`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologi
+calSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   IsHomeomorph f → Functi
+on.Bijective…
 -/
-lemma IsHomeomorph.sumMap {g : Z -> W} (hf : IsHomeomorph f) (hg : IsHomeomorph g) :
+lemma IsHomeomorph.sumMap {g : Z → W} (hf : IsHomeomorph f) (hg : IsHomeomorph g) :
     IsHomeomorph (Sum.map f g) := ⟨hf.1.sumMap hg.1, hf.2.sumMap hg.2, hf.3.sumMap hg.3⟩
-
-/--
-lemma `IsHomeomorph.prodMap` / 引理 `IsHomeomorph.prodMap`
-
-English:
-lemma IsHomeomorph.prodMap
-  given: {g : Z -> W} (hf : IsHomeomorph f) (hg : IsHomeomorph g)
-  proof: ⟨hf.1.prodMap hg.1, hf.2.prodMap hg.2, hf.3.prodMap hg.3⟩
-
-中文:
-引理 是同胚.prodMap
-  条件: {g : Z -> W} (hf : 是同胚 f) (hg : 是同胚 g)
-  证明: ⟨hf.1.prodMap hg.1, hf.2.prodMap hg.2, hf.3.prodMap hg.3⟩
-
-Depends on / 依赖: prodMap
+/-
+**IsHomeomorph.prodMap** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsHomeomorph.prodMap {g : Z -> W} (hf : IsHomeomorph f) (hg : IsHomeomorph
+ g) : IsHomeomorph (Prod.map f g)
+参数：hf : IsHomeomorph f；hg : IsHomeomorph g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.prodMap`：Continuous.prodMap {f : Z -> X} {g : W -> Y} (hf : C
+ontinuous f) (hg : Continuous g) : Continuous (Prod.map f g)
+· 使用定理 `IsHomeomorph.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolog
+icalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   IsHomeomorph f → Conti
+nuous f
+· 使用定理 `IsOpenMap.prodMap`：∀ {X : Type u} {Y : Type v} {W : Type u_1} {Z : Type 
+u_2} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y]   [inst_2 : Topol
+ogicalS…
+· 使用定理 `IsHomeomorph.isOpenMap`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologi
+calSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   IsHomeomorph f → IsOpen
+Map f
+· 使用定理 `Function.Bijective.prodMap`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_
+3} {δ : Type u_4} {f : α → γ} {g : β → δ},   Function.Bijective f → Function.Bij
+ective g → Funct…
+· 使用定理 `IsHomeomorph.bijective`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologi
+calSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y},   IsHomeomorph f → Functi
+on.Bijective…
 -/
-lemma IsHomeomorph.prodMap {g : Z -> W} (hf : IsHomeomorph f) (hg : IsHomeomorph g) :
+lemma IsHomeomorph.prodMap {g : Z → W} (hf : IsHomeomorph f) (hg : IsHomeomorph g) :
     IsHomeomorph (Prod.map f g) := ⟨hf.1.prodMap hg.1, hf.2.prodMap hg.2, hf.3.prodMap hg.3⟩
-
-/--
-lemma `IsHomeomorph.sigmaMap` / 引理 `IsHomeomorph.sigmaMap`
-
-English:
-lemma IsHomeomorph.sigmaMap
-  statement: {ι κ : Type*} {X : ι -> Type*} {Y : κ -> Type*}
-  proof: by
-  simp_rw [isHomeomorph_iff_isEmbedding_surjective] at hg ⊢
-  exact ⟨(isEmbedding_sigmaMap hf.1).2 fun i => (hg i).1, hf.2.sigma_map fun i => (hg i).2⟩
-
-中文:
-引理 是同胚.sigmaMap
-  结论: {ι κ : 类型} {X : ι -> 类型} {Y : κ -> 类型}
-  证明: by
-  simp_rw [isHomeomorph_iff_isEmbedding_surjective] at hg ⊢
-  exact ⟨(isEmbedding_sigmaMap hf.1).2 fun i => (hg i).1, hf.2.sigma_map fun i => (hg i).2⟩
-
-Depends on / 依赖: isEmbedding_sigmaMap, isHomeomorph_iff_isEmbedding_surjective, sigma_map, simp_rw
+/-
+**IsHomeomorph.sigmaMap** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsHomeomorph.sigmaMap {ι κ : Type*} {X : ι -> Type*} {Y : κ -> Type*} [for
+all i, TopologicalSpace (X i)] [forall i, TopologicalSpace (Y i)] {f : ι -> κ} (
+hf : Bijective f) {g : (i : ι) -> X i -> Y (f i)} (hg : forall i, IsHomeomorph (
+g i)) : IsHomeomorph (Sigma.map f g)
+参数：X i；Y i；hf : Bijective f；i : ι；f i；hg : forall i, IsHomeomorph (g i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Topology.isEmbedding_sigmaMap`：Topology.isEmbedding_sigmaMap {f₁ : ι -> 
+κ} {f₂ : forall i, σ i -> τ (f₁ i)} (h : Injective f₁) : IsEmbedding (Sigma.map 
+f₁ f₂) ↔ forall i, …
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Function.Surjective.sigma_map`：Function.Surjective.sigma_map {f₁ : α₁ ->
+ α₂} {f₂ : forall a, β₁ a -> β₂ (f₁ a)} (h₁ : Surjective f₁) (h₂ : forall a, Sur
+jective (f₂ a)) : S…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-lemma IsHomeomorph.sigmaMap {ι κ : Type*} {X : ι -> Type*} {Y : κ -> Type*}
-    [forall i, TopologicalSpace (X i)] [forall i, TopologicalSpace (Y i)] {f : ι -> κ}
-    (hf : Bijective f) {g : (i : ι) -> X i -> Y (f i)} (hg : forall i, IsHomeomorph (g i)) :
+lemma IsHomeomorph.sigmaMap {ι κ : Type*} {X : ι → Type*} {Y : κ → Type*}
+    [∀ i, TopologicalSpace (X i)] [∀ i, TopologicalSpace (Y i)] {f : ι → κ}
+    (hf : Bijective f) {g : (i : ι) → X i → Y (f i)} (hg : ∀ i, IsHomeomorph (g i)) :
     IsHomeomorph (Sigma.map f g) := by
   simp_rw [isHomeomorph_iff_isEmbedding_surjective] at hg ⊢
-  exact ⟨(isEmbedding_sigmaMap hf.1).2 fun i => (hg i).1, hf.2.sigma_map fun i => (hg i).2⟩
-
-/--
-lemma `IsHomeomorph.pi_map` / 引理 `IsHomeomorph.pi_map`
-
-English:
-lemma IsHomeomorph.pi_map
-  statement: {ι : Type*} {X Y : ι -> Type*} [forall i, TopologicalSpace (X i)]
-  proof: (Homeomorph.piCongrRight fun i => (h i).homeomorph (f i)).isHomeomorph
-
-中文:
-引理 是同胚.pi_map
-  结论: {ι : 类型} {X Y : ι -> 类型} [对任意 i, 拓扑空间 (X i)]
-  证明: (Homeomorph.piCongrRight fun i => (h i).homeomorph (f i)).isHomeomorph
-
-Depends on / 依赖: Homeomorph, Homeomorph.piCongrRight, homeomorph, isHomeomorph, piCongrRight
+  exact ⟨(isEmbedding_sigmaMap hf.1).2 fun i ↦ (hg i).1, hf.2.sigma_map fun i ↦ (hg i).2⟩
+/-
+**IsHomeomorph.pi_map** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsHomeomorph.pi_map {ι : Type*} {X Y : ι -> Type*} [forall i, TopologicalS
+pace (X i)] [forall i, TopologicalSpace (Y i)] {f : (i : ι) -> X i -> Y i} (h : 
+forall i, IsHomeomorph (f i)) : IsHomeomorph (fun (x : forall i, X i) i => f i (
+x i))
+参数：X i；Y i；i : ι；h : forall i, IsHomeomorph (f i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.isHomeomorph`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolog
+icalSpace X] [inst_1 : TopologicalSpace Y] (h : X ≃ₜ Y), IsHomeomorph ⇑h
 -/
-lemma IsHomeomorph.pi_map {ι : Type*} {X Y : ι -> Type*} [forall i, TopologicalSpace (X i)]
-    [forall i, TopologicalSpace (Y i)] {f : (i : ι) -> X i -> Y i} (h : forall i, IsHomeomorph (f i)) :
-    IsHomeomorph (fun (x : forall i, X i) i => f i (x i)) :=
-  (Homeomorph.piCongrRight fun i => (h i).homeomorph (f i)).isHomeomorph
+lemma IsHomeomorph.pi_map {ι : Type*} {X Y : ι → Type*} [∀ i, TopologicalSpace (X i)]
+    [∀ i, TopologicalSpace (Y i)] {f : (i : ι) → X i → Y i} (h : ∀ i, IsHomeomorph (f i)) :
+    IsHomeomorph (fun (x : ∀ i, X i) i ↦ f i (x i)) :=
+  (Homeomorph.piCongrRight fun i ↦ (h i).homeomorph (f i)).isHomeomorph
 
-/--
-Definition of `Homeomorph.ofDiscrete` / `Homeomorph.ofDiscrete` 的定义
+/-- A bijection between discrete topological spaces induces a homeomorphism. -/
+/-
+**Homeomorph.ofDiscrete** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Homeomorph.ofDiscrete [DiscreteTopology X] [DiscreteTopology Y] (f : X ≃ Y
+) : X ≃ₜ Y where toEquiv
+参数：f : X ≃ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Homeomorph.ofDiscrete
-  signature: [DiscreteTopology X] [DiscreteTopology Y] (f : X ≃ Y)
-  body: f
-
-中文:
-定义 同胚.ofDiscrete
-  签名: [离散拓扑 X] [离散拓扑 Y] (f : X ≃ Y)
-  定义体: f
+--- 原说明 ---
+A bijection between discrete topological spaces induces a homeomorphism.
 -/
 def Homeomorph.ofDiscrete [DiscreteTopology X] [DiscreteTopology Y] (f : X ≃ Y) : X ≃ₜ Y where
   toEquiv := f
-
-/--
-theorem `Equiv.isHomeomorph_of_discrete` / 定理 `Equiv.isHomeomorph_of_discrete`
-
-English:
-theorem Equiv.isHomeomorph_of_discrete
-  statement: [DiscreteTopology X] [DiscreteTopology Y]
-  proof: (Homeomorph.ofDiscrete f).isHomeomorph
-
-中文:
-定理 等价.isHomeomorph_of_discrete
-  结论: [离散拓扑 X] [离散拓扑 Y]
-  证明: (Homeomorph.ofDiscrete f).isHomeomorph
-
-Depends on / 依赖: Homeomorph, Homeomorph.ofDiscrete, isHomeomorph, ofDiscrete
+/-
+**Equiv.isHomeomorph_of_discrete** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Equiv.isHomeomorph_of_discrete [DiscreteTopology X] [DiscreteTopology Y] (
+f : X ≃ Y) : IsHomeomorph f
+参数：f : X ≃ Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.isHomeomorph`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolog
+icalSpace X] [inst_1 : TopologicalSpace Y] (h : X ≃ₜ Y), IsHomeomorph ⇑h
 -/
 theorem Equiv.isHomeomorph_of_discrete [DiscreteTopology X] [DiscreteTopology Y]
     (f : X ≃ Y) : IsHomeomorph f :=
@@ -2091,77 +1819,72 @@ theorem Equiv.isHomeomorph_of_discrete [DiscreteTopology X] [DiscreteTopology Y]
 
 section
 
-/--
-Definition of `Topology.IsCoinducing.connectedComponentsHomeomorph` / `Topology.IsCoinducing.connectedComponentsHomeomorph` 的定义
+/-- If `f : X → Y` is coinducing and has connected fibers, it induces a homeomorphism on `π₀`. -/
+/-
+**Topology.IsCoinducing.connectedComponentsHomeomorph** 是 Mathlib 中的一个定义，位于命名空间 
+``。
+形式化陈述：Topology.IsCoinducing.connectedComponentsHomeomorph {f : X -> Y} (hf : IsC
+oinducing f) (hf' : forall y, IsConnected (f ⁻¹' {y})) : ConnectedComponents X ≃
+ₜ ConnectedComponents Y
+参数：hf : IsCoinducing f；hf' : forall y, IsConnected (f ⁻¹' {y})。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsCoinducing.continuous`：∀ {X : Type u_1} {Y : Type u_2} {f : X
+ → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.IsCo
+inducing f → Continuou…
 
-English:
-definition Topology.IsCoinducing.connectedComponentsHomeomorph
-  signature: {f : X -> Y}
-  body: IsHomeomorph.homeomorph hf.continuous.connectedComponentsMap by
-    have hbij := hf.connectedComponentsMap_bijective hf'
-    exact ⟨hf.continuous.connectedComponentsMap_continuous,
-      hf.connectedComponentsMap.isOpenMap_of_injective hbij.injective, hbij⟩
-
-中文:
-定义 拓扑.是余inducing.connectedComponentsHomeomorph
-  签名: {f : X -> Y}
-  定义体: IsHomeomorph.homeomorph hf.continuous.connectedComponentsMap by
-    have hbij := hf.connectedComponentsMap_bijective hf'
-    exact ⟨hf.continuous.connectedComponentsMap_continuous,
-      hf.connectedComponentsMap.isOpenMap_of_injective hbij.injective, hbij⟩
-
-Depends on / 依赖: IsHomeomorph, IsHomeomorph.homeomorph, connectedComponentsMap, connectedComponentsMap_bijective, connectedComponentsMap_continuous, continuous, hbij.injective, hf.connectedComponentsMap.isOpenMap_of_injective, hf.connectedComponentsMap_bijective, hf.continuous.connectedComponentsMap, hf.continuous.connectedComponentsMap_continuous, homeomorph, injective, isOpenMap_of_injective
+--- 原说明 ---
+If `f : X → Y` is coinducing and has connected fibers, it induces a homeomorphis
+m on `π₀`.
 -/
-noncomputable def Topology.IsCoinducing.connectedComponentsHomeomorph {f : X -> Y}
-    (hf : IsCoinducing f) (hf' : forall y, IsConnected (f ⁻¹' {y})) :
+noncomputable def Topology.IsCoinducing.connectedComponentsHomeomorph {f : X → Y}
+    (hf : IsCoinducing f) (hf' : ∀ y, IsConnected (f ⁻¹' {y})) :
     ConnectedComponents X ≃ₜ ConnectedComponents Y :=
-IsHomeomorph.homeomorph hf.continuous.connectedComponentsMap by
+  IsHomeomorph.homeomorph hf.continuous.connectedComponentsMap <| by
     have hbij := hf.connectedComponentsMap_bijective hf'
     exact ⟨hf.continuous.connectedComponentsMap_continuous,
       hf.connectedComponentsMap.isOpenMap_of_injective hbij.injective, hbij⟩
 
-variable {f : X -> Y} (hf : Topology.IsCoinducing f) (hf' : forall y, IsConnected (f ⁻¹' {y}))
+variable {f : X → Y} (hf : Topology.IsCoinducing f) (hf' : ∀ y, IsConnected (f ⁻¹' {y}))
 
 @[simp]
-/--
-lemma `Topology.IsCoinducing.connectedComponentsHomeomorph_mk` / 引理 `Topology.IsCoinducing.connectedComponentsHomeomorph_mk`
-
-English:
-lemma Topology.IsCoinducing.connectedComponentsHomeomorph_mk
-  given: (x : X)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 拓扑.是余inducing.connectedComponentsHomeomorph_mk
-  条件: (x : X)
-  证明: rfl
-
-@[simp]
+/-
+**Topology.IsCoinducing.connectedComponentsHomeomorph_mk** 是 Mathlib 中的一个引理，位于命名
+空间 ``。
+形式化陈述：Topology.IsCoinducing.connectedComponentsHomeomorph_mk (x : X) : hf.connec
+tedComponentsHomeomorph hf' (.mk x) = .mk (f x)
+参数：x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Topology.IsCoinducing.connectedComponentsHomeomorph_mk (x : X) :
     hf.connectedComponentsHomeomorph hf' (.mk x) = .mk (f x) :=
   rfl
 
 @[simp]
-/--
-lemma `Topology.IsCoinducing.connectedComponentsHomeomorph_symm_mk_apply` / 引理 `Topology.IsCoinducing.connectedComponentsHomeomorph_symm_mk_apply`
-
-English:
-lemma Topology.IsCoinducing.connectedComponentsHomeomorph_symm_mk_apply
-  given: (x : X)
-  proof: (hf.connectedComponentsHomeomorph hf').injective (by simp)
-
-中文:
-引理 拓扑.是余inducing.connectedComponentsHomeomorph_symm_mk_apply
-  条件: (x : X)
-  证明: (hf.connectedComponentsHomeomorph hf').injective (by simp)
-
-Depends on / 依赖: connectedComponentsHomeomorph, hf.connectedComponentsHomeomorph, injective
+/-
+**Topology.IsCoinducing.connectedComponentsHomeomorph_symm_mk_apply** 是 Mathlib 
+中的一个引理，位于命名空间 ``。
+形式化陈述：Topology.IsCoinducing.connectedComponentsHomeomorph_symm_mk_apply (x : X) 
+: (hf.connectedComponentsHomeomorph hf').symm (.mk (f x)) = .mk x
+参数：x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.injective`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologica
+lSpace X] [inst_1 : TopologicalSpace Y] (h : X ≃ₜ Y),   Function.Injective ⇑h
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Homeomorph.apply_symm_apply`：apply_symm_apply (h : X ≃ₜ Y) (y : Y) : h (
+h.symm y) = y
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Topology.IsCoinducing.connectedComponentsHomeomorph_symm_mk_apply (x : X) :
     (hf.connectedComponentsHomeomorph hf').symm (.mk (f x)) = .mk x :=
   (hf.connectedComponentsHomeomorph hf').injective (by simp)
 
 end
+

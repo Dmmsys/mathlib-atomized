@@ -33,200 +33,87 @@ open Set Filter Function Lattice
 
 open Topology Filter Pointwise
 
-/--
-Definition of `RingSubgroupsBasis` / `RingSubgroupsBasis` 的定义
+/-- A family of additive subgroups on a ring `A` is a subgroups basis if it satisfies some
+axioms ensuring there is a topology on `A` which is compatible with the ring structure and
+admits this family as a basis of neighborhoods of zero. -/
+/-
+**RingSubgroupsBasis** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{A : Type u_1} → {ι : Type u_2} → [inst : Ring A] → (ι → AddSubgroup A) → 
+Prop
+参数：ι → AddSubgroup A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure RingSubgroupsBasis
-  parameters: {A ι : Type*} [Ring A] (B : ι -> AddSubgroup A)
-  axioms and operations (4):
-    - inter : forall i j, exists k, B k <= B i ⊓ B j
-    - mul : forall i, exists j, (B j : Set A) * B j subseteq B i
-    - leftMul : forall x : A, forall i, exists j, (B j : Set A) subseteq (x * ·) ⁻¹' B i
-    - rightMul : forall x : A, forall i, exists j, (B j : Set A) subseteq (· * x) ⁻¹' B i
-
-中文:
-结构 RingSubgroupsBasis
-  参数: {A ι : 类型} [环 A] (B : ι -> 加法子群 A)
-  公理与运算 (4 个):
-    - inter : 对任意 i j, 存在 k, B k <= B i ⊓ B j
-    - mul : 对任意 i, 存在 j, (B j : 集合 A) * B j subseteq B i
-    - leftMul : 对任意 x : A, 对任意 i, 存在 j, (B j : 集合 A) subseteq (x * ·) ⁻¹' B i
-    - rightMul : 对任意 x : A, 对任意 i, 存在 j, (B j : 集合 A) subseteq (· * x) ⁻¹' B i
+--- 原说明 ---
+A family of additive subgroups on a ring `A` is a subgroups basis if it satisfie
+s some
+axioms ensuring there is a topology on `A` which is compatible with the ring str
+ucture and
+admits this family as a basis of neighborhoods of zero.
 -/
-structure RingSubgroupsBasis {A ι : Type*} [Ring A] (B : ι -> AddSubgroup A) : Prop where
+structure RingSubgroupsBasis {A ι : Type*} [Ring A] (B : ι → AddSubgroup A) : Prop where
   /-- Condition for `B` to be a filter basis on `A`. -/
-  inter : forall i j, exists k, B k <= B i ⊓ B j
+  inter : ∀ i j, ∃ k, B k ≤ B i ⊓ B j
   /-- For each set `B` in the submodule basis on `A`, there is another basis element `B'` such
   that the set-theoretic product `B' * B'` is in `B`. -/
-  mul : forall i, exists j, (B j : Set A) * B j subseteq B i
+  mul : ∀ i, ∃ j, (B j : Set A) * B j ⊆ B i
   /-- For any element `x : A` and any set `B` in the submodule basis on `A`,
   there is another basis element `B'` such that `B' * x` is in `B`. -/
-  leftMul : forall x : A, forall i, exists j, (B j : Set A) subseteq (x * ·) ⁻¹' B i
+  leftMul : ∀ x : A, ∀ i, ∃ j, (B j : Set A) ⊆ (x * ·) ⁻¹' B i
   /-- For any element `x : A` and any set `B` in the submodule basis on `A`,
   there is another basis element `B'` such that `x * B'` is in `B`. -/
-  rightMul : forall x : A, forall i, exists j, (B j : Set A) subseteq (· * x) ⁻¹' B i
+  rightMul : ∀ x : A, ∀ i, ∃ j, (B j : Set A) ⊆ (· * x) ⁻¹' B i
 
 namespace RingSubgroupsBasis
 
 variable {A ι : Type*} [Ring A]
 
-/--
-theorem `of_comm` / 定理 `of_comm`
-
-English:
-theorem of_comm
-  statement: {A ι : Type*} [CommRing A] (B : ι -> AddSubgroup A)
-  proof: { inter
-    mul
-    leftMul
-    rightMul := fun x i => (leftMul x i).imp fun j hj => by simpa only [mul_comm] using hj }
-
-中文:
-定理 of_comm
-  结论: {A ι : 类型} [交换环 A] (B : ι -> 加法子群 A)
-  证明: { inter
-    mul
-    leftMul
-    rightMul := fun x i => (leftMul x i).imp fun j hj => by simpa only [mul_comm] using hj }
-
-Depends on / 依赖: leftMul, mul_comm, rightMul
+/-
+**RingSubgroupsBasis.of_comm** 是 Mathlib 中的一个定理，位于命名空间 `RingSubgroupsBasis`。
+形式化陈述：of_comm {A ι : Type*} [CommRing A] (B : ι -> AddSubgroup A) (inter : foral
+l i j, exists k, B k <= B i ⊓ B j) (mul : forall i, exists j, (B j : Set A) * B 
+j subseteq B i) (leftMul : forall x : A, forall i, exists j, (B j : Set A) subse
+teq (fun y : A => x * y) ⁻¹' B i) : RingSubgroupsBasis B
+参数：B : ι -> AddSubgroup A；inter : forall i j, exists k, B k <= B i ⊓ B j；mul : f
+orall i, exists j, (B j : Set A) * B j subseteq B i；leftMul : forall x : A, fora
+ll i, exists j, (B j : Set A) subseteq (fun y : A => x * y) ⁻¹' B i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
-theorem of_comm {A ι : Type*} [CommRing A] (B : ι -> AddSubgroup A)
-    (inter : forall i j, exists k, B k <= B i ⊓ B j) (mul : forall i, exists j, (B j : Set A) * B j subseteq B i)
-    (leftMul : forall x : A, forall i, exists j, (B j : Set A) subseteq (fun y : A => x * y) ⁻¹' B i) :
+theorem of_comm {A ι : Type*} [CommRing A] (B : ι → AddSubgroup A)
+    (inter : ∀ i j, ∃ k, B k ≤ B i ⊓ B j) (mul : ∀ i, ∃ j, (B j : Set A) * B j ⊆ B i)
+    (leftMul : ∀ x : A, ∀ i, ∃ j, (B j : Set A) ⊆ (fun y : A => x * y) ⁻¹' B i) :
     RingSubgroupsBasis B :=
   { inter
     mul
     leftMul
-    rightMul := fun x i => (leftMul x i).imp fun j hj => by simpa only [mul_comm] using hj }
+    rightMul := fun x i ↦ (leftMul x i).imp fun j hj ↦ by simpa only [mul_comm] using hj }
 
 /-- Every subgroups basis on a ring leads to a ring filter basis. -/
 @[instance_reducible]
-/--
-Definition of `toRingFilterBasis` / `toRingFilterBasis` 的定义
+/-
+**RingSubgroupsBasis.toRingFilterBasis** 是 Mathlib 中的一个定义，位于命名空间 `RingSubgroupsB
+asis`。
+形式化陈述：toRingFilterBasis [Nonempty ι] {B : ι -> AddSubgroup A} (hB : RingSubgroup
+sBasis B) : RingFilterBasis A where sets
+参数：hB : RingSubgroupsBasis B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toRingFilterBasis
-  signature: [Nonempty ι] {B : ι -> AddSubgroup A} (hB : RingSubgroupsBasis B)
-  body: { U | exists i, U = B i }
-  nonempty := by
-    inhabit ι
-    exact ⟨B default, default, rfl⟩
-  inter_sets := by
-    rintro _ _ ⟨i, rfl⟩ ⟨j, rfl⟩
-    obtain ⟨k, hk⟩ := hB.inter i j
-    use B k
-    constructor
-    · use k
-    · exact hk
-  zero' := by
-    rintro _ ⟨i, rfl⟩
-    exact (B i).zero_mem
-  add' := by
-    rintro _ ⟨i, rfl⟩
-    use B i
-    constructor
-    · use i
-    · rintro x ⟨y, y_in, z, z_in, rfl⟩
-      exact (B i).add_mem y_in z_in
-  neg' := by
-    rintro _ ⟨i, rfl⟩
-    use B i
-    constructor
-    · use i
-    · intro x x_in
-      exact (B i).neg_mem x_in
-  conj' := by
-    rintro x₀ _ ⟨i, rfl⟩
-    use B i
-    constructor
-    · use i
-    · simp
-  mul' := by
-    rintro _ ⟨i, rfl⟩
-    obtain ⟨k, hk⟩ := hB.mul i
-    use B k
-    constructor
-    · use k
-    · exact hk
-  mul_left' := by
-    rintro x₀ _ ⟨i, rfl⟩
-    obtain ⟨k, hk⟩ := hB.leftMul x₀ i
-    use B k
-    constructor
-    · use k
-    · exact hk
-  mul_right' := by
-    rintro x₀ _ ⟨i, rfl⟩
-    obtain ⟨k, hk⟩ := hB.rightMul x₀ i
-    use B k
-    constructor
-    · use k
-    · exact hk
-
-中文:
-定义 toRingFilterBasis
-  签名: [非空 ι] {B : ι -> 加法子群 A} (hB : RingSubgroupsBasis B)
-  定义体: { U | exists i, U = B i }
-  nonempty := by
-    inhabit ι
-    exact ⟨B default, default, rfl⟩
-  inter_sets := by
-    rintro _ _ ⟨i, rfl⟩ ⟨j, rfl⟩
-    obtain ⟨k, hk⟩ := hB.inter i j
-    use B k
-    constructor
-    · use k
-    · exact hk
-  zero' := by
-    rintro _ ⟨i, rfl⟩
-    exact (B i).zero_mem
-  add' := by
-    rintro _ ⟨i, rfl⟩
-    use B i
-    constructor
-    · use i
-    · rintro x ⟨y, y_in, z, z_in, rfl⟩
-      exact (B i).add_mem y_in z_in
-  neg' := by
-    rintro _ ⟨i, rfl⟩
-    use B i
-    constructor
-    · use i
-    · intro x x_in
-      exact (B i).neg_mem x_in
-  conj' := by
-    rintro x₀ _ ⟨i, rfl⟩
-    use B i
-    constructor
-    · use i
-    · simp
-  mul' := by
-    rintro _ ⟨i, rfl⟩
-    obtain ⟨k, hk⟩ := hB.mul i
-    use B k
-    constructor
-    · use k
-    · exact hk
-  mul_left' := by
-    rintro x₀ _ ⟨i, rfl⟩
-    obtain ⟨k, hk⟩ := hB.leftMul x₀ i
-    use B k
-    constructor
-    · use k
-    · exact hk
-  mul_right' := by
-    rintro x₀ _ ⟨i, rfl⟩
-    obtain ⟨k, hk⟩ := hB.rightMul x₀ i
-    use B k
-    constructor
-    · use k
-    · exact hk
+--- 原说明 ---
+Every subgroups basis on a ring leads to a ring filter basis.
 -/
-def toRingFilterBasis [Nonempty ι] {B : ι -> AddSubgroup A} (hB : RingSubgroupsBasis B) :
+def toRingFilterBasis [Nonempty ι] {B : ι → AddSubgroup A} (hB : RingSubgroupsBasis B) :
     RingFilterBasis A where
-  sets := { U | exists i, U = B i }
+  sets := { U | ∃ i, U = B i }
   nonempty := by
     inhabit ι
     exact ⟨B default, default, rfl⟩
@@ -282,94 +169,63 @@ def toRingFilterBasis [Nonempty ι] {B : ι -> AddSubgroup A} (hB : RingSubgroup
     · use k
     · exact hk
 
-variable [Nonempty ι] {B : ι -> AddSubgroup A} (hB : RingSubgroupsBasis B)
-
-/--
-theorem `mem_addGroupFilterBasis_iff` / 定理 `mem_addGroupFilterBasis_iff`
-
-English:
-theorem mem_addGroupFilterBasis_iff
-  given: {V : Set A}
-  proof: Iff.rfl
-
-中文:
-定理 mem_addGroupFilterBasis_iff
-  条件: {V : 集合 A}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+variable [Nonempty ι] {B : ι → AddSubgroup A} (hB : RingSubgroupsBasis B)
+/-
+**RingSubgroupsBasis.mem_addGroupFilterBasis_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ring
+SubgroupsBasis`。
+形式化陈述：mem_addGroupFilterBasis_iff {V : Set A} : V in hB.toRingFilterBasis.toAddG
+roupFilterBasis ↔ exists i, V = B i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem mem_addGroupFilterBasis_iff {V : Set A} :
-    V in hB.toRingFilterBasis.toAddGroupFilterBasis ↔ exists i, V = B i :=
+    V ∈ hB.toRingFilterBasis.toAddGroupFilterBasis ↔ ∃ i, V = B i :=
   Iff.rfl
-
-/--
-theorem `mem_addGroupFilterBasis` / 定理 `mem_addGroupFilterBasis`
-
-English:
-theorem mem_addGroupFilterBasis
-  given: (i)
-  statement: (B i : Set A) in hB.toRingFilterBasis.toAddGroupFilterBasis
-  proof: ⟨i, rfl⟩
-
-中文:
-定理 mem_addGroupFilterBasis
-  条件: (i)
-  结论: (B i : 集合 A) in hB.toRingFilterBasis.toAddGroupFilterBasis
-  证明: ⟨i, rfl⟩
+/-
+**RingSubgroupsBasis.mem_addGroupFilterBasis** 是 Mathlib 中的一个定理，位于命名空间 `RingSubg
+roupsBasis`。
+形式化陈述：mem_addGroupFilterBasis (i) : (B i : Set A) in hB.toRingFilterBasis.toAddG
+roupFilterBasis
+参数：i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_addGroupFilterBasis (i) : (B i : Set A) in hB.toRingFilterBasis.toAddGroupFilterBasis :=
+theorem mem_addGroupFilterBasis (i) : (B i : Set A) ∈ hB.toRingFilterBasis.toAddGroupFilterBasis :=
   ⟨i, rfl⟩
 
 /-- The topology defined from a subgroups basis, admitting the given subgroups as a basis
 of neighborhoods of zero. -/
 @[instance_reducible]
-/--
-Definition of `topology` / `topology` 的定义
+/-
+**RingSubgroupsBasis.topology** 是 Mathlib 中的一个定义，位于命名空间 `RingSubgroupsBasis`。
+形式化陈述：topology : TopologicalSpace A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition topology
-  signature: : TopologicalSpace A
-  body: hB.toRingFilterBasis.toAddGroupFilterBasis.topology
-
-中文:
-定义 topology
-  签名: : 拓扑空间 A
-  定义体: hB.toRingFilterBasis.toAddGroupFilterBasis.topology
-
-Depends on / 依赖: hB.toRingFilterBasis.toAddGroupFilterBasis.topology, toAddGroupFilterBasis, toRingFilterBasis, topology
+--- 原说明 ---
+The topology defined from a subgroups basis, admitting the given subgroups as a 
+basis
+of neighborhoods of zero.
 -/
 def topology : TopologicalSpace A :=
   hB.toRingFilterBasis.toAddGroupFilterBasis.topology
-
-/--
-theorem `hasBasis_nhds_zero` / 定理 `hasBasis_nhds_zero`
-
-English:
-theorem hasBasis_nhds_zero
-  statement: HasBasis (@nhds A hB.topology 0) (fun _ => True) fun i => B i
-  proof: ⟨by
-    intro s
-    rw [hB.toRingFilterBasis.toAddGroupFilterBasis.nhds_zero_hasBasis.mem_iff]
-    constructor
-    · rintro ⟨-, ⟨i, rfl⟩, hi⟩
-      exact ⟨i, trivial, hi⟩
-    · rintro ⟨i, -, hi⟩
-      exact ⟨B i, ⟨i, rfl⟩, hi⟩⟩
-
-中文:
-定理 hasBasis_nhds_zero
-  结论: 有基 (@邻域滤子 A hB.topology 0) (fun _ => 真) fun i => B i
-  证明: ⟨by
-    intro s
-    rw [hB.toRingFilterBasis.toAddGroupFilterBasis.nhds_zero_hasBasis.mem_iff]
-    constructor
-    · rintro ⟨-, ⟨i, rfl⟩, hi⟩
-      exact ⟨i, trivial, hi⟩
-    · rintro ⟨i, -, hi⟩
-      exact ⟨B i, ⟨i, rfl⟩, hi⟩⟩
-
-Depends on / 依赖: hB.toRingFilterBasis.toAddGroupFilterBasis.nhds_zero_hasBasis.mem_iff, mem_iff, nhds_zero_hasBasis, toAddGroupFilterBasis, toRingFilterBasis
+/-
+**RingSubgroupsBasis.hasBasis_nhds_zero** 是 Mathlib 中的一个定理，位于命名空间 `RingSubgroups
+Basis`。
+形式化陈述：hasBasis_nhds_zero : HasBasis (@nhds A hB.topology 0) (fun _ => True) fun 
+i => B i
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.HasBasis.mem_iff`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter α} 
+{p : ι → Prop} {s : ι → Set α} {t : Set α},   l.HasBasis p s → (t ∈ l ↔ ∃ i, p i
+ ∧ s i ⊆ t)
+· 使用定理 `AddGroupFilterBasis.nhds_zero_hasBasis`：∀ {G : Type u} [inst : AddGroup 
+G] (B : AddGroupFilterBasis G), (nhds 0).HasBasis (fun V => V ∈ B) id
+· 使用定理 `trivial`：True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem hasBasis_nhds_zero : HasBasis (@nhds A hB.topology 0) (fun _ => True) fun i => B i :=
   ⟨by
@@ -380,64 +236,43 @@ theorem hasBasis_nhds_zero : HasBasis (@nhds A hB.topology 0) (fun _ => True) fu
       exact ⟨i, trivial, hi⟩
     · rintro ⟨i, -, hi⟩
       exact ⟨B i, ⟨i, rfl⟩, hi⟩⟩
-
-/--
-theorem `hasBasis_nhds` / 定理 `hasBasis_nhds`
-
-English:
-theorem hasBasis_nhds
-  given: (a : A)
-  proof: ⟨by
-    intro s
-    rw [(hB.toRingFilterBasis.toAddGroupFilterBasis.nhds_hasBasis a).mem_iff]
-    simp only [true_and]
-    constructor
-    · rintro ⟨-, ⟨i, rfl⟩, hi⟩
-      use i
-      suffices h : { b : A | b - a in B i } = (fun y => a + y) '' ↑(B i) by
-        rw [h]
-        assumption
-      simp only [image_add_left, neg_add_eq_sub]
-      ext b
-      simp
-    · rintro ⟨i, hi⟩
-      use B i
-      constructor
-      · use i
-      · rw [image_subset_iff]
-        rintro b b_in
-        apply hi
-        simpa using b_in⟩
-
-中文:
-定理 hasBasis_nhds
-  条件: (a : A)
-  证明: ⟨by
-    intro s
-    rw [(hB.toRingFilterBasis.toAddGroupFilterBasis.nhds_hasBasis a).mem_iff]
-    simp only [true_and]
-    constructor
-    · rintro ⟨-, ⟨i, rfl⟩, hi⟩
-      use i
-      suffices h : { b : A | b - a in B i } = (fun y => a + y) '' ↑(B i) by
-        rw [h]
-        assumption
-      simp only [image_add_left, neg_add_eq_sub]
-      ext b
-      simp
-    · rintro ⟨i, hi⟩
-      use B i
-      constructor
-      · use i
-      · rw [image_subset_iff]
-        rintro b b_in
-        apply hi
-        simpa using b_in⟩
-
-Depends on / 依赖: b_in, hB.toRingFilterBasis.toAddGroupFilterBasis.nhds_hasBasis, image_add_left, image_subset_iff, mem_iff, neg_add_eq_sub, nhds_hasBasis, toAddGroupFilterBasis, toRingFilterBasis, true_and
+/-
+**RingSubgroupsBasis.hasBasis_nhds** 是 Mathlib 中的一个定理，位于命名空间 `RingSubgroupsBasis
+`。
+形式化陈述：hasBasis_nhds (a : A) : HasBasis (@nhds A hB.topology a) (fun _ => True) f
+un i => { b | b - a in B i }
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.HasBasis.mem_iff`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter α} 
+{p : ι → Prop} {s : ι → Set α} {t : Set α},   l.HasBasis p s → (t ∈ l ↔ ∃ i, p i
+ ∧ s i ⊆ t)
+· 使用定理 `AddGroupFilterBasis.nhds_hasBasis`：∀ {G : Type u} [inst : AddGroup G] (B
+ : AddGroupFilterBasis G) (x₀ : G),   (nhds x₀).HasBasis (fun V => V ∈ B) fun V 
+=> (fun y => x₀ + y) ''…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.image_add_left`：∀ {α : Type u_2} [inst : AddGroup α] {t : Set α} {a 
+: α}, (fun x => a + x) '' t = (fun x => -a + x) ⁻¹' t
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `neg_add_eq_sub`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b :
+ α), -a + b = b - a
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_subset_iff`：image_subset_iff {s : Set α} {t : Set β} {f : α ->
+ β} : f '' s subseteq t ↔ s subseteq f ⁻¹' t
+· 使用定理 `add_sub_cancel_left`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G),
+ a + b - a = b
 -/
 theorem hasBasis_nhds (a : A) :
-    HasBasis (@nhds A hB.topology a) (fun _ => True) fun i => { b | b - a in B i } :=
+    HasBasis (@nhds A hB.topology a) (fun _ => True) fun i => { b | b - a ∈ B i } :=
   ⟨by
     intro s
     rw [(hB.toRingFilterBasis.toAddGroupFilterBasis.nhds_hasBasis a).mem_iff]
@@ -445,7 +280,7 @@ theorem hasBasis_nhds (a : A) :
     constructor
     · rintro ⟨-, ⟨i, rfl⟩, hi⟩
       use i
-      suffices h : { b : A | b - a in B i } = (fun y => a + y) '' ↑(B i) by
+      suffices h : { b : A | b - a ∈ B i } = (fun y => a + y) '' ↑(B i) by
         rw [h]
         assumption
       simp only [image_add_left, neg_add_eq_sub]
@@ -460,36 +295,20 @@ theorem hasBasis_nhds (a : A) :
         apply hi
         simpa using b_in⟩
 
-/--
-Definition of `openAddSubgroup` / `openAddSubgroup` 的定义
+/-- Given a subgroups basis, the basis elements as open additive subgroups in the associated
+topology. -/
+/-
+**RingSubgroupsBasis.openAddSubgroup** 是 Mathlib 中的一个定义，位于命名空间 `RingSubgroupsBas
+is`。
+形式化陈述：openAddSubgroup (i : ι) : @OpenAddSubgroup A _ hB.topology
+参数：i : ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition openAddSubgroup
-  signature: (i : ι)
-  body: let _ := hB.topology
-  { B i with
-    isOpen' := by
-      rw [isOpen_iff_mem_nhds]
-      intro a a_in
-      rw [(hB.hasBasis_nhds a).mem_iff]
-      use i, trivial
-      rintro b b_in
-      simpa using (B i).add_mem a_in b_in }
-
-中文:
-定义 openAddSubgroup
-  签名: (i : ι)
-  定义体: let _ := hB.topology
-  { B i with
-    isOpen' := by
-      rw [isOpen_iff_mem_nhds]
-      intro a a_in
-      rw [(hB.hasBasis_nhds a).mem_iff]
-      use i, trivial
-      rintro b b_in
-      simpa using (B i).add_mem a_in b_in }
-
-Depends on / 依赖: a_in, add_mem, b_in, hB.hasBasis_nhds, hB.topology, hasBasis_nhds, isOpen, isOpen_iff_mem_nhds, mem_iff, topology
+--- 原说明 ---
+Given a subgroups basis, the basis elements as open additive subgroups in the as
+sociated
+topology.
 -/
 def openAddSubgroup (i : ι) : @OpenAddSubgroup A _ hB.topology :=
   let _ := hB.topology
@@ -503,101 +322,88 @@ def openAddSubgroup (i : ι) : @OpenAddSubgroup A _ hB.topology :=
       simpa using (B i).add_mem a_in b_in }
 
 -- See note [non-Archimedean non-instances]
-/--
-theorem `nonarchimedean` / 定理 `nonarchimedean`
-
-English:
-theorem nonarchimedean
-  statement: @NonarchimedeanRing A _ hB.topology
-  proof: by
-  let := hB.topology
-  constructor
-  intro U hU
-  obtain ⟨i, -, hi : (B i : Set A) subseteq U⟩ := hB.hasBasis_nhds_zero.mem_iff.mp hU
-  exact ⟨hB.openAddSubgroup i, hi⟩
-
-中文:
-定理 nonarchimedean
-  结论: @Nonarchimedean环 A _ hB.topology
-  证明: by
-  let := hB.topology
-  constructor
-  intro U hU
-  obtain ⟨i, -, hi : (B i : Set A) subseteq U⟩ := hB.hasBasis_nhds_zero.mem_iff.mp hU
-  exact ⟨hB.openAddSubgroup i, hi⟩
-
-Depends on / 依赖: hB.hasBasis_nhds_zero.mem_iff.mp, hB.openAddSubgroup, hB.topology, hasBasis_nhds_zero, mem_iff, openAddSubgroup, subseteq, topology
+/-
+**RingSubgroupsBasis.nonarchimedean** 是 Mathlib 中的一个定理，位于命名空间 `RingSubgroupsBasi
+s`。
+形式化陈述：nonarchimedean : @NonarchimedeanRing A _ hB.topology
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingFilterBasis.isTopologicalRing`：∀ {R : Type u} [inst : Ring R] (B : R
+ingFilterBasis R), IsTopologicalRing R
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.HasBasis.mem_iff`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter α} 
+{p : ι → Prop} {s : ι → Set α} {t : Set α},   l.HasBasis p s → (t ∈ l ↔ ∃ i, p i
+ ∧ s i ⊆ t)
+· 使用定理 `RingSubgroupsBasis.hasBasis_nhds_zero`：hasBasis_nhds_zero : HasBasis (@n
+hds A hB.topology 0) (fun _ => True) fun i => B i
 -/
 theorem nonarchimedean : @NonarchimedeanRing A _ hB.topology := by
   let := hB.topology
   constructor
   intro U hU
-  obtain ⟨i, -, hi : (B i : Set A) subseteq U⟩ := hB.hasBasis_nhds_zero.mem_iff.mp hU
+  obtain ⟨i, -, hi : (B i : Set A) ⊆ U⟩ := hB.hasBasis_nhds_zero.mem_iff.mp hU
   exact ⟨hB.openAddSubgroup i, hi⟩
 
 end RingSubgroupsBasis
 
 variable {ι R A : Type*} [CommRing R] [CommRing A] [Algebra R A]
 
-/--
-Definition of `SubmodulesRingBasis` / `SubmodulesRingBasis` 的定义
+/-- A family of submodules in a commutative `R`-algebra `A` is a submodules basis if it satisfies
+some axioms ensuring there is a topology on `A` which is compatible with the ring structure and
+admits this family as a basis of neighborhoods of zero. -/
+/-
+**SubmodulesRingBasis** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{ι : Type u_1} →   {R : Type u_2} →     {A : Type u_3} → [inst : CommRing 
+R] → [inst_1 : CommRing A] → [inst_2 : Algebra R A] → (ι → Submodule R A) → Prop
+参数：ι → Submodule R A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure SubmodulesRingBasis
-  parameters: (B : ι -> Submodule R A)
-  axioms and operations (3):
-    - inter : forall i j, exists k, B k <= B i ⊓ B j
-    - leftMul : forall (a : A) (i), exists j, a • B j <= B i
-    - mul : forall i, exists j, (B j : Set A) * B j subseteq B i
-
-中文:
-结构 SubmodulesRingBasis
-  参数: (B : ι -> 子模 R A)
-  公理与运算 (3 个):
-    - inter : 对任意 i j, 存在 k, B k <= B i ⊓ B j
-    - leftMul : 对任意 (a : A) (i), 存在 j, a • B j <= B i
-    - mul : 对任意 i, 存在 j, (B j : 集合 A) * B j subseteq B i
+--- 原说明 ---
+A family of submodules in a commutative `R`-algebra `A` is a submodules basis if
+ it satisfies
+some axioms ensuring there is a topology on `A` which is compatible with the rin
+g structure and
+admits this family as a basis of neighborhoods of zero.
 -/
-structure SubmodulesRingBasis (B : ι -> Submodule R A) : Prop where
+structure SubmodulesRingBasis (B : ι → Submodule R A) : Prop where
   /-- Condition for `B` to be a filter basis on `A`. -/
-  inter : forall i j, exists k, B k <= B i ⊓ B j
+  inter : ∀ i j, ∃ k, B k ≤ B i ⊓ B j
   /-- For any element `a : A` and any set `B` in the submodule basis on `A`,
   there is another basis element `B'` such that `a • B'` is in `B`. -/
-  leftMul : forall (a : A) (i), exists j, a • B j <= B i
+  leftMul : ∀ (a : A) (i), ∃ j, a • B j ≤ B i
   /-- For each set `B` in the submodule basis on `A`, there is another basis element `B'` such
   that the set-theoretic product `B' * B'` is in `B`. -/
-  mul : forall i, exists j, (B j : Set A) * B j subseteq B i
+  mul : ∀ i, ∃ j, (B j : Set A) * B j ⊆ B i
 
 namespace SubmodulesRingBasis
 
-variable {B : ι -> Submodule R A} (hB : SubmodulesRingBasis B)
+variable {B : ι → Submodule R A} (hB : SubmodulesRingBasis B)
 
-/--
-theorem `toRing_subgroups_basis` / 定理 `toRing_subgroups_basis`
-
-English:
-theorem toRing_subgroups_basis
-  given: (hB : SubmodulesRingBasis B)
-  proof: by
-  apply RingSubgroupsBasis.of_comm (fun i => (B i).toAddSubgroup) hB.inter hB.mul
-  intro a i
-  rcases hB.leftMul a i with ⟨j, hj⟩
-  use j
-  rintro b (b_in : b in B j)
-  exact hj ⟨b, b_in, rfl⟩
-
-中文:
-定理 toRing_subgroups_basis
-  条件: (hB : SubmodulesRingBasis B)
-  证明: by
-  apply RingSubgroupsBasis.of_comm (fun i => (B i).toAddSubgroup) hB.inter hB.mul
-  intro a i
-  rcases hB.leftMul a i with ⟨j, hj⟩
-  use j
-  rintro b (b_in : b in B j)
-  exact hj ⟨b, b_in, rfl⟩
-
-Depends on / 依赖: RingSubgroupsBasis, RingSubgroupsBasis.of_comm, b_in, hB.inter, hB.leftMul, hB.mul, leftMul, of_comm, toAddSubgroup
+/-
+**SubmodulesRingBasis.toRing_subgroups_basis** 是 Mathlib 中的一个定理，位于命名空间 `Submodul
+esRingBasis`。
+形式化陈述：toRing_subgroups_basis (hB : SubmodulesRingBasis B) : RingSubgroupsBasis f
+un i => (B i).toAddSubgroup
+参数：hB : SubmodulesRingBasis B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingSubgroupsBasis.of_comm`：of_comm {A ι : Type*} [CommRing A] (B : ι ->
+ AddSubgroup A) (inter : forall i j, exists k, B k <= B i ⊓ B j) (mul : forall i
+, exists j, (B j…
+· 使用定理 `SubmodulesRingBasis.inter`：∀ {ι : Type u_1} {R : Type u_2} {A : Type u_3
+} [inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A]   {B : ι → Su
+bmodule R A}, S…
+· 使用定理 `SubmodulesRingBasis.mul`：∀ {ι : Type u_1} {R : Type u_2} {A : Type u_3} 
+[inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A]   {B : ι → Subm
+odule R A}, S…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `SubmodulesRingBasis.leftMul`：∀ {ι : Type u_1} {R : Type u_2} {A : Type u
+_3} [inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A]   {B : ι → 
+Submodule R A}, S…
 -/
 theorem toRing_subgroups_basis (hB : SubmodulesRingBasis B) :
     RingSubgroupsBasis fun i => (B i).toAddSubgroup := by
@@ -605,25 +411,22 @@ theorem toRing_subgroups_basis (hB : SubmodulesRingBasis B) :
   intro a i
   rcases hB.leftMul a i with ⟨j, hj⟩
   use j
-  rintro b (b_in : b in B j)
+  rintro b (b_in : b ∈ B j)
   exact hj ⟨b, b_in, rfl⟩
 
 /-- The topology associated to a basis of submodules in an algebra. -/
 @[instance_reducible]
-/--
-Definition of `topology` / `topology` 的定义
+/-
+**SubmodulesRingBasis.topology** 是 Mathlib 中的一个定义，位于命名空间 `SubmodulesRingBasis`。
+形式化陈述：topology [Nonempty ι] (hB : SubmodulesRingBasis B) : TopologicalSpace A
+参数：hB : SubmodulesRingBasis B。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SubmodulesRingBasis.toRing_subgroups_basis`：toRing_subgroups_basis (hB :
+ SubmodulesRingBasis B) : RingSubgroupsBasis fun i => (B i).toAddSubgroup
 
-English:
-definition topology
-  signature: [Nonempty ι] (hB : SubmodulesRingBasis B)
-  body: hB.toRing_subgroups_basis.topology
-
-中文:
-定义 topology
-  签名: [非空 ι] (hB : SubmodulesRingBasis B)
-  定义体: hB.toRing_subgroups_basis.topology
-
-Depends on / 依赖: hB.toRing_subgroups_basis.topology, toRing_subgroups_basis, topology
+--- 原说明 ---
+The topology associated to a basis of submodules in an algebra.
 -/
 def topology [Nonempty ι] (hB : SubmodulesRingBasis B) : TopologicalSpace A :=
   hB.toRing_subgroups_basis.topology
@@ -632,155 +435,48 @@ end SubmodulesRingBasis
 
 variable {M : Type*} [AddCommGroup M] [Module R M]
 
-/--
-Definition of `SubmodulesBasis` / `SubmodulesBasis` 的定义
+/-- A family of submodules in an `R`-module `M` is a submodules basis if it satisfies
+some axioms ensuring there is a topology on `M` which is compatible with the module structure and
+admits this family as a basis of neighborhoods of zero. -/
+/-
+**SubmodulesBasis** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{ι : Type u_1} →   {R : Type u_2} →     [inst : CommRing R] →       {M : T
+ype u_4} →         [inst_1 : AddCommGroup M] → [inst_2 : _root_.Module R M] → [T
+opologicalSpace R] → (ι → Submodule R M) → Prop
+参数：ι → Submodule R M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure SubmodulesBasis
-  parameters: [TopologicalSpace R] (B : ι -> Submodule R M)
-  axioms and operations (2):
-    - inter : forall i j, exists k, B k <= B i ⊓ B j
-    - smul : forall (m : M) (i : ι), forallᶠ a in 𝓝 (0 : R), a • m in B i
-
-中文:
-结构 SubmodulesBasis
-  参数: [拓扑空间 R] (B : ι -> 子模 R M)
-  公理与运算 (2 个):
-    - inter : 对任意 i j, 存在 k, B k <= B i ⊓ B j
-    - smul : 对任意 (m : M) (i : ι), 对任意ᶠ a in 𝓝 (0 : R), a • m in B i
+--- 原说明 ---
+A family of submodules in an `R`-module `M` is a submodules basis if it satisfie
+s
+some axioms ensuring there is a topology on `M` which is compatible with the mod
+ule structure and
+admits this family as a basis of neighborhoods of zero.
 -/
-structure SubmodulesBasis [TopologicalSpace R] (B : ι -> Submodule R M) : Prop where
+structure SubmodulesBasis [TopologicalSpace R] (B : ι → Submodule R M) : Prop where
   /-- Condition for `B` to be a filter basis on `M`. -/
-  inter : forall i j, exists k, B k <= B i ⊓ B j
+  inter : ∀ i j, ∃ k, B k ≤ B i ⊓ B j
   /-- For any element `m : M` and any set `B` in the basis, `a • m` lies in `B` for all
   `a` sufficiently close to `0`. -/
-  smul : forall (m : M) (i : ι), forallᶠ a in 𝓝 (0 : R), a • m in B i
+  smul : ∀ (m : M) (i : ι), ∀ᶠ a in 𝓝 (0 : R), a • m ∈ B i
 
 namespace SubmodulesBasis
 
-variable [TopologicalSpace R] [Nonempty ι] {B : ι -> Submodule R M} (hB : SubmodulesBasis B)
+variable [TopologicalSpace R] [Nonempty ι] {B : ι → Submodule R M} (hB : SubmodulesBasis B)
 
-/--
-Definition of `toModuleFilterBasis` / `toModuleFilterBasis` 的定义
+/-- The image of a submodules basis is a module filter basis. -/
+/-
+**SubmodulesBasis.toModuleFilterBasis** 是 Mathlib 中的一个定义，位于命名空间 `SubmodulesBasis
+`。
+形式化陈述：toModuleFilterBasis : ModuleFilterBasis R M where sets
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toModuleFilterBasis
-  signature: : ModuleFilterBasis R M where
-  body: { U | exists i, U = B i }
-  nonempty := by
-    inhabit ι
-    exact ⟨B default, default, rfl⟩
-  inter_sets := by
-    rintro _ _ ⟨i, rfl⟩ ⟨j, rfl⟩
-    obtain ⟨k, hk⟩ := hB.inter i j
-    use B k
-    constructor
-    · use k
-    · exact hk
-  zero' := by
-    rintro _ ⟨i, rfl⟩
-    exact (B i).zero_mem
-  add' := by
-    rintro _ ⟨i, rfl⟩
-    use B i
-    constructor
-    · use i
-    · rintro x ⟨y, y_in, z, z_in, rfl⟩
-      exact (B i).add_mem y_in z_in
-  neg' := by
-    rintro _ ⟨i, rfl⟩
-    use B i
-    constructor
-    · use i
-    · intro x x_in
-      exact (B i).neg_mem x_in
-  conj' := by
-    rintro x₀ _ ⟨i, rfl⟩
-    use B i
-    constructor
-    · use i
-    · simp
-  smul' := by
-    rintro _ ⟨i, rfl⟩
-    use univ
-    constructor
-    · exact univ_mem
-    · use B i
-      constructor
-      · use i
-      · rintro _ ⟨a, -, m, hm, rfl⟩
-        exact (B i).smul_mem _ hm
-  smul_left' := by
-    rintro x₀ _ ⟨i, rfl⟩
-    use B i
-    constructor
-    · use i
-    · intro m
-      exact (B i).smul_mem _
-  smul_right' := by
-    rintro m₀ _ ⟨i, rfl⟩
-    exact hB.smul m₀ i
-
-中文:
-定义 toModuleFilterBasis
-  签名: : ModuleFilterBasis R M where
-  定义体: { U | exists i, U = B i }
-  nonempty := by
-    inhabit ι
-    exact ⟨B default, default, rfl⟩
-  inter_sets := by
-    rintro _ _ ⟨i, rfl⟩ ⟨j, rfl⟩
-    obtain ⟨k, hk⟩ := hB.inter i j
-    use B k
-    constructor
-    · use k
-    · exact hk
-  zero' := by
-    rintro _ ⟨i, rfl⟩
-    exact (B i).zero_mem
-  add' := by
-    rintro _ ⟨i, rfl⟩
-    use B i
-    constructor
-    · use i
-    · rintro x ⟨y, y_in, z, z_in, rfl⟩
-      exact (B i).add_mem y_in z_in
-  neg' := by
-    rintro _ ⟨i, rfl⟩
-    use B i
-    constructor
-    · use i
-    · intro x x_in
-      exact (B i).neg_mem x_in
-  conj' := by
-    rintro x₀ _ ⟨i, rfl⟩
-    use B i
-    constructor
-    · use i
-    · simp
-  smul' := by
-    rintro _ ⟨i, rfl⟩
-    use univ
-    constructor
-    · exact univ_mem
-    · use B i
-      constructor
-      · use i
-      · rintro _ ⟨a, -, m, hm, rfl⟩
-        exact (B i).smul_mem _ hm
-  smul_left' := by
-    rintro x₀ _ ⟨i, rfl⟩
-    use B i
-    constructor
-    · use i
-    · intro m
-      exact (B i).smul_mem _
-  smul_right' := by
-    rintro m₀ _ ⟨i, rfl⟩
-    exact hB.smul m₀ i
+--- 原说明 ---
+The image of a submodules basis is a module filter basis.
 -/
 def toModuleFilterBasis : ModuleFilterBasis R M where
-  sets := { U | exists i, U = B i }
+  sets := { U | ∃ i, U = B i }
   nonempty := by
     inhabit ι
     exact ⟨B default, default, rfl⟩
@@ -837,60 +533,31 @@ def toModuleFilterBasis : ModuleFilterBasis R M where
 
 /-- The topology associated to a basis of submodules in a module. -/
 @[instance_reducible]
-/--
-Definition of `topology` / `topology` 的定义
+/-
+**SubmodulesBasis.topology** 是 Mathlib 中的一个定义，位于命名空间 `SubmodulesBasis`。
+形式化陈述：topology : TopologicalSpace M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition topology
-  signature: : TopologicalSpace M
-  body: hB.toModuleFilterBasis.toAddGroupFilterBasis.topology
-
-中文:
-定义 topology
-  签名: : 拓扑空间 M
-  定义体: hB.toModuleFilterBasis.toAddGroupFilterBasis.topology
-
-Depends on / 依赖: hB.toModuleFilterBasis.toAddGroupFilterBasis.topology, toAddGroupFilterBasis, toModuleFilterBasis, topology
+--- 原说明 ---
+The topology associated to a basis of submodules in a module.
 -/
 def topology : TopologicalSpace M :=
   hB.toModuleFilterBasis.toAddGroupFilterBasis.topology
 
-/--
-Definition of `openAddSubgroup` / `openAddSubgroup` 的定义
+/-- Given a submodules basis, the basis elements as open additive subgroups in the associated
+topology. -/
+/-
+**SubmodulesBasis.openAddSubgroup** 是 Mathlib 中的一个定义，位于命名空间 `SubmodulesBasis`。
+形式化陈述：openAddSubgroup (i : ι) : @OpenAddSubgroup M _ hB.topology
+参数：i : ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition openAddSubgroup
-  signature: (i : ι)
-  body: let _ := hB.topology
-  { (B i).toAddSubgroup with
-    isOpen' := by
-      let := hB.topology
-      rw [isOpen_iff_mem_nhds]
-      intro a a_in
-      rw [(hB.toModuleFilterBasis.toAddGroupFilterBasis.nhds_hasBasis a).mem_iff]
-      use B i
-      constructor
-      · use i
-      · rintro - ⟨b, b_in, rfl⟩
-        exact (B i).add_mem a_in b_in }
-
-中文:
-定义 openAddSubgroup
-  签名: (i : ι)
-  定义体: let _ := hB.topology
-  { (B i).toAddSubgroup with
-    isOpen' := by
-      let := hB.topology
-      rw [isOpen_iff_mem_nhds]
-      intro a a_in
-      rw [(hB.toModuleFilterBasis.toAddGroupFilterBasis.nhds_hasBasis a).mem_iff]
-      use B i
-      constructor
-      · use i
-      · rintro - ⟨b, b_in, rfl⟩
-        exact (B i).add_mem a_in b_in }
-
-Depends on / 依赖: a_in, add_mem, b_in, hB.toModuleFilterBasis.toAddGroupFilterBasis.nhds_hasBasis, hB.topology, isOpen, isOpen_iff_mem_nhds, mem_iff, nhds_hasBasis, toAddGroupFilterBasis, toAddSubgroup, toModuleFilterBasis, topology
+--- 原说明 ---
+Given a submodules basis, the basis elements as open additive subgroups in the a
+ssociated
+topology.
 -/
 def openAddSubgroup (i : ι) : @OpenAddSubgroup M _ hB.topology :=
   let _ := hB.topology
@@ -907,52 +574,28 @@ def openAddSubgroup (i : ι) : @OpenAddSubgroup M _ hB.topology :=
         exact (B i).add_mem a_in b_in }
 
 -- See note [non-Archimedean non-instances]
-/--
-theorem `nonarchimedean` / 定理 `nonarchimedean`
-
-English:
-theorem nonarchimedean
-  given: (hB : SubmodulesBasis B)
-  statement: @NonarchimedeanAddGroup M _ hB.topology
-  proof: by
-  let := hB.topology
-  constructor
-  intro U hU
-  obtain ⟨-, ⟨i, rfl⟩, hi : (B i : Set M) subseteq U⟩ :=
-    hB.toModuleFilterBasis.toAddGroupFilterBasis.nhds_zero_hasBasis.mem_iff.mp hU
-  exact ⟨hB.openAddSubgroup i, hi⟩
-
-library_note «non-Archimedean non-instances» /--
-The non-Archimedean subgroup basis lemmas cannot be instances because some instances
-(such as `MeasureTheory.AEEqFun.instAddMonoid` or `IsTopologicalAddGroup.toContinuousAdd`)
-cause the search for `@IsTopologicalAddGroup β ?m1 ?m2`, i.e. a search for a topological group where
-the topology/group structure are unknown. -/
-
-中文:
-定理 nonarchimedean
-  条件: (hB : SubmodulesBasis B)
-  结论: @NonarchimedeanAdd群 M _ hB.topology
-  证明: by
-  let := hB.topology
-  constructor
-  intro U hU
-  obtain ⟨-, ⟨i, rfl⟩, hi : (B i : Set M) subseteq U⟩ :=
-    hB.toModuleFilterBasis.toAddGroupFilterBasis.nhds_zero_hasBasis.mem_iff.mp hU
-  exact ⟨hB.openAddSubgroup i, hi⟩
-
-library_note «non-Archimedean non-instances» /--
-The non-Archimedean subgroup basis lemmas cannot be instances because some instances
-(such as `MeasureTheory.AEEqFun.instAddMonoid` or `IsTopologicalAddGroup.toContinuousAdd`)
-cause the search for `@IsTopologicalAddGroup β ?m1 ?m2`, i.e. a search for a topological group where
-the topology/group structure are unknown. -/
-
-Depends on / 依赖: hB.openAddSubgroup, hB.toModuleFilterBasis.toAddGroupFilterBasis.nhds_zero_hasBasis.mem_iff.mp, hB.topology, mem_iff, nhds_zero_hasBasis, openAddSubgroup, subseteq, toAddGroupFilterBasis, toModuleFilterBasis, topology
+/-
+**SubmodulesBasis.nonarchimedean** 是 Mathlib 中的一个定理，位于命名空间 `SubmodulesBasis`。
+形式化陈述：nonarchimedean (hB : SubmodulesBasis B) : @NonarchimedeanAddGroup M _ hB.t
+opology
+参数：hB : SubmodulesBasis B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddGroupFilterBasis.isTopologicalAddGroup`：∀ {G : Type u} [inst : AddGro
+up G] (B : AddGroupFilterBasis G), IsTopologicalAddGroup G
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.HasBasis.mem_iff`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter α} 
+{p : ι → Prop} {s : ι → Set α} {t : Set α},   l.HasBasis p s → (t ∈ l ↔ ∃ i, p i
+ ∧ s i ⊆ t)
+· 使用定理 `AddGroupFilterBasis.nhds_zero_hasBasis`：∀ {G : Type u} [inst : AddGroup 
+G] (B : AddGroupFilterBasis G), (nhds 0).HasBasis (fun V => V ∈ B) id
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem nonarchimedean (hB : SubmodulesBasis B) : @NonarchimedeanAddGroup M _ hB.topology := by
   let := hB.topology
   constructor
   intro U hU
-  obtain ⟨-, ⟨i, rfl⟩, hi : (B i : Set M) subseteq U⟩ :=
+  obtain ⟨-, ⟨i, rfl⟩, hi : (B i : Set M) ⊆ U⟩ :=
     hB.toModuleFilterBasis.toAddGroupFilterBasis.nhds_zero_hasBasis.mem_iff.mp hU
   exact ⟨hB.openAddSubgroup i, hi⟩
 
@@ -973,95 +616,76 @@ a basis of `R`-submodules which is compatible with the topology on `R` is also a
 in the sense of `R`-modules (forgetting about the ring structure on `A`) and those two points of
 view definitionaly gives the same topology on `A`.
 -/
-variable [TopologicalSpace R] {B : ι -> Submodule R A} (hB : SubmodulesRingBasis B)
-  (hsmul : forall (m : A) (i : ι), forallᶠ a : R in 𝓝 0, a • m in B i)
+variable [TopologicalSpace R] {B : ι → Submodule R A} (hB : SubmodulesRingBasis B)
+  (hsmul : ∀ (m : A) (i : ι), ∀ᶠ a : R in 𝓝 0, a • m ∈ B i)
 include hB hsmul
 
-/--
-theorem `SubmodulesRingBasis.toSubmodulesBasis` / 定理 `SubmodulesRingBasis.toSubmodulesBasis`
-
-English:
-theorem SubmodulesRingBasis.toSubmodulesBasis
-  statement: SubmodulesBasis B
-  proof: { inter := hB.inter
-    smul := hsmul }
-
-example [Nonempty ι] : hB.topology = (hB.toSubmodulesBasis hsmul).topology :=
-  rfl
-
-中文:
-定理 SubmodulesRingBasis.toSubmodulesBasis
-  结论: SubmodulesBasis B
-  证明: { inter := hB.inter
-    smul := hsmul }
-
-example [Nonempty ι] : hB.topology = (hB.toSubmodulesBasis hsmul).topology :=
-  rfl
-
-Depends on / 依赖: hB.inter
+/-
+**SubmodulesRingBasis.toSubmodulesBasis** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：SubmodulesRingBasis.toSubmodulesBasis : SubmodulesBasis B
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SubmodulesRingBasis.inter`：∀ {ι : Type u_1} {R : Type u_2} {A : Type u_3
+} [inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A]   {B : ι → Su
+bmodule R A}, S…
 -/
 theorem SubmodulesRingBasis.toSubmodulesBasis : SubmodulesBasis B :=
   { inter := hB.inter
     smul := hsmul }
-
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example [Nonempty ι] : hB.topology = (hB.toSubmodulesBasis hsmul).topology :=
   rfl
 
 end
 
-/--
-Definition of `RingFilterBasis.SubmodulesBasis` / `RingFilterBasis.SubmodulesBasis` 的定义
+/-- Given a ring filter basis on a commutative ring `R`, define a compatibility condition
+on a family of submodules of an `R`-module `M`. This compatibility condition allows to get
+a topological module structure. -/
+/-
+**RingFilterBasis.SubmodulesBasis** 是 Mathlib 中的一个归纳类型，位于命名空间 `RingFilterBasis`。
+形式化陈述：{ι : Type u_1} →   {R : Type u_2} →     [inst : CommRing R] →       {M : T
+ype u_4} →         [inst_1 : AddCommGroup M] → [inst_2 : _root_.Module R M] → Ri
+ngFilterBasis R → (ι → Submodule R M) → Prop
+参数：ι → Submodule R M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure RingFilterBasis.SubmodulesBasis
-  parameters: (BR : RingFilterBasis R) (B : ι -> Submodule R M)
-  axioms and operations (2):
-    - inter : forall i j, exists k, B k <= B i ⊓ B j
-    - smul : forall (m : M) (i : ι), exists U in BR, U subseteq (· • m) ⁻¹' B i
-
-中文:
-结构 RingFilterBasis.SubmodulesBasis
-  参数: (BR : RingFilterBasis R) (B : ι -> 子模 R M)
-  公理与运算 (2 个):
-    - inter : 对任意 i j, 存在 k, B k <= B i ⊓ B j
-    - smul : 对任意 (m : M) (i : ι), 存在 U in BR, U subseteq (· • m) ⁻¹' B i
+--- 原说明 ---
+Given a ring filter basis on a commutative ring `R`, define a compatibility cond
+ition
+on a family of submodules of an `R`-module `M`. This compatibility condition all
+ows to get
+a topological module structure.
 -/
-structure RingFilterBasis.SubmodulesBasis (BR : RingFilterBasis R) (B : ι -> Submodule R M) :
+structure RingFilterBasis.SubmodulesBasis (BR : RingFilterBasis R) (B : ι → Submodule R M) :
     Prop where
   /-- Condition for `B` to be a filter basis on `M`. -/
-  inter : forall i j, exists k, B k <= B i ⊓ B j
+  inter : ∀ i j, ∃ k, B k ≤ B i ⊓ B j
   /-- For any element `m : M` and any set `B i` in the submodule basis on `M`,
   there is a `U` in the ring filter basis on `R` such that `U * m` is in `B i`. -/
-  smul : forall (m : M) (i : ι), exists U in BR, U subseteq (· • m) ⁻¹' B i
-
-/--
-theorem `RingFilterBasis.submodulesBasisIsBasis` / 定理 `RingFilterBasis.submodulesBasisIsBasis`
-
-English:
-theorem RingFilterBasis.submodulesBasisIsBasis
-  statement: (BR : RingFilterBasis R) {B : ι -> Submodule R M}
-  proof: let _ := BR.topology
-  { inter := hB.inter
-    smul := by
-      let := BR.topology
-      intro m i
-      rcases hB.smul m i with ⟨V, V_in, hV⟩
-      exact mem_of_superset (BR.toAddGroupFilterBasis.mem_nhds_zero V_in) hV }
-
-中文:
-定理 RingFilterBasis.submodulesBasisIsBasis
-  结论: (BR : RingFilterBasis R) {B : ι -> 子模 R M}
-  证明: let _ := BR.topology
-  { inter := hB.inter
-    smul := by
-      let := BR.topology
-      intro m i
-      rcases hB.smul m i with ⟨V, V_in, hV⟩
-      exact mem_of_superset (BR.toAddGroupFilterBasis.mem_nhds_zero V_in) hV }
-
-Depends on / 依赖: BR.toAddGroupFilterBasis.mem_nhds_zero, BR.topology, V_in, hB.inter, hB.smul, mem_nhds_zero, mem_of_superset, toAddGroupFilterBasis, topology
+  smul : ∀ (m : M) (i : ι), ∃ U ∈ BR, U ⊆ (· • m) ⁻¹' B i
+/-
+**RingFilterBasis.submodulesBasisIsBasis** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：RingFilterBasis.submodulesBasisIsBasis (BR : RingFilterBasis R) {B : ι -> 
+Submodule R M} (hB : BR.SubmodulesBasis B) : @_root_.SubmodulesBasis ι R _ M _ _
+ BR.topology B
+参数：BR : RingFilterBasis R；hB : BR.SubmodulesBasis B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingFilterBasis.SubmodulesBasis.inter`：∀ {ι : Type u_1} {R : Type u_2} [
+inst : CommRing R] {M : Type u_4} [inst_1 : AddCommGroup M]   [inst_2 : _root_.M
+odule R M] {BR : RingFilter…
+· 使用定理 `RingFilterBasis.SubmodulesBasis.smul`：∀ {ι : Type u_1} {R : Type u_2} [i
+nst : CommRing R] {M : Type u_4} [inst_1 : AddCommGroup M]   [inst_2 : _root_.Mo
+dule R M] {BR : RingFilter…
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
+· 使用定理 `AddGroupFilterBasis.mem_nhds_zero`：∀ {G : Type u} [inst : AddGroup G] (B
+ : AddGroupFilterBasis G) {U : Set G}, U ∈ B → U ∈ nhds 0
 -/
-theorem RingFilterBasis.submodulesBasisIsBasis (BR : RingFilterBasis R) {B : ι -> Submodule R M}
+theorem RingFilterBasis.submodulesBasisIsBasis (BR : RingFilterBasis R) {B : ι → Submodule R M}
     (hB : BR.SubmodulesBasis B) : @_root_.SubmodulesBasis ι R _ M _ _ BR.topology B :=
   let _ := BR.topology
   { inter := hB.inter
@@ -1071,21 +695,28 @@ theorem RingFilterBasis.submodulesBasisIsBasis (BR : RingFilterBasis R) {B : ι 
       rcases hB.smul m i with ⟨V, V_in, hV⟩
       exact mem_of_superset (BR.toAddGroupFilterBasis.mem_nhds_zero V_in) hV }
 
-/--
-Definition of `RingFilterBasis.moduleFilterBasis` / `RingFilterBasis.moduleFilterBasis` 的定义
+/-- The module filter basis associated to a ring filter basis and a compatible submodule basis.
+This allows to build a topological module structure compatible with the given module structure
+and the topology associated to the given ring filter basis. -/
+/-
+**RingFilterBasis.moduleFilterBasis** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：RingFilterBasis.moduleFilterBasis [Nonempty ι] (BR : RingFilterBasis R) {B
+ : ι -> Submodule R M} (hB : BR.SubmodulesBasis B) : @ModuleFilterBasis R M _ BR
+.topology _ _
+参数：BR : RingFilterBasis R；hB : BR.SubmodulesBasis B。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `RingFilterBasis.submodulesBasisIsBasis`：RingFilterBasis.submodulesBasisI
+sBasis (BR : RingFilterBasis R) {B : ι -> Submodule R M} (hB : BR.SubmodulesBasi
+s B) : @_root_.SubmodulesBas…
 
-English:
-definition RingFilterBasis.moduleFilterBasis
-  signature: [Nonempty ι] (BR : RingFilterBasis R) {B : ι -> Submodule R M}
-  body: @SubmodulesBasis.toModuleFilterBasis ι R _ M _ _ BR.topology _ _ (BR.submodulesBasisIsBasis hB)
-
-中文:
-定义 RingFilterBasis.moduleFilterBasis
-  签名: [非空 ι] (BR : RingFilterBasis R) {B : ι -> 子模 R M}
-  定义体: @SubmodulesBasis.toModuleFilterBasis ι R _ M _ _ BR.topology _ _ (BR.submodulesBasisIsBasis hB)
-
-Depends on / 依赖: BR.submodulesBasisIsBasis, BR.topology, SubmodulesBasis, SubmodulesBasis.toModuleFilterBasis, submodulesBasisIsBasis, toModuleFilterBasis, topology
+--- 原说明 ---
+The module filter basis associated to a ring filter basis and a compatible submo
+dule basis.
+This allows to build a topological module structure compatible with the given mo
+dule structure
+and the topology associated to the given ring filter basis.
 -/
-def RingFilterBasis.moduleFilterBasis [Nonempty ι] (BR : RingFilterBasis R) {B : ι -> Submodule R M}
+def RingFilterBasis.moduleFilterBasis [Nonempty ι] (BR : RingFilterBasis R) {B : ι → Submodule R M}
     (hB : BR.SubmodulesBasis B) : @ModuleFilterBasis R M _ BR.topology _ _ :=
   @SubmodulesBasis.toModuleFilterBasis ι R _ M _ _ BR.topology _ _ (BR.submodulesBasisIsBasis hB)

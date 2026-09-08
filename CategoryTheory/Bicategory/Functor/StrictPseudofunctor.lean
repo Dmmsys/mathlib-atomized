@@ -40,109 +40,94 @@ variable (B C)
 /-- A strict pseudofunctor `F` between bicategories `B` and `C` is a
 pseudofunctor `F` from `B` to `C` such that `mapId` and `mapComp` are given by `eqToIso _`. -/
 @[kerodon 008H]
-/--
-Definition of `StrictPseudofunctor` / `StrictPseudofunctor` 的定义
+/-
+**CategoryTheory.StrictPseudofunctor** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory`。
+形式化陈述：StrictPseudofunctor extends StrictlyUnitaryPseudofunctor B C where map_com
+p : forall {a b c : B} (f : a ⟶ b) (g : b ⟶ c), map (f ≫ g) = map f ≫ map g
+继承自：StrictlyUnitaryPseudofunctor B C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure StrictPseudofunctor
-  parameters: extends StrictlyUnitaryPseudofunctor B C
-  extends: StrictlyUnitaryPseudofunctor B C
-  axioms and operations (2):
-    - map_comp : forall {a b c : B} (f : a ⟶ b) (g : b ⟶ c), map (f ≫ g) = map f ≫ map g  [default: by rfl_cat]
-    - mapComp_eq_eqToIso : forall {a b c : B} (f : a ⟶ b) (g : b ⟶ c), mapComp f g = eqToIso (map_comp f g)  [default: by cat_disch]
-
-中文:
-结构 StrictPseudofunctor
-  参数: extends StrictlyUnitaryPseudofunctor B C
-  继承: StrictlyUnitaryPseudofunctor B C
-  公理与运算 (2 个):
-    - map_comp : 对任意 {a b c : B} (f : a ⟶ b) (g : b ⟶ c), map (f ≫ g) = map f ≫ map g  [默认: by rfl_cat]
-    - mapComp_eq_eqToIso : 对任意 {a b c : B} (f : a ⟶ b) (g : b ⟶ c), mapComp f g = eqToIso (map_comp f g)  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch, eqToIso, mapComp, mapComp_eq_eqToIso, map_comp, rfl_cat
+--- 原说明 ---
+A strict pseudofunctor `F` between bicategories `B` and `C` is a
+pseudofunctor `F` from `B` to `C` such that `mapId` and `mapComp` are given by `
+eqToIso _`.
 -/
 structure StrictPseudofunctor extends StrictlyUnitaryPseudofunctor B C where
-  map_comp : forall {a b c : B} (f : a ⟶ b) (g : b ⟶ c), map (f ≫ g) = map f ≫ map g := by
+  map_comp : ∀ {a b c : B} (f : a ⟶ b) (g : b ⟶ c), map (f ≫ g) = map f ≫ map g := by
     rfl_cat
-  mapComp_eq_eqToIso : forall {a b c : B} (f : a ⟶ b) (g : b ⟶ c),
+  mapComp_eq_eqToIso : ∀ {a b c : B} (f : a ⟶ b) (g : b ⟶ c),
     mapComp f g = eqToIso (map_comp f g) := by cat_disch
 
-/--
-Definition of `StrictPseudofunctorPreCore` / `StrictPseudofunctorPreCore` 的定义
+/-- A helper structure that bundles the necessary data to
+construct a `StrictPseudofunctor`.
 
-English:
-structure StrictPseudofunctorPreCore
-  parameters: extends PrelaxFunctor B C
-  extends: PrelaxFunctor B C
-  axioms and operations (4):
-    - map_id((X : B)) : map (𝟙 X) = 𝟙 (obj X)  [default: by rfl_cat]
-    - map_comp : forall {a b c : B} (f : a ⟶ b) (g : b ⟶ c), map (f ≫ g) = map f ≫ map g  [default: by rfl_cat]
-    - map₂_whisker_left : forall {a b c : B} (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g'), map₂ (f ◁ η) = eqToHom (map_comp f g) ≫ map f ◁ map₂ η ≫ eqToHom (map_comp f g').symm  [default: by cat_disch]
-    - map₂_whisker_right : forall {a b c : B} {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c), map₂ (η ▷ g) = eqToHom (map_comp f g) ≫ map₂ η ▷ map g ≫ eqToHom (map_comp f' g).symm  [default: by cat_disch]
+`StrictPseudofunctorPreCore` does not construct a Pseudofunctor in general,
+since it does not include the compatibility conditions on the associator
+and unitors. However, when the underlying bicategories are strict, a
+`StrictPseudofunctorPreCore` does induce a `StrictPseudofunctor`. -/
+/-
+**CategoryTheory.StrictPseudofunctorPreCore** 是 Mathlib 中的一个结构，位于命名空间 `CategoryT
+heory`。
+形式化陈述：StrictPseudofunctorPreCore extends PrelaxFunctor B C where map_id (X : B) 
+: map (𝟙 X) = 𝟙 (obj X)
+参数：X : B。
+继承自：PrelaxFunctor B C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 StrictPseudofunctorPreCore
-  参数: extends 预松弛函子 B C
-  继承: 预松弛函子 B C
-  公理与运算 (4 个):
-    - map_id((X : B)) : map (𝟙 X) = 𝟙 (obj X)  [默认: by rfl_cat]
-    - map_comp : 对任意 {a b c : B} (f : a ⟶ b) (g : b ⟶ c), map (f ≫ g) = map f ≫ map g  [默认: by rfl_cat]
-    - map₂_whisker_left : 对任意 {a b c : B} (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g'), map₂ (f ◁ η) = eqToHom (map_comp f g) ≫ map f ◁ map₂ η ≫ eqToHom (map_comp f g').symm  [默认: by cat_disch]
-    - map₂_whisker_right : 对任意 {a b c : B} {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c), map₂ (η ▷ g) = eqToHom (map_comp f g) ≫ map₂ η ▷ map g ≫ eqToHom (map_comp f' g).symm  [默认: by cat_disch]
+--- 原说明 ---
+A helper structure that bundles the necessary data to
+construct a `StrictPseudofunctor`.
 
-Depends on / 依赖: cat_disch, eqToHom, map_comp, rfl_cat
+`StrictPseudofunctorPreCore` does not construct a Pseudofunctor in general,
+since it does not include the compatibility conditions on the associator
+and unitors. However, when the underlying bicategories are strict, a
+`StrictPseudofunctorPreCore` does induce a `StrictPseudofunctor`.
 -/
 structure StrictPseudofunctorPreCore extends PrelaxFunctor B C where
   map_id (X : B) : map (𝟙 X) = 𝟙 (obj X) := by rfl_cat
-  map_comp : forall {a b c : B} (f : a ⟶ b) (g : b ⟶ c), map (f ≫ g) = map f ≫ map g := by
+  map_comp : ∀ {a b c : B} (f : a ⟶ b) (g : b ⟶ c), map (f ≫ g) = map f ≫ map g := by
     rfl_cat
   map₂_whisker_left :
-    forall {a b c : B} (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g'),
+    ∀ {a b c : B} (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g'),
       map₂ (f ◁ η) = eqToHom (map_comp f g) ≫
         map f ◁ map₂ η ≫ eqToHom (map_comp f g').symm := by cat_disch
   map₂_whisker_right :
-      forall {a b c : B} {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c),
+      ∀ {a b c : B} {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c),
         map₂ (η ▷ g) = eqToHom (map_comp f g) ≫
           map₂ η ▷ map g ≫ eqToHom (map_comp f' g).symm := by cat_disch
 
-/--
-Definition of `StrictPseudofunctorCore` / `StrictPseudofunctorCore` 的定义
+/-- A helper structure that bundles the necessary data to
+construct a `StrictPseudofunctor` without specifying the redundant
+fields `mapId` and `mapComp`. -/
+/-
+**CategoryTheory.StrictPseudofunctorCore** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheo
+ry`。
+形式化陈述：StrictPseudofunctorCore extends StrictPseudofunctorPreCore B C where map₂_
+left_unitor : forall {a b : B} (f : a ⟶ b), map₂ (fun_ f).hom = eqToHom (by rw [
+map_comp (𝟙 a) f, map_id a]) ≫ (fun_ (map f)).hom
+继承自：StrictPseudofunctorPreCore B C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure StrictPseudofunctorCore
-  parameters: extends StrictPseudofunctorPreCore B C
-  extends: StrictPseudofunctorPreCore B C
-  axioms and operations (3):
-    - map₂_left_unitor : forall {a b : B} (f : a ⟶ b), map₂ (fun_ f).hom = eqToHom (by rw [map_comp (𝟙 a) f, map_id a]) ≫ (fun_ (map f)).hom  [default: by cat_disch]
-    - map₂_right_unitor : forall {a b : B} (f : a ⟶ b), map₂ (ρ_ f).hom = eqToHom (by rw [map_comp f (𝟙 b), map_id b]) ≫ (ρ_ (map f)).hom  [default: by cat_disch]
-    - map₂_associator : forall {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d), map₂ (α_ f g h).hom = eqToHom (by simp only [map_comp]) ≫ (α_ (map f) (map g) (map h)).hom ≫ eqToHom (by simp only [map_comp])  [default: by cat_disch]
-
-中文:
-结构 StrictPseudofunctorCore
-  参数: extends StrictPseudofunctorPreCore B C
-  继承: StrictPseudofunctorPreCore B C
-  公理与运算 (3 个):
-    - map₂_left_unitor : 对任意 {a b : B} (f : a ⟶ b), map₂ (fun_ f).hom = eqToHom (by rw [map_comp (𝟙 a) f, map_id a]) ≫ (fun_ (map f)).hom  [默认: by cat_disch]
-    - map₂_right_unitor : 对任意 {a b : B} (f : a ⟶ b), map₂ (ρ_ f).hom = eqToHom (by rw [map_comp f (𝟙 b), map_id b]) ≫ (ρ_ (map f)).hom  [默认: by cat_disch]
-    - map₂_associator : 对任意 {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d), map₂ (α_ f g h).hom = eqToHom (by simp only [map_comp]) ≫ (α_ (map f) (map g) (map h)).hom ≫ eqToHom (by simp only [map_comp])  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch, eqToHom, map_comp, map_id
+--- 原说明 ---
+A helper structure that bundles the necessary data to
+construct a `StrictPseudofunctor` without specifying the redundant
+fields `mapId` and `mapComp`.
 -/
 structure StrictPseudofunctorCore extends StrictPseudofunctorPreCore B C where
   map₂_left_unitor :
-      forall {a b : B} (f : a ⟶ b),
-        map₂ (fun_ f).hom =
+      ∀ {a b : B} (f : a ⟶ b),
+        map₂ (λ_ f).hom =
         eqToHom (by rw [map_comp (𝟙 a) f, map_id a]) ≫
-          (fun_ (map f)).hom := by
+          (λ_ (map f)).hom := by
     cat_disch
   map₂_right_unitor :
-      forall {a b : B} (f : a ⟶ b),
+      ∀ {a b : B} (f : a ⟶ b),
         map₂ (ρ_ f).hom =
          eqToHom (by rw [map_comp f (𝟙 b), map_id b]) ≫
           (ρ_ (map f)).hom := by
     cat_disch
   map₂_associator :
-      forall {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d),
+      ∀ {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d),
         map₂ (α_ f g h).hom = eqToHom (by simp only [map_comp]) ≫
           (α_ (map f) (map g) (map h)).hom ≫ eqToHom (by simp only [map_comp]) := by
     cat_disch
@@ -155,58 +140,19 @@ variable {B C}
 require the `mapId` or `mapComp` fields, and that adapts the compatibility conditions
 to the fact that the pseudofunctor is strict -/
 @[simps]
-/--
-Definition of `mk'` / `mk'` 的定义
+/-
+**CategoryTheory.StrictPseudofunctor.mk'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.StrictPseudofunctor`。
+形式化陈述：mk' (S : StrictPseudofunctorCore B C) : StrictPseudofunctor B C where obj
+参数：S : StrictPseudofunctorCore B C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk'
-  signature: (S : StrictPseudofunctorCore B C)
-  body: S.obj
-  map := S.map
-  map_id := S.map_id
-  mapId x := eqToIso (S.map_id x)
-  mapId_eq_eqToIso x := rfl
-  map₂ := S.map₂
-  map₂_id := S.map₂_id
-  map₂_comp := S.map₂_comp
-  map_comp := S.map_comp
-mapComp f g := eqToIso S.map_comp f g
-  map₂_left_unitor f := by
-    simpa using S.map₂_left_unitor f
-  map₂_right_unitor f := by
-    simpa using S.map₂_right_unitor f
-  map₂_associator f g h := by
-    simpa using S.map₂_associator f g h
-  map₂_whisker_left f _ _ η := by
-    simpa using S.map₂_whisker_left f η
-  map₂_whisker_right η f := by
-    simpa using S.map₂_whisker_right η f
-
-中文:
-定义 mk'
-  签名: (S : StrictPseudofunctorCore B C)
-  定义体: S.obj
-  map := S.map
-  map_id := S.map_id
-  mapId x := eqToIso (S.map_id x)
-  mapId_eq_eqToIso x := rfl
-  map₂ := S.map₂
-  map₂_id := S.map₂_id
-  map₂_comp := S.map₂_comp
-  map_comp := S.map_comp
-mapComp f g := eqToIso S.map_comp f g
-  map₂_left_unitor f := by
-    simpa using S.map₂_left_unitor f
-  map₂_right_unitor f := by
-    simpa using S.map₂_right_unitor f
-  map₂_associator f g h := by
-    simpa using S.map₂_associator f g h
-  map₂_whisker_left f _ _ η := by
-    simpa using S.map₂_whisker_left f η
-  map₂_whisker_right η f := by
-    simpa using S.map₂_whisker_right η f
-
-Depends on / 依赖: S.obj, cat_disch, extendIso
+--- 原说明 ---
+An alternate constructor for strict pseudofunctors that does not
+require the `mapId` or `mapComp` fields, and that adapts the compatibility condi
+tions
+to the fact that the pseudofunctor is strict
 -/
 def mk' (S : StrictPseudofunctorCore B C) : StrictPseudofunctor B C where
   obj := S.obj
@@ -218,7 +164,7 @@ def mk' (S : StrictPseudofunctorCore B C) : StrictPseudofunctor B C where
   map₂_id := S.map₂_id
   map₂_comp := S.map₂_comp
   map_comp := S.map_comp
-mapComp f g := eqToIso S.map_comp f g
+  mapComp f g := eqToIso <| S.map_comp f g
   map₂_left_unitor f := by
     simpa using S.map₂_left_unitor f
   map₂_right_unitor f := by
@@ -237,20 +183,15 @@ variable (F : StrictPseudofunctor B C)
 variable (B) in
 /-- The identity `StrictPseudofunctor`. -/
 @[simps!]
-/--
-Definition of `id` / `id` 的定义
+/-
+**CategoryTheory.StrictPseudofunctor.id** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.StrictPseudofunctor`。
+形式化陈述：id : StrictPseudofunctor B B where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : StrictPseudofunctor B B where
-  body: StrictlyUnitaryPseudofunctor.id B
-
-中文:
-定义 id
-  签名: : StrictPseudofunctor B B where
-  定义体: StrictlyUnitaryPseudofunctor.id B
-
-Depends on / 依赖: StrictlyUnitaryPseudofunctor, StrictlyUnitaryPseudofunctor.id
+--- 原说明 ---
+The identity `StrictPseudofunctor`.
 -/
 def id : StrictPseudofunctor B B where
   __ := StrictlyUnitaryPseudofunctor.id B
@@ -258,32 +199,17 @@ def id : StrictPseudofunctor B B where
 set_option backward.isDefEq.respectTransparency false in
 /-- Composition of `StrictPseudofunctor`. -/
 @[simps!]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**CategoryTheory.StrictPseudofunctor.comp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.StrictPseudofunctor`。
+形式化陈述：comp (F : StrictPseudofunctor B C) (G : StrictPseudofunctor C D) : StrictP
+seudofunctor B D where __
+参数：F : StrictPseudofunctor B C；G : StrictPseudofunctor C D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (F : StrictPseudofunctor B C)
-  body: StrictlyUnitaryPseudofunctor.comp
-    F.toStrictlyUnitaryPseudofunctor G.toStrictlyUnitaryPseudofunctor
-  map_comp _ := by simp [StrictPseudofunctor.map_comp]
-  mapComp_eq_eqToIso _ _ := by
-    ext
-    simp [StrictPseudofunctor.mapComp_eq_eqToIso,
-      PrelaxFunctor.map₂_eqToHom]
-
-中文:
-定义 comp
-  签名: (F : StrictPseudofunctor B C)
-  定义体: StrictlyUnitaryPseudofunctor.comp
-    F.toStrictlyUnitaryPseudofunctor G.toStrictlyUnitaryPseudofunctor
-  map_comp _ := by simp [StrictPseudofunctor.map_comp]
-  mapComp_eq_eqToIso _ _ := by
-    ext
-    simp [StrictPseudofunctor.mapComp_eq_eqToIso,
-      PrelaxFunctor.map₂_eqToHom]
-
-Depends on / 依赖: StrictlyUnitaryPseudofunctor, StrictlyUnitaryPseudofunctor.comp
+--- 原说明 ---
+Composition of `StrictPseudofunctor`.
 -/
 def comp (F : StrictPseudofunctor B C)
     (G : StrictPseudofunctor C D) :
@@ -307,46 +233,25 @@ attribute [local simp] Strict.leftUnitor_eqToIso Strict.rightUnitor_eqToIso
 /-- An alternate constructor for strict pseudofunctors between strict bicategories, that
 only requires the data bundled in `StrictPseudofunctorPreCore`. -/
 @[simps]
-/--
-Definition of `mk''` / `mk''` 的定义
+/-
+**CategoryTheory.StrictPseudofunctor.mk''** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.StrictPseudofunctor`。
+形式化陈述：mk'' (S : StrictPseudofunctorPreCore B C) : StrictPseudofunctor B C where 
+obj
+参数：S : StrictPseudofunctorPreCore B C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.StrictPseudofunctorPreCore.map_id`：∀ {B : Type u₁} [inst 
+: CategoryTheory.Bicategory B] {C : Type u₂} [inst_1 : CategoryTheory.Bicategory
+ C]   (self : CategoryTheory.StrictPse…
+· 使用定理 `CategoryTheory.StrictPseudofunctorPreCore.map_comp`：∀ {B : Type u₁} [ins
+t : CategoryTheory.Bicategory B] {C : Type u₂} [inst_1 : CategoryTheory.Bicatego
+ry C]   (self : CategoryTheory.StrictPse…
 
-English:
-definition mk''
-  signature: (S : StrictPseudofunctorPreCore B C)
-  body: S.obj
-  map := S.map
-  map_id := S.map_id
-  mapId x := eqToIso (S.map_id x)
-  mapId_eq_eqToIso x := rfl
-  map₂ := S.map₂
-  map₂_id := S.map₂_id
-  map₂_comp := S.map₂_comp
-  map_comp := S.map_comp
-mapComp f g := eqToIso S.map_comp f g
-  map₂_whisker_left f _ _ η := by
-    simpa using S.map₂_whisker_left f η
-  map₂_whisker_right η f := by
-    simpa using S.map₂_whisker_right η f
-
-中文:
-定义 mk''
-  签名: (S : StrictPseudofunctorPreCore B C)
-  定义体: S.obj
-  map := S.map
-  map_id := S.map_id
-  mapId x := eqToIso (S.map_id x)
-  mapId_eq_eqToIso x := rfl
-  map₂ := S.map₂
-  map₂_id := S.map₂_id
-  map₂_comp := S.map₂_comp
-  map_comp := S.map_comp
-mapComp f g := eqToIso S.map_comp f g
-  map₂_whisker_left f _ _ η := by
-    simpa using S.map₂_whisker_left f η
-  map₂_whisker_right η f := by
-    simpa using S.map₂_whisker_right η f
-
-Depends on / 依赖: S.obj
+--- 原说明 ---
+An alternate constructor for strict pseudofunctors between strict bicategories, 
+that
+only requires the data bundled in `StrictPseudofunctorPreCore`.
 -/
 def mk'' (S : StrictPseudofunctorPreCore B C) : StrictPseudofunctor B C where
   obj := S.obj
@@ -358,7 +263,7 @@ def mk'' (S : StrictPseudofunctorPreCore B C) : StrictPseudofunctor B C where
   map₂_id := S.map₂_id
   map₂_comp := S.map₂_comp
   map_comp := S.map_comp
-mapComp f g := eqToIso S.map_comp f g
+  mapComp f g := eqToIso <| S.map_comp f g
   map₂_whisker_left f _ _ η := by
     simpa using S.map₂_whisker_left f η
   map₂_whisker_right η f := by
@@ -367,26 +272,21 @@ mapComp f g := eqToIso S.map_comp f g
 /-- A strict pseudofunctor between strict bicategories induces a functor on the underlying
 categories. -/
 @[simps]
-/--
-Definition of `toFunctor` / `toFunctor` 的定义
+/-
+**CategoryTheory.StrictPseudofunctor.toFunctor** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.StrictPseudofunctor`。
+形式化陈述：toFunctor (F : StrictPseudofunctor B C) : Functor B C where obj
+参数：F : StrictPseudofunctor B C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.StrictPseudofunctor.map_comp`：∀ {B : Type u₁} [inst : Cat
+egoryTheory.Bicategory B] {C : Type u₂} [inst_1 : CategoryTheory.Bicategory C]  
+ (self : CategoryTheory.StrictPse…
 
-English:
-definition toFunctor
-  signature: (F : StrictPseudofunctor B C)
-  body: F.obj
-  map := F.map
-  map_id := F.map_id
-  map_comp := F.map_comp
-
-中文:
-定义 toFunctor
-  签名: (F : StrictPseudofunctor B C)
-  定义体: F.obj
-  map := F.map
-  map_id := F.map_id
-  map_comp := F.map_comp
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+A strict pseudofunctor between strict bicategories induces a functor on the unde
+rlying
+categories.
 -/
 def toFunctor (F : StrictPseudofunctor B C) : Functor B C where
   obj := F.obj
@@ -399,3 +299,4 @@ end
 end StrictPseudofunctor
 
 end CategoryTheory
+

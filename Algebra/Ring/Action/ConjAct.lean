@@ -19,24 +19,11 @@ assert_not_exists Field
 namespace ConjAct
 variable {R : Type*} [Semiring R]
 
-/--
-Instance `unitsMulSemiringAction` / 实例 `unitsMulSemiringAction`
-
-English:
-instance unitsMulSemiringAction
-  signature: : MulSemiringAction (ConjAct Rˣ) R
-  body: { ConjAct.unitsMulDistribMulAction with
-    smul_zero := by simp [units_smul_def]
-    smul_add := by simp [units_smul_def, mul_add, add_mul] }
-
-中文:
-实例 unitsMulSemiringAction
-  签名: : MulSemiring作用 (ConjAct Rˣ) R
-  定义体: { ConjAct.unitsMulDistribMulAction with
-    smul_zero := by simp [units_smul_def]
-    smul_add := by simp [units_smul_def, mul_add, add_mul] }
-
-Depends on / 依赖: ConjAct, ConjAct.unitsMulDistribMulAction, add_mul, mul_add, smul_add, smul_zero, unitsMulDistribMulAction, units_smul_def
+/-
+**ConjAct.unitsMulSemiringAction** 是 Mathlib 中的一个实例，位于命名空间 `ConjAct`。
+形式化陈述：unitsMulSemiringAction : MulSemiringAction (ConjAct Rˣ) R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance unitsMulSemiringAction : MulSemiringAction (ConjAct Rˣ) R :=
   { ConjAct.unitsMulDistribMulAction with
@@ -44,3 +31,4 @@ instance unitsMulSemiringAction : MulSemiringAction (ConjAct Rˣ) R :=
     smul_add := by simp [units_smul_def, mul_add, add_mul] }
 
 end ConjAct
+

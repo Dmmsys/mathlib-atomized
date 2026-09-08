@@ -25,65 +25,27 @@ namespace PresheafOfModules
 
 variable {C : Type u₁} [Category.{v₁} C] (R : Cᵒᵖ ⥤ RingCat.{u})
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsNormalEpiCategory (PresheafOfModules.{v} R)
-  body: ⟨NormalEpi.mk _ (kernel.ι p) (kernel.condition _)
-    (evaluationJointlyReflectsColimits _ _ (fun _ =>
-      Abelian.isColimitMapCoconeOfCokernelCoforkOfπ _ _))⟩
-
-中文:
-实例 :
-  签名: 是正规满态射范畴 (预模层.{v} R)
-  定义体: ⟨NormalEpi.mk _ (kernel.ι p) (kernel.condition _)
-    (evaluationJointlyReflectsColimits _ _ (fun _ =>
-      Abelian.isColimitMapCoconeOfCokernelCoforkOfπ _ _))⟩
-
-Depends on / 依赖: NormalEpi, NormalEpi.mk, condition, kernel, kernel.condition
+/-
+**PresheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `PresheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : IsNormalEpiCategory (PresheafOfModules.{v} R) where
   normalEpiOfEpi p _ := ⟨NormalEpi.mk _ (kernel.ι p) (kernel.condition _)
     (evaluationJointlyReflectsColimits _ _ (fun _ =>
       Abelian.isColimitMapCoconeOfCokernelCoforkOfπ _ _))⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsNormalMonoCategory (PresheafOfModules.{v} R)
-  body: ⟨NormalMono.mk _ (cokernel.π i) (cokernel.condition _)
-    (evaluationJointlyReflectsLimits _ _ (fun _ =>
-      Abelian.isLimitMapConeOfKernelForkOfι _ _))⟩
-
-中文:
-实例 :
-  签名: 是正规单态射范畴 (预模层.{v} R)
-  定义体: ⟨NormalMono.mk _ (cokernel.π i) (cokernel.condition _)
-    (evaluationJointlyReflectsLimits _ _ (fun _ =>
-      Abelian.isLimitMapConeOfKernelForkOfι _ _))⟩
-
-Depends on / 依赖: NormalMono, NormalMono.mk, cokernel, cokernel.condition, condition
+/-
+**PresheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `PresheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : IsNormalMonoCategory (PresheafOfModules.{v} R) where
   normalMonoOfMono i _ := ⟨NormalMono.mk _ (cokernel.π i) (cokernel.condition _)
     (evaluationJointlyReflectsLimits _ _ (fun _ =>
       Abelian.isLimitMapConeOfKernelForkOfι _ _))⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Abelian (PresheafOfModules.{v} R)
-
-中文:
-实例 :
-  签名: 交换 (预模层.{v} R)
+/-
+**PresheafOfModules.** 是 Mathlib 中的一个实例，位于命名空间 `PresheafOfModules`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : Abelian (PresheafOfModules.{v} R) where
 
 end PresheafOfModules
+

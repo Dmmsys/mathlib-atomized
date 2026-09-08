@@ -54,7 +54,7 @@ injective whenever `n ≤ m`, and then transfer the results to any Fintype `σ`.
 
 @[expose] public section
 
-variable {σ τ R : Type*} {n m k : Nat}
+variable {σ τ R : Type*} {n m k : ℕ}
 
 open AddMonoidAlgebra Finset
 
@@ -62,210 +62,248 @@ namespace Fin
 
 section accumulate
 
-/--
-Definition of `accumulate` / `accumulate` 的定义
+/-- The `j`th entry of `accumulate n m t` is the sum of `t i` over all `i ≥ j`. -/
+/-
+**Fin.accumulate** 是 Mathlib 中的一个定义，位于命名空间 `Fin`。
+形式化陈述：(n m : ℕ) → (Fin n → ℕ) →+ Fin m → ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition accumulate
-  signature: (n m : Nat)
-  body: ∑ i : Fin n with j.val <= i.val, t i
-map_zero' := funext fun _ => sum_eq_zero fun _ _ => rfl
-map_add' _ _ := funext fun _ => sum_add_distrib
-
-中文:
-定义 accumulate
-  签名: (n m : 自然数)
-  定义体: ∑ i : Fin n with j.val <= i.val, t i
-map_zero' := funext fun _ => sum_eq_zero fun _ _ => rfl
-map_add' _ _ := funext fun _ => sum_add_distrib
+--- 原说明 ---
+The `j`th entry of `accumulate n m t` is the sum of `t i` over all `i ≥ j`.
 -/
-@[simps] def accumulate (n m : Nat) : (Fin n -> Nat) ->+ (Fin m -> Nat) where
-  toFun t j := ∑ i : Fin n with j.val <= i.val, t i
-map_zero' := funext fun _ => sum_eq_zero fun _ _ => rfl
-map_add' _ _ := funext fun _ => sum_add_distrib
+@[simps] def accumulate (n m : ℕ) : (Fin n → ℕ) →+ (Fin m → ℕ) where
+  toFun t j := ∑ i : Fin n with j.val ≤ i.val, t i
+  map_zero' := funext <| fun _ ↦ sum_eq_zero <| fun _ _ ↦ rfl
+  map_add' _ _ := funext <| fun _ ↦ sum_add_distrib
 
-/--
-Definition of `invAccumulate` / `invAccumulate` 的定义
+/-- The `i`th entry of `invAccumulate n m s` is `s i - s (i+1)`, where `s j = 0` if `j ≥ m`. -/
+/-
+**Fin.invAccumulate** 是 Mathlib 中的一个定义，位于命名空间 `Fin`。
+形式化陈述：invAccumulate (n m : Nat) (s : Fin m -> Nat) (i : Fin n) : Nat
+参数：n m : Nat；s : Fin m -> Nat；i : Fin n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition invAccumulate
-  signature: (n m : Nat) (s : Fin m -> Nat) (i : Fin n)
-  body: (if hi : i < m then s ⟨i, hi⟩ else 0) - (if hi : i + 1 < m then s ⟨i + 1, hi⟩ else 0)
-
-中文:
-定义 invAccumulate
-  签名: (n m : 自然数) (s : 有限集 m -> 自然数) (i : 有限集 n)
-  定义体: (if hi : i < m then s ⟨i, hi⟩ else 0) - (if hi : i + 1 < m then s ⟨i + 1, hi⟩ else 0)
+--- 原说明 ---
+The `i`th entry of `invAccumulate n m s` is `s i - s (i+1)`, where `s j = 0` if 
+`j ≥ m`.
 -/
-def invAccumulate (n m : Nat) (s : Fin m -> Nat) (i : Fin n) : Nat :=
+def invAccumulate (n m : ℕ) (s : Fin m → ℕ) (i : Fin n) : ℕ :=
   (if hi : i < m then s ⟨i, hi⟩ else 0) - (if hi : i + 1 < m then s ⟨i + 1, hi⟩ else 0)
-
-/--
-lemma `accumulate_rec` / 引理 `accumulate_rec`
-
-English:
-lemma accumulate_rec
-  given: {i n m : Nat} (hin : i < n) (him : i + 1 < m) (t : Fin n -> Nat)
-  proof: by
-  simp_rw [accumulate_apply]
-  convert! (add_sum_erase _ _ _).symm
-  · ext
-    rw [mem_erase]
-    simp_rw [mem_filter_univ, i.succ_le_iff, lt_iff_le_and_ne]
-    rw [and_comm]; rw [ne_comm]; rw [← Fin.val_ne_iff]
-  · exact mem_filter.2 ⟨mem_univ _, le_rfl⟩
-
-中文:
-引理 accumulate_rec
-  条件: {i n m : 自然数} (hin : i < n) (him : i + 1 < m) (t : 有限集 n -> 自然数)
-  证明: by
-  simp_rw [accumulate_apply]
-  convert! (add_sum_erase _ _ _).symm
-  · ext
-    rw [mem_erase]
-    simp_rw [mem_filter_univ, i.succ_le_iff, lt_iff_le_and_ne]
-    rw [and_comm]; rw [ne_comm]; rw [← Fin.val_ne_iff]
-  · exact mem_filter.2 ⟨mem_univ _, le_rfl⟩
-
-Depends on / 依赖: Fin.val_ne_iff, accumulate_apply, add_sum_erase, and_comm, convert, i.succ_le_iff, le_rfl, lt_iff_le_and_ne, mem_erase, mem_filter, mem_filter_univ, mem_univ, ne_comm, simp_rw, succ_le_iff, val_ne_iff
+/-
+**Fin.accumulate_rec** 是 Mathlib 中的一个引理，位于命名空间 `Fin`。
+形式化陈述：accumulate_rec {i n m : Nat} (hin : i < n) (him : i + 1 < m) (t : Fin n ->
+ Nat) : accumulate n m t ⟨i, Nat.lt_of_succ_lt him⟩ = t ⟨i, hin⟩ + accumulate n 
+m t ⟨i + 1, him⟩
+参数：hin : i < n；him : i + 1 < m；t : Fin n -> Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.lt_of_succ_lt`：∀ {n m : ℕ}, n.succ < m → n < m
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Fin.accumulate_apply`：∀ (n m : ℕ) (t : Fin n → ℕ) (j : Fin m), (Fin.accu
+mulate n m) t j = ∑ i with ↑j ≤ ↑i, t i
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.filter_congr`：∀ {α : Type u_1} {p q : α → Prop} [inst : Decidable
+Pred p] [inst_1 : DecidablePred q] {s : Finset α},   (∀ x ∈ s, p x ↔ q x) → Fins
+et.filter…
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `Finset.mem_erase`：mem_erase {a b : α} {s : Finset α} : a in erase s b ↔ 
+a != b ∧ a in s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.succ_le_iff`：∀ {m n : ℕ}, m.succ ≤ n ↔ m < n
+· 使用定理 `and_comm`：∀ {a b : Prop}, a ∧ b ↔ b ∧ a
+· 使用定理 `ne_comm`：∀ {α : Sort u_1} {a b : α}, a ≠ b ↔ b ≠ a
+· 使用定理 `Fin.val_ne_iff`：∀ {n : ℕ} {a b : Fin n}, ↑a ≠ ↑b ↔ a ≠ b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `Finset.add_sum_erase`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] [inst_1 : DecidableEq ι] (s : Finset ι) (f : ι → M) {a : ι},   a ∈ s → f 
+a + ∑ x ∈ …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.mem_filter`：∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred
+ p] {s : Finset α} {a : α}, a ∈ Finset.filter p s ↔ a ∈ s ∧ p a
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-lemma accumulate_rec {i n m : Nat} (hin : i < n) (him : i + 1 < m) (t : Fin n -> Nat) :
+lemma accumulate_rec {i n m : ℕ} (hin : i < n) (him : i + 1 < m) (t : Fin n → ℕ) :
     accumulate n m t ⟨i, Nat.lt_of_succ_lt him⟩ = t ⟨i, hin⟩ + accumulate n m t ⟨i + 1, him⟩ := by
   simp_rw [accumulate_apply]
   convert! (add_sum_erase _ _ _).symm
   · ext
     rw [mem_erase]
     simp_rw [mem_filter_univ, i.succ_le_iff, lt_iff_le_and_ne]
-    rw [and_comm]; rw [ne_comm]; rw [← Fin.val_ne_iff]
+    rw [and_comm, ne_comm, ← Fin.val_ne_iff]
   · exact mem_filter.2 ⟨mem_univ _, le_rfl⟩
-
-/--
-lemma `accumulate_last` / 引理 `accumulate_last`
-
-English:
-lemma accumulate_last
-  statement: {i n m : Nat} (hin : i < n) (hmi : m = i + 1) (t : Fin n -> Nat)
-  proof: by
-  rw [accumulate_apply]
-  apply sum_eq_single_of_mem
-  · rw [mem_filter]; exact ⟨mem_univ _, le_rfl⟩
-  refine fun j hij hji => ht j ?_
-  rw [mem_filter_univ] at hij
-  exact hmi.trans_le (hij.lt_of_ne (Fin.val_ne_iff.2 hji).symm).nat_succ_le
-
-中文:
-引理 accumulate_last
-  结论: {i n m : 自然数} (hin : i < n) (hmi : m = i + 1) (t : 有限集 n -> 自然数)
-  证明: by
-  rw [accumulate_apply]
-  apply sum_eq_single_of_mem
-  · rw [mem_filter]; exact ⟨mem_univ _, le_rfl⟩
-  refine fun j hij hji => ht j ?_
-  rw [mem_filter_univ] at hij
-  exact hmi.trans_le (hij.lt_of_ne (Fin.val_ne_iff.2 hji).symm).nat_succ_le
-
-Depends on / 依赖: Fin.val_ne_iff, accumulate_apply, hij.lt_of_ne, hmi.trans_le, le_rfl, lt_of_ne, mem_filter, mem_filter_univ, mem_univ, nat_succ_le, sum_eq_single_of_mem, trans_le, val_ne_iff
+/-
+**Fin.accumulate_last** 是 Mathlib 中的一个引理，位于命名空间 `Fin`。
+形式化陈述：accumulate_last {i n m : Nat} (hin : i < n) (hmi : m = i + 1) (t : Fin n -
+> Nat) (ht : forall j : Fin n, m <= j -> t j = 0) : accumulate n m t ⟨i, i.lt_su
+cc_self.trans_eq hmi.symm⟩ = t ⟨i, hin⟩
+参数：hin : i < n；hmi : m = i + 1；t : Fin n -> Nat；ht : forall j : Fin n, m <= j ->
+ t j = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LT α], a < b → b = 
+c → a < c
+· 使用定理 `Nat.lt_succ_self`：∀ (n : ℕ), n < n.succ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fin.accumulate_apply`：∀ (n m : ℕ) (t : Fin n → ℕ) (j : Fin m), (Fin.accu
+mulate n m) t j = ∑ i with ↑j ≤ ↑i, t i
+· 使用定理 `Finset.sum_eq_single_of_mem`：∀ {ι : Type u_1} {M : Type u_4} [inst : Add
+CommMonoid M] {s : Finset ι} {f : ι → M},   ∀ a ∈ s, (∀ b ∈ s, b ≠ a → f b = 0) 
+→ ∑ x ∈ s, f x = …
+· 使用定理 `Finset.mem_filter`：∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred
+ p] {s : Finset α} {a : α}, a ∈ Finset.filter p s ↔ a ∈ s ∧ p a
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `Eq.trans_le`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a = b → b ≤ c →
+ a ≤ c
+· 使用定理 `LT.lt.nat_succ_le`：∀ {n m : ℕ}, n < m → n.succ ≤ m
+· 使用定理 `LE.le.lt_of_ne`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a ≠ b → a < b
+· 使用定理 `Finset.mem_filter_univ`：mem_filter_univ {p : α -> Prop} [DecidablePred p
+] : forall x, x in univ.filter p ↔ p x
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Fin.val_ne_iff`：∀ {n : ℕ} {a b : Fin n}, ↑a ≠ ↑b ↔ a ≠ b
 -/
-lemma accumulate_last {i n m : Nat} (hin : i < n) (hmi : m = i + 1) (t : Fin n -> Nat)
-    (ht : forall j : Fin n, m <= j -> t j = 0) :
+lemma accumulate_last {i n m : ℕ} (hin : i < n) (hmi : m = i + 1) (t : Fin n → ℕ)
+    (ht : ∀ j : Fin n, m ≤ j → t j = 0) :
     accumulate n m t ⟨i, i.lt_succ_self.trans_eq hmi.symm⟩ = t ⟨i, hin⟩ := by
   rw [accumulate_apply]
   apply sum_eq_single_of_mem
   · rw [mem_filter]; exact ⟨mem_univ _, le_rfl⟩
-  refine fun j hij hji => ht j ?_
+  refine fun j hij hji ↦ ht j ?_
   rw [mem_filter_univ] at hij
   exact hmi.trans_le (hij.lt_of_ne (Fin.val_ne_iff.2 hji).symm).nat_succ_le
-
-/--
-lemma `accumulate_injective` / 引理 `accumulate_injective`
-
-English:
-lemma accumulate_injective
-  given: {n m} (hnm : n <= m)
-  statement: Function.Injective (accumulate n m)
-  proof: by
-  refine fun t s he => funext fun i => ?_
-  obtain h | h := lt_or_ge (i.1 + 1) m
-  · have := accumulate_rec i.2 h s
-    rwa [← he, accumulate_rec i.2 h t, add_right_cancel_iff] at this
-  · have := h.antisymm (i.2.nat_succ_le.trans hnm)
-    rw [← accumulate_last i.2 this t]; rw [← accumulate_last i.2 this s]; rw [he]
-    iterate 2 { intro j hj; exact ((j.2.trans_le hnm).not_ge hj).elim }
-
-中文:
-引理 accumulate_injective
-  条件: {n m} (hnm : n <= m)
-  结论: 函数.单射 (accumulate n m)
-  证明: by
-  refine fun t s he => funext fun i => ?_
-  obtain h | h := lt_or_ge (i.1 + 1) m
-  · have := accumulate_rec i.2 h s
-    rwa [← he, accumulate_rec i.2 h t, add_right_cancel_iff] at this
-  · have := h.antisymm (i.2.nat_succ_le.trans hnm)
-    rw [← accumulate_last i.2 this t]; rw [← accumulate_last i.2 this s]; rw [he]
-    iterate 2 { intro j hj; exact ((j.2.trans_le hnm).not_ge hj).elim }
-
-Depends on / 依赖: accumulate_last, accumulate_rec, add_right_cancel_iff, antisymm, h.antisymm, iterate, lt_or_ge, nat_succ_le, nat_succ_le.trans, not_ge, trans_le
+/-
+**Fin.accumulate_injective** 是 Mathlib 中的一个引理，位于命名空间 `Fin`。
+形式化陈述：accumulate_injective {n m} (hnm : n <= m) : Function.Injective (accumulate
+ n m)
+参数：hnm : n <= m。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `lt_or_ge`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a < b ∨ b ≤
+ a
+· 使用定理 `Nat.lt_of_succ_lt`：∀ {n m : ℕ}, n.succ < m → n < m
+· 使用定理 `Fin.isLt`：∀ {n : ℕ} (self : Fin n), ↑self < n
+· 使用引理 `Fin.accumulate_rec`：accumulate_rec {i n m : Nat} (hin : i < n) (him : i 
++ 1 < m) (t : Fin n -> Nat) : accumulate n m t ⟨i, Nat.lt_of_succ_lt him⟩ = t ⟨i
+, hin⟩ +…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_right_cancel_iff`：∀ {G : Type u_1} [inst : Add G] [IsRightCancelAdd 
+G] {a b c : G}, b + a = c + a ↔ b = c
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `LT.lt.nat_succ_le`：∀ {n m : ℕ}, n < m → n.succ ≤ m
+· 使用定理 `LT.lt.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LT α], a < b → b = 
+c → a < c
+· 使用定理 `Nat.lt_succ_self`：∀ (n : ℕ), n < n.succ
+· 使用引理 `Fin.accumulate_last`：accumulate_last {i n m : Nat} (hin : i < n) (hmi : 
+m = i + 1) (t : Fin n -> Nat) (ht : forall j : Fin n, m <= j -> t j = 0) : accum
+ulate n m…
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
 -/
-lemma accumulate_injective {n m} (hnm : n <= m) : Function.Injective (accumulate n m) := by
-  refine fun t s he => funext fun i => ?_
+lemma accumulate_injective {n m} (hnm : n ≤ m) : Function.Injective (accumulate n m) := by
+  refine fun t s he ↦ funext fun i ↦ ?_
   obtain h | h := lt_or_ge (i.1 + 1) m
   · have := accumulate_rec i.2 h s
     rwa [← he, accumulate_rec i.2 h t, add_right_cancel_iff] at this
   · have := h.antisymm (i.2.nat_succ_le.trans hnm)
-    rw [← accumulate_last i.2 this t]; rw [← accumulate_last i.2 this s]; rw [he]
+    rw [← accumulate_last i.2 this t, ← accumulate_last i.2 this s, he]
     iterate 2 { intro j hj; exact ((j.2.trans_le hnm).not_ge hj).elim }
-
-/--
-lemma `accumulate_invAccumulate` / 引理 `accumulate_invAccumulate`
-
-English:
-lemma accumulate_invAccumulate
-  given: {n m} (hmn : m <= n) {s : Fin m -> Nat} (hs : Antitone s)
-  proof: funext fun ⟨i, hi⟩ => by
-  have := Nat.le_sub_one_of_lt hi
-  revert hi
-  refine Nat.decreasingInduction' (fun i hi _ ih him => ?_) this fun hm => ?_
-  · rw [← Nat.pred_eq_sub_one, Nat.lt_pred_iff, Nat.succ_eq_add_one] at hi
-    rw [accumulate_rec (him.trans_le hmn) hi]; rw [ih hi]; rw [invAccumulate]; rw [dif_pos him]; rw [dif_pos hi]
-    simp only
-    exact Nat.sub_add_cancel (hs i.le_succ)
-  · have := (Nat.sub_one_add_one <| Nat.ne_zero_of_lt hm).symm
-    rw [accumulate_last (hm.trans_le hmn) this]; rw [invAccumulate]; rw [dif_pos hm]; rw [dif_neg this.not_gt]; rw [Nat.sub_zero]
-    intro j hj
-    rw [invAccumulate]; rw [dif_neg hj.not_gt]; rw [Nat.zero_sub]
-
-中文:
-引理 accumulate_invAccumulate
-  条件: {n m} (hmn : m <= n) {s : 有限集 m -> 自然数} (hs : 递减 s)
-  证明: funext fun ⟨i, hi⟩ => by
-  have := Nat.le_sub_one_of_lt hi
-  revert hi
-  refine Nat.decreasingInduction' (fun i hi _ ih him => ?_) this fun hm => ?_
-  · rw [← Nat.pred_eq_sub_one, Nat.lt_pred_iff, Nat.succ_eq_add_one] at hi
-    rw [accumulate_rec (him.trans_le hmn) hi]; rw [ih hi]; rw [invAccumulate]; rw [dif_pos him]; rw [dif_pos hi]
-    simp only
-    exact Nat.sub_add_cancel (hs i.le_succ)
-  · have := (Nat.sub_one_add_one <| Nat.ne_zero_of_lt hm).symm
-    rw [accumulate_last (hm.trans_le hmn) this]; rw [invAccumulate]; rw [dif_pos hm]; rw [dif_neg this.not_gt]; rw [Nat.sub_zero]
-    intro j hj
-    rw [invAccumulate]; rw [dif_neg hj.not_gt]; rw [Nat.zero_sub]
-
-Depends on / 依赖: Nat.decreasingInduction, Nat.le_sub_one_of_lt, Nat.lt_pred_iff, Nat.ne_zero_of_lt, Nat.pred_eq_sub_one, Nat.sub_add_cancel, Nat.sub_one_add_one, Nat.succ_eq_add_one, accumulate_last, accumulate_rec, decreasingInduction, dif_pos, him.trans_le, hm.trans_le, i.le_succ, invAccumulate, le_sub_one_of_lt, le_succ, lt_pred_iff, ne_zero_of_lt
+/-
+**Fin.accumulate_invAccumulate** 是 Mathlib 中的一个引理，位于命名空间 `Fin`。
+形式化陈述：accumulate_invAccumulate {n m} (hmn : m <= n) {s : Fin m -> Nat} (hs : Ant
+itone s) : accumulate n m (invAccumulate n m s) = s
+参数：hmn : m <= n；hs : Antitone s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Nat.le_sub_one_of_lt`：∀ {a b : ℕ}, a < b → a ≤ b - 1
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.succ_eq_add_one`：∀ (n : ℕ), n.succ = n + 1
+· 使用定理 `Nat.lt_pred_iff`：∀ {n : ℕ} {m : ℕ}, n < m.pred ↔ n.succ < m
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.pred_eq_sub_one`：∀ {n : ℕ}, n.pred = n - 1
+· 使用定理 `Nat.lt_of_succ_lt`：∀ {n m : ℕ}, n.succ < m → n < m
+· 使用引理 `Fin.accumulate_rec`：accumulate_rec {i n m : Nat} (hin : i < n) (him : i 
++ 1 < m) (t : Fin n -> Nat) : accumulate n m t ⟨i, Nat.lt_of_succ_lt him⟩ = t ⟨i
+, hin⟩ +…
+· 使用定理 `Fin.invAccumulate.eq_1`：∀ (n m : ℕ) (s : Fin m → ℕ) (i : Fin n),   Fin.i
+nvAccumulate n m s i = (if hi : ↑i < m then s ⟨↑i, hi⟩ else 0) - if hi : ↑i + 1 
+< m then s ⟨…
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `Nat.sub_add_cancel`：∀ {n m : ℕ}, m ≤ n → n - m + m = n
+· 使用定理 `Nat.le_succ`：∀ (n : ℕ), n ≤ n.succ
+· 使用定理 `Nat.sub_one_add_one`：∀ {a : ℕ}, a ≠ 0 → a - 1 + 1 = a
+· 使用定理 `Nat.ne_zero_of_lt`：∀ {b a : ℕ}, b < a → a ≠ 0
+· 使用定理 `LT.lt.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LT α], a < b → b = 
+c → a < c
+· 使用定理 `Nat.lt_succ_self`：∀ (n : ℕ), n < n.succ
+· 使用引理 `Fin.accumulate_last`：accumulate_last {i n m : Nat} (hin : i < n) (hmi : 
+m = i + 1) (t : Fin n -> Nat) (ht : forall j : Fin n, m <= j -> t j = 0) : accum
+ulate n m…
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `Nat.zero_sub`：∀ (n : ℕ), 0 - n = 0
+· 使用定理 `Eq.not_gt`：∀ {α : Type u_2} [inst : Preorder α] {a b : α}, a = b → ¬b < 
+a
+· 使用定理 `Nat.sub_zero`：∀ (n : ℕ), n - 0 = n
 -/
-lemma accumulate_invAccumulate {n m} (hmn : m <= n) {s : Fin m -> Nat} (hs : Antitone s) :
-accumulate n m (invAccumulate n m s) = s := funext fun ⟨i, hi⟩ => by
+lemma accumulate_invAccumulate {n m} (hmn : m ≤ n) {s : Fin m → ℕ} (hs : Antitone s) :
+    accumulate n m (invAccumulate n m s) = s := funext <| fun ⟨i, hi⟩ ↦ by
   have := Nat.le_sub_one_of_lt hi
   revert hi
-  refine Nat.decreasingInduction' (fun i hi _ ih him => ?_) this fun hm => ?_
+  refine Nat.decreasingInduction' (fun i hi _ ih him ↦ ?_) this fun hm ↦ ?_
   · rw [← Nat.pred_eq_sub_one, Nat.lt_pred_iff, Nat.succ_eq_add_one] at hi
-    rw [accumulate_rec (him.trans_le hmn) hi]; rw [ih hi]; rw [invAccumulate]; rw [dif_pos him]; rw [dif_pos hi]
+    rw [accumulate_rec (him.trans_le hmn) hi, ih hi, invAccumulate, dif_pos him, dif_pos hi]
     simp only
     exact Nat.sub_add_cancel (hs i.le_succ)
   · have := (Nat.sub_one_add_one <| Nat.ne_zero_of_lt hm).symm
-    rw [accumulate_last (hm.trans_le hmn) this]; rw [invAccumulate]; rw [dif_pos hm]; rw [dif_neg this.not_gt]; rw [Nat.sub_zero]
+    rw [accumulate_last (hm.trans_le hmn) this, invAccumulate, dif_pos hm, dif_neg this.not_gt,
+      Nat.sub_zero]
     intro j hj
-    rw [invAccumulate]; rw [dif_neg hj.not_gt]; rw [Nat.zero_sub]
+    rw [invAccumulate, dif_neg hj.not_gt, Nat.zero_sub]
 
 end accumulate
 
@@ -280,64 +318,66 @@ section CommSemiring
 variable [CommSemiring R] [Fintype σ] [Fintype τ]
 
 variable (σ R n) in
-/--
-Definition of `esymmAlgHom` / `esymmAlgHom` 的定义
+/-- The `R`-algebra homomorphism from $R[x_1,\dots,x_n]$ to the symmetric subalgebra of
+  $R[\{x_i \mid i ∈ σ\}]$ sending $x_i$ to the $i$-th elementary symmetric polynomial. -/
+/-
+**MvPolynomial.esymmAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `MvPolynomial`。
+形式化陈述：esymmAlgHom : MvPolynomial (Fin n) R ->ₐ[R] symmetricSubalgebra σ R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition esymmAlgHom
-  signature: :
-  body: aeval (fun i => ⟨esymm σ R (i + 1), esymm_isSymmetric σ R _⟩)
-
-中文:
-定义 esymmAlgHom
-  签名: :
-  定义体: aeval (fun i => ⟨esymm σ R (i + 1), esymm_isSymmetric σ R _⟩)
-
-Depends on / 依赖: esymm_isSymmetric
+--- 原说明 ---
+The `R`-algebra homomorphism from $R[x_1,\dots,x_n]$ to the symmetric subalgebra
+ of
+  $R[\{x_i \mid i ∈ σ\}]$ sending $x_i$ to the $i$-th elementary symmetric polyn
+omial.
 -/
 noncomputable def esymmAlgHom :
-    MvPolynomial (Fin n) R ->ₐ[R] symmetricSubalgebra σ R :=
-  aeval (fun i => ⟨esymm σ R (i + 1), esymm_isSymmetric σ R _⟩)
-
-/--
-lemma `esymmAlgHom_apply` / 引理 `esymmAlgHom_apply`
-
-English:
-lemma esymmAlgHom_apply
-  given: (p : MvPolynomial (Fin n) R)
-  proof: (Subalgebra.mvPolynomial_aeval_coe _ _ _).symm
-
-中文:
-引理 esymmAlgHom_apply
-  条件: (p : 多元多项式 (有限集 n) R)
-  证明: (Subalgebra.mvPolynomial_aeval_coe _ _ _).symm
-
-Depends on / 依赖: Subalgebra, Subalgebra.mvPolynomial_aeval_coe, mvPolynomial_aeval_coe
+    MvPolynomial (Fin n) R →ₐ[R] symmetricSubalgebra σ R :=
+  aeval (fun i ↦ ⟨esymm σ R (i + 1), esymm_isSymmetric σ R _⟩)
+/-
+**MvPolynomial.esymmAlgHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial`。
+形式化陈述：esymmAlgHom_apply (p : MvPolynomial (Fin n) R) : (esymmAlgHom σ R n p).val
+ = aeval (fun i : Fin n => esymm σ R (i + 1)) p
+参数：p : MvPolynomial (Fin n) R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subalgebra.mvPolynomial_aeval_coe`：mvPolynomial_aeval_coe (S : Subalgebr
+a R A) (x : σ -> S) (p : MvPolynomial σ R) : aeval (fun i => (x i : A)) p = aeva
+l x p
 -/
 lemma esymmAlgHom_apply (p : MvPolynomial (Fin n) R) :
-    (esymmAlgHom σ R n p).val = aeval (fun i : Fin n => esymm σ R (i + 1)) p :=
+    (esymmAlgHom σ R n p).val = aeval (fun i : Fin n ↦ esymm σ R (i + 1)) p :=
   (Subalgebra.mvPolynomial_aeval_coe _ _ _).symm
-
-/--
-lemma `rename_esymmAlgHom` / 引理 `rename_esymmAlgHom`
-
-English:
-lemma rename_esymmAlgHom
-  given: (e : σ ≃ τ)
-  proof: by
-  ext i : 2
-  simp_rw [AlgHom.comp_apply, esymmAlgHom, aeval_X, AlgEquiv.coe_toAlgHom,
-    renameSymmetricSubalgebra_apply_coe, rename_esymm]
-
-中文:
-引理 rename_esymmAlgHom
-  条件: (e : σ ≃ τ)
-  证明: by
-  ext i : 2
-  simp_rw [AlgHom.comp_apply, esymmAlgHom, aeval_X, AlgEquiv.coe_toAlgHom,
-    renameSymmetricSubalgebra_apply_coe, rename_esymm]
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.coe_toAlgHom, AlgHom, AlgHom.comp_apply, aeval_X, coe_toAlgHom, comp_apply, esymmAlgHom, renameSymmetricSubalgebra_apply_coe, rename_esymm, simp_rw
+/-
+**MvPolynomial.rename_esymmAlgHom** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial`。
+形式化陈述：rename_esymmAlgHom (e : σ ≃ τ) : (renameSymmetricSubalgebra e).toAlgHom.co
+mp (esymmAlgHom σ R n) = esymmAlgHom τ R n
+参数：e : σ ≃ τ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.algHom_ext`：algHom_ext {A : Type*} [Semiring A] [Algebra R 
+A] {f g : MvPolynomial σ R ->ₐ[R] A} (hf : forall i : σ, f (X i) = g (X i)) : f 
+= g
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.aeval_X`：aeval_X (s : σ) : aeval f (X s : MvPolynomial σ R)
+ = f s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MvPolynomial.renameSymmetricSubalgebra_apply_coe`：∀ {σ : Type u_1} {τ : 
+Type u_2} {R : Type u_3} [inst : CommSemiring R] (e : σ ≃ τ)   (a : ↥(MvPolynomi
+al.symmetricSubalgebra σ R)),   ↑((MvP…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MvPolynomial.rename_esymm`：rename_esymm (n : Nat) (e : σ ≃ τ) : rename e
+ (esymm σ R n) = esymm τ R n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma rename_esymmAlgHom (e : σ ≃ τ) :
     (renameSymmetricSubalgebra e).toAlgHom.comp (esymmAlgHom σ R n) = esymmAlgHom τ R n := by
@@ -346,266 +386,242 @@ lemma rename_esymmAlgHom (e : σ ≃ τ) :
     renameSymmetricSubalgebra_apply_coe, rename_esymm]
 
 variable (σ) in
-/--
-Definition of `esymmAlgHomMonomial` / `esymmAlgHomMonomial` 的定义
+/-- The image of a monomial under `esymmAlgHom`. -/
+/-
+**MvPolynomial.esymmAlgHomMonomial** 是 Mathlib 中的一个定义，位于命名空间 `MvPolynomial`。
+形式化陈述：esymmAlgHomMonomial (t : Fin n ->₀ Nat) (r : R) : MvPolynomial σ R
+参数：t : Fin n ->₀ Nat；r : R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition esymmAlgHomMonomial
-  signature: (t : Fin n ->₀ Nat) (r : R)
-  body: (esymmAlgHom σ R n <| monomial t r).val
-
-中文:
-定义 esymmAlgHomMonomial
-  签名: (t : 有限集 n ->₀ 自然数) (r : R)
-  定义体: (esymmAlgHom σ R n <| monomial t r).val
-
-Depends on / 依赖: esymmAlgHom, monomial
+--- 原说明 ---
+The image of a monomial under `esymmAlgHom`.
 -/
-noncomputable def esymmAlgHomMonomial (t : Fin n ->₀ Nat) (r : R) :
+noncomputable def esymmAlgHomMonomial (t : Fin n →₀ ℕ) (r : R) :
     MvPolynomial σ R := (esymmAlgHom σ R n <| monomial t r).val
 
 variable {i : Fin n} {r : R}
-
-/--
-lemma `isSymmetric_esymmAlgHomMonomial` / 引理 `isSymmetric_esymmAlgHomMonomial`
-
-English:
-lemma isSymmetric_esymmAlgHomMonomial
-  given: (t : Fin n ->₀ Nat) (r : R)
-  proof: (esymmAlgHom _ _ _ _).2
-
-中文:
-引理 isSymmetric_esymmAlgHomMonomial
-  条件: (t : 有限集 n ->₀ 自然数) (r : R)
-  证明: (esymmAlgHom _ _ _ _).2
-
-Depends on / 依赖: esymmAlgHom
+/-
+**MvPolynomial.isSymmetric_esymmAlgHomMonomial** 是 Mathlib 中的一个引理，位于命名空间 `MvPoly
+nomial`。
+形式化陈述：isSymmetric_esymmAlgHomMonomial (t : Fin n ->₀ Nat) (r : R) : (esymmAlgHom
+Monomial σ t r).IsSymmetric
+参数：t : Fin n ->₀ Nat；r : R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-lemma isSymmetric_esymmAlgHomMonomial (t : Fin n ->₀ Nat) (r : R) :
+lemma isSymmetric_esymmAlgHomMonomial (t : Fin n →₀ ℕ) (r : R) :
     (esymmAlgHomMonomial σ t r).IsSymmetric := (esymmAlgHom _ _ _ _).2
-
-/--
-lemma `esymmAlgHomMonomial_single` / 引理 `esymmAlgHomMonomial_single`
-
-English:
-lemma esymmAlgHomMonomial_single
-  proof: by
-  rw [esymmAlgHomMonomial]; rw [esymmAlgHom_apply]; rw [aeval_monomial]; rw [algebraMap_eq]; rw [Finsupp.prod_single_index]
-  exact pow_zero _
-
-中文:
-引理 esymmAlgHomMonomial_single
-  证明: by
-  rw [esymmAlgHomMonomial]; rw [esymmAlgHom_apply]; rw [aeval_monomial]; rw [algebraMap_eq]; rw [Finsupp.prod_single_index]
-  exact pow_zero _
-
-Depends on / 依赖: Finsupp, Finsupp.prod_single_index, aeval_monomial, algebraMap_eq, esymmAlgHomMonomial, esymmAlgHom_apply, pow_zero, prod_single_index
+/-
+**MvPolynomial.esymmAlgHomMonomial_single** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomia
+l`。
+形式化陈述：esymmAlgHomMonomial_single : esymmAlgHomMonomial σ (Finsupp.single i k) r 
+= C r * esymm σ R (i + 1) ^ k
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.esymmAlgHomMonomial.eq_1`：∀ (σ : Type u_1) {R : Type u_3} {
+n : ℕ} [inst : CommSemiring R] [inst_1 : Fintype σ] (t : Fin n →₀ ℕ) (r : R),   
+MvPolynomial.esymmAlgHomMon…
+· 使用引理 `MvPolynomial.esymmAlgHom_apply`：esymmAlgHom_apply (p : MvPolynomial (Fin
+ n) R) : (esymmAlgHom σ R n p).val = aeval (fun i : Fin n => esymm σ R (i + 1)) 
+p
+· 使用定理 `MvPolynomial.aeval_monomial`：aeval_monomial (g : σ -> S₁) (d : σ ->₀ Nat
+) (r : R) : aeval g (monomial d r) = algebraMap _ _ r * d.prod fun i k => g i ^ 
+k
+· 使用定理 `MvPolynomial.algebraMap_eq`：algebraMap_eq : algebraMap R (MvPolynomial σ
+ R) = C
+· 使用定理 `Finsupp.prod_single_index`：prod_single_index {a : α} {b : M} {h : α -> M
+ -> N} (h_zero : h a 0 = 1) : (single a b).prod h = h a b
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
 -/
 lemma esymmAlgHomMonomial_single :
     esymmAlgHomMonomial σ (Finsupp.single i k) r = C r * esymm σ R (i + 1) ^ k := by
-  rw [esymmAlgHomMonomial]; rw [esymmAlgHom_apply]; rw [aeval_monomial]; rw [algebraMap_eq]; rw [Finsupp.prod_single_index]
+  rw [esymmAlgHomMonomial, esymmAlgHom_apply, aeval_monomial, algebraMap_eq,
+    Finsupp.prod_single_index]
   exact pow_zero _
-
-/--
-lemma `esymmAlgHomMonomial_single_one` / 引理 `esymmAlgHomMonomial_single_one`
-
-English:
-lemma esymmAlgHomMonomial_single_one
-  proof: by
-  rw [esymmAlgHomMonomial_single]; rw [map_one]; rw [one_mul]
-
-中文:
-引理 esymmAlgHomMonomial_single_one
-  证明: by
-  rw [esymmAlgHomMonomial_single]; rw [map_one]; rw [one_mul]
-
-Depends on / 依赖: esymmAlgHomMonomial_single, map_one, one_mul
+/-
+**MvPolynomial.esymmAlgHomMonomial_single_one** 是 Mathlib 中的一个引理，位于命名空间 `MvPolyn
+omial`。
+形式化陈述：esymmAlgHomMonomial_single_one : esymmAlgHomMonomial σ (Finsupp.single i k
+) 1 = esymm σ R (i + 1) ^ k
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MvPolynomial.esymmAlgHomMonomial_single`：esymmAlgHomMonomial_single : es
+ymmAlgHomMonomial σ (Finsupp.single i k) r = C r * esymm σ R (i + 1) ^ k
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
 lemma esymmAlgHomMonomial_single_one :
     esymmAlgHomMonomial σ (Finsupp.single i k) 1 = esymm σ R (i + 1) ^ k := by
-  rw [esymmAlgHomMonomial_single]; rw [map_one]; rw [one_mul]
-
-/--
-lemma `esymmAlgHomMonomial_add` / 引理 `esymmAlgHomMonomial_add`
-
-English:
-lemma esymmAlgHomMonomial_add
-  given: {t s : Fin n ->₀ Nat}
-  proof: by
-  simp_rw [esymmAlgHomMonomial, esymmAlgHom_apply, ← map_mul, monomial_mul, mul_one]
-
-中文:
-引理 esymmAlgHomMonomial_add
-  条件: {t s : 有限集 n ->₀ 自然数}
-  证明: by
-  simp_rw [esymmAlgHomMonomial, esymmAlgHom_apply, ← map_mul, monomial_mul, mul_one]
-
-Depends on / 依赖: esymmAlgHomMonomial, esymmAlgHom_apply, map_mul, monomial_mul, mul_one, simp_rw
+  rw [esymmAlgHomMonomial_single, map_one, one_mul]
+/-
+**MvPolynomial.esymmAlgHomMonomial_add** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial`。
+形式化陈述：esymmAlgHomMonomial_add {t s : Fin n ->₀ Nat} : esymmAlgHomMonomial σ (t +
+ s) r = esymmAlgHomMonomial σ t r * esymmAlgHomMonomial σ s 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MvPolynomial.esymmAlgHom_apply`：esymmAlgHom_apply (p : MvPolynomial (Fin
+ n) R) : (esymmAlgHom σ R n p).val = aeval (fun i : Fin n => esymm σ R (i + 1)) 
+p
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `MvPolynomial.monomial_mul`：monomial_mul {s s' : σ ->₀ Nat} {a b : R} : m
+onomial s a * monomial s' b = monomial (s + s') (a * b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma esymmAlgHomMonomial_add {t s : Fin n ->₀ Nat} :
+lemma esymmAlgHomMonomial_add {t s : Fin n →₀ ℕ} :
     esymmAlgHomMonomial σ (t + s) r = esymmAlgHomMonomial σ t r * esymmAlgHomMonomial σ s 1 := by
   simp_rw [esymmAlgHomMonomial, esymmAlgHom_apply, ← map_mul, monomial_mul, mul_one]
-
-/--
-lemma `esymmAlgHom_zero` / 引理 `esymmAlgHom_zero`
-
-English:
-lemma esymmAlgHom_zero
-  statement: esymmAlgHomMonomial σ (0 : Fin n ->₀ Nat) r = C r
-  proof: by
-  rw [esymmAlgHomMonomial]; rw [monomial_zero']; rw [esymmAlgHom_apply]; rw [aeval_C]; rw [algebraMap_eq]
-
-中文:
-引理 esymmAlgHom_zero
-  结论: esymmAlgHomMonomial σ (0 : 有限集 n ->₀ 自然数) r = C r
-  证明: by
-  rw [esymmAlgHomMonomial]; rw [monomial_zero']; rw [esymmAlgHom_apply]; rw [aeval_C]; rw [algebraMap_eq]
-
-Depends on / 依赖: aeval_C, algebraMap_eq, esymmAlgHomMonomial, esymmAlgHom_apply, monomial_zero
+/-
+**MvPolynomial.esymmAlgHom_zero** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial`。
+形式化陈述：esymmAlgHom_zero : esymmAlgHomMonomial σ (0 : Fin n ->₀ Nat) r = C r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.esymmAlgHomMonomial.eq_1`：∀ (σ : Type u_1) {R : Type u_3} {
+n : ℕ} [inst : CommSemiring R] [inst_1 : Fintype σ] (t : Fin n →₀ ℕ) (r : R),   
+MvPolynomial.esymmAlgHomMon…
+· 使用定理 `MvPolynomial.monomial_zero'`：monomial_zero' : (monomial (0 : σ ->₀ Nat) 
+: R -> MvPolynomial σ R) = C
+· 使用引理 `MvPolynomial.esymmAlgHom_apply`：esymmAlgHom_apply (p : MvPolynomial (Fin
+ n) R) : (esymmAlgHom σ R n p).val = aeval (fun i : Fin n => esymm σ R (i + 1)) 
+p
+· 使用定理 `MvPolynomial.aeval_C`：aeval_C (r : R) : aeval f (C r) = algebraMap R S₁ 
+r
+· 使用定理 `MvPolynomial.algebraMap_eq`：algebraMap_eq : algebraMap R (MvPolynomial σ
+ R) = C
 -/
-lemma esymmAlgHom_zero : esymmAlgHomMonomial σ (0 : Fin n ->₀ Nat) r = C r := by
-  rw [esymmAlgHomMonomial]; rw [monomial_zero']; rw [esymmAlgHom_apply]; rw [aeval_C]; rw [algebraMap_eq]
-
-/--
-lemma `supDegree_monic_esymm` / 引理 `supDegree_monic_esymm`
-
-English:
-lemma supDegree_monic_esymm
-  given: [Nontrivial R] {i : Nat} (him : i < m)
-  proof: by
-  have := supDegree_leadingCoeff_sum_eq (D := toLex) (s := univ.powersetCard (i + 1))
-    (i := Iic (⟨i, him⟩ : Fin m)) ?_ (f := fun s => monomial (∑ j in s, fun₀ | j => 1) (1 : R)) ?_
-  · rwa [← esymm_eq_sum_monomial, ← Finsupp.indicator_eq_sum_single, ← single_eq_monomial,
-      supDegree_single_ne_zero _ one_ne_zero, leadingCoeff_single toLex.injective] at this
-  · exact mem_powersetCard.2 ⟨subset_univ _, Fin.card_Iic _⟩
-  intro t ht hne
-  have ht' : #t = #(Iic (⟨i, him⟩ : Fin m)) := by
-    rw [(mem_powersetCard.1 ht).2]; rw [Fin.card_Iic]
-  simp_rw [← single_eq_monomial, supDegree_single_ne_zero _ one_ne_zero,
-    ← Finsupp.indicator_eq_sum_single]
-  rw [ne_comm]; rw [Ne]; rw [← subset_iff_eq_of_card_le ht'.le]; rw [not_subset] at hne
-  simp_rw [← mem_sdiff] at hne
-  have hkm := mem_sdiff.1 (min'_mem _ hne)
-  refine ⟨min' _ hne, fun k hk => ?_, ?_⟩
-  all_goals simp only [ofLex_toLex, Finsupp.indicator_apply]
-  · have hki := mem_Iic.2 (hk.le.trans <| mem_Iic.1 hkm.1)
-    rw [dif_pos hki]; rw [dif_pos]
-    by_contra h
-exact lt_irrefl k ((lt_min'_iff _ _).1 hk) _ mem_sdiff.2 ⟨hki, h⟩
-  · rw [dif_neg hkm.2, dif_pos hkm.1]; exact Nat.zero_lt_one
-
-中文:
-引理 supDegree_monic_esymm
-  条件: [非平凡 R] {i : 自然数} (him : i < m)
-  证明: by
-  have := supDegree_leadingCoeff_sum_eq (D := toLex) (s := univ.powersetCard (i + 1))
-    (i := Iic (⟨i, him⟩ : Fin m)) ?_ (f := fun s => monomial (∑ j in s, fun₀ | j => 1) (1 : R)) ?_
-  · rwa [← esymm_eq_sum_monomial, ← Finsupp.indicator_eq_sum_single, ← single_eq_monomial,
-      supDegree_single_ne_zero _ one_ne_zero, leadingCoeff_single toLex.injective] at this
-  · exact mem_powersetCard.2 ⟨subset_univ _, Fin.card_Iic _⟩
-  intro t ht hne
-  have ht' : #t = #(Iic (⟨i, him⟩ : Fin m)) := by
-    rw [(mem_powersetCard.1 ht).2]; rw [Fin.card_Iic]
-  simp_rw [← single_eq_monomial, supDegree_single_ne_zero _ one_ne_zero,
-    ← Finsupp.indicator_eq_sum_single]
-  rw [ne_comm]; rw [Ne]; rw [← subset_iff_eq_of_card_le ht'.le]; rw [not_subset] at hne
-  simp_rw [← mem_sdiff] at hne
-  have hkm := mem_sdiff.1 (min'_mem _ hne)
-  refine ⟨min' _ hne, fun k hk => ?_, ?_⟩
-  all_goals simp only [ofLex_toLex, Finsupp.indicator_apply]
-  · have hki := mem_Iic.2 (hk.le.trans <| mem_Iic.1 hkm.1)
-    rw [dif_pos hki]; rw [dif_pos]
-    by_contra h
-exact lt_irrefl k ((lt_min'_iff _ _).1 hk) _ mem_sdiff.2 ⟨hki, h⟩
-  · rw [dif_neg hkm.2, dif_pos hkm.1]; exact Nat.zero_lt_one
+lemma esymmAlgHom_zero : esymmAlgHomMonomial σ (0 : Fin n →₀ ℕ) r = C r := by
+  rw [esymmAlgHomMonomial, monomial_zero', esymmAlgHom_apply, aeval_C, algebraMap_eq]
+/-
+**MvPolynomial.supDegree_monic_esymm** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma supDegree_monic_esymm [Nontrivial R] {i : Nat} (him : i < m) :
+private lemma supDegree_monic_esymm [Nontrivial R] {i : ℕ} (him : i < m) :
     supDegree toLex (esymm (Fin m) R (i + 1)) =
-      toLex (Finsupp.indicator (Iic ⟨i, him⟩) fun _ _ => 1) ∧
+      toLex (Finsupp.indicator (Iic ⟨i, him⟩) fun _ _ ↦ 1) ∧
     Monic toLex (esymm (Fin m) R (i + 1)) := by
   have := supDegree_leadingCoeff_sum_eq (D := toLex) (s := univ.powersetCard (i + 1))
-    (i := Iic (⟨i, him⟩ : Fin m)) ?_ (f := fun s => monomial (∑ j in s, fun₀ | j => 1) (1 : R)) ?_
+    (i := Iic (⟨i, him⟩ : Fin m)) ?_ (f := fun s ↦ monomial (∑ j ∈ s, fun₀ | j => 1) (1 : R)) ?_
   · rwa [← esymm_eq_sum_monomial, ← Finsupp.indicator_eq_sum_single, ← single_eq_monomial,
       supDegree_single_ne_zero _ one_ne_zero, leadingCoeff_single toLex.injective] at this
   · exact mem_powersetCard.2 ⟨subset_univ _, Fin.card_Iic _⟩
   intro t ht hne
   have ht' : #t = #(Iic (⟨i, him⟩ : Fin m)) := by
-    rw [(mem_powersetCard.1 ht).2]; rw [Fin.card_Iic]
+    rw [(mem_powersetCard.1 ht).2, Fin.card_Iic]
   simp_rw [← single_eq_monomial, supDegree_single_ne_zero _ one_ne_zero,
     ← Finsupp.indicator_eq_sum_single]
-  rw [ne_comm]; rw [Ne]; rw [← subset_iff_eq_of_card_le ht'.le]; rw [not_subset] at hne
+  rw [ne_comm, Ne, ← subset_iff_eq_of_card_le ht'.le, not_subset] at hne
   simp_rw [← mem_sdiff] at hne
   have hkm := mem_sdiff.1 (min'_mem _ hne)
-  refine ⟨min' _ hne, fun k hk => ?_, ?_⟩
+  refine ⟨min' _ hne, fun k hk ↦ ?_, ?_⟩
   all_goals simp only [ofLex_toLex, Finsupp.indicator_apply]
   · have hki := mem_Iic.2 (hk.le.trans <| mem_Iic.1 hkm.1)
-    rw [dif_pos hki]; rw [dif_pos]
+    rw [dif_pos hki, dif_pos]
     by_contra h
-exact lt_irrefl k ((lt_min'_iff _ _).1 hk) _ mem_sdiff.2 ⟨hki, h⟩
+    exact lt_irrefl k <| ((lt_min'_iff _ _).1 hk) _ <| mem_sdiff.2 ⟨hki, h⟩
   · rw [dif_neg hkm.2, dif_pos hkm.1]; exact Nat.zero_lt_one
-
-/--
-lemma `supDegree_esymm` / 引理 `supDegree_esymm`
-
-English:
-lemma supDegree_esymm
-  given: [Nontrivial R] (him : i < m)
-  proof: by
-  rw [(supDegree_monic_esymm him).1]; rw [ofLex_toLex]
-  ext j
-  simp_rw [Finsupp.indicator_apply, dite_eq_ite, mem_Iic, accumulate_apply, Finsupp.single_apply,
-    sum_ite_eq, mem_filter_univ, Fin.le_def]
-
-中文:
-引理 supDegree_esymm
-  条件: [非平凡 R] (him : i < m)
-  证明: by
-  rw [(supDegree_monic_esymm him).1]; rw [ofLex_toLex]
-  ext j
-  simp_rw [Finsupp.indicator_apply, dite_eq_ite, mem_Iic, accumulate_apply, Finsupp.single_apply,
-    sum_ite_eq, mem_filter_univ, Fin.le_def]
-
-Depends on / 依赖: Fin.le_def, Finsupp, Finsupp.indicator_apply, Finsupp.single_apply, accumulate_apply, dite_eq_ite, indicator_apply, le_def, mem_Iic, mem_filter_univ, ofLex_toLex, simp_rw, single_apply, sum_ite_eq, supDegree_monic_esymm
+/-
+**MvPolynomial.supDegree_esymm** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial`。
+形式化陈述：supDegree_esymm [Nontrivial R] (him : i < m) : ofLex (supDegree toLex <| e
+symm (Fin m) R (i + 1)) = accumulate n m (Finsupp.single i 1)
+参数：him : i < m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `_private.Mathlib.RingTheory.MvPolynomial.Symmetric.FundamentalTheorem.0.
+MvPolynomial.supDegree_monic_esymm`：∀ {R : Type u_3} {m : ℕ} [inst : CommSemirin
+g R] [Nontrivial R] {i : ℕ} (him : i < m),   AddMonoidAlgebra.supDegree (⇑toLex)
+ (MvPolynomial.e…
+· 使用定理 `ofLex_toLex`：ofLex_toLex (a : α) : ofLex (toLex a) = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finsupp.indicator_apply`：indicator_apply [DecidableEq ι] : indicator s f
+ i = if hi : i in s then f i hi else 0
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `Fin.accumulate_apply`：∀ (n m : ℕ) (t : Fin n → ℕ) (j : Fin m), (Fin.accu
+mulate n m) t j = ∑ i with ↑j ≤ ↑i, t i
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finsupp.single_apply`：single_apply [Decidable (a = a')] : single a b a' 
+= if a = a' then b else 0
+· 使用定理 `Finset.sum_ite_eq`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid
+ M] [inst_1 : DecidableEq ι] (s : Finset ι) (a : ι) (b : ι → M),   (∑ x ∈ s, if 
+a = x t…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma supDegree_esymm [Nontrivial R] (him : i < m) :
     ofLex (supDegree toLex <| esymm (Fin m) R (i + 1)) = accumulate n m (Finsupp.single i 1) := by
-  rw [(supDegree_monic_esymm him).1]; rw [ofLex_toLex]
+  rw [(supDegree_monic_esymm him).1, ofLex_toLex]
   ext j
   simp_rw [Finsupp.indicator_apply, dite_eq_ite, mem_Iic, accumulate_apply, Finsupp.single_apply,
     sum_ite_eq, mem_filter_univ, Fin.le_def]
-
-/--
-lemma `monic_esymm` / 引理 `monic_esymm`
-
-English:
-lemma monic_esymm
-  given: {i : Nat} (him : i <= m)
-  statement: Monic toLex (esymm (Fin m) R i)
-  proof: by
-  cases i with
-  | zero =>
-    rw [esymm_zero]
-    exact monic_one toLex.injective
-  | succ i =>
-    nontriviality R
-    exact (supDegree_monic_esymm him).2
-
-中文:
-引理 monic_esymm
-  条件: {i : 自然数} (him : i <= m)
-  结论: Monic toLex (esymm (有限集 m) R i)
-  证明: by
-  cases i with
-  | zero =>
-    rw [esymm_zero]
-    exact monic_one toLex.injective
-  | succ i =>
-    nontriviality R
-    exact (supDegree_monic_esymm him).2
-
-Depends on / 依赖: esymm_zero, injective, monic_one, nontriviality, supDegree_monic_esymm, toLex.injective
+/-
+**MvPolynomial.monic_esymm** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial`。
+形式化陈述：monic_esymm {i : Nat} (him : i <= m) : Monic toLex (esymm (Fin m) R i)
+参数：him : i <= m。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.esymm_zero`：esymm_zero : esymm σ R 0 = 1
+· 使用定理 `AddMonoidAlgebra.monic_one`：monic_one [AddZeroClass A] (hD : D.Injective
+) : (1 : R[A]).Monic D
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Nontriviality.subsingleton_or_nontrivial_elim`：subsinglet
+on_or_nontrivial_elim {p : Prop} {α : Type u} (h₁ : Subsingleton α -> p) (h₂ : N
+ontrivial α -> p) : p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `_private.Mathlib.RingTheory.MvPolynomial.Symmetric.FundamentalTheorem.0.
+MvPolynomial.supDegree_monic_esymm`：∀ {R : Type u_3} {m : ℕ} [inst : CommSemirin
+g R] [Nontrivial R] {i : ℕ} (him : i < m),   AddMonoidAlgebra.supDegree (⇑toLex)
+ (MvPolynomial.e…
 -/
-lemma monic_esymm {i : Nat} (him : i <= m) : Monic toLex (esymm (Fin m) R i) := by
+lemma monic_esymm {i : ℕ} (him : i ≤ m) : Monic toLex (esymm (Fin m) R i) := by
   cases i with
   | zero =>
     rw [esymm_zero]
@@ -613,154 +629,265 @@ lemma monic_esymm {i : Nat} (him : i <= m) : Monic toLex (esymm (Fin m) R i) := 
   | succ i =>
     nontriviality R
     exact (supDegree_monic_esymm him).2
-
-/--
-lemma `leadingCoeff_esymmAlgHomMonomial` / 引理 `leadingCoeff_esymmAlgHomMonomial`
-
-English:
-lemma leadingCoeff_esymmAlgHomMonomial
-  given: (t : Fin n ->₀ Nat) (hnm : n <= m)
-  proof: by
-  induction t using Finsupp.induction₂ with
-  | zero => rw [esymmAlgHom_zero, leadingCoeff_toLex_C]
-  | add_single i _ _ _ _ ih =>
-    rw [esymmAlgHomMonomial_add]; rw [esymmAlgHomMonomial_single_one]; rw [((monic_esymm <| i.2.trans_le hnm).pow toLex_add toLex.injective).leadingCoeff_mul_eq_left]; rw [ih]
-    exacts [toLex.injective, toLex_add]
-
-中文:
-引理 leadingCoeff_esymmAlgHomMonomial
-  条件: (t : 有限集 n ->₀ 自然数) (hnm : n <= m)
-  证明: by
-  induction t using Finsupp.induction₂ with
-  | zero => rw [esymmAlgHom_zero, leadingCoeff_toLex_C]
-  | add_single i _ _ _ _ ih =>
-    rw [esymmAlgHomMonomial_add]; rw [esymmAlgHomMonomial_single_one]; rw [((monic_esymm <| i.2.trans_le hnm).pow toLex_add toLex.injective).leadingCoeff_mul_eq_left]; rw [ih]
-    exacts [toLex.injective, toLex_add]
-
-Depends on / 依赖: Finsupp, Finsupp.induction, add_single, esymmAlgHomMonomial_add, esymmAlgHomMonomial_single_one, esymmAlgHom_zero, exacts, injective, leadingCoeff_mul_eq_left, leadingCoeff_toLex_C, monic_esymm, toLex.injective, toLex_add, trans_le
+/-
+**MvPolynomial.leadingCoeff_esymmAlgHomMonomial** 是 Mathlib 中的一个引理，位于命名空间 `MvPol
+ynomial`。
+形式化陈述：leadingCoeff_esymmAlgHomMonomial (t : Fin n ->₀ Nat) (hnm : n <= m) : lead
+ingCoeff toLex (esymmAlgHomMonomial (Fin m) t r) = r
+参数：t : Fin n ->₀ Nat；hnm : n <= m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finsupp.induction₂`：induction₂ {motive : (ι ->₀ M) -> Prop} (f : ι ->₀ M
+) (zero : motive 0) (add_single : forall (a b) (f : ι ->₀ M), a ∉ f.support -> b
+ != 0 ->…
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MvPolynomial.esymmAlgHom_zero`：esymmAlgHom_zero : esymmAlgHomMonomial σ 
+(0 : Fin n ->₀ Nat) r = C r
+· 使用引理 `MvPolynomial.leadingCoeff_toLex_C`：leadingCoeff_toLex_C (r : R) : leadin
+gCoeff toLex (C (σ
+· 使用引理 `MvPolynomial.esymmAlgHomMonomial_add`：esymmAlgHomMonomial_add {t s : Fin
+ n ->₀ Nat} : esymmAlgHomMonomial σ (t + s) r = esymmAlgHomMonomial σ t r * esym
+mAlgHomMonomial σ s 1
+· 使用引理 `MvPolynomial.esymmAlgHomMonomial_single_one`：esymmAlgHomMonomial_single_
+one : esymmAlgHomMonomial σ (Finsupp.single i k) 1 = esymm σ R (i + 1) ^ k
+· 使用定理 `Zero.instNonempty`：∀ {α : Type u} [Zero α], Nonempty α
+· 使用定理 `AddMonoidAlgebra.Monic.leadingCoeff_mul_eq_left`：∀ {R : Type u_1} {A : T
+ype u_3} {B : Type u_5} [inst : Semiring R] [inst_1 : LinearOrder B] [inst_2 : O
+rderBot B]   {p q : AddMonoidAlgebra …
+· 使用定理 `Finsupp.Lex.addLeftStrictMono`：∀ {α : Type u_1} {N : Type u_2} [inst : L
+inearOrder α] [inst_1 : AddMonoid N] [inst_2 : LinearOrder N]   [AddLeftStrictMo
+no N], AddLeftStric…
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Finsupp.Lex.addRightStrictMono`：∀ {α : Type u_1} {N : Type u_2} [inst : 
+LinearOrder α] [inst_1 : AddMonoid N] [inst_2 : LinearOrder N]   [AddRightStrict
+Mono N], AddRightStr…
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `AddMonoidAlgebra.Monic.pow`：∀ {R : Type u_1} [inst : Semiring R] {A : Ty
+pe u_8} {B : Type u_9} [inst_1 : AddMonoid A] [inst_2 : AddMonoid B]   [inst_3 :
+ LinearOrder B] …
+· 使用定理 `toLex_add`：∀ {α : Type u_1} [inst : Add α] (a b : α), toLex (a + b) = to
+Lex a + toLex b
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用引理 `MvPolynomial.monic_esymm`：monic_esymm {i : Nat} (him : i <= m) : Monic t
+oLex (esymm (Fin m) R i)
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Fin.isLt`：∀ {n : ℕ} (self : Fin n), ↑self < n
 -/
-lemma leadingCoeff_esymmAlgHomMonomial (t : Fin n ->₀ Nat) (hnm : n <= m) :
+lemma leadingCoeff_esymmAlgHomMonomial (t : Fin n →₀ ℕ) (hnm : n ≤ m) :
     leadingCoeff toLex (esymmAlgHomMonomial (Fin m) t r) = r := by
   induction t using Finsupp.induction₂ with
   | zero => rw [esymmAlgHom_zero, leadingCoeff_toLex_C]
   | add_single i _ _ _ _ ih =>
-    rw [esymmAlgHomMonomial_add]; rw [esymmAlgHomMonomial_single_one]; rw [((monic_esymm <| i.2.trans_le hnm).pow toLex_add toLex.injective).leadingCoeff_mul_eq_left]; rw [ih]
+    rw [esymmAlgHomMonomial_add, esymmAlgHomMonomial_single_one,
+        ((monic_esymm <| i.2.trans_le hnm).pow toLex_add toLex.injective).leadingCoeff_mul_eq_left,
+        ih]
     exacts [toLex.injective, toLex_add]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `supDegree_esymmAlgHomMonomial` / 引理 `supDegree_esymmAlgHomMonomial`
-
-English:
-lemma supDegree_esymmAlgHomMonomial
-  given: (hr : r != 0) (t : Fin n ->₀ Nat) (hnm : n <= m)
-  proof: by
-  nontriviality R
-  induction t using Finsupp.induction₂ with
-  | zero => simp_rw [esymmAlgHom_zero, supDegree_toLex_C, ofLex_zero, Finsupp.coe_zero, map_zero]
-  | add_single i _ _ _ _ ih =>
-    have := i.2.trans_le hnm
-    rw [esymmAlgHomMonomial_add]; rw [esymmAlgHomMonomial_single_one]; rw [Monic.supDegree_mul_of_ne_zero_left toLex.injective toLex_add]; rw [ofLex_add]; rw [Finsupp.coe_add]; rw [ih]; rw [Finsupp.coe_add]; rw [map_add]; rw [Monic.supDegree_pow rfl toLex_add toLex.injective]; rw [ofLex_smul]; rw [Finsupp.coe_smul]; rw [supDegree_esymm this]; rw [← map_nsmul]; rw [← Finsupp.coe_smul]; rw [Finsupp.smul_single]; rw [nsmul_one]; rw [Nat.cast_id]
-    · exact monic_esymm this
-    · exact (monic_esymm this).pow toLex_add toLex.injective
-    · rwa [Ne, ← leadingCoeff_eq_zero toLex.injective, leadingCoeff_esymmAlgHomMonomial _ hnm]
-
-omit [Fintype σ] in
-
-中文:
-引理 supDegree_esymmAlgHomMonomial
-  条件: (hr : r != 0) (t : 有限集 n ->₀ 自然数) (hnm : n <= m)
-  证明: by
-  nontriviality R
-  induction t using Finsupp.induction₂ with
-  | zero => simp_rw [esymmAlgHom_zero, supDegree_toLex_C, ofLex_zero, Finsupp.coe_zero, map_zero]
-  | add_single i _ _ _ _ ih =>
-    have := i.2.trans_le hnm
-    rw [esymmAlgHomMonomial_add]; rw [esymmAlgHomMonomial_single_one]; rw [Monic.supDegree_mul_of_ne_zero_left toLex.injective toLex_add]; rw [ofLex_add]; rw [Finsupp.coe_add]; rw [ih]; rw [Finsupp.coe_add]; rw [map_add]; rw [Monic.supDegree_pow rfl toLex_add toLex.injective]; rw [ofLex_smul]; rw [Finsupp.coe_smul]; rw [supDegree_esymm this]; rw [← map_nsmul]; rw [← Finsupp.coe_smul]; rw [Finsupp.smul_single]; rw [nsmul_one]; rw [Nat.cast_id]
-    · exact monic_esymm this
-    · exact (monic_esymm this).pow toLex_add toLex.injective
-    · rwa [Ne, ← leadingCoeff_eq_zero toLex.injective, leadingCoeff_esymmAlgHomMonomial _ hnm]
-
-omit [Fintype σ] in
-
-Depends on / 依赖: Finsupp, Finsupp.coe_add, Finsupp.coe_zero, Finsupp.induction, Monic.supDegree_mul_of_ne_zero_left, Monic.supDegree_pow, add_single, coe_add, coe_zero, esymmAlgHomMonomial_add, esymmAlgHomMonomial_single_one, esymmAlgHom_zero, injective, map_add, map_zero, nontriviality, ofLex_add, ofLex_smul, ofLex_zero, simp_rw
+/-
+**MvPolynomial.supDegree_esymmAlgHomMonomial** 是 Mathlib 中的一个引理，位于命名空间 `MvPolyno
+mial`。
+形式化陈述：supDegree_esymmAlgHomMonomial (hr : r != 0) (t : Fin n ->₀ Nat) (hnm : n <
+= m) : ofLex (supDegree toLex <| esymmAlgHomMonomial (Fin m) t r) = accumulate n
+ m t
+参数：hr : r != 0；t : Fin n ->₀ Nat；hnm : n <= m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finsupp.induction₂`：induction₂ {motive : (ι ->₀ M) -> Prop} (f : ι ->₀ M
+) (zero : motive 0) (add_single : forall (a b) (f : ι ->₀ M), a ∉ f.support -> b
+ != 0 ->…
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MvPolynomial.esymmAlgHom_zero`：esymmAlgHom_zero : esymmAlgHomMonomial σ 
+(0 : Fin n ->₀ Nat) r = C r
+· 使用引理 `MvPolynomial.supDegree_toLex_C`：supDegree_toLex_C (r : R) : supDegree to
+Lex (C (σ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Fin.isLt`：∀ {n : ℕ} (self : Fin n), ↑self < n
+· 使用引理 `MvPolynomial.esymmAlgHomMonomial_add`：esymmAlgHomMonomial_add {t s : Fin
+ n ->₀ Nat} : esymmAlgHomMonomial σ (t + s) r = esymmAlgHomMonomial σ t r * esym
+mAlgHomMonomial σ s 1
+· 使用引理 `MvPolynomial.esymmAlgHomMonomial_single_one`：esymmAlgHomMonomial_single_
+one : esymmAlgHomMonomial σ (Finsupp.single i k) 1 = esymm σ R (i + 1) ^ k
+· 使用定理 `AddMonoidAlgebra.Monic.supDegree_mul_of_ne_zero_left`：∀ {R : Type u_1} {
+A : Type u_3} {B : Type u_5} [inst : Semiring R] [inst_1 : LinearOrder B] [inst_
+2 : OrderBot B]   {p q : AddMonoidAlgebra …
+· 使用定理 `Finsupp.Lex.addLeftStrictMono`：∀ {α : Type u_1} {N : Type u_2} [inst : L
+inearOrder α] [inst_1 : AddMonoid N] [inst_2 : LinearOrder N]   [AddLeftStrictMo
+no N], AddLeftStric…
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Finsupp.Lex.addRightStrictMono`：∀ {α : Type u_1} {N : Type u_2} [inst : 
+LinearOrder α] [inst_1 : AddMonoid N] [inst_2 : LinearOrder N]   [AddRightStrict
+Mono N], AddRightStr…
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+（共 52 条，此处仅展示前 30 条）
 -/
-lemma supDegree_esymmAlgHomMonomial (hr : r != 0) (t : Fin n ->₀ Nat) (hnm : n <= m) :
+lemma supDegree_esymmAlgHomMonomial (hr : r ≠ 0) (t : Fin n →₀ ℕ) (hnm : n ≤ m) :
     ofLex (supDegree toLex <| esymmAlgHomMonomial (Fin m) t r) = accumulate n m t := by
   nontriviality R
   induction t using Finsupp.induction₂ with
   | zero => simp_rw [esymmAlgHom_zero, supDegree_toLex_C, ofLex_zero, Finsupp.coe_zero, map_zero]
   | add_single i _ _ _ _ ih =>
     have := i.2.trans_le hnm
-    rw [esymmAlgHomMonomial_add]; rw [esymmAlgHomMonomial_single_one]; rw [Monic.supDegree_mul_of_ne_zero_left toLex.injective toLex_add]; rw [ofLex_add]; rw [Finsupp.coe_add]; rw [ih]; rw [Finsupp.coe_add]; rw [map_add]; rw [Monic.supDegree_pow rfl toLex_add toLex.injective]; rw [ofLex_smul]; rw [Finsupp.coe_smul]; rw [supDegree_esymm this]; rw [← map_nsmul]; rw [← Finsupp.coe_smul]; rw [Finsupp.smul_single]; rw [nsmul_one]; rw [Nat.cast_id]
+    rw [esymmAlgHomMonomial_add, esymmAlgHomMonomial_single_one,
+        Monic.supDegree_mul_of_ne_zero_left toLex.injective toLex_add, ofLex_add, Finsupp.coe_add,
+        ih, Finsupp.coe_add, map_add, Monic.supDegree_pow rfl toLex_add toLex.injective, ofLex_smul,
+        Finsupp.coe_smul, supDegree_esymm this, ← map_nsmul, ← Finsupp.coe_smul,
+        Finsupp.smul_single, nsmul_one, Nat.cast_id]
     · exact monic_esymm this
     · exact (monic_esymm this).pow toLex_add toLex.injective
     · rwa [Ne, ← leadingCoeff_eq_zero toLex.injective, leadingCoeff_esymmAlgHomMonomial _ hnm]
 
 omit [Fintype σ] in
-/--
-lemma `IsSymmetric.antitone_supDegree` / 引理 `IsSymmetric.antitone_supDegree`
-
-English:
-lemma IsSymmetric.antitone_supDegree
-  given: [LinearOrder σ] {p : MvPolynomial σ R} (hp : p.IsSymmetric)
-  proof: by
-  obtain rfl | h0 := eq_or_ne p 0
-  · rw [supDegree_zero, bot_eq_zero (α := Lex (σ ->₀ Nat))]
-    exact Pi.zero_mono
-  rw [Antitone]
-  by_contra! ⟨i, j, hle, hlt⟩
-  apply (le_sup (s := p.support) (f := toLex) _).not_gt
-  pick_goal 3
-  · rw [← hp (Equiv.swap i j), mem_support_iff, coeff_rename_mapDomain _ (Equiv.injective _)]
-    rw [Ne]; rw [← leadingCoeff_eq_zero toLex.injective]; rw [leadingCoeff_toLex] at h0
-    assumption
-  refine ⟨i, fun k hk => ?_, ?_⟩
-  all_goals dsimp only [Pi.toLex_apply, ofLex_toLex]
-  · conv_rhs => rw [← Equiv.swap_apply_of_ne_of_ne hk.ne (hk.trans_le hle).ne]
-    rw [Finsupp.mapDomain_apply (Equiv.injective _)]; rw [supDegree]; rfl
-  · apply hlt.trans_eq
-    simp_rw [Finsupp.mapDomain_equiv_apply, Equiv.symm_swap, Equiv.swap_apply_left]
-
-中文:
-引理 IsSymmetric.antitone_supDegree
-  条件: [线性序 σ] {p : 多元多项式 σ R} (hp : p.IsSymmetric)
-  证明: by
-  obtain rfl | h0 := eq_or_ne p 0
-  · rw [supDegree_zero, bot_eq_zero (α := Lex (σ ->₀ Nat))]
-    exact Pi.zero_mono
-  rw [Antitone]
-  by_contra! ⟨i, j, hle, hlt⟩
-  apply (le_sup (s := p.support) (f := toLex) _).not_gt
-  pick_goal 3
-  · rw [← hp (Equiv.swap i j), mem_support_iff, coeff_rename_mapDomain _ (Equiv.injective _)]
-    rw [Ne]; rw [← leadingCoeff_eq_zero toLex.injective]; rw [leadingCoeff_toLex] at h0
-    assumption
-  refine ⟨i, fun k hk => ?_, ?_⟩
-  all_goals dsimp only [Pi.toLex_apply, ofLex_toLex]
-  · conv_rhs => rw [← Equiv.swap_apply_of_ne_of_ne hk.ne (hk.trans_le hle).ne]
-    rw [Finsupp.mapDomain_apply (Equiv.injective _)]; rw [supDegree]; rfl
-  · apply hlt.trans_eq
-    simp_rw [Finsupp.mapDomain_equiv_apply, Equiv.symm_swap, Equiv.swap_apply_left]
-
-Depends on / 依赖: Antitone, Equiv.injective, Equiv.swap, Pi.toLex_apply, Pi.zero_mono, all_goals, bot_eq_zero, coeff_rename_mapDomain, conv_rhs, eq_or_ne, injective, le_sup, leadingCoeff_eq_zero, leadingCoeff_toLex, mem_support_iff, not_gt, ofLex_toLex, p.support, pick_goal, supDegree_zero
+/-
+**MvPolynomial.IsSymmetric.antitone_supDegree** 是 Mathlib 中的一个定理，位于命名空间 `MvPolyn
+omial.IsSymmetric`。
+形式化陈述：∀ {σ : Type u_1} {R : Type u_3} [inst : CommSemiring R] [inst_1 : LinearOr
+der σ] {p : MvPolynomial σ R},   p.IsSymmetric → Antitone ⇑(ofLex (AddMonoidAlge
+bra.supDegree (⇑toLex) p))
+参数：ofLex (AddMonoidAlgebra.supDegree (⇑toLex) p)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddMonoidAlgebra.supDegree_zero`：supDegree_zero : (0 : R[A]).supDegree D
+ = ⊥
+· 使用定理 `bot_eq_zero`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Zero α] 
+[IsBotZeroClass α] [inst_3 : OrderBot α], ⊥ = 0
+· 使用定理 `Finsupp.Lex.isBotZeroClass`：∀ {α : Type u_1} {N : Type u_2} [inst : Line
+arOrder α] [inst_1 : AddCommMonoid N] [inst_2 : PartialOrder N]   [IsBotZeroClas
+s N], IsBotZeroC…
+· 使用定理 `Pi.zero_mono`：∀ {α : Type u_5} {β : Type u_6} [inst : Preorder α] [inst_
+1 : Preorder β] [inst_2 : Zero β], Monotone 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Antitone.eq_1`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1 :
+ Preorder β] (f : α → β),   Antitone f = ∀ ⦃a b : α⦄, a ≤ b → f b ≤ f a
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `Finset.le_sup`：le_sup {b : β} (hb : b in s) : f b <= s.sup f
+· 使用定理 `MvPolynomial.mem_support_iff`：mem_support_iff {p : MvPolynomial σ R} {m 
+: σ ->₀ Nat} : m in p.support ↔ p.coeff m != 0
+· 使用定理 `MvPolynomial.coeff_rename_mapDomain`：coeff_rename_mapDomain (f : σ -> τ)
+ (hf : Injective f) (φ : MvPolynomial σ R) (d : σ ->₀ Nat) : (rename f φ).coeff 
+(d.mapDomain f) = φ.coeff…
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用引理 `MvPolynomial.leadingCoeff_toLex`：leadingCoeff_toLex : p.leadingCoeff toL
+ex = p.coeff (ofLex <| p.supDegree toLex)
+· 使用定理 `Zero.instNonempty`：∀ {α : Type u} [Zero α], Nonempty α
+· 使用引理 `AddMonoidAlgebra.leadingCoeff_eq_zero`：leadingCoeff_eq_zero (hD : D.Inje
+ctive) : p.leadingCoeff D = 0 ↔ p = 0
+· 使用定理 `Ne.eq_1`：∀ {α : Sort u} (a b : α), (a ≠ b) = ¬a = b
+· 使用定理 `Equiv.swap_apply_of_ne_of_ne`：swap_apply_of_ne_of_ne {a b x : α} : x != 
+a -> x != b -> swap a b x = x
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Finsupp.mapDomain_apply`：∀ {α : Type u_1} {β : Type u_2} {M : Type u_5} 
+[inst : AddCommMonoid M] {f : α → β},   Function.Injective f → ∀ (x : α →₀ M) (a
+ : α), (Finsu…
+· 使用定理 `AddMonoidAlgebra.supDegree.eq_1`：∀ {R : Type u_1} {A : Type u_3} {B : Ty
+pe u_5} [inst : Semiring R] [inst_1 : SemilatticeSup B] [inst_2 : OrderBot B]   
+(D : A → B) (f : AddM…
+· 使用定理 `LT.lt.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LT α], a < b → b = 
+c → a < c
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+（共 34 条，此处仅展示前 30 条）
 -/
 lemma IsSymmetric.antitone_supDegree [LinearOrder σ] {p : MvPolynomial σ R} (hp : p.IsSymmetric) :
     Antitone ↑(ofLex <| p.supDegree toLex) := by
   obtain rfl | h0 := eq_or_ne p 0
-  · rw [supDegree_zero, bot_eq_zero (α := Lex (σ ->₀ Nat))]
+  · rw [supDegree_zero, bot_eq_zero (α := Lex (σ →₀ ℕ))]
     exact Pi.zero_mono
   rw [Antitone]
   by_contra! ⟨i, j, hle, hlt⟩
   apply (le_sup (s := p.support) (f := toLex) _).not_gt
   pick_goal 3
   · rw [← hp (Equiv.swap i j), mem_support_iff, coeff_rename_mapDomain _ (Equiv.injective _)]
-    rw [Ne]; rw [← leadingCoeff_eq_zero toLex.injective]; rw [leadingCoeff_toLex] at h0
+    rw [Ne, ← leadingCoeff_eq_zero toLex.injective, leadingCoeff_toLex] at h0
     assumption
-  refine ⟨i, fun k hk => ?_, ?_⟩
+  refine ⟨i, fun k hk ↦ ?_, ?_⟩
   all_goals dsimp only [Pi.toLex_apply, ofLex_toLex]
   · conv_rhs => rw [← Equiv.swap_apply_of_ne_of_ne hk.ne (hk.trans_le hle).ne]
-    rw [Finsupp.mapDomain_apply (Equiv.injective _)]; rw [supDegree]; rfl
+    rw [Finsupp.mapDomain_apply (Equiv.injective _), supDegree]; rfl
   · apply hlt.trans_eq
     simp_rw [Finsupp.mapDomain_equiv_apply, Equiv.symm_swap, Equiv.swap_apply_left]
 
@@ -771,142 +898,193 @@ section CommRing
 variable (R)
 variable [Fintype σ] [CommRing R]
 
-/--
-lemma `esymmAlgHom_fin_injective` / 引理 `esymmAlgHom_fin_injective`
+/- Also holds for a cancellative CommSemiring. -/
+/-
+**MvPolynomial.esymmAlgHom_fin_injective** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial
+`。
+形式化陈述：esymmAlgHom_fin_injective (h : n <= m) : Function.Injective (esymmAlgHom (
+Fin m) R n)
+参数：h : n <= m。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `injective_iff_map_eq_zero`：∀ {F : Type u_7} {G : Type u_8} {H : Type u_9
+} [inst : AddGroup G] [inst_1 : AddZeroClass H] [inst_2 : FunLike F G H]   [AddM
+onoidHomClass F…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `Function.mtr`：∀ {a b : Prop}, (¬a → ¬b) → b → a
+· 使用定理 `MvPolynomial.as_sum`：as_sum (p : MvPolynomial σ R) : p = ∑ v in p.suppor
+t, monomial v (coeff v p)
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `SubsemiringClass.toAddSubmonoidClass`：∀ {S : Type u_1} {R : outParam (Ty
+pe u)} {inst : NonAssocSemiring R} {inst_1 : SetLike S R}   [self : SubsemiringC
+lass S R], AddSubmonoidCla…
+· 使用定理 `Subalgebra.instSubsemiringClass`：∀ {R : Type u} {A : Type v} [inst : Com
+mSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SubsemiringClass (S
+ubalgebra R A) A
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subalgebra.coe_eq_zero`：∀ {R : Type u} {A : Type v} [inst : CommSemiring
+ R] [inst_1 : Semiring A] [inst_2 : Algebra R A] (S : Subalgebra R A)   {x : ↥S}
+, ↑x = 0 ↔ x…
+· 使用定理 `AddSubmonoidClass.coe_finsetSum`：∀ {B : Type u_3} {S : B} {ι : Type u_4}
+ {M : Type u_5} [inst : AddCommMonoid M] [inst_1 : SetLike B M]   [inst_2 : AddS
+ubmonoidClass B M] (f…
+· 使用引理 `AddMonoidAlgebra.sum_ne_zero_of_injOn_supDegree`：sum_ne_zero_of_injOn_su
+pDegree (hs : s.Nonempty) (hf : forall i in s, f i != 0) (hd : (s : Set ι).InjOn
+ (supDegree D ∘ f)) : ∑ i in s, f i !…
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `MvPolynomial.support_nonempty`：support_nonempty {p : MvPolynomial σ R} :
+ p.support.Nonempty ↔ p != 0
+· 使用定理 `MvPolynomial.esymmAlgHomMonomial.eq_1`：∀ (σ : Type u_1) {R : Type u_3} {
+n : ℕ} [inst : CommSemiring R] [inst_1 : Fintype σ] (t : Fin n →₀ ℕ) (r : R),   
+MvPolynomial.esymmAlgHomMon…
+· 使用定理 `Ne.eq_1`：∀ {α : Sort u} (a b : α), (a ≠ b) = ¬a = b
+· 使用定理 `Zero.instNonempty`：∀ {α : Type u} [Zero α], Nonempty α
+· 使用引理 `AddMonoidAlgebra.leadingCoeff_eq_zero`：leadingCoeff_eq_zero (hD : D.Inje
+ctive) : p.leadingCoeff D = 0 ↔ p = 0
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用引理 `MvPolynomial.leadingCoeff_esymmAlgHomMonomial`：leadingCoeff_esymmAlgHomM
+onomial (t : Fin n ->₀ Nat) (hnm : n <= m) : leadingCoeff toLex (esymmAlgHomMono
+mial (Fin m) t r) = r
+· 使用定理 `MvPolynomial.mem_support_iff`：mem_support_iff {p : MvPolynomial σ R} {m 
+: σ ->₀ Nat} : m in p.support ↔ p.coeff m != 0
+· 使用定理 `DFunLike.ext'`：ext' {f g : F} (h : (f : forall a : α, β a) = (g : forall
+ a : α, β a)) : f = g
+· 使用引理 `Fin.accumulate_injective`：accumulate_injective {n m} (hnm : n <= m) : Fu
+nction.Injective (accumulate n m)
+· 使用引理 `MvPolynomial.supDegree_esymmAlgHomMonomial`：supDegree_esymmAlgHomMonomia
+l (hr : r != 0) (t : Fin n ->₀ Nat) (hnm : n <= m) : ofLex (supDegree toLex <| e
+symmAlgHomMonomial (Fin m) t r) …
+· 使用定理 `Finset.mem_coe`：mem_coe {a : α} {s : Finset α} : a in (s : Set α) ↔ a in
+ (s : Finset α)
+（共 32 条，此处仅展示前 30 条）
 
-English:
-lemma esymmAlgHom_fin_injective
-  given: (h : n <= m)
-  proof: by
-  rw [injective_iff_map_eq_zero]
-  refine fun p => (fun hp => ?_).mtr
-  rw [p.as_sum]; rw [map_sum (esymmAlgHom (Fin m) R n)]; rw [← Subalgebra.coe_eq_zero]; rw [AddSubmonoidClass.coe_finsetSum]
-  refine sum_ne_zero_of_injOn_supDegree (D := toLex) (support_nonempty.2 hp) (fun t ht => ?_)
-    (fun t ht s hs he => DFunLike.ext' <| accumulate_injective h ?_)
-  · rw [← esymmAlgHomMonomial, Ne, ← leadingCoeff_eq_zero toLex.injective,
-      leadingCoeff_esymmAlgHomMonomial t h]
-    rwa [mem_support_iff] at ht
-  rw [mem_coe]; rw [mem_support_iff] at ht hs
-  dsimp only [Function.comp] at he
-  rwa [← esymmAlgHomMonomial, ← esymmAlgHomMonomial, ← ofLex_inj, DFunLike.ext'_iff,
-       supDegree_esymmAlgHomMonomial ht t h, supDegree_esymmAlgHomMonomial hs s h] at he
-
-中文:
-引理 esymmAlgHom_fin_injective
-  条件: (h : n <= m)
-  证明: by
-  rw [injective_iff_map_eq_zero]
-  refine fun p => (fun hp => ?_).mtr
-  rw [p.as_sum]; rw [map_sum (esymmAlgHom (Fin m) R n)]; rw [← Subalgebra.coe_eq_zero]; rw [AddSubmonoidClass.coe_finsetSum]
-  refine sum_ne_zero_of_injOn_supDegree (D := toLex) (support_nonempty.2 hp) (fun t ht => ?_)
-    (fun t ht s hs he => DFunLike.ext' <| accumulate_injective h ?_)
-  · rw [← esymmAlgHomMonomial, Ne, ← leadingCoeff_eq_zero toLex.injective,
-      leadingCoeff_esymmAlgHomMonomial t h]
-    rwa [mem_support_iff] at ht
-  rw [mem_coe]; rw [mem_support_iff] at ht hs
-  dsimp only [Function.comp] at he
-  rwa [← esymmAlgHomMonomial, ← esymmAlgHomMonomial, ← ofLex_inj, DFunLike.ext'_iff,
-       supDegree_esymmAlgHomMonomial ht t h, supDegree_esymmAlgHomMonomial hs s h] at he
-
-Depends on / 依赖: AddSubmonoidClass, AddSubmonoidClass.coe_finsetSum, DFunLike, DFunLike.ext, Subalgebra, Subalgebra.coe_eq_zero, accumulate_injective, as_sum, coe_eq_zero, coe_finsetSum, esymmAlgHom, esymmAlgHomMonomial, injective, injective_iff_map_eq_zero, leadingCoeff_eq_zero, leadingCoeff_esymmAlgHomMonomial, map_sum, mem_coe, mem_support_iff, p.as_sum
+--- 原说明 ---
+Also holds for a cancellative CommSemiring.
 -/
-lemma esymmAlgHom_fin_injective (h : n <= m) :
+lemma esymmAlgHom_fin_injective (h : n ≤ m) :
     Function.Injective (esymmAlgHom (Fin m) R n) := by
   rw [injective_iff_map_eq_zero]
-  refine fun p => (fun hp => ?_).mtr
-  rw [p.as_sum]; rw [map_sum (esymmAlgHom (Fin m) R n)]; rw [← Subalgebra.coe_eq_zero]; rw [AddSubmonoidClass.coe_finsetSum]
-  refine sum_ne_zero_of_injOn_supDegree (D := toLex) (support_nonempty.2 hp) (fun t ht => ?_)
-    (fun t ht s hs he => DFunLike.ext' <| accumulate_injective h ?_)
+  refine fun p ↦ (fun hp ↦ ?_).mtr
+  rw [p.as_sum, map_sum (esymmAlgHom (Fin m) R n), ← Subalgebra.coe_eq_zero,
+    AddSubmonoidClass.coe_finsetSum]
+  refine sum_ne_zero_of_injOn_supDegree (D := toLex) (support_nonempty.2 hp) (fun t ht ↦ ?_)
+    (fun t ht s hs he ↦ DFunLike.ext' <| accumulate_injective h ?_)
   · rw [← esymmAlgHomMonomial, Ne, ← leadingCoeff_eq_zero toLex.injective,
       leadingCoeff_esymmAlgHomMonomial t h]
     rwa [mem_support_iff] at ht
-  rw [mem_coe]; rw [mem_support_iff] at ht hs
+  rw [mem_coe, mem_support_iff] at ht hs
   dsimp only [Function.comp] at he
   rwa [← esymmAlgHomMonomial, ← esymmAlgHomMonomial, ← ofLex_inj, DFunLike.ext'_iff,
        supDegree_esymmAlgHomMonomial ht t h, supDegree_esymmAlgHomMonomial hs s h] at he
-
-/--
-lemma `esymmAlgHom_injective` / 引理 `esymmAlgHom_injective`
-
-English:
-lemma esymmAlgHom_injective
-  given: (hn : n <= Fintype.card σ)
-  proof: by
-  rw [← rename_esymmAlgHom (Fintype.equivFin σ).symm]; rw [AlgHom.coe_comp]
-  exact (AlgEquiv.injective _).comp (esymmAlgHom_fin_injective R hn)
-
-中文:
-引理 esymmAlgHom_injective
-  条件: (hn : n <= 有限类型.card σ)
-  证明: by
-  rw [← rename_esymmAlgHom (Fintype.equivFin σ).symm]; rw [AlgHom.coe_comp]
-  exact (AlgEquiv.injective _).comp (esymmAlgHom_fin_injective R hn)
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.injective, AlgHom, AlgHom.coe_comp, Fintype, Fintype.equivFin, coe_comp, equivFin, esymmAlgHom_fin_injective, injective, rename_esymmAlgHom
+/-
+**MvPolynomial.esymmAlgHom_injective** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial`。
+形式化陈述：esymmAlgHom_injective (hn : n <= Fintype.card σ) : Function.Injective (esy
+mmAlgHom σ R n)
+参数：hn : n <= Fintype.card σ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `MvPolynomial.rename_esymmAlgHom`：rename_esymmAlgHom (e : σ ≃ τ) : (renam
+eSymmetricSubalgebra e).toAlgHom.comp (esymmAlgHom σ R n) = esymmAlgHom τ R n
+· 使用定理 `AlgHom.coe_comp`：coe_comp (φ₁ : B ->ₐ[R] C) (φ₂ : A ->ₐ[R] B) : ⇑(φ₁.com
+p φ₂) = φ₁ ∘ φ₂
+· 使用定理 `Function.Injective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} 
+{g : β → γ} {f : α → β},   Function.Injective g → Function.Injective f → Functio
+n.Injective (…
+· 使用定理 `AlgEquiv.injective`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA₂} [ins
+t : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [inst_3 : Al
+gebra R …
+· 使用引理 `MvPolynomial.esymmAlgHom_fin_injective`：esymmAlgHom_fin_injective (h : n
+ <= m) : Function.Injective (esymmAlgHom (Fin m) R n)
 -/
-lemma esymmAlgHom_injective (hn : n <= Fintype.card σ) :
+lemma esymmAlgHom_injective (hn : n ≤ Fintype.card σ) :
     Function.Injective (esymmAlgHom σ R n) := by
-  rw [← rename_esymmAlgHom (Fintype.equivFin σ).symm]; rw [AlgHom.coe_comp]
+  rw [← rename_esymmAlgHom (Fintype.equivFin σ).symm, AlgHom.coe_comp]
   exact (AlgEquiv.injective _).comp (esymmAlgHom_fin_injective R hn)
-
-/--
-lemma `esymmAlgHom_fin_bijective` / 引理 `esymmAlgHom_fin_bijective`
-
-English:
-lemma esymmAlgHom_fin_bijective
-  given: (n : Nat)
-  proof: by
-  use esymmAlgHom_fin_injective R le_rfl
-  rintro ⟨p, hp⟩
-  rw [← AlgHom.mem_range]
-  obtain rfl | h0 := eq_or_ne p 0
-  · exact Subalgebra.zero_mem _
-  induction he : p.supDegree toLex using WellFoundedLT.induction generalizing p with | _ t ih
-  subst he
-  let t := Finsupp.equivFunOnFinite.symm (invAccumulate n n <| ↑(ofLex <| p.supDegree toLex))
-  have hd :
-      (esymmAlgHomMonomial _ t <| p.leadingCoeff toLex).supDegree toLex = p.supDegree toLex := by
-    rw [← ofLex_inj]; rw [DFunLike.ext'_iff]; rw [supDegree_esymmAlgHomMonomial _ _ le_rfl]
-    · exact accumulate_invAccumulate le_rfl hp.antitone_supDegree
-    · rwa [Ne, leadingCoeff_eq_zero toLex.injective]
-  obtain he | hne := eq_or_ne p (esymmAlgHomMonomial _ t <| p.leadingCoeff toLex)
-  · convert! AlgHom.mem_range_self _ (monomial t <| p.leadingCoeff toLex)
-  have := (supDegree_sub_lt_of_leadingCoeff_eq toLex.injective hd.symm ?_).resolve_right hne
-  · specialize ih _ this _ (Subalgebra.sub_mem _ hp <| isSymmetric_esymmAlgHomMonomial _ _) _ rfl
-    · rwa [sub_ne_zero]
-    convert! ← Subalgebra.add_mem _ ih ⟨monomial t (p.leadingCoeff toLex), rfl⟩
-    apply sub_add_cancel p
-  · rw [leadingCoeff_esymmAlgHomMonomial t le_rfl]
-
-中文:
-引理 esymmAlgHom_fin_bijective
-  条件: (n : 自然数)
-  证明: by
-  use esymmAlgHom_fin_injective R le_rfl
-  rintro ⟨p, hp⟩
-  rw [← AlgHom.mem_range]
-  obtain rfl | h0 := eq_or_ne p 0
-  · exact Subalgebra.zero_mem _
-  induction he : p.supDegree toLex using WellFoundedLT.induction generalizing p with | _ t ih
-  subst he
-  let t := Finsupp.equivFunOnFinite.symm (invAccumulate n n <| ↑(ofLex <| p.supDegree toLex))
-  have hd :
-      (esymmAlgHomMonomial _ t <| p.leadingCoeff toLex).supDegree toLex = p.supDegree toLex := by
-    rw [← ofLex_inj]; rw [DFunLike.ext'_iff]; rw [supDegree_esymmAlgHomMonomial _ _ le_rfl]
-    · exact accumulate_invAccumulate le_rfl hp.antitone_supDegree
-    · rwa [Ne, leadingCoeff_eq_zero toLex.injective]
-  obtain he | hne := eq_or_ne p (esymmAlgHomMonomial _ t <| p.leadingCoeff toLex)
-  · convert! AlgHom.mem_range_self _ (monomial t <| p.leadingCoeff toLex)
-  have := (supDegree_sub_lt_of_leadingCoeff_eq toLex.injective hd.symm ?_).resolve_right hne
-  · specialize ih _ this _ (Subalgebra.sub_mem _ hp <| isSymmetric_esymmAlgHomMonomial _ _) _ rfl
-    · rwa [sub_ne_zero]
-    convert! ← Subalgebra.add_mem _ ih ⟨monomial t (p.leadingCoeff toLex), rfl⟩
-    apply sub_add_cancel p
-  · rw [leadingCoeff_esymmAlgHomMonomial t le_rfl]
-
-Depends on / 依赖: AlgHom, AlgHom.mem_range, DFunLike, DFunLike.ext, Finsupp, Finsupp.equivFunOnFinite.symm, Subalgebra, Subalgebra.zero_mem, WellFoundedLT, WellFoundedLT.induction, _iff, eq_or_ne, equivFunOnFinite, esymmAlgHomMonomial, esymmAlgHom_fin_injective, generalizing, invAccumulate, le_rfl, leadingCoeff, mem_range
+/-
+**MvPolynomial.esymmAlgHom_fin_bijective** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial
+`。
+形式化陈述：esymmAlgHom_fin_bijective (n : Nat) : Function.Bijective (esymmAlgHom (Fin
+ n) R n)
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MvPolynomial.esymmAlgHom_fin_injective`：esymmAlgHom_fin_injective (h : n
+ <= m) : Function.Injective (esymmAlgHom (Fin m) R n)
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgHom.mem_range`：mem_range (φ : A ->ₐ[R] B) {y : B} : y in φ.range ↔ ex
+ists x, φ x = y
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `Subalgebra.zero_mem`：∀ {R : Type u} {A : Type v} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A] (S : Subalgebra R A),   0 ∈ S
+· 使用定理 `WellFoundedLT.induction`：induction {motive : α -> Prop} (a : α) (ind : f
+orall x, (forall y, y < x -> motive y) -> motive x) : motive a
+· 使用定理 `Finsupp.Lex.wellFoundedLT`：∀ {α : Type u_3} {N : Type u_4} [inst : LT α]
+ [Std.Trichotomous fun x1 x2 => x1 < x2] [hα : WellFoundedGT α]   [inst_2 : AddM
+onoid N] [inst_…
+· 使用定理 `IsWellOrder.toIsWellFounded`：∀ {α : Type u} {r : α → α → Prop} [self : I
+sWellOrder α r], IsWellFounded α r
+· 使用定理 `isWellOrder_gt`：∀ {α : Type u} [inst : LinearOrder α] [WellFoundedGT α],
+ IsWellOrder α fun x1 x2 => x2 < x1
+· 使用定理 `Finite.to_wellFoundedGT`：∀ {α : Type u_1} [Finite α] [inst : Preorder α]
+, WellFoundedGT α
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `instWellFoundedLTNat`：WellFoundedLT ℕ
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `ofLex_inj`：ofLex_inj {a b : Lex α} : ofLex a = ofLex b ↔ a = b
+· 使用定理 `DFunLike.ext'_iff`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [i
+ : DFunLike F α β] {f g : F}, f = g ↔ ⇑f = ⇑g
+· 使用引理 `MvPolynomial.supDegree_esymmAlgHomMonomial`：supDegree_esymmAlgHomMonomia
+l (hr : r != 0) (t : Fin n ->₀ Nat) (hnm : n <= m) : ofLex (supDegree toLex <| e
+symmAlgHomMonomial (Fin m) t r) …
+· 使用定理 `Ne.eq_1`：∀ {α : Sort u} (a b : α), (a ≠ b) = ¬a = b
+· 使用定理 `Zero.instNonempty`：∀ {α : Type u} [Zero α], Nonempty α
+· 使用引理 `AddMonoidAlgebra.leadingCoeff_eq_zero`：leadingCoeff_eq_zero (hD : D.Inje
+ctive) : p.leadingCoeff D = 0 ↔ p = 0
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用引理 `Fin.accumulate_invAccumulate`：accumulate_invAccumulate {n m} (hmn : m <=
+ n) {s : Fin m -> Nat} (hs : Antitone s) : accumulate n m (invAccumulate n m s) 
+= s
+· 使用定理 `MvPolynomial.IsSymmetric.antitone_supDegree`：∀ {σ : Type u_1} {R : Type 
+u_3} [inst : CommSemiring R] [inst_1 : LinearOrder σ] {p : MvPolynomial σ R},   
+p.IsSymmetric → Antitone ⇑(ofLex …
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `AlgHom.mem_range_self`：mem_range_self (φ : A ->ₐ[R] B) (x : A) : φ x in 
+φ.range
+· 使用定理 `Or.resolve_right`：∀ {a b : Prop}, a ∨ b → ¬b → a
+（共 37 条，此处仅展示前 30 条）
 -/
-lemma esymmAlgHom_fin_bijective (n : Nat) :
+lemma esymmAlgHom_fin_bijective (n : ℕ) :
     Function.Bijective (esymmAlgHom (Fin n) R n) := by
   use esymmAlgHom_fin_injective R le_rfl
   rintro ⟨p, hp⟩
@@ -918,7 +1096,7 @@ lemma esymmAlgHom_fin_bijective (n : Nat) :
   let t := Finsupp.equivFunOnFinite.symm (invAccumulate n n <| ↑(ofLex <| p.supDegree toLex))
   have hd :
       (esymmAlgHomMonomial _ t <| p.leadingCoeff toLex).supDegree toLex = p.supDegree toLex := by
-    rw [← ofLex_inj]; rw [DFunLike.ext'_iff]; rw [supDegree_esymmAlgHomMonomial _ _ le_rfl]
+    rw [← ofLex_inj, DFunLike.ext'_iff, supDegree_esymmAlgHomMonomial _ _ le_rfl]
     · exact accumulate_invAccumulate le_rfl hp.antitone_supDegree
     · rwa [Ne, leadingCoeff_eq_zero toLex.injective]
   obtain he | hne := eq_or_ne p (esymmAlgHomMonomial _ t <| p.leadingCoeff toLex)
@@ -929,47 +1107,66 @@ lemma esymmAlgHom_fin_bijective (n : Nat) :
     convert! ← Subalgebra.add_mem _ ih ⟨monomial t (p.leadingCoeff toLex), rfl⟩
     apply sub_add_cancel p
   · rw [leadingCoeff_esymmAlgHomMonomial t le_rfl]
-
-/--
-lemma `esymmAlgHom_fin_surjective` / 引理 `esymmAlgHom_fin_surjective`
-
-English:
-lemma esymmAlgHom_fin_surjective
-  given: (h : m <= n)
-  proof: by
-  intro p
-  obtain ⟨q, rfl⟩ := (esymmAlgHom_fin_bijective R m).2 p
-  rw [← AlgHom.mem_range]
-  induction q using MvPolynomial.induction_on with
-  | C r => rw [← algebraMap_eq, AlgHom.commutes]; apply Subalgebra.algebraMap_mem
-  | add p q hp hq => rw [map_add]; exact Subalgebra.add_mem _ hp hq
-  | mul_X p i hp =>
-    rw [map_mul]
-    apply Subalgebra.mul_mem _ hp
-    rw [AlgHom.mem_range]
-    refine ⟨X ⟨i, i.2.trans_le h⟩, ?_⟩
-    simp_rw [esymmAlgHom, aeval_X]
-
-中文:
-引理 esymmAlgHom_fin_surjective
-  条件: (h : m <= n)
-  证明: by
-  intro p
-  obtain ⟨q, rfl⟩ := (esymmAlgHom_fin_bijective R m).2 p
-  rw [← AlgHom.mem_range]
-  induction q using MvPolynomial.induction_on with
-  | C r => rw [← algebraMap_eq, AlgHom.commutes]; apply Subalgebra.algebraMap_mem
-  | add p q hp hq => rw [map_add]; exact Subalgebra.add_mem _ hp hq
-  | mul_X p i hp =>
-    rw [map_mul]
-    apply Subalgebra.mul_mem _ hp
-    rw [AlgHom.mem_range]
-    refine ⟨X ⟨i, i.2.trans_le h⟩, ?_⟩
-    simp_rw [esymmAlgHom, aeval_X]
-
-Depends on / 依赖: AlgHom, AlgHom.commutes, AlgHom.mem_range, MvPolynomial, MvPolynomial.induction_on, Subalgebra, Subalgebra.add_mem, Subalgebra.algebraMap_mem, Subalgebra.mul_mem, add_mem, aeval_X, algebraMap_eq, algebraMap_mem, commutes, esymmAlgHom, esymmAlgHom_fin_bijective, induction_on, map_add, map_mul, mem_range
+/-
+**MvPolynomial.esymmAlgHom_fin_surjective** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomia
+l`。
+形式化陈述：esymmAlgHom_fin_surjective (h : m <= n) : Function.Surjective (esymmAlgHom
+ (Fin m) R n)
+参数：h : m <= n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用引理 `MvPolynomial.esymmAlgHom_fin_bijective`：esymmAlgHom_fin_bijective (n : N
+at) : Function.Bijective (esymmAlgHom (Fin n) R n)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgHom.mem_range`：mem_range (φ : A ->ₐ[R] B) {y : B} : y in φ.range ↔ ex
+ists x, φ x = y
+· 使用定理 `MvPolynomial.induction_on`：induction_on {motive : MvPolynomial σ R -> Pr
+op} (p : MvPolynomial σ R) (C : forall a, motive (C a)) (add : forall p q, motiv
+e p -> motive q…
+· 使用定理 `MvPolynomial.algebraMap_eq`：algebraMap_eq : algebraMap R (MvPolynomial σ
+ R) = C
+· 使用定理 `AlgHom.commutes`：commutes (r : R) : φ (algebraMap R A r) = algebraMap R 
+B r
+· 使用定理 `Subalgebra.algebraMap_mem`：∀ {R : Type u} {A : Type v} [inst : CommSemir
+ing R] [inst_1 : Semiring A] [inst_2 : Algebra R A] (S : Subalgebra R A)   (r : 
+R), (algebraMap…
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `Subalgebra.add_mem`：∀ {R : Type u} {A : Type v} [inst : CommSemiring R] 
+[inst_1 : Semiring A] [inst_2 : Algebra R A] (S : Subalgebra R A)   {x y : A}, x
+ ∈ S → y…
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `Subalgebra.mul_mem`：∀ {R : Type u} {A : Type v} [inst : CommSemiring R] 
+[inst_1 : Semiring A] [inst_2 : Algebra R A] (S : Subalgebra R A)   {x y : A}, x
+ ∈ S → y…
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Fin.isLt`：∀ {n : ℕ} (self : Fin n), ↑self < n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MvPolynomial.aeval_X`：aeval_X (s : σ) : aeval f (X s : MvPolynomial σ R)
+ = f s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma esymmAlgHom_fin_surjective (h : m <= n) :
+lemma esymmAlgHom_fin_surjective (h : m ≤ n) :
     Function.Surjective (esymmAlgHom (Fin m) R n) := by
   intro p
   obtain ⟨q, rfl⟩ := (esymmAlgHom_fin_bijective R m).2 p
@@ -983,50 +1180,48 @@ lemma esymmAlgHom_fin_surjective (h : m <= n) :
     rw [AlgHom.mem_range]
     refine ⟨X ⟨i, i.2.trans_le h⟩, ?_⟩
     simp_rw [esymmAlgHom, aeval_X]
-
-/--
-lemma `esymmAlgHom_surjective` / 引理 `esymmAlgHom_surjective`
-
-English:
-lemma esymmAlgHom_surjective
-  given: (hn : Fintype.card σ <= n)
-  proof: by
-  rw [← rename_esymmAlgHom (Fintype.equivFin σ).symm]; rw [AlgHom.coe_comp]
-  exact (AlgEquiv.surjective _).comp (esymmAlgHom_fin_surjective R hn)
-
-中文:
-引理 esymmAlgHom_surjective
-  条件: (hn : 有限类型.card σ <= n)
-  证明: by
-  rw [← rename_esymmAlgHom (Fintype.equivFin σ).symm]; rw [AlgHom.coe_comp]
-  exact (AlgEquiv.surjective _).comp (esymmAlgHom_fin_surjective R hn)
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.surjective, AlgHom, AlgHom.coe_comp, Fintype, Fintype.equivFin, coe_comp, equivFin, esymmAlgHom_fin_surjective, rename_esymmAlgHom, surjective
+/-
+**MvPolynomial.esymmAlgHom_surjective** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial`。
+形式化陈述：esymmAlgHom_surjective (hn : Fintype.card σ <= n) : Function.Surjective (e
+symmAlgHom σ R n)
+参数：hn : Fintype.card σ <= n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `MvPolynomial.rename_esymmAlgHom`：rename_esymmAlgHom (e : σ ≃ τ) : (renam
+eSymmetricSubalgebra e).toAlgHom.comp (esymmAlgHom σ R n) = esymmAlgHom τ R n
+· 使用定理 `AlgHom.coe_comp`：coe_comp (φ₁ : B ->ₐ[R] C) (φ₂ : A ->ₐ[R] B) : ⇑(φ₁.com
+p φ₂) = φ₁ ∘ φ₂
+· 使用定理 `Function.Surjective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3}
+ {g : β → γ} {f : α → β},   Function.Surjective g → Function.Surjective f → Func
+tion.Surjectiv…
+· 使用定理 `AlgEquiv.surjective`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA₂} [in
+st : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [inst_3 : A
+lgebra R …
+· 使用引理 `MvPolynomial.esymmAlgHom_fin_surjective`：esymmAlgHom_fin_surjective (h :
+ m <= n) : Function.Surjective (esymmAlgHom (Fin m) R n)
 -/
-lemma esymmAlgHom_surjective (hn : Fintype.card σ <= n) :
+lemma esymmAlgHom_surjective (hn : Fintype.card σ ≤ n) :
     Function.Surjective (esymmAlgHom σ R n) := by
-  rw [← rename_esymmAlgHom (Fintype.equivFin σ).symm]; rw [AlgHom.coe_comp]
+  rw [← rename_esymmAlgHom (Fintype.equivFin σ).symm, AlgHom.coe_comp]
   exact (AlgEquiv.surjective _).comp (esymmAlgHom_fin_surjective R hn)
 
 variable (σ) in
 /-- If the cardinality of `σ` is `n`, then `esymmAlgHom σ R n` is an isomorphism. -/
 @[simps! apply]
-/--
-Definition of `esymmAlgEquiv` / `esymmAlgEquiv` 的定义
+/-
+**MvPolynomial.esymmAlgEquiv** 是 Mathlib 中的一个定义，位于命名空间 `MvPolynomial`。
+形式化陈述：esymmAlgEquiv (hn : Fintype.card σ = n) : MvPolynomial (Fin n) R ≃ₐ[R] sym
+metricSubalgebra σ R
+参数：hn : Fintype.card σ = n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition esymmAlgEquiv
-  signature: (hn : Fintype.card σ = n)
-  body: AlgEquiv.ofBijective (esymmAlgHom σ R n)
-    ⟨esymmAlgHom_injective R hn.ge, esymmAlgHom_surjective R hn.le⟩
-
-中文:
-定义 esymmAlgEquiv
-  签名: (hn : 有限类型.card σ = n)
-  定义体: AlgEquiv.ofBijective (esymmAlgHom σ R n)
-    ⟨esymmAlgHom_injective R hn.ge, esymmAlgHom_surjective R hn.le⟩
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.ofBijective, esymmAlgHom, esymmAlgHom_injective, esymmAlgHom_surjective, hn.ge, hn.le, ofBijective
+--- 原说明 ---
+If the cardinality of `σ` is `n`, then `esymmAlgHom σ R n` is an isomorphism.
 -/
 noncomputable def esymmAlgEquiv (hn : Fintype.card σ = n) :
     MvPolynomial (Fin n) R ≃ₐ[R] symmetricSubalgebra σ R :=
@@ -1034,24 +1229,31 @@ noncomputable def esymmAlgEquiv (hn : Fintype.card σ = n) :
     ⟨esymmAlgHom_injective R hn.ge, esymmAlgHom_surjective R hn.le⟩
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `esymmAlgEquiv_symm_apply` / 引理 `esymmAlgEquiv_symm_apply`
-
-English:
-lemma esymmAlgEquiv_symm_apply
-  given: (hn : Fintype.card σ = n) (i : Fin n)
-  proof: by
-  apply_fun esymmAlgHom σ R n using esymmAlgHom_injective R hn.ge
-  simp_rw [esymmAlgEquiv, AlgEquiv.ofBijective_apply_symm_apply, esymmAlgHom, aeval_X]
-
-中文:
-引理 esymmAlgEquiv_symm_apply
-  条件: (hn : 有限类型.card σ = n) (i : 有限集 n)
-  证明: by
-  apply_fun esymmAlgHom σ R n using esymmAlgHom_injective R hn.ge
-  simp_rw [esymmAlgEquiv, AlgEquiv.ofBijective_apply_symm_apply, esymmAlgHom, aeval_X]
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.ofBijective_apply_symm_apply, aeval_X, apply_fun, esymmAlgEquiv, esymmAlgHom, esymmAlgHom_injective, hn.ge, ofBijective_apply_symm_apply, simp_rw
+/-
+**MvPolynomial.esymmAlgEquiv_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial`
+。
+形式化陈述：esymmAlgEquiv_symm_apply (hn : Fintype.card σ = n) (i : Fin n) : (esymmAlg
+Equiv σ R hn).symm ⟨esymm σ R (i + 1), esymm_isSymmetric σ R _⟩ = X i
+参数：hn : Fintype.card σ = n；i : Fin n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MvPolynomial.esymmAlgHom_injective`：esymmAlgHom_injective (hn : n <= Fin
+type.card σ) : Function.Injective (esymmAlgHom σ R n)
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `MvPolynomial.esymm_isSymmetric`：esymm_isSymmetric (n : Nat) : IsSymmetri
+c (esymm σ R n)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AlgEquiv.ofBijective_apply_symm_apply`：ofBijective_apply_symm_apply (f :
+ A₁ ->ₐ[R] A₂) (hf : Function.Bijective f) (x : A₂) : f ((ofBijective f hf).symm
+ x) = x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MvPolynomial.aeval_X`：aeval_X (s : σ) : aeval f (X s : MvPolynomial σ R)
+ = f s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma esymmAlgEquiv_symm_apply (hn : Fintype.card σ = n) (i : Fin n) :
     (esymmAlgEquiv σ R hn).symm ⟨esymm σ R (i + 1), esymm_isSymmetric σ R _⟩ = X i := by
@@ -1061,3 +1263,4 @@ lemma esymmAlgEquiv_symm_apply (hn : Fintype.card σ = n) (i : Fin n) :
 end CommRing
 
 end MvPolynomial
+

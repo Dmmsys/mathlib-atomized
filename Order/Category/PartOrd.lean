@@ -21,24 +21,15 @@ open CategoryTheory
 
 universe v u
 
-/--
-Definition of `PartOrd` / `PartOrd` 的定义
+/-- The category of partial orders. -/
+/-
+**PartOrd** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type (u_1 + 1)
+参数：u_1 + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure PartOrd
-  parameters: where
-  axioms and operations (3):
-    - of : :
-    - (carrier : Type*)
-    - [str : PartialOrder carrier]
-
-中文:
-结构 偏序
-  参数: where
-  公理与运算 (3 个):
-    - of : :
-    - (carrier : 类型)
-    - [str : 偏序 carrier]
+--- 原说明 ---
+The category of partial orders.
 -/
 structure PartOrd where
   /-- Construct a bundled `PartOrd` from the underlying type and typeclass. -/
@@ -49,24 +40,13 @@ structure PartOrd where
 
 attribute [instance] PartOrd.str
 
-initialize_simps_projections PartOrd (carrier -> coe, -str)
+initialize_simps_projections PartOrd (carrier → coe, -str)
 
 namespace PartOrd
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort PartOrd (Type _)
-  body: ⟨PartOrd.carrier⟩
-
-中文:
-实例 :
-  签名: CoeSort 偏序 (类型 _)
-  定义体: ⟨PartOrd.carrier⟩
-
-Depends on / 依赖: PartOrd, PartOrd.carrier, carrier
+/-
+**PartOrd.** 是 Mathlib 中的一个实例，位于命名空间 `PartOrd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort PartOrd (Type _) :=
   ⟨PartOrd.carrier⟩
@@ -75,46 +55,24 @@ attribute [coe] PartOrd.carrier
 
 /-- The type of morphisms in `PartOrd R`. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**PartOrd.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `PartOrd`。
+形式化陈述：PartOrd → PartOrd → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (X Y : PartOrd.{u})
-  axioms and operations (2):
-    - private(mk) : :
-    - hom' : X ->o Y
-
-中文:
-结构 态射
-  参数: (X Y : 偏序.{u})
-  公理与运算 (2 个):
-    - private(mk) : :
-    - hom' : X ->o Y
+--- 原说明 ---
+The type of morphisms in `PartOrd R`.
 -/
 structure Hom (X Y : PartOrd.{u}) where
   private mk ::
   /-- The underlying `OrderHom`. -/
-  hom' : X ->o Y
+  hom' : X →o Y
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category PartOrd.{u}
-  body: Hom X Y
-  id _ := ⟨OrderHom.id⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
-
-中文:
-实例 :
-  签名: 范畴 偏序.{u}
-  定义体: Hom X Y
-  id _ := ⟨OrderHom.id⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
+/-
+**PartOrd.** 是 Mathlib 中的一个实例，位于命名空间 `PartOrd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category PartOrd.{u} where
   Hom X Y := Hom X Y
@@ -123,428 +81,287 @@ instance : Category PartOrd.{u} where
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ConcreteCategory PartOrd (· ->o ·)
-  body: Hom.hom'
-  ofHom := Hom.mk
-
-中文:
-实例 :
-  签名: 余ncrete范畴 偏序 (· ->o ·)
-  定义体: Hom.hom'
-  ofHom := Hom.mk
-
-Depends on / 依赖: Hom.hom
+/-
+**PartOrd.** 是 Mathlib 中的一个实例，位于命名空间 `PartOrd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ConcreteCategory PartOrd (· ->o ·) where
+instance : ConcreteCategory PartOrd (· →o ·) where
   hom := Hom.hom'
   ofHom := Hom.mk
 
-/--
-Definition of `Hom.hom` / `Hom.hom` 的定义
+/-- Turn a morphism in `PartOrd` back into a `OrderHom`. -/
+/-
+**PartOrd.Hom.hom** 是 Mathlib 中的一个定义，位于命名空间 `PartOrd.Hom`。
+形式化陈述：{X Y : PartOrd} → X.Hom Y → ↑X →o ↑Y
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.hom
-  signature: {X Y : PartOrd.{u}} (f : Hom X Y)
-  body: ConcreteCategory.hom (C := PartOrd) f
-
-中文:
-缩写 态射.hom
-  签名: {X Y : 偏序.{u}} (f : 态射 X Y)
-  定义体: ConcreteCategory.hom (C := PartOrd) f
+--- 原说明 ---
+Turn a morphism in `PartOrd` back into a `OrderHom`.
 -/
 abbrev Hom.hom {X Y : PartOrd.{u}} (f : Hom X Y) :=
   ConcreteCategory.hom (C := PartOrd) f
 
-/--
-Definition of `ofHom` / `ofHom` 的定义
+/-- Typecheck a `OrderHom` as a morphism in `PartOrd`. -/
+/-
+**PartOrd.ofHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `PartOrd`。
+形式化陈述：ofHom {X Y : Type u} [PartialOrder X] [PartialOrder Y] (f : X ->o Y) : of 
+X ⟶ of Y
+参数：f : X ->o Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofHom
-  signature: {X Y : Type u} [PartialOrder X] [PartialOrder Y] (f : X ->o Y)
-  body: ConcreteCategory.ofHom (C := PartOrd) f
-
-中文:
-缩写 ofHom
-  签名: {X Y : 类型u} [偏序 X] [偏序 Y] (f : X ->o Y)
-  定义体: ConcreteCategory.ofHom (C := PartOrd) f
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, PartOrd
+--- 原说明 ---
+Typecheck a `OrderHom` as a morphism in `PartOrd`.
 -/
-abbrev ofHom {X Y : Type u} [PartialOrder X] [PartialOrder Y] (f : X ->o Y) : of X ⟶ of Y :=
+abbrev ofHom {X Y : Type u} [PartialOrder X] [PartialOrder Y] (f : X →o Y) : of X ⟶ of Y :=
   ConcreteCategory.ofHom (C := PartOrd) f
 
 variable {R} in
-/--
-Definition of `Hom.Simps.hom` / `Hom.Simps.hom` 的定义
+/-- Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas. -/
+/-
+**PartOrd.Hom.Simps.hom** 是 Mathlib 中的一个定义，位于命名空间 `PartOrd.Hom.Simps`。
+形式化陈述：(X Y : PartOrd) → X.Hom Y → ↑X →o ↑Y
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.Simps.hom
-  signature: (X Y : PartOrd.{u}) (f : Hom X Y)
-  body: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
-
-中文:
-定义 态射.Simps.hom
-  签名: (X Y : 偏序.{u}) (f : 态射 X Y)
-  定义体: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
+--- 原说明 ---
+Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas.
 -/
 def Hom.Simps.hom (X Y : PartOrd.{u}) (f : Hom X Y) :=
   f.hom
 
-initialize_simps_projections Hom (hom' -> hom)
+initialize_simps_projections Hom (hom' → hom)
 
-
-/--
-lemma `coe_id` / 引理 `coe_id`
-
-English:
-lemma coe_id
-  given: {X : PartOrd}
-  statement: (𝟙 X : X -> X) = id
-  proof: rfl
-
-中文:
-引理 coe_id
-  条件: {X : 偏序}
-  结论: (𝟙 X : X -> X) = id
-  证明: rfl
+/-!
+The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep them for `dsimp`.
 -/
-lemma coe_id {X : PartOrd} : (𝟙 X : X -> X) = id := rfl
 
-/--
-lemma `coe_comp` / 引理 `coe_comp`
+/-
+**PartOrd.coe_id** 是 Mathlib 中的一个引理，位于命名空间 `PartOrd`。
+形式化陈述：coe_id {X : PartOrd} : (𝟙 X : X -> X) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma coe_comp
-  given: {X Y Z : PartOrd} {f : X ⟶ Y} {g : Y ⟶ Z}
-  statement: (f ≫ g : X -> Z) = g ∘ f
-  proof: rfl
+--- 原说明 ---
+The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep 
+them for `dsimp`.
+-/
+lemma coe_id {X : PartOrd} : (𝟙 X : X → X) = id := rfl
+/-
+**PartOrd.coe_comp** 是 Mathlib 中的一个引理，位于命名空间 `PartOrd`。
+形式化陈述：coe_comp {X Y Z : PartOrd} {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g : X -> Z) = g 
+∘ f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+lemma coe_comp {X Y Z : PartOrd} {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g : X → Z) = g ∘ f := rfl
 
 @[deprecated (since := "2026-02-16")] alias forget_map := ConcreteCategory.forget_map_eq_ofHom
 
 @[ext]
-
-中文:
-引理 coe_comp
-  条件: {X Y Z : 偏序} {f : X ⟶ Y} {g : Y ⟶ Z}
-  结论: (f ≫ g : X -> Z) = g ∘ f
-  证明: rfl
-
-@[deprecated (since := "2026-02-16")] alias forget_map := ConcreteCategory.forget_map_eq_ofHom
-
-@[ext]
+/-
+**PartOrd.ext** 是 Mathlib 中的一个引理，位于命名空间 `PartOrd`。
+形式化陈述：ext {X Y : PartOrd} {f g : X ⟶ Y} (w : forall x : X, f x = g x) : f = g
+参数：w : forall x : X, f x = g x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ext`：hom_ext {X Y : C} (f g : X ⟶ Y)
+ (w : forall x, f x = g x) : f = g
 -/
-lemma coe_comp {X Y Z : PartOrd} {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g : X -> Z) = g ∘ f := rfl
-
-@[deprecated (since := "2026-02-16")] alias forget_map := ConcreteCategory.forget_map_eq_ofHom
-
-@[ext]
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: {X Y : PartOrd} {f g : X ⟶ Y} (w : forall x : X, f x = g x)
-  statement: f = g
-  proof: ConcreteCategory.hom_ext _ _ w
-
-中文:
-引理 ext
-  条件: {X Y : 偏序} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
-  结论: f = g
-  证明: ConcreteCategory.hom_ext _ _ w
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ext, hom_ext
--/
-lemma ext {X Y : PartOrd} {f g : X ⟶ Y} (w : forall x : X, f x = g x) : f = g :=
+lemma ext {X Y : PartOrd} {f g : X ⟶ Y} (w : ∀ x : X, f x = g x) : f = g :=
   ConcreteCategory.hom_ext _ _ w
 
 -- This is not `simp` to avoid rewriting in types of terms.
-/--
-theorem `coe_of` / 定理 `coe_of`
-
-English:
-theorem coe_of
-  given: (X : Type u) [PartialOrder X]
-  statement: (PartOrd.of X : Type u) = X
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_of
-  条件: (X : 类型u) [偏序 X]
-  结论: (偏序.of X : 类型u) = X
-  证明: rfl
-
-@[simp]
+/-
+**PartOrd.coe_of** 是 Mathlib 中的一个定理，位于命名空间 `PartOrd`。
+形式化陈述：coe_of (X : Type u) [PartialOrder X] : (PartOrd.of X : Type u) = X
+参数：X : Type u。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_of (X : Type u) [PartialOrder X] : (PartOrd.of X : Type u) = X := rfl
 
 @[simp]
-/--
-lemma `hom_id` / 引理 `hom_id`
-
-English:
-lemma hom_id
-  given: {X : PartOrd}
-  statement: (𝟙 X : X ⟶ X).hom = OrderHom.id
-  proof: rfl
-
-中文:
-引理 hom_id
-  条件: {X : 偏序}
-  结论: (𝟙 X : X ⟶ X).hom = 序态射.id
-  证明: rfl
+/-
+**PartOrd.hom_id** 是 Mathlib 中的一个引理，位于命名空间 `PartOrd`。
+形式化陈述：hom_id {X : PartOrd} : (𝟙 X : X ⟶ X).hom = OrderHom.id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_id {X : PartOrd} : (𝟙 X : X ⟶ X).hom = OrderHom.id := rfl
 
-/--
-lemma `id_apply` / 引理 `id_apply`
+/- Provided for rewriting. -/
+/-
+**PartOrd.id_apply** 是 Mathlib 中的一个引理，位于命名空间 `PartOrd`。
+形式化陈述：id_apply (X : PartOrd) (x : X) : (𝟙 X : X ⟶ X) x = x
+参数：X : PartOrd；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `OrderHom.id_coe`：∀ {α : Type u_2} [inst : Preorder α], ⇑OrderHom.id = id
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma id_apply
-  given: (X : PartOrd) (x : X)
-  proof: by simp
-
-@[simp]
-
-中文:
-引理 id_apply
-  条件: (X : 偏序) (x : X)
-  证明: by simp
-
-@[simp]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma id_apply (X : PartOrd) (x : X) :
     (𝟙 X : X ⟶ X) x = x := by simp
 
 @[simp]
-/--
-lemma `hom_comp` / 引理 `hom_comp`
-
-English:
-lemma hom_comp
-  given: {X Y Z : PartOrd} (f : X ⟶ Y) (g : Y ⟶ Z)
-  proof: rfl
-
-中文:
-引理 hom_comp
-  条件: {X Y Z : 偏序} (f : X ⟶ Y) (g : Y ⟶ Z)
-  证明: rfl
+/-
+**PartOrd.hom_comp** 是 Mathlib 中的一个引理，位于命名空间 `PartOrd`。
+形式化陈述：hom_comp {X Y Z : PartOrd} (f : X ⟶ Y) (g : Y ⟶ Z) : (f ≫ g).hom = g.hom.c
+omp f.hom
+参数：f : X ⟶ Y；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_comp {X Y Z : PartOrd} (f : X ⟶ Y) (g : Y ⟶ Z) :
     (f ≫ g).hom = g.hom.comp f.hom := rfl
 
-/--
-lemma `comp_apply` / 引理 `comp_apply`
+/- Provided for rewriting. -/
+/-
+**PartOrd.comp_apply** 是 Mathlib 中的一个引理，位于命名空间 `PartOrd`。
+形式化陈述：comp_apply {X Y Z : PartOrd} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X) : (f ≫ g) x =
+ g (f x)
+参数：f : X ⟶ Y；g : Y ⟶ Z；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `OrderHom.comp_coe`：∀ {α : Type u_2} {β : Type u_3} {γ : Type u_4} [inst 
+: Preorder α] [inst_1 : Preorder β] [inst_2 : Preorder γ]   (g : β →o γ) (f : α 
+→o β), …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma comp_apply
-  given: {X Y Z : PartOrd} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
-  proof: by simp
-
-@[ext]
-
-中文:
-引理 comp_apply
-  条件: {X Y Z : 偏序} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
-  证明: by simp
-
-@[ext]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma comp_apply {X Y Z : PartOrd} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X) :
     (f ≫ g) x = g (f x) := by simp
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {X Y : PartOrd} {f g : X ⟶ Y} (hf : f.hom = g.hom)
-  statement: f = g
-  proof: Hom.ext hf
-
-@[simp]
-
-中文:
-引理 hom_ext
-  条件: {X Y : 偏序} {f g : X ⟶ Y} (hf : f.hom = g.hom)
-  结论: f = g
-  证明: Hom.ext hf
-
-@[simp]
-
-Depends on / 依赖: Hom.ext
+/-
+**PartOrd.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `PartOrd`。
+形式化陈述：hom_ext {X Y : PartOrd} {f g : X ⟶ Y} (hf : f.hom = g.hom) : f = g
+参数：hf : f.hom = g.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PartOrd.Hom.ext`：∀ {X Y : PartOrd} {x y : X.Hom Y}, x.hom' = y.hom' → x 
+= y
 -/
 lemma hom_ext {X Y : PartOrd} {f g : X ⟶ Y} (hf : f.hom = g.hom) : f = g :=
   Hom.ext hf
 
 @[simp]
-/--
-lemma `hom_ofHom` / 引理 `hom_ofHom`
-
-English:
-lemma hom_ofHom
-  given: {X Y : Type u} [PartialOrder X] [PartialOrder Y] (f : X ->o Y)
-  statement: (ofHom f).hom = f
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 hom_ofHom
-  条件: {X Y : 类型u} [偏序 X] [偏序 Y] (f : X ->o Y)
-  结论: (ofHom f).hom = f
-  证明: rfl
-
-@[simp]
+/-
+**PartOrd.hom_ofHom** 是 Mathlib 中的一个引理，位于命名空间 `PartOrd`。
+形式化陈述：hom_ofHom {X Y : Type u} [PartialOrder X] [PartialOrder Y] (f : X ->o Y) :
+ (ofHom f).hom = f
+参数：f : X ->o Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma hom_ofHom {X Y : Type u} [PartialOrder X] [PartialOrder Y] (f : X ->o Y) : (ofHom f).hom = f :=
+lemma hom_ofHom {X Y : Type u} [PartialOrder X] [PartialOrder Y] (f : X →o Y) : (ofHom f).hom = f :=
   rfl
 
 @[simp]
-/--
-lemma `ofHom_hom` / 引理 `ofHom_hom`
-
-English:
-lemma ofHom_hom
-  given: {X Y : PartOrd} (f : X ⟶ Y)
-  statement: ofHom (Hom.hom f) = f
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ofHom_hom
-  条件: {X Y : 偏序} (f : X ⟶ Y)
-  结论: ofHom (态射.hom f) = f
-  证明: rfl
-
-@[simp]
+/-
+**PartOrd.ofHom_hom** 是 Mathlib 中的一个引理，位于命名空间 `PartOrd`。
+形式化陈述：ofHom_hom {X Y : PartOrd} (f : X ⟶ Y) : ofHom (Hom.hom f) = f
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_hom {X Y : PartOrd} (f : X ⟶ Y) : ofHom (Hom.hom f) = f := rfl
 
 @[simp]
-/--
-lemma `ofHom_id` / 引理 `ofHom_id`
-
-English:
-lemma ofHom_id
-  given: {X : Type u} [PartialOrder X]
-  statement: ofHom OrderHom.id = 𝟙 (of X)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ofHom_id
-  条件: {X : 类型u} [偏序 X]
-  结论: ofHom 序态射.id = 𝟙 (of X)
-  证明: rfl
-
-@[simp]
+/-
+**PartOrd.ofHom_id** 是 Mathlib 中的一个引理，位于命名空间 `PartOrd`。
+形式化陈述：ofHom_id {X : Type u} [PartialOrder X] : ofHom OrderHom.id = 𝟙 (of X)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_id {X : Type u} [PartialOrder X] : ofHom OrderHom.id = 𝟙 (of X) := rfl
 
 @[simp]
-/--
-lemma `ofHom_comp` / 引理 `ofHom_comp`
-
-English:
-lemma ofHom_comp
-  statement: {X Y Z : Type u} [PartialOrder X] [PartialOrder Y] [PartialOrder Z]
-  proof: rfl
-
-中文:
-引理 ofHom_comp
-  结论: {X Y Z : 类型u} [偏序 X] [偏序 Y] [偏序 Z]
-  证明: rfl
+/-
+**PartOrd.ofHom_comp** 是 Mathlib 中的一个引理，位于命名空间 `PartOrd`。
+形式化陈述：ofHom_comp {X Y Z : Type u} [PartialOrder X] [PartialOrder Y] [PartialOrde
+r Z] (f : X ->o Y) (g : Y ->o Z) : ofHom (g.comp f) = ofHom f ≫ ofHom g
+参数：f : X ->o Y；g : Y ->o Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_comp {X Y Z : Type u} [PartialOrder X] [PartialOrder Y] [PartialOrder Z]
-    (f : X ->o Y) (g : Y ->o Z) :
+    (f : X →o Y) (g : Y →o Z) :
     ofHom (g.comp f) = ofHom f ≫ ofHom g :=
   rfl
-
-/--
-lemma `ofHom_apply` / 引理 `ofHom_apply`
-
-English:
-lemma ofHom_apply
-  given: {X Y : Type u} [PartialOrder X] [PartialOrder Y] (f : X ->o Y) (x : X)
-  proof: rfl
-
-中文:
-引理 ofHom_apply
-  条件: {X Y : 类型u} [偏序 X] [偏序 Y] (f : X ->o Y) (x : X)
-  证明: rfl
+/-
+**PartOrd.ofHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `PartOrd`。
+形式化陈述：ofHom_apply {X Y : Type u} [PartialOrder X] [PartialOrder Y] (f : X ->o Y)
+ (x : X) : (ofHom f) x = f x
+参数：f : X ->o Y；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma ofHom_apply {X Y : Type u} [PartialOrder X] [PartialOrder Y] (f : X ->o Y) (x : X) :
+lemma ofHom_apply {X Y : Type u} [PartialOrder X] [PartialOrder Y] (f : X →o Y) (x : X) :
     (ofHom f) x = f x := rfl
-
-/--
-lemma `inv_hom_apply` / 引理 `inv_hom_apply`
-
-English:
-lemma inv_hom_apply
-  given: {X Y : PartOrd} (e : X ≅ Y) (x : X)
-  statement: e.inv (e.hom x) = x
-  proof: by
-  simp
-
-中文:
-引理 inv_hom_apply
-  条件: {X Y : 偏序} (e : X ≅ Y) (x : X)
-  结论: e.inv (e.hom x) = x
-  证明: by
-  simp
+/-
+**PartOrd.inv_hom_apply** 是 Mathlib 中的一个引理，位于命名空间 `PartOrd`。
+形式化陈述：inv_hom_apply {X Y : PartOrd} (e : X ≅ Y) (x : X) : e.inv (e.hom x) = x
+参数：e : X ≅ Y；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma inv_hom_apply {X Y : PartOrd} (e : X ≅ Y) (x : X) : e.inv (e.hom x) = x := by
   simp
-
-/--
-lemma `hom_inv_apply` / 引理 `hom_inv_apply`
-
-English:
-lemma hom_inv_apply
-  given: {X Y : PartOrd} (e : X ≅ Y) (s : Y)
-  statement: e.hom (e.inv s) = s
-  proof: by
-  simp
-
-中文:
-引理 hom_inv_apply
-  条件: {X Y : 偏序} (e : X ≅ Y) (s : Y)
-  结论: e.hom (e.inv s) = s
-  证明: by
-  simp
+/-
+**PartOrd.hom_inv_apply** 是 Mathlib 中的一个引理，位于命名空间 `PartOrd`。
+形式化陈述：hom_inv_apply {X Y : PartOrd} (e : X ≅ Y) (s : Y) : e.hom (e.inv s) = s
+参数：e : X ≅ Y；s : Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma hom_inv_apply {X Y : PartOrd} (e : X ≅ Y) (s : Y) : e.hom (e.inv s) = s := by
   simp
-
-/--
-Instance `hasForgetToPreord` / 实例 `hasForgetToPreord`
-
-English:
-instance hasForgetToPreord
-  signature: : HasForget₂ PartOrd Preord where
-  body: .of X
-  forget₂.map f := Preord.ofHom f.hom
-
-中文:
-实例 hasForgetToPreord
-  签名: : 有Forget₂ 偏序 预序 where
-  定义体: .of X
-  forget₂.map f := Preord.ofHom f.hom
+/-
+**PartOrd.hasForgetToPreord** 是 Mathlib 中的一个实例，位于命名空间 `PartOrd`。
+形式化陈述：hasForgetToPreord : HasForget₂ PartOrd Preord where forget₂.obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasForgetToPreord : HasForget₂ PartOrd Preord where
   forget₂.obj X := .of X
@@ -552,20 +369,15 @@ instance hasForgetToPreord : HasForget₂ PartOrd Preord where
 
 /-- Constructs an equivalence between partial orders from an order isomorphism between them. -/
 @[simps]
-/--
-Definition of `Iso.mk` / `Iso.mk` 的定义
+/-
+**PartOrd.Iso.mk** 是 Mathlib 中的一个定义，位于命名空间 `PartOrd.Iso`。
+形式化陈述：{α β : PartOrd} → ↑α ≃o ↑β → (α ≅ β)
+参数：α ≅ β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Iso.mk
-  signature: {α β : PartOrd.{u}} (e : α ≃o β)
-  body: ofHom e
-  inv := ofHom e.symm
-
-中文:
-定义 同构.mk
-  签名: {α β : 偏序.{u}} (e : α ≃o β)
-  定义体: ofHom e
-  inv := ofHom e.symm
+--- 原说明 ---
+Constructs an equivalence between partial orders from an order isomorphism betwe
+en them.
 -/
 def Iso.mk {α β : PartOrd.{u}} (e : α ≃o β) : α ≅ β where
   hom := ofHom e
@@ -573,20 +385,14 @@ def Iso.mk {α β : PartOrd.{u}} (e : α ≃o β) : α ≅ β where
 
 /-- `OrderDual` as a functor. -/
 @[simps map]
-/--
-Definition of `dual` / `dual` 的定义
+/-
+**PartOrd.dual** 是 Mathlib 中的一个定义，位于命名空间 `PartOrd`。
+形式化陈述：dual : PartOrd ⥤ PartOrd where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dual
-  signature: : PartOrd ⥤ PartOrd where
-  body: of Xᵒᵈ
-  map f := ofHom f.hom.dual
-
-中文:
-定义 dual
-  签名: : 偏序 ⥤ 偏序 where
-  定义体: of Xᵒᵈ
-  map f := ofHom f.hom.dual
+--- 原说明 ---
+`OrderDual` as a functor.
 -/
 def dual : PartOrd ⥤ PartOrd where
   obj X := of Xᵒᵈ
@@ -594,157 +400,93 @@ def dual : PartOrd ⥤ PartOrd where
 
 /-- The equivalence between `PartOrd` and itself induced by `OrderDual` both ways. -/
 @[simps functor inverse]
-/--
-Definition of `dualEquiv` / `dualEquiv` 的定义
+/-
+**PartOrd.dualEquiv** 是 Mathlib 中的一个定义，位于命名空间 `PartOrd`。
+形式化陈述：dualEquiv : PartOrd ≌ PartOrd where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dualEquiv
-  signature: : PartOrd ≌ PartOrd where
-  body: dual
-  inverse := dual
-unitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
-counitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
-
-中文:
-定义 dualEquiv
-  签名: : 偏序 ≌ 偏序 where
-  定义体: dual
-  inverse := dual
-unitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
-counitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
+--- 原说明 ---
+The equivalence between `PartOrd` and itself induced by `OrderDual` both ways.
 -/
 def dualEquiv : PartOrd ≌ PartOrd where
   functor := dual
   inverse := dual
-unitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
-counitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
+  unitIso := NatIso.ofComponents fun X => Iso.mk <| OrderIso.dualDual X
+  counitIso := NatIso.ofComponents fun X => Iso.mk <| OrderIso.dualDual X
 
 /-- The ulift functor `PartOrd.{u} ⥤ PartOrd.{max u v}`. -/
 @[simps]
-/--
-Definition of `uliftFunctor` / `uliftFunctor` 的定义
+/-
+**PartOrd.uliftFunctor** 是 Mathlib 中的一个定义，位于命名空间 `PartOrd`。
+形式化陈述：uliftFunctor : PartOrd.{u} ⥤ PartOrd.{max u v} where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uliftFunctor
-  signature: : PartOrd.{u} ⥤ PartOrd.{max u v} where
-  body: .of (ULift.{v} X)
-  map f := PartOrd.ofHom ⟨fun x => ULift.up (f (ULift.down x)),
-    fun x y hxy => f.hom.monotone hxy⟩
-
-中文:
-定义 uliftFunctor
-  签名: : 偏序.{u} ⥤ 偏序.{最大值 u v} where
-  定义体: .of (ULift.{v} X)
-  map f := PartOrd.ofHom ⟨fun x => ULift.up (f (ULift.down x)),
-    fun x y hxy => f.hom.monotone hxy⟩
+--- 原说明 ---
+The ulift functor `PartOrd.{u} ⥤ PartOrd.{max u v}`.
 -/
 def uliftFunctor : PartOrd.{u} ⥤ PartOrd.{max u v} where
   obj X := .of (ULift.{v} X)
-  map f := PartOrd.ofHom ⟨fun x => ULift.up (f (ULift.down x)),
-    fun x y hxy => f.hom.monotone hxy⟩
+  map f := PartOrd.ofHom ⟨fun x ↦ ULift.up (f (ULift.down x)),
+    fun x y hxy ↦ f.hom.monotone hxy⟩
 
 end PartOrd
 
-/--
-theorem `partOrd_dual_comp_forget_to_preord` / 定理 `partOrd_dual_comp_forget_to_preord`
-
-English:
-theorem partOrd_dual_comp_forget_to_preord
-  proof: rfl
-
-中文:
-定理 partOrd_dual_comp_forget_to_preord
-  证明: rfl
+/-
+**partOrd_dual_comp_forget_to_preord** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：partOrd_dual_comp_forget_to_preord : PartOrd.dual ⋙ forget₂ PartOrd Preord
+ = forget₂ PartOrd Preord ⋙ Preord.dual
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem partOrd_dual_comp_forget_to_preord :
     PartOrd.dual ⋙ forget₂ PartOrd Preord =
       forget₂ PartOrd Preord ⋙ Preord.dual :=
   rfl
 
-/--
-Definition of `preordToPartOrd` / `preordToPartOrd` 的定义
+/-- `Antisymmetrization` as a functor. It is the free functor. -/
+/-
+**preordToPartOrd** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：preordToPartOrd : Preord.{u} ⥤ PartOrd where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition preordToPartOrd
-  signature: : Preord.{u} ⥤ PartOrd where
-  body: .of (Antisymmetrization X (· <= ·))
-  map f := PartOrd.ofHom f.hom.antisymmetrization
-  map_id X := by
-    ext x
-    induction x using Quotient.inductionOn'
-    exact Quotient.map'_mk'' _ (fun a b => id) _
-  map_comp f g := by
-    ext x
-    induction x using Quotient.inductionOn'
-    exact OrderHom.antisymmetrization_apply_mk ..
-
-中文:
-定义 preordToPartOrd
-  签名: : 预序.{u} ⥤ 偏序 where
-  定义体: .of (Antisymmetrization X (· <= ·))
-  map f := PartOrd.ofHom f.hom.antisymmetrization
-  map_id X := by
-    ext x
-    induction x using Quotient.inductionOn'
-    exact Quotient.map'_mk'' _ (fun a b => id) _
-  map_comp f g := by
-    ext x
-    induction x using Quotient.inductionOn'
-    exact OrderHom.antisymmetrization_apply_mk ..
-
-Depends on / 依赖: Antisymmetrization
+--- 原说明 ---
+`Antisymmetrization` as a functor. It is the free functor.
 -/
 def preordToPartOrd : Preord.{u} ⥤ PartOrd where
-  obj X := .of (Antisymmetrization X (· <= ·))
+  obj X := .of (Antisymmetrization X (· ≤ ·))
   map f := PartOrd.ofHom f.hom.antisymmetrization
   map_id X := by
     ext x
     induction x using Quotient.inductionOn'
-    exact Quotient.map'_mk'' _ (fun a b => id) _
+    exact Quotient.map'_mk'' _ (fun a b ↦ id) _
   map_comp f g := by
     ext x
     induction x using Quotient.inductionOn'
     exact OrderHom.antisymmetrization_apply_mk ..
 
-/--
-Definition of `preordToPartOrdForgetAdjunction` / `preordToPartOrdForgetAdjunction` 的定义
+/-- `preordToPartOrd` is left adjoint to the forgetful functor, meaning it is the free
+functor from `Preord` to `PartOrd`. -/
+/-
+**preordToPartOrdForgetAdjunction** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：preordToPartOrdForgetAdjunction : preordToPartOrd.{u} ⊣ forget₂ PartOrd Pr
+eord
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition preordToPartOrdForgetAdjunction
-  signature: :
-  body: Adjunction.mkOfHomEquiv
-    { homEquiv _ _ :=
-        { toFun f := Preord.ofHom
-            ⟨f ∘ toAntisymmetrization (· <= ·), f.hom.mono.comp toAntisymmetrization_mono⟩
-          invFun f := PartOrd.ofHom
-            ⟨fun a => Quotient.liftOn' a f (fun _ _ h => (AntisymmRel.image h f.hom.mono).eq),
-              fun a b => Quotient.inductionOn₂' a b fun _ _ h => f.hom.mono h⟩
-          left_inv _ := PartOrd.ext fun x => Quotient.inductionOn' x fun _ => rfl }
-      homEquiv_naturality_left_symm _ _ :=
-        PartOrd.ext fun x => Quotient.inductionOn' x fun _ => rfl }
-
-中文:
-定义 preordToPartOrdForgetAdjunction
-  签名: :
-  定义体: Adjunction.mkOfHomEquiv
-    { homEquiv _ _ :=
-        { toFun f := Preord.ofHom
-            ⟨f ∘ toAntisymmetrization (· <= ·), f.hom.mono.comp toAntisymmetrization_mono⟩
-          invFun f := PartOrd.ofHom
-            ⟨fun a => Quotient.liftOn' a f (fun _ _ h => (AntisymmRel.image h f.hom.mono).eq),
-              fun a b => Quotient.inductionOn₂' a b fun _ _ h => f.hom.mono h⟩
-          left_inv _ := PartOrd.ext fun x => Quotient.inductionOn' x fun _ => rfl }
-      homEquiv_naturality_left_symm _ _ :=
-        PartOrd.ext fun x => Quotient.inductionOn' x fun _ => rfl }
-
-Depends on / 依赖: Adjunction, Adjunction.mkOfHomEquiv, AntisymmRel, AntisymmRel.image, PartOrd, PartOrd.ext, PartOrd.ofHom, Preord, Preord.ofHom, Quotient, Quotient.inductionOn, Quotient.liftOn, f.hom.mono, f.hom.mono.comp, homEquiv, homEquiv_naturality_left_symm, inductionOn, invFun, left_inv, liftOn
+--- 原说明 ---
+`preordToPartOrd` is left adjoint to the forgetful functor, meaning it is the fr
+ee
+functor from `Preord` to `PartOrd`.
 -/
 def preordToPartOrdForgetAdjunction :
     preordToPartOrd.{u} ⊣ forget₂ PartOrd Preord :=
   Adjunction.mkOfHomEquiv
     { homEquiv _ _ :=
         { toFun f := Preord.ofHom
-            ⟨f ∘ toAntisymmetrization (· <= ·), f.hom.mono.comp toAntisymmetrization_mono⟩
+            ⟨f ∘ toAntisymmetrization (· ≤ ·), f.hom.mono.comp toAntisymmetrization_mono⟩
           invFun f := PartOrd.ofHom
             ⟨fun a => Quotient.liftOn' a f (fun _ _ h => (AntisymmRel.image h f.hom.mono).eq),
               fun a b => Quotient.inductionOn₂' a b fun _ _ h => f.hom.mono h⟩
@@ -756,22 +498,16 @@ def preordToPartOrdForgetAdjunction :
 -- of `preordToPartOrdCompToDualIsoToDualCompPreordToPartOrd_hom_app_coe`
 /-- `PreordToPartOrd` and `OrderDual` commute. -/
 @[simps! -isSimp hom_app_hom_coe inv_app_hom_coe]
-/--
-Definition of `preordToPartOrdCompToDualIsoToDualCompPreordToPartOrd` / `preordToPartOrdCompToDualIsoToDualCompPreordToPartOrd` 的定义
+/-
+**preordToPartOrdCompToDualIsoToDualCompPreordToPartOrd** 是 Mathlib 中的一个定义，位于命名空
+间 ``。
+形式化陈述：preordToPartOrdCompToDualIsoToDualCompPreordToPartOrd : preordToPartOrd.{u
+} ⋙ PartOrd.dual ≅ Preord.dual ⋙ preordToPartOrd
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition preordToPartOrdCompToDualIsoToDualCompPreordToPartOrd
-  signature: :
-  body: NatIso.ofComponents (fun _ => PartOrd.Iso.mk <| OrderIso.dualAntisymmetrization _)
-    (fun _ => PartOrd.ext fun x => Quotient.inductionOn' x fun _ => rfl)
-
-中文:
-定义 preordToPartOrdCompToDualIsoToDualCompPreordToPartOrd
-  签名: :
-  定义体: NatIso.ofComponents (fun _ => PartOrd.Iso.mk <| OrderIso.dualAntisymmetrization _)
-    (fun _ => PartOrd.ext fun x => Quotient.inductionOn' x fun _ => rfl)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, OrderIso, OrderIso.dualAntisymmetrization, PartOrd, PartOrd.Iso.mk, PartOrd.ext, Quotient, Quotient.inductionOn, dualAntisymmetrization, inductionOn, ofComponents
+--- 原说明 ---
+`PreordToPartOrd` and `OrderDual` commute.
 -/
 def preordToPartOrdCompToDualIsoToDualCompPreordToPartOrd :
     preordToPartOrd.{u} ⋙ PartOrd.dual ≅ Preord.dual ⋙ preordToPartOrd :=
@@ -780,20 +516,14 @@ def preordToPartOrdCompToDualIsoToDualCompPreordToPartOrd :
 
 -- `simp`-normal form for `preordToPartOrdCompToDualIsoToDualCompPreordToPartOrd_inv_app_hom_coe`
 @[simp]
-/--
-lemma `preordToPartOrdCompToDualIsoToDualCompPreordToPartOrd_inv_app_hom_coe'` / 引理 `preordToPartOrdCompToDualIsoToDualCompPreordToPartOrd_inv_app_hom_coe'`
-
-English:
-lemma preordToPartOrdCompToDualIsoToDualCompPreordToPartOrd_inv_app_hom_coe'
-  statement: (X)
-  proof: rfl
-
-中文:
-引理 preordToPartOrdCompToDualIsoToDualCompPreordToPartOrd_inv_app_hom_coe'
-  结论: (X)
-  证明: rfl
-
-Depends on / 依赖: Preord, Preord.dual.obj, preordToPartOrd, preordToPartOrd.obj
+/-
+**preordToPartOrdCompToDualIsoToDualCompPreordToPartOrd_inv_app_hom_coe'** 是 Mat
+hlib 中的一个引理，位于命名空间 ``。
+形式化陈述：preordToPartOrdCompToDualIsoToDualCompPreordToPartOrd_inv_app_hom_coe' (X)
+ (a : preordToPartOrd.obj (Preord.dual.obj X)) : (PartOrd.Hom.hom (X
+参数：X；a : preordToPartOrd.obj (Preord.dual.obj X)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma preordToPartOrdCompToDualIsoToDualCompPreordToPartOrd_inv_app_hom_coe' (X)
     (a : preordToPartOrd.obj (Preord.dual.obj X)) :

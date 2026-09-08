@@ -50,38 +50,34 @@ section
 
 variable [(G.sheafPushforwardContinuous A J K).IsRightAdjoint]
 
-/--
-Definition of `sheafPullback` / `sheafPullback` 的定义
+/-- The pullback functor `Sheaf J A ⥤ Sheaf K A` associated to a functor `G : C ⥤ D` in the
+same direction as `G`. -/
+/-
+**CategoryTheory.Functor.sheafPullback** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Functor`。
+形式化陈述：sheafPullback : Sheaf J A ⥤ Sheaf K A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sheafPullback
-  signature: : Sheaf J A ⥤ Sheaf K A
-  body: (G.sheafPushforwardContinuous A J K).leftAdjoint
-
-中文:
-定义 sheafPullback
-  签名: : 层 J A ⥤ 层 K A
-  定义体: (G.sheafPushforwardContinuous A J K).leftAdjoint
-
-Depends on / 依赖: G.sheafPushforwardContinuous, leftAdjoint, sheafPushforwardContinuous
+--- 原说明 ---
+The pullback functor `Sheaf J A ⥤ Sheaf K A` associated to a functor `G : C ⥤ D`
+ in the
+same direction as `G`.
 -/
 def sheafPullback : Sheaf J A ⥤ Sheaf K A :=
   (G.sheafPushforwardContinuous A J K).leftAdjoint
 
-/--
-Definition of `sheafAdjunctionContinuous` / `sheafAdjunctionContinuous` 的定义
+/-- The pullback functor is left adjoint to the pushforward functor. -/
+/-
+**CategoryTheory.Functor.sheafAdjunctionContinuous** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Functor`。
+形式化陈述：sheafAdjunctionContinuous : G.sheafPullback A J K ⊣ G.sheafPushforwardCont
+inuous A J K
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sheafAdjunctionContinuous
-  signature: :
-  body: Adjunction.ofIsRightAdjoint (G.sheafPushforwardContinuous A J K)
-
-中文:
-定义 sheafAdjunctionContinuous
-  签名: :
-  定义体: Adjunction.ofIsRightAdjoint (G.sheafPushforwardContinuous A J K)
-
-Depends on / 依赖: Adjunction, Adjunction.ofIsRightAdjoint, G.sheafPushforwardContinuous, ofIsRightAdjoint, sheafPushforwardContinuous
+--- 原说明 ---
+The pullback functor is left adjoint to the pushforward functor.
 -/
 def sheafAdjunctionContinuous :
     G.sheafPullback A J K ⊣ G.sheafPushforwardContinuous A J K :=
@@ -91,83 +87,64 @@ end
 
 namespace sheafPullbackConstruction
 
-variable [forall (F : Cᵒᵖ ⥤ A), G.op.HasLeftKanExtension F]
+variable [∀ (F : Cᵒᵖ ⥤ A), G.op.HasLeftKanExtension F]
 
-/--
-Definition of `sheafPullback` / `sheafPullback` 的定义
+/-- Construction of the pullback of sheaves using a left Kan extension. -/
+/-
+**CategoryTheory.Functor.sheafPullbackConstruction.sheafPullback** 是 Mathlib 中的一
+个定义，位于命名空间 `CategoryTheory.Functor.sheafPullbackConstruction`。
+形式化陈述：sheafPullback [HasWeakSheafify K A] : Sheaf J A ⥤ Sheaf K A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sheafPullback
-  signature: [HasWeakSheafify K A]
-  body: sheafToPresheaf J A ⋙ G.op.lan ⋙ presheafToSheaf K A
-
-中文:
-定义 sheafPullback
-  签名: [HasWeakSheafify K A]
-  定义体: sheafToPresheaf J A ⋙ G.op.lan ⋙ presheafToSheaf K A
-
-Depends on / 依赖: G.op.lan, presheafToSheaf, sheafToPresheaf
+--- 原说明 ---
+Construction of the pullback of sheaves using a left Kan extension.
 -/
 def sheafPullback [HasWeakSheafify K A] : Sheaf J A ⥤ Sheaf K A :=
   sheafToPresheaf J A ⋙ G.op.lan ⋙ presheafToSheaf K A
 
-/--
-Definition of `sheafAdjunctionContinuous` / `sheafAdjunctionContinuous` 的定义
+/-- The constructed `sheafPullback G A J K` is left adjoint
+to `G.sheafPushforwardContinuous A J K`. -/
+/-
+**CategoryTheory.Functor.sheafPullbackConstruction.sheafAdjunctionContinuous** 是
+ Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Functor.sheafPullbackConstruction`。
+形式化陈述：sheafAdjunctionContinuous [HasWeakSheafify K A] : sheafPullback G A J K ⊣ 
+G.sheafPushforwardContinuous A J K
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sheafAdjunctionContinuous
-  signature: [HasWeakSheafify K A]
-  body: ((G.op.lanAdjunction A).comp (sheafificationAdjunction K A)).restrictFullyFaithful
-    (fullyFaithfulSheafToPresheaf J A) (Functor.FullyFaithful.id _) (Iso.refl _) (Iso.refl _)
-
-中文:
-定义 sheafAdjunctionContinuous
-  签名: [HasWeakSheafify K A]
-  定义体: ((G.op.lanAdjunction A).comp (sheafificationAdjunction K A)).restrictFullyFaithful
-    (fullyFaithfulSheafToPresheaf J A) (Functor.FullyFaithful.id _) (Iso.refl _) (Iso.refl _)
-
-Depends on / 依赖: FullyFaithful, Functor, Functor.FullyFaithful.id, G.op.lanAdjunction, Iso.refl, fullyFaithfulSheafToPresheaf, lanAdjunction, restrictFullyFaithful, sheafificationAdjunction
+--- 原说明 ---
+The constructed `sheafPullback G A J K` is left adjoint
+to `G.sheafPushforwardContinuous A J K`.
 -/
 def sheafAdjunctionContinuous [HasWeakSheafify K A] :
     sheafPullback G A J K ⊣ G.sheafPushforwardContinuous A J K :=
   ((G.op.lanAdjunction A).comp (sheafificationAdjunction K A)).restrictFullyFaithful
     (fullyFaithfulSheafToPresheaf J A) (Functor.FullyFaithful.id _) (Iso.refl _) (Iso.refl _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasWeakSheafify
-  signature: K A] :
-  body: (sheafAdjunctionContinuous G A J K).isRightAdjoint
-
-中文:
-实例 [HasWeakSheafify
-  签名: K A] :
-  定义体: (sheafAdjunctionContinuous G A J K).isRightAdjoint
-
-Depends on / 依赖: isRightAdjoint, sheafAdjunctionContinuous
+/-
+**CategoryTheory.Functor.sheafPullbackConstruction.** 是 Mathlib 中的一个实例，位于命名空间 `C
+ategoryTheory.Functor.sheafPullbackConstruction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasWeakSheafify K A] :
     (G.sheafPushforwardContinuous A J K).IsRightAdjoint :=
   (sheafAdjunctionContinuous G A J K).isRightAdjoint
 
-/--
-Definition of `sheafPullbackIso` / `sheafPullbackIso` 的定义
+/-- The constructed pullback of sheaves is isomorphic to the abstract one. -/
+/-
+**CategoryTheory.Functor.sheafPullbackConstruction.sheafPullbackIso** 是 Mathlib 
+中的一个定义，位于命名空间 `CategoryTheory.Functor.sheafPullbackConstruction`。
+形式化陈述：sheafPullbackIso [HasWeakSheafify K A] : Functor.sheafPullback G A J K ≅ s
+heafPullback G A J K
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.sheafPullbackConstruction.instIsRightAdjointSheaf
+SheafPushforwardContinuousOfHasWeakSheafify`：∀ {C : Type u₂} [inst : CategoryThe
+ory.Category.{v₂, u₂} C] {D : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃
+} D]   (G : CategoryTheor…
 
-English:
-definition sheafPullbackIso
-  signature: [HasWeakSheafify K A]
-  body: Adjunction.leftAdjointUniq (Functor.sheafAdjunctionContinuous G A J K)
-    (sheafAdjunctionContinuous G A J K)
-
-中文:
-定义 sheafPullbackIso
-  签名: [HasWeakSheafify K A]
-  定义体: Adjunction.leftAdjointUniq (Functor.sheafAdjunctionContinuous G A J K)
-    (sheafAdjunctionContinuous G A J K)
-
-Depends on / 依赖: Adjunction, Adjunction.leftAdjointUniq, Functor, Functor.sheafAdjunctionContinuous, leftAdjointUniq, sheafAdjunctionContinuous
+--- 原说明 ---
+The constructed pullback of sheaves is isomorphic to the abstract one.
 -/
 def sheafPullbackIso [HasWeakSheafify K A] :
     Functor.sheafPullback G A J K ≅ sheafPullback G A J K :=
@@ -176,47 +153,36 @@ def sheafPullbackIso [HasWeakSheafify K A] :
 
 variable [RepresentablyFlat G] [HasSheafify K A] [HasSheafify J A]
   [PreservesFiniteLimits (G.op.lan : (_ ⥤ _ ⥤ A))]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesFiniteLimits (sheafPullback G A J K)
-  body: by
-  have : PreservesFiniteLimits (G.op.lan ⋙ presheafToSheaf K A) :=
-    comp_preservesFiniteLimits _ _
-  apply comp_preservesFiniteLimits
-
-中文:
-实例 :
-  签名: 保持FiniteLimits (sheafPullback G A J K)
-  定义体: by
-  have : PreservesFiniteLimits (G.op.lan ⋙ presheafToSheaf K A) :=
-    comp_preservesFiniteLimits _ _
-  apply comp_preservesFiniteLimits
-
-Depends on / 依赖: G.op.lan, PreservesFiniteLimits, comp_preservesFiniteLimits, presheafToSheaf
+/-
+**CategoryTheory.Functor.sheafPullbackConstruction.** 是 Mathlib 中的一个实例，位于命名空间 `C
+ategoryTheory.Functor.sheafPullbackConstruction`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PreservesFiniteLimits (sheafPullback G A J K) := by
   have : PreservesFiniteLimits (G.op.lan ⋙ presheafToSheaf K A) :=
     comp_preservesFiniteLimits _ _
   apply comp_preservesFiniteLimits
-
-/--
-Instance `preservesFiniteLimits` / 实例 `preservesFiniteLimits`
-
-English:
-instance preservesFiniteLimits
-  signature: : PreservesFiniteLimits (Functor.sheafPullback G A J K)
-  body: preservesFiniteLimits_of_natIso (sheafPullbackIso G A J K).symm
-
-中文:
-实例 preservesFiniteLimits
-  签名: : 保持FiniteLimits (函子.sheafPullback G A J K)
-  定义体: preservesFiniteLimits_of_natIso (sheafPullbackIso G A J K).symm
-
-Depends on / 依赖: preservesFiniteLimits_of_natIso, sheafPullbackIso
+/-
+**CategoryTheory.Functor.sheafPullbackConstruction.preservesFiniteLimits** 是 Mat
+hlib 中的一个实例，位于命名空间 `CategoryTheory.Functor.sheafPullbackConstruction`。
+形式化陈述：preservesFiniteLimits : PreservesFiniteLimits (Functor.sheafPullback G A J
+ K)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.preservesFiniteLimits_of_natIso`：preservesFiniteLi
+mits_of_natIso {F G : C ⥤ D} (h : F ≅ G) [PreservesFiniteLimits F] : PreservesFi
+niteLimits G where preservesFiniteLimits _ …
+· 使用定理 `CategoryTheory.instHasWeakSheafifyOfHasSheafify`：∀ {C : Type u₁} [inst :
+ CategoryTheory.Category.{v₁, u₁} C] (J : CategoryTheory.GrothendieckTopology C)
+ (A : Type u₂)   [inst_1 : CategoryTh…
+· 使用定理 `CategoryTheory.Functor.sheafPullbackConstruction.instIsRightAdjointSheaf
+SheafPushforwardContinuousOfHasWeakSheafify`：∀ {C : Type u₂} [inst : CategoryThe
+ory.Category.{v₂, u₂} C] {D : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃
+} D]   (G : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.sheafPullbackConstruction.instPreservesFiniteLimi
+tsSheafSheafPullback`：∀ {C : Type u₂} [inst : CategoryTheory.Category.{v₂, u₂} C
+] {D : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} D]   (G : CategoryThe
+or…
 -/
 instance preservesFiniteLimits : PreservesFiniteLimits (Functor.sheafPullback G A J K) :=
   preservesFiniteLimits_of_natIso (sheafPullbackIso G A J K).symm
@@ -232,30 +198,23 @@ variable {C : Type v₁} [SmallCategory C] {D : Type v₁} [SmallCategory D] (G 
   (J : GrothendieckTopology C) (K : GrothendieckTopology D)
 
 -- The favourable assumptions under which we have sheafification
-variable {FA : A -> A -> Type*} {CA : A -> Type v₁} [forall X Y, FunLike (FA X Y) (CA X) (CA Y)]
+variable {FA : A → A → Type*} {CA : A → Type v₁} [∀ X Y, FunLike (FA X Y) (CA X) (CA Y)]
 variable [ConcreteCategory.{v₁} A FA] [PreservesLimits (forget A)] [HasColimits A] [HasLimits A]
   [PreservesFilteredColimits (forget A)] [(forget A).ReflectsIsomorphisms]
   [Functor.IsContinuous.{v₁} G J K]
 
+/-
+**CategoryTheory.Functor.SmallCategories.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryThe
+ory.Functor.SmallCategories`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : (G.sheafPushforwardContinuous A J K).IsRightAdjoint := inferInstance
 
 attribute [local instance] reflectsLimits_of_reflectsIsomorphisms in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [RepresentablyFlat
-  signature: G] : PreservesFiniteLimits (G.sheafPullback A J K)
-  body: by
-  apply sheafPullbackConstruction.preservesFiniteLimits
-
-中文:
-实例 [RepresentablyFlat
-  签名: G] : 保持FiniteLimits (G.sheafPullback A J K)
-  定义体: by
-  apply sheafPullbackConstruction.preservesFiniteLimits
-
-Depends on / 依赖: preservesFiniteLimits, sheafPullbackConstruction, sheafPullbackConstruction.preservesFiniteLimits
+/-
+**CategoryTheory.Functor.SmallCategories.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryThe
+ory.Functor.SmallCategories`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [RepresentablyFlat G] : PreservesFiniteLimits (G.sheafPullback A J K) := by
   apply sheafPullbackConstruction.preservesFiniteLimits
@@ -263,3 +222,4 @@ instance [RepresentablyFlat G] : PreservesFiniteLimits (G.sheafPullback A J K) :
 end SmallCategories
 
 end CategoryTheory.Functor
+

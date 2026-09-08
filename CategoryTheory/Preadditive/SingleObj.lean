@@ -20,22 +20,9 @@ namespace CategoryTheory
 
 variable {α : Type*} [Ring α]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Preadditive (SingleObj α)
-  body: mul_add g f f'
-  comp_add _ _ _ f g g' := add_mul g g' f
-
-中文:
-实例 :
-  签名: 预加性 (SingleObj α)
-  定义体: mul_add g f f'
-  comp_add _ _ _ f g g' := add_mul g g' f
-
-Depends on / 依赖: mul_add
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Preadditive (SingleObj α) where
   add_comp _ _ _ f f' g := mul_add g f f'
@@ -43,3 +30,4 @@ instance : Preadditive (SingleObj α) where
 
 -- TODO define `PreAddCat` (with additive functors as morphisms), and `Ring ⥤ PreAddCat`.
 end CategoryTheory
+

@@ -38,42 +38,34 @@ variable (C : Type u₁) [Category.{v₁} C]
 variable (D : Type u₂) [Category.{v₂} D]
 variable {E : Type u₃} [Category.{v₃} E]
 
-/--
-Definition of `Skeletal` / `Skeletal` 的定义
+/-- A category is skeletal if isomorphic objects are equal. -/
+/-
+**CategoryTheory.Skeletal** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：Skeletal : Prop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Skeletal
-  signature: : Prop
-  body: forall ⦃X Y : C⦄, IsIsomorphic X Y -> X = Y
-
-中文:
-定义 Skeletal
-  签名: : 命题
-  定义体: forall ⦃X Y : C⦄, IsIsomorphic X Y -> X = Y
-
-Depends on / 依赖: IsIsomorphic
+--- 原说明 ---
+A category is skeletal if isomorphic objects are equal.
 -/
 def Skeletal : Prop :=
-  forall ⦃X Y : C⦄, IsIsomorphic X Y -> X = Y
+  ∀ ⦃X Y : C⦄, IsIsomorphic X Y → X = Y
 
-/--
-Definition of `IsSkeletonOf` / `IsSkeletonOf` 的定义
+/-- `IsSkeletonOf C D F` says that `F : D ⥤ C` exhibits `D` as a skeletal full subcategory of `C`,
+in particular `F` is a (strong) equivalence and `D` is skeletal.
+-/
+/-
+**CategoryTheory.IsSkeletonOf** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory`。
+形式化陈述：IsSkeletonOf (F : D ⥤ C) : Prop where /-- The category `D` has isomorphic 
+objects equal -/ skel : Skeletal D /-- The functor `F` is an equivalence -/ eqv 
+: F.IsEquivalence
+参数：F : D ⥤ C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsSkeletonOf
-  parameters: (F : D ⥤ C)
-  axioms and operations (2):
-    - skel : Skeletal D
-    - eqv : F.IsEquivalence  [default: by infer_instance]
-
-中文:
-结构 是SkeletonOf
-  参数: (F : D ⥤ C)
-  公理与运算 (2 个):
-    - skel : Skeletal D
-    - eqv : F.是等价  [默认: by infer_instance]
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+`IsSkeletonOf C D F` says that `F : D ⥤ C` exhibits `D` as a skeletal full subca
+tegory of `C`,
+in particular `F` is a (strong) equivalence and `D` is skeletal.
 -/
 structure IsSkeletonOf (F : D ⥤ C) : Prop where
   /-- The category `D` has isomorphic objects equal -/
@@ -85,41 +77,47 @@ attribute [local instance] isIsomorphicSetoid
 
 variable {C D}
 
-/--
-theorem `Functor.eq_of_iso` / 定理 `Functor.eq_of_iso`
+/-- If `C` is thin and skeletal, then any naturally isomorphic functors to `C` are equal. -/
+/-
+**CategoryTheory.Functor.eq_of_iso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Fun
+ctor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {F₁ F₂ : CategoryTheory.Functor 
+D C} [Quiver.IsThin C], CategoryTheory.Skeletal C → ∀ (hF : F₁ ≅ F₂), F₁ = F₂
+参数：hF : F₁ ≅ F₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.ext`：ext {F G : C ⥤ D} (h_obj : forall X, F.obj X
+ = G.obj X) (h_map : forall X Y f, F.map f = eqToHom (h_obj X) ≫ G.map f ≫ eqToH
+om (h_obj Y).sym…
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem Functor.eq_of_iso
-  given: {F₁ F₂ : D ⥤ C} [Quiver.IsThin C] (hC : Skeletal C) (hF : F₁ ≅ F₂)
-  proof: Functor.ext (fun X => hC ⟨hF.app X⟩) fun _ _ _ => Subsingleton.elim _ _
-
-中文:
-定理 函子.eq_of_iso
-  条件: {F₁ F₂ : D ⥤ C} [箭图.IsThin C] (hC : Skeletal C) (hF : F₁ ≅ F₂)
-  证明: Functor.ext (fun X => hC ⟨hF.app X⟩) fun _ _ _ => Subsingleton.elim _ _
-
-Depends on / 依赖: Functor, Functor.ext, Subsingleton, Subsingleton.elim, hF.app
+--- 原说明 ---
+If `C` is thin and skeletal, then any naturally isomorphic functors to `C` are e
+qual.
 -/
 theorem Functor.eq_of_iso {F₁ F₂ : D ⥤ C} [Quiver.IsThin C] (hC : Skeletal C) (hF : F₁ ≅ F₂) :
     F₁ = F₂ :=
   Functor.ext (fun X => hC ⟨hF.app X⟩) fun _ _ _ => Subsingleton.elim _ _
 
-/--
-theorem `functor_skeletal` / 定理 `functor_skeletal`
+/-- If `C` is thin and skeletal, `D ⥤ C` is skeletal.
+`CategoryTheory.functor_thin` shows it is thin also.
+-/
+/-
+**CategoryTheory.functor_skeletal** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：functor_skeletal [Quiver.IsThin C] (hC : Skeletal C) : Skeletal (D ⥤ C)
+参数：hC : Skeletal C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonempty.elim`：∀ {α : Sort u} {p : Prop}, Nonempty α → (∀ (a : α), p) → 
+p
+· 使用定理 `CategoryTheory.Functor.eq_of_iso`：∀ {C : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D
+]   {F₁ F₂ : CategoryT…
 
-English:
-theorem functor_skeletal
-  given: [Quiver.IsThin C] (hC : Skeletal C)
-  statement: Skeletal (D ⥤ C)
-  proof: fun _ _ h =>
-  h.elim (Functor.eq_of_iso hC)
-
-中文:
-定理 functor_skeletal
-  条件: [箭图.IsThin C] (hC : Skeletal C)
-  结论: Skeletal (D ⥤ C)
-  证明: fun _ _ h =>
-  h.elim (Functor.eq_of_iso hC)
+--- 原说明 ---
+If `C` is thin and skeletal, `D ⥤ C` is skeletal.
+`CategoryTheory.functor_thin` shows it is thin also.
 -/
 theorem functor_skeletal [Quiver.IsThin C] (hC : Skeletal C) : Skeletal (D ⥤ C) := fun _ _ h =>
   h.elim (Functor.eq_of_iso hC)
@@ -128,54 +126,41 @@ variable (C D)
 
 noncomputable section
 
-/--
-Definition of `Skeleton` / `Skeleton` 的定义
+/-- Construct the skeleton category as the induced category on the isomorphism classes, and derive
+its category structure.
+-/
+/-
+**CategoryTheory.Skeleton** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：Skeleton : Type u₁
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Skeleton
-  signature: : Type u₁
-  body: InducedCategory (C := Quotient (isIsomorphicSetoid C)) C Quotient.out
-deriving
-  Category,
-  [Inhabited C] -> Inhabited _
-
-中文:
-定义 Skeleton
-  签名: : 类型u₁
-  定义体: InducedCategory (C := Quotient (isIsomorphicSetoid C)) C Quotient.out
-deriving
-  Category,
-  [Inhabited C] -> Inhabited _
-
-Depends on / 依赖: InducedCategory, Quotient, Quotient.out, isIsomorphicSetoid
+--- 原说明 ---
+Construct the skeleton category as the induced category on the isomorphism class
+es, and derive
+its category structure.
 -/
 def Skeleton : Type u₁ := InducedCategory (C := Quotient (isIsomorphicSetoid C)) C Quotient.out
 deriving
   Category,
-  [Inhabited C] -> Inhabited _
+  [Inhabited C] → Inhabited _
 
 -- Without this we get errors in Mathlib/RingTheory/PicardGroup.lean
 set_option backward.inferInstanceAs.wrap.data false in
-deriving instance (α : Sort _) -> [CoeSort C α] -> CoeSort _ α for Skeleton C
+deriving instance (α : Sort _) → [CoeSort C α] → CoeSort _ α for Skeleton C
 
 end
 
 /-- The functor from the skeleton of `C` to `C`. -/
 @[simps!]
-/--
-Definition of `fromSkeleton` / `fromSkeleton` 的定义
+/-
+**CategoryTheory.fromSkeleton** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：fromSkeleton : Skeleton C ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fromSkeleton
-  signature: : Skeleton C ⥤ C
-  body: inducedFunctor _
-
-中文:
-定义 fromSkeleton
-  签名: : Skeleton C ⥤ C
-  定义体: inducedFunctor _
-
-Depends on / 依赖: inducedFunctor
+--- 原说明 ---
+The functor from the skeleton of `C` to `C`.
 -/
 noncomputable def fromSkeleton : Skeleton C ⥤ C :=
   inducedFunctor _
@@ -184,128 +169,79 @@ noncomputable def fromSkeleton : Skeleton C ⥤ C :=
 -- Note(kmill): `derive Functor.Full, Functor.Faithful` does not create instances
 -- that are in terms of `Skeleton`, but rather `InducedCategory`, which can't be applied.
 -- With `deriving @Functor.Full (Skeleton C)`, the instance can't be derived, for a similar reason.
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (fromSkeleton C).Full
-  body: by
-  apply InducedCategory.full
-
-中文:
-实例 :
-  签名: (fromSkeleton C).满
-  定义体: by
-  apply InducedCategory.full
-
-Depends on / 依赖: InducedCategory, InducedCategory.full
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : (fromSkeleton C).Full := by
   apply InducedCategory.full
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (fromSkeleton C).Faithful
-  body: by
-  apply InducedCategory.faithful
-
-中文:
-实例 :
-  签名: (fromSkeleton C).忠实
-  定义体: by
-  apply InducedCategory.faithful
-
-Depends on / 依赖: InducedCategory, InducedCategory.faithful, faithful
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : (fromSkeleton C).Faithful := by
   apply InducedCategory.faithful
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (fromSkeleton C).EssSurj
-  body: ⟨Quotient.mk' X, Quotient.mk_out X⟩
-
-中文:
-实例 :
-  签名: (fromSkeleton C).本质满射
-  定义体: ⟨Quotient.mk' X, Quotient.mk_out X⟩
-
-Depends on / 依赖: Quotient, Quotient.mk, Quotient.mk_out, mk_out
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (fromSkeleton C).EssSurj where mem_essImage X := ⟨Quotient.mk' X, Quotient.mk_out X⟩
-
-/--
-Instance `fromSkeleton.isEquivalence` / 实例 `fromSkeleton.isEquivalence`
-
-English:
-instance fromSkeleton.isEquivalence
-  signature: : (fromSkeleton C).IsEquivalence where
-
-中文:
-实例 fromSkeleton.isEquivalence
-  签名: : (fromSkeleton C).是等价 where
+/-
+**CategoryTheory.fromSkeleton.isEquivalence** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.fromSkeleton`。
+形式化陈述：∀ (C : Type u₁) [inst : CategoryTheory.Category.{v₁, u₁} C], (CategoryTheo
+ry.fromSkeleton C).IsEquivalence
+参数：C : Type u₁；CategoryTheory.fromSkeleton C。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instFaithfulSkeletonFromSkeleton`：∀ (C : Type u₁) [inst :
+ CategoryTheory.Category.{v₁, u₁} C], (CategoryTheory.fromSkeleton C).Faithful
+· 使用定理 `CategoryTheory.instFullSkeletonFromSkeleton`：∀ (C : Type u₁) [inst : Cat
+egoryTheory.Category.{v₁, u₁} C], (CategoryTheory.fromSkeleton C).Full
+· 使用定理 `CategoryTheory.instEssSurjSkeletonFromSkeleton`：∀ (C : Type u₁) [inst : 
+CategoryTheory.Category.{v₁, u₁} C], (CategoryTheory.fromSkeleton C).EssSurj
 -/
 noncomputable instance fromSkeleton.isEquivalence : (fromSkeleton C).IsEquivalence where
 
 variable {C}
 
-/--
-Definition of `toSkeleton` / `toSkeleton` 的定义
+/-- The class of an object in the skeleton. -/
+/-
+**CategoryTheory.toSkeleton** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory`。
+形式化陈述：toSkeleton (X : C) : Skeleton C
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toSkeleton
-  signature: (X : C)
-  body: ⟦X⟧
-
-中文:
-缩写 toSkeleton
-  签名: (X : C)
-  定义体: ⟦X⟧
+--- 原说明 ---
+The class of an object in the skeleton.
 -/
 abbrev toSkeleton (X : C) : Skeleton C := ⟦X⟧
 
-/--
-Definition of `fromSkeletonToSkeletonIso` / `fromSkeletonToSkeletonIso` 的定义
+/-- The isomorphism between `⟦X⟧.out` and `X`. -/
+/-
+**CategoryTheory.fromSkeletonToSkeletonIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory`。
+形式化陈述：fromSkeletonToSkeletonIso (X : C) : (fromSkeleton C).obj (toSkeleton X) ≅ 
+X
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fromSkeletonToSkeletonIso
-  signature: (X : C)
-  body: Nonempty.some (Quotient.mk_out X)
-
-@[reassoc, simp]
-
-中文:
-定义 fromSkeletonToSkeletonIso
-  签名: (X : C)
-  定义体: Nonempty.some (Quotient.mk_out X)
-
-@[reassoc, simp]
-
-Depends on / 依赖: Nonempty, Nonempty.some, Quotient, Quotient.mk_out, mk_out
+--- 原说明 ---
+The isomorphism between `⟦X⟧.out` and `X`.
 -/
 noncomputable def fromSkeletonToSkeletonIso (X : C) : (fromSkeleton C).obj (toSkeleton X) ≅ X :=
   Nonempty.some (Quotient.mk_out X)
 
 @[reassoc, simp]
-/--
-lemma `Skeleton.comp_hom` / 引理 `Skeleton.comp_hom`
-
-English:
-lemma Skeleton.comp_hom
-  given: {X Y Z : Skeleton C} (f : X ⟶ Y) (g : Y ⟶ Z)
-  proof: rfl
-
-中文:
-引理 Skeleton.comp_hom
-  条件: {X Y Z : Skeleton C} (f : X ⟶ Y) (g : Y ⟶ Z)
-  证明: rfl
+/-
+**CategoryTheory.Skeleton.comp_hom** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Ske
+leton`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y Z : Categ
+oryTheory.Skeleton C} (f : X ⟶ Y) (g : Y ⟶ Z),   (CategoryTheory.CategoryStruct.
+comp f g).hom = CategoryTheory.CategoryStruct.comp f.hom g.hom
+参数：f : X ⟶ Y；g : Y ⟶ Z；CategoryTheory.CategoryStruct.comp f g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Skeleton.comp_hom {X Y Z : Skeleton C} (f : X ⟶ Y) (g : Y ⟶ Z) :
     (f ≫ g).hom = f.hom ≫ g.hom := rfl
@@ -313,26 +249,15 @@ lemma Skeleton.comp_hom {X Y Z : Skeleton C} (f : X ⟶ Y) (g : Y ⟶ Z) :
 variable (C)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `toSkeletonFunctor` / `toSkeletonFunctor` 的定义
+/-- An inverse to `fromSkeleton C` that forms an equivalence with it. -/
+/-
+**CategoryTheory.toSkeletonFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：(C : Type u₁) → [inst : CategoryTheory.Category.{v₁, u₁} C] → CategoryTheo
+ry.Functor C (CategoryTheory.Skeleton C)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toSkeletonFunctor
-  signature: : C ⥤ Skeleton C where
-  body: toSkeleton
-  map {X Y} f :=
-    { hom := (fromSkeletonToSkeletonIso X).hom ≫ f ≫ (fromSkeletonToSkeletonIso Y).inv }
-  map_id _ := by aesop
-  map_comp _ _ := InducedCategory.hom_ext (by simp)
-
-中文:
-定义 toSkeletonFunctor
-  签名: : C ⥤ Skeleton C where
-  定义体: toSkeleton
-  map {X Y} f :=
-    { hom := (fromSkeletonToSkeletonIso X).hom ≫ f ≫ (fromSkeletonToSkeletonIso Y).inv }
-  map_id _ := by aesop
-  map_comp _ _ := InducedCategory.hom_ext (by simp)
+--- 原说明 ---
+An inverse to `fromSkeleton C` that forms an equivalence with it.
 -/
 @[simps] noncomputable def toSkeletonFunctor : C ⥤ Skeleton C where
   obj := toSkeleton
@@ -343,183 +268,128 @@ definition toSkeletonFunctor
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `skeletonEquivalence` / `skeletonEquivalence` 的定义
+/-- The equivalence between the skeleton and the category itself. -/
+/-
+**CategoryTheory.skeletonEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：(C : Type u₁) → [inst : CategoryTheory.Category.{v₁, u₁} C] → CategoryTheo
+ry.Skeleton C ≌ C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition skeletonEquivalence
-  signature: : Skeleton C ≌ C where
-  body: fromSkeleton C
-  inverse := toSkeletonFunctor C
-  unitIso := NatIso.ofComponents
-    (fun X => InducedCategory.isoMk (Nonempty.some <| Quotient.mk_out X.out).symm)
-    (fun f => InducedCategory.hom_ext (Iso.inv_hom_id_assoc _ _).symm)
-  counitIso := NatIso.ofComponents fromSkeletonToSkeletonIso
-  functor_unitIso_comp _ := Iso.inv_hom_id _
-
-中文:
-定义 skeletonEquivalence
-  签名: : Skeleton C ≌ C where
-  定义体: fromSkeleton C
-  inverse := toSkeletonFunctor C
-  unitIso := NatIso.ofComponents
-    (fun X => InducedCategory.isoMk (Nonempty.some <| Quotient.mk_out X.out).symm)
-    (fun f => InducedCategory.hom_ext (Iso.inv_hom_id_assoc _ _).symm)
-  counitIso := NatIso.ofComponents fromSkeletonToSkeletonIso
-  functor_unitIso_comp _ := Iso.inv_hom_id _
+--- 原说明 ---
+The equivalence between the skeleton and the category itself.
 -/
 @[simps] noncomputable def skeletonEquivalence : Skeleton C ≌ C where
   functor := fromSkeleton C
   inverse := toSkeletonFunctor C
   unitIso := NatIso.ofComponents
-    (fun X => InducedCategory.isoMk (Nonempty.some <| Quotient.mk_out X.out).symm)
-    (fun f => InducedCategory.hom_ext (Iso.inv_hom_id_assoc _ _).symm)
+    (fun X ↦ InducedCategory.isoMk (Nonempty.some <| Quotient.mk_out X.out).symm)
+    (fun f ↦ InducedCategory.hom_ext (Iso.inv_hom_id_assoc _ _).symm)
   counitIso := NatIso.ofComponents fromSkeletonToSkeletonIso
   functor_unitIso_comp _ := Iso.inv_hom_id _
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `skeleton_skeletal` / 定理 `skeleton_skeletal`
-
-English:
-theorem skeleton_skeletal
-  statement: Skeletal (Skeleton C)
-  proof: by
-  rintro X Y ⟨h⟩
-  have : X.out ≈ Y.out := ⟨(fromSkeleton C).mapIso h⟩
-  simpa using! Quotient.sound this
-
-中文:
-定理 skeleton_skeletal
-  结论: Skeletal (Skeleton C)
-  证明: by
-  rintro X Y ⟨h⟩
-  have : X.out ≈ Y.out := ⟨(fromSkeleton C).mapIso h⟩
-  simpa using! Quotient.sound this
-
-Depends on / 依赖: Quotient, Quotient.sound, X.out, Y.out, fromSkeleton, mapIso
+/-
+**CategoryTheory.skeleton_skeletal** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory`。
+形式化陈述：skeleton_skeletal : Skeletal (Skeleton C)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Quotient.out_eq`：Quotient.out_eq {s : Setoid α} (q : Quotient s) : ⟦q.ou
+t⟧ = q
+· 使用定理 `Quotient.sound`：∀ {α : Sort u} {s : Setoid α} {a b : α}, a ≈ b → ⟦a⟧ = ⟦
+b⟧
 -/
 theorem skeleton_skeletal : Skeletal (Skeleton C) := by
   rintro X Y ⟨h⟩
   have : X.out ≈ Y.out := ⟨(fromSkeleton C).mapIso h⟩
   simpa using! Quotient.sound this
 
-/--
-lemma `skeleton_isSkeleton` / 引理 `skeleton_isSkeleton`
+/-- The `skeleton` of `C` given by choice is a skeleton of `C`. -/
+/-
+**CategoryTheory.skeleton_isSkeleton** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：skeleton_isSkeleton : IsSkeletonOf C (Skeleton C) (fromSkeleton C) where s
+kel
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.skeleton_skeletal`：skeleton_skeletal : Skeletal (Skeleton
+ C)
+· 使用定理 `CategoryTheory.fromSkeleton.isEquivalence`：∀ (C : Type u₁) [inst : Categ
+oryTheory.Category.{v₁, u₁} C], (CategoryTheory.fromSkeleton C).IsEquivalence
 
-English:
-lemma skeleton_isSkeleton
-  statement: IsSkeletonOf C (Skeleton C) (fromSkeleton C) where
-  proof: skeleton_skeletal C
-  eqv := fromSkeleton.isEquivalence C
-
-中文:
-引理 skeleton_isSkeleton
-  结论: 是SkeletonOf C (Skeleton C) (fromSkeleton C) where
-  证明: skeleton_skeletal C
-  eqv := fromSkeleton.isEquivalence C
-
-Depends on / 依赖: skeleton_skeletal
+--- 原说明 ---
+The `skeleton` of `C` given by choice is a skeleton of `C`.
 -/
 lemma skeleton_isSkeleton : IsSkeletonOf C (Skeleton C) (fromSkeleton C) where
   skel := skeleton_skeletal C
   eqv := fromSkeleton.isEquivalence C
 
 variable {C D}
-
-/--
-lemma `toSkeleton_fromSkeleton_obj` / 引理 `toSkeleton_fromSkeleton_obj`
-
-English:
-lemma toSkeleton_fromSkeleton_obj
-  given: (X : Skeleton C)
-  statement: toSkeleton ((fromSkeleton C).obj X) = X
-  proof: Quotient.out_eq _
-
-中文:
-引理 toSkeleton_fromSkeleton_obj
-  条件: (X : Skeleton C)
-  结论: toSkeleton ((fromSkeleton C).obj X) = X
-  证明: Quotient.out_eq _
-
-Depends on / 依赖: Quotient, Quotient.out_eq, out_eq
+/-
+**CategoryTheory.toSkeleton_fromSkeleton_obj** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory`。
+形式化陈述：toSkeleton_fromSkeleton_obj (X : Skeleton C) : toSkeleton ((fromSkeleton C
+).obj X) = X
+参数：X : Skeleton C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.out_eq`：Quotient.out_eq {s : Setoid α} (q : Quotient s) : ⟦q.ou
+t⟧ = q
 -/
 lemma toSkeleton_fromSkeleton_obj (X : Skeleton C) : toSkeleton ((fromSkeleton C).obj X) = X :=
   Quotient.out_eq _
-
-/--
-lemma `toSkeleton_eq_toSkeleton_iff` / 引理 `toSkeleton_eq_toSkeleton_iff`
-
-English:
-lemma toSkeleton_eq_toSkeleton_iff
-  given: {X Y : C}
-  statement: toSkeleton X = toSkeleton Y ↔ Nonempty (X ≅ Y)
-  proof: Quotient.eq
-
-中文:
-引理 toSkeleton_eq_toSkeleton_iff
-  条件: {X Y : C}
-  结论: toSkeleton X = toSkeleton Y ↔ 非空 (X ≅ Y)
-  证明: Quotient.eq
-
-Depends on / 依赖: Quotient, Quotient.eq
+/-
+**CategoryTheory.toSkeleton_eq_toSkeleton_iff** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory`。
+形式化陈述：toSkeleton_eq_toSkeleton_iff {X Y : C} : toSkeleton X = toSkeleton Y ↔ Non
+empty (X ≅ Y)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.eq`：Quotient.eq {r : Setoid α} {x y : α} : Quotient.mk r x = ⟦y
+⟧ ↔ r x y
 -/
 lemma toSkeleton_eq_toSkeleton_iff {X Y : C} : toSkeleton X = toSkeleton Y ↔ Nonempty (X ≅ Y) :=
   Quotient.eq
-
-/--
-lemma `congr_toSkeleton_of_iso` / 引理 `congr_toSkeleton_of_iso`
-
-English:
-lemma congr_toSkeleton_of_iso
-  given: {X Y : C} (e : X ≅ Y)
-  statement: toSkeleton X = toSkeleton Y
-  proof: Quotient.sound ⟨e⟩
-
-中文:
-引理 congr_toSkeleton_of_iso
-  条件: {X Y : C} (e : X ≅ Y)
-  结论: toSkeleton X = toSkeleton Y
-  证明: Quotient.sound ⟨e⟩
-
-Depends on / 依赖: Quotient, Quotient.sound
+/-
+**CategoryTheory.congr_toSkeleton_of_iso** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry`。
+形式化陈述：congr_toSkeleton_of_iso {X Y : C} (e : X ≅ Y) : toSkeleton X = toSkeleton 
+Y
+参数：e : X ≅ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.sound`：∀ {α : Sort u} {s : Setoid α} {a b : α}, a ≈ b → ⟦a⟧ = ⟦
+b⟧
 -/
 lemma congr_toSkeleton_of_iso {X Y : C} (e : X ≅ Y) : toSkeleton X = toSkeleton Y :=
   Quotient.sound ⟨e⟩
 
-/--
-Definition of `Skeleton.isoOfEq` / `Skeleton.isoOfEq` 的定义
+/-- Provides a (noncomputable) isomorphism `X ≅ Y` given that `toSkeleton X = toSkeleton Y`. -/
+/-
+**CategoryTheory.Skeleton.isoOfEq** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Skel
+eton`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {X Y :
+ C} → CategoryTheory.toSkeleton X = CategoryTheory.toSkeleton Y → (X ≅ Y)
+参数：X ≅ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Skeleton.isoOfEq
-  signature: {X Y : C} (h : toSkeleton X = toSkeleton Y)
-  body: .some Quotient.exact h
-
-中文:
-定义 Skeleton.isoOfEq
-  签名: {X Y : C} (h : toSkeleton X = toSkeleton Y)
-  定义体: .some Quotient.exact h
-
-Depends on / 依赖: Quotient, Quotient.exact
+--- 原说明 ---
+Provides a (noncomputable) isomorphism `X ≅ Y` given that `toSkeleton X = toSkel
+eton Y`.
 -/
 noncomputable def Skeleton.isoOfEq {X Y : C} (h : toSkeleton X = toSkeleton Y) :
     X ≅ Y :=
-.some Quotient.exact h
-
-/--
-lemma `toSkeleton_eq_iff` / 引理 `toSkeleton_eq_iff`
-
-English:
-lemma toSkeleton_eq_iff
-  given: {X : C} {Y : Skeleton C}
-  proof: Quotient.mk_eq_iff_out
-
-中文:
-引理 toSkeleton_eq_iff
-  条件: {X : C} {Y : Skeleton C}
-  证明: Quotient.mk_eq_iff_out
-
-Depends on / 依赖: Quotient, Quotient.mk_eq_iff_out, mk_eq_iff_out
+  Quotient.exact h |>.some
+/-
+**CategoryTheory.toSkeleton_eq_iff** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：toSkeleton_eq_iff {X : C} {Y : Skeleton C} : toSkeleton X = Y ↔ Nonempty (
+X ≅ (fromSkeleton C).obj Y)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk_eq_iff_out`：Quotient.mk_eq_iff_out {s : Setoid α} {x : α} {y
+ : Quotient s} : ⟦x⟧ = y ↔ x ≈ Quotient.out y
 -/
 lemma toSkeleton_eq_iff {X : C} {Y : Skeleton C} :
     toSkeleton X = Y ↔ Nonempty (X ≅ (fromSkeleton C).obj Y) :=
@@ -527,20 +397,17 @@ lemma toSkeleton_eq_iff {X : C} {Y : Skeleton C} :
 
 namespace Functor
 
-/--
-Definition of `mapSkeleton` / `mapSkeleton` 的定义
+/-- From a functor `C ⥤ D`, construct a map of skeletons `Skeleton C → Skeleton D`. -/
+/-
+**CategoryTheory.Functor.mapSkeleton** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.F
+unctor`。
+形式化陈述：mapSkeleton (F : C ⥤ D) : Skeleton C ⥤ Skeleton D
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapSkeleton
-  signature: (F : C ⥤ D)
-  body: (skeletonEquivalence C).functor ⋙ F ⋙ (skeletonEquivalence D).inverse
-
-中文:
-定义 mapSkeleton
-  签名: (F : C ⥤ D)
-  定义体: (skeletonEquivalence C).functor ⋙ F ⋙ (skeletonEquivalence D).inverse
-
-Depends on / 依赖: functor, inverse, skeletonEquivalence
+--- 原说明 ---
+From a functor `C ⥤ D`, construct a map of skeletons `Skeleton C → Skeleton D`.
 -/
 noncomputable def mapSkeleton (F : C ⥤ D) : Skeleton C ⥤ Skeleton D :=
   (skeletonEquivalence C).functor ⋙ F ⋙ (skeletonEquivalence D).inverse
@@ -548,165 +415,113 @@ noncomputable def mapSkeleton (F : C ⥤ D) : Skeleton C ⥤ Skeleton D :=
 variable (F : C ⥤ D)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `mapSkeleton_obj_toSkeleton` / 引理 `mapSkeleton_obj_toSkeleton`
-
-English:
-lemma mapSkeleton_obj_toSkeleton
-  given: (X : C)
-  proof: congr_toSkeleton_of_iso F.mapIso fromSkeletonToSkeletonIso X
-
-中文:
-引理 mapSkeleton_obj_toSkeleton
-  条件: (X : C)
-  证明: congr_toSkeleton_of_iso F.mapIso fromSkeletonToSkeletonIso X
-
-Depends on / 依赖: F.mapIso, congr_toSkeleton_of_iso, fromSkeletonToSkeletonIso, mapIso
+/-
+**CategoryTheory.Functor.mapSkeleton_obj_toSkeleton** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Functor`。
+形式化陈述：mapSkeleton_obj_toSkeleton (X : C) : F.mapSkeleton.obj (toSkeleton X) = to
+Skeleton (F.obj X)
+参数：X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.congr_toSkeleton_of_iso`：congr_toSkeleton_of_iso {X Y : C
+} (e : X ≅ Y) : toSkeleton X = toSkeleton Y
 -/
 lemma mapSkeleton_obj_toSkeleton (X : C) :
     F.mapSkeleton.obj (toSkeleton X) = toSkeleton (F.obj X) :=
-congr_toSkeleton_of_iso F.mapIso fromSkeletonToSkeletonIso X
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [F.Full]
-  signature: : F.mapSkeleton.Full
-  body: inferInstanceAs (_ ⋙ _).Full
-
-中文:
-实例 [F.满]
-  签名: : F.mapSkeleton.满
-  定义体: inferInstanceAs (_ ⋙ _).Full
+  congr_toSkeleton_of_iso <| F.mapIso <| fromSkeletonToSkeletonIso X
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [F.Full] : F.mapSkeleton.Full := inferInstanceAs (_ ⋙ _).Full
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [F.Faithful]
-  signature: : F.mapSkeleton.Faithful
-  body: inferInstanceAs (_ ⋙ _).Faithful
-
-中文:
-实例 [F.忠实]
-  签名: : F.mapSkeleton.忠实
-  定义体: inferInstanceAs (_ ⋙ _).Faithful
-
-Depends on / 依赖: Faithful
+instance [F.Full] : F.mapSkeleton.Full := inferInstanceAs <| (_ ⋙ _).Full
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [F.Faithful] : F.mapSkeleton.Faithful := inferInstanceAs (_ ⋙ _).Faithful
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [F.EssSurj]
-  signature: : F.mapSkeleton.EssSurj
-  body: inferInstanceAs (_ ⋙ _).EssSurj
-
-中文:
-实例 [F.本质满射]
-  签名: : F.mapSkeleton.本质满射
-  定义体: inferInstanceAs (_ ⋙ _).EssSurj
-
-Depends on / 依赖: EssSurj
+instance [F.Faithful] : F.mapSkeleton.Faithful := inferInstanceAs <| (_ ⋙ _).Faithful
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [F.EssSurj] : F.mapSkeleton.EssSurj := inferInstanceAs (_ ⋙ _).EssSurj
+instance [F.EssSurj] : F.mapSkeleton.EssSurj := inferInstanceAs <| (_ ⋙ _).EssSurj
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `toSkeletonFunctorCompMapSkeletonIso` / `toSkeletonFunctorCompMapSkeletonIso` 的定义
+/-- A natural isomorphism between `X ↦ ⟦X⟧ ↦ ⟦FX⟧` and `X ↦ FX ↦ ⟦FX⟧`. On the level of
+categories, these are `C ⥤ Skeleton C ⥤ Skeleton D` and `C ⥤ D ⥤ Skeleton D`. So this says that
+the square formed by these 4 objects and 4 functors commutes. -/
+/-
+**CategoryTheory.Functor.toSkeletonFunctorCompMapSkeletonIso** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：toSkeletonFunctorCompMapSkeletonIso : toSkeletonFunctor C ⋙ F.mapSkeleton 
+≅ F ⋙ toSkeletonFunctor D
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toSkeletonFunctorCompMapSkeletonIso
-  signature: :
-  body: NatIso.ofComponents
-    (fun X => (toSkeletonFunctor D).mapIso <| F.mapIso <| fromSkeletonToSkeletonIso X)
-    (fun f => InducedCategory.hom_ext (show (_ ≫ _) ≫ _ = _ ≫ _ by simp))
-
-中文:
-定义 toSkeletonFunctorCompMapSkeletonIso
-  签名: :
-  定义体: NatIso.ofComponents
-    (fun X => (toSkeletonFunctor D).mapIso <| F.mapIso <| fromSkeletonToSkeletonIso X)
-    (fun f => InducedCategory.hom_ext (show (_ ≫ _) ≫ _ = _ ≫ _ by simp))
-
-Depends on / 依赖: F.mapIso, InducedCategory, InducedCategory.hom_ext, NatIso, NatIso.ofComponents, fromSkeletonToSkeletonIso, hom_ext, mapIso, ofComponents, toSkeletonFunctor
+--- 原说明 ---
+A natural isomorphism between `X ↦ ⟦X⟧ ↦ ⟦FX⟧` and `X ↦ FX ↦ ⟦FX⟧`. On the level
+ of
+categories, these are `C ⥤ Skeleton C ⥤ Skeleton D` and `C ⥤ D ⥤ Skeleton D`. So
+ this says that
+the square formed by these 4 objects and 4 functors commutes.
 -/
 noncomputable def toSkeletonFunctorCompMapSkeletonIso :
     toSkeletonFunctor C ⋙ F.mapSkeleton ≅ F ⋙ toSkeletonFunctor D :=
   NatIso.ofComponents
-    (fun X => (toSkeletonFunctor D).mapIso <| F.mapIso <| fromSkeletonToSkeletonIso X)
-    (fun f => InducedCategory.hom_ext (show (_ ≫ _) ≫ _ = _ ≫ _ by simp))
-
-/--
-lemma `mapSkeleton_injective` / 引理 `mapSkeleton_injective`
-
-English:
-lemma mapSkeleton_injective
-  given: [F.Full] [F.Faithful]
-  statement: Function.Injective F.mapSkeleton.obj
-  proof: fun _ _ h => skeleton_skeletal C ⟨F.mapSkeleton.preimageIso eqToIso h⟩
-
-中文:
-引理 mapSkeleton_injective
-  条件: [F.满] [F.忠实]
-  结论: 函数.单射 F.mapSkeleton.obj
-  证明: fun _ _ h => skeleton_skeletal C ⟨F.mapSkeleton.preimageIso eqToIso h⟩
-
-Depends on / 依赖: F.mapSkeleton.preimageIso, eqToIso, mapSkeleton, preimageIso, skeleton_skeletal
+    (fun X ↦ (toSkeletonFunctor D).mapIso <| F.mapIso <| fromSkeletonToSkeletonIso X)
+    (fun f ↦ InducedCategory.hom_ext (show (_ ≫ _) ≫ _ = _ ≫ _ by simp))
+/-
+**CategoryTheory.Functor.mapSkeleton_injective** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.Functor`。
+形式化陈述：mapSkeleton_injective [F.Full] [F.Faithful] : Function.Injective F.mapSkel
+eton.obj
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.skeleton_skeletal`：skeleton_skeletal : Skeletal (Skeleton
+ C)
+· 使用定理 `CategoryTheory.Functor.instFullSkeletonMapSkeleton`：∀ {C : Type u₁} [ins
+t : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.C
+ategory.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.instFaithfulSkeletonMapSkeleton`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} D]   (F : CategoryTheor…
 -/
 lemma mapSkeleton_injective [F.Full] [F.Faithful] : Function.Injective F.mapSkeleton.obj :=
-fun _ _ h => skeleton_skeletal C ⟨F.mapSkeleton.preimageIso eqToIso h⟩
-
-/--
-lemma `mapSkeleton_surjective` / 引理 `mapSkeleton_surjective`
-
-English:
-lemma mapSkeleton_surjective
-  given: [F.EssSurj]
-  statement: Function.Surjective F.mapSkeleton.obj
-  proof: fun Y => let ⟨X, h⟩ := EssSurj.mem_essImage F.mapSkeleton Y; ⟨X, skeleton_skeletal D h⟩
-
-中文:
-引理 mapSkeleton_surjective
-  条件: [F.本质满射]
-  结论: 函数.满射 F.mapSkeleton.obj
-  证明: fun Y => let ⟨X, h⟩ := EssSurj.mem_essImage F.mapSkeleton Y; ⟨X, skeleton_skeletal D h⟩
-
-Depends on / 依赖: EssSurj, EssSurj.mem_essImage, F.mapSkeleton, mapSkeleton, mem_essImage, skeleton_skeletal
+  fun _ _ h ↦ skeleton_skeletal C ⟨F.mapSkeleton.preimageIso <| eqToIso h⟩
+/-
+**CategoryTheory.Functor.mapSkeleton_surjective** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.Functor`。
+形式化陈述：mapSkeleton_surjective [F.EssSurj] : Function.Surjective F.mapSkeleton.obj
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.EssSurj.mem_essImage`：∀ {C : Type u₁} {D : Type u
+₂} {inst : CategoryTheory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.Category
+.{v₂, u₂} D}   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.instEssSurjSkeletonMapSkeleton`：∀ {C : Type u₁} [
+inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheor
+y.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.skeleton_skeletal`：skeleton_skeletal : Skeletal (Skeleton
+ C)
 -/
 lemma mapSkeleton_surjective [F.EssSurj] : Function.Surjective F.mapSkeleton.obj :=
-  fun Y => let ⟨X, h⟩ := EssSurj.mem_essImage F.mapSkeleton Y; ⟨X, skeleton_skeletal D h⟩
+  fun Y ↦ let ⟨X, h⟩ := EssSurj.mem_essImage F.mapSkeleton Y; ⟨X, skeleton_skeletal D h⟩
 
 end Functor
 
-/--
-Definition of `Equivalence.skeletonEquiv` / `Equivalence.skeletonEquiv` 的定义
+/-- Two categories which are categorically equivalent have skeletons with equivalent objects.
+-/
+/-
+**CategoryTheory.Equivalence.skeletonEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Equivalence`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] → (C ≌ D) → Catego
+ryTheory.Skeleton C ≃ CategoryTheory.Skeleton D
+参数：C ≌ D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Equivalence.skeletonEquiv
-  signature: (e : C ≌ D)
-  body: let f := ((skeletonEquivalence C).trans e).trans (skeletonEquivalence D).symm
-  { toFun := f.functor.obj
-    invFun := f.inverse.obj
-    left_inv := fun X => skeleton_skeletal C ⟨(f.unitIso.app X).symm⟩
-    right_inv := fun Y => skeleton_skeletal D ⟨f.counitIso.app Y⟩ }
-
-中文:
-定义 等价.skeletonEquiv
-  签名: (e : C ≌ D)
-  定义体: let f := ((skeletonEquivalence C).trans e).trans (skeletonEquivalence D).symm
-  { toFun := f.functor.obj
-    invFun := f.inverse.obj
-    left_inv := fun X => skeleton_skeletal C ⟨(f.unitIso.app X).symm⟩
-    right_inv := fun Y => skeleton_skeletal D ⟨f.counitIso.app Y⟩ }
-
-Depends on / 依赖: counitIso, f.counitIso.app, f.functor.obj, f.inverse.obj, f.unitIso.app, functor, invFun, inverse, left_inv, right_inv, skeletonEquivalence, skeleton_skeletal, unitIso
+--- 原说明 ---
+Two categories which are categorically equivalent have skeletons with equivalent
+ objects.
 -/
 noncomputable def Equivalence.skeletonEquiv (e : C ≌ D) : Skeleton C ≃ Skeleton D :=
   let f := ((skeletonEquivalence C).trans e).trans (skeletonEquivalence D).symm
@@ -722,96 +537,53 @@ preorder with nice definitional properties, but is only really appropriate for t
 If your original category is not thin, you probably want to be using `Skeleton` instead of this.
 -/
 @[implicit_reducible]
-/--
-Definition of `ThinSkeleton` / `ThinSkeleton` 的定义
+/-
+**CategoryTheory.ThinSkeleton** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：ThinSkeleton : Type u₁
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ThinSkeleton
-  signature: : Type u₁
-  body: Quotient (isIsomorphicSetoid C)
-
-中文:
-定义 ThinSkeleton
-  签名: : 类型u₁
-  定义体: Quotient (isIsomorphicSetoid C)
-
-Depends on / 依赖: Quotient, isIsomorphicSetoid
+--- 原说明 ---
+Construct the skeleton category by taking the quotient of objects. This construc
+tion gives a
+preorder with nice definitional properties, but is only really appropriate for t
+hin categories.
+If your original category is not thin, you probably want to be using `Skeleton` 
+instead of this.
 -/
 def ThinSkeleton : Type u₁ :=
   Quotient (isIsomorphicSetoid C)
 
 variable {C} in
-/--
-Definition of `ThinSkeleton.mk` / `ThinSkeleton.mk` 的定义
+/-- Convenience constructor for `ThinSkeleton`. -/
+/-
+**CategoryTheory.ThinSkeleton.mk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.ThinS
+keleton`。
+形式化陈述：{C : Type u₁} → [inst : CategoryTheory.Category.{v₁, u₁} C] → C → Category
+Theory.ThinSkeleton C
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk'`：Quotient.mk'_surjective [s : Setoid α] : Function.Surjecti
+ve (Quotient.mk' : α -> Quotient s)
 
-English:
-abbreviation ThinSkeleton.mk
-  signature: (c : C)
-  body: Quotient.mk' c
-
-中文:
-缩写 ThinSkeleton.mk
-  签名: (c : C)
-  定义体: Quotient.mk' c
-
-Depends on / 依赖: Quotient, Quotient.mk
+--- 原说明 ---
+Convenience constructor for `ThinSkeleton`.
 -/
 abbrev ThinSkeleton.mk (c : C) : ThinSkeleton C := Quotient.mk' c
-
-/--
-Instance `inhabitedThinSkeleton` / 实例 `inhabitedThinSkeleton`
-
-English:
-instance inhabitedThinSkeleton
-  signature: [Inhabited C]
-  body: ⟨ThinSkeleton.mk default⟩
-
-中文:
-实例 inhabitedThinSkeleton
-  签名: [可居 C]
-  定义体: ⟨ThinSkeleton.mk default⟩
-
-Depends on / 依赖: ThinSkeleton, ThinSkeleton.mk
+/-
+**CategoryTheory.inhabitedThinSkeleton** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory
+`。
+形式化陈述：inhabitedThinSkeleton [Inhabited C] : Inhabited (ThinSkeleton C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance inhabitedThinSkeleton [Inhabited C] : Inhabited (ThinSkeleton C) :=
   ⟨ThinSkeleton.mk default⟩
-
-/--
-Instance `ThinSkeleton.preorder` / 实例 `ThinSkeleton.preorder`
-
-English:
-instance ThinSkeleton.preorder
-  signature: : Preorder (ThinSkeleton C) where
-  body: @Quotient.lift₂ C C _ (isIsomorphicSetoid C) (isIsomorphicSetoid C)
-      (fun X Y => Nonempty (X ⟶ Y))
-        (by
-          rintro _ _ _ _ ⟨i₁⟩ ⟨i₂⟩
-          exact
-            propext
-              ⟨Nonempty.map fun f => i₁.inv ≫ f ≫ i₂.hom,
-                Nonempty.map fun f => i₁.hom ≫ f ≫ i₂.inv⟩)
-  le_refl := by
-    refine Quotient.ind fun a => ?_
-    exact ⟨𝟙 _⟩
-  le_trans a b c := Quotient.inductionOn₃ a b c fun _ _ _ => Nonempty.map2 (· ≫ ·)
-
-中文:
-实例 ThinSkeleton.preorder
-  签名: : 预序 (ThinSkeleton C) where
-  定义体: @Quotient.lift₂ C C _ (isIsomorphicSetoid C) (isIsomorphicSetoid C)
-      (fun X Y => Nonempty (X ⟶ Y))
-        (by
-          rintro _ _ _ _ ⟨i₁⟩ ⟨i₂⟩
-          exact
-            propext
-              ⟨Nonempty.map fun f => i₁.inv ≫ f ≫ i₂.hom,
-                Nonempty.map fun f => i₁.hom ≫ f ≫ i₂.inv⟩)
-  le_refl := by
-    refine Quotient.ind fun a => ?_
-    exact ⟨𝟙 _⟩
-  le_trans a b c := Quotient.inductionOn₃ a b c fun _ _ _ => Nonempty.map2 (· ≫ ·)
-
-Depends on / 依赖: Nonempty, Nonempty.map, Nonempty.map2, Quotient, Quotient.ind, Quotient.inductionOn, Quotient.lift, isIsomorphicSetoid, le_refl, le_trans, propext
+/-
+**CategoryTheory.ThinSkeleton.preorder** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.ThinSkeleton`。
+形式化陈述：(C : Type u₁) → [inst : CategoryTheory.Category.{v₁, u₁} C] → Preorder (Ca
+tegoryTheory.ThinSkeleton C)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance ThinSkeleton.preorder : Preorder (ThinSkeleton C) where
   le :=
@@ -830,22 +602,14 @@ instance ThinSkeleton.preorder : Preorder (ThinSkeleton C) where
 
 /-- The functor from a category to its thin skeleton. -/
 @[simps, implicit_reducible]
-/--
-Definition of `toThinSkeleton` / `toThinSkeleton` 的定义
+/-
+**CategoryTheory.toThinSkeleton** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：toThinSkeleton : C ⥤ ThinSkeleton C where obj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toThinSkeleton
-  signature: : C ⥤ ThinSkeleton C where
-  body: ThinSkeleton.mk
-  map f := homOfLE (Nonempty.intro f)
-
-中文:
-定义 toThinSkeleton
-  签名: : C ⥤ ThinSkeleton C where
-  定义体: ThinSkeleton.mk
-  map f := homOfLE (Nonempty.intro f)
-
-Depends on / 依赖: ThinSkeleton, ThinSkeleton.mk
+--- 原说明 ---
+The functor from a category to its thin skeleton.
 -/
 def toThinSkeleton : C ⥤ ThinSkeleton C where
   obj := ThinSkeleton.mk
@@ -859,24 +623,16 @@ some of the statements can be shown without this assumption.
 
 namespace ThinSkeleton
 
-/--
-Instance `thin` / 实例 `thin`
+/-- The thin skeleton is thin. -/
+/-
+**CategoryTheory.ThinSkeleton.thin** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Thi
+nSkeleton`。
+形式化陈述：thin : Quiver.IsThin (ThinSkeleton C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance thin
-  signature: : Quiver.IsThin (ThinSkeleton C)
-  body: fun _ _ =>
-  ⟨by
-    rintro ⟨⟨f₁⟩⟩ ⟨⟨_⟩⟩
-    rfl⟩
-
-中文:
-实例 thin
-  签名: : 箭图.IsThin (ThinSkeleton C)
-  定义体: fun _ _ =>
-  ⟨by
-    rintro ⟨⟨f₁⟩⟩ ⟨⟨_⟩⟩
-    rfl⟩
+--- 原说明 ---
+The thin skeleton is thin.
 -/
 instance thin : Quiver.IsThin (ThinSkeleton C) := fun _ _ =>
   ⟨by
@@ -888,59 +644,45 @@ variable {C} {D}
 set_option backward.isDefEq.respectTransparency.types false in
 /-- A functor `C ⥤ D` computably lowers to a functor `ThinSkeleton C ⥤ ThinSkeleton D`. -/
 @[simps]
-/--
-Definition of `map` / `map` 的定义
+/-
+**CategoryTheory.ThinSkeleton.map** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Thin
+Skeleton`。
+形式化陈述：map (F : C ⥤ D) : ThinSkeleton C ⥤ ThinSkeleton D where obj
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (F : C ⥤ D)
-  body: Quotient.map F.obj fun _ _ ⟨hX⟩ => ⟨F.mapIso hX⟩
-  map {X} {Y} := Quotient.recOnSubsingleton₂ X Y fun _ _ k => homOfLE (k.le.elim fun t => ⟨F.map t⟩)
-
-中文:
-定义 map
-  签名: (F : C ⥤ D)
-  定义体: Quotient.map F.obj fun _ _ ⟨hX⟩ => ⟨F.mapIso hX⟩
-  map {X} {Y} := Quotient.recOnSubsingleton₂ X Y fun _ _ k => homOfLE (k.le.elim fun t => ⟨F.map t⟩)
-
-Depends on / 依赖: F.mapIso, F.obj, Quotient, Quotient.map, mapIso
+--- 原说明 ---
+A functor `C ⥤ D` computably lowers to a functor `ThinSkeleton C ⥤ ThinSkeleton 
+D`.
 -/
 def map (F : C ⥤ D) : ThinSkeleton C ⥤ ThinSkeleton D where
   obj := Quotient.map F.obj fun _ _ ⟨hX⟩ => ⟨F.mapIso hX⟩
   map {X} {Y} := Quotient.recOnSubsingleton₂ X Y fun _ _ k => homOfLE (k.le.elim fun t => ⟨F.map t⟩)
-
-/--
-theorem `comp_toThinSkeleton` / 定理 `comp_toThinSkeleton`
-
-English:
-theorem comp_toThinSkeleton
-  given: (F : C ⥤ D)
-  statement: F ⋙ toThinSkeleton D = toThinSkeleton C ⋙ map F
-  proof: rfl
-
-中文:
-定理 comp_toThinSkeleton
-  条件: (F : C ⥤ D)
-  结论: F ⋙ toThinSkeleton D = toThinSkeleton C ⋙ map F
-  证明: rfl
+/-
+**CategoryTheory.ThinSkeleton.comp_toThinSkeleton** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.ThinSkeleton`。
+形式化陈述：comp_toThinSkeleton (F : C ⥤ D) : F ⋙ toThinSkeleton D = toThinSkeleton C 
+⋙ map F
+参数：F : C ⥤ D。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_toThinSkeleton (F : C ⥤ D) : F ⋙ toThinSkeleton D = toThinSkeleton C ⋙ map F :=
   rfl
 
-/--
-Definition of `mapNatTrans` / `mapNatTrans` 的定义
+/-- Given a natural transformation `F₁ ⟶ F₂`, induce a natural transformation `map F₁ ⟶ map F₂`. -/
+/-
+**CategoryTheory.ThinSkeleton.mapNatTrans** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.ThinSkeleton`。
+形式化陈述：mapNatTrans {F₁ F₂ : C ⥤ D} (k : F₁ ⟶ F₂) : map F₁ ⟶ map F₂ where app X
+参数：k : F₁ ⟶ F₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapNatTrans
-  signature: {F₁ F₂ : C ⥤ D} (k : F₁ ⟶ F₂)
-  body: Quotient.recOnSubsingleton X fun x => ⟨⟨⟨k.app x⟩⟩⟩
-
-中文:
-定义 map自然数Trans
-  签名: {F₁ F₂ : C ⥤ D} (k : F₁ ⟶ F₂)
-  定义体: Quotient.recOnSubsingleton X fun x => ⟨⟨⟨k.app x⟩⟩⟩
-
-Depends on / 依赖: Quotient, Quotient.recOnSubsingleton, k.app, recOnSubsingleton
+--- 原说明 ---
+Given a natural transformation `F₁ ⟶ F₂`, induce a natural transformation `map F
+₁ ⟶ map F₂`.
 -/
 def mapNatTrans {F₁ F₂ : C ⥤ D} (k : F₁ ⟶ F₂) : map F₁ ⟶ map F₂ where
   app X := Quotient.recOnSubsingleton X fun x => ⟨⟨⟨k.app x⟩⟩⟩
@@ -956,91 +698,63 @@ It would be better to prove that
 which is more immediate from comparing the preorders. Then one could get
 `map₂` by currying.
 -/
-/--
-Definition of `map₂ObjMap` / `map₂ObjMap` 的定义
+/-- Given a bifunctor, we descend to a function on objects of `ThinSkeleton` -/
+/-
+**CategoryTheory.ThinSkeleton.map** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Thin
+Skeleton`。
+形式化陈述：map (F : C ⥤ D) : ThinSkeleton C ⥤ ThinSkeleton D where obj
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map₂ObjMap
-  signature: (F : C ⥤ D ⥤ E)
-  body: fun x y =>
-    @Quotient.map₂ C D (isIsomorphicSetoid C) (isIsomorphicSetoid D) E (isIsomorphicSetoid E)
-      (fun X Y => (F.obj X).obj Y)
-          (fun X₁ _ ⟨hX⟩ _ Y₂ ⟨hY⟩ => ⟨(F.obj X₁).mapIso hY ≪≫ (F.mapIso hX).app Y₂⟩) x y
-
-中文:
-定义 map₂ObjMap
-  签名: (F : C ⥤ D ⥤ E)
-  定义体: fun x y =>
-    @Quotient.map₂ C D (isIsomorphicSetoid C) (isIsomorphicSetoid D) E (isIsomorphicSetoid E)
-      (fun X Y => (F.obj X).obj Y)
-          (fun X₁ _ ⟨hX⟩ _ Y₂ ⟨hY⟩ => ⟨(F.obj X₁).mapIso hY ≪≫ (F.mapIso hX).app Y₂⟩) x y
-
-Depends on / 依赖: F.mapIso, F.obj, Quotient, Quotient.map, isIsomorphicSetoid, mapIso
+--- 原说明 ---
+Given a bifunctor, we descend to a function on objects of `ThinSkeleton`
 -/
-def map₂ObjMap (F : C ⥤ D ⥤ E) : ThinSkeleton C -> ThinSkeleton D -> ThinSkeleton E :=
+def map₂ObjMap (F : C ⥤ D ⥤ E) : ThinSkeleton C → ThinSkeleton D → ThinSkeleton E :=
   fun x y =>
     @Quotient.map₂ C D (isIsomorphicSetoid C) (isIsomorphicSetoid D) E (isIsomorphicSetoid E)
       (fun X Y => (F.obj X).obj Y)
           (fun X₁ _ ⟨hX⟩ _ Y₂ ⟨hY⟩ => ⟨(F.obj X₁).mapIso hY ≪≫ (F.mapIso hX).app Y₂⟩) x y
 
-/--
-Definition of `map₂Functor` / `map₂Functor` 的定义
+/-- For each `x : ThinSkeleton C`, we promote `map₂ObjMap F x` to a functor -/
+/-
+**CategoryTheory.ThinSkeleton.map** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Thin
+Skeleton`。
+形式化陈述：map (F : C ⥤ D) : ThinSkeleton C ⥤ ThinSkeleton D where obj
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map₂Functor
-  signature: (F : C ⥤ D ⥤ E)
-  body: fun x =>
-    { obj := fun y => map₂ObjMap F x y
-      map := fun {y₁} {y₂} => @Quotient.recOnSubsingleton C (isIsomorphicSetoid C)
-        (fun x => (y₁ ⟶ y₂) -> (map₂ObjMap F x y₁ ⟶ map₂ObjMap F x y₂)) _ x fun X
-          => Quotient.recOnSubsingleton₂ y₁ y₂ fun _ _ hY =>
-            homOfLE (hY.le.elim fun g => ⟨(F.obj X).map g⟩) }
-
-中文:
-定义 map₂Functor
-  签名: (F : C ⥤ D ⥤ E)
-  定义体: fun x =>
-    { obj := fun y => map₂ObjMap F x y
-      map := fun {y₁} {y₂} => @Quotient.recOnSubsingleton C (isIsomorphicSetoid C)
-        (fun x => (y₁ ⟶ y₂) -> (map₂ObjMap F x y₁ ⟶ map₂ObjMap F x y₂)) _ x fun X
-          => Quotient.recOnSubsingleton₂ y₁ y₂ fun _ _ hY =>
-            homOfLE (hY.le.elim fun g => ⟨(F.obj X).map g⟩) }
-
-Depends on / 依赖: F.obj, Quotient, Quotient.recOnSubsingleton, hY.le.elim, homOfLE, isIsomorphicSetoid, recOnSubsingleton
+--- 原说明 ---
+For each `x : ThinSkeleton C`, we promote `map₂ObjMap F x` to a functor
 -/
-def map₂Functor (F : C ⥤ D ⥤ E) : ThinSkeleton C -> ThinSkeleton D ⥤ ThinSkeleton E :=
+def map₂Functor (F : C ⥤ D ⥤ E) : ThinSkeleton C → ThinSkeleton D ⥤ ThinSkeleton E :=
   fun x =>
     { obj := fun y => map₂ObjMap F x y
       map := fun {y₁} {y₂} => @Quotient.recOnSubsingleton C (isIsomorphicSetoid C)
-        (fun x => (y₁ ⟶ y₂) -> (map₂ObjMap F x y₁ ⟶ map₂ObjMap F x y₂)) _ x fun X
+        (fun x => (y₁ ⟶ y₂) → (map₂ObjMap F x y₁ ⟶ map₂ObjMap F x y₂)) _ x fun X
           => Quotient.recOnSubsingleton₂ y₁ y₂ fun _ _ hY =>
             homOfLE (hY.le.elim fun g => ⟨(F.obj X).map g⟩) }
 
-/--
-Definition of `map₂NatTrans` / `map₂NatTrans` 的定义
+/-- This provides natural transformations `map₂Functor F x₁ ⟶ map₂Functor F x₂` given
+`x₁ ⟶ x₂` -/
+/-
+**CategoryTheory.ThinSkeleton.map** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Thin
+Skeleton`。
+形式化陈述：map (F : C ⥤ D) : ThinSkeleton C ⥤ ThinSkeleton D where obj
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map₂NatTrans
-  signature: (F : C ⥤ D ⥤ E)
-  body: fun {x₁} {x₂} =>
-  @Quotient.recOnSubsingleton₂ C C (isIsomorphicSetoid C) (isIsomorphicSetoid C)
-    (fun x x' : ThinSkeleton C => (x ⟶ x') -> (map₂Functor F x ⟶ map₂Functor F x')) _ x₁ x₂
-    (fun X₁ X₂ f => { app := fun y =>
-      Quotient.recOnSubsingleton y fun Y => homOfLE (f.le.elim fun f' => ⟨(F.map f').app Y⟩) })
-
-中文:
-定义 map₂自然数Trans
-  签名: (F : C ⥤ D ⥤ E)
-  定义体: fun {x₁} {x₂} =>
-  @Quotient.recOnSubsingleton₂ C C (isIsomorphicSetoid C) (isIsomorphicSetoid C)
-    (fun x x' : ThinSkeleton C => (x ⟶ x') -> (map₂Functor F x ⟶ map₂Functor F x')) _ x₁ x₂
-    (fun X₁ X₂ f => { app := fun y =>
-      Quotient.recOnSubsingleton y fun Y => homOfLE (f.le.elim fun f' => ⟨(F.map f').app Y⟩) })
+--- 原说明 ---
+This provides natural transformations `map₂Functor F x₁ ⟶ map₂Functor F x₂` give
+n
+`x₁ ⟶ x₂`
 -/
-def map₂NatTrans (F : C ⥤ D ⥤ E) : {x₁ x₂ : ThinSkeleton C} -> (x₁ ⟶ x₂) ->
+def map₂NatTrans (F : C ⥤ D ⥤ E) : {x₁ x₂ : ThinSkeleton C} → (x₁ ⟶ x₂) →
     (map₂Functor F x₁ ⟶ map₂Functor F x₂) := fun {x₁} {x₂} =>
   @Quotient.recOnSubsingleton₂ C C (isIsomorphicSetoid C) (isIsomorphicSetoid C)
-    (fun x x' : ThinSkeleton C => (x ⟶ x') -> (map₂Functor F x ⟶ map₂Functor F x')) _ x₁ x₂
+    (fun x x' : ThinSkeleton C => (x ⟶ x') → (map₂Functor F x ⟶ map₂Functor F x')) _ x₁ x₂
     (fun X₁ X₂ f => { app := fun y =>
       Quotient.recOnSubsingleton y fun Y => homOfLE (f.le.elim fun f' => ⟨(F.map f').app Y⟩) })
 
@@ -1048,20 +762,17 @@ def map₂NatTrans (F : C ⥤ D ⥤ E) : {x₁ x₂ : ThinSkeleton C} -> (x₁ �
 /-- A functor `C ⥤ D ⥤ E` computably lowers to a functor
 `ThinSkeleton C ⥤ ThinSkeleton D ⥤ ThinSkeleton E` -/
 @[simps]
-/--
-Definition of `map₂` / `map₂` 的定义
+/-
+**CategoryTheory.ThinSkeleton.map** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Thin
+Skeleton`。
+形式化陈述：map (F : C ⥤ D) : ThinSkeleton C ⥤ ThinSkeleton D where obj
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map₂
-  signature: (F : C ⥤ D ⥤ E)
-  body: map₂Functor F
-  map := map₂NatTrans F
-
-中文:
-定义 map₂
-  签名: (F : C ⥤ D ⥤ E)
-  定义体: map₂Functor F
-  map := map₂NatTrans F
+--- 原说明 ---
+A functor `C ⥤ D ⥤ E` computably lowers to a functor
+`ThinSkeleton C ⥤ ThinSkeleton D ⥤ ThinSkeleton E`
 -/
 def map₂ (F : C ⥤ D ⥤ E) : ThinSkeleton C ⥤ ThinSkeleton D ⥤ ThinSkeleton E where
   obj := map₂Functor F
@@ -1073,41 +784,28 @@ section
 
 variable [Quiver.IsThin C]
 
-/--
-Instance `toThinSkeleton_faithful` / 实例 `toThinSkeleton_faithful`
-
-English:
-instance toThinSkeleton_faithful
-  signature: : (toThinSkeleton C).Faithful where
-
-中文:
-实例 toThinSkeleton_faithful
-  签名: : (toThinSkeleton C).忠实 where
+/-
+**CategoryTheory.ThinSkeleton.toThinSkeleton_faithful** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.ThinSkeleton`。
+形式化陈述：∀ (C : Type u₁) [inst : CategoryTheory.Category.{v₁, u₁} C] [Quiver.IsThin
+ C],   (CategoryTheory.toThinSkeleton C).Faithful
+参数：C : Type u₁；CategoryTheory.toThinSkeleton C。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
 instance toThinSkeleton_faithful : (toThinSkeleton C).Faithful where
 
 /-- Use `Quotient.out` to create a functor out of the thin skeleton. -/
 @[simps]
-/--
-Definition of `fromThinSkeleton` / `fromThinSkeleton` 的定义
+/-
+**CategoryTheory.ThinSkeleton.fromThinSkeleton** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.ThinSkeleton`。
+形式化陈述：fromThinSkeleton : ThinSkeleton C ⥤ C where obj
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fromThinSkeleton
-  signature: : ThinSkeleton C ⥤ C where
-  body: Quotient.out
-  map {x} {y} :=
-    Quotient.recOnSubsingleton₂ x y fun X Y f =>
-      (Nonempty.some (Quotient.mk_out X)).hom ≫ f.le.some ≫ (Nonempty.some (Quotient.mk_out Y)).inv
-
-中文:
-定义 fromThinSkeleton
-  签名: : ThinSkeleton C ⥤ C where
-  定义体: Quotient.out
-  map {x} {y} :=
-    Quotient.recOnSubsingleton₂ x y fun X Y f =>
-      (Nonempty.some (Quotient.mk_out X)).hom ≫ f.le.some ≫ (Nonempty.some (Quotient.mk_out Y)).inv
-
-Depends on / 依赖: Quotient, Quotient.out
+--- 原说明 ---
+Use `Quotient.out` to create a functor out of the thin skeleton.
 -/
 noncomputable def fromThinSkeleton : ThinSkeleton C ⥤ C where
   obj := Quotient.out
@@ -1115,28 +813,16 @@ noncomputable def fromThinSkeleton : ThinSkeleton C ⥤ C where
     Quotient.recOnSubsingleton₂ x y fun X Y f =>
       (Nonempty.some (Quotient.mk_out X)).hom ≫ f.le.some ≫ (Nonempty.some (Quotient.mk_out Y)).inv
 
-/--
-Definition of `equivalence` / `equivalence` 的定义
+/-- The equivalence between the thin skeleton and the category itself. -/
+/-
+**CategoryTheory.ThinSkeleton.equivalence** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.ThinSkeleton`。
+形式化陈述：equivalence : ThinSkeleton C ≌ C where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivalence
-  signature: : ThinSkeleton C ≌ C where
-  body: fromThinSkeleton C
-  inverse := toThinSkeleton C
-  counitIso := NatIso.ofComponents fun X => Nonempty.some (Quotient.mk_out X)
-  unitIso := NatIso.ofComponents fun x => Quotient.recOnSubsingleton x fun X =>
-    eqToIso (Quotient.sound ⟨(Nonempty.some (Quotient.mk_out X)).symm⟩)
-
-中文:
-定义 equivalence
-  签名: : ThinSkeleton C ≌ C where
-  定义体: fromThinSkeleton C
-  inverse := toThinSkeleton C
-  counitIso := NatIso.ofComponents fun X => Nonempty.some (Quotient.mk_out X)
-  unitIso := NatIso.ofComponents fun x => Quotient.recOnSubsingleton x fun X =>
-    eqToIso (Quotient.sound ⟨(Nonempty.some (Quotient.mk_out X)).symm⟩)
-
-Depends on / 依赖: fromThinSkeleton
+--- 原说明 ---
+The equivalence between the thin skeleton and the category itself.
 -/
 noncomputable def equivalence : ThinSkeleton C ≌ C where
   functor := fromThinSkeleton C
@@ -1144,71 +830,36 @@ noncomputable def equivalence : ThinSkeleton C ≌ C where
   counitIso := NatIso.ofComponents fun X => Nonempty.some (Quotient.mk_out X)
   unitIso := NatIso.ofComponents fun x => Quotient.recOnSubsingleton x fun X =>
     eqToIso (Quotient.sound ⟨(Nonempty.some (Quotient.mk_out X)).symm⟩)
-
-/--
-Instance `fromThinSkeleton_isEquivalence` / 实例 `fromThinSkeleton_isEquivalence`
-
-English:
-instance fromThinSkeleton_isEquivalence
-  signature: : (fromThinSkeleton C).IsEquivalence
-  body: (equivalence C).isEquivalence_functor
-
-中文:
-实例 fromThinSkeleton_isEquivalence
-  签名: : (fromThinSkeleton C).是等价
-  定义体: (equivalence C).isEquivalence_functor
-
-Depends on / 依赖: equivalence, isEquivalence_functor
+/-
+**CategoryTheory.ThinSkeleton.fromThinSkeleton_isEquivalence** 是 Mathlib 中的一个实例，
+位于命名空间 `CategoryTheory.ThinSkeleton`。
+形式化陈述：fromThinSkeleton_isEquivalence : (fromThinSkeleton C).IsEquivalence
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_functor`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.fun…
 -/
 noncomputable instance fromThinSkeleton_isEquivalence : (fromThinSkeleton C).IsEquivalence :=
   (equivalence C).isEquivalence_functor
 
 variable {C}
-
-/--
-theorem `equiv_of_both_ways` / 定理 `equiv_of_both_ways`
-
-English:
-theorem equiv_of_both_ways
-  given: {X Y : C} (f : X ⟶ Y) (g : Y ⟶ X)
-  statement: X ≈ Y
-  proof: ⟨iso_of_both_ways f g⟩
-
-中文:
-定理 equiv_of_both_ways
-  条件: {X Y : C} (f : X ⟶ Y) (g : Y ⟶ X)
-  结论: X ≈ Y
-  证明: ⟨iso_of_both_ways f g⟩
-
-Depends on / 依赖: iso_of_both_ways
+/-
+**CategoryTheory.ThinSkeleton.equiv_of_both_ways** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.ThinSkeleton`。
+形式化陈述：equiv_of_both_ways {X Y : C} (f : X ⟶ Y) (g : Y ⟶ X) : X ≈ Y
+参数：f : X ⟶ Y；g : Y ⟶ X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem equiv_of_both_ways {X Y : C} (f : X ⟶ Y) (g : Y ⟶ X) : X ≈ Y :=
   ⟨iso_of_both_ways f g⟩
-
-/--
-Instance `thinSkeletonPartialOrder` / 实例 `thinSkeletonPartialOrder`
-
-English:
-instance thinSkeletonPartialOrder
-  signature: : PartialOrder (ThinSkeleton C)
-  body: { CategoryTheory.ThinSkeleton.preorder C with
-    le_antisymm :=
-      Quotient.ind₂
-        (by
-          rintro _ _ ⟨f⟩ ⟨g⟩
-          apply Quotient.sound (equiv_of_both_ways f g)) }
-
-中文:
-实例 thinSkeletonPartialOrder
-  签名: : 偏序 (ThinSkeleton C)
-  定义体: { CategoryTheory.ThinSkeleton.preorder C with
-    le_antisymm :=
-      Quotient.ind₂
-        (by
-          rintro _ _ ⟨f⟩ ⟨g⟩
-          apply Quotient.sound (equiv_of_both_ways f g)) }
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.ThinSkeleton.preorder, Quotient, Quotient.ind, Quotient.sound, ThinSkeleton, equiv_of_both_ways, le_antisymm, preorder
+/-
+**CategoryTheory.ThinSkeleton.thinSkeletonPartialOrder** 是 Mathlib 中的一个实例，位于命名空间
+ `CategoryTheory.ThinSkeleton`。
+形式化陈述：thinSkeletonPartialOrder : PartialOrder (ThinSkeleton C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance thinSkeletonPartialOrder : PartialOrder (ThinSkeleton C) :=
   { CategoryTheory.ThinSkeleton.preorder C with
@@ -1217,89 +868,65 @@ instance thinSkeletonPartialOrder : PartialOrder (ThinSkeleton C) :=
         (by
           rintro _ _ ⟨f⟩ ⟨g⟩
           apply Quotient.sound (equiv_of_both_ways f g)) }
-
-/--
-theorem `skeletal` / 定理 `skeletal`
-
-English:
-theorem skeletal
-  statement: Skeletal (ThinSkeleton C)
-  proof: fun X Y =>
-  Quotient.inductionOn₂ X Y fun _ _ h => h.elim fun i => i.1.le.antisymm i.2.le
-
-中文:
-定理 skeletal
-  结论: Skeletal (ThinSkeleton C)
-  证明: fun X Y =>
-  Quotient.inductionOn₂ X Y fun _ _ h => h.elim fun i => i.1.le.antisymm i.2.le
+/-
+**CategoryTheory.ThinSkeleton.skeletal** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.ThinSkeleton`。
+形式化陈述：skeletal : Skeletal (ThinSkeleton C)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn₂`：∀ {α : Sort uA} {β : Sort uB} {s₁ : Setoid α} {s₂
+ : Setoid β} {motive : Quotient s₁ → Quotient s₂ → Prop}   (q₁ : Quotient s₁) (q
+₂ : Quotien…
+· 使用定理 `Nonempty.elim`：∀ {α : Sort u} {p : Prop}, Nonempty α → (∀ (a : α), p) → 
+p
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
 -/
 theorem skeletal : Skeletal (ThinSkeleton C) := fun X Y =>
   Quotient.inductionOn₂ X Y fun _ _ h => h.elim fun i => i.1.le.antisymm i.2.le
-
-/--
-theorem `map_comp_eq` / 定理 `map_comp_eq`
-
-English:
-theorem map_comp_eq
-  given: (F : E ⥤ D) (G : D ⥤ C)
-  statement: map (F ⋙ G) = map F ⋙ map G
-  proof: Functor.eq_of_iso skeletal
-    NatIso.ofComponents fun X => Quotient.recOnSubsingleton X fun _ => Iso.refl _
-
-中文:
-定理 map_comp_eq
-  条件: (F : E ⥤ D) (G : D ⥤ C)
-  结论: map (F ⋙ G) = map F ⋙ map G
-  证明: Functor.eq_of_iso skeletal
-    NatIso.ofComponents fun X => Quotient.recOnSubsingleton X fun _ => Iso.refl _
-
-Depends on / 依赖: Functor, Functor.eq_of_iso, Iso.refl, NatIso, NatIso.ofComponents, Quotient, Quotient.recOnSubsingleton, eq_of_iso, ofComponents, recOnSubsingleton, skeletal
+/-
+**CategoryTheory.ThinSkeleton.map_comp_eq** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.ThinSkeleton`。
+形式化陈述：map_comp_eq (F : E ⥤ D) (G : D ⥤ C) : map (F ⋙ G) = map F ⋙ map G
+参数：F : E ⥤ D；G : D ⥤ C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.eq_of_iso`：∀ {C : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D
+]   {F₁ F₂ : CategoryT…
+· 使用定理 `CategoryTheory.ThinSkeleton.skeletal`：skeletal : Skeletal (ThinSkeleton 
+C)
 -/
 theorem map_comp_eq (F : E ⥤ D) (G : D ⥤ C) : map (F ⋙ G) = map F ⋙ map G :=
-Functor.eq_of_iso skeletal
+  Functor.eq_of_iso skeletal <|
     NatIso.ofComponents fun X => Quotient.recOnSubsingleton X fun _ => Iso.refl _
-
-/--
-theorem `map_id_eq` / 定理 `map_id_eq`
-
-English:
-theorem map_id_eq
-  statement: map (𝟭 C) = 𝟭 (ThinSkeleton C)
-  proof: Functor.eq_of_iso skeletal
-    NatIso.ofComponents fun X => Quotient.recOnSubsingleton X fun _ => Iso.refl _
-
-中文:
-定理 map_id_eq
-  结论: map (𝟭 C) = 𝟭 (ThinSkeleton C)
-  证明: Functor.eq_of_iso skeletal
-    NatIso.ofComponents fun X => Quotient.recOnSubsingleton X fun _ => Iso.refl _
-
-Depends on / 依赖: Functor, Functor.eq_of_iso, Iso.refl, NatIso, NatIso.ofComponents, Quotient, Quotient.recOnSubsingleton, eq_of_iso, ofComponents, recOnSubsingleton, skeletal
+/-
+**CategoryTheory.ThinSkeleton.map_id_eq** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.ThinSkeleton`。
+形式化陈述：map_id_eq : map (𝟭 C) = 𝟭 (ThinSkeleton C)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.eq_of_iso`：∀ {C : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D
+]   {F₁ F₂ : CategoryT…
+· 使用定理 `CategoryTheory.ThinSkeleton.skeletal`：skeletal : Skeletal (ThinSkeleton 
+C)
 -/
 theorem map_id_eq : map (𝟭 C) = 𝟭 (ThinSkeleton C) :=
-Functor.eq_of_iso skeletal
+  Functor.eq_of_iso skeletal <|
     NatIso.ofComponents fun X => Quotient.recOnSubsingleton X fun _ => Iso.refl _
-
-/--
-theorem `map_iso_eq` / 定理 `map_iso_eq`
-
-English:
-theorem map_iso_eq
-  given: {F₁ F₂ : D ⥤ C} (h : F₁ ≅ F₂)
-  statement: map F₁ = map F₂
-  proof: Functor.eq_of_iso skeletal
-    { hom := mapNatTrans h.hom
-      inv := mapNatTrans h.inv }
-
-中文:
-定理 map_iso_eq
-  条件: {F₁ F₂ : D ⥤ C} (h : F₁ ≅ F₂)
-  结论: map F₁ = map F₂
-  证明: Functor.eq_of_iso skeletal
-    { hom := mapNatTrans h.hom
-      inv := mapNatTrans h.inv }
-
-Depends on / 依赖: Functor, Functor.eq_of_iso, eq_of_iso, h.hom, h.inv, mapNatTrans, skeletal
+/-
+**CategoryTheory.ThinSkeleton.map_iso_eq** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.ThinSkeleton`。
+形式化陈述：map_iso_eq {F₁ F₂ : D ⥤ C} (h : F₁ ≅ F₂) : map F₁ = map F₂
+参数：h : F₁ ≅ F₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.eq_of_iso`：∀ {C : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D
+]   {F₁ F₂ : CategoryT…
+· 使用定理 `CategoryTheory.ThinSkeleton.skeletal`：skeletal : Skeletal (ThinSkeleton 
+C)
 -/
 theorem map_iso_eq {F₁ F₂ : D ⥤ C} (h : F₁ ≅ F₂) : map F₁ = map F₂ :=
   Functor.eq_of_iso skeletal
@@ -1307,23 +934,20 @@ theorem map_iso_eq {F₁ F₂ : D ⥤ C} (h : F₁ ≅ F₂) : map F₁ = map F�
       inv := mapNatTrans h.inv }
 
 /--
-Definition of `fromThinSkeletonCompToThinSkeletonIso` / `fromThinSkeletonCompToThinSkeletonIso` 的定义
+Applying `fromThinSkeleton`, `F` and then `toThinSkeleton` is isomorphic to applying `map F`.
+-/
+/-
+**CategoryTheory.ThinSkeleton.fromThinSkeletonCompToThinSkeletonIso** 是 Mathlib 
+中的一个定义，位于命名空间 `CategoryTheory.ThinSkeleton`。
+形式化陈述：fromThinSkeletonCompToThinSkeletonIso (F : C ⥤ D) : fromThinSkeleton C ⋙ F
+ ⋙ toThinSkeleton D ≅ map F
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fromThinSkeletonCompToThinSkeletonIso
-  signature: (F : C ⥤ D)
-  body: Functor.isoWhiskerLeft (fromThinSkeleton C) (Iso.refl _) ≪≫
-    Functor.isoWhiskerRight (equivalence C).unitIso.symm (map F) ≪≫
-    Functor.leftUnitor (map F)
-
-中文:
-定义 fromThinSkeletonCompToThinSkeletonIso
-  签名: (F : C ⥤ D)
-  定义体: Functor.isoWhiskerLeft (fromThinSkeleton C) (Iso.refl _) ≪≫
-    Functor.isoWhiskerRight (equivalence C).unitIso.symm (map F) ≪≫
-    Functor.leftUnitor (map F)
-
-Depends on / 依赖: Functor, Functor.isoWhiskerLeft, Functor.isoWhiskerRight, Functor.leftUnitor, Iso.refl, equivalence, fromThinSkeleton, isoWhiskerLeft, isoWhiskerRight, leftUnitor, unitIso, unitIso.symm
+--- 原说明 ---
+Applying `fromThinSkeleton`, `F` and then `toThinSkeleton` is isomorphic to appl
+ying `map F`.
 -/
 noncomputable def fromThinSkeletonCompToThinSkeletonIso (F : C ⥤ D) :
     fromThinSkeleton C ⋙ F ⋙ toThinSkeleton D ≅ map F :=
@@ -1332,23 +956,22 @@ noncomputable def fromThinSkeletonCompToThinSkeletonIso (F : C ⥤ D) :
     Functor.leftUnitor (map F)
 
 /--
-Definition of `mapCompFromThinSkeletonIso` / `mapCompFromThinSkeletonIso` 的定义
+Applying `map F` and then `fromThinSkeleton` is isomorphic to first applying `fromThinSkeleton`
+and then applying `F`.
+-/
+/-
+**CategoryTheory.ThinSkeleton.mapCompFromThinSkeletonIso** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.ThinSkeleton`。
+形式化陈述：mapCompFromThinSkeletonIso [Quiver.IsThin D] (F : C ⥤ D) : map F ⋙ fromThi
+nSkeleton D ≅ fromThinSkeleton C ⋙ F
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapCompFromThinSkeletonIso
-  signature: [Quiver.IsThin D] (F : C ⥤ D)
-  body: Functor.isoWhiskerRight (fromThinSkeletonCompToThinSkeletonIso F).symm _ ≪≫
-    Functor.isoWhiskerLeft (fromThinSkeleton C ⋙ F) (equivalence D).counitIso ≪≫
-    Functor.rightUnitor (fromThinSkeleton C ⋙ F)
-
-中文:
-定义 mapCompFromThinSkeletonIso
-  签名: [箭图.IsThin D] (F : C ⥤ D)
-  定义体: Functor.isoWhiskerRight (fromThinSkeletonCompToThinSkeletonIso F).symm _ ≪≫
-    Functor.isoWhiskerLeft (fromThinSkeleton C ⋙ F) (equivalence D).counitIso ≪≫
-    Functor.rightUnitor (fromThinSkeleton C ⋙ F)
-
-Depends on / 依赖: Functor, Functor.isoWhiskerLeft, Functor.isoWhiskerRight, Functor.rightUnitor, counitIso, equivalence, fromThinSkeleton, fromThinSkeletonCompToThinSkeletonIso, isoWhiskerLeft, isoWhiskerRight, rightUnitor
+--- 原说明 ---
+Applying `map F` and then `fromThinSkeleton` is isomorphic to first applying `fr
+omThinSkeleton`
+and then applying `F`.
 -/
 noncomputable def mapCompFromThinSkeletonIso [Quiver.IsThin D] (F : C ⥤ D) :
     map F ⋙ fromThinSkeleton D ≅ fromThinSkeleton C ⋙ F :=
@@ -1356,38 +979,31 @@ noncomputable def mapCompFromThinSkeletonIso [Quiver.IsThin D] (F : C ⥤ D) :
     Functor.isoWhiskerLeft (fromThinSkeleton C ⋙ F) (equivalence D).counitIso ≪≫
     Functor.rightUnitor (fromThinSkeleton C ⋙ F)
 
-/--
-lemma `thinSkeleton_isSkeleton` / 引理 `thinSkeleton_isSkeleton`
+/-- `fromThinSkeleton C` exhibits the thin skeleton as a skeleton. -/
+/-
+**CategoryTheory.ThinSkeleton.thinSkeleton_isSkeleton** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.ThinSkeleton`。
+形式化陈述：thinSkeleton_isSkeleton : IsSkeletonOf C (ThinSkeleton C) (fromThinSkeleto
+n C) where skel
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ThinSkeleton.skeletal`：skeletal : Skeletal (ThinSkeleton 
+C)
 
-English:
-lemma thinSkeleton_isSkeleton
-  statement: IsSkeletonOf C (ThinSkeleton C) (fromThinSkeleton C) where
-  proof: skeletal
-
-中文:
-引理 thinSkeleton_isSkeleton
-  结论: 是SkeletonOf C (ThinSkeleton C) (fromThinSkeleton C) where
-  证明: skeletal
-
-Depends on / 依赖: skeletal
+--- 原说明 ---
+`fromThinSkeleton C` exhibits the thin skeleton as a skeleton.
 -/
 lemma thinSkeleton_isSkeleton : IsSkeletonOf C (ThinSkeleton C) (fromThinSkeleton C) where
   skel := skeletal
-
-/--
-Instance `isSkeletonOfInhabited` / 实例 `isSkeletonOfInhabited`
-
-English:
-instance isSkeletonOfInhabited
-  signature: :
-  body: ⟨thinSkeleton_isSkeleton⟩
-
-中文:
-实例 isSkeletonOfInhabited
-  签名: :
-  定义体: ⟨thinSkeleton_isSkeleton⟩
-
-Depends on / 依赖: thinSkeleton_isSkeleton
+/-
+**CategoryTheory.ThinSkeleton.isSkeletonOfInhabited** 是 Mathlib 中的一个实例，位于命名空间 `C
+ategoryTheory.ThinSkeleton`。
+形式化陈述：isSkeletonOfInhabited : Inhabited (IsSkeletonOf C (ThinSkeleton C) (fromTh
+inSkeleton C))
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ThinSkeleton.thinSkeleton_isSkeleton`：thinSkeleton_isSkel
+eton : IsSkeletonOf C (ThinSkeleton C) (fromThinSkeleton C) where skel
 -/
 instance isSkeletonOfInhabited :
     Inhabited (IsSkeletonOf C (ThinSkeleton C) (fromThinSkeleton C)) :=
@@ -1397,34 +1013,19 @@ end
 
 variable {C}
 
-/--
-Definition of `lowerAdjunction` / `lowerAdjunction` 的定义
+/-- An adjunction between thin categories gives an adjunction between their thin skeletons. -/
+/-
+**CategoryTheory.ThinSkeleton.lowerAdjunction** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.ThinSkeleton`。
+形式化陈述：lowerAdjunction (R : D ⥤ C) (L : C ⥤ D) (h : L ⊣ R) : ThinSkeleton.map L ⊣
+ ThinSkeleton.map R where unit
+参数：R : D ⥤ C；L : C ⥤ D；h : L ⊣ R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lowerAdjunction
-  signature: (R : D ⥤ C) (L : C ⥤ D) (h : L ⊣ R)
-  body: { app := fun X => by
-        letI := isIsomorphicSetoid C
-        exact Quotient.recOnSubsingleton X fun x => homOfLE ⟨h.unit.app x⟩ }
-      -- TODO: make quotient.rec_on_subsingleton' so the letI isn't needed
-  counit :=
-    { app := fun X => by
-        letI := isIsomorphicSetoid D
-        exact Quotient.recOnSubsingleton X fun x => homOfLE ⟨h.counit.app x⟩ }
-
-中文:
-定义 lowerAdjunction
-  签名: (R : D ⥤ C) (L : C ⥤ D) (h : L ⊣ R)
-  定义体: { app := fun X => by
-        letI := isIsomorphicSetoid C
-        exact Quotient.recOnSubsingleton X fun x => homOfLE ⟨h.unit.app x⟩ }
-      -- TODO: make quotient.rec_on_subsingleton' so the letI isn't needed
-  counit :=
-    { app := fun X => by
-        letI := isIsomorphicSetoid D
-        exact Quotient.recOnSubsingleton X fun x => homOfLE ⟨h.counit.app x⟩ }
-
-Depends on / 依赖: Quotient, Quotient.recOnSubsingleton, h.unit.app, homOfLE, isIsomorphicSetoid, recOnSubsingleton
+--- 原说明 ---
+An adjunction between thin categories gives an adjunction between their thin ske
+letons.
 -/
 def lowerAdjunction (R : D ⥤ C) (L : C ⥤ D) (h : L ⊣ R) :
     ThinSkeleton.map L ⊣ ThinSkeleton.map R where
@@ -1447,19 +1048,22 @@ section
 variable {C} {α : Type*} [PartialOrder α]
 
 /--
-Definition of `Equivalence.thinSkeletonOrderIso` / `Equivalence.thinSkeletonOrderIso` 的定义
+When `e : C ≌ α` is a categorical equivalence from a thin category `C` to some partial order `α`,
+the `ThinSkeleton C` is order isomorphic to `α`.
+-/
+/-
+**CategoryTheory.Equivalence.thinSkeletonOrderIso** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Equivalence`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {α : T
+ype u_1} → [inst_1 : PartialOrder α] → [Quiver.IsThin C] → (C ≌ α) → CategoryThe
+ory.ThinSkeleton C ≃o α
+参数：C ≌ α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Equivalence.thinSkeletonOrderIso
-  signature: [Quiver.IsThin C] (e : C ≌ α)
-  body: ((ThinSkeleton.equivalence C).trans e).toOrderIso
-
-中文:
-定义 等价.thinSkeletonOrderIso
-  签名: [箭图.IsThin C] (e : C ≌ α)
-  定义体: ((ThinSkeleton.equivalence C).trans e).toOrderIso
-
-Depends on / 依赖: ThinSkeleton, ThinSkeleton.equivalence, equivalence, toOrderIso
+--- 原说明 ---
+When `e : C ≌ α` is a categorical equivalence from a thin category `C` to some p
+artial order `α`,
+the `ThinSkeleton C` is order isomorphic to `α`.
 -/
 noncomputable def Equivalence.thinSkeletonOrderIso [Quiver.IsThin C] (e : C ≌ α) :
     ThinSkeleton C ≃o α :=
@@ -1468,3 +1072,4 @@ noncomputable def Equivalence.thinSkeletonOrderIso [Quiver.IsThin C] (e : C ≌ 
 end
 
 end CategoryTheory
+

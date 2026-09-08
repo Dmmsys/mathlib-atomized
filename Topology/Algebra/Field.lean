@@ -24,66 +24,122 @@ non-zero element.
 
 variable {K : Type*} [DivisionRing K] [TopologicalSpace K]
 
-/--
-theorem `Filter.tendsto_cocompact_mul_left₀` / 定理 `Filter.tendsto_cocompact_mul_left₀`
+/-- Left-multiplication by a nonzero element of a topological division ring is proper, i.e.,
+inverse images of compact sets are compact. -/
+/-
+**Filter.tendsto_cocompact_mul_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Filter.tendsto_cocompact_mul_left {a b : M} (ha : b * a = 1) : Filter.Tend
+sto (fun x : M => a * x) (Filter.cocompact M) (Filter.cocompact M)
+参数：ha : b * a = 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.of_tendsto_comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Typ
+e u_3} {f : α → β} {g : β → γ} {a : Filter α} {b : Filter β} {c : Filter γ},   F
+ilter.Tendsto (g ∘ f…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Filter.tendsto_id`：tendsto_id {x : Filter α} : Tendsto id x x
+· 使用定理 `Filter.comap_cocompact_le`：Filter.comap_cocompact_le {f : X -> Y} (hf : 
+Continuous f) : (Filter.cocompact Y).comap f <= Filter.cocompact X
+· 使用定理 `continuous_const_mul`：continuous_const_mul (m : M) : Continuous (m * ·)
 
-English:
-theorem Filter.tendsto_cocompact_mul_left₀
-  given: [SeparatelyContinuousMul K] {a : K} (ha : a != 0)
-  proof: Filter.tendsto_cocompact_mul_left (inv_mul_cancel₀ ha)
-
-中文:
-定理 滤子.tendsto_cocompact_mul_left₀
-  条件: [SeparatelyContinuousMul K] {a : K} (ha : a != 0)
-  证明: Filter.tendsto_cocompact_mul_left (inv_mul_cancel₀ ha)
-
-Depends on / 依赖: Filter, Filter.tendsto_cocompact_mul_left, tendsto_cocompact_mul_left
+--- 原说明 ---
+Left-multiplication by a nonzero element of a topological division ring is prope
+r, i.e.,
+inverse images of compact sets are compact.
 -/
-theorem Filter.tendsto_cocompact_mul_left₀ [SeparatelyContinuousMul K] {a : K} (ha : a != 0) :
+theorem Filter.tendsto_cocompact_mul_left₀ [SeparatelyContinuousMul K] {a : K} (ha : a ≠ 0) :
     Filter.Tendsto (fun x : K => a * x) (Filter.cocompact K) (Filter.cocompact K) :=
   Filter.tendsto_cocompact_mul_left (inv_mul_cancel₀ ha)
 
-/--
-theorem `Filter.tendsto_cocompact_mul_right₀` / 定理 `Filter.tendsto_cocompact_mul_right₀`
+/-- Right-multiplication by a nonzero element of a topological division ring is proper, i.e.,
+inverse images of compact sets are compact. -/
+/-
+**Filter.tendsto_cocompact_mul_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Filter.tendsto_cocompact_mul_right {a b : M} (ha : a * b = 1) : Filter.Ten
+dsto (fun x : M => x * a) (Filter.cocompact M) (Filter.cocompact M)
+参数：ha : a * b = 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.of_tendsto_comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Typ
+e u_3} {f : α → β} {g : β → γ} {a : Filter α} {b : Filter β} {c : Filter γ},   F
+ilter.Tendsto (g ∘ f…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `comp_mul_right`：comp_mul_right (x y : α) : (· * x) ∘ (· * y) = (· * (y *
+ x))
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Filter.tendsto_id`：tendsto_id {x : Filter α} : Tendsto id x x
+· 使用定理 `Filter.comap_cocompact_le`：Filter.comap_cocompact_le {f : X -> Y} (hf : 
+Continuous f) : (Filter.cocompact Y).comap f <= Filter.cocompact X
+· 使用定理 `continuous_mul_const`：continuous_mul_const (m : M) : Continuous (· * m)
 
-English:
-theorem Filter.tendsto_cocompact_mul_right₀
-  given: [SeparatelyContinuousMul K] {a : K} (ha : a != 0)
-  proof: Filter.tendsto_cocompact_mul_right (mul_inv_cancel₀ ha)
-
-中文:
-定理 滤子.tendsto_cocompact_mul_right₀
-  条件: [SeparatelyContinuousMul K] {a : K} (ha : a != 0)
-  证明: Filter.tendsto_cocompact_mul_right (mul_inv_cancel₀ ha)
-
-Depends on / 依赖: Filter, Filter.tendsto_cocompact_mul_right, tendsto_cocompact_mul_right
+--- 原说明 ---
+Right-multiplication by a nonzero element of a topological division ring is prop
+er, i.e.,
+inverse images of compact sets are compact.
 -/
-theorem Filter.tendsto_cocompact_mul_right₀ [SeparatelyContinuousMul K] {a : K} (ha : a != 0) :
+theorem Filter.tendsto_cocompact_mul_right₀ [SeparatelyContinuousMul K] {a : K} (ha : a ≠ 0) :
     Filter.Tendsto (fun x : K => x * a) (Filter.cocompact K) (Filter.cocompact K) :=
   Filter.tendsto_cocompact_mul_right (mul_inv_cancel₀ ha)
 
-/--
-theorem `DivisionRing.finite_of_compactSpace_of_t2Space` / 定理 `DivisionRing.finite_of_compactSpace_of_t2Space`
+/-- Compact Hausdorff topological fields are finite. This is not an instance, as it would apply to
+every `Finite` goal, causing slowly failing typeclass search in some cases. -/
+/-
+**DivisionRing.finite_of_compactSpace_of_t2Space** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DivisionRing.finite_of_compactSpace_of_t2Space {K} [DivisionRing K] [Topol
+ogicalSpace K] [IsTopologicalRing K] [CompactSpace K] [T2Space K] : Finite K
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `discreteTopology_iff_isOpen_singleton_zero`：∀ {G : Type w} [inst : Topol
+ogicalSpace G] [inst_1 : AddGroup G] [SeparatelyContinuousAdd G],   DiscreteTopo
+logy G ↔ IsOpen {0}
+· 使用定理 `instSeparatelyContinuousAddOfContinuousAdd`：∀ {M : Type u_1} [inst : Top
+ologicalSpace M] [inst_1 : Add M] [ContinuousAdd M], SeparatelyContinuousAdd M
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用引理 `GroupWithZero.isOpen_singleton_zero`：GroupWithZero.isOpen_singleton_zero
+ [GroupWithZero M] [TopologicalSpace M] [ContinuousMul M] [CompactSpace M] [T1Sp
+ace M] : IsOpen {(0 : M)}
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `T2Space.t1Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T2Space X
+], T1Space X
+· 使用定理 `finite_of_compact_of_discrete`：finite_of_compact_of_discrete [CompactSpa
+ce X] [DiscreteTopology X] : Finite X
 
-English:
-theorem DivisionRing.finite_of_compactSpace_of_t2Space
-  statement: {K} [DivisionRing K] [TopologicalSpace K]
-  proof: by
-  suffices DiscreteTopology K by
-    exact finite_of_compact_of_discrete
-  rw [discreteTopology_iff_isOpen_singleton_zero]
-  exact GroupWithZero.isOpen_singleton_zero
-
-中文:
-定理 除环.finite_of_compactSpace_of_t2Space
-  结论: {K} [除环 K] [拓扑空间 K]
-  证明: by
-  suffices DiscreteTopology K by
-    exact finite_of_compact_of_discrete
-  rw [discreteTopology_iff_isOpen_singleton_zero]
-  exact GroupWithZero.isOpen_singleton_zero
-
-Depends on / 依赖: DiscreteTopology, GroupWithZero, GroupWithZero.isOpen_singleton_zero, discreteTopology_iff_isOpen_singleton_zero, finite_of_compact_of_discrete, isOpen_singleton_zero
+--- 原说明 ---
+Compact Hausdorff topological fields are finite. This is not an instance, as it 
+would apply to
+every `Finite` goal, causing slowly failing typeclass search in some cases.
 -/
 theorem DivisionRing.finite_of_compactSpace_of_t2Space {K} [DivisionRing K] [TopologicalSpace K]
     [IsTopologicalRing K] [CompactSpace K] [T2Space K] : Finite K := by
@@ -94,20 +150,17 @@ theorem DivisionRing.finite_of_compactSpace_of_t2Space {K} [DivisionRing K] [Top
 
 variable (K)
 
-/--
-Definition of `IsTopologicalDivisionRing` / `IsTopologicalDivisionRing` 的定义
+/-- A topological division ring is a division ring with a topology where all operations are
+continuous, including inversion. -/
+/-
+**IsTopologicalDivisionRing** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(K : Type u_1) → [DivisionRing K] → [TopologicalSpace K] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsTopologicalDivisionRing
-  parameters: : Prop extends IsTopologicalRing K, ContinuousInv₀ K
-  extends: IsTopologicalRing K, ContinuousInv₀ K
-  (no additional axioms)
-
-中文:
-类 是TopologicalDivision环
-  参数: : 命题 extends 是拓扑环 K, 余ntinuousInv₀ K
-  继承: 是拓扑环 K, 余ntinuousInv₀ K
-  (无附加公理)
+--- 原说明 ---
+A topological division ring is a division ring with a topology where all operati
+ons are
+continuous, including inversion.
 -/
 class IsTopologicalDivisionRing : Prop extends IsTopologicalRing K, ContinuousInv₀ K
 
@@ -115,32 +168,18 @@ section Subfield
 
 variable {α : Type*} [Field α] [TopologicalSpace α] [IsTopologicalDivisionRing α]
 
-/--
-Definition of `Subfield.topologicalClosure` / `Subfield.topologicalClosure` 的定义
+/-- The (topological-space) closure of a subfield of a topological field is
+itself a subfield. -/
+/-
+**Subfield.topologicalClosure** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Subfield.topologicalClosure (K : Subfield α) : Subfield α
+参数：K : Subfield α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Subfield.topologicalClosure
-  signature: (K : Subfield α)
-  body: { K.toSubring.topologicalClosure with
-    carrier := _root_.closure (K : Set α)
-    inv_mem' := fun x hx => by
-      rcases eq_or_ne x 0 with (rfl | h)
-      · rwa [inv_zero]
-      · rw [← inv_coe_set, ← Set.image_inv_eq_inv]
-        exact mem_closure_image (continuousAt_inv₀ h) hx }
-
-中文:
-定义 子域.topologicalClosure
-  签名: (K : 子域 α)
-  定义体: { K.toSubring.topologicalClosure with
-    carrier := _root_.closure (K : Set α)
-    inv_mem' := fun x hx => by
-      rcases eq_or_ne x 0 with (rfl | h)
-      · rwa [inv_zero]
-      · rw [← inv_coe_set, ← Set.image_inv_eq_inv]
-        exact mem_closure_image (continuousAt_inv₀ h) hx }
-
-Depends on / 依赖: K.toSubring.topologicalClosure, Set.image_inv_eq_inv, _root_, _root_.closure, carrier, closure, eq_or_ne, image_inv_eq_inv, inv_coe_set, inv_mem, inv_zero, mem_closure_image, toSubring, topologicalClosure
+--- 原说明 ---
+The (topological-space) closure of a subfield of a topological field is
+itself a subfield.
 -/
 def Subfield.topologicalClosure (K : Subfield α) : Subfield α :=
   { K.toSubring.topologicalClosure with
@@ -150,63 +189,41 @@ def Subfield.topologicalClosure (K : Subfield α) : Subfield α :=
       · rwa [inv_zero]
       · rw [← inv_coe_set, ← Set.image_inv_eq_inv]
         exact mem_closure_image (continuousAt_inv₀ h) hx }
-
-/--
-theorem `Subfield.le_topologicalClosure` / 定理 `Subfield.le_topologicalClosure`
-
-English:
-theorem Subfield.le_topologicalClosure
-  given: (s : Subfield α)
-  statement: s <= s.topologicalClosure
-  proof: _root_.subset_closure
-
-中文:
-定理 子域.le_topologicalClosure
-  条件: (s : 子域 α)
-  结论: s <= s.topologicalClosure
-  证明: _root_.subset_closure
-
-Depends on / 依赖: _root_, _root_.subset_closure, subset_closure
+/-
+**Subfield.le_topologicalClosure** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Subfield.le_topologicalClosure (s : Subfield α) : s <= s.topologicalClosur
+e
+参数：s : Subfield α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_closure`：subset_closure : s subseteq closure s
 -/
-theorem Subfield.le_topologicalClosure (s : Subfield α) : s <= s.topologicalClosure :=
+theorem Subfield.le_topologicalClosure (s : Subfield α) : s ≤ s.topologicalClosure :=
   _root_.subset_closure
-
-/--
-theorem `Subfield.isClosed_topologicalClosure` / 定理 `Subfield.isClosed_topologicalClosure`
-
-English:
-theorem Subfield.isClosed_topologicalClosure
-  given: (s : Subfield α)
-  proof: isClosed_closure
-
-中文:
-定理 子域.isClosed_topologicalClosure
-  条件: (s : 子域 α)
-  证明: isClosed_closure
-
-Depends on / 依赖: isClosed_closure
+/-
+**Subfield.isClosed_topologicalClosure** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Subfield.isClosed_topologicalClosure (s : Subfield α) : IsClosed (s.topolo
+gicalClosure : Set α)
+参数：s : Subfield α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isClosed_closure`：isClosed_closure : IsClosed (closure s)
 -/
 theorem Subfield.isClosed_topologicalClosure (s : Subfield α) :
     IsClosed (s.topologicalClosure : Set α) :=
   isClosed_closure
-
-/--
-theorem `Subfield.topologicalClosure_minimal` / 定理 `Subfield.topologicalClosure_minimal`
-
-English:
-theorem Subfield.topologicalClosure_minimal
-  statement: (s : Subfield α) {t : Subfield α} (h : s <= t)
-  proof: closure_minimal h ht
-
-中文:
-定理 子域.topologicalClosure_minimal
-  结论: (s : 子域 α) {t : 子域 α} (h : s <= t)
-  证明: closure_minimal h ht
-
-Depends on / 依赖: closure_minimal
+/-
+**Subfield.topologicalClosure_minimal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Subfield.topologicalClosure_minimal (s : Subfield α) {t : Subfield α} (h :
+ s <= t) (ht : IsClosed (t : Set α)) : s.topologicalClosure <= t
+参数：s : Subfield α；h : s <= t；ht : IsClosed (t : Set α)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `closure_minimal`：closure_minimal (h₁ : s subseteq t) (h₂ : IsClosed t) :
+ closure s subseteq t
 -/
-theorem Subfield.topologicalClosure_minimal (s : Subfield α) {t : Subfield α} (h : s <= t)
-    (ht : IsClosed (t : Set α)) : s.topologicalClosure <= t :=
+theorem Subfield.topologicalClosure_minimal (s : Subfield α) {t : Subfield α} (h : s ≤ t)
+    (ht : IsClosed (t : Set α)) : s.topologicalClosure ≤ t :=
   closure_minimal h ht
 
 end Subfield
@@ -215,56 +232,34 @@ section Units
 
 /-- In an ordered field, the units of the nonnegative elements are the positive elements. -/
 @[simps!]
-/--
-Definition of `Nonneg.unitsHomeomorphPos` / `Nonneg.unitsHomeomorphPos` 的定义
+/-
+**Nonneg.unitsHomeomorphPos** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Nonneg.unitsHomeomorphPos (R : Type*) [DivisionSemiring R] [PartialOrder R
+] [IsStrictOrderedRing R] [PosMulReflectLT R] [TopologicalSpace R] [ContinuousIn
+v₀ R] : { r : R // 0 <= r }ˣ ≃ₜ { r : R // 0 < r } where __
+参数：R : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Nonneg.unitsHomeomorphPos
-  signature: (R : Type*) [DivisionSemiring R] [PartialOrder R]
-  body: Nonneg.unitsEquivPos R
-  continuous_toFun := by
-    rw [Topology.IsEmbedding.subtypeVal.continuous_iff]
-    exact Continuous.subtype_val (p := (0 <= ·)) Units.continuous_val
-  continuous_invFun := by
-    rw [Units.continuous_iff]
-    refine ⟨by fun_prop, ?_⟩
-    suffices Continuous fun (x : { r : R // 0 < r }) => (x⁻¹ : R) by
-      simpa [Topology.IsEmbedding.subtypeVal.continuous_iff, Function.comp_def]
-    rw [continuous_iff_continuousAt]
-    exact fun x => ContinuousAt.inv₀ (by fun_prop) x.2.ne'
-
-中文:
-定义 Nonneg.unitsHomeomorphPos
-  签名: (R : 类型) [除半环 R] [偏序 R]
-  定义体: Nonneg.unitsEquivPos R
-  continuous_toFun := by
-    rw [Topology.IsEmbedding.subtypeVal.continuous_iff]
-    exact Continuous.subtype_val (p := (0 <= ·)) Units.continuous_val
-  continuous_invFun := by
-    rw [Units.continuous_iff]
-    refine ⟨by fun_prop, ?_⟩
-    suffices Continuous fun (x : { r : R // 0 < r }) => (x⁻¹ : R) by
-      simpa [Topology.IsEmbedding.subtypeVal.continuous_iff, Function.comp_def]
-    rw [continuous_iff_continuousAt]
-    exact fun x => ContinuousAt.inv₀ (by fun_prop) x.2.ne'
-
-Depends on / 依赖: Nonneg, Nonneg.unitsEquivPos, unitsEquivPos
+--- 原说明 ---
+In an ordered field, the units of the nonnegative elements are the positive elem
+ents.
 -/
 def Nonneg.unitsHomeomorphPos (R : Type*) [DivisionSemiring R] [PartialOrder R]
     [IsStrictOrderedRing R] [PosMulReflectLT R]
     [TopologicalSpace R] [ContinuousInv₀ R] :
-    { r : R // 0 <= r }ˣ ≃ₜ { r : R // 0 < r } where
+    { r : R // 0 ≤ r }ˣ ≃ₜ { r : R // 0 < r } where
   __ := Nonneg.unitsEquivPos R
   continuous_toFun := by
     rw [Topology.IsEmbedding.subtypeVal.continuous_iff]
-    exact Continuous.subtype_val (p := (0 <= ·)) Units.continuous_val
+    exact Continuous.subtype_val (p := (0 ≤ ·)) Units.continuous_val
   continuous_invFun := by
     rw [Units.continuous_iff]
     refine ⟨by fun_prop, ?_⟩
-    suffices Continuous fun (x : { r : R // 0 < r }) => (x⁻¹ : R) by
+    suffices Continuous fun (x : { r : R // 0 < r }) ↦ (x⁻¹ : R) by
       simpa [Topology.IsEmbedding.subtypeVal.continuous_iff, Function.comp_def]
     rw [continuous_iff_continuousAt]
-    exact fun x => ContinuousAt.inv₀ (by fun_prop) x.2.ne'
+    exact fun x ↦ ContinuousAt.inv₀ (by fun_prop) x.2.ne'
 
 end Units
 
@@ -284,30 +279,19 @@ The map `fun x => a * x + b`, as a homeomorphism from `𝕜` (a topological fiel
 when `a ≠ 0`.
 -/
 @[simps]
-/--
-Definition of `affineHomeomorph` / `affineHomeomorph` 的定义
+/-
+**affineHomeomorph** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：affineHomeomorph (a b : 𝕜) (h : a != 0) : 𝕜 ≃ₜ 𝕜 where toFun x
+参数：a b : 𝕜；h : a != 0。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition affineHomeomorph
-  signature: (a b : 𝕜) (h : a != 0)
-  body: a * x + b
-  invFun y := (y - b) / a
-  left_inv x := by
-    simp only [add_sub_cancel_right]
-    exact mul_div_cancel_left₀ x h
-  right_inv y := by simp [mul_div_cancel₀ _ h]
-
-中文:
-定义 affineHomeomorph
-  签名: (a b : 𝕜) (h : a != 0)
-  定义体: a * x + b
-  invFun y := (y - b) / a
-  left_inv x := by
-    simp only [add_sub_cancel_right]
-    exact mul_div_cancel_left₀ x h
-  right_inv y := by simp [mul_div_cancel₀ _ h]
+--- 原说明 ---
+The map `fun x => a * x + b`, as a homeomorphism from `𝕜` (a topological field) 
+to itself,
+when `a ≠ 0`.
 -/
-def affineHomeomorph (a b : 𝕜) (h : a != 0) : 𝕜 ≃ₜ 𝕜 where
+def affineHomeomorph (a b : 𝕜) (h : a ≠ 0) : 𝕜 ≃ₜ 𝕜 where
   toFun x := a * x + b
   invFun y := (y - b) / a
   left_inv x := by
@@ -316,20 +300,42 @@ def affineHomeomorph (a b : 𝕜) (h : a != 0) : 𝕜 ≃ₜ 𝕜 where
   right_inv y := by simp [mul_div_cancel₀ _ h]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `affineHomeomorph_image_Icc` / 定理 `affineHomeomorph_image_Icc`
-
-English:
-theorem affineHomeomorph_image_Icc
-  statement: {𝕜 : Type*}
-  proof: by
-  simp [h]
-
-中文:
-定理 affineHomeomorph_image_Icc
-  结论: {𝕜 : 类型}
-  证明: by
-  simp [h]
+/-
+**affineHomeomorph_image_Icc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：affineHomeomorph_image_Icc {𝕜 : Type*} [Field 𝕜] [LinearOrder 𝕜] [IsStrict
+OrderedRing 𝕜] [TopologicalSpace 𝕜] [IsTopologicalRing 𝕜] (a b c d : 𝕜) (h : 0 <
+ a) : affineHomeomorph a b h.ne' '' Set.Icc c d = Set.Icc (a * c + b) (a * d + b
+)
+参数：a b c d : 𝕜；h : 0 < a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `affineHomeomorph_apply`：∀ {𝕜 : Type u_2} [inst : Field 𝕜] [inst_1 : Topo
+logicalSpace 𝕜] [inst_2 : IsTopologicalRing 𝕜] (a b : 𝕜) (h : a ≠ 0)   (x : 𝕜), 
+(affineHomeo…
+· 使用定理 `Set.image_affine_Icc'`：image_affine_Icc' (h : 0 < a) (b c d : K) : (a * 
+· + b) '' Icc c d = Icc (a * c + b) (a * d + b)
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `AddGroup.existsAddOfLE`：∀ (α : Type u) [inst : AddGroup α] [inst_1 : LE 
+α], ExistsAddOfLE α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem affineHomeomorph_image_Icc {𝕜 : Type*}
     [Field 𝕜] [LinearOrder 𝕜] [IsStrictOrderedRing 𝕜] [TopologicalSpace 𝕜]
@@ -338,20 +344,42 @@ theorem affineHomeomorph_image_Icc {𝕜 : Type*}
   simp [h]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `affineHomeomorph_image_Ico` / 定理 `affineHomeomorph_image_Ico`
-
-English:
-theorem affineHomeomorph_image_Ico
-  statement: {𝕜 : Type*}
-  proof: by
-  simp [h]
-
-中文:
-定理 affineHomeomorph_image_Ico
-  结论: {𝕜 : 类型}
-  证明: by
-  simp [h]
+/-
+**affineHomeomorph_image_Ico** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：affineHomeomorph_image_Ico {𝕜 : Type*} [Field 𝕜] [LinearOrder 𝕜] [IsStrict
+OrderedRing 𝕜] [TopologicalSpace 𝕜] [IsTopologicalRing 𝕜] (a b c d : 𝕜) (h : 0 <
+ a) : affineHomeomorph a b h.ne' '' Set.Ico c d = Set.Ico (a * c + b) (a * d + b
+)
+参数：a b c d : 𝕜；h : 0 < a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `affineHomeomorph_apply`：∀ {𝕜 : Type u_2} [inst : Field 𝕜] [inst_1 : Topo
+logicalSpace 𝕜] [inst_2 : IsTopologicalRing 𝕜] (a b : 𝕜) (h : a ≠ 0)   (x : 𝕜), 
+(affineHomeo…
+· 使用定理 `Set.image_affine_Ico`：image_affine_Ico (h : 0 < a) (b c d : K) : (a * · 
++ b) '' Ico c d = Ico (a * c + b) (a * d + b)
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `AddGroup.existsAddOfLE`：∀ (α : Type u) [inst : AddGroup α] [inst_1 : LE 
+α], ExistsAddOfLE α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem affineHomeomorph_image_Ico {𝕜 : Type*}
     [Field 𝕜] [LinearOrder 𝕜] [IsStrictOrderedRing 𝕜] [TopologicalSpace 𝕜]
@@ -360,20 +388,42 @@ theorem affineHomeomorph_image_Ico {𝕜 : Type*}
   simp [h]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `affineHomeomorph_image_Ioc` / 定理 `affineHomeomorph_image_Ioc`
-
-English:
-theorem affineHomeomorph_image_Ioc
-  statement: {𝕜 : Type*}
-  proof: by
-  simp [h]
-
-中文:
-定理 affineHomeomorph_image_Ioc
-  结论: {𝕜 : 类型}
-  证明: by
-  simp [h]
+/-
+**affineHomeomorph_image_Ioc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：affineHomeomorph_image_Ioc {𝕜 : Type*} [Field 𝕜] [LinearOrder 𝕜] [IsStrict
+OrderedRing 𝕜] [TopologicalSpace 𝕜] [IsTopologicalRing 𝕜] (a b c d : 𝕜) (h : 0 <
+ a) : affineHomeomorph a b h.ne' '' Set.Ioc c d = Set.Ioc (a * c + b) (a * d + b
+)
+参数：a b c d : 𝕜；h : 0 < a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `affineHomeomorph_apply`：∀ {𝕜 : Type u_2} [inst : Field 𝕜] [inst_1 : Topo
+logicalSpace 𝕜] [inst_2 : IsTopologicalRing 𝕜] (a b : 𝕜) (h : a ≠ 0)   (x : 𝕜), 
+(affineHomeo…
+· 使用定理 `Set.image_affine_Ioc`：image_affine_Ioc (h : 0 < a) (b c d : K) : (a * · 
++ b) '' Ioc c d = Ioc (a * c + b) (a * d + b)
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `AddGroup.existsAddOfLE`：∀ (α : Type u) [inst : AddGroup α] [inst_1 : LE 
+α], ExistsAddOfLE α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem affineHomeomorph_image_Ioc {𝕜 : Type*}
     [Field 𝕜] [LinearOrder 𝕜] [IsStrictOrderedRing 𝕜] [TopologicalSpace 𝕜]
@@ -382,20 +432,42 @@ theorem affineHomeomorph_image_Ioc {𝕜 : Type*}
   simp [h]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `affineHomeomorph_image_Ioo` / 定理 `affineHomeomorph_image_Ioo`
-
-English:
-theorem affineHomeomorph_image_Ioo
-  statement: {𝕜 : Type*}
-  proof: by
-  simp [h]
-
-中文:
-定理 affineHomeomorph_image_Ioo
-  结论: {𝕜 : 类型}
-  证明: by
-  simp [h]
+/-
+**affineHomeomorph_image_Ioo** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：affineHomeomorph_image_Ioo {𝕜 : Type*} [Field 𝕜] [LinearOrder 𝕜] [IsStrict
+OrderedRing 𝕜] [TopologicalSpace 𝕜] [IsTopologicalRing 𝕜] (a b c d : 𝕜) (h : 0 <
+ a) : affineHomeomorph a b h.ne' '' Set.Ioo c d = Set.Ioo (a * c + b) (a * d + b
+)
+参数：a b c d : 𝕜；h : 0 < a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `affineHomeomorph_apply`：∀ {𝕜 : Type u_2} [inst : Field 𝕜] [inst_1 : Topo
+logicalSpace 𝕜] [inst_2 : IsTopologicalRing 𝕜] (a b : 𝕜) (h : a ≠ 0)   (x : 𝕜), 
+(affineHomeo…
+· 使用定理 `Set.image_affine_Ioo`：image_affine_Ioo (h : 0 < a) (b c d : K) : (a * · 
++ b) '' Ioo c d = Ioo (a * c + b) (a * d + b)
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `AddGroup.existsAddOfLE`：∀ (α : Type u) [inst : AddGroup α] [inst_1 : LE 
+α], ExistsAddOfLE α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem affineHomeomorph_image_Ioo {𝕜 : Type*}
     [Field 𝕜] [LinearOrder 𝕜] [IsStrictOrderedRing 𝕜] [TopologicalSpace 𝕜]
@@ -412,24 +484,36 @@ variable {α β : Type*} [TopologicalSpace α]
 
 open Topology
 
-/--
-theorem `IsLocalMin.inv` / 定理 `IsLocalMin.inv`
-
-English:
-theorem IsLocalMin.inv
-  given: {f : α -> β} {a : α} (h1 : IsLocalMin f a) (h2 : forallᶠ z in 𝓝 a, 0 < f z)
-  proof: by
-  filter_upwards [h1, h2] with z h3 h4 using (inv_le_inv₀ h4 h2.self_of_nhds).mpr h3
-
-中文:
-定理 IsLocalMin.inv
-  条件: {f : α -> β} {a : α} (h1 : IsLocalMin f a) (h2 : 对任意ᶠ z in 𝓝 a, 0 < f z)
-  证明: by
-  filter_upwards [h1, h2] with z h3 h4 using (inv_le_inv₀ h4 h2.self_of_nhds).mpr h3
-
-Depends on / 依赖: filter_upwards, h2.self_of_nhds, self_of_nhds
+/-
+**IsLocalMin.inv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsLocalMin.inv {f : α -> β} {a : α} (h1 : IsLocalMin f a) (h2 : forallᶠ z 
+in 𝓝 a, 0 < f z) : IsLocalMax f⁻¹ a
+参数：h1 : IsLocalMin f a；h2 : forallᶠ z in 𝓝 a, 0 < f z。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `inv_le_inv₀`：inv_le_inv₀ (ha : 0 < a) (hb : 0 < b) : a⁻¹ <= b⁻¹ ↔ b <= a
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `MulPosReflectLE.toMulPosReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [MulPosReflectLE α], MulPosReflectLT α
+· 使用定理 `MulPosStrictMono.toMulPosReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [MulPosStrictMono α], MulPosReflectLE α
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
+· 使用定理 `Filter.Eventually.self_of_nhds`：Filter.Eventually.self_of_nhds {p : X ->
+ Prop} (h : forallᶠ y in 𝓝 x, p y) : p x
 -/
-theorem IsLocalMin.inv {f : α -> β} {a : α} (h1 : IsLocalMin f a) (h2 : forallᶠ z in 𝓝 a, 0 < f z) :
+theorem IsLocalMin.inv {f : α → β} {a : α} (h1 : IsLocalMin f a) (h2 : ∀ᶠ z in 𝓝 a, 0 < f z) :
     IsLocalMax f⁻¹ a := by
   filter_upwards [h1, h2] with z h3 h4 using (inv_le_inv₀ h4 h2.self_of_nhds).mpr h3
 
@@ -441,29 +525,48 @@ section Preconnected
 
 open Set
 
-variable {α 𝕜 : Type*} {f g : α -> 𝕜} {S : Set α} [TopologicalSpace α] [TopologicalSpace 𝕜]
+variable {α 𝕜 : Type*} {f g : α → 𝕜} {S : Set α} [TopologicalSpace α] [TopologicalSpace 𝕜]
   [T1Space 𝕜]
 
-/--
-theorem `IsPreconnected.eq_one_or_eq_neg_one_of_sq_eq` / 定理 `IsPreconnected.eq_one_or_eq_neg_one_of_sq_eq`
+/-- If `f` is a function `α → 𝕜` which is continuous on a preconnected set `S`, and
+`f ^ 2 = 1` on `S`, then either `f = 1` on `S`, or `f = -1` on `S`. -/
+/-
+**IsPreconnected.eq_one_or_eq_neg_one_of_sq_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPreconnected.eq_one_or_eq_neg_one_of_sq_eq [Ring 𝕜] [NoZeroDivisors 𝕜] (
+hS : IsPreconnected S) (hf : ContinuousOn f S) (hsq : EqOn (f ^ 2) 1 S) : EqOn f
+ 1 S ∨ EqOn f (-1) S
+参数：hS : IsPreconnected S；hf : ContinuousOn f S；hsq : EqOn (f ^ 2) 1 S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Exists.elim`：∀ {α : Sort u} {p : α → Prop} {b : Prop}, (∃ x, p x) → (∀ (
+a : α), p a → b) → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `IsPreconnected.eqOn_const_of_mapsTo`：IsPreconnected.eqOn_const_of_mapsTo
+ {S : Set α} (hS : IsPreconnected S) {β} [TopologicalSpace β] {T : Set β} (hT : 
+IsDiscrete T) {f : α -> β…
+· 使用引理 `Set.Finite.isDiscrete`：Set.Finite.isDiscrete [T1Space X] {s : Set X} (hs
+ : s.Finite) : IsDiscrete s
+· 使用定理 `Set.toFinite`：toFinite (s : Set α) [Finite s] : s.Finite
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
 
-English:
-theorem IsPreconnected.eq_one_or_eq_neg_one_of_sq_eq
-  statement: [Ring 𝕜] [NoZeroDivisors 𝕜]
-  proof: by
-  have hmaps : MapsTo f S {1, -1} := by
-    simpa only [EqOn, Pi.one_apply, Pi.pow_apply, sq_eq_one_iff] using! hsq
-  simpa using! hS.eqOn_const_of_mapsTo (toFinite _).isDiscrete hf hmaps
-
-中文:
-定理 是预连通.eq_one_or_eq_neg_one_of_sq_eq
-  结论: [环 𝕜] [无零因子 𝕜]
-  证明: by
-  have hmaps : MapsTo f S {1, -1} := by
-    simpa only [EqOn, Pi.one_apply, Pi.pow_apply, sq_eq_one_iff] using! hsq
-  simpa using! hS.eqOn_const_of_mapsTo (toFinite _).isDiscrete hf hmaps
-
-Depends on / 依赖: MapsTo, Pi.one_apply, Pi.pow_apply, eqOn_const_of_mapsTo, hS.eqOn_const_of_mapsTo, isDiscrete, one_apply, pow_apply, sq_eq_one_iff, toFinite
+--- 原说明 ---
+If `f` is a function `α → 𝕜` which is continuous on a preconnected set `S`, and
+`f ^ 2 = 1` on `S`, then either `f = 1` on `S`, or `f = -1` on `S`.
 -/
 theorem IsPreconnected.eq_one_or_eq_neg_one_of_sq_eq [Ring 𝕜] [NoZeroDivisors 𝕜]
     (hS : IsPreconnected S) (hf : ContinuousOn f S) (hsq : EqOn (f ^ 2) 1 S) :
@@ -472,64 +575,106 @@ theorem IsPreconnected.eq_one_or_eq_neg_one_of_sq_eq [Ring 𝕜] [NoZeroDivisors
     simpa only [EqOn, Pi.one_apply, Pi.pow_apply, sq_eq_one_iff] using! hsq
   simpa using! hS.eqOn_const_of_mapsTo (toFinite _).isDiscrete hf hmaps
 
-/--
-theorem `IsPreconnected.eq_or_eq_neg_of_sq_eq` / 定理 `IsPreconnected.eq_or_eq_neg_of_sq_eq`
+/-- If `f, g` are functions `α → 𝕜`, both continuous on a preconnected set `S`, with
+`f ^ 2 = g ^ 2` on `S`, and `g z ≠ 0` all `z ∈ S`, then either `f = g` or `f = -g` on
+`S`. -/
+/-
+**IsPreconnected.eq_or_eq_neg_of_sq_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPreconnected.eq_or_eq_neg_of_sq_eq [Field 𝕜] [ContinuousInv₀ 𝕜] [Continu
+ousMul 𝕜] (hS : IsPreconnected S) (hf : ContinuousOn f S) (hg : ContinuousOn g S
+) (hsq : EqOn (f ^ 2) (g ^ 2) S) (hg_ne : forall {x : α}, x in S -> g x != 0) : 
+EqOn f g S ∨ EqOn f (-g) S
+参数：hS : IsPreconnected S；hf : ContinuousOn f S；hg : ContinuousOn g S；hsq : EqOn 
+(f ^ 2) (g ^ 2) S；hg_ne : forall {x : α}, x in S -> g x != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `div_pow`：div_pow (a b : α) (n : Nat) : (a / b) ^ n = a ^ n / b ^ n
+· 使用引理 `div_eq_one_iff_eq`：div_eq_one_iff_eq (hb : b != 0) : a / b = 1 ↔ a = b
+· 使用引理 `pow_ne_zero`：pow_ne_zero (n : Nat) (h : a != 0) : a ^ n != 0
+· 使用定理 `isReduced_of_noZeroDivisors`：∀ {M₀ : Type u_1} [inst : MonoidWithZero M₀
+] [NoZeroDivisors M₀], IsReduced M₀
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `Field.isDomain`：∀ {K : Type u_1} [inst : Field K], IsDomain K
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用引理 `div_eq_iff`：div_eq_iff (hb : b != 0) : a / b = c ↔ a = c * b
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `IsPreconnected.eq_one_or_eq_neg_one_of_sq_eq`：IsPreconnected.eq_one_or_e
+q_neg_one_of_sq_eq [Ring 𝕜] [NoZeroDivisors 𝕜] (hS : IsPreconnected S) (hf : Con
+tinuousOn f S) (hsq : EqOn (f ^ 2)…
+· 使用定理 `ContinuousOn.div`：ContinuousOn.div (hf : ContinuousOn f s) (hg : Continu
+ousOn g s) (h₀ : forall x in s, g x != 0) : ContinuousOn (f / g) s
 
-English:
-theorem IsPreconnected.eq_or_eq_neg_of_sq_eq
-  statement: [Field 𝕜] [ContinuousInv₀ 𝕜] [ContinuousMul 𝕜]
-  proof: by
-  have hsq : EqOn ((f / g) ^ 2) 1 S := fun x hx => by
-    simpa [div_eq_one_iff_eq (pow_ne_zero _ (hg_ne hx)), div_pow] using hsq hx
-  simpa +contextual [EqOn, div_eq_iff (hg_ne _)]
-    using hS.eq_one_or_eq_neg_one_of_sq_eq (hf.div hg fun z => hg_ne) hsq
-
-中文:
-定理 是预连通.eq_or_eq_neg_of_sq_eq
-  结论: [域 𝕜] [余ntinuousInv₀ 𝕜] [连续乘法 𝕜]
-  证明: by
-  have hsq : EqOn ((f / g) ^ 2) 1 S := fun x hx => by
-    simpa [div_eq_one_iff_eq (pow_ne_zero _ (hg_ne hx)), div_pow] using hsq hx
-  simpa +contextual [EqOn, div_eq_iff (hg_ne _)]
-    using hS.eq_one_or_eq_neg_one_of_sq_eq (hf.div hg fun z => hg_ne) hsq
-
-Depends on / 依赖: contextual, div_eq_iff, div_eq_one_iff_eq, div_pow, eq_one_or_eq_neg_one_of_sq_eq, hS.eq_one_or_eq_neg_one_of_sq_eq, hf.div, hg_ne, pow_ne_zero
+--- 原说明 ---
+If `f, g` are functions `α → 𝕜`, both continuous on a preconnected set `S`, with
+`f ^ 2 = g ^ 2` on `S`, and `g z ≠ 0` all `z ∈ S`, then either `f = g` or `f = -
+g` on
+`S`.
 -/
 theorem IsPreconnected.eq_or_eq_neg_of_sq_eq [Field 𝕜] [ContinuousInv₀ 𝕜] [ContinuousMul 𝕜]
     (hS : IsPreconnected S) (hf : ContinuousOn f S) (hg : ContinuousOn g S)
-    (hsq : EqOn (f ^ 2) (g ^ 2) S) (hg_ne : forall {x : α}, x in S -> g x != 0) :
+    (hsq : EqOn (f ^ 2) (g ^ 2) S) (hg_ne : ∀ {x : α}, x ∈ S → g x ≠ 0) :
     EqOn f g S ∨ EqOn f (-g) S := by
   have hsq : EqOn ((f / g) ^ 2) 1 S := fun x hx => by
     simpa [div_eq_one_iff_eq (pow_ne_zero _ (hg_ne hx)), div_pow] using hsq hx
   simpa +contextual [EqOn, div_eq_iff (hg_ne _)]
     using hS.eq_one_or_eq_neg_one_of_sq_eq (hf.div hg fun z => hg_ne) hsq
 
-/--
-theorem `IsPreconnected.eq_of_sq_eq` / 定理 `IsPreconnected.eq_of_sq_eq`
+/-- If `f, g` are functions `α → 𝕜`, both continuous on a preconnected set `S`, with
+`f ^ 2 = g ^ 2` on `S`, and `g z ≠ 0` all `z ∈ S`, then as soon as `f = g` holds at
+one point of `S` it holds for all points. -/
+/-
+**IsPreconnected.eq_of_sq_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPreconnected.eq_of_sq_eq [Field 𝕜] [ContinuousInv₀ 𝕜] [ContinuousMul 𝕜] 
+(hS : IsPreconnected S) (hf : ContinuousOn f S) (hg : ContinuousOn g S) (hsq : E
+qOn (f ^ 2) (g ^ 2) S) (hg_ne : forall {x : α}, x in S -> g x != 0) {y : α} (hy 
+: y in S) (hy' : f y = g y) : EqOn f g S
+参数：hS : IsPreconnected S；hf : ContinuousOn f S；hg : ContinuousOn g S；hsq : EqOn 
+(f ^ 2) (g ^ 2) S；hg_ne : forall {x : α}, x in S -> g x != 0；hy : y in S；hy' : f
+ y = g y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.eq_or_eq_neg_of_sq_eq`：IsPreconnected.eq_or_eq_neg_of_sq_
+eq [Field 𝕜] [ContinuousInv₀ 𝕜] [ContinuousMul 𝕜] (hS : IsPreconnected S) (hf : 
+ContinuousOn f S) (hg : Co…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Pi.neg_apply`：∀ {ι : Type u_1} {G : ι → Type u_4} [inst : (i : ι) → Neg 
+(G i)] (f : (i : ι) → G i) (i : ι), (-f) i = -f i
+· 使用定理 `neg_eq_iff_add_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, 
+-a = b ↔ a + b = 0
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `two_mul`：two_mul (n : α) : 2 * n = n + n
+· 使用定理 `mul_eq_zero`：mul_eq_zero : a * b = 0 ↔ a = 0 ∨ b = 0
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `Field.isDomain`：∀ {K : Type u_1} [inst : Field K], IsDomain K
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `iff_of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_false`：∀ (p : Prop), (p ↔ False) = ¬p
 
-English:
-theorem IsPreconnected.eq_of_sq_eq
-  statement: [Field 𝕜] [ContinuousInv₀ 𝕜] [ContinuousMul 𝕜]
-  proof: fun x hx => by
-  rcases hS.eq_or_eq_neg_of_sq_eq hf hg @hsq @hg_ne with (h | h)
-  · exact h hx
-  · rw [h _, Pi.neg_apply, neg_eq_iff_add_eq_zero, ← two_mul, mul_eq_zero,
-      (iff_of_eq (iff_false _)).2 (hg_ne _)] at hy' ⊢ <;> assumption
-
-中文:
-定理 是预连通.eq_of_sq_eq
-  结论: [域 𝕜] [余ntinuousInv₀ 𝕜] [连续乘法 𝕜]
-  证明: fun x hx => by
-  rcases hS.eq_or_eq_neg_of_sq_eq hf hg @hsq @hg_ne with (h | h)
-  · exact h hx
-  · rw [h _, Pi.neg_apply, neg_eq_iff_add_eq_zero, ← two_mul, mul_eq_zero,
-      (iff_of_eq (iff_false _)).2 (hg_ne _)] at hy' ⊢ <;> assumption
-
-Depends on / 依赖: Pi.neg_apply, eq_or_eq_neg_of_sq_eq, hS.eq_or_eq_neg_of_sq_eq, hg_ne, iff_false, iff_of_eq, mul_eq_zero, neg_apply, neg_eq_iff_add_eq_zero, two_mul
+--- 原说明 ---
+If `f, g` are functions `α → 𝕜`, both continuous on a preconnected set `S`, with
+`f ^ 2 = g ^ 2` on `S`, and `g z ≠ 0` all `z ∈ S`, then as soon as `f = g` holds
+ at
+one point of `S` it holds for all points.
 -/
 theorem IsPreconnected.eq_of_sq_eq [Field 𝕜] [ContinuousInv₀ 𝕜] [ContinuousMul 𝕜]
     (hS : IsPreconnected S) (hf : ContinuousOn f S) (hg : ContinuousOn g S)
-    (hsq : EqOn (f ^ 2) (g ^ 2) S) (hg_ne : forall {x : α}, x in S -> g x != 0) {y : α} (hy : y in S)
+    (hsq : EqOn (f ^ 2) (g ^ 2) S) (hg_ne : ∀ {x : α}, x ∈ S → g x ≠ 0) {y : α} (hy : y ∈ S)
     (hy' : f y = g y) : EqOn f g S := fun x hx => by
   rcases hS.eq_or_eq_neg_of_sq_eq hf hg @hsq @hg_ne with (h | h)
   · exact h hx
@@ -543,22 +688,15 @@ section ContinuousSMul
 variable {F : Type*} [DivisionRing F] [TopologicalSpace F] [IsTopologicalRing F]
     (X : Type*) [TopologicalSpace X] [MulAction F X] [ContinuousSMul F X]
 
-/--
-Instance `Subfield.continuousSMul` / 实例 `Subfield.continuousSMul`
-
-English:
-instance Subfield.continuousSMul
-  signature: (M : Subfield F)
-  body: Subring.continuousSMul M.toSubring X
-
-中文:
-实例 子域.continuousSMul
-  签名: (M : 子域 F)
-  定义体: Subring.continuousSMul M.toSubring X
-
-Depends on / 依赖: M.toSubring, Subring, Subring.continuousSMul, continuousSMul, toSubring
+/-
+**Subfield.continuousSMul** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Subfield.continuousSMul (M : Subfield F) : ContinuousSMul M X
+参数：M : Subfield F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Subfield.continuousSMul (M : Subfield F) : ContinuousSMul M X :=
   Subring.continuousSMul M.toSubring X
 
 end ContinuousSMul
+

@@ -25,73 +25,82 @@ noncomputable section
 
 open Function Set MeasurableSpace Encodable
 
-variable {ι : Type*} {α : ι -> Type*}
+variable {ι : Type*} {α : ι → Type*}
 
+/-! We start with some measurability properties -/
 
-/--
-lemma `MeasurableSpace.pi_eq_generateFrom_projections` / 引理 `MeasurableSpace.pi_eq_generateFrom_projections`
+/-
+**MeasurableSpace.pi_eq_generateFrom_projections** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：MeasurableSpace.pi_eq_generateFrom_projections {mα : forall i, MeasurableS
+pace (α i)} : pi = generateFrom {B | exists (i : ι) (A : Set (α i)), MeasurableS
+et A ∧ eval i ⁻¹' A = B}
+参数：α i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_ofPred`：iUnion_ofPred (P : ι -> α -> Prop) : ⋃ i, { x : α | P
+ i x } = { x : α | exists i, P i x }
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma MeasurableSpace.pi_eq_generateFrom_projections
-  given: {mα : forall i, MeasurableSpace (α i)}
-  proof: by
-  simp only [pi, ← generateFrom_iUnion_measurableSet, iUnion_ofPred, measurableSet_comap]
-
-中文:
-引理 可测空间.pi_eq_generateFrom_projections
-  条件: {mα : 对任意 i, 可测空间 (α i)}
-  证明: by
-  simp only [pi, ← generateFrom_iUnion_measurableSet, iUnion_ofPred, measurableSet_comap]
-
-Depends on / 依赖: generateFrom_iUnion_measurableSet, iUnion_ofPred, measurableSet_comap
+--- 原说明 ---
+We start with some measurability properties
 -/
-lemma MeasurableSpace.pi_eq_generateFrom_projections {mα : forall i, MeasurableSpace (α i)} :
-    pi = generateFrom {B | exists (i : ι) (A : Set (α i)), MeasurableSet A ∧ eval i ⁻¹' A = B} := by
+lemma MeasurableSpace.pi_eq_generateFrom_projections {mα : ∀ i, MeasurableSpace (α i)} :
+    pi = generateFrom {B | ∃ (i : ι) (A : Set (α i)), MeasurableSet A ∧ eval i ⁻¹' A = B} := by
   simp only [pi, ← generateFrom_iUnion_measurableSet, iUnion_ofPred, measurableSet_comap]
 
-/--
-theorem `IsPiSystem.pi` / 定理 `IsPiSystem.pi`
+/-- Boxes formed by π-systems form a π-system. -/
+/-
+**IsPiSystem.pi** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPiSystem.pi {C : forall i, Set (Set (α i))} (hC : forall i, IsPiSystem (
+C i)) : IsPiSystem (pi univ '' pi univ C)
+参数：Set (α i)；hC : forall i, IsPiSystem (C i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.pi_inter_distrib`：pi_inter_distrib : (s.pi fun i => t i inter t₁ i) 
+= s.pi t inter s.pi t₁
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
+· 使用定理 `Set.univ_pi_nonempty_iff`：univ_pi_nonempty_iff : (pi univ t).Nonempty ↔ 
+forall i, (t i).Nonempty
 
-English:
-theorem IsPiSystem.pi
-  given: {C : forall i, Set (Set (α i))} (hC : forall i, IsPiSystem (C i))
-  proof: by
-  rintro _ ⟨s₁, hs₁, rfl⟩ _ ⟨s₂, hs₂, rfl⟩ hst
-  rw [← pi_inter_distrib] at hst ⊢; rw [univ_pi_nonempty_iff] at hst
-  exact mem_image_of_mem _ fun i _ => hC i _ (hs₁ i (mem_univ i)) _ (hs₂ i (mem_univ i)) (hst i)
-
-中文:
-定理 IsPiSystem.pi
-  条件: {C : 对任意 i, 集合 (集合 (α i))} (hC : 对任意 i, IsPiSystem (C i))
-  证明: by
-  rintro _ ⟨s₁, hs₁, rfl⟩ _ ⟨s₂, hs₂, rfl⟩ hst
-  rw [← pi_inter_distrib] at hst ⊢; rw [univ_pi_nonempty_iff] at hst
-  exact mem_image_of_mem _ fun i _ => hC i _ (hs₁ i (mem_univ i)) _ (hs₂ i (mem_univ i)) (hst i)
-
-Depends on / 依赖: mem_image_of_mem, mem_univ, pi_inter_distrib, univ_pi_nonempty_iff
+--- 原说明 ---
+Boxes formed by π-systems form a π-system.
 -/
-theorem IsPiSystem.pi {C : forall i, Set (Set (α i))} (hC : forall i, IsPiSystem (C i)) :
+theorem IsPiSystem.pi {C : ∀ i, Set (Set (α i))} (hC : ∀ i, IsPiSystem (C i)) :
     IsPiSystem (pi univ '' pi univ C) := by
   rintro _ ⟨s₁, hs₁, rfl⟩ _ ⟨s₂, hs₂, rfl⟩ hst
   rw [← pi_inter_distrib] at hst ⊢; rw [univ_pi_nonempty_iff] at hst
   exact mem_image_of_mem _ fun i _ => hC i _ (hs₁ i (mem_univ i)) _ (hs₂ i (mem_univ i)) (hst i)
 
-/--
-theorem `isPiSystem_pi` / 定理 `isPiSystem_pi`
+/-- Boxes form a π-system. -/
+/-
+**isPiSystem_pi** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPiSystem_pi [forall i, MeasurableSpace (α i)] : IsPiSystem (pi univ '' p
+i univ fun i => { s : Set (α i) | MeasurableSet s })
+参数：α i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPiSystem.pi`：IsPiSystem.pi {C : forall i, Set (Set (α i))} (hC : foral
+l i, IsPiSystem (C i)) : IsPiSystem (pi univ '' pi univ C)
+· 使用定理 `MeasurableSpace.isPiSystem_measurableSet`：isPiSystem_measurableSet {α : 
+Type*} [MeasurableSpace α] : IsPiSystem { s : Set α | MeasurableSet s }
 
-English:
-theorem isPiSystem_pi
-  given: [forall i, MeasurableSpace (α i)]
-  proof: IsPiSystem.pi fun _ => isPiSystem_measurableSet
-
-中文:
-定理 isPiSystem_pi
-  条件: [对任意 i, 可测空间 (α i)]
-  证明: IsPiSystem.pi fun _ => isPiSystem_measurableSet
-
-Depends on / 依赖: IsPiSystem, IsPiSystem.pi, isPiSystem_measurableSet
+--- 原说明 ---
+Boxes form a π-system.
 -/
-theorem isPiSystem_pi [forall i, MeasurableSpace (α i)] :
+theorem isPiSystem_pi [∀ i, MeasurableSpace (α i)] :
     IsPiSystem (pi univ '' pi univ fun i => { s : Set (α i) | MeasurableSet s }) :=
   IsPiSystem.pi fun _ => isPiSystem_measurableSet
 
@@ -99,116 +108,126 @@ section Finite
 
 variable [Finite ι]
 
-/--
-theorem `IsCountablySpanning.pi` / 定理 `IsCountablySpanning.pi`
+/-- Boxes of countably spanning sets are countably spanning. -/
+/-
+**IsCountablySpanning.pi** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsCountablySpanning.pi {C : forall i, Set (Set (α i))} (hC : forall i, IsC
+ountablySpanning (C i)) : IsCountablySpanning (pi univ '' pi univ C)
+参数：Set (α i)；hC : forall i, IsCountablySpanning (C i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_encodable`：nonempty_encodable (α : Type*) [Countable α] : Nonem
+pty (Encodable α)
+· 使用定理 `instCountableForallOfFinite`：∀ {α : Sort u} {π : α → Sort w} [Finite α] 
+[∀ (a : α), Countable (π a)], Countable ((a : α) → π a)
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.Surjective.iUnion_comp`：iUnion_comp {f : ι -> ι₂} (hf : Surject
+ive f) (g : ι₂ -> Set α) : ⋃ x, g (f x) = ⋃ y, g y
+· 使用定理 `Encodable.surjective_decode_getD`：surjective_decode_getD (α : Type*) [En
+codable α] (d : α) : Surjective fun n => (Encodable.decode n).getD d
+· 使用定理 `Set.iUnion_univ_pi`：iUnion_univ_pi {ι : α -> Type*} (t : (a : α) -> ι a 
+-> Set (π a)) : ⋃ x : (a : α) -> ι a, pi univ (fun a => t a (x a)) = pi univ fun
+ a => ⋃ …
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.pi_univ`：pi_univ (s : Set ι) : (pi s fun i => (univ : Set (α i))) = 
+univ
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 
-English:
-theorem IsCountablySpanning.pi
-  given: {C : forall i, Set (Set (α i))} (hC : forall i, IsCountablySpanning (C i))
-  proof: by
-  choose s h1s h2s using hC
-  cases nonempty_encodable (ι -> Nat)
-  let e : Nat -> ι -> Nat := fun n => (@decode (ι -> Nat) _ n).getD default
-  refine ⟨fun n => Set.pi univ fun i => s i (e n i), fun n =>
-    mem_image_of_mem _ fun i _ => h1s i _, ?_⟩
-  simp_rw [e,
-    (surjective_decode_getD (ι -> Nat) default).iUnion_comp fun x => Set.pi univ fun i => s i (x i),
-    iUnion_univ_pi s, h2s, pi_univ]
-
-中文:
-定理 IsCountablySpanning.pi
-  条件: {C : 对任意 i, 集合 (集合 (α i))} (hC : 对任意 i, IsCountablySpanning (C i))
-  证明: by
-  choose s h1s h2s using hC
-  cases nonempty_encodable (ι -> Nat)
-  let e : Nat -> ι -> Nat := fun n => (@decode (ι -> Nat) _ n).getD default
-  refine ⟨fun n => Set.pi univ fun i => s i (e n i), fun n =>
-    mem_image_of_mem _ fun i _ => h1s i _, ?_⟩
-  simp_rw [e,
-    (surjective_decode_getD (ι -> Nat) default).iUnion_comp fun x => Set.pi univ fun i => s i (x i),
-    iUnion_univ_pi s, h2s, pi_univ]
-
-Depends on / 依赖: Set.pi, decode, iUnion_comp, iUnion_univ_pi, mem_image_of_mem, nonempty_encodable, pi_univ, simp_rw, surjective_decode_getD
+--- 原说明 ---
+Boxes of countably spanning sets are countably spanning.
 -/
-theorem IsCountablySpanning.pi {C : forall i, Set (Set (α i))} (hC : forall i, IsCountablySpanning (C i)) :
+theorem IsCountablySpanning.pi {C : ∀ i, Set (Set (α i))} (hC : ∀ i, IsCountablySpanning (C i)) :
     IsCountablySpanning (pi univ '' pi univ C) := by
   choose s h1s h2s using hC
-  cases nonempty_encodable (ι -> Nat)
-  let e : Nat -> ι -> Nat := fun n => (@decode (ι -> Nat) _ n).getD default
+  cases nonempty_encodable (ι → ℕ)
+  let e : ℕ → ι → ℕ := fun n => (@decode (ι → ℕ) _ n).getD default
   refine ⟨fun n => Set.pi univ fun i => s i (e n i), fun n =>
     mem_image_of_mem _ fun i _ => h1s i _, ?_⟩
   simp_rw [e,
-    (surjective_decode_getD (ι -> Nat) default).iUnion_comp fun x => Set.pi univ fun i => s i (x i),
+    (surjective_decode_getD (ι → ℕ) default).iUnion_comp fun x => Set.pi univ fun i => s i (x i),
     iUnion_univ_pi s, h2s, pi_univ]
 
 -- `grind` can close the goal from the point marked by the comment below, but is slow
 set_option linter.tacticAnalysis.mergeWithGrind false in
-/--
-theorem `generateFrom_pi_eq` / 定理 `generateFrom_pi_eq`
+/-- The product of generated σ-algebras is the one generated by boxes, if both generating sets
+  are countably spanning. -/
+/-
+**generateFrom_pi_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：generateFrom_pi_eq {C : forall i, Set (Set (α i))} (hC : forall i, IsCount
+ablySpanning (C i)) : (@MeasurableSpace.pi _ _ fun i => generateFrom (C i)) = ge
+nerateFrom (pi univ '' pi univ C)
+参数：Set (α i)；hC : forall i, IsCountablySpanning (C i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_encodable`：nonempty_encodable (α : Type*) [Countable α] : Nonem
+pty (Encodable α)
+· 使用定理 `Finite.to_countable`：∀ {α : Sort u} [Finite α], Countable α
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `iSup_le`：iSup_le (h : forall i, f i <= a) : iSup f <= a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasurableSpace.comap_generateFrom`：comap_generateFrom {f : α -> β} {s :
+ Set (Set β)} : (generateFrom s).comap f = generateFrom (preimage f '' s)
+· 使用定理 `MeasurableSpace.generateFrom_le`：generateFrom_le {s : Set (Set α)} {m : 
+MeasurableSpace α} (h : forall t in s, MeasurableSet[m] t) : generateFrom s <= m
+· 使用定理 `Set.eval_preimage`：eval_preimage [DecidableEq ι] {s : Set (α i)} : eval 
+i ⁻¹' s = pi univ (update (fun _ => univ) i s)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用引理 `Set.iUnion_const`：iUnion_const (s : Set β) : ⋃ _ : ι, s = s
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Function.update_self`：update_self (a : α) (v : β a) (f : forall a, β a) 
+: update f a v a = v
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Function.update_of_ne`：update_of_ne {a a' : α} (h : a != a') (v : β a') 
+(f : forall a, β a) : update f a' v a = f a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Set.iUnion_univ_pi`：iUnion_univ_pi {ι : α -> Type*} (t : (a : α) -> ι a 
+-> Set (π a)) : ⋃ x : (a : α) -> ι a, pi univ (fun a => t a (x a)) = pi univ fun
+ a => ⋃ …
+· 使用定理 `MeasurableSet.iUnion`：∀ {α : Type u_1} {ι : Sort u_6} {m : MeasurableSpa
+ce α} [Countable ι] ⦃f : ι → Set α⦄,   (∀ (b : ι), MeasurableSet (f b)) → Measur
+ableSet (⋃…
+· 使用定理 `instCountableForallOfFinite`：∀ {α : Sort u} {π : α → Sort w} [Finite α] 
+[∀ (a : α), Countable (π a)], Countable ((a : α) → π a)
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `MeasurableSpace.measurableSet_generateFrom`：measurableSet_generateFrom {
+s : Set (Set α)} {t : Set α} (ht : t in s) : MeasurableSet[generateFrom s] t
+（共 38 条，此处仅展示前 30 条）
 
-English:
-theorem generateFrom_pi_eq
-  given: {C : forall i, Set (Set (α i))} (hC : forall i, IsCountablySpanning (C i))
-  proof: by
-  classical
-  cases nonempty_encodable ι
-  apply le_antisymm
-  · refine iSup_le ?_; intro i; rw [comap_generateFrom]
-    apply generateFrom_le; rintro _ ⟨s, hs, rfl⟩
-    choose t h1t h2t using hC
-    simp_rw [eval_preimage, ← h2t]
-    rw [← @iUnion_const _ Nat _ s]
-    have : Set.pi univ (update (fun i' : ι => iUnion (t i')) i (⋃ _ : Nat, s)) =
-        Set.pi univ fun k => ⋃ j : Nat,
-        @update ι (fun i' => Set (α i')) _ (fun i' => t i' j) i s k := by
-      ext; simp_rw [mem_univ_pi]; apply forall_congr'; intro i'
-      by_cases h : i' = i
-      · subst h; simp
-      · simp [h]
-    rw [this]; rw [← iUnion_univ_pi]
-    apply MeasurableSet.iUnion
-    intro n; apply measurableSet_generateFrom
-    -- `grind` can close the goal alone, but is slow
-    apply mem_image_of_mem
-    grind
-  · apply generateFrom_le; rintro _ ⟨s, hs, rfl⟩
-    rw [univ_pi_eq_iInter]; apply MeasurableSet.iInter; intro i
-    apply @measurable_pi_apply _ _ (fun i => generateFrom (C i))
-    exact measurableSet_generateFrom (hs i (mem_univ i))
-
-中文:
-定理 generateFrom_pi_eq
-  条件: {C : 对任意 i, 集合 (集合 (α i))} (hC : 对任意 i, IsCountablySpanning (C i))
-  证明: by
-  classical
-  cases nonempty_encodable ι
-  apply le_antisymm
-  · refine iSup_le ?_; intro i; rw [comap_generateFrom]
-    apply generateFrom_le; rintro _ ⟨s, hs, rfl⟩
-    choose t h1t h2t using hC
-    simp_rw [eval_preimage, ← h2t]
-    rw [← @iUnion_const _ Nat _ s]
-    have : Set.pi univ (update (fun i' : ι => iUnion (t i')) i (⋃ _ : Nat, s)) =
-        Set.pi univ fun k => ⋃ j : Nat,
-        @update ι (fun i' => Set (α i')) _ (fun i' => t i' j) i s k := by
-      ext; simp_rw [mem_univ_pi]; apply forall_congr'; intro i'
-      by_cases h : i' = i
-      · subst h; simp
-      · simp [h]
-    rw [this]; rw [← iUnion_univ_pi]
-    apply MeasurableSet.iUnion
-    intro n; apply measurableSet_generateFrom
-    -- `grind` can close the goal alone, but is slow
-    apply mem_image_of_mem
-    grind
-  · apply generateFrom_le; rintro _ ⟨s, hs, rfl⟩
-    rw [univ_pi_eq_iInter]; apply MeasurableSet.iInter; intro i
-    apply @measurable_pi_apply _ _ (fun i => generateFrom (C i))
-    exact measurableSet_generateFrom (hs i (mem_univ i))
-
-Depends on / 依赖: Set.pi, classical, comap_generateFrom, eval_preimage, forall_congr, generateFrom_le, iSup_le, iUnion, iUnion_const, le_antisymm, mem_univ_pi, nonempty_encodable, simp_rw, update
+--- 原说明 ---
+The product of generated σ-algebras is the one generated by boxes, if both gener
+ating sets
+  are countably spanning.
 -/
-theorem generateFrom_pi_eq {C : forall i, Set (Set (α i))} (hC : forall i, IsCountablySpanning (C i)) :
+theorem generateFrom_pi_eq {C : ∀ i, Set (Set (α i))} (hC : ∀ i, IsCountablySpanning (C i)) :
     (@MeasurableSpace.pi _ _ fun i => generateFrom (C i)) =
     generateFrom (pi univ '' pi univ C) := by
   classical
@@ -218,15 +237,15 @@ theorem generateFrom_pi_eq {C : forall i, Set (Set (α i))} (hC : forall i, IsCo
     apply generateFrom_le; rintro _ ⟨s, hs, rfl⟩
     choose t h1t h2t using hC
     simp_rw [eval_preimage, ← h2t]
-    rw [← @iUnion_const _ Nat _ s]
-    have : Set.pi univ (update (fun i' : ι => iUnion (t i')) i (⋃ _ : Nat, s)) =
-        Set.pi univ fun k => ⋃ j : Nat,
+    rw [← @iUnion_const _ ℕ _ s]
+    have : Set.pi univ (update (fun i' : ι => iUnion (t i')) i (⋃ _ : ℕ, s)) =
+        Set.pi univ fun k => ⋃ j : ℕ,
         @update ι (fun i' => Set (α i')) _ (fun i' => t i' j) i s k := by
       ext; simp_rw [mem_univ_pi]; apply forall_congr'; intro i'
       by_cases h : i' = i
       · subst h; simp
       · simp [h]
-    rw [this]; rw [← iUnion_univ_pi]
+    rw [this, ← iUnion_univ_pi]
     apply MeasurableSet.iUnion
     intro n; apply measurableSet_generateFrom
     -- `grind` can close the goal alone, but is slow
@@ -237,49 +256,66 @@ theorem generateFrom_pi_eq {C : forall i, Set (Set (α i))} (hC : forall i, IsCo
     apply @measurable_pi_apply _ _ (fun i => generateFrom (C i))
     exact measurableSet_generateFrom (hs i (mem_univ i))
 
-/--
-theorem `generateFrom_eq_pi` / 定理 `generateFrom_eq_pi`
+/-- If `C` and `D` generate the σ-algebras on `α` resp. `β`, then rectangles formed by `C` and `D`
+  generate the σ-algebra on `α × β`. -/
+/-
+**generateFrom_eq_pi** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：generateFrom_eq_pi [h : forall i, MeasurableSpace (α i)] {C : forall i, Se
+t (Set (α i))} (hC : forall i, generateFrom (C i) = h i) (h2C : forall i, IsCoun
+tablySpanning (C i)) : generateFrom (pi univ '' pi univ C) = MeasurableSpace.pi
+参数：α i；Set (α i)；hC : forall i, generateFrom (C i) = h i；h2C : forall i, IsCount
+ablySpanning (C i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `generateFrom_pi_eq`：generateFrom_pi_eq {C : forall i, Set (Set (α i))} (
+hC : forall i, IsCountablySpanning (C i)) : (@MeasurableSpace.pi _ _ fun i => ge
+nerateFr…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem generateFrom_eq_pi
-  statement: [h : forall i, MeasurableSpace (α i)] {C : forall i, Set (Set (α i))}
-  proof: by
-  simp +instances only [← funext hC, generateFrom_pi_eq h2C]
-
-中文:
-定理 generateFrom_eq_pi
-  结论: [h : 对任意 i, 可测空间 (α i)] {C : 对任意 i, 集合 (集合 (α i))}
-  证明: by
-  simp +instances only [← funext hC, generateFrom_pi_eq h2C]
-
-Depends on / 依赖: generateFrom_pi_eq, instances
+--- 原说明 ---
+If `C` and `D` generate the σ-algebras on `α` resp. `β`, then rectangles formed 
+by `C` and `D`
+  generate the σ-algebra on `α × β`.
 -/
-theorem generateFrom_eq_pi [h : forall i, MeasurableSpace (α i)] {C : forall i, Set (Set (α i))}
-    (hC : forall i, generateFrom (C i) = h i) (h2C : forall i, IsCountablySpanning (C i)) :
+theorem generateFrom_eq_pi [h : ∀ i, MeasurableSpace (α i)] {C : ∀ i, Set (Set (α i))}
+    (hC : ∀ i, generateFrom (C i) = h i) (h2C : ∀ i, IsCountablySpanning (C i)) :
     generateFrom (pi univ '' pi univ C) = MeasurableSpace.pi := by
   simp +instances only [← funext hC, generateFrom_pi_eq h2C]
 
-/--
-theorem `generateFrom_pi` / 定理 `generateFrom_pi`
+/-- The product σ-algebra is generated from boxes, i.e. `s ×ˢ t` for sets `s : set α` and
+  `t : set β`. -/
+/-
+**generateFrom_pi** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：generateFrom_pi [forall i, MeasurableSpace (α i)] : generateFrom (pi univ 
+'' pi univ fun i => { s : Set (α i) | MeasurableSet s }) = MeasurableSpace.pi
+参数：α i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `generateFrom_eq_pi`：generateFrom_eq_pi [h : forall i, MeasurableSpace (α
+ i)] {C : forall i, Set (Set (α i))} (hC : forall i, generateFrom (C i) = h i) (
+h2C : fo…
+· 使用定理 `MeasurableSpace.generateFrom_measurableSet`：generateFrom_measurableSet [
+MeasurableSpace α] : generateFrom {s : Set α | MeasurableSet s} = ‹_›
+· 使用定理 `isCountablySpanning_measurableSet`：isCountablySpanning_measurableSet [Me
+asurableSpace α] : IsCountablySpanning { s : Set α | MeasurableSet s }
 
-English:
-theorem generateFrom_pi
-  given: [forall i, MeasurableSpace (α i)]
-  proof: generateFrom_eq_pi (fun _ => generateFrom_measurableSet) fun _ =>
-    isCountablySpanning_measurableSet
-
-中文:
-定理 generateFrom_pi
-  条件: [对任意 i, 可测空间 (α i)]
-  证明: generateFrom_eq_pi (fun _ => generateFrom_measurableSet) fun _ =>
-    isCountablySpanning_measurableSet
-
-Depends on / 依赖: generateFrom_eq_pi, generateFrom_measurableSet, isCountablySpanning_measurableSet
+--- 原说明 ---
+The product σ-algebra is generated from boxes, i.e. `s ×ˢ t` for sets `s : set α
+` and
+  `t : set β`.
 -/
-theorem generateFrom_pi [forall i, MeasurableSpace (α i)] :
+theorem generateFrom_pi [∀ i, MeasurableSpace (α i)] :
     generateFrom (pi univ '' pi univ fun i => { s : Set (α i) | MeasurableSet s }) =
       MeasurableSpace.pi :=
   generateFrom_eq_pi (fun _ => generateFrom_measurableSet) fun _ =>
     isCountablySpanning_measurableSet
 
 end Finite
+

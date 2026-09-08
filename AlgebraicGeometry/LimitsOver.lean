@@ -31,34 +31,17 @@ variable (P : MorphismProperty Scheme.{u})
 section Over
 
 variable {S : Scheme.{u}} {J : Type*} [Category* J] (F : J ⥤ Over S)
-  [forall {i j} (f : i ⟶ j), IsOpenImmersion (F.map f).left]
+  [∀ {i j} (f : i ⟶ j), IsOpenImmersion (F.map f).left]
   [(F ⋙ Over.forget S ⋙ Scheme.forget).IsLocallyDirected]
   [Quiver.IsThin J] [Small.{u} J]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasColimit F
-  body: have {i j} (f : i ⟶ j) : IsOpenImmersion ((F ⋙ Over.forget S).map f) :=
-inferInstanceAs IsOpenImmersion (F.map f).left
-  have : ((F ⋙ Over.forget S) ⋙ Scheme.forget).IsLocallyDirected := ‹_›
-  hasColimit_of_created _ (Over.forget S)
-
-中文:
-实例 :
-  签名: 有余极限 F
-  定义体: have {i j} (f : i ⟶ j) : IsOpenImmersion ((F ⋙ Over.forget S).map f) :=
-inferInstanceAs IsOpenImmersion (F.map f).left
-  have : ((F ⋙ Over.forget S) ⋙ Scheme.forget).IsLocallyDirected := ‹_›
-  hasColimit_of_created _ (Over.forget S)
-
-Depends on / 依赖: F.map, IsLocallyDirected, IsOpenImmersion, Over.forget, Scheme, Scheme.forget, SimplicialObject, SimplicialObject.Truncated.sk.full, Truncated, forget, hasColimit_of_created
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : HasColimit F :=
   have {i j} (f : i ⟶ j) : IsOpenImmersion ((F ⋙ Over.forget S).map f) :=
-inferInstanceAs IsOpenImmersion (F.map f).left
+    inferInstanceAs <| IsOpenImmersion (F.map f).left
   have : ((F ⋙ Over.forget S) ⋙ Scheme.forget).IsLocallyDirected := ‹_›
   hasColimit_of_created _ (Over.forget S)
 
@@ -66,6 +49,10 @@ end Over
 
 section OverProp
 
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {S : Scheme.{u}} {U X Y : P.Over ⊤ S} (f : U ⟶ X) (g : U ⟶ Y)
     [IsOpenImmersion f.left] [IsOpenImmersion g.left] (i : WalkingPair) :
     Mono ((span f g ⋙ MorphismProperty.Over.forget P ⊤ S ⋙ Over.forget S ⋙ Scheme.forget).map
@@ -74,7 +61,10 @@ instance {S : Scheme.{u}} {U X Y : P.Over ⊤ S} (f : U ⟶ X) (g : U ⟶ Y)
   cases i
   · simpa using! f.left.isOpenEmbedding.injective
   · simpa using! g.left.isOpenEmbedding.injective
-
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {S : Scheme.{u}} {U X Y : P.Over ⊤ S} (f : U ⟶ X) (g : U ⟶ Y)
     [IsOpenImmersion f.left] [IsOpenImmersion g.left]
     {i j : WalkingSpan} (t : i ⟶ j) :
@@ -86,7 +76,7 @@ instance {S : Scheme.{u}} {U X Y : P.Over ⊤ S} (f : U ⟶ X) (g : U ⟶ Y)
   · simpa
 
 variable [IsZariskiLocalAtSource P] {S : Scheme.{u}} {J : Type*} [Category* J] (F : J ⥤ P.Over ⊤ S)
-  [forall {i j} (f : i ⟶ j), IsOpenImmersion (F.map f).left]
+  [∀ {i j} (f : i ⟶ j), IsOpenImmersion (F.map f).left]
   [(F ⋙ MorphismProperty.Over.forget P ⊤ S ⋙ Over.forget S ⋙ Scheme.forget).IsLocallyDirected]
   [Quiver.IsThin J] [Small.{u} J]
 
@@ -96,51 +86,14 @@ local instance :
   ‹_›
 
 local instance {i j} (f : i ⟶ j) :
-IsOpenImmersion
+    IsOpenImmersion <|
       ((F ⋙ MorphismProperty.Over.forget P ⊤ S) ⋙ Over.forget S).map f :=
-inferInstanceAs IsOpenImmersion (F.map f).left
+  inferInstanceAs <| IsOpenImmersion (F.map f).left
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CreatesColimit F (MorphismProperty.Over.forget P ⊤ S)
-  body: by
-  have : HasColimit (F ⋙ MorphismProperty.Over.forget P ⊤ S) :=
-    hasColimit_of_created _ (Over.forget S)
-  refine createsColimitOfFullyFaithfulOfIso
-      { toComma := colimit (F ⋙ MorphismProperty.Over.forget P ⊤ S)
-        prop := ?_ } (Iso.refl _)
-  let e : (colimit (F ⋙ MorphismProperty.Over.forget P ⊤ S)).left ≅
-      colimit ((F ⋙ MorphismProperty.Over.forget P ⊤ S) ⋙ Over.forget S) :=
-    preservesColimitIso (Over.forget S) _
-  let 𝒰 : (colimit (F ⋙ MorphismProperty.Over.forget P ⊤ S)).left.OpenCover :=
-    (Scheme.IsLocallyDirected.openCover _).pushforwardIso e.inv
-  rw [IsZariskiLocalAtSource.iff_of_openCover (P := P) 𝒰]
-  intro i
-  simpa [𝒰, e] using! (F.obj i).prop
-
-中文:
-实例 :
-  签名: 创造余极限 F (MorphismProperty.Over.forget P ⊤ S)
-  定义体: by
-  have : HasColimit (F ⋙ MorphismProperty.Over.forget P ⊤ S) :=
-    hasColimit_of_created _ (Over.forget S)
-  refine createsColimitOfFullyFaithfulOfIso
-      { toComma := colimit (F ⋙ MorphismProperty.Over.forget P ⊤ S)
-        prop := ?_ } (Iso.refl _)
-  let e : (colimit (F ⋙ MorphismProperty.Over.forget P ⊤ S)).left ≅
-      colimit ((F ⋙ MorphismProperty.Over.forget P ⊤ S) ⋙ Over.forget S) :=
-    preservesColimitIso (Over.forget S) _
-  let 𝒰 : (colimit (F ⋙ MorphismProperty.Over.forget P ⊤ S)).left.OpenCover :=
-    (Scheme.IsLocallyDirected.openCover _).pushforwardIso e.inv
-  rw [IsZariskiLocalAtSource.iff_of_openCover (P := P) 𝒰]
-  intro i
-  simpa [𝒰, e] using! (F.obj i).prop
-
-Depends on / 依赖: HasColimit, IsLoca, Iso.refl, MorphismProperty, MorphismProperty.Over.forget, OpenCover, Over.forget, Scheme, Scheme.IsLoca, SimplicialObject, SimplicialObject.Truncated.sk.faithful, Truncated, colimit, createsColimitOfFullyFaithfulOfIso, faithful, forget, hasColimit_of_created, left.OpenCover, preservesColimitIso, toComma
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : CreatesColimit F (MorphismProperty.Over.forget P ⊤ S) := by
   have : HasColimit (F ⋙ MorphismProperty.Over.forget P ⊤ S) :=
@@ -156,124 +109,98 @@ noncomputable instance : CreatesColimit F (MorphismProperty.Over.forget P ⊤ S)
   rw [IsZariskiLocalAtSource.iff_of_openCover (P := P) 𝒰]
   intro i
   simpa [𝒰, e] using! (F.obj i).prop
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasColimit F
-  body: hasColimit_of_created _ (MorphismProperty.Over.forget P ⊤ S)
-
-中文:
-实例 :
-  签名: 有余极限 F
-  定义体: hasColimit_of_created _ (MorphismProperty.Over.forget P ⊤ S)
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.Over.forget, SimplicialObject, SimplicialObject.Truncated.skAdj.coreflective, Truncated, coreflective, forget, hasColimit_of_created
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasColimit F := hasColimit_of_created _ (MorphismProperty.Over.forget P ⊤ S)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PreservesColimit F (MorphismProperty.Over.forget P ⊤ S)
-  body: -- this is only `inferInstance` with the local instances above
-  inferInstance
-
-中文:
-实例 :
-  签名: 保持余极限 F (MorphismProperty.Over.forget P ⊤ S)
-  定义体: -- this is only `inferInstance` with the local instances above
-  inferInstance
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PreservesColimit F (MorphismProperty.Over.forget P ⊤ S) :=
   -- this is only `inferInstance` with the local instances above
   inferInstance
 
 set_option backward.isDefEq.respectTransparency false in
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (j : J) : IsOpenImmersion (colimit.ι F j).left := by
   rw [← MorphismProperty.Over.forget_comp_forget_map]
   let e : (colimit F).left ≅ colimit (F ⋙ _) :=
     preservesColimitIso (MorphismProperty.Over.forget P ⊤ S ⋙ Over.forget S) F
   rw [← MorphismProperty.cancel_right_of_respectsIso (P := @IsOpenImmersion) _ e.hom]
   simp only [e, CategoryTheory.ι_preservesColimitIso_hom]
-exact inferInstanceAs IsOpenImmersion
+  exact inferInstanceAs <| IsOpenImmersion
     (colimit.ι ((F ⋙ MorphismProperty.Over.forget P ⊤ S) ⋙ Over.forget S) j)
-
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {ι : Type*} [Small.{u} ι] : HasCoproductsOfShape ι (P.Over ⊤ S) where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasFiniteCoproducts (P.Over ⊤ S)
-  body: inferInstance
-
-中文:
-实例 :
-  签名: 有FiniteCoproducts (P.Over ⊤ S)
-  定义体: inferInstance
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasFiniteCoproducts (P.Over ⊤ S) where
   out := inferInstance
-
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 noncomputable instance (J : Type*) [Small.{u} J] :
     CreatesColimitsOfShape (Discrete J) (MorphismProperty.Over.forget P ⊤ S) where
 
 variable {P : MorphismProperty Scheme.{u}} [IsZariskiLocalAtSource P]
-
-/--
-Instance `IsZariskiLocalAtSource.isClosedUnderColimitsOfShape_discrete` / 实例 `IsZariskiLocalAtSource.isClosedUnderColimitsOfShape_discrete`
-
-English:
-instance IsZariskiLocalAtSource.isClosedUnderColimitsOfShape_discrete
-  signature: {ι : Type*} [Small.{u} ι]
-  body: CostructuredArrow.isClosedUnderColimitsOfShape _ (fun _ => coproductIsCoproduct' _)
-    (fun _ _ _ _ h => IsZariskiLocalAtSource.sigmaDesc (h ⟨·⟩)) _
-
-中文:
-实例 IsZariskiLocalAtSource.isClosedUnderColimitsOfShape_discrete
-  签名: {ι : 类型} [Small.{u} ι]
-  定义体: CostructuredArrow.isClosedUnderColimitsOfShape _ (fun _ => coproductIsCoproduct' _)
-    (fun _ _ _ _ h => IsZariskiLocalAtSource.sigmaDesc (h ⟨·⟩)) _
-
-Depends on / 依赖: Discrete, IsClosedUnderColimitsOfShape
+/-
+**AlgebraicGeometry.IsZariskiLocalAtSource.isClosedUnderColimitsOfShape_discrete
+** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGeometry.IsZariskiLocalAtSource`。
+形式化陈述：∀ {P : CategoryTheory.MorphismProperty AlgebraicGeometry.Scheme} [Algebrai
+cGeometry.IsZariskiLocalAtSource P]   {ι : Type u_2} [Small.{u, u_2} ι] {C : Typ
+e u_3} [inst : CategoryTheory.Category.{v_2, u_3} C]   [CategoryTheory.Limits.Ha
+sColimitsOfShape (CategoryTheory.Discrete ι) C]   (L : CategoryTheory.Functor C 
+AlgebraicGeometry.Scheme)   [CategoryTheory.Limits.PreservesColimitsOfShape (Cat
+egoryTheory.Discrete ι) L] (X : AlgebraicGeometry.Scheme),   (CategoryTheory.Mor
+phismProperty.costructuredArrowObj L P).IsClosedUnderColimitsOfShape (CategoryTh
+eory.Discrete ι)
+参数：CategoryTheory.Discrete ι；L : CategoryTheory.Functor C AlgebraicGeometry.Sche
+me；CategoryTheory.Discrete ι；X : AlgebraicGeometry.Scheme；CategoryTheory.Morphis
+mProperty.costructuredArrowObj L P；CategoryTheory.Discrete ι。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CostructuredArrow.isClosedUnderColimitsOfShape`：∀ {T : Ty
+pe u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] {A : Type u_2}   [inst_1 :
+ CategoryTheory.Category.{v_2, u_2} A] {L : Categor…
+· 使用定理 `CategoryTheory.MorphismProperty.IsLocalAtSource.toRespects`：∀ {C : Type 
+u} {inst : CategoryTheory.Category.{v, u} C} {P : CategoryTheory.MorphismPropert
+y C}   (K : CategoryTheory.Precoverage C) [self …
+· 使用定理 `AlgebraicGeometry.Scheme.IsLocallyDirected.instHasColimit`：∀ {J : Type w
+} [inst : CategoryTheory.Category.{v, w} J] (F : CategoryTheory.Functor J Algebr
+aicGeometry.Scheme)   [∀ {i j : J} (f : i ⟶ j),…
+· 使用定理 `AlgebraicGeometry.IsOpenImmersion.of_isIso`：∀ {Y Z : AlgebraicGeometry.S
+cheme} (g : Y ⟶ Z) [CategoryTheory.IsIso g], AlgebraicGeometry.IsOpenImmersion g
+· 使用定理 `CategoryTheory.Discrete.instIsIso`：∀ {I : Type u₁} {i j : CategoryTheory
+.Discrete I} (f : i ⟶ j), CategoryTheory.IsIso f
+· 使用定理 `CategoryTheory.instIsLocallyDirectedDiscrete`：∀ {J : Type u_1} (F : Cate
+goryTheory.Functor (CategoryTheory.Discrete J) (Type u_2)), F.IsLocallyDirected
+· 使用定理 `CategoryTheory.instSmallDiscrete`：∀ (C : Type u) [Small.{w, u} C], Small
+.{w, u} (CategoryTheory.Discrete C)
+· 使用引理 `AlgebraicGeometry.IsZariskiLocalAtSource.sigmaDesc`：sigmaDesc {X : Schem
+e.{u}} {ι : Type v} [Small.{u} ι] {Y : ι -> Scheme.{u}} {f : forall i, Y i ⟶ X} 
+(hf : forall i, P (f i)) : P (Sigma.desc…
 -/
 instance IsZariskiLocalAtSource.isClosedUnderColimitsOfShape_discrete {ι : Type*} [Small.{u} ι]
     {C : Type*} [Category* C] [HasColimitsOfShape (Discrete ι) C] (L : C ⥤ Scheme.{u})
     [PreservesColimitsOfShape (Discrete ι) L] (X : Scheme.{u}) :
     (P.costructuredArrowObj L (X := X)).IsClosedUnderColimitsOfShape (Discrete ι) :=
-  CostructuredArrow.isClosedUnderColimitsOfShape _ (fun _ => coproductIsCoproduct' _)
-    (fun _ _ _ _ h => IsZariskiLocalAtSource.sigmaDesc (h ⟨·⟩)) _
+  CostructuredArrow.isClosedUnderColimitsOfShape _ (fun _ ↦ coproductIsCoproduct' _)
+    (fun _ _ _ _ h ↦ IsZariskiLocalAtSource.sigmaDesc (h ⟨·⟩)) _
 
 variable [P.IsStableUnderBaseChange] [P.HasOfPostcompProperty P] [P.IsMultiplicative]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasFiniteCoproducts (P.CostructuredArrow ⊤ Scheme.Spec S)
-  body: by
-    have : (MorphismProperty.commaObj Scheme.Spec (.fromPUnit S) P).IsClosedUnderColimitsOfShape
-        (Discrete (Fin n)) :=
-      IsZariskiLocalAtSource.isClosedUnderColimitsOfShape_discrete _ _
-    apply MorphismProperty.Comma.hasColimitsOfShape_of_closedUnderColimitsOfShape
-
-中文:
-实例 :
-  签名: 有FiniteCoproducts (P.CostructuredArrow ⊤ 概形.Spec S)
-  定义体: by
-    have : (MorphismProperty.commaObj Scheme.Spec (.fromPUnit S) P).IsClosedUnderColimitsOfShape
-        (Discrete (Fin n)) :=
-      IsZariskiLocalAtSource.isClosedUnderColimitsOfShape_discrete _ _
-    apply MorphismProperty.Comma.hasColimitsOfShape_of_closedUnderColimitsOfShape
-
-Depends on / 依赖: Discrete, IsClosedUnderColimitsOfShape, IsZariskiLocalAtSource, IsZariskiLocalAtSource.isClosedUnderColimitsOfShape_discrete, MorphismProperty, MorphismProperty.Comma.hasColimitsOfShape_of_closedUnderColimitsOfShape, MorphismProperty.commaObj, Scheme, Scheme.Spec, commaObj, fromPUnit, hasColimitsOfShape_of_closedUnderColimitsOfShape, isClosedUnderColimitsOfShape_discrete
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasFiniteCoproducts (P.CostructuredArrow ⊤ Scheme.Spec S) where
   out n := by
@@ -285,3 +212,4 @@ instance : HasFiniteCoproducts (P.CostructuredArrow ⊤ Scheme.Spec S) where
 end OverProp
 
 end AlgebraicGeometry
+

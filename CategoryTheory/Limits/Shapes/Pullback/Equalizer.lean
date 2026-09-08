@@ -23,145 +23,151 @@ namespace CategoryTheory.Limits
 variable {C : Type u} [Category.{v} C] {X Y : C} (f g : X ⟶ Y)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `isPullback_equalizer_prod` / 引理 `isPullback_equalizer_prod`
+/-- The equalizer of `f g : X ⟶ Y` is the pullback of the diagonal map `Y ⟶ Y × Y`
+along the map `(f, g) : X ⟶ Y × Y`. -/
+/-
+**CategoryTheory.Limits.isPullback_equalizer_prod** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.Limits`。
+形式化陈述：isPullback_equalizer_prod [HasEqualizer f g] [HasBinaryProduct Y Y] : IsPu
+llback (equalizer.ι f g) (equalizer.ι f g ≫ f) (prod.lift f g) (prod.lift (𝟙 _) 
+(𝟙 _))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.prod.hom_ext`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {W X Y : C}   [inst_1 : CategoryTheory.Limits.HasBinaryProd
+uct X Y] {f g : W ⟶ X ⨯ …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Limits.prod.comp_lift`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] {V W X Y : C}   [inst_1 : CategoryTheory.Limits.HasBinary
+Product X Y] (f : V ⟶ W) (…
+· 使用定理 `CategoryTheory.Limits.equalizer.condition`：∀ {C : Type u} {X Y : C} [ins
+t : CategoryTheory.Category.{v, u} C] (f g : X ⟶ Y)   [inst_1 : CategoryTheory.L
+imits.HasEqualizer f g],   Cate…
+· 使用定理 `CategoryTheory.Limits.limit.lift_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.CommSq.w`：∀ {C : Type u_1} [inst : CategoryTheory.Categor
+y.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z},
+   CategoryTh…
+· 使用定理 `CategoryTheory.Limits.PullbackCone.condition`：condition (t : PullbackCon
+e f g) : fst t ≫ f = snd t ≫ g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Limits.limit.lift_π_assoc`：∀ {J : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v,
+ u} C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.equalizer.hom_ext`：∀ {C : Type u} {X Y : C} [inst 
+: CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.Lim
+its.HasEqualizer f g] {W : C}…
 
-English:
-lemma isPullback_equalizer_prod
-  given: [HasEqualizer f g] [HasBinaryProduct Y Y]
-  proof: by
-  refine ⟨⟨by ext <;> simp [equalizer.condition f g]⟩, ⟨PullbackCone.IsLimit.mk _ ?_ ?_ ?_ ?_⟩⟩
-  · refine fun s => equalizer.lift s.fst ?_
-    have H₁ : s.fst ≫ f = s.snd := by simpa using congr($s.condition ≫ prod.fst)
-    have H₂ : s.fst ≫ g = s.snd := by simpa using congr($s.condition ≫ prod.snd)
-    exact H₁.trans H₂.symm
-  · exact fun s => by simp
-  · exact fun s => by simpa using congr($s.condition ≫ prod.fst)
-  · exact fun s m hm _ => by ext; simp [*]
-
-中文:
-引理 isPullback_equalizer_prod
-  条件: [HasEqualizer f g] [HasBinaryProduct Y Y]
-  证明: by
-  refine ⟨⟨by ext <;> simp [equalizer.condition f g]⟩, ⟨PullbackCone.IsLimit.mk _ ?_ ?_ ?_ ?_⟩⟩
-  · refine fun s => equalizer.lift s.fst ?_
-    have H₁ : s.fst ≫ f = s.snd := by simpa using congr($s.condition ≫ prod.fst)
-    have H₂ : s.fst ≫ g = s.snd := by simpa using congr($s.condition ≫ prod.snd)
-    exact H₁.trans H₂.symm
-  · exact fun s => by simp
-  · exact fun s => by simpa using congr($s.condition ≫ prod.fst)
-  · exact fun s m hm _ => by ext; simp [*]
-
-Depends on / 依赖: IsLimit, PullbackCone, PullbackCone.IsLimit.mk, condition, equalizer, equalizer.condition, equalizer.lift, prod.fst, prod.snd, s.condition, s.fst, s.snd
+--- 原说明 ---
+The equalizer of `f g : X ⟶ Y` is the pullback of the diagonal map `Y ⟶ Y × Y`
+along the map `(f, g) : X ⟶ Y × Y`.
 -/
 lemma isPullback_equalizer_prod [HasEqualizer f g] [HasBinaryProduct Y Y] :
     IsPullback (equalizer.ι f g) (equalizer.ι f g ≫ f) (prod.lift f g) (prod.lift (𝟙 _) (𝟙 _)) := by
   refine ⟨⟨by ext <;> simp [equalizer.condition f g]⟩, ⟨PullbackCone.IsLimit.mk _ ?_ ?_ ?_ ?_⟩⟩
-  · refine fun s => equalizer.lift s.fst ?_
+  · refine fun s ↦ equalizer.lift s.fst ?_
     have H₁ : s.fst ≫ f = s.snd := by simpa using congr($s.condition ≫ prod.fst)
     have H₂ : s.fst ≫ g = s.snd := by simpa using congr($s.condition ≫ prod.snd)
     exact H₁.trans H₂.symm
-  · exact fun s => by simp
-  · exact fun s => by simpa using congr($s.condition ≫ prod.fst)
-  · exact fun s m hm _ => by ext; simp [*]
+  · exact fun s ↦ by simp
+  · exact fun s ↦ by simpa using congr($s.condition ≫ prod.fst)
+  · exact fun s m hm _ ↦ by ext; simp [*]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `isPushout_coequalizer_coprod` / 引理 `isPushout_coequalizer_coprod`
+/-- The coequalizer of `f g : X ⟶ Y` is the pushout of the diagonal map `X ⨿ X ⟶ X`
+along the map `(f, g) : X ⨿ X ⟶ Y`. -/
+/-
+**CategoryTheory.Limits.isPushout_coequalizer_coprod** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Limits`。
+形式化陈述：isPushout_coequalizer_coprod [HasCoequalizer f g] [HasBinaryCoproduct X X]
+ : IsPushout (coprod.desc f g) (coprod.desc (𝟙 _) (𝟙 _)) (coequalizer.π f g) (f 
+≫ coequalizer.π f g)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.coprod.hom_ext`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] {W X Y : C}   [inst_1 : CategoryTheory.Limits.HasBinaryCo
+product X Y] {f g : X ⨿ Y …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.coprod.desc_comp`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] {V W X Y : C}   [inst_1 : CategoryTheory.Limits.HasBina
+ryCoproduct X Y] (f : V ⟶ W)…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Limits.coequalizer.condition`：∀ {C : Type u} {X Y : C} [i
+nst : CategoryTheory.Category.{v, u} C] (f g : X ⟶ Y)   [inst_1 : CategoryTheory
+.Limits.HasCoequalizer f g],   Ca…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_desc`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} 
+C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.CommSq.w`：∀ {C : Type u_1} [inst : CategoryTheory.Categor
+y.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z},
+   CategoryTh…
+· 使用定理 `CategoryTheory.Limits.PushoutCocone.condition`：condition (t : PushoutCoc
+one f g) : f ≫ inl t = g ≫ inr t
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.coequalizer.hom_ext`：∀ {C : Type u} {X Y : C} [ins
+t : CategoryTheory.Category.{v, u} C] {f g : X ⟶ Y}   [inst_1 : CategoryTheory.L
+imits.HasCoequalizer f g] {W : …
 
-English:
-lemma isPushout_coequalizer_coprod
-  given: [HasCoequalizer f g] [HasBinaryCoproduct X X]
-  proof: by
-  refine ⟨⟨by ext <;> simp [coequalizer.condition f g]⟩, ⟨PushoutCocone.IsColimit.mk _ ?_ ?_ ?_ ?_⟩⟩
-  · refine fun s => coequalizer.desc s.inl ?_
-    have H₁ : f ≫ s.inl = s.inr := by simpa using congr(coprod.inl ≫ $s.condition)
-    have H₂ : g ≫ s.inl = s.inr := by simpa using congr(coprod.inr ≫ $s.condition)
-    exact H₁.trans H₂.symm
-  · exact fun s => by simp
-  · exact fun s => by simpa using congr(coprod.inl ≫ $s.condition)
-  · exact fun s m hm _ => by ext; simp [*]
-
-中文:
-引理 isPushout_coequalizer_coprod
-  条件: [HasCoequalizer f g] [HasBinaryCoproduct X X]
-  证明: by
-  refine ⟨⟨by ext <;> simp [coequalizer.condition f g]⟩, ⟨PushoutCocone.IsColimit.mk _ ?_ ?_ ?_ ?_⟩⟩
-  · refine fun s => coequalizer.desc s.inl ?_
-    have H₁ : f ≫ s.inl = s.inr := by simpa using congr(coprod.inl ≫ $s.condition)
-    have H₂ : g ≫ s.inl = s.inr := by simpa using congr(coprod.inr ≫ $s.condition)
-    exact H₁.trans H₂.symm
-  · exact fun s => by simp
-  · exact fun s => by simpa using congr(coprod.inl ≫ $s.condition)
-  · exact fun s m hm _ => by ext; simp [*]
-
-Depends on / 依赖: IsColimit, PushoutCocone, PushoutCocone.IsColimit.mk, coequalizer, coequalizer.condition, coequalizer.desc, condition, coprod, coprod.inl, coprod.inr, s.condition, s.inl, s.inr
+--- 原说明 ---
+The coequalizer of `f g : X ⟶ Y` is the pushout of the diagonal map `X ⨿ X ⟶ X`
+along the map `(f, g) : X ⨿ X ⟶ Y`.
 -/
 lemma isPushout_coequalizer_coprod [HasCoequalizer f g] [HasBinaryCoproduct X X] :
     IsPushout (coprod.desc f g) (coprod.desc (𝟙 _) (𝟙 _))
       (coequalizer.π f g) (f ≫ coequalizer.π f g) := by
   refine ⟨⟨by ext <;> simp [coequalizer.condition f g]⟩, ⟨PushoutCocone.IsColimit.mk _ ?_ ?_ ?_ ?_⟩⟩
-  · refine fun s => coequalizer.desc s.inl ?_
+  · refine fun s ↦ coequalizer.desc s.inl ?_
     have H₁ : f ≫ s.inl = s.inr := by simpa using congr(coprod.inl ≫ $s.condition)
     have H₂ : g ≫ s.inl = s.inr := by simpa using congr(coprod.inr ≫ $s.condition)
     exact H₁.trans H₂.symm
-  · exact fun s => by simp
-  · exact fun s => by simpa using congr(coprod.inl ≫ $s.condition)
-  · exact fun s m hm _ => by ext; simp [*]
+  · exact fun s ↦ by simp
+  · exact fun s ↦ by simpa using congr(coprod.inl ≫ $s.condition)
+  · exact fun s m hm _ ↦ by ext; simp [*]
 
 section
 
 variable [HasEqualizers C] [HasPullbacks C] {X Y S T : C}
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `equalizerPullbackMapIso` / `equalizerPullbackMapIso` 的定义
+/-- The natural isomorphism `eq(f ×[S] T, g ×[S] T) ≅ eq(f, g) ×[S] T`. -/
+/-
+**CategoryTheory.Limits.equalizerPullbackMapIso** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits`。
+形式化陈述：equalizerPullbackMapIso {f g : X ⟶ Y} {s : X ⟶ S} {t : Y ⟶ S} (hf : f ≫ t 
+= s) (hg : g ≫ t = s) (v : T ⟶ S) : equalizer (pullback.map s v t v f (𝟙 T) (𝟙 S
+) (by simp [hf]) (by simp)) (pullback.map s v t v g (𝟙 T) (𝟙 S) (by simp [hg]) (
+by simp)) ≅ pullback (equalizer.ι f g) (pullback.fst s v)
+参数：hf : f ≫ t = s；hg : g ≫ t = s；v : T ⟶ S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equalizerPullbackMapIso
-  signature: {f g : X ⟶ Y} {s : X ⟶ S} {t : Y ⟶ S}
-  body: letI lhs := pullback.map s v t v f (𝟙 T) (𝟙 S) (by simp [hf]) (by simp)
-  letI rhs := pullback.map s v t v g (𝟙 T) (𝟙 S) (by simp [hg]) (by simp)
-  haveI hl : pullback.fst s v ≫ f = lhs ≫ pullback.fst _ _ := by simp [lhs]
-  haveI hr : pullback.fst s v ≫ g = rhs ≫ pullback.fst _ _ := by simp [rhs]
-  letI e : equalizer lhs rhs ≅ pullback (equalizer.ι f g) (pullback.fst s v) :=
-    { hom := pullback.lift
-        (equalizer.lift (equalizer.ι _ _ ≫ pullback.fst _ _) (by
-          simp [hl, hr, equalizer.condition_assoc lhs rhs]))
-        (pullback.lift (equalizer.ι _ _ ≫ pullback.fst _ _)
-          (equalizer.ι _ _ ≫ pullback.snd _ _) (by simp [pullback.condition]))
-        (by simp)
-      inv := equalizer.lift
-        (pullback.map _ _ _ _ (equalizer.ι _ _) (pullback.snd _ _) s rfl
-          (by simp [pullback.condition]))
-        (by ext <;> simp [lhs, rhs, equalizer.condition f g])
-      hom_inv_id := by ext <;> simp
-      inv_hom_id := by ext <;> simp [pullback.condition] }
-  e
-
-中文:
-定义 equalizerPullbackMapIso
-  签名: {f g : X ⟶ Y} {s : X ⟶ S} {t : Y ⟶ S}
-  定义体: letI lhs := pullback.map s v t v f (𝟙 T) (𝟙 S) (by simp [hf]) (by simp)
-  letI rhs := pullback.map s v t v g (𝟙 T) (𝟙 S) (by simp [hg]) (by simp)
-  haveI hl : pullback.fst s v ≫ f = lhs ≫ pullback.fst _ _ := by simp [lhs]
-  haveI hr : pullback.fst s v ≫ g = rhs ≫ pullback.fst _ _ := by simp [rhs]
-  letI e : equalizer lhs rhs ≅ pullback (equalizer.ι f g) (pullback.fst s v) :=
-    { hom := pullback.lift
-        (equalizer.lift (equalizer.ι _ _ ≫ pullback.fst _ _) (by
-          simp [hl, hr, equalizer.condition_assoc lhs rhs]))
-        (pullback.lift (equalizer.ι _ _ ≫ pullback.fst _ _)
-          (equalizer.ι _ _ ≫ pullback.snd _ _) (by simp [pullback.condition]))
-        (by simp)
-      inv := equalizer.lift
-        (pullback.map _ _ _ _ (equalizer.ι _ _) (pullback.snd _ _) s rfl
-          (by simp [pullback.condition]))
-        (by ext <;> simp [lhs, rhs, equalizer.condition f g])
-      hom_inv_id := by ext <;> simp
-      inv_hom_id := by ext <;> simp [pullback.condition] }
-  e
-
-Depends on / 依赖: condition_assoc, equalizer, equalizer.condition_assoc, equalizer.lift, pullback, pullback.fst, pullback.lift, pullback.map
+--- 原说明 ---
+The natural isomorphism `eq(f ×[S] T, g ×[S] T) ≅ eq(f, g) ×[S] T`.
 -/
 noncomputable def equalizerPullbackMapIso {f g : X ⟶ Y} {s : X ⟶ S} {t : Y ⟶ S}
     (hf : f ≫ t = s) (hg : g ≫ t = s) (v : T ⟶ S) :
@@ -192,20 +198,32 @@ variable {f g : X ⟶ Y} {s : X ⟶ S} {t : Y ⟶ S} (hf : f ≫ t = s) (hg : g 
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `equalizerPullbackMapIso_hom_fst` / 引理 `equalizerPullbackMapIso_hom_fst`
-
-English:
-lemma equalizerPullbackMapIso_hom_fst
-  proof: by
-  simp [equalizerPullbackMapIso]
-
-中文:
-引理 equalizerPullbackMapIso_hom_fst
-  证明: by
-  simp [equalizerPullbackMapIso]
-
-Depends on / 依赖: equalizerPullbackMapIso
+/-
+**CategoryTheory.Limits.equalizerPullbackMapIso_hom_fst** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.Limits`。
+形式化陈述：equalizerPullbackMapIso_hom_fst : (equalizerPullbackMapIso hf hg v).hom ≫ 
+pullback.fst _ _ ≫ equalizer.ι _ _ = equalizer.ι _ _ ≫ pullback.fst _ _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.limit.lift_π_assoc`：∀ {J : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v,
+ u} C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.PullbackCone.mk_π_app`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} {W : C} (fst :
+ W ⟶ X)   (snd : W ⟶ Y)   (eq :  …
+· 使用定理 `CategoryTheory.Limits.limit.lift_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {F : CategoryTheory.F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma equalizerPullbackMapIso_hom_fst :
     (equalizerPullbackMapIso hf hg v).hom ≫ pullback.fst _ _ ≫ equalizer.ι _ _ =
@@ -214,20 +232,32 @@ lemma equalizerPullbackMapIso_hom_fst :
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `equalizerPullbackMapIso_hom_snd` / 引理 `equalizerPullbackMapIso_hom_snd`
-
-English:
-lemma equalizerPullbackMapIso_hom_snd
-  proof: by
-  ext <;> simp [equalizerPullbackMapIso]
-
-中文:
-引理 equalizerPullbackMapIso_hom_snd
-  证明: by
-  ext <;> simp [equalizerPullbackMapIso]
-
-Depends on / 依赖: equalizerPullbackMapIso
+/-
+**CategoryTheory.Limits.equalizerPullbackMapIso_hom_snd** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.Limits`。
+形式化陈述：equalizerPullbackMapIso_hom_snd : (equalizerPullbackMapIso hf hg v).hom ≫ 
+pullback.snd _ _ = equalizer.ι _ _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.pullback.hom_ext`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categor
+yTheory.Limits.HasPullback f…
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.limit.lift_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.PullbackCone.mk_π_app`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} {W : C} (fst :
+ W ⟶ X)   (snd : W ⟶ Y)   (eq :  …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma equalizerPullbackMapIso_hom_snd :
     (equalizerPullbackMapIso hf hg v).hom ≫ pullback.snd _ _ =
@@ -236,20 +266,10 @@ lemma equalizerPullbackMapIso_hom_snd :
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `equalizerPullbackMapIso_inv_ι_fst` / 引理 `equalizerPullbackMapIso_inv_ι_fst`
-
-English:
-lemma equalizerPullbackMapIso_inv_ι_fst
-  proof: by
-  simp [equalizerPullbackMapIso]
-
-中文:
-引理 equalizerPullbackMapIso_inv_ι_fst
-  证明: by
-  simp [equalizerPullbackMapIso]
-
-Depends on / 依赖: equalizerPullbackMapIso
+/-
+**CategoryTheory.Limits.equalizerPullbackMapIso_inv_** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma equalizerPullbackMapIso_inv_ι_fst :
     (equalizerPullbackMapIso hf hg v).inv ≫ equalizer.ι _ _ ≫ pullback.fst _ _ =
@@ -258,20 +278,10 @@ lemma equalizerPullbackMapIso_inv_ι_fst :
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `equalizerPullbackMapIso_inv_ι_snd` / 引理 `equalizerPullbackMapIso_inv_ι_snd`
-
-English:
-lemma equalizerPullbackMapIso_inv_ι_snd
-  proof: by
-  simp [equalizerPullbackMapIso]
-
-中文:
-引理 equalizerPullbackMapIso_inv_ι_snd
-  证明: by
-  simp [equalizerPullbackMapIso]
-
-Depends on / 依赖: equalizerPullbackMapIso
+/-
+**CategoryTheory.Limits.equalizerPullbackMapIso_inv_** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma equalizerPullbackMapIso_inv_ι_snd :
     (equalizerPullbackMapIso hf hg v).inv ≫ equalizer.ι _ _ ≫ pullback.snd _ _ =
@@ -281,3 +291,4 @@ lemma equalizerPullbackMapIso_inv_ι_snd :
 end
 
 end CategoryTheory.Limits
+

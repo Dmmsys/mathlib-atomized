@@ -26,20 +26,16 @@ namespace SSet.Subcomplex
 
 variable {X : SSet.{u}} (A : X.Subcomplex)
 
-/--
-Definition of `N` / `N` 的定义
+/-- The type of nondegenerate simplices which do not belong to
+a given subcomplex of a simplicial set. -/
+/-
+**SSet.Subcomplex.N** 是 Mathlib 中的一个归纳类型，位于命名空间 `SSet.Subcomplex`。
+形式化陈述：{X : _root_.SSet} → X.Subcomplex → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure N
-  parameters: extends X.N
-  extends: X.N
-  (no additional axioms)
-
-中文:
-结构 N
-  参数: extends X.N
-  继承: X.N
-  (无附加公理)
+--- 原说明 ---
+The type of nondegenerate simplices which do not belong to
+a given subcomplex of a simplicial set.
 -/
 structure N extends X.N where mk' ::
   notMem : simplex ∉ A.obj _
@@ -48,92 +44,74 @@ namespace N
 
 variable {A}
 
-/--
-lemma `mk'_surjective` / 引理 `mk'_surjective`
-
-English:
-lemma mk'_surjective
-  given: (s : A.N)
-  proof: ⟨s.toN, s.notMem, rfl⟩
-
-中文:
-引理 mk'_surjective
-  条件: (s : A.N)
-  证明: ⟨s.toN, s.notMem, rfl⟩
-
-Depends on / 依赖: notMem, s.notMem, s.toN
+/-
+**SSet.Subcomplex.N.mk'_surjective** 是 Mathlib 中的一个定理，位于命名空间 `SSet.Subcomplex.N`
+。
+形式化陈述：∀ {X : _root_.SSet} {A : X.Subcomplex} (s : A.N),   ∃ t, ∃ (ht : t.simplex
+ ∉ A.obj (Opposite.op { len := t.dim })), s = { toN := t, notMem := ht }
+参数：s : A.N；ht : t.simplex ∉ A.obj (Opposite.op { len := t.dim })。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SSet.Subcomplex.N.mk'`：mk'_surjective (s : A.N) : exists (t : X.N) (ht :
+ t.simplex ∉ A.obj _), s = mk' t ht
+· 使用定理 `SSet.Subcomplex.N.notMem`：∀ {X : _root_.SSet} {A : X.Subcomplex} (self :
+ A.N), self.simplex ∉ A.obj (Opposite.op { len := self.dim })
 -/
 lemma mk'_surjective (s : A.N) :
-    exists (t : X.N) (ht : t.simplex ∉ A.obj _), s = mk' t ht :=
+    ∃ (t : X.N) (ht : t.simplex ∉ A.obj _), s = mk' t ht :=
   ⟨s.toN, s.notMem, rfl⟩
 
 /-- Constructor for the type of nondegenerate simplices which
 do not belong to a given subcomplex of a simplicial set. -/
 @[simps!]
-/--
-Definition of `mk` / `mk` 的定义
+/-
+**SSet.Subcomplex.N.mk** 是 Mathlib 中的一个定义，位于命名空间 `SSet.Subcomplex.N`。
+形式化陈述：mk {n : Nat} (x : X _⦋n⦌) (hx : x in X.nonDegenerate n) (hx' : x ∉ A.obj _
+) : A.N where simplex
+参数：x : X _⦋n⦌；hx : x in X.nonDegenerate n；hx' : x ∉ A.obj _。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `SSet.Subcomplex.N.mk'`：mk'_surjective (s : A.N) : exists (t : X.N) (ht :
+ t.simplex ∉ A.obj _), s = mk' t ht
+· 使用引理 `SSet.N.mk'`：mk'_surjective (s : X.N) : exists (t : X.S) (ht : t.simplex 
+in X.nonDegenerate _), s = mk' t ht
 
-English:
-definition mk
-  signature: {n : Nat} (x : X _⦋n⦌) (hx : x in X.nonDegenerate n)
-  body: x
-  nonDegenerate := hx
-  notMem := hx'
-
-中文:
-定义 mk
-  签名: {n : 自然数} (x : X _⦋n⦌) (hx : x in X.nonDegenerate n)
-  定义体: x
-  nonDegenerate := hx
-  notMem := hx'
+--- 原说明 ---
+Constructor for the type of nondegenerate simplices which
+do not belong to a given subcomplex of a simplicial set.
 -/
-def mk {n : Nat} (x : X _⦋n⦌) (hx : x in X.nonDegenerate n)
+def mk {n : ℕ} (x : X _⦋n⦌) (hx : x ∈ X.nonDegenerate n)
     (hx' : x ∉ A.obj _) : A.N where
   simplex := x
   nonDegenerate := hx
   notMem := hx'
 
 /-- A unification hint for the dimension of `Subcomplex.N.mk`. -/
-unif_hint {X : SSet.{u}} {A : X.Subcomplex} (n : Nat) (x : X _⦋n⦌)
-    (hx : x in X.nonDegenerate n) (hx' : x ∉ A.obj _) where
+unif_hint {X : SSet.{u}} {A : X.Subcomplex} (n : ℕ) (x : X _⦋n⦌)
+    (hx : x ∈ X.nonDegenerate n) (hx' : x ∉ A.obj _) where
   ⊢ (mk x hx hx').dim ≟ n
 
-/--
-lemma `mk_surjective` / 引理 `mk_surjective`
-
-English:
-lemma mk_surjective
-  given: (s : A.N)
-  proof: ⟨s.dim, s.simplex, s.nonDegenerate, s.notMem, rfl⟩
-
-中文:
-引理 mk_surjective
-  条件: (s : A.N)
-  证明: ⟨s.dim, s.simplex, s.nonDegenerate, s.notMem, rfl⟩
-
-Depends on / 依赖: nonDegenerate, notMem, s.dim, s.nonDegenerate, s.notMem, s.simplex, simplex
+/-
+**SSet.Subcomplex.N.mk_surjective** 是 Mathlib 中的一个引理，位于命名空间 `SSet.Subcomplex.N`。
+形式化陈述：mk_surjective (s : A.N) : exists (n : Nat) (x : X _⦋n⦌) (hx : x in X.nonDe
+generate n) (hx' : x ∉ A.obj _), s = mk x hx hx'
+参数：s : A.N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SSet.N.nonDegenerate`：∀ {X : _root_.SSet} (self : X.N), self.simplex ∈ X
+.nonDegenerate self.dim
+· 使用定理 `SSet.Subcomplex.N.notMem`：∀ {X : _root_.SSet} {A : X.Subcomplex} (self :
+ A.N), self.simplex ∉ A.obj (Opposite.op { len := self.dim })
 -/
 lemma mk_surjective (s : A.N) :
-    exists (n : Nat) (x : X _⦋n⦌) (hx : x in X.nonDegenerate n)
+    ∃ (n : ℕ) (x : X _⦋n⦌) (hx : x ∈ X.nonDegenerate n)
       (hx' : x ∉ A.obj _), s = mk x hx hx' :=
   ⟨s.dim, s.simplex, s.nonDegenerate, s.notMem, rfl⟩
-
-/--
-lemma `ext_iff` / 引理 `ext_iff`
-
-English:
-lemma ext_iff
-  given: (x y : A.N)
-  proof: by
-  grind [cases SSet.Subcomplex.N]
-
-中文:
-引理 ext_iff
-  条件: (x y : A.N)
-  证明: by
-  grind [cases SSet.Subcomplex.N]
-
-Depends on / 依赖: SSet.Subcomplex.N, Subcomplex
+/-
+**SSet.Subcomplex.N.ext_iff** 是 Mathlib 中的一个引理，位于命名空间 `SSet.Subcomplex.N`。
+形式化陈述：ext_iff (x y : A.N) : x = y ↔ x.toN = y.toN
+参数：x y : A.N。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ext_iff (x y : A.N) :
     x = y ↔ x.toN = y.toN := by
@@ -141,156 +119,96 @@ lemma ext_iff (x y : A.N) :
 
 variable (A) in
 @[elab_as_elim]
-/--
-lemma `cases` / 引理 `cases`
-
-English:
-lemma cases
-  statement: {motive : X.N -> Prop}
-  proof: by
-  by_cases hs : s.subcomplex <= A
-  · exact mem s hs
-  · exact notMem (.mk' s (by simpa using hs))
-
-中文:
-引理 cases
-  结论: {motive : X.N -> 命题}
-  证明: by
-  by_cases hs : s.subcomplex <= A
-  · exact mem s hs
-  · exact notMem (.mk' s (by simpa using hs))
-
-Depends on / 依赖: notMem, s.subcomplex, subcomplex
+/-
+**SSet.Subcomplex.N.cases** 是 Mathlib 中的一个引理，位于命名空间 `SSet.Subcomplex.N`。
+形式化陈述：cases {motive : X.N -> Prop} (mem : forall (s : X.N), s.subcomplex <= A ->
+ motive s) (notMem : forall (s : A.N), motive s.toN) (s : X.N) : motive s
+参数：mem : forall (s : X.N), s.subcomplex <= A -> motive s；notMem : forall (s : A.
+N), motive s.toN；s : X.N。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SSet.Subcomplex.N.mk'`：mk'_surjective (s : A.N) : exists (t : X.N) (ht :
+ t.simplex ∉ A.obj _), s = mk' t ht
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-lemma cases {motive : X.N -> Prop}
-    (mem : forall (s : X.N), s.subcomplex <= A -> motive s)
-    (notMem : forall (s : A.N), motive s.toN)
+lemma cases {motive : X.N → Prop}
+    (mem : ∀ (s : X.N), s.subcomplex ≤ A → motive s)
+    (notMem : ∀ (s : A.N), motive s.toN)
     (s : X.N) :
     motive s := by
-  by_cases hs : s.subcomplex <= A
+  by_cases hs : s.subcomplex ≤ A
   · exact mem s hs
   · exact notMem (.mk' s (by simpa using hs))
-
-/--
-lemma `eq_iff_sMk_eq` / 引理 `eq_iff_sMk_eq`
-
-English:
-lemma eq_iff_sMk_eq
-  given: {X : SSet.{u}} {A : X.Subcomplex} (x y : A.N)
-  proof: by
-  rw [N.ext_iff]; rw [SSet.N.ext_iff]
-
-中文:
-引理 eq_iff_sMk_eq
-  条件: {X : SSet.{u}} {A : X.子复形} (x y : A.N)
-  证明: by
-  rw [N.ext_iff]; rw [SSet.N.ext_iff]
-
-Depends on / 依赖: N.ext_iff, SSet.N.ext_iff, ext_iff
+/-
+**SSet.Subcomplex.N.eq_iff_sMk_eq** 是 Mathlib 中的一个引理，位于命名空间 `SSet.Subcomplex.N`。
+形式化陈述：eq_iff_sMk_eq {X : SSet.{u}} {A : X.Subcomplex} (x y : A.N) : x = y ↔ S.mk
+ x.simplex = S.mk y.simplex
+参数：x y : A.N。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SSet.Subcomplex.N.ext_iff`：ext_iff (x y : A.N) : x = y ↔ x.toN = y.toN
+· 使用引理 `SSet.N.ext_iff`：ext_iff (x y : X.N) : x = y ↔ x.toS = y.toS
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma eq_iff_sMk_eq {X : SSet.{u}} {A : X.Subcomplex} (x y : A.N) :
     x = y ↔ S.mk x.simplex = S.mk y.simplex := by
-  rw [N.ext_iff]; rw [SSet.N.ext_iff]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder A.N
-  body: PartialOrder.lift toN (fun _ _ => by simp [ext_iff])
-
-中文:
-实例 :
-  签名: 偏序 A.N
-  定义体: PartialOrder.lift toN (fun _ _ => by simp [ext_iff])
-
-Depends on / 依赖: PartialOrder, PartialOrder.lift, ext_iff
+  rw [N.ext_iff, SSet.N.ext_iff]
+/-
+**SSet.Subcomplex.N.** 是 Mathlib 中的一个实例，位于命名空间 `SSet.Subcomplex.N`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder A.N :=
-  PartialOrder.lift toN (fun _ _ => by simp [ext_iff])
-
-/--
-lemma `le_iff` / 引理 `le_iff`
-
-English:
-lemma le_iff
-  given: {x y : A.N}
-  statement: x <= y ↔ x.toN <= y.toN
-  proof: Iff.rfl
-
-中文:
-引理 le_iff
-  条件: {x y : A.N}
-  结论: x <= y ↔ x.toN <= y.toN
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+  PartialOrder.lift toN (fun _ _ ↦ by simp [ext_iff])
+/-
+**SSet.Subcomplex.N.le_iff** 是 Mathlib 中的一个引理，位于命名空间 `SSet.Subcomplex.N`。
+形式化陈述：le_iff {x y : A.N} : x <= y ↔ x.toN <= y.toN
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma le_iff {x y : A.N} : x <= y ↔ x.toN <= y.toN :=
+lemma le_iff {x y : A.N} : x ≤ y ↔ x.toN ≤ y.toN :=
   Iff.rfl
-
-/--
-lemma `lt_iff` / 引理 `lt_iff`
-
-English:
-lemma lt_iff
-  given: {x y : A.N}
-  statement: x < y ↔ x.toN < y.toN
-  proof: Iff.rfl
-
-中文:
-引理 lt_iff
-  条件: {x y : A.N}
-  结论: x < y ↔ x.toN < y.toN
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**SSet.Subcomplex.N.lt_iff** 是 Mathlib 中的一个引理，位于命名空间 `SSet.Subcomplex.N`。
+形式化陈述：lt_iff {x y : A.N} : x < y ↔ x.toN < y.toN
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma lt_iff {x y : A.N} : x < y ↔ x.toN < y.toN :=
   Iff.rfl
 
 section
 
-variable (s : A.N) {d : Nat} (hd : s.dim = d)
+variable (s : A.N) {d : ℕ} (hd : s.dim = d)
 
-/--
-Definition of `cast` / `cast` 的定义
+/-- When `A` is a subcomplex of a simplicial set `X`,
+and `s : A.N` is such that `s.dim = d`, this is a term
+that is equal to `s`, but whose dimension if definitionally equal to `d`. -/
+/-
+**SSet.Subcomplex.N.cast** 是 Mathlib 中的一个缩写定义，位于命名空间 `SSet.Subcomplex.N`。
+形式化陈述：cast : A.N where toN
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `SSet.Subcomplex.N.mk'`：mk'_surjective (s : A.N) : exists (t : X.N) (ht :
+ t.simplex ∉ A.obj _), s = mk' t ht
 
-English:
-abbreviation cast
-  signature: : A.N where
-  body: s.toN.cast hd
-  notMem := hd ▸ s.notMem
-
-中文:
-缩写 cast
-  签名: : A.N where
-  定义体: s.toN.cast hd
-  notMem := hd ▸ s.notMem
-
-Depends on / 依赖: s.toN.cast
+--- 原说明 ---
+When `A` is a subcomplex of a simplicial set `X`,
+and `s : A.N` is such that `s.dim = d`, this is a term
+that is equal to `s`, but whose dimension if definitionally equal to `d`.
 -/
 abbrev cast : A.N where
   toN := s.toN.cast hd
   notMem := hd ▸ s.notMem
-
-/--
-lemma `cast_eq_self` / 引理 `cast_eq_self`
-
-English:
-lemma cast_eq_self
-  statement: s.cast hd = s
-  proof: by
-  subst hd
-  rfl
-
-中文:
-引理 cast_eq_self
-  结论: s.cast hd = s
-  证明: by
-  subst hd
-  rfl
+/-
+**SSet.Subcomplex.N.cast_eq_self** 是 Mathlib 中的一个引理，位于命名空间 `SSet.Subcomplex.N`。
+形式化陈述：cast_eq_self : s.cast hd = s
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma cast_eq_self : s.cast hd = s := by
   subst hd
@@ -299,34 +217,24 @@ lemma cast_eq_self : s.cast hd = s := by
 end
 
 /-- A unification hint for the dimension of `Subcomplex.N.cast`. -/
-unif_hint {X : SSet.{u}} {A : X.Subcomplex} (s : A.N) (d : Nat)
+unif_hint {X : SSet.{u}} {A : X.Subcomplex} (s : A.N) (d : ℕ)
     (hd : s.dim = d) where
   ⊢ (s.cast hd).dim ≟ d
 
 /-- The bijection `A.op.N ≃ A.N` for a subcomplex `A` of a simplicial set.. -/
 @[simps -isSimp apply symm_apply]
-/--
-Definition of `opEquiv` / `opEquiv` 的定义
+/-
+**SSet.Subcomplex.N.opEquiv** 是 Mathlib 中的一个定义，位于命名空间 `SSet.Subcomplex.N`。
+形式化陈述：opEquiv : A.op.N ≃o A.N where toFun x
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `SSet.Subcomplex.N.mk'`：mk'_surjective (s : A.N) : exists (t : X.N) (ht :
+ t.simplex ∉ A.obj _), s = mk' t ht
+· 使用定理 `SSet.Subcomplex.N.notMem`：∀ {X : _root_.SSet} {A : X.Subcomplex} (self :
+ A.N), self.simplex ∉ A.obj (Opposite.op { len := self.dim })
 
-English:
-definition opEquiv
-  signature: : A.op.N ≃o A.N where
-  body: N.mk' (SSet.N.opEquiv x.toN) x.notMem
-  invFun y := N.mk' (SSet.N.opEquiv.symm y.toN) y.notMem
-  left_inv _ := rfl
-  right_inv _ := rfl
-  map_rel_iff' := SSet.N.opEquiv.map_rel_iff
-
-中文:
-定义 opEquiv
-  签名: : A.op.N ≃o A.N where
-  定义体: N.mk' (SSet.N.opEquiv x.toN) x.notMem
-  invFun y := N.mk' (SSet.N.opEquiv.symm y.toN) y.notMem
-  left_inv _ := rfl
-  right_inv _ := rfl
-  map_rel_iff' := SSet.N.opEquiv.map_rel_iff
-
-Depends on / 依赖: N.mk, SSet.N.opEquiv, notMem, opEquiv, x.notMem, x.toN
+--- 原说明 ---
+The bijection `A.op.N ≃ A.N` for a subcomplex `A` of a simplicial set..
 -/
 def opEquiv : A.op.N ≃o A.N where
   toFun x := N.mk' (SSet.N.opEquiv x.toN) x.notMem
@@ -339,32 +247,20 @@ def opEquiv : A.op.N ≃o A.N where
 to a certain subcomplex that is induced by an isomorphism `X ≅ Y` of
 simplicial sets which maps `A : X.Subcomplex` to `B : Y.Subcomplex`. -/
 @[simps -isSimp apply symm_apply]
-/--
-Definition of `orderIsoOfIso` / `orderIsoOfIso` 的定义
+/-
+**SSet.Subcomplex.N.orderIsoOfIso** 是 Mathlib 中的一个定义，位于命名空间 `SSet.Subcomplex.N`。
+形式化陈述：orderIsoOfIso {Y : SSet.{u}} {B : Y.Subcomplex} (e : X ≅ Y) (hA : B.preima
+ge e.hom = A) : A.N ≃o B.N where toFun x
+参数：e : X ≅ Y；hA : B.preimage e.hom = A。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `SSet.Subcomplex.N.mk'`：mk'_surjective (s : A.N) : exists (t : X.N) (ht :
+ t.simplex ∉ A.obj _), s = mk' t ht
 
-English:
-definition orderIsoOfIso
-  signature: {Y : SSet.{u}} {B : Y.Subcomplex} (e : X ≅ Y)
-  body: N.mk' (SSet.N.orderIsoOfIso e x.toN) (by subst hA; exact x.notMem)
-  invFun y := N.mk' ((SSet.N.orderIsoOfIso e).symm y.toN) (by
-    obtain rfl : A.preimage e.inv = B := by aesop
-    exact y.notMem)
-  left_inv _ := by aesop
-  right_inv _ := by aesop
-  map_rel_iff' {_ _} := (SSet.N.orderIsoOfIso e).map_rel_iff'
-
-中文:
-定义 orderIsoOfIso
-  签名: {Y : SSet.{u}} {B : Y.子复形} (e : X ≅ Y)
-  定义体: N.mk' (SSet.N.orderIsoOfIso e x.toN) (by subst hA; exact x.notMem)
-  invFun y := N.mk' ((SSet.N.orderIsoOfIso e).symm y.toN) (by
-    obtain rfl : A.preimage e.inv = B := by aesop
-    exact y.notMem)
-  left_inv _ := by aesop
-  right_inv _ := by aesop
-  map_rel_iff' {_ _} := (SSet.N.orderIsoOfIso e).map_rel_iff'
-
-Depends on / 依赖: N.mk, SSet.N.orderIsoOfIso, notMem, orderIsoOfIso, x.notMem, x.toN
+--- 原说明 ---
+The bijection `A.N ≃ B.N` on nondegenerate simplices not belonging
+to a certain subcomplex that is induced by an isomorphism `X ≅ Y` of
+simplicial sets which maps `A : X.Subcomplex` to `B : Y.Subcomplex`.
 -/
 def orderIsoOfIso {Y : SSet.{u}} {B : Y.Subcomplex} (e : X ≅ Y)
     (hA : B.preimage e.hom = A) : A.N ≃o B.N where
@@ -378,32 +274,34 @@ def orderIsoOfIso {Y : SSet.{u}} {B : Y.Subcomplex} (e : X ≅ Y)
 
 end N
 
-/--
-lemma `existsN` / 引理 `existsN`
-
-English:
-lemma existsN
-  statement: {X : SSet.{u}} {n : Nat} (s : X _⦋n⦌) {A : X.Subcomplex}
-  proof: by
-  refine ⟨⟨(S.mk s).toN, fun h => hs ?_⟩, ⟨(S.mk s).toNπ, inferInstance, S.map_toNπ_op_apply _⟩⟩
-  simp only [← ofSimplex_le_iff] at h ⊢
-  simpa using h
-
-中文:
-引理 存在N
-  结论: {X : SSet.{u}} {n : 自然数} (s : X _⦋n⦌) {A : X.子复形}
-  证明: by
-  refine ⟨⟨(S.mk s).toN, fun h => hs ?_⟩, ⟨(S.mk s).toNπ, inferInstance, S.map_toNπ_op_apply _⟩⟩
-  simp only [← ofSimplex_le_iff] at h ⊢
-  simpa using h
-
-Depends on / 依赖: S.map_toN, S.mk, ofSimplex_le_iff
+/-
+**SSet.Subcomplex.existsN** 是 Mathlib 中的一个引理，位于命名空间 `SSet.Subcomplex`。
+形式化陈述：existsN {X : SSet.{u}} {n : Nat} (s : X _⦋n⦌) {A : X.Subcomplex} (hs : s ∉
+ A.obj _) : exists (x : A.N) (f : ⦋n⦌ ⟶ ⦋x.dim⦌), Epi f ∧ X.map f.op x.simplex =
+ s
+参数：s : X _⦋n⦌；hs : s ∉ A.obj _。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SSet.Subcomplex.N.mk'`：mk'_surjective (s : A.N) : exists (t : X.N) (ht :
+ t.simplex ∉ A.obj _), s = mk' t ht
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SSet.S.subcomplex_toN`：subcomplex_toN (x : X.S) : x.toN.subcomplex = x.s
+ubcomplex
+· 使用定理 `SSet.S.instEpiSimplexCategoryToNπ`：∀ {X : _root_.SSet} (x : X.S), Catego
+ryTheory.Epi x.toNπ
+· 使用引理 `SSet.S.map_toNπ_op_apply`：map_toNπ_op_apply (x : X.S) : X.map x.toNπ.op 
+x.toN.simplex = x.simplex
 -/
-lemma existsN {X : SSet.{u}} {n : Nat} (s : X _⦋n⦌) {A : X.Subcomplex}
+lemma existsN {X : SSet.{u}} {n : ℕ} (s : X _⦋n⦌) {A : X.Subcomplex}
     (hs : s ∉ A.obj _) :
-    exists (x : A.N) (f : ⦋n⦌ ⟶ ⦋x.dim⦌), Epi f ∧ X.map f.op x.simplex = s := by
-  refine ⟨⟨(S.mk s).toN, fun h => hs ?_⟩, ⟨(S.mk s).toNπ, inferInstance, S.map_toNπ_op_apply _⟩⟩
+    ∃ (x : A.N) (f : ⦋n⦌ ⟶ ⦋x.dim⦌), Epi f ∧ X.map f.op x.simplex = s := by
+  refine ⟨⟨(S.mk s).toN, fun h ↦ hs ?_⟩, ⟨(S.mk s).toNπ, inferInstance, S.map_toNπ_op_apply _⟩⟩
   simp only [← ofSimplex_le_iff] at h ⊢
   simpa using h
 
 end SSet.Subcomplex
+

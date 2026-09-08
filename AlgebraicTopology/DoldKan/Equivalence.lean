@@ -138,44 +138,30 @@ namespace DoldKan
 
 open AlgebraicTopology.DoldKan
 
-/--
-Definition of `N` / `N` 的定义
+/-- The functor `N` for the equivalence is `normalizedMooreComplex A` -/
+/-
+**CategoryTheory.Abelian.DoldKan.N** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Abe
+lian.DoldKan`。
+形式化陈述：N : SimplicialObject A ⥤ ChainComplex A Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition N
-  signature: : SimplicialObject A ⥤ ChainComplex A Nat
-  body: AlgebraicTopology.normalizedMooreComplex A
-
-中文:
-定义 N
-  签名: : SimplicialObject A ⥤ 链复形 A 自然数
-  定义体: AlgebraicTopology.normalizedMooreComplex A
-
-Depends on / 依赖: AlgebraicTopology, AlgebraicTopology.normalizedMooreComplex, normalizedMooreComplex
+--- 原说明 ---
+The functor `N` for the equivalence is `normalizedMooreComplex A`
 -/
-def N : SimplicialObject A ⥤ ChainComplex A Nat :=
+def N : SimplicialObject A ⥤ ChainComplex A ℕ :=
   AlgebraicTopology.normalizedMooreComplex A
 
-/--
-Definition of `Γ` / `Γ` 的定义
+/-- The functor `Γ` for the equivalence is the same as in the pseudoabelian case. -/
+/-
+**CategoryTheory.Abelian.DoldKan.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Abel
+ian.DoldKan`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Γ
-  signature: : ChainComplex A Nat ⥤ SimplicialObject A
-  body: Idempotents.DoldKan.Γ
-
-#adaptation_note
-
-中文:
-定义 Γ
-  签名: : 链复形 A 自然数 ⥤ SimplicialObject A
-  定义体: Idempotents.DoldKan.Γ
-
-#adaptation_note
-
-Depends on / 依赖: DoldKan, Idempotents, Idempotents.DoldKan
+--- 原说明 ---
+The functor `Γ` for the equivalence is the same as in the pseudoabelian case.
 -/
-def Γ : ChainComplex A Nat ⥤ SimplicialObject A :=
+def Γ : ChainComplex A ℕ ⥤ SimplicialObject A :=
   Idempotents.DoldKan.Γ
 
 #adaptation_note
@@ -184,36 +170,19 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- The comparison isomorphism between `normalizedMooreComplex A` and
 the functor `Idempotents.DoldKan.N` from the pseudoabelian case -/
 @[simps!]
-/--
-Definition of `comparisonN` / `comparisonN` 的定义
+/-
+**CategoryTheory.Abelian.DoldKan.comparisonN** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Abelian.DoldKan`。
+形式化陈述：comparisonN : (N : SimplicialObject A ⥤ _) ≅ Idempotents.DoldKan.N
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Idempotents.isIdempotentComplete_of_abelian`：∀ (D : Type 
+u_2) [inst : CategoryTheory.Category.{v_2, u_2} D] [CategoryTheory.Abelian D],  
+ CategoryTheory.IsIdempotentComplete D
 
-English:
-definition comparisonN
-  signature: : (N : SimplicialObject A ⥤ _) ≅ Idempotents.DoldKan.N
-  body: calc
-    N ≅ N ⋙ 𝟭 _ := Functor.leftUnitor N
-    _ ≅ N ⋙ (toKaroubiEquivalence _).functor ⋙ (toKaroubiEquivalence _).inverse :=
-          Functor.isoWhiskerLeft _ (toKaroubiEquivalence _).unitIso
-    _ ≅ (N ⋙ (toKaroubiEquivalence _).functor) ⋙ (toKaroubiEquivalence _).inverse :=
-          Iso.refl _
-    _ ≅ N₁ ⋙ (toKaroubiEquivalence _).inverse :=
-          Functor.isoWhiskerRight (N₁_iso_normalizedMooreComplex_comp_toKaroubi A).symm _
-    _ ≅ Idempotents.DoldKan.N := Iso.refl _
-
-中文:
-定义 comparisonN
-  签名: : (N : SimplicialObject A ⥤ _) ≅ Idempotents.DoldKan.N
-  定义体: calc
-    N ≅ N ⋙ 𝟭 _ := Functor.leftUnitor N
-    _ ≅ N ⋙ (toKaroubiEquivalence _).functor ⋙ (toKaroubiEquivalence _).inverse :=
-          Functor.isoWhiskerLeft _ (toKaroubiEquivalence _).unitIso
-    _ ≅ (N ⋙ (toKaroubiEquivalence _).functor) ⋙ (toKaroubiEquivalence _).inverse :=
-          Iso.refl _
-    _ ≅ N₁ ⋙ (toKaroubiEquivalence _).inverse :=
-          Functor.isoWhiskerRight (N₁_iso_normalizedMooreComplex_comp_toKaroubi A).symm _
-    _ ≅ Idempotents.DoldKan.N := Iso.refl _
-
-Depends on / 依赖: DoldKan, Functor, Functor.isoWhiskerLeft, Functor.isoWhiskerRight, Functor.leftUnitor, Idempotents, Idempotents.DoldKan.N, Iso.refl, functor, inverse, isoWhiskerLeft, isoWhiskerRight, leftUnitor, toKaroubiEquivalence, unitIso
+--- 原说明 ---
+The comparison isomorphism between `normalizedMooreComplex A` and
+the functor `Idempotents.DoldKan.N` from the pseudoabelian case
 -/
 def comparisonN : (N : SimplicialObject A ⥤ _) ≅ Idempotents.DoldKan.N :=
   calc
@@ -228,36 +197,29 @@ def comparisonN : (N : SimplicialObject A ⥤ _) ≅ Idempotents.DoldKan.N :=
 
 /-- The Dold-Kan equivalence for abelian categories -/
 @[simps! functor]
-/--
-Definition of `equivalence` / `equivalence` 的定义
+/-
+**CategoryTheory.Abelian.DoldKan.equivalence** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Abelian.DoldKan`。
+形式化陈述：equivalence : SimplicialObject A ≌ ChainComplex A Nat
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Idempotents.isIdempotentComplete_of_abelian`：∀ (D : Type 
+u_2) [inst : CategoryTheory.Category.{v_2, u_2} D] [CategoryTheory.Abelian D],  
+ CategoryTheory.IsIdempotentComplete D
 
-English:
-definition equivalence
-  signature: : SimplicialObject A ≌ ChainComplex A Nat
-  body: (Idempotents.DoldKan.equivalence (C := A)).changeFunctor comparisonN.symm
-
-中文:
-定义 equivalence
-  签名: : SimplicialObject A ≌ 链复形 A 自然数
-  定义体: (Idempotents.DoldKan.equivalence (C := A)).changeFunctor comparisonN.symm
-
-Depends on / 依赖: DoldKan, Idempotents, Idempotents.DoldKan.equivalence, changeFunctor, comparisonN, comparisonN.symm, equivalence
+--- 原说明 ---
+The Dold-Kan equivalence for abelian categories
 -/
-def equivalence : SimplicialObject A ≌ ChainComplex A Nat :=
+def equivalence : SimplicialObject A ≌ ChainComplex A ℕ :=
   (Idempotents.DoldKan.equivalence (C := A)).changeFunctor comparisonN.symm
-
-/--
-theorem `equivalence_inverse` / 定理 `equivalence_inverse`
-
-English:
-theorem equivalence_inverse
-  statement: (equivalence : SimplicialObject A ≌ _).inverse = Γ
-  proof: rfl
-
-中文:
-定理 equivalence_inverse
-  结论: (equivalence : SimplicialObject A ≌ _).inverse = Γ
-  证明: rfl
+/-
+**CategoryTheory.Abelian.DoldKan.equivalence_inverse** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Abelian.DoldKan`。
+形式化陈述：equivalence_inverse : (equivalence : SimplicialObject A ≌ _).inverse = Γ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
 theorem equivalence_inverse : (equivalence : SimplicialObject A ≌ _).inverse = Γ :=
   rfl
@@ -267,3 +229,4 @@ end DoldKan
 end Abelian
 
 end CategoryTheory
+

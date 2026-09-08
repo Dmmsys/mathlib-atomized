@@ -36,65 +36,47 @@ namespace Functor
 
 variable (F : J ⥤ Type w₀)
 
-/--
-lemma `eqvGen_colimitTypeRel_iff_of_isFiltered` / 引理 `eqvGen_colimitTypeRel_iff_of_isFiltered`
-
-English:
-lemma eqvGen_colimitTypeRel_iff_of_isFiltered
-  proof: by
-  constructor
-  · intro h
-    induction h with
-    | rel x y h =>
-      obtain ⟨f, h⟩ := h
-      exact ⟨y.1, f, 𝟙 _, by simpa using h.symm⟩
-    | refl x => exact ⟨x.1, 𝟙 _, 𝟙 _, rfl⟩
-    | symm _ _ _ h =>
-      obtain ⟨k, f, g, h⟩ := h
-      exact ⟨k, g, f, h.symm⟩
-    | trans x y z _ _ h h' =>
-      obtain ⟨k, f, g, h⟩ := h
-      obtain ⟨k', f', g', h'⟩ := h'
-      obtain ⟨l, a, b, h''⟩ := span g f'
-      refine ⟨l, f ≫ a, g' ≫ b, ?_⟩
-      simp only [map_comp, comp_apply, h, ← h']
-      simp [← comp_apply, ← map_comp, h'']
-  · rintro ⟨k, f, f', h⟩
-    apply Relation.EqvGen.trans (y := ⟨k, F.map f' y.2⟩)
-    · exact .rel _ _ ⟨f, by rw [← h]⟩
-    · exact .symm _ _ (.rel _ _ ⟨f', rfl⟩)
-
-中文:
-引理 eqvGen_colimitTypeRel_iff_of_isFiltered
-  证明: by
-  constructor
-  · intro h
-    induction h with
-    | rel x y h =>
-      obtain ⟨f, h⟩ := h
-      exact ⟨y.1, f, 𝟙 _, by simpa using h.symm⟩
-    | refl x => exact ⟨x.1, 𝟙 _, 𝟙 _, rfl⟩
-    | symm _ _ _ h =>
-      obtain ⟨k, f, g, h⟩ := h
-      exact ⟨k, g, f, h.symm⟩
-    | trans x y z _ _ h h' =>
-      obtain ⟨k, f, g, h⟩ := h
-      obtain ⟨k', f', g', h'⟩ := h'
-      obtain ⟨l, a, b, h''⟩ := span g f'
-      refine ⟨l, f ≫ a, g' ≫ b, ?_⟩
-      simp only [map_comp, comp_apply, h, ← h']
-      simp [← comp_apply, ← map_comp, h'']
-  · rintro ⟨k, f, f', h⟩
-    apply Relation.EqvGen.trans (y := ⟨k, F.map f' y.2⟩)
-    · exact .rel _ _ ⟨f, by rw [← h]⟩
-    · exact .symm _ _ (.rel _ _ ⟨f', rfl⟩)
-
-Depends on / 依赖: EqvGen, Relation, Relation.EqvGen.trans, comp_apply, h.symm, map_comp
+/-
+**CategoryTheory.Functor.eqvGen_colimitTypeRel_iff_of_isFiltered** 是 Mathlib 中的一
+个引理，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：eqvGen_colimitTypeRel_iff_of_isFiltered (x y : (j : J) × (F.obj j)) : Rela
+tion.EqvGen F.ColimitTypeRel x y ↔ exists (k : J) (f : x.1 ⟶ k) (g : y.1 ⟶ k), F
+.map f x.2 = F.map g y.2
+参数：x y : (j : J) × (F.obj j)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `CategoryTheory.types_congr_hom`：types_congr_hom {X Y : Type u} {f g : X 
+⟶ Y} (h : f = g) (x : X) : f x = g x
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.id_apply`：∀ {C : Type u} [inst : CategoryTheory.Category.
+{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → FunL
+ike (FC X Y) …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.IsFiltered.span`：span {i j j' : C} (f : i ⟶ j) (f' : i ⟶ 
+j') : exists (k : C) (g : j ⟶ k) (g' : j' ⟶ k), f ≫ g = f' ≫ g'
+· 使用定理 `CategoryTheory.IsFiltered.toIsFilteredOrEmpty`：∀ {C : Type u} {inst : Ca
+tegoryTheory.Category.{v, u} C} [self : CategoryTheory.IsFiltered C],   Category
+Theory.IsFilteredOrEmpty C
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma eqvGen_colimitTypeRel_iff_of_isFiltered
     (x y : (j : J) × (F.obj j)) :
     Relation.EqvGen F.ColimitTypeRel x y ↔
-      exists (k : J) (f : x.1 ⟶ k) (g : y.1 ⟶ k), F.map f x.2 = F.map g y.2 := by
+      ∃ (k : J) (f : x.1 ⟶ k) (g : y.1 ⟶ k), F.map f x.2 = F.map g y.2 := by
   constructor
   · intro h
     induction h with
@@ -116,63 +98,28 @@ lemma eqvGen_colimitTypeRel_iff_of_isFiltered
     apply Relation.EqvGen.trans (y := ⟨k, F.map f' y.2⟩)
     · exact .rel _ _ ⟨f, by rw [← h]⟩
     · exact .symm _ _ (.rel _ _ ⟨f', rfl⟩)
-
-/--
-lemma `ιColimitType_eq_iff_of_isFiltered` / 引理 `ιColimitType_eq_iff_of_isFiltered`
-
-English:
-lemma ιColimitType_eq_iff_of_isFiltered
-  given: {j j' : J} (x : F.obj j) (y : F.obj j')
-  proof: by
-  rw [ιColimitType_eq_iff]; rw [eqvGen_colimitTypeRel_iff_of_isFiltered]
-
-中文:
-引理 ιColimitType_eq_iff_of_isFiltered
-  条件: {j j' : J} (x : F.obj j) (y : F.obj j')
-  证明: by
-  rw [ιColimitType_eq_iff]; rw [eqvGen_colimitTypeRel_iff_of_isFiltered]
-
-Depends on / 依赖: eqvGen_colimitTypeRel_iff_of_isFiltered
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ιColimitType_eq_iff_of_isFiltered {j j' : J} (x : F.obj j) (y : F.obj j') :
     F.ιColimitType j x = F.ιColimitType j' y ↔
-      exists (k : J) (f : j ⟶ k) (f' : j' ⟶ k), F.map f x = F.map f' y := by
-  rw [ιColimitType_eq_iff]; rw [eqvGen_colimitTypeRel_iff_of_isFiltered]
+      ∃ (k : J) (f : j ⟶ k) (f' : j' ⟶ k), F.map f x = F.map f' y := by
+  rw [ιColimitType_eq_iff, eqvGen_colimitTypeRel_iff_of_isFiltered]
 
-/--
-lemma `ιColimitType_eq_iff_of_isFiltered'` / 引理 `ιColimitType_eq_iff_of_isFiltered'`
+/-- More precise variant of the lemma `ιColimitType_eq_iff_of_isFiltered`
+in the case both `x` and `y` are in the same type `F.obj j`. -/
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma ιColimitType_eq_iff_of_isFiltered'
-  given: {j : J} (x y : F.obj j)
-  proof: by
-  rw [ιColimitType_eq_iff_of_isFiltered]
-  constructor
-  · rintro ⟨k, f, f', h⟩
-    refine ⟨coeq f f', f ≫ coeqHom f f', ?_⟩
-    nth_rw 2 [coeq_condition]
-    simp [h]
-  · rintro ⟨k, f, h⟩
-    exact ⟨k, f, f, h⟩
-
-中文:
-引理 ιColimitType_eq_iff_of_isFiltered'
-  条件: {j : J} (x y : F.obj j)
-  证明: by
-  rw [ιColimitType_eq_iff_of_isFiltered]
-  constructor
-  · rintro ⟨k, f, f', h⟩
-    refine ⟨coeq f f', f ≫ coeqHom f f', ?_⟩
-    nth_rw 2 [coeq_condition]
-    simp [h]
-  · rintro ⟨k, f, h⟩
-    exact ⟨k, f, f, h⟩
-
-Depends on / 依赖: coeqHom, coeq_condition, nth_rw
+--- 原说明 ---
+More precise variant of the lemma `ιColimitType_eq_iff_of_isFiltered`
+in the case both `x` and `y` are in the same type `F.obj j`.
 -/
 lemma ιColimitType_eq_iff_of_isFiltered' {j : J} (x y : F.obj j) :
     F.ιColimitType j x = F.ιColimitType j y ↔
-      exists (k : J) (f : j ⟶ k), F.map f x = F.map f y := by
+      ∃ (k : J) (f : j ⟶ k), F.map f x = F.map f y := by
   rw [ιColimitType_eq_iff_of_isFiltered]
   constructor
   · rintro ⟨k, f, f', h⟩
@@ -186,41 +133,29 @@ namespace CoconeTypes
 
 variable {F} (c : CoconeTypes.{w₁} F)
 
-/--
-lemma `descColimitType_injective_iff_of_isFiltered` / 引理 `descColimitType_injective_iff_of_isFiltered`
-
-English:
-lemma descColimitType_injective_iff_of_isFiltered
-  proof: by
-  constructor
-  · intro h j j' x x' eq
-    have : F.ιColimitType j x = F.ιColimitType j' x' := h eq
-    rwa [ιColimitType_eq_iff_of_isFiltered] at this
-  · intro h x x' eq
-    obtain ⟨i, x, rfl⟩ := F.ιColimitType_jointly_surjective x
-    obtain ⟨i', x', rfl⟩ := F.ιColimitType_jointly_surjective x'
-    simp only [descColimitType_ιColimitType_apply] at eq
-    obtain ⟨k, f, f', eq⟩ := h _ _ _ _ eq
-    rw [← F.ιColimitType_map f x]; rw [eq]; rw [F.ιColimitType_map]
-
-中文:
-引理 descColimitType_injective_iff_of_isFiltered
-  证明: by
-  constructor
-  · intro h j j' x x' eq
-    have : F.ιColimitType j x = F.ιColimitType j' x' := h eq
-    rwa [ιColimitType_eq_iff_of_isFiltered] at this
-  · intro h x x' eq
-    obtain ⟨i, x, rfl⟩ := F.ιColimitType_jointly_surjective x
-    obtain ⟨i', x', rfl⟩ := F.ιColimitType_jointly_surjective x'
-    simp only [descColimitType_ιColimitType_apply] at eq
-    obtain ⟨k, f, f', eq⟩ := h _ _ _ _ eq
-    rw [← F.ιColimitType_map f x]; rw [eq]; rw [F.ιColimitType_map]
+/-
+**CategoryTheory.Functor.CoconeTypes.descColimitType_injective_iff_of_isFiltered
+** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Functor.CoconeTypes`。
+形式化陈述：descColimitType_injective_iff_of_isFiltered : Function.Injective (F.descCo
+limitType c) ↔ forall (j j' : J) (x : F.obj j) (x' : F.obj j'), c.ι j x = c.ι j'
+ x' -> exists (k : J) (f : j ⟶ k) (f' : j' ⟶ k), F.map f x = F.map f' x'
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Functor.ιColimitType_eq_iff_of_isFiltered`：ιColimitType_e
+q_iff_of_isFiltered {j j' : J} (x : F.obj j) (y : F.obj j') : F.ιColimitType j x
+ = F.ιColimitType j' y ↔ exists (k : J) (f : j…
+· 使用引理 `CategoryTheory.Functor.ιColimitType_jointly_surjective`：ιColimitType_joi
+ntly_surjective (t : F.ColimitType) : exists j x, F.ιColimitType j x = t
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.Functor.ιColimitType_map`：ιColimitType_map {j j' : J} (f 
+: j ⟶ j') (x : F.obj j) : F.ιColimitType j' (F.map f x) = F.ιColimitType j x
 -/
 lemma descColimitType_injective_iff_of_isFiltered :
     Function.Injective (F.descColimitType c) ↔
-      forall (j j' : J) (x : F.obj j) (x' : F.obj j'), c.ι j x = c.ι j' x' ->
-        exists (k : J) (f : j ⟶ k) (f' : j' ⟶ k), F.map f x = F.map f' x' := by
+      ∀ (j j' : J) (x : F.obj j) (x' : F.obj j'), c.ι j x = c.ι j' x' →
+        ∃ (k : J) (f : j ⟶ k) (f' : j' ⟶ k), F.map f x = F.map f' x' := by
   constructor
   · intro h j j' x x' eq
     have : F.ιColimitType j x = F.ιColimitType j' x' := h eq
@@ -230,55 +165,59 @@ lemma descColimitType_injective_iff_of_isFiltered :
     obtain ⟨i', x', rfl⟩ := F.ιColimitType_jointly_surjective x'
     simp only [descColimitType_ιColimitType_apply] at eq
     obtain ⟨k, f, f', eq⟩ := h _ _ _ _ eq
-    rw [← F.ιColimitType_map f x]; rw [eq]; rw [F.ιColimitType_map]
+    rw [← F.ιColimitType_map f x, eq, F.ιColimitType_map]
 
-/--
-lemma `descColimitType_injective_iff_of_isFiltered'` / 引理 `descColimitType_injective_iff_of_isFiltered'`
+/-- Variant of `descColimitType_injective_iff_of_isFiltered` where we
+assume both elements `x` and `x'` are in the same type `F.obj j`. -/
+/-
+**CategoryTheory.Functor.CoconeTypes.descColimitType_injective_iff_of_isFiltered
+'** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Functor.CoconeTypes`。
+形式化陈述：descColimitType_injective_iff_of_isFiltered' : Function.Injective (F.descC
+olimitType c) ↔ forall (j : J) (x x' : F.obj j), c.ι j x = c.ι j x' -> exists (k
+ : J) (f : j ⟶ k), F.map f x = F.map f x'
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Functor.CoconeTypes.descColimitType_injective_iff_of_isFi
+ltered`：descColimitType_injective_iff_of_isFiltered : Function.Injective (F.desc
+ColimitType c) ↔ forall (j j' : J) (x : F.obj j) (x' : F.obj j'), c.…
+· 使用定理 `CategoryTheory.IsFiltered.toIsFilteredOrEmpty`：∀ {C : Type u} {inst : Ca
+tegoryTheory.Category.{v, u} C} [self : CategoryTheory.IsFiltered C],   Category
+Theory.IsFilteredOrEmpty C
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `CategoryTheory.types_congr_hom`：types_congr_hom {X Y : Type u} {f g : X 
+⟶ Y} (h : f = g) (x : X) : f x = g x
+· 使用定理 `CategoryTheory.IsFiltered.coeq_condition`：coeq_condition {j j' : C} (f f
+' : j ⟶ j') : f ≫ coeqHom f f' = f' ≫ coeqHom f f'
+· 使用引理 `CategoryTheory.Functor.CoconeTypes.ι_naturality_apply`：ι_naturality_appl
+y (c : CoconeTypes.{w₁} F) {j j' : J} (f : j ⟶ j') (x : F.obj j) : c.ι j' (F.map
+ f x) = c.ι j x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma descColimitType_injective_iff_of_isFiltered'
-  proof: by
-  rw [descColimitType_injective_iff_of_isFiltered]
-  constructor
-  · intro h j x x' eq
-    obtain ⟨k, f, f', eq⟩ := h _ _ _ _ eq
-    refine ⟨coeq f f', f ≫ coeqHom f f', ?_⟩
-    rw [map_comp]; rw [comp_apply]; rw [eq]
-    simp only [← comp_apply, ← map_comp]
-    rw [coeq_condition]
-  · intro h j j' x x' eq
-    obtain ⟨k, g, eq⟩ := h (max j j') (F.map (leftToMax _ _) x)
-      (F.map (rightToMax _ _) x') (by simpa only [c.ι_naturality_apply])
-    exact ⟨k, leftToMax _ _ ≫ g, rightToMax _ _ ≫ g, by simp [eq]⟩
-
-中文:
-引理 descColimitType_injective_iff_of_isFiltered'
-  证明: by
-  rw [descColimitType_injective_iff_of_isFiltered]
-  constructor
-  · intro h j x x' eq
-    obtain ⟨k, f, f', eq⟩ := h _ _ _ _ eq
-    refine ⟨coeq f f', f ≫ coeqHom f f', ?_⟩
-    rw [map_comp]; rw [comp_apply]; rw [eq]
-    simp only [← comp_apply, ← map_comp]
-    rw [coeq_condition]
-  · intro h j j' x x' eq
-    obtain ⟨k, g, eq⟩ := h (max j j') (F.map (leftToMax _ _) x)
-      (F.map (rightToMax _ _) x') (by simpa only [c.ι_naturality_apply])
-    exact ⟨k, leftToMax _ _ ≫ g, rightToMax _ _ ≫ g, by simp [eq]⟩
-
-Depends on / 依赖: F.map, coeqHom, coeq_condition, comp_apply, descColimitType_injective_iff_of_isFiltered, leftToMax, map_comp, rightToMax
+--- 原说明 ---
+Variant of `descColimitType_injective_iff_of_isFiltered` where we
+assume both elements `x` and `x'` are in the same type `F.obj j`.
 -/
 lemma descColimitType_injective_iff_of_isFiltered' :
     Function.Injective (F.descColimitType c) ↔
-      forall (j : J) (x x' : F.obj j), c.ι j x = c.ι j x' ->
-        exists (k : J) (f : j ⟶ k), F.map f x = F.map f x' := by
+      ∀ (j : J) (x x' : F.obj j), c.ι j x = c.ι j x' →
+        ∃ (k : J) (f : j ⟶ k), F.map f x = F.map f x' := by
   rw [descColimitType_injective_iff_of_isFiltered]
   constructor
   · intro h j x x' eq
     obtain ⟨k, f, f', eq⟩ := h _ _ _ _ eq
     refine ⟨coeq f f', f ≫ coeqHom f f', ?_⟩
-    rw [map_comp]; rw [comp_apply]; rw [eq]
+    rw [map_comp, comp_apply, eq]
     simp only [← comp_apply, ← map_comp]
     rw [coeq_condition]
   · intro h j j' x x' eq
@@ -291,3 +230,4 @@ end CoconeTypes
 end Functor
 
 end CategoryTheory
+

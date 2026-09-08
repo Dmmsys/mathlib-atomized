@@ -59,158 +59,19 @@ syntax (name := recall?) "recall? " ident : command
 
 open Lean Meta Elab Command Term
 
-/--
-Definition of `mkRecallSuggestion` / `mkRecallSuggestion` 的定义
+/-- Format a `recall` suggestion string for the given constant name.
+Uses `delabConstWithSignature` with `universes := false` to produce the idiomatic
+decomposed binder form without universe parameters on the name. -/
+/-
+**Mathlib.Tactic.Recall.mkRecallSuggestion** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Ta
+ctic.Recall`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkRecallSuggestion
-  signature: (declName : Name)
-  body: do
-  let decl ← getConstInfo declName
-  let e := Expr.const declName (decl.levelParams.map Level.param)
-  let (stx, _) ← PrettyPrinter.delabCore e
-    (delab := PrettyPrinter.Delaborator.delabConstWithSignature (universes := false))
-  let sig := toString (← PrettyPrinter.ppTerm ⟨stx⟩)
-  return s!"recall {sig}"
-
-elab_rules : command
-  | `(recall?%$tk $id) => withoutModifyingEnv do
-    let declName := id.getId
-    addConstInfo id declName
-    let _ ← getConstInfo declName
-let suggestion ← liftTermElabM mkRecallSuggestion declName
-liftTermElabM
-      Tactic.TryThis.addSuggestion tk (suggestion : String) (origSpan? := ← getRef)
-
-elab_rules : command
-  | `($[$_doc?:docComment]? recall $id $sig:optDeclSig $[$val?]?) =>
-    -- `recall` doesn't introduce new definitions, so suppress the unused variable linter.
-withScope (fun sc => { sc with opts := sc.opts.set `linter.unusedVariables false })
-    withoutModifyingEnv do
-    let declName ← resolveGlobalConstNoOverload id
-    addConstInfo id declName
-    let info ← getConstInfo declName
-let declConst : Expr := mkConst declName info.levelParams.map Level.param
-    let stxRef ← getRef
-    let recallName := Name.mkSimple
-      s!"_recall_{(← liftTermElabM Lean.mkFreshId)}"
-    let newId := mkIdentFrom id recallName
-    if let some val := val? then
-      let some infoVal := info.value? (allowOpaque := true)
-        | throwErrorAt val "constant '{declName}' has no defined value"
-elabCommand ← `(noncomputable def $newId $sig:optDeclSig $val)
-      let ns ← getCurrNamespace
-      let some newInfo := (← getEnv).find? (ns ++ recallName)
-        | return -- def already threw
-      liftTermElabM do
-        let mvs ← newInfo.levelParams.mapM fun _ => mkFreshLevelMVar
-        let newType := newInfo.type.instantiateLevelParams newInfo.levelParams mvs
-        unless (← isDefEq info.type newType) do
-          let suggestion ← mkRecallSuggestion declName
-          Tactic.TryThis.addSuggestion stxRef (suggestion : String) (origSpan? := stxRef)
-          throwTypeMismatchError none info.type newInfo.type declConst
-        let newVal := newInfo.value?.get!.instantiateLevelParams newInfo.levelParams mvs
-        unless (← isDefEq infoVal newVal) do
-          let err := m!"\
-            value mismatch{indentExpr declConst}\nhas value{indentExpr newVal}\n\
-            but is expected to have value{indentExpr infoVal}"
-          throwErrorAt val err
-    else
-      let (binders, type?) := expandOptDeclSig sig
-      if let some type := type? then
-        runTermElabM fun vars => do
-          withAutoBoundImplicit do
-            elabBinders binders.getArgs fun xs => do
-              let xs ← addAutoBoundImplicits xs none
-              let type ← elabType type
-              Term.synthesizeSyntheticMVarsNoPostponing
-              let type ← mkForallFVars xs type
-              let type ← mkForallFVars vars type (usedOnly := true)
-              let infoType ← do
-                let mvs ← info.levelParams.mapM fun _ => mkFreshLevelMVar
-pure info.type.instantiateLevelParams info.levelParams mvs
-              unless (← isDefEq infoType type) do
-                let suggestion ← mkRecallSuggestion declName
-                Tactic.TryThis.addSuggestion stxRef (suggestion : String) (origSpan? := stxRef)
-                throwTypeMismatchError none info.type type declConst
-      else
-        unless binders.getNumArgs == 0 do
-          throwError "expected type after ':'"
-
-中文:
-定义 mkRecallSuggestion
-  签名: (declName : Name)
-  定义体: do
-  let decl ← getConstInfo declName
-  let e := Expr.const declName (decl.levelParams.map Level.param)
-  let (stx, _) ← PrettyPrinter.delabCore e
-    (delab := PrettyPrinter.Delaborator.delabConstWithSignature (universes := false))
-  let sig := toString (← PrettyPrinter.ppTerm ⟨stx⟩)
-  return s!"recall {sig}"
-
-elab_rules : command
-  | `(recall?%$tk $id) => withoutModifyingEnv do
-    let declName := id.getId
-    addConstInfo id declName
-    let _ ← getConstInfo declName
-let suggestion ← liftTermElabM mkRecallSuggestion declName
-liftTermElabM
-      Tactic.TryThis.addSuggestion tk (suggestion : String) (origSpan? := ← getRef)
-
-elab_rules : command
-  | `($[$_doc?:docComment]? recall $id $sig:optDeclSig $[$val?]?) =>
-    -- `recall` doesn't introduce new definitions, so suppress the unused variable linter.
-withScope (fun sc => { sc with opts := sc.opts.set `linter.unusedVariables false })
-    withoutModifyingEnv do
-    let declName ← resolveGlobalConstNoOverload id
-    addConstInfo id declName
-    let info ← getConstInfo declName
-let declConst : Expr := mkConst declName info.levelParams.map Level.param
-    let stxRef ← getRef
-    let recallName := Name.mkSimple
-      s!"_recall_{(← liftTermElabM Lean.mkFreshId)}"
-    let newId := mkIdentFrom id recallName
-    if let some val := val? then
-      let some infoVal := info.value? (allowOpaque := true)
-        | throwErrorAt val "constant '{declName}' has no defined value"
-elabCommand ← `(noncomputable def $newId $sig:optDeclSig $val)
-      let ns ← getCurrNamespace
-      let some newInfo := (← getEnv).find? (ns ++ recallName)
-        | return -- def already threw
-      liftTermElabM do
-        let mvs ← newInfo.levelParams.mapM fun _ => mkFreshLevelMVar
-        let newType := newInfo.type.instantiateLevelParams newInfo.levelParams mvs
-        unless (← isDefEq info.type newType) do
-          let suggestion ← mkRecallSuggestion declName
-          Tactic.TryThis.addSuggestion stxRef (suggestion : String) (origSpan? := stxRef)
-          throwTypeMismatchError none info.type newInfo.type declConst
-        let newVal := newInfo.value?.get!.instantiateLevelParams newInfo.levelParams mvs
-        unless (← isDefEq infoVal newVal) do
-          let err := m!"\
-            value mismatch{indentExpr declConst}\nhas value{indentExpr newVal}\n\
-            but is expected to have value{indentExpr infoVal}"
-          throwErrorAt val err
-    else
-      let (binders, type?) := expandOptDeclSig sig
-      if let some type := type? then
-        runTermElabM fun vars => do
-          withAutoBoundImplicit do
-            elabBinders binders.getArgs fun xs => do
-              let xs ← addAutoBoundImplicits xs none
-              let type ← elabType type
-              Term.synthesizeSyntheticMVarsNoPostponing
-              let type ← mkForallFVars xs type
-              let type ← mkForallFVars vars type (usedOnly := true)
-              let infoType ← do
-                let mvs ← info.levelParams.mapM fun _ => mkFreshLevelMVar
-pure info.type.instantiateLevelParams info.levelParams mvs
-              unless (← isDefEq infoType type) do
-                let suggestion ← mkRecallSuggestion declName
-                Tactic.TryThis.addSuggestion stxRef (suggestion : String) (origSpan? := stxRef)
-                throwTypeMismatchError none info.type type declConst
-      else
-        unless binders.getNumArgs == 0 do
-          throwError "expected type after ':'"
+--- 原说明 ---
+Format a `recall` suggestion string for the given constant name.
+Uses `delabConstWithSignature` with `universes := false` to produce the idiomati
+c
+decomposed binder form without universe parameters on the name.
 -/
 private def mkRecallSuggestion (declName : Name) : MetaM String := do
   let decl ← getConstInfo declName
@@ -225,19 +86,19 @@ elab_rules : command
     let declName := id.getId
     addConstInfo id declName
     let _ ← getConstInfo declName
-let suggestion ← liftTermElabM mkRecallSuggestion declName
-liftTermElabM
+    let suggestion ← liftTermElabM <| mkRecallSuggestion declName
+    liftTermElabM <|
       Tactic.TryThis.addSuggestion tk (suggestion : String) (origSpan? := ← getRef)
 
 elab_rules : command
   | `($[$_doc?:docComment]? recall $id $sig:optDeclSig $[$val?]?) =>
     -- `recall` doesn't introduce new definitions, so suppress the unused variable linter.
-withScope (fun sc => { sc with opts := sc.opts.set `linter.unusedVariables false })
+    withScope (fun sc => { sc with opts := sc.opts.set `linter.unusedVariables false }) <|
     withoutModifyingEnv do
     let declName ← resolveGlobalConstNoOverload id
     addConstInfo id declName
     let info ← getConstInfo declName
-let declConst : Expr := mkConst declName info.levelParams.map Level.param
+    let declConst : Expr := mkConst declName <| info.levelParams.map Level.param
     let stxRef ← getRef
     let recallName := Name.mkSimple
       s!"_recall_{(← liftTermElabM Lean.mkFreshId)}"
@@ -245,7 +106,7 @@ let declConst : Expr := mkConst declName info.levelParams.map Level.param
     if let some val := val? then
       let some infoVal := info.value? (allowOpaque := true)
         | throwErrorAt val "constant '{declName}' has no defined value"
-elabCommand ← `(noncomputable def $newId $sig:optDeclSig $val)
+      elabCommand <| ← `(noncomputable def $newId $sig:optDeclSig $val)
       let ns ← getCurrNamespace
       let some newInfo := (← getEnv).find? (ns ++ recallName)
         | return -- def already threw
@@ -275,7 +136,7 @@ elabCommand ← `(noncomputable def $newId $sig:optDeclSig $val)
               let type ← mkForallFVars vars type (usedOnly := true)
               let infoType ← do
                 let mvs ← info.levelParams.mapM fun _ => mkFreshLevelMVar
-pure info.type.instantiateLevelParams info.levelParams mvs
+                pure <| info.type.instantiateLevelParams info.levelParams mvs
               unless (← isDefEq infoType type) do
                 let suggestion ← mkRecallSuggestion declName
                 Tactic.TryThis.addSuggestion stxRef (suggestion : String) (origSpan? := stxRef)
@@ -285,3 +146,4 @@ pure info.type.instantiateLevelParams info.levelParams mvs
           throwError "expected type after ':'"
 
 end Mathlib.Tactic.Recall
+

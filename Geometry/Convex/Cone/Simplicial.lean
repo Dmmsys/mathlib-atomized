@@ -38,38 +38,37 @@ variable (C : PointedCone R M)
 
 namespace PointedCone
 
-/--
-Definition of `IsSimplicial` / `IsSimplicial` 的定义
+/-- A pointed cone is simplicial if it equals the conic hull of a finite set that is linearly
+independent over `R`. -/
+/-
+**PointedCone.IsSimplicial** 是 Mathlib 中的一个定义，位于命名空间 `PointedCone`。
+形式化陈述：IsSimplicial : Prop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsSimplicial
-  signature: : Prop
-  body: exists s : Set M, s.Finite ∧ LinearIndepOn R id s ∧ hull R s = C
-
-中文:
-定义 IsSimplicial
-  签名: : 命题
-  定义体: exists s : Set M, s.Finite ∧ LinearIndepOn R id s ∧ hull R s = C
-
-Depends on / 依赖: Finite, LinearIndepOn, s.Finite
+--- 原说明 ---
+A pointed cone is simplicial if it equals the conic hull of a finite set that is
+ linearly
+independent over `R`.
 -/
 def IsSimplicial : Prop :=
-  exists s : Set M, s.Finite ∧ LinearIndepOn R id s ∧ hull R s = C
+  ∃ s : Set M, s.Finite ∧ LinearIndepOn R id s ∧ hull R s = C
 
 namespace IsSimplicial
 
-/--
-theorem `hull` / 定理 `hull`
+/-- The conic hull of a finite linearly independent set is simplicial. -/
+/-
+**PointedCone.IsSimplicial.hull** 是 Mathlib 中的一个定理，位于命名空间 `PointedCone.IsSimplic
+ial`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : Semiring R] [inst_1 : PartialOrder
+ R] [inst_2 : IsOrderedRing R]   [inst_3 : AddCommMonoid M] [inst_4 : _root_.Mod
+ule R M] {s : Set M},   s.Finite → LinearIndepOn R id s → (PointedCone.hull R s)
+.IsSimplicial
+参数：PointedCone.hull R s。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem hull
-  given: {s : Set M} (hs : s.Finite) (hli : LinearIndepOn R id s)
-  proof: ⟨s, hs, hli, rfl⟩
-
-中文:
-定理 hull
-  条件: {s : 集合 M} (hs : s.有限) (hli : LinearIndepOn R id s)
-  证明: ⟨s, hs, hli, rfl⟩
+--- 原说明 ---
+The conic hull of a finite linearly independent set is simplicial.
 -/
 protected theorem hull {s : Set M} (hs : s.Finite) (hli : LinearIndepOn R id s) :
     (PointedCone.hull R s).IsSimplicial := ⟨s, hs, hli, rfl⟩
@@ -77,3 +76,4 @@ protected theorem hull {s : Set M} (hs : s.Finite) (hli : LinearIndepOn R id s) 
 end IsSimplicial
 
 end PointedCone
+

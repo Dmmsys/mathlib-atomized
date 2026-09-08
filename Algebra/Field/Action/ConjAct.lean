@@ -19,24 +19,9 @@ namespace ConjAct
 
 variable {K : Type*} [DivisionRing K]
 
-/--
-Instance `distribMulAction₀` / 实例 `distribMulAction₀`
-
-English:
-instance distribMulAction₀
-  signature: : DistribMulAction (ConjAct K) K
-  body: { ConjAct.mulAction₀ with
-    smul_zero := by simp [smul_def]
-    smul_add := by simp [smul_def, mul_add, add_mul] }
-
-中文:
-实例 distribMulAction₀
-  签名: : 分配乘法作用 (ConjAct K) K
-  定义体: { ConjAct.mulAction₀ with
-    smul_zero := by simp [smul_def]
-    smul_add := by simp [smul_def, mul_add, add_mul] }
-
-Depends on / 依赖: ConjAct, ConjAct.mulAction, add_mul, mul_add, smul_add, smul_def, smul_zero
+/-
+**ConjAct.distribMulAction** 是 Mathlib 中的一个实例，位于命名空间 `ConjAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance distribMulAction₀ : DistribMulAction (ConjAct K) K :=
   { ConjAct.mulAction₀ with
@@ -44,3 +29,4 @@ instance distribMulAction₀ : DistribMulAction (ConjAct K) K :=
     smul_add := by simp [smul_def, mul_add, add_mul] }
 
 end ConjAct
+

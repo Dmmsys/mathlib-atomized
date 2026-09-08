@@ -26,72 +26,38 @@ namespace Con
 multiplicative congruence on `Mᵐᵒᵖ`. -/
 @[to_additive /-- If `c` is an additive congruence on `M`, then `(a, b) ↦ c b.unop a.unop` is an
 additive congruence on `Mᵃᵒᵖ` -/]
-/--
-Definition of `op` / `op` 的定义
-
-English:
-definition op
-  signature: (c : Con M)
-  body: c b.unop a.unop
-  iseqv :=
-  { refl := fun a => c.refl a.unop
-    symm := c.symm
-    trans := fun h1 h2 => c.trans h2 h1 }
-  mul' h1 h2 := c.mul h2 h1
-
-中文:
-定义 op
-  签名: (c : Con M)
-  定义体: c b.unop a.unop
-  iseqv :=
-  { refl := fun a => c.refl a.unop
-    symm := c.symm
-    trans := fun h1 h2 => c.trans h2 h1 }
-  mul' h1 h2 := c.mul h2 h1
-
-Depends on / 依赖: a.unop, b.unop
+/-
+**Con.op** 是 Mathlib 中的一个定义，位于命名空间 `Con`。
+形式化陈述：op (c : Con M) : Con Mᵐᵒᵖ where r a b
+参数：c : Con M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def op (c : Con M) : Con Mᵐᵒᵖ where
   r a b := c b.unop a.unop
   iseqv :=
-  { refl := fun a => c.refl a.unop
+  { refl := fun a ↦ c.refl a.unop
     symm := c.symm
-    trans := fun h1 h2 => c.trans h2 h1 }
+    trans := fun h1 h2 ↦ c.trans h2 h1 }
   mul' h1 h2 := c.mul h2 h1
 
 /-- If `c` is a multiplicative congruence on `Mᵐᵒᵖ`, then `(a, b) ↦ c bᵒᵖ aᵒᵖ` is a multiplicative
 congruence on `M`. -/
 @[to_additive /-- If `c` is an additive congruence on `Mᵃᵒᵖ`, then `(a, b) ↦ c bᵒᵖ aᵒᵖ` is an
 additive congruence on `M`. -/]
-/--
-Definition of `unop` / `unop` 的定义
-
-English:
-definition unop
-  signature: (c : Con Mᵐᵒᵖ)
-  body: c (.op b) (.op a)
-  iseqv :=
-  { refl := fun a => c.refl (.op a)
-    symm := c.symm
-    trans := fun h1 h2 => c.trans h2 h1 }
-  mul' h1 h2 := c.mul h2 h1
-
-中文:
-定义 unop
-  签名: (c : Con Mᵐᵒᵖ)
-  定义体: c (.op b) (.op a)
-  iseqv :=
-  { refl := fun a => c.refl (.op a)
-    symm := c.symm
-    trans := fun h1 h2 => c.trans h2 h1 }
-  mul' h1 h2 := c.mul h2 h1
+/-
+**Con.unop** 是 Mathlib 中的一个定义，位于命名空间 `Con`。
+形式化陈述：unop (c : Con Mᵐᵒᵖ) : Con M where r a b
+参数：c : Con Mᵐᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def unop (c : Con Mᵐᵒᵖ) : Con M where
   r a b := c (.op b) (.op a)
   iseqv :=
-  { refl := fun a => c.refl (.op a)
+  { refl := fun a ↦ c.refl (.op a)
     symm := c.symm
-    trans := fun h1 h2 => c.trans h2 h1 }
+    trans := fun h1 h2 ↦ c.trans h2 h1 }
   mul' h1 h2 := c.mul h2 h1
 
 /--
@@ -99,22 +65,11 @@ The multiplicative congruences on `M` bijects to the multiplicative congruences 
 -/
 @[to_additive (attr := simps) /-- The additive congruences on `M` bijects to the additive
 congruences on `Mᵃᵒᵖ` -/]
-/--
-Definition of `orderIsoOp` / `orderIsoOp` 的定义
-
-English:
-definition orderIsoOp
-  signature: : Con M ≃o Con Mᵐᵒᵖ where
-  body: op
-  invFun := unop
-  map_rel_iff' {c d} := by rw [le_def, le_def]; constructor <;> intro h _ _ h' <;> exact h h'
-
-中文:
-定义 orderIsoOp
-  签名: : Con M ≃o Con Mᵐᵒᵖ where
-  定义体: op
-  invFun := unop
-  map_rel_iff' {c d} := by rw [le_def, le_def]; constructor <;> intro h _ _ h' <;> exact h h'
+/-
+**Con.orderIsoOp** 是 Mathlib 中的一个定义，位于命名空间 `Con`。
+形式化陈述：orderIsoOp : Con M ≃o Con Mᵐᵒᵖ where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def orderIsoOp : Con M ≃o Con Mᵐᵒᵖ where
   toFun := op
@@ -122,3 +77,4 @@ def orderIsoOp : Con M ≃o Con Mᵐᵒᵖ where
   map_rel_iff' {c d} := by rw [le_def, le_def]; constructor <;> intro h _ _ h' <;> exact h h'
 
 end Con
+

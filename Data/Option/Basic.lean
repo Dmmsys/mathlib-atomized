@@ -42,811 +42,563 @@ namespace Option
 
 variable {α β γ δ : Type*}
 
-/--
-theorem `coe_def` / 定理 `coe_def`
-
-English:
-theorem coe_def
-  statement: (fun a => ↑a : α -> Option α) = some
-  proof: rfl
-
-中文:
-定理 coe_def
-  结论: (fun a => ↑a : α -> 选项类型 α) = some
-  证明: rfl
+/-
+**Option.coe_def** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：coe_def : (fun a => ↑a : α -> Option α) = some
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_def : (fun a => ↑a : α -> Option α) = some :=
+theorem coe_def : (fun a ↦ ↑a : α → Option α) = some :=
   rfl
-
-/--
-theorem `mem_map` / 定理 `mem_map`
-
-English:
-theorem mem_map
-  given: {f : α -> β} {y : β} {o : Option α}
-  statement: y in o.map f ↔ exists x in o, f x = y
-  proof: by simp
+/-
+**Option.mem_map** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：mem_map {f : α -> β} {y : β} {o : Option α} : y in o.map f ↔ exists x in o
+, f x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+theorem mem_map {f : α → β} {y : β} {o : Option α} : y ∈ o.map f ↔ ∃ x ∈ o, f x = y := by simp
 
 @[simp 1100]
-
-中文:
-定理 mem_map
-  条件: {f : α -> β} {y : β} {o : 选项类型 α}
-  结论: y in o.map f ↔ 存在 x in o, f x = y
-  证明: by simp
-
-@[simp 1100]
+/-
+**Option.mem_map_of_injective** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：mem_map_of_injective {f : α -> β} (H : Function.Injective f) {a : α} {o : 
+Option α} : f a in o.map f ↔ a in o
+参数：H : Function.Injective f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Option.some.injEq`：∀ {α : Type u} (val val_1 : α), (some val = some val_
+1) = (val = val_1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-theorem mem_map {f : α -> β} {y : β} {o : Option α} : y in o.map f ↔ exists x in o, f x = y := by simp
-
-@[simp 1100]
-/--
-theorem `mem_map_of_injective` / 定理 `mem_map_of_injective`
-
-English:
-theorem mem_map_of_injective
-  given: {f : α -> β} (H : Function.Injective f) {a : α} {o : Option α}
-  proof: by
+theorem mem_map_of_injective {f : α → β} (H : Function.Injective f) {a : α} {o : Option α} :
+    f a ∈ o.map f ↔ a ∈ o := by
   aesop
-
-中文:
-定理 mem_map_of_injective
-  条件: {f : α -> β} (H : 函数.单射 f) {a : α} {o : 选项类型 α}
-  证明: by
-  aesop
+/-
+**Option.forall_mem_map** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：forall_mem_map {f : α -> β} {o : Option α} {p : β -> Prop} : (forall y in 
+o.map f, p y) ↔ forall x in o, p (f x)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_map_of_injective {f : α -> β} (H : Function.Injective f) {a : α} {o : Option α} :
-    f a in o.map f ↔ a in o := by
-  aesop
-
-/--
-theorem `forall_mem_map` / 定理 `forall_mem_map`
-
-English:
-theorem forall_mem_map
-  given: {f : α -> β} {o : Option α} {p : β -> Prop}
-  proof: by simp
-
-中文:
-定理 对任意_mem_map
-  条件: {f : α -> β} {o : 选项类型 α} {p : β -> 命题}
-  证明: by simp
+theorem forall_mem_map {f : α → β} {o : Option α} {p : β → Prop} :
+    (∀ y ∈ o.map f, p y) ↔ ∀ x ∈ o, p (f x) := by simp
+/-
+**Option.exists_mem_map** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：exists_mem_map {f : α -> β} {o : Option α} {p : β -> Prop} : (exists y in 
+o.map f, p y) ↔ exists x in o, p (f x)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem forall_mem_map {f : α -> β} {o : Option α} {p : β -> Prop} :
-    (forall y in o.map f, p y) ↔ forall x in o, p (f x) := by simp
-
-/--
-theorem `exists_mem_map` / 定理 `exists_mem_map`
-
-English:
-theorem exists_mem_map
-  given: {f : α -> β} {o : Option α} {p : β -> Prop}
-  proof: by simp
-
-中文:
-定理 存在_mem_map
-  条件: {f : α -> β} {o : 选项类型 α} {p : β -> 命题}
-  证明: by simp
--/
-theorem exists_mem_map {f : α -> β} {o : Option α} {p : β -> Prop} :
-    (exists y in o.map f, p y) ↔ exists x in o, p (f x) := by simp
-
-/--
-theorem `coe_get` / 定理 `coe_get`
-
-English:
-theorem coe_get
-  given: {o : Option α} (h : o.isSome)
-  statement: ((Option.get _ h : α) : Option α) = o
-  proof: Option.some_get h
-
-中文:
-定理 coe_get
-  条件: {o : 选项类型 α} (h : o.isSome)
-  结论: ((选项类型.get _ h : α) : 选项类型 α) = o
-  证明: Option.some_get h
-
-Depends on / 依赖: Option.some_get, some_get
+theorem exists_mem_map {f : α → β} {o : Option α} {p : β → Prop} :
+    (∃ y ∈ o.map f, p y) ↔ ∃ x ∈ o, p (f x) := by simp
+/-
+**Option.coe_get** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：coe_get {o : Option α} (h : o.isSome) : ((Option.get _ h : α) : Option α) 
+= o
+参数：h : o.isSome。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Option.some_get`：∀ {α : Type u_1} {x : Option α} (h : x.isSome = true), 
+some (x.get h) = x
 -/
 theorem coe_get {o : Option α} (h : o.isSome) : ((Option.get _ h : α) : Option α) = o :=
   Option.some_get h
-
-/--
-theorem `eq_of_mem_of_mem` / 定理 `eq_of_mem_of_mem`
-
-English:
-theorem eq_of_mem_of_mem
-  given: {a : α} {o1 o2 : Option α} (h1 : a in o1) (h2 : a in o2)
-  statement: o1 = o2
-  proof: h1.trans h2.symm
-
-中文:
-定理 eq_of_mem_of_mem
-  条件: {a : α} {o1 o2 : 选项类型 α} (h1 : a in o1) (h2 : a in o2)
-  结论: o1 = o2
-  证明: h1.trans h2.symm
-
-Depends on / 依赖: h1.trans, h2.symm
+/-
+**Option.eq_of_mem_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：eq_of_mem_of_mem {a : α} {o1 o2 : Option α} (h1 : a in o1) (h2 : a in o2) 
+: o1 = o2
+参数：h1 : a in o1；h2 : a in o2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem eq_of_mem_of_mem {a : α} {o1 o2 : Option α} (h1 : a in o1) (h2 : a in o2) : o1 = o2 :=
+theorem eq_of_mem_of_mem {a : α} {o1 o2 : Option α} (h1 : a ∈ o1) (h2 : a ∈ o2) : o1 = o2 :=
   h1.trans h2.symm
-
-/--
-theorem `Mem.leftUnique` / 定理 `Mem.leftUnique`
-
-English:
-theorem Mem.leftUnique
-  statement: Relator.LeftUnique ((· in ·) : α -> Option α -> Prop)
-  proof: fun _ _ _ => mem_unique
-
-中文:
-定理 Mem.leftUnique
-  结论: Relator.LeftUnique ((· in ·) : α -> 选项类型 α -> 命题)
-  证明: fun _ _ _ => mem_unique
-
-Depends on / 依赖: mem_unique
+/-
+**Option.Mem.leftUnique** 是 Mathlib 中的一个定理，位于命名空间 `Option.Mem`。
+形式化陈述：∀ {α : Type u_1}, Relator.LeftUnique fun x1 x2 => x1 ∈ x2
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Option.mem_unique`：∀ {α : Type u_1} {o : Option α} {a b : α}, a ∈ o → b 
+∈ o → a = b
 -/
-theorem Mem.leftUnique : Relator.LeftUnique ((· in ·) : α -> Option α -> Prop) :=
+theorem Mem.leftUnique : Relator.LeftUnique ((· ∈ ·) : α → Option α → Prop) :=
   fun _ _ _ => mem_unique
-
-/--
-theorem `some_injective` / 定理 `some_injective`
-
-English:
-theorem some_injective
-  given: (α : Type*)
-  statement: Function.Injective (@some α)
-  proof: fun _ _ => some_inj.mp
-
-@[simp]
-
-中文:
-定理 some_injective
-  条件: (α : 类型)
-  结论: 函数.单射 (@some α)
-  证明: fun _ _ => some_inj.mp
-
-@[simp]
-
-Depends on / 依赖: some_inj, some_inj.mp
+/-
+**Option.some_injective** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：some_injective (α : Type*) : Function.Injective (@some α)
+参数：α : Type*。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Option.some_inj`：∀ {α : Type u_1} {a b : α}, some a = some b ↔ a = b
 -/
-theorem some_injective (α : Type*) : Function.Injective (@some α) := fun _ _ => some_inj.mp
+theorem some_injective (α : Type*) : Function.Injective (@some α) := fun _ _ ↦ some_inj.mp
 
 @[simp]
-/--
-theorem `map_comp_some` / 定理 `map_comp_some`
-
-English:
-theorem map_comp_some
-  given: (f : α -> β)
-  statement: Option.map f ∘ some = some ∘ f
-  proof: rfl
-
-@[congr]
-
-中文:
-定理 map_comp_some
-  条件: (f : α -> β)
-  结论: 选项类型.map f ∘ some = some ∘ f
-  证明: rfl
-
-@[congr]
+/-
+**Option.map_comp_some** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：map_comp_some (f : α -> β) : Option.map f ∘ some = some ∘ f
+参数：f : α -> β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_comp_some (f : α -> β) : Option.map f ∘ some = some ∘ f :=
+theorem map_comp_some (f : α → β) : Option.map f ∘ some = some ∘ f :=
   rfl
 
 @[congr]
-/--
-theorem `bind_congr'` / 定理 `bind_congr'`
-
-English:
-theorem bind_congr'
-  statement: {f g : α -> Option β} {x y : Option α} (hx : x = y)
-  proof: hx.symm ▸ bind_congr hf
-
-中文:
-定理 bind_congr'
-  结论: {f g : α -> 选项类型 β} {x y : 选项类型 α} (hx : x = y)
-  证明: hx.symm ▸ bind_congr hf
-
-Depends on / 依赖: bind_congr, hx.symm
+/-
+**Option.bind_congr'** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：bind_congr' {f g : α -> Option β} {x y : Option α} (hx : x = y) (hf : fora
+ll a in y, f a = g a) : x.bind f = y.bind g
+参数：hx : x = y；hf : forall a in y, f a = g a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Option.bind_congr`：∀ {α : Type u_1} {β : Type u_2} {o : Option α} {f g :
+ α → Option β},   (∀ (a : α), o = some a → f a = g a) → o.bind f = o.bind g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem bind_congr' {f g : α -> Option β} {x y : Option α} (hx : x = y)
-    (hf : forall a in y, f a = g a) : x.bind f = y.bind g :=
+theorem bind_congr' {f g : α → Option β} {x y : Option α} (hx : x = y)
+    (hf : ∀ a ∈ y, f a = g a) : x.bind f = y.bind g :=
   hx.symm ▸ bind_congr hf
-
-/--
-theorem `joinM_eq_join` / 定理 `joinM_eq_join`
-
-English:
-theorem joinM_eq_join
-  statement: joinM = @join α
-  proof: funext fun _ => rfl
-
-中文:
-定理 joinM_eq_join
-  结论: joinM = @join α
-  证明: funext fun _ => rfl
+/-
+**Option.joinM_eq_join** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：joinM_eq_join : joinM = @join α
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 theorem joinM_eq_join : joinM = @join α :=
-  funext fun _ => rfl
-
-/--
-theorem `bind_eq_bind'` / 定理 `bind_eq_bind'`
-
-English:
-theorem bind_eq_bind'
-  given: {α β : Type u} {f : α -> Option β} {x : Option α}
-  statement: x >>= f = x.bind f
-  proof: rfl
-
-中文:
-定理 bind_eq_bind'
-  条件: {α β : 类型u} {f : α -> 选项类型 β} {x : 选项类型 α}
-  结论: x >>= f = x.bind f
-  证明: rfl
+  funext fun _ ↦ rfl
+/-
+**Option.bind_eq_bind'** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：bind_eq_bind' {α β : Type u} {f : α -> Option β} {x : Option α} : x >>= f 
+= x.bind f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem bind_eq_bind' {α β : Type u} {f : α -> Option β} {x : Option α} : x >>= f = x.bind f :=
+theorem bind_eq_bind' {α β : Type u} {f : α → Option β} {x : Option α} : x >>= f = x.bind f :=
   rfl
-
-/--
-theorem `map_coe` / 定理 `map_coe`
-
-English:
-theorem map_coe
-  given: {α β} {a : α} {f : α -> β}
-  statement: f < > (a : Option α) = ↑(f a)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 map_coe
-  条件: {α β} {a : α} {f : α -> β}
-  结论: f < > (a : 选项类型 α) = ↑(f a)
-  证明: rfl
-
-@[simp]
+/-
+**Option.map_coe** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：map_coe {α β} {a : α} {f : α -> β} : f < > (a : Option α) = ↑(f a)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_coe {α β} {a : α} {f : α -> β} : f < > (a : Option α) = ↑(f a) :=
+theorem map_coe {α β} {a : α} {f : α → β} : f <$> (a : Option α) = ↑(f a) :=
   rfl
 
 @[simp]
-/--
-theorem `map_coe'` / 定理 `map_coe'`
-
-English:
-theorem map_coe'
-  given: {a : α} {f : α -> β}
-  statement: Option.map f (a : Option α) = ↑(f a)
-  proof: rfl
-
-中文:
-定理 map_coe'
-  条件: {a : α} {f : α -> β}
-  结论: 选项类型.map f (a : 选项类型 α) = ↑(f a)
-  证明: rfl
+/-
+**Option.map_coe'** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：map_coe' {a : α} {f : α -> β} : Option.map f (a : Option α) = ↑(f a)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_coe' {a : α} {f : α -> β} : Option.map f (a : Option α) = ↑(f a) :=
+theorem map_coe' {a : α} {f : α → β} : Option.map f (a : Option α) = ↑(f a) :=
   rfl
 
-/--
-theorem `map_injective'` / 定理 `map_injective'`
+/-- `Option.map` as a function between functions is injective. -/
+/-
+**Option.map_injective'** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：map_injective' : Function.Injective (@Option.map α β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Option.some_injective`：some_injective (α : Type*) : Function.Injective (
+@some α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem map_injective'
-  statement: Function.Injective (@Option.map α β)
-  proof: fun f g h =>
-funext fun x => some_injective _ by simp only [← map_some, h]
-
-@[simp]
-
-中文:
-定理 map_injective'
-  结论: 函数.单射 (@选项类型.map α β)
-  证明: fun f g h =>
-funext fun x => some_injective _ by simp only [← map_some, h]
-
-@[simp]
+--- 原说明 ---
+`Option.map` as a function between functions is injective.
 -/
-theorem map_injective' : Function.Injective (@Option.map α β) := fun f g h =>
-funext fun x => some_injective _ by simp only [← map_some, h]
+theorem map_injective' : Function.Injective (@Option.map α β) := fun f g h ↦
+  funext fun x ↦ some_injective _ <| by simp only [← map_some, h]
 
 @[simp]
-/--
-theorem `map_inj` / 定理 `map_inj`
-
-English:
-theorem map_inj
-  given: {f g : α -> β}
-  statement: Option.map f = Option.map g ↔ f = g
-  proof: map_injective'.eq_iff
-
-@[simp]
-
-中文:
-定理 map_inj
-  条件: {f g : α -> β}
-  结论: 选项类型.map f = 选项类型.map g ↔ f = g
-  证明: map_injective'.eq_iff
-
-@[simp]
-
-Depends on / 依赖: eq_iff, map_injective
+/-
+**Option.map_inj** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：map_inj {f g : α -> β} : Option.map f = Option.map g ↔ f = g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Option.map_injective'`：map_injective' : Function.Injective (@Option.map 
+α β)
 -/
-theorem map_inj {f g : α -> β} : Option.map f = Option.map g ↔ f = g :=
+theorem map_inj {f g : α → β} : Option.map f = Option.map g ↔ f = g :=
   map_injective'.eq_iff
 
 @[simp]
-/--
-theorem `map_eq_id` / 定理 `map_eq_id`
-
-English:
-theorem map_eq_id
-  given: {f : α -> α}
-  statement: Option.map f = id ↔ f = id
-  proof: map_injective'.eq_iff' map_id
-
-中文:
-定理 map_eq_id
-  条件: {f : α -> α}
-  结论: 选项类型.map f = id ↔ f = id
-  证明: map_injective'.eq_iff' map_id
-
-Depends on / 依赖: eq_iff, map_id, map_injective
+/-
+**Option.map_eq_id** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：map_eq_id {f : α -> α} : Option.map f = id ↔ f = id
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+ Function.Injective f → ∀ {a b : α} {c : β}, f b = c → (f a = c ↔ a = b)
+· 使用定理 `Option.map_injective'`：map_injective' : Function.Injective (@Option.map 
+α β)
+· 使用定理 `Option.map_id`：∀ {α : Type u_1}, Option.map id = id
 -/
-theorem map_eq_id {f : α -> α} : Option.map f = id ↔ f = id :=
+theorem map_eq_id {f : α → α} : Option.map f = id ↔ f = id :=
   map_injective'.eq_iff' map_id
-
-/--
-theorem `map_comm` / 定理 `map_comm`
-
-English:
-theorem map_comm
-  statement: {f₁ : α -> β} {f₂ : α -> γ} {g₁ : β -> δ} {g₂ : γ -> δ} (h : g₁ ∘ f₁ = g₂ ∘ f₂)
-  proof: by rw [map_map, h, ← map_map]
-
-中文:
-定理 map_comm
-  结论: {f₁ : α -> β} {f₂ : α -> γ} {g₁ : β -> δ} {g₂ : γ -> δ} (h : g₁ ∘ f₁ = g₂ ∘ f₂)
-  证明: by rw [map_map, h, ← map_map]
-
-Depends on / 依赖: map_map
+/-
+**Option.map_comm** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：map_comm {f₁ : α -> β} {f₂ : α -> γ} {g₁ : β -> δ} {g₂ : γ -> δ} (h : g₁ ∘
+ f₁ = g₂ ∘ f₂) (a : α) : (Option.map f₁ a).map g₁ = (Option.map f₂ a).map g₂
+参数：h : g₁ ∘ f₁ = g₂ ∘ f₂；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Option.map_map`：∀ {β : Type u_1} {γ : Type u_2} {α : Type u_3} (h : β → 
+γ) (g : α → β) (x : Option α),   Option.map h (Option.map g x) = Option.map (h ∘
+ g) …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem map_comm {f₁ : α -> β} {f₂ : α -> γ} {g₁ : β -> δ} {g₂ : γ -> δ} (h : g₁ ∘ f₁ = g₂ ∘ f₂)
+theorem map_comm {f₁ : α → β} {f₂ : α → γ} {g₁ : β → δ} {g₂ : γ → δ} (h : g₁ ∘ f₁ = g₂ ∘ f₂)
     (a : α) :
     (Option.map f₁ a).map g₁ = (Option.map f₂ a).map g₂ := by rw [map_map, h, ← map_map]
 
 section pmap
 
-variable {p : α -> Prop} (f : forall a : α, p a -> β) (x : Option α)
+variable {p : α → Prop} (f : ∀ a : α, p a → β) (x : Option α)
 
-/--
-theorem `mem_pmem` / 定理 `mem_pmem`
-
-English:
-theorem mem_pmem
-  given: {a : α} (h : forall a in x, p a) (ha : a in x)
-  statement: f a (h a ha) in pmap f x h
-  proof: by
+/-
+**Option.mem_pmem** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：mem_pmem {a : α} (h : forall a in x, p a) (ha : a in x) : f a (h a ha) in 
+pmap f x h
+参数：h : forall a in x, p a；ha : a in x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Option.mem_def`：∀ {α : Type u_1} {a : α} {b : Option α}, a ∈ b ↔ b = som
+e a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+-/
+theorem mem_pmem {a : α} (h : ∀ a ∈ x, p a) (ha : a ∈ x) : f a (h a ha) ∈ pmap f x h := by
   rw [mem_def] at ha ⊢
   subst ha
   rfl
-
-中文:
-定理 mem_pmem
-  条件: {a : α} (h : 对任意 a in x, p a) (ha : a in x)
-  结论: f a (h a ha) in pmap f x h
-  证明: by
-  rw [mem_def] at ha ⊢
-  subst ha
-  rfl
-
-Depends on / 依赖: mem_def
+/-
+**Option.pmap_bind** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：pmap_bind {α β γ} {x : Option α} {g : α -> Option β} {p : β -> Prop} {f : 
+forall b, p b -> γ} (H) (H' : forall (a : α), forall b in g a, b in x >>= g) : p
+map f (x >>= g) H = x >>= fun a => pmap f (g a) fun _ h => H _ (H' a _ h)
+参数：H；H' : forall (a : α), forall b in g a, b in x >>= g。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_pmem {a : α} (h : forall a in x, p a) (ha : a in x) : f a (h a ha) in pmap f x h := by
-  rw [mem_def] at ha ⊢
-  subst ha
-  rfl
-
-/--
-theorem `pmap_bind` / 定理 `pmap_bind`
-
-English:
-theorem pmap_bind
-  statement: {α β γ} {x : Option α} {g : α -> Option β} {p : β -> Prop} {f : forall b, p b -> γ} (H)
-  proof: by
+theorem pmap_bind {α β γ} {x : Option α} {g : α → Option β} {p : β → Prop} {f : ∀ b, p b → γ} (H)
+    (H' : ∀ (a : α), ∀ b ∈ g a, b ∈ x >>= g) :
+    pmap f (x >>= g) H = x >>= fun a ↦ pmap f (g a) fun _ h ↦ H _ (H' a _ h) := by
   grind [cases Option]
-
-中文:
-定理 pmap_bind
-  结论: {α β γ} {x : 选项类型 α} {g : α -> 选项类型 β} {p : β -> 命题} {f : 对任意 b, p b -> γ} (H)
-  证明: by
-  grind [cases Option]
+/-
+**Option.bind_pmap** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：bind_pmap {α β γ} {p : α -> Prop} (f : forall a, p a -> β) (x : Option α) 
+(g : β -> Option γ) (H) : pmap f x H >>= g = x.pbind fun a h => g (f a (H _ h))
+参数：f : forall a, p a -> β；x : Option α；g : β -> Option γ；H。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem pmap_bind {α β γ} {x : Option α} {g : α -> Option β} {p : β -> Prop} {f : forall b, p b -> γ} (H)
-    (H' : forall (a : α), forall b in g a, b in x >>= g) :
-    pmap f (x >>= g) H = x >>= fun a => pmap f (g a) fun _ h => H _ (H' a _ h) := by
-  grind [cases Option]
-
-/--
-theorem `bind_pmap` / 定理 `bind_pmap`
-
-English:
-theorem bind_pmap
-  given: {α β γ} {p : α -> Prop} (f : forall a, p a -> β) (x : Option α) (g : β -> Option γ) (H)
-  proof: by
-  grind [cases Option, pmap]
-
-中文:
-定理 bind_pmap
-  条件: {α β γ} {p : α -> 命题} (f : 对任意 a, p a -> β) (x : 选项类型 α) (g : β -> 选项类型 γ) (H)
-  证明: by
-  grind [cases Option, pmap]
--/
-theorem bind_pmap {α β γ} {p : α -> Prop} (f : forall a, p a -> β) (x : Option α) (g : β -> Option γ) (H) :
-    pmap f x H >>= g = x.pbind fun a h => g (f a (H _ h)) := by
+theorem bind_pmap {α β γ} {p : α → Prop} (f : ∀ a, p a → β) (x : Option α) (g : β → Option γ) (H) :
+    pmap f x H >>= g = x.pbind fun a h ↦ g (f a (H _ h)) := by
   grind [cases Option, pmap]
 
 variable {f x}
-
-/--
-theorem `pbind_eq_none` / 定理 `pbind_eq_none`
-
-English:
-theorem pbind_eq_none
-  statement: {f : forall a : α, a in x -> Option β}
-  proof: by
-  grind [cases Option]
-
-中文:
-定理 pbind_eq_none
-  结论: {f : 对任意 a : α, a in x -> 选项类型 β}
-  证明: by
-  grind [cases Option]
+/-
+**Option.pbind_eq_none** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：pbind_eq_none {f : forall a : α, a in x -> Option β} (h' : forall a (H : a
+ in x), f a H = none -> x = none) : x.pbind f = none ↔ x = none
+参数：h' : forall a (H : a in x), f a H = none -> x = none。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem pbind_eq_none {f : forall a : α, a in x -> Option β}
-    (h' : forall a (H : a in x), f a H = none -> x = none) : x.pbind f = none ↔ x = none := by
+theorem pbind_eq_none {f : ∀ a : α, a ∈ x → Option β}
+    (h' : ∀ a (H : a ∈ x), f a H = none → x = none) : x.pbind f = none ↔ x = none := by
   grind [cases Option]
-
-/--
-theorem `join_pmap_eq_pmap_join` / 定理 `join_pmap_eq_pmap_join`
-
-English:
-theorem join_pmap_eq_pmap_join
-  given: {f : forall a, p a -> β} {x : Option (Option α)} (H)
-  proof: by
-  grind [cases Option]
-
-中文:
-定理 join_pmap_eq_pmap_join
-  条件: {f : 对任意 a, p a -> β} {x : 选项类型 (选项类型 α)} (H)
-  证明: by
-  grind [cases Option]
+/-
+**Option.join_pmap_eq_pmap_join** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：join_pmap_eq_pmap_join {f : forall a, p a -> β} {x : Option (Option α)} (H
+) : (pmap (pmap f) x H).join = pmap f x.join fun a h => H (some a) (mem_of_mem_j
+oin h) _ rfl
+参数：Option α；H。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem join_pmap_eq_pmap_join {f : forall a, p a -> β} {x : Option (Option α)} (H) :
-    (pmap (pmap f) x H).join = pmap f x.join fun a h => H (some a) (mem_of_mem_join h) _ rfl := by
+theorem join_pmap_eq_pmap_join {f : ∀ a, p a → β} {x : Option (Option α)} (H) :
+    (pmap (pmap f) x H).join = pmap f x.join fun a h ↦ H (some a) (mem_of_mem_join h) _ rfl := by
   grind [cases Option]
-
-/--
-theorem `pmap_bind_id_eq_pmap_join` / 定理 `pmap_bind_id_eq_pmap_join`
-
-English:
-theorem pmap_bind_id_eq_pmap_join
-  given: {f : forall a, p a -> β} {x : Option (Option α)} (H)
-  proof: by
-  grind [cases Option]
-
-中文:
-定理 pmap_bind_id_eq_pmap_join
-  条件: {f : 对任意 a, p a -> β} {x : 选项类型 (选项类型 α)} (H)
-  证明: by
-  grind [cases Option]
+/-
+**Option.pmap_bind_id_eq_pmap_join** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：pmap_bind_id_eq_pmap_join {f : forall a, p a -> β} {x : Option (Option α)}
+ (H) : ((pmap (pmap f) x H).bind fun a => a) = pmap f x.join fun a h => H (some 
+a) (mem_of_mem_join h) _ rfl
+参数：Option α；H。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem pmap_bind_id_eq_pmap_join {f : forall a, p a -> β} {x : Option (Option α)} (H) :
-    ((pmap (pmap f) x H).bind fun a => a) =
-      pmap f x.join fun a h => H (some a) (mem_of_mem_join h) _ rfl := by
+theorem pmap_bind_id_eq_pmap_join {f : ∀ a, p a → β} {x : Option (Option α)} (H) :
+    ((pmap (pmap f) x H).bind fun a ↦ a) =
+      pmap f x.join fun a h ↦ H (some a) (mem_of_mem_join h) _ rfl := by
   grind [cases Option]
 
 end pmap
 
 @[simp]
-/--
-theorem `seq_some` / 定理 `seq_some`
-
-English:
-theorem seq_some
-  given: {α β} {a : α} {f : α -> β}
-  statement: some f <*> some a = some (f a)
-  proof: rfl
-
-@[deprecated "Use `Option.get` with proof of `isSome`." (since := "2026-01-05")]
-
-中文:
-定理 seq_some
-  条件: {α β} {a : α} {f : α -> β}
-  结论: some f <*> some a = some (f a)
-  证明: rfl
-
-@[deprecated "Use `Option.get` with proof of `isSome`." (since := "2026-01-05")]
+/-
+**Option.seq_some** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：seq_some {α β} {a : α} {f : α -> β} : some f <*> some a = some (f a)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem seq_some {α β} {a : α} {f : α -> β} : some f <*> some a = some (f a) :=
+theorem seq_some {α β} {a : α} {f : α → β} : some f <*> some a = some (f a) :=
   rfl
 
 @[deprecated "Use `Option.get` with proof of `isSome`." (since := "2026-01-05")]
-/--
-theorem `iget_mem` / 定理 `iget_mem`
-
-English:
-theorem iget_mem
-  given: [Inhabited α]
-  statement: forall {o : Option α}, isSome o -> o.iget in o
-
-中文:
-定理 iget_mem
-  条件: [可居 α]
-  结论: 对任意 {o : 选项类型 α}, isSome o -> o.iget in o
+/-
+**Option.iget_mem** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：∀ {α : Type u_1} [inst : Inhabited α] {o : Option α}, o.isSome = true → o.
+iget ∈ o
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem iget_mem [Inhabited α] : forall {o : Option α}, isSome o -> o.iget in o
+theorem iget_mem [Inhabited α] : ∀ {o : Option α}, isSome o → o.iget ∈ o
   | some _, _ => rfl
 
 @[deprecated "Use `Option.getD`." (since := "2026-01-05")]
-/--
-theorem `iget_of_mem` / 定理 `iget_of_mem`
-
-English:
-theorem iget_of_mem
-  given: [Inhabited α] {a : α}
-  statement: forall {o : Option α}, a in o -> o.iget = a
-
-中文:
-定理 iget_of_mem
-  条件: [可居 α] {a : α}
-  结论: 对任意 {o : 选项类型 α}, a in o -> o.iget = a
+/-
+**Option.iget_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：∀ {α : Type u_1} [inst : Inhabited α] {a : α} {o : Option α}, a ∈ o → o.ig
+et = a
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem iget_of_mem [Inhabited α] {a : α} : forall {o : Option α}, a in o -> o.iget = a
+theorem iget_of_mem [Inhabited α] {a : α} : ∀ {o : Option α}, a ∈ o → o.iget = a
   | _, rfl => rfl
 
 @[deprecated "Use `Option.getD` directly." (since := "2026-01-05")]
-/--
-theorem `getD_default_eq_iget` / 定理 `getD_default_eq_iget`
-
-English:
-theorem getD_default_eq_iget
-  given: [Inhabited α] (o : Option α)
-  proof: by cases o <;> rfl
-
-@[simp, grind =]
-
-中文:
-定理 getD_default_eq_iget
-  条件: [可居 α] (o : 选项类型 α)
-  证明: by cases o <;> rfl
-
-@[simp, grind =]
+/-
+**Option.getD_default_eq_iget** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：getD_default_eq_iget [Inhabited α] (o : Option α) : o.getD default = o.ige
+t
+参数：o : Option α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem getD_default_eq_iget [Inhabited α] (o : Option α) :
     o.getD default = o.iget := by cases o <;> rfl
 
 @[simp, grind =]
-/--
-theorem `failure_eq_none` / 定理 `failure_eq_none`
-
-English:
-theorem failure_eq_none
-  given: {α}
-  statement: failure = (none : Option α)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 failure_eq_none
-  条件: {α}
-  结论: failure = (none : 选项类型 α)
-  证明: rfl
-
-@[simp]
+/-
+**Option.failure_eq_none** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：failure_eq_none {α} : failure = (none : Option α)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem failure_eq_none {α} : failure = (none : Option α) := rfl
 
 @[simp]
-/--
-theorem `guard_eq_some'` / 定理 `guard_eq_some'`
-
-English:
-theorem guard_eq_some'
-  given: {p : Prop} [Decidable p] (u)
-  statement: _root_.guard p = some u ↔ p
-  proof: by
-  grind [cases Option, _root_.guard]
-
-中文:
-定理 guard_eq_some'
-  条件: {p : 命题} [可判定 p] (u)
-  结论: _root_.guard p = some u ↔ p
-  证明: by
-  grind [cases Option, _root_.guard]
-
-Depends on / 依赖: _root_, _root_.guard
+/-
+**Option.guard_eq_some'** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：guard_eq_some' {p : Prop} [Decidable p] (u) : _root_.guard p = some u ↔ p
+参数：u。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem guard_eq_some' {p : Prop} [Decidable p] (u) : _root_.guard p = some u ↔ p := by
   grind [cases Option, _root_.guard]
 
-/--
-Definition of `casesOn'` / `casesOn'` 的定义
+/-- Given an element of `a : Option α`, a default element `b : β` and a function `α → β`, apply this
+function to `a` if it comes from `α`, and return `b` otherwise. -/
+/-
+**Option.casesOn'** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：casesOn'_none (x : β) (f : α -> β) : casesOn' none x f = x
+参数：x : β；f : α -> β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition casesOn'
-  signature: : Option α -> β -> (α -> β) -> β
-
-中文:
-定义 casesOn'
-  签名: : 选项类型 α -> β -> (α -> β) -> β
+--- 原说明 ---
+Given an element of `a : Option α`, a default element `b : β` and a function `α 
+→ β`, apply this
+function to `a` if it comes from `α`, and return `b` otherwise.
 -/
-def casesOn' : Option α -> β -> (α -> β) -> β
+def casesOn' : Option α → β → (α → β) → β
   | none, n, _ => n
   | some a, _, s => s a
 
 @[simp]
-/--
-theorem `casesOn'_none` / 定理 `casesOn'_none`
-
-English:
-theorem casesOn'_none
-  given: (x : β) (f : α -> β)
-  statement: casesOn' none x f = x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 casesOn'_none
-  条件: (x : β) (f : α -> β)
-  结论: casesOn' none x f = x
-  证明: rfl
-
-@[simp]
+/-
+**Option.casesOn'_none** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (x : β) (f : α → β), none.casesOn' x f = x
+参数：x : β；f : α → β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Option.casesOn'`：casesOn'_none (x : β) (f : α -> β) : casesOn' none x f 
+= x
 -/
-theorem casesOn'_none (x : β) (f : α -> β) : casesOn' none x f = x :=
+theorem casesOn'_none (x : β) (f : α → β) : casesOn' none x f = x :=
   rfl
 
 @[simp]
-/--
-theorem `casesOn'_some` / 定理 `casesOn'_some`
-
-English:
-theorem casesOn'_some
-  given: (x : β) (f : α -> β) (a : α)
-  statement: casesOn' (some a) x f = f a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 casesOn'_some
-  条件: (x : β) (f : α -> β) (a : α)
-  结论: casesOn' (some a) x f = f a
-  证明: rfl
-
-@[simp]
+/-
+**Option.casesOn'_some** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (x : β) (f : α → β) (a : α), (some a).case
+sOn' x f = f a
+参数：x : β；f : α → β；a : α；some a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Option.casesOn'`：casesOn'_none (x : β) (f : α -> β) : casesOn' none x f 
+= x
 -/
-theorem casesOn'_some (x : β) (f : α -> β) (a : α) : casesOn' (some a) x f = f a :=
+theorem casesOn'_some (x : β) (f : α → β) (a : α) : casesOn' (some a) x f = f a :=
   rfl
 
 @[simp]
-/--
-theorem `casesOn'_coe` / 定理 `casesOn'_coe`
-
-English:
-theorem casesOn'_coe
-  given: (x : β) (f : α -> β) (a : α)
-  statement: casesOn' (a : Option α) x f = f a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 casesOn'_coe
-  条件: (x : β) (f : α -> β) (a : α)
-  结论: casesOn' (a : 选项类型 α) x f = f a
-  证明: rfl
-
-@[simp]
+/-
+**Option.casesOn'_coe** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (x : β) (f : α → β) (a : α), (some a).case
+sOn' x f = f a
+参数：x : β；f : α → β；a : α；some a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Option.casesOn'`：casesOn'_none (x : β) (f : α -> β) : casesOn' none x f 
+= x
 -/
-theorem casesOn'_coe (x : β) (f : α -> β) (a : α) : casesOn' (a : Option α) x f = f a :=
+theorem casesOn'_coe (x : β) (f : α → β) (a : α) : casesOn' (a : Option α) x f = f a :=
   rfl
 
 @[simp]
-/--
-theorem `casesOn'_none_coe` / 定理 `casesOn'_none_coe`
-
-English:
-theorem casesOn'_none_coe
-  given: (f : Option α -> β) (o : Option α)
-  proof: by cases o <;> rfl
-
-中文:
-定理 casesOn'_none_coe
-  条件: (f : 选项类型 α -> β) (o : 选项类型 α)
-  证明: by cases o <;> rfl
+/-
+**Option.casesOn'_none_coe** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (f : Option α → β) (o : Option α), o.cases
+On' (f none) (f ∘ fun a => some a) = f o
+参数：f : Option α → β；o : Option α；f none；f ∘ fun a => some a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Option.casesOn'`：casesOn'_none (x : β) (f : α -> β) : casesOn' none x f 
+= x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem casesOn'_none_coe (f : Option α -> β) (o : Option α) :
-    casesOn' o (f none) (f ∘ (fun a => ↑a)) = f o := by cases o <;> rfl
-
-/--
-lemma `casesOn'_eq_elim` / 引理 `casesOn'_eq_elim`
-
-English:
-lemma casesOn'_eq_elim
-  given: (b : β) (f : α -> β) (a : Option α)
-  proof: by cases a <;> rfl
-
-中文:
-引理 casesOn'_eq_elim
-  条件: (b : β) (f : α -> β) (a : 选项类型 α)
-  证明: by cases a <;> rfl
+theorem casesOn'_none_coe (f : Option α → β) (o : Option α) :
+    casesOn' o (f none) (f ∘ (fun a ↦ ↑a)) = f o := by cases o <;> rfl
+/-
+**Option.casesOn'_eq_elim** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (b : β) (f : α → β) (a : Option α), a.case
+sOn' b f = a.elim b f
+参数：b : β；f : α → β；a : Option α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Option.casesOn'`：casesOn'_none (x : β) (f : α -> β) : casesOn' none x f 
+= x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma casesOn'_eq_elim (b : β) (f : α -> β) (a : Option α) :
+lemma casesOn'_eq_elim (b : β) (f : α → β) (a : Option α) :
     Option.casesOn' a b f = Option.elim a b f := by cases a <;> rfl
-
-/--
-theorem `orElse_eq_some` / 定理 `orElse_eq_some`
-
-English:
-theorem orElse_eq_some
-  given: (o o' : Option α) (x : α)
-  proof: by
-  simp
-
-中文:
-定理 orElse_eq_some
-  条件: (o o' : 选项类型 α) (x : α)
-  证明: by
-  simp
+/-
+**Option.orElse_eq_some** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：orElse_eq_some (o o' : Option α) (x : α) : (o <|> o') = some x ↔ o = some 
+x ∨ o = none ∧ o' = some x
+参数：o o' : Option α；x : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Option.orElse_eq_or`：∀ {α : Type u_1} {o : Option α} {f : Unit → Option 
+α}, o.orElse f = o.or (f ())
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem orElse_eq_some (o o' : Option α) (x : α) :
     (o <|> o') = some x ↔ o = some x ∨ o = none ∧ o' = some x := by
   simp
-
-/--
-theorem `orElse_eq_none` / 定理 `orElse_eq_none`
-
-English:
-theorem orElse_eq_none
-  given: (o o' : Option α)
-  statement: (o <|> o') = none ↔ o = none ∧ o' = none
-  proof: by
-  simp
-
-中文:
-定理 orElse_eq_none
-  条件: (o o' : 选项类型 α)
-  结论: (o <|> o') = none ↔ o = none ∧ o' = none
-  证明: by
-  simp
+/-
+**Option.orElse_eq_none** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：orElse_eq_none (o o' : Option α) : (o <|> o') = none ↔ o = none ∧ o' = non
+e
+参数：o o' : Option α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Option.orElse_eq_or`：∀ {α : Type u_1} {o : Option α} {f : Unit → Option 
+α}, o.orElse f = o.or (f ())
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem orElse_eq_none (o o' : Option α) : (o <|> o') = none ↔ o = none ∧ o' = none := by
   simp
 
 section
 
-/--
-theorem `choice_eq_none` / 定理 `choice_eq_none`
-
-English:
-theorem choice_eq_none
-  given: (α : Type*) [IsEmpty α]
-  statement: choice α = none
-  proof: choice_eq_none_iff_not_nonempty.mpr (not_nonempty_iff_imp_false.mpr isEmptyElim)
-
-中文:
-定理 choice_eq_none
-  条件: (α : 类型) [是空 α]
-  结论: choice α = none
-  证明: choice_eq_none_iff_not_nonempty.mpr (not_nonempty_iff_imp_false.mpr isEmptyElim)
-
-Depends on / 依赖: choice_eq_none_iff_not_nonempty, choice_eq_none_iff_not_nonempty.mpr, isEmptyElim, not_nonempty_iff_imp_false, not_nonempty_iff_imp_false.mpr
+/-
+**Option.choice_eq_none** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：choice_eq_none (α : Type*) [IsEmpty α] : choice α = none
+参数：α : Type*。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Option.choice_eq_none_iff_not_nonempty`：∀ {α : Type u_1}, Option.choice 
+α = none ↔ ¬Nonempty α
+· 使用定理 `not_nonempty_iff_imp_false`：not_nonempty_iff_imp_false {α : Sort*} : ¬No
+nempty α ↔ α -> False
 -/
 theorem choice_eq_none (α : Type*) [IsEmpty α] : choice α = none :=
   choice_eq_none_iff_not_nonempty.mpr (not_nonempty_iff_imp_false.mpr isEmptyElim)
@@ -854,106 +606,74 @@ theorem choice_eq_none (α : Type*) [IsEmpty α] : choice α = none :=
 end
 
 @[simp]
-/--
-theorem `elim_none_some` / 定理 `elim_none_some`
-
-English:
-theorem elim_none_some
-  given: (f : Option α -> β) (i : Option α)
-  statement: i.elim (f none) (f ∘ some) = f i
-  proof: by
-  cases i <;> rfl
-
-中文:
-定理 elim_none_some
-  条件: (f : 选项类型 α -> β) (i : 选项类型 α)
-  结论: i.elim (f none) (f ∘ some) = f i
-  证明: by
-  cases i <;> rfl
+/-
+**Option.elim_none_some** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：elim_none_some (f : Option α -> β) (i : Option α) : i.elim (f none) (f ∘ s
+ome) = f i
+参数：f : Option α -> β；i : Option α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem elim_none_some (f : Option α -> β) (i : Option α) : i.elim (f none) (f ∘ some) = f i := by
+theorem elim_none_some (f : Option α → β) (i : Option α) : i.elim (f none) (f ∘ some) = f i := by
   cases i <;> rfl
-
-/--
-theorem `elim_comp` / 定理 `elim_comp`
-
-English:
-theorem elim_comp
-  given: (h : α -> β) {f : γ -> α} {x : α} {i : Option γ}
-  proof: by cases i <;> rfl
-
-中文:
-定理 elim_comp
-  条件: (h : α -> β) {f : γ -> α} {x : α} {i : 选项类型 γ}
-  证明: by cases i <;> rfl
+/-
+**Option.elim_comp** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：elim_comp (h : α -> β) {f : γ -> α} {x : α} {i : Option γ} : (i.elim (h x)
+ fun j => h (f j)) = h (i.elim x f)
+参数：h : α -> β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem elim_comp (h : α -> β) {f : γ -> α} {x : α} {i : Option γ} :
+theorem elim_comp (h : α → β) {f : γ → α} {x : α} {i : Option γ} :
     (i.elim (h x) fun j => h (f j)) = h (i.elim x f) := by cases i <;> rfl
-
-/--
-theorem `elim_comp₂` / 定理 `elim_comp₂`
-
-English:
-theorem elim_comp₂
-  statement: (h : α -> β -> γ) {f : γ -> α} {x : α} {g : γ -> β} {y : β}
-  proof: by
-  cases i <;> rfl
-
-中文:
-定理 elim_comp₂
-  结论: (h : α -> β -> γ) {f : γ -> α} {x : α} {g : γ -> β} {y : β}
-  证明: by
-  cases i <;> rfl
+/-
+**Option.elim_comp** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：elim_comp (h : α -> β) {f : γ -> α} {x : α} {i : Option γ} : (i.elim (h x)
+ fun j => h (f j)) = h (i.elim x f)
+参数：h : α -> β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem elim_comp₂ (h : α -> β -> γ) {f : γ -> α} {x : α} {g : γ -> β} {y : β}
+theorem elim_comp₂ (h : α → β → γ) {f : γ → α} {x : α} {g : γ → β} {y : β}
     {i : Option γ} : (i.elim (h x y) fun j => h (f j) (g j)) = h (i.elim x f) (i.elim y g) := by
   cases i <;> rfl
-
-/--
-theorem `elim_apply` / 定理 `elim_apply`
-
-English:
-theorem elim_apply
-  given: {f : γ -> α -> β} {x : α -> β} {i : Option γ} {y : α}
-  proof: by rw [elim_comp fun f : α -> β => f y]
-
-中文:
-定理 elim_apply
-  条件: {f : γ -> α -> β} {x : α -> β} {i : 选项类型 γ} {y : α}
-  证明: by rw [elim_comp fun f : α -> β => f y]
-
-Depends on / 依赖: elim_comp
+/-
+**Option.elim_apply** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：elim_apply {f : γ -> α -> β} {x : α -> β} {i : Option γ} {y : α} : i.elim 
+x f y = i.elim (x y) fun j => f j y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Option.elim_comp`：elim_comp (h : α -> β) {f : γ -> α} {x : α} {i : Optio
+n γ} : (i.elim (h x) fun j => h (f j)) = h (i.elim x f)
 -/
-theorem elim_apply {f : γ -> α -> β} {x : α -> β} {i : Option γ} {y : α} :
-    i.elim x f y = i.elim (x y) fun j => f j y := by rw [elim_comp fun f : α -> β => f y]
+theorem elim_apply {f : γ → α → β} {x : α → β} {i : Option γ} {y : α} :
+    i.elim x f y = i.elim (x y) fun j => f j y := by rw [elim_comp fun f : α → β => f y]
 
 open Function in
 @[simp]
-/--
-lemma `elim'_update` / 引理 `elim'_update`
-
-English:
-lemma elim'_update
-  statement: {α : Type*} {β : Type*} [DecidableEq α]
-  proof: -- Can't reuse `Option.rec_update` as `Option.elim'` is not defeq.
-  Function.rec_update (α := fun _ => β) (@Option.some.inj _) (Option.elim' f) (fun _ _ => rfl) (fun
-    | _, _, some _, h => (h _ rfl).elim
-    | _, _, none, _ => rfl) _ _ _
-
-@[simp]
-
-中文:
-引理 elim'_update
-  结论: {α : 类型} {β : 类型} [DecidableEq α]
-  证明: -- Can't reuse `Option.rec_update` as `Option.elim'` is not defeq.
-  Function.rec_update (α := fun _ => β) (@Option.some.inj _) (Option.elim' f) (fun _ _ => rfl) (fun
-    | _, _, some _, h => (h _ rfl).elim
-    | _, _, none, _ => rfl) _ _ _
-
-@[simp]
+/-
+**Option.elim'_update** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：∀ {α : Type u_5} {β : Type u_6} [inst : DecidableEq α] (f : β) (g : α → β)
+ (a : α) (x : β),   Option.elim' f (Function.update g a x) = Function.update (Op
+tion.elim' f g) (some a) x
+参数：f : β；g : α → β；a : α；x : β；Function.update g a x；Option.elim' f g；some a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Function.rec_update`：rec_update {ι κ : Sort*} {α : κ -> Sort*} [Decidabl
+eEq ι] [DecidableEq κ] {ctor : ι -> κ} (_ : Function.Injective ctor) (recursor :
+ ((i : ι)…
+· 使用定理 `Option.some.inj`：∀ {α : Type u} {val val_1 : α}, some val = some val_1 →
+ val = val_1
+· 使用引理 `Option.elim'`：elim'_update {α : Type*} {β : Type*} [DecidableEq α] (f : 
+β) (g : α -> β) (a : α) (x : β) : Option.elim' f (update g a x) = update (Option
+.e…
 -/
 lemma elim'_update {α : Type*} {β : Type*} [DecidableEq α]
-    (f : β) (g : α -> β) (a : α) (x : β) :
+    (f : β) (g : α → β) (a : α) (x : β) :
     Option.elim' f (update g a x) = update (Option.elim' f g) (some a) x :=
   -- Can't reuse `Option.rec_update` as `Option.elim'` is not defeq.
   Function.rec_update (α := fun _ => β) (@Option.some.inj _) (Option.elim' f) (fun _ _ => rfl) (fun
@@ -961,82 +681,54 @@ lemma elim'_update {α : Type*} {β : Type*} [DecidableEq α]
     | _, _, none, _ => rfl) _ _ _
 
 @[simp]
-/--
-lemma `getD_comp_some` / 引理 `getD_comp_some`
-
-English:
-lemma getD_comp_some
-  given: (d : α)
-  statement: (fun x => x.getD d) ∘ some = id
-  proof: by
+/-
+**Option.getD_comp_some** 是 Mathlib 中的一个引理，位于命名空间 `Option`。
+形式化陈述：getD_comp_some (d : α) : (fun x => x.getD d) ∘ some = id
+参数：d : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+lemma getD_comp_some (d : α) : (fun x ↦ x.getD d) ∘ some = id := by
   ext
   simp only [Function.comp_apply, getD_some, id_eq]
 
 @[simp]
-
-中文:
-引理 getD_comp_some
-  条件: (d : α)
-  结论: (fun x => x.getD d) ∘ some = id
-  证明: by
-  ext
-  simp only [Function.comp_apply, getD_some, id_eq]
-
-@[simp]
-
-Depends on / 依赖: Function, Function.comp_apply, comp_apply, getD_some, id_eq
+/-
+**Option.none_eq_map_iff** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：none_eq_map_iff {x : Option α} {f : α -> β} : none = x.map f ↔ x = none
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Option.map_eq_none_iff`：∀ {α : Type u_1} {x : Option α} {α_1 : Type u_2}
+ {f : α → α_1}, Option.map f x = none ↔ x = none
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma getD_comp_some (d : α) : (fun x => x.getD d) ∘ some = id := by
-  ext
-  simp only [Function.comp_apply, getD_some, id_eq]
+theorem none_eq_map_iff {x : Option α} {f : α → β} : none = x.map f ↔ x = none := by
+  rw [eq_comm, map_eq_none_iff]
 
 @[simp]
-/--
-theorem `none_eq_map_iff` / 定理 `none_eq_map_iff`
-
-English:
-theorem none_eq_map_iff
-  given: {x : Option α} {f : α -> β}
-  statement: none = x.map f ↔ x = none
-  proof: by
-  rw [eq_comm]; rw [map_eq_none_iff]
-
-@[simp]
-
-中文:
-定理 none_eq_map_iff
-  条件: {x : 选项类型 α} {f : α -> β}
-  结论: none = x.map f ↔ x = none
-  证明: by
-  rw [eq_comm]; rw [map_eq_none_iff]
-
-@[simp]
-
-Depends on / 依赖: eq_comm, map_eq_none_iff
+/-
+**Option.some_eq_map_iff** 是 Mathlib 中的一个定理，位于命名空间 `Option`。
+形式化陈述：some_eq_map_iff {b : β} {x : Option α} {f : α -> β} : some b = x.map f ↔ e
+xists (a : α), x = some a ∧ f a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Option.map_eq_some_iff`：∀ {α : Type u_1} {b : α} {α_1 : Type u_2} {x : O
+ption α_1} {f : α_1 → α},   Option.map f x = some b ↔ ∃ a, x = some a ∧ f a = b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem none_eq_map_iff {x : Option α} {f : α -> β} : none = x.map f ↔ x = none := by
-  rw [eq_comm]; rw [map_eq_none_iff]
-
-@[simp]
-/--
-theorem `some_eq_map_iff` / 定理 `some_eq_map_iff`
-
-English:
-theorem some_eq_map_iff
-  given: {b : β} {x : Option α} {f : α -> β}
-  proof: by
-  rw [eq_comm]; rw [map_eq_some_iff]
-
-中文:
-定理 some_eq_map_iff
-  条件: {b : β} {x : 选项类型 α} {f : α -> β}
-  证明: by
-  rw [eq_comm]; rw [map_eq_some_iff]
-
-Depends on / 依赖: eq_comm, map_eq_some_iff
--/
-theorem some_eq_map_iff {b : β} {x : Option α} {f : α -> β} :
-    some b = x.map f ↔ exists (a : α), x = some a ∧ f a = b := by
-  rw [eq_comm]; rw [map_eq_some_iff]
+theorem some_eq_map_iff {b : β} {x : Option α} {f : α → β} :
+    some b = x.map f ↔ ∃ (a : α), x = some a ∧ f a = b := by
+  rw [eq_comm, map_eq_some_iff]
 
 end Option
+

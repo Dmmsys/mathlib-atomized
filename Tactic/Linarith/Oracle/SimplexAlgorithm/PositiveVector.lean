@@ -39,36 +39,70 @@ public meta section
 
 namespace Mathlib.Tactic.Linarith.SimplexAlgorithm
 
-variable {matType : Nat -> Nat -> Type} [UsableInSimplexAlgorithm matType]
+variable {matType : Nat → Nat → Type} [UsableInSimplexAlgorithm matType]
 
 /--
-Definition of `stateLP` / `stateLP` 的定义
+Given matrix `A` and list `strictIndexes` of strict inequalities' indexes, we want to state the
+Linear Programming problem which solution would give us a solution for the initial problem (see
+`findPositiveVector`).
 
-English:
-definition stateLP
-  signature: {n m : Nat} (A : matType n m) (strictIndexes : List Nat)
-  body: /- +2 due to shifting by `f` and `z` -/
-  let objectiveRow : List (Nat × Nat × Rat) :=
-    (0, 0, -1) :: strictIndexes.map fun idx => (0, idx + 2, 1)
-  let constraintRow : List (Nat × Nat × Rat) :=
-    [(1, 1, 1), (1, m + 2, -1)] ++ (List.range m).map (fun i => (1, i + 2, 1))
+As an objective function (that we are trying to maximize) we use sum of coordinates from
+`strictIndexes`: it suffices to find the nonnegative vector that makes this function positive.
 
-.map fun (i, j, v) => (i + 2, j + 2, v) let valuesA := getValues A
+We introduce two auxiliary variables and one constraint:
+* The variable `y` is interpreted as "homogenized" `1`. We need it because dealing with a
+  homogenized problem is easier, but having some "unit" is necessary.
+* To bound the problem we add the constraint `x₁ + ... + xₘ + z = y` introducing new variable `z`.
 
-  ofValues (objectiveRow ++ constraintRow ++ valuesA)
+The objective function also interpreted as an auxiliary variable with constraint
+`f = ∑ i ∈ strictIndexes, xᵢ`.
 
-中文:
-定义 stateLP
-  签名: {n m : 自然数} (A : matType n m) (strictIndexes : 列表 自然数)
-  定义体: /- +2 due to shifting by `f` and `z` -/
-  let objectiveRow : List (Nat × Nat × Rat) :=
-    (0, 0, -1) :: strictIndexes.map fun idx => (0, idx + 2, 1)
-  let constraintRow : List (Nat × Nat × Rat) :=
-    [(1, 1, 1), (1, m + 2, -1)] ++ (List.range m).map (fun i => (1, i + 2, 1))
+The variable `f` has to always be basic while `y` has to be free. Our Gauss method implementation
+greedy collects basic variables moving from left to right. So we place `f` before `x`-s and `y`
+after them. We place `z` between `f` and `x` because in this case `z` will be basic and
+`Gauss.getTableau` produce tableau with nonnegative last column, meaning that we are starting from
+a feasible point.
+-/
+/-
+**Mathlib.Tactic.Linarith.SimplexAlgorithm.stateLP** 是 Mathlib 中的一个定义，位于命名空间 `Ma
+thlib.Tactic.Linarith.SimplexAlgorithm`。
+形式化陈述：stateLP {n m : Nat} (A : matType n m) (strictIndexes : List Nat) : matType
+ (n + 2) (m + 3)
+参数：A : matType n m；strictIndexes : List Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-.map fun (i, j, v) => (i + 2, j + 2, v) let valuesA := getValues A
+--- 原说明 ---
+Given matrix `A` and list `strictIndexes` of strict inequalities' indexes, we wa
+nt to state the
+Linear Programming problem which solution would give us a solution for the initi
+al problem (see
+`findPositiveVector`).
 
-  ofValues (objectiveRow ++ constraintRow ++ valuesA)
+As an objective function (that we are trying to maximize) we use sum of coordina
+tes from
+`strictIndexes`: it suffices to find the nonnegative vector that makes this func
+tion positive.
+
+We introduce two auxiliary variables and one constraint:
+* The variable `y` is interpreted as "homogenized" `1`. We need it because deali
+ng with a
+  homogenized problem is easier, but having some "unit" is necessary.
+* To bound the problem we add the constraint `x₁ + ... + xₘ + z = y` introducing
+ new variable `z`.
+
+The objective function also interpreted as an auxiliary variable with constraint
+`f = ∑ i ∈ strictIndexes, xᵢ`.
+
+The variable `f` has to always be basic while `y` has to be free. Our Gauss meth
+od implementation
+greedy collects basic variables moving from left to right. So we place `f` befor
+e `x`-s and `y`
+after them. We place `z` between `f` and `x` because in this case `z` will be ba
+sic and
+`Gauss.getTableau` produce tableau with nonnegative last column, meaning that we
+ are starting from
+a feasible point.
 -/
 def stateLP {n m : Nat} (A : matType n m) (strictIndexes : List Nat) : matType (n + 2) (m + 3) :=
   /- +2 due to shifting by `f` and `z` -/
@@ -77,80 +111,56 @@ def stateLP {n m : Nat} (A : matType n m) (strictIndexes : List Nat) : matType (
   let constraintRow : List (Nat × Nat × Rat) :=
     [(1, 1, 1), (1, m + 2, -1)] ++ (List.range m).map (fun i => (1, i + 2, 1))
 
-.map fun (i, j, v) => (i + 2, j + 2, v) let valuesA := getValues A
+  let valuesA := getValues A |>.map fun (i, j, v) => (i + 2, j + 2, v)
 
   ofValues (objectiveRow ++ constraintRow ++ valuesA)
 
-/--
-Definition of `extractSolution` / `extractSolution` 的定义
+/-- Extracts target vector from the tableau, putting auxiliary variables aside (see `stateLP`). -/
+/-
+**Mathlib.Tactic.Linarith.SimplexAlgorithm.extractSolution** 是 Mathlib 中的一个定义，位于
+命名空间 `Mathlib.Tactic.Linarith.SimplexAlgorithm`。
+形式化陈述：extractSolution (tableau : Tableau matType) : Array Rat
+参数：tableau : Tableau matType。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.zero_lt_one`：0 < 1
 
-English:
-definition extractSolution
-  signature: (tableau : Tableau matType)
-  body: Id.run do
-  let mut ans : Array Rat := Array.replicate (tableau.basic.size + tableau.free.size - 3) 0
-  for h : i in [1:tableau.basic.size] do
-ans := ans.set! (tableau.basic[i] - 2) tableau.mat[(i, tableau.free.size - 1)]!
-  return ans
-
-中文:
-定义 extractSolution
-  签名: (tableau : Tableau matType)
-  定义体: Id.run do
-  let mut ans : Array Rat := Array.replicate (tableau.basic.size + tableau.free.size - 3) 0
-  for h : i in [1:tableau.basic.size] do
-ans := ans.set! (tableau.basic[i] - 2) tableau.mat[(i, tableau.free.size - 1)]!
-  return ans
-
-Depends on / 依赖: Id.run
+--- 原说明 ---
+Extracts target vector from the tableau, putting auxiliary variables aside (see 
+`stateLP`).
 -/
 def extractSolution (tableau : Tableau matType) : Array Rat := Id.run do
   let mut ans : Array Rat := Array.replicate (tableau.basic.size + tableau.free.size - 3) 0
   for h : i in [1:tableau.basic.size] do
-ans := ans.set! (tableau.basic[i] - 2) tableau.mat[(i, tableau.free.size - 1)]!
+    ans := ans.set! (tableau.basic[i] - 2) <| tableau.mat[(i, tableau.free.size - 1)]!
   return ans
 
 /--
-Definition of `findPositiveVector` / `findPositiveVector` 的定义
-
-English:
-definition findPositiveVector
-  signature: {n m : Nat} {matType : Nat -> Nat -> Type} [UsableInSimplexAlgorithm matType]
-  body: do
-  /- State the linear programming problem. -/
-  let B := stateLP A strictIndexes
-
-  /- Using Gaussian elimination split variable into free and basic forming the tableau that will be
-  operated by the Simplex Algorithm. -/
-  let initTableau ← Gauss.getTableau B
-
-  /- Run the Simplex Algorithm and extract the solution. -/
-  let res ← runSimplexAlgorithm.run initTableau
-  if res.fst.isOk then
-    return extractSolution res.snd
-  else
-    throwError "Simplex Algorithm failed"
-
-中文:
-定义 findPositiveVector
-  签名: {n m : 自然数} {matType : 自然数 -> 自然数 -> 类型} [UsableInSimplexAlgorithm matType]
-  定义体: do
-  /- State the linear programming problem. -/
-  let B := stateLP A strictIndexes
-
-  /- Using Gaussian elimination split variable into free and basic forming the tableau that will be
-  operated by the Simplex Algorithm. -/
-  let initTableau ← Gauss.getTableau B
-
-  /- Run the Simplex Algorithm and extract the solution. -/
-  let res ← runSimplexAlgorithm.run initTableau
-  if res.fst.isOk then
-    return extractSolution res.snd
-  else
-    throwError "Simplex Algorithm failed"
+Finds a nonnegative vector `v`, such that `A v = 0` and some of its coordinates from
+`strictCoords`
+are positive, in the case such `v` exists. If not, throws the error. The latter prevents
+`linarith` from doing useless post-processing.
 -/
-def findPositiveVector {n m : Nat} {matType : Nat -> Nat -> Type} [UsableInSimplexAlgorithm matType]
-(A : matType n m) (strictIndexes : List Nat) : Lean.Meta.MetaM Array Rat := do
+/-
+**Mathlib.Tactic.Linarith.SimplexAlgorithm.findPositiveVector** 是 Mathlib 中的一个定义
+，位于命名空间 `Mathlib.Tactic.Linarith.SimplexAlgorithm`。
+形式化陈述：findPositiveVector {n m : Nat} {matType : Nat -> Nat -> Type} [UsableInSim
+plexAlgorithm matType] (A : matType n m) (strictIndexes : List Nat) : Lean.Meta.
+MetaM Array Rat
+参数：A : matType n m；strictIndexes : List Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Finds a nonnegative vector `v`, such that `A v = 0` and some of its coordinates 
+from
+`strictCoords`
+are positive, in the case such `v` exists. If not, throws the error. The latter 
+prevents
+`linarith` from doing useless post-processing.
+-/
+def findPositiveVector {n m : Nat} {matType : Nat → Nat → Type} [UsableInSimplexAlgorithm matType]
+    (A : matType n m) (strictIndexes : List Nat) : Lean.Meta.MetaM <| Array Rat := do
   /- State the linear programming problem. -/
   let B := stateLP A strictIndexes
 
@@ -166,3 +176,4 @@ def findPositiveVector {n m : Nat} {matType : Nat -> Nat -> Type} [UsableInSimpl
     throwError "Simplex Algorithm failed"
 
 end Mathlib.Tactic.Linarith.SimplexAlgorithm
+

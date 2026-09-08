@@ -29,7 +29,7 @@ produces the third one.
 ## TODO
 
 * Prove an `IsKleinFour` group is isomorphic to the normal subgroup of `alternatingGroup (Fin 4)`
-  with the permutation cycles `V = {(), (1 2)(3 4), (1 3)(2 4), (1 4)(2 3)}`. This is the kernel
+  with the permutation cycles `V = {(), (1 2)(3 4), (1 3)(2 4), (1 4)(2 3)}`.  This is the kernel
   of the surjection of `alternatingGroup (Fin 4)` onto `alternatingGroup (Fin 3) ≃ (ZMod 3)`.
   In other words, we have the exact sequence `V → A₄ → A₃`.
 
@@ -45,22 +45,15 @@ non-cyclic abelian group
 
 /-! ### Klein four-groups as a mixin class -/
 
-/--
-Definition of `IsAddKleinFour` / `IsAddKleinFour` 的定义
+/-- An (additive) Klein four-group is an (additive) group of cardinality four and exponent two. -/
+/-
+**IsAddKleinFour** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(G : Type u_1) → [AddGroup G] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsAddKleinFour
-  parameters: (G : Type*) [AddGroup G]
-  axioms and operations (2):
-    - card_four : Nat.card G = 4
-    - exponent_two : AddMonoid.exponent G = 2
-
-中文:
-类 是加法KleinFour
-  参数: (G : 类型) [加法群 G]
-  公理与运算 (2 个):
-    - card_four : 自然数.card G = 4
-    - exponent_two : 加法幺半群.exponent G = 2
+--- 原说明 ---
+An (additive) Klein four-group is an (additive) group of cardinality four and ex
+ponent two.
 -/
 class IsAddKleinFour (G : Type*) [AddGroup G] : Prop where
   card_four : Nat.card G = 4
@@ -68,22 +61,13 @@ class IsAddKleinFour (G : Type*) [AddGroup G] : Prop where
 
 /-- A Klein four-group is a group of cardinality four and exponent two. -/
 @[to_additive existing IsAddKleinFour]
-/--
-Definition of `IsKleinFour` / `IsKleinFour` 的定义
+/-
+**IsKleinFour** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(G : Type u_1) → [Group G] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsKleinFour
-  parameters: (G : Type*) [Group G]
-  axioms and operations (2):
-    - card_four : Nat.card G = 4
-    - exponent_two : Monoid.exponent G = 2
-
-中文:
-类 是KleinFour
-  参数: (G : 类型) [群 G]
-  公理与运算 (2 个):
-    - card_four : 自然数.card G = 4
-    - exponent_two : 幺半群.exponent G = 2
+--- 原说明 ---
+A Klein four-group is a group of cardinality four and exponent two.
 -/
 class IsKleinFour (G : Type*) [Group G] : Prop where
   card_four : Nat.card G = 4
@@ -91,32 +75,24 @@ class IsKleinFour (G : Type*) [Group G] : Prop where
 
 attribute [simp] IsKleinFour.card_four IsKleinFour.exponent_two
   IsAddKleinFour.card_four IsAddKleinFour.exponent_two
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsAddKleinFour (ZMod 2 × ZMod 2)
-  body: by simp
-  exponent_two := by simp [AddMonoid.exponent_prod]
-
-中文:
-实例 :
-  签名: 是加法KleinFour (ZMod 2 × ZMod 2)
-  定义体: by simp
-  exponent_two := by simp [AddMonoid.exponent_prod]
-
-Depends on / 依赖: AddMonoid, AddMonoid.exponent_prod, exponent_prod, exponent_two
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsAddKleinFour (ZMod 2 × ZMod 2) where
   card_four := by simp
   exponent_two := by simp [AddMonoid.exponent_prod]
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {G : Type*} [Group G] [IsKleinFour G] : IsAddKleinFour (Additive G) where
   card_four := by rw [← IsKleinFour.card_four (G := G)]; congr!
   exponent_two := by simp
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {G : Type*} [AddGroup G] [IsAddKleinFour G] : IsKleinFour (Multiplicative G) where
   card_four := by rw [← IsAddKleinFour.card_four (G := G)]; congr!
   exponent_two := by simp
@@ -124,20 +100,18 @@ instance {G : Type*} [AddGroup G] [IsAddKleinFour G] : IsKleinFour (Multiplicati
 namespace IsKleinFour
 
 @[to_additive]
-/--
-theorem `isMulCommutative` / 定理 `isMulCommutative`
-
-English:
-theorem isMulCommutative
-  given: {G : Type*} [Group G] [IsKleinFour G]
-  proof: mul_comm_of_exponent_two exponent_two
-
-中文:
-定理 isMulCommutative
-  条件: {G : 类型} [群 G] [是KleinFour G]
-  证明: mul_comm_of_exponent_two exponent_two
-
-Depends on / 依赖: exponent_two, mul_comm_of_exponent_two
+/-
+**IsKleinFour.isMulCommutative** 是 Mathlib 中的一个定理，位于命名空间 `IsKleinFour`。
+形式化陈述：isMulCommutative {G : Type*} [Group G] [IsKleinFour G] : IsMulCommutative 
+G where is_comm.comm
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `mul_comm_of_exponent_two`：mul_comm_of_exponent_two [IsCancelMul G] (hG :
+ Monoid.exponent G = 2) (a b : G) : a * b = b * a
+· 使用定理 `CancelMonoid.toIsCancelMul`：∀ (M : Type u) [inst : CancelMonoid M], IsCa
+ncelMul M
+· 使用定理 `IsKleinFour.exponent_two`：∀ {G : Type u_1} {inst : Group G} [self : IsKl
+einFour G], Monoid.exponent G = 2
 -/
 theorem isMulCommutative {G : Type*} [Group G] [IsKleinFour G] :
     IsMulCommutative G where
@@ -146,24 +120,44 @@ theorem isMulCommutative {G : Type*} [Group G] [IsKleinFour G] :
 /-- This instance is scoped, because it always applies (which makes linting and typeclass inference
 potentially *a lot* slower). -/
 @[to_additive]
+/-
+**IsKleinFour.instFinite** 是 Mathlib 中的一个定理，位于命名空间 `IsKleinFour`。
+形式化陈述：∀ {G : Type u_1} [inst : Group G] [IsKleinFour G], Finite G
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.finite_of_card_ne_zero`：finite_of_card_ne_zero (h : Nat.card α != 0)
+ : Finite α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsKleinFour.card_four`：∀ {G : Type u_1} {inst : Group G} [self : IsKlein
+Four G], Nat.card G = 4
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `not_false_eq_true`：(¬False) = True
+
+--- 原说明 ---
+This instance is scoped, because it always applies (which makes linting and type
+class inference
+potentially *a lot* slower).
+-/
 scoped instance instFinite {G : Type*} [Group G] [IsKleinFour G] : Finite G :=
-Nat.finite_of_card_ne_zero by simp [IsKleinFour.card_four]
+  Nat.finite_of_card_ne_zero <| by simp [IsKleinFour.card_four]
 
 @[to_additive (attr := simp)]
-/--
-lemma `card_four'` / 引理 `card_four'`
-
-English:
-lemma card_four'
-  given: {G : Type*} [Group G] [Fintype G] [IsKleinFour G]
-  proof: Nat.card_eq_fintype_card (α := G).symm ▸ IsKleinFour.card_four
-
-中文:
-引理 card_four'
-  条件: {G : 类型} [群 G] [有限类型 G] [是KleinFour G]
-  证明: Nat.card_eq_fintype_card (α := G).symm ▸ IsKleinFour.card_four
-
-Depends on / 依赖: IsKleinFour, IsKleinFour.card_four, Nat.card_eq_fintype_card, card_eq_fintype_card, card_four
+/-
+**IsKleinFour.card_four'** 是 Mathlib 中的一个引理，位于命名空间 `IsKleinFour`。
+形式化陈述：card_four' {G : Type*} [Group G] [Fintype G] [IsKleinFour G] : Fintype.car
+d G = 4
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsKleinFour.card_four`：∀ {G : Type u_1} {inst : Group G} [self : IsKlein
+Four G], Nat.card G = 4
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
 -/
 lemma card_four' {G : Type*} [Group G] [Fintype G] [IsKleinFour G] :
     Fintype.card G = 4 :=
@@ -174,45 +168,46 @@ open Finset
 variable {G : Type*} [Group G] [IsKleinFour G]
 
 @[to_additive]
-/--
-lemma `not_isCyclic` / 引理 `not_isCyclic`
-
-English:
-lemma not_isCyclic
-  statement: ¬IsCyclic G
-  proof: fun h => by simpa using h.exponent_eq_card
-
-@[to_additive]
-
-中文:
-引理 not_isCyclic
-  结论: ¬是循环 G
-  证明: fun h => by simpa using h.exponent_eq_card
-
-@[to_additive]
-
-Depends on / 依赖: Encodable, IsEmpty, _root_, _root_.IsEmpty.toEncodable, exponent_eq_card, h.exponent_eq_card, toEncodable
+/-
+**IsKleinFour.not_isCyclic** 是 Mathlib 中的一个引理，位于命名空间 `IsKleinFour`。
+形式化陈述：not_isCyclic : ¬IsCyclic G
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsKleinFour.exponent_two`：∀ {G : Type u_1} {inst : Group G} [self : IsKl
+einFour G], Monoid.exponent G = 2
+· 使用定理 `IsKleinFour.card_four`：∀ {G : Type u_1} {inst : Group G} [self : IsKlein
+Four G], Nat.card G = 4
+· 使用定理 `eq_false_of_decide`：∀ {p : Prop} {x : Decidable p}, decide p = false → p
+ = False
+· 使用定理 `IsCyclic.exponent_eq_card`：IsCyclic.exponent_eq_card [Group α] [IsCyclic
+ α] : exponent α = Nat.card α
 -/
 lemma not_isCyclic : ¬IsCyclic G :=
-  fun h => by simpa using h.exponent_eq_card
+  fun h ↦ by simpa using h.exponent_eq_card
 
 @[to_additive]
-/--
-lemma `inv_eq_self` / 引理 `inv_eq_self`
-
-English:
-lemma inv_eq_self
-  given: (x : G)
-  statement: x⁻¹ = x
-  proof: inv_eq_self_of_exponent_two (by simp) x
-
-中文:
-引理 inv_eq_self
-  条件: (x : G)
-  结论: x⁻¹ = x
-  证明: inv_eq_self_of_exponent_two (by simp) x
-
-Depends on / 依赖: inv_eq_self_of_exponent_two
+/-
+**IsKleinFour.inv_eq_self** 是 Mathlib 中的一个引理，位于命名空间 `IsKleinFour`。
+形式化陈述：inv_eq_self (x : G) : x⁻¹ = x
+参数：x : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `inv_eq_self_of_exponent_two`：inv_eq_self_of_exponent_two (hG : Monoid.ex
+ponent G = 2) (x : G) : x⁻¹ = x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsKleinFour.exponent_two`：∀ {G : Type u_1} {inst : Group G} [self : IsKl
+einFour G], Monoid.exponent G = 2
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma inv_eq_self (x : G) : x⁻¹ = x := inv_eq_self_of_exponent_two (by simp) x
 
@@ -223,64 +218,59 @@ scoped[IsKleinFour] attribute [simp] inv_eq_self
 scoped[IsAddKleinFour] attribute [simp] neg_eq_self
 
 @[to_additive]
-/--
-lemma `mul_self` / 引理 `mul_self`
-
-English:
-lemma mul_self
-  given: (x : G)
-  statement: x * x = 1
-  proof: by
-  rw [mul_eq_one_iff_eq_inv]; rw [inv_eq_self]
-
-@[to_additive]
-
-中文:
-引理 mul_self
-  条件: (x : G)
-  结论: x * x = 1
-  证明: by
-  rw [mul_eq_one_iff_eq_inv]; rw [inv_eq_self]
-
-@[to_additive]
-
-Depends on / 依赖: inv_eq_self, mul_eq_one_iff_eq_inv
+/-
+**IsKleinFour.mul_self** 是 Mathlib 中的一个引理，位于命名空间 `IsKleinFour`。
+形式化陈述：mul_self (x : G) : x * x = 1
+参数：x : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_eq_one_iff_eq_inv`：mul_eq_one_iff_eq_inv : a * b = 1 ↔ a = b⁻¹
+· 使用引理 `IsKleinFour.inv_eq_self`：inv_eq_self (x : G) : x⁻¹ = x
 -/
 lemma mul_self (x : G) : x * x = 1 := by
-  rw [mul_eq_one_iff_eq_inv]; rw [inv_eq_self]
+  rw [mul_eq_one_iff_eq_inv, inv_eq_self]
 
 @[to_additive]
-/--
-lemma `eq_finset_univ` / 引理 `eq_finset_univ`
-
-English:
-lemma eq_finset_univ
-  statement: [Fintype G] [DecidableEq G]
-  proof: by
-  apply Finset.eq_univ_of_card
-  rw [card_four']
-  repeat rw [card_insert_of_notMem]
-  on_goal 4 => simpa using mul_notMem_of_exponent_two (by simp) hx hy hxy
-  all_goals simp_all
-
-@[to_additive]
-
-中文:
-引理 eq_finset_univ
-  结论: [有限类型 G] [DecidableEq G]
-  证明: by
-  apply Finset.eq_univ_of_card
-  rw [card_four']
-  repeat rw [card_insert_of_notMem]
-  on_goal 4 => simpa using mul_notMem_of_exponent_two (by simp) hx hy hxy
-  all_goals simp_all
-
-@[to_additive]
-
-Depends on / 依赖: Finset, Finset.eq_univ_of_card, all_goals, card_four, card_insert_of_notMem, eq_univ_of_card, mul_notMem_of_exponent_two, on_goal, repeat
+/-
+**IsKleinFour.eq_finset_univ** 是 Mathlib 中的一个引理，位于命名空间 `IsKleinFour`。
+形式化陈述：eq_finset_univ [Fintype G] [DecidableEq G] {x y : G} (hx : x != 1) (hy : y
+ != 1) (hxy : x != y) : {x * y, x, y, (1 : G)} = Finset.univ
+参数：hx : x != 1；hy : y != 1；hxy : x != y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.eq_univ_of_card`：Finset.eq_univ_of_card [Fintype α] (s : Finset α
+) (hs : #s = Fintype.card α) : s = univ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `IsKleinFour.card_four'`：card_four' {G : Type*} [Group G] [Fintype G] [Is
+KleinFour G] : Fintype.card G = 4
+· 使用定理 `Finset.card_insert_of_notMem`：card_insert_of_notMem (h : a ∉ s) : #(inse
+rt a s) = #s + 1
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `LeftCancelSemigroup.toIsLeftCancelMul`：∀ {G : Type u} [self : LeftCancel
+Semigroup G], IsLeftCancelMul G
+· 使用定理 `RightCancelSemigroup.toIsRightCancelMul`：∀ {G : Type u} [self : RightCan
+celSemigroup G], IsRightCancelMul G
+· 使用引理 `mul_notMem_of_exponent_two`：mul_notMem_of_exponent_two (h : Monoid.expon
+ent G = 2) {x y : G} (hx : x != 1) (hy : y != 1) (hxy : x != y) : x * y ∉ ({x, y
+, 1} : Set G)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `IsKleinFour.exponent_two`：∀ {G : Type u_1} {inst : Group G} [self : IsKl
+einFour G], Monoid.exponent G = 2
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `or_self`：∀ (p : Prop), (p ∨ p) = p
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Finset.card_singleton`：card_singleton (a : α) : #{a} = 1
 -/
 lemma eq_finset_univ [Fintype G] [DecidableEq G]
-    {x y : G} (hx : x != 1) (hy : y != 1) (hxy : x != y) : {x * y, x, y, (1 : G)} = Finset.univ := by
+    {x y : G} (hx : x ≠ 1) (hy : y ≠ 1) (hxy : x ≠ y) : {x * y, x, y, (1 : G)} = Finset.univ := by
   apply Finset.eq_univ_of_card
   rw [card_four']
   repeat rw [card_insert_of_notMem]
@@ -288,34 +278,31 @@ lemma eq_finset_univ [Fintype G] [DecidableEq G]
   all_goals simp_all
 
 @[to_additive]
-/--
-lemma `eq_mul_of_ne_all` / 引理 `eq_mul_of_ne_all`
-
-English:
-lemma eq_mul_of_ne_all
-  statement: {x y z : G} (hx : x != 1)
-  proof: by
-  classical
-  let _ := Fintype.ofFinite G
-apply eq_of_mem_insert_of_notMem (eq_finset_univ hx hy hxy).symm ▸ mem_univ _
-  simpa only [mem_singleton, mem_insert, not_or] using ⟨hzx, hzy, hz⟩
-
-中文:
-引理 eq_mul_of_ne_all
-  结论: {x y z : G} (hx : x != 1)
-  证明: by
-  classical
-  let _ := Fintype.ofFinite G
-apply eq_of_mem_insert_of_notMem (eq_finset_univ hx hy hxy).symm ▸ mem_univ _
-  simpa only [mem_singleton, mem_insert, not_or] using ⟨hzx, hzy, hz⟩
-
-Depends on / 依赖: Fintype, Fintype.ofFinite, classical, eq_finset_univ, eq_of_mem_insert_of_notMem, mem_insert, mem_singleton, mem_univ, not_or, ofFinite
+/-
+**IsKleinFour.eq_mul_of_ne_all** 是 Mathlib 中的一个引理，位于命名空间 `IsKleinFour`。
+形式化陈述：eq_mul_of_ne_all {x y z : G} (hx : x != 1) (hy : y != 1) (hxy : x != y) (h
+z : z != 1) (hzx : z != x) (hzy : z != y) : z = x * y
+参数：hx : x != 1；hy : y != 1；hxy : x != y；hz : z != 1；hzx : z != x；hzy : z != y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsKleinFour.instFinite`：∀ {G : Type u_1} [inst : Group G] [IsKleinFour G
+], Finite G
+· 使用定理 `Finset.eq_of_mem_insert_of_notMem`：eq_of_mem_insert_of_notMem (ha : b in
+ insert a s) (hb : b ∉ s) : b = a
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `IsKleinFour.eq_finset_univ`：eq_finset_univ [Fintype G] [DecidableEq G] {
+x y : G} (hx : x != 1) (hy : y != 1) (hxy : x != y) : {x * y, x, y, (1 : G)} = F
+inset.univ
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-lemma eq_mul_of_ne_all {x y z : G} (hx : x != 1)
-    (hy : y != 1) (hxy : x != y) (hz : z != 1) (hzx : z != x) (hzy : z != y) : z = x * y := by
+lemma eq_mul_of_ne_all {x y z : G} (hx : x ≠ 1)
+    (hy : y ≠ 1) (hxy : x ≠ y) (hz : z ≠ 1) (hzx : z ≠ x) (hzy : z ≠ y) : z = x * y := by
   classical
   let _ := Fintype.ofFinite G
-apply eq_of_mem_insert_of_notMem (eq_finset_univ hx hy hxy).symm ▸ mem_univ _
+  apply eq_of_mem_insert_of_notMem <| (eq_finset_univ hx hy hxy).symm ▸ mem_univ _
   simpa only [mem_singleton, mem_insert, not_or] using ⟨hzx, hzy, hz⟩
 
 variable {G₁ G₂ : Type*} [Group G₁] [Group G₂] [IsKleinFour G₁]
@@ -324,52 +311,13 @@ variable {G₁ G₂ : Type*} [Group G₁] [Group G₂] [IsKleinFour G₁]
 `1 : G₁` to `1 : G₂` is in fact an isomorphism. -/
 @[to_additive /-- An equivalence between an `IsAddKleinFour` group `G₁` and a group `G₂` of exponent
 two which sends `0 : G₁` to `0 : G₂` is in fact an isomorphism. -/]
-/--
-Definition of `mulEquiv'` / `mulEquiv'` 的定义
-
-English:
-definition mulEquiv'
-  signature: (e : G₁ ≃ G₂) (he : e 1 = 1) (h : Monoid.exponent G₂ = 2)
-  body: e
-  map_mul' := by
-    let _inst₁ := Fintype.ofFinite G₁
-    let _inst₂ := Fintype.ofEquiv G₁ e
-    intro x y
-    by_cases hx : x = 1 <;> by_cases hy : y = 1
-    all_goals try simp only [hx, hy, mul_one, one_mul, Equiv.toFun_as_coe, he]
-    by_cases hxy : x = y
-    · simp [hxy, mul_self, ← pow_two (e y), h ▸ Monoid.pow_exponent_eq_one (e y), he]
-    · classical
-      have univ₂ : {e (x * y), e x, e y, (1 : G₂)} = Finset.univ := by
-        simpa [map_univ_equiv e, map_insert, he]
-          using congr(Finset.map e.toEmbedding $(eq_finset_univ hx hy hxy))
-      rw [← Ne]; rw [← e.injective.ne_iff] at hx hy hxy
-      rw [he] at hx hy
-      symm
-apply eq_of_mem_insert_of_notMem univ₂.symm ▸ mem_univ _
-      simpa using mul_notMem_of_exponent_two h hx hy hxy
-
-中文:
-定义 mulEquiv'
-  签名: (e : G₁ ≃ G₂) (he : e 1 = 1) (h : 幺半群.exponent G₂ = 2)
-  定义体: e
-  map_mul' := by
-    let _inst₁ := Fintype.ofFinite G₁
-    let _inst₂ := Fintype.ofEquiv G₁ e
-    intro x y
-    by_cases hx : x = 1 <;> by_cases hy : y = 1
-    all_goals try simp only [hx, hy, mul_one, one_mul, Equiv.toFun_as_coe, he]
-    by_cases hxy : x = y
-    · simp [hxy, mul_self, ← pow_two (e y), h ▸ Monoid.pow_exponent_eq_one (e y), he]
-    · classical
-      have univ₂ : {e (x * y), e x, e y, (1 : G₂)} = Finset.univ := by
-        simpa [map_univ_equiv e, map_insert, he]
-          using congr(Finset.map e.toEmbedding $(eq_finset_univ hx hy hxy))
-      rw [← Ne]; rw [← e.injective.ne_iff] at hx hy hxy
-      rw [he] at hx hy
-      symm
-apply eq_of_mem_insert_of_notMem univ₂.symm ▸ mem_univ _
-      simpa using mul_notMem_of_exponent_two h hx hy hxy
+/-
+**IsKleinFour.mulEquiv'** 是 Mathlib 中的一个定义，位于命名空间 `IsKleinFour`。
+形式化陈述：mulEquiv' (e : G₁ ≃ G₂) (he : e 1 = 1) (h : Monoid.exponent G₂ = 2) : G₁ ≃
+* G₂ where toEquiv
+参数：e : G₁ ≃ G₂；he : e 1 = 1；h : Monoid.exponent G₂ = 2。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def mulEquiv' (e : G₁ ≃ G₂) (he : e 1 = 1) (h : Monoid.exponent G₂ = 2) : G₁ ≃* G₂ where
   toEquiv := e
@@ -385,65 +333,59 @@ def mulEquiv' (e : G₁ ≃ G₂) (he : e 1 = 1) (h : Monoid.exponent G₂ = 2) 
       have univ₂ : {e (x * y), e x, e y, (1 : G₂)} = Finset.univ := by
         simpa [map_univ_equiv e, map_insert, he]
           using congr(Finset.map e.toEmbedding $(eq_finset_univ hx hy hxy))
-      rw [← Ne]; rw [← e.injective.ne_iff] at hx hy hxy
+      rw [← Ne, ← e.injective.ne_iff] at hx hy hxy
       rw [he] at hx hy
       symm
-apply eq_of_mem_insert_of_notMem univ₂.symm ▸ mem_univ _
+      apply eq_of_mem_insert_of_notMem <| univ₂.symm ▸ mem_univ _
       simpa using mul_notMem_of_exponent_two h hx hy hxy
 
 /-- Any two `IsKleinFour` groups are isomorphic via any equivalence which sends the identity of one
 group to the identity of the other. -/
 @[to_additive /-- Any two `IsAddKleinFour` groups are isomorphic via any
 equivalence which sends the identity of one group to the identity of the other. -/]
-/--
-Definition of `mulEquiv` / `mulEquiv` 的定义
-
-English:
-abbreviation mulEquiv
-  signature: [IsKleinFour G₂] (e : G₁ ≃ G₂) (he : e 1 = 1)
-  body: mulEquiv' e he exponent_two
-
-中文:
-缩写 mulEquiv
-  签名: [是KleinFour G₂] (e : G₁ ≃ G₂) (he : e 1 = 1)
-  定义体: mulEquiv' e he exponent_two
-
-Depends on / 依赖: exponent_two, mulEquiv
+/-
+**IsKleinFour.mulEquiv** 是 Mathlib 中的一个缩写定义，位于命名空间 `IsKleinFour`。
+形式化陈述：mulEquiv [IsKleinFour G₂] (e : G₁ ≃ G₂) (he : e 1 = 1) : G₁ ≃* G₂
+参数：e : G₁ ≃ G₂；he : e 1 = 1。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsKleinFour.exponent_two`：∀ {G : Type u_1} {inst : Group G} [self : IsKl
+einFour G], Monoid.exponent G = 2
 -/
 abbrev mulEquiv [IsKleinFour G₂] (e : G₁ ≃ G₂) (he : e 1 = 1) : G₁ ≃* G₂ :=
   mulEquiv' e he exponent_two
 
 /-- Any two `IsKleinFour` groups are isomorphic. -/
 @[to_additive /-- Any two `IsAddKleinFour` groups are isomorphic. -/]
-/--
-lemma `nonempty_mulEquiv` / 引理 `nonempty_mulEquiv`
+/-
+**IsKleinFour.nonempty_mulEquiv** 是 Mathlib 中的一个引理，位于命名空间 `IsKleinFour`。
+形式化陈述：nonempty_mulEquiv [IsKleinFour G₂] : Nonempty (G₁ ≃* G₂)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsKleinFour.instFinite`：∀ {G : Type u_1} [inst : Group G] [IsKleinFour G
+], Finite G
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `IsKleinFour.card_four'`：card_four' {G : Type*} [Group G] [Fintype G] [Is
+KleinFour G] : Fintype.card G = 4
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.setValue_eq`：setValue_eq (f : α ≃ β) (a : α) (b : β) : setValue f 
+a b a = b
 
-English:
-lemma nonempty_mulEquiv
-  given: [IsKleinFour G₂]
-  statement: Nonempty (G₁ ≃* G₂)
-  proof: by
-  classical
-  let _inst₁ := Fintype.ofFinite G₁
-  let _inst₁ := Fintype.ofFinite G₂
-exact ⟨mulEquiv ((Fintype.equivOfCardEq <| by simp).setValue 1 1) by simp⟩
-
-中文:
-引理 nonempty_mulEquiv
-  条件: [是KleinFour G₂]
-  结论: 非空 (G₁ ≃* G₂)
-  证明: by
-  classical
-  let _inst₁ := Fintype.ofFinite G₁
-  let _inst₁ := Fintype.ofFinite G₂
-exact ⟨mulEquiv ((Fintype.equivOfCardEq <| by simp).setValue 1 1) by simp⟩
-
-Depends on / 依赖: Fintype, Fintype.equivOfCardEq, Fintype.ofFinite, classical, equivOfCardEq, mulEquiv, ofFinite, setValue
+--- 原说明 ---
+Any two `IsKleinFour` groups are isomorphic.
 -/
 lemma nonempty_mulEquiv [IsKleinFour G₂] : Nonempty (G₁ ≃* G₂) := by
   classical
   let _inst₁ := Fintype.ofFinite G₁
   let _inst₁ := Fintype.ofFinite G₂
-exact ⟨mulEquiv ((Fintype.equivOfCardEq <| by simp).setValue 1 1) by simp⟩
+  exact ⟨mulEquiv ((Fintype.equivOfCardEq <| by simp).setValue 1 1) <| by simp⟩
 
 end IsKleinFour
+

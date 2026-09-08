@@ -41,49 +41,35 @@ Lemmas about the operators `⊔` and `⊓` should use the names `sup` and `inf` 
 
 /-- Set / lattice complement -/
 @[notation_class]
-/--
-Definition of `Compl` / `Compl` 的定义
+/-
+**Compl** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Compl
-  parameters: (α : Type*)
-  axioms and operations (1):
-    - compl : α -> α
-
-中文:
-类 补集
-  参数: (α : 类型)
-  公理与运算 (1 个):
-    - compl : α -> α
+--- 原说明 ---
+Set / lattice complement
 -/
 class Compl (α : Type*) where
   /-- Set / lattice complement -/
-  compl : α -> α
+  compl : α → α
 
 export Compl (compl)
 
 /-- Set / lattice complement -/
 @[deprecated Compl (since := "2026-01-04")]
-/--
-Definition of `HasCompl` / `HasCompl` 的定义
+/-
+**HasCompl** 是 Mathlib 中的一个类，位于命名空间 ``。
+形式化陈述：HasCompl (α : Type*) where /-- Set / lattice complement -/ compl : α -> α 
+ attribute [deprecated Compl.compl (since
+参数：α : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasCompl
-  parameters: (α : Type*)
-  axioms and operations (1):
-    - compl : α -> α
-
-中文:
-类 有补集
-  参数: (α : 类型)
-  公理与运算 (1 个):
-    - compl : α -> α
-
-Depends on / 依赖: HasCompl, HasCompl.compl
+--- 原说明 ---
+Set / lattice complement
 -/
 class HasCompl (α : Type*) where
   /-- Set / lattice complement -/
-  compl : α -> α
+  compl : α → α
 
 attribute [deprecated Compl.compl (since := "2026-01-04")] HasCompl.compl
 
@@ -115,11 +101,11 @@ namespace Mathlib.Meta
 open Lean Meta PrettyPrinter Delaborator SubExpr Qq
 
 -- irreducible to not confuse Qq
-@[irreducible] private meta def linearOrderExpr (u : Level) : Q(Type u -> Type u) :=
+@[irreducible] private meta def linearOrderExpr (u : Level) : Q(Type u → Type u) :=
   .const `LinearOrder [u]
-private meta def linearOrderToMax (u : Level) : Q((a : Type u) -> $(linearOrderExpr u) a -> Max a) :=
+private meta def linearOrderToMax (u : Level) : Q((a : Type u) → $(linearOrderExpr u) a → Max a) :=
   .const `LinearOrder.toMax [u]
-private meta def linearOrderToMin (u : Level) : Q((a : Type u) -> $(linearOrderExpr u) a -> Min a) :=
+private meta def linearOrderToMin (u : Level) : Q((a : Type u) → $(linearOrderExpr u) a → Min a) :=
   .const `LinearOrder.toMin [u]
 
 /--
@@ -127,8 +113,8 @@ Return `true` if `LinearOrder` is imported and `inst` comes from a `LinearOrder 
 
 We use a `try catch` block to make sure there are no surprising errors during delaboration.
 -/
-private meta def hasLinearOrder (u : Level) (α : Q(Type u)) (cls : Q(Type u -> Type u))
-    (toCls : Q((α : Type u) -> $(linearOrderExpr u) α -> $cls α)) (inst : Q($cls $α)) :
+private meta def hasLinearOrder (u : Level) (α : Q(Type u)) (cls : Q(Type u → Type u))
+    (toCls : Q((α : Type u) → $(linearOrderExpr u) α → $cls α)) (inst : Q($cls $α)) :
     MetaM Bool := do
   try
     withNewMCtxDepth do
@@ -146,8 +132,8 @@ private meta def hasLinearOrder (u : Level) (α : Q(Type u)) (cls : Q(Type u -> 
 /-- Delaborate `max x y` into `x ⊔ y` if the type is not a linear order. -/
 @[delab app.Max.max]
 meta def delabSup : Delab :=
-whenNotPPOption getPPExplicit
-whenPPOption getPPNotation
+  whenNotPPOption getPPExplicit <|
+  whenPPOption getPPNotation <|
   withOverApp 4 do
     let_expr f@Max.max α inst _ _ := ← getExpr | failure
     have u := f.constLevels![0]!
@@ -161,8 +147,8 @@ whenPPOption getPPNotation
 /-- Delaborate `min x y` into `x ⊓ y` if the type is not a linear order. -/
 @[delab app.Min.min]
 meta def delabInf : Delab :=
-whenNotPPOption getPPExplicit
-whenPPOption getPPNotation
+  whenNotPPOption getPPExplicit <|
+  whenPPOption getPPNotation <|
   withOverApp 4 do
     let_expr f@Min.min α inst _ _ := ← getExpr | failure
     have u := f.constLevels![0]!
@@ -177,26 +163,20 @@ end Mathlib.Meta
 
 /-- Syntax typeclass for Heyting implication `⇨`. -/
 @[notation_class, to_dual SDiff]
-/--
-Definition of `HImp` / `HImp` 的定义
+/-
+**HImp** 是 Mathlib 中的一个类，位于命名空间 ``。
+形式化陈述：HImp (α : Type*) where /-- Heyting implication `⇨` -/ himp : α -> α -> α  
+set_option linter.translateOverwrite false in attribute [to_dual existing (reord
+er
+参数：α : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HImp
-  parameters: (α : Type*)
-  axioms and operations (1):
-    - himp : α -> α -> α
-
-中文:
-类 HImp
-  参数: (α : 类型)
-  公理与运算 (1 个):
-    - himp : α -> α -> α
-
-Depends on / 依赖: HImp.himp
+--- 原说明 ---
+Syntax typeclass for Heyting implication `⇨`.
 -/
 class HImp (α : Type*) where
   /-- Heyting implication `⇨` -/
-  himp : α -> α -> α
+  himp : α → α → α
 
 set_option linter.translateOverwrite false in
 attribute [to_dual existing (reorder := 3 4) sdiff] HImp.himp
@@ -211,24 +191,24 @@ underestimates while `HNot` overestimates. In Boolean algebras, they are equal.
 See `hnot_eq_compl`.
 -/
 @[notation_class, to_dual Compl]
-/--
-Definition of `HNot` / `HNot` 的定义
+/-
+**HNot** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HNot
-  parameters: (α : Type*)
-  axioms and operations (1):
-    - hnot : α -> α
+--- 原说明 ---
+Syntax typeclass for Heyting negation `￢`.
 
-中文:
-类 HNot
-  参数: (α : 类型)
-  公理与运算 (1 个):
-    - hnot : α -> α
+The difference between `Compl` and `HNot` is that the former belongs to Heyting 
+algebras,
+while the latter belongs to co-Heyting algebras. They are both pseudo-complement
+s, but `compl`
+underestimates while `HNot` overestimates. In Boolean algebras, they are equal.
+See `hnot_eq_compl`.
 -/
 class HNot (α : Type*) where
   /-- Heyting negation `￢` -/
-  hnot : α -> α
+  hnot : α → α
 
 export HImp (himp)
 export SDiff (sdiff)
@@ -243,20 +223,13 @@ prefix:72 "￢" => hnot
 
 /-- Typeclass for the `⊤` (`\top`) notation -/
 @[notation_class, ext]
-/--
-Definition of `Top` / `Top` 的定义
+/-
+**Top** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Top
-  parameters: (α : Type*)
-  axioms and operations (1):
-    - top : α
-
-中文:
-类 顶元素
-  参数: (α : 类型)
-  公理与运算 (1 个):
-    - top : α
+--- 原说明 ---
+Typeclass for the `⊤` (`\top`) notation
 -/
 class Top (α : Type*) where
   /-- The top (`⊤`, `\top`) element -/
@@ -264,20 +237,13 @@ class Top (α : Type*) where
 
 /-- Typeclass for the `⊥` (`\bot`) notation -/
 @[notation_class, ext, to_dual]
-/--
-Definition of `Bot` / `Bot` 的定义
+/-
+**Bot** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Bot
-  parameters: (α : Type*)
-  axioms and operations (1):
-    - bot : α
-
-中文:
-类 底元素
-  参数: (α : 类型)
-  公理与运算 (1 个):
-    - bot : α
+--- 原说明 ---
+Typeclass for the `⊥` (`\bot`) notation
 -/
 class Bot (α : Type*) where
   /-- The bot (`⊥`, `\bot`) element -/
@@ -290,6 +256,10 @@ notation "⊤" => Top.top
 notation "⊥" => Bot.bot
 
 @[to_dual]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) top_nonempty (α : Type*) [Top α] : Nonempty α :=
   ⟨⊤⟩
 
@@ -310,3 +280,4 @@ recommended_spelling "min" for "min" in [Min.min]
 recommended_spelling "sup" for "⊔" in [Max.max]
 /-- `⊓` is the preferred notation for `min` when the type is not linearly ordered. -/
 recommended_spelling "inf" for "⊓" in [Min.min]
+

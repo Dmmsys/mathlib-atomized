@@ -27,46 +27,29 @@ variable {α : Type*}
 
 namespace Set
 
+/-! ### Complete lattice and complete Boolean algebra instances -/
 
-/--
-Instance `instCompleteAtomicBooleanAlgebra` / 实例 `instCompleteAtomicBooleanAlgebra`
+/-
+**Set.instCompleteAtomicBooleanAlgebra** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+形式化陈述：instCompleteAtomicBooleanAlgebra : CompleteAtomicBooleanAlgebra (Set α) wh
+ere isLUB_sSup _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instCompleteAtomicBooleanAlgebra
-  signature: : CompleteAtomicBooleanAlgebra (Set α) where
-  body: ⟨fun s hs _ hx => ⟨s, hs, hx⟩, fun _ h _ ⟨_, ⟨hs, hx⟩⟩ => h hs hx⟩
-  isGLB_sInf _ := ⟨fun _ hs _ hx => hx _ hs, fun _ h _ hx _ hs => h hs hx⟩
-  iInf_iSup_eq := by intros; ext; simp [Classical.skolem]
-
-中文:
-实例 instCompleteAtomic布尔eanAlgebra
-  签名: : 余mpleteAtomic布尔ean代数 (集合 α) where
-  定义体: ⟨fun s hs _ hx => ⟨s, hs, hx⟩, fun _ h _ ⟨_, ⟨hs, hx⟩⟩ => h hs hx⟩
-  isGLB_sInf _ := ⟨fun _ hs _ hx => hx _ hs, fun _ h _ hx _ hs => h hs hx⟩
-  iInf_iSup_eq := by intros; ext; simp [Classical.skolem]
+--- 原说明 ---
+### Complete lattice and complete Boolean algebra instances
 -/
 instance instCompleteAtomicBooleanAlgebra : CompleteAtomicBooleanAlgebra (Set α) where
-  isLUB_sSup _ := ⟨fun s hs _ hx => ⟨s, hs, hx⟩, fun _ h _ ⟨_, ⟨hs, hx⟩⟩ => h hs hx⟩
-  isGLB_sInf _ := ⟨fun _ hs _ hx => hx _ hs, fun _ h _ hx _ hs => h hs hx⟩
+  isLUB_sSup _ := ⟨fun s hs _ hx ↦ ⟨s, hs, hx⟩, fun _ h _ ⟨_, ⟨hs, hx⟩⟩ => h hs hx⟩
+  isGLB_sInf _ := ⟨fun _ hs _ hx ↦ hx _ hs, fun _ h _ hx _ hs => h hs hx⟩
   iInf_iSup_eq := by intros; ext; simp [Classical.skolem]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: OrderTop (Set α)
-  body: univ
-  le_top := by simp
-
-中文:
-实例 :
-  签名: 有顶序 (集合 α)
-  定义体: univ
-  le_top := by simp
+/-
+**Set.** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : OrderTop (Set α) where
   top := univ
   le_top := by simp
 
 end Set
+

@@ -18,526 +18,387 @@ universe u u1 u2 u3 u4
 
 variable {α : Type u1} {β : Type u2} {γ : Type u3} {ι : Type u4}
 
-/--
-theorem `small_subset` / 定理 `small_subset`
-
-English:
-theorem small_subset
-  given: {s t : Set α} (hts : t subseteq s) [Small.{u} s]
-  statement: Small.{u} t
-  proof: small_of_injective (Set.inclusion_injective hts)
-
-中文:
-定理 small_subset
-  条件: {s t : 集合 α} (hts : t subseteq s) [Small.{u} s]
-  结论: Small.{u} t
-  证明: small_of_injective (Set.inclusion_injective hts)
-
-Depends on / 依赖: Set.inclusion_injective, inclusion_injective, small_of_injective
+/-
+**small_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：small_subset {s t : Set α} (hts : t subseteq s) [Small.{u} s] : Small.{u} 
+t
+参数：hts : t subseteq s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_of_injective`：small_of_injective {α : Type v} {β : Type w} [Small.
+{u} β] {f : α -> β} (hf : Function.Injective f) : Small.{u} α
+· 使用定理 `Set.inclusion_injective`：inclusion_injective (h : s subseteq t) : (inclu
+sion h).Injective
 -/
-theorem small_subset {s t : Set α} (hts : t subseteq s) [Small.{u} s] : Small.{u} t :=
+theorem small_subset {s t : Set α} (hts : t ⊆ s) [Small.{u} s] : Small.{u} t :=
   small_of_injective (Set.inclusion_injective hts)
-
-/--
-Instance `small_powerset` / 实例 `small_powerset`
-
-English:
-instance small_powerset
-  signature: (s : Set α) [Small.{u} s]
-  body: small_map (Equiv.Set.powerset s)
-
-中文:
-实例 small_powerset
-  签名: (s : 集合 α) [Small.{u} s]
-  定义体: small_map (Equiv.Set.powerset s)
-
-Depends on / 依赖: Equiv.Set.powerset, powerset, small_map
+/-
+**small_powerset** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_powerset (s : Set α) [Small.{u} s] : Small.{u} (𝒫 s)
+参数：s : Set α。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_map`：small_map {α : Type*} {β : Type*} [hβ : Small.{w} β] (e : α ≃
+ β) : Small.{w} α
 -/
 instance small_powerset (s : Set α) [Small.{u} s] : Small.{u} (𝒫 s) :=
   small_map (Equiv.Set.powerset s)
-
-/--
-Instance `small_setProd` / 实例 `small_setProd`
-
-English:
-instance small_setProd
-  signature: (s : Set α) (t : Set β) [Small.{u} s] [Small.{u} t]
-  body: small_of_injective (Equiv.Set.prod s t).injective
-
-中文:
-实例 small_setProd
-  签名: (s : 集合 α) (t : 集合 β) [Small.{u} s] [Small.{u} t]
-  定义体: small_of_injective (Equiv.Set.prod s t).injective
-
-Depends on / 依赖: Equiv.Set.prod, injective, small_of_injective
+/-
+**small_setProd** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_setProd (s : Set α) (t : Set β) [Small.{u} s] [Small.{u} t] : Small.
+{u} (s ×ˢ t : Set (α × β))
+参数：s : Set α；t : Set β。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_of_injective`：small_of_injective {α : Type v} {β : Type w} [Small.
+{u} β] {f : α -> β} (hf : Function.Injective f) : Small.{u} α
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
 instance small_setProd (s : Set α) (t : Set β) [Small.{u} s] [Small.{u} t] :
     Small.{u} (s ×ˢ t : Set (α × β)) :=
   small_of_injective (Equiv.Set.prod s t).injective
-
-/--
-Instance `small_setPi` / 实例 `small_setPi`
-
-English:
-instance small_setPi
-  signature: {β : α -> Type u2} (s : (a : α) -> Set (β a))
-  body: small_of_injective (Equiv.Set.univPi s).injective
-
-中文:
-实例 small_setPi
-  签名: {β : α -> 类型u2} (s : (a : α) -> 集合 (β a))
-  定义体: small_of_injective (Equiv.Set.univPi s).injective
-
-Depends on / 依赖: Equiv.Set.univPi, injective, small_of_injective, univPi
+/-
+**small_setPi** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_setPi {β : α -> Type u2} (s : (a : α) -> Set (β a)) [Small.{u} α] [f
+orall a, Small.{u} (s a)] : Small.{u} (Set.pi Set.univ s)
+参数：s : (a : α) -> Set (β a)；s a。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_of_injective`：small_of_injective {α : Type v} {β : Type w} [Small.
+{u} β] {f : α -> β} (hf : Function.Injective f) : Small.{u} α
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
-instance small_setPi {β : α -> Type u2} (s : (a : α) -> Set (β a))
-    [Small.{u} α] [forall a, Small.{u} (s a)] : Small.{u} (Set.pi Set.univ s) :=
+instance small_setPi {β : α → Type u2} (s : (a : α) → Set (β a))
+    [Small.{u} α] [∀ a, Small.{u} (s a)] : Small.{u} (Set.pi Set.univ s) :=
   small_of_injective (Equiv.Set.univPi s).injective
-
-/--
-Instance `small_range` / 实例 `small_range`
-
-English:
-instance small_range
-  signature: (f : α -> β) [Small.{u} α]
-  body: small_of_surjective Set.rangeFactorization_surjective
-
-中文:
-实例 small_range
-  签名: (f : α -> β) [Small.{u} α]
-  定义体: small_of_surjective Set.rangeFactorization_surjective
-
-Depends on / 依赖: Set.rangeFactorization_surjective, rangeFactorization_surjective, small_of_surjective
+/-
+**small_range** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_range (f : α -> β) [Small.{u} α] : Small.{u} (Set.range f)
+参数：f : α -> β。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_of_surjective`：small_of_surjective {α : Type v} {β : Type w} [Smal
+l.{u} α] {f : α -> β} (hf : Function.Surjective f) : Small.{u} β
+· 使用定理 `Set.rangeFactorization_surjective`：∀ {α : Type u} {ι : Sort u_1} {f : ι 
+→ α}, Function.Surjective (Set.rangeFactorization f)
 -/
-instance small_range (f : α -> β) [Small.{u} α] :
+instance small_range (f : α → β) [Small.{u} α] :
     Small.{u} (Set.range f) :=
   small_of_surjective Set.rangeFactorization_surjective
-
-/--
-Instance `small_image` / 实例 `small_image`
-
-English:
-instance small_image
-  signature: (f : α -> β) (s : Set α) [Small.{u} s]
-  body: small_of_surjective Set.imageFactorization_surjective
-
-中文:
-实例 small_image
-  签名: (f : α -> β) (s : 集合 α) [Small.{u} s]
-  定义体: small_of_surjective Set.imageFactorization_surjective
-
-Depends on / 依赖: Set.imageFactorization_surjective, imageFactorization_surjective, small_of_surjective
+/-
+**small_image** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_image (f : α -> β) (s : Set α) [Small.{u} s] : Small.{u} (f '' s)
+参数：f : α -> β；s : Set α。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_of_surjective`：small_of_surjective {α : Type v} {β : Type w} [Smal
+l.{u} α] {f : α -> β} (hf : Function.Surjective f) : Small.{u} β
+· 使用定理 `Set.imageFactorization_surjective`：imageFactorization_surjective {f : α 
+-> β} {s : Set α} : Surjective (imageFactorization f s)
 -/
-instance small_image (f : α -> β) (s : Set α) [Small.{u} s] :
+instance small_image (f : α → β) (s : Set α) [Small.{u} s] :
     Small.{u} (f '' s) :=
   small_of_surjective Set.imageFactorization_surjective
-
-/--
-Instance `small_image2` / 实例 `small_image2`
-
-English:
-instance small_image2
-  signature: (f : α -> β -> γ) (s : Set α) (t : Set β) [Small.{u} s] [Small.{u} t]
-  body: by
-  rw [← Set.image_uncurry_prod]
-  infer_instance
-
-中文:
-实例 small_image2
-  签名: (f : α -> β -> γ) (s : 集合 α) (t : 集合 β) [Small.{u} s] [Small.{u} t]
-  定义体: by
-  rw [← Set.image_uncurry_prod]
-  infer_instance
-
-Depends on / 依赖: Set.image_uncurry_prod, image_uncurry_prod, infer_instance
+/-
+**small_image2** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_image2 (f : α -> β -> γ) (s : Set α) (t : Set β) [Small.{u} s] [Smal
+l.{u} t] : Small.{u} (Set.image2 f s t)
+参数：f : α -> β -> γ；s : Set α；t : Set β。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_uncurry_prod`：∀ {α : Type u_1} {β : Type u_3} {γ : Type u_5} (
+f : α → β → γ) (s : Set α) (t : Set β),   Function.uncurry f '' s ×ˢ t = Set.ima
+ge2 f s t
 -/
-instance small_image2 (f : α -> β -> γ) (s : Set α) (t : Set β) [Small.{u} s] [Small.{u} t] :
+instance small_image2 (f : α → β → γ) (s : Set α) (t : Set β) [Small.{u} s] [Small.{u} t] :
     Small.{u} (Set.image2 f s t) := by
   rw [← Set.image_uncurry_prod]
   infer_instance
-
-/--
-theorem `small_univ_iff` / 定理 `small_univ_iff`
-
-English:
-theorem small_univ_iff
-  statement: Small.{u} (@Set.univ α) ↔ Small.{u} α
-  proof: small_congr Equiv.Set.univ α
-
-中文:
-定理 small_univ_iff
-  结论: Small.{u} (@集合.univ α) ↔ Small.{u} α
-  证明: small_congr Equiv.Set.univ α
-
-Depends on / 依赖: Equiv.Set.univ, small_congr
+/-
+**small_univ_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：small_univ_iff : Small.{u} (@Set.univ α) ↔ Small.{u} α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_congr`：small_congr {α : Type*} {β : Type*} (e : α ≃ β) : Small.{w}
+ α ↔ Small.{w} β
 -/
 theorem small_univ_iff : Small.{u} (@Set.univ α) ↔ Small.{u} α :=
-small_congr Equiv.Set.univ α
-
-/--
-Instance `small_univ` / 实例 `small_univ`
-
-English:
-instance small_univ
-  signature: [h : Small.{u} α]
-  body: small_univ_iff.2 h
-
-中文:
-实例 small_univ
-  签名: [h : Small.{u} α]
-  定义体: small_univ_iff.2 h
-
-Depends on / 依赖: small_univ_iff
+  small_congr <| Equiv.Set.univ α
+/-
+**small_univ** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_univ [h : Small.{u} α] : Small.{u} (@Set.univ α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `small_univ_iff`：small_univ_iff : Small.{u} (@Set.univ α) ↔ Small.{u} α
 -/
 instance small_univ [h : Small.{u} α] : Small.{u} (@Set.univ α) :=
   small_univ_iff.2 h
-
-/--
-Instance `small_union` / 实例 `small_union`
-
-English:
-instance small_union
-  signature: (s t : Set α) [Small.{u} s] [Small.{u} t]
-  body: by
-  rw [← Subtype.range_val (s := s)]; rw [← Subtype.range_val (s := t)]; rw [← Set.Sum.elim_range]
-  infer_instance
-
-中文:
-实例 small_union
-  签名: (s t : 集合 α) [Small.{u} s] [Small.{u} t]
-  定义体: by
-  rw [← Subtype.range_val (s := s)]; rw [← Subtype.range_val (s := t)]; rw [← Set.Sum.elim_range]
-  infer_instance
-
-Depends on / 依赖: Set.Sum.elim_range, Subtype, Subtype.range_val, elim_range, infer_instance, range_val
+/-
+**small_union** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_union (s t : Set α) [Small.{u} s] [Small.{u} t] : Small.{u} (s union
+ t : Set α)
+参数：s t : Set α。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subtype.range_val`：range_val {s : Set α} : range (Subtype.val : s -> α) 
+= s
+· 使用定理 `Set.Sum.elim_range`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} (f : 
+α → γ) (g : β → γ),   Set.range (Sum.elim f g) = Set.range f ∪ Set.range g
 -/
 instance small_union (s t : Set α) [Small.{u} s] [Small.{u} t] :
-    Small.{u} (s union t : Set α) := by
-  rw [← Subtype.range_val (s := s)]; rw [← Subtype.range_val (s := t)]; rw [← Set.Sum.elim_range]
+    Small.{u} (s ∪ t : Set α) := by
+  rw [← Subtype.range_val (s := s), ← Subtype.range_val (s := t), ← Set.Sum.elim_range]
   infer_instance
-
-/--
-Instance `small_iUnion` / 实例 `small_iUnion`
-
-English:
-instance small_iUnion
-  signature: [Small.{u} ι] (s : ι -> Set α)
-  body: small_of_surjective Set.sigmaToiUnion_surjective _
-
-中文:
-实例 small_iUnion
-  签名: [Small.{u} ι] (s : ι -> 集合 α)
-  定义体: small_of_surjective Set.sigmaToiUnion_surjective _
-
-Depends on / 依赖: Set.sigmaToiUnion_surjective, sigmaToiUnion_surjective, small_of_surjective
+/-
+**small_iUnion** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_iUnion [Small.{u} ι] (s : ι -> Set α) [forall i, Small.{u} (s i)] : 
+Small.{u} (⋃ i, s i)
+参数：s : ι -> Set α；s i。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_of_surjective`：small_of_surjective {α : Type v} {β : Type w} [Smal
+l.{u} α] {f : α -> β} (hf : Function.Surjective f) : Small.{u} β
+· 使用定理 `Set.sigmaToiUnion_surjective`：sigmaToiUnion_surjective : Surjective (sig
+maToiUnion t) | ⟨b, hb⟩ => have : exists a, b in t a
 -/
-instance small_iUnion [Small.{u} ι] (s : ι -> Set α)
-    [forall i, Small.{u} (s i)] : Small.{u} (⋃ i, s i) :=
-small_of_surjective Set.sigmaToiUnion_surjective _
-
-/--
-Instance `small_sUnion` / 实例 `small_sUnion`
-
-English:
-instance small_sUnion
-  signature: (s : Set (Set α)) [Small.{u} s] [forall t : s, Small.{u} t]
-  body: Set.sUnion_eq_iUnion ▸ small_iUnion _
-
-中文:
-实例 small_sUnion
-  签名: (s : 集合 (集合 α)) [Small.{u} s] [对任意 t : s, Small.{u} t]
-  定义体: Set.sUnion_eq_iUnion ▸ small_iUnion _
-
-Depends on / 依赖: Set.sUnion_eq_iUnion, sUnion_eq_iUnion, small_iUnion
+instance small_iUnion [Small.{u} ι] (s : ι → Set α)
+    [∀ i, Small.{u} (s i)] : Small.{u} (⋃ i, s i) :=
+  small_of_surjective <| Set.sigmaToiUnion_surjective _
+/-
+**small_sUnion** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_sUnion (s : Set (Set α)) [Small.{u} s] [forall t : s, Small.{u} t] :
+ Small.{u} (⋃₀ s)
+参数：s : Set (Set α)。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.sUnion_eq_iUnion`：sUnion_eq_iUnion {s : Set (Set α)} : ⋃₀ s = ⋃ i : 
+s, i
 -/
-instance small_sUnion (s : Set (Set α)) [Small.{u} s] [forall t : s, Small.{u} t] :
+instance small_sUnion (s : Set (Set α)) [Small.{u} s] [∀ t : s, Small.{u} t] :
     Small.{u} (⋃₀ s) :=
   Set.sUnion_eq_iUnion ▸ small_iUnion _
-
-/--
-Instance `small_biUnion` / 实例 `small_biUnion`
-
-English:
-instance small_biUnion
-  signature: (s : Set ι) [Small.{u} s]
-  body: Set.biUnion_eq_iUnion s f ▸ small_iUnion _
-
-中文:
-实例 small_biUnion
-  签名: (s : 集合 ι) [Small.{u} s]
-  定义体: Set.biUnion_eq_iUnion s f ▸ small_iUnion _
-
-Depends on / 依赖: Set.biUnion_eq_iUnion, biUnion_eq_iUnion, small_iUnion
+/-
+**small_biUnion** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_biUnion (s : Set ι) [Small.{u} s] (f : (i : ι) -> i in s -> Set α) [
+forall i hi, Small.{u} (f i hi)] : Small.{u} (⋃ i, ⋃ hi, f i hi)
+参数：s : Set ι；f : (i : ι) -> i in s -> Set α；f i hi。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.biUnion_eq_iUnion`：biUnion_eq_iUnion (s : Set α) (t : forall x in s,
+ Set β) : ⋃ x in s, t x ‹_› = ⋃ x : s, t x x.2
 -/
 instance small_biUnion (s : Set ι) [Small.{u} s]
-    (f : (i : ι) -> i in s -> Set α) [forall i hi, Small.{u} (f i hi)] : Small.{u} (⋃ i, ⋃ hi, f i hi) :=
+    (f : (i : ι) → i ∈ s → Set α) [∀ i hi, Small.{u} (f i hi)] : Small.{u} (⋃ i, ⋃ hi, f i hi) :=
   Set.biUnion_eq_iUnion s f ▸ small_iUnion _
-
-/--
-Instance `small_insert` / 实例 `small_insert`
-
-English:
-instance small_insert
-  signature: (x : α) (s : Set α) [Small.{u} s]
-  body: Set.insert_eq x s ▸ small_union.{u} {x} s
-
-中文:
-实例 small_insert
-  签名: (x : α) (s : 集合 α) [Small.{u} s]
-  定义体: Set.insert_eq x s ▸ small_union.{u} {x} s
-
-Depends on / 依赖: Set.insert_eq, insert_eq, small_union
+/-
+**small_insert** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_insert (x : α) (s : Set α) [Small.{u} s] : Small.{u} (insert x s : S
+et α)
+参数：x : α；s : Set α。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_subsingleton`：∀ (α : Type v) [Subsingleton α], Small.{w, v} α
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.insert_eq`：insert_eq (x : α) (s : Set α) : insert x s = ({x} : Set α
+) union s
 -/
 instance small_insert (x : α) (s : Set α) [Small.{u} s] :
     Small.{u} (insert x s : Set α) :=
   Set.insert_eq x s ▸ small_union.{u} {x} s
-
-/--
-Instance `small_diff` / 实例 `small_diff`
-
-English:
-instance small_diff
-  signature: (s t : Set α) [Small.{u} s]
-  body: small_subset (Set.sdiff_subset)
-
-中文:
-实例 small_diff
-  签名: (s t : 集合 α) [Small.{u} s]
-  定义体: small_subset (Set.sdiff_subset)
-
-Depends on / 依赖: Set.sdiff_subset, sdiff_subset, small_subset
+/-
+**small_diff** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_diff (s t : Set α) [Small.{u} s] : Small.{u} (s \ t : Set α)
+参数：s t : Set α。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_subset`：small_subset {s t : Set α} (hts : t subseteq s) [Small.{u}
+ s] : Small.{u} t
+· 使用定理 `Set.sdiff_subset`：sdiff_subset {s t : Set α} : s \ t subseteq s
 -/
 instance small_diff (s t : Set α) [Small.{u} s] : Small.{u} (s \ t : Set α) :=
   small_subset (Set.sdiff_subset)
-
-/--
-Instance `small_sep` / 实例 `small_sep`
-
-English:
-instance small_sep
-  signature: (s : Set α) (P : α -> Prop) [Small.{u} s]
-  body: small_subset (Set.sep_subset s P)
-
-中文:
-实例 small_sep
-  签名: (s : 集合 α) (P : α -> 命题) [Small.{u} s]
-  定义体: small_subset (Set.sep_subset s P)
-
-Depends on / 依赖: Set.sep_subset, sep_subset, small_subset
+/-
+**small_sep** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_sep (s : Set α) (P : α -> Prop) [Small.{u} s] : Small.{u} { x | x in
+ s ∧ P x}
+参数：s : Set α；P : α -> Prop。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_subset`：small_subset {s t : Set α} (hts : t subseteq s) [Small.{u}
+ s] : Small.{u} t
+· 使用定理 `Set.sep_subset`：sep_subset (s : Set α) (p : α -> Prop) : { x in s | p x 
+} subseteq s
 -/
-instance small_sep (s : Set α) (P : α -> Prop) [Small.{u} s] :
-    Small.{u} { x | x in s ∧ P x} :=
+instance small_sep (s : Set α) (P : α → Prop) [Small.{u} s] :
+    Small.{u} { x | x ∈ s ∧ P x} :=
   small_subset (Set.sep_subset s P)
-
-/--
-Instance `small_inter_of_left` / 实例 `small_inter_of_left`
-
-English:
-instance small_inter_of_left
-  signature: (s t : Set α) [Small.{u} s]
-  body: small_subset Set.inter_subset_left
-
-中文:
-实例 small_inter_of_left
-  签名: (s t : 集合 α) [Small.{u} s]
-  定义体: small_subset Set.inter_subset_left
-
-Depends on / 依赖: Set.inter_subset_left, inter_subset_left, small_subset
+/-
+**small_inter_of_left** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_inter_of_left (s t : Set α) [Small.{u} s] : Small.{u} (s inter t : S
+et α)
+参数：s t : Set α。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_subset`：small_subset {s t : Set α} (hts : t subseteq s) [Small.{u}
+ s] : Small.{u} t
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
 -/
 instance small_inter_of_left (s t : Set α) [Small.{u} s] :
-    Small.{u} (s inter t : Set α) :=
+    Small.{u} (s ∩ t : Set α) :=
   small_subset Set.inter_subset_left
-
-/--
-Instance `small_inter_of_right` / 实例 `small_inter_of_right`
-
-English:
-instance small_inter_of_right
-  signature: (s t : Set α) [Small.{u} t]
-  body: small_subset Set.inter_subset_right
-
-中文:
-实例 small_inter_of_right
-  签名: (s t : 集合 α) [Small.{u} t]
-  定义体: small_subset Set.inter_subset_right
-
-Depends on / 依赖: Set.inter_subset_right, inter_subset_right, small_subset
+/-
+**small_inter_of_right** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_inter_of_right (s t : Set α) [Small.{u} t] : Small.{u} (s inter t : 
+Set α)
+参数：s t : Set α。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_subset`：small_subset {s t : Set α} (hts : t subseteq s) [Small.{u}
+ s] : Small.{u} t
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
 -/
 instance small_inter_of_right (s t : Set α) [Small.{u} t] :
-    Small.{u} (s inter t : Set α) :=
+    Small.{u} (s ∩ t : Set α) :=
   small_subset Set.inter_subset_right
-
-/--
-theorem `small_iInter` / 定理 `small_iInter`
-
-English:
-theorem small_iInter
-  statement: (s : ι -> Set α) (i : ι)
-  proof: small_subset (Set.iInter_subset s i)
-
-中文:
-定理 small_i整数er
-  结论: (s : ι -> 集合 α) (i : ι)
-  证明: small_subset (Set.iInter_subset s i)
-
-Depends on / 依赖: Set.iInter_subset, iInter_subset, small_subset
+/-
+**small_iInter** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：small_iInter (s : ι -> Set α) (i : ι) [Small.{u} (s i)] : Small.{u} (⋂ i, 
+s i)
+参数：s : ι -> Set α；i : ι；s i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_subset`：small_subset {s t : Set α} (hts : t subseteq s) [Small.{u}
+ s] : Small.{u} t
+· 使用定理 `Set.iInter_subset`：iInter_subset : forall (s : ι -> Set β) (i : ι), ⋂ i,
+ s i subseteq s i
 -/
-theorem small_iInter (s : ι -> Set α) (i : ι)
+theorem small_iInter (s : ι → Set α) (i : ι)
     [Small.{u} (s i)] : Small.{u} (⋂ i, s i) :=
   small_subset (Set.iInter_subset s i)
-
-/--
-Instance `small_iInter'` / 实例 `small_iInter'`
-
-English:
-instance small_iInter'
-  signature: [Nonempty ι] (s : ι -> Set α)
-  body: let ⟨i⟩ : Nonempty ι := inferInstance
-  small_iInter s i
-
-中文:
-实例 small_i整数er'
-  签名: [非空 ι] (s : ι -> 集合 α)
-  定义体: let ⟨i⟩ : Nonempty ι := inferInstance
-  small_iInter s i
-
-Depends on / 依赖: Nonempty, small_iInter
+/-
+**small_iInter'** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_iInter' [Nonempty ι] (s : ι -> Set α) [forall i, Small.{u} (s i)] : 
+Small.{u} (⋂ i, s i)
+参数：s : ι -> Set α；s i。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_iInter`：small_iInter (s : ι -> Set α) (i : ι) [Small.{u} (s i)] : 
+Small.{u} (⋂ i, s i)
 -/
-instance small_iInter' [Nonempty ι] (s : ι -> Set α)
-    [forall i, Small.{u} (s i)] : Small.{u} (⋂ i, s i) :=
+instance small_iInter' [Nonempty ι] (s : ι → Set α)
+    [∀ i, Small.{u} (s i)] : Small.{u} (⋂ i, s i) :=
   let ⟨i⟩ : Nonempty ι := inferInstance
   small_iInter s i
-
-/--
-theorem `small_sInter` / 定理 `small_sInter`
-
-English:
-theorem small_sInter
-  statement: {s : Set (Set α)} {t : Set α} (ht : t in s)
-  proof: Set.sInter_eq_iInter ▸ small_iInter _ ⟨t, ht⟩
-
-中文:
-定理 small_s整数er
-  结论: {s : 集合 (集合 α)} {t : 集合 α} (ht : t in s)
-  证明: Set.sInter_eq_iInter ▸ small_iInter _ ⟨t, ht⟩
-
-Depends on / 依赖: Set.sInter_eq_iInter, sInter_eq_iInter, small_iInter
+/-
+**small_sInter** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：small_sInter {s : Set (Set α)} {t : Set α} (ht : t in s) [Small.{u} t] : S
+mall.{u} (⋂₀ s)
+参数：Set α；ht : t in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_iInter`：small_iInter (s : ι -> Set α) (i : ι) [Small.{u} (s i)] : 
+Small.{u} (⋂ i, s i)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.sInter_eq_iInter`：sInter_eq_iInter {s : Set (Set α)} : ⋂₀ s = ⋂ i : 
+s, i
 -/
-theorem small_sInter {s : Set (Set α)} {t : Set α} (ht : t in s)
+theorem small_sInter {s : Set (Set α)} {t : Set α} (ht : t ∈ s)
     [Small.{u} t] : Small.{u} (⋂₀ s) :=
   Set.sInter_eq_iInter ▸ small_iInter _ ⟨t, ht⟩
-
-/--
-Instance `small_sInter'` / 实例 `small_sInter'`
-
-English:
-instance small_sInter'
-  signature: {s : Set (Set α)} [Nonempty s]
-  body: let ⟨t⟩ : Nonempty s := inferInstance
-  small_sInter t.prop
-
-中文:
-实例 small_s整数er'
-  签名: {s : 集合 (集合 α)} [非空 s]
-  定义体: let ⟨t⟩ : Nonempty s := inferInstance
-  small_sInter t.prop
-
-Depends on / 依赖: Nonempty, small_sInter, t.prop
+/-
+**small_sInter'** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_sInter' {s : Set (Set α)} [Nonempty s] [forall t : s, Small.{u} t] :
+ Small.{u} (⋂₀ s)
+参数：Set α。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_sInter`：small_sInter {s : Set (Set α)} {t : Set α} (ht : t in s) [
+Small.{u} t] : Small.{u} (⋂₀ s)
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
 -/
 instance small_sInter' {s : Set (Set α)} [Nonempty s]
-    [forall t : s, Small.{u} t] : Small.{u} (⋂₀ s) :=
+    [∀ t : s, Small.{u} t] : Small.{u} (⋂₀ s) :=
   let ⟨t⟩ : Nonempty s := inferInstance
   small_sInter t.prop
-
-/--
-theorem `small_biInter` / 定理 `small_biInter`
-
-English:
-theorem small_biInter
-  statement: {s : Set ι} {i : ι} (hi : i in s)
-  proof: Set.biInter_eq_iInter s f ▸ small_iInter _ ⟨i, hi⟩
-
-中文:
-定理 small_bi整数er
-  结论: {s : 集合 ι} {i : ι} (hi : i in s)
-  证明: Set.biInter_eq_iInter s f ▸ small_iInter _ ⟨i, hi⟩
-
-Depends on / 依赖: Set.biInter_eq_iInter, biInter_eq_iInter, small_iInter
+/-
+**small_biInter** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：small_biInter {s : Set ι} {i : ι} (hi : i in s) (f : (i : ι) -> i in s -> 
+Set α) [Small.{u} (f i hi)] : Small.{u} (⋂ i, ⋂ hi, f i hi)
+参数：hi : i in s；f : (i : ι) -> i in s -> Set α；f i hi。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `small_iInter`：small_iInter (s : ι -> Set α) (i : ι) [Small.{u} (s i)] : 
+Small.{u} (⋂ i, s i)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.biInter_eq_iInter`：biInter_eq_iInter (s : Set α) (t : forall x in s,
+ Set β) : ⋂ x in s, t x ‹_› = ⋂ x : s, t x x.2
 -/
-theorem small_biInter {s : Set ι} {i : ι} (hi : i in s)
-    (f : (i : ι) -> i in s -> Set α) [Small.{u} (f i hi)] : Small.{u} (⋂ i, ⋂ hi, f i hi) :=
+theorem small_biInter {s : Set ι} {i : ι} (hi : i ∈ s)
+    (f : (i : ι) → i ∈ s → Set α) [Small.{u} (f i hi)] : Small.{u} (⋂ i, ⋂ hi, f i hi) :=
   Set.biInter_eq_iInter s f ▸ small_iInter _ ⟨i, hi⟩
-
-/--
-Instance `small_biInter'` / 实例 `small_biInter'`
-
-English:
-instance small_biInter'
-  signature: (s : Set ι) [Nonempty s]
-  body: let ⟨t⟩ : Nonempty s := inferInstance
-  small_biInter t.prop f
-
-中文:
-实例 small_bi整数er'
-  签名: (s : 集合 ι) [非空 s]
-  定义体: let ⟨t⟩ : Nonempty s := inferInstance
-  small_biInter t.prop f
-
-Depends on / 依赖: Nonempty, small_biInter, t.prop
+/-
+**small_biInter'** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：small_biInter' (s : Set ι) [Nonempty s] (f : (i : ι) -> i in s -> Set α) [
+forall i hi, Small.{u} (f i hi)] : Small.{u} (⋂ i, ⋂ hi, f i hi)
+参数：s : Set ι；f : (i : ι) -> i in s -> Set α；f i hi。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_biInter`：small_biInter {s : Set ι} {i : ι} (hi : i in s) (f : (i :
+ ι) -> i in s -> Set α) [Small.{u} (f i hi)] : Small.{u} (⋂ i, ⋂ hi, f i hi)
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
 -/
 instance small_biInter' (s : Set ι) [Nonempty s]
-    (f : (i : ι) -> i in s -> Set α) [forall i hi, Small.{u} (f i hi)] : Small.{u} (⋂ i, ⋂ hi, f i hi) :=
+    (f : (i : ι) → i ∈ s → Set α) [∀ i hi, Small.{u} (f i hi)] : Small.{u} (⋂ i, ⋂ hi, f i hi) :=
   let ⟨t⟩ : Nonempty s := inferInstance
   small_biInter t.prop f
-
-/--
-theorem `small_empty` / 定理 `small_empty`
-
-English:
-theorem small_empty
-  statement: Small.{u} (∅ : Set α)
-  proof: inferInstance
-
-中文:
-定理 small_empty
-  结论: Small.{u} (∅ : 集合 α)
-  证明: inferInstance
+/-
+**small_empty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：small_empty : Small.{u} (∅ : Set α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_subsingleton`：∀ (α : Type v) [Subsingleton α], Small.{w, v} α
+· 使用定理 `IsEmpty.instSubsingleton`：∀ {α : Sort u} [IsEmpty α], Subsingleton α
+· 使用定理 `Set.instIsEmptyElemEmptyCollection`：∀ (α : Type u), IsEmpty ↑∅
 -/
 theorem small_empty : Small.{u} (∅ : Set α) :=
   inferInstance
-
-/--
-theorem `small_single` / 定理 `small_single`
-
-English:
-theorem small_single
-  given: (x : α)
-  statement: Small.{u} ({x} : Set α)
-  proof: inferInstance
-
-中文:
-定理 small_single
-  条件: (x : α)
-  结论: Small.{u} ({x} : 集合 α)
-  证明: inferInstance
+/-
+**small_single** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：small_single (x : α) : Small.{u} ({x} : Set α)
+参数：x : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_subsingleton`：∀ (α : Type v) [Subsingleton α], Small.{w, v} α
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
 theorem small_single (x : α) : Small.{u} ({x} : Set α) :=
   inferInstance
-
-/--
-theorem `small_pair` / 定理 `small_pair`
-
-English:
-theorem small_pair
-  given: (x y : α)
-  statement: Small.{u} ({x, y} : Set α)
-  proof: inferInstance
-
-中文:
-定理 small_pair
-  条件: (x y : α)
-  结论: Small.{u} ({x, y} : 集合 α)
-  证明: inferInstance
+/-
+**small_pair** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：small_pair (x y : α) : Small.{u} ({x, y} : Set α)
+参数：x y : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_subsingleton`：∀ (α : Type v) [Subsingleton α], Small.{w, v} α
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
 theorem small_pair (x y : α) : Small.{u} ({x, y} : Set α) :=
   inferInstance

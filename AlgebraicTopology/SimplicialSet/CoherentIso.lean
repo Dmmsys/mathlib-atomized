@@ -36,39 +36,33 @@ open CategoryTheory
 
 namespace CategoryTheory
 
-/--
-Definition of `WalkingIso` / `WalkingIso` 的定义
+/-- This is the free-living isomorphism as the codiscrete category on `Bool`. -/
+/-
+**CategoryTheory.WalkingIso** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory`。
+形式化陈述：WalkingIso : Type w
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation WalkingIso
-  signature: : Type w
-  body: Codiscrete (ULift Bool)
-
-中文:
-缩写 WalkingIso
-  签名: : 类型 w
-  定义体: Codiscrete (ULift Bool)
-
-Depends on / 依赖: Codiscrete
+--- 原说明 ---
+This is the free-living isomorphism as the codiscrete category on `Bool`.
 -/
 abbrev WalkingIso : Type w := Codiscrete (ULift Bool)
 
 namespace WalkingIso
 
-/--
-Definition of `equivBool` / `equivBool` 的定义
+/-- The underlying type of `WalkingIso` is equivalent to `Bool`, since they both have 2 elements. -/
+/-
+**CategoryTheory.WalkingIso.equivBool** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+WalkingIso`。
+形式化陈述：equivBool : WalkingIso.{w} ≃ Bool
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition equivBool
-  signature: : WalkingIso.{w} ≃ Bool
-  body: codiscreteEquiv.trans Equiv.ulift
-
-中文:
-定义 equiv布尔
-  签名: : WalkingIso.{w} ≃ 布尔值
-  定义体: codiscreteEquiv.trans Equiv.ulift
-
-Depends on / 依赖: Equiv.ulift, codiscreteEquiv, codiscreteEquiv.trans
+--- 原说明 ---
+The underlying type of `WalkingIso` is equivalent to `Bool`, since they both hav
+e 2 elements.
 -/
 def equivBool : WalkingIso.{w} ≃ Bool := codiscreteEquiv.trans Equiv.ulift
 
@@ -76,184 +70,145 @@ section
 
 variable {C : Type u} [Category.{v} C]
 
-/--
-Definition of `zero` / `zero` 的定义
+/-- The domain of the isomorphism -/
+/-
+**CategoryTheory.WalkingIso.zero** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Walki
+ngIso`。
+形式化陈述：zero : WalkingIso.{w}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition zero
-  signature: : WalkingIso.{w}
-  body: .mk (.up false)
-
-中文:
-定义 zero
-  签名: : WalkingIso.{w}
-  定义体: .mk (.up false)
+--- 原说明 ---
+The domain of the isomorphism
 -/
 def zero : WalkingIso.{w} := .mk (.up false)
 
-/--
-Definition of `one` / `one` 的定义
+/-- The codomain of the isomorphism -/
+/-
+**CategoryTheory.WalkingIso.one** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Walkin
+gIso`。
+形式化陈述：one : WalkingIso.{w}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition one
-  signature: : WalkingIso.{w}
-  body: .mk (.up true)
-
-中文:
-定义 one
-  签名: : WalkingIso.{w}
-  定义体: .mk (.up true)
+--- 原说明 ---
+The codomain of the isomorphism
 -/
 def one : WalkingIso.{w} := .mk (.up true)
 
-/--
-Definition of `iso` / `iso` 的定义
+/-- The isomorphism between `zero` and `one` in `WalkingIso`. -/
+/-
+**CategoryTheory.WalkingIso.iso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Walkin
+gIso`。
+形式化陈述：iso : zero.{w} ≅ one
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iso
-  signature: : zero.{w} ≅ one
-  body: Codiscrete.iso zero one
-
-中文:
-定义 iso
-  签名: : zero.{w} ≅ one
-  定义体: Codiscrete.iso zero one
-
-Depends on / 依赖: Codiscrete, Codiscrete.iso
+--- 原说明 ---
+The isomorphism between `zero` and `one` in `WalkingIso`.
 -/
 def iso : zero.{w} ≅ one := Codiscrete.iso zero one
-
-/--
-lemma `eq_iso_hom` / 引理 `eq_iso_hom`
-
-English:
-lemma eq_iso_hom
-  given: (f : zero.{w} ⟶ one)
-  statement: f = iso.{w}.hom
-  proof: Codiscrete.eq_iso_hom f
-
-中文:
-引理 eq_iso_hom
-  条件: (f : zero.{w} ⟶ one)
-  结论: f = iso.{w}.hom
-  证明: Codiscrete.eq_iso_hom f
-
-Depends on / 依赖: Codiscrete, Codiscrete.eq_iso_hom, eq_iso_hom
+/-
+**CategoryTheory.WalkingIso.eq_iso_hom** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.WalkingIso`。
+形式化陈述：eq_iso_hom (f : zero.{w} ⟶ one) : f = iso.{w}.hom
+参数：f : zero.{w} ⟶ one。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Codiscrete.eq_iso_hom`：eq_iso_hom {A : Type u} {x y : Cod
+iscrete A} (f : x ⟶ y) : f = (iso x y).hom
 -/
 lemma eq_iso_hom (f : zero.{w} ⟶ one) : f = iso.{w}.hom := Codiscrete.eq_iso_hom f
-
-/--
-lemma `eq_iso_inv` / 引理 `eq_iso_inv`
-
-English:
-lemma eq_iso_inv
-  given: (f : one.{w} ⟶ zero)
-  statement: f = iso.{w}.inv
-  proof: Codiscrete.eq_iso_inv f
-
-中文:
-引理 eq_iso_inv
-  条件: (f : one.{w} ⟶ zero)
-  结论: f = iso.{w}.inv
-  证明: Codiscrete.eq_iso_inv f
-
-Depends on / 依赖: Codiscrete, Codiscrete.eq_iso_inv, eq_iso_inv
+/-
+**CategoryTheory.WalkingIso.eq_iso_inv** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.WalkingIso`。
+形式化陈述：eq_iso_inv (f : one.{w} ⟶ zero) : f = iso.{w}.inv
+参数：f : one.{w} ⟶ zero。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Codiscrete.eq_iso_inv`：eq_iso_inv {A : Type u} {x y : Cod
+iscrete A} (f : x ⟶ y) : f = (iso y x).inv
 -/
 lemma eq_iso_inv (f : one.{w} ⟶ zero) : f = iso.{w}.inv := Codiscrete.eq_iso_inv f
 
 /-- Functors out of `WalkingIso` define isomorphisms in the target category. -/
 @[simps!]
-/--
-Definition of `toIso` / `toIso` 的定义
+/-
+**CategoryTheory.WalkingIso.toIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Walk
+ingIso`。
+形式化陈述：toIso (F : WalkingIso.{w} ⥤ C) : F.obj zero ≅ F.obj one
+参数：F : WalkingIso.{w} ⥤ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toIso
-  signature: (F : WalkingIso.{w} ⥤ C)
-  body: F.mapIso iso
-
-中文:
-定义 toIso
-  签名: (F : WalkingIso.{w} ⥤ C)
-  定义体: F.mapIso iso
-
-Depends on / 依赖: F.mapIso, mapIso
+--- 原说明 ---
+Functors out of `WalkingIso` define isomorphisms in the target category.
 -/
 def toIso (F : WalkingIso.{w} ⥤ C) : F.obj zero ≅ F.obj one := F.mapIso iso
 
 section induction
 
-variable {motive : WalkingIso.{u} -> Sort*} (zero : motive zero) (one : motive one)
+variable {motive : WalkingIso.{u} → Sort*} (zero : motive zero) (one : motive one)
 
 /-- The recursor for WalkingIso, which constructs a term of `∏ (x : WalkingIso), A x` from
 a term of `A zero` and a term of `A one`. -/
 @[elab_as_elim, induction_eliminator]
-/--
-Definition of `rec` / `rec` 的定义
+/-
+**CategoryTheory.WalkingIso.rec** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Walkin
+gIso`。
+形式化陈述：{motive : CategoryTheory.WalkingIso → Sort u_1} →   motive CategoryTheory.
+WalkingIso.zero →     motive CategoryTheory.WalkingIso.one → (a : CategoryTheory
+.WalkingIso) → motive a
+参数：a : CategoryTheory.WalkingIso。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rec
-  signature: : forall a, motive a
-
-中文:
-定义 rec
-  签名: : 对任意 a, motive a
+--- 原说明 ---
+The recursor for WalkingIso, which constructs a term of `∏ (x : WalkingIso), A x
+` from
+a term of `A zero` and a term of `A one`.
 -/
-protected def rec : forall a, motive a
+protected def rec : ∀ a, motive a
   | .mk (.up false) => zero
   | .mk (.up true) => one
-
-/--
-lemma `rec_zero` / 引理 `rec_zero`
-
-English:
-lemma rec_zero
-  statement: WalkingIso.rec zero one .zero = zero
-  proof: rfl
-
-中文:
-引理 rec_zero
-  结论: WalkingIso.rec zero one .zero = zero
-  证明: rfl
+/-
+**CategoryTheory.WalkingIso.rec_zero** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.W
+alkingIso`。
+形式化陈述：∀ {motive : CategoryTheory.WalkingIso → Sort u_1} (zero : motive CategoryT
+heory.WalkingIso.zero)   (one : motive CategoryTheory.WalkingIso.one),   Categor
+yTheory.WalkingIso.rec zero one CategoryTheory.WalkingIso.zero = zero
+参数：zero : motive CategoryTheory.WalkingIso.zero；one : motive CategoryTheory.Walk
+ingIso.one。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma rec_zero : WalkingIso.rec zero one .zero = zero := rfl
-/--
-lemma `rec_one` / 引理 `rec_one`
-
-English:
-lemma rec_one
-  statement: WalkingIso.rec zero one .one = one
-  proof: rfl
-
-中文:
-引理 rec_one
-  结论: WalkingIso.rec zero one .one = one
-  证明: rfl
+/-
+**CategoryTheory.WalkingIso.rec_one** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Wa
+lkingIso`。
+形式化陈述：∀ {motive : CategoryTheory.WalkingIso → Sort u_1} (zero : motive CategoryT
+heory.WalkingIso.zero)   (one : motive CategoryTheory.WalkingIso.one),   Categor
+yTheory.WalkingIso.rec zero one CategoryTheory.WalkingIso.one = one
+参数：zero : motive CategoryTheory.WalkingIso.zero；one : motive CategoryTheory.Walk
+ingIso.one。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma rec_one : WalkingIso.rec zero one .one = one := rfl
 
 end induction
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `fromIso` / `fromIso` 的定义
+/-- From an isomorphism in a category, we can build a functor out of `WalkingIso` to
+that category. -/
+/-
+**CategoryTheory.WalkingIso.fromIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Wa
+lkingIso`。
+形式化陈述：fromIso {X Y : C} (e : X ≅ Y) : WalkingIso.{w} ⥤ C where obj x
+参数：e : X ≅ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fromIso
-  signature: {X Y : C} (e : X ≅ Y)
-  body: by induction x; exacts [X, Y]
-  map {x y} _ := by induction x <;> induction y; exacts [𝟙 X, e.hom, e.inv, 𝟙 Y]
-  map_comp {x y z} _ _ := by induction x <;> induction y <;> induction z <;> simp
-  map_id {x} := by induction x <;> rfl
-
-中文:
-定义 fromIso
-  签名: {X Y : C} (e : X ≅ Y)
-  定义体: by induction x; exacts [X, Y]
-  map {x y} _ := by induction x <;> induction y; exacts [𝟙 X, e.hom, e.inv, 𝟙 Y]
-  map_comp {x y z} _ _ := by induction x <;> induction y <;> induction z <;> simp
-  map_id {x} := by induction x <;> rfl
-
-Depends on / 依赖: e.hom, e.inv, exacts, map_comp, map_id
+--- 原说明 ---
+From an isomorphism in a category, we can build a functor out of `WalkingIso` to
+that category.
 -/
 def fromIso {X Y : C} (e : X ≅ Y) : WalkingIso.{w} ⥤ C where
   obj x := by induction x; exacts [X, Y]
@@ -266,126 +221,66 @@ section
 variable {X Y : C} (e : X ≅ Y)
 
 @[simp]
-/--
-lemma `fromIso_zero` / 引理 `fromIso_zero`
-
-English:
-lemma fromIso_zero
-  statement: (fromIso.{w} e).obj .zero = X
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 fromIso_zero
-  结论: (fromIso.{w} e).obj .zero = X
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.WalkingIso.fromIso_zero** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.WalkingIso`。
+形式化陈述：fromIso_zero : (fromIso.{w} e).obj .zero = X
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fromIso_zero : (fromIso.{w} e).obj .zero = X := rfl
 
 @[simp]
-/--
-lemma `fromIso_one` / 引理 `fromIso_one`
-
-English:
-lemma fromIso_one
-  statement: (fromIso.{w} e).obj .one = Y
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 fromIso_one
-  结论: (fromIso.{w} e).obj .one = Y
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.WalkingIso.fromIso_one** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.WalkingIso`。
+形式化陈述：fromIso_one : (fromIso.{w} e).obj .one = Y
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fromIso_one : (fromIso.{w} e).obj .one = Y := rfl
 
 @[simp]
-/--
-lemma `fromIso_map_zero_zero` / 引理 `fromIso_map_zero_zero`
-
-English:
-lemma fromIso_map_zero_zero
-  given: (f : zero ⟶ zero)
-  statement: (fromIso.{w} e).map f = 𝟙 X
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 fromIso_map_zero_zero
-  条件: (f : zero ⟶ zero)
-  结论: (fromIso.{w} e).map f = 𝟙 X
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.WalkingIso.fromIso_map_zero_zero** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.WalkingIso`。
+形式化陈述：fromIso_map_zero_zero (f : zero ⟶ zero) : (fromIso.{w} e).map f = 𝟙 X
+参数：f : zero ⟶ zero。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fromIso_map_zero_zero (f : zero ⟶ zero) : (fromIso.{w} e).map f = 𝟙 X := rfl
 
 @[simp]
-/--
-lemma `fromIso_hom` / 引理 `fromIso_hom`
-
-English:
-lemma fromIso_hom
-  given: (f : zero ⟶ one)
-  statement: (fromIso.{w} e).map f = e.hom
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 fromIso_hom
-  条件: (f : zero ⟶ one)
-  结论: (fromIso.{w} e).map f = e.hom
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.WalkingIso.fromIso_hom** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.WalkingIso`。
+形式化陈述：fromIso_hom (f : zero ⟶ one) : (fromIso.{w} e).map f = e.hom
+参数：f : zero ⟶ one。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fromIso_hom (f : zero ⟶ one) : (fromIso.{w} e).map f = e.hom := rfl
 
 @[simp]
-/--
-lemma `fromIso_inv` / 引理 `fromIso_inv`
-
-English:
-lemma fromIso_inv
-  given: (f : one ⟶ zero)
-  statement: (fromIso.{w} e).map f = e.inv
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 fromIso_inv
-  条件: (f : one ⟶ zero)
-  结论: (fromIso.{w} e).map f = e.inv
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.WalkingIso.fromIso_inv** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.WalkingIso`。
+形式化陈述：fromIso_inv (f : one ⟶ zero) : (fromIso.{w} e).map f = e.inv
+参数：f : one ⟶ zero。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fromIso_inv (f : one ⟶ zero) : (fromIso.{w} e).map f = e.inv := rfl
 
 @[simp]
-/--
-lemma `fromIso_map_one_one` / 引理 `fromIso_map_one_one`
-
-English:
-lemma fromIso_map_one_one
-  given: (f : one ⟶ one)
-  statement: (fromIso.{w} e).map f = 𝟙 Y
-  proof: rfl
-
-中文:
-引理 fromIso_map_one_one
-  条件: (f : one ⟶ one)
-  结论: (fromIso.{w} e).map f = 𝟙 Y
-  证明: rfl
+/-
+**CategoryTheory.WalkingIso.fromIso_map_one_one** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.WalkingIso`。
+形式化陈述：fromIso_map_one_one (f : one ⟶ one) : (fromIso.{w} e).map f = 𝟙 Y
+参数：f : one ⟶ one。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fromIso_map_one_one (f : one ⟶ one) : (fromIso.{w} e).map f = 𝟙 Y := rfl
 
@@ -394,42 +289,22 @@ end
 set_option backward.isDefEq.respectTransparency false in
 /-- An equivalence between the type of `WalkingIso`s in `C` and the type of isomorphisms in `C`. -/
 @[simps]
-/--
-Definition of `equiv` / `equiv` 的定义
+/-
+**CategoryTheory.WalkingIso.equiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Walk
+ingIso`。
+形式化陈述：equiv : (WalkingIso.{w} ⥤ C) ≃ Σ (X : C) (Y : C), (X ≅ Y) where toFun F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equiv
-  signature: : (WalkingIso.{w} ⥤ C) ≃ Σ (X : C) (Y : C), (X ≅ Y) where
-  body: ⟨F.obj zero, F.obj one, toIso F⟩
-  invFun p := fromIso p.2.2
-  right_inv := fun ⟨X, Y, e⟩ => rfl
-left_inv F := Functor.ext (by rintro (_ | _) <;> rfl) by
-      intro X Y f
-      induction X <;>
-      induction Y <;>
-      simp [Codiscrete.eq_id] <;>
-      rfl
-
-中文:
-定义 equiv
-  签名: : (WalkingIso.{w} ⥤ C) ≃ Σ (X : C) (Y : C), (X ≅ Y) where
-  定义体: ⟨F.obj zero, F.obj one, toIso F⟩
-  invFun p := fromIso p.2.2
-  right_inv := fun ⟨X, Y, e⟩ => rfl
-left_inv F := Functor.ext (by rintro (_ | _) <;> rfl) by
-      intro X Y f
-      induction X <;>
-      induction Y <;>
-      simp [Codiscrete.eq_id] <;>
-      rfl
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+An equivalence between the type of `WalkingIso`s in `C` and the type of isomorph
+isms in `C`.
 -/
 def equiv : (WalkingIso.{w} ⥤ C) ≃ Σ (X : C) (Y : C), (X ≅ Y) where
   toFun F := ⟨F.obj zero, F.obj one, toIso F⟩
   invFun p := fromIso p.2.2
-  right_inv := fun ⟨X, Y, e⟩ => rfl
-left_inv F := Functor.ext (by rintro (_ | _) <;> rfl) by
+  right_inv := fun ⟨X, Y, e⟩ ↦ rfl
+  left_inv F := Functor.ext (by rintro (_ | _) <;> rfl) <| by
       intro X Y f
       induction X <;>
       induction Y <;>
@@ -446,129 +321,83 @@ namespace SSet
 
 open Simplicial Edge
 
-/--
-Definition of `coherentIso` / `coherentIso` 的定义
+/-- The simplicial set that encodes a single isomorphism.
+Its n-simplices are formal compositions of arrows in WalkingIso. -/
+/-
+**SSet.coherentIso** 是 Mathlib 中的一个缩写定义，位于命名空间 `SSet`。
+形式化陈述：coherentIso : SSet
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation coherentIso
-  signature: : SSet
-  body: nerve WalkingIso.{u}
-
-中文:
-缩写 coherentIso
-  签名: : SSet
-  定义体: nerve WalkingIso.{u}
-
-Depends on / 依赖: WalkingIso
+--- 原说明 ---
+The simplicial set that encodes a single isomorphism.
+Its n-simplices are formal compositions of arrows in WalkingIso.
 -/
 abbrev coherentIso : SSet := nerve WalkingIso.{u}
 
 namespace coherentIso
 
-/--
-Definition of `x₀` / `x₀` 的定义
+/-- The source vertex of `coherentIso`. -/
+/-
+**SSet.coherentIso.x** 是 Mathlib 中的一个定义，位于命名空间 `SSet.coherentIso`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition x₀
-  signature: : coherentIso.{u} _⦋0⦌
-  body: ComposableArrows.mk₀ WalkingIso.zero
-
-中文:
-定义 x₀
-  签名: : coherentIso.{u} _⦋0⦌
-  定义体: ComposableArrows.mk₀ WalkingIso.zero
-
-Depends on / 依赖: ComposableArrows, ComposableArrows.mk, WalkingIso, WalkingIso.zero
+--- 原说明 ---
+The source vertex of `coherentIso`.
 -/
 def x₀ : coherentIso.{u} _⦋0⦌ :=
   ComposableArrows.mk₀ WalkingIso.zero
 
-/--
-Definition of `x₁` / `x₁` 的定义
+/-- The target vertex of `coherentIso`. -/
+/-
+**SSet.coherentIso.x** 是 Mathlib 中的一个定义，位于命名空间 `SSet.coherentIso`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition x₁
-  signature: : coherentIso.{u} _⦋0⦌
-  body: ComposableArrows.mk₀ WalkingIso.one
-
-中文:
-定义 x₁
-  签名: : coherentIso.{u} _⦋0⦌
-  定义体: ComposableArrows.mk₀ WalkingIso.one
-
-Depends on / 依赖: ComposableArrows, ComposableArrows.mk, WalkingIso, WalkingIso.one
+--- 原说明 ---
+The target vertex of `coherentIso`.
 -/
 def x₁ : coherentIso.{u} _⦋0⦌ :=
   ComposableArrows.mk₀ WalkingIso.one
 
-/--
-Definition of `hom` / `hom` 的定义
+/-- The forwards edge of `coherentIso`. -/
+/-
+**SSet.coherentIso.hom** 是 Mathlib 中的一个定义，位于命名空间 `SSet.coherentIso`。
+形式化陈述：hom : Edge.{u} x₀ x₁ where edge
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition hom
-  signature: : Edge.{u} x₀ x₁ where
-  body: ComposableArrows.mk₁ WalkingIso.iso.hom
-  src_eq := ComposableArrows.ext₀ rfl
-  tgt_eq := ComposableArrows.ext₀ rfl
-
-中文:
-定义 hom
-  签名: : 边.{u} x₀ x₁ where
-  定义体: ComposableArrows.mk₁ WalkingIso.iso.hom
-  src_eq := ComposableArrows.ext₀ rfl
-  tgt_eq := ComposableArrows.ext₀ rfl
-
-Depends on / 依赖: ComposableArrows, ComposableArrows.mk, WalkingIso, WalkingIso.iso.hom
+--- 原说明 ---
+The forwards edge of `coherentIso`.
 -/
 def hom : Edge.{u} x₀ x₁ where
   edge := ComposableArrows.mk₁ WalkingIso.iso.hom
   src_eq := ComposableArrows.ext₀ rfl
   tgt_eq := ComposableArrows.ext₀ rfl
 
-/--
-Definition of `inv` / `inv` 的定义
+/-- The backwards edge of `coherentIso`. -/
+/-
+**SSet.coherentIso.inv** 是 Mathlib 中的一个定义，位于命名空间 `SSet.coherentIso`。
+形式化陈述：inv : Edge.{u} x₁ x₀ where edge
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inv
-  signature: : Edge.{u} x₁ x₀ where
-  body: ComposableArrows.mk₁ WalkingIso.iso.inv
-  src_eq := ComposableArrows.ext₀ rfl
-  tgt_eq := ComposableArrows.ext₀ rfl
-
-中文:
-定义 inv
-  签名: : 边.{u} x₁ x₀ where
-  定义体: ComposableArrows.mk₁ WalkingIso.iso.inv
-  src_eq := ComposableArrows.ext₀ rfl
-  tgt_eq := ComposableArrows.ext₀ rfl
-
-Depends on / 依赖: ComposableArrows, ComposableArrows.mk, WalkingIso, WalkingIso.iso.inv
+--- 原说明 ---
+The backwards edge of `coherentIso`.
 -/
 def inv : Edge.{u} x₁ x₀ where
   edge := ComposableArrows.mk₁ WalkingIso.iso.inv
   src_eq := ComposableArrows.ext₀ rfl
   tgt_eq := ComposableArrows.ext₀ rfl
 
-/--
-Definition of `homInvId` / `homInvId` 的定义
+/-- The forwards and backwards edge of `coherentIso` compose to the identity. -/
+/-
+**SSet.coherentIso.homInvId** 是 Mathlib 中的一个定义，位于命名空间 `SSet.coherentIso`。
+形式化陈述：homInvId : Edge.CompStruct.{u} hom inv (Edge.id x₀) where simplex
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homInvId
-  signature: : Edge.CompStruct.{u} hom inv (Edge.id x₀) where
-  body: ComposableArrows.mk₂ WalkingIso.iso.hom WalkingIso.iso.inv
-  d₂ := ComposableArrows.ext₁ rfl rfl rfl
-  d₀ := ComposableArrows.ext₁ rfl rfl rfl
-  d₁ := ComposableArrows.ext₁ rfl rfl rfl
-
-中文:
-定义 homInvId
-  签名: : 边.余mpStruct.{u} hom inv (边.id x₀) where
-  定义体: ComposableArrows.mk₂ WalkingIso.iso.hom WalkingIso.iso.inv
-  d₂ := ComposableArrows.ext₁ rfl rfl rfl
-  d₀ := ComposableArrows.ext₁ rfl rfl rfl
-  d₁ := ComposableArrows.ext₁ rfl rfl rfl
-
-Depends on / 依赖: ComposableArrows, ComposableArrows.mk, WalkingIso, WalkingIso.iso.hom, WalkingIso.iso.inv
+--- 原说明 ---
+The forwards and backwards edge of `coherentIso` compose to the identity.
 -/
 def homInvId : Edge.CompStruct.{u} hom inv (Edge.id x₀) where
   simplex := ComposableArrows.mk₂ WalkingIso.iso.hom WalkingIso.iso.inv
@@ -576,26 +405,15 @@ def homInvId : Edge.CompStruct.{u} hom inv (Edge.id x₀) where
   d₀ := ComposableArrows.ext₁ rfl rfl rfl
   d₁ := ComposableArrows.ext₁ rfl rfl rfl
 
-/--
-Definition of `invHomId` / `invHomId` 的定义
+/-- The backwards and forwards edge of `coherentIso` compose to the identity. -/
+/-
+**SSet.coherentIso.invHomId** 是 Mathlib 中的一个定义，位于命名空间 `SSet.coherentIso`。
+形式化陈述：invHomId : Edge.CompStruct.{u} inv hom (Edge.id x₁) where simplex
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition invHomId
-  signature: : Edge.CompStruct.{u} inv hom (Edge.id x₁) where
-  body: ComposableArrows.mk₂ WalkingIso.iso.inv WalkingIso.iso.hom
-  d₂ := ComposableArrows.ext₁ rfl rfl rfl
-  d₀ := ComposableArrows.ext₁ rfl rfl rfl
-  d₁ := ComposableArrows.ext₁ rfl rfl rfl
-
-中文:
-定义 invHomId
-  签名: : 边.余mpStruct.{u} inv hom (边.id x₁) where
-  定义体: ComposableArrows.mk₂ WalkingIso.iso.inv WalkingIso.iso.hom
-  d₂ := ComposableArrows.ext₁ rfl rfl rfl
-  d₀ := ComposableArrows.ext₁ rfl rfl rfl
-  d₁ := ComposableArrows.ext₁ rfl rfl rfl
-
-Depends on / 依赖: ComposableArrows, ComposableArrows.mk, WalkingIso, WalkingIso.iso.hom, WalkingIso.iso.inv
+--- 原说明 ---
+The backwards and forwards edge of `coherentIso` compose to the identity.
 -/
 def invHomId : Edge.CompStruct.{u} inv hom (Edge.id x₁) where
   simplex := ComposableArrows.mk₂ WalkingIso.iso.inv WalkingIso.iso.hom
@@ -605,42 +423,34 @@ def invHomId : Edge.CompStruct.{u} inv hom (Edge.id x₁) where
 
 /-- The forwards edge of `coherentIso` has an inverse. -/
 @[simps]
-/--
-Definition of `invStructHom` / `invStructHom` 的定义
+/-
+**SSet.coherentIso.invStructHom** 是 Mathlib 中的一个定义，位于命名空间 `SSet.coherentIso`。
+形式化陈述：invStructHom : Edge.InvStruct.{u} coherentIso.hom where inv
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition invStructHom
-  signature: : Edge.InvStruct.{u} coherentIso.hom where
-  body: inv
-  homInvId := homInvId
-  invHomId := invHomId
-
-中文:
-定义 invStructHom
-  签名: : 边.InvStruct.{u} coherentIso.hom where
-  定义体: inv
-  homInvId := homInvId
-  invHomId := invHomId
+--- 原说明 ---
+The forwards edge of `coherentIso` has an inverse.
 -/
 def invStructHom : Edge.InvStruct.{u} coherentIso.hom where
   inv := inv
   homInvId := homInvId
   invHomId := invHomId
 
-/--
-Definition of `invStructOfEqMapHom` / `invStructOfEqMapHom` 的定义
+/-- For a simplicial set `X`, if an edge in `X` is equal to the image of `hom`
+under a morphism of simplicial sets, this edge has an inverse. -/
+/-
+**SSet.coherentIso.invStructOfEqMapHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `SSet.coheren
+tIso`。
+形式化陈述：invStructOfEqMapHom {X : SSet.{u}} {x₀ x₁ : X _⦋0⦌} {f : Edge x₀ x₁} {g : 
+coherentIso ⟶ X} (hfg : f.edge = g.app _ hom.edge) : f.InvStruct
+参数：hfg : f.edge = g.app _ hom.edge。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation invStructOfEqMapHom
-  signature: {X : SSet.{u}} {x₀ x₁ : X _⦋0⦌}
-  body: (invStructHom.map g).ofEq hfg.symm
-
-中文:
-缩写 invStructOfEqMapHom
-  签名: {X : SSet.{u}} {x₀ x₁ : X _⦋0⦌}
-  定义体: (invStructHom.map g).ofEq hfg.symm
-
-Depends on / 依赖: hfg.symm, invStructHom, invStructHom.map
+--- 原说明 ---
+For a simplicial set `X`, if an edge in `X` is equal to the image of `hom`
+under a morphism of simplicial sets, this edge has an inverse.
 -/
 abbrev invStructOfEqMapHom {X : SSet.{u}} {x₀ x₁ : X _⦋0⦌}
     {f : Edge x₀ x₁}
@@ -652,3 +462,4 @@ abbrev invStructOfEqMapHom {X : SSet.{u}} {x₀ x₁ : X _⦋0⦌}
 end coherentIso
 
 end SSet
+

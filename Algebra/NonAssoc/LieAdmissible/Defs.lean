@@ -44,22 +44,16 @@ Frames.**][munthe-kaas_lundervold_2013]
 /-- A `LieAdmissibleRing` is a `NonUnitalNonAssocRing` such that the canonical bracket
 `⁅x, y⁆ := x * y - y * x` turns it into a `LieRing`. This is expressed by an associator identity. -/
 @[ext]
-/--
-Definition of `LieAdmissibleRing` / `LieAdmissibleRing` 的定义
+/-
+**LieAdmissibleRing** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class LieAdmissibleRing
-  parameters: (L : Type*)
-  extends: NonUnitalNonAssocRing L
-  axioms and operations (1):
-    - assoc_def((x y z : L)) : associator x y z + associator z x y + associator y z x = associator y x z + associator z y x + associator x z y
-
-中文:
-类 LieAdmissible环
-  参数: (L : 类型)
-  继承: 非幺非结合环 L
-  公理与运算 (1 个):
-    - assoc_def((x y z : L)) : associator x y z + associator z x y + associator y z x = associator y x z + associator z y x + associator x z y
+--- 原说明 ---
+A `LieAdmissibleRing` is a `NonUnitalNonAssocRing` such that the canonical brack
+et
+`⁅x, y⁆ := x * y - y * x` turns it into a `LieRing`. This is expressed by an ass
+ociator identity.
 -/
 class LieAdmissibleRing (L : Type*) extends NonUnitalNonAssocRing L where
   assoc_def (x y z : L) : associator x y z + associator z x y + associator y z x =
@@ -68,20 +62,16 @@ class LieAdmissibleRing (L : Type*) extends NonUnitalNonAssocRing L where
 /-- A `LieAdmissibleAlgebra` is a `LieAdmissibleRing` equipped with a compatible action by scalars
 from a commutative ring. -/
 @[ext]
-/--
-Definition of `LieAdmissibleAlgebra` / `LieAdmissibleAlgebra` 的定义
+/-
+**LieAdmissibleAlgebra** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_1) → (L : Type u_2) → [CommRing R] → [LieAdmissibleRing L] → T
+ype (max u_1 u_2)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class LieAdmissibleAlgebra
-  parameters: (R L : Type*) [CommRing R] [LieAdmissibleRing L]
-  extends: Module R L, IsScalarTower R L L, SMulCommClass R L L
-  (no additional axioms)
-
-中文:
-类 LieAdmissible代数
-  参数: (R L : 类型) [交换环 R] [LieAdmissible环 L]
-  继承: 模 R L, 标量塔 R L L, 标量交换类 R L L
-  (无附加公理)
+--- 原说明 ---
+A `LieAdmissibleAlgebra` is a `LieAdmissibleRing` equipped with a compatible act
+ion by scalars
+from a commutative ring.
 -/
 class LieAdmissibleAlgebra (R L : Type*) [CommRing R] [LieAdmissibleRing L]
   extends Module R L, IsScalarTower R L L, SMulCommClass R L L
@@ -92,40 +82,16 @@ variable {R L : Type*} [CommRing R]
 
 namespace LieAdmissibleRing
 
-/--
-Instance `instLieRing` / 实例 `instLieRing`
+/-- By definition, every `LieAdmissibleRing` yields a `LieRing` with the commutator bracket. -/
+/-
+**LieAdmissibleRing.instLieRing** 是 Mathlib 中的一个实例，位于命名空间 `LieAdmissibleRing`。
+形式化陈述：instLieRing [LieAdmissibleRing L] : LieRing L where add_lie x y z
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instLieRing
-  signature: [LieAdmissibleRing L]
-  body: by
-    simp only [Ring.lie_def, mul_add, add_mul]
-    abel
-  lie_add x y z := by
-    simp only [Ring.lie_def, mul_add, add_mul]
-    abel
-  lie_self := by simp [Ring.lie_def]
-  leibniz_lie x y z := by
-    have := LieAdmissibleRing.assoc_def x y z
-    simp only [associator_apply] at this
-    grind [Ring.lie_def, mul_sub, sub_mul]
-
-中文:
-实例 instLieRing
-  签名: [LieAdmissible环 L]
-  定义体: by
-    simp only [Ring.lie_def, mul_add, add_mul]
-    abel
-  lie_add x y z := by
-    simp only [Ring.lie_def, mul_add, add_mul]
-    abel
-  lie_self := by simp [Ring.lie_def]
-  leibniz_lie x y z := by
-    have := LieAdmissibleRing.assoc_def x y z
-    simp only [associator_apply] at this
-    grind [Ring.lie_def, mul_sub, sub_mul]
-
-Depends on / 依赖: LieAdmissibleRing, LieAdmissibleRing.assoc_def, Ring.lie_def, add_mul, assoc_def, associator_apply, leibniz_lie, lie_add, lie_def, lie_self, mul_add, mul_sub, sub_mul
+--- 原说明 ---
+By definition, every `LieAdmissibleRing` yields a `LieRing` with the commutator 
+bracket.
 -/
 instance instLieRing [LieAdmissibleRing L] : LieRing L where
   add_lie x y z := by
@@ -144,22 +110,17 @@ end LieAdmissibleRing
 
 namespace LieAdmissibleAlgebra
 
-/--
-Instance `instLieAlgebra` / 实例 `instLieAlgebra`
+/-- Every `LieAdmissibleAlgebra` is a `LieAlgebra` with the commutator bracket. -/
+/-
+**LieAdmissibleAlgebra.instLieAlgebra** 是 Mathlib 中的一个实例，位于命名空间 `LieAdmissibleAl
+gebra`。
+形式化陈述：instLieAlgebra [LieAdmissibleRing L] [LieAdmissibleAlgebra R L] : LieAlgeb
+ra R L where lie_smul r x y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instLieAlgebra
-  signature: [LieAdmissibleRing L] [LieAdmissibleAlgebra R L]
-  body: by
-    simp [Ring.lie_def, mul_smul_comm, smul_mul_assoc, ← smul_sub]
-
-中文:
-实例 instLieAlgebra
-  签名: [LieAdmissible环 L] [LieAdmissible代数 R L]
-  定义体: by
-    simp [Ring.lie_def, mul_smul_comm, smul_mul_assoc, ← smul_sub]
-
-Depends on / 依赖: Ring.lie_def, lie_def, mul_smul_comm, smul_mul_assoc, smul_sub
+--- 原说明 ---
+Every `LieAdmissibleAlgebra` is a `LieAlgebra` with the commutator bracket.
 -/
 instance instLieAlgebra [LieAdmissibleRing L] [LieAdmissibleAlgebra R L] : LieAlgebra R L where
   lie_smul r x y := by
@@ -171,28 +132,19 @@ namespace LeftPreLieRing
 
 variable [LeftPreLieRing L]
 
-/--
-Instance `instLieAdmissibleRing` / 实例 `instLieAdmissibleRing`
+/-- `LeftPreLieRings` are examples of `LieAdmissibleRings` by the commutativity assumption on the
+associator. -/
+/-
+**LeftPreLieRing.instLieAdmissibleRing** 是 Mathlib 中的一个实例，位于命名空间 `LeftPreLieRing
+`。
+形式化陈述：instLieAdmissibleRing : LieAdmissibleRing L where assoc_def x y z
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instLieAdmissibleRing
-  signature: : LieAdmissibleRing L where
-  body: by
-    have assoc_xyz := LeftPreLieRing.assoc_symm' x y z
-    have assoc_zxy := LeftPreLieRing.assoc_symm' z x y
-    have assoc_yzx := LeftPreLieRing.assoc_symm' y z x
-    grind
-
-中文:
-实例 instLieAdmissibleRing
-  签名: : LieAdmissible环 L where
-  定义体: by
-    have assoc_xyz := LeftPreLieRing.assoc_symm' x y z
-    have assoc_zxy := LeftPreLieRing.assoc_symm' z x y
-    have assoc_yzx := LeftPreLieRing.assoc_symm' y z x
-    grind
-
-Depends on / 依赖: LeftPreLieRing, LeftPreLieRing.assoc_symm, assoc_symm, assoc_xyz, assoc_yzx, assoc_zxy
+--- 原说明 ---
+`LeftPreLieRings` are examples of `LieAdmissibleRings` by the commutativity assu
+mption on the
+associator.
 -/
 instance instLieAdmissibleRing : LieAdmissibleRing L where
   assoc_def x y z := by
@@ -207,16 +159,18 @@ namespace LeftPreLieAlgebra
 
 variable [LeftPreLieRing L] [LeftPreLieAlgebra R L]
 
-/--
-Instance `instLieAdmissibleAlgebra` / 实例 `instLieAdmissibleAlgebra`
-
-English:
-instance instLieAdmissibleAlgebra
-  signature: : LieAdmissibleAlgebra R L where
-
-中文:
-实例 instLieAdmissibleAlgebra
-  签名: : LieAdmissible代数 R L where
+/-
+**LeftPreLieAlgebra.instLieAdmissibleAlgebra** 是 Mathlib 中的一个定义，位于命名空间 `LeftPreL
+ieAlgebra`。
+形式化陈述：{R : Type u_1} →   {L : Type u_2} →     [inst : CommRing R] → [inst_1 : Le
+ftPreLieRing L] → [LeftPreLieAlgebra R L] → LieAdmissibleAlgebra R L
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `LeftPreLieAlgebra.toIsScalarTower`：∀ {R : Type u_1} {inst : CommRing R} 
+{L : Type u_2} {inst_1 : LeftPreLieRing L} [self : LeftPreLieAlgebra R L],   IsS
+calarTower R L L
+· 使用定理 `LeftPreLieAlgebra.toSMulCommClass`：∀ {R : Type u_1} {inst : CommRing R} 
+{L : Type u_2} {inst_1 : LeftPreLieRing L} [self : LeftPreLieAlgebra R L],   SMu
+lCommClass R L L
 -/
 instance instLieAdmissibleAlgebra : LieAdmissibleAlgebra R L where
 
@@ -226,28 +180,19 @@ namespace RightPreLieRing
 
 variable [RightPreLieRing L]
 
-/--
-Instance `instLieAdmissibleRing` / 实例 `instLieAdmissibleRing`
+/-- `RightPreLieRings` are examples of `LieAdmissibleRings` by the commutativity assumption on
+the associator. -/
+/-
+**RightPreLieRing.instLieAdmissibleRing** 是 Mathlib 中的一个实例，位于命名空间 `RightPreLieRi
+ng`。
+形式化陈述：instLieAdmissibleRing : LieAdmissibleRing L where assoc_def x y z
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instLieAdmissibleRing
-  signature: : LieAdmissibleRing L where
-  body: by
-    have assoc_xyz := RightPreLieRing.assoc_symm' x y z
-    have assoc_zxy := RightPreLieRing.assoc_symm' z x y
-    have assoc_yzx := RightPreLieRing.assoc_symm' y z x
-    grind
-
-中文:
-实例 instLieAdmissibleRing
-  签名: : LieAdmissible环 L where
-  定义体: by
-    have assoc_xyz := RightPreLieRing.assoc_symm' x y z
-    have assoc_zxy := RightPreLieRing.assoc_symm' z x y
-    have assoc_yzx := RightPreLieRing.assoc_symm' y z x
-    grind
-
-Depends on / 依赖: RightPreLieRing, RightPreLieRing.assoc_symm, assoc_symm, assoc_xyz, assoc_yzx, assoc_zxy
+--- 原说明 ---
+`RightPreLieRings` are examples of `LieAdmissibleRings` by the commutativity ass
+umption on
+the associator.
 -/
 instance instLieAdmissibleRing : LieAdmissibleRing L where
   assoc_def x y z := by
@@ -262,16 +207,18 @@ namespace RightPreLieAlgebra
 
 variable [RightPreLieRing L] [RightPreLieAlgebra R L]
 
-/--
-Instance `instLieAdmissibleAlgebra` / 实例 `instLieAdmissibleAlgebra`
-
-English:
-instance instLieAdmissibleAlgebra
-  signature: : LieAdmissibleAlgebra R L where
-
-中文:
-实例 instLieAdmissibleAlgebra
-  签名: : LieAdmissible代数 R L where
+/-
+**RightPreLieAlgebra.instLieAdmissibleAlgebra** 是 Mathlib 中的一个定义，位于命名空间 `RightPr
+eLieAlgebra`。
+形式化陈述：{R : Type u_1} →   {L : Type u_2} →     [inst : CommRing R] → [inst_1 : Ri
+ghtPreLieRing L] → [RightPreLieAlgebra R L] → LieAdmissibleAlgebra R L
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `RightPreLieAlgebra.toIsScalarTower`：∀ {R : Type u_1} {inst : CommRing R}
+ {L : Type u_2} {inst_1 : RightPreLieRing L} [self : RightPreLieAlgebra R L],   
+IsScalarTower R L L
+· 使用定理 `RightPreLieAlgebra.toSMulCommClass`：∀ {R : Type u_1} {inst : CommRing R}
+ {L : Type u_2} {inst_1 : RightPreLieRing L} [self : RightPreLieAlgebra R L],   
+SMulCommClass R L L
 -/
 instance instLieAdmissibleAlgebra : LieAdmissibleAlgebra R L where
 
@@ -281,28 +228,21 @@ namespace Ring
 
 variable [Ring L]
 
-/--
-Definition of `instLieAdmissibleRing` / `instLieAdmissibleRing` 的定义
+/-- Every ring is Lie-admissible.
+See note [reducible non-instances]. -/
+/-
+**Ring.instLieAdmissibleRing** 是 Mathlib 中的一个缩写定义，位于命名空间 `Ring`。
+形式化陈述：instLieAdmissibleRing : LieAdmissibleRing L where assoc_def
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation instLieAdmissibleRing
-  signature: : LieAdmissibleRing L where
-  body: by
-    suffices forall a b c : L, associator a b c = 0 by simp
-    simp
-
-中文:
-缩写 instLieAdmissibleRing
-  签名: : LieAdmissible环 L where
-  定义体: by
-    suffices forall a b c : L, associator a b c = 0 by simp
-    simp
-
-Depends on / 依赖: associator
+--- 原说明 ---
+Every ring is Lie-admissible.
+See note [reducible non-instances].
 -/
 abbrev instLieAdmissibleRing : LieAdmissibleRing L where
   assoc_def := by
-    suffices forall a b c : L, associator a b c = 0 by simp
+    suffices ∀ a b c : L, associator a b c = 0 by simp
     simp
 
 end Ring
@@ -312,18 +252,17 @@ namespace Algebra
 variable [Ring L] [Algebra R L]
 attribute [local instance] Ring.instLieAdmissibleRing
 
-/--
-Definition of `instLieAdmissibleAlgebra` / `instLieAdmissibleAlgebra` 的定义
+/-- Every algebra is Lie-admissible.
+See note [reducible non-instances]. -/
+/-
+**Algebra.instLieAdmissibleAlgebra** 是 Mathlib 中的一个缩写定义，位于命名空间 `Algebra`。
+形式化陈述：instLieAdmissibleAlgebra : LieAdmissibleAlgebra R L where smul_comm
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation instLieAdmissibleAlgebra
-  signature: : LieAdmissibleAlgebra R L where
-  body: by simp
-
-中文:
-缩写 instLieAdmissibleAlgebra
-  签名: : LieAdmissible代数 R L where
-  定义体: by simp
+--- 原说明 ---
+Every algebra is Lie-admissible.
+See note [reducible non-instances].
 -/
 abbrev instLieAdmissibleAlgebra : LieAdmissibleAlgebra R L where
   smul_comm := by simp
@@ -331,3 +270,4 @@ abbrev instLieAdmissibleAlgebra : LieAdmissibleAlgebra R L where
 end Algebra
 
 end instances
+

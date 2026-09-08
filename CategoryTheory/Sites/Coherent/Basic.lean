@@ -50,19 +50,18 @@ open Limits
 variable (C : Type*) [Category* C]
 
 /--
-Definition of `Precoherent` / `Precoherent` 的定义
+The condition `Precoherent C` is essentially the minimal condition required to define the
+coherent coverage on `C`.
+-/
+/-
+**CategoryTheory.Precoherent** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：(C : Type u_1) → [CategoryTheory.Category.{v_1, u_1} C] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Precoherent
-  parameters: : Prop where
-  axioms and operations (1):
-    - pullback({B₁ B₂ : C} (f : B₂ ⟶ B₁)) : forall (α : Type) [Finite α] (X₁ : α -> C) (π₁ : (a : α) -> (X₁ a ⟶ B₁)), EffectiveEpiFamily X₁ π₁ -> exists (β : Type) (_ : Finite β) (X₂ : β -> C) (π₂ : (b : β) -> (X₂ b ⟶ B₂)), EffectiveEpiFamily X₂ π₂ ∧ exists (i : β -> α) (ι : (b : β) -> (X₂ b ⟶ X₁ (i b))), forall (b : β), ι b ≫ π₁ _ = π₂ _ ≫ f
-
-中文:
-类 Precoherent
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - pullback({B₁ B₂ : C} (f : B₂ ⟶ B₁)) : 对任意 (α : 类型) [有限 α] (X₁ : α -> C) (π₁ : (a : α) -> (X₁ a ⟶ B₁)), EffectiveEpiFamily X₁ π₁ -> 存在 (β : 类型) (_ : 有限 β) (X₂ : β -> C) (π₂ : (b : β) -> (X₂ b ⟶ B₂)), EffectiveEpiFamily X₂ π₂ ∧ 存在 (i : β -> α) (ι : (b : β) -> (X₂ b ⟶ X₁ (i b))), 对任意 (b : β), ι b ≫ π₁ _ = π₂ _ ≫ f
+--- 原说明 ---
+The condition `Precoherent C` is essentially the minimal condition required to d
+efine the
+coherent coverage on `C`.
 -/
 class Precoherent : Prop where
   /--
@@ -70,42 +69,25 @@ class Precoherent : Prop where
   an effective epi family `π₂` over `B₂`, such that `π₂` factors through `π₁`.
   -/
   pullback {B₁ B₂ : C} (f : B₂ ⟶ B₁) :
-    forall (α : Type) [Finite α] (X₁ : α -> C) (π₁ : (a : α) -> (X₁ a ⟶ B₁)), EffectiveEpiFamily X₁ π₁ ->
-    exists (β : Type) (_ : Finite β) (X₂ : β -> C) (π₂ : (b : β) -> (X₂ b ⟶ B₂)),
+    ∀ (α : Type) [Finite α] (X₁ : α → C) (π₁ : (a : α) → (X₁ a ⟶ B₁)), EffectiveEpiFamily X₁ π₁ →
+    ∃ (β : Type) (_ : Finite β) (X₂ : β → C) (π₂ : (b : β) → (X₂ b ⟶ B₂)),
       EffectiveEpiFamily X₂ π₂ ∧
-    exists (i : β -> α) (ι : (b : β) -> (X₂ b ⟶ X₁ (i b))), forall (b : β), ι b ≫ π₁ _ = π₂ _ ≫ f
+    ∃ (i : β → α) (ι : (b : β) → (X₂ b ⟶ X₁ (i b))), ∀ (b : β), ι b ≫ π₁ _ = π₂ _ ≫ f
 
 /--
-Definition of `coherentCoverage` / `coherentCoverage` 的定义
+The coherent coverage on a precoherent category `C`.
+-/
+/-
+**CategoryTheory.coherentCoverage** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：coherentCoverage [Precoherent C] : Coverage C where coverings B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coherentCoverage
-  signature: [Precoherent C]
-  body: { S | exists (α : Type) (_ : Finite α) (X : α -> C) (π : (a : α) -> (X a ⟶ B)),
-    S = Presieve.ofArrows X π ∧ EffectiveEpiFamily X π }
-  pullback := by
-    rintro B₁ B₂ f S ⟨α, _, X₁, π₁, rfl, hS⟩
-    obtain ⟨β, _, X₂, π₂, h, i, ι, hh⟩ := Precoherent.pullback f α X₁ π₁ hS
-    refine ⟨Presieve.ofArrows X₂ π₂, ⟨β, inferInstance, X₂, π₂, rfl, h⟩, ?_⟩
-    rintro _ _ ⟨b⟩
-    exact ⟨(X₁ (i b)), ι _, π₁ _, ⟨_⟩, hh _⟩
-
-中文:
-定义 coherentCoverage
-  签名: [Precoherent C]
-  定义体: { S | exists (α : Type) (_ : Finite α) (X : α -> C) (π : (a : α) -> (X a ⟶ B)),
-    S = Presieve.ofArrows X π ∧ EffectiveEpiFamily X π }
-  pullback := by
-    rintro B₁ B₂ f S ⟨α, _, X₁, π₁, rfl, hS⟩
-    obtain ⟨β, _, X₂, π₂, h, i, ι, hh⟩ := Precoherent.pullback f α X₁ π₁ hS
-    refine ⟨Presieve.ofArrows X₂ π₂, ⟨β, inferInstance, X₂, π₂, rfl, h⟩, ?_⟩
-    rintro _ _ ⟨b⟩
-    exact ⟨(X₁ (i b)), ι _, π₁ _, ⟨_⟩, hh _⟩
-
-Depends on / 依赖: Finite
+--- 原说明 ---
+The coherent coverage on a precoherent category `C`.
 -/
 def coherentCoverage [Precoherent C] : Coverage C where
-  coverings B := { S | exists (α : Type) (_ : Finite α) (X : α -> C) (π : (a : α) -> (X a ⟶ B)),
+  coverings B := { S | ∃ (α : Type) (_ : Finite α) (X : α → C) (π : (a : α) → (X a ⟶ B)),
     S = Presieve.ofArrows X π ∧ EffectiveEpiFamily X π }
   pullback := by
     rintro B₁ B₂ f S ⟨α, _, X₁, π₁, rfl, hS⟩
@@ -115,37 +97,39 @@ def coherentCoverage [Precoherent C] : Coverage C where
     exact ⟨(X₁ (i b)), ι _, π₁ _, ⟨_⟩, hh _⟩
 
 /--
-Definition of `coherentTopology` / `coherentTopology` 的定义
+The coherent Grothendieck topology on a precoherent category `C`.
+-/
+/-
+**CategoryTheory.coherentTopology** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：coherentTopology [Precoherent C] : GrothendieckTopology C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coherentTopology
-  signature: [Precoherent C]
-  body: (coherentCoverage C).toGrothendieck
-
-中文:
-定义 coherentTopology
-  签名: [Precoherent C]
-  定义体: (coherentCoverage C).toGrothendieck
-
-Depends on / 依赖: coherentCoverage, toGrothendieck
+--- 原说明 ---
+The coherent Grothendieck topology on a precoherent category `C`.
 -/
 def coherentTopology [Precoherent C] : GrothendieckTopology C :=
   (coherentCoverage C).toGrothendieck
 
 /--
-Definition of `Preregular` / `Preregular` 的定义
+The condition `Preregular C` is a property that effective epis can be "pulled back" along any
+morphism. This is satisfied e.g. by categories that have pullbacks that preserve effective
+epimorphisms (like `Profinite` and `CompHaus`), and categories where every object is projective
+(like  `Stonean`).
+-/
+/-
+**CategoryTheory.Preregular** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：(C : Type u_1) → [CategoryTheory.Category.{v_1, u_1} C] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Preregular
-  parameters: : Prop where
-  axioms and operations (1):
-    - exists_fac : forall {X Y Z : C} (f : X ⟶ Y) (g : Z ⟶ Y) [EffectiveEpi g], (exists (W : C) (h : W ⟶ X) (_ : EffectiveEpi h) (i : W ⟶ Z), i ≫ g = h ≫ f)
-
-中文:
-类 Preregular
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - exists_fac : 对任意 {X Y Z : C} (f : X ⟶ Y) (g : Z ⟶ Y) [有效满态射 g], (存在 (W : C) (h : W ⟶ X) (_ : 有效满态射 h) (i : W ⟶ Z), i ≫ g = h ≫ f)
+--- 原说明 ---
+The condition `Preregular C` is a property that effective epis can be "pulled ba
+ck" along any
+morphism. This is satisfied e.g. by categories that have pullbacks that preserve
+ effective
+epimorphisms (like `Profinite` and `CompHaus`), and categories where every objec
+t is projective
+(like  `Stonean`).
 -/
 class Preregular : Prop where
   /--
@@ -154,59 +138,30 @@ class Preregular : Prop where
   commute.
   ```
   W --i-→ Z
-  | |
-  h g
-  ↓ ↓
+  |       |
+  h       g
+  ↓       ↓
   X --f-→ Y
   ```
   -/
-  exists_fac : forall {X Y Z : C} (f : X ⟶ Y) (g : Z ⟶ Y) [EffectiveEpi g],
-    (exists (W : C) (h : W ⟶ X) (_ : EffectiveEpi h) (i : W ⟶ Z), i ≫ g = h ≫ f)
+  exists_fac : ∀ {X Y Z : C} (f : X ⟶ Y) (g : Z ⟶ Y) [EffectiveEpi g],
+    (∃ (W : C) (h : W ⟶ X) (_ : EffectiveEpi h) (i : W ⟶ Z), i ≫ g = h ≫ f)
 
 /--
-Definition of `regularCoverage` / `regularCoverage` 的定义
+The regular coverage on a regular category `C`.
+-/
+/-
+**CategoryTheory.regularCoverage** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：regularCoverage [Preregular C] : Coverage C where coverings B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition regularCoverage
-  signature: [Preregular C]
-  body: { S | exists (X : C) (f : X ⟶ B), S = Presieve.ofArrows (fun (_ : Unit) => X)
-    (fun (_ : Unit) => f) ∧ EffectiveEpi f }
-  pullback := by
-    intro X Y f S ⟨Z, π, hπ, h_epi⟩
-    have := Preregular.exists_fac f π
-    obtain ⟨W, h, _, i, this⟩ := this
-    refine ⟨Presieve.singleton h, ⟨?_, ?_⟩⟩
-    · exact ⟨W, h, by {rw [Presieve.ofArrows_pUnit h]}, inferInstance⟩
-    · intro W g hg
-      cases hg
-      refine ⟨Z, i, π, ⟨?_, this⟩⟩
-      cases hπ
-      rw [Presieve.ofArrows_pUnit]
-      exact Presieve.singleton.mk
-
-中文:
-定义 regularCoverage
-  签名: [Preregular C]
-  定义体: { S | exists (X : C) (f : X ⟶ B), S = Presieve.ofArrows (fun (_ : Unit) => X)
-    (fun (_ : Unit) => f) ∧ EffectiveEpi f }
-  pullback := by
-    intro X Y f S ⟨Z, π, hπ, h_epi⟩
-    have := Preregular.exists_fac f π
-    obtain ⟨W, h, _, i, this⟩ := this
-    refine ⟨Presieve.singleton h, ⟨?_, ?_⟩⟩
-    · exact ⟨W, h, by {rw [Presieve.ofArrows_pUnit h]}, inferInstance⟩
-    · intro W g hg
-      cases hg
-      refine ⟨Z, i, π, ⟨?_, this⟩⟩
-      cases hπ
-      rw [Presieve.ofArrows_pUnit]
-      exact Presieve.singleton.mk
-
-Depends on / 依赖: Presieve, Presieve.ofArrows, ofArrows
+--- 原说明 ---
+The regular coverage on a regular category `C`.
 -/
 def regularCoverage [Preregular C] : Coverage C where
-  coverings B := { S | exists (X : C) (f : X ⟶ B), S = Presieve.ofArrows (fun (_ : Unit) => X)
-    (fun (_ : Unit) => f) ∧ EffectiveEpi f }
+  coverings B := { S | ∃ (X : C) (f : X ⟶ B), S = Presieve.ofArrows (fun (_ : Unit) ↦ X)
+    (fun (_ : Unit) ↦ f) ∧ EffectiveEpi f }
   pullback := by
     intro X Y f S ⟨Z, π, hπ, h_epi⟩
     have := Preregular.exists_fac f π
@@ -221,73 +176,43 @@ def regularCoverage [Preregular C] : Coverage C where
       exact Presieve.singleton.mk
 
 /--
-Definition of `regularTopology` / `regularTopology` 的定义
+The regular Grothendieck topology on a preregular category `C`.
+-/
+/-
+**CategoryTheory.regularTopology** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：regularTopology [Preregular C] : GrothendieckTopology C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition regularTopology
-  signature: [Preregular C]
-  body: (regularCoverage C).toGrothendieck
-
-中文:
-定义 regularTopology
-  签名: [Preregular C]
-  定义体: (regularCoverage C).toGrothendieck
-
-Depends on / 依赖: regularCoverage, toGrothendieck
+--- 原说明 ---
+The regular Grothendieck topology on a preregular category `C`.
 -/
 def regularTopology [Preregular C] : GrothendieckTopology C :=
   (regularCoverage C).toGrothendieck
 
 /--
-Definition of `extensiveCoverage` / `extensiveCoverage` 的定义
+The extensive coverage on an extensive category `C`
 
-English:
-definition extensiveCoverage
-  signature: [FinitaryPreExtensive C]
-  body: { S | exists (α : Type) (_ : Finite α) (X : α -> C) (π : (a : α) -> (X a ⟶ B)),
-    S = Presieve.ofArrows X π ∧ IsIso (Sigma.desc π) }
-  pullback := by
-    intro X Y f S ⟨α, hα, Z, π, hS, h_iso⟩
-    let Z' : α -> C := fun a => pullback f (π a)
-    let π' : (a : α) -> Z' a ⟶ Y := fun a => pullback.fst _ _
-    refine ⟨@Presieve.ofArrows C _ _ α Z' π', ⟨?_, ?_⟩⟩
-    · constructor
-      exact ⟨hα, Z', π', ⟨by simp only,
-        FinitaryPreExtensive.isIso_sigmaDesc_fst (fun x => π x) f h_iso⟩⟩
-    · intro W g hg
-      rcases hg with ⟨a⟩
-      refine ⟨Z a, pullback.snd _ _, π a, ?_, by rw [CategoryTheory.Limits.pullback.condition]⟩
-      rw [hS]
-      exact Presieve.ofArrows.mk a
+TODO: use general colimit API instead of `IsIso (Sigma.desc π)`
+-/
+/-
+**CategoryTheory.extensiveCoverage** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：extensiveCoverage [FinitaryPreExtensive C] : Coverage C where coverings B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 extensiveCoverage
-  签名: [有限预广延 C]
-  定义体: { S | exists (α : Type) (_ : Finite α) (X : α -> C) (π : (a : α) -> (X a ⟶ B)),
-    S = Presieve.ofArrows X π ∧ IsIso (Sigma.desc π) }
-  pullback := by
-    intro X Y f S ⟨α, hα, Z, π, hS, h_iso⟩
-    let Z' : α -> C := fun a => pullback f (π a)
-    let π' : (a : α) -> Z' a ⟶ Y := fun a => pullback.fst _ _
-    refine ⟨@Presieve.ofArrows C _ _ α Z' π', ⟨?_, ?_⟩⟩
-    · constructor
-      exact ⟨hα, Z', π', ⟨by simp only,
-        FinitaryPreExtensive.isIso_sigmaDesc_fst (fun x => π x) f h_iso⟩⟩
-    · intro W g hg
-      rcases hg with ⟨a⟩
-      refine ⟨Z a, pullback.snd _ _, π a, ?_, by rw [CategoryTheory.Limits.pullback.condition]⟩
-      rw [hS]
-      exact Presieve.ofArrows.mk a
+--- 原说明 ---
+The extensive coverage on an extensive category `C`
 
-Depends on / 依赖: Finite
+TODO: use general colimit API instead of `IsIso (Sigma.desc π)`
 -/
 def extensiveCoverage [FinitaryPreExtensive C] : Coverage C where
-  coverings B := { S | exists (α : Type) (_ : Finite α) (X : α -> C) (π : (a : α) -> (X a ⟶ B)),
+  coverings B := { S | ∃ (α : Type) (_ : Finite α) (X : α → C) (π : (a : α) → (X a ⟶ B)),
     S = Presieve.ofArrows X π ∧ IsIso (Sigma.desc π) }
   pullback := by
     intro X Y f S ⟨α, hα, Z, π, hS, h_iso⟩
-    let Z' : α -> C := fun a => pullback f (π a)
-    let π' : (a : α) -> Z' a ⟶ Y := fun a => pullback.fst _ _
+    let Z' : α → C := fun a ↦ pullback f (π a)
+    let π' : (a : α) → Z' a ⟶ Y := fun a ↦ pullback.fst _ _
     refine ⟨@Presieve.ofArrows C _ _ α Z' π', ⟨?_, ?_⟩⟩
     · constructor
       exact ⟨hα, Z', π', ⟨by simp only,
@@ -299,21 +224,19 @@ def extensiveCoverage [FinitaryPreExtensive C] : Coverage C where
       exact Presieve.ofArrows.mk a
 
 /--
-Definition of `extensiveTopology` / `extensiveTopology` 的定义
+The extensive Grothendieck topology on a finitary pre-extensive category `C`.
+-/
+/-
+**CategoryTheory.extensiveTopology** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：extensiveTopology [FinitaryPreExtensive C] : GrothendieckTopology C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition extensiveTopology
-  signature: [FinitaryPreExtensive C]
-  body: (extensiveCoverage C).toGrothendieck
-
-中文:
-定义 extensiveTopology
-  签名: [有限预广延 C]
-  定义体: (extensiveCoverage C).toGrothendieck
-
-Depends on / 依赖: extensiveCoverage, toGrothendieck
+--- 原说明 ---
+The extensive Grothendieck topology on a finitary pre-extensive category `C`.
 -/
 def extensiveTopology [FinitaryPreExtensive C] : GrothendieckTopology C :=
   (extensiveCoverage C).toGrothendieck
 
 end CategoryTheory
+

@@ -25,49 +25,58 @@ variable {C D : Type*} [Category* C] [Category* D] [MonoidalCategory C] [Monoida
 which is sent by a faithful monoidal functor to an exact pairing,
 the equations holds automatically. -/
 @[instance_reducible]
-/--
-Definition of `ExactPairing.ofFaithful` / `ExactPairing.ofFaithful` 的定义
+/-
+**CategoryTheory.ExactPairing.ofFaithful** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.ExactPairing`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         [i
+nst_2 : CategoryTheory.MonoidalCategory C] →           [inst_3 : CategoryTheory.
+MonoidalCategory D] →             (F : CategoryTheory.Functor C D) →            
+   [inst_4 : F.Monoidal] →                 [F.Faithful] →                   {X Y
+ : C} →                     (eval :                         CategoryTheory.Monoi
+dalCategoryStruct.tensorObj Y X ⟶                           CategoryTheory.Monoi
+dalCategoryStruct.tensorUnit C) →                       (coeval :               
+            CategoryTheory.MonoidalCategoryStruct.tensorUnit C ⟶                
+             CategoryTheory.MonoidalCategoryStruct.tensorObj X Y) →             
+            [inst_6 : CategoryTheory.ExactPairing (F.obj X) (F.obj Y)] →        
+                   F.map eval =                               CategoryTheory.Cat
+egoryStruct.comp (CategoryTheory.Functor.OplaxMonoidal.δ F Y X)                 
+                (CategoryTheory.CategoryStruct.comp (ε_ (F.obj X) (F.obj Y))    
+                               (CategoryTheory.Functor.LaxMonoidal.ε F)) →      
+                       F.map coeval =                                 CategoryTh
+eory.CategoryStruct.comp (CategoryTheory.Functor.OplaxMonoidal.η F)             
+                      (CategoryTheory.CategoryStruct.comp (η_ (F.obj X) (F.obj Y
+))                                     (CategoryTheory.Functor.LaxMonoidal.μ F X
+ Y)) →                               CategoryTheory.ExactPairing X Y
+参数：F : CategoryTheory.Functor C D；eval :                         CategoryTheory.
+MonoidalCategoryStruct.tensorObj Y X ⟶                           CategoryTheory.
+MonoidalCategoryStruct.tensorUnit C；coeval :                           CategoryT
+heory.MonoidalCategoryStruct.tensorUnit C ⟶                             Category
+Theory.MonoidalCategoryStruct.tensorObj X Y；F.obj X；F.obj Y；CategoryTheory.Funct
+or.OplaxMonoidal.δ F Y X；CategoryTheory.CategoryStruct.comp (ε_ (F.obj X) (F.obj
+ Y))                                   (CategoryTheory.Functor.LaxMonoidal.ε F)；
+CategoryTheory.Functor.OplaxMonoidal.η F；CategoryTheory.CategoryStruct.comp (η_ 
+(F.obj X) (F.obj Y))                                     (CategoryTheory.Functor
+.LaxMonoidal.μ F X Y)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ExactPairing.ofFaithful
-  signature: [F.Faithful] {X Y : C} (eval : Y otimes X ⟶ 𝟙_ C)
-  body: eval
-  coevaluation' := coeval
-  evaluation_coevaluation' :=
-F.map_injective by
-      simp [map_eval, map_coeval, Functor.Monoidal.map_whiskerLeft,
-        Functor.Monoidal.map_whiskerRight]
-  coevaluation_evaluation' :=
-F.map_injective by
-      simp [map_eval, map_coeval, Functor.Monoidal.map_whiskerLeft,
-        Functor.Monoidal.map_whiskerRight]
-
-中文:
-定义 ExactPairing.ofFaithful
-  签名: [F.忠实] {X Y : C} (eval : Y otimes X ⟶ 𝟙_ C)
-  定义体: eval
-  coevaluation' := coeval
-  evaluation_coevaluation' :=
-F.map_injective by
-      simp [map_eval, map_coeval, Functor.Monoidal.map_whiskerLeft,
-        Functor.Monoidal.map_whiskerRight]
-  coevaluation_evaluation' :=
-F.map_injective by
-      simp [map_eval, map_coeval, Functor.Monoidal.map_whiskerLeft,
-        Functor.Monoidal.map_whiskerRight]
+--- 原说明 ---
+Given candidate data for an exact pairing,
+which is sent by a faithful monoidal functor to an exact pairing,
+the equations holds automatically.
 -/
-def ExactPairing.ofFaithful [F.Faithful] {X Y : C} (eval : Y otimes X ⟶ 𝟙_ C)
-    (coeval : 𝟙_ C ⟶ X otimes Y) [ExactPairing (F.obj X) (F.obj Y)]
+def ExactPairing.ofFaithful [F.Faithful] {X Y : C} (eval : Y ⊗ X ⟶ 𝟙_ C)
+    (coeval : 𝟙_ C ⟶ X ⊗ Y) [ExactPairing (F.obj X) (F.obj Y)]
     (map_eval : F.map eval = (δ F _ _) ≫ ε_ _ _ ≫ ε F)
     (map_coeval : F.map coeval = (η F) ≫ η_ _ _ ≫ μ F _ _) : ExactPairing X Y where
   evaluation' := eval
   coevaluation' := coeval
   evaluation_coevaluation' :=
-F.map_injective by
+    F.map_injective <| by
       simp [map_eval, map_coeval, Functor.Monoidal.map_whiskerLeft,
         Functor.Monoidal.map_whiskerRight]
   coevaluation_evaluation' :=
-F.map_injective by
+    F.map_injective <| by
       simp [map_eval, map_coeval, Functor.Monoidal.map_whiskerLeft,
         Functor.Monoidal.map_whiskerRight]
 
@@ -75,22 +84,23 @@ F.map_injective by
 with an exact pairing, we get an exact pairing.
 -/
 @[instance_reducible]
-/--
-Definition of `ExactPairing.ofFullyFaithful` / `ExactPairing.ofFullyFaithful` 的定义
+/-
+**CategoryTheory.ExactPairing.ofFullyFaithful** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.ExactPairing`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         [i
+nst_2 : CategoryTheory.MonoidalCategory C] →           [inst_3 : CategoryTheory.
+MonoidalCategory D] →             (F : CategoryTheory.Functor C D) →            
+   [F.Monoidal] →                 [F.Full] →                   [F.Faithful] →   
+                  (X Y : C) → [CategoryTheory.ExactPairing (F.obj X) (F.obj Y)] 
+→ CategoryTheory.ExactPairing X Y
+参数：F : CategoryTheory.Functor C D；X Y : C；F.obj X；F.obj Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ExactPairing.ofFullyFaithful
-  signature: [F.Full] [F.Faithful] (X Y : C)
-  body: .ofFaithful F (F.preimage (δ F _ _ ≫ ε_ _ _ ≫ (ε F)))
-    (F.preimage (η F ≫ η_ _ _ ≫ μ F _ _)) (by simp) (by simp)
-
-中文:
-定义 ExactPairing.ofFullyFaithful
-  签名: [F.满] [F.忠实] (X Y : C)
-  定义体: .ofFaithful F (F.preimage (δ F _ _ ≫ ε_ _ _ ≫ (ε F)))
-    (F.preimage (η F ≫ η_ _ _ ≫ μ F _ _)) (by simp) (by simp)
-
-Depends on / 依赖: F.preimage, ofFaithful, preimage
+--- 原说明 ---
+Given a pair of objects which are sent by a fully faithful functor to a pair of 
+objects
+with an exact pairing, we get an exact pairing.
 -/
 noncomputable def ExactPairing.ofFullyFaithful [F.Full] [F.Faithful] (X Y : C)
     [ExactPairing (F.obj X) (F.obj Y)] : ExactPairing X Y :=
@@ -104,28 +114,23 @@ noncomputable section
 
 /-- Pull back a left dual along an equivalence. -/
 @[instance_reducible]
-/--
-Definition of `hasLeftDualOfEquivalence` / `hasLeftDualOfEquivalence` 的定义
+/-
+**CategoryTheory.hasLeftDualOfEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory`。
+形式化陈述：hasLeftDualOfEquivalence (X : C) [HasLeftDual (F.obj X)] : HasLeftDual X w
+here leftDual
+参数：X : C；F.obj X。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.full`：∀ {C : Type u₁} {inst : Categ
+oryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{
+v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.faithful`：∀ {C : Type u₁} {inst : C
+ategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D}   {F : CategoryTheor…
 
-English:
-definition hasLeftDualOfEquivalence
-  signature: (X : C) [HasLeftDual (F.obj X)]
-  body: G.obj (ᘁ(F.obj X))
-  exact := by
-    letI := exactPairingCongrLeft (X := F.obj (G.obj ᘁ(F.obj X)))
-      (X' := ᘁ(F.obj X)) (Y := F.obj X) (adj.toEquivalence.counitIso.app ᘁ(F.obj X))
-    apply ExactPairing.ofFullyFaithful F
-
-中文:
-定义 hasLeftDualOfEquivalence
-  签名: (X : C) [有LeftDual (F.obj X)]
-  定义体: G.obj (ᘁ(F.obj X))
-  exact := by
-    letI := exactPairingCongrLeft (X := F.obj (G.obj ᘁ(F.obj X)))
-      (X' := ᘁ(F.obj X)) (Y := F.obj X) (adj.toEquivalence.counitIso.app ᘁ(F.obj X))
-    apply ExactPairing.ofFullyFaithful F
-
-Depends on / 依赖: F.obj, G.obj
+--- 原说明 ---
+Pull back a left dual along an equivalence.
 -/
 def hasLeftDualOfEquivalence (X : C) [HasLeftDual (F.obj X)] :
     HasLeftDual X where
@@ -137,28 +142,23 @@ def hasLeftDualOfEquivalence (X : C) [HasLeftDual (F.obj X)] :
 
 /-- Pull back a right dual along an equivalence. -/
 @[instance_reducible]
-/--
-Definition of `hasRightDualOfEquivalence` / `hasRightDualOfEquivalence` 的定义
+/-
+**CategoryTheory.hasRightDualOfEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory`。
+形式化陈述：hasRightDualOfEquivalence (X : C) [HasRightDual (F.obj X)] : HasRightDual 
+X where rightDual
+参数：X : C；F.obj X。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.full`：∀ {C : Type u₁} {inst : Categ
+oryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category.{
+v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.IsEquivalence.faithful`：∀ {C : Type u₁} {inst : C
+ategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D}   {F : CategoryTheor…
 
-English:
-definition hasRightDualOfEquivalence
-  signature: (X : C) [HasRightDual (F.obj X)]
-  body: G.obj ((F.obj X)ᘁ)
-  exact := by
-    letI := exactPairingCongrRight (X := F.obj X) (Y := F.obj (G.obj (F.obj X)ᘁ))
-      (Y' := (F.obj X)ᘁ) (adj.toEquivalence.counitIso.app (F.obj X)ᘁ)
-    apply ExactPairing.ofFullyFaithful F
-
-中文:
-定义 hasRightDualOfEquivalence
-  签名: (X : C) [有RightDual (F.obj X)]
-  定义体: G.obj ((F.obj X)ᘁ)
-  exact := by
-    letI := exactPairingCongrRight (X := F.obj X) (Y := F.obj (G.obj (F.obj X)ᘁ))
-      (Y' := (F.obj X)ᘁ) (adj.toEquivalence.counitIso.app (F.obj X)ᘁ)
-    apply ExactPairing.ofFullyFaithful F
-
-Depends on / 依赖: F.obj, G.obj
+--- 原说明 ---
+Pull back a right dual along an equivalence.
 -/
 def hasRightDualOfEquivalence (X : C) [HasRightDual (F.obj X)] :
     HasRightDual X where
@@ -170,62 +170,48 @@ def hasRightDualOfEquivalence (X : C) [HasRightDual (F.obj X)] :
 
 /-- Pull back a left rigid structure along an equivalence. -/
 @[instance_reducible]
-/--
-Definition of `leftRigidCategoryOfEquivalence` / `leftRigidCategoryOfEquivalence` 的定义
+/-
+**CategoryTheory.leftRigidCategoryOfEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory`。
+形式化陈述：leftRigidCategoryOfEquivalence [LeftRigidCategory D] : LeftRigidCategory C
+ where leftDual X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftRigidCategoryOfEquivalence
-  signature: [LeftRigidCategory D]
-  body: hasLeftDualOfEquivalence adj X
-
-中文:
-定义 leftRigidCategoryOfEquivalence
-  签名: [LeftRigid范畴 D]
-  定义体: hasLeftDualOfEquivalence adj X
-
-Depends on / 依赖: hasLeftDualOfEquivalence
+--- 原说明 ---
+Pull back a left rigid structure along an equivalence.
 -/
 def leftRigidCategoryOfEquivalence [LeftRigidCategory D] :
     LeftRigidCategory C where leftDual X := hasLeftDualOfEquivalence adj X
 
 /-- Pull back a right rigid structure along an equivalence. -/
 @[instance_reducible]
-/--
-Definition of `rightRigidCategoryOfEquivalence` / `rightRigidCategoryOfEquivalence` 的定义
+/-
+**CategoryTheory.rightRigidCategoryOfEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory`。
+形式化陈述：rightRigidCategoryOfEquivalence [RightRigidCategory D] : RightRigidCategor
+y C where rightDual X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightRigidCategoryOfEquivalence
-  signature: [RightRigidCategory D]
-  body: hasRightDualOfEquivalence adj X
-
-中文:
-定义 rightRigidCategoryOfEquivalence
-  签名: [RightRigid范畴 D]
-  定义体: hasRightDualOfEquivalence adj X
-
-Depends on / 依赖: hasRightDualOfEquivalence
+--- 原说明 ---
+Pull back a right rigid structure along an equivalence.
 -/
 def rightRigidCategoryOfEquivalence [RightRigidCategory D] :
     RightRigidCategory C where rightDual X := hasRightDualOfEquivalence adj X
 
 /-- Pull back a rigid structure along an equivalence. -/
 @[instance_reducible]
-/--
-Definition of `rigidCategoryOfEquivalence` / `rigidCategoryOfEquivalence` 的定义
+/-
+**CategoryTheory.rigidCategoryOfEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory`。
+形式化陈述：rigidCategoryOfEquivalence [RigidCategory D] : RigidCategory C where leftD
+ual X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rigidCategoryOfEquivalence
-  signature: [RigidCategory D]
-  body: hasLeftDualOfEquivalence adj X
-  rightDual X := hasRightDualOfEquivalence adj X
-
-中文:
-定义 rigidCategoryOfEquivalence
-  签名: [Rigid范畴 D]
-  定义体: hasLeftDualOfEquivalence adj X
-  rightDual X := hasRightDualOfEquivalence adj X
-
-Depends on / 依赖: hasLeftDualOfEquivalence
+--- 原说明 ---
+Pull back a rigid structure along an equivalence.
 -/
 def rigidCategoryOfEquivalence [RigidCategory D] : RigidCategory C where
   leftDual X := hasLeftDualOfEquivalence adj X
@@ -234,3 +220,4 @@ def rigidCategoryOfEquivalence [RigidCategory D] : RigidCategory C where
 end
 
 end CategoryTheory
+

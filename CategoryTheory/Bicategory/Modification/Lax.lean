@@ -59,31 +59,30 @@ consists of a family of 2-morphisms `Γ.app a : η.app a ⟶ θ.app a`, which sa
 for each 1-morphism `f : a ⟶ b`.
 -/
 @[ext]
-/--
-Definition of `Modification` / `Modification` 的定义
+/-
+**CategoryTheory.Lax.LaxTrans.Modification** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTh
+eory.Lax.LaxTrans`。
+形式化陈述：Modification where /-- The underlying family of 2-morphisms. -/ app (a : B
+) : η.app a ⟶ θ.app a /-- The naturality condition. -/ naturality : forall {a b 
+: B} (f : a ⟶ b), app a ▷ G.map f ≫ θ.naturality f = η.naturality f ≫ F.map f ◁ 
+app b
+参数：a : B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Modification
-  parameters: where
-  axioms and operations (2):
-    - app((a : B)) : η.app a ⟶ θ.app a
-    - naturality : forall {a b : B} (f : a ⟶ b), app a ▷ G.map f ≫ θ.naturality f = η.naturality f ≫ F.map f ◁ app b  [default: by cat_disch]
-
-中文:
-结构 Modification
-  参数: where
-  公理与运算 (2 个):
-    - app((a : B)) : η.app a ⟶ θ.app a
-    - naturality : 对任意 {a b : B} (f : a ⟶ b), app a ▷ G.map f ≫ θ.naturality f = η.naturality f ≫ F.map f ◁ app b  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+A modification `Γ` between lax natural transformations `η` and `θ` (between lax 
+functors)
+consists of a family of 2-morphisms `Γ.app a : η.app a ⟶ θ.app a`, which satisfi
+es the equation
+`(app a ▷ G.map f) ≫ θ.naturality f = η.naturality f ≫ (F.map f ◁ app b)`
+for each 1-morphism `f : a ⟶ b`.
 -/
 structure Modification where
   /-- The underlying family of 2-morphisms. -/
   app (a : B) : η.app a ⟶ θ.app a
   /-- The naturality condition. -/
   naturality :
-    forall {a b : B} (f : a ⟶ b),
+    ∀ {a b : B} (f : a ⟶ b),
       app a ▷ G.map f ≫ θ.naturality f = η.naturality f ≫ F.map f ◁ app b := by
     cat_disch
 
@@ -96,54 +95,39 @@ namespace Modification
 variable (η) in
 /-- The identity modification. -/
 @[simps]
-/--
-Definition of `id` / `id` 的定义
+/-
+**CategoryTheory.Lax.LaxTrans.Modification.id** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Lax.LaxTrans.Modification`。
+形式化陈述：id : Modification η η where app a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : Modification η η where
-  body: 𝟙 (η.app a)
-
-中文:
-定义 id
-  签名: : Modification η η where
-  定义体: 𝟙 (η.app a)
+--- 原说明 ---
+The identity modification.
 -/
 def id : Modification η η where
   app a := 𝟙 (η.app a)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Modification η η)
-  body: ⟨Modification.id η⟩
-
-中文:
-实例 :
-  签名: 可居 (Modification η η)
-  定义体: ⟨Modification.id η⟩
-
-Depends on / 依赖: Modification, Modification.id
+/-
+**CategoryTheory.Lax.LaxTrans.Modification.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory.Lax.LaxTrans.Modification`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Modification η η) :=
   ⟨Modification.id η⟩
 
 /-- Vertical composition of modifications. -/
 @[simps]
-/--
-Definition of `vcomp` / `vcomp` 的定义
+/-
+**CategoryTheory.Lax.LaxTrans.Modification.vcomp** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Lax.LaxTrans.Modification`。
+形式化陈述：vcomp {ι : F ⟶ G} (Γ : Modification η θ) (Δ : Modification θ ι) : Modifica
+tion η ι where app a
+参数：Γ : Modification η θ；Δ : Modification θ ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition vcomp
-  signature: {ι : F ⟶ G} (Γ : Modification η θ) (Δ : Modification θ ι)
-  body: Γ.app a ≫ Δ.app a
-
-中文:
-定义 vcomp
-  签名: {ι : F ⟶ G} (Γ : Modification η θ) (Δ : Modification θ ι)
-  定义体: Γ.app a ≫ Δ.app a
+--- 原说明 ---
+Vertical composition of modifications.
 -/
 def vcomp {ι : F ⟶ G} (Γ : Modification η θ) (Δ : Modification θ ι) : Modification η ι where
   app a := Γ.app a ≫ Δ.app a
@@ -155,22 +139,20 @@ variable (η θ) in
 used for the 2-homomorphisms in the bicategory of lax functors equipped with lax
 transformations. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**CategoryTheory.Lax.LaxTrans.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.La
+x.LaxTrans`。
+形式化陈述：{B : Type u₁} →   [inst : CategoryTheory.Bicategory B] →     {C : Type u₂}
+ →       [inst_1 : CategoryTheory.Bicategory C] →         {F G : CategoryTheory.
+LaxFunctor B C} → (F ⟶ G) → (F ⟶ G) → Type (max u₁ w₂)
+参数：F ⟶ G；F ⟶ G；max u₁ w₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: where
-  axioms and operations (2):
-    - of : :
-    - as : Modification η θ
-
-中文:
-结构 态射
-  参数: where
-  公理与运算 (2 个):
-    - of : :
-    - as : Modification η θ
+--- 原说明 ---
+Type-alias for modifications between lax transformations of lax functors. This i
+s the type
+used for the 2-homomorphisms in the bicategory of lax functors equipped with lax
+transformations.
 -/
 structure Hom where
   of ::
@@ -181,80 +163,75 @@ structure Hom where
 
 Note that this is a scoped instance in the `Lax.LaxTrans` namespace. -/
 @[simps!]
+/-
+**CategoryTheory.Lax.LaxTrans.homCategory** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Lax.LaxTrans`。
+形式化陈述：{B : Type u₁} →   [inst : CategoryTheory.Bicategory B] →     {C : Type u₂}
+ →       [inst_1 : CategoryTheory.Bicategory C] →         {F G : CategoryTheory.
+LaxFunctor B C} → CategoryTheory.Category.{max u₁ w₂, max (max (max u₁ v₁) v₂) w
+₂} (F ⟶ G)
+参数：max (max u₁ v₁) v₂；F ⟶ G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Category structure on the lax natural transformations between lax functors.
+
+Note that this is a scoped instance in the `Lax.LaxTrans` namespace.
+-/
 scoped instance homCategory : Category (F ⟶ G) where
   Hom := Hom
   id η := ⟨Modification.id η⟩
   comp Γ Δ := ⟨Modification.vcomp Γ.as Δ.as⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (η ⟶ η)
-  body: ⟨𝟙 η⟩
-
-@[ext]
-
-中文:
-实例 :
-  签名: 可居 (η ⟶ η)
-  定义体: ⟨𝟙 η⟩
-
-@[ext]
+/-
+**CategoryTheory.Lax.LaxTrans.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Lax.Lax
+Trans`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (η ⟶ η) :=
   ⟨𝟙 η⟩
 
 @[ext]
-/--
-lemma `homCategory.ext` / 引理 `homCategory.ext`
-
-English:
-lemma homCategory.ext
-  given: {Γ Δ : η ⟶ θ} (h : forall a, Γ.as.app a = Δ.as.app a)
-  statement: Γ = Δ
-  proof: Hom.ext Modification.ext funext h
-
-中文:
-引理 homCategory.ext
-  条件: {Γ Δ : η ⟶ θ} (h : 对任意 a, Γ.as.app a = Δ.as.app a)
-  结论: Γ = Δ
-  证明: Hom.ext Modification.ext funext h
-
-Depends on / 依赖: Hom.ext, Modification, Modification.ext
+/-
+**CategoryTheory.Lax.LaxTrans.homCategory.ext** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Lax.LaxTrans.homCategory`。
+形式化陈述：∀ {B : Type u₁} [inst : CategoryTheory.Bicategory B] {C : Type u₂} [inst_1
+ : CategoryTheory.Bicategory C]   {F G : CategoryTheory.LaxFunctor B C} {η θ : F
+ ⟶ G} {Γ Δ : η ⟶ θ}, (∀ (a : B), Γ.as.app a = Δ.as.app a) → Γ = Δ
+参数：∀ (a : B), Γ.as.app a = Δ.as.app a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Lax.LaxTrans.Hom.ext`：∀ {B : Type u₁} {inst : CategoryThe
+ory.Bicategory B} {C : Type u₂} {inst_1 : CategoryTheory.Bicategory C}   {F G : 
+CategoryTheory.LaxFunctor…
+· 使用定理 `CategoryTheory.Lax.LaxTrans.Modification.ext`：∀ {B : Type u₁} {inst : Ca
+tegoryTheory.Bicategory B} {C : Type u₂} {inst_1 : CategoryTheory.Bicategory C} 
+  {F G : CategoryTheory.LaxFunctor…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-lemma homCategory.ext {Γ Δ : η ⟶ θ} (h : forall a, Γ.as.app a = Δ.as.app a) : Γ = Δ :=
-Hom.ext Modification.ext funext h
+lemma homCategory.ext {Γ Δ : η ⟶ θ} (h : ∀ a, Γ.as.app a = Δ.as.app a) : Γ = Δ :=
+  Hom.ext <| Modification.ext <| funext h
 
 /-- Construct a modification isomorphism between lax natural transformations
 by giving object level isomorphisms, and checking naturality only in the forward direction.
 -/
 @[simps]
-/--
-Definition of `isoMk` / `isoMk` 的定义
+/-
+**CategoryTheory.Lax.LaxTrans.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.La
+x.LaxTrans`。
+形式化陈述：isoMk (app : forall a, η.app a ≅ θ.app a) (naturality : forall {a b} (f : 
+a ⟶ b), (app a).hom ▷ G.map f ≫ θ.naturality f = η.naturality f ≫ F.map f ◁ (app
+ b).hom
+参数：app : forall a, η.app a ≅ θ.app a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoMk
-  signature: (app : forall a, η.app a ≅ θ.app a)
-  body: (app a).hom
-  inv.as.app a := (app a).inv
-  inv.as.naturality {a b} f := by
-    simpa using (app a).inv ▷ G.map f ≫= (naturality f).symm =≫ F.map f ◁ (app b).inv
-
-中文:
-定义 isoMk
-  签名: (app : 对任意 a, η.app a ≅ θ.app a)
-  定义体: (app a).hom
-  inv.as.app a := (app a).inv
-  inv.as.naturality {a b} f := by
-    simpa using (app a).inv ▷ G.map f ≫= (naturality f).symm =≫ F.map f ◁ (app b).inv
-
-Depends on / 依赖: F.map, G.map, cat_disch, hom.as.app, inv.as.app, inv.as.naturality, naturality
+--- 原说明 ---
+Construct a modification isomorphism between lax natural transformations
+by giving object level isomorphisms, and checking naturality only in the forward
+ direction.
 -/
-def isoMk (app : forall a, η.app a ≅ θ.app a)
+def isoMk (app : ∀ a, η.app a ≅ θ.app a)
     (naturality :
-      forall {a b} (f : a ⟶ b),
+      ∀ {a b} (f : a ⟶ b),
         (app a).hom ▷ G.map f ≫ θ.naturality f =
           η.naturality f ≫ F.map f ◁ (app b).hom := by cat_disch) :
     η ≅ θ where
@@ -277,31 +254,30 @@ consists of a family of 2-morphisms `Γ.app a : η.app a ⟶ θ.app a`, which sa
 for each 1-morphism `f : a ⟶ b`.
 -/
 @[ext]
-/--
-Definition of `Modification` / `Modification` 的定义
+/-
+**CategoryTheory.Lax.OplaxTrans.Modification** 是 Mathlib 中的一个结构，位于命名空间 `Category
+Theory.Lax.OplaxTrans`。
+形式化陈述：Modification where /-- The underlying family of 2-morphisms. -/ app (a : B
+) : η.app a ⟶ θ.app a /-- The naturality condition. -/ naturality : forall {a b 
+: B} (f : a ⟶ b), F.map f ◁ app b ≫ θ.naturality f = η.naturality f ≫ app a ▷ G.
+map f
+参数：a : B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Modification
-  parameters: where
-  axioms and operations (2):
-    - app((a : B)) : η.app a ⟶ θ.app a
-    - naturality : forall {a b : B} (f : a ⟶ b), F.map f ◁ app b ≫ θ.naturality f = η.naturality f ≫ app a ▷ G.map f  [default: by cat_disch]
-
-中文:
-结构 Modification
-  参数: where
-  公理与运算 (2 个):
-    - app((a : B)) : η.app a ⟶ θ.app a
-    - naturality : 对任意 {a b : B} (f : a ⟶ b), F.map f ◁ app b ≫ θ.naturality f = η.naturality f ≫ app a ▷ G.map f  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+A modification `Γ` between oplax natural transformations `η` and `θ` (between la
+x functors)
+consists of a family of 2-morphisms `Γ.app a : η.app a ⟶ θ.app a`, which satisfi
+es the equation
+`(F.map f ◁ app b) ≫ θ.naturality f = η.naturality f ≫ (app a ▷ G.map f)`
+for each 1-morphism `f : a ⟶ b`.
 -/
 structure Modification where
   /-- The underlying family of 2-morphisms. -/
   app (a : B) : η.app a ⟶ θ.app a
   /-- The naturality condition. -/
   naturality :
-    forall {a b : B} (f : a ⟶ b),
+    ∀ {a b : B} (f : a ⟶ b),
       F.map f ◁ app b ≫ θ.naturality f = η.naturality f ≫ app a ▷ G.map f := by
     cat_disch
 
@@ -314,54 +290,39 @@ namespace Modification
 variable (η) in
 /-- The identity modification. -/
 @[simps]
-/--
-Definition of `id` / `id` 的定义
+/-
+**CategoryTheory.Lax.OplaxTrans.Modification.id** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Lax.OplaxTrans.Modification`。
+形式化陈述：id : Modification η η where app a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : Modification η η where
-  body: 𝟙 (η.app a)
-
-中文:
-定义 id
-  签名: : Modification η η where
-  定义体: 𝟙 (η.app a)
+--- 原说明 ---
+The identity modification.
 -/
 def id : Modification η η where
   app a := 𝟙 (η.app a)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Modification η η)
-  body: ⟨Modification.id η⟩
-
-中文:
-实例 :
-  签名: 可居 (Modification η η)
-  定义体: ⟨Modification.id η⟩
-
-Depends on / 依赖: Modification, Modification.id
+/-
+**CategoryTheory.Lax.OplaxTrans.Modification.** 是 Mathlib 中的一个实例，位于命名空间 `Categor
+yTheory.Lax.OplaxTrans.Modification`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Modification η η) :=
   ⟨Modification.id η⟩
 
 /-- Vertical composition of modifications. -/
 @[simps]
-/--
-Definition of `vcomp` / `vcomp` 的定义
+/-
+**CategoryTheory.Lax.OplaxTrans.Modification.vcomp** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Lax.OplaxTrans.Modification`。
+形式化陈述：vcomp {ι : F ⟶ G} (Γ : Modification η θ) (Δ : Modification θ ι) : Modifica
+tion η ι where app a
+参数：Γ : Modification η θ；Δ : Modification θ ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition vcomp
-  signature: {ι : F ⟶ G} (Γ : Modification η θ) (Δ : Modification θ ι)
-  body: Γ.app a ≫ Δ.app a
-
-中文:
-定义 vcomp
-  签名: {ι : F ⟶ G} (Γ : Modification η θ) (Δ : Modification θ ι)
-  定义体: Γ.app a ≫ Δ.app a
+--- 原说明 ---
+Vertical composition of modifications.
 -/
 def vcomp {ι : F ⟶ G} (Γ : Modification η θ) (Δ : Modification θ ι) :
     Modification η ι where
@@ -374,22 +335,21 @@ variable (η θ) in
 used for the 2-homomorphisms in the bicategory of lax functors equipped with oplax
 transformations. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**CategoryTheory.Lax.OplaxTrans.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.
+Lax.OplaxTrans`。
+形式化陈述：{B : Type u₁} →   [inst : CategoryTheory.Bicategory B] →     {C : Type u₂}
+ →       [inst_1 : CategoryTheory.Bicategory C] →         {F G : CategoryTheory.
+LaxFunctor B C} → (F ⟶ G) → (F ⟶ G) → Type (max u₁ w₂)
+参数：F ⟶ G；F ⟶ G；max u₁ w₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: where
-  axioms and operations (2):
-    - of : :
-    - as : Modification η θ
-
-中文:
-结构 态射
-  参数: where
-  公理与运算 (2 个):
-    - of : :
-    - as : Modification η θ
+--- 原说明 ---
+Type-alias for modifications between oplax transformations of lax functors. This
+ is the type
+used for the 2-homomorphisms in the bicategory of lax functors equipped with opl
+ax
+transformations.
 -/
 structure Hom where
   of ::
@@ -400,78 +360,75 @@ structure Hom where
 
 Note that this is a scoped instance in the `Lax.OplaxTrans` namespace. -/
 @[simps!]
+/-
+**CategoryTheory.Lax.OplaxTrans.homCategory** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Lax.OplaxTrans`。
+形式化陈述：{B : Type u₁} →   [inst : CategoryTheory.Bicategory B] →     {C : Type u₂}
+ →       [inst_1 : CategoryTheory.Bicategory C] →         {F G : CategoryTheory.
+LaxFunctor B C} → CategoryTheory.Category.{max u₁ w₂, max (max (max u₁ v₁) v₂) w
+₂} (F ⟶ G)
+参数：max (max u₁ v₁) v₂；F ⟶ G。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Category structure on the oplax natural transformations between lax functors.
+
+Note that this is a scoped instance in the `Lax.OplaxTrans` namespace.
+-/
 scoped instance homCategory : Category (F ⟶ G) where
   Hom := Hom
   id η := ⟨Modification.id η⟩
   comp Γ Δ := ⟨Modification.vcomp Γ.as Δ.as⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (η ⟶ η)
-  body: ⟨𝟙 η⟩
-
-@[ext]
-
-中文:
-实例 :
-  签名: 可居 (η ⟶ η)
-  定义体: ⟨𝟙 η⟩
-
-@[ext]
+/-
+**CategoryTheory.Lax.OplaxTrans.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Lax.O
+plaxTrans`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (η ⟶ η) :=
   ⟨𝟙 η⟩
 
 @[ext]
-/--
-lemma `homCategory.ext` / 引理 `homCategory.ext`
-
-English:
-lemma homCategory.ext
-  given: {Γ Δ : η ⟶ θ} (h : forall a, Γ.as.app a = Δ.as.app a)
-  statement: Γ = Δ
-  proof: Hom.ext Modification.ext funext h
-
-中文:
-引理 homCategory.ext
-  条件: {Γ Δ : η ⟶ θ} (h : 对任意 a, Γ.as.app a = Δ.as.app a)
-  结论: Γ = Δ
-  证明: Hom.ext Modification.ext funext h
+/-
+**CategoryTheory.Lax.OplaxTrans.homCategory.ext** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Lax.OplaxTrans.homCategory`。
+形式化陈述：∀ {B : Type u₁} [inst : CategoryTheory.Bicategory B] {C : Type u₂} [inst_1
+ : CategoryTheory.Bicategory C]   {F G : CategoryTheory.LaxFunctor B C} {η θ : F
+ ⟶ G} {Γ Δ : η ⟶ θ}, (∀ (a : B), Γ.as.app a = Δ.as.app a) → Γ = Δ
+参数：∀ (a : B), Γ.as.app a = Δ.as.app a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Lax.OplaxTrans.Hom.ext`：∀ {B : Type u₁} {inst : CategoryT
+heory.Bicategory B} {C : Type u₂} {inst_1 : CategoryTheory.Bicategory C}   {F G 
+: CategoryTheory.LaxFunctor…
+· 使用定理 `CategoryTheory.Lax.OplaxTrans.Modification.ext`：∀ {B : Type u₁} {inst : 
+CategoryTheory.Bicategory B} {C : Type u₂} {inst_1 : CategoryTheory.Bicategory C
+}   {F G : CategoryTheory.LaxFunctor…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-lemma homCategory.ext {Γ Δ : η ⟶ θ} (h : forall a, Γ.as.app a = Δ.as.app a) : Γ = Δ :=
-Hom.ext Modification.ext funext h
+lemma homCategory.ext {Γ Δ : η ⟶ θ} (h : ∀ a, Γ.as.app a = Δ.as.app a) : Γ = Δ :=
+  Hom.ext <| Modification.ext <| funext h
 
 /-- Construct a modification isomorphism between oplax natural transformations
 by giving object level isomorphisms, and checking naturality only in the forward direction.
 -/
 @[simps]
-/--
-Definition of `isoMk` / `isoMk` 的定义
+/-
+**CategoryTheory.Lax.OplaxTrans.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Lax.OplaxTrans`。
+形式化陈述：isoMk (app : forall a, η.app a ≅ θ.app a) (naturality : forall {a b} (f : 
+a ⟶ b), F.map f ◁ (app b).hom ≫ θ.naturality f = η.naturality f ≫ (app a).hom ▷ 
+G.map f
+参数：app : forall a, η.app a ≅ θ.app a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoMk
-  signature: (app : forall a, η.app a ≅ θ.app a)
-  body: (app a).hom
-  inv.as.app a := (app a).inv
-  inv.as.naturality {a b} f := by
-    simpa using F.map f ◁ (app b).inv ≫= (naturality f).symm =≫ (app a).inv ▷ G.map f
-
-中文:
-定义 isoMk
-  签名: (app : 对任意 a, η.app a ≅ θ.app a)
-  定义体: (app a).hom
-  inv.as.app a := (app a).inv
-  inv.as.naturality {a b} f := by
-    simpa using F.map f ◁ (app b).inv ≫= (naturality f).symm =≫ (app a).inv ▷ G.map f
-
-Depends on / 依赖: F.map, G.map, cat_disch, hom.as.app, inv.as.app, inv.as.naturality, naturality
+--- 原说明 ---
+Construct a modification isomorphism between oplax natural transformations
+by giving object level isomorphisms, and checking naturality only in the forward
+ direction.
 -/
-def isoMk (app : forall a, η.app a ≅ θ.app a)
+def isoMk (app : ∀ a, η.app a ≅ θ.app a)
     (naturality :
-      forall {a b} (f : a ⟶ b),
+      ∀ {a b} (f : a ⟶ b),
         F.map f ◁ (app b).hom ≫ θ.naturality f =
           η.naturality f ≫ (app a).hom ▷ G.map f := by cat_disch) :
     η ≅ θ where
@@ -483,3 +440,4 @@ def isoMk (app : forall a, η.app a ≅ θ.app a)
 end OplaxTrans
 
 end CategoryTheory.Lax
+

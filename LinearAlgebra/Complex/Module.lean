@@ -66,161 +66,174 @@ they lead Lean to a very costly path, and most often they don't apply (most acti
 come from actions on `ℝ`). See https://github.com/leanprover-community/mathlib4/pull/11980 -/
 
 -- priority manually adjusted in https://github.com/leanprover-community/mathlib4/pull/11980
-instance (priority := 90) [SMul R Real] [SMul S Real] [SMulCommClass R S Real] : SMulCommClass R S Complex where
+/-
+**Complex.** 是 Mathlib 中的一个实例，位于命名空间 `Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (priority := 90) [SMul R ℝ] [SMul S ℝ] [SMulCommClass R S ℝ] : SMulCommClass R S ℂ where
   smul_comm r s x := by ext <;> simp [smul_re, smul_im, smul_comm]
 
 -- priority manually adjusted in https://github.com/leanprover-community/mathlib4/pull/11980
-instance (priority := 90) [SMul R S] [SMul R Real] [SMul S Real] [IsScalarTower R S Real] :
-    IsScalarTower R S Complex where
+/-
+**Complex.** 是 Mathlib 中的一个实例，位于命名空间 `Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (priority := 90) [SMul R S] [SMul R ℝ] [SMul S ℝ] [IsScalarTower R S ℝ] :
+    IsScalarTower R S ℂ where
   smul_assoc r s x := by ext <;> simp [smul_re, smul_im, smul_assoc]
 
 -- priority manually adjusted in https://github.com/leanprover-community/mathlib4/pull/11980
-instance (priority := 90) [SMul R Real] [SMul Rᵐᵒᵖ Real] [IsCentralScalar R Real] :
-    IsCentralScalar R Complex where
+/-
+**Complex.** 是 Mathlib 中的一个实例，位于命名空间 `Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (priority := 90) [SMul R ℝ] [SMul Rᵐᵒᵖ ℝ] [IsCentralScalar R ℝ] :
+    IsCentralScalar R ℂ where
   op_smul_eq_smul r x := by ext <;> simp [smul_re, smul_im, op_smul_eq_smul]
 
 -- priority manually adjusted in https://github.com/leanprover-community/mathlib4/pull/11980
-instance (priority := 90) mulAction [Monoid R] [MulAction R Real] : MulAction R Complex where
+/-
+**Complex.** 是 Mathlib 中的一个实例，位于命名空间 `Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (priority := 90) mulAction [Monoid R] [MulAction R ℝ] : MulAction R ℂ where
   one_smul x := by ext <;> simp [smul_re, smul_im, one_smul]
   mul_smul r s x := by ext <;> simp [smul_re, smul_im, mul_smul]
 
 -- priority manually adjusted in https://github.com/leanprover-community/mathlib4/pull/11980
-instance (priority := 90) distribSMul [DistribSMul R Real] : DistribSMul R Complex where
+/-
+**Complex.** 是 Mathlib 中的一个实例，位于命名空间 `Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (priority := 90) distribSMul [DistribSMul R ℝ] : DistribSMul R ℂ where
   smul_add r x y := by ext <;> simp [smul_re, smul_im, smul_add]
   smul_zero r := by ext <;> simp [smul_re, smul_im, smul_zero]
 
 -- priority manually adjusted in https://github.com/leanprover-community/mathlib4/pull/11980
-instance (priority := 90) [Semiring R] [DistribMulAction R Real] : DistribMulAction R Complex :=
+/-
+**Complex.** 是 Mathlib 中的一个实例，位于命名空间 `Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (priority := 90) [Semiring R] [DistribMulAction R ℝ] : DistribMulAction R ℂ :=
   { Complex.distribSMul, Complex.mulAction with }
 
 -- priority manually adjusted in https://github.com/leanprover-community/mathlib4/pull/11980
-instance (priority := 100) instModule [Semiring R] [Module R Real] : Module R Complex where
+/-
+**Complex.** 是 Mathlib 中的一个实例，位于命名空间 `Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (priority := 100) instModule [Semiring R] [Module R ℝ] : Module R ℂ where
   add_smul r s x := by ext <;> simp [smul_re, smul_im, add_smul]
   zero_smul r := by ext <;> simp [smul_re, smul_im, zero_smul]
 
 -- priority manually adjusted in https://github.com/leanprover-community/mathlib4/pull/11980
-instance (priority := 95) instAlgebraOfReal [CommSemiring R] [Algebra R Real] : Algebra R Complex where
-  algebraMap := Complex.ofRealHom.comp (algebraMap R Real)
+/-
+**Complex.** 是 Mathlib 中的一个实例，位于命名空间 `Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (priority := 95) instAlgebraOfReal [CommSemiring R] [Algebra R ℝ] : Algebra R ℂ where
+  algebraMap := Complex.ofRealHom.comp (algebraMap R ℝ)
   smul_def' := fun r x => by ext <;> simp [smul_re, smul_im, Algebra.smul_def]
   commutes' := fun r ⟨xr, xi⟩ => by ext <;> simp [Algebra.commutes]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: StarModule Real Complex
-  body: ⟨fun r x => by simp only [star_def, star_trivial, real_smul, map_mul, conj_ofReal]⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 对合模 实数 复形
-  定义体: ⟨fun r x => by simp only [star_def, star_trivial, real_smul, map_mul, conj_ofReal]⟩
-
-@[simp]
-
-Depends on / 依赖: conj_ofReal, map_mul, real_smul, star_def, star_trivial
+/-
+**Complex.** 是 Mathlib 中的一个实例，位于命名空间 `Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : StarModule Real Complex :=
+instance : StarModule ℝ ℂ :=
   ⟨fun r x => by simp only [star_def, star_trivial, real_smul, map_mul, conj_ofReal]⟩
 
 @[simp]
-/--
-theorem `coe_algebraMap` / 定理 `coe_algebraMap`
-
-English:
-theorem coe_algebraMap
-  statement: (algebraMap Real Complex : Real -> Complex) = ((↑) : Real -> Complex)
-  proof: rfl
-
-example : (Semiring.toNatAlgebra : Algebra Nat Complex) = Complex.instAlgebraOfReal := by
-  with_reducible_and_instances rfl
-
-example : (Ring.toIntAlgebra Complex : Algebra Int Complex) = Complex.instAlgebraOfReal := by
-  with_reducible_and_instances rfl
-
-example : Module.restrictScalars Real Complex Complex = Complex.instModule := by
-  with_reducible_and_instances rfl
-
-中文:
-定理 coe_algebraMap
-  结论: (algebraMap 实数 复形 : 实数 -> 复形) = ((↑) : 实数 -> 复形)
-  证明: rfl
-
-example : (Semiring.toNatAlgebra : Algebra Nat Complex) = Complex.instAlgebraOfReal := by
-  with_reducible_and_instances rfl
-
-example : (Ring.toIntAlgebra Complex : Algebra Int Complex) = Complex.instAlgebraOfReal := by
-  with_reducible_and_instances rfl
-
-example : Module.restrictScalars Real Complex Complex = Complex.instModule := by
-  with_reducible_and_instances rfl
+/-
+**Complex.coe_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：coe_algebraMap : (algebraMap Real Complex : Real -> Complex) = ((↑) : Real
+ -> Complex)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_algebraMap : (algebraMap Real Complex : Real -> Complex) = ((↑) : Real -> Complex) :=
+theorem coe_algebraMap : (algebraMap ℝ ℂ : ℝ → ℂ) = ((↑) : ℝ → ℂ) :=
   rfl
-
-example : (Semiring.toNatAlgebra : Algebra Nat Complex) = Complex.instAlgebraOfReal := by
+/-
+**Complex.** 是 Mathlib 中的一个示例，位于命名空间 `Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example : (Semiring.toNatAlgebra : Algebra ℕ ℂ) = Complex.instAlgebraOfReal := by
   with_reducible_and_instances rfl
-
-example : (Ring.toIntAlgebra Complex : Algebra Int Complex) = Complex.instAlgebraOfReal := by
+/-
+**Complex.** 是 Mathlib 中的一个示例，位于命名空间 `Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example : (Ring.toIntAlgebra ℂ : Algebra ℤ ℂ) = Complex.instAlgebraOfReal := by
   with_reducible_and_instances rfl
-
-example : Module.restrictScalars Real Complex Complex = Complex.instModule := by
+/-
+**Complex.** 是 Mathlib 中的一个示例，位于命名空间 `Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example : Module.restrictScalars ℝ ℂ ℂ = Complex.instModule := by
   with_reducible_and_instances rfl
 
 section
 
-variable {A : Type*} [Semiring A] [Algebra Real A]
+variable {A : Type*} [Semiring A] [Algebra ℝ A]
 
 /-- We need this lemma since `Complex.coe_algebraMap` diverts the simp-normal form away from
 `AlgHom.commutes`. -/
 @[simp]
-/--
-theorem `_root_.AlgHom.map_coe_real_complex` / 定理 `_root_.AlgHom.map_coe_real_complex`
+/-
+**Complex._root_.AlgHom.map_coe_real_complex** 是 Mathlib 中的一个定理，位于命名空间 `Complex`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.AlgHom.map_coe_real_complex
-  given: (f : Complex ->ₐ[Real] A) (x : Real)
-  statement: f x = algebraMap Real A x
-  proof: f.commutes x
-
-中文:
-定理 _root_.代数态射.map_coe_real_complex
-  条件: (f : 复形 ->ₐ[实数] A) (x : 实数)
-  结论: f x = algebraMap 实数 A x
-  证明: f.commutes x
-
-Depends on / 依赖: commutes, f.commutes
+--- 原说明 ---
+We need this lemma since `Complex.coe_algebraMap` diverts the simp-normal form a
+way from
+`AlgHom.commutes`.
 -/
-theorem _root_.AlgHom.map_coe_real_complex (f : Complex ->ₐ[Real] A) (x : Real) : f x = algebraMap Real A x :=
+theorem _root_.AlgHom.map_coe_real_complex (f : ℂ →ₐ[ℝ] A) (x : ℝ) : f x = algebraMap ℝ A x :=
   f.commutes x
 
 /-- Two `ℝ`-algebra homomorphisms from `ℂ` are equal if they agree on `Complex.I`. -/
 @[ext]
-/--
-theorem `algHom_ext` / 定理 `algHom_ext`
+/-
+**Complex.algHom_ext** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：algHom_ext ⦃f g : Complex ->ₐ[Real] A⦄ (h : f I = g I) : f = g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.ext`：ext {φ₁ φ₂ : A ->ₐ[R] B} (H : forall x, φ₁ x = φ₂ x) : φ₁ = 
+φ₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Complex.mk_eq_add_mul_I`：mk_eq_add_mul_I (a b : Real) : Complex.mk a b =
+ a + b * I
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `AlgHom.map_coe_real_complex`：∀ {A : Type u_3} [inst : Semiring A] [inst_
+1 : Algebra ℝ A] (f : ℂ →ₐ[ℝ] A) (x : ℝ), f ↑x = (algebraMap ℝ A) x
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem algHom_ext
-  given: ⦃f g
-  statement: Complex ->ₐ[Real] A⦄ (h : f I = g I) : f = g
-  proof: by
-  ext ⟨x, y⟩
-  simp only [mk_eq_add_mul_I, map_add, AlgHom.map_coe_real_complex, map_mul, h]
-
-中文:
-定理 algHom_ext
-  条件: ⦃f g
-  结论: 复形 ->ₐ[实数] A⦄ (h : f I = g I) : f = g
-  证明: by
-  ext ⟨x, y⟩
-  simp only [mk_eq_add_mul_I, map_add, AlgHom.map_coe_real_complex, map_mul, h]
-
-Depends on / 依赖: AlgHom, AlgHom.map_coe_real_complex, map_add, map_coe_real_complex, map_mul, mk_eq_add_mul_I
+--- 原说明 ---
+Two `ℝ`-algebra homomorphisms from `ℂ` are equal if they agree on `Complex.I`.
 -/
-theorem algHom_ext ⦃f g : Complex ->ₐ[Real] A⦄ (h : f I = g I) : f = g := by
+theorem algHom_ext ⦃f g : ℂ →ₐ[ℝ] A⦄ (h : f I = g I) : f = g := by
   ext ⟨x, y⟩
   simp only [mk_eq_add_mul_I, map_add, AlgHom.map_coe_real_complex, map_mul, h]
 
@@ -228,42 +241,17 @@ end
 
 open Module Submodule
 
-/--
-Definition of `basisOneI` / `basisOneI` 的定义
+/-- `ℂ` has a basis over `ℝ` given by `1` and `I`. -/
+/-
+**Complex.basisOneI** 是 Mathlib 中的一个定义，位于命名空间 `Complex`。
+形式化陈述：basisOneI : Basis (Fin 2) Real Complex
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition basisOneI
-  signature: : Basis (Fin 2) Real Complex
-  body: .ofEquivFun
-    { toFun := fun z => ![z.re, z.im]
-      invFun := fun c => c 0 + c 1 • I
-      left_inv := fun z => by simp
-      right_inv := fun c => by
-        ext i
-        fin_cases i <;> simp
-      map_add' := fun z z' => by simp
-      map_smul' := fun c z => by simp }
-
-@[simp]
-
-中文:
-定义 basisOneI
-  签名: : 基 (有限集 2) 实数 复形
-  定义体: .ofEquivFun
-    { toFun := fun z => ![z.re, z.im]
-      invFun := fun c => c 0 + c 1 • I
-      left_inv := fun z => by simp
-      right_inv := fun c => by
-        ext i
-        fin_cases i <;> simp
-      map_add' := fun z z' => by simp
-      map_smul' := fun c z => by simp }
-
-@[simp]
-
-Depends on / 依赖: fin_cases, invFun, left_inv, map_add, map_smul, ofEquivFun, right_inv, z.im, z.re
+--- 原说明 ---
+`ℂ` has a basis over `ℝ` given by `1` and `I`.
 -/
-noncomputable def basisOneI : Basis (Fin 2) Real Complex :=
+noncomputable def basisOneI : Basis (Fin 2) ℝ ℂ :=
   .ofEquivFun
     { toFun := fun z => ![z.re, z.im]
       invFun := fun c => c 0 + c 1 • I
@@ -275,53 +263,58 @@ noncomputable def basisOneI : Basis (Fin 2) Real Complex :=
       map_smul' := fun c z => by simp }
 
 @[simp]
-/--
-theorem `coe_basisOneI_repr` / 定理 `coe_basisOneI_repr`
-
-English:
-theorem coe_basisOneI_repr
-  given: (z : Complex)
-  statement: ⇑(basisOneI.repr z) = ![z.re, z.im]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_basisOneI_repr
-  条件: (z : 复形)
-  结论: ⇑(basisOneI.repr z) = ![z.re, z.im]
-  证明: rfl
-
-@[simp]
+/-
+**Complex.coe_basisOneI_repr** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：coe_basisOneI_repr (z : Complex) : ⇑(basisOneI.repr z) = ![z.re, z.im]
+参数：z : Complex。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_basisOneI_repr (z : Complex) : ⇑(basisOneI.repr z) = ![z.re, z.im] :=
+theorem coe_basisOneI_repr (z : ℂ) : ⇑(basisOneI.repr z) = ![z.re, z.im] :=
   rfl
 
 @[simp]
-/--
-theorem `coe_basisOneI` / 定理 `coe_basisOneI`
-
-English:
-theorem coe_basisOneI
-  statement: ⇑basisOneI = ![1, I]
-  proof: funext fun i =>
-Basis.apply_eq_iff.mpr
-      Finsupp.ext fun j => by
-        fin_cases i <;> fin_cases j <;> simp
-
-中文:
-定理 coe_basisOneI
-  结论: ⇑basisOneI = ![1, I]
-  证明: funext fun i =>
-Basis.apply_eq_iff.mpr
-      Finsupp.ext fun j => by
-        fin_cases i <;> fin_cases j <;> simp
-
-Depends on / 依赖: Basis.apply_eq_iff.mpr, Finsupp, Finsupp.ext, apply_eq_iff, fin_cases
+/-
+**Complex.coe_basisOneI** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：coe_basisOneI : ⇑basisOneI = ![1, I]
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Module.Basis.apply_eq_iff`：apply_eq_iff {b : Basis ι R M} {x : M} {i : ι
+} : b i = x ↔ b.repr x = Finsupp.single i 1
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `Fintype.complete`：∀ {α : Type u_4} [self : Fintype α] (x : α), x ∈ Finty
+pe.elems
+· 使用定理 `Nat.le_of_lt`：∀ {n m : ℕ}, n < m → n ≤ m
+· 使用定理 `Nat.le_refl`：∀ (n : ℕ), n ≤ n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.single_eq_same`：single_eq_same : (single a b : α ->₀ M) a = b
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Matrix.cons_val_fin_one`：cons_val_fin_one (x : α) (u : Fin 0 -> α) : for
+all (i : Fin 1), vecCons x u i = x
+· 使用定理 `Finsupp.single_eq_of_ne`：single_eq_of_ne (h : a' != a) : (single a b : α
+ ->₀ M) a' = 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
 -/
 theorem coe_basisOneI : ⇑basisOneI = ![1, I] :=
   funext fun i =>
-Basis.apply_eq_iff.mpr
+    Basis.apply_eq_iff.mpr <|
       Finsupp.ext fun j => by
         fin_cases i <;> fin_cases j <;> simp
 
@@ -329,241 +322,217 @@ end Complex
 
 /-- Register as an instance (with low priority) the fact that a complex vector space is also a real
 vector space. -/
-instance (priority := 900) Module.complexToReal (E : Type*) [AddCommGroup E] [Module Complex E] :
-    Module Real E :=
-  .restrictScalars Real Complex E
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Register as an instance (with low priority) the fact that a complex vector space
+ is also a real
+vector space.
+-/
+instance (priority := 900) Module.complexToReal (E : Type*) [AddCommGroup E] [Module ℂ E] :
+    Module ℝ E :=
+  .restrictScalars ℝ ℂ E
 
 /-- Register as an instance (with low priority) the fact that a complex algebra is also a real
 algebra. -/
-instance (priority := 900) Algebra.complexToReal {A : Type*} [Semiring A] [Algebra Complex A] :
-    Algebra Real A :=
-  .restrictScalars Real Complex A
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Register as an instance (with low priority) the fact that a complex algebra is a
+lso a real
+algebra.
+-/
+instance (priority := 900) Algebra.complexToReal {A : Type*} [Semiring A] [Algebra ℂ A] :
+    Algebra ℝ A :=
+  .restrictScalars ℝ ℂ A
 
 -- try to make sure we're not introducing diamonds but we will need
 -- `reducible_and_instances` which currently fails https://github.com/leanprover-community/mathlib4/issues/10906
-example : Prod.algebra Real Complex Complex = (Prod.algebra Complex Complex Complex).complexToReal := rfl
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example : Prod.algebra ℝ ℂ ℂ = (Prod.algebra ℂ ℂ ℂ).complexToReal := rfl
 
 -- try to make sure we're not introducing diamonds but we will need
 -- `reducible_and_instances` which currently fails https://github.com/leanprover-community/mathlib4/issues/10906
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example {ι : Type*} [Fintype ι] :
-    Pi.algebra (R := Real) ι (fun _ => Complex) = (Pi.algebra (R := Complex) ι (fun _ => Complex)).complexToReal :=
+    Pi.algebra (R := ℝ) ι (fun _ ↦ ℂ) = (Pi.algebra (R := ℂ) ι (fun _ ↦ ℂ)).complexToReal :=
   rfl
-
-example {A : Type*} [Ring A] [inst : Algebra Complex A] :
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example {A : Type*} [Ring A] [inst : Algebra ℂ A] :
     (inst.complexToReal).toModule = (inst.toModule).complexToReal := by
   with_reducible_and_instances rfl
 
 @[simp, norm_cast]
-/--
-theorem `Complex.coe_smul` / 定理 `Complex.coe_smul`
-
-English:
-theorem Complex.coe_smul
-  given: {E : Type*} [AddCommGroup E] [Module Complex E] (x : Real) (y : E)
-  proof: rfl
-
-中文:
-定理 复形.coe_smul
-  条件: {E : 类型} [加法交换群 E] [模 复形 E] (x : 实数) (y : E)
-  证明: rfl
+/-
+**Complex.coe_smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Complex.coe_smul {E : Type*} [AddCommGroup E] [Module Complex E] (x : Real
+) (y : E) : (x : Complex) • y = x • y
+参数：x : Real；y : E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Complex.coe_smul {E : Type*} [AddCommGroup E] [Module Complex E] (x : Real) (y : E) :
-    (x : Complex) • y = x • y :=
+theorem Complex.coe_smul {E : Type*} [AddCommGroup E] [Module ℂ E] (x : ℝ) (y : E) :
+    (x : ℂ) • y = x • y :=
   rfl
 
 /-- The scalar action of `ℝ` on a `ℂ`-module `E` induced by `Module.complexToReal` commutes with
 another scalar action of `M` on `E` whenever the action of `ℂ` commutes with the action of `M`. -/
-instance (priority := 900) SMulCommClass.complexToReal {M E : Type*} [AddCommGroup E] [Module Complex E]
-    [SMul M E] [SMulCommClass Complex M E] : SMulCommClass Real M E where
-  smul_comm r _ _ := smul_comm (r : Complex) _ _
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-Instance `IsScalarTower.complexToReal` / 实例 `IsScalarTower.complexToReal`
-
-English:
-instance IsScalarTower.complexToReal
-  signature: {M E : Type*} [AddCommGroup M] [Module Complex M] [AddCommGroup E]
-  body: smul_assoc (r : Complex) _ _
-
-中文:
-实例 标量塔.complexTo实数
-  签名: {M E : 类型} [加法交换群 M] [模 复形 M] [加法交换群 E]
-  定义体: smul_assoc (r : Complex) _ _
-
-Depends on / 依赖: smul_assoc
+--- 原说明 ---
+The scalar action of `ℝ` on a `ℂ`-module `E` induced by `Module.complexToReal` c
+ommutes with
+another scalar action of `M` on `E` whenever the action of `ℂ` commutes with the
+ action of `M`.
 -/
-instance IsScalarTower.complexToReal {M E : Type*} [AddCommGroup M] [Module Complex M] [AddCommGroup E]
-    [Module Complex E] [SMul M E] [IsScalarTower Complex M E] : IsScalarTower Real M E where
-  smul_assoc r _ _ := smul_assoc (r : Complex) _ _
+instance (priority := 900) SMulCommClass.complexToReal {M E : Type*} [AddCommGroup E] [Module ℂ E]
+    [SMul M E] [SMulCommClass ℂ M E] : SMulCommClass ℝ M E where
+  smul_comm r _ _ := smul_comm (r : ℂ) _ _
+
+/-- The scalar action of `ℝ` on a `ℂ`-module `E` induced by `Module.complexToReal` associates with
+another scalar action of `M` on `E` whenever the action of `ℂ` associates with the action of `M`. -/
+/-
+**IsScalarTower.complexToReal** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：IsScalarTower.complexToReal {M E : Type*} [AddCommGroup M] [Module Complex
+ M] [AddCommGroup E] [Module Complex E] [SMul M E] [IsScalarTower Complex M E] :
+ IsScalarTower Real M E where smul_assoc r _ _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.smul_assoc`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_1
+1} {inst : SMul M N} {inst_1 : SMul N α} {inst_2 : SMul M α}   [self : IsScalarT
+ower M N α] (x…
+
+--- 原说明 ---
+The scalar action of `ℝ` on a `ℂ`-module `E` induced by `Module.complexToReal` a
+ssociates with
+another scalar action of `M` on `E` whenever the action of `ℂ` associates with t
+he action of `M`.
+-/
+instance IsScalarTower.complexToReal {M E : Type*} [AddCommGroup M] [Module ℂ M] [AddCommGroup E]
+    [Module ℂ E] [SMul M E] [IsScalarTower ℂ M E] : IsScalarTower ℝ M E where
+  smul_assoc r _ _ := smul_assoc (r : ℂ) _ _
 
 -- check that the following instance is implied by the one above.
-example (E : Type*) [AddCommGroup E] [Module Complex E] : IsScalarTower Real Complex E := inferInstance
-
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example (E : Type*) [AddCommGroup E] [Module ℂ E] : IsScalarTower ℝ ℂ E := inferInstance
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 900) StarModule.complexToReal {E : Type*} [AddCommGroup E] [Star E]
-    [Module Complex E] [StarModule Complex E] : StarModule Real E :=
-  ⟨fun r a => by rw [← smul_one_smul Complex r a, star_smul, star_smul, star_one, smul_one_smul]⟩
+    [Module ℂ E] [StarModule ℂ E] : StarModule ℝ E :=
+  ⟨fun r a => by rw [← smul_one_smul ℂ r a, star_smul, star_smul, star_one, smul_one_smul]⟩
 
 namespace Complex
 
 open ComplexConjugate
 
-/--
-Definition of `reLm` / `reLm` 的定义
+/-- Linear map version of the real part function, from `ℂ` to `ℝ`. -/
+/-
+**Complex.reLm** 是 Mathlib 中的一个定义，位于命名空间 `Complex`。
+形式化陈述：reLm : Complex ->ₗ[Real] Real where toFun x
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Complex.add_re`：add_re (z w : Complex) : (z + w).re = z.re + w.re
 
-English:
-definition reLm
-  signature: : Complex ->ₗ[Real] Real where
-  body: x.re
-  map_add' := add_re
-  map_smul' := by simp
-
-@[simp]
-
-中文:
-定义 reLm
-  签名: : 复形 ->ₗ[实数] 实数 where
-  定义体: x.re
-  map_add' := add_re
-  map_smul' := by simp
-
-@[simp]
-
-Depends on / 依赖: x.re
+--- 原说明 ---
+Linear map version of the real part function, from `ℂ` to `ℝ`.
 -/
-def reLm : Complex ->ₗ[Real] Real where
+def reLm : ℂ →ₗ[ℝ] ℝ where
   toFun x := x.re
   map_add' := add_re
   map_smul' := by simp
 
 @[simp]
-/--
-theorem `reLm_coe` / 定理 `reLm_coe`
-
-English:
-theorem reLm_coe
-  statement: ⇑reLm = re
-  proof: rfl
-
-中文:
-定理 reLm_coe
-  结论: ⇑reLm = re
-  证明: rfl
+/-
+**Complex.reLm_coe** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：reLm_coe : ⇑reLm = re
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem reLm_coe : ⇑reLm = re :=
   rfl
 
-/--
-Definition of `imLm` / `imLm` 的定义
+/-- Linear map version of the imaginary part function, from `ℂ` to `ℝ`. -/
+/-
+**Complex.imLm** 是 Mathlib 中的一个定义，位于命名空间 `Complex`。
+形式化陈述：imLm : Complex ->ₗ[Real] Real where toFun x
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Complex.add_im`：add_im (z w : Complex) : (z + w).im = z.im + w.im
 
-English:
-definition imLm
-  signature: : Complex ->ₗ[Real] Real where
-  body: x.im
-  map_add' := add_im
-  map_smul' := by simp
-
-@[simp]
-
-中文:
-定义 imLm
-  签名: : 复形 ->ₗ[实数] 实数 where
-  定义体: x.im
-  map_add' := add_im
-  map_smul' := by simp
-
-@[simp]
-
-Depends on / 依赖: x.im
+--- 原说明 ---
+Linear map version of the imaginary part function, from `ℂ` to `ℝ`.
 -/
-def imLm : Complex ->ₗ[Real] Real where
+def imLm : ℂ →ₗ[ℝ] ℝ where
   toFun x := x.im
   map_add' := add_im
   map_smul' := by simp
 
 @[simp]
-/--
-theorem `imLm_coe` / 定理 `imLm_coe`
-
-English:
-theorem imLm_coe
-  statement: ⇑imLm = im
-  proof: rfl
-
-中文:
-定理 imLm_coe
-  结论: ⇑imLm = im
-  证明: rfl
+/-
+**Complex.imLm_coe** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：imLm_coe : ⇑imLm = im
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem imLm_coe : ⇑imLm = im :=
   rfl
 
-/--
-Definition of `ofRealAm` / `ofRealAm` 的定义
+/-- `ℝ`-algebra morphism version of the canonical embedding of `ℝ` in `ℂ`. -/
+/-
+**Complex.ofRealAm** 是 Mathlib 中的一个定义，位于命名空间 `Complex`。
+形式化陈述：ofRealAm : Real ->ₐ[Real] Complex
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofRealAm
-  signature: : Real ->ₐ[Real] Complex
-  body: Algebra.ofId Real Complex
-
-@[simp]
-
-中文:
-定义 of实数Am
-  签名: : 实数 ->ₐ[实数] 复形
-  定义体: Algebra.ofId Real Complex
-
-@[simp]
-
-Depends on / 依赖: Algebra, Algebra.ofId
+--- 原说明 ---
+`ℝ`-algebra morphism version of the canonical embedding of `ℝ` in `ℂ`.
 -/
-def ofRealAm : Real ->ₐ[Real] Complex :=
-  Algebra.ofId Real Complex
+def ofRealAm : ℝ →ₐ[ℝ] ℂ :=
+  Algebra.ofId ℝ ℂ
 
 @[simp]
-/--
-theorem `ofRealAm_coe` / 定理 `ofRealAm_coe`
-
-English:
-theorem ofRealAm_coe
-  statement: ⇑ofRealAm = ((↑) : Real -> Complex)
-  proof: rfl
-
-中文:
-定理 of实数Am_coe
-  结论: ⇑of实数Am = ((↑) : 实数 -> 复形)
-  证明: rfl
+/-
+**Complex.ofRealAm_coe** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：ofRealAm_coe : ⇑ofRealAm = ((↑) : Real -> Complex)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofRealAm_coe : ⇑ofRealAm = ((↑) : Real -> Complex) :=
+theorem ofRealAm_coe : ⇑ofRealAm = ((↑) : ℝ → ℂ) :=
   rfl
 
-/--
-Definition of `conjAe` / `conjAe` 的定义
+/-- `ℝ`-algebra isomorphism version of the complex conjugation function from `ℂ` to `ℂ` -/
+/-
+**Complex.conjAe** 是 Mathlib 中的一个定义，位于命名空间 `Complex`。
+形式化陈述：conjAe : Complex ≃ₐ[Real] Complex
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Complex.conj_ofReal`：conj_ofReal (r : Real) : conj (r : Complex) = r
 
-English:
-definition conjAe
-  signature: : Complex ≃ₐ[Real] Complex
-  body: { conj with
-    invFun := conj
-    left_inv := star_star
-    right_inv := star_star
-    commutes' := conj_ofReal }
-
-@[simp]
-
-中文:
-定义 conjAe
-  签名: : 复形 ≃ₐ[实数] 复形
-  定义体: { conj with
-    invFun := conj
-    left_inv := star_star
-    right_inv := star_star
-    commutes' := conj_ofReal }
-
-@[simp]
-
-Depends on / 依赖: commutes, conj_ofReal, invFun, left_inv, right_inv, star_star
+--- 原说明 ---
+`ℝ`-algebra isomorphism version of the complex conjugation function from `ℂ` to 
+`ℂ`
 -/
-def conjAe : Complex ≃ₐ[Real] Complex :=
+def conjAe : ℂ ≃ₐ[ℝ] ℂ :=
   { conj with
     invFun := conj
     left_inv := star_star
@@ -571,72 +540,140 @@ def conjAe : Complex ≃ₐ[Real] Complex :=
     commutes' := conj_ofReal }
 
 @[simp]
-/--
-theorem `conjAe_coe` / 定理 `conjAe_coe`
-
-English:
-theorem conjAe_coe
-  statement: ⇑conjAe = conj
-  proof: rfl
-
-中文:
-定理 conjAe_coe
-  结论: ⇑conjAe = conj
-  证明: rfl
+/-
+**Complex.conjAe_coe** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：conjAe_coe : ⇑conjAe = conj
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem conjAe_coe : ⇑conjAe = conj :=
   rfl
 
 /-- The matrix representation of `conjAe`. -/
 @[simp]
-/--
-theorem `toMatrix_conjAe` / 定理 `toMatrix_conjAe`
+/-
+**Complex.toMatrix_conjAe** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：toMatrix_conjAe : conjAe.toLinearEquiv.toLinearMap.toMatrix basisOneI basi
+sOneI = !![1, 0; 0, -1]
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Fintype.complete`：∀ {α : Type u_4} [self : Fintype α] (x : α), x ∈ Finty
+pe.elems
+· 使用定理 `Nat.le_of_lt`：∀ {n m : ℕ}, n < m → n ≤ m
+· 使用定理 `Nat.le_refl`：∀ (n : ℕ), n ≤ n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `LinearMap.toMatrix_apply`：LinearMap.toMatrix_apply (f : M₁ ->ₗ[R] M₂) (i
+ : m) (j : n) : LinearMap.toMatrix v₁ v₂ f i j = v₂.repr (f (v₁ j)) i
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Complex.coe_basisOneI`：coe_basisOneI : ⇑basisOneI = ![1, I]
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `Matrix.cons_val'`：cons_val' (v : n' -> α) (B : Fin m -> n' -> α) (i j) :
+ vecCons v B i j = vecCons (v j) (fun i => B i j) i
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Matrix.cons_val_fin_one`：cons_val_fin_one (x : α) (u : Fin 0 -> α) : for
+all (i : Fin 1), vecCons x u i = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Complex.conj_I`：conj_I : conj I = -I
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `SemilinearEquivClass.instSemilinearMapClass`：∀ {R : Type u_1} {S : Type 
+u_6} {M : Type u_7} {M₂ : Type u_9} (F : Type u_14) [inst : Semiring R] [inst_1 
+: Semiring S]   [inst_2 : AddComm…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
+（共 32 条，此处仅展示前 30 条）
 
-English:
-theorem toMatrix_conjAe
-  proof: by
-  ext i j
-  fin_cases i <;> fin_cases j <;> simp [LinearMap.toMatrix_apply]
-
-中文:
-定理 toMatrix_conjAe
-  证明: by
-  ext i j
-  fin_cases i <;> fin_cases j <;> simp [LinearMap.toMatrix_apply]
-
-Depends on / 依赖: LinearMap, LinearMap.toMatrix_apply, fin_cases, toMatrix_apply
+--- 原说明 ---
+The matrix representation of `conjAe`.
 -/
 theorem toMatrix_conjAe :
     conjAe.toLinearEquiv.toLinearMap.toMatrix basisOneI basisOneI = !![1, 0; 0, -1] := by
   ext i j
   fin_cases i <;> fin_cases j <;> simp [LinearMap.toMatrix_apply]
 
-/--
-theorem `real_algHom_eq_id_or_conj` / 定理 `real_algHom_eq_id_or_conj`
+/-- The identity and the complex conjugation are the only two `ℝ`-algebra homomorphisms of `ℂ`. -/
+/-
+**Complex.real_algHom_eq_id_or_conj** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：real_algHom_eq_id_or_conj (f : Complex ->ₐ[Real] Complex) : f = AlgHom.id 
+Real Complex ∨ f = conjAe
+参数：f : Complex ->ₐ[Real] Complex。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用定理 `Complex.algHom_ext`：algHom_ext ⦃f g : Complex ->ₐ[Real] A⦄ (h : f I = g 
+I) : f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Complex.conj_I`：conj_I : conj I = -I
+· 使用引理 `eq_or_eq_neg_of_sq_eq_sq`：eq_or_eq_neg_of_sq_eq_sq (a b : R) : a ^ 2 = b
+ ^ 2 -> a = b ∨ a = -b
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `Complex.I_sq`：I_sq : I ^ 2 = -1
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
 
-English:
-theorem real_algHom_eq_id_or_conj
-  given: (f : Complex ->ₐ[Real] Complex)
-  statement: f = AlgHom.id Real Complex ∨ f = conjAe
-  proof: by
-  refine
-      (eq_or_eq_neg_of_sq_eq_sq (f I) I <| by rw [← map_pow, I_sq, map_neg, map_one]).imp ?_ ?_ <;>
-    refine fun h => algHom_ext ?_
-  exacts [h, conj_I.symm ▸ h]
-
-中文:
-定理 real_algHom_eq_id_or_conj
-  条件: (f : 复形 ->ₐ[实数] 复形)
-  结论: f = 代数态射.id 实数 复形 ∨ f = conjAe
-  证明: by
-  refine
-      (eq_or_eq_neg_of_sq_eq_sq (f I) I <| by rw [← map_pow, I_sq, map_neg, map_one]).imp ?_ ?_ <;>
-    refine fun h => algHom_ext ?_
-  exacts [h, conj_I.symm ▸ h]
-
-Depends on / 依赖: I_sq, algHom_ext, conj_I, conj_I.symm, eq_or_eq_neg_of_sq_eq_sq, exacts, map_neg, map_one, map_pow
+--- 原说明 ---
+The identity and the complex conjugation are the only two `ℝ`-algebra homomorphi
+sms of `ℂ`.
 -/
-theorem real_algHom_eq_id_or_conj (f : Complex ->ₐ[Real] Complex) : f = AlgHom.id Real Complex ∨ f = conjAe := by
+theorem real_algHom_eq_id_or_conj (f : ℂ →ₐ[ℝ] ℂ) : f = AlgHom.id ℝ ℂ ∨ f = conjAe := by
   refine
       (eq_or_eq_neg_of_sq_eq_sq (f I) I <| by rw [← map_pow, I_sq, map_neg, map_one]).imp ?_ ?_ <;>
     refine fun h => algHom_ext ?_
@@ -644,81 +681,64 @@ theorem real_algHom_eq_id_or_conj (f : Complex ->ₐ[Real] Complex) : f = AlgHom
 
 /-- The natural `LinearEquiv` from `ℂ` to `ℝ × ℝ`. -/
 @[simps! +simpRhs apply symm_apply_re symm_apply_im]
-/--
-Definition of `equivRealProdLm` / `equivRealProdLm` 的定义
+/-
+**Complex.equivRealProdLm** 是 Mathlib 中的一个定义，位于命名空间 `Complex`。
+形式化陈述：equivRealProdLm : Complex ≃ₗ[Real] Real × Real
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivRealProdLm
-  signature: : Complex ≃ₗ[Real] Real × Real
-  body: { equivRealProdAddHom with
-    map_smul' := fun r c => by simp }
-
-中文:
-定义 equiv实数ProdLm
-  签名: : 复形 ≃ₗ[实数] 实数 × 实数
-  定义体: { equivRealProdAddHom with
-    map_smul' := fun r c => by simp }
-
-Depends on / 依赖: equivRealProdAddHom, map_smul
+--- 原说明 ---
+The natural `LinearEquiv` from `ℂ` to `ℝ × ℝ`.
 -/
-def equivRealProdLm : Complex ≃ₗ[Real] Real × Real :=
+def equivRealProdLm : ℂ ≃ₗ[ℝ] ℝ × ℝ :=
   { equivRealProdAddHom with
     map_smul' := fun r c => by simp }
-
-/--
-theorem `equivRealProdLm_symm_apply` / 定理 `equivRealProdLm_symm_apply`
-
-English:
-theorem equivRealProdLm_symm_apply
-  given: (p : Real × Real)
-  proof: Complex.equivRealProd_symm_apply p
-
-中文:
-定理 equiv实数ProdLm_symm_apply
-  条件: (p : 实数 × 实数)
-  证明: Complex.equivRealProd_symm_apply p
-
-Depends on / 依赖: Complex.equivRealProd_symm_apply, equivRealProd_symm_apply
+/-
+**Complex.equivRealProdLm_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：equivRealProdLm_symm_apply (p : Real × Real) : Complex.equivRealProdLm.sym
+m p = p.1 + p.2 * Complex.I
+参数：p : Real × Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Complex.equivRealProd_symm_apply`：equivRealProd_symm_apply (p : Real × R
+eal) : equivRealProd.symm p = p.1 + p.2 * I
 -/
-theorem equivRealProdLm_symm_apply (p : Real × Real) :
+theorem equivRealProdLm_symm_apply (p : ℝ × ℝ) :
     Complex.equivRealProdLm.symm p = p.1 + p.2 * Complex.I := Complex.equivRealProd_symm_apply p
 
 section lift
 
-variable {A : Type*} [Ring A] [Algebra Real A]
+variable {A : Type*} [Ring A] [Algebra ℝ A]
 
 open Algebra
 
-/--
-Definition of `liftAux` / `liftAux` 的定义
+/-- There is an `AlgHom` from `ℂ` to any `ℝ`-algebra with an element that squares to `-1`.
 
-English:
-definition liftAux
-  signature: (I' : A) (hf : I' * I' = -1)
-  body: AlgHom.ofLinearMap
-    ((Algebra.linearMap Real A).comp reLm + (LinearMap.toSpanSingleton _ _ I').comp imLm)
-    (show algebraMap Real A 1 + (0 : Real) • I' = 1 by rw [map_one, zero_smul, add_zero]) ?_
+See `Complex.lift` for this as an equiv. -/
+/-
+**Complex.liftAux** 是 Mathlib 中的一个定义，位于命名空间 `Complex`。
+形式化陈述：liftAux (I' : A) (hf : I' * I' = -1) : Complex ->ₐ[Real] A
+参数：I' : A；hf : I' * I' = -1。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 liftAux
-  签名: (I' : A) (hf : I' * I' = -1)
-  定义体: AlgHom.ofLinearMap
-    ((Algebra.linearMap Real A).comp reLm + (LinearMap.toSpanSingleton _ _ I').comp imLm)
-    (show algebraMap Real A 1 + (0 : Real) • I' = 1 by rw [map_one, zero_smul, add_zero]) ?_
+--- 原说明 ---
+There is an `AlgHom` from `ℂ` to any `ℝ`-algebra with an element that squares to
+ `-1`.
 
-Depends on / 依赖: AlgHom, AlgHom.ofLinearMap, Algebra, Algebra.linearMap, LinearMap, LinearMap.toSpanSingleton, add_zero, algebraMap, linearMap, map_one, ofLinearMap, toSpanSingleton, zero_smul
+See `Complex.lift` for this as an equiv.
 -/
-def liftAux (I' : A) (hf : I' * I' = -1) : Complex ->ₐ[Real] A :=
+def liftAux (I' : A) (hf : I' * I' = -1) : ℂ →ₐ[ℝ] A :=
   AlgHom.ofLinearMap
-    ((Algebra.linearMap Real A).comp reLm + (LinearMap.toSpanSingleton _ _ I').comp imLm)
-    (show algebraMap Real A 1 + (0 : Real) • I' = 1 by rw [map_one, zero_smul, add_zero]) ?_
+    ((Algebra.linearMap ℝ A).comp reLm + (LinearMap.toSpanSingleton _ _ I').comp imLm)
+    (show algebraMap ℝ A 1 + (0 : ℝ) • I' = 1 by rw [map_one, zero_smul, add_zero]) ?_
 where finally
   rintro ⟨x₁, y₁⟩ ⟨x₂, y₂⟩
   rw [mk_mul_mk]
   change
-    algebraMap Real A (x₁ * x₂ - y₁ * y₂) + (x₁ * y₂ + y₁ * x₂) • I' =
-      (algebraMap Real A x₁ + y₁ • I') * (algebraMap Real A x₂ + y₂ • I')
-  rw [add_mul]; rw [mul_add]; rw [mul_add]; rw [add_comm _ (y₁ • I' * y₂ • I')]; rw [add_add_add_comm]
+    algebraMap ℝ A (x₁ * x₂ - y₁ * y₂) + (x₁ * y₂ + y₁ * x₂) • I' =
+      (algebraMap ℝ A x₁ + y₁ • I') * (algebraMap ℝ A x₂ + y₂ • I')
+  rw [add_mul, mul_add, mul_add, add_comm _ (y₁ • I' * y₂ • I'), add_add_add_comm]
   congr 1
   -- equate "real" and "imaginary" parts
   · rw [smul_mul_smul_comm, hf, smul_neg, ← algebraMap_eq_smul_one, ← sub_eq_add_neg,
@@ -727,97 +747,113 @@ where finally
       ← mul_assoc, ← add_mul, ← map_mul, ← map_mul, ← map_add]
 
 @[simp]
-/--
-theorem `liftAux_apply` / 定理 `liftAux_apply`
-
-English:
-theorem liftAux_apply
-  given: (I' : A) (hI') (z : Complex)
-  statement: liftAux I' hI' z = algebraMap Real A z.re + z.im • I'
-  proof: rfl
-
-中文:
-定理 liftAux_apply
-  条件: (I' : A) (hI') (z : 复形)
-  结论: liftAux I' hI' z = algebraMap 实数 A z.re + z.im • I'
-  证明: rfl
+/-
+**Complex.liftAux_apply** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：liftAux_apply (I' : A) (hI') (z : Complex) : liftAux I' hI' z = algebraMap
+ Real A z.re + z.im • I'
+参数：I' : A；hI'；z : Complex。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem liftAux_apply (I' : A) (hI') (z : Complex) : liftAux I' hI' z = algebraMap Real A z.re + z.im • I' :=
+theorem liftAux_apply (I' : A) (hI') (z : ℂ) : liftAux I' hI' z = algebraMap ℝ A z.re + z.im • I' :=
   rfl
-
-/--
-theorem `liftAux_apply_I` / 定理 `liftAux_apply_I`
-
-English:
-theorem liftAux_apply_I
-  given: (I' : A) (hI')
-  statement: liftAux I' hI' I = I'
-  proof: by simp
-
-@[simp]
-
-中文:
-定理 liftAux_apply_I
-  条件: (I' : A) (hI')
-  结论: liftAux I' hI' I = I'
-  证明: by simp
-
-@[simp]
+/-
+**Complex.liftAux_apply_I** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：liftAux_apply_I (I' : A) (hI') : liftAux I' hI' I = I'
+参数：I' : A；hI'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem liftAux_apply_I (I' : A) (hI') : liftAux I' hI' I = I' := by simp
 
 @[simp]
-/--
-theorem `adjoin_I` / 定理 `adjoin_I`
-
-English:
-theorem adjoin_I
-  statement: Real[I] = ⊤
-  proof: by
-  refine top_unique fun x hx => ?_; clear hx
-  rw [← x.re_add_im]; rw [← smul_eq_mul]; rw [← Complex.coe_algebraMap]
-  exact add_mem (algebraMap_mem _ _) (Subalgebra.smul_mem _ (subset_adjoin <| by simp) _)
-
-@[simp]
-
-中文:
-定理 adjoin_I
-  结论: 实数[I] = ⊤
-  证明: by
-  refine top_unique fun x hx => ?_; clear hx
-  rw [← x.re_add_im]; rw [← smul_eq_mul]; rw [← Complex.coe_algebraMap]
-  exact add_mem (algebraMap_mem _ _) (Subalgebra.smul_mem _ (subset_adjoin <| by simp) _)
-
-@[simp]
-
-Depends on / 依赖: Complex.coe_algebraMap, Subalgebra, Subalgebra.smul_mem, add_mem, algebraMap_mem, coe_algebraMap, re_add_im, smul_eq_mul, smul_mem, subset_adjoin, top_unique, x.re_add_im
+/-
+**Complex.adjoin_I** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：adjoin_I : Real[I] = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `top_unique`：top_unique (h : ⊤ <= a) : a = ⊤
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Complex.re_add_im`：re_add_im (z : Complex) : (z.re : Complex) + z.im * I
+ = z
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `Complex.coe_algebraMap`：coe_algebraMap : (algebraMap Real Complex : Real
+ -> Complex) = ((↑) : Real -> Complex)
+· 使用定理 `AddMemClass.add_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Add M} {inst_1 : SetLike S M} [self : AddMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `AddSubmonoidClass.toAddMemClass`：∀ {S : Type u_3} {M : outParam (Type u_
+4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass S
+ M], AddMemClass S M
+· 使用定理 `SubsemiringClass.toAddSubmonoidClass`：∀ {S : Type u_1} {R : outParam (Ty
+pe u)} {inst : NonAssocSemiring R} {inst_1 : SetLike S R}   [self : SubsemiringC
+lass S R], AddSubmonoidCla…
+· 使用定理 `Subalgebra.instSubsemiringClass`：∀ {R : Type u} {A : Type v} [inst : Com
+mSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SubsemiringClass (S
+ubalgebra R A) A
+· 使用定理 `algebraMap_mem`：∀ {S : Type u_1} {R : Type u_2} {A : Type u_3} [inst : C
+ommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [inst_3 : SetLike 
+S A]…
+· 使用定理 `AddSubmonoidWithOneClass.toOneMemClass`：∀ {S : Type u_1} {R : outParam (
+Type u_2)} {inst : AddMonoidWithOne R} {inst_1 : SetLike S R}   [self : AddSubmo
+noidWithOneClass S R], OneMe…
+· 使用定理 `SubsemiringClass.addSubmonoidWithOneClass`：∀ (S : Type u_1) (R : Type u)
+ {x : NonAssocSemiring R} [inst : SetLike S R] [h : SubsemiringClass S R],   Add
+SubmonoidWithOneClass S R
+· 使用定理 `Subalgebra.smul_mem`：smul_mem {x : A} (hx : x in S) (r : R) : r • x in S
+· 使用定理 `Algebra.subset_adjoin`：subset_adjoin : s subseteq adjoin R s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem adjoin_I : Real[I] = ⊤ := by
+theorem adjoin_I : ℝ[I] = ⊤ := by
   refine top_unique fun x hx => ?_; clear hx
-  rw [← x.re_add_im]; rw [← smul_eq_mul]; rw [← Complex.coe_algebraMap]
+  rw [← x.re_add_im, ← smul_eq_mul, ← Complex.coe_algebraMap]
   exact add_mem (algebraMap_mem _ _) (Subalgebra.smul_mem _ (subset_adjoin <| by simp) _)
 
 @[simp]
-/--
-theorem `range_liftAux` / 定理 `range_liftAux`
-
-English:
-theorem range_liftAux
-  given: (I' : A) (hI')
-  statement: (liftAux I' hI').range = Real[I']
-  proof: by
-  simp_rw [← Algebra.map_top, ← adjoin_I, AlgHom.map_adjoin, Set.image_singleton, liftAux_apply_I]
-
-中文:
-定理 range_liftAux
-  条件: (I' : A) (hI')
-  结论: (liftAux I' hI').range = 实数[I']
-  证明: by
-  simp_rw [← Algebra.map_top, ← adjoin_I, AlgHom.map_adjoin, Set.image_singleton, liftAux_apply_I]
-
-Depends on / 依赖: AlgHom, AlgHom.map_adjoin, Algebra, Algebra.map_top, Set.image_singleton, adjoin_I, image_singleton, liftAux_apply_I, map_adjoin, map_top, simp_rw
+/-
+**Complex.range_liftAux** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：range_liftAux (I' : A) (hI') : (liftAux I' hI').range = Real[I']
+参数：I' : A；hI'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgHom.map_adjoin`：map_adjoin (φ : A ->ₐ[R] B) (s : Set A) : (adjoin R s
+).map φ = adjoin R (φ '' s)
+· 使用定理 `Set.image_singleton`：image_singleton {f : α -> β} {a : α} : f '' {a} = {
+f a}
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Complex.liftAux_apply_I`：liftAux_apply_I (I' : A) (hI') : liftAux I' hI'
+ I = I'
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem range_liftAux (I' : A) (hI') : (liftAux I' hI').range = Real[I'] := by
+theorem range_liftAux (I' : A) (hI') : (liftAux I' hI').range = ℝ[I'] := by
   simp_rw [← Algebra.map_top, ← adjoin_I, AlgHom.map_adjoin, Set.image_singleton, liftAux_apply_I]
 
 /-- A universal property of the complex numbers, providing a unique `ℂ →ₐ[ℝ] A` for every element
@@ -827,72 +863,62 @@ This can be used to embed the complex numbers in the `Quaternion`s.
 
 This isomorphism is named to match the very similar `Zsqrtd.lift`. -/
 @[simps +simpRhs]
-/--
-Definition of `lift` / `lift` 的定义
+/-
+**Complex.lift** 是 Mathlib 中的一个定义，位于命名空间 `Complex`。
+形式化陈述：lift : { I' : A // I' * I' = -1 } ≃ (Complex ->ₐ[Real] A) where toFun I'
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: : { I' : A // I' * I' = -1 } ≃ (Complex ->ₐ[Real] A) where
-  body: liftAux I' I'.prop
-  invFun F := ⟨F I, by rw [← map_mul, I_mul_I, map_neg, map_one]⟩
-left_inv I' := Subtype.ext liftAux_apply_I (I' : A) I'.prop
-right_inv _ := algHom_ext liftAux_apply_I _ _
+--- 原说明 ---
+A universal property of the complex numbers, providing a unique `ℂ →ₐ[ℝ] A` for 
+every element
+of `A` which squares to `-1`.
 
-中文:
-定义 lift
-  签名: : { I' : A // I' * I' = -1 } ≃ (复形 ->ₐ[实数] A) where
-  定义体: liftAux I' I'.prop
-  invFun F := ⟨F I, by rw [← map_mul, I_mul_I, map_neg, map_one]⟩
-left_inv I' := Subtype.ext liftAux_apply_I (I' : A) I'.prop
-right_inv _ := algHom_ext liftAux_apply_I _ _
+This can be used to embed the complex numbers in the `Quaternion`s.
 
-Depends on / 依赖: liftAux
+This isomorphism is named to match the very similar `Zsqrtd.lift`.
 -/
-def lift : { I' : A // I' * I' = -1 } ≃ (Complex ->ₐ[Real] A) where
+def lift : { I' : A // I' * I' = -1 } ≃ (ℂ →ₐ[ℝ] A) where
   toFun I' := liftAux I' I'.prop
   invFun F := ⟨F I, by rw [← map_mul, I_mul_I, map_neg, map_one]⟩
-left_inv I' := Subtype.ext liftAux_apply_I (I' : A) I'.prop
-right_inv _ := algHom_ext liftAux_apply_I _ _
+  left_inv I' := Subtype.ext <| liftAux_apply_I (I' : A) I'.prop
+  right_inv _ := algHom_ext <| liftAux_apply_I _ _
 
 -- When applied to `Complex.I` itself, `lift` is the identity.
 @[simp]
-/--
-theorem `liftAux_I` / 定理 `liftAux_I`
-
-English:
-theorem liftAux_I
-  statement: liftAux I I_mul_I = AlgHom.id Real Complex
-  proof: algHom_ext liftAux_apply_I _ _
-
-中文:
-定理 liftAux_I
-  结论: liftAux I I_mul_I = 代数态射.id 实数 复形
-  证明: algHom_ext liftAux_apply_I _ _
-
-Depends on / 依赖: algHom_ext, liftAux_apply_I
+/-
+**Complex.liftAux_I** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：liftAux_I : liftAux I I_mul_I = AlgHom.id Real Complex
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Complex.algHom_ext`：algHom_ext ⦃f g : Complex ->ₐ[Real] A⦄ (h : f I = g 
+I) : f = g
+· 使用定理 `Complex.I_mul_I`：I_mul_I : I * I = -1
+· 使用定理 `Complex.liftAux_apply_I`：liftAux_apply_I (I' : A) (hI') : liftAux I' hI'
+ I = I'
 -/
-theorem liftAux_I : liftAux I I_mul_I = AlgHom.id Real Complex :=
-algHom_ext liftAux_apply_I _ _
+theorem liftAux_I : liftAux I I_mul_I = AlgHom.id ℝ ℂ :=
+  algHom_ext <| liftAux_apply_I _ _
 
 -- When applied to `-Complex.I`, `lift` is conjugation, `conj`.
 @[simp]
-/--
-theorem `liftAux_neg_I` / 定理 `liftAux_neg_I`
-
-English:
-theorem liftAux_neg_I
-  statement: liftAux (-I) ((neg_mul_neg _ _).trans I_mul_I) = conjAe
-  proof: algHom_ext (liftAux_apply_I _ _).trans conj_I.symm
-
-中文:
-定理 liftAux_neg_I
-  结论: liftAux (-I) ((neg_mul_neg _ _).trans I_mul_I) = conjAe
-  证明: algHom_ext (liftAux_apply_I _ _).trans conj_I.symm
-
-Depends on / 依赖: algHom_ext, conj_I, conj_I.symm, liftAux_apply_I
+/-
+**Complex.liftAux_neg_I** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：liftAux_neg_I : liftAux (-I) ((neg_mul_neg _ _).trans I_mul_I) = conjAe
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Complex.algHom_ext`：algHom_ext ⦃f g : Complex ->ₐ[Real] A⦄ (h : f I = g 
+I) : f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `neg_mul_neg`：neg_mul_neg (a b : α) : -a * -b = a * b
+· 使用定理 `Complex.I_mul_I`：I_mul_I : I * I = -1
+· 使用定理 `Complex.liftAux_apply_I`：liftAux_apply_I (I' : A) (hI') : liftAux I' hI'
+ I = I'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Complex.conj_I`：conj_I : conj I = -I
 -/
 theorem liftAux_neg_I : liftAux (-I) ((neg_mul_neg _ _).trans I_mul_I) = conjAe :=
-algHom_ext (liftAux_apply_I _ _).trans conj_I.symm
+  algHom_ext <| (liftAux_apply_I _ _).trans conj_I.symm
 
 end lift
 
@@ -906,157 +932,180 @@ variable {A : Type*}
 
 section AddCommGroup
 
-variable [AddCommGroup A] [Module Complex A] [StarAddMonoid A] [StarModule Complex A]
+variable [AddCommGroup A] [Module ℂ A] [StarAddMonoid A] [StarModule ℂ A]
 
-/--
-lemma `Complex.I_mem_skewAdjoint` / 引理 `Complex.I_mem_skewAdjoint`
-
-English:
-lemma Complex.I_mem_skewAdjoint
-  statement: I in skewAdjoint Complex
-  proof: by simp [skewAdjoint.mem_iff]
-
-中文:
-引理 复形.I_mem_skewAdjoint
-  结论: I in skewAdjoint 复形
-  证明: by simp [skewAdjoint.mem_iff]
-
-Depends on / 依赖: mem_iff, skewAdjoint, skewAdjoint.mem_iff
+/-
+**Complex.I_mem_skewAdjoint** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Complex.I_mem_skewAdjoint : I in skewAdjoint Complex
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Complex.conj_I`：conj_I : conj I = -I
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Complex.I_mem_skewAdjoint : I in skewAdjoint Complex := by simp [skewAdjoint.mem_iff]
-
-/--
-lemma `Complex.I_smul_mem_skewAdjoint_iff_isSelfAdjoint` / 引理 `Complex.I_smul_mem_skewAdjoint_iff_isSelfAdjoint`
-
-English:
-lemma Complex.I_smul_mem_skewAdjoint_iff_isSelfAdjoint
-  given: {a : A}
-  proof: by
-  simp [skewAdjoint.mem_iff, IsSelfAdjoint, smul_right_inj]
-
-中文:
-引理 复形.I_smul_mem_skewAdjoint_iff_isSelfAdjoint
-  条件: {a : A}
-  证明: by
-  simp [skewAdjoint.mem_iff, IsSelfAdjoint, smul_right_inj]
+lemma Complex.I_mem_skewAdjoint : I ∈ skewAdjoint ℂ := by simp [skewAdjoint.mem_iff]
+/-
+**Complex.I_smul_mem_skewAdjoint_iff_isSelfAdjoint** 是 Mathlib 中的一个定理，位于命名空间 `Co
+mplex`。
+形式化陈述：∀ {A : Type u_1} [inst : AddCommGroup A] [inst_1 : _root_.Module ℂ A] [ins
+t_2 : StarAddMonoid A] [StarModule ℂ A]   {a : A}, Complex.I • a ∈ skewAdjoint A
+ ↔ IsSelfAdjoint a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `StarModule.star_smul`：∀ {R : Type u} {A : Type v} {inst : Star R} {inst_
+1 : Star A} {inst_2 : SMul R A} [self : StarModule R A] (r : R)   (a : A), star 
+(r • a) = …
+· 使用定理 `Complex.conj_I`：conj_I : conj I = -I
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `DivisionSemiring.to_moduleIsTorsionFree`：∀ {𝕜 : Type u_1} {M : Type u_2}
+ [inst : DivisionSemiring 𝕜] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module 
+𝕜 M],   Module.IsTorsionFree …
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma Complex.I_smul_mem_skewAdjoint_iff_isSelfAdjoint {a : A} :
-    I • a in skewAdjoint A ↔ IsSelfAdjoint a := by
+    I • a ∈ skewAdjoint A ↔ IsSelfAdjoint a := by
   simp [skewAdjoint.mem_iff, IsSelfAdjoint, smul_right_inj]
-
-/--
-lemma `Complex.isSelfAdjoint_I_smul_iff_mem_skewAdjoint` / 引理 `Complex.isSelfAdjoint_I_smul_iff_mem_skewAdjoint`
-
-English:
-lemma Complex.isSelfAdjoint_I_smul_iff_mem_skewAdjoint
-  given: {a : A}
-  proof: by
-  simp [← I_smul_mem_skewAdjoint_iff_isSelfAdjoint, smul_smul]
-
-中文:
-引理 复形.isSelfAdjoint_I_smul_iff_mem_skewAdjoint
-  条件: {a : A}
-  证明: by
-  simp [← I_smul_mem_skewAdjoint_iff_isSelfAdjoint, smul_smul]
+/-
+**Complex.isSelfAdjoint_I_smul_iff_mem_skewAdjoint** 是 Mathlib 中的一个定理，位于命名空间 `Co
+mplex`。
+形式化陈述：∀ {A : Type u_1} [inst : AddCommGroup A] [inst_1 : _root_.Module ℂ A] [ins
+t_2 : StarAddMonoid A] [StarModule ℂ A]   {a : A}, IsSelfAdjoint (Complex.I • a)
+ ↔ a ∈ skewAdjoint A
+参数：Complex.I • a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `Complex.I_mul_I`：I_mul_I : I * I = -1
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `AddSubgroupClass.toNegMemClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass S G],
+   NegMemClass S G
+· 使用定理 `AddSubgroup.instAddSubgroupClass`：∀ {G : Type u_1} [inst : AddGroup G], 
+AddSubgroupClass (AddSubgroup G) G
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma Complex.isSelfAdjoint_I_smul_iff_mem_skewAdjoint {a : A} :
-    IsSelfAdjoint (I • a) ↔ a in skewAdjoint A := by
+    IsSelfAdjoint (I • a) ↔ a ∈ skewAdjoint A := by
   simp [← I_smul_mem_skewAdjoint_iff_isSelfAdjoint, smul_smul]
 
 /-- Create a `selfAdjoint` element from a `skewAdjoint` element by multiplying by the scalar
 `-Complex.I`. -/
 @[simps]
-/--
-Definition of `skewAdjoint.negISMul` / `skewAdjoint.negISMul` 的定义
+/-
+**skewAdjoint.negISMul** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：skewAdjoint.negISMul : skewAdjoint A ->ₗ[Real] selfAdjoint A where toFun a
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
 
-English:
-definition skewAdjoint.negISMul
-  signature: : skewAdjoint A ->ₗ[Real] selfAdjoint A where
-  body: ⟨-I • ↑a, by simp [selfAdjoint.mem_iff]⟩
-  map_add' a b := by simp
-  map_smul' a b := by ext; simp [smul_comm I]
-
-中文:
-定义 skewAdjoint.negISMul
-  签名: : skewAdjoint A ->ₗ[实数] selfAdjoint A where
-  定义体: ⟨-I • ↑a, by simp [selfAdjoint.mem_iff]⟩
-  map_add' a b := by simp
-  map_smul' a b := by ext; simp [smul_comm I]
-
-Depends on / 依赖: mem_iff, selfAdjoint, selfAdjoint.mem_iff
+--- 原说明 ---
+Create a `selfAdjoint` element from a `skewAdjoint` element by multiplying by th
+e scalar
+`-Complex.I`.
 -/
-def skewAdjoint.negISMul : skewAdjoint A ->ₗ[Real] selfAdjoint A where
+def skewAdjoint.negISMul : skewAdjoint A →ₗ[ℝ] selfAdjoint A where
   toFun a := ⟨-I • ↑a, by simp [selfAdjoint.mem_iff]⟩
   map_add' a b := by simp
   map_smul' a b := by ext; simp [smul_comm I]
-
-/--
-theorem `skewAdjoint.I_smul_neg_I` / 定理 `skewAdjoint.I_smul_neg_I`
-
-English:
-theorem skewAdjoint.I_smul_neg_I
-  given: (a : skewAdjoint A)
-  statement: I • (skewAdjoint.negISMul a : A) = a
-  proof: by
-  simp [smul_smul]
-
-中文:
-定理 skewAdjoint.I_smul_neg_I
-  条件: (a : skewAdjoint A)
-  结论: I • (skewAdjoint.negISMul a : A) = a
-  证明: by
-  simp [smul_smul]
-
-Depends on / 依赖: smul_smul
+/-
+**skewAdjoint.I_smul_neg_I** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：skewAdjoint.I_smul_neg_I (a : skewAdjoint A) : I • (skewAdjoint.negISMul a
+ : A) = a
+参数：a : skewAdjoint A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `skewAdjoint.negISMul_apply_coe`：∀ {A : Type u_1} [inst : AddCommGroup A]
+ [inst_1 : _root_.Module ℂ A] [inst_2 : StarAddMonoid A]   [inst_3 : StarModule 
+ℂ A] (a : ↥(skewAdjo…
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `smul_neg`：smul_neg (r : M) (x : A) : r • -x = -(r • x)
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `Complex.I_mul_I`：I_mul_I : I * I = -1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem skewAdjoint.I_smul_neg_I (a : skewAdjoint A) : I • (skewAdjoint.negISMul a : A) = a := by
   simp [smul_smul]
 
-/--
-Definition of `realPart` / `realPart` 的定义
+/-- The real part `ℜ a` of an element `a` of a star module over `ℂ`, as a linear map. This is just
+`selfAdjointPart ℝ`, but we provide it as a separate definition in order to link it with lemmas
+concerning the `imaginaryPart`, which doesn't exist in star modules over other rings. -/
+/-
+**realPart** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：realPart : A ->ₗ[Real] selfAdjoint A
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
 
-English:
-definition realPart
-  signature: : A ->ₗ[Real] selfAdjoint A
-  body: selfAdjointPart Real
-
-中文:
-定义 realPart
-  签名: : A ->ₗ[实数] selfAdjoint A
-  定义体: selfAdjointPart Real
-
-Depends on / 依赖: selfAdjointPart
+--- 原说明 ---
+The real part `ℜ a` of an element `a` of a star module over `ℂ`, as a linear map
+. This is just
+`selfAdjointPart ℝ`, but we provide it as a separate definition in order to link
+ it with lemmas
+concerning the `imaginaryPart`, which doesn't exist in star modules over other r
+ings.
 -/
-noncomputable def realPart : A ->ₗ[Real] selfAdjoint A :=
-  selfAdjointPart Real
+noncomputable def realPart : A →ₗ[ℝ] selfAdjoint A :=
+  selfAdjointPart ℝ
 
-/--
-Definition of `imaginaryPart` / `imaginaryPart` 的定义
+/-- The imaginary part `ℑ a` of an element `a` of a star module over `ℂ`, as a linear map into the
+self adjoint elements. In a general star module, we have a decomposition into the `selfAdjoint`
+and `skewAdjoint` parts, but in a star module over `ℂ` we have
+`realPart_add_I_smul_imaginaryPart`, which allows us to decompose into a linear combination of
+`selfAdjoint`s. -/
+/-
+**imaginaryPart** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：imaginaryPart : A ->ₗ[Real] selfAdjoint A
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
 
-English:
-definition imaginaryPart
-  signature: : A ->ₗ[Real] selfAdjoint A
-  body: skewAdjoint.negISMul.comp (skewAdjointPart Real)
-
-@[inherit_doc]
-scoped[ComplexStarModule] notation "ℜ" => realPart
-@[inherit_doc]
-scoped[ComplexStarModule] notation "ℑ" => imaginaryPart
-
-中文:
-定义 imaginaryPart
-  签名: : A ->ₗ[实数] selfAdjoint A
-  定义体: skewAdjoint.negISMul.comp (skewAdjointPart Real)
-
-@[inherit_doc]
-scoped[ComplexStarModule] notation "ℜ" => realPart
-@[inherit_doc]
-scoped[ComplexStarModule] notation "ℑ" => imaginaryPart
-
-Depends on / 依赖: negISMul, skewAdjoint, skewAdjoint.negISMul.comp, skewAdjointPart
+--- 原说明 ---
+The imaginary part `ℑ a` of an element `a` of a star module over `ℂ`, as a linea
+r map into the
+self adjoint elements. In a general star module, we have a decomposition into th
+e `selfAdjoint`
+and `skewAdjoint` parts, but in a star module over `ℂ` we have
+`realPart_add_I_smul_imaginaryPart`, which allows us to decompose into a linear 
+combination of
+`selfAdjoint`s.
 -/
-noncomputable def imaginaryPart : A ->ₗ[Real] selfAdjoint A :=
-  skewAdjoint.negISMul.comp (skewAdjointPart Real)
+noncomputable def imaginaryPart : A →ₗ[ℝ] selfAdjoint A :=
+  skewAdjoint.negISMul.comp (skewAdjointPart ℝ)
 
 @[inherit_doc]
 scoped[ComplexStarModule] notation "ℜ" => realPart
@@ -1064,492 +1113,597 @@ scoped[ComplexStarModule] notation "ℜ" => realPart
 scoped[ComplexStarModule] notation "ℑ" => imaginaryPart
 
 open ComplexStarModule
-
-/--
-theorem `realPart_apply_coe` / 定理 `realPart_apply_coe`
-
-English:
-theorem realPart_apply_coe
-  given: (a : A)
-  statement: (ℜ a : A) = (2 : Real)⁻¹ • (a + star a)
-  proof: by
-  simp [realPart]
-
-中文:
-定理 realPart_apply_coe
-  条件: (a : A)
-  结论: (ℜ a : A) = (2 : 实数)⁻¹ • (a + star a)
-  证明: by
-  simp [realPart]
-
-Depends on / 依赖: realPart
+/-
+**realPart_apply_coe** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：realPart_apply_coe (a : A) : (ℜ a : A) = (2 : Real)⁻¹ • (a + star a)
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
+· 使用定理 `selfAdjointPart_apply_coe`：∀ (R : Type u_1) {A : Type u_2} [inst : Semir
+ing R] [inst_1 : StarMul R] [inst_2 : TrivialStar R]   [inst_3 : AddCommGroup A]
+ [inst_4 : _roo…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `invOf_eq_inv`：invOf_eq_inv (a : α) [Invertible a] : ⅟a = a⁻¹
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem realPart_apply_coe (a : A) : (ℜ a : A) = (2 : Real)⁻¹ • (a + star a) := by
+theorem realPart_apply_coe (a : A) : (ℜ a : A) = (2 : ℝ)⁻¹ • (a + star a) := by
   simp [realPart]
-
-/--
-theorem `imaginaryPart_apply_coe` / 定理 `imaginaryPart_apply_coe`
-
-English:
-theorem imaginaryPart_apply_coe
-  given: (a : A)
-  statement: (ℑ a : A) = -I • (2 : Real)⁻¹ • (a - star a)
-  proof: by
-  simp [imaginaryPart]
-
-中文:
-定理 imaginaryPart_apply_coe
-  条件: (a : A)
-  结论: (ℑ a : A) = -I • (2 : 实数)⁻¹ • (a - star a)
-  证明: by
-  simp [imaginaryPart]
-
-Depends on / 依赖: imaginaryPart
+/-
+**imaginaryPart_apply_coe** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：imaginaryPart_apply_coe (a : A) : (ℑ a : A) = -I • (2 : Real)⁻¹ • (a - sta
+r a)
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
+· 使用定理 `skewAdjoint.negISMul_apply_coe`：∀ {A : Type u_1} [inst : AddCommGroup A]
+ [inst_1 : _root_.Module ℂ A] [inst_2 : StarAddMonoid A]   [inst_3 : StarModule 
+ℂ A] (a : ↥(skewAdjo…
+· 使用定理 `skewAdjointPart_apply_coe`：∀ (R : Type u_1) {A : Type u_2} [inst : Semir
+ing R] [inst_1 : StarMul R] [inst_2 : TrivialStar R]   [inst_3 : AddCommGroup A]
+ [inst_4 : _roo…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `invOf_eq_inv`：invOf_eq_inv (a : α) [Invertible a] : ⅟a = a⁻¹
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem imaginaryPart_apply_coe (a : A) : (ℑ a : A) = -I • (2 : Real)⁻¹ • (a - star a) := by
+theorem imaginaryPart_apply_coe (a : A) : (ℑ a : A) = -I • (2 : ℝ)⁻¹ • (a - star a) := by
   simp [imaginaryPart]
 
-/--
-theorem `realPart_add_I_smul_imaginaryPart` / 定理 `realPart_add_I_smul_imaginaryPart`
+/-- The standard decomposition of `ℜ a + Complex.I • ℑ a = a` of an element of a star module over
+`ℂ` into a linear combination of self adjoint elements. -/
+/-
+**realPart_add_I_smul_imaginaryPart** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：realPart_add_I_smul_imaginaryPart (a : A) : (ℜ a : A) + I • (ℑ a : A) = a
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
+· 使用定理 `selfAdjointPart_apply_coe`：∀ (R : Type u_1) {A : Type u_2} [inst : Semir
+ing R] [inst_1 : StarMul R] [inst_2 : TrivialStar R]   [inst_3 : AddCommGroup A]
+ [inst_4 : _roo…
+· 使用定理 `invOf_eq_inv`：invOf_eq_inv (a : α) [Invertible a] : ⅟a = a⁻¹
+· 使用定理 `skewAdjoint.negISMul_apply_coe`：∀ {A : Type u_1} [inst : AddCommGroup A]
+ [inst_1 : _root_.Module ℂ A] [inst_2 : StarAddMonoid A]   [inst_3 : StarModule 
+ℂ A] (a : ↥(skewAdjo…
+· 使用定理 `skewAdjointPart_apply_coe`：∀ (R : Type u_1) {A : Type u_2} [inst : Semir
+ing R] [inst_1 : StarMul R] [inst_2 : TrivialStar R]   [inst_3 : AddCommGroup A]
+ [inst_4 : _roo…
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `smul_neg`：smul_neg (r : M) (x : A) : r • -x = -(r • x)
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `Complex.I_mul_I`：I_mul_I : I * I = -1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `add_add_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b c : G)
+, a + c + (b - c) = a + b
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `two_smul`：two_smul : (2 : R) • x = x + x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem realPart_add_I_smul_imaginaryPart
-  given: (a : A)
-  statement: (ℜ a : A) + I • (ℑ a : A) = a
-  proof: by
-  simp [realPart, imaginaryPart, smul_smul, ← smul_add, inv_smul_eq_iff₀, two_smul]
-
-@[simp]
-
-中文:
-定理 realPart_add_I_smul_imaginaryPart
-  条件: (a : A)
-  结论: (ℜ a : A) + I • (ℑ a : A) = a
-  证明: by
-  simp [realPart, imaginaryPart, smul_smul, ← smul_add, inv_smul_eq_iff₀, two_smul]
-
-@[simp]
-
-Depends on / 依赖: imaginaryPart, realPart, smul_add, smul_smul, two_smul
+--- 原说明 ---
+The standard decomposition of `ℜ a + Complex.I • ℑ a = a` of an element of a sta
+r module over
+`ℂ` into a linear combination of self adjoint elements.
 -/
 theorem realPart_add_I_smul_imaginaryPart (a : A) : (ℜ a : A) + I • (ℑ a : A) = a := by
   simp [realPart, imaginaryPart, smul_smul, ← smul_add, inv_smul_eq_iff₀, two_smul]
 
 @[simp]
-/--
-theorem `realPart_I_smul` / 定理 `realPart_I_smul`
-
-English:
-theorem realPart_I_smul
-  given: (a : A)
-  statement: ℜ (I • a) = -ℑ a
-  proof: by
-  ext
-  simp [realPart_apply_coe, imaginaryPart_apply_coe, smul_comm I, sub_eq_add_neg, add_comm]
-
-@[simp]
-
-中文:
-定理 realPart_I_smul
-  条件: (a : A)
-  结论: ℜ (I • a) = -ℑ a
-  证明: by
-  ext
-  simp [realPart_apply_coe, imaginaryPart_apply_coe, smul_comm I, sub_eq_add_neg, add_comm]
-
-@[simp]
-
-Depends on / 依赖: add_comm, imaginaryPart_apply_coe, realPart_apply_coe, smul_comm, sub_eq_add_neg
+/-
+**realPart_I_smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：realPart_I_smul (a : A) : ℜ (I • a) = -ℑ a
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `realPart_apply_coe`：realPart_apply_coe (a : A) : (ℜ a : A) = (2 : Real)⁻
+¹ • (a + star a)
+· 使用定理 `StarModule.star_smul`：∀ {R : Type u} {A : Type v} {inst : Star R} {inst_
+1 : Star A} {inst_2 : SMul R A} [self : StarModule R A] (r : R)   (a : A), star 
+(r • a) = …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Complex.conj_I`：conj_I : conj I = -I
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用定理 `smul_neg`：smul_neg (r : M) (x : A) : r • -x = -(r • x)
+· 使用定理 `imaginaryPart_apply_coe`：imaginaryPart_apply_coe (a : A) : (ℑ a : A) = -
+I • (2 : Real)⁻¹ • (a - star a)
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `neg_add_rev`：∀ {G : Type u_1} [inst : SubtractionMonoid G] (a b : G), -(
+a + b) = -b + -a
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem realPart_I_smul (a : A) : ℜ (I • a) = -ℑ a := by
   ext
   simp [realPart_apply_coe, imaginaryPart_apply_coe, smul_comm I, sub_eq_add_neg, add_comm]
 
 @[simp]
-/--
-theorem `imaginaryPart_I_smul` / 定理 `imaginaryPart_I_smul`
-
-English:
-theorem imaginaryPart_I_smul
-  given: (a : A)
-  statement: ℑ (I • a) = ℜ a
-  proof: by
-  ext
-  simp [realPart_apply_coe, imaginaryPart_apply_coe, smul_comm I (2⁻¹ : Real), smul_smul I]
-
-中文:
-定理 imaginaryPart_I_smul
-  条件: (a : A)
-  结论: ℑ (I • a) = ℜ a
-  证明: by
-  ext
-  simp [realPart_apply_coe, imaginaryPart_apply_coe, smul_comm I (2⁻¹ : Real), smul_smul I]
-
-Depends on / 依赖: imaginaryPart_apply_coe, realPart_apply_coe, smul_comm, smul_smul
+/-
+**imaginaryPart_I_smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：imaginaryPart_I_smul (a : A) : ℑ (I • a) = ℜ a
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `imaginaryPart_apply_coe`：imaginaryPart_apply_coe (a : A) : (ℑ a : A) = -
+I • (2 : Real)⁻¹ • (a - star a)
+· 使用定理 `StarModule.star_smul`：∀ {R : Type u} {A : Type v} {inst : Star R} {inst_
+1 : Star A} {inst_2 : SMul R A} [self : StarModule R A] (r : R)   (a : A), star 
+(r • a) = …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Complex.conj_I`：conj_I : conj I = -I
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `sub_neg_eq_add`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α),
+ a - -b = a + b
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用定理 `SMulCommClass.smul_comm`：∀ {M : Type u_9} {N : Type u_10} {α : Type u_11
+} {inst : SMul M α} {inst_1 : SMul N α} [self : SMulCommClass M N α]   (m : M) (
+n : N) (a : α…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `Complex.I_mul_I`：I_mul_I : I * I = -1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `smul_neg`：smul_neg (r : M) (x : A) : r • -x = -(r • x)
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `realPart_apply_coe`：realPart_apply_coe (a : A) : (ℜ a : A) = (2 : Real)⁻
+¹ • (a + star a)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem imaginaryPart_I_smul (a : A) : ℑ (I • a) = ℜ a := by
   ext
-  simp [realPart_apply_coe, imaginaryPart_apply_coe, smul_comm I (2⁻¹ : Real), smul_smul I]
-
-/--
-theorem `realPart_smul` / 定理 `realPart_smul`
-
-English:
-theorem realPart_smul
-  given: (z : Complex) (a : A)
-  statement: ℜ (z • a) = z.re • ℜ a - z.im • ℑ a
-  proof: by
-  have := by congrm (ℜ ($((re_add_im z).symm) • a))
-  simpa [-re_add_im, add_smul, ← smul_smul, sub_eq_add_neg]
-
-中文:
-定理 realPart_smul
-  条件: (z : 复形) (a : A)
-  结论: ℜ (z • a) = z.re • ℜ a - z.im • ℑ a
-  证明: by
-  have := by congrm (ℜ ($((re_add_im z).symm) • a))
-  simpa [-re_add_im, add_smul, ← smul_smul, sub_eq_add_neg]
-
-Depends on / 依赖: add_smul, congrm, re_add_im, smul_smul, sub_eq_add_neg
+  simp [realPart_apply_coe, imaginaryPart_apply_coe, smul_comm I (2⁻¹ : ℝ), smul_smul I]
+/-
+**realPart_smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：realPart_smul (z : Complex) (a : A) : ℜ (z • a) = z.re • ℜ a - z.im • ℑ a
+参数：z : Complex；a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Complex.re_add_im`：re_add_im (z : Complex) : (z.re : Complex) + z.im * I
+ = z
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `add_smul`：add_smul : (r + s) • x = r • x + s • x
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `realPart_I_smul`：realPart_I_smul (a : A) : ℜ (I • a) = -ℑ a
+· 使用定理 `smul_neg`：smul_neg (r : M) (x : A) : r • -x = -(r • x)
 -/
-theorem realPart_smul (z : Complex) (a : A) : ℜ (z • a) = z.re • ℜ a - z.im • ℑ a := by
+theorem realPart_smul (z : ℂ) (a : A) : ℜ (z • a) = z.re • ℜ a - z.im • ℑ a := by
   have := by congrm (ℜ ($((re_add_im z).symm) • a))
   simpa [-re_add_im, add_smul, ← smul_smul, sub_eq_add_neg]
-
-/--
-theorem `imaginaryPart_smul` / 定理 `imaginaryPart_smul`
-
-English:
-theorem imaginaryPart_smul
-  given: (z : Complex) (a : A)
-  statement: ℑ (z • a) = z.re • ℑ a + z.im • ℜ a
-  proof: by
-  have := by congrm (ℑ ($((re_add_im z).symm) • a))
-  simpa [-re_add_im, add_smul, ← smul_smul]
-
-中文:
-定理 imaginaryPart_smul
-  条件: (z : 复形) (a : A)
-  结论: ℑ (z • a) = z.re • ℑ a + z.im • ℜ a
-  证明: by
-  have := by congrm (ℑ ($((re_add_im z).symm) • a))
-  simpa [-re_add_im, add_smul, ← smul_smul]
-
-Depends on / 依赖: add_smul, congrm, re_add_im, smul_smul
+/-
+**imaginaryPart_smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：imaginaryPart_smul (z : Complex) (a : A) : ℑ (z • a) = z.re • ℑ a + z.im •
+ ℜ a
+参数：z : Complex；a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Complex.re_add_im`：re_add_im (z : Complex) : (z.re : Complex) + z.im * I
+ = z
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `add_smul`：add_smul : (r + s) • x = r • x + s • x
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `imaginaryPart_I_smul`：imaginaryPart_I_smul (a : A) : ℑ (I • a) = ℜ a
 -/
-theorem imaginaryPart_smul (z : Complex) (a : A) : ℑ (z • a) = z.re • ℑ a + z.im • ℜ a := by
+theorem imaginaryPart_smul (z : ℂ) (a : A) : ℑ (z • a) = z.re • ℑ a + z.im • ℜ a := by
   have := by congrm (ℑ ($((re_add_im z).symm) • a))
   simpa [-re_add_im, add_smul, ← smul_smul]
-
-/--
-lemma `skewAdjointPart_eq_I_smul_imaginaryPart` / 引理 `skewAdjointPart_eq_I_smul_imaginaryPart`
-
-English:
-lemma skewAdjointPart_eq_I_smul_imaginaryPart
-  given: (x : A)
-  proof: by
-  simp [imaginaryPart_apply_coe, smul_smul]
-
-中文:
-引理 skewAdjointPart_eq_I_smul_imaginaryPart
-  条件: (x : A)
-  证明: by
-  simp [imaginaryPart_apply_coe, smul_smul]
-
-Depends on / 依赖: imaginaryPart_apply_coe, smul_smul
+/-
+**skewAdjointPart_eq_I_smul_imaginaryPart** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：skewAdjointPart_eq_I_smul_imaginaryPart (x : A) : (skewAdjointPart Real x 
+: A) = I • (imaginaryPart x : A)
+参数：x : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `skewAdjointPart_apply_coe`：∀ (R : Type u_1) {A : Type u_2} [inst : Semir
+ing R] [inst_1 : StarMul R] [inst_2 : TrivialStar R]   [inst_3 : AddCommGroup A]
+ [inst_4 : _roo…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `invOf_eq_inv`：invOf_eq_inv (a : α) [Invertible a] : ⅟a = a⁻¹
+· 使用定理 `imaginaryPart_apply_coe`：imaginaryPart_apply_coe (a : A) : (ℑ a : A) = -
+I • (2 : Real)⁻¹ • (a - star a)
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `smul_neg`：smul_neg (r : M) (x : A) : r • -x = -(r • x)
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `Complex.I_mul_I`：I_mul_I : I * I = -1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma skewAdjointPart_eq_I_smul_imaginaryPart (x : A) :
-    (skewAdjointPart Real x : A) = I • (imaginaryPart x : A) := by
+    (skewAdjointPart ℝ x : A) = I • (imaginaryPart x : A) := by
   simp [imaginaryPart_apply_coe, smul_smul]
-
-/--
-lemma `imaginaryPart_eq_neg_I_smul_skewAdjointPart` / 引理 `imaginaryPart_eq_neg_I_smul_skewAdjointPart`
-
-English:
-lemma imaginaryPart_eq_neg_I_smul_skewAdjointPart
-  given: (x : A)
-  proof: rfl
-
-中文:
-引理 imaginaryPart_eq_neg_I_smul_skewAdjointPart
-  条件: (x : A)
-  证明: rfl
+/-
+**imaginaryPart_eq_neg_I_smul_skewAdjointPart** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：imaginaryPart_eq_neg_I_smul_skewAdjointPart (x : A) : (imaginaryPart x : A
+) = -I • (skewAdjointPart Real x : A)
+参数：x : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
 -/
 lemma imaginaryPart_eq_neg_I_smul_skewAdjointPart (x : A) :
-    (imaginaryPart x : A) = -I • (skewAdjointPart Real x : A) :=
+    (imaginaryPart x : A) = -I • (skewAdjointPart ℝ x : A) :=
   rfl
-
-/--
-lemma `IsSelfAdjoint.coe_realPart` / 引理 `IsSelfAdjoint.coe_realPart`
-
-English:
-lemma IsSelfAdjoint.coe_realPart
-  given: {x : A} (hx : IsSelfAdjoint x)
-  proof: hx.coe_selfAdjointPart_apply Real
-
-nonrec lemma IsSelfAdjoint.imaginaryPart {x : A} (hx : IsSelfAdjoint x) :
-    ℑ x = 0 := by
-  rw [imaginaryPart]; rw [LinearMap.comp_apply]; rw [hx.skewAdjointPart_apply _]; rw [map_zero]
-
-中文:
-引理 IsSelfAdjoint.coe_realPart
-  条件: {x : A} (hx : IsSelfAdjoint x)
-  证明: hx.coe_selfAdjointPart_apply Real
-
-nonrec lemma IsSelfAdjoint.imaginaryPart {x : A} (hx : IsSelfAdjoint x) :
-    ℑ x = 0 := by
-  rw [imaginaryPart]; rw [LinearMap.comp_apply]; rw [hx.skewAdjointPart_apply _]; rw [map_zero]
-
-Depends on / 依赖: coe_selfAdjointPart_apply, hx.coe_selfAdjointPart_apply
+/-
+**IsSelfAdjoint.coe_realPart** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsSelfAdjoint.coe_realPart {x : A} (hx : IsSelfAdjoint x) : (ℜ x : A) = x
+参数：hx : IsSelfAdjoint x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSelfAdjoint.coe_selfAdjointPart_apply`：IsSelfAdjoint.coe_selfAdjointPa
+rt_apply {x : A} (hx : IsSelfAdjoint x) : (selfAdjointPart R x : A) = x
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
 -/
 lemma IsSelfAdjoint.coe_realPart {x : A} (hx : IsSelfAdjoint x) :
     (ℜ x : A) = x :=
-  hx.coe_selfAdjointPart_apply Real
+  hx.coe_selfAdjointPart_apply ℝ
 
 nonrec lemma IsSelfAdjoint.imaginaryPart {x : A} (hx : IsSelfAdjoint x) :
     ℑ x = 0 := by
-  rw [imaginaryPart]; rw [LinearMap.comp_apply]; rw [hx.skewAdjointPart_apply _]; rw [map_zero]
-
-/--
-lemma `realPart_comp_subtype_selfAdjoint` / 引理 `realPart_comp_subtype_selfAdjoint`
-
-English:
-lemma realPart_comp_subtype_selfAdjoint
-  proof: selfAdjointPart_comp_subtype_selfAdjoint Real
-
-中文:
-引理 realPart_comp_subtype_selfAdjoint
-  证明: selfAdjointPart_comp_subtype_selfAdjoint Real
-
-Depends on / 依赖: selfAdjointPart_comp_subtype_selfAdjoint
+  rw [imaginaryPart, LinearMap.comp_apply, hx.skewAdjointPart_apply _, map_zero]
+/-
+**realPart_comp_subtype_selfAdjoint** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：realPart_comp_subtype_selfAdjoint : realPart.comp (selfAdjoint.submodule R
+eal A).subtype = LinearMap.id
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `selfAdjointPart_comp_subtype_selfAdjoint`：selfAdjointPart_comp_subtype_s
+elfAdjoint : (selfAdjointPart R).comp (selfAdjoint.submodule R A).subtype = .id
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
 -/
 lemma realPart_comp_subtype_selfAdjoint :
-    realPart.comp (selfAdjoint.submodule Real A).subtype = LinearMap.id :=
-  selfAdjointPart_comp_subtype_selfAdjoint Real
+    realPart.comp (selfAdjoint.submodule ℝ A).subtype = LinearMap.id :=
+  selfAdjointPart_comp_subtype_selfAdjoint ℝ
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `imaginaryPart_comp_subtype_selfAdjoint` / 引理 `imaginaryPart_comp_subtype_selfAdjoint`
-
-English:
-lemma imaginaryPart_comp_subtype_selfAdjoint
-  proof: by
-  ext; simp [imaginaryPart]
-
-@[simp]
-
-中文:
-引理 imaginaryPart_comp_subtype_selfAdjoint
-  证明: by
-  ext; simp [imaginaryPart]
-
-@[simp]
-
-Depends on / 依赖: imaginaryPart
+/-
+**imaginaryPart_comp_subtype_selfAdjoint** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：imaginaryPart_comp_subtype_selfAdjoint : imaginaryPart.comp (selfAdjoint.s
+ubmodule Real A).subtype = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
+· 使用定理 `skewAdjoint.negISMul_apply_coe`：∀ {A : Type u_1} [inst : AddCommGroup A]
+ [inst_1 : _root_.Module ℂ A] [inst_2 : StarAddMonoid A]   [inst_3 : StarModule 
+ℂ A] (a : ↥(skewAdjo…
+· 使用定理 `skewAdjointPart_apply_coe`：∀ (R : Type u_1) {A : Type u_2} [inst : Semir
+ing R] [inst_1 : StarMul R] [inst_2 : TrivialStar R]   [inst_3 : AddCommGroup A]
+ [inst_4 : _roo…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `invOf_eq_inv`：invOf_eq_inv (a : α) [Invertible a] : ⅟a = a⁻¹
+· 使用定理 `selfAdjoint.star_val_eq`：star_val_eq {x : selfAdjoint R} : star (x : R) 
+= x
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma imaginaryPart_comp_subtype_selfAdjoint :
-    imaginaryPart.comp (selfAdjoint.submodule Real A).subtype = 0 := by
+    imaginaryPart.comp (selfAdjoint.submodule ℝ A).subtype = 0 := by
   ext; simp [imaginaryPart]
 
 @[simp]
-/--
-lemma `selfAdjoint.realPart_coe` / 引理 `selfAdjoint.realPart_coe`
-
-English:
-lemma selfAdjoint.realPart_coe
-  given: {x : selfAdjoint A}
-  statement: ℜ (x : A) = x
-  proof: Subtype.ext x.property.coe_realPart
-
-@[simp]
-
-中文:
-引理 selfAdjoint.realPart_coe
-  条件: {x : selfAdjoint A}
-  结论: ℜ (x : A) = x
-  证明: Subtype.ext x.property.coe_realPart
-
-@[simp]
-
-Depends on / 依赖: Subtype, Subtype.ext, coe_realPart, property, x.property.coe_realPart
+/-
+**selfAdjoint.realPart_coe** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：selfAdjoint.realPart_coe {x : selfAdjoint A} : ℜ (x : A) = x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用引理 `IsSelfAdjoint.coe_realPart`：IsSelfAdjoint.coe_realPart {x : A} (hx : IsS
+elfAdjoint x) : (ℜ x : A) = x
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 lemma selfAdjoint.realPart_coe {x : selfAdjoint A} : ℜ (x : A) = x :=
   Subtype.ext x.property.coe_realPart
 
 @[simp]
-/--
-lemma `selfAdjoint.imaginaryPart_coe` / 引理 `selfAdjoint.imaginaryPart_coe`
-
-English:
-lemma selfAdjoint.imaginaryPart_coe
-  given: {x : selfAdjoint A}
-  statement: ℑ (x : A) = 0
-  proof: x.property.imaginaryPart
-
-中文:
-引理 selfAdjoint.imaginaryPart_coe
-  条件: {x : selfAdjoint A}
-  结论: ℑ (x : A) = 0
-  证明: x.property.imaginaryPart
-
-Depends on / 依赖: imaginaryPart, property, x.property.imaginaryPart
+/-
+**selfAdjoint.imaginaryPart_coe** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：selfAdjoint.imaginaryPart_coe {x : selfAdjoint A} : ℑ (x : A) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSelfAdjoint.imaginaryPart`：∀ {A : Type u_1} [inst : AddCommGroup A] [i
+nst_1 : _root_.Module ℂ A] [inst_2 : StarAddMonoid A]   [inst_3 : StarModule ℂ A
+] {x : A}, IsSelf…
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 lemma selfAdjoint.imaginaryPart_coe {x : selfAdjoint A} : ℑ (x : A) = 0 :=
   x.property.imaginaryPart
-
-/--
-lemma `imaginaryPart_realPart` / 引理 `imaginaryPart_realPart`
-
-English:
-lemma imaginaryPart_realPart
-  given: {x : A}
-  statement: ℑ (ℜ x : A) = 0
-  proof: (ℜ x).property.imaginaryPart
-
-中文:
-引理 imaginaryPart_realPart
-  条件: {x : A}
-  结论: ℑ (ℜ x : A) = 0
-  证明: (ℜ x).property.imaginaryPart
-
-Depends on / 依赖: imaginaryPart, property, property.imaginaryPart
+/-
+**imaginaryPart_realPart** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：imaginaryPart_realPart {x : A} : ℑ (ℜ x : A) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSelfAdjoint.imaginaryPart`：∀ {A : Type u_1} [inst : AddCommGroup A] [i
+nst_1 : _root_.Module ℂ A] [inst_2 : StarAddMonoid A]   [inst_3 : StarModule ℂ A
+] {x : A}, IsSelf…
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 lemma imaginaryPart_realPart {x : A} : ℑ (ℜ x : A) = 0 :=
   (ℜ x).property.imaginaryPart
-
-/--
-lemma `imaginaryPart_imaginaryPart` / 引理 `imaginaryPart_imaginaryPart`
-
-English:
-lemma imaginaryPart_imaginaryPart
-  given: {x : A}
-  statement: ℑ (ℑ x : A) = 0
-  proof: (ℑ x).property.imaginaryPart
-
-中文:
-引理 imaginaryPart_imaginaryPart
-  条件: {x : A}
-  结论: ℑ (ℑ x : A) = 0
-  证明: (ℑ x).property.imaginaryPart
-
-Depends on / 依赖: imaginaryPart, property, property.imaginaryPart
+/-
+**imaginaryPart_imaginaryPart** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：imaginaryPart_imaginaryPart {x : A} : ℑ (ℑ x : A) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSelfAdjoint.imaginaryPart`：∀ {A : Type u_1} [inst : AddCommGroup A] [i
+nst_1 : _root_.Module ℂ A] [inst_2 : StarAddMonoid A]   [inst_3 : StarModule ℂ A
+] {x : A}, IsSelf…
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 lemma imaginaryPart_imaginaryPart {x : A} : ℑ (ℑ x : A) = 0 :=
   (ℑ x).property.imaginaryPart
-
-/--
-lemma `realPart_idem` / 引理 `realPart_idem`
-
-English:
-lemma realPart_idem
-  given: {x : A}
-  statement: ℜ (ℜ x : A) = ℜ x
-  proof: Subtype.ext (ℜ x).property.coe_realPart
-
-中文:
-引理 realPart_idem
-  条件: {x : A}
-  结论: ℜ (ℜ x : A) = ℜ x
-  证明: Subtype.ext (ℜ x).property.coe_realPart
-
-Depends on / 依赖: Subtype, Subtype.ext, coe_realPart, property, property.coe_realPart
+/-
+**realPart_idem** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：realPart_idem {x : A} : ℜ (ℜ x : A) = ℜ x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用引理 `IsSelfAdjoint.coe_realPart`：IsSelfAdjoint.coe_realPart {x : A} (hx : IsS
+elfAdjoint x) : (ℜ x : A) = x
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 lemma realPart_idem {x : A} : ℜ (ℜ x : A) = ℜ x :=
-Subtype.ext (ℜ x).property.coe_realPart
-
-/--
-lemma `realPart_imaginaryPart` / 引理 `realPart_imaginaryPart`
-
-English:
-lemma realPart_imaginaryPart
-  given: {x : A}
-  statement: ℜ (ℑ x : A) = ℑ x
-  proof: Subtype.ext (ℑ x).property.coe_realPart
-
-中文:
-引理 realPart_imaginaryPart
-  条件: {x : A}
-  结论: ℜ (ℑ x : A) = ℑ x
-  证明: Subtype.ext (ℑ x).property.coe_realPart
-
-Depends on / 依赖: Subtype, Subtype.ext, coe_realPart, property, property.coe_realPart
+  Subtype.ext <| (ℜ x).property.coe_realPart
+/-
+**realPart_imaginaryPart** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：realPart_imaginaryPart {x : A} : ℜ (ℑ x : A) = ℑ x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用引理 `IsSelfAdjoint.coe_realPart`：IsSelfAdjoint.coe_realPart {x : A} (hx : IsS
+elfAdjoint x) : (ℜ x : A) = x
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 lemma realPart_imaginaryPart {x : A} : ℜ (ℑ x : A) = ℑ x :=
-Subtype.ext (ℑ x).property.coe_realPart
-
-/--
-lemma `realPart_surjective` / 引理 `realPart_surjective`
-
-English:
-lemma realPart_surjective
-  statement: Function.Surjective (realPart (A := A))
-  proof: fun x => ⟨(x : A), Subtype.ext x.property.coe_realPart⟩
-
-中文:
-引理 realPart_surjective
-  结论: 函数.满射 (realPart (A := A))
-  证明: fun x => ⟨(x : A), Subtype.ext x.property.coe_realPart⟩
+  Subtype.ext <| (ℑ x).property.coe_realPart
+/-
+**realPart_surjective** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：realPart_surjective : Function.Surjective (realPart (A
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用引理 `IsSelfAdjoint.coe_realPart`：IsSelfAdjoint.coe_realPart {x : A} (hx : IsS
+elfAdjoint x) : (ℜ x : A) = x
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 lemma realPart_surjective : Function.Surjective (realPart (A := A)) :=
-  fun x => ⟨(x : A), Subtype.ext x.property.coe_realPart⟩
-
-/--
-lemma `imaginaryPart_surjective` / 引理 `imaginaryPart_surjective`
-
-English:
-lemma imaginaryPart_surjective
-  statement: Function.Surjective (imaginaryPart (A := A))
-  proof: fun x =>
-⟨I • (x : A), Subtype.ext by simp only [imaginaryPart_I_smul, x.property.coe_realPart]⟩
-
-中文:
-引理 imaginaryPart_surjective
-  结论: 函数.满射 (imaginaryPart (A := A))
-  证明: fun x =>
-⟨I • (x : A), Subtype.ext by simp only [imaginaryPart_I_smul, x.property.coe_realPart]⟩
+  fun x ↦ ⟨(x : A), Subtype.ext x.property.coe_realPart⟩
+/-
+**imaginaryPart_surjective** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：imaginaryPart_surjective : Function.Surjective (imaginaryPart (A
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `imaginaryPart_I_smul`：imaginaryPart_I_smul (a : A) : ℑ (I • a) = ℜ a
+· 使用引理 `IsSelfAdjoint.coe_realPart`：IsSelfAdjoint.coe_realPart {x : A} (hx : IsS
+elfAdjoint x) : (ℜ x : A) = x
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma imaginaryPart_surjective : Function.Surjective (imaginaryPart (A := A)) :=
-  fun x =>
-⟨I • (x : A), Subtype.ext by simp only [imaginaryPart_I_smul, x.property.coe_realPart]⟩
-
-/--
-lemma `ComplexStarModule.ext` / 引理 `ComplexStarModule.ext`
-
-English:
-lemma ComplexStarModule.ext
-  given: {x y : A} (h₁ : ℜ x = ℜ y) (h₂ : ℑ x = ℑ y)
-  statement: x = y
-  proof: by
-  rw [← realPart_add_I_smul_imaginaryPart x]; rw [← realPart_add_I_smul_imaginaryPart y]; rw [h₁]; rw [h₂]
-
-中文:
-引理 ComplexStarModule.ext
-  条件: {x y : A} (h₁ : ℜ x = ℜ y) (h₂ : ℑ x = ℑ y)
-  结论: x = y
-  证明: by
-  rw [← realPart_add_I_smul_imaginaryPart x]; rw [← realPart_add_I_smul_imaginaryPart y]; rw [h₁]; rw [h₂]
-
-Depends on / 依赖: realPart_add_I_smul_imaginaryPart
+  fun x ↦
+    ⟨I • (x : A), Subtype.ext <| by simp only [imaginaryPart_I_smul, x.property.coe_realPart]⟩
+/-
+**ComplexStarModule.ext** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：ComplexStarModule.ext {x y : A} (h₁ : ℜ x = ℜ y) (h₂ : ℑ x = ℑ y) : x = y
+参数：h₁ : ℜ x = ℜ y；h₂ : ℑ x = ℑ y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `realPart_add_I_smul_imaginaryPart`：realPart_add_I_smul_imaginaryPart (a 
+: A) : (ℜ a : A) + I • (ℑ a : A) = a
 -/
 lemma ComplexStarModule.ext {x y : A} (h₁ : ℜ x = ℜ y) (h₂ : ℑ x = ℑ y) : x = y := by
-  rw [← realPart_add_I_smul_imaginaryPart x]; rw [← realPart_add_I_smul_imaginaryPart y]; rw [h₁]; rw [h₂]
-
-/--
-lemma `ComplexStarModule.ext_iff` / 引理 `ComplexStarModule.ext_iff`
-
-English:
-lemma ComplexStarModule.ext_iff
-  given: {x y : A}
-  statement: x = y ↔ ℜ x = ℜ y ∧ ℑ x = ℑ y where
-  proof: by grind
-  mpr h := ext h.1 h.2
-
-中文:
-引理 ComplexStarModule.ext_iff
-  条件: {x y : A}
-  结论: x = y ↔ ℜ x = ℜ y ∧ ℑ x = ℑ y where
-  证明: by grind
-  mpr h := ext h.1 h.2
+  rw [← realPart_add_I_smul_imaginaryPart x, ← realPart_add_I_smul_imaginaryPart y, h₁, h₂]
+/-
+**ComplexStarModule.ext_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：ComplexStarModule.ext_iff {x y : A} : x = y ↔ ℜ x = ℜ y ∧ ℑ x = ℑ y where 
+mp
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用引理 `ComplexStarModule.ext`：ComplexStarModule.ext {x y : A} (h₁ : ℜ x = ℜ y) 
+(h₂ : ℑ x = ℑ y) : x = y
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 lemma ComplexStarModule.ext_iff {x y : A} : x = y ↔ ℜ x = ℜ y ∧ ℑ x = ℑ y where
   mp := by grind
@@ -1557,49 +1711,93 @@ lemma ComplexStarModule.ext_iff {x y : A} : x = y ↔ ℜ x = ℜ y ∧ ℑ x = 
 
 section StarHomClass
 
-variable {B F : Type*} [AddCommGroup B] [Module Complex B] [StarAddMonoid B] [StarModule Complex B]
-    [FunLike F A B] [StarHomClass F A B] [LinearMapClass F Complex A B]
+variable {B F : Type*} [AddCommGroup B] [Module ℂ B] [StarAddMonoid B] [StarModule ℂ B]
+    [FunLike F A B] [StarHomClass F A B] [LinearMapClass F ℂ A B]
 
-/--
-lemma `map_realPart` / 引理 `map_realPart`
-
-English:
-lemma map_realPart
-  given: (f : F) (x : A)
-  statement: f (ℜ x) = ℜ (f x)
-  proof: by
-  simp [realPart_apply_coe, ← Complex.coe_smul, map_star]
-
-中文:
-引理 map_realPart
-  条件: (f : F) (x : A)
-  结论: f (ℜ x) = ℜ (f x)
-  证明: by
-  simp [realPart_apply_coe, ← Complex.coe_smul, map_star]
-
-Depends on / 依赖: Complex.coe_smul, coe_smul, map_star, realPart_apply_coe
+/-
+**map_realPart** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：map_realPart (f : F) (x : A) : f (ℜ x) = ℜ (f x)
+参数：f : F；x : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `realPart_apply_coe`：realPart_apply_coe (a : A) : (ℜ a : A) = (2 : Real)⁻
+¹ • (a + star a)
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Complex.ofReal_inv`：ofReal_inv (r : Real) : ((r⁻¹ : Real) : Complex) = (
+r : Complex)⁻¹
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `StarHomClass.map_star`：∀ {F : Type u_1} {R : outParam (Type u_2)} {S : o
+utParam (Type u_3)} {inst : Star R} {inst_1 : Star S}   {inst_2 : FunLike F R S}
+ [self : St…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma map_realPart (f : F) (x : A) : f (ℜ x) = ℜ (f x) := by
   simp [realPart_apply_coe, ← Complex.coe_smul, map_star]
-
-/--
-lemma `map_imaginaryPart` / 引理 `map_imaginaryPart`
-
-English:
-lemma map_imaginaryPart
-  given: (f : F) (x : A)
-  statement: f (ℑ x) = ℑ (f x)
-  proof: by
-  simp [imaginaryPart_apply_coe, ← Complex.coe_smul, map_star]
-
-中文:
-引理 map_imaginaryPart
-  条件: (f : F) (x : A)
-  结论: f (ℑ x) = ℑ (f x)
-  证明: by
-  simp [imaginaryPart_apply_coe, ← Complex.coe_smul, map_star]
-
-Depends on / 依赖: Complex.coe_smul, coe_smul, imaginaryPart_apply_coe, map_star
+/-
+**map_imaginaryPart** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：map_imaginaryPart (f : F) (x : A) : f (ℑ x) = ℑ (f x)
+参数：f : F；x : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `imaginaryPart_apply_coe`：imaginaryPart_apply_coe (a : A) : (ℑ a : A) = -
+I • (2 : Real)⁻¹ • (a - star a)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Complex.ofReal_inv`：ofReal_inv (r : Real) : ((r⁻¹ : Real) : Complex) = (
+r : Complex)⁻¹
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `StarHomClass.map_star`：∀ {F : Type u_1} {R : outParam (Type u_2)} {S : o
+utParam (Type u_3)} {inst : Star R} {inst_1 : Star S}   {inst_2 : FunLike F R S}
+ [self : St…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma map_imaginaryPart (f : F) (x : A) : f (ℑ x) = ℑ (f x) := by
   simp [imaginaryPart_apply_coe, ← Complex.coe_smul, map_star]
@@ -1608,89 +1806,96 @@ end StarHomClass
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `ker_imaginaryPart` / 定理 `ker_imaginaryPart`
-
-English:
-theorem ker_imaginaryPart
-  statement: imaginaryPart.ker = selfAdjoint.submodule Real A
-  proof: by
-  ext x
-  simp [selfAdjoint.submodule, selfAdjoint.mem_iff, imaginaryPart, Subtype.ext_iff]
-  grind
-
-@[simp]
-
-中文:
-定理 ker_imaginaryPart
-  结论: imaginaryPart.ker = selfAdjoint.submodule 实数 A
-  证明: by
-  ext x
-  simp [selfAdjoint.submodule, selfAdjoint.mem_iff, imaginaryPart, Subtype.ext_iff]
-  grind
-
-@[simp]
-
-Depends on / 依赖: Subtype, Subtype.ext_iff, ext_iff, imaginaryPart, mem_iff, selfAdjoint, selfAdjoint.mem_iff, selfAdjoint.submodule, submodule
+/-
+**ker_imaginaryPart** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ker_imaginaryPart : imaginaryPart.ker = selfAdjoint.submodule Real A
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `skewAdjoint.negISMul_apply_coe`：∀ {A : Type u_1} [inst : AddCommGroup A]
+ [inst_1 : _root_.Module ℂ A] [inst_2 : StarAddMonoid A]   [inst_3 : StarModule 
+ℂ A] (a : ↥(skewAdjo…
+· 使用定理 `skewAdjointPart_apply_coe`：∀ (R : Type u_1) {A : Type u_2} [inst : Semir
+ing R] [inst_1 : StarMul R] [inst_2 : TrivialStar R]   [inst_3 : AddCommGroup A]
+ [inst_4 : _roo…
+· 使用定理 `invOf_eq_inv`：invOf_eq_inv (a : α) [Invertible a] : ⅟a = a⁻¹
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-theorem ker_imaginaryPart : imaginaryPart.ker = selfAdjoint.submodule Real A := by
+theorem ker_imaginaryPart : imaginaryPart.ker = selfAdjoint.submodule ℝ A := by
   ext x
   simp [selfAdjoint.submodule, selfAdjoint.mem_iff, imaginaryPart, Subtype.ext_iff]
   grind
 
 @[simp]
-/--
-lemma `imaginaryPart_eq_zero_iff` / 引理 `imaginaryPart_eq_zero_iff`
-
-English:
-lemma imaginaryPart_eq_zero_iff
-  given: {x : A}
-  statement: ℑ x = 0 ↔ IsSelfAdjoint x
-  proof: by
-  simpa [-ker_imaginaryPart] using! SetLike.ext_iff.mp ker_imaginaryPart x
-
-中文:
-引理 imaginaryPart_eq_zero_iff
-  条件: {x : A}
-  结论: ℑ x = 0 ↔ IsSelfAdjoint x
-  证明: by
-  simpa [-ker_imaginaryPart] using! SetLike.ext_iff.mp ker_imaginaryPart x
-
-Depends on / 依赖: SetLike, SetLike.ext_iff.mp, ext_iff, ker_imaginaryPart
+/-
+**imaginaryPart_eq_zero_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：imaginaryPart_eq_zero_iff {x : A} : ℑ x = 0 ↔ IsSelfAdjoint x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `SetLike.ext_iff`：ext_iff : p = q ↔ forall x, x in p ↔ x in q
+· 使用定理 `ker_imaginaryPart`：ker_imaginaryPart : imaginaryPart.ker = selfAdjoint.s
+ubmodule Real A
 -/
 lemma imaginaryPart_eq_zero_iff {x : A} : ℑ x = 0 ↔ IsSelfAdjoint x := by
   simpa [-ker_imaginaryPart] using! SetLike.ext_iff.mp ker_imaginaryPart x
 
 open Submodule
-
-/--
-lemma `span_selfAdjoint` / 引理 `span_selfAdjoint`
-
-English:
-lemma span_selfAdjoint
-  statement: span Complex (selfAdjoint A : Set A) = ⊤
-  proof: by
-  refine eq_top_iff'.mpr fun x => ?_
-  rw [← realPart_add_I_smul_imaginaryPart x]
-exact add_mem (subset_span (ℜ x).property)
-SMulMemClass.smul_mem _ subset_span (ℑ x).property
-
-中文:
-引理 span_selfAdjoint
-  结论: span 复形 (selfAdjoint A : 集合 A) = ⊤
-  证明: by
-  refine eq_top_iff'.mpr fun x => ?_
-  rw [← realPart_add_I_smul_imaginaryPart x]
-exact add_mem (subset_span (ℜ x).property)
-SMulMemClass.smul_mem _ subset_span (ℑ x).property
-
-Depends on / 依赖: SMulMemClass, SMulMemClass.smul_mem, add_mem, eq_top_iff, property, realPart_add_I_smul_imaginaryPart, smul_mem, subset_span
+/-
+**span_selfAdjoint** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：span_selfAdjoint : span Complex (selfAdjoint A : Set A) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Submodule.eq_top_iff'`：eq_top_iff' {p : Submodule R M} : p = ⊤ ↔ forall 
+x, x in p
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `realPart_add_I_smul_imaginaryPart`：realPart_add_I_smul_imaginaryPart (a 
+: A) : (ℜ a : A) + I • (ℑ a : A) = a
+· 使用定理 `AddMemClass.add_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Add M} {inst_1 : SetLike S M} [self : AddMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `AddSubmonoidClass.toAddMemClass`：∀ {S : Type u_3} {M : outParam (Type u_
+4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass S
+ M], AddMemClass S M
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `SMulMemClass.smul_mem`：∀ {S : Type u_1} {R : outParam (Type u_2)} {M : T
+ype u_3} {inst : SMul R M} {inst_1 : SetLike S M}   [self : SMulMemClass S R M] 
+{s : S} (r …
 -/
-lemma span_selfAdjoint : span Complex (selfAdjoint A : Set A) = ⊤ := by
-  refine eq_top_iff'.mpr fun x => ?_
+lemma span_selfAdjoint : span ℂ (selfAdjoint A : Set A) = ⊤ := by
+  refine eq_top_iff'.mpr fun x ↦ ?_
   rw [← realPart_add_I_smul_imaginaryPart x]
-exact add_mem (subset_span (ℜ x).property)
-SMulMemClass.smul_mem _ subset_span (ℑ x).property
+  exact add_mem (subset_span (ℜ x).property) <|
+    SMulMemClass.smul_mem _ <| subset_span (ℑ x).property
 
 end AddCommGroup
 
@@ -1698,173 +1903,216 @@ open scoped ComplexStarModule
 
 /-- The natural `ℝ`-linear equivalence between `selfAdjoint ℂ` and `ℝ`. -/
 @[simps apply symm_apply]
-/--
-Definition of `Complex.selfAdjointEquiv` / `Complex.selfAdjointEquiv` 的定义
+/-
+**Complex.selfAdjointEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Complex.selfAdjointEquiv : selfAdjoint Complex ≃ₗ[Real] Real where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `Complex.instStarModuleReal`：StarModule ℝ ℂ
+· 使用定理 `Complex.conj_ofReal`：conj_ofReal (r : Real) : conj (r : Complex) = r
 
-English:
-definition Complex.selfAdjointEquiv
-  signature: : selfAdjoint Complex ≃ₗ[Real] Real where
-  body: fun z => (z : Complex).re
-  invFun := fun x => ⟨x, conj_ofReal x⟩
-left_inv := fun z => Subtype.ext conj_eq_iff_re.mp z.property.star_eq
-  map_add' := by simp
-  map_smul' := by simp
-
-中文:
-定义 复形.selfAdjointEquiv
-  签名: : selfAdjoint 复形 ≃ₗ[实数] 实数 where
-  定义体: fun z => (z : Complex).re
-  invFun := fun x => ⟨x, conj_ofReal x⟩
-left_inv := fun z => Subtype.ext conj_eq_iff_re.mp z.property.star_eq
-  map_add' := by simp
-  map_smul' := by simp
+--- 原说明 ---
+The natural `ℝ`-linear equivalence between `selfAdjoint ℂ` and `ℝ`.
 -/
-def Complex.selfAdjointEquiv : selfAdjoint Complex ≃ₗ[Real] Real where
-  toFun := fun z => (z : Complex).re
-  invFun := fun x => ⟨x, conj_ofReal x⟩
-left_inv := fun z => Subtype.ext conj_eq_iff_re.mp z.property.star_eq
+def Complex.selfAdjointEquiv : selfAdjoint ℂ ≃ₗ[ℝ] ℝ where
+  toFun := fun z ↦ (z : ℂ).re
+  invFun := fun x ↦ ⟨x, conj_ofReal x⟩
+  left_inv := fun z ↦ Subtype.ext <| conj_eq_iff_re.mp z.property.star_eq
   map_add' := by simp
   map_smul' := by simp
-
-/--
-lemma `Complex.coe_selfAdjointEquiv` / 引理 `Complex.coe_selfAdjointEquiv`
-
-English:
-lemma Complex.coe_selfAdjointEquiv
-  given: (z : selfAdjoint Complex)
-  proof: by
+/-
+**Complex.coe_selfAdjointEquiv** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Complex.coe_selfAdjointEquiv (z : selfAdjoint Complex) : (selfAdjointEquiv
+ z : Complex) = z
+参数：z : selfAdjoint Complex。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `Complex.instStarModuleReal`：StarModule ℝ ℂ
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Complex.selfAdjointEquiv_apply`：∀ (z : ↥(selfAdjoint ℂ)), Complex.selfAd
+jointEquiv z = (↑z).re
+· 使用定理 `Complex.conj_ofReal`：conj_ofReal (r : Real) : conj (r : Complex) = r
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Complex.selfAdjointEquiv_symm_apply`：∀ (x : ℝ), Complex.selfAdjointEquiv
+.symm x = ⟨↑x, ⋯⟩
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `LinearEquiv.left_inv`：∀ {R : Type u_14} {S : Type u_15} [inst : Semiring
+ R] [inst_1 : Semiring S] {σ : R →+* S} {σ' : S →+* R}   [inst_2 : RingHomInvPai
+r σ σ'] [i…
+-/
+lemma Complex.coe_selfAdjointEquiv (z : selfAdjoint ℂ) :
+    (selfAdjointEquiv z : ℂ) = z := by
   simpa [selfAdjointEquiv_symm_apply]
     using (congr_arg Subtype.val <| Complex.selfAdjointEquiv.left_inv z)
 
 @[simp]
-
-中文:
-引理 复形.coe_selfAdjointEquiv
-  条件: (z : selfAdjoint 复形)
-  证明: by
-  simpa [selfAdjointEquiv_symm_apply]
-    using (congr_arg Subtype.val <| Complex.selfAdjointEquiv.left_inv z)
-
-@[simp]
-
-Depends on / 依赖: Complex.selfAdjointEquiv.left_inv, Subtype, Subtype.val, congr_arg, left_inv, selfAdjointEquiv, selfAdjointEquiv_symm_apply
+/-
+**realPart_ofReal** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：realPart_ofReal (r : Real) : (ℜ (r : Complex) : Complex) = r
+参数：r : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `realPart_apply_coe`：realPart_apply_coe (a : A) : (ℜ a : A) = (2 : Real)⁻
+¹ • (a + star a)
+· 使用定理 `Complex.star_def`：star_def : (Star.star : Complex -> Complex) = conj
+· 使用定理 `Complex.conj_ofReal`：conj_ofReal (r : Real) : conj (r : Complex) = r
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `two_smul`：two_smul : (2 : R) • x = x + x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Complex.ofReal_inv`：ofReal_inv (r : Real) : ((r⁻¹ : Real) : Complex) = (
+r : Complex)⁻¹
+· 使用定理 `inv_mul_cancel_left₀`：inv_mul_cancel_left₀ (h : a != 0) (b : G₀) : a⁻¹ *
+ (a * b) = b
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Complex.coe_selfAdjointEquiv (z : selfAdjoint Complex) :
-    (selfAdjointEquiv z : Complex) = z := by
-  simpa [selfAdjointEquiv_symm_apply]
-    using (congr_arg Subtype.val <| Complex.selfAdjointEquiv.left_inv z)
-
-@[simp]
-/--
-lemma `realPart_ofReal` / 引理 `realPart_ofReal`
-
-English:
-lemma realPart_ofReal
-  given: (r : Real)
-  statement: (ℜ (r : Complex) : Complex) = r
-  proof: by
-  rw [realPart_apply_coe]; rw [star_def]; rw [conj_ofReal]; rw [← two_smul Real (r : Complex)]
+lemma realPart_ofReal (r : ℝ) : (ℜ (r : ℂ) : ℂ) = r := by
+  rw [realPart_apply_coe, star_def, conj_ofReal, ← two_smul ℝ (r : ℂ)]
   simp
 
 @[simp]
-
-中文:
-引理 realPart_of实数
-  条件: (r : 实数)
-  结论: (ℜ (r : 复形) : 复形) = r
-  证明: by
-  rw [realPart_apply_coe]; rw [star_def]; rw [conj_ofReal]; rw [← two_smul Real (r : Complex)]
-  simp
-
-@[simp]
-
-Depends on / 依赖: conj_ofReal, realPart_apply_coe, star_def, two_smul
+/-
+**imaginaryPart_ofReal** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：imaginaryPart_ofReal (r : Real) : ℑ (r : Complex) = 0
+参数：r : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `imaginaryPart_apply_coe`：imaginaryPart_apply_coe (a : A) : (ℑ a : A) = -
+I • (2 : Real)⁻¹ • (a - star a)
+· 使用定理 `Complex.conj_ofReal`：conj_ofReal (r : Real) : conj (r : Complex) = r
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma realPart_ofReal (r : Real) : (ℜ (r : Complex) : Complex) = r := by
-  rw [realPart_apply_coe]; rw [star_def]; rw [conj_ofReal]; rw [← two_smul Real (r : Complex)]
-  simp
-
-@[simp]
-/--
-lemma `imaginaryPart_ofReal` / 引理 `imaginaryPart_ofReal`
-
-English:
-lemma imaginaryPart_ofReal
-  given: (r : Real)
-  statement: ℑ (r : Complex) = 0
-  proof: by
+lemma imaginaryPart_ofReal (r : ℝ) : ℑ (r : ℂ) = 0 := by
   ext1; simp [imaginaryPart_apply_coe, conj_ofReal]
-
-中文:
-引理 imaginaryPart_of实数
-  条件: (r : 实数)
-  结论: ℑ (r : 复形) = 0
-  证明: by
-  ext1; simp [imaginaryPart_apply_coe, conj_ofReal]
-
-Depends on / 依赖: IsBoundedSMul, IsBoundedSMul.of_norm_smul_le, conj_ofReal, imaginaryPart_apply_coe, norm_smul_le, of_norm_smul_le
+/-
+**Complex.coe_realPart** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Complex.coe_realPart (z : Complex) : (ℜ z : Complex) = z.re
+参数：z : Complex。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Complex.re_add_im`：re_add_im (z : Complex) : (z.re : Complex) + z.im * I
+ = z
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `realPart_I_smul`：realPart_I_smul (a : A) : ℜ (I • a) = -ℑ a
+· 使用引理 `imaginaryPart_ofReal`：imaginaryPart_ofReal (r : Real) : ℑ (r : Complex) 
+= 0
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用引理 `realPart_ofReal`：realPart_ofReal (r : Real) : (ℜ (r : Complex) : Complex
+) = r
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma imaginaryPart_ofReal (r : Real) : ℑ (r : Complex) = 0 := by
-  ext1; simp [imaginaryPart_apply_coe, conj_ofReal]
-
-/--
-lemma `Complex.coe_realPart` / 引理 `Complex.coe_realPart`
-
-English:
-lemma Complex.coe_realPart
-  given: (z : Complex)
-  statement: (ℜ z : Complex) = z.re
-  proof: by
-  conv_lhs => rw [← re_add_im z]
-  simp [-re_add_im, realPart_I_smul, mul_comm _ I, ← smul_eq_mul]
-
-中文:
-引理 复形.coe_realPart
-  条件: (z : 复形)
-  结论: (ℜ z : 复形) = z.re
-  证明: by
-  conv_lhs => rw [← re_add_im z]
-  simp [-re_add_im, realPart_I_smul, mul_comm _ I, ← smul_eq_mul]
-
-Depends on / 依赖: conv_lhs, mul_comm, re_add_im, realPart_I_smul, smul_eq_mul
--/
-lemma Complex.coe_realPart (z : Complex) : (ℜ z : Complex) = z.re := by
+lemma Complex.coe_realPart (z : ℂ) : (ℜ z : ℂ) = z.re := by
   conv_lhs => rw [← re_add_im z]
   simp [-re_add_im, realPart_I_smul, mul_comm _ I, ← smul_eq_mul]
 
 section NonUnitalNonAssocRing
 
-variable [NonUnitalNonAssocRing A] [StarRing A] [Module Complex A] [IsScalarTower Complex A A]
-  [SMulCommClass Complex A A] [StarModule Complex A]
+variable [NonUnitalNonAssocRing A] [StarRing A] [Module ℂ A] [IsScalarTower ℂ A A]
+  [SMulCommClass ℂ A A] [StarModule ℂ A]
 
-/--
-lemma `star_mul_self_add_self_mul_star` / 引理 `star_mul_self_add_self_mul_star`
-
-English:
-lemma star_mul_self_add_self_mul_star
-  given: (a : A)
-  proof: have a_eq := (realPart_add_I_smul_imaginaryPart a).symm
-  calc
-    star a * a + a * star a = _ :=
-      congr((star $(a_eq)) * $(a_eq) + $(a_eq) * (star $(a_eq)))
-    _ = 2 • (ℜ a * ℜ a + ℑ a * ℑ a) := by
-      simp [mul_add, add_mul, smul_smul, mul_smul_comm,
-        smul_mul_assoc]
-      abel
-
-中文:
-引理 star_mul_self_add_self_mul_star
-  条件: (a : A)
-  证明: have a_eq := (realPart_add_I_smul_imaginaryPart a).symm
-  calc
-    star a * a + a * star a = _ :=
-      congr((star $(a_eq)) * $(a_eq) + $(a_eq) * (star $(a_eq)))
-    _ = 2 • (ℜ a * ℜ a + ℑ a * ℑ a) := by
-      simp [mul_add, add_mul, smul_smul, mul_smul_comm,
-        smul_mul_assoc]
-      abel
-
-Depends on / 依赖: a_eq, add_mul, mul_add, mul_smul_comm, realPart_add_I_smul_imaginaryPart, smul_mul_assoc, smul_smul
+/-
+**star_mul_self_add_self_mul_star** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：star_mul_self_add_self_mul_star (a : A) : star a * a + a * star a = 2 • (ℜ
+ a * ℜ a + ℑ a * ℑ a)
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `realPart_add_I_smul_imaginaryPart`：realPart_add_I_smul_imaginaryPart (a 
+: A) : (ℜ a : A) + I • (ℑ a : A) = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `StarAddMonoid.star_add`：∀ {R : Type u} {inst : AddMonoid R} [self : Star
+AddMonoid R] (r s : R), star (r + s) = star r + star s
+· 使用定理 `selfAdjoint.star_val_eq`：star_val_eq {x : selfAdjoint R} : star (x : R) 
+= x
+· 使用定理 `StarModule.star_smul`：∀ {R : Type u} {A : Type v} {inst : Star R} {inst_
+1 : Star A} {inst_2 : SMul R A} [self : StarModule R A] (r : R)   (a : A), star 
+(r • a) = …
+· 使用定理 `Complex.conj_I`：conj_I : conj I = -I
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用引理 `smul_mul_assoc`：smul_mul_assoc [Mul β] [SMul α β] [IsScalarTower α β β] 
+(r : α) (x y : β) : r • x * y = r • (x * y)
+· 使用引理 `mul_smul_comm`：mul_smul_comm [Mul β] [SMul α β] [SMulCommClass α β β] (s
+ : α) (x y : β) : x * s • y = s • (x * y)
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用定理 `smul_neg`：smul_neg (r : M) (x : A) : r • -x = -(r • x)
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `Complex.I_mul_I`：I_mul_I : I * I = -1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `neg_add_rev`：∀ {G : Type u_1} [inst : SubtractionMonoid G] (a b : G), -(
+a + b) = -b + -a
+· 使用定理 `_private.Mathlib.LinearAlgebra.Complex.Module.0.star_mul_self_add_self_m
+ul_star._abel_1_2`：∀ {A : Type u_1} [inst : NonUnitalNonAssocRing A] [inst_1 : S
+tarRing A] [inst_2 : _root_.Module ℂ A]   [inst_3 : StarModule ℂ A] (a : A),   …
 -/
 lemma star_mul_self_add_self_mul_star (a : A) :
     star a * a + a * star a = 2 • (ℜ a * ℜ a + ℑ a * ℑ a) :=
@@ -1876,33 +2124,64 @@ lemma star_mul_self_add_self_mul_star (a : A) :
       simp [mul_add, add_mul, smul_smul, mul_smul_comm,
         smul_mul_assoc]
       abel
-
-/--
-lemma `star_mul_self_sub_self_mul_star` / 引理 `star_mul_self_sub_self_mul_star`
-
-English:
-lemma star_mul_self_sub_self_mul_star
-  given: (a : A)
-  proof: have a_eq := (realPart_add_I_smul_imaginaryPart a).symm
-  calc
-    star a * a - a * star a = _ :=
-      congr((star $(a_eq)) * $(a_eq) - $(a_eq) * (star $(a_eq)))
-    _ = 2 • I • (ℜ a * ℑ a - ℑ a * ℜ a) := by
-      simp [mul_add, add_mul, mul_smul_comm, smul_mul_assoc, smul_smul]
-      module
-
-中文:
-引理 star_mul_self_sub_self_mul_star
-  条件: (a : A)
-  证明: have a_eq := (realPart_add_I_smul_imaginaryPart a).symm
-  calc
-    star a * a - a * star a = _ :=
-      congr((star $(a_eq)) * $(a_eq) - $(a_eq) * (star $(a_eq)))
-    _ = 2 • I • (ℜ a * ℑ a - ℑ a * ℜ a) := by
-      simp [mul_add, add_mul, mul_smul_comm, smul_mul_assoc, smul_smul]
-      module
-
-Depends on / 依赖: a_eq, add_mul, module, mul_add, mul_smul_comm, realPart_add_I_smul_imaginaryPart, smul_mul_assoc, smul_smul
+/-
+**star_mul_self_sub_self_mul_star** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：star_mul_self_sub_self_mul_star (a : A) : star a * a - a * star a = 2 • I 
+• (ℜ a * ℑ a - ℑ a * ℜ a)
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `realPart_add_I_smul_imaginaryPart`：realPart_add_I_smul_imaginaryPart (a 
+: A) : (ℜ a : A) + I • (ℑ a : A) = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `StarAddMonoid.star_add`：∀ {R : Type u} {inst : AddMonoid R} [self : Star
+AddMonoid R] (r s : R), star (r + s) = star r + star s
+· 使用定理 `selfAdjoint.star_val_eq`：star_val_eq {x : selfAdjoint R} : star (x : R) 
+= x
+· 使用定理 `StarModule.star_smul`：∀ {R : Type u} {A : Type v} {inst : Star R} {inst_
+1 : Star A} {inst_2 : SMul R A} [self : StarModule R A] (r : R)   (a : A), star 
+(r • a) = …
+· 使用定理 `Complex.conj_I`：conj_I : conj I = -I
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用引理 `smul_mul_assoc`：smul_mul_assoc [Mul β] [SMul α β] [IsScalarTower α β β] 
+(r : α) (x y : β) : r • x * y = r • (x * y)
+· 使用引理 `mul_smul_comm`：mul_smul_comm [Mul β] [SMul α β] [SMulCommClass α β β] (s
+ : α) (x y : β) : x * s • y = s • (x * y)
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用定理 `smul_neg`：smul_neg (r : M) (x : A) : r • -x = -(r • x)
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `Complex.I_mul_I`：I_mul_I : I * I = -1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `neg_add_rev`：∀ {G : Type u_1} [inst : SubtractionMonoid G] (a b : G), -(
+a + b) = -b + -a
+· 使用定理 `Mathlib.Tactic.Module.NF.eq_of_eval_eq_eval`：eq_of_eval_eq_eval {R₁ R₂ :
+ Type*} [AddCommMonoid M] [Semiring R] [Module R M] [Semiring R₁] [Module R₁ M] 
+[Semiring R₂] [Module R₂ M] {l₁ l…
+· 使用定理 `Mathlib.Tactic.Module.NF.sub_eq_eval`：sub_eq_eval {R₁ R₂ S₁ S₂ : Type*} 
+[AddCommGroup M] [Ring R] [Module R M] [Semiring R₁] [Module R₁ M] [Semiring R₂]
+ [Module R₂ M] [Semiring S…
+（共 89 条，此处仅展示前 30 条）
 -/
 lemma star_mul_self_sub_self_mul_star (a : A) :
     star a * a - a * star a = 2 • I • (ℜ a * ℑ a - ℑ a * ℜ a) :=
@@ -1914,68 +2193,126 @@ lemma star_mul_self_sub_self_mul_star (a : A) :
       simp [mul_add, add_mul, mul_smul_comm, smul_mul_assoc, smul_smul]
       module
 
-/--
-lemma `isStarNormal_iff_commute_realPart_imaginaryPart` / 引理 `isStarNormal_iff_commute_realPart_imaginaryPart`
+/-- An element in a non-unital star `ℂ`-algebra is normal if and only if its real and imaginary
+parts commute. -/
+/-
+**isStarNormal_iff_commute_realPart_imaginaryPart** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isStarNormal_iff_commute_realPart_imaginaryPart {x : A} : IsStarNormal x ↔
+ Commute (ℜ x : A) (ℑ x : A)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isStarNormal_iff`：∀ {R : Type u_1} [inst : Mul R] [inst_1 : Star R] (x :
+ R), IsStarNormal x ↔ Commute (star x) x
+· 使用定理 `commute_iff_eq`：commute_iff_eq [Mul S] (a b : S) : Commute a b ↔ a * b =
+ b * a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用引理 `star_mul_self_sub_self_mul_star`：star_mul_self_sub_self_mul_star (a : A)
+ : star a * a - a * star a = 2 • I • (ℜ a * ℑ a - ℑ a * ℜ a)
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `two_smul`：two_smul : (2 : R) • x = x + x
+· 使用引理 `smul_eq_zero_iff_right`：smul_eq_zero_iff_right (hr : r != 0) : r • m = 0
+ ↔ m = 0
+· 使用定理 `DivisionSemiring.to_moduleIsTorsionFree`：∀ {𝕜 : Type u_1} {M : Type u_2}
+ [inst : DivisionSemiring 𝕜] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module 
+𝕜 M],   Module.IsTorsionFree …
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用引理 `two_ne_zero`：two_ne_zero [OfNat α 2] [NeZero (2 : α)] : (2 : α) != 0
+· 使用定理 `Complex.I_ne_zero`：Complex.I ≠ 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-lemma isStarNormal_iff_commute_realPart_imaginaryPart
-  given: {x : A}
-  proof: by
-  rw [isStarNormal_iff]; rw [commute_iff_eq]; rw [← sub_eq_zero]; rw [star_mul_self_sub_self_mul_star]; rw [two_smul Nat]; rw [← two_smul Complex]; rw [smul_eq_zero_iff_right two_ne_zero]; rw [smul_eq_zero_iff_right I_ne_zero]; rw [sub_eq_zero]; rw [commute_iff_eq]
-
-中文:
-引理 isStarNormal_iff_commute_realPart_imaginaryPart
-  条件: {x : A}
-  证明: by
-  rw [isStarNormal_iff]; rw [commute_iff_eq]; rw [← sub_eq_zero]; rw [star_mul_self_sub_self_mul_star]; rw [two_smul Nat]; rw [← two_smul Complex]; rw [smul_eq_zero_iff_right two_ne_zero]; rw [smul_eq_zero_iff_right I_ne_zero]; rw [sub_eq_zero]; rw [commute_iff_eq]
-
-Depends on / 依赖: I_ne_zero, commute_iff_eq, isStarNormal_iff, smul_eq_zero_iff_right, star_mul_self_sub_self_mul_star, sub_eq_zero, two_ne_zero, two_smul
+--- 原说明 ---
+An element in a non-unital star `ℂ`-algebra is normal if and only if its real an
+d imaginary
+parts commute.
 -/
 lemma isStarNormal_iff_commute_realPart_imaginaryPart {x : A} :
     IsStarNormal x ↔ Commute (ℜ x : A) (ℑ x : A) := by
-  rw [isStarNormal_iff]; rw [commute_iff_eq]; rw [← sub_eq_zero]; rw [star_mul_self_sub_self_mul_star]; rw [two_smul Nat]; rw [← two_smul Complex]; rw [smul_eq_zero_iff_right two_ne_zero]; rw [smul_eq_zero_iff_right I_ne_zero]; rw [sub_eq_zero]; rw [commute_iff_eq]
-
-/--
-lemma `Commute.realPart_imaginaryPart` / 引理 `Commute.realPart_imaginaryPart`
-
-English:
-lemma Commute.realPart_imaginaryPart
-  given: (x : A) [IsStarNormal x]
-  proof: isStarNormal_iff_commute_realPart_imaginaryPart.mp inferInstance
-
-中文:
-引理 Commute.realPart_imaginaryPart
-  条件: (x : A) [是StarNormal x]
-  证明: isStarNormal_iff_commute_realPart_imaginaryPart.mp inferInstance
-
-Depends on / 依赖: isStarNormal_iff_commute_realPart_imaginaryPart, isStarNormal_iff_commute_realPart_imaginaryPart.mp
+  rw [isStarNormal_iff, commute_iff_eq, ← sub_eq_zero, star_mul_self_sub_self_mul_star,
+    two_smul ℕ, ← two_smul ℂ, smul_eq_zero_iff_right two_ne_zero, smul_eq_zero_iff_right I_ne_zero,
+    sub_eq_zero, commute_iff_eq]
+/-
+**Commute.realPart_imaginaryPart** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Commute.realPart_imaginaryPart (x : A) [IsStarNormal x] : Commute (ℜ x : A
+) (ℑ x : A)
+参数：x : A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用引理 `isStarNormal_iff_commute_realPart_imaginaryPart`：isStarNormal_iff_commut
+e_realPart_imaginaryPart {x : A} : IsStarNormal x ↔ Commute (ℜ x : A) (ℑ x : A)
 -/
 lemma Commute.realPart_imaginaryPart (x : A) [IsStarNormal x] :
     Commute (ℜ x : A) (ℑ x : A) :=
   isStarNormal_iff_commute_realPart_imaginaryPart.mp inferInstance
-
-/--
-lemma `star_mul_self_eq_realPart_sq_add_imaginaryPart_sq` / 引理 `star_mul_self_eq_realPart_sq_add_imaginaryPart_sq`
-
-English:
-lemma star_mul_self_eq_realPart_sq_add_imaginaryPart_sq
-  given: (x : A) [hx : IsStarNormal x]
-  proof: calc
-  star x * x = ℜ x * ℜ x + ℑ x * ℑ x + Complex.I • (ℜ x * ℑ x - ℑ x * ℜ x) := by
-    conv_lhs => rw [← realPart_add_I_smul_imaginaryPart x]
-    simp [add_mul, mul_add, smul_mul_assoc, mul_smul_comm, smul_smul, smul_sub]
-    grind
-  _ = _ := by simp [Commute.realPart_imaginaryPart x |>.eq]
-
-中文:
-引理 star_mul_self_eq_realPart_sq_add_imaginaryPart_sq
-  条件: (x : A) [hx : 是StarNormal x]
-  证明: calc
-  star x * x = ℜ x * ℜ x + ℑ x * ℑ x + Complex.I • (ℜ x * ℑ x - ℑ x * ℜ x) := by
-    conv_lhs => rw [← realPart_add_I_smul_imaginaryPart x]
-    simp [add_mul, mul_add, smul_mul_assoc, mul_smul_comm, smul_smul, smul_sub]
-    grind
-  _ = _ := by simp [Commute.realPart_imaginaryPart x |>.eq]
+/-
+**star_mul_self_eq_realPart_sq_add_imaginaryPart_sq** 是 Mathlib 中的一个引理，位于命名空间 ``
+。
+形式化陈述：star_mul_self_eq_realPart_sq_add_imaginaryPart_sq (x : A) [hx : IsStarNorm
+al x] : star x * x = ℜ x * ℜ x + ℑ x * ℑ x
+参数：x : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `realPart_add_I_smul_imaginaryPart`：realPart_add_I_smul_imaginaryPart (a 
+: A) : (ℜ a : A) + I • (ℑ a : A) = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `StarAddMonoid.star_add`：∀ {R : Type u} {inst : AddMonoid R} [self : Star
+AddMonoid R] (r s : R), star (r + s) = star r + star s
+· 使用定理 `selfAdjoint.star_val_eq`：star_val_eq {x : selfAdjoint R} : star (x : R) 
+= x
+· 使用定理 `StarModule.star_smul`：∀ {R : Type u} {A : Type v} {inst : Star R} {inst_
+1 : Star A} {inst_2 : SMul R A} [self : StarModule R A] (r : R)   (a : A), star 
+(r • a) = …
+· 使用定理 `Complex.conj_I`：conj_I : conj I = -I
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用引理 `smul_mul_assoc`：smul_mul_assoc [Mul β] [SMul α β] [IsScalarTower α β β] 
+(r : α) (x y : β) : r • x * y = r • (x * y)
+· 使用引理 `mul_smul_comm`：mul_smul_comm [Mul β] [SMul α β] [SMulCommClass α β β] (s
+ : α) (x y : β) : x * s • y = s • (x * y)
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用定理 `smul_neg`：smul_neg (r : M) (x : A) : r • -x = -(r • x)
+· 使用引理 `smul_smul`：smul_smul (a₁ a₂ : M) (b : α) : a₁ • a₂ • b = (a₁ * a₂) • b
+· 使用定理 `Complex.I_mul_I`：I_mul_I : I * I = -1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `smul_sub`：smul_sub (r : M) (x y : A) : r • (x - y) = r • x - r • y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Commute.eq`：∀ {S : Type u_3} [inst : Mul S] {a b : S}, Commute a b → a *
+ b = b * a
+· 使用引理 `Commute.realPart_imaginaryPart`：Commute.realPart_imaginaryPart (x : A) [
+IsStarNormal x] : Commute (ℜ x : A) (ℑ x : A)
+（共 34 条，此处仅展示前 30 条）
 -/
 lemma star_mul_self_eq_realPart_sq_add_imaginaryPart_sq (x : A) [hx : IsStarNormal x] :
     star x * x = ℜ x * ℜ x + ℑ x * ℑ x := calc
@@ -1990,224 +2327,300 @@ end NonUnitalNonAssocRing
 section StarOrderedRing
 
 variable [NonUnitalRing A] [StarRing A] [PartialOrder A]
-    [StarOrderedRing A] [Module Complex A] [StarModule Complex A]
+    [StarOrderedRing A] [Module ℂ A] [StarModule ℂ A]
 
-/--
-lemma `nonneg_iff_realPart_imaginaryPart` / 引理 `nonneg_iff_realPart_imaginaryPart`
-
-English:
-lemma nonneg_iff_realPart_imaginaryPart
-  given: {a : A}
-  proof: by
-  refine ⟨fun h => ⟨?_, h.isSelfAdjoint.imaginaryPart⟩, fun h => ?_⟩
-  · simpa +singlePass [← h.isSelfAdjoint.coe_realPart] using! h
-  · rw [← realPart_add_I_smul_imaginaryPart a, h.2]
-    simpa using! h.1
-
-中文:
-引理 nonneg_iff_realPart_imaginaryPart
-  条件: {a : A}
-  证明: by
-  refine ⟨fun h => ⟨?_, h.isSelfAdjoint.imaginaryPart⟩, fun h => ?_⟩
-  · simpa +singlePass [← h.isSelfAdjoint.coe_realPart] using! h
-  · rw [← realPart_add_I_smul_imaginaryPart a, h.2]
-    simpa using! h.1
-
-Depends on / 依赖: coe_realPart, h.isSelfAdjoint.coe_realPart, h.isSelfAdjoint.imaginaryPart, imaginaryPart, isSelfAdjoint, realPart_add_I_smul_imaginaryPart, singlePass
+/-
+**nonneg_iff_realPart_imaginaryPart** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：nonneg_iff_realPart_imaginaryPart {a : A} : 0 <= a ↔ 0 <= ℜ a ∧ ℑ a = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `IsSelfAdjoint.coe_realPart`：IsSelfAdjoint.coe_realPart {x : A} (hx : IsS
+elfAdjoint x) : (ℜ x : A) = x
+· 使用定理 `LE.le.isSelfAdjoint`：∀ {R : Type u_1} [inst : NonUnitalSemiring R] [inst
+_1 : PartialOrder R] [inst_2 : StarRing R] [StarOrderedRing R]   {x : R}, 0 ≤ x 
+→ IsSelfA…
+· 使用引理 `selfAdjoint.realPart_coe`：selfAdjoint.realPart_coe {x : selfAdjoint A} :
+ ℜ (x : A) = x
+· 使用定理 `IsSelfAdjoint.imaginaryPart`：∀ {A : Type u_1} [inst : AddCommGroup A] [i
+nst_1 : _root_.Module ℂ A] [inst_2 : StarAddMonoid A]   [inst_3 : StarModule ℂ A
+] {x : A}, IsSelf…
+· 使用定理 `realPart_add_I_smul_imaginaryPart`：realPart_add_I_smul_imaginaryPart (a 
+: A) : (ℜ a : A) + I • (ℑ a : A) = a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 lemma nonneg_iff_realPart_imaginaryPart {a : A} :
-    0 <= a ↔ 0 <= ℜ a ∧ ℑ a = 0 := by
-  refine ⟨fun h => ⟨?_, h.isSelfAdjoint.imaginaryPart⟩, fun h => ?_⟩
+    0 ≤ a ↔ 0 ≤ ℜ a ∧ ℑ a = 0 := by
+  refine ⟨fun h ↦ ⟨?_, h.isSelfAdjoint.imaginaryPart⟩, fun h ↦ ?_⟩
   · simpa +singlePass [← h.isSelfAdjoint.coe_realPart] using! h
   · rw [← realPart_add_I_smul_imaginaryPart a, h.2]
     simpa using! h.1
-
-/--
-lemma `nonpos_iff_realPart_imaginaryPart` / 引理 `nonpos_iff_realPart_imaginaryPart`
-
-English:
-lemma nonpos_iff_realPart_imaginaryPart
-  given: {a : A}
-  proof: by
-  simpa using nonneg_iff_realPart_imaginaryPart (a := -a)
-
-中文:
-引理 nonpos_iff_realPart_imaginaryPart
-  条件: {a : A}
-  证明: by
-  simpa using nonneg_iff_realPart_imaginaryPart (a := -a)
-
-Depends on / 依赖: nonneg_iff_realPart_imaginaryPart
+/-
+**nonpos_iff_realPart_imaginaryPart** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：nonpos_iff_realPart_imaginaryPart {a : A} : a <= 0 ↔ ℜ a <= 0 ∧ ℑ a = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedCancelAddMonoid.toIsOrderedAddMonoid`：∀ {α : Type u_2} {inst : 
+AddCommMonoid α} {inst_1 : Preorder α} [self : IsOrderedCancelAddMonoid α],   Is
+OrderedAddMonoid α
+· 使用定理 `IsOrderedAddMonoid.toIsOrderedCancelAddMonoid`：∀ {α : Type u} [inst : Ad
+dCommGroup α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], IsOrderedCancelAddMo
+noid α
+· 使用定理 `StarOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} [inst : NonUnital
+Semiring R] [inst_1 : PartialOrder R] [inst_2 : StarRing R] [StarOrderedRing R],
+   IsOrderedAddMonoid R
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `AddSubmonoidClass.toIsOrderedCancelAddMonoid`：∀ {M : Type u_1} {S : Type
+ u_2} [inst : SetLike S M] [inst_1 : AddCommMonoid M] [inst_2 : Preorder M]   [I
+sOrderedCancelAddMonoid M] [inst_4…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `nonneg_iff_realPart_imaginaryPart`：nonneg_iff_realPart_imaginaryPart {a 
+: A} : 0 <= a ↔ 0 <= ℜ a ∧ ℑ a = 0
 -/
 lemma nonpos_iff_realPart_imaginaryPart {a : A} :
-    a <= 0 ↔ ℜ a <= 0 ∧ ℑ a = 0 := by
+    a ≤ 0 ↔ ℜ a ≤ 0 ∧ ℑ a = 0 := by
   simpa using nonneg_iff_realPart_imaginaryPart (a := -a)
-
-/--
-lemma `realPart_nonneg_of_nonneg` / 引理 `realPart_nonneg_of_nonneg`
-
-English:
-lemma realPart_nonneg_of_nonneg
-  given: {a : A} (ha : 0 <= a)
-  statement: 0 <= ℜ a
-  proof: .1 nonneg_iff_realPart_imaginaryPart.mp ha
-
-中文:
-引理 realPart_nonneg_of_nonneg
-  条件: {a : A} (ha : 0 <= a)
-  结论: 0 <= ℜ a
-  证明: .1 nonneg_iff_realPart_imaginaryPart.mp ha
-
-Depends on / 依赖: nonneg_iff_realPart_imaginaryPart, nonneg_iff_realPart_imaginaryPart.mp
+/-
+**realPart_nonneg_of_nonneg** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：realPart_nonneg_of_nonneg {a : A} (ha : 0 <= a) : 0 <= ℜ a
+参数：ha : 0 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `nonneg_iff_realPart_imaginaryPart`：nonneg_iff_realPart_imaginaryPart {a 
+: A} : 0 <= a ↔ 0 <= ℜ a ∧ ℑ a = 0
 -/
-lemma realPart_nonneg_of_nonneg {a : A} (ha : 0 <= a) : 0 <= ℜ a :=
-.1 nonneg_iff_realPart_imaginaryPart.mp ha
-
-/--
-lemma `realPart_nonpos_of_nonpos` / 引理 `realPart_nonpos_of_nonpos`
-
-English:
-lemma realPart_nonpos_of_nonpos
-  given: {a : A} (ha : a <= 0)
-  statement: ℜ a <= 0
-  proof: .1 nonpos_iff_realPart_imaginaryPart.mp ha
-
-中文:
-引理 realPart_nonpos_of_nonpos
-  条件: {a : A} (ha : a <= 0)
-  结论: ℜ a <= 0
-  证明: .1 nonpos_iff_realPart_imaginaryPart.mp ha
-
-Depends on / 依赖: nonpos_iff_realPart_imaginaryPart, nonpos_iff_realPart_imaginaryPart.mp
+lemma realPart_nonneg_of_nonneg {a : A} (ha : 0 ≤ a) : 0 ≤ ℜ a :=
+  nonneg_iff_realPart_imaginaryPart.mp ha |>.1
+/-
+**realPart_nonpos_of_nonpos** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：realPart_nonpos_of_nonpos {a : A} (ha : a <= 0) : ℜ a <= 0
+参数：ha : a <= 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `nonpos_iff_realPart_imaginaryPart`：nonpos_iff_realPart_imaginaryPart {a 
+: A} : a <= 0 ↔ ℜ a <= 0 ∧ ℑ a = 0
 -/
-lemma realPart_nonpos_of_nonpos {a : A} (ha : a <= 0) : ℜ a <= 0 :=
-.1 nonpos_iff_realPart_imaginaryPart.mp ha
-
-/--
-lemma `le_iff_realPart_imaginaryPart` / 引理 `le_iff_realPart_imaginaryPart`
-
-English:
-lemma le_iff_realPart_imaginaryPart
-  given: {a b : A}
-  proof: by
-  simpa [sub_eq_zero, eq_comm (a := ℑ a)] using nonneg_iff_realPart_imaginaryPart (a := b - a)
-
-中文:
-引理 le_iff_realPart_imaginaryPart
-  条件: {a b : A}
-  证明: by
-  simpa [sub_eq_zero, eq_comm (a := ℑ a)] using nonneg_iff_realPart_imaginaryPart (a := b - a)
-
-Depends on / 依赖: eq_comm, nonneg_iff_realPart_imaginaryPart, sub_eq_zero
+lemma realPart_nonpos_of_nonpos {a : A} (ha : a ≤ 0) : ℜ a ≤ 0 :=
+  nonpos_iff_realPart_imaginaryPart.mp ha |>.1
+/-
+**le_iff_realPart_imaginaryPart** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：le_iff_realPart_imaginaryPart {a b : A} : a <= b ↔ ℜ a <= ℜ b ∧ ℑ a = ℑ b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedCancelAddMonoid.toIsOrderedAddMonoid`：∀ {α : Type u_2} {inst : 
+AddCommMonoid α} {inst_1 : Preorder α} [self : IsOrderedCancelAddMonoid α],   Is
+OrderedAddMonoid α
+· 使用定理 `IsOrderedAddMonoid.toIsOrderedCancelAddMonoid`：∀ {α : Type u} [inst : Ad
+dCommGroup α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], IsOrderedCancelAddMo
+noid α
+· 使用定理 `StarOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} [inst : NonUnital
+Semiring R] [inst_1 : PartialOrder R] [inst_2 : StarRing R] [StarOrderedRing R],
+   IsOrderedAddMonoid R
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `AddSubmonoidClass.toAddMemClass`：∀ {S : Type u_3} {M : outParam (Type u_
+4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass S
+ M], AddMemClass S M
+· 使用定理 `AddSubgroupClass.toAddSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Ty
+pe u_4)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass
+ S G],   AddSubmonoidClass…
+· 使用定理 `AddSubgroup.instAddSubgroupClass`：∀ {G : Type u_1} [inst : AddGroup G], 
+AddSubgroupClass (AddSubgroup G) G
+· 使用定理 `AddSubmonoidClass.toIsOrderedCancelAddMonoid`：∀ {M : Type u_1} {S : Type
+ u_2} [inst : SetLike S M] [inst_1 : AddCommMonoid M] [inst_2 : Preorder M]   [I
+sOrderedCancelAddMonoid M] [inst_4…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `nonneg_iff_realPart_imaginaryPart`：nonneg_iff_realPart_imaginaryPart {a 
+: A} : 0 <= a ↔ 0 <= ℜ a ∧ ℑ a = 0
 -/
 lemma le_iff_realPart_imaginaryPart {a b : A} :
-    a <= b ↔ ℜ a <= ℜ b ∧ ℑ a = ℑ b := by
+    a ≤ b ↔ ℜ a ≤ ℜ b ∧ ℑ a = ℑ b := by
   simpa [sub_eq_zero, eq_comm (a := ℑ a)] using nonneg_iff_realPart_imaginaryPart (a := b - a)
-
-/--
-lemma `imaginaryPart_eq_of_le` / 引理 `imaginaryPart_eq_of_le`
-
-English:
-lemma imaginaryPart_eq_of_le
-  given: {a b : A} (hab : a <= b)
-  proof: .2 le_iff_realPart_imaginaryPart.mp hab
-
-中文:
-引理 imaginaryPart_eq_of_le
-  条件: {a b : A} (hab : a <= b)
-  证明: .2 le_iff_realPart_imaginaryPart.mp hab
-
-Depends on / 依赖: le_iff_realPart_imaginaryPart, le_iff_realPart_imaginaryPart.mp
+/-
+**imaginaryPart_eq_of_le** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：imaginaryPart_eq_of_le {a b : A} (hab : a <= b) : ℑ a = ℑ b
+参数：hab : a <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `le_iff_realPart_imaginaryPart`：le_iff_realPart_imaginaryPart {a b : A} :
+ a <= b ↔ ℜ a <= ℜ b ∧ ℑ a = ℑ b
 -/
-lemma imaginaryPart_eq_of_le {a b : A} (hab : a <= b) :
+lemma imaginaryPart_eq_of_le {a b : A} (hab : a ≤ b) :
     ℑ a = ℑ b :=
-.2 le_iff_realPart_imaginaryPart.mp hab
-
-/--
-lemma `realPart_mono` / 引理 `realPart_mono`
-
-English:
-lemma realPart_mono
-  given: {a b : A} (hab : a <= b)
-  proof: .1 le_iff_realPart_imaginaryPart.mp hab
-
-中文:
-引理 realPart_mono
-  条件: {a b : A} (hab : a <= b)
-  证明: .1 le_iff_realPart_imaginaryPart.mp hab
-
-Depends on / 依赖: le_iff_realPart_imaginaryPart, le_iff_realPart_imaginaryPart.mp
+  le_iff_realPart_imaginaryPart.mp hab |>.2
+/-
+**realPart_mono** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：realPart_mono {a b : A} (hab : a <= b) : ℜ a <= ℜ b
+参数：hab : a <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `le_iff_realPart_imaginaryPart`：le_iff_realPart_imaginaryPart {a b : A} :
+ a <= b ↔ ℜ a <= ℜ b ∧ ℑ a = ℑ b
 -/
-lemma realPart_mono {a b : A} (hab : a <= b) :
-    ℜ a <= ℜ b :=
-.1 le_iff_realPart_imaginaryPart.mp hab
+lemma realPart_mono {a b : A} (hab : a ≤ b) :
+    ℜ a ≤ ℜ b :=
+  le_iff_realPart_imaginaryPart.mp hab |>.1
 
 end StarOrderedRing
 
 @[simp]
-/--
-lemma `realPart_one` / 引理 `realPart_one`
-
-English:
-lemma realPart_one
-  given: [Ring A] [StarRing A] [Module Complex A] [StarModule Complex A]
-  proof: by
-  ext; simp [realPart_apply_coe, ← two_smul Real]
-
-中文:
-引理 realPart_one
-  条件: [环 A] [对合环 A] [模 复形 A] [对合模 复形 A]
-  证明: by
-  ext; simp [realPart_apply_coe, ← two_smul Real]
-
-Depends on / 依赖: realPart_apply_coe, two_smul
+/-
+**realPart_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：realPart_one [Ring A] [StarRing A] [Module Complex A] [StarModule Complex 
+A] : ℜ (1 : A) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `realPart_apply_coe`：realPart_apply_coe (a : A) : (ℜ a : A) = (2 : Real)⁻
+¹ • (a + star a)
+· 使用定理 `star_one`：star_one [MulOneClass R] [StarMul R] : star (1 : R) = 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `two_smul`：two_smul : (2 : R) • x = x + x
+· 使用定理 `inv_smul_smul₀`：∀ {α : Type u_4} {β : Type u_5} [inst : GroupWithZero α]
+ [inst_1 : MulAction α β] {a : α},   a ≠ 0 → ∀ (x : β), a⁻¹ • a • x = x
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma realPart_one [Ring A] [StarRing A] [Module Complex A] [StarModule Complex A] :
+lemma realPart_one [Ring A] [StarRing A] [Module ℂ A] [StarModule ℂ A] :
     ℜ (1 : A) = 1 := by
-  ext; simp [realPart_apply_coe, ← two_smul Real]
-
-/--
-lemma `mem_unitary_iff_isStarNormal_and_realPart_sq_add_imaginaryPart_sq_eq_one` / 引理 `mem_unitary_iff_isStarNormal_and_realPart_sq_add_imaginaryPart_sq_eq_one`
-
-English:
-lemma mem_unitary_iff_isStarNormal_and_realPart_sq_add_imaginaryPart_sq_eq_one
-  statement: [Ring A]
-  proof: by
-  rw [Unitary.mem_iff]
-  refine ⟨fun ⟨h, h'⟩ => ?_, fun ⟨hx, h⟩ => ?_⟩
-  · have : IsStarNormal x := ⟨h.trans h'.symm⟩
-    exact ⟨this, by simp [sq, ← star_mul_self_eq_realPart_sq_add_imaginaryPart_sq x, h]⟩
-  · simp [← hx.star_comm_self.eq, star_mul_self_eq_realPart_sq_add_imaginaryPart_sq, ← sq, h]
-
-中文:
-引理 mem_unitary_iff_isStarNormal_and_realPart_sq_add_imaginaryPart_sq_eq_one
-  结论: [环 A]
-  证明: by
-  rw [Unitary.mem_iff]
-  refine ⟨fun ⟨h, h'⟩ => ?_, fun ⟨hx, h⟩ => ?_⟩
-  · have : IsStarNormal x := ⟨h.trans h'.symm⟩
-    exact ⟨this, by simp [sq, ← star_mul_self_eq_realPart_sq_add_imaginaryPart_sq x, h]⟩
-  · simp [← hx.star_comm_self.eq, star_mul_self_eq_realPart_sq_add_imaginaryPart_sq, ← sq, h]
-
-Depends on / 依赖: IsStarNormal, Unitary, Unitary.mem_iff, h.trans, hx.star_comm_self.eq, mem_iff, star_comm_self, star_mul_self_eq_realPart_sq_add_imaginaryPart_sq
+  ext; simp [realPart_apply_coe, ← two_smul ℝ]
+/-
+**mem_unitary_iff_isStarNormal_and_realPart_sq_add_imaginaryPart_sq_eq_one** 是 M
+athlib 中的一个引理，位于命名空间 ``。
+形式化陈述：mem_unitary_iff_isStarNormal_and_realPart_sq_add_imaginaryPart_sq_eq_one [
+Ring A] [StarRing A] [Module Complex A] [SMulCommClass Complex A A] [IsScalarTow
+er Complex A A] [StarModule Complex A] {x : A} : x in unitary A ↔ IsStarNormal x
+ ∧ ℜ x ^ 2 + ℑ x ^ 2 = (1 : A)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instTrivialStarReal`：TrivialStar ℝ
+· 使用定理 `StarModule.complexToReal`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst
+_1 : Star E] [inst_2 : _root_.Module ℂ E] [StarModule ℂ E], StarModule ℝ E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Unitary.mem_iff`：mem_iff {U : R} : U in unitary R ↔ star U * U = 1 ∧ U *
+ star U = 1
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `sq`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
+· 使用引理 `star_mul_self_eq_realPart_sq_add_imaginaryPart_sq`：star_mul_self_eq_real
+Part_sq_add_imaginaryPart_sq (x : A) [hx : IsStarNormal x] : star x * x = ℜ x * 
+ℜ x + ℑ x * ℑ x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Commute.eq`：∀ {S : Type u_3} [inst : Mul S] {a b : S}, Commute a b → a *
+ b = b * a
+· 使用定理 `IsStarNormal.star_comm_self`：∀ {R : Type u_1} {inst : Mul R} {inst_1 : S
+tar R} {x : R} [self : IsStarNormal x], Commute (star x) x
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 lemma mem_unitary_iff_isStarNormal_and_realPart_sq_add_imaginaryPart_sq_eq_one [Ring A]
-    [StarRing A] [Module Complex A] [SMulCommClass Complex A A] [IsScalarTower Complex A A] [StarModule Complex A] {x : A} :
-    x in unitary A ↔ IsStarNormal x ∧ ℜ x ^ 2 + ℑ x ^ 2 = (1 : A) := by
+    [StarRing A] [Module ℂ A] [SMulCommClass ℂ A A] [IsScalarTower ℂ A A] [StarModule ℂ A] {x : A} :
+    x ∈ unitary A ↔ IsStarNormal x ∧ ℜ x ^ 2 + ℑ x ^ 2 = (1 : A) := by
   rw [Unitary.mem_iff]
-  refine ⟨fun ⟨h, h'⟩ => ?_, fun ⟨hx, h⟩ => ?_⟩
+  refine ⟨fun ⟨h, h'⟩ ↦ ?_, fun ⟨hx, h⟩ ↦ ?_⟩
   · have : IsStarNormal x := ⟨h.trans h'.symm⟩
     exact ⟨this, by simp [sq, ← star_mul_self_eq_realPart_sq_add_imaginaryPart_sq x, h]⟩
   · simp [← hx.star_comm_self.eq, star_mul_self_eq_realPart_sq_add_imaginaryPart_sq, ← sq, h]
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {F E A : Type*} [AddCommGroup E] [PartialOrder E]
-    [StarAddMonoid E] [SelfAdjointDecompose E] [Module Complex E] [StarModule Complex E]
+    [StarAddMonoid E] [SelfAdjointDecompose E] [Module ℂ E] [StarModule ℂ E]
     [NonUnitalRing A] [PartialOrder A] [StarRing A]
-    [StarOrderedRing A] [Module Complex A] [StarModule Complex A]
-    [FunLike F E A] [OrderHomClass F E A] [LinearMapClass F Complex E A] :
+    [StarOrderedRing A] [Module ℂ A] [StarModule ℂ A]
+    [FunLike F E A] [OrderHomClass F E A] [LinearMapClass F ℂ E A] :
     StarHomClass F E A where
   map_star φ x := by
     rw [← realPart_add_I_smul_imaginaryPart x]
     simp [(ℜ x).2.map' φ, IsSelfAdjoint.star_eq, (ℑ x).2.map' φ]
 
 end RealImaginaryPart
+

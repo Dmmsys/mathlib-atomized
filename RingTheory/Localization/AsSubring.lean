@@ -26,109 +26,87 @@ namespace Localization
 
 open nonZeroDivisors
 
-variable {A : Type*} (K : Type*) [CommRing A] (S : Submonoid A) (hS : S <= A⁰)
+variable {A : Type*} (K : Type*) [CommRing A] (S : Submonoid A) (hS : S ≤ A⁰)
 
 section CommRing
 
 variable [CommRing K] [Algebra A K] [IsFractionRing A K]
 
-/--
-theorem `map_isUnit_of_le` / 定理 `map_isUnit_of_le`
-
-English:
-theorem map_isUnit_of_le
-  given: (hS : S <= A⁰) (s : S)
-  statement: IsUnit (algebraMap A K s)
-  proof: by
-  apply IsLocalization.map_units K (⟨s.1, hS s.2⟩ : A⁰)
-
-中文:
-定理 map_isUnit_of_le
-  条件: (hS : S <= A⁰) (s : S)
-  结论: 是单位 (algebraMap A K s)
-  证明: by
-  apply IsLocalization.map_units K (⟨s.1, hS s.2⟩ : A⁰)
-
-Depends on / 依赖: IsLocalization, IsLocalization.map_units, map_units
+/-
+**Localization.map_isUnit_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Localization`。
+形式化陈述：map_isUnit_of_le (hS : S <= A⁰) (s : S) : IsUnit (algebraMap A K s)
+参数：hS : S <= A⁰；s : S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalization.map_units`：map_units : forall y : M, IsUnit (algebraMap R
+ S y)
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem map_isUnit_of_le (hS : S <= A⁰) (s : S) : IsUnit (algebraMap A K s) := by
+theorem map_isUnit_of_le (hS : S ≤ A⁰) (s : S) : IsUnit (algebraMap A K s) := by
   apply IsLocalization.map_units K (⟨s.1, hS s.2⟩ : A⁰)
 
-/--
-Definition of `mapToFractionRing` / `mapToFractionRing` 的定义
+/-- The canonical map from a localization of `A` at `S` to the fraction ring
+  of `A`, given that `S ≤ A⁰`. -/
+/-
+**Localization.mapToFractionRing** 是 Mathlib 中的一个定义，位于命名空间 `Localization`。
+形式化陈述：mapToFractionRing (B : Type*) [CommRing B] [Algebra A B] [IsLocalization S
+ B] (hS : S <= A⁰) : B ->ₐ[A] K
+参数：B : Type*；hS : S <= A⁰。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Localization.map_isUnit_of_le`：map_isUnit_of_le (hS : S <= A⁰) (s : S) :
+ IsUnit (algebraMap A K s)
 
-English:
-definition mapToFractionRing
-  signature: (B : Type*) [CommRing B] [Algebra A B] [IsLocalization S B]
-  body: { IsLocalization.lift (map_isUnit_of_le K S hS) with commutes' := fun a => by simp }
-
-@[simp]
-
-中文:
-定义 mapToFractionRing
-  签名: (B : 类型) [交换环 B] [代数 A B] [是Localization S B]
-  定义体: { IsLocalization.lift (map_isUnit_of_le K S hS) with commutes' := fun a => by simp }
-
-@[simp]
-
-Depends on / 依赖: IsLocalization, IsLocalization.lift, commutes, map_isUnit_of_le
+--- 原说明 ---
+The canonical map from a localization of `A` at `S` to the fraction ring
+  of `A`, given that `S ≤ A⁰`.
 -/
 noncomputable def mapToFractionRing (B : Type*) [CommRing B] [Algebra A B] [IsLocalization S B]
-    (hS : S <= A⁰) : B ->ₐ[A] K :=
+    (hS : S ≤ A⁰) : B →ₐ[A] K :=
   { IsLocalization.lift (map_isUnit_of_le K S hS) with commutes' := fun a => by simp }
 
 @[simp]
-/--
-theorem `mapToFractionRing_apply` / 定理 `mapToFractionRing_apply`
-
-English:
-theorem mapToFractionRing_apply
-  statement: {B : Type*} [CommRing B] [Algebra A B] [IsLocalization S B]
-  proof: rfl
-
-中文:
-定理 mapToFractionRing_apply
-  结论: {B : 类型} [交换环 B] [代数 A B] [是Localization S B]
-  证明: rfl
+/-
+**Localization.mapToFractionRing_apply** 是 Mathlib 中的一个定理，位于命名空间 `Localization`。
+形式化陈述：mapToFractionRing_apply {B : Type*} [CommRing B] [Algebra A B] [IsLocaliza
+tion S B] (hS : S <= A⁰) (b : B) : mapToFractionRing K S B hS b = IsLocalization
+.lift (map_isUnit_of_le K S hS) b
+参数：hS : S <= A⁰；b : B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mapToFractionRing_apply {B : Type*} [CommRing B] [Algebra A B] [IsLocalization S B]
-    (hS : S <= A⁰) (b : B) :
+    (hS : S ≤ A⁰) (b : B) :
     mapToFractionRing K S B hS b = IsLocalization.lift (map_isUnit_of_le K S hS) b :=
   rfl
-
-/--
-theorem `mem_range_mapToFractionRing_iff` / 定理 `mem_range_mapToFractionRing_iff`
-
-English:
-theorem mem_range_mapToFractionRing_iff
-  statement: (B : Type*) [CommRing B] [Algebra A B] [IsLocalization S B]
-  proof: ⟨by
-    rintro ⟨x, rfl⟩
-    obtain ⟨a, s, rfl⟩ := IsLocalization.exists_mk'_eq S x
-    use a, s, s.2
-    apply IsLocalization.lift_mk', by
-    rintro ⟨a, s, hs, rfl⟩
-    use IsLocalization.mk' _ a ⟨s, hs⟩
-    apply IsLocalization.lift_mk'⟩
-
-中文:
-定理 mem_range_mapToFractionRing_iff
-  结论: (B : 类型) [交换环 B] [代数 A B] [是Localization S B]
-  证明: ⟨by
-    rintro ⟨x, rfl⟩
-    obtain ⟨a, s, rfl⟩ := IsLocalization.exists_mk'_eq S x
-    use a, s, s.2
-    apply IsLocalization.lift_mk', by
-    rintro ⟨a, s, hs, rfl⟩
-    use IsLocalization.mk' _ a ⟨s, hs⟩
-    apply IsLocalization.lift_mk'⟩
-
-Depends on / 依赖: IsLocalization, IsLocalization.exists_mk, IsLocalization.lift_mk, IsLocalization.mk, exists_mk, lift_mk
+/-
+**Localization.mem_range_mapToFractionRing_iff** 是 Mathlib 中的一个定理，位于命名空间 `Locali
+zation`。
+形式化陈述：mem_range_mapToFractionRing_iff (B : Type*) [CommRing B] [Algebra A B] [Is
+Localization S B] (hS : S <= A⁰) (x : K) : x in (mapToFractionRing K S B hS).ran
+ge ↔ exists (a s : A) (hs : s in S), x = IsLocalization.mk' K a ⟨s, hS hs⟩
+参数：B : Type*；hS : S <= A⁰；x : K。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `IsLocalization.exists_mk'_eq`：∀ {R : Type u_1} [inst : CommSemiring R] (
+M : Submonoid R) {S : Type u_2} [inst_1 : CommSemiring S]   [inst_2 : Algebra R 
+S] [inst_3 : IsLoc…
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `IsLocalization.lift_mk'`：lift_mk' (x y) : lift hg (mk' S x y) = g x * ↑(
+IsUnit.liftRight (g.toMonoidHom.domRestrict M) hg y)⁻¹
+· 使用定理 `Localization.map_isUnit_of_le`：map_isUnit_of_le (hS : S <= A⁰) (s : S) :
+ IsUnit (algebraMap A K s)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem mem_range_mapToFractionRing_iff (B : Type*) [CommRing B] [Algebra A B] [IsLocalization S B]
-    (hS : S <= A⁰) (x : K) :
-    x in (mapToFractionRing K S B hS).range ↔
-      exists (a s : A) (hs : s in S), x = IsLocalization.mk' K a ⟨s, hS hs⟩ :=
+    (hS : S ≤ A⁰) (x : K) :
+    x ∈ (mapToFractionRing K S B hS).range ↔
+      ∃ (a s : A) (hs : s ∈ S), x = IsLocalization.mk' K a ⟨s, hS hs⟩ :=
   ⟨by
     rintro ⟨x, rfl⟩
     obtain ⟨a, s, rfl⟩ := IsLocalization.exists_mk'_eq S x
@@ -137,132 +115,127 @@ theorem mem_range_mapToFractionRing_iff (B : Type*) [CommRing B] [Algebra A B] [
     rintro ⟨a, s, hs, rfl⟩
     use IsLocalization.mk' _ a ⟨s, hs⟩
     apply IsLocalization.lift_mk'⟩
-
-/--
-Instance `isLocalization_range_mapToFractionRing` / 实例 `isLocalization_range_mapToFractionRing`
-
-English:
-instance isLocalization_range_mapToFractionRing
-  signature: (B : Type*) [CommRing B] [Algebra A B]
-  body: IsLocalization.isLocalization_of_algEquiv S
-    show B ≃ₐ[A] _ from AlgEquiv.ofBijective (mapToFractionRing K S B hS).rangeRestrict (by
-      refine ⟨fun a b h => ?_, Set.rangeFactorization_surjective⟩
-      refine (IsLocalization.lift_injective_iff _).2 (fun a b => ?_) (Subtype.ext_iff.1 h)
-      exact ⟨fun h => congr_arg _ (IsLocalization.injective _ hS h),
-        fun h => congr_arg _ (IsFractionRing.injective A K h)⟩)
-
-中文:
-实例 isLocalization_range_mapToFractionRing
-  签名: (B : 类型) [交换环 B] [代数 A B]
-  定义体: IsLocalization.isLocalization_of_algEquiv S
-    show B ≃ₐ[A] _ from AlgEquiv.ofBijective (mapToFractionRing K S B hS).rangeRestrict (by
-      refine ⟨fun a b h => ?_, Set.rangeFactorization_surjective⟩
-      refine (IsLocalization.lift_injective_iff _).2 (fun a b => ?_) (Subtype.ext_iff.1 h)
-      exact ⟨fun h => congr_arg _ (IsLocalization.injective _ hS h),
-        fun h => congr_arg _ (IsFractionRing.injective A K h)⟩)
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.ofBijective, IsFractionRing, IsFractionRing.injective, IsLocalization, IsLocalization.injective, IsLocalization.isLocalization_of_algEquiv, IsLocalization.lift_injective_iff, Set.rangeFactorization_surjective, Subtype, Subtype.ext_iff, congr_arg, ext_iff, injective, isLocalization_of_algEquiv, lift_injective_iff, mapToFractionRing, ofBijective, rangeFactorization_surjective, rangeRestrict
+/-
+**Localization.isLocalization_range_mapToFractionRing** 是 Mathlib 中的一个实例，位于命名空间 
+`Localization`。
+形式化陈述：isLocalization_range_mapToFractionRing (B : Type*) [CommRing B] [Algebra A
+ B] [IsLocalization S B] (hS : S <= A⁰) : IsLocalization S (mapToFractionRing K 
+S B hS).range
+参数：B : Type*；hS : S <= A⁰。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalization.isLocalization_of_algEquiv`：isLocalization_of_algEquiv [A
+lgebra R P] [IsLocalization M S] (h : S ≃ₐ[R] P) : IsLocalization M P
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Localization.map_isUnit_of_le`：map_isUnit_of_le (hS : S <= A⁰) (s : S) :
+ IsUnit (algebraMap A K s)
+· 使用定理 `IsLocalization.lift_injective_iff`：lift_injective_iff : Injective (lift 
+hg : S -> P) ↔ forall x y, algebraMap R S x = algebraMap R S y ↔ g x = g y
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `IsLocalization.injective`：∀ {R : Type u_1} [inst : CommRing R] {M : Subm
+onoid R} (S : Type u_2) [inst_1 : CommRing S] [inst_2 : Algebra R S]   [IsLocali
+zation M S], M…
+· 使用定理 `IsFractionRing.injective`：∀ (R : Type u_1) [inst : CommRing R] (K : Type
+ u_5) [inst_1 : CommRing K] [inst_2 : Algebra R K] [IsFractionRing R K],   Funct
+ion.Injective …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
+· 使用定理 `Set.rangeFactorization_surjective`：∀ {α : Type u} {ι : Sort u_1} {f : ι 
+→ α}, Function.Surjective (Set.rangeFactorization f)
 -/
 instance isLocalization_range_mapToFractionRing (B : Type*) [CommRing B] [Algebra A B]
-    [IsLocalization S B] (hS : S <= A⁰) : IsLocalization S (mapToFractionRing K S B hS).range :=
-IsLocalization.isLocalization_of_algEquiv S
+    [IsLocalization S B] (hS : S ≤ A⁰) : IsLocalization S (mapToFractionRing K S B hS).range :=
+  IsLocalization.isLocalization_of_algEquiv S <|
     show B ≃ₐ[A] _ from AlgEquiv.ofBijective (mapToFractionRing K S B hS).rangeRestrict (by
       refine ⟨fun a b h => ?_, Set.rangeFactorization_surjective⟩
       refine (IsLocalization.lift_injective_iff _).2 (fun a b => ?_) (Subtype.ext_iff.1 h)
       exact ⟨fun h => congr_arg _ (IsLocalization.injective _ hS h),
         fun h => congr_arg _ (IsFractionRing.injective A K h)⟩)
-
-/--
-Instance `isFractionRing_range_mapToFractionRing` / 实例 `isFractionRing_range_mapToFractionRing`
-
-English:
-instance isFractionRing_range_mapToFractionRing
-  signature: (B : Type*) [CommRing B] [Algebra A B]
-  body: IsFractionRing.isFractionRing_of_isLocalization S _ _ hS
-
-中文:
-实例 isFractionRing_range_mapToFractionRing
-  签名: (B : 类型) [交换环 B] [代数 A B]
-  定义体: IsFractionRing.isFractionRing_of_isLocalization S _ _ hS
-
-Depends on / 依赖: IsFractionRing, IsFractionRing.isFractionRing_of_isLocalization, isFractionRing_of_isLocalization
+/-
+**Localization.isFractionRing_range_mapToFractionRing** 是 Mathlib 中的一个实例，位于命名空间 
+`Localization`。
+形式化陈述：isFractionRing_range_mapToFractionRing (B : Type*) [CommRing B] [Algebra A
+ B] [IsLocalization S B] (hS : S <= A⁰) : IsFractionRing (mapToFractionRing K S 
+B hS).range K
+参数：B : Type*；hS : S <= A⁰。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsFractionRing.isFractionRing_of_isLocalization`：isFractionRing_of_isLoc
+alization (S T : Type*) [CommRing S] [CommRing T] [Algebra R S] [Algebra R T] [A
+lgebra S T] [IsScalarTower R S T] [Is…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
 -/
 instance isFractionRing_range_mapToFractionRing (B : Type*) [CommRing B] [Algebra A B]
-    [IsLocalization S B] (hS : S <= A⁰) : IsFractionRing (mapToFractionRing K S B hS).range K :=
+    [IsLocalization S B] (hS : S ≤ A⁰) : IsFractionRing (mapToFractionRing K S B hS).range K :=
   IsFractionRing.isFractionRing_of_isLocalization S _ _ hS
 
-/--
-Definition of `subalgebra` / `subalgebra` 的定义
+/-- Given a commutative ring `A` with fraction ring `K`, and a submonoid `S` of `A` which
+contains no zero divisor, this is the localization of `A` at `S`, considered as
+a subalgebra of `K` over `A`.
 
-English:
-definition subalgebra
-  signature: (hS : S <= A⁰)
-  body: (mapToFractionRing K S (Localization S) hS).range.copy
-{ x | exists (a s : A) (hs : s in S), x = IsLocalization.mk' K a ⟨s, hS hs⟩ } by
-    ext
-    symm
-    apply mem_range_mapToFractionRing_iff
-
-中文:
-定义 subalgebra
-  签名: (hS : S <= A⁰)
-  定义体: (mapToFractionRing K S (Localization S) hS).range.copy
-{ x | exists (a s : A) (hs : s in S), x = IsLocalization.mk' K a ⟨s, hS hs⟩ } by
-    ext
-    symm
-    apply mem_range_mapToFractionRing_iff
-
-Depends on / 依赖: IsLocalization, IsLocalization.mk, Localization, mapToFractionRing, mem_range_mapToFractionRing_iff, range.copy
+The carrier of this subalgebra is defined as the set of all `x : K` of the form
+`IsLocalization.mk' K a ⟨s, _⟩`, where `s ∈ S`.
 -/
-noncomputable def subalgebra (hS : S <= A⁰) : Subalgebra A K :=
+/-
+**Localization.subalgebra** 是 Mathlib 中的一个定义，位于命名空间 `Localization`。
+形式化陈述：subalgebra (hS : S <= A⁰) : Subalgebra A K
+参数：hS : S <= A⁰。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+
+--- 原说明 ---
+Given a commutative ring `A` with fraction ring `K`, and a submonoid `S` of `A` 
+which
+contains no zero divisor, this is the localization of `A` at `S`, considered as
+a subalgebra of `K` over `A`.
+
+The carrier of this subalgebra is defined as the set of all `x : K` of the form
+`IsLocalization.mk' K a ⟨s, _⟩`, where `s ∈ S`.
+-/
+noncomputable def subalgebra (hS : S ≤ A⁰) : Subalgebra A K :=
   (mapToFractionRing K S (Localization S) hS).range.copy
-{ x | exists (a s : A) (hs : s in S), x = IsLocalization.mk' K a ⟨s, hS hs⟩ } by
+      { x | ∃ (a s : A) (hs : s ∈ S), x = IsLocalization.mk' K a ⟨s, hS hs⟩ } <| by
     ext
     symm
     apply mem_range_mapToFractionRing_iff
 
 namespace subalgebra
 
-/--
-Instance `isLocalization_subalgebra` / 实例 `isLocalization_subalgebra`
-
-English:
-instance isLocalization_subalgebra
-  signature: : IsLocalization S (subalgebra K S hS)
-  body: by
-  dsimp +instances only [Localization.subalgebra]
-  rw [Subalgebra.copy_eq]
-  infer_instance
-
-中文:
-实例 isLocalization_subalgebra
-  签名: : 是Localization S (subalgebra K S hS)
-  定义体: by
-  dsimp +instances only [Localization.subalgebra]
-  rw [Subalgebra.copy_eq]
-  infer_instance
-
-Depends on / 依赖: Localization, Localization.subalgebra, Subalgebra, Subalgebra.copy_eq, copy_eq, infer_instance, instances, subalgebra
+/-
+**Localization.subalgebra.isLocalization_subalgebra** 是 Mathlib 中的一个实例，位于命名空间 `L
+ocalization.subalgebra`。
+形式化陈述：isLocalization_subalgebra : IsLocalization S (subalgebra K S hS)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subalgebra.copy_eq`：copy_eq (S : Subalgebra R A) (s : Set A) (hs : s = ↑
+S) : S.copy s hs = S
 -/
 instance isLocalization_subalgebra : IsLocalization S (subalgebra K S hS) := by
   dsimp +instances only [Localization.subalgebra]
   rw [Subalgebra.copy_eq]
   infer_instance
-
-/--
-Instance `isFractionRing` / 实例 `isFractionRing`
-
-English:
-instance isFractionRing
-  signature: : IsFractionRing (subalgebra K S hS) K
-  body: IsFractionRing.isFractionRing_of_isLocalization S _ _ hS
-
-中文:
-实例 isFractionRing
-  签名: : IsFractionRing (subalgebra K S hS) K
-  定义体: IsFractionRing.isFractionRing_of_isLocalization S _ _ hS
-
-Depends on / 依赖: IsFractionRing, IsFractionRing.isFractionRing_of_isLocalization, isFractionRing_of_isLocalization
+/-
+**Localization.subalgebra.isFractionRing** 是 Mathlib 中的一个实例，位于命名空间 `Localization
+.subalgebra`。
+形式化陈述：isFractionRing : IsFractionRing (subalgebra K S hS) K
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsFractionRing.isFractionRing_of_isLocalization`：isFractionRing_of_isLoc
+alization (S T : Type*) [CommRing S] [CommRing T] [Algebra R S] [Algebra R T] [A
+lgebra S T] [IsScalarTower R S T] [Is…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
 -/
 instance isFractionRing : IsFractionRing (subalgebra K S hS) K :=
   IsFractionRing.isFractionRing_of_isLocalization S _ _ hS
@@ -277,131 +250,123 @@ variable [Field K] [Algebra A K] [IsFractionRing A K]
 
 namespace subalgebra
 
-/--
-theorem `mem_range_mapToFractionRing_iff_ofField` / 定理 `mem_range_mapToFractionRing_iff_ofField`
-
-English:
-theorem mem_range_mapToFractionRing_iff_ofField
-  statement: (B : Type*) [CommRing B] [Algebra A B]
-  proof: by
-  rw [mem_range_mapToFractionRing_iff]
-  convert! Iff.rfl
-  congr
-  rw [Units.val_inv_eq_inv_val]
-  rfl
-
-中文:
-定理 mem_range_mapToFractionRing_iff_ofField
-  结论: (B : 类型) [交换环 B] [代数 A B]
-  证明: by
-  rw [mem_range_mapToFractionRing_iff]
-  convert! Iff.rfl
-  congr
-  rw [Units.val_inv_eq_inv_val]
-  rfl
-
-Depends on / 依赖: Iff.rfl, Units.val_inv_eq_inv_val, convert, mem_range_mapToFractionRing_iff, val_inv_eq_inv_val
+/-
+**Localization.subalgebra.mem_range_mapToFractionRing_iff_ofField** 是 Mathlib 中的
+一个定理，位于命名空间 `Localization.subalgebra`。
+形式化陈述：mem_range_mapToFractionRing_iff_ofField (B : Type*) [CommRing B] [Algebra 
+A B] [IsLocalization S B] (x : K) : x in (mapToFractionRing K S B hS).range ↔ ex
+ists (a s : A) (_ : s in S), x = algebraMap A K a * (algebraMap A K s)⁻¹
+参数：B : Type*；x : K。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Localization.mem_range_mapToFractionRing_iff`：mem_range_mapToFractionRin
+g_iff (B : Type*) [CommRing B] [Algebra A B] [IsLocalization S B] (hS : S <= A⁰)
+ (x : K) : x in (mapToFractionRing…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Submonoid.LocalizationMap.map_units`：map_units (f : LocalizationMap S N)
+ (y : S) : IsUnit (f y)
+· 使用定理 `Units.val_inv_eq_inv_val`：∀ {α : Type u} [inst : DivisionMonoid α] (u : 
+αˣ), ↑u⁻¹ = (↑u)⁻¹
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem mem_range_mapToFractionRing_iff_ofField (B : Type*) [CommRing B] [Algebra A B]
     [IsLocalization S B] (x : K) :
-    x in (mapToFractionRing K S B hS).range ↔
-      exists (a s : A) (_ : s in S), x = algebraMap A K a * (algebraMap A K s)⁻¹ := by
+    x ∈ (mapToFractionRing K S B hS).range ↔
+      ∃ (a s : A) (_ : s ∈ S), x = algebraMap A K a * (algebraMap A K s)⁻¹ := by
   rw [mem_range_mapToFractionRing_iff]
   convert! Iff.rfl
   congr
   rw [Units.val_inv_eq_inv_val]
   rfl
 
-/--
-Definition of `ofField` / `ofField` 的定义
+/-- Given a domain `A` with fraction field `K`, and a submonoid `S` of `A` which
+contains no zero divisor, this is the localization of `A` at `S`, considered as
+a subalgebra of `K` over `A`.
 
-English:
-definition ofField
-  signature: : Subalgebra A K
-  body: (mapToFractionRing K S (Localization S) hS).range.copy
-{ x | exists (a s : A) (_ : s in S), x = algebraMap A K a * (algebraMap A K s)⁻¹ } by
-    ext
-    symm
-    apply mem_range_mapToFractionRing_iff_ofField
+The carrier of this subalgebra is defined as the set of all `x : K` of the form
+`algebraMap A K a * (algebraMap A K s)⁻¹` where `a s : A` and `s ∈ S`.
+-/
+/-
+**Localization.subalgebra.ofField** 是 Mathlib 中的一个定义，位于命名空间 `Localization.subalg
+ebra`。
+形式化陈述：ofField : Subalgebra A K
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 ofField
-  签名: : 子代数 A K
-  定义体: (mapToFractionRing K S (Localization S) hS).range.copy
-{ x | exists (a s : A) (_ : s in S), x = algebraMap A K a * (algebraMap A K s)⁻¹ } by
-    ext
-    symm
-    apply mem_range_mapToFractionRing_iff_ofField
+--- 原说明 ---
+Given a domain `A` with fraction field `K`, and a submonoid `S` of `A` which
+contains no zero divisor, this is the localization of `A` at `S`, considered as
+a subalgebra of `K` over `A`.
 
-Depends on / 依赖: Localization, algebraMap, mapToFractionRing, mem_range_mapToFractionRing_iff_ofField, range.copy
+The carrier of this subalgebra is defined as the set of all `x : K` of the form
+`algebraMap A K a * (algebraMap A K s)⁻¹` where `a s : A` and `s ∈ S`.
 -/
 noncomputable def ofField : Subalgebra A K :=
   (mapToFractionRing K S (Localization S) hS).range.copy
-{ x | exists (a s : A) (_ : s in S), x = algebraMap A K a * (algebraMap A K s)⁻¹ } by
+      { x | ∃ (a s : A) (_ : s ∈ S), x = algebraMap A K a * (algebraMap A K s)⁻¹ } <| by
     ext
     symm
     apply mem_range_mapToFractionRing_iff_ofField
-
-/--
-theorem `ofField_eq` / 定理 `ofField_eq`
-
-English:
-theorem ofField_eq
-  statement: ofField K S hS = subalgebra K S hS
-  proof: by
-  simp_rw [ofField, subalgebra, Subalgebra.copy_eq]
-
-中文:
-定理 ofField_eq
-  结论: ofField K S hS = subalgebra K S hS
-  证明: by
-  simp_rw [ofField, subalgebra, Subalgebra.copy_eq]
-
-Depends on / 依赖: Subalgebra, Subalgebra.copy_eq, copy_eq, ofField, simp_rw, subalgebra
+/-
+**Localization.subalgebra.ofField_eq** 是 Mathlib 中的一个定理，位于命名空间 `Localization.sub
+algebra`。
+形式化陈述：ofField_eq : ofField K S hS = subalgebra K S hS
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subalgebra.copy_eq`：copy_eq (S : Subalgebra R A) (s : Set A) (hs : s = ↑
+S) : S.copy s hs = S
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem ofField_eq : ofField K S hS = subalgebra K S hS := by
   simp_rw [ofField, subalgebra, Subalgebra.copy_eq]
-
-/--
-Instance `isLocalization_ofField` / 实例 `isLocalization_ofField`
-
-English:
-instance isLocalization_ofField
-  signature: : IsLocalization S (ofField K S hS)
-  body: by
-  rw [ofField_eq]
-  exact isLocalization_subalgebra K S hS
-
-中文:
-实例 isLocalization_ofField
-  签名: : 是Localization S (ofField K S hS)
-  定义体: by
-  rw [ofField_eq]
-  exact isLocalization_subalgebra K S hS
-
-Depends on / 依赖: isLocalization_subalgebra, ofField_eq
+/-
+**Localization.subalgebra.isLocalization_ofField** 是 Mathlib 中的一个实例，位于命名空间 `Loca
+lization.subalgebra`。
+形式化陈述：isLocalization_ofField : IsLocalization S (ofField K S hS)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Localization.subalgebra.ofField_eq`：ofField_eq : ofField K S hS = subalg
+ebra K S hS
 -/
 instance isLocalization_ofField : IsLocalization S (ofField K S hS) := by
   rw [ofField_eq]
   exact isLocalization_subalgebra K S hS
-
+/-
+**Localization.subalgebra.** 是 Mathlib 中的一个实例，位于命名空间 `Localization.subalgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (S : Subalgebra A K) : IsFractionRing S K := by
-  refine IsFractionRing.of_field S K fun z => ?_
+  refine IsFractionRing.of_field S K fun z ↦ ?_
   rcases IsFractionRing.div_surjective A z with ⟨x, y, _, eq⟩
   exact ⟨algebraMap A S x, algebraMap A S y, eq.symm⟩
-
-/--
-Instance `isFractionRing_ofField` / 实例 `isFractionRing_ofField`
-
-English:
-instance isFractionRing_ofField
-  signature: : IsFractionRing (ofField K S hS) K
-  body: inferInstance
-
-中文:
-实例 isFractionRing_ofField
-  签名: : IsFractionRing (ofField K S hS) K
-  定义体: inferInstance
+/-
+**Localization.subalgebra.isFractionRing_ofField** 是 Mathlib 中的一个实例，位于命名空间 `Loca
+lization.subalgebra`。
+形式化陈述：isFractionRing_ofField : IsFractionRing (ofField K S hS) K
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Localization.subalgebra.instIsFractionRingSubtypeMemSubalgebra`：∀ {A : T
+ype u_1} (K : Type u_2) [inst : CommRing A] [inst_1 : Field K] [inst_2 : Algebra
+ A K] [IsFractionRing A K]   (S : Subalgebra A K), I…
 -/
 instance isFractionRing_ofField : IsFractionRing (ofField K S hS) K :=
   inferInstance
@@ -411,3 +376,4 @@ end subalgebra
 end Field
 
 end Localization
+

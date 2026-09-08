@@ -21,24 +21,24 @@ Let `R` be a `CommRing` and let `A` be an R-algebra.
 
 public section
 
-/--
-Definition of `IsIntegralClosure` / `IsIntegralClosure` 的定义
+/-- `IsIntegralClosure A R B` is the characteristic predicate stating `A` is
+the integral closure of `R` in `B`,
+i.e. that an element of `B` is integral over `R` iff it is an element of (the image of) `A`.
+-/
+/-
+**IsIntegralClosure** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(A : Type u_1) →   (R : Type u_2) →     (B : Type u_3) →       [inst : Com
+mRing R] → [inst_1 : CommSemiring A] → [inst_2 : CommRing B] → [Algebra R B] → [
+Algebra A B] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsIntegralClosure
-  parameters: (A R B : Type*) [CommRing R] [CommSemiring A] [CommRing B] [Algebra R B]
-  axioms and operations (2):
-    - algebraMap_injective((A R B)) : Function.Injective (algebraMap A B)
-    - isIntegral_iff : forall {x : B}, IsIntegral R x ↔ exists y, algebraMap A B y = x
-
-中文:
-类 是整闭包
-  参数: (A R B : 类型) [交换环 R] [交换半环 A] [交换环 B] [代数 R B]
-  公理与运算 (2 个):
-    - algebraMap_injective((A R B)) : 函数.单射 (algebraMap A B)
-    - isIntegral_iff : 对任意 {x : B}, 是整 R x ↔ 存在 y, algebraMap A B y = x
+--- 原说明 ---
+`IsIntegralClosure A R B` is the characteristic predicate stating `A` is
+the integral closure of `R` in `B`,
+i.e. that an element of `B` is integral over `R` iff it is an element of (the im
+age of) `A`.
 -/
 class IsIntegralClosure (A R B : Type*) [CommRing R] [CommSemiring A] [CommRing B] [Algebra R B]
   [Algebra A B] : Prop where
   algebraMap_injective (A R B) : Function.Injective (algebraMap A B)
-  isIntegral_iff : forall {x : B}, IsIntegral R x ↔ exists y, algebraMap A B y = x
+  isIntegral_iff : ∀ {x : B}, IsIntegral R x ↔ ∃ y, algebraMap A B y = x

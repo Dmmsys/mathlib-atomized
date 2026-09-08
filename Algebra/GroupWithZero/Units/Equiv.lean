@@ -22,126 +22,78 @@ namespace Equiv
 section GroupWithZero
 variable [GroupWithZero G₀]
 
-/--
-Definition of `_root_.unitsEquivNeZero` / `_root_.unitsEquivNeZero` 的定义
+/-- In a `GroupWithZero` `G₀`, the unit group `G₀ˣ` is equivalent to the subtype of nonzero
+elements. -/
+/-
+**Equiv._root_.unitsEquivNeZero** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.unitsEquivNeZero
-  signature: : G₀ˣ ≃ {a : G₀ // a != 0} where
-  body: ⟨a, a.ne_zero⟩
-  invFun a := Units.mk0 _ a.prop
-
-中文:
-定义 _root_.unitsEquivNeZero
-  签名: : G₀ˣ ≃ {a : G₀ // a != 0} where
-  定义体: ⟨a, a.ne_zero⟩
-  invFun a := Units.mk0 _ a.prop
+--- 原说明 ---
+In a `GroupWithZero` `G₀`, the unit group `G₀ˣ` is equivalent to the subtype of 
+nonzero
+elements.
 -/
-@[simps] def _root_.unitsEquivNeZero : G₀ˣ ≃ {a : G₀ // a != 0} where
+@[simps] def _root_.unitsEquivNeZero : G₀ˣ ≃ {a : G₀ // a ≠ 0} where
   toFun a := ⟨a, a.ne_zero⟩
   invFun a := Units.mk0 _ a.prop
 
 /-- Left multiplication by a nonzero element in a `GroupWithZero` is a permutation of the
 underlying type. -/
 @[simps! -fullyApplied]
-/--
-Definition of `mulLeft₀` / `mulLeft₀` 的定义
+/-
+**Equiv.mulLeft** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{G : Type u_5} → [Group G] → G → Equiv.Perm G
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulLeft₀
-  signature: (a : G₀) (ha : a != 0)
-  body: (Units.mk0 a ha).mulLeft
-
-中文:
-定义 mulLeft₀
-  签名: (a : G₀) (ha : a != 0)
-  定义体: (Units.mk0 a ha).mulLeft
+--- 原说明 ---
+Left multiplication by a nonzero element in a `GroupWithZero` is a permutation o
+f the
+underlying type.
 -/
-protected def mulLeft₀ (a : G₀) (ha : a != 0) : Perm G₀ :=
+protected def mulLeft₀ (a : G₀) (ha : a ≠ 0) : Perm G₀ :=
   (Units.mk0 a ha).mulLeft
-
-/--
-theorem `_root_.mulLeft_bijective₀` / 定理 `_root_.mulLeft_bijective₀`
-
-English:
-theorem _root_.mulLeft_bijective₀
-  given: (a : G₀) (ha : a != 0)
-  statement: Function.Bijective (a * · : G₀ -> G₀)
-  proof: (Equiv.mulLeft₀ a ha).bijective
-
-中文:
-定理 _root_.mulLeft_bijective₀
-  条件: (a : G₀) (ha : a != 0)
-  结论: 函数.双射 (a * · : G₀ -> G₀)
-  证明: (Equiv.mulLeft₀ a ha).bijective
-
-Depends on / 依赖: Equiv.mulLeft, bijective
+/-
+**Equiv._root_.mulLeft_bijective** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.mulLeft_bijective₀ (a : G₀) (ha : a != 0) : Function.Bijective (a * · : G₀ -> G₀) :=
+theorem _root_.mulLeft_bijective₀ (a : G₀) (ha : a ≠ 0) : Function.Bijective (a * · : G₀ → G₀) :=
   (Equiv.mulLeft₀ a ha).bijective
 
 /-- Right multiplication by a nonzero element in a `GroupWithZero` is a permutation of the
 underlying type. -/
 @[simps! -fullyApplied]
-/--
-Definition of `mulRight₀` / `mulRight₀` 的定义
+/-
+**Equiv.mulRight** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{G : Type u_5} → [Group G] → G → Equiv.Perm G
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulRight₀
-  signature: (a : G₀) (ha : a != 0)
-  body: (Units.mk0 a ha).mulRight
-
-中文:
-定义 mulRight₀
-  签名: (a : G₀) (ha : a != 0)
-  定义体: (Units.mk0 a ha).mulRight
+--- 原说明 ---
+Right multiplication by a nonzero element in a `GroupWithZero` is a permutation 
+of the
+underlying type.
 -/
-protected def mulRight₀ (a : G₀) (ha : a != 0) : Perm G₀ :=
+protected def mulRight₀ (a : G₀) (ha : a ≠ 0) : Perm G₀ :=
   (Units.mk0 a ha).mulRight
-
-/--
-theorem `_root_.mulRight_bijective₀` / 定理 `_root_.mulRight_bijective₀`
-
-English:
-theorem _root_.mulRight_bijective₀
-  given: (a : G₀) (ha : a != 0)
-  statement: Function.Bijective ((· * a) : G₀ -> G₀)
-  proof: (Equiv.mulRight₀ a ha).bijective
-
-中文:
-定理 _root_.mulRight_bijective₀
-  条件: (a : G₀) (ha : a != 0)
-  结论: 函数.双射 ((· * a) : G₀ -> G₀)
-  证明: (Equiv.mulRight₀ a ha).bijective
-
-Depends on / 依赖: Equiv.mulRight, bijective
+/-
+**Equiv._root_.mulRight_bijective** 是 Mathlib 中的一个定理，位于命名空间 `Equiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.mulRight_bijective₀ (a : G₀) (ha : a != 0) : Function.Bijective ((· * a) : G₀ -> G₀) :=
+theorem _root_.mulRight_bijective₀ (a : G₀) (ha : a ≠ 0) : Function.Bijective ((· * a) : G₀ → G₀) :=
   (Equiv.mulRight₀ a ha).bijective
 
 /-- Right division by a nonzero element in a `GroupWithZero` is a permutation of the
 underlying type. -/
 @[simps! +simpRhs]
-/--
-Definition of `divRight₀` / `divRight₀` 的定义
+/-
+**Equiv.divRight** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{G : Type u_5} → [Group G] → G → G ≃ G
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition divRight₀
-  signature: (a : G₀) (ha : a != 0)
-  body: (· / a)
-  invFun := (· * a)
-  left_inv _ := by simp [ha]
-  right_inv _ := by simp [ha]
-
-中文:
-定义 divRight₀
-  签名: (a : G₀) (ha : a != 0)
-  定义体: (· / a)
-  invFun := (· * a)
-  left_inv _ := by simp [ha]
-  right_inv _ := by simp [ha]
+--- 原说明 ---
+Right division by a nonzero element in a `GroupWithZero` is a permutation of the
+underlying type.
 -/
-def divRight₀ (a : G₀) (ha : a != 0) : Perm G₀ where
+def divRight₀ (a : G₀) (ha : a ≠ 0) : Perm G₀ where
   toFun := (· / a)
   invFun := (· * a)
   left_inv _ := by simp [ha]
@@ -155,26 +107,17 @@ variable [CommGroupWithZero G₀]
 /-- Left division by a nonzero element in a `CommGroupWithZero` is a permutation of the underlying
 type. -/
 @[simps! +simpRhs]
-/--
-Definition of `divLeft₀` / `divLeft₀` 的定义
+/-
+**Equiv.divLeft** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：{G : Type u_5} → [Group G] → G → G ≃ G
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition divLeft₀
-  signature: (a : G₀) (ha : a != 0)
-  body: (a / ·)
-  invFun := (a / ·)
-  left_inv _ := by simp [ha]
-  right_inv _ := by simp [ha]
-
-中文:
-定义 divLeft₀
-  签名: (a : G₀) (ha : a != 0)
-  定义体: (a / ·)
-  invFun := (a / ·)
-  left_inv _ := by simp [ha]
-  right_inv _ := by simp [ha]
+--- 原说明 ---
+Left division by a nonzero element in a `CommGroupWithZero` is a permutation of 
+the underlying
+type.
 -/
-def divLeft₀ (a : G₀) (ha : a != 0) : Perm G₀ where
+def divLeft₀ (a : G₀) (ha : a ≠ 0) : Perm G₀ where
   toFun := (a / ·)
   invFun := (a / ·)
   left_inv _ := by simp [ha]
@@ -182,3 +125,4 @@ def divLeft₀ (a : G₀) (ha : a != 0) : Perm G₀ where
 
 end CommGroupWithZero
 end Equiv
+

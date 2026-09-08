@@ -20,172 +20,193 @@ public section
 
 namespace Complex
 
-/--
-lemma `isOpen_re_lt_EReal` / 引理 `isOpen_re_lt_EReal`
+/-- An open left half-plane (with boundary real part given by an `EReal`) is an open set
+in the complex plane. -/
+/-
+**Complex.isOpen_re_lt_EReal** 是 Mathlib 中的一个引理，位于命名空间 `Complex`。
+形式化陈述：isOpen_re_lt_EReal (x : EReal) : IsOpen {z : Complex | z.re < x}
+参数：x : EReal。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isOpen_lt`：isOpen_lt [TopologicalSpace β] {f g : β -> α} (hf : Continuou
+s f) (hg : Continuous g) : IsOpen { b | f b < g b }
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `EReal.instOrderTopology`：OrderTopology EReal
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `EReal.continuous_coe_iff`：continuous_coe_iff {f : α -> Real} : (Continuo
+us fun a => (f a : EReal)) ↔ Continuous f
+· 使用定理 `Complex.continuous_re`：Continuous Complex.re
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
 
-English:
-lemma isOpen_re_lt_EReal
-  given: (x : EReal)
-  statement: IsOpen {z : Complex | z.re < x}
-  proof: isOpen_lt (EReal.continuous_coe_iff.mpr continuous_re) continuous_const
-
-中文:
-引理 isOpen_re_lt_E实数
-  条件: (x : E实数)
-  结论: 是开集 {z : 复形 | z.re < x}
-  证明: isOpen_lt (EReal.continuous_coe_iff.mpr continuous_re) continuous_const
-
-Depends on / 依赖: EReal.continuous_coe_iff.mpr, continuous_coe_iff, continuous_const, continuous_re, isOpen_lt
+--- 原说明 ---
+An open left half-plane (with boundary real part given by an `EReal`) is an open
+ set
+in the complex plane.
 -/
-lemma isOpen_re_lt_EReal (x : EReal) : IsOpen {z : Complex | z.re < x} :=
+lemma isOpen_re_lt_EReal (x : EReal) : IsOpen {z : ℂ | z.re < x} :=
   isOpen_lt (EReal.continuous_coe_iff.mpr continuous_re) continuous_const
 
-/--
-lemma `isOpen_re_gt_EReal` / 引理 `isOpen_re_gt_EReal`
+/-- An open right half-plane (with boundary real part given by an `EReal`) is an open set
+in the complex plane. -/
+/-
+**Complex.isOpen_re_gt_EReal** 是 Mathlib 中的一个引理，位于命名空间 `Complex`。
+形式化陈述：isOpen_re_gt_EReal (x : EReal) : IsOpen {z : Complex | x < z.re}
+参数：x : EReal。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isOpen_lt`：isOpen_lt [TopologicalSpace β] {f g : β -> α} (hf : Continuou
+s f) (hg : Continuous g) : IsOpen { b | f b < g b }
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `EReal.instOrderTopology`：OrderTopology EReal
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `EReal.continuous_coe_iff`：continuous_coe_iff {f : α -> Real} : (Continuo
+us fun a => (f a : EReal)) ↔ Continuous f
+· 使用定理 `Complex.continuous_re`：Continuous Complex.re
 
-English:
-lemma isOpen_re_gt_EReal
-  given: (x : EReal)
-  statement: IsOpen {z : Complex | x < z.re}
-  proof: isOpen_lt continuous_const EReal.continuous_coe_iff.mpr continuous_re
-
-中文:
-引理 isOpen_re_gt_E实数
-  条件: (x : E实数)
-  结论: 是开集 {z : 复形 | x < z.re}
-  证明: isOpen_lt continuous_const EReal.continuous_coe_iff.mpr continuous_re
-
-Depends on / 依赖: EReal.continuous_coe_iff.mpr, continuous_coe_iff, continuous_const, continuous_re, isOpen_lt
+--- 原说明 ---
+An open right half-plane (with boundary real part given by an `EReal`) is an ope
+n set
+in the complex plane.
 -/
-lemma isOpen_re_gt_EReal (x : EReal) : IsOpen {z : Complex | x < z.re} :=
-isOpen_lt continuous_const EReal.continuous_coe_iff.mpr continuous_re
+lemma isOpen_re_gt_EReal (x : EReal) : IsOpen {z : ℂ | x < z.re} :=
+  isOpen_lt continuous_const <| EReal.continuous_coe_iff.mpr continuous_re
 
-/--
-lemma `isOpen_im_lt_EReal` / 引理 `isOpen_im_lt_EReal`
+/-- An open lower half-plane (with boundary imaginary part given by an `EReal`) is an open set
+in the complex plane. -/
+/-
+**Complex.isOpen_im_lt_EReal** 是 Mathlib 中的一个引理，位于命名空间 `Complex`。
+形式化陈述：isOpen_im_lt_EReal (x : EReal) : IsOpen {z : Complex | z.im < x}
+参数：x : EReal。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isOpen_lt`：isOpen_lt [TopologicalSpace β] {f g : β -> α} (hf : Continuou
+s f) (hg : Continuous g) : IsOpen { b | f b < g b }
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `EReal.instOrderTopology`：OrderTopology EReal
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `EReal.continuous_coe_iff`：continuous_coe_iff {f : α -> Real} : (Continuo
+us fun a => (f a : EReal)) ↔ Continuous f
+· 使用定理 `Complex.continuous_im`：Continuous Complex.im
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
 
-English:
-lemma isOpen_im_lt_EReal
-  given: (x : EReal)
-  statement: IsOpen {z : Complex | z.im < x}
-  proof: isOpen_lt (EReal.continuous_coe_iff.mpr continuous_im) continuous_const
-
-中文:
-引理 isOpen_im_lt_E实数
-  条件: (x : E实数)
-  结论: 是开集 {z : 复形 | z.im < x}
-  证明: isOpen_lt (EReal.continuous_coe_iff.mpr continuous_im) continuous_const
-
-Depends on / 依赖: EReal.continuous_coe_iff.mpr, continuous_coe_iff, continuous_const, continuous_im, isOpen_lt
+--- 原说明 ---
+An open lower half-plane (with boundary imaginary part given by an `EReal`) is a
+n open set
+in the complex plane.
 -/
-lemma isOpen_im_lt_EReal (x : EReal) : IsOpen {z : Complex | z.im < x} :=
+lemma isOpen_im_lt_EReal (x : EReal) : IsOpen {z : ℂ | z.im < x} :=
   isOpen_lt (EReal.continuous_coe_iff.mpr continuous_im) continuous_const
 
-/--
-lemma `isOpen_im_gt_EReal` / 引理 `isOpen_im_gt_EReal`
+/-- An open upper half-plane (with boundary imaginary part given by an `EReal`) is an open set
+in the complex plane. -/
+/-
+**Complex.isOpen_im_gt_EReal** 是 Mathlib 中的一个引理，位于命名空间 `Complex`。
+形式化陈述：isOpen_im_gt_EReal (x : EReal) : IsOpen {z : Complex | x < z.im}
+参数：x : EReal。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isOpen_lt`：isOpen_lt [TopologicalSpace β] {f g : β -> α} (hf : Continuou
+s f) (hg : Continuous g) : IsOpen { b | f b < g b }
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `EReal.instOrderTopology`：OrderTopology EReal
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `EReal.continuous_coe_iff`：continuous_coe_iff {f : α -> Real} : (Continuo
+us fun a => (f a : EReal)) ↔ Continuous f
+· 使用定理 `Complex.continuous_im`：Continuous Complex.im
 
-English:
-lemma isOpen_im_gt_EReal
-  given: (x : EReal)
-  statement: IsOpen {z : Complex | x < z.im}
-  proof: isOpen_lt continuous_const EReal.continuous_coe_iff.mpr continuous_im
-
-中文:
-引理 isOpen_im_gt_E实数
-  条件: (x : E实数)
-  结论: 是开集 {z : 复形 | x < z.im}
-  证明: isOpen_lt continuous_const EReal.continuous_coe_iff.mpr continuous_im
-
-Depends on / 依赖: EReal.continuous_coe_iff.mpr, continuous_coe_iff, continuous_const, continuous_im, isOpen_lt
+--- 原说明 ---
+An open upper half-plane (with boundary imaginary part given by an `EReal`) is a
+n open set
+in the complex plane.
 -/
-lemma isOpen_im_gt_EReal (x : EReal) : IsOpen {z : Complex | x < z.im} :=
-isOpen_lt continuous_const EReal.continuous_coe_iff.mpr continuous_im
+lemma isOpen_im_gt_EReal (x : EReal) : IsOpen {z : ℂ | x < z.im} :=
+  isOpen_lt continuous_const <| EReal.continuous_coe_iff.mpr continuous_im
 
-/--
-lemma `isOpen_re_lt` / 引理 `isOpen_re_lt`
+/-- An open left half-plane is an open set in the complex plane. -/
+/-
+**Complex.isOpen_re_lt** 是 Mathlib 中的一个引理，位于命名空间 `Complex`。
+形式化陈述：isOpen_re_lt (x : Real) : IsOpen {z : Complex | z.re < x}
+参数：x : Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `Complex.isOpen_re_lt_EReal`：isOpen_re_lt_EReal (x : EReal) : IsOpen {z :
+ Complex | z.re < x}
 
-English:
-lemma isOpen_re_lt
-  given: (x : Real)
-  statement: IsOpen {z : Complex | z.re < x}
-  proof: by
+--- 原说明 ---
+An open left half-plane is an open set in the complex plane.
+-/
+lemma isOpen_re_lt (x : ℝ) : IsOpen {z : ℂ | z.re < x} := by
   simpa using isOpen_re_lt_EReal x
 
-中文:
-引理 isOpen_re_lt
-  条件: (x : 实数)
-  结论: 是开集 {z : 复形 | z.re < x}
-  证明: by
-  simpa using isOpen_re_lt_EReal x
+/-- An open right half-plane is an open set in the complex plane. -/
+/-
+**Complex.isOpen_re_gt** 是 Mathlib 中的一个引理，位于命名空间 `Complex`。
+形式化陈述：isOpen_re_gt (x : Real) : IsOpen {z : Complex | x < z.re}
+参数：x : Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `Complex.isOpen_re_gt_EReal`：isOpen_re_gt_EReal (x : EReal) : IsOpen {z :
+ Complex | x < z.re}
 
-Depends on / 依赖: isOpen_re_lt_EReal
+--- 原说明 ---
+An open right half-plane is an open set in the complex plane.
 -/
-lemma isOpen_re_lt (x : Real) : IsOpen {z : Complex | z.re < x} := by
-  simpa using isOpen_re_lt_EReal x
-
-/--
-lemma `isOpen_re_gt` / 引理 `isOpen_re_gt`
-
-English:
-lemma isOpen_re_gt
-  given: (x : Real)
-  statement: IsOpen {z : Complex | x < z.re}
-  proof: by
+lemma isOpen_re_gt (x : ℝ) : IsOpen {z : ℂ | x < z.re} := by
   simpa using isOpen_re_gt_EReal x
 
-中文:
-引理 isOpen_re_gt
-  条件: (x : 实数)
-  结论: 是开集 {z : 复形 | x < z.re}
-  证明: by
-  simpa using isOpen_re_gt_EReal x
+/-- An open lower half-plane is an open set in the complex plane. -/
+/-
+**Complex.isOpen_im_lt** 是 Mathlib 中的一个引理，位于命名空间 `Complex`。
+形式化陈述：isOpen_im_lt (x : Real) : IsOpen {z : Complex | z.im < x}
+参数：x : Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `Complex.isOpen_im_lt_EReal`：isOpen_im_lt_EReal (x : EReal) : IsOpen {z :
+ Complex | z.im < x}
 
-Depends on / 依赖: isOpen_re_gt_EReal
+--- 原说明 ---
+An open lower half-plane is an open set in the complex plane.
 -/
-lemma isOpen_re_gt (x : Real) : IsOpen {z : Complex | x < z.re} := by
-  simpa using isOpen_re_gt_EReal x
-
-/--
-lemma `isOpen_im_lt` / 引理 `isOpen_im_lt`
-
-English:
-lemma isOpen_im_lt
-  given: (x : Real)
-  statement: IsOpen {z : Complex | z.im < x}
-  proof: by
+lemma isOpen_im_lt (x : ℝ) : IsOpen {z : ℂ | z.im < x} := by
   simpa using isOpen_im_lt_EReal x
 
-中文:
-引理 isOpen_im_lt
-  条件: (x : 实数)
-  结论: 是开集 {z : 复形 | z.im < x}
-  证明: by
-  simpa using isOpen_im_lt_EReal x
+/-- An open upper half-plane is an open set in the complex plane. -/
+/-
+**Complex.isOpen_im_gt** 是 Mathlib 中的一个引理，位于命名空间 `Complex`。
+形式化陈述：isOpen_im_gt (x : Real) : IsOpen {z : Complex | x < z.im}
+参数：x : Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `Complex.isOpen_im_gt_EReal`：isOpen_im_gt_EReal (x : EReal) : IsOpen {z :
+ Complex | x < z.im}
 
-Depends on / 依赖: isOpen_im_lt_EReal
+--- 原说明 ---
+An open upper half-plane is an open set in the complex plane.
 -/
-lemma isOpen_im_lt (x : Real) : IsOpen {z : Complex | z.im < x} := by
-  simpa using isOpen_im_lt_EReal x
-
-/--
-lemma `isOpen_im_gt` / 引理 `isOpen_im_gt`
-
-English:
-lemma isOpen_im_gt
-  given: (x : Real)
-  statement: IsOpen {z : Complex | x < z.im}
-  proof: by
-  simpa using isOpen_im_gt_EReal x
-
-中文:
-引理 isOpen_im_gt
-  条件: (x : 实数)
-  结论: 是开集 {z : 复形 | x < z.im}
-  证明: by
-  simpa using isOpen_im_gt_EReal x
-
-Depends on / 依赖: isOpen_im_gt_EReal
--/
-lemma isOpen_im_gt (x : Real) : IsOpen {z : Complex | x < z.im} := by
+lemma isOpen_im_gt (x : ℝ) : IsOpen {z : ℂ | x < z.im} := by
   simpa using isOpen_im_gt_EReal x
 
 end Complex
+

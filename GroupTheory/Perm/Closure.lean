@@ -35,28 +35,23 @@ variable [Finite β]
 
 open Subgroup
 
-/--
-theorem `closure_isCycle` / 定理 `closure_isCycle`
-
-English:
-theorem closure_isCycle
-  statement: closure { σ : Perm β | IsCycle σ } = ⊤
-  proof: by
-  classical
-    cases nonempty_fintype β
-    exact
-      top_le_iff.mp (le_trans (ge_of_eq closure_isSwap) (closure_mono fun _ => IsSwap.isCycle))
-
-中文:
-定理 closure_isCycle
-  结论: closure { σ : 置换 β | 是环 σ } = ⊤
-  证明: by
-  classical
-    cases nonempty_fintype β
-    exact
-      top_le_iff.mp (le_trans (ge_of_eq closure_isSwap) (closure_mono fun _ => IsSwap.isCycle))
-
-Depends on / 依赖: IsSwap, IsSwap.isCycle, classical, closure_isSwap, closure_mono, ge_of_eq, isCycle, le_trans, nonempty_fintype, top_le_iff, top_le_iff.mp
+/-
+**Equiv.Perm.closure_isCycle** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：closure_isCycle : closure { σ : Perm β | IsCycle σ } = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_fintype`：nonempty_fintype (α : Type*) [Finite α] : Nonempty (Fi
+ntype α)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `top_le_iff`：top_le_iff : ⊤ <= a ↔ a = ⊤
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `ge_of_eq`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Equiv.Perm.closure_isSwap`：closure_isSwap [Finite α] : Subgroup.closure 
+{ σ : Perm α | IsSwap σ } = ⊤
+· 使用定理 `Subgroup.closure_mono`：closure_mono ⦃h k : Set G⦄ (h' : h subseteq k) : 
+closure h <= closure k
+· 使用定理 `Equiv.Perm.IsSwap.isCycle`：∀ {α : Type u_2} {f : Equiv.Perm α} [inst : D
+ecidableEq α], f.IsSwap → f.IsCycle
 -/
 theorem closure_isCycle : closure { σ : Perm β | IsCycle σ } = ⊤ := by
   classical
@@ -65,131 +60,71 @@ theorem closure_isCycle : closure { σ : Perm β | IsCycle σ } = ⊤ := by
       top_le_iff.mp (le_trans (ge_of_eq closure_isSwap) (closure_mono fun _ => IsSwap.isCycle))
 
 variable [DecidableEq α] [Fintype α]
-
-/--
-theorem `closure_cycle_adjacent_swap` / 定理 `closure_cycle_adjacent_swap`
-
-English:
-theorem closure_cycle_adjacent_swap
-  given: {σ : Perm α} (h1 : IsCycle σ) (h2 : σ.support = univ) (x : α)
-  proof: by
-  let H := closure ({σ, swap x (σ x)} : Set (Perm α))
-  have h3 : σ in H := subset_closure (Set.mem_insert σ _)
-  have h4 : swap x (σ x) in H := subset_closure (Set.mem_insert_of_mem _ (Set.mem_singleton _))
-  have step1 : forall n : Nat, swap ((σ ^ n) x) ((σ ^ (n + 1) : Perm α) x) in H := by
-    intro n
-    induction n with
-    | zero => exact subset_closure (Set.mem_insert_of_mem _ (Set.mem_singleton _))
-    | succ n ih =>
-      convert! H.mul_mem (H.mul_mem h3 ih) (H.inv_mem h3)
-      simp_rw [mul_swap_eq_swap_mul, mul_inv_cancel_right, pow_succ', coe_mul, comp_apply]
-  have step2 : forall n : Nat, swap x ((σ ^ n) x) in H := by
-    intro n
-    induction n with
-    | zero =>
-      simp only [pow_zero, coe_one, id_eq, swap_self]
-      convert! H.one_mem
-    | succ n ih =>
-      by_cases h5 : x = (σ ^ n) x
-      · rw [pow_succ', mul_apply, ← h5]
-        exact h4
-      by_cases h6 : x = (σ ^ (n + 1) : Perm α) x
-      · rw [← h6, swap_self]
-        exact H.one_mem
-      rw [swap_comm]; rw [← swap_mul_swap_mul_swap h5 h6]
-      exact H.mul_mem (H.mul_mem (step1 n) ih) (step1 n)
-  have step3 : forall y : α, swap x y in H := by
-    intro y
-    have hx : x in univ := Finset.mem_univ x
-    rw [← h2]; rw [mem_support] at hx
-    have hy : y in univ := Finset.mem_univ y
-    rw [← h2]; rw [mem_support] at hy
-    obtain ⟨n, hn⟩ := IsCycle.exists_pow_eq h1 hx hy
-    rw [← hn]
-    exact step2 n
-  have step4 : forall y z : α, swap y z in H := by
-    intro y z
-    by_cases h5 : z = x
-    · rw [h5, swap_comm]
-      exact step3 y
-    by_cases h6 : z = y
-    · rw [h6, swap_self]
-      exact H.one_mem
-    rw [← swap_mul_swap_mul_swap h5 h6]; rw [swap_comm z x]
-    exact H.mul_mem (H.mul_mem (step3 y) (step3 z)) (step3 y)
-  rw [eq_top_iff]; rw [← closure_isSwap]; rw [closure_le]
-  rintro τ ⟨y, z, _, h6⟩
-  rw [h6]
-  exact step4 y z
-
-中文:
-定理 closure_cycle_adjacent_swap
-  条件: {σ : 置换 α} (h1 : 是环 σ) (h2 : σ.support = univ) (x : α)
-  证明: by
-  let H := closure ({σ, swap x (σ x)} : Set (Perm α))
-  have h3 : σ in H := subset_closure (Set.mem_insert σ _)
-  have h4 : swap x (σ x) in H := subset_closure (Set.mem_insert_of_mem _ (Set.mem_singleton _))
-  have step1 : forall n : Nat, swap ((σ ^ n) x) ((σ ^ (n + 1) : Perm α) x) in H := by
-    intro n
-    induction n with
-    | zero => exact subset_closure (Set.mem_insert_of_mem _ (Set.mem_singleton _))
-    | succ n ih =>
-      convert! H.mul_mem (H.mul_mem h3 ih) (H.inv_mem h3)
-      simp_rw [mul_swap_eq_swap_mul, mul_inv_cancel_right, pow_succ', coe_mul, comp_apply]
-  have step2 : forall n : Nat, swap x ((σ ^ n) x) in H := by
-    intro n
-    induction n with
-    | zero =>
-      simp only [pow_zero, coe_one, id_eq, swap_self]
-      convert! H.one_mem
-    | succ n ih =>
-      by_cases h5 : x = (σ ^ n) x
-      · rw [pow_succ', mul_apply, ← h5]
-        exact h4
-      by_cases h6 : x = (σ ^ (n + 1) : Perm α) x
-      · rw [← h6, swap_self]
-        exact H.one_mem
-      rw [swap_comm]; rw [← swap_mul_swap_mul_swap h5 h6]
-      exact H.mul_mem (H.mul_mem (step1 n) ih) (step1 n)
-  have step3 : forall y : α, swap x y in H := by
-    intro y
-    have hx : x in univ := Finset.mem_univ x
-    rw [← h2]; rw [mem_support] at hx
-    have hy : y in univ := Finset.mem_univ y
-    rw [← h2]; rw [mem_support] at hy
-    obtain ⟨n, hn⟩ := IsCycle.exists_pow_eq h1 hx hy
-    rw [← hn]
-    exact step2 n
-  have step4 : forall y z : α, swap y z in H := by
-    intro y z
-    by_cases h5 : z = x
-    · rw [h5, swap_comm]
-      exact step3 y
-    by_cases h6 : z = y
-    · rw [h6, swap_self]
-      exact H.one_mem
-    rw [← swap_mul_swap_mul_swap h5 h6]; rw [swap_comm z x]
-    exact H.mul_mem (H.mul_mem (step3 y) (step3 z)) (step3 y)
-  rw [eq_top_iff]; rw [← closure_isSwap]; rw [closure_le]
-  rintro τ ⟨y, z, _, h6⟩
-  rw [h6]
-  exact step4 y z
-
-Depends on / 依赖: H.inv_mem, H.mul_mem, Set.mem_insert, Set.mem_insert_of_mem, Set.mem_singleton, closure, convert, inv_mem, mem_insert, mem_insert_of_mem, mem_singleton, mul_inv_c, mul_mem, mul_swap_eq_swap_mul, simp_rw, subset_closure
+/-
+**Equiv.Perm.closure_cycle_adjacent_swap** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：closure_cycle_adjacent_swap {σ : Perm α} (h1 : IsCycle σ) (h2 : σ.support 
+= univ) (x : α) : closure ({σ, swap x (σ x)} : Set (Perm α)) = ⊤
+参数：h1 : IsCycle σ；h2 : σ.support = univ；x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.subset_closure`：subset_closure : k subseteq closure k
+· 使用定理 `Set.mem_insert`：mem_insert (x : α) (s : Set α) : x in insert x s
+· 使用定理 `Set.mem_insert_of_mem`：mem_insert_of_mem {x : α} {s : Set α} (y : α) : x
+ in s -> x in insert y s
+· 使用定理 `Set.mem_singleton`：mem_singleton (a : α) : a in ({a} : Set α)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.mul_swap_eq_swap_mul`：∀ {α : Type u_4} [inst : DecidableEq α] (f :
+ Equiv.Perm α) (x y : α), f * Equiv.swap x y = Equiv.swap (f x) (f y) * f
+· 使用定理 `mul_inv_cancel_right`：mul_inv_cancel_right (a b : G) : a * b * b⁻¹ = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `pow_succ'`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (n : ℕ), a ^ (n + 
+1) = a * a ^ n
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Subgroup.mul_mem`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G) {x 
+y : G}, x ∈ H → y ∈ H → x * y ∈ H
+· 使用定理 `Subgroup.inv_mem`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G) {x 
+: G}, x ∈ H → x⁻¹ ∈ H
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Equiv.swap_self`：swap_self (a : α) : swap a a = Equiv.refl _
+· 使用定理 `Subgroup.one_mem`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G), 1 
+∈ H
+· 使用定理 `Equiv.Perm.mul_apply`：mul_apply (f g : Perm α) (x) : (f * g) x = f (g x)
+· 使用定理 `Equiv.swap_comm`：swap_comm (a b : α) : swap a b = swap b a
+· 使用定理 `Equiv.swap_mul_swap_mul_swap`：∀ {α : Type u_4} [inst : DecidableEq α] {x
+ y z : α},   x ≠ y → x ≠ z → Equiv.swap y z * Equiv.swap x y * Equiv.swap y z = 
+Equiv.swap z x
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
+· 使用定理 `Equiv.Perm.IsCycle.exists_pow_eq`：∀ {α : Type u_2} {f : Equiv.Perm α} {x
+ y : α} [Finite α], f.IsCycle → f x ≠ x → f y ≠ y → ∃ i, (f ^ i) x = y
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Equiv.Perm.mem_support`：mem_support {x : α} : x in f.support ↔ f x != x
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `Equiv.Perm.closure_isSwap`：closure_isSwap [Finite α] : Subgroup.closure 
+{ σ : Perm α | IsSwap σ } = ⊤
+（共 31 条，此处仅展示前 30 条）
 -/
 theorem closure_cycle_adjacent_swap {σ : Perm α} (h1 : IsCycle σ) (h2 : σ.support = univ) (x : α) :
     closure ({σ, swap x (σ x)} : Set (Perm α)) = ⊤ := by
   let H := closure ({σ, swap x (σ x)} : Set (Perm α))
-  have h3 : σ in H := subset_closure (Set.mem_insert σ _)
-  have h4 : swap x (σ x) in H := subset_closure (Set.mem_insert_of_mem _ (Set.mem_singleton _))
-  have step1 : forall n : Nat, swap ((σ ^ n) x) ((σ ^ (n + 1) : Perm α) x) in H := by
+  have h3 : σ ∈ H := subset_closure (Set.mem_insert σ _)
+  have h4 : swap x (σ x) ∈ H := subset_closure (Set.mem_insert_of_mem _ (Set.mem_singleton _))
+  have step1 : ∀ n : ℕ, swap ((σ ^ n) x) ((σ ^ (n + 1) : Perm α) x) ∈ H := by
     intro n
     induction n with
     | zero => exact subset_closure (Set.mem_insert_of_mem _ (Set.mem_singleton _))
     | succ n ih =>
       convert! H.mul_mem (H.mul_mem h3 ih) (H.inv_mem h3)
       simp_rw [mul_swap_eq_swap_mul, mul_inv_cancel_right, pow_succ', coe_mul, comp_apply]
-  have step2 : forall n : Nat, swap x ((σ ^ n) x) in H := by
+  have step2 : ∀ n : ℕ, swap x ((σ ^ n) x) ∈ H := by
     intro n
     induction n with
     | zero =>
@@ -202,18 +137,18 @@ theorem closure_cycle_adjacent_swap {σ : Perm α} (h1 : IsCycle σ) (h2 : σ.su
       by_cases h6 : x = (σ ^ (n + 1) : Perm α) x
       · rw [← h6, swap_self]
         exact H.one_mem
-      rw [swap_comm]; rw [← swap_mul_swap_mul_swap h5 h6]
+      rw [swap_comm, ← swap_mul_swap_mul_swap h5 h6]
       exact H.mul_mem (H.mul_mem (step1 n) ih) (step1 n)
-  have step3 : forall y : α, swap x y in H := by
+  have step3 : ∀ y : α, swap x y ∈ H := by
     intro y
-    have hx : x in univ := Finset.mem_univ x
-    rw [← h2]; rw [mem_support] at hx
-    have hy : y in univ := Finset.mem_univ y
-    rw [← h2]; rw [mem_support] at hy
+    have hx : x ∈ univ := Finset.mem_univ x
+    rw [← h2, mem_support] at hx
+    have hy : y ∈ univ := Finset.mem_univ y
+    rw [← h2, mem_support] at hy
     obtain ⟨n, hn⟩ := IsCycle.exists_pow_eq h1 hx hy
     rw [← hn]
     exact step2 n
-  have step4 : forall y z : α, swap y z in H := by
+  have step4 : ∀ y z : α, swap y z ∈ H := by
     intro y z
     by_cases h5 : z = x
     · rw [h5, swap_comm]
@@ -221,96 +156,109 @@ theorem closure_cycle_adjacent_swap {σ : Perm α} (h1 : IsCycle σ) (h2 : σ.su
     by_cases h6 : z = y
     · rw [h6, swap_self]
       exact H.one_mem
-    rw [← swap_mul_swap_mul_swap h5 h6]; rw [swap_comm z x]
+    rw [← swap_mul_swap_mul_swap h5 h6, swap_comm z x]
     exact H.mul_mem (H.mul_mem (step3 y) (step3 z)) (step3 y)
-  rw [eq_top_iff]; rw [← closure_isSwap]; rw [closure_le]
+  rw [eq_top_iff, ← closure_isSwap, closure_le]
   rintro τ ⟨y, z, _, h6⟩
   rw [h6]
   exact step4 y z
-
-/--
-theorem `closure_cycle_coprime_swap` / 定理 `closure_cycle_coprime_swap`
-
-English:
-theorem closure_cycle_coprime_swap
-  statement: {n : Nat} {σ : Perm α} (h0 : Nat.Coprime n (Fintype.card α))
-  proof: by
-  rw [← Finset.card_univ]; rw [← h2]; rw [← h1.orderOf] at h0
-  obtain ⟨m, hm⟩ := exists_pow_eq_self_of_coprime h0
-  have h2' : (σ ^ n).support = univ := Eq.trans (support_pow_coprime h0) h2
-  have h1' : IsCycle ((σ ^ n) ^ (m : Int)) := by rwa [← hm] at h1
-  replace h1' : IsCycle (σ ^ n) :=
-    h1'.of_pow (le_trans (support_pow_le σ n) (ge_of_eq (congr_arg support hm)))
-  rw [eq_top_iff]; rw [← closure_cycle_adjacent_swap h1' h2' x]; rw [closure_le]; rw [Set.insert_subset_iff]
-  exact
-    ⟨Subgroup.pow_mem (closure _) (subset_closure (Set.mem_insert σ _)) n,
-      Set.singleton_subset_iff.mpr (subset_closure (Set.mem_insert_of_mem _ (Set.mem_singleton _)))⟩
-
-中文:
-定理 closure_cycle_coprime_swap
-  结论: {n : 自然数} {σ : 置换 α} (h0 : 自然数.Coprime n (有限类型.card α))
-  证明: by
-  rw [← Finset.card_univ]; rw [← h2]; rw [← h1.orderOf] at h0
-  obtain ⟨m, hm⟩ := exists_pow_eq_self_of_coprime h0
-  have h2' : (σ ^ n).support = univ := Eq.trans (support_pow_coprime h0) h2
-  have h1' : IsCycle ((σ ^ n) ^ (m : Int)) := by rwa [← hm] at h1
-  replace h1' : IsCycle (σ ^ n) :=
-    h1'.of_pow (le_trans (support_pow_le σ n) (ge_of_eq (congr_arg support hm)))
-  rw [eq_top_iff]; rw [← closure_cycle_adjacent_swap h1' h2' x]; rw [closure_le]; rw [Set.insert_subset_iff]
-  exact
-    ⟨Subgroup.pow_mem (closure _) (subset_closure (Set.mem_insert σ _)) n,
-      Set.singleton_subset_iff.mpr (subset_closure (Set.mem_insert_of_mem _ (Set.mem_singleton _)))⟩
-
-Depends on / 依赖: Eq.trans, Finset, Finset.card_univ, IsCycle, Set.insert_subset_iff, Subgroup, Subgroup.pow_mem, card_univ, closur, closure_cycle_adjacent_swap, closure_le, congr_arg, eq_top_iff, exists_pow_eq_self_of_coprime, ge_of_eq, h1.orderOf, insert_subset_iff, le_trans, of_pow, orderOf
+/-
+**Equiv.Perm.closure_cycle_coprime_swap** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：closure_cycle_coprime_swap {n : Nat} {σ : Perm α} (h0 : Nat.Coprime n (Fin
+type.card α)) (h1 : IsCycle σ) (h2 : σ.support = Finset.univ) (x : α) : closure 
+({σ, swap x ((σ ^ n) x)} : Set (Perm α)) = ⊤
+参数：h0 : Nat.Coprime n (Fintype.card α)；h1 : IsCycle σ；h2 : σ.support = Finset.un
+iv；x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_pow_eq_self_of_coprime`：exists_pow_eq_self_of_coprime (h : n.Copr
+ime (orderOf x)) : exists m : Nat, (x ^ n) ^ m = x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.Perm.IsCycle.orderOf`：∀ {α : Type u_2} {f : Equiv.Perm α} [inst : 
+DecidableEq α] [inst_1 : Fintype α], f.IsCycle → orderOf f = f.support.card
+· 使用定理 `Finset.card_univ`：Finset.card_univ [Fintype α] : #(univ : Finset α) = Fi
+ntype.card α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Equiv.Perm.support_pow_coprime`：support_pow_coprime {σ : Perm α} {n : Na
+t} (h : Nat.Coprime n (orderOf σ)) : (σ ^ n).support = σ.support
+· 使用定理 `Equiv.Perm.IsCycle.of_pow`：∀ {α : Type u_2} {f : Equiv.Perm α} [inst : D
+ecidableEq α] [inst_1 : Fintype α] {n : ℕ},   (f ^ n).IsCycle → f.support ⊆ (f ^
+ n).support → f…
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Equiv.Perm.support_pow_le`：support_pow_le (σ : Perm α) (n : Nat) : (σ ^ 
+n).support <= σ.support
+· 使用定理 `ge_of_eq`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `Equiv.Perm.closure_cycle_adjacent_swap`：closure_cycle_adjacent_swap {σ :
+ Perm α} (h1 : IsCycle σ) (h2 : σ.support = univ) (x : α) : closure ({σ, swap x 
+(σ x)} : Set (Perm α)) = ⊤
+· 使用定理 `Subgroup.closure_le`：closure_le : closure k <= K ↔ k subseteq K
+· 使用定理 `Set.insert_subset_iff`：insert_subset_iff : insert a s subseteq t ↔ a in 
+t ∧ s subseteq t
+· 使用定理 `Subgroup.pow_mem`：∀ {G : Type u_1} [inst : Group G] (K : Subgroup G) {x 
+: G}, x ∈ K → ∀ (n : ℕ), x ^ n ∈ K
+· 使用定理 `Subgroup.subset_closure`：subset_closure : k subseteq closure k
+· 使用定理 `Set.mem_insert`：mem_insert (x : α) (s : Set α) : x in insert x s
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.singleton_subset_iff`：singleton_subset_iff {a : α} {s : Set α} : {a}
+ subseteq s ↔ a in s
+· 使用定理 `Set.mem_insert_of_mem`：mem_insert_of_mem {x : α} {s : Set α} (y : α) : x
+ in s -> x in insert y s
+· 使用定理 `Set.mem_singleton`：mem_singleton (a : α) : a in ({a} : Set α)
 -/
-theorem closure_cycle_coprime_swap {n : Nat} {σ : Perm α} (h0 : Nat.Coprime n (Fintype.card α))
+theorem closure_cycle_coprime_swap {n : ℕ} {σ : Perm α} (h0 : Nat.Coprime n (Fintype.card α))
     (h1 : IsCycle σ) (h2 : σ.support = Finset.univ) (x : α) :
     closure ({σ, swap x ((σ ^ n) x)} : Set (Perm α)) = ⊤ := by
-  rw [← Finset.card_univ]; rw [← h2]; rw [← h1.orderOf] at h0
+  rw [← Finset.card_univ, ← h2, ← h1.orderOf] at h0
   obtain ⟨m, hm⟩ := exists_pow_eq_self_of_coprime h0
   have h2' : (σ ^ n).support = univ := Eq.trans (support_pow_coprime h0) h2
-  have h1' : IsCycle ((σ ^ n) ^ (m : Int)) := by rwa [← hm] at h1
+  have h1' : IsCycle ((σ ^ n) ^ (m : ℤ)) := by rwa [← hm] at h1
   replace h1' : IsCycle (σ ^ n) :=
     h1'.of_pow (le_trans (support_pow_le σ n) (ge_of_eq (congr_arg support hm)))
-  rw [eq_top_iff]; rw [← closure_cycle_adjacent_swap h1' h2' x]; rw [closure_le]; rw [Set.insert_subset_iff]
+  rw [eq_top_iff, ← closure_cycle_adjacent_swap h1' h2' x, closure_le, Set.insert_subset_iff]
   exact
     ⟨Subgroup.pow_mem (closure _) (subset_closure (Set.mem_insert σ _)) n,
       Set.singleton_subset_iff.mpr (subset_closure (Set.mem_insert_of_mem _ (Set.mem_singleton _)))⟩
-
-/--
-theorem `closure_prime_cycle_swap` / 定理 `closure_prime_cycle_swap`
-
-English:
-theorem closure_prime_cycle_swap
-  statement: {σ τ : Perm α} (h0 : (Fintype.card α).Prime) (h1 : IsCycle σ)
-  proof: by
-  obtain ⟨x, y, h4, h5⟩ := h3
-  obtain ⟨i, hi⟩ :=
-    h1.exists_pow_eq (mem_support.mp ((Finset.ext_iff.mp h2 x).mpr (Finset.mem_univ x)))
-      (mem_support.mp ((Finset.ext_iff.mp h2 y).mpr (Finset.mem_univ y)))
-  rw [h5]; rw [← hi]
-  refine closure_cycle_coprime_swap
-    (Nat.Coprime.symm (h0.coprime_iff_not_dvd.mpr fun h => h4 ?_)) h1 h2 x
-  obtain ⟨m, hm⟩ := h
-  rwa [hm, pow_mul, ← Finset.card_univ, ← h2, ← h1.orderOf, pow_orderOf_eq_one, one_pow,
-    one_apply] at hi
-
-中文:
-定理 closure_prime_cycle_swap
-  结论: {σ τ : 置换 α} (h0 : (有限类型.card α).素) (h1 : 是环 σ)
-  证明: by
-  obtain ⟨x, y, h4, h5⟩ := h3
-  obtain ⟨i, hi⟩ :=
-    h1.exists_pow_eq (mem_support.mp ((Finset.ext_iff.mp h2 x).mpr (Finset.mem_univ x)))
-      (mem_support.mp ((Finset.ext_iff.mp h2 y).mpr (Finset.mem_univ y)))
-  rw [h5]; rw [← hi]
-  refine closure_cycle_coprime_swap
-    (Nat.Coprime.symm (h0.coprime_iff_not_dvd.mpr fun h => h4 ?_)) h1 h2 x
-  obtain ⟨m, hm⟩ := h
-  rwa [hm, pow_mul, ← Finset.card_univ, ← h2, ← h1.orderOf, pow_orderOf_eq_one, one_pow,
-    one_apply] at hi
-
-Depends on / 依赖: Coprime, Finset, Finset.card_univ, Finset.ext_iff.mp, Finset.mem_univ, Nat.Coprime.symm, card_univ, closure_cycle_coprime_swap, coprime_iff_not_dvd, exists_pow_eq, ext_iff, h0.coprime_iff_not_dvd.mpr, h1.exists_pow_eq, h1.orderOf, mem_support, mem_support.mp, mem_univ, one_apply, one_pow, orderOf
+/-
+**Equiv.Perm.closure_prime_cycle_swap** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm`。
+形式化陈述：closure_prime_cycle_swap {σ τ : Perm α} (h0 : (Fintype.card α).Prime) (h1 
+: IsCycle σ) (h2 : σ.support = Finset.univ) (h3 : IsSwap τ) : closure ({σ, τ} : 
+Set (Perm α)) = ⊤
+参数：h0 : (Fintype.card α).Prime；h1 : IsCycle σ；h2 : σ.support = Finset.univ；h3 : 
+IsSwap τ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.Perm.IsCycle.exists_pow_eq`：∀ {α : Type u_2} {f : Equiv.Perm α} {x
+ y : α} [Finite α], f.IsCycle → f x ≠ x → f y ≠ y → ∃ i, (f ^ i) x = y
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Equiv.Perm.mem_support`：mem_support {x : α} : x in f.support ↔ f x != x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.ext_iff`：∀ {α : Type u_1} {s₁ s₂ : Finset α}, s₁ = s₂ ↔ ∀ (a : α)
+, a ∈ s₁ ↔ a ∈ s₂
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.Perm.closure_cycle_coprime_swap`：closure_cycle_coprime_swap {n : N
+at} {σ : Perm α} (h0 : Nat.Coprime n (Fintype.card α)) (h1 : IsCycle σ) (h2 : σ.
+support = Finset.univ) (x :…
+· 使用定理 `Nat.Coprime.symm`：∀ {n m : ℕ}, n.Coprime m → m.Coprime n
+· 使用定理 `Nat.Prime.coprime_iff_not_dvd`：∀ {p n : ℕ}, Nat.Prime p → (p.Coprime n ↔
+ ¬p ∣ n)
+· 使用定理 `Equiv.Perm.one_apply`：one_apply (x) : (1 : Perm α) x = x
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `pow_orderOf_eq_one`：pow_orderOf_eq_one (x : G) : x ^ orderOf x = 1
+· 使用定理 `Equiv.Perm.IsCycle.orderOf`：∀ {α : Type u_2} {f : Equiv.Perm α} [inst : 
+DecidableEq α] [inst_1 : Fintype α], f.IsCycle → orderOf f = f.support.card
+· 使用定理 `Finset.card_univ`：Finset.card_univ [Fintype α] : #(univ : Finset α) = Fi
+ntype.card α
+· 使用定理 `pow_mul`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (m n : ℕ), a ^ (m * 
+n) = (a ^ m) ^ n
 -/
 theorem closure_prime_cycle_swap {σ τ : Perm α} (h0 : (Fintype.card α).Prime) (h1 : IsCycle σ)
     (h2 : σ.support = Finset.univ) (h3 : IsSwap τ) : closure ({σ, τ} : Set (Perm α)) = ⊤ := by
@@ -318,7 +266,7 @@ theorem closure_prime_cycle_swap {σ τ : Perm α} (h0 : (Fintype.card α).Prime
   obtain ⟨i, hi⟩ :=
     h1.exists_pow_eq (mem_support.mp ((Finset.ext_iff.mp h2 x).mpr (Finset.mem_univ x)))
       (mem_support.mp ((Finset.ext_iff.mp h2 y).mpr (Finset.mem_univ y)))
-  rw [h5]; rw [← hi]
+  rw [h5, ← hi]
   refine closure_cycle_coprime_swap
     (Nat.Coprime.symm (h0.coprime_iff_not_dvd.mpr fun h => h4 ?_)) h1 h2 x
   obtain ⟨m, hm⟩ := h
@@ -330,3 +278,4 @@ end Generation
 end Perm
 
 end Equiv
+

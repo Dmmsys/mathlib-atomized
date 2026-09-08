@@ -26,488 +26,394 @@ namespace Set
 
 variable {α : Type*} [LinearOrder α] {s t : Set α} {x y z : α}
 
-/--
-Definition of `ordConnectedComponent` / `ordConnectedComponent` 的定义
+/-- Order-connected component of a point `x` in a set `s`. It is defined as the set of `y` such that
+`Set.uIcc x y ⊆ s`. Note that it is empty if and only if `x ∉ s`. -/
+/-
+**Set.ordConnectedComponent** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：ordConnectedComponent (s : Set α) (x : α) : Set α
+参数：s : Set α；x : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ordConnectedComponent
-  signature: (s : Set α) (x : α)
-  body: { y | [[x, y]] subseteq s }
-
-中文:
-定义 ordConnectedComponent
-  签名: (s : 集合 α) (x : α)
-  定义体: { y | [[x, y]] subseteq s }
-
-Depends on / 依赖: subseteq
+--- 原说明 ---
+Order-connected component of a point `x` in a set `s`. It is defined as the set 
+of `y` such that
+`Set.uIcc x y ⊆ s`. Note that it is empty if and only if `x ∉ s`.
 -/
 def ordConnectedComponent (s : Set α) (x : α) : Set α :=
-  { y | [[x, y]] subseteq s }
-
-/--
-theorem `mem_ordConnectedComponent` / 定理 `mem_ordConnectedComponent`
-
-English:
-theorem mem_ordConnectedComponent
-  statement: y in ordConnectedComponent s x ↔ [[x, y]] subseteq s
-  proof: Iff.rfl
-
-中文:
-定理 mem_ordConnectedComponent
-  结论: y in ordConnectedComponent s x ↔ [[x, y]] subseteq s
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+  { y | [[x, y]] ⊆ s }
+/-
+**Set.mem_ordConnectedComponent** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_ordConnectedComponent : y in ordConnectedComponent s x ↔ [[x, y]] subs
+eteq s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_ordConnectedComponent : y in ordConnectedComponent s x ↔ [[x, y]] subseteq s :=
+theorem mem_ordConnectedComponent : y ∈ ordConnectedComponent s x ↔ [[x, y]] ⊆ s :=
   Iff.rfl
-
-/--
-theorem `dual_ordConnectedComponent` / 定理 `dual_ordConnectedComponent`
-
-English:
-theorem dual_ordConnectedComponent
-  proof: ext (Surjective.forall toDual.surjective).2 fun x => by simp [mem_ordConnectedComponent]
-
-中文:
-定理 dual_ordConnectedComponent
-  证明: ext (Surjective.forall toDual.surjective).2 fun x => by simp [mem_ordConnectedComponent]
-
-Depends on / 依赖: Surjective, Surjective.forall, mem_ordConnectedComponent, surjective, toDual, toDual.surjective
+/-
+**Set.dual_ordConnectedComponent** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：dual_ordConnectedComponent : ordConnectedComponent (ofDual ⁻¹' s) (toDual 
+x) = ofDual ⁻¹' ordConnectedComponent s x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Set.uIcc_toDual`：uIcc_toDual (a b : α) : [[toDual a, toDual b]] = ofDual
+ ⁻¹' [[a, b]]
+· 使用定理 `EquivLike.range_eq_univ`：range_eq_univ {α : Type*} {β : Type*} {E : Type
+*} [EquivLike E α β] (e : E) : range e = univ
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem dual_ordConnectedComponent :
     ordConnectedComponent (ofDual ⁻¹' s) (toDual x) = ofDual ⁻¹' ordConnectedComponent s x :=
-ext (Surjective.forall toDual.surjective).2 fun x => by simp [mem_ordConnectedComponent]
-
-/--
-theorem `ordConnectedComponent_subset` / 定理 `ordConnectedComponent_subset`
-
-English:
-theorem ordConnectedComponent_subset
-  statement: ordConnectedComponent s x subseteq s
-  proof: fun _ hy =>
+  ext <| (Surjective.forall toDual.surjective).2 fun x => by simp [mem_ordConnectedComponent]
+/-
+**Set.ordConnectedComponent_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ordConnectedComponent_subset : ordConnectedComponent s x subseteq s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.right_mem_uIcc`：∀ {α : Type u_1} [inst : Lattice α] {a b : α}, b ∈ S
+et.uIcc a b
+-/
+theorem ordConnectedComponent_subset : ordConnectedComponent s x ⊆ s := fun _ hy =>
   hy right_mem_uIcc
-
-中文:
-定理 ordConnectedComponent_subset
-  结论: ordConnectedComponent s x subseteq s
-  证明: fun _ hy =>
-  hy right_mem_uIcc
+/-
+**Set.subset_ordConnectedComponent** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：subset_ordConnectedComponent {t} [h : OrdConnected s] (hs : x in s) (ht : 
+s subseteq t) : s subseteq ordConnectedComponent t x
+参数：hs : x in s；ht : s subseteq t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Set.OrdConnected.uIcc_subset`：∀ {α : Type u_1} [inst : LinearOrder α] {s
+ : Set α},   s.OrdConnected → ∀ ⦃x : α⦄, x ∈ s → ∀ ⦃y : α⦄, y ∈ s → Set.uIcc x y
+ ⊆ s
 -/
-theorem ordConnectedComponent_subset : ordConnectedComponent s x subseteq s := fun _ hy =>
-  hy right_mem_uIcc
-
-/--
-theorem `subset_ordConnectedComponent` / 定理 `subset_ordConnectedComponent`
-
-English:
-theorem subset_ordConnectedComponent
-  given: {t} [h : OrdConnected s] (hs : x in s) (ht : s subseteq t)
-  proof: fun _ hy => (h.uIcc_subset hs hy).trans ht
+theorem subset_ordConnectedComponent {t} [h : OrdConnected s] (hs : x ∈ s) (ht : s ⊆ t) :
+    s ⊆ ordConnectedComponent t x := fun _ hy => (h.uIcc_subset hs hy).trans ht
 
 @[simp]
-
-中文:
-定理 subset_ordConnectedComponent
-  条件: {t} [h : 序连通 s] (hs : x in s) (ht : s subseteq t)
-  证明: fun _ hy => (h.uIcc_subset hs hy).trans ht
-
-@[simp]
-
-Depends on / 依赖: h.uIcc_subset, uIcc_subset
+/-
+**Set.self_mem_ordConnectedComponent** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：self_mem_ordConnectedComponent : x in ordConnectedComponent s x ↔ x in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mem_ordConnectedComponent`：mem_ordConnectedComponent : y in ordConne
+ctedComponent s x ↔ [[x, y]] subseteq s
+· 使用引理 `Set.uIcc_self`：uIcc_self : [[a, a]] = {a}
+· 使用定理 `Set.singleton_subset_iff`：singleton_subset_iff {a : α} {s : Set α} : {a}
+ subseteq s ↔ a in s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem subset_ordConnectedComponent {t} [h : OrdConnected s] (hs : x in s) (ht : s subseteq t) :
-    s subseteq ordConnectedComponent t x := fun _ hy => (h.uIcc_subset hs hy).trans ht
+theorem self_mem_ordConnectedComponent : x ∈ ordConnectedComponent s x ↔ x ∈ s := by
+  rw [mem_ordConnectedComponent, uIcc_self, singleton_subset_iff]
 
 @[simp]
-/--
-theorem `self_mem_ordConnectedComponent` / 定理 `self_mem_ordConnectedComponent`
-
-English:
-theorem self_mem_ordConnectedComponent
-  statement: x in ordConnectedComponent s x ↔ x in s
-  proof: by
-  rw [mem_ordConnectedComponent]; rw [uIcc_self]; rw [singleton_subset_iff]
-
-@[simp]
-
-中文:
-定理 self_mem_ordConnectedComponent
-  结论: x in ordConnectedComponent s x ↔ x in s
-  证明: by
-  rw [mem_ordConnectedComponent]; rw [uIcc_self]; rw [singleton_subset_iff]
-
-@[simp]
-
-Depends on / 依赖: mem_ordConnectedComponent, singleton_subset_iff, uIcc_self
+/-
+**Set.nonempty_ordConnectedComponent** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：nonempty_ordConnectedComponent : (ordConnectedComponent s x).Nonempty ↔ x 
+in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.left_mem_uIcc`：∀ {α : Type u_1} [inst : Lattice α] {a b : α}, a ∈ Se
+t.uIcc a b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.self_mem_ordConnectedComponent`：self_mem_ordConnectedComponent : x i
+n ordConnectedComponent s x ↔ x in s
 -/
-theorem self_mem_ordConnectedComponent : x in ordConnectedComponent s x ↔ x in s := by
-  rw [mem_ordConnectedComponent]; rw [uIcc_self]; rw [singleton_subset_iff]
+theorem nonempty_ordConnectedComponent : (ordConnectedComponent s x).Nonempty ↔ x ∈ s :=
+  ⟨fun ⟨_, hy⟩ => hy <| left_mem_uIcc, fun h => ⟨x, self_mem_ordConnectedComponent.2 h⟩⟩
 
 @[simp]
-/--
-theorem `nonempty_ordConnectedComponent` / 定理 `nonempty_ordConnectedComponent`
-
-English:
-theorem nonempty_ordConnectedComponent
-  statement: (ordConnectedComponent s x).Nonempty ↔ x in s
-  proof: ⟨fun ⟨_, hy⟩ => hy left_mem_uIcc, fun h => ⟨x, self_mem_ordConnectedComponent.2 h⟩⟩
-
-@[simp]
-
-中文:
-定理 nonempty_ordConnectedComponent
-  结论: (ordConnectedComponent s x).非空 ↔ x in s
-  证明: ⟨fun ⟨_, hy⟩ => hy left_mem_uIcc, fun h => ⟨x, self_mem_ordConnectedComponent.2 h⟩⟩
-
-@[simp]
-
-Depends on / 依赖: left_mem_uIcc, self_mem_ordConnectedComponent
--/
-theorem nonempty_ordConnectedComponent : (ordConnectedComponent s x).Nonempty ↔ x in s :=
-⟨fun ⟨_, hy⟩ => hy left_mem_uIcc, fun h => ⟨x, self_mem_ordConnectedComponent.2 h⟩⟩
-
-@[simp]
-/--
-theorem `ordConnectedComponent_eq_empty` / 定理 `ordConnectedComponent_eq_empty`
-
-English:
-theorem ordConnectedComponent_eq_empty
-  statement: ordConnectedComponent s x = ∅ ↔ x ∉ s
-  proof: by
-  rw [← not_nonempty_iff_eq_empty]; rw [nonempty_ordConnectedComponent]
-
-@[simp]
-
-中文:
-定理 ordConnectedComponent_eq_empty
-  结论: ordConnectedComponent s x = ∅ ↔ x ∉ s
-  证明: by
-  rw [← not_nonempty_iff_eq_empty]; rw [nonempty_ordConnectedComponent]
-
-@[simp]
-
-Depends on / 依赖: nonempty_ordConnectedComponent, not_nonempty_iff_eq_empty
+/-
+**Set.ordConnectedComponent_eq_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ordConnectedComponent_eq_empty : ordConnectedComponent s x = ∅ ↔ x ∉ s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.not_nonempty_iff_eq_empty`：not_nonempty_iff_eq_empty : ¬s.Nonempty ↔
+ s = ∅
+· 使用定理 `Set.nonempty_ordConnectedComponent`：nonempty_ordConnectedComponent : (or
+dConnectedComponent s x).Nonempty ↔ x in s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem ordConnectedComponent_eq_empty : ordConnectedComponent s x = ∅ ↔ x ∉ s := by
-  rw [← not_nonempty_iff_eq_empty]; rw [nonempty_ordConnectedComponent]
+  rw [← not_nonempty_iff_eq_empty, nonempty_ordConnectedComponent]
 
 @[simp]
-/--
-theorem `ordConnectedComponent_empty` / 定理 `ordConnectedComponent_empty`
-
-English:
-theorem ordConnectedComponent_empty
-  statement: ordConnectedComponent ∅ x = ∅
-  proof: ordConnectedComponent_eq_empty.2 (notMem_empty x)
-
-@[simp]
-
-中文:
-定理 ordConnectedComponent_empty
-  结论: ordConnectedComponent ∅ x = ∅
-  证明: ordConnectedComponent_eq_empty.2 (notMem_empty x)
-
-@[simp]
-
-Depends on / 依赖: notMem_empty, ordConnectedComponent_eq_empty
+/-
+**Set.ordConnectedComponent_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ordConnectedComponent_empty : ordConnectedComponent ∅ x = ∅
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.ordConnectedComponent_eq_empty`：ordConnectedComponent_eq_empty : ord
+ConnectedComponent s x = ∅ ↔ x ∉ s
+· 使用定理 `Set.notMem_empty`：notMem_empty (x : α) : x ∉ (∅ : Set α)
 -/
 theorem ordConnectedComponent_empty : ordConnectedComponent ∅ x = ∅ :=
   ordConnectedComponent_eq_empty.2 (notMem_empty x)
 
 @[simp]
-/--
-theorem `ordConnectedComponent_univ` / 定理 `ordConnectedComponent_univ`
-
-English:
-theorem ordConnectedComponent_univ
-  statement: ordConnectedComponent univ x = univ
-  proof: by
-  simp [ordConnectedComponent]
-
-中文:
-定理 ordConnectedComponent_univ
-  结论: ordConnectedComponent univ x = univ
-  证明: by
-  simp [ordConnectedComponent]
-
-Depends on / 依赖: ordConnectedComponent
+/-
+**Set.ordConnectedComponent_univ** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ordConnectedComponent_univ : ordConnectedComponent univ x = univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem ordConnectedComponent_univ : ordConnectedComponent univ x = univ := by
   simp [ordConnectedComponent]
-
-/--
-theorem `ordConnectedComponent_inter` / 定理 `ordConnectedComponent_inter`
-
-English:
-theorem ordConnectedComponent_inter
-  given: (s t : Set α) (x : α)
-  proof: by
-  simp [ordConnectedComponent, ofPred_and]
-
-中文:
-定理 ordConnectedComponent_inter
-  条件: (s t : 集合 α) (x : α)
-  证明: by
-  simp [ordConnectedComponent, ofPred_and]
-
-Depends on / 依赖: IsTwoSided, ofPred_and, ordConnectedComponent
+/-
+**Set.ordConnectedComponent_inter** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ordConnectedComponent_inter (s t : Set α) (x : α) : ordConnectedComponent 
+(s inter t) x = ordConnectedComponent s x inter ordConnectedComponent t x
+参数：s t : Set α；x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem ordConnectedComponent_inter (s t : Set α) (x : α) :
-    ordConnectedComponent (s inter t) x = ordConnectedComponent s x inter ordConnectedComponent t x := by
+    ordConnectedComponent (s ∩ t) x = ordConnectedComponent s x ∩ ordConnectedComponent t x := by
   simp [ordConnectedComponent, ofPred_and]
-
-/--
-theorem `mem_ordConnectedComponent_comm` / 定理 `mem_ordConnectedComponent_comm`
-
-English:
-theorem mem_ordConnectedComponent_comm
-  proof: by
-  rw [mem_ordConnectedComponent]; rw [mem_ordConnectedComponent]; rw [uIcc_comm]
-
-中文:
-定理 mem_ordConnectedComponent_comm
-  证明: by
-  rw [mem_ordConnectedComponent]; rw [mem_ordConnectedComponent]; rw [uIcc_comm]
-
-Depends on / 依赖: mem_ordConnectedComponent, uIcc_comm
+/-
+**Set.mem_ordConnectedComponent_comm** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_ordConnectedComponent_comm : y in ordConnectedComponent s x ↔ x in ord
+ConnectedComponent s y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mem_ordConnectedComponent`：mem_ordConnectedComponent : y in ordConne
+ctedComponent s x ↔ [[x, y]] subseteq s
+· 使用引理 `Set.uIcc_comm`：uIcc_comm (a b : α) : [[a, b]] = [[b, a]]
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem mem_ordConnectedComponent_comm :
-    y in ordConnectedComponent s x ↔ x in ordConnectedComponent s y := by
-  rw [mem_ordConnectedComponent]; rw [mem_ordConnectedComponent]; rw [uIcc_comm]
-
-/--
-theorem `mem_ordConnectedComponent_trans` / 定理 `mem_ordConnectedComponent_trans`
-
-English:
-theorem mem_ordConnectedComponent_trans
-  statement: (hxy : y in ordConnectedComponent s x)
-  proof: calc
-    [[x, z]] subseteq [[x, y]] union [[y, z]] := uIcc_subset_uIcc_union_uIcc
-    _ subseteq s := union_subset hxy hyz
-
-中文:
-定理 mem_ordConnectedComponent_trans
-  结论: (hxy : y in ordConnectedComponent s x)
-  证明: calc
-    [[x, z]] subseteq [[x, y]] union [[y, z]] := uIcc_subset_uIcc_union_uIcc
-    _ subseteq s := union_subset hxy hyz
-
-Depends on / 依赖: subseteq, uIcc_subset_uIcc_union_uIcc, union_subset
+    y ∈ ordConnectedComponent s x ↔ x ∈ ordConnectedComponent s y := by
+  rw [mem_ordConnectedComponent, mem_ordConnectedComponent, uIcc_comm]
+/-
+**Set.mem_ordConnectedComponent_trans** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_ordConnectedComponent_trans (hxy : y in ordConnectedComponent s x) (hy
+z : z in ordConnectedComponent s y) : z in ordConnectedComponent s x
+参数：hxy : y in ordConnectedComponent s x；hyz : z in ordConnectedComponent s y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.uIcc_subset_uIcc_union_uIcc`：uIcc_subset_uIcc_union_uIcc : [[a, c]] 
+subseteq [[a, b]] union [[b, c]]
+· 使用定理 `Set.union_subset`：union_subset {s t r : Set α} (sr : s subseteq r) (tr :
+ t subseteq r) : s union t subseteq r
 -/
-theorem mem_ordConnectedComponent_trans (hxy : y in ordConnectedComponent s x)
-    (hyz : z in ordConnectedComponent s y) : z in ordConnectedComponent s x :=
+theorem mem_ordConnectedComponent_trans (hxy : y ∈ ordConnectedComponent s x)
+    (hyz : z ∈ ordConnectedComponent s y) : z ∈ ordConnectedComponent s x :=
   calc
-    [[x, z]] subseteq [[x, y]] union [[y, z]] := uIcc_subset_uIcc_union_uIcc
-    _ subseteq s := union_subset hxy hyz
-
-/--
-theorem `ordConnectedComponent_eq` / 定理 `ordConnectedComponent_eq`
-
-English:
-theorem ordConnectedComponent_eq
-  given: (h : [[x, y]] subseteq s)
-  proof: ext fun _ =>
-    ⟨mem_ordConnectedComponent_trans (mem_ordConnectedComponent_comm.2 h),
-      mem_ordConnectedComponent_trans h⟩
-
-中文:
-定理 ordConnectedComponent_eq
-  条件: (h : [[x, y]] subseteq s)
-  证明: ext fun _ =>
-    ⟨mem_ordConnectedComponent_trans (mem_ordConnectedComponent_comm.2 h),
-      mem_ordConnectedComponent_trans h⟩
-
-Depends on / 依赖: mem_ordConnectedComponent_comm, mem_ordConnectedComponent_trans
+    [[x, z]] ⊆ [[x, y]] ∪ [[y, z]] := uIcc_subset_uIcc_union_uIcc
+    _ ⊆ s := union_subset hxy hyz
+/-
+**Set.ordConnectedComponent_eq** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ordConnectedComponent_eq (h : [[x, y]] subseteq s) : ordConnectedComponent
+ s x = ordConnectedComponent s y
+参数：h : [[x, y]] subseteq s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Set.mem_ordConnectedComponent_trans`：mem_ordConnectedComponent_trans (hx
+y : y in ordConnectedComponent s x) (hyz : z in ordConnectedComponent s y) : z i
+n ordConnectedComponent s…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.mem_ordConnectedComponent_comm`：mem_ordConnectedComponent_comm : y i
+n ordConnectedComponent s x ↔ x in ordConnectedComponent s y
 -/
-theorem ordConnectedComponent_eq (h : [[x, y]] subseteq s) :
+theorem ordConnectedComponent_eq (h : [[x, y]] ⊆ s) :
     ordConnectedComponent s x = ordConnectedComponent s y :=
   ext fun _ =>
     ⟨mem_ordConnectedComponent_trans (mem_ordConnectedComponent_comm.2 h),
       mem_ordConnectedComponent_trans h⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: OrdConnected (ordConnectedComponent s x)
-  body: ordConnected_of_uIcc_subset_left fun _ hy _ hz => (uIcc_subset_uIcc_left hz).trans hy
-
-中文:
-实例 :
-  签名: 序连通 (ordConnectedComponent s x)
-  定义体: ordConnected_of_uIcc_subset_left fun _ hy _ hz => (uIcc_subset_uIcc_left hz).trans hy
-
-Depends on / 依赖: ordConnected_of_uIcc_subset_left, uIcc_subset_uIcc_left
+/-
+**Set.** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : OrdConnected (ordConnectedComponent s x) :=
   ordConnected_of_uIcc_subset_left fun _ hy _ hz => (uIcc_subset_uIcc_left hz).trans hy
 
-/--
-Definition of `ordConnectedProj` / `ordConnectedProj` 的定义
+/-- Projection from `s : Set α` to `α` sending each order connected component of `s` to a single
+point of this component. -/
+/-
+**Set.ordConnectedProj** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：ordConnectedProj (s : Set α) : s -> α
+参数：s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ordConnectedProj
-  signature: (s : Set α)
-  body: fun x : s =>
-  (nonempty_ordConnectedComponent.2 x.2).some
-
-中文:
-定义 ordConnectedProj
-  签名: (s : 集合 α)
-  定义体: fun x : s =>
-  (nonempty_ordConnectedComponent.2 x.2).some
+--- 原说明 ---
+Projection from `s : Set α` to `α` sending each order connected component of `s`
+ to a single
+point of this component.
 -/
-noncomputable def ordConnectedProj (s : Set α) : s -> α := fun x : s =>
+noncomputable def ordConnectedProj (s : Set α) : s → α := fun x : s =>
   (nonempty_ordConnectedComponent.2 x.2).some
-
-/--
-theorem `ordConnectedProj_mem_ordConnectedComponent` / 定理 `ordConnectedProj_mem_ordConnectedComponent`
-
-English:
-theorem ordConnectedProj_mem_ordConnectedComponent
-  given: (s : Set α) (x : s)
-  proof: Nonempty.some_mem _
-
-中文:
-定理 ordConnectedProj_mem_ordConnectedComponent
-  条件: (s : 集合 α) (x : s)
-  证明: Nonempty.some_mem _
-
-Depends on / 依赖: Nonempty, Nonempty.some_mem, some_mem
+/-
+**Set.ordConnectedProj_mem_ordConnectedComponent** 是 Mathlib 中的一个定理，位于命名空间 `Set`
+。
+形式化陈述：ordConnectedProj_mem_ordConnectedComponent (s : Set α) (x : s) : ordConnec
+tedProj s x in ordConnectedComponent s x
+参数：s : Set α；x : s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.some_mem`：∀ {α : Type u} {s : Set α} (h : s.Nonempty), h.so
+me ∈ s
 -/
 theorem ordConnectedProj_mem_ordConnectedComponent (s : Set α) (x : s) :
-    ordConnectedProj s x in ordConnectedComponent s x :=
+    ordConnectedProj s x ∈ ordConnectedComponent s x :=
   Nonempty.some_mem _
-
-/--
-theorem `mem_ordConnectedComponent_ordConnectedProj` / 定理 `mem_ordConnectedComponent_ordConnectedProj`
-
-English:
-theorem mem_ordConnectedComponent_ordConnectedProj
-  given: (s : Set α) (x : s)
-  proof: mem_ordConnectedComponent_comm.2 ordConnectedProj_mem_ordConnectedComponent s x
-
-@[simp]
-
-中文:
-定理 mem_ordConnectedComponent_ordConnectedProj
-  条件: (s : 集合 α) (x : s)
-  证明: mem_ordConnectedComponent_comm.2 ordConnectedProj_mem_ordConnectedComponent s x
-
-@[simp]
-
-Depends on / 依赖: mem_ordConnectedComponent_comm, ordConnectedProj_mem_ordConnectedComponent
+/-
+**Set.mem_ordConnectedComponent_ordConnectedProj** 是 Mathlib 中的一个定理，位于命名空间 `Set`
+。
+形式化陈述：mem_ordConnectedComponent_ordConnectedProj (s : Set α) (x : s) : ↑x in ord
+ConnectedComponent s (ordConnectedProj s x)
+参数：s : Set α；x : s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.mem_ordConnectedComponent_comm`：mem_ordConnectedComponent_comm : y i
+n ordConnectedComponent s x ↔ x in ordConnectedComponent s y
+· 使用定理 `Set.ordConnectedProj_mem_ordConnectedComponent`：ordConnectedProj_mem_ord
+ConnectedComponent (s : Set α) (x : s) : ordConnectedProj s x in ordConnectedCom
+ponent s x
 -/
 theorem mem_ordConnectedComponent_ordConnectedProj (s : Set α) (x : s) :
-    ↑x in ordConnectedComponent s (ordConnectedProj s x) :=
-mem_ordConnectedComponent_comm.2 ordConnectedProj_mem_ordConnectedComponent s x
+    ↑x ∈ ordConnectedComponent s (ordConnectedProj s x) :=
+  mem_ordConnectedComponent_comm.2 <| ordConnectedProj_mem_ordConnectedComponent s x
 
 @[simp]
-/--
-theorem `ordConnectedComponent_ordConnectedProj` / 定理 `ordConnectedComponent_ordConnectedProj`
-
-English:
-theorem ordConnectedComponent_ordConnectedProj
-  given: (s : Set α) (x : s)
-  proof: ordConnectedComponent_eq mem_ordConnectedComponent_ordConnectedProj _ _
-
-@[simp]
-
-中文:
-定理 ordConnectedComponent_ordConnectedProj
-  条件: (s : 集合 α) (x : s)
-  证明: ordConnectedComponent_eq mem_ordConnectedComponent_ordConnectedProj _ _
-
-@[simp]
-
-Depends on / 依赖: mem_ordConnectedComponent_ordConnectedProj, ordConnectedComponent_eq
+/-
+**Set.ordConnectedComponent_ordConnectedProj** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ordConnectedComponent_ordConnectedProj (s : Set α) (x : s) : ordConnectedC
+omponent s (ordConnectedProj s x) = ordConnectedComponent s x
+参数：s : Set α；x : s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ordConnectedComponent_eq`：ordConnectedComponent_eq (h : [[x, y]] sub
+seteq s) : ordConnectedComponent s x = ordConnectedComponent s y
+· 使用定理 `Set.mem_ordConnectedComponent_ordConnectedProj`：mem_ordConnectedComponen
+t_ordConnectedProj (s : Set α) (x : s) : ↑x in ordConnectedComponent s (ordConne
+ctedProj s x)
 -/
 theorem ordConnectedComponent_ordConnectedProj (s : Set α) (x : s) :
     ordConnectedComponent s (ordConnectedProj s x) = ordConnectedComponent s x :=
-ordConnectedComponent_eq mem_ordConnectedComponent_ordConnectedProj _ _
+  ordConnectedComponent_eq <| mem_ordConnectedComponent_ordConnectedProj _ _
 
 @[simp]
-/--
-theorem `ordConnectedProj_eq` / 定理 `ordConnectedProj_eq`
-
-English:
-theorem ordConnectedProj_eq
-  given: {x y : s}
-  proof: by
-  constructor <;> intro h
-  · rw [← mem_ordConnectedComponent, ← ordConnectedComponent_ordConnectedProj, h,
-      ordConnectedComponent_ordConnectedProj, self_mem_ordConnectedComponent]
-    exact y.2
-  · simp only [ordConnectedProj, ordConnectedComponent_eq h]
-
-中文:
-定理 ordConnectedProj_eq
-  条件: {x y : s}
-  证明: by
-  constructor <;> intro h
-  · rw [← mem_ordConnectedComponent, ← ordConnectedComponent_ordConnectedProj, h,
-      ordConnectedComponent_ordConnectedProj, self_mem_ordConnectedComponent]
-    exact y.2
-  · simp only [ordConnectedProj, ordConnectedComponent_eq h]
-
-Depends on / 依赖: mem_ordConnectedComponent, ordConnectedComponent_eq, ordConnectedComponent_ordConnectedProj, ordConnectedProj, self_mem_ordConnectedComponent
+/-
+**Set.ordConnectedProj_eq** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ordConnectedProj_eq {x y : s} : ordConnectedProj s x = ordConnectedProj s 
+y ↔ [[(x : α), y]] subseteq s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.mem_ordConnectedComponent`：mem_ordConnectedComponent : y in ordConne
+ctedComponent s x ↔ [[x, y]] subseteq s
+· 使用定理 `Set.ordConnectedComponent_ordConnectedProj`：ordConnectedComponent_ordCon
+nectedProj (s : Set α) (x : s) : ordConnectedComponent s (ordConnectedProj s x) 
+= ordConnectedComponent s x
+· 使用定理 `Set.self_mem_ordConnectedComponent`：self_mem_ordConnectedComponent : x i
+n ordConnectedComponent s x ↔ x in s
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.ordConnectedComponent_eq`：ordConnectedComponent_eq (h : [[x, y]] sub
+seteq s) : ordConnectedComponent s x = ordConnectedComponent s y
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.Nonempty.some.congr_simp`：∀ {α : Type u} {s s_1 : Set α} (e_s : s = 
+s_1) (h : s.Nonempty), h.some = ⋯.some
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem ordConnectedProj_eq {x y : s} :
-    ordConnectedProj s x = ordConnectedProj s y ↔ [[(x : α), y]] subseteq s := by
+    ordConnectedProj s x = ordConnectedProj s y ↔ [[(x : α), y]] ⊆ s := by
   constructor <;> intro h
   · rw [← mem_ordConnectedComponent, ← ordConnectedComponent_ordConnectedProj, h,
       ordConnectedComponent_ordConnectedProj, self_mem_ordConnectedComponent]
     exact y.2
   · simp only [ordConnectedProj, ordConnectedComponent_eq h]
 
+/-- A set that intersects each order connected component of a set by a single point. Defined as the
+range of `Set.ordConnectedProj s`. -/
 -- Note: `Set` has no computational content, but Lean still attempts to compile it.
 -- See https://github.com/leanprover/lean4/issues/14084.
-/--
-Definition of `ordConnectedSection` / `ordConnectedSection` 的定义
-
-English:
-definition ordConnectedSection
-  signature: (s : Set α)
-  body: range ordConnectedProj s
-
-中文:
-定义 ordConnectedSection
-  签名: (s : 集合 α)
-  定义体: range ordConnectedProj s
-
-Depends on / 依赖: ordConnectedProj
+/-
+**Set.ordConnectedSection** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：ordConnectedSection (s : Set α) : Set α
+参数：s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable def ordConnectedSection (s : Set α) : Set α :=
-range ordConnectedProj s
-
-/--
-theorem `dual_ordConnectedSection` / 定理 `dual_ordConnectedSection`
-
-English:
-theorem dual_ordConnectedSection
-  given: (s : Set α)
-  proof: by
-  simp only [ordConnectedSection]
-  simp +unfoldPartialApp only [ordConnectedProj]
-  ext x
-  simp only [mem_range, Subtype.exists, mem_preimage, OrderDual.exists, dual_ordConnectedComponent,
-    ofDual_toDual]
-  tauto
-
-中文:
-定理 dual_ordConnectedSection
-  条件: (s : 集合 α)
-  证明: by
-  simp only [ordConnectedSection]
-  simp +unfoldPartialApp only [ordConnectedProj]
-  ext x
-  simp only [mem_range, Subtype.exists, mem_preimage, OrderDual.exists, dual_ordConnectedComponent,
-    ofDual_toDual]
-  tauto
-
-Depends on / 依赖: OrderDual, OrderDual.exists, Subtype, Subtype.exists, dual_ordConnectedComponent, mem_preimage, mem_range, ofDual_toDual, ordConnectedProj, ordConnectedSection, unfoldPartialApp
+  range <| ordConnectedProj s
+/-
+**Set.dual_ordConnectedSection** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：dual_ordConnectedSection (s : Set α) : ordConnectedSection (ofDual ⁻¹' s) 
+= ofDual ⁻¹' ordConnectedSection s
+参数：s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.dual_ordConnectedComponent`：dual_ordConnectedComponent : ordConnecte
+dComponent (ofDual ⁻¹' s) (toDual x) = ofDual ⁻¹' ordConnectedComponent s x
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.Nonempty.some.congr_simp`：∀ {α : Type u} {s s_1 : Set α} (e_s : s = 
+s_1) (h : s.Nonempty), h.some = ⋯.some
 -/
 theorem dual_ordConnectedSection (s : Set α) :
     ordConnectedSection (ofDual ⁻¹' s) = ofDual ⁻¹' ordConnectedSection s := by
@@ -517,54 +423,45 @@ theorem dual_ordConnectedSection (s : Set α) :
   simp only [mem_range, Subtype.exists, mem_preimage, OrderDual.exists, dual_ordConnectedComponent,
     ofDual_toDual]
   tauto
-
-/--
-theorem `ordConnectedSection_subset` / 定理 `ordConnectedSection_subset`
-
-English:
-theorem ordConnectedSection_subset
-  statement: ordConnectedSection s subseteq s
-  proof: range_subset_iff.2 fun _ => ordConnectedComponent_subset Nonempty.some_mem _
-
-中文:
-定理 ordConnectedSection_subset
-  结论: ordConnectedSection s subseteq s
-  证明: range_subset_iff.2 fun _ => ordConnectedComponent_subset Nonempty.some_mem _
-
-Depends on / 依赖: Nonempty, Nonempty.some_mem, ordConnectedComponent_subset, range_subset_iff, some_mem
+/-
+**Set.ordConnectedSection_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ordConnectedSection_subset : ordConnectedSection s subseteq s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.range_subset_iff`：range_subset_iff : range f subseteq s ↔ forall y, 
+f y in s
+· 使用定理 `Set.ordConnectedComponent_subset`：ordConnectedComponent_subset : ordConn
+ectedComponent s x subseteq s
+· 使用定理 `Set.Nonempty.some_mem`：∀ {α : Type u} {s : Set α} (h : s.Nonempty), h.so
+me ∈ s
 -/
-theorem ordConnectedSection_subset : ordConnectedSection s subseteq s :=
-range_subset_iff.2 fun _ => ordConnectedComponent_subset Nonempty.some_mem _
-
-/--
-theorem `eq_of_mem_ordConnectedSection_of_uIcc_subset` / 定理 `eq_of_mem_ordConnectedSection_of_uIcc_subset`
-
-English:
-theorem eq_of_mem_ordConnectedSection_of_uIcc_subset
-  statement: (hx : x in ordConnectedSection s)
-  proof: by
-  rcases hx with ⟨x, rfl⟩; rcases hy with ⟨y, rfl⟩
-  exact
-    ordConnectedProj_eq.2
-      (mem_ordConnectedComponent_trans
-        (mem_ordConnectedComponent_trans (ordConnectedProj_mem_ordConnectedComponent _ _) h)
-        (mem_ordConnectedComponent_ordConnectedProj _ _))
-
-中文:
-定理 eq_of_mem_ordConnectedSection_of_uIcc_subset
-  结论: (hx : x in ordConnectedSection s)
-  证明: by
-  rcases hx with ⟨x, rfl⟩; rcases hy with ⟨y, rfl⟩
-  exact
-    ordConnectedProj_eq.2
-      (mem_ordConnectedComponent_trans
-        (mem_ordConnectedComponent_trans (ordConnectedProj_mem_ordConnectedComponent _ _) h)
-        (mem_ordConnectedComponent_ordConnectedProj _ _))
-
-Depends on / 依赖: mem_ordConnectedComponent_ordConnectedProj, mem_ordConnectedComponent_trans, ordConnectedProj_eq, ordConnectedProj_mem_ordConnectedComponent
+theorem ordConnectedSection_subset : ordConnectedSection s ⊆ s :=
+  range_subset_iff.2 fun _ => ordConnectedComponent_subset <| Nonempty.some_mem _
+/-
+**Set.eq_of_mem_ordConnectedSection_of_uIcc_subset** 是 Mathlib 中的一个定理，位于命名空间 `Se
+t`。
+形式化陈述：eq_of_mem_ordConnectedSection_of_uIcc_subset (hx : x in ordConnectedSectio
+n s) (hy : y in ordConnectedSection s) (h : [[x, y]] subseteq s) : x = y
+参数：hx : x in ordConnectedSection s；hy : y in ordConnectedSection s；h : [[x, y]] 
+subseteq s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.ordConnectedProj_eq`：ordConnectedProj_eq {x y : s} : ordConnectedPro
+j s x = ordConnectedProj s y ↔ [[(x : α), y]] subseteq s
+· 使用定理 `Set.mem_ordConnectedComponent_trans`：mem_ordConnectedComponent_trans (hx
+y : y in ordConnectedComponent s x) (hyz : z in ordConnectedComponent s y) : z i
+n ordConnectedComponent s…
+· 使用定理 `Set.ordConnectedProj_mem_ordConnectedComponent`：ordConnectedProj_mem_ord
+ConnectedComponent (s : Set α) (x : s) : ordConnectedProj s x in ordConnectedCom
+ponent s x
+· 使用定理 `Set.mem_ordConnectedComponent_ordConnectedProj`：mem_ordConnectedComponen
+t_ordConnectedProj (s : Set α) (x : s) : ↑x in ordConnectedComponent s (ordConne
+ctedProj s x)
 -/
-theorem eq_of_mem_ordConnectedSection_of_uIcc_subset (hx : x in ordConnectedSection s)
-    (hy : y in ordConnectedSection s) (h : [[x, y]] subseteq s) : x = y := by
+theorem eq_of_mem_ordConnectedSection_of_uIcc_subset (hx : x ∈ ordConnectedSection s)
+    (hy : y ∈ ordConnectedSection s) (h : [[x, y]] ⊆ s) : x = y := by
   rcases hx with ⟨x, rfl⟩; rcases hy with ⟨y, rfl⟩
   exact
     ordConnectedProj_eq.2
@@ -572,210 +469,170 @@ theorem eq_of_mem_ordConnectedSection_of_uIcc_subset (hx : x in ordConnectedSect
         (mem_ordConnectedComponent_trans (ordConnectedProj_mem_ordConnectedComponent _ _) h)
         (mem_ordConnectedComponent_ordConnectedProj _ _))
 
-/--
-Definition of `ordSeparatingSet` / `ordSeparatingSet` 的定义
+/-- Given two sets `s t : Set α`, the set `Set.orderSeparatingSet s t` is the set of points that
+belong both to some `Set.ordConnectedComponent tᶜ x`, `x ∈ s`, and to some
+`Set.ordConnectedComponent sᶜ x`, `x ∈ t`. In the case of two disjoint closed sets, this is the
+union of all open intervals $(a, b)$ such that their endpoints belong to different sets. -/
+/-
+**Set.ordSeparatingSet** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：ordSeparatingSet (s t : Set α) : Set α
+参数：s t : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ordSeparatingSet
-  signature: (s t : Set α)
-  body: (⋃ x in s, ordConnectedComponent tᶜ x) inter ⋃ x in t, ordConnectedComponent sᶜ x
-
-中文:
-定义 ordSeparatingSet
-  签名: (s t : 集合 α)
-  定义体: (⋃ x in s, ordConnectedComponent tᶜ x) inter ⋃ x in t, ordConnectedComponent sᶜ x
-
-Depends on / 依赖: ordConnectedComponent
+--- 原说明 ---
+Given two sets `s t : Set α`, the set `Set.orderSeparatingSet s t` is the set of
+ points that
+belong both to some `Set.ordConnectedComponent tᶜ x`, `x ∈ s`, and to some
+`Set.ordConnectedComponent sᶜ x`, `x ∈ t`. In the case of two disjoint closed se
+ts, this is the
+union of all open intervals $(a, b)$ such that their endpoints belong to differe
+nt sets.
 -/
 def ordSeparatingSet (s t : Set α) : Set α :=
-  (⋃ x in s, ordConnectedComponent tᶜ x) inter ⋃ x in t, ordConnectedComponent sᶜ x
-
-/--
-theorem `ordSeparatingSet_comm` / 定理 `ordSeparatingSet_comm`
-
-English:
-theorem ordSeparatingSet_comm
-  given: (s t : Set α)
-  statement: ordSeparatingSet s t = ordSeparatingSet t s
-  proof: inter_comm _ _
-
-中文:
-定理 ordSeparatingSet_comm
-  条件: (s t : 集合 α)
-  结论: ordSeparatingSet s t = ordSeparatingSet t s
-  证明: inter_comm _ _
-
-Depends on / 依赖: inter_comm
+  (⋃ x ∈ s, ordConnectedComponent tᶜ x) ∩ ⋃ x ∈ t, ordConnectedComponent sᶜ x
+/-
+**Set.ordSeparatingSet_comm** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ordSeparatingSet_comm (s t : Set α) : ordSeparatingSet s t = ordSeparating
+Set t s
+参数：s t : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
 -/
 theorem ordSeparatingSet_comm (s t : Set α) : ordSeparatingSet s t = ordSeparatingSet t s :=
   inter_comm _ _
-
-/--
-theorem `disjoint_left_ordSeparatingSet` / 定理 `disjoint_left_ordSeparatingSet`
-
-English:
-theorem disjoint_left_ordSeparatingSet
-  statement: Disjoint s (ordSeparatingSet s t)
-  proof: Disjoint.inter_right' _
-    disjoint_iUnion₂_right.2 fun _ _ =>
-disjoint_compl_right.mono_right ordConnectedComponent_subset
-
-中文:
-定理 disjoint_left_ordSeparatingSet
-  结论: Disjoint s (ordSeparatingSet s t)
-  证明: Disjoint.inter_right' _
-    disjoint_iUnion₂_right.2 fun _ _ =>
-disjoint_compl_right.mono_right ordConnectedComponent_subset
-
-Depends on / 依赖: Disjoint, Disjoint.inter_right, disjoint_compl_right, disjoint_compl_right.mono_right, inter_right, mono_right, ordConnectedComponent_subset
+/-
+**Set.disjoint_left_ordSeparatingSet** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：disjoint_left_ordSeparatingSet : Disjoint s (ordSeparatingSet s t)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Disjoint.inter_right'`：inter_right' (u : Set α) (h : Disjoint s t) : Dis
+joint s (u inter t)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.disjoint_iUnion₂_right`：disjoint_iUnion₂_right {s : Set α} {t : fora
+ll i, κ i -> Set α} : Disjoint s (⋃ (i) (j), t i j) ↔ forall i j, Disjoint s (t 
+i j)
+· 使用定理 `Disjoint.mono_right`：Disjoint.mono_right (h : b <= c) : Disjoint a c -> 
+Disjoint a b
+· 使用定理 `Set.ordConnectedComponent_subset`：ordConnectedComponent_subset : ordConn
+ectedComponent s x subseteq s
+· 使用定理 `disjoint_compl_right`：disjoint_compl_right : Disjoint a aᶜ
 -/
 theorem disjoint_left_ordSeparatingSet : Disjoint s (ordSeparatingSet s t) :=
-Disjoint.inter_right' _
+  Disjoint.inter_right' _ <|
     disjoint_iUnion₂_right.2 fun _ _ =>
-disjoint_compl_right.mono_right ordConnectedComponent_subset
-
-/--
-theorem `disjoint_right_ordSeparatingSet` / 定理 `disjoint_right_ordSeparatingSet`
-
-English:
-theorem disjoint_right_ordSeparatingSet
-  statement: Disjoint t (ordSeparatingSet s t)
-  proof: ordSeparatingSet_comm t s ▸ disjoint_left_ordSeparatingSet
-
-中文:
-定理 disjoint_right_ordSeparatingSet
-  结论: Disjoint t (ordSeparatingSet s t)
-  证明: ordSeparatingSet_comm t s ▸ disjoint_left_ordSeparatingSet
-
-Depends on / 依赖: disjoint_left_ordSeparatingSet, ordSeparatingSet_comm
+      disjoint_compl_right.mono_right <| ordConnectedComponent_subset
+/-
+**Set.disjoint_right_ordSeparatingSet** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：disjoint_right_ordSeparatingSet : Disjoint t (ordSeparatingSet s t)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.disjoint_left_ordSeparatingSet`：disjoint_left_ordSeparatingSet : Dis
+joint s (ordSeparatingSet s t)
+· 使用定理 `Set.ordSeparatingSet_comm`：ordSeparatingSet_comm (s t : Set α) : ordSepa
+ratingSet s t = ordSeparatingSet t s
 -/
 theorem disjoint_right_ordSeparatingSet : Disjoint t (ordSeparatingSet s t) :=
   ordSeparatingSet_comm t s ▸ disjoint_left_ordSeparatingSet
-
-/--
-theorem `dual_ordSeparatingSet` / 定理 `dual_ordSeparatingSet`
-
-English:
-theorem dual_ordSeparatingSet
-  proof: by
-  simp only [ordSeparatingSet, mem_preimage, ← toDual.surjective.iUnion_comp, ofDual_toDual,
-    dual_ordConnectedComponent, ← preimage_compl, preimage_inter, preimage_iUnion]
-
-中文:
-定理 dual_ordSeparatingSet
-  证明: by
-  simp only [ordSeparatingSet, mem_preimage, ← toDual.surjective.iUnion_comp, ofDual_toDual,
-    dual_ordConnectedComponent, ← preimage_compl, preimage_inter, preimage_iUnion]
-
-Depends on / 依赖: dual_ordConnectedComponent, iUnion_comp, mem_preimage, ofDual_toDual, ordSeparatingSet, preimage_compl, preimage_iUnion, preimage_inter, surjective, toDual, toDual.surjective.iUnion_comp
+/-
+**Set.dual_ordSeparatingSet** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：dual_ordSeparatingSet : ordSeparatingSet (ofDual ⁻¹' s) (ofDual ⁻¹' t) = o
+fDual ⁻¹' ordSeparatingSet s t
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Surjective.iUnion_comp`：iUnion_comp {f : ι -> ι₂} (hf : Surject
+ive f) (g : ι₂ -> Set α) : ⋃ x, g (f x) = ⋃ y, g y
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `Set.dual_ordConnectedComponent`：dual_ordConnectedComponent : ordConnecte
+dComponent (ofDual ⁻¹' s) (toDual x) = ofDual ⁻¹' ordConnectedComponent s x
+· 使用定理 `Set.preimage_iUnion`：preimage_iUnion {f : α -> β} {s : ι -> Set β} : (f 
+⁻¹' ⋃ i, s i) = ⋃ i, f ⁻¹' s i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem dual_ordSeparatingSet :
     ordSeparatingSet (ofDual ⁻¹' s) (ofDual ⁻¹' t) = ofDual ⁻¹' ordSeparatingSet s t := by
   simp only [ordSeparatingSet, mem_preimage, ← toDual.surjective.iUnion_comp, ofDual_toDual,
     dual_ordConnectedComponent, ← preimage_compl, preimage_inter, preimage_iUnion]
 
+/-- An auxiliary neighborhood that will be used in the proof of
+`OrderTopology.CompletelyNormalSpace`. -/
 -- Note: `Set` has no computational content, but Lean still attempts to compile it.
 -- See https://github.com/leanprover/lean4/issues/14084.
-/--
-Definition of `ordT5Nhd` / `ordT5Nhd` 的定义
-
-English:
-definition ordT5Nhd
-  signature: (s t : Set α)
-  body: ⋃ x in s, ordConnectedComponent (tᶜ inter (ordConnectedSection <| ordSeparatingSet s t)ᶜ) x
-
-中文:
-定义 ordT5Nhd
-  签名: (s t : 集合 α)
-  定义体: ⋃ x in s, ordConnectedComponent (tᶜ inter (ordConnectedSection <| ordSeparatingSet s t)ᶜ) x
-
-Depends on / 依赖: ordConnectedComponent, ordConnectedSection, ordSeparatingSet
+/-
+**Set.ordT5Nhd** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：ordT5Nhd (s t : Set α) : Set α
+参数：s t : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable def ordT5Nhd (s t : Set α) : Set α :=
-  ⋃ x in s, ordConnectedComponent (tᶜ inter (ordConnectedSection <| ordSeparatingSet s t)ᶜ) x
-
-/--
-theorem `disjoint_ordT5Nhd` / 定理 `disjoint_ordT5Nhd`
-
-English:
-theorem disjoint_ordT5Nhd
-  statement: Disjoint (ordT5Nhd s t) (ordT5Nhd t s)
-  proof: by
-  rw [disjoint_iff_inf_le]
-  rintro x ⟨hx₁, hx₂⟩
-  rcases mem_iUnion₂.1 hx₁ with ⟨a, has, ha⟩
-  clear hx₁
-  rcases mem_iUnion₂.1 hx₂ with ⟨b, hbt, hb⟩
-  clear hx₂
-  rw [mem_ordConnectedComponent]; rw [subset_inter_iff] at ha hb
-  wlog hab : a <= b with H
-  · exact H b hbt hb a has ha (le_of_not_ge hab)
-  obtain ⟨ha, ha'⟩ := ha
-  obtain ⟨hb, hb'⟩ := hb
-  have hsub : [[a, b]] subseteq (ordSeparatingSet s t).ordConnectedSectionᶜ := by
-    rw [ordSeparatingSet_comm]; rw [uIcc_comm] at hb'
-    calc
-      [[a, b]] subseteq [[a, x]] union [[x, b]] := uIcc_subset_uIcc_union_uIcc
-      _ subseteq (ordSeparatingSet s t).ordConnectedSectionᶜ := union_subset ha' hb'
-  clear ha' hb'
-  rcases le_total x a with hxa | hax
-  · exact hb (Icc_subset_uIcc' ⟨hxa, hab⟩) has
-  rcases le_total b x with hbx | hxb
-  · exact ha (Icc_subset_uIcc ⟨hab, hbx⟩) hbt
-  have h' : x in ordSeparatingSet s t := ⟨mem_iUnion₂.2 ⟨a, has, ha⟩, mem_iUnion₂.2 ⟨b, hbt, hb⟩⟩
-  lift x to ordSeparatingSet s t using h'
-  suffices ordConnectedComponent (ordSeparatingSet s t) x subseteq [[a, b]] from
-    hsub (this <| ordConnectedProj_mem_ordConnectedComponent _ x) (mem_range_self _)
-  rintro y hy
-  rw [uIcc_of_le hab]; rw [mem_Icc]; rw [← not_lt]; rw [← not_lt]
-  have sol1 := fun (hya : y < a) =>
-      (disjoint_left (t := ordSeparatingSet s t)).1 disjoint_left_ordSeparatingSet has
-        (hy <| Icc_subset_uIcc' ⟨hya.le, hax⟩)
-  have sol2 := fun (hby : b < y) =>
-      (disjoint_left (t := ordSeparatingSet s t)).1 disjoint_right_ordSeparatingSet hbt
-        (hy <| Icc_subset_uIcc ⟨hxb, hby.le⟩)
-  exact ⟨sol1, sol2⟩
-
-中文:
-定理 disjoint_ordT5Nhd
-  结论: Disjoint (ordT5Nhd s t) (ordT5Nhd t s)
-  证明: by
-  rw [disjoint_iff_inf_le]
-  rintro x ⟨hx₁, hx₂⟩
-  rcases mem_iUnion₂.1 hx₁ with ⟨a, has, ha⟩
-  clear hx₁
-  rcases mem_iUnion₂.1 hx₂ with ⟨b, hbt, hb⟩
-  clear hx₂
-  rw [mem_ordConnectedComponent]; rw [subset_inter_iff] at ha hb
-  wlog hab : a <= b with H
-  · exact H b hbt hb a has ha (le_of_not_ge hab)
-  obtain ⟨ha, ha'⟩ := ha
-  obtain ⟨hb, hb'⟩ := hb
-  have hsub : [[a, b]] subseteq (ordSeparatingSet s t).ordConnectedSectionᶜ := by
-    rw [ordSeparatingSet_comm]; rw [uIcc_comm] at hb'
-    calc
-      [[a, b]] subseteq [[a, x]] union [[x, b]] := uIcc_subset_uIcc_union_uIcc
-      _ subseteq (ordSeparatingSet s t).ordConnectedSectionᶜ := union_subset ha' hb'
-  clear ha' hb'
-  rcases le_total x a with hxa | hax
-  · exact hb (Icc_subset_uIcc' ⟨hxa, hab⟩) has
-  rcases le_total b x with hbx | hxb
-  · exact ha (Icc_subset_uIcc ⟨hab, hbx⟩) hbt
-  have h' : x in ordSeparatingSet s t := ⟨mem_iUnion₂.2 ⟨a, has, ha⟩, mem_iUnion₂.2 ⟨b, hbt, hb⟩⟩
-  lift x to ordSeparatingSet s t using h'
-  suffices ordConnectedComponent (ordSeparatingSet s t) x subseteq [[a, b]] from
-    hsub (this <| ordConnectedProj_mem_ordConnectedComponent _ x) (mem_range_self _)
-  rintro y hy
-  rw [uIcc_of_le hab]; rw [mem_Icc]; rw [← not_lt]; rw [← not_lt]
-  have sol1 := fun (hya : y < a) =>
-      (disjoint_left (t := ordSeparatingSet s t)).1 disjoint_left_ordSeparatingSet has
-        (hy <| Icc_subset_uIcc' ⟨hya.le, hax⟩)
-  have sol2 := fun (hby : b < y) =>
-      (disjoint_left (t := ordSeparatingSet s t)).1 disjoint_right_ordSeparatingSet hbt
-        (hy <| Icc_subset_uIcc ⟨hxb, hby.le⟩)
-  exact ⟨sol1, sol2⟩
-
-Depends on / 依赖: disjoint_iff_inf_le, le_of_not_ge, mem_ordConnectedComponent, ordSeparatingSet, ordSeparatingSet_comm, subset_inter_iff, subseteq, uIcc_comm
+  ⋃ x ∈ s, ordConnectedComponent (tᶜ ∩ (ordConnectedSection <| ordSeparatingSet s t)ᶜ) x
+/-
+**Set.disjoint_ordT5Nhd** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：disjoint_ordT5Nhd : Disjoint (ordT5Nhd s t) (ordT5Nhd t s)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `disjoint_iff_inf_le`：disjoint_iff_inf_le : Disjoint a b ↔ a ⊓ b <= ⊥
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_iUnion₂`：mem_iUnion₂ {x : γ} {s : forall i, κ i -> Set γ} : (x i
+n ⋃ (i) (j), s i j) ↔ exists i j, x in s i j
+· 使用定理 `Classical.em`：∀ (p : Prop), p ∨ ¬p
+· 使用引理 `Set.uIcc_subset_uIcc_union_uIcc`：uIcc_subset_uIcc_union_uIcc : [[a, c]] 
+subseteq [[a, b]] union [[b, c]]
+· 使用定理 `Set.union_subset`：union_subset {s t r : Set α} (sr : s subseteq r) (tr :
+ t subseteq r) : s union t subseteq r
+· 使用引理 `Set.uIcc_comm`：uIcc_comm (a b : α) : [[a, b]] = [[b, a]]
+· 使用定理 `Set.ordSeparatingSet_comm`：ordSeparatingSet_comm (s t : Set α) : ordSepa
+ratingSet s t = ordSeparatingSet t s
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用引理 `Set.Icc_subset_uIcc'`：Icc_subset_uIcc' : Icc b a subseteq [[a, b]]
+· 使用引理 `Set.Icc_subset_uIcc`：Icc_subset_uIcc : Icc a b subseteq [[a, b]]
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用引理 `Set.uIcc_of_le`：uIcc_of_le (h : a <= b) : [[a, b]] = Icc a b
+· 使用定理 `Set.mem_Icc`：∀ {α : Type u_1} [inst : Preorder α] {a b x : α}, x ∈ Set.I
+cc a b ↔ a ≤ x ∧ x ≤ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `Set.disjoint_left`：disjoint_left : Disjoint s t ↔ forall ⦃a⦄, a in s -> 
+a ∉ t
+· 使用定理 `Set.disjoint_left_ordSeparatingSet`：disjoint_left_ordSeparatingSet : Dis
+joint s (ordSeparatingSet s t)
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Set.disjoint_right_ordSeparatingSet`：disjoint_right_ordSeparatingSet : D
+isjoint t (ordSeparatingSet s t)
+· 使用定理 `Set.ordConnectedProj_mem_ordConnectedComponent`：ordConnectedProj_mem_ord
+ConnectedComponent (s : Set α) (x : s) : ordConnectedProj s x in ordConnectedCom
+ponent s x
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
+· 使用定理 `Set.subset_inter_iff`：subset_inter_iff {s t r : Set α} : r subseteq s in
+ter t ↔ r subseteq s ∧ r subseteq t
+· 使用定理 `Set.mem_ordConnectedComponent`：mem_ordConnectedComponent : y in ordConne
+ctedComponent s x ↔ [[x, y]] subseteq s
+· 使用定理 `le_of_not_ge`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b 
+→ b ≤ a
 -/
 theorem disjoint_ordT5Nhd : Disjoint (ordT5Nhd s t) (ordT5Nhd t s) := by
   rw [disjoint_iff_inf_le]
@@ -784,27 +641,27 @@ theorem disjoint_ordT5Nhd : Disjoint (ordT5Nhd s t) (ordT5Nhd t s) := by
   clear hx₁
   rcases mem_iUnion₂.1 hx₂ with ⟨b, hbt, hb⟩
   clear hx₂
-  rw [mem_ordConnectedComponent]; rw [subset_inter_iff] at ha hb
-  wlog hab : a <= b with H
+  rw [mem_ordConnectedComponent, subset_inter_iff] at ha hb
+  wlog hab : a ≤ b with H
   · exact H b hbt hb a has ha (le_of_not_ge hab)
   obtain ⟨ha, ha'⟩ := ha
   obtain ⟨hb, hb'⟩ := hb
-  have hsub : [[a, b]] subseteq (ordSeparatingSet s t).ordConnectedSectionᶜ := by
-    rw [ordSeparatingSet_comm]; rw [uIcc_comm] at hb'
+  have hsub : [[a, b]] ⊆ (ordSeparatingSet s t).ordConnectedSectionᶜ := by
+    rw [ordSeparatingSet_comm, uIcc_comm] at hb'
     calc
-      [[a, b]] subseteq [[a, x]] union [[x, b]] := uIcc_subset_uIcc_union_uIcc
-      _ subseteq (ordSeparatingSet s t).ordConnectedSectionᶜ := union_subset ha' hb'
+      [[a, b]] ⊆ [[a, x]] ∪ [[x, b]] := uIcc_subset_uIcc_union_uIcc
+      _ ⊆ (ordSeparatingSet s t).ordConnectedSectionᶜ := union_subset ha' hb'
   clear ha' hb'
   rcases le_total x a with hxa | hax
   · exact hb (Icc_subset_uIcc' ⟨hxa, hab⟩) has
   rcases le_total b x with hbx | hxb
   · exact ha (Icc_subset_uIcc ⟨hab, hbx⟩) hbt
-  have h' : x in ordSeparatingSet s t := ⟨mem_iUnion₂.2 ⟨a, has, ha⟩, mem_iUnion₂.2 ⟨b, hbt, hb⟩⟩
+  have h' : x ∈ ordSeparatingSet s t := ⟨mem_iUnion₂.2 ⟨a, has, ha⟩, mem_iUnion₂.2 ⟨b, hbt, hb⟩⟩
   lift x to ordSeparatingSet s t using h'
-  suffices ordConnectedComponent (ordSeparatingSet s t) x subseteq [[a, b]] from
+  suffices ordConnectedComponent (ordSeparatingSet s t) x ⊆ [[a, b]] from
     hsub (this <| ordConnectedProj_mem_ordConnectedComponent _ x) (mem_range_self _)
   rintro y hy
-  rw [uIcc_of_le hab]; rw [mem_Icc]; rw [← not_lt]; rw [← not_lt]
+  rw [uIcc_of_le hab, mem_Icc, ← not_lt, ← not_lt]
   have sol1 := fun (hya : y < a) =>
       (disjoint_left (t := ordSeparatingSet s t)).1 disjoint_left_ordSeparatingSet has
         (hy <| Icc_subset_uIcc' ⟨hya.le, hax⟩)
@@ -814,3 +671,4 @@ theorem disjoint_ordT5Nhd : Disjoint (ordT5Nhd s t) (ordT5Nhd t s) := by
   exact ⟨sol1, sol2⟩
 
 end Set
+

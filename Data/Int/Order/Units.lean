@@ -16,269 +16,219 @@ public section
 
 namespace Int
 
-/--
-theorem `isUnit_iff_abs_eq` / 定理 `isUnit_iff_abs_eq`
-
-English:
-theorem isUnit_iff_abs_eq
-  given: {x : Int}
-  statement: IsUnit x ↔ abs x = 1
-  proof: by
-  rw [isUnit_iff_natAbs_eq]; rw [abs_eq_natAbs]; rw [← Int.ofNat_one]; rw [natCast_inj]
-
-中文:
-定理 isUnit_iff_abs_eq
-  条件: {x : 整数}
-  结论: 是单位 x ↔ abs x = 1
-  证明: by
-  rw [isUnit_iff_natAbs_eq]; rw [abs_eq_natAbs]; rw [← Int.ofNat_one]; rw [natCast_inj]
-
-Depends on / 依赖: Int.ofNat_one, abs_eq_natAbs, isUnit_iff_natAbs_eq, natCast_inj, ofNat_one
+/-
+**Int.isUnit_iff_abs_eq** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：isUnit_iff_abs_eq {x : Int} : IsUnit x ↔ abs x = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Int.isUnit_iff_natAbs_eq`：isUnit_iff_natAbs_eq : IsUnit u ↔ u.natAbs = 1
+· 使用定理 `Int.abs_eq_natAbs`：∀ (a : ℤ), |a| = ↑a.natAbs
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.ofNat_one`：↑1 = 1
+· 使用定理 `Int.natCast_inj`：∀ {m n : ℕ}, ↑m = ↑n ↔ m = n
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem isUnit_iff_abs_eq {x : Int} : IsUnit x ↔ abs x = 1 := by
-  rw [isUnit_iff_natAbs_eq]; rw [abs_eq_natAbs]; rw [← Int.ofNat_one]; rw [natCast_inj]
-
-/--
-theorem `isUnit_sq` / 定理 `isUnit_sq`
-
-English:
-theorem isUnit_sq
-  given: {a : Int} (ha : IsUnit a)
-  statement: a ^ 2 = 1
-  proof: by rw [sq, isUnit_mul_self ha]
-
-@[simp]
-
-中文:
-定理 isUnit_sq
-  条件: {a : 整数} (ha : 是单位 a)
-  结论: a ^ 2 = 1
-  证明: by rw [sq, isUnit_mul_self ha]
-
-@[simp]
-
-Depends on / 依赖: isUnit_mul_self
+theorem isUnit_iff_abs_eq {x : ℤ} : IsUnit x ↔ abs x = 1 := by
+  rw [isUnit_iff_natAbs_eq, abs_eq_natAbs, ← Int.ofNat_one, natCast_inj]
+/-
+**Int.isUnit_sq** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：isUnit_sq {a : Int} (ha : IsUnit a) : a ^ 2 = 1
+参数：ha : IsUnit a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sq`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
+· 使用引理 `Int.isUnit_mul_self`：isUnit_mul_self (hu : IsUnit u) : u * u = 1
 -/
-theorem isUnit_sq {a : Int} (ha : IsUnit a) : a ^ 2 = 1 := by rw [sq, isUnit_mul_self ha]
+theorem isUnit_sq {a : ℤ} (ha : IsUnit a) : a ^ 2 = 1 := by rw [sq, isUnit_mul_self ha]
 
 @[simp]
-/--
-theorem `units_sq` / 定理 `units_sq`
-
-English:
-theorem units_sq
-  given: (u : Intˣ)
-  statement: u ^ 2 = 1
-  proof: by
-  rw [Units.ext_iff]; rw [Units.val_pow_eq_pow_val]; rw [Units.val_one]; rw [isUnit_sq u.isUnit]
+/-
+**Int.units_sq** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：units_sq (u : Intˣ) : u ^ 2 = 1
+参数：u : Intˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Units.ext_iff`：∀ {α : Type u} [inst : Monoid α] {u v : αˣ}, u = v ↔ ↑u =
+ ↑v
+· 使用引理 `Units.val_pow_eq_pow_val`：val_pow_eq_pow_val (n : Nat) : ↑(a ^ n) = (a ^
+ n : α)
+· 使用定理 `Units.val_one`：val_one : ((1 : αˣ) : α) = 1
+· 使用定理 `Int.isUnit_sq`：isUnit_sq {a : Int} (ha : IsUnit a) : a ^ 2 = 1
+· 使用定理 `Units.isUnit`：∀ {M : Type u_1} [inst : Monoid M] (u : Mˣ), IsUnit ↑u
+-/
+theorem units_sq (u : ℤˣ) : u ^ 2 = 1 := by
+  rw [Units.ext_iff, Units.val_pow_eq_pow_val, Units.val_one, isUnit_sq u.isUnit]
 
 alias units_pow_two := units_sq
 
 @[simp]
-
-中文:
-定理 units_sq
-  条件: (u : 整数ˣ)
-  结论: u ^ 2 = 1
-  证明: by
-  rw [Units.ext_iff]; rw [Units.val_pow_eq_pow_val]; rw [Units.val_one]; rw [isUnit_sq u.isUnit]
-
-alias units_pow_two := units_sq
-
-@[simp]
-
-Depends on / 依赖: Units.ext_iff, Units.val_one, Units.val_pow_eq_pow_val, ext_iff, isUnit, isUnit_sq, u.isUnit, val_one, val_pow_eq_pow_val
+/-
+**Int.units_mul_self** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：units_mul_self (u : Intˣ) : u * u = 1
+参数：u : Intˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sq`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
+· 使用定理 `Int.units_sq`：units_sq (u : Intˣ) : u ^ 2 = 1
 -/
-theorem units_sq (u : Intˣ) : u ^ 2 = 1 := by
-  rw [Units.ext_iff]; rw [Units.val_pow_eq_pow_val]; rw [Units.val_one]; rw [isUnit_sq u.isUnit]
-
-alias units_pow_two := units_sq
+theorem units_mul_self (u : ℤˣ) : u * u = 1 := by rw [← sq, units_sq]
 
 @[simp]
-/--
-theorem `units_mul_self` / 定理 `units_mul_self`
-
-English:
-theorem units_mul_self
-  given: (u : Intˣ)
-  statement: u * u = 1
-  proof: by rw [← sq, units_sq]
-
-@[simp]
-
-中文:
-定理 units_mul_self
-  条件: (u : 整数ˣ)
-  结论: u * u = 1
-  证明: by rw [← sq, units_sq]
-
-@[simp]
-
-Depends on / 依赖: units_sq
+/-
+**Int.units_inv_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：units_inv_eq_self (u : Intˣ) : u⁻¹ = u
+参数：u : Intˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inv_eq_iff_mul_eq_one`：inv_eq_iff_mul_eq_one : a⁻¹ = b ↔ a * b = 1
+· 使用定理 `Int.units_mul_self`：units_mul_self (u : Intˣ) : u * u = 1
 -/
-theorem units_mul_self (u : Intˣ) : u * u = 1 := by rw [← sq, units_sq]
-
-@[simp]
-/--
-theorem `units_inv_eq_self` / 定理 `units_inv_eq_self`
-
-English:
-theorem units_inv_eq_self
-  given: (u : Intˣ)
-  statement: u⁻¹ = u
-  proof: by rw [inv_eq_iff_mul_eq_one, units_mul_self]
-
-中文:
-定理 units_inv_eq_self
-  条件: (u : 整数ˣ)
-  结论: u⁻¹ = u
-  证明: by rw [inv_eq_iff_mul_eq_one, units_mul_self]
-
-Depends on / 依赖: inv_eq_iff_mul_eq_one, units_mul_self
+theorem units_inv_eq_self (u : ℤˣ) : u⁻¹ = u := by rw [inv_eq_iff_mul_eq_one, units_mul_self]
+/-
+**Int.units_div_eq_mul** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：units_div_eq_mul (u₁ u₂ : Intˣ) : u₁ / u₂ = u₁ * u₂
+参数：u₁ u₂ : Intˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `Int.units_inv_eq_self`：units_inv_eq_self (u : Intˣ) : u⁻¹ = u
 -/
-theorem units_inv_eq_self (u : Intˣ) : u⁻¹ = u := by rw [inv_eq_iff_mul_eq_one, units_mul_self]
-
-/--
-theorem `units_div_eq_mul` / 定理 `units_div_eq_mul`
-
-English:
-theorem units_div_eq_mul
-  given: (u₁ u₂ : Intˣ)
-  statement: u₁ / u₂ = u₁ * u₂
-  proof: by
-  rw [div_eq_mul_inv]; rw [units_inv_eq_self]
-
-中文:
-定理 units_div_eq_mul
-  条件: (u₁ u₂ : 整数ˣ)
-  结论: u₁ / u₂ = u₁ * u₂
-  证明: by
-  rw [div_eq_mul_inv]; rw [units_inv_eq_self]
-
-Depends on / 依赖: div_eq_mul_inv, units_inv_eq_self
--/
-theorem units_div_eq_mul (u₁ u₂ : Intˣ) : u₁ / u₂ = u₁ * u₂ := by
-  rw [div_eq_mul_inv]; rw [units_inv_eq_self]
+theorem units_div_eq_mul (u₁ u₂ : ℤˣ) : u₁ / u₂ = u₁ * u₂ := by
+  rw [div_eq_mul_inv, units_inv_eq_self]
 
 -- `Units.val_mul` is a "wrong turn" for the simplifier, this undoes it and simplifies further
 @[simp]
-/--
-theorem `units_coe_mul_self` / 定理 `units_coe_mul_self`
-
-English:
-theorem units_coe_mul_self
-  given: (u : Intˣ)
-  statement: (u * u : Int) = 1
-  proof: by
-  rw [← Units.val_mul]; rw [units_mul_self]; rw [Units.val_one]
-
-中文:
-定理 units_coe_mul_self
-  条件: (u : 整数ˣ)
-  结论: (u * u : 整数) = 1
-  证明: by
-  rw [← Units.val_mul]; rw [units_mul_self]; rw [Units.val_one]
-
-Depends on / 依赖: Units.val_mul, Units.val_one, units_mul_self, val_mul, val_one
+/-
+**Int.units_coe_mul_self** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：units_coe_mul_self (u : Intˣ) : (u * u : Int) = 1
+参数：u : Intˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Units.val_mul`：val_mul : (↑(a * b) : α) = a * b
+· 使用定理 `Int.units_mul_self`：units_mul_self (u : Intˣ) : u * u = 1
+· 使用定理 `Units.val_one`：val_one : ((1 : αˣ) : α) = 1
 -/
-theorem units_coe_mul_self (u : Intˣ) : (u * u : Int) = 1 := by
-  rw [← Units.val_mul]; rw [units_mul_self]; rw [Units.val_one]
-
-/--
-theorem `neg_one_pow_ne_zero` / 定理 `neg_one_pow_ne_zero`
-
-English:
-theorem neg_one_pow_ne_zero
-  given: {n : Nat}
-  statement: (-1 : Int) ^ n != 0
-  proof: by simp
-
-中文:
-定理 neg_one_pow_ne_zero
-  条件: {n : 自然数}
-  结论: (-1 : 整数) ^ n != 0
-  证明: by simp
+theorem units_coe_mul_self (u : ℤˣ) : (u * u : ℤ) = 1 := by
+  rw [← Units.val_mul, units_mul_self, Units.val_one]
+/-
+**Int.neg_one_pow_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：neg_one_pow_ne_zero {n : Nat} : (-1 : Int) ^ n != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isReduced_of_noZeroDivisors`：∀ {M₀ : Type u_1} [inst : MonoidWithZero M₀
+] [NoZeroDivisors M₀], IsReduced M₀
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `Int.instIsDomain`：IsDomain ℤ
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Int.instNeZeroOfNatOfNat`：∀ {n : ℕ} [NeZero n], NeZero (OfNat.ofNat n)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-theorem neg_one_pow_ne_zero {n : Nat} : (-1 : Int) ^ n != 0 := by simp
-
-/--
-theorem `sq_eq_one_of_sq_lt_four` / 定理 `sq_eq_one_of_sq_lt_four`
-
-English:
-theorem sq_eq_one_of_sq_lt_four
-  given: {x : Int} (h1 : x ^ 2 < 4) (h2 : x != 0)
-  statement: x ^ 2 = 1
-  proof: sq_eq_one_iff.mpr
-    ((abs_eq (zero_le_one' Int)).mp
-      (le_antisymm (lt_add_one_iff.mp (abs_lt_of_sq_lt_sq h1 zero_le_two))
-        (sub_one_lt_iff.mp (abs_pos.mpr h2))))
-
-中文:
-定理 sq_eq_one_of_sq_lt_four
-  条件: {x : 整数} (h1 : x ^ 2 < 4) (h2 : x != 0)
-  结论: x ^ 2 = 1
-  证明: sq_eq_one_iff.mpr
-    ((abs_eq (zero_le_one' Int)).mp
-      (le_antisymm (lt_add_one_iff.mp (abs_lt_of_sq_lt_sq h1 zero_le_two))
-        (sub_one_lt_iff.mp (abs_pos.mpr h2))))
-
-Depends on / 依赖: abs_eq, abs_lt_of_sq_lt_sq, abs_pos, abs_pos.mpr, le_antisymm, lt_add_one_iff, lt_add_one_iff.mp, sq_eq_one_iff, sq_eq_one_iff.mpr, sub_one_lt_iff, sub_one_lt_iff.mp, zero_le_one, zero_le_two
+theorem neg_one_pow_ne_zero {n : ℕ} : (-1 : ℤ) ^ n ≠ 0 := by simp
+/-
+**Int.sq_eq_one_of_sq_lt_four** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：sq_eq_one_of_sq_lt_four {x : Int} (h1 : x ^ 2 < 4) (h2 : x != 0) : x ^ 2 =
+ 1
+参数：h1 : x ^ 2 < 4；h2 : x != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `sq_eq_one_iff`：∀ {R : Type u} [inst : Ring R] {a : R} [NoZeroDivisors R]
+, a ^ 2 = 1 ↔ a = 1 ∨ a = -1
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `Int.instIsDomain`：IsDomain ℤ
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `abs_eq`：∀ {G : Type u_1} [inst : AddCommGroup G] [inst_1 : LinearOrder G
+] [IsOrderedAddMonoid G] {a b : G},   0 ≤ b → (|a| = b ↔ a = b ∨ a = -b)
+· 使用引理 `zero_le_one'`：zero_le_one' (α) [Zero α] [One α] [LE α] [ZeroLEOneClass α
+] : (0 : α) <= 1
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Int.lt_add_one_iff`：∀ {a b : ℤ}, a < b + 1 ↔ a ≤ b
+· 使用引理 `abs_lt_of_sq_lt_sq`：abs_lt_of_sq_lt_sq (h : a ^ 2 < b ^ 2) (hb : 0 <= b)
+ : |a| < b
+· 使用引理 `zero_le_two`：zero_le_two [Preorder α] [ZeroLEOneClass α] [AddLeftMono α]
+ : (0 : α) <= 2
+· 使用定理 `Int.sub_one_lt_iff`：∀ {m n : ℤ}, m - 1 < n ↔ m ≤ n
+· 使用定理 `abs_pos`：∀ {α : Type u_1} [inst : AddGroup α] [inst_1 : LinearOrder α] [
+AddLeftMono α] {a : α}, 0 < |a| ↔ a ≠ 0
 -/
-theorem sq_eq_one_of_sq_lt_four {x : Int} (h1 : x ^ 2 < 4) (h2 : x != 0) : x ^ 2 = 1 :=
+theorem sq_eq_one_of_sq_lt_four {x : ℤ} (h1 : x ^ 2 < 4) (h2 : x ≠ 0) : x ^ 2 = 1 :=
   sq_eq_one_iff.mpr
-    ((abs_eq (zero_le_one' Int)).mp
+    ((abs_eq (zero_le_one' ℤ)).mp
       (le_antisymm (lt_add_one_iff.mp (abs_lt_of_sq_lt_sq h1 zero_le_two))
         (sub_one_lt_iff.mp (abs_pos.mpr h2))))
-
-/--
-theorem `sq_eq_one_of_sq_le_three` / 定理 `sq_eq_one_of_sq_le_three`
-
-English:
-theorem sq_eq_one_of_sq_le_three
-  given: {x : Int} (h1 : x ^ 2 <= 3) (h2 : x != 0)
-  statement: x ^ 2 = 1
-  proof: sq_eq_one_of_sq_lt_four (lt_of_le_of_lt h1 (lt_add_one (3 : Int))) h2
-
-中文:
-定理 sq_eq_one_of_sq_le_three
-  条件: {x : 整数} (h1 : x ^ 2 <= 3) (h2 : x != 0)
-  结论: x ^ 2 = 1
-  证明: sq_eq_one_of_sq_lt_four (lt_of_le_of_lt h1 (lt_add_one (3 : Int))) h2
-
-Depends on / 依赖: lt_add_one, lt_of_le_of_lt, sq_eq_one_of_sq_lt_four
+/-
+**Int.sq_eq_one_of_sq_le_three** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：sq_eq_one_of_sq_le_three {x : Int} (h1 : x ^ 2 <= 3) (h2 : x != 0) : x ^ 2
+ = 1
+参数：h1 : x ^ 2 <= 3；h2 : x != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.sq_eq_one_of_sq_lt_four`：sq_eq_one_of_sq_lt_four {x : Int} (h1 : x ^
+ 2 < 4) (h2 : x != 0) : x ^ 2 = 1
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用引理 `lt_add_one`：lt_add_one [One α] [AddZeroClass α] [PartialOrder α] [ZeroLE
+OneClass α] [NeZero (1 : α)] [AddLeftStrictMono α] (a : α) : a < a + 1
+· 使用定理 `Int.instNeZeroOfNatOfNat`：∀ {n : ℕ} [NeZero n], NeZero (OfNat.ofNat n)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
 -/
-theorem sq_eq_one_of_sq_le_three {x : Int} (h1 : x ^ 2 <= 3) (h2 : x != 0) : x ^ 2 = 1 :=
-  sq_eq_one_of_sq_lt_four (lt_of_le_of_lt h1 (lt_add_one (3 : Int))) h2
-
-/--
-theorem `units_pow_eq_pow_mod_two` / 定理 `units_pow_eq_pow_mod_two`
-
-English:
-theorem units_pow_eq_pow_mod_two
-  given: (u : Intˣ) (n : Nat)
-  statement: u ^ n = u ^ (n % 2)
-  proof: by
-  conv =>
-    lhs
-    rw [← Nat.mod_add_div n 2]
-    rw [pow_add]; rw [pow_mul]; rw [units_sq]; rw [one_pow]; rw [mul_one]
-
-中文:
-定理 units_pow_eq_pow_mod_two
-  条件: (u : 整数ˣ) (n : 自然数)
-  结论: u ^ n = u ^ (n % 2)
-  证明: by
-  conv =>
-    lhs
-    rw [← Nat.mod_add_div n 2]
-    rw [pow_add]; rw [pow_mul]; rw [units_sq]; rw [one_pow]; rw [mul_one]
-
-Depends on / 依赖: Nat.mod_add_div, mod_add_div, mul_one, one_pow, pow_add, pow_mul, units_sq
+theorem sq_eq_one_of_sq_le_three {x : ℤ} (h1 : x ^ 2 ≤ 3) (h2 : x ≠ 0) : x ^ 2 = 1 :=
+  sq_eq_one_of_sq_lt_four (lt_of_le_of_lt h1 (lt_add_one (3 : ℤ))) h2
+/-
+**Int.units_pow_eq_pow_mod_two** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：units_pow_eq_pow_mod_two (u : Intˣ) (n : Nat) : u ^ n = u ^ (n % 2)
+参数：u : Intˣ；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.mod_add_div`：∀ (m k : ℕ), m % k + k * (m / k) = m
+· 使用定理 `pow_add`：pow_add {b₁ b₂ : Nat} {d : R} (_ : a ^ b₁ = c₁) (_ : a ^ b₂ = c
+₂) (_ : c₁ * c₂ = d) : (a : R) ^ (b₁ + b₂) = d
+· 使用定理 `pow_mul`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (m n : ℕ), a ^ (m * 
+n) = (a ^ m) ^ n
+· 使用定理 `Int.units_sq`：units_sq (u : Intˣ) : u ^ 2 = 1
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
-theorem units_pow_eq_pow_mod_two (u : Intˣ) (n : Nat) : u ^ n = u ^ (n % 2) := by
+theorem units_pow_eq_pow_mod_two (u : ℤˣ) (n : ℕ) : u ^ n = u ^ (n % 2) := by
   conv =>
     lhs
     rw [← Nat.mod_add_div n 2]
-    rw [pow_add]; rw [pow_mul]; rw [units_sq]; rw [one_pow]; rw [mul_one]
+    rw [pow_add, pow_mul, units_sq, one_pow, mul_one]
 
 end Int
+

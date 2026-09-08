@@ -19,123 +19,98 @@ namespace Ordering
 
 variable {α : Type*}
 
-/--
-Definition of `Compares` / `Compares` 的定义
+/-- `Compares o a b` means that `a` and `b` have the ordering relation `o` between them, assuming
+that the relation `a < b` is defined. -/
+/-
+**Ordering.Compares** 是 Mathlib 中的一个定义，位于命名空间 `Ordering`。
+形式化陈述：{α : Type u_1} → [LT α] → Ordering → α → α → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Compares
-  signature: [LT α]
-
-中文:
-定义 Compares
-  签名: [LT α]
+--- 原说明 ---
+`Compares o a b` means that `a` and `b` have the ordering relation `o` between t
+hem, assuming
+that the relation `a < b` is defined.
 -/
-def Compares [LT α] : Ordering -> α -> α -> Prop
+def Compares [LT α] : Ordering → α → α → Prop
   | lt, a, b => a < b
   | eq, a, b => a = b
   | gt, a, b => a > b
-
-/--
-lemma `compares_lt` / 引理 `compares_lt`
-
-English:
-lemma compares_lt
-  given: [LT α] (a b : α)
-  statement: Compares lt a b = (a < b)
-  proof: rfl
-
-中文:
-引理 compares_lt
-  条件: [LT α] (a b : α)
-  结论: Compares lt a b = (a < b)
-  证明: rfl
+/-
+**Ordering.compares_lt** 是 Mathlib 中的一个定理，位于命名空间 `Ordering`。
+形式化陈述：∀ {α : Type u_1} [inst : LT α] (a b : α), Ordering.lt.Compares a b = (a < 
+b)
+参数：a b : α；a < b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma compares_lt [LT α] (a b : α) : Compares lt a b = (a < b) := rfl
-
-/--
-lemma `compares_eq` / 引理 `compares_eq`
-
-English:
-lemma compares_eq
-  given: [LT α] (a b : α)
-  statement: Compares eq a b = (a = b)
-  proof: rfl
-
-中文:
-引理 compares_eq
-  条件: [LT α] (a b : α)
-  结论: Compares eq a b = (a = b)
-  证明: rfl
+/-
+**Ordering.compares_eq** 是 Mathlib 中的一个定理，位于命名空间 `Ordering`。
+形式化陈述：∀ {α : Type u_1} [inst : LT α] (a b : α), Ordering.eq.Compares a b = (a = 
+b)
+参数：a b : α；a = b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma compares_eq [LT α] (a b : α) : Compares eq a b = (a = b) := rfl
-
-/--
-lemma `compares_gt` / 引理 `compares_gt`
-
-English:
-lemma compares_gt
-  given: [LT α] (a b : α)
-  statement: Compares gt a b = (a > b)
-  proof: rfl
-
-中文:
-引理 compares_gt
-  条件: [LT α] (a b : α)
-  结论: Compares gt a b = (a > b)
-  证明: rfl
+/-
+**Ordering.compares_gt** 是 Mathlib 中的一个定理，位于命名空间 `Ordering`。
+形式化陈述：∀ {α : Type u_1} [inst : LT α] (a b : α), Ordering.gt.Compares a b = (a > 
+b)
+参数：a b : α；a > b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma compares_gt [LT α] (a b : α) : Compares gt a b = (a > b) := rfl
 
-/--
-Definition of `dthen` / `dthen` 的定义
+/-- `o₁.dthen fun h => o₂(h)` is like `o₁.then o₂` but `o₂` is allowed to depend on
+`h : o₁ = .eq`. -/
+/-
+**Ordering.dthen** 是 Mathlib 中的一个定义，位于命名空间 `Ordering`。
+形式化陈述：(o : Ordering) → (o = Ordering.eq → Ordering) → Ordering
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dthen
-  signature: :
-
-中文:
-定义 dthen
-  签名: :
+--- 原说明 ---
+`o₁.dthen fun h => o₂(h)` is like `o₁.then o₂` but `o₂` is allowed to depend on
+`h : o₁ = .eq`.
 -/
 @[macro_inline] def dthen :
-    (o : Ordering) -> (o = .eq -> Ordering) -> Ordering
+    (o : Ordering) → (o = .eq → Ordering) → Ordering
   | .eq, f => f rfl
   | o, _ => o
 
 end Ordering
 
 /--
-Definition of `cmpUsing` / `cmpUsing` 的定义
-
-English:
-definition cmpUsing
-  signature: {α : Type u} (lt : α -> α -> Prop) [DecidableRel lt] (a b : α)
-  body: if lt a b then Ordering.lt else if lt b a then Ordering.gt else Ordering.eq
-
-中文:
-定义 cmpUsing
-  签名: {α : 类型u} (lt : α -> α -> 命题) [DecidableRel lt] (a b : α)
-  定义体: if lt a b then Ordering.lt else if lt b a then Ordering.gt else Ordering.eq
-
-Depends on / 依赖: Ordering, Ordering.eq, Ordering.gt, Ordering.lt
+Lift a decidable relation to an `Ordering`,
+assuming that incomparable terms are `Ordering.eq`.
 -/
-def cmpUsing {α : Type u} (lt : α -> α -> Prop) [DecidableRel lt] (a b : α) : Ordering :=
+/-
+**cmpUsing** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：cmpUsing {α : Type u} (lt : α -> α -> Prop) [DecidableRel lt] (a b : α) : 
+Ordering
+参数：lt : α -> α -> Prop；a b : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Lift a decidable relation to an `Ordering`,
+assuming that incomparable terms are `Ordering.eq`.
+-/
+def cmpUsing {α : Type u} (lt : α → α → Prop) [DecidableRel lt] (a b : α) : Ordering :=
   if lt a b then Ordering.lt else if lt b a then Ordering.gt else Ordering.eq
 
 /--
-Definition of `cmp` / `cmp` 的定义
+Construct an `Ordering` from a type with a decidable `LT` instance,
+assuming that incomparable terms are `Ordering.eq`.
+-/
+/-
+**cmp** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：cmp {α : Type u} [LT α] [DecidableLT α] (a b : α) : Ordering
+参数：a b : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cmp
-  signature: {α : Type u} [LT α] [DecidableLT α] (a b : α)
-  body: cmpUsing (· < ·) a b
-
-中文:
-定义 cmp
-  签名: {α : 类型u} [LT α] [DecidableLT α] (a b : α)
-  定义体: cmpUsing (· < ·) a b
-
-Depends on / 依赖: cmpUsing
+--- 原说明 ---
+Construct an `Ordering` from a type with a decidable `LT` instance,
+assuming that incomparable terms are `Ordering.eq`.
 -/
 def cmp {α : Type u} [LT α] [DecidableLT α] (a b : α) : Ordering :=
   cmpUsing (· < ·) a b

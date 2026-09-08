@@ -41,357 +41,384 @@ variable {α β γ δ : Type*} {ι : Sort y} {s t u : Set α}
 
 namespace Real
 
-/--
-theorem `borel_eq_generateFrom_Ioo_rat` / 定理 `borel_eq_generateFrom_Ioo_rat`
-
-English:
-theorem borel_eq_generateFrom_Ioo_rat
-  proof: isTopologicalBasis_Ioo_rat.borel_eq_generateFrom
-
-中文:
-定理 borel_eq_generateFrom_Ioo_rat
-  证明: isTopologicalBasis_Ioo_rat.borel_eq_generateFrom
-
-Depends on / 依赖: borel_eq_generateFrom, isTopologicalBasis_Ioo_rat, isTopologicalBasis_Ioo_rat.borel_eq_generateFrom
+/-
+**Real.borel_eq_generateFrom_Ioo_rat** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：borel_eq_generateFrom_Ioo_rat : borel Real = .generateFrom (⋃ (a : Rat) (b
+ : Rat) (_ : a < b), {Ioo (a : Real) (b : Real)})
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.IsTopologicalBasis.borel_eq_generateFrom`：TopologicalSp
+ace.IsTopologicalBasis.borel_eq_generateFrom [TopologicalSpace α] [SecondCountab
+leTopology α] {s : Set (Set α)} (hs : IsTopolog…
+· 使用定理 `instSecondCountableTopologyReal`：SecondCountableTopology ℝ
+· 使用定理 `Real.isTopologicalBasis_Ioo_rat`：Real.isTopologicalBasis_Ioo_rat : @IsTo
+pologicalBasis Real _ (⋃ (a : Rat) (b : Rat) (_ : a < b), {Ioo (a : Real) b})
 -/
 theorem borel_eq_generateFrom_Ioo_rat :
-    borel Real = .generateFrom (⋃ (a : Rat) (b : Rat) (_ : a < b), {Ioo (a : Real) (b : Real)}) :=
+    borel ℝ = .generateFrom (⋃ (a : ℚ) (b : ℚ) (_ : a < b), {Ioo (a : ℝ) (b : ℝ)}) :=
   isTopologicalBasis_Ioo_rat.borel_eq_generateFrom
-
-/--
-theorem `borel_eq_generateFrom_Iio_rat` / 定理 `borel_eq_generateFrom_Iio_rat`
-
-English:
-theorem borel_eq_generateFrom_Iio_rat
-  statement: borel Real = .generateFrom (⋃ a : Rat, {Iio (a : Real)})
-  proof: by
-  rw [borel_eq_generateFrom_Iio]
-  refine le_antisymm
-    (generateFrom_le ?_)
-    (generateFrom_mono <| iUnion_subset fun q => singleton_subset_iff.mpr <| mem_range_self _)
-  rintro _ ⟨a, rfl⟩
-  have : IsLUB (range ((↑) : Rat -> Real) inter Iio a) a := by
-    simp [isLUB_iff_le_iff, mem_upperBounds, ← le_iff_forall_rat_lt_imp_le]
-  rw [← this.biUnion_Iio_eq]; rw [← image_univ]; rw [← image_inter_preimage]; rw [univ_inter]; rw [biUnion_image]
-  exact MeasurableSet.biUnion (to_countable _)
-    fun b _ => GenerateMeasurable.basic (Iio (b : Real)) (by simp)
-
-中文:
-定理 borel_eq_generateFrom_Iio_rat
-  结论: borel 实数 = .generateFrom (⋃ a : 有理数, {左无界右开区间 (a : 实数)})
-  证明: by
-  rw [borel_eq_generateFrom_Iio]
-  refine le_antisymm
-    (generateFrom_le ?_)
-    (generateFrom_mono <| iUnion_subset fun q => singleton_subset_iff.mpr <| mem_range_self _)
-  rintro _ ⟨a, rfl⟩
-  have : IsLUB (range ((↑) : Rat -> Real) inter Iio a) a := by
-    simp [isLUB_iff_le_iff, mem_upperBounds, ← le_iff_forall_rat_lt_imp_le]
-  rw [← this.biUnion_Iio_eq]; rw [← image_univ]; rw [← image_inter_preimage]; rw [univ_inter]; rw [biUnion_image]
-  exact MeasurableSet.biUnion (to_countable _)
-    fun b _ => GenerateMeasurable.basic (Iio (b : Real)) (by simp)
-
-Depends on / 依赖: GenerateMeasurab, MeasurableSet, MeasurableSet.biUnion, biUnion, biUnion_Iio_eq, biUnion_image, borel_eq_generateFrom_Iio, generateFrom_le, generateFrom_mono, iUnion_subset, image_inter_preimage, image_univ, isLUB_iff_le_iff, le_antisymm, le_iff_forall_rat_lt_imp_le, mem_range_self, mem_upperBounds, singleton_subset_iff, singleton_subset_iff.mpr, this.biUnion_Iio_eq
+/-
+**Real.borel_eq_generateFrom_Iio_rat** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：borel_eq_generateFrom_Iio_rat : borel Real = .generateFrom (⋃ a : Rat, {Ii
+o (a : Real)})
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `borel_eq_generateFrom_Iio`：borel_eq_generateFrom_Iio : borel α = .genera
+teFrom (range Iio)
+· 使用定理 `instSecondCountableTopologyReal`：SecondCountableTopology ℝ
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `MeasurableSpace.generateFrom_le`：generateFrom_le {s : Set (Set α)} {m : 
+MeasurableSpace α} (h : forall t in s, MeasurableSet[m] t) : generateFrom s <= m
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsLUB.biUnion_Iio_eq`：IsLUB.biUnion_Iio_eq (h : IsLUB s a) : ⋃ x in s, I
+io x = Iio a
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `Set.image_inter_preimage`：image_inter_preimage (f : α -> β) (s : Set α) 
+(t : Set β) : f '' (s inter f ⁻¹' t) = f '' s inter t
+· 使用定理 `Set.univ_inter`：univ_inter (a : Set α) : univ inter a = a
+· 使用定理 `Set.biUnion_image`：biUnion_image : ⋃ x in f '' s, g x = ⋃ y in s, g (f y
+)
+· 使用定理 `MeasurableSet.biUnion`：∀ {α : Type u_1} {β : Type u_2} {m : MeasurableSp
+ace α} {f : β → Set α} {s : Set β},   s.Countable → (∀ b ∈ s, MeasurableSet (f b
+)) → Measur…
+· 使用定理 `Set.to_countable`：to_countable (s : Set α) [Countable s] : s.Countable
+· 使用定理 `SetCoe.countable`：∀ {α : Type u} [Countable α] (s : Set α), Countable ↑s
+· 使用定理 `Encodable.countable`：∀ {α : Type u_1} [Encodable α], Countable α
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.iUnion_singleton_eq_range`：iUnion_singleton_eq_range (f : α -> β) : 
+⋃ x : α, {f x} = range f
+· 使用定理 `MeasurableSpace.generateFrom_mono`：generateFrom_mono {s t : Set (Set α)}
+ (h : s subseteq t) : generateFrom s <= generateFrom t
+· 使用定理 `Set.iUnion_subset`：iUnion_subset {s : ι -> Set α} {t : Set α} (h : foral
+l i, s i subseteq t) : ⋃ i, s i subseteq t
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.singleton_subset_iff`：singleton_subset_iff {a : α} {s : Set α} : {a}
+ subseteq s ↔ a in s
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
 -/
-theorem borel_eq_generateFrom_Iio_rat : borel Real = .generateFrom (⋃ a : Rat, {Iio (a : Real)}) := by
+theorem borel_eq_generateFrom_Iio_rat : borel ℝ = .generateFrom (⋃ a : ℚ, {Iio (a : ℝ)}) := by
   rw [borel_eq_generateFrom_Iio]
   refine le_antisymm
     (generateFrom_le ?_)
-    (generateFrom_mono <| iUnion_subset fun q => singleton_subset_iff.mpr <| mem_range_self _)
+    (generateFrom_mono <| iUnion_subset fun q ↦ singleton_subset_iff.mpr <| mem_range_self _)
   rintro _ ⟨a, rfl⟩
-  have : IsLUB (range ((↑) : Rat -> Real) inter Iio a) a := by
+  have : IsLUB (range ((↑) : ℚ → ℝ) ∩ Iio a) a := by
     simp [isLUB_iff_le_iff, mem_upperBounds, ← le_iff_forall_rat_lt_imp_le]
-  rw [← this.biUnion_Iio_eq]; rw [← image_univ]; rw [← image_inter_preimage]; rw [univ_inter]; rw [biUnion_image]
+  rw [← this.biUnion_Iio_eq, ← image_univ, ← image_inter_preimage, univ_inter, biUnion_image]
   exact MeasurableSet.biUnion (to_countable _)
-    fun b _ => GenerateMeasurable.basic (Iio (b : Real)) (by simp)
-
-/--
-theorem `borel_eq_generateFrom_Ioi_rat` / 定理 `borel_eq_generateFrom_Ioi_rat`
-
-English:
-theorem borel_eq_generateFrom_Ioi_rat
-  statement: borel Real = .generateFrom (⋃ a : Rat, {Ioi (a : Real)})
-  proof: by
-  rw [borel_eq_generateFrom_Ioi]
-  refine le_antisymm
-    (generateFrom_le ?_)
-    (generateFrom_mono <| iUnion_subset fun q => singleton_subset_iff.mpr <| mem_range_self _)
-  rintro _ ⟨a, rfl⟩
-  have : IsGLB (range ((↑) : Rat -> Real) inter Ioi a) a := by
-    simp [isGLB_iff_le_iff, mem_lowerBounds, ← le_iff_forall_lt_rat_imp_le]
-  rw [← this.biUnion_Ioi_eq]; rw [← image_univ]; rw [← image_inter_preimage]; rw [univ_inter]; rw [biUnion_image]
-  exact MeasurableSet.biUnion (to_countable _)
-    fun b _ => GenerateMeasurable.basic (Ioi (b : Real)) (by simp)
-
-中文:
-定理 borel_eq_generateFrom_Ioi_rat
-  结论: borel 实数 = .generateFrom (⋃ a : 有理数, {左开右无界区间 (a : 实数)})
-  证明: by
-  rw [borel_eq_generateFrom_Ioi]
-  refine le_antisymm
-    (generateFrom_le ?_)
-    (generateFrom_mono <| iUnion_subset fun q => singleton_subset_iff.mpr <| mem_range_self _)
-  rintro _ ⟨a, rfl⟩
-  have : IsGLB (range ((↑) : Rat -> Real) inter Ioi a) a := by
-    simp [isGLB_iff_le_iff, mem_lowerBounds, ← le_iff_forall_lt_rat_imp_le]
-  rw [← this.biUnion_Ioi_eq]; rw [← image_univ]; rw [← image_inter_preimage]; rw [univ_inter]; rw [biUnion_image]
-  exact MeasurableSet.biUnion (to_countable _)
-    fun b _ => GenerateMeasurable.basic (Ioi (b : Real)) (by simp)
-
-Depends on / 依赖: GenerateMeasurab, MeasurableSet, MeasurableSet.biUnion, biUnion, biUnion_Ioi_eq, biUnion_image, borel_eq_generateFrom_Ioi, generateFrom_le, generateFrom_mono, iUnion_subset, image_inter_preimage, image_univ, isGLB_iff_le_iff, le_antisymm, le_iff_forall_lt_rat_imp_le, mem_lowerBounds, mem_range_self, singleton_subset_iff, singleton_subset_iff.mpr, this.biUnion_Ioi_eq
+    fun b _ => GenerateMeasurable.basic (Iio (b : ℝ)) (by simp)
+/-
+**Real.borel_eq_generateFrom_Ioi_rat** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：borel_eq_generateFrom_Ioi_rat : borel Real = .generateFrom (⋃ a : Rat, {Io
+i (a : Real)})
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `borel_eq_generateFrom_Ioi`：borel_eq_generateFrom_Ioi : borel α = .genera
+teFrom (range Ioi)
+· 使用定理 `instSecondCountableTopologyReal`：SecondCountableTopology ℝ
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `MeasurableSpace.generateFrom_le`：generateFrom_le {s : Set (Set α)} {m : 
+MeasurableSpace α} (h : forall t in s, MeasurableSet[m] t) : generateFrom s <= m
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsGLB.biUnion_Ioi_eq`：IsGLB.biUnion_Ioi_eq (h : IsGLB s a) : ⋃ x in s, I
+oi x = Ioi a
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `Set.image_inter_preimage`：image_inter_preimage (f : α -> β) (s : Set α) 
+(t : Set β) : f '' (s inter f ⁻¹' t) = f '' s inter t
+· 使用定理 `Set.univ_inter`：univ_inter (a : Set α) : univ inter a = a
+· 使用定理 `Set.biUnion_image`：biUnion_image : ⋃ x in f '' s, g x = ⋃ y in s, g (f y
+)
+· 使用定理 `MeasurableSet.biUnion`：∀ {α : Type u_1} {β : Type u_2} {m : MeasurableSp
+ace α} {f : β → Set α} {s : Set β},   s.Countable → (∀ b ∈ s, MeasurableSet (f b
+)) → Measur…
+· 使用定理 `Set.to_countable`：to_countable (s : Set α) [Countable s] : s.Countable
+· 使用定理 `SetCoe.countable`：∀ {α : Type u} [Countable α] (s : Set α), Countable ↑s
+· 使用定理 `Encodable.countable`：∀ {α : Type u_1} [Encodable α], Countable α
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.iUnion_singleton_eq_range`：iUnion_singleton_eq_range (f : α -> β) : 
+⋃ x : α, {f x} = range f
+· 使用定理 `MeasurableSpace.generateFrom_mono`：generateFrom_mono {s t : Set (Set α)}
+ (h : s subseteq t) : generateFrom s <= generateFrom t
+· 使用定理 `Set.iUnion_subset`：iUnion_subset {s : ι -> Set α} {t : Set α} (h : foral
+l i, s i subseteq t) : ⋃ i, s i subseteq t
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.singleton_subset_iff`：singleton_subset_iff {a : α} {s : Set α} : {a}
+ subseteq s ↔ a in s
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
 -/
-theorem borel_eq_generateFrom_Ioi_rat : borel Real = .generateFrom (⋃ a : Rat, {Ioi (a : Real)}) := by
+theorem borel_eq_generateFrom_Ioi_rat : borel ℝ = .generateFrom (⋃ a : ℚ, {Ioi (a : ℝ)}) := by
   rw [borel_eq_generateFrom_Ioi]
   refine le_antisymm
     (generateFrom_le ?_)
-    (generateFrom_mono <| iUnion_subset fun q => singleton_subset_iff.mpr <| mem_range_self _)
+    (generateFrom_mono <| iUnion_subset fun q ↦ singleton_subset_iff.mpr <| mem_range_self _)
   rintro _ ⟨a, rfl⟩
-  have : IsGLB (range ((↑) : Rat -> Real) inter Ioi a) a := by
+  have : IsGLB (range ((↑) : ℚ → ℝ) ∩ Ioi a) a := by
     simp [isGLB_iff_le_iff, mem_lowerBounds, ← le_iff_forall_lt_rat_imp_le]
-  rw [← this.biUnion_Ioi_eq]; rw [← image_univ]; rw [← image_inter_preimage]; rw [univ_inter]; rw [biUnion_image]
+  rw [← this.biUnion_Ioi_eq, ← image_univ, ← image_inter_preimage, univ_inter, biUnion_image]
   exact MeasurableSet.biUnion (to_countable _)
-    fun b _ => GenerateMeasurable.basic (Ioi (b : Real)) (by simp)
-
-/--
-theorem `borel_eq_generateFrom_Iic_rat` / 定理 `borel_eq_generateFrom_Iic_rat`
-
-English:
-theorem borel_eq_generateFrom_Iic_rat
-  statement: borel Real = .generateFrom (⋃ a : Rat, {Iic (a : Real)})
-  proof: by
-  rw [borel_eq_generateFrom_Ioi_rat]; rw [iUnion_singleton_eq_range]; rw [iUnion_singleton_eq_range]
+    fun b _ => GenerateMeasurable.basic (Ioi (b : ℝ)) (by simp)
+/-
+**Real.borel_eq_generateFrom_Iic_rat** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：borel_eq_generateFrom_Iic_rat : borel Real = .generateFrom (⋃ a : Rat, {Ii
+c (a : Real)})
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.borel_eq_generateFrom_Ioi_rat`：borel_eq_generateFrom_Ioi_rat : bore
+l Real = .generateFrom (⋃ a : Rat, {Ioi (a : Real)})
+· 使用定理 `Set.iUnion_singleton_eq_range`：iUnion_singleton_eq_range (f : α -> β) : 
+⋃ x : α, {f x} = range f
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `MeasurableSpace.generateFrom_le`：generateFrom_le {s : Set (Set α)} {m : 
+MeasurableSpace α} (h : forall t in s, MeasurableSet[m] t) : generateFrom s <= m
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.compl_Iic`：compl_Iic : (Iic a)ᶜ = Ioi a
+· 使用定理 `MeasurableSet.compl`：∀ {α : Type u_1} {s : Set α} {m : MeasurableSpace α
+}, MeasurableSet s → MeasurableSet sᶜ
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
+· 使用定理 `Set.compl_Ioi`：∀ {α : Type u_1} [inst : LinearOrder α] {a : α}, (Set.Ioi
+ a)ᶜ = Set.Iic a
+-/
+theorem borel_eq_generateFrom_Iic_rat : borel ℝ = .generateFrom (⋃ a : ℚ, {Iic (a : ℝ)}) := by
+  rw [borel_eq_generateFrom_Ioi_rat, iUnion_singleton_eq_range, iUnion_singleton_eq_range]
   refine le_antisymm (generateFrom_le ?_) (generateFrom_le ?_) <;>
   rintro _ ⟨q, rfl⟩ <;>
   dsimp only <;>
   [rw [← compl_Iic]; rw [← compl_Ioi]] <;>
   exact MeasurableSet.compl (GenerateMeasurable.basic _ (mem_range_self q))
-
-中文:
-定理 borel_eq_generateFrom_Iic_rat
-  结论: borel 实数 = .generateFrom (⋃ a : 有理数, {左无界右闭区间 (a : 实数)})
-  证明: by
-  rw [borel_eq_generateFrom_Ioi_rat]; rw [iUnion_singleton_eq_range]; rw [iUnion_singleton_eq_range]
-  refine le_antisymm (generateFrom_le ?_) (generateFrom_le ?_) <;>
-  rintro _ ⟨q, rfl⟩ <;>
-  dsimp only <;>
-  [rw [← compl_Iic]; rw [← compl_Ioi]] <;>
-  exact MeasurableSet.compl (GenerateMeasurable.basic _ (mem_range_self q))
-
-Depends on / 依赖: GenerateMeasurable, GenerateMeasurable.basic, MeasurableSet, MeasurableSet.compl, borel_eq_generateFrom_Ioi_rat, compl_Iic, compl_Ioi, generateFrom_le, iUnion_singleton_eq_range, le_antisymm, mem_range_self
+/-
+**Real.borel_eq_generateFrom_Ici_rat** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：borel_eq_generateFrom_Ici_rat : borel Real = .generateFrom (⋃ a : Rat, {Ic
+i (a : Real)})
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.borel_eq_generateFrom_Iio_rat`：borel_eq_generateFrom_Iio_rat : bore
+l Real = .generateFrom (⋃ a : Rat, {Iio (a : Real)})
+· 使用定理 `Set.iUnion_singleton_eq_range`：iUnion_singleton_eq_range (f : α -> β) : 
+⋃ x : α, {f x} = range f
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `MeasurableSpace.generateFrom_le`：generateFrom_le {s : Set (Set α)} {m : 
+MeasurableSpace α} (h : forall t in s, MeasurableSet[m] t) : generateFrom s <= m
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.compl_Ici`：∀ {α : Type u_1} [inst : LinearOrder α] {a : α}, (Set.Ici
+ a)ᶜ = Set.Iio a
+· 使用定理 `MeasurableSet.compl`：∀ {α : Type u_1} {s : Set α} {m : MeasurableSpace α
+}, MeasurableSet s → MeasurableSet sᶜ
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
+· 使用定理 `Set.compl_Iio`：compl_Iio : (Iio a)ᶜ = Ici a
 -/
-theorem borel_eq_generateFrom_Iic_rat : borel Real = .generateFrom (⋃ a : Rat, {Iic (a : Real)}) := by
-  rw [borel_eq_generateFrom_Ioi_rat]; rw [iUnion_singleton_eq_range]; rw [iUnion_singleton_eq_range]
-  refine le_antisymm (generateFrom_le ?_) (generateFrom_le ?_) <;>
-  rintro _ ⟨q, rfl⟩ <;>
-  dsimp only <;>
-  [rw [← compl_Iic]; rw [← compl_Ioi]] <;>
-  exact MeasurableSet.compl (GenerateMeasurable.basic _ (mem_range_self q))
-
-/--
-theorem `borel_eq_generateFrom_Ici_rat` / 定理 `borel_eq_generateFrom_Ici_rat`
-
-English:
-theorem borel_eq_generateFrom_Ici_rat
-  statement: borel Real = .generateFrom (⋃ a : Rat, {Ici (a : Real)})
-  proof: by
-  rw [borel_eq_generateFrom_Iio_rat]; rw [iUnion_singleton_eq_range]; rw [iUnion_singleton_eq_range]
+theorem borel_eq_generateFrom_Ici_rat : borel ℝ = .generateFrom (⋃ a : ℚ, {Ici (a : ℝ)}) := by
+  rw [borel_eq_generateFrom_Iio_rat, iUnion_singleton_eq_range, iUnion_singleton_eq_range]
   refine le_antisymm (generateFrom_le ?_) (generateFrom_le ?_) <;>
   rintro _ ⟨q, rfl⟩ <;>
   dsimp only <;>
   [rw [← compl_Ici]; rw [← compl_Iio]] <;>
   exact MeasurableSet.compl (GenerateMeasurable.basic _ (mem_range_self q))
-
-中文:
-定理 borel_eq_generateFrom_Ici_rat
-  结论: borel 实数 = .generateFrom (⋃ a : 有理数, {左闭右无界区间 (a : 实数)})
-  证明: by
-  rw [borel_eq_generateFrom_Iio_rat]; rw [iUnion_singleton_eq_range]; rw [iUnion_singleton_eq_range]
-  refine le_antisymm (generateFrom_le ?_) (generateFrom_le ?_) <;>
-  rintro _ ⟨q, rfl⟩ <;>
-  dsimp only <;>
-  [rw [← compl_Ici]; rw [← compl_Iio]] <;>
-  exact MeasurableSet.compl (GenerateMeasurable.basic _ (mem_range_self q))
-
-Depends on / 依赖: GenerateMeasurable, GenerateMeasurable.basic, MeasurableSet, MeasurableSet.compl, borel_eq_generateFrom_Iio_rat, compl_Ici, compl_Iio, generateFrom_le, iUnion_singleton_eq_range, le_antisymm, mem_range_self
--/
-theorem borel_eq_generateFrom_Ici_rat : borel Real = .generateFrom (⋃ a : Rat, {Ici (a : Real)}) := by
-  rw [borel_eq_generateFrom_Iio_rat]; rw [iUnion_singleton_eq_range]; rw [iUnion_singleton_eq_range]
-  refine le_antisymm (generateFrom_le ?_) (generateFrom_le ?_) <;>
-  rintro _ ⟨q, rfl⟩ <;>
-  dsimp only <;>
-  [rw [← compl_Ici]; rw [← compl_Iio]] <;>
-  exact MeasurableSet.compl (GenerateMeasurable.basic _ (mem_range_self q))
-
-/--
-theorem `isPiSystem_Ioo_rat` / 定理 `isPiSystem_Ioo_rat`
-
-English:
-theorem isPiSystem_Ioo_rat
-  proof: by
-  convert! isPiSystem_Ioo ((↑) : Rat -> Real) ((↑) : Rat -> Real)
-  ext x
-  simp [eq_comm]
-
-中文:
-定理 isPiSystem_Ioo_rat
-  证明: by
-  convert! isPiSystem_Ioo ((↑) : Rat -> Real) ((↑) : Rat -> Real)
-  ext x
-  simp [eq_comm]
-
-Depends on / 依赖: convert, eq_comm, isPiSystem_Ioo
+/-
+**Real.isPiSystem_Ioo_rat** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：isPiSystem_Ioo_rat : IsPiSystem (⋃ (a : Rat) (b : Rat) (_ : a < b), {Ioo (
+a : Real) (b : Real)})
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `isPiSystem_Ioo`：isPiSystem_Ioo (f : ι -> α) (g : ι' -> α) : @IsPiSystem 
+α { S | exists l u, f l < g u ∧ Ioo (f l) (g u) = S }
 -/
 theorem isPiSystem_Ioo_rat :
-    IsPiSystem (⋃ (a : Rat) (b : Rat) (_ : a < b), {Ioo (a : Real) (b : Real)}) := by
-  convert! isPiSystem_Ioo ((↑) : Rat -> Real) ((↑) : Rat -> Real)
+    IsPiSystem (⋃ (a : ℚ) (b : ℚ) (_ : a < b), {Ioo (a : ℝ) (b : ℝ)}) := by
+  convert! isPiSystem_Ioo ((↑) : ℚ → ℝ) ((↑) : ℚ → ℝ)
   ext x
   simp [eq_comm]
-
-/--
-theorem `isPiSystem_Iio_rat` / 定理 `isPiSystem_Iio_rat`
-
-English:
-theorem isPiSystem_Iio_rat
-  statement: IsPiSystem (⋃ a : Rat, {Iio (a : Real)})
-  proof: by
-  convert! isPiSystem_image_Iio (((↑) : Rat -> Real) '' univ)
-  ext x
-  simp only [iUnion_singleton_eq_range, mem_range, image_univ, mem_image, exists_exists_eq_and]
-
-中文:
-定理 isPiSystem_Iio_rat
-  结论: IsPiSystem (⋃ a : 有理数, {左无界右开区间 (a : 实数)})
-  证明: by
-  convert! isPiSystem_image_Iio (((↑) : Rat -> Real) '' univ)
-  ext x
-  simp only [iUnion_singleton_eq_range, mem_range, image_univ, mem_image, exists_exists_eq_and]
-
-Depends on / 依赖: convert, exists_exists_eq_and, iUnion_singleton_eq_range, image_univ, isPiSystem_image_Iio, mem_image, mem_range
+/-
+**Real.isPiSystem_Iio_rat** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：isPiSystem_Iio_rat : IsPiSystem (⋃ a : Rat, {Iio (a : Real)})
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.iUnion_singleton_eq_range`：iUnion_singleton_eq_range (f : α -> β) : 
+⋃ x : α, {f x} = range f
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `isPiSystem_image_Iio`：isPiSystem_image_Iio (s : Set α) : IsPiSystem (Iio
+ '' s)
 -/
-theorem isPiSystem_Iio_rat : IsPiSystem (⋃ a : Rat, {Iio (a : Real)}) := by
-  convert! isPiSystem_image_Iio (((↑) : Rat -> Real) '' univ)
+theorem isPiSystem_Iio_rat : IsPiSystem (⋃ a : ℚ, {Iio (a : ℝ)}) := by
+  convert! isPiSystem_image_Iio (((↑) : ℚ → ℝ) '' univ)
   ext x
   simp only [iUnion_singleton_eq_range, mem_range, image_univ, mem_image, exists_exists_eq_and]
-
-/--
-theorem `isPiSystem_Ioi_rat` / 定理 `isPiSystem_Ioi_rat`
-
-English:
-theorem isPiSystem_Ioi_rat
-  statement: IsPiSystem (⋃ a : Rat, {Ioi (a : Real)})
-  proof: by
-  convert! isPiSystem_image_Ioi (((↑) : Rat -> Real) '' univ)
-  ext x
-  simp only [iUnion_singleton_eq_range, mem_range, image_univ, mem_image, exists_exists_eq_and]
-
-中文:
-定理 isPiSystem_Ioi_rat
-  结论: IsPiSystem (⋃ a : 有理数, {左开右无界区间 (a : 实数)})
-  证明: by
-  convert! isPiSystem_image_Ioi (((↑) : Rat -> Real) '' univ)
-  ext x
-  simp only [iUnion_singleton_eq_range, mem_range, image_univ, mem_image, exists_exists_eq_and]
-
-Depends on / 依赖: convert, exists_exists_eq_and, iUnion_singleton_eq_range, image_univ, isPiSystem_image_Ioi, mem_image, mem_range
+/-
+**Real.isPiSystem_Ioi_rat** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：isPiSystem_Ioi_rat : IsPiSystem (⋃ a : Rat, {Ioi (a : Real)})
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.iUnion_singleton_eq_range`：iUnion_singleton_eq_range (f : α -> β) : 
+⋃ x : α, {f x} = range f
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `isPiSystem_image_Ioi`：isPiSystem_image_Ioi (s : Set α) : IsPiSystem (Ioi
+ '' s)
 -/
-theorem isPiSystem_Ioi_rat : IsPiSystem (⋃ a : Rat, {Ioi (a : Real)}) := by
-  convert! isPiSystem_image_Ioi (((↑) : Rat -> Real) '' univ)
+theorem isPiSystem_Ioi_rat : IsPiSystem (⋃ a : ℚ, {Ioi (a : ℝ)}) := by
+  convert! isPiSystem_image_Ioi (((↑) : ℚ → ℝ) '' univ)
   ext x
   simp only [iUnion_singleton_eq_range, mem_range, image_univ, mem_image, exists_exists_eq_and]
-
-/--
-theorem `isPiSystem_Iic_rat` / 定理 `isPiSystem_Iic_rat`
-
-English:
-theorem isPiSystem_Iic_rat
-  statement: IsPiSystem (⋃ a : Rat, {Iic (a : Real)})
-  proof: by
-  convert! isPiSystem_image_Iic (((↑) : Rat -> Real) '' univ)
-  ext x
-  simp only [iUnion_singleton_eq_range, mem_range, image_univ, mem_image, exists_exists_eq_and]
-
-中文:
-定理 isPiSystem_Iic_rat
-  结论: IsPiSystem (⋃ a : 有理数, {左无界右闭区间 (a : 实数)})
-  证明: by
-  convert! isPiSystem_image_Iic (((↑) : Rat -> Real) '' univ)
-  ext x
-  simp only [iUnion_singleton_eq_range, mem_range, image_univ, mem_image, exists_exists_eq_and]
-
-Depends on / 依赖: convert, exists_exists_eq_and, iUnion_singleton_eq_range, image_univ, isPiSystem_image_Iic, mem_image, mem_range
+/-
+**Real.isPiSystem_Iic_rat** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：isPiSystem_Iic_rat : IsPiSystem (⋃ a : Rat, {Iic (a : Real)})
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.iUnion_singleton_eq_range`：iUnion_singleton_eq_range (f : α -> β) : 
+⋃ x : α, {f x} = range f
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `isPiSystem_image_Iic`：isPiSystem_image_Iic (s : Set α) : IsPiSystem (Iic
+ '' s)
 -/
-theorem isPiSystem_Iic_rat : IsPiSystem (⋃ a : Rat, {Iic (a : Real)}) := by
-  convert! isPiSystem_image_Iic (((↑) : Rat -> Real) '' univ)
+theorem isPiSystem_Iic_rat : IsPiSystem (⋃ a : ℚ, {Iic (a : ℝ)}) := by
+  convert! isPiSystem_image_Iic (((↑) : ℚ → ℝ) '' univ)
   ext x
   simp only [iUnion_singleton_eq_range, mem_range, image_univ, mem_image, exists_exists_eq_and]
-
-/--
-theorem `isPiSystem_Ici_rat` / 定理 `isPiSystem_Ici_rat`
-
-English:
-theorem isPiSystem_Ici_rat
-  statement: IsPiSystem (⋃ a : Rat, {Ici (a : Real)})
-  proof: by
-  convert! isPiSystem_image_Ici (((↑) : Rat -> Real) '' univ)
-  ext x
-  simp only [iUnion_singleton_eq_range, mem_range, image_univ, mem_image, exists_exists_eq_and]
-
-中文:
-定理 isPiSystem_Ici_rat
-  结论: IsPiSystem (⋃ a : 有理数, {左闭右无界区间 (a : 实数)})
-  证明: by
-  convert! isPiSystem_image_Ici (((↑) : Rat -> Real) '' univ)
-  ext x
-  simp only [iUnion_singleton_eq_range, mem_range, image_univ, mem_image, exists_exists_eq_and]
-
-Depends on / 依赖: convert, exists_exists_eq_and, iUnion_singleton_eq_range, image_univ, isPiSystem_image_Ici, mem_image, mem_range
+/-
+**Real.isPiSystem_Ici_rat** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：isPiSystem_Ici_rat : IsPiSystem (⋃ a : Rat, {Ici (a : Real)})
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.iUnion_singleton_eq_range`：iUnion_singleton_eq_range (f : α -> β) : 
+⋃ x : α, {f x} = range f
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `isPiSystem_image_Ici`：isPiSystem_image_Ici (s : Set α) : IsPiSystem (Ici
+ '' s)
 -/
-theorem isPiSystem_Ici_rat : IsPiSystem (⋃ a : Rat, {Ici (a : Real)}) := by
-  convert! isPiSystem_image_Ici (((↑) : Rat -> Real) '' univ)
+theorem isPiSystem_Ici_rat : IsPiSystem (⋃ a : ℚ, {Ici (a : ℝ)}) := by
+  convert! isPiSystem_image_Ici (((↑) : ℚ → ℝ) '' univ)
   ext x
   simp only [iUnion_singleton_eq_range, mem_range, image_univ, mem_image, exists_exists_eq_and]
 
-/--
-Definition of `finiteSpanningSetsInIooRat` / `finiteSpanningSetsInIooRat` 的定义
+/-- The intervals `(-(n + 1), (n + 1))` form a finite spanning set in the set of open intervals
+with rational endpoints for a locally finite measure `μ` on `ℝ`. -/
+/-
+**Real.finiteSpanningSetsInIooRat** 是 Mathlib 中的一个定义，位于命名空间 `Real`。
+形式化陈述：finiteSpanningSetsInIooRat (μ : Measure Real) [IsLocallyFiniteMeasure μ] :
+ μ.FiniteSpanningSetsIn (⋃ (a : Rat) (b : Rat) (_ : a < b), {Ioo (a : Real) (b :
+ Real)}) where set n
+参数：μ : Measure Real。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finiteSpanningSetsInIooRat
-  signature: (μ : Measure Real) [IsLocallyFiniteMeasure μ]
-  body: Ioo (-(n + 1)) (n + 1)
-  set_mem n := by
-    simp only [mem_iUnion, mem_singleton_iff]
-    refine ⟨-(n + 1 : Nat), n + 1, ?_, by simp⟩
-    -- TODO: norm_cast fails here?
-    push_cast
-    exact neg_lt_self n.cast_add_one_pos
-  finite _ := measure_Ioo_lt_top
-  spanning :=
-    iUnion_eq_univ_iff.2 fun x =>
-      ⟨⌊|x|⌋₊, neg_lt.1 ((neg_le_abs x).trans_lt (Nat.lt_floor_add_one _)),
-        (le_abs_self x).trans_lt (Nat.lt_floor_add_one _)⟩
-
-中文:
-定义 finiteSpanningSetsInIooRat
-  签名: (μ : 测度 实数) [是局部有限测度 μ]
-  定义体: Ioo (-(n + 1)) (n + 1)
-  set_mem n := by
-    simp only [mem_iUnion, mem_singleton_iff]
-    refine ⟨-(n + 1 : Nat), n + 1, ?_, by simp⟩
-    -- TODO: norm_cast fails here?
-    push_cast
-    exact neg_lt_self n.cast_add_one_pos
-  finite _ := measure_Ioo_lt_top
-  spanning :=
-    iUnion_eq_univ_iff.2 fun x =>
-      ⟨⌊|x|⌋₊, neg_lt.1 ((neg_le_abs x).trans_lt (Nat.lt_floor_add_one _)),
-        (le_abs_self x).trans_lt (Nat.lt_floor_add_one _)⟩
+--- 原说明 ---
+The intervals `(-(n + 1), (n + 1))` form a finite spanning set in the set of ope
+n intervals
+with rational endpoints for a locally finite measure `μ` on `ℝ`.
 -/
-def finiteSpanningSetsInIooRat (μ : Measure Real) [IsLocallyFiniteMeasure μ] :
-    μ.FiniteSpanningSetsIn (⋃ (a : Rat) (b : Rat) (_ : a < b), {Ioo (a : Real) (b : Real)}) where
+def finiteSpanningSetsInIooRat (μ : Measure ℝ) [IsLocallyFiniteMeasure μ] :
+    μ.FiniteSpanningSetsIn (⋃ (a : ℚ) (b : ℚ) (_ : a < b), {Ioo (a : ℝ) (b : ℝ)}) where
   set n := Ioo (-(n + 1)) (n + 1)
   set_mem n := by
     simp only [mem_iUnion, mem_singleton_iff]
-    refine ⟨-(n + 1 : Nat), n + 1, ?_, by simp⟩
+    refine ⟨-(n + 1 : ℕ), n + 1, ?_, by simp⟩
     -- TODO: norm_cast fails here?
     push_cast
     exact neg_lt_self n.cast_add_one_pos
@@ -400,31 +427,38 @@ def finiteSpanningSetsInIooRat (μ : Measure Real) [IsLocallyFiniteMeasure μ] :
     iUnion_eq_univ_iff.2 fun x =>
       ⟨⌊|x|⌋₊, neg_lt.1 ((neg_le_abs x).trans_lt (Nat.lt_floor_add_one _)),
         (le_abs_self x).trans_lt (Nat.lt_floor_add_one _)⟩
-
-/--
-theorem `measure_ext_Ioo_rat` / 定理 `measure_ext_Ioo_rat`
-
-English:
-theorem measure_ext_Ioo_rat
-  statement: {μ ν : Measure Real} [IsLocallyFiniteMeasure μ]
-  proof: (finiteSpanningSetsInIooRat μ).ext borel_eq_generateFrom_Ioo_rat isPiSystem_Ioo_rat by
-    simp only [mem_iUnion, mem_singleton_iff]
-    rintro _ ⟨a, b, -, rfl⟩
-    apply h
-
-中文:
-定理 measure_ext_Ioo_rat
-  结论: {μ ν : 测度 实数} [是局部有限测度 μ]
-  证明: (finiteSpanningSetsInIooRat μ).ext borel_eq_generateFrom_Ioo_rat isPiSystem_Ioo_rat by
-    simp only [mem_iUnion, mem_singleton_iff]
-    rintro _ ⟨a, b, -, rfl⟩
-    apply h
-
-Depends on / 依赖: borel_eq_generateFrom_Ioo_rat, finiteSpanningSetsInIooRat, isPiSystem_Ioo_rat, mem_iUnion, mem_singleton_iff
+/-
+**Real.measure_ext_Ioo_rat** 是 Mathlib 中的一个定理，位于命名空间 `Real`。
+形式化陈述：measure_ext_Ioo_rat {μ ν : Measure Real} [IsLocallyFiniteMeasure μ] (h : f
+orall a b : Rat, μ (Ioo a b) = ν (Ioo a b)) : μ = ν
+参数：h : forall a b : Rat, μ (Ioo a b) = ν (Ioo a b)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.FiniteSpanningSetsIn.ext`：∀ {α : Type u_1} {m0 : M
+easurableSpace α} {μ ν : MeasureTheory.Measure α} {C : Set (Set α)},   m0 = Meas
+urableSpace.generateFrom C → IsPiSys…
+· 使用定理 `Real.borel_eq_generateFrom_Ioo_rat`：borel_eq_generateFrom_Ioo_rat : bore
+l Real = .generateFrom (⋃ (a : Rat) (b : Rat) (_ : a < b), {Ioo (a : Real) (b : 
+Real)})
+· 使用定理 `Real.isPiSystem_Ioo_rat`：isPiSystem_Ioo_rat : IsPiSystem (⋃ (a : Rat) (b
+ : Rat) (_ : a < b), {Ioo (a : Real) (b : Real)})
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem measure_ext_Ioo_rat {μ ν : Measure Real} [IsLocallyFiniteMeasure μ]
-    (h : forall a b : Rat, μ (Ioo a b) = ν (Ioo a b)) : μ = ν :=
-(finiteSpanningSetsInIooRat μ).ext borel_eq_generateFrom_Ioo_rat isPiSystem_Ioo_rat by
+theorem measure_ext_Ioo_rat {μ ν : Measure ℝ} [IsLocallyFiniteMeasure μ]
+    (h : ∀ a b : ℚ, μ (Ioo a b) = ν (Ioo a b)) : μ = ν :=
+  (finiteSpanningSetsInIooRat μ).ext borel_eq_generateFrom_Ioo_rat isPiSystem_Ioo_rat <| by
     simp only [mem_iUnion, mem_singleton_iff]
     rintro _ ⟨a, b, -, rfl⟩
     apply h
@@ -434,971 +468,873 @@ end Real
 variable {mα : MeasurableSpace α}
 
 @[fun_prop]
-/--
-theorem `measurable_real_toNNReal` / 定理 `measurable_real_toNNReal`
-
-English:
-theorem measurable_real_toNNReal
-  statement: Measurable Real.toNNReal
-  proof: continuous_real_toNNReal.measurable
-
-@[fun_prop]
-
-中文:
-定理 measurable_real_toNN实数
-  结论: 可测 实数.toNN实数
-  证明: continuous_real_toNNReal.measurable
-
-@[fun_prop]
-
-Depends on / 依赖: continuous_real_toNNReal, continuous_real_toNNReal.measurable, measurable
+/-
+**measurable_real_toNNReal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_real_toNNReal : Measurable Real.toNNReal
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.measurable`：Continuous.measurable {f : α -> γ} (hf : Continuo
+us f) : Measurable f
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `continuous_real_toNNReal`：Continuous Real.toNNReal
 -/
 theorem measurable_real_toNNReal : Measurable Real.toNNReal :=
   continuous_real_toNNReal.measurable
 
 @[fun_prop]
-/--
-theorem `Measurable.real_toNNReal` / 定理 `Measurable.real_toNNReal`
-
-English:
-theorem Measurable.real_toNNReal
-  given: {f : α -> Real} (hf : Measurable f)
-  proof: measurable_real_toNNReal.comp hf
-
-@[fun_prop]
-
-中文:
-定理 可测.real_toNN实数
-  条件: {f : α -> 实数} (hf : 可测 f)
-  证明: measurable_real_toNNReal.comp hf
-
-@[fun_prop]
-
-Depends on / 依赖: measurable_real_toNNReal, measurable_real_toNNReal.comp
+/-
+**Measurable.real_toNNReal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.real_toNNReal {f : α -> Real} (hf : Measurable f) : Measurable 
+fun x => Real.toNNReal (f x)
+参数：hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `measurable_real_toNNReal`：measurable_real_toNNReal : Measurable Real.toN
+NReal
 -/
-theorem Measurable.real_toNNReal {f : α -> Real} (hf : Measurable f) :
+theorem Measurable.real_toNNReal {f : α → ℝ} (hf : Measurable f) :
     Measurable fun x => Real.toNNReal (f x) :=
   measurable_real_toNNReal.comp hf
 
 @[fun_prop]
-/--
-theorem `AEMeasurable.real_toNNReal` / 定理 `AEMeasurable.real_toNNReal`
-
-English:
-theorem AEMeasurable.real_toNNReal
-  given: {f : α -> Real} {μ : Measure α} (hf : AEMeasurable f μ)
-  proof: measurable_real_toNNReal.comp_aemeasurable hf
-
-中文:
-定理 几乎处处可测.real_toNN实数
-  条件: {f : α -> 实数} {μ : 测度 α} (hf : 几乎处处可测 f μ)
-  证明: measurable_real_toNNReal.comp_aemeasurable hf
-
-Depends on / 依赖: comp_aemeasurable, measurable_real_toNNReal, measurable_real_toNNReal.comp_aemeasurable
+/-
+**AEMeasurable.real_toNNReal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AEMeasurable.real_toNNReal {f : α -> Real} {μ : Measure α} (hf : AEMeasura
+ble f μ) : AEMeasurable (fun x => Real.toNNReal (f x)) μ
+参数：hf : AEMeasurable f μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp_aemeasurable`：Measurable.comp_aemeasurable [MeasurableSp
+ace δ] {f : α -> δ} {g : δ -> β} (hg : Measurable g) (hf : AEMeasurable f μ) : A
+EMeasurable (g ∘ f…
+· 使用定理 `measurable_real_toNNReal`：measurable_real_toNNReal : Measurable Real.toN
+NReal
 -/
-theorem AEMeasurable.real_toNNReal {f : α -> Real} {μ : Measure α} (hf : AEMeasurable f μ) :
+theorem AEMeasurable.real_toNNReal {f : α → ℝ} {μ : Measure α} (hf : AEMeasurable f μ) :
     AEMeasurable (fun x => Real.toNNReal (f x)) μ :=
   measurable_real_toNNReal.comp_aemeasurable hf
-
-/--
-theorem `measurable_coe_nnreal_real` / 定理 `measurable_coe_nnreal_real`
-
-English:
-theorem measurable_coe_nnreal_real
-  statement: Measurable ((↑) : Real>=0 -> Real)
-  proof: NNReal.continuous_coe.measurable
-
-@[fun_prop]
-
-中文:
-定理 measurable_coe_nnreal_real
-  结论: 可测 ((↑) : 实数>=0 -> 实数)
-  证明: NNReal.continuous_coe.measurable
-
-@[fun_prop]
-
-Depends on / 依赖: NNReal, NNReal.continuous_coe.measurable, continuous_coe, measurable
+/-
+**measurable_coe_nnreal_real** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_coe_nnreal_real : Measurable ((↑) : Real>=0 -> Real)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.measurable`：Continuous.measurable {f : α -> γ} (hf : Continuo
+us f) : Measurable f
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `NNReal.continuous_coe`：continuous_coe : Continuous ((↑) : Real>=0 -> Rea
+l)
 -/
-theorem measurable_coe_nnreal_real : Measurable ((↑) : Real>=0 -> Real) :=
+theorem measurable_coe_nnreal_real : Measurable ((↑) : ℝ≥0 → ℝ) :=
   NNReal.continuous_coe.measurable
 
 @[fun_prop]
-/--
-theorem `Measurable.coe_nnreal_real` / 定理 `Measurable.coe_nnreal_real`
-
-English:
-theorem Measurable.coe_nnreal_real
-  given: {f : α -> Real>=0} (hf : Measurable f)
-  proof: measurable_coe_nnreal_real.comp hf
-
-@[fun_prop]
-
-中文:
-定理 可测.coe_nnreal_real
-  条件: {f : α -> 实数>=0} (hf : 可测 f)
-  证明: measurable_coe_nnreal_real.comp hf
-
-@[fun_prop]
-
-Depends on / 依赖: measurable_coe_nnreal_real, measurable_coe_nnreal_real.comp
+/-
+**Measurable.coe_nnreal_real** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.coe_nnreal_real {f : α -> Real>=0} (hf : Measurable f) : Measur
+able fun x => (f x : Real)
+参数：hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `measurable_coe_nnreal_real`：measurable_coe_nnreal_real : Measurable ((↑)
+ : Real>=0 -> Real)
 -/
-theorem Measurable.coe_nnreal_real {f : α -> Real>=0} (hf : Measurable f) :
-    Measurable fun x => (f x : Real) :=
+theorem Measurable.coe_nnreal_real {f : α → ℝ≥0} (hf : Measurable f) :
+    Measurable fun x => (f x : ℝ) :=
   measurable_coe_nnreal_real.comp hf
 
 @[fun_prop]
-/--
-theorem `AEMeasurable.coe_nnreal_real` / 定理 `AEMeasurable.coe_nnreal_real`
-
-English:
-theorem AEMeasurable.coe_nnreal_real
-  given: {f : α -> Real>=0} {μ : Measure α} (hf : AEMeasurable f μ)
-  proof: measurable_coe_nnreal_real.comp_aemeasurable hf
-
-中文:
-定理 几乎处处可测.coe_nnreal_real
-  条件: {f : α -> 实数>=0} {μ : 测度 α} (hf : 几乎处处可测 f μ)
-  证明: measurable_coe_nnreal_real.comp_aemeasurable hf
-
-Depends on / 依赖: comp_aemeasurable, measurable_coe_nnreal_real, measurable_coe_nnreal_real.comp_aemeasurable
+/-
+**AEMeasurable.coe_nnreal_real** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AEMeasurable.coe_nnreal_real {f : α -> Real>=0} {μ : Measure α} (hf : AEMe
+asurable f μ) : AEMeasurable (fun x => (f x : Real)) μ
+参数：hf : AEMeasurable f μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp_aemeasurable`：Measurable.comp_aemeasurable [MeasurableSp
+ace δ] {f : α -> δ} {g : δ -> β} (hg : Measurable g) (hf : AEMeasurable f μ) : A
+EMeasurable (g ∘ f…
+· 使用定理 `measurable_coe_nnreal_real`：measurable_coe_nnreal_real : Measurable ((↑)
+ : Real>=0 -> Real)
 -/
-theorem AEMeasurable.coe_nnreal_real {f : α -> Real>=0} {μ : Measure α} (hf : AEMeasurable f μ) :
-    AEMeasurable (fun x => (f x : Real)) μ :=
+theorem AEMeasurable.coe_nnreal_real {f : α → ℝ≥0} {μ : Measure α} (hf : AEMeasurable f μ) :
+    AEMeasurable (fun x => (f x : ℝ)) μ :=
   measurable_coe_nnreal_real.comp_aemeasurable hf
-
-/--
-theorem `measurable_coe_nnreal_ennreal` / 定理 `measurable_coe_nnreal_ennreal`
-
-English:
-theorem measurable_coe_nnreal_ennreal
-  statement: Measurable ((↑) : Real>=0 -> Real>=0∞)
-  proof: ENNReal.continuous_coe.measurable
-
-@[fun_prop]
-
-中文:
-定理 measurable_coe_nnreal_ennreal
-  结论: 可测 ((↑) : 实数>=0 -> 实数>=0∞)
-  证明: ENNReal.continuous_coe.measurable
-
-@[fun_prop]
-
-Depends on / 依赖: ENNReal, ENNReal.continuous_coe.measurable, continuous_coe, measurable
+/-
+**measurable_coe_nnreal_ennreal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_coe_nnreal_ennreal : Measurable ((↑) : Real>=0 -> Real>=0∞)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.measurable`：Continuous.measurable {f : α -> γ} (hf : Continuo
+us f) : Measurable f
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `ENNReal.continuous_coe`：continuous_coe : Continuous ((↑) : Real>=0 -> Re
+al>=0∞)
 -/
-theorem measurable_coe_nnreal_ennreal : Measurable ((↑) : Real>=0 -> Real>=0∞) :=
+theorem measurable_coe_nnreal_ennreal : Measurable ((↑) : ℝ≥0 → ℝ≥0∞) :=
   ENNReal.continuous_coe.measurable
 
 @[fun_prop]
-/--
-theorem `Measurable.coe_nnreal_ennreal` / 定理 `Measurable.coe_nnreal_ennreal`
-
-English:
-theorem Measurable.coe_nnreal_ennreal
-  given: {f : α -> Real>=0} (hf : Measurable f)
-  proof: ENNReal.continuous_coe.measurable.comp hf
-
-@[fun_prop]
-
-中文:
-定理 可测.coe_nnreal_ennreal
-  条件: {f : α -> 实数>=0} (hf : 可测 f)
-  证明: ENNReal.continuous_coe.measurable.comp hf
-
-@[fun_prop]
-
-Depends on / 依赖: ENNReal, ENNReal.continuous_coe.measurable.comp, continuous_coe, measurable
+/-
+**Measurable.coe_nnreal_ennreal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.coe_nnreal_ennreal {f : α -> Real>=0} (hf : Measurable f) : Mea
+surable fun x => (f x : Real>=0∞)
+参数：hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `Continuous.measurable`：Continuous.measurable {f : α -> γ} (hf : Continuo
+us f) : Measurable f
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `ENNReal.continuous_coe`：continuous_coe : Continuous ((↑) : Real>=0 -> Re
+al>=0∞)
 -/
-theorem Measurable.coe_nnreal_ennreal {f : α -> Real>=0} (hf : Measurable f) :
-    Measurable fun x => (f x : Real>=0∞) :=
+theorem Measurable.coe_nnreal_ennreal {f : α → ℝ≥0} (hf : Measurable f) :
+    Measurable fun x => (f x : ℝ≥0∞) :=
   ENNReal.continuous_coe.measurable.comp hf
 
 @[fun_prop]
-/--
-theorem `AEMeasurable.coe_nnreal_ennreal` / 定理 `AEMeasurable.coe_nnreal_ennreal`
-
-English:
-theorem AEMeasurable.coe_nnreal_ennreal
-  given: {f : α -> Real>=0} {μ : Measure α} (hf : AEMeasurable f μ)
-  proof: ENNReal.continuous_coe.measurable.comp_aemeasurable hf
-
-@[fun_prop]
-
-中文:
-定理 几乎处处可测.coe_nnreal_ennreal
-  条件: {f : α -> 实数>=0} {μ : 测度 α} (hf : 几乎处处可测 f μ)
-  证明: ENNReal.continuous_coe.measurable.comp_aemeasurable hf
-
-@[fun_prop]
-
-Depends on / 依赖: ENNReal, ENNReal.continuous_coe.measurable.comp_aemeasurable, comp_aemeasurable, continuous_coe, measurable
+/-
+**AEMeasurable.coe_nnreal_ennreal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AEMeasurable.coe_nnreal_ennreal {f : α -> Real>=0} {μ : Measure α} (hf : A
+EMeasurable f μ) : AEMeasurable (fun x => (f x : Real>=0∞)) μ
+参数：hf : AEMeasurable f μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp_aemeasurable`：Measurable.comp_aemeasurable [MeasurableSp
+ace δ] {f : α -> δ} {g : δ -> β} (hg : Measurable g) (hf : AEMeasurable f μ) : A
+EMeasurable (g ∘ f…
+· 使用定理 `Continuous.measurable`：Continuous.measurable {f : α -> γ} (hf : Continuo
+us f) : Measurable f
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `ENNReal.continuous_coe`：continuous_coe : Continuous ((↑) : Real>=0 -> Re
+al>=0∞)
 -/
-theorem AEMeasurable.coe_nnreal_ennreal {f : α -> Real>=0} {μ : Measure α} (hf : AEMeasurable f μ) :
-    AEMeasurable (fun x => (f x : Real>=0∞)) μ :=
+theorem AEMeasurable.coe_nnreal_ennreal {f : α → ℝ≥0} {μ : Measure α} (hf : AEMeasurable f μ) :
+    AEMeasurable (fun x => (f x : ℝ≥0∞)) μ :=
   ENNReal.continuous_coe.measurable.comp_aemeasurable hf
 
 @[fun_prop]
-/--
-theorem `Measurable.ennreal_ofReal` / 定理 `Measurable.ennreal_ofReal`
-
-English:
-theorem Measurable.ennreal_ofReal
-  given: {f : α -> Real} (hf : Measurable f)
-  proof: ENNReal.continuous_ofReal.measurable.comp hf
-
-@[fun_prop]
-
-中文:
-定理 可测.ennreal_of实数
-  条件: {f : α -> 实数} (hf : 可测 f)
-  证明: ENNReal.continuous_ofReal.measurable.comp hf
-
-@[fun_prop]
-
-Depends on / 依赖: ENNReal, ENNReal.continuous_ofReal.measurable.comp, continuous_ofReal, measurable
+/-
+**Measurable.ennreal_ofReal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.ennreal_ofReal {f : α -> Real} (hf : Measurable f) : Measurable
+ fun x => ENNReal.ofReal (f x)
+参数：hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `Continuous.measurable`：Continuous.measurable {f : α -> γ} (hf : Continuo
+us f) : Measurable f
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `ENNReal.continuous_ofReal`：continuous_ofReal : Continuous ENNReal.ofReal
 -/
-theorem Measurable.ennreal_ofReal {f : α -> Real} (hf : Measurable f) :
+theorem Measurable.ennreal_ofReal {f : α → ℝ} (hf : Measurable f) :
     Measurable fun x => ENNReal.ofReal (f x) :=
   ENNReal.continuous_ofReal.measurable.comp hf
 
 @[fun_prop]
-/--
-lemma `AEMeasurable.ennreal_ofReal` / 引理 `AEMeasurable.ennreal_ofReal`
-
-English:
-lemma AEMeasurable.ennreal_ofReal
-  given: {f : α -> Real} {μ : Measure α} (hf : AEMeasurable f μ)
-  proof: ENNReal.continuous_ofReal.measurable.comp_aemeasurable hf
-
-@[simp, norm_cast]
-
-中文:
-引理 几乎处处可测.ennreal_of实数
-  条件: {f : α -> 实数} {μ : 测度 α} (hf : 几乎处处可测 f μ)
-  证明: ENNReal.continuous_ofReal.measurable.comp_aemeasurable hf
-
-@[simp, norm_cast]
-
-Depends on / 依赖: ENNReal, ENNReal.continuous_ofReal.measurable.comp_aemeasurable, comp_aemeasurable, continuous_ofReal, measurable
+/-
+**AEMeasurable.ennreal_ofReal** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：AEMeasurable.ennreal_ofReal {f : α -> Real} {μ : Measure α} (hf : AEMeasur
+able f μ) : AEMeasurable (fun x => ENNReal.ofReal (f x)) μ
+参数：hf : AEMeasurable f μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp_aemeasurable`：Measurable.comp_aemeasurable [MeasurableSp
+ace δ] {f : α -> δ} {g : δ -> β} (hg : Measurable g) (hf : AEMeasurable f μ) : A
+EMeasurable (g ∘ f…
+· 使用定理 `Continuous.measurable`：Continuous.measurable {f : α -> γ} (hf : Continuo
+us f) : Measurable f
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `ENNReal.continuous_ofReal`：continuous_ofReal : Continuous ENNReal.ofReal
 -/
-lemma AEMeasurable.ennreal_ofReal {f : α -> Real} {μ : Measure α} (hf : AEMeasurable f μ) :
-    AEMeasurable (fun x => ENNReal.ofReal (f x)) μ :=
+lemma AEMeasurable.ennreal_ofReal {f : α → ℝ} {μ : Measure α} (hf : AEMeasurable f μ) :
+    AEMeasurable (fun x ↦ ENNReal.ofReal (f x)) μ :=
   ENNReal.continuous_ofReal.measurable.comp_aemeasurable hf
 
 @[simp, norm_cast]
-/--
-theorem `measurable_coe_nnreal_real_iff` / 定理 `measurable_coe_nnreal_real_iff`
-
-English:
-theorem measurable_coe_nnreal_real_iff
-  given: {f : α -> Real>=0}
-  proof: ⟨fun h => by simpa only [Real.toNNReal_coe] using h.real_toNNReal, Measurable.coe_nnreal_real⟩
-
-@[fun_prop]
-
-中文:
-定理 measurable_coe_nnreal_real_iff
-  条件: {f : α -> 实数>=0}
-  证明: ⟨fun h => by simpa only [Real.toNNReal_coe] using h.real_toNNReal, Measurable.coe_nnreal_real⟩
-
-@[fun_prop]
-
-Depends on / 依赖: Measurable, Measurable.coe_nnreal_real, Real.toNNReal_coe, coe_nnreal_real, h.real_toNNReal, real_toNNReal, toNNReal_coe
+/-
+**measurable_coe_nnreal_real_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_coe_nnreal_real_iff {f : α -> Real>=0} : Measurable (fun x => f
+ x : α -> Real) ↔ Measurable f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Real.toNNReal_coe`：∀ {r : NNReal}, (↑r).toNNReal = r
+· 使用定理 `Measurable.real_toNNReal`：Measurable.real_toNNReal {f : α -> Real} (hf :
+ Measurable f) : Measurable fun x => Real.toNNReal (f x)
+· 使用定理 `Measurable.coe_nnreal_real`：Measurable.coe_nnreal_real {f : α -> Real>=0
+} (hf : Measurable f) : Measurable fun x => (f x : Real)
 -/
-theorem measurable_coe_nnreal_real_iff {f : α -> Real>=0} :
-    Measurable (fun x => f x : α -> Real) ↔ Measurable f :=
+theorem measurable_coe_nnreal_real_iff {f : α → ℝ≥0} :
+    Measurable (fun x => f x : α → ℝ) ↔ Measurable f :=
   ⟨fun h => by simpa only [Real.toNNReal_coe] using h.real_toNNReal, Measurable.coe_nnreal_real⟩
 
 @[fun_prop]
-/--
-theorem `Measurable.nnreal_mk` / 定理 `Measurable.nnreal_mk`
-
-English:
-theorem Measurable.nnreal_mk
-  given: {f : α -> Real} (hf : Measurable f) {h'f : forall x, 0 <= f x}
-  proof: measurable_coe_nnreal_real_iff.mp hf
-
-@[simp, norm_cast]
-
-中文:
-定理 可测.nnreal_mk
-  条件: {f : α -> 实数} (hf : 可测 f) {h'f : 对任意 x, 0 <= f x}
-  证明: measurable_coe_nnreal_real_iff.mp hf
-
-@[simp, norm_cast]
-
-Depends on / 依赖: measurable_coe_nnreal_real_iff, measurable_coe_nnreal_real_iff.mp
+/-
+**Measurable.nnreal_mk** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.nnreal_mk {f : α -> Real} (hf : Measurable f) {h'f : forall x, 
+0 <= f x} : Measurable (fun x => NNReal.mk (f x) (h'f x))
+参数：hf : Measurable f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `measurable_coe_nnreal_real_iff`：measurable_coe_nnreal_real_iff {f : α ->
+ Real>=0} : Measurable (fun x => f x : α -> Real) ↔ Measurable f
 -/
-theorem Measurable.nnreal_mk {f : α -> Real} (hf : Measurable f) {h'f : forall x, 0 <= f x} :
-    Measurable (fun x => NNReal.mk (f x) (h'f x)) :=
+theorem Measurable.nnreal_mk {f : α → ℝ} (hf : Measurable f) {h'f : ∀ x, 0 ≤ f x} :
+    Measurable (fun x ↦ NNReal.mk (f x) (h'f x)) :=
   measurable_coe_nnreal_real_iff.mp hf
 
 @[simp, norm_cast]
-/--
-theorem `aemeasurable_coe_nnreal_real_iff` / 定理 `aemeasurable_coe_nnreal_real_iff`
-
-English:
-theorem aemeasurable_coe_nnreal_real_iff
-  given: {f : α -> Real>=0} {μ : Measure α}
-  proof: ⟨fun h => by simpa only [Real.toNNReal_coe] using h.real_toNNReal, AEMeasurable.coe_nnreal_real⟩
-
-中文:
-定理 aemeasurable_coe_nnreal_real_iff
-  条件: {f : α -> 实数>=0} {μ : 测度 α}
-  证明: ⟨fun h => by simpa only [Real.toNNReal_coe] using h.real_toNNReal, AEMeasurable.coe_nnreal_real⟩
-
-Depends on / 依赖: AEMeasurable, AEMeasurable.coe_nnreal_real, Real.toNNReal_coe, coe_nnreal_real, h.real_toNNReal, real_toNNReal, toNNReal_coe
+/-
+**aemeasurable_coe_nnreal_real_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：aemeasurable_coe_nnreal_real_iff {f : α -> Real>=0} {μ : Measure α} : AEMe
+asurable (fun x => f x : α -> Real) μ ↔ AEMeasurable f μ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Real.toNNReal_coe`：∀ {r : NNReal}, (↑r).toNNReal = r
+· 使用定理 `AEMeasurable.real_toNNReal`：AEMeasurable.real_toNNReal {f : α -> Real} {
+μ : Measure α} (hf : AEMeasurable f μ) : AEMeasurable (fun x => Real.toNNReal (f
+ x)) μ
+· 使用定理 `AEMeasurable.coe_nnreal_real`：AEMeasurable.coe_nnreal_real {f : α -> Rea
+l>=0} {μ : Measure α} (hf : AEMeasurable f μ) : AEMeasurable (fun x => (f x : Re
+al)) μ
 -/
-theorem aemeasurable_coe_nnreal_real_iff {f : α -> Real>=0} {μ : Measure α} :
-    AEMeasurable (fun x => f x : α -> Real) μ ↔ AEMeasurable f μ :=
-  ⟨fun h => by simpa only [Real.toNNReal_coe] using h.real_toNNReal, AEMeasurable.coe_nnreal_real⟩
+theorem aemeasurable_coe_nnreal_real_iff {f : α → ℝ≥0} {μ : Measure α} :
+    AEMeasurable (fun x => f x : α → ℝ) μ ↔ AEMeasurable f μ :=
+  ⟨fun h ↦ by simpa only [Real.toNNReal_coe] using h.real_toNNReal, AEMeasurable.coe_nnreal_real⟩
 
-/--
-Definition of `MeasurableEquiv.ennrealEquivNNReal` / `MeasurableEquiv.ennrealEquivNNReal` 的定义
+/-- The set of finite `ℝ≥0∞` numbers is `MeasurableEquiv` to `ℝ≥0`. -/
+/-
+**MeasurableEquiv.ennrealEquivNNReal** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：MeasurableEquiv.ennrealEquivNNReal : { r : Real>=0∞ | r != ∞ } ≃ᵐ Real>=0
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MeasurableEquiv.ennrealEquivNNReal
-  signature: : { r : Real>=0∞ | r != ∞ } ≃ᵐ Real>=0
-  body: ENNReal.neTopHomeomorphNNReal.toMeasurableEquiv
-
-中文:
-定义 可测等价.ennrealEquivNN实数
-  签名: : { r : 实数>=0∞ | r != ∞ } ≃ᵐ 实数>=0
-  定义体: ENNReal.neTopHomeomorphNNReal.toMeasurableEquiv
-
-Depends on / 依赖: ENNReal, ENNReal.neTopHomeomorphNNReal.toMeasurableEquiv, neTopHomeomorphNNReal, toMeasurableEquiv
+--- 原说明 ---
+The set of finite `ℝ≥0∞` numbers is `MeasurableEquiv` to `ℝ≥0`.
 -/
-def MeasurableEquiv.ennrealEquivNNReal : { r : Real>=0∞ | r != ∞ } ≃ᵐ Real>=0 :=
+def MeasurableEquiv.ennrealEquivNNReal : { r : ℝ≥0∞ | r ≠ ∞ } ≃ᵐ ℝ≥0 :=
   ENNReal.neTopHomeomorphNNReal.toMeasurableEquiv
 
 namespace ENNReal
 
-/--
-theorem `measurable_of_measurable_nnreal` / 定理 `measurable_of_measurable_nnreal`
-
-English:
-theorem measurable_of_measurable_nnreal
-  given: {f : Real>=0∞ -> α} (h : Measurable fun p : Real>=0 => f p)
-  proof: measurable_of_measurable_on_compl_singleton ∞
-    (MeasurableEquiv.ennrealEquivNNReal.symm.measurable_comp_iff.1 h)
-
-中文:
-定理 measurable_of_measurable_nnreal
-  条件: {f : 实数>=0∞ -> α} (h : 可测 fun p : 实数>=0 => f p)
-  证明: measurable_of_measurable_on_compl_singleton ∞
-    (MeasurableEquiv.ennrealEquivNNReal.symm.measurable_comp_iff.1 h)
-
-Depends on / 依赖: MeasurableEquiv, MeasurableEquiv.ennrealEquivNNReal.symm.measurable_comp_iff, ennrealEquivNNReal, measurable_comp_iff, measurable_of_measurable_on_compl_singleton
+/-
+**ENNReal.measurable_of_measurable_nnreal** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：measurable_of_measurable_nnreal {f : Real>=0∞ -> α} (h : Measurable fun p 
+: Real>=0 => f p) : Measurable f
+参数：h : Measurable fun p : Real>=0 => f p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `measurable_of_measurable_on_compl_singleton`：measurable_of_measurable_on
+_compl_singleton [MeasurableSingletonClass α] {f : α -> β} (a : α) (hf : Measura
+ble ({ x | x != a }.domRestrict f…
+· 使用定理 `instMeasurableSingletonClassOfMeasurableEq`：∀ {α : Type u_1} [inst : Mea
+surableSpace α] [MeasurableEq α], MeasurableSingletonClass α
+· 使用定理 `instMeasurableEqOfSecondCountableTopologyOfT2Space`：∀ {α : Type u_1} [in
+st : TopologicalSpace α] [inst_1 : MeasurableSpace α] [OpensMeasurableSpace α]  
+ [SecondCountableTopology α] [T2Space α]…
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `ENNReal.instSecondCountableTopology`：SecondCountableTopology ENNReal
+· 使用定理 `ENNReal.instT2Space`：T2Space ENNReal
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MeasurableEquiv.measurable_comp_iff`：∀ {α : Type u_1} {β : Type u_2} {γ 
+: Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β]   [inst_2 : 
+MeasurableSpace γ] {f : β…
 -/
-theorem measurable_of_measurable_nnreal {f : Real>=0∞ -> α} (h : Measurable fun p : Real>=0 => f p) :
+theorem measurable_of_measurable_nnreal {f : ℝ≥0∞ → α} (h : Measurable fun p : ℝ≥0 => f p) :
     Measurable f :=
   measurable_of_measurable_on_compl_singleton ∞
     (MeasurableEquiv.ennrealEquivNNReal.symm.measurable_comp_iff.1 h)
 
-/--
-Definition of `ennrealEquivSum` / `ennrealEquivSum` 的定义
+/-- `ℝ≥0∞` is `MeasurableEquiv` to `ℝ≥0 ⊕ Unit`. -/
+/-
+**ENNReal.ennrealEquivSum** 是 Mathlib 中的一个定义，位于命名空间 `ENNReal`。
+形式化陈述：ennrealEquivSum : Real>=0∞ ≃ᵐ Real>=0 oplus Unit
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ennrealEquivSum
-  signature: : Real>=0∞ ≃ᵐ Real>=0 oplus Unit
-  body: { Equiv.optionEquivSumPUnit Real>=0 with
-    measurable_toFun := measurable_of_measurable_nnreal measurable_inl
-    measurable_invFun :=
-      measurable_fun_sum measurable_coe_nnreal_ennreal (@measurable_const Real>=0∞ Unit _ _ ∞) }
-
-中文:
-定义 ennrealEquivSum
-  签名: : 实数>=0∞ ≃ᵐ 实数>=0 oplus 单元
-  定义体: { Equiv.optionEquivSumPUnit Real>=0 with
-    measurable_toFun := measurable_of_measurable_nnreal measurable_inl
-    measurable_invFun :=
-      measurable_fun_sum measurable_coe_nnreal_ennreal (@measurable_const Real>=0∞ Unit _ _ ∞) }
-
-Depends on / 依赖: Equiv.optionEquivSumPUnit, measurable_coe_nnreal_ennreal, measurable_const, measurable_fun_sum, measurable_inl, measurable_invFun, measurable_of_measurable_nnreal, measurable_toFun, optionEquivSumPUnit
+--- 原说明 ---
+`ℝ≥0∞` is `MeasurableEquiv` to `ℝ≥0 ⊕ Unit`.
 -/
-def ennrealEquivSum : Real>=0∞ ≃ᵐ Real>=0 oplus Unit :=
-  { Equiv.optionEquivSumPUnit Real>=0 with
+def ennrealEquivSum : ℝ≥0∞ ≃ᵐ ℝ≥0 ⊕ Unit :=
+  { Equiv.optionEquivSumPUnit ℝ≥0 with
     measurable_toFun := measurable_of_measurable_nnreal measurable_inl
     measurable_invFun :=
-      measurable_fun_sum measurable_coe_nnreal_ennreal (@measurable_const Real>=0∞ Unit _ _ ∞) }
+      measurable_fun_sum measurable_coe_nnreal_ennreal (@measurable_const ℝ≥0∞ Unit _ _ ∞) }
 
 open Function (uncurry)
-
-/--
-theorem `measurable_of_measurable_nnreal_prod` / 定理 `measurable_of_measurable_nnreal_prod`
-
-English:
-theorem measurable_of_measurable_nnreal_prod
-  statement: {_ : MeasurableSpace β} {_ : MeasurableSpace γ}
-  proof: let e : Real>=0∞ × β ≃ᵐ (Real>=0 × β) oplus (Unit × β) :=
-    (ennrealEquivSum.prodCongr (MeasurableEquiv.refl β)).trans
-      (MeasurableEquiv.sumProdDistrib _ _ _)
-e.symm.measurable_comp_iff.1 measurable_fun_sum H₁ (H₂.comp measurable_id.snd)
-
-中文:
-定理 measurable_of_measurable_nnreal_prod
-  结论: {_ : 可测空间 β} {_ : 可测空间 γ}
-  证明: let e : Real>=0∞ × β ≃ᵐ (Real>=0 × β) oplus (Unit × β) :=
-    (ennrealEquivSum.prodCongr (MeasurableEquiv.refl β)).trans
-      (MeasurableEquiv.sumProdDistrib _ _ _)
-e.symm.measurable_comp_iff.1 measurable_fun_sum H₁ (H₂.comp measurable_id.snd)
-
-Depends on / 依赖: MeasurableEquiv, MeasurableEquiv.refl, MeasurableEquiv.sumProdDistrib, e.symm.measurable_comp_iff, ennrealEquivSum, ennrealEquivSum.prodCongr, measurable_comp_iff, measurable_fun_sum, measurable_id, measurable_id.snd, prodCongr, sumProdDistrib
+/-
+**ENNReal.measurable_of_measurable_nnreal_prod** 是 Mathlib 中的一个定理，位于命名空间 `ENNRea
+l`。
+形式化陈述：measurable_of_measurable_nnreal_prod {_ : MeasurableSpace β} {_ : Measurab
+leSpace γ} {f : Real>=0∞ × β -> γ} (H₁ : Measurable fun p : Real>=0 × β => f (p.
+1, p.2)) (H₂ : Measurable fun x => f (∞, x)) : Measurable f
+参数：H₁ : Measurable fun p : Real>=0 × β => f (p.1, p.2)；H₂ : Measurable fun x => 
+f (∞, x)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MeasurableEquiv.measurable_comp_iff`：∀ {α : Type u_1} {β : Type u_2} {γ 
+: Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β]   [inst_2 : 
+MeasurableSpace γ] {f : β…
+· 使用定理 `measurable_fun_sum`：measurable_fun_sum {_ : MeasurableSpace γ} {f : α op
+lus β -> γ} (hl : Measurable (f ∘ Sum.inl)) (hr : Measurable (f ∘ Sum.inr)) : Me
+asurable…
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Measurable.snd`：Measurable.snd {f : α -> β × γ} (hf : Measurable f) : Me
+asurable fun a : α => (f a).2
+· 使用定理 `measurable_id`：measurable_id {_ : MeasurableSpace α} : Measurable (@id α
+)
 -/
 theorem measurable_of_measurable_nnreal_prod {_ : MeasurableSpace β} {_ : MeasurableSpace γ}
-    {f : Real>=0∞ × β -> γ} (H₁ : Measurable fun p : Real>=0 × β => f (p.1, p.2))
+    {f : ℝ≥0∞ × β → γ} (H₁ : Measurable fun p : ℝ≥0 × β => f (p.1, p.2))
     (H₂ : Measurable fun x => f (∞, x)) : Measurable f :=
-  let e : Real>=0∞ × β ≃ᵐ (Real>=0 × β) oplus (Unit × β) :=
+  let e : ℝ≥0∞ × β ≃ᵐ (ℝ≥0 × β) ⊕ (Unit × β) :=
     (ennrealEquivSum.prodCongr (MeasurableEquiv.refl β)).trans
       (MeasurableEquiv.sumProdDistrib _ _ _)
-e.symm.measurable_comp_iff.1 measurable_fun_sum H₁ (H₂.comp measurable_id.snd)
-
-/--
-theorem `measurable_of_measurable_nnreal_nnreal` / 定理 `measurable_of_measurable_nnreal_nnreal`
-
-English:
-theorem measurable_of_measurable_nnreal_nnreal
-  statement: {_ : MeasurableSpace β} {f : Real>=0∞ × Real>=0∞ -> β}
-  proof: measurable_of_measurable_nnreal_prod
-    (measurable_swap_iff.1 <| measurable_of_measurable_nnreal_prod (h₁.comp measurable_swap) h₃)
-    (measurable_of_measurable_nnreal h₂)
-
-中文:
-定理 measurable_of_measurable_nnreal_nnreal
-  结论: {_ : 可测空间 β} {f : 实数>=0∞ × 实数>=0∞ -> β}
-  证明: measurable_of_measurable_nnreal_prod
-    (measurable_swap_iff.1 <| measurable_of_measurable_nnreal_prod (h₁.comp measurable_swap) h₃)
-    (measurable_of_measurable_nnreal h₂)
-
-Depends on / 依赖: measurable_of_measurable_nnreal, measurable_of_measurable_nnreal_prod, measurable_swap, measurable_swap_iff
+  e.symm.measurable_comp_iff.1 <| measurable_fun_sum H₁ (H₂.comp measurable_id.snd)
+/-
+**ENNReal.measurable_of_measurable_nnreal_nnreal** 是 Mathlib 中的一个定理，位于命名空间 `ENNR
+eal`。
+形式化陈述：measurable_of_measurable_nnreal_nnreal {_ : MeasurableSpace β} {f : Real>=
+0∞ × Real>=0∞ -> β} (h₁ : Measurable fun p : Real>=0 × Real>=0 => f (p.1, p.2)) 
+(h₂ : Measurable fun r : Real>=0 => f (∞, r)) (h₃ : Measurable fun r : Real>=0 =
+> f (r, ∞)) : Measurable f
+参数：h₁ : Measurable fun p : Real>=0 × Real>=0 => f (p.1, p.2)；h₂ : Measurable fun
+ r : Real>=0 => f (∞, r)；h₃ : Measurable fun r : Real>=0 => f (r, ∞)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ENNReal.measurable_of_measurable_nnreal_prod`：measurable_of_measurable_n
+nreal_prod {_ : MeasurableSpace β} {_ : MeasurableSpace γ} {f : Real>=0∞ × β -> 
+γ} (H₁ : Measurable fun p : Real>=…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `measurable_swap_iff`：measurable_swap_iff {_ : MeasurableSpace γ} {f : α 
+× β -> γ} : Measurable (f ∘ Prod.swap) ↔ Measurable f
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `measurable_swap`：measurable_swap : Measurable (Prod.swap : α × β -> β × 
+α)
+· 使用定理 `ENNReal.measurable_of_measurable_nnreal`：measurable_of_measurable_nnreal
+ {f : Real>=0∞ -> α} (h : Measurable fun p : Real>=0 => f p) : Measurable f
 -/
-theorem measurable_of_measurable_nnreal_nnreal {_ : MeasurableSpace β} {f : Real>=0∞ × Real>=0∞ -> β}
-    (h₁ : Measurable fun p : Real>=0 × Real>=0 => f (p.1, p.2)) (h₂ : Measurable fun r : Real>=0 => f (∞, r))
-    (h₃ : Measurable fun r : Real>=0 => f (r, ∞)) : Measurable f :=
+theorem measurable_of_measurable_nnreal_nnreal {_ : MeasurableSpace β} {f : ℝ≥0∞ × ℝ≥0∞ → β}
+    (h₁ : Measurable fun p : ℝ≥0 × ℝ≥0 => f (p.1, p.2)) (h₂ : Measurable fun r : ℝ≥0 => f (∞, r))
+    (h₃ : Measurable fun r : ℝ≥0 => f (r, ∞)) : Measurable f :=
   measurable_of_measurable_nnreal_prod
     (measurable_swap_iff.1 <| measurable_of_measurable_nnreal_prod (h₁.comp measurable_swap) h₃)
     (measurable_of_measurable_nnreal h₂)
-
-/--
-theorem `measurable_ofReal` / 定理 `measurable_ofReal`
-
-English:
-theorem measurable_ofReal
-  statement: Measurable ENNReal.ofReal
-  proof: ENNReal.continuous_ofReal.measurable
-
-中文:
-定理 measurable_of实数
-  结论: 可测 广义非负实数.of实数
-  证明: ENNReal.continuous_ofReal.measurable
-
-Depends on / 依赖: ENNReal, ENNReal.continuous_ofReal.measurable, continuous_ofReal, measurable
+/-
+**ENNReal.measurable_ofReal** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：measurable_ofReal : Measurable ENNReal.ofReal
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.measurable`：Continuous.measurable {f : α -> γ} (hf : Continuo
+us f) : Measurable f
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `ENNReal.continuous_ofReal`：continuous_ofReal : Continuous ENNReal.ofReal
 -/
 theorem measurable_ofReal : Measurable ENNReal.ofReal :=
   ENNReal.continuous_ofReal.measurable
-
-/--
-theorem `measurable_toReal` / 定理 `measurable_toReal`
-
-English:
-theorem measurable_toReal
-  statement: Measurable ENNReal.toReal
-  proof: ENNReal.measurable_of_measurable_nnreal measurable_coe_nnreal_real
-
-中文:
-定理 measurable_to实数
-  结论: 可测 广义非负实数.to实数
-  证明: ENNReal.measurable_of_measurable_nnreal measurable_coe_nnreal_real
-
-Depends on / 依赖: ENNReal, ENNReal.measurable_of_measurable_nnreal, measurable_coe_nnreal_real, measurable_of_measurable_nnreal
+/-
+**ENNReal.measurable_toReal** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：measurable_toReal : Measurable ENNReal.toReal
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ENNReal.measurable_of_measurable_nnreal`：measurable_of_measurable_nnreal
+ {f : Real>=0∞ -> α} (h : Measurable fun p : Real>=0 => f p) : Measurable f
+· 使用定理 `measurable_coe_nnreal_real`：measurable_coe_nnreal_real : Measurable ((↑)
+ : Real>=0 -> Real)
 -/
 theorem measurable_toReal : Measurable ENNReal.toReal :=
   ENNReal.measurable_of_measurable_nnreal measurable_coe_nnreal_real
-
-/--
-theorem `measurable_toNNReal` / 定理 `measurable_toNNReal`
-
-English:
-theorem measurable_toNNReal
-  statement: Measurable ENNReal.toNNReal
-  proof: ENNReal.measurable_of_measurable_nnreal measurable_id
-
-中文:
-定理 measurable_toNN实数
-  结论: 可测 广义非负实数.toNN实数
-  证明: ENNReal.measurable_of_measurable_nnreal measurable_id
-
-Depends on / 依赖: ENNReal, ENNReal.measurable_of_measurable_nnreal, measurable_id, measurable_of_measurable_nnreal
+/-
+**ENNReal.measurable_toNNReal** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：measurable_toNNReal : Measurable ENNReal.toNNReal
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ENNReal.measurable_of_measurable_nnreal`：measurable_of_measurable_nnreal
+ {f : Real>=0∞ -> α} (h : Measurable fun p : Real>=0 => f p) : Measurable f
+· 使用定理 `measurable_id`：measurable_id {_ : MeasurableSpace α} : Measurable (@id α
+)
 -/
 theorem measurable_toNNReal : Measurable ENNReal.toNNReal :=
   ENNReal.measurable_of_measurable_nnreal measurable_id
-
-/--
-Instance `instMeasurableMul₂` / 实例 `instMeasurableMul₂`
-
-English:
-instance instMeasurableMul₂
-  signature: : MeasurableMul₂ Real>=0∞
-  body: by
-  refine ⟨measurable_of_measurable_nnreal_nnreal ?_ ?_ ?_⟩
-  · simp only [← ENNReal.coe_mul, measurable_mul.coe_nnreal_ennreal]
-  · simp only [ENNReal.top_mul', ENNReal.coe_eq_zero]
-    exact measurable_const.piecewise (measurableSet_singleton _) measurable_const
-  · simp only [ENNReal.mul_top', ENNReal.coe_eq_zero]
-    exact measurable_const.piecewise (measurableSet_singleton _) measurable_const
-
-中文:
-实例 instMeasurableMul₂
-  签名: : MeasurableMul₂ 实数>=0∞
-  定义体: by
-  refine ⟨measurable_of_measurable_nnreal_nnreal ?_ ?_ ?_⟩
-  · simp only [← ENNReal.coe_mul, measurable_mul.coe_nnreal_ennreal]
-  · simp only [ENNReal.top_mul', ENNReal.coe_eq_zero]
-    exact measurable_const.piecewise (measurableSet_singleton _) measurable_const
-  · simp only [ENNReal.mul_top', ENNReal.coe_eq_zero]
-    exact measurable_const.piecewise (measurableSet_singleton _) measurable_const
-
-Depends on / 依赖: ENNReal, ENNReal.coe_eq_zero, ENNReal.coe_mul, ENNReal.mul_top, ENNReal.top_mul, coe_eq_zero, coe_mul, coe_nnreal_ennreal, measurableSet_singleton, measurable_const, measurable_const.piecewise, measurable_mul, measurable_mul.coe_nnreal_ennreal, measurable_of_measurable_nnreal_nnreal, mul_top, piecewise, top_mul
+/-
+**ENNReal.instMeasurableMul** 是 Mathlib 中的一个实例，位于命名空间 `ENNReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instMeasurableMul₂ : MeasurableMul₂ Real>=0∞ := by
+instance instMeasurableMul₂ : MeasurableMul₂ ℝ≥0∞ := by
   refine ⟨measurable_of_measurable_nnreal_nnreal ?_ ?_ ?_⟩
   · simp only [← ENNReal.coe_mul, measurable_mul.coe_nnreal_ennreal]
   · simp only [ENNReal.top_mul', ENNReal.coe_eq_zero]
     exact measurable_const.piecewise (measurableSet_singleton _) measurable_const
   · simp only [ENNReal.mul_top', ENNReal.coe_eq_zero]
     exact measurable_const.piecewise (measurableSet_singleton _) measurable_const
-
-/--
-Instance `instMeasurableSub₂` / 实例 `instMeasurableSub₂`
-
-English:
-instance instMeasurableSub₂
-  signature: : MeasurableSub₂ Real>=0∞
-  body: ⟨measurable_of_measurable_nnreal_nnreal measurable_sub.coe_nnreal_ennreal (by simp) (by simp)⟩
-
-中文:
-实例 instMeasurableSub₂
-  签名: : MeasurableSub₂ 实数>=0∞
-  定义体: ⟨measurable_of_measurable_nnreal_nnreal measurable_sub.coe_nnreal_ennreal (by simp) (by simp)⟩
-
-Depends on / 依赖: coe_nnreal_ennreal, measurable_of_measurable_nnreal_nnreal, measurable_sub, measurable_sub.coe_nnreal_ennreal
+/-
+**ENNReal.instMeasurableSub** 是 Mathlib 中的一个实例，位于命名空间 `ENNReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instMeasurableSub₂ : MeasurableSub₂ Real>=0∞ :=
+instance instMeasurableSub₂ : MeasurableSub₂ ℝ≥0∞ :=
   ⟨measurable_of_measurable_nnreal_nnreal measurable_sub.coe_nnreal_ennreal (by simp) (by simp)⟩
-
-/--
-Instance `instMeasurableInv` / 实例 `instMeasurableInv`
-
-English:
-instance instMeasurableInv
-  signature: : MeasurableInv Real>=0∞
-  body: ⟨continuous_inv.measurable⟩
-
-中文:
-实例 instMeasurableInv
-  签名: : MeasurableInv 实数>=0∞
-  定义体: ⟨continuous_inv.measurable⟩
-
-Depends on / 依赖: continuous_inv, continuous_inv.measurable, measurable
+/-
+**ENNReal.instMeasurableInv** 是 Mathlib 中的一个实例，位于命名空间 `ENNReal`。
+形式化陈述：instMeasurableInv : MeasurableInv Real>=0∞
+该定义给出了一等式。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.measurable`：Continuous.measurable {f : α -> γ} (hf : Continuo
+us f) : Measurable f
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `ContinuousInv.continuous_inv`：∀ {G : Type u} {inst : TopologicalSpace G}
+ {inst_1 : Inv G} [self : ContinuousInv G], Continuous fun a => a⁻¹
+· 使用定理 `ENNReal.instContinuousInv`：ContinuousInv ENNReal
 -/
-instance instMeasurableInv : MeasurableInv Real>=0∞ :=
+instance instMeasurableInv : MeasurableInv ℝ≥0∞ :=
   ⟨continuous_inv.measurable⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MeasurableSMul Real>=0 Real>=0∞
-  body: by simp_rw [ENNReal.smul_def]; exact measurable_const_smul _
-  measurable_smul_const _ := by
-    simp_rw [ENNReal.smul_def]
-    exact measurable_coe_nnreal_ennreal.mul_const _
-
-中文:
-实例 :
-  签名: 可测标量乘法 实数>=0 实数>=0∞
-  定义体: by simp_rw [ENNReal.smul_def]; exact measurable_const_smul _
-  measurable_smul_const _ := by
-    simp_rw [ENNReal.smul_def]
-    exact measurable_coe_nnreal_ennreal.mul_const _
-
-Depends on / 依赖: ENNReal, ENNReal.smul_def, measurable_coe_nnreal_ennreal, measurable_coe_nnreal_ennreal.mul_const, measurable_const_smul, measurable_smul_const, mul_const, simp_rw, smul_def
+/-
+**ENNReal.** 是 Mathlib 中的一个实例，位于命名空间 `ENNReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : MeasurableSMul Real>=0 Real>=0∞ where
+instance : MeasurableSMul ℝ≥0 ℝ≥0∞ where
   measurable_const_smul _ := by simp_rw [ENNReal.smul_def]; exact measurable_const_smul _
   measurable_smul_const _ := by
     simp_rw [ENNReal.smul_def]
     exact measurable_coe_nnreal_ennreal.mul_const _
 
-/--
-theorem `measurable_of_tendsto'` / 定理 `measurable_of_tendsto'`
+/-- A limit (over a general filter) of measurable `ℝ≥0∞`-valued functions is measurable. -/
+/-
+**ENNReal.measurable_of_tendsto'** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：measurable_of_tendsto' {ι : Type*} {f : ι -> α -> Real>=0∞} {g : α -> Real
+>=0∞} (u : Filter ι) [NeBot u] [IsCountablyGenerated u] (hf : forall i, Measurab
+le (f i)) (lim : Tendsto f u (𝓝 g)) : Measurable g
+参数：u : Filter ι；hf : forall i, Measurable (f i)；lim : Tendsto f u (𝓝 g)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.exists_seq_tendsto`：exists_seq_tendsto (f : Filter α) [IsCountabl
+yGenerated f] [NeBot f] : exists x : Nat -> α, Tendsto x atTop f
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Filter.Tendsto.liminf_eq`：Filter.Tendsto.liminf_eq {f : Filter β} {u : β
+ -> α} {a : α} [NeBot f] (h : Tendsto u f (𝓝 a)) : liminf u f = a
+· 使用定理 `ENNReal.instOrderTopology`：OrderTopology ENNReal
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Filter.Tendsto.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {f :
+ α → β} {g : β → γ} {x : Filter α} {y : Filter β} {z : Filter γ},   Filter.Tends
+to g y z …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `tendsto_pi_nhds`：tendsto_pi_nhds {f : Y -> forall i, A i} {g : forall i,
+ A i} {u : Filter Y} : Tendsto f u (𝓝 g) ↔ forall x, Tendsto (fun i => f i x) u 
+(𝓝 (g…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Measurable.liminf`：Measurable.liminf {f : Nat -> δ -> α} (hf : forall i,
+ Measurable (f i)) : Measurable fun x => liminf (fun i => f i x) atTop
+· 使用定理 `ENNReal.instSecondCountableTopology`：SecondCountableTopology ENNReal
 
-English:
-theorem measurable_of_tendsto'
-  statement: {ι : Type*} {f : ι -> α -> Real>=0∞} {g : α -> Real>=0∞} (u : Filter ι)
-  proof: by
-  rcases u.exists_seq_tendsto with ⟨x, hx⟩
-  rw [tendsto_pi_nhds] at lim
-  have : (fun y => liminf (fun n => (f (x n) y : Real>=0∞)) atTop) = g := by
-    ext1 y
-    exact ((lim y).comp hx).liminf_eq
-  rw [← this]
-  change Measurable fun y => liminf (fun n => (f (x n) y : Real>=0∞)) atTop
-  exact .liminf fun n => hf (x n)
-
-中文:
-定理 measurable_of_tendsto'
-  结论: {ι : 类型} {f : ι -> α -> 实数>=0∞} {g : α -> 实数>=0∞} (u : 滤子 ι)
-  证明: by
-  rcases u.exists_seq_tendsto with ⟨x, hx⟩
-  rw [tendsto_pi_nhds] at lim
-  have : (fun y => liminf (fun n => (f (x n) y : Real>=0∞)) atTop) = g := by
-    ext1 y
-    exact ((lim y).comp hx).liminf_eq
-  rw [← this]
-  change Measurable fun y => liminf (fun n => (f (x n) y : Real>=0∞)) atTop
-  exact .liminf fun n => hf (x n)
-
-Depends on / 依赖: Measurable, exists_seq_tendsto, liminf, liminf_eq, tendsto_pi_nhds, u.exists_seq_tendsto
+--- 原说明 ---
+A limit (over a general filter) of measurable `ℝ≥0∞`-valued functions is measura
+ble.
 -/
-theorem measurable_of_tendsto' {ι : Type*} {f : ι -> α -> Real>=0∞} {g : α -> Real>=0∞} (u : Filter ι)
-    [NeBot u] [IsCountablyGenerated u] (hf : forall i, Measurable (f i)) (lim : Tendsto f u (𝓝 g)) :
+theorem measurable_of_tendsto' {ι : Type*} {f : ι → α → ℝ≥0∞} {g : α → ℝ≥0∞} (u : Filter ι)
+    [NeBot u] [IsCountablyGenerated u] (hf : ∀ i, Measurable (f i)) (lim : Tendsto f u (𝓝 g)) :
     Measurable g := by
   rcases u.exists_seq_tendsto with ⟨x, hx⟩
   rw [tendsto_pi_nhds] at lim
-  have : (fun y => liminf (fun n => (f (x n) y : Real>=0∞)) atTop) = g := by
+  have : (fun y => liminf (fun n => (f (x n) y : ℝ≥0∞)) atTop) = g := by
     ext1 y
     exact ((lim y).comp hx).liminf_eq
   rw [← this]
-  change Measurable fun y => liminf (fun n => (f (x n) y : Real>=0∞)) atTop
+  change Measurable fun y => liminf (fun n => (f (x n) y : ℝ≥0∞)) atTop
   exact .liminf fun n => hf (x n)
 
-/--
-theorem `measurable_of_tendsto` / 定理 `measurable_of_tendsto`
+/-- A sequential limit of measurable `ℝ≥0∞`-valued functions is measurable. -/
+/-
+**ENNReal.measurable_of_tendsto** 是 Mathlib 中的一个定理，位于命名空间 `ENNReal`。
+形式化陈述：measurable_of_tendsto {f : Nat -> α -> Real>=0∞} {g : α -> Real>=0∞} (hf :
+ forall i, Measurable (f i)) (lim : Tendsto f atTop (𝓝 g)) : Measurable g
+参数：hf : forall i, Measurable (f i)；lim : Tendsto f atTop (𝓝 g)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ENNReal.measurable_of_tendsto'`：measurable_of_tendsto' {ι : Type*} {f : 
+ι -> α -> Real>=0∞} {g : α -> Real>=0∞} (u : Filter ι) [NeBot u] [IsCountablyGen
+erated u] (hf : fora…
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `instDiscreteTopologyNat`：DiscreteTopology ℕ
+· 使用定理 `TopologicalSpace.SecondCountableTopology.to_separableSpace`：∀ {α : Type 
+u} [t : TopologicalSpace α] [SecondCountableTopology α], TopologicalSpace.Separa
+bleSpace α
+· 使用定理 `TopologicalSpace.instSecondCountableTopologyOfLindelofSpaceOfPseudoMetri
+zableSpace`：∀ (X : Type u_5) [inst : TopologicalSpace X] [LindelofSpace X] [Topo
+logicalSpace.PseudoMetrizableSpace X],   SecondCountableTopology X
+· 使用定理 `Countable.LindelofSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Cou
+ntable X], LindelofSpace X
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
 
-English:
-theorem measurable_of_tendsto
-  statement: {f : Nat -> α -> Real>=0∞} {g : α -> Real>=0∞} (hf : forall i, Measurable (f i))
-  proof: measurable_of_tendsto' atTop hf lim
-
-中文:
-定理 measurable_of_tendsto
-  结论: {f : 自然数 -> α -> 实数>=0∞} {g : α -> 实数>=0∞} (hf : 对任意 i, 可测 (f i))
-  证明: measurable_of_tendsto' atTop hf lim
-
-Depends on / 依赖: measurable_of_tendsto
+--- 原说明 ---
+A sequential limit of measurable `ℝ≥0∞`-valued functions is measurable.
 -/
-theorem measurable_of_tendsto {f : Nat -> α -> Real>=0∞} {g : α -> Real>=0∞} (hf : forall i, Measurable (f i))
+theorem measurable_of_tendsto {f : ℕ → α → ℝ≥0∞} {g : α → ℝ≥0∞} (hf : ∀ i, Measurable (f i))
     (lim : Tendsto f atTop (𝓝 g)) : Measurable g :=
   measurable_of_tendsto' atTop hf lim
 
-/--
-lemma `aemeasurable_of_tendsto'` / 引理 `aemeasurable_of_tendsto'`
+/-- A limit (over a general filter) of a.e.-measurable `ℝ≥0∞`-valued functions is
+a.e.-measurable. -/
+/-
+**ENNReal.aemeasurable_of_tendsto'** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal`。
+形式化陈述：aemeasurable_of_tendsto' {ι : Type*} {f : ι -> α -> Real>=0∞} {g : α -> Re
+al>=0∞} {μ : Measure α} (u : Filter ι) [NeBot u] [IsCountablyGenerated u] (hf : 
+forall i, AEMeasurable (f i) μ) (hlim : forallᵐ a ∂μ, Tendsto (fun i => f i a) u
+ (𝓝 (g a))) : AEMeasurable g μ
+参数：u : Filter ι；hf : forall i, AEMeasurable (f i) μ；hlim : forallᵐ a ∂μ, Tendsto
+ (fun i => f i a) u (𝓝 (g a))。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Filter.exists_seq_tendsto`：exists_seq_tendsto (f : Filter α) [IsCountabl
+yGenerated f] [NeBot f] : exists x : Nat -> α, Tendsto x atTop f
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `Filter.Tendsto.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {f :
+ α → β} {g : β → γ} {x : Filter α} {y : Filter β} {z : Filter γ},   Filter.Tends
+to g y z …
+· 使用定理 `ENNReal.measurable_of_tendsto'`：measurable_of_tendsto' {ι : Type*} {f : 
+ι -> α -> Real>=0∞} {g : α -> Real>=0∞} (u : Filter ι) [NeBot u] [IsCountablyGen
+erated u] (hf : fora…
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `instDiscreteTopologyNat`：DiscreteTopology ℕ
+· 使用定理 `TopologicalSpace.SecondCountableTopology.to_separableSpace`：∀ {α : Type 
+u} [t : TopologicalSpace α] [SecondCountableTopology α], TopologicalSpace.Separa
+bleSpace α
+· 使用定理 `TopologicalSpace.instSecondCountableTopologyOfLindelofSpaceOfPseudoMetri
+zableSpace`：∀ (X : Type u_5) [inst : TopologicalSpace X] [LindelofSpace X] [Topo
+logicalSpace.PseudoMetrizableSpace X],   SecondCountableTopology X
+· 使用定理 `Countable.LindelofSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Cou
+ntable X], LindelofSpace X
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `aeSeq.measurable`：measurable (hf : forall i, AEMeasurable (f i) μ) (p : 
+α -> (ι -> β) -> Prop) (i : ι) : Measurable (aeSeq hf p i)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `tendsto_pi_nhds`：tendsto_pi_nhds {f : Y -> forall i, A i} {g : forall i,
+ A i} {u : Filter Y} : Tendsto f u (𝓝 g) ↔ forall x, Tendsto (fun i => f i x) u 
+(𝓝 (g…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `aeSeq.mk_eq_fun_of_mem_aeSeqSet`：mk_eq_fun_of_mem_aeSeqSet (hf : forall 
+i, AEMeasurable (f i) μ) {x : α} (hx : x in aeSeqSet hf p) (i : ι) : (hf i).mk (
+f i) x = f i x
+· 使用定理 `aeSeq.fun_prop_of_mem_aeSeqSet`：fun_prop_of_mem_aeSeqSet (hf : forall i,
+ AEMeasurable (f i) μ) {x : α} (hx : x in aeSeqSet hf p) : p x fun n => f n x
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `tendsto_const_nhds`：tendsto_const_nhds {f : Filter α} : Tendsto (fun _ :
+ α => x) f (𝓝 x)
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
+（共 32 条，此处仅展示前 30 条）
 
-English:
-lemma aemeasurable_of_tendsto'
-  statement: {ι : Type*} {f : ι -> α -> Real>=0∞} {g : α -> Real>=0∞}
-  proof: by
-  rcases u.exists_seq_tendsto with ⟨v, hv⟩
-  have h'f : forall n, AEMeasurable (f (v n)) μ := fun n => hf (v n)
-  set p : α -> (Nat -> Real>=0∞) -> Prop := fun x f' => Tendsto f' atTop (𝓝 (g x))
-  have hp : forallᵐ x ∂μ, p x fun n => f (v n) x := by
-    filter_upwards [hlim] with x hx using hx.comp hv
-  classical
-  set aeSeqLim := fun x => ite (x in aeSeqSet h'f p) (g x) (⟨f (v 0) x⟩ : Nonempty Real>=0∞).some
-  refine ⟨aeSeqLim, measurable_of_tendsto' atTop (aeSeq.measurable h'f p)
-    (tendsto_pi_nhds.mpr fun x => ?_), ?_⟩
-  · unfold aeSeqLim
-    simp_rw [aeSeq]
-    split_ifs with hx
-    · simp_rw [aeSeq.mk_eq_fun_of_mem_aeSeqSet h'f hx]
-      exact aeSeq.fun_prop_of_mem_aeSeqSet h'f hx
-    · exact tendsto_const_nhds
-  · exact (ite_ae_eq_of_measure_compl_zero g (fun x => (⟨f (v 0) x⟩ : Nonempty Real>=0∞).some)
-      (aeSeqSet h'f p) (aeSeq.measure_compl_aeSeqSet_eq_zero h'f hp)).symm
-
-中文:
-引理 aemeasurable_of_tendsto'
-  结论: {ι : 类型} {f : ι -> α -> 实数>=0∞} {g : α -> 实数>=0∞}
-  证明: by
-  rcases u.exists_seq_tendsto with ⟨v, hv⟩
-  have h'f : forall n, AEMeasurable (f (v n)) μ := fun n => hf (v n)
-  set p : α -> (Nat -> Real>=0∞) -> Prop := fun x f' => Tendsto f' atTop (𝓝 (g x))
-  have hp : forallᵐ x ∂μ, p x fun n => f (v n) x := by
-    filter_upwards [hlim] with x hx using hx.comp hv
-  classical
-  set aeSeqLim := fun x => ite (x in aeSeqSet h'f p) (g x) (⟨f (v 0) x⟩ : Nonempty Real>=0∞).some
-  refine ⟨aeSeqLim, measurable_of_tendsto' atTop (aeSeq.measurable h'f p)
-    (tendsto_pi_nhds.mpr fun x => ?_), ?_⟩
-  · unfold aeSeqLim
-    simp_rw [aeSeq]
-    split_ifs with hx
-    · simp_rw [aeSeq.mk_eq_fun_of_mem_aeSeqSet h'f hx]
-      exact aeSeq.fun_prop_of_mem_aeSeqSet h'f hx
-    · exact tendsto_const_nhds
-  · exact (ite_ae_eq_of_measure_compl_zero g (fun x => (⟨f (v 0) x⟩ : Nonempty Real>=0∞).some)
-      (aeSeqSet h'f p) (aeSeq.measure_compl_aeSeqSet_eq_zero h'f hp)).symm
-
-Depends on / 依赖: AEMeasurable, Nonempty, Tendsto, aeSeq.measurable, aeSeqLim, aeSeqSet, classical, exists_seq_tendsto, filter_upwards, hx.comp, measurable, measurable_of_tendsto, tendsto_pi_nhds, tendsto_pi_nhds.mpr, u.exists_seq_tendsto
+--- 原说明 ---
+A limit (over a general filter) of a.e.-measurable `ℝ≥0∞`-valued functions is
+a.e.-measurable.
 -/
-lemma aemeasurable_of_tendsto' {ι : Type*} {f : ι -> α -> Real>=0∞} {g : α -> Real>=0∞}
+lemma aemeasurable_of_tendsto' {ι : Type*} {f : ι → α → ℝ≥0∞} {g : α → ℝ≥0∞}
     {μ : Measure α} (u : Filter ι) [NeBot u] [IsCountablyGenerated u]
-    (hf : forall i, AEMeasurable (f i) μ) (hlim : forallᵐ a ∂μ, Tendsto (fun i => f i a) u (𝓝 (g a))) :
+    (hf : ∀ i, AEMeasurable (f i) μ) (hlim : ∀ᵐ a ∂μ, Tendsto (fun i ↦ f i a) u (𝓝 (g a))) :
     AEMeasurable g μ := by
   rcases u.exists_seq_tendsto with ⟨v, hv⟩
-  have h'f : forall n, AEMeasurable (f (v n)) μ := fun n => hf (v n)
-  set p : α -> (Nat -> Real>=0∞) -> Prop := fun x f' => Tendsto f' atTop (𝓝 (g x))
-  have hp : forallᵐ x ∂μ, p x fun n => f (v n) x := by
+  have h'f : ∀ n, AEMeasurable (f (v n)) μ := fun n ↦ hf (v n)
+  set p : α → (ℕ → ℝ≥0∞) → Prop := fun x f' ↦ Tendsto f' atTop (𝓝 (g x))
+  have hp : ∀ᵐ x ∂μ, p x fun n ↦ f (v n) x := by
     filter_upwards [hlim] with x hx using hx.comp hv
   classical
-  set aeSeqLim := fun x => ite (x in aeSeqSet h'f p) (g x) (⟨f (v 0) x⟩ : Nonempty Real>=0∞).some
+  set aeSeqLim := fun x ↦ ite (x ∈ aeSeqSet h'f p) (g x) (⟨f (v 0) x⟩ : Nonempty ℝ≥0∞).some
   refine ⟨aeSeqLim, measurable_of_tendsto' atTop (aeSeq.measurable h'f p)
-    (tendsto_pi_nhds.mpr fun x => ?_), ?_⟩
+    (tendsto_pi_nhds.mpr fun x ↦ ?_), ?_⟩
   · unfold aeSeqLim
     simp_rw [aeSeq]
     split_ifs with hx
     · simp_rw [aeSeq.mk_eq_fun_of_mem_aeSeqSet h'f hx]
       exact aeSeq.fun_prop_of_mem_aeSeqSet h'f hx
     · exact tendsto_const_nhds
-  · exact (ite_ae_eq_of_measure_compl_zero g (fun x => (⟨f (v 0) x⟩ : Nonempty Real>=0∞).some)
+  · exact (ite_ae_eq_of_measure_compl_zero g (fun x ↦ (⟨f (v 0) x⟩ : Nonempty ℝ≥0∞).some)
       (aeSeqSet h'f p) (aeSeq.measure_compl_aeSeqSet_eq_zero h'f hp)).symm
 
-/--
-lemma `aemeasurable_of_tendsto` / 引理 `aemeasurable_of_tendsto`
+/-- A limit of a.e.-measurable `ℝ≥0∞`-valued functions is a.e.-measurable. -/
+/-
+**ENNReal.aemeasurable_of_tendsto** 是 Mathlib 中的一个引理，位于命名空间 `ENNReal`。
+形式化陈述：aemeasurable_of_tendsto {f : Nat -> α -> Real>=0∞} {g : α -> Real>=0∞} {μ 
+: Measure α} (hf : forall i, AEMeasurable (f i) μ) (hlim : forallᵐ a ∂μ, Tendsto
+ (fun i => f i a) atTop (𝓝 (g a))) : AEMeasurable g μ
+参数：hf : forall i, AEMeasurable (f i) μ；hlim : forallᵐ a ∂μ, Tendsto (fun i => f 
+i a) atTop (𝓝 (g a))。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用引理 `ENNReal.aemeasurable_of_tendsto'`：aemeasurable_of_tendsto' {ι : Type*} {
+f : ι -> α -> Real>=0∞} {g : α -> Real>=0∞} {μ : Measure α} (u : Filter ι) [NeBo
+t u] [IsCountablyGener…
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `instDiscreteTopologyNat`：DiscreteTopology ℕ
+· 使用定理 `TopologicalSpace.SecondCountableTopology.to_separableSpace`：∀ {α : Type 
+u} [t : TopologicalSpace α] [SecondCountableTopology α], TopologicalSpace.Separa
+bleSpace α
+· 使用定理 `TopologicalSpace.instSecondCountableTopologyOfLindelofSpaceOfPseudoMetri
+zableSpace`：∀ (X : Type u_5) [inst : TopologicalSpace X] [LindelofSpace X] [Topo
+logicalSpace.PseudoMetrizableSpace X],   SecondCountableTopology X
+· 使用定理 `Countable.LindelofSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Cou
+ntable X], LindelofSpace X
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
 
-English:
-lemma aemeasurable_of_tendsto
-  statement: {f : Nat -> α -> Real>=0∞} {g : α -> Real>=0∞} {μ : Measure α}
-  proof: aemeasurable_of_tendsto' atTop hf hlim
-
-中文:
-引理 aemeasurable_of_tendsto
-  结论: {f : 自然数 -> α -> 实数>=0∞} {g : α -> 实数>=0∞} {μ : 测度 α}
-  证明: aemeasurable_of_tendsto' atTop hf hlim
-
-Depends on / 依赖: aemeasurable_of_tendsto
+--- 原说明 ---
+A limit of a.e.-measurable `ℝ≥0∞`-valued functions is a.e.-measurable.
 -/
-lemma aemeasurable_of_tendsto {f : Nat -> α -> Real>=0∞} {g : α -> Real>=0∞} {μ : Measure α}
-    (hf : forall i, AEMeasurable (f i) μ) (hlim : forallᵐ a ∂μ, Tendsto (fun i => f i a) atTop (𝓝 (g a))) :
+lemma aemeasurable_of_tendsto {f : ℕ → α → ℝ≥0∞} {g : α → ℝ≥0∞} {μ : Measure α}
+    (hf : ∀ i, AEMeasurable (f i) μ) (hlim : ∀ᵐ a ∂μ, Tendsto (fun i ↦ f i a) atTop (𝓝 (g a))) :
     AEMeasurable g μ :=
   aemeasurable_of_tendsto' atTop hf hlim
 
 end ENNReal
 
 @[fun_prop]
-/--
-theorem `Measurable.ennreal_toNNReal` / 定理 `Measurable.ennreal_toNNReal`
-
-English:
-theorem Measurable.ennreal_toNNReal
-  given: {f : α -> Real>=0∞} (hf : Measurable f)
-  proof: ENNReal.measurable_toNNReal.comp hf
-
-@[fun_prop]
-
-中文:
-定理 可测.ennreal_toNN实数
-  条件: {f : α -> 实数>=0∞} (hf : 可测 f)
-  证明: ENNReal.measurable_toNNReal.comp hf
-
-@[fun_prop]
-
-Depends on / 依赖: ENNReal, ENNReal.measurable_toNNReal.comp, measurable_toNNReal
+/-
+**Measurable.ennreal_toNNReal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.ennreal_toNNReal {f : α -> Real>=0∞} (hf : Measurable f) : Meas
+urable fun x => (f x).toNNReal
+参数：hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `ENNReal.measurable_toNNReal`：measurable_toNNReal : Measurable ENNReal.to
+NNReal
 -/
-theorem Measurable.ennreal_toNNReal {f : α -> Real>=0∞} (hf : Measurable f) :
+theorem Measurable.ennreal_toNNReal {f : α → ℝ≥0∞} (hf : Measurable f) :
     Measurable fun x => (f x).toNNReal :=
   ENNReal.measurable_toNNReal.comp hf
 
 @[fun_prop]
-/--
-theorem `AEMeasurable.ennreal_toNNReal` / 定理 `AEMeasurable.ennreal_toNNReal`
-
-English:
-theorem AEMeasurable.ennreal_toNNReal
-  given: {f : α -> Real>=0∞} {μ : Measure α} (hf : AEMeasurable f μ)
-  proof: ENNReal.measurable_toNNReal.comp_aemeasurable hf
-
-@[simp, norm_cast]
-
-中文:
-定理 几乎处处可测.ennreal_toNN实数
-  条件: {f : α -> 实数>=0∞} {μ : 测度 α} (hf : 几乎处处可测 f μ)
-  证明: ENNReal.measurable_toNNReal.comp_aemeasurable hf
-
-@[simp, norm_cast]
-
-Depends on / 依赖: ENNReal, ENNReal.measurable_toNNReal.comp_aemeasurable, comp_aemeasurable, measurable_toNNReal
+/-
+**AEMeasurable.ennreal_toNNReal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AEMeasurable.ennreal_toNNReal {f : α -> Real>=0∞} {μ : Measure α} (hf : AE
+Measurable f μ) : AEMeasurable (fun x => (f x).toNNReal) μ
+参数：hf : AEMeasurable f μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp_aemeasurable`：Measurable.comp_aemeasurable [MeasurableSp
+ace δ] {f : α -> δ} {g : δ -> β} (hg : Measurable g) (hf : AEMeasurable f μ) : A
+EMeasurable (g ∘ f…
+· 使用定理 `ENNReal.measurable_toNNReal`：measurable_toNNReal : Measurable ENNReal.to
+NNReal
 -/
-theorem AEMeasurable.ennreal_toNNReal {f : α -> Real>=0∞} {μ : Measure α} (hf : AEMeasurable f μ) :
+theorem AEMeasurable.ennreal_toNNReal {f : α → ℝ≥0∞} {μ : Measure α} (hf : AEMeasurable f μ) :
     AEMeasurable (fun x => (f x).toNNReal) μ :=
   ENNReal.measurable_toNNReal.comp_aemeasurable hf
 
 @[simp, norm_cast]
-/--
-theorem `measurable_coe_nnreal_ennreal_iff` / 定理 `measurable_coe_nnreal_ennreal_iff`
-
-English:
-theorem measurable_coe_nnreal_ennreal_iff
-  given: {f : α -> Real>=0}
-  proof: ⟨fun h => h.ennreal_toNNReal, fun h => h.coe_nnreal_ennreal⟩
-
-@[simp, norm_cast]
-
-中文:
-定理 measurable_coe_nnreal_ennreal_iff
-  条件: {f : α -> 实数>=0}
-  证明: ⟨fun h => h.ennreal_toNNReal, fun h => h.coe_nnreal_ennreal⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: coe_nnreal_ennreal, ennreal_toNNReal, h.coe_nnreal_ennreal, h.ennreal_toNNReal
+/-
+**measurable_coe_nnreal_ennreal_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_coe_nnreal_ennreal_iff {f : α -> Real>=0} : (Measurable fun x =
+> (f x : Real>=0∞)) ↔ Measurable f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.ennreal_toNNReal`：Measurable.ennreal_toNNReal {f : α -> Real>
+=0∞} (hf : Measurable f) : Measurable fun x => (f x).toNNReal
+· 使用定理 `Measurable.coe_nnreal_ennreal`：Measurable.coe_nnreal_ennreal {f : α -> R
+eal>=0} (hf : Measurable f) : Measurable fun x => (f x : Real>=0∞)
 -/
-theorem measurable_coe_nnreal_ennreal_iff {f : α -> Real>=0} :
-    (Measurable fun x => (f x : Real>=0∞)) ↔ Measurable f :=
+theorem measurable_coe_nnreal_ennreal_iff {f : α → ℝ≥0} :
+    (Measurable fun x => (f x : ℝ≥0∞)) ↔ Measurable f :=
   ⟨fun h => h.ennreal_toNNReal, fun h => h.coe_nnreal_ennreal⟩
 
 @[simp, norm_cast]
-/--
-theorem `aemeasurable_coe_nnreal_ennreal_iff` / 定理 `aemeasurable_coe_nnreal_ennreal_iff`
-
-English:
-theorem aemeasurable_coe_nnreal_ennreal_iff
-  given: {f : α -> Real>=0} {μ : Measure α}
-  proof: ⟨fun h => h.ennreal_toNNReal, fun h => h.coe_nnreal_ennreal⟩
-
-@[fun_prop]
-
-中文:
-定理 aemeasurable_coe_nnreal_ennreal_iff
-  条件: {f : α -> 实数>=0} {μ : 测度 α}
-  证明: ⟨fun h => h.ennreal_toNNReal, fun h => h.coe_nnreal_ennreal⟩
-
-@[fun_prop]
-
-Depends on / 依赖: coe_nnreal_ennreal, ennreal_toNNReal, h.coe_nnreal_ennreal, h.ennreal_toNNReal
+/-
+**aemeasurable_coe_nnreal_ennreal_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：aemeasurable_coe_nnreal_ennreal_iff {f : α -> Real>=0} {μ : Measure α} : A
+EMeasurable (fun x => (f x : Real>=0∞)) μ ↔ AEMeasurable f μ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AEMeasurable.ennreal_toNNReal`：AEMeasurable.ennreal_toNNReal {f : α -> R
+eal>=0∞} {μ : Measure α} (hf : AEMeasurable f μ) : AEMeasurable (fun x => (f x).
+toNNReal) μ
+· 使用定理 `AEMeasurable.coe_nnreal_ennreal`：AEMeasurable.coe_nnreal_ennreal {f : α 
+-> Real>=0} {μ : Measure α} (hf : AEMeasurable f μ) : AEMeasurable (fun x => (f 
+x : Real>=0∞)) μ
 -/
-theorem aemeasurable_coe_nnreal_ennreal_iff {f : α -> Real>=0} {μ : Measure α} :
-    AEMeasurable (fun x => (f x : Real>=0∞)) μ ↔ AEMeasurable f μ :=
+theorem aemeasurable_coe_nnreal_ennreal_iff {f : α → ℝ≥0} {μ : Measure α} :
+    AEMeasurable (fun x => (f x : ℝ≥0∞)) μ ↔ AEMeasurable f μ :=
   ⟨fun h => h.ennreal_toNNReal, fun h => h.coe_nnreal_ennreal⟩
 
 @[fun_prop]
-/--
-theorem `Measurable.ennreal_toReal` / 定理 `Measurable.ennreal_toReal`
-
-English:
-theorem Measurable.ennreal_toReal
-  given: {f : α -> Real>=0∞} (hf : Measurable f)
-  proof: ENNReal.measurable_toReal.comp hf
-
-@[fun_prop]
-
-中文:
-定理 可测.ennreal_to实数
-  条件: {f : α -> 实数>=0∞} (hf : 可测 f)
-  证明: ENNReal.measurable_toReal.comp hf
-
-@[fun_prop]
-
-Depends on / 依赖: ENNReal, ENNReal.measurable_toReal.comp, measurable_toReal
+/-
+**Measurable.ennreal_toReal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.ennreal_toReal {f : α -> Real>=0∞} (hf : Measurable f) : Measur
+able fun x => ENNReal.toReal (f x)
+参数：hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `ENNReal.measurable_toReal`：measurable_toReal : Measurable ENNReal.toReal
 -/
-theorem Measurable.ennreal_toReal {f : α -> Real>=0∞} (hf : Measurable f) :
+theorem Measurable.ennreal_toReal {f : α → ℝ≥0∞} (hf : Measurable f) :
     Measurable fun x => ENNReal.toReal (f x) :=
   ENNReal.measurable_toReal.comp hf
 
 @[fun_prop]
-/--
-theorem `AEMeasurable.ennreal_toReal` / 定理 `AEMeasurable.ennreal_toReal`
-
-English:
-theorem AEMeasurable.ennreal_toReal
-  given: {f : α -> Real>=0∞} {μ : Measure α} (hf : AEMeasurable f μ)
-  proof: ENNReal.measurable_toReal.comp_aemeasurable hf
-
-@[fun_prop, deprecated
-  "Use `Measurable.tsum` from `Mathlib.MeasureTheory.Constructions.Polish.Basic` instead"
-  (since := "2026-04-30")]
-
-中文:
-定理 几乎处处可测.ennreal_to实数
-  条件: {f : α -> 实数>=0∞} {μ : 测度 α} (hf : 几乎处处可测 f μ)
-  证明: ENNReal.measurable_toReal.comp_aemeasurable hf
-
-@[fun_prop, deprecated
-  "Use `Measurable.tsum` from `Mathlib.MeasureTheory.Constructions.Polish.Basic` instead"
-  (since := "2026-04-30")]
-
-Depends on / 依赖: ENNReal, ENNReal.measurable_toReal.comp_aemeasurable, comp_aemeasurable, measurable_toReal
+/-
+**AEMeasurable.ennreal_toReal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AEMeasurable.ennreal_toReal {f : α -> Real>=0∞} {μ : Measure α} (hf : AEMe
+asurable f μ) : AEMeasurable (fun x => ENNReal.toReal (f x)) μ
+参数：hf : AEMeasurable f μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp_aemeasurable`：Measurable.comp_aemeasurable [MeasurableSp
+ace δ] {f : α -> δ} {g : δ -> β} (hg : Measurable g) (hf : AEMeasurable f μ) : A
+EMeasurable (g ∘ f…
+· 使用定理 `ENNReal.measurable_toReal`：measurable_toReal : Measurable ENNReal.toReal
 -/
-theorem AEMeasurable.ennreal_toReal {f : α -> Real>=0∞} {μ : Measure α} (hf : AEMeasurable f μ) :
+theorem AEMeasurable.ennreal_toReal {f : α → ℝ≥0∞} {μ : Measure α} (hf : AEMeasurable f μ) :
     AEMeasurable (fun x => ENNReal.toReal (f x)) μ :=
   ENNReal.measurable_toReal.comp_aemeasurable hf
 
 @[fun_prop, deprecated
   "Use `Measurable.tsum` from `Mathlib.MeasureTheory.Constructions.Polish.Basic` instead"
   (since := "2026-04-30")]
-/--
-theorem `Measurable.ennreal_tsum` / 定理 `Measurable.ennreal_tsum`
-
-English:
-theorem Measurable.ennreal_tsum
-  given: {ι} [Countable ι] {f : ι -> α -> Real>=0∞} (h : forall i, Measurable (f i))
-  proof: by
-  simp_rw [ENNReal.tsum_eq_iSup_sum]
-  exact .iSup fun s => s.measurable_fun_sum fun i _ => h i
-
-@[fun_prop, deprecated
-  "Use `Measurable.tsum'` from `Mathlib.MeasureTheory.Constructions.Polish.Basic` instead"
-  (since := "2026-04-30")]
-
-中文:
-定理 可测.ennreal_tsum
-  条件: {ι} [可数 ι] {f : ι -> α -> 实数>=0∞} (h : 对任意 i, 可测 (f i))
-  证明: by
-  simp_rw [ENNReal.tsum_eq_iSup_sum]
-  exact .iSup fun s => s.measurable_fun_sum fun i _ => h i
-
-@[fun_prop, deprecated
-  "Use `Measurable.tsum'` from `Mathlib.MeasureTheory.Constructions.Polish.Basic` instead"
-  (since := "2026-04-30")]
-
-Depends on / 依赖: ENNReal, ENNReal.tsum_eq_iSup_sum, measurable_fun_sum, s.measurable_fun_sum, simp_rw, tsum_eq_iSup_sum
+/-
+**Measurable.ennreal_tsum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.ennreal_tsum {ι} [Countable ι] {f : ι -> α -> Real>=0∞} (h : fo
+rall i, Measurable (f i)) : Measurable fun x => ∑' i, f i x
+参数：h : forall i, Measurable (f i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ENNReal.tsum_eq_iSup_sum`：∀ {α : Type u_1} {f : α → ENNReal}, ∑' (a : α)
+, f a = ⨆ s, ∑ a ∈ s, f a
+· 使用定理 `Measurable.iSup`：∀ {α : Type u_1} {δ : Type u_4} [inst : TopologicalSpac
+e α] {mα : MeasurableSpace α} [BorelSpace α]   {mδ : MeasurableSpace δ} [inst_2 
+: Con…
+· 使用定理 `ENNReal.instOrderTopology`：OrderTopology ENNReal
+· 使用定理 `ENNReal.instSecondCountableTopology`：SecondCountableTopology ENNReal
+· 使用定理 `Finset.countable`：∀ {α : Type u_1} [Countable α], Countable (Finset α)
+· 使用定理 `Finset.measurable_fun_sum`：∀ {M : Type u_2} {ι : Type u_3} {α : Type u_4
+} [inst : AddCommMonoid M] [inst_1 : MeasurableSpace M] [MeasurableAdd₂ M]   {m 
+: MeasurableSpa…
+· 使用定理 `ContinuousAdd.measurableMul₂`：∀ {γ : Type u_3} [inst : TopologicalSpace 
+γ] [inst_1 : MeasurableSpace γ] [BorelSpace γ] [SecondCountableTopology γ]   [in
+st_4 : Add γ] [Con…
+· 使用定理 `ENNReal.instContinuousAdd`：ContinuousAdd ENNReal
 -/
-theorem Measurable.ennreal_tsum {ι} [Countable ι] {f : ι -> α -> Real>=0∞} (h : forall i, Measurable (f i)) :
+theorem Measurable.ennreal_tsum {ι} [Countable ι] {f : ι → α → ℝ≥0∞} (h : ∀ i, Measurable (f i)) :
     Measurable fun x => ∑' i, f i x := by
   simp_rw [ENNReal.tsum_eq_iSup_sum]
-  exact .iSup fun s => s.measurable_fun_sum fun i _ => h i
+  exact .iSup fun s ↦ s.measurable_fun_sum fun i _ => h i
 
 @[fun_prop, deprecated
   "Use `Measurable.tsum'` from `Mathlib.MeasureTheory.Constructions.Polish.Basic` instead"
   (since := "2026-04-30")]
-/--
-theorem `Measurable.ennreal_tsum'` / 定理 `Measurable.ennreal_tsum'`
-
-English:
-theorem Measurable.ennreal_tsum'
-  given: {ι} [Countable ι] {f : ι -> α -> Real>=0∞} (h : forall i, Measurable (f i))
-  proof: by
-  convert! Measurable.ennreal_tsum h with x
-  exact tsum_apply (Pi.summable.2 fun _ => ENNReal.summable)
-
-@[fun_prop, deprecated
-  "Use `Measurable.tsum` from `Mathlib.MeasureTheory.Constructions.Polish.Basic` instead"
-  (since := "2026-04-30")]
-
-中文:
-定理 可测.ennreal_tsum'
-  条件: {ι} [可数 ι] {f : ι -> α -> 实数>=0∞} (h : 对任意 i, 可测 (f i))
-  证明: by
-  convert! Measurable.ennreal_tsum h with x
-  exact tsum_apply (Pi.summable.2 fun _ => ENNReal.summable)
-
-@[fun_prop, deprecated
-  "Use `Measurable.tsum` from `Mathlib.MeasureTheory.Constructions.Polish.Basic` instead"
-  (since := "2026-04-30")]
-
-Depends on / 依赖: ENNReal, ENNReal.summable, Measurable, Measurable.ennreal_tsum, Pi.summable, convert, ennreal_tsum, summable, tsum_apply
+/-
+**Measurable.ennreal_tsum'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.ennreal_tsum' {ι} [Countable ι] {f : ι -> α -> Real>=0∞} (h : f
+orall i, Measurable (f i)) : Measurable (∑' i, f i)
+参数：h : forall i, Measurable (f i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `tsum_apply`：∀ {α : Type u_1} {ι : Type u_4} {X : α → Type u_5} [inst : (
+x : α) → AddCommMonoid (X x)]   [inst_1 : (x : α) → TopologicalSpace (X x)] {L :
+…
+· 使用定理 `SummationFilter.instNeBotUnconditional`：∀ (β : Type u_2), (SummationFilt
+er.unconditional β).NeBot
+· 使用定理 `ENNReal.instT2Space`：T2Space ENNReal
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Pi.summable`：∀ {α : Type u_1} {ι : Type u_4} {X : α → Type u_5} [inst : 
+(x : α) → AddCommMonoid (X x)]   [inst_1 : (x : α) → TopologicalSpace (X x)] {L 
+:…
+· 使用定理 `ENNReal.summable`：∀ {α : Type u_1} {f : α → ENNReal}, Summable f
+· 使用定理 `Measurable.ennreal_tsum`：Measurable.ennreal_tsum {ι} [Countable ι] {f : 
+ι -> α -> Real>=0∞} (h : forall i, Measurable (f i)) : Measurable fun x => ∑' i,
+ f i x
 -/
-theorem Measurable.ennreal_tsum' {ι} [Countable ι] {f : ι -> α -> Real>=0∞} (h : forall i, Measurable (f i)) :
+theorem Measurable.ennreal_tsum' {ι} [Countable ι] {f : ι → α → ℝ≥0∞} (h : ∀ i, Measurable (f i)) :
     Measurable (∑' i, f i) := by
   convert! Measurable.ennreal_tsum h with x
   exact tsum_apply (Pi.summable.2 fun _ => ENNReal.summable)
@@ -1406,34 +1342,28 @@ theorem Measurable.ennreal_tsum' {ι} [Countable ι] {f : ι -> α -> Real>=0∞
 @[fun_prop, deprecated
   "Use `Measurable.tsum` from `Mathlib.MeasureTheory.Constructions.Polish.Basic` instead"
   (since := "2026-04-30")]
-/--
-theorem `Measurable.nnreal_tsum` / 定理 `Measurable.nnreal_tsum`
-
-English:
-theorem Measurable.nnreal_tsum
-  given: {ι} [Countable ι] {f : ι -> α -> Real>=0} (h : forall i, Measurable (f i))
-  proof: by
-  simp_rw [NNReal.tsum_eq_toNNReal_tsum]
-  exact (Measurable.ennreal_tsum fun i => (h i).coe_nnreal_ennreal).ennreal_toNNReal
-
-@[fun_prop, deprecated
-  "Use `AEMeasurable.tsum` from `Mathlib.MeasureTheory.Constructions.Polish.Basic` instead"
-  (since := "2026-04-30")]
-
-中文:
-定理 可测.nnreal_tsum
-  条件: {ι} [可数 ι] {f : ι -> α -> 实数>=0} (h : 对任意 i, 可测 (f i))
-  证明: by
-  simp_rw [NNReal.tsum_eq_toNNReal_tsum]
-  exact (Measurable.ennreal_tsum fun i => (h i).coe_nnreal_ennreal).ennreal_toNNReal
-
-@[fun_prop, deprecated
-  "Use `AEMeasurable.tsum` from `Mathlib.MeasureTheory.Constructions.Polish.Basic` instead"
-  (since := "2026-04-30")]
-
-Depends on / 依赖: Measurable, Measurable.ennreal_tsum, NNReal, NNReal.tsum_eq_toNNReal_tsum, coe_nnreal_ennreal, ennreal_toNNReal, ennreal_tsum, simp_rw, tsum_eq_toNNReal_tsum
+/-
+**Measurable.nnreal_tsum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.nnreal_tsum {ι} [Countable ι] {f : ι -> α -> Real>=0} (h : fora
+ll i, Measurable (f i)) : Measurable fun x => ∑' i, f i x
+参数：h : forall i, Measurable (f i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `NNReal.tsum_eq_toNNReal_tsum`：tsum_eq_toNNReal_tsum {f : β -> Real>=0} :
+ ∑' b, f b = (∑' b, (f b : Real>=0∞)).toNNReal
+· 使用定理 `Measurable.ennreal_toNNReal`：Measurable.ennreal_toNNReal {f : α -> Real>
+=0∞} (hf : Measurable f) : Measurable fun x => (f x).toNNReal
+· 使用定理 `Measurable.ennreal_tsum`：Measurable.ennreal_tsum {ι} [Countable ι] {f : 
+ι -> α -> Real>=0∞} (h : forall i, Measurable (f i)) : Measurable fun x => ∑' i,
+ f i x
+· 使用定理 `Measurable.coe_nnreal_ennreal`：Measurable.coe_nnreal_ennreal {f : α -> R
+eal>=0} (hf : Measurable f) : Measurable fun x => (f x : Real>=0∞)
 -/
-theorem Measurable.nnreal_tsum {ι} [Countable ι] {f : ι -> α -> Real>=0} (h : forall i, Measurable (f i)) :
+theorem Measurable.nnreal_tsum {ι} [Countable ι] {f : ι → α → ℝ≥0} (h : ∀ i, Measurable (f i)) :
     Measurable fun x => ∑' i, f i x := by
   simp_rw [NNReal.tsum_eq_toNNReal_tsum]
   exact (Measurable.ennreal_tsum fun i => (h i).coe_nnreal_ennreal).ennreal_toNNReal
@@ -1441,437 +1371,403 @@ theorem Measurable.nnreal_tsum {ι} [Countable ι] {f : ι -> α -> Real>=0} (h 
 @[fun_prop, deprecated
   "Use `AEMeasurable.tsum` from `Mathlib.MeasureTheory.Constructions.Polish.Basic` instead"
   (since := "2026-04-30")]
-/--
-theorem `AEMeasurable.ennreal_tsum` / 定理 `AEMeasurable.ennreal_tsum`
-
-English:
-theorem AEMeasurable.ennreal_tsum
-  statement: {ι} [Countable ι] {f : ι -> α -> Real>=0∞} {μ : Measure α}
-  proof: by
-  simp_rw [ENNReal.tsum_eq_iSup_sum]
-  exact .iSup fun s => Finset.aemeasurable_fun_sum s fun i _ => h i
-
-@[fun_prop, deprecated
-  "Use `AEMeasurable.tsum` from `Mathlib.MeasureTheory.Constructions.Polish.Basic` instead"
-  (since := "2026-04-30")]
-
-中文:
-定理 几乎处处可测.ennreal_tsum
-  结论: {ι} [可数 ι] {f : ι -> α -> 实数>=0∞} {μ : 测度 α}
-  证明: by
-  simp_rw [ENNReal.tsum_eq_iSup_sum]
-  exact .iSup fun s => Finset.aemeasurable_fun_sum s fun i _ => h i
-
-@[fun_prop, deprecated
-  "Use `AEMeasurable.tsum` from `Mathlib.MeasureTheory.Constructions.Polish.Basic` instead"
-  (since := "2026-04-30")]
-
-Depends on / 依赖: ENNReal, ENNReal.tsum_eq_iSup_sum, Finset, Finset.aemeasurable_fun_sum, aemeasurable_fun_sum, simp_rw, tsum_eq_iSup_sum
+/-
+**AEMeasurable.ennreal_tsum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AEMeasurable.ennreal_tsum {ι} [Countable ι] {f : ι -> α -> Real>=0∞} {μ : 
+Measure α} (h : forall i, AEMeasurable (f i) μ) : AEMeasurable (fun x => ∑' i, f
+ i x) μ
+参数：h : forall i, AEMeasurable (f i) μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ENNReal.tsum_eq_iSup_sum`：∀ {α : Type u_1} {f : α → ENNReal}, ∑' (a : α)
+, f a = ⨆ s, ∑ a ∈ s, f a
+· 使用定理 `AEMeasurable.iSup`：∀ {α : Type u_1} {δ : Type u_4} [inst : TopologicalSp
+ace α] {mα : MeasurableSpace α} [BorelSpace α]   {mδ : MeasurableSpace δ} [inst_
+2 : Con…
+· 使用定理 `ENNReal.instOrderTopology`：OrderTopology ENNReal
+· 使用定理 `ENNReal.instSecondCountableTopology`：SecondCountableTopology ENNReal
+· 使用定理 `Finset.countable`：∀ {α : Type u_1} [Countable α], Countable (Finset α)
+· 使用定理 `Finset.aemeasurable_fun_sum`：∀ {M : Type u_2} {ι : Type u_3} {α : Type u
+_4} [inst : AddCommMonoid M] [inst_1 : MeasurableSpace M] [MeasurableAdd₂ M]   {
+m : MeasurableSpa…
+· 使用定理 `ContinuousAdd.measurableMul₂`：∀ {γ : Type u_3} [inst : TopologicalSpace 
+γ] [inst_1 : MeasurableSpace γ] [BorelSpace γ] [SecondCountableTopology γ]   [in
+st_4 : Add γ] [Con…
+· 使用定理 `ENNReal.instContinuousAdd`：ContinuousAdd ENNReal
 -/
-theorem AEMeasurable.ennreal_tsum {ι} [Countable ι] {f : ι -> α -> Real>=0∞} {μ : Measure α}
-    (h : forall i, AEMeasurable (f i) μ) : AEMeasurable (fun x => ∑' i, f i x) μ := by
+theorem AEMeasurable.ennreal_tsum {ι} [Countable ι] {f : ι → α → ℝ≥0∞} {μ : Measure α}
+    (h : ∀ i, AEMeasurable (f i) μ) : AEMeasurable (fun x => ∑' i, f i x) μ := by
   simp_rw [ENNReal.tsum_eq_iSup_sum]
-  exact .iSup fun s => Finset.aemeasurable_fun_sum s fun i _ => h i
+  exact .iSup fun s ↦ Finset.aemeasurable_fun_sum s fun i _ => h i
 
 @[fun_prop, deprecated
   "Use `AEMeasurable.tsum` from `Mathlib.MeasureTheory.Constructions.Polish.Basic` instead"
   (since := "2026-04-30")]
-/--
-theorem `AEMeasurable.nnreal_tsum` / 定理 `AEMeasurable.nnreal_tsum`
-
-English:
-theorem AEMeasurable.nnreal_tsum
-  statement: {α : Type*} {_ : MeasurableSpace α} {ι : Type*} [Countable ι]
-  proof: by
-  simp_rw [NNReal.tsum_eq_toNNReal_tsum]
-  exact (AEMeasurable.ennreal_tsum fun i => (h i).coe_nnreal_ennreal).ennreal_toNNReal
-
-@[fun_prop]
-
-中文:
-定理 几乎处处可测.nnreal_tsum
-  结论: {α : 类型} {_ : 可测空间 α} {ι : 类型} [可数 ι]
-  证明: by
-  simp_rw [NNReal.tsum_eq_toNNReal_tsum]
-  exact (AEMeasurable.ennreal_tsum fun i => (h i).coe_nnreal_ennreal).ennreal_toNNReal
-
-@[fun_prop]
-
-Depends on / 依赖: AEMeasurable, AEMeasurable.ennreal_tsum, NNReal, NNReal.tsum_eq_toNNReal_tsum, coe_nnreal_ennreal, ennreal_toNNReal, ennreal_tsum, simp_rw, tsum_eq_toNNReal_tsum
+/-
+**AEMeasurable.nnreal_tsum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AEMeasurable.nnreal_tsum {α : Type*} {_ : MeasurableSpace α} {ι : Type*} [
+Countable ι] {f : ι -> α -> NNReal} {μ : Measure α} (h : forall i : ι, AEMeasura
+ble (f i) μ) : AEMeasurable (fun x : α => ∑' i : ι, f i x) μ
+参数：h : forall i : ι, AEMeasurable (f i) μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `NNReal.tsum_eq_toNNReal_tsum`：tsum_eq_toNNReal_tsum {f : β -> Real>=0} :
+ ∑' b, f b = (∑' b, (f b : Real>=0∞)).toNNReal
+· 使用定理 `AEMeasurable.ennreal_toNNReal`：AEMeasurable.ennreal_toNNReal {f : α -> R
+eal>=0∞} {μ : Measure α} (hf : AEMeasurable f μ) : AEMeasurable (fun x => (f x).
+toNNReal) μ
+· 使用定理 `AEMeasurable.ennreal_tsum`：AEMeasurable.ennreal_tsum {ι} [Countable ι] {
+f : ι -> α -> Real>=0∞} {μ : Measure α} (h : forall i, AEMeasurable (f i) μ) : A
+EMeasurable (fu…
+· 使用定理 `AEMeasurable.coe_nnreal_ennreal`：AEMeasurable.coe_nnreal_ennreal {f : α 
+-> Real>=0} {μ : Measure α} (hf : AEMeasurable f μ) : AEMeasurable (fun x => (f 
+x : Real>=0∞)) μ
 -/
 theorem AEMeasurable.nnreal_tsum {α : Type*} {_ : MeasurableSpace α} {ι : Type*} [Countable ι]
-    {f : ι -> α -> NNReal} {μ : Measure α} (h : forall i : ι, AEMeasurable (f i) μ) :
+    {f : ι → α → NNReal} {μ : Measure α} (h : ∀ i : ι, AEMeasurable (f i) μ) :
     AEMeasurable (fun x : α => ∑' i : ι, f i x) μ := by
   simp_rw [NNReal.tsum_eq_toNNReal_tsum]
   exact (AEMeasurable.ennreal_tsum fun i => (h i).coe_nnreal_ennreal).ennreal_toNNReal
 
 @[fun_prop]
-/--
-theorem `measurable_coe_real_ereal` / 定理 `measurable_coe_real_ereal`
-
-English:
-theorem measurable_coe_real_ereal
-  statement: Measurable ((↑) : Real -> EReal)
-  proof: continuous_coe_real_ereal.measurable
-
-中文:
-定理 measurable_coe_real_ereal
-  结论: 可测 ((↑) : 实数 -> E实数)
-  证明: continuous_coe_real_ereal.measurable
-
-Depends on / 依赖: continuous_coe_real_ereal, continuous_coe_real_ereal.measurable, measurable
+/-
+**measurable_coe_real_ereal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_coe_real_ereal : Measurable ((↑) : Real -> EReal)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.measurable`：Continuous.measurable {f : α -> γ} (hf : Continuo
+us f) : Measurable f
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `continuous_coe_real_ereal`：Continuous Real.toEReal
 -/
-theorem measurable_coe_real_ereal : Measurable ((↑) : Real -> EReal) :=
+theorem measurable_coe_real_ereal : Measurable ((↑) : ℝ → EReal) :=
   continuous_coe_real_ereal.measurable
-
-/--
-theorem `Measurable.coe_real_ereal` / 定理 `Measurable.coe_real_ereal`
-
-English:
-theorem Measurable.coe_real_ereal
-  given: {f : α -> Real} (hf : Measurable f)
-  proof: measurable_coe_real_ereal.comp hf
-
-@[fun_prop]
-
-中文:
-定理 可测.coe_real_ereal
-  条件: {f : α -> 实数} (hf : 可测 f)
-  证明: measurable_coe_real_ereal.comp hf
-
-@[fun_prop]
-
-Depends on / 依赖: measurable_coe_real_ereal, measurable_coe_real_ereal.comp
+/-
+**Measurable.coe_real_ereal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.coe_real_ereal {f : α -> Real} (hf : Measurable f) : Measurable
+ fun x => (f x : EReal)
+参数：hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `measurable_coe_real_ereal`：measurable_coe_real_ereal : Measurable ((↑) :
+ Real -> EReal)
 -/
-theorem Measurable.coe_real_ereal {f : α -> Real} (hf : Measurable f) :
+theorem Measurable.coe_real_ereal {f : α → ℝ} (hf : Measurable f) :
     Measurable fun x => (f x : EReal) :=
   measurable_coe_real_ereal.comp hf
 
 @[fun_prop]
-/--
-theorem `AEMeasurable.coe_real_ereal` / 定理 `AEMeasurable.coe_real_ereal`
-
-English:
-theorem AEMeasurable.coe_real_ereal
-  given: {f : α -> Real} {μ : Measure α} (hf : AEMeasurable f μ)
-  proof: measurable_coe_real_ereal.comp_aemeasurable hf
-
-中文:
-定理 几乎处处可测.coe_real_ereal
-  条件: {f : α -> 实数} {μ : 测度 α} (hf : 几乎处处可测 f μ)
-  证明: measurable_coe_real_ereal.comp_aemeasurable hf
-
-Depends on / 依赖: comp_aemeasurable, measurable_coe_real_ereal, measurable_coe_real_ereal.comp_aemeasurable
+/-
+**AEMeasurable.coe_real_ereal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AEMeasurable.coe_real_ereal {f : α -> Real} {μ : Measure α} (hf : AEMeasur
+able f μ) : AEMeasurable (fun x => (f x : EReal)) μ
+参数：hf : AEMeasurable f μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp_aemeasurable`：Measurable.comp_aemeasurable [MeasurableSp
+ace δ] {f : α -> δ} {g : δ -> β} (hg : Measurable g) (hf : AEMeasurable f μ) : A
+EMeasurable (g ∘ f…
+· 使用定理 `measurable_coe_real_ereal`：measurable_coe_real_ereal : Measurable ((↑) :
+ Real -> EReal)
 -/
-theorem AEMeasurable.coe_real_ereal {f : α -> Real} {μ : Measure α} (hf : AEMeasurable f μ) :
+theorem AEMeasurable.coe_real_ereal {f : α → ℝ} {μ : Measure α} (hf : AEMeasurable f μ) :
     AEMeasurable (fun x => (f x : EReal)) μ :=
   measurable_coe_real_ereal.comp_aemeasurable hf
 
-/--
-Definition of `MeasurableEquiv.erealEquivReal` / `MeasurableEquiv.erealEquivReal` 的定义
+/-- The set of finite `EReal` numbers is `MeasurableEquiv` to `ℝ`. -/
+/-
+**MeasurableEquiv.erealEquivReal** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：MeasurableEquiv.erealEquivReal : ({⊥, ⊤}ᶜ : Set EReal) ≃ᵐ Real
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MeasurableEquiv.erealEquivReal
-  signature: : ({⊥, ⊤}ᶜ : Set EReal) ≃ᵐ Real
-  body: EReal.neBotTopHomeomorphReal.toMeasurableEquiv
-
-中文:
-定义 可测等价.erealEquiv实数
-  签名: : ({⊥, ⊤}ᶜ : 集合 E实数) ≃ᵐ 实数
-  定义体: EReal.neBotTopHomeomorphReal.toMeasurableEquiv
-
-Depends on / 依赖: EReal.neBotTopHomeomorphReal.toMeasurableEquiv, neBotTopHomeomorphReal, toMeasurableEquiv
+--- 原说明 ---
+The set of finite `EReal` numbers is `MeasurableEquiv` to `ℝ`.
 -/
-noncomputable def MeasurableEquiv.erealEquivReal : ({⊥, ⊤}ᶜ : Set EReal) ≃ᵐ Real :=
+noncomputable def MeasurableEquiv.erealEquivReal : ({⊥, ⊤}ᶜ : Set EReal) ≃ᵐ ℝ :=
   EReal.neBotTopHomeomorphReal.toMeasurableEquiv
-
-/--
-theorem `EReal.measurable_of_measurable_real` / 定理 `EReal.measurable_of_measurable_real`
-
-English:
-theorem EReal.measurable_of_measurable_real
-  given: {f : EReal -> α} (h : Measurable fun p : Real => f p)
-  proof: measurable_of_measurable_on_compl_finite {⊥, ⊤} (by simp)
-    (MeasurableEquiv.erealEquivReal.symm.measurable_comp_iff.1 h)
-
-中文:
-定理 E实数.measurable_of_measurable_real
-  条件: {f : E实数 -> α} (h : 可测 fun p : 实数 => f p)
-  证明: measurable_of_measurable_on_compl_finite {⊥, ⊤} (by simp)
-    (MeasurableEquiv.erealEquivReal.symm.measurable_comp_iff.1 h)
-
-Depends on / 依赖: MeasurableEquiv, MeasurableEquiv.erealEquivReal.symm.measurable_comp_iff, erealEquivReal, measurable_comp_iff, measurable_of_measurable_on_compl_finite
+/-
+**EReal.measurable_of_measurable_real** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：EReal.measurable_of_measurable_real {f : EReal -> α} (h : Measurable fun p
+ : Real => f p) : Measurable f
+参数：h : Measurable fun p : Real => f p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `measurable_of_measurable_on_compl_finite`：measurable_of_measurable_on_co
+mpl_finite [MeasurableSingletonClass α] {f : α -> β} (s : Set α) (hs : s.Finite)
+ (hf : Measurable (sᶜ.domRestr…
+· 使用定理 `instMeasurableSingletonClassOfMeasurableEq`：∀ {α : Type u_1} [inst : Mea
+surableSpace α] [MeasurableEq α], MeasurableSingletonClass α
+· 使用定理 `instMeasurableEqOfSecondCountableTopologyOfT2Space`：∀ {α : Type u_1} [in
+st : TopologicalSpace α] [inst_1 : MeasurableSpace α] [OpensMeasurableSpace α]  
+ [SecondCountableTopology α] [T2Space α]…
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `EReal.instSecondCountableTopology`：SecondCountableTopology EReal
+· 使用定理 `EReal.instT2Space`：T2Space EReal
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MeasurableEquiv.measurable_comp_iff`：∀ {α : Type u_1} {β : Type u_2} {γ 
+: Type u_3} [inst : MeasurableSpace α] [inst_1 : MeasurableSpace β]   [inst_2 : 
+MeasurableSpace γ] {f : β…
 -/
-theorem EReal.measurable_of_measurable_real {f : EReal -> α} (h : Measurable fun p : Real => f p) :
+theorem EReal.measurable_of_measurable_real {f : EReal → α} (h : Measurable fun p : ℝ => f p) :
     Measurable f :=
   measurable_of_measurable_on_compl_finite {⊥, ⊤} (by simp)
     (MeasurableEquiv.erealEquivReal.symm.measurable_comp_iff.1 h)
-
-/--
-theorem `measurable_ereal_toReal` / 定理 `measurable_ereal_toReal`
-
-English:
-theorem measurable_ereal_toReal
-  statement: Measurable EReal.toReal
-  proof: EReal.measurable_of_measurable_real (by simpa using! measurable_id)
-
-@[fun_prop]
-
-中文:
-定理 measurable_ereal_to实数
-  结论: 可测 E实数.to实数
-  证明: EReal.measurable_of_measurable_real (by simpa using! measurable_id)
-
-@[fun_prop]
-
-Depends on / 依赖: EReal.measurable_of_measurable_real, measurable_id, measurable_of_measurable_real
+/-
+**measurable_ereal_toReal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_ereal_toReal : Measurable EReal.toReal
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EReal.measurable_of_measurable_real`：EReal.measurable_of_measurable_real
+ {f : EReal -> α} (h : Measurable fun p : Real => f p) : Measurable f
+· 使用定理 `measurable_id`：measurable_id {_ : MeasurableSpace α} : Measurable (@id α
+)
 -/
 theorem measurable_ereal_toReal : Measurable EReal.toReal :=
   EReal.measurable_of_measurable_real (by simpa using! measurable_id)
 
 @[fun_prop]
-/--
-theorem `Measurable.ereal_toReal` / 定理 `Measurable.ereal_toReal`
-
-English:
-theorem Measurable.ereal_toReal
-  given: {f : α -> EReal} (hf : Measurable f)
-  proof: measurable_ereal_toReal.comp hf
-
-@[fun_prop]
-
-中文:
-定理 可测.ereal_to实数
-  条件: {f : α -> E实数} (hf : 可测 f)
-  证明: measurable_ereal_toReal.comp hf
-
-@[fun_prop]
-
-Depends on / 依赖: measurable_ereal_toReal, measurable_ereal_toReal.comp
+/-
+**Measurable.ereal_toReal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.ereal_toReal {f : α -> EReal} (hf : Measurable f) : Measurable 
+fun x => (f x).toReal
+参数：hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `measurable_ereal_toReal`：measurable_ereal_toReal : Measurable EReal.toRe
+al
 -/
-theorem Measurable.ereal_toReal {f : α -> EReal} (hf : Measurable f) :
+theorem Measurable.ereal_toReal {f : α → EReal} (hf : Measurable f) :
     Measurable fun x => (f x).toReal :=
   measurable_ereal_toReal.comp hf
 
 @[fun_prop]
-/--
-theorem `AEMeasurable.ereal_toReal` / 定理 `AEMeasurable.ereal_toReal`
-
-English:
-theorem AEMeasurable.ereal_toReal
-  given: {f : α -> EReal} {μ : Measure α} (hf : AEMeasurable f μ)
-  proof: measurable_ereal_toReal.comp_aemeasurable hf
-
-中文:
-定理 几乎处处可测.ereal_to实数
-  条件: {f : α -> E实数} {μ : 测度 α} (hf : 几乎处处可测 f μ)
-  证明: measurable_ereal_toReal.comp_aemeasurable hf
-
-Depends on / 依赖: comp_aemeasurable, measurable_ereal_toReal, measurable_ereal_toReal.comp_aemeasurable
+/-
+**AEMeasurable.ereal_toReal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AEMeasurable.ereal_toReal {f : α -> EReal} {μ : Measure α} (hf : AEMeasura
+ble f μ) : AEMeasurable (fun x => (f x).toReal) μ
+参数：hf : AEMeasurable f μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp_aemeasurable`：Measurable.comp_aemeasurable [MeasurableSp
+ace δ] {f : α -> δ} {g : δ -> β} (hg : Measurable g) (hf : AEMeasurable f μ) : A
+EMeasurable (g ∘ f…
+· 使用定理 `measurable_ereal_toReal`：measurable_ereal_toReal : Measurable EReal.toRe
+al
 -/
-theorem AEMeasurable.ereal_toReal {f : α -> EReal} {μ : Measure α} (hf : AEMeasurable f μ) :
+theorem AEMeasurable.ereal_toReal {f : α → EReal} {μ : Measure α} (hf : AEMeasurable f μ) :
     AEMeasurable (fun x => (f x).toReal) μ :=
   measurable_ereal_toReal.comp_aemeasurable hf
-
-/--
-theorem `measurable_coe_ennreal_ereal` / 定理 `measurable_coe_ennreal_ereal`
-
-English:
-theorem measurable_coe_ennreal_ereal
-  statement: Measurable ((↑) : Real>=0∞ -> EReal)
-  proof: continuous_coe_ennreal_ereal.measurable
-
-@[fun_prop]
-
-中文:
-定理 measurable_coe_ennreal_ereal
-  结论: 可测 ((↑) : 实数>=0∞ -> E实数)
-  证明: continuous_coe_ennreal_ereal.measurable
-
-@[fun_prop]
-
-Depends on / 依赖: continuous_coe_ennreal_ereal, continuous_coe_ennreal_ereal.measurable, measurable
+/-
+**measurable_coe_ennreal_ereal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_coe_ennreal_ereal : Measurable ((↑) : Real>=0∞ -> EReal)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.measurable`：Continuous.measurable {f : α -> γ} (hf : Continuo
+us f) : Measurable f
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `continuous_coe_ennreal_ereal`：Continuous ENNReal.toEReal
 -/
-theorem measurable_coe_ennreal_ereal : Measurable ((↑) : Real>=0∞ -> EReal) :=
+theorem measurable_coe_ennreal_ereal : Measurable ((↑) : ℝ≥0∞ → EReal) :=
   continuous_coe_ennreal_ereal.measurable
 
 @[fun_prop]
-/--
-theorem `Measurable.coe_ereal_ennreal` / 定理 `Measurable.coe_ereal_ennreal`
-
-English:
-theorem Measurable.coe_ereal_ennreal
-  given: {f : α -> Real>=0∞} (hf : Measurable f)
-  proof: measurable_coe_ennreal_ereal.comp hf
-
-@[fun_prop]
-
-中文:
-定理 可测.coe_ereal_ennreal
-  条件: {f : α -> 实数>=0∞} (hf : 可测 f)
-  证明: measurable_coe_ennreal_ereal.comp hf
-
-@[fun_prop]
-
-Depends on / 依赖: measurable_coe_ennreal_ereal, measurable_coe_ennreal_ereal.comp
+/-
+**Measurable.coe_ereal_ennreal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.coe_ereal_ennreal {f : α -> Real>=0∞} (hf : Measurable f) : Mea
+surable fun x => (f x : EReal)
+参数：hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `measurable_coe_ennreal_ereal`：measurable_coe_ennreal_ereal : Measurable 
+((↑) : Real>=0∞ -> EReal)
 -/
-theorem Measurable.coe_ereal_ennreal {f : α -> Real>=0∞} (hf : Measurable f) :
+theorem Measurable.coe_ereal_ennreal {f : α → ℝ≥0∞} (hf : Measurable f) :
     Measurable fun x => (f x : EReal) :=
   measurable_coe_ennreal_ereal.comp hf
 
 @[fun_prop]
-/--
-theorem `AEMeasurable.coe_ereal_ennreal` / 定理 `AEMeasurable.coe_ereal_ennreal`
-
-English:
-theorem AEMeasurable.coe_ereal_ennreal
-  given: {f : α -> Real>=0∞} {μ : Measure α} (hf : AEMeasurable f μ)
-  proof: measurable_coe_ennreal_ereal.comp_aemeasurable hf
-
-中文:
-定理 几乎处处可测.coe_ereal_ennreal
-  条件: {f : α -> 实数>=0∞} {μ : 测度 α} (hf : 几乎处处可测 f μ)
-  证明: measurable_coe_ennreal_ereal.comp_aemeasurable hf
-
-Depends on / 依赖: comp_aemeasurable, measurable_coe_ennreal_ereal, measurable_coe_ennreal_ereal.comp_aemeasurable
+/-
+**AEMeasurable.coe_ereal_ennreal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AEMeasurable.coe_ereal_ennreal {f : α -> Real>=0∞} {μ : Measure α} (hf : A
+EMeasurable f μ) : AEMeasurable (fun x => (f x : EReal)) μ
+参数：hf : AEMeasurable f μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp_aemeasurable`：Measurable.comp_aemeasurable [MeasurableSp
+ace δ] {f : α -> δ} {g : δ -> β} (hg : Measurable g) (hf : AEMeasurable f μ) : A
+EMeasurable (g ∘ f…
+· 使用定理 `measurable_coe_ennreal_ereal`：measurable_coe_ennreal_ereal : Measurable 
+((↑) : Real>=0∞ -> EReal)
 -/
-theorem AEMeasurable.coe_ereal_ennreal {f : α -> Real>=0∞} {μ : Measure α} (hf : AEMeasurable f μ) :
+theorem AEMeasurable.coe_ereal_ennreal {f : α → ℝ≥0∞} {μ : Measure α} (hf : AEMeasurable f μ) :
     AEMeasurable (fun x => (f x : EReal)) μ :=
   measurable_coe_ennreal_ereal.comp_aemeasurable hf
-
-/--
-theorem `measurable_ereal_toENNReal` / 定理 `measurable_ereal_toENNReal`
-
-English:
-theorem measurable_ereal_toENNReal
-  statement: Measurable EReal.toENNReal
-  proof: EReal.measurable_of_measurable_real (by simpa using ENNReal.measurable_ofReal)
-
-@[fun_prop]
-
-中文:
-定理 measurable_ereal_toENN实数
-  结论: 可测 E实数.toENN实数
-  证明: EReal.measurable_of_measurable_real (by simpa using ENNReal.measurable_ofReal)
-
-@[fun_prop]
-
-Depends on / 依赖: ENNReal, ENNReal.measurable_ofReal, EReal.measurable_of_measurable_real, measurable_ofReal, measurable_of_measurable_real
+/-
+**measurable_ereal_toENNReal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_ereal_toENNReal : Measurable EReal.toENNReal
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EReal.measurable_of_measurable_real`：EReal.measurable_of_measurable_real
+ {f : EReal -> α} (h : Measurable fun p : Real => f p) : Measurable f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `EReal.toENNReal_of_ne_top`：toENNReal_of_ne_top {x : EReal} (hx : x != ⊤)
+ : x.toENNReal = ENNReal.ofReal x.toReal
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `ENNReal.measurable_ofReal`：measurable_ofReal : Measurable ENNReal.ofReal
 -/
 theorem measurable_ereal_toENNReal : Measurable EReal.toENNReal :=
   EReal.measurable_of_measurable_real (by simpa using ENNReal.measurable_ofReal)
 
 @[fun_prop]
-/--
-theorem `Measurable.ereal_toENNReal` / 定理 `Measurable.ereal_toENNReal`
-
-English:
-theorem Measurable.ereal_toENNReal
-  given: {f : α -> EReal} (hf : Measurable f)
-  proof: measurable_ereal_toENNReal.comp hf
-
-@[fun_prop]
-
-中文:
-定理 可测.ereal_toENN实数
-  条件: {f : α -> E实数} (hf : 可测 f)
-  证明: measurable_ereal_toENNReal.comp hf
-
-@[fun_prop]
-
-Depends on / 依赖: measurable_ereal_toENNReal, measurable_ereal_toENNReal.comp
+/-
+**Measurable.ereal_toENNReal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.ereal_toENNReal {f : α -> EReal} (hf : Measurable f) : Measurab
+le fun x => (f x).toENNReal
+参数：hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `measurable_ereal_toENNReal`：measurable_ereal_toENNReal : Measurable ERea
+l.toENNReal
 -/
-theorem Measurable.ereal_toENNReal {f : α -> EReal} (hf : Measurable f) :
+theorem Measurable.ereal_toENNReal {f : α → EReal} (hf : Measurable f) :
     Measurable fun x => (f x).toENNReal :=
   measurable_ereal_toENNReal.comp hf
 
 @[fun_prop]
-/--
-theorem `AEMeasurable.ereal_toENNReal` / 定理 `AEMeasurable.ereal_toENNReal`
-
-English:
-theorem AEMeasurable.ereal_toENNReal
-  given: {f : α -> EReal} {μ : Measure α} (hf : AEMeasurable f μ)
-  proof: measurable_ereal_toENNReal.comp_aemeasurable hf
-
-中文:
-定理 几乎处处可测.ereal_toENN实数
-  条件: {f : α -> E实数} {μ : 测度 α} (hf : 几乎处处可测 f μ)
-  证明: measurable_ereal_toENNReal.comp_aemeasurable hf
-
-Depends on / 依赖: comp_aemeasurable, measurable_ereal_toENNReal, measurable_ereal_toENNReal.comp_aemeasurable
+/-
+**AEMeasurable.ereal_toENNReal** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AEMeasurable.ereal_toENNReal {f : α -> EReal} {μ : Measure α} (hf : AEMeas
+urable f μ) : AEMeasurable (fun x => (f x).toENNReal) μ
+参数：hf : AEMeasurable f μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp_aemeasurable`：Measurable.comp_aemeasurable [MeasurableSp
+ace δ] {f : α -> δ} {g : δ -> β} (hg : Measurable g) (hf : AEMeasurable f μ) : A
+EMeasurable (g ∘ f…
+· 使用定理 `measurable_ereal_toENNReal`：measurable_ereal_toENNReal : Measurable ERea
+l.toENNReal
 -/
-theorem AEMeasurable.ereal_toENNReal {f : α -> EReal} {μ : Measure α} (hf : AEMeasurable f μ) :
+theorem AEMeasurable.ereal_toENNReal {f : α → EReal} {μ : Measure α} (hf : AEMeasurable f μ) :
     AEMeasurable (fun x => (f x).toENNReal) μ :=
   measurable_ereal_toENNReal.comp_aemeasurable hf
 
 namespace NNReal
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MeasurableSMul₂ Real>=0 Real>=0∞
-  body: show Measurable fun r : Real>=0 × Real>=0∞ => (r.1 : Real>=0) * r.2 by fun_prop
-
-中文:
-实例 :
-  签名: MeasurableSMul₂ 实数>=0 实数>=0∞
-  定义体: show Measurable fun r : Real>=0 × Real>=0∞ => (r.1 : Real>=0) * r.2 by fun_prop
-
-Depends on / 依赖: Measurable, fun_prop
+/-
+**NNReal.** 是 Mathlib 中的一个实例，位于命名空间 `NNReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : MeasurableSMul₂ Real>=0 Real>=0∞ where
-  measurable_smul := show Measurable fun r : Real>=0 × Real>=0∞ => (r.1 : Real>=0) * r.2 by fun_prop
+instance : MeasurableSMul₂ ℝ≥0 ℝ≥0∞ where
+  measurable_smul := show Measurable fun r : ℝ≥0 × ℝ≥0∞ ↦ (r.1 : ℝ≥0) * r.2 by fun_prop
 
-/--
-theorem `measurable_of_tendsto'` / 定理 `measurable_of_tendsto'`
+/-- A limit (over a general filter) of measurable `ℝ≥0`-valued functions is measurable. -/
+/-
+**NNReal.measurable_of_tendsto'** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：measurable_of_tendsto' {ι} {f : ι -> α -> Real>=0} {g : α -> Real>=0} (u :
+ Filter ι) [NeBot u] [IsCountablyGenerated u] (hf : forall i, Measurable (f i)) 
+(lim : Tendsto f u (𝓝 g)) : Measurable g
+参数：u : Filter ι；hf : forall i, Measurable (f i)；lim : Tendsto f u (𝓝 g)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ENNReal.measurable_of_tendsto'`：measurable_of_tendsto' {ι : Type*} {f : 
+ι -> α -> Real>=0∞} {g : α -> Real>=0∞} (u : Filter ι) [NeBot u] [IsCountablyGen
+erated u] (hf : fora…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `tendsto_pi_nhds`：tendsto_pi_nhds {f : Y -> forall i, A i} {g : forall i,
+ A i} {u : Filter Y} : Tendsto f u (𝓝 g) ↔ forall x, Tendsto (fun i => f i x) u 
+(𝓝 (g…
+· 使用定理 `Filter.Tendsto.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {f :
+ α → β} {g : β → γ} {x : Filter α} {y : Filter β} {z : Filter γ},   Filter.Tends
+to g y z …
+· 使用定理 `Continuous.tendsto`：Continuous.tendsto (hf : Continuous f) (x) : Tendsto
+ f (𝓝 x) (𝓝 (f x))
+· 使用定理 `ENNReal.continuous_coe`：continuous_coe : Continuous ((↑) : Real>=0 -> Re
+al>=0∞)
 
-English:
-theorem measurable_of_tendsto'
-  statement: {ι} {f : ι -> α -> Real>=0} {g : α -> Real>=0} (u : Filter ι) [NeBot u]
-  proof: by
-  simp_rw [← measurable_coe_nnreal_ennreal_iff] at hf ⊢
-  refine ENNReal.measurable_of_tendsto' u hf ?_
-  rw [tendsto_pi_nhds] at lim ⊢
-  exact fun x => (ENNReal.continuous_coe.tendsto (g x)).comp (lim x)
-
-中文:
-定理 measurable_of_tendsto'
-  结论: {ι} {f : ι -> α -> 实数>=0} {g : α -> 实数>=0} (u : 滤子 ι) [NeBot u]
-  证明: by
-  simp_rw [← measurable_coe_nnreal_ennreal_iff] at hf ⊢
-  refine ENNReal.measurable_of_tendsto' u hf ?_
-  rw [tendsto_pi_nhds] at lim ⊢
-  exact fun x => (ENNReal.continuous_coe.tendsto (g x)).comp (lim x)
-
-Depends on / 依赖: ENNReal, ENNReal.continuous_coe.tendsto, ENNReal.measurable_of_tendsto, continuous_coe, measurable_coe_nnreal_ennreal_iff, measurable_of_tendsto, simp_rw, tendsto, tendsto_pi_nhds
+--- 原说明 ---
+A limit (over a general filter) of measurable `ℝ≥0`-valued functions is measurab
+le.
 -/
-theorem measurable_of_tendsto' {ι} {f : ι -> α -> Real>=0} {g : α -> Real>=0} (u : Filter ι) [NeBot u]
-    [IsCountablyGenerated u] (hf : forall i, Measurable (f i)) (lim : Tendsto f u (𝓝 g)) :
+theorem measurable_of_tendsto' {ι} {f : ι → α → ℝ≥0} {g : α → ℝ≥0} (u : Filter ι) [NeBot u]
+    [IsCountablyGenerated u] (hf : ∀ i, Measurable (f i)) (lim : Tendsto f u (𝓝 g)) :
     Measurable g := by
   simp_rw [← measurable_coe_nnreal_ennreal_iff] at hf ⊢
   refine ENNReal.measurable_of_tendsto' u hf ?_
   rw [tendsto_pi_nhds] at lim ⊢
   exact fun x => (ENNReal.continuous_coe.tendsto (g x)).comp (lim x)
 
-/--
-theorem `measurable_of_tendsto` / 定理 `measurable_of_tendsto`
+/-- A sequential limit of measurable `ℝ≥0`-valued functions is measurable. -/
+/-
+**NNReal.measurable_of_tendsto** 是 Mathlib 中的一个定理，位于命名空间 `NNReal`。
+形式化陈述：measurable_of_tendsto {f : Nat -> α -> Real>=0} {g : α -> Real>=0} (hf : f
+orall i, Measurable (f i)) (lim : Tendsto f atTop (𝓝 g)) : Measurable g
+参数：hf : forall i, Measurable (f i)；lim : Tendsto f atTop (𝓝 g)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.measurable_of_tendsto'`：measurable_of_tendsto' {ι} {f : ι -> α ->
+ Real>=0} {g : α -> Real>=0} (u : Filter ι) [NeBot u] [IsCountablyGenerated u] (
+hf : forall i, Meas…
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `instDiscreteTopologyNat`：DiscreteTopology ℕ
+· 使用定理 `TopologicalSpace.SecondCountableTopology.to_separableSpace`：∀ {α : Type 
+u} [t : TopologicalSpace α] [SecondCountableTopology α], TopologicalSpace.Separa
+bleSpace α
+· 使用定理 `TopologicalSpace.instSecondCountableTopologyOfLindelofSpaceOfPseudoMetri
+zableSpace`：∀ (X : Type u_5) [inst : TopologicalSpace X] [LindelofSpace X] [Topo
+logicalSpace.PseudoMetrizableSpace X],   SecondCountableTopology X
+· 使用定理 `Countable.LindelofSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Cou
+ntable X], LindelofSpace X
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
 
-English:
-theorem measurable_of_tendsto
-  statement: {f : Nat -> α -> Real>=0} {g : α -> Real>=0} (hf : forall i, Measurable (f i))
-  proof: measurable_of_tendsto' atTop hf lim
-
-中文:
-定理 measurable_of_tendsto
-  结论: {f : 自然数 -> α -> 实数>=0} {g : α -> 实数>=0} (hf : 对任意 i, 可测 (f i))
-  证明: measurable_of_tendsto' atTop hf lim
-
-Depends on / 依赖: measurable_of_tendsto
+--- 原说明 ---
+A sequential limit of measurable `ℝ≥0`-valued functions is measurable.
 -/
-theorem measurable_of_tendsto {f : Nat -> α -> Real>=0} {g : α -> Real>=0} (hf : forall i, Measurable (f i))
+theorem measurable_of_tendsto {f : ℕ → α → ℝ≥0} {g : α → ℝ≥0} (hf : ∀ i, Measurable (f i))
     (lim : Tendsto f atTop (𝓝 g)) : Measurable g :=
   measurable_of_tendsto' atTop hf lim
 
@@ -1879,38 +1775,22 @@ end NNReal
 
 namespace EReal
 
-/--
-lemma `measurableEmbedding_coe` / 引理 `measurableEmbedding_coe`
-
-English:
-lemma measurableEmbedding_coe
-  statement: MeasurableEmbedding Real.toEReal
-  proof: isOpenEmbedding_coe.measurableEmbedding
-
-中文:
-引理 measurableEmbedding_coe
-  结论: 可测嵌入 实数.toE实数
-  证明: isOpenEmbedding_coe.measurableEmbedding
-
-Depends on / 依赖: isOpenEmbedding_coe, isOpenEmbedding_coe.measurableEmbedding, measurableEmbedding
+/-
+**EReal.measurableEmbedding_coe** 是 Mathlib 中的一个引理，位于命名空间 `EReal`。
+形式化陈述：measurableEmbedding_coe : MeasurableEmbedding Real.toEReal
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsOpenEmbedding.measurableEmbedding`：∀ {α : Type u_1} {β : Type
+ u_2} [inst : TopologicalSpace α] [mα : MeasurableSpace α] [BorelSpace α]   [mβ 
+: TopologicalSpace β] [inst_2 : Me…
+· 使用定理 `EReal.isOpenEmbedding_coe`：isOpenEmbedding_coe : IsOpenEmbedding ((↑) : 
+Real -> EReal)
 -/
 lemma measurableEmbedding_coe : MeasurableEmbedding Real.toEReal :=
   isOpenEmbedding_coe.measurableEmbedding
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MeasurableAdd₂ EReal
-  body: ⟨EReal.lowerSemicontinuous_add.measurable⟩
-
-中文:
-实例 :
-  签名: MeasurableAdd₂ E实数
-  定义体: ⟨EReal.lowerSemicontinuous_add.measurable⟩
-
-Depends on / 依赖: EReal.lowerSemicontinuous_add.measurable, lowerSemicontinuous_add, measurable
+/-
+**EReal.** 是 Mathlib 中的一个实例，位于命名空间 `EReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MeasurableAdd₂ EReal := ⟨EReal.lowerSemicontinuous_add.measurable⟩
 
@@ -1918,132 +1798,122 @@ section MeasurableMul
 
 variable {α β γ : Type*} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {mγ : MeasurableSpace γ}
 
-/--
-lemma `measurable_of_real_prod` / 引理 `measurable_of_real_prod`
-
-English:
-lemma measurable_of_real_prod
-  statement: {f : EReal × β -> γ}
-  proof: .of_union₃_range_cover (measurableEmbedding_prodMk_left _) (measurableEmbedding_prodMk_left _)
-    (measurableEmbedding_coe.prodMap .id) (by simp [-univ_subset_iff, subset_def, EReal.forall])
-    h_bot h_top h_real
-
-中文:
-引理 measurable_of_real_prod
-  结论: {f : E实数 × β -> γ}
-  证明: .of_union₃_range_cover (measurableEmbedding_prodMk_left _) (measurableEmbedding_prodMk_left _)
-    (measurableEmbedding_coe.prodMap .id) (by simp [-univ_subset_iff, subset_def, EReal.forall])
-    h_bot h_top h_real
-
-Depends on / 依赖: EReal.forall, h_bot, h_real, h_top, measurableEmbedding_coe, measurableEmbedding_coe.prodMap, measurableEmbedding_prodMk_left, prodMap, subset_def, univ_subset_iff
+/-
+**EReal.measurable_of_real_prod** 是 Mathlib 中的一个引理，位于命名空间 `EReal`。
+形式化陈述：measurable_of_real_prod {f : EReal × β -> γ} (h_real : Measurable fun p : 
+Real × β => f (p.1, p.2)) (h_bot : Measurable fun x => f (⊥, x)) (h_top : Measur
+able fun x => f (⊤, x)) : Measurable f
+参数：h_real : Measurable fun p : Real × β => f (p.1, p.2)；h_bot : Measurable fun x
+ => f (⊥, x)；h_top : Measurable fun x => f (⊤, x)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Measurable.of_union₃_range_cover`：Measurable.of_union₃_range_cover (hi₁ 
+: MeasurableEmbedding i₁) (hi₂ : MeasurableEmbedding i₂) (hi₃ : MeasurableEmbedd
+ing i₃) (h : univ subs…
+· 使用引理 `measurableEmbedding_prodMk_left`：measurableEmbedding_prodMk_left [Measur
+ableSingletonClass α] (x : α) : MeasurableEmbedding (Prod.mk x : β -> α × β)
+· 使用定理 `instMeasurableSingletonClassOfMeasurableEq`：∀ {α : Type u_1} [inst : Mea
+surableSpace α] [MeasurableEq α], MeasurableSingletonClass α
+· 使用定理 `instMeasurableEqOfSecondCountableTopologyOfT2Space`：∀ {α : Type u_1} [in
+st : TopologicalSpace α] [inst_1 : MeasurableSpace α] [OpensMeasurableSpace α]  
+ [SecondCountableTopology α] [T2Space α]…
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `EReal.instSecondCountableTopology`：SecondCountableTopology EReal
+· 使用定理 `EReal.instT2Space`：T2Space EReal
+· 使用引理 `MeasurableEmbedding.prodMap`：MeasurableEmbedding.prodMap {α β γ δ : Type
+*} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {mγ : MeasurableSpace γ} {m
+δ : MeasurableSpa…
+· 使用引理 `EReal.measurableEmbedding_coe`：measurableEmbedding_coe : MeasurableEmbed
+ding Real.toEReal
+· 使用定理 `MeasurableEmbedding.id`：id : MeasurableEmbedding (id : α -> α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.range_prodMap`：range_prodMap {m₁ : α -> γ} {m₂ : β -> δ} : range (Pr
+od.map m₁ m₂) = range m₁ ×ˢ range m₂
+· 使用定理 `Set.range_id`：range_id : range (@id α) = univ
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Prod.mk.injEq`：∀ {α : Type u} {β : Type v} (fst : α) (snd : β) (fst_1 : 
+α) (snd_1 : β),   ((fst, snd) = (fst_1, snd_1)) = (fst = fst_1 ∧ snd = snd_1)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `instNontrivialEReal`：Nontrivial EReal
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `or_self`：∀ (p : Prop), (p ∨ p) = p
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
-lemma measurable_of_real_prod {f : EReal × β -> γ}
-    (h_real : Measurable fun p : Real × β => f (p.1, p.2))
-    (h_bot : Measurable fun x => f (⊥, x)) (h_top : Measurable fun x => f (⊤, x)) : Measurable f :=
+lemma measurable_of_real_prod {f : EReal × β → γ}
+    (h_real : Measurable fun p : ℝ × β ↦ f (p.1, p.2))
+    (h_bot : Measurable fun x ↦ f (⊥, x)) (h_top : Measurable fun x ↦ f (⊤, x)) : Measurable f :=
   .of_union₃_range_cover (measurableEmbedding_prodMk_left _) (measurableEmbedding_prodMk_left _)
     (measurableEmbedding_coe.prodMap .id) (by simp [-univ_subset_iff, subset_def, EReal.forall])
     h_bot h_top h_real
-
-/--
-lemma `measurable_of_real_real` / 引理 `measurable_of_real_real`
-
-English:
-lemma measurable_of_real_real
-  statement: {f : EReal × EReal -> β}
-  proof: by
-  refine measurable_of_real_prod ?_ ?_ ?_
-· refine measurable_swap_iff.mp measurable_of_real_prod ?_ h_bot_right h_top_right
-    exact h_real.comp measurable_swap
-  · exact measurable_of_measurable_real h_bot_left
-  · exact measurable_of_measurable_real h_top_left
-
-中文:
-引理 measurable_of_real_real
-  结论: {f : E实数 × E实数 -> β}
-  证明: by
-  refine measurable_of_real_prod ?_ ?_ ?_
-· refine measurable_swap_iff.mp measurable_of_real_prod ?_ h_bot_right h_top_right
-    exact h_real.comp measurable_swap
-  · exact measurable_of_measurable_real h_bot_left
-  · exact measurable_of_measurable_real h_top_left
-
-Depends on / 依赖: h_bot_left, h_bot_right, h_real, h_real.comp, h_top_left, h_top_right, measurable_of_measurable_real, measurable_of_real_prod, measurable_swap, measurable_swap_iff, measurable_swap_iff.mp
+/-
+**EReal.measurable_of_real_real** 是 Mathlib 中的一个引理，位于命名空间 `EReal`。
+形式化陈述：measurable_of_real_real {f : EReal × EReal -> β} (h_real : Measurable fun 
+p : Real × Real => f (p.1, p.2)) (h_bot_left : Measurable fun r : Real => f (⊥, 
+r)) (h_top_left : Measurable fun r : Real => f (⊤, r)) (h_bot_right : Measurable
+ fun r : Real => f (r, ⊥)) (h_top_right : Measurable fun r : Real => f (r, ⊤)) :
+ Measurable f
+参数：h_real : Measurable fun p : Real × Real => f (p.1, p.2)；h_bot_left : Measurab
+le fun r : Real => f (⊥, r)；h_top_left : Measurable fun r : Real => f (⊤, r)；h_b
+ot_right : Measurable fun r : Real => f (r, ⊥)；h_top_right : Measurable fun r : 
+Real => f (r, ⊤)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `EReal.measurable_of_real_prod`：measurable_of_real_prod {f : EReal × β ->
+ γ} (h_real : Measurable fun p : Real × β => f (p.1, p.2)) (h_bot : Measurable f
+un x => f (⊥, x)) (…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `measurable_swap_iff`：measurable_swap_iff {_ : MeasurableSpace γ} {f : α 
+× β -> γ} : Measurable (f ∘ Prod.swap) ↔ Measurable f
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `measurable_swap`：measurable_swap : Measurable (Prod.swap : α × β -> β × 
+α)
+· 使用定理 `EReal.measurable_of_measurable_real`：EReal.measurable_of_measurable_real
+ {f : EReal -> α} (h : Measurable fun p : Real => f p) : Measurable f
 -/
-lemma measurable_of_real_real {f : EReal × EReal -> β}
-    (h_real : Measurable fun p : Real × Real => f (p.1, p.2))
-    (h_bot_left : Measurable fun r : Real => f (⊥, r))
-    (h_top_left : Measurable fun r : Real => f (⊤, r))
-    (h_bot_right : Measurable fun r : Real => f (r, ⊥))
-    (h_top_right : Measurable fun r : Real => f (r, ⊤)) :
+lemma measurable_of_real_real {f : EReal × EReal → β}
+    (h_real : Measurable fun p : ℝ × ℝ ↦ f (p.1, p.2))
+    (h_bot_left : Measurable fun r : ℝ ↦ f (⊥, r))
+    (h_top_left : Measurable fun r : ℝ ↦ f (⊤, r))
+    (h_bot_right : Measurable fun r : ℝ ↦ f (r, ⊥))
+    (h_top_right : Measurable fun r : ℝ ↦ f (r, ⊤)) :
     Measurable f := by
   refine measurable_of_real_prod ?_ ?_ ?_
-· refine measurable_swap_iff.mp measurable_of_real_prod ?_ h_bot_right h_top_right
+  · refine measurable_swap_iff.mp <| measurable_of_real_prod ?_ h_bot_right h_top_right
     exact h_real.comp measurable_swap
   · exact measurable_of_measurable_real h_bot_left
   · exact measurable_of_measurable_real h_top_left
-
-/--
-lemma `measurable_const_mul` / 引理 `measurable_const_mul`
-
-English:
-lemma measurable_const_mul
-  given: (c : EReal)
-  statement: Measurable fun (x : EReal) => c * x
-  proof: by
-  rcases eq_or_ne c 0 with rfl | hc
-  · simp
-  · refine measurable_of_continuousOn_compl_singleton 0 fun x (hx : x != 0) => ?_
-    exact (continuousAt_mul (Or.inl hc) (Or.inl hc) (Or.inr hx) (Or.inr hx)).comp_of_eq
-.continuousWithinAt (continuousAt_const.prodMk continuousAt_id) rfl
-
-中文:
-引理 measurable_const_mul
-  条件: (c : E实数)
-  结论: 可测 fun (x : E实数) => c * x
-  证明: by
-  rcases eq_or_ne c 0 with rfl | hc
-  · simp
-  · refine measurable_of_continuousOn_compl_singleton 0 fun x (hx : x != 0) => ?_
-    exact (continuousAt_mul (Or.inl hc) (Or.inl hc) (Or.inr hx) (Or.inr hx)).comp_of_eq
-.continuousWithinAt (continuousAt_const.prodMk continuousAt_id) rfl
+/-
+**EReal.measurable_const_mul** 是 Mathlib 中的一个引理，位于命名空间 `EReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private lemma measurable_const_mul (c : EReal) : Measurable fun (x : EReal) => c * x := by
+private lemma measurable_const_mul (c : EReal) : Measurable fun (x : EReal) ↦ c * x := by
   rcases eq_or_ne c 0 with rfl | hc
   · simp
-  · refine measurable_of_continuousOn_compl_singleton 0 fun x (hx : x != 0) => ?_
+  · refine measurable_of_continuousOn_compl_singleton 0 fun x (hx : x ≠ 0) ↦ ?_
     exact (continuousAt_mul (Or.inl hc) (Or.inl hc) (Or.inr hx) (Or.inr hx)).comp_of_eq
-.continuousWithinAt (continuousAt_const.prodMk continuousAt_id) rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MeasurableMul₂ EReal
-  body: by
-  refine ⟨measurable_of_real_real ?_ ?_ ?_ ?_ ?_⟩
-  · exact (measurable_fst.mul measurable_snd).coe_real_ereal
-  · exact (measurable_const_mul _).comp measurable_coe_real_ereal
-  · exact (measurable_const_mul _).comp measurable_coe_real_ereal
-  · simp_rw [mul_comm _ ⊥]
-    exact (measurable_const_mul _).comp measurable_coe_real_ereal
-  · simp_rw [mul_comm _ ⊤]
-    exact (measurable_const_mul _).comp measurable_coe_real_ereal
-
-中文:
-实例 :
-  签名: MeasurableMul₂ E实数
-  定义体: by
-  refine ⟨measurable_of_real_real ?_ ?_ ?_ ?_ ?_⟩
-  · exact (measurable_fst.mul measurable_snd).coe_real_ereal
-  · exact (measurable_const_mul _).comp measurable_coe_real_ereal
-  · exact (measurable_const_mul _).comp measurable_coe_real_ereal
-  · simp_rw [mul_comm _ ⊥]
-    exact (measurable_const_mul _).comp measurable_coe_real_ereal
-  · simp_rw [mul_comm _ ⊤]
-    exact (measurable_const_mul _).comp measurable_coe_real_ereal
-
-Depends on / 依赖: coe_real_ereal, measurable_coe_real_ereal, measurable_const_mul, measurable_fst, measurable_fst.mul, measurable_of_real_real, measurable_snd, mul_comm, simp_rw
+      (continuousAt_const.prodMk continuousAt_id) rfl |>.continuousWithinAt
+/-
+**EReal.** 是 Mathlib 中的一个实例，位于命名空间 `EReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MeasurableMul₂ EReal := by
   refine ⟨measurable_of_real_real ?_ ?_ ?_ ?_ ?_⟩
@@ -2059,193 +1929,287 @@ end MeasurableMul
 
 end EReal
 
-/--
-theorem `exists_spanning_measurableSet_le` / 定理 `exists_spanning_measurableSet_le`
+/-- If a function `f : α → ℝ≥0` is measurable and the measure is σ-finite, then there exists
+spanning measurable sets with finite measure on which `f` is bounded.
+See also `StronglyMeasurable.exists_spanning_measurableSet_norm_le` for functions into normed
+groups. -/
+/-
+**exists_spanning_measurableSet_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_spanning_measurableSet_le {f : α -> Real>=0} (hf : Measurable f) (μ
+ : Measure α) [SigmaFinite μ] : exists s : Nat -> Set α, (forall n, MeasurableSe
+t (s n) ∧ μ (s n) < ∞ ∧ forall x in s n, f x <= n) ∧ ⋃ i, s i = Set.univ
+参数：hf : Measurable f；μ : Measure α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_true`：∀ (p : Prop), (p ↔ True) = p
+· 使用定理 `exists_nat_ge`：exists_nat_ge (x : R) : exists n : Nat, x <= n
+· 使用定理 `NNReal.instIsOrderedRing_1`：IsOrderedRing NNReal
+· 使用定理 `NNReal.instArchimedean`：Archimedean NNReal
+· 使用定理 `MeasurableSet.inter`：∀ {α : Type u_1} {m : MeasurableSpace α} {s₁ s₂ : S
+et α}, MeasurableSet s₁ → MeasurableSet s₂ → MeasurableSet (s₁ ∩ s₂)
+· 使用定理 `MeasureTheory.measurableSet_spanningSets`：measurableSet_spanningSets (μ 
+: Measure α) [SigmaFinite μ] (i : Nat) : MeasurableSet (spanningSets μ i)
+· 使用定理 `measurableSet_Iic`：measurableSet_Iic [ClosedIicTopology α] : MeasurableS
+et (Iic a)
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `NNReal.instOrderTopology`：OrderTopology NNReal
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `MeasureTheory.measure_mono`：measure_mono (h : s subseteq t) : μ s <= μ t
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `MeasureTheory.measure_spanningSets_lt_top`：measure_spanningSets_lt_top (
+μ : Measure α) [SigmaFinite μ] (i : Nat) : μ (spanningSets μ i) < ∞
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Set.iUnion_inter_of_monotone`：iUnion_inter_of_monotone {ι α} [Preorder ι
+] [IsDirectedOrder ι] {s t : ι -> Set α} (hs : Monotone s) (ht : Monotone t) : ⋃
+ i, s i inter t i …
+· 使用定理 `instIsDirectedOrder`：∀ {R : Type u_3} [inst : Semiring R] [inst_1 : Part
+ialOrder R] [IsOrderedRing R] [Archimedean R], IsDirectedOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instArchimedeanNat`：Archimedean ℕ
+· 使用定理 `MeasureTheory.monotone_spanningSets`：monotone_spanningSets (μ : Measure 
+α) [SigmaFinite μ] : Monotone (spanningSets μ)
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `FloorSemiring.instZeroLEOneClass`：∀ {α : Type u_2} [inst : Semiring α] [
+inst_1 : PartialOrder α] [FloorSemiring α], ZeroLEOneClass α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+（共 32 条，此处仅展示前 30 条）
 
-English:
-theorem exists_spanning_measurableSet_le
-  statement: {f : α -> Real>=0} (hf : Measurable f) (μ : Measure α)
-  proof: by
-  let sigma_finite_sets := spanningSets μ
-  let norm_sets := fun n : Nat => { x | f x <= n }
-  have norm_sets_spanning : ⋃ n, norm_sets n = Set.univ := by
-    ext1 x
-    simp only [Set.mem_iUnion, Set.mem_univ, iff_true]
-    exact exists_nat_ge (f x)
-  let sets n := sigma_finite_sets n inter norm_sets n
-  have h_meas : forall n, MeasurableSet (sets n) := by
-    refine fun n => MeasurableSet.inter ?_ ?_
-    · exact measurableSet_spanningSets μ n
-    · exact hf measurableSet_Iic
-  have h_finite : forall n, μ (sets n) < ∞ := by
-    refine fun n => (measure_mono Set.inter_subset_left).trans_lt ?_
-    exact measure_spanningSets_lt_top μ n
-  refine ⟨sets, fun n => ⟨h_meas n, h_finite n, ?_⟩, ?_⟩
-  · exact fun x hx => hx.2
-  · have :
-      ⋃ i, sigma_finite_sets i inter norm_sets i = (⋃ i, sigma_finite_sets i) inter ⋃ i, norm_sets i := by
-      refine Set.iUnion_inter_of_monotone (monotone_spanningSets μ) fun i j hij x => ?_
-      simp only [norm_sets, Set.mem_ofPred_eq]
-      refine fun hif => hif.trans ?_
-      exact mod_cast hij
-    rw [this]; rw [norm_sets_spanning]; rw [iUnion_spanningSets μ]; rw [Set.inter_univ]
-
-中文:
-定理 存在_spanning_measurableSet_le
-  结论: {f : α -> 实数>=0} (hf : 可测 f) (μ : 测度 α)
-  证明: by
-  let sigma_finite_sets := spanningSets μ
-  let norm_sets := fun n : Nat => { x | f x <= n }
-  have norm_sets_spanning : ⋃ n, norm_sets n = Set.univ := by
-    ext1 x
-    simp only [Set.mem_iUnion, Set.mem_univ, iff_true]
-    exact exists_nat_ge (f x)
-  let sets n := sigma_finite_sets n inter norm_sets n
-  have h_meas : forall n, MeasurableSet (sets n) := by
-    refine fun n => MeasurableSet.inter ?_ ?_
-    · exact measurableSet_spanningSets μ n
-    · exact hf measurableSet_Iic
-  have h_finite : forall n, μ (sets n) < ∞ := by
-    refine fun n => (measure_mono Set.inter_subset_left).trans_lt ?_
-    exact measure_spanningSets_lt_top μ n
-  refine ⟨sets, fun n => ⟨h_meas n, h_finite n, ?_⟩, ?_⟩
-  · exact fun x hx => hx.2
-  · have :
-      ⋃ i, sigma_finite_sets i inter norm_sets i = (⋃ i, sigma_finite_sets i) inter ⋃ i, norm_sets i := by
-      refine Set.iUnion_inter_of_monotone (monotone_spanningSets μ) fun i j hij x => ?_
-      simp only [norm_sets, Set.mem_ofPred_eq]
-      refine fun hif => hif.trans ?_
-      exact mod_cast hij
-    rw [this]; rw [norm_sets_spanning]; rw [iUnion_spanningSets μ]; rw [Set.inter_univ]
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.inter, Set.mem_iUnion, Set.mem_univ, Set.univ, exists_nat_ge, h_finite, h_meas, iff_true, measurableSet_Iic, measurableSet_spanningSets, mem_iUnion, mem_univ, norm_sets, norm_sets_spanning, sigma_finite_sets, spanningSets
+--- 原说明 ---
+If a function `f : α → ℝ≥0` is measurable and the measure is σ-finite, then ther
+e exists
+spanning measurable sets with finite measure on which `f` is bounded.
+See also `StronglyMeasurable.exists_spanning_measurableSet_norm_le` for function
+s into normed
+groups.
 -/
-theorem exists_spanning_measurableSet_le {f : α -> Real>=0} (hf : Measurable f) (μ : Measure α)
+theorem exists_spanning_measurableSet_le {f : α → ℝ≥0} (hf : Measurable f) (μ : Measure α)
     [SigmaFinite μ] :
-    exists s : Nat -> Set α,
-      (forall n, MeasurableSet (s n) ∧ μ (s n) < ∞ ∧ forall x in s n, f x <= n) ∧
+    ∃ s : ℕ → Set α,
+      (∀ n, MeasurableSet (s n) ∧ μ (s n) < ∞ ∧ ∀ x ∈ s n, f x ≤ n) ∧
       ⋃ i, s i = Set.univ := by
   let sigma_finite_sets := spanningSets μ
-  let norm_sets := fun n : Nat => { x | f x <= n }
+  let norm_sets := fun n : ℕ => { x | f x ≤ n }
   have norm_sets_spanning : ⋃ n, norm_sets n = Set.univ := by
     ext1 x
     simp only [Set.mem_iUnion, Set.mem_univ, iff_true]
     exact exists_nat_ge (f x)
-  let sets n := sigma_finite_sets n inter norm_sets n
-  have h_meas : forall n, MeasurableSet (sets n) := by
+  let sets n := sigma_finite_sets n ∩ norm_sets n
+  have h_meas : ∀ n, MeasurableSet (sets n) := by
     refine fun n => MeasurableSet.inter ?_ ?_
     · exact measurableSet_spanningSets μ n
     · exact hf measurableSet_Iic
-  have h_finite : forall n, μ (sets n) < ∞ := by
+  have h_finite : ∀ n, μ (sets n) < ∞ := by
     refine fun n => (measure_mono Set.inter_subset_left).trans_lt ?_
     exact measure_spanningSets_lt_top μ n
   refine ⟨sets, fun n => ⟨h_meas n, h_finite n, ?_⟩, ?_⟩
   · exact fun x hx => hx.2
   · have :
-      ⋃ i, sigma_finite_sets i inter norm_sets i = (⋃ i, sigma_finite_sets i) inter ⋃ i, norm_sets i := by
+      ⋃ i, sigma_finite_sets i ∩ norm_sets i = (⋃ i, sigma_finite_sets i) ∩ ⋃ i, norm_sets i := by
       refine Set.iUnion_inter_of_monotone (monotone_spanningSets μ) fun i j hij x => ?_
       simp only [norm_sets, Set.mem_ofPred_eq]
       refine fun hif => hif.trans ?_
       exact mod_cast hij
-    rw [this]; rw [norm_sets_spanning]; rw [iUnion_spanningSets μ]; rw [Set.inter_univ]
+    rw [this, norm_sets_spanning, iUnion_spanningSets μ, Set.inter_univ]
 
-variable (μ : Measure Real) [IsFiniteMeasureOnCompacts μ]
-
-/--
-lemma `tendsto_measure_Icc_nhdsWithin_right'` / 引理 `tendsto_measure_Icc_nhdsWithin_right'`
-
-English:
-lemma tendsto_measure_Icc_nhdsWithin_right'
-  given: (b : Real)
-  proof: by
-  rw [Real.singleton_eq_inter_Icc]
-  apply tendsto_measure_biInter_gt (fun r hr => nullMeasurableSet_Icc)
-  · intro r s _rpos hrs
-    exact Icc_subset_Icc (by linarith) (by linarith)
-  · exact ⟨1, zero_lt_one, isCompact_Icc.measure_ne_top⟩
-
-中文:
-引理 tendsto_measure_Icc_nhdsWithin_right'
-  条件: (b : 实数)
-  证明: by
-  rw [Real.singleton_eq_inter_Icc]
-  apply tendsto_measure_biInter_gt (fun r hr => nullMeasurableSet_Icc)
-  · intro r s _rpos hrs
-    exact Icc_subset_Icc (by linarith) (by linarith)
-  · exact ⟨1, zero_lt_one, isCompact_Icc.measure_ne_top⟩
-
-Depends on / 依赖: Icc_subset_Icc, Real.singleton_eq_inter_Icc, _rpos, isCompact_Icc, isCompact_Icc.measure_ne_top, measure_ne_top, nullMeasurableSet_Icc, singleton_eq_inter_Icc, tendsto_measure_biInter_gt, zero_lt_one
+variable (μ : Measure ℝ) [IsFiniteMeasureOnCompacts μ]
+/-
+**tendsto_measure_Icc_nhdsWithin_right'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：tendsto_measure_Icc_nhdsWithin_right' (b : Real) : Tendsto (fun δ => μ (Ic
+c (b - δ) (b + δ))) (𝓝[>] (0 : Real)) (𝓝 (μ {b}))
+参数：b : Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Real.singleton_eq_inter_Icc`：Real.singleton_eq_inter_Icc (b : Real) : {b
+} = ⋂ (r > 0), Icc (b - r) (b + r)
+· 使用定理 `MeasureTheory.tendsto_measure_biInter_gt`：tendsto_measure_biInter_gt {ι 
+: Type*} [LinearOrder ι] [TopologicalSpace ι] [OrderTopology ι] [FirstCountableT
+opology ι] {s : ι -> Set α} {a…
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `TopologicalSpace.PseudoMetrizableSpace.firstCountableTopology`：∀ {X : Ty
+pe u_2} [inst : TopologicalSpace X] [h : TopologicalSpace.PseudoMetrizableSpace 
+X], FirstCountableTopology X
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `nullMeasurableSet_Icc`：nullMeasurableSet_Icc [OrderClosedTopology α] : N
+ullMeasurableSet (Icc a b) μ
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `Set.Icc_subset_Icc`：Icc_subset_Icc (ha : a₂ <= a₁) (hb : b₁ <= b₂) : Icc
+ a₁ b₁ subseteq Icc a₂ b₂
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_pf`：∀ {R : Type u_2} [inst : CommRing R] 
+{a b c d : R}, -b = c → a + c = d → a - b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_mul`：∀ {R : Type u_2} [inst : CommRing R]
+ (a₁ : R) (a₂ : ℕ) {a₃ b : R}, -a₃ = b → -(a₁ ^ a₂ * a₃) = a₁ ^ a₂ * b
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_lt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a₂ b c : R} (a₁ : R), a₂ + b = c → a₁ + a₂ + b = a₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_gt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a b₂ c : R} (b₁ : R), a + b₂ = c → a + (b₁ + b₂) = b₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+（共 46 条，此处仅展示前 30 条）
 -/
-lemma tendsto_measure_Icc_nhdsWithin_right' (b : Real) :
-    Tendsto (fun δ => μ (Icc (b - δ) (b + δ))) (𝓝[>] (0 : Real)) (𝓝 (μ {b})) := by
+lemma tendsto_measure_Icc_nhdsWithin_right' (b : ℝ) :
+    Tendsto (fun δ ↦ μ (Icc (b - δ) (b + δ))) (𝓝[>] (0 : ℝ)) (𝓝 (μ {b})) := by
   rw [Real.singleton_eq_inter_Icc]
-  apply tendsto_measure_biInter_gt (fun r hr => nullMeasurableSet_Icc)
+  apply tendsto_measure_biInter_gt (fun r hr ↦ nullMeasurableSet_Icc)
   · intro r s _rpos hrs
     exact Icc_subset_Icc (by linarith) (by linarith)
   · exact ⟨1, zero_lt_one, isCompact_Icc.measure_ne_top⟩
-
-/--
-lemma `tendsto_measure_Icc_nhdsWithin_right` / 引理 `tendsto_measure_Icc_nhdsWithin_right`
-
-English:
-lemma tendsto_measure_Icc_nhdsWithin_right
-  given: (b : Real)
-  proof: by
+/-
+**tendsto_measure_Icc_nhdsWithin_right** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：tendsto_measure_Icc_nhdsWithin_right (b : Real) : Tendsto (fun δ => μ (Icc
+ (b - δ) (b + δ))) (𝓝[>=] (0 : Real)) (𝓝 (μ {b}))
+参数：b : Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nhdsWithin_singleton`：nhdsWithin_singleton (a : α) : 𝓝[{a}] a = pure a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用引理 `tendsto_measure_Icc_nhdsWithin_right'`：tendsto_measure_Icc_nhdsWithin_ri
+ght' (b : Real) : Tendsto (fun δ => μ (Icc (b - δ) (b + δ))) (𝓝[>] (0 : Real)) (
+𝓝 (μ {b}))
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Set.Icc_self`：Icc_self (a : α) : Icc a a = {a}
+· 使用定理 `mem_of_mem_nhds`：mem_of_mem_nhds : s in 𝓝 x -> x in s
+-/
+lemma tendsto_measure_Icc_nhdsWithin_right (b : ℝ) :
+    Tendsto (fun δ ↦ μ (Icc (b - δ) (b + δ))) (𝓝[≥] (0 : ℝ)) (𝓝 (μ {b})) := by
   simp only [← nhdsGT_sup_nhdsWithin_singleton, nhdsWithin_singleton, tendsto_sup,
     tendsto_measure_Icc_nhdsWithin_right' μ b, true_and, tendsto_pure_left]
   intro s hs
   simpa using mem_of_mem_nhds hs
-
-中文:
-引理 tendsto_measure_Icc_nhdsWithin_right
-  条件: (b : 实数)
-  证明: by
-  simp only [← nhdsGT_sup_nhdsWithin_singleton, nhdsWithin_singleton, tendsto_sup,
-    tendsto_measure_Icc_nhdsWithin_right' μ b, true_and, tendsto_pure_left]
-  intro s hs
-  simpa using mem_of_mem_nhds hs
-
-Depends on / 依赖: mem_of_mem_nhds, nhdsGT_sup_nhdsWithin_singleton, nhdsWithin_singleton, tendsto_measure_Icc_nhdsWithin_right, tendsto_pure_left, tendsto_sup, true_and
+/-
+**tendsto_measure_Icc** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：tendsto_measure_Icc [NullSingletonClass μ] (b : Real) : Tendsto (fun δ => 
+μ (Icc (b - δ) (b + δ))) (𝓝 (0 : Real)) (𝓝 0)
+参数：b : Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `nhdsLT_sup_nhdsGE`：nhdsLT_sup_nhdsGE (a : α) : 𝓝[<] a ⊔ 𝓝[>=] a = 𝓝 a
+· 使用定理 `Filter.tendsto_sup`：tendsto_sup {f : α -> β} {x₁ x₂ : Filter α} {y : Fil
+ter β} : Tendsto f (x₁ ⊔ x₂) y ↔ Tendsto f x₁ y ∧ Tendsto f x₂ y
+· 使用定理 `Filter.Tendsto.congr'`：∀ {α : Type u_1} {β : Type u_2} {f₁ f₂ : α → β} {
+l₁ : Filter α} {l₂ : Filter β},   f₁ =ᶠ[l₁] f₂ → Filter.Tendsto f₁ l₁ l₂ → Filte
+r.Tendsto f…
+· 使用定理 `tendsto_const_nhds`：tendsto_const_nhds {f : Filter α} : Tendsto (fun _ :
+ α => x) f (𝓝 x)
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `self_mem_nhdsWithin`：self_mem_nhdsWithin {a : α} {s : Set α} : s in 𝓝[s]
+ a
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `Set.Icc_eq_empty`：Icc_eq_empty (h : ¬a <= b) : Icc a b = ∅
+· 使用定理 `Not.intro`：∀ {a : Prop}, (a → False) → ¬a
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.cast_pos`：∀ {R : Type u_1} [inst : CommSemiring R] {
+a : R} {n : ℕ}, Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast + 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用引理 `Mathlib.Meta.NormNum.instAtLeastTwo`：instAtLeastTwo (n : Nat) : Nat.AtLe
+astTwo (n + 2)
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Mathlib.Tactic.Ring.cast_zero`：∀ {R : Type u_1} [inst : CommSemiring R] 
+{a : R}, Mathlib.Meta.NormNum.IsNat a 0 → a = 0
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_pf`：∀ {R : Type u_2} [inst : CommRing R] 
+{a b c d : R}, -b = c → a + c = d → a - b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+（共 60 条，此处仅展示前 30 条）
 -/
-lemma tendsto_measure_Icc_nhdsWithin_right (b : Real) :
-    Tendsto (fun δ => μ (Icc (b - δ) (b + δ))) (𝓝[>=] (0 : Real)) (𝓝 (μ {b})) := by
-  simp only [← nhdsGT_sup_nhdsWithin_singleton, nhdsWithin_singleton, tendsto_sup,
-    tendsto_measure_Icc_nhdsWithin_right' μ b, true_and, tendsto_pure_left]
-  intro s hs
-  simpa using mem_of_mem_nhds hs
-
-/--
-lemma `tendsto_measure_Icc` / 引理 `tendsto_measure_Icc`
-
-English:
-lemma tendsto_measure_Icc
-  given: [NullSingletonClass μ] (b : Real)
-  proof: by
-  rw [← nhdsLT_sup_nhdsGE]; rw [tendsto_sup]
+lemma tendsto_measure_Icc [NullSingletonClass μ] (b : ℝ) :
+    Tendsto (fun δ ↦ μ (Icc (b - δ) (b + δ))) (𝓝 (0 : ℝ)) (𝓝 0) := by
+  rw [← nhdsLT_sup_nhdsGE, tendsto_sup]
   constructor
   · apply tendsto_const_nhds.congr'
     filter_upwards [self_mem_nhdsWithin] with r (hr : r < 0)
-    rw [Icc_eq_empty (by linarith)]; rw [measure_empty]
-  · simpa only [measure_singleton] using tendsto_measure_Icc_nhdsWithin_right μ b
-
-中文:
-引理 tendsto_measure_Icc
-  条件: [NullSingleton类 μ] (b : 实数)
-  证明: by
-  rw [← nhdsLT_sup_nhdsGE]; rw [tendsto_sup]
-  constructor
-  · apply tendsto_const_nhds.congr'
-    filter_upwards [self_mem_nhdsWithin] with r (hr : r < 0)
-    rw [Icc_eq_empty (by linarith)]; rw [measure_empty]
-  · simpa only [measure_singleton] using tendsto_measure_Icc_nhdsWithin_right μ b
-
-Depends on / 依赖: Icc_eq_empty, filter_upwards, measure_empty, measure_singleton, nhdsLT_sup_nhdsGE, self_mem_nhdsWithin, tendsto_const_nhds, tendsto_const_nhds.congr, tendsto_measure_Icc_nhdsWithin_right, tendsto_sup
--/
-lemma tendsto_measure_Icc [NullSingletonClass μ] (b : Real) :
-    Tendsto (fun δ => μ (Icc (b - δ) (b + δ))) (𝓝 (0 : Real)) (𝓝 0) := by
-  rw [← nhdsLT_sup_nhdsGE]; rw [tendsto_sup]
-  constructor
-  · apply tendsto_const_nhds.congr'
-    filter_upwards [self_mem_nhdsWithin] with r (hr : r < 0)
-    rw [Icc_eq_empty (by linarith)]; rw [measure_empty]
+    rw [Icc_eq_empty (by linarith), measure_empty]
   · simpa only [measure_singleton] using tendsto_measure_Icc_nhdsWithin_right μ b

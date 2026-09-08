@@ -37,54 +37,35 @@ namespace Finsupp
 
 section RangeSingleton
 
-variable [Zero α] {f : ι ->₀ α} {i : ι} {a : α}
+variable [Zero α] {f : ι →₀ α} {i : ι} {a : α}
 
 /-- Pointwise `Singleton.singleton` bundled as a `Finsupp`. -/
 @[simps]
-/--
-Definition of `rangeSingleton` / `rangeSingleton` 的定义
+/-
+**Finsupp.rangeSingleton** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：rangeSingleton (f : ι ->₀ α) : ι ->₀ Finset α where toFun i
+参数：f : ι ->₀ α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rangeSingleton
-  signature: (f : ι ->₀ α)
-  body: {f i}
-  support := f.support
-  mem_support_toFun i := by
-    rw [← not_iff_not]; rw [notMem_support_iff]; rw [not_ne_iff]
-    exact singleton_injective.eq_iff.symm
-
-中文:
-定义 rangeSingleton
-  签名: (f : ι ->₀ α)
-  定义体: {f i}
-  support := f.support
-  mem_support_toFun i := by
-    rw [← not_iff_not]; rw [notMem_support_iff]; rw [not_ne_iff]
-    exact singleton_injective.eq_iff.symm
+--- 原说明 ---
+Pointwise `Singleton.singleton` bundled as a `Finsupp`.
 -/
-def rangeSingleton (f : ι ->₀ α) : ι ->₀ Finset α where
+def rangeSingleton (f : ι →₀ α) : ι →₀ Finset α where
   toFun i := {f i}
   support := f.support
   mem_support_toFun i := by
-    rw [← not_iff_not]; rw [notMem_support_iff]; rw [not_ne_iff]
+    rw [← not_iff_not, notMem_support_iff, not_ne_iff]
     exact singleton_injective.eq_iff.symm
-
-/--
-theorem `mem_rangeSingleton_apply_iff` / 定理 `mem_rangeSingleton_apply_iff`
-
-English:
-theorem mem_rangeSingleton_apply_iff
-  statement: a in f.rangeSingleton i ↔ a = f i
-  proof: mem_singleton
-
-中文:
-定理 mem_rangeSingleton_apply_iff
-  结论: a in f.rangeSingleton i ↔ a = f i
-  证明: mem_singleton
-
-Depends on / 依赖: mem_singleton
+/-
+**Finsupp.mem_rangeSingleton_apply_iff** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：mem_rangeSingleton_apply_iff : a in f.rangeSingleton i ↔ a = f i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.mem_singleton`：mem_singleton {a b : α} : b in ({a} : Finset α) ↔ 
+b = a
 -/
-theorem mem_rangeSingleton_apply_iff : a in f.rangeSingleton i ↔ a = f i :=
+theorem mem_rangeSingleton_apply_iff : a ∈ f.rangeSingleton i ↔ a = f i :=
   mem_singleton
 
 end RangeSingleton
@@ -92,252 +73,168 @@ end RangeSingleton
 section RangeIcc
 
 variable [Zero α] [PartialOrder α] [LocallyFiniteOrder α] [DecidableEq ι]
-variable {f g : ι ->₀ α} {i : ι} {a : α}
+variable {f g : ι →₀ α} {i : ι} {a : α}
 
 /-- Pointwise `Finset.Icc` bundled as a `Finsupp`. -/
 @[simps apply]
-/--
-Definition of `rangeIcc` / `rangeIcc` 的定义
+/-
+**Finsupp.rangeIcc** 是 Mathlib 中的一个定义，位于命名空间 `Finsupp`。
+形式化陈述：rangeIcc (f g : ι ->₀ α) : ι ->₀ Finset α where toFun i
+参数：f g : ι ->₀ α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rangeIcc
-  signature: (f g : ι ->₀ α)
-  body: Icc (f i) (g i)
-  support := f.support union g.support
-  mem_support_toFun i := by
-    rw [mem_union]; rw [← not_iff_not]; rw [not_or]; rw [notMem_support_iff]; rw [notMem_support_iff]; rw [not_ne_iff]
-    exact Icc_eq_singleton_iff.symm
-
-中文:
-定义 rangeIcc
-  签名: (f g : ι ->₀ α)
-  定义体: Icc (f i) (g i)
-  support := f.support union g.support
-  mem_support_toFun i := by
-    rw [mem_union]; rw [← not_iff_not]; rw [not_or]; rw [notMem_support_iff]; rw [notMem_support_iff]; rw [not_ne_iff]
-    exact Icc_eq_singleton_iff.symm
+--- 原说明 ---
+Pointwise `Finset.Icc` bundled as a `Finsupp`.
 -/
-def rangeIcc (f g : ι ->₀ α) : ι ->₀ Finset α where
+def rangeIcc (f g : ι →₀ α) : ι →₀ Finset α where
   toFun i := Icc (f i) (g i)
-  support := f.support union g.support
+  support := f.support ∪ g.support
   mem_support_toFun i := by
-    rw [mem_union]; rw [← not_iff_not]; rw [not_or]; rw [notMem_support_iff]; rw [notMem_support_iff]; rw [not_ne_iff]
+    rw [mem_union, ← not_iff_not, not_or, notMem_support_iff, notMem_support_iff, not_ne_iff]
     exact Icc_eq_singleton_iff.symm
-
-/--
-lemma `coe_rangeIcc` / 引理 `coe_rangeIcc`
-
-English:
-lemma coe_rangeIcc
-  given: (f g : ι ->₀ α)
-  statement: rangeIcc f g i = Icc (f i) (g i)
-  proof: rfl
+/-
+**Finsupp.coe_rangeIcc** 是 Mathlib 中的一个引理，位于命名空间 `Finsupp`。
+形式化陈述：coe_rangeIcc (f g : ι ->₀ α) : rangeIcc f g i = Icc (f i) (g i)
+参数：f g : ι ->₀ α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+lemma coe_rangeIcc (f g : ι →₀ α) : rangeIcc f g i = Icc (f i) (g i) := rfl
 
 @[simp]
-
-中文:
-引理 coe_rangeIcc
-  条件: (f g : ι ->₀ α)
-  结论: rangeIcc f g i = 闭区间 (f i) (g i)
-  证明: rfl
-
-@[simp]
+/-
+**Finsupp.rangeIcc_support** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：rangeIcc_support (f g : ι ->₀ α) : (rangeIcc f g).support = f.support unio
+n g.support
+参数：f g : ι ->₀ α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_rangeIcc (f g : ι ->₀ α) : rangeIcc f g i = Icc (f i) (g i) := rfl
-
-@[simp]
-/--
-theorem `rangeIcc_support` / 定理 `rangeIcc_support`
-
-English:
-theorem rangeIcc_support
-  given: (f g : ι ->₀ α)
-  proof: rfl
-
-中文:
-定理 rangeIcc_support
-  条件: (f g : ι ->₀ α)
-  证明: rfl
+theorem rangeIcc_support (f g : ι →₀ α) :
+    (rangeIcc f g).support = f.support ∪ g.support := rfl
+/-
+**Finsupp.mem_rangeIcc_apply_iff** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：mem_rangeIcc_apply_iff : a in f.rangeIcc g i ↔ f i <= a ∧ a <= g i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.mem_Icc`：mem_Icc : x in Icc a b ↔ a <= x ∧ x <= b
 -/
-theorem rangeIcc_support (f g : ι ->₀ α) :
-    (rangeIcc f g).support = f.support union g.support := rfl
-
-/--
-theorem `mem_rangeIcc_apply_iff` / 定理 `mem_rangeIcc_apply_iff`
-
-English:
-theorem mem_rangeIcc_apply_iff
-  statement: a in f.rangeIcc g i ↔ f i <= a ∧ a <= g i
-  proof: mem_Icc
-
-中文:
-定理 mem_rangeIcc_apply_iff
-  结论: a in f.rangeIcc g i ↔ f i <= a ∧ a <= g i
-  证明: mem_Icc
-
-Depends on / 依赖: mem_Icc
--/
-theorem mem_rangeIcc_apply_iff : a in f.rangeIcc g i ↔ f i <= a ∧ a <= g i := mem_Icc
+theorem mem_rangeIcc_apply_iff : a ∈ f.rangeIcc g i ↔ f i ≤ a ∧ a ≤ g i := mem_Icc
 
 end RangeIcc
 
 section PartialOrder
 
 variable [PartialOrder α] [Zero α] [LocallyFiniteOrder α] [DecidableEq ι] [DecidableEq α]
-variable (f g : ι ->₀ α)
+variable (f g : ι →₀ α)
 
-/--
-Instance `instLocallyFiniteOrder` / 实例 `instLocallyFiniteOrder`
-
-English:
-instance instLocallyFiniteOrder
-  signature: : LocallyFiniteOrder (ι ->₀ α)
-  body: LocallyFiniteOrder.ofIcc (ι ->₀ α) (fun f g => (f.support union g.support).finsupp <| f.rangeIcc g)
+/-
+**Finsupp.instLocallyFiniteOrder** 是 Mathlib 中的一个实例，位于命名空间 `Finsupp`。
+形式化陈述：instLocallyFiniteOrder : LocallyFiniteOrder (ι ->₀ α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance instLocallyFiniteOrder : LocallyFiniteOrder (ι →₀ α) :=
+  LocallyFiniteOrder.ofIcc (ι →₀ α) (fun f g => (f.support ∪ g.support).finsupp <| f.rangeIcc g)
     fun f g x => by
       refine
         (mem_finsupp_iff_of_support_subset <| Finset.subset_of_eq <| rangeIcc_support _ _).trans ?_
       simp_rw [mem_rangeIcc_apply_iff]
       exact forall_and
-
-中文:
-实例 instLocallyFiniteOrder
-  签名: : 局部有限序 (ι ->₀ α)
-  定义体: LocallyFiniteOrder.ofIcc (ι ->₀ α) (fun f g => (f.support union g.support).finsupp <| f.rangeIcc g)
-    fun f g x => by
-      refine
-        (mem_finsupp_iff_of_support_subset <| Finset.subset_of_eq <| rangeIcc_support _ _).trans ?_
-      simp_rw [mem_rangeIcc_apply_iff]
-      exact forall_and
-
-Depends on / 依赖: Finset, Finset.subset_of_eq, LocallyFiniteOrder, LocallyFiniteOrder.ofIcc, f.rangeIcc, f.support, finsupp, forall_and, g.support, mem_finsupp_iff_of_support_subset, mem_rangeIcc_apply_iff, rangeIcc, rangeIcc_support, simp_rw, subset_of_eq, support
+/-
+**Finsupp.Icc_eq** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：Icc_eq : Icc f g = (f.support union g.support).finsupp (f.rangeIcc g)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instLocallyFiniteOrder : LocallyFiniteOrder (ι ->₀ α) :=
-  LocallyFiniteOrder.ofIcc (ι ->₀ α) (fun f g => (f.support union g.support).finsupp <| f.rangeIcc g)
-    fun f g x => by
-      refine
-        (mem_finsupp_iff_of_support_subset <| Finset.subset_of_eq <| rangeIcc_support _ _).trans ?_
-      simp_rw [mem_rangeIcc_apply_iff]
-      exact forall_and
-
-/--
-theorem `Icc_eq` / 定理 `Icc_eq`
-
-English:
-theorem Icc_eq
-  statement: Icc f g = (f.support union g.support).finsupp (f.rangeIcc g)
-  proof: rfl
-
-中文:
-定理 Icc_eq
-  结论: 闭区间 f g = (f.support union g.support).finsupp (f.rangeIcc g)
-  证明: rfl
+theorem Icc_eq : Icc f g = (f.support ∪ g.support).finsupp (f.rangeIcc g) := rfl
+/-
+**Finsupp.card_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：card_Icc : #(Icc f g) = ∏ i in f.support union g.support, #(Icc (f i) (g i
+))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.card_finsupp`：card_finsupp (s : Finset ι) (t : ι -> Finset α) : #
+(s.finsupp t) = ∏ i in s, #(t i)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem Icc_eq : Icc f g = (f.support union g.support).finsupp (f.rangeIcc g) := rfl
-
-/--
-theorem `card_Icc` / 定理 `card_Icc`
-
-English:
-theorem card_Icc
-  statement: #(Icc f g) = ∏ i in f.support union g.support, #(Icc (f i) (g i))
-  proof: by
+theorem card_Icc : #(Icc f g) = ∏ i ∈ f.support ∪ g.support, #(Icc (f i) (g i)) := by
   simp_rw [Icc_eq, card_finsupp, coe_rangeIcc]
-
-中文:
-定理 card_Icc
-  结论: #(闭区间 f g) = ∏ i in f.support union g.support, #(闭区间 (f i) (g i))
-  证明: by
-  simp_rw [Icc_eq, card_finsupp, coe_rangeIcc]
-
-Depends on / 依赖: Icc_eq, card_finsupp, coe_rangeIcc, simp_rw
+/-
+**Finsupp.card_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：card_Ico : #(Ico f g) = ∏ i in f.support union g.support, #(Icc (f i) (g i
+)) - 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.card_Ico_eq_card_Icc_sub_one`：card_Ico_eq_card_Icc_sub_one (a b :
+ α) : #(Ico a b) = #(Icc a b) - 1
+· 使用定理 `Finsupp.card_Icc`：card_Icc : #(Icc f g) = ∏ i in f.support union g.suppo
+rt, #(Icc (f i) (g i))
 -/
-theorem card_Icc : #(Icc f g) = ∏ i in f.support union g.support, #(Icc (f i) (g i)) := by
-  simp_rw [Icc_eq, card_finsupp, coe_rangeIcc]
-
-/--
-theorem `card_Ico` / 定理 `card_Ico`
-
-English:
-theorem card_Ico
-  statement: #(Ico f g) = ∏ i in f.support union g.support, #(Icc (f i) (g i)) - 1
-  proof: by
-  rw [card_Ico_eq_card_Icc_sub_one]; rw [card_Icc]
-
-中文:
-定理 card_Ico
-  结论: #(左闭右开区间 f g) = ∏ i in f.support union g.support, #(闭区间 (f i) (g i)) - 1
-  证明: by
-  rw [card_Ico_eq_card_Icc_sub_one]; rw [card_Icc]
-
-Depends on / 依赖: card_Icc, card_Ico_eq_card_Icc_sub_one
+theorem card_Ico : #(Ico f g) = ∏ i ∈ f.support ∪ g.support, #(Icc (f i) (g i)) - 1 := by
+  rw [card_Ico_eq_card_Icc_sub_one, card_Icc]
+/-
+**Finsupp.card_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：card_Ioc : #(Ioc f g) = ∏ i in f.support union g.support, #(Icc (f i) (g i
+)) - 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.card_Ioc_eq_card_Icc_sub_one`：card_Ioc_eq_card_Icc_sub_one (a b :
+ α) : #(Ioc a b) = #(Icc a b) - 1
+· 使用定理 `Finsupp.card_Icc`：card_Icc : #(Icc f g) = ∏ i in f.support union g.suppo
+rt, #(Icc (f i) (g i))
 -/
-theorem card_Ico : #(Ico f g) = ∏ i in f.support union g.support, #(Icc (f i) (g i)) - 1 := by
-  rw [card_Ico_eq_card_Icc_sub_one]; rw [card_Icc]
-
-/--
-theorem `card_Ioc` / 定理 `card_Ioc`
-
-English:
-theorem card_Ioc
-  statement: #(Ioc f g) = ∏ i in f.support union g.support, #(Icc (f i) (g i)) - 1
-  proof: by
-  rw [card_Ioc_eq_card_Icc_sub_one]; rw [card_Icc]
-
-中文:
-定理 card_Ioc
-  结论: #(左开右闭区间 f g) = ∏ i in f.support union g.support, #(闭区间 (f i) (g i)) - 1
-  证明: by
-  rw [card_Ioc_eq_card_Icc_sub_one]; rw [card_Icc]
-
-Depends on / 依赖: card_Icc, card_Ioc_eq_card_Icc_sub_one
+theorem card_Ioc : #(Ioc f g) = ∏ i ∈ f.support ∪ g.support, #(Icc (f i) (g i)) - 1 := by
+  rw [card_Ioc_eq_card_Icc_sub_one, card_Icc]
+/-
+**Finsupp.card_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：card_Ioo : #(Ioo f g) = ∏ i in f.support union g.support, #(Icc (f i) (g i
+)) - 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.card_Ioo_eq_card_Icc_sub_two`：card_Ioo_eq_card_Icc_sub_two (a b :
+ α) : #(Ioo a b) = #(Icc a b) - 2
+· 使用定理 `Finsupp.card_Icc`：card_Icc : #(Icc f g) = ∏ i in f.support union g.suppo
+rt, #(Icc (f i) (g i))
 -/
-theorem card_Ioc : #(Ioc f g) = ∏ i in f.support union g.support, #(Icc (f i) (g i)) - 1 := by
-  rw [card_Ioc_eq_card_Icc_sub_one]; rw [card_Icc]
-
-/--
-theorem `card_Ioo` / 定理 `card_Ioo`
-
-English:
-theorem card_Ioo
-  statement: #(Ioo f g) = ∏ i in f.support union g.support, #(Icc (f i) (g i)) - 2
-  proof: by
-  rw [card_Ioo_eq_card_Icc_sub_two]; rw [card_Icc]
-
-中文:
-定理 card_Ioo
-  结论: #(开区间 f g) = ∏ i in f.support union g.support, #(闭区间 (f i) (g i)) - 2
-  证明: by
-  rw [card_Ioo_eq_card_Icc_sub_two]; rw [card_Icc]
-
-Depends on / 依赖: card_Icc, card_Ioo_eq_card_Icc_sub_two
--/
-theorem card_Ioo : #(Ioo f g) = ∏ i in f.support union g.support, #(Icc (f i) (g i)) - 2 := by
-  rw [card_Ioo_eq_card_Icc_sub_two]; rw [card_Icc]
+theorem card_Ioo : #(Ioo f g) = ∏ i ∈ f.support ∪ g.support, #(Icc (f i) (g i)) - 2 := by
+  rw [card_Ioo_eq_card_Icc_sub_two, card_Icc]
 
 end PartialOrder
 
 section Lattice
-variable [Lattice α] [Zero α] [LocallyFiniteOrder α] (f g : ι ->₀ α)
+variable [Lattice α] [Zero α] [LocallyFiniteOrder α] (f g : ι →₀ α)
 
 open scoped Classical in
-/--
-theorem `card_uIcc` / 定理 `card_uIcc`
-
-English:
-theorem card_uIcc
-  proof: by
-  rw [← support_inf_union_support_sup]; exact card_Icc (_ : ι ->₀ α) _
-
-中文:
-定理 card_uIcc
-  证明: by
-  rw [← support_inf_union_support_sup]; exact card_Icc (_ : ι ->₀ α) _
-
-Depends on / 依赖: card_Icc, support_inf_union_support_sup
+/-
+**Finsupp.card_uIcc** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：card_uIcc : #(uIcc f g) = ∏ i in f.support union g.support, #(uIcc (f i) (
+g i))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Finsupp.support_inf_union_support_sup`：support_inf_union_support_sup : (
+f ⊓ g).support union (f ⊔ g).support = f.support union g.support
+· 使用定理 `Finsupp.card_Icc`：card_Icc : #(Icc f g) = ∏ i in f.support union g.suppo
+rt, #(Icc (f i) (g i))
 -/
 theorem card_uIcc :
-    #(uIcc f g) = ∏ i in f.support union g.support, #(uIcc (f i) (g i)) := by
-  rw [← support_inf_union_support_sup]; exact card_Icc (_ : ι ->₀ α) _
+    #(uIcc f g) = ∏ i ∈ f.support ∪ g.support, #(uIcc (f i) (g i)) := by
+  rw [← support_inf_union_support_sup]; exact card_Icc (_ : ι →₀ α) _
 
 end Lattice
 
@@ -345,48 +242,50 @@ section IsBotZeroClass
 
 variable [AddCommMonoid α] [PartialOrder α] [IsBotZeroClass α]
   [OrderBot α] [LocallyFiniteOrder α]
-variable [DecidableEq ι] [DecidableEq α] (f : ι ->₀ α)
+variable [DecidableEq ι] [DecidableEq α] (f : ι →₀ α)
 
-/--
-theorem `card_Iic` / 定理 `card_Iic`
-
-English:
-theorem card_Iic
-  statement: #(Iic f) = ∏ i in f.support, #(Iic (f i))
-  proof: by
-  simp [Iic_eq_Icc, card_Icc, bot_eq_zero]
-
-中文:
-定理 card_Iic
-  结论: #(左无界右闭区间 f) = ∏ i in f.support, #(左无界右闭区间 (f i))
-  证明: by
-  simp [Iic_eq_Icc, card_Icc, bot_eq_zero]
-
-Depends on / 依赖: Iic_eq_Icc, bot_eq_zero, card_Icc
+/-
+**Finsupp.card_Iic** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：card_Iic : #(Iic f) = ∏ i in f.support, #(Iic (f i))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `bot_eq_zero`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Zero α] 
+[IsBotZeroClass α] [inst_3 : OrderBot α], ⊥ = 0
+· 使用定理 `Finsupp.instIsBotZeroClass`：∀ {ι : Type u_1} {α : Type u_3} [inst : AddC
+ommMonoid α] [inst_1 : PartialOrder α] [IsBotZeroClass α],   IsBotZeroClass (ι →
+₀ α)
+· 使用定理 `Finsupp.card_Icc`：card_Icc : #(Icc f g) = ∏ i in f.support union g.suppo
+rt, #(Icc (f i) (g i))
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `Finset.empty_union`：empty_union (s : Finset α) : ∅ union s = s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem card_Iic : #(Iic f) = ∏ i in f.support, #(Iic (f i)) := by
+theorem card_Iic : #(Iic f) = ∏ i ∈ f.support, #(Iic (f i)) := by
   simp [Iic_eq_Icc, card_Icc, bot_eq_zero]
-
-/--
-theorem `card_Iio` / 定理 `card_Iio`
-
-English:
-theorem card_Iio
-  statement: #(Iio f) = ∏ i in f.support, #(Iic (f i)) - 1
-  proof: by
-  rw [card_Iio_eq_card_Iic_sub_one]; rw [card_Iic]
-
-中文:
-定理 card_Iio
-  结论: #(左无界右开区间 f) = ∏ i in f.support, #(左无界右闭区间 (f i)) - 1
-  证明: by
-  rw [card_Iio_eq_card_Iic_sub_one]; rw [card_Iic]
-
-Depends on / 依赖: card_Iic, card_Iio_eq_card_Iic_sub_one
+/-
+**Finsupp.card_Iio** 是 Mathlib 中的一个定理，位于命名空间 `Finsupp`。
+形式化陈述：card_Iio : #(Iio f) = ∏ i in f.support, #(Iic (f i)) - 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.card_Iio_eq_card_Iic_sub_one`：card_Iio_eq_card_Iic_sub_one (a : α
+) : #(Iio a) = #(Iic a) - 1
+· 使用定理 `Finsupp.card_Iic`：card_Iic : #(Iic f) = ∏ i in f.support, #(Iic (f i))
 -/
-theorem card_Iio : #(Iio f) = ∏ i in f.support, #(Iic (f i)) - 1 := by
-  rw [card_Iio_eq_card_Iic_sub_one]; rw [card_Iic]
+theorem card_Iio : #(Iio f) = ∏ i ∈ f.support, #(Iic (f i)) - 1 := by
+  rw [card_Iio_eq_card_Iic_sub_one, card_Iic]
 
 end IsBotZeroClass
 
 end Finsupp
+

@@ -40,26 +40,20 @@ variable (F G F' G' : C ⥤ D)
 Tensor product of functors `C ⥤ D`, when `D` is monoidal.
 -/
 @[simps]
-/--
-Definition of `tensorObj` / `tensorObj` 的定义
+/-
+**CategoryTheory.Monoidal.FunctorCategory.tensorObj** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Monoidal.FunctorCategory`。
+形式化陈述：tensorObj : C ⥤ D where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tensorObj
-  signature: : C ⥤ D where
-  body: F.obj X otimes G.obj X
-  map f := F.map f otimesₘ G.map f
-
-中文:
-定义 tensorObj
-  签名: : C ⥤ D where
-  定义体: F.obj X otimes G.obj X
-  map f := F.map f otimesₘ G.map f
-
-Depends on / 依赖: E.mem, F.obj, G.obj, equivShrink, otimes
+--- 原说明 ---
+(An auxiliary definition for `functorCategoryMonoidal`.)
+Tensor product of functors `C ⥤ D`, when `D` is monoidal.
 -/
 def tensorObj : C ⥤ D where
-  obj X := F.obj X otimes G.obj X
-  map f := F.map f otimesₘ G.map f
+  obj X := F.obj X ⊗ G.obj X
+  map f := F.map f ⊗ₘ G.map f
 
 variable {F G F' G'}
 variable (α : F ⟶ G) (β : F' ⟶ G')
@@ -69,50 +63,35 @@ set_option backward.defeqAttrib.useBackward true in
 Tensor product of natural transformations into `D`, when `D` is monoidal.
 -/
 @[simps]
-/--
-Definition of `tensorHom` / `tensorHom` 的定义
+/-
+**CategoryTheory.Monoidal.FunctorCategory.tensorHom** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Monoidal.FunctorCategory`。
+形式化陈述：tensorHom : tensorObj F F' ⟶ tensorObj G G' where app X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tensorHom
-  signature: : tensorObj F F' ⟶ tensorObj G G' where
-  body: α.app X otimesₘ β.app X
-  naturality X Y f := by
-    dsimp; rw [tensorHom_comp_tensorHom, α.naturality, β.naturality, ← tensorHom_comp_tensorHom]
-
-中文:
-定义 tensorHom
-  签名: : tensorObj F F' ⟶ tensorObj G G' where
-  定义体: α.app X otimesₘ β.app X
-  naturality X Y f := by
-    dsimp; rw [tensorHom_comp_tensorHom, α.naturality, β.naturality, ← tensorHom_comp_tensorHom]
+--- 原说明 ---
+(An auxiliary definition for `functorCategoryMonoidal`.)
+Tensor product of natural transformations into `D`, when `D` is monoidal.
 -/
 def tensorHom : tensorObj F F' ⟶ tensorObj G G' where
-  app X := α.app X otimesₘ β.app X
+  app X := α.app X ⊗ₘ β.app X
   naturality X Y f := by
     dsimp; rw [tensorHom_comp_tensorHom, α.naturality, β.naturality, ← tensorHom_comp_tensorHom]
 
 /-- (An auxiliary definition for `functorCategoryMonoidal`.) -/
 @[simps]
-/--
-Definition of `whiskerLeft` / `whiskerLeft` 的定义
+/-
+**CategoryTheory.Monoidal.FunctorCategory.whiskerLeft** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Monoidal.FunctorCategory`。
+形式化陈述：whiskerLeft (F) (β : F' ⟶ G') : tensorObj F F' ⟶ tensorObj F G' where app 
+X
+参数：F；β : F' ⟶ G'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerLeft
-  signature: (F) (β : F' ⟶ G')
-  body: F.obj X ◁ β.app X
-  naturality X Y f := by
-    simp only [← id_tensorHom]
-    apply (tensorHom (𝟙 F) β).naturality
-
-中文:
-定义 whiskerLeft
-  签名: (F) (β : F' ⟶ G')
-  定义体: F.obj X ◁ β.app X
-  naturality X Y f := by
-    simp only [← id_tensorHom]
-    apply (tensorHom (𝟙 F) β).naturality
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+(An auxiliary definition for `functorCategoryMonoidal`.)
 -/
 def whiskerLeft (F) (β : F' ⟶ G') : tensorObj F F' ⟶ tensorObj F G' where
   app X := F.obj X ◁ β.app X
@@ -122,24 +101,16 @@ def whiskerLeft (F) (β : F' ⟶ G') : tensorObj F F' ⟶ tensorObj F G' where
 
 /-- (An auxiliary definition for `functorCategoryMonoidal`.) -/
 @[simps]
-/--
-Definition of `whiskerRight` / `whiskerRight` 的定义
+/-
+**CategoryTheory.Monoidal.FunctorCategory.whiskerRight** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Monoidal.FunctorCategory`。
+形式化陈述：whiskerRight (F') : tensorObj F F' ⟶ tensorObj G F' where app X
+参数：F'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerRight
-  signature: (F')
-  body: α.app X ▷ F'.obj X
-  naturality X Y f := by
-    simp only [← tensorHom_id]
-    apply (tensorHom α (𝟙 F')).naturality
-
-中文:
-定义 whiskerRight
-  签名: (F')
-  定义体: α.app X ▷ F'.obj X
-  naturality X Y f := by
-    simp only [← tensorHom_id]
-    apply (tensorHom α (𝟙 F')).naturality
+--- 原说明 ---
+(An auxiliary definition for `functorCategoryMonoidal`.)
 -/
 def whiskerRight (F') : tensorObj F F' ⟶ tensorObj G F' where
   app X := α.app X ▷ F'.obj X
@@ -152,38 +123,22 @@ end FunctorCategory
 open CategoryTheory.Monoidal.FunctorCategory
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `functorCategoryMonoidalStruct` / 实例 `functorCategoryMonoidalStruct`
+/-- When `C` is any category, and `D` is a monoidal category,
+the functor category `C ⥤ D` has a natural pointwise monoidal structure,
+where `(F ⊗ G).obj X = F.obj X ⊗ G.obj X`.
+-/
+/-
+**CategoryTheory.Monoidal.functorCategoryMonoidalStruct** 是 Mathlib 中的一个实例，位于命名空
+间 `CategoryTheory.Monoidal`。
+形式化陈述：functorCategoryMonoidalStruct : MonoidalCategoryStruct (C ⥤ D) where tenso
+rObj F G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance functorCategoryMonoidalStruct
-  signature: : MonoidalCategoryStruct (C ⥤ D) where
-  body: tensorObj F G
-  tensorHom α β := tensorHom α β
-  whiskerLeft F _ _ α := FunctorCategory.whiskerLeft F α
-  whiskerRight α F := FunctorCategory.whiskerRight α F
-  tensorUnit := (CategoryTheory.Functor.const C).obj (𝟙_ D)
-  leftUnitor F := NatIso.ofComponents fun X => fun_ (F.obj X)
-  rightUnitor F := NatIso.ofComponents fun X => ρ_ (F.obj X)
-  associator F G H := NatIso.ofComponents fun X => α_ (F.obj X) (G.obj X) (H.obj X)
-
-@[simp]
-
-中文:
-实例 functorCategoryMonoidalStruct
-  签名: : 幺半群范畴结构 (C ⥤ D) where
-  定义体: tensorObj F G
-  tensorHom α β := tensorHom α β
-  whiskerLeft F _ _ α := FunctorCategory.whiskerLeft F α
-  whiskerRight α F := FunctorCategory.whiskerRight α F
-  tensorUnit := (CategoryTheory.Functor.const C).obj (𝟙_ D)
-  leftUnitor F := NatIso.ofComponents fun X => fun_ (F.obj X)
-  rightUnitor F := NatIso.ofComponents fun X => ρ_ (F.obj X)
-  associator F G H := NatIso.ofComponents fun X => α_ (F.obj X) (G.obj X) (H.obj X)
-
-@[simp]
-
-Depends on / 依赖: E.mem, E.presieve, Presieve, Presieve.ofArrows, convert, eqToHom, exists_eq_ofArrows, le_antisymm, ofArrows, tensorObj
+--- 原说明 ---
+When `C` is any category, and `D` is a monoidal category,
+the functor category `C ⥤ D` has a natural pointwise monoidal structure,
+where `(F ⊗ G).obj X = F.obj X ⊗ G.obj X`.
 -/
 instance functorCategoryMonoidalStruct : MonoidalCategoryStruct (C ⥤ D) where
   tensorObj F G := tensorObj F G
@@ -191,318 +146,188 @@ instance functorCategoryMonoidalStruct : MonoidalCategoryStruct (C ⥤ D) where
   whiskerLeft F _ _ α := FunctorCategory.whiskerLeft F α
   whiskerRight α F := FunctorCategory.whiskerRight α F
   tensorUnit := (CategoryTheory.Functor.const C).obj (𝟙_ D)
-  leftUnitor F := NatIso.ofComponents fun X => fun_ (F.obj X)
+  leftUnitor F := NatIso.ofComponents fun X => λ_ (F.obj X)
   rightUnitor F := NatIso.ofComponents fun X => ρ_ (F.obj X)
   associator F G H := NatIso.ofComponents fun X => α_ (F.obj X) (G.obj X) (H.obj X)
 
 @[simp]
-/--
-theorem `tensorUnit_obj` / 定理 `tensorUnit_obj`
-
-English:
-theorem tensorUnit_obj
-  given: {X}
-  statement: (𝟙_ (C ⥤ D)).obj X = 𝟙_ D
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 tensorUnit_obj
-  条件: {X}
-  结论: (𝟙_ (C ⥤ D)).obj X = 𝟙_ D
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Monoidal.tensorUnit_obj** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Monoidal`。
+形式化陈述：tensorUnit_obj {X} : (𝟙_ (C ⥤ D)).obj X = 𝟙_ D
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem tensorUnit_obj {X} : (𝟙_ (C ⥤ D)).obj X = 𝟙_ D :=
   rfl
 
 @[simp]
-/--
-theorem `tensorUnit_map` / 定理 `tensorUnit_map`
-
-English:
-theorem tensorUnit_map
-  given: {X Y} {f : X ⟶ Y}
-  statement: (𝟙_ (C ⥤ D)).map f = 𝟙 (𝟙_ D)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 tensorUnit_map
-  条件: {X Y} {f : X ⟶ Y}
-  结论: (𝟙_ (C ⥤ D)).map f = 𝟙 (𝟙_ D)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: E.restrictIndexOfSmall.f, HasPullback, Small.Index, Small.restrictFun, infer_instance, restrictFun, restrictIndexOfSmall
+/-
+**CategoryTheory.Monoidal.tensorUnit_map** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Monoidal`。
+形式化陈述：tensorUnit_map {X Y} {f : X ⟶ Y} : (𝟙_ (C ⥤ D)).map f = 𝟙 (𝟙_ D)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem tensorUnit_map {X Y} {f : X ⟶ Y} : (𝟙_ (C ⥤ D)).map f = 𝟙 (𝟙_ D) :=
   rfl
 
 @[simp]
-/--
-theorem `tensorObj_obj` / 定理 `tensorObj_obj`
-
-English:
-theorem tensorObj_obj
-  given: {F G : C ⥤ D} {X}
-  statement: (F otimes G).obj X = F.obj X otimes G.obj X
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 tensorObj_obj
-  条件: {F G : C ⥤ D} {X}
-  结论: (F otimes G).obj X = F.obj X otimes G.obj X
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Monoidal.tensorObj_obj** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Monoidal`。
+形式化陈述：tensorObj_obj {F G : C ⥤ D} {X} : (F otimes G).obj X = F.obj X otimes G.ob
+j X
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem tensorObj_obj {F G : C ⥤ D} {X} : (F otimes G).obj X = F.obj X otimes G.obj X :=
+theorem tensorObj_obj {F G : C ⥤ D} {X} : (F ⊗ G).obj X = F.obj X ⊗ G.obj X :=
   rfl
 
 @[simp]
-/--
-theorem `tensorObj_map` / 定理 `tensorObj_map`
-
-English:
-theorem tensorObj_map
-  given: {F G : C ⥤ D} {X Y} {f : X ⟶ Y}
-  statement: (F otimes G).map f = F.map f otimesₘ G.map f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 tensorObj_map
-  条件: {F G : C ⥤ D} {X Y} {f : X ⟶ Y}
-  结论: (F otimes G).map f = F.map f otimesₘ G.map f
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Monoidal.tensorObj_map** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Monoidal`。
+形式化陈述：tensorObj_map {F G : C ⥤ D} {X Y} {f : X ⟶ Y} : (F otimes G).map f = F.map
+ f otimesₘ G.map f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem tensorObj_map {F G : C ⥤ D} {X Y} {f : X ⟶ Y} : (F otimes G).map f = F.map f otimesₘ G.map f :=
+theorem tensorObj_map {F G : C ⥤ D} {X Y} {f : X ⟶ Y} : (F ⊗ G).map f = F.map f ⊗ₘ G.map f :=
   rfl
 
 @[simp]
-/--
-theorem `tensorHom_app` / 定理 `tensorHom_app`
-
-English:
-theorem tensorHom_app
-  given: {F G F' G' : C ⥤ D} {α : F ⟶ G} {β : F' ⟶ G'} {X}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 tensorHom_app
-  条件: {F G F' G' : C ⥤ D} {α : F ⟶ G} {β : F' ⟶ G'} {X}
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Monoidal.tensorHom_app** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Monoidal`。
+形式化陈述：tensorHom_app {F G F' G' : C ⥤ D} {α : F ⟶ G} {β : F' ⟶ G'} {X} : (α otime
+sₘ β).app X = α.app X otimesₘ β.app X
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem tensorHom_app {F G F' G' : C ⥤ D} {α : F ⟶ G} {β : F' ⟶ G'} {X} :
-    (α otimesₘ β).app X = α.app X otimesₘ β.app X :=
+    (α ⊗ₘ β).app X = α.app X ⊗ₘ β.app X :=
   rfl
 
 @[simp]
-/--
-theorem `whiskerLeft_app` / 定理 `whiskerLeft_app`
-
-English:
-theorem whiskerLeft_app
-  given: {F F' G' : C ⥤ D} {β : F' ⟶ G'} {X}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 whiskerLeft_app
-  条件: {F F' G' : C ⥤ D} {β : F' ⟶ G'} {X}
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: Small.zeroHypercoverSmall, ZeroHypercover, ZeroHypercover.Small, ZeroHypercover.Small.restrictFun, ZeroHypercover.restrictIndexOfSmall, restrictFun, restrictIndexOfSmall, zeroHypercoverSmall
+/-
+**CategoryTheory.Monoidal.whiskerLeft_app** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Monoidal`。
+形式化陈述：whiskerLeft_app {F F' G' : C ⥤ D} {β : F' ⟶ G'} {X} : (F ◁ β).app X = F.ob
+j X ◁ β.app X
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem whiskerLeft_app {F F' G' : C ⥤ D} {β : F' ⟶ G'} {X} :
     (F ◁ β).app X = F.obj X ◁ β.app X :=
   rfl
 
 @[simp]
-/--
-theorem `whiskerRight_app` / 定理 `whiskerRight_app`
-
-English:
-theorem whiskerRight_app
-  given: {F G F' : C ⥤ D} {α : F ⟶ G} {X}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 whiskerRight_app
-  条件: {F G F' : C ⥤ D} {α : F ⟶ G} {X}
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: E.map, ZeroHypercover, ZeroHypercover.Small.restrictFun, le_rfl, restrictFun, restrictIndexOfSmall, restrictIndexOfSmall.I, restrictIndexOfSmall.mem
+/-
+**CategoryTheory.Monoidal.whiskerRight_app** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Monoidal`。
+形式化陈述：whiskerRight_app {F G F' : C ⥤ D} {α : F ⟶ G} {X} : (α ▷ F').app X = α.app
+ X ▷ F'.obj X
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem whiskerRight_app {F G F' : C ⥤ D} {α : F ⟶ G} {X} :
     (α ▷ F').app X = α.app X ▷ F'.obj X :=
   rfl
 
 @[simp]
-/--
-theorem `leftUnitor_hom_app` / 定理 `leftUnitor_hom_app`
-
-English:
-theorem leftUnitor_hom_app
-  given: {F : C ⥤ D} {X}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 leftUnitor_hom_app
-  条件: {F : C ⥤ D} {X}
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Monoidal.leftUnitor_hom_app** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Monoidal`。
+形式化陈述：leftUnitor_hom_app {F : C ⥤ D} {X} : ((fun_ F).hom : 𝟙_ _ otimes F ⟶ F).ap
+p X = (fun_ (F.obj X)).hom
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem leftUnitor_hom_app {F : C ⥤ D} {X} :
-    ((fun_ F).hom : 𝟙_ _ otimes F ⟶ F).app X = (fun_ (F.obj X)).hom :=
+    ((λ_ F).hom : 𝟙_ _ ⊗ F ⟶ F).app X = (λ_ (F.obj X)).hom :=
   rfl
 
 @[simp]
-/--
-theorem `leftUnitor_inv_app` / 定理 `leftUnitor_inv_app`
-
-English:
-theorem leftUnitor_inv_app
-  given: {F : C ⥤ D} {X}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 leftUnitor_inv_app
-  条件: {F : C ⥤ D} {X}
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Monoidal.leftUnitor_inv_app** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Monoidal`。
+形式化陈述：leftUnitor_inv_app {F : C ⥤ D} {X} : ((fun_ F).inv : F ⟶ 𝟙_ _ otimes F).ap
+p X = (fun_ (F.obj X)).inv
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem leftUnitor_inv_app {F : C ⥤ D} {X} :
-    ((fun_ F).inv : F ⟶ 𝟙_ _ otimes F).app X = (fun_ (F.obj X)).inv :=
+    ((λ_ F).inv : F ⟶ 𝟙_ _ ⊗ F).app X = (λ_ (F.obj X)).inv :=
   rfl
 
 @[simp]
-/--
-theorem `rightUnitor_hom_app` / 定理 `rightUnitor_hom_app`
-
-English:
-theorem rightUnitor_hom_app
-  given: {F : C ⥤ D} {X}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 rightUnitor_hom_app
-  条件: {F : C ⥤ D} {X}
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Monoidal.rightUnitor_hom_app** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Monoidal`。
+形式化陈述：rightUnitor_hom_app {F : C ⥤ D} {X} : ((ρ_ F).hom : F otimes 𝟙_ _ ⟶ F).app
+ X = (ρ_ (F.obj X)).hom
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem rightUnitor_hom_app {F : C ⥤ D} {X} :
-    ((ρ_ F).hom : F otimes 𝟙_ _ ⟶ F).app X = (ρ_ (F.obj X)).hom :=
+    ((ρ_ F).hom : F ⊗ 𝟙_ _ ⟶ F).app X = (ρ_ (F.obj X)).hom :=
   rfl
 
 @[simp]
-/--
-theorem `rightUnitor_inv_app` / 定理 `rightUnitor_inv_app`
-
-English:
-theorem rightUnitor_inv_app
-  given: {F : C ⥤ D} {X}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 rightUnitor_inv_app
-  条件: {F : C ⥤ D} {X}
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Monoidal.rightUnitor_inv_app** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Monoidal`。
+形式化陈述：rightUnitor_inv_app {F : C ⥤ D} {X} : ((ρ_ F).inv : F ⟶ F otimes 𝟙_ _).app
+ X = (ρ_ (F.obj X)).inv
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem rightUnitor_inv_app {F : C ⥤ D} {X} :
-    ((ρ_ F).inv : F ⟶ F otimes 𝟙_ _).app X = (ρ_ (F.obj X)).inv :=
+    ((ρ_ F).inv : F ⟶ F ⊗ 𝟙_ _).app X = (ρ_ (F.obj X)).inv :=
   rfl
 
 @[simp]
-/--
-theorem `associator_hom_app` / 定理 `associator_hom_app`
-
-English:
-theorem associator_hom_app
-  given: {F G H : C ⥤ D} {X}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 associator_hom_app
-  条件: {F G H : C ⥤ D} {X}
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Monoidal.associator_hom_app** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Monoidal`。
+形式化陈述：associator_hom_app {F G H : C ⥤ D} {X} : ((α_ F G H).hom : (F otimes G) ot
+imes H ⟶ F otimes G otimes H).app X = (α_ (F.obj X) (G.obj X) (H.obj X)).hom
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem associator_hom_app {F G H : C ⥤ D} {X} :
-    ((α_ F G H).hom : (F otimes G) otimes H ⟶ F otimes G otimes H).app X = (α_ (F.obj X) (G.obj X) (H.obj X)).hom :=
+    ((α_ F G H).hom : (F ⊗ G) ⊗ H ⟶ F ⊗ G ⊗ H).app X = (α_ (F.obj X) (G.obj X) (H.obj X)).hom :=
   rfl
 
 @[simp]
-/--
-theorem `associator_inv_app` / 定理 `associator_inv_app`
-
-English:
-theorem associator_inv_app
-  given: {F G H : C ⥤ D} {X}
-  proof: rfl
-
-中文:
-定理 associator_inv_app
-  条件: {F G H : C ⥤ D} {X}
-  证明: rfl
+/-
+**CategoryTheory.Monoidal.associator_inv_app** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Monoidal`。
+形式化陈述：associator_inv_app {F G H : C ⥤ D} {X} : ((α_ F G H).inv : F otimes G otim
+es H ⟶ (F otimes G) otimes H).app X = (α_ (F.obj X) (G.obj X) (H.obj X)).inv
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem associator_inv_app {F G H : C ⥤ D} {X} :
-    ((α_ F G H).inv : F otimes G otimes H ⟶ (F otimes G) otimes H).app X = (α_ (F.obj X) (G.obj X) (H.obj X)).inv :=
+    ((α_ F G H).inv : F ⊗ G ⊗ H ⟶ (F ⊗ G) ⊗ H).app X = (α_ (F.obj X) (G.obj X) (H.obj X)).inv :=
   rfl
 
-/--
-Instance `functorCategoryMonoidal` / 实例 `functorCategoryMonoidal`
+/-- When `C` is any category, and `D` is a monoidal category,
+the functor category `C ⥤ D` has a natural pointwise monoidal structure,
+where `(F ⊗ G).obj X = F.obj X ⊗ G.obj X`.
+-/
+/-
+**CategoryTheory.Monoidal.functorCategoryMonoidal** 是 Mathlib 中的一个实例，位于命名空间 `Cat
+egoryTheory.Monoidal`。
+形式化陈述：functorCategoryMonoidal : MonoidalCategory (C ⥤ D) where tensorHom_def
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance functorCategoryMonoidal
-  signature: : MonoidalCategory (C ⥤ D) where
-  body: by intros; ext; simp [tensorHom_def]
-  pentagon F G H K := by ext X; dsimp; rw [pentagon]
-
-中文:
-实例 functorCategoryMonoidal
-  签名: : 幺半群范畴 (C ⥤ D) where
-  定义体: by intros; ext; simp [tensorHom_def]
-  pentagon F G H K := by ext X; dsimp; rw [pentagon]
-
-Depends on / 依赖: intros, pentagon, tensorHom_def
+--- 原说明 ---
+When `C` is any category, and `D` is a monoidal category,
+the functor category `C ⥤ D` has a natural pointwise monoidal structure,
+where `(F ⊗ G).obj X = F.obj X ⊗ G.obj X`.
 -/
 instance functorCategoryMonoidal : MonoidalCategory (C ⥤ D) where
   tensorHom_def := by intros; ext; simp [tensorHom_def]
@@ -515,24 +340,21 @@ open CategoryTheory.BraidedCategory
 variable [BraidedCategory.{v₂} D]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `functorCategoryBraided` / 实例 `functorCategoryBraided`
+/-- When `C` is any category, and `D` is a braided monoidal category,
+the natural pointwise monoidal structure on the functor category `C ⥤ D`
+is also braided.
+-/
+/-
+**CategoryTheory.Monoidal.functorCategoryBraided** 是 Mathlib 中的一个实例，位于命名空间 `Cate
+goryTheory.Monoidal`。
+形式化陈述：functorCategoryBraided : BraidedCategory (C ⥤ D) where braiding F G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance functorCategoryBraided
-  signature: : BraidedCategory (C ⥤ D) where
-  body: NatIso.ofComponents fun _ => β_ _ _
-  hexagon_forward F G H := by ext X; apply hexagon_forward
-  hexagon_reverse F G H := by ext X; apply hexagon_reverse
-
-中文:
-实例 functorCategoryBraided
-  签名: : 辫范畴 (C ⥤ D) where
-  定义体: NatIso.ofComponents fun _ => β_ _ _
-  hexagon_forward F G H := by ext X; apply hexagon_forward
-  hexagon_reverse F G H := by ext X; apply hexagon_reverse
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+When `C` is any category, and `D` is a braided monoidal category,
+the natural pointwise monoidal structure on the functor category `C ⥤ D`
+is also braided.
 -/
 instance functorCategoryBraided : BraidedCategory (C ⥤ D) where
   braiding F G := NatIso.ofComponents fun _ => β_ _ _
@@ -540,6 +362,10 @@ instance functorCategoryBraided : BraidedCategory (C ⥤ D) where
   hexagon_reverse F G H := by ext X; apply hexagon_reverse
 
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**CategoryTheory.Monoidal.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Monoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : BraidedCategory (C ⥤ D) :=
   CategoryTheory.Monoidal.functorCategoryBraided
 
@@ -552,20 +378,21 @@ open CategoryTheory.SymmetricCategory
 variable [SymmetricCategory.{v₂} D]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `functorCategorySymmetric` / 实例 `functorCategorySymmetric`
+/-- When `C` is any category, and `D` is a symmetric monoidal category,
+the natural pointwise monoidal structure on the functor category `C ⥤ D`
+is also symmetric.
+-/
+/-
+**CategoryTheory.Monoidal.functorCategorySymmetric** 是 Mathlib 中的一个实例，位于命名空间 `Ca
+tegoryTheory.Monoidal`。
+形式化陈述：functorCategorySymmetric : SymmetricCategory (C ⥤ D) where symmetry F G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance functorCategorySymmetric
-  signature: : SymmetricCategory (C ⥤ D) where
-  body: by ext X; apply symmetry
-
-中文:
-实例 functorCategorySymmetric
-  签名: : 对称范畴 (C ⥤ D) where
-  定义体: by ext X; apply symmetry
-
-Depends on / 依赖: symmetry
+--- 原说明 ---
+When `C` is any category, and `D` is a symmetric monoidal category,
+the natural pointwise monoidal structure on the functor category `C ⥤ D`
+is also symmetric.
 -/
 instance functorCategorySymmetric : SymmetricCategory (C ⥤ D) where
   symmetry F G := by ext X; apply symmetry
@@ -576,20 +403,19 @@ end Monoidal
 
 set_option backward.defeqAttrib.useBackward true in
 @[simps]
-/--
-Instance `Functor.LaxMonoidal.whiskeringRight` / 实例 `Functor.LaxMonoidal.whiskeringRight`
-
-English:
-instance Functor.LaxMonoidal.whiskeringRight
-  body: { app X := Functor.LaxMonoidal.ε L }
-  μ F G := { app X := Functor.LaxMonoidal.μ L (F.obj X) (G.obj X) }
-
-中文:
-实例 函子.松弛幺半群.whiskeringRight
-  定义体: { app X := Functor.LaxMonoidal.ε L }
-  μ F G := { app X := Functor.LaxMonoidal.μ L (F.obj X) (G.obj X) }
-
-Depends on / 依赖: Functor, Functor.LaxMonoidal, LaxMonoidal
+/-
+**CategoryTheory.Functor.LaxMonoidal.whiskeringRight** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Functor.LaxMonoidal`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     {E : Type u_3} →       [inst : Cat
+egoryTheory.Category.{v_1, u_1} C] →         [inst_1 : CategoryTheory.Category.{
+v_2, u_2} D] →           [inst_2 : CategoryTheory.Category.{v_3, u_3} E] →      
+       [inst_3 : CategoryTheory.MonoidalCategory D] →               [inst_4 : Ca
+tegoryTheory.MonoidalCategory E] →                 (L : CategoryTheory.Functor D
+ E) →                   [L.LaxMonoidal] → ((CategoryTheory.Functor.whiskeringRig
+ht C D E).obj L).LaxMonoidal
+参数：L : CategoryTheory.Functor D E；(CategoryTheory.Functor.whiskeringRight C D E)
+.obj L。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Functor.LaxMonoidal.whiskeringRight
     {C D E : Type*} [Category* C] [Category* D] [Category* E] [MonoidalCategory D]
@@ -600,24 +426,19 @@ instance Functor.LaxMonoidal.whiskeringRight
 
 set_option backward.defeqAttrib.useBackward true in
 @[simps]
-/--
-Instance `Functor.OplaxMonoidal.whiskeringRight` / 实例 `Functor.OplaxMonoidal.whiskeringRight`
-
-English:
-instance Functor.OplaxMonoidal.whiskeringRight
-  body: { app X := Functor.OplaxMonoidal.η L }
-  δ F G := { app X := Functor.OplaxMonoidal.δ L (F.obj X) (G.obj X) }
-  oplax_left_unitality := by aesop
-  oplax_right_unitality := by aesop
-
-中文:
-实例 函子.反松弛幺半群.whiskeringRight
-  定义体: { app X := Functor.OplaxMonoidal.η L }
-  δ F G := { app X := Functor.OplaxMonoidal.δ L (F.obj X) (G.obj X) }
-  oplax_left_unitality := by aesop
-  oplax_right_unitality := by aesop
-
-Depends on / 依赖: Functor, Functor.OplaxMonoidal, OplaxMonoidal
+/-
+**CategoryTheory.Functor.OplaxMonoidal.whiskeringRight** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Functor.OplaxMonoidal`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     {E : Type u_3} →       [inst : Cat
+egoryTheory.Category.{v_1, u_1} C] →         [inst_1 : CategoryTheory.Category.{
+v_2, u_2} D] →           [inst_2 : CategoryTheory.Category.{v_3, u_3} E] →      
+       [inst_3 : CategoryTheory.MonoidalCategory D] →               [inst_4 : Ca
+tegoryTheory.MonoidalCategory E] →                 (L : CategoryTheory.Functor D
+ E) →                   [L.OplaxMonoidal] → ((CategoryTheory.Functor.whiskeringR
+ight C D E).obj L).OplaxMonoidal
+参数：L : CategoryTheory.Functor D E；(CategoryTheory.Functor.whiskeringRight C D E)
+.obj L。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Functor.OplaxMonoidal.whiskeringRight
     {C D E : Type*} [Category* C] [Category* D] [Category* E] [MonoidalCategory D]
@@ -630,6 +451,10 @@ instance Functor.OplaxMonoidal.whiskeringRight
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {C D E : Type*} [Category* C] [Category* D] [Category* E] [MonoidalCategory D]
     [MonoidalCategory E] (L : D ⥤ E) [L.Monoidal] :
     ((Functor.whiskeringRight C D E).obj L).Monoidal where
@@ -637,34 +462,43 @@ instance {C D E : Type*} [Category* C] [Category* D] [Category* E] [MonoidalCate
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 @[simps!]
-/--
-Instance `Functor.Monoidal.whiskeringLeft` / 实例 `Functor.Monoidal.whiskeringLeft`
-
-English:
-instance Functor.Monoidal.whiskeringLeft
-  body: CoreMonoidal.toMonoidal { εIso := Iso.refl _, μIso _ _ := Iso.refl _ }
-
-中文:
-实例 函子.幺半群.whiskeringLeft
-  定义体: CoreMonoidal.toMonoidal { εIso := Iso.refl _, μIso _ _ := Iso.refl _ }
-
-Depends on / 依赖: CoreMonoidal, CoreMonoidal.toMonoidal, Iso.refl, toMonoidal
+/-
+**CategoryTheory.Functor.Monoidal.whiskeringLeft** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Functor.Monoidal`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         (E : Typ
+e u_1) →           [inst_2 : CategoryTheory.Category.{v_1, u_1} E] →            
+ [inst_3 : CategoryTheory.MonoidalCategory E] →               (F : CategoryTheor
+y.Functor C D) → ((CategoryTheory.Functor.whiskeringLeft C D E).obj F).Monoidal
+参数：E : Type u_1；F : CategoryTheory.Functor C D；(CategoryTheory.Functor.whiskerin
+gLeft C D E).obj F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Functor.Monoidal.whiskeringLeft
     (E : Type*) [Category* E] [MonoidalCategory E] (F : C ⥤ D) :
     ((whiskeringLeft _ _ E).obj F).Monoidal :=
   CoreMonoidal.toMonoidal { εIso := Iso.refl _, μIso _ _ := Iso.refl _ }
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (E : Type*) [Category* E] [MonoidalCategory E] (e : C ≌ D) :
     (e.congrLeft (E := E)).functor.Monoidal :=
   inferInstanceAs ((Functor.whiskeringLeft _ _ E).obj e.inverse).Monoidal
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (E : Type*) [Category* E] [MonoidalCategory E] (e : C ≌ D) :
     (e.congrLeft (E := E)).inverse.Monoidal :=
   inferInstanceAs ((Functor.whiskeringLeft _ _ E).obj e.functor).Monoidal
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (E : Type*) [Category* E] [MonoidalCategory E] (e : C ≌ D) :
     (e.congrLeft (E := E)).IsMonoidal where
   leftAdjoint_μ X Y := by
@@ -672,3 +506,4 @@ instance (E : Type*) [Category* E] [MonoidalCategory E] (e : C ≌ D) :
     simp [← Functor.map_comp]
 
 end CategoryTheory
+

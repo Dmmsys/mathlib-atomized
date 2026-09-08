@@ -25,19 +25,36 @@ namespace Mathlib.FindSyntax
 open Lean Elab Command
 
 /--
-Definition of `extractSymbols` / `extractSymbols` 的定义
+`extractSymbols descr acc` takes as input a `ParserDescr`iptor `descr` and an accumulator array
+`acc`. It accumulates all symbols in `descr` corresponding to `Lean.ParserDescr.symbol`,
+`Lean.ParserDescr.nonReservedSymbol` or `Lean.ParserDescr.unicodeSymbol`.
 
-English:
-definition extractSymbols
-  signature: : ParserDescr -> Array String -> Array String
-
-中文:
-定义 extractSymbols
-  签名: : ParserDescr -> 数组 String -> 数组 String
-
-Depends on / 依赖: ParserDescr, TrailingParserDescr
+The output array serves as a way of regenerating what the syntax tree of the input parser is.
 -/
-def extractSymbols : ParserDescr -> Array String -> Array String
+/-
+**Mathlib.FindSyntax.extractSymbols** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.FindSynta
+x`。
+形式化陈述：extractSymbols : ParserDescr -> Array String -> Array String | .symbol s, 
+acc | .nonReservedSymbol s _, acc | .unicodeSymbol s _ _, acc => acc.push s | .p
+arser _, acc | .const _, acc | .cat _ _, acc => acc | .node _ _ descr, acc | .tr
+ailingNode _ _ _ descr, acc | .nodeWithAntiquot _ _ descr, acc | .unary _ descr,
+ acc => extractSymbols descr acc | .binary _ l r, acc => extractSymbols r (extra
+ctSymbols l acc) | .sepBy p _ psep _, acc | .sepBy1 p _ psep _, acc => extractSy
+mbols psep (extractSymbols
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`extractSymbols descr acc` takes as input a `ParserDescr`iptor `descr` and an ac
+cumulator array
+`acc`. It accumulates all symbols in `descr` corresponding to `Lean.ParserDescr.
+symbol`,
+`Lean.ParserDescr.nonReservedSymbol` or `Lean.ParserDescr.unicodeSymbol`.
+
+The output array serves as a way of regenerating what the syntax tree of the inp
+ut parser is.
+-/
+def extractSymbols : ParserDescr → Array String → Array String
   | .symbol s, acc | .nonReservedSymbol s _, acc | .unicodeSymbol s _ _, acc =>
     acc.push s
   | .parser _, acc | .const _, acc | .cat _ _, acc =>
@@ -81,20 +98,21 @@ elab "#find_syntax " id:str d:(&" approx")? : command => do
     let rem : String := " _ ".intercalate ar
     -- If either the name of the parser or the regenerated syntax stub contains the input string,
     -- then we include an entry into the final message.
-    if 2 <= (nm.toString.splitOn id.getString).length || 2 <= (rem.splitOn id.getString).length then
+    if 2 ≤ (nm.toString.splitOn id.getString).length || 2 ≤ (rem.splitOn id.getString).length then
       let mod := (← findModuleOf? nm).getD (← getMainModule)
-match_results := match_results.insert mod (match_results.getD mod #[]).push
+      match_results := match_results.insert mod <| (match_results.getD mod #[]).push
         (nm, rem.trimAscii.copy)
   -- We sort the messages to produce a more stable output.
   let sorted_results := match_results.toArray.qsort (·.1.lt ·.1)
   let sorted_results := sorted_results.map fun (mod, msgs) => (mod, msgs.qsort (·.1.lt ·.1))
   let mods := (sorted_results.toList).map fun (mod, msgs) =>
     m!"In `{mod}`:" ++ (MessageData.nest 2 <|
-m!"".joinSep msgs.toList.map fun (decl, patt) =>
+      m!"".joinSep <| msgs.toList.map fun (decl, patt) =>
         m!"\n{MessageData.ofConstName decl}: '{patt}'")
   let uses := (sorted_results.toList.map fun (_, msgs) => msgs.size).sum
   let numSymbs := if d.isSome then s!"over {(symbs.size / 100) * 100}" else s!"{symbs.size}"
   let head := m!"Found {uses} use{if uses == 1 then "" else "s"} \
                 among {numSymbs} syntax declarations"
-logInfo head ++ m!"\n" ++ m!"\n\n".joinSep mods
+  logInfo <| head ++ m!"\n" ++ m!"\n\n".joinSep mods
 end Mathlib.FindSyntax
+

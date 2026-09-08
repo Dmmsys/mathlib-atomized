@@ -24,52 +24,29 @@ universe u v w
 variable {I : Type u}
 
 -- The indexing type
-variable {f : I -> Type v}
+variable {f : I → Type v}
 
 namespace Pi
 
-/--
-theorem `_root_.IsSMulRegular.pi` / 定理 `_root_.IsSMulRegular.pi`
-
-English:
-theorem _root_.IsSMulRegular.pi
-  statement: {α : Type*} [forall i, SMul α <| f i] {k : α}
-  proof: fun _ _ h =>
-  funext fun i => hk i (congr_fun h i :)
-
-中文:
-定理 _root_.IsSMulRegular.pi
-  结论: {α : 类型} [对任意 i, 标量乘法 α <| f i] {k : α}
-  证明: fun _ _ h =>
-  funext fun i => hk i (congr_fun h i :)
+/-
+**Pi._root_.IsSMulRegular.pi** 是 Mathlib 中的一个定理，位于命名空间 `Pi`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.IsSMulRegular.pi {α : Type*} [forall i, SMul α <| f i] {k : α}
-    (hk : forall i, IsSMulRegular (f i) k) : IsSMulRegular (forall i, f i) k := fun _ _ h =>
+theorem _root_.IsSMulRegular.pi {α : Type*} [∀ i, SMul α <| f i] {k : α}
+    (hk : ∀ i, IsSMulRegular (f i) k) : IsSMulRegular (∀ i, f i) k := fun _ _ h =>
   funext fun i => hk i (congr_fun h i :)
 
 variable (I f)
-
-/--
-Instance `module` / 实例 `module`
-
-English:
-instance module
-  signature: (α) {r : Semiring α} {m : forall i, AddCommMonoid <| f i} [forall i, Module α <| f i]
-  body: { Pi.distribMulAction _ with
-    add_smul := fun _ _ _ => funext fun _ => add_smul _ _ _
-    zero_smul := fun _ => funext fun _ => zero_smul α _ }
-
-中文:
-实例 module
-  签名: (α) {r : 半环 α} {m : 对任意 i, 加法交换幺半群 <| f i} [对任意 i, 模 α <| f i]
-  定义体: { Pi.distribMulAction _ with
-    add_smul := fun _ _ _ => funext fun _ => add_smul _ _ _
-    zero_smul := fun _ => funext fun _ => zero_smul α _ }
-
-Depends on / 依赖: Pi.distribMulAction, add_smul, distribMulAction, zero_smul
+/-
+**Pi.module** 是 Mathlib 中的一个实例，位于命名空间 `Pi`。
+形式化陈述：module (α) {r : Semiring α} {m : forall i, AddCommMonoid <| f i} [forall i
+, Module α <| f i] : @Module α (forall i : I, f i) r (@Pi.addCommMonoid I f m)
+参数：α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance module (α) {r : Semiring α} {m : forall i, AddCommMonoid <| f i} [forall i, Module α <| f i] :
-    @Module α (forall i : I, f i) r (@Pi.addCommMonoid I f m) :=
+instance module (α) {r : Semiring α} {m : ∀ i, AddCommMonoid <| f i} [∀ i, Module α <| f i] :
+    @Module α (∀ i : I, f i) r (@Pi.addCommMonoid I f m) :=
   { Pi.distribMulAction _ with
     add_smul := fun _ _ _ => funext fun _ => add_smul _ _ _
     zero_smul := fun _ => funext fun _ => zero_smul α _ }
@@ -81,58 +58,35 @@ example (β X : Type*) [NormedAddCommGroup β] [NormedSpace ℝ β] : Module ℝ
 ```
 See: https://leanprover.zulipchat.com/#narrow/stream/113488-general/topic/Typeclass.20resolution.20under.20binders/near/281296989
 -/
-/--
-Instance `Function.module` / 实例 `Function.module`
+/-- A special case of `Pi.module` for non-dependent types. Lean struggles to elaborate
+definitions elsewhere in the library without this. -/
+/-
+**Pi.Function.module** 是 Mathlib 中的一个定义，位于命名空间 `Pi.Function`。
+形式化陈述：(I : Type u) →   (α : Type u_1) →     (β : Type u_2) → [inst : Semiring α]
+ → [inst_1 : AddCommMonoid β] → [_root_.Module α β] → _root_.Module α (I → β)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Function.module
-  signature: (α β : Type*) [Semiring α] [AddCommMonoid β] [Module α β]
-  body: Pi.module _ _ _
-
-中文:
-实例 函数.module
-  签名: (α β : 类型) [半环 α] [加法交换幺半群 β] [模 α β]
-  定义体: Pi.module _ _ _
-
-Depends on / 依赖: Pi.module, module
+--- 原说明 ---
+A special case of `Pi.module` for non-dependent types. Lean struggles to elabora
+te
+definitions elsewhere in the library without this.
 -/
 instance Function.module (α β : Type*) [Semiring α] [AddCommMonoid β] [Module α β] :
-    Module α (I -> β) :=
+    Module α (I → β) :=
   Pi.module _ _ _
 
 variable {I f}
-
-/--
-Instance `module'` / 实例 `module'`
-
-English:
-instance module'
-  signature: {g : I -> Type*} {r : forall i, Semiring (f i)} {m : forall i, AddCommMonoid (g i)}
-  body: by
-    intros
-    ext1
-    apply add_smul
-  zero_smul := by
-    intros
-    ext1
-    rw [zero_smul]
-
-中文:
-实例 module'
-  签名: {g : I -> 类型} {r : 对任意 i, 半环 (f i)} {m : 对任意 i, 加法交换幺半群 (g i)}
-  定义体: by
-    intros
-    ext1
-    apply add_smul
-  zero_smul := by
-    intros
-    ext1
-    rw [zero_smul]
-
-Depends on / 依赖: add_smul, intros, zero_smul
+/-
+**Pi.module'** 是 Mathlib 中的一个实例，位于命名空间 `Pi`。
+形式化陈述：module' {g : I -> Type*} {r : forall i, Semiring (f i)} {m : forall i, Add
+CommMonoid (g i)} [forall i, Module (f i) (g i)] : Module (forall i, f i) (foral
+l i, g i) where add_smul
+参数：f i；g i；f i；g i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance module' {g : I -> Type*} {r : forall i, Semiring (f i)} {m : forall i, AddCommMonoid (g i)}
-    [forall i, Module (f i) (g i)] : Module (forall i, f i) (forall i, g i) where
+instance module' {g : I → Type*} {r : ∀ i, Semiring (f i)} {m : ∀ i, AddCommMonoid (g i)}
+    [∀ i, Module (f i) (g i)] : Module (∀ i, f i) (∀ i, g i) where
   add_smul := by
     intros
     ext1
@@ -143,3 +97,4 @@ instance module' {g : I -> Type*} {r : forall i, Semiring (f i)} {m : forall i, 
     rw [zero_smul]
 
 end Pi
+

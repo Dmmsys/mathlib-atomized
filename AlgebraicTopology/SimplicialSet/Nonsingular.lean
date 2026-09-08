@@ -43,72 +43,55 @@ variable (X) in
 nondegenerate simplex `x` (of dimension `n`), the corresponding
 morphism `Δ[n] ⟶ X` is a monomorphism. -/
 @[kerodon 02MG]
-/--
-Definition of `Nonsingular` / `Nonsingular` 的定义
+/-
+**SSet.Nonsingular** 是 Mathlib 中的一个归纳类型，位于命名空间 `SSet`。
+形式化陈述：_root_.SSet → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Nonsingular
-  parameters: where
-  axioms and operations (1):
-    - mono({n : Nat} (x : X.nonDegenerate n)) : Mono (yonedaEquiv.symm x.val)
-
-中文:
-类 非奇异
-  参数: where
-  公理与运算 (1 个):
-    - mono({n : 自然数} (x : X.nonDegenerate n)) : 单态射 (yonedaEquiv.symm x.val)
+--- 原说明 ---
+A simplicial set `X` is nonsingular if for any
+nondegenerate simplex `x` (of dimension `n`), the corresponding
+morphism `Δ[n] ⟶ X` is a monomorphism.
 -/
 class Nonsingular where
-  mono {n : Nat} (x : X.nonDegenerate n) : Mono (yonedaEquiv.symm x.val)
+  mono {n : ℕ} (x : X.nonDegenerate n) : Mono (yonedaEquiv.symm x.val)
 
 attribute [instance] Nonsingular.mono
-
-/--
-lemma `Nonsingular.mono'` / 引理 `Nonsingular.mono'`
-
-English:
-lemma Nonsingular.mono'
-  statement: [X.Nonsingular]
-  proof: mono ⟨x, hx⟩
-
-@[kerodon 02MK]
-
-中文:
-引理 非奇异.mono'
-  结论: [X.非奇异]
-  证明: mono ⟨x, hx⟩
-
-@[kerodon 02MK]
+/-
+**SSet.Nonsingular.mono'** 是 Mathlib 中的一个定理，位于命名空间 `SSet.Nonsingular`。
+形式化陈述：∀ {X : _root_.SSet} [X.Nonsingular] {n : ℕ}, ∀ x ∈ X.nonDegenerate n, Cate
+goryTheory.Mono (SSet.yonedaEquiv.symm x)
+参数：SSet.yonedaEquiv.symm x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SSet.Nonsingular.mono`：∀ {X : _root_.SSet} [self : X.Nonsingular] {n : ℕ
+} (x : ↑(X.nonDegenerate n)),   CategoryTheory.Mono (SSet.yonedaEquiv.symm ↑x)
 -/
 lemma Nonsingular.mono' [X.Nonsingular]
-    {n : Nat} (x : X _⦋n⦌) (hx : x in X.nonDegenerate n) :
+    {n : ℕ} (x : X _⦋n⦌) (hx : x ∈ X.nonDegenerate n) :
     Mono (yonedaEquiv.symm x) := mono ⟨x, hx⟩
 
 @[kerodon 02MK]
-/--
-lemma `Nonsingular.of_mono` / 引理 `Nonsingular.of_mono`
-
-English:
-lemma Nonsingular.of_mono
-  given: (f : X ⟶ Y) [Mono f] [Y.Nonsingular]
-  proof: by
-    intro n ⟨x, hx⟩
-    rw [← nonDegenerate_iff_of_mono f] at hx
-    have := mono' _ hx
-    rw [← SSet.yonedaEquiv_symm_comp] at this
-    exact mono_of_mono _ f
-
-中文:
-引理 非奇异.of_mono
-  条件: (f : X ⟶ Y) [单态射 f] [Y.非奇异]
-  证明: by
-    intro n ⟨x, hx⟩
-    rw [← nonDegenerate_iff_of_mono f] at hx
-    have := mono' _ hx
-    rw [← SSet.yonedaEquiv_symm_comp] at this
-    exact mono_of_mono _ f
-
-Depends on / 依赖: SSet.yonedaEquiv_symm_comp, mono_of_mono, nonDegenerate_iff_of_mono, yonedaEquiv_symm_comp
+/-
+**SSet.Nonsingular.of_mono** 是 Mathlib 中的一个定理，位于命名空间 `SSet.Nonsingular`。
+形式化陈述：∀ {X Y : _root_.SSet} (f : X ⟶ Y) [CategoryTheory.Mono f] [Y.Nonsingular],
+ X.Nonsingular
+参数：f : X ⟶ Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `SSet.Nonsingular.mono'`：∀ {X : _root_.SSet} [X.Nonsingular] {n : ℕ}, ∀ x
+ ∈ X.nonDegenerate n, CategoryTheory.Mono (SSet.yonedaEquiv.symm x)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `SSet.nonDegenerate_iff_of_mono`：nonDegenerate_iff_of_mono {Y : SSet.{u}}
+ (f : X ⟶ Y) [Mono f] (x : X _⦋n⦌) : f.app _ x in Y.nonDegenerate n ↔ x in X.non
+Degenerate n
+· 使用定理 `CategoryTheory.mono_of_mono`：∀ {C : Type u} [inst : CategoryTheory.Categ
+ory.{v, u} C] {X Y Z : C} (g : Z ⟶ Y) (f : Y ⟶ X)   [CategoryTheory.Mono (Catego
+ryTheory.Category…
+· 使用定理 `SSet.yonedaEquiv_symm_comp`：∀ {X Y : _root_.SSet} {n : SimplexCategory} 
+(x : X.obj (Opposite.op n)) (f : X ⟶ Y),   CategoryTheory.CategoryStruct.comp (S
+Set.yonedaEquiv.…
 -/
 lemma Nonsingular.of_mono (f : X ⟶ Y) [Mono f] [Y.Nonsingular] :
     X.Nonsingular where
@@ -118,31 +101,42 @@ lemma Nonsingular.of_mono (f : X ⟶ Y) [Mono f] [Y.Nonsingular] :
     have := mono' _ hx
     rw [← SSet.yonedaEquiv_symm_comp] at this
     exact mono_of_mono _ f
-
-/--
-lemma `Nonsingular.of_iso` / 引理 `Nonsingular.of_iso`
-
-English:
-lemma Nonsingular.of_iso
-  given: (e : X ≅ Y) [X.Nonsingular]
-  statement: Y.Nonsingular
-  proof: .of_mono e.inv
-
-中文:
-引理 非奇异.of_iso
-  条件: (e : X ≅ Y) [X.非奇异]
-  结论: Y.非奇异
-  证明: .of_mono e.inv
-
-Depends on / 依赖: e.inv, of_mono
+/-
+**SSet.Nonsingular.of_iso** 是 Mathlib 中的一个定理，位于命名空间 `SSet.Nonsingular`。
+形式化陈述：∀ {X Y : _root_.SSet} (e : X ≅ Y) [X.Nonsingular], Y.Nonsingular
+参数：e : X ≅ Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SSet.Nonsingular.of_mono`：∀ {X Y : _root_.SSet} (f : X ⟶ Y) [CategoryThe
+ory.Mono f] [Y.Nonsingular], X.Nonsingular
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.instStrongMonoOfIsRegularMono`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsRegula
+rMono f],   CategoryTheory.StrongM…
+· 使用定理 `CategoryTheory.instIsRegularMonoOfIsSplitMono`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsSplit
+Mono f],   CategoryTheory.IsRegular…
+· 使用定理 `CategoryTheory.IsSplitMono.of_iso`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   Categor
+yTheory.IsSplitMono f
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
 -/
 lemma Nonsingular.of_iso (e : X ≅ Y) [X.Nonsingular] : Y.Nonsingular :=
   .of_mono e.inv
-
+/-
+**SSet.** 是 Mathlib 中的一个实例，位于命名空间 `SSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (A : X.Subcomplex) [X.Nonsingular] : (A : SSet).Nonsingular :=
   .of_mono A.ι
 
 @[kerodon 02MT]
+/-
+**SSet.** 是 Mathlib 中的一个实例，位于命名空间 `SSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (T : Type*) [PartialOrder T] : (nerve T).Nonsingular where
   mono := by
     intro n ⟨x, hx⟩
@@ -151,105 +145,76 @@ instance (T : Type*) [PartialOrder T] : (nerve T).Nonsingular where
     intro ⟨⟨k⟩⟩ i j hij
     ext l : 1
     exact hx (Functor.congr_obj hij l)
-
+/-
+**SSet.** 是 Mathlib 中的一个实例，位于命名空间 `SSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (n : SimplexCategory) : (stdSimplex.{u}.obj n).Nonsingular :=
   Nonsingular.of_iso (stdSimplex.isoNerve _).symm
-
+/-
+**SSet.** 是 Mathlib 中的一个实例，位于命名空间 `SSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (n m : SimplexCategory) :
-    (stdSimplex.{u}.obj n otimes stdSimplex.obj m).Nonsingular :=
+    (stdSimplex.{u}.obj n ⊗ stdSimplex.obj m).Nonsingular :=
   Nonsingular.of_iso (prodStdSimplex.isoNerve _ _).symm
 
 @[kerodon 02MH]
-/--
-lemma `nonDegenerate_δ` / 引理 `nonDegenerate_δ`
-
-English:
-lemma nonDegenerate_δ
-  statement: [X.Nonsingular]
-  proof: by
-  have := Nonsingular.mono' x hx
-  have : X.δ i x = (yonedaEquiv.symm x).app _
-    (stdSimplex.objEquiv.symm (SimplexCategory.δ i)) := rfl
-  rw [this]; rw [nonDegenerate_iff_of_mono]; rw [stdSimplex.mem_nonDegenerate_iff_mono]; rw [Equiv.apply_symm_apply]
-  infer_instance
-
-中文:
-引理 nonDegenerate_δ
-  结论: [X.非奇异]
-  证明: by
-  have := Nonsingular.mono' x hx
-  have : X.δ i x = (yonedaEquiv.symm x).app _
-    (stdSimplex.objEquiv.symm (SimplexCategory.δ i)) := rfl
-  rw [this]; rw [nonDegenerate_iff_of_mono]; rw [stdSimplex.mem_nonDegenerate_iff_mono]; rw [Equiv.apply_symm_apply]
-  infer_instance
-
-Depends on / 依赖: Equiv.apply_symm_apply, Nonsingular, Nonsingular.mono, SimplexCategory, apply_symm_apply, infer_instance, mem_nonDegenerate_iff_mono, nonDegenerate_iff_of_mono, objEquiv, stdSimplex, stdSimplex.mem_nonDegenerate_iff_mono, stdSimplex.objEquiv.symm, yonedaEquiv, yonedaEquiv.symm
+/-
+**SSet.nonDegenerate_** 是 Mathlib 中的一个引理，位于命名空间 `SSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma nonDegenerate_δ [X.Nonsingular]
-    {n : Nat} {x : X _⦋n + 1⦌} (hx : x in X.nonDegenerate _) (i : Fin (n + 2)) :
-    X.δ i x in X.nonDegenerate _ := by
+    {n : ℕ} {x : X _⦋n + 1⦌} (hx : x ∈ X.nonDegenerate _) (i : Fin (n + 2)) :
+    X.δ i x ∈ X.nonDegenerate _ := by
   have := Nonsingular.mono' x hx
   have : X.δ i x = (yonedaEquiv.symm x).app _
     (stdSimplex.objEquiv.symm (SimplexCategory.δ i)) := rfl
-  rw [this]; rw [nonDegenerate_iff_of_mono]; rw [stdSimplex.mem_nonDegenerate_iff_mono]; rw [Equiv.apply_symm_apply]
+  rw [this, nonDegenerate_iff_of_mono, stdSimplex.mem_nonDegenerate_iff_mono,
+    Equiv.apply_symm_apply]
   infer_instance
-
-/--
-lemma `Nonsingular.δ_injective` / 引理 `Nonsingular.δ_injective`
-
-English:
-lemma Nonsingular.δ_injective
-  statement: [X.Nonsingular]
-  proof: by
-  apply SimplexCategory.δ_injective
-  apply stdSimplex.objEquiv.symm.injective
-  have := mono' x hx
-  exact injective_of_mono ((yonedaEquiv.symm x).app _) hij
-
-中文:
-引理 非奇异.δ_injective
-  结论: [X.非奇异]
-  证明: by
-  apply SimplexCategory.δ_injective
-  apply stdSimplex.objEquiv.symm.injective
-  have := mono' x hx
-  exact injective_of_mono ((yonedaEquiv.symm x).app _) hij
-
-Depends on / 依赖: SimplexCategory, injective, injective_of_mono, objEquiv, stdSimplex, stdSimplex.objEquiv.symm.injective, yonedaEquiv, yonedaEquiv.symm
+/-
+**SSet.Nonsingular.** 是 Mathlib 中的一个引理，位于命名空间 `SSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Nonsingular.δ_injective [X.Nonsingular]
-    {n : Nat} (x : X _⦋n + 1⦌) (hx : x in X.nonDegenerate _)
+    {n : ℕ} (x : X _⦋n + 1⦌) (hx : x ∈ X.nonDegenerate _)
     (i j : Fin (n + 2)) (hij : X.δ i x = X.δ j x) : i = j := by
   apply SimplexCategory.δ_injective
   apply stdSimplex.objEquiv.symm.injective
   have := mono' x hx
   exact injective_of_mono ((yonedaEquiv.symm x).app _) hij
-
-/--
-lemma `Nonsingular.injective_map` / 引理 `Nonsingular.injective_map`
-
-English:
-lemma Nonsingular.injective_map
-  proof: by
-  have := Nonsingular.mono' x hx
-  apply stdSimplex.{u}.map_injective
-  rw [← cancel_mono (yonedaEquiv.symm x)]
-  apply yonedaEquiv.injective
-  simpa [yonedaEquiv_comp, yonedaEquiv_map]
-
-中文:
-引理 非奇异.injective_map
-  证明: by
-  have := Nonsingular.mono' x hx
-  apply stdSimplex.{u}.map_injective
-  rw [← cancel_mono (yonedaEquiv.symm x)]
-  apply yonedaEquiv.injective
-  simpa [yonedaEquiv_comp, yonedaEquiv_map]
-
-Depends on / 依赖: Nonsingular, Nonsingular.mono, cancel_mono, injective, map_injective, stdSimplex, yonedaEquiv, yonedaEquiv.injective, yonedaEquiv.symm, yonedaEquiv_comp, yonedaEquiv_map
+/-
+**SSet.Nonsingular.injective_map** 是 Mathlib 中的一个定理，位于命名空间 `SSet.Nonsingular`。
+形式化陈述：∀ {X : _root_.SSet} [X.Nonsingular] {n : ℕ},   ∀ x ∈ X.nonDegenerate n,   
+  ∀ {m : SimplexCategory} {f g : m ⟶ { len := n }},       (CategoryTheory.Concre
+teCategory.hom (X.map f.op)) x = (CategoryTheory.ConcreteCategory.hom (X.map g.o
+p)) x →         f = g
+参数：CategoryTheory.ConcreteCategory.hom (X.map f.op)；CategoryTheory.ConcreteCateg
+ory.hom (X.map g.op)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `SSet.Nonsingular.mono'`：∀ {X : _root_.SSet} [X.Nonsingular] {n : ℕ}, ∀ x
+ ∈ X.nonDegenerate n, CategoryTheory.Mono (SSet.yonedaEquiv.symm x)
+· 使用定理 `CategoryTheory.Functor.map_injective`：map_injective (F : C ⥤ D) [Faithfu
+l F] : Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))
+· 使用定理 `SSet.stdSimplex.instFaithfulSimplexCategory`：CategoryTheory.Functor.Fait
+hful SSet.stdSimplex
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `SSet.yonedaEquiv_map`：yonedaEquiv_map {n m : SimplexCategory} (f : n ⟶ m
+) : yonedaEquiv.{u} (stdSimplex.map f) = stdSimplex.objEquiv.symm f
 -/
 lemma Nonsingular.injective_map
-    [X.Nonsingular] {n : Nat} (x : X _⦋n⦌) (hx : x in X.nonDegenerate n)
+    [X.Nonsingular] {n : ℕ} (x : X _⦋n⦌) (hx : x ∈ X.nonDegenerate n)
     {m : SimplexCategory} {f g : m ⟶ ⦋n⦌}
     (h : X.map f.op x = X.map g.op x) :
     f = g := by
@@ -258,28 +223,23 @@ lemma Nonsingular.injective_map
   rw [← cancel_mono (yonedaEquiv.symm x)]
   apply yonedaEquiv.injective
   simpa [yonedaEquiv_comp, yonedaEquiv_map]
-
-/--
-lemma `Nonsingular.isIso_toOfSimplex` / 引理 `Nonsingular.isIso_toOfSimplex`
-
-English:
-lemma Nonsingular.isIso_toOfSimplex
-  statement: [X.Nonsingular]
-  proof: by
-  rw [Subcomplex.isIso_toOfSimplex_iff]
-  exact Nonsingular.mono' x hx
-
-中文:
-引理 非奇异.isIso_toOfSimplex
-  结论: [X.非奇异]
-  证明: by
-  rw [Subcomplex.isIso_toOfSimplex_iff]
-  exact Nonsingular.mono' x hx
-
-Depends on / 依赖: Nonsingular, Nonsingular.mono, Subcomplex, Subcomplex.isIso_toOfSimplex_iff, isIso_toOfSimplex_iff
+/-
+**SSet.Nonsingular.isIso_toOfSimplex** 是 Mathlib 中的一个定理，位于命名空间 `SSet.Nonsingular
+`。
+形式化陈述：∀ {X : _root_.SSet} [X.Nonsingular] {n : ℕ},   ∀ x ∈ X.nonDegenerate n, Ca
+tegoryTheory.IsIso (SSet.Subcomplex.toOfSimplex x)
+参数：SSet.Subcomplex.toOfSimplex x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SSet.Subcomplex.isIso_toOfSimplex_iff`：isIso_toOfSimplex_iff : IsIso (to
+OfSimplex x) ↔ Mono (yonedaEquiv.symm x)
+· 使用定理 `SSet.Nonsingular.mono'`：∀ {X : _root_.SSet} [X.Nonsingular] {n : ℕ}, ∀ x
+ ∈ X.nonDegenerate n, CategoryTheory.Mono (SSet.yonedaEquiv.symm x)
 -/
 lemma Nonsingular.isIso_toOfSimplex [X.Nonsingular]
-    {n : Nat} (x : X _⦋n⦌) (hx : x in X.nonDegenerate n) :
+    {n : ℕ} (x : X _⦋n⦌) (hx : x ∈ X.nonDegenerate n) :
     IsIso (Subcomplex.toOfSimplex x) := by
   rw [Subcomplex.isIso_toOfSimplex_iff]
   exact Nonsingular.mono' x hx
@@ -287,211 +247,213 @@ lemma Nonsingular.isIso_toOfSimplex [X.Nonsingular]
 /-- If `x : X _⦋n⦌` is a nondegenerate simplex of a nonsingular simplicial set,
 this is the isomorphism `Δ[n] ≅ Subcomplex.ofSimplex x` induced by `x`. -/
 @[expose, simps! hom]
-/--
-Definition of `Nonsingular.iso` / `Nonsingular.iso` 的定义
+/-
+**SSet.Nonsingular.iso** 是 Mathlib 中的一个定义，位于命名空间 `SSet.Nonsingular`。
+形式化陈述：{X : _root_.SSet} →   [X.Nonsingular] →     {n : ℕ} →       (x : X.obj (Op
+posite.op { len := n })) →         x ∈ X.nonDegenerate n → (SSet.stdSimplex.obj 
+{ len := n } ≅ (SSet.Subcomplex.ofSimplex x).toSSet)
+参数：x : X.obj (Opposite.op { len := n })；SSet.stdSimplex.obj { len := n } ≅ (SSet
+.Subcomplex.ofSimplex x).toSSet。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SSet.Nonsingular.isIso_toOfSimplex`：∀ {X : _root_.SSet} [X.Nonsingular] 
+{n : ℕ},   ∀ x ∈ X.nonDegenerate n, CategoryTheory.IsIso (SSet.Subcomplex.toOfSi
+mplex x)
 
-English:
-definition Nonsingular.iso
-  body: letI := Nonsingular.isIso_toOfSimplex x hx
-  asIso (Subcomplex.toOfSimplex x)
-
-中文:
-定义 非奇异.iso
-  定义体: letI := Nonsingular.isIso_toOfSimplex x hx
-  asIso (Subcomplex.toOfSimplex x)
-
-Depends on / 依赖: Nonsingular, Nonsingular.isIso_toOfSimplex, Subcomplex, Subcomplex.toOfSimplex, isIso_toOfSimplex, toOfSimplex
+--- 原说明 ---
+If `x : X _⦋n⦌` is a nondegenerate simplex of a nonsingular simplicial set,
+this is the isomorphism `Δ[n] ≅ Subcomplex.ofSimplex x` induced by `x`.
 -/
 noncomputable def Nonsingular.iso
-    [X.Nonsingular] {n : Nat} (x : X _⦋n⦌) (hx : x in X.nonDegenerate n) :
+    [X.Nonsingular] {n : ℕ} (x : X _⦋n⦌) (hx : x ∈ X.nonDegenerate n) :
     Δ[n] ≅ Subcomplex.ofSimplex x :=
   letI := Nonsingular.isIso_toOfSimplex x hx
   asIso (Subcomplex.toOfSimplex x)
 
 namespace N
 
-variable [X.Nonsingular] {x y z : X.N} (h : x <= y)
+variable [X.Nonsingular] {x y z : X.N} (h : x ≤ y)
 
 include h in
-/--
-lemma `existsUnique_of_le` / 引理 `existsUnique_of_le`
-
-English:
-lemma existsUnique_of_le
-  proof: existsUnique_of_exists_of_unique (by
-    obtain ⟨f, _, hf⟩ := le_iff_exists_mono.1 h
-    exact ⟨f, inferInstance, hf⟩) (fun f₁ f₂ ⟨_, hf₁⟩ ⟨_, hf₂⟩ => by
-    exact Nonsingular.injective_map _ y.nonDegenerate (by rw [hf₁, hf₂]))
-
-中文:
-引理 存在Unique_of_le
-  证明: existsUnique_of_exists_of_unique (by
-    obtain ⟨f, _, hf⟩ := le_iff_exists_mono.1 h
-    exact ⟨f, inferInstance, hf⟩) (fun f₁ f₂ ⟨_, hf₁⟩ ⟨_, hf₂⟩ => by
-    exact Nonsingular.injective_map _ y.nonDegenerate (by rw [hf₁, hf₂]))
-
-Depends on / 依赖: Nonsingular, Nonsingular.injective_map, existsUnique_of_exists_of_unique, injective_map, le_iff_exists_mono, nonDegenerate, y.nonDegenerate
+/-
+**SSet.N.existsUnique_of_le** 是 Mathlib 中的一个引理，位于命名空间 `SSet.N`。
+形式化陈述：existsUnique_of_le : exists! (f : ⦋x.dim⦌ ⟶ ⦋y.dim⦌), Mono f ∧ X.map f.op 
+y.1.2 = x.1.2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `existsUnique_of_exists_of_unique`：existsUnique_of_exists_of_unique {p : 
+α -> Prop} (hex : exists x, p x) (hunique : forall y₁ y₂, p y₁ -> p y₂ -> y₁ = y
+₂) : exists! x, p x
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `SSet.N.le_iff_exists_mono`：le_iff_exists_mono {x y : X.N} : x <= y ↔ exi
+sts (f : ⦋x.dim⦌ ⟶ ⦋y.dim⦌) (_ : Mono f), X.map f.op y.simplex = x.simplex
+· 使用定理 `SSet.Nonsingular.injective_map`：∀ {X : _root_.SSet} [X.Nonsingular] {n :
+ ℕ},   ∀ x ∈ X.nonDegenerate n,     ∀ {m : SimplexCategory} {f g : m ⟶ { len := 
+n }},       (Categor…
+· 使用定理 `SSet.N.nonDegenerate`：∀ {X : _root_.SSet} (self : X.N), self.simplex ∈ X
+.nonDegenerate self.dim
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 lemma existsUnique_of_le :
-    exists! (f : ⦋x.dim⦌ ⟶ ⦋y.dim⦌), Mono f ∧ X.map f.op y.1.2 = x.1.2 :=
+    ∃! (f : ⦋x.dim⦌ ⟶ ⦋y.dim⦌), Mono f ∧ X.map f.op y.1.2 = x.1.2 :=
   existsUnique_of_exists_of_unique (by
     obtain ⟨f, _, hf⟩ := le_iff_exists_mono.1 h
-    exact ⟨f, inferInstance, hf⟩) (fun f₁ f₂ ⟨_, hf₁⟩ ⟨_, hf₂⟩ => by
+    exact ⟨f, inferInstance, hf⟩) (fun f₁ f₂ ⟨_, hf₁⟩ ⟨_, hf₂⟩ ↦ by
     exact Nonsingular.injective_map _ y.nonDegenerate (by rw [hf₁, hf₂]))
 
-/--
-Definition of `monoOfLE` / `monoOfLE` 的定义
+/-- Given an inequality `x ≤ y` between nondegenerate simplices of a
+nonsingular simplicial set `X`, this is the corresponding morphism
+`⦋x.dim⦌ ⟶ ⦋y.dim⦌` in the simplex category. -/
+/-
+**SSet.N.monoOfLE** 是 Mathlib 中的一个定义，位于命名空间 `SSet.N`。
+形式化陈述：monoOfLE : ⦋x.dim⦌ ⟶ ⦋y.dim⦌
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition monoOfLE
-  signature: : ⦋x.dim⦌ ⟶ ⦋y.dim⦌
-  body: (existsUnique_of_le h).exists.choose
-
-中文:
-定义 monoOfLE
-  签名: : ⦋x.dim⦌ ⟶ ⦋y.dim⦌
-  定义体: (existsUnique_of_le h).exists.choose
-
-Depends on / 依赖: exists.choose, existsUnique_of_le
+--- 原说明 ---
+Given an inequality `x ≤ y` between nondegenerate simplices of a
+nonsingular simplicial set `X`, this is the corresponding morphism
+`⦋x.dim⦌ ⟶ ⦋y.dim⦌` in the simplex category.
 -/
 noncomputable def monoOfLE : ⦋x.dim⦌ ⟶ ⦋y.dim⦌ :=
   (existsUnique_of_le h).exists.choose
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mono (monoOfLE h)
-  body: (existsUnique_of_le h).exists.choose_spec.1
-
-@[simp]
-
-中文:
-实例 :
-  签名: 单态射 (monoOfLE h)
-  定义体: (existsUnique_of_le h).exists.choose_spec.1
-
-@[simp]
-
-Depends on / 依赖: choose_spec, exists.choose_spec, existsUnique_of_le
+/-
+**SSet.N.** 是 Mathlib 中的一个实例，位于命名空间 `SSet.N`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mono (monoOfLE h) :=
   (existsUnique_of_le h).exists.choose_spec.1
 
 @[simp]
-/--
-lemma `map_monoOfLE` / 引理 `map_monoOfLE`
-
-English:
-lemma map_monoOfLE
-  statement: X.map (monoOfLE h).op y.simplex = x.simplex
-  proof: (existsUnique_of_le h).exists.choose_spec.2
-
-@[reassoc, simp]
-
-中文:
-引理 map_monoOfLE
-  结论: X.map (monoOfLE h).op y.simplex = x.simplex
-  证明: (existsUnique_of_le h).exists.choose_spec.2
-
-@[reassoc, simp]
-
-Depends on / 依赖: choose_spec, exists.choose_spec, existsUnique_of_le
+/-
+**SSet.N.map_monoOfLE** 是 Mathlib 中的一个引理，位于命名空间 `SSet.N`。
+形式化陈述：map_monoOfLE : X.map (monoOfLE h).op y.simplex = x.simplex
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `ExistsUnique.exists`：∀ {α : Sort u_1} {p : α → Prop}, (∃! x, p x) → ∃ x,
+ p x
+· 使用引理 `SSet.N.existsUnique_of_le`：existsUnique_of_le : exists! (f : ⦋x.dim⦌ ⟶ ⦋
+y.dim⦌), Mono f ∧ X.map f.op y.1.2 = x.1.2
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 -/
 lemma map_monoOfLE : X.map (monoOfLE h).op y.simplex = x.simplex :=
   (existsUnique_of_le h).exists.choose_spec.2
 
 @[reassoc, simp]
-/--
-lemma `stdSimplex_map_monoOfLE_yonedaEquiv_symm_simplex` / 引理 `stdSimplex_map_monoOfLE_yonedaEquiv_symm_simplex`
-
-English:
-lemma stdSimplex_map_monoOfLE_yonedaEquiv_symm_simplex
-  proof: by
-  rw [yonedaEquiv_symm_naturality_left]; rw [map_monoOfLE]
-
-中文:
-引理 stdSimplex_map_monoOfLE_yonedaEquiv_symm_simplex
-  证明: by
-  rw [yonedaEquiv_symm_naturality_left]; rw [map_monoOfLE]
-
-Depends on / 依赖: map_monoOfLE, yonedaEquiv_symm_naturality_left
+/-
+**SSet.N.stdSimplex_map_monoOfLE_yonedaEquiv_symm_simplex** 是 Mathlib 中的一个引理，位于命
+名空间 `SSet.N`。
+形式化陈述：stdSimplex_map_monoOfLE_yonedaEquiv_symm_simplex : stdSimplex.map (monoOfL
+E h) ≫ yonedaEquiv.symm y.simplex = yonedaEquiv.symm x.simplex
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SSet.yonedaEquiv_symm_naturality_left`：yonedaEquiv_symm_naturality_left 
+{X : SSet} {m n : SimplexCategory} (f : m ⟶ n) (g : X.obj (Opposite.op n)) : std
+Simplex.map f ≫ yonedaEquiv…
+· 使用引理 `SSet.N.map_monoOfLE`：map_monoOfLE : X.map (monoOfLE h).op y.simplex = x.
+simplex
 -/
 lemma stdSimplex_map_monoOfLE_yonedaEquiv_symm_simplex :
     stdSimplex.map (monoOfLE h) ≫ yonedaEquiv.symm y.simplex =
       yonedaEquiv.symm x.simplex := by
-  rw [yonedaEquiv_symm_naturality_left]; rw [map_monoOfLE]
-
-/--
-lemma `monoOfLE_eq_iff` / 引理 `monoOfLE_eq_iff`
-
-English:
-lemma monoOfLE_eq_iff
-  given: (h : x <= y) (g : ⦋x.dim⦌ ⟶ ⦋y.dim⦌) [Mono g]
-  proof: ⟨by rintro rfl; simp,
-    fun h' => (existsUnique_of_le h).unique ⟨inferInstance, by simp⟩ ⟨inferInstance, h'⟩⟩
-
-中文:
-引理 monoOfLE_eq_iff
-  条件: (h : x <= y) (g : ⦋x.dim⦌ ⟶ ⦋y.dim⦌) [单态射 g]
-  证明: ⟨by rintro rfl; simp,
-    fun h' => (existsUnique_of_le h).unique ⟨inferInstance, by simp⟩ ⟨inferInstance, h'⟩⟩
-
-Depends on / 依赖: existsUnique_of_le, unique
+  rw [yonedaEquiv_symm_naturality_left, map_monoOfLE]
+/-
+**SSet.N.monoOfLE_eq_iff** 是 Mathlib 中的一个引理，位于命名空间 `SSet.N`。
+形式化陈述：monoOfLE_eq_iff (h : x <= y) (g : ⦋x.dim⦌ ⟶ ⦋y.dim⦌) [Mono g] : monoOfLE h
+ = g ↔ X.map g.op y.simplex = x.simplex
+参数：h : x <= y；g : ⦋x.dim⦌ ⟶ ⦋y.dim⦌。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SSet.N.map_monoOfLE`：map_monoOfLE : X.map (monoOfLE h).op y.simplex = x.
+simplex
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `ExistsUnique.unique`：ExistsUnique.unique {p : α -> Prop} (h : exists! x,
+ p x) {y₁ y₂ : α} (py₁ : p y₁) (py₂ : p y₂) : y₁ = y₂
+· 使用引理 `SSet.N.existsUnique_of_le`：existsUnique_of_le : exists! (f : ⦋x.dim⦌ ⟶ ⦋
+y.dim⦌), Mono f ∧ X.map f.op y.1.2 = x.1.2
+· 使用定理 `SSet.N.instMonoSimplexCategoryMonoOfLE`：∀ {X : _root_.SSet} [inst : X.No
+nsingular] {x y : X.N} (h : x ≤ y), CategoryTheory.Mono (SSet.N.monoOfLE h)
 -/
-lemma monoOfLE_eq_iff (h : x <= y) (g : ⦋x.dim⦌ ⟶ ⦋y.dim⦌) [Mono g] :
+lemma monoOfLE_eq_iff (h : x ≤ y) (g : ⦋x.dim⦌ ⟶ ⦋y.dim⦌) [Mono g] :
     monoOfLE h = g ↔ X.map g.op y.simplex = x.simplex :=
   ⟨by rintro rfl; simp,
-    fun h' => (existsUnique_of_le h).unique ⟨inferInstance, by simp⟩ ⟨inferInstance, h'⟩⟩
+    fun h' ↦ (existsUnique_of_le h).unique ⟨inferInstance, by simp⟩ ⟨inferInstance, h'⟩⟩
 
 variable (x) in
 @[simp]
-/--
-lemma `monoOfLE_refl` / 引理 `monoOfLE_refl`
-
-English:
-lemma monoOfLE_refl
-  statement: monoOfLE (le_refl x) = 𝟙 _
-  proof: by
-  simp [monoOfLE_eq_iff]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 monoOfLE_refl
-  结论: monoOfLE (le_refl x) = 𝟙 _
-  证明: by
-  simp [monoOfLE_eq_iff]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: monoOfLE_eq_iff
+/-
+**SSet.N.monoOfLE_refl** 是 Mathlib 中的一个引理，位于命名空间 `SSet.N`。
+形式化陈述：monoOfLE_refl : monoOfLE (le_refl x) = 𝟙 _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.instMonoId`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] (X : C),   CategoryTheory.Mono (CategoryTheory.CategoryStruct.id X)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.types_congr_hom`：types_congr_hom {X Y : Type u} {f g : X 
+⟶ Y} (h : f = g) (x : X) : f x = g x
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.id_apply`：∀ {C : Type u} [inst : CategoryTheory.Category.
+{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → FunL
+ike (FC X Y) …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma monoOfLE_refl : monoOfLE (le_refl x) = 𝟙 _ := by
   simp [monoOfLE_eq_iff]
 
 @[reassoc (attr := simp)]
-/--
-lemma `monoOfLE_comp` / 引理 `monoOfLE_comp`
-
-English:
-lemma monoOfLE_comp
-  given: (h' : y <= z)
-  proof: by
-  symm
-  simp [monoOfLE_eq_iff]
-
-中文:
-引理 monoOfLE_comp
-  条件: (h' : y <= z)
-  证明: by
-  symm
-  simp [monoOfLE_eq_iff]
-
-Depends on / 依赖: monoOfLE_eq_iff
+/-
+**SSet.N.monoOfLE_comp** 是 Mathlib 中的一个引理，位于命名空间 `SSet.N`。
+形式化陈述：monoOfLE_comp (h' : y <= z) : monoOfLE h ≫ monoOfLE h' = monoOfLE (h.trans
+ h')
+参数：h' : y <= z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.mono_comp`：∀ {C : Type u} [inst : CategoryTheory.Category
+.{v, u} C] {X Y Z : C} (g : Z ⟶ Y) [CategoryTheory.Mono g] (f : Y ⟶ X)   [Catego
+ryTheory.Mono …
+· 使用定理 `SSet.N.instMonoSimplexCategoryMonoOfLE`：∀ {X : _root_.SSet} [inst : X.No
+nsingular] {x y : X.N} (h : x ≤ y), CategoryTheory.Mono (SSet.N.monoOfLE h)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.types_congr_hom`：types_congr_hom {X Y : Type u} {f g : X 
+⟶ Y} (h : f = g) (x : X) : f x = g x
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用引理 `SSet.N.map_monoOfLE`：map_monoOfLE : X.map (monoOfLE h).op y.simplex = x.
+simplex
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma monoOfLE_comp (h' : y <= z) :
+lemma monoOfLE_comp (h' : y ≤ z) :
     monoOfLE h ≫ monoOfLE h' = monoOfLE (h.trans h') := by
   symm
   simp [monoOfLE_eq_iff]
@@ -499,3 +461,4 @@ lemma monoOfLE_comp (h' : y <= z) :
 end N
 
 end SSet
+

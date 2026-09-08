@@ -38,137 +38,95 @@ variable {α β γ δ : Type*} {ι : Sort y} {s t u : Set α}
 section PseudoMetricSpace
 
 variable [PseudoMetricSpace α] [MeasurableSpace α] [OpensMeasurableSpace α]
-variable [MeasurableSpace β] {x : α} {ε : Real}
+variable [MeasurableSpace β] {x : α} {ε : ℝ}
 
 open Metric
 
 @[measurability]
-/--
-theorem `measurableSet_ball` / 定理 `measurableSet_ball`
-
-English:
-theorem measurableSet_ball
-  statement: MeasurableSet (Metric.ball x ε)
-  proof: Metric.isOpen_ball.measurableSet
-
-@[measurability]
-
-中文:
-定理 measurableSet_ball
-  结论: 可测集 (Metric.ball x ε)
-  证明: Metric.isOpen_ball.measurableSet
-
-@[measurability]
-
-Depends on / 依赖: Metric, Metric.isOpen_ball.measurableSet, isOpen_ball, measurableSet
+/-
+**measurableSet_ball** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurableSet_ball : MeasurableSet (Metric.ball x ε)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOpen.measurableSet`：IsOpen.measurableSet (h : IsOpen s) : MeasurableSe
+t s
+· 使用定理 `Metric.isOpen_ball`：∀ {α : Type u} [inst : PseudoMetricSpace α] {x : α} 
+{ε : ℝ}, IsOpen (Metric.ball x ε)
 -/
 theorem measurableSet_ball : MeasurableSet (Metric.ball x ε) :=
   Metric.isOpen_ball.measurableSet
 
 @[measurability]
-/--
-theorem `measurableSet_closedBall` / 定理 `measurableSet_closedBall`
-
-English:
-theorem measurableSet_closedBall
-  statement: MeasurableSet (Metric.closedBall x ε)
-  proof: Metric.isClosed_closedBall.measurableSet
-
-中文:
-定理 measurableSet_closedBall
-  结论: 可测集 (Metric.closedBall x ε)
-  证明: Metric.isClosed_closedBall.measurableSet
-
-Depends on / 依赖: Metric, Metric.isClosed_closedBall.measurableSet, isClosed_closedBall, measurableSet
+/-
+**measurableSet_closedBall** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurableSet_closedBall : MeasurableSet (Metric.closedBall x ε)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsClosed.measurableSet`：IsClosed.measurableSet (h : IsClosed s) : Measur
+ableSet s
+· 使用引理 `Metric.isClosed_closedBall`：isClosed_closedBall : IsClosed (closedBall x
+ ε)
 -/
 theorem measurableSet_closedBall : MeasurableSet (Metric.closedBall x ε) :=
   Metric.isClosed_closedBall.measurableSet
-
-/--
-theorem `measurable_infDist` / 定理 `measurable_infDist`
-
-English:
-theorem measurable_infDist
-  given: {s : Set α}
-  statement: Measurable fun x => infDist x s
-  proof: (continuous_infDist_pt s).measurable
-
-@[fun_prop]
-
-中文:
-定理 measurable_infDist
-  条件: {s : 集合 α}
-  结论: 可测 fun x => infDist x s
-  证明: (continuous_infDist_pt s).measurable
-
-@[fun_prop]
-
-Depends on / 依赖: continuous_infDist_pt, measurable
+/-
+**measurable_infDist** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_infDist {s : Set α} : Measurable fun x => infDist x s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.measurable`：Continuous.measurable {f : α -> γ} (hf : Continuo
+us f) : Measurable f
+· 使用定理 `Metric.continuous_infDist_pt`：continuous_infDist_pt : Continuous (infDis
+t · s)
 -/
 theorem measurable_infDist {s : Set α} : Measurable fun x => infDist x s :=
   (continuous_infDist_pt s).measurable
 
 @[fun_prop]
-/--
-theorem `Measurable.infDist` / 定理 `Measurable.infDist`
-
-English:
-theorem Measurable.infDist
-  given: {f : β -> α} (hf : Measurable f) {s : Set α}
-  proof: measurable_infDist.comp hf
-
-中文:
-定理 可测.infDist
-  条件: {f : β -> α} (hf : 可测 f) {s : 集合 α}
-  证明: measurable_infDist.comp hf
-
-Depends on / 依赖: measurable_infDist, measurable_infDist.comp
+/-
+**Measurable.infDist** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.infDist {f : β -> α} (hf : Measurable f) {s : Set α} : Measurab
+le fun x => infDist (f x) s
+参数：hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `measurable_infDist`：measurable_infDist {s : Set α} : Measurable fun x =>
+ infDist x s
 -/
-theorem Measurable.infDist {f : β -> α} (hf : Measurable f) {s : Set α} :
+theorem Measurable.infDist {f : β → α} (hf : Measurable f) {s : Set α} :
     Measurable fun x => infDist (f x) s :=
   measurable_infDist.comp hf
-
-/--
-theorem `measurable_infNndist` / 定理 `measurable_infNndist`
-
-English:
-theorem measurable_infNndist
-  given: {s : Set α}
-  statement: Measurable fun x => infNndist x s
-  proof: (continuous_infNndist_pt s).measurable
-
-@[fun_prop]
-
-中文:
-定理 measurable_infNndist
-  条件: {s : 集合 α}
-  结论: 可测 fun x => infNndist x s
-  证明: (continuous_infNndist_pt s).measurable
-
-@[fun_prop]
-
-Depends on / 依赖: continuous_infNndist_pt, measurable
+/-
+**measurable_infNndist** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_infNndist {s : Set α} : Measurable fun x => infNndist x s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.measurable`：Continuous.measurable {f : α -> γ} (hf : Continuo
+us f) : Measurable f
+· 使用定理 `Metric.continuous_infNndist_pt`：continuous_infNndist_pt (s : Set α) : Co
+ntinuous fun x => infNndist x s
 -/
 theorem measurable_infNndist {s : Set α} : Measurable fun x => infNndist x s :=
   (continuous_infNndist_pt s).measurable
 
 @[fun_prop]
-/--
-theorem `Measurable.infNndist` / 定理 `Measurable.infNndist`
-
-English:
-theorem Measurable.infNndist
-  given: {f : β -> α} (hf : Measurable f) {s : Set α}
-  proof: measurable_infNndist.comp hf
-
-中文:
-定理 可测.infNndist
-  条件: {f : β -> α} (hf : 可测 f) {s : 集合 α}
-  证明: measurable_infNndist.comp hf
-
-Depends on / 依赖: measurable_infNndist, measurable_infNndist.comp
+/-
+**Measurable.infNndist** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.infNndist {f : β -> α} (hf : Measurable f) {s : Set α} : Measur
+able fun x => infNndist (f x) s
+参数：hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `measurable_infNndist`：measurable_infNndist {s : Set α} : Measurable fun 
+x => infNndist x s
 -/
-theorem Measurable.infNndist {f : β -> α} (hf : Measurable f) {s : Set α} :
+theorem Measurable.infNndist {f : β → α} (hf : Measurable f) {s : Set α} :
     Measurable fun x => infNndist (f x) s :=
   measurable_infNndist.comp hf
 
@@ -176,112 +134,98 @@ section
 
 variable [SecondCountableTopology α]
 
-/--
-theorem `measurable_dist` / 定理 `measurable_dist`
-
-English:
-theorem measurable_dist
-  statement: Measurable fun p : α × α => dist p.1 p.2
-  proof: continuous_dist.measurable
-
-@[fun_prop]
-
-中文:
-定理 measurable_dist
-  结论: 可测 fun p : α × α => dist p.1 p.2
-  证明: continuous_dist.measurable
-
-@[fun_prop]
-
-Depends on / 依赖: continuous_dist, continuous_dist.measurable, measurable
+/-
+**measurable_dist** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_dist : Measurable fun p : α × α => dist p.1 p.2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.measurable`：Continuous.measurable {f : α -> γ} (hf : Continuo
+us f) : Measurable f
+· 使用定理 `secondCountableTopologyEither_of_right`：∀ (α : Type u_6) (β : Type u_7) 
+[inst : TopologicalSpace α] [inst_1 : TopologicalSpace β] [SecondCountableTopolo
+gy β],   SecondCountableTopo…
+· 使用引理 `continuous_dist`：continuous_dist : Continuous fun p : α × α => dist p.1 
+p.2
 -/
 theorem measurable_dist : Measurable fun p : α × α => dist p.1 p.2 :=
   continuous_dist.measurable
 
 @[fun_prop]
-/--
-theorem `Measurable.dist` / 定理 `Measurable.dist`
-
-English:
-theorem Measurable.dist
-  given: {f g : β -> α} (hf : Measurable f) (hg : Measurable g)
-  proof: continuous_dist.measurable2 hf hg
-
-@[fun_prop]
-
-中文:
-定理 可测.dist
-  条件: {f g : β -> α} (hf : 可测 f) (hg : 可测 g)
-  证明: continuous_dist.measurable2 hf hg
-
-@[fun_prop]
-
-Depends on / 依赖: continuous_dist, continuous_dist.measurable2, measurable2
+/-
+**Measurable.dist** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.dist {f g : β -> α} (hf : Measurable f) (hg : Measurable g) : M
+easurable fun b => dist (f b) (g b)
+参数：hf : Measurable f；hg : Measurable g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.measurable2`：Continuous.measurable2 [SecondCountableTopologyE
+ither α β] {f : δ -> α} {g : δ -> β} {c : α -> β -> γ} (h : Continuous fun p : α
+ × β => c p.…
+· 使用定理 `secondCountableTopologyEither_of_right`：∀ (α : Type u_6) (β : Type u_7) 
+[inst : TopologicalSpace α] [inst_1 : TopologicalSpace β] [SecondCountableTopolo
+gy β],   SecondCountableTopo…
+· 使用引理 `continuous_dist`：continuous_dist : Continuous fun p : α × α => dist p.1 
+p.2
 -/
-theorem Measurable.dist {f g : β -> α} (hf : Measurable f) (hg : Measurable g) :
+theorem Measurable.dist {f g : β → α} (hf : Measurable f) (hg : Measurable g) :
     Measurable fun b => dist (f b) (g b) :=
   continuous_dist.measurable2 hf hg
 
 @[fun_prop]
-/--
-lemma `AEMeasurable.dist` / 引理 `AEMeasurable.dist`
-
-English:
-lemma AEMeasurable.dist
-  statement: {f g : β -> α} {μ : Measure β}
-  proof: continuous_dist.aemeasurable2 hf hg
-
-中文:
-引理 几乎处处可测.dist
-  结论: {f g : β -> α} {μ : 测度 β}
-  证明: continuous_dist.aemeasurable2 hf hg
-
-Depends on / 依赖: aemeasurable2, continuous_dist, continuous_dist.aemeasurable2
+/-
+**AEMeasurable.dist** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：AEMeasurable.dist {f g : β -> α} {μ : Measure β} (hf : AEMeasurable f μ) (
+hg : AEMeasurable g μ) : AEMeasurable (fun b => dist (f b) (g b)) μ
+参数：hf : AEMeasurable f μ；hg : AEMeasurable g μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.aemeasurable2`：Continuous.aemeasurable2 [SecondCountableTopol
+ogyEither α β] {f : δ -> α} {g : δ -> β} {c : α -> β -> γ} {μ : Measure δ} (h : 
+Continuous fun…
+· 使用定理 `secondCountableTopologyEither_of_right`：∀ (α : Type u_6) (β : Type u_7) 
+[inst : TopologicalSpace α] [inst_1 : TopologicalSpace β] [SecondCountableTopolo
+gy β],   SecondCountableTopo…
+· 使用引理 `continuous_dist`：continuous_dist : Continuous fun p : α × α => dist p.1 
+p.2
 -/
-lemma AEMeasurable.dist {f g : β -> α} {μ : Measure β}
+lemma AEMeasurable.dist {f g : β → α} {μ : Measure β}
     (hf : AEMeasurable f μ) (hg : AEMeasurable g μ) :
-    AEMeasurable (fun b => dist (f b) (g b)) μ :=
+    AEMeasurable (fun b ↦ dist (f b) (g b)) μ :=
   continuous_dist.aemeasurable2 hf hg
-
-/--
-theorem `measurable_nndist` / 定理 `measurable_nndist`
-
-English:
-theorem measurable_nndist
-  statement: Measurable fun p : α × α => nndist p.1 p.2
-  proof: continuous_nndist.measurable
-
-@[fun_prop]
-
-中文:
-定理 measurable_nndist
-  结论: 可测 fun p : α × α => nndist p.1 p.2
-  证明: continuous_nndist.measurable
-
-@[fun_prop]
-
-Depends on / 依赖: continuous_nndist, continuous_nndist.measurable, measurable
+/-
+**measurable_nndist** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_nndist : Measurable fun p : α × α => nndist p.1 p.2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.measurable`：Continuous.measurable {f : α -> γ} (hf : Continuo
+us f) : Measurable f
+· 使用定理 `secondCountableTopologyEither_of_right`：∀ (α : Type u_6) (β : Type u_7) 
+[inst : TopologicalSpace α] [inst_1 : TopologicalSpace β] [SecondCountableTopolo
+gy β],   SecondCountableTopo…
+· 使用引理 `continuous_nndist`：continuous_nndist : Continuous fun p : α × α => nndis
+t p.1 p.2
 -/
 theorem measurable_nndist : Measurable fun p : α × α => nndist p.1 p.2 :=
   continuous_nndist.measurable
 
 @[fun_prop]
-/--
-theorem `Measurable.nndist` / 定理 `Measurable.nndist`
-
-English:
-theorem Measurable.nndist
-  given: {f g : β -> α} (hf : Measurable f) (hg : Measurable g)
-  proof: continuous_nndist.measurable2 hf hg
-
-中文:
-定理 可测.nndist
-  条件: {f g : β -> α} (hf : 可测 f) (hg : 可测 g)
-  证明: continuous_nndist.measurable2 hf hg
-
-Depends on / 依赖: continuous_nndist, continuous_nndist.measurable2, measurable2
+/-
+**Measurable.nndist** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.nndist {f g : β -> α} (hf : Measurable f) (hg : Measurable g) :
+ Measurable fun b => nndist (f b) (g b)
+参数：hf : Measurable f；hg : Measurable g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.measurable2`：Continuous.measurable2 [SecondCountableTopologyE
+ither α β] {f : δ -> α} {g : δ -> β} {c : α -> β -> γ} (h : Continuous fun p : α
+ × β => c p.…
+· 使用定理 `secondCountableTopologyEither_of_right`：∀ (α : Type u_6) (β : Type u_7) 
+[inst : TopologicalSpace α] [inst_1 : TopologicalSpace β] [SecondCountableTopolo
+gy β],   SecondCountableTopo…
+· 使用引理 `continuous_nndist`：continuous_nndist : Continuous fun p : α × α => nndis
+t p.1 p.2
 -/
-theorem Measurable.nndist {f g : β -> α} (hf : Measurable f) (hg : Measurable g) :
+theorem Measurable.nndist {f g : β → α} (hf : Measurable f) (hg : Measurable g) :
     Measurable fun b => nndist (f b) (g b) :=
   continuous_nndist.measurable2 hf hg
 
@@ -292,99 +236,62 @@ end PseudoMetricSpace
 section PseudoEMetricSpace
 
 variable [PseudoEMetricSpace α] [MeasurableSpace α] [OpensMeasurableSpace α]
-variable [MeasurableSpace β] {x : α} {ε : Real>=0∞}
+variable [MeasurableSpace β] {x : α} {ε : ℝ≥0∞}
 
 open Metric
 
 @[measurability]
-/--
-theorem `measurableSet_eball` / 定理 `measurableSet_eball`
-
-English:
-theorem measurableSet_eball
-  statement: MeasurableSet (Metric.eball x ε)
-  proof: Metric.isOpen_eball.measurableSet
-
-@[fun_prop]
-
-中文:
-定理 measurableSet_eball
-  结论: 可测集 (Metric.eball x ε)
-  证明: Metric.isOpen_eball.measurableSet
-
-@[fun_prop]
-
-Depends on / 依赖: Metric, Metric.isOpen_eball.measurableSet, isOpen_eball, measurableSet
+/-
+**measurableSet_eball** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurableSet_eball : MeasurableSet (Metric.eball x ε)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOpen.measurableSet`：IsOpen.measurableSet (h : IsOpen s) : MeasurableSe
+t s
+· 使用定理 `Metric.isOpen_eball`：∀ {α : Type u} [inst : PseudoEMetricSpace α] {x : α
+} {ε : ENNReal}, IsOpen (Metric.eball x ε)
 -/
 theorem measurableSet_eball : MeasurableSet (Metric.eball x ε) :=
   Metric.isOpen_eball.measurableSet
 
 @[fun_prop]
-/--
-theorem `measurable_edist_right` / 定理 `measurable_edist_right`
-
-English:
-theorem measurable_edist_right
-  statement: Measurable (edist x)
-  proof: by fun_prop
-
-@[fun_prop]
-
-中文:
-定理 measurable_edist_right
-  结论: 可测 (edist x)
-  证明: by fun_prop
-
-@[fun_prop]
-
-Depends on / 依赖: fun_prop
+/-
+**measurable_edist_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_edist_right : Measurable (edist x)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.measurable`：Continuous.measurable {f : α -> γ} (hf : Continuo
+us f) : Measurable f
+· 使用定理 `Continuous.edist`：Continuous.edist [TopologicalSpace β] {f g : β -> α} (
+hf : Continuous f) (hg : Continuous g) : Continuous fun b => edist (f b) (g b)
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
+· 使用定理 `continuous_id'`：continuous_id' : Continuous (fun (x : X) => x)
 -/
 theorem measurable_edist_right : Measurable (edist x) := by fun_prop
 
 @[fun_prop]
-/--
-theorem `measurable_edist_left` / 定理 `measurable_edist_left`
-
-English:
-theorem measurable_edist_left
-  statement: Measurable fun y => edist y x
-  proof: by fun_prop
-
-中文:
-定理 measurable_edist_left
-  结论: 可测 fun y => edist y x
-  证明: by fun_prop
-
-Depends on / 依赖: fun_prop
+/-
+**measurable_edist_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_edist_left : Measurable fun y => edist y x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.measurable`：Continuous.measurable {f : α -> γ} (hf : Continuo
+us f) : Measurable f
+· 使用定理 `Continuous.edist`：Continuous.edist [TopologicalSpace β] {f g : β -> α} (
+hf : Continuous f) (hg : Continuous g) : Continuous fun b => edist (f b) (g b)
+· 使用定理 `continuous_id'`：continuous_id' : Continuous (fun (x : X) => x)
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
 -/
-theorem measurable_edist_left : Measurable fun y => edist y x := by fun_prop
-
-/--
-theorem `measurable_infEDist` / 定理 `measurable_infEDist`
-
-English:
-theorem measurable_infEDist
-  given: {s : Set α}
-  statement: Measurable fun x => infEDist x s
-  proof: continuous_infEDist.measurable
-
-@[deprecated (since := "2026-01-08")]
-alias measurable_infEdist := measurable_infEDist
-
-@[fun_prop]
-
-中文:
-定理 measurable_infEDist
-  条件: {s : 集合 α}
-  结论: 可测 fun x => infEDist x s
-  证明: continuous_infEDist.measurable
-
-@[deprecated (since := "2026-01-08")]
-alias measurable_infEdist := measurable_infEDist
-
-@[fun_prop]
-
-Depends on / 依赖: continuous_infEDist, continuous_infEDist.measurable, measurable
+theorem measurable_edist_left : Measurable fun y ↦ edist y x := by fun_prop
+/-
+**measurable_infEDist** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_infEDist {s : Set α} : Measurable fun x => infEDist x s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.measurable`：Continuous.measurable {f : α -> γ} (hf : Continuo
+us f) : Measurable f
+· 使用定理 `Metric.continuous_infEDist`：continuous_infEDist : Continuous fun x => in
+fEDist x s
 -/
 theorem measurable_infEDist {s : Set α} : Measurable fun x => infEDist x s :=
   continuous_infEDist.measurable
@@ -393,71 +300,81 @@ theorem measurable_infEDist {s : Set α} : Measurable fun x => infEDist x s :=
 alias measurable_infEdist := measurable_infEDist
 
 @[fun_prop]
-/--
-theorem `Measurable.infEDist` / 定理 `Measurable.infEDist`
-
-English:
-theorem Measurable.infEDist
-  given: {f : β -> α} (hf : Measurable f) {s : Set α}
-  proof: measurable_infEDist.comp hf
-
-@[deprecated (since := "2026-01-08")]
-alias Measurable.infEdist := Measurable.infEDist
-
-中文:
-定理 可测.infEDist
-  条件: {f : β -> α} (hf : 可测 f) {s : 集合 α}
-  证明: measurable_infEDist.comp hf
-
-@[deprecated (since := "2026-01-08")]
-alias Measurable.infEdist := Measurable.infEDist
+/-
+**Measurable.infEDist** 是 Mathlib 中的一个定理，位于命名空间 `Measurable`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : PseudoEMetricSpace α] [inst_1 : Me
+asurableSpace α] [OpensMeasurableSpace α]   [inst_3 : MeasurableSpace β] {f : β 
+→ α}, Measurable f → ∀ {s : Set α}, Measurable fun x => Metric.infEDist (f x) s
+参数：f x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `measurable_infEDist`：measurable_infEDist {s : Set α} : Measurable fun x 
+=> infEDist x s
 -/
-protected theorem Measurable.infEDist {f : β -> α} (hf : Measurable f) {s : Set α} :
+protected theorem Measurable.infEDist {f : β → α} (hf : Measurable f) {s : Set α} :
     Measurable fun x => infEDist (f x) s :=
   measurable_infEDist.comp hf
 
 @[deprecated (since := "2026-01-08")]
 alias Measurable.infEdist := Measurable.infEDist
 
-/--
-theorem `tendsto_measure_cthickening` / 定理 `tendsto_measure_cthickening`
+/-- If a set has a closed thickening with finite measure, then the measure of its `r`-closed
+thickenings converges to the measure of its closure as `r` tends to `0`. -/
+/-
+**tendsto_measure_cthickening** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tendsto_measure_cthickening {μ : Measure α} {s : Set α} (hs : exists R > 0
+, μ (cthickening R s) != ∞) : Tendsto (fun r => μ (cthickening r s)) (𝓝 0) (𝓝 (μ
+ (closure s)))
+参数：hs : exists R > 0, μ (cthickening R s) != ∞。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.closure_eq_iInter_cthickening`：closure_eq_iInter_cthickening (E :
+ Set α) : closure E = ⋂ (δ : Real) (_ : 0 < δ), cthickening δ E
+· 使用定理 `MeasureTheory.tendsto_measure_biInter_gt`：tendsto_measure_biInter_gt {ι 
+: Type*} [LinearOrder ι] [TopologicalSpace ι] [OrderTopology ι] [FirstCountableT
+opology ι] {s : ι -> Set α} {a…
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `TopologicalSpace.PseudoMetrizableSpace.firstCountableTopology`：∀ {X : Ty
+pe u_2} [inst : TopologicalSpace X] [h : TopologicalSpace.PseudoMetrizableSpace 
+X], FirstCountableTopology X
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `IsClosed.nullMeasurableSet`：IsClosed.nullMeasurableSet {μ} (h : IsClosed
+ s) : NullMeasurableSet s μ
+· 使用定理 `Metric.isClosed_cthickening`：isClosed_cthickening {δ : Real} {E : Set α}
+ : IsClosed (cthickening δ E)
+· 使用定理 `Metric.cthickening_mono`：cthickening_mono {δ₁ δ₂ : Real} (hle : δ₁ <= δ₂
+) (E : Set α) : cthickening δ₁ E subseteq cthickening δ₂ E
+· 使用定理 `Filter.Tendsto.congr'`：∀ {α : Type u_1} {β : Type u_2} {f₁ f₂ : α → β} {
+l₁ : Filter α} {l₂ : Filter β},   f₁ =ᶠ[l₁] f₂ → Filter.Tendsto f₁ l₁ l₂ → Filte
+r.Tendsto f…
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `self_mem_nhdsWithin`：self_mem_nhdsWithin {a : α} {s : Set α} : s in 𝓝[s]
+ a
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `Metric.cthickening_of_nonpos`：cthickening_of_nonpos {δ : Real} (hδ : δ <
+= 0) (E : Set α) : cthickening δ E = closure E
+· 使用定理 `tendsto_const_nhds`：tendsto_const_nhds {f : Filter α} : Tendsto (fun _ :
+ α => x) f (𝓝 x)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `nhdsLE_sup_nhdsGT`：nhdsLE_sup_nhdsGT (a : α) : 𝓝[<=] a ⊔ 𝓝[>] a = 𝓝 a
+· 使用定理 `Filter.Tendsto.sup`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {x₁ x₂ :
+ Filter α} {y : Filter β},   Filter.Tendsto f x₁ y → Filter.Tendsto f x₂ y → Fil
+ter.Tend…
 
-English:
-theorem tendsto_measure_cthickening
-  statement: {μ : Measure α} {s : Set α}
-  proof: by
-  have A : Tendsto (fun r => μ (cthickening r s)) (𝓝[Ioi 0] 0) (𝓝 (μ (closure s))) := by
-    rw [closure_eq_iInter_cthickening]
-    exact
-      tendsto_measure_biInter_gt (fun r _ => isClosed_cthickening.nullMeasurableSet)
-        (fun i j _ ij => cthickening_mono ij _) hs
-  have B : Tendsto (fun r => μ (cthickening r s)) (𝓝[Iic 0] 0) (𝓝 (μ (closure s))) := by
-    apply Tendsto.congr' _ tendsto_const_nhds
-    filter_upwards [self_mem_nhdsWithin (α := Real)] with _ hr
-    rw [cthickening_of_nonpos hr]
-  convert! B.sup A
-  exact (nhdsLE_sup_nhdsGT 0).symm
-
-中文:
-定理 tendsto_measure_cthickening
-  结论: {μ : 测度 α} {s : 集合 α}
-  证明: by
-  have A : Tendsto (fun r => μ (cthickening r s)) (𝓝[Ioi 0] 0) (𝓝 (μ (closure s))) := by
-    rw [closure_eq_iInter_cthickening]
-    exact
-      tendsto_measure_biInter_gt (fun r _ => isClosed_cthickening.nullMeasurableSet)
-        (fun i j _ ij => cthickening_mono ij _) hs
-  have B : Tendsto (fun r => μ (cthickening r s)) (𝓝[Iic 0] 0) (𝓝 (μ (closure s))) := by
-    apply Tendsto.congr' _ tendsto_const_nhds
-    filter_upwards [self_mem_nhdsWithin (α := Real)] with _ hr
-    rw [cthickening_of_nonpos hr]
-  convert! B.sup A
-  exact (nhdsLE_sup_nhdsGT 0).symm
-
-Depends on / 依赖: B.sup, Tendsto, Tendsto.congr, closure, closure_eq_iInter_cthickening, convert, cthickening, cthickening_mono, cthickening_of_nonpos, filter_upwards, isClosed_cthickening, isClosed_cthickening.nullMeasurableSet, nullMeasurableSet, self_mem_nhdsWithin, tendsto_const_nhds, tendsto_measure_biInter_gt
+--- 原说明 ---
+If a set has a closed thickening with finite measure, then the measure of its `r
+`-closed
+thickenings converges to the measure of its closure as `r` tends to `0`.
 -/
 theorem tendsto_measure_cthickening {μ : Measure α} {s : Set α}
-    (hs : exists R > 0, μ (cthickening R s) != ∞) :
+    (hs : ∃ R > 0, μ (cthickening R s) ≠ ∞) :
     Tendsto (fun r => μ (cthickening r s)) (𝓝 0) (𝓝 (μ (closure s))) := by
   have A : Tendsto (fun r => μ (cthickening r s)) (𝓝[Ioi 0] 0) (𝓝 (μ (closure s))) := by
     rw [closure_eq_iInter_cthickening]
@@ -466,175 +383,207 @@ theorem tendsto_measure_cthickening {μ : Measure α} {s : Set α}
         (fun i j _ ij => cthickening_mono ij _) hs
   have B : Tendsto (fun r => μ (cthickening r s)) (𝓝[Iic 0] 0) (𝓝 (μ (closure s))) := by
     apply Tendsto.congr' _ tendsto_const_nhds
-    filter_upwards [self_mem_nhdsWithin (α := Real)] with _ hr
+    filter_upwards [self_mem_nhdsWithin (α := ℝ)] with _ hr
     rw [cthickening_of_nonpos hr]
   convert! B.sup A
   exact (nhdsLE_sup_nhdsGT 0).symm
 
-/--
-theorem `tendsto_measure_cthickening_of_isClosed` / 定理 `tendsto_measure_cthickening_of_isClosed`
+/-- If a closed set has a closed thickening with finite measure, then the measure of its closed
+`r`-thickenings converge to its measure as `r` tends to `0`. -/
+/-
+**tendsto_measure_cthickening_of_isClosed** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tendsto_measure_cthickening_of_isClosed {μ : Measure α} {s : Set α} (hs : 
+exists R > 0, μ (cthickening R s) != ∞) (h's : IsClosed s) : Tendsto (fun r => μ
+ (cthickening r s)) (𝓝 0) (𝓝 (μ s))
+参数：hs : exists R > 0, μ (cthickening R s) != ∞；h's : IsClosed s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsClosed.closure_eq`：IsClosed.closure_eq : c.IsClosed x -> c x = x
+· 使用定理 `tendsto_measure_cthickening`：tendsto_measure_cthickening {μ : Measure α}
+ {s : Set α} (hs : exists R > 0, μ (cthickening R s) != ∞) : Tendsto (fun r => μ
+ (cthickening r s…
 
-English:
-theorem tendsto_measure_cthickening_of_isClosed
-  statement: {μ : Measure α} {s : Set α}
-  proof: by
-  convert! tendsto_measure_cthickening hs
-  exact h's.closure_eq.symm
-
-中文:
-定理 tendsto_measure_cthickening_of_isClosed
-  结论: {μ : 测度 α} {s : 集合 α}
-  证明: by
-  convert! tendsto_measure_cthickening hs
-  exact h's.closure_eq.symm
-
-Depends on / 依赖: closure_eq, convert, s.closure_eq.symm, tendsto_measure_cthickening
+--- 原说明 ---
+If a closed set has a closed thickening with finite measure, then the measure of
+ its closed
+`r`-thickenings converge to its measure as `r` tends to `0`.
 -/
 theorem tendsto_measure_cthickening_of_isClosed {μ : Measure α} {s : Set α}
-    (hs : exists R > 0, μ (cthickening R s) != ∞) (h's : IsClosed s) :
+    (hs : ∃ R > 0, μ (cthickening R s) ≠ ∞) (h's : IsClosed s) :
     Tendsto (fun r => μ (cthickening r s)) (𝓝 0) (𝓝 (μ s)) := by
   convert! tendsto_measure_cthickening hs
   exact h's.closure_eq.symm
 
-/--
-theorem `tendsto_measure_thickening` / 定理 `tendsto_measure_thickening`
+/-- If a set has a thickening with finite measure, then the measures of its `r`-thickenings
+converge to the measure of its closure as `r > 0` tends to `0`. -/
+/-
+**tendsto_measure_thickening** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tendsto_measure_thickening {μ : Measure α} {s : Set α} (hs : exists R > 0,
+ μ (thickening R s) != ∞) : Tendsto (fun r => μ (thickening r s)) (𝓝[>] 0) (𝓝 (μ
+ (closure s)))
+参数：hs : exists R > 0, μ (thickening R s) != ∞。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.closure_eq_iInter_thickening`：closure_eq_iInter_thickening (E : S
+et α) : closure E = ⋂ (δ : Real) (_ : 0 < δ), thickening δ E
+· 使用定理 `MeasureTheory.tendsto_measure_biInter_gt`：tendsto_measure_biInter_gt {ι 
+: Type*} [LinearOrder ι] [TopologicalSpace ι] [OrderTopology ι] [FirstCountableT
+opology ι] {s : ι -> Set α} {a…
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `TopologicalSpace.PseudoMetrizableSpace.firstCountableTopology`：∀ {X : Ty
+pe u_2} [inst : TopologicalSpace X] [h : TopologicalSpace.PseudoMetrizableSpace 
+X], FirstCountableTopology X
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `IsOpen.nullMeasurableSet`：IsOpen.nullMeasurableSet {μ} (h : IsOpen s) : 
+NullMeasurableSet s μ
+· 使用定理 `Metric.isOpen_thickening`：isOpen_thickening {δ : Real} {E : Set α} : IsO
+pen (thickening δ E)
+· 使用定理 `Metric.thickening_mono`：thickening_mono {δ₁ δ₂ : Real} (hle : δ₁ <= δ₂) 
+(E : Set α) : thickening δ₁ E subseteq thickening δ₂ E
 
-English:
-theorem tendsto_measure_thickening
-  statement: {μ : Measure α} {s : Set α}
-  proof: by
-  rw [closure_eq_iInter_thickening]
-  exact tendsto_measure_biInter_gt (fun r _ => isOpen_thickening.nullMeasurableSet)
-      (fun i j _ ij => thickening_mono ij _) hs
-
-中文:
-定理 tendsto_measure_thickening
-  结论: {μ : 测度 α} {s : 集合 α}
-  证明: by
-  rw [closure_eq_iInter_thickening]
-  exact tendsto_measure_biInter_gt (fun r _ => isOpen_thickening.nullMeasurableSet)
-      (fun i j _ ij => thickening_mono ij _) hs
-
-Depends on / 依赖: closure_eq_iInter_thickening, isOpen_thickening, isOpen_thickening.nullMeasurableSet, nullMeasurableSet, tendsto_measure_biInter_gt, thickening_mono
+--- 原说明 ---
+If a set has a thickening with finite measure, then the measures of its `r`-thic
+kenings
+converge to the measure of its closure as `r > 0` tends to `0`.
 -/
 theorem tendsto_measure_thickening {μ : Measure α} {s : Set α}
-    (hs : exists R > 0, μ (thickening R s) != ∞) :
+    (hs : ∃ R > 0, μ (thickening R s) ≠ ∞) :
     Tendsto (fun r => μ (thickening r s)) (𝓝[>] 0) (𝓝 (μ (closure s))) := by
   rw [closure_eq_iInter_thickening]
   exact tendsto_measure_biInter_gt (fun r _ => isOpen_thickening.nullMeasurableSet)
       (fun i j _ ij => thickening_mono ij _) hs
 
-/--
-theorem `tendsto_measure_thickening_of_isClosed` / 定理 `tendsto_measure_thickening_of_isClosed`
+/-- If a closed set has a thickening with finite measure, then the measure of its
+`r`-thickenings converge to its measure as `r > 0` tends to `0`. -/
+/-
+**tendsto_measure_thickening_of_isClosed** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tendsto_measure_thickening_of_isClosed {μ : Measure α} {s : Set α} (hs : e
+xists R > 0, μ (thickening R s) != ∞) (h's : IsClosed s) : Tendsto (fun r => μ (
+thickening r s)) (𝓝[>] 0) (𝓝 (μ s))
+参数：hs : exists R > 0, μ (thickening R s) != ∞；h's : IsClosed s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsClosed.closure_eq`：IsClosed.closure_eq : c.IsClosed x -> c x = x
+· 使用定理 `tendsto_measure_thickening`：tendsto_measure_thickening {μ : Measure α} {
+s : Set α} (hs : exists R > 0, μ (thickening R s) != ∞) : Tendsto (fun r => μ (t
+hickening r s)) …
 
-English:
-theorem tendsto_measure_thickening_of_isClosed
-  statement: {μ : Measure α} {s : Set α}
-  proof: by
-  convert! tendsto_measure_thickening hs
-  exact h's.closure_eq.symm
-
-中文:
-定理 tendsto_measure_thickening_of_isClosed
-  结论: {μ : 测度 α} {s : 集合 α}
-  证明: by
-  convert! tendsto_measure_thickening hs
-  exact h's.closure_eq.symm
-
-Depends on / 依赖: closure_eq, convert, s.closure_eq.symm, tendsto_measure_thickening
+--- 原说明 ---
+If a closed set has a thickening with finite measure, then the measure of its
+`r`-thickenings converge to its measure as `r > 0` tends to `0`.
 -/
 theorem tendsto_measure_thickening_of_isClosed {μ : Measure α} {s : Set α}
-    (hs : exists R > 0, μ (thickening R s) != ∞) (h's : IsClosed s) :
+    (hs : ∃ R > 0, μ (thickening R s) ≠ ∞) (h's : IsClosed s) :
     Tendsto (fun r => μ (thickening r s)) (𝓝[>] 0) (𝓝 (μ s)) := by
   convert! tendsto_measure_thickening hs
   exact h's.closure_eq.symm
 
 variable [SecondCountableTopology α]
-
-/--
-theorem `measurable_edist` / 定理 `measurable_edist`
-
-English:
-theorem measurable_edist
-  statement: Measurable fun p : α × α => edist p.1 p.2
-  proof: continuous_edist.measurable
-
-@[fun_prop]
-
-中文:
-定理 measurable_edist
-  结论: 可测 fun p : α × α => edist p.1 p.2
-  证明: continuous_edist.measurable
-
-@[fun_prop]
-
-Depends on / 依赖: continuous_edist, continuous_edist.measurable, measurable
+/-
+**measurable_edist** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_edist : Measurable fun p : α × α => edist p.1 p.2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.measurable`：Continuous.measurable {f : α -> γ} (hf : Continuo
+us f) : Measurable f
+· 使用定理 `secondCountableTopologyEither_of_right`：∀ (α : Type u_6) (β : Type u_7) 
+[inst : TopologicalSpace α] [inst_1 : TopologicalSpace β] [SecondCountableTopolo
+gy β],   SecondCountableTopo…
+· 使用定理 `continuous_edist`：continuous_edist : Continuous fun p : α × α => edist p
+.1 p.2
 -/
 theorem measurable_edist : Measurable fun p : α × α => edist p.1 p.2 :=
   continuous_edist.measurable
 
 @[fun_prop]
-/--
-theorem `Measurable.edist` / 定理 `Measurable.edist`
-
-English:
-theorem Measurable.edist
-  given: {f g : β -> α} (hf : Measurable f) (hg : Measurable g)
-  proof: continuous_edist.measurable2 hf hg
-
-@[fun_prop]
-
-中文:
-定理 可测.edist
-  条件: {f g : β -> α} (hf : 可测 f) (hg : 可测 g)
-  证明: continuous_edist.measurable2 hf hg
-
-@[fun_prop]
-
-Depends on / 依赖: continuous_edist, continuous_edist.measurable2, measurable2
+/-
+**Measurable.edist** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.edist {f g : β -> α} (hf : Measurable f) (hg : Measurable g) : 
+Measurable fun b => edist (f b) (g b)
+参数：hf : Measurable f；hg : Measurable g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.measurable2`：Continuous.measurable2 [SecondCountableTopologyE
+ither α β] {f : δ -> α} {g : δ -> β} {c : α -> β -> γ} (h : Continuous fun p : α
+ × β => c p.…
+· 使用定理 `secondCountableTopologyEither_of_right`：∀ (α : Type u_6) (β : Type u_7) 
+[inst : TopologicalSpace α] [inst_1 : TopologicalSpace β] [SecondCountableTopolo
+gy β],   SecondCountableTopo…
+· 使用定理 `continuous_edist`：continuous_edist : Continuous fun p : α × α => edist p
+.1 p.2
 -/
-theorem Measurable.edist {f g : β -> α} (hf : Measurable f) (hg : Measurable g) :
+theorem Measurable.edist {f g : β → α} (hf : Measurable f) (hg : Measurable g) :
     Measurable fun b => edist (f b) (g b) :=
   continuous_edist.measurable2 hf hg
 
 @[fun_prop]
-/--
-theorem `AEMeasurable.edist` / 定理 `AEMeasurable.edist`
-
-English:
-theorem AEMeasurable.edist
-  statement: {f g : β -> α} {μ : Measure β} (hf : AEMeasurable f μ)
-  proof: continuous_edist.aemeasurable2 hf hg
-
-中文:
-定理 几乎处处可测.edist
-  结论: {f g : β -> α} {μ : 测度 β} (hf : 几乎处处可测 f μ)
-  证明: continuous_edist.aemeasurable2 hf hg
-
-Depends on / 依赖: aemeasurable2, continuous_edist, continuous_edist.aemeasurable2
+/-
+**AEMeasurable.edist** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AEMeasurable.edist {f g : β -> α} {μ : Measure β} (hf : AEMeasurable f μ) 
+(hg : AEMeasurable g μ) : AEMeasurable (fun a => edist (f a) (g a)) μ
+参数：hf : AEMeasurable f μ；hg : AEMeasurable g μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.aemeasurable2`：Continuous.aemeasurable2 [SecondCountableTopol
+ogyEither α β] {f : δ -> α} {g : δ -> β} {c : α -> β -> γ} {μ : Measure δ} (h : 
+Continuous fun…
+· 使用定理 `secondCountableTopologyEither_of_right`：∀ (α : Type u_6) (β : Type u_7) 
+[inst : TopologicalSpace α] [inst_1 : TopologicalSpace β] [SecondCountableTopolo
+gy β],   SecondCountableTopo…
+· 使用定理 `continuous_edist`：continuous_edist : Continuous fun p : α × α => edist p
+.1 p.2
 -/
-theorem AEMeasurable.edist {f g : β -> α} {μ : Measure β} (hf : AEMeasurable f μ)
+theorem AEMeasurable.edist {f g : β → α} {μ : Measure β} (hf : AEMeasurable f μ)
     (hg : AEMeasurable g μ) : AEMeasurable (fun a => edist (f a) (g a)) μ :=
   continuous_edist.aemeasurable2 hf hg
 
 end PseudoEMetricSpace
 
-/--
-theorem `tendsto_measure_cthickening_of_isCompact` / 定理 `tendsto_measure_cthickening_of_isCompact`
+/-- Given a compact set in a proper space, the measure of its `r`-closed thickenings converges to
+its measure as `r` tends to `0`. -/
+/-
+**tendsto_measure_cthickening_of_isCompact** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tendsto_measure_cthickening_of_isCompact [MetricSpace α] [MeasurableSpace 
+α] [OpensMeasurableSpace α] [ProperSpace α] {μ : Measure α} [IsFiniteMeasureOnCo
+mpacts μ] {s : Set α} (hs : IsCompact s) : Tendsto (fun r => μ (Metric.cthickeni
+ng r s)) (𝓝 0) (𝓝 (μ s))
+参数：hs : IsCompact s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `tendsto_measure_cthickening_of_isClosed`：tendsto_measure_cthickening_of_
+isClosed {μ : Measure α} {s : Set α} (hs : exists R > 0, μ (cthickening R s) != 
+∞) (h's : IsClosed s) : Tends…
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `Bornology.IsBounded.measure_lt_top`：∀ {α : Type u_1} {m0 : MeasurableSpa
+ce α} [inst : PseudoMetricSpace α] [ProperSpace α] {μ : MeasureTheory.Measure α}
+   [MeasureTheory.IsFini…
+· 使用定理 `Bornology.IsBounded.cthickening`：∀ {α : Type u_2} [inst : PseudoMetricSp
+ace α] {δ : ℝ} {E : Set α},   Bornology.IsBounded E → Bornology.IsBounded (Metri
+c.cthickening δ E)
+· 使用定理 `IsCompact.isBounded`：∀ {α : Type u} [inst : PseudoMetricSpace α] {s : Se
+t α}, IsCompact s → Bornology.IsBounded s
+· 使用定理 `IsCompact.isClosed`：IsCompact.isClosed [T2Space X] {s : Set X} (hs : IsC
+ompact s) : IsClosed s
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
 
-English:
-theorem tendsto_measure_cthickening_of_isCompact
-  statement: [MetricSpace α] [MeasurableSpace α]
-  proof: tendsto_measure_cthickening_of_isClosed
-    ⟨1, zero_lt_one, hs.isBounded.cthickening.measure_lt_top.ne⟩ hs.isClosed
-
-中文:
-定理 tendsto_measure_cthickening_of_isCompact
-  结论: [度量空间 α] [可测空间 α]
-  证明: tendsto_measure_cthickening_of_isClosed
-    ⟨1, zero_lt_one, hs.isBounded.cthickening.measure_lt_top.ne⟩ hs.isClosed
-
-Depends on / 依赖: cthickening, hs.isBounded.cthickening.measure_lt_top.ne, hs.isClosed, isBounded, isClosed, measure_lt_top, tendsto_measure_cthickening_of_isClosed, zero_lt_one
+--- 原说明 ---
+Given a compact set in a proper space, the measure of its `r`-closed thickenings
+ converges to
+its measure as `r` tends to `0`.
 -/
 theorem tendsto_measure_cthickening_of_isCompact [MetricSpace α] [MeasurableSpace α]
     [OpensMeasurableSpace α] [ProperSpace α] {μ : Measure α} [IsFiniteMeasureOnCompacts μ]
@@ -643,64 +592,126 @@ theorem tendsto_measure_cthickening_of_isCompact [MetricSpace α] [MeasurableSpa
   tendsto_measure_cthickening_of_isClosed
     ⟨1, zero_lt_one, hs.isBounded.cthickening.measure_lt_top.ne⟩ hs.isClosed
 
-/--
-theorem `exists_borelSpace_of_countablyGenerated_of_separatesPoints` / 定理 `exists_borelSpace_of_countablyGenerated_of_separatesPoints`
+/-- If a measurable space is countably generated and separates points, it arises as
+the Borel sets of some second countable t4 topology (i.e. a separable metrizable one). -/
+/-
+**exists_borelSpace_of_countablyGenerated_of_separatesPoints** 是 Mathlib 中的一个定理，
+位于命名空间 ``。
+形式化陈述：exists_borelSpace_of_countablyGenerated_of_separatesPoints (α : Type*) [m 
+: MeasurableSpace α] [CountablyGenerated α] [SeparatesPoints α] : exists _ : Top
+ologicalSpace α, SecondCountableTopology α ∧ T4Space α ∧ BorelSpace α
+参数：α : Type*。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSpace.measurableEquiv_nat_bool_of_countablyGenerated`：measurab
+leEquiv_nat_bool_of_countablyGenerated [MeasurableSpace α] [CountablyGenerated α
+] [SeparatesPoints α] : exists s : Set (Nat -> Bool)…
+· 使用定理 `Topology.IsInducing.induced`：∀ {X : Type u_1} {Y : Type u_2} [inst : Top
+ologicalSpace Y] (f : X → Y), Topology.IsInducing f
+· 使用定理 `Homeomorph.secondCountableTopology`：∀ {X : Type u_1} {Y : Type u_2} [ins
+t : TopologicalSpace X] [inst_1 : TopologicalSpace Y] [SecondCountableTopology Y
+]   (h : X ≃ₜ Y), Second…
+· 使用定理 `TopologicalSpace.Subtype.secondCountableTopology`：∀ {α : Type u} [t : To
+pologicalSpace α] (s : Set α) [SecondCountableTopology α], SecondCountableTopolo
+gy ↑s
+· 使用定理 `TopologicalSpace.instSecondCountableTopologyForallOfCountable`：∀ {ι : Ty
+pe u_1} {X : ι → Type u_2} [Countable ι] [inst : (a : ι) → TopologicalSpace (X a
+)]   [∀ (a : ι), SecondCountableTopology (X a)], Se…
+· 使用定理 `instCountableNat`：Countable ℕ
+· 使用定理 `TopologicalSpace.instSecondCountableTopologyOfLindelofSpaceOfPseudoMetri
+zableSpace`：∀ (X : Type u_5) [inst : TopologicalSpace X] [LindelofSpace X] [Topo
+logicalSpace.PseudoMetrizableSpace X],   SecondCountableTopology X
+· 使用定理 `Countable.LindelofSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Cou
+ntable X], LindelofSpace X
+· 使用定理 `TopologicalSpace.MetrizableSpace.toPseudoMetrizableSpace`：∀ {X : Type u_
+5} {t : TopologicalSpace X} [self : TopologicalSpace.MetrizableSpace X],   Topol
+ogicalSpace.PseudoMetrizableSpace X
+· 使用定理 `TopologicalSpace.DiscreteTopology.metrizableSpace`：∀ {X : Type u_2} [ins
+t : TopologicalSpace X] [DiscreteTopology X], TopologicalSpace.MetrizableSpace X
+· 使用定理 `instDiscreteTopologyBool`：DiscreteTopology Bool
+· 使用定理 `Homeomorph.t4Space`：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalS
+pace X] [inst_1 : TopologicalSpace Y] [T4Space X] (h : X ≃ₜ Y),   T4Space Y
+· 使用定理 `instT4SpaceOfT1SpaceOfNormalSpace`：∀ {X : Type u_1} [inst : TopologicalS
+pace X] [T1Space X] [NormalSpace X], T4Space X
+· 使用定理 `instT1SpaceForall`：∀ {ι : Type u_3} {X : ι → Type u_4} [inst : (i : ι) →
+ TopologicalSpace (X i)] [∀ (i : ι), T1Space (X i)],   T1Space ((i : ι) → X i)
+· 使用定理 `T5Space.toT1Space`：∀ {X : Type u} {inst : TopologicalSpace X} [self : T5
+Space X], T1Space X
+· 使用定理 `T6Space.toT5Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T6Space
+ X], T5Space X
+· 使用定理 `instT6SpaceOfMetrizableSpace`：∀ {X : Type u_1} [inst : TopologicalSpace 
+X] [TopologicalSpace.MetrizableSpace X], T6Space X
+· 使用定理 `CompletelyNormalSpace.toNormalSpace`：∀ {X : Type u_1} [inst : Topologica
+lSpace X] [CompletelyNormalSpace X], NormalSpace X
+· 使用定理 `instCompletelyNormalSpaceSubtype`：∀ {X : Type u_1} [inst : TopologicalSp
+ace X] [CompletelyNormalSpace X] {p : X → Prop},   CompletelyNormalSpace { x // 
+p x }
+· 使用定理 `CompletelyNormalSpace.of_regularSpace_secondCountableTopology`：∀ {X : Ty
+pe u_1} [inst : TopologicalSpace X] [RegularSpace X] [SecondCountableTopology X]
+, CompletelyNormalSpace X
+· 使用定理 `instRegularSpaceForall`：∀ {ι : Type u_3} {X : ι → Type u_4} [inst : (i :
+ ι) → TopologicalSpace (X i)] [∀ (i : ι), RegularSpace (X i)],   RegularSpace ((
+i : ι) → X i…
+· 使用定理 `TopologicalSpace.PseudoMetrizableSpace.regularSpace`：∀ {X : Type u_2} [i
+nst : TopologicalSpace X] [TopologicalSpace.PseudoMetrizableSpace X], RegularSpa
+ce X
+· 使用引理 `MeasurableEmbedding.borelSpace`：MeasurableEmbedding.borelSpace {α β : Ty
+pe*} [MeasurableSpace α] [TopologicalSpace α] [MeasurableSpace β] [TopologicalSp
+ace β] [hβ : BorelSp…
+· 使用定理 `MeasurableEquiv.measurableEmbedding`：∀ {α : Type u_1} {β : Type u_2} [in
+st : MeasurableSpace α] [inst_1 : MeasurableSpace β] (e : α ≃ᵐ β),   MeasurableE
+mbedding ⇑e
+· 使用引理 `Homeomorph.isInducing`：isInducing (h : X ≃ₜ Y) : IsInducing h
 
-English:
-theorem exists_borelSpace_of_countablyGenerated_of_separatesPoints
-  statement: (α : Type*)
-  proof: by
-  rcases measurableEquiv_nat_bool_of_countablyGenerated α with ⟨s, ⟨f⟩⟩
-  let := induced f inferInstance
-let F := f.toEquiv.toHomeomorphOfIsInducing .induced _
-  exact ⟨inferInstance, F.secondCountableTopology, F.symm.t4Space,
-    f.measurableEmbedding.borelSpace F.isInducing⟩
-
-中文:
-定理 存在_borelSpace_of_countablyGenerated_of_separatesPoints
-  结论: (α : 类型)
-  证明: by
-  rcases measurableEquiv_nat_bool_of_countablyGenerated α with ⟨s, ⟨f⟩⟩
-  let := induced f inferInstance
-let F := f.toEquiv.toHomeomorphOfIsInducing .induced _
-  exact ⟨inferInstance, F.secondCountableTopology, F.symm.t4Space,
-    f.measurableEmbedding.borelSpace F.isInducing⟩
-
-Depends on / 依赖: F.isInducing, F.secondCountableTopology, F.symm.t4Space, borelSpace, f.measurableEmbedding.borelSpace, f.toEquiv.toHomeomorphOfIsInducing, induced, isInducing, measurableEmbedding, measurableEquiv_nat_bool_of_countablyGenerated, secondCountableTopology, t4Space, toEquiv, toHomeomorphOfIsInducing
+--- 原说明 ---
+If a measurable space is countably generated and separates points, it arises as
+the Borel sets of some second countable t4 topology (i.e. a separable metrizable
+ one).
 -/
 theorem exists_borelSpace_of_countablyGenerated_of_separatesPoints (α : Type*)
     [m : MeasurableSpace α] [CountablyGenerated α] [SeparatesPoints α] :
-    exists _ : TopologicalSpace α, SecondCountableTopology α ∧ T4Space α ∧ BorelSpace α := by
+    ∃ _ : TopologicalSpace α, SecondCountableTopology α ∧ T4Space α ∧ BorelSpace α := by
   rcases measurableEquiv_nat_bool_of_countablyGenerated α with ⟨s, ⟨f⟩⟩
   let := induced f inferInstance
-let F := f.toEquiv.toHomeomorphOfIsInducing .induced _
+  let F := f.toEquiv.toHomeomorphOfIsInducing <| .induced _
   exact ⟨inferInstance, F.secondCountableTopology, F.symm.t4Space,
     f.measurableEmbedding.borelSpace F.isInducing⟩
 
-/--
-theorem `exists_opensMeasurableSpace_of_countablySeparated` / 定理 `exists_opensMeasurableSpace_of_countablySeparated`
+/-- If a measurable space on `α` is countably generated and separates points, there is some
+second countable t4 topology on `α` (i.e. a separable metrizable one) for which every
+open set is measurable. -/
+/-
+**exists_opensMeasurableSpace_of_countablySeparated** 是 Mathlib 中的一个定理，位于命名空间 ``
+。
+形式化陈述：exists_opensMeasurableSpace_of_countablySeparated (α : Type*) [m : Measura
+bleSpace α] [CountablySeparated α] : exists _ : TopologicalSpace α, SecondCounta
+bleTopology α ∧ T4Space α ∧ OpensMeasurableSpace α
+参数：α : Type*。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSpace.exists_countablyGenerated_le_of_countablySeparated`：exis
+ts_countablyGenerated_le_of_countablySeparated [m : MeasurableSpace α] [h : Coun
+tablySeparated α] : exists m' : MeasurableSpace α, @Coun…
+· 使用定理 `exists_borelSpace_of_countablyGenerated_of_separatesPoints`：exists_borel
+Space_of_countablyGenerated_of_separatesPoints (α : Type*) [m : MeasurableSpace 
+α] [CountablyGenerated α] [SeparatesPoints α] : …
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `BorelSpace.measurable_eq`：∀ {α : Type u_6} {inst : TopologicalSpace α} {
+inst_1 : MeasurableSpace α} [self : BorelSpace α], inst_1 = borel α
 
-English:
-theorem exists_opensMeasurableSpace_of_countablySeparated
-  statement: (α : Type*)
-  proof: by
-  rcases exists_countablyGenerated_le_of_countablySeparated α with ⟨m', _, _, m'le⟩
-  rcases exists_borelSpace_of_countablyGenerated_of_separatesPoints (m := m') with ⟨τ, _, _, τm'⟩
-  exact ⟨τ, ‹_›, ‹_›, @OpensMeasurableSpace.mk _ _ m (τm'.measurable_eq.symm.le.trans m'le)⟩
-
-中文:
-定理 存在_opensMeasurableSpace_of_countablySeparated
-  结论: (α : 类型)
-  证明: by
-  rcases exists_countablyGenerated_le_of_countablySeparated α with ⟨m', _, _, m'le⟩
-  rcases exists_borelSpace_of_countablyGenerated_of_separatesPoints (m := m') with ⟨τ, _, _, τm'⟩
-  exact ⟨τ, ‹_›, ‹_›, @OpensMeasurableSpace.mk _ _ m (τm'.measurable_eq.symm.le.trans m'le)⟩
-
-Depends on / 依赖: OpensMeasurableSpace, OpensMeasurableSpace.mk, exists_borelSpace_of_countablyGenerated_of_separatesPoints, exists_countablyGenerated_le_of_countablySeparated, measurable_eq, measurable_eq.symm.le.trans
+--- 原说明 ---
+If a measurable space on `α` is countably generated and separates points, there 
+is some
+second countable t4 topology on `α` (i.e. a separable metrizable one) for which 
+every
+open set is measurable.
 -/
 theorem exists_opensMeasurableSpace_of_countablySeparated (α : Type*)
     [m : MeasurableSpace α] [CountablySeparated α] :
-    exists _ : TopologicalSpace α, SecondCountableTopology α ∧ T4Space α ∧ OpensMeasurableSpace α := by
+    ∃ _ : TopologicalSpace α, SecondCountableTopology α ∧ T4Space α ∧ OpensMeasurableSpace α := by
   rcases exists_countablyGenerated_le_of_countablySeparated α with ⟨m', _, _, m'le⟩
   rcases exists_borelSpace_of_countablyGenerated_of_separatesPoints (m := m') with ⟨τ, _, _, τm'⟩
   exact ⟨τ, ‹_›, ‹_›, @OpensMeasurableSpace.mk _ _ m (τm'.measurable_eq.symm.le.trans m'le)⟩
@@ -712,65 +723,47 @@ variable {ε : Type*} [MeasurableSpace ε] [TopologicalSpace ε] [ContinuousENor
   [OpensMeasurableSpace ε] [MeasurableSpace β]
 
 @[fun_prop]
-/--
-lemma `measurable_enorm` / 引理 `measurable_enorm`
-
-English:
-lemma measurable_enorm
-  statement: Measurable (enorm : ε -> Real>=0∞)
-  proof: continuous_enorm.measurable
-
-@[fun_prop]
-
-中文:
-引理 measurable_enorm
-  结论: 可测 (enorm : ε -> 实数>=0∞)
-  证明: continuous_enorm.measurable
-
-@[fun_prop]
-
-Depends on / 依赖: continuous_enorm, continuous_enorm.measurable, measurable
+/-
+**measurable_enorm** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：measurable_enorm : Measurable (enorm : ε -> Real>=0∞)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.measurable`：Continuous.measurable {f : α -> γ} (hf : Continuo
+us f) : Measurable f
+· 使用引理 `continuous_enorm`：continuous_enorm : Continuous fun a : E => ‖a‖ₑ
 -/
-lemma measurable_enorm : Measurable (enorm : ε -> Real>=0∞) := continuous_enorm.measurable
+lemma measurable_enorm : Measurable (enorm : ε → ℝ≥0∞) := continuous_enorm.measurable
 
 @[fun_prop]
-/--
-lemma `Measurable.enorm` / 引理 `Measurable.enorm`
-
-English:
-lemma Measurable.enorm
-  given: {f : β -> ε} (hf : Measurable f)
-  statement: Measurable (‖f ·‖ₑ)
-  proof: measurable_enorm.comp hf
-
-@[fun_prop]
-
-中文:
-引理 可测.enorm
-  条件: {f : β -> ε} (hf : 可测 f)
-  结论: 可测 (‖f ·‖ₑ)
-  证明: measurable_enorm.comp hf
-
-@[fun_prop]
+/-
+**Measurable.enorm** 是 Mathlib 中的一个定理，位于命名空间 `Measurable`。
+形式化陈述：∀ {β : Type u_2} {ε : Type u_5} [inst : MeasurableSpace ε] [inst_1 : Topol
+ogicalSpace ε] [inst_2 : ContinuousENorm ε]   [OpensMeasurableSpace ε] [inst_4 :
+ MeasurableSpace β] {f : β → ε}, Measurable f → Measurable fun x => ‖f x‖ₑ
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用引理 `measurable_enorm`：measurable_enorm : Measurable (enorm : ε -> Real>=0∞)
 -/
-protected lemma Measurable.enorm {f : β -> ε} (hf : Measurable f) : Measurable (‖f ·‖ₑ) :=
+protected lemma Measurable.enorm {f : β → ε} (hf : Measurable f) : Measurable (‖f ·‖ₑ) :=
   measurable_enorm.comp hf
 
 @[fun_prop]
-/--
-lemma `AEMeasurable.enorm` / 引理 `AEMeasurable.enorm`
-
-English:
-lemma AEMeasurable.enorm
-  given: {f : β -> ε} {μ : Measure β} (hf : AEMeasurable f μ)
-  proof: measurable_enorm.comp_aemeasurable hf
-
-中文:
-引理 几乎处处可测.enorm
-  条件: {f : β -> ε} {μ : 测度 β} (hf : 几乎处处可测 f μ)
-  证明: measurable_enorm.comp_aemeasurable hf
+/-
+**AEMeasurable.enorm** 是 Mathlib 中的一个定理，位于命名空间 `AEMeasurable`。
+形式化陈述：∀ {β : Type u_2} {ε : Type u_5} [inst : MeasurableSpace ε] [inst_1 : Topol
+ogicalSpace ε] [inst_2 : ContinuousENorm ε]   [OpensMeasurableSpace ε] [inst_4 :
+ MeasurableSpace β] {f : β → ε} {μ : MeasureTheory.Measure β},   AEMeasurable f 
+μ → AEMeasurable (fun x => ‖f x‖ₑ) μ
+参数：fun x => ‖f x‖ₑ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp_aemeasurable`：Measurable.comp_aemeasurable [MeasurableSp
+ace δ] {f : α -> δ} {g : δ -> β} (hg : Measurable g) (hf : AEMeasurable f μ) : A
+EMeasurable (g ∘ f…
+· 使用引理 `measurable_enorm`：measurable_enorm : Measurable (enorm : ε -> Real>=0∞)
 -/
-protected lemma AEMeasurable.enorm {f : β -> ε} {μ : Measure β} (hf : AEMeasurable f μ) :
+protected lemma AEMeasurable.enorm {f : β → ε} {μ : Measure β} (hf : AEMeasurable f μ) :
     AEMeasurable (‖f ·‖ₑ) μ :=
   measurable_enorm.comp_aemeasurable hf
 
@@ -781,134 +774,98 @@ section NormedAddCommGroup
 variable [MeasurableSpace α] [NormedAddCommGroup α] [OpensMeasurableSpace α] [MeasurableSpace β]
 
 @[fun_prop]
-/--
-theorem `measurable_norm` / 定理 `measurable_norm`
-
-English:
-theorem measurable_norm
-  statement: Measurable (norm : α -> Real)
-  proof: continuous_norm.measurable
-
-@[fun_prop]
-
-中文:
-定理 measurable_norm
-  结论: 可测 (norm : α -> 实数)
-  证明: continuous_norm.measurable
-
-@[fun_prop]
-
-Depends on / 依赖: continuous_norm, continuous_norm.measurable, measurable
+/-
+**measurable_norm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_norm : Measurable (norm : α -> Real)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.measurable`：Continuous.measurable {f : α -> γ} (hf : Continuo
+us f) : Measurable f
+· 使用定理 `continuous_norm`：∀ {E : Type u_4} [inst : SeminormedAddGroup E], Continu
+ous fun a => ‖a‖
 -/
-theorem measurable_norm : Measurable (norm : α -> Real) :=
+theorem measurable_norm : Measurable (norm : α → ℝ) :=
   continuous_norm.measurable
 
 @[fun_prop]
-/--
-theorem `Measurable.norm` / 定理 `Measurable.norm`
-
-English:
-theorem Measurable.norm
-  given: {f : β -> α} (hf : Measurable f)
-  statement: Measurable fun a => norm (f a)
-  proof: measurable_norm.comp hf
-
-@[fun_prop]
-
-中文:
-定理 可测.norm
-  条件: {f : β -> α} (hf : 可测 f)
-  结论: 可测 fun a => norm (f a)
-  证明: measurable_norm.comp hf
-
-@[fun_prop]
-
-Depends on / 依赖: measurable_norm, measurable_norm.comp
+/-
+**Measurable.norm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.norm {f : β -> α} (hf : Measurable f) : Measurable fun a => nor
+m (f a)
+参数：hf : Measurable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `measurable_norm`：measurable_norm : Measurable (norm : α -> Real)
 -/
-theorem Measurable.norm {f : β -> α} (hf : Measurable f) : Measurable fun a => norm (f a) :=
+theorem Measurable.norm {f : β → α} (hf : Measurable f) : Measurable fun a => norm (f a) :=
   measurable_norm.comp hf
 
 @[fun_prop]
-/--
-theorem `AEMeasurable.norm` / 定理 `AEMeasurable.norm`
-
-English:
-theorem AEMeasurable.norm
-  given: {f : β -> α} {μ : Measure β} (hf : AEMeasurable f μ)
-  proof: measurable_norm.comp_aemeasurable hf
-
-中文:
-定理 几乎处处可测.norm
-  条件: {f : β -> α} {μ : 测度 β} (hf : 几乎处处可测 f μ)
-  证明: measurable_norm.comp_aemeasurable hf
-
-Depends on / 依赖: comp_aemeasurable, measurable_norm, measurable_norm.comp_aemeasurable
+/-
+**AEMeasurable.norm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：AEMeasurable.norm {f : β -> α} {μ : Measure β} (hf : AEMeasurable f μ) : A
+EMeasurable (fun a => norm (f a)) μ
+参数：hf : AEMeasurable f μ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp_aemeasurable`：Measurable.comp_aemeasurable [MeasurableSp
+ace δ] {f : α -> δ} {g : δ -> β} (hg : Measurable g) (hf : AEMeasurable f μ) : A
+EMeasurable (g ∘ f…
+· 使用定理 `measurable_norm`：measurable_norm : Measurable (norm : α -> Real)
 -/
-theorem AEMeasurable.norm {f : β -> α} {μ : Measure β} (hf : AEMeasurable f μ) :
+theorem AEMeasurable.norm {f : β → α} {μ : Measure β} (hf : AEMeasurable f μ) :
     AEMeasurable (fun a => norm (f a)) μ :=
   measurable_norm.comp_aemeasurable hf
-
-/--
-theorem `measurable_nnnorm` / 定理 `measurable_nnnorm`
-
-English:
-theorem measurable_nnnorm
-  statement: Measurable (nnnorm : α -> Real>=0)
-  proof: continuous_nnnorm.measurable
-
-@[fun_prop]
-
-中文:
-定理 measurable_nnnorm
-  结论: 可测 (nnnorm : α -> 实数>=0)
-  证明: continuous_nnnorm.measurable
-
-@[fun_prop]
-
-Depends on / 依赖: continuous_nnnorm, continuous_nnnorm.measurable, measurable
+/-
+**measurable_nnnorm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：measurable_nnnorm : Measurable (nnnorm : α -> Real>=0)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.measurable`：Continuous.measurable {f : α -> γ} (hf : Continuo
+us f) : Measurable f
+· 使用定理 `continuous_nnnorm`：∀ {E : Type u_4} [inst : SeminormedAddGroup E], Conti
+nuous fun a => ‖a‖₊
 -/
-theorem measurable_nnnorm : Measurable (nnnorm : α -> Real>=0) :=
+theorem measurable_nnnorm : Measurable (nnnorm : α → ℝ≥0) :=
   continuous_nnnorm.measurable
 
 @[fun_prop]
-/--
-theorem `Measurable.nnnorm` / 定理 `Measurable.nnnorm`
-
-English:
-theorem Measurable.nnnorm
-  given: {f : β -> α} (hf : Measurable f)
-  statement: Measurable fun a => ‖f a‖₊
-  proof: measurable_nnnorm.comp hf
-
-@[fun_prop]
-
-中文:
-定理 可测.nnnorm
-  条件: {f : β -> α} (hf : 可测 f)
-  结论: 可测 fun a => ‖f a‖₊
-  证明: measurable_nnnorm.comp hf
-
-@[fun_prop]
+/-
+**Measurable.nnnorm** 是 Mathlib 中的一个定理，位于命名空间 `Measurable`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : MeasurableSpace α] [inst_1 : Norme
+dAddCommGroup α] [OpensMeasurableSpace α]   [inst_3 : MeasurableSpace β] {f : β 
+→ α}, Measurable f → Measurable fun a => ‖f a‖₊
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
+· 使用定理 `measurable_nnnorm`：measurable_nnnorm : Measurable (nnnorm : α -> Real>=0
+)
 -/
-protected theorem Measurable.nnnorm {f : β -> α} (hf : Measurable f) : Measurable fun a => ‖f a‖₊ :=
+protected theorem Measurable.nnnorm {f : β → α} (hf : Measurable f) : Measurable fun a => ‖f a‖₊ :=
   measurable_nnnorm.comp hf
 
 @[fun_prop]
-/--
-lemma `AEMeasurable.nnnorm` / 引理 `AEMeasurable.nnnorm`
-
-English:
-lemma AEMeasurable.nnnorm
-  given: {f : β -> α} {μ : Measure β} (hf : AEMeasurable f μ)
-  proof: measurable_nnnorm.comp_aemeasurable hf
-
-中文:
-引理 几乎处处可测.nnnorm
-  条件: {f : β -> α} {μ : 测度 β} (hf : 几乎处处可测 f μ)
-  证明: measurable_nnnorm.comp_aemeasurable hf
+/-
+**AEMeasurable.nnnorm** 是 Mathlib 中的一个定理，位于命名空间 `AEMeasurable`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : MeasurableSpace α] [inst_1 : Norme
+dAddCommGroup α] [OpensMeasurableSpace α]   [inst_3 : MeasurableSpace β] {f : β 
+→ α} {μ : MeasureTheory.Measure β},   AEMeasurable f μ → AEMeasurable (fun a => 
+‖f a‖₊) μ
+参数：fun a => ‖f a‖₊。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp_aemeasurable`：Measurable.comp_aemeasurable [MeasurableSp
+ace δ] {f : α -> δ} {g : δ -> β} (hg : Measurable g) (hf : AEMeasurable f μ) : A
+EMeasurable (g ∘ f…
+· 使用定理 `measurable_nnnorm`：measurable_nnnorm : Measurable (nnnorm : α -> Real>=0
+)
 -/
-protected lemma AEMeasurable.nnnorm {f : β -> α} {μ : Measure β} (hf : AEMeasurable f μ) :
+protected lemma AEMeasurable.nnnorm {f : β → α} {μ : Measure β} (hf : AEMeasurable f μ) :
     AEMeasurable (fun a => ‖f a‖₊) μ :=
   measurable_nnnorm.comp_aemeasurable hf
 
 end NormedAddCommGroup
+

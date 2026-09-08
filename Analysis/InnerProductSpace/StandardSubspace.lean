@@ -49,79 +49,64 @@ open scoped ComplexInnerProductSpace
 
 section ScalarSMulCLE
 
-variable (H : Type*) [NormedAddCommGroup H] [InnerProductSpace Complex H]
+variable (H : Type*) [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
-/--
-Definition of `scalarSMulCLE` / `scalarSMulCLE` 的定义
+/-- the scalar product by a non-zero complex number as a continuous real-linear equivalence. -/
+/-
+**scalarSMulCLE** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：scalarSMulCLE (c : Complexˣ) : H ≃L[Real] H
+参数：c : Complexˣ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition scalarSMulCLE
-  signature: (c : Complexˣ)
-  body: ContinuousLinearEquiv.smulLeft c
-
-@[simp]
-
-中文:
-定义 scalarSMulCLE
-  签名: (c : Complexˣ)
-  定义体: ContinuousLinearEquiv.smulLeft c
-
-@[simp]
-
-Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.smulLeft, smulLeft
+--- 原说明 ---
+the scalar product by a non-zero complex number as a continuous real-linear equi
+valence.
 -/
-noncomputable def scalarSMulCLE (c : Complexˣ) : H ≃L[Real] H := ContinuousLinearEquiv.smulLeft c
+noncomputable def scalarSMulCLE (c : ℂˣ) : H ≃L[ℝ] H := ContinuousLinearEquiv.smulLeft c
 
 @[simp]
-/--
-lemma `scalarSMulCLE_apply` / 引理 `scalarSMulCLE_apply`
-
-English:
-lemma scalarSMulCLE_apply
-  given: (c : Complexˣ) (x : H)
-  statement: scalarSMulCLE H c x = c • x
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 scalarSMulCLE_apply
-  条件: (c : Complexˣ) (x : H)
-  结论: scalarSMulCLE H c x = c • x
-  证明: rfl
-
-@[simp]
+/-
+**scalarSMulCLE_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：scalarSMulCLE_apply (c : Complexˣ) (x : H) : scalarSMulCLE H c x = c • x
+参数：c : Complexˣ；x : H。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma scalarSMulCLE_apply (c : Complexˣ) (x : H) : scalarSMulCLE H c x = c • x := rfl
+lemma scalarSMulCLE_apply (c : ℂˣ) (x : H) : scalarSMulCLE H c x = c • x := rfl
 
 @[simp]
-/--
-lemma `scalarSMulCLE_symm_apply` / 引理 `scalarSMulCLE_symm_apply`
-
-English:
-lemma scalarSMulCLE_symm_apply
-  given: (c : Complexˣ) (x : H)
-  statement: (scalarSMulCLE H c).symm x = c⁻¹ • x
-  proof: rfl
-
-中文:
-引理 scalarSMulCLE_symm_apply
-  条件: (c : Complexˣ) (x : H)
-  结论: (scalarSMulCLE H c).symm x = c⁻¹ • x
-  证明: rfl
+/-
+**scalarSMulCLE_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：scalarSMulCLE_symm_apply (c : Complexˣ) (x : H) : (scalarSMulCLE H c).symm
+ x = c⁻¹ • x
+参数：c : Complexˣ；x : H。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma scalarSMulCLE_symm_apply (c : Complexˣ) (x : H) : (scalarSMulCLE H c).symm x = c⁻¹ • x := rfl
+lemma scalarSMulCLE_symm_apply (c : ℂˣ) (x : H) : (scalarSMulCLE H c).symm x = c⁻¹ • x := rfl
 
 end ScalarSMulCLE
 
 namespace ClosedSubmodule
 
-variable {H : Type*} [NormedAddCommGroup H] [ipc : InnerProductSpace Complex H]
+variable {H : Type*} [NormedAddCommGroup H] [ipc : InnerProductSpace ℂ H]
 
 /-- `H` as a real Hilbert space. This instance is declared inside `ClosedSubmodule` namespace. If
 one needs this structure (for example when considering standard subspaces), one should just `open
 ClosedSubmodule` and not declare another instance. -/
-noncomputable scoped instance : InnerProductSpace Real H where
+/-
+**ClosedSubmodule.** 是 Mathlib 中的一个实例，位于命名空间 `ClosedSubmodule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`H` as a real Hilbert space. This instance is declared inside `ClosedSubmodule` 
+namespace. If
+one needs this structure (for example when considering standard subspaces), one 
+should just `open
+ClosedSubmodule` and not declare another instance.
+-/
+noncomputable scoped instance : InnerProductSpace ℝ H where
   inner x y := ⟪x, y⟫.re
   norm_sq_eq_re_inner := by simp [RCLike.re_to_real, ipc.norm_sq_eq_re_inner]
   conj_inner_symm x y := by
@@ -129,114 +114,118 @@ noncomputable scoped instance : InnerProductSpace Real H where
     rfl
   add_left := by simp
   smul_left := by simp
-
-/--
-lemma `inner_real_eq_re_inner` / 引理 `inner_real_eq_re_inner`
-
-English:
-lemma inner_real_eq_re_inner
-  given: (x y : H)
-  statement: inner Real x y = ⟪x, y⟫.re
-  proof: rfl
-
-中文:
-引理 inner_real_eq_re_inner
-  条件: (x y : H)
-  结论: inner 实数 x y = ⟪x, y⟫.re
-  证明: rfl
+/-
+**ClosedSubmodule.inner_real_eq_re_inner** 是 Mathlib 中的一个引理，位于命名空间 `ClosedSubmod
+ule`。
+形式化陈述：inner_real_eq_re_inner (x y : H) : inner Real x y = ⟪x, y⟫.re
+参数：x y : H。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma inner_real_eq_re_inner (x y : H) : inner Real x y = ⟪x, y⟫.re := rfl
+lemma inner_real_eq_re_inner (x y : H) : inner ℝ x y = ⟪x, y⟫.re := rfl
 
 /-- The imaginary unit as an invertible element. -/
 @[simps val]
-/--
-Definition of `_root_.Complex.UnitI` / `_root_.Complex.UnitI` 的定义
+/-
+**ClosedSubmodule._root_.Complex.UnitI** 是 Mathlib 中的一个定义，位于命名空间 `ClosedSubmodul
+e`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.Complex.UnitI
-  signature: : Complexˣ where
-  body: I
-  inv := -I
-  val_inv := by simp
-  inv_val := by simp
-
-中文:
-定义 _root_.复形.UnitI
-  签名: : Complexˣ where
-  定义体: I
-  inv := -I
-  val_inv := by simp
-  inv_val := by simp
+--- 原说明 ---
+The imaginary unit as an invertible element.
 -/
-def _root_.Complex.UnitI : Complexˣ where
+def _root_.Complex.UnitI : ℂˣ where
   val := I
   inv := -I
   val_inv := by simp
   inv_val := by simp
 
-/--
-Definition of `mulI` / `mulI` 的定义
+/-- The image of a closed submodule by the multiplication by `Complex.I`. -/
+/-
+**ClosedSubmodule.mulI** 是 Mathlib 中的一个缩写定义，位于命名空间 `ClosedSubmodule`。
+形式化陈述：mulI (S : ClosedSubmodule Real H)
+参数：S : ClosedSubmodule Real H。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mulI
-  signature: (S : ClosedSubmodule Real H)
-  body: S.mapEquiv (scalarSMulCLE H UnitI)
-
-中文:
-缩写 mulI
-  签名: (S : 闭子模 实数 H)
-  定义体: S.mapEquiv (scalarSMulCLE H UnitI)
-
-Depends on / 依赖: S.mapEquiv, mapEquiv, scalarSMulCLE
+--- 原说明 ---
+The image of a closed submodule by the multiplication by `Complex.I`.
 -/
-noncomputable abbrev mulI (S : ClosedSubmodule Real H) := S.mapEquiv (scalarSMulCLE H UnitI)
+noncomputable abbrev mulI (S : ClosedSubmodule ℝ H) := S.mapEquiv (scalarSMulCLE H UnitI)
 
-/--
-Definition of `symplComp` / `symplComp` 的定义
+/-- The symplectic complement of a closed submodule with respect to `⟪⬝, ⬝⟫.im`, defined as the
+image of `mulI` and `orthogonal`. The proof that this is the symplectic complement is given by
+`mem_symplComp_iff`. -/
+/-
+**ClosedSubmodule.symplComp** 是 Mathlib 中的一个缩写定义，位于命名空间 `ClosedSubmodule`。
+形式化陈述：symplComp (S : ClosedSubmodule Real H)
+参数：S : ClosedSubmodule Real H。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation symplComp
-  signature: (S : ClosedSubmodule Real H)
-  body: (S.mulI)ᗮ
-
-中文:
-缩写 symplComp
-  签名: (S : 闭子模 实数 H)
-  定义体: (S.mulI)ᗮ
-
-Depends on / 依赖: S.mulI
+--- 原说明 ---
+The symplectic complement of a closed submodule with respect to `⟪⬝, ⬝⟫.im`, def
+ined as the
+image of `mulI` and `orthogonal`. The proof that this is the symplectic compleme
+nt is given by
+`mem_symplComp_iff`.
 -/
-noncomputable abbrev symplComp (S : ClosedSubmodule Real H) := (S.mulI)ᗮ
-
-/--
-lemma `mem_iff` / 引理 `mem_iff`
-
-English:
-lemma mem_iff
-  given: (S : ClosedSubmodule Real H) {x : H}
-  statement: x in S ↔ x in S.toSubmodule.carrier
-  proof: by
-  exact Eq.to_iff rfl
-
-中文:
-引理 mem_iff
-  条件: (S : 闭子模 实数 H) {x : H}
-  结论: x in S ↔ x in S.toSubmodule.carrier
-  证明: by
-  exact Eq.to_iff rfl
-
-Depends on / 依赖: Eq.to_iff, to_iff
+noncomputable abbrev symplComp (S : ClosedSubmodule ℝ H) := (S.mulI)ᗮ
+/-
+**ClosedSubmodule.mem_iff** 是 Mathlib 中的一个引理，位于命名空间 `ClosedSubmodule`。
+形式化陈述：mem_iff (S : ClosedSubmodule Real H) {x : H} : x in S ↔ x in S.toSubmodule
+.carrier
+参数：S : ClosedSubmodule Real H。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.to_iff`：∀ {a b : Prop}, a = b → (a ↔ b)
 -/
-lemma mem_iff (S : ClosedSubmodule Real H) {x : H} : x in S ↔ x in S.toSubmodule.carrier := by
+lemma mem_iff (S : ClosedSubmodule ℝ H) {x : H} : x ∈ S ↔ x ∈ S.toSubmodule.carrier := by
   exact Eq.to_iff rfl
-
-/--
-lemma `mem_symplComp_iff` / 引理 `mem_symplComp_iff`
-
-English:
-lemma mem_symplComp_iff
-  given: {x : H} {S : ClosedSubmodule Real H}
-  proof: by
+/-
+**ClosedSubmodule.mem_symplComp_iff** 是 Mathlib 中的一个引理，位于命名空间 `ClosedSubmodule`。
+形式化陈述：mem_symplComp_iff {x : H} {S : ClosedSubmodule Real H} : x in S.symplComp 
+↔ forall y in S, ⟪y, x⟫.im = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Units.val_inv_eq_inv_val`：∀ {α : Type u} [inst : DivisionMonoid α] (u : 
+αˣ), ↑u⁻¹ = (↑u)⁻¹
+· 使用定理 `Complex.val_UnitI`：↑Complex.UnitI = Complex.I
+· 使用定理 `Complex.inv_I`：inv_I : I⁻¹ = -I
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用引理 `CStarModule.inner_op_smul_left`：inner_op_smul_left {a : A} {x y : E} : ⟪
+a • x, y⟫ = ⟪x, y⟫ * star a
+· 使用定理 `Complex.conj_I`：conj_I : conj I = -I
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `Complex.mul_re`：mul_re (z w : Complex) : (z * w).re = z.re * w.re - z.im
+ * w.im
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `zero_sub`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 0 - a = -a
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `Complex.I_mul_I`：I_mul_I : I * I = -1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `CStarModule.inner_neg_left`：∀ {A : Type u_1} {E : Type u_2} [inst : NonU
+nitalRing A] [inst_1 : StarRing A] [inst_2 : AddCommGroup E]   [inst_3 : _root_.
+Module ℂ A] [ins…
+· 使用定理 `CStarAlgebra.toStarModule`：∀ {A : Type u_1} [self : CStarAlgebra A], Sta
+rModule ℂ A
+· 使用定理 `Complex.mul_im`：mul_im (z w : Complex) : (z * w).im = z.re * w.im + z.im
+ * w.re
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+-/
+lemma mem_symplComp_iff {x : H} {S : ClosedSubmodule ℝ H} :
+    x ∈ S.symplComp ↔ ∀ y ∈ S, ⟪y, x⟫.im = 0 := by
   simp only [mem_orthogonal, mem_mapEquiv_iff, scalarSMulCLE_symm_apply, Units.smul_def,
     Units.val_inv_eq_inv_val, val_UnitI, inv_I, neg_smul]
   constructor
@@ -247,335 +236,333 @@ lemma mem_symplComp_iff
   · intro h _ hy
     have hiy := h _ hy
     simpa [inner_smul_left] using! hiy
-
-中文:
-引理 mem_symplComp_iff
-  条件: {x : H} {S : 闭子模 实数 H}
-  证明: by
-  simp only [mem_orthogonal, mem_mapEquiv_iff, scalarSMulCLE_symm_apply, Units.smul_def,
-    Units.val_inv_eq_inv_val, val_UnitI, inv_I, neg_smul]
-  constructor
-  · intro h y hy
-    have hiy := h (I • y)
-    simp only [← smul_assoc, smul_eq_mul, I_mul_I, neg_smul, one_smul, neg_neg] at hiy
-    simpa [inner_real_eq_re_inner] using! hiy hy
-  · intro h _ hy
-    have hiy := h _ hy
-    simpa [inner_smul_left] using! hiy
-
-Depends on / 依赖: I_mul_I, Units.smul_def, Units.val_inv_eq_inv_val, inner_real_eq_re_inner, inner_smul_left, inv_I, mem_mapEquiv_iff, mem_orthogonal, neg_neg, neg_smul, one_smul, scalarSMulCLE_symm_apply, smul_assoc, smul_def, smul_eq_mul, val_UnitI, val_inv_eq_inv_val
+/-
+**ClosedSubmodule.mulI_orthogonal_eq_symplComp** 是 Mathlib 中的一个引理，位于命名空间 `Closed
+Submodule`。
+形式化陈述：mulI_orthogonal_eq_symplComp (S : ClosedSubmodule Real H) : Sᗮ.mulI = S.sy
+mplComp
+参数：S : ClosedSubmodule Real H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ClosedSubmodule.ext`：∀ {R : Type u_2} {M : Type u_3} {inst : Semiring R}
+ {inst_1 : AddCommMonoid M} {inst_2 : TopologicalSpace M}   {inst_3 : _root_.Mod
+ule R M} …
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `ClosedSubmodule.mem_iff`：mem_iff (S : ClosedSubmodule Real H) {x : H} : 
+x in S ↔ x in S.toSubmodule.carrier
+· 使用引理 `ClosedSubmodule.mem_symplComp_iff`：mem_symplComp_iff {x : H} {S : Closed
+Submodule Real H} : x in S.symplComp ↔ forall y in S, ⟪y, x⟫.im = 0
+· 使用引理 `ClosedSubmodule.mem_mapEquiv_iff`：mem_mapEquiv_iff (x : N) : x in (s.map
+Equiv f) ↔ f.symm x in s
+· 使用引理 `scalarSMulCLE_symm_apply`：scalarSMulCLE_symm_apply (c : Complexˣ) (x : H
+) : (scalarSMulCLE H c).symm x = c⁻¹ • x
+· 使用定理 `Units.inv_val`：∀ {α : Type u} [inst : Monoid α] (self : αˣ), self.inv * 
+↑self = 1
+· 使用定理 `Units.val_inv`：∀ {α : Type u} [inst : Monoid α] (self : αˣ), ↑self * sel
+f.inv = 1
+· 使用定理 `Units.inv_mk`：inv_mk (x y : α) (h₁ h₂) : (mk x y h₁ h₂)⁻¹ = mk y x h₂ h₁
+· 使用引理 `Units.smul_mk_apply`：smul_mk_apply {M α : Type*} [Monoid M] [SMul M α] (
+m n : M) (h₁) (h₂) (a : α) : (⟨m, n, h₁, h₂⟩ : Mˣ) • a = m • a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Units.val_inv_eq_inv_val`：∀ {α : Type u} [inst : DivisionMonoid α] (u : 
+αˣ), ↑u⁻¹ = (↑u)⁻¹
+· 使用定理 `Complex.val_UnitI`：↑Complex.UnitI = Complex.I
+· 使用定理 `Complex.inv_I`：inv_I : I⁻¹ = -I
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `inner_neg_right`：inner_neg_right (x y : E) : ⟪x, -y⟫ = -⟪x, y⟫
+· 使用定理 `CStarModule.inner_op_smul_right`：∀ {A : Type u_1} {E : Type u_2} {inst :
+ NonUnitalSemiring A} {inst_1 : StarRing A} {inst_2 : _root_.Module ℂ A}   {inst
+_3 : AddCommGroup E} …
+· 使用定理 `Complex.mul_re`：mul_re (z w : Complex) : (z * w).re = z.re * w.re - z.im
+ * w.im
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `zero_sub`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 0 - a = -a
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma mem_symplComp_iff {x : H} {S : ClosedSubmodule Real H} :
-    x in S.symplComp ↔ forall y in S, ⟪y, x⟫.im = 0 := by
-  simp only [mem_orthogonal, mem_mapEquiv_iff, scalarSMulCLE_symm_apply, Units.smul_def,
-    Units.val_inv_eq_inv_val, val_UnitI, inv_I, neg_smul]
-  constructor
-  · intro h y hy
-    have hiy := h (I • y)
-    simp only [← smul_assoc, smul_eq_mul, I_mul_I, neg_smul, one_smul, neg_neg] at hiy
-    simpa [inner_real_eq_re_inner] using! hiy hy
-  · intro h _ hy
-    have hiy := h _ hy
-    simpa [inner_smul_left] using! hiy
-
-/--
-lemma `mulI_orthogonal_eq_symplComp` / 引理 `mulI_orthogonal_eq_symplComp`
-
-English:
-lemma mulI_orthogonal_eq_symplComp
-  given: (S : ClosedSubmodule Real H)
-  statement: Sᗮ.mulI = S.symplComp
-  proof: by
+lemma mulI_orthogonal_eq_symplComp (S : ClosedSubmodule ℝ H) : Sᗮ.mulI = S.symplComp := by
   ext x
-  rw [← mem_iff]; rw [← mem_iff]; rw [mem_symplComp_iff]; rw [mem_mapEquiv_iff]; rw [scalarSMulCLE_symm_apply]; rw [Units.inv_mk]; rw [Units.smul_mk_apply]
+  rw [← mem_iff, ← mem_iff, mem_symplComp_iff, mem_mapEquiv_iff, scalarSMulCLE_symm_apply,
+    Units.inv_mk, Units.smul_mk_apply]
   simp [inner_real_eq_re_inner]
-
-中文:
-引理 mulI_orthogonal_eq_symplComp
-  条件: (S : 闭子模 实数 H)
-  结论: Sᗮ.mulI = S.symplComp
-  证明: by
-  ext x
-  rw [← mem_iff]; rw [← mem_iff]; rw [mem_symplComp_iff]; rw [mem_mapEquiv_iff]; rw [scalarSMulCLE_symm_apply]; rw [Units.inv_mk]; rw [Units.smul_mk_apply]
-  simp [inner_real_eq_re_inner]
-
-Depends on / 依赖: Units.inv_mk, Units.smul_mk_apply, inner_real_eq_re_inner, inv_mk, mem_iff, mem_mapEquiv_iff, mem_symplComp_iff, scalarSMulCLE_symm_apply, smul_mk_apply
+/-
+**ClosedSubmodule.mulI_orthogonal** 是 Mathlib 中的一个引理，位于命名空间 `ClosedSubmodule`。
+形式化陈述：mulI_orthogonal (S : ClosedSubmodule Real H) : Sᗮ.mulI = S.mulIᗮ
+参数：S : ClosedSubmodule Real H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ClosedSubmodule.mulI_orthogonal_eq_symplComp`：mulI_orthogonal_eq_symplCo
+mp (S : ClosedSubmodule Real H) : Sᗮ.mulI = S.symplComp
 -/
-lemma mulI_orthogonal_eq_symplComp (S : ClosedSubmodule Real H) : Sᗮ.mulI = S.symplComp := by
-  ext x
-  rw [← mem_iff]; rw [← mem_iff]; rw [mem_symplComp_iff]; rw [mem_mapEquiv_iff]; rw [scalarSMulCLE_symm_apply]; rw [Units.inv_mk]; rw [Units.smul_mk_apply]
-  simp [inner_real_eq_re_inner]
-
-
-/--
-lemma `mulI_orthogonal` / 引理 `mulI_orthogonal`
-
-English:
-lemma mulI_orthogonal
-  given: (S : ClosedSubmodule Real H)
-  statement: Sᗮ.mulI = S.mulIᗮ
-  proof: by
+lemma mulI_orthogonal (S : ClosedSubmodule ℝ H) : Sᗮ.mulI = S.mulIᗮ := by
   rw [mulI_orthogonal_eq_symplComp]
 
 @[simp]
-
-中文:
-引理 mulI_orthogonal
-  条件: (S : 闭子模 实数 H)
-  结论: Sᗮ.mulI = S.mulIᗮ
-  证明: by
-  rw [mulI_orthogonal_eq_symplComp]
-
-@[simp]
-
-Depends on / 依赖: mulI_orthogonal_eq_symplComp
+/-
+**ClosedSubmodule.mulI_symplComp** 是 Mathlib 中的一个引理，位于命名空间 `ClosedSubmodule`。
+形式化陈述：mulI_symplComp {S : ClosedSubmodule Real H} : S.symplComp.mulI = S.mulI.sy
+mplComp
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ClosedSubmodule.symplComp.eq_1`：∀ {H : Type u_1} [inst : NormedAddCommGr
+oup H] [ipc : InnerProductSpace ℂ H] (S : ClosedSubmodule ℝ H),   S.symplComp = 
+S.mulIᗮ
+· 使用引理 `ClosedSubmodule.mulI_orthogonal_eq_symplComp`：mulI_orthogonal_eq_symplCo
+mp (S : ClosedSubmodule Real H) : Sᗮ.mulI = S.symplComp
 -/
-lemma mulI_orthogonal (S : ClosedSubmodule Real H) : Sᗮ.mulI = S.mulIᗮ := by
-  rw [mulI_orthogonal_eq_symplComp]
-
-@[simp]
-/--
-lemma `mulI_symplComp` / 引理 `mulI_symplComp`
-
-English:
-lemma mulI_symplComp
-  given: {S : ClosedSubmodule Real H}
-  proof: by
-  rw [symplComp]; rw [symplComp]; rw [mulI_orthogonal_eq_symplComp]
-
-@[simp]
-
-中文:
-引理 mulI_symplComp
-  条件: {S : 闭子模 实数 H}
-  证明: by
-  rw [symplComp]; rw [symplComp]; rw [mulI_orthogonal_eq_symplComp]
-
-@[simp]
-
-Depends on / 依赖: mulI_orthogonal_eq_symplComp, symplComp
--/
-lemma mulI_symplComp {S : ClosedSubmodule Real H} :
+lemma mulI_symplComp {S : ClosedSubmodule ℝ H} :
     S.symplComp.mulI = S.mulI.symplComp := by
-  rw [symplComp]; rw [symplComp]; rw [mulI_orthogonal_eq_symplComp]
+  rw [symplComp, symplComp, mulI_orthogonal_eq_symplComp]
 
 @[simp]
-/--
-lemma `mulI_mulI_eq` / 引理 `mulI_mulI_eq`
-
-English:
-lemma mulI_mulI_eq
-  given: (S : ClosedSubmodule Real H)
-  statement: S.mulI.mulI = S
-  proof: by
-  ext x
-  simp only [Submodule.carrier_eq_coe, coe_toSubmodule, SetLike.mem_coe]
-  constructor
-  · intro h
-    rw [mem_mapEquiv_iff (scalarSMulCLE H UnitI)]; rw [← SetLike.forall_smul_mem_iff] at h
-    simpa [← smul_assoc, Units.smul_def] using (h (-1 : Real))
-  · intro h
-    rw [← SetLike.forall_smul_mem_iff] at h
-    simpa [← smul_assoc, Units.smul_def] using (h (-1 : Real))
-
-中文:
-引理 mulI_mulI_eq
-  条件: (S : 闭子模 实数 H)
-  结论: S.mulI.mulI = S
-  证明: by
-  ext x
-  simp only [Submodule.carrier_eq_coe, coe_toSubmodule, SetLike.mem_coe]
-  constructor
-  · intro h
-    rw [mem_mapEquiv_iff (scalarSMulCLE H UnitI)]; rw [← SetLike.forall_smul_mem_iff] at h
-    simpa [← smul_assoc, Units.smul_def] using (h (-1 : Real))
-  · intro h
-    rw [← SetLike.forall_smul_mem_iff] at h
-    simpa [← smul_assoc, Units.smul_def] using (h (-1 : Real))
-
-Depends on / 依赖: SetLike, SetLike.forall_smul_mem_iff, SetLike.mem_coe, Submodule, Submodule.carrier_eq_coe, Units.smul_def, carrier_eq_coe, coe_toSubmodule, forall_smul_mem_iff, mem_coe, mem_mapEquiv_iff, scalarSMulCLE, smul_assoc, smul_def
+/-
+**ClosedSubmodule.mulI_mulI_eq** 是 Mathlib 中的一个引理，位于命名空间 `ClosedSubmodule`。
+形式化陈述：mulI_mulI_eq (S : ClosedSubmodule Real H) : S.mulI.mulI = S
+参数：S : ClosedSubmodule Real H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ClosedSubmodule.ext`：∀ {R : Type u_2} {M : Type u_3} {inst : Semiring R}
+ {inst_1 : AddCommMonoid M} {inst_2 : TopologicalSpace M}   {inst_3 : _root_.Mod
+ule R M} …
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Units.val_inv_eq_inv_val`：∀ {α : Type u} [inst : DivisionMonoid α] (u : 
+αˣ), ↑u⁻¹ = (↑u)⁻¹
+· 使用定理 `Complex.val_UnitI`：↑Complex.UnitI = Complex.I
+· 使用定理 `Complex.inv_I`：inv_I : I⁻¹ = -I
+· 使用定理 `neg_smul`：neg_smul : -r • x = -(r • x)
+· 使用定理 `smul_neg`：smul_neg (r : M) (x : A) : r • -x = -(r • x)
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `Units.instIsScalarTower`：∀ {M : Type u_3} {N : Type u_4} {α : Type u_5} 
+[inst : Monoid M] [inst_1 : SMul M N] [inst_2 : SMul M α]   [inst_3 : SMul N α] 
+[IsScalarTowe…
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `Complex.I_mul_I`：I_mul_I : I * I = -1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SetLike.forall_smul_mem_iff`：forall_smul_mem_iff {R M S : Type*} [Monoid
+ R] [MulAction R M] [SetLike S M] [SMulMemClass S R M] {N : S} {x : M} : (forall
+ a : R, a • x in …
+· 使用定理 `ClosedSubmodule.instSMulMemClass`：∀ {R : Type u_2} {M : Type u_3} [inst 
+: Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : TopologicalSpace M]   [inst_3
+ : _root_.Module R M],…
+· 使用引理 `ClosedSubmodule.mem_mapEquiv_iff`：mem_mapEquiv_iff (x : N) : x in (s.map
+Equiv f) ↔ f.symm x in s
 -/
-lemma mulI_mulI_eq (S : ClosedSubmodule Real H) : S.mulI.mulI = S := by
+lemma mulI_mulI_eq (S : ClosedSubmodule ℝ H) : S.mulI.mulI = S := by
   ext x
   simp only [Submodule.carrier_eq_coe, coe_toSubmodule, SetLike.mem_coe]
   constructor
   · intro h
-    rw [mem_mapEquiv_iff (scalarSMulCLE H UnitI)]; rw [← SetLike.forall_smul_mem_iff] at h
-    simpa [← smul_assoc, Units.smul_def] using (h (-1 : Real))
+    rw [mem_mapEquiv_iff (scalarSMulCLE H UnitI), ← SetLike.forall_smul_mem_iff] at h
+    simpa [← smul_assoc, Units.smul_def] using (h (-1 : ℝ))
   · intro h
     rw [← SetLike.forall_smul_mem_iff] at h
-    simpa [← smul_assoc, Units.smul_def] using (h (-1 : Real))
-
-/--
-lemma `involutive_mulI` / 引理 `involutive_mulI`
-
-English:
-lemma involutive_mulI
-  proof: mulI_mulI_eq
-
-@[simp]
-
-中文:
-引理 involutive_mulI
-  证明: mulI_mulI_eq
-
-@[simp]
-
-Depends on / 依赖: mulI_mulI_eq
+    simpa [← smul_assoc, Units.smul_def] using (h (-1 : ℝ))
+/-
+**ClosedSubmodule.involutive_mulI** 是 Mathlib 中的一个引理，位于命名空间 `ClosedSubmodule`。
+形式化陈述：involutive_mulI : Function.Involutive (mulI : ClosedSubmodule Real H -> Cl
+osedSubmodule Real H)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ClosedSubmodule.mulI_mulI_eq`：mulI_mulI_eq (S : ClosedSubmodule Real H) 
+: S.mulI.mulI = S
 -/
 lemma involutive_mulI :
-    Function.Involutive (mulI : ClosedSubmodule Real H -> ClosedSubmodule Real H) := mulI_mulI_eq
+    Function.Involutive (mulI : ClosedSubmodule ℝ H → ClosedSubmodule ℝ H) := mulI_mulI_eq
 
 @[simp]
-/--
-lemma `symplComp_symplComp_eq` / 引理 `symplComp_symplComp_eq`
-
-English:
-lemma symplComp_symplComp_eq
-  given: [CompleteSpace H] {S : ClosedSubmodule Real H}
-  proof: by simp [symplComp]
-
-中文:
-引理 symplComp_symplComp_eq
-  条件: [完备空间 H] {S : 闭子模 实数 H}
-  证明: by simp [symplComp]
-
-Depends on / 依赖: symplComp
+/-
+**ClosedSubmodule.symplComp_symplComp_eq** 是 Mathlib 中的一个引理，位于命名空间 `ClosedSubmod
+ule`。
+形式化陈述：symplComp_symplComp_eq [CompleteSpace H] {S : ClosedSubmodule Real H} : S.
+symplComp.symplComp = S
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ClosedSubmodule.mulI_symplComp`：mulI_symplComp {S : ClosedSubmodule Real
+ H} : S.symplComp.mulI = S.mulI.symplComp
+· 使用引理 `ClosedSubmodule.mulI_mulI_eq`：mulI_mulI_eq (S : ClosedSubmodule Real H) 
+: S.mulI.mulI = S
+· 使用定理 `ClosedSubmodule.orthogonal_orthogonal_eq`：orthogonal_orthogonal_eq (K : 
+ClosedSubmodule 𝕜 E) [K.HasOrthogonalProjection] : (Kᗮ)ᗮ = K
+· 使用定理 `Submodule.instHasOrthogonalProjectionOfCompleteSpace`：∀ {𝕜 : Type u_1} {
+E : Type u_2} [inst : RCLike 𝕜] [inst_1 : NormedAddCommGroup E] [inst_2 : InnerP
+roductSpace 𝕜 E]   (K : ClosedSubmodule 𝕜 …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma symplComp_symplComp_eq [CompleteSpace H] {S : ClosedSubmodule Real H} :
+lemma symplComp_symplComp_eq [CompleteSpace H] {S : ClosedSubmodule ℝ H} :
     S.symplComp.symplComp = S := by simp [symplComp]
-
-/--
-lemma `mulI_sup` / 引理 `mulI_sup`
-
-English:
-lemma mulI_sup
-  given: (S T : ClosedSubmodule Real H)
-  proof: by
-  rw [mulI]; rw [← mapEquiv_sup_eq]
-
-中文:
-引理 mulI_sup
-  条件: (S T : 闭子模 实数 H)
-  证明: by
-  rw [mulI]; rw [← mapEquiv_sup_eq]
-
-Depends on / 依赖: mapEquiv_sup_eq
+/-
+**ClosedSubmodule.mulI_sup** 是 Mathlib 中的一个引理，位于命名空间 `ClosedSubmodule`。
+形式化陈述：mulI_sup (S T : ClosedSubmodule Real H) : (S ⊔ T).mulI = S.mulI ⊔ T.mulI
+参数：S T : ClosedSubmodule Real H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ClosedSubmodule.mulI.eq_1`：∀ {H : Type u_1} [inst : NormedAddCommGroup H
+] [ipc : InnerProductSpace ℂ H] (S : ClosedSubmodule ℝ H),   S.mulI = (ClosedSub
+module.mapEquiv…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `ClosedSubmodule.mapEquiv_sup_eq`：mapEquiv_sup_eq (f : M ≃L[R] N) {s t : 
+ClosedSubmodule R M} : (s ⊔ t).mapEquiv f = s.mapEquiv f ⊔ t.mapEquiv f
 -/
-lemma mulI_sup (S T : ClosedSubmodule Real H) :
+lemma mulI_sup (S T : ClosedSubmodule ℝ H) :
     (S ⊔ T).mulI = S.mulI ⊔ T.mulI := by
-  rw [mulI]; rw [← mapEquiv_sup_eq]
-
-/--
-lemma `mulI_inf` / 引理 `mulI_inf`
-
-English:
-lemma mulI_inf
-  given: (S T : ClosedSubmodule Real H)
-  proof: by
-  rw [mulI]; rw [← mapEquiv_inf_eq]
-
-@[simp]
-
-中文:
-引理 mulI_inf
-  条件: (S T : 闭子模 实数 H)
-  证明: by
-  rw [mulI]; rw [← mapEquiv_inf_eq]
-
-@[simp]
-
-Depends on / 依赖: mapEquiv_inf_eq
+  rw [mulI, ← mapEquiv_sup_eq]
+/-
+**ClosedSubmodule.mulI_inf** 是 Mathlib 中的一个引理，位于命名空间 `ClosedSubmodule`。
+形式化陈述：mulI_inf (S T : ClosedSubmodule Real H) : (S ⊓ T).mulI = S.mulI ⊓ T.mulI
+参数：S T : ClosedSubmodule Real H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ClosedSubmodule.mulI.eq_1`：∀ {H : Type u_1} [inst : NormedAddCommGroup H
+] [ipc : InnerProductSpace ℂ H] (S : ClosedSubmodule ℝ H),   S.mulI = (ClosedSub
+module.mapEquiv…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `ClosedSubmodule.mapEquiv_inf_eq`：mapEquiv_inf_eq (f : M ≃L[R] N) {s t : 
+ClosedSubmodule R M} : (s ⊓ t).mapEquiv f = s.mapEquiv f ⊓ t.mapEquiv f
 -/
-lemma mulI_inf (S T : ClosedSubmodule Real H) :
+lemma mulI_inf (S T : ClosedSubmodule ℝ H) :
     (S ⊓ T).mulI = S.mulI ⊓ T.mulI := by
-  rw [mulI]; rw [← mapEquiv_inf_eq]
+  rw [mulI, ← mapEquiv_inf_eq]
 
 @[simp]
-/--
-lemma `symplComp_sup` / 引理 `symplComp_sup`
-
-English:
-lemma symplComp_sup
-  given: (S T : ClosedSubmodule Real H)
-  proof: by
-  rw [symplComp]; rw [symplComp]; rw [symplComp]; rw [mulI_sup]
-  exact Eq.symm (inf_orthogonal S.mulI T.mulI)
-
-@[simp]
-
-中文:
-引理 symplComp_sup
-  条件: (S T : 闭子模 实数 H)
-  证明: by
-  rw [symplComp]; rw [symplComp]; rw [symplComp]; rw [mulI_sup]
-  exact Eq.symm (inf_orthogonal S.mulI T.mulI)
-
-@[simp]
-
-Depends on / 依赖: Eq.symm, S.mulI, T.mulI, inf_orthogonal, mulI_sup, symplComp
+/-
+**ClosedSubmodule.symplComp_sup** 是 Mathlib 中的一个引理，位于命名空间 `ClosedSubmodule`。
+形式化陈述：symplComp_sup (S T : ClosedSubmodule Real H) : (S ⊔ T).symplComp = S.sympl
+Comp ⊓ T.symplComp
+参数：S T : ClosedSubmodule Real H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ClosedSubmodule.symplComp.eq_1`：∀ {H : Type u_1} [inst : NormedAddCommGr
+oup H] [ipc : InnerProductSpace ℂ H] (S : ClosedSubmodule ℝ H),   S.symplComp = 
+S.mulIᗮ
+· 使用引理 `ClosedSubmodule.mulI_sup`：mulI_sup (S T : ClosedSubmodule Real H) : (S ⊔
+ T).mulI = S.mulI ⊔ T.mulI
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ClosedSubmodule.inf_orthogonal`：inf_orthogonal (K₁ K₂ : ClosedSubmodule 
+𝕜 E) : K₁ᗮ ⊓ K₂ᗮ = (K₁ ⊔ K₂)ᗮ
 -/
-lemma symplComp_sup (S T : ClosedSubmodule Real H) :
+lemma symplComp_sup (S T : ClosedSubmodule ℝ H) :
     (S ⊔ T).symplComp = S.symplComp ⊓ T.symplComp := by
-  rw [symplComp]; rw [symplComp]; rw [symplComp]; rw [mulI_sup]
+  rw [symplComp, symplComp, symplComp, mulI_sup]
   exact Eq.symm (inf_orthogonal S.mulI T.mulI)
 
 @[simp]
-/--
-lemma `symplComp_inf` / 引理 `symplComp_inf`
-
-English:
-lemma symplComp_inf
-  given: [CompleteSpace H] (S T : ClosedSubmodule Real H)
-  proof: by
-  rw [symplComp]; rw [symplComp]; rw [symplComp]; rw [mulI_inf]
-  exact Eq.symm (sup_orthogonal S.mulI T.mulI)
-
-中文:
-引理 symplComp_inf
-  条件: [完备空间 H] (S T : 闭子模 实数 H)
-  证明: by
-  rw [symplComp]; rw [symplComp]; rw [symplComp]; rw [mulI_inf]
-  exact Eq.symm (sup_orthogonal S.mulI T.mulI)
-
-Depends on / 依赖: Eq.symm, S.mulI, T.mulI, mulI_inf, sup_orthogonal, symplComp
+/-
+**ClosedSubmodule.symplComp_inf** 是 Mathlib 中的一个引理，位于命名空间 `ClosedSubmodule`。
+形式化陈述：symplComp_inf [CompleteSpace H] (S T : ClosedSubmodule Real H) : (S ⊓ T).s
+ymplComp = S.symplComp ⊔ T.symplComp
+参数：S T : ClosedSubmodule Real H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `UniformContinuousConstSMul.instContinuousConstSMul`：∀ (M : Type v) (X : 
+Type x) [inst : UniformSpace X] [inst_1 : SMul M X] [UniformContinuousConstSMul 
+M X],   ContinuousConstSMul M X
+· 使用定理 `IsBoundedSMul.toUniformContinuousConstSMul`：∀ {α : Type u_1} {β : Type u
+_2} [inst : PseudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α
+]   [inst_3 : Zero β] [inst_4 : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ClosedSubmodule.symplComp.eq_1`：∀ {H : Type u_1} [inst : NormedAddCommGr
+oup H] [ipc : InnerProductSpace ℂ H] (S : ClosedSubmodule ℝ H),   S.symplComp = 
+S.mulIᗮ
+· 使用引理 `ClosedSubmodule.mulI_inf`：mulI_inf (S T : ClosedSubmodule Real H) : (S ⊓
+ T).mulI = S.mulI ⊓ T.mulI
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ClosedSubmodule.sup_orthogonal`：sup_orthogonal [CompleteSpace E] (K₁ K₂ 
+: ClosedSubmodule 𝕜 E) : K₁ᗮ ⊔ K₂ᗮ = (K₁ ⊓ K₂)ᗮ
 -/
-lemma symplComp_inf [CompleteSpace H] (S T : ClosedSubmodule Real H) :
+lemma symplComp_inf [CompleteSpace H] (S T : ClosedSubmodule ℝ H) :
     (S ⊓ T).symplComp = S.symplComp ⊔ T.symplComp := by
-  rw [symplComp]; rw [symplComp]; rw [symplComp]; rw [mulI_inf]
+  rw [symplComp, symplComp, symplComp, mulI_inf]
   exact Eq.symm (sup_orthogonal S.mulI T.mulI)
 
 end ClosedSubmodule
 
 section Def
 
-variable (H : Type*) [NormedAddCommGroup H] [InnerProductSpace Complex H]
+variable (H : Type*) [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 /-- A standard subspace `S` of a complex Hilbert space (or just an inner product space) `H` is a
 closed real subspace `S` such that `S ⊓ i S = ⊥` and `S ⊔ i S = ⊤`. -/
 @[ext]
-/--
-Definition of `StandardSubspace` / `StandardSubspace` 的定义
+/-
+**StandardSubspace** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(H : Type u_1) → [inst : NormedAddCommGroup H] → [InnerProductSpace ℂ H] →
+ Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure StandardSubspace
-  parameters: where
-  axioms and operations (3):
-    - toClosedSubmodule : ClosedSubmodule Real H
-    - IsSeparating : toClosedSubmodule ⊓ toClosedSubmodule.mulI = ⊥
-    - IsCyclic : toClosedSubmodule ⊔ toClosedSubmodule.mulI = ⊤
-
-中文:
-结构 StandardSubspace
-  参数: where
-  公理与运算 (3 个):
-    - toClosedSubmodule : 闭子模 实数 H
-    - IsSeparating : toClosedSubmodule ⊓ toClosedSubmodule.mulI = ⊥
-    - IsCyclic : toClosedSubmodule ⊔ toClosedSubmodule.mulI = ⊤
+--- 原说明 ---
+A standard subspace `S` of a complex Hilbert space (or just an inner product spa
+ce) `H` is a
+closed real subspace `S` such that `S ⊓ i S = ⊥` and `S ⊔ i S = ⊤`.
 -/
 structure StandardSubspace where
   /-- A real closed subspace `S`. -/
-  toClosedSubmodule : ClosedSubmodule Real H
+  toClosedSubmodule : ClosedSubmodule ℝ H
   /-- `S` is separating, that is, `S ⊓ i S` is the trivial subspace. -/
   IsSeparating : toClosedSubmodule ⊓ toClosedSubmodule.mulI = ⊥
   /-- `S` is cyclic, that is, `S ⊔ i S` is the whole space. -/
@@ -587,94 +574,68 @@ namespace StandardSubspace
 
 open ClosedSubmodule
 
-variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace Complex H]
+variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 @[simp]
-/--
-lemma `toClosedSubmodule_inj` / 引理 `toClosedSubmodule_inj`
-
-English:
-lemma toClosedSubmodule_inj
-  given: {S T : StandardSubspace H}
-  proof: StandardSubspace.ext_iff.symm
-
-中文:
-引理 toClosedSubmodule_inj
-  条件: {S T : StandardSubspace H}
-  证明: StandardSubspace.ext_iff.symm
-
-Depends on / 依赖: StandardSubspace, StandardSubspace.ext_iff.symm, ext_iff
+/-
+**StandardSubspace.toClosedSubmodule_inj** 是 Mathlib 中的一个引理，位于命名空间 `StandardSubs
+pace`。
+形式化陈述：toClosedSubmodule_inj {S T : StandardSubspace H} : S.toClosedSubmodule = T
+.toClosedSubmodule ↔ S = T
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `StandardSubspace.ext_iff`：∀ {H : Type u_1} {inst : NormedAddCommGroup H}
+ {inst_1 : InnerProductSpace ℂ H} {x y : StandardSubspace H},   x = y ↔ x.toClos
+edSubmodule = …
 -/
 lemma toClosedSubmodule_inj {S T : StandardSubspace H} :
     S.toClosedSubmodule = T.toClosedSubmodule ↔ S = T :=
   StandardSubspace.ext_iff.symm
-
-/--
-lemma `toClosedSubmodule_injective` / 引理 `toClosedSubmodule_injective`
-
-English:
-lemma toClosedSubmodule_injective
-  statement: Function.Injective (toClosedSubmodule (H := H))
-  proof: fun _ _ => toClosedSubmodule_inj.mp
-
-中文:
-引理 toClosedSubmodule_injective
-  结论: 函数.单射 (toClosedSubmodule (H := H))
-  证明: fun _ _ => toClosedSubmodule_inj.mp
+/-
+**StandardSubspace.toClosedSubmodule_injective** 是 Mathlib 中的一个引理，位于命名空间 `Standa
+rdSubspace`。
+形式化陈述：toClosedSubmodule_injective : Function.Injective (toClosedSubmodule (H
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `StandardSubspace.toClosedSubmodule_inj`：toClosedSubmodule_inj {S T : Sta
+ndardSubspace H} : S.toClosedSubmodule = T.toClosedSubmodule ↔ S = T
 -/
 lemma toClosedSubmodule_injective : Function.Injective (toClosedSubmodule (H := H)) :=
-  fun _ _ => toClosedSubmodule_inj.mp
+  fun _ _ ↦ toClosedSubmodule_inj.mp
 
-/--
-Definition of `mulI` / `mulI` 的定义
+/-- The image of a standard subspace by the multiplication by `Complex.I`, bundled as a
+`StandardSubspace`. -/
+/-
+**StandardSubspace.mulI** 是 Mathlib 中的一个定义，位于命名空间 `StandardSubspace`。
+形式化陈述：mulI (S : StandardSubspace H) : StandardSubspace H where toClosedSubmodule
+参数：S : StandardSubspace H。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulI
-  signature: (S : StandardSubspace H)
-  body: S.toClosedSubmodule.mulI
-  IsSeparating := by simpa [mulI_mulI_eq, inf_comm] using S.IsSeparating
-  IsCyclic := by simpa [mulI_mulI_eq, sup_comm] using S.IsCyclic
-
-中文:
-定义 mulI
-  签名: (S : StandardSubspace H)
-  定义体: S.toClosedSubmodule.mulI
-  IsSeparating := by simpa [mulI_mulI_eq, inf_comm] using S.IsSeparating
-  IsCyclic := by simpa [mulI_mulI_eq, sup_comm] using S.IsCyclic
-
-Depends on / 依赖: S.toClosedSubmodule.mulI, toClosedSubmodule
+--- 原说明 ---
+The image of a standard subspace by the multiplication by `Complex.I`, bundled a
+s a
+`StandardSubspace`.
 -/
 noncomputable def mulI (S : StandardSubspace H) : StandardSubspace H where
   toClosedSubmodule := S.toClosedSubmodule.mulI
   IsSeparating := by simpa [mulI_mulI_eq, inf_comm] using S.IsSeparating
   IsCyclic := by simpa [mulI_mulI_eq, sup_comm] using S.IsCyclic
 
-/--
-Definition of `symplComp` / `symplComp` 的定义
+/-- The symplectic complement of a standard subspace, bundled as a `StandardSubspace`. -/
+/-
+**StandardSubspace.symplComp** 是 Mathlib 中的一个定义，位于命名空间 `StandardSubspace`。
+形式化陈述：symplComp [CompleteSpace H] (S : StandardSubspace H) : StandardSubspace H 
+where toClosedSubmodule
+参数：S : StandardSubspace H。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition symplComp
-  signature: [CompleteSpace H] (S : StandardSubspace H)
-  body: S.toClosedSubmodule.symplComp
-  IsSeparating := by
-    simp [mulI_symplComp, ClosedSubmodule.inf_orthogonal, sup_comm, S.IsCyclic]
-  IsCyclic := by
-    simp [mulI_symplComp, ClosedSubmodule.sup_orthogonal, inf_comm, S.IsSeparating]
-
-@[simp]
-
-中文:
-定义 symplComp
-  签名: [完备空间 H] (S : StandardSubspace H)
-  定义体: S.toClosedSubmodule.symplComp
-  IsSeparating := by
-    simp [mulI_symplComp, ClosedSubmodule.inf_orthogonal, sup_comm, S.IsCyclic]
-  IsCyclic := by
-    simp [mulI_symplComp, ClosedSubmodule.sup_orthogonal, inf_comm, S.IsSeparating]
-
-@[simp]
-
-Depends on / 依赖: S.toClosedSubmodule.symplComp, symplComp, toClosedSubmodule
+--- 原说明 ---
+The symplectic complement of a standard subspace, bundled as a `StandardSubspace
+`.
 -/
 noncomputable def symplComp [CompleteSpace H] (S : StandardSubspace H) : StandardSubspace H where
   toClosedSubmodule := S.toClosedSubmodule.symplComp
@@ -684,41 +645,35 @@ noncomputable def symplComp [CompleteSpace H] (S : StandardSubspace H) : Standar
     simp [mulI_symplComp, ClosedSubmodule.sup_orthogonal, inf_comm, S.IsSeparating]
 
 @[simp]
-/--
-theorem `symplComp_symplComp_eq` / 定理 `symplComp_symplComp_eq`
-
-English:
-theorem symplComp_symplComp_eq
-  given: [CompleteSpace H] (S : StandardSubspace H)
-  proof: toClosedSubmodule_inj.mp ClosedSubmodule.symplComp_symplComp_eq
-
-中文:
-定理 symplComp_symplComp_eq
-  条件: [完备空间 H] (S : StandardSubspace H)
-  证明: toClosedSubmodule_inj.mp ClosedSubmodule.symplComp_symplComp_eq
-
-Depends on / 依赖: ClosedSubmodule, ClosedSubmodule.symplComp_symplComp_eq, symplComp_symplComp_eq, toClosedSubmodule_inj, toClosedSubmodule_inj.mp
+/-
+**StandardSubspace.symplComp_symplComp_eq** 是 Mathlib 中的一个定理，位于命名空间 `StandardSub
+space`。
+形式化陈述：symplComp_symplComp_eq [CompleteSpace H] (S : StandardSubspace H) : S.symp
+lComp.symplComp = S
+参数：S : StandardSubspace H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `StandardSubspace.toClosedSubmodule_inj`：toClosedSubmodule_inj {S T : Sta
+ndardSubspace H} : S.toClosedSubmodule = T.toClosedSubmodule ↔ S = T
+· 使用引理 `ClosedSubmodule.symplComp_symplComp_eq`：symplComp_symplComp_eq [Complete
+Space H] {S : ClosedSubmodule Real H} : S.symplComp.symplComp = S
 -/
 theorem symplComp_symplComp_eq [CompleteSpace H] (S : StandardSubspace H) :
     S.symplComp.symplComp = S := toClosedSubmodule_inj.mp ClosedSubmodule.symplComp_symplComp_eq
-
-/--
-lemma `involutive_symplComp` / 引理 `involutive_symplComp`
-
-English:
-lemma involutive_symplComp
-  given: [CompleteSpace H]
-  proof: symplComp_symplComp_eq
-
-中文:
-引理 involutive_symplComp
-  条件: [完备空间 H]
-  证明: symplComp_symplComp_eq
-
-Depends on / 依赖: symplComp_symplComp_eq
+/-
+**StandardSubspace.involutive_symplComp** 是 Mathlib 中的一个引理，位于命名空间 `StandardSubsp
+ace`。
+形式化陈述：involutive_symplComp [CompleteSpace H] : Function.Involutive (symplComp : 
+StandardSubspace H -> StandardSubspace H)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StandardSubspace.symplComp_symplComp_eq`：symplComp_symplComp_eq [Complet
+eSpace H] (S : StandardSubspace H) : S.symplComp.symplComp = S
 -/
 lemma involutive_symplComp [CompleteSpace H] :
-    Function.Involutive (symplComp : StandardSubspace H -> StandardSubspace H)
+    Function.Involutive (symplComp : StandardSubspace H → StandardSubspace H)
   := symplComp_symplComp_eq
 
 end StandardSubspace
+

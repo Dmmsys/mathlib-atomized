@@ -27,57 +27,60 @@ variable [CommMonoid M] [Subsingleton Mˣ] {S : Set M}
 submonoid it generates. -/
 @[to_additive /-- Any set `S` inside an additive monoid with a single unit contains the irreducible
 elements of the submonoid it generates. -/]
-/--
-lemma `irreducible_mem_submonoidClosure_subset` / 引理 `irreducible_mem_submonoidClosure_subset`
-
-English:
-lemma irreducible_mem_submonoidClosure_subset
-  statement: {p in Submonoid.closure S | Irreducible p} subseteq S
-  proof: by
-  refine fun x hx =>
-      Submonoid.closure_induction (s := S) (motive := fun x _ => (Irreducible x -> x in S))
-      (fun _ hx _ => hx) (by simp) (fun a b _ _ ha hb h => ?_) hx.1 hx.2
-  obtain rfl | rfl := h.eq_one_or_eq_one <;> simp_all
-
-中文:
-引理 irreducible_mem_submonoidClosure_subset
-  结论: {p in 子幺半群.closure S | 不可约 p} subseteq S
-  证明: by
-  refine fun x hx =>
-      Submonoid.closure_induction (s := S) (motive := fun x _ => (Irreducible x -> x in S))
-      (fun _ hx _ => hx) (by simp) (fun a b _ _ ha hb h => ?_) hx.1 hx.2
-  obtain rfl | rfl := h.eq_one_or_eq_one <;> simp_all
-
-Depends on / 依赖: Irreducible, Submonoid, Submonoid.closure_induction, closure_induction, eq_one_or_eq_one, h.eq_one_or_eq_one, motive
+/-
+**irreducible_mem_submonoidClosure_subset** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：irreducible_mem_submonoidClosure_subset : {p in Submonoid.closure S | Irre
+ducible p} subseteq S
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submonoid.closure_induction`：closure_induction {s : Set M} {motive : (x 
+: M) -> x in closure s -> Prop} (mem : forall (x) (h : x in s), motive x (subset
+_closure h)) (one…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用引理 `Irreducible.eq_one_or_eq_one`：Irreducible.eq_one_or_eq_one [Subsingleton
+ Mˣ] (hab : Irreducible (a * b)) : a = 1 ∨ b = 1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-lemma irreducible_mem_submonoidClosure_subset : {p in Submonoid.closure S | Irreducible p} subseteq S := by
-  refine fun x hx =>
-      Submonoid.closure_induction (s := S) (motive := fun x _ => (Irreducible x -> x in S))
-      (fun _ hx _ => hx) (by simp) (fun a b _ _ ha hb h => ?_) hx.1 hx.2
+lemma irreducible_mem_submonoidClosure_subset : {p ∈ Submonoid.closure S | Irreducible p} ⊆ S := by
+  refine fun x hx ↦
+      Submonoid.closure_induction (s := S) (motive := fun x _ ↦ (Irreducible x → x ∈ S))
+      (fun _ hx _ ↦ hx) (by simp) (fun a b _ _ ha hb h ↦ ?_) hx.1 hx.2
   obtain rfl | rfl := h.eq_one_or_eq_one <;> simp_all
 
 /-- In a monoid with a single unit, irreducible elements lie in all generating sets. -/
 @[to_additive
 /-- In an additive monoid with a single unit, irreducible elements lie in all generating sets. -/]
-/--
-lemma `irreducible_subset_of_submonoidClosure_eq_top` / 引理 `irreducible_subset_of_submonoidClosure_eq_top`
-
-English:
-lemma irreducible_subset_of_submonoidClosure_eq_top
-  given: (hS : Submonoid.closure S = ⊤)
-  proof: by
-  simpa [hS] using irreducible_mem_submonoidClosure_subset (S := S)
-
-中文:
-引理 irreducible_subset_of_submonoidClosure_eq_top
-  条件: (hS : 子幺半群.closure S = ⊤)
-  证明: by
-  simpa [hS] using irreducible_mem_submonoidClosure_subset (S := S)
-
-Depends on / 依赖: irreducible_mem_submonoidClosure_subset
+/-
+**irreducible_subset_of_submonoidClosure_eq_top** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：irreducible_subset_of_submonoidClosure_eq_top (hS : Submonoid.closure S = 
+⊤) : {p | Irreducible p} subseteq S
+参数：hS : Submonoid.closure S = ⊤。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用引理 `irreducible_mem_submonoidClosure_subset`：irreducible_mem_submonoidClosur
+e_subset : {p in Submonoid.closure S | Irreducible p} subseteq S
 -/
 lemma irreducible_subset_of_submonoidClosure_eq_top (hS : Submonoid.closure S = ⊤) :
-    {p | Irreducible p} subseteq S := by
+    {p | Irreducible p} ⊆ S := by
   simpa [hS] using irreducible_mem_submonoidClosure_subset (S := S)
 
 /-- A finitely generated submonoid of a monoid with a single unit has finitely many irreducible
@@ -85,26 +88,23 @@ elements. -/
 @[to_additive
 /-- A finitely generated submonoid of an additive monoid with a single unit has finitely many
 irreducible elements. -/]
-/--
-lemma `Submonoid.FG.finite_irreducible_mem_submonoidClosure` / 引理 `Submonoid.FG.finite_irreducible_mem_submonoidClosure`
-
-English:
-lemma Submonoid.FG.finite_irreducible_mem_submonoidClosure
-  given: {S : Submonoid M} (hS : S.FG)
-  proof: by
-obtain ⟨T, hT⟩ := hS; exact T.finite_toSet.subset hT ▸ irreducible_mem_submonoidClosure_subset
-
-中文:
-引理 子幺半群.FG.finite_irreducible_mem_submonoidClosure
-  条件: {S : 子幺半群 M} (hS : S.FG)
-  证明: by
-obtain ⟨T, hT⟩ := hS; exact T.finite_toSet.subset hT ▸ irreducible_mem_submonoidClosure_subset
-
-Depends on / 依赖: T.finite_toSet.subset, finite_toSet, irreducible_mem_submonoidClosure_subset, subset
+/-
+**Submonoid.FG.finite_irreducible_mem_submonoidClosure** 是 Mathlib 中的一个引理，位于命名空间
+ ``。
+形式化陈述：Submonoid.FG.finite_irreducible_mem_submonoidClosure {S : Submonoid M} (hS
+ : S.FG) : {p in S | Irreducible p}.Finite
+参数：hS : S.FG。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.subset`：∀ {α : Type u} {s : Set α}, s.Finite → ∀ {t : Set α},
+ t ⊆ s → t.Finite
+· 使用定理 `Finset.finite_toSet`：finite_toSet (s : Finset α) : (s : Set α).Finite
+· 使用引理 `irreducible_mem_submonoidClosure_subset`：irreducible_mem_submonoidClosur
+e_subset : {p in Submonoid.closure S | Irreducible p} subseteq S
 -/
 lemma Submonoid.FG.finite_irreducible_mem_submonoidClosure {S : Submonoid M} (hS : S.FG) :
-    {p in S | Irreducible p}.Finite := by
-obtain ⟨T, hT⟩ := hS; exact T.finite_toSet.subset hT ▸ irreducible_mem_submonoidClosure_subset
+    {p ∈ S | Irreducible p}.Finite := by
+  obtain ⟨T, hT⟩ := hS; exact T.finite_toSet.subset <| hT ▸ irreducible_mem_submonoidClosure_subset
 
 variable [Monoid.FG M]
 
@@ -112,22 +112,24 @@ variable [Monoid.FG M]
 @[to_additive
 /-- A finitely generated additive monoid with a single unit has finitely many irreducible
 elements. -/]
-/--
-lemma `finite_irreducible` / 引理 `finite_irreducible`
-
-English:
-lemma finite_irreducible
-  statement: {p : M | Irreducible p}.Finite
-  proof: by
-  simpa using Monoid.FG.fg_top.finite_irreducible_mem_submonoidClosure
-
-中文:
-引理 finite_irreducible
-  结论: {p : M | 不可约 p}.有限
-  证明: by
-  simpa using Monoid.FG.fg_top.finite_irreducible_mem_submonoidClosure
-
-Depends on / 依赖: Monoid, Monoid.FG.fg_top.finite_irreducible_mem_submonoidClosure, fg_top, finite_irreducible_mem_submonoidClosure
+/-
+**finite_irreducible** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：finite_irreducible : {p : M | Irreducible p}.Finite
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用引理 `Submonoid.FG.finite_irreducible_mem_submonoidClosure`：Submonoid.FG.finit
+e_irreducible_mem_submonoidClosure {S : Submonoid M} (hS : S.FG) : {p in S | Irr
+educible p}.Finite
+· 使用定理 `Monoid.FG.fg_top`：∀ {M : Type u_1} {inst : Monoid M} [self : Monoid.FG M
+], ⊤.FG
 -/
 lemma finite_irreducible : {p : M | Irreducible p}.Finite := by
   simpa using Monoid.FG.fg_top.finite_irreducible_mem_submonoidClosure
@@ -142,136 +144,62 @@ irreducible elements. -/
 @[to_additive (attr := simp)
 /-- A finitely generated cancellative additive monoid with a single unit is generated by its
 (finitely many) irreducible elements. -/]
-/--
-lemma `Submonoid.closure_irreducible` / 引理 `Submonoid.closure_irreducible`
-
-English:
-lemma Submonoid.closure_irreducible
-  given: [Monoid.FG M]
-  proof: by
-  classical
-  -- Pick a minimal set `S` generating `M`.
-  obtain ⟨S, hSgen, hSmax⟩ := Submonoid.exists_minimal_closure_eq_top M
-  -- We claim that `S` is the set of irreducible elements of `M`.
-  convert! hSgen
-  -- We already know that `S` contains all irreducible elements...
-  refine (irreducible_subset_of_submonoidClosure_eq_top hSgen).antisymm fun r hrS => ?_
-  -- So let us for contradiction assume that `r ∈ S` is reducible.
-  by_contra hrirred
-  -- If `r = 1`, then `S` isn't minimal. Contradiction.
-  obtain rfl | hr₀ := eq_or_ne r 1
-  · simpa using hSmax (y := S \ {1}) (by simpa) Finset.sdiff_subset hrS
-  -- Else find `a`, `b` non-units such that `a * b = r`.
-  simp only [irreducible_iff, Set.mem_ofPred_eq, not_and, not_forall, not_or] at hrirred
-obtain ⟨a, b, hr, ha, hb⟩ := hrirred by simpa
-  -- Write `a = ∏ s ∈ S, s ^ m s`, `b = ∏ s ∈ S, s ^ n s` for some coefficients `m`, `n`.
-  obtain ⟨m, -, hm⟩ := Submonoid.mem_closure_finset (x := a).mp (by rw [hSgen]; exact mem_top _)
-  obtain ⟨n, -, hn⟩ := Submonoid.mem_closure_finset (x := b).mp (by rw [hSgen]; exact mem_top _)
-  -- Single out the `r` term in the two products.
-  replace hm : a = r ^ m r * ∏ s in S \ {r}, s ^ m s := by
-    rw [← hm]; rw [Finset.sdiff_singleton_eq_erase]; rw [← Finset.mul_prod_erase _ _ hrS]
-  replace hn : b = r ^ n r * ∏ s in S \ {r}, s ^ n s := by
-    rw [← hn]; rw [Finset.sdiff_singleton_eq_erase]; rw [← Finset.mul_prod_erase _ _ hrS]
-  -- Multiply the two equations together to write `r` as a power (namely `m r + n r`) of itself
-  -- times a product of elements of `S \ {r}` (namely `∏ s ∈ S \ {r}, s ^ (m s + n s)`).
-  have hr' : r = r ^ (m r + n r) * (∏ s in S \ {r}, s ^ m s) * ∏ s in S \ {r}, s ^ n s := by
-    rwa [pow_add, mul_assoc, mul_assoc, ← mul_assoc (r ^ n r), mul_comm (r ^ n r) _, mul_assoc,
-      ← hn, ← mul_assoc, ← hm]
-  -- Case on whether that power is `0`, `1` or at least `2`.
-  match hr : m r + n r with
-  -- If that power is `0`, then `r` can be written as a product of elements of `S \ {r}` and `S` was
-  -- not minimal. Contradiction.
-  | 0 =>
-    have : ({r} : Set M) subseteq closure (S \ {r}) := by
-      simp only [hr, pow_zero, one_mul] at hr'
-      rw [hr']; rw [Set.singleton_subset_iff]
-      refine mul_mem ?_ ?_ <;> refine prod_mem _ fun s hs => pow_mem (subset_closure ?_) _ <;>
-        rw [← hr'] <;> simpa using hs
-    specialize hSmax (y := S \ {r}) (by simp [Submonoid.closure_sdiff_eq_closure this, hSgen])
-      Finset.sdiff_subset
-    simpa using hSmax hrS
-  -- Assume that power is `1`.
-  | 1 =>
-    -- By cancelling on both sides we get `∏ s ∈ S \ {r}, s ^ (m s + n s) = 1`.
-    simp only [hr, pow_one, mul_assoc, eq_comm (a := r), mul_eq_left, LeftCancelMonoid.mul_eq_one,
-      Finset.prod_eq_one_iff] at hr'
-    -- Since `M` has a single unit, this means that
-    -- `∏ s ∈ S \ {r}, s ^ m s = ∏ s ∈ S \ {r}, s ^ n s = 1`.
-    -- Furthermore, `m r + n r = 1` implies that one of `m r` or `n r` is zero.
-    -- Therefore one of `a` or `b` is `1`, contradicting the fact that they are non-units.
-    obtain h | h : m r = 0 ∨ n r = 0 := by lia
-    · obtain rfl : a = 1 := by simpa [h, Finset.prod_eq_one hr'.1] using hm
-      simp at ha
-    · obtain rfl : b = 1 := by simpa [h, Finset.prod_eq_one hr'.2] using hn
-      simp at hb
-  -- If that power is at least `2`, then we can write `1` as `r` times something.
-  -- Since `M` has a single unit, this means that `r = 1`. Contradiction.
-  | N + 2 => simp [hr, hr₀, pow_add, mul_assoc, mul_left_comm] at hr'
-
-中文:
-引理 子幺半群.closure_irreducible
-  条件: [幺半群.FG M]
-  证明: by
-  classical
-  -- Pick a minimal set `S` generating `M`.
-  obtain ⟨S, hSgen, hSmax⟩ := Submonoid.exists_minimal_closure_eq_top M
-  -- We claim that `S` is the set of irreducible elements of `M`.
-  convert! hSgen
-  -- We already know that `S` contains all irreducible elements...
-  refine (irreducible_subset_of_submonoidClosure_eq_top hSgen).antisymm fun r hrS => ?_
-  -- So let us for contradiction assume that `r ∈ S` is reducible.
-  by_contra hrirred
-  -- If `r = 1`, then `S` isn't minimal. Contradiction.
-  obtain rfl | hr₀ := eq_or_ne r 1
-  · simpa using hSmax (y := S \ {1}) (by simpa) Finset.sdiff_subset hrS
-  -- Else find `a`, `b` non-units such that `a * b = r`.
-  simp only [irreducible_iff, Set.mem_ofPred_eq, not_and, not_forall, not_or] at hrirred
-obtain ⟨a, b, hr, ha, hb⟩ := hrirred by simpa
-  -- Write `a = ∏ s ∈ S, s ^ m s`, `b = ∏ s ∈ S, s ^ n s` for some coefficients `m`, `n`.
-  obtain ⟨m, -, hm⟩ := Submonoid.mem_closure_finset (x := a).mp (by rw [hSgen]; exact mem_top _)
-  obtain ⟨n, -, hn⟩ := Submonoid.mem_closure_finset (x := b).mp (by rw [hSgen]; exact mem_top _)
-  -- Single out the `r` term in the two products.
-  replace hm : a = r ^ m r * ∏ s in S \ {r}, s ^ m s := by
-    rw [← hm]; rw [Finset.sdiff_singleton_eq_erase]; rw [← Finset.mul_prod_erase _ _ hrS]
-  replace hn : b = r ^ n r * ∏ s in S \ {r}, s ^ n s := by
-    rw [← hn]; rw [Finset.sdiff_singleton_eq_erase]; rw [← Finset.mul_prod_erase _ _ hrS]
-  -- Multiply the two equations together to write `r` as a power (namely `m r + n r`) of itself
-  -- times a product of elements of `S \ {r}` (namely `∏ s ∈ S \ {r}, s ^ (m s + n s)`).
-  have hr' : r = r ^ (m r + n r) * (∏ s in S \ {r}, s ^ m s) * ∏ s in S \ {r}, s ^ n s := by
-    rwa [pow_add, mul_assoc, mul_assoc, ← mul_assoc (r ^ n r), mul_comm (r ^ n r) _, mul_assoc,
-      ← hn, ← mul_assoc, ← hm]
-  -- Case on whether that power is `0`, `1` or at least `2`.
-  match hr : m r + n r with
-  -- If that power is `0`, then `r` can be written as a product of elements of `S \ {r}` and `S` was
-  -- not minimal. Contradiction.
-  | 0 =>
-    have : ({r} : Set M) subseteq closure (S \ {r}) := by
-      simp only [hr, pow_zero, one_mul] at hr'
-      rw [hr']; rw [Set.singleton_subset_iff]
-      refine mul_mem ?_ ?_ <;> refine prod_mem _ fun s hs => pow_mem (subset_closure ?_) _ <;>
-        rw [← hr'] <;> simpa using hs
-    specialize hSmax (y := S \ {r}) (by simp [Submonoid.closure_sdiff_eq_closure this, hSgen])
-      Finset.sdiff_subset
-    simpa using hSmax hrS
-  -- Assume that power is `1`.
-  | 1 =>
-    -- By cancelling on both sides we get `∏ s ∈ S \ {r}, s ^ (m s + n s) = 1`.
-    simp only [hr, pow_one, mul_assoc, eq_comm (a := r), mul_eq_left, LeftCancelMonoid.mul_eq_one,
-      Finset.prod_eq_one_iff] at hr'
-    -- Since `M` has a single unit, this means that
-    -- `∏ s ∈ S \ {r}, s ^ m s = ∏ s ∈ S \ {r}, s ^ n s = 1`.
-    -- Furthermore, `m r + n r = 1` implies that one of `m r` or `n r` is zero.
-    -- Therefore one of `a` or `b` is `1`, contradicting the fact that they are non-units.
-    obtain h | h : m r = 0 ∨ n r = 0 := by lia
-    · obtain rfl : a = 1 := by simpa [h, Finset.prod_eq_one hr'.1] using hm
-      simp at ha
-    · obtain rfl : b = 1 := by simpa [h, Finset.prod_eq_one hr'.2] using hn
-      simp at hb
-  -- If that power is at least `2`, then we can write `1` as `r` times something.
-  -- Since `M` has a single unit, this means that `r = 1`. Contradiction.
-  | N + 2 => simp [hr, hr₀, pow_add, mul_assoc, mul_left_comm] at hr'
-
-Depends on / 依赖: classical
+/-
+**Submonoid.closure_irreducible** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Submonoid.closure_irreducible [Monoid.FG M] : Submonoid.closure {p : M | I
+rreducible p} = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Submonoid.exists_minimal_closure_eq_top`：Submonoid.exists_minimal_closur
+e_eq_top [Monoid.FG M] : exists S : Finset M, Minimal (fun S => Submonoid.closur
+e (SetLike.coe S) = ⊤) S
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用引理 `irreducible_subset_of_submonoidClosure_eq_top`：irreducible_subset_of_sub
+monoidClosure_eq_top (hS : Submonoid.closure S = ⊤) : {p | Irreducible p} subset
+eq S
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.coe_sdiff`：coe_sdiff (s₁ s₂ : Finset α) : ↑(s₁ \ s₂) = (s₁ \ s₂ :
+ Set α)
+· 使用定理 `Finset.coe_singleton`：coe_singleton (a : α) : (({a} : Finset α) : Set α)
+ = {a}
+· 使用引理 `Submonoid.closure_sdiff_singleton_one`：closure_sdiff_singleton_one (s : 
+Set M) : closure (s \ {1}) = closure s
+· 使用定理 `Finset.sdiff_subset`：sdiff_subset {s t : Finset α} : s \ t subseteq s
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Submonoid.mem_closure_finset`：mem_closure_finset {s : Finset M} : x in c
+losure s ↔ exists f : M -> Nat, f.support subseteq s ∧ ∏ a in s, a ^ f a = x whe
+re mp
+· 使用定理 `Submonoid.mem_top`：mem_top (x : M) : x in (⊤ : Submonoid M)
+· 使用定理 `Finset.sdiff_singleton_eq_erase`：sdiff_singleton_eq_erase (a : α) (s : F
+inset α) : s \ {a} = s.erase a
+· 使用定理 `Finset.mul_prod_erase`：mul_prod_erase [DecidableEq ι] (s : Finset ι) (f 
+: ι -> M) {a : ι} (h : a in s) : (f a * ∏ x in s.erase a, f x) = ∏ x in s, f x
+· 使用定理 `pow_add`：pow_add {b₁ b₂ : Nat} {d : R} (_ : a ^ b₁ = c₁) (_ : a ^ b₂ = c
+₂) (_ : c₁ * c₂ = d) : (a : R) ^ (b₁ + b₂) = d
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+（共 52 条，此处仅展示前 30 条）
 -/
 lemma Submonoid.closure_irreducible [Monoid.FG M] :
     Submonoid.closure {p : M | Irreducible p} = ⊤ := by
@@ -281,7 +209,7 @@ lemma Submonoid.closure_irreducible [Monoid.FG M] :
   -- We claim that `S` is the set of irreducible elements of `M`.
   convert! hSgen
   -- We already know that `S` contains all irreducible elements...
-  refine (irreducible_subset_of_submonoidClosure_eq_top hSgen).antisymm fun r hrS => ?_
+  refine (irreducible_subset_of_submonoidClosure_eq_top hSgen).antisymm fun r hrS ↦ ?_
   -- So let us for contradiction assume that `r ∈ S` is reducible.
   by_contra hrirred
   -- If `r = 1`, then `S` isn't minimal. Contradiction.
@@ -289,18 +217,18 @@ lemma Submonoid.closure_irreducible [Monoid.FG M] :
   · simpa using hSmax (y := S \ {1}) (by simpa) Finset.sdiff_subset hrS
   -- Else find `a`, `b` non-units such that `a * b = r`.
   simp only [irreducible_iff, Set.mem_ofPred_eq, not_and, not_forall, not_or] at hrirred
-obtain ⟨a, b, hr, ha, hb⟩ := hrirred by simpa
+  obtain ⟨a, b, hr, ha, hb⟩ := hrirred <| by simpa
   -- Write `a = ∏ s ∈ S, s ^ m s`, `b = ∏ s ∈ S, s ^ n s` for some coefficients `m`, `n`.
   obtain ⟨m, -, hm⟩ := Submonoid.mem_closure_finset (x := a).mp (by rw [hSgen]; exact mem_top _)
   obtain ⟨n, -, hn⟩ := Submonoid.mem_closure_finset (x := b).mp (by rw [hSgen]; exact mem_top _)
   -- Single out the `r` term in the two products.
-  replace hm : a = r ^ m r * ∏ s in S \ {r}, s ^ m s := by
-    rw [← hm]; rw [Finset.sdiff_singleton_eq_erase]; rw [← Finset.mul_prod_erase _ _ hrS]
-  replace hn : b = r ^ n r * ∏ s in S \ {r}, s ^ n s := by
-    rw [← hn]; rw [Finset.sdiff_singleton_eq_erase]; rw [← Finset.mul_prod_erase _ _ hrS]
+  replace hm : a = r ^ m r * ∏ s ∈ S \ {r}, s ^ m s := by
+    rw [← hm, Finset.sdiff_singleton_eq_erase, ← Finset.mul_prod_erase _ _ hrS]
+  replace hn : b = r ^ n r * ∏ s ∈ S \ {r}, s ^ n s := by
+    rw [← hn, Finset.sdiff_singleton_eq_erase, ← Finset.mul_prod_erase _ _ hrS]
   -- Multiply the two equations together to write `r` as a power (namely `m r + n r`) of itself
   -- times a product of elements of `S \ {r}` (namely `∏ s ∈ S \ {r}, s ^ (m s + n s)`).
-  have hr' : r = r ^ (m r + n r) * (∏ s in S \ {r}, s ^ m s) * ∏ s in S \ {r}, s ^ n s := by
+  have hr' : r = r ^ (m r + n r) * (∏ s ∈ S \ {r}, s ^ m s) * ∏ s ∈ S \ {r}, s ^ n s := by
     rwa [pow_add, mul_assoc, mul_assoc, ← mul_assoc (r ^ n r), mul_comm (r ^ n r) _, mul_assoc,
       ← hn, ← mul_assoc, ← hm]
   -- Case on whether that power is `0`, `1` or at least `2`.
@@ -308,10 +236,10 @@ obtain ⟨a, b, hr, ha, hb⟩ := hrirred by simpa
   -- If that power is `0`, then `r` can be written as a product of elements of `S \ {r}` and `S` was
   -- not minimal. Contradiction.
   | 0 =>
-    have : ({r} : Set M) subseteq closure (S \ {r}) := by
+    have : ({r} : Set M) ⊆ closure (S \ {r}) := by
       simp only [hr, pow_zero, one_mul] at hr'
-      rw [hr']; rw [Set.singleton_subset_iff]
-      refine mul_mem ?_ ?_ <;> refine prod_mem _ fun s hs => pow_mem (subset_closure ?_) _ <;>
+      rw [hr', Set.singleton_subset_iff]
+      refine mul_mem ?_ ?_ <;> refine prod_mem _ fun s hs ↦ pow_mem (subset_closure ?_) _ <;>
         rw [← hr'] <;> simpa using hs
     specialize hSmax (y := S \ {r}) (by simp [Submonoid.closure_sdiff_eq_closure this, hSgen])
       Finset.sdiff_subset
@@ -335,3 +263,4 @@ obtain ⟨a, b, hr, ha, hb⟩ := hrirred by simpa
   | N + 2 => simp [hr, hr₀, pow_add, mul_assoc, mul_left_comm] at hr'
 
 end CancelCommMonoid
+

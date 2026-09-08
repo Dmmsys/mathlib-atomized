@@ -21,139 +21,58 @@ open Metric
 
 namespace PNat
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MetricSpace Nat+
-  body: inferInstanceAs (MetricSpace { n : Nat // 0 < n })
-
-中文:
-实例 :
-  签名: 度量空间 自然数+
-  定义体: inferInstanceAs (MetricSpace { n : Nat // 0 < n })
-
-Depends on / 依赖: MetricSpace
+/-
+**PNat.** 是 Mathlib 中的一个实例，位于命名空间 `PNat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : MetricSpace Nat+ := inferInstanceAs (MetricSpace { n : Nat // 0 < n })
-
-/--
-theorem `dist_eq` / 定理 `dist_eq`
-
-English:
-theorem dist_eq
-  given: (x y : Nat+)
-  statement: dist x y = |(↑x : Real) - ↑y|
-  proof: rfl
+instance : MetricSpace ℕ+ := inferInstanceAs (MetricSpace { n : ℕ // 0 < n })
+/-
+**PNat.dist_eq** 是 Mathlib 中的一个定理，位于命名空间 `PNat`。
+形式化陈述：dist_eq (x y : Nat+) : dist x y = |(↑x : Real) - ↑y|
+参数：x y : Nat+。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem dist_eq (x y : ℕ+) : dist x y = |(↑x : ℝ) - ↑y| := rfl
 
 @[simp, norm_cast]
-
-中文:
-定理 dist_eq
-  条件: (x y : 自然数+)
-  结论: dist x y = |(↑x : 实数) - ↑y|
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**PNat.dist_coe** 是 Mathlib 中的一个定理，位于命名空间 `PNat`。
+形式化陈述：dist_coe (x y : Nat+) : dist (↑x : Nat) (↑y : Nat) = dist x y
+参数：x y : Nat+。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem dist_eq (x y : Nat+) : dist x y = |(↑x : Real) - ↑y| := rfl
-
-@[simp, norm_cast]
-/--
-theorem `dist_coe` / 定理 `dist_coe`
-
-English:
-theorem dist_coe
-  given: (x y : Nat+)
-  statement: dist (↑x : Nat) (↑y : Nat) = dist x y
-  proof: rfl
-
-中文:
-定理 dist_coe
-  条件: (x y : 自然数+)
-  结论: dist (↑x : 自然数) (↑y : 自然数) = dist x y
-  证明: rfl
+theorem dist_coe (x y : ℕ+) : dist (↑x : ℕ) (↑y : ℕ) = dist x y := rfl
+/-
+**PNat.isUniformEmbedding_coe** 是 Mathlib 中的一个定理，位于命名空间 `PNat`。
+形式化陈述：isUniformEmbedding_coe : IsUniformEmbedding ((↑) : Nat+ -> Nat)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isUniformEmbedding_subtype_val`：isUniformEmbedding_subtype_val {p : α ->
+ Prop} : IsUniformEmbedding (Subtype.val : Subtype p -> α)
 -/
-theorem dist_coe (x y : Nat+) : dist (↑x : Nat) (↑y : Nat) = dist x y := rfl
-
-/--
-theorem `isUniformEmbedding_coe` / 定理 `isUniformEmbedding_coe`
-
-English:
-theorem isUniformEmbedding_coe
-  statement: IsUniformEmbedding ((↑) : Nat+ -> Nat)
-  proof: isUniformEmbedding_subtype_val
-
-中文:
-定理 isUniformEmbedding_coe
-  结论: 是一致嵌入 ((↑) : 自然数+ -> 自然数)
-  证明: isUniformEmbedding_subtype_val
-
-Depends on / 依赖: isUniformEmbedding_subtype_val
+theorem isUniformEmbedding_coe : IsUniformEmbedding ((↑) : ℕ+ → ℕ) := isUniformEmbedding_subtype_val
+/-
+**PNat.** 是 Mathlib 中的一个实例，位于命名空间 `PNat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem isUniformEmbedding_coe : IsUniformEmbedding ((↑) : Nat+ -> Nat) := isUniformEmbedding_subtype_val
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: DiscreteTopology Nat+
-  body: inferInstanceAs (DiscreteTopology { n : Nat // 0 < n })
-
-中文:
-实例 :
-  签名: 离散拓扑 自然数+
-  定义体: inferInstanceAs (DiscreteTopology { n : Nat // 0 < n })
-
-Depends on / 依赖: DiscreteTopology
+instance : DiscreteTopology ℕ+ := inferInstanceAs (DiscreteTopology { n : ℕ // 0 < n })
+/-
+**PNat.** 是 Mathlib 中的一个实例，位于命名空间 `PNat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : DiscreteTopology Nat+ := inferInstanceAs (DiscreteTopology { n : Nat // 0 < n })
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ProperSpace Nat+
-  body: by
-    change IsCompact (((↑) : Nat+ -> Nat) ⁻¹' closedBall (↑n : Nat) r)
-    rw [Nat.closedBall_eq_Icc]
-    exact ((Set.finite_Icc _ _).preimage PNat.coe_injective.injOn).isCompact
-
-中文:
-实例 :
-  签名: 真空间 自然数+
-  定义体: by
-    change IsCompact (((↑) : Nat+ -> Nat) ⁻¹' closedBall (↑n : Nat) r)
-    rw [Nat.closedBall_eq_Icc]
-    exact ((Set.finite_Icc _ _).preimage PNat.coe_injective.injOn).isCompact
-
-Depends on / 依赖: IsCompact, Nat.closedBall_eq_Icc, PNat.coe_injective.injOn, Set.finite_Icc, closedBall, closedBall_eq_Icc, coe_injective, finite_Icc, isCompact, preimage
--/
-instance : ProperSpace Nat+ where
+instance : ProperSpace ℕ+ where
   isCompact_closedBall n r := by
-    change IsCompact (((↑) : Nat+ -> Nat) ⁻¹' closedBall (↑n : Nat) r)
+    change IsCompact (((↑) : ℕ+ → ℕ) ⁻¹' closedBall (↑n : ℕ) r)
     rw [Nat.closedBall_eq_Icc]
     exact ((Set.finite_Icc _ _).preimage PNat.coe_injective.injOn).isCompact
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NoncompactSpace Nat+
-  body: noncompactSpace_of_neBot by simp only [Filter.cocompact_eq_cofinite, Filter.cofinite_neBot]
-
-中文:
-实例 :
-  签名: Noncompact空间 自然数+
-  定义体: noncompactSpace_of_neBot by simp only [Filter.cocompact_eq_cofinite, Filter.cofinite_neBot]
-
-Depends on / 依赖: Filter, Filter.cocompact_eq_cofinite, Filter.cofinite_neBot, cocompact_eq_cofinite, cofinite_neBot, noncompactSpace_of_neBot
+/-
+**PNat.** 是 Mathlib 中的一个实例，位于命名空间 `PNat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : NoncompactSpace Nat+ :=
-noncompactSpace_of_neBot by simp only [Filter.cocompact_eq_cofinite, Filter.cofinite_neBot]
+instance : NoncompactSpace ℕ+ :=
+  noncompactSpace_of_neBot <| by simp only [Filter.cocompact_eq_cofinite, Filter.cofinite_neBot]
 
 end PNat
+

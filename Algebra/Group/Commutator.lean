@@ -25,21 +25,14 @@ assert_not_exists MonoidWithZero DenselyOrdered
 `commutatorElement` namespace to avoid clashing with other brackets. -/
 @[to_additive (attr := reducible) /-- The additive commutator of two elements `g₁` and `g₂`. This
 is a scoped instance in the `commutatorElement` namespace to avoid clashing with other brackets -/]
-/--
-Definition of `commutatorElement` / `commutatorElement` 的定义
-
-English:
-definition commutatorElement
-  signature: {G : Type*} [Group G]
-  body: ⟨fun g₁ g₂ => g₁ * g₂ * g₁⁻¹ * g₂⁻¹⟩
-
-中文:
-定义 commutatorElement
-  签名: {G : 类型} [群 G]
-  定义体: ⟨fun g₁ g₂ => g₁ * g₂ * g₁⁻¹ * g₂⁻¹⟩
+/-
+**commutatorElement** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：commutatorElement {G : Type*} [Group G] : Bracket G G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def commutatorElement {G : Type*} [Group G] : Bracket G G :=
-  ⟨fun g₁ g₂ => g₁ * g₂ * g₁⁻¹ * g₂⁻¹⟩
+  ⟨fun g₁ g₂ ↦ g₁ * g₂ * g₁⁻¹ * g₂⁻¹⟩
 
 namespace commutatorElement
 
@@ -56,18 +49,13 @@ end addCommutatorElement
 open scoped commutatorElement
 
 @[to_additive]
-/--
-theorem `commutatorElement_def` / 定理 `commutatorElement_def`
-
-English:
-theorem commutatorElement_def
-  given: {G : Type*} [Group G] (g₁ g₂ : G)
-  proof: rfl
-
-中文:
-定理 commutatorElement_def
-  条件: {G : 类型} [群 G] (g₁ g₂ : G)
-  证明: rfl
+/-
+**commutatorElement_def** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：commutatorElement_def {G : Type*} [Group G] (g₁ g₂ : G) : ⁅g₁, g₂⁆ = g₁ * 
+g₂ * g₁⁻¹ * g₂⁻¹
+参数：g₁ g₂ : G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem commutatorElement_def {G : Type*} [Group G] (g₁ g₂ : G) :
     ⁅g₁, g₂⁆ = g₁ * g₂ * g₁⁻¹ * g₂⁻¹ :=

@@ -30,77 +30,41 @@ namespace Completion
 
 variable (E : Type*)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [UniformSpace
-  signature: E] [Norm E] : Norm (Completion E) where
-  body: Completion.extension Norm.norm
-
-@[simp]
-
-中文:
-实例 [一致空间
-  签名: E] [范数 E] : 范数 (完备化 E) where
-  定义体: Completion.extension Norm.norm
-
-@[simp]
-
-Depends on / 依赖: Completion, Completion.extension, Norm.norm, extension
+/-
+**UniformSpace.Completion.** 是 Mathlib 中的一个实例，位于命名空间 `UniformSpace.Completion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [UniformSpace E] [Norm E] : Norm (Completion E) where
   norm := Completion.extension Norm.norm
 
 @[simp]
-/--
-theorem `norm_coe` / 定理 `norm_coe`
-
-English:
-theorem norm_coe
-  given: {E} [SeminormedAddCommGroup E] (x : E)
-  statement: ‖(x : Completion E)‖ = ‖x‖
-  proof: Completion.extension_coe uniformContinuous_norm x
-
-中文:
-定理 norm_coe
-  条件: {E} [SeminormedAddComm群 E] (x : E)
-  结论: ‖(x : 完备化 E)‖ = ‖x‖
-  证明: Completion.extension_coe uniformContinuous_norm x
-
-Depends on / 依赖: Completion, Completion.extension_coe, extension_coe, uniformContinuous_norm
+/-
+**UniformSpace.Completion.norm_coe** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpace.Compl
+etion`。
+形式化陈述：norm_coe {E} [SeminormedAddCommGroup E] (x : E) : ‖(x : Completion E)‖ = ‖
+x‖
+参数：x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformSpace.Completion.extension_coe`：extension_coe [T0Space β] (hf : U
+niformContinuous f) (a : α) : (Completion.extension f) a = f a
+· 使用定理 `T3Space.toT0Space`：∀ {X : Type u} {inst : TopologicalSpace X} [self : T3
+Space X], T0Space X
+· 使用定理 `T4Space.t3Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T4Space X
+], T3Space X
+· 使用定理 `T5Space.toT4Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T5Space
+ X], T4Space X
+· 使用定理 `OrderTopology.t5Space`：∀ {X : Type u_1} [inst : LinearOrder X] [inst_1 :
+ TopologicalSpace X] [OrderTopology X], T5Space X
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `uniformContinuous_norm`：∀ {E : Type u_2} [inst : SeminormedAddGroup E], 
+UniformContinuous norm
 -/
 theorem norm_coe {E} [SeminormedAddCommGroup E] (x : E) : ‖(x : Completion E)‖ = ‖x‖ :=
   Completion.extension_coe uniformContinuous_norm x
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SeminormedAddCommGroup
-  signature: E] : NormedAddCommGroup (Completion E) where
-  body: by
-    induction x, y using Completion.induction_on₂
-    · refine isClosed_eq (Completion.uniformContinuous_extension₂ _).continuous ?_
-      exact Continuous.comp Completion.continuous_extension (continuous_neg.fst.add continuous_snd)
-    · rw [← Completion.coe_neg, ← Completion.coe_add, norm_coe, Completion.dist_eq,
-        dist_eq_norm_neg_add]
-
-@[simp]
-
-中文:
-实例 [SeminormedAddComm群
-  签名: E] : 赋范交换加群 (完备化 E) where
-  定义体: by
-    induction x, y using Completion.induction_on₂
-    · refine isClosed_eq (Completion.uniformContinuous_extension₂ _).continuous ?_
-      exact Continuous.comp Completion.continuous_extension (continuous_neg.fst.add continuous_snd)
-    · rw [← Completion.coe_neg, ← Completion.coe_add, norm_coe, Completion.dist_eq,
-        dist_eq_norm_neg_add]
-
-@[simp]
-
-Depends on / 依赖: Completion, Completion.coe_add, Completion.coe_neg, Completion.continuous_extension, Completion.dist_eq, Completion.induction_on, Completion.uniformContinuous_extension, Continuous, Continuous.comp, coe_add, coe_neg, continuous, continuous_extension, continuous_neg, continuous_neg.fst.add, continuous_snd, dist_eq, dist_eq_norm_neg_add, isClosed_eq, norm_coe
+/-
+**UniformSpace.Completion.** 是 Mathlib 中的一个实例，位于命名空间 `UniformSpace.Completion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SeminormedAddCommGroup E] : NormedAddCommGroup (Completion E) where
   dist_eq x y := by
@@ -111,49 +75,49 @@ instance [SeminormedAddCommGroup E] : NormedAddCommGroup (Completion E) where
         dist_eq_norm_neg_add]
 
 @[simp]
-/--
-theorem `nnnorm_coe` / 定理 `nnnorm_coe`
-
-English:
-theorem nnnorm_coe
-  given: {E} [SeminormedAddCommGroup E] (x : E)
-  statement: ‖(x : Completion E)‖₊ = ‖x‖₊
-  proof: by
-  simp [nnnorm]
-
-@[simp]
-
-中文:
-定理 nnnorm_coe
-  条件: {E} [SeminormedAddComm群 E] (x : E)
-  结论: ‖(x : 完备化 E)‖₊ = ‖x‖₊
-  证明: by
-  simp [nnnorm]
-
-@[simp]
-
-Depends on / 依赖: nnnorm
+/-
+**UniformSpace.Completion.nnnorm_coe** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpace.Com
+pletion`。
+形式化陈述：nnnorm_coe {E} [SeminormedAddCommGroup E] (x : E) : ‖(x : Completion E)‖₊ 
+= ‖x‖₊
+参数：x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `UniformSpace.Completion.norm_coe`：norm_coe {E} [SeminormedAddCommGroup E
+] (x : E) : ‖(x : Completion E)‖ = ‖x‖
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NNReal.mk.congr_simp`：∀ (x x_1 : ℝ) (e_x : x = x_1) (hx : 0 ≤ x), NNReal
+.mk x hx = NNReal.mk x_1 ⋯
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem nnnorm_coe {E} [SeminormedAddCommGroup E] (x : E) : ‖(x : Completion E)‖₊ = ‖x‖₊ := by
   simp [nnnorm]
 
 @[simp]
-/--
-lemma `enorm_coe` / 引理 `enorm_coe`
-
-English:
-lemma enorm_coe
-  given: {E} [SeminormedAddCommGroup E] (x : E)
-  statement: ‖(x : Completion E)‖ₑ = ‖x‖ₑ
-  proof: by
-  simp [enorm]
-
-中文:
-引理 enorm_coe
-  条件: {E} [SeminormedAddComm群 E] (x : E)
-  结论: ‖(x : 完备化 E)‖ₑ = ‖x‖ₑ
-  证明: by
-  simp [enorm]
+/-
+**UniformSpace.Completion.enorm_coe** 是 Mathlib 中的一个引理，位于命名空间 `UniformSpace.Comp
+letion`。
+形式化陈述：enorm_coe {E} [SeminormedAddCommGroup E] (x : E) : ‖(x : Completion E)‖ₑ =
+ ‖x‖ₑ
+参数：x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UniformSpace.Completion.nnnorm_coe`：nnnorm_coe {E} [SeminormedAddCommGro
+up E] (x : E) : ‖(x : Completion E)‖₊ = ‖x‖₊
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma enorm_coe {E} [SeminormedAddCommGroup E] (x : E) : ‖(x : Completion E)‖ₑ = ‖x‖ₑ := by
   simp [enorm]
@@ -161,3 +125,4 @@ lemma enorm_coe {E} [SeminormedAddCommGroup E] (x : E) : ‖(x : Completion E)�
 end Completion
 
 end UniformSpace
+

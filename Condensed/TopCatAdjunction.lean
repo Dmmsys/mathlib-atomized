@@ -28,22 +28,17 @@ open Condensed CondensedSet CategoryTheory CompHaus
 variable (X : CondensedSet.{u})
 
 set_option backward.privateInPublic true in
-/--
-Definition of `CondensedSet.coinducingCoprod` / `CondensedSet.coinducingCoprod` 的定义
+/-- Auxiliary definition to define the topology on `X(*)` for a condensed set `X`. -/
+/-
+**CondensedSet.coinducingCoprod** 是 Mathlib 中的一个定义，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CondensedSet.coinducingCoprod
-  signature: :
-  body: fun ⟨⟨_, i⟩, s⟩ => X.obj.map ((of PUnit.{u + 1}).const s).op i
-
-中文:
-定义 CondensedSet.coinducingCoprod
-  签名: :
-  定义体: fun ⟨⟨_, i⟩, s⟩ => X.obj.map ((of PUnit.{u + 1}).const s).op i
+--- 原说明 ---
+Auxiliary definition to define the topology on `X(*)` for a condensed set `X`.
 -/
 private def CondensedSet.coinducingCoprod :
-    (Σ (i : (S : CompHaus.{u}) × X.obj.obj ⟨S⟩), i.fst) -> X.obj.obj ⟨of PUnit⟩ :=
-  fun ⟨⟨_, i⟩, s⟩ => X.obj.map ((of PUnit.{u + 1}).const s).op i
+    (Σ (i : (S : CompHaus.{u}) × X.obj.obj ⟨S⟩), i.fst) → X.obj.obj ⟨of PUnit⟩ :=
+  fun ⟨⟨_, i⟩, s⟩ ↦ X.obj.map ((of PUnit.{u + 1}).const s).op i
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
@@ -53,20 +48,18 @@ In other words, the topology coinduced by the map `CondensedSet.coinducingCoprod
 local instance : TopologicalSpace (X.obj.obj ⟨CompHaus.of PUnit⟩) :=
   TopologicalSpace.coinduced (coinducingCoprod X) inferInstance
 
-/--
-Definition of `CondensedSet.toTopCat` / `CondensedSet.toTopCat` 的定义
+/-- The object part of the functor `CondensedSet ⥤ TopCat` -/
+/-
+**CondensedSet.toTopCat** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：CondensedSet.toTopCat : TopCat.{u + 1}
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
 
-English:
-abbreviation CondensedSet.toTopCat
-  signature: : TopCat.{u + 1}
-  body: TopCat.of (X.obj.obj ⟨of PUnit⟩)
-
-中文:
-缩写 CondensedSet.toTopCat
-  签名: : 顶元素范畴.{u + 1}
-  定义体: TopCat.of (X.obj.obj ⟨of PUnit⟩)
-
-Depends on / 依赖: TopCat, TopCat.of, X.obj.obj
+--- 原说明 ---
+The object part of the functor `CondensedSet ⥤ TopCat`
 -/
 abbrev CondensedSet.toTopCat : TopCat.{u + 1} := TopCat.of (X.obj.obj ⟨of PUnit⟩)
 
@@ -74,33 +67,33 @@ namespace CondensedSet
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-lemma `continuous_coinducingCoprod` / 引理 `continuous_coinducingCoprod`
-
-English:
-lemma continuous_coinducingCoprod
-  given: {S : CompHaus.{u}} (x : X.obj.obj ⟨S⟩)
-  proof: by
-  suffices forall (i : (T : CompHaus.{u}) × X.obj.obj ⟨T⟩),
-      Continuous (fun (a : i.fst) => X.coinducingCoprod ⟨i, a⟩) from this ⟨_, _⟩
-  rw [← continuous_sigma_iff]
-  apply continuous_coinduced_rng
-
-中文:
-引理 continuous_coinducingCoprod
-  条件: {S : CompHaus.{u}} (x : X.obj.obj ⟨S⟩)
-  证明: by
-  suffices forall (i : (T : CompHaus.{u}) × X.obj.obj ⟨T⟩),
-      Continuous (fun (a : i.fst) => X.coinducingCoprod ⟨i, a⟩) from this ⟨_, _⟩
-  rw [← continuous_sigma_iff]
-  apply continuous_coinduced_rng
-
-Depends on / 依赖: CompHaus, Continuous, X.coinducingCoprod, X.obj.obj, coinducingCoprod, continuous_coinduced_rng, continuous_sigma_iff, i.fst
+/-
+**CondensedSet.continuous_coinducingCoprod** 是 Mathlib 中的一个引理，位于命名空间 `CondensedS
+et`。
+形式化陈述：continuous_coinducingCoprod {S : CompHaus.{u}} (x : X.obj.obj ⟨S⟩) : Conti
+nuous fun a => (X.coinducingCoprod ⟨⟨S, x⟩, a⟩)
+参数：x : X.obj.obj ⟨S⟩。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `continuous_sigma_iff`：continuous_sigma_iff {f : Sigma σ -> X} : Continuo
+us f ↔ forall i, Continuous fun a => f ⟨i, a⟩
+· 使用定理 `continuous_coinduced_rng`：continuous_coinduced_rng {t : TopologicalSpace
+ α} : Continuous[t, coinduced f t] f
 -/
 lemma continuous_coinducingCoprod {S : CompHaus.{u}} (x : X.obj.obj ⟨S⟩) :
-    Continuous fun a => (X.coinducingCoprod ⟨⟨S, x⟩, a⟩) := by
-  suffices forall (i : (T : CompHaus.{u}) × X.obj.obj ⟨T⟩),
-      Continuous (fun (a : i.fst) => X.coinducingCoprod ⟨i, a⟩) from this ⟨_, _⟩
+    Continuous fun a ↦ (X.coinducingCoprod ⟨⟨S, x⟩, a⟩) := by
+  suffices ∀ (i : (T : CompHaus.{u}) × X.obj.obj ⟨T⟩),
+      Continuous (fun (a : i.fst) ↦ X.coinducingCoprod ⟨i, a⟩) from this ⟨_, _⟩
   rw [← continuous_sigma_iff]
   apply continuous_coinduced_rng
 
@@ -108,40 +101,17 @@ variable {X} {Y : CondensedSet} (f : X ⟶ Y)
 
 /-- The map part of the functor `CondensedSet ⥤ TopCat` -/
 @[simps!]
-/--
-Definition of `toTopCatMap` / `toTopCatMap` 的定义
+/-
+**CondensedSet.toTopCatMap** 是 Mathlib 中的一个定义，位于命名空间 `CondensedSet`。
+形式化陈述：toTopCatMap : X.toTopCat ⟶ Y.toTopCat
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
 
-English:
-definition toTopCatMap
-  signature: : X.toTopCat ⟶ Y.toTopCat
-  body: TopCat.ofHom
-  { toFun := f.hom.app ⟨of PUnit⟩
-    continuous_toFun := by
-      rw [continuous_coinduced_dom]
-      apply continuous_sigma
-      intro ⟨S, x⟩
-      simp only [Function.comp_apply, coinducingCoprod]
-      rw [show (fun (a : S) =>
-          f.hom.app ⟨of PUnit⟩ (X.obj.map ((of PUnit.{u + 1}).const a).op x)) = _
-        from funext fun a => NatTrans.naturality_apply f.hom ((of PUnit.{u + 1}).const a).op x]
-      exact continuous_coinducingCoprod Y _ }
-
-中文:
-定义 toTopCatMap
-  签名: : X.toTopCat ⟶ Y.toTopCat
-  定义体: TopCat.ofHom
-  { toFun := f.hom.app ⟨of PUnit⟩
-    continuous_toFun := by
-      rw [continuous_coinduced_dom]
-      apply continuous_sigma
-      intro ⟨S, x⟩
-      simp only [Function.comp_apply, coinducingCoprod]
-      rw [show (fun (a : S) =>
-          f.hom.app ⟨of PUnit⟩ (X.obj.map ((of PUnit.{u + 1}).const a).op x)) = _
-        from funext fun a => NatTrans.naturality_apply f.hom ((of PUnit.{u + 1}).const a).op x]
-      exact continuous_coinducingCoprod Y _ }
-
-Depends on / 依赖: Function, Function.comp_apply, NatTrans, NatTrans.naturality_apply, TopCat, TopCat.ofHom, X.obj.map, coinducingCoprod, comp_apply, continuous_coinduced_dom, continuous_coinducingCoprod, continuous_sigma, continuous_toFun, f.hom, f.hom.app, naturality_apply
+--- 原说明 ---
+The map part of the functor `CondensedSet ⥤ TopCat`
 -/
 def toTopCatMap : X.toTopCat ⟶ Y.toTopCat :=
   TopCat.ofHom
@@ -151,31 +121,23 @@ def toTopCatMap : X.toTopCat ⟶ Y.toTopCat :=
       apply continuous_sigma
       intro ⟨S, x⟩
       simp only [Function.comp_apply, coinducingCoprod]
-      rw [show (fun (a : S) =>
+      rw [show (fun (a : S) ↦
           f.hom.app ⟨of PUnit⟩ (X.obj.map ((of PUnit.{u + 1}).const a).op x)) = _
-        from funext fun a => NatTrans.naturality_apply f.hom ((of PUnit.{u + 1}).const a).op x]
+        from funext fun a ↦ NatTrans.naturality_apply f.hom ((of PUnit.{u + 1}).const a).op x]
       exact continuous_coinducingCoprod Y _ }
 
 end CondensedSet
 
 /-- The functor `CondensedSet ⥤ TopCat` -/
 @[simps]
-/--
-Definition of `condensedSetToTopCat` / `condensedSetToTopCat` 的定义
+/-
+**condensedSetToTopCat** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：condensedSetToTopCat : CondensedSet.{u} ⥤ TopCat.{u + 1} where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition condensedSetToTopCat
-  signature: : CondensedSet.{u} ⥤ TopCat.{u + 1} where
-  body: X.toTopCat
-  map f := toTopCatMap f
-
-中文:
-定义 condensedSetToTopCat
-  签名: : CondensedSet.{u} ⥤ 顶元素范畴.{u + 1} where
-  定义体: X.toTopCat
-  map f := toTopCatMap f
-
-Depends on / 依赖: X.toTopCat, toTopCat
+--- 原说明 ---
+The functor `CondensedSet ⥤ TopCat`
 -/
 def condensedSetToTopCat : CondensedSet.{u} ⥤ TopCat.{u + 1} where
   obj X := X.toTopCat
@@ -184,28 +146,20 @@ def condensedSetToTopCat : CondensedSet.{u} ⥤ TopCat.{u + 1} where
 namespace CondensedSet
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `topCatAdjunctionCounit` / `topCatAdjunctionCounit` 的定义
+/-- The counit of the adjunction `condensedSetToTopCat ⊣ topCatToCondensedSet` -/
+/-
+**CondensedSet.topCatAdjunctionCounit** 是 Mathlib 中的一个定义，位于命名空间 `CondensedSet`。
+形式化陈述：topCatAdjunctionCounit (X : TopCat.{u + 1}) : X.toCondensedSet.toTopCat ⟶ 
+X
+参数：X : TopCat.{u + 1}。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
 
-English:
-definition topCatAdjunctionCounit
-  signature: (X : TopCat.{u + 1})
-  body: TopCat.ofHom
-  { toFun x := x.1 PUnit.unit
-    continuous_toFun := by
-      rw [continuous_coinduced_dom]
-      continuity }
-
-中文:
-定义 topCatAdjunctionCounit
-  签名: (X : 顶元素范畴.{u + 1})
-  定义体: TopCat.ofHom
-  { toFun x := x.1 PUnit.unit
-    continuous_toFun := by
-      rw [continuous_coinduced_dom]
-      continuity }
-
-Depends on / 依赖: PUnit.unit, TopCat, TopCat.ofHom, continuity, continuous_coinduced_dom, continuous_toFun
+--- 原说明 ---
+The counit of the adjunction `condensedSetToTopCat ⊣ topCatToCondensedSet`
 -/
 noncomputable def topCatAdjunctionCounit (X : TopCat.{u + 1}) : X.toCondensedSet.toTopCat ⟶ X :=
   TopCat.ofHom
@@ -215,18 +169,18 @@ noncomputable def topCatAdjunctionCounit (X : TopCat.{u + 1}) : X.toCondensedSet
       continuity }
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `topCatAdjunctionCounit_hom_apply` / 引理 `topCatAdjunctionCounit_hom_apply`
+/-- `simp`-normal form of the lemma that `@[simps]` would generate. -/
+/-
+**CondensedSet.topCatAdjunctionCounit_hom_apply** 是 Mathlib 中的一个定理，位于命名空间 `Conde
+nsedSet`。
+形式化陈述：∀ (X : TopCat) (x : C(PUnit.{u_1 + 1}, ↑X)), (TopCat.Hom.hom (CondensedSet
+.topCatAdjunctionCounit X)) x = x PUnit.unit
+参数：X : TopCat；x : C(PUnit.{u_1 + 1}, ↑X)；TopCat.Hom.hom (CondensedSet.topCatAdju
+nctionCounit X)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma topCatAdjunctionCounit_hom_apply
-  given: (X : TopCat) (x)
-  proof: rfl
-
-中文:
-引理 topCatAdjunctionCounit_hom_apply
-  条件: (X : 顶元素范畴) (x)
-  证明: rfl
+--- 原说明 ---
+`simp`-normal form of the lemma that `@[simps]` would generate.
 -/
 @[simp] lemma topCatAdjunctionCounit_hom_apply (X : TopCat) (x) :
     -- We have to specify here to not infer the `TopologicalSpace` instance on `C(PUnit, X)`,
@@ -236,42 +190,41 @@ lemma topCatAdjunctionCounit_hom_apply
       x PUnit.unit := rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `topCatAdjunctionCounitEquiv` / `topCatAdjunctionCounitEquiv` 的定义
+/-- The counit of the adjunction `condensedSetToTopCat ⊣ topCatToCondensedSet` is always bijective,
+but not an isomorphism in general (the inverse isn't continuous unless `X` is compactly generated).
+-/
+/-
+**CondensedSet.topCatAdjunctionCounitEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CondensedS
+et`。
+形式化陈述：topCatAdjunctionCounitEquiv (X : TopCat.{u + 1}) : X.toCondensedSet.toTopC
+at ≃ X where toFun
+参数：X : TopCat.{u + 1}。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
 
-English:
-definition topCatAdjunctionCounitEquiv
-  signature: (X : TopCat.{u + 1})
-  body: topCatAdjunctionCounit X
-  invFun x := ContinuousMap.const _ x
-
-中文:
-定义 topCatAdjunctionCounitEquiv
-  签名: (X : 顶元素范畴.{u + 1})
-  定义体: topCatAdjunctionCounit X
-  invFun x := ContinuousMap.const _ x
-
-Depends on / 依赖: topCatAdjunctionCounit
+--- 原说明 ---
+The counit of the adjunction `condensedSetToTopCat ⊣ topCatToCondensedSet` is al
+ways bijective,
+but not an isomorphism in general (the inverse isn't continuous unless `X` is co
+mpactly generated).
 -/
 noncomputable def topCatAdjunctionCounitEquiv (X : TopCat.{u + 1}) :
     X.toCondensedSet.toTopCat ≃ X where
   toFun := topCatAdjunctionCounit X
   invFun x := ContinuousMap.const _ x
-
-/--
-lemma `topCatAdjunctionCounit_bijective` / 引理 `topCatAdjunctionCounit_bijective`
-
-English:
-lemma topCatAdjunctionCounit_bijective
-  given: (X : TopCat.{u + 1})
-  proof: (topCatAdjunctionCounitEquiv X).bijective
-
-中文:
-引理 topCatAdjunctionCounit_bijective
-  条件: (X : 顶元素范畴.{u + 1})
-  证明: (topCatAdjunctionCounitEquiv X).bijective
-
-Depends on / 依赖: bijective, topCatAdjunctionCounitEquiv
+/-
+**CondensedSet.topCatAdjunctionCounit_bijective** 是 Mathlib 中的一个引理，位于命名空间 `Conde
+nsedSet`。
+形式化陈述：topCatAdjunctionCounit_bijective (X : TopCat.{u + 1}) : Function.Bijective
+ (topCatAdjunctionCounit X)
+参数：X : TopCat.{u + 1}。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
 -/
 lemma topCatAdjunctionCounit_bijective (X : TopCat.{u + 1}) :
     Function.Bijective (topCatAdjunctionCounit X) :=
@@ -280,55 +233,30 @@ lemma topCatAdjunctionCounit_bijective (X : TopCat.{u + 1}) :
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The unit of the adjunction `condensedSetToTopCat ⊣ topCatToCondensedSet` -/
 @[simps hom_app]
-/--
-Definition of `topCatAdjunctionUnit` / `topCatAdjunctionUnit` 的定义
+/-
+**CondensedSet.topCatAdjunctionUnit** 是 Mathlib 中的一个定义，位于命名空间 `CondensedSet`。
+形式化陈述：topCatAdjunctionUnit (X : CondensedSet.{u}) : X ⟶ X.toTopCat.toCondensedSe
+t where hom
+参数：X : CondensedSet.{u}。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instCompactSpace`：∀ {X : Type u} [inst : TopologicalSpace X] [Indiscrete
+Topology X], CompactSpace X
+· 使用定理 `instIndiscreteTopologyPUnit`：IndiscreteTopology PUnit.{u_1 + 1}
 
-English:
-definition topCatAdjunctionUnit
-  signature: (X : CondensedSet.{u})
-  body: {
-    app S := ↾fun x => {
-      toFun := fun s => X.obj.map ((of PUnit.{u + 1}).const s).op x
-      continuous_toFun := by
-        suffices forall (i : (T : CompHaus.{u}) × X.obj.obj ⟨T⟩),
-          Continuous (fun (a : i.fst) => X.coinducingCoprod ⟨i, a⟩) from this ⟨_, _⟩
-        rw [← continuous_sigma_iff]
-        apply continuous_coinduced_rng }
-    naturality := fun _ _ _ => by
-      ext
-      simp only [TypeCat.Fun.toFun_apply,
-        comp_apply, TopCat.toSheafCompHausLike_obj_map, ConcreteCategory.hom_ofHom,
-        TypeCat.Fun.coe_mk, ← Functor.map_comp_apply]
-      rfl }
-
-中文:
-定义 topCatAdjunctionUnit
-  签名: (X : CondensedSet.{u})
-  定义体: {
-    app S := ↾fun x => {
-      toFun := fun s => X.obj.map ((of PUnit.{u + 1}).const s).op x
-      continuous_toFun := by
-        suffices forall (i : (T : CompHaus.{u}) × X.obj.obj ⟨T⟩),
-          Continuous (fun (a : i.fst) => X.coinducingCoprod ⟨i, a⟩) from this ⟨_, _⟩
-        rw [← continuous_sigma_iff]
-        apply continuous_coinduced_rng }
-    naturality := fun _ _ _ => by
-      ext
-      simp only [TypeCat.Fun.toFun_apply,
-        comp_apply, TopCat.toSheafCompHausLike_obj_map, ConcreteCategory.hom_ofHom,
-        TypeCat.Fun.coe_mk, ← Functor.map_comp_apply]
-      rfl }
+--- 原说明 ---
+The unit of the adjunction `condensedSetToTopCat ⊣ topCatToCondensedSet`
 -/
 noncomputable def topCatAdjunctionUnit (X : CondensedSet.{u}) : X ⟶ X.toTopCat.toCondensedSet where
   hom := {
-    app S := ↾fun x => {
-      toFun := fun s => X.obj.map ((of PUnit.{u + 1}).const s).op x
+    app S := ↾fun x ↦ {
+      toFun := fun s ↦ X.obj.map ((of PUnit.{u + 1}).const s).op x
       continuous_toFun := by
-        suffices forall (i : (T : CompHaus.{u}) × X.obj.obj ⟨T⟩),
-          Continuous (fun (a : i.fst) => X.coinducingCoprod ⟨i, a⟩) from this ⟨_, _⟩
+        suffices ∀ (i : (T : CompHaus.{u}) × X.obj.obj ⟨T⟩),
+          Continuous (fun (a : i.fst) ↦ X.coinducingCoprod ⟨i, a⟩) from this ⟨_, _⟩
         rw [← continuous_sigma_iff]
         apply continuous_coinduced_rng }
-    naturality := fun _ _ _ => by
+    naturality := fun _ _ _ ↦ by
       ext
       simp only [TypeCat.Fun.toFun_apply,
         comp_apply, TopCat.toSheafCompHausLike_obj_map, ConcreteCategory.hom_ofHom,
@@ -337,30 +265,16 @@ noncomputable def topCatAdjunctionUnit (X : CondensedSet.{u}) : X ⟶ X.toTopCat
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `topCatAdjunction` / `topCatAdjunction` 的定义
+/-- The adjunction `condensedSetToTopCat ⊣ topCatToCondensedSet` -/
+/-
+**CondensedSet.topCatAdjunction** 是 Mathlib 中的一个定义，位于命名空间 `CondensedSet`。
+形式化陈述：topCatAdjunction : condensedSetToTopCat.{u} ⊣ topCatToCondensedSet where u
+nit.app
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition topCatAdjunction
-  signature: : condensedSetToTopCat.{u} ⊣ topCatToCondensedSet where
-  body: topCatAdjunctionUnit
-  counit.app := topCatAdjunctionCounit
-  left_triangle_components Y := by
-    ext
-    change Y.obj.map (𝟙 _) _ = _
-    simp
-
-中文:
-定义 topCatAdjunction
-  签名: : condensedSetToTopCat.{u} ⊣ topCatToCondensedSet where
-  定义体: topCatAdjunctionUnit
-  counit.app := topCatAdjunctionCounit
-  left_triangle_components Y := by
-    ext
-    change Y.obj.map (𝟙 _) _ = _
-    simp
-
-Depends on / 依赖: topCatAdjunctionUnit
+--- 原说明 ---
+The adjunction `condensedSetToTopCat ⊣ topCatToCondensedSet`
 -/
 noncomputable def topCatAdjunction : condensedSetToTopCat.{u} ⊣ topCatToCondensedSet where
   unit.app := topCatAdjunctionUnit
@@ -371,74 +285,71 @@ noncomputable def topCatAdjunction : condensedSetToTopCat.{u} ⊣ topCatToConden
     simp
 
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**CondensedSet.** 是 Mathlib 中的一个实例，位于命名空间 `CondensedSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : TopCat) : Epi (topCatAdjunction.counit.app X) := by
   rw [TopCat.epi_iff_surjective]
   exact (topCatAdjunctionCounit_bijective _).2
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: topCatToCondensedSet.Faithful
-  body: topCatAdjunction.faithful_R_of_epi_counit_app
-
-中文:
-实例 :
-  签名: topCatToCondensedSet.忠实
-  定义体: topCatAdjunction.faithful_R_of_epi_counit_app
-
-Depends on / 依赖: faithful_R_of_epi_counit_app, topCatAdjunction, topCatAdjunction.faithful_R_of_epi_counit_app
+/-
+**CondensedSet.** 是 Mathlib 中的一个实例，位于命名空间 `CondensedSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : topCatToCondensedSet.Faithful := topCatAdjunction.faithful_R_of_epi_counit_app
 
 open CompactlyGenerated
-
+/-
+**CondensedSet.** 是 Mathlib 中的一个实例，位于命名空间 `CondensedSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : CondensedSet.{u}) : UCompactlyGeneratedSpace.{u, u + 1} X.toTopCat := by
   apply uCompactlyGeneratedSpace_of_continuous_maps
   intro Y _ f h
-  rw [continuous_coinduced_dom]; rw [continuous_sigma_iff]
-  exact fun ⟨S, s⟩ => h S ⟨_, continuous_coinducingCoprod X _⟩
-
+  rw [continuous_coinduced_dom, continuous_sigma_iff]
+  exact fun ⟨S, s⟩ ↦ h S ⟨_, continuous_coinducingCoprod X _⟩
+/-
+**CondensedSet.** 是 Mathlib 中的一个实例，位于命名空间 `CondensedSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : CondensedSet.{u}) :
     UCompactlyGeneratedSpace.{u, u + 1} (condensedSetToTopCat.obj X) :=
   inferInstanceAs (UCompactlyGeneratedSpace.{u, u + 1} X.toTopCat)
 
-/--
-Definition of `condensedSetToCompactlyGenerated` / `condensedSetToCompactlyGenerated` 的定义
+/-- The functor from condensed sets to topological spaces lands in compactly generated spaces. -/
+/-
+**CondensedSet.condensedSetToCompactlyGenerated** 是 Mathlib 中的一个定义，位于命名空间 `Conde
+nsedSet`。
+形式化陈述：condensedSetToCompactlyGenerated : CondensedSet.{u} ⥤ CompactlyGenerated.{
+u, u + 1} where obj X
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CondensedSet.instUCompactlyGeneratedSpaceCarrierObjTopCatCondensedSetToT
+opCat`：∀ (X : CondensedSet), UCompactlyGeneratedSpace ↑(condensedSetToTopCat.obj
+ X)
 
-English:
-definition condensedSetToCompactlyGenerated
-  signature: : CondensedSet.{u} ⥤ CompactlyGenerated.{u, u + 1} where
-  body: CompactlyGenerated.of (condensedSetToTopCat.obj X)
-  map f := InducedCategory.homMk (toTopCatMap f)
-
-中文:
-定义 condensedSetToCompactlyGenerated
-  签名: : CondensedSet.{u} ⥤ 余mpactlyGenerated.{u, u + 1} where
-  定义体: CompactlyGenerated.of (condensedSetToTopCat.obj X)
-  map f := InducedCategory.homMk (toTopCatMap f)
-
-Depends on / 依赖: CompactlyGenerated, CompactlyGenerated.of, condensedSetToTopCat, condensedSetToTopCat.obj
+--- 原说明 ---
+The functor from condensed sets to topological spaces lands in compactly generat
+ed spaces.
 -/
 def condensedSetToCompactlyGenerated : CondensedSet.{u} ⥤ CompactlyGenerated.{u, u + 1} where
   obj X := CompactlyGenerated.of (condensedSetToTopCat.obj X)
   map f := InducedCategory.homMk (toTopCatMap f)
 
 /--
-Definition of `compactlyGeneratedToCondensedSet` / `compactlyGeneratedToCondensedSet` 的定义
+The functor from topological spaces to condensed sets restricted to compactly generated spaces.
+-/
+/-
+**CondensedSet.compactlyGeneratedToCondensedSet** 是 Mathlib 中的一个定义，位于命名空间 `Conde
+nsedSet`。
+形式化陈述：compactlyGeneratedToCondensedSet : CompactlyGenerated.{u, u + 1} ⥤ Condens
+edSet.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compactlyGeneratedToCondensedSet
-  signature: :
-  body: compactlyGeneratedToTop ⋙ topCatToCondensedSet
-
-中文:
-定义 compactlyGeneratedToCondensedSet
-  签名: :
-  定义体: compactlyGeneratedToTop ⋙ topCatToCondensedSet
-
-Depends on / 依赖: compactlyGeneratedToTop, topCatToCondensedSet
+--- 原说明 ---
+The functor from topological spaces to condensed sets restricted to compactly ge
+nerated spaces.
 -/
 noncomputable def compactlyGeneratedToCondensedSet :
     CompactlyGenerated.{u, u + 1} ⥤ CondensedSet.{u} :=
@@ -446,23 +357,21 @@ noncomputable def compactlyGeneratedToCondensedSet :
 
 
 /--
-Definition of `compactlyGeneratedAdjunction` / `compactlyGeneratedAdjunction` 的定义
+The adjunction `condensedSetToTopCat ⊣ topCatToCondensedSet` restricted to compactly generated
+spaces.
+-/
+/-
+**CondensedSet.compactlyGeneratedAdjunction** 是 Mathlib 中的一个定义，位于命名空间 `Condensed
+Set`。
+形式化陈述：compactlyGeneratedAdjunction : condensedSetToCompactlyGenerated ⊣ compactl
+yGeneratedToCondensedSet
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compactlyGeneratedAdjunction
-  signature: :
-  body: topCatAdjunction.restrictFullyFaithful (iC := 𝟭 _) (iD := compactlyGeneratedToTop)
-    (Functor.FullyFaithful.id _) fullyFaithfulCompactlyGeneratedToTop
-    (Iso.refl _) (Iso.refl _)
-
-中文:
-定义 compactlyGeneratedAdjunction
-  签名: :
-  定义体: topCatAdjunction.restrictFullyFaithful (iC := 𝟭 _) (iD := compactlyGeneratedToTop)
-    (Functor.FullyFaithful.id _) fullyFaithfulCompactlyGeneratedToTop
-    (Iso.refl _) (Iso.refl _)
-
-Depends on / 依赖: FullyFaithful, Functor, Functor.FullyFaithful.id, Iso.refl, compactlyGeneratedToTop, fullyFaithfulCompactlyGeneratedToTop, restrictFullyFaithful, topCatAdjunction, topCatAdjunction.restrictFullyFaithful
+--- 原说明 ---
+The adjunction `condensedSetToTopCat ⊣ topCatToCondensedSet` restricted to compa
+ctly generated
+spaces.
 -/
 noncomputable def compactlyGeneratedAdjunction :
     condensedSetToCompactlyGenerated ⊣ compactlyGeneratedToCondensedSet :=
@@ -471,23 +380,22 @@ noncomputable def compactlyGeneratedAdjunction :
     (Iso.refl _) (Iso.refl _)
 
 /--
-Definition of `compactlyGeneratedAdjunctionCounitHomeo` / `compactlyGeneratedAdjunctionCounitHomeo` 的定义
+The counit of the adjunction `condensedSetToCompactlyGenerated ⊣ compactlyGeneratedToCondensedSet`
+is a homeomorphism.
+-/
+/-
+**CondensedSet.compactlyGeneratedAdjunctionCounitHomeo** 是 Mathlib 中的一个定义，位于命名空间
+ `CondensedSet`。
+形式化陈述：compactlyGeneratedAdjunctionCounitHomeo (X : TopCat.{u + 1}) [UCompactlyGe
+neratedSpace.{u} X] : X.toCondensedSet.toTopCat ≃ₜ X where toEquiv
+参数：X : TopCat.{u + 1}。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compactlyGeneratedAdjunctionCounitHomeo
-  body: topCatAdjunctionCounitEquiv X
-  continuous_invFun := by
-    apply continuous_from_uCompactlyGeneratedSpace
-    exact fun _ _ => continuous_coinducingCoprod X.toCondensedSet _
-
-中文:
-定义 compactlyGeneratedAdjunctionCounitHomeo
-  定义体: topCatAdjunctionCounitEquiv X
-  continuous_invFun := by
-    apply continuous_from_uCompactlyGeneratedSpace
-    exact fun _ _ => continuous_coinducingCoprod X.toCondensedSet _
-
-Depends on / 依赖: topCatAdjunctionCounitEquiv
+--- 原说明 ---
+The counit of the adjunction `condensedSetToCompactlyGenerated ⊣ compactlyGenera
+tedToCondensedSet`
+is a homeomorphism.
 -/
 noncomputable def compactlyGeneratedAdjunctionCounitHomeo
     (X : TopCat.{u + 1}) [UCompactlyGeneratedSpace.{u} X] :
@@ -495,47 +403,35 @@ noncomputable def compactlyGeneratedAdjunctionCounitHomeo
   toEquiv := topCatAdjunctionCounitEquiv X
   continuous_invFun := by
     apply continuous_from_uCompactlyGeneratedSpace
-    exact fun _ _ => continuous_coinducingCoprod X.toCondensedSet _
+    exact fun _ _ ↦ continuous_coinducingCoprod X.toCondensedSet _
 
 /--
-Definition of `compactlyGeneratedAdjunctionCounitIso` / `compactlyGeneratedAdjunctionCounitIso` 的定义
+The counit of the adjunction `condensedSetToCompactlyGenerated ⊣ compactlyGeneratedToCondensedSet`
+is an isomorphism.
+-/
+/-
+**CondensedSet.compactlyGeneratedAdjunctionCounitIso** 是 Mathlib 中的一个定义，位于命名空间 `
+CondensedSet`。
+形式化陈述：compactlyGeneratedAdjunctionCounitIso (X : CompactlyGenerated.{u, u + 1}) 
+: condensedSetToCompactlyGenerated.obj (compactlyGeneratedToCondensedSet.obj X) 
+≅ X
+参数：X : CompactlyGenerated.{u, u + 1}。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CompactlyGenerated.is_compactly_generated`：∀ (self : CompactlyGenerated)
+, UCompactlyGeneratedSpace ↑self.toTop
 
-English:
-definition compactlyGeneratedAdjunctionCounitIso
-  signature: (X : CompactlyGenerated.{u, u + 1})
-  body: isoOfHomeo (compactlyGeneratedAdjunctionCounitHomeo X.toTop)
-
-中文:
-定义 compactlyGeneratedAdjunctionCounitIso
-  签名: (X : 余mpactlyGenerated.{u, u + 1})
-  定义体: isoOfHomeo (compactlyGeneratedAdjunctionCounitHomeo X.toTop)
-
-Depends on / 依赖: X.toTop, compactlyGeneratedAdjunctionCounitHomeo, isoOfHomeo
+--- 原说明 ---
+The counit of the adjunction `condensedSetToCompactlyGenerated ⊣ compactlyGenera
+tedToCondensedSet`
+is an isomorphism.
 -/
 noncomputable def compactlyGeneratedAdjunctionCounitIso (X : CompactlyGenerated.{u, u + 1}) :
     condensedSetToCompactlyGenerated.obj (compactlyGeneratedToCondensedSet.obj X) ≅ X :=
   isoOfHomeo (compactlyGeneratedAdjunctionCounitHomeo X.toTop)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsIso compactlyGeneratedAdjunction.counit
-  body: by
-  rw [NatTrans.isIso_iff_isIso_app]
-  intro X
-  exact inferInstanceAs (IsIso (compactlyGeneratedAdjunctionCounitIso X).hom)
-
-中文:
-实例 :
-  签名: 是同构 compactlyGeneratedAdjunction.counit
-  定义体: by
-  rw [NatTrans.isIso_iff_isIso_app]
-  intro X
-  exact inferInstanceAs (IsIso (compactlyGeneratedAdjunctionCounitIso X).hom)
-
-Depends on / 依赖: NatTrans, NatTrans.isIso_iff_isIso_app, compactlyGeneratedAdjunctionCounitIso, isIso_iff_isIso_app
+/-
+**CondensedSet.** 是 Mathlib 中的一个实例，位于命名空间 `CondensedSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsIso compactlyGeneratedAdjunction.counit := by
   rw [NatTrans.isIso_iff_isIso_app]
@@ -543,22 +439,27 @@ instance : IsIso compactlyGeneratedAdjunction.counit := by
   exact inferInstanceAs (IsIso (compactlyGeneratedAdjunctionCounitIso X).hom)
 
 /--
-Definition of `fullyFaithfulCompactlyGeneratedToCondensedSet` / `fullyFaithfulCompactlyGeneratedToCondensedSet` 的定义
+The functor from topological spaces to condensed sets restricted to compactly generated spaces
+is fully faithful.
+-/
+/-
+**CondensedSet.fullyFaithfulCompactlyGeneratedToCondensedSet** 是 Mathlib 中的一个定义，
+位于命名空间 `CondensedSet`。
+形式化陈述：fullyFaithfulCompactlyGeneratedToCondensedSet : compactlyGeneratedToConden
+sedSet.FullyFaithful
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CondensedSet.instIsIsoFunctorCompactlyGeneratedCounitCompactlyGeneratedA
+djunction`：CategoryTheory.IsIso CondensedSet.compactlyGeneratedAdjunction.counit
 
-English:
-definition fullyFaithfulCompactlyGeneratedToCondensedSet
-  signature: :
-  body: compactlyGeneratedAdjunction.fullyFaithfulROfIsIsoCounit
-
-中文:
-定义 fullyFaithfulCompactlyGeneratedToCondensedSet
-  签名: :
-  定义体: compactlyGeneratedAdjunction.fullyFaithfulROfIsIsoCounit
-
-Depends on / 依赖: compactlyGeneratedAdjunction, compactlyGeneratedAdjunction.fullyFaithfulROfIsIsoCounit, fullyFaithfulROfIsIsoCounit
+--- 原说明 ---
+The functor from topological spaces to condensed sets restricted to compactly ge
+nerated spaces
+is fully faithful.
 -/
 noncomputable def fullyFaithfulCompactlyGeneratedToCondensedSet :
     compactlyGeneratedToCondensedSet.FullyFaithful :=
   compactlyGeneratedAdjunction.fullyFaithfulROfIsIsoCounit
 
 end CondensedSet
+

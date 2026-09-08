@@ -156,50 +156,22 @@ open Lean Qq Elab Meta Tactic
 
 initialize registerTraceClass `order
 
-/--
-Definition of `findContradictionWithNe` / `findContradictionWithNe` 的定义
+/-- Finds a contradictory `≠`-fact whose `.lhs` and `.rhs` belong to the same strongly connected
+component in the `≤`-graph, implying they must be equal, and then uses it to derive `False`. -/
+/-
+**Mathlib.Tactic.Order.findContradictionWithNe** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Tactic.Order`。
+形式化陈述：findContradictionWithNe (graph : Graph) (facts : Array AtomicFact) : AtomM
+ (Option Expr)
+参数：graph : Graph；facts : Array AtomicFact。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition findContradictionWithNe
-  signature: (graph : Graph) (facts : Array AtomicFact)
-  body: do
-  let scc := graph.findSCCs
-  for fact in facts do
-    let .ne lhs rhs neProof := fact | continue
-    -- It is possible that `lhs` or `rhs` is not in the `≤`-graph if there were no `≤`-facts
-    -- involving them. In this case we can use this fact only if `lhs = rhs`
-    if lhs == rhs then
-return some mkApp neProof (← mkEqRefl (← get).atoms[lhs]!)
-    if !scc.contains lhs || !scc.contains rhs || scc[lhs]! != scc[rhs]! then
-      continue
-    let some pf1 ← graph.buildTransitiveLeProof lhs rhs
-      | panic! "Cannot find path in strongly connected component"
-    let some pf2 ← graph.buildTransitiveLeProof rhs lhs
-      | panic! "Cannot find path in strongly connected component"
-    let pf3 ← mkAppM ``le_antisymm #[pf1, pf2]
-return some mkApp neProof pf3
-  return none
-
-中文:
-定义 findContradictionWithNe
-  签名: (graph : 图) (facts : 数组 AtomicFact)
-  定义体: do
-  let scc := graph.findSCCs
-  for fact in facts do
-    let .ne lhs rhs neProof := fact | continue
-    -- It is possible that `lhs` or `rhs` is not in the `≤`-graph if there were no `≤`-facts
-    -- involving them. In this case we can use this fact only if `lhs = rhs`
-    if lhs == rhs then
-return some mkApp neProof (← mkEqRefl (← get).atoms[lhs]!)
-    if !scc.contains lhs || !scc.contains rhs || scc[lhs]! != scc[rhs]! then
-      continue
-    let some pf1 ← graph.buildTransitiveLeProof lhs rhs
-      | panic! "Cannot find path in strongly connected component"
-    let some pf2 ← graph.buildTransitiveLeProof rhs lhs
-      | panic! "Cannot find path in strongly connected component"
-    let pf3 ← mkAppM ``le_antisymm #[pf1, pf2]
-return some mkApp neProof pf3
-  return none
+--- 原说明 ---
+Finds a contradictory `≠`-fact whose `.lhs` and `.rhs` belong to the same strong
+ly connected
+component in the `≤`-graph, implying they must be equal, and then uses it to der
+ive `False`.
 -/
 def findContradictionWithNe (graph : Graph) (facts : Array AtomicFact) : AtomM (Option Expr) := do
   let scc := graph.findSCCs
@@ -208,7 +180,7 @@ def findContradictionWithNe (graph : Graph) (facts : Array AtomicFact) : AtomM (
     -- It is possible that `lhs` or `rhs` is not in the `≤`-graph if there were no `≤`-facts
     -- involving them. In this case we can use this fact only if `lhs = rhs`
     if lhs == rhs then
-return some mkApp neProof (← mkEqRefl (← get).atoms[lhs]!)
+      return some <| mkApp neProof (← mkEqRefl (← get).atoms[lhs]!)
     if !scc.contains lhs || !scc.contains rhs || scc[lhs]! != scc[rhs]! then
       continue
     let some pf1 ← graph.buildTransitiveLeProof lhs rhs
@@ -216,122 +188,57 @@ return some mkApp neProof (← mkEqRefl (← get).atoms[lhs]!)
     let some pf2 ← graph.buildTransitiveLeProof rhs lhs
       | panic! "Cannot find path in strongly connected component"
     let pf3 ← mkAppM ``le_antisymm #[pf1, pf2]
-return some mkApp neProof pf3
+    return some <| mkApp neProof pf3
   return none
 
-/--
-Definition of `findContradictionWithNle` / `findContradictionWithNle` 的定义
+/-- Using the `≤`-graph `g`, find a contradiction with some `≰`-fact. -/
+/-
+**Mathlib.Tactic.Order.findContradictionWithNle** 是 Mathlib 中的一个定义，位于命名空间 `Mathl
+ib.Tactic.Order`。
+形式化陈述：findContradictionWithNle (g : Graph) (facts : Array AtomicFact) : AtomM Op
+tion Expr
+参数：g : Graph；facts : Array AtomicFact。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition findContradictionWithNle
-  signature: (g : Graph)
-  body: do
-  for fact in facts do
-    if let .nle lhs rhs proof := fact then
-      let some pf ← g.buildTransitiveLeProof lhs rhs | continue
-return some mkApp proof pf
-  return none
-
-中文:
-定义 findContradictionWithNle
-  签名: (g : 图)
-  定义体: do
-  for fact in facts do
-    if let .nle lhs rhs proof := fact then
-      let some pf ← g.buildTransitiveLeProof lhs rhs | continue
-return some mkApp proof pf
-  return none
+--- 原说明 ---
+Using the `≤`-graph `g`, find a contradiction with some `≰`-fact.
 -/
 def findContradictionWithNle (g : Graph)
-(facts : Array AtomicFact) : AtomM Option Expr := do
+    (facts : Array AtomicFact) : AtomM <| Option Expr := do
   for fact in facts do
     if let .nle lhs rhs proof := fact then
       let some pf ← g.buildTransitiveLeProof lhs rhs | continue
-return some mkApp proof pf
+      return some <| mkApp proof pf
   return none
 
-/--
-Definition of `updateGraphWithNltInfSup` / `updateGraphWithNltInfSup` 的定义
+/-- Adds edges to the `≤`-graph using two types of facts:
+1. Each fact `¬ (x < y)` allows to add the edge `(x, y)` when `y` is reachable from `x` in the
+   graph.
+2. Each fact `x ⊔ y = z` allows to add the edge `(z, s)` when `s` is reachable from both `x`
+   and `y`.
 
-English:
-definition updateGraphWithNltInfSup
-  signature: (g : Graph)
-  body: do
-  let nltFacts := facts.filter fun fact => fact matches .nlt ..
-  let mut usedNltFacts : Vector Bool _ := .replicate nltFacts.size false
-  let infSupFacts := facts.filter fun fact => fact matches .isInf .. | .isSup ..
-  let mut g := g
-  let vertices : Std.HashSet Nat := g.fold (init := ∅) fun acc v edges =>
-(acc.insert v).insertMany edges.map (fun e => e.dst)
-  repeat do
-    let mut changed : Bool := false
-    for h : i in [:nltFacts.size] do
-      if usedNltFacts[i] then
-        continue
-      let .nlt lhs rhs proof := nltFacts[i] | panic! "Non-nlt fact in nltFacts."
-      let some pf ← g.buildTransitiveLeProof lhs rhs | continue
-      g := g.addEdge ⟨rhs, lhs, ← mkAppM ``le_of_not_lt_le #[proof, pf]⟩
-      changed := true
-      usedNltFacts := usedNltFacts.set i true
-    for fact in infSupFacts do
-      for idx in vertices do
-        match fact with
-        | .isSup lhs rhs sup =>
-          let some pf1 ← g.buildTransitiveLeProof lhs idx | continue
-          let some pf2 ← g.buildTransitiveLeProof rhs idx | continue
-          if (← g.buildTransitiveLeProof sup idx).isNone then
-            g := g.addEdge ⟨sup, idx, ← mkAppM ``sup_le #[pf1, pf2]⟩
-            changed := true
-        | .isInf lhs rhs inf =>
-          let some pf1 ← g.buildTransitiveLeProof idx lhs | continue
-          let some pf2 ← g.buildTransitiveLeProof idx rhs | continue
-          if (← g.buildTransitiveLeProof idx inf).isNone then
-            g := g.addEdge ⟨idx, inf, ← mkAppM ``le_inf #[pf1, pf2]⟩
-            changed := true
-        | _ => panic! "Non-isInf or isSup fact in infSupFacts."
-    if !changed then
-      break
-  return g
+We repeat the process until no more edges can be added. -/
+/-
+**Mathlib.Tactic.Order.updateGraphWithNltInfSup** 是 Mathlib 中的一个定义，位于命名空间 `Mathl
+ib.Tactic.Order`。
+形式化陈述：updateGraphWithNltInfSup (g : Graph) (facts : Array AtomicFact) : AtomM Gr
+aph
+参数：g : Graph；facts : Array AtomicFact。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.zero_lt_one`：0 < 1
 
-中文:
-定义 updateGraphWithNltInfSup
-  签名: (g : 图)
-  定义体: do
-  let nltFacts := facts.filter fun fact => fact matches .nlt ..
-  let mut usedNltFacts : Vector Bool _ := .replicate nltFacts.size false
-  let infSupFacts := facts.filter fun fact => fact matches .isInf .. | .isSup ..
-  let mut g := g
-  let vertices : Std.HashSet Nat := g.fold (init := ∅) fun acc v edges =>
-(acc.insert v).insertMany edges.map (fun e => e.dst)
-  repeat do
-    let mut changed : Bool := false
-    for h : i in [:nltFacts.size] do
-      if usedNltFacts[i] then
-        continue
-      let .nlt lhs rhs proof := nltFacts[i] | panic! "Non-nlt fact in nltFacts."
-      let some pf ← g.buildTransitiveLeProof lhs rhs | continue
-      g := g.addEdge ⟨rhs, lhs, ← mkAppM ``le_of_not_lt_le #[proof, pf]⟩
-      changed := true
-      usedNltFacts := usedNltFacts.set i true
-    for fact in infSupFacts do
-      for idx in vertices do
-        match fact with
-        | .isSup lhs rhs sup =>
-          let some pf1 ← g.buildTransitiveLeProof lhs idx | continue
-          let some pf2 ← g.buildTransitiveLeProof rhs idx | continue
-          if (← g.buildTransitiveLeProof sup idx).isNone then
-            g := g.addEdge ⟨sup, idx, ← mkAppM ``sup_le #[pf1, pf2]⟩
-            changed := true
-        | .isInf lhs rhs inf =>
-          let some pf1 ← g.buildTransitiveLeProof idx lhs | continue
-          let some pf2 ← g.buildTransitiveLeProof idx rhs | continue
-          if (← g.buildTransitiveLeProof idx inf).isNone then
-            g := g.addEdge ⟨idx, inf, ← mkAppM ``le_inf #[pf1, pf2]⟩
-            changed := true
-        | _ => panic! "Non-isInf or isSup fact in infSupFacts."
-    if !changed then
-      break
-  return g
+--- 原说明 ---
+Adds edges to the `≤`-graph using two types of facts:
+1. Each fact `¬ (x < y)` allows to add the edge `(x, y)` when `y` is reachable f
+rom `x` in the
+   graph.
+2. Each fact `x ⊔ y = z` allows to add the edge `(z, s)` when `s` is reachable f
+rom both `x`
+   and `y`.
+
+We repeat the process until no more edges can be added.
 -/
 def updateGraphWithNltInfSup (g : Graph)
     (facts : Array AtomicFact) : AtomM Graph := do
@@ -340,7 +247,7 @@ def updateGraphWithNltInfSup (g : Graph)
   let infSupFacts := facts.filter fun fact => fact matches .isInf .. | .isSup ..
   let mut g := g
   let vertices : Std.HashSet Nat := g.fold (init := ∅) fun acc v edges =>
-(acc.insert v).insertMany edges.map (fun e => e.dst)
+    (acc.insert v).insertMany <| edges.map (fun e => e.dst)
   repeat do
     let mut changed : Bool := false
     for h : i in [:nltFacts.size] do
@@ -375,117 +282,23 @@ def updateGraphWithNltInfSup (g : Graph)
 local instance : Ord (Nat × Expr) where
   compare x y := compare x.1 y.1
 
-/--
-Definition of `orderCoreImp` / `orderCoreImp` 的定义
+/-- Implementation of `orderCore` in `AtomM`. -/
+/-
+**Mathlib.Tactic.Order.orderCoreImp** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Or
+der`。
+形式化陈述：orderCoreImp (only? : Bool) (hyps : Array Expr) (negGoal : Expr) (g : MVar
+Id) : AtomM Unit
+参数：only? : Bool；hyps : Array Expr；negGoal : Expr；g : MVarId。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition orderCoreImp
-  signature: (only? : Bool) (hyps : Array Expr) (negGoal : Expr) (g : MVarId)
-  body: do
-  g.withContext do
-    let TypeToFacts ← collectFacts only? hyps negGoal
-let atomsMsg := String.intercalate "\n" Array.toList
-      ← (← get).atoms.mapIdxM
-        fun idx atom => do return s!"#{idx} := {← ppExpr atom}"
-    trace[order] "Collected atoms:\n{atomsMsg}"
-    for (type, facts) in TypeToFacts do
-      let some orderType ← findBestOrderInstance type | continue
-      trace[order] "Working on type {← ppExpr type} ({orderType})"
-      let factsMsg := String.intercalate "\n" (facts.map toString).toList
-      trace[order] "Collected facts:\n{factsMsg}"
-      let facts ← replaceBotTop facts
-      let processedFacts : Array AtomicFact ← preprocessFacts facts orderType
-      let factsMsg := String.intercalate "\n" (processedFacts.map toString).toList
-      trace[order] "Processed facts:\n{factsMsg}"
-      let mut graph ← Graph.constructLeGraph processedFacts
-      graph ← updateGraphWithNltInfSup graph processedFacts
-      if orderType == .pre then
-        let some pf ← findContradictionWithNle graph processedFacts | continue
-        g.assign pf
-        return
-      if let some pf ← findContradictionWithNe graph processedFacts then
-        g.assign pf
-        return
-      -- if fast procedure failed and order is linear, we try `omega`
-      if orderType == .lin then
-        let ⟨u, type⟩ ← getLevelQ' type
-        let instLinearOrder ← synthInstanceQ q(LinearOrder $type)
-        -- Here we only need to translate the hypotheses,
-        -- since the goal will remain to derive `False`.
-        let (_, factsNat) ← translateToInt type instLinearOrder facts
-        let factsExpr : Array Expr := factsNat.filterMap fun factNat =>
-          match factNat with
-          | .eq _ _ proof => some proof
-          | .ne _ _ proof => some proof
-          | .le _ _ proof => some proof
-          | .nle _ _ proof => some proof
-          | .lt _ _ proof => some proof
-          | .nlt _ _ proof => some proof
-          | _ => none
-        try
-          Omega.omega factsExpr.toList g
-          return
-        catch _ => pure ()
-    throwError ("No contradiction found.\n\n" ++
-      "Additional diagnostic information may be available using " ++
-      "the `set_option trace.order true` command.")
-
-中文:
-定义 orderCoreImp
-  签名: (only? : 布尔值) (hyps : 数组 Expr) (negGoal : Expr) (g : MVarId)
-  定义体: do
-  g.withContext do
-    let TypeToFacts ← collectFacts only? hyps negGoal
-let atomsMsg := String.intercalate "\n" Array.toList
-      ← (← get).atoms.mapIdxM
-        fun idx atom => do return s!"#{idx} := {← ppExpr atom}"
-    trace[order] "Collected atoms:\n{atomsMsg}"
-    for (type, facts) in TypeToFacts do
-      let some orderType ← findBestOrderInstance type | continue
-      trace[order] "Working on type {← ppExpr type} ({orderType})"
-      let factsMsg := String.intercalate "\n" (facts.map toString).toList
-      trace[order] "Collected facts:\n{factsMsg}"
-      let facts ← replaceBotTop facts
-      let processedFacts : Array AtomicFact ← preprocessFacts facts orderType
-      let factsMsg := String.intercalate "\n" (processedFacts.map toString).toList
-      trace[order] "Processed facts:\n{factsMsg}"
-      let mut graph ← Graph.constructLeGraph processedFacts
-      graph ← updateGraphWithNltInfSup graph processedFacts
-      if orderType == .pre then
-        let some pf ← findContradictionWithNle graph processedFacts | continue
-        g.assign pf
-        return
-      if let some pf ← findContradictionWithNe graph processedFacts then
-        g.assign pf
-        return
-      -- if fast procedure failed and order is linear, we try `omega`
-      if orderType == .lin then
-        let ⟨u, type⟩ ← getLevelQ' type
-        let instLinearOrder ← synthInstanceQ q(LinearOrder $type)
-        -- Here we only need to translate the hypotheses,
-        -- since the goal will remain to derive `False`.
-        let (_, factsNat) ← translateToInt type instLinearOrder facts
-        let factsExpr : Array Expr := factsNat.filterMap fun factNat =>
-          match factNat with
-          | .eq _ _ proof => some proof
-          | .ne _ _ proof => some proof
-          | .le _ _ proof => some proof
-          | .nle _ _ proof => some proof
-          | .lt _ _ proof => some proof
-          | .nlt _ _ proof => some proof
-          | _ => none
-        try
-          Omega.omega factsExpr.toList g
-          return
-        catch _ => pure ()
-    throwError ("No contradiction found.\n\n" ++
-      "Additional diagnostic information may be available using " ++
-      "the `set_option trace.order true` command.")
+--- 原说明 ---
+Implementation of `orderCore` in `AtomM`.
 -/
 def orderCoreImp (only? : Bool) (hyps : Array Expr) (negGoal : Expr) (g : MVarId) : AtomM Unit := do
   g.withContext do
     let TypeToFacts ← collectFacts only? hyps negGoal
-let atomsMsg := String.intercalate "\n" Array.toList
+    let atomsMsg := String.intercalate "\n" <| Array.toList <|
       ← (← get).atoms.mapIdxM
         fun idx atom => do return s!"#{idx} := {← ppExpr atom}"
     trace[order] "Collected atoms:\n{atomsMsg}"
@@ -531,20 +344,18 @@ let atomsMsg := String.intercalate "\n" Array.toList
       "Additional diagnostic information may be available using " ++
       "the `set_option trace.order true` command.")
 
-/--
-Definition of `orderCore` / `orderCore` 的定义
+/-- Core of the `order` tactic. -/
+/-
+**Mathlib.Tactic.Order.orderCore** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Order
+`。
+形式化陈述：orderCore (only? : Bool) (hyps : Array Expr) (negGoal : Expr) (g : MVarId)
+ : MetaM Unit
+参数：only? : Bool；hyps : Array Expr；negGoal : Expr；g : MVarId。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition orderCore
-  signature: (only? : Bool) (hyps : Array Expr) (negGoal : Expr) (g : MVarId)
-  body: (orderCoreImp only? hyps negGoal g).run .reducible
-
-中文:
-定义 orderCore
-  签名: (only? : 布尔值) (hyps : 数组 Expr) (negGoal : Expr) (g : MVarId)
-  定义体: (orderCoreImp only? hyps negGoal g).run .reducible
-
-Depends on / 依赖: negGoal, orderCoreImp, reducible
+--- 原说明 ---
+Core of the `order` tactic.
 -/
 def orderCore (only? : Bool) (hyps : Array Expr) (negGoal : Expr) (g : MVarId) : MetaM Unit :=
   (orderCoreImp only? hyps negGoal g).run .reducible
@@ -562,7 +373,7 @@ elab_rules : tactic
   | `(tactic| order_core $[only%$o]? $[[$args,*]]? $order_neg_goal) => withMainContext do
     let negGoal ← elabTerm order_neg_goal none
     let args ← ((args.map (TSepArray.getElems)).getD {}).mapM (elabTermWithoutNewMVars `order)
-commitIfNoEx do liftMetaFinishingTactic orderCore o.isSome args negGoal
+    commitIfNoEx do liftMetaFinishingTactic <| orderCore o.isSome args negGoal
 
 /-- `order` solves the main goal if it can be derived from the local hypotheses and the axioms of
 `Preorder`, `PartialOrder` or `LinearOrder`. Also supports `⊤`, `⊥` and lattice operations.
@@ -577,7 +388,8 @@ This tactic fails if it cannot prove the main goal.
 macro "order" args:orderArgs : tactic => `(tactic|
   · intros
     by_contra! _order_neg_goal
-order_core args _order_neg_goal
+    order_core $args _order_neg_goal
 )
 
 end Mathlib.Tactic.Order
+

@@ -24,7 +24,7 @@ set, and the forgetful functor from the category of condensed sets to the catego
 
 open Function
 
-variable {S Y : Type*} (f : S -> Y)
+variable {S Y : Type*} (f : S → Y)
 
 namespace TopologicalSpace.Fiber
 
@@ -32,153 +32,122 @@ variable [TopologicalSpace S]
 
 /-- The canonical map from the disjoint union induced by `f` to `S`. -/
 @[simps apply]
-/--
-Definition of `sigmaIsoHom` / `sigmaIsoHom` 的定义
+/-
+**TopologicalSpace.Fiber.sigmaIsoHom** 是 Mathlib 中的一个定义，位于命名空间 `TopologicalSpace
+.Fiber`。
+形式化陈述：sigmaIsoHom : C((x : Fiber f) × x.val, S) where toFun | ⟨a, x⟩ => x.val co
+ntinuous_toFun
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sigmaIsoHom
-  signature: : C((x : Fiber f) × x.val, S) where
-  body: continuous_sigma (by fun_prop)
-
-中文:
-定义 sigmaIsoHom
-  签名: : C((x : Fiber f) × x.val, S) where
-  定义体: continuous_sigma (by fun_prop)
-
-Depends on / 依赖: continuous_sigma, fun_prop
+--- 原说明 ---
+The canonical map from the disjoint union induced by `f` to `S`.
 -/
 def sigmaIsoHom : C((x : Fiber f) × x.val, S) where
   toFun | ⟨a, x⟩ => x.val
   continuous_toFun := continuous_sigma (by fun_prop)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `sigmaIsoHom_inj` / 引理 `sigmaIsoHom_inj`
-
-English:
-lemma sigmaIsoHom_inj
-  statement: Function.Injective (sigmaIsoHom f)
-  proof: by
-  rintro ⟨⟨_, _, rfl⟩, ⟨_, hx⟩⟩ ⟨⟨_, _, rfl⟩, ⟨_, hy⟩⟩ h
-  refine Sigma.subtype_ext ?_ h
-  simp only [sigmaIsoHom_apply] at h
-  rw [Set.mem_preimage]; rw [Set.mem_singleton_iff] at hx hy
-  simp [← hx, ← hy, h]
-
-中文:
-引理 sigmaIsoHom_inj
-  结论: 函数.单射 (sigmaIsoHom f)
-  证明: by
-  rintro ⟨⟨_, _, rfl⟩, ⟨_, hx⟩⟩ ⟨⟨_, _, rfl⟩, ⟨_, hy⟩⟩ h
-  refine Sigma.subtype_ext ?_ h
-  simp only [sigmaIsoHom_apply] at h
-  rw [Set.mem_preimage]; rw [Set.mem_singleton_iff] at hx hy
-  simp [← hx, ← hy, h]
-
-Depends on / 依赖: Set.mem_preimage, Set.mem_singleton_iff, Sigma.subtype_ext, mem_preimage, mem_singleton_iff, sigmaIsoHom_apply, subtype_ext
+/-
+**TopologicalSpace.Fiber.sigmaIsoHom_inj** 是 Mathlib 中的一个引理，位于命名空间 `TopologicalS
+pace.Fiber`。
+形式化陈述：sigmaIsoHom_inj : Function.Injective (sigmaIsoHom f)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sigma.subtype_ext`：∀ {α : Type u_1} {β : Type u_7} {p : α → β → Prop} {x
+₀ x₁ : (a : α) × Subtype (p a)},   x₀.fst = x₁.fst → ↑x₀.snd = ↑x₁.snd → x₀ = x₁
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.mem_singleton_iff`：mem_singleton_iff {a b : α} : a in ({b} : Set α) 
+↔ a = b
+· 使用定理 `Set.mem_preimage`：mem_preimage {f : α -> β} {s : Set β} {a : α} : a in f
+ ⁻¹' s ↔ f a in s
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `TopologicalSpace.Fiber.sigmaIsoHom_apply`：∀ {S : Type u_1} {Y : Type u_2
+} (f : S → Y) [inst : TopologicalSpace S] (x : (x : Function.Fiber f) × ↑↑x),   
+(TopologicalSpace.Fiber.sigmaI…
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma sigmaIsoHom_inj : Function.Injective (sigmaIsoHom f) := by
   rintro ⟨⟨_, _, rfl⟩, ⟨_, hx⟩⟩ ⟨⟨_, _, rfl⟩, ⟨_, hy⟩⟩ h
   refine Sigma.subtype_ext ?_ h
   simp only [sigmaIsoHom_apply] at h
-  rw [Set.mem_preimage]; rw [Set.mem_singleton_iff] at hx hy
+  rw [Set.mem_preimage, Set.mem_singleton_iff] at hx hy
   simp [← hx, ← hy, h]
-
-/--
-lemma `sigmaIsoHom_surj` / 引理 `sigmaIsoHom_surj`
-
-English:
-lemma sigmaIsoHom_surj
-  statement: Function.Surjective (sigmaIsoHom f)
-  proof: fun _ => ⟨⟨⟨_, ⟨⟨_, Set.mem_range_self _⟩, rfl⟩⟩, ⟨_, rfl⟩⟩, rfl⟩
-
-中文:
-引理 sigmaIsoHom_surj
-  结论: 函数.满射 (sigmaIsoHom f)
-  证明: fun _ => ⟨⟨⟨_, ⟨⟨_, Set.mem_range_self _⟩, rfl⟩⟩, ⟨_, rfl⟩⟩, rfl⟩
-
-Depends on / 依赖: Set.mem_range_self, mem_range_self
+/-
+**TopologicalSpace.Fiber.sigmaIsoHom_surj** 是 Mathlib 中的一个引理，位于命名空间 `Topological
+Space.Fiber`。
+形式化陈述：sigmaIsoHom_surj : Function.Surjective (sigmaIsoHom f)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
 -/
 lemma sigmaIsoHom_surj : Function.Surjective (sigmaIsoHom f) :=
-  fun _ => ⟨⟨⟨_, ⟨⟨_, Set.mem_range_self _⟩, rfl⟩⟩, ⟨_, rfl⟩⟩, rfl⟩
+  fun _ ↦ ⟨⟨⟨_, ⟨⟨_, Set.mem_range_self _⟩, rfl⟩⟩, ⟨_, rfl⟩⟩, rfl⟩
 
-/--
-Definition of `sigmaIncl` / `sigmaIncl` 的定义
+/-- The inclusion map from a component of the disjoint union induced by `f` into `S`. -/
+/-
+**TopologicalSpace.Fiber.sigmaIncl** 是 Mathlib 中的一个定义，位于命名空间 `TopologicalSpace.F
+iber`。
+形式化陈述：sigmaIncl (a : Fiber f) : C(a.val, S) where toFun x
+参数：a : Fiber f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sigmaIncl
-  signature: (a : Fiber f)
-  body: x.val
-
-中文:
-定义 sigmaIncl
-  签名: (a : Fiber f)
-  定义体: x.val
-
-Depends on / 依赖: x.val
+--- 原说明 ---
+The inclusion map from a component of the disjoint union induced by `f` into `S`
+.
 -/
 def sigmaIncl (a : Fiber f) : C(a.val, S) where
   toFun x := x.val
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `sigmaInclIncl` / `sigmaInclIncl` 的定义
+/-- The inclusion map from a fiber of a composition into the intermediate fiber. -/
+/-
+**TopologicalSpace.Fiber.sigmaInclIncl** 是 Mathlib 中的一个定义，位于命名空间 `TopologicalSpa
+ce.Fiber`。
+形式化陈述：sigmaInclIncl {X : Type*} (g : Y -> X) (a : Fiber (g ∘ f)) (b : Fiber (f ∘
+ (sigmaIncl (g ∘ f) a))) : C(b.val, (Fiber.mk f (b.preimage).val).val) where toF
+un x
+参数：g : Y -> X；a : Fiber (g ∘ f)；b : Fiber (f ∘ (sigmaIncl (g ∘ f) a))。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sigmaInclIncl
-  signature: {X : Type*} (g : Y -> X) (a : Fiber (g ∘ f))
-  body: ⟨x.val.val, by
-    have := x.prop
-    simp only [sigmaIncl, ContinuousMap.coe_mk, Fiber.mem_iff_eq_image, comp_apply] at this
-    rw [Fiber.mem_iff_eq_image]; rw [Fiber.mk_image]; rw [this]; rw [← Fiber.map_preimage_eq_image]
-    simp [sigmaIncl]⟩
-
-中文:
-定义 sigmaInclIncl
-  签名: {X : 类型} (g : Y -> X) (a : Fiber (g ∘ f))
-  定义体: ⟨x.val.val, by
-    have := x.prop
-    simp only [sigmaIncl, ContinuousMap.coe_mk, Fiber.mem_iff_eq_image, comp_apply] at this
-    rw [Fiber.mem_iff_eq_image]; rw [Fiber.mk_image]; rw [this]; rw [← Fiber.map_preimage_eq_image]
-    simp [sigmaIncl]⟩
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.coe_mk, Fiber.map_preimage_eq_image, Fiber.mem_iff_eq_image, Fiber.mk_image, coe_mk, comp_apply, map_preimage_eq_image, mem_iff_eq_image, mk_image, sigmaIncl, x.prop, x.val.val
+--- 原说明 ---
+The inclusion map from a fiber of a composition into the intermediate fiber.
 -/
-def sigmaInclIncl {X : Type*} (g : Y -> X) (a : Fiber (g ∘ f))
+def sigmaInclIncl {X : Type*} (g : Y → X) (a : Fiber (g ∘ f))
     (b : Fiber (f ∘ (sigmaIncl (g ∘ f) a))) :
     C(b.val, (Fiber.mk f (b.preimage).val).val) where
   toFun x := ⟨x.val.val, by
     have := x.prop
     simp only [sigmaIncl, ContinuousMap.coe_mk, Fiber.mem_iff_eq_image, comp_apply] at this
-    rw [Fiber.mem_iff_eq_image]; rw [Fiber.mk_image]; rw [this]; rw [← Fiber.map_preimage_eq_image]
+    rw [Fiber.mem_iff_eq_image, Fiber.mk_image, this, ← Fiber.map_preimage_eq_image]
     simp [sigmaIncl]⟩
 
 variable (l : LocallyConstant S Y) [CompactSpace S]
-
+/-
+**TopologicalSpace.Fiber.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Fiber`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (x : Fiber l) : CompactSpace x.val := by
   obtain ⟨y, hy⟩ := x.prop
-  rw [← isCompact_iff_compactSpace]; rw [← hy]
+  rw [← isCompact_iff_compactSpace, ← hy]
   exact (l.2.isClosed_fiber _).isCompact
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Finite (Fiber l)
-  body: have : Finite (Set.range l) := l.range_finite
-  Finite.Set.finite_range _
-
-中文:
-实例 :
-  签名: 有限 (Fiber l)
-  定义体: have : Finite (Set.range l) := l.range_finite
-  Finite.Set.finite_range _
-
-Depends on / 依赖: Finite, Finite.Set.finite_range, Set.range, finite_range, l.range_finite, range_finite
+/-
+**TopologicalSpace.Fiber.** 是 Mathlib 中的一个实例，位于命名空间 `TopologicalSpace.Fiber`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Finite (Fiber l) :=
   have : Finite (Set.range l) := l.range_finite
   Finite.Set.finite_range _
 
 end TopologicalSpace.Fiber
+

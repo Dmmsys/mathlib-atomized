@@ -36,307 +36,285 @@ lie algebra, abelian, commutative, center
 
 universe u v w w₁ w₂
 
-/--
-Definition of `LieModule.IsTrivial` / `LieModule.IsTrivial` 的定义
+/-- A Lie (ring) module is trivial iff all brackets vanish. -/
+/-
+**LieModule.IsTrivial** 是 Mathlib 中的一个归纳类型，位于命名空间 `LieModule`。
+形式化陈述：(L : Type v) → (M : Type w) → [Bracket L M] → [Zero M] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class LieModule.IsTrivial
-  parameters: (L : Type v) (M : Type w) [Bracket L M] [Zero M]
-  axioms and operations (1):
-    - trivial : forall (x : L) (m : M), ⁅x, m⁆ = 0
-
-中文:
-类 Lie模.是平凡
-  参数: (L : 类型v) (M : 类型 w) [Bracket L M] [零 M]
-  公理与运算 (1 个):
-    - trivial : 对任意 (x : L) (m : M), ⁅x, m⁆ = 0
+--- 原说明 ---
+A Lie (ring) module is trivial iff all brackets vanish.
 -/
 class LieModule.IsTrivial (L : Type v) (M : Type w) [Bracket L M] [Zero M] : Prop where
-  trivial : forall (x : L) (m : M), ⁅x, m⁆ = 0
-
-/--
-theorem `trivial_lie_zero` / 定理 `trivial_lie_zero`
-
-English:
-theorem trivial_lie_zero
-  statement: (L : Type v) (M : Type w) [Bracket L M] [Zero M] [LieModule.IsTrivial L M]
-  proof: LieModule.IsTrivial.trivial x m
-
-中文:
-定理 trivial_lie_zero
-  结论: (L : 类型v) (M : 类型 w) [Bracket L M] [零 M] [Lie模.是平凡 L M]
-  证明: LieModule.IsTrivial.trivial x m
-
-Depends on / 依赖: IsTrivial, LieModule, LieModule.IsTrivial.trivial
+  trivial : ∀ (x : L) (m : M), ⁅x, m⁆ = 0
+/-
+**trivial_lie_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：trivial_lie_zero (L : Type v) (M : Type w) [Bracket L M] [Zero M] [LieModu
+le.IsTrivial L M] (x : L) (m : M) : ⁅x, m⁆ = 0
+参数：L : Type v；M : Type w；x : L；m : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieModule.IsTrivial.trivial`：∀ {L : Type v} {M : Type w} {inst : Bracket
+ L M} {inst_1 : Zero M} [self : LieModule.IsTrivial L M] (x : L) (m : M),   ⁅x, 
+m⁆ = 0
 -/
 theorem trivial_lie_zero (L : Type v) (M : Type w) [Bracket L M] [Zero M] [LieModule.IsTrivial L M]
     (x : L) (m : M) : ⁅x, m⁆ = 0 :=
   LieModule.IsTrivial.trivial x m
-
-/--
-Instance `LieModule.instIsTrivialOfSubsingleton` / 实例 `LieModule.instIsTrivialOfSubsingleton`
-
-English:
-instance LieModule.instIsTrivialOfSubsingleton
-  signature: {L M : Type*}
-  body: ⟨fun x m => by rw [Subsingleton.eq_zero x, zero_lie]⟩
-
-中文:
-实例 Lie模.instIsTrivialOfSubsingleton
-  签名: {L M : 类型}
-  定义体: ⟨fun x m => by rw [Subsingleton.eq_zero x, zero_lie]⟩
-
-Depends on / 依赖: Subsingleton, Subsingleton.eq_zero, eq_zero, zero_lie
+/-
+**LieModule.instIsTrivialOfSubsingleton** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：LieModule.instIsTrivialOfSubsingleton {L M : Type*} [LieRing L] [AddCommGr
+oup M] [LieRingModule L M] [Subsingleton L] : LieModule.IsTrivial L M
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subsingleton.eq_zero`：∀ {α : Type u} [inst : Zero α] [Subsingleton α] (a
+ : α), a = 0
+· 使用定理 `zero_lie`：zero_lie : ⁅(0 : L), m⁆ = 0
 -/
 instance LieModule.instIsTrivialOfSubsingleton {L M : Type*}
     [LieRing L] [AddCommGroup M] [LieRingModule L M] [Subsingleton L] : LieModule.IsTrivial L M :=
-  ⟨fun x m => by rw [Subsingleton.eq_zero x, zero_lie]⟩
-
-/--
-Instance `LieModule.instIsTrivialOfSubsingleton'` / 实例 `LieModule.instIsTrivialOfSubsingleton'`
-
-English:
-instance LieModule.instIsTrivialOfSubsingleton'
-  signature: {L M : Type*}
-  body: ⟨fun x m => by simp_rw [Subsingleton.eq_zero m, lie_zero]⟩
-
-中文:
-实例 Lie模.instIsTrivialOfSubsingleton'
-  签名: {L M : 类型}
-  定义体: ⟨fun x m => by simp_rw [Subsingleton.eq_zero m, lie_zero]⟩
-
-Depends on / 依赖: Subsingleton, Subsingleton.eq_zero, eq_zero, lie_zero, simp_rw
+  ⟨fun x m ↦ by rw [Subsingleton.eq_zero x, zero_lie]⟩
+/-
+**LieModule.instIsTrivialOfSubsingleton'** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：LieModule.instIsTrivialOfSubsingleton' {L M : Type*} [LieRing L] [AddCommG
+roup M] [LieRingModule L M] [Subsingleton M] : LieModule.IsTrivial L M
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subsingleton.eq_zero`：∀ {α : Type u} [inst : Zero α] [Subsingleton α] (a
+ : α), a = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `lie_zero`：lie_zero : ⁅x, 0⁆ = (0 : M)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 instance LieModule.instIsTrivialOfSubsingleton' {L M : Type*}
     [LieRing L] [AddCommGroup M] [LieRingModule L M] [Subsingleton M] : LieModule.IsTrivial L M :=
-  ⟨fun x m => by simp_rw [Subsingleton.eq_zero m, lie_zero]⟩
+  ⟨fun x m ↦ by simp_rw [Subsingleton.eq_zero m, lie_zero]⟩
 
-/--
-Definition of `IsLieAbelian` / `IsLieAbelian` 的定义
+/-- A Lie algebra is Abelian iff it is trivial as a Lie module over itself. -/
+/-
+**IsLieAbelian** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：IsLieAbelian (L : Type v) [Bracket L L] [Zero L] : Prop
+参数：L : Type v。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsLieAbelian
-  signature: (L : Type v) [Bracket L L] [Zero L]
-  body: LieModule.IsTrivial L L
-
-中文:
-缩写 IsLieAbelian
-  签名: (L : 类型v) [Bracket L L] [零 L]
-  定义体: LieModule.IsTrivial L L
-
-Depends on / 依赖: IsTrivial, LieModule, LieModule.IsTrivial
+--- 原说明 ---
+A Lie algebra is Abelian iff it is trivial as a Lie module over itself.
 -/
 abbrev IsLieAbelian (L : Type v) [Bracket L L] [Zero L] : Prop :=
   LieModule.IsTrivial L L
-
-/--
-Instance `LieIdeal.isLieAbelian_of_trivial` / 实例 `LieIdeal.isLieAbelian_of_trivial`
-
-English:
-instance LieIdeal.isLieAbelian_of_trivial
-  signature: (R : Type u) (L : Type v) [CommRing R] [LieRing L]
-  body: by apply h.trivial
-
-中文:
-实例 LieIdeal.isLieAbelian_of_trivial
-  签名: (R : 类型u) (L : 类型v) [交换环 R] [Lie环 L]
-  定义体: by apply h.trivial
-
-Depends on / 依赖: h.trivial
+/-
+**LieIdeal.isLieAbelian_of_trivial** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：LieIdeal.isLieAbelian_of_trivial (R : Type u) (L : Type v) [CommRing R] [L
+ieRing L] [LieAlgebra R L] (I : LieIdeal R L) [h : LieModule.IsTrivial L I] : Is
+LieAbelian I where trivial x y
+参数：R : Type u；L : Type v；I : LieIdeal R L。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubmodule.instAddSubgroupClass`：∀ {R : Type u} {L : Type v} {M : Type
+ w} [inst : CommRing R] [inst_1 : LieRing L] [inst_2 : AddCommGroup M]   [inst_3
+ : _root_.Module R M] […
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `AddSubgroupClass.toAddSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Ty
+pe u_4)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass
+ S G],   AddSubmonoidClass…
+· 使用定理 `LieModule.IsTrivial.trivial`：∀ {L : Type v} {M : Type w} {inst : Bracket
+ L M} {inst_1 : Zero M} [self : LieModule.IsTrivial L M] (x : L) (m : M),   ⁅x, 
+m⁆ = 0
 -/
 instance LieIdeal.isLieAbelian_of_trivial (R : Type u) (L : Type v) [CommRing R] [LieRing L]
     [LieAlgebra R L] (I : LieIdeal R L) [h : LieModule.IsTrivial L I] : IsLieAbelian I where
   trivial x y := by apply h.trivial
-
-/--
-theorem `Function.Injective.isLieAbelian` / 定理 `Function.Injective.isLieAbelian`
-
-English:
-theorem Function.Injective.isLieAbelian
-  statement: {R : Type u} {L₁ : Type v} {L₂ : Type w} [CommRing R]
-  proof: { trivial := fun x y => h₁ <|
-      calc
-        f ⁅x, y⁆ = ⁅f x, f y⁆ := LieHom.map_lie f x y
-        _ = 0 := trivial_lie_zero _ _ _ _
-        _ = f 0 := (map_zero _).symm }
-
-中文:
-定理 函数.单射.isLieAbelian
-  结论: {R : 类型u} {L₁ : 类型v} {L₂ : 类型 w} [交换环 R]
-  证明: { trivial := fun x y => h₁ <|
-      calc
-        f ⁅x, y⁆ = ⁅f x, f y⁆ := LieHom.map_lie f x y
-        _ = 0 := trivial_lie_zero _ _ _ _
-        _ = f 0 := (map_zero _).symm }
-
-Depends on / 依赖: LieHom, LieHom.map_lie, map_lie, map_zero, trivial_lie_zero
+/-
+**Function.Injective.isLieAbelian** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Function.Injective.isLieAbelian {R : Type u} {L₁ : Type v} {L₂ : Type w} [
+CommRing R] [LieRing L₁] [LieRing L₂] [LieAlgebra R L₁] [LieAlgebra R L₂] {f : L
+₁ ->ₗ⁅R⁆ L₂} (h₁ : Function.Injective f) (_ : IsLieAbelian L₂) : IsLieAbelian L₁
+参数：h₁ : Function.Injective f；_ : IsLieAbelian L₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieHom.map_lie`：map_lie (f : L₁ ->ₗ⁅R⁆ L₂) (x y : L₁) : f ⁅x, y⁆ = ⁅f x,
+ f y⁆
+· 使用定理 `trivial_lie_zero`：trivial_lie_zero (L : Type v) (M : Type w) [Bracket L 
+M] [Zero M] [LieModule.IsTrivial L M] (x : L) (m : M) : ⁅x, m⁆ = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `LieHom.instLinearMapClass`：∀ {R : Type u} {L₁ : Type v} {L₂ : Type w} [i
+nst : CommRing R] [inst_1 : LieRing L₁] [inst_2 : LieAlgebra R L₁]   [inst_3 : L
+ieRing L₂] [ins…
 -/
 theorem Function.Injective.isLieAbelian {R : Type u} {L₁ : Type v} {L₂ : Type w} [CommRing R]
-    [LieRing L₁] [LieRing L₂] [LieAlgebra R L₁] [LieAlgebra R L₂] {f : L₁ ->ₗ⁅R⁆ L₂}
+    [LieRing L₁] [LieRing L₂] [LieAlgebra R L₁] [LieAlgebra R L₂] {f : L₁ →ₗ⁅R⁆ L₂}
     (h₁ : Function.Injective f) (_ : IsLieAbelian L₂) : IsLieAbelian L₁ :=
   { trivial := fun x y => h₁ <|
       calc
         f ⁅x, y⁆ = ⁅f x, f y⁆ := LieHom.map_lie f x y
         _ = 0 := trivial_lie_zero _ _ _ _
         _ = f 0 := (map_zero _).symm }
-
-/--
-theorem `Function.Surjective.isLieAbelian` / 定理 `Function.Surjective.isLieAbelian`
-
-English:
-theorem Function.Surjective.isLieAbelian
-  statement: {R : Type u} {L₁ : Type v} {L₂ : Type w} [CommRing R]
-  proof: { trivial := fun x y => by
-      obtain ⟨u, rfl⟩ := h₁ x
-      obtain ⟨v, rfl⟩ := h₁ y
-      rw [← LieHom.map_lie]; rw [trivial_lie_zero]; rw [map_zero] }
-
-中文:
-定理 函数.满射.isLieAbelian
-  结论: {R : 类型u} {L₁ : 类型v} {L₂ : 类型 w} [交换环 R]
-  证明: { trivial := fun x y => by
-      obtain ⟨u, rfl⟩ := h₁ x
-      obtain ⟨v, rfl⟩ := h₁ y
-      rw [← LieHom.map_lie]; rw [trivial_lie_zero]; rw [map_zero] }
-
-Depends on / 依赖: LieHom, LieHom.map_lie, map_lie, map_zero, trivial_lie_zero
+/-
+**Function.Surjective.isLieAbelian** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Function.Surjective.isLieAbelian {R : Type u} {L₁ : Type v} {L₂ : Type w} 
+[CommRing R] [LieRing L₁] [LieRing L₂] [LieAlgebra R L₁] [LieAlgebra R L₂] {f : 
+L₁ ->ₗ⁅R⁆ L₂} (h₁ : Function.Surjective f) (h₂ : IsLieAbelian L₁) : IsLieAbelian
+ L₂
+参数：h₁ : Function.Surjective f；h₂ : IsLieAbelian L₁。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LieHom.map_lie`：map_lie (f : L₁ ->ₗ⁅R⁆ L₂) (x y : L₁) : f ⁅x, y⁆ = ⁅f x,
+ f y⁆
+· 使用定理 `trivial_lie_zero`：trivial_lie_zero (L : Type v) (M : Type w) [Bracket L 
+M] [Zero M] [LieModule.IsTrivial L M] (x : L) (m : M) : ⁅x, m⁆ = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `LieHom.instLinearMapClass`：∀ {R : Type u} {L₁ : Type v} {L₂ : Type w} [i
+nst : CommRing R] [inst_1 : LieRing L₁] [inst_2 : LieAlgebra R L₁]   [inst_3 : L
+ieRing L₂] [ins…
 -/
 theorem Function.Surjective.isLieAbelian {R : Type u} {L₁ : Type v} {L₂ : Type w} [CommRing R]
-    [LieRing L₁] [LieRing L₂] [LieAlgebra R L₁] [LieAlgebra R L₂] {f : L₁ ->ₗ⁅R⁆ L₂}
+    [LieRing L₁] [LieRing L₂] [LieAlgebra R L₁] [LieAlgebra R L₂] {f : L₁ →ₗ⁅R⁆ L₂}
     (h₁ : Function.Surjective f) (h₂ : IsLieAbelian L₁) : IsLieAbelian L₂ :=
   { trivial := fun x y => by
       obtain ⟨u, rfl⟩ := h₁ x
       obtain ⟨v, rfl⟩ := h₁ y
-      rw [← LieHom.map_lie]; rw [trivial_lie_zero]; rw [map_zero] }
-
-/--
-theorem `lie_abelian_iff_equiv_lie_abelian` / 定理 `lie_abelian_iff_equiv_lie_abelian`
-
-English:
-theorem lie_abelian_iff_equiv_lie_abelian
-  statement: {R : Type u} {L₁ : Type v} {L₂ : Type w} [CommRing R]
-  proof: ⟨e.symm.injective.isLieAbelian, e.injective.isLieAbelian⟩
-
-中文:
-定理 lie_abelian_iff_equiv_lie_abelian
-  结论: {R : 类型u} {L₁ : 类型v} {L₂ : 类型 w} [交换环 R]
-  证明: ⟨e.symm.injective.isLieAbelian, e.injective.isLieAbelian⟩
-
-Depends on / 依赖: e.injective.isLieAbelian, e.symm.injective.isLieAbelian, injective, isLieAbelian
+      rw [← LieHom.map_lie, trivial_lie_zero, map_zero] }
+/-
+**lie_abelian_iff_equiv_lie_abelian** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lie_abelian_iff_equiv_lie_abelian {R : Type u} {L₁ : Type v} {L₂ : Type w}
+ [CommRing R] [LieRing L₁] [LieRing L₂] [LieAlgebra R L₁] [LieAlgebra R L₂] (e :
+ L₁ ≃ₗ⁅R⁆ L₂) : IsLieAbelian L₁ ↔ IsLieAbelian L₂
+参数：e : L₁ ≃ₗ⁅R⁆ L₂。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.isLieAbelian`：Function.Injective.isLieAbelian {R : Ty
+pe u} {L₁ : Type v} {L₂ : Type w} [CommRing R] [LieRing L₁] [LieRing L₂] [LieAlg
+ebra R L₁] [LieAlgebr…
+· 使用定理 `LieEquiv.injective`：∀ {R : Type u} {L₁ : Type v} {L₂ : Type w} [inst : C
+ommRing R] [inst_1 : LieRing L₁] [inst_2 : LieRing L₂]   [inst_3 : LieAlgebra R 
+L₁] [ins…
 -/
 theorem lie_abelian_iff_equiv_lie_abelian {R : Type u} {L₁ : Type v} {L₂ : Type w} [CommRing R]
     [LieRing L₁] [LieRing L₂] [LieAlgebra R L₁] [LieAlgebra R L₂] (e : L₁ ≃ₗ⁅R⁆ L₂) :
     IsLieAbelian L₁ ↔ IsLieAbelian L₂ :=
   ⟨e.symm.injective.isLieAbelian, e.injective.isLieAbelian⟩
-
-/--
-theorem `isMulCommutative_iff_isLieAbelian` / 定理 `isMulCommutative_iff_isLieAbelian`
-
-English:
-theorem isMulCommutative_iff_isLieAbelian
-  given: {A : Type v} [Ring A]
-  proof: by
-  have : IsLieAbelian A ↔ forall a b : A, ⁅a, b⁆ = 0 := ⟨(·.trivial), (⟨·⟩)⟩
-  simp [this, isMulCommutative_iff, LieRing.of_associative_ring_bracket, sub_eq_zero]
-
-@[deprecated (since := "2026-04-01")]
-alias commutative_ring_iff_abelian_lie_ring := isMulCommutative_iff_isLieAbelian
-
-中文:
-定理 isMulCommutative_iff_isLieAbelian
-  条件: {A : 类型v} [环 A]
-  证明: by
-  have : IsLieAbelian A ↔ forall a b : A, ⁅a, b⁆ = 0 := ⟨(·.trivial), (⟨·⟩)⟩
-  simp [this, isMulCommutative_iff, LieRing.of_associative_ring_bracket, sub_eq_zero]
-
-@[deprecated (since := "2026-04-01")]
-alias commutative_ring_iff_abelian_lie_ring := isMulCommutative_iff_isLieAbelian
-
-Depends on / 依赖: IsLieAbelian, LieRing, LieRing.of_associative_ring_bracket, isMulCommutative_iff, of_associative_ring_bracket, sub_eq_zero
+/-
+**isMulCommutative_iff_isLieAbelian** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isMulCommutative_iff_isLieAbelian {A : Type v} [Ring A] : IsMulCommutative
+ A ↔ IsLieAbelian A
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieModule.IsTrivial.trivial`：∀ {L : Type v} {M : Type w} {inst : Bracket
+ L M} {inst_1 : Zero M} [self : LieModule.IsTrivial L M] (x : L) (m : M),   ⁅x, 
+m⁆ = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem isMulCommutative_iff_isLieAbelian {A : Type v} [Ring A] :
     IsMulCommutative A ↔ IsLieAbelian A := by
-  have : IsLieAbelian A ↔ forall a b : A, ⁅a, b⁆ = 0 := ⟨(·.trivial), (⟨·⟩)⟩
+  have : IsLieAbelian A ↔ ∀ a b : A, ⁅a, b⁆ = 0 := ⟨(·.trivial), (⟨·⟩)⟩
   simp [this, isMulCommutative_iff, LieRing.of_associative_ring_bracket, sub_eq_zero]
 
 @[deprecated (since := "2026-04-01")]
 alias commutative_ring_iff_abelian_lie_ring := isMulCommutative_iff_isLieAbelian
-
-/--
-theorem `LieSubalgebra.isLieAbelian_lieSpan_iff` / 定理 `LieSubalgebra.isLieAbelian_lieSpan_iff`
-
-English:
-theorem LieSubalgebra.isLieAbelian_lieSpan_iff
-  proof: by
-  refine ⟨fun h x hx y hy => ?_, fun h => ⟨fun ⟨x, hx⟩ ⟨y, hy⟩ => ?_⟩⟩
-  · let x' : lieSpan R L s := ⟨x, subset_lieSpan hx⟩
-    let y' : lieSpan R L s := ⟨y, subset_lieSpan hy⟩
-    suffices ⁅x', y'⁆ = 0 by simpa [x', y', Subtype.ext_iff] using this
-    simp [trivial_lie_zero]
-  · induction hx using lieSpan_induction with
-    | mem w hw =>
-      induction hy using lieSpan_induction with
-      | mem u hu => simpa [Subtype.ext_iff] using h w hw u hu
-      | zero => simp [Subtype.ext_iff]
-      | add u v _ _ hu hv =>
-        simp only [Subtype.ext_iff, coe_bracket, ZeroMemClass.coe_zero, lie_add] at hu hv ⊢
-        simp [hu, hv]
-      | smul t u _ hu =>
-        simp only [Subtype.ext_iff, coe_bracket, ZeroMemClass.coe_zero] at hu
-        simp [Subtype.ext_iff, hu]
-      | lie u v _ _ hu hv =>
-        simp only [Subtype.ext_iff, coe_bracket, ZeroMemClass.coe_zero] at hu hv ⊢
-        rw [leibniz_lie]
-        simp [hu, hv]
-    | zero => simp [Subtype.ext_iff]
-    | add u v _ _ hu hv =>
-      simp only [Subtype.ext_iff, coe_bracket, ZeroMemClass.coe_zero, add_lie] at hu hv ⊢
-      simp [hu, hv]
-    | smul t u _ hu =>
-      simp only [Subtype.ext_iff, coe_bracket, ZeroMemClass.coe_zero] at hu
-      simp [Subtype.ext_iff, hu]
-    | lie u v _ _ hu hv =>
-      simp only [Subtype.ext_iff, coe_bracket, ZeroMemClass.coe_zero] at hu hv ⊢
-      simp [hu, hv]
-
-中文:
-定理 Lie子代数.isLieAbelian_lieSpan_iff
-  证明: by
-  refine ⟨fun h x hx y hy => ?_, fun h => ⟨fun ⟨x, hx⟩ ⟨y, hy⟩ => ?_⟩⟩
-  · let x' : lieSpan R L s := ⟨x, subset_lieSpan hx⟩
-    let y' : lieSpan R L s := ⟨y, subset_lieSpan hy⟩
-    suffices ⁅x', y'⁆ = 0 by simpa [x', y', Subtype.ext_iff] using this
-    simp [trivial_lie_zero]
-  · induction hx using lieSpan_induction with
-    | mem w hw =>
-      induction hy using lieSpan_induction with
-      | mem u hu => simpa [Subtype.ext_iff] using h w hw u hu
-      | zero => simp [Subtype.ext_iff]
-      | add u v _ _ hu hv =>
-        simp only [Subtype.ext_iff, coe_bracket, ZeroMemClass.coe_zero, lie_add] at hu hv ⊢
-        simp [hu, hv]
-      | smul t u _ hu =>
-        simp only [Subtype.ext_iff, coe_bracket, ZeroMemClass.coe_zero] at hu
-        simp [Subtype.ext_iff, hu]
-      | lie u v _ _ hu hv =>
-        simp only [Subtype.ext_iff, coe_bracket, ZeroMemClass.coe_zero] at hu hv ⊢
-        rw [leibniz_lie]
-        simp [hu, hv]
-    | zero => simp [Subtype.ext_iff]
-    | add u v _ _ hu hv =>
-      simp only [Subtype.ext_iff, coe_bracket, ZeroMemClass.coe_zero, add_lie] at hu hv ⊢
-      simp [hu, hv]
-    | smul t u _ hu =>
-      simp only [Subtype.ext_iff, coe_bracket, ZeroMemClass.coe_zero] at hu
-      simp [Subtype.ext_iff, hu]
-    | lie u v _ _ hu hv =>
-      simp only [Subtype.ext_iff, coe_bracket, ZeroMemClass.coe_zero] at hu hv ⊢
-      simp [hu, hv]
+/-
+**LieSubalgebra.isLieAbelian_lieSpan_iff** 是 Mathlib 中的一个定理，位于命名空间 `LieSubalgebr
+a`。
+形式化陈述：∀ {R : Type u_1} {L : Type u_2} [inst : CommRing R] [inst_1 : LieRing L] [
+inst_2 : LieAlgebra R L] {s : Set L},   IsLieAbelian ↥(LieSubalgebra.lieSpan R L
+ s) ↔ ∀ x ∈ s, ∀ y ∈ s, ⁅x, y⁆ = 0
+参数：LieSubalgebra.lieSpan R L s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `AddSubgroupClass.toAddSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Ty
+pe u_4)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass
+ S G],   AddSubmonoidClass…
+· 使用定理 `LieSubalgebra.instAddSubgroupClass`：∀ (R : Type u) (L : Type v) [inst : 
+CommRing R] [inst_1 : LieRing L] [inst_2 : LieAlgebra R L],   AddSubgroupClass (
+LieSubalgebra R L) L
+· 使用定理 `LieSubalgebra.subset_lieSpan`：subset_lieSpan : s subseteq lieSpan R L s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `trivial_lie_zero`：trivial_lie_zero (L : Type v) (M : Type w) [Bracket L 
+M] [Zero M] [LieModule.IsTrivial L M] (x : L) (m : M) : ⁅x, m⁆ = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `LieSubalgebra.lieSpan_induction`：lieSpan_induction {p : (x : L) -> x in 
+lieSpan R L s -> Prop} (mem : forall (x) (h : x in s), p x (subset_lieSpan h)) (
+zero : p 0 (LieSubalg…
+· 使用定理 `LieSubalgebra.zero_mem`：∀ {R : Type u} {L : Type v} [inst : CommRing R] 
+[inst_1 : LieRing L] [inst_2 : LieAlgebra R L] (L' : LieSubalgebra R L),   0 ∈ L
+'
+· 使用定理 `lie_zero`：lie_zero : ⁅x, 0⁆ = (0 : M)
+· 使用定理 `LieSubalgebra.add_mem`：∀ {R : Type u} {L : Type v} [inst : CommRing R] [
+inst_1 : LieRing L] [inst_2 : LieAlgebra R L] (L' : LieSubalgebra R L)   {x y : 
+L}, x ∈ L' …
+· 使用定理 `lie_add`：lie_add : ⁅x, m + n⁆ = ⁅x, m⁆ + ⁅x, n⁆
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `LieSubalgebra.smul_mem`：∀ {R : Type u} {L : Type v} [inst : CommRing R] 
+[inst_1 : LieRing L] [inst_2 : LieAlgebra R L] (L' : LieSubalgebra R L)   (t : R
+) {x : L}, x…
+· 使用定理 `lie_smul`：lie_smul : ⁅x, t • m⁆ = t • ⁅x, m⁆
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `LieSubalgebra.lie_mem`：lie_mem {x y : L} (hx : x in L') (hy : y in L') :
+ (⁅x, y⁆ : L) in L'
+· 使用引理 `leibniz_lie`：leibniz_lie [Add M] [IsLieTower L₁ L₂ M] (x : L₁) (y : L₂) 
+(m : M) : ⁅x, ⁅y, m⁆⁆ = ⁅⁅x, y⁆, m⁆ + ⁅y, ⁅x, m⁆⁆
+· 使用定理 `instIsLieTower`：∀ {L : Type v} {M : Type w} [inst : LieRing L] [inst_1 :
+ AddCommGroup M] [inst_2 : LieRingModule L M], IsLieTower L L M
+· 使用定理 `zero_lie`：zero_lie : ⁅(0 : L), m⁆ = 0
+· 使用定理 `add_lie`：add_lie : ⁅x + y, m⁆ = ⁅x, m⁆ + ⁅y, m⁆
+· 使用定理 `smul_lie`：smul_lie : ⁅t • x, m⁆ = t • ⁅x, m⁆
+· 使用引理 `lie_lie`：lie_lie : ⁅⁅x, y⁆, m⁆ = ⁅x, ⁅y, m⁆⁆ - ⁅y, ⁅x, m⁆⁆
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
 -/
 @[simp] theorem LieSubalgebra.isLieAbelian_lieSpan_iff
     {R L : Type*} [CommRing R] [LieRing L] [LieAlgebra R L] {s : Set L} :
-    IsLieAbelian (lieSpan R L s) ↔ forallᵉ (x in s) (y in s), ⁅x, y⁆ = 0 := by
-  refine ⟨fun h x hx y hy => ?_, fun h => ⟨fun ⟨x, hx⟩ ⟨y, hy⟩ => ?_⟩⟩
+    IsLieAbelian (lieSpan R L s) ↔ ∀ᵉ (x ∈ s) (y ∈ s), ⁅x, y⁆ = 0 := by
+  refine ⟨fun h x hx y hy ↦ ?_, fun h ↦ ⟨fun ⟨x, hx⟩ ⟨y, hy⟩ ↦ ?_⟩⟩
   · let x' : lieSpan R L s := ⟨x, subset_lieSpan hx⟩
     let y' : lieSpan R L s := ⟨y, subset_lieSpan hy⟩
     suffices ⁅x', y'⁆ = 0 by simpa [x', y', Subtype.ext_iff] using this
@@ -378,510 +356,397 @@ namespace LieModule
 
 attribute [local instance 100] LieRing.ofAssociativeRing
 
-/--
-Definition of `ker` / `ker` 的定义
+/-- The kernel of the action of a Lie algebra `L` on a Lie module `M` as a Lie ideal in `L`. -/
+/-
+**LieModule.ker** 是 Mathlib 中的一个定义，位于命名空间 `LieModule`。
+形式化陈述：(R : Type u) →   (L : Type v) →     (M : Type w) →       [inst : CommRing 
+R] →         [inst_1 : LieRing L] →           [inst_2 : LieAlgebra R L] →       
+      [inst_3 : AddCommGroup M] →               [inst_4 : _root_.Module R M] → [
+inst_5 : LieRingModule L M] → [LieModule R L M] → LieIdeal R L
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ker
-  signature: : LieIdeal R L
-  body: (toEnd R L M).ker
-
-@[simp]
-
-中文:
-定义 ker
-  签名: : LieIdeal R L
-  定义体: (toEnd R L M).ker
-
-@[simp]
+--- 原说明 ---
+The kernel of the action of a Lie algebra `L` on a Lie module `M` as a Lie ideal
+ in `L`.
 -/
 protected def ker : LieIdeal R L :=
   (toEnd R L M).ker
 
 @[simp]
-/--
-theorem `mem_ker` / 定理 `mem_ker`
-
-English:
-theorem mem_ker
-  given: (x : L)
-  statement: x in LieModule.ker R L M ↔ forall m : M, ⁅x, m⁆ = 0
-  proof: by
-  simp only [LieModule.ker, LieHom.mem_ker, LinearMap.ext_iff, LinearMap.zero_apply,
-    toEnd_apply_apply]
-
-中文:
-定理 mem_ker
-  条件: (x : L)
-  结论: x in Lie模.ker R L M ↔ 对任意 m : M, ⁅x, m⁆ = 0
-  证明: by
-  simp only [LieModule.ker, LieHom.mem_ker, LinearMap.ext_iff, LinearMap.zero_apply,
-    toEnd_apply_apply]
+/-
+**LieModule.mem_ker** 是 Mathlib 中的一个定理，位于命名空间 `LieModule`。
+形式化陈述：∀ (R : Type u) (L : Type v) (M : Type w) [inst : CommRing R] [inst_1 : Lie
+Ring L] [inst_2 : LieAlgebra R L]   [inst_3 : AddCommGroup M] [inst_4 : _root_.M
+odule R M] [inst_5 : LieRingModule L M] [inst_6 : LieModule R L M]   (x : L), x 
+∈ LieModule.ker R L M ↔ ∀ (m : M), ⁅x, m⁆ = 0
+参数：R : Type u；L : Type v；M : Type w；x : L；m : M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `LieModule.toEnd_apply_apply`：∀ (R : Type u) (L : Type v) (M : Type w) [i
+nst : CommRing R] [inst_1 : LieRing L] [inst_2 : LieAlgebra R L]   [inst_3 : Add
+CommGroup M] [ins…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-protected theorem mem_ker (x : L) : x in LieModule.ker R L M ↔ forall m : M, ⁅x, m⁆ = 0 := by
+protected theorem mem_ker (x : L) : x ∈ LieModule.ker R L M ↔ ∀ m : M, ⁅x, m⁆ = 0 := by
   simp only [LieModule.ker, LieHom.mem_ker, LinearMap.ext_iff, LinearMap.zero_apply,
     toEnd_apply_apply]
-
-/--
-lemma `_root_.LieIdeal.isLieAbelian_iff` / 引理 `_root_.LieIdeal.isLieAbelian_iff`
-
-English:
-lemma _root_.LieIdeal.isLieAbelian_iff
-  given: {I : LieIdeal R L}
-  proof: by
-  refine ⟨fun hI x hx => LieHom.mem_ker.mpr ?_, fun h => ⟨fun ⟨x, hx⟩ ⟨y, hy⟩ => ?_⟩⟩
-  · ext y
-    have := IsTrivial.trivial (⟨x, hx⟩ : I) y
-    rw [LieIdeal.coe_bracket_of_module] at this
-    simp [this]
-  · simpa using LinearMap.congr_fun (h hx) ⟨y, hy⟩
-
-中文:
-引理 _root_.LieIdeal.isLieAbelian_iff
-  条件: {I : LieIdeal R L}
-  证明: by
-  refine ⟨fun hI x hx => LieHom.mem_ker.mpr ?_, fun h => ⟨fun ⟨x, hx⟩ ⟨y, hy⟩ => ?_⟩⟩
-  · ext y
-    have := IsTrivial.trivial (⟨x, hx⟩ : I) y
-    rw [LieIdeal.coe_bracket_of_module] at this
-    simp [this]
-  · simpa using LinearMap.congr_fun (h hx) ⟨y, hy⟩
-
-Depends on / 依赖: IsTrivial, IsTrivial.trivial, LieHom, LieHom.mem_ker.mpr, LieIdeal, LieIdeal.coe_bracket_of_module, LinearMap, LinearMap.congr_fun, coe_bracket_of_module, congr_fun, mem_ker
+/-
+**LieModule._root_.LieIdeal.isLieAbelian_iff** 是 Mathlib 中的一个引理，位于命名空间 `LieModul
+e`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.LieIdeal.isLieAbelian_iff {I : LieIdeal R L} :
-    IsLieAbelian I ↔ I <= LieModule.ker R L I := by
-  refine ⟨fun hI x hx => LieHom.mem_ker.mpr ?_, fun h => ⟨fun ⟨x, hx⟩ ⟨y, hy⟩ => ?_⟩⟩
+    IsLieAbelian I ↔ I ≤ LieModule.ker R L I := by
+  refine ⟨fun hI x hx ↦ LieHom.mem_ker.mpr ?_, fun h ↦ ⟨fun ⟨x, hx⟩ ⟨y, hy⟩ ↦ ?_⟩⟩
   · ext y
     have := IsTrivial.trivial (⟨x, hx⟩ : I) y
     rw [LieIdeal.coe_bracket_of_module] at this
     simp [this]
   · simpa using LinearMap.congr_fun (h hx) ⟨y, hy⟩
-
-/--
-lemma `isFaithful_iff_ker_eq_bot` / 引理 `isFaithful_iff_ker_eq_bot`
-
-English:
-lemma isFaithful_iff_ker_eq_bot
-  statement: IsFaithful R L M ↔ LieModule.ker R L M = ⊥
-  proof: by
-  rw [isFaithful_iff']; rw [LieSubmodule.ext_iff]
-  aesop
-
-中文:
-引理 isFaithful_iff_ker_eq_bot
-  结论: 是忠实 R L M ↔ Lie模.ker R L M = ⊥
-  证明: by
-  rw [isFaithful_iff']; rw [LieSubmodule.ext_iff]
-  aesop
-
-Depends on / 依赖: LieSubmodule, LieSubmodule.ext_iff, ext_iff, isFaithful_iff
+/-
+**LieModule.isFaithful_iff_ker_eq_bot** 是 Mathlib 中的一个引理，位于命名空间 `LieModule`。
+形式化陈述：isFaithful_iff_ker_eq_bot : IsFaithful R L M ↔ LieModule.ker R L M = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `LieModule.isFaithful_iff'`：isFaithful_iff' : IsFaithful R L M ↔ forall x
+ : L, (forall m : M, ⁅x, m⁆ = 0) -> x = 0
+· 使用定理 `LieSubmodule.ext_iff`：∀ {R : Type u} {L : Type v} {M : Type w} [inst : C
+ommRing R] [inst_1 : LieRing L] [inst_2 : AddCommGroup M]   [inst_3 : _root_.Mod
+ule R M] […
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `zero_lie`：zero_lie : ⁅(0 : L), m⁆ = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma isFaithful_iff_ker_eq_bot : IsFaithful R L M ↔ LieModule.ker R L M = ⊥ := by
-  rw [isFaithful_iff']; rw [LieSubmodule.ext_iff]
+  rw [isFaithful_iff', LieSubmodule.ext_iff]
   aesop
-
-/--
-lemma `ker_eq_bot` / 引理 `ker_eq_bot`
-
-English:
-lemma ker_eq_bot
-  given: [IsFaithful R L M]
-  proof: (isFaithful_iff_ker_eq_bot R L M).mp inferInstance
-
-中文:
-引理 ker_eq_bot
-  条件: [是忠实 R L M]
-  证明: (isFaithful_iff_ker_eq_bot R L M).mp inferInstance
+/-
+**LieModule.ker_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 `LieModule`。
+形式化陈述：∀ (R : Type u) (L : Type v) (M : Type w) [inst : CommRing R] [inst_1 : Lie
+Ring L] [inst_2 : LieAlgebra R L]   [inst_3 : AddCommGroup M] [inst_4 : _root_.M
+odule R M] [inst_5 : LieRingModule L M] [inst_6 : LieModule R L M]   [LieModule.
+IsFaithful R L M], LieModule.ker R L M = ⊥
+参数：R : Type u；L : Type v；M : Type w。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `LieModule.isFaithful_iff_ker_eq_bot`：isFaithful_iff_ker_eq_bot : IsFaith
+ful R L M ↔ LieModule.ker R L M = ⊥
 -/
 @[simp] lemma ker_eq_bot [IsFaithful R L M] :
     LieModule.ker R L M = ⊥ :=
   (isFaithful_iff_ker_eq_bot R L M).mp inferInstance
 
-/--
-Definition of `maxTrivSubmodule` / `maxTrivSubmodule` 的定义
+/-- The largest submodule of a Lie module `M` on which the Lie algebra `L` acts trivially. -/
+/-
+**LieModule.maxTrivSubmodule** 是 Mathlib 中的一个定义，位于命名空间 `LieModule`。
+形式化陈述：maxTrivSubmodule : LieSubmodule R L M where carrier
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `lie_zero`：lie_zero : ⁅x, 0⁆ = (0 : M)
 
-English:
-definition maxTrivSubmodule
-  signature: : LieSubmodule R L M where
-  body: { m | forall x : L, ⁅x, m⁆ = 0 }
-  zero_mem' x := lie_zero x
-  add_mem' {x y} hx hy z := by rw [lie_add, hx, hy, add_zero]
-  smul_mem' c x hx y := by rw [lie_smul, hx, smul_zero]
-  lie_mem {x m} hm y := by rw [hm, lie_zero]
-
-@[simp]
-
-中文:
-定义 maxTrivSubmodule
-  签名: : Lie子模 R L M where
-  定义体: { m | forall x : L, ⁅x, m⁆ = 0 }
-  zero_mem' x := lie_zero x
-  add_mem' {x y} hx hy z := by rw [lie_add, hx, hy, add_zero]
-  smul_mem' c x hx y := by rw [lie_smul, hx, smul_zero]
-  lie_mem {x m} hm y := by rw [hm, lie_zero]
-
-@[simp]
+--- 原说明 ---
+The largest submodule of a Lie module `M` on which the Lie algebra `L` acts triv
+ially.
 -/
 def maxTrivSubmodule : LieSubmodule R L M where
-  carrier := { m | forall x : L, ⁅x, m⁆ = 0 }
+  carrier := { m | ∀ x : L, ⁅x, m⁆ = 0 }
   zero_mem' x := lie_zero x
   add_mem' {x y} hx hy z := by rw [lie_add, hx, hy, add_zero]
   smul_mem' c x hx y := by rw [lie_smul, hx, smul_zero]
   lie_mem {x m} hm y := by rw [hm, lie_zero]
 
 @[simp]
-/--
-theorem `mem_maxTrivSubmodule` / 定理 `mem_maxTrivSubmodule`
-
-English:
-theorem mem_maxTrivSubmodule
-  given: (m : M)
-  statement: m in maxTrivSubmodule R L M ↔ forall x : L, ⁅x, m⁆ = 0
-  proof: Iff.rfl
-
-中文:
-定理 mem_maxTrivSubmodule
-  条件: (m : M)
-  结论: m in maxTrivSubmodule R L M ↔ 对任意 x : L, ⁅x, m⁆ = 0
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**LieModule.mem_maxTrivSubmodule** 是 Mathlib 中的一个定理，位于命名空间 `LieModule`。
+形式化陈述：mem_maxTrivSubmodule (m : M) : m in maxTrivSubmodule R L M ↔ forall x : L,
+ ⁅x, m⁆ = 0
+参数：m : M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_maxTrivSubmodule (m : M) : m in maxTrivSubmodule R L M ↔ forall x : L, ⁅x, m⁆ = 0 :=
+theorem mem_maxTrivSubmodule (m : M) : m ∈ maxTrivSubmodule R L M ↔ ∀ x : L, ⁅x, m⁆ = 0 :=
   Iff.rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsTrivial L (maxTrivSubmodule R L M)
-  body: Subtype.ext (m.property x)
-
-@[simp]
-
-中文:
-实例 :
-  签名: 是平凡 L (maxTrivSubmodule R L M)
-  定义体: Subtype.ext (m.property x)
-
-@[simp]
-
-Depends on / 依赖: Subtype, Subtype.ext, m.property, property
+/-
+**LieModule.** 是 Mathlib 中的一个实例，位于命名空间 `LieModule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsTrivial L (maxTrivSubmodule R L M) where trivial x m := Subtype.ext (m.property x)
 
 @[simp]
-/--
-theorem `ideal_oper_maxTrivSubmodule_eq_bot` / 定理 `ideal_oper_maxTrivSubmodule_eq_bot`
-
-English:
-theorem ideal_oper_maxTrivSubmodule_eq_bot
-  given: (I : LieIdeal R L)
-  proof: by
-  rw [← LieSubmodule.toSubmodule_inj]; rw [LieSubmodule.lieIdeal_oper_eq_linear_span]; rw [LieSubmodule.bot_toSubmodule]; rw [Submodule.span_eq_bot]
-  rintro m ⟨⟨x, hx⟩, ⟨⟨m, hm⟩, rfl⟩⟩
-  exact hm x
-
-中文:
-定理 ideal_oper_maxTrivSubmodule_eq_bot
-  条件: (I : LieIdeal R L)
-  证明: by
-  rw [← LieSubmodule.toSubmodule_inj]; rw [LieSubmodule.lieIdeal_oper_eq_linear_span]; rw [LieSubmodule.bot_toSubmodule]; rw [Submodule.span_eq_bot]
-  rintro m ⟨⟨x, hx⟩, ⟨⟨m, hm⟩, rfl⟩⟩
-  exact hm x
-
-Depends on / 依赖: LieSubmodule, LieSubmodule.bot_toSubmodule, LieSubmodule.lieIdeal_oper_eq_linear_span, LieSubmodule.toSubmodule_inj, Submodule, Submodule.span_eq_bot, bot_toSubmodule, lieIdeal_oper_eq_linear_span, span_eq_bot, toSubmodule_inj
+/-
+**LieModule.ideal_oper_maxTrivSubmodule_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 `LieMod
+ule`。
+形式化陈述：ideal_oper_maxTrivSubmodule_eq_bot (I : LieIdeal R L) : ⁅I, maxTrivSubmodu
+le R L M⁆ = ⊥
+参数：I : LieIdeal R L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LieSubmodule.toSubmodule_inj`：toSubmodule_inj : (N : Submodule R M) = (N
+' : Submodule R M) ↔ N = N'
+· 使用定理 `LieSubmodule.lieIdeal_oper_eq_linear_span`：lieIdeal_oper_eq_linear_span 
+[LieModule R L M] : (↑⁅I, N⁆ : Submodule R M) = Submodule.span R { ⁅(x : L), (n 
+: M)⁆ | (x : I) (n : N) }
+· 使用定理 `LieSubmodule.bot_toSubmodule`：bot_toSubmodule : ((⊥ : LieSubmodule R L M
+) : Submodule R M) = ⊥
+· 使用定理 `Submodule.span_eq_bot`：span_eq_bot : span R (s : Set M) = ⊥ ↔ forall x i
+n s, (x : M) = 0
 -/
 theorem ideal_oper_maxTrivSubmodule_eq_bot (I : LieIdeal R L) :
     ⁅I, maxTrivSubmodule R L M⁆ = ⊥ := by
-  rw [← LieSubmodule.toSubmodule_inj]; rw [LieSubmodule.lieIdeal_oper_eq_linear_span]; rw [LieSubmodule.bot_toSubmodule]; rw [Submodule.span_eq_bot]
+  rw [← LieSubmodule.toSubmodule_inj, LieSubmodule.lieIdeal_oper_eq_linear_span,
+    LieSubmodule.bot_toSubmodule, Submodule.span_eq_bot]
   rintro m ⟨⟨x, hx⟩, ⟨⟨m, hm⟩, rfl⟩⟩
   exact hm x
-
-/--
-theorem `le_max_triv_iff_bracket_eq_bot` / 定理 `le_max_triv_iff_bracket_eq_bot`
-
-English:
-theorem le_max_triv_iff_bracket_eq_bot
-  given: {N : LieSubmodule R L M}
-  proof: by
-  refine ⟨fun h => ?_, fun h m hm => ?_⟩
-  · rw [← le_bot_iff, ← ideal_oper_maxTrivSubmodule_eq_bot R L M ⊤]
-    exact LieSubmodule.mono_lie_right ⊤ h
-  · rw [mem_maxTrivSubmodule]
-    rw [LieSubmodule.lie_eq_bot_iff] at h
-    exact fun x => h x (LieSubmodule.mem_top x) m hm
-
-中文:
-定理 le_max_triv_iff_bracket_eq_bot
-  条件: {N : Lie子模 R L M}
-  证明: by
-  refine ⟨fun h => ?_, fun h m hm => ?_⟩
-  · rw [← le_bot_iff, ← ideal_oper_maxTrivSubmodule_eq_bot R L M ⊤]
-    exact LieSubmodule.mono_lie_right ⊤ h
-  · rw [mem_maxTrivSubmodule]
-    rw [LieSubmodule.lie_eq_bot_iff] at h
-    exact fun x => h x (LieSubmodule.mem_top x) m hm
-
-Depends on / 依赖: LieSubmodule, LieSubmodule.lie_eq_bot_iff, LieSubmodule.mem_top, LieSubmodule.mono_lie_right, ideal_oper_maxTrivSubmodule_eq_bot, le_bot_iff, lie_eq_bot_iff, mem_maxTrivSubmodule, mem_top, mono_lie_right
+/-
+**LieModule.le_max_triv_iff_bracket_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 `LieModule`
+。
+形式化陈述：le_max_triv_iff_bracket_eq_bot {N : LieSubmodule R L M} : N <= maxTrivSubm
+odule R L M ↔ ⁅(⊤ : LieIdeal R L), N⁆ = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `le_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a ≤ ⊥ ↔ a = ⊥
+· 使用定理 `LieModule.ideal_oper_maxTrivSubmodule_eq_bot`：ideal_oper_maxTrivSubmodul
+e_eq_bot (I : LieIdeal R L) : ⁅I, maxTrivSubmodule R L M⁆ = ⊥
+· 使用定理 `LieSubmodule.mono_lie_right`：mono_lie_right (h : N <= N') : ⁅I, N⁆ <= ⁅I
+, N'⁆
+· 使用定理 `LieModule.mem_maxTrivSubmodule`：mem_maxTrivSubmodule (m : M) : m in maxT
+rivSubmodule R L M ↔ forall x : L, ⁅x, m⁆ = 0
+· 使用定理 `LieSubmodule.lie_eq_bot_iff`：lie_eq_bot_iff : ⁅I, N⁆ = ⊥ ↔ forall x in I
+, forall m in N, ⁅(x : L), m⁆ = 0
+· 使用定理 `LieSubmodule.mem_top`：mem_top (x : M) : x in (⊤ : LieSubmodule R L M)
 -/
 theorem le_max_triv_iff_bracket_eq_bot {N : LieSubmodule R L M} :
-    N <= maxTrivSubmodule R L M ↔ ⁅(⊤ : LieIdeal R L), N⁆ = ⊥ := by
+    N ≤ maxTrivSubmodule R L M ↔ ⁅(⊤ : LieIdeal R L), N⁆ = ⊥ := by
   refine ⟨fun h => ?_, fun h m hm => ?_⟩
   · rw [← le_bot_iff, ← ideal_oper_maxTrivSubmodule_eq_bot R L M ⊤]
     exact LieSubmodule.mono_lie_right ⊤ h
   · rw [mem_maxTrivSubmodule]
     rw [LieSubmodule.lie_eq_bot_iff] at h
     exact fun x => h x (LieSubmodule.mem_top x) m hm
-
-/--
-theorem `trivial_iff_le_maximal_trivial` / 定理 `trivial_iff_le_maximal_trivial`
-
-English:
-theorem trivial_iff_le_maximal_trivial
-  given: (N : LieSubmodule R L M)
-  proof: ⟨fun h m hm x => IsTrivial.casesOn h fun h => Subtype.ext_iff.mp (h x ⟨m, hm⟩), fun h =>
-    { trivial := fun x m => Subtype.ext (h m.2 x) }⟩
-
-中文:
-定理 trivial_iff_le_maximal_trivial
-  条件: (N : Lie子模 R L M)
-  证明: ⟨fun h m hm x => IsTrivial.casesOn h fun h => Subtype.ext_iff.mp (h x ⟨m, hm⟩), fun h =>
-    { trivial := fun x m => Subtype.ext (h m.2 x) }⟩
-
-Depends on / 依赖: IsTrivial, IsTrivial.casesOn, Subtype, Subtype.ext, Subtype.ext_iff.mp, casesOn, ext_iff
+/-
+**LieModule.trivial_iff_le_maximal_trivial** 是 Mathlib 中的一个定理，位于命名空间 `LieModule`
+。
+形式化陈述：trivial_iff_le_maximal_trivial (N : LieSubmodule R L M) : IsTrivial L N ↔ 
+N <= maxTrivSubmodule R L M
+参数：N : LieSubmodule R L M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubmodule.instAddSubgroupClass`：∀ {R : Type u} {L : Type v} {M : Type
+ w} [inst : CommRing R] [inst_1 : LieRing L] [inst_2 : AddCommGroup M]   [inst_3
+ : _root_.Module R M] […
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `AddSubgroupClass.toAddSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Ty
+pe u_4)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass
+ S G],   AddSubmonoidClass…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem trivial_iff_le_maximal_trivial (N : LieSubmodule R L M) :
-    IsTrivial L N ↔ N <= maxTrivSubmodule R L M :=
+    IsTrivial L N ↔ N ≤ maxTrivSubmodule R L M :=
   ⟨fun h m hm x => IsTrivial.casesOn h fun h => Subtype.ext_iff.mp (h x ⟨m, hm⟩), fun h =>
     { trivial := fun x m => Subtype.ext (h m.2 x) }⟩
-
-/--
-theorem `isTrivial_iff_max_triv_eq_top` / 定理 `isTrivial_iff_max_triv_eq_top`
-
-English:
-theorem isTrivial_iff_max_triv_eq_top
-  statement: IsTrivial L M ↔ maxTrivSubmodule R L M = ⊤
-  proof: by
-  constructor
-  · rintro ⟨h⟩; ext; simp only [mem_maxTrivSubmodule, h, forall_const, LieSubmodule.mem_top]
-  · intro h; constructor; intro x m; revert x
-    rw [← mem_maxTrivSubmodule R L M]; rw [h]; exact LieSubmodule.mem_top m
-
-中文:
-定理 isTrivial_iff_max_triv_eq_top
-  结论: 是平凡 L M ↔ maxTrivSubmodule R L M = ⊤
-  证明: by
-  constructor
-  · rintro ⟨h⟩; ext; simp only [mem_maxTrivSubmodule, h, forall_const, LieSubmodule.mem_top]
-  · intro h; constructor; intro x m; revert x
-    rw [← mem_maxTrivSubmodule R L M]; rw [h]; exact LieSubmodule.mem_top m
-
-Depends on / 依赖: LieSubmodule, LieSubmodule.mem_top, forall_const, mem_maxTrivSubmodule, mem_top, revert
+/-
+**LieModule.isTrivial_iff_max_triv_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `LieModule`。
+形式化陈述：isTrivial_iff_max_triv_eq_top : IsTrivial L M ↔ maxTrivSubmodule R L M = ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubmodule.ext`：ext (h : forall m, m in N ↔ m in N') : N = N'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Zero.instNonempty`：∀ {α : Type u} [Zero α], Nonempty α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LieModule.mem_maxTrivSubmodule`：mem_maxTrivSubmodule (m : M) : m in maxT
+rivSubmodule R L M ↔ forall x : L, ⁅x, m⁆ = 0
+· 使用定理 `LieSubmodule.mem_top`：mem_top (x : M) : x in (⊤ : LieSubmodule R L M)
 -/
 theorem isTrivial_iff_max_triv_eq_top : IsTrivial L M ↔ maxTrivSubmodule R L M = ⊤ := by
   constructor
   · rintro ⟨h⟩; ext; simp only [mem_maxTrivSubmodule, h, forall_const, LieSubmodule.mem_top]
   · intro h; constructor; intro x m; revert x
-    rw [← mem_maxTrivSubmodule R L M]; rw [h]; exact LieSubmodule.mem_top m
+    rw [← mem_maxTrivSubmodule R L M, h]; exact LieSubmodule.mem_top m
 
 variable {R L M N}
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `maxTrivHom` / `maxTrivHom` 的定义
+/-- `maxTrivSubmodule` is functorial. -/
+/-
+**LieModule.maxTrivHom** 是 Mathlib 中的一个定义，位于命名空间 `LieModule`。
+形式化陈述：maxTrivHom (f : M ->ₗ⁅R,L⁆ N) : maxTrivSubmodule R L M ->ₗ⁅R,L⁆ maxTrivSub
+module R L N where toFun m
+参数：f : M ->ₗ⁅R,L⁆ N。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubmodule.instAddSubgroupClass`：∀ {R : Type u} {L : Type v} {M : Type
+ w} [inst : CommRing R] [inst_1 : LieRing L] [inst_2 : AddCommGroup M]   [inst_3
+ : _root_.Module R M] […
 
-English:
-definition maxTrivHom
-  signature: (f : M ->ₗ⁅R,L⁆ N)
-  body: ⟨f m, fun x =>
-(LieModuleHom.map_lie _ _ _).symm.trans
-      (congr_arg f (m.property x)).trans (map_zero _)⟩
-  map_add' m n := by ext; simp
-  map_smul' t m := by ext; simp
-  map_lie' {x m} := by simp [trivial_lie_zero]
-
-@[norm_cast, simp]
-
-中文:
-定义 maxTrivHom
-  签名: (f : M ->ₗ⁅R,L⁆ N)
-  定义体: ⟨f m, fun x =>
-(LieModuleHom.map_lie _ _ _).symm.trans
-      (congr_arg f (m.property x)).trans (map_zero _)⟩
-  map_add' m n := by ext; simp
-  map_smul' t m := by ext; simp
-  map_lie' {x m} := by simp [trivial_lie_zero]
-
-@[norm_cast, simp]
+--- 原说明 ---
+`maxTrivSubmodule` is functorial.
 -/
-def maxTrivHom (f : M ->ₗ⁅R,L⁆ N) : maxTrivSubmodule R L M ->ₗ⁅R,L⁆ maxTrivSubmodule R L N where
+def maxTrivHom (f : M →ₗ⁅R,L⁆ N) : maxTrivSubmodule R L M →ₗ⁅R,L⁆ maxTrivSubmodule R L N where
   toFun m := ⟨f m, fun x =>
-(LieModuleHom.map_lie _ _ _).symm.trans
+    (LieModuleHom.map_lie _ _ _).symm.trans <|
       (congr_arg f (m.property x)).trans (map_zero _)⟩
   map_add' m n := by ext; simp
   map_smul' t m := by ext; simp
   map_lie' {x m} := by simp [trivial_lie_zero]
 
 @[norm_cast, simp]
-/--
-theorem `coe_maxTrivHom_apply` / 定理 `coe_maxTrivHom_apply`
-
-English:
-theorem coe_maxTrivHom_apply
-  given: (f : M ->ₗ⁅R,L⁆ N) (m : maxTrivSubmodule R L M)
-  proof: rfl
-
-中文:
-定理 coe_maxTrivHom_apply
-  条件: (f : M ->ₗ⁅R,L⁆ N) (m : maxTrivSubmodule R L M)
-  证明: rfl
+/-
+**LieModule.coe_maxTrivHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `LieModule`。
+形式化陈述：coe_maxTrivHom_apply (f : M ->ₗ⁅R,L⁆ N) (m : maxTrivSubmodule R L M) : (ma
+xTrivHom f m : N) = f m
+参数：f : M ->ₗ⁅R,L⁆ N；m : maxTrivSubmodule R L M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubmodule.instAddSubgroupClass`：∀ {R : Type u} {L : Type v} {M : Type
+ w} [inst : CommRing R] [inst_1 : LieRing L] [inst_2 : AddCommGroup M]   [inst_3
+ : _root_.Module R M] […
 -/
-theorem coe_maxTrivHom_apply (f : M ->ₗ⁅R,L⁆ N) (m : maxTrivSubmodule R L M) :
+theorem coe_maxTrivHom_apply (f : M →ₗ⁅R,L⁆ N) (m : maxTrivSubmodule R L M) :
     (maxTrivHom f m : N) = f m :=
   rfl
 
-/--
-Definition of `maxTrivEquiv` / `maxTrivEquiv` 的定义
+/-- The maximal trivial submodules of Lie-equivalent Lie modules are Lie-equivalent. -/
+/-
+**LieModule.maxTrivEquiv** 是 Mathlib 中的一个定义，位于命名空间 `LieModule`。
+形式化陈述：maxTrivEquiv (e : M ≃ₗ⁅R,L⁆ N) : maxTrivSubmodule R L M ≃ₗ⁅R,L⁆ maxTrivSub
+module R L N
+参数：e : M ≃ₗ⁅R,L⁆ N。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubmodule.instAddSubgroupClass`：∀ {R : Type u} {L : Type v} {M : Type
+ w} [inst : CommRing R] [inst_1 : LieRing L] [inst_2 : AddCommGroup M]   [inst_3
+ : _root_.Module R M] […
 
-English:
-definition maxTrivEquiv
-  signature: (e : M ≃ₗ⁅R,L⁆ N)
-  body: { maxTrivHom (e : M ->ₗ⁅R,L⁆ N) with
-    toFun := maxTrivHom (e : M ->ₗ⁅R,L⁆ N)
-    invFun := maxTrivHom (e.symm : N ->ₗ⁅R,L⁆ M)
-    left_inv := fun m => by ext; simp
-    right_inv := fun n => by ext; simp }
-
-@[norm_cast, simp]
-
-中文:
-定义 maxTrivEquiv
-  签名: (e : M ≃ₗ⁅R,L⁆ N)
-  定义体: { maxTrivHom (e : M ->ₗ⁅R,L⁆ N) with
-    toFun := maxTrivHom (e : M ->ₗ⁅R,L⁆ N)
-    invFun := maxTrivHom (e.symm : N ->ₗ⁅R,L⁆ M)
-    left_inv := fun m => by ext; simp
-    right_inv := fun n => by ext; simp }
-
-@[norm_cast, simp]
-
-Depends on / 依赖: e.symm, invFun, left_inv, maxTrivHom, right_inv
+--- 原说明 ---
+The maximal trivial submodules of Lie-equivalent Lie modules are Lie-equivalent.
 -/
 def maxTrivEquiv (e : M ≃ₗ⁅R,L⁆ N) : maxTrivSubmodule R L M ≃ₗ⁅R,L⁆ maxTrivSubmodule R L N :=
-  { maxTrivHom (e : M ->ₗ⁅R,L⁆ N) with
-    toFun := maxTrivHom (e : M ->ₗ⁅R,L⁆ N)
-    invFun := maxTrivHom (e.symm : N ->ₗ⁅R,L⁆ M)
+  { maxTrivHom (e : M →ₗ⁅R,L⁆ N) with
+    toFun := maxTrivHom (e : M →ₗ⁅R,L⁆ N)
+    invFun := maxTrivHom (e.symm : N →ₗ⁅R,L⁆ M)
     left_inv := fun m => by ext; simp
     right_inv := fun n => by ext; simp }
 
 @[norm_cast, simp]
-/--
-theorem `coe_maxTrivEquiv_apply` / 定理 `coe_maxTrivEquiv_apply`
-
-English:
-theorem coe_maxTrivEquiv_apply
-  given: (e : M ≃ₗ⁅R,L⁆ N) (m : maxTrivSubmodule R L M)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_maxTrivEquiv_apply
-  条件: (e : M ≃ₗ⁅R,L⁆ N) (m : maxTrivSubmodule R L M)
-  证明: rfl
-
-@[simp]
+/-
+**LieModule.coe_maxTrivEquiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `LieModule`。
+形式化陈述：coe_maxTrivEquiv_apply (e : M ≃ₗ⁅R,L⁆ N) (m : maxTrivSubmodule R L M) : (m
+axTrivEquiv e m : N) = e ↑m
+参数：e : M ≃ₗ⁅R,L⁆ N；m : maxTrivSubmodule R L M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubmodule.instAddSubgroupClass`：∀ {R : Type u} {L : Type v} {M : Type
+ w} [inst : CommRing R] [inst_1 : LieRing L] [inst_2 : AddCommGroup M]   [inst_3
+ : _root_.Module R M] […
 -/
 theorem coe_maxTrivEquiv_apply (e : M ≃ₗ⁅R,L⁆ N) (m : maxTrivSubmodule R L M) :
     (maxTrivEquiv e m : N) = e ↑m :=
   rfl
 
 @[simp]
-/--
-theorem `maxTrivEquiv_of_refl_eq_refl` / 定理 `maxTrivEquiv_of_refl_eq_refl`
-
-English:
-theorem maxTrivEquiv_of_refl_eq_refl
-  proof: by
-  ext; simp only [coe_maxTrivEquiv_apply, LieModuleEquiv.refl_apply]
-
-@[simp]
-
-中文:
-定理 maxTrivEquiv_of_refl_eq_refl
-  证明: by
-  ext; simp only [coe_maxTrivEquiv_apply, LieModuleEquiv.refl_apply]
-
-@[simp]
-
-Depends on / 依赖: LieModuleEquiv, LieModuleEquiv.refl_apply, coe_maxTrivEquiv_apply, refl_apply
+/-
+**LieModule.maxTrivEquiv_of_refl_eq_refl** 是 Mathlib 中的一个定理，位于命名空间 `LieModule`。
+形式化陈述：maxTrivEquiv_of_refl_eq_refl : maxTrivEquiv (LieModuleEquiv.refl : M ≃ₗ⁅R,
+L⁆ M) = LieModuleEquiv.refl
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieModuleEquiv.ext`：ext (e₁ e₂ : M ≃ₗ⁅R,L⁆ N) (h : forall m, e₁ m = e₂ m
+) : e₁ = e₂
+· 使用定理 `LieSubmodule.instAddSubgroupClass`：∀ {R : Type u} {L : Type v} {M : Type
+ w} [inst : CommRing R] [inst_1 : LieRing L] [inst_2 : AddCommGroup M]   [inst_3
+ : _root_.Module R M] […
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem maxTrivEquiv_of_refl_eq_refl :
     maxTrivEquiv (LieModuleEquiv.refl : M ≃ₗ⁅R,L⁆ M) = LieModuleEquiv.refl := by
   ext; simp only [coe_maxTrivEquiv_apply, LieModuleEquiv.refl_apply]
 
 @[simp]
-/--
-theorem `maxTrivEquiv_of_equiv_symm_eq_symm` / 定理 `maxTrivEquiv_of_equiv_symm_eq_symm`
-
-English:
-theorem maxTrivEquiv_of_equiv_symm_eq_symm
-  given: (e : M ≃ₗ⁅R,L⁆ N)
-  proof: rfl
-
-中文:
-定理 maxTrivEquiv_of_equiv_symm_eq_symm
-  条件: (e : M ≃ₗ⁅R,L⁆ N)
-  证明: rfl
+/-
+**LieModule.maxTrivEquiv_of_equiv_symm_eq_symm** 是 Mathlib 中的一个定理，位于命名空间 `LieMod
+ule`。
+形式化陈述：maxTrivEquiv_of_equiv_symm_eq_symm (e : M ≃ₗ⁅R,L⁆ N) : (maxTrivEquiv e).sy
+mm = maxTrivEquiv e.symm
+参数：e : M ≃ₗ⁅R,L⁆ N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubmodule.instAddSubgroupClass`：∀ {R : Type u} {L : Type v} {M : Type
+ w} [inst : CommRing R] [inst_1 : LieRing L] [inst_2 : AddCommGroup M]   [inst_3
+ : _root_.Module R M] […
 -/
 theorem maxTrivEquiv_of_equiv_symm_eq_symm (e : M ≃ₗ⁅R,L⁆ N) :
     (maxTrivEquiv e).symm = maxTrivEquiv e.symm :=
   rfl
 
-/--
-Definition of `maxTrivLinearMapEquivLieModuleHom` / `maxTrivLinearMapEquivLieModuleHom` 的定义
+/-- A linear map between two Lie modules is a morphism of Lie modules iff the Lie algebra action
+on it is trivial. -/
+/-
+**LieModule.maxTrivLinearMapEquivLieModuleHom** 是 Mathlib 中的一个定义，位于命名空间 `LieModu
+le`。
+形式化陈述：maxTrivLinearMapEquivLieModuleHom : maxTrivSubmodule R L (M ->ₗ[R] N) ≃ₗ[R
+] M ->ₗ⁅R,L⁆ N where toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition maxTrivLinearMapEquivLieModuleHom
-  signature: : maxTrivSubmodule R L (M ->ₗ[R] N) ≃ₗ[R] M ->ₗ⁅R,L⁆ N where
-  body: { toLinearMap := f.val
-      map_lie' := fun {x m} => by
-        have hf : ⁅x, f.val⁆ m = 0 := by rw [f.property x, LinearMap.zero_apply]
-        rw [LieHom.lie_apply]; rw [sub_eq_zero]; rw [← LinearMap.toFun_eq_coe] at hf; exact hf.symm }
-  map_add' f g := by ext; simp
-  map_smul' F G := by ext; simp
-  invFun F := ⟨F, fun x => by ext; simp⟩
-  left_inv f := by simp
-  right_inv F := by simp
-
-@[simp]
-
-中文:
-定义 maxTrivLinearMapEquivLieModuleHom
-  签名: : maxTrivSubmodule R L (M ->ₗ[R] N) ≃ₗ[R] M ->ₗ⁅R,L⁆ N where
-  定义体: { toLinearMap := f.val
-      map_lie' := fun {x m} => by
-        have hf : ⁅x, f.val⁆ m = 0 := by rw [f.property x, LinearMap.zero_apply]
-        rw [LieHom.lie_apply]; rw [sub_eq_zero]; rw [← LinearMap.toFun_eq_coe] at hf; exact hf.symm }
-  map_add' f g := by ext; simp
-  map_smul' F G := by ext; simp
-  invFun F := ⟨F, fun x => by ext; simp⟩
-  left_inv f := by simp
-  right_inv F := by simp
-
-@[simp]
-
-Depends on / 依赖: LieHom, LieHom.lie_apply, LinearMap, LinearMap.toFun_eq_coe, LinearMap.zero_apply, f.property, f.val, hf.symm, invFun, left_inv, lie_apply, map_add, map_lie, map_smul, property, right_inv, sub_eq_zero, toFun_eq_coe, toLinearMap, zero_apply
+--- 原说明 ---
+A linear map between two Lie modules is a morphism of Lie modules iff the Lie al
+gebra action
+on it is trivial.
 -/
-def maxTrivLinearMapEquivLieModuleHom : maxTrivSubmodule R L (M ->ₗ[R] N) ≃ₗ[R] M ->ₗ⁅R,L⁆ N where
+def maxTrivLinearMapEquivLieModuleHom : maxTrivSubmodule R L (M →ₗ[R] N) ≃ₗ[R] M →ₗ⁅R,L⁆ N where
   toFun f :=
     { toLinearMap := f.val
       map_lie' := fun {x m} => by
         have hf : ⁅x, f.val⁆ m = 0 := by rw [f.property x, LinearMap.zero_apply]
-        rw [LieHom.lie_apply]; rw [sub_eq_zero]; rw [← LinearMap.toFun_eq_coe] at hf; exact hf.symm }
+        rw [LieHom.lie_apply, sub_eq_zero, ← LinearMap.toFun_eq_coe] at hf; exact hf.symm }
   map_add' f g := by ext; simp
   map_smul' F G := by ext; simp
   invFun F := ⟨F, fun x => by ext; simp⟩
@@ -889,124 +754,101 @@ def maxTrivLinearMapEquivLieModuleHom : maxTrivSubmodule R L (M ->ₗ[R] N) ≃�
   right_inv F := by simp
 
 @[simp]
-/--
-theorem `coe_maxTrivLinearMapEquivLieModuleHom` / 定理 `coe_maxTrivLinearMapEquivLieModuleHom`
-
-English:
-theorem coe_maxTrivLinearMapEquivLieModuleHom
-  given: (f : maxTrivSubmodule R L (M ->ₗ[R] N))
-  proof: by ext; rfl
-
-@[simp]
-
-中文:
-定理 coe_maxTrivLinearMapEquivLieModuleHom
-  条件: (f : maxTrivSubmodule R L (M ->ₗ[R] N))
-  证明: by ext; rfl
-
-@[simp]
+/-
+**LieModule.coe_maxTrivLinearMapEquivLieModuleHom** 是 Mathlib 中的一个定理，位于命名空间 `Lie
+Module`。
+形式化陈述：coe_maxTrivLinearMapEquivLieModuleHom (f : maxTrivSubmodule R L (M ->ₗ[R] 
+N)) : (maxTrivLinearMapEquivLieModuleHom (M
+参数：f : maxTrivSubmodule R L (M ->ₗ[R] N)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `LieSubmodule.instAddSubgroupClass`：∀ {R : Type u} {L : Type v} {M : Type
+ w} [inst : CommRing R] [inst_1 : LieRing L] [inst_2 : AddCommGroup M]   [inst_3
+ : _root_.Module R M] […
 -/
-theorem coe_maxTrivLinearMapEquivLieModuleHom (f : maxTrivSubmodule R L (M ->ₗ[R] N)) :
-    (maxTrivLinearMapEquivLieModuleHom (M := M) (N := N) f : M -> N) = f := by ext; rfl
+theorem coe_maxTrivLinearMapEquivLieModuleHom (f : maxTrivSubmodule R L (M →ₗ[R] N)) :
+    (maxTrivLinearMapEquivLieModuleHom (M := M) (N := N) f : M → N) = f := by ext; rfl
 
 @[simp]
-/--
-theorem `coe_maxTrivLinearMapEquivLieModuleHom_symm` / 定理 `coe_maxTrivLinearMapEquivLieModuleHom_symm`
-
-English:
-theorem coe_maxTrivLinearMapEquivLieModuleHom_symm
-  given: (f : M ->ₗ⁅R,L⁆ N)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_maxTrivLinearMapEquivLieModuleHom_symm
-  条件: (f : M ->ₗ⁅R,L⁆ N)
-  证明: rfl
-
-@[simp]
+/-
+**LieModule.coe_maxTrivLinearMapEquivLieModuleHom_symm** 是 Mathlib 中的一个定理，位于命名空间
+ `LieModule`。
+形式化陈述：coe_maxTrivLinearMapEquivLieModuleHom_symm (f : M ->ₗ⁅R,L⁆ N) : (maxTrivLi
+nearMapEquivLieModuleHom (M
+参数：f : M ->ₗ⁅R,L⁆ N。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubmodule.instAddSubgroupClass`：∀ {R : Type u} {L : Type v} {M : Type
+ w} [inst : CommRing R] [inst_1 : LieRing L] [inst_2 : AddCommGroup M]   [inst_3
+ : _root_.Module R M] […
 -/
-theorem coe_maxTrivLinearMapEquivLieModuleHom_symm (f : M ->ₗ⁅R,L⁆ N) :
-    (maxTrivLinearMapEquivLieModuleHom (M := M) (N := N) |>.symm f : M -> N) = f :=
+theorem coe_maxTrivLinearMapEquivLieModuleHom_symm (f : M →ₗ⁅R,L⁆ N) :
+    (maxTrivLinearMapEquivLieModuleHom (M := M) (N := N) |>.symm f : M → N) = f :=
   rfl
 
 @[simp]
-/--
-theorem `toLinearMap_maxTrivLinearMapEquivLieModuleHom` / 定理 `toLinearMap_maxTrivLinearMapEquivLieModuleHom`
-
-English:
-theorem toLinearMap_maxTrivLinearMapEquivLieModuleHom
-  given: (f : maxTrivSubmodule R L (M ->ₗ[R] N))
-  proof: by
-  ext; rfl
-
-@[simp]
-
-中文:
-定理 toLinearMap_maxTrivLinearMapEquivLieModuleHom
-  条件: (f : maxTrivSubmodule R L (M ->ₗ[R] N))
-  证明: by
-  ext; rfl
-
-@[simp]
+/-
+**LieModule.toLinearMap_maxTrivLinearMapEquivLieModuleHom** 是 Mathlib 中的一个定理，位于命
+名空间 `LieModule`。
+形式化陈述：toLinearMap_maxTrivLinearMapEquivLieModuleHom (f : maxTrivSubmodule R L (M
+ ->ₗ[R] N)) : (maxTrivLinearMapEquivLieModuleHom (M
+参数：f : maxTrivSubmodule R L (M ->ₗ[R] N)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `LieSubmodule.instAddSubgroupClass`：∀ {R : Type u} {L : Type v} {M : Type
+ w} [inst : CommRing R] [inst_1 : LieRing L] [inst_2 : AddCommGroup M]   [inst_3
+ : _root_.Module R M] […
 -/
-theorem toLinearMap_maxTrivLinearMapEquivLieModuleHom (f : maxTrivSubmodule R L (M ->ₗ[R] N)) :
-    (maxTrivLinearMapEquivLieModuleHom (M := M) (N := N) f : M ->ₗ[R] N) = (f : M ->ₗ[R] N) := by
+theorem toLinearMap_maxTrivLinearMapEquivLieModuleHom (f : maxTrivSubmodule R L (M →ₗ[R] N)) :
+    (maxTrivLinearMapEquivLieModuleHom (M := M) (N := N) f : M →ₗ[R] N) = (f : M →ₗ[R] N) := by
   ext; rfl
 
 @[simp]
-/--
-theorem `toLinearMap_maxTrivLinearMapEquivLieModuleHom_symm` / 定理 `toLinearMap_maxTrivLinearMapEquivLieModuleHom_symm`
-
-English:
-theorem toLinearMap_maxTrivLinearMapEquivLieModuleHom_symm
-  given: (f : M ->ₗ⁅R,L⁆ N)
-  proof: rfl
-
-中文:
-定理 toLinearMap_maxTrivLinearMapEquivLieModuleHom_symm
-  条件: (f : M ->ₗ⁅R,L⁆ N)
-  证明: rfl
+/-
+**LieModule.toLinearMap_maxTrivLinearMapEquivLieModuleHom_symm** 是 Mathlib 中的一个定
+理，位于命名空间 `LieModule`。
+形式化陈述：toLinearMap_maxTrivLinearMapEquivLieModuleHom_symm (f : M ->ₗ⁅R,L⁆ N) : (m
+axTrivLinearMapEquivLieModuleHom (M
+参数：f : M ->ₗ⁅R,L⁆ N。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubmodule.instAddSubgroupClass`：∀ {R : Type u} {L : Type v} {M : Type
+ w} [inst : CommRing R] [inst_1 : LieRing L] [inst_2 : AddCommGroup M]   [inst_3
+ : _root_.Module R M] […
 -/
-theorem toLinearMap_maxTrivLinearMapEquivLieModuleHom_symm (f : M ->ₗ⁅R,L⁆ N) :
-    (maxTrivLinearMapEquivLieModuleHom (M := M) (N := N) |>.symm f : M ->ₗ[R] N) = (f : M ->ₗ[R] N) :=
+theorem toLinearMap_maxTrivLinearMapEquivLieModuleHom_symm (f : M →ₗ⁅R,L⁆ N) :
+    (maxTrivLinearMapEquivLieModuleHom (M := M) (N := N) |>.symm f : M →ₗ[R] N) = (f : M →ₗ[R] N) :=
   rfl
 
 end LieModule
 
 namespace LieAlgebra
 
-/--
-Definition of `center` / `center` 的定义
+/-- The center of a Lie algebra is the set of elements that commute with everything. It can
+be viewed as the maximal trivial submodule of the Lie algebra as a Lie module over itself via the
+adjoint representation. -/
+/-
+**LieAlgebra.center** 是 Mathlib 中的一个缩写定义，位于命名空间 `LieAlgebra`。
+形式化陈述：center : LieIdeal R L
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation center
-  signature: : LieIdeal R L
-  body: LieModule.maxTrivSubmodule R L L
-
-中文:
-缩写 center
-  签名: : LieIdeal R L
-  定义体: LieModule.maxTrivSubmodule R L L
-
-Depends on / 依赖: LieModule, LieModule.maxTrivSubmodule, maxTrivSubmodule
+--- 原说明 ---
+The center of a Lie algebra is the set of elements that commute with everything.
+ It can
+be viewed as the maximal trivial submodule of the Lie algebra as a Lie module ov
+er itself via the
+adjoint representation.
 -/
 abbrev center : LieIdeal R L :=
   LieModule.maxTrivSubmodule R L L
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsLieAbelian (center R L)
-  body: inferInstance
-
-中文:
-实例 :
-  签名: IsLieAbelian (center R L)
-  定义体: inferInstance
+/-
+**LieAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `LieAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsLieAbelian (center R L) :=
   inferInstance
@@ -1014,130 +856,98 @@ instance : IsLieAbelian (center R L) :=
 attribute [local instance 100] LieRing.ofAssociativeRing
 
 @[simp]
-/--
-theorem `ad_ker_eq_self_module_ker` / 定理 `ad_ker_eq_self_module_ker`
-
-English:
-theorem ad_ker_eq_self_module_ker
-  statement: (ad R L).ker = LieModule.ker R L L
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ad_ker_eq_self_module_ker
-  结论: (ad R L).ker = Lie模.ker R L L
-  证明: rfl
-
-@[simp]
+/-
+**LieAlgebra.ad_ker_eq_self_module_ker** 是 Mathlib 中的一个定理，位于命名空间 `LieAlgebra`。
+形式化陈述：ad_ker_eq_self_module_ker : (ad R L).ker = LieModule.ker R L L
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ad_ker_eq_self_module_ker : (ad R L).ker = LieModule.ker R L L :=
   rfl
 
 @[simp]
-/--
-theorem `self_module_ker_eq_center` / 定理 `self_module_ker_eq_center`
-
-English:
-theorem self_module_ker_eq_center
-  statement: LieModule.ker R L L = center R L
-  proof: by
-  ext y
-  simp only [LieModule.mem_maxTrivSubmodule, LieModule.mem_ker, ← lie_skew _ y, neg_eq_zero]
-
-中文:
-定理 self_module_ker_eq_center
-  结论: Lie模.ker R L L = center R L
-  证明: by
-  ext y
-  simp only [LieModule.mem_maxTrivSubmodule, LieModule.mem_ker, ← lie_skew _ y, neg_eq_zero]
-
-Depends on / 依赖: LieModule, LieModule.mem_ker, LieModule.mem_maxTrivSubmodule, lie_skew, mem_ker, mem_maxTrivSubmodule, neg_eq_zero
+/-
+**LieAlgebra.self_module_ker_eq_center** 是 Mathlib 中的一个定理，位于命名空间 `LieAlgebra`。
+形式化陈述：self_module_ker_eq_center : LieModule.ker R L L = center R L
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubmodule.ext`：ext (h : forall m, m in N ↔ m in N') : N = N'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `lie_skew`：lie_skew : -⁅y, x⁆ = ⁅x, y⁆
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem self_module_ker_eq_center : LieModule.ker R L L = center R L := by
   ext y
   simp only [LieModule.mem_maxTrivSubmodule, LieModule.mem_ker, ← lie_skew _ y, neg_eq_zero]
-
-/--
-theorem `abelian_of_le_center` / 定理 `abelian_of_le_center`
-
-English:
-theorem abelian_of_le_center
-  given: (I : LieIdeal R L) (h : I <= center R L)
-  statement: IsLieAbelian I
-  proof: haveI : LieModule.IsTrivial L I := (LieModule.trivial_iff_le_maximal_trivial R L L I).mpr h
-  LieIdeal.isLieAbelian_of_trivial R L I
-
-中文:
-定理 abelian_of_le_center
-  条件: (I : LieIdeal R L) (h : I <= center R L)
-  结论: IsLieAbelian I
-  证明: haveI : LieModule.IsTrivial L I := (LieModule.trivial_iff_le_maximal_trivial R L L I).mpr h
-  LieIdeal.isLieAbelian_of_trivial R L I
-
-Depends on / 依赖: IsTrivial, LieIdeal, LieIdeal.isLieAbelian_of_trivial, LieModule, LieModule.IsTrivial, LieModule.trivial_iff_le_maximal_trivial, isLieAbelian_of_trivial, trivial_iff_le_maximal_trivial
+/-
+**LieAlgebra.abelian_of_le_center** 是 Mathlib 中的一个定理，位于命名空间 `LieAlgebra`。
+形式化陈述：abelian_of_le_center (I : LieIdeal R L) (h : I <= center R L) : IsLieAbeli
+an I
+参数：I : LieIdeal R L；h : I <= center R L。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LieSubmodule.instAddSubgroupClass`：∀ {R : Type u} {L : Type v} {M : Type
+ w} [inst : CommRing R] [inst_1 : LieRing L] [inst_2 : AddCommGroup M]   [inst_3
+ : _root_.Module R M] […
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `AddSubgroupClass.toAddSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Ty
+pe u_4)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass
+ S G],   AddSubmonoidClass…
+· 使用定理 `LieModule.trivial_iff_le_maximal_trivial`：trivial_iff_le_maximal_trivial
+ (N : LieSubmodule R L M) : IsTrivial L N ↔ N <= maxTrivSubmodule R L M
 -/
-theorem abelian_of_le_center (I : LieIdeal R L) (h : I <= center R L) : IsLieAbelian I :=
+theorem abelian_of_le_center (I : LieIdeal R L) (h : I ≤ center R L) : IsLieAbelian I :=
   haveI : LieModule.IsTrivial L I := (LieModule.trivial_iff_le_maximal_trivial R L L I).mpr h
   LieIdeal.isLieAbelian_of_trivial R L I
-
-/--
-theorem `isLieAbelian_iff_center_eq_top` / 定理 `isLieAbelian_iff_center_eq_top`
-
-English:
-theorem isLieAbelian_iff_center_eq_top
-  statement: IsLieAbelian L ↔ center R L = ⊤
-  proof: LieModule.isTrivial_iff_max_triv_eq_top R L L
-
-中文:
-定理 isLieAbelian_iff_center_eq_top
-  结论: IsLieAbelian L ↔ center R L = ⊤
-  证明: LieModule.isTrivial_iff_max_triv_eq_top R L L
-
-Depends on / 依赖: LieModule, LieModule.isTrivial_iff_max_triv_eq_top, isTrivial_iff_max_triv_eq_top
+/-
+**LieAlgebra.isLieAbelian_iff_center_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `LieAlgebr
+a`。
+形式化陈述：isLieAbelian_iff_center_eq_top : IsLieAbelian L ↔ center R L = ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieModule.isTrivial_iff_max_triv_eq_top`：isTrivial_iff_max_triv_eq_top :
+ IsTrivial L M ↔ maxTrivSubmodule R L M = ⊤
 -/
 theorem isLieAbelian_iff_center_eq_top : IsLieAbelian L ↔ center R L = ⊤ :=
   LieModule.isTrivial_iff_max_triv_eq_top R L L
-
-/--
-theorem `isFaithful_self_iff` / 定理 `isFaithful_self_iff`
-
-English:
-theorem isFaithful_self_iff
-  statement: LieModule.IsFaithful R L L ↔ center R L = ⊥
-  proof: by
-  rw [LieModule.isFaithful_iff_ker_eq_bot]; rw [self_module_ker_eq_center]
-
-@[simp]
-
-中文:
-定理 isFaithful_self_iff
-  结论: Lie模.是忠实 R L L ↔ center R L = ⊥
-  证明: by
-  rw [LieModule.isFaithful_iff_ker_eq_bot]; rw [self_module_ker_eq_center]
-
-@[simp]
-
-Depends on / 依赖: LieModule, LieModule.isFaithful_iff_ker_eq_bot, isFaithful_iff_ker_eq_bot, self_module_ker_eq_center
+/-
+**LieAlgebra.isFaithful_self_iff** 是 Mathlib 中的一个定理，位于命名空间 `LieAlgebra`。
+形式化陈述：isFaithful_self_iff : LieModule.IsFaithful R L L ↔ center R L = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `LieModule.isFaithful_iff_ker_eq_bot`：isFaithful_iff_ker_eq_bot : IsFaith
+ful R L M ↔ LieModule.ker R L M = ⊥
+· 使用定理 `LieAlgebra.self_module_ker_eq_center`：self_module_ker_eq_center : LieMod
+ule.ker R L L = center R L
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem isFaithful_self_iff : LieModule.IsFaithful R L L ↔ center R L = ⊥ := by
-  rw [LieModule.isFaithful_iff_ker_eq_bot]; rw [self_module_ker_eq_center]
+  rw [LieModule.isFaithful_iff_ker_eq_bot, self_module_ker_eq_center]
 
 @[simp]
-/--
-theorem `center_eq_bot` / 定理 `center_eq_bot`
-
-English:
-theorem center_eq_bot
-  given: [LieModule.IsFaithful R L L]
-  proof: (isFaithful_self_iff R L).mp inferInstance
-
-中文:
-定理 center_eq_bot
-  条件: [Lie模.是忠实 R L L]
-  证明: (isFaithful_self_iff R L).mp inferInstance
-
-Depends on / 依赖: isFaithful_self_iff
+/-
+**LieAlgebra.center_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 `LieAlgebra`。
+形式化陈述：center_eq_bot [LieModule.IsFaithful R L L] : center R L = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `LieAlgebra.isFaithful_self_iff`：isFaithful_self_iff : LieModule.IsFaithf
+ul R L L ↔ center R L = ⊥
 -/
 theorem center_eq_bot [LieModule.IsFaithful R L L] :
     center R L = ⊥ :=
@@ -1148,42 +958,55 @@ end LieAlgebra
 namespace LieModule
 
 variable {R L}
-variable {x : L} (hx : x in LieAlgebra.center R L) (y : L)
+variable {x : L} (hx : x ∈ LieAlgebra.center R L) (y : L)
 include hx
 
 attribute [local instance 100] LieRing.ofAssociativeRing
 
-/--
-lemma `commute_toEnd_of_mem_center_left` / 引理 `commute_toEnd_of_mem_center_left`
-
-English:
-lemma commute_toEnd_of_mem_center_left
-  proof: by
-  rw [Commute.symm_iff]; rw [commute_iff_lie_eq]; rw [← LieHom.map_lie]; rw [hx y]; rw [map_zero]
-
-中文:
-引理 commute_toEnd_of_mem_center_left
-  证明: by
-  rw [Commute.symm_iff]; rw [commute_iff_lie_eq]; rw [← LieHom.map_lie]; rw [hx y]; rw [map_zero]
-
-Depends on / 依赖: Commute, Commute.symm_iff, LieHom, LieHom.map_lie, commute_iff_lie_eq, map_lie, map_zero, symm_iff
+/-
+**LieModule.commute_toEnd_of_mem_center_left** 是 Mathlib 中的一个引理，位于命名空间 `LieModul
+e`。
+形式化陈述：commute_toEnd_of_mem_center_left : Commute (toEnd R L M x) (toEnd R L M y)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Commute.symm_iff`：∀ {S : Type u_3} [inst : Mul S] {a b : S}, Commute a b
+ ↔ Commute b a
+· 使用定理 `commute_iff_lie_eq`：commute_iff_lie_eq {x y : R} : Commute x y ↔ ⁅x, y⁆ 
+= 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LieHom.map_lie`：map_lie (f : L₁ ->ₗ⁅R⁆ L₂) (x y : L₁) : f ⁅x, y⁆ = ⁅f x,
+ f y⁆
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `LieHom.instLinearMapClass`：∀ {R : Type u} {L₁ : Type v} {L₂ : Type w} [i
+nst : CommRing R] [inst_1 : LieRing L₁] [inst_2 : LieAlgebra R L₁]   [inst_3 : L
+ieRing L₂] [ins…
 -/
 lemma commute_toEnd_of_mem_center_left :
     Commute (toEnd R L M x) (toEnd R L M y) := by
-  rw [Commute.symm_iff]; rw [commute_iff_lie_eq]; rw [← LieHom.map_lie]; rw [hx y]; rw [map_zero]
-
-/--
-lemma `commute_toEnd_of_mem_center_right` / 引理 `commute_toEnd_of_mem_center_right`
-
-English:
-lemma commute_toEnd_of_mem_center_right
-  proof: (LieModule.commute_toEnd_of_mem_center_left M hx y).symm
-
-中文:
-引理 commute_toEnd_of_mem_center_right
-  证明: (LieModule.commute_toEnd_of_mem_center_left M hx y).symm
-
-Depends on / 依赖: LieModule, LieModule.commute_toEnd_of_mem_center_left, commute_toEnd_of_mem_center_left
+  rw [Commute.symm_iff, commute_iff_lie_eq, ← LieHom.map_lie, hx y, map_zero]
+/-
+**LieModule.commute_toEnd_of_mem_center_right** 是 Mathlib 中的一个引理，位于命名空间 `LieModu
+le`。
+形式化陈述：commute_toEnd_of_mem_center_right : Commute (toEnd R L M y) (toEnd R L M x
+)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Commute.symm`：∀ {S : Type u_3} [inst : Mul S] {a b : S}, Commute a b → C
+ommute b a
+· 使用引理 `LieModule.commute_toEnd_of_mem_center_left`：commute_toEnd_of_mem_center_
+left : Commute (toEnd R L M x) (toEnd R L M y)
 -/
 lemma commute_toEnd_of_mem_center_right :
     Commute (toEnd R L M y) (toEnd R L M x) :=
@@ -1202,64 +1025,63 @@ variable [CommRing R] [LieRing L] [LieAlgebra R L] [AddCommGroup M] [Module R M]
 variable [LieRingModule L M] (N N' : LieSubmodule R L M) (I J : LieIdeal R L)
 
 @[simp]
-/--
-theorem `LieSubmodule.trivial_lie_oper_zero` / 定理 `LieSubmodule.trivial_lie_oper_zero`
-
-English:
-theorem LieSubmodule.trivial_lie_oper_zero
-  given: [LieModule.IsTrivial L M]
-  statement: ⁅I, N⁆ = ⊥
-  proof: by
-  suffices ⁅I, N⁆ <= ⊥ from le_bot_iff.mp this
-  rw [lieIdeal_oper_eq_span]; rw [LieSubmodule.lieSpan_le]
-  rintro m ⟨x, n, h⟩; rw [trivial_lie_zero] at h; simp [← h]
-
-中文:
-定理 Lie子模.trivial_lie_oper_zero
-  条件: [Lie模.是平凡 L M]
-  结论: ⁅I, N⁆ = ⊥
-  证明: by
-  suffices ⁅I, N⁆ <= ⊥ from le_bot_iff.mp this
-  rw [lieIdeal_oper_eq_span]; rw [LieSubmodule.lieSpan_le]
-  rintro m ⟨x, n, h⟩; rw [trivial_lie_zero] at h; simp [← h]
-
-Depends on / 依赖: LieSubmodule, LieSubmodule.lieSpan_le, le_bot_iff, le_bot_iff.mp, lieIdeal_oper_eq_span, lieSpan_le, trivial_lie_zero
+/-
+**LieSubmodule.trivial_lie_oper_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：LieSubmodule.trivial_lie_oper_zero [LieModule.IsTrivial L M] : ⁅I, N⁆ = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LieSubmodule.lieIdeal_oper_eq_span`：lieIdeal_oper_eq_span : ⁅I, N⁆ = lie
+Span R L { ⁅(x : L), (n : M)⁆ | (x : I) (n : N) }
+· 使用定理 `LieSubmodule.lieSpan_le`：lieSpan_le {N} : lieSpan R L s <= N ↔ s subsete
+q N
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `trivial_lie_zero`：trivial_lie_zero (L : Type v) (M : Type w) [Bracket L 
+M] [Zero M] [LieModule.IsTrivial L M] (x : L) (m : M) : ⁅x, m⁆ = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `le_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a ≤ ⊥ ↔ a = ⊥
 -/
 theorem LieSubmodule.trivial_lie_oper_zero [LieModule.IsTrivial L M] : ⁅I, N⁆ = ⊥ := by
-  suffices ⁅I, N⁆ <= ⊥ from le_bot_iff.mp this
-  rw [lieIdeal_oper_eq_span]; rw [LieSubmodule.lieSpan_le]
+  suffices ⁅I, N⁆ ≤ ⊥ from le_bot_iff.mp this
+  rw [lieIdeal_oper_eq_span, LieSubmodule.lieSpan_le]
   rintro m ⟨x, n, h⟩; rw [trivial_lie_zero] at h; simp [← h]
-
-/--
-theorem `LieSubmodule.lie_abelian_iff_lie_self_eq_bot` / 定理 `LieSubmodule.lie_abelian_iff_lie_self_eq_bot`
-
-English:
-theorem LieSubmodule.lie_abelian_iff_lie_self_eq_bot
-  statement: IsLieAbelian I ↔ ⁅I, I⁆ = ⊥
-  proof: by
-  simp only [_root_.eq_bot_iff, lieIdeal_oper_eq_span, LieSubmodule.lieSpan_le,
-    LieSubmodule.bot_coe, Set.subset_singleton_iff, Set.mem_ofPred_eq, exists_imp]
-  refine
-    ⟨fun h z x y hz =>
-      hz.symm.trans
-        (((I : LieSubalgebra R L).coe_bracket x y).symm.trans
-          ((coe_zero_iff_zero _ _).mpr (by apply h.trivial))),
-      fun h => ⟨fun x y => ((I : LieSubalgebra R L).coe_zero_iff_zero _).mp (h _ x y rfl)⟩⟩
-
-中文:
-定理 Lie子模.lie_abelian_iff_lie_self_eq_bot
-  结论: IsLieAbelian I ↔ ⁅I, I⁆ = ⊥
-  证明: by
-  simp only [_root_.eq_bot_iff, lieIdeal_oper_eq_span, LieSubmodule.lieSpan_le,
-    LieSubmodule.bot_coe, Set.subset_singleton_iff, Set.mem_ofPred_eq, exists_imp]
-  refine
-    ⟨fun h z x y hz =>
-      hz.symm.trans
-        (((I : LieSubalgebra R L).coe_bracket x y).symm.trans
-          ((coe_zero_iff_zero _ _).mpr (by apply h.trivial))),
-      fun h => ⟨fun x y => ((I : LieSubalgebra R L).coe_zero_iff_zero _).mp (h _ x y rfl)⟩⟩
-
-Depends on / 依赖: LieSubalgebra, LieSubmodule, LieSubmodule.bot_coe, LieSubmodule.lieSpan_le, Set.mem_ofPred_eq, Set.subset_singleton_iff, _root_, _root_.eq_bot_iff, bot_coe, coe_bracket, coe_zero_iff_zero, eq_bot_iff, exists_imp, h.trivial, hz.symm.trans, lieIdeal_oper_eq_span, lieSpan_le, mem_ofPred_eq, subset_singleton_iff, symm.trans
+/-
+**LieSubmodule.lie_abelian_iff_lie_self_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：LieSubmodule.lie_abelian_iff_lie_self_eq_bot : IsLieAbelian I ↔ ⁅I, I⁆ = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `AddSubgroupClass.toAddSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Ty
+pe u_4)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass
+ S G],   AddSubmonoidClass…
+· 使用定理 `LieSubmodule.instAddSubgroupClass`：∀ {R : Type u} {L : Type v} {M : Type
+ w} [inst : CommRing R] [inst_1 : LieRing L] [inst_2 : AddCommGroup M]   [inst_3
+ : _root_.Module R M] […
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LieSubalgebra.coe_bracket`：coe_bracket (x y : L') : (↑⁅x, y⁆ : L) = ⁅(↑x
+ : L), ↑y⁆
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LieSubalgebra.instAddSubgroupClass`：∀ (R : Type u) (L : Type v) [inst : 
+CommRing R] [inst_1 : LieRing L] [inst_2 : LieAlgebra R L],   AddSubgroupClass (
+LieSubalgebra R L) L
+· 使用定理 `LieSubalgebra.coe_zero_iff_zero`：coe_zero_iff_zero (x : L') : (x : L) = 
+0 ↔ x = 0
+· 使用定理 `LieModule.IsTrivial.trivial`：∀ {L : Type v} {M : Type w} {inst : Bracket
+ L M} {inst_1 : Zero M} [self : LieModule.IsTrivial L M] (x : L) (m : M),   ⁅x, 
+m⁆ = 0
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 -/
 theorem LieSubmodule.lie_abelian_iff_lie_self_eq_bot : IsLieAbelian I ↔ ⁅I, I⁆ = ⊥ := by
   simp only [_root_.eq_bot_iff, lieIdeal_oper_eq_span, LieSubmodule.lieSpan_le,
@@ -1272,46 +1094,50 @@ theorem LieSubmodule.lie_abelian_iff_lie_self_eq_bot : IsLieAbelian I ↔ ⁅I, 
       fun h => ⟨fun x y => ((I : LieSubalgebra R L).coe_zero_iff_zero _).mp (h _ x y rfl)⟩⟩
 
 variable {I N} in
-/--
-lemma `lie_eq_self_of_isAtom_of_ne_bot` / 引理 `lie_eq_self_of_isAtom_of_ne_bot`
-
-English:
-lemma lie_eq_self_of_isAtom_of_ne_bot
-  given: (hN : IsAtom N) (h : ⁅I, N⁆ != ⊥)
-  statement: ⁅I, N⁆ = N
-  proof: (hN.le_iff_eq h).mp LieSubmodule.lie_le_right N I
-
-中文:
-引理 lie_eq_self_of_isAtom_of_ne_bot
-  条件: (hN : IsAtom N) (h : ⁅I, N⁆ != ⊥)
-  结论: ⁅I, N⁆ = N
-  证明: (hN.le_iff_eq h).mp LieSubmodule.lie_le_right N I
-
-Depends on / 依赖: LieSubmodule, LieSubmodule.lie_le_right, hN.le_iff_eq, le_iff_eq, lie_le_right
+/-
+**lie_eq_self_of_isAtom_of_ne_bot** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：lie_eq_self_of_isAtom_of_ne_bot (hN : IsAtom N) (h : ⁅I, N⁆ != ⊥) : ⁅I, N⁆
+ = N
+参数：hN : IsAtom N；h : ⁅I, N⁆ != ⊥。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `IsAtom.le_iff_eq`：IsAtom.le_iff_eq (ha : IsAtom a) (hb : b != ⊥) : b <= 
+a ↔ b = a
+· 使用定理 `LieSubmodule.lie_le_right`：lie_le_right : ⁅I, N⁆ <= N
 -/
-lemma lie_eq_self_of_isAtom_of_ne_bot (hN : IsAtom N) (h : ⁅I, N⁆ != ⊥) : ⁅I, N⁆ = N :=
-(hN.le_iff_eq h).mp LieSubmodule.lie_le_right N I
+lemma lie_eq_self_of_isAtom_of_ne_bot (hN : IsAtom N) (h : ⁅I, N⁆ ≠ ⊥) : ⁅I, N⁆ = N :=
+  (hN.le_iff_eq h).mp <| LieSubmodule.lie_le_right N I
 
 -- TODO: introduce typeclass for perfect Lie algebras and use it here in the conclusion
-/--
-lemma `lie_eq_self_of_isAtom_of_nonabelian` / 引理 `lie_eq_self_of_isAtom_of_nonabelian`
-
-English:
-lemma lie_eq_self_of_isAtom_of_nonabelian
-  statement: {R L : Type*} [CommRing R] [LieRing L] [LieAlgebra R L]
-  proof: lie_eq_self_of_isAtom_of_ne_bot hI not_imp_not.mpr (lie_abelian_iff_lie_self_eq_bot I).mpr h
-
-中文:
-引理 lie_eq_self_of_isAtom_of_nonabelian
-  结论: {R L : 类型} [交换环 R] [Lie环 L] [Lie代数 R L]
-  证明: lie_eq_self_of_isAtom_of_ne_bot hI not_imp_not.mpr (lie_abelian_iff_lie_self_eq_bot I).mpr h
-
-Depends on / 依赖: lie_abelian_iff_lie_self_eq_bot, lie_eq_self_of_isAtom_of_ne_bot, not_imp_not, not_imp_not.mpr
+/-
+**lie_eq_self_of_isAtom_of_nonabelian** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：lie_eq_self_of_isAtom_of_nonabelian {R L : Type*} [CommRing R] [LieRing L]
+ [LieAlgebra R L] (I : LieIdeal R L) (hI : IsAtom I) (h : ¬IsLieAbelian I) : ⁅I,
+ I⁆ = I
+参数：I : LieIdeal R L；hI : IsAtom I；h : ¬IsLieAbelian I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `AddSubgroupClass.toAddSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Ty
+pe u_4)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass
+ S G],   AddSubmonoidClass…
+· 使用定理 `LieSubmodule.instAddSubgroupClass`：∀ {R : Type u} {L : Type v} {M : Type
+ w} [inst : CommRing R] [inst_1 : LieRing L] [inst_2 : AddCommGroup M]   [inst_3
+ : _root_.Module R M] […
+· 使用引理 `lie_eq_self_of_isAtom_of_ne_bot`：lie_eq_self_of_isAtom_of_ne_bot (hN : I
+sAtom N) (h : ⁅I, N⁆ != ⊥) : ⁅I, N⁆ = N
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `not_imp_not`：not_imp_not : ¬a -> ¬b ↔ b -> a
+· 使用定理 `LieSubmodule.lie_abelian_iff_lie_self_eq_bot`：LieSubmodule.lie_abelian_i
+ff_lie_self_eq_bot : IsLieAbelian I ↔ ⁅I, I⁆ = ⊥
 -/
 lemma lie_eq_self_of_isAtom_of_nonabelian {R L : Type*} [CommRing R] [LieRing L] [LieAlgebra R L]
     (I : LieIdeal R L) (hI : IsAtom I) (h : ¬IsLieAbelian I) :
     ⁅I, I⁆ = I :=
-lie_eq_self_of_isAtom_of_ne_bot hI not_imp_not.mpr (lie_abelian_iff_lie_self_eq_bot I).mpr h
+  lie_eq_self_of_isAtom_of_ne_bot hI <| not_imp_not.mpr (lie_abelian_iff_lie_self_eq_bot I).mpr h
 
 end IdealOperations
 
@@ -1320,18 +1146,14 @@ section TrivialLieModule
 set_option linter.unusedVariables false in
 /-- A type synonym for an `R`-module to have a trivial Lie module structure. -/
 @[nolint unusedArguments]
-/--
-Definition of `TrivialLieModule` / `TrivialLieModule` 的定义
+/-
+**TrivialLieModule** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：TrivialLieModule (R L M : Type*)
+参数：R L M : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition TrivialLieModule
-  signature: (R L M : Type*)
-  body: M
-
-中文:
-定义 TrivialLieModule
-  签名: (R L M : 类型)
-  定义体: M
+--- 原说明 ---
+A type synonym for an `R`-module to have a trivial Lie module structure.
 -/
 def TrivialLieModule (R L M : Type*) := M
 
@@ -1339,114 +1161,47 @@ namespace TrivialLieModule
 
 variable (R L M : Type*) [CommRing R] [LieRing L] [LieAlgebra R L] [AddCommGroup M] [Module R M]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddCommGroup (TrivialLieModule R L M)
-  body: inferInstanceAs (AddCommGroup M)
-
-中文:
-实例 :
-  签名: 加法交换群 (TrivialLieModule R L M)
-  定义体: inferInstanceAs (AddCommGroup M)
-
-Depends on / 依赖: AddCommGroup
+/-
+**TrivialLieModule.** 是 Mathlib 中的一个实例，位于命名空间 `TrivialLieModule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : AddCommGroup (TrivialLieModule R L M) := inferInstanceAs (AddCommGroup M)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Module R (TrivialLieModule R L M)
-  body: inferInstanceAs (Module R M)
-
-中文:
-实例 :
-  签名: 模 R (TrivialLieModule R L M)
-  定义体: inferInstanceAs (Module R M)
-
-Depends on / 依赖: Module
+/-
+**TrivialLieModule.** 是 Mathlib 中的一个实例，位于命名空间 `TrivialLieModule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Module R (TrivialLieModule R L M) := inferInstanceAs (Module R M)
 
-/--
-Definition of `equiv` / `equiv` 的定义
+/-- The linear equivalence between a trivial Lie module and its underlying `R`-module. -/
+/-
+**TrivialLieModule.equiv** 是 Mathlib 中的一个定义，位于命名空间 `TrivialLieModule`。
+形式化陈述：equiv : (TrivialLieModule R L M) ≃ₗ[R] M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equiv
-  signature: : (TrivialLieModule R L M) ≃ₗ[R] M
-  body: LinearEquiv.refl R M
-
-中文:
-定义 equiv
-  签名: : (TrivialLieModule R L M) ≃ₗ[R] M
-  定义体: LinearEquiv.refl R M
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.refl
+--- 原说明 ---
+The linear equivalence between a trivial Lie module and its underlying `R`-modul
+e.
 -/
 def equiv : (TrivialLieModule R L M) ≃ₗ[R] M := LinearEquiv.refl R M
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LieRingModule L (TrivialLieModule R L M)
-  body: 0
-  add_lie := by simp
-  lie_add := by simp
-  leibniz_lie := by simp
-
-中文:
-实例 :
-  签名: Lie环模 L (TrivialLieModule R L M)
-  定义体: 0
-  add_lie := by simp
-  lie_add := by simp
-  leibniz_lie := by simp
+/-
+**TrivialLieModule.** 是 Mathlib 中的一个实例，位于命名空间 `TrivialLieModule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LieRingModule L (TrivialLieModule R L M) where
   bracket x m := 0
   add_lie := by simp
   lie_add := by simp
   leibniz_lie := by simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LieModule.IsTrivial L (TrivialLieModule R L M)
-  body: rfl
-
-中文:
-实例 :
-  签名: Lie模.是平凡 L (TrivialLieModule R L M)
-  定义体: rfl
+/-
+**TrivialLieModule.** 是 Mathlib 中的一个实例，位于命名空间 `TrivialLieModule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LieModule.IsTrivial L (TrivialLieModule R L M) where
   trivial _ _ := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LieModule R L (TrivialLieModule R L M)
-  body: by simp [trivial_lie_zero]
-  lie_smul := by simp [trivial_lie_zero]
-
-中文:
-实例 :
-  签名: Lie模 R L (TrivialLieModule R L M)
-  定义体: by simp [trivial_lie_zero]
-  lie_smul := by simp [trivial_lie_zero]
-
-Depends on / 依赖: lie_smul, trivial_lie_zero
+/-
+**TrivialLieModule.** 是 Mathlib 中的一个实例，位于命名空间 `TrivialLieModule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LieModule R L (TrivialLieModule R L M) where
   smul_lie := by simp [trivial_lie_zero]
@@ -1455,3 +1210,4 @@ instance : LieModule R L (TrivialLieModule R L M) where
 end TrivialLieModule
 
 end TrivialLieModule
+

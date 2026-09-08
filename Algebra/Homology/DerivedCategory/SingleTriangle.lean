@@ -39,53 +39,40 @@ variable {S : ShortComplex C} (hS : S.ShortExact)
 
 namespace ShortExact
 
-/--
-Definition of `singleδ` / `singleδ` 的定义
+/-- The connecting homomorphism
+`(singleFunctor C 0).obj S.X₃ ⟶ ((singleFunctor C 0).obj S.X₁)⟦(1 : ℤ)⟧` in the derived
+category of `C` when `S` is a short exact short complex in `C`. -/
+/-
+**CategoryTheory.ShortComplex.ShortExact.single** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.ShortComplex.ShortExact`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition singleδ
-  signature: : (singleFunctor C 0).obj S.X₃ ⟶
-  body: (((SingleFunctors.evaluation _ _ 0).mapIso (singleFunctorsPostcompQIso C)).hom.app S.X₃) ≫
-    triangleOfSESδ (hS.map_of_exact (HomologicalComplex.single C (ComplexShape.up Int) 0)) ≫
-    (((SingleFunctors.evaluation _ _ 0).mapIso
-      (singleFunctorsPostcompQIso C)).inv.app S.X₁)⟦(1 : Int)⟧'
-
-中文:
-定义 singleδ
-  签名: : (singleFunctor C 0).obj S.X₃ ⟶
-  定义体: (((SingleFunctors.evaluation _ _ 0).mapIso (singleFunctorsPostcompQIso C)).hom.app S.X₃) ≫
-    triangleOfSESδ (hS.map_of_exact (HomologicalComplex.single C (ComplexShape.up Int) 0)) ≫
-    (((SingleFunctors.evaluation _ _ 0).mapIso
-      (singleFunctorsPostcompQIso C)).inv.app S.X₁)⟦(1 : Int)⟧'
-
-Depends on / 依赖: ComplexShape, ComplexShape.up, HomologicalComplex, HomologicalComplex.single, SingleFunctors, SingleFunctors.evaluation, evaluation, hS.map_of_exact, hom.app, inv.app, mapIso, map_of_exact, single, singleFunctorsPostcompQIso
+--- 原说明 ---
+The connecting homomorphism
+`(singleFunctor C 0).obj S.X₃ ⟶ ((singleFunctor C 0).obj S.X₁)⟦(1 : ℤ)⟧` in the 
+derived
+category of `C` when `S` is a short exact short complex in `C`.
 -/
 noncomputable def singleδ : (singleFunctor C 0).obj S.X₃ ⟶
-    ((singleFunctor C 0).obj S.X₁)⟦(1 : Int)⟧ :=
+    ((singleFunctor C 0).obj S.X₁)⟦(1 : ℤ)⟧ :=
   (((SingleFunctors.evaluation _ _ 0).mapIso (singleFunctorsPostcompQIso C)).hom.app S.X₃) ≫
-    triangleOfSESδ (hS.map_of_exact (HomologicalComplex.single C (ComplexShape.up Int) 0)) ≫
+    triangleOfSESδ (hS.map_of_exact (HomologicalComplex.single C (ComplexShape.up ℤ) 0)) ≫
     (((SingleFunctors.evaluation _ _ 0).mapIso
-      (singleFunctorsPostcompQIso C)).inv.app S.X₁)⟦(1 : Int)⟧'
+      (singleFunctorsPostcompQIso C)).inv.app S.X₁)⟦(1 : ℤ)⟧'
 
 /-- The (distinguished) triangle in the derived category of `C` given by a
 short exact short complex in `C`. -/
 @[simps!]
-/--
-Definition of `singleTriangle` / `singleTriangle` 的定义
+/-
+**CategoryTheory.ShortComplex.ShortExact.singleTriangle** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.ShortComplex.ShortExact`。
+形式化陈述：singleTriangle : Triangle (DerivedCategory C)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition singleTriangle
-  signature: : Triangle (DerivedCategory C)
-  body: Triangle.mk ((singleFunctor C 0).map S.f)
-    ((singleFunctor C 0).map S.g) hS.singleδ
-
-中文:
-定义 singleTriangle
-  签名: : Triangle (导出范畴 C)
-  定义体: Triangle.mk ((singleFunctor C 0).map S.f)
-    ((singleFunctor C 0).map S.g) hS.singleδ
-
-Depends on / 依赖: Triangle, Triangle.mk, hS.single, singleFunctor
+--- 原说明 ---
+The (distinguished) triangle in the derived category of `C` given by a
+short exact short complex in `C`.
 -/
 noncomputable def singleTriangle : Triangle (DerivedCategory C) :=
   Triangle.mk ((singleFunctor C 0).map S.f)
@@ -98,59 +85,87 @@ canonical isomorphism between the triangle `hS.singleTriangle` in the derived ca
 and the triangle attached to the corresponding short exact sequence of cochain complexes
 after the application of the single functor. -/
 @[simps!]
-/--
-Definition of `singleTriangleIso` / `singleTriangleIso` 的定义
+/-
+**CategoryTheory.ShortComplex.ShortExact.singleTriangleIso** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.ShortComplex.ShortExact`。
+形式化陈述：singleTriangleIso : hS.singleTriangle ≅ triangleOfSES (hS.map_of_exact (Ho
+mologicalComplex.single C (ComplexShape.up Int) 0))
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Abelian.hasZeroObject`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] [CategoryTheory.Abelian C],   CategoryTheory.Limits.HasZe
+roObject C
 
-English:
-definition singleTriangleIso
-  signature: :
-  body: by
-  let e := (SingleFunctors.evaluation _ _ 0).mapIso (singleFunctorsPostcompQIso C)
-  refine Triangle.isoMk _ _ (e.app S.X₁) (e.app S.X₂) (e.app S.X₃) ?_ ?_ ?_
-  · cat_disch
-  · cat_disch
-  · simp [singleδ, e, ← Functor.map_comp, CochainComplex.singleFunctors]
-
-中文:
-定义 singleTriangleIso
-  签名: :
-  定义体: by
-  let e := (SingleFunctors.evaluation _ _ 0).mapIso (singleFunctorsPostcompQIso C)
-  refine Triangle.isoMk _ _ (e.app S.X₁) (e.app S.X₂) (e.app S.X₃) ?_ ?_ ?_
-  · cat_disch
-  · cat_disch
-  · simp [singleδ, e, ← Functor.map_comp, CochainComplex.singleFunctors]
-
-Depends on / 依赖: CochainComplex, CochainComplex.singleFunctors, Functor, Functor.map_comp, SingleFunctors, SingleFunctors.evaluation, Triangle, Triangle.isoMk, cat_disch, e.app, evaluation, mapIso, map_comp, singleFunctors, singleFunctorsPostcompQIso
+--- 原说明 ---
+Given a short exact complex `S` in `C` that is short exact (`hS`), this is the
+canonical isomorphism between the triangle `hS.singleTriangle` in the derived ca
+tegory
+and the triangle attached to the corresponding short exact sequence of cochain c
+omplexes
+after the application of the single functor.
 -/
 noncomputable def singleTriangleIso :
     hS.singleTriangle ≅
-      triangleOfSES (hS.map_of_exact (HomologicalComplex.single C (ComplexShape.up Int) 0)) := by
+      triangleOfSES (hS.map_of_exact (HomologicalComplex.single C (ComplexShape.up ℤ) 0)) := by
   let e := (SingleFunctors.evaluation _ _ 0).mapIso (singleFunctorsPostcompQIso C)
   refine Triangle.isoMk _ _ (e.app S.X₁) (e.app S.X₂) (e.app S.X₃) ?_ ?_ ?_
   · cat_disch
   · cat_disch
   · simp [singleδ, e, ← Functor.map_comp, CochainComplex.singleFunctors]
 
-/--
-lemma `singleTriangle_distinguished` / 引理 `singleTriangle_distinguished`
+/-- The distinguished triangle in the derived category of `C` given by a
+short exact short complex in `C`. -/
+/-
+**CategoryTheory.ShortComplex.ShortExact.singleTriangle_distinguished** 是 Mathli
+b 中的一个引理，位于命名空间 `CategoryTheory.ShortComplex.ShortExact`。
+形式化陈述：singleTriangle_distinguished : hS.singleTriangle in distTriang (DerivedCat
+egory C)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Pretriangulated.isomorphic_distinguished`：∀ {C : Type u} 
+{inst : CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZer
+oObject C}   {inst_2 : CategoryTheory.HasShif…
+· 使用定理 `DerivedCategory.instHasZeroObject`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : HasDerivedCa
+tegory C], CategoryTheo…
+· 使用定理 `DerivedCategory.instAdditiveShiftFunctorInt`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : Ha
+sDerivedCategory C] (n : ℤ), (Cat…
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `CategoryTheory.Abelian.hasZeroObject`：∀ {C : Type u} [inst : CategoryThe
+ory.Category.{v, u} C] [CategoryTheory.Abelian C],   CategoryTheory.Limits.HasZe
+roObject C
+· 使用定理 `HomologicalComplex.instPreservesZeroMorphismsSingle`：∀ {V : Type u} [ins
+t : CategoryTheory.Category.{v, u} V] [inst_1 : CategoryTheory.Limits.HasZeroMor
+phisms V]   [inst_2 : CategoryTheory.Limi…
+· 使用定理 `CategoryTheory.ShortComplex.ShortExact.map_of_exact`：∀ {C : Type u_1} {D
+ : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryT
+heory.Category.{v_2, u_2} D] [inst_2 : Ca…
+· 使用定理 `HomologicalComplex.instPreservesFiniteLimitsSingle`：∀ {C : Type u_1} {ι 
+: Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C] {c : ComplexShape ι}  
+ [inst_1 : CategoryTheory.Limits.HasZero…
+· 使用定理 `HomologicalComplex.instPreservesFiniteColimitsSingle`：∀ {C : Type u_1} {
+ι : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C] {c : ComplexShape ι}
+   [inst_1 : CategoryTheory.Limits.HasZero…
+· 使用引理 `DerivedCategory.triangleOfSES_distinguished`：triangleOfSES_distinguished
+ : triangleOfSES hS in distTriang (DerivedCategory C)
 
-English:
-lemma singleTriangle_distinguished
-  proof: isomorphic_distinguished _ (triangleOfSES_distinguished (hS.map_of_exact
-    (HomologicalComplex.single C (ComplexShape.up Int) 0))) _ (singleTriangleIso hS)
-
-中文:
-引理 singleTriangle_distinguished
-  证明: isomorphic_distinguished _ (triangleOfSES_distinguished (hS.map_of_exact
-    (HomologicalComplex.single C (ComplexShape.up Int) 0))) _ (singleTriangleIso hS)
-
-Depends on / 依赖: ComplexShape, ComplexShape.up, HomologicalComplex, HomologicalComplex.single, hS.map_of_exact, isomorphic_distinguished, map_of_exact, single, singleTriangleIso, triangleOfSES_distinguished
+--- 原说明 ---
+The distinguished triangle in the derived category of `C` given by a
+short exact short complex in `C`.
 -/
 lemma singleTriangle_distinguished :
-    hS.singleTriangle in distTriang (DerivedCategory C) :=
+    hS.singleTriangle ∈ distTriang (DerivedCategory C) :=
   isomorphic_distinguished _ (triangleOfSES_distinguished (hS.map_of_exact
-    (HomologicalComplex.single C (ComplexShape.up Int) 0))) _ (singleTriangleIso hS)
+    (HomologicalComplex.single C (ComplexShape.up ℤ) 0))) _ (singleTriangleIso hS)
 
 variable {S₁ S₂ : ShortComplex C} (h₁ : S₁.ShortExact) (h₂ : S₂.ShortExact) (f : S₁ ⟶ S₂)
 
@@ -160,42 +175,20 @@ set_option backward.isDefEq.respectTransparency false in
 map of short exact sequences of objects of `C`.
 -/
 @[simps!]
-/--
-Definition of `singleTriangle.map` / `singleTriangle.map` 的定义
+/-
+**CategoryTheory.ShortComplex.ShortExact.singleTriangle.map** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.ShortComplex.ShortExact.singleTriangle`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.Abelian C] →       [inst_2 : HasDerivedCategory C] →         {S₁
+ S₂ : CategoryTheory.ShortComplex C} →           (h₁ : S₁.ShortExact) → (h₂ : S₂
+.ShortExact) → (S₁ ⟶ S₂) → (h₁.singleTriangle ⟶ h₂.singleTriangle)
+参数：h₁ : S₁.ShortExact；h₂ : S₂.ShortExact；S₁ ⟶ S₂；h₁.singleTriangle ⟶ h₂.singleTr
+iangle。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition singleTriangle.map
-  signature: : h₁.singleTriangle ⟶ h₂.singleTriangle where
-  body: (singleFunctor C 0).map f.τ₁
-  hom₂ := (singleFunctor C 0).map f.τ₂
-  hom₃ := (singleFunctor C 0).map f.τ₃
-  comm₁ := by simp [← Functor.map_comp, f.comm₁₂]
-  comm₂ := by simp [← Functor.map_comp, f.comm₂₃]
-  comm₃ := by
-    dsimp [singleδ]
-    rw [assoc]; rw [assoc]; rw [← Functor.map_comp]; rw [← NatTrans.naturality]; rw [Functor.map_comp]
-    dsimp [CochainComplex.singleFunctors]
-    rw [reassoc_of% dsimp% ((triangleOfSES.map (h₁.map_of_exact _) (h₂.map_of_exact _))
-      ((HomologicalComplex.single C (.up Int) 0).mapShortComplex.map f)).comm₃]
-    simp
-
-中文:
-定义 singleTriangle.map
-  签名: : h₁.singleTriangle ⟶ h₂.singleTriangle where
-  定义体: (singleFunctor C 0).map f.τ₁
-  hom₂ := (singleFunctor C 0).map f.τ₂
-  hom₃ := (singleFunctor C 0).map f.τ₃
-  comm₁ := by simp [← Functor.map_comp, f.comm₁₂]
-  comm₂ := by simp [← Functor.map_comp, f.comm₂₃]
-  comm₃ := by
-    dsimp [singleδ]
-    rw [assoc]; rw [assoc]; rw [← Functor.map_comp]; rw [← NatTrans.naturality]; rw [Functor.map_comp]
-    dsimp [CochainComplex.singleFunctors]
-    rw [reassoc_of% dsimp% ((triangleOfSES.map (h₁.map_of_exact _) (h₂.map_of_exact _))
-      ((HomologicalComplex.single C (.up Int) 0).mapShortComplex.map f)).comm₃]
-    simp
-
-Depends on / 依赖: singleFunctor
+--- 原说明 ---
+The morphism `h₁.singleTriangle h₁ ⟶ h₂.singleTriangle` that is induced by a
+map of short exact sequences of objects of `C`.
 -/
 noncomputable def singleTriangle.map : h₁.singleTriangle ⟶ h₂.singleTriangle where
   hom₁ := (singleFunctor C 0).map f.τ₁
@@ -205,10 +198,10 @@ noncomputable def singleTriangle.map : h₁.singleTriangle ⟶ h₂.singleTriang
   comm₂ := by simp [← Functor.map_comp, f.comm₂₃]
   comm₃ := by
     dsimp [singleδ]
-    rw [assoc]; rw [assoc]; rw [← Functor.map_comp]; rw [← NatTrans.naturality]; rw [Functor.map_comp]
+    rw [assoc, assoc, ← Functor.map_comp, ← NatTrans.naturality, Functor.map_comp]
     dsimp [CochainComplex.singleFunctors]
     rw [reassoc_of% dsimp% ((triangleOfSES.map (h₁.map_of_exact _) (h₂.map_of_exact _))
-      ((HomologicalComplex.single C (.up Int) 0).mapShortComplex.map f)).comm₃]
+      ((HomologicalComplex.single C (.up ℤ) 0).mapShortComplex.map f)).comm₃]
     simp
 
 end ShortExact
@@ -216,3 +209,4 @@ end ShortExact
 end ShortComplex
 
 end CategoryTheory
+

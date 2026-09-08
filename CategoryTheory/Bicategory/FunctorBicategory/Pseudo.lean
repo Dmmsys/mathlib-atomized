@@ -36,60 +36,43 @@ namespace StrongTrans
 variable {F G H I : Pseudofunctor B C}
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `whiskerLeft` / `whiskerLeft` 的定义
+/-- Left whiskering of a strong natural transformation between pseudofunctors
+and a modification. -/
+/-
+**CategoryTheory.Pseudofunctor.StrongTrans.whiskerLeft** 是 Mathlib 中的一个缩写定义，位于命名
+空间 `CategoryTheory.Pseudofunctor.StrongTrans`。
+形式化陈述：whiskerLeft (η : F ⟶ G) {θ ι : G ⟶ H} (Γ : θ ⟶ ι) : η ≫ θ ⟶ η ≫ ι where as
+参数：η : F ⟶ G；Γ : θ ⟶ ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation whiskerLeft
-  signature: (η : F ⟶ G) {θ ι : G ⟶ H} (Γ : θ ⟶ ι)
-  body: {
-    app a := η.app a ◁ Γ.as.app a
-    naturality {a b} f := by
-      dsimp
-      rw [associator_inv_naturality_right_assoc]; rw [whisker_exchange_assoc]
-      simp }
-
-中文:
-缩写 whiskerLeft
-  签名: (η : F ⟶ G) {θ ι : G ⟶ H} (Γ : θ ⟶ ι)
-  定义体: {
-    app a := η.app a ◁ Γ.as.app a
-    naturality {a b} f := by
-      dsimp
-      rw [associator_inv_naturality_right_assoc]; rw [whisker_exchange_assoc]
-      simp }
+--- 原说明 ---
+Left whiskering of a strong natural transformation between pseudofunctors
+and a modification.
 -/
 abbrev whiskerLeft (η : F ⟶ G) {θ ι : G ⟶ H} (Γ : θ ⟶ ι) : η ≫ θ ⟶ η ≫ ι where
   as := {
     app a := η.app a ◁ Γ.as.app a
     naturality {a b} f := by
       dsimp
-      rw [associator_inv_naturality_right_assoc]; rw [whisker_exchange_assoc]
+      rw [associator_inv_naturality_right_assoc, whisker_exchange_assoc]
       simp }
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `whiskerRight` / `whiskerRight` 的定义
+/-- Right whiskering of a strong natural transformation between pseudofunctors
+and a modification. -/
+/-
+**CategoryTheory.Pseudofunctor.StrongTrans.whiskerRight** 是 Mathlib 中的一个缩写定义，位于命
+名空间 `CategoryTheory.Pseudofunctor.StrongTrans`。
+形式化陈述：whiskerRight {η θ : F ⟶ G} (Γ : η ⟶ θ) (ι : G ⟶ H) : η ≫ ι ⟶ θ ≫ ι where a
+s
+参数：Γ : η ⟶ θ；ι : G ⟶ H。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation whiskerRight
-  signature: {η θ : F ⟶ G} (Γ : η ⟶ θ) (ι : G ⟶ H)
-  body: {
-    app a := Γ.as.app a ▷ ι.app a
-    naturality {a b} f := by
-      dsimp
-      simp_rw [Category.assoc, ← associator_inv_naturality_left, whisker_exchange_assoc]
-      simp }
-
-中文:
-缩写 whiskerRight
-  签名: {η θ : F ⟶ G} (Γ : η ⟶ θ) (ι : G ⟶ H)
-  定义体: {
-    app a := Γ.as.app a ▷ ι.app a
-    naturality {a b} f := by
-      dsimp
-      simp_rw [Category.assoc, ← associator_inv_naturality_left, whisker_exchange_assoc]
-      simp }
+--- 原说明 ---
+Right whiskering of a strong natural transformation between pseudofunctors
+and a modification.
 -/
 abbrev whiskerRight {η θ : F ⟶ G} (Γ : η ⟶ θ) (ι : G ⟶ H) : η ≫ ι ⟶ θ ≫ ι where
   as := {
@@ -100,54 +83,55 @@ abbrev whiskerRight {η θ : F ⟶ G} (Γ : η ⟶ θ) (ι : G ⟶ H) : η ≫ �
       simp }
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `associator` / `associator` 的定义
+/-- Associator for the vertical composition of strong natural transformations
+between pseudofunctors. -/
+/-
+**CategoryTheory.Pseudofunctor.StrongTrans.associator** 是 Mathlib 中的一个缩写定义，位于命名空
+间 `CategoryTheory.Pseudofunctor.StrongTrans`。
+形式化陈述：associator (η : F ⟶ G) (θ : G ⟶ H) (ι : H ⟶ I) : (η ≫ θ) ≫ ι ≅ η ≫ θ ≫ ι
+参数：η : F ⟶ G；θ : G ⟶ H；ι : H ⟶ I。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation associator
-  signature: (η : F ⟶ G) (θ : G ⟶ H) (ι : H ⟶ I)
-  body: isoMk (fun a => α_ (η.app a) (θ.app a) (ι.app a))
-
-中文:
-缩写 associator
-  签名: (η : F ⟶ G) (θ : G ⟶ H) (ι : H ⟶ I)
-  定义体: isoMk (fun a => α_ (η.app a) (θ.app a) (ι.app a))
+--- 原说明 ---
+Associator for the vertical composition of strong natural transformations
+between pseudofunctors.
 -/
 abbrev associator (η : F ⟶ G) (θ : G ⟶ H) (ι : H ⟶ I) : (η ≫ θ) ≫ ι ≅ η ≫ θ ≫ ι :=
   isoMk (fun a => α_ (η.app a) (θ.app a) (ι.app a))
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `leftUnitor` / `leftUnitor` 的定义
+/-- Left unitor for the vertical composition of strong natural transformations
+between pseudofunctors. -/
+/-
+**CategoryTheory.Pseudofunctor.StrongTrans.leftUnitor** 是 Mathlib 中的一个缩写定义，位于命名空
+间 `CategoryTheory.Pseudofunctor.StrongTrans`。
+形式化陈述：leftUnitor (η : F ⟶ G) : 𝟙 F ≫ η ≅ η
+参数：η : F ⟶ G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation leftUnitor
-  signature: (η : F ⟶ G)
-  body: isoMk (fun a => fun_ (η.app a))
-
-中文:
-缩写 leftUnitor
-  签名: (η : F ⟶ G)
-  定义体: isoMk (fun a => fun_ (η.app a))
-
-Depends on / 依赖: fun_
+--- 原说明 ---
+Left unitor for the vertical composition of strong natural transformations
+between pseudofunctors.
 -/
 abbrev leftUnitor (η : F ⟶ G) : 𝟙 F ≫ η ≅ η :=
-  isoMk (fun a => fun_ (η.app a))
+  isoMk (fun a => λ_ (η.app a))
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `rightUnitor` / `rightUnitor` 的定义
+/-- Right unitor for the vertical composition of strong natural transformations
+between pseudofunctors. -/
+/-
+**CategoryTheory.Pseudofunctor.StrongTrans.rightUnitor** 是 Mathlib 中的一个缩写定义，位于命名
+空间 `CategoryTheory.Pseudofunctor.StrongTrans`。
+形式化陈述：rightUnitor (η : F ⟶ G) : η ≫ 𝟙 G ≅ η
+参数：η : F ⟶ G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation rightUnitor
-  signature: (η : F ⟶ G)
-  body: isoMk (fun a => ρ_ (η.app a))
-
-中文:
-缩写 rightUnitor
-  签名: (η : F ⟶ G)
-  定义体: isoMk (fun a => ρ_ (η.app a))
+--- 原说明 ---
+Right unitor for the vertical composition of strong natural transformations
+between pseudofunctors.
 -/
 abbrev rightUnitor (η : F ⟶ G) : η ≫ 𝟙 G ≅ η :=
   isoMk (fun a => ρ_ (η.app a))
@@ -160,6 +144,11 @@ set_option backward.isDefEq.respectTransparency.types false in
 Note that this instance is scoped to the `Pseudofunctor.StrongTrans` namespace. -/
 @[simps! whiskerLeft_as_app whiskerRight_as_app associator_hom_as_app associator_inv_as_app
 rightUnitor_hom_as_app rightUnitor_inv_as_app leftUnitor_hom_as_app leftUnitor_inv_as_app]
+/-
+**CategoryTheory.Pseudofunctor.StrongTrans.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory.Pseudofunctor.StrongTrans`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 scoped instance : Bicategory (Pseudofunctor B C) where
   whiskerLeft {F G H} η _ _ Γ := StrongTrans.whiskerLeft η Γ
   whiskerRight {F G H} _ _ Γ η := StrongTrans.whiskerRight Γ η
@@ -171,3 +160,4 @@ scoped instance : Bicategory (Pseudofunctor B C) where
 end StrongTrans
 
 end CategoryTheory.Pseudofunctor
+

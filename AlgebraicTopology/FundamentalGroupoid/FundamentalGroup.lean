@@ -30,20 +30,17 @@ open CategoryTheory
 
 variable (X)
 
-/--
-Definition of `FundamentalGroup` / `FundamentalGroup` 的定义
+/-- The fundamental group is the automorphism group (vertex group) of the basepoint
+in the fundamental groupoid. -/
+/-
+**FundamentalGroup** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：FundamentalGroup (x : X)
+参数：x : X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation FundamentalGroup
-  signature: (x : X)
-  body: End (FundamentalGroupoid.mk x)
-
-中文:
-缩写 基本群
-  签名: (x : X)
-  定义体: End (FundamentalGroupoid.mk x)
-
-Depends on / 依赖: FundamentalGroupoid, FundamentalGroupoid.mk
+--- 原说明 ---
+The fundamental group is the automorphism group (vertex group) of the basepoint
+in the fundamental groupoid.
 -/
 abbrev FundamentalGroup (x : X) :=
   End (FundamentalGroupoid.mk x)
@@ -54,63 +51,41 @@ namespace FundamentalGroup
 
 variable {x : X} {p q : FundamentalGroup X x}
 
-/--
-theorem `one_def` / 定理 `one_def`
-
-English:
-theorem one_def
-  statement: (1 : FundamentalGroup X x) = .refl x
-  proof: rfl
-
-中文:
-定理 one_def
-  结论: (1 : 基本群 X x) = .refl x
-  证明: rfl
+/-
+**FundamentalGroup.one_def** 是 Mathlib 中的一个定理，位于命名空间 `FundamentalGroup`。
+形式化陈述：one_def : (1 : FundamentalGroup X x) = .refl x
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem one_def : (1 : FundamentalGroup X x) = .refl x := rfl
-/--
-theorem `mul_def` / 定理 `mul_def`
-
-English:
-theorem mul_def
-  statement: p * q = q.trans p
-  proof: rfl
-
-中文:
-定理 mul_def
-  结论: p * q = q.trans p
-  证明: rfl
+/-
+**FundamentalGroup.mul_def** 是 Mathlib 中的一个定理，位于命名空间 `FundamentalGroup`。
+形式化陈述：mul_def : p * q = q.trans p
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mul_def : p * q = q.trans p := rfl
-/--
-theorem `inv_def` / 定理 `inv_def`
-
-English:
-theorem inv_def
-  statement: p⁻¹ = p.symm
-  proof: rfl
-
-中文:
-定理 inv_def
-  结论: p⁻¹ = p.symm
-  证明: rfl
+/-
+**FundamentalGroup.inv_def** 是 Mathlib 中的一个定理，位于命名空间 `FundamentalGroup`。
+形式化陈述：inv_def : p⁻¹ = p.symm
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem inv_def : p⁻¹ = p.symm := rfl
 
-/--
-Definition of `fundamentalGroupMulEquivOfPath` / `fundamentalGroupMulEquivOfPath` 的定义
+/-- Get an isomorphism between the fundamental groups at two points given a path -/
+/-
+**FundamentalGroup.fundamentalGroupMulEquivOfPath** 是 Mathlib 中的一个定义，位于命名空间 `Fun
+damentalGroup`。
+形式化陈述：fundamentalGroupMulEquivOfPath (p : Path x₀ x₁) : FundamentalGroup X x₀ ≃*
+ FundamentalGroup X x₁
+参数：p : Path x₀ x₁。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition fundamentalGroupMulEquivOfPath
-  signature: (p : Path x₀ x₁)
-  body: ((Groupoid.isoEquivHom ..).symm ⟦p⟧).conj
-
-中文:
-定义 fundamentalGroupMulEquivOfPath
-  签名: (p : 道路 x₀ x₁)
-  定义体: ((Groupoid.isoEquivHom ..).symm ⟦p⟧).conj
-
-Depends on / 依赖: Groupoid, Groupoid.isoEquivHom, isoEquivHom
+--- 原说明 ---
+Get an isomorphism between the fundamental groups at two points given a path
 -/
 def fundamentalGroupMulEquivOfPath (p : Path x₀ x₁) :
     FundamentalGroup X x₀ ≃* FundamentalGroup X x₁ :=
@@ -118,149 +93,131 @@ def fundamentalGroupMulEquivOfPath (p : Path x₀ x₁) :
 
 variable (x₀ x₁)
 
-/--
-Definition of `fundamentalGroupMulEquivOfPathConnected` / `fundamentalGroupMulEquivOfPathConnected` 的定义
+/-- The fundamental group of a path connected space is independent of the choice of basepoint. -/
+/-
+**FundamentalGroup.fundamentalGroupMulEquivOfPathConnected** 是 Mathlib 中的一个定义，位于
+命名空间 `FundamentalGroup`。
+形式化陈述：fundamentalGroupMulEquivOfPathConnected [PathConnectedSpace X] : Fundament
+alGroup X x₀ ≃* FundamentalGroup X x₁
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fundamentalGroupMulEquivOfPathConnected
-  signature: [PathConnectedSpace X]
-  body: fundamentalGroupMulEquivOfPath (PathConnectedSpace.somePath x₀ x₁)
-
-中文:
-定义 fundamentalGroupMulEquivOfPathConnected
-  签名: [道路连通空间 X]
-  定义体: fundamentalGroupMulEquivOfPath (PathConnectedSpace.somePath x₀ x₁)
-
-Depends on / 依赖: PathConnectedSpace, PathConnectedSpace.somePath, fundamentalGroupMulEquivOfPath, somePath
+--- 原说明 ---
+The fundamental group of a path connected space is independent of the choice of 
+basepoint.
 -/
 def fundamentalGroupMulEquivOfPathConnected [PathConnectedSpace X] :
     FundamentalGroup X x₀ ≃* FundamentalGroup X x₁ :=
   fundamentalGroupMulEquivOfPath (PathConnectedSpace.somePath x₀ x₁)
 
-/--
-Definition of `toArrow` / `toArrow` 的定义
+/-- An element of the fundamental group as an arrow in the fundamental groupoid. -/
+/-
+**FundamentalGroup.toArrow** 是 Mathlib 中的一个缩写定义，位于命名空间 `FundamentalGroup`。
+形式化陈述：toArrow {x : X} (p : FundamentalGroup X x) : FundamentalGroupoid.mk x ⟶ Fu
+ndamentalGroupoid.mk x
+参数：p : FundamentalGroup X x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toArrow
-  signature: {x : X} (p : FundamentalGroup X x)
-  body: p
-
-中文:
-缩写 toArrow
-  签名: {x : X} (p : 基本群 X x)
-  定义体: p
+--- 原说明 ---
+An element of the fundamental group as an arrow in the fundamental groupoid.
 -/
 abbrev toArrow {x : X} (p : FundamentalGroup X x) :
     FundamentalGroupoid.mk x ⟶ FundamentalGroupoid.mk x :=
   p
 
-/--
-Definition of `toPath` / `toPath` 的定义
+/-- An element of the fundamental group as a quotient of homotopic paths. -/
+/-
+**FundamentalGroup.toPath** 是 Mathlib 中的一个缩写定义，位于命名空间 `FundamentalGroup`。
+形式化陈述：toPath {x : X} (p : FundamentalGroup X x) : Path.Homotopic.Quotient x x
+参数：p : FundamentalGroup X x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toPath
-  signature: {x : X} (p : FundamentalGroup X x)
-  body: toArrow p
-
-中文:
-缩写 toPath
-  签名: {x : X} (p : 基本群 X x)
-  定义体: toArrow p
-
-Depends on / 依赖: toArrow
+--- 原说明 ---
+An element of the fundamental group as a quotient of homotopic paths.
 -/
 abbrev toPath {x : X} (p : FundamentalGroup X x) : Path.Homotopic.Quotient x x :=
   toArrow p
 
-/--
-Definition of `fromArrow` / `fromArrow` 的定义
+/-- An element of the fundamental group, constructed from an arrow in the fundamental groupoid. -/
+/-
+**FundamentalGroup.fromArrow** 是 Mathlib 中的一个缩写定义，位于命名空间 `FundamentalGroup`。
+形式化陈述：fromArrow {x : X} (p : FundamentalGroupoid.mk x ⟶ FundamentalGroupoid.mk x
+) : FundamentalGroup X x
+参数：p : FundamentalGroupoid.mk x ⟶ FundamentalGroupoid.mk x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation fromArrow
-  signature: {x : X}
-  body: p
-
-中文:
-缩写 fromArrow
-  签名: {x : X}
-  定义体: p
+--- 原说明 ---
+An element of the fundamental group, constructed from an arrow in the fundamenta
+l groupoid.
 -/
 abbrev fromArrow {x : X}
     (p : FundamentalGroupoid.mk x ⟶ FundamentalGroupoid.mk x) :
     FundamentalGroup X x :=
   p
 
-/--
-Definition of `fromPath` / `fromPath` 的定义
+/-- An element of the fundamental group, constructed from a quotient of homotopic paths. -/
+/-
+**FundamentalGroup.fromPath** 是 Mathlib 中的一个缩写定义，位于命名空间 `FundamentalGroup`。
+形式化陈述：fromPath {x : X} (p : Path.Homotopic.Quotient x x) : FundamentalGroup X x
+参数：p : Path.Homotopic.Quotient x x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation fromPath
-  signature: {x : X} (p : Path.Homotopic.Quotient x x)
-  body: fromArrow p
-
-中文:
-缩写 fromPath
-  签名: {x : X} (p : 道路.同伦.商 x x)
-  定义体: fromArrow p
-
-Depends on / 依赖: fromArrow
+--- 原说明 ---
+An element of the fundamental group, constructed from a quotient of homotopic pa
+ths.
 -/
 abbrev fromPath {x : X} (p : Path.Homotopic.Quotient x x) : FundamentalGroup X x :=
   fromArrow p
 
-/--
-Definition of `map` / `map` 的定义
+/-- The homomorphism between fundamental groups induced by a continuous map. -/
+/-
+**FundamentalGroup.map** 是 Mathlib 中的一个定义，位于命名空间 `FundamentalGroup`。
+形式化陈述：{X : Type u_1} →   {Y : Type u_2} →     [inst : TopologicalSpace X] →     
+  [inst_1 : TopologicalSpace Y] → (f : C(X, Y)) → (x : X) → FundamentalGroup X x
+ →* FundamentalGroup Y (f x)
+参数：f : C(X, Y)；x : X；f x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (f : C(X, Y)) (x : X)
-  body: (FundamentalGroupoid.map f).mapEnd _
-
-中文:
-定义 map
-  签名: (f : C(X, Y)) (x : X)
-  定义体: (FundamentalGroupoid.map f).mapEnd _
+--- 原说明 ---
+The homomorphism between fundamental groups induced by a continuous map.
 -/
-@[simps!] def map (f : C(X, Y)) (x : X) : FundamentalGroup X x ->* FundamentalGroup Y (f x) :=
+@[simps!] def map (f : C(X, Y)) (x : X) : FundamentalGroup X x →* FundamentalGroup Y (f x) :=
   (FundamentalGroupoid.map f).mapEnd _
 
 variable (f : C(X, Y)) {x : X} {y : Y} (h : f x = y)
 
-/--
-Definition of `mapOfEq` / `mapOfEq` 的定义
+/-- The homomorphism from π₁(X, x) to π₁(Y, y) induced by a continuous map `f` with `f x = y`. -/
+/-
+**FundamentalGroup.mapOfEq** 是 Mathlib 中的一个定义，位于命名空间 `FundamentalGroup`。
+形式化陈述：mapOfEq : FundamentalGroup X x ->* FundamentalGroup Y y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapOfEq
-  signature: : FundamentalGroup X x ->* FundamentalGroup Y y
-  body: (eqToIso <| congr_arg FundamentalGroupoid.mk h).conj.toMonoidHom.comp (map f x)
-
-中文:
-定义 mapOfEq
-  签名: : 基本群 X x ->* 基本群 Y y
-  定义体: (eqToIso <| congr_arg FundamentalGroupoid.mk h).conj.toMonoidHom.comp (map f x)
-
-Depends on / 依赖: FundamentalGroupoid, FundamentalGroupoid.mk, congr_arg, conj.toMonoidHom.comp, eqToIso, toMonoidHom
+--- 原说明 ---
+The homomorphism from π₁(X, x) to π₁(Y, y) induced by a continuous map `f` with 
+`f x = y`.
 -/
-def mapOfEq : FundamentalGroup X x ->* FundamentalGroup Y y :=
+def mapOfEq : FundamentalGroup X x →* FundamentalGroup Y y :=
   (eqToIso <| congr_arg FundamentalGroupoid.mk h).conj.toMonoidHom.comp (map f x)
-
-/--
-theorem `mapOfEq_apply` / 定理 `mapOfEq_apply`
-
-English:
-theorem mapOfEq_apply
-  given: (p : FundamentalGroup X x)
-  proof: FundamentalGroupoid.conj_eqToHom ..
-
-中文:
-定理 mapOfEq_apply
-  条件: (p : 基本群 X x)
-  证明: FundamentalGroupoid.conj_eqToHom ..
-
-Depends on / 依赖: FundamentalGroupoid, FundamentalGroupoid.conj_eqToHom, conj_eqToHom
+/-
+**FundamentalGroup.mapOfEq_apply** 是 Mathlib 中的一个定理，位于命名空间 `FundamentalGroup`。
+形式化陈述：mapOfEq_apply (p : FundamentalGroup X x) : mapOfEq f h p = (Path.Homotopic
+.Quotient.map p f).cast h.symm h.symm
+参数：p : FundamentalGroup X x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `FundamentalGroupoid.conj_eqToHom`：conj_eqToHom {x y x' y' : X} {p : Path
+.Homotopic.Quotient x y} (hx : x' = x) (hy : y' = y) : eqToHom congr(mk $hx) ≫ p
+ ≫ eqToHom congr(mk $h…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem mapOfEq_apply (p : FundamentalGroup X x) :
     mapOfEq f h p = (Path.Homotopic.Quotient.map p f).cast h.symm h.symm :=
   FundamentalGroupoid.conj_eqToHom ..
 
 end FundamentalGroup
+

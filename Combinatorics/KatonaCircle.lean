@@ -24,35 +24,25 @@ open Fintype Finset Nat
 variable {X : Type*} [Fintype X]
 
 variable (X) in
-/--
-Definition of `Numbering` / `Numbering` 的定义
+/-- A numbering of a fintype `X` is a bijection between `X` and `Fin (card X)`. -/
+/-
+**Numbering** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：Numbering : Type _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Numbering
-  signature: : Type _
-  body: X ≃ Fin (card X)
-
-中文:
-缩写 Numbering
-  签名: : 类型 _
-  定义体: X ≃ Fin (card X)
+--- 原说明 ---
+A numbering of a fintype `X` is a bijection between `X` and `Fin (card X)`.
 -/
 abbrev Numbering : Type _ := X ≃ Fin (card X)
-
-/--
-lemma `Fintype.card_numbering` / 引理 `Fintype.card_numbering`
-
-English:
-lemma Fintype.card_numbering
-  given: [DecidableEq X]
-  statement: card (Numbering X) = (card X)!
-  proof: card_equiv (equivFin _)
-
-中文:
-引理 有限类型.card_numbering
-  条件: [DecidableEq X]
-  结论: card (Numbering X) = (card X)!
-  证明: card_equiv (equivFin _)
+/-
+**Fintype.card_numbering** 是 Mathlib 中的一个定理，位于命名空间 `Fintype`。
+形式化陈述：∀ {X : Type u_1} [inst : Fintype X] [inst_1 : DecidableEq X], Fintype.card
+ (Numbering X) = (Fintype.card X).factorial
+参数：Numbering X；Fintype.card X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fintype.card_equiv`：Fintype.card_equiv [Fintype α] [Fintype β] (e : α ≃ 
+β) : Fintype.card (α ≃ β) = (Fintype.card α)!
 -/
 @[simp] lemma Fintype.card_numbering [DecidableEq X] : card (Numbering X) = (card X)! :=
   card_equiv (equivFin _)
@@ -60,209 +50,89 @@ lemma Fintype.card_numbering
 namespace Numbering
 variable {f : Numbering X} {s t : Finset X}
 
-/--
-Definition of `IsPrefix` / `IsPrefix` 的定义
+/-- `IsPrefix f s` means that the elements of `s` precede the elements of `sᶜ`
+in the numbering `f`. -/
+/-
+**Numbering.IsPrefix** 是 Mathlib 中的一个定义，位于命名空间 `Numbering`。
+形式化陈述：IsPrefix (f : Numbering X) (s : Finset X)
+参数：f : Numbering X；s : Finset X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsPrefix
-  signature: (f : Numbering X) (s : Finset X)
-  body: forall x, x in s ↔ f x < #s
-
-中文:
-定义 IsPrefix
-  签名: (f : Numbering X) (s : 有限集 X)
-  定义体: forall x, x in s ↔ f x < #s
+--- 原说明 ---
+`IsPrefix f s` means that the elements of `s` precede the elements of `sᶜ`
+in the numbering `f`.
 -/
-def IsPrefix (f : Numbering X) (s : Finset X) := forall x, x in s ↔ f x < #s
-
-/--
-lemma `IsPrefix.subset_of_card_le_card` / 引理 `IsPrefix.subset_of_card_le_card`
-
-English:
-lemma IsPrefix.subset_of_card_le_card
-  given: (hs : IsPrefix f s) (ht : IsPrefix f t) (hst : #s <= #t)
-  proof: fun a ha => (ht a).mpr ((hs a).mp ha).trans_le hst
-
-中文:
-引理 IsPrefix.subset_of_card_le_card
-  条件: (hs : IsPrefix f s) (ht : IsPrefix f t) (hst : #s <= #t)
-  证明: fun a ha => (ht a).mpr ((hs a).mp ha).trans_le hst
-
-Depends on / 依赖: trans_le
+def IsPrefix (f : Numbering X) (s : Finset X) := ∀ x, x ∈ s ↔ f x < #s
+/-
+**Numbering.IsPrefix.subset_of_card_le_card** 是 Mathlib 中的一个定理，位于命名空间 `Numbering
+.IsPrefix`。
+形式化陈述：∀ {X : Type u_1} [inst : Fintype X] {f : Numbering X} {s t : Finset X},   
+f.IsPrefix s → f.IsPrefix t → s.card ≤ t.card → s ⊆ t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 -/
-lemma IsPrefix.subset_of_card_le_card (hs : IsPrefix f s) (ht : IsPrefix f t) (hst : #s <= #t) :
-s subseteq t := fun a ha => (ht a).mpr ((hs a).mp ha).trans_le hst
+lemma IsPrefix.subset_of_card_le_card (hs : IsPrefix f s) (ht : IsPrefix f t) (hst : #s ≤ #t) :
+    s ⊆ t := fun a ha ↦ (ht a).mpr <| ((hs a).mp ha).trans_le hst
 
 variable [DecidableEq X]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Decidable (IsPrefix f s)
-  body: inferInstanceAs Decidable (forall _, _)
-
-中文:
-实例 :
-  签名: 可判定 (IsPrefix f s)
-  定义体: inferInstanceAs Decidable (forall _, _)
-
-Depends on / 依赖: Decidable
+/-
+**Numbering.** 是 Mathlib 中的一个实例，位于命名空间 `Numbering`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Decidable (IsPrefix f s) := inferInstanceAs Decidable (forall _, _)
+instance : Decidable (IsPrefix f s) := inferInstanceAs <| Decidable (∀ _, _)
 
-/--
-Definition of `prefixed` / `prefixed` 的定义
+/-- The set of numberings of which `s` is a prefix. -/
+/-
+**Numbering.prefixed** 是 Mathlib 中的一个定义，位于命名空间 `Numbering`。
+形式化陈述：prefixed (s : Finset X) : Finset (Numbering X)
+参数：s : Finset X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prefixed
-  signature: (s : Finset X)
-  body: {f | IsPrefix f s}
-
-中文:
-定义 prefixed
-  签名: (s : 有限集 X)
-  定义体: {f | IsPrefix f s}
-
-Depends on / 依赖: IsPrefix
+--- 原说明 ---
+The set of numberings of which `s` is a prefix.
 -/
 def prefixed (s : Finset X) : Finset (Numbering X) := {f | IsPrefix f s}
-
-/--
-lemma `mem_prefixed` / 引理 `mem_prefixed`
-
-English:
-lemma mem_prefixed
-  statement: f in prefixed s ↔ IsPrefix f s
-  proof: by simp [prefixed]
-
-中文:
-引理 mem_prefixed
-  结论: f in prefixed s ↔ IsPrefix f s
-  证明: by simp [prefixed]
+/-
+**Numbering.mem_prefixed** 是 Mathlib 中的一个定理，位于命名空间 `Numbering`。
+形式化陈述：∀ {X : Type u_1} [inst : Fintype X] {f : Numbering X} {s : Finset X} [inst
+_1 : DecidableEq X],   f ∈ Numbering.prefixed s ↔ f.IsPrefix s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[simp] lemma mem_prefixed : f in prefixed s ↔ IsPrefix f s := by simp [prefixed]
+@[simp] lemma mem_prefixed : f ∈ prefixed s ↔ IsPrefix f s := by simp [prefixed]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `prefixedEquiv` / `prefixedEquiv` 的定义
+/-- Decompose a numbering of which `s` is a prefix into a numbering of `s` and a numbering on `sᶜ`.
+-/
+/-
+**Numbering.prefixedEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Numbering`。
+形式化陈述：prefixedEquiv (s : Finset X) : prefixed s ≃ Numbering s × Numbering ↑(sᶜ) 
+where toFun f
+参数：s : Finset X。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition prefixedEquiv
-  signature: (s : Finset X)
-  body: { fst.toFun x := ⟨f.1 x, by simp [← mem_prefixed.1 f.2 x]⟩
-      fst.invFun n :=
-⟨f.1.symm ⟨n, n.2.trans_le by simpa using s.card_le_univ⟩, by
-          rw [mem_prefixed.1 f.2]; simpa using n.2⟩
-      fst.left_inv x := by simp
-      fst.right_inv n := by simp
-      snd.toFun x := ⟨f.1 x - #s, by
-        have := (mem_prefixed.1 f.2 x).not.1 (Finset.mem_compl.1 x.2)
-        simp at this ⊢
-        omega⟩
-      snd.invFun n :=
-⟨f.1.symm ⟨n + #s, Nat.add_lt_of_lt_sub by simpa using n.2⟩, by
-          rw [s.mem_compl]; rw [mem_prefixed.1 f.2]; simp⟩
-      snd.left_inv := by
-        rintro ⟨x, hx⟩
-        rw [s.mem_compl]; rw [mem_prefixed.1 f.2]; rw [not_lt] at hx
-        simp [Nat.sub_add_cancel hx]
-      snd.right_inv := by rintro ⟨n, hn⟩; simp }
-  invFun := fun (g, g') =>
-    { val.toFun x :=
-        if hx : x in s then
-.castLE (Fintype.card_subtype_le _) g ⟨x, hx⟩
-        else
-.cast (by simp [card_le_univ]) .addNat #s g' ⟨x, by simpa⟩
-      val.invFun n :=
-        if hn : n < #s then
-          g.symm ⟨n, by simpa using hn⟩
-        else
-          g'.symm ⟨n - #s, by simp; omega⟩
-      val.left_inv x := by
-        by_cases hx : x in s
-        · have : g ⟨x, hx⟩ < #s := by simpa using (g ⟨x, hx⟩).2
-          simp [hx, this]
-        · simp [hx]
-      val.right_inv n := by
-        obtain hns | hsn := lt_or_ge n.1 #s
-        · simp [hns]
-        · simp [hsn.not_gt, hsn, mem_compl.1 <| Subtype.prop _]
-      property := mem_prefixed.2 fun x => by
-        constructor
-        · intro hx
-          simpa [hx, -Fin.is_lt] using (g _).is_lt
-        · by_cases hx : x in s <;> simp [hx] }
-  left_inv f := by
-    ext x
-    by_cases hx : x in s
-    · simp [hx]
-    · rw [mem_prefixed.1 f.2, not_lt] at hx
-      simp [hx]
-  right_inv g := by simp +contextual [Prod.ext_iff, DFunLike.ext_iff]
-
-中文:
-定义 prefixedEquiv
-  签名: (s : 有限集 X)
-  定义体: { fst.toFun x := ⟨f.1 x, by simp [← mem_prefixed.1 f.2 x]⟩
-      fst.invFun n :=
-⟨f.1.symm ⟨n, n.2.trans_le by simpa using s.card_le_univ⟩, by
-          rw [mem_prefixed.1 f.2]; simpa using n.2⟩
-      fst.left_inv x := by simp
-      fst.right_inv n := by simp
-      snd.toFun x := ⟨f.1 x - #s, by
-        have := (mem_prefixed.1 f.2 x).not.1 (Finset.mem_compl.1 x.2)
-        simp at this ⊢
-        omega⟩
-      snd.invFun n :=
-⟨f.1.symm ⟨n + #s, Nat.add_lt_of_lt_sub by simpa using n.2⟩, by
-          rw [s.mem_compl]; rw [mem_prefixed.1 f.2]; simp⟩
-      snd.left_inv := by
-        rintro ⟨x, hx⟩
-        rw [s.mem_compl]; rw [mem_prefixed.1 f.2]; rw [not_lt] at hx
-        simp [Nat.sub_add_cancel hx]
-      snd.right_inv := by rintro ⟨n, hn⟩; simp }
-  invFun := fun (g, g') =>
-    { val.toFun x :=
-        if hx : x in s then
-.castLE (Fintype.card_subtype_le _) g ⟨x, hx⟩
-        else
-.cast (by simp [card_le_univ]) .addNat #s g' ⟨x, by simpa⟩
-      val.invFun n :=
-        if hn : n < #s then
-          g.symm ⟨n, by simpa using hn⟩
-        else
-          g'.symm ⟨n - #s, by simp; omega⟩
-      val.left_inv x := by
-        by_cases hx : x in s
-        · have : g ⟨x, hx⟩ < #s := by simpa using (g ⟨x, hx⟩).2
-          simp [hx, this]
-        · simp [hx]
-      val.right_inv n := by
-        obtain hns | hsn := lt_or_ge n.1 #s
-        · simp [hns]
-        · simp [hsn.not_gt, hsn, mem_compl.1 <| Subtype.prop _]
-      property := mem_prefixed.2 fun x => by
-        constructor
-        · intro hx
-          simpa [hx, -Fin.is_lt] using (g _).is_lt
-        · by_cases hx : x in s <;> simp [hx] }
-  left_inv f := by
-    ext x
-    by_cases hx : x in s
-    · simp [hx]
-    · rw [mem_prefixed.1 f.2, not_lt] at hx
-      simp [hx]
-  right_inv g := by simp +contextual [Prod.ext_iff, DFunLike.ext_iff]
-
-Depends on / 依赖: Finset, Finset.mem_compl, Nat.add_lt_of_lt_sub, Sigma.mk, add_lt_of_lt_sub, card_le_univ, flatMap, fst.invFun, fst.left_inv, fst.right_inv, fst.toFun, invFun, left_inv, mem_compl, mem_prefixed, ofList, right_inv, s.card_le_univ, s.mem_compl, snd.invFun
+--- 原说明 ---
+Decompose a numbering of which `s` is a prefix into a numbering of `s` and a num
+bering on `sᶜ`.
 -/
 def prefixedEquiv (s : Finset X) : prefixed s ≃ Numbering s × Numbering ↑(sᶜ) where
   toFun f :=
     { fst.toFun x := ⟨f.1 x, by simp [← mem_prefixed.1 f.2 x]⟩
       fst.invFun n :=
-⟨f.1.symm ⟨n, n.2.trans_le by simpa using s.card_le_univ⟩, by
+        ⟨f.1.symm ⟨n, n.2.trans_le <| by simpa using s.card_le_univ⟩, by
           rw [mem_prefixed.1 f.2]; simpa using n.2⟩
       fst.left_inv x := by simp
       fst.right_inv n := by simp
@@ -271,26 +141,26 @@ def prefixedEquiv (s : Finset X) : prefixed s ≃ Numbering s × Numbering ↑(s
         simp at this ⊢
         omega⟩
       snd.invFun n :=
-⟨f.1.symm ⟨n + #s, Nat.add_lt_of_lt_sub by simpa using n.2⟩, by
-          rw [s.mem_compl]; rw [mem_prefixed.1 f.2]; simp⟩
+        ⟨f.1.symm ⟨n + #s, Nat.add_lt_of_lt_sub <| by simpa using n.2⟩, by
+          rw [s.mem_compl, mem_prefixed.1 f.2]; simp⟩
       snd.left_inv := by
         rintro ⟨x, hx⟩
-        rw [s.mem_compl]; rw [mem_prefixed.1 f.2]; rw [not_lt] at hx
+        rw [s.mem_compl, mem_prefixed.1 f.2, not_lt] at hx
         simp [Nat.sub_add_cancel hx]
       snd.right_inv := by rintro ⟨n, hn⟩; simp }
-  invFun := fun (g, g') =>
+  invFun := fun (g, g') ↦
     { val.toFun x :=
-        if hx : x in s then
-.castLE (Fintype.card_subtype_le _) g ⟨x, hx⟩
+        if hx : x ∈ s then
+          g ⟨x, hx⟩ |>.castLE (Fintype.card_subtype_le _)
         else
-.cast (by simp [card_le_univ]) .addNat #s g' ⟨x, by simpa⟩
+          g' ⟨x, by simpa⟩ |>.addNat #s |>.cast (by simp [card_le_univ])
       val.invFun n :=
         if hn : n < #s then
           g.symm ⟨n, by simpa using hn⟩
         else
           g'.symm ⟨n - #s, by simp; omega⟩
       val.left_inv x := by
-        by_cases hx : x in s
+        by_cases hx : x ∈ s
         · have : g ⟨x, hx⟩ < #s := by simpa using (g ⟨x, hx⟩).2
           simp [hx, this]
         · simp [hx]
@@ -298,100 +168,105 @@ def prefixedEquiv (s : Finset X) : prefixed s ≃ Numbering s × Numbering ↑(s
         obtain hns | hsn := lt_or_ge n.1 #s
         · simp [hns]
         · simp [hsn.not_gt, hsn, mem_compl.1 <| Subtype.prop _]
-      property := mem_prefixed.2 fun x => by
+      property := mem_prefixed.2 fun x ↦ by
         constructor
         · intro hx
           simpa [hx, -Fin.is_lt] using (g _).is_lt
-        · by_cases hx : x in s <;> simp [hx] }
+        · by_cases hx : x ∈ s <;> simp [hx] }
   left_inv f := by
     ext x
-    by_cases hx : x in s
+    by_cases hx : x ∈ s
     · simp [hx]
     · rw [mem_prefixed.1 f.2, not_lt] at hx
       simp [hx]
   right_inv g := by simp +contextual [Prod.ext_iff, DFunLike.ext_iff]
-
-/--
-lemma `card_prefixed` / 引理 `card_prefixed`
-
-English:
-lemma card_prefixed
-  given: (s : Finset X)
-  statement: #(prefixed s) = (#s)! * (card X - #s)!
-  proof: by
-  simpa [-mem_prefixed] using Fintype.card_congr (prefixedEquiv s)
-
-@[simp]
-
-中文:
-引理 card_prefixed
-  条件: (s : 有限集 X)
-  结论: #(prefixed s) = (#s)! * (card X - #s)!
-  证明: by
-  simpa [-mem_prefixed] using Fintype.card_congr (prefixedEquiv s)
-
-@[simp]
-
-Depends on / 依赖: Fintype, Fintype.card_congr, card_congr, mem_prefixed, prefixedEquiv
+/-
+**Numbering.card_prefixed** 是 Mathlib 中的一个引理，位于命名空间 `Numbering`。
+形式化陈述：card_prefixed (s : Finset X) : #(prefixed s) = (#s)! * (card X - #s)!
+参数：s : Finset X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fintype.card_coe`：Fintype.card_coe (s : Finset α) [Fintype s] : Fintype.
+card s = #s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Fintype.card_prod`：Fintype.card_prod (α β : Type*) [Fintype α] [Fintype 
+β] : Fintype.card (α × β) = Fintype.card α * Fintype.card β
+· 使用定理 `Fintype.card_numbering`：∀ {X : Type u_1} [inst : Fintype X] [inst_1 : De
+cidableEq X], Fintype.card (Numbering X) = (Fintype.card X).factorial
+· 使用定理 `Fintype.card_congr'`：card_congr' {α β} [Fintype α] [Fintype β] (h : α = 
+β) : card α = card β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Fintype.card_subtype_compl`：Fintype.card_subtype_compl [Fintype α] (p : 
+α -> Prop) [Fintype { x // p x }] [Fintype { x // ¬p x }] : Fintype.card { x // 
+¬p x } = Fintype…
+· 使用定理 `Fintype.card_congr`：card_congr {α β} [Fintype α] [Fintype β] (f : α ≃ β)
+ : card α = card β
 -/
 lemma card_prefixed (s : Finset X) : #(prefixed s) = (#s)! * (card X - #s)! := by
   simpa [-mem_prefixed] using Fintype.card_congr (prefixedEquiv s)
 
 @[simp]
-/--
-lemma `dens_prefixed` / 引理 `dens_prefixed`
-
-English:
-lemma dens_prefixed
-  given: (s : Finset X)
-  statement: (prefixed s).dens = ((card X).choose #s : Rat>=0)⁻¹
-  proof: by
-  simp [dens, card_prefixed, Nat.cast_choose _ s.card_le_univ]
-
-中文:
-引理 dens_prefixed
-  条件: (s : 有限集 X)
-  结论: (prefixed s).dens = ((card X).choose #s : 有理数>=0)⁻¹
-  证明: by
-  simp [dens, card_prefixed, Nat.cast_choose _ s.card_le_univ]
-
-Depends on / 依赖: Nat.cast_choose, card_le_univ, card_prefixed, cast_choose, s.card_le_univ
+/-
+**Numbering.dens_prefixed** 是 Mathlib 中的一个引理，位于命名空间 `Numbering`。
+形式化陈述：dens_prefixed (s : Finset X) : (prefixed s).dens = ((card X).choose #s : R
+at>=0)⁻¹
+参数：s : Finset X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Numbering.card_prefixed`：card_prefixed (s : Finset X) : #(prefixed s) = 
+(#s)! * (card X - #s)!
+· 使用定理 `Nat.cast_mul`：∀ {α : Type u_1} [inst : NonAssocSemiring α] (m n : ℕ), ↑(
+m * n) = ↑m * ↑n
+· 使用定理 `Fintype.card_numbering`：∀ {X : Type u_1} [inst : Fintype X] [inst_1 : De
+cidableEq X], Fintype.card (Numbering X) = (Fintype.card X).factorial
+· 使用定理 `Nat.cast_choose`：cast_choose {a b : Nat} (h : a <= b) : (b.choose a : K)
+ = b ! / (a ! * (b - a)!)
+· 使用定理 `Finset.card_le_univ`：Finset.card_le_univ [Fintype α] (s : Finset α) : #s
+ <= Fintype.card α
+· 使用定理 `inv_div`：inv_div : (a / b)⁻¹ = b / a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma dens_prefixed (s : Finset X) : (prefixed s).dens = ((card X).choose #s : Rat>=0)⁻¹ := by
+lemma dens_prefixed (s : Finset X) : (prefixed s).dens = ((card X).choose #s : ℚ≥0)⁻¹ := by
   simp [dens, card_prefixed, Nat.cast_choose _ s.card_le_univ]
 
 -- TODO: This can be strengthened to an iff
-/--
-lemma `disjoint_prefixed_prefixed` / 引理 `disjoint_prefixed_prefixed`
-
-English:
-lemma disjoint_prefixed_prefixed
-  given: (hst : ¬ s subseteq t) (hts : ¬ t subseteq s)
-  proof: by
-  simp only [Finset.disjoint_left, mem_prefixed]
-  intro f hs ht
-  obtain hst' | hts' := Nat.le_total #s #t
-· exact hst hs.subset_of_card_le_card ht hst'
-· exact hts ht.subset_of_card_le_card hs hts'
-
-中文:
-引理 disjoint_prefixed_prefixed
-  条件: (hst : ¬ s subseteq t) (hts : ¬ t subseteq s)
-  证明: by
-  simp only [Finset.disjoint_left, mem_prefixed]
-  intro f hs ht
-  obtain hst' | hts' := Nat.le_total #s #t
-· exact hst hs.subset_of_card_le_card ht hst'
-· exact hts ht.subset_of_card_le_card hs hts'
-
-Depends on / 依赖: Finset, Finset.disjoint_left, Nat.le_total, disjoint_left, hs.subset_of_card_le_card, ht.subset_of_card_le_card, le_total, mem_prefixed, subset_of_card_le_card
+/-
+**Numbering.disjoint_prefixed_prefixed** 是 Mathlib 中的一个引理，位于命名空间 `Numbering`。
+形式化陈述：disjoint_prefixed_prefixed (hst : ¬ s subseteq t) (hts : ¬ t subseteq s) :
+ Disjoint (prefixed s) (prefixed t)
+参数：hst : ¬ s subseteq t；hts : ¬ t subseteq s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.le_total`：∀ (m n : ℕ), m ≤ n ∨ n ≤ m
+· 使用定理 `Numbering.IsPrefix.subset_of_card_le_card`：∀ {X : Type u_1} [inst : Fint
+ype X] {f : Numbering X} {s t : Finset X},   f.IsPrefix s → f.IsPrefix t → s.car
+d ≤ t.card → s ⊆ t
 -/
-lemma disjoint_prefixed_prefixed (hst : ¬ s subseteq t) (hts : ¬ t subseteq s) :
+lemma disjoint_prefixed_prefixed (hst : ¬ s ⊆ t) (hts : ¬ t ⊆ s) :
     Disjoint (prefixed s) (prefixed t) := by
   simp only [Finset.disjoint_left, mem_prefixed]
   intro f hs ht
   obtain hst' | hts' := Nat.le_total #s #t
-· exact hst hs.subset_of_card_le_card ht hst'
-· exact hts ht.subset_of_card_le_card hs hts'
+  · exact hst <| hs.subset_of_card_le_card ht hst'
+  · exact hts <| ht.subset_of_card_le_card hs hts'
 
 end Numbering
+

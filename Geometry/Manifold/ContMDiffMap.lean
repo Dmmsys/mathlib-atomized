@@ -27,40 +27,27 @@ variable {𝕜 : Type*} [NontriviallyNormedField 𝕜] {E : Type*} [NormedAddCom
   -- declare a manifold `N` over the pair `(F, G)`.
   {F : Type*}
   [NormedAddCommGroup F] [NormedSpace 𝕜 F] {G : Type*} [TopologicalSpace G]
-  {J : ModelWithCorners 𝕜 F G} {N : Type*} [TopologicalSpace N] [ChartedSpace G N] (n : WithTop Nat∞)
+  {J : ModelWithCorners 𝕜 F G} {N : Type*} [TopologicalSpace N] [ChartedSpace G N] (n : WithTop ℕ∞)
 
 open scoped Manifold
 
 variable (I I') in
-/--
-Definition of `ContMDiffMap` / `ContMDiffMap` 的定义
+/-- Bundled `n` times continuously differentiable maps,
+denoted as `C^n(I, M; I', M')` and `C^n(I, M; k)` (when the target is a normed space `k` with
+the trivial model) in the `Manifold` namespace. -/
+/-
+**ContMDiffMap** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ContMDiffMap
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ContMDiffMap
-  body: { f : M -> M' // CMDiff n f }
-
-@[inherit_doc]
-scoped[Manifold] notation "C^" n "⟮" I ", " M "; " I' ", " M' "⟯" => ContMDiffMap I I' M M' n
-
-@[inherit_doc]
-scoped[Manifold]
-  notation "C^" n "⟮" I ", " M "; " k "⟯" => ContMDiffMap I (modelWithCornersSelf k k) M k n
-
-中文:
-定义 ContMDiffMap
-  定义体: { f : M -> M' // CMDiff n f }
-
-@[inherit_doc]
-scoped[Manifold] notation "C^" n "⟮" I ", " M "; " I' ", " M' "⟯" => ContMDiffMap I I' M M' n
-
-@[inherit_doc]
-scoped[Manifold]
-  notation "C^" n "⟮" I ", " M "; " k "⟯" => ContMDiffMap I (modelWithCornersSelf k k) M k n
-
-Depends on / 依赖: CMDiff
+--- 原说明 ---
+Bundled `n` times continuously differentiable maps,
+denoted as `C^n(I, M; I', M')` and `C^n(I, M; k)` (when the target is a normed s
+pace `k` with
+the trivial model) in the `Manifold` namespace.
 -/
 def ContMDiffMap :=
-  { f : M -> M' // CMDiff n f }
+  { f : M → M' // CMDiff n f }
 
 @[inherit_doc]
 scoped[Manifold] notation "C^" n "⟮" I ", " M "; " I' ", " M' "⟯" => ContMDiffMap I I' M M' n
@@ -75,41 +62,28 @@ namespace ContMDiffMap
 
 variable {M} {M'} {n}
 
-/--
-Instance `instFunLike` / 实例 `instFunLike`
-
-English:
-instance instFunLike
-  signature: : FunLike C^n⟮I, M; I', M'⟯ M M' where
-  body: Subtype.val
-  coe_injective := Subtype.coe_injective
-
-中文:
-实例 instFunLike
-  签名: : 函数状 C^n⟮I, M; I', M'⟯ M M' where
-  定义体: Subtype.val
-  coe_injective := Subtype.coe_injective
-
-Depends on / 依赖: Subtype, Subtype.val
+/-
+**ContMDiffMap.instFunLike** 是 Mathlib 中的一个实例，位于命名空间 `ContMDiffMap`。
+形式化陈述：instFunLike : FunLike C^n⟮I, M; I', M'⟯ M M' where coe
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instFunLike : FunLike C^n⟮I, M; I', M'⟯ M M' where
   coe := Subtype.val
   coe_injective := Subtype.coe_injective
-
-/--
-theorem `contMDiff` / 定理 `contMDiff`
-
-English:
-theorem contMDiff
-  given: (f : C^n⟮I, M; I', M'⟯)
-  statement: CMDiff n f
-  proof: f.prop
-
-中文:
-定理 contMDiff
-  条件: (f : C^n⟮I, M; I', M'⟯)
-  结论: CMDiff n f
-  证明: f.prop
+/-
+**ContMDiffMap.contMDiff** 是 Mathlib 中的一个定理，位于命名空间 `ContMDiffMap`。
+形式化陈述：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedField 𝕜] {E : Type u_2} [inst_1
+ : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜 E] {E' : Type u_3} [inst_3 : 
+NormedAddCommGroup E'] [inst_4 : NormedSpace 𝕜 E'] {H : Type u_4}   [inst_5 : To
+pologicalSpace H] {H' : Type u_5} [inst_6 : TopologicalSpace H'] {I : ModelWithC
+orners 𝕜 E H}   {I' : ModelWithCorners 𝕜 E' H'} {M : Type u_6} [inst_7 : Topolog
+icalSpace M] [inst_8 : ChartedSpace H M]   {M' : Type u_7} [inst_9 : Topological
+Space M'] [inst_10 : ChartedSpace H' M'] {n : WithTop ℕ∞}   (f : ContMDiffMap I 
+I' M M' n), ContMDiff I I' n ⇑f
+参数：f : ContMDiffMap I I' M M' n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
 -/
 protected theorem contMDiff (f : C^n⟮I, M; I', M'⟯) : CMDiff n f := f.prop
 
@@ -118,81 +92,40 @@ attribute [to_additive_ignore_args 21] ContMDiffMap ContMDiffMap.instFunLike
 variable {f g : C^n⟮I, M; I', M'⟯}
 
 @[simp]
-/--
-theorem `coeFn_mk` / 定理 `coeFn_mk`
-
-English:
-theorem coeFn_mk
-  given: (f : M -> M') (hf : CMDiff n f)
-  proof: rfl
-
-中文:
-定理 coeFn_mk
-  条件: (f : M -> M') (hf : CMDiff n f)
-  证明: rfl
+/-
+**ContMDiffMap.coeFn_mk** 是 Mathlib 中的一个定理，位于命名空间 `ContMDiffMap`。
+形式化陈述：coeFn_mk (f : M -> M') (hf : CMDiff n f) : DFunLike.coe (F
+参数：f : M -> M'；hf : CMDiff n f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coeFn_mk (f : M -> M') (hf : CMDiff n f) :
+theorem coeFn_mk (f : M → M') (hf : CMDiff n f) :
     DFunLike.coe (F := C^n⟮I, M; I', M'⟯) ⟨f, hf⟩ = f :=
   rfl
-
-/--
-theorem `coe_injective` / 定理 `coe_injective`
-
-English:
-theorem coe_injective
-  given: ⦃f g
-  statement: C^n⟮I, M; I', M'⟯⦄ (h : (f : M -> M') = g) : f = g
-  proof: DFunLike.ext' h
-
-@[ext]
-
-中文:
-定理 coe_injective
-  条件: ⦃f g
-  结论: C^n⟮I, M; I', M'⟯⦄ (h : (f : M -> M') = g) : f = g
-  证明: DFunLike.ext' h
-
-@[ext]
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**ContMDiffMap.coe_injective** 是 Mathlib 中的一个定理，位于命名空间 `ContMDiffMap`。
+形式化陈述：coe_injective ⦃f g : C^n⟮I, M; I', M'⟯⦄ (h : (f : M -> M') = g) : f = g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext'`：ext' {f g : F} (h : (f : forall a : α, β a) = (g : forall
+ a : α, β a)) : f = g
 -/
-theorem coe_injective ⦃f g : C^n⟮I, M; I', M'⟯⦄ (h : (f : M -> M') = g) : f = g :=
+theorem coe_injective ⦃f g : C^n⟮I, M; I', M'⟯⦄ (h : (f : M → M') = g) : f = g :=
   DFunLike.ext' h
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: (h : forall x, f x = g x)
-  statement: f = g
-  proof: DFunLike.ext _ _ h
-
-中文:
-定理 ext
-  条件: (h : 对任意 x, f x = g x)
-  结论: f = g
-  证明: DFunLike.ext _ _ h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**ContMDiffMap.ext** 是 Mathlib 中的一个定理，位于命名空间 `ContMDiffMap`。
+形式化陈述：ext (h : forall x, f x = g x) : f = g
+参数：h : forall x, f x = g x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext (h : forall x, f x = g x) : f = g := DFunLike.ext _ _ h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ContinuousMapClass C^n⟮I, M; I', M'⟯ M M'
-  body: f.contMDiff.continuous
-
-中文:
-实例 :
-  签名: 连续映射类 C^n⟮I, M; I', M'⟯ M M'
-  定义体: f.contMDiff.continuous
-
-Depends on / 依赖: contMDiff, continuous, f.contMDiff.continuous
+theorem ext (h : ∀ x, f x = g x) : f = g := DFunLike.ext _ _ h
+/-
+**ContMDiffMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContMDiffMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ContinuousMapClass C^n⟮I, M; I', M'⟯ M M' where
   map_continuous f := f.contMDiff.continuous
@@ -201,154 +134,110 @@ instance : ContinuousMapClass C^n⟮I, M; I', M'⟯ M M' where
 nonrec def id : C^n⟮I, M; I, M⟯ :=
   ⟨id, contMDiff_id⟩
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- The composition of `C^n` maps, as a `C^n` map. -/
+/-
+**ContMDiffMap.comp** 是 Mathlib 中的一个定义，位于命名空间 `ContMDiffMap`。
+形式化陈述：comp (f : C^n⟮I', M'; I'', M''⟯) (g : C^n⟮I, M; I', M'⟯) : C^n⟮I, M; I'', 
+M''⟯ where val a
+参数：f : C^n⟮I', M'; I'', M''⟯；g : C^n⟮I, M; I', M'⟯。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (f : C^n⟮I', M'; I'', M''⟯) (g : C^n⟮I, M; I', M'⟯)
-  body: f (g a)
-  property := f.contMDiff.comp g.contMDiff
-
-@[simp]
-
-中文:
-定义 comp
-  签名: (f : C^n⟮I', M'; I'', M''⟯) (g : C^n⟮I, M; I', M'⟯)
-  定义体: f (g a)
-  property := f.contMDiff.comp g.contMDiff
-
-@[simp]
+--- 原说明 ---
+The composition of `C^n` maps, as a `C^n` map.
 -/
 def comp (f : C^n⟮I', M'; I'', M''⟯) (g : C^n⟮I, M; I', M'⟯) : C^n⟮I, M; I'', M''⟯ where
   val a := f (g a)
   property := f.contMDiff.comp g.contMDiff
 
 @[simp]
-/--
-theorem `comp_apply` / 定理 `comp_apply`
-
-English:
-theorem comp_apply
-  given: (f : C^n⟮I', M'; I'', M''⟯) (g : C^n⟮I, M; I', M'⟯) (x : M)
-  proof: rfl
-
-中文:
-定理 comp_apply
-  条件: (f : C^n⟮I', M'; I'', M''⟯) (g : C^n⟮I, M; I', M'⟯) (x : M)
-  证明: rfl
+/-
+**ContMDiffMap.comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContMDiffMap`。
+形式化陈述：comp_apply (f : C^n⟮I', M'; I'', M''⟯) (g : C^n⟮I, M; I', M'⟯) (x : M) : f
+.comp g x = f (g x)
+参数：f : C^n⟮I', M'; I'', M''⟯；g : C^n⟮I, M; I', M'⟯；x : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_apply (f : C^n⟮I', M'; I'', M''⟯) (g : C^n⟮I, M; I', M'⟯) (x : M) :
     f.comp g x = f (g x) :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: M'] : Inhabited C^n⟮I, M; I', M'⟯
-  body: ⟨⟨fun _ => default, contMDiff_const⟩⟩
-
-中文:
-实例 [可居
-  签名: M'] : 可居 C^n⟮I, M; I', M'⟯
-  定义体: ⟨⟨fun _ => default, contMDiff_const⟩⟩
-
-Depends on / 依赖: contMDiff_const
+/-
+**ContMDiffMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContMDiffMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited M'] : Inhabited C^n⟮I, M; I', M'⟯ :=
   ⟨⟨fun _ => default, contMDiff_const⟩⟩
 
-/--
-Definition of `const` / `const` 的定义
+/-- Constant map as a `C^n` map -/
+/-
+**ContMDiffMap.const** 是 Mathlib 中的一个定义，位于命名空间 `ContMDiffMap`。
+形式化陈述：const (y : M') : C^n⟮I, M; I', M'⟯
+参数：y : M'。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `contMDiff_const`：contMDiff_const : ContMDiff I I' n fun _ : M => c
 
-English:
-definition const
-  signature: (y : M')
-  body: ⟨fun _ => y, contMDiff_const⟩
-
-中文:
-定义 const
-  签名: (y : M')
-  定义体: ⟨fun _ => y, contMDiff_const⟩
-
-Depends on / 依赖: contMDiff_const
+--- 原说明 ---
+Constant map as a `C^n` map
 -/
 def const (y : M') : C^n⟮I, M; I', M'⟯ :=
   ⟨fun _ => y, contMDiff_const⟩
 
-/--
-Definition of `fst` / `fst` 的定义
+/-- The first projection of a product, as a `C^n` map. -/
+/-
+**ContMDiffMap.fst** 是 Mathlib 中的一个定义，位于命名空间 `ContMDiffMap`。
+形式化陈述：fst : C^n⟮I.prod I', M × M'; I, M⟯
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `contMDiff_fst`：contMDiff_fst : ContMDiff (I.prod J) I n (@Prod.fst M N)
 
-English:
-definition fst
-  signature: : C^n⟮I.prod I', M × M'; I, M⟯
-  body: ⟨Prod.fst, contMDiff_fst⟩
-
-中文:
-定义 fst
-  签名: : C^n⟮I.乘积 I', M × M'; I, M⟯
-  定义体: ⟨Prod.fst, contMDiff_fst⟩
-
-Depends on / 依赖: Prod.fst, contMDiff_fst
+--- 原说明 ---
+The first projection of a product, as a `C^n` map.
 -/
 def fst : C^n⟮I.prod I', M × M'; I, M⟯ :=
   ⟨Prod.fst, contMDiff_fst⟩
 
-/--
-Definition of `snd` / `snd` 的定义
+/-- The second projection of a product, as a `C^n` map. -/
+/-
+**ContMDiffMap.snd** 是 Mathlib 中的一个定义，位于命名空间 `ContMDiffMap`。
+形式化陈述：snd : C^n⟮I.prod I', M × M'; I', M'⟯
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `contMDiff_snd`：contMDiff_snd : ContMDiff (I.prod J) J n (@Prod.snd M N)
 
-English:
-definition snd
-  signature: : C^n⟮I.prod I', M × M'; I', M'⟯
-  body: ⟨Prod.snd, contMDiff_snd⟩
-
-中文:
-定义 snd
-  签名: : C^n⟮I.乘积 I', M × M'; I', M'⟯
-  定义体: ⟨Prod.snd, contMDiff_snd⟩
-
-Depends on / 依赖: Prod.snd, contMDiff_snd
+--- 原说明 ---
+The second projection of a product, as a `C^n` map.
 -/
 def snd : C^n⟮I.prod I', M × M'; I', M'⟯ :=
   ⟨Prod.snd, contMDiff_snd⟩
 
-/--
-Definition of `prodMk` / `prodMk` 的定义
+/-- Given two `C^n` maps `f` and `g`, this is the `C^n` map `x ↦ (f x, g x)`. -/
+/-
+**ContMDiffMap.prodMk** 是 Mathlib 中的一个定义，位于命名空间 `ContMDiffMap`。
+形式化陈述：prodMk (f : C^n⟮J, N; I, M⟯) (g : C^n⟮J, N; I', M'⟯) : C^n⟮J, N; I.prod I'
+, M × M'⟯
+参数：f : C^n⟮J, N; I, M⟯；g : C^n⟮J, N; I', M'⟯。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodMk
-  signature: (f : C^n⟮J, N; I, M⟯) (g : C^n⟮J, N; I', M'⟯)
-  body: ⟨fun x => (f x, g x), f.2.prodMk g.2⟩
-
-中文:
-定义 prodMk
-  签名: (f : C^n⟮J, N; I, M⟯) (g : C^n⟮J, N; I', M'⟯)
-  定义体: ⟨fun x => (f x, g x), f.2.prodMk g.2⟩
-
-Depends on / 依赖: prodMk
+--- 原说明 ---
+Given two `C^n` maps `f` and `g`, this is the `C^n` map `x ↦ (f x, g x)`.
 -/
 def prodMk (f : C^n⟮J, N; I, M⟯) (g : C^n⟮J, N; I', M'⟯) : C^n⟮J, N; I.prod I', M × M'⟯ :=
   ⟨fun x => (f x, g x), f.2.prodMk g.2⟩
 
 end ContMDiffMap
 
-/--
-Instance `ContinuousLinearMap.hasCoeToContMDiffMap` / 实例 `ContinuousLinearMap.hasCoeToContMDiffMap`
-
-English:
-instance ContinuousLinearMap.hasCoeToContMDiffMap
-  signature: :
-  body: ⟨fun f => ⟨f, f.contMDiff⟩⟩
-
-中文:
-实例 连续线性映射.hasCoeToContMDiffMap
-  签名: :
-  定义体: ⟨fun f => ⟨f, f.contMDiff⟩⟩
-
-Depends on / 依赖: contMDiff, f.contMDiff
+/-
+**ContinuousLinearMap.hasCoeToContMDiffMap** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：ContinuousLinearMap.hasCoeToContMDiffMap : Coe (E ->L[𝕜] E') C^n⟮𝓘(𝕜, E), 
+E; 𝓘(𝕜, E'), E'⟯
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.contMDiff`：ContinuousLinearMap.contMDiff (L : E ->L[
+𝕜] F) : ContMDiff 𝓘(𝕜, E) 𝓘(𝕜, F) n L
 -/
 instance ContinuousLinearMap.hasCoeToContMDiffMap :
-    Coe (E ->L[𝕜] E') C^n⟮𝓘(𝕜, E), E; 𝓘(𝕜, E'), E'⟯ :=
+    Coe (E →L[𝕜] E') C^n⟮𝓘(𝕜, E), E; 𝓘(𝕜, E'), E'⟯ :=
   ⟨fun f => ⟨f, f.contMDiff⟩⟩

@@ -17,9 +17,9 @@ there exists a pullback square
 ```
      t
   x₁ --> x₂
-  | |
-l | | r
-  v v
+  |      |
+l |      | r
+  v      v
   x₃ --> x₄
      b
 ```
@@ -37,28 +37,21 @@ variable {C : Type*} [Category* C]
   (Wₗ : MorphismProperty C)
   (Wᵣ : MorphismProperty C)
 
-/--
-Definition of `Span` / `Span` 的定义
+/-- A (Wₗ, Wᵣ)-span from c to c' is the data of an
+object `a : C`, together with a morphism `a ⟶ c` in Wₗ,
+and a morphism `a ⟶ c'` in Wᵣ. -/
+/-
+**CategoryTheory.Span** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     Cat
+egoryTheory.MorphismProperty C → CategoryTheory.MorphismProperty C → C → C → Typ
+e (max u_1 v_1)
+参数：max u_1 v_1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Span
-  parameters: (c c' : C)
-  axioms and operations (5):
-    - apex : C
-    - l : apex ⟶ c
-    - r : apex ⟶ c'
-    - wl : Wₗ l
-    - wr : Wᵣ r
-
-中文:
-结构 张成
-  参数: (c c' : C)
-  公理与运算 (5 个):
-    - apex : C
-    - l : apex ⟶ c
-    - r : apex ⟶ c'
-    - wl : Wₗ l
-    - wr : Wᵣ r
+--- 原说明 ---
+A (Wₗ, Wᵣ)-span from c to c' is the data of an
+object `a : C`, together with a morphism `a ⟶ c` in Wₗ,
+and a morphism `a ⟶ c'` in Wᵣ.
 -/
 structure Span (c c' : C) where
   /-- the apex of the span -/
@@ -74,26 +67,18 @@ namespace Span
 
 variable {Wₗ Wᵣ} {c c' : C}
 
-/--
-Definition of `Hom` / `Hom` 的定义
+/-- A morphism of spans is a morphism between the apices compatible
+with the projections. -/
+/-
+**CategoryTheory.Span.Hom** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory.Span`。
+形式化陈述：Hom (S₁ S₂ : Span Wₗ Wᵣ c c') : Type _ where /-- the map between the apice
+s -/ hom : S₁.apex ⟶ S₂.apex hom_l : hom ≫ S₂.l = S₁.l
+参数：S₁ S₂ : Span Wₗ Wᵣ c c'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (S₁ S₂ : Span Wₗ Wᵣ c c')
-  axioms and operations (3):
-    - hom : S₁.apex ⟶ S₂.apex
-    - hom_l : hom ≫ S₂.l = S₁.l  [default: by cat_disch]
-    - hom_r : hom ≫ S₂.r = S₁.r  [default: by cat_disch]
-
-中文:
-结构 态射
-  参数: (S₁ S₂ : 张成 Wₗ Wᵣ c c')
-  公理与运算 (3 个):
-    - hom : S₁.apex ⟶ S₂.apex
-    - hom_l : hom ≫ S₂.l = S₁.l  [默认: by cat_disch]
-    - hom_r : hom ≫ S₂.r = S₁.r  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch, hom_r
+--- 原说明 ---
+A morphism of spans is a morphism between the apices compatible
+with the projections.
 -/
 structure Hom (S₁ S₂ : Span Wₗ Wᵣ c c') : Type _ where
   /-- the map between the apices -/
@@ -105,22 +90,9 @@ attribute [reassoc (attr := simp)] Hom.hom_l Hom.hom_r
 attribute [grind =] Hom.hom_l Hom.hom_r
 
 @[simps!]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (Span Wₗ Wᵣ c c')
-  body: Hom
-  comp φ φ' := { hom := φ.hom ≫ φ'.hom }
-  id S := { hom := 𝟙 _ }
-
-中文:
-实例 :
-  签名: 范畴 (张成 Wₗ Wᵣ c c')
-  定义体: Hom
-  comp φ φ' := { hom := φ.hom ≫ φ'.hom }
-  id S := { hom := 𝟙 _ }
+/-
+**CategoryTheory.Span.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Span`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (Span Wₗ Wᵣ c c') where
   Hom := Hom
@@ -130,24 +102,14 @@ instance : Category (Span Wₗ Wᵣ c c') where
 attribute [grind =] id_hom comp_hom
 
 @[ext, grind ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {S S' : Span Wₗ Wᵣ c c'} {f g : S ⟶ S'} (h : f.hom = g.hom)
-  proof: by
-  cases f
-  cases g
-  grind
-
-中文:
-引理 hom_ext
-  条件: {S S' : 张成 Wₗ Wᵣ c c'} {f g : S ⟶ S'} (h : f.hom = g.hom)
-  证明: by
-  cases f
-  cases g
-  grind
+/-
+**CategoryTheory.Span.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Span`。
+形式化陈述：hom_ext {S S' : Span Wₗ Wᵣ c c'} {f g : S ⟶ S'} (h : f.hom = g.hom) : f = 
+g
+参数：h : f.hom = g.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma hom_ext {S S' : Span Wₗ Wᵣ c c'} {f g : S ⟶ S'} (h : f.hom = g.hom) :
     f = g := by
@@ -159,22 +121,16 @@ set_option mathlib.tactic.category.grind true in
 /-- Construct an isomorphism of spans from an isomorphism between the
 apices that is compatible with the projections. -/
 @[simps (attr := grind =)]
-/--
-Definition of `mkIso` / `mkIso` 的定义
+/-
+**CategoryTheory.Span.mkIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Span`。
+形式化陈述：mkIso {S S' : Span Wₗ Wᵣ c c'} (e : S.apex ≅ S'.apex) (hₗ : e.hom ≫ S'.l =
+ S.l
+参数：e : S.apex ≅ S'.apex。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkIso
-  signature: {S S' : Span Wₗ Wᵣ c c'} (e : S.apex ≅ S'.apex)
-  body: e.hom
-  inv.hom := e.inv
-
-中文:
-定义 mkIso
-  签名: {S S' : 张成 Wₗ Wᵣ c c'} (e : S.apex ≅ S'.apex)
-  定义体: e.hom
-  inv.hom := e.inv
-
-Depends on / 依赖: cat_disch, e.hom, e.inv, hom.hom, inv.hom
+--- 原说明 ---
+Construct an isomorphism of spans from an isomorphism between the
+apices that is compatible with the projections.
 -/
 def mkIso {S S' : Span Wₗ Wᵣ c c'} (e : S.apex ≅ S'.apex)
     (hₗ : e.hom ≫ S'.l = S.l := by cat_disch)
@@ -188,38 +144,40 @@ variable [Wₗ.ContainsIdentities] [Wᵣ.ContainsIdentities] [Wₗ.HasPullbacksA
     [Wₗ.IsStableUnderComposition] [Wᵣ.IsStableUnderComposition]
 
 open Limits in
+/-
+**CategoryTheory.Span.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Span`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {c c' c'' : C} (S₁ : Span Wₗ Wᵣ c c') (S₂ : Span Wₗ Wᵣ c' c'') : HasPullback S₁.r S₂.l :=
   letI : HasPullback S₂.l S₁.r := hasPullback_ofHasPullbacksAgainst S₂.wl S₁.wr
   hasPullback_symmetry _ _
-
+/-
+**CategoryTheory.Span.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Span`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (S₁ : Span Wₗ Wᵣ c c') : Wₗ.IsStableUnderBaseChangeAlong S₁.r :=
   MorphismProperty.IsStableUnderBaseChangeAgainst.isStableUnderBaseChangeAlong _ S₁.wr
-
+/-
+**CategoryTheory.Span.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Span`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (S₁ : Span Wₗ Wᵣ c c') : Wᵣ.IsStableUnderBaseChangeAlong S₁.l :=
   MorphismProperty.IsStableUnderBaseChangeAgainst.isStableUnderBaseChangeAlong _ S₁.wl
 
 /-- The identity span, where both legs are identity morphisms. -/
 @[simps (attr := grind =)]
-/--
-Definition of `id` / `id` 的定义
+/-
+**CategoryTheory.Span.id** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Span`。
+形式化陈述：id (c : C) : Span Wₗ Wᵣ c c where apex
+参数：c : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.ContainsIdentities.id_mem`：∀ {C : Type u
+} {inst : CategoryTheory.Category.{v, u} C} {W : CategoryTheory.MorphismProperty
+ C}   [self : W.ContainsIdentities] (X : C), W …
 
-English:
-definition id
-  signature: (c : C)
-  body: c
-  l := 𝟙 _
-  r := 𝟙 _
-  wl := MorphismProperty.ContainsIdentities.id_mem _
-  wr := MorphismProperty.ContainsIdentities.id_mem _
-
-中文:
-定义 id
-  签名: (c : C)
-  定义体: c
-  l := 𝟙 _
-  r := 𝟙 _
-  wl := MorphismProperty.ContainsIdentities.id_mem _
-  wr := MorphismProperty.ContainsIdentities.id_mem _
+--- 原说明 ---
+The identity span, where both legs are identity morphisms.
 -/
 def id (c : C) :
     Span Wₗ Wᵣ c c where
@@ -235,49 +193,40 @@ morphism properties are stable under the relevant base change, it is given by th
 total span
 ```
      P
-    / \
-   / \
-  X₁ X₂
- / \ / \
-c c' c''
+    /  \
+   /    \
+  X₁     X₂
+ /  \   /  \
+c     c'    c''
 ```
 where the top diamond is a pullback square
 -/
 @[simps (attr := grind =)]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**CategoryTheory.Span.comp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Span`。
+形式化陈述：comp {c c' c'' : C} (S₁ : Span Wₗ Wᵣ c c') (S₂ : Span Wₗ Wᵣ c' c'') : Span
+ Wₗ Wᵣ c c'' where apex
+参数：S₁ : Span Wₗ Wᵣ c c'；S₂ : Span Wₗ Wᵣ c' c''。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Span.instHasPullbackRL`：∀ {C : Type u_1} [inst : Category
+Theory.Category.{v_1, u_1} C] {Wₗ Wᵣ : CategoryTheory.MorphismProperty C}   [Wₗ.
+HasPullbacksAgainst Wᵣ] {c …
 
-English:
-definition comp
-  signature: {c c' c'' : C}
-  body: pullback S₁.r S₂.l
-  l := pullback.fst S₁.r S₂.l ≫ S₁.l
-  r := pullback.snd S₁.r S₂.l ≫ S₂.r
-  wl :=
-    IsStableUnderComposition.comp_mem
-      _ _ (IsStableUnderBaseChangeAlong.of_isPullback
-      (.flip <| .of_hasPullback S₁.r S₂.l) S₂.wl) S₁.wl
-  wr :=
-    IsStableUnderComposition.comp_mem
-    _ _ (IsStableUnderBaseChangeAlong.of_isPullback
-      (.of_hasPullback S₁.r S₂.l) S₁.wr) S₂.wr
-
-中文:
-定义 comp
-  签名: {c c' c'' : C}
-  定义体: pullback S₁.r S₂.l
-  l := pullback.fst S₁.r S₂.l ≫ S₁.l
-  r := pullback.snd S₁.r S₂.l ≫ S₂.r
-  wl :=
-    IsStableUnderComposition.comp_mem
-      _ _ (IsStableUnderBaseChangeAlong.of_isPullback
-      (.flip <| .of_hasPullback S₁.r S₂.l) S₂.wl) S₁.wl
-  wr :=
-    IsStableUnderComposition.comp_mem
-    _ _ (IsStableUnderBaseChangeAlong.of_isPullback
-      (.of_hasPullback S₁.r S₂.l) S₁.wr) S₂.wr
-
-Depends on / 依赖: pullback
+--- 原说明 ---
+The composition of two spans: if the relevant pullback exists and if the
+morphism properties are stable under the relevant base change, it is given by th
+e
+total span
+```
+     P
+    /  \
+   /    \
+  X₁     X₂
+ /  \   /  \
+c     c'    c''
+```
+where the top diamond is a pullback square
 -/
 noncomputable def comp {c c' c'' : C}
     (S₁ : Span Wₗ Wᵣ c c') (S₂ : Span Wₗ Wᵣ c' c'') :
@@ -297,3 +246,4 @@ noncomputable def comp {c c' c'' : C}
 end Span
 
 end CategoryTheory
+

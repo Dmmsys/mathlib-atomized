@@ -25,90 +25,79 @@ For the special case `n = 3`, an interconversion is provided with `Affine.Triang
 
 open Set
 
-/--
-Definition of `Polygon` / `Polygon` 的定义
+/-- A polygon with `n` vertices in a type `P`. -/
+/-
+**Polygon** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → ℕ → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Polygon
-  parameters: (P : Type*) (n : Nat)
-  axioms and operations (1):
-    - vertices : Fin n -> P
-
-中文:
-结构 多边形
-  参数: (P : 类型) (n : 自然数)
-  公理与运算 (1 个):
-    - vertices : 有限集 n -> P
+--- 原说明 ---
+A polygon with `n` vertices in a type `P`.
 -/
-structure Polygon (P : Type*) (n : Nat) where
+structure Polygon (P : Type*) (n : ℕ) where
   /-- The vertices of the polygon, indexed by `Fin n`. -/
-  vertices : Fin n -> P
+  vertices : Fin n → P
 
 namespace Polygon
 
-variable {R V P : Type*} {n : Nat}
+variable {R V P : Type*} {n : ℕ}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- A coercion to function so that vertices can
+be written as `poly i` instead of `poly.vertices i` -/
+/-
+**Polygon.** 是 Mathlib 中的一个实例，位于命名空间 `Polygon`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: CoeFun (Polygon P n) (fun _ => Fin n -> P)
-  body: Polygon.vertices
-
-中文:
-实例 :
-  签名: CoeFun (多边形 P n) (fun _ => 有限集 n -> P)
-  定义体: Polygon.vertices
-
-Depends on / 依赖: Polygon, Polygon.vertices, vertices
+--- 原说明 ---
+A coercion to function so that vertices can
+be written as `poly i` instead of `poly.vertices i`
 -/
-instance : CoeFun (Polygon P n) (fun _ => Fin n -> P) where
+instance : CoeFun (Polygon P n) (fun _ => Fin n → P) where
   coe := Polygon.vertices
 
-/--
-Definition of `HasNondegenerateEdges` / `HasNondegenerateEdges` 的定义
+/-- A polygon has nondegenerate edges if adjacent vertices are distinct. -/
+/-
+**Polygon.HasNondegenerateEdges** 是 Mathlib 中的一个定义，位于命名空间 `Polygon`。
+形式化陈述：HasNondegenerateEdges (poly : Polygon P n) : Prop
+参数：poly : Polygon P n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HasNondegenerateEdges
-  signature: (poly : Polygon P n)
-  body: forall i : Fin n, poly i != poly (finRotate n i)
-
-中文:
-定义 HasNondegenerateEdges
-  签名: (poly : 多边形 P n)
-  定义体: forall i : Fin n, poly i != poly (finRotate n i)
-
-Depends on / 依赖: finRotate
+--- 原说明 ---
+A polygon has nondegenerate edges if adjacent vertices are distinct.
 -/
 def HasNondegenerateEdges (poly : Polygon P n) : Prop :=
-  forall i : Fin n, poly i != poly (finRotate n i)
-
-/--
-theorem `HasNondegenerateEdges.two_le` / 定理 `HasNondegenerateEdges.two_le`
-
-English:
-theorem HasNondegenerateEdges.two_le
-  statement: [NeZero n] {poly : Polygon P n}
-  proof: by
-  by_contra! hlt
-  interval_cases n
-  · simp_all only [neZero_zero_iff_false]
-  · exact h 0 (by simp)
-
-中文:
-定理 HasNondegenerateEdges.two_le
-  结论: [NeZero n] {poly : 多边形 P n}
-  证明: by
-  by_contra! hlt
-  interval_cases n
-  · simp_all only [neZero_zero_iff_false]
-  · exact h 0 (by simp)
-
-Depends on / 依赖: interval_cases, neZero_zero_iff_false
+  ∀ i : Fin n, poly i ≠ poly (finRotate n i)
+/-
+**Polygon.HasNondegenerateEdges.two_le** 是 Mathlib 中的一个定理，位于命名空间 `Polygon.HasNon
+degenerateEdges`。
+形式化陈述：∀ {P : Type u_3} {n : ℕ} [NeZero n] {poly : Polygon P n}, poly.HasNondegen
+erateEdges → 2 ≤ n
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `finRotate_one`：finRotate_one : finRotate 1 = Equiv.refl _
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Nat.ge_of_not_lt`：∀ {n m : ℕ}, ¬n < m → n ≥ m
+· 使用定理 `Mathlib.Tactic.IntervalCases.of_lt_right`：of_lt_right [LinearOrder α] (h
+ : (a : α) < b) (eq : b = b') : ¬b' <= a
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
 -/
 theorem HasNondegenerateEdges.two_le [NeZero n] {poly : Polygon P n}
-    (h : poly.HasNondegenerateEdges) : 2 <= n := by
+    (h : poly.HasNondegenerateEdges) : 2 ≤ n := by
   by_contra! hlt
   interval_cases n
   · simp_all only [neZero_zero_iff_false]
@@ -117,155 +106,170 @@ theorem HasNondegenerateEdges.two_le [NeZero n] {poly : Polygon P n}
 variable [Ring R] [AddCommGroup V] [Module R V] [AddTorsor V P]
 
 variable (R) in
-/--
-Definition of `edgePath` / `edgePath` 的定义
+/-- The `i`-th edge as an affine map `R →ᵃ[R] P`. -/
+/-
+**Polygon.edgePath** 是 Mathlib 中的一个定义，位于命名空间 `Polygon`。
+形式化陈述：edgePath (poly : Polygon P n) (i : Fin n) : R ->ᵃ[R] P
+参数：poly : Polygon P n；i : Fin n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition edgePath
-  signature: (poly : Polygon P n) (i : Fin n)
-  body: AffineMap.lineMap (poly i) (poly (finRotate n i))
-
-中文:
-定义 edgePath
-  签名: (poly : 多边形 P n) (i : 有限集 n)
-  定义体: AffineMap.lineMap (poly i) (poly (finRotate n i))
-
-Depends on / 依赖: AffineMap, AffineMap.lineMap, finRotate, lineMap
+--- 原说明 ---
+The `i`-th edge as an affine map `R →ᵃ[R] P`.
 -/
-def edgePath (poly : Polygon P n) (i : Fin n) : R ->ᵃ[R] P :=
+def edgePath (poly : Polygon P n) (i : Fin n) : R →ᵃ[R] P :=
   AffineMap.lineMap (poly i) (poly (finRotate n i))
 
 variable (R) in
-/--
-Definition of `edgeSet` / `edgeSet` 的定义
+/-- The `i`-th edge as a set of points using an `affineSegment`. -/
+/-
+**Polygon.edgeSet** 是 Mathlib 中的一个定义，位于命名空间 `Polygon`。
+形式化陈述：edgeSet [PartialOrder R] (poly : Polygon P n) (i : Fin n) : Set P
+参数：poly : Polygon P n；i : Fin n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition edgeSet
-  signature: [PartialOrder R] (poly : Polygon P n) (i : Fin n)
-  body: affineSegment R (poly i) (poly (finRotate n i))
-
-中文:
-定义 edgeSet
-  签名: [偏序 R] (poly : 多边形 P n) (i : 有限集 n)
-  定义体: affineSegment R (poly i) (poly (finRotate n i))
-
-Depends on / 依赖: affineSegment, finRotate
+--- 原说明 ---
+The `i`-th edge as a set of points using an `affineSegment`.
 -/
 def edgeSet [PartialOrder R] (poly : Polygon P n) (i : Fin n) : Set P :=
   affineSegment R (poly i) (poly (finRotate n i))
 
 variable (R) in
-/--
-theorem `edgeSet_eq_image_edgePath` / 定理 `edgeSet_eq_image_edgePath`
+/-- The `edgeSet` is equivalent to the image of the `edgePath`. -/
+/-
+**Polygon.edgeSet_eq_image_edgePath** 是 Mathlib 中的一个定理，位于命名空间 `Polygon`。
+形式化陈述：edgeSet_eq_image_edgePath [PartialOrder R] (poly : Polygon P n) (i : Fin n
+) : poly.edgeSet R i = poly.edgePath R i '' Icc (0 : R) 1
+参数：poly : Polygon P n；i : Fin n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem edgeSet_eq_image_edgePath
-  given: [PartialOrder R] (poly : Polygon P n) (i : Fin n)
-  proof: rfl
-
-中文:
-定理 edgeSet_eq_image_edgePath
-  条件: [偏序 R] (poly : 多边形 P n) (i : 有限集 n)
-  证明: rfl
+--- 原说明 ---
+The `edgeSet` is equivalent to the image of the `edgePath`.
 -/
 theorem edgeSet_eq_image_edgePath [PartialOrder R] (poly : Polygon P n) (i : Fin n) :
     poly.edgeSet R i = poly.edgePath R i '' Icc (0 : R) 1 := rfl
 
 variable (R) in
-/--
-Definition of `boundary` / `boundary` 的定义
+/-- The boundary of the polygon is the union of all its edges. -/
+/-
+**Polygon.boundary** 是 Mathlib 中的一个定义，位于命名空间 `Polygon`。
+形式化陈述：boundary [PartialOrder R] (poly : Polygon P n) : Set P
+参数：poly : Polygon P n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition boundary
-  signature: [PartialOrder R] (poly : Polygon P n)
-  body: ⋃ i, poly.edgeSet R i
-
-中文:
-定义 boundary
-  签名: [偏序 R] (poly : 多边形 P n)
-  定义体: ⋃ i, poly.edgeSet R i
-
-Depends on / 依赖: edgeSet, poly.edgeSet
+--- 原说明 ---
+The boundary of the polygon is the union of all its edges.
 -/
 def boundary [PartialOrder R] (poly : Polygon P n) : Set P :=
   ⋃ i, poly.edgeSet R i
 
 variable (R) in
-/--
-Definition of `HasNondegenerateVertices` / `HasNondegenerateVertices` 的定义
+/-- A polygon has nondegenerate vertices if any three consecutive vertices
+are affinely independent. -/
+/-
+**Polygon.HasNondegenerateVertices** 是 Mathlib 中的一个定义，位于命名空间 `Polygon`。
+形式化陈述：HasNondegenerateVertices [NeZero n] (poly : Polygon P n) : Prop
+参数：poly : Polygon P n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HasNondegenerateVertices
-  signature: [NeZero n] (poly : Polygon P n)
-  body: forall i : Fin n, AffineIndependent R ![poly i, poly (i + 1), poly (i + 2)]
-
-中文:
-定义 HasNondegenerateVertices
-  签名: [NeZero n] (poly : 多边形 P n)
-  定义体: forall i : Fin n, AffineIndependent R ![poly i, poly (i + 1), poly (i + 2)]
-
-Depends on / 依赖: AffineIndependent
+--- 原说明 ---
+A polygon has nondegenerate vertices if any three consecutive vertices
+are affinely independent.
 -/
 def HasNondegenerateVertices [NeZero n] (poly : Polygon P n) : Prop :=
-  forall i : Fin n, AffineIndependent R ![poly i, poly (i + 1), poly (i + 2)]
+  ∀ i : Fin n, AffineIndependent R ![poly i, poly (i + 1), poly (i + 2)]
 
-/--
-theorem `HasNondegenerateVertices.hasNondegenerateEdges` / 定理 `HasNondegenerateVertices.hasNondegenerateEdges`
+/-- Polygons with nondegenerate vertices also have nondegenerate edges. -/
+/-
+**Polygon.HasNondegenerateVertices.hasNondegenerateEdges** 是 Mathlib 中的一个定理，位于命名
+空间 `Polygon.HasNondegenerateVertices`。
+形式化陈述：∀ {R : Type u_1} {V : Type u_2} {P : Type u_3} {n : ℕ} [inst : Ring R] [in
+st_1 : AddCommGroup V]   [inst_2 : _root_.Module R V] [inst_3 : AddTorsor V P] [
+inst_4 : NeZero n] [Nontrivial R] {poly : Polygon P n},   Polygon.HasNondegenera
+teVertices R poly → poly.HasNondegenerateEdges
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.exists_eq_succ_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → ∃ k, n = k.succ
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
+· 使用引理 `Fin.neZero`：neZero {n : Nat} (i : Fin n) : NeZero n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `finRotate_apply`：finRotate_apply (i : Fin n) : haveI
+· 使用定理 `Function.Injective.ne`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, Func
+tion.Injective f → ∀ {a₁ a₂ : α}, a₁ ≠ a₂ → f a₁ ≠ f a₂
+· 使用定理 `AffineIndependent.injective`：∀ {k : Type u_1} {V : Type u_2} {P : Type u
+_3} [inst : Ring k] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module k V]   [in
+st_3 : AddTorsor …
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem HasNondegenerateVertices.hasNondegenerateEdges
-  statement: [NeZero n] [Nontrivial R]
-  proof: by
-  obtain ⟨m, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (NeZero.ne n)
-  intro i
-  simpa using (h i).injective.ne (by decide : (0 : Fin 3) != 1)
-
-中文:
-定理 HasNondegenerateVertices.hasNondegenerateEdges
-  结论: [NeZero n] [非平凡 R]
-  证明: by
-  obtain ⟨m, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (NeZero.ne n)
-  intro i
-  simpa using (h i).injective.ne (by decide : (0 : Fin 3) != 1)
-
-Depends on / 依赖: Nat.exists_eq_succ_of_ne_zero, NeZero, NeZero.ne, exists_eq_succ_of_ne_zero, injective, injective.ne
+--- 原说明 ---
+Polygons with nondegenerate vertices also have nondegenerate edges.
 -/
 theorem HasNondegenerateVertices.hasNondegenerateEdges [NeZero n] [Nontrivial R]
     {poly : Polygon P n}
     (h : poly.HasNondegenerateVertices R) : poly.HasNondegenerateEdges := by
   obtain ⟨m, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (NeZero.ne n)
   intro i
-  simpa using (h i).injective.ne (by decide : (0 : Fin 3) != 1)
-
-/--
-theorem `HasNondegenerateVertices.three_le` / 定理 `HasNondegenerateVertices.three_le`
-
-English:
-theorem HasNondegenerateVertices.three_le
-  statement: [NeZero n] [Nontrivial R] {poly : Polygon P n}
-  proof: by
-  have := h.hasNondegenerateEdges.two_le
-  by_contra! hlt
-  interval_cases n
-  exact (h 0).injective.ne (by decide : (0 : Fin 3) != 2) (by simp)
-
-中文:
-定理 HasNondegenerateVertices.three_le
-  结论: [NeZero n] [非平凡 R] {poly : 多边形 P n}
-  证明: by
-  have := h.hasNondegenerateEdges.two_le
-  by_contra! hlt
-  interval_cases n
-  exact (h 0).injective.ne (by decide : (0 : Fin 3) != 2) (by simp)
-
-Depends on / 依赖: h.hasNondegenerateEdges.two_le, hasNondegenerateEdges, injective, injective.ne, interval_cases, two_le
+  simpa using (h i).injective.ne (by decide : (0 : Fin 3) ≠ 1)
+/-
+**Polygon.HasNondegenerateVertices.three_le** 是 Mathlib 中的一个定理，位于命名空间 `Polygon.H
+asNondegenerateVertices`。
+形式化陈述：∀ {R : Type u_1} {V : Type u_2} {P : Type u_3} {n : ℕ} [inst : Ring R] [in
+st_1 : AddCommGroup V]   [inst_2 : _root_.Module R V] [inst_3 : AddTorsor V P] [
+inst_4 : NeZero n] [Nontrivial R] {poly : Polygon P n},   Polygon.HasNondegenera
+teVertices R poly → 3 ≤ n
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polygon.HasNondegenerateEdges.two_le`：∀ {P : Type u_3} {n : ℕ} [NeZero n
+] {poly : Polygon P n}, poly.HasNondegenerateEdges → 2 ≤ n
+· 使用定理 `Polygon.HasNondegenerateVertices.hasNondegenerateEdges`：∀ {R : Type u_1}
+ {V : Type u_2} {P : Type u_3} {n : ℕ} [inst : Ring R] [inst_1 : AddCommGroup V]
+   [inst_2 : _root_.Module R V] [inst_3 : Ad…
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `Function.Injective.ne`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, Func
+tion.Injective f → ∀ {a₁ a₂ : α}, a₁ ≠ a₂ → f a₁ ≠ f a₂
+· 使用定理 `AffineIndependent.injective`：∀ {k : Type u_1} {V : Type u_2} {P : Type u
+_3} [inst : Ring k] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module k V]   [in
+st_3 : AddTorsor …
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Nat.ge_of_not_lt`：∀ {n m : ℕ}, ¬n < m → n ≥ m
+· 使用定理 `Mathlib.Tactic.IntervalCases.of_lt_right`：of_lt_right [LinearOrder α] (h
+ : (a : α) < b) (eq : b = b') : ¬b' <= a
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Mathlib.Tactic.IntervalCases.of_le_left`：of_le_left [LE α] (h : (a : α) 
+<= b) (eq : a = a') : a' <= b
 -/
 theorem HasNondegenerateVertices.three_le [NeZero n] [Nontrivial R] {poly : Polygon P n}
-    (h : poly.HasNondegenerateVertices R) : 3 <= n := by
+    (h : poly.HasNondegenerateVertices R) : 3 ≤ n := by
   have := h.hasNondegenerateEdges.two_le
   by_contra! hlt
   interval_cases n
-  exact (h 0).injective.ne (by decide : (0 : Fin 3) != 2) (by simp)
+  exact (h 0).injective.ne (by decide : (0 : Fin 3) ≠ 2) (by simp)
 
 end Polygon
 
@@ -276,32 +280,15 @@ namespace Affine.Triangle
 variable {R V P : Type*}
 variable [Ring R] [AddCommGroup V] [Module R V] [AddTorsor V P]
 
-/--
-Definition of `toPolygon` / `toPolygon` 的定义
+/-- Embedding from affine triangles to polygons with 3 vertices. -/
+/-
+**Affine.Triangle.toPolygon** 是 Mathlib 中的一个定义，位于命名空间 `Affine.Triangle`。
+形式化陈述：toPolygon : Affine.Triangle R P ↪ Polygon P 3 where toFun t
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toPolygon
-  signature: : Affine.Triangle R P ↪ Polygon P 3 where
-  body: ⟨t.points⟩
-  inj' t₁ t₂ h := by
-    apply Simplex.ext
-    apply_fun Polygon.vertices at h
-    simp_all
-
-@[simp]
-
-中文:
-定义 toPolygon
-  签名: : 仿射.Triangle R P ↪ 多边形 P 3 where
-  定义体: ⟨t.points⟩
-  inj' t₁ t₂ h := by
-    apply Simplex.ext
-    apply_fun Polygon.vertices at h
-    simp_all
-
-@[simp]
-
-Depends on / 依赖: points, t.points
+--- 原说明 ---
+Embedding from affine triangles to polygons with 3 vertices.
 -/
 def toPolygon : Affine.Triangle R P ↪ Polygon P 3 where
   toFun t := ⟨t.points⟩
@@ -311,20 +298,14 @@ def toPolygon : Affine.Triangle R P ↪ Polygon P 3 where
     simp_all
 
 @[simp]
-/--
-lemma `toPolygon_vertices` / 引理 `toPolygon_vertices`
-
-English:
-lemma toPolygon_vertices
-  given: (t : Affine.Triangle R P)
-  statement: (t.toPolygon).vertices = t.points
-  proof: rfl
-
-中文:
-引理 toPolygon_vertices
-  条件: (t : 仿射.Triangle R P)
-  结论: (t.toPolygon).vertices = t.points
-  证明: rfl
+/-
+**Affine.Triangle.toPolygon_vertices** 是 Mathlib 中的一个引理，位于命名空间 `Affine.Triangle`
+。
+形式化陈述：toPolygon_vertices (t : Affine.Triangle R P) : (t.toPolygon).vertices = t.
+points
+参数：t : Affine.Triangle R P。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toPolygon_vertices (t : Affine.Triangle R P) : (t.toPolygon).vertices = t.points := rfl
 
@@ -336,30 +317,17 @@ variable {R V P : Type*}
 variable [Ring R] [AddCommGroup V] [Module R V] [AddTorsor V P]
 
 variable (R) in
-/--
-Definition of `toTriangle` / `toTriangle` 的定义
+/-- Convert a polygon with 3 nondegenerate vertices to an `Affine.Triangle`. -/
+/-
+**Polygon.toTriangle** 是 Mathlib 中的一个定义，位于命名空间 `Polygon`。
+形式化陈述：toTriangle (p : Polygon P 3) (h : p.HasNondegenerateVertices R) : Affine.T
+riangle R P
+参数：p : Polygon P 3；h : p.HasNondegenerateVertices R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toTriangle
-  signature: (p : Polygon P 3) (h : p.HasNondegenerateVertices R)
-  body: ⟨p.vertices, by
-    have : p.vertices = ![p.vertices 0, p.vertices 1, p.vertices 2] := List.ofFn_inj.mp rfl
-    rw [this]
-    apply h⟩
-
-@[simp]
-
-中文:
-定义 toTriangle
-  签名: (p : 多边形 P 3) (h : p.HasNondegenerateVertices R)
-  定义体: ⟨p.vertices, by
-    have : p.vertices = ![p.vertices 0, p.vertices 1, p.vertices 2] := List.ofFn_inj.mp rfl
-    rw [this]
-    apply h⟩
-
-@[simp]
-
-Depends on / 依赖: List.ofFn_inj.mp, ofFn_inj, p.vertices, vertices
+--- 原说明 ---
+Convert a polygon with 3 nondegenerate vertices to an `Affine.Triangle`.
 -/
 def toTriangle (p : Polygon P 3) (h : p.HasNondegenerateVertices R) :
     Affine.Triangle R P :=
@@ -369,38 +337,31 @@ def toTriangle (p : Polygon P 3) (h : p.HasNondegenerateVertices R) :
     apply h⟩
 
 @[simp]
-/--
-lemma `toTriangle_points` / 引理 `toTriangle_points`
-
-English:
-lemma toTriangle_points
-  given: (p : Polygon P 3) (h : p.HasNondegenerateVertices R)
-  proof: rfl
-
-中文:
-引理 toTriangle_points
-  条件: (p : 多边形 P 3) (h : p.HasNondegenerateVertices R)
-  证明: rfl
+/-
+**Polygon.toTriangle_points** 是 Mathlib 中的一个引理，位于命名空间 `Polygon`。
+形式化陈述：toTriangle_points (p : Polygon P 3) (h : p.HasNondegenerateVertices R) : (
+p.toTriangle R h).points = p.vertices
+参数：p : Polygon P 3；h : p.HasNondegenerateVertices R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 lemma toTriangle_points (p : Polygon P 3) (h : p.HasNondegenerateVertices R) :
     (p.toTriangle R h).points = p.vertices := rfl
 
 /-- Converting a 3-polygon to a triangle and back yields the original polygon. -/
 @[simp]
-/--
-lemma `toTriangle_toPolygon` / 引理 `toTriangle_toPolygon`
+/-
+**Polygon.toTriangle_toPolygon** 是 Mathlib 中的一个引理，位于命名空间 `Polygon`。
+形式化陈述：toTriangle_toPolygon (poly : Polygon P 3) (h : poly.HasNondegenerateVertic
+es R) : (poly.toTriangle R h).toPolygon = poly
+参数：poly : Polygon P 3；h : poly.HasNondegenerateVertices R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 
-English:
-lemma toTriangle_toPolygon
-  given: (poly : Polygon P 3) (h : poly.HasNondegenerateVertices R)
-  proof: by
-  rfl
-
-中文:
-引理 toTriangle_toPolygon
-  条件: (poly : 多边形 P 3) (h : poly.HasNondegenerateVertices R)
-  证明: by
-  rfl
+--- 原说明 ---
+Converting a 3-polygon to a triangle and back yields the original polygon.
 -/
 lemma toTriangle_toPolygon (poly : Polygon P 3) (h : poly.HasNondegenerateVertices R) :
     (poly.toTriangle R h).toPolygon = poly := by
@@ -413,32 +374,40 @@ namespace Affine.Triangle
 variable {R V P : Type*}
 variable [Ring R] [AddCommGroup V] [Module R V] [AddTorsor V P]
 
-/--
-theorem `toPolygon_hasNondegenerateVertices` / 定理 `toPolygon_hasNondegenerateVertices`
+/-- The polygon obtained from a triangle has nondegenerate vertices. -/
+/-
+**Affine.Triangle.toPolygon_hasNondegenerateVertices** 是 Mathlib 中的一个定理，位于命名空间 `
+Affine.Triangle`。
+形式化陈述：toPolygon_hasNondegenerateVertices (t : Affine.Triangle R P) : t.toPolygon
+.HasNondegenerateVertices R
+参数：t : Affine.Triangle R P。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.ofFn_inj`：ofFn_inj {n : Nat} {f g : Fin n -> α} : ofFn f = ofFn g ↔
+ f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Affine.Simplex.independent`：∀ {k : Type u_1} {V : Type u_2} {P : Type u_
+5} [inst : Ring k] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module k V]   [ins
+t_3 : AddTorsor …
+· 使用定理 `Fintype.complete`：∀ {α : Type u_4} [self : Fintype α] (x : α), x ∈ Finty
+pe.elems
+· 使用定理 `Nat.le_of_lt`：∀ {n m : ℕ}, n < m → n ≤ m
+· 使用定理 `Nat.le_refl`：∀ (n : ℕ), n ≤ n
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `AffineIndependent.comm_right`：AffineIndependent.comm_right {p₁ p₂ p₃ : P
+} (h : AffineIndependent k ![p₁, p₂, p₃]) : AffineIndependent k ![p₁, p₃, p₂]
+· 使用定理 `AffineIndependent.comm_left`：AffineIndependent.comm_left {p₁ p₂ p₃ : P} 
+(h : AffineIndependent k ![p₁, p₂, p₃]) : AffineIndependent k ![p₂, p₁, p₃]
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
 
-English:
-theorem toPolygon_hasNondegenerateVertices
-  given: (t : Affine.Triangle R P)
-  proof: by
-  have ht : t.points = ![t.points 0, t.points 1, t.points 2] := List.ofFn_inj.mp rfl
-  have h : AffineIndependent R ![t.points 0, t.points 1, t.points 2] := by
-    simpa [← ht] using t.independent
-  intro i
-  fin_cases i <;> dsimp
-  exacts [h, h.comm_left.comm_right, h.comm_right.comm_left]
-
-中文:
-定理 toPolygon_hasNondegenerateVertices
-  条件: (t : 仿射.Triangle R P)
-  证明: by
-  have ht : t.points = ![t.points 0, t.points 1, t.points 2] := List.ofFn_inj.mp rfl
-  have h : AffineIndependent R ![t.points 0, t.points 1, t.points 2] := by
-    simpa [← ht] using t.independent
-  intro i
-  fin_cases i <;> dsimp
-  exacts [h, h.comm_left.comm_right, h.comm_right.comm_left]
-
-Depends on / 依赖: AffineIndependent, List.ofFn_inj.mp, comm_left, comm_right, exacts, fin_cases, h.comm_left.comm_right, h.comm_right.comm_left, independent, ofFn_inj, points, t.independent, t.points
+--- 原说明 ---
+The polygon obtained from a triangle has nondegenerate vertices.
 -/
 theorem toPolygon_hasNondegenerateVertices (t : Affine.Triangle R P) :
     t.toPolygon.HasNondegenerateVertices R := by
@@ -451,23 +420,24 @@ theorem toPolygon_hasNondegenerateVertices (t : Affine.Triangle R P) :
 
 /-- Converting a triangle to a polygon and back yields the original triangle. -/
 @[simp]
-/--
-lemma `toPolygon_toTriangle` / 引理 `toPolygon_toTriangle`
+/-
+**Affine.Triangle.toPolygon_toTriangle** 是 Mathlib 中的一个引理，位于命名空间 `Affine.Triangl
+e`。
+形式化陈述：toPolygon_toTriangle (t : Affine.Triangle R P) : t.toPolygon.toTriangle R 
+(toPolygon_hasNondegenerateVertices t) = t
+参数：t : Affine.Triangle R P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Affine.Triangle.toPolygon_hasNondegenerateVertices`：toPolygon_hasNondege
+nerateVertices (t : Affine.Triangle R P) : t.toPolygon.HasNondegenerateVertices 
+R
 
-English:
-lemma toPolygon_toTriangle
-  given: (t : Affine.Triangle R P)
-  proof: by
-  rfl
-
-中文:
-引理 toPolygon_toTriangle
-  条件: (t : 仿射.Triangle R P)
-  证明: by
-  rfl
+--- 原说明 ---
+Converting a triangle to a polygon and back yields the original triangle.
 -/
 lemma toPolygon_toTriangle (t : Affine.Triangle R P) :
     t.toPolygon.toTriangle R (toPolygon_hasNondegenerateVertices t) = t := by
   rfl
 
 end Affine.Triangle
+

@@ -29,54 +29,19 @@ variable {C D : Type*} [Category C] [Category D]
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: {F G : D} (f : F ⟶ G) [Epi f], HasPullback f f] [HasPushouts D]
-  body: ⟨⟨{
-.pt W := PullbackCone.combine f f _ (fun k => pullback.isLimit (f.app k) (f.app k))
-.fst left := PullbackCone.combine f f _ (fun k => pullback.isLimit (f.app k) (f.app k))
-.snd right := PullbackCone.combine f f _ (fun k => pullback.isLimit (f.app k) (f.app k))
-.condition w := PullbackCone.combine f f _ (fun k => pullback.isLimit (f.app k) (f.app k))
-    isColimit := evaluationJointlyReflectsColimits _ fun k => by
-      have := IsRegularEpiCategory.regularEpiOfEpi (f.app k)
-      refine .equivOfNatIsoOfIso ?_ _ _ ?_ (isColimitCoforkOfEffectiveEpi (f.app k)
-        (pullback.cone (f.app k) (f.app k))
-        (pullback.isLimit (f.app k) (f.app k)))
-      · refine NatIso.ofComponents (by rintro (_ | _); exacts [Iso.refl _, Iso.refl _]) ?_
-        rintro _ _ (_ | _)
-        all_goals cat_disch
-· exact Cocone.ext (Iso.refl _) by rintro (_ | _ | _); all_goals cat_disch }⟩⟩
-
-中文:
-实例 [对任意
-  签名: {F G : D} (f : F ⟶ G) [满态射 f], HasPullback f f] [有Pushouts D]
-  定义体: ⟨⟨{
-.pt W := PullbackCone.combine f f _ (fun k => pullback.isLimit (f.app k) (f.app k))
-.fst left := PullbackCone.combine f f _ (fun k => pullback.isLimit (f.app k) (f.app k))
-.snd right := PullbackCone.combine f f _ (fun k => pullback.isLimit (f.app k) (f.app k))
-.condition w := PullbackCone.combine f f _ (fun k => pullback.isLimit (f.app k) (f.app k))
-    isColimit := evaluationJointlyReflectsColimits _ fun k => by
-      have := IsRegularEpiCategory.regularEpiOfEpi (f.app k)
-      refine .equivOfNatIsoOfIso ?_ _ _ ?_ (isColimitCoforkOfEffectiveEpi (f.app k)
-        (pullback.cone (f.app k) (f.app k))
-        (pullback.isLimit (f.app k) (f.app k)))
-      · refine NatIso.ofComponents (by rintro (_ | _); exacts [Iso.refl _, Iso.refl _]) ?_
-        rintro _ _ (_ | _)
-        all_goals cat_disch
-· exact Cocone.ext (Iso.refl _) by rintro (_ | _ | _); all_goals cat_disch }⟩⟩
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall {F G : D} (f : F ⟶ G) [Epi f], HasPullback f f] [HasPushouts D]
+instance [∀ {F G : D} (f : F ⟶ G) [Epi f], HasPullback f f] [HasPushouts D]
     [IsRegularEpiCategory D] :
     IsRegularEpiCategory (C ⥤ D) where
   regularEpiOfEpi {F G} f := ⟨⟨{
-.pt W := PullbackCone.combine f f _ (fun k => pullback.isLimit (f.app k) (f.app k))
-.fst left := PullbackCone.combine f f _ (fun k => pullback.isLimit (f.app k) (f.app k))
-.snd right := PullbackCone.combine f f _ (fun k => pullback.isLimit (f.app k) (f.app k))
-.condition w := PullbackCone.combine f f _ (fun k => pullback.isLimit (f.app k) (f.app k))
-    isColimit := evaluationJointlyReflectsColimits _ fun k => by
+    W := PullbackCone.combine f f _ (fun k ↦ pullback.isLimit (f.app k) (f.app k)) |>.pt
+    left := PullbackCone.combine f f _ (fun k ↦ pullback.isLimit (f.app k) (f.app k)) |>.fst
+    right := PullbackCone.combine f f _ (fun k ↦ pullback.isLimit (f.app k) (f.app k)) |>.snd
+    w := PullbackCone.combine f f _ (fun k ↦ pullback.isLimit (f.app k) (f.app k)) |>.condition
+    isColimit := evaluationJointlyReflectsColimits _ fun k ↦ by
       have := IsRegularEpiCategory.regularEpiOfEpi (f.app k)
       refine .equivOfNatIsoOfIso ?_ _ _ ?_ (isColimitCoforkOfEffectiveEpi (f.app k)
         (pullback.cone (f.app k) (f.app k))
@@ -84,6 +49,7 @@ instance [forall {F G : D} (f : F ⟶ G) [Epi f], HasPullback f f] [HasPushouts 
       · refine NatIso.ofComponents (by rintro (_ | _); exacts [Iso.refl _, Iso.refl _]) ?_
         rintro _ _ (_ | _)
         all_goals cat_disch
-· exact Cocone.ext (Iso.refl _) by rintro (_ | _ | _); all_goals cat_disch }⟩⟩
+      · exact Cocone.ext (Iso.refl _) <| by rintro (_ | _ | _); all_goals cat_disch }⟩⟩
 
 end CategoryTheory.Functor
+

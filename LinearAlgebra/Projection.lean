@@ -45,101 +45,88 @@ variable {p}
 
 open Submodule
 
-/--
-theorem `ker_id_sub_eq_of_proj` / 定理 `ker_id_sub_eq_of_proj`
-
-English:
-theorem ker_id_sub_eq_of_proj
-  given: {f : E ->ₗ[R] p} (hf : forall x : p, f x = x)
-  proof: by
-  ext x
-  simp only [comp_apply, mem_ker, subtype_apply, sub_apply, id_apply, sub_eq_zero]
-  exact ⟨fun h => h.symm ▸ Submodule.coe_mem _, fun hx => by rw [hf ⟨x, hx⟩, Subtype.coe_mk]⟩
-
-中文:
-定理 ker_id_sub_eq_of_proj
-  条件: {f : E ->ₗ[R] p} (hf : 对任意 x : p, f x = x)
-  证明: by
-  ext x
-  simp only [comp_apply, mem_ker, subtype_apply, sub_apply, id_apply, sub_eq_zero]
-  exact ⟨fun h => h.symm ▸ Submodule.coe_mem _, fun hx => by rw [hf ⟨x, hx⟩, Subtype.coe_mk]⟩
-
-Depends on / 依赖: Submodule, Submodule.coe_mem, Subtype, Subtype.coe_mk, coe_mem, coe_mk, comp_apply, h.symm, id_apply, mem_ker, sub_apply, sub_eq_zero, subtype_apply
+/-
+**LinearMap.ker_id_sub_eq_of_proj** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：ker_id_sub_eq_of_proj {f : E ->ₗ[R] p} (hf : forall x : p, f x = x) : ker 
+(id - p.subtype.comp f) = p
+参数：hf : forall x : p, f x = x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Submodule.coe_mem`：coe_mem (x : p) : (x : M) in p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subtype.coe_mk`：coe_mk (a h) : (@mk α p a h : α) = a
 -/
-theorem ker_id_sub_eq_of_proj {f : E ->ₗ[R] p} (hf : forall x : p, f x = x) :
+theorem ker_id_sub_eq_of_proj {f : E →ₗ[R] p} (hf : ∀ x : p, f x = x) :
     ker (id - p.subtype.comp f) = p := by
   ext x
   simp only [comp_apply, mem_ker, subtype_apply, sub_apply, id_apply, sub_eq_zero]
   exact ⟨fun h => h.symm ▸ Submodule.coe_mem _, fun hx => by rw [hf ⟨x, hx⟩, Subtype.coe_mk]⟩
-
-/--
-theorem `range_eq_of_proj` / 定理 `range_eq_of_proj`
-
-English:
-theorem range_eq_of_proj
-  given: {f : E ->ₗ[R] p} (hf : forall x : p, f x = x)
-  statement: range f = ⊤
-  proof: range_eq_top.2 fun x => ⟨x, hf x⟩
-
-中文:
-定理 range_eq_of_proj
-  条件: {f : E ->ₗ[R] p} (hf : 对任意 x : p, f x = x)
-  结论: range f = ⊤
-  证明: range_eq_top.2 fun x => ⟨x, hf x⟩
-
-Depends on / 依赖: range_eq_top
+/-
+**LinearMap.range_eq_of_proj** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：range_eq_of_proj {f : E ->ₗ[R] p} (hf : forall x : p, f x = x) : range f =
+ ⊤
+参数：hf : forall x : p, f x = x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LinearMap.range_eq_top`：range_eq_top [RingHomSurjective τ₁₂] {f : M ->ₛₗ
+[τ₁₂] M₂} : range f = ⊤ ↔ Surjective f
 -/
-theorem range_eq_of_proj {f : E ->ₗ[R] p} (hf : forall x : p, f x = x) : range f = ⊤ :=
+theorem range_eq_of_proj {f : E →ₗ[R] p} (hf : ∀ x : p, f x = x) : range f = ⊤ :=
   range_eq_top.2 fun x => ⟨x, hf x⟩
-
-/--
-theorem `isCompl_of_proj` / 定理 `isCompl_of_proj`
-
-English:
-theorem isCompl_of_proj
-  given: {f : E ->ₗ[R] p} (hf : forall x : p, f x = x)
-  statement: IsCompl p (ker f)
-  proof: by
-  constructor
-  · rw [disjoint_iff_inf_le]
-    rintro x ⟨hpx, hfx⟩
-    rw [SetLike.mem_coe]; rw [mem_ker]; rw [hf ⟨x]; rw [hpx⟩]; rw [mk_eq_zero] at hfx
-    simp only [hfx, zero_mem]
-  · rw [codisjoint_iff_le_sup]
-    intro x _
-    rw [mem_sup']
-    refine ⟨f x, ⟨x - f x, ?_⟩, add_sub_cancel _ _⟩
-    rw [mem_ker]; rw [map_sub]; rw [hf]; rw [sub_self]
-
-中文:
-定理 isCompl_of_proj
-  条件: {f : E ->ₗ[R] p} (hf : 对任意 x : p, f x = x)
-  结论: 是补集 p (ker f)
-  证明: by
-  constructor
-  · rw [disjoint_iff_inf_le]
-    rintro x ⟨hpx, hfx⟩
-    rw [SetLike.mem_coe]; rw [mem_ker]; rw [hf ⟨x]; rw [hpx⟩]; rw [mk_eq_zero] at hfx
-    simp only [hfx, zero_mem]
-  · rw [codisjoint_iff_le_sup]
-    intro x _
-    rw [mem_sup']
-    refine ⟨f x, ⟨x - f x, ?_⟩, add_sub_cancel _ _⟩
-    rw [mem_ker]; rw [map_sub]; rw [hf]; rw [sub_self]
-
-Depends on / 依赖: SetLike, SetLike.mem_coe, add_sub_cancel, codisjoint_iff_le_sup, disjoint_iff_inf_le, map_sub, mem_coe, mem_ker, mem_sup, mk_eq_zero, sub_self, zero_mem
+/-
+**LinearMap.isCompl_of_proj** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：isCompl_of_proj {f : E ->ₗ[R] p} (hf : forall x : p, f x = x) : IsCompl p 
+(ker f)
+参数：hf : forall x : p, f x = x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `disjoint_iff_inf_le`：disjoint_iff_inf_le : Disjoint a b ↔ a ⊓ b <= ⊥
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Submodule.mk_eq_zero`：mk_eq_zero {x} (h : x in p) : (⟨x, h⟩ : p) = 0 ↔ x
+ = 0
+· 使用定理 `LinearMap.mem_ker`：mem_ker {f : M ->ₛₗ[τ₁₂] M₂} {y} : y in ker f ↔ f y =
+ 0
+· 使用定理 `SetLike.mem_coe`：mem_coe {x : B} : x in (p : Set B) ↔ x in p
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `codisjoint_iff_le_sup`：∀ {α : Type u_1} [inst : SemilatticeSup α] [inst_
+1 : OrderTop α] {a b : α}, Codisjoint a b ↔ ⊤ ≤ a ⊔ b
+· 使用定理 `Submodule.mem_sup'`：mem_sup' : x in p ⊔ p' ↔ exists (y : p) (z : p'), (y
+ : M) + z = x
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `add_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G), a + 
+(b - a) = b
 -/
-theorem isCompl_of_proj {f : E ->ₗ[R] p} (hf : forall x : p, f x = x) : IsCompl p (ker f) := by
+theorem isCompl_of_proj {f : E →ₗ[R] p} (hf : ∀ x : p, f x = x) : IsCompl p (ker f) := by
   constructor
   · rw [disjoint_iff_inf_le]
     rintro x ⟨hpx, hfx⟩
-    rw [SetLike.mem_coe]; rw [mem_ker]; rw [hf ⟨x]; rw [hpx⟩]; rw [mk_eq_zero] at hfx
+    rw [SetLike.mem_coe, mem_ker, hf ⟨x, hpx⟩, mk_eq_zero] at hfx
     simp only [hfx, zero_mem]
   · rw [codisjoint_iff_le_sup]
     intro x _
     rw [mem_sup']
     refine ⟨f x, ⟨x - f x, ?_⟩, add_sub_cancel _ _⟩
-    rw [mem_ker]; rw [map_sub]; rw [hf]; rw [sub_self]
+    rw [mem_ker, map_sub, hf, sub_self]
 
 end LinearMap
 
@@ -147,225 +134,232 @@ namespace Submodule
 
 open LinearMap
 
-/--
-Definition of `prodEquivOfIsCompl` / `prodEquivOfIsCompl` 的定义
+/-- If `q` is a complement of `p`, then `p × q` is isomorphic to `E`. -/
+/-
+**Submodule.prodEquivOfIsCompl** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：prodEquivOfIsCompl (h : IsCompl p q) : (p × q) ≃ₗ[R] E
+参数：h : IsCompl p q。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodEquivOfIsCompl
-  signature: (h : IsCompl p q)
-  body: by
-  apply LinearEquiv.ofBijective (p.subtype.coprod q.subtype)
-  constructor
-  · rw [← ker_eq_bot, ker_coprod_of_disjoint_range, ker_subtype, ker_subtype, prod_bot]
-    rw [range_subtype]; rw [range_subtype]
-    exact h.1
-  · rw [← range_eq_top, ← sup_eq_range, h.sup_eq_top]
-
-@[simp]
-
-中文:
-定义 prodEquivOfIsCompl
-  签名: (h : 是补集 p q)
-  定义体: by
-  apply LinearEquiv.ofBijective (p.subtype.coprod q.subtype)
-  constructor
-  · rw [← ker_eq_bot, ker_coprod_of_disjoint_range, ker_subtype, ker_subtype, prod_bot]
-    rw [range_subtype]; rw [range_subtype]
-    exact h.1
-  · rw [← range_eq_top, ← sup_eq_range, h.sup_eq_top]
-
-@[simp]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.ofBijective, coprod, h.sup_eq_top, ker_coprod_of_disjoint_range, ker_eq_bot, ker_subtype, ofBijective, p.subtype.coprod, prod_bot, q.subtype, range_eq_top, range_subtype, subtype, sup_eq_range, sup_eq_top
+--- 原说明 ---
+If `q` is a complement of `p`, then `p × q` is isomorphic to `E`.
 -/
 def prodEquivOfIsCompl (h : IsCompl p q) : (p × q) ≃ₗ[R] E := by
   apply LinearEquiv.ofBijective (p.subtype.coprod q.subtype)
   constructor
   · rw [← ker_eq_bot, ker_coprod_of_disjoint_range, ker_subtype, ker_subtype, prod_bot]
-    rw [range_subtype]; rw [range_subtype]
+    rw [range_subtype, range_subtype]
     exact h.1
   · rw [← range_eq_top, ← sup_eq_range, h.sup_eq_top]
 
 @[simp]
-/--
-theorem `coe_prodEquivOfIsCompl` / 定理 `coe_prodEquivOfIsCompl`
-
-English:
-theorem coe_prodEquivOfIsCompl
-  given: (h : IsCompl p q)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_prodEquivOfIsCompl
-  条件: (h : 是补集 p q)
-  证明: rfl
-
-@[simp]
+/-
+**Submodule.coe_prodEquivOfIsCompl** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：coe_prodEquivOfIsCompl (h : IsCompl p q) : (prodEquivOfIsCompl p q h : p ×
+ q ->ₗ[R] E) = p.subtype.coprod q.subtype
+参数：h : IsCompl p q。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_prodEquivOfIsCompl (h : IsCompl p q) :
-    (prodEquivOfIsCompl p q h : p × q ->ₗ[R] E) = p.subtype.coprod q.subtype := rfl
+    (prodEquivOfIsCompl p q h : p × q →ₗ[R] E) = p.subtype.coprod q.subtype := rfl
 
 @[simp]
-/--
-theorem `coe_prodEquivOfIsCompl'` / 定理 `coe_prodEquivOfIsCompl'`
-
-English:
-theorem coe_prodEquivOfIsCompl'
-  given: (h : IsCompl p q) (x : p × q)
-  proof: rfl
-
-中文:
-定理 coe_prodEquivOfIsCompl'
-  条件: (h : 是补集 p q) (x : p × q)
-  证明: rfl
+/-
+**Submodule.coe_prodEquivOfIsCompl'** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：coe_prodEquivOfIsCompl' (h : IsCompl p q) (x : p × q) : prodEquivOfIsCompl
+ p q h x = x.1 + x.2
+参数：h : IsCompl p q；x : p × q。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_prodEquivOfIsCompl' (h : IsCompl p q) (x : p × q) :
     prodEquivOfIsCompl p q h x = x.1 + x.2 := rfl
-
-/--
-theorem `prodEquivOfIsCompl_symm_apply_left` / 定理 `prodEquivOfIsCompl_symm_apply_left`
-
-English:
-theorem prodEquivOfIsCompl_symm_apply_left
-  given: (h : IsCompl p q) (x : p)
-  proof: (prodEquivOfIsCompl p q h).symm_apply_eq.2 by simp
-
-中文:
-定理 prodEquivOfIsCompl_symm_apply_left
-  条件: (h : 是补集 p q) (x : p)
-  证明: (prodEquivOfIsCompl p q h).symm_apply_eq.2 by simp
-
-Depends on / 依赖: prodEquivOfIsCompl, symm_apply_eq
+/-
+**Submodule.prodEquivOfIsCompl_symm_apply_left** 是 Mathlib 中的一个定理，位于命名空间 `Submod
+ule`。
+形式化陈述：prodEquivOfIsCompl_symm_apply_left (h : IsCompl p q) (x : p) : (prodEquivO
+fIsCompl p q h).symm x = (x, 0)
+参数：h : IsCompl p q；x : p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LinearEquiv.symm_apply_eq`：symm_apply_eq {x y} : e.symm x = y ↔ x = e y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem prodEquivOfIsCompl_symm_apply_left (h : IsCompl p q) (x : p) :
     (prodEquivOfIsCompl p q h).symm x = (x, 0) :=
-(prodEquivOfIsCompl p q h).symm_apply_eq.2 by simp
-
-/--
-theorem `prodEquivOfIsCompl_symm_apply_right` / 定理 `prodEquivOfIsCompl_symm_apply_right`
-
-English:
-theorem prodEquivOfIsCompl_symm_apply_right
-  given: (h : IsCompl p q) (x : q)
-  proof: (prodEquivOfIsCompl p q h).symm_apply_eq.2 by simp
-
-中文:
-定理 prodEquivOfIsCompl_symm_apply_right
-  条件: (h : 是补集 p q) (x : q)
-  证明: (prodEquivOfIsCompl p q h).symm_apply_eq.2 by simp
-
-Depends on / 依赖: prodEquivOfIsCompl, symm_apply_eq
+  (prodEquivOfIsCompl p q h).symm_apply_eq.2 <| by simp
+/-
+**Submodule.prodEquivOfIsCompl_symm_apply_right** 是 Mathlib 中的一个定理，位于命名空间 `Submo
+dule`。
+形式化陈述：prodEquivOfIsCompl_symm_apply_right (h : IsCompl p q) (x : q) : (prodEquiv
+OfIsCompl p q h).symm x = (0, x)
+参数：h : IsCompl p q；x : q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LinearEquiv.symm_apply_eq`：symm_apply_eq {x y} : e.symm x = y ↔ x = e y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem prodEquivOfIsCompl_symm_apply_right (h : IsCompl p q) (x : q) :
     (prodEquivOfIsCompl p q h).symm x = (0, x) :=
-(prodEquivOfIsCompl p q h).symm_apply_eq.2 by simp
-
-/--
-theorem `prodEquivOfIsCompl_symm_apply_fst_eq_zero` / 定理 `prodEquivOfIsCompl_symm_apply_fst_eq_zero`
-
-English:
-theorem prodEquivOfIsCompl_symm_apply_fst_eq_zero
-  given: (h : IsCompl p q) {x : E}
-  proof: by
-  conv_rhs => rw [← (prodEquivOfIsCompl p q h).apply_symm_apply x]
-  rw [coe_prodEquivOfIsCompl']; rw [Submodule.add_mem_iff_left _ (Submodule.coe_mem _)]; rw [mem_right_iff_eq_zero_of_disjoint h.disjoint]
-
-中文:
-定理 prodEquivOfIsCompl_symm_apply_fst_eq_zero
-  条件: (h : 是补集 p q) {x : E}
-  证明: by
-  conv_rhs => rw [← (prodEquivOfIsCompl p q h).apply_symm_apply x]
-  rw [coe_prodEquivOfIsCompl']; rw [Submodule.add_mem_iff_left _ (Submodule.coe_mem _)]; rw [mem_right_iff_eq_zero_of_disjoint h.disjoint]
-
-Depends on / 依赖: Submodule, Submodule.add_mem_iff_left, Submodule.coe_mem, add_mem_iff_left, apply_symm_apply, coe_mem, coe_prodEquivOfIsCompl, conv_rhs, disjoint, h.disjoint, mem_right_iff_eq_zero_of_disjoint, prodEquivOfIsCompl
+  (prodEquivOfIsCompl p q h).symm_apply_eq.2 <| by simp
+/-
+**Submodule.prodEquivOfIsCompl_symm_apply_fst_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 
+`Submodule`。
+形式化陈述：prodEquivOfIsCompl_symm_apply_fst_eq_zero (h : IsCompl p q) {x : E} : ((pr
+odEquivOfIsCompl p q h).symm x).1 = 0 ↔ x in q
+参数：h : IsCompl p q。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearEquiv.apply_symm_apply`：apply_symm_apply (c : M₂) : e (e.symm c) =
+ c
+· 使用定理 `Submodule.coe_prodEquivOfIsCompl'`：coe_prodEquivOfIsCompl' (h : IsCompl 
+p q) (x : p × q) : prodEquivOfIsCompl p q h x = x.1 + x.2
+· 使用定理 `Submodule.add_mem_iff_left`：∀ {R : Type u} {M : Type v} [inst : Ring R] 
+[inst_1 : AddCommGroup M] {module_M : _root_.Module R M} (p : Submodule R M)   {
+x y : M}, y ∈ p …
+· 使用定理 `Submodule.coe_mem`：coe_mem (x : p) : (x : M) in p
+· 使用定理 `Submodule.mem_right_iff_eq_zero_of_disjoint`：mem_right_iff_eq_zero_of_di
+sjoint {p p' : Submodule R M} (h : Disjoint p p') {x : p} : (x : M) in p' ↔ x = 
+0
+· 使用定理 `IsCompl.disjoint`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Bou
+ndedOrder α] {x y : α}, IsCompl x y → Disjoint x y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem prodEquivOfIsCompl_symm_apply_fst_eq_zero (h : IsCompl p q) {x : E} :
-    ((prodEquivOfIsCompl p q h).symm x).1 = 0 ↔ x in q := by
+    ((prodEquivOfIsCompl p q h).symm x).1 = 0 ↔ x ∈ q := by
   conv_rhs => rw [← (prodEquivOfIsCompl p q h).apply_symm_apply x]
-  rw [coe_prodEquivOfIsCompl']; rw [Submodule.add_mem_iff_left _ (Submodule.coe_mem _)]; rw [mem_right_iff_eq_zero_of_disjoint h.disjoint]
-
-/--
-theorem `prodEquivOfIsCompl_symm_apply_snd_eq_zero` / 定理 `prodEquivOfIsCompl_symm_apply_snd_eq_zero`
-
-English:
-theorem prodEquivOfIsCompl_symm_apply_snd_eq_zero
-  given: (h : IsCompl p q) {x : E}
-  proof: by
-  conv_rhs => rw [← (prodEquivOfIsCompl p q h).apply_symm_apply x]
-  rw [coe_prodEquivOfIsCompl']; rw [Submodule.add_mem_iff_right _ (Submodule.coe_mem _)]; rw [mem_left_iff_eq_zero_of_disjoint h.disjoint]
-
-@[simp]
-
-中文:
-定理 prodEquivOfIsCompl_symm_apply_snd_eq_zero
-  条件: (h : 是补集 p q) {x : E}
-  证明: by
-  conv_rhs => rw [← (prodEquivOfIsCompl p q h).apply_symm_apply x]
-  rw [coe_prodEquivOfIsCompl']; rw [Submodule.add_mem_iff_right _ (Submodule.coe_mem _)]; rw [mem_left_iff_eq_zero_of_disjoint h.disjoint]
-
-@[simp]
-
-Depends on / 依赖: Submodule, Submodule.add_mem_iff_right, Submodule.coe_mem, add_mem_iff_right, apply_symm_apply, coe_mem, coe_prodEquivOfIsCompl, conv_rhs, disjoint, h.disjoint, mem_left_iff_eq_zero_of_disjoint, prodEquivOfIsCompl
+  rw [coe_prodEquivOfIsCompl', Submodule.add_mem_iff_left _ (Submodule.coe_mem _),
+    mem_right_iff_eq_zero_of_disjoint h.disjoint]
+/-
+**Submodule.prodEquivOfIsCompl_symm_apply_snd_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 
+`Submodule`。
+形式化陈述：prodEquivOfIsCompl_symm_apply_snd_eq_zero (h : IsCompl p q) {x : E} : ((pr
+odEquivOfIsCompl p q h).symm x).2 = 0 ↔ x in p
+参数：h : IsCompl p q。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearEquiv.apply_symm_apply`：apply_symm_apply (c : M₂) : e (e.symm c) =
+ c
+· 使用定理 `Submodule.coe_prodEquivOfIsCompl'`：coe_prodEquivOfIsCompl' (h : IsCompl 
+p q) (x : p × q) : prodEquivOfIsCompl p q h x = x.1 + x.2
+· 使用定理 `Submodule.add_mem_iff_right`：∀ {R : Type u} {M : Type v} [inst : Ring R]
+ [inst_1 : AddCommGroup M] {module_M : _root_.Module R M} (p : Submodule R M)   
+{x y : M}, x ∈ p …
+· 使用定理 `Submodule.coe_mem`：coe_mem (x : p) : (x : M) in p
+· 使用定理 `Submodule.mem_left_iff_eq_zero_of_disjoint`：mem_left_iff_eq_zero_of_disj
+oint {p p' : Submodule R M} (h : Disjoint p p') {x : p'} : (x : M) in p ↔ x = 0
+· 使用定理 `IsCompl.disjoint`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Bou
+ndedOrder α] {x y : α}, IsCompl x y → Disjoint x y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem prodEquivOfIsCompl_symm_apply_snd_eq_zero (h : IsCompl p q) {x : E} :
-    ((prodEquivOfIsCompl p q h).symm x).2 = 0 ↔ x in p := by
+    ((prodEquivOfIsCompl p q h).symm x).2 = 0 ↔ x ∈ p := by
   conv_rhs => rw [← (prodEquivOfIsCompl p q h).apply_symm_apply x]
-  rw [coe_prodEquivOfIsCompl']; rw [Submodule.add_mem_iff_right _ (Submodule.coe_mem _)]; rw [mem_left_iff_eq_zero_of_disjoint h.disjoint]
+  rw [coe_prodEquivOfIsCompl', Submodule.add_mem_iff_right _ (Submodule.coe_mem _),
+    mem_left_iff_eq_zero_of_disjoint h.disjoint]
 
 @[simp]
-/--
-theorem `prodComm_trans_prodEquivOfIsCompl` / 定理 `prodComm_trans_prodEquivOfIsCompl`
-
-English:
-theorem prodComm_trans_prodEquivOfIsCompl
-  given: (h : IsCompl p q)
-  proof: LinearEquiv.ext fun _ => add_comm _ _
-
-中文:
-定理 prodComm_trans_prodEquivOfIsCompl
-  条件: (h : 是补集 p q)
-  证明: LinearEquiv.ext fun _ => add_comm _ _
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.ext, add_comm
+/-
+**Submodule.prodComm_trans_prodEquivOfIsCompl** 是 Mathlib 中的一个定理，位于命名空间 `Submodu
+le`。
+形式化陈述：prodComm_trans_prodEquivOfIsCompl (h : IsCompl p q) : LinearEquiv.prodComm
+ R q p ≪≫ₗ prodEquivOfIsCompl p q h = prodEquivOfIsCompl q p h.symm
+参数：h : IsCompl p q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.ext`：ext (h : forall x, e x = e' x) : e = e'
+· 使用定理 `IsCompl.symm`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Bounded
+Order α] {x y : α}, IsCompl x y → IsCompl y x
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
 -/
 theorem prodComm_trans_prodEquivOfIsCompl (h : IsCompl p q) :
     LinearEquiv.prodComm R q p ≪≫ₗ prodEquivOfIsCompl p q h = prodEquivOfIsCompl q p h.symm :=
   LinearEquiv.ext fun _ => add_comm _ _
 
-/--
-Definition of `projectionOnto` / `projectionOnto` 的定义
+/-- Projection to a submodule along a complement. It is the unique
+linear map `f : E → p` such that `f x = x` for `x ∈ p` and `f x = 0` for `x ∈ q`.
 
-English:
-definition projectionOnto
-  signature: (h : IsCompl p q)
-  body: LinearMap.fst R p q ∘ₗ ↑(prodEquivOfIsCompl p q h).symm
+For the projection from `E` to `E`, see `Submodule.projection`. See also:
+* `Submodule.projectionOntoL` and `Submodule.projectionL` for the continuous versions.
+* `Submodule.orthogonalProjection` and `Submodule.orthogonalProjectionOnto` for the projections
+  along the orthogonal subspace.
 
-中文:
-定义 projectionOnto
-  签名: (h : 是补集 p q)
-  定义体: LinearMap.fst R p q ∘ₗ ↑(prodEquivOfIsCompl p q h).symm
+See also `LinearMap.linearProjOfIsCompl`. -/
+/-
+**Submodule.projectionOnto** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：projectionOnto (h : IsCompl p q) : E ->ₗ[R] p
+参数：h : IsCompl p q。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: LinearMap, LinearMap.fst, prodEquivOfIsCompl
+--- 原说明 ---
+Projection to a submodule along a complement. It is the unique
+linear map `f : E → p` such that `f x = x` for `x ∈ p` and `f x = 0` for `x ∈ q`
+.
+
+For the projection from `E` to `E`, see `Submodule.projection`. See also:
+* `Submodule.projectionOntoL` and `Submodule.projectionL` for the continuous ver
+sions.
+* `Submodule.orthogonalProjection` and `Submodule.orthogonalProjectionOnto` for 
+the projections
+  along the orthogonal subspace.
+
+See also `LinearMap.linearProjOfIsCompl`.
 -/
-def projectionOnto (h : IsCompl p q) : E ->ₗ[R] p :=
+def projectionOnto (h : IsCompl p q) : E →ₗ[R] p :=
   LinearMap.fst R p q ∘ₗ ↑(prodEquivOfIsCompl p q h).symm
 
-/--
-Definition of `projection` / `projection` 的定义
+/-- The linear projection onto a subspace along its complement
+as a map from the full space to itself, as opposed to `Submodule.projectionOnto`,
+which maps into the subtype.
+This version is important as it satisfies `IsIdempotentElem`.
 
-English:
-definition projection
-  signature: (hpq : IsCompl p q)
-  body: p.subtype ∘ₗ p.projectionOnto q hpq
+See also:
+* `Submodule.projectionOntoL` and `Submodule.projectionL` for the continuous versions.
+* `Submodule.orthogonalProjection` and `Submodule.orthogonalProjectionOnto` for the projections
+  along the orthogonal subspace. -/
+/-
+**Submodule.projection** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：projection (hpq : IsCompl p q)
+参数：hpq : IsCompl p q。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 projection
-  签名: (hpq : 是补集 p q)
-  定义体: p.subtype ∘ₗ p.projectionOnto q hpq
+--- 原说明 ---
+The linear projection onto a subspace along its complement
+as a map from the full space to itself, as opposed to `Submodule.projectionOnto`
+,
+which maps into the subtype.
+This version is important as it satisfies `IsIdempotentElem`.
 
-Depends on / 依赖: p.projectionOnto, p.subtype, projectionOnto, subtype
+See also:
+* `Submodule.projectionOntoL` and `Submodule.projectionL` for the continuous ver
+sions.
+* `Submodule.orthogonalProjection` and `Submodule.orthogonalProjectionOnto` for 
+the projections
+  along the orthogonal subspace.
 -/
 noncomputable def projection (hpq : IsCompl p q) :=
   p.subtype ∘ₗ p.projectionOnto q hpq
@@ -373,292 +367,215 @@ noncomputable def projection (hpq : IsCompl p q) :=
 variable {p q}
 
 open Submodule
-
-/--
-theorem `projection_apply` / 定理 `projection_apply`
-
-English:
-theorem projection_apply
-  given: (hpq : IsCompl p q) (x : E)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 projection_apply
-  条件: (hpq : 是补集 p q) (x : E)
-  证明: rfl
-
-@[simp]
+/-
+**Submodule.projection_apply** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：projection_apply (hpq : IsCompl p q) (x : E) : p.projection q hpq x = p.pr
+ojectionOnto q hpq x
+参数：hpq : IsCompl p q；x : E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem projection_apply (hpq : IsCompl p q) (x : E) :
     p.projection q hpq x = p.projectionOnto q hpq x :=
   rfl
 
 @[simp]
-/--
-theorem `coe_projectionOnto_apply` / 定理 `coe_projectionOnto_apply`
-
-English:
-theorem coe_projectionOnto_apply
-  given: (hpq : IsCompl p q) (x : E)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_projectionOnto_apply
-  条件: (hpq : 是补集 p q) (x : E)
-  证明: rfl
-
-@[simp]
+/-
+**Submodule.coe_projectionOnto_apply** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：coe_projectionOnto_apply (hpq : IsCompl p q) (x : E) : (p.projectionOnto q
+ hpq x : E) = p.projection q hpq x
+参数：hpq : IsCompl p q；x : E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_projectionOnto_apply (hpq : IsCompl p q) (x : E) :
     (p.projectionOnto q hpq x : E) = p.projection q hpq x :=
   rfl
 
 @[simp]
-/--
-theorem `projection_apply_mem` / 定理 `projection_apply_mem`
-
-English:
-theorem projection_apply_mem
-  given: (hpq : IsCompl p q) (x : E)
-  proof: SetLike.coe_mem _
-
-@[simp]
-
-中文:
-定理 projection_apply_mem
-  条件: (hpq : 是补集 p q) (x : E)
-  证明: SetLike.coe_mem _
-
-@[simp]
-
-Depends on / 依赖: SetLike, SetLike.coe_mem, coe_mem
+/-
+**Submodule.projection_apply_mem** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：projection_apply_mem (hpq : IsCompl p q) (x : E) : p.projection q hpq x in
+ p
+参数：hpq : IsCompl p q；x : E。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_mem`：coe_mem (x : p) : (x : B) in p
 -/
 theorem projection_apply_mem (hpq : IsCompl p q) (x : E) :
-    p.projection q hpq x in p :=
+    p.projection q hpq x ∈ p :=
   SetLike.coe_mem _
 
 @[simp]
-/--
-theorem `projectionOnto_apply_left` / 定理 `projectionOnto_apply_left`
-
-English:
-theorem projectionOnto_apply_left
-  given: (h : IsCompl p q) (x : p)
-  proof: by
-  simp [projectionOnto, prodEquivOfIsCompl_symm_apply_left]
-
-@[simp]
-
-中文:
-定理 projectionOnto_apply_left
-  条件: (h : 是补集 p q) (x : p)
-  证明: by
-  simp [projectionOnto, prodEquivOfIsCompl_symm_apply_left]
-
-@[simp]
-
-Depends on / 依赖: prodEquivOfIsCompl_symm_apply_left, projectionOnto
+/-
+**Submodule.projectionOnto_apply_left** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：projectionOnto_apply_left (h : IsCompl p q) (x : p) : projectionOnto p q h
+ x = x
+参数：h : IsCompl p q；x : p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.prodEquivOfIsCompl_symm_apply_left`：prodEquivOfIsCompl_symm_ap
+ply_left (h : IsCompl p q) (x : p) : (prodEquivOfIsCompl p q h).symm x = (x, 0)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem projectionOnto_apply_left (h : IsCompl p q) (x : p) :
     projectionOnto p q h x = x := by
   simp [projectionOnto, prodEquivOfIsCompl_symm_apply_left]
 
 @[simp]
-/--
-theorem `projection_apply_left` / 定理 `projection_apply_left`
-
-English:
-theorem projection_apply_left
-  given: (hpq : IsCompl p q) (x : p)
-  proof: by simp [projection]
-
-中文:
-定理 projection_apply_left
-  条件: (hpq : 是补集 p q) (x : p)
-  证明: by simp [projection]
-
-Depends on / 依赖: projection
+/-
+**Submodule.projection_apply_left** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：projection_apply_left (hpq : IsCompl p q) (x : p) : p.projection q hpq x =
+ x
+参数：hpq : IsCompl p q；x : p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.projectionOnto_apply_left`：projectionOnto_apply_left (h : IsCo
+mpl p q) (x : p) : projectionOnto p q h x = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem projection_apply_left (hpq : IsCompl p q) (x : p) :
     p.projection q hpq x = x := by simp [projection]
-
-/--
-lemma `projectionOnto_apply_of_mem_left` / 引理 `projectionOnto_apply_of_mem_left`
-
-English:
-lemma projectionOnto_apply_of_mem_left
-  given: (hpq : IsCompl p q) {x : E} (hx : x in p)
-  proof: projectionOnto_apply_left hpq ⟨x, hx⟩
-
-中文:
-引理 projectionOnto_apply_of_mem_left
-  条件: (hpq : 是补集 p q) {x : E} (hx : x in p)
-  证明: projectionOnto_apply_left hpq ⟨x, hx⟩
-
-Depends on / 依赖: projectionOnto_apply_left
+/-
+**Submodule.projectionOnto_apply_of_mem_left** 是 Mathlib 中的一个引理，位于命名空间 `Submodul
+e`。
+形式化陈述：projectionOnto_apply_of_mem_left (hpq : IsCompl p q) {x : E} (hx : x in p)
+ : p.projectionOnto q hpq x = ⟨x, hx⟩
+参数：hpq : IsCompl p q；hx : x in p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.projectionOnto_apply_left`：projectionOnto_apply_left (h : IsCo
+mpl p q) (x : p) : projectionOnto p q h x = x
 -/
-lemma projectionOnto_apply_of_mem_left (hpq : IsCompl p q) {x : E} (hx : x in p) :
+lemma projectionOnto_apply_of_mem_left (hpq : IsCompl p q) {x : E} (hx : x ∈ p) :
     p.projectionOnto q hpq x = ⟨x, hx⟩ := projectionOnto_apply_left hpq ⟨x, hx⟩
-
-/--
-lemma `projection_apply_of_mem_left` / 引理 `projection_apply_of_mem_left`
-
-English:
-lemma projection_apply_of_mem_left
-  given: (hpq : IsCompl p q) {x : E} (hx : x in p)
-  proof: projection_apply_left hpq ⟨x, hx⟩
-
-@[simp]
-
-中文:
-引理 projection_apply_of_mem_left
-  条件: (hpq : 是补集 p q) {x : E} (hx : x in p)
-  证明: projection_apply_left hpq ⟨x, hx⟩
-
-@[simp]
-
-Depends on / 依赖: projection_apply_left
+/-
+**Submodule.projection_apply_of_mem_left** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：projection_apply_of_mem_left (hpq : IsCompl p q) {x : E} (hx : x in p) : p
+.projection q hpq x = x
+参数：hpq : IsCompl p q；hx : x in p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.projection_apply_left`：projection_apply_left (hpq : IsCompl p 
+q) (x : p) : p.projection q hpq x = x
 -/
-lemma projection_apply_of_mem_left (hpq : IsCompl p q) {x : E} (hx : x in p) :
+lemma projection_apply_of_mem_left (hpq : IsCompl p q) {x : E} (hx : x ∈ p) :
     p.projection q hpq x = x := projection_apply_left hpq ⟨x, hx⟩
 
 @[simp]
-/--
-theorem `range_projectionOnto` / 定理 `range_projectionOnto`
-
-English:
-theorem range_projectionOnto
-  given: (h : IsCompl p q)
-  statement: range (projectionOnto p q h) = ⊤
-  proof: range_eq_of_proj (projectionOnto_apply_left h)
-
-@[simp]
-
-中文:
-定理 range_projectionOnto
-  条件: (h : 是补集 p q)
-  结论: range (projectionOnto p q h) = ⊤
-  证明: range_eq_of_proj (projectionOnto_apply_left h)
-
-@[simp]
-
-Depends on / 依赖: projectionOnto_apply_left, range_eq_of_proj
+/-
+**Submodule.range_projectionOnto** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：range_projectionOnto (h : IsCompl p q) : range (projectionOnto p q h) = ⊤
+参数：h : IsCompl p q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.range_eq_of_proj`：range_eq_of_proj {f : E ->ₗ[R] p} (hf : fora
+ll x : p, f x = x) : range f = ⊤
+· 使用定理 `Submodule.projectionOnto_apply_left`：projectionOnto_apply_left (h : IsCo
+mpl p q) (x : p) : projectionOnto p q h x = x
 -/
 theorem range_projectionOnto (h : IsCompl p q) : range (projectionOnto p q h) = ⊤ :=
   range_eq_of_proj (projectionOnto_apply_left h)
 
 @[simp]
-/--
-theorem `range_projection` / 定理 `range_projection`
-
-English:
-theorem range_projection
-  given: (hpq : IsCompl p q)
-  statement: range (p.projection q hpq) = p
-  proof: by
-  simp [projection, range_comp]
-
-中文:
-定理 range_projection
-  条件: (hpq : 是补集 p q)
-  结论: range (p.projection q hpq) = p
-  证明: by
-  simp [projection, range_comp]
-
-Depends on / 依赖: projection, range_comp
+/-
+**Submodule.range_projection** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：range_projection (hpq : IsCompl p q) : range (p.projection q hpq) = p
+参数：hpq : IsCompl p q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.range_comp`：range_comp [RingHomSurjective τ₁₂] [RingHomSurject
+ive τ₂₃] [RingHomSurjective τ₁₃] (f : M ->ₛₗ[τ₁₂] M₂) (g : M₂ ->ₛₗ[τ₂₃] M₃) : ra
+nge (g.com…
+· 使用定理 `Submodule.map.congr_simp`：∀ {R : Type u_1} {R₂ : Type u_3} {M : Type u_5
+} {M₂ : Type u_7} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddComm
+Monoid M] [ins…
+· 使用定理 `Submodule.range_projectionOnto`：range_projectionOnto (h : IsCompl p q) :
+ range (projectionOnto p q h) = ⊤
+· 使用定理 `Submodule.map_top`：map_top [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) 
+: map f ⊤ = range f
+· 使用定理 `Submodule.range_subtype`：range_subtype : range p.subtype = p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem range_projection (hpq : IsCompl p q) : range (p.projection q hpq) = p := by
   simp [projection, range_comp]
-
-/--
-theorem `projectionOnto_surjective` / 定理 `projectionOnto_surjective`
-
-English:
-theorem projectionOnto_surjective
-  given: (h : IsCompl p q)
-  proof: range_eq_top.mp (range_projectionOnto h)
-
-@[simp]
-
-中文:
-定理 projectionOnto_surjective
-  条件: (h : 是补集 p q)
-  证明: range_eq_top.mp (range_projectionOnto h)
-
-@[simp]
-
-Depends on / 依赖: range_eq_top, range_eq_top.mp, range_projectionOnto
+/-
+**Submodule.projectionOnto_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：projectionOnto_surjective (h : IsCompl p q) : Function.Surjective (project
+ionOnto p q h)
+参数：h : IsCompl p q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `LinearMap.range_eq_top`：range_eq_top [RingHomSurjective τ₁₂] {f : M ->ₛₗ
+[τ₁₂] M₂} : range f = ⊤ ↔ Surjective f
+· 使用定理 `Submodule.range_projectionOnto`：range_projectionOnto (h : IsCompl p q) :
+ range (projectionOnto p q h) = ⊤
 -/
 theorem projectionOnto_surjective (h : IsCompl p q) :
     Function.Surjective (projectionOnto p q h) :=
   range_eq_top.mp (range_projectionOnto h)
 
 @[simp]
-/--
-theorem `projectionOnto_apply_eq_zero_iff` / 定理 `projectionOnto_apply_eq_zero_iff`
-
-English:
-theorem projectionOnto_apply_eq_zero_iff
-  given: (h : IsCompl p q) {x : E}
-  proof: by
-  simp [projectionOnto, prodEquivOfIsCompl_symm_apply_fst_eq_zero]
-
-@[simp]
-
-中文:
-定理 projectionOnto_apply_eq_zero_iff
-  条件: (h : 是补集 p q) {x : E}
-  证明: by
-  simp [projectionOnto, prodEquivOfIsCompl_symm_apply_fst_eq_zero]
-
-@[simp]
-
-Depends on / 依赖: prodEquivOfIsCompl_symm_apply_fst_eq_zero, projectionOnto
+/-
+**Submodule.projectionOnto_apply_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Submodul
+e`。
+形式化陈述：projectionOnto_apply_eq_zero_iff (h : IsCompl p q) {x : E} : projectionOnt
+o p q h x = 0 ↔ x in q
+参数：h : IsCompl p q。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem projectionOnto_apply_eq_zero_iff (h : IsCompl p q) {x : E} :
-    projectionOnto p q h x = 0 ↔ x in q := by
+    projectionOnto p q h x = 0 ↔ x ∈ q := by
   simp [projectionOnto, prodEquivOfIsCompl_symm_apply_fst_eq_zero]
 
 @[simp]
-/--
-theorem `projection_apply_eq_zero_iff` / 定理 `projection_apply_eq_zero_iff`
-
-English:
-theorem projection_apply_eq_zero_iff
-  given: (hpq : IsCompl p q) {x : E}
-  proof: by
-  simp [projection, -coe_projectionOnto_apply]
-
-alias ⟨_, projectionOnto_apply_of_mem_right⟩ :=
-  projectionOnto_apply_eq_zero_iff
-
-alias ⟨_, projection_apply_of_mem_right⟩ :=
-  projection_apply_eq_zero_iff
-
-@[simp]
-
-中文:
-定理 projection_apply_eq_zero_iff
-  条件: (hpq : 是补集 p q) {x : E}
-  证明: by
-  simp [projection, -coe_projectionOnto_apply]
-
-alias ⟨_, projectionOnto_apply_of_mem_right⟩ :=
-  projectionOnto_apply_eq_zero_iff
-
-alias ⟨_, projection_apply_of_mem_right⟩ :=
-  projection_apply_eq_zero_iff
-
-@[simp]
-
-Depends on / 依赖: coe_projectionOnto_apply, projection
+/-
+**Submodule.projection_apply_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：projection_apply_eq_zero_iff (hpq : IsCompl p q) {x : E} : p.projection q 
+hpq x = 0 ↔ x in q
+参数：hpq : IsCompl p q。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem projection_apply_eq_zero_iff (hpq : IsCompl p q) {x : E} :
-    p.projection q hpq x = 0 ↔ x in q := by
+    p.projection q hpq x = 0 ↔ x ∈ q := by
   simp [projection, -coe_projectionOnto_apply]
 
 alias ⟨_, projectionOnto_apply_of_mem_right⟩ :=
@@ -668,133 +585,102 @@ alias ⟨_, projection_apply_of_mem_right⟩ :=
   projection_apply_eq_zero_iff
 
 @[simp]
-/--
-theorem `projectionOnto_apply_right` / 定理 `projectionOnto_apply_right`
-
-English:
-theorem projectionOnto_apply_right
-  given: (h : IsCompl p q) (x : q)
-  proof: projectionOnto_apply_of_mem_right h x.2
-
-@[simp]
-
-中文:
-定理 projectionOnto_apply_right
-  条件: (h : 是补集 p q) (x : q)
-  证明: projectionOnto_apply_of_mem_right h x.2
-
-@[simp]
-
-Depends on / 依赖: projectionOnto_apply_of_mem_right
+/-
+**Submodule.projectionOnto_apply_right** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：projectionOnto_apply_right (h : IsCompl p q) (x : q) : projectionOnto p q 
+h x = 0
+参数：h : IsCompl p q；x : q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.projectionOnto_apply_of_mem_right`：∀ {R : Type u_1} [inst : Ri
+ng R] {E : Type u_2} [inst_1 : AddCommGroup E] [inst_2 : _root_.Module R E]   {p
+ q : Submodule R E} (h : IsCompl …
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem projectionOnto_apply_right (h : IsCompl p q) (x : q) :
     projectionOnto p q h x = 0 :=
   projectionOnto_apply_of_mem_right h x.2
 
 @[simp]
-/--
-theorem `projection_apply_right` / 定理 `projection_apply_right`
-
-English:
-theorem projection_apply_right
-  given: (h : IsCompl p q) (x : q)
-  proof: projection_apply_of_mem_right h x.2
-
-@[simp]
-
-中文:
-定理 projection_apply_right
-  条件: (h : 是补集 p q) (x : q)
-  证明: projection_apply_of_mem_right h x.2
-
-@[simp]
-
-Depends on / 依赖: projection_apply_of_mem_right
+/-
+**Submodule.projection_apply_right** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：projection_apply_right (h : IsCompl p q) (x : q) : p.projection q h x = 0
+参数：h : IsCompl p q；x : q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.projection_apply_of_mem_right`：∀ {R : Type u_1} [inst : Ring R
+] {E : Type u_2} [inst_1 : AddCommGroup E] [inst_2 : _root_.Module R E]   {p q :
+ Submodule R E} (hpq : IsComp…
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 theorem projection_apply_right (h : IsCompl p q) (x : q) :
     p.projection q h x = 0 :=
   projection_apply_of_mem_right h x.2
 
 @[simp]
-/--
-theorem `ker_projectionOnto` / 定理 `ker_projectionOnto`
-
-English:
-theorem ker_projectionOnto
-  given: (h : IsCompl p q)
-  statement: ker (projectionOnto p q h) = q
-  proof: ext fun _ => mem_ker.trans (projectionOnto_apply_eq_zero_iff h)
-
-@[simp]
-
-中文:
-定理 ker_projectionOnto
-  条件: (h : 是补集 p q)
-  结论: ker (projectionOnto p q h) = q
-  证明: ext fun _ => mem_ker.trans (projectionOnto_apply_eq_zero_iff h)
-
-@[simp]
-
-Depends on / 依赖: mem_ker, mem_ker.trans, projectionOnto_apply_eq_zero_iff
+/-
+**Submodule.ker_projectionOnto** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：ker_projectionOnto (h : IsCompl p q) : ker (projectionOnto p q h) = q
+参数：h : IsCompl p q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `LinearMap.mem_ker`：mem_ker {f : M ->ₛₗ[τ₁₂] M₂} {y} : y in ker f ↔ f y =
+ 0
+· 使用定理 `Submodule.projectionOnto_apply_eq_zero_iff`：projectionOnto_apply_eq_zero
+_iff (h : IsCompl p q) {x : E} : projectionOnto p q h x = 0 ↔ x in q
 -/
 theorem ker_projectionOnto (h : IsCompl p q) : ker (projectionOnto p q h) = q :=
   ext fun _ => mem_ker.trans (projectionOnto_apply_eq_zero_iff h)
 
 @[simp]
-/--
-theorem `ker_projection` / 定理 `ker_projection`
-
-English:
-theorem ker_projection
-  given: (hpq : IsCompl p q)
-  proof: by
-  simp [projection, ker_comp]
-
-中文:
-定理 ker_projection
-  条件: (hpq : 是补集 p q)
-  证明: by
-  simp [projection, ker_comp]
-
-Depends on / 依赖: ker_comp, projection
+/-
+**Submodule.ker_projection** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：ker_projection (hpq : IsCompl p q) : ker (p.projection q hpq) = q
+参数：hpq : IsCompl p q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.ker_subtype`：ker_subtype : ker p.subtype = ⊥
+· 使用定理 `Submodule.ker_projectionOnto`：ker_projectionOnto (h : IsCompl p q) : ker
+ (projectionOnto p q h) = q
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem ker_projection (hpq : IsCompl p q) :
     ker (p.projection q hpq) = q := by
   simp [projection, ker_comp]
-
-/--
-theorem `projectionOnto_comp_subtype` / 定理 `projectionOnto_comp_subtype`
-
-English:
-theorem projectionOnto_comp_subtype
-  given: (h : IsCompl p q)
-  proof: LinearMap.ext projectionOnto_apply_left h
-
-中文:
-定理 projectionOnto_comp_subtype
-  条件: (h : 是补集 p q)
-  证明: LinearMap.ext projectionOnto_apply_left h
-
-Depends on / 依赖: LinearMap, LinearMap.ext, projectionOnto_apply_left
+/-
+**Submodule.projectionOnto_comp_subtype** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：projectionOnto_comp_subtype (h : IsCompl p q) : (projectionOnto p q h).com
+p p.subtype = LinearMap.id
+参数：h : IsCompl p q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Submodule.projectionOnto_apply_left`：projectionOnto_apply_left (h : IsCo
+mpl p q) (x : p) : projectionOnto p q h x = x
 -/
 theorem projectionOnto_comp_subtype (h : IsCompl p q) :
     (projectionOnto p q h).comp p.subtype = LinearMap.id :=
-LinearMap.ext projectionOnto_apply_left h
-
-/--
-theorem `projectionOnto_projection` / 定理 `projectionOnto_projection`
-
-English:
-theorem projectionOnto_projection
-  given: (h : IsCompl p q) (x : E)
-  proof: projectionOnto_apply_left h _
-
-中文:
-定理 projectionOnto_projection
-  条件: (h : 是补集 p q) (x : E)
-  证明: projectionOnto_apply_left h _
-
-Depends on / 依赖: projectionOnto_apply_left
+  LinearMap.ext <| projectionOnto_apply_left h
+/-
+**Submodule.projectionOnto_projection** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：projectionOnto_projection (h : IsCompl p q) (x : E) : projectionOnto p q h
+ (p.projection q h x) = projectionOnto p q h x
+参数：h : IsCompl p q；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.projectionOnto_apply_left`：projectionOnto_apply_left (h : IsCo
+mpl p q) (x : p) : projectionOnto p q h x = x
 -/
 theorem projectionOnto_projection (h : IsCompl p q) (x : E) :
     projectionOnto p q h (p.projection q h x) = projectionOnto p q h x :=
@@ -802,194 +688,193 @@ theorem projectionOnto_projection (h : IsCompl p q) (x : E) :
 
 /-- The linear projection onto a subspace along its complement is an idempotent. -/
 @[simp]
-/--
-theorem `isIdempotentElem_projection` / 定理 `isIdempotentElem_projection`
+/-
+**Submodule.isIdempotentElem_projection** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：isIdempotentElem_projection (hpq : IsCompl p q) : IsIdempotentElem (p.proj
+ection q hpq)
+参数：hpq : IsCompl p q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.projectionOnto_projection`：projectionOnto_projection (h : IsCo
+mpl p q) (x : E) : projectionOnto p q h (p.projection q h x) = projectionOnto p 
+q h x
 
-English:
-theorem isIdempotentElem_projection
-  given: (hpq : IsCompl p q)
-  proof: LinearMap.ext fun _ => congr($(projectionOnto_projection hpq _))
-
-中文:
-定理 isIdempotentElem_projection
-  条件: (hpq : 是补集 p q)
-  证明: LinearMap.ext fun _ => congr($(projectionOnto_projection hpq _))
-
-Depends on / 依赖: LinearMap, LinearMap.ext, projectionOnto_projection
+--- 原说明 ---
+The linear projection onto a subspace along its complement is an idempotent.
 -/
 theorem isIdempotentElem_projection (hpq : IsCompl p q) :
     IsIdempotentElem (p.projection q hpq) :=
-  LinearMap.ext fun _ => congr($(projectionOnto_projection hpq _))
-
-/--
-theorem `existsUnique_add_of_isCompl_prod` / 定理 `existsUnique_add_of_isCompl_prod`
-
-English:
-theorem existsUnique_add_of_isCompl_prod
-  given: (hc : IsCompl p q) (x : E)
-  proof: (prodEquivOfIsCompl _ _ hc).toEquiv.bijective.existsUnique _
-
-中文:
-定理 存在Unique_add_of_isCompl_prod
-  条件: (hc : 是补集 p q) (x : E)
-  证明: (prodEquivOfIsCompl _ _ hc).toEquiv.bijective.existsUnique _
-
-Depends on / 依赖: bijective, existsUnique, prodEquivOfIsCompl, toEquiv, toEquiv.bijective.existsUnique
+  LinearMap.ext fun _ ↦ congr($(projectionOnto_projection hpq _))
+/-
+**Submodule.existsUnique_add_of_isCompl_prod** 是 Mathlib 中的一个定理，位于命名空间 `Submodul
+e`。
+形式化陈述：existsUnique_add_of_isCompl_prod (hc : IsCompl p q) (x : E) : exists! u : 
+p × q, (u.fst : E) + u.snd = x
+参数：hc : IsCompl p q；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Bijective.existsUnique`：∀ {α : Sort u_1} {β : Sort u_2} {f : α 
+→ β}, Function.Bijective f → ∀ (b : β), ∃! a, f a = b
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
 -/
 theorem existsUnique_add_of_isCompl_prod (hc : IsCompl p q) (x : E) :
-    exists! u : p × q, (u.fst : E) + u.snd = x :=
+    ∃! u : p × q, (u.fst : E) + u.snd = x :=
   (prodEquivOfIsCompl _ _ hc).toEquiv.bijective.existsUnique _
-
-/--
-theorem `existsUnique_add_of_isCompl` / 定理 `existsUnique_add_of_isCompl`
-
-English:
-theorem existsUnique_add_of_isCompl
-  given: (hc : IsCompl p q) (x : E)
-  proof: let ⟨u, hu₁, hu₂⟩ := existsUnique_add_of_isCompl_prod hc x
-  ⟨u.1, u.2, hu₁, fun r s hrs => Prod.eq_iff_fst_eq_snd_eq.1 (hu₂ ⟨r, s⟩ hrs)⟩
-
-中文:
-定理 存在Unique_add_of_isCompl
-  条件: (hc : 是补集 p q) (x : E)
-  证明: let ⟨u, hu₁, hu₂⟩ := existsUnique_add_of_isCompl_prod hc x
-  ⟨u.1, u.2, hu₁, fun r s hrs => Prod.eq_iff_fst_eq_snd_eq.1 (hu₂ ⟨r, s⟩ hrs)⟩
-
-Depends on / 依赖: Prod.eq_iff_fst_eq_snd_eq, eq_iff_fst_eq_snd_eq, existsUnique_add_of_isCompl_prod
+/-
+**Submodule.existsUnique_add_of_isCompl** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：existsUnique_add_of_isCompl (hc : IsCompl p q) (x : E) : exists (u : p) (v
+ : q), (u : E) + v = x ∧ forall (r : p) (s : q), (r : E) + s = x -> r = u ∧ s = 
+v
+参数：hc : IsCompl p q；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.existsUnique_add_of_isCompl_prod`：existsUnique_add_of_isCompl_
+prod (hc : IsCompl p q) (x : E) : exists! u : p × q, (u.fst : E) + u.snd = x
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Prod.eq_iff_fst_eq_snd_eq`：∀ {α : Type u_1} {β : Type u_2} {p q : α × β}
+, p = q ↔ p.1 = q.1 ∧ p.2 = q.2
 -/
 theorem existsUnique_add_of_isCompl (hc : IsCompl p q) (x : E) :
-    exists (u : p) (v : q), (u : E) + v = x ∧ forall (r : p) (s : q), (r : E) + s = x -> r = u ∧ s = v :=
+    ∃ (u : p) (v : q), (u : E) + v = x ∧ ∀ (r : p) (s : q), (r : E) + s = x → r = u ∧ s = v :=
   let ⟨u, hu₁, hu₂⟩ := existsUnique_add_of_isCompl_prod hc x
   ⟨u.1, u.2, hu₁, fun r s hrs => Prod.eq_iff_fst_eq_snd_eq.1 (hu₂ ⟨r, s⟩ hrs)⟩
-
-/--
-theorem `projection_add_projection_eq_self` / 定理 `projection_add_projection_eq_self`
-
-English:
-theorem projection_add_projection_eq_self
-  given: (hpq : IsCompl p q) (x : E)
-  proof: by
-  dsimp only [projection, projectionOnto]
-  rw [← prodComm_trans_prodEquivOfIsCompl _ _ hpq]
-  exact (prodEquivOfIsCompl _ _ hpq).apply_symm_apply x
-
-中文:
-定理 projection_add_projection_eq_self
-  条件: (hpq : 是补集 p q) (x : E)
-  证明: by
-  dsimp only [projection, projectionOnto]
-  rw [← prodComm_trans_prodEquivOfIsCompl _ _ hpq]
-  exact (prodEquivOfIsCompl _ _ hpq).apply_symm_apply x
-
-Depends on / 依赖: apply_symm_apply, prodComm_trans_prodEquivOfIsCompl, prodEquivOfIsCompl, projection, projectionOnto
+/-
+**Submodule.projection_add_projection_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `Submodu
+le`。
+形式化陈述：projection_add_projection_eq_self (hpq : IsCompl p q) (x : E) : (p.project
+ion q hpq) x + (q.projection p hpq.symm) x = x
+参数：hpq : IsCompl p q；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCompl.symm`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Bounded
+Order α] {x y : α}, IsCompl x y → IsCompl y x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.prodComm_trans_prodEquivOfIsCompl`：prodComm_trans_prodEquivOfI
+sCompl (h : IsCompl p q) : LinearEquiv.prodComm R q p ≪≫ₗ prodEquivOfIsCompl p q
+ h = prodEquivOfIsCompl q p h.sym…
+· 使用定理 `LinearEquiv.apply_symm_apply`：apply_symm_apply (c : M₂) : e (e.symm c) =
+ c
 -/
 theorem projection_add_projection_eq_self (hpq : IsCompl p q) (x : E) :
     (p.projection q hpq) x + (q.projection p hpq.symm) x = x := by
   dsimp only [projection, projectionOnto]
   rw [← prodComm_trans_prodEquivOfIsCompl _ _ hpq]
   exact (prodEquivOfIsCompl _ _ hpq).apply_symm_apply x
-
-/--
-theorem `projection_add_projection_eq_id` / 定理 `projection_add_projection_eq_id`
-
-English:
-theorem projection_add_projection_eq_id
-  given: (hpq : IsCompl p q)
-  proof: LinearMap.ext (projection_add_projection_eq_self hpq)
-
-中文:
-定理 projection_add_projection_eq_id
-  条件: (hpq : 是补集 p q)
-  证明: LinearMap.ext (projection_add_projection_eq_self hpq)
-
-Depends on / 依赖: LinearMap, LinearMap.ext, projection_add_projection_eq_self
+/-
+**Submodule.projection_add_projection_eq_id** 是 Mathlib 中的一个定理，位于命名空间 `Submodule
+`。
+形式化陈述：projection_add_projection_eq_id (hpq : IsCompl p q) : p.projection q hpq +
+ q.projection p hpq.symm = .id
+参数：hpq : IsCompl p q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `IsCompl.symm`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Bounded
+Order α] {x y : α}, IsCompl x y → IsCompl y x
+· 使用定理 `Submodule.projection_add_projection_eq_self`：projection_add_projection_e
+q_self (hpq : IsCompl p q) (x : E) : (p.projection q hpq) x + (q.projection p hp
+q.symm) x = x
 -/
 theorem projection_add_projection_eq_id (hpq : IsCompl p q) :
     p.projection q hpq + q.projection p hpq.symm = .id :=
   LinearMap.ext (projection_add_projection_eq_self hpq)
-
-/--
-lemma `projection_eq_self_sub_projection` / 引理 `projection_eq_self_sub_projection`
-
-English:
-lemma projection_eq_self_sub_projection
-  given: (hpq : IsCompl p q) (x : E)
-  proof: by
-  rw [eq_sub_iff_add_eq]; rw [projection_add_projection_eq_self]
-
-中文:
-引理 projection_eq_self_sub_projection
-  条件: (hpq : 是补集 p q) (x : E)
-  证明: by
-  rw [eq_sub_iff_add_eq]; rw [projection_add_projection_eq_self]
-
-Depends on / 依赖: eq_sub_iff_add_eq, projection_add_projection_eq_self
+/-
+**Submodule.projection_eq_self_sub_projection** 是 Mathlib 中的一个引理，位于命名空间 `Submodu
+le`。
+形式化陈述：projection_eq_self_sub_projection (hpq : IsCompl p q) (x : E) : q.projecti
+on p hpq.symm x = x - p.projection q hpq x
+参数：hpq : IsCompl p q；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCompl.symm`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Bounded
+Order α] {x y : α}, IsCompl x y → IsCompl y x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_sub_iff_add_eq`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a =
+ b - c ↔ a + c = b
+· 使用定理 `Submodule.projection_add_projection_eq_self`：projection_add_projection_e
+q_self (hpq : IsCompl p q) (x : E) : (p.projection q hpq) x + (q.projection p hp
+q.symm) x = x
 -/
 lemma projection_eq_self_sub_projection (hpq : IsCompl p q) (x : E) :
     q.projection p hpq.symm x = x - p.projection q hpq x := by
-  rw [eq_sub_iff_add_eq]; rw [projection_add_projection_eq_self]
-
-/--
-lemma `projection_eq_id_sub_projection` / 引理 `projection_eq_id_sub_projection`
-
-English:
-lemma projection_eq_id_sub_projection
-  given: (hpq : IsCompl p q)
-  proof: LinearMap.ext (projection_eq_self_sub_projection hpq)
-
-中文:
-引理 projection_eq_id_sub_projection
-  条件: (hpq : 是补集 p q)
-  证明: LinearMap.ext (projection_eq_self_sub_projection hpq)
-
-Depends on / 依赖: LinearMap, LinearMap.ext, projection_eq_self_sub_projection
+  rw [eq_sub_iff_add_eq, projection_add_projection_eq_self]
+/-
+**Submodule.projection_eq_id_sub_projection** 是 Mathlib 中的一个引理，位于命名空间 `Submodule
+`。
+形式化陈述：projection_eq_id_sub_projection (hpq : IsCompl p q) : q.projection p hpq.s
+ymm = .id - p.projection q hpq
+参数：hpq : IsCompl p q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `IsCompl.symm`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Bounded
+Order α] {x y : α}, IsCompl x y → IsCompl y x
+· 使用引理 `Submodule.projection_eq_self_sub_projection`：projection_eq_self_sub_proj
+ection (hpq : IsCompl p q) (x : E) : q.projection p hpq.symm x = x - p.projectio
+n q hpq x
 -/
 lemma projection_eq_id_sub_projection (hpq : IsCompl p q) :
     q.projection p hpq.symm = .id - p.projection q hpq :=
   LinearMap.ext (projection_eq_self_sub_projection hpq)
 
-/--
-lemma `projection_eq_self_iff` / 引理 `projection_eq_self_iff`
+/-- The projection to `p` along `q` of `x` equals `x` if and only if `x ∈ p`. -/
+/-
+**Submodule.projection_eq_self_iff** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：∀ {R : Type u_1} [inst : Ring R] {E : Type u_2} [inst_1 : AddCommGroup E] 
+[inst_2 : _root_.Module R E]   {p q : Submodule R E} (hpq : IsCompl p q) (x : E)
+, (p.projection q hpq) x = x ↔ x ∈ p
+参数：hpq : IsCompl p q；x : E；p.projection q hpq。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `IsCompl.symm`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Bounded
+Order α] {x y : α}, IsCompl x y → IsCompl y x
+· 使用引理 `Submodule.projection_eq_self_sub_projection`：projection_eq_self_sub_proj
+ection (hpq : IsCompl p q) (x : E) : q.projection p hpq.symm x = x - p.projectio
+n q hpq x
+· 使用定理 `Submodule.projection_apply_eq_zero_iff`：projection_apply_eq_zero_iff (hp
+q : IsCompl p q) {x : E} : p.projection q hpq x = 0 ↔ x in q
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-lemma projection_eq_self_iff
-  given: (hpq : IsCompl p q) (x : E)
-  proof: by
-  rw [eq_comm]; rw [← sub_eq_zero]; rw [← projection_eq_self_sub_projection]; rw [projection_apply_eq_zero_iff]
-
-@[simp]
-
-中文:
-引理 projection_eq_self_iff
-  条件: (hpq : 是补集 p q) (x : E)
-  证明: by
-  rw [eq_comm]; rw [← sub_eq_zero]; rw [← projection_eq_self_sub_projection]; rw [projection_apply_eq_zero_iff]
-
-@[simp]
+--- 原说明 ---
+The projection to `p` along `q` of `x` equals `x` if and only if `x ∈ p`.
 -/
 @[simp] lemma projection_eq_self_iff (hpq : IsCompl p q) (x : E) :
-    p.projection q hpq x = x ↔ x in p := by
-  rw [eq_comm]; rw [← sub_eq_zero]; rw [← projection_eq_self_sub_projection]; rw [projection_apply_eq_zero_iff]
+    p.projection q hpq x = x ↔ x ∈ p := by
+  rw [eq_comm, ← sub_eq_zero, ← projection_eq_self_sub_projection, projection_apply_eq_zero_iff]
 
 @[simp]
-/--
-theorem `prodEquivOfIsCompl_symm_apply` / 定理 `prodEquivOfIsCompl_symm_apply`
-
-English:
-theorem prodEquivOfIsCompl_symm_apply
-  given: (hpq : IsCompl p q) (x : E)
-  proof: Prod.ext rfl congr(($(prodComm_trans_prodEquivOfIsCompl p q hpq).symm x).1)
-
-@[simp]
-
-中文:
-定理 prodEquivOfIsCompl_symm_apply
-  条件: (hpq : 是补集 p q) (x : E)
-  证明: Prod.ext rfl congr(($(prodComm_trans_prodEquivOfIsCompl p q hpq).symm x).1)
-
-@[simp]
-
-Depends on / 依赖: Prod.ext, prodComm_trans_prodEquivOfIsCompl
+/-
+**Submodule.prodEquivOfIsCompl_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：prodEquivOfIsCompl_symm_apply (hpq : IsCompl p q) (x : E) : (p.prodEquivOf
+IsCompl q hpq).symm x = (p.projectionOnto q hpq x, q.projectionOnto p hpq.symm x
+)
+参数：hpq : IsCompl p q；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Prod.ext`：∀ {α : Type u} {β : Type v} {x y : α × β}, x.1 = y.1 → x.2 = y
+.2 → x = y
+· 使用定理 `IsCompl.symm`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Bounded
+Order α] {x y : α}, IsCompl x y → IsCompl y x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.prodComm_trans_prodEquivOfIsCompl`：prodComm_trans_prodEquivOfI
+sCompl (h : IsCompl p q) : LinearEquiv.prodComm R q p ≪≫ₗ prodEquivOfIsCompl p q
+ h = prodEquivOfIsCompl q p h.sym…
 -/
 theorem prodEquivOfIsCompl_symm_apply (hpq : IsCompl p q) (x : E) :
     (p.prodEquivOfIsCompl q hpq).symm x =
@@ -997,48 +882,58 @@ theorem prodEquivOfIsCompl_symm_apply (hpq : IsCompl p q) (x : E) :
   Prod.ext rfl congr(($(prodComm_trans_prodEquivOfIsCompl p q hpq).symm x).1)
 
 @[simp]
-/--
-theorem `toLinearMap_prodEquivOfIsCompl_symm` / 定理 `toLinearMap_prodEquivOfIsCompl_symm`
-
-English:
-theorem toLinearMap_prodEquivOfIsCompl_symm
-  given: (hpq : IsCompl p q)
-  proof: LinearMap.ext by simp
-
-中文:
-定理 toLinearMap_prodEquivOfIsCompl_symm
-  条件: (hpq : 是补集 p q)
-  证明: LinearMap.ext by simp
-
-Depends on / 依赖: LinearMap, LinearMap.ext
+/-
+**Submodule.toLinearMap_prodEquivOfIsCompl_symm** 是 Mathlib 中的一个定理，位于命名空间 `Submo
+dule`。
+形式化陈述：toLinearMap_prodEquivOfIsCompl_symm (hpq : IsCompl p q) : (p.prodEquivOfIs
+Compl q hpq).symm.toLinearMap = (p.projectionOnto q hpq).prod (q.projectionOnto 
+p hpq.symm)
+参数：hpq : IsCompl p q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `IsCompl.symm`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Bounded
+Order α] {x y : α}, IsCompl x y → IsCompl y x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.prodEquivOfIsCompl_symm_apply`：prodEquivOfIsCompl_symm_apply (
+hpq : IsCompl p q) (x : E) : (p.prodEquivOfIsCompl q hpq).symm x = (p.projection
+Onto q hpq x, q.projectionOnt…
+· 使用定理 `LinearMap.prod_apply`：∀ {R : Type u} {M : Type v} {M₂ : Type w} {M₃ : Ty
+pe y} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : AddCommMonoid M
+₂] [inst_3…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem toLinearMap_prodEquivOfIsCompl_symm (hpq : IsCompl p q) :
     (p.prodEquivOfIsCompl q hpq).symm.toLinearMap =
       (p.projectionOnto q hpq).prod (q.projectionOnto p hpq.symm) :=
-LinearMap.ext by simp
-
-/--
-theorem `sub_projection_mem` / 定理 `sub_projection_mem`
-
-English:
-theorem sub_projection_mem
-  given: (h : IsCompl p q) (x : E)
-  statement: x - p.projection q h x in q
-  proof: by
-  rw [← projection_eq_self_sub_projection h]
-  exact projection_apply_mem h.symm x
-
-中文:
-定理 sub_projection_mem
-  条件: (h : 是补集 p q) (x : E)
-  结论: x - p.projection q h x in q
-  证明: by
-  rw [← projection_eq_self_sub_projection h]
-  exact projection_apply_mem h.symm x
-
-Depends on / 依赖: h.symm, projection_apply_mem, projection_eq_self_sub_projection
+  LinearMap.ext <| by simp
+/-
+**Submodule.sub_projection_mem** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：sub_projection_mem (h : IsCompl p q) (x : E) : x - p.projection q h x in q
+参数：h : IsCompl p q；x : E。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCompl.symm`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Bounded
+Order α] {x y : α}, IsCompl x y → IsCompl y x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Submodule.projection_eq_self_sub_projection`：projection_eq_self_sub_proj
+ection (hpq : IsCompl p q) (x : E) : q.projection p hpq.symm x = x - p.projectio
+n q hpq x
+· 使用定理 `Submodule.projection_apply_mem`：projection_apply_mem (hpq : IsCompl p q)
+ (x : E) : p.projection q hpq x in p
 -/
-theorem sub_projection_mem (h : IsCompl p q) (x : E) : x - p.projection q h x in q := by
+theorem sub_projection_mem (h : IsCompl p q) (x : E) : x - p.projection q h x ∈ q := by
   rw [← projection_eq_self_sub_projection h]
   exact projection_apply_mem h.symm x
 
@@ -1047,28 +942,19 @@ variable (p q) in
 to its projection onto `q` along `p`; the backward direction sends an element of `q` to its class
 in `M ⧸ p`. -/
 @[simps! symm_apply]
-/--
-Definition of `quotientEquivOfIsCompl` / `quotientEquivOfIsCompl` 的定义
+/-
+**Submodule.quotientEquivOfIsCompl** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：quotientEquivOfIsCompl (h : IsCompl p q) : (E ⧸ p) ≃ₗ[R] q
+参数：h : IsCompl p q。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition quotientEquivOfIsCompl
-  signature: (h : IsCompl p q)
-  body: .ofLinearMap
-    (p.liftQ (q.projectionOnto p h.symm) (by simp))
-    (p.mkQ ∘ₗ q.subtype)
-    (by ext; simp)
-    (by ext; simp [Quotient.eq, sub_mem_comm_iff, sub_projection_mem])
-
-中文:
-定义 quotientEquivOfIsCompl
-  签名: (h : 是补集 p q)
-  定义体: .ofLinearMap
-    (p.liftQ (q.projectionOnto p h.symm) (by simp))
-    (p.mkQ ∘ₗ q.subtype)
-    (by ext; simp)
-    (by ext; simp [Quotient.eq, sub_mem_comm_iff, sub_projection_mem])
-
-Depends on / 依赖: Quotient, Quotient.eq, h.symm, ofLinearMap, p.liftQ, p.mkQ, projectionOnto, q.projectionOnto, q.subtype, sub_mem_comm_iff, sub_projection_mem, subtype
+--- 原说明 ---
+If `q` is a complement of `p`, then `M ⧸ p ≃ q`. The forward direction sends a q
+uotient class
+to its projection onto `q` along `p`; the backward direction sends an element of
+ `q` to its class
+in `M ⧸ p`.
 -/
 def quotientEquivOfIsCompl (h : IsCompl p q) : (E ⧸ p) ≃ₗ[R] q :=
   .ofLinearMap
@@ -1076,70 +962,42 @@ def quotientEquivOfIsCompl (h : IsCompl p q) : (E ⧸ p) ≃ₗ[R] q :=
     (p.mkQ ∘ₗ q.subtype)
     (by ext; simp)
     (by ext; simp [Quotient.eq, sub_mem_comm_iff, sub_projection_mem])
-
-/--
-theorem `quotientEquivOfIsCompl_comp_mkQ` / 定理 `quotientEquivOfIsCompl_comp_mkQ`
-
-English:
-theorem quotientEquivOfIsCompl_comp_mkQ
-  given: (h : IsCompl p q)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 quotientEquivOfIsCompl_comp_mkQ
-  条件: (h : 是补集 p q)
-  证明: rfl
-
-@[simp]
+/-
+**Submodule.quotientEquivOfIsCompl_comp_mkQ** 是 Mathlib 中的一个定理，位于命名空间 `Submodule
+`。
+形式化陈述：quotientEquivOfIsCompl_comp_mkQ (h : IsCompl p q) : (quotientEquivOfIsComp
+l p q h : E ⧸ p ->ₗ[R] q) ∘ₗ p.mkQ = q.projectionOnto p h.symm
+参数：h : IsCompl p q。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem quotientEquivOfIsCompl_comp_mkQ (h : IsCompl p q) :
-    (quotientEquivOfIsCompl p q h : E ⧸ p ->ₗ[R] q) ∘ₗ p.mkQ = q.projectionOnto p h.symm :=
+    (quotientEquivOfIsCompl p q h : E ⧸ p →ₗ[R] q) ∘ₗ p.mkQ = q.projectionOnto p h.symm :=
   rfl
 
 @[simp]
-/--
-theorem `quotientEquivOfIsCompl_apply_mk` / 定理 `quotientEquivOfIsCompl_apply_mk`
-
-English:
-theorem quotientEquivOfIsCompl_apply_mk
-  given: (h : IsCompl p q) (x : E)
-  proof: rfl
-
-中文:
-定理 quotientEquivOfIsCompl_apply_mk
-  条件: (h : 是补集 p q) (x : E)
-  证明: rfl
+/-
+**Submodule.quotientEquivOfIsCompl_apply_mk** 是 Mathlib 中的一个定理，位于命名空间 `Submodule
+`。
+形式化陈述：quotientEquivOfIsCompl_apply_mk (h : IsCompl p q) (x : E) : quotientEquivO
+fIsCompl p q h (Quotient.mk x) = q.projectionOnto p h.symm x
+参数：h : IsCompl p q；x : E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem quotientEquivOfIsCompl_apply_mk (h : IsCompl p q) (x : E) :
     quotientEquivOfIsCompl p q h (Quotient.mk x) = q.projectionOnto p h.symm x :=
   rfl
-
-/--
-theorem `quotientEquivOfIsCompl_apply_mk_right` / 定理 `quotientEquivOfIsCompl_apply_mk_right`
-
-English:
-theorem quotientEquivOfIsCompl_apply_mk_right
-  given: (h : IsCompl p q) (x : q)
-  proof: (quotientEquivOfIsCompl p q h).apply_symm_apply x
-
-@[deprecated (since := "2026-05-06")]
-alias quotientEquivOfIsCompl_apply_mk_coe := quotientEquivOfIsCompl_apply_mk_right
-
-@[simp]
-
-中文:
-定理 quotientEquivOfIsCompl_apply_mk_right
-  条件: (h : 是补集 p q) (x : q)
-  证明: (quotientEquivOfIsCompl p q h).apply_symm_apply x
-
-@[deprecated (since := "2026-05-06")]
-alias quotientEquivOfIsCompl_apply_mk_coe := quotientEquivOfIsCompl_apply_mk_right
-
-@[simp]
-
-Depends on / 依赖: apply_symm_apply, quotientEquivOfIsCompl
+/-
+**Submodule.quotientEquivOfIsCompl_apply_mk_right** 是 Mathlib 中的一个定理，位于命名空间 `Sub
+module`。
+形式化陈述：quotientEquivOfIsCompl_apply_mk_right (h : IsCompl p q) (x : q) : quotient
+EquivOfIsCompl p q h (Quotient.mk x) = x
+参数：h : IsCompl p q；x : q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.apply_symm_apply`：apply_symm_apply (c : M₂) : e (e.symm c) =
+ c
 -/
 theorem quotientEquivOfIsCompl_apply_mk_right (h : IsCompl p q) (x : q) :
     quotientEquivOfIsCompl p q h (Quotient.mk x) = x :=
@@ -1149,64 +1007,44 @@ theorem quotientEquivOfIsCompl_apply_mk_right (h : IsCompl p q) (x : q) :
 alias quotientEquivOfIsCompl_apply_mk_coe := quotientEquivOfIsCompl_apply_mk_right
 
 @[simp]
-/--
-theorem `mk_quotientEquivOfIsCompl_apply` / 定理 `mk_quotientEquivOfIsCompl_apply`
-
-English:
-theorem mk_quotientEquivOfIsCompl_apply
-  given: (h : IsCompl p q) (x : E ⧸ p)
-  proof: (quotientEquivOfIsCompl p q h).symm_apply_apply x
-
-@[simp]
-
-中文:
-定理 mk_quotientEquivOfIsCompl_apply
-  条件: (h : 是补集 p q) (x : E ⧸ p)
-  证明: (quotientEquivOfIsCompl p q h).symm_apply_apply x
-
-@[simp]
-
-Depends on / 依赖: quotientEquivOfIsCompl, symm_apply_apply
+/-
+**Submodule.mk_quotientEquivOfIsCompl_apply** 是 Mathlib 中的一个定理，位于命名空间 `Submodule
+`。
+形式化陈述：mk_quotientEquivOfIsCompl_apply (h : IsCompl p q) (x : E ⧸ p) : (Quotient.
+mk (quotientEquivOfIsCompl p q h x) : E ⧸ p) = x
+参数：h : IsCompl p q；x : E ⧸ p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.symm_apply_apply`：symm_apply_apply (b : M) : e.symm (e b) = 
+b
 -/
 theorem mk_quotientEquivOfIsCompl_apply (h : IsCompl p q) (x : E ⧸ p) :
     (Quotient.mk (quotientEquivOfIsCompl p q h x) : E ⧸ p) = x :=
   (quotientEquivOfIsCompl p q h).symm_apply_apply x
 
 @[simp]
-/--
-lemma `toLinearMap_quotientEquivOfIsCompl` / 引理 `toLinearMap_quotientEquivOfIsCompl`
-
-English:
-lemma toLinearMap_quotientEquivOfIsCompl
-  given: (h : IsCompl p q)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toLinearMap_quotientEquivOfIsCompl
-  条件: (h : 是补集 p q)
-  证明: rfl
-
-@[simp]
+/-
+**Submodule.toLinearMap_quotientEquivOfIsCompl** 是 Mathlib 中的一个引理，位于命名空间 `Submod
+ule`。
+形式化陈述：toLinearMap_quotientEquivOfIsCompl (h : IsCompl p q) : (p.quotientEquivOfI
+sCompl q h).toLinearMap = p.liftQ (q.projectionOnto p h.symm) (by simp)
+参数：h : IsCompl p q。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toLinearMap_quotientEquivOfIsCompl (h : IsCompl p q) :
     (p.quotientEquivOfIsCompl q h).toLinearMap = p.liftQ (q.projectionOnto p h.symm) (by simp) :=
   rfl
 
 @[simp]
-/--
-lemma `toLinearMap_symm_quotientEquivOfIsCompl` / 引理 `toLinearMap_symm_quotientEquivOfIsCompl`
-
-English:
-lemma toLinearMap_symm_quotientEquivOfIsCompl
-  given: (h : IsCompl p q)
-  proof: rfl
-
-中文:
-引理 toLinearMap_symm_quotientEquivOfIsCompl
-  条件: (h : 是补集 p q)
-  证明: rfl
+/-
+**Submodule.toLinearMap_symm_quotientEquivOfIsCompl** 是 Mathlib 中的一个引理，位于命名空间 `S
+ubmodule`。
+形式化陈述：toLinearMap_symm_quotientEquivOfIsCompl (h : IsCompl p q) : (p.quotientEqu
+ivOfIsCompl q h).symm.toLinearMap = p.mkQ ∘ₗ q.subtype
+参数：h : IsCompl p q。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toLinearMap_symm_quotientEquivOfIsCompl (h : IsCompl p q) :
     (p.quotientEquivOfIsCompl q h).symm.toLinearMap = p.mkQ ∘ₗ q.subtype :=
@@ -1220,460 +1058,604 @@ open Submodule
 
 section
 
-/--
-Definition of `linearProjOfIsCompl` / `linearProjOfIsCompl` 的定义
+/-- Projection to the image of an injection along a complement.
 
-English:
-definition linearProjOfIsCompl
-  signature: {F : Type*} [AddCommGroup F] [Module R F]
-  body: (LinearEquiv.ofInjective i hi).symm ∘ₗ (LinearMap.range i).projectionOnto q h
+This has an advantage over `Submodule.projectionOnto` in that it allows the user better
+definitional control over the type. -/
+/-
+**LinearMap.linearProjOfIsCompl** 是 Mathlib 中的一个定义，位于命名空间 `LinearMap`。
+形式化陈述：linearProjOfIsCompl {F : Type*} [AddCommGroup F] [Module R F] (i : F ->ₗ[R
+] E) (hi : Function.Injective i) (h : IsCompl (LinearMap.range i) q) : E ->ₗ[R] 
+F
+参数：i : F ->ₗ[R] E；hi : Function.Injective i；h : IsCompl (LinearMap.range i) q。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 linearProjOfIsCompl
-  签名: {F : 类型} [加法交换群 F] [模 R F]
-  定义体: (LinearEquiv.ofInjective i hi).symm ∘ₗ (LinearMap.range i).projectionOnto q h
+--- 原说明 ---
+Projection to the image of an injection along a complement.
 
-Depends on / 依赖: LinearEquiv, LinearEquiv.ofInjective, LinearMap, LinearMap.range, ofInjective, projectionOnto
+This has an advantage over `Submodule.projectionOnto` in that it allows the user
+ better
+definitional control over the type.
 -/
 def linearProjOfIsCompl {F : Type*} [AddCommGroup F] [Module R F]
-    (i : F ->ₗ[R] E) (hi : Function.Injective i)
-    (h : IsCompl (LinearMap.range i) q) : E ->ₗ[R] F :=
+    (i : F →ₗ[R] E) (hi : Function.Injective i)
+    (h : IsCompl (LinearMap.range i) q) : E →ₗ[R] F :=
   (LinearEquiv.ofInjective i hi).symm ∘ₗ (LinearMap.range i).projectionOnto q h
 
-variable {F : Type*} [AddCommGroup F] [Module R F] (i : F ->ₗ[R] E) (hi : Function.Injective i)
+variable {F : Type*} [AddCommGroup F] [Module R F] (i : F →ₗ[R] E) (hi : Function.Injective i)
     (h : IsCompl (LinearMap.range i) q)
 
 @[simp]
-/--
-theorem `linearProjOfIsCompl_apply_left` / 定理 `linearProjOfIsCompl_apply_left`
-
-English:
-theorem linearProjOfIsCompl_apply_left
-  given: (x : F)
-  statement: linearProjOfIsCompl q i hi h (i x) = x
-  proof: by
-  obtain ⟨ix, rfl⟩ := (LinearEquiv.ofInjective i hi).symm.surjective x
-  simp [linearProjOfIsCompl]
-
-中文:
-定理 linearProjOfIsCompl_apply_left
-  条件: (x : F)
-  结论: linearProjOfIsCompl q i hi h (i x) = x
-  证明: by
-  obtain ⟨ix, rfl⟩ := (LinearEquiv.ofInjective i hi).symm.surjective x
-  simp [linearProjOfIsCompl]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.ofInjective, linearProjOfIsCompl, ofInjective, surjective, symm.surjective
+/-
+**LinearMap.linearProjOfIsCompl_apply_left** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`
+。
+形式化陈述：linearProjOfIsCompl_apply_left (x : F) : linearProjOfIsCompl q i hi h (i x
+) = x
+参数：x : F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomSurjective.invPair`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst : Sem
+iring R₁] [inst_1 : Semiring R₂] {σ₁ : R₁ →+* R₂} {σ₂ : R₂ →+* R₁}   [RingHomInv
+Pair σ₁ σ₂], Ri…
+· 使用定理 `LinearEquiv.surjective`：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {
+M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMono
+id M] [inst_…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `LinearEquiv.ofInjective_symm_apply`：ofInjective_symm_apply [RingHomInvPa
+ir σ₁₂ σ₂₁] [RingHomInvPair σ₂₁ σ₁₂] {h : Injective f} (x : LinearMap.range f) :
+ f ((ofInjective f h).sy…
+· 使用定理 `Submodule.projectionOnto_apply_left`：projectionOnto_apply_left (h : IsCo
+mpl p q) (x : p) : projectionOnto p q h x = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem linearProjOfIsCompl_apply_left (x : F) : linearProjOfIsCompl q i hi h (i x) = x := by
   obtain ⟨ix, rfl⟩ := (LinearEquiv.ofInjective i hi).symm.surjective x
   simp [linearProjOfIsCompl]
-
-/--
-lemma `linearProjOfIsCompl_apply_right'` / 引理 `linearProjOfIsCompl_apply_right'`
-
-English:
-lemma linearProjOfIsCompl_apply_right'
-  given: (x : E) (hx : x in q)
-  proof: by
-  simpa [LinearMap.linearProjOfIsCompl]
-
-@[simp]
-
-中文:
-引理 linearProjOfIsCompl_apply_right'
-  条件: (x : E) (hx : x in q)
-  证明: by
-  simpa [LinearMap.linearProjOfIsCompl]
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.linearProjOfIsCompl, linearProjOfIsCompl
+/-
+**LinearMap.linearProjOfIsCompl_apply_right'** 是 Mathlib 中的一个引理，位于命名空间 `LinearMa
+p`。
+形式化陈述：linearProjOfIsCompl_apply_right' (x : E) (hx : x in q) : linearProjOfIsCom
+pl q i hi h x = 0
+参数：x : E；hx : x in q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `SemilinearEquivClass.instSemilinearMapClass`：∀ {R : Type u_1} {S : Type 
+u_6} {M : Type u_7} {M₂ : Type u_9} (F : Type u_14) [inst : Semiring R] [inst_1 
+: Semiring S]   [inst_2 : AddComm…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
 -/
-lemma linearProjOfIsCompl_apply_right' (x : E) (hx : x in q) :
+lemma linearProjOfIsCompl_apply_right' (x : E) (hx : x ∈ q) :
     linearProjOfIsCompl q i hi h x = 0 := by
   simpa [LinearMap.linearProjOfIsCompl]
 
 @[simp]
-/--
-lemma `linearProjOfIsCompl_apply_right` / 引理 `linearProjOfIsCompl_apply_right`
-
-English:
-lemma linearProjOfIsCompl_apply_right
-  given: (x : q)
-  statement: linearProjOfIsCompl q i hi h x = 0
-  proof: by
-  simp [LinearMap.linearProjOfIsCompl]
-
-@[simp]
-
-中文:
-引理 linearProjOfIsCompl_apply_right
-  条件: (x : q)
-  结论: linearProjOfIsCompl q i hi h x = 0
-  证明: by
-  simp [LinearMap.linearProjOfIsCompl]
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.linearProjOfIsCompl, linearProjOfIsCompl
+/-
+**LinearMap.linearProjOfIsCompl_apply_right** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap
+`。
+形式化陈述：linearProjOfIsCompl_apply_right (x : q) : linearProjOfIsCompl q i hi h x =
+ 0
+参数：x : q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.projectionOnto_apply_right`：projectionOnto_apply_right (h : Is
+Compl p q) (x : q) : projectionOnto p q h x = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `SemilinearEquivClass.instSemilinearMapClass`：∀ {R : Type u_1} {S : Type 
+u_6} {M : Type u_7} {M₂ : Type u_9} (F : Type u_14) [inst : Semiring R] [inst_1 
+: Semiring S]   [inst_2 : AddComm…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma linearProjOfIsCompl_apply_right (x : q) : linearProjOfIsCompl q i hi h x = 0 := by
   simp [LinearMap.linearProjOfIsCompl]
 
 @[simp]
-/--
-lemma `ker_linearProjOfIsCompl` / 引理 `ker_linearProjOfIsCompl`
-
-English:
-lemma ker_linearProjOfIsCompl
-  statement: ker (linearProjOfIsCompl q i hi h) = q
-  proof: by
-  simp [LinearMap.linearProjOfIsCompl]
-
-中文:
-引理 ker_linearProjOfIsCompl
-  结论: ker (linearProjOfIsCompl q i hi h) = q
-  证明: by
-  simp [LinearMap.linearProjOfIsCompl]
-
-Depends on / 依赖: LinearMap, LinearMap.linearProjOfIsCompl, linearProjOfIsCompl
+/-
+**LinearMap.ker_linearProjOfIsCompl** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap`。
+形式化陈述：ker_linearProjOfIsCompl : ker (linearProjOfIsCompl q i hi h) = q
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearEquiv.ker_comp`：ker_comp (l : M ->ₛₗ[σ₁₂] M₂) : LinearMap.ker (((e
+'' : M₂ ->ₛₗ[σ₂₃] M₃).comp l : M ->ₛₗ[σ₁₃] M₃) : M ->ₛₗ[σ₁₃] M₃) = LinearMap.ker
+ l
+· 使用定理 `Submodule.ker_projectionOnto`：ker_projectionOnto (h : IsCompl p q) : ker
+ (projectionOnto p q h) = q
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma ker_linearProjOfIsCompl : ker (linearProjOfIsCompl q i hi h) = q := by
   simp [LinearMap.linearProjOfIsCompl]
 
 end
 
-/--
-Definition of `ofIsCompl` / `ofIsCompl` 的定义
+/-- Given linear maps `φ` and `ψ` from complement submodules, `LinearMap.ofIsCompl` is
+the induced linear map over the entire module. -/
+/-
+**LinearMap.ofIsCompl** 是 Mathlib 中的一个定义，位于命名空间 `LinearMap`。
+形式化陈述：ofIsCompl {p q : Submodule R E} (h : IsCompl p q) (φ : p ->ₗ[R] F) (ψ : q 
+->ₗ[R] F) : E ->ₗ[R] F
+参数：h : IsCompl p q；φ : p ->ₗ[R] F；ψ : q ->ₗ[R] F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIsCompl
-  signature: {p q : Submodule R E} (h : IsCompl p q) (φ : p ->ₗ[R] F) (ψ : q ->ₗ[R] F)
-  body: LinearMap.coprod φ ψ ∘ₗ ↑(Submodule.prodEquivOfIsCompl _ _ h).symm
-
-中文:
-定义 ofIsCompl
-  签名: {p q : 子模 R E} (h : 是补集 p q) (φ : p ->ₗ[R] F) (ψ : q ->ₗ[R] F)
-  定义体: LinearMap.coprod φ ψ ∘ₗ ↑(Submodule.prodEquivOfIsCompl _ _ h).symm
-
-Depends on / 依赖: LinearMap, LinearMap.coprod, Submodule, Submodule.prodEquivOfIsCompl, coprod, prodEquivOfIsCompl
+--- 原说明 ---
+Given linear maps `φ` and `ψ` from complement submodules, `LinearMap.ofIsCompl` 
+is
+the induced linear map over the entire module.
 -/
-def ofIsCompl {p q : Submodule R E} (h : IsCompl p q) (φ : p ->ₗ[R] F) (ψ : q ->ₗ[R] F) : E ->ₗ[R] F :=
+def ofIsCompl {p q : Submodule R E} (h : IsCompl p q) (φ : p →ₗ[R] F) (ψ : q →ₗ[R] F) : E →ₗ[R] F :=
   LinearMap.coprod φ ψ ∘ₗ ↑(Submodule.prodEquivOfIsCompl _ _ h).symm
 
 variable {p q}
 
 @[simp]
-/--
-theorem `ofIsCompl_apply_left` / 定理 `ofIsCompl_apply_left`
-
-English:
-theorem ofIsCompl_apply_left
-  given: (h : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} (u : p)
-  proof: by simp [ofIsCompl]
-
-@[simp]
-
-中文:
-定理 ofIsCompl_apply_left
-  条件: (h : 是补集 p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} (u : p)
-  证明: by simp [ofIsCompl]
-
-@[simp]
-
-Depends on / 依赖: ofIsCompl
+/-
+**LinearMap.ofIsCompl_apply_left** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：ofIsCompl_apply_left (h : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} (
+u : p) : ofIsCompl h φ ψ (u : E) = φ u
+参数：h : IsCompl p q；u : p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsCompl.symm`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Bounded
+Order α] {x y : α}, IsCompl x y → IsCompl y x
+· 使用定理 `LinearMap.comp.congr_simp`：∀ {R₁ : Type u_2} {R₂ : Type u_3} {R₃ : Type 
+u_4} {M₁ : Type u_9} {M₂ : Type u_10} {M₃ : Type u_11} [inst : Semiring R₁]   [i
+nst_1 : Semirin…
+· 使用定理 `Submodule.toLinearMap_prodEquivOfIsCompl_symm`：toLinearMap_prodEquivOfIs
+Compl_symm (hpq : IsCompl p q) : (p.prodEquivOfIsCompl q hpq).symm.toLinearMap =
+ (p.projectionOnto q hpq).prod (q.p…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Submodule.projectionOnto_apply_left`：projectionOnto_apply_left (h : IsCo
+mpl p q) (x : p) : projectionOnto p q h x = x
+· 使用定理 `Submodule.projectionOnto_apply_right`：projectionOnto_apply_right (h : Is
+Compl p q) (x : q) : projectionOnto p q h x = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ofIsCompl_apply_left (h : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} (u : p) :
+theorem ofIsCompl_apply_left (h : IsCompl p q) {φ : p →ₗ[R] F} {ψ : q →ₗ[R] F} (u : p) :
     ofIsCompl h φ ψ (u : E) = φ u := by simp [ofIsCompl]
 
 @[simp]
-/--
-theorem `ofIsCompl_apply_right` / 定理 `ofIsCompl_apply_right`
-
-English:
-theorem ofIsCompl_apply_right
-  given: (h : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} (v : q)
-  proof: by simp [ofIsCompl]
-
-中文:
-定理 ofIsCompl_apply_right
-  条件: (h : 是补集 p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} (v : q)
-  证明: by simp [ofIsCompl]
-
-Depends on / 依赖: ofIsCompl
+/-
+**LinearMap.ofIsCompl_apply_right** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：ofIsCompl_apply_right (h : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} 
+(v : q) : ofIsCompl h φ ψ (v : E) = ψ v
+参数：h : IsCompl p q；v : q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsCompl.symm`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Bounded
+Order α] {x y : α}, IsCompl x y → IsCompl y x
+· 使用定理 `LinearMap.comp.congr_simp`：∀ {R₁ : Type u_2} {R₂ : Type u_3} {R₃ : Type 
+u_4} {M₁ : Type u_9} {M₂ : Type u_10} {M₃ : Type u_11} [inst : Semiring R₁]   [i
+nst_1 : Semirin…
+· 使用定理 `Submodule.toLinearMap_prodEquivOfIsCompl_symm`：toLinearMap_prodEquivOfIs
+Compl_symm (hpq : IsCompl p q) : (p.prodEquivOfIsCompl q hpq).symm.toLinearMap =
+ (p.projectionOnto q hpq).prod (q.p…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Submodule.projectionOnto_apply_right`：projectionOnto_apply_right (h : Is
+Compl p q) (x : q) : projectionOnto p q h x = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `Submodule.projectionOnto_apply_left`：projectionOnto_apply_left (h : IsCo
+mpl p q) (x : p) : projectionOnto p q h x = x
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ofIsCompl_apply_right (h : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} (v : q) :
+theorem ofIsCompl_apply_right (h : IsCompl p q) {φ : p →ₗ[R] F} {ψ : q →ₗ[R] F} (v : q) :
     ofIsCompl h φ ψ (v : E) = ψ v := by simp [ofIsCompl]
-
-/--
-theorem `ofIsCompl_eq` / 定理 `ofIsCompl_eq`
-
-English:
-theorem ofIsCompl_eq
-  statement: (h : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} {χ : E ->ₗ[R] F}
-  proof: by
-  ext x
-  obtain ⟨_, _, rfl, _⟩ := existsUnique_add_of_isCompl h x
-  simp [ofIsCompl, hφ, hψ]
-
-中文:
-定理 ofIsCompl_eq
-  结论: (h : 是补集 p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} {χ : E ->ₗ[R] F}
-  证明: by
-  ext x
-  obtain ⟨_, _, rfl, _⟩ := existsUnique_add_of_isCompl h x
-  simp [ofIsCompl, hφ, hψ]
-
-Depends on / 依赖: existsUnique_add_of_isCompl, ofIsCompl
+/-
+**LinearMap.ofIsCompl_eq** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：ofIsCompl_eq (h : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} {χ : E ->
+ₗ[R] F} (hφ : forall u, φ u = χ u) (hψ : forall u, ψ u = χ u) : ofIsCompl h φ ψ 
+= χ
+参数：h : IsCompl p q；hφ : forall u, φ u = χ u；hψ : forall u, ψ u = χ u。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Submodule.existsUnique_add_of_isCompl`：existsUnique_add_of_isCompl (hc :
+ IsCompl p q) (x : E) : exists (u : p) (v : q), (u : E) + v = x ∧ forall (r : p)
+ (s : q), (r : E) + s = x -…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsCompl.symm`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Bounded
+Order α] {x y : α}, IsCompl x y → IsCompl y x
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LinearMap.comp.congr_simp`：∀ {R₁ : Type u_2} {R₂ : Type u_3} {R₃ : Type 
+u_4} {M₁ : Type u_9} {M₂ : Type u_10} {M₃ : Type u_11} [inst : Semiring R₁]   [i
+nst_1 : Semirin…
+· 使用定理 `Submodule.toLinearMap_prodEquivOfIsCompl_symm`：toLinearMap_prodEquivOfIs
+Compl_symm (hpq : IsCompl p q) : (p.prodEquivOfIsCompl q hpq).symm.toLinearMap =
+ (p.projectionOnto q hpq).prod (q.p…
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `Submodule.projectionOnto_apply_left`：projectionOnto_apply_left (h : IsCo
+mpl p q) (x : p) : projectionOnto p q h x = x
+· 使用定理 `Submodule.projectionOnto_apply_right`：projectionOnto_apply_right (h : Is
+Compl p q) (x : q) : projectionOnto p q h x = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ofIsCompl_eq (h : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} {χ : E ->ₗ[R] F}
-    (hφ : forall u, φ u = χ u) (hψ : forall u, ψ u = χ u) : ofIsCompl h φ ψ = χ := by
+theorem ofIsCompl_eq (h : IsCompl p q) {φ : p →ₗ[R] F} {ψ : q →ₗ[R] F} {χ : E →ₗ[R] F}
+    (hφ : ∀ u, φ u = χ u) (hψ : ∀ u, ψ u = χ u) : ofIsCompl h φ ψ = χ := by
   ext x
   obtain ⟨_, _, rfl, _⟩ := existsUnique_add_of_isCompl h x
   simp [ofIsCompl, hφ, hψ]
-
-/--
-theorem `ofIsCompl_eq'` / 定理 `ofIsCompl_eq'`
-
-English:
-theorem ofIsCompl_eq'
-  statement: (h : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} {χ : E ->ₗ[R] F}
-  proof: ofIsCompl_eq h (fun _ => hφ.symm ▸ rfl) fun _ => hψ.symm ▸ rfl
-
-中文:
-定理 ofIsCompl_eq'
-  结论: (h : 是补集 p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} {χ : E ->ₗ[R] F}
-  证明: ofIsCompl_eq h (fun _ => hφ.symm ▸ rfl) fun _ => hψ.symm ▸ rfl
-
-Depends on / 依赖: ofIsCompl_eq
+/-
+**LinearMap.ofIsCompl_eq'** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：ofIsCompl_eq' (h : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} {χ : E -
+>ₗ[R] F} (hφ : φ = χ.comp p.subtype) (hψ : ψ = χ.comp q.subtype) : ofIsCompl h φ
+ ψ = χ
+参数：h : IsCompl p q；hφ : φ = χ.comp p.subtype；hψ : ψ = χ.comp q.subtype。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ofIsCompl_eq`：ofIsCompl_eq (h : IsCompl p q) {φ : p ->ₗ[R] F} 
+{ψ : q ->ₗ[R] F} {χ : E ->ₗ[R] F} (hφ : forall u, φ u = χ u) (hψ : forall u, ψ u
+ = χ u) : of…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem ofIsCompl_eq' (h : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} {χ : E ->ₗ[R] F}
+theorem ofIsCompl_eq' (h : IsCompl p q) {φ : p →ₗ[R] F} {ψ : q →ₗ[R] F} {χ : E →ₗ[R] F}
     (hφ : φ = χ.comp p.subtype) (hψ : ψ = χ.comp q.subtype) : ofIsCompl h φ ψ = χ :=
   ofIsCompl_eq h (fun _ => hφ.symm ▸ rfl) fun _ => hψ.symm ▸ rfl
-
-/--
-theorem `ofIsCompl_eq_add` / 定理 `ofIsCompl_eq_add`
-
-English:
-theorem ofIsCompl_eq_add
-  given: (hpq : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F}
-  proof: by
-  ext x
-  obtain ⟨a, b, rfl, _⟩ := existsUnique_add_of_isCompl hpq x
-  simp
-
-@[simp]
-
-中文:
-定理 ofIsCompl_eq_add
-  条件: (hpq : 是补集 p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F}
-  证明: by
-  ext x
-  obtain ⟨a, b, rfl, _⟩ := existsUnique_add_of_isCompl hpq x
-  simp
-
-@[simp]
-
-Depends on / 依赖: existsUnique_add_of_isCompl
+/-
+**LinearMap.ofIsCompl_eq_add** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：ofIsCompl_eq_add (hpq : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} : o
+fIsCompl hpq φ ψ = (φ ∘ₗ p.projectionOnto q hpq) + (ψ ∘ₗ q.projectionOnto p hpq.
+symm)
+参数：hpq : IsCompl p q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `IsCompl.symm`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Bounded
+Order α] {x y : α}, IsCompl x y → IsCompl y x
+· 使用定理 `Submodule.existsUnique_add_of_isCompl`：existsUnique_add_of_isCompl (hc :
+ IsCompl p q) (x : E) : exists (u : p) (v : q), (u : E) + v = x ∧ forall (r : p)
+ (s : q), (r : E) + s = x -…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `LinearMap.ofIsCompl_apply_left`：ofIsCompl_apply_left (h : IsCompl p q) {
+φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} (u : p) : ofIsCompl h φ ψ (u : E) = φ u
+· 使用定理 `LinearMap.ofIsCompl_apply_right`：ofIsCompl_apply_right (h : IsCompl p q)
+ {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} (v : q) : ofIsCompl h φ ψ (v : E) = ψ v
+· 使用定理 `Submodule.projectionOnto_apply_left`：projectionOnto_apply_left (h : IsCo
+mpl p q) (x : p) : projectionOnto p q h x = x
+· 使用定理 `Submodule.projectionOnto_apply_right`：projectionOnto_apply_right (h : Is
+Compl p q) (x : q) : projectionOnto p q h x = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ofIsCompl_eq_add (hpq : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} :
+theorem ofIsCompl_eq_add (hpq : IsCompl p q) {φ : p →ₗ[R] F} {ψ : q →ₗ[R] F} :
     ofIsCompl hpq φ ψ = (φ ∘ₗ p.projectionOnto q hpq) + (ψ ∘ₗ q.projectionOnto p hpq.symm) := by
   ext x
   obtain ⟨a, b, rfl, _⟩ := existsUnique_add_of_isCompl hpq x
   simp
 
 @[simp]
-/--
-theorem `ofIsCompl_zero` / 定理 `ofIsCompl_zero`
-
-English:
-theorem ofIsCompl_zero
-  given: (h : IsCompl p q)
-  statement: (ofIsCompl h 0 0 : E ->ₗ[R] F) = 0
-  proof: ofIsCompl_eq _ (fun _ => rfl) fun _ => rfl
-
-@[simp]
-
-中文:
-定理 ofIsCompl_zero
-  条件: (h : 是补集 p q)
-  结论: (ofIsCompl h 0 0 : E ->ₗ[R] F) = 0
-  证明: ofIsCompl_eq _ (fun _ => rfl) fun _ => rfl
-
-@[simp]
-
-Depends on / 依赖: ofIsCompl_eq
+/-
+**LinearMap.ofIsCompl_zero** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：ofIsCompl_zero (h : IsCompl p q) : (ofIsCompl h 0 0 : E ->ₗ[R] F) = 0
+参数：h : IsCompl p q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ofIsCompl_eq`：ofIsCompl_eq (h : IsCompl p q) {φ : p ->ₗ[R] F} 
+{ψ : q ->ₗ[R] F} {χ : E ->ₗ[R] F} (hφ : forall u, φ u = χ u) (hψ : forall u, ψ u
+ = χ u) : of…
 -/
-theorem ofIsCompl_zero (h : IsCompl p q) : (ofIsCompl h 0 0 : E ->ₗ[R] F) = 0 :=
+theorem ofIsCompl_zero (h : IsCompl p q) : (ofIsCompl h 0 0 : E →ₗ[R] F) = 0 :=
   ofIsCompl_eq _ (fun _ => rfl) fun _ => rfl
 
 @[simp]
-/--
-theorem `ofIsCompl_add` / 定理 `ofIsCompl_add`
-
-English:
-theorem ofIsCompl_add
-  given: (h : IsCompl p q) {φ₁ φ₂ : p ->ₗ[R] F} {ψ₁ ψ₂ : q ->ₗ[R] F}
-  proof: ofIsCompl_eq _ (by simp) (by simp)
-
-@[simp]
-
-中文:
-定理 ofIsCompl_add
-  条件: (h : 是补集 p q) {φ₁ φ₂ : p ->ₗ[R] F} {ψ₁ ψ₂ : q ->ₗ[R] F}
-  证明: ofIsCompl_eq _ (by simp) (by simp)
-
-@[simp]
-
-Depends on / 依赖: ofIsCompl_eq
+/-
+**LinearMap.ofIsCompl_add** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：ofIsCompl_add (h : IsCompl p q) {φ₁ φ₂ : p ->ₗ[R] F} {ψ₁ ψ₂ : q ->ₗ[R] F} 
+: ofIsCompl h (φ₁ + φ₂) (ψ₁ + ψ₂) = ofIsCompl h φ₁ ψ₁ + ofIsCompl h φ₂ ψ₂
+参数：h : IsCompl p q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ofIsCompl_eq`：ofIsCompl_eq (h : IsCompl p q) {φ : p ->ₗ[R] F} 
+{ψ : q ->ₗ[R] F} {χ : E ->ₗ[R] F} (hφ : forall u, φ u = χ u) (hψ : forall u, ψ u
+ = χ u) : of…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `LinearMap.ofIsCompl_apply_left`：ofIsCompl_apply_left (h : IsCompl p q) {
+φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} (u : p) : ofIsCompl h φ ψ (u : E) = φ u
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `LinearMap.ofIsCompl_apply_right`：ofIsCompl_apply_right (h : IsCompl p q)
+ {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} (v : q) : ofIsCompl h φ ψ (v : E) = ψ v
 -/
-theorem ofIsCompl_add (h : IsCompl p q) {φ₁ φ₂ : p ->ₗ[R] F} {ψ₁ ψ₂ : q ->ₗ[R] F} :
+theorem ofIsCompl_add (h : IsCompl p q) {φ₁ φ₂ : p →ₗ[R] F} {ψ₁ ψ₂ : q →ₗ[R] F} :
     ofIsCompl h (φ₁ + φ₂) (ψ₁ + ψ₂) = ofIsCompl h φ₁ ψ₁ + ofIsCompl h φ₂ ψ₂ :=
   ofIsCompl_eq _ (by simp) (by simp)
 
 @[simp]
-/--
-theorem `ofIsCompl_smul` / 定理 `ofIsCompl_smul`
-
-English:
-theorem ofIsCompl_smul
-  statement: {R : Type*} [CommRing R] {E : Type*} [AddCommGroup E] [Module R E]
-  proof: ofIsCompl_eq _ (by simp) (by simp)
-
-中文:
-定理 ofIsCompl_smul
-  结论: {R : 类型} [交换环 R] {E : 类型} [加法交换群 E] [模 R E]
-  证明: ofIsCompl_eq _ (by simp) (by simp)
-
-Depends on / 依赖: ofIsCompl_eq
+/-
+**LinearMap.ofIsCompl_smul** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：ofIsCompl_smul {R : Type*} [CommRing R] {E : Type*} [AddCommGroup E] [Modu
+le R E] {F : Type*} [AddCommGroup F] [Module R F] {p q : Submodule R E} (h : IsC
+ompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} (c : R) : ofIsCompl h (c • φ) (c • ψ
+) = c • ofIsCompl h φ ψ
+参数：h : IsCompl p q；c : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ofIsCompl_eq`：ofIsCompl_eq (h : IsCompl p q) {φ : p ->ₗ[R] F} 
+{ψ : q ->ₗ[R] F} {χ : E ->ₗ[R] F} (hφ : forall u, φ u = χ u) (hψ : forall u, ψ u
+ = χ u) : of…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.ofIsCompl_apply_left`：ofIsCompl_apply_left (h : IsCompl p q) {
+φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} (u : p) : ofIsCompl h φ ψ (u : E) = φ u
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `LinearMap.ofIsCompl_apply_right`：ofIsCompl_apply_right (h : IsCompl p q)
+ {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} (v : q) : ofIsCompl h φ ψ (v : E) = ψ v
 -/
 theorem ofIsCompl_smul {R : Type*} [CommRing R] {E : Type*} [AddCommGroup E] [Module R E]
     {F : Type*} [AddCommGroup F] [Module R F] {p q : Submodule R E} (h : IsCompl p q)
-    {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} (c : R) : ofIsCompl h (c • φ) (c • ψ) = c • ofIsCompl h φ ψ :=
+    {φ : p →ₗ[R] F} {ψ : q →ₗ[R] F} (c : R) : ofIsCompl h (c • φ) (c • ψ) = c • ofIsCompl h φ ψ :=
   ofIsCompl_eq _ (by simp) (by simp)
-
-/--
-theorem `surjective_comp_projectionOnto` / 定理 `surjective_comp_projectionOnto`
-
-English:
-theorem surjective_comp_projectionOnto
-  given: (h : IsCompl p q) [Module R M]
-  proof: fun f => ⟨p.subtype ∘ₗ f, by ext; simp⟩
-
-中文:
-定理 surjective_comp_projectionOnto
-  条件: (h : 是补集 p q) [模 R M]
-  证明: fun f => ⟨p.subtype ∘ₗ f, by ext; simp⟩
-
-Depends on / 依赖: p.subtype, subtype
+/-
+**LinearMap.surjective_comp_projectionOnto** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`
+。
+形式化陈述：surjective_comp_projectionOnto (h : IsCompl p q) [Module R M] : Function.S
+urjective (comp (p.projectionOnto q h) : (M ->ₗ[R] E) -> _)
+参数：h : IsCompl p q。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.projectionOnto_apply_left`：projectionOnto_apply_left (h : IsCo
+mpl p q) (x : p) : projectionOnto p q h x = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem surjective_comp_projectionOnto (h : IsCompl p q) [Module R M] :
-    Function.Surjective (comp (p.projectionOnto q h) : (M ->ₗ[R] E) -> _) :=
-  fun f => ⟨p.subtype ∘ₗ f, by ext; simp⟩
-
-/--
-theorem `surjective_comp_subtype_of_isComplemented` / 定理 `surjective_comp_subtype_of_isComplemented`
-
-English:
-theorem surjective_comp_subtype_of_isComplemented
-  given: (h : IsComplemented p) [Module R M]
-  proof: have ⟨q, h⟩ := h; fun f => ⟨f ∘ₗ p.projectionOnto q h, by ext; simp⟩
-
-@[simp]
-
-中文:
-定理 surjective_comp_subtype_of_isComplemented
-  条件: (h : IsComplemented p) [模 R M]
-  证明: have ⟨q, h⟩ := h; fun f => ⟨f ∘ₗ p.projectionOnto q h, by ext; simp⟩
-
-@[simp]
-
-Depends on / 依赖: p.projectionOnto, projectionOnto
+    Function.Surjective (comp (p.projectionOnto q h) : (M →ₗ[R] E) → _) :=
+  fun f ↦ ⟨p.subtype ∘ₗ f, by ext; simp⟩
+/-
+**LinearMap.surjective_comp_subtype_of_isComplemented** 是 Mathlib 中的一个定理，位于命名空间 
+`LinearMap`。
+形式化陈述：surjective_comp_subtype_of_isComplemented (h : IsComplemented p) [Module R
+ M] : Function.Surjective fun f : E ->ₗ[R] M => f ∘ₗ p.subtype
+参数：h : IsComplemented p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.projectionOnto_apply_left`：projectionOnto_apply_left (h : IsCo
+mpl p q) (x : p) : projectionOnto p q h x = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem surjective_comp_subtype_of_isComplemented (h : IsComplemented p) [Module R M] :
-    Function.Surjective fun f : E ->ₗ[R] M => f ∘ₗ p.subtype :=
-  have ⟨q, h⟩ := h; fun f => ⟨f ∘ₗ p.projectionOnto q h, by ext; simp⟩
+    Function.Surjective fun f : E →ₗ[R] M ↦ f ∘ₗ p.subtype :=
+  have ⟨q, h⟩ := h; fun f ↦ ⟨f ∘ₗ p.projectionOnto q h, by ext; simp⟩
 
 @[simp]
-/--
-theorem `range_ofIsCompl` / 定理 `range_ofIsCompl`
-
-English:
-theorem range_ofIsCompl
-  given: (hpq : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F}
-  proof: by
-  rw [ofIsCompl_eq_add]
-  apply le_antisymm
-.trans · apply range_add_le _ _
-    gcongr
-    all_goals exact range_comp_le_range ..
-  · apply sup_le
-    all_goals rintro - ⟨x, rfl⟩; exact ⟨x, by simp⟩
-
-中文:
-定理 range_ofIsCompl
-  条件: (hpq : 是补集 p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F}
-  证明: by
-  rw [ofIsCompl_eq_add]
-  apply le_antisymm
-.trans · apply range_add_le _ _
-    gcongr
-    all_goals exact range_comp_le_range ..
-  · apply sup_le
-    all_goals rintro - ⟨x, rfl⟩; exact ⟨x, by simp⟩
-
-Depends on / 依赖: all_goals, le_antisymm, ofIsCompl_eq_add, range_add_le, range_comp_le_range, sup_le
+/-
+**LinearMap.range_ofIsCompl** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：range_ofIsCompl (hpq : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} : ra
+nge (ofIsCompl hpq φ ψ) = range φ ⊔ range ψ
+参数：hpq : IsCompl p q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCompl.symm`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Bounded
+Order α] {x y : α}, IsCompl x y → IsCompl y x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.ofIsCompl_eq_add`：ofIsCompl_eq_add (hpq : IsCompl p q) {φ : p 
+->ₗ[R] F} {ψ : q ->ₗ[R] F} : ofIsCompl hpq φ ψ = (φ ∘ₗ p.projectionOnto q hpq) +
+ (ψ ∘ₗ q.project…
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `LinearMap.range_add_le`：range_add_le [RingHomSurjective τ₁₂] (f g : M ->
+ₛₗ[τ₁₂] M₂) : range (f + g) <= range f ⊔ range g
+· 使用定理 `sup_le_sup`：sup_le_sup (h₁ : a <= b) (h₂ : c <= d) : a ⊔ c <= b ⊔ d
+· 使用定理 `LinearMap.range_comp_le_range`：range_comp_le_range [RingHomSurjective τ₂
+₃] [RingHomSurjective τ₁₃] (f : M ->ₛₗ[τ₁₂] M₂) (g : M₂ ->ₛₗ[τ₂₃] M₃) : range (g
+.comp f : M ->ₛₗ[τ₁…
+· 使用定理 `sup_le`：sup_le : a <= c -> b <= c -> a ⊔ b <= c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Submodule.projectionOnto_apply_left`：projectionOnto_apply_left (h : IsCo
+mpl p q) (x : p) : projectionOnto p q h x = x
+· 使用定理 `Submodule.projectionOnto_apply_right`：projectionOnto_apply_right (h : Is
+Compl p q) (x : q) : projectionOnto p q h x = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
 -/
-theorem range_ofIsCompl (hpq : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} :
+theorem range_ofIsCompl (hpq : IsCompl p q) {φ : p →ₗ[R] F} {ψ : q →ₗ[R] F} :
     range (ofIsCompl hpq φ ψ) = range φ ⊔ range ψ := by
   rw [ofIsCompl_eq_add]
   apply le_antisymm
-.trans · apply range_add_le _ _
+  · apply range_add_le _ _ |>.trans
     gcongr
     all_goals exact range_comp_le_range ..
   · apply sup_le
     all_goals rintro - ⟨x, rfl⟩; exact ⟨x, by simp⟩
-
-/--
-theorem `ofIsCompl_subtype_zero_eq` / 定理 `ofIsCompl_subtype_zero_eq`
-
-English:
-theorem ofIsCompl_subtype_zero_eq
-  given: (hpq : IsCompl p q)
-  proof: by
-  simp [ofIsCompl_eq_add, projection]
-
-中文:
-定理 ofIsCompl_subtype_zero_eq
-  条件: (hpq : 是补集 p q)
-  证明: by
-  simp [ofIsCompl_eq_add, projection]
-
-Depends on / 依赖: ofIsCompl_eq_add, projection
+/-
+**LinearMap.ofIsCompl_subtype_zero_eq** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：ofIsCompl_subtype_zero_eq (hpq : IsCompl p q) : ofIsCompl hpq p.subtype 0 
+= p.projection q hpq
+参数：hpq : IsCompl p q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsCompl.symm`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Bounded
+Order α] {x y : α}, IsCompl x y → IsCompl y x
+· 使用定理 `LinearMap.ofIsCompl_eq_add`：ofIsCompl_eq_add (hpq : IsCompl p q) {φ : p 
+->ₗ[R] F} {ψ : q ->ₗ[R] F} : ofIsCompl hpq φ ψ = (φ ∘ₗ p.projectionOnto q hpq) +
+ (ψ ∘ₗ q.project…
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem ofIsCompl_subtype_zero_eq (hpq : IsCompl p q) :
     ofIsCompl hpq p.subtype 0 = p.projection q hpq := by
   simp [ofIsCompl_eq_add, projection]
-
-/--
-theorem `ofIsCompl_symm` / 定理 `ofIsCompl_symm`
-
-English:
-theorem ofIsCompl_symm
-  given: (hpq : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F}
-  proof: by
-  simp [ofIsCompl_eq_add, add_comm]
-
-中文:
-定理 ofIsCompl_symm
-  条件: (hpq : 是补集 p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F}
-  证明: by
-  simp [ofIsCompl_eq_add, add_comm]
-
-Depends on / 依赖: add_comm, ofIsCompl_eq_add
+/-
+**LinearMap.ofIsCompl_symm** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：ofIsCompl_symm (hpq : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} : ofI
+sCompl hpq.symm ψ φ = ofIsCompl hpq φ ψ
+参数：hpq : IsCompl p q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsCompl.symm`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Bounded
+Order α] {x y : α}, IsCompl x y → IsCompl y x
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.ofIsCompl_eq_add`：ofIsCompl_eq_add (hpq : IsCompl p q) {φ : p 
+->ₗ[R] F} {ψ : q ->ₗ[R] F} : ofIsCompl hpq φ ψ = (φ ∘ₗ p.projectionOnto q hpq) +
+ (ψ ∘ₗ q.project…
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ofIsCompl_symm (hpq : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} :
+theorem ofIsCompl_symm (hpq : IsCompl p q) {φ : p →ₗ[R] F} {ψ : q →ₗ[R] F} :
     ofIsCompl hpq.symm ψ φ = ofIsCompl hpq φ ψ := by
   simp [ofIsCompl_eq_add, add_comm]
 
@@ -1681,95 +1663,59 @@ section
 
 variable {R₁ : Type*} [CommRing R₁] [Module R₁ E] [Module R₁ F]
 
-/--
-Definition of `ofIsComplProd` / `ofIsComplProd` 的定义
+/-- The linear map from `(p →ₗ[R₁] F) × (q →ₗ[R₁] F)` to `E →ₗ[R₁] F`. -/
+/-
+**LinearMap.ofIsComplProd** 是 Mathlib 中的一个定义，位于命名空间 `LinearMap`。
+形式化陈述：ofIsComplProd {p q : Submodule R₁ E} (h : IsCompl p q) : (p ->ₗ[R₁] F) × (
+q ->ₗ[R₁] F) ->ₗ[R₁] E ->ₗ[R₁] F where toFun φ
+参数：h : IsCompl p q。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIsComplProd
-  signature: {p q : Submodule R₁ E} (h : IsCompl p q)
-  body: ofIsCompl h φ.1 φ.2
-  map_add' := by intro φ ψ; rw [Prod.snd_add, Prod.fst_add, ofIsCompl_add]
-  map_smul' := by intro c φ; simp [Prod.smul_snd, Prod.smul_fst, ofIsCompl_smul]
-
-@[simp]
-
-中文:
-定义 ofIsComplProd
-  签名: {p q : 子模 R₁ E} (h : 是补集 p q)
-  定义体: ofIsCompl h φ.1 φ.2
-  map_add' := by intro φ ψ; rw [Prod.snd_add, Prod.fst_add, ofIsCompl_add]
-  map_smul' := by intro c φ; simp [Prod.smul_snd, Prod.smul_fst, ofIsCompl_smul]
-
-@[simp]
-
-Depends on / 依赖: ofIsCompl
+--- 原说明 ---
+The linear map from `(p →ₗ[R₁] F) × (q →ₗ[R₁] F)` to `E →ₗ[R₁] F`.
 -/
 def ofIsComplProd {p q : Submodule R₁ E} (h : IsCompl p q) :
-    (p ->ₗ[R₁] F) × (q ->ₗ[R₁] F) ->ₗ[R₁] E ->ₗ[R₁] F where
+    (p →ₗ[R₁] F) × (q →ₗ[R₁] F) →ₗ[R₁] E →ₗ[R₁] F where
   toFun φ := ofIsCompl h φ.1 φ.2
   map_add' := by intro φ ψ; rw [Prod.snd_add, Prod.fst_add, ofIsCompl_add]
   map_smul' := by intro c φ; simp [Prod.smul_snd, Prod.smul_fst, ofIsCompl_smul]
 
 @[simp]
-/--
-theorem `ofIsComplProd_apply` / 定理 `ofIsComplProd_apply`
-
-English:
-theorem ofIsComplProd_apply
-  statement: {p q : Submodule R₁ E} (h : IsCompl p q)
-  proof: rfl
-
-中文:
-定理 ofIsComplProd_apply
-  结论: {p q : 子模 R₁ E} (h : 是补集 p q)
-  证明: rfl
+/-
+**LinearMap.ofIsComplProd_apply** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：ofIsComplProd_apply {p q : Submodule R₁ E} (h : IsCompl p q) (φ : (p ->ₗ[R
+₁] F) × (q ->ₗ[R₁] F)) : ofIsComplProd h φ = ofIsCompl h φ.1 φ.2
+参数：h : IsCompl p q；φ : (p ->ₗ[R₁] F) × (q ->ₗ[R₁] F)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofIsComplProd_apply {p q : Submodule R₁ E} (h : IsCompl p q)
-    (φ : (p ->ₗ[R₁] F) × (q ->ₗ[R₁] F)) : ofIsComplProd h φ = ofIsCompl h φ.1 φ.2 :=
+    (φ : (p →ₗ[R₁] F) × (q →ₗ[R₁] F)) : ofIsComplProd h φ = ofIsCompl h φ.1 φ.2 :=
   rfl
 
-/--
-Definition of `ofIsComplProdEquiv` / `ofIsComplProdEquiv` 的定义
+/-- The natural linear equivalence between `(p →ₗ[R₁] F) × (q →ₗ[R₁] F)` and `E →ₗ[R₁] F`. -/
+/-
+**LinearMap.ofIsComplProdEquiv** 是 Mathlib 中的一个定义，位于命名空间 `LinearMap`。
+形式化陈述：ofIsComplProdEquiv {p q : Submodule R₁ E} (h : IsCompl p q) : ((p ->ₗ[R₁] 
+F) × (q ->ₗ[R₁] F)) ≃ₗ[R₁] E ->ₗ[R₁] F
+参数：h : IsCompl p q。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIsComplProdEquiv
-  signature: {p q : Submodule R₁ E} (h : IsCompl p q)
-  body: { ofIsComplProd h with
-    invFun := fun φ => ⟨φ.domRestrict p, φ.domRestrict q⟩
-    left_inv := fun φ => by
-      ext x
-      · exact ofIsCompl_apply_left h x
-      · exact ofIsCompl_apply_right h x
-    right_inv := fun φ => by
-      ext x
-      obtain ⟨a, b, hab, _⟩ := existsUnique_add_of_isCompl h x
-      rw [← hab]; simp }
-
-中文:
-定义 ofIsComplProdEquiv
-  签名: {p q : 子模 R₁ E} (h : 是补集 p q)
-  定义体: { ofIsComplProd h with
-    invFun := fun φ => ⟨φ.domRestrict p, φ.domRestrict q⟩
-    left_inv := fun φ => by
-      ext x
-      · exact ofIsCompl_apply_left h x
-      · exact ofIsCompl_apply_right h x
-    right_inv := fun φ => by
-      ext x
-      obtain ⟨a, b, hab, _⟩ := existsUnique_add_of_isCompl h x
-      rw [← hab]; simp }
-
-Depends on / 依赖: domRestrict, existsUnique_add_of_isCompl, invFun, left_inv, ofIsComplProd, ofIsCompl_apply_left, ofIsCompl_apply_right, right_inv
+--- 原说明 ---
+The natural linear equivalence between `(p →ₗ[R₁] F) × (q →ₗ[R₁] F)` and `E →ₗ[R
+₁] F`.
 -/
 def ofIsComplProdEquiv {p q : Submodule R₁ E} (h : IsCompl p q) :
-    ((p ->ₗ[R₁] F) × (q ->ₗ[R₁] F)) ≃ₗ[R₁] E ->ₗ[R₁] F :=
+    ((p →ₗ[R₁] F) × (q →ₗ[R₁] F)) ≃ₗ[R₁] E →ₗ[R₁] F :=
   { ofIsComplProd h with
     invFun := fun φ => ⟨φ.domRestrict p, φ.domRestrict q⟩
-    left_inv := fun φ => by
+    left_inv := fun φ ↦ by
       ext x
       · exact ofIsCompl_apply_left h x
       · exact ofIsCompl_apply_right h x
-    right_inv := fun φ => by
+    right_inv := fun φ ↦ by
       ext x
       obtain ⟨a, b, hab, _⟩ := existsUnique_add_of_isCompl h x
       rw [← hab]; simp }
@@ -1777,62 +1723,72 @@ def ofIsComplProdEquiv {p q : Submodule R₁ E} (h : IsCompl p q) :
 end
 
 @[simp]
-/--
-theorem `projectionOnto_of_proj` / 定理 `projectionOnto_of_proj`
-
-English:
-theorem projectionOnto_of_proj
-  given: (f : E ->ₗ[R] p) (hf : forall x : p, f x = x)
-  proof: by
-  ext x
-  have : x in p ⊔ (ker f) := by simp only [(isCompl_of_proj hf).sup_eq_top, mem_top]
-  rcases mem_sup'.1 this with ⟨x, y, rfl⟩
-  simp [hf]
-
-中文:
-定理 projectionOnto_of_proj
-  条件: (f : E ->ₗ[R] p) (hf : 对任意 x : p, f x = x)
-  证明: by
-  ext x
-  have : x in p ⊔ (ker f) := by simp only [(isCompl_of_proj hf).sup_eq_top, mem_top]
-  rcases mem_sup'.1 this with ⟨x, y, rfl⟩
-  simp [hf]
-
-Depends on / 依赖: isCompl_of_proj, mem_sup, mem_top, sup_eq_top
+/-
+**LinearMap.projectionOnto_of_proj** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：projectionOnto_of_proj (f : E ->ₗ[R] p) (hf : forall x : p, f x = x) : p.p
+rojectionOnto (ker f) (isCompl_of_proj hf) = f
+参数：f : E ->ₗ[R] p；hf : forall x : p, f x = x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `LinearMap.isCompl_of_proj`：isCompl_of_proj {f : E ->ₗ[R] p} (hf : forall
+ x : p, f x = x) : IsCompl p (ker f)
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsCompl.sup_eq_top`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Bounde
+dOrder α] {x y : α}, IsCompl x y → x ⊔ y = ⊤
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Submodule.mem_sup'`：mem_sup' : x in p ⊔ p' ↔ exists (y : p) (z : p'), (y
+ : M) + z = x
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `Submodule.projectionOnto_apply_left`：projectionOnto_apply_left (h : IsCo
+mpl p q) (x : p) : projectionOnto p q h x = x
+· 使用定理 `Submodule.projectionOnto_apply_right`：projectionOnto_apply_right (h : Is
+Compl p q) (x : q) : projectionOnto p q h x = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `LinearMap.map_coe_ker`：map_coe_ker (f : M ->ₛₗ[τ₁₂] M₂) (x : ker f) : f 
+x = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem projectionOnto_of_proj (f : E ->ₗ[R] p) (hf : forall x : p, f x = x) :
+theorem projectionOnto_of_proj (f : E →ₗ[R] p) (hf : ∀ x : p, f x = x) :
     p.projectionOnto (ker f) (isCompl_of_proj hf) = f := by
   ext x
-  have : x in p ⊔ (ker f) := by simp only [(isCompl_of_proj hf).sup_eq_top, mem_top]
+  have : x ∈ p ⊔ (ker f) := by simp only [(isCompl_of_proj hf).sup_eq_top, mem_top]
   rcases mem_sup'.1 this with ⟨x, y, rfl⟩
   simp [hf]
 
-/--
-Definition of `equivProdOfSurjectiveOfIsCompl` / `equivProdOfSurjectiveOfIsCompl` 的定义
+/-- If `f : E →ₗ[R] F` and `g : E →ₗ[R] G` are two surjective linear maps and
+their kernels are complement of each other, then `x ↦ (f x, g x)` defines
+a linear equivalence `E ≃ₗ[R] F × G`. -/
+/-
+**LinearMap.equivProdOfSurjectiveOfIsCompl** 是 Mathlib 中的一个定义，位于命名空间 `LinearMap`
+。
+形式化陈述：equivProdOfSurjectiveOfIsCompl (f : E ->ₗ[R] F) (g : E ->ₗ[R] G) (hf : ran
+ge f = ⊤) (hg : range g = ⊤) (hfg : IsCompl (ker f) (ker g)) : E ≃ₗ[R] F × G
+参数：f : E ->ₗ[R] F；g : E ->ₗ[R] G；hf : range f = ⊤；hg : range g = ⊤；hfg : IsCompl
+ (ker f) (ker g)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivProdOfSurjectiveOfIsCompl
-  signature: (f : E ->ₗ[R] F) (g : E ->ₗ[R] G) (hf : range f = ⊤)
-  body: LinearEquiv.ofBijective (f.prod g)
-    ⟨by simp [← ker_eq_bot, hfg.inf_eq_bot], by
-      rw [← range_eq_top]
-      simp [range_prod_eq hfg.sup_eq_top, *]⟩
-
-@[simp]
-
-中文:
-定义 equivProdOfSurjectiveOfIsCompl
-  签名: (f : E ->ₗ[R] F) (g : E ->ₗ[R] G) (hf : range f = ⊤)
-  定义体: LinearEquiv.ofBijective (f.prod g)
-    ⟨by simp [← ker_eq_bot, hfg.inf_eq_bot], by
-      rw [← range_eq_top]
-      simp [range_prod_eq hfg.sup_eq_top, *]⟩
-
-@[simp]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.ofBijective, f.prod, hfg.inf_eq_bot, hfg.sup_eq_top, inf_eq_bot, ker_eq_bot, ofBijective, range_eq_top, range_prod_eq, sup_eq_top
+--- 原说明 ---
+If `f : E →ₗ[R] F` and `g : E →ₗ[R] G` are two surjective linear maps and
+their kernels are complement of each other, then `x ↦ (f x, g x)` defines
+a linear equivalence `E ≃ₗ[R] F × G`.
 -/
-def equivProdOfSurjectiveOfIsCompl (f : E ->ₗ[R] F) (g : E ->ₗ[R] G) (hf : range f = ⊤)
+def equivProdOfSurjectiveOfIsCompl (f : E →ₗ[R] F) (g : E →ₗ[R] G) (hf : range f = ⊤)
     (hg : range g = ⊤) (hfg : IsCompl (ker f) (ker g)) : E ≃ₗ[R] F × G :=
   LinearEquiv.ofBijective (f.prod g)
     ⟨by simp [← ker_eq_bot, hfg.inf_eq_bot], by
@@ -1840,42 +1796,32 @@ def equivProdOfSurjectiveOfIsCompl (f : E ->ₗ[R] F) (g : E ->ₗ[R] G) (hf : r
       simp [range_prod_eq hfg.sup_eq_top, *]⟩
 
 @[simp]
-/--
-theorem `coe_equivProdOfSurjectiveOfIsCompl` / 定理 `coe_equivProdOfSurjectiveOfIsCompl`
-
-English:
-theorem coe_equivProdOfSurjectiveOfIsCompl
-  statement: {f : E ->ₗ[R] F} {g : E ->ₗ[R] G} (hf : range f = ⊤)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_equivProdOfSurjectiveOfIsCompl
-  结论: {f : E ->ₗ[R] F} {g : E ->ₗ[R] G} (hf : range f = ⊤)
-  证明: rfl
-
-@[simp]
+/-
+**LinearMap.coe_equivProdOfSurjectiveOfIsCompl** 是 Mathlib 中的一个定理，位于命名空间 `Linear
+Map`。
+形式化陈述：coe_equivProdOfSurjectiveOfIsCompl {f : E ->ₗ[R] F} {g : E ->ₗ[R] G} (hf :
+ range f = ⊤) (hg : range g = ⊤) (hfg : IsCompl (ker f) (ker g)) : (equivProdOfS
+urjectiveOfIsCompl f g hf hg hfg : E ->ₗ[R] F × G) = f.prod g
+参数：hf : range f = ⊤；hg : range g = ⊤；hfg : IsCompl (ker f) (ker g)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_equivProdOfSurjectiveOfIsCompl {f : E ->ₗ[R] F} {g : E ->ₗ[R] G} (hf : range f = ⊤)
+theorem coe_equivProdOfSurjectiveOfIsCompl {f : E →ₗ[R] F} {g : E →ₗ[R] G} (hf : range f = ⊤)
     (hg : range g = ⊤) (hfg : IsCompl (ker f) (ker g)) :
-    (equivProdOfSurjectiveOfIsCompl f g hf hg hfg : E ->ₗ[R] F × G) = f.prod g := rfl
+    (equivProdOfSurjectiveOfIsCompl f g hf hg hfg : E →ₗ[R] F × G) = f.prod g := rfl
 
 @[simp]
-/--
-theorem `equivProdOfSurjectiveOfIsCompl_apply` / 定理 `equivProdOfSurjectiveOfIsCompl_apply`
-
-English:
-theorem equivProdOfSurjectiveOfIsCompl_apply
-  statement: {f : E ->ₗ[R] F} {g : E ->ₗ[R] G} (hf : range f = ⊤)
-  proof: rfl
-
-中文:
-定理 equivProdOfSurjectiveOfIsCompl_apply
-  结论: {f : E ->ₗ[R] F} {g : E ->ₗ[R] G} (hf : range f = ⊤)
-  证明: rfl
+/-
+**LinearMap.equivProdOfSurjectiveOfIsCompl_apply** 是 Mathlib 中的一个定理，位于命名空间 `Line
+arMap`。
+形式化陈述：equivProdOfSurjectiveOfIsCompl_apply {f : E ->ₗ[R] F} {g : E ->ₗ[R] G} (hf
+ : range f = ⊤) (hg : range g = ⊤) (hfg : IsCompl (ker f) (ker g)) (x : E) : equ
+ivProdOfSurjectiveOfIsCompl f g hf hg hfg x = (f x, g x)
+参数：hf : range f = ⊤；hg : range g = ⊤；hfg : IsCompl (ker f) (ker g)；x : E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem equivProdOfSurjectiveOfIsCompl_apply {f : E ->ₗ[R] F} {g : E ->ₗ[R] G} (hf : range f = ⊤)
+theorem equivProdOfSurjectiveOfIsCompl_apply {f : E →ₗ[R] F} {g : E →ₗ[R] G} (hf : range f = ⊤)
     (hg : range g = ⊤) (hfg : IsCompl (ker f) (ker g)) (x : E) :
     equivProdOfSurjectiveOfIsCompl f g hf hg hfg x = (f x, g x) := rfl
 
@@ -1885,110 +1831,79 @@ namespace Submodule
 
 open LinearMap
 
-/--
-Definition of `isComplEquivProj` / `isComplEquivProj` 的定义
+/-- Equivalence between submodules `q` such that `IsCompl p q` and linear maps `f : E →ₗ[R] p`
+such that `∀ x : p, f x = x`. -/
+/-
+**Submodule.isComplEquivProj** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：isComplEquivProj : { q // IsCompl p q } ≃ { f : E ->ₗ[R] p // forall x : p
+, f x = x } where toFun q
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isComplEquivProj
-  signature: : { q // IsCompl p q } ≃ { f : E ->ₗ[R] p // forall x : p, f x = x } where
-  body: ⟨projectionOnto p q q.2, projectionOnto_apply_left q.2⟩
-  invFun f := ⟨ker (f : E ->ₗ[R] p), isCompl_of_proj f.2⟩
-  left_inv := fun ⟨q, hq⟩ => by simp only [ker_projectionOnto]
-right_inv := fun ⟨f, hf⟩ => Subtype.ext f.projectionOnto_of_proj hf
-
-@[simp]
-
-中文:
-定义 isComplEquivProj
-  签名: : { q // 是补集 p q } ≃ { f : E ->ₗ[R] p // 对任意 x : p, f x = x } where
-  定义体: ⟨projectionOnto p q q.2, projectionOnto_apply_left q.2⟩
-  invFun f := ⟨ker (f : E ->ₗ[R] p), isCompl_of_proj f.2⟩
-  left_inv := fun ⟨q, hq⟩ => by simp only [ker_projectionOnto]
-right_inv := fun ⟨f, hf⟩ => Subtype.ext f.projectionOnto_of_proj hf
-
-@[simp]
-
-Depends on / 依赖: projectionOnto, projectionOnto_apply_left
+--- 原说明 ---
+Equivalence between submodules `q` such that `IsCompl p q` and linear maps `f : 
+E →ₗ[R] p`
+such that `∀ x : p, f x = x`.
 -/
-def isComplEquivProj : { q // IsCompl p q } ≃ { f : E ->ₗ[R] p // forall x : p, f x = x } where
+def isComplEquivProj : { q // IsCompl p q } ≃ { f : E →ₗ[R] p // ∀ x : p, f x = x } where
   toFun q := ⟨projectionOnto p q q.2, projectionOnto_apply_left q.2⟩
-  invFun f := ⟨ker (f : E ->ₗ[R] p), isCompl_of_proj f.2⟩
+  invFun f := ⟨ker (f : E →ₗ[R] p), isCompl_of_proj f.2⟩
   left_inv := fun ⟨q, hq⟩ => by simp only [ker_projectionOnto]
-right_inv := fun ⟨f, hf⟩ => Subtype.ext f.projectionOnto_of_proj hf
+  right_inv := fun ⟨f, hf⟩ => Subtype.ext <| f.projectionOnto_of_proj hf
 
 @[simp]
-/--
-theorem `coe_isComplEquivProj_apply` / 定理 `coe_isComplEquivProj_apply`
-
-English:
-theorem coe_isComplEquivProj_apply
-  given: (q : { q // IsCompl p q })
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_isComplEquivProj_apply
-  条件: (q : { q // 是补集 p q })
-  证明: rfl
-
-@[simp]
+/-
+**Submodule.coe_isComplEquivProj_apply** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：coe_isComplEquivProj_apply (q : { q // IsCompl p q }) : (p.isComplEquivPro
+j q : E ->ₗ[R] p) = projectionOnto p q q.2
+参数：q : { q // IsCompl p q }。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_isComplEquivProj_apply (q : { q // IsCompl p q }) :
-    (p.isComplEquivProj q : E ->ₗ[R] p) = projectionOnto p q q.2 := rfl
+    (p.isComplEquivProj q : E →ₗ[R] p) = projectionOnto p q q.2 := rfl
 
 @[simp]
-/--
-theorem `coe_isComplEquivProj_symm_apply` / 定理 `coe_isComplEquivProj_symm_apply`
-
-English:
-theorem coe_isComplEquivProj_symm_apply
-  given: (f : { f : E ->ₗ[R] p // forall x : p, f x = x })
-  proof: rfl
-
-中文:
-定理 coe_isComplEquivProj_symm_apply
-  条件: (f : { f : E ->ₗ[R] p // 对任意 x : p, f x = x })
-  证明: rfl
+/-
+**Submodule.coe_isComplEquivProj_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Submodule
+`。
+形式化陈述：coe_isComplEquivProj_symm_apply (f : { f : E ->ₗ[R] p // forall x : p, f x
+ = x }) : (p.isComplEquivProj.symm f : Submodule R E) = ker (f : E ->ₗ[R] p)
+参数：f : { f : E ->ₗ[R] p // forall x : p, f x = x }。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-theorem coe_isComplEquivProj_symm_apply (f : { f : E ->ₗ[R] p // forall x : p, f x = x }) :
-    (p.isComplEquivProj.symm f : Submodule R E) = ker (f : E ->ₗ[R] p) := rfl
+theorem coe_isComplEquivProj_symm_apply (f : { f : E →ₗ[R] p // ∀ x : p, f x = x }) :
+    (p.isComplEquivProj.symm f : Submodule R E) = ker (f : E →ₗ[R] p) := rfl
 
-/--
-Definition of `isIdempotentElemEquiv` / `isIdempotentElemEquiv` 的定义
+/-- The idempotent endomorphisms of a module with range equal to a submodule are in 1-1
+correspondence with linear maps to the submodule that restrict to the identity on the submodule. -/
+/-
+**Submodule.isIdempotentElemEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：{R : Type u_1} →   [inst : Ring R] →     {E : Type u_2} →       [inst_1 : 
+AddCommGroup E] →         [inst_2 : _root_.Module R E] →           (p : Submodul
+e R E) → { f // IsIdempotentElem f ∧ LinearMap.range f = p } ≃ { f // ∀ (x : ↥p)
+, f ↑x = x }
+参数：p : Submodule R E；x : ↥p。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isIdempotentElemEquiv
-  signature: :
-  body: ⟨f.1.codRestrict _ fun x => by simp_rw [← f.2.2]; exact mem_range_self f.1 x,
-fun ⟨x, hx⟩ => Subtype.ext by
-      obtain ⟨x, rfl⟩ := f.2.2.symm ▸ hx
-      exact DFunLike.congr_fun f.2.1 x⟩
-  invFun f := ⟨p.subtype ∘ₗ f.1, LinearMap.ext fun x => by simp [f.2], le_antisymm
-    ((range_comp_le_range _ _).trans_eq p.range_subtype)
-fun x hx => ⟨x, Subtype.ext_iff.1 f.2 ⟨x, hx⟩⟩⟩
-
-中文:
-定义 isIdempotentElemEquiv
-  签名: :
-  定义体: ⟨f.1.codRestrict _ fun x => by simp_rw [← f.2.2]; exact mem_range_self f.1 x,
-fun ⟨x, hx⟩ => Subtype.ext by
-      obtain ⟨x, rfl⟩ := f.2.2.symm ▸ hx
-      exact DFunLike.congr_fun f.2.1 x⟩
-  invFun f := ⟨p.subtype ∘ₗ f.1, LinearMap.ext fun x => by simp [f.2], le_antisymm
-    ((range_comp_le_range _ _).trans_eq p.range_subtype)
-fun x hx => ⟨x, Subtype.ext_iff.1 f.2 ⟨x, hx⟩⟩⟩
+--- 原说明 ---
+The idempotent endomorphisms of a module with range equal to a submodule are in 
+1-1
+correspondence with linear maps to the submodule that restrict to the identity o
+n the submodule.
 -/
 @[simps] def isIdempotentElemEquiv :
     { f : Module.End R E // IsIdempotentElem f ∧ range f = p } ≃
-    { f : E ->ₗ[R] p // forall x : p, f x = x } where
-  toFun f := ⟨f.1.codRestrict _ fun x => by simp_rw [← f.2.2]; exact mem_range_self f.1 x,
-fun ⟨x, hx⟩ => Subtype.ext by
+    { f : E →ₗ[R] p // ∀ x : p, f x = x } where
+  toFun f := ⟨f.1.codRestrict _ fun x ↦ by simp_rw [← f.2.2]; exact mem_range_self f.1 x,
+    fun ⟨x, hx⟩ ↦ Subtype.ext <| by
       obtain ⟨x, rfl⟩ := f.2.2.symm ▸ hx
       exact DFunLike.congr_fun f.2.1 x⟩
-  invFun f := ⟨p.subtype ∘ₗ f.1, LinearMap.ext fun x => by simp [f.2], le_antisymm
+  invFun f := ⟨p.subtype ∘ₗ f.1, LinearMap.ext fun x ↦ by simp [f.2], le_antisymm
     ((range_comp_le_range _ _).trans_eq p.range_subtype)
-fun x hx => ⟨x, Subtype.ext_iff.1 f.2 ⟨x, hx⟩⟩⟩
+    fun x hx ↦ ⟨x, Subtype.ext_iff.1 <| f.2 ⟨x, hx⟩⟩⟩
 
 end Submodule
 
@@ -1997,54 +1912,49 @@ namespace LinearMap
 open Submodule
 
 /--
-Definition of `IsProj` / `IsProj` 的定义
+A linear endomorphism of a module `E` is a projection onto a submodule `p` if it sends every element
+of `E` to `p` and fixes every element of `p`.
+The definition allow more generally any `FunLike` type and not just linear maps, so that it can be
+used for example with `ContinuousLinearMap` or `Matrix`.
+-/
+/-
+**LinearMap.IsProj** 是 Mathlib 中的一个归纳类型，位于命名空间 `LinearMap`。
+形式化陈述：{S : Type u_5} →   [inst : Semiring S] →     {M : Type u_6} →       [inst_
+1 : AddCommMonoid M] →         [inst_2 : _root_.Module S M] → Submodule S M → {F
+ : Type u_7} → [FunLike F M M] → F → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsProj
-  parameters: {F : Type*} [FunLike F M M] (f : F)
-  axioms and operations (2):
-    - map_mem : forall x, f x in m
-    - map_id : forall x in m, f x = x
-
-中文:
-结构 是Proj
-  参数: {F : 类型} [函数状 F M M] (f : F)
-  公理与运算 (2 个):
-    - map_mem : 对任意 x, f x in m
-    - map_id : 对任意 x in m, f x = x
+--- 原说明 ---
+A linear endomorphism of a module `E` is a projection onto a submodule `p` if it
+ sends every element
+of `E` to `p` and fixes every element of `p`.
+The definition allow more generally any `FunLike` type and not just linear maps,
+ so that it can be
+used for example with `ContinuousLinearMap` or `Matrix`.
 -/
 structure IsProj {F : Type*} [FunLike F M M] (f : F) : Prop where
-  map_mem : forall x, f x in m
-  map_id : forall x in m, f x = x
-
-/--
-theorem `isProj_range_iff_isIdempotentElem` / 定理 `isProj_range_iff_isIdempotentElem`
-
-English:
-theorem isProj_range_iff_isIdempotentElem
-  given: (f : M ->ₗ[S] M)
-  proof: by
-  refine ⟨fun ⟨h1, h2⟩ => ?_, fun hf =>
-    ⟨fun x => mem_range_self f x, fun x ⟨y, hy⟩ => by rw [← hy, ← Module.End.mul_apply, hf.eq]⟩⟩
-  ext x
-  exact h2 (f x) (h1 x)
-
-alias ⟨_, IsIdempotentElem.isProj_range⟩ := isProj_range_iff_isIdempotentElem
-
-中文:
-定理 isProj_range_iff_isIdempotentElem
-  条件: (f : M ->ₗ[S] M)
-  证明: by
-  refine ⟨fun ⟨h1, h2⟩ => ?_, fun hf =>
-    ⟨fun x => mem_range_self f x, fun x ⟨y, hy⟩ => by rw [← hy, ← Module.End.mul_apply, hf.eq]⟩⟩
-  ext x
-  exact h2 (f x) (h1 x)
-
-alias ⟨_, IsIdempotentElem.isProj_range⟩ := isProj_range_iff_isIdempotentElem
-
-Depends on / 依赖: Module, Module.End.mul_apply, hf.eq, mem_range_self, mul_apply
+  map_mem : ∀ x, f x ∈ m
+  map_id : ∀ x ∈ m, f x = x
+/-
+**LinearMap.isProj_range_iff_isIdempotentElem** 是 Mathlib 中的一个定理，位于命名空间 `LinearM
+ap`。
+形式化陈述：isProj_range_iff_isIdempotentElem (f : M ->ₗ[S] M) : IsProj (range f) f ↔ 
+IsIdempotentElem f
+参数：f : M ->ₗ[S] M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `LinearMap.mem_range_self`：mem_range_self [RingHomSurjective τ₁₂] (f : M 
+->ₛₗ[τ₁₂] M₂) (x : M) : f x in range f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Module.End.mul_apply`：mul_apply (f g : Module.End R M) (x : M) : (f * g)
+ x = f (g x)
+· 使用引理 `IsIdempotentElem.eq`：eq (ha : IsIdempotentElem a) : a * a = a
 -/
-theorem isProj_range_iff_isIdempotentElem (f : M ->ₗ[S] M) :
+theorem isProj_range_iff_isIdempotentElem (f : M →ₗ[S] M) :
     IsProj (range f) f ↔ IsIdempotentElem f := by
   refine ⟨fun ⟨h1, h2⟩ => ?_, fun hf =>
     ⟨fun x => mem_range_self f x, fun x ⟨y, hy⟩ => by rw [← hy, ← Module.End.mul_apply, hf.eq]⟩⟩
@@ -2052,30 +1962,27 @@ theorem isProj_range_iff_isIdempotentElem (f : M ->ₗ[S] M) :
   exact h2 (f x) (h1 x)
 
 alias ⟨_, IsIdempotentElem.isProj_range⟩ := isProj_range_iff_isIdempotentElem
-
-/--
-theorem `isProj_iff_isIdempotentElem` / 定理 `isProj_iff_isIdempotentElem`
-
-English:
-theorem isProj_iff_isIdempotentElem
-  given: (f : M ->ₗ[S] M)
-  proof: by
-  refine ⟨fun ⟨p, hp⟩ => ?_, fun h => ⟨_, IsIdempotentElem.isProj_range _ h⟩⟩
-  ext x
-  exact hp.map_id (f x) (hp.map_mem x)
-
-中文:
-定理 isProj_iff_isIdempotentElem
-  条件: (f : M ->ₗ[S] M)
-  证明: by
-  refine ⟨fun ⟨p, hp⟩ => ?_, fun h => ⟨_, IsIdempotentElem.isProj_range _ h⟩⟩
-  ext x
-  exact hp.map_id (f x) (hp.map_mem x)
-
-Depends on / 依赖: IsIdempotentElem, IsIdempotentElem.isProj_range, hp.map_id, hp.map_mem, isProj_range, map_id, map_mem
+/-
+**LinearMap.isProj_iff_isIdempotentElem** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：isProj_iff_isIdempotentElem (f : M ->ₗ[S] M) : (exists p : Submodule S M, 
+IsProj p f) ↔ IsIdempotentElem f
+参数：f : M ->ₗ[S] M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `LinearMap.IsProj.map_id`：∀ {S : Type u_5} [inst : Semiring S] {M : Type 
+u_6} [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module S M]   {m : Submodule S 
+M} {F : Type …
+· 使用定理 `LinearMap.IsProj.map_mem`：∀ {S : Type u_5} [inst : Semiring S] {M : Type
+ u_6} [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module S M]   {m : Submodule S
+ M} {F : Type …
+· 使用定理 `LinearMap.IsIdempotentElem.isProj_range`：∀ {S : Type u_5} [inst : Semiri
+ng S] {M : Type u_6} [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module S M]   (
+f : M →ₗ[S] M), IsIdempotentE…
 -/
-theorem isProj_iff_isIdempotentElem (f : M ->ₗ[S] M) :
-    (exists p : Submodule S M, IsProj p f) ↔ IsIdempotentElem f := by
+theorem isProj_iff_isIdempotentElem (f : M →ₗ[S] M) :
+    (∃ p : Submodule S M, IsProj p f) ↔ IsIdempotentElem f := by
   refine ⟨fun ⟨p, hp⟩ => ?_, fun h => ⟨_, IsIdempotentElem.isProj_range _ h⟩⟩
   ext x
   exact hp.map_id (f x) (hp.map_mem x)
@@ -2084,347 +1991,328 @@ namespace IsProj
 
 variable {p m}
 
-/--
-theorem `isIdempotentElem` / 定理 `isIdempotentElem`
-
-English:
-theorem isIdempotentElem
-  given: {f : M ->ₗ[S] M} (h : IsProj m f)
-  statement: IsIdempotentElem f
-  proof: f.isProj_iff_isIdempotentElem.mp ⟨m, h⟩
-
-中文:
-定理 isIdempotentElem
-  条件: {f : M ->ₗ[S] M} (h : 是Proj m f)
-  结论: IsIdempotentElem f
-  证明: f.isProj_iff_isIdempotentElem.mp ⟨m, h⟩
-
-Depends on / 依赖: f.isProj_iff_isIdempotentElem.mp, isProj_iff_isIdempotentElem
+/-
+**LinearMap.IsProj.isIdempotentElem** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsProj`
+。
+形式化陈述：isIdempotentElem {f : M ->ₗ[S] M} (h : IsProj m f) : IsIdempotentElem f
+参数：h : IsProj m f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `LinearMap.isProj_iff_isIdempotentElem`：isProj_iff_isIdempotentElem (f : 
+M ->ₗ[S] M) : (exists p : Submodule S M, IsProj p f) ↔ IsIdempotentElem f
 -/
-theorem isIdempotentElem {f : M ->ₗ[S] M} (h : IsProj m f) : IsIdempotentElem f :=
+theorem isIdempotentElem {f : M →ₗ[S] M} (h : IsProj m f) : IsIdempotentElem f :=
   f.isProj_iff_isIdempotentElem.mp ⟨m, h⟩
-
-/--
-theorem `mem_iff_map_id` / 定理 `mem_iff_map_id`
-
-English:
-theorem mem_iff_map_id
-  given: {f : M ->ₗ[S] M} (hf : IsProj m f) {x : M}
-  proof: ⟨hf.map_id x, fun h => h ▸ hf.map_mem x⟩
-
-中文:
-定理 mem_iff_map_id
-  条件: {f : M ->ₗ[S] M} (hf : 是Proj m f) {x : M}
-  证明: ⟨hf.map_id x, fun h => h ▸ hf.map_mem x⟩
-
-Depends on / 依赖: hf.map_id, hf.map_mem, map_id, map_mem
+/-
+**LinearMap.IsProj.mem_iff_map_id** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsProj`。
+形式化陈述：mem_iff_map_id {f : M ->ₗ[S] M} (hf : IsProj m f) {x : M} : x in m ↔ f x =
+ x
+参数：hf : IsProj m f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.IsProj.map_id`：∀ {S : Type u_5} [inst : Semiring S] {M : Type 
+u_6} [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module S M]   {m : Submodule S 
+M} {F : Type …
+· 使用定理 `LinearMap.IsProj.map_mem`：∀ {S : Type u_5} [inst : Semiring S] {M : Type
+ u_6} [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module S M]   {m : Submodule S
+ M} {F : Type …
 -/
-theorem mem_iff_map_id {f : M ->ₗ[S] M} (hf : IsProj m f) {x : M} :
-    x in m ↔ f x = x :=
-  ⟨hf.map_id x, fun h => h ▸ hf.map_mem x⟩
+theorem mem_iff_map_id {f : M →ₗ[S] M} (hf : IsProj m f) {x : M} :
+    x ∈ m ↔ f x = x :=
+  ⟨hf.map_id x, fun h ↦ h ▸ hf.map_mem x⟩
 
-/--
-Definition of `codRestrict` / `codRestrict` 的定义
-
-English:
-definition codRestrict
-  signature: {f : M ->ₗ[S] M} (h : IsProj m f)
-  body: f.codRestrict m h.map_mem
-
-@[simp]
-
-中文:
-定义 codRestrict
-  签名: {f : M ->ₗ[S] M} (h : 是Proj m f)
-  定义体: f.codRestrict m h.map_mem
-
-@[simp]
-
-Depends on / 依赖: codRestrict, f.codRestrict, h.map_mem, map_mem
+/-- Restriction of the codomain of a projection of onto a subspace `p` to `p` instead of the whole
+space.
 -/
-def codRestrict {f : M ->ₗ[S] M} (h : IsProj m f) : M ->ₗ[S] m :=
+/-
+**LinearMap.IsProj.codRestrict** 是 Mathlib 中的一个定义，位于命名空间 `LinearMap.IsProj`。
+形式化陈述：codRestrict {f : M ->ₗ[S] M} (h : IsProj m f) : M ->ₗ[S] m
+参数：h : IsProj m f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Restriction of the codomain of a projection of onto a subspace `p` to `p` instea
+d of the whole
+space.
+-/
+def codRestrict {f : M →ₗ[S] M} (h : IsProj m f) : M →ₗ[S] m :=
   f.codRestrict m h.map_mem
 
 @[simp]
-/--
-theorem `codRestrict_apply` / 定理 `codRestrict_apply`
-
-English:
-theorem codRestrict_apply
-  given: {f : M ->ₗ[S] M} (h : IsProj m f) (x : M)
-  statement: ↑(h.codRestrict x) = f x
-  proof: f.codRestrict_apply m x
-
-@[simp]
-
-中文:
-定理 codRestrict_apply
-  条件: {f : M ->ₗ[S] M} (h : 是Proj m f) (x : M)
-  结论: ↑(h.codRestrict x) = f x
-  证明: f.codRestrict_apply m x
-
-@[simp]
-
-Depends on / 依赖: codRestrict_apply, f.codRestrict_apply
+/-
+**LinearMap.IsProj.codRestrict_apply** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsProj
+`。
+形式化陈述：codRestrict_apply {f : M ->ₗ[S] M} (h : IsProj m f) (x : M) : ↑(h.codRestr
+ict x) = f x
+参数：h : IsProj m f；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.codRestrict_apply`：codRestrict_apply (p : Submodule R₂ M₂) (f 
+: M ->ₛₗ[σ₁₂] M₂) {h} (x : M) : (codRestrict p f h x : M₂) = f x
 -/
-theorem codRestrict_apply {f : M ->ₗ[S] M} (h : IsProj m f) (x : M) : ↑(h.codRestrict x) = f x :=
+theorem codRestrict_apply {f : M →ₗ[S] M} (h : IsProj m f) (x : M) : ↑(h.codRestrict x) = f x :=
   f.codRestrict_apply m x
 
 @[simp]
-/--
-theorem `codRestrict_apply_cod` / 定理 `codRestrict_apply_cod`
-
-English:
-theorem codRestrict_apply_cod
-  given: {f : M ->ₗ[S] M} (h : IsProj m f) (x : m)
-  statement: h.codRestrict x = x
-  proof: by
-  ext
-  rw [codRestrict_apply]
-  exact h.map_id x x.2
-
-中文:
-定理 codRestrict_apply_cod
-  条件: {f : M ->ₗ[S] M} (h : 是Proj m f) (x : m)
-  结论: h.codRestrict x = x
-  证明: by
-  ext
-  rw [codRestrict_apply]
-  exact h.map_id x x.2
-
-Depends on / 依赖: codRestrict_apply, h.map_id, map_id
+/-
+**LinearMap.IsProj.codRestrict_apply_cod** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.Is
+Proj`。
+形式化陈述：codRestrict_apply_cod {f : M ->ₗ[S] M} (h : IsProj m f) (x : m) : h.codRes
+trict x = x
+参数：h : IsProj m f；x : m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.IsProj.codRestrict_apply`：codRestrict_apply {f : M ->ₗ[S] M} (
+h : IsProj m f) (x : M) : ↑(h.codRestrict x) = f x
+· 使用定理 `LinearMap.IsProj.map_id`：∀ {S : Type u_5} [inst : Semiring S] {M : Type 
+u_6} [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module S M]   {m : Submodule S 
+M} {F : Type …
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem codRestrict_apply_cod {f : M ->ₗ[S] M} (h : IsProj m f) (x : m) : h.codRestrict x = x := by
+theorem codRestrict_apply_cod {f : M →ₗ[S] M} (h : IsProj m f) (x : m) : h.codRestrict x = x := by
   ext
   rw [codRestrict_apply]
   exact h.map_id x x.2
-
-/--
-theorem `codRestrict_ker` / 定理 `codRestrict_ker`
-
-English:
-theorem codRestrict_ker
-  given: {f : M ->ₗ[S] M} (h : IsProj m f)
-  statement: ker h.codRestrict = ker f
-  proof: f.ker_codRestrict m _
-
-中文:
-定理 codRestrict_ker
-  条件: {f : M ->ₗ[S] M} (h : 是Proj m f)
-  结论: ker h.codRestrict = ker f
-  证明: f.ker_codRestrict m _
-
-Depends on / 依赖: f.ker_codRestrict, ker_codRestrict
+/-
+**LinearMap.IsProj.codRestrict_ker** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsProj`。
+形式化陈述：codRestrict_ker {f : M ->ₗ[S] M} (h : IsProj m f) : ker h.codRestrict = ke
+r f
+参数：h : IsProj m f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ker_codRestrict`：ker_codRestrict (p : Submodule R₂ M₂) (f : M 
+->ₛₗ[τ₁₂] M₂) (hf) : ker (codRestrict p f hf) = ker f
 -/
-theorem codRestrict_ker {f : M ->ₗ[S] M} (h : IsProj m f) : ker h.codRestrict = ker f :=
+theorem codRestrict_ker {f : M →ₗ[S] M} (h : IsProj m f) : ker h.codRestrict = ker f :=
   f.ker_codRestrict m _
-
-/--
-theorem `isCompl` / 定理 `isCompl`
-
-English:
-theorem isCompl
-  given: {f : E ->ₗ[R] E} (h : IsProj p f)
-  statement: IsCompl p (ker f)
-  proof: by
-  rw [← codRestrict_ker h]
-  exact isCompl_of_proj h.codRestrict_apply_cod
-
-中文:
-定理 isCompl
-  条件: {f : E ->ₗ[R] E} (h : 是Proj p f)
-  结论: 是补集 p (ker f)
-  证明: by
-  rw [← codRestrict_ker h]
-  exact isCompl_of_proj h.codRestrict_apply_cod
-
-Depends on / 依赖: codRestrict_apply_cod, codRestrict_ker, h.codRestrict_apply_cod, isCompl_of_proj
+/-
+**LinearMap.IsProj.isCompl** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsProj`。
+形式化陈述：isCompl {f : E ->ₗ[R] E} (h : IsProj p f) : IsCompl p (ker f)
+参数：h : IsProj p f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.IsProj.codRestrict_ker`：codRestrict_ker {f : M ->ₗ[S] M} (h : 
+IsProj m f) : ker h.codRestrict = ker f
+· 使用定理 `LinearMap.isCompl_of_proj`：isCompl_of_proj {f : E ->ₗ[R] p} (hf : forall
+ x : p, f x = x) : IsCompl p (ker f)
+· 使用定理 `LinearMap.IsProj.codRestrict_apply_cod`：codRestrict_apply_cod {f : M ->ₗ
+[S] M} (h : IsProj m f) (x : m) : h.codRestrict x = x
 -/
-theorem isCompl {f : E ->ₗ[R] E} (h : IsProj p f) : IsCompl p (ker f) := by
+theorem isCompl {f : E →ₗ[R] E} (h : IsProj p f) : IsCompl p (ker f) := by
   rw [← codRestrict_ker h]
   exact isCompl_of_proj h.codRestrict_apply_cod
-
-/--
-theorem `eq_conj_prod_map'` / 定理 `eq_conj_prod_map'`
-
-English:
-theorem eq_conj_prod_map'
-  given: {f : E ->ₗ[R] E} (h : IsProj p f)
-  proof: by
-  rw [← LinearMap.comp_assoc]; rw [LinearEquiv.eq_comp_toLinearMap_symm]
-  ext x
-  · simp only [coe_prodEquivOfIsCompl, comp_apply, coe_inl, coprod_apply, coe_subtype,
-      map_zero, add_zero, h.map_id x x.2, prodMap_apply, id_apply]
-  · simp only [coe_prodEquivOfIsCompl, comp_apply, coe_inr, coprod_apply, map_zero,
-      coe_subtype, zero_add, map_coe_ker, prodMap_apply, zero_apply, add_zero]
-
-中文:
-定理 eq_conj_prod_map'
-  条件: {f : E ->ₗ[R] E} (h : 是Proj p f)
-  证明: by
-  rw [← LinearMap.comp_assoc]; rw [LinearEquiv.eq_comp_toLinearMap_symm]
-  ext x
-  · simp only [coe_prodEquivOfIsCompl, comp_apply, coe_inl, coprod_apply, coe_subtype,
-      map_zero, add_zero, h.map_id x x.2, prodMap_apply, id_apply]
-  · simp only [coe_prodEquivOfIsCompl, comp_apply, coe_inr, coprod_apply, map_zero,
-      coe_subtype, zero_add, map_coe_ker, prodMap_apply, zero_apply, add_zero]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.eq_comp_toLinearMap_symm, LinearMap, LinearMap.comp_assoc, add_zero, coe_inl, coe_inr, coe_prodEquivOfIsCompl, coe_subtype, comp_apply, comp_assoc, coprod_apply, eq_comp_toLinearMap_symm, h.map_id, id_apply, map_coe_ker, map_id, map_zero, prodMap_apply, zero_add
+/-
+**LinearMap.IsProj.eq_conj_prod_map'** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsProj
+`。
+形式化陈述：eq_conj_prod_map' {f : E ->ₗ[R] E} (h : IsProj p f) : f = (p.prodEquivOfIs
+Compl (ker f) h.isCompl).toLinearMap ∘ₗ prodMap id 0 ∘ₗ (p.prodEquivOfIsCompl (k
+er f) h.isCompl).symm.toLinearMap
+参数：h : IsProj p f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.IsProj.isCompl`：isCompl {f : E ->ₗ[R] E} (h : IsProj p f) : Is
+Compl p (ker f)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.comp_assoc`：comp_assoc {R₄ M₄ : Type*} [Semiring R₄] [AddCommM
+onoid M₄] [Module R₄ M₄] {σ₃₄ : R₃ ->+* R₄} {σ₂₄ : R₂ ->+* R₄} {σ₁₄ : R₁ ->+* R₄
+} [RingHom…
+· 使用定理 `LinearEquiv.eq_comp_toLinearMap_symm`：eq_comp_toLinearMap_symm (f : M₂ -
+>ₛₗ[σ₂₃] M₃) (g : M₁ ->ₛₗ[σ₁₃] M₃) : f = g.comp e₁₂.symm.toLinearMap ↔ f.comp e₁
+₂.toLinearMap = g
+· 使用定理 `LinearMap.prod_ext`：prod_ext {f g : M × M₂ ->ₗ[R] M₃} (hl : f.comp (inl 
+_ _ _) = g.comp (inl _ _ _)) (hr : f.comp (inr _ _ _) = g.comp (inr _ _ _)) : f 
+= g
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `LinearMap.IsProj.map_id`：∀ {S : Type u_5} [inst : Semiring S] {M : Type 
+u_6} [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module S M]   {m : Submodule S 
+M} {F : Type …
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `LinearMap.map_coe_ker`：map_coe_ker (f : M ->ₛₗ[τ₁₂] M₂) (x : ker f) : f 
+x = 0
 -/
-theorem eq_conj_prod_map' {f : E ->ₗ[R] E} (h : IsProj p f) :
+theorem eq_conj_prod_map' {f : E →ₗ[R] E} (h : IsProj p f) :
     f = (p.prodEquivOfIsCompl (ker f) h.isCompl).toLinearMap ∘ₗ
         prodMap id 0 ∘ₗ (p.prodEquivOfIsCompl (ker f) h.isCompl).symm.toLinearMap := by
-  rw [← LinearMap.comp_assoc]; rw [LinearEquiv.eq_comp_toLinearMap_symm]
+  rw [← LinearMap.comp_assoc, LinearEquiv.eq_comp_toLinearMap_symm]
   ext x
   · simp only [coe_prodEquivOfIsCompl, comp_apply, coe_inl, coprod_apply, coe_subtype,
       map_zero, add_zero, h.map_id x x.2, prodMap_apply, id_apply]
   · simp only [coe_prodEquivOfIsCompl, comp_apply, coe_inr, coprod_apply, map_zero,
       coe_subtype, zero_add, map_coe_ker, prodMap_apply, zero_apply, add_zero]
-
-/--
-theorem `submodule_unique` / 定理 `submodule_unique`
-
-English:
-theorem submodule_unique
-  statement: {f : M ->ₗ[S] M} {m₁ m₂ : Submodule S M}
-  proof: by
-  ext; simp [hf₁.mem_iff_map_id, hf₂.mem_iff_map_id]
-
-中文:
-定理 submodule_unique
-  结论: {f : M ->ₗ[S] M} {m₁ m₂ : 子模 S M}
-  证明: by
-  ext; simp [hf₁.mem_iff_map_id, hf₂.mem_iff_map_id]
-
-Depends on / 依赖: mem_iff_map_id
+/-
+**LinearMap.IsProj.submodule_unique** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsProj`
+。
+形式化陈述：submodule_unique {f : M ->ₗ[S] M} {m₁ m₂ : Submodule S M} (hf₁ : IsProj m₁
+ f) (hf₂ : IsProj m₂ f) : m₁ = m₂
+参数：hf₁ : IsProj m₁ f；hf₂ : IsProj m₂ f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.IsProj.mem_iff_map_id`：mem_iff_map_id {f : M ->ₗ[S] M} (hf : I
+sProj m f) {x : M} : x in m ↔ f x = x
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem submodule_unique {f : M ->ₗ[S] M} {m₁ m₂ : Submodule S M}
+theorem submodule_unique {f : M →ₗ[S] M} {m₁ m₂ : Submodule S M}
     (hf₁ : IsProj m₁ f) (hf₂ : IsProj m₂ f) : m₁ = m₂ := by
   ext; simp [hf₁.mem_iff_map_id, hf₂.mem_iff_map_id]
 
 open LinearMap in
-/--
-theorem `range` / 定理 `range`
-
-English:
-theorem range
-  given: {f : M ->ₗ[S] M} (h : IsProj m f)
-  statement: range f = m
-  proof: h.isIdempotentElem.isProj_range.submodule_unique h
-
-中文:
-定理 range
-  条件: {f : M ->ₗ[S] M} (h : 是Proj m f)
-  结论: range f = m
-  证明: h.isIdempotentElem.isProj_range.submodule_unique h
+/-
+**LinearMap.IsProj.range** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsProj`。
+形式化陈述：∀ {S : Type u_5} [inst : Semiring S] {M : Type u_6} [inst_1 : AddCommMonoi
+d M] [inst_2 : _root_.Module S M]   {m : Submodule S M} {f : M →ₗ[S] M}, LinearM
+ap.IsProj m f → f.range = m
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.IsProj.submodule_unique`：submodule_unique {f : M ->ₗ[S] M} {m₁
+ m₂ : Submodule S M} (hf₁ : IsProj m₁ f) (hf₂ : IsProj m₂ f) : m₁ = m₂
+· 使用定理 `LinearMap.IsIdempotentElem.isProj_range`：∀ {S : Type u_5} [inst : Semiri
+ng S] {M : Type u_6} [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module S M]   (
+f : M →ₗ[S] M), IsIdempotentE…
+· 使用定理 `LinearMap.IsProj.isIdempotentElem`：isIdempotentElem {f : M ->ₗ[S] M} (h 
+: IsProj m f) : IsIdempotentElem f
 -/
-protected theorem range {f : M ->ₗ[S] M} (h : IsProj m f) : range f = m :=
+protected theorem range {f : M →ₗ[S] M} (h : IsProj m f) : range f = m :=
   h.isIdempotentElem.isProj_range.submodule_unique h
 
 variable (S M) in
-/--
-theorem `bot` / 定理 `bot`
-
-English:
-theorem bot
-  statement: IsProj (⊥ : Submodule S M) (0 : M ->ₗ[S] M)
-  proof: ⟨congrFun rfl, by simp only [mem_bot, zero_apply, forall_eq]⟩
-
-中文:
-定理 bot
-  结论: 是Proj (⊥ : 子模 S M) (0 : M ->ₗ[S] M)
-  证明: ⟨congrFun rfl, by simp only [mem_bot, zero_apply, forall_eq]⟩
+/-
+**LinearMap.IsProj.bot** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsProj`。
+形式化陈述：∀ (S : Type u_5) [inst : Semiring S] (M : Type u_6) [inst_1 : AddCommMonoi
+d M] [inst_2 : _root_.Module S M],   LinearMap.IsProj ⊥ 0
+参数：S : Type u_5；M : Type u_6。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-protected theorem bot : IsProj (⊥ : Submodule S M) (0 : M ->ₗ[S] M) :=
+protected theorem bot : IsProj (⊥ : Submodule S M) (0 : M →ₗ[S] M) :=
   ⟨congrFun rfl, by simp only [mem_bot, zero_apply, forall_eq]⟩
 
 variable (S M) in
-/--
-theorem `top` / 定理 `top`
-
-English:
-theorem top
-  statement: IsProj (⊤ : Submodule S M) (id (R := S))
-  proof: ⟨fun _ => trivial, fun _ => congrFun rfl⟩
-
-中文:
-定理 top
-  结论: 是Proj (⊤ : 子模 S M) (id (R := S))
-  证明: ⟨fun _ => trivial, fun _ => congrFun rfl⟩
+/-
+**LinearMap.IsProj.top** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsProj`。
+形式化陈述：∀ (S : Type u_5) [inst : Semiring S] (M : Type u_6) [inst_1 : AddCommMonoi
+d M] [inst_2 : _root_.Module S M],   LinearMap.IsProj ⊤ LinearMap.id
+参数：S : Type u_5；M : Type u_6。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
 -/
 protected theorem top : IsProj (⊤ : Submodule S M) (id (R := S)) :=
-  ⟨fun _ => trivial, fun _ => congrFun rfl⟩
-
-/--
-theorem `subtype_comp_codRestrict` / 定理 `subtype_comp_codRestrict`
-
-English:
-theorem subtype_comp_codRestrict
-  given: {U : Submodule S M} {f : M ->ₗ[S] M} (hf : IsProj U f)
-  proof: rfl
-
-中文:
-定理 subtype_comp_codRestrict
-  条件: {U : 子模 S M} {f : M ->ₗ[S] M} (hf : 是Proj U f)
-  证明: rfl
+  ⟨fun _ ↦ trivial, fun _ ↦ congrFun rfl⟩
+/-
+**LinearMap.IsProj.subtype_comp_codRestrict** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap
+.IsProj`。
+形式化陈述：subtype_comp_codRestrict {U : Submodule S M} {f : M ->ₗ[S] M} (hf : IsProj
+ U f) : U.subtype ∘ₗ hf.codRestrict = f
+参数：hf : IsProj U f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem subtype_comp_codRestrict {U : Submodule S M} {f : M ->ₗ[S] M} (hf : IsProj U f) :
+theorem subtype_comp_codRestrict {U : Submodule S M} {f : M →ₗ[S] M} (hf : IsProj U f) :
     U.subtype ∘ₗ hf.codRestrict = f := rfl
-
-/--
-theorem `submodule_eq_top_iff` / 定理 `submodule_eq_top_iff`
-
-English:
-theorem submodule_eq_top_iff
-  given: {f : M ->ₗ[S] M} (hf : IsProj m f)
-  proof: by
-  constructor <;> rintro rfl
-  · ext
-    simp [hf.map_id]
-  · rw [← hf.range, range_id]
-
-中文:
-定理 submodule_eq_top_iff
-  条件: {f : M ->ₗ[S] M} (hf : 是Proj m f)
-  证明: by
-  constructor <;> rintro rfl
-  · ext
-    simp [hf.map_id]
-  · rw [← hf.range, range_id]
-
-Depends on / 依赖: hf.map_id, hf.range, map_id, range_id
+/-
+**LinearMap.IsProj.submodule_eq_top_iff** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsP
+roj`。
+形式化陈述：submodule_eq_top_iff {f : M ->ₗ[S] M} (hf : IsProj m f) : m = (⊤ : Submodu
+le S M) ↔ f = LinearMap.id
+参数：hf : IsProj m f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.IsProj.map_id`：∀ {S : Type u_5} [inst : Semiring S] {M : Type 
+u_6} [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module S M]   {m : Submodule S 
+M} {F : Type …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.IsProj.range`：∀ {S : Type u_5} [inst : Semiring S] {M : Type u
+_6} [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module S M]   {m : Submodule S M
+} {f : M →ₗ[…
+· 使用定理 `LinearMap.range_id`：range_id : range (LinearMap.id : M ->ₗ[R] M) = ⊤
 -/
-theorem submodule_eq_top_iff {f : M ->ₗ[S] M} (hf : IsProj m f) :
+theorem submodule_eq_top_iff {f : M →ₗ[S] M} (hf : IsProj m f) :
     m = (⊤ : Submodule S M) ↔ f = LinearMap.id := by
   constructor <;> rintro rfl
   · ext
     simp [hf.map_id]
   · rw [← hf.range, range_id]
-
-/--
-theorem `submodule_eq_bot_iff` / 定理 `submodule_eq_bot_iff`
-
-English:
-theorem submodule_eq_bot_iff
-  given: {f : M ->ₗ[S] M} (hf : IsProj m f)
-  proof: by
-  constructor <;> rintro rfl
-  · ext
-    simpa using hf.map_mem _
-  · rw [← hf.range, range_zero]
-
-中文:
-定理 submodule_eq_bot_iff
-  条件: {f : M ->ₗ[S] M} (hf : 是Proj m f)
-  证明: by
-  constructor <;> rintro rfl
-  · ext
-    simpa using hf.map_mem _
-  · rw [← hf.range, range_zero]
-
-Depends on / 依赖: hf.map_mem, hf.range, map_mem, range_zero
+/-
+**LinearMap.IsProj.submodule_eq_bot_iff** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsP
+roj`。
+形式化陈述：submodule_eq_bot_iff {f : M ->ₗ[S] M} (hf : IsProj m f) : m = (⊥ : Submodu
+le S M) ↔ f = 0
+参数：hf : IsProj m f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `LinearMap.IsProj.map_mem`：∀ {S : Type u_5} [inst : Semiring S] {M : Type
+ u_6} [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module S M]   {m : Submodule S
+ M} {F : Type …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.IsProj.range`：∀ {S : Type u_5} [inst : Semiring S] {M : Type u
+_6} [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module S M]   {m : Submodule S M
+} {f : M →ₗ[…
+· 使用定理 `LinearMap.range_zero`：range_zero [RingHomSurjective τ₁₂] : range (0 : M 
+->ₛₗ[τ₁₂] M₂) = ⊥
 -/
-theorem submodule_eq_bot_iff {f : M ->ₗ[S] M} (hf : IsProj m f) :
+theorem submodule_eq_bot_iff {f : M →ₗ[S] M} (hf : IsProj m f) :
     m = (⊥ : Submodule S M) ↔ f = 0 := by
   constructor <;> rintro rfl
   · ext
@@ -2434,148 +2322,210 @@ theorem submodule_eq_bot_iff {f : M ->ₗ[S] M} (hf : IsProj m f) :
 end IsProj
 
 open LinearMap in
-/--
-lemma `IsIdempotentElem.isCompl` / 引理 `IsIdempotentElem.isCompl`
-
-English:
-lemma IsIdempotentElem.isCompl
-  given: {f : E ->ₗ[R] E} (hf : IsIdempotentElem f)
-  proof: hf.isProj_range.isCompl
-
-中文:
-引理 IsIdempotentElem.isCompl
-  条件: {f : E ->ₗ[R] E} (hf : IsIdempotentElem f)
-  证明: hf.isProj_range.isCompl
-
-Depends on / 依赖: hf.isProj_range.isCompl, isCompl, isProj_range
+/-
+**LinearMap.IsIdempotentElem.isCompl** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsIdem
+potentElem`。
+形式化陈述：∀ {R : Type u_1} [inst : Ring R] {E : Type u_2} [inst_1 : AddCommGroup E] 
+[inst_2 : _root_.Module R E] {f : E →ₗ[R] E},   IsIdempotentElem f → IsCompl f.r
+ange f.ker
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.IsProj.isCompl`：isCompl {f : E ->ₗ[R] E} (h : IsProj p f) : Is
+Compl p (ker f)
+· 使用定理 `LinearMap.IsIdempotentElem.isProj_range`：∀ {S : Type u_5} [inst : Semiri
+ng S] {M : Type u_6} [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module S M]   (
+f : M →ₗ[S] M), IsIdempotentE…
 -/
-lemma IsIdempotentElem.isCompl {f : E ->ₗ[R] E} (hf : IsIdempotentElem f) :
+lemma IsIdempotentElem.isCompl {f : E →ₗ[R] E} (hf : IsIdempotentElem f) :
     IsCompl (range f) (ker f) := hf.isProj_range.isCompl
 
 open LinearMap in
-/--
-theorem `IsIdempotentElem.mem_range_iff` / 定理 `IsIdempotentElem.mem_range_iff`
+/-- Given an idempotent linear operator `p`, we have
+`x ∈ range p` if and only if `p(x) = x` for all `x`. -/
+/-
+**LinearMap.IsIdempotentElem.mem_range_iff** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.
+IsIdempotentElem`。
+形式化陈述：∀ {S : Type u_5} [inst : Semiring S] {M : Type u_6} [inst_1 : AddCommMonoi
+d M] [inst_2 : _root_.Module S M]   {p : M →ₗ[S] M}, IsIdempotentElem p → ∀ {x :
+ M}, x ∈ p.range ↔ p x = x
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.IsProj.mem_iff_map_id`：mem_iff_map_id {f : M ->ₗ[S] M} (hf : I
+sProj m f) {x : M} : x in m ↔ f x = x
+· 使用定理 `LinearMap.IsIdempotentElem.isProj_range`：∀ {S : Type u_5} [inst : Semiri
+ng S] {M : Type u_6} [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module S M]   (
+f : M →ₗ[S] M), IsIdempotentE…
 
-English:
-theorem IsIdempotentElem.mem_range_iff
-  given: {p : M ->ₗ[S] M} (hp : IsIdempotentElem p) {x : M}
-  proof: hp.isProj_range.mem_iff_map_id
-
-中文:
-定理 IsIdempotentElem.mem_range_iff
-  条件: {p : M ->ₗ[S] M} (hp : IsIdempotentElem p) {x : M}
-  证明: hp.isProj_range.mem_iff_map_id
-
-Depends on / 依赖: hp.isProj_range.mem_iff_map_id, isProj_range, mem_iff_map_id
+--- 原说明 ---
+Given an idempotent linear operator `p`, we have
+`x ∈ range p` if and only if `p(x) = x` for all `x`.
 -/
-theorem IsIdempotentElem.mem_range_iff {p : M ->ₗ[S] M} (hp : IsIdempotentElem p) {x : M} :
-    x in range p ↔ p x = x := hp.isProj_range.mem_iff_map_id
+theorem IsIdempotentElem.mem_range_iff {p : M →ₗ[S] M} (hp : IsIdempotentElem p) {x : M} :
+    x ∈ range p ↔ p x = x := hp.isProj_range.mem_iff_map_id
 
 open LinearMap in
-/--
-theorem `IsIdempotentElem.eq_projection` / 定理 `IsIdempotentElem.eq_projection`
+/-- An idempotent linear operator is equal to the linear projection onto
+its range along its kernel. -/
+/-
+**LinearMap.IsIdempotentElem.eq_projection** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.
+IsIdempotentElem`。
+形式化陈述：∀ {R : Type u_1} [inst : Ring R] {E : Type u_2} [inst_1 : AddCommGroup E] 
+[inst_2 : _root_.Module R E] {T : E →ₗ[R] E}   (hT : IsIdempotentElem T), T = T.
+range.projection T.ker ⋯
+参数：hT : IsIdempotentElem T。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.IsIdempotentElem.isCompl`：∀ {R : Type u_1} [inst : Ring R] {E 
+: Type u_2} [inst_1 : AddCommGroup E] [inst_2 : _root_.Module R E] {f : E →ₗ[R] 
+E},   IsIdempotentElem f…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.ofIsCompl_eq`：ofIsCompl_eq (h : IsCompl p q) {φ : p ->ₗ[R] F} 
+{ψ : q ->ₗ[R] F} {χ : E ->ₗ[R] F} (hφ : forall u, φ u = χ u) (hψ : forall u, ψ u
+ = χ u) : of…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.IsProj.map_id`：∀ {S : Type u_5} [inst : Semiring S] {M : Type 
+u_6} [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module S M]   {m : Submodule S 
+M} {F : Type …
+· 使用定理 `LinearMap.IsIdempotentElem.isProj_range`：∀ {S : Type u_5} [inst : Semiri
+ng S] {M : Type u_6} [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module S M]   (
+f : M →ₗ[S] M), IsIdempotentE…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `LinearMap.map_coe_ker`：map_coe_ker (f : M ->ₛₗ[τ₁₂] M₂) (x : ker f) : f 
+x = 0
+· 使用定理 `LinearMap.ofIsCompl_subtype_zero_eq`：ofIsCompl_subtype_zero_eq (hpq : Is
+Compl p q) : ofIsCompl hpq p.subtype 0 = p.projection q hpq
 
-English:
-theorem IsIdempotentElem.eq_projection
-  given: {T : E ->ₗ[R] E} (hT : IsIdempotentElem T)
-  proof: by
-  convert! ofIsCompl_subtype_zero_eq hT.isCompl
-.symm exact ofIsCompl_eq _ (by simp [hT.isProj_range.map_id]) (by simp)
-
-中文:
-定理 IsIdempotentElem.eq_projection
-  条件: {T : E ->ₗ[R] E} (hT : IsIdempotentElem T)
-  证明: by
-  convert! ofIsCompl_subtype_zero_eq hT.isCompl
-.symm exact ofIsCompl_eq _ (by simp [hT.isProj_range.map_id]) (by simp)
-
-Depends on / 依赖: convert, hT.isCompl, hT.isProj_range.map_id, isCompl, isProj_range, map_id, ofIsCompl_eq, ofIsCompl_subtype_zero_eq
+--- 原说明 ---
+An idempotent linear operator is equal to the linear projection onto
+its range along its kernel.
 -/
-theorem IsIdempotentElem.eq_projection {T : E ->ₗ[R] E} (hT : IsIdempotentElem T) :
+theorem IsIdempotentElem.eq_projection {T : E →ₗ[R] E} (hT : IsIdempotentElem T) :
     T = T.range.projection T.ker hT.isCompl := by
   convert! ofIsCompl_subtype_zero_eq hT.isCompl
-.symm exact ofIsCompl_eq _ (by simp [hT.isProj_range.map_id]) (by simp)
+  exact ofIsCompl_eq _ (by simp [hT.isProj_range.map_id]) (by simp) |>.symm
 
 open LinearMap in
-/--
-theorem `isIdempotentElem_iff_eq_projection_range_ker` / 定理 `isIdempotentElem_iff_eq_projection_range_ker`
+/-- A linear map is an idempotent if and only if it equals the projection
+onto its range along its kernel. -/
+/-
+**LinearMap.isIdempotentElem_iff_eq_projection_range_ker** 是 Mathlib 中的一个定理，位于命名
+空间 `LinearMap`。
+形式化陈述：isIdempotentElem_iff_eq_projection_range_ker {T : E ->ₗ[R] E} : IsIdempote
+ntElem T ↔ exists (h : IsCompl (range T) (ker T)), T = T.range.projection T.ker 
+h
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.IsProj.isCompl`：isCompl {f : E ->ₗ[R] E} (h : IsProj p f) : Is
+Compl p (ker f)
+· 使用定理 `LinearMap.IsIdempotentElem.isProj_range`：∀ {S : Type u_5} [inst : Semiri
+ng S] {M : Type u_6} [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module S M]   (
+f : M →ₗ[S] M), IsIdempotentE…
+· 使用定理 `LinearMap.IsIdempotentElem.eq_projection`：∀ {R : Type u_1} [inst : Ring 
+R] {E : Type u_2} [inst_1 : AddCommGroup E] [inst_2 : _root_.Module R E] {T : E 
+→ₗ[R] E}   (hT : IsIdempotentE…
+· 使用定理 `Submodule.isIdempotentElem_projection`：isIdempotentElem_projection (hpq 
+: IsCompl p q) : IsIdempotentElem (p.projection q hpq)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem isIdempotentElem_iff_eq_projection_range_ker
-  given: {T : E ->ₗ[R] E}
-  proof: ⟨fun hT => ⟨hT.isProj_range.isCompl, hT.eq_projection⟩,
-   fun ⟨hT, h⟩ => h.symm ▸ isIdempotentElem_projection hT⟩
-
-中文:
-定理 isIdempotentElem_iff_eq_projection_range_ker
-  条件: {T : E ->ₗ[R] E}
-  证明: ⟨fun hT => ⟨hT.isProj_range.isCompl, hT.eq_projection⟩,
-   fun ⟨hT, h⟩ => h.symm ▸ isIdempotentElem_projection hT⟩
-
-Depends on / 依赖: R1Space, Regular, Regular.weaklyRegular, eq_projection, h.symm, hT.eq_projection, hT.isProj_range.isCompl, isCompl, isIdempotentElem_projection, isProj_range, weaklyRegular
+--- 原说明 ---
+A linear map is an idempotent if and only if it equals the projection
+onto its range along its kernel.
 -/
-theorem isIdempotentElem_iff_eq_projection_range_ker {T : E ->ₗ[R] E} :
-    IsIdempotentElem T ↔ exists (h : IsCompl (range T) (ker T)), T = T.range.projection T.ker h :=
+theorem isIdempotentElem_iff_eq_projection_range_ker {T : E →ₗ[R] E} :
+    IsIdempotentElem T ↔ ∃ (h : IsCompl (range T) (ker T)), T = T.range.projection T.ker h :=
   ⟨fun hT => ⟨hT.isProj_range.isCompl, hT.eq_projection⟩,
    fun ⟨hT, h⟩ => h.symm ▸ isIdempotentElem_projection hT⟩
 
 open LinearMap in
-/--
-theorem `IsIdempotentElem.comp_eq_right_iff` / 定理 `IsIdempotentElem.comp_eq_right_iff`
+/-- Given an idempotent linear operator `q`,
+we have `q ∘ p = p` iff `range p ⊆ range q` for all `p`. -/
+/-
+**LinearMap.IsIdempotentElem.comp_eq_right_iff** 是 Mathlib 中的一个定理，位于命名空间 `Linear
+Map.IsIdempotentElem`。
+形式化陈述：∀ {S : Type u_5} [inst : Semiring S] {M : Type u_6} [inst_1 : AddCommMonoi
+d M] [inst_2 : _root_.Module S M]   {q : M →ₗ[S] M},   IsIdempotentElem q →     
+∀ {E : Type u_7} [inst_3 : AddCommMonoid E] [inst_4 : _root_.Module S E] (p : E 
+→ₗ[S] M),       q ∘ₗ p = p ↔ p.range ≤ q.range
+参数：p : E →ₗ[S] M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.IsIdempotentElem.mem_range_iff`：∀ {S : Type u_5} [inst : Semir
+ing S] {M : Type u_6} [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module S M]   
+{p : M →ₗ[S] M}, IsIdempotentE…
+· 使用定理 `instIsConcreteLE`：∀ (A : Type u_1) (B : Type u_2) [inst : SetLike A B], 
+IsConcreteLE A B
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem IsIdempotentElem.comp_eq_right_iff
-  statement: {q : M ->ₗ[S] M} (hq : IsIdempotentElem q)
-  proof: by
-  simp_rw [LinearMap.ext_iff, comp_apply, ← hq.mem_range_iff,
-    SetLike.le_def, mem_range, forall_exists_index, forall_apply_eq_imp_iff]
-
-中文:
-定理 IsIdempotentElem.comp_eq_right_iff
-  结论: {q : M ->ₗ[S] M} (hq : IsIdempotentElem q)
-  证明: by
-  simp_rw [LinearMap.ext_iff, comp_apply, ← hq.mem_range_iff,
-    SetLike.le_def, mem_range, forall_exists_index, forall_apply_eq_imp_iff]
-
-Depends on / 依赖: LinearMap, LinearMap.ext_iff, SetLike, SetLike.le_def, comp_apply, ext_iff, forall_apply_eq_imp_iff, forall_exists_index, hq.mem_range_iff, le_def, mem_range, mem_range_iff, simp_rw
+--- 原说明 ---
+Given an idempotent linear operator `q`,
+we have `q ∘ p = p` iff `range p ⊆ range q` for all `p`.
 -/
-theorem IsIdempotentElem.comp_eq_right_iff {q : M ->ₗ[S] M} (hq : IsIdempotentElem q)
-    {E : Type*} [AddCommMonoid E] [Module S E] (p : E ->ₗ[S] M) :
-    q.comp p = p ↔ range p <= range q := by
+theorem IsIdempotentElem.comp_eq_right_iff {q : M →ₗ[S] M} (hq : IsIdempotentElem q)
+    {E : Type*} [AddCommMonoid E] [Module S E] (p : E →ₗ[S] M) :
+    q.comp p = p ↔ range p ≤ range q := by
   simp_rw [LinearMap.ext_iff, comp_apply, ← hq.mem_range_iff,
     SetLike.le_def, mem_range, forall_exists_index, forall_apply_eq_imp_iff]
 
 open LinearMap in
-/--
-lemma `IsIdempotentElem.ext_iff` / 引理 `IsIdempotentElem.ext_iff`
+/-- Idempotent operators are equal iff their range and kernels are. -/
+/-
+**LinearMap.IsIdempotentElem.ext_iff** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsIdem
+potentElem`。
+形式化陈述：∀ {R : Type u_1} [inst : Ring R] {E : Type u_2} [inst_1 : AddCommGroup E] 
+[inst_2 : _root_.Module R E]   {p q : E →ₗ[R] E}, IsIdempotentElem p → IsIdempot
+entElem q → (p = q ↔ p.range = q.range ∧ p.ker = q.ker)
+参数：p = q ↔ p.range = q.range ∧ p.ker = q.ker。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Submodule.existsUnique_add_of_isCompl`：existsUnique_add_of_isCompl (hc :
+ IsCompl p q) (x : E) : exists (u : p) (v : q), (u : E) + v = x ∧ forall (r : p)
+ (s : q), (r : E) + s = x -…
+· 使用定理 `IsCompl.symm`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Bounded
+Order α] {x y : α}, IsCompl x y → IsCompl y x
+· 使用定理 `LinearMap.IsIdempotentElem.isCompl`：∀ {R : Type u_1} [inst : Ring R] {E 
+: Type u_2} [inst_1 : AddCommGroup E] [inst_2 : _root_.Module R E] {f : E →ₗ[R] 
+E},   IsIdempotentElem f…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `LinearMap.mem_ker`：mem_ker {f : M ->ₛₗ[τ₁₂] M₂} {y} : y in ker f ↔ f y =
+ 0
+· 使用定理 `LinearMap.IsIdempotentElem.mem_range_iff`：∀ {S : Type u_5} [inst : Semir
+ing S] {M : Type u_6} [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module S M]   
+{p : M →ₗ[S] M}, IsIdempotentE…
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma IsIdempotentElem.ext_iff
-  statement: {p q : E ->ₗ[R] E}
-  proof: by
-  refine ⟨fun h => ⟨congrArg range h, congrArg ker h⟩, fun ⟨hr, hk⟩ => ?_⟩
-  ext x
-  obtain ⟨⟨v, hv⟩, ⟨w, hw⟩, rfl, _⟩ :=
-    (ker p).existsUnique_add_of_isCompl hp.isCompl.symm x
-  simp [mem_ker.mp, hv, (hk ▸ hv), (mem_range_iff hp).mp, hw, (mem_range_iff hq).mp, (hr ▸ hw)]
-
-alias ⟨_, IsIdempotentElem.ext⟩ := IsIdempotentElem.ext_iff
-
-中文:
-引理 IsIdempotentElem.ext_iff
-  结论: {p q : E ->ₗ[R] E}
-  证明: by
-  refine ⟨fun h => ⟨congrArg range h, congrArg ker h⟩, fun ⟨hr, hk⟩ => ?_⟩
-  ext x
-  obtain ⟨⟨v, hv⟩, ⟨w, hw⟩, rfl, _⟩ :=
-    (ker p).existsUnique_add_of_isCompl hp.isCompl.symm x
-  simp [mem_ker.mp, hv, (hk ▸ hv), (mem_range_iff hp).mp, hw, (mem_range_iff hq).mp, (hr ▸ hw)]
-
-alias ⟨_, IsIdempotentElem.ext⟩ := IsIdempotentElem.ext_iff
-
-Depends on / 依赖: existsUnique_add_of_isCompl, hp.isCompl.symm, isCompl, mem_ker, mem_ker.mp, mem_range_iff
+--- 原说明 ---
+Idempotent operators are equal iff their range and kernels are.
 -/
-lemma IsIdempotentElem.ext_iff {p q : E ->ₗ[R] E}
+lemma IsIdempotentElem.ext_iff {p q : E →ₗ[R] E}
     (hp : IsIdempotentElem p) (hq : IsIdempotentElem q) :
     p = q ↔ range p = range q ∧ ker p = ker q := by
   refine ⟨fun h => ⟨congrArg range h, congrArg ker h⟩, fun ⟨hr, hk⟩ => ?_⟩
@@ -2585,113 +2535,113 @@ lemma IsIdempotentElem.ext_iff {p q : E ->ₗ[R] E}
   simp [mem_ker.mp, hv, (hk ▸ hv), (mem_range_iff hp).mp, hw, (mem_range_iff hq).mp, (hr ▸ hw)]
 
 alias ⟨_, IsIdempotentElem.ext⟩ := IsIdempotentElem.ext_iff
-
-/--
-theorem `IsIdempotentElem.range_eq_ker` / 定理 `IsIdempotentElem.range_eq_ker`
-
-English:
-theorem IsIdempotentElem.range_eq_ker
-  statement: {E : Type*} [AddCommGroup E] [Module S E]
-  proof: le_antisymm
-    (LinearMap.range_le_ker_iff.mpr hp.one_sub_mul_self)
-    fun x hx => ⟨x, by simpa [sub_eq_zero, eq_comm (a := x)] using hx⟩
-
-中文:
-定理 IsIdempotentElem.range_eq_ker
-  结论: {E : 类型} [加法交换群 E] [模 S E]
-  证明: le_antisymm
-    (LinearMap.range_le_ker_iff.mpr hp.one_sub_mul_self)
-    fun x hx => ⟨x, by simpa [sub_eq_zero, eq_comm (a := x)] using hx⟩
-
-Depends on / 依赖: LinearMap, LinearMap.range_le_ker_iff.mpr, eq_comm, hp.one_sub_mul_self, le_antisymm, one_sub_mul_self, range_le_ker_iff, sub_eq_zero
+/-
+**LinearMap.IsIdempotentElem.range_eq_ker** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.I
+sIdempotentElem`。
+形式化陈述：∀ {S : Type u_5} [inst : Semiring S] {E : Type u_7} [inst_1 : AddCommGroup
+ E] [inst_2 : _root_.Module S E]   {p : E →ₗ[S] E}, IsIdempotentElem p → p.range
+ = (LinearMap.id - p).ker
+参数：LinearMap.id - p。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LinearMap.range_le_ker_iff`：range_le_ker_iff {f : M ->ₛₗ[τ₁₂] M₂} {g : M
+₂ ->ₛₗ[τ₂₃] M₃} : range f <= ker g ↔ (g.comp f : M ->ₛₗ[τ₁₃] M₃) = 0
+· 使用引理 `IsIdempotentElem.one_sub_mul_self`：one_sub_mul_self (h : IsIdempotentEle
+m a) : (1 - a) * a = 0
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
 -/
 theorem IsIdempotentElem.range_eq_ker {E : Type*} [AddCommGroup E] [Module S E]
-    {p : E ->ₗ[S] E} (hp : IsIdempotentElem p) : LinearMap.range p = LinearMap.ker (id - p) :=
+    {p : E →ₗ[S] E} (hp : IsIdempotentElem p) : LinearMap.range p = LinearMap.ker (id - p) :=
   le_antisymm
     (LinearMap.range_le_ker_iff.mpr hp.one_sub_mul_self)
-    fun x hx => ⟨x, by simpa [sub_eq_zero, eq_comm (a := x)] using hx⟩
-
-/--
-theorem `IsIdempotentElem.range_eq_ker_one_sub` / 定理 `IsIdempotentElem.range_eq_ker_one_sub`
-
-English:
-theorem IsIdempotentElem.range_eq_ker_one_sub
-  statement: {E : Type*} [AddCommGroup E] [Module S E]
-  proof: range_eq_ker hp
-
-中文:
-定理 IsIdempotentElem.range_eq_ker_one_sub
-  结论: {E : 类型} [加法交换群 E] [模 S E]
-  证明: range_eq_ker hp
-
-Depends on / 依赖: range_eq_ker
+    fun x hx ↦ ⟨x, by simpa [sub_eq_zero, eq_comm (a := x)] using hx⟩
+/-
+**LinearMap.IsIdempotentElem.range_eq_ker_one_sub** 是 Mathlib 中的一个定理，位于命名空间 `Lin
+earMap.IsIdempotentElem`。
+形式化陈述：∀ {S : Type u_5} [inst : Semiring S] {E : Type u_7} [inst_1 : AddCommGroup
+ E] [inst_2 : _root_.Module S E]   {p : E →ₗ[S] E}, IsIdempotentElem p → p.range
+ = (1 - p).ker
+参数：1 - p。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.IsIdempotentElem.range_eq_ker`：∀ {S : Type u_5} [inst : Semiri
+ng S] {E : Type u_7} [inst_1 : AddCommGroup E] [inst_2 : _root_.Module S E]   {p
+ : E →ₗ[S] E}, IsIdempotentEl…
 -/
 theorem IsIdempotentElem.range_eq_ker_one_sub {E : Type*} [AddCommGroup E] [Module S E]
-    {p : E ->ₗ[S] E} (hp : IsIdempotentElem p) : LinearMap.range p = LinearMap.ker (1 - p) :=
+    {p : E →ₗ[S] E} (hp : IsIdempotentElem p) : LinearMap.range p = LinearMap.ker (1 - p) :=
   range_eq_ker hp
 
 open LinearMap in
-/--
-theorem `IsIdempotentElem.ker_eq_range` / 定理 `IsIdempotentElem.ker_eq_range`
-
-English:
-theorem IsIdempotentElem.ker_eq_range
-  statement: {E : Type*} [AddCommGroup E] [Module S E]
-  proof: by
-  simpa using! hp.one_sub.range_eq_ker_one_sub.symm
-
-中文:
-定理 IsIdempotentElem.ker_eq_range
-  结论: {E : 类型} [加法交换群 E] [模 S E]
-  证明: by
-  simpa using! hp.one_sub.range_eq_ker_one_sub.symm
-
-Depends on / 依赖: hp.one_sub.range_eq_ker_one_sub.symm, one_sub, range_eq_ker_one_sub
+/-
+**LinearMap.IsIdempotentElem.ker_eq_range** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.I
+sIdempotentElem`。
+形式化陈述：∀ {S : Type u_5} [inst : Semiring S] {E : Type u_7} [inst_1 : AddCommGroup
+ E] [inst_2 : _root_.Module S E]   {p : E →ₗ[S] E}, IsIdempotentElem p → p.ker =
+ (LinearMap.id - p).range
+参数：LinearMap.id - p。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G), a - 
+(a - b) = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.IsIdempotentElem.range_eq_ker_one_sub`：∀ {S : Type u_5} [inst 
+: Semiring S] {E : Type u_7} [inst_1 : AddCommGroup E] [inst_2 : _root_.Module S
+ E]   {p : E →ₗ[S] E}, IsIdempotentEl…
+· 使用引理 `IsIdempotentElem.one_sub`：one_sub (h : IsIdempotentElem a) : IsIdempoten
+tElem (1 - a)
 -/
 theorem IsIdempotentElem.ker_eq_range {E : Type*} [AddCommGroup E] [Module S E]
-    {p : E ->ₗ[S] E} (hp : IsIdempotentElem p) : LinearMap.ker p = LinearMap.range (id - p) := by
+    {p : E →ₗ[S] E} (hp : IsIdempotentElem p) : LinearMap.ker p = LinearMap.range (id - p) := by
   simpa using! hp.one_sub.range_eq_ker_one_sub.symm
-
-/--
-theorem `IsIdempotentElem.ker_eq_range_one_sub` / 定理 `IsIdempotentElem.ker_eq_range_one_sub`
-
-English:
-theorem IsIdempotentElem.ker_eq_range_one_sub
-  statement: {E : Type*} [AddCommGroup E] [Module S E]
-  proof: ker_eq_range hp
-
-中文:
-定理 IsIdempotentElem.ker_eq_range_one_sub
-  结论: {E : 类型} [加法交换群 E] [模 S E]
-  证明: ker_eq_range hp
-
-Depends on / 依赖: ker_eq_range
+/-
+**LinearMap.IsIdempotentElem.ker_eq_range_one_sub** 是 Mathlib 中的一个定理，位于命名空间 `Lin
+earMap.IsIdempotentElem`。
+形式化陈述：∀ {S : Type u_5} [inst : Semiring S] {E : Type u_7} [inst_1 : AddCommGroup
+ E] [inst_2 : _root_.Module S E]   {p : E →ₗ[S] E}, IsIdempotentElem p → p.ker =
+ (1 - p).range
+参数：1 - p。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.IsIdempotentElem.ker_eq_range`：∀ {S : Type u_5} [inst : Semiri
+ng S] {E : Type u_7} [inst_1 : AddCommGroup E] [inst_2 : _root_.Module S E]   {p
+ : E →ₗ[S] E}, IsIdempotentEl…
 -/
 theorem IsIdempotentElem.ker_eq_range_one_sub {E : Type*} [AddCommGroup E] [Module S E]
-    {p : E ->ₗ[S] E} (hp : IsIdempotentElem p) : LinearMap.ker p = LinearMap.range (1 - p) :=
+    {p : E →ₗ[S] E} (hp : IsIdempotentElem p) : LinearMap.ker p = LinearMap.range (1 - p) :=
   ker_eq_range hp
 
 open LinearMap in
-/--
-theorem `IsIdempotentElem.comp_eq_left_iff` / 定理 `IsIdempotentElem.comp_eq_left_iff`
-
-English:
-theorem IsIdempotentElem.comp_eq_left_iff
-  statement: {M : Type*} [AddCommGroup M] [Module S M] {q : M ->ₗ[S] M}
-  proof: by
-  simp [hq.ker_eq_range, range_le_ker_iff, comp_sub, sub_eq_zero, eq_comm]
-
-中文:
-定理 IsIdempotentElem.comp_eq_left_iff
-  结论: {M : 类型} [加法交换群 M] [模 S M] {q : M ->ₗ[S] M}
-  证明: by
-  simp [hq.ker_eq_range, range_le_ker_iff, comp_sub, sub_eq_zero, eq_comm]
-
-Depends on / 依赖: comp_sub, eq_comm, hq.ker_eq_range, ker_eq_range, range_le_ker_iff, sub_eq_zero
+/-
+**LinearMap.IsIdempotentElem.comp_eq_left_iff** 是 Mathlib 中的一个定理，位于命名空间 `LinearM
+ap.IsIdempotentElem`。
+形式化陈述：∀ {S : Type u_5} [inst : Semiring S] {M : Type u_7} [inst_1 : AddCommGroup
+ M] [inst_2 : _root_.Module S M]   {q : M →ₗ[S] M},   IsIdempotentElem q →     ∀
+ {E : Type u_8} [inst_3 : AddCommGroup E] [inst_4 : _root_.Module S E] (p : M →ₗ
+[S] E), p ∘ₗ q = p ↔ q.ker ≤ p.ker
+参数：p : M →ₗ[S] E。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LinearMap.IsIdempotentElem.ker_eq_range`：∀ {S : Type u_5} [inst : Semiri
+ng S] {E : Type u_7} [inst_1 : AddCommGroup E] [inst_2 : _root_.Module S E]   {p
+ : E →ₗ[S] E}, IsIdempotentEl…
+· 使用定理 `LinearMap.comp_sub`：comp_sub (f g : M ->ₛₗ[σ₁₂] N₂) (h : N₂ ->ₛₗ[σ₂₃] N₃
+) : h.comp (g - f) = h.comp g - h.comp f
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem IsIdempotentElem.comp_eq_left_iff {M : Type*} [AddCommGroup M] [Module S M] {q : M ->ₗ[S] M}
-    (hq : IsIdempotentElem q) {E : Type*} [AddCommGroup E] [Module S E] (p : M ->ₗ[S] E) :
-    p ∘ₗ q = p ↔ ker q <= ker p := by
+theorem IsIdempotentElem.comp_eq_left_iff {M : Type*} [AddCommGroup M] [Module S M] {q : M →ₗ[S] M}
+    (hq : IsIdempotentElem q) {E : Type*} [AddCommGroup E] [Module S E] (p : M →ₗ[S] E) :
+    p ∘ₗ q = p ↔ ker q ≤ ker p := by
   simp [hq.ker_eq_range, range_le_ker_iff, comp_sub, sub_eq_zero, eq_comm]
 
 end LinearMap
@@ -2704,26 +2654,26 @@ namespace LinearMap
 
 variable {R : Type*} [CommRing R] {E : Type*} [AddCommGroup E] [Module R E] {p : Submodule R E}
 
-/--
-theorem `IsProj.eq_conj_prodMap` / 定理 `IsProj.eq_conj_prodMap`
-
-English:
-theorem IsProj.eq_conj_prodMap
-  given: {f : E ->ₗ[R] E} (h : IsProj p f)
-  proof: by
-  rw [LinearEquiv.conj_apply]
-  exact h.eq_conj_prod_map'
-
-中文:
-定理 是Proj.eq_conj_prodMap
-  条件: {f : E ->ₗ[R] E} (h : 是Proj p f)
-  证明: by
-  rw [LinearEquiv.conj_apply]
-  exact h.eq_conj_prod_map'
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.conj_apply, conj_apply, eq_conj_prod_map, h.eq_conj_prod_map
+/-
+**LinearMap.IsProj.eq_conj_prodMap** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsProj`。
+形式化陈述：∀ {R : Type u_1} [inst : CommRing R] {E : Type u_2} [inst_1 : AddCommGroup
+ E] [inst_2 : _root_.Module R E]   {p : Submodule R E} {f : E →ₗ[R] E} (h : Line
+arMap.IsProj p f),   f = (p.prodEquivOfIsCompl f.ker ⋯).conj (LinearMap.id.prodM
+ap 0)
+参数：h : LinearMap.IsProj p f；p.prodEquivOfIsCompl f.ker ⋯；LinearMap.id.prodMap 0。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.IsProj.isCompl`：isCompl {f : E ->ₗ[R] E} (h : IsProj p f) : Is
+Compl p (ker f)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearEquiv.conj_apply`：conj_apply (e : M₁' ≃ₛₗ[σ₁'₂'] M₂') (f : Module.
+End R₁' M₁') : e.conj f = ((↑e : M₁' ->ₛₗ[σ₁'₂'] M₂').comp f).comp (e.symm : M₂'
+ ->ₛₗ[σ₂'₁']…
+· 使用定理 `LinearMap.IsProj.eq_conj_prod_map'`：eq_conj_prod_map' {f : E ->ₗ[R] E} (
+h : IsProj p f) : f = (p.prodEquivOfIsCompl (ker f) h.isCompl).toLinearMap ∘ₗ pr
+odMap id 0 ∘ₗ (p.prodEqu…
 -/
-theorem IsProj.eq_conj_prodMap {f : E ->ₗ[R] E} (h : IsProj p f) :
+theorem IsProj.eq_conj_prodMap {f : E →ₗ[R] E} (h : IsProj p f) :
     f = (p.prodEquivOfIsCompl (ker f) h.isCompl).conj (prodMap id 0) := by
   rw [LinearEquiv.conj_apply]
   exact h.eq_conj_prod_map'
@@ -2736,139 +2686,168 @@ namespace LinearMap.IsIdempotentElem
 
 open Submodule LinearMap
 
-variable {E R : Type*} [Ring R] [AddCommGroup E] [Module R E] {T f : E ->ₗ[R] E}
+variable {E R : Type*} [Ring R] [AddCommGroup E] [Module R E] {T f : E →ₗ[R] E}
 
-/--
-lemma `range_mem_invtSubmodule_iff` / 引理 `range_mem_invtSubmodule_iff`
+/-- `range f` is invariant under `T` if and only if `f ∘ₗ T ∘ₗ f = T ∘ₗ f`,
+for idempotent `f`. -/
+/-
+**LinearMap.IsIdempotentElem.range_mem_invtSubmodule_iff** 是 Mathlib 中的一个引理，位于命名
+空间 `LinearMap.IsIdempotentElem`。
+形式化陈述：range_mem_invtSubmodule_iff (hf : IsIdempotentElem f) : range f in Module.
+End.invtSubmodule T ↔ f ∘ₗ T ∘ₗ f = T ∘ₗ f
+参数：hf : IsIdempotentElem f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.IsIdempotentElem.comp_eq_right_iff`：∀ {S : Type u_5} [inst : S
+emiring S] {M : Type u_6} [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module S M
+]   {q : M →ₗ[S] M},   IsIdempoten…
+· 使用定理 `LinearMap.range_comp`：range_comp [RingHomSurjective τ₁₂] [RingHomSurject
+ive τ₂₃] [RingHomSurjective τ₁₃] (f : M ->ₛₗ[τ₁₂] M₂) (g : M₂ ->ₛₗ[τ₂₃] M₃) : ra
+nge (g.com…
+· 使用定理 `Module.End.mem_invtSubmodule_iff_map_le`：mem_invtSubmodule_iff_map_le {p
+ : Submodule R M} : p in f.invtSubmodule ↔ p.map f <= p
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-lemma range_mem_invtSubmodule_iff
-  given: (hf : IsIdempotentElem f)
-  proof: by
-  rw [hf.comp_eq_right_iff]; rw [range_comp]; rw [Module.End.mem_invtSubmodule_iff_map_le]
-
-alias ⟨conj_eq_of_range_mem_invtSubmodule, range_mem_invtSubmodule⟩ := range_mem_invtSubmodule_iff
-
-中文:
-引理 range_mem_invtSubmodule_iff
-  条件: (hf : IsIdempotentElem f)
-  证明: by
-  rw [hf.comp_eq_right_iff]; rw [range_comp]; rw [Module.End.mem_invtSubmodule_iff_map_le]
-
-alias ⟨conj_eq_of_range_mem_invtSubmodule, range_mem_invtSubmodule⟩ := range_mem_invtSubmodule_iff
-
-Depends on / 依赖: Module, Module.End.mem_invtSubmodule_iff_map_le, comp_eq_right_iff, hf.comp_eq_right_iff, mem_invtSubmodule_iff_map_le, range_comp
+--- 原说明 ---
+`range f` is invariant under `T` if and only if `f ∘ₗ T ∘ₗ f = T ∘ₗ f`,
+for idempotent `f`.
 -/
 lemma range_mem_invtSubmodule_iff (hf : IsIdempotentElem f) :
-    range f in Module.End.invtSubmodule T ↔ f ∘ₗ T ∘ₗ f = T ∘ₗ f := by
-  rw [hf.comp_eq_right_iff]; rw [range_comp]; rw [Module.End.mem_invtSubmodule_iff_map_le]
+    range f ∈ Module.End.invtSubmodule T ↔ f ∘ₗ T ∘ₗ f = T ∘ₗ f := by
+  rw [hf.comp_eq_right_iff, range_comp, Module.End.mem_invtSubmodule_iff_map_le]
 
 alias ⟨conj_eq_of_range_mem_invtSubmodule, range_mem_invtSubmodule⟩ := range_mem_invtSubmodule_iff
-
-/--
-lemma `_root_.LinearMap.IsProj.mem_invtSubmodule_iff` / 引理 `_root_.LinearMap.IsProj.mem_invtSubmodule_iff`
-
-English:
-lemma _root_.LinearMap.IsProj.mem_invtSubmodule_iff
-  statement: {U : Submodule R E}
-  proof: hf.range ▸ hf.isIdempotentElem.range_mem_invtSubmodule_iff
-
-中文:
-引理 _root_.线性映射.是Proj.mem_invtSubmodule_iff
-  结论: {U : 子模 R E}
-  证明: hf.range ▸ hf.isIdempotentElem.range_mem_invtSubmodule_iff
-
-Depends on / 依赖: hf.isIdempotentElem.range_mem_invtSubmodule_iff, hf.range, isIdempotentElem, range_mem_invtSubmodule_iff
+/-
+**LinearMap.IsIdempotentElem._root_.LinearMap.IsProj.mem_invtSubmodule_iff** 是 M
+athlib 中的一个引理，位于命名空间 `LinearMap.IsIdempotentElem`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.LinearMap.IsProj.mem_invtSubmodule_iff {U : Submodule R E}
-    (hf : IsProj U f) : U in Module.End.invtSubmodule T ↔ f ∘ₗ T ∘ₗ f = T ∘ₗ f :=
+    (hf : IsProj U f) : U ∈ Module.End.invtSubmodule T ↔ f ∘ₗ T ∘ₗ f = T ∘ₗ f :=
   hf.range ▸ hf.isIdempotentElem.range_mem_invtSubmodule_iff
 
 open LinearMap in
-/--
-lemma `ker_mem_invtSubmodule_iff` / 引理 `ker_mem_invtSubmodule_iff`
+/-- `ker f` is invariant under `T` if and only if `f ∘ₗ T ∘ₗ f = f ∘ₗ T`,
+for idempotent `f`. -/
+/-
+**LinearMap.IsIdempotentElem.ker_mem_invtSubmodule_iff** 是 Mathlib 中的一个引理，位于命名空间
+ `LinearMap.IsIdempotentElem`。
+形式化陈述：ker_mem_invtSubmodule_iff (hf : IsIdempotentElem f) : ker f in Module.End.
+invtSubmodule T ↔ f ∘ₗ T ∘ₗ f = f ∘ₗ T
+参数：hf : IsIdempotentElem f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.comp_assoc`：comp_assoc {R₄ M₄ : Type*} [Semiring R₄] [AddCommM
+onoid M₄] [Module R₄ M₄] {σ₃₄ : R₃ ->+* R₄} {σ₂₄ : R₂ ->+* R₄} {σ₁₄ : R₁ ->+* R₄
+} [RingHom…
+· 使用定理 `LinearMap.IsIdempotentElem.comp_eq_left_iff`：∀ {S : Type u_5} [inst : Se
+miring S] {M : Type u_7} [inst_1 : AddCommGroup M] [inst_2 : _root_.Module S M] 
+  {q : M →ₗ[S] M},   IsIdempotent…
+· 使用定理 `LinearMap.ker_comp`：ker_comp (f : M ->ₛₗ[τ₁₂] M₂) (g : M₂ ->ₛₗ[τ₂₃] M₃) 
+: ker (g.comp f : M ->ₛₗ[τ₁₃] M₃) = comap f (ker g)
+· 使用引理 `Module.End.mem_invtSubmodule`：mem_invtSubmodule {p : Submodule R M} : p 
+in f.invtSubmodule ↔ p <= p.comap f
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-lemma ker_mem_invtSubmodule_iff
-  given: (hf : IsIdempotentElem f)
-  proof: by
-  rw [← comp_assoc]; rw [hf.comp_eq_left_iff]; rw [ker_comp]; rw [Module.End.mem_invtSubmodule]
-
-alias ⟨conj_eq_of_ker_mem_invtSubmodule, ker_mem_invtSubmodule⟩ := ker_mem_invtSubmodule_iff
-
-中文:
-引理 ker_mem_invtSubmodule_iff
-  条件: (hf : IsIdempotentElem f)
-  证明: by
-  rw [← comp_assoc]; rw [hf.comp_eq_left_iff]; rw [ker_comp]; rw [Module.End.mem_invtSubmodule]
-
-alias ⟨conj_eq_of_ker_mem_invtSubmodule, ker_mem_invtSubmodule⟩ := ker_mem_invtSubmodule_iff
-
-Depends on / 依赖: Module, Module.End.mem_invtSubmodule, comp_assoc, comp_eq_left_iff, hf.comp_eq_left_iff, ker_comp, mem_invtSubmodule
+--- 原说明 ---
+`ker f` is invariant under `T` if and only if `f ∘ₗ T ∘ₗ f = f ∘ₗ T`,
+for idempotent `f`.
 -/
 lemma ker_mem_invtSubmodule_iff (hf : IsIdempotentElem f) :
-    ker f in Module.End.invtSubmodule T ↔ f ∘ₗ T ∘ₗ f = f ∘ₗ T := by
-  rw [← comp_assoc]; rw [hf.comp_eq_left_iff]; rw [ker_comp]; rw [Module.End.mem_invtSubmodule]
+    ker f ∈ Module.End.invtSubmodule T ↔ f ∘ₗ T ∘ₗ f = f ∘ₗ T := by
+  rw [← comp_assoc, hf.comp_eq_left_iff, ker_comp, Module.End.mem_invtSubmodule]
 
 alias ⟨conj_eq_of_ker_mem_invtSubmodule, ker_mem_invtSubmodule⟩ := ker_mem_invtSubmodule_iff
 
-/--
-lemma `commute_iff` / 引理 `commute_iff`
+/-- An idempotent operator `f` commutes with a linear operator `T` if and only if
+both `range f` and `ker f` are invariant under `T`. -/
+/-
+**LinearMap.IsIdempotentElem.commute_iff** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap.Is
+IdempotentElem`。
+形式化陈述：commute_iff (hf : IsIdempotentElem f) : Commute f T ↔ (range f in Module.E
+nd.invtSubmodule T ∧ ker f in Module.End.invtSubmodule T)
+参数：hf : IsIdempotentElem f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `LinearMap.IsIdempotentElem.range_mem_invtSubmodule_iff`：range_mem_invtSu
+bmodule_iff (hf : IsIdempotentElem f) : range f in Module.End.invtSubmodule T ↔ 
+f ∘ₗ T ∘ₗ f = T ∘ₗ f
+· 使用引理 `LinearMap.IsIdempotentElem.ker_mem_invtSubmodule_iff`：ker_mem_invtSubmod
+ule_iff (hf : IsIdempotentElem f) : ker f in Module.End.invtSubmodule T ↔ f ∘ₗ T
+ ∘ₗ f = f ∘ₗ T
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Commute.eq`：∀ {S : Type u_3} [inst : Mul S] {a b : S}, Commute a b → a *
+ b = b * a
+· 使用引理 `IsIdempotentElem.eq`：eq (ha : IsIdempotentElem a) : a * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 
-English:
-lemma commute_iff
-  given: (hf : IsIdempotentElem f)
-  proof: by
-  simp_rw [hf.range_mem_invtSubmodule_iff, hf.ker_mem_invtSubmodule_iff, ← Module.End.mul_eq_comp]
-  exact ⟨fun h => (by simp [← h.eq, ← mul_assoc, hf.eq]), fun ⟨h1, h2⟩ => h2.symm.trans h1⟩
-
-中文:
-引理 commute_iff
-  条件: (hf : IsIdempotentElem f)
-  证明: by
-  simp_rw [hf.range_mem_invtSubmodule_iff, hf.ker_mem_invtSubmodule_iff, ← Module.End.mul_eq_comp]
-  exact ⟨fun h => (by simp [← h.eq, ← mul_assoc, hf.eq]), fun ⟨h1, h2⟩ => h2.symm.trans h1⟩
-
-Depends on / 依赖: Module, Module.End.mul_eq_comp, h.eq, h2.symm.trans, hf.eq, hf.ker_mem_invtSubmodule_iff, hf.range_mem_invtSubmodule_iff, ker_mem_invtSubmodule_iff, mul_assoc, mul_eq_comp, range_mem_invtSubmodule_iff, simp_rw
+--- 原说明 ---
+An idempotent operator `f` commutes with a linear operator `T` if and only if
+both `range f` and `ker f` are invariant under `T`.
 -/
 lemma commute_iff (hf : IsIdempotentElem f) :
-    Commute f T ↔ (range f in Module.End.invtSubmodule T ∧ ker f in Module.End.invtSubmodule T) := by
+    Commute f T ↔ (range f ∈ Module.End.invtSubmodule T ∧ ker f ∈ Module.End.invtSubmodule T) := by
   simp_rw [hf.range_mem_invtSubmodule_iff, hf.ker_mem_invtSubmodule_iff, ← Module.End.mul_eq_comp]
   exact ⟨fun h => (by simp [← h.eq, ← mul_assoc, hf.eq]), fun ⟨h1, h2⟩ => h2.symm.trans h1⟩
 
-/--
-theorem `commute_iff_of_isUnit` / 定理 `commute_iff_of_isUnit`
+/-- An idempotent operator `f` commutes with a unit operator `T` if and only if
+`T (range f) = range f` and `T (ker f) = ker f`. -/
+/-
+**LinearMap.IsIdempotentElem.commute_iff_of_isUnit** 是 Mathlib 中的一个定理，位于命名空间 `Li
+nearMap.IsIdempotentElem`。
+形式化陈述：commute_iff_of_isUnit (hT : IsUnit T) (hf : IsIdempotentElem f) : Commute 
+f T ↔ (range f).map T = range f ∧ (ker f).map T = ker f
+参数：hT : IsUnit T；hf : IsIdempotentElem f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `instCanLiftUnitsValIsUnit`：∀ {M : Type u_1} [inst : Monoid M], CanLift M
+ Mˣ Units.val IsUnit
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Submodule.map.congr_simp`：∀ {R : Type u_1} {R₂ : Type u_3} {M : Type u_5
+} {M₂ : Type u_7} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddComm
+Monoid M] [ins…
+· 使用定理 `and_and_and_comm`：∀ {a b c d : Prop}, (a ∧ b) ∧ c ∧ d ↔ (a ∧ c) ∧ b ∧ d
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `LinearMap.IsIdempotentElem.commute_iff`：commute_iff (hf : IsIdempotentEl
+em f) : Commute f T ↔ (range f in Module.End.invtSubmodule T ∧ ker f in Module.E
+nd.invtSubmodule T)
+· 使用定理 `LinearMap.GeneralLinearGroup.generalLinearEquiv_to_linearMap`：generalLin
+earEquiv_to_linearMap (f : GeneralLinearGroup R M) : (generalLinearEquiv R M f :
+ M ->ₗ[R] M) = f
+· 使用定理 `Commute.units_inv_right`：units_inv_right : Commute a u -> Commute a ↑u⁻¹
 
-English:
-theorem commute_iff_of_isUnit
-  given: (hT : IsUnit T) (hf : IsIdempotentElem f)
-  proof: by
-  lift T to GeneralLinearGroup R E using hT
-  simp_rw [← GeneralLinearGroup.generalLinearEquiv_to_linearMap, le_antisymm_iff,
-    ← Module.End.mem_invtSubmodule_iff_map_le, ← Module.End.mem_invtSubmodule_symm_iff_le_map,
-    and_and_and_comm (c := (ker f in _)), ← hf.commute_iff,
-    GeneralLinearGroup.generalLinearEquiv_to_linearMap, iff_self_and]
-  exact Commute.units_inv_right
-
-中文:
-定理 commute_iff_of_isUnit
-  条件: (hT : 是单位 T) (hf : IsIdempotentElem f)
-  证明: by
-  lift T to GeneralLinearGroup R E using hT
-  simp_rw [← GeneralLinearGroup.generalLinearEquiv_to_linearMap, le_antisymm_iff,
-    ← Module.End.mem_invtSubmodule_iff_map_le, ← Module.End.mem_invtSubmodule_symm_iff_le_map,
-    and_and_and_comm (c := (ker f in _)), ← hf.commute_iff,
-    GeneralLinearGroup.generalLinearEquiv_to_linearMap, iff_self_and]
-  exact Commute.units_inv_right
-
-Depends on / 依赖: Commute, Commute.units_inv_right, GeneralLinearGroup, GeneralLinearGroup.generalLinearEquiv_to_linearMap, Module, Module.End.mem_invtSubmodule_iff_map_le, Module.End.mem_invtSubmodule_symm_iff_le_map, and_and_and_comm, commute_iff, generalLinearEquiv_to_linearMap, hf.commute_iff, iff_self_and, le_antisymm_iff, mem_invtSubmodule_iff_map_le, mem_invtSubmodule_symm_iff_le_map, simp_rw, units_inv_right
+--- 原说明 ---
+An idempotent operator `f` commutes with a unit operator `T` if and only if
+`T (range f) = range f` and `T (ker f) = ker f`.
 -/
 theorem commute_iff_of_isUnit (hT : IsUnit T) (hf : IsIdempotentElem f) :
     Commute f T ↔ (range f).map T = range f ∧ (ker f).map T = ker f := by
   lift T to GeneralLinearGroup R E using hT
   simp_rw [← GeneralLinearGroup.generalLinearEquiv_to_linearMap, le_antisymm_iff,
     ← Module.End.mem_invtSubmodule_iff_map_le, ← Module.End.mem_invtSubmodule_symm_iff_le_map,
-    and_and_and_comm (c := (ker f in _)), ← hf.commute_iff,
+    and_and_and_comm (c := (ker f ∈ _)), ← hf.commute_iff,
     GeneralLinearGroup.generalLinearEquiv_to_linearMap, iff_self_and]
   exact Commute.units_inv_right
 
@@ -2938,3 +2917,4 @@ namespace LinearMap
 @[deprecated (since := "2026-05-16")] alias ofIsCompl_right_apply := ofIsCompl_apply_right
 
 end LinearMap
+

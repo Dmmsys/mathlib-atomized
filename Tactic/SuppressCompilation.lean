@@ -28,119 +28,68 @@ public meta section
 
 open Lean Parser Elab Command
 
-/--
-Definition of `elabSuppressCompilationDecl` / `elabSuppressCompilationDecl` 的定义
+/-- Replacing `def` and `instance` by `noncomputable def` and `noncomputable instance`, designed
+to disable the compiler in a given file or a given section.
+This is a hack to work around https://github.com/leanprover-community/mathlib4/issues/7103. -/
+/-
+**elabSuppressCompilationDecl** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：elabSuppressCompilationDecl : CommandElab
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabSuppressCompilationDecl
-  signature: : CommandElab
-  body: fun
-| `($[$doc?:docComment]? $(attrs?)? $(vis?)? $[noncomputable]? $(unsafe?)?
- (recKind?)? def id sig:optDeclSig val:declVal) => do
-elabDeclaration ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
- (recKind?)? def id sig:optDeclSig val:declVal)
-| `($[$doc?:docComment]? $(attrs?)? $(vis?)? $[noncomputable]? $(unsafe?)?
- (recKind?)? def id sig:optDeclSig val:declVal deriving derivs,*) => do
-elabDeclaration ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
- (recKind?)? def id sig:optDeclSig val:declVal deriving derivs,*)
-| `($[$doc?:docComment]? $(attrs?)? $(vis?)? $[noncomputable]? $(unsafe?)?
- (recKind?)? (attrKind?)? instance (prio?)? (id?)? sig:declSig val:declVal) => do
-elabDeclaration ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
- (recKind?)? (attrKind?)? instance (prio?)? (id?)? sig:declSig val:declVal)
-| `($[$doc?:docComment]? $(attrs?)? $(vis?)? $[noncomputable]? $(unsafe?)?
- (recKind?)? example sig:optDeclSig val:declVal) => do
-elabDeclaration ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
- (recKind?)? example sig:optDeclSig val:declVal)
-| `($[$doc?:docComment]? $(attrs?)? $(vis?)? $[noncomputable]? $(unsafe?)?
- (recKind?)? abbrev id sig:optDeclSig val:declVal) => do
-elabDeclaration ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
- (recKind?)? abbrev id sig:optDeclSig val:declVal)
-| _ => throwUnsupportedSyntax
-
-中文:
-定义 elabSuppressCompilationDecl
-  签名: : CommandElab
-  定义体: fun
-| `($[$doc?:docComment]? $(attrs?)? $(vis?)? $[noncomputable]? $(unsafe?)?
- (recKind?)? def id sig:optDeclSig val:declVal) => do
-elabDeclaration ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
- (recKind?)? def id sig:optDeclSig val:declVal)
-| `($[$doc?:docComment]? $(attrs?)? $(vis?)? $[noncomputable]? $(unsafe?)?
- (recKind?)? def id sig:optDeclSig val:declVal deriving derivs,*) => do
-elabDeclaration ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
- (recKind?)? def id sig:optDeclSig val:declVal deriving derivs,*)
-| `($[$doc?:docComment]? $(attrs?)? $(vis?)? $[noncomputable]? $(unsafe?)?
- (recKind?)? (attrKind?)? instance (prio?)? (id?)? sig:declSig val:declVal) => do
-elabDeclaration ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
- (recKind?)? (attrKind?)? instance (prio?)? (id?)? sig:declSig val:declVal)
-| `($[$doc?:docComment]? $(attrs?)? $(vis?)? $[noncomputable]? $(unsafe?)?
- (recKind?)? example sig:optDeclSig val:declVal) => do
-elabDeclaration ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
- (recKind?)? example sig:optDeclSig val:declVal)
-| `($[$doc?:docComment]? $(attrs?)? $(vis?)? $[noncomputable]? $(unsafe?)?
- (recKind?)? abbrev id sig:optDeclSig val:declVal) => do
-elabDeclaration ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
- (recKind?)? abbrev id sig:optDeclSig val:declVal)
-| _ => throwUnsupportedSyntax
+--- 原说明 ---
+Replacing `def` and `instance` by `noncomputable def` and `noncomputable instanc
+e`, designed
+to disable the compiler in a given file or a given section.
+This is a hack to work around https://github.com/leanprover-community/mathlib4/i
+ssues/7103.
 -/
 def elabSuppressCompilationDecl : CommandElab := fun
 | `($[$doc?:docComment]? $(attrs?)? $(vis?)? $[noncomputable]? $(unsafe?)?
- (recKind?)? def id sig:optDeclSig val:declVal) => do
-elabDeclaration ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
- (recKind?)? def id sig:optDeclSig val:declVal)
+    $(recKind?)? def $id $sig:optDeclSig $val:declVal) => do
+  elabDeclaration <| ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
+    $(recKind?)? def $id $sig:optDeclSig $val:declVal)
 | `($[$doc?:docComment]? $(attrs?)? $(vis?)? $[noncomputable]? $(unsafe?)?
- (recKind?)? def id sig:optDeclSig val:declVal deriving derivs,*) => do
-elabDeclaration ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
- (recKind?)? def id sig:optDeclSig val:declVal deriving derivs,*)
+    $(recKind?)? def $id $sig:optDeclSig $val:declVal deriving $derivs,*) => do
+  elabDeclaration <| ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
+    $(recKind?)? def $id $sig:optDeclSig $val:declVal deriving $derivs,*)
 | `($[$doc?:docComment]? $(attrs?)? $(vis?)? $[noncomputable]? $(unsafe?)?
- (recKind?)? (attrKind?)? instance (prio?)? (id?)? sig:declSig val:declVal) => do
-elabDeclaration ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
- (recKind?)? (attrKind?)? instance (prio?)? (id?)? sig:declSig val:declVal)
+    $(recKind?)? $(attrKind?)? instance $(prio?)? $(id?)? $sig:declSig $val:declVal) => do
+  elabDeclaration <| ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
+    $(recKind?)? $(attrKind?)? instance $(prio?)? $(id?)? $sig:declSig $val:declVal)
 | `($[$doc?:docComment]? $(attrs?)? $(vis?)? $[noncomputable]? $(unsafe?)?
- (recKind?)? example sig:optDeclSig val:declVal) => do
-elabDeclaration ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
- (recKind?)? example sig:optDeclSig val:declVal)
+    $(recKind?)? example $sig:optDeclSig $val:declVal) => do
+  elabDeclaration <| ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
+    $(recKind?)? example $sig:optDeclSig $val:declVal)
 | `($[$doc?:docComment]? $(attrs?)? $(vis?)? $[noncomputable]? $(unsafe?)?
- (recKind?)? abbrev id sig:optDeclSig val:declVal) => do
-elabDeclaration ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
- (recKind?)? abbrev id sig:optDeclSig val:declVal)
+    $(recKind?)? abbrev $id $sig:optDeclSig $val:declVal) => do
+  elabDeclaration <| ← `($[$doc?:docComment]? $(attrs?)? $(vis?)? noncomputable $(unsafe?)?
+    $(recKind?)? abbrev $id $sig:optDeclSig $val:declVal)
 | _ => throwUnsupportedSyntax
 
 /-- The command `unsuppress_compilation in def foo : ...` makes sure that the definition is
 compiled to executable code, even if `suppress_compilation` is active. -/
 syntax "unsuppress_compilation" (" in " command)? : command
 
-/--
-Definition of `expandSuppressCompilationNotation` / `expandSuppressCompilationNotation` 的定义
+/-- Make sure that notations are compiled, even if `suppress_compilation` is active, by prepending
+them with `unsuppress_compilation`. -/
+/-
+**expandSuppressCompilationNotation** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：expandSuppressCompilationNotation : Macro
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition expandSuppressCompilationNotation
-  signature: : Macro
-  body: fun
-| `($[$doc?:docComment]? $(attrs?)? $(attrKind)? notation
- (prec?)? (name?)? (prio?)? items* => v) => do
-  `(unsuppress_compilation in
- [$doc?:docComment]? (attrs?)? (attrKind)? notation
- (prec?)? (name?)? (prio?)? items* => v)
-| _ => Macro.throwUnsupported
-
-中文:
-定义 expandSuppressCompilationNotation
-  签名: : Macro
-  定义体: fun
-| `($[$doc?:docComment]? $(attrs?)? $(attrKind)? notation
- (prec?)? (name?)? (prio?)? items* => v) => do
-  `(unsuppress_compilation in
- [$doc?:docComment]? (attrs?)? (attrKind)? notation
- (prec?)? (name?)? (prio?)? items* => v)
-| _ => Macro.throwUnsupported
+--- 原说明 ---
+Make sure that notations are compiled, even if `suppress_compilation` is active,
+ by prepending
+them with `unsuppress_compilation`.
 -/
 def expandSuppressCompilationNotation : Macro := fun
 | `($[$doc?:docComment]? $(attrs?)? $(attrKind)? notation
- (prec?)? (name?)? (prio?)? items* => v) => do
+    $(prec?)? $(name?)? $(prio?)? $items* => $v) => do
   `(unsuppress_compilation in
- [$doc?:docComment]? (attrs?)? (attrKind)? notation
- (prec?)? (name?)? (prio?)? items* => v)
+    $[$doc?:docComment]? $(attrs?)? $(attrKind)? notation
+      $(prec?)? $(name?)? $(prio?)? $items* => $v)
 | _ => Macro.throwUnsupported
 
 /-- Replacing `def` and `instance` by `noncomputable def` and `noncomputable instance`, designed
@@ -154,8 +103,8 @@ macro "suppress_compilation" : command => do
   let declElab := mkCIdent ``elabSuppressCompilationDecl
   let notaMacro := mkCIdent ``expandSuppressCompilationNotation
   `(
-attribute [local command_elab $declKind] declElab
-attribute [local macro $notaKind] notaMacro
+  attribute [local command_elab $declKind] $declElab
+  attribute [local macro $notaKind] $notaMacro
   )
 
 /-- The command `unsuppress_compilation in def foo : ...` makes sure that the definition is
@@ -165,10 +114,11 @@ macro_rules
   let declElab := mkCIdent ``elabSuppressCompilationDecl
   let notaMacro := mkCIdent ``expandSuppressCompilationNotation
   let attrCmds ← `(
-attribute [-command_elab] declElab
-attribute [-macro] notaMacro
+    attribute [-command_elab] $declElab
+    attribute [-macro] $notaMacro
   )
   if let some cmd := cmd? then
     `($attrCmds:command $cmd:command suppress_compilation)
   else
     return attrCmds
+

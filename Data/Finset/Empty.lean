@@ -41,113 +41,60 @@ namespace Finset
 /-! ### Nonempty -/
 
 
-/--
-Definition of `Nonempty` / `Nonempty` 的定义
+/-- The property `s.Nonempty` expresses the fact that the finset `s` is not empty. It should be used
+in theorem assumptions instead of `∃ x, x ∈ s` or `s ≠ ∅` as it gives access to a nice API thanks
+to the dot notation. -/
+/-
+**Finset.Nonempty** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：{α : Type u_1} → Finset α → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Nonempty
-  signature: (s : Finset α)
-  body: exists x : α, x in s
-
-@[grind =]
-
-中文:
-定义 非空
-  签名: (s : 有限集 α)
-  定义体: exists x : α, x in s
-
-@[grind =]
+--- 原说明 ---
+The property `s.Nonempty` expresses the fact that the finset `s` is not empty. I
+t should be used
+in theorem assumptions instead of `∃ x, x ∈ s` or `s ≠ ∅` as it gives access to 
+a nice API thanks
+to the dot notation.
 -/
-protected def Nonempty (s : Finset α) : Prop := exists x : α, x in s
+protected def Nonempty (s : Finset α) : Prop := ∃ x : α, x ∈ s
 
 @[grind =]
-/--
-theorem `nonempty_def` / 定理 `nonempty_def`
-
-English:
-theorem nonempty_def
-  given: {s : Finset α}
-  statement: s.Nonempty ↔ exists x, x in s
-  proof: Iff.rfl
-
-中文:
-定理 nonempty_def
-  条件: {s : 有限集 α}
-  结论: s.非空 ↔ 存在 x, x in s
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Finset.nonempty_def** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：nonempty_def {s : Finset α} : s.Nonempty ↔ exists x, x in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem nonempty_def {s : Finset α} : s.Nonempty ↔ exists x, x in s := Iff.rfl
-
-/--
-Instance `decidableNonempty` / 实例 `decidableNonempty`
-
-English:
-instance decidableNonempty
-  signature: {s : Finset α}
-  body: decidable_of_iff (exists a in s, true) by simp [Finset.Nonempty]
-
-@[simp, norm_cast]
-
-中文:
-实例 decidableNonempty
-  签名: {s : 有限集 α}
-  定义体: decidable_of_iff (exists a in s, true) by simp [Finset.Nonempty]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Finset, Finset.Nonempty, Nonempty, decidable_of_iff
+theorem nonempty_def {s : Finset α} : s.Nonempty ↔ ∃ x, x ∈ s := Iff.rfl
+/-
+**Finset.decidableNonempty** 是 Mathlib 中的一个实例，位于命名空间 `Finset`。
+形式化陈述：decidableNonempty {s : Finset α} : Decidable s.Nonempty
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance decidableNonempty {s : Finset α} : Decidable s.Nonempty :=
-decidable_of_iff (exists a in s, true) by simp [Finset.Nonempty]
+  decidable_of_iff (∃ a ∈ s, true) <| by simp [Finset.Nonempty]
 
 @[simp, norm_cast]
-/--
-theorem `coe_nonempty` / 定理 `coe_nonempty`
-
-English:
-theorem coe_nonempty
-  given: {s : Finset α}
-  statement: (s : Set α).Nonempty ↔ s.Nonempty
-  proof: Iff.rfl
-
-中文:
-定理 coe_nonempty
-  条件: {s : 有限集 α}
-  结论: (s : 集合 α).非空 ↔ s.非空
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Finset.coe_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：coe_nonempty {s : Finset α} : (s : Set α).Nonempty ↔ s.Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem coe_nonempty {s : Finset α} : (s : Set α).Nonempty ↔ s.Nonempty :=
   Iff.rfl
 
 -- Not `@[simp]` since `nonempty_subtype` already is.
-/--
-theorem `nonempty_coe_sort` / 定理 `nonempty_coe_sort`
-
-English:
-theorem nonempty_coe_sort
-  given: {s : Finset α}
-  statement: Nonempty (s : Type _) ↔ s.Nonempty
-  proof: nonempty_subtype
-
-alias ⟨_, Nonempty.to_set⟩ := coe_nonempty
-
-alias ⟨_, Nonempty.coe_sort⟩ := nonempty_coe_sort
-
-中文:
-定理 nonempty_coe_sort
-  条件: {s : 有限集 α}
-  结论: 非空 (s : 类型 _) ↔ s.非空
-  证明: nonempty_subtype
-
-alias ⟨_, Nonempty.to_set⟩ := coe_nonempty
-
-alias ⟨_, Nonempty.coe_sort⟩ := nonempty_coe_sort
-
-Depends on / 依赖: nonempty_subtype
+/-
+**Finset.nonempty_coe_sort** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：nonempty_coe_sort {s : Finset α} : Nonempty (s : Type _) ↔ s.Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_subtype`：nonempty_subtype {α} {p : α -> Prop} : Nonempty (Subty
+pe p) ↔ exists a : α, p a
 -/
 theorem nonempty_coe_sort {s : Finset α} : Nonempty (s : Type _) ↔ s.Nonempty :=
   nonempty_subtype
@@ -155,125 +102,64 @@ theorem nonempty_coe_sort {s : Finset α} : Nonempty (s : Type _) ↔ s.Nonempty
 alias ⟨_, Nonempty.to_set⟩ := coe_nonempty
 
 alias ⟨_, Nonempty.coe_sort⟩ := nonempty_coe_sort
-
-/--
-theorem `Nonempty.exists_mem` / 定理 `Nonempty.exists_mem`
-
-English:
-theorem Nonempty.exists_mem
-  given: {s : Finset α} (h : s.Nonempty)
-  statement: exists x : α, x in s
-  proof: h
-
-中文:
-定理 非空.存在_mem
-  条件: {s : 有限集 α} (h : s.非空)
-  结论: 存在 x : α, x in s
-  证明: h
+/-
+**Finset.Nonempty.exists_mem** 是 Mathlib 中的一个定理，位于命名空间 `Finset.Nonempty`。
+形式化陈述：∀ {α : Type u_1} {s : Finset α}, s.Nonempty → ∃ x, x ∈ s
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Nonempty.exists_mem {s : Finset α} (h : s.Nonempty) : exists x : α, x in s :=
+theorem Nonempty.exists_mem {s : Finset α} (h : s.Nonempty) : ∃ x : α, x ∈ s :=
   h
-
-/--
-theorem `Nonempty.mono` / 定理 `Nonempty.mono`
-
-English:
-theorem Nonempty.mono
-  given: {s t : Finset α} (hst : s subseteq t) (hs : s.Nonempty)
-  statement: t.Nonempty
-  proof: Set.Nonempty.mono hst hs
-
-中文:
-定理 非空.mono
-  条件: {s t : 有限集 α} (hst : s subseteq t) (hs : s.非空)
-  结论: t.非空
-  证明: Set.Nonempty.mono hst hs
+/-
+**Finset.Nonempty.mono** 是 Mathlib 中的一个定理，位于命名空间 `Finset.Nonempty`。
+形式化陈述：∀ {α : Type u_1} {s t : Finset α}, s ⊆ t → s.Nonempty → t.Nonempty
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.mono`：∀ {α : Type u} {s t : Set α}, s ⊆ t → s.Nonempty → t.
+Nonempty
 -/
-@[gcongr] theorem Nonempty.mono {s t : Finset α} (hst : s subseteq t) (hs : s.Nonempty) : t.Nonempty :=
+@[gcongr] theorem Nonempty.mono {s t : Finset α} (hst : s ⊆ t) (hs : s.Nonempty) : t.Nonempty :=
   Set.Nonempty.mono hst hs
-
-/--
-theorem `Nonempty.forall_const` / 定理 `Nonempty.forall_const`
-
-English:
-theorem Nonempty.forall_const
-  given: {s : Finset α} (h : s.Nonempty) {p : Prop}
-  statement: (forall x in s, p) ↔ p
-  proof: let ⟨x, hx⟩ := h
-  ⟨fun h => h x hx, fun h _ _ => h⟩
-
-@[simp]
-
-中文:
-定理 非空.对任意_const
-  条件: {s : 有限集 α} (h : s.非空) {p : 命题}
-  结论: (对任意 x in s, p) ↔ p
-  证明: let ⟨x, hx⟩ := h
-  ⟨fun h => h x hx, fun h _ _ => h⟩
-
-@[simp]
+/-
+**Finset.Nonempty.forall_const** 是 Mathlib 中的一个定理，位于命名空间 `Finset.Nonempty`。
+形式化陈述：∀ {α : Type u_1} {s : Finset α}, s.Nonempty → ∀ {p : Prop}, (∀ x ∈ s, p) ↔
+ p
+参数：∀ x ∈ s, p。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Nonempty.forall_const {s : Finset α} (h : s.Nonempty) {p : Prop} : (forall x in s, p) ↔ p :=
+theorem Nonempty.forall_const {s : Finset α} (h : s.Nonempty) {p : Prop} : (∀ x ∈ s, p) ↔ p :=
   let ⟨x, hx⟩ := h
   ⟨fun h => h x hx, fun h _ _ => h⟩
 
 @[simp]
-/--
-theorem `forall_mem_const` / 定理 `forall_mem_const`
-
-English:
-theorem forall_mem_const
-  given: {s : Finset α} [Nonempty s] {p : Prop}
-  statement: (forall x in s, p) ↔ p
-  proof: (nonempty_coe_sort.mp ‹_›).forall_const
-
-中文:
-定理 对任意_mem_const
-  条件: {s : 有限集 α} [非空 s] {p : 命题}
-  结论: (对任意 x in s, p) ↔ p
-  证明: (nonempty_coe_sort.mp ‹_›).forall_const
-
-Depends on / 依赖: forall_const, nonempty_coe_sort, nonempty_coe_sort.mp
+/-
+**Finset.forall_mem_const** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：forall_mem_const {s : Finset α} [Nonempty s] {p : Prop} : (forall x in s, 
+p) ↔ p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.Nonempty.forall_const`：∀ {α : Type u_1} {s : Finset α}, s.Nonempt
+y → ∀ {p : Prop}, (∀ x ∈ s, p) ↔ p
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.nonempty_coe_sort`：nonempty_coe_sort {s : Finset α} : Nonempty (s
+ : Type _) ↔ s.Nonempty
 -/
-theorem forall_mem_const {s : Finset α} [Nonempty s] {p : Prop} : (forall x in s, p) ↔ p :=
+theorem forall_mem_const {s : Finset α} [Nonempty s] {p : Prop} : (∀ x ∈ s, p) ↔ p :=
   (nonempty_coe_sort.mp ‹_›).forall_const
-
-/--
-theorem `Nonempty.to_subtype` / 定理 `Nonempty.to_subtype`
-
-English:
-theorem Nonempty.to_subtype
-  given: {s : Finset α}
-  statement: s.Nonempty -> Nonempty s
-  proof: nonempty_coe_sort.2
-
-中文:
-定理 非空.to_subtype
-  条件: {s : 有限集 α}
-  结论: s.非空 -> 非空 s
-  证明: nonempty_coe_sort.2
-
-Depends on / 依赖: nonempty_coe_sort
+/-
+**Finset.Nonempty.to_subtype** 是 Mathlib 中的一个定理，位于命名空间 `Finset.Nonempty`。
+形式化陈述：∀ {α : Type u_1} {s : Finset α}, s.Nonempty → Nonempty ↥s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.nonempty_coe_sort`：nonempty_coe_sort {s : Finset α} : Nonempty (s
+ : Type _) ↔ s.Nonempty
 -/
-theorem Nonempty.to_subtype {s : Finset α} : s.Nonempty -> Nonempty s :=
+theorem Nonempty.to_subtype {s : Finset α} : s.Nonempty → Nonempty s :=
   nonempty_coe_sort.2
-
-/--
-theorem `Nonempty.to_type` / 定理 `Nonempty.to_type`
-
-English:
-theorem Nonempty.to_type
-  given: {s : Finset α}
-  statement: s.Nonempty -> Nonempty α
-  proof: fun ⟨x, _hx⟩ => ⟨x⟩
-
-中文:
-定理 非空.to_type
-  条件: {s : 有限集 α}
-  结论: s.非空 -> 非空 α
-  证明: fun ⟨x, _hx⟩ => ⟨x⟩
+/-
+**Finset.Nonempty.to_type** 是 Mathlib 中的一个定理，位于命名空间 `Finset.Nonempty`。
+形式化陈述：∀ {α : Type u_1} {s : Finset α}, s.Nonempty → Nonempty α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Nonempty.to_type {s : Finset α} : s.Nonempty -> Nonempty α := fun ⟨x, _hx⟩ => ⟨x⟩
+theorem Nonempty.to_type {s : Finset α} : s.Nonempty → Nonempty α := fun ⟨x, _hx⟩ => ⟨x⟩
 
 /-! ### empty -/
 
@@ -282,573 +168,305 @@ section Empty
 
 variable {s : Finset α}
 
-/--
-Definition of `empty` / `empty` 的定义
+/-- The empty finset -/
+/-
+**Finset.empty** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：{α : Type u_1} → Finset α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.nodup_zero`：nodup_zero : @Nodup α 0
 
-English:
-definition empty
-  signature: : Finset α
-  body: ⟨0, nodup_zero⟩
-
-中文:
-定义 empty
-  签名: : 有限集 α
-  定义体: ⟨0, nodup_zero⟩
+--- 原说明 ---
+The empty finset
 -/
 protected def empty : Finset α :=
   ⟨0, nodup_zero⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: EmptyCollection (Finset α)
-  body: ⟨Finset.empty⟩
-
-中文:
-实例 :
-  签名: EmptyCollection (有限集 α)
-  定义体: ⟨Finset.empty⟩
-
-Depends on / 依赖: Finset, Finset.empty
+/-
+**Finset.** 是 Mathlib 中的一个实例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : EmptyCollection (Finset α) :=
   ⟨Finset.empty⟩
-
-/--
-Instance `inhabitedFinset` / 实例 `inhabitedFinset`
-
-English:
-instance inhabitedFinset
-  signature: : Inhabited (Finset α)
-  body: ⟨∅⟩
-
-@[simp]
-
-中文:
-实例 inhabitedFinset
-  签名: : 可居 (有限集 α)
-  定义体: ⟨∅⟩
-
-@[simp]
-
-Depends on / 依赖: instOfNat
+/-
+**Finset.inhabitedFinset** 是 Mathlib 中的一个实例，位于命名空间 `Finset`。
+形式化陈述：inhabitedFinset : Inhabited (Finset α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance inhabitedFinset : Inhabited (Finset α) :=
   ⟨∅⟩
 
 @[simp]
-/--
-theorem `empty_val` / 定理 `empty_val`
-
-English:
-theorem empty_val
-  statement: (∅ : Finset α).1 = 0
-  proof: rfl
-
-@[simp, grind ←]
-
-中文:
-定理 empty_val
-  结论: (∅ : 有限集 α).1 = 0
-  证明: rfl
-
-@[simp, grind ←]
+/-
+**Finset.empty_val** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：empty_val : (∅ : Finset α).1 = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem empty_val : (∅ : Finset α).1 = 0 :=
   rfl
 
 @[simp, grind ←]
-/--
-theorem `notMem_empty` / 定理 `notMem_empty`
-
-English:
-theorem notMem_empty
-  given: (a : α)
-  statement: a ∉ (∅ : Finset α)
-  proof: by
-  simp only [mem_def, empty_val, notMem_zero, not_false_iff]
-
-@[simp]
-
-中文:
-定理 notMem_empty
-  条件: (a : α)
-  结论: a ∉ (∅ : 有限集 α)
-  证明: by
-  simp only [mem_def, empty_val, notMem_zero, not_false_iff]
-
-@[simp]
-
-Depends on / 依赖: empty_val, mem_def, notMem_zero, not_false_iff
+/-
+**Finset.notMem_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：notMem_empty (a : α) : a ∉ (∅ : Finset α)
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem notMem_empty (a : α) : a ∉ (∅ : Finset α) := by
   simp only [mem_def, empty_val, notMem_zero, not_false_iff]
 
 @[simp]
-/--
-theorem `not_nonempty_empty` / 定理 `not_nonempty_empty`
-
-English:
-theorem not_nonempty_empty
-  statement: ¬(∅ : Finset α).Nonempty
-  proof: fun ⟨x, hx⟩ => notMem_empty x hx
-
-@[simp]
-
-中文:
-定理 not_nonempty_empty
-  结论: ¬(∅ : 有限集 α).非空
-  证明: fun ⟨x, hx⟩ => notMem_empty x hx
-
-@[simp]
-
-Depends on / 依赖: notMem_empty
+/-
+**Finset.not_nonempty_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：not_nonempty_empty : ¬(∅ : Finset α).Nonempty
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.notMem_empty`：notMem_empty (a : α) : a ∉ (∅ : Finset α)
 -/
 theorem not_nonempty_empty : ¬(∅ : Finset α).Nonempty := fun ⟨x, hx⟩ => notMem_empty x hx
 
 @[simp]
-/--
-theorem `mk_zero` / 定理 `mk_zero`
-
-English:
-theorem mk_zero
-  statement: (⟨0, nodup_zero⟩ : Finset α) = ∅
-  proof: rfl
-
-中文:
-定理 mk_zero
-  结论: (⟨0, nodup_zero⟩ : 有限集 α) = ∅
-  证明: rfl
+/-
+**Finset.mk_zero** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：mk_zero : (⟨0, nodup_zero⟩ : Finset α) = ∅
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.nodup_zero`：nodup_zero : @Nodup α 0
 -/
 theorem mk_zero : (⟨0, nodup_zero⟩ : Finset α) = ∅ :=
   rfl
-
-/--
-theorem `ne_empty_of_mem` / 定理 `ne_empty_of_mem`
-
-English:
-theorem ne_empty_of_mem
-  given: {a : α} {s : Finset α} (h : a in s)
-  statement: s != ∅
-  proof: fun e =>
-notMem_empty a e ▸ h
-
-中文:
-定理 ne_empty_of_mem
-  条件: {a : α} {s : 有限集 α} (h : a in s)
-  结论: s != ∅
-  证明: fun e =>
-notMem_empty a e ▸ h
+/-
+**Finset.ne_empty_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：ne_empty_of_mem {a : α} {s : Finset α} (h : a in s) : s != ∅
+参数：h : a in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.notMem_empty`：notMem_empty (a : α) : a ∉ (∅ : Finset α)
 -/
-theorem ne_empty_of_mem {a : α} {s : Finset α} (h : a in s) : s != ∅ := fun e =>
-notMem_empty a e ▸ h
-
-/--
-theorem `Nonempty.ne_empty` / 定理 `Nonempty.ne_empty`
-
-English:
-theorem Nonempty.ne_empty
-  given: {s : Finset α} (h : s.Nonempty)
-  statement: s != ∅
-  proof: (Exists.elim h) fun _a => ne_empty_of_mem
-
-@[simp]
-
-中文:
-定理 非空.ne_empty
-  条件: {s : 有限集 α} (h : s.非空)
-  结论: s != ∅
-  证明: (Exists.elim h) fun _a => ne_empty_of_mem
-
-@[simp]
-
-Depends on / 依赖: Exists, Exists.elim, ne_empty_of_mem
+theorem ne_empty_of_mem {a : α} {s : Finset α} (h : a ∈ s) : s ≠ ∅ := fun e =>
+  notMem_empty a <| e ▸ h
+/-
+**Finset.Nonempty.ne_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset.Nonempty`。
+形式化陈述：∀ {α : Type u_1} {s : Finset α}, s.Nonempty → s ≠ ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.elim`：∀ {α : Sort u} {p : α → Prop} {b : Prop}, (∃ x, p x) → (∀ (
+a : α), p a → b) → b
+· 使用定理 `Finset.ne_empty_of_mem`：ne_empty_of_mem {a : α} {s : Finset α} (h : a in
+ s) : s != ∅
 -/
-theorem Nonempty.ne_empty {s : Finset α} (h : s.Nonempty) : s != ∅ :=
+theorem Nonempty.ne_empty {s : Finset α} (h : s.Nonempty) : s ≠ ∅ :=
   (Exists.elim h) fun _a => ne_empty_of_mem
 
 @[simp]
-/--
-theorem `empty_subset` / 定理 `empty_subset`
-
-English:
-theorem empty_subset
-  given: (s : Finset α)
-  statement: ∅ subseteq s
-  proof: zero_subset _
-
-中文:
-定理 empty_subset
-  条件: (s : 有限集 α)
-  结论: ∅ subseteq s
-  证明: zero_subset _
-
-Depends on / 依赖: zero_subset
+/-
+**Finset.empty_subset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：empty_subset (s : Finset α) : ∅ subseteq s
+参数：s : Finset α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.zero_subset`：zero_subset (s : Multiset α) : 0 subseteq s
 -/
-theorem empty_subset (s : Finset α) : ∅ subseteq s :=
+theorem empty_subset (s : Finset α) : ∅ ⊆ s :=
   zero_subset _
-
-/--
-theorem `eq_empty_of_forall_notMem` / 定理 `eq_empty_of_forall_notMem`
-
-English:
-theorem eq_empty_of_forall_notMem
-  given: {s : Finset α} (H : forall x, x ∉ s)
-  statement: s = ∅
-  proof: eq_of_veq (eq_zero_of_forall_notMem H)
-
-中文:
-定理 eq_empty_of_对任意_notMem
-  条件: {s : 有限集 α} (H : 对任意 x, x ∉ s)
-  结论: s = ∅
-  证明: eq_of_veq (eq_zero_of_forall_notMem H)
-
-Depends on / 依赖: eq_of_veq, eq_zero_of_forall_notMem
+/-
+**Finset.eq_empty_of_forall_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：eq_empty_of_forall_notMem {s : Finset α} (H : forall x, x ∉ s) : s = ∅
+参数：H : forall x, x ∉ s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.eq_of_veq`：∀ {α : Type u_1} {s t : Finset α}, s.val = t.val → s =
+ t
+· 使用定理 `Multiset.eq_zero_of_forall_notMem`：eq_zero_of_forall_notMem {s : Multise
+t α} : (forall x, x ∉ s) -> s = 0
 -/
-theorem eq_empty_of_forall_notMem {s : Finset α} (H : forall x, x ∉ s) : s = ∅ :=
+theorem eq_empty_of_forall_notMem {s : Finset α} (H : ∀ x, x ∉ s) : s = ∅ :=
   eq_of_veq (eq_zero_of_forall_notMem H)
-
-/--
-theorem `eq_empty_iff_forall_notMem` / 定理 `eq_empty_iff_forall_notMem`
-
-English:
-theorem eq_empty_iff_forall_notMem
-  given: {s : Finset α}
-  statement: s = ∅ ↔ forall x, x ∉ s
-  proof: by grind
-
-@[simp]
-
-中文:
-定理 eq_empty_iff_对任意_notMem
-  条件: {s : 有限集 α}
-  结论: s = ∅ ↔ 对任意 x, x ∉ s
-  证明: by grind
-
-@[simp]
+/-
+**Finset.eq_empty_iff_forall_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：eq_empty_iff_forall_notMem {s : Finset α} : s = ∅ ↔ forall x, x ∉ s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eq_empty_iff_forall_notMem {s : Finset α} : s = ∅ ↔ forall x, x ∉ s := by grind
+theorem eq_empty_iff_forall_notMem {s : Finset α} : s = ∅ ↔ ∀ x, x ∉ s := by grind
 
 @[simp]
-/--
-theorem `val_eq_zero` / 定理 `val_eq_zero`
-
-English:
-theorem val_eq_zero
-  given: {s : Finset α}
-  statement: s.1 = 0 ↔ s = ∅
-  proof: @val_inj _ s ∅
-
-中文:
-定理 val_eq_zero
-  条件: {s : 有限集 α}
-  结论: s.1 = 0 ↔ s = ∅
-  证明: @val_inj _ s ∅
-
-Depends on / 依赖: val_inj
+/-
+**Finset.val_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：val_eq_zero {s : Finset α} : s.1 = 0 ↔ s = ∅
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.val_inj`：val_inj {s t : Finset α} : s.1 = t.1 ↔ s = t
 -/
 theorem val_eq_zero {s : Finset α} : s.1 = 0 ↔ s = ∅ :=
   @val_inj _ s ∅
-
-/--
-lemma `subset_empty` / 引理 `subset_empty`
-
-English:
-lemma subset_empty
-  statement: s subseteq ∅ ↔ s = ∅
-  proof: subset_zero.trans val_eq_zero
-
-@[simp]
-
-中文:
-引理 subset_empty
-  结论: s subseteq ∅ ↔ s = ∅
-  证明: subset_zero.trans val_eq_zero
-
-@[simp]
+/-
+**Finset.subset_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {s : Finset α}, s ⊆ ∅ ↔ s = ∅
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Multiset.subset_zero`：∀ {α : Type u_1} {s : Multiset α}, s ⊆ 0 ↔ s = 0
+· 使用定理 `Finset.val_eq_zero`：val_eq_zero {s : Finset α} : s.1 = 0 ↔ s = ∅
 -/
-@[simp] lemma subset_empty : s subseteq ∅ ↔ s = ∅ := subset_zero.trans val_eq_zero
+@[simp] lemma subset_empty : s ⊆ ∅ ↔ s = ∅ := subset_zero.trans val_eq_zero
 
 @[simp]
-/--
-theorem `not_ssubset_empty` / 定理 `not_ssubset_empty`
-
-English:
-theorem not_ssubset_empty
-  given: (s : Finset α)
-  statement: ¬s ⊂ ∅
-  proof: by grind
-
-中文:
-定理 not_ssubset_empty
-  条件: (s : 有限集 α)
-  结论: ¬s ⊂ ∅
-  证明: by grind
+/-
+**Finset.not_ssubset_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：not_ssubset_empty (s : Finset α) : ¬s ⊂ ∅
+参数：s : Finset α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem not_ssubset_empty (s : Finset α) : ¬s ⊂ ∅ := by grind
-
-/--
-theorem `nonempty_of_ne_empty` / 定理 `nonempty_of_ne_empty`
-
-English:
-theorem nonempty_of_ne_empty
-  given: {s : Finset α} (h : s != ∅)
-  statement: s.Nonempty
-  proof: exists_mem_of_ne_zero (mt val_eq_zero.1 h)
-
-@[push ←]
-
-中文:
-定理 nonempty_of_ne_empty
-  条件: {s : 有限集 α} (h : s != ∅)
-  结论: s.非空
-  证明: exists_mem_of_ne_zero (mt val_eq_zero.1 h)
-
-@[push ←]
-
-Depends on / 依赖: exists_mem_of_ne_zero, val_eq_zero
+/-
+**Finset.nonempty_of_ne_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：nonempty_of_ne_empty {s : Finset α} (h : s != ∅) : s.Nonempty
+参数：h : s != ∅。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.exists_mem_of_ne_zero`：exists_mem_of_ne_zero {s : Multiset α} :
+ s != 0 -> exists a : α, a in s
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.val_eq_zero`：val_eq_zero {s : Finset α} : s.1 = 0 ↔ s = ∅
 -/
-theorem nonempty_of_ne_empty {s : Finset α} (h : s != ∅) : s.Nonempty :=
+theorem nonempty_of_ne_empty {s : Finset α} (h : s ≠ ∅) : s.Nonempty :=
   exists_mem_of_ne_zero (mt val_eq_zero.1 h)
 
 @[push ←]
-/--
-theorem `nonempty_iff_ne_empty` / 定理 `nonempty_iff_ne_empty`
-
-English:
-theorem nonempty_iff_ne_empty
-  given: {s : Finset α}
-  statement: s.Nonempty ↔ s != ∅
-  proof: ⟨Nonempty.ne_empty, nonempty_of_ne_empty⟩
-
-@[simp, push]
-
-中文:
-定理 nonempty_iff_ne_empty
-  条件: {s : 有限集 α}
-  结论: s.非空 ↔ s != ∅
-  证明: ⟨Nonempty.ne_empty, nonempty_of_ne_empty⟩
-
-@[simp, push]
-
-Depends on / 依赖: Nonempty, Nonempty.ne_empty, ne_empty, nonempty_of_ne_empty
+/-
+**Finset.nonempty_iff_ne_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：nonempty_iff_ne_empty {s : Finset α} : s.Nonempty ↔ s != ∅
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.Nonempty.ne_empty`：∀ {α : Type u_1} {s : Finset α}, s.Nonempty → 
+s ≠ ∅
+· 使用定理 `Finset.nonempty_of_ne_empty`：nonempty_of_ne_empty {s : Finset α} (h : s 
+!= ∅) : s.Nonempty
 -/
-theorem nonempty_iff_ne_empty {s : Finset α} : s.Nonempty ↔ s != ∅ :=
+theorem nonempty_iff_ne_empty {s : Finset α} : s.Nonempty ↔ s ≠ ∅ :=
   ⟨Nonempty.ne_empty, nonempty_of_ne_empty⟩
 
 @[simp, push]
-/--
-theorem `not_nonempty_iff_eq_empty` / 定理 `not_nonempty_iff_eq_empty`
-
-English:
-theorem not_nonempty_iff_eq_empty
-  given: {s : Finset α}
-  statement: ¬s.Nonempty ↔ s = ∅
-  proof: nonempty_iff_ne_empty.not.trans not_not
-
-中文:
-定理 not_nonempty_iff_eq_empty
-  条件: {s : 有限集 α}
-  结论: ¬s.非空 ↔ s = ∅
-  证明: nonempty_iff_ne_empty.not.trans not_not
-
-Depends on / 依赖: nonempty_iff_ne_empty, nonempty_iff_ne_empty.not.trans, not_not
+/-
+**Finset.not_nonempty_iff_eq_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：not_nonempty_iff_eq_empty {s : Finset α} : ¬s.Nonempty ↔ s = ∅
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Finset.nonempty_iff_ne_empty`：nonempty_iff_ne_empty {s : Finset α} : s.N
+onempty ↔ s != ∅
+· 使用定理 `Classical.not_not`：∀ {a : Prop}, ¬¬a ↔ a
 -/
 theorem not_nonempty_iff_eq_empty {s : Finset α} : ¬s.Nonempty ↔ s = ∅ :=
   nonempty_iff_ne_empty.not.trans not_not
-
-/--
-theorem `eq_empty_or_nonempty` / 定理 `eq_empty_or_nonempty`
-
-English:
-theorem eq_empty_or_nonempty
-  given: (s : Finset α)
-  statement: s = ∅ ∨ s.Nonempty
-  proof: by_cases Or.inl fun h => Or.inr (nonempty_of_ne_empty h)
-
-@[simp, norm_cast]
-
-中文:
-定理 eq_empty_or_nonempty
-  条件: (s : 有限集 α)
-  结论: s = ∅ ∨ s.非空
-  证明: by_cases Or.inl fun h => Or.inr (nonempty_of_ne_empty h)
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Or.inl, Or.inr, nonempty_of_ne_empty
+/-
+**Finset.eq_empty_or_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：eq_empty_or_nonempty (s : Finset α) : s = ∅ ∨ s.Nonempty
+参数：s : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `by_cases`：by_cases {p q : Prop} (hpq : p -> q) (hnpq : ¬p -> q) : q
+· 使用定理 `Finset.nonempty_of_ne_empty`：nonempty_of_ne_empty {s : Finset α} (h : s 
+!= ∅) : s.Nonempty
 -/
 theorem eq_empty_or_nonempty (s : Finset α) : s = ∅ ∨ s.Nonempty :=
   by_cases Or.inl fun h => Or.inr (nonempty_of_ne_empty h)
 
 @[simp, norm_cast]
-/--
-theorem `coe_empty` / 定理 `coe_empty`
-
-English:
-theorem coe_empty
-  statement: ((∅ : Finset α) : Set α) = ∅
-  proof: by grind
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_empty
-  结论: ((∅ : 有限集 α) : 集合 α) = ∅
-  证明: by grind
-
-@[simp, norm_cast]
+/-
+**Finset.coe_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：coe_empty : ((∅ : Finset α) : Set α) = ∅
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_empty : ((∅ : Finset α) : Set α) = ∅ := by grind
 
 @[simp, norm_cast]
-/--
-theorem `coe_eq_empty` / 定理 `coe_eq_empty`
-
-English:
-theorem coe_eq_empty
-  given: {s : Finset α}
-  statement: (s : Set α) = ∅ ↔ s = ∅
-  proof: by grind
-
-@[simp]
-
-中文:
-定理 coe_eq_empty
-  条件: {s : 有限集 α}
-  结论: (s : 集合 α) = ∅ ↔ s = ∅
-  证明: by grind
-
-@[simp]
+/-
+**Finset.coe_eq_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：coe_eq_empty {s : Finset α} : (s : Set α) = ∅ ↔ s = ∅
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_eq_empty {s : Finset α} : (s : Set α) = ∅ ↔ s = ∅ := by grind
 
 @[simp]
-/--
-theorem `isEmpty_coe_sort` / 定理 `isEmpty_coe_sort`
-
-English:
-theorem isEmpty_coe_sort
-  given: {s : Finset α}
-  statement: IsEmpty (s : Type _) ↔ s = ∅
-  proof: by
-  simpa using @Set.isEmpty_coe_sort α s
-
-中文:
-定理 isEmpty_coe_sort
-  条件: {s : 有限集 α}
-  结论: 是空 (s : 类型 _) ↔ s = ∅
-  证明: by
-  simpa using @Set.isEmpty_coe_sort α s
-
-Depends on / 依赖: Set.isEmpty_coe_sort, isEmpty_coe_sort
+/-
+**Finset.isEmpty_coe_sort** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：isEmpty_coe_sort {s : Finset α} : IsEmpty (s : Type _) ↔ s = ∅
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.isEmpty_coe_sort`：isEmpty_coe_sort {s : Set α} : IsEmpty (↥s) ↔ s = 
+∅
 -/
 theorem isEmpty_coe_sort {s : Finset α} : IsEmpty (s : Type _) ↔ s = ∅ := by
   simpa using @Set.isEmpty_coe_sort α s
-
-/--
-Instance `instIsEmpty` / 实例 `instIsEmpty`
-
-English:
-instance instIsEmpty
-  signature: : IsEmpty (∅ : Finset α)
-  body: isEmpty_coe_sort.2 rfl
-
-中文:
-实例 instIsEmpty
-  签名: : 是空 (∅ : 有限集 α)
-  定义体: isEmpty_coe_sort.2 rfl
-
-Depends on / 依赖: AtLeastTwo, Nat.AtLeastTwo, NatCast, instOfNatAtLeastTwo, isEmpty_coe_sort
+/-
+**Finset.instIsEmpty** 是 Mathlib 中的一个实例，位于命名空间 `Finset`。
+形式化陈述：instIsEmpty : IsEmpty (∅ : Finset α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.isEmpty_coe_sort`：isEmpty_coe_sort {s : Finset α} : IsEmpty (s : 
+Type _) ↔ s = ∅
 -/
 instance instIsEmpty : IsEmpty (∅ : Finset α) :=
   isEmpty_coe_sort.2 rfl
 
-/--
-theorem `eq_empty_of_isEmpty` / 定理 `eq_empty_of_isEmpty`
+/-- A `Finset` for an empty type is empty. -/
+/-
+**Finset.eq_empty_of_isEmpty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：eq_empty_of_isEmpty [IsEmpty α] (s : Finset α) : s = ∅
+参数：s : Finset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.eq_empty_of_forall_notMem`：eq_empty_of_forall_notMem {s : Finset 
+α} (H : forall x, x ∉ s) : s = ∅
 
-English:
-theorem eq_empty_of_isEmpty
-  given: [IsEmpty α] (s : Finset α)
-  statement: s = ∅
-  proof: Finset.eq_empty_of_forall_notMem isEmptyElim
-
-中文:
-定理 eq_empty_of_isEmpty
-  条件: [是空 α] (s : 有限集 α)
-  结论: s = ∅
-  证明: Finset.eq_empty_of_forall_notMem isEmptyElim
-
-Depends on / 依赖: Finset, Finset.eq_empty_of_forall_notMem, eq_empty_of_forall_notMem, isEmptyElim
+--- 原说明 ---
+A `Finset` for an empty type is empty.
 -/
 theorem eq_empty_of_isEmpty [IsEmpty α] (s : Finset α) : s = ∅ :=
   Finset.eq_empty_of_forall_notMem isEmptyElim
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: OrderBot (Finset α)
-  body: ∅
-  bot_le := empty_subset
-
-@[simp, grind =]
-
-中文:
-实例 :
-  签名: 有底序 (有限集 α)
-  定义体: ∅
-  bot_le := empty_subset
-
-@[simp, grind =]
+/-
+**Finset.** 是 Mathlib 中的一个实例，位于命名空间 `Finset`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : OrderBot (Finset α) where
   bot := ∅
   bot_le := empty_subset
 
 @[simp, grind =]
-/--
-theorem `bot_eq_empty` / 定理 `bot_eq_empty`
-
-English:
-theorem bot_eq_empty
-  statement: (⊥ : Finset α) = ∅
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 bot_eq_empty
-  结论: (⊥ : 有限集 α) = ∅
-  证明: rfl
-
-@[simp]
+/-
+**Finset.bot_eq_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：bot_eq_empty : (⊥ : Finset α) = ∅
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem bot_eq_empty : (⊥ : Finset α) = ∅ :=
   rfl
 
 @[simp]
-/--
-theorem `empty_ssubset` / 定理 `empty_ssubset`
-
-English:
-theorem empty_ssubset
-  statement: ∅ ⊂ s ↔ s.Nonempty
-  proof: (@bot_lt_iff_ne_bot (Finset α) _ _ _).trans nonempty_iff_ne_empty.symm
-
-alias ⟨_, Nonempty.empty_ssubset⟩ := empty_ssubset
-
-中文:
-定理 empty_ssubset
-  结论: ∅ ⊂ s ↔ s.非空
-  证明: (@bot_lt_iff_ne_bot (Finset α) _ _ _).trans nonempty_iff_ne_empty.symm
-
-alias ⟨_, Nonempty.empty_ssubset⟩ := empty_ssubset
-
-Depends on / 依赖: Finset, bot_lt_iff_ne_bot, nonempty_iff_ne_empty, nonempty_iff_ne_empty.symm
+/-
+**Finset.empty_ssubset** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：empty_ssubset : ∅ ⊂ s ↔ s.Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `bot_lt_iff_ne_bot`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : Orde
+rBot α] {a : α}, ⊥ < a ↔ a ≠ ⊥
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Finset.nonempty_iff_ne_empty`：nonempty_iff_ne_empty {s : Finset α} : s.N
+onempty ↔ s != ∅
 -/
 theorem empty_ssubset : ∅ ⊂ s ↔ s.Nonempty :=
   (@bot_lt_iff_ne_bot (Finset α) _ _ _).trans nonempty_iff_ne_empty.symm
@@ -856,44 +474,25 @@ theorem empty_ssubset : ∅ ⊂ s ↔ s.Nonempty :=
 alias ⟨_, Nonempty.empty_ssubset⟩ := empty_ssubset
 
 -- useful rules for calculations with quantifiers
-/--
-theorem `exists_mem_empty_iff` / 定理 `exists_mem_empty_iff`
-
-English:
-theorem exists_mem_empty_iff
-  given: (p : α -> Prop)
-  statement: (exists x, x in (∅ : Finset α) ∧ p x) ↔ False
-  proof: by
-  grind
-
-中文:
-定理 存在_mem_empty_iff
-  条件: (p : α -> 命题)
-  结论: (存在 x, x in (∅ : 有限集 α) ∧ p x) ↔ 假
-  证明: by
-  grind
+/-
+**Finset.exists_mem_empty_iff** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：exists_mem_empty_iff (p : α -> Prop) : (exists x, x in (∅ : Finset α) ∧ p 
+x) ↔ False
+参数：p : α -> Prop。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem exists_mem_empty_iff (p : α -> Prop) : (exists x, x in (∅ : Finset α) ∧ p x) ↔ False := by
+theorem exists_mem_empty_iff (p : α → Prop) : (∃ x, x ∈ (∅ : Finset α) ∧ p x) ↔ False := by
   grind
-
-/--
-theorem `forall_mem_empty_iff` / 定理 `forall_mem_empty_iff`
-
-English:
-theorem forall_mem_empty_iff
-  given: (p : α -> Prop)
-  statement: (forall x, x in (∅ : Finset α) -> p x) ↔ True
-  proof: by
-  grind
-
-中文:
-定理 对任意_mem_empty_iff
-  条件: (p : α -> 命题)
-  结论: (对任意 x, x in (∅ : 有限集 α) -> p x) ↔ 真
-  证明: by
-  grind
+/-
+**Finset.forall_mem_empty_iff** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：forall_mem_empty_iff (p : α -> Prop) : (forall x, x in (∅ : Finset α) -> p
+ x) ↔ True
+参数：p : α -> Prop。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem forall_mem_empty_iff (p : α -> Prop) : (forall x, x in (∅ : Finset α) -> p x) ↔ True := by
+theorem forall_mem_empty_iff (p : α → Prop) : (∀ x, x ∈ (∅ : Finset α) → p x) ↔ True := by
   grind
 
 end Empty
@@ -934,3 +533,4 @@ meta def proveFinsetNonempty {u : Level} {α : Q(Type u)} (s : Q(Finset $α)) :
   Lean.getExprMVarAssignment? mvar
 
 end Mathlib.Meta
+

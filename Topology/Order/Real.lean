@@ -26,163 +26,100 @@ open Set
 
 namespace EReal
 
+/-!
+### Topological structure on `EReal`
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+We endow `EReal` with the order topology.
+Most proofs are adapted from the corresponding proofs on `ℝ≥0∞`.
+-/
 
-English:
-instance :
-  signature: TopologicalSpace EReal
-  body: Preorder.topology EReal
+/-
+**EReal.** 是 Mathlib 中的一个实例，位于命名空间 `EReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-实例 :
-  签名: 拓扑空间 E实数
-  定义体: Preorder.topology EReal
+--- 原说明 ---
+### Topological structure on `EReal`
 
-Depends on / 依赖: Preorder, Preorder.topology, topology
+We endow `EReal` with the order topology.
+Most proofs are adapted from the corresponding proofs on `ℝ≥0∞`.
 -/
 noncomputable instance : TopologicalSpace EReal := Preorder.topology EReal
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: OrderTopology EReal
-  body: ⟨rfl⟩
-
-中文:
-实例 :
-  签名: Order拓扑 E实数
-  定义体: ⟨rfl⟩
+/-
+**EReal.** 是 Mathlib 中的一个实例，位于命名空间 `EReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : OrderTopology EReal := ⟨rfl⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: T5Space EReal
-  body: inferInstance
-
-中文:
-实例 :
-  签名: T5空间 E实数
-  定义体: inferInstance
+/-
+**EReal.** 是 Mathlib 中的一个实例，位于命名空间 `EReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : T5Space EReal := inferInstance
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: T2Space EReal
-  body: inferInstance
-
-中文:
-实例 :
-  签名: T2空间 E实数
-  定义体: inferInstance
+/-
+**EReal.** 是 Mathlib 中的一个实例，位于命名空间 `EReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : T2Space EReal := inferInstance
-
-/--
-lemma `denseRange_ratCast` / 引理 `denseRange_ratCast`
-
-English:
-lemma denseRange_ratCast
-  statement: DenseRange (fun r : Rat => ((r : Real) : EReal))
-  proof: dense_of_exists_between fun _ _ h => exists_range_iff.2 exists_rat_btwn_of_lt h
-
-中文:
-引理 denseRange_ratCast
-  结论: DenseRange (fun r : 有理数 => ((r : 实数) : E实数))
-  证明: dense_of_exists_between fun _ _ h => exists_range_iff.2 exists_rat_btwn_of_lt h
-
-Depends on / 依赖: dense_of_exists_between, exists_range_iff, exists_rat_btwn_of_lt
+/-
+**EReal.denseRange_ratCast** 是 Mathlib 中的一个引理，位于命名空间 `EReal`。
+形式化陈述：denseRange_ratCast : DenseRange (fun r : Rat => ((r : Real) : EReal))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dense_of_exists_between`：dense_of_exists_between [Nontrivial α] {s : Set
+ α} (h : forall ⦃a b⦄, a < b -> exists c in s, c in Ioo a b) : Dense s
+· 使用定理 `EReal.instOrderTopology`：OrderTopology EReal
+· 使用定理 `instNontrivialEReal`：Nontrivial EReal
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.exists_range_iff`：exists_range_iff {p : α -> Prop} : (exists a in ra
+nge f, p a) ↔ exists i, p (f i)
+· 使用定理 `EReal.exists_rat_btwn_of_lt`：exists_rat_btwn_of_lt : forall {a b : EReal
+}, a < b -> exists x : Rat, a < (x : Real) ∧ ((x : Real) : EReal) < b | ⊤, _, h 
+=> (not_top_lt h)…
 -/
-lemma denseRange_ratCast : DenseRange (fun r : Rat => ((r : Real) : EReal)) :=
-dense_of_exists_between fun _ _ h => exists_range_iff.2 exists_rat_btwn_of_lt h
+lemma denseRange_ratCast : DenseRange (fun r : ℚ ↦ ((r : ℝ) : EReal)) :=
+  dense_of_exists_between fun _ _ h => exists_range_iff.2 <| exists_rat_btwn_of_lt h
 
 end EReal
 
 namespace ENNReal
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Topology on `ℝ≥0∞`.
 
-English:
-instance :
-  signature: TopologicalSpace Real>=0∞
-  body: Preorder.topology Real>=0∞
+Note: this is different from the `EMetricSpace` topology. The `EMetricSpace` topology has
+`IsOpen {∞}`, while this topology doesn't have singleton elements. -/
+/-
+**ENNReal.** 是 Mathlib 中的一个实例，位于命名空间 `ENNReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-实例 :
-  签名: 拓扑空间 实数>=0∞
-  定义体: Preorder.topology Real>=0∞
+--- 原说明 ---
+Topology on `ℝ≥0∞`.
 
-Depends on / 依赖: Preorder, Preorder.topology, topology
+Note: this is different from the `EMetricSpace` topology. The `EMetricSpace` top
+ology has
+`IsOpen {∞}`, while this topology doesn't have singleton elements.
 -/
-instance : TopologicalSpace Real>=0∞ := Preorder.topology Real>=0∞
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: OrderTopology Real>=0∞
-  body: ⟨rfl⟩
-
-中文:
-实例 :
-  签名: Order拓扑 实数>=0∞
-  定义体: ⟨rfl⟩
+instance : TopologicalSpace ℝ≥0∞ := Preorder.topology ℝ≥0∞
+/-
+**ENNReal.** 是 Mathlib 中的一个实例，位于命名空间 `ENNReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : OrderTopology Real>=0∞ := ⟨rfl⟩
+instance : OrderTopology ℝ≥0∞ := ⟨rfl⟩
 
 -- short-circuit type class inference
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: T2Space Real>=0∞
-  body: inferInstance
-
-中文:
-实例 :
-  签名: T2空间 实数>=0∞
-  定义体: inferInstance
+/-
+**ENNReal.** 是 Mathlib 中的一个实例，位于命名空间 `ENNReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : T2Space Real>=0∞ := inferInstance
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: T5Space Real>=0∞
-  body: inferInstance
-
-中文:
-实例 :
-  签名: T5空间 实数>=0∞
-  定义体: inferInstance
+instance : T2Space ℝ≥0∞ := inferInstance
+/-
+**ENNReal.** 是 Mathlib 中的一个实例，位于命名空间 `ENNReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : T5Space Real>=0∞ := inferInstance
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: T4Space Real>=0∞
-  body: inferInstance
-
-中文:
-实例 :
-  签名: T4空间 实数>=0∞
-  定义体: inferInstance
+instance : T5Space ℝ≥0∞ := inferInstance
+/-
+**ENNReal.** 是 Mathlib 中的一个实例，位于命名空间 `ENNReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : T4Space Real>=0∞ := inferInstance
+instance : T4Space ℝ≥0∞ := inferInstance
 
 end ENNReal
+

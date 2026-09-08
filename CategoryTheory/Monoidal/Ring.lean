@@ -37,62 +37,56 @@ variable {C : Type u} [Category.{v} C] [CartesianMonoidalCategory C]
 
 open scoped MonObj AddMonObj
 
-/--
-lemma `mul_add_iff` / 引理 `mul_add_iff`
-
-English:
-lemma mul_add_iff
-  given: (R : C) [MonObj R] [AddMonObj R]
-  proof: by
-  refine ⟨fun h _ a b c => ?_, fun h => ?_⟩
-  · have := lift a (lift b c) ≫= h
-    simp only [lift_whiskerLeft_assoc] at this
-    simp only [Hom.add_def, Hom.mul_def, this, ← Category.assoc]
-    cat_disch
-  · replace h := h (fst R (R otimes R)) (snd _ _ ≫ fst _ _) (snd _ _ ≫ snd _ _)
-    simp only [Hom.mul_def, Hom.add_def] at h
-    convert! h using 2
-    · cat_disch
-    · ext
-      · simp only [lift_fst]
-        congr 1
-        cat_disch
-      · simp only [lift_snd]
-        congr 1
-        cat_disch
-
-中文:
-引理 mul_add_iff
-  条件: (R : C) [MonObj R] [加法MonObj R]
-  证明: by
-  refine ⟨fun h _ a b c => ?_, fun h => ?_⟩
-  · have := lift a (lift b c) ≫= h
-    simp only [lift_whiskerLeft_assoc] at this
-    simp only [Hom.add_def, Hom.mul_def, this, ← Category.assoc]
-    cat_disch
-  · replace h := h (fst R (R otimes R)) (snd _ _ ≫ fst _ _) (snd _ _ ≫ snd _ _)
-    simp only [Hom.mul_def, Hom.add_def] at h
-    convert! h using 2
-    · cat_disch
-    · ext
-      · simp only [lift_fst]
-        congr 1
-        cat_disch
-      · simp only [lift_snd]
-        congr 1
-        cat_disch
-
-Depends on / 依赖: Category, Category.assoc, Hom.add_def, Hom.mul_def, add_def, cat_disch, convert, lift_fst, lift_snd, lift_whiskerLeft_assoc, mul_def, otimes, replace
+/-
+**CategoryTheory.mul_add_iff** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：mul_add_iff (R : C) [MonObj R] [AddMonObj R] : R ◁ σ ≫ μ = lift ((R ◁ fst 
+_ _) ≫ μ) ((R ◁ snd _ _) ≫ μ) ≫ σ ↔ forall ⦃X : C⦄ (a b c : X ⟶ R), a * (b + c) 
+= a * b + a * c
+参数：R : C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.whisker_eq`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {X Y Z : C} {f g : Y ⟶ X} (h : Z ⟶ Y),   f = g → CategoryTheory.Cate
+goryStruct.comp…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.lift_whiskerLeft_assoc`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Carte
+sianMonoidalCategory C]   {X Y Z W : C} (f : X ⟶ Y) (…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.comp_lift`：comp_lift {V W X Y :
+ C} (f : V ⟶ W) (g : W ⟶ X) (h : W ⟶ Y) : f ≫ lift g h = lift (f ≫ g) (f ≫ h)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_fst`：lift_fst {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ fst _ _ = f
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_snd`：lift_snd {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ snd _ _ = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_comp_fst_snd`：lift_comp_fs
+t_snd {X Y Z : C} (f : X ⟶ Y otimes Z) : lift (f ≫ fst _ _) (f ≫ snd _ _) = f
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.whiskerLeft_fst`：whiskerLeft_fs
+t (X : C) {Y Z : C} (f : Y ⟶ Z) : X ◁ f ≫ fst _ _ = fst _ _
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.whiskerLeft_snd`：whiskerLeft_sn
+d (X : C) {Y Z : C} (f : Y ⟶ Z) : X ◁ f ≫ snd _ _ = snd _ _ ≫ f
 -/
 lemma mul_add_iff (R : C) [MonObj R] [AddMonObj R] :
     R ◁ σ ≫ μ = lift ((R ◁ fst _ _) ≫ μ) ((R ◁ snd _ _) ≫ μ) ≫ σ ↔
-      forall ⦃X : C⦄ (a b c : X ⟶ R), a * (b + c) = a * b + a * c := by
-  refine ⟨fun h _ a b c => ?_, fun h => ?_⟩
+      ∀ ⦃X : C⦄ (a b c : X ⟶ R), a * (b + c) = a * b + a * c := by
+  refine ⟨fun h _ a b c ↦ ?_, fun h ↦ ?_⟩
   · have := lift a (lift b c) ≫= h
     simp only [lift_whiskerLeft_assoc] at this
     simp only [Hom.add_def, Hom.mul_def, this, ← Category.assoc]
     cat_disch
-  · replace h := h (fst R (R otimes R)) (snd _ _ ≫ fst _ _) (snd _ _ ≫ snd _ _)
+  · replace h := h (fst R (R ⊗ R)) (snd _ _ ≫ fst _ _) (snd _ _ ≫ snd _ _)
     simp only [Hom.mul_def, Hom.add_def] at h
     convert! h using 2
     · cat_disch
@@ -103,63 +97,56 @@ lemma mul_add_iff (R : C) [MonObj R] [AddMonObj R] :
       · simp only [lift_snd]
         congr 1
         cat_disch
-
-/--
-lemma `add_mul_iff` / 引理 `add_mul_iff`
-
-English:
-lemma add_mul_iff
-  given: (R : C) [MonObj R] [AddMonObj R]
-  proof: by
-  refine ⟨fun h _ a b c => ?_, fun h => ?_⟩
-  · have := lift (lift a b) c ≫= h
-    simp only [lift_whiskerRight_assoc] at this
-    simp only [Hom.add_def, Hom.mul_def, this, ← Category.assoc]
-    cat_disch
-  · replace h := h (fst (R otimes R) R ≫ fst _ _) (fst _ _ ≫ snd _ _) (snd _ _)
-    simp only [Hom.mul_def, Hom.add_def] at h
-    convert! h using 2
-    · cat_disch
-    · ext
-      · simp only [lift_fst]
-        congr 1
-        cat_disch
-      · simp only [lift_snd]
-        congr 1
-        cat_disch
-
-中文:
-引理 add_mul_iff
-  条件: (R : C) [MonObj R] [加法MonObj R]
-  证明: by
-  refine ⟨fun h _ a b c => ?_, fun h => ?_⟩
-  · have := lift (lift a b) c ≫= h
-    simp only [lift_whiskerRight_assoc] at this
-    simp only [Hom.add_def, Hom.mul_def, this, ← Category.assoc]
-    cat_disch
-  · replace h := h (fst (R otimes R) R ≫ fst _ _) (fst _ _ ≫ snd _ _) (snd _ _)
-    simp only [Hom.mul_def, Hom.add_def] at h
-    convert! h using 2
-    · cat_disch
-    · ext
-      · simp only [lift_fst]
-        congr 1
-        cat_disch
-      · simp only [lift_snd]
-        congr 1
-        cat_disch
-
-Depends on / 依赖: Category, Category.assoc, Hom.add_def, Hom.mul_def, add_def, cat_disch, convert, lift_fst, lift_snd, lift_whiskerRight_assoc, mul_def, otimes, replace
+/-
+**CategoryTheory.add_mul_iff** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：add_mul_iff (R : C) [MonObj R] [AddMonObj R] : σ ▷ R ≫ μ = lift (fst _ _ ▷
+ _ ≫ μ) (snd _ _ ▷ _ ≫ μ) ≫ σ ↔ forall ⦃X : C⦄ (a b c : X ⟶ R), (a + b) * c = a 
+* c + b * c
+参数：R : C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.whisker_eq`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {X Y Z : C} {f g : Y ⟶ X} (h : Z ⟶ Y),   f = g → CategoryTheory.Cate
+goryStruct.comp…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.CartesianMonoidalCategory.lift_whiskerRight_assoc`：∀ {C :
+ Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Cart
+esianMonoidalCategory C]   {X Y Z W : C} (f : X ⟶ Y) (…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.comp_lift`：comp_lift {V W X Y :
+ C} (f : V ⟶ W) (g : W ⟶ X) (h : W ⟶ Y) : f ≫ lift g h = lift (f ≫ g) (f ≫ h)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_fst`：lift_fst {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ fst _ _ = f
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_snd`：lift_snd {T X Y : C} 
+(f : T ⟶ X) (g : T ⟶ Y) : lift f g ≫ snd _ _ = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.lift_comp_fst_snd`：lift_comp_fs
+t_snd {X Y Z : C} (f : X ⟶ Y otimes Z) : lift (f ≫ fst _ _) (f ≫ snd _ _) = f
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.hom_ext`：hom_ext {T X Y : C} (f
+ g : T ⟶ X otimes Y) (h_fst : f ≫ fst _ _ = g ≫ fst _ _) (h_snd : f ≫ snd _ _ = 
+g ≫ snd _ _) : f = g
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.whiskerRight_fst`：whiskerRight_
+fst {X Y : C} (f : X ⟶ Y) (Z : C) : f ▷ Z ≫ fst _ _ = fst _ _ ≫ f
+· 使用引理 `CategoryTheory.CartesianMonoidalCategory.whiskerRight_snd`：whiskerRight_
+snd {X Y : C} (f : X ⟶ Y) (Z : C) : f ▷ Z ≫ snd _ _ = snd _ _
 -/
 lemma add_mul_iff (R : C) [MonObj R] [AddMonObj R] :
     σ ▷ R ≫ μ = lift (fst _ _ ▷ _ ≫ μ) (snd _ _ ▷ _ ≫ μ) ≫ σ ↔
-      forall ⦃X : C⦄ (a b c : X ⟶ R), (a + b) * c = a * c + b * c := by
-  refine ⟨fun h _ a b c => ?_, fun h => ?_⟩
+      ∀ ⦃X : C⦄ (a b c : X ⟶ R), (a + b) * c = a * c + b * c := by
+  refine ⟨fun h _ a b c ↦ ?_, fun h ↦ ?_⟩
   · have := lift (lift a b) c ≫= h
     simp only [lift_whiskerRight_assoc] at this
     simp only [Hom.add_def, Hom.mul_def, this, ← Category.assoc]
     cat_disch
-  · replace h := h (fst (R otimes R) R ≫ fst _ _) (fst _ _ ≫ snd _ _) (snd _ _)
+  · replace h := h (fst (R ⊗ R) R ≫ fst _ _) (fst _ _ ≫ snd _ _) (snd _ _)
     simp only [Hom.mul_def, Hom.add_def] at h
     convert! h using 2
     · cat_disch
@@ -173,24 +160,20 @@ lemma add_mul_iff (R : C) [MonObj R] [AddMonObj R] :
 
 variable [BraidedCategory C]
 
-/--
-Definition of `RingObj` / `RingObj` 的定义
+/-- A ring object in a cartesian monoidal category is an object that is equipped
+with an additive group structure and a (multiplicative) monoid structure that
+is left and right distributive over the additive structure. -/
+/-
+**CategoryTheory.RingObj** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.CartesianMonoidalCategory C] → [CategoryTheory.BraidedCategory C
+] → C → Type v
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class RingObj
-  parameters: (R : C)
-  extends: AddGrpObj R, IsCommAddMonObj R, MonObj R
-  axioms and operations (2):
-    - mul_add((R)) : R ◁ σ ≫ μ = lift ((R ◁ fst _ _) ≫ μ) ((R ◁ snd _ _) ≫ μ) ≫ σ
-    - add_mul((R)) : σ ▷ R ≫ μ = lift (fst _ _ ▷ _ ≫ μ) (snd _ _ ▷ _ ≫ μ) ≫ σ
-
-中文:
-类 RingObj
-  参数: (R : C)
-  继承: 加法GrpObj R, 是交换加法MonObj R, MonObj R
-  公理与运算 (2 个):
-    - mul_add((R)) : R ◁ σ ≫ μ = lift ((R ◁ fst _ _) ≫ μ) ((R ◁ snd _ _) ≫ μ) ≫ σ
-    - add_mul((R)) : σ ▷ R ≫ μ = lift (fst _ _ ▷ _ ≫ μ) (snd _ _ ▷ _ ≫ μ) ≫ σ
+--- 原说明 ---
+A ring object in a cartesian monoidal category is an object that is equipped
+with an additive group structure and a (multiplicative) monoid structure that
+is left and right distributive over the additive structure.
 -/
 class RingObj (R : C) extends AddGrpObj R, IsCommAddMonObj R, MonObj R where
   mul_add (R) : R ◁ σ ≫ μ = lift ((R ◁ fst _ _) ≫ μ) ((R ◁ snd _ _) ≫ μ) ≫ σ
@@ -200,80 +183,75 @@ section
 
 variable {R : C} [RingObj R] {X : C}
 
-/--
-lemma `Hom.mul_add` / 引理 `Hom.mul_add`
-
-English:
-lemma Hom.mul_add
-  given: (a b c : X ⟶ R)
-  statement: a * (b + c) = a * b + a * c
-  proof: by
-  revert X a b c
-  rw [← mul_add_iff]; rw [RingObj.mul_add R]
-
-中文:
-引理 态射.mul_add
-  条件: (a b c : X ⟶ R)
-  结论: a * (b + c) = a * b + a * c
-  证明: by
-  revert X a b c
-  rw [← mul_add_iff]; rw [RingObj.mul_add R]
-
-Depends on / 依赖: RingObj, RingObj.mul_add, mul_add, mul_add_iff, revert
+/-
+**CategoryTheory.Hom.mul_add** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Hom`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.CartesianMonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCategory 
+C] {R : C} [inst_3 : CategoryTheory.RingObj R] {X : C} (a b c : X ⟶ R),   a * (b
+ + c) = a * b + a * c
+参数：a b c : X ⟶ R；b + c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.RingObj.toIsCommAddMonObj`：∀ {C : Type u} {inst : Categor
+yTheory.Category.{v, u} C} {inst_1 : CategoryTheory.CartesianMonoidalCategory C}
+   {inst_2 : CategoryTheory.Br…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.mul_add_iff`：mul_add_iff (R : C) [MonObj R] [AddMonObj R]
+ : R ◁ σ ≫ μ = lift ((R ◁ fst _ _) ≫ μ) ((R ◁ snd _ _) ≫ μ) ≫ σ ↔ forall ⦃X : C⦄
+ (a b c : X ⟶ R)…
+· 使用定理 `CategoryTheory.RingObj.mul_add`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {inst_1 : CategoryTheory.CartesianMonoidalCategory C}   {inst_2
+ : CategoryTheory.Br…
 -/
 lemma Hom.mul_add (a b c : X ⟶ R) : a * (b + c) = a * b + a * c := by
   revert X a b c
-  rw [← mul_add_iff]; rw [RingObj.mul_add R]
-
-/--
-lemma `Hom.add_mul` / 引理 `Hom.add_mul`
-
-English:
-lemma Hom.add_mul
-  given: (a b c : X ⟶ R)
-  statement: (a + b) * c = a * c + b * c
-  proof: by
-  revert X a b c
-  rw [← add_mul_iff]; rw [RingObj.add_mul R]
-
-中文:
-引理 态射.add_mul
-  条件: (a b c : X ⟶ R)
-  结论: (a + b) * c = a * c + b * c
-  证明: by
-  revert X a b c
-  rw [← add_mul_iff]; rw [RingObj.add_mul R]
-
-Depends on / 依赖: RingObj, RingObj.add_mul, add_mul, add_mul_iff, revert
+  rw [← mul_add_iff, RingObj.mul_add R]
+/-
+**CategoryTheory.Hom.add_mul** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Hom`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.CartesianMonoidalCategory C]   [inst_2 : CategoryTheory.BraidedCategory 
+C] {R : C} [inst_3 : CategoryTheory.RingObj R] {X : C} (a b c : X ⟶ R),   (a + b
+) * c = a * c + b * c
+参数：a b c : X ⟶ R；a + b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.RingObj.toIsCommAddMonObj`：∀ {C : Type u} {inst : Categor
+yTheory.Category.{v, u} C} {inst_1 : CategoryTheory.CartesianMonoidalCategory C}
+   {inst_2 : CategoryTheory.Br…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.add_mul_iff`：add_mul_iff (R : C) [MonObj R] [AddMonObj R]
+ : σ ▷ R ≫ μ = lift (fst _ _ ▷ _ ≫ μ) (snd _ _ ▷ _ ≫ μ) ≫ σ ↔ forall ⦃X : C⦄ (a 
+b c : X ⟶ R), (a…
+· 使用定理 `CategoryTheory.RingObj.add_mul`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {inst_1 : CategoryTheory.CartesianMonoidalCategory C}   {inst_2
+ : CategoryTheory.Br…
 -/
 lemma Hom.add_mul (a b c : X ⟶ R) : (a + b) * c = a * c + b * c := by
   revert X a b c
-  rw [← add_mul_iff]; rw [RingObj.add_mul R]
+  rw [← add_mul_iff, RingObj.add_mul R]
 
-/--
-Definition of `Hom.ring` / `Hom.ring` 的定义
+/-- If `G` is a ring object, then `Hom(X, G)` has a ring structure. -/
+/-
+**CategoryTheory.Hom.ring** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Hom`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.CartesianMonoidalCategory C] →       [inst_2 : CategoryTheory.Br
+aidedCategory C] → {R : C} → [CategoryTheory.RingObj R] → {X : C} → Ring (X ⟶ R)
+参数：X ⟶ R。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.RingObj.toIsCommAddMonObj`：∀ {C : Type u} {inst : Categor
+yTheory.Category.{v, u} C} {inst_1 : CategoryTheory.CartesianMonoidalCategory C}
+   {inst_2 : CategoryTheory.Br…
+· 使用定理 `CategoryTheory.Hom.mul_add`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] [inst_1 : CategoryTheory.CartesianMonoidalCategory C]   [inst_2 : C
+ategoryTheory.Br…
+· 使用定理 `CategoryTheory.Hom.add_mul`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] [inst_1 : CategoryTheory.CartesianMonoidalCategory C]   [inst_2 : C
+ategoryTheory.Br…
 
-English:
-abbreviation Hom.ring
-  signature: {X : C}
-  body: Hom.mul_add
-  right_distrib := Hom.add_mul
-  mul_zero a := by simpa using mul_add a 0 0
-  zero_mul a := by simpa using add_mul 0 0 a
-
-scoped[CategoryTheory.RingObj] attribute [instance] Hom.ring
-
-中文:
-缩写 态射.ring
-  签名: {X : C}
-  定义体: Hom.mul_add
-  right_distrib := Hom.add_mul
-  mul_zero a := by simpa using mul_add a 0 0
-  zero_mul a := by simpa using add_mul 0 0 a
-
-scoped[CategoryTheory.RingObj] attribute [instance] Hom.ring
-
-Depends on / 依赖: Hom.mul_add, mul_add
+--- 原说明 ---
+If `G` is a ring object, then `Hom(X, G)` has a ring structure.
 -/
 abbrev Hom.ring {X : C} : Ring (X ⟶ R) where
   left_distrib := Hom.mul_add
@@ -287,81 +265,94 @@ end
 
 open scoped RingObj
 
-/--
-Definition of `CommRingObj` / `CommRingObj` 的定义
+/-- A commutative ring object in a cartesian monoidal category is a
+ring object such that the multiplicative law is commutative. -/
+/-
+**CategoryTheory.CommRingObj** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.CartesianMonoidalCategory C] → [CategoryTheory.BraidedCategory C
+] → C → Type v
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class CommRingObj
-  parameters: (R : C)
-  extends: RingObj R, IsCommMonObj R
-  (no additional axioms)
-
-中文:
-类 交换RingObj
-  参数: (R : C)
-  继承: RingObj R, 是交换MonObj R
-  (无附加公理)
+--- 原说明 ---
+A commutative ring object in a cartesian monoidal category is a
+ring object such that the multiplicative law is commutative.
 -/
 class CommRingObj (R : C) extends RingObj R, IsCommMonObj R where
 
-/--
-Definition of `Hom.commRing` / `Hom.commRing` 的定义
+/-- If `G` is a commutative ring object, then `Hom(X, G)` has a commutative ring structure. -/
+/-
+**CategoryTheory.Hom.commRing** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Hom`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.CartesianMonoidalCategory C] →       [inst_2 : CategoryTheory.Br
+aidedCategory C] → {R X : C} → [CategoryTheory.CommRingObj R] → CommRing (X ⟶ R)
+参数：X ⟶ R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.commRing
-  signature: {R : C} {X : C} [CommRingObj R]
-
-中文:
-缩写 态射.commRing
-  签名: {R : C} {X : C} [交换RingObj R]
+--- 原说明 ---
+If `G` is a commutative ring object, then `Hom(X, G)` has a commutative ring str
+ucture.
 -/
 abbrev Hom.commRing {R : C} {X : C} [CommRingObj R] : CommRing (X ⟶ R) where
 
 scoped[CategoryTheory.CommRingObj] attribute [instance] Hom.commRing
 
-/--
-Definition of `IsRingHom` / `IsRingHom` 的定义
+/-- The property that a morphism between ring objects is a ring morphism. -/
+/-
+**CategoryTheory.IsRingHom** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.CartesianMonoidalCategory C] →       {R₁ R₂ : C} →         [Cate
+goryTheory.AddMonObj R₁] →           [CategoryTheory.AddMonObj R₂] → [CategoryTh
+eory.MonObj R₁] → [CategoryTheory.MonObj R₂] → (R₁ ⟶ R₂) → Prop
+参数：R₁ ⟶ R₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsRingHom
-  parameters: {R₁ R₂ : C} [AddMonObj R₁] [AddMonObj R₂] [MonObj R₁] [MonObj R₂] (f : R₁ ⟶ R₂)
-  extends: IsAddMonHom f, IsMonHom f
-  (no additional axioms)
-
-中文:
-类 是环态射
-  参数: {R₁ R₂ : C} [加法MonObj R₁] [加法MonObj R₂] [MonObj R₁] [MonObj R₂] (f : R₁ ⟶ R₂)
-  继承: 是加法幺半群态射 f, 是幺半群态射 f
-  (无附加公理)
+--- 原说明 ---
+The property that a morphism between ring objects is a ring morphism.
 -/
 class IsRingHom {R₁ R₂ : C} [AddMonObj R₁] [AddMonObj R₂] [MonObj R₁] [MonObj R₂] (f : R₁ ⟶ R₂)
   extends IsAddMonHom f, IsMonHom f
-
-/--
-Instance `IsRingHom.id` / 实例 `IsRingHom.id`
-
-English:
-instance IsRingHom.id
-  signature: (R : C) [AddMonObj R] [MonObj R]
-
-中文:
-实例 是环态射.id
-  签名: (R : C) [加法MonObj R] [MonObj R]
+/-
+**CategoryTheory.IsRingHom.id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.IsRingHo
+m`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.CartesianMonoidalCategory C] (R : C)   [inst_2 : CategoryTheory.AddMonOb
+j R] [inst_3 : CategoryTheory.MonObj R],   CategoryTheory.IsRingHom (CategoryThe
+ory.CategoryStruct.id R)
+参数：R : C；CategoryTheory.CategoryStruct.id R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.AddMonObj.instIsAddMonHomId`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.MonoidalCategory C] {X 
+: C}   [inst_2 : CategoryTheory.…
+· 使用定理 `CategoryTheory.MonObj.instIsMonHomId`：∀ {C : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.MonoidalCategory C] {X : C}  
+ [inst_2 : CategoryTheory.…
 -/
 instance IsRingHom.id (R : C) [AddMonObj R] [MonObj R] : IsRingHom (𝟙 R) where
-
-/--
-Instance `IsRingHom.comp` / 实例 `IsRingHom.comp`
-
-English:
-instance IsRingHom.comp
-  signature: {R₁ R₂ R₃ : C}
-
-中文:
-实例 是环态射.comp
-  签名: {R₁ R₂ R₃ : C}
-
-Depends on / 依赖: initial, initial.to
+/-
+**CategoryTheory.IsRingHom.comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.IsRing
+Hom`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.CartesianMonoidalCategory C]   {R₁ R₂ R₃ : C} [inst_2 : CategoryTheory.A
+ddMonObj R₁] [inst_3 : CategoryTheory.AddMonObj R₂]   [inst_4 : CategoryTheory.A
+ddMonObj R₃] [inst_5 : CategoryTheory.MonObj R₁] [inst_6 : CategoryTheory.MonObj
+ R₂]   [inst_7 : CategoryTheory.MonObj R₃] (f : R₁ ⟶ R₂) (g : R₂ ⟶ R₃) [Category
+Theory.IsRingHom f]   [CategoryTheory.IsRingHom g], CategoryTheory.IsRingHom (Ca
+tegoryTheory.CategoryStruct.comp f g)
+参数：f : R₁ ⟶ R₂；g : R₂ ⟶ R₃；CategoryTheory.CategoryStruct.comp f g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instIsAddMonHomComp`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.MonoidalCategory C] {M N O : C}
+   [inst_2 : CategoryThe…
+· 使用定理 `CategoryTheory.IsRingHom.toIsAddMonHom`：∀ {C : Type u} {inst : CategoryT
+heory.Category.{v, u} C} {inst_1 : CategoryTheory.CartesianMonoidalCategory C}  
+ {R₁ R₂ : C} {inst_2 : Categ…
+· 使用定理 `CategoryTheory.instIsMonHomComp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] [inst_1 : CategoryTheory.MonoidalCategory C] {M N O : C}   
+[inst_2 : CategoryThe…
+· 使用定理 `CategoryTheory.IsRingHom.toIsMonHom`：∀ {C : Type u} {inst : CategoryTheo
+ry.Category.{v, u} C} {inst_1 : CategoryTheory.CartesianMonoidalCategory C}   {R
+₁ R₂ : C} {inst_2 : Categ…
 -/
 instance IsRingHom.comp {R₁ R₂ R₃ : C}
     [AddMonObj R₁] [AddMonObj R₂] [AddMonObj R₃]
@@ -370,22 +361,16 @@ instance IsRingHom.comp {R₁ R₂ R₃ : C}
     IsRingHom (f ≫ g) where
 
 variable (C) in
-/--
-Definition of `RingObjCat` / `RingObjCat` 的定义
+/-- The category of ring objects in a cartesian monoidal category. -/
+/-
+**CategoryTheory.RingObjCat** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：(C : Type u) →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.CartesianMonoidalCategory C] → [CategoryTheory.BraidedCategory C
+] → Type (max u v)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure RingObjCat
-  parameters: where
-  axioms and operations (2):
-    - X : C
-    - [ringObj : RingObj X]
-
-中文:
-结构 RingObj范畴
-  参数: where
-  公理与运算 (2 个):
-    - X : C
-    - [ringObj : RingObj X]
+--- 原说明 ---
+The category of ring objects in a cartesian monoidal category.
 -/
 structure RingObjCat where
   /-- The underlying object in the ambient monoidal category -/
@@ -400,22 +385,17 @@ attribute [instance] ringObj
 
 /-- A morphism of ring objects. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**CategoryTheory.RingObjCat.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.Ring
+ObjCat`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.CartesianMonoidalCategory C] →       [inst_2 : CategoryTheory.Br
+aidedCategory C] → CategoryTheory.RingObjCat C → CategoryTheory.RingObjCat C → T
+ype v
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (R₁ R₂ : RingObjCat C)
-  axioms and operations (2):
-    - hom : R₁.X ⟶ R₂.X
-    - [isRingHom : IsRingHom hom]
-
-中文:
-结构 态射
-  参数: (R₁ R₂ : RingObj范畴 C)
-  公理与运算 (2 个):
-    - hom : R₁.X ⟶ R₂.X
-    - [isRingHom : 是环态射 hom]
+--- 原说明 ---
+A morphism of ring objects.
 -/
 structure Hom (R₁ R₂ : RingObjCat C) where
   /-- The underlying morphism -/
@@ -425,26 +405,10 @@ structure Hom (R₁ R₂ : RingObjCat C) where
 attribute [instance] Hom.isRingHom
 
 @[simps]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (RingObjCat C)
-  body: Hom R₁ R₂
-  id X := { hom := 𝟙 _ }
-  comp f g := { hom := f.hom ≫ g.hom }
-
-@[ext]
-
-中文:
-实例 :
-  签名: 范畴 (RingObj范畴 C)
-  定义体: Hom R₁ R₂
-  id X := { hom := 𝟙 _ }
-  comp f g := { hom := f.hom ≫ g.hom }
-
-@[ext]
+/-
+**CategoryTheory.RingObjCat.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.RingObjCa
+t`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (RingObjCat C) where
   Hom R₁ R₂ := Hom R₁ R₂
@@ -452,22 +416,16 @@ instance : Category (RingObjCat C) where
   comp f g := { hom := f.hom ≫ g.hom }
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {R₁ R₂ : RingObjCat C} {f g : R₁ ⟶ R₂} (h : f.hom = g.hom)
-  statement: f = g
-  proof: Hom.ext h
-
-中文:
-引理 hom_ext
-  条件: {R₁ R₂ : RingObj范畴 C} {f g : R₁ ⟶ R₂} (h : f.hom = g.hom)
-  结论: f = g
-  证明: Hom.ext h
-
-Depends on / 依赖: Hom.ext
+/-
+**CategoryTheory.RingObjCat.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Ri
+ngObjCat`。
+形式化陈述：hom_ext {R₁ R₂ : RingObjCat C} {f g : R₁ ⟶ R₂} (h : f.hom = g.hom) : f = g
+参数：h : f.hom = g.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.RingObjCat.Hom.ext`：∀ {C : Type u} {inst : CategoryTheory
+.Category.{v, u} C} {inst_1 : CategoryTheory.CartesianMonoidalCategory C}   {ins
+t_2 : CategoryTheory.Br…
 -/
 lemma hom_ext {R₁ R₂ : RingObjCat C} {f g : R₁ ⟶ R₂} (h : f.hom = g.hom) : f = g :=
   Hom.ext h
@@ -475,35 +433,23 @@ lemma hom_ext {R₁ R₂ : RingObjCat C} {f g : R₁ ⟶ R₂} (h : f.hom = g.ho
 variable (C) in
 /-- The forgetful functor from the category of ring objects in `C` to `C`. -/
 @[simps]
-/--
-Definition of `forget` / `forget` 的定义
+/-
+**CategoryTheory.RingObjCat.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Rin
+gObjCat`。
+形式化陈述：forget : RingObjCat C ⥤ C where obj R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forget
-  signature: : RingObjCat C ⥤ C where
-  body: R.X
-  map f := f.hom
-
-中文:
-定义 forget
-  签名: : RingObj范畴 C ⥤ C where
-  定义体: R.X
-  map f := f.hom
+--- 原说明 ---
+The forgetful functor from the category of ring objects in `C` to `C`.
 -/
 def forget : RingObjCat C ⥤ C where
   obj R := R.X
   map f := f.hom
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget C).Faithful
-
-中文:
-实例 :
-  签名: (forget C).忠实
+/-
+**CategoryTheory.RingObjCat.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.RingObjCa
+t`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget C).Faithful where
 
@@ -511,20 +457,16 @@ variable (C) in
 /-- The forgetful functor from the category of ring objects in `C`
 to the category of monoid objects in `C`. -/
 @[simps]
-/--
-Definition of `forget₂Mon` / `forget₂Mon` 的定义
+/-
+**CategoryTheory.RingObjCat.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Rin
+gObjCat`。
+形式化陈述：forget : RingObjCat C ⥤ C where obj R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forget₂Mon
-  signature: : RingObjCat C ⥤ Mon C where
-  body: .mk R.X
-  map f := .mk f.hom
-
-中文:
-定义 forget₂Mon
-  签名: : RingObj范畴 C ⥤ 幺半群 C where
-  定义体: .mk R.X
-  map f := .mk f.hom
+--- 原说明 ---
+The forgetful functor from the category of ring objects in `C`
+to the category of monoid objects in `C`.
 -/
 def forget₂Mon : RingObjCat C ⥤ Mon C where
   obj R := .mk R.X
@@ -534,20 +476,16 @@ variable (C) in
 /-- The forgetful functor from the category of ring objects in `C`
 to the category of additive monoid objects in `C`. -/
 @[simps]
-/--
-Definition of `forget₂AddMon` / `forget₂AddMon` 的定义
+/-
+**CategoryTheory.RingObjCat.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Rin
+gObjCat`。
+形式化陈述：forget : RingObjCat C ⥤ C where obj R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forget₂AddMon
-  signature: : RingObjCat C ⥤ AddMon C where
-  body: .mk R.X
-  map f := .mk f.hom
-
-中文:
-定义 forget₂AddMon
-  签名: : RingObj范畴 C ⥤ 加法幺半群 C where
-  定义体: .mk R.X
-  map f := .mk f.hom
+--- 原说明 ---
+The forgetful functor from the category of ring objects in `C`
+to the category of additive monoid objects in `C`.
 -/
 def forget₂AddMon : RingObjCat C ⥤ AddMon C where
   obj R := .mk R.X
@@ -556,22 +494,16 @@ def forget₂AddMon : RingObjCat C ⥤ AddMon C where
 end RingObjCat
 
 variable (C) in
-/--
-Definition of `CommRingObjCat` / `CommRingObjCat` 的定义
+/-- The category of commutative ring objects in a cartesian monoidal category. -/
+/-
+**CategoryTheory.CommRingObjCat** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：(C : Type u) →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.CartesianMonoidalCategory C] → [CategoryTheory.BraidedCategory C
+] → Type (max u v)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CommRingObjCat
-  parameters: where
-  axioms and operations (2):
-    - X : C
-    - [commRingObj : CommRingObj X]
-
-中文:
-结构 交换RingObj范畴
-  参数: where
-  公理与运算 (2 个):
-    - X : C
-    - [commRingObj : 交换RingObj X]
+--- 原说明 ---
+The category of commutative ring objects in a cartesian monoidal category.
 -/
 structure CommRingObjCat where
   /-- The underlying object in the ambient monoidal category -/
@@ -586,22 +518,17 @@ attribute [instance] commRingObj
 
 /-- A morphism of commutative ring objects. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**CategoryTheory.CommRingObjCat.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.
+CommRingObjCat`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.CartesianMonoidalCategory C] →       [inst_2 : CategoryTheory.Br
+aidedCategory C] →         CategoryTheory.CommRingObjCat C → CategoryTheory.Comm
+RingObjCat C → Type v
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (R₁ R₂ : CommRingObjCat C)
-  axioms and operations (2):
-    - hom : R₁.X ⟶ R₂.X
-    - [isRingHom : IsRingHom hom]
-
-中文:
-结构 态射
-  参数: (R₁ R₂ : 交换RingObj范畴 C)
-  公理与运算 (2 个):
-    - hom : R₁.X ⟶ R₂.X
-    - [isRingHom : 是环态射 hom]
+--- 原说明 ---
+A morphism of commutative ring objects.
 -/
 structure Hom (R₁ R₂ : CommRingObjCat C) where
   /-- The underlying morphism -/
@@ -611,26 +538,10 @@ structure Hom (R₁ R₂ : CommRingObjCat C) where
 attribute [instance] Hom.isRingHom
 
 @[simps]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (CommRingObjCat C)
-  body: Hom R₁ R₂
-  id X := { hom := 𝟙 _ }
-  comp f g := { hom := f.hom ≫ g.hom }
-
-@[ext]
-
-中文:
-实例 :
-  签名: 范畴 (交换RingObj范畴 C)
-  定义体: Hom R₁ R₂
-  id X := { hom := 𝟙 _ }
-  comp f g := { hom := f.hom ≫ g.hom }
-
-@[ext]
+/-
+**CategoryTheory.CommRingObjCat.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.CommR
+ingObjCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (CommRingObjCat C) where
   Hom R₁ R₂ := Hom R₁ R₂
@@ -638,22 +549,17 @@ instance : Category (CommRingObjCat C) where
   comp f g := { hom := f.hom ≫ g.hom }
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {R₁ R₂ : CommRingObjCat C} {f g : R₁ ⟶ R₂} (h : f.hom = g.hom)
-  statement: f = g
-  proof: Hom.ext h
-
-中文:
-引理 hom_ext
-  条件: {R₁ R₂ : 交换RingObj范畴 C} {f g : R₁ ⟶ R₂} (h : f.hom = g.hom)
-  结论: f = g
-  证明: Hom.ext h
-
-Depends on / 依赖: Hom.ext
+/-
+**CategoryTheory.CommRingObjCat.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.CommRingObjCat`。
+形式化陈述：hom_ext {R₁ R₂ : CommRingObjCat C} {f g : R₁ ⟶ R₂} (h : f.hom = g.hom) : f
+ = g
+参数：h : f.hom = g.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CommRingObjCat.Hom.ext`：∀ {C : Type u} {inst : CategoryTh
+eory.Category.{v, u} C} {inst_1 : CategoryTheory.CartesianMonoidalCategory C}   
+{inst_2 : CategoryTheory.Br…
 -/
 lemma hom_ext {R₁ R₂ : CommRingObjCat C} {f g : R₁ ⟶ R₂} (h : f.hom = g.hom) : f = g :=
   Hom.ext h
@@ -661,20 +567,15 @@ lemma hom_ext {R₁ R₂ : CommRingObjCat C} {f g : R₁ ⟶ R₂} (h : f.hom = 
 variable (C) in
 /-- The forgetful functor from the category of ring objects in `C` to `C`. -/
 @[simps]
-/--
-Definition of `forget` / `forget` 的定义
+/-
+**CategoryTheory.CommRingObjCat.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.CommRingObjCat`。
+形式化陈述：forget : CommRingObjCat C ⥤ C where obj R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forget
-  signature: : CommRingObjCat C ⥤ C where
-  body: R.X
-  map f := f.hom
-
-中文:
-定义 forget
-  签名: : 交换RingObj范畴 C ⥤ C where
-  定义体: R.X
-  map f := f.hom
+--- 原说明 ---
+The forgetful functor from the category of ring objects in `C` to `C`.
 -/
 def forget : CommRingObjCat C ⥤ C where
   obj R := R.X
@@ -684,91 +585,55 @@ variable (C) in
 /-- The forgetful functor from the category of commutative ring objects
 to the category of ring objects. -/
 @[simps]
-/--
-Definition of `forget₂RingObjCat` / `forget₂RingObjCat` 的定义
+/-
+**CategoryTheory.CommRingObjCat.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.CommRingObjCat`。
+形式化陈述：forget : CommRingObjCat C ⥤ C where obj R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forget₂RingObjCat
-  signature: : CommRingObjCat C ⥤ RingObjCat C where
-  body: .mk R.X
-  map f := { hom := f.hom }
-
-中文:
-定义 forget₂RingObjCat
-  签名: : 交换RingObj范畴 C ⥤ RingObj范畴 C where
-  定义体: .mk R.X
-  map f := { hom := f.hom }
+--- 原说明 ---
+The forgetful functor from the category of commutative ring objects
+to the category of ring objects.
 -/
 def forget₂RingObjCat : CommRingObjCat C ⥤ RingObjCat C where
   obj R := .mk R.X
   map f := { hom := f.hom }
 
 variable (C) in
-/--
-Definition of `fullyFaithfulForget₂RingObjCat` / `fullyFaithfulForget₂RingObjCat` 的定义
+/-- The forgetful functor `CommRingObjCat C ⥤ RingObjCat C` is fully faithful. -/
+/-
+**CategoryTheory.CommRingObjCat.fullyFaithfulForget** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.CommRingObjCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithfulForget₂RingObjCat
-  signature: : (forget₂RingObjCat C).FullyFaithful where
-  body: { hom := f.hom, isRingHom := f.isRingHom }
-
-中文:
-定义 fullyFaithfulForget₂RingObjCat
-  签名: : (forget₂RingObjCat C).满忠实 where
-  定义体: { hom := f.hom, isRingHom := f.isRingHom }
-
-Depends on / 依赖: f.hom, f.isRingHom, isRingHom
+--- 原说明 ---
+The forgetful functor `CommRingObjCat C ⥤ RingObjCat C` is fully faithful.
 -/
 def fullyFaithfulForget₂RingObjCat : (forget₂RingObjCat C).FullyFaithful where
   preimage f := { hom := f.hom, isRingHom := f.isRingHom }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget₂RingObjCat C).Faithful
-  body: (fullyFaithfulForget₂RingObjCat C).faithful
-
-中文:
-实例 :
-  签名: (forget₂RingObjCat C).忠实
-  定义体: (fullyFaithfulForget₂RingObjCat C).faithful
-
-Depends on / 依赖: faithful
+/-
+**CategoryTheory.CommRingObjCat.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.CommR
+ingObjCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget₂RingObjCat C).Faithful :=
   (fullyFaithfulForget₂RingObjCat C).faithful
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget₂RingObjCat C).Full
-  body: (fullyFaithfulForget₂RingObjCat C).full
-
-中文:
-实例 :
-  签名: (forget₂RingObjCat C).满
-  定义体: (fullyFaithfulForget₂RingObjCat C).full
+/-
+**CategoryTheory.CommRingObjCat.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.CommR
+ingObjCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget₂RingObjCat C).Full :=
   (fullyFaithfulForget₂RingObjCat C).full
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget C).Faithful
-
-中文:
-实例 :
-  签名: (forget C).忠实
+/-
+**CategoryTheory.CommRingObjCat.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.CommR
+ingObjCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget C).Faithful where
 
 end CommRingObjCat
 
 end CategoryTheory
+

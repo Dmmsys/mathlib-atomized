@@ -25,38 +25,34 @@ open scoped MonoidAlgebra
 variable {G k V W : Type*} [Monoid G] [Field k] [AddCommGroup V] [Module k V] [AddCommGroup W]
     [Module k W] (ρ : Representation k G V) (σ : Representation k G W)
 
-/--
-Definition of `IsIrreducible` / `IsIrreducible` 的定义
+/-- A representation `ρ` is irreducible if it is non-trivial and has no proper non-trivial
+subrepresentations. -/
+/-
+**Representation.IsIrreducible** 是 Mathlib 中的一个缩写定义，位于命名空间 `Representation`。
+形式化陈述：IsIrreducible
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsIrreducible
-  body: IsSimpleOrder (Subrepresentation ρ)
-
-中文:
-缩写 是不可约
-  定义体: IsSimpleOrder (Subrepresentation ρ)
-
-Depends on / 依赖: IsSimpleOrder, Subrepresentation
+--- 原说明 ---
+A representation `ρ` is irreducible if it is non-trivial and has no proper non-t
+rivial
+subrepresentations.
 -/
 abbrev IsIrreducible :=
   IsSimpleOrder (Subrepresentation ρ)
-
-/--
-theorem `irreducible_iff_isSimpleModule_asModule` / 定理 `irreducible_iff_isSimpleModule_asModule`
-
-English:
-theorem irreducible_iff_isSimpleModule_asModule
-  proof: by
-  rw [isSimpleModule_iff]
-  exact OrderIso.isSimpleOrder_iff Subrepresentation.subrepresentationSubmoduleOrderIso
-
-中文:
-定理 irreducible_iff_isSimpleModule_asModule
-  证明: by
-  rw [isSimpleModule_iff]
-  exact OrderIso.isSimpleOrder_iff Subrepresentation.subrepresentationSubmoduleOrderIso
-
-Depends on / 依赖: OrderIso, OrderIso.isSimpleOrder_iff, Subrepresentation, Subrepresentation.subrepresentationSubmoduleOrderIso, isSimpleModule_iff, isSimpleOrder_iff, subrepresentationSubmoduleOrderIso
+/-
+**Representation.irreducible_iff_isSimpleModule_asModule** 是 Mathlib 中的一个定理，位于命名
+空间 `Representation`。
+形式化陈述：irreducible_iff_isSimpleModule_asModule : IsIrreducible ρ ↔ IsSimpleModule
+ k[G] ρ.asModule
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isSimpleModule_iff`：∀ (R : Type u_2) [inst : Ring R] (M : Type u_4) [ins
+t_1 : AddCommGroup M] [inst_2 : _root_.Module R M],   IsSimpleModule R M ↔ IsSim
+pleOrder…
+· 使用定理 `OrderIso.isSimpleOrder_iff`：isSimpleOrder_iff [BoundedOrder α] [BoundedO
+rder β] (f : α ≃o β) : IsSimpleOrder α ↔ IsSimpleOrder β
 -/
 theorem irreducible_iff_isSimpleModule_asModule :
     IsIrreducible ρ ↔ IsSimpleModule k[G] ρ.asModule := by
@@ -64,30 +60,21 @@ theorem irreducible_iff_isSimpleModule_asModule :
   exact OrderIso.isSimpleOrder_iff Subrepresentation.subrepresentationSubmoduleOrderIso
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `isSimpleModule_iff_irreducible_ofModule` / 定理 `isSimpleModule_iff_irreducible_ofModule`
-
-English:
-theorem isSimpleModule_iff_irreducible_ofModule
-  given: (M : Type*) [AddCommGroup M] [Module k[G] M]
-  proof: by
-  rw [isSimpleModule_iff]
-  exact OrderIso.isSimpleOrder_iff Subrepresentation.submoduleSubrepresentationOrderIso
-
-@[deprecated (since := "2026-02-09")]
-alias is_simple_module_iff_irreducible_ofModule := isSimpleModule_iff_irreducible_ofModule
-
-中文:
-定理 isSimpleModule_iff_irreducible_ofModule
-  条件: (M : 类型) [加法交换群 M] [模 k[G] M]
-  证明: by
-  rw [isSimpleModule_iff]
-  exact OrderIso.isSimpleOrder_iff Subrepresentation.submoduleSubrepresentationOrderIso
-
-@[deprecated (since := "2026-02-09")]
-alias is_simple_module_iff_irreducible_ofModule := isSimpleModule_iff_irreducible_ofModule
-
-Depends on / 依赖: OrderIso, OrderIso.isSimpleOrder_iff, Subrepresentation, Subrepresentation.submoduleSubrepresentationOrderIso, isSimpleModule_iff, isSimpleOrder_iff, submoduleSubrepresentationOrderIso
+/-
+**Representation.isSimpleModule_iff_irreducible_ofModule** 是 Mathlib 中的一个定理，位于命名
+空间 `Representation`。
+形式化陈述：isSimpleModule_iff_irreducible_ofModule (M : Type*) [AddCommGroup M] [Modu
+le k[G] M] : IsSimpleModule k[G] M ↔ IsIrreducible (ofModule (k
+参数：M : Type*。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isSimpleModule_iff`：∀ (R : Type u_2) [inst : Ring R] (M : Type u_4) [ins
+t_1 : AddCommGroup M] [inst_2 : _root_.Module R M],   IsSimpleModule R M ↔ IsSim
+pleOrder…
+· 使用定理 `OrderIso.isSimpleOrder_iff`：isSimpleOrder_iff [BoundedOrder α] [BoundedO
+rder β] (f : α ≃o β) : IsSimpleOrder α ↔ IsSimpleOrder β
 -/
 theorem isSimpleModule_iff_irreducible_ofModule (M : Type*) [AddCommGroup M] [Module k[G] M] :
     IsSimpleModule k[G] M ↔ IsIrreducible (ofModule (k := k) (G := G) M) := by
@@ -101,140 +88,131 @@ namespace IsIrreducible
 
 variable {ρ σ} (f : IntertwiningMap ρ σ) [IsIrreducible ρ]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsSimpleModule k[G] ρ.asModule
-  body: (irreducible_iff_isSimpleModule_asModule ρ).mp inferInstance
-
-中文:
-实例 :
-  签名: 是单模 k[G] ρ.asModule
-  定义体: (irreducible_iff_isSimpleModule_asModule ρ).mp inferInstance
-
-Depends on / 依赖: irreducible_iff_isSimpleModule_asModule
+/-
+**Representation.IsIrreducible.** 是 Mathlib 中的一个实例，位于命名空间 `Representation.IsIrre
+ducible`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsSimpleModule k[G] ρ.asModule :=
   (irreducible_iff_isSimpleModule_asModule ρ).mp inferInstance
 
 open Function IntertwiningMap
-
-/--
-theorem `injective_or_eq_zero` / 定理 `injective_or_eq_zero`
-
-English:
-theorem injective_or_eq_zero
-  statement: Injective f ∨ f = 0
-  proof: by
-  rw [← LinearEquiv.map_eq_zero_iff (equivLinearMapAsModule ρ σ)]
-  exact LinearMap.injective_or_eq_zero (equivLinearMapAsModule ρ σ f)
-
-中文:
-定理 injective_or_eq_zero
-  结论: 单射 f ∨ f = 0
-  证明: by
-  rw [← LinearEquiv.map_eq_zero_iff (equivLinearMapAsModule ρ σ)]
-  exact LinearMap.injective_or_eq_zero (equivLinearMapAsModule ρ σ f)
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.map_eq_zero_iff, LinearMap, LinearMap.injective_or_eq_zero, equivLinearMapAsModule, injective_or_eq_zero, map_eq_zero_iff
+/-
+**Representation.IsIrreducible.injective_or_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `R
+epresentation.IsIrreducible`。
+形式化陈述：injective_or_eq_zero : Injective f ∨ f = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `Representation.instIsScalarTowerMonoidAlgebraAsModule`：∀ {k : Type u_1} 
+{G : Type u_2} {V : Type u_3} [inst : CommSemiring k] [inst_1 : Monoid G] [inst_
+2 : AddCommMonoid V]   [inst_3 : _root_.Mod…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearEquiv.map_eq_zero_iff`：map_eq_zero_iff {x : M} : e x = 0 ↔ x = 0
+· 使用定理 `LinearMap.injective_or_eq_zero`：injective_or_eq_zero [IsSimpleModule R M
+] (f : M ->ₗ[R] N) : Function.Injective f ∨ f = 0
+· 使用定理 `Representation.IsIrreducible.instIsSimpleModuleMonoidAlgebraAsModule`：∀ 
+{G : Type u_1} {k : Type u_2} {V : Type u_3} [inst : Monoid G] [inst_1 : Field k
+] [inst_2 : AddCommGroup V]   [inst_3 : _root_.Module k V]…
 -/
 theorem injective_or_eq_zero : Injective f ∨ f = 0 := by
   rw [← LinearEquiv.map_eq_zero_iff (equivLinearMapAsModule ρ σ)]
   exact LinearMap.injective_or_eq_zero (equivLinearMapAsModule ρ σ f)
-
-/--
-theorem `surjective_or_eq_zero` / 定理 `surjective_or_eq_zero`
-
-English:
-theorem surjective_or_eq_zero
-  given: (g : IntertwiningMap σ ρ)
-  statement: Surjective g ∨ g = 0
-  proof: by
-  rw [← LinearEquiv.map_eq_zero_iff (equivLinearMapAsModule σ ρ)]
-  exact LinearMap.surjective_or_eq_zero (equivLinearMapAsModule σ ρ g)
-
-中文:
-定理 surjective_or_eq_zero
-  条件: (g : 整数ertwining映射 σ ρ)
-  结论: 满射 g ∨ g = 0
-  证明: by
-  rw [← LinearEquiv.map_eq_zero_iff (equivLinearMapAsModule σ ρ)]
-  exact LinearMap.surjective_or_eq_zero (equivLinearMapAsModule σ ρ g)
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.map_eq_zero_iff, LinearMap, LinearMap.surjective_or_eq_zero, equivLinearMapAsModule, map_eq_zero_iff, surjective_or_eq_zero
+/-
+**Representation.IsIrreducible.surjective_or_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `
+Representation.IsIrreducible`。
+形式化陈述：surjective_or_eq_zero (g : IntertwiningMap σ ρ) : Surjective g ∨ g = 0
+参数：g : IntertwiningMap σ ρ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `Representation.instIsScalarTowerMonoidAlgebraAsModule`：∀ {k : Type u_1} 
+{G : Type u_2} {V : Type u_3} [inst : CommSemiring k] [inst_1 : Monoid G] [inst_
+2 : AddCommMonoid V]   [inst_3 : _root_.Mod…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearEquiv.map_eq_zero_iff`：map_eq_zero_iff {x : M} : e x = 0 ↔ x = 0
+· 使用定理 `LinearMap.surjective_or_eq_zero`：surjective_or_eq_zero [IsSimpleModule R
+ N] (f : M ->ₗ[R] N) : Function.Surjective f ∨ f = 0
+· 使用定理 `Representation.IsIrreducible.instIsSimpleModuleMonoidAlgebraAsModule`：∀ 
+{G : Type u_1} {k : Type u_2} {V : Type u_3} [inst : Monoid G] [inst_1 : Field k
+] [inst_2 : AddCommGroup V]   [inst_3 : _root_.Module k V]…
 -/
 theorem surjective_or_eq_zero (g : IntertwiningMap σ ρ) : Surjective g ∨ g = 0 := by
   rw [← LinearEquiv.map_eq_zero_iff (equivLinearMapAsModule σ ρ)]
   exact LinearMap.surjective_or_eq_zero (equivLinearMapAsModule σ ρ g)
-
-/--
-theorem `bijective_or_eq_zero` / 定理 `bijective_or_eq_zero`
-
-English:
-theorem bijective_or_eq_zero
-  given: [IsIrreducible σ]
-  statement: Bijective f ∨ f = 0
-  proof: by
-  rw [← LinearEquiv.map_eq_zero_iff (equivLinearMapAsModule ρ σ)]
-  exact LinearMap.bijective_or_eq_zero (equivLinearMapAsModule ρ σ f)
-
-中文:
-定理 bijective_or_eq_zero
-  条件: [是不可约 σ]
-  结论: 双射 f ∨ f = 0
-  证明: by
-  rw [← LinearEquiv.map_eq_zero_iff (equivLinearMapAsModule ρ σ)]
-  exact LinearMap.bijective_or_eq_zero (equivLinearMapAsModule ρ σ f)
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.map_eq_zero_iff, LinearMap, LinearMap.bijective_or_eq_zero, bijective_or_eq_zero, equivLinearMapAsModule, map_eq_zero_iff
+/-
+**Representation.IsIrreducible.bijective_or_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `R
+epresentation.IsIrreducible`。
+形式化陈述：bijective_or_eq_zero [IsIrreducible σ] : Bijective f ∨ f = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `Representation.instIsScalarTowerMonoidAlgebraAsModule`：∀ {k : Type u_1} 
+{G : Type u_2} {V : Type u_3} [inst : CommSemiring k] [inst_1 : Monoid G] [inst_
+2 : AddCommMonoid V]   [inst_3 : _root_.Mod…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearEquiv.map_eq_zero_iff`：map_eq_zero_iff {x : M} : e x = 0 ↔ x = 0
+· 使用定理 `LinearMap.bijective_or_eq_zero`：bijective_or_eq_zero [IsSimpleModule R M
+] [IsSimpleModule R N] (f : M ->ₗ[R] N) : Function.Bijective f ∨ f = 0
+· 使用定理 `Representation.IsIrreducible.instIsSimpleModuleMonoidAlgebraAsModule`：∀ 
+{G : Type u_1} {k : Type u_2} {V : Type u_3} [inst : Monoid G] [inst_1 : Field k
+] [inst_2 : AddCommGroup V]   [inst_3 : _root_.Module k V]…
 -/
 theorem bijective_or_eq_zero [IsIrreducible σ] : Bijective f ∨ f = 0 := by
   rw [← LinearEquiv.map_eq_zero_iff (equivLinearMapAsModule ρ σ)]
   exact LinearMap.bijective_or_eq_zero (equivLinearMapAsModule ρ σ f)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsIrreducible
-  signature: σ] [IsEmpty (Equiv ρ σ)] : Subsingleton (IntertwiningMap ρ σ)
-  body: ⟨fun f g => sub_eq_zero.mp (bijective_or_eq_zero _).resolve_left
-fun h => isEmpty_iff.mp inferInstance (f - g).ofBijective h⟩
-
-中文:
-实例 [是不可约
-  签名: σ] [是空 (等价 ρ σ)] : 子单例 (整数ertwining映射 ρ σ)
-  定义体: ⟨fun f g => sub_eq_zero.mp (bijective_or_eq_zero _).resolve_left
-fun h => isEmpty_iff.mp inferInstance (f - g).ofBijective h⟩
-
-Depends on / 依赖: FiniteDimensional, IsAlgClosed, bijective_or_eq_zero, isEmpty_iff, isEmpty_iff.mp, ofBijective, resolve_left, sub_eq_zero, sub_eq_zero.mp, variable
+/-
+**Representation.IsIrreducible.** 是 Mathlib 中的一个实例，位于命名空间 `Representation.IsIrre
+ducible`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsIrreducible σ] [IsEmpty (Equiv ρ σ)] : Subsingleton (IntertwiningMap ρ σ) :=
-⟨fun f g => sub_eq_zero.mp (bijective_or_eq_zero _).resolve_left
-fun h => isEmpty_iff.mp inferInstance (f - g).ofBijective h⟩
+  ⟨fun f g ↦ sub_eq_zero.mp <| (bijective_or_eq_zero _).resolve_left
+    fun h ↦ isEmpty_iff.mp inferInstance <| (f - g).ofBijective h⟩
 variable [FiniteDimensional k V] [IsAlgClosed k]
 
 variable (f : IntertwiningMap ρ ρ) in
-/--
-theorem `algebraMap_intertwiningMap_bijective_of_isAlgClosed` / 定理 `algebraMap_intertwiningMap_bijective_of_isAlgClosed`
-
-English:
-theorem algebraMap_intertwiningMap_bijective_of_isAlgClosed
-  proof: by
-  have : Bijective (algebraMap k (Module.End k[G] ρ.asModule)) :=
-    IsSimpleModule.algebraMap_end_bijective_of_isAlgClosed k
-  exact (Bijective.of_comp_iff' (IntertwiningMap.equivAlgEnd (ρ := ρ)).bijective _).1 this
-
-中文:
-定理 algebraMap_intertwiningMap_bijective_of_isAlgClosed
-  证明: by
-  have : Bijective (algebraMap k (Module.End k[G] ρ.asModule)) :=
-    IsSimpleModule.algebraMap_end_bijective_of_isAlgClosed k
-  exact (Bijective.of_comp_iff' (IntertwiningMap.equivAlgEnd (ρ := ρ)).bijective _).1 this
-
-Depends on / 依赖: Bijective, Bijective.of_comp_iff, IntertwiningMap, IntertwiningMap.equivAlgEnd, IsSimpleModule, IsSimpleModule.algebraMap_end_bijective_of_isAlgClosed, Module, Module.End, algebraMap, algebraMap_end_bijective_of_isAlgClosed, asModule, bijective, equivAlgEnd, of_comp_iff
+/-
+**Representation.IsIrreducible.algebraMap_intertwiningMap_bijective_of_isAlgClos
+ed** 是 Mathlib 中的一个定理，位于命名空间 `Representation.IsIrreducible`。
+形式化陈述：algebraMap_intertwiningMap_bijective_of_isAlgClosed : Bijective (algebraMa
+p k (IntertwiningMap ρ ρ))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `Representation.instIsScalarTowerMonoidAlgebraAsModule`：∀ {k : Type u_1} 
+{G : Type u_2} {V : Type u_3} [inst : CommSemiring k] [inst_1 : Monoid G] [inst_
+2 : AddCommMonoid V]   [inst_3 : _root_.Mod…
+· 使用定理 `IsSimpleModule.algebraMap_end_bijective_of_isAlgClosed`：IsSimpleModule.a
+lgebraMap_end_bijective_of_isAlgClosed : Function.Bijective (algebraMap k (Modul
+e.End A V))
+· 使用定理 `Representation.IsIrreducible.instIsSimpleModuleMonoidAlgebraAsModule`：∀ 
+{G : Type u_1} {k : Type u_2} {V : Type u_3} [inst : Monoid G] [inst_1 : Field k
+] [inst_2 : AddCommGroup V]   [inst_3 : _root_.Module k V]…
+· 使用定理 `Representation.instFiniteAsModule`：∀ {k : Type u_4} {G : Type u_5} {V : 
+Type u_6} [inst : Semiring k] [inst_1 : Monoid G] [inst_2 : AddCommMonoid V]   [
+inst_3 : _root_.Module …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Function.Bijective.of_comp_iff'`：∀ {α : Sort u_1} {β : Sort u_2} {γ : So
+rt u_3} {f : α → β},   Function.Bijective f → ∀ (g : γ → α), Function.Bijective 
+(f ∘ g) ↔ Function.Bi…
+· 使用定理 `AlgEquiv.bijective`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA₂} [ins
+t : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [inst_3 : Al
+gebra R …
 -/
 theorem algebraMap_intertwiningMap_bijective_of_isAlgClosed :
     Bijective (algebraMap k (IntertwiningMap ρ ρ)) := by
@@ -243,24 +221,24 @@ theorem algebraMap_intertwiningMap_bijective_of_isAlgClosed :
   exact (Bijective.of_comp_iff' (IntertwiningMap.equivAlgEnd (ρ := ρ)).bijective _).1 this
 
 variable (ρ) in
-/--
-theorem `finrank_intertwiningMap_self` / 定理 `finrank_intertwiningMap_self`
-
-English:
-theorem finrank_intertwiningMap_self
-  statement: Module.finrank k (IntertwiningMap ρ ρ) = 1
-  proof: by
-  rw [LinearEquiv.finrank_eq (LinearEquiv.ofBijective (Algebra.linearMap k (IntertwiningMap ρ ρ))
-      algebraMap_intertwiningMap_bijective_of_isAlgClosed).symm]
-  exact CommSemiring.finrank_self k
-
-中文:
-定理 finrank_intertwiningMap_self
-  结论: 模.finrank k (整数ertwining映射 ρ ρ) = 1
-  证明: by
-  rw [LinearEquiv.finrank_eq (LinearEquiv.ofBijective (Algebra.linearMap k (IntertwiningMap ρ ρ))
-      algebraMap_intertwiningMap_bijective_of_isAlgClosed).symm]
-  exact CommSemiring.finrank_self k
+/-
+**Representation.IsIrreducible.finrank_intertwiningMap_self** 是 Mathlib 中的一个定理，位
+于命名空间 `Representation.IsIrreducible`。
+形式化陈述：∀ {G : Type u_1} {k : Type u_2} {V : Type u_3} [inst : Monoid G] [inst_1 :
+ Field k] [inst_2 : AddCommGroup V]   [inst_3 : _root_.Module k V] (ρ : Represen
+tation k G V) [ρ.IsIrreducible] [FiniteDimensional k V] [IsAlgClosed k],   Modul
+e.finrank k (ρ.IntertwiningMap ρ) = 1
+参数：ρ : Representation k G V；ρ.IntertwiningMap ρ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearEquiv.finrank_eq`：finrank_eq (f : M ≃ₗ[R] N) : finrank R M = finra
+nk R N
+· 使用定理 `Representation.IsIrreducible.algebraMap_intertwiningMap_bijective_of_isA
+lgClosed`：algebraMap_intertwiningMap_bijective_of_isAlgClosed : Bijective (algeb
+raMap k (IntertwiningMap ρ ρ))
+· 使用定理 `CommSemiring.finrank_self`：CommSemiring.finrank_self (R) [CommSemiring R
+] : Module.finrank R R = 1
 -/
 @[simp] theorem finrank_intertwiningMap_self : Module.finrank k (IntertwiningMap ρ ρ) = 1 := by
   rw [LinearEquiv.finrank_eq (LinearEquiv.ofBijective (Algebra.linearMap k (IntertwiningMap ρ ρ))
@@ -270,24 +248,24 @@ theorem finrank_intertwiningMap_self
 open scoped IsMulCommutative in
 include ρ in
 variable (ρ) in
-/--
-theorem `finrank_eq_one_of_isMulCommutative` / 定理 `finrank_eq_one_of_isMulCommutative`
-
-English:
-theorem finrank_eq_one_of_isMulCommutative
-  given: [IsMulCommutative G]
-  statement: Module.finrank k V = 1
-  proof: by
-  exact IsSimpleModule.finrank_eq_one_of_isMulCommutative k[G] ρ.asModule k
-
-中文:
-定理 finrank_eq_one_of_isMulCommutative
-  条件: [是MulCommutative G]
-  结论: 模.finrank k V = 1
-  证明: by
-  exact IsSimpleModule.finrank_eq_one_of_isMulCommutative k[G] ρ.asModule k
-
-Depends on / 依赖: IsSimpleModule, IsSimpleModule.finrank_eq_one_of_isMulCommutative, asModule, finrank_eq_one_of_isMulCommutative
+/-
+**Representation.IsIrreducible.finrank_eq_one_of_isMulCommutative** 是 Mathlib 中的
+一个定理，位于命名空间 `Representation.IsIrreducible`。
+形式化陈述：finrank_eq_one_of_isMulCommutative [IsMulCommutative G] : Module.finrank k
+ V = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSimpleModule.finrank_eq_one_of_isMulCommutative`：IsSimpleModule.finran
+k_eq_one_of_isMulCommutative [IsMulCommutative A] : Module.finrank k V = 1
+· 使用定理 `Representation.instIsScalarTowerMonoidAlgebraAsModule`：∀ {k : Type u_1} 
+{G : Type u_2} {V : Type u_3} [inst : CommSemiring k] [inst_1 : Monoid G] [inst_
+2 : AddCommMonoid V]   [inst_3 : _root_.Mod…
+· 使用定理 `Representation.IsIrreducible.instIsSimpleModuleMonoidAlgebraAsModule`：∀ 
+{G : Type u_1} {k : Type u_2} {V : Type u_3} [inst : Monoid G] [inst_1 : Field k
+] [inst_2 : AddCommGroup V]   [inst_3 : _root_.Module k V]…
+· 使用定理 `Representation.instFiniteAsModule`：∀ {k : Type u_4} {G : Type u_5} {V : 
+Type u_6} [inst : Semiring k] [inst_1 : Monoid G] [inst_2 : AddCommMonoid V]   [
+inst_3 : _root_.Module …
 -/
 theorem finrank_eq_one_of_isMulCommutative [IsMulCommutative G] : Module.finrank k V = 1 := by
   exact IsSimpleModule.finrank_eq_one_of_isMulCommutative k[G] ρ.asModule k
@@ -295,3 +273,4 @@ theorem finrank_eq_one_of_isMulCommutative [IsMulCommutative G] : Module.finrank
 end IsIrreducible
 
 end Representation
+

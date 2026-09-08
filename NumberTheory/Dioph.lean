@@ -58,7 +58,7 @@ open Fin2 Function Nat Sum
 
 local infixr:67 " ::ₒ " => Option.elim'
 
-local infixr:65 " otimes " => Sum.elim
+local infixr:65 " ⊗ " => Sum.elim
 
 universe u
 
@@ -73,618 +73,313 @@ section Polynomials
 
 variable {α β : Type*}
 
-/--
-Inductive type `IsPoly` / 归纳类型 `IsPoly`
+/-- A predicate asserting that a function is a multivariate integer polynomial.
+  (We are being a bit lazy here by allowing many representations for multiplication,
+  rather than only allowing monomials and addition, but the definition is equivalent
+  and this is easier to use.) -/
+/-
+**IsPoly** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{α : Type u_1} → ((α → ℕ) → ℤ) → Prop
+参数：(α → ℕ) → ℤ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive IsPoly
-  parameters: : ((α -> Nat) -> Int) -> Prop
-  constructors (4):
-    - proj: forall i, IsPoly fun x : α -> Nat => x i
-    - const: forall n : Int, IsPoly fun _ : α -> Nat => n
-    - sub: forall {f g : (α -> Nat) -> Int}, IsPoly f -> IsPoly g -> IsPoly fun x => f x - g x
-    - mul: forall {f g : (α -> Nat) -> Int}, IsPoly f -> IsPoly g -> IsPoly fun x => f x * g x
-
-中文:
-归纳类型 是Poly
-  参数: : ((α -> 自然数) -> 整数) -> 命题
-  构造子 (4 个):
-    - proj: 对任意 i, 是Poly fun x : α -> 自然数 => x i
-    - const: 对任意 n : 整数, 是Poly fun _ : α -> 自然数 => n
-    - sub: 对任意 {f g : (α -> 自然数) -> 整数}, 是Poly f -> 是Poly g -> 是Poly fun x => f x - g x
-    - mul: 对任意 {f g : (α -> 自然数) -> 整数}, 是Poly f -> 是Poly g -> 是Poly fun x => f x * g x
+--- 原说明 ---
+A predicate asserting that a function is a multivariate integer polynomial.
+  (We are being a bit lazy here by allowing many representations for multiplicat
+ion,
+  rather than only allowing monomials and addition, but the definition is equiva
+lent
+  and this is easier to use.)
 -/
-inductive IsPoly : ((α -> Nat) -> Int) -> Prop
-  | proj : forall i, IsPoly fun x : α -> Nat => x i
-  | const : forall n : Int, IsPoly fun _ : α -> Nat => n
-  | sub : forall {f g : (α -> Nat) -> Int}, IsPoly f -> IsPoly g -> IsPoly fun x => f x - g x
-  | mul : forall {f g : (α -> Nat) -> Int}, IsPoly f -> IsPoly g -> IsPoly fun x => f x * g x
-
-/--
-theorem `IsPoly.neg` / 定理 `IsPoly.neg`
-
-English:
-theorem IsPoly.neg
-  given: {f : (α -> Nat) -> Int}
-  statement: IsPoly f -> IsPoly (-f)
-  proof: by
-  rw [← zero_sub]; exact (IsPoly.const 0).sub
-
-中文:
-定理 是Poly.neg
-  条件: {f : (α -> 自然数) -> 整数}
-  结论: 是Poly f -> 是Poly (-f)
-  证明: by
-  rw [← zero_sub]; exact (IsPoly.const 0).sub
-
-Depends on / 依赖: IsPoly, IsPoly.const, zero_sub
+inductive IsPoly : ((α → ℕ) → ℤ) → Prop
+  | proj : ∀ i, IsPoly fun x : α → ℕ => x i
+  | const : ∀ n : ℤ, IsPoly fun _ : α → ℕ => n
+  | sub : ∀ {f g : (α → ℕ) → ℤ}, IsPoly f → IsPoly g → IsPoly fun x => f x - g x
+  | mul : ∀ {f g : (α → ℕ) → ℤ}, IsPoly f → IsPoly g → IsPoly fun x => f x * g x
+/-
+**IsPoly.neg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPoly.neg {f : (α -> Nat) -> Int} : IsPoly f -> IsPoly (-f)
+参数：α -> Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `zero_sub`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 0 - a = -a
 -/
-theorem IsPoly.neg {f : (α -> Nat) -> Int} : IsPoly f -> IsPoly (-f) := by
+theorem IsPoly.neg {f : (α → ℕ) → ℤ} : IsPoly f → IsPoly (-f) := by
   rw [← zero_sub]; exact (IsPoly.const 0).sub
-
-/--
-theorem `IsPoly.add` / 定理 `IsPoly.add`
-
-English:
-theorem IsPoly.add
-  given: {f g : (α -> Nat) -> Int} (hf : IsPoly f) (hg : IsPoly g)
-  statement: IsPoly (f + g)
-  proof: by
+/-
+**IsPoly.add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPoly.add {f g : (α -> Nat) -> Int} (hf : IsPoly f) (hg : IsPoly g) : IsP
+oly (f + g)
+参数：α -> Nat；hf : IsPoly f；hg : IsPoly g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_neg_eq_add`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α),
+ a - -b = a + b
+· 使用定理 `IsPoly.neg`：IsPoly.neg {f : (α -> Nat) -> Int} : IsPoly f -> IsPoly (-f)
+-/
+theorem IsPoly.add {f g : (α → ℕ) → ℤ} (hf : IsPoly f) (hg : IsPoly g) : IsPoly (f + g) := by
   rw [← sub_neg_eq_add]; exact hf.sub hg.neg
 
-中文:
-定理 是Poly.add
-  条件: {f g : (α -> 自然数) -> 整数} (hf : 是Poly f) (hg : 是Poly g)
-  结论: 是Poly (f + g)
-  证明: by
-  rw [← sub_neg_eq_add]; exact hf.sub hg.neg
+/-- The type of multivariate integer polynomials -/
+/-
+**Poly** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Poly (α : Type u)
+参数：α : Type u。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: hf.sub, hg.neg, sub_neg_eq_add
+--- 原说明 ---
+The type of multivariate integer polynomials
 -/
-theorem IsPoly.add {f g : (α -> Nat) -> Int} (hf : IsPoly f) (hg : IsPoly g) : IsPoly (f + g) := by
-  rw [← sub_neg_eq_add]; exact hf.sub hg.neg
-
-/--
-Definition of `Poly` / `Poly` 的定义
-
-English:
-definition Poly
-  signature: (α : Type u)
-  body: { f : (α -> Nat) -> Int // IsPoly f }
-
-中文:
-定义 Poly
-  签名: (α : 类型u)
-  定义体: { f : (α -> Nat) -> Int // IsPoly f }
-
-Depends on / 依赖: IsPoly
--/
-def Poly (α : Type u) := { f : (α -> Nat) -> Int // IsPoly f }
+def Poly (α : Type u) := { f : (α → ℕ) → ℤ // IsPoly f }
 
 namespace Poly
 
 section
 
-/--
-Instance `instFunLike` / 实例 `instFunLike`
-
-English:
-instance instFunLike
-  signature: : FunLike (Poly α) (α -> Nat) Int
-  body: ⟨Subtype.val, Subtype.val_injective⟩
-
-中文:
-实例 instFunLike
-  签名: : 函数状 (Poly α) (α -> 自然数) 整数
-  定义体: ⟨Subtype.val, Subtype.val_injective⟩
-
-Depends on / 依赖: Subtype, Subtype.val, Subtype.val_injective, val_injective
+/-
+**Poly.instFunLike** 是 Mathlib 中的一个实例，位于命名空间 `Poly`。
+形式化陈述：instFunLike : FunLike (Poly α) (α -> Nat) Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instFunLike : FunLike (Poly α) (α -> Nat) Int :=
+instance instFunLike : FunLike (Poly α) (α → ℕ) ℤ :=
   ⟨Subtype.val, Subtype.val_injective⟩
 
-/--
-theorem `isPoly` / 定理 `isPoly`
+/-- The underlying function of a `Poly` is a polynomial -/
+/-
+**Poly.isPoly** 是 Mathlib 中的一个定理，位于命名空间 `Poly`。
+形式化陈述：∀ {α : Type u_1} (f : Poly α), IsPoly ⇑f
+参数：f : Poly α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 
-English:
-theorem isPoly
-  given: (f : Poly α)
-  statement: IsPoly f
-  proof: f.2
-
-中文:
-定理 isPoly
-  条件: (f : Poly α)
-  结论: 是Poly f
-  证明: f.2
+--- 原说明 ---
+The underlying function of a `Poly` is a polynomial
 -/
 protected theorem isPoly (f : Poly α) : IsPoly f := f.2
 
 /-- Extensionality for `Poly α` -/
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
+/-
+**Poly.ext** 是 Mathlib 中的一个定理，位于命名空间 `Poly`。
+形式化陈述：ext {f g : Poly α} : (forall x, f x = g x) -> f = g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 
-English:
-theorem ext
-  given: {f g : Poly α}
-  statement: (forall x, f x = g x) -> f = g
-  proof: DFunLike.ext _ _
-
-中文:
-定理 ext
-  条件: {f g : Poly α}
-  结论: (对任意 x, f x = g x) -> f = g
-  证明: DFunLike.ext _ _
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+--- 原说明 ---
+Extensionality for `Poly α`
 -/
-theorem ext {f g : Poly α} : (forall x, f x = g x) -> f = g := DFunLike.ext _ _
+theorem ext {f g : Poly α} : (∀ x, f x = g x) → f = g := DFunLike.ext _ _
 
-/--
-Definition of `proj` / `proj` 的定义
+/-- The `i`th projection function, `x_i`. -/
+/-
+**Poly.proj** 是 Mathlib 中的一个定义，位于命名空间 `Poly`。
+形式化陈述：proj (i : α) : Poly α
+参数：i : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition proj
-  signature: (i : α)
-  body: ⟨_, IsPoly.proj i⟩
-
-@[simp]
-
-中文:
-定义 proj
-  签名: (i : α)
-  定义体: ⟨_, IsPoly.proj i⟩
-
-@[simp]
-
-Depends on / 依赖: IsPoly, IsPoly.proj
+--- 原说明 ---
+The `i`th projection function, `x_i`.
 -/
 def proj (i : α) : Poly α := ⟨_, IsPoly.proj i⟩
 
 @[simp]
-/--
-theorem `proj_apply` / 定理 `proj_apply`
-
-English:
-theorem proj_apply
-  given: (i : α) (x)
-  statement: proj i x = x i
-  proof: rfl
-
-中文:
-定理 proj_apply
-  条件: (i : α) (x)
-  结论: proj i x = x i
-  证明: rfl
+/-
+**Poly.proj_apply** 是 Mathlib 中的一个定理，位于命名空间 `Poly`。
+形式化陈述：proj_apply (i : α) (x) : proj i x = x i
+参数：i : α；x。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem proj_apply (i : α) (x) : proj i x = x i := rfl
 
-/--
-Definition of `const` / `const` 的定义
+/-- The constant function with value `n : ℤ`. -/
+/-
+**Poly.const** 是 Mathlib 中的一个定义，位于命名空间 `Poly`。
+形式化陈述：const (n : Int) : Poly α
+参数：n : Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition const
-  signature: (n : Int)
-  body: ⟨_, IsPoly.const n⟩
-
-@[simp]
-
-中文:
-定义 const
-  签名: (n : 整数)
-  定义体: ⟨_, IsPoly.const n⟩
-
-@[simp]
-
-Depends on / 依赖: IsPoly, IsPoly.const
+--- 原说明 ---
+The constant function with value `n : ℤ`.
 -/
-def const (n : Int) : Poly α := ⟨_, IsPoly.const n⟩
+def const (n : ℤ) : Poly α := ⟨_, IsPoly.const n⟩
 
 @[simp]
-/--
-theorem `const_apply` / 定理 `const_apply`
-
-English:
-theorem const_apply
-  given: (n) (x : α -> Nat)
-  statement: const n x = n
-  proof: rfl
-
-中文:
-定理 const_apply
-  条件: (n) (x : α -> 自然数)
-  结论: const n x = n
-  证明: rfl
+/-
+**Poly.const_apply** 是 Mathlib 中的一个定理，位于命名空间 `Poly`。
+形式化陈述：const_apply (n) (x : α -> Nat) : const n x = n
+参数：n；x : α -> Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem const_apply (n) (x : α -> Nat) : const n x = n := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Zero (Poly α)
-  body: ⟨const 0⟩
-
-中文:
-实例 :
-  签名: 零 (Poly α)
-  定义体: ⟨const 0⟩
+theorem const_apply (n) (x : α → ℕ) : const n x = n := rfl
+/-
+**Poly.** 是 Mathlib 中的一个实例，位于命名空间 `Poly`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Zero (Poly α) := ⟨const 0⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: One (Poly α)
-  body: ⟨const 1⟩
-
-中文:
-实例 :
-  签名: 幺 (Poly α)
-  定义体: ⟨const 1⟩
+/-
+**Poly.** 是 Mathlib 中的一个实例，位于命名空间 `Poly`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : One (Poly α) := ⟨const 1⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Neg (Poly α)
-  body: ⟨fun f => ⟨-f, f.2.neg⟩⟩
-
-中文:
-实例 :
-  签名: 取负 (Poly α)
-  定义体: ⟨fun f => ⟨-f, f.2.neg⟩⟩
+/-
+**Poly.** 是 Mathlib 中的一个实例，位于命名空间 `Poly`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Neg (Poly α) := ⟨fun f => ⟨-f, f.2.neg⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Add (Poly α)
-  body: ⟨fun f g => ⟨f + g, f.2.add g.2⟩⟩
-
-中文:
-实例 :
-  签名: 加法 (Poly α)
-  定义体: ⟨fun f g => ⟨f + g, f.2.add g.2⟩⟩
+/-
+**Poly.** 是 Mathlib 中的一个实例，位于命名空间 `Poly`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Add (Poly α) := ⟨fun f g => ⟨f + g, f.2.add g.2⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Sub (Poly α)
-  body: ⟨fun f g => ⟨f - g, f.2.sub g.2⟩⟩
-
-中文:
-实例 :
-  签名: 减法 (Poly α)
-  定义体: ⟨fun f g => ⟨f - g, f.2.sub g.2⟩⟩
+/-
+**Poly.** 是 Mathlib 中的一个实例，位于命名空间 `Poly`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Sub (Poly α) := ⟨fun f g => ⟨f - g, f.2.sub g.2⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mul (Poly α)
-  body: ⟨fun f g => ⟨f * g, f.2.mul g.2⟩⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 乘法 (Poly α)
-  定义体: ⟨fun f g => ⟨f * g, f.2.mul g.2⟩⟩
-
-@[simp]
+/-
+**Poly.** 是 Mathlib 中的一个实例，位于命名空间 `Poly`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mul (Poly α) := ⟨fun f g => ⟨f * g, f.2.mul g.2⟩⟩
 
 @[simp]
-/--
-theorem `coe_zero` / 定理 `coe_zero`
-
-English:
-theorem coe_zero
-  statement: ⇑(0 : Poly α) = const 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_zero
-  结论: ⇑(0 : Poly α) = const 0
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: RelEmbedding, RelEmbedding.instFunLike, instFunLike
+/-
+**Poly.coe_zero** 是 Mathlib 中的一个定理，位于命名空间 `Poly`。
+形式化陈述：coe_zero : ⇑(0 : Poly α) = const 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_zero : ⇑(0 : Poly α) = const 0 := rfl
 
 @[simp]
-/--
-theorem `coe_one` / 定理 `coe_one`
-
-English:
-theorem coe_one
-  statement: ⇑(1 : Poly α) = const 1
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_one
-  结论: ⇑(1 : Poly α) = const 1
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: RelIso, RelIso.instFunLike, instFunLike
+/-
+**Poly.coe_one** 是 Mathlib 中的一个定理，位于命名空间 `Poly`。
+形式化陈述：coe_one : ⇑(1 : Poly α) = const 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_one : ⇑(1 : Poly α) = const 1 := rfl
 
 @[simp]
-/--
-theorem `coe_neg` / 定理 `coe_neg`
-
-English:
-theorem coe_neg
-  given: (f : Poly α)
-  statement: ⇑(-f) = -f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_neg
-  条件: (f : Poly α)
-  结论: ⇑(-f) = -f
-  证明: rfl
-
-@[simp]
+/-
+**Poly.coe_neg** 是 Mathlib 中的一个定理，位于命名空间 `Poly`。
+形式化陈述：coe_neg (f : Poly α) : ⇑(-f) = -f
+参数：f : Poly α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_neg (f : Poly α) : ⇑(-f) = -f := rfl
 
 @[simp]
-/--
-theorem `coe_add` / 定理 `coe_add`
-
-English:
-theorem coe_add
-  given: (f g : Poly α)
-  statement: ⇑(f + g) = f + g
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_add
-  条件: (f g : Poly α)
-  结论: ⇑(f + g) = f + g
-  证明: rfl
-
-@[simp]
+/-
+**Poly.coe_add** 是 Mathlib 中的一个定理，位于命名空间 `Poly`。
+形式化陈述：coe_add (f g : Poly α) : ⇑(f + g) = f + g
+参数：f g : Poly α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_add (f g : Poly α) : ⇑(f + g) = f + g := rfl
 
 @[simp]
-/--
-theorem `coe_sub` / 定理 `coe_sub`
-
-English:
-theorem coe_sub
-  given: (f g : Poly α)
-  statement: ⇑(f - g) = f - g
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_sub
-  条件: (f g : Poly α)
-  结论: ⇑(f - g) = f - g
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: OrderIsoClass, OrderIsoClass.toOrderIso, toOrderIso
+/-
+**Poly.coe_sub** 是 Mathlib 中的一个定理，位于命名空间 `Poly`。
+形式化陈述：coe_sub (f g : Poly α) : ⇑(f - g) = f - g
+参数：f g : Poly α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_sub (f g : Poly α) : ⇑(f - g) = f - g := rfl
 
 @[simp]
-/--
-theorem `coe_mul` / 定理 `coe_mul`
-
-English:
-theorem coe_mul
-  given: (f g : Poly α)
-  statement: ⇑(f * g) = f * g
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_mul
-  条件: (f g : Poly α)
-  结论: ⇑(f * g) = f * g
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: OrderIsoClass, OrderIsoClass.toOrderHomClass, toOrderHomClass
+/-
+**Poly.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `Poly`。
+形式化陈述：coe_mul (f g : Poly α) : ⇑(f * g) = f * g
+参数：f g : Poly α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mul (f g : Poly α) : ⇑(f * g) = f * g := rfl
 
 @[simp]
-/--
-theorem `zero_apply` / 定理 `zero_apply`
-
-English:
-theorem zero_apply
-  given: (x)
-  statement: (0 : Poly α) x = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 zero_apply
-  条件: (x)
-  结论: (0 : Poly α) x = 0
-  证明: rfl
-
-@[simp]
+/-
+**Poly.zero_apply** 是 Mathlib 中的一个定理，位于命名空间 `Poly`。
+形式化陈述：zero_apply (x) : (0 : Poly α) x = 0
+参数：x。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem zero_apply (x) : (0 : Poly α) x = 0 := rfl
 
 @[simp]
-/--
-theorem `one_apply` / 定理 `one_apply`
-
-English:
-theorem one_apply
-  given: (x)
-  statement: (1 : Poly α) x = 1
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 one_apply
-  条件: (x)
-  结论: (1 : Poly α) x = 1
-  证明: rfl
-
-@[simp]
+/-
+**Poly.one_apply** 是 Mathlib 中的一个定理，位于命名空间 `Poly`。
+形式化陈述：one_apply (x) : (1 : Poly α) x = 1
+参数：x。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem one_apply (x) : (1 : Poly α) x = 1 := rfl
 
 @[simp]
-/--
-theorem `neg_apply` / 定理 `neg_apply`
-
-English:
-theorem neg_apply
-  given: (f : Poly α) (x)
-  statement: (-f) x = -f x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 neg_apply
-  条件: (f : Poly α) (x)
-  结论: (-f) x = -f x
-  证明: rfl
-
-@[simp]
+/-
+**Poly.neg_apply** 是 Mathlib 中的一个定理，位于命名空间 `Poly`。
+形式化陈述：neg_apply (f : Poly α) (x) : (-f) x = -f x
+参数：f : Poly α；x。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem neg_apply (f : Poly α) (x) : (-f) x = -f x := rfl
 
 @[simp]
-/--
-theorem `add_apply` / 定理 `add_apply`
-
-English:
-theorem add_apply
-  given: (f g : Poly α) (x : α -> Nat)
-  statement: (f + g) x = f x + g x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 add_apply
-  条件: (f g : Poly α) (x : α -> 自然数)
-  结论: (f + g) x = f x + g x
-  证明: rfl
-
-@[simp]
+/-
+**Poly.add_apply** 是 Mathlib 中的一个定理，位于命名空间 `Poly`。
+形式化陈述：add_apply (f g : Poly α) (x : α -> Nat) : (f + g) x = f x + g x
+参数：f g : Poly α；x : α -> Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem add_apply (f g : Poly α) (x : α -> Nat) : (f + g) x = f x + g x := rfl
+theorem add_apply (f g : Poly α) (x : α → ℕ) : (f + g) x = f x + g x := rfl
 
 @[simp]
-/--
-theorem `sub_apply` / 定理 `sub_apply`
-
-English:
-theorem sub_apply
-  given: (f g : Poly α) (x : α -> Nat)
-  statement: (f - g) x = f x - g x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 sub_apply
-  条件: (f g : Poly α) (x : α -> 自然数)
-  结论: (f - g) x = f x - g x
-  证明: rfl
-
-@[simp]
+/-
+**Poly.sub_apply** 是 Mathlib 中的一个定理，位于命名空间 `Poly`。
+形式化陈述：sub_apply (f g : Poly α) (x : α -> Nat) : (f - g) x = f x - g x
+参数：f g : Poly α；x : α -> Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem sub_apply (f g : Poly α) (x : α -> Nat) : (f - g) x = f x - g x := rfl
+theorem sub_apply (f g : Poly α) (x : α → ℕ) : (f - g) x = f x - g x := rfl
 
 @[simp]
-/--
-theorem `mul_apply` / 定理 `mul_apply`
-
-English:
-theorem mul_apply
-  given: (f g : Poly α) (x : α -> Nat)
-  statement: (f * g) x = f x * g x
-  proof: rfl
-
-中文:
-定理 mul_apply
-  条件: (f g : Poly α) (x : α -> 自然数)
-  结论: (f * g) x = f x * g x
-  证明: rfl
+/-
+**Poly.mul_apply** 是 Mathlib 中的一个定理，位于命名空间 `Poly`。
+形式化陈述：mul_apply (f g : Poly α) (x : α -> Nat) : (f * g) x = f x * g x
+参数：f g : Poly α；x : α -> Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mul_apply (f g : Poly α) (x : α -> Nat) : (f * g) x = f x * g x := rfl
-
+theorem mul_apply (f g : Poly α) (x : α → ℕ) : (f * g) x = f x * g x := rfl
+/-
+**Poly.** 是 Mathlib 中的一个实例，位于命名空间 `Poly`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (α : Type*) : Inhabited (Poly α) := ⟨0⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddCommGroup (Poly α)
-  body: @nsmulRec _ ⟨(0 : Poly α)⟩ ⟨(· + ·)⟩
-  zsmul := @zsmulRec _ ⟨(0 : Poly α)⟩ ⟨(· + ·)⟩ ⟨Neg.neg⟩ (@nsmulRec _ ⟨(0 : Poly α)⟩ ⟨(· + ·)⟩)
-  add_zero _ := by ext; simp_rw [add_apply, zero_apply, add_zero]
-  zero_add _ := by ext; simp_rw [add_apply, zero_apply, zero_add]
-  add_comm _ _ := by ext; simp_rw [add_apply, add_comm]
-  add_assoc _ _ _ := by ext; simp_rw [add_apply, ← add_assoc]
-  neg_add_cancel _ := by ext; simp_rw [add_apply, neg_apply, neg_add_cancel, zero_apply]
-
-中文:
-实例 :
-  签名: 加法交换群 (Poly α)
-  定义体: @nsmulRec _ ⟨(0 : Poly α)⟩ ⟨(· + ·)⟩
-  zsmul := @zsmulRec _ ⟨(0 : Poly α)⟩ ⟨(· + ·)⟩ ⟨Neg.neg⟩ (@nsmulRec _ ⟨(0 : Poly α)⟩ ⟨(· + ·)⟩)
-  add_zero _ := by ext; simp_rw [add_apply, zero_apply, add_zero]
-  zero_add _ := by ext; simp_rw [add_apply, zero_apply, zero_add]
-  add_comm _ _ := by ext; simp_rw [add_apply, add_comm]
-  add_assoc _ _ _ := by ext; simp_rw [add_apply, ← add_assoc]
-  neg_add_cancel _ := by ext; simp_rw [add_apply, neg_apply, neg_add_cancel, zero_apply]
-
-Depends on / 依赖: nsmulRec
+/-
+**Poly.** 是 Mathlib 中的一个实例，位于命名空间 `Poly`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : AddCommGroup (Poly α) where
   nsmul := @nsmulRec _ ⟨(0 : Poly α)⟩ ⟨(· + ·)⟩
@@ -694,62 +389,16 @@ instance : AddCommGroup (Poly α) where
   add_comm _ _ := by ext; simp_rw [add_apply, add_comm]
   add_assoc _ _ _ := by ext; simp_rw [add_apply, ← add_assoc]
   neg_add_cancel _ := by ext; simp_rw [add_apply, neg_apply, neg_add_cancel, zero_apply]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddGroupWithOne (Poly α)
-  body: fun n => Poly.const n
-  intCast := Poly.const
-
-中文:
-实例 :
-  签名: 加法带幺群 (Poly α)
-  定义体: fun n => Poly.const n
-  intCast := Poly.const
-
-Depends on / 依赖: Poly.const
+/-
+**Poly.** 是 Mathlib 中的一个实例，位于命名空间 `Poly`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : AddGroupWithOne (Poly α) where
   natCast := fun n => Poly.const n
   intCast := Poly.const
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CommRing (Poly α)
-  body: (inferInstance : AddCommGroup (Poly α))
-  __ := (inferInstance : AddGroupWithOne (Poly α))
-  npow := @npowRec _ ⟨(1 : Poly α)⟩ ⟨(· * ·)⟩
-  mul_zero _ := by ext; rw [mul_apply, zero_apply, mul_zero]
-  zero_mul _ := by ext; rw [mul_apply, zero_apply, zero_mul]
-  mul_one _ := by ext; rw [mul_apply, one_apply, mul_one]
-  one_mul _ := by ext; rw [mul_apply, one_apply, one_mul]
-  mul_comm _ _ := by ext; simp_rw [mul_apply, mul_comm]
-  mul_assoc _ _ _ := by ext; simp_rw [mul_apply, mul_assoc]
-  left_distrib _ _ _ := by ext; simp_rw [add_apply, mul_apply]; apply mul_add
-  right_distrib _ _ _ := by ext; simp only [add_apply, mul_apply]; apply add_mul
-
-中文:
-实例 :
-  签名: 交换环 (Poly α)
-  定义体: (inferInstance : AddCommGroup (Poly α))
-  __ := (inferInstance : AddGroupWithOne (Poly α))
-  npow := @npowRec _ ⟨(1 : Poly α)⟩ ⟨(· * ·)⟩
-  mul_zero _ := by ext; rw [mul_apply, zero_apply, mul_zero]
-  zero_mul _ := by ext; rw [mul_apply, zero_apply, zero_mul]
-  mul_one _ := by ext; rw [mul_apply, one_apply, mul_one]
-  one_mul _ := by ext; rw [mul_apply, one_apply, one_mul]
-  mul_comm _ _ := by ext; simp_rw [mul_apply, mul_comm]
-  mul_assoc _ _ _ := by ext; simp_rw [mul_apply, mul_assoc]
-  left_distrib _ _ _ := by ext; simp_rw [add_apply, mul_apply]; apply mul_add
-  right_distrib _ _ _ := by ext; simp only [add_apply, mul_apply]; apply add_mul
-
-Depends on / 依赖: AddCommGroup
+/-
+**Poly.** 是 Mathlib 中的一个实例，位于命名空间 `Poly`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CommRing (Poly α) where
   __ := (inferInstance : AddCommGroup (Poly α))
@@ -763,34 +412,18 @@ instance : CommRing (Poly α) where
   mul_assoc _ _ _ := by ext; simp_rw [mul_apply, mul_assoc]
   left_distrib _ _ _ := by ext; simp_rw [add_apply, mul_apply]; apply mul_add
   right_distrib _ _ _ := by ext; simp only [add_apply, mul_apply]; apply add_mul
-
-/--
-theorem `induction` / 定理 `induction`
-
-English:
-theorem induction
-  statement: {C : Poly α -> Prop} (H1 : forall i, C (proj i)) (H2 : forall n, C (const n))
-  proof: by
-  obtain ⟨f, pf⟩ := f
-  induction pf with
-  | proj => apply H1
-  | const => apply H2
-  | sub _ _ ihf ihg => apply H3 _ _ ihf ihg
-  | mul _ _ ihf ihg => apply H4 _ _ ihf ihg
-
-中文:
-定理 induction
-  结论: {C : Poly α -> 命题} (H1 : 对任意 i, C (proj i)) (H2 : 对任意 n, C (const n))
-  证明: by
-  obtain ⟨f, pf⟩ := f
-  induction pf with
-  | proj => apply H1
-  | const => apply H2
-  | sub _ _ ihf ihg => apply H3 _ _ ihf ihg
-  | mul _ _ ihf ihg => apply H4 _ _ ihf ihg
+/-
+**Poly.induction** 是 Mathlib 中的一个定理，位于命名空间 `Poly`。
+形式化陈述：induction {C : Poly α -> Prop} (H1 : forall i, C (proj i)) (H2 : forall n,
+ C (const n)) (H3 : forall f g, C f -> C g -> C (f - g)) (H4 : forall f g, C f -
+> C g -> C (f * g)) (f : Poly α) : C f
+参数：H1 : forall i, C (proj i)；H2 : forall n, C (const n)；H3 : forall f g, C f -> 
+C g -> C (f - g)；H4 : forall f g, C f -> C g -> C (f * g)；f : Poly α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem induction {C : Poly α -> Prop} (H1 : forall i, C (proj i)) (H2 : forall n, C (const n))
-    (H3 : forall f g, C f -> C g -> C (f - g)) (H4 : forall f g, C f -> C g -> C (f * g)) (f : Poly α) : C f := by
+theorem induction {C : Poly α → Prop} (H1 : ∀ i, C (proj i)) (H2 : ∀ n, C (const n))
+    (H3 : ∀ f g, C f → C g → C (f - g)) (H4 : ∀ f g, C f → C g → C (f * g)) (f : Poly α) : C f := by
   obtain ⟨f, pf⟩ := f
   induction pf with
   | proj => apply H1
@@ -798,107 +431,75 @@ theorem induction {C : Poly α -> Prop} (H1 : forall i, C (proj i)) (H2 : forall
   | sub _ _ ihf ihg => apply H3 _ _ ihf ihg
   | mul _ _ ihf ihg => apply H4 _ _ ihf ihg
 
-/--
-Definition of `sumsq` / `sumsq` 的定义
+/-- The sum of squares of a list of polynomials. This is relevant for
+  Diophantine equations, because it means that a list of equations
+  can be encoded as a single equation: `x = 0 ∧ y = 0 ∧ z = 0` is
+  equivalent to `x^2 + y^2 + z^2 = 0`. -/
+/-
+**Poly.sumsq** 是 Mathlib 中的一个定义，位于命名空间 `Poly`。
+形式化陈述：{α : Type u_1} → List (Poly α) → Poly α
+参数：Poly α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sumsq
-  signature: : List (Poly α) -> Poly α
-
-中文:
-定义 sumsq
-  签名: : 列表 (Poly α) -> Poly α
+--- 原说明 ---
+The sum of squares of a list of polynomials. This is relevant for
+  Diophantine equations, because it means that a list of equations
+  can be encoded as a single equation: `x = 0 ∧ y = 0 ∧ z = 0` is
+  equivalent to `x^2 + y^2 + z^2 = 0`.
 -/
-def sumsq : List (Poly α) -> Poly α
+def sumsq : List (Poly α) → Poly α
   | [] => 0
   | p::ps => p * p + sumsq ps
-
-/--
-theorem `sumsq_nonneg` / 定理 `sumsq_nonneg`
-
-English:
-theorem sumsq_nonneg
-  given: (x : α -> Nat)
-  statement: forall l, 0 <= sumsq l x
-
-中文:
-定理 sumsq_nonneg
-  条件: (x : α -> 自然数)
-  结论: 对任意 l, 0 <= sumsq l x
+/-
+**Poly.sumsq_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Poly`。
+形式化陈述：∀ {α : Type u_1} (x : α → ℕ) (l : List (Poly α)), 0 ≤ (Poly.sumsq l) x
+参数：x : α → ℕ；l : List (Poly α)；Poly.sumsq l。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] theorem sumsq_nonneg (x : α -> Nat) : forall l, 0 <= sumsq l x
+@[simp] theorem sumsq_nonneg (x : α → ℕ) : ∀ l, 0 ≤ sumsq l x
   | [] => le_refl 0
   | p::ps => by
     rw [sumsq]
     exact add_nonneg (mul_self_nonneg _) (sumsq_nonneg _ ps)
-
-/--
-theorem `sumsq_eq_zero` / 定理 `sumsq_eq_zero`
-
-English:
-theorem sumsq_eq_zero
-  given: (x)
-  statement: forall l, sumsq l x = 0 ↔ l.Forall fun a : Poly α => a x = 0
-
-中文:
-定理 sumsq_eq_zero
-  条件: (x)
-  结论: 对任意 l, sumsq l x = 0 ↔ l.任意 fun a : Poly α => a x = 0
+/-
+**Poly.sumsq_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Poly`。
+形式化陈述：∀ {α : Type u_1} (x : α → ℕ) (l : List (Poly α)), (Poly.sumsq l) x = 0 ↔ L
+ist.Forall (fun a => a x = 0) l
+参数：x : α → ℕ；l : List (Poly α)；Poly.sumsq l；fun a => a x = 0。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem sumsq_eq_zero (x) : forall l, sumsq l x = 0 ↔ l.Forall fun a : Poly α => a x = 0
+theorem sumsq_eq_zero (x) : ∀ l, sumsq l x = 0 ↔ l.Forall fun a : Poly α => a x = 0
   | [] => eq_self_iff_true _
   | p::ps => by simp [sumsq, add_eq_zero_iff_of_nonneg, mul_self_nonneg, sumsq_eq_zero]
 
 end
 
-/--
-Definition of `map` / `map` 的定义
+/-- Map the index set of variables, replacing `x_i` with `x_(f i)`. -/
+/-
+**Poly.map** 是 Mathlib 中的一个定义，位于命名空间 `Poly`。
+形式化陈述：map {α β} (f : α -> β) (g : Poly α) : Poly β
+参数：f : α -> β；g : Poly α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: {α β} (f : α -> β) (g : Poly α)
-  body: ⟨fun v => g v ∘ f, Poly.induction (C := fun g => IsPoly (fun v => g (v ∘ f)))
-    (fun i => by simpa using IsPoly.proj _) (fun n => by simpa using IsPoly.const _)
-    (fun f g pf pg => by simpa using IsPoly.sub pf pg)
-    (fun f g pf pg => by simpa using IsPoly.mul pf pg) _⟩
-
-@[simp]
-
-中文:
-定义 map
-  签名: {α β} (f : α -> β) (g : Poly α)
-  定义体: ⟨fun v => g v ∘ f, Poly.induction (C := fun g => IsPoly (fun v => g (v ∘ f)))
-    (fun i => by simpa using IsPoly.proj _) (fun n => by simpa using IsPoly.const _)
-    (fun f g pf pg => by simpa using IsPoly.sub pf pg)
-    (fun f g pf pg => by simpa using IsPoly.mul pf pg) _⟩
-
-@[simp]
-
-Depends on / 依赖: IsPoly, IsPoly.const, IsPoly.mul, IsPoly.proj, IsPoly.sub, Poly.induction
+--- 原说明 ---
+Map the index set of variables, replacing `x_i` with `x_(f i)`.
 -/
-def map {α β} (f : α -> β) (g : Poly α) : Poly β :=
-⟨fun v => g v ∘ f, Poly.induction (C := fun g => IsPoly (fun v => g (v ∘ f)))
+def map {α β} (f : α → β) (g : Poly α) : Poly β :=
+  ⟨fun v => g <| v ∘ f, Poly.induction (C := fun g => IsPoly (fun v => g (v ∘ f)))
     (fun i => by simpa using IsPoly.proj _) (fun n => by simpa using IsPoly.const _)
     (fun f g pf pg => by simpa using IsPoly.sub pf pg)
     (fun f g pf pg => by simpa using IsPoly.mul pf pg) _⟩
 
 @[simp]
-/--
-theorem `map_apply` / 定理 `map_apply`
-
-English:
-theorem map_apply
-  given: {α β} (f : α -> β) (g : Poly α) (v)
-  statement: map f g v = g (v ∘ f)
-  proof: rfl
-
-中文:
-定理 map_apply
-  条件: {α β} (f : α -> β) (g : Poly α) (v)
-  结论: map f g v = g (v ∘ f)
-  证明: rfl
+/-
+**Poly.map_apply** 是 Mathlib 中的一个定理，位于命名空间 `Poly`。
+形式化陈述：map_apply {α β} (f : α -> β) (g : Poly α) (v) : map f g v = g (v ∘ f)
+参数：f : α -> β；g : Poly α；v。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_apply {α β} (f : α -> β) (g : Poly α) (v) : map f g v = g (v ∘ f) := rfl
+theorem map_apply {α β} (f : α → β) (g : Poly α) (v) : map f g v = g (v ∘ f) := rfl
 
 end Poly
 
@@ -907,403 +508,310 @@ end Polynomials
 /-! ### Diophantine sets -/
 
 
-/--
-Definition of `Dioph` / `Dioph` 的定义
+/-- A set `S ⊆ ℕ^α` is Diophantine if there exists a polynomial on
+  `α ⊕ β` such that `v ∈ S` iff there exists `t : ℕ^β` with `p (v, t) = 0`. -/
+/-
+**Dioph** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Dioph {α : Type u} (S : Set (α -> Nat)) : Prop
+参数：S : Set (α -> Nat)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Dioph
-  signature: {α : Type u} (S : Set (α -> Nat))
-  body: exists (β : Type u) (p : Poly (α oplus β)), forall v, v in S ↔ exists t, p (v otimes t) = 0
-
-中文:
-定义 Dioph
-  签名: {α : 类型u} (S : 集合 (α -> 自然数))
-  定义体: exists (β : Type u) (p : Poly (α oplus β)), forall v, v in S ↔ exists t, p (v otimes t) = 0
-
-Depends on / 依赖: otimes
+--- 原说明 ---
+A set `S ⊆ ℕ^α` is Diophantine if there exists a polynomial on
+  `α ⊕ β` such that `v ∈ S` iff there exists `t : ℕ^β` with `p (v, t) = 0`.
 -/
-def Dioph {α : Type u} (S : Set (α -> Nat)) : Prop :=
-  exists (β : Type u) (p : Poly (α oplus β)), forall v, v in S ↔ exists t, p (v otimes t) = 0
+def Dioph {α : Type u} (S : Set (α → ℕ)) : Prop :=
+  ∃ (β : Type u) (p : Poly (α ⊕ β)), ∀ v, v ∈ S ↔ ∃ t, p (v ⊗ t) = 0
 
 namespace Dioph
 
 section
 
-variable {α β γ : Type u} {S S' : Set (α -> Nat)}
+variable {α β γ : Type u} {S S' : Set (α → ℕ)}
 
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: (d : Dioph S) (H : forall v, v in S ↔ v in S')
-  statement: Dioph S'
-  proof: by rwa [← Set.ext H]
-
-中文:
-定理 ext
-  条件: (d : Dioph S) (H : 对任意 v, v in S ↔ v in S')
-  结论: Dioph S'
-  证明: by rwa [← Set.ext H]
-
-Depends on / 依赖: Set.ext
+/-
+**Dioph.ext** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：ext (d : Dioph S) (H : forall v, v in S ↔ v in S') : Dioph S'
+参数：d : Dioph S；H : forall v, v in S ↔ v in S'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
 -/
-theorem ext (d : Dioph S) (H : forall v, v in S ↔ v in S') : Dioph S' := by rwa [← Set.ext H]
-
-/--
-theorem `of_no_dummies` / 定理 `of_no_dummies`
-
-English:
-theorem of_no_dummies
-  given: (S : Set (α -> Nat)) (p : Poly α) (h : forall v, v in S ↔ p v = 0)
-  statement: Dioph S
-  proof: ⟨PEmpty, ⟨p.map inl, fun v => (h v).trans ⟨fun h => ⟨PEmpty.elim, h⟩, fun ⟨_, ht⟩ => ht⟩⟩⟩
-
-中文:
-定理 of_no_dummies
-  条件: (S : 集合 (α -> 自然数)) (p : Poly α) (h : 对任意 v, v in S ↔ p v = 0)
-  结论: Dioph S
-  证明: ⟨PEmpty, ⟨p.map inl, fun v => (h v).trans ⟨fun h => ⟨PEmpty.elim, h⟩, fun ⟨_, ht⟩ => ht⟩⟩⟩
-
-Depends on / 依赖: PEmpty, PEmpty.elim, p.map
+theorem ext (d : Dioph S) (H : ∀ v, v ∈ S ↔ v ∈ S') : Dioph S' := by rwa [← Set.ext H]
+/-
+**Dioph.of_no_dummies** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：of_no_dummies (S : Set (α -> Nat)) (p : Poly α) (h : forall v, v in S ↔ p 
+v = 0) : Dioph S
+参数：S : Set (α -> Nat)；p : Poly α；h : forall v, v in S ↔ p v = 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
 -/
-theorem of_no_dummies (S : Set (α -> Nat)) (p : Poly α) (h : forall v, v in S ↔ p v = 0) : Dioph S :=
+theorem of_no_dummies (S : Set (α → ℕ)) (p : Poly α) (h : ∀ v, v ∈ S ↔ p v = 0) : Dioph S :=
   ⟨PEmpty, ⟨p.map inl, fun v => (h v).trans ⟨fun h => ⟨PEmpty.elim, h⟩, fun ⟨_, ht⟩ => ht⟩⟩⟩
-
-/--
-theorem `inject_dummies_lem` / 定理 `inject_dummies_lem`
-
-English:
-theorem inject_dummies_lem
-  statement: (f : β -> γ) (g : γ -> Option β) (inv : forall x, g (f x) = some x)
-  proof: by
-  dsimp; refine ⟨fun t => ?_, fun t => ?_⟩ <;> obtain ⟨t, ht⟩ := t
-  · have : (v otimes (0 ::ₒ t) ∘ g) ∘ (inl otimes inr ∘ f) = v otimes t :=
-      funext fun s => by rcases s with a | b <;> dsimp [(· ∘ ·)]; try rw [inv]; rfl
-    exact ⟨(0 ::ₒ t) ∘ g, by rwa [this]⟩
-  · have : v otimes t ∘ f = (v otimes t) ∘ (inl otimes inr ∘ f) := funext fun s => by rcases s with a | b <;> rfl
-    exact ⟨t ∘ f, by rwa [this]⟩
-
-中文:
-定理 inject_dummies_lem
-  结论: (f : β -> γ) (g : γ -> 选项类型 β) (inv : 对任意 x, g (f x) = some x)
-  证明: by
-  dsimp; refine ⟨fun t => ?_, fun t => ?_⟩ <;> obtain ⟨t, ht⟩ := t
-  · have : (v otimes (0 ::ₒ t) ∘ g) ∘ (inl otimes inr ∘ f) = v otimes t :=
-      funext fun s => by rcases s with a | b <;> dsimp [(· ∘ ·)]; try rw [inv]; rfl
-    exact ⟨(0 ::ₒ t) ∘ g, by rwa [this]⟩
-  · have : v otimes t ∘ f = (v otimes t) ∘ (inl otimes inr ∘ f) := funext fun s => by rcases s with a | b <;> rfl
-    exact ⟨t ∘ f, by rwa [this]⟩
-
-Depends on / 依赖: PartialOrder, PartialOrder.lift, otimes
+/-
+**Dioph.inject_dummies_lem** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：inject_dummies_lem (f : β -> γ) (g : γ -> Option β) (inv : forall x, g (f 
+x) = some x) (p : Poly (α oplus β)) (v : α -> Nat) : (exists t, p (v otimes t) =
+ 0) ↔ exists t, p.map (inl otimes inr ∘ f) (v otimes t) = 0
+参数：f : β -> γ；g : γ -> Option β；inv : forall x, g (f x) = some x；p : Poly (α opl
+us β)；v : α -> Nat。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Option.elim'`：elim'_update {α : Type*} {β : Type*} [DecidableEq α] (f : 
+β) (g : α -> β) (a : α) (x : β) : Option.elim' f (update g a x) = update (Option
+.e…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-theorem inject_dummies_lem (f : β -> γ) (g : γ -> Option β) (inv : forall x, g (f x) = some x)
-    (p : Poly (α oplus β)) (v : α -> Nat) :
-    (exists t, p (v otimes t) = 0) ↔ exists t, p.map (inl otimes inr ∘ f) (v otimes t) = 0 := by
+theorem inject_dummies_lem (f : β → γ) (g : γ → Option β) (inv : ∀ x, g (f x) = some x)
+    (p : Poly (α ⊕ β)) (v : α → ℕ) :
+    (∃ t, p (v ⊗ t) = 0) ↔ ∃ t, p.map (inl ⊗ inr ∘ f) (v ⊗ t) = 0 := by
   dsimp; refine ⟨fun t => ?_, fun t => ?_⟩ <;> obtain ⟨t, ht⟩ := t
-  · have : (v otimes (0 ::ₒ t) ∘ g) ∘ (inl otimes inr ∘ f) = v otimes t :=
+  · have : (v ⊗ (0 ::ₒ t) ∘ g) ∘ (inl ⊗ inr ∘ f) = v ⊗ t :=
       funext fun s => by rcases s with a | b <;> dsimp [(· ∘ ·)]; try rw [inv]; rfl
     exact ⟨(0 ::ₒ t) ∘ g, by rwa [this]⟩
-  · have : v otimes t ∘ f = (v otimes t) ∘ (inl otimes inr ∘ f) := funext fun s => by rcases s with a | b <;> rfl
+  · have : v ⊗ t ∘ f = (v ⊗ t) ∘ (inl ⊗ inr ∘ f) := funext fun s => by rcases s with a | b <;> rfl
     exact ⟨t ∘ f, by rwa [this]⟩
-
-/--
-theorem `inject_dummies` / 定理 `inject_dummies`
-
-English:
-theorem inject_dummies
-  statement: (f : β -> γ) (g : γ -> Option β) (inv : forall x, g (f x) = some x)
-  proof: ⟨p.map (inl otimes inr ∘ f), fun v => (h v).trans inject_dummies_lem f g inv _ _⟩
-
-中文:
-定理 inject_dummies
-  结论: (f : β -> γ) (g : γ -> 选项类型 β) (inv : 对任意 x, g (f x) = some x)
-  证明: ⟨p.map (inl otimes inr ∘ f), fun v => (h v).trans inject_dummies_lem f g inv _ _⟩
-
-Depends on / 依赖: inject_dummies_lem, otimes, p.map
+/-
+**Dioph.inject_dummies** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：inject_dummies (f : β -> γ) (g : γ -> Option β) (inv : forall x, g (f x) =
+ some x) (p : Poly (α oplus β)) (h : forall v, v in S ↔ exists t, p (v otimes t)
+ = 0) : exists q : Poly (α oplus γ), forall v, v in S ↔ exists t, q (v otimes t)
+ = 0
+参数：f : β -> γ；g : γ -> Option β；inv : forall x, g (f x) = some x；p : Poly (α opl
+us β)；h : forall v, v in S ↔ exists t, p (v otimes t) = 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Dioph.inject_dummies_lem`：inject_dummies_lem (f : β -> γ) (g : γ -> Opti
+on β) (inv : forall x, g (f x) = some x) (p : Poly (α oplus β)) (v : α -> Nat) :
+ (exists t, p …
 -/
-theorem inject_dummies (f : β -> γ) (g : γ -> Option β) (inv : forall x, g (f x) = some x)
-    (p : Poly (α oplus β)) (h : forall v, v in S ↔ exists t, p (v otimes t) = 0) :
-    exists q : Poly (α oplus γ), forall v, v in S ↔ exists t, q (v otimes t) = 0 :=
-⟨p.map (inl otimes inr ∘ f), fun v => (h v).trans inject_dummies_lem f g inv _ _⟩
+theorem inject_dummies (f : β → γ) (g : γ → Option β) (inv : ∀ x, g (f x) = some x)
+    (p : Poly (α ⊕ β)) (h : ∀ v, v ∈ S ↔ ∃ t, p (v ⊗ t) = 0) :
+    ∃ q : Poly (α ⊕ γ), ∀ v, v ∈ S ↔ ∃ t, q (v ⊗ t) = 0 :=
+  ⟨p.map (inl ⊗ inr ∘ f), fun v => (h v).trans <| inject_dummies_lem f g inv _ _⟩
 
 variable (β) in
-/--
-theorem `reindex_dioph` / 定理 `reindex_dioph`
-
-English:
-theorem reindex_dioph
-  given: (f : α -> β)
-  statement: Dioph S -> Dioph {v | v ∘ f in S}
-
-中文:
-定理 reindex_dioph
-  条件: (f : α -> β)
-  结论: Dioph S -> Dioph {v | v ∘ f in S}
+/-
+**Dioph.reindex_dioph** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：∀ {α : Type u} (β : Type u) {S : Set (α → ℕ)} (f : α → β), Dioph S → Dioph
+ {v | v ∘ f ∈ S}
+参数：β : Type u；α → ℕ；f : α → β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `exists_congr`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a) 
+→ ((∃ a, p a) ↔ ∃ a, q a)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem reindex_dioph (f : α -> β) : Dioph S -> Dioph {v | v ∘ f in S}
-  | ⟨γ, p, pe⟩ => ⟨γ, p.map (inl ∘ f otimes inr), fun v =>
-(pe _).trans
+theorem reindex_dioph (f : α → β) : Dioph S → Dioph {v | v ∘ f ∈ S}
+  | ⟨γ, p, pe⟩ => ⟨γ, p.map (inl ∘ f ⊗ inr), fun v =>
+      (pe _).trans <|
         exists_congr fun t =>
-          suffices v ∘ f otimes t = (v otimes t) ∘ (inl ∘ f otimes inr) by simp [this]
+          suffices v ∘ f ⊗ t = (v ⊗ t) ∘ (inl ∘ f ⊗ inr) by simp [this]
           funext fun s => by rcases s with a | b <;> rfl⟩
-
-/--
-theorem `DiophList.forall` / 定理 `DiophList.forall`
-
-English:
-theorem DiophList.forall
-  given: (l : List (Set <| α -> Nat)) (d : l.Forall Dioph)
-  proof: by
-  suffices exists (β : _) (pl : List (Poly (α oplus β))), forall v, List.Forall (fun S : Set _ => v in S) l ↔
-          exists t, List.Forall (fun p : Poly (α oplus β) => p (v otimes t) = 0) pl
+/-
+**Dioph.DiophList.forall** 是 Mathlib 中的一个定理，位于命名空间 `Dioph.DiophList`。
+形式化陈述：∀ {α : Type u} (l : List (Set (α → ℕ))), List.Forall Dioph l → Dioph {v | 
+List.Forall (fun S => v ∈ S) l}
+参数：l : List (Set (α → ℕ))；fun S => v ∈ S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Pi.instNonempty`：∀ {α : Sort u} {β : α → Sort v} [∀ (a : α), Nonempty (β
+ a)], Nonempty ((a : α) → β a)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.forall_cons`：∀ {α : Type u} (p : α → Prop) (x : α) (l : List α), Li
+st.Forall p (x :: l) ↔ p x ∧ List.Forall p l
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `and_congr`：∀ {a c b d : Prop}, (a ↔ c) → (b ↔ d) → (a ∧ b ↔ c ∧ d)
+· 使用定理 `List.Forall.imp`：∀ {α : Type u} {p q : α → Prop}, (∀ (x : α), p x → q x)
+ → ∀ {l : List α}, List.Forall p l → List.Forall q l
+· 使用定理 `exists_congr`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a) 
+→ ((∃ a, p a) ↔ ∃ a, q a)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Poly.sumsq_eq_zero`：∀ {α : Type u_1} (x : α → ℕ) (l : List (Poly α)), (P
+oly.sumsq l) x = 0 ↔ List.Forall (fun a => a x = 0) l
+-/
+theorem DiophList.forall (l : List (Set <| α → ℕ)) (d : l.Forall Dioph) :
+    Dioph {v | l.Forall fun S : Set (α → ℕ) => v ∈ S} := by
+  suffices ∃ (β : _) (pl : List (Poly (α ⊕ β))), ∀ v, List.Forall (fun S : Set _ => v ∈ S) l ↔
+          ∃ t, List.Forall (fun p : Poly (α ⊕ β) => p (v ⊗ t) = 0) pl
     from
     let ⟨β, pl, h⟩ := this
-⟨β, Poly.sumsq pl, fun v => (h v).trans exists_congr fun t => (Poly.sumsq_eq_zero _ _).symm⟩
+    ⟨β, Poly.sumsq pl, fun v => (h v).trans <| exists_congr fun t => (Poly.sumsq_eq_zero _ _).symm⟩
   induction l with | nil => exact ⟨ULift Empty, [], fun _ => by simp⟩ | cons S l IH =>
   obtain ⟨⟨β, p, pe⟩, dl⟩ := (List.forall_cons _ _ _).mp d
   exact
     let ⟨γ, pl, ple⟩ := IH dl
-    ⟨β oplus γ, p.map (inl otimes inr ∘ inl)::pl.map fun q => q.map (inl otimes inr ∘ inr),
+    ⟨β ⊕ γ, p.map (inl ⊗ inr ∘ inl)::pl.map fun q => q.map (inl ⊗ inr ∘ inr),
       fun v => by
       simpa using
         Iff.trans (and_congr (pe v) (ple v))
           ⟨fun ⟨⟨m, hm⟩, ⟨n, hn⟩⟩ =>
-            ⟨m otimes n, by
-              rw [show (v otimes m otimes n) ∘ (inl otimes inr ∘ inl) = v otimes m from
+            ⟨m ⊗ n, by
+              rw [show (v ⊗ m ⊗ n) ∘ (inl ⊗ inr ∘ inl) = v ⊗ m from
                     funext fun s => by rcases s with a | b <;> rfl]; exact hm, by
               refine List.Forall.imp (fun q hq => ?_) hn; dsimp [Function.comp_def]
               rw [show
-                    (fun x : α oplus γ => (v otimes m otimes n) ((inl otimes fun x : γ => inr (inr x)) x)) = v otimes n
+                    (fun x : α ⊕ γ => (v ⊗ m ⊗ n) ((inl ⊗ fun x : γ => inr (inr x)) x)) = v ⊗ n
                     from funext fun s => by rcases s with a | b <;> rfl]; exact hq⟩,
             fun ⟨t, hl, hr⟩ =>
             ⟨⟨t ∘ inl, by
-                rwa [show (v otimes t) ∘ (inl otimes inr ∘ inl) = v otimes t ∘ inl from
+                rwa [show (v ⊗ t) ∘ (inl ⊗ inr ∘ inl) = v ⊗ t ∘ inl from
                     funext fun s => by rcases s with a | b <;> rfl] at hl⟩,
               ⟨t ∘ inr, by
                 refine List.Forall.imp (fun q hq => ?_) hr; dsimp [Function.comp_def] at hq
                 rwa [show
-                    (fun x : α oplus γ => (v otimes t) ((inl otimes fun x : γ => inr (inr x)) x)) =
-                      v otimes t ∘ inr
+                    (fun x : α ⊕ γ => (v ⊗ t) ((inl ⊗ fun x : γ => inr (inr x)) x)) =
+                      v ⊗ t ∘ inr
                     from funext fun s => by rcases s with a | b <;> rfl] at hq ⟩⟩⟩⟩
 
-中文:
-定理 DiophList.对任意
-  条件: (l : 列表 (集合 <| α -> 自然数)) (d : l.任意 Dioph)
-  证明: by
-  suffices exists (β : _) (pl : List (Poly (α oplus β))), forall v, List.Forall (fun S : Set _ => v in S) l ↔
-          exists t, List.Forall (fun p : Poly (α oplus β) => p (v otimes t) = 0) pl
-    from
-    let ⟨β, pl, h⟩ := this
-⟨β, Poly.sumsq pl, fun v => (h v).trans exists_congr fun t => (Poly.sumsq_eq_zero _ _).symm⟩
-  induction l with | nil => exact ⟨ULift Empty, [], fun _ => by simp⟩ | cons S l IH =>
-  obtain ⟨⟨β, p, pe⟩, dl⟩ := (List.forall_cons _ _ _).mp d
-  exact
-    let ⟨γ, pl, ple⟩ := IH dl
-    ⟨β oplus γ, p.map (inl otimes inr ∘ inl)::pl.map fun q => q.map (inl otimes inr ∘ inr),
-      fun v => by
-      simpa using
-        Iff.trans (and_congr (pe v) (ple v))
-          ⟨fun ⟨⟨m, hm⟩, ⟨n, hn⟩⟩ =>
-            ⟨m otimes n, by
-              rw [show (v otimes m otimes n) ∘ (inl otimes inr ∘ inl) = v otimes m from
-                    funext fun s => by rcases s with a | b <;> rfl]; exact hm, by
-              refine List.Forall.imp (fun q hq => ?_) hn; dsimp [Function.comp_def]
-              rw [show
-                    (fun x : α oplus γ => (v otimes m otimes n) ((inl otimes fun x : γ => inr (inr x)) x)) = v otimes n
-                    from funext fun s => by rcases s with a | b <;> rfl]; exact hq⟩,
-            fun ⟨t, hl, hr⟩ =>
-            ⟨⟨t ∘ inl, by
-                rwa [show (v otimes t) ∘ (inl otimes inr ∘ inl) = v otimes t ∘ inl from
-                    funext fun s => by rcases s with a | b <;> rfl] at hl⟩,
-              ⟨t ∘ inr, by
-                refine List.Forall.imp (fun q hq => ?_) hr; dsimp [Function.comp_def] at hq
-                rwa [show
-                    (fun x : α oplus γ => (v otimes t) ((inl otimes fun x : γ => inr (inr x)) x)) =
-                      v otimes t ∘ inr
-                    from funext fun s => by rcases s with a | b <;> rfl] at hq ⟩⟩⟩⟩
+/-- Diophantine sets are closed under intersection. -/
+/-
+**Dioph.inter** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：inter (d : Dioph S) (d' : Dioph S') : Dioph (S inter S')
+参数：d : Dioph S；d' : Dioph S'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dioph.DiophList.forall`：∀ {α : Type u} (l : List (Set (α → ℕ))), List.Fo
+rall Dioph l → Dioph {v | List.Forall (fun S => v ∈ S) l}
 
-Depends on / 依赖: Forall, List.Forall, List.forall_cons, Poly.sumsq, Poly.sumsq_eq_zero, exists_congr, forall_cons, otimes, p.map, sumsq_eq_zero
+--- 原说明 ---
+Diophantine sets are closed under intersection.
 -/
-theorem DiophList.forall (l : List (Set <| α -> Nat)) (d : l.Forall Dioph) :
-    Dioph {v | l.Forall fun S : Set (α -> Nat) => v in S} := by
-  suffices exists (β : _) (pl : List (Poly (α oplus β))), forall v, List.Forall (fun S : Set _ => v in S) l ↔
-          exists t, List.Forall (fun p : Poly (α oplus β) => p (v otimes t) = 0) pl
-    from
-    let ⟨β, pl, h⟩ := this
-⟨β, Poly.sumsq pl, fun v => (h v).trans exists_congr fun t => (Poly.sumsq_eq_zero _ _).symm⟩
-  induction l with | nil => exact ⟨ULift Empty, [], fun _ => by simp⟩ | cons S l IH =>
-  obtain ⟨⟨β, p, pe⟩, dl⟩ := (List.forall_cons _ _ _).mp d
-  exact
-    let ⟨γ, pl, ple⟩ := IH dl
-    ⟨β oplus γ, p.map (inl otimes inr ∘ inl)::pl.map fun q => q.map (inl otimes inr ∘ inr),
-      fun v => by
-      simpa using
-        Iff.trans (and_congr (pe v) (ple v))
-          ⟨fun ⟨⟨m, hm⟩, ⟨n, hn⟩⟩ =>
-            ⟨m otimes n, by
-              rw [show (v otimes m otimes n) ∘ (inl otimes inr ∘ inl) = v otimes m from
-                    funext fun s => by rcases s with a | b <;> rfl]; exact hm, by
-              refine List.Forall.imp (fun q hq => ?_) hn; dsimp [Function.comp_def]
-              rw [show
-                    (fun x : α oplus γ => (v otimes m otimes n) ((inl otimes fun x : γ => inr (inr x)) x)) = v otimes n
-                    from funext fun s => by rcases s with a | b <;> rfl]; exact hq⟩,
-            fun ⟨t, hl, hr⟩ =>
-            ⟨⟨t ∘ inl, by
-                rwa [show (v otimes t) ∘ (inl otimes inr ∘ inl) = v otimes t ∘ inl from
-                    funext fun s => by rcases s with a | b <;> rfl] at hl⟩,
-              ⟨t ∘ inr, by
-                refine List.Forall.imp (fun q hq => ?_) hr; dsimp [Function.comp_def] at hq
-                rwa [show
-                    (fun x : α oplus γ => (v otimes t) ((inl otimes fun x : γ => inr (inr x)) x)) =
-                      v otimes t ∘ inr
-                    from funext fun s => by rcases s with a | b <;> rfl] at hq ⟩⟩⟩⟩
+theorem inter (d : Dioph S) (d' : Dioph S') : Dioph (S ∩ S') := DiophList.forall [S, S'] ⟨d, d'⟩
 
-/--
-theorem `inter` / 定理 `inter`
+/-- Diophantine sets are closed under union. -/
+/-
+**Dioph.union** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：∀ {α : Type u} {S S' : Set (α → ℕ)}, Dioph S → Dioph S' → Dioph (S ∪ S')
+参数：α → ℕ；S ∪ S'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `or_congr`：∀ {a c b d : Prop}, (a ↔ c) → (b ↔ d) → (a ∨ b ↔ c ∨ d)
+· 使用定理 `Dioph.inject_dummies_lem`：inject_dummies_lem (f : β -> γ) (g : γ -> Opti
+on β) (inv : forall x, g (f x) = some x) (p : Poly (α oplus β)) (v : α -> Nat) :
+ (exists t, p …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `exists_or`：∀ {α : Sort u_1} {p q : α → Prop}, (∃ x, p x ∨ q x) ↔ (∃ x, p
+ x) ∨ ∃ x, q x
+· 使用定理 `exists_congr`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a) 
+→ ((∃ a, p a) ↔ ∃ a, q a)
+· 使用定理 `mul_eq_zero`：mul_eq_zero : a * b = 0 ↔ a = 0 ∨ b = 0
+· 使用定理 `IsStrictOrderedRing.noZeroDivisors`：∀ {R : Type u} [inst : Semiring R] [
+inst_1 : LinearOrder R] [IsStrictOrderedRing R] [ExistsAddOfLE R], NoZeroDivisor
+s R
+· 使用定理 `AddGroup.existsAddOfLE`：∀ (α : Type u) [inst : AddGroup α] [inst_1 : LE 
+α], ExistsAddOfLE α
 
-English:
-theorem inter
-  given: (d : Dioph S) (d' : Dioph S')
-  statement: Dioph (S inter S')
-  proof: DiophList.forall [S, S'] ⟨d, d'⟩
-
-中文:
-定理 inter
-  条件: (d : Dioph S) (d' : Dioph S')
-  结论: Dioph (S inter S')
-  证明: DiophList.forall [S, S'] ⟨d, d'⟩
-
-Depends on / 依赖: DiophList, DiophList.forall
+--- 原说明 ---
+Diophantine sets are closed under union.
 -/
-theorem inter (d : Dioph S) (d' : Dioph S') : Dioph (S inter S') := DiophList.forall [S, S'] ⟨d, d'⟩
-
-/--
-theorem `union` / 定理 `union`
-
-English:
-theorem union
-  statement: forall (_ : Dioph S) (_ : Dioph S'), Dioph (S union S')
-
-中文:
-定理 union
-  结论: 对任意 (_ : Dioph S) (_ : Dioph S'), Dioph (S union S')
--/
-theorem union : forall (_ : Dioph S) (_ : Dioph S'), Dioph (S union S')
+theorem union : ∀ (_ : Dioph S) (_ : Dioph S'), Dioph (S ∪ S')
   | ⟨β, p, pe⟩, ⟨γ, q, qe⟩ =>
-    ⟨β oplus γ, p.map (inl otimes inr ∘ inl) * q.map (inl otimes inr ∘ inr), fun v => by
+    ⟨β ⊕ γ, p.map (inl ⊗ inr ∘ inl) * q.map (inl ⊗ inr ∘ inr), fun v => by
       refine
         Iff.trans (or_congr ((pe v).trans ?_) ((qe v).trans ?_))
           (exists_or.symm.trans
             (exists_congr fun t =>
-              (@mul_eq_zero _ _ _ (p ((v otimes t) ∘ (inl otimes inr ∘ inl)))
-                  (q ((v otimes t) ∘ (inl otimes inr ∘ inr)))).symm))
+              (@mul_eq_zero _ _ _ (p ((v ⊗ t) ∘ (inl ⊗ inr ∘ inl)))
+                  (q ((v ⊗ t) ∘ (inl ⊗ inr ∘ inr)))).symm))
       · -- Porting note: putting everything on the same line fails
-        refine inject_dummies_lem _ (some otimes fun _ => none) ?_ _ _
+        refine inject_dummies_lem _ (some ⊗ fun _ => none) ?_ _ _
         exact fun _ => by simp only [elim_inl]
       · -- Porting note: putting everything on the same line fails
-        refine inject_dummies_lem _ ((fun _ => none) otimes some) ?_ _ _
+        refine inject_dummies_lem _ ((fun _ => none) ⊗ some) ?_ _ _
         exact fun _ => by simp only [elim_inr]⟩
 
-/--
-Definition of `DiophPFun` / `DiophPFun` 的定义
+/-- A partial function is Diophantine if its graph is Diophantine. -/
+/-
+**Dioph.DiophPFun** 是 Mathlib 中的一个定义，位于命名空间 `Dioph`。
+形式化陈述：DiophPFun (f : (α -> Nat) ->. Nat) : Prop
+参数：f : (α -> Nat) ->. Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition DiophPFun
-  signature: (f : (α -> Nat) ->. Nat)
-  body: Dioph {v : Option α -> Nat | (v ∘ some, v none) in f.graph}
-
-中文:
-定义 DiophPFun
-  签名: (f : (α -> 自然数) ->. 自然数)
-  定义体: Dioph {v : Option α -> Nat | (v ∘ some, v none) in f.graph}
-
-Depends on / 依赖: f.graph
+--- 原说明 ---
+A partial function is Diophantine if its graph is Diophantine.
 -/
-def DiophPFun (f : (α -> Nat) ->. Nat) : Prop :=
-  Dioph {v : Option α -> Nat | (v ∘ some, v none) in f.graph}
+def DiophPFun (f : (α → ℕ) →. ℕ) : Prop :=
+  Dioph {v : Option α → ℕ | (v ∘ some, v none) ∈ f.graph}
 
-/--
-Definition of `DiophFn` / `DiophFn` 的定义
+/-- A function is Diophantine if its graph is Diophantine. -/
+/-
+**Dioph.DiophFn** 是 Mathlib 中的一个定义，位于命名空间 `Dioph`。
+形式化陈述：DiophFn (f : (α -> Nat) -> Nat) : Prop
+参数：f : (α -> Nat) -> Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition DiophFn
-  signature: (f : (α -> Nat) -> Nat)
-  body: Dioph {v : Option α -> Nat | f (v ∘ some) = v none}
-
-中文:
-定义 DiophFn
-  签名: (f : (α -> 自然数) -> 自然数)
-  定义体: Dioph {v : Option α -> Nat | f (v ∘ some) = v none}
+--- 原说明 ---
+A function is Diophantine if its graph is Diophantine.
 -/
-def DiophFn (f : (α -> Nat) -> Nat) : Prop :=
-  Dioph {v : Option α -> Nat | f (v ∘ some) = v none}
-
-/--
-theorem `reindex_diophFn` / 定理 `reindex_diophFn`
-
-English:
-theorem reindex_diophFn
-  given: {f : (α -> Nat) -> Nat} (g : α -> β) (d : DiophFn f)
-  proof: by convert! reindex_dioph (Option β) (Option.map g) d
-
-中文:
-定理 reindex_diophFn
-  条件: {f : (α -> 自然数) -> 自然数} (g : α -> β) (d : DiophFn f)
-  证明: by convert! reindex_dioph (Option β) (Option.map g) d
-
-Depends on / 依赖: Option.map, convert, reindex_dioph
+def DiophFn (f : (α → ℕ) → ℕ) : Prop :=
+  Dioph {v : Option α → ℕ | f (v ∘ some) = v none}
+/-
+**Dioph.reindex_diophFn** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：reindex_diophFn {f : (α -> Nat) -> Nat} (g : α -> β) (d : DiophFn f) : Dio
+phFn fun v => f (v ∘ g)
+参数：α -> Nat；g : α -> β；d : DiophFn f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dioph.reindex_dioph`：∀ {α : Type u} (β : Type u) {S : Set (α → ℕ)} (f : 
+α → β), Dioph S → Dioph {v | v ∘ f ∈ S}
 -/
-theorem reindex_diophFn {f : (α -> Nat) -> Nat} (g : α -> β) (d : DiophFn f) :
+theorem reindex_diophFn {f : (α → ℕ) → ℕ} (g : α → β) (d : DiophFn f) :
     DiophFn fun v => f (v ∘ g) := by convert! reindex_dioph (Option β) (Option.map g) d
-
-/--
-theorem `ex_dioph` / 定理 `ex_dioph`
-
-English:
-theorem ex_dioph
-  given: {S : Set (α oplus β -> Nat)}
-  statement: Dioph S -> Dioph {v | exists x, v otimes x in S}
-  proof: (pe _).1 hx
-        ⟨x otimes t, by
-          simp only [Poly.map_apply]
-          rw [show (v otimes x otimes t) ∘ ((inl otimes inr ∘ inl) otimes inr ∘ inr) = (v otimes x) otimes t from
-            funext fun s => by rcases s with a | b <;> try { cases a <;> rfl }; rfl]
-          exact ht⟩,
-        fun ⟨t, ht⟩ =>
-        ⟨t ∘ inl,
-          (pe _).2
-            ⟨t ∘ inr, by
-              simp only [Poly.map_apply] at ht
-              rwa [show (v otimes t) ∘ ((inl otimes inr ∘ inl) otimes inr ∘ inr) = (v otimes t ∘ inl) otimes t ∘ inr from
-                funext fun s => by rcases s with a | b <;> try { cases a <;> rfl }; rfl] at ht⟩⟩⟩⟩
-
-中文:
-定理 ex_dioph
-  条件: {S : 集合 (α oplus β -> 自然数)}
-  结论: Dioph S -> Dioph {v | 存在 x, v otimes x in S}
-  证明: (pe _).1 hx
-        ⟨x otimes t, by
-          simp only [Poly.map_apply]
-          rw [show (v otimes x otimes t) ∘ ((inl otimes inr ∘ inl) otimes inr ∘ inr) = (v otimes x) otimes t from
-            funext fun s => by rcases s with a | b <;> try { cases a <;> rfl }; rfl]
-          exact ht⟩,
-        fun ⟨t, ht⟩ =>
-        ⟨t ∘ inl,
-          (pe _).2
-            ⟨t ∘ inr, by
-              simp only [Poly.map_apply] at ht
-              rwa [show (v otimes t) ∘ ((inl otimes inr ∘ inl) otimes inr ∘ inr) = (v otimes t ∘ inl) otimes t ∘ inr from
-                funext fun s => by rcases s with a | b <;> try { cases a <;> rfl }; rfl] at ht⟩⟩⟩⟩
+/-
+**Dioph.ex_dioph** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：ex_dioph {S : Set (α oplus β -> Nat)} : Dioph S -> Dioph {v | exists x, v 
+otimes x in S} | ⟨γ, p, pe⟩ => ⟨β oplus γ, p.map ((inl otimes inr ∘ inl) otimes 
+inr ∘ inr), fun v => ⟨fun ⟨x, hx⟩ => let ⟨t, ht⟩
+参数：α oplus β -> Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 -/
-theorem ex_dioph {S : Set (α oplus β -> Nat)} : Dioph S -> Dioph {v | exists x, v otimes x in S}
+theorem ex_dioph {S : Set (α ⊕ β → ℕ)} : Dioph S → Dioph {v | ∃ x, v ⊗ x ∈ S}
   | ⟨γ, p, pe⟩ =>
-    ⟨β oplus γ, p.map ((inl otimes inr ∘ inl) otimes inr ∘ inr), fun v =>
+    ⟨β ⊕ γ, p.map ((inl ⊗ inr ∘ inl) ⊗ inr ∘ inr), fun v =>
       ⟨fun ⟨x, hx⟩ =>
         let ⟨t, ht⟩ := (pe _).1 hx
-        ⟨x otimes t, by
+        ⟨x ⊗ t, by
           simp only [Poly.map_apply]
-          rw [show (v otimes x otimes t) ∘ ((inl otimes inr ∘ inl) otimes inr ∘ inr) = (v otimes x) otimes t from
+          rw [show (v ⊗ x ⊗ t) ∘ ((inl ⊗ inr ∘ inl) ⊗ inr ∘ inr) = (v ⊗ x) ⊗ t from
             funext fun s => by rcases s with a | b <;> try { cases a <;> rfl }; rfl]
           exact ht⟩,
         fun ⟨t, ht⟩ =>
@@ -1311,56 +819,35 @@ theorem ex_dioph {S : Set (α oplus β -> Nat)} : Dioph S -> Dioph {v | exists x
           (pe _).2
             ⟨t ∘ inr, by
               simp only [Poly.map_apply] at ht
-              rwa [show (v otimes t) ∘ ((inl otimes inr ∘ inl) otimes inr ∘ inr) = (v otimes t ∘ inl) otimes t ∘ inr from
+              rwa [show (v ⊗ t) ∘ ((inl ⊗ inr ∘ inl) ⊗ inr ∘ inr) = (v ⊗ t ∘ inl) ⊗ t ∘ inr from
                 funext fun s => by rcases s with a | b <;> try { cases a <;> rfl }; rfl] at ht⟩⟩⟩⟩
-
-/--
-theorem `ex1_dioph` / 定理 `ex1_dioph`
-
-English:
-theorem ex1_dioph
-  given: {S : Set (Option α -> Nat)}
-  statement: Dioph S -> Dioph {v | exists x, x ::ₒ v in S}
-  proof: (pe _).1 hx
-        ⟨x ::ₒ t, by
-          simp only [Poly.map_apply]
-          rw [show (v otimes x ::ₒ t) ∘ (inr none ::ₒ inl otimes inr ∘ some) = x ::ₒ v otimes t from
-            funext fun s => by rcases s with a | b <;> try { cases a <;> rfl}; rfl]
-          exact ht⟩,
-        fun ⟨t, ht⟩ =>
-        ⟨t none,
-          (pe _).2
-            ⟨t ∘ some, by
-              simp only [Poly.map_apply] at ht
-              rwa [show (v otimes t) ∘ (inr none ::ₒ inl otimes inr ∘ some) = t none ::ₒ v otimes t ∘ some from
-                funext fun s => by rcases s with a | b <;> try { cases a <;> rfl }; rfl] at ht ⟩⟩⟩⟩
-
-中文:
-定理 ex1_dioph
-  条件: {S : 集合 (选项类型 α -> 自然数)}
-  结论: Dioph S -> Dioph {v | 存在 x, x ::ₒ v in S}
-  证明: (pe _).1 hx
-        ⟨x ::ₒ t, by
-          simp only [Poly.map_apply]
-          rw [show (v otimes x ::ₒ t) ∘ (inr none ::ₒ inl otimes inr ∘ some) = x ::ₒ v otimes t from
-            funext fun s => by rcases s with a | b <;> try { cases a <;> rfl}; rfl]
-          exact ht⟩,
-        fun ⟨t, ht⟩ =>
-        ⟨t none,
-          (pe _).2
-            ⟨t ∘ some, by
-              simp only [Poly.map_apply] at ht
-              rwa [show (v otimes t) ∘ (inr none ::ₒ inl otimes inr ∘ some) = t none ::ₒ v otimes t ∘ some from
-                funext fun s => by rcases s with a | b <;> try { cases a <;> rfl }; rfl] at ht ⟩⟩⟩⟩
+/-
+**Dioph.ex1_dioph** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：ex1_dioph {S : Set (Option α -> Nat)} : Dioph S -> Dioph {v | exists x, x 
+::ₒ v in S} | ⟨β, p, pe⟩ => ⟨Option β, p.map (inr none ::ₒ inl otimes inr ∘ some
+), fun v => ⟨fun ⟨x, hx⟩ => let ⟨t, ht⟩
+参数：Option α -> Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Option.elim'`：elim'_update {α : Type*} {β : Type*} [DecidableEq α] (f : 
+β) (g : α -> β) (a : α) (x : β) : Option.elim' f (update g a x) = update (Option
+.e…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 -/
-theorem ex1_dioph {S : Set (Option α -> Nat)} : Dioph S -> Dioph {v | exists x, x ::ₒ v in S}
+theorem ex1_dioph {S : Set (Option α → ℕ)} : Dioph S → Dioph {v | ∃ x, x ::ₒ v ∈ S}
   | ⟨β, p, pe⟩ =>
-    ⟨Option β, p.map (inr none ::ₒ inl otimes inr ∘ some), fun v =>
+    ⟨Option β, p.map (inr none ::ₒ inl ⊗ inr ∘ some), fun v =>
       ⟨fun ⟨x, hx⟩ =>
         let ⟨t, ht⟩ := (pe _).1 hx
         ⟨x ::ₒ t, by
           simp only [Poly.map_apply]
-          rw [show (v otimes x ::ₒ t) ∘ (inr none ::ₒ inl otimes inr ∘ some) = x ::ₒ v otimes t from
+          rw [show (v ⊗ x ::ₒ t) ∘ (inr none ::ₒ inl ⊗ inr ∘ some) = x ::ₒ v ⊗ t from
             funext fun s => by rcases s with a | b <;> try { cases a <;> rfl}; rfl]
           exact ht⟩,
         fun ⟨t, ht⟩ =>
@@ -1368,123 +855,90 @@ theorem ex1_dioph {S : Set (Option α -> Nat)} : Dioph S -> Dioph {v | exists x,
           (pe _).2
             ⟨t ∘ some, by
               simp only [Poly.map_apply] at ht
-              rwa [show (v otimes t) ∘ (inr none ::ₒ inl otimes inr ∘ some) = t none ::ₒ v otimes t ∘ some from
+              rwa [show (v ⊗ t) ∘ (inr none ::ₒ inl ⊗ inr ∘ some) = t none ::ₒ v ⊗ t ∘ some from
                 funext fun s => by rcases s with a | b <;> try { cases a <;> rfl }; rfl] at ht ⟩⟩⟩⟩
-
-/--
-theorem `dom_dioph` / 定理 `dom_dioph`
-
-English:
-theorem dom_dioph
-  given: {f : (α -> Nat) ->. Nat} (d : DiophPFun f)
-  statement: Dioph f.Dom
-  proof: cast (congr_arg Dioph <| Set.ext fun _ => (PFun.dom_iff_graph _ _).symm) (ex1_dioph d)
-
-中文:
-定理 dom_dioph
-  条件: {f : (α -> 自然数) ->. 自然数} (d : DiophPFun f)
-  结论: Dioph f.Dom
-  证明: cast (congr_arg Dioph <| Set.ext fun _ => (PFun.dom_iff_graph _ _).symm) (ex1_dioph d)
-
-Depends on / 依赖: PFun.dom_iff_graph, Set.ext, congr_arg, dom_iff_graph, ex1_dioph
+/-
+**Dioph.dom_dioph** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：dom_dioph {f : (α -> Nat) ->. Nat} (d : DiophPFun f) : Dioph f.Dom
+参数：α -> Nat；d : DiophPFun f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `PFun.dom_iff_graph`：dom_iff_graph (f : α ->. β) (x : α) : x in f.Dom ↔ e
+xists y, (x, y) in f.graph
+· 使用定理 `Dioph.ex1_dioph`：ex1_dioph {S : Set (Option α -> Nat)} : Dioph S -> Diop
+h {v | exists x, x ::ₒ v in S} | ⟨β, p, pe⟩ => ⟨Option β, p.map (inr none ::ₒ in
+l oti…
 -/
-theorem dom_dioph {f : (α -> Nat) ->. Nat} (d : DiophPFun f) : Dioph f.Dom :=
+theorem dom_dioph {f : (α → ℕ) →. ℕ} (d : DiophPFun f) : Dioph f.Dom :=
   cast (congr_arg Dioph <| Set.ext fun _ => (PFun.dom_iff_graph _ _).symm) (ex1_dioph d)
-
-/--
-theorem `diophFn_iff_pFun` / 定理 `diophFn_iff_pFun`
-
-English:
-theorem diophFn_iff_pFun
-  given: (f : (α -> Nat) -> Nat)
-  statement: DiophFn f = @DiophPFun α f
-  proof: by
-  refine congr_arg Dioph (Set.ext fun v => ?_); exact PFun.lift_graph.symm
-
-中文:
-定理 diophFn_iff_pFun
-  条件: (f : (α -> 自然数) -> 自然数)
-  结论: DiophFn f = @DiophPFun α f
-  证明: by
-  refine congr_arg Dioph (Set.ext fun v => ?_); exact PFun.lift_graph.symm
-
-Depends on / 依赖: PFun.lift_graph.symm, Set.ext, congr_arg, lift_graph
+/-
+**Dioph.diophFn_iff_pFun** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：diophFn_iff_pFun (f : (α -> Nat) -> Nat) : DiophFn f = @DiophPFun α f
+参数：f : (α -> Nat) -> Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `PFun.lift_graph`：lift_graph {f : α -> β} {a b} : (a, b) in (f : α ->. β)
+.graph ↔ f a = b
 -/
-theorem diophFn_iff_pFun (f : (α -> Nat) -> Nat) : DiophFn f = @DiophPFun α f := by
+theorem diophFn_iff_pFun (f : (α → ℕ) → ℕ) : DiophFn f = @DiophPFun α f := by
   refine congr_arg Dioph (Set.ext fun v => ?_); exact PFun.lift_graph.symm
-
-/--
-theorem `abs_poly_dioph` / 定理 `abs_poly_dioph`
-
-English:
-theorem abs_poly_dioph
-  given: (p : Poly α)
-  statement: DiophFn fun v => (p v).natAbs
-  proof: of_no_dummies _ ((p.map some - Poly.proj none) * (p.map some + Poly.proj none))
-    fun v => (by dsimp; exact Int.natAbs_eq_iff_mul_eq_zero)
-
-中文:
-定理 abs_poly_dioph
-  条件: (p : Poly α)
-  结论: DiophFn fun v => (p v).natAbs
-  证明: of_no_dummies _ ((p.map some - Poly.proj none) * (p.map some + Poly.proj none))
-    fun v => (by dsimp; exact Int.natAbs_eq_iff_mul_eq_zero)
-
-Depends on / 依赖: Int.natAbs_eq_iff_mul_eq_zero, Poly.proj, natAbs_eq_iff_mul_eq_zero, of_no_dummies, p.map
+/-
+**Dioph.abs_poly_dioph** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：abs_poly_dioph (p : Poly α) : DiophFn fun v => (p v).natAbs
+参数：p : Poly α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dioph.of_no_dummies`：of_no_dummies (S : Set (α -> Nat)) (p : Poly α) (h 
+: forall v, v in S ↔ p v = 0) : Dioph S
+· 使用定理 `Int.natAbs_eq_iff_mul_eq_zero`：∀ {a : ℤ} {n : ℕ}, a.natAbs = n ↔ (a - ↑n
+) * (a + ↑n) = 0
 -/
 theorem abs_poly_dioph (p : Poly α) : DiophFn fun v => (p v).natAbs :=
   of_no_dummies _ ((p.map some - Poly.proj none) * (p.map some + Poly.proj none))
     fun v => (by dsimp; exact Int.natAbs_eq_iff_mul_eq_zero)
-
-/--
-theorem `proj_dioph` / 定理 `proj_dioph`
-
-English:
-theorem proj_dioph
-  given: (i : α)
-  statement: DiophFn fun v => v i
-  proof: abs_poly_dioph (Poly.proj i)
-
-中文:
-定理 proj_dioph
-  条件: (i : α)
-  结论: DiophFn fun v => v i
-  证明: abs_poly_dioph (Poly.proj i)
-
-Depends on / 依赖: Poly.proj, abs_poly_dioph
+/-
+**Dioph.proj_dioph** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：proj_dioph (i : α) : DiophFn fun v => v i
+参数：i : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dioph.abs_poly_dioph`：abs_poly_dioph (p : Poly α) : DiophFn fun v => (p 
+v).natAbs
 -/
 theorem proj_dioph (i : α) : DiophFn fun v => v i :=
   abs_poly_dioph (Poly.proj i)
-
-/--
-theorem `diophPFun_comp1` / 定理 `diophPFun_comp1`
-
-English:
-theorem diophPFun_comp1
-  given: {S : Set (Option α -> Nat)} (d : Dioph S) {f} (df : DiophPFun f)
-  proof: ext (ex1_dioph (d.inter df)) fun v =>
-    ⟨fun ⟨x, hS, (h : Exists _)⟩ => by
-      rw [show (x ::ₒ v) ∘ some = v from funext fun s => rfl] at h
-      obtain ⟨hf, h⟩ := h; refine ⟨hf, ?_⟩; rw [PFun.fn, h]; exact hS,
-    fun ⟨x, hS⟩ =>
-      ⟨f.fn v x, hS, show Exists _ by
-        rw [show (f.fn v x ::ₒ v) ∘ some = v from funext fun s => rfl]; exact ⟨x, rfl⟩⟩⟩
-
-中文:
-定理 diophPFun_comp1
-  条件: {S : 集合 (选项类型 α -> 自然数)} (d : Dioph S) {f} (df : DiophPFun f)
-  证明: ext (ex1_dioph (d.inter df)) fun v =>
-    ⟨fun ⟨x, hS, (h : Exists _)⟩ => by
-      rw [show (x ::ₒ v) ∘ some = v from funext fun s => rfl] at h
-      obtain ⟨hf, h⟩ := h; refine ⟨hf, ?_⟩; rw [PFun.fn, h]; exact hS,
-    fun ⟨x, hS⟩ =>
-      ⟨f.fn v x, hS, show Exists _ by
-        rw [show (f.fn v x ::ₒ v) ∘ some = v from funext fun s => rfl]; exact ⟨x, rfl⟩⟩⟩
-
-Depends on / 依赖: Exists, PFun.fn, d.inter, ex1_dioph, f.fn
+/-
+**Dioph.diophPFun_comp1** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：diophPFun_comp1 {S : Set (Option α -> Nat)} (d : Dioph S) {f} (df : DiophP
+Fun f) : Dioph {v : α -> Nat | exists h : v in f.Dom, f.fn v h ::ₒ v in S}
+参数：Option α -> Nat；d : Dioph S；df : DiophPFun f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dioph.ext`：ext (d : Dioph S) (H : forall v, v in S ↔ v in S') : Dioph S'
+· 使用引理 `Option.elim'`：elim'_update {α : Type*} {β : Type*} [DecidableEq α] (f : 
+β) (g : α -> β) (a : α) (x : β) : Option.elim' f (update g a x) = update (Option
+.e…
+· 使用定理 `Dioph.ex1_dioph`：ex1_dioph {S : Set (Option α -> Nat)} : Dioph S -> Diop
+h {v | exists x, x ::ₒ v in S} | ⟨β, p, pe⟩ => ⟨Option β, p.map (inr none ::ₒ in
+l oti…
+· 使用定理 `Dioph.inter`：inter (d : Dioph S) (d' : Dioph S') : Dioph (S inter S')
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `PFun.fn.eq_1`：∀ {α : Type u_1} {β : Type u_2} (f : α →. β) (a : α), f.fn
+ a = (f a).get
 -/
-theorem diophPFun_comp1 {S : Set (Option α -> Nat)} (d : Dioph S) {f} (df : DiophPFun f) :
-    Dioph {v : α -> Nat | exists h : v in f.Dom, f.fn v h ::ₒ v in S} :=
+theorem diophPFun_comp1 {S : Set (Option α → ℕ)} (d : Dioph S) {f} (df : DiophPFun f) :
+    Dioph {v : α → ℕ | ∃ h : v ∈ f.Dom, f.fn v h ::ₒ v ∈ S} :=
   ext (ex1_dioph (d.inter df)) fun v =>
     ⟨fun ⟨x, hS, (h : Exists _)⟩ => by
       rw [show (x ::ₒ v) ∘ some = v from funext fun s => rfl] at h
@@ -1492,26 +946,26 @@ theorem diophPFun_comp1 {S : Set (Option α -> Nat)} (d : Dioph S) {f} (df : Dio
     fun ⟨x, hS⟩ =>
       ⟨f.fn v x, hS, show Exists _ by
         rw [show (f.fn v x ::ₒ v) ∘ some = v from funext fun s => rfl]; exact ⟨x, rfl⟩⟩⟩
-
-/--
-theorem `diophFn_comp1` / 定理 `diophFn_comp1`
-
-English:
-theorem diophFn_comp1
-  given: {S : Set (Option α -> Nat)} (d : Dioph S) {f : (α -> Nat) -> Nat} (df : DiophFn f)
-  proof: ext (diophPFun_comp1 d <| cast (diophFn_iff_pFun f) df)
-    fun _ => ⟨fun ⟨_, h⟩ => h, fun h => ⟨trivial, h⟩⟩
-
-中文:
-定理 diophFn_comp1
-  条件: {S : 集合 (选项类型 α -> 自然数)} (d : Dioph S) {f : (α -> 自然数) -> 自然数} (df : DiophFn f)
-  证明: ext (diophPFun_comp1 d <| cast (diophFn_iff_pFun f) df)
-    fun _ => ⟨fun ⟨_, h⟩ => h, fun h => ⟨trivial, h⟩⟩
-
-Depends on / 依赖: diophFn_iff_pFun, diophPFun_comp1
+/-
+**Dioph.diophFn_comp1** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：diophFn_comp1 {S : Set (Option α -> Nat)} (d : Dioph S) {f : (α -> Nat) ->
+ Nat} (df : DiophFn f) : Dioph {v | f v ::ₒ v in S}
+参数：Option α -> Nat；d : Dioph S；α -> Nat；df : DiophFn f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dioph.ext`：ext (d : Dioph S) (H : forall v, v in S ↔ v in S') : Dioph S'
+· 使用引理 `Option.elim'`：elim'_update {α : Type*} {β : Type*} [DecidableEq α] (f : 
+β) (g : α -> β) (a : α) (x : β) : Option.elim' f (update g a x) = update (Option
+.e…
+· 使用定理 `Dioph.diophPFun_comp1`：diophPFun_comp1 {S : Set (Option α -> Nat)} (d : 
+Dioph S) {f} (df : DiophPFun f) : Dioph {v : α -> Nat | exists h : v in f.Dom, f
+.fn v h ::ₒ…
+· 使用定理 `Dioph.diophFn_iff_pFun`：diophFn_iff_pFun (f : (α -> Nat) -> Nat) : Dioph
+Fn f = @DiophPFun α f
+· 使用定理 `trivial`：True
 -/
-theorem diophFn_comp1 {S : Set (Option α -> Nat)} (d : Dioph S) {f : (α -> Nat) -> Nat} (df : DiophFn f) :
-    Dioph {v | f v ::ₒ v in S} :=
+theorem diophFn_comp1 {S : Set (Option α → ℕ)} (d : Dioph S) {f : (α → ℕ) → ℕ} (df : DiophFn f) :
+    Dioph {v | f v ::ₒ v ∈ S} :=
   ext (diophPFun_comp1 d <| cast (diophFn_iff_pFun f) df)
     fun _ => ⟨fun ⟨_, h⟩ => h, fun h => ⟨trivial, h⟩⟩
 
@@ -1519,39 +973,35 @@ end
 
 section
 
-variable {α : Type} {n : Nat}
+variable {α : Type} {n : ℕ}
 
 open Vector3
 
 open scoped Vector3
 
-/--
-theorem `diophFn_vec_comp1` / 定理 `diophFn_vec_comp1`
-
-English:
-theorem diophFn_vec_comp1
-  statement: {S : Set (Vector3 Nat (succ n))} (d : Dioph S) {f : Vector3 Nat n -> Nat}
-  proof: Dioph.ext (diophFn_comp1 (reindex_dioph _ (none :: some) d) df) (fun v => by
-    dsimp
-    -- TODO: `apply iff_of_eq` is required here, even though `congr!` works on iff below.
-    apply iff_of_eq
-    congr 1
-    ext x; cases x <;> rfl)
-
-中文:
-定理 diophFn_vec_comp1
-  结论: {S : 集合 (Vector3 自然数 (succ n))} (d : Dioph S) {f : Vector3 自然数 n -> 自然数}
-  证明: Dioph.ext (diophFn_comp1 (reindex_dioph _ (none :: some) d) df) (fun v => by
-    dsimp
-    -- TODO: `apply iff_of_eq` is required here, even though `congr!` works on iff below.
-    apply iff_of_eq
-    congr 1
-    ext x; cases x <;> rfl)
-
-Depends on / 依赖: Dioph.ext, diophFn_comp1, reindex_dioph
+/-
+**Dioph.diophFn_vec_comp1** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：diophFn_vec_comp1 {S : Set (Vector3 Nat (succ n))} (d : Dioph S) {f : Vect
+or3 Nat n -> Nat} (df : DiophFn f) : Dioph {v : Vector3 Nat n | (f v :: v) in S}
+参数：Vector3 Nat (succ n)；d : Dioph S；df : DiophFn f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dioph.ext`：ext (d : Dioph S) (H : forall v, v in S ↔ v in S') : Dioph S'
+· 使用引理 `Option.elim'`：elim'_update {α : Type*} {β : Type*} [DecidableEq α] (f : 
+β) (g : α -> β) (a : α) (x : β) : Option.elim' f (update g a x) = update (Option
+.e…
+· 使用定理 `Dioph.diophFn_comp1`：diophFn_comp1 {S : Set (Option α -> Nat)} (d : Diop
+h S) {f : (α -> Nat) -> Nat} (df : DiophFn f) : Dioph {v | f v ::ₒ v in S}
+· 使用定理 `Dioph.reindex_dioph`：∀ {α : Type u} (β : Type u) {S : Set (α → ℕ)} (f : 
+α → β), Dioph S → Dioph {v | v ∘ f ∈ S}
+· 使用定理 `iff_of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
-theorem diophFn_vec_comp1 {S : Set (Vector3 Nat (succ n))} (d : Dioph S) {f : Vector3 Nat n -> Nat}
-    (df : DiophFn f) : Dioph {v : Vector3 Nat n | (f v :: v) in S} :=
+theorem diophFn_vec_comp1 {S : Set (Vector3 ℕ (succ n))} (d : Dioph S) {f : Vector3 ℕ n → ℕ}
+    (df : DiophFn f) : Dioph {v : Vector3 ℕ n | (f v :: v) ∈ S} :=
   Dioph.ext (diophFn_comp1 (reindex_dioph _ (none :: some) d) df) (fun v => by
     dsimp
     -- TODO: `apply iff_of_eq` is required here, even though `congr!` works on iff below.
@@ -1560,132 +1010,91 @@ theorem diophFn_vec_comp1 {S : Set (Vector3 Nat (succ n))} (d : Dioph S) {f : Ve
     ext x; cases x <;> rfl)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `vec_ex1_dioph` / 定理 `vec_ex1_dioph`
+/-- Deleting the first component preserves the Diophantine property. -/
+/-
+**Dioph.vec_ex1_dioph** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：vec_ex1_dioph (n) {S : Set (Vector3 Nat (succ n))} (d : Dioph S) : Dioph {
+v : Fin2 n -> Nat | exists x, (x :: v) in S}
+参数：n；Vector3 Nat (succ n)；d : Dioph S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dioph.ext`：ext (d : Dioph S) (H : forall v, v in S ↔ v in S') : Dioph S'
+· 使用引理 `Option.elim'`：elim'_update {α : Type*} {β : Type*} [DecidableEq α] (f : 
+β) (g : α -> β) (a : α) (x : β) : Option.elim' f (update g a x) = update (Option
+.e…
+· 使用定理 `Dioph.ex1_dioph`：ex1_dioph {S : Set (Option α -> Nat)} : Dioph S -> Diop
+h {v | exists x, x ::ₒ v in S} | ⟨β, p, pe⟩ => ⟨Option β, p.map (inr none ::ₒ in
+l oti…
+· 使用定理 `Dioph.reindex_dioph`：∀ {α : Type u} (β : Type u) {S : Set (α → ℕ)} (f : 
+α → β), Dioph S → Dioph {v | v ∘ f ∈ S}
+· 使用定理 `exists_congr`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a) 
+→ ((∃ a, p a) ↔ ∃ a, q a)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem vec_ex1_dioph
-  given: (n) {S : Set (Vector3 Nat (succ n))} (d : Dioph S)
-  proof: ext (ex1_dioph <| reindex_dioph _ (none :: some) d) fun v =>
-    exists_congr fun x => by
-      dsimp
-      rw [show Option.elim' x v ∘ cons none some = x :: v from
-          funext fun s => by rcases s with a | b <;> rfl]
-
-中文:
-定理 vec_ex1_dioph
-  条件: (n) {S : 集合 (Vector3 自然数 (succ n))} (d : Dioph S)
-  证明: ext (ex1_dioph <| reindex_dioph _ (none :: some) d) fun v =>
-    exists_congr fun x => by
-      dsimp
-      rw [show Option.elim' x v ∘ cons none some = x :: v from
-          funext fun s => by rcases s with a | b <;> rfl]
-
-Depends on / 依赖: Option.elim, ex1_dioph, exists_congr, reindex_dioph
+--- 原说明 ---
+Deleting the first component preserves the Diophantine property.
 -/
-theorem vec_ex1_dioph (n) {S : Set (Vector3 Nat (succ n))} (d : Dioph S) :
-    Dioph {v : Fin2 n -> Nat | exists x, (x :: v) in S} :=
+theorem vec_ex1_dioph (n) {S : Set (Vector3 ℕ (succ n))} (d : Dioph S) :
+    Dioph {v : Fin2 n → ℕ | ∃ x, (x :: v) ∈ S} :=
   ext (ex1_dioph <| reindex_dioph _ (none :: some) d) fun v =>
     exists_congr fun x => by
       dsimp
       rw [show Option.elim' x v ∘ cons none some = x :: v from
           funext fun s => by rcases s with a | b <;> rfl]
-
-/--
-theorem `diophFn_vec` / 定理 `diophFn_vec`
-
-English:
-theorem diophFn_vec
-  given: (f : Vector3 Nat n -> Nat)
-  statement: DiophFn f ↔ Dioph {v | f (v ∘ fs) = v fz}
-  proof: ⟨reindex_dioph _ (fz ::ₒ fs), reindex_dioph _ (none::some)⟩
-
-中文:
-定理 diophFn_vec
-  条件: (f : Vector3 自然数 n -> 自然数)
-  结论: DiophFn f ↔ Dioph {v | f (v ∘ fs) = v fz}
-  证明: ⟨reindex_dioph _ (fz ::ₒ fs), reindex_dioph _ (none::some)⟩
-
-Depends on / 依赖: reindex_dioph
+/-
+**Dioph.diophFn_vec** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：diophFn_vec (f : Vector3 Nat n -> Nat) : DiophFn f ↔ Dioph {v | f (v ∘ fs)
+ = v fz}
+参数：f : Vector3 Nat n -> Nat。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dioph.reindex_dioph`：∀ {α : Type u} (β : Type u) {S : Set (α → ℕ)} (f : 
+α → β), Dioph S → Dioph {v | v ∘ f ∈ S}
+· 使用引理 `Option.elim'`：elim'_update {α : Type*} {β : Type*} [DecidableEq α] (f : 
+β) (g : α -> β) (a : α) (x : β) : Option.elim' f (update g a x) = update (Option
+.e…
 -/
-theorem diophFn_vec (f : Vector3 Nat n -> Nat) : DiophFn f ↔ Dioph {v | f (v ∘ fs) = v fz} :=
+theorem diophFn_vec (f : Vector3 ℕ n → ℕ) : DiophFn f ↔ Dioph {v | f (v ∘ fs) = v fz} :=
   ⟨reindex_dioph _ (fz ::ₒ fs), reindex_dioph _ (none::some)⟩
-
-/--
-theorem `diophPFun_vec` / 定理 `diophPFun_vec`
-
-English:
-theorem diophPFun_vec
-  given: (f : Vector3 Nat n ->. Nat)
-  statement: DiophPFun f ↔ Dioph {v | (v ∘ fs, v fz) in f.graph}
-  proof: ⟨reindex_dioph _ (fz ::ₒ fs), reindex_dioph _ (none::some)⟩
-
-中文:
-定理 diophPFun_vec
-  条件: (f : Vector3 自然数 n ->. 自然数)
-  结论: DiophPFun f ↔ Dioph {v | (v ∘ fs, v fz) in f.graph}
-  证明: ⟨reindex_dioph _ (fz ::ₒ fs), reindex_dioph _ (none::some)⟩
-
-Depends on / 依赖: reindex_dioph
+/-
+**Dioph.diophPFun_vec** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：diophPFun_vec (f : Vector3 Nat n ->. Nat) : DiophPFun f ↔ Dioph {v | (v ∘ 
+fs, v fz) in f.graph}
+参数：f : Vector3 Nat n ->. Nat。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dioph.reindex_dioph`：∀ {α : Type u} (β : Type u) {S : Set (α → ℕ)} (f : 
+α → β), Dioph S → Dioph {v | v ∘ f ∈ S}
+· 使用引理 `Option.elim'`：elim'_update {α : Type*} {β : Type*} [DecidableEq α] (f : 
+β) (g : α -> β) (a : α) (x : β) : Option.elim' f (update g a x) = update (Option
+.e…
 -/
-theorem diophPFun_vec (f : Vector3 Nat n ->. Nat) : DiophPFun f ↔ Dioph {v | (v ∘ fs, v fz) in f.graph} :=
+theorem diophPFun_vec (f : Vector3 ℕ n →. ℕ) : DiophPFun f ↔ Dioph {v | (v ∘ fs, v fz) ∈ f.graph} :=
   ⟨reindex_dioph _ (fz ::ₒ fs), reindex_dioph _ (none::some)⟩
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `diophFn_compn` / 定理 `diophFn_compn`
-
-English:
-theorem diophFn_compn
-  proof: x; rfl
-  | succ n, S, d, f =>
-    f.consElim fun f fl => by
-        simp only [vectorAllP_cons, and_imp]
-        exact fun df dfl =>
-          have : Dioph {v | (v ∘ inl otimes f (v ∘ inl)::v ∘ inr) in S} :=
-            ext (diophFn_comp1 (reindex_dioph _ (some ∘ inl otimes none :: some ∘ inr) d) <|
-                reindex_diophFn inl df)
-              fun v => by
-                dsimp
-                -- TODO: `congr! 1; ext` should be equivalent to `congr! 1 with x`
-                -- but that does not work.
-                congr! 1
-                ext x; obtain _ | _ | _ := x <;> rfl
-          have : Dioph {v | (v otimes f v::fun i : Fin2 n => fl i v) in S} :=
-            @diophFn_compn n {v | (v ∘ inl otimes f (v ∘ inl) :: v ∘ inr) in S} this _ dfl
-          ext this fun v => by
-            dsimp
-            congr! 3 with x
-            obtain _ | _ | _ := x <;> rfl
-
-中文:
-定理 diophFn_compn
-  证明: x; rfl
-  | succ n, S, d, f =>
-    f.consElim fun f fl => by
-        simp only [vectorAllP_cons, and_imp]
-        exact fun df dfl =>
-          have : Dioph {v | (v ∘ inl otimes f (v ∘ inl)::v ∘ inr) in S} :=
-            ext (diophFn_comp1 (reindex_dioph _ (some ∘ inl otimes none :: some ∘ inr) d) <|
-                reindex_diophFn inl df)
-              fun v => by
-                dsimp
-                -- TODO: `congr! 1; ext` should be equivalent to `congr! 1 with x`
-                -- but that does not work.
-                congr! 1
-                ext x; obtain _ | _ | _ := x <;> rfl
-          have : Dioph {v | (v otimes f v::fun i : Fin2 n => fl i v) in S} :=
-            @diophFn_compn n {v | (v ∘ inl otimes f (v ∘ inl) :: v ∘ inr) in S} this _ dfl
-          ext this fun v => by
-            dsimp
-            congr! 3 with x
-            obtain _ | _ | _ := x <;> rfl
+/-
+**Dioph.diophFn_compn** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：diophFn_compn : forall {n} {S : Set (α oplus (Fin2 n) -> Nat)} (_ : Dioph 
+S) {f : Vector3 ((α -> Nat) -> Nat) n} (_ : VectorAllP DiophFn f), Dioph {v : α 
+-> Nat | (v otimes fun i => f i v) in S} | 0, S, d, f => fun _ => ext (reindex_d
+ioph _ (id otimes Fin2.elim0) d) fun v => by dsimp -- TODO: `congr! 1; ext` shou
+ld be equivalent to `congr! 1 with x` but that does not work. congr! 1 ext x; ob
+tain _ | _ | _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem diophFn_compn :
-    forall {n} {S : Set (α oplus (Fin2 n) -> Nat)} (_ : Dioph S) {f : Vector3 ((α -> Nat) -> Nat) n}
-      (_ : VectorAllP DiophFn f), Dioph {v : α -> Nat | (v otimes fun i => f i v) in S}
+    ∀ {n} {S : Set (α ⊕ (Fin2 n) → ℕ)} (_ : Dioph S) {f : Vector3 ((α → ℕ) → ℕ) n}
+      (_ : VectorAllP DiophFn f), Dioph {v : α → ℕ | (v ⊗ fun i => f i v) ∈ S}
   | 0, S, d, f => fun _ =>
-    ext (reindex_dioph _ (id otimes Fin2.elim0) d) fun v => by
+    ext (reindex_dioph _ (id ⊗ Fin2.elim0) d) fun v => by
       dsimp
       -- TODO: `congr! 1; ext` should be equivalent to `congr! 1 with x` but that does not work.
       congr! 1
@@ -1694,8 +1103,8 @@ theorem diophFn_compn :
     f.consElim fun f fl => by
         simp only [vectorAllP_cons, and_imp]
         exact fun df dfl =>
-          have : Dioph {v | (v ∘ inl otimes f (v ∘ inl)::v ∘ inr) in S} :=
-            ext (diophFn_comp1 (reindex_dioph _ (some ∘ inl otimes none :: some ∘ inr) d) <|
+          have : Dioph {v | (v ∘ inl ⊗ f (v ∘ inl)::v ∘ inr) ∈ S} :=
+            ext (diophFn_comp1 (reindex_dioph _ (some ∘ inl ⊗ none :: some ∘ inr) d) <|
                 reindex_diophFn inl df)
               fun v => by
                 dsimp
@@ -1703,78 +1112,58 @@ theorem diophFn_compn :
                 -- but that does not work.
                 congr! 1
                 ext x; obtain _ | _ | _ := x <;> rfl
-          have : Dioph {v | (v otimes f v::fun i : Fin2 n => fl i v) in S} :=
-            @diophFn_compn n {v | (v ∘ inl otimes f (v ∘ inl) :: v ∘ inr) in S} this _ dfl
+          have : Dioph {v | (v ⊗ f v::fun i : Fin2 n => fl i v) ∈ S} :=
+            @diophFn_compn n {v | (v ∘ inl ⊗ f (v ∘ inl) :: v ∘ inr) ∈ S} this _ dfl
           ext this fun v => by
             dsimp
             congr! 3 with x
             obtain _ | _ | _ := x <;> rfl
-
-/--
-theorem `dioph_comp` / 定理 `dioph_comp`
-
-English:
-theorem dioph_comp
-  statement: {S : Set (Vector3 Nat n)} (d : Dioph S) (f : Vector3 ((α -> Nat) -> Nat) n)
-  proof: diophFn_compn (reindex_dioph _ inr d) df
-
-中文:
-定理 dioph_comp
-  结论: {S : 集合 (Vector3 自然数 n)} (d : Dioph S) (f : Vector3 ((α -> 自然数) -> 自然数) n)
-  证明: diophFn_compn (reindex_dioph _ inr d) df
-
-Depends on / 依赖: diophFn_compn, reindex_dioph
+/-
+**Dioph.dioph_comp** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：dioph_comp {S : Set (Vector3 Nat n)} (d : Dioph S) (f : Vector3 ((α -> Nat
+) -> Nat) n) (df : VectorAllP DiophFn f) : Dioph {v | (fun i => f i v) in S}
+参数：Vector3 Nat n；d : Dioph S；f : Vector3 ((α -> Nat) -> Nat) n；df : VectorAllP D
+iophFn f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dioph.diophFn_compn`：diophFn_compn : forall {n} {S : Set (α oplus (Fin2 
+n) -> Nat)} (_ : Dioph S) {f : Vector3 ((α -> Nat) -> Nat) n} (_ : VectorAllP Di
+ophFn f),…
+· 使用定理 `Dioph.reindex_dioph`：∀ {α : Type u} (β : Type u) {S : Set (α → ℕ)} (f : 
+α → β), Dioph S → Dioph {v | v ∘ f ∈ S}
 -/
-theorem dioph_comp {S : Set (Vector3 Nat n)} (d : Dioph S) (f : Vector3 ((α -> Nat) -> Nat) n)
-    (df : VectorAllP DiophFn f) : Dioph {v | (fun i => f i v) in S} :=
+theorem dioph_comp {S : Set (Vector3 ℕ n)} (d : Dioph S) (f : Vector3 ((α → ℕ) → ℕ) n)
+    (df : VectorAllP DiophFn f) : Dioph {v | (fun i => f i v) ∈ S} :=
   diophFn_compn (reindex_dioph _ inr d) df
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `diophFn_comp` / 定理 `diophFn_comp`
-
-English:
-theorem diophFn_comp
-  statement: {f : Vector3 Nat n -> Nat} (df : DiophFn f) (g : Vector3 ((α -> Nat) -> Nat) n)
-  proof: dioph_comp ((diophFn_vec _).1 df) ((fun v => v none) :: fun i v => g i (v ∘ some)) by
-    simp only [vectorAllP_cons]
-    exact ⟨proj_dioph none, (vectorAllP_iff_forall _ _).2 fun i =>
-reindex_diophFn _ (vectorAllP_iff_forall _ _).1 dg _⟩
-
-@[inherit_doc]
-scoped notation:35 x " D∧ " y => Dioph.inter x y
-
-@[inherit_doc]
-scoped notation:35 x " D∨ " y => Dioph.union x y
-
-@[inherit_doc]
-scoped notation:30 "Dexists" => Dioph.vec_ex1_dioph
-
-中文:
-定理 diophFn_comp
-  结论: {f : Vector3 自然数 n -> 自然数} (df : DiophFn f) (g : Vector3 ((α -> 自然数) -> 自然数) n)
-  证明: dioph_comp ((diophFn_vec _).1 df) ((fun v => v none) :: fun i v => g i (v ∘ some)) by
-    simp only [vectorAllP_cons]
-    exact ⟨proj_dioph none, (vectorAllP_iff_forall _ _).2 fun i =>
-reindex_diophFn _ (vectorAllP_iff_forall _ _).1 dg _⟩
-
-@[inherit_doc]
-scoped notation:35 x " D∧ " y => Dioph.inter x y
-
-@[inherit_doc]
-scoped notation:35 x " D∨ " y => Dioph.union x y
-
-@[inherit_doc]
-scoped notation:30 "Dexists" => Dioph.vec_ex1_dioph
-
-Depends on / 依赖: diophFn_vec, dioph_comp, proj_dioph, reindex_diophFn, vectorAllP_cons, vectorAllP_iff_forall
+/-
+**Dioph.diophFn_comp** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：diophFn_comp {f : Vector3 Nat n -> Nat} (df : DiophFn f) (g : Vector3 ((α 
+-> Nat) -> Nat) n) (dg : VectorAllP DiophFn g) : DiophFn fun v => f fun i => g i
+ v
+参数：df : DiophFn f；g : Vector3 ((α -> Nat) -> Nat) n；dg : VectorAllP DiophFn g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dioph.dioph_comp`：dioph_comp {S : Set (Vector3 Nat n)} (d : Dioph S) (f 
+: Vector3 ((α -> Nat) -> Nat) n) (df : VectorAllP DiophFn f) : Dioph {v | (fun i
+ => f …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Dioph.diophFn_vec`：diophFn_vec (f : Vector3 Nat n -> Nat) : DiophFn f ↔ 
+Dioph {v | f (v ∘ fs) = v fz}
+· 使用定理 `Dioph.proj_dioph`：proj_dioph (i : α) : DiophFn fun v => v i
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `vectorAllP_iff_forall`：vectorAllP_iff_forall (p : α -> Prop) (v : Vector
+3 α n) : VectorAllP p v ↔ forall i, p (v i)
+· 使用定理 `Dioph.reindex_diophFn`：reindex_diophFn {f : (α -> Nat) -> Nat} (g : α ->
+ β) (d : DiophFn f) : DiophFn fun v => f (v ∘ g)
 -/
-theorem diophFn_comp {f : Vector3 Nat n -> Nat} (df : DiophFn f) (g : Vector3 ((α -> Nat) -> Nat) n)
+theorem diophFn_comp {f : Vector3 ℕ n → ℕ} (df : DiophFn f) (g : Vector3 ((α → ℕ) → ℕ) n)
     (dg : VectorAllP DiophFn g) : DiophFn fun v => f fun i => g i v :=
-dioph_comp ((diophFn_vec _).1 df) ((fun v => v none) :: fun i v => g i (v ∘ some)) by
+  dioph_comp ((diophFn_vec _).1 df) ((fun v ↦ v none) :: fun i v ↦ g i (v ∘ some)) <| by
     simp only [vectorAllP_cons]
     exact ⟨proj_dioph none, (vectorAllP_iff_forall _ _).2 fun i =>
-reindex_diophFn _ (vectorAllP_iff_forall _ _).1 dg _⟩
+          reindex_diophFn _ <| (vectorAllP_iff_forall _ _).1 dg _⟩
 
 @[inherit_doc]
 scoped notation:35 x " D∧ " y => Dioph.inter x y
@@ -1783,386 +1172,342 @@ scoped notation:35 x " D∧ " y => Dioph.inter x y
 scoped notation:35 x " D∨ " y => Dioph.union x y
 
 @[inherit_doc]
-scoped notation:30 "Dexists" => Dioph.vec_ex1_dioph
+scoped notation:30 "D∃" => Dioph.vec_ex1_dioph
 
 /-- Local abbreviation for `Fin2.ofNat'` -/
 scoped prefix:arg "&" => Fin2.ofNat'
 
-/--
-theorem `proj_dioph_of_nat` / 定理 `proj_dioph_of_nat`
-
-English:
-theorem proj_dioph_of_nat
-  given: {n : Nat} (m : Nat) [IsLT m n]
-  statement: DiophFn fun v : Vector3 Nat n => v &m
-  proof: proj_dioph &m
-
-中文:
-定理 proj_dioph_of_nat
-  条件: {n : 自然数} (m : 自然数) [是LT m n]
-  结论: DiophFn fun v : Vector3 自然数 n => v &m
-  证明: proj_dioph &m
-
-Depends on / 依赖: proj_dioph
+/-
+**Dioph.proj_dioph_of_nat** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：proj_dioph_of_nat {n : Nat} (m : Nat) [IsLT m n] : DiophFn fun v : Vector3
+ Nat n => v &m
+参数：m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dioph.proj_dioph`：proj_dioph (i : α) : DiophFn fun v => v i
 -/
-theorem proj_dioph_of_nat {n : Nat} (m : Nat) [IsLT m n] : DiophFn fun v : Vector3 Nat n => v &m :=
+theorem proj_dioph_of_nat {n : ℕ} (m : ℕ) [IsLT m n] : DiophFn fun v : Vector3 ℕ n => v &m :=
   proj_dioph &m
 
 /-- Projection preserves Diophantine functions. -/
 scoped prefix:100 "D&" => Dioph.proj_dioph_of_nat
 
-/--
-theorem `const_dioph` / 定理 `const_dioph`
-
-English:
-theorem const_dioph
-  given: (n : Nat)
-  statement: DiophFn (const (α -> Nat) n)
-  proof: abs_poly_dioph (Poly.const n)
-
-中文:
-定理 const_dioph
-  条件: (n : 自然数)
-  结论: DiophFn (const (α -> 自然数) n)
-  证明: abs_poly_dioph (Poly.const n)
-
-Depends on / 依赖: Poly.const, abs_poly_dioph
+/-
+**Dioph.const_dioph** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：const_dioph (n : Nat) : DiophFn (const (α -> Nat) n)
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dioph.abs_poly_dioph`：abs_poly_dioph (p : Poly α) : DiophFn fun v => (p 
+v).natAbs
 -/
-theorem const_dioph (n : Nat) : DiophFn (const (α -> Nat) n) :=
+theorem const_dioph (n : ℕ) : DiophFn (const (α → ℕ) n) :=
   abs_poly_dioph (Poly.const n)
 
 /-- The constant function is Diophantine. -/
 scoped prefix:100 "D." => Dioph.const_dioph
 
 section
-variable {f g : (α -> Nat) -> Nat} (df : DiophFn f) (dg : DiophFn g)
+variable {f g : (α → ℕ) → ℕ} (df : DiophFn f) (dg : DiophFn g)
 include df dg
 
-/--
-theorem `dioph_comp2` / 定理 `dioph_comp2`
-
-English:
-theorem dioph_comp2
-  given: {S : Nat -> Nat -> Prop} (d : Dioph {v : Vector3 Nat 2 | S (v &0) (v &1)})
-  proof: dioph_comp d [f, g] ⟨df, dg⟩
-
-中文:
-定理 dioph_comp2
-  条件: {S : 自然数 -> 自然数 -> 命题} (d : Dioph {v : Vector3 自然数 2 | S (v &0) (v &1)})
-  证明: dioph_comp d [f, g] ⟨df, dg⟩
-
-Depends on / 依赖: dioph_comp
+/-
+**Dioph.dioph_comp2** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：dioph_comp2 {S : Nat -> Nat -> Prop} (d : Dioph {v : Vector3 Nat 2 | S (v 
+&0) (v &1)}) : Dioph {v | S (f v) (g v)}
+参数：d : Dioph {v : Vector3 Nat 2 | S (v &0) (v &1)}。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fin2.IsLT.zero`：∀ (n : ℕ), Fin2.IsLT 0 n.succ
+· 使用定理 `Fin2.IsLT.succ`：∀ (m n : ℕ) [l : Fin2.IsLT m n], Fin2.IsLT m.succ n.succ
+· 使用定理 `Dioph.dioph_comp`：dioph_comp {S : Set (Vector3 Nat n)} (d : Dioph S) (f 
+: Vector3 ((α -> Nat) -> Nat) n) (df : VectorAllP DiophFn f) : Dioph {v | (fun i
+ => f …
 -/
-theorem dioph_comp2 {S : Nat -> Nat -> Prop} (d : Dioph {v : Vector3 Nat 2 | S (v &0) (v &1)}) :
+theorem dioph_comp2 {S : ℕ → ℕ → Prop} (d : Dioph {v : Vector3 ℕ 2 | S (v &0) (v &1)}) :
     Dioph {v | S (f v) (g v)} := dioph_comp d [f, g] ⟨df, dg⟩
-
-/--
-theorem `diophFn_comp2` / 定理 `diophFn_comp2`
-
-English:
-theorem diophFn_comp2
-  given: {h : Nat -> Nat -> Nat} (d : DiophFn fun v : Vector3 Nat 2 => h (v &0) (v &1))
-  proof: diophFn_comp d [f, g] ⟨df, dg⟩
-
-中文:
-定理 diophFn_comp2
-  条件: {h : 自然数 -> 自然数 -> 自然数} (d : DiophFn fun v : Vector3 自然数 2 => h (v &0) (v &1))
-  证明: diophFn_comp d [f, g] ⟨df, dg⟩
-
-Depends on / 依赖: diophFn_comp
+/-
+**Dioph.diophFn_comp2** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：diophFn_comp2 {h : Nat -> Nat -> Nat} (d : DiophFn fun v : Vector3 Nat 2 =
+> h (v &0) (v &1)) : DiophFn fun v => h (f v) (g v)
+参数：d : DiophFn fun v : Vector3 Nat 2 => h (v &0) (v &1)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fin2.IsLT.zero`：∀ (n : ℕ), Fin2.IsLT 0 n.succ
+· 使用定理 `Fin2.IsLT.succ`：∀ (m n : ℕ) [l : Fin2.IsLT m n], Fin2.IsLT m.succ n.succ
+· 使用定理 `Dioph.diophFn_comp`：diophFn_comp {f : Vector3 Nat n -> Nat} (df : DiophF
+n f) (g : Vector3 ((α -> Nat) -> Nat) n) (dg : VectorAllP DiophFn g) : DiophFn f
+un v => …
 -/
-theorem diophFn_comp2 {h : Nat -> Nat -> Nat} (d : DiophFn fun v : Vector3 Nat 2 => h (v &0) (v &1)) :
+theorem diophFn_comp2 {h : ℕ → ℕ → ℕ} (d : DiophFn fun v : Vector3 ℕ 2 => h (v &0) (v &1)) :
     DiophFn fun v => h (f v) (g v) := diophFn_comp d [f, g] ⟨df, dg⟩
 
-/--
-theorem `eq_dioph` / 定理 `eq_dioph`
+/-- The set of places where two Diophantine functions are equal is Diophantine. -/
+/-
+**Dioph.eq_dioph** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：eq_dioph : Dioph {v | f v = g v}
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dioph.dioph_comp2`：dioph_comp2 {S : Nat -> Nat -> Prop} (d : Dioph {v : 
+Vector3 Nat 2 | S (v &0) (v &1)}) : Dioph {v | S (f v) (g v)}
+· 使用定理 `Dioph.of_no_dummies`：of_no_dummies (S : Set (α -> Nat)) (p : Poly α) (h 
+: forall v, v in S ↔ p v = 0) : Dioph S
+· 使用定理 `Fin2.IsLT.zero`：∀ (n : ℕ), Fin2.IsLT 0 n.succ
+· 使用定理 `Fin2.IsLT.succ`：∀ (m n : ℕ) [l : Fin2.IsLT m n], Fin2.IsLT m.succ n.succ
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Int.ofNat_inj`：∀ {m n : ℕ}, ↑m = ↑n ↔ m = n
+· 使用定理 `sub_eq_zero_of_eq`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a = b
+ → a - b = 0
+· 使用定理 `eq_of_sub_eq_zero`：∀ {α : Type u_1} [inst : SubtractionMonoid α] {a b : 
+α}, a - b = 0 → a = b
 
-English:
-theorem eq_dioph
-  statement: Dioph {v | f v = g v}
-  proof: dioph_comp2 df dg
-    of_no_dummies _ (Poly.proj &0 - Poly.proj &1) fun v => by
-      exact Int.ofNat_inj.symm.trans ⟨@sub_eq_zero_of_eq Int _ (v &0) (v &1), eq_of_sub_eq_zero⟩
-
-@[inherit_doc]
-scoped infixl:50 " D= " => Dioph.eq_dioph
-
-中文:
-定理 eq_dioph
-  结论: Dioph {v | f v = g v}
-  证明: dioph_comp2 df dg
-    of_no_dummies _ (Poly.proj &0 - Poly.proj &1) fun v => by
-      exact Int.ofNat_inj.symm.trans ⟨@sub_eq_zero_of_eq Int _ (v &0) (v &1), eq_of_sub_eq_zero⟩
-
-@[inherit_doc]
-scoped infixl:50 " D= " => Dioph.eq_dioph
-
-Depends on / 依赖: Int.ofNat_inj.symm.trans, Poly.proj, dioph_comp2, eq_of_sub_eq_zero, ofNat_inj, of_no_dummies, sub_eq_zero_of_eq
+--- 原说明 ---
+The set of places where two Diophantine functions are equal is Diophantine.
 -/
 theorem eq_dioph : Dioph {v | f v = g v} :=
-dioph_comp2 df dg
+  dioph_comp2 df dg <|
     of_no_dummies _ (Poly.proj &0 - Poly.proj &1) fun v => by
-      exact Int.ofNat_inj.symm.trans ⟨@sub_eq_zero_of_eq Int _ (v &0) (v &1), eq_of_sub_eq_zero⟩
+      exact Int.ofNat_inj.symm.trans ⟨@sub_eq_zero_of_eq ℤ _ (v &0) (v &1), eq_of_sub_eq_zero⟩
 
 @[inherit_doc]
 scoped infixl:50 " D= " => Dioph.eq_dioph
 
-/--
-theorem `add_dioph` / 定理 `add_dioph`
+/-- Diophantine functions are closed under addition. -/
+/-
+**Dioph.add_dioph** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：add_dioph : DiophFn fun v => f v + g v
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dioph.diophFn_comp2`：diophFn_comp2 {h : Nat -> Nat -> Nat} (d : DiophFn 
+fun v : Vector3 Nat 2 => h (v &0) (v &1)) : DiophFn fun v => h (f v) (g v)
+· 使用定理 `Dioph.abs_poly_dioph`：abs_poly_dioph (p : Poly α) : DiophFn fun v => (p 
+v).natAbs
+· 使用定理 `Fin2.IsLT.zero`：∀ (n : ℕ), Fin2.IsLT 0 n.succ
+· 使用定理 `Fin2.IsLT.succ`：∀ (m n : ℕ) [l : Fin2.IsLT m n], Fin2.IsLT m.succ n.succ
 
-English:
-theorem add_dioph
-  statement: DiophFn fun v => f v + g v
-  proof: diophFn_comp2 df dg abs_poly_dioph (@Poly.proj (Fin2 2) &0 + @Poly.proj (Fin2 2) &1)
-
-@[inherit_doc]
-scoped infixl:80 " D+ " => Dioph.add_dioph
-
-中文:
-定理 add_dioph
-  结论: DiophFn fun v => f v + g v
-  证明: diophFn_comp2 df dg abs_poly_dioph (@Poly.proj (Fin2 2) &0 + @Poly.proj (Fin2 2) &1)
-
-@[inherit_doc]
-scoped infixl:80 " D+ " => Dioph.add_dioph
-
-Depends on / 依赖: Poly.proj, abs_poly_dioph, diophFn_comp2
+--- 原说明 ---
+Diophantine functions are closed under addition.
 -/
 theorem add_dioph : DiophFn fun v => f v + g v :=
-diophFn_comp2 df dg abs_poly_dioph (@Poly.proj (Fin2 2) &0 + @Poly.proj (Fin2 2) &1)
+  diophFn_comp2 df dg <| abs_poly_dioph (@Poly.proj (Fin2 2) &0 + @Poly.proj (Fin2 2) &1)
 
 @[inherit_doc]
 scoped infixl:80 " D+ " => Dioph.add_dioph
 
-/--
-theorem `mul_dioph` / 定理 `mul_dioph`
+/-- Diophantine functions are closed under multiplication. -/
+/-
+**Dioph.mul_dioph** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：mul_dioph : DiophFn fun v => f v * g v
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dioph.diophFn_comp2`：diophFn_comp2 {h : Nat -> Nat -> Nat} (d : DiophFn 
+fun v : Vector3 Nat 2 => h (v &0) (v &1)) : DiophFn fun v => h (f v) (g v)
+· 使用定理 `Dioph.abs_poly_dioph`：abs_poly_dioph (p : Poly α) : DiophFn fun v => (p 
+v).natAbs
+· 使用定理 `Fin2.IsLT.zero`：∀ (n : ℕ), Fin2.IsLT 0 n.succ
+· 使用定理 `Fin2.IsLT.succ`：∀ (m n : ℕ) [l : Fin2.IsLT m n], Fin2.IsLT m.succ n.succ
 
-English:
-theorem mul_dioph
-  statement: DiophFn fun v => f v * g v
-  proof: diophFn_comp2 df dg abs_poly_dioph (@Poly.proj (Fin2 2) &0 * @Poly.proj (Fin2 2) &1)
-
-@[inherit_doc]
-scoped infixl:90 " D* " => Dioph.mul_dioph
-
-中文:
-定理 mul_dioph
-  结论: DiophFn fun v => f v * g v
-  证明: diophFn_comp2 df dg abs_poly_dioph (@Poly.proj (Fin2 2) &0 * @Poly.proj (Fin2 2) &1)
-
-@[inherit_doc]
-scoped infixl:90 " D* " => Dioph.mul_dioph
-
-Depends on / 依赖: Poly.proj, abs_poly_dioph, diophFn_comp2
+--- 原说明 ---
+Diophantine functions are closed under multiplication.
 -/
 theorem mul_dioph : DiophFn fun v => f v * g v :=
-diophFn_comp2 df dg abs_poly_dioph (@Poly.proj (Fin2 2) &0 * @Poly.proj (Fin2 2) &1)
+  diophFn_comp2 df dg <| abs_poly_dioph (@Poly.proj (Fin2 2) &0 * @Poly.proj (Fin2 2) &1)
 
 @[inherit_doc]
 scoped infixl:90 " D* " => Dioph.mul_dioph
 
-/--
-theorem `le_dioph` / 定理 `le_dioph`
+/-- The set of places where one Diophantine function is at most another is Diophantine. -/
+/-
+**Dioph.le_dioph** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：le_dioph : Dioph {v | f v <= g v}
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dioph.dioph_comp2`：dioph_comp2 {S : Nat -> Nat -> Prop} (d : Dioph {v : 
+Vector3 Nat 2 | S (v &0) (v &1)}) : Dioph {v | S (f v) (g v)}
+· 使用定理 `Dioph.ext`：ext (d : Dioph S) (H : forall v, v in S ↔ v in S') : Dioph S'
+· 使用定理 `Fin2.IsLT.succ`：∀ (m n : ℕ) [l : Fin2.IsLT m n], Fin2.IsLT m.succ n.succ
+· 使用定理 `Fin2.IsLT.zero`：∀ (n : ℕ), Fin2.IsLT 0 n.succ
+· 使用定理 `Dioph.vec_ex1_dioph`：vec_ex1_dioph (n) {S : Set (Vector3 Nat (succ n))} 
+(d : Dioph S) : Dioph {v : Fin2 n -> Nat | exists x, (x :: v) in S}
+· 使用定理 `Dioph.eq_dioph`：eq_dioph : Dioph {v | f v = g v}
+· 使用定理 `Dioph.add_dioph`：add_dioph : DiophFn fun v => f v + g v
+· 使用定理 `Dioph.proj_dioph_of_nat`：proj_dioph_of_nat {n : Nat} (m : Nat) [IsLT m n
+] : DiophFn fun v : Vector3 Nat n => v &m
+· 使用定理 `Nat.le.intro`：∀ {n m k : ℕ}, n + k = m → n ≤ m
+· 使用定理 `Nat.le.dest`：∀ {n m : ℕ}, n ≤ m → ∃ k, n + k = m
 
-English:
-theorem le_dioph
-  statement: Dioph {v | f v <= g v}
-  proof: dioph_comp2 df dg
-    ext ((Dexists) 2 <| D&1 D+ D&0 D= D&2) fun _ => ⟨fun ⟨_, hx⟩ => le.intro hx, le.dest⟩
-
-@[inherit_doc]
-scoped infixl:50 " D<= " => Dioph.le_dioph
-
-中文:
-定理 le_dioph
-  结论: Dioph {v | f v <= g v}
-  证明: dioph_comp2 df dg
-    ext ((Dexists) 2 <| D&1 D+ D&0 D= D&2) fun _ => ⟨fun ⟨_, hx⟩ => le.intro hx, le.dest⟩
-
-@[inherit_doc]
-scoped infixl:50 " D<= " => Dioph.le_dioph
-
-Depends on / 依赖: Dexists, dioph_comp2, le.dest, le.intro
+--- 原说明 ---
+The set of places where one Diophantine function is at most another is Diophanti
+ne.
 -/
-theorem le_dioph : Dioph {v | f v <= g v} :=
-dioph_comp2 df dg
-    ext ((Dexists) 2 <| D&1 D+ D&0 D= D&2) fun _ => ⟨fun ⟨_, hx⟩ => le.intro hx, le.dest⟩
+theorem le_dioph : Dioph {v | f v ≤ g v} :=
+  dioph_comp2 df dg <|
+    ext ((D∃) 2 <| D&1 D+ D&0 D= D&2) fun _ => ⟨fun ⟨_, hx⟩ => le.intro hx, le.dest⟩
 
 @[inherit_doc]
-scoped infixl:50 " D<= " => Dioph.le_dioph
+scoped infixl:50 " D≤ " => Dioph.le_dioph
 
-/--
-theorem `lt_dioph` / 定理 `lt_dioph`
+/-- The set of places where one Diophantine function is less than another is Diophantine. -/
+/-
+**Dioph.lt_dioph** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：lt_dioph : Dioph {v | f v < g v}
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dioph.le_dioph`：le_dioph : Dioph {v | f v <= g v}
+· 使用定理 `Dioph.add_dioph`：add_dioph : DiophFn fun v => f v + g v
+· 使用定理 `Dioph.const_dioph`：const_dioph (n : Nat) : DiophFn (const (α -> Nat) n)
 
-English:
-theorem lt_dioph
-  statement: Dioph {v | f v < g v}
-  proof: df D+ D.1 D<= dg
+--- 原说明 ---
+The set of places where one Diophantine function is less than another is Diophan
+tine.
+-/
+theorem lt_dioph : Dioph {v | f v < g v} := df D+ D.1 D≤ dg
 
 @[inherit_doc]
 scoped infixl:50 " D< " => Dioph.lt_dioph
 
-中文:
-定理 lt_dioph
-  结论: Dioph {v | f v < g v}
-  证明: df D+ D.1 D<= dg
+/-- The set of places where two Diophantine functions are unequal is Diophantine. -/
+/-
+**Dioph.ne_dioph** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：ne_dioph : Dioph {v | f v != g v}
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dioph.ext`：ext (d : Dioph S) (H : forall v, v in S ↔ v in S') : Dioph S'
+· 使用定理 `Dioph.union`：∀ {α : Type u} {S S' : Set (α → ℕ)}, Dioph S → Dioph S' → D
+ioph (S ∪ S')
+· 使用定理 `Dioph.lt_dioph`：lt_dioph : Dioph {v | f v < g v}
+· 使用定理 `lt_or_lt_iff_ne`：lt_or_lt_iff_ne : a < b ∨ b < a ↔ a != b
 
-@[inherit_doc]
-scoped infixl:50 " D< " => Dioph.lt_dioph
+--- 原说明 ---
+The set of places where two Diophantine functions are unequal is Diophantine.
 -/
-theorem lt_dioph : Dioph {v | f v < g v} := df D+ D.1 D<= dg
+theorem ne_dioph : Dioph {v | f v ≠ g v} :=
+  ext (df D< dg D∨ dg D< df) fun v => by dsimp; exact lt_or_lt_iff_ne (α := ℕ)
 
 @[inherit_doc]
-scoped infixl:50 " D< " => Dioph.lt_dioph
+scoped infixl:50 " D≠ " => Dioph.ne_dioph
 
-/--
-theorem `ne_dioph` / 定理 `ne_dioph`
+/-- Diophantine functions are closed under subtraction. -/
+/-
+**Dioph.sub_dioph** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：sub_dioph : DiophFn fun v => f v - g v
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dioph.diophFn_comp2`：diophFn_comp2 {h : Nat -> Nat -> Nat} (d : DiophFn 
+fun v : Vector3 Nat 2 => h (v &0) (v &1)) : DiophFn fun v => h (f v) (g v)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Fin2.IsLT.zero`：∀ (n : ℕ), Fin2.IsLT 0 n.succ
+· 使用定理 `Fin2.IsLT.succ`：∀ (m n : ℕ) [l : Fin2.IsLT m n], Fin2.IsLT m.succ n.succ
+· 使用定理 `Dioph.diophFn_vec`：diophFn_vec (f : Vector3 Nat n -> Nat) : DiophFn f ↔ 
+Dioph {v | f (v ∘ fs) = v fz}
+· 使用定理 `Dioph.ext`：ext (d : Dioph S) (H : forall v, v in S ↔ v in S') : Dioph S'
+· 使用定理 `Dioph.union`：∀ {α : Type u} {S S' : Set (α → ℕ)}, Dioph S → Dioph S' → D
+ioph (S ∪ S')
+· 使用定理 `Dioph.eq_dioph`：eq_dioph : Dioph {v | f v = g v}
+· 使用定理 `Dioph.proj_dioph_of_nat`：proj_dioph_of_nat {n : Nat} (m : Nat) [IsLT m n
+] : DiophFn fun v : Vector3 Nat n => v &m
+· 使用定理 `Dioph.add_dioph`：add_dioph : DiophFn fun v => f v + g v
+· 使用定理 `Dioph.inter`：inter (d : Dioph S) (d' : Dioph S') : Dioph (S inter S')
+· 使用定理 `Dioph.le_dioph`：le_dioph : Dioph {v | f v <= g v}
+· 使用定理 `Dioph.const_dioph`：const_dioph (n : Nat) : DiophFn (const (α -> Nat) n)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `vectorAll_iff_forall`：∀ {α : Type u_1} {n : ℕ} (f : Vector3 α n → Prop),
+ VectorAll n f ↔ ∀ (v : Vector3 α n), f v
 
-English:
-theorem ne_dioph
-  statement: Dioph {v | f v != g v}
-  proof: ext (df D< dg D∨ dg D< df) fun v => by dsimp; exact lt_or_lt_iff_ne (α := Nat)
-
-@[inherit_doc]
-scoped infixl:50 " D!= " => Dioph.ne_dioph
-
-中文:
-定理 ne_dioph
-  结论: Dioph {v | f v != g v}
-  证明: ext (df D< dg D∨ dg D< df) fun v => by dsimp; exact lt_or_lt_iff_ne (α := Nat)
-
-@[inherit_doc]
-scoped infixl:50 " D!= " => Dioph.ne_dioph
-
-Depends on / 依赖: lt_or_lt_iff_ne
+--- 原说明 ---
+Diophantine functions are closed under subtraction.
 -/
-theorem ne_dioph : Dioph {v | f v != g v} :=
-  ext (df D< dg D∨ dg D< df) fun v => by dsimp; exact lt_or_lt_iff_ne (α := Nat)
-
-@[inherit_doc]
-scoped infixl:50 " D!= " => Dioph.ne_dioph
-
-/--
-theorem `sub_dioph` / 定理 `sub_dioph`
-
-English:
-theorem sub_dioph
-  statement: DiophFn fun v => f v - g v
-  proof: diophFn_comp2 df dg
-(diophFn_vec _).2
-ext (D&1 D= D&0 D+ D&2 D∨ D&1 D<= D&2 D∧ D&0 D= D.0)
-        (vectorAll_iff_forall _).1 fun x y z =>
-          show y = x + z ∨ y <= z ∧ x = 0 ↔ y - z = x by grind
+theorem sub_dioph : DiophFn fun v ↦ f v - g v :=
+  diophFn_comp2 df dg <|
+    (diophFn_vec _).2 <|
+      ext (D&1 D= D&0 D+ D&2 D∨ D&1 D≤ D&2 D∧ D&0 D= D.0) <|
+        (vectorAll_iff_forall _).1 fun x y z ↦
+          show y = x + z ∨ y ≤ z ∧ x = 0 ↔ y - z = x by grind
 
 @[inherit_doc]
 scoped infixl:80 " D- " => Dioph.sub_dioph
 
-中文:
-定理 sub_dioph
-  结论: DiophFn fun v => f v - g v
-  证明: diophFn_comp2 df dg
-(diophFn_vec _).2
-ext (D&1 D= D&0 D+ D&2 D∨ D&1 D<= D&2 D∧ D&0 D= D.0)
-        (vectorAll_iff_forall _).1 fun x y z =>
-          show y = x + z ∨ y <= z ∧ x = 0 ↔ y - z = x by grind
+/-- The set of places where one Diophantine function divides another is Diophantine. -/
+/-
+**Dioph.dvd_dioph** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：dvd_dioph : Dioph {v | f v ∣ g v}
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dioph.dioph_comp`：dioph_comp {S : Set (Vector3 Nat n)} (d : Dioph S) (f 
+: Vector3 ((α -> Nat) -> Nat) n) (df : VectorAllP DiophFn f) : Dioph {v | (fun i
+ => f …
+· 使用定理 `Fin2.IsLT.succ`：∀ (m n : ℕ) [l : Fin2.IsLT m n], Fin2.IsLT m.succ n.succ
+· 使用定理 `Fin2.IsLT.zero`：∀ (n : ℕ), Fin2.IsLT 0 n.succ
+· 使用定理 `Dioph.vec_ex1_dioph`：vec_ex1_dioph (n) {S : Set (Vector3 Nat (succ n))} 
+(d : Dioph S) : Dioph {v : Fin2 n -> Nat | exists x, (x :: v) in S}
+· 使用定理 `Dioph.eq_dioph`：eq_dioph : Dioph {v | f v = g v}
+· 使用定理 `Dioph.proj_dioph_of_nat`：proj_dioph_of_nat {n : Nat} (m : Nat) [IsLT m n
+] : DiophFn fun v : Vector3 Nat n => v &m
+· 使用定理 `Dioph.mul_dioph`：mul_dioph : DiophFn fun v => f v * g v
 
-@[inherit_doc]
-scoped infixl:80 " D- " => Dioph.sub_dioph
-
-Depends on / 依赖: diophFn_comp2, diophFn_vec, vectorAll_iff_forall
--/
-theorem sub_dioph : DiophFn fun v => f v - g v :=
-diophFn_comp2 df dg
-(diophFn_vec _).2
-ext (D&1 D= D&0 D+ D&2 D∨ D&1 D<= D&2 D∧ D&0 D= D.0)
-        (vectorAll_iff_forall _).1 fun x y z =>
-          show y = x + z ∨ y <= z ∧ x = 0 ↔ y - z = x by grind
-
-@[inherit_doc]
-scoped infixl:80 " D- " => Dioph.sub_dioph
-
-/--
-theorem `dvd_dioph` / 定理 `dvd_dioph`
-
-English:
-theorem dvd_dioph
-  statement: Dioph {v | f v ∣ g v}
-  proof: dioph_comp ((Dexists) 2 <| D&2 D= D&1 D* D&0) [f, g] ⟨df, dg⟩
-
-@[inherit_doc]
-scoped infixl:50 " D∣ " => Dioph.dvd_dioph
-
-中文:
-定理 dvd_dioph
-  结论: Dioph {v | f v ∣ g v}
-  证明: dioph_comp ((Dexists) 2 <| D&2 D= D&1 D* D&0) [f, g] ⟨df, dg⟩
-
-@[inherit_doc]
-scoped infixl:50 " D∣ " => Dioph.dvd_dioph
-
-Depends on / 依赖: Dexists, dioph_comp
+--- 原说明 ---
+The set of places where one Diophantine function divides another is Diophantine.
 -/
 theorem dvd_dioph : Dioph {v | f v ∣ g v} :=
-  dioph_comp ((Dexists) 2 <| D&2 D= D&1 D* D&0) [f, g] ⟨df, dg⟩
+  dioph_comp ((D∃) 2 <| D&2 D= D&1 D* D&0) [f, g] ⟨df, dg⟩
 
 @[inherit_doc]
 scoped infixl:50 " D∣ " => Dioph.dvd_dioph
 
-/--
-theorem `mod_dioph` / 定理 `mod_dioph`
+/-- Diophantine functions are closed under the modulo operation. -/
+/-
+**Dioph.mod_dioph** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：mod_dioph : DiophFn fun v => f v % g v
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fin2.IsLT.succ`：∀ (m n : ℕ) [l : Fin2.IsLT m n], Fin2.IsLT m.succ n.succ
+· 使用定理 `Fin2.IsLT.zero`：∀ (n : ℕ), Fin2.IsLT 0 n.succ
+· 使用定理 `Dioph.inter`：inter (d : Dioph S) (d' : Dioph S') : Dioph (S inter S')
+· 使用定理 `Dioph.union`：∀ {α : Type u} {S S' : Set (α → ℕ)}, Dioph S → Dioph S' → D
+ioph (S ∪ S')
+· 使用定理 `Dioph.eq_dioph`：eq_dioph : Dioph {v | f v = g v}
+· 使用定理 `Dioph.proj_dioph_of_nat`：proj_dioph_of_nat {n : Nat} (m : Nat) [IsLT m n
+] : DiophFn fun v : Vector3 Nat n => v &m
+· 使用定理 `Dioph.const_dioph`：const_dioph (n : Nat) : DiophFn (const (α -> Nat) n)
+· 使用定理 `Dioph.lt_dioph`：lt_dioph : Dioph {v | f v < g v}
+· 使用定理 `Dioph.vec_ex1_dioph`：vec_ex1_dioph (n) {S : Set (Vector3 Nat (succ n))} 
+(d : Dioph S) : Dioph {v : Fin2 n -> Nat | exists x, (x :: v) in S}
+· 使用定理 `Dioph.add_dioph`：add_dioph : DiophFn fun v => f v + g v
+· 使用定理 `Dioph.mul_dioph`：mul_dioph : DiophFn fun v => f v * g v
+· 使用定理 `Dioph.diophFn_comp2`：diophFn_comp2 {h : Nat -> Nat -> Nat} (d : DiophFn 
+fun v : Vector3 Nat 2 => h (v &0) (v &1)) : DiophFn fun v => h (f v) (g v)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Dioph.diophFn_vec`：diophFn_vec (f : Vector3 Nat n -> Nat) : DiophFn f ↔ 
+Dioph {v | f (v ∘ fs) = v fz}
+· 使用定理 `Dioph.ext`：ext (d : Dioph S) (H : forall v, v in S ↔ v in S') : Dioph S'
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `vectorAll_iff_forall`：∀ {α : Type u_1} {n : ℕ} (f : Vector3 α n → Prop),
+ VectorAll n f ↔ ∀ (v : Vector3 α n), f v
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.add_mul_mod_self_left`：∀ (x y z : ℕ), (x + y * z) % y = x % y
+· 使用定理 `Nat.mod_zero`：∀ (a : ℕ), a % 0 = a
+· 使用定理 `Nat.mod_eq_of_lt`：∀ {a b : ℕ}, a < b → a % b = a
+· 使用定理 `Classical.or_iff_not_imp_left`：∀ {a b : Prop}, a ∨ b ↔ ¬a → b
+· 使用定理 `Nat.mod_lt`：∀ (x : ℕ) {y : ℕ}, 0 < y → x % y < y
+· 使用定理 `Nat.pos_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → 0 < n
+· 使用定理 `Nat.mod_add_div`：∀ (m k : ℕ), m % k + k * (m / k) = m
 
-English:
-theorem mod_dioph
-  statement: DiophFn fun v => f v % g v
-  proof: have : Dioph {v : Vector3 Nat 3 | (v &2 = 0 ∨ v &0 < v &2) ∧ exists x : Nat, v &0 + v &2 * x = v &1} :=
-(D&2 D= D.0 D∨ D&0 D< D&2) D∧ (Dexists) 3 D&1 D+ D&3 D* D&0 D= D&2
-diophFn_comp2 df dg
-(diophFn_vec _).2
-ext this
-        (vectorAll_iff_forall _).1 fun z x y =>
-          show ((y = 0 ∨ z < y) ∧ exists c, z + y * c = x) ↔ x % y = z from
-            ⟨fun ⟨h, c, hc⟩ => by
-              rw [← hc]; simp only [add_mul_mod_self_left]; rcases h with x0 | hl
-              · rw [x0, mod_zero]
-              exact mod_eq_of_lt hl, fun e => by
-                rw [← e]
-                exact ⟨or_iff_not_imp_left.2 fun h => mod_lt _ (Nat.pos_of_ne_zero h), x / y,
-                  mod_add_div _ _⟩⟩
-
-@[inherit_doc]
-scoped infixl:80 " D% " => Dioph.mod_dioph
-
-中文:
-定理 mod_dioph
-  结论: DiophFn fun v => f v % g v
-  证明: have : Dioph {v : Vector3 Nat 3 | (v &2 = 0 ∨ v &0 < v &2) ∧ exists x : Nat, v &0 + v &2 * x = v &1} :=
-(D&2 D= D.0 D∨ D&0 D< D&2) D∧ (Dexists) 3 D&1 D+ D&3 D* D&0 D= D&2
-diophFn_comp2 df dg
-(diophFn_vec _).2
-ext this
-        (vectorAll_iff_forall _).1 fun z x y =>
-          show ((y = 0 ∨ z < y) ∧ exists c, z + y * c = x) ↔ x % y = z from
-            ⟨fun ⟨h, c, hc⟩ => by
-              rw [← hc]; simp only [add_mul_mod_self_left]; rcases h with x0 | hl
-              · rw [x0, mod_zero]
-              exact mod_eq_of_lt hl, fun e => by
-                rw [← e]
-                exact ⟨or_iff_not_imp_left.2 fun h => mod_lt _ (Nat.pos_of_ne_zero h), x / y,
-                  mod_add_div _ _⟩⟩
-
-@[inherit_doc]
-scoped infixl:80 " D% " => Dioph.mod_dioph
-
-Depends on / 依赖: Dexists, Vector3, add_mul_mod_self_left, diophFn_comp2, diophFn_vec, mod_eq_of_lt, mod_zero, or_iff_not_imp_, vectorAll_iff_forall
+--- 原说明 ---
+Diophantine functions are closed under the modulo operation.
 -/
 theorem mod_dioph : DiophFn fun v => f v % g v :=
-  have : Dioph {v : Vector3 Nat 3 | (v &2 = 0 ∨ v &0 < v &2) ∧ exists x : Nat, v &0 + v &2 * x = v &1} :=
-(D&2 D= D.0 D∨ D&0 D< D&2) D∧ (Dexists) 3 D&1 D+ D&3 D* D&0 D= D&2
-diophFn_comp2 df dg
-(diophFn_vec _).2
-ext this
+  have : Dioph {v : Vector3 ℕ 3 | (v &2 = 0 ∨ v &0 < v &2) ∧ ∃ x : ℕ, v &0 + v &2 * x = v &1} :=
+    (D&2 D= D.0 D∨ D&0 D< D&2) D∧ (D∃) 3 <| D&1 D+ D&3 D* D&0 D= D&2
+  diophFn_comp2 df dg <|
+    (diophFn_vec _).2 <|
+      ext this <|
         (vectorAll_iff_forall _).1 fun z x y =>
-          show ((y = 0 ∨ z < y) ∧ exists c, z + y * c = x) ↔ x % y = z from
+          show ((y = 0 ∨ z < y) ∧ ∃ c, z + y * c = x) ↔ x % y = z from
             ⟨fun ⟨h, c, hc⟩ => by
               rw [← hc]; simp only [add_mul_mod_self_left]; rcases h with x0 | hl
               · rw [x0, mod_zero]
@@ -2174,79 +1519,88 @@ ext this
 @[inherit_doc]
 scoped infixl:80 " D% " => Dioph.mod_dioph
 
-/--
-theorem `modEq_dioph` / 定理 `modEq_dioph`
+/-- The set of places where two Diophantine functions are congruent modulo a third
+is Diophantine. -/
+/-
+**Dioph.modEq_dioph** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：modEq_dioph {h : (α -> Nat) -> Nat} (dh : DiophFn h) : Dioph {v | f v ≡ g 
+v [MOD h v]}
+参数：α -> Nat；dh : DiophFn h。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dioph.eq_dioph`：eq_dioph : Dioph {v | f v = g v}
+· 使用定理 `Dioph.mod_dioph`：mod_dioph : DiophFn fun v => f v % g v
 
-English:
-theorem modEq_dioph
-  given: {h : (α -> Nat) -> Nat} (dh : DiophFn h)
-  statement: Dioph {v | f v ≡ g v [MOD h v]}
-  proof: df D% dh D= dg D% dh
-
-@[inherit_doc]
-scoped notation "D≡ " => Dioph.modEq_dioph
-
-中文:
-定理 modEq_dioph
-  条件: {h : (α -> 自然数) -> 自然数} (dh : DiophFn h)
-  结论: Dioph {v | f v ≡ g v [MOD h v]}
-  证明: df D% dh D= dg D% dh
-
-@[inherit_doc]
-scoped notation "D≡ " => Dioph.modEq_dioph
+--- 原说明 ---
+The set of places where two Diophantine functions are congruent modulo a third
+is Diophantine.
 -/
-theorem modEq_dioph {h : (α -> Nat) -> Nat} (dh : DiophFn h) : Dioph {v | f v ≡ g v [MOD h v]} :=
+theorem modEq_dioph {h : (α → ℕ) → ℕ} (dh : DiophFn h) : Dioph {v | f v ≡ g v [MOD h v]} :=
   df D% dh D= dg D% dh
 
 @[inherit_doc]
 scoped notation "D≡ " => Dioph.modEq_dioph
 
-/--
-theorem `div_dioph` / 定理 `div_dioph`
+/-- Diophantine functions are closed under integer division. -/
+/-
+**Dioph.div_dioph** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：div_dioph : DiophFn fun v => f v / g v
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fin2.IsLT.succ`：∀ (m n : ℕ) [l : Fin2.IsLT m n], Fin2.IsLT m.succ n.succ
+· 使用定理 `Fin2.IsLT.zero`：∀ (n : ℕ), Fin2.IsLT 0 n.succ
+· 使用定理 `Dioph.union`：∀ {α : Type u} {S S' : Set (α → ℕ)}, Dioph S → Dioph S' → D
+ioph (S ∪ S')
+· 使用定理 `Dioph.inter`：inter (d : Dioph S) (d' : Dioph S') : Dioph (S inter S')
+· 使用定理 `Dioph.eq_dioph`：eq_dioph : Dioph {v | f v = g v}
+· 使用定理 `Dioph.proj_dioph_of_nat`：proj_dioph_of_nat {n : Nat} (m : Nat) [IsLT m n
+] : DiophFn fun v : Vector3 Nat n => v &m
+· 使用定理 `Dioph.const_dioph`：const_dioph (n : Nat) : DiophFn (const (α -> Nat) n)
+· 使用定理 `Dioph.le_dioph`：le_dioph : Dioph {v | f v <= g v}
+· 使用定理 `Dioph.mul_dioph`：mul_dioph : DiophFn fun v => f v * g v
+· 使用定理 `Dioph.lt_dioph`：lt_dioph : Dioph {v | f v < g v}
+· 使用定理 `Dioph.add_dioph`：add_dioph : DiophFn fun v => f v + g v
+· 使用定理 `Dioph.diophFn_comp2`：diophFn_comp2 {h : Nat -> Nat -> Nat} (d : DiophFn 
+fun v : Vector3 Nat 2 => h (v &0) (v &1)) : DiophFn fun v => h (f v) (g v)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Dioph.diophFn_vec`：diophFn_vec (f : Vector3 Nat n -> Nat) : DiophFn f ↔ 
+Dioph {v | f (v ∘ fs) = v fz}
+· 使用定理 `Dioph.ext`：ext (d : Dioph S) (H : forall v, v in S ↔ v in S') : Dioph S'
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `vectorAll_iff_forall`：∀ {α : Type u_1} {n : ℕ} (f : Vector3 α n → Prop),
+ VectorAll n f ↔ ∀ (v : Vector3 α n), f v
+· 使用定理 `Nat.eq_zero_or_pos`：∀ (n : ℕ), n = 0 ∨ n > 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `Nat.div_zero`：∀ (n : ℕ), n / 0 = 0
+（共 34 条，此处仅展示前 30 条）
 
-English:
-theorem div_dioph
-  statement: DiophFn fun v => f v / g v
-  proof: have :
-    Dioph {v : Vector3 Nat 3 | v &2 = 0 ∧ v &0 = 0 ∨ v &0 * v &2 <= v &1 ∧ v &1 < (v &0 + 1) * v &2} :=
-    (D&2 D= D.0 D∧ D&0 D= D.0) D∨ D&0 D* D&2 D<= D&1 D∧ D&1 D< (D&0 D+ D.1) D* D&2
-diophFn_comp2 df dg
-(diophFn_vec _).2
-ext this
-        (vectorAll_iff_forall _).1 fun z x y =>
-          show y = 0 ∧ z = 0 ∨ z * y <= x ∧ x < (z + 1) * y ↔ x / y = z by
-            rcases y.eq_zero_or_pos with rfl | hy
-            · simp [eq_comm]
-            · rw [Nat.div_eq_iff hy, Nat.succ_mul]
-              grind
-
-中文:
-定理 div_dioph
-  结论: DiophFn fun v => f v / g v
-  证明: have :
-    Dioph {v : Vector3 Nat 3 | v &2 = 0 ∧ v &0 = 0 ∨ v &0 * v &2 <= v &1 ∧ v &1 < (v &0 + 1) * v &2} :=
-    (D&2 D= D.0 D∧ D&0 D= D.0) D∨ D&0 D* D&2 D<= D&1 D∧ D&1 D< (D&0 D+ D.1) D* D&2
-diophFn_comp2 df dg
-(diophFn_vec _).2
-ext this
-        (vectorAll_iff_forall _).1 fun z x y =>
-          show y = 0 ∧ z = 0 ∨ z * y <= x ∧ x < (z + 1) * y ↔ x / y = z by
-            rcases y.eq_zero_or_pos with rfl | hy
-            · simp [eq_comm]
-            · rw [Nat.div_eq_iff hy, Nat.succ_mul]
-              grind
-
-Depends on / 依赖: Nat.div_eq_iff, Nat.succ_mul, Vector3, diophFn_comp2, diophFn_vec, div_eq_iff, eq_comm, eq_zero_or_pos, succ_mul, vectorAll_iff_forall, y.eq_zero_or_pos
+--- 原说明 ---
+Diophantine functions are closed under integer division.
 -/
 theorem div_dioph : DiophFn fun v => f v / g v :=
   have :
-    Dioph {v : Vector3 Nat 3 | v &2 = 0 ∧ v &0 = 0 ∨ v &0 * v &2 <= v &1 ∧ v &1 < (v &0 + 1) * v &2} :=
-    (D&2 D= D.0 D∧ D&0 D= D.0) D∨ D&0 D* D&2 D<= D&1 D∧ D&1 D< (D&0 D+ D.1) D* D&2
-diophFn_comp2 df dg
-(diophFn_vec _).2
-ext this
+    Dioph {v : Vector3 ℕ 3 | v &2 = 0 ∧ v &0 = 0 ∨ v &0 * v &2 ≤ v &1 ∧ v &1 < (v &0 + 1) * v &2} :=
+    (D&2 D= D.0 D∧ D&0 D= D.0) D∨ D&0 D* D&2 D≤ D&1 D∧ D&1 D< (D&0 D+ D.1) D* D&2
+  diophFn_comp2 df dg <|
+    (diophFn_vec _).2 <|
+      ext this <|
         (vectorAll_iff_forall _).1 fun z x y =>
-          show y = 0 ∧ z = 0 ∨ z * y <= x ∧ x < (z + 1) * y ↔ x / y = z by
+          show y = 0 ∧ z = 0 ∨ z * y ≤ x ∧ x < (z + 1) * y ↔ x / y = z by
             rcases y.eq_zero_or_pos with rfl | hy
             · simp [eq_comm]
             · rw [Nat.div_eq_iff hy, Nat.succ_mul]
@@ -2259,69 +1613,42 @@ scoped infixl:80 " D/ " => Dioph.div_dioph
 
 open Pell
 
-/--
-theorem `pell_dioph` / 定理 `pell_dioph`
-
-English:
-theorem pell_dioph
-  proof: by
-  have : Dioph {v : Vector3 Nat 4 |
-    1 < v &0 ∧ v &1 <= v &3 ∧
-    (v &2 = 1 ∧ v &3 = 0 ∨
-    exists u w s t b : Nat,
-      v &2 * v &2 - (v &0 * v &0 - 1) * v &3 * v &3 = 1 ∧
-      u * u - (v &0 * v &0 - 1) * w * w = 1 ∧
-      s * s - (b * b - 1) * t * t = 1 ∧
-      1 < b ∧ b ≡ 1 [MOD 4 * v &3] ∧ b ≡ v &0 [MOD u] ∧
-      0 < w ∧ v &3 * v &3 ∣ w ∧
-      s ≡ v &2 [MOD u] ∧
-      t ≡ v &1 [MOD 4 * v &3])} :=
-  (D.1 D< D&0 D∧ D&1 D<= D&3 D∧
-    ((D&2 D= D.1 D∧ D&3 D= D.0) D∨
-    ((Dexists) 4 <| (Dexists) 5 <| (Dexists) 6 <| (Dexists) 7 <| (Dexists) 8 <|
-    D&7 D* D&7 D- (D&5 D* D&5 D- D.1) D* D&8 D* D&8 D= D.1 D∧
-    D&4 D* D&4 D- (D&5 D* D&5 D- D.1) D* D&3 D* D&3 D= D.1 D∧
-    D&2 D* D&2 D- (D&0 D* D&0 D- D.1) D* D&1 D* D&1 D= D.1 D∧
-    D.1 D< D&0 D∧ (D≡ (D&0) (D.1) (D.4 D* D&8)) D∧ (D≡ (D&0) (D&5) (D&4)) D∧
-    D.0 D< D&3 D∧ D&8 D* D&8 D∣ D&3 D∧
-    (D≡ (D&2) (D&7) (D&4)) D∧
-    (D≡ (D&1) (D&6) (D.4 D* (D&8))))) :)
-  exact Dioph.ext this fun v => matiyasevic.symm
-
-中文:
-定理 pell_dioph
-  证明: by
-  have : Dioph {v : Vector3 Nat 4 |
-    1 < v &0 ∧ v &1 <= v &3 ∧
-    (v &2 = 1 ∧ v &3 = 0 ∨
-    exists u w s t b : Nat,
-      v &2 * v &2 - (v &0 * v &0 - 1) * v &3 * v &3 = 1 ∧
-      u * u - (v &0 * v &0 - 1) * w * w = 1 ∧
-      s * s - (b * b - 1) * t * t = 1 ∧
-      1 < b ∧ b ≡ 1 [MOD 4 * v &3] ∧ b ≡ v &0 [MOD u] ∧
-      0 < w ∧ v &3 * v &3 ∣ w ∧
-      s ≡ v &2 [MOD u] ∧
-      t ≡ v &1 [MOD 4 * v &3])} :=
-  (D.1 D< D&0 D∧ D&1 D<= D&3 D∧
-    ((D&2 D= D.1 D∧ D&3 D= D.0) D∨
-    ((Dexists) 4 <| (Dexists) 5 <| (Dexists) 6 <| (Dexists) 7 <| (Dexists) 8 <|
-    D&7 D* D&7 D- (D&5 D* D&5 D- D.1) D* D&8 D* D&8 D= D.1 D∧
-    D&4 D* D&4 D- (D&5 D* D&5 D- D.1) D* D&3 D* D&3 D= D.1 D∧
-    D&2 D* D&2 D- (D&0 D* D&0 D- D.1) D* D&1 D* D&1 D= D.1 D∧
-    D.1 D< D&0 D∧ (D≡ (D&0) (D.1) (D.4 D* D&8)) D∧ (D≡ (D&0) (D&5) (D&4)) D∧
-    D.0 D< D&3 D∧ D&8 D* D&8 D∣ D&3 D∧
-    (D≡ (D&2) (D&7) (D&4)) D∧
-    (D≡ (D&1) (D&6) (D.4 D* (D&8))))) :)
-  exact Dioph.ext this fun v => matiyasevic.symm
-
-Depends on / 依赖: Dexists, Vector3
+/-
+**Dioph.pell_dioph** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：pell_dioph : Dioph {v : Vector3 Nat 4 | exists h : 1 < v &0, xn h (v &1) =
+ v &2 ∧ yn h (v &1) = v &3}
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fin2.IsLT.zero`：∀ (n : ℕ), Fin2.IsLT 0 n.succ
+· 使用定理 `Fin2.IsLT.succ`：∀ (m n : ℕ) [l : Fin2.IsLT m n], Fin2.IsLT m.succ n.succ
+· 使用定理 `Dioph.inter`：inter (d : Dioph S) (d' : Dioph S') : Dioph (S inter S')
+· 使用定理 `Dioph.lt_dioph`：lt_dioph : Dioph {v | f v < g v}
+· 使用定理 `Dioph.const_dioph`：const_dioph (n : Nat) : DiophFn (const (α -> Nat) n)
+· 使用定理 `Dioph.proj_dioph_of_nat`：proj_dioph_of_nat {n : Nat} (m : Nat) [IsLT m n
+] : DiophFn fun v : Vector3 Nat n => v &m
+· 使用定理 `Dioph.le_dioph`：le_dioph : Dioph {v | f v <= g v}
+· 使用定理 `Dioph.union`：∀ {α : Type u} {S S' : Set (α → ℕ)}, Dioph S → Dioph S' → D
+ioph (S ∪ S')
+· 使用定理 `Dioph.eq_dioph`：eq_dioph : Dioph {v | f v = g v}
+· 使用定理 `Dioph.vec_ex1_dioph`：vec_ex1_dioph (n) {S : Set (Vector3 Nat (succ n))} 
+(d : Dioph S) : Dioph {v : Fin2 n -> Nat | exists x, (x :: v) in S}
+· 使用定理 `Dioph.sub_dioph`：sub_dioph : DiophFn fun v => f v - g v
+· 使用定理 `Dioph.mul_dioph`：mul_dioph : DiophFn fun v => f v * g v
+· 使用定理 `Dioph.modEq_dioph`：modEq_dioph {h : (α -> Nat) -> Nat} (dh : DiophFn h) 
+: Dioph {v | f v ≡ g v [MOD h v]}
+· 使用定理 `Dioph.dvd_dioph`：dvd_dioph : Dioph {v | f v ∣ g v}
+· 使用定理 `Dioph.ext`：ext (d : Dioph S) (H : forall v, v in S ↔ v in S') : Dioph S'
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Pell.matiyasevic`：matiyasevic {a k x y} : (exists a1 : 1 < a, xn a1 k = 
+x ∧ yn a1 k = y) ↔ 1 < a ∧ k <= y ∧ (x = 1 ∧ y = 0 ∨ exists u v s t b : Nat, x *
+ x - (…
 -/
 theorem pell_dioph :
-    Dioph {v : Vector3 Nat 4 | exists h : 1 < v &0, xn h (v &1) = v &2 ∧ yn h (v &1) = v &3} := by
-  have : Dioph {v : Vector3 Nat 4 |
-    1 < v &0 ∧ v &1 <= v &3 ∧
+    Dioph {v : Vector3 ℕ 4 | ∃ h : 1 < v &0, xn h (v &1) = v &2 ∧ yn h (v &1) = v &3} := by
+  have : Dioph {v : Vector3 ℕ 4 |
+    1 < v &0 ∧ v &1 ≤ v &3 ∧
     (v &2 = 1 ∧ v &3 = 0 ∨
-    exists u w s t b : Nat,
+    ∃ u w s t b : ℕ,
       v &2 * v &2 - (v &0 * v &0 - 1) * v &3 * v &3 = 1 ∧
       u * u - (v &0 * v &0 - 1) * w * w = 1 ∧
       s * s - (b * b - 1) * t * t = 1 ∧
@@ -2329,9 +1656,9 @@ theorem pell_dioph :
       0 < w ∧ v &3 * v &3 ∣ w ∧
       s ≡ v &2 [MOD u] ∧
       t ≡ v &1 [MOD 4 * v &3])} :=
-  (D.1 D< D&0 D∧ D&1 D<= D&3 D∧
+  (D.1 D< D&0 D∧ D&1 D≤ D&3 D∧
     ((D&2 D= D.1 D∧ D&3 D= D.0) D∨
-    ((Dexists) 4 <| (Dexists) 5 <| (Dexists) 6 <| (Dexists) 7 <| (Dexists) 8 <|
+    ((D∃) 4 <| (D∃) 5 <| (D∃) 6 <| (D∃) 7 <| (D∃) 8 <|
     D&7 D* D&7 D- (D&5 D* D&5 D- D.1) D* D&8 D* D&8 D= D.1 D∧
     D&4 D* D&4 D- (D&5 D* D&5 D- D.1) D* D&3 D* D&3 D= D.1 D∧
     D&2 D* D&2 D- (D&0 D* D&0 D- D.1) D* D&1 D* D&1 D= D.1 D∧
@@ -2340,121 +1667,106 @@ theorem pell_dioph :
     (D≡ (D&2) (D&7) (D&4)) D∧
     (D≡ (D&1) (D&6) (D.4 D* (D&8))))) :)
   exact Dioph.ext this fun v => matiyasevic.symm
-
-/--
-theorem `xn_dioph` / 定理 `xn_dioph`
-
-English:
-theorem xn_dioph
-  statement: DiophPFun fun v : Vector3 Nat 2 => ⟨1 < v &0, fun h => xn h (v &1)⟩
-  proof: have : Dioph {v : Vector3 Nat 3 | exists y, exists h : 1 < v &1, xn h (v &2) = v &0 ∧ yn h (v &2) = y} :=
-    let D_pell := pell_dioph.reindex_dioph (Fin2 4) [&2, &3, &1, &0]
-    (Dexists) 3 D_pell
-(diophPFun_vec _).2
-    Dioph.ext this fun _ => ⟨fun ⟨_, h, xe, _⟩ => ⟨h, xe⟩, fun ⟨h, xe⟩ => ⟨_, h, xe, rfl⟩⟩
-
-中文:
-定理 xn_dioph
-  结论: DiophPFun fun v : Vector3 自然数 2 => ⟨1 < v &0, fun h => xn h (v &1)⟩
-  证明: have : Dioph {v : Vector3 Nat 3 | exists y, exists h : 1 < v &1, xn h (v &2) = v &0 ∧ yn h (v &2) = y} :=
-    let D_pell := pell_dioph.reindex_dioph (Fin2 4) [&2, &3, &1, &0]
-    (Dexists) 3 D_pell
-(diophPFun_vec _).2
-    Dioph.ext this fun _ => ⟨fun ⟨_, h, xe, _⟩ => ⟨h, xe⟩, fun ⟨h, xe⟩ => ⟨_, h, xe, rfl⟩⟩
-
-Depends on / 依赖: D_pell, Dexists, Dioph.ext, Vector3, diophPFun_vec, pell_dioph, pell_dioph.reindex_dioph, reindex_dioph
+/-
+**Dioph.xn_dioph** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：xn_dioph : DiophPFun fun v : Vector3 Nat 2 => ⟨1 < v &0, fun h => xn h (v 
+&1)⟩
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fin2.IsLT.succ`：∀ (m n : ℕ) [l : Fin2.IsLT m n], Fin2.IsLT m.succ n.succ
+· 使用定理 `Fin2.IsLT.zero`：∀ (n : ℕ), Fin2.IsLT 0 n.succ
+· 使用定理 `Dioph.reindex_dioph`：∀ {α : Type u} (β : Type u) {S : Set (α → ℕ)} (f : 
+α → β), Dioph S → Dioph {v | v ∘ f ∈ S}
+· 使用定理 `Dioph.pell_dioph`：pell_dioph : Dioph {v : Vector3 Nat 4 | exists h : 1 <
+ v &0, xn h (v &1) = v &2 ∧ yn h (v &1) = v &3}
+· 使用定理 `Dioph.vec_ex1_dioph`：vec_ex1_dioph (n) {S : Set (Vector3 Nat (succ n))} 
+(d : Dioph S) : Dioph {v : Fin2 n -> Nat | exists x, (x :: v) in S}
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Dioph.diophPFun_vec`：diophPFun_vec (f : Vector3 Nat n ->. Nat) : DiophPF
+un f ↔ Dioph {v | (v ∘ fs, v fz) in f.graph}
+· 使用定理 `Dioph.ext`：ext (d : Dioph S) (H : forall v, v in S ↔ v in S') : Dioph S'
 -/
-theorem xn_dioph : DiophPFun fun v : Vector3 Nat 2 => ⟨1 < v &0, fun h => xn h (v &1)⟩ :=
-  have : Dioph {v : Vector3 Nat 3 | exists y, exists h : 1 < v &1, xn h (v &2) = v &0 ∧ yn h (v &2) = y} :=
+theorem xn_dioph : DiophPFun fun v : Vector3 ℕ 2 => ⟨1 < v &0, fun h => xn h (v &1)⟩ :=
+  have : Dioph {v : Vector3 ℕ 3 | ∃ y, ∃ h : 1 < v &1, xn h (v &2) = v &0 ∧ yn h (v &2) = y} :=
     let D_pell := pell_dioph.reindex_dioph (Fin2 4) [&2, &3, &1, &0]
-    (Dexists) 3 D_pell
-(diophPFun_vec _).2
+    (D∃) 3 D_pell
+  (diophPFun_vec _).2 <|
     Dioph.ext this fun _ => ⟨fun ⟨_, h, xe, _⟩ => ⟨h, xe⟩, fun ⟨h, xe⟩ => ⟨_, h, xe, rfl⟩⟩
 
-/--
-theorem `pow_dioph` / 定理 `pow_dioph`
+/-- A version of **Matiyasevic's theorem** -/
+/-
+**Dioph.pow_dioph** 是 Mathlib 中的一个定理，位于命名空间 `Dioph`。
+形式化陈述：pow_dioph {f g : (α -> Nat) -> Nat} (df : DiophFn f) (dg : DiophFn g) : Di
+ophFn fun v => f v ^ g v
+参数：α -> Nat；df : DiophFn f；dg : DiophFn g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fin2.IsLT.succ`：∀ (m n : ℕ) [l : Fin2.IsLT m n], Fin2.IsLT m.succ n.succ
+· 使用定理 `Fin2.IsLT.zero`：∀ (n : ℕ), Fin2.IsLT 0 n.succ
+· 使用定理 `Dioph.union`：∀ {α : Type u} {S S' : Set (α → ℕ)}, Dioph S → Dioph S' → D
+ioph (S ∪ S')
+· 使用定理 `Dioph.inter`：inter (d : Dioph S) (d' : Dioph S') : Dioph (S inter S')
+· 使用定理 `Dioph.eq_dioph`：eq_dioph : Dioph {v | f v = g v}
+· 使用定理 `Dioph.proj_dioph_of_nat`：proj_dioph_of_nat {n : Nat} (m : Nat) [IsLT m n
+] : DiophFn fun v : Vector3 Nat n => v &m
+· 使用定理 `Dioph.const_dioph`：const_dioph (n : Nat) : DiophFn (const (α -> Nat) n)
+· 使用定理 `Dioph.lt_dioph`：lt_dioph : Dioph {v | f v < g v}
+· 使用定理 `Dioph.vec_ex1_dioph`：vec_ex1_dioph (n) {S : Set (Vector3 Nat (succ n))} 
+(d : Dioph S) : Dioph {v : Fin2 n -> Nat | exists x, (x :: v) in S}
+· 使用定理 `Dioph.reindex_dioph`：∀ {α : Type u} (β : Type u) {S : Set (α → ℕ)} (f : 
+α → β), Dioph S → Dioph {v | v ∘ f ∈ S}
+· 使用定理 `Dioph.pell_dioph`：pell_dioph : Dioph {v : Vector3 Nat 4 | exists h : 1 <
+ v &0, xn h (v &1) = v &2 ∧ yn h (v &1) = v &3}
+· 使用定理 `Dioph.modEq_dioph`：modEq_dioph {h : (α -> Nat) -> Nat} (dh : DiophFn h) 
+: Dioph {v | f v ≡ g v [MOD h v]}
+· 使用定理 `Dioph.add_dioph`：add_dioph : DiophFn fun v => f v + g v
+· 使用定理 `Dioph.mul_dioph`：mul_dioph : DiophFn fun v => f v * g v
+· 使用定理 `Dioph.sub_dioph`：sub_dioph : DiophFn fun v => f v - g v
+· 使用定理 `Dioph.le_dioph`：le_dioph : Dioph {v | f v <= g v}
+· 使用定理 `Dioph.diophFn_comp2`：diophFn_comp2 {h : Nat -> Nat -> Nat} (d : DiophFn 
+fun v : Vector3 Nat 2 => h (v &0) (v &1)) : DiophFn fun v => h (f v) (g v)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Dioph.diophFn_vec`：diophFn_vec (f : Vector3 Nat n -> Nat) : DiophFn f ↔ 
+Dioph {v | f (v ∘ fs) = v fz}
+· 使用定理 `Dioph.ext`：ext (d : Dioph S) (H : forall v, v in S ↔ v in S') : Dioph S'
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Pell.eq_pow_of_pell`：eq_pow_of_pell {m n k} : n ^ k = m ↔ k = 0 ∧ m = 1 
+∨ 0 < k ∧ (n = 0 ∧ m = 0 ∨ 0 < n ∧ exists (w a t z : Nat) (a1 : 1 < a), xn a1 k 
+≡ yn a1 k…
+· 使用定理 `or_congr`：∀ {a c b d : Prop}, (a ↔ c) → (b ↔ d) → (a ∨ b ↔ c ∨ d)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `and_congr`：∀ {a c b d : Prop}, (a ↔ c) → (b ↔ d) → (a ∧ b ↔ c ∧ d)
 
-English:
-theorem pow_dioph
-  given: {f g : (α -> Nat) -> Nat} (df : DiophFn f) (dg : DiophFn g)
-  proof: by
-  have : Dioph {v : Vector3 Nat 3 |
-    v &2 = 0 ∧ v &0 = 1 ∨ 0 < v &2 ∧
-    (v &1 = 0 ∧ v &0 = 0 ∨ 0 < v &1 ∧
-    exists w a t z x y : Nat,
-      (exists a1 : 1 < a, xn a1 (v &2) = x ∧ yn a1 (v &2) = y) ∧
-      x ≡ y * (a - v &1) + v &0 [MOD t] ∧
-      2 * a * v &1 = t + (v &1 * v &1 + 1) ∧
-      v &0 < t ∧ v &1 <= w ∧ v &2 <= w ∧
-      a * a - ((w + 1) * (w + 1) - 1) * (w * z) * (w * z) = 1)} :=
-  (D&2 D= D.0 D∧ D&0 D= D.1) D∨ (D.0 D< D&2 D∧
-    ((D&1 D= D.0 D∧ D&0 D= D.0) D∨ (D.0 D< D&1 D∧
-    ((Dexists) 3 <| (Dexists) 4 <| (Dexists) 5 <| (Dexists) 6 <| (Dexists) 7 <| (Dexists) 8 <|
-    pell_dioph.reindex_dioph (Fin2 9) [&4, &8, &1, &0] D∧
-    (D≡ (D&1) (D&0 D* (D&4 D- D&7) D+ D&6) (D&3)) D∧
-    D.2 D* D&4 D* D&7 D= D&3 D+ (D&7 D* D&7 D+ D.1) D∧
-    D&6 D< D&3 D∧ D&7 D<= D&5 D∧ D&8 D<= D&5 D∧
-    D&4 D* D&4 D- ((D&5 D+ D.1) D* (D&5 D+ D.1) D- D.1) D* (D&5 D* D&2) D* (D&5 D* D&2) D= D.1))) :)
-exact diophFn_comp2 df dg (diophFn_vec _).2 Dioph.ext this fun v => Iff.symm
-eq_pow_of_pell.trans or_congr Iff.rfl and_congr Iff.rfl or_congr Iff.rfl
-and_congr Iff.rfl
-        ⟨fun ⟨w, a, t, z, a1, h⟩ => ⟨w, a, t, z, _, _, ⟨a1, rfl, rfl⟩, h⟩,
-        fun ⟨w, a, t, z, _, _, ⟨a1, rfl, rfl⟩, h⟩ => ⟨w, a, t, z, a1, h⟩⟩
-
-中文:
-定理 pow_dioph
-  条件: {f g : (α -> 自然数) -> 自然数} (df : DiophFn f) (dg : DiophFn g)
-  证明: by
-  have : Dioph {v : Vector3 Nat 3 |
-    v &2 = 0 ∧ v &0 = 1 ∨ 0 < v &2 ∧
-    (v &1 = 0 ∧ v &0 = 0 ∨ 0 < v &1 ∧
-    exists w a t z x y : Nat,
-      (exists a1 : 1 < a, xn a1 (v &2) = x ∧ yn a1 (v &2) = y) ∧
-      x ≡ y * (a - v &1) + v &0 [MOD t] ∧
-      2 * a * v &1 = t + (v &1 * v &1 + 1) ∧
-      v &0 < t ∧ v &1 <= w ∧ v &2 <= w ∧
-      a * a - ((w + 1) * (w + 1) - 1) * (w * z) * (w * z) = 1)} :=
-  (D&2 D= D.0 D∧ D&0 D= D.1) D∨ (D.0 D< D&2 D∧
-    ((D&1 D= D.0 D∧ D&0 D= D.0) D∨ (D.0 D< D&1 D∧
-    ((Dexists) 3 <| (Dexists) 4 <| (Dexists) 5 <| (Dexists) 6 <| (Dexists) 7 <| (Dexists) 8 <|
-    pell_dioph.reindex_dioph (Fin2 9) [&4, &8, &1, &0] D∧
-    (D≡ (D&1) (D&0 D* (D&4 D- D&7) D+ D&6) (D&3)) D∧
-    D.2 D* D&4 D* D&7 D= D&3 D+ (D&7 D* D&7 D+ D.1) D∧
-    D&6 D< D&3 D∧ D&7 D<= D&5 D∧ D&8 D<= D&5 D∧
-    D&4 D* D&4 D- ((D&5 D+ D.1) D* (D&5 D+ D.1) D- D.1) D* (D&5 D* D&2) D* (D&5 D* D&2) D= D.1))) :)
-exact diophFn_comp2 df dg (diophFn_vec _).2 Dioph.ext this fun v => Iff.symm
-eq_pow_of_pell.trans or_congr Iff.rfl and_congr Iff.rfl or_congr Iff.rfl
-and_congr Iff.rfl
-        ⟨fun ⟨w, a, t, z, a1, h⟩ => ⟨w, a, t, z, _, _, ⟨a1, rfl, rfl⟩, h⟩,
-        fun ⟨w, a, t, z, _, _, ⟨a1, rfl, rfl⟩, h⟩ => ⟨w, a, t, z, a1, h⟩⟩
-
-Depends on / 依赖: Dexists, Vector3
+--- 原说明 ---
+A version of **Matiyasevic's theorem**
 -/
-theorem pow_dioph {f g : (α -> Nat) -> Nat} (df : DiophFn f) (dg : DiophFn g) :
+theorem pow_dioph {f g : (α → ℕ) → ℕ} (df : DiophFn f) (dg : DiophFn g) :
     DiophFn fun v => f v ^ g v := by
-  have : Dioph {v : Vector3 Nat 3 |
+  have : Dioph {v : Vector3 ℕ 3 |
     v &2 = 0 ∧ v &0 = 1 ∨ 0 < v &2 ∧
     (v &1 = 0 ∧ v &0 = 0 ∨ 0 < v &1 ∧
-    exists w a t z x y : Nat,
-      (exists a1 : 1 < a, xn a1 (v &2) = x ∧ yn a1 (v &2) = y) ∧
+    ∃ w a t z x y : ℕ,
+      (∃ a1 : 1 < a, xn a1 (v &2) = x ∧ yn a1 (v &2) = y) ∧
       x ≡ y * (a - v &1) + v &0 [MOD t] ∧
       2 * a * v &1 = t + (v &1 * v &1 + 1) ∧
-      v &0 < t ∧ v &1 <= w ∧ v &2 <= w ∧
+      v &0 < t ∧ v &1 ≤ w ∧ v &2 ≤ w ∧
       a * a - ((w + 1) * (w + 1) - 1) * (w * z) * (w * z) = 1)} :=
   (D&2 D= D.0 D∧ D&0 D= D.1) D∨ (D.0 D< D&2 D∧
     ((D&1 D= D.0 D∧ D&0 D= D.0) D∨ (D.0 D< D&1 D∧
-    ((Dexists) 3 <| (Dexists) 4 <| (Dexists) 5 <| (Dexists) 6 <| (Dexists) 7 <| (Dexists) 8 <|
+    ((D∃) 3 <| (D∃) 4 <| (D∃) 5 <| (D∃) 6 <| (D∃) 7 <| (D∃) 8 <|
     pell_dioph.reindex_dioph (Fin2 9) [&4, &8, &1, &0] D∧
     (D≡ (D&1) (D&0 D* (D&4 D- D&7) D+ D&6) (D&3)) D∧
     D.2 D* D&4 D* D&7 D= D&3 D+ (D&7 D* D&7 D+ D.1) D∧
-    D&6 D< D&3 D∧ D&7 D<= D&5 D∧ D&8 D<= D&5 D∧
+    D&6 D< D&3 D∧ D&7 D≤ D&5 D∧ D&8 D≤ D&5 D∧
     D&4 D* D&4 D- ((D&5 D+ D.1) D* (D&5 D+ D.1) D- D.1) D* (D&5 D* D&2) D* (D&5 D* D&2) D= D.1))) :)
-exact diophFn_comp2 df dg (diophFn_vec _).2 Dioph.ext this fun v => Iff.symm
-eq_pow_of_pell.trans or_congr Iff.rfl and_congr Iff.rfl or_congr Iff.rfl
-and_congr Iff.rfl
+  exact diophFn_comp2 df dg <| (diophFn_vec _).2 <| Dioph.ext this fun v => Iff.symm <|
+    eq_pow_of_pell.trans <| or_congr Iff.rfl <| and_congr Iff.rfl <| or_congr Iff.rfl <|
+       and_congr Iff.rfl <|
         ⟨fun ⟨w, a, t, z, a1, h⟩ => ⟨w, a, t, z, _, _, ⟨a1, rfl, rfl⟩, h⟩,
         fun ⟨w, a, t, z, _, _, ⟨a1, rfl, rfl⟩, h⟩ => ⟨w, a, t, z, a1, h⟩⟩
 
 end
 
 end Dioph
+

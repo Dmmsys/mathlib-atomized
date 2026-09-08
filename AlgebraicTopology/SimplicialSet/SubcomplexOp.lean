@@ -21,41 +21,29 @@ namespace SSet.Subcomplex
 
 variable {X : SSet.{u}} (A : X.Subcomplex)
 
-/--
-Definition of `op` / `op` 的定义
+/-- The opposite of subcomplex, as a subcomplex of the opposite simplicial set. -/
+/-
+**SSet.Subcomplex.op** 是 Mathlib 中的一个定义，位于命名空间 `SSet.Subcomplex`。
+形式化陈述：{X : _root_.SSet} → X.Subcomplex → X.op.Subcomplex
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition op
-  signature: : X.op.Subcomplex where
-  body: A.obj
-  map _ := A.map _
-
-中文:
-定义 op
-  签名: : X.op.子复形 where
-  定义体: A.obj
-  map _ := A.map _
+--- 原说明 ---
+The opposite of subcomplex, as a subcomplex of the opposite simplicial set.
 -/
 protected def op : X.op.Subcomplex where
   obj := A.obj
   map _ := A.map _
-
-/--
-lemma `mem_op_obj_iff` / 引理 `mem_op_obj_iff`
-
-English:
-lemma mem_op_obj_iff
-  given: {d : SimplexCategoryᵒᵖ} (x : X.op.obj d)
-  proof: Iff.rfl
-
-中文:
-引理 mem_op_obj_iff
-  条件: {d : SimplexCategoryᵒᵖ} (x : X.op.obj d)
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**SSet.Subcomplex.mem_op_obj_iff** 是 Mathlib 中的一个引理，位于命名空间 `SSet.Subcomplex`。
+形式化陈述：mem_op_obj_iff {d : SimplexCategoryᵒᵖ} (x : X.op.obj d) : x in A.op.obj d 
+↔ X.opObjEquiv x in A.obj d
+参数：x : X.op.obj d。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma mem_op_obj_iff {d : SimplexCategoryᵒᵖ} (x : X.op.obj d) :
-    x in A.op.obj d ↔ X.opObjEquiv x in A.obj d := Iff.rfl
+    x ∈ A.op.obj d ↔ X.opObjEquiv x ∈ A.obj d := Iff.rfl
 
 end SSet.Subcomplex
+

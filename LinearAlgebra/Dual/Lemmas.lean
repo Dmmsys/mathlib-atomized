@@ -90,41 +90,29 @@ variable (M' : Type*) [AddCommMonoid M'] [Module R M']
 
 /-- Taking duals distributes over products. -/
 @[simps!]
-/--
-Definition of `dualProdDualEquivDual` / `dualProdDualEquivDual` 的定义
+/-
+**Module.dualProdDualEquivDual** 是 Mathlib 中的一个定义，位于命名空间 `Module`。
+形式化陈述：dualProdDualEquivDual : (Module.Dual R M × Module.Dual R M') ≃ₗ[R] Module.
+Dual R (M × M')
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dualProdDualEquivDual
-  signature: : (Module.Dual R M × Module.Dual R M') ≃ₗ[R] Module.Dual R (M × M')
-  body: LinearMap.coprodEquiv R
-
-@[simp]
-
-中文:
-定义 dualProdDualEquivDual
-  签名: : (模.对偶 R M × 模.对偶 R M') ≃ₗ[R] 模.对偶 R (M × M')
-  定义体: LinearMap.coprodEquiv R
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.coprodEquiv, coprodEquiv
+--- 原说明 ---
+Taking duals distributes over products.
 -/
 def dualProdDualEquivDual : (Module.Dual R M × Module.Dual R M') ≃ₗ[R] Module.Dual R (M × M') :=
   LinearMap.coprodEquiv R
 
 @[simp]
-/--
-theorem `dualProdDualEquivDual_apply` / 定理 `dualProdDualEquivDual_apply`
-
-English:
-theorem dualProdDualEquivDual_apply
-  given: (φ : Module.Dual R M) (ψ : Module.Dual R M')
-  proof: rfl
-
-中文:
-定理 dualProdDualEquivDual_apply
-  条件: (φ : 模.对偶 R M) (ψ : 模.对偶 R M')
-  证明: rfl
+/-
+**Module.dualProdDualEquivDual_apply** 是 Mathlib 中的一个定理，位于命名空间 `Module`。
+形式化陈述：dualProdDualEquivDual_apply (φ : Module.Dual R M) (ψ : Module.Dual R M') :
+ dualProdDualEquivDual R M M' (φ, ψ) = φ.coprod ψ
+参数：φ : Module.Dual R M；ψ : Module.Dual R M'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 theorem dualProdDualEquivDual_apply (φ : Module.Dual R M) (ψ : Module.Dual R M') :
     dualProdDualEquivDual R M M' (φ, ψ) = φ.coprod ψ :=
@@ -150,58 +138,75 @@ section Finite
 variable [Finite ι]
 
 -- Not sure whether this is true for free modules over a commutative ring
-/--
-theorem `Basis.linearEquiv_dual_iff_finiteDimensional` / 定理 `Basis.linearEquiv_dual_iff_finiteDimensional`
+/-- A vector space over a field is isomorphic to its dual if and only if it is finite-dimensional:
+  a consequence of the Erdős-Kaplansky theorem. -/
+/-
+**Basis.linearEquiv_dual_iff_finiteDimensional** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Basis.linearEquiv_dual_iff_finiteDimensional [Field K] [AddCommGroup V] [M
+odule K V] : Nonempty (V ≃ₗ[K] Dual K V) ↔ FiniteDimensional K V
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FiniteDimensional.eq_1`：∀ (K : Type u_1) (V : Type u_2) [inst : Division
+Ring K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V],   FiniteDimensio
+nal K V = Mo…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Module.rank_lt_aleph0_iff`：rank_lt_aleph0_iff : Module.rank R M < ℵ₀ ↔ M
+odule.Finite R M
+· 使用定理 `Module.Free.of_divisionRing`：∀ (K : Type u_3) (V : Type u_4) [inst : Div
+isionRing K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V],   Module.Fr
+ee K V
+· 使用定理 `commRing_strongRankCondition`：∀ (R : Type u_1) [inst : CommRing R] [Nont
+rivial R], StrongRankCondition R
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `lift_rank_lt_rank_dual`：lift_rank_lt_rank_dual {K : Type u} {V : Type v}
+ [Field K] [AddCommGroup V] [Module K V] (h : ℵ₀ <= Module.rank K V) : Cardinal.
+lift.{u} (Mo…
+· 使用定理 `LinearEquiv.lift_rank_eq`：LinearEquiv.lift_rank_eq (f : M ≃ₗ[R] M') : Ca
+rdinal.lift.{v'} (Module.rank R M) = Cardinal.lift.{v} (Module.rank R M')
+· 使用定理 `Cardinal.lift_id'`：lift_id' (a : Cardinal.{max u v}) : lift.{u} a = a
+· 使用定理 `Cardinal.lift_umax`：lift_umax : lift.{max u v, u} = lift.{v, u}
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
 
-English:
-theorem Basis.linearEquiv_dual_iff_finiteDimensional
-  given: [Field K] [AddCommGroup V] [Module K V]
-  proof: by
-  refine ⟨fun ⟨e⟩ => ?_, fun h => ⟨(Module.Free.chooseBasis K V).toDualEquiv⟩⟩
-  rw [FiniteDimensional]; rw [← Module.rank_lt_aleph0_iff]
-  by_contra!
-  apply (lift_rank_lt_rank_dual this).ne
-  have := e.lift_rank_eq
-  rwa [lift_umax, lift_id'.{uV}] at this
-
-中文:
-定理 基.linearEquiv_dual_iff_finiteDimensional
-  条件: [域 K] [加法交换群 V] [模 K V]
-  证明: by
-  refine ⟨fun ⟨e⟩ => ?_, fun h => ⟨(Module.Free.chooseBasis K V).toDualEquiv⟩⟩
-  rw [FiniteDimensional]; rw [← Module.rank_lt_aleph0_iff]
-  by_contra!
-  apply (lift_rank_lt_rank_dual this).ne
-  have := e.lift_rank_eq
-  rwa [lift_umax, lift_id'.{uV}] at this
-
-Depends on / 依赖: FiniteDimensional, Module, Module.Free.chooseBasis, Module.rank_lt_aleph0_iff, chooseBasis, e.lift_rank_eq, lift_id, lift_rank_eq, lift_rank_lt_rank_dual, lift_umax, rank_lt_aleph0_iff, toDualEquiv
+--- 原说明 ---
+A vector space over a field is isomorphic to its dual if and only if it is finit
+e-dimensional:
+  a consequence of the Erdős-Kaplansky theorem.
 -/
 theorem Basis.linearEquiv_dual_iff_finiteDimensional [Field K] [AddCommGroup V] [Module K V] :
     Nonempty (V ≃ₗ[K] Dual K V) ↔ FiniteDimensional K V := by
-  refine ⟨fun ⟨e⟩ => ?_, fun h => ⟨(Module.Free.chooseBasis K V).toDualEquiv⟩⟩
-  rw [FiniteDimensional]; rw [← Module.rank_lt_aleph0_iff]
+  refine ⟨fun ⟨e⟩ ↦ ?_, fun h ↦ ⟨(Module.Free.chooseBasis K V).toDualEquiv⟩⟩
+  rw [FiniteDimensional, ← Module.rank_lt_aleph0_iff]
   by_contra!
   apply (lift_rank_lt_rank_dual this).ne
   have := e.lift_rank_eq
   rwa [lift_umax, lift_id'.{uV}] at this
-
-/--
-theorem `Module.Basis.dual_rank_eq` / 定理 `Module.Basis.dual_rank_eq`
-
-English:
-theorem Module.Basis.dual_rank_eq
-  given: (b : Basis ι R M)
-  proof: by
-  classical rw [← lift_umax.{uM, uR}, b.toDualEquiv.lift_rank_eq, lift_id'.{uM, uR}]
-
-中文:
-定理 模.基.dual_rank_eq
-  条件: (b : 基 ι R M)
-  证明: by
-  classical rw [← lift_umax.{uM, uR}, b.toDualEquiv.lift_rank_eq, lift_id'.{uM, uR}]
-
-Depends on / 依赖: b.toDualEquiv.lift_rank_eq, classical, lift_id, lift_rank_eq, lift_umax, toDualEquiv
+/-
+**Module.Basis.dual_rank_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Module.Basis.dual_rank_eq (b : Basis ι R M) : Module.rank R (Dual R M) = C
+ardinal.lift.{uR, uM} (Module.rank R M)
+参数：b : Basis ι R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.lift_umax`：lift_umax : lift.{max u v, u} = lift.{v, u}
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `LinearEquiv.lift_rank_eq`：LinearEquiv.lift_rank_eq (f : M ≃ₗ[R] M') : Ca
+rdinal.lift.{v'} (Module.rank R M) = Cardinal.lift.{v} (Module.rank R M')
+· 使用定理 `Cardinal.lift_id'`：lift_id' (a : Cardinal.{max u v}) : lift.{u} a = a
 -/
 theorem Module.Basis.dual_rank_eq (b : Basis ι R M) :
     Module.rank R (Dual R M) = Cardinal.lift.{uR, uM} (Module.rank R M) := by
@@ -213,67 +218,77 @@ namespace Module
 
 variable [Module.Finite R M]
 
-/--
-Instance `dual_free` / 实例 `dual_free`
-
-English:
-instance dual_free
-  signature: [Free R M]
-  body: Free.of_basis (Free.chooseBasis R M).dualBasis
-
-中文:
-实例 dual_free
-  签名: [自由 R M]
-  定义体: Free.of_basis (Free.chooseBasis R M).dualBasis
-
-Depends on / 依赖: ENNReal, ENNReal.coe_mul, ENNReal.coe_ne_top, ENNReal.coe_rpow_of_nonneg, ENNReal.mul_rpow_of_nonneg, ENNReal.rpow_le_rpow_iff, ENNReal.rpow_mul, ENNReal.rpow_one, ENNReal.smul_def, Free.chooseBasis, Free.of_basis, NNReal, NNReal.mul_rpow, _eq_lintegral_enorm, chooseBasis, coe_mul, coe_ne_top, coe_rpow_of_nonneg, dualBasis, eLpNorm
+/-
+**Module.dual_free** 是 Mathlib 中的一个实例，位于命名空间 `Module`。
+形式化陈述：dual_free [Free R M] : Free R (Dual R M)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Free.of_basis`：∀ {R : Type u} {M : Type v} [inst : Semiring R] [i
+nst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M] {ι : Type w}   (b : Module
+.Basis ι R…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
 -/
 instance dual_free [Free R M] : Free R (Dual R M) :=
   Free.of_basis (Free.chooseBasis R M).dualBasis
-
-/--
-Instance `dual_projective` / 实例 `dual_projective`
-
-English:
-instance dual_projective
-  signature: [Projective R M]
-  body: have ⟨_, f, g, _, _, hfg⟩ := Finite.exists_comp_eq_id_of_projective R M
-  .of_split f.dualMap g.dualMap (congr_arg dualMap hfg)
-
-中文:
-实例 dual_projective
-  签名: [投射 R M]
-  定义体: have ⟨_, f, g, _, _, hfg⟩ := Finite.exists_comp_eq_id_of_projective R M
-  .of_split f.dualMap g.dualMap (congr_arg dualMap hfg)
-
-Depends on / 依赖: ENNReal, ENNReal.coe_ne_top, ENNReal.coe_r, ENNReal.coe_rpow_of_nonneg, ENNReal.mul_rpow_eq_ite, ENNReal.mul_rpow_of_nonneg, ENNReal.rpow_le_rpow_iff, ENNReal.rpow_mul, ENNReal.rpow_one, ENNReal.smul_def, Finite, Finite.exists_comp_eq_id_of_projective, _eq_lintegral_enorm, coe_ne_top, coe_r, coe_rpow_of_nonneg, congr_arg, dualMap, eLpNorm, exists_comp_eq_id_of_projective
+/-
+**Module.dual_projective** 是 Mathlib 中的一个实例，位于命名空间 `Module`。
+形式化陈述：dual_projective [Projective R M] : Projective R (Dual R M)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Module.Finite.exists_comp_eq_id_of_projective`：exists_comp_eq_id_of_proj
+ective [Module.Finite R M] [Projective R M] : exists (n : Nat) (f : (Fin n -> R)
+ ->ₗ[R] M) (g : M ->ₗ[R] Fin n -> R…
+· 使用定理 `Module.Projective.of_split`：∀ {R : Type u_1} [inst : Semiring R] {P : Ty
+pe u_2} [inst_1 : AddCommMonoid P] [inst_2 : _root_.Module R P]   {M : Type u_3}
+ [inst_3 : AddCo…
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Module.Projective.of_free`：∀ {R : Type u_1} [inst : Semiring R] {P : Typ
+e u_2} [inst_1 : AddCommMonoid P] [inst_2 : _root_.Module R P]   [Module.Free R 
+P], Module.Proj…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Module.Free.function`：∀ (ι : Type u_1) (R : Type u_2) (M : Type u_3) [in
+st : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] [Fini
+te ι] [Mod…
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 instance dual_projective [Projective R M] : Projective R (Dual R M) :=
   have ⟨_, f, g, _, _, hfg⟩ := Finite.exists_comp_eq_id_of_projective R M
   .of_split f.dualMap g.dualMap (congr_arg dualMap hfg)
-
-/--
-Instance `dual_finite` / 实例 `dual_finite`
-
-English:
-instance dual_finite
-  signature: [Projective R M]
-  body: have ⟨n, f, g, _, _, hfg⟩ := Finite.exists_comp_eq_id_of_projective R M
-  have := Finite.of_basis (Free.chooseBasis R <| Fin n -> R).dualBasis
-  .of_surjective _ (surjective_of_comp_eq_id f.dualMap g.dualMap <| congr_arg dualMap hfg)
-
-中文:
-实例 dual_finite
-  签名: [投射 R M]
-  定义体: have ⟨n, f, g, _, _, hfg⟩ := Finite.exists_comp_eq_id_of_projective R M
-  have := Finite.of_basis (Free.chooseBasis R <| Fin n -> R).dualBasis
-  .of_surjective _ (surjective_of_comp_eq_id f.dualMap g.dualMap <| congr_arg dualMap hfg)
-
-Depends on / 依赖: ENNReal, ENNReal.rpow_eq_zero_iff, Finite, Finite.exists_comp_eq_id_of_projective, Finite.of_basis, Free.chooseBasis, MeasureTheory, MeasureTheory.lintegral_eq_zero_iff, _eq_lintegral_enorm, and_false, and_true, chooseBasis, congr_arg, dualBasis, dualMap, eLpNorm, exists_comp_eq_id_of_projective, f.dualMap, fun_prop, g.dualMap
+/-
+**Module.dual_finite** 是 Mathlib 中的一个实例，位于命名空间 `Module`。
+形式化陈述：dual_finite [Projective R M] : Module.Finite R (Dual R M)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Module.Finite.exists_comp_eq_id_of_projective`：exists_comp_eq_id_of_proj
+ective [Module.Finite R M] [Projective R M] : exists (n : Nat) (f : (Fin n -> R)
+ ->ₗ[R] M) (g : M ->ₗ[R] Fin n -> R…
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Module.Finite.of_basis`：Module.Finite.of_basis {R M ι : Type*} [Semiring
+ R] [AddCommMonoid M] [Module R M] [_root_.Finite ι] (b : Basis ι R M) : Module.
+Finite R M
+· 使用定理 `Module.Free.function`：∀ (ι : Type u_1) (R : Type u_2) (M : Type u_3) [in
+st : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] [Fini
+te ι] [Mod…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Module.Finite.of_surjective`：of_surjective [hM : Module.Finite R M] (f :
+ M ->ₛₗ[σ] P) (hf : Surjective f) : Module.Finite S P
+· 使用定理 `LinearMap.surjective_of_comp_eq_id`：surjective_of_comp_eq_id : Surjectiv
+e g
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 instance dual_finite [Projective R M] : Module.Finite R (Dual R M) :=
   have ⟨n, f, g, _, _, hfg⟩ := Finite.exists_comp_eq_id_of_projective R M
-  have := Finite.of_basis (Free.chooseBasis R <| Fin n -> R).dualBasis
+  have := Finite.of_basis (Free.chooseBasis R <| Fin n → R).dualBasis
   .of_surjective _ (surjective_of_comp_eq_id f.dualMap g.dualMap <| congr_arg dualMap hfg)
 
 end Module
@@ -294,24 +309,24 @@ section
 
 variable (K)
 
-/--
-theorem `eval_apply_injective` / 定理 `eval_apply_injective`
-
-English:
-theorem eval_apply_injective
-  statement: Function.Injective (eval K V)
-  proof: have ⟨s, hs⟩ := Module.projective_def'.mp ‹Projective K V›
-  .of_comp (f := s.dualMap.dualMap)
-    (Finsupp.basisSingleOne.eval_injective.comp <| injective_of_comp_eq_id s _ hs)
-
-中文:
-定理 eval_apply_injective
-  结论: 函数.单射 (eval K V)
-  证明: have ⟨s, hs⟩ := Module.projective_def'.mp ‹Projective K V›
-  .of_comp (f := s.dualMap.dualMap)
-    (Finsupp.basisSingleOne.eval_injective.comp <| injective_of_comp_eq_id s _ hs)
-
-Depends on / 依赖: Finsupp, Finsupp.basisSingleOne.eval_injective.comp, Module, Module.projective_def, Projective, basisSingleOne, dualMap, eval_injective, injective_of_comp_eq_id, of_comp, projective_def, s.dualMap.dualMap
+/-
+**Module.eval_apply_injective** 是 Mathlib 中的一个定理，位于命名空间 `Module`。
+形式化陈述：eval_apply_injective : Function.Injective (eval K V)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Module.projective_def'`：projective_def' : Projective R P ↔ exists s : P 
+->ₗ[R] P ->₀ R, Finsupp.linearCombination R id ∘ₗ s = .id
+· 使用定理 `Function.Injective.of_comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_
+3} {f : α → β} {g : γ → α},   Function.Injective (f ∘ g) → Function.Injective g
+· 使用定理 `Function.Injective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} 
+{g : β → γ} {f : α → β},   Function.Injective g → Function.Injective f → Functio
+n.Injective (…
+· 使用定理 `Module.Basis.eval_injective`：eval_injective {ι : Type*} (b : Basis ι R M
+) : Function.Injective (Dual.eval R M)
+· 使用定理 `LinearMap.injective_of_comp_eq_id`：injective_of_comp_eq_id : Injective f
 -/
 theorem eval_apply_injective : Function.Injective (eval K V) :=
   have ⟨s, hs⟩ := Module.projective_def'.mp ‹Projective K V›
@@ -319,56 +334,44 @@ theorem eval_apply_injective : Function.Injective (eval K V) :=
     (Finsupp.basisSingleOne.eval_injective.comp <| injective_of_comp_eq_id s _ hs)
 
 variable (V)
-
-/--
-theorem `eval_ker` / 定理 `eval_ker`
-
-English:
-theorem eval_ker
-  statement: LinearMap.ker (eval K V) = ⊥
-  proof: ker_eq_bot_of_injective (eval_apply_injective K)
-
-中文:
-定理 eval_ker
-  结论: 线性映射.ker (eval K V) = ⊥
-  证明: ker_eq_bot_of_injective (eval_apply_injective K)
-
-Depends on / 依赖: eval_apply_injective, ker_eq_bot_of_injective
+/-
+**Module.eval_ker** 是 Mathlib 中的一个定理，位于命名空间 `Module`。
+形式化陈述：eval_ker : LinearMap.ker (eval K V) = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ker_eq_bot_of_injective`：ker_eq_bot_of_injective {f : M ->ₛₗ[τ
+₁₂] M₂} (hf : Injective f) : ker f = ⊥
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Module.eval_apply_injective`：eval_apply_injective : Function.Injective (
+eval K V)
 -/
 theorem eval_ker : LinearMap.ker (eval K V) = ⊥ := ker_eq_bot_of_injective (eval_apply_injective K)
-
-/--
-theorem `map_eval_injective` / 定理 `map_eval_injective`
-
-English:
-theorem map_eval_injective
-  statement: (Submodule.map (eval K V)).Injective
-  proof: Submodule.map_injective_of_injective (eval_apply_injective K)
-
-中文:
-定理 map_eval_injective
-  结论: (子模.map (eval K V)).单射
-  证明: Submodule.map_injective_of_injective (eval_apply_injective K)
-
-Depends on / 依赖: Submodule, Submodule.map_injective_of_injective, eval_apply_injective, map_injective_of_injective
+/-
+**Module.map_eval_injective** 是 Mathlib 中的一个定理，位于命名空间 `Module`。
+形式化陈述：map_eval_injective : (Submodule.map (eval K V)).Injective
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.map_injective_of_injective`：map_injective_of_injective : Funct
+ion.Injective (map f)
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Module.eval_apply_injective`：eval_apply_injective : Function.Injective (
+eval K V)
 -/
 theorem map_eval_injective : (Submodule.map (eval K V)).Injective :=
   Submodule.map_injective_of_injective (eval_apply_injective K)
-
-/--
-theorem `comap_eval_surjective` / 定理 `comap_eval_surjective`
-
-English:
-theorem comap_eval_surjective
-  statement: (Submodule.comap (eval K V)).Surjective
-  proof: Submodule.comap_surjective_of_injective (eval_apply_injective K)
-
-中文:
-定理 comap_eval_surjective
-  结论: (子模.comap (eval K V)).满射
-  证明: Submodule.comap_surjective_of_injective (eval_apply_injective K)
-
-Depends on / 依赖: Submodule, Submodule.comap_surjective_of_injective, comap_surjective_of_injective, eval_apply_injective
+/-
+**Module.comap_eval_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Module`。
+形式化陈述：comap_eval_surjective : (Submodule.comap (eval K V)).Surjective
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.comap_surjective_of_injective`：comap_surjective_of_injective :
+ Function.Surjective (comap f)
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Module.eval_apply_injective`：eval_apply_injective : Function.Injective (
+eval K V)
 -/
 theorem comap_eval_surjective : (Submodule.comap (eval K V)).Surjective :=
   Submodule.comap_surjective_of_injective (eval_apply_injective K)
@@ -379,213 +382,229 @@ section
 
 variable (K)
 
-/--
-theorem `eval_apply_eq_zero_iff` / 定理 `eval_apply_eq_zero_iff`
-
-English:
-theorem eval_apply_eq_zero_iff
-  given: (v : V)
-  statement: (eval K V) v = 0 ↔ v = 0
-  proof: SetLike.ext_iff.mp (eval_ker K V) v
-
-中文:
-定理 eval_apply_eq_zero_iff
-  条件: (v : V)
-  结论: (eval K V) v = 0 ↔ v = 0
-  证明: SetLike.ext_iff.mp (eval_ker K V) v
-
-Depends on / 依赖: SetLike, SetLike.ext_iff.mp, eval_ker, ext_iff
+/-
+**Module.eval_apply_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Module`。
+形式化陈述：eval_apply_eq_zero_iff (v : V) : (eval K V) v = 0 ↔ v = 0
+参数：v : V。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `SetLike.ext_iff`：ext_iff : p = q ↔ forall x, x in p ↔ x in q
+· 使用定理 `Module.eval_ker`：eval_ker : LinearMap.ker (eval K V) = ⊥
 -/
 theorem eval_apply_eq_zero_iff (v : V) : (eval K V) v = 0 ↔ v = 0 :=
   SetLike.ext_iff.mp (eval_ker K V) v
 
-/--
-theorem `Projective.exists_dual_ne_zero` / 定理 `Projective.exists_dual_ne_zero`
+/-- This is a linear map version of `SeparatingDual.exists_ne_zero` in a projective module. -/
+/-
+**Module.Projective.exists_dual_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Module.Projec
+tive`。
+形式化陈述：∀ {V : Type uV} [inst : AddCommMonoid V] (R : Type u_1) [inst_1 : Semiring
+ R] [inst_2 : _root_.Module R V]   [Module.Projective R V] {x : V}, x ≠ 0 → ∃ f,
+ f x ≠ 0
+参数：R : Type u_1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Module.Projective.iff_split`：∀ {R : Type u} [inst : Semiring R] {P : Typ
+e v} [inst_1 : AddCommMonoid P] [inst_2 : _root_.Module R P],   Module.Projectiv
+e R P ↔ ∃ M x x_1…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `LinearMap.map_eq_zero_iff`：∀ {R : Type u_1} {S : Type u_5} {M : Type u_8
+} {M₃ : Type u_11} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddComm
+Monoid M] [inst…
+· 使用定理 `LinearMap.injective_of_comp_eq_id`：injective_of_comp_eq_id : Injective f
+· 使用定理 `Classical.not_forall`：∀ {α : Sort u_1} {p : α → Prop}, (¬∀ (x : α), p x)
+ ↔ ∃ x, ¬p x
+· 使用定理 `LinearEquiv.map_ne_zero_iff`：map_ne_zero_iff {x : M} : e x != 0 ↔ x != 0
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
 
-English:
-theorem Projective.exists_dual_ne_zero
-  statement: (R : Type*) [Semiring R] [Module R V]
-  proof: have ⟨M, _, _, _, ⟨i, s, his⟩⟩ := Projective.iff_split.mp ‹Projective R V›
-  let b := Free.chooseBasis R M
-.not.mpr hx have : i x != 0 := i.map_eq_zero_iff (injective_of_comp_eq_id i s his)
-have ⟨j, hj⟩ := not_forall.mp fun h => b.repr.map_ne_zero_iff.mpr this Finsupp.ext h
-  ⟨b.coord j ∘ₗ i, hj⟩
-
-中文:
-定理 投射.存在_dual_ne_zero
-  结论: (R : 类型) [半环 R] [模 R V]
-  证明: have ⟨M, _, _, _, ⟨i, s, his⟩⟩ := Projective.iff_split.mp ‹Projective R V›
-  let b := Free.chooseBasis R M
-.not.mpr hx have : i x != 0 := i.map_eq_zero_iff (injective_of_comp_eq_id i s his)
-have ⟨j, hj⟩ := not_forall.mp fun h => b.repr.map_ne_zero_iff.mpr this Finsupp.ext h
-  ⟨b.coord j ∘ₗ i, hj⟩
-
-Depends on / 依赖: Finsupp, Finsupp.ext, Free.chooseBasis, Projective, Projective.iff_split.mp, b.coord, b.repr.map_ne_zero_iff.mpr, chooseBasis, i.map_eq_zero_iff, iff_split, injective_of_comp_eq_id, map_eq_zero_iff, map_ne_zero_iff, not.mpr, not_forall, not_forall.mp
+--- 原说明 ---
+This is a linear map version of `SeparatingDual.exists_ne_zero` in a projective 
+module.
 -/
 theorem Projective.exists_dual_ne_zero (R : Type*) [Semiring R] [Module R V]
-    [Projective R V] {x : V} (hx : x != 0) : exists f : Dual R V, f x != 0 :=
+    [Projective R V] {x : V} (hx : x ≠ 0) : ∃ f : Dual R V, f x ≠ 0 :=
   have ⟨M, _, _, _, ⟨i, s, his⟩⟩ := Projective.iff_split.mp ‹Projective R V›
   let b := Free.chooseBasis R M
-.not.mpr hx have : i x != 0 := i.map_eq_zero_iff (injective_of_comp_eq_id i s his)
-have ⟨j, hj⟩ := not_forall.mp fun h => b.repr.map_ne_zero_iff.mpr this Finsupp.ext h
+  have : i x ≠ 0 := i.map_eq_zero_iff (injective_of_comp_eq_id i s his) |>.not.mpr hx
+  have ⟨j, hj⟩ := not_forall.mp fun h ↦ b.repr.map_ne_zero_iff.mpr this <| Finsupp.ext h
   ⟨b.coord j ∘ₗ i, hj⟩
-
-/--
-theorem `forall_dual_apply_eq_zero_iff` / 定理 `forall_dual_apply_eq_zero_iff`
-
-English:
-theorem forall_dual_apply_eq_zero_iff
-  proof: by
-  refine ⟨fun h => ?_, fun hv => by simp [hv]⟩
-  contrapose! h
-  exact Projective.exists_dual_ne_zero R h
-
-中文:
-定理 对任意_dual_apply_eq_zero_iff
-  证明: by
-  refine ⟨fun h => ?_, fun hv => by simp [hv]⟩
-  contrapose! h
-  exact Projective.exists_dual_ne_zero R h
-
-Depends on / 依赖: Projective, Projective.exists_dual_ne_zero, contrapose, exists_dual_ne_zero
+/-
+**Module.forall_dual_apply_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Module`。
+形式化陈述：forall_dual_apply_eq_zero_iff (R : Type*) [Semiring R] [Module R V] [Proje
+ctive R V] (v : V) : (forall φ : Module.Dual R V, φ v = 0) ↔ v = 0
+参数：R : Type*；v : V。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `Module.Projective.exists_dual_ne_zero`：∀ {V : Type uV} [inst : AddCommMo
+noid V] (R : Type u_1) [inst_1 : Semiring R] [inst_2 : _root_.Module R V]   [Mod
+ule.Projective R V] {x : V}…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem forall_dual_apply_eq_zero_iff
     (R : Type*) [Semiring R] [Module R V] [Projective R V] (v : V) :
-    (forall φ : Module.Dual R V, φ v = 0) ↔ v = 0 := by
-  refine ⟨fun h => ?_, fun hv => by simp [hv]⟩
+    (∀ φ : Module.Dual R V, φ v = 0) ↔ v = 0 := by
+  refine ⟨fun h ↦ ?_, fun hv ↦ by simp [hv]⟩
   contrapose! h
   exact Projective.exists_dual_ne_zero R h
 
-/--
-theorem `Projective.exists_dual_eq_one` / 定理 `Projective.exists_dual_eq_one`
+/-- This is a linear map version of `SeparatingDual.exists_eq_one` in a projective module. -/
+/-
+**Module.Projective.exists_dual_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `Module.Project
+ive`。
+形式化陈述：∀ {V : Type uV} [inst : AddCommMonoid V] (K : Type u_1) [inst_1 : Semifiel
+d K] [inst_2 : _root_.Module K V]   [Module.Projective K V] {x : V}, x ≠ 0 → ∃ f
+, f x = 1
+参数：K : Type u_1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Projective.exists_dual_ne_zero`：∀ {V : Type uV} [inst : AddCommMo
+noid V] (R : Type u_1) [inst_1 : Semiring R] [inst_2 : _root_.Module R V]   [Mod
+ule.Projective R V] {x : V}…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `inv_mul_cancel₀`：inv_mul_cancel₀ (h : a != 0) : a⁻¹ * a = 1
 
-English:
-theorem Projective.exists_dual_eq_one
-  statement: (K : Type*) [Semifield K] [Module K V] [Projective K V]
-  proof: have ⟨f, hf⟩ := exists_dual_ne_zero K hx
-  ⟨(f x)⁻¹ • f, inv_mul_cancel₀ hf⟩
-
-@[simp]
-
-中文:
-定理 投射.存在_dual_eq_one
-  结论: (K : 类型) [半域 K] [模 K V] [投射 K V]
-  证明: have ⟨f, hf⟩ := exists_dual_ne_zero K hx
-  ⟨(f x)⁻¹ • f, inv_mul_cancel₀ hf⟩
-
-@[simp]
-
-Depends on / 依赖: exists_dual_ne_zero
+--- 原说明 ---
+This is a linear map version of `SeparatingDual.exists_eq_one` in a projective m
+odule.
 -/
 theorem Projective.exists_dual_eq_one (K : Type*) [Semifield K] [Module K V] [Projective K V]
-    {x : V} (hx : x != 0) : exists f : Dual K V, f x = 1 :=
+    {x : V} (hx : x ≠ 0) : ∃ f : Dual K V, f x = 1 :=
   have ⟨f, hf⟩ := exists_dual_ne_zero K hx
   ⟨(f x)⁻¹ • f, inv_mul_cancel₀ hf⟩
 
 @[simp]
-/--
-theorem `subsingleton_dual_iff` / 定理 `subsingleton_dual_iff`
-
-English:
-theorem subsingleton_dual_iff
-  statement: Subsingleton (Dual K V) ↔ Subsingleton V
-  proof: ⟨fun _ => ⟨fun _ _ => eval_apply_injective K (Subsingleton.elim ..)⟩, fun _ => inferInstance⟩
-
-@[simp]
-
-中文:
-定理 subsingleton_dual_iff
-  结论: 子单例 (对偶 K V) ↔ 子单例 V
-  证明: ⟨fun _ => ⟨fun _ _ => eval_apply_injective K (Subsingleton.elim ..)⟩, fun _ => inferInstance⟩
-
-@[simp]
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim, eval_apply_injective
+/-
+**Module.subsingleton_dual_iff** 是 Mathlib 中的一个定理，位于命名空间 `Module`。
+形式化陈述：subsingleton_dual_iff : Subsingleton (Dual K V) ↔ Subsingleton V
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.eval_apply_injective`：eval_apply_injective : Function.Injective (
+eval K V)
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
 theorem subsingleton_dual_iff : Subsingleton (Dual K V) ↔ Subsingleton V :=
-  ⟨fun _ => ⟨fun _ _ => eval_apply_injective K (Subsingleton.elim ..)⟩, fun _ => inferInstance⟩
+  ⟨fun _ ↦ ⟨fun _ _ ↦ eval_apply_injective K (Subsingleton.elim ..)⟩, fun _ ↦ inferInstance⟩
 
 @[simp]
-/--
-theorem `nontrivial_dual_iff` / 定理 `nontrivial_dual_iff`
-
-English:
-theorem nontrivial_dual_iff
-  statement: Nontrivial (Dual K V) ↔ Nontrivial V
-  proof: by
-  contrapose!; exact subsingleton_dual_iff K
-
-中文:
-定理 nontrivial_dual_iff
-  结论: 非平凡 (对偶 K V) ↔ 非平凡 V
-  证明: by
-  contrapose!; exact subsingleton_dual_iff K
-
-Depends on / 依赖: contrapose, subsingleton_dual_iff
+/-
+**Module.nontrivial_dual_iff** 是 Mathlib 中的一个定理，位于命名空间 `Module`。
+形式化陈述：nontrivial_dual_iff : Nontrivial (Dual K V) ↔ Nontrivial V
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose_iff₁`：contrapose_iff₁ {p q : Prop} 
+: (¬ p ↔ ¬ q) -> (p ↔ q)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.subsingleton_dual_iff`：subsingleton_dual_iff : Subsingleton (Dual
+ K V) ↔ Subsingleton V
 -/
 theorem nontrivial_dual_iff : Nontrivial (Dual K V) ↔ Nontrivial V := by
   contrapose!; exact subsingleton_dual_iff K
-
-/--
-Instance `instNontrivialDual` / 实例 `instNontrivialDual`
-
-English:
-instance instNontrivialDual
-  signature: [Nontrivial V]
-  body: (nontrivial_dual_iff K).mpr inferInstance
-
-omit [Projective K V] in
-
-中文:
-实例 instNontrivialDual
-  签名: [非平凡 V]
-  定义体: (nontrivial_dual_iff K).mpr inferInstance
-
-omit [Projective K V] in
-
-Depends on / 依赖: nontrivial_dual_iff
+/-
+**Module.instNontrivialDual** 是 Mathlib 中的一个实例，位于命名空间 `Module`。
+形式化陈述：instNontrivialDual [Nontrivial V] : Nontrivial (Dual K V)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Module.nontrivial_dual_iff`：nontrivial_dual_iff : Nontrivial (Dual K V) 
+↔ Nontrivial V
 -/
 instance instNontrivialDual [Nontrivial V] : Nontrivial (Dual K V) :=
   (nontrivial_dual_iff K).mpr inferInstance
 
 omit [Projective K V] in
-/--
-theorem `finite_dual_iff` / 定理 `finite_dual_iff`
+/-- For an example of a non-free projective `K`-module `V` for which the forward implication
+fails, see https://stacks.math.columbia.edu/tag/05WG#comment-9913. -/
+/-
+**Module.finite_dual_iff** 是 Mathlib 中的一个定理，位于命名空间 `Module`。
+形式化陈述：finite_dual_iff [Free K V] : Module.Finite K (Dual K V) ↔ Module.Finite K 
+V
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Module.Free.exists_basis`：∀ (R : Type u) (M : Type v) {inst : Semiring R
+} {inst_1 : AddCommMonoid M} {inst_2 : _root_.Module R M}   [self : Module.Free 
+R M], Nonempty…
+· 使用定理 `finite_or_infinite`：finite_or_infinite (α : Sort*) : Finite α ∨ Infinite
+ α
+· 使用定理 `Module.Finite.of_basis`：Module.Finite.of_basis {R M ι : Type*} [Semiring
+ R] [AddCommMonoid M] [Module R M] [_root_.Finite ι] (b : Basis ι R M) : Module.
+Finite R M
+· 使用定理 `Mathlib.Tactic.Nontriviality.subsingleton_or_nontrivial_elim`：subsinglet
+on_or_nontrivial_elim {p : Prop} {α : Type u} (h₁ : Subsingleton α -> p) (h₂ : N
+ontrivial α -> p) : p
+· 使用定理 `Module.IsNoetherian.finite`：∀ (R : Type u_1) (M : Type u_3) [inst : Semi
+ring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   [IsNoetherian 
+R M], Module.Fin…
+· 使用定理 `isNoetherian_of_subsingleton`：∀ (R : Type u_1) (M : Type u_2) [Subsingle
+ton R] [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module 
+R M], IsNoetherian…
+· 使用定理 `Module.Finite.exists_nat_not_surjective`：Module.Finite.exists_nat_not_su
+rjective [RankCondition R] (M) [AddCommMonoid M] [Module R M] [Module.Finite R M
+] : exists n : Nat, forall f …
+· 使用定理 `rankCondition_of_nontrivial_of_commSemiring`：∀ {R : Type u_4} [inst : Co
+mmSemiring R] [Nontrivial R], RankCondition R
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Function.Surjective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3}
+ {g : β → γ} {f : α → β},   Function.Surjective g → Function.Surjective f → Func
+tion.Surjectiv…
+· 使用定理 `Function.Injective.surjective_comp_right`：∀ {α : Sort u_1} {β : Sort u_2
+} {γ : Sort u_3} {f : α → β} [Nonempty γ],   Function.Injective f → Function.Sur
+jective fun g => g ∘ f
+· 使用定理 `Nontrivial.to_nonempty`：∀ {α : Type u_1} [Nontrivial α], Nonempty α
+· 使用定理 `Function.Embedding.injective`：∀ {α : Sort u_1} {β : Sort u_2} (f : α ↪ β
+), Function.Injective ⇑f
+· 使用定理 `LinearEquiv.surjective`：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {
+M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMono
+id M] [inst_…
+· 使用定理 `Module.Projective.of_free`：∀ {R : Type u_1} [inst : Semiring R] {P : Typ
+e u_2} [inst_1 : AddCommMonoid P] [inst_2 : _root_.Module R P]   [Module.Free R 
+P], Module.Proj…
 
-English:
-theorem finite_dual_iff
-  given: [Free K V]
-  statement: Module.Finite K (Dual K V) ↔ Module.Finite K V
-  proof: by
-  refine ⟨fun h => ?_, fun _ => inferInstance⟩
-  have ⟨⟨ι, b⟩⟩ := Free.exists_basis (R := K) (M := V)
-  cases finite_or_infinite ι
-  · exact .of_basis b
-  nontriviality K
-  have ⟨n, hn⟩ := Module.Finite.exists_nat_not_surjective K (Dual K V)
-  let g := Finsupp.llift K K K ι ≪≫ₗ b.repr.dualMap
-  exact hn (LinearMap.funLeft K K (Fin.valEmbedding.trans (Infinite.natEmbedding ι)) ∘ₗ _)
-.elim ((Function.Embedding.injective _).surjective_comp_right.comp g.symm.surjective)
-
-中文:
-定理 finite_dual_iff
-  条件: [自由 K V]
-  结论: 模.有限 K (对偶 K V) ↔ 模.有限 K V
-  证明: by
-  refine ⟨fun h => ?_, fun _ => inferInstance⟩
-  have ⟨⟨ι, b⟩⟩ := Free.exists_basis (R := K) (M := V)
-  cases finite_or_infinite ι
-  · exact .of_basis b
-  nontriviality K
-  have ⟨n, hn⟩ := Module.Finite.exists_nat_not_surjective K (Dual K V)
-  let g := Finsupp.llift K K K ι ≪≫ₗ b.repr.dualMap
-  exact hn (LinearMap.funLeft K K (Fin.valEmbedding.trans (Infinite.natEmbedding ι)) ∘ₗ _)
-.elim ((Function.Embedding.injective _).surjective_comp_right.comp g.symm.surjective)
-
-Depends on / 依赖: Embedding, Fin.valEmbedding.trans, Finite, Finsupp, Finsupp.llift, Free.exists_basis, Function, Function.Embedding.injective, Infinite, Infinite.natEmbedding, LinearMap, LinearMap.funLeft, Module, Module.Finite.exists_nat_not_surjective, b.repr.dualMap, dualMap, exists_basis, exists_nat_not_surjective, finite_or_infinite, funLeft
+--- 原说明 ---
+For an example of a non-free projective `K`-module `V` for which the forward imp
+lication
+fails, see https://stacks.math.columbia.edu/tag/05WG#comment-9913.
 -/
 theorem finite_dual_iff [Free K V] : Module.Finite K (Dual K V) ↔ Module.Finite K V := by
-  refine ⟨fun h => ?_, fun _ => inferInstance⟩
+  refine ⟨fun h ↦ ?_, fun _ ↦ inferInstance⟩
   have ⟨⟨ι, b⟩⟩ := Free.exists_basis (R := K) (M := V)
   cases finite_or_infinite ι
   · exact .of_basis b
@@ -593,26 +612,21 @@ theorem finite_dual_iff [Free K V] : Module.Finite K (Dual K V) ↔ Module.Finit
   have ⟨n, hn⟩ := Module.Finite.exists_nat_not_surjective K (Dual K V)
   let g := Finsupp.llift K K K ι ≪≫ₗ b.repr.dualMap
   exact hn (LinearMap.funLeft K K (Fin.valEmbedding.trans (Infinite.natEmbedding ι)) ∘ₗ _)
-.elim ((Function.Embedding.injective _).surjective_comp_right.comp g.symm.surjective)
+    ((Function.Embedding.injective _).surjective_comp_right.comp g.symm.surjective) |>.elim
 
 end
 
 omit [Projective K V]
 
-/--
-theorem `dual_rank_eq` / 定理 `dual_rank_eq`
-
-English:
-theorem dual_rank_eq
-  given: [Free K V] [Module.Finite K V]
-  proof: (Free.chooseBasis K V).dual_rank_eq
-
-中文:
-定理 dual_rank_eq
-  条件: [自由 K V] [模.有限 K V]
-  证明: (Free.chooseBasis K V).dual_rank_eq
-
-Depends on / 依赖: Free.chooseBasis, chooseBasis, dual_rank_eq
+/-
+**Module.dual_rank_eq** 是 Mathlib 中的一个定理，位于命名空间 `Module`。
+形式化陈述：dual_rank_eq [Free K V] [Module.Finite K V] : Module.rank K (Dual K V) = C
+ardinal.lift.{uK, uV} (Module.rank K V)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Basis.dual_rank_eq`：Module.Basis.dual_rank_eq (b : Basis ι R M) :
+ Module.rank R (Dual R M) = Cardinal.lift.{uR, uM} (Module.rank R M)
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
 -/
 theorem dual_rank_eq [Free K V] [Module.Finite K V] :
     Module.rank K (Dual K V) = Cardinal.lift.{uK, uV} (Module.rank K V) :=
@@ -626,48 +640,31 @@ variable (R M N : Type*)
 variable [CommSemiring R] [AddCommMonoid M] [AddCommMonoid N] [Module R M] [Module R N]
 
 /-- See also `Module.instFiniteDimensionalOfIsReflexive` for the converse over a field. -/
+/-
+**Module.** 是 Mathlib 中的一个实例，位于命名空间 `Module`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+See also `Module.instFiniteDimensionalOfIsReflexive` for the converse over a fie
+ld.
+-/
 instance (priority := 900) IsReflexive.of_finite_of_free [Module.Finite R M] [Free R M] :
     IsReflexive R M where
   bijective_dual_eval'.left := (Free.chooseBasis R M).eval_injective
   bijective_dual_eval'.right := range_eq_top.mp (Free.chooseBasis R M).eval_range
 
 variable [IsReflexive R M]
-
+/-
+**Module.** 是 Mathlib 中的一个实例，位于命名空间 `Module`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 900) [Module.Finite R N] [Projective R N] : IsReflexive R N :=
   have ⟨_, f, hf⟩ := Finite.exists_fin' R N
   have ⟨g, H⟩ := projective_lifting_property f .id hf
   .of_split g f H
-
-/--
-Instance `_root_.Prod.instModuleIsReflexive` / 实例 `_root_.Prod.instModuleIsReflexive`
-
-English:
-instance _root_.Prod.instModuleIsReflexive
-  signature: [IsReflexive R N]
-  body: by
-    let e : Dual R (Dual R (M × N)) ≃ₗ[R] Dual R (Dual R M) × Dual R (Dual R N) :=
-      (dualProdDualEquivDual R M N).dualMap.trans
-        (dualProdDualEquivDual R (Dual R M) (Dual R N)).symm
-    have : Dual.eval R (M × N) = e.symm.comp ((Dual.eval R M).prodMap (Dual.eval R N)) := by
-      ext m f <;> simp [e]
-    simp only [this,
-      coe_comp, LinearEquiv.coe_coe, EquivLike.comp_bijective]
-    exact (bijective_dual_eval R M).prodMap (bijective_dual_eval R N)
-
-中文:
-实例 _root_.积类型.instModuleIsReflexive
-  签名: [是自反 R N]
-  定义体: by
-    let e : Dual R (Dual R (M × N)) ≃ₗ[R] Dual R (Dual R M) × Dual R (Dual R N) :=
-      (dualProdDualEquivDual R M N).dualMap.trans
-        (dualProdDualEquivDual R (Dual R M) (Dual R N)).symm
-    have : Dual.eval R (M × N) = e.symm.comp ((Dual.eval R M).prodMap (Dual.eval R N)) := by
-      ext m f <;> simp [e]
-    simp only [this,
-      coe_comp, LinearEquiv.coe_coe, EquivLike.comp_bijective]
-    exact (bijective_dual_eval R M).prodMap (bijective_dual_eval R N)
-
-Depends on / 依赖: Dual.eval, EquivLike, EquivLike.comp_bijective, LinearEquiv, LinearEquiv.coe_coe, bijective_dual_eval, coe_coe, coe_comp, comp_bijective, dualMap, dualMap.trans, dualProdDualEquivDual, e.symm.comp, prodMap
+/-
+**Module._root_.Prod.instModuleIsReflexive** 是 Mathlib 中的一个实例，位于命名空间 `Module`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance _root_.Prod.instModuleIsReflexive [IsReflexive R N] :
     IsReflexive R (M × N) where
@@ -680,40 +677,32 @@ instance _root_.Prod.instModuleIsReflexive [IsReflexive R N] :
     simp only [this,
       coe_comp, LinearEquiv.coe_coe, EquivLike.comp_bijective]
     exact (bijective_dual_eval R M).prodMap (bijective_dual_eval R N)
-
-/--
-Instance `_root_.ULift.instModuleIsReflexive.` / 实例 `_root_.ULift.instModuleIsReflexive.`
-
-English:
-instance _root_.ULift.instModuleIsReflexive.{w}
-  signature: : IsReflexive R (ULift.{w} M)
-  body: equiv ULift.moduleEquiv.symm
-
-中文:
-实例 _root_.类型层提升.instModuleIsReflexive.{w}
-  签名: : 是自反 R (类型层提升.{w} M)
-  定义体: equiv ULift.moduleEquiv.symm
-
-Depends on / 依赖: ULift.moduleEquiv.symm, moduleEquiv
+/-
+**Module._root_.ULift.instModuleIsReflexive.** 是 Mathlib 中的一个实例，位于命名空间 `Module`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance _root_.ULift.instModuleIsReflexive.{w} : IsReflexive R (ULift.{w} M) :=
   equiv ULift.moduleEquiv.symm
 
 -- Very low priority because instance resolution will often end up using the instances above
 -- to prove `IsReflexive`, which require proving `Finite` again.
+/-
+**Module.** 是 Mathlib 中的一个实例，位于命名空间 `Module`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 90) instFiniteDimensionalOfIsReflexive (K V : Type*)
     [Field K] [AddCommGroup V] [Module K V] [IsReflexive K V] :
     FiniteDimensional K V := by
-  rw [FiniteDimensional]; rw [← rank_lt_aleph0_iff]
+  rw [FiniteDimensional, ← rank_lt_aleph0_iff]
   by_contra! contra
   suffices lift (Module.rank K V) < Module.rank K (Dual K (Dual K V)) by
     have heq := lift_rank_eq_of_equiv_equiv (R := K) (R' := K) (M := V) (M' := Dual K (Dual K V))
-      (ZeroHom.id K) (evalEquiv K V) bijective_id (fun r v => (evalEquiv K V).map_smul _ _)
-    rw [← lift_umax]; rw [heq]; rw [lift_id'] at this
+      (ZeroHom.id K) (evalEquiv K V) bijective_id (fun r v ↦ (evalEquiv K V).map_smul _ _)
+    rw [← lift_umax, heq, lift_id'] at this
     exact lt_irrefl _ this
   have h₁ : lift (Module.rank K V) < Module.rank K (Dual K V) := lift_rank_lt_rank_dual contra
   have h₂ : Module.rank K (Dual K V) < Module.rank K (Dual K (Dual K V)) := by
-convert! lift_rank_lt_rank_dual le_trans (by simpa) h₁.le
+    convert! lift_rank_lt_rank_dual <| le_trans (by simpa) h₁.le
     rw [lift_id']
   exact lt_trans h₁ h₂
 
@@ -728,240 +717,224 @@ open Module
 variable {R M : Type*} [CommRing R] [AddCommGroup M] [Module R M] {p : Submodule R M}
 
 @[simp]
-/--
-theorem `dualCoannihilator_top` / 定理 `dualCoannihilator_top`
-
-English:
-theorem dualCoannihilator_top
-  given: [Projective R M]
-  proof: by
-  rw [dualCoannihilator]; rw [dualAnnihilator_top]; rw [comap_bot]; rw [Module.eval_ker]
-
-中文:
-定理 dualCoannihilator_top
-  条件: [投射 R M]
-  证明: by
-  rw [dualCoannihilator]; rw [dualAnnihilator_top]; rw [comap_bot]; rw [Module.eval_ker]
-
-Depends on / 依赖: Module, Module.eval_ker, comap_bot, dualAnnihilator_top, dualCoannihilator, eval_ker
+/-
+**Submodule.dualCoannihilator_top** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：dualCoannihilator_top [Projective R M] : (⊤ : Submodule R (Module.Dual R M
+)).dualCoannihilator = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.dualCoannihilator.eq_1`：∀ {R : Type u_1} {M : Type u_2} [inst 
+: CommSemiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (Φ :
+ Submodule R (Module.D…
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Submodule.dualAnnihilator_top`：dualAnnihilator_top : (⊤ : Submodule R M)
+.dualAnnihilator = ⊥
+· 使用定理 `Submodule.comap_bot`：comap_bot (f : M ->ₛₗ[τ₁₂] M₂) : comap f ⊥ = ker f
+· 使用定理 `Module.eval_ker`：eval_ker : LinearMap.ker (eval K V) = ⊥
 -/
 theorem dualCoannihilator_top [Projective R M] :
     (⊤ : Submodule R (Module.Dual R M)).dualCoannihilator = ⊥ := by
-  rw [dualCoannihilator]; rw [dualAnnihilator_top]; rw [comap_bot]; rw [Module.eval_ker]
-
-/--
-theorem `exists_dual_map_eq_bot_of_notMem` / 定理 `exists_dual_map_eq_bot_of_notMem`
-
-English:
-theorem exists_dual_map_eq_bot_of_notMem
-  proof: by
-  suffices exists f : Dual R (M ⧸ p), f (p.mkQ x) != 0 by
-    obtain ⟨f, hf⟩ := this; exact ⟨f.comp p.mkQ, hf, by simp [Submodule.map_comp]⟩
-  rw [← Submodule.Quotient.mk_eq_zero]; rw [← Submodule.mkQ_apply] at hx
-  exact Projective.exists_dual_ne_zero R hx
-
-中文:
-定理 存在_dual_map_eq_bot_of_notMem
-  证明: by
-  suffices exists f : Dual R (M ⧸ p), f (p.mkQ x) != 0 by
-    obtain ⟨f, hf⟩ := this; exact ⟨f.comp p.mkQ, hf, by simp [Submodule.map_comp]⟩
-  rw [← Submodule.Quotient.mk_eq_zero]; rw [← Submodule.mkQ_apply] at hx
-  exact Projective.exists_dual_ne_zero R hx
-
-Depends on / 依赖: Projective, Projective.exists_dual_ne_zero, Quotient, Submodule, Submodule.Quotient.mk_eq_zero, Submodule.map_comp, Submodule.mkQ_apply, exists_dual_ne_zero, f.comp, map_comp, mkQ_apply, mk_eq_zero, p.mkQ
+  rw [dualCoannihilator, dualAnnihilator_top, comap_bot, Module.eval_ker]
+/-
+**Submodule.exists_dual_map_eq_bot_of_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Submodul
+e`。
+形式化陈述：exists_dual_map_eq_bot_of_notMem {R M : Type*} [Ring R] [AddCommGroup M] [
+Module R M] {p : Submodule R M} {x : M} (hx : x ∉ p) (hp' : Projective R (M ⧸ p)
+) : exists f : Dual R M, f x != 0 ∧ p.map f = ⊥
+参数：hx : x ∉ p；hp' : Projective R (M ⧸ p)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Projective.exists_dual_ne_zero`：∀ {V : Type uV} [inst : AddCommMo
+noid V] (R : Type u_1) [inst_1 : Semiring R] [inst_2 : _root_.Module R V]   [Mod
+ule.Projective R V] {x : V}…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.mkQ_apply`：mkQ_apply (x : M) : p.mkQ x = Quotient.mk x
+· 使用定理 `Submodule.Quotient.mk_eq_zero`：mk_eq_zero : (mk x : M ⧸ p) = 0 ↔ x in p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Submodule.map_comp`：map_comp [RingHomSurjective σ₂₃] [RingHomSurjective 
+σ₁₃] (f : M ->ₛₗ[σ₁₂] M₂) (g : M₂ ->ₛₗ[σ₂₃] M₃) (p : Submodule R M) : map (g.com
+p f : M …
+· 使用定理 `Submodule.map.congr_simp`：∀ {R : Type u_1} {R₂ : Type u_3} {M : Type u_5
+} {M₂ : Type u_7} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddComm
+Monoid M] [ins…
+· 使用定理 `Submodule.mkQ_map_self`：mkQ_map_self : map p.mkQ p = ⊥
+· 使用定理 `Submodule.map_bot`：map_bot (f : M ->ₛₗ[σ₁₂] M₂) : map f ⊥ = ⊥
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem exists_dual_map_eq_bot_of_notMem
     {R M : Type*} [Ring R] [AddCommGroup M] [Module R M] {p : Submodule R M}
     {x : M} (hx : x ∉ p) (hp' : Projective R (M ⧸ p)) :
-    exists f : Dual R M, f x != 0 ∧ p.map f = ⊥ := by
-  suffices exists f : Dual R (M ⧸ p), f (p.mkQ x) != 0 by
+    ∃ f : Dual R M, f x ≠ 0 ∧ p.map f = ⊥ := by
+  suffices ∃ f : Dual R (M ⧸ p), f (p.mkQ x) ≠ 0 by
     obtain ⟨f, hf⟩ := this; exact ⟨f.comp p.mkQ, hf, by simp [Submodule.map_comp]⟩
-  rw [← Submodule.Quotient.mk_eq_zero]; rw [← Submodule.mkQ_apply] at hx
+  rw [← Submodule.Quotient.mk_eq_zero, ← Submodule.mkQ_apply] at hx
   exact Projective.exists_dual_ne_zero R hx
-
-/--
-theorem `exists_dual_map_eq_bot_of_lt_top` / 定理 `exists_dual_map_eq_bot_of_lt_top`
-
-English:
-theorem exists_dual_map_eq_bot_of_lt_top
-  proof: by
-  obtain ⟨x, hx⟩ : exists x : M, x ∉ p := by rw [lt_top_iff_ne_top] at hp; contrapose! hp; ext; simp [hp]
-  obtain ⟨f, hf, hf'⟩ := p.exists_dual_map_eq_bot_of_notMem hx hp'
-  exact ⟨f, by aesop, hf'⟩
-
-中文:
-定理 存在_dual_map_eq_bot_of_lt_top
-  证明: by
-  obtain ⟨x, hx⟩ : exists x : M, x ∉ p := by rw [lt_top_iff_ne_top] at hp; contrapose! hp; ext; simp [hp]
-  obtain ⟨f, hf, hf'⟩ := p.exists_dual_map_eq_bot_of_notMem hx hp'
-  exact ⟨f, by aesop, hf'⟩
-
-Depends on / 依赖: contrapose, exists_dual_map_eq_bot_of_notMem, lt_top_iff_ne_top, p.exists_dual_map_eq_bot_of_notMem
+/-
+**Submodule.exists_dual_map_eq_bot_of_lt_top** 是 Mathlib 中的一个定理，位于命名空间 `Submodul
+e`。
+形式化陈述：exists_dual_map_eq_bot_of_lt_top {R M : Type*} [Ring R] [AddCommGroup M] [
+Module R M] {p : Submodule R M} (hp : p < ⊤) (hp' : Projective R (M ⧸ p)) : exis
+ts f : Dual R M, f != 0 ∧ p.map f = ⊥
+参数：hp : p < ⊤；hp' : Projective R (M ⧸ p)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₂`：contrapose₂ {p q : Prop} : (¬ q -
+> p) -> (¬ p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Submodule.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `lt_top_iff_ne_top`：lt_top_iff_ne_top : a < ⊤ ↔ a != ⊤
+· 使用定理 `Submodule.exists_dual_map_eq_bot_of_notMem`：exists_dual_map_eq_bot_of_no
+tMem {R M : Type*} [Ring R] [AddCommGroup M] [Module R M] {p : Submodule R M} {x
+ : M} (hx : x ∉ p) (hp' : Projec…
+· 使用定理 `Aesop.BuiltinRules.not_intro`：∀ {P : Prop}, (P → False) → ¬P
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem exists_dual_map_eq_bot_of_lt_top
     {R M : Type*} [Ring R] [AddCommGroup M] [Module R M] {p : Submodule R M}
     (hp : p < ⊤) (hp' : Projective R (M ⧸ p)) :
-    exists f : Dual R M, f != 0 ∧ p.map f = ⊥ := by
-  obtain ⟨x, hx⟩ : exists x : M, x ∉ p := by rw [lt_top_iff_ne_top] at hp; contrapose! hp; ext; simp [hp]
+    ∃ f : Dual R M, f ≠ 0 ∧ p.map f = ⊥ := by
+  obtain ⟨x, hx⟩ : ∃ x : M, x ∉ p := by rw [lt_top_iff_ne_top] at hp; contrapose! hp; ext; simp [hp]
   obtain ⟨f, hf, hf'⟩ := p.exists_dual_map_eq_bot_of_notMem hx hp'
   exact ⟨f, by aesop, hf'⟩
 
-/--
-theorem `span_eq_top_of_ne_zero` / 定理 `span_eq_top_of_ne_zero`
+/-- Consider a reflexive module and a set `s` of linear forms. If for any `z ≠ 0` there exists
+`f ∈ s` such that `f z ≠ 0`, then `s` spans the whole dual space. -/
+/-
+**Submodule.span_eq_top_of_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：span_eq_top_of_ne_zero [IsReflexive R M] {s : Set (M ->ₗ[R] R)} [Projectiv
+e R ((M ->ₗ[R] R) ⧸ (span R s))] (h : forall z != 0, exists f in s, f z != 0) : 
+span R s = ⊤
+参数：M ->ₗ[R] R；(M ->ₗ[R] R) ⧸ (span R s)；h : forall z != 0, exists f in s, f z !=
+ 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `Submodule.exists_dual_map_eq_bot_of_lt_top`：exists_dual_map_eq_bot_of_lt
+_top {R M : Type*} [Ring R] [AddCommGroup M] [Module R M] {p : Submodule R M} (h
+p : p < ⊤) (hp' : Projective R (…
+· 使用定理 `Ne.lt_top`：Ne.lt_top (h : a != ⊤) : a < ⊤
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.mem_bot`：mem_bot {x : M} : x in (⊥ : Submodule R M) ↔ x = 0
+· 使用定理 `Submodule.mem_map`：mem_map {f : M ->ₛₗ[σ₁₂] M₂} {p : Submodule R M} {x :
+ M₂} : x in map f p ↔ exists y, y in p ∧ f y = x
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
+· 使用定理 `Module.apply_evalEquiv_symm_apply`：∀ (R : Type u_3) (M : Type u_4) [inst
+ : CommSemiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   [in
+st_3 : Module.IsReflexi…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `SemilinearEquivClass.instSemilinearMapClass`：∀ {R : Type u_1} {S : Type 
+u_6} {M : Type u_7} {M₂ : Type u_9} (F : Type u_14) [inst : Semiring R] [inst_1 
+: Semiring S]   [inst_2 : AddComm…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 
-English:
-theorem span_eq_top_of_ne_zero
-  statement: [IsReflexive R M]
-  proof: by
-  by_contra! hn
-  obtain ⟨φ, φne, hφ⟩ := exists_dual_map_eq_bot_of_lt_top hn.lt_top inferInstance
-  let φs := (evalEquiv R M).symm φ
-  have this f (hf : f in s) : f φs = 0 := by
-    rw [← mem_bot R]; rw [← hφ]; rw [mem_map]
-    exact ⟨f, subset_span hf, (apply_evalEquiv_symm_apply R M f φ).symm⟩
-  obtain ⟨x, xs, hx⟩ := h φs (by simp [φne, φs])
-exact hx this x xs
-
-中文:
-定理 span_eq_top_of_ne_zero
-  结论: [是自反 R M]
-  证明: by
-  by_contra! hn
-  obtain ⟨φ, φne, hφ⟩ := exists_dual_map_eq_bot_of_lt_top hn.lt_top inferInstance
-  let φs := (evalEquiv R M).symm φ
-  have this f (hf : f in s) : f φs = 0 := by
-    rw [← mem_bot R]; rw [← hφ]; rw [mem_map]
-    exact ⟨f, subset_span hf, (apply_evalEquiv_symm_apply R M f φ).symm⟩
-  obtain ⟨x, xs, hx⟩ := h φs (by simp [φne, φs])
-exact hx this x xs
-
-Depends on / 依赖: apply_evalEquiv_symm_apply, evalEquiv, exists_dual_map_eq_bot_of_lt_top, hn.lt_top, lt_top, mem_bot, mem_map, subset_span
+--- 原说明 ---
+Consider a reflexive module and a set `s` of linear forms. If for any `z ≠ 0` th
+ere exists
+`f ∈ s` such that `f z ≠ 0`, then `s` spans the whole dual space.
 -/
 theorem span_eq_top_of_ne_zero [IsReflexive R M]
-    {s : Set (M ->ₗ[R] R)} [Projective R ((M ->ₗ[R] R) ⧸ (span R s))]
-    (h : forall z != 0, exists f in s, f z != 0) : span R s = ⊤ := by
+    {s : Set (M →ₗ[R] R)} [Projective R ((M →ₗ[R] R) ⧸ (span R s))]
+    (h : ∀ z ≠ 0, ∃ f ∈ s, f z ≠ 0) : span R s = ⊤ := by
   by_contra! hn
   obtain ⟨φ, φne, hφ⟩ := exists_dual_map_eq_bot_of_lt_top hn.lt_top inferInstance
   let φs := (evalEquiv R M).symm φ
-  have this f (hf : f in s) : f φs = 0 := by
-    rw [← mem_bot R]; rw [← hφ]; rw [mem_map]
+  have this f (hf : f ∈ s) : f φs = 0 := by
+    rw [← mem_bot R, ← hφ, mem_map]
     exact ⟨f, subset_span hf, (apply_evalEquiv_symm_apply R M f φ).symm⟩
   obtain ⟨x, xs, hx⟩ := h φs (by simp [φne, φs])
-exact hx this x xs
+  exact hx <| this x xs
 
 variable {ι 𝕜 E : Type*} [Field 𝕜] [AddCommGroup E] [Module 𝕜 E]
 
 open LinearMap Set FiniteDimensional
-
-/--
-theorem `_root_.FiniteDimensional.mem_span_of_iInf_ker_le_ker` / 定理 `_root_.FiniteDimensional.mem_span_of_iInf_ker_le_ker`
-
-English:
-theorem _root_.FiniteDimensional.mem_span_of_iInf_ker_le_ker
-  statement: [FiniteDimensional 𝕜 E]
-  proof: by
-  by_contra hK
-  rcases exists_dual_map_eq_bot_of_notMem hK inferInstance with ⟨φ, φne, hφ⟩
-  let φs := (Module.evalEquiv 𝕜 E).symm φ
-  have : K φs = 0 := by
-refine h (Submodule.mem_iInf _).2 fun i => (mem_bot 𝕜).1 ?_
-    rw [← hφ]; rw [Submodule.mem_map]
-    exact ⟨L i, Submodule.subset_span ⟨i, rfl⟩, (apply_evalEquiv_symm_apply 𝕜 E _ φ).symm⟩
-  simp only [apply_evalEquiv_symm_apply, φs, φne] at this
-
-中文:
-定理 _root_.有限维.mem_span_of_iInf_ker_le_ker
-  结论: [有限维 𝕜 E]
-  证明: by
-  by_contra hK
-  rcases exists_dual_map_eq_bot_of_notMem hK inferInstance with ⟨φ, φne, hφ⟩
-  let φs := (Module.evalEquiv 𝕜 E).symm φ
-  have : K φs = 0 := by
-refine h (Submodule.mem_iInf _).2 fun i => (mem_bot 𝕜).1 ?_
-    rw [← hφ]; rw [Submodule.mem_map]
-    exact ⟨L i, Submodule.subset_span ⟨i, rfl⟩, (apply_evalEquiv_symm_apply 𝕜 E _ φ).symm⟩
-  simp only [apply_evalEquiv_symm_apply, φs, φne] at this
-
-Depends on / 依赖: Eventually, Eventually.of_forall, Module, Module.evalEquiv, Submodule, Submodule.mem_iInf, Submodule.mem_map, Submodule.subset_span, _le_nnreal_smul_eLpNorm, _of_ae_le_mul, apply_evalEquiv_symm_apply, eLpNorm, evalEquiv, exists_dual_map_eq_bot_of_notMem, mem_bot, mem_iInf, mem_map, nnnorm_smul_le, of_forall, subset_span
+/-
+**Submodule._root_.FiniteDimensional.mem_span_of_iInf_ker_le_ker** 是 Mathlib 中的一
+个定理，位于命名空间 `Submodule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.FiniteDimensional.mem_span_of_iInf_ker_le_ker [FiniteDimensional 𝕜 E]
-    {L : ι -> E ->ₗ[𝕜] 𝕜} {K : E ->ₗ[𝕜] 𝕜}
-    (h : ⨅ i, LinearMap.ker (L i) <= ker K) : K in span 𝕜 (range L) := by
+    {L : ι → E →ₗ[𝕜] 𝕜} {K : E →ₗ[𝕜] 𝕜}
+    (h : ⨅ i, LinearMap.ker (L i) ≤ ker K) : K ∈ span 𝕜 (range L) := by
   by_contra hK
   rcases exists_dual_map_eq_bot_of_notMem hK inferInstance with ⟨φ, φne, hφ⟩
   let φs := (Module.evalEquiv 𝕜 E).symm φ
   have : K φs = 0 := by
-refine h (Submodule.mem_iInf _).2 fun i => (mem_bot 𝕜).1 ?_
-    rw [← hφ]; rw [Submodule.mem_map]
+    refine h <| (Submodule.mem_iInf _).2 fun i ↦ (mem_bot 𝕜).1 ?_
+    rw [← hφ, Submodule.mem_map]
     exact ⟨L i, Submodule.subset_span ⟨i, rfl⟩, (apply_evalEquiv_symm_apply 𝕜 E _ φ).symm⟩
   simp only [apply_evalEquiv_symm_apply, φs, φne] at this
 
-/--
-theorem `_root_.mem_span_of_iInf_ker_le_ker` / 定理 `_root_.mem_span_of_iInf_ker_le_ker`
+/-- Given some linear forms $L_1, ..., L_n, K$ over a vector space $E$, if
+$\bigcap_{i=1}^n \mathrm{ker}(L_i) \subseteq \mathrm{ker}(K)$, then $K$ is in the space generated
+by $L_1, ..., L_n$. -/
+/-
+**Submodule._root_.mem_span_of_iInf_ker_le_ker** 是 Mathlib 中的一个定理，位于命名空间 `Submod
+ule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.mem_span_of_iInf_ker_le_ker
-  statement: [Finite ι] {L : ι -> E ->ₗ[𝕜] 𝕜} {K : E ->ₗ[𝕜] 𝕜}
-  proof: by
-  have _ := Fintype.ofFinite ι
-  let φ : E ->ₗ[𝕜] ι -> 𝕜 := LinearMap.pi L
-  let p := ⨅ i, ker (L i)
-  have p_eq : p = ker φ := (ker_pi L).symm
-  let ψ : (E ⧸ p) ->ₗ[𝕜] ι -> 𝕜 := p.liftQ φ p_eq.le
-  have _ : FiniteDimensional 𝕜 (E ⧸ p) := of_injective ψ (ker_eq_bot.1 (ker_liftQ_eq_bot' p φ p_eq))
-  let L' i : (E ⧸ p) ->ₗ[𝕜] 𝕜 := p.liftQ (L i) (iInf_le _ i)
-  let K' : (E ⧸ p) ->ₗ[𝕜] 𝕜 := p.liftQ K h
-  have : ⨅ i, ker (L' i) <= ker K' := by
-    simp_rw +zetaDelta [← ker_pi, pi_liftQ_eq_liftQ_pi, ker_liftQ_eq_bot' p φ p_eq]
-    exact bot_le
-  obtain ⟨c, hK'⟩ :=
-    (mem_span_range_iff_exists_fun 𝕜).1 (FiniteDimensional.mem_span_of_iInf_ker_le_ker this)
-  refine (mem_span_range_iff_exists_fun 𝕜).2 ⟨c, ?_⟩
-  conv_lhs => enter [2]; intro i; rw [← p.liftQ_mkQ (L i) (iInf_le _ i)]
-  rw [← p.liftQ_mkQ K h]
-  ext x
-  convert! LinearMap.congr_fun hK' (p.mkQ x)
-  simp only [L', LinearMap.coe_sum, Finset.sum_apply, smul_apply, coe_comp, Function.comp_apply,
-    smul_eq_mul]
-
-中文:
-定理 _root_.mem_span_of_iInf_ker_le_ker
-  结论: [有限 ι] {L : ι -> E ->ₗ[𝕜] 𝕜} {K : E ->ₗ[𝕜] 𝕜}
-  证明: by
-  have _ := Fintype.ofFinite ι
-  let φ : E ->ₗ[𝕜] ι -> 𝕜 := LinearMap.pi L
-  let p := ⨅ i, ker (L i)
-  have p_eq : p = ker φ := (ker_pi L).symm
-  let ψ : (E ⧸ p) ->ₗ[𝕜] ι -> 𝕜 := p.liftQ φ p_eq.le
-  have _ : FiniteDimensional 𝕜 (E ⧸ p) := of_injective ψ (ker_eq_bot.1 (ker_liftQ_eq_bot' p φ p_eq))
-  let L' i : (E ⧸ p) ->ₗ[𝕜] 𝕜 := p.liftQ (L i) (iInf_le _ i)
-  let K' : (E ⧸ p) ->ₗ[𝕜] 𝕜 := p.liftQ K h
-  have : ⨅ i, ker (L' i) <= ker K' := by
-    simp_rw +zetaDelta [← ker_pi, pi_liftQ_eq_liftQ_pi, ker_liftQ_eq_bot' p φ p_eq]
-    exact bot_le
-  obtain ⟨c, hK'⟩ :=
-    (mem_span_range_iff_exists_fun 𝕜).1 (FiniteDimensional.mem_span_of_iInf_ker_le_ker this)
-  refine (mem_span_range_iff_exists_fun 𝕜).2 ⟨c, ?_⟩
-  conv_lhs => enter [2]; intro i; rw [← p.liftQ_mkQ (L i) (iInf_le _ i)]
-  rw [← p.liftQ_mkQ K h]
-  ext x
-  convert! LinearMap.congr_fun hK' (p.mkQ x)
-  simp only [L', LinearMap.coe_sum, Finset.sum_apply, smul_apply, coe_comp, Function.comp_apply,
-    smul_eq_mul]
-
-Depends on / 依赖: FiniteDimensional, Fintype, Fintype.ofFinite, LinearMap, LinearMap.pi, iInf_le, ker_eq_bot, ker_liftQ_eq_bot, ker_pi, ofFinite, of_injective, p.liftQ, p_eq, p_eq.le, pi_liftQ_eq_liftQ_pi, simp_rw, zetaDelta
+--- 原说明 ---
+Given some linear forms $L_1, ..., L_n, K$ over a vector space $E$, if
+$\bigcap_{i=1}^n \mathrm{ker}(L_i) \subseteq \mathrm{ker}(K)$, then $K$ is in th
+e space generated
+by $L_1, ..., L_n$.
 -/
-theorem _root_.mem_span_of_iInf_ker_le_ker [Finite ι] {L : ι -> E ->ₗ[𝕜] 𝕜} {K : E ->ₗ[𝕜] 𝕜}
-    (h : ⨅ i, ker (L i) <= ker K) : K in span 𝕜 (range L) := by
+theorem _root_.mem_span_of_iInf_ker_le_ker [Finite ι] {L : ι → E →ₗ[𝕜] 𝕜} {K : E →ₗ[𝕜] 𝕜}
+    (h : ⨅ i, ker (L i) ≤ ker K) : K ∈ span 𝕜 (range L) := by
   have _ := Fintype.ofFinite ι
-  let φ : E ->ₗ[𝕜] ι -> 𝕜 := LinearMap.pi L
+  let φ : E →ₗ[𝕜] ι → 𝕜 := LinearMap.pi L
   let p := ⨅ i, ker (L i)
   have p_eq : p = ker φ := (ker_pi L).symm
-  let ψ : (E ⧸ p) ->ₗ[𝕜] ι -> 𝕜 := p.liftQ φ p_eq.le
+  let ψ : (E ⧸ p) →ₗ[𝕜] ι → 𝕜 := p.liftQ φ p_eq.le
   have _ : FiniteDimensional 𝕜 (E ⧸ p) := of_injective ψ (ker_eq_bot.1 (ker_liftQ_eq_bot' p φ p_eq))
-  let L' i : (E ⧸ p) ->ₗ[𝕜] 𝕜 := p.liftQ (L i) (iInf_le _ i)
-  let K' : (E ⧸ p) ->ₗ[𝕜] 𝕜 := p.liftQ K h
-  have : ⨅ i, ker (L' i) <= ker K' := by
+  let L' i : (E ⧸ p) →ₗ[𝕜] 𝕜 := p.liftQ (L i) (iInf_le _ i)
+  let K' : (E ⧸ p) →ₗ[𝕜] 𝕜 := p.liftQ K h
+  have : ⨅ i, ker (L' i) ≤ ker K' := by
     simp_rw +zetaDelta [← ker_pi, pi_liftQ_eq_liftQ_pi, ker_liftQ_eq_bot' p φ p_eq]
     exact bot_le
   obtain ⟨c, hK'⟩ :=
@@ -984,439 +957,419 @@ open Submodule LinearMap
 variable {K V : Type*} [Field K] [AddCommGroup V] [Module K V]
 
 @[simp]
-/--
-theorem `dualAnnihilator_dualCoannihilator_eq` / 定理 `dualAnnihilator_dualCoannihilator_eq`
-
-English:
-theorem dualAnnihilator_dualCoannihilator_eq
-  given: {W : Subspace K V}
-  proof: by
-  refine le_antisymm (fun v => Function.mtr ?_) (le_dualAnnihilator_dualCoannihilator _)
-  simp only [mem_dualAnnihilator, mem_dualCoannihilator]
-  rw [← Quotient.mk_eq_zero W]; rw [← Module.forall_dual_apply_eq_zero_iff K]
-  push Not
-  refine fun ⟨φ, hφ⟩ => ⟨φ.comp W.mkQ, fun w hw => ?_, hφ⟩
-  rw [comp_apply]; rw [mkQ_apply]; rw [(Quotient.mk_eq_zero W).mpr hw]; rw [φ.map_zero]
-
-中文:
-定理 dualAnnihilator_dualCoannihilator_eq
-  条件: {W : 子空间 K V}
-  证明: by
-  refine le_antisymm (fun v => Function.mtr ?_) (le_dualAnnihilator_dualCoannihilator _)
-  simp only [mem_dualAnnihilator, mem_dualCoannihilator]
-  rw [← Quotient.mk_eq_zero W]; rw [← Module.forall_dual_apply_eq_zero_iff K]
-  push Not
-  refine fun ⟨φ, hφ⟩ => ⟨φ.comp W.mkQ, fun w hw => ?_, hφ⟩
-  rw [comp_apply]; rw [mkQ_apply]; rw [(Quotient.mk_eq_zero W).mpr hw]; rw [φ.map_zero]
-
-Depends on / 依赖: Function, Function.mtr, Module, Module.forall_dual_apply_eq_zero_iff, Quotient, Quotient.mk_eq_zero, W.mkQ, comp_apply, forall_dual_apply_eq_zero_iff, le_antisymm, le_dualAnnihilator_dualCoannihilator, map_zero, mem_dualAnnihilator, mem_dualCoannihilator, mkQ_apply, mk_eq_zero
+/-
+**Subspace.dualAnnihilator_dualCoannihilator_eq** 是 Mathlib 中的一个定理，位于命名空间 `Subsp
+ace`。
+形式化陈述：dualAnnihilator_dualCoannihilator_eq {W : Subspace K V} : W.dualAnnihilato
+r.dualCoannihilator = W
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Function.mtr`：∀ {a b : Prop}, (¬a → ¬b) → b → a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.Quotient.mk_eq_zero`：mk_eq_zero : (mk x : M ⧸ p) = 0 ↔ x in p
+· 使用定理 `Module.forall_dual_apply_eq_zero_iff`：forall_dual_apply_eq_zero_iff (R :
+ Type*) [Semiring R] [Module R V] [Projective R V] (v : V) : (forall φ : Module.
+Dual R V, φ v = 0) ↔ v = 0
+· 使用定理 `Module.Projective.of_free`：∀ {R : Type u_1} [inst : Semiring R] {P : Typ
+e u_2} [inst_1 : AddCommMonoid P] [inst_2 : _root_.Module R P]   [Module.Free R 
+P], Module.Proj…
+· 使用定理 `Module.Free.of_divisionRing`：∀ (K : Type u_3) (V : Type u_4) [inst : Div
+isionRing K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V],   Module.Fr
+ee K V
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `LinearMap.comp_apply`：comp_apply (x : M₁) : f.comp g x = f (g x)
+· 使用定理 `Submodule.mkQ_apply`：mkQ_apply (x : M) : p.mkQ x = Quotient.mk x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LinearMap.map_zero`：∀ {R : Type u_1} {S : Type u_5} {M : Type u_8} {M₃ :
+ Type u_11} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid 
+M] [inst…
+· 使用定理 `Submodule.le_dualAnnihilator_dualCoannihilator`：le_dualAnnihilator_dualC
+oannihilator (U : Submodule R M) : U <= U.dualAnnihilator.dualCoannihilator
 -/
 theorem dualAnnihilator_dualCoannihilator_eq {W : Subspace K V} :
     W.dualAnnihilator.dualCoannihilator = W := by
-  refine le_antisymm (fun v => Function.mtr ?_) (le_dualAnnihilator_dualCoannihilator _)
+  refine le_antisymm (fun v ↦ Function.mtr ?_) (le_dualAnnihilator_dualCoannihilator _)
   simp only [mem_dualAnnihilator, mem_dualCoannihilator]
-  rw [← Quotient.mk_eq_zero W]; rw [← Module.forall_dual_apply_eq_zero_iff K]
+  rw [← Quotient.mk_eq_zero W, ← Module.forall_dual_apply_eq_zero_iff K]
   push Not
-  refine fun ⟨φ, hφ⟩ => ⟨φ.comp W.mkQ, fun w hw => ?_, hφ⟩
-  rw [comp_apply]; rw [mkQ_apply]; rw [(Quotient.mk_eq_zero W).mpr hw]; rw [φ.map_zero]
+  refine fun ⟨φ, hφ⟩ ↦ ⟨φ.comp W.mkQ, fun w hw ↦ ?_, hφ⟩
+  rw [comp_apply, mkQ_apply, (Quotient.mk_eq_zero W).mpr hw, φ.map_zero]
 
 -- exact elaborates slowly
-/--
-theorem `forall_mem_dualAnnihilator_apply_eq_zero_iff` / 定理 `forall_mem_dualAnnihilator_apply_eq_zero_iff`
-
-English:
-theorem forall_mem_dualAnnihilator_apply_eq_zero_iff
-  given: (W : Subspace K V) (v : V)
-  proof: by
-  rw [← SetLike.ext_iff.mp dualAnnihilator_dualCoannihilator_eq v]; rw [mem_dualCoannihilator]
-
-中文:
-定理 对任意_mem_dualAnnihilator_apply_eq_zero_iff
-  条件: (W : 子空间 K V) (v : V)
-  证明: by
-  rw [← SetLike.ext_iff.mp dualAnnihilator_dualCoannihilator_eq v]; rw [mem_dualCoannihilator]
-
-Depends on / 依赖: SetLike, SetLike.ext_iff.mp, dualAnnihilator_dualCoannihilator_eq, ext_iff, mem_dualCoannihilator
+/-
+**Subspace.forall_mem_dualAnnihilator_apply_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空
+间 `Subspace`。
+形式化陈述：forall_mem_dualAnnihilator_apply_eq_zero_iff (W : Subspace K V) (v : V) : 
+(forall φ : Module.Dual K V, φ in W.dualAnnihilator -> φ v = 0) ↔ v in W
+参数：W : Subspace K V；v : V。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `SetLike.ext_iff`：ext_iff : p = q ↔ forall x, x in p ↔ x in q
+· 使用定理 `Subspace.dualAnnihilator_dualCoannihilator_eq`：dualAnnihilator_dualCoann
+ihilator_eq {W : Subspace K V} : W.dualAnnihilator.dualCoannihilator = W
+· 使用定理 `Submodule.mem_dualCoannihilator`：mem_dualCoannihilator {Φ : Submodule R 
+(Module.Dual R M)} (x : M) : x in Φ.dualCoannihilator ↔ forall φ in Φ, (φ x : R)
+ = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem forall_mem_dualAnnihilator_apply_eq_zero_iff (W : Subspace K V) (v : V) :
-    (forall φ : Module.Dual K V, φ in W.dualAnnihilator -> φ v = 0) ↔ v in W := by
-  rw [← SetLike.ext_iff.mp dualAnnihilator_dualCoannihilator_eq v]; rw [mem_dualCoannihilator]
-
-/--
-theorem `comap_dualAnnihilator_dualAnnihilator` / 定理 `comap_dualAnnihilator_dualAnnihilator`
-
-English:
-theorem comap_dualAnnihilator_dualAnnihilator
-  given: (W : Subspace K V)
-  proof: by
-  ext; rw [Iff.comm, ← forall_mem_dualAnnihilator_apply_eq_zero_iff]; simp
-
-中文:
-定理 comap_dualAnnihilator_dualAnnihilator
-  条件: (W : 子空间 K V)
-  证明: by
-  ext; rw [Iff.comm, ← forall_mem_dualAnnihilator_apply_eq_zero_iff]; simp
-
-Depends on / 依赖: Iff.comm, forall_mem_dualAnnihilator_apply_eq_zero_iff
+    (∀ φ : Module.Dual K V, φ ∈ W.dualAnnihilator → φ v = 0) ↔ v ∈ W := by
+  rw [← SetLike.ext_iff.mp dualAnnihilator_dualCoannihilator_eq v, mem_dualCoannihilator]
+/-
+**Subspace.comap_dualAnnihilator_dualAnnihilator** 是 Mathlib 中的一个定理，位于命名空间 `Subs
+pace`。
+形式化陈述：comap_dualAnnihilator_dualAnnihilator (W : Subspace K V) : W.dualAnnihilat
+or.dualAnnihilator.comap (Module.Dual.eval K V) = W
+参数：W : Subspace K V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.comm`：∀ {a b : Prop}, (a ↔ b) ↔ (b ↔ a)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subspace.forall_mem_dualAnnihilator_apply_eq_zero_iff`：forall_mem_dualAn
+nihilator_apply_eq_zero_iff (W : Subspace K V) (v : V) : (forall φ : Module.Dual
+ K V, φ in W.dualAnnihilator -> φ v = 0) ↔ …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem comap_dualAnnihilator_dualAnnihilator (W : Subspace K V) :
     W.dualAnnihilator.dualAnnihilator.comap (Module.Dual.eval K V) = W := by
   ext; rw [Iff.comm, ← forall_mem_dualAnnihilator_apply_eq_zero_iff]; simp
-
-/--
-theorem `map_le_dualAnnihilator_dualAnnihilator` / 定理 `map_le_dualAnnihilator_dualAnnihilator`
-
-English:
-theorem map_le_dualAnnihilator_dualAnnihilator
-  given: (W : Subspace K V)
-  proof: map_le_iff_le_comap.mpr (comap_dualAnnihilator_dualAnnihilator W).ge
-
-中文:
-定理 map_le_dualAnnihilator_dualAnnihilator
-  条件: (W : 子空间 K V)
-  证明: map_le_iff_le_comap.mpr (comap_dualAnnihilator_dualAnnihilator W).ge
-
-Depends on / 依赖: comap_dualAnnihilator_dualAnnihilator, map_le_iff_le_comap, map_le_iff_le_comap.mpr
+/-
+**Subspace.map_le_dualAnnihilator_dualAnnihilator** 是 Mathlib 中的一个定理，位于命名空间 `Sub
+space`。
+形式化陈述：map_le_dualAnnihilator_dualAnnihilator (W : Subspace K V) : W.map (Module.
+Dual.eval K V) <= W.dualAnnihilator.dualAnnihilator
+参数：W : Subspace K V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Submodule.map_le_iff_le_comap`：map_le_iff_le_comap {f : M ->ₛₗ[σ₁₂] M₂} 
+{p : Submodule R M} {q : Submodule R₂ M₂} : map f p <= q ↔ p <= comap f q
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Subspace.comap_dualAnnihilator_dualAnnihilator`：comap_dualAnnihilator_du
+alAnnihilator (W : Subspace K V) : W.dualAnnihilator.dualAnnihilator.comap (Modu
+le.Dual.eval K V) = W
 -/
 theorem map_le_dualAnnihilator_dualAnnihilator (W : Subspace K V) :
-    W.map (Module.Dual.eval K V) <= W.dualAnnihilator.dualAnnihilator :=
+    W.map (Module.Dual.eval K V) ≤ W.dualAnnihilator.dualAnnihilator :=
   map_le_iff_le_comap.mpr (comap_dualAnnihilator_dualAnnihilator W).ge
 
-/--
-Definition of `dualAnnihilatorGci` / `dualAnnihilatorGci` 的定义
+/-- `Submodule.dualAnnihilator` and `Submodule.dualCoannihilator` form a Galois coinsertion. -/
+/-
+**Subspace.dualAnnihilatorGci** 是 Mathlib 中的一个定义，位于命名空间 `Subspace`。
+形式化陈述：dualAnnihilatorGci (K V : Type*) [Field K] [AddCommGroup V] [Module K V] :
+ GaloisCoinsertion (OrderDual.toDual ∘ (dualAnnihilator : Subspace K V -> Subspa
+ce K (Module.Dual K V))) (dualCoannihilator ∘ OrderDual.ofDual) where choice W _
+参数：K V : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dualAnnihilatorGci
-  signature: (K V : Type*) [Field K] [AddCommGroup V] [Module K V]
-  body: dualCoannihilator W
-  gc := dualAnnihilator_gc K V
-  u_l_le _ := dualAnnihilator_dualCoannihilator_eq.le
-  choice_eq _ _ := rfl
-
-中文:
-定义 dualAnnihilatorGci
-  签名: (K V : 类型) [域 K] [加法交换群 V] [模 K V]
-  定义体: dualCoannihilator W
-  gc := dualAnnihilator_gc K V
-  u_l_le _ := dualAnnihilator_dualCoannihilator_eq.le
-  choice_eq _ _ := rfl
-
-Depends on / 依赖: Eventually, Eventually.of_forall, _le_nnreal_smul_eLpNorm, _of_ae_le_mul, dualCoannihilator, eLpNorm, enorm_smul, le_of_eq, of_forall
+--- 原说明 ---
+`Submodule.dualAnnihilator` and `Submodule.dualCoannihilator` form a Galois coin
+sertion.
 -/
 def dualAnnihilatorGci (K V : Type*) [Field K] [AddCommGroup V] [Module K V] :
     GaloisCoinsertion
-      (OrderDual.toDual ∘ (dualAnnihilator : Subspace K V -> Subspace K (Module.Dual K V)))
+      (OrderDual.toDual ∘ (dualAnnihilator : Subspace K V → Subspace K (Module.Dual K V)))
       (dualCoannihilator ∘ OrderDual.ofDual) where
   choice W _ := dualCoannihilator W
   gc := dualAnnihilator_gc K V
   u_l_le _ := dualAnnihilator_dualCoannihilator_eq.le
   choice_eq _ _ := rfl
-
-/--
-theorem `dualAnnihilator_le_dualAnnihilator_iff` / 定理 `dualAnnihilator_le_dualAnnihilator_iff`
-
-English:
-theorem dualAnnihilator_le_dualAnnihilator_iff
-  given: {W W' : Subspace K V}
-  proof: (dualAnnihilatorGci K V).l_le_l_iff
-
-中文:
-定理 dualAnnihilator_le_dualAnnihilator_iff
-  条件: {W W' : 子空间 K V}
-  证明: (dualAnnihilatorGci K V).l_le_l_iff
-
-Depends on / 依赖: dualAnnihilatorGci, l_le_l_iff
+/-
+**Subspace.dualAnnihilator_le_dualAnnihilator_iff** 是 Mathlib 中的一个定理，位于命名空间 `Sub
+space`。
+形式化陈述：dualAnnihilator_le_dualAnnihilator_iff {W W' : Subspace K V} : W.dualAnnih
+ilator <= W'.dualAnnihilator ↔ W' <= W
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisCoinsertion.l_le_l_iff`：∀ {α : Type u} {β : Type v} {u : α → β} {l
+ : β → α} [inst : Preorder α] [inst_1 : Preorder β]   (gi : GaloisCoinsertion l 
+u) {a b : β}, l b …
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
 -/
 theorem dualAnnihilator_le_dualAnnihilator_iff {W W' : Subspace K V} :
-    W.dualAnnihilator <= W'.dualAnnihilator ↔ W' <= W :=
+    W.dualAnnihilator ≤ W'.dualAnnihilator ↔ W' ≤ W :=
   (dualAnnihilatorGci K V).l_le_l_iff
-
-/--
-theorem `dualAnnihilator_inj` / 定理 `dualAnnihilator_inj`
-
-English:
-theorem dualAnnihilator_inj
-  given: {W W' : Subspace K V}
-  proof: ⟨fun h => (dualAnnihilatorGci K V).l_injective h, congr_arg _⟩
-
-中文:
-定理 dualAnnihilator_inj
-  条件: {W W' : 子空间 K V}
-  证明: ⟨fun h => (dualAnnihilatorGci K V).l_injective h, congr_arg _⟩
-
-Depends on / 依赖: congr_arg, dualAnnihilatorGci, l_injective
+/-
+**Subspace.dualAnnihilator_inj** 是 Mathlib 中的一个定理，位于命名空间 `Subspace`。
+形式化陈述：dualAnnihilator_inj {W W' : Subspace K V} : W.dualAnnihilator = W'.dualAnn
+ihilator ↔ W = W'
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `GaloisCoinsertion.l_injective`：∀ {α : Type u} {β : Type v} {u : α → β} {
+l : β → α} [inst : Preorder α] [inst_1 : PartialOrder β]   (gi : GaloisCoinserti
+on l u), Function.I…
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem dualAnnihilator_inj {W W' : Subspace K V} :
     W.dualAnnihilator = W'.dualAnnihilator ↔ W = W' :=
-  ⟨fun h => (dualAnnihilatorGci K V).l_injective h, congr_arg _⟩
+  ⟨fun h ↦ (dualAnnihilatorGci K V).l_injective h, congr_arg _⟩
 
-/--
-Definition of `dualLift` / `dualLift` 的定义
+/-- Given a subspace `W` of `V` and an element of its dual `φ`, `dualLift W φ` is
+an arbitrary extension of `φ` to an element of the dual of `V`.
+That is, `dualLift W φ` sends `w ∈ W` to `φ x` and `x` in a chosen complement of `W` to `0`. -/
+/-
+**Subspace.dualLift** 是 Mathlib 中的一个定义，位于命名空间 `Subspace`。
+形式化陈述：dualLift (W : Subspace K V) : Module.Dual K W ->ₗ[K] Module.Dual K V
+参数：W : Subspace K V。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dualLift
-  signature: (W : Subspace K V)
-  body: W.subtype.leftInverse.dualMap
-
-中文:
-定义 dualLift
-  签名: (W : 子空间 K V)
-  定义体: W.subtype.leftInverse.dualMap
-
-Depends on / 依赖: W.subtype.leftInverse.dualMap, dualMap, leftInverse, subtype
+--- 原说明 ---
+Given a subspace `W` of `V` and an element of its dual `φ`, `dualLift W φ` is
+an arbitrary extension of `φ` to an element of the dual of `V`.
+That is, `dualLift W φ` sends `w ∈ W` to `φ x` and `x` in a chosen complement of
+ `W` to `0`.
 -/
-noncomputable def dualLift (W : Subspace K V) : Module.Dual K W ->ₗ[K] Module.Dual K V :=
+noncomputable def dualLift (W : Subspace K V) : Module.Dual K W →ₗ[K] Module.Dual K V :=
   W.subtype.leftInverse.dualMap
 
 variable {W : Subspace K V}
 
 @[simp]
-/--
-theorem `dualLift_of_subtype` / 定理 `dualLift_of_subtype`
-
-English:
-theorem dualLift_of_subtype
-  given: {φ : Module.Dual K W} (w : W)
-  statement: W.dualLift φ (w : V) = φ w
-  proof: congr_arg φ LinearMap.leftInverse_apply_of_inj W.ker_subtype _
-
-中文:
-定理 dualLift_of_subtype
-  条件: {φ : 模.对偶 K W} (w : W)
-  结论: W.dualLift φ (w : V) = φ w
-  证明: congr_arg φ LinearMap.leftInverse_apply_of_inj W.ker_subtype _
-
-Depends on / 依赖: LinearMap, LinearMap.leftInverse_apply_of_inj, W.ker_subtype, congr_arg, ker_subtype, leftInverse_apply_of_inj
+/-
+**Subspace.dualLift_of_subtype** 是 Mathlib 中的一个定理，位于命名空间 `Subspace`。
+形式化陈述：dualLift_of_subtype {φ : Module.Dual K W} (w : W) : W.dualLift φ (w : V) =
+ φ w
+参数：w : W。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `LinearMap.leftInverse_apply_of_inj`：LinearMap.leftInverse_apply_of_inj {
+f : V ->ₗ[K] V'} (h_inj : LinearMap.ker f = ⊥) (x : V) : f.leftInverse (f x) = x
+· 使用定理 `Submodule.ker_subtype`：ker_subtype : ker p.subtype = ⊥
 -/
 theorem dualLift_of_subtype {φ : Module.Dual K W} (w : W) : W.dualLift φ (w : V) = φ w :=
-congr_arg φ LinearMap.leftInverse_apply_of_inj W.ker_subtype _
-
-/--
-theorem `dualLift_of_mem` / 定理 `dualLift_of_mem`
-
-English:
-theorem dualLift_of_mem
-  given: {φ : Module.Dual K W} {w : V} (hw : w in W)
-  statement: W.dualLift φ w = φ ⟨w, hw⟩
-  proof: dualLift_of_subtype ⟨w, hw⟩
-
-@[simp]
-
-中文:
-定理 dualLift_of_mem
-  条件: {φ : 模.对偶 K W} {w : V} (hw : w in W)
-  结论: W.dualLift φ w = φ ⟨w, hw⟩
-  证明: dualLift_of_subtype ⟨w, hw⟩
-
-@[simp]
-
-Depends on / 依赖: ENNReal, ENNReal.div_eq_inv_mul, ENNReal.mul_le_of_le_div, _const_smul_le, _eq_lintegral_enorm, div_eq_inv_mul, dualLift_of_subtype, eLpNorm, enorm_inv, eq_or_ne, hq_pos, le_antisymm, mul_le_of_le_div
+  congr_arg φ <| LinearMap.leftInverse_apply_of_inj W.ker_subtype _
+/-
+**Subspace.dualLift_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Subspace`。
+形式化陈述：dualLift_of_mem {φ : Module.Dual K W} {w : V} (hw : w in W) : W.dualLift φ
+ w = φ ⟨w, hw⟩
+参数：hw : w in W。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subspace.dualLift_of_subtype`：dualLift_of_subtype {φ : Module.Dual K W} 
+(w : W) : W.dualLift φ (w : V) = φ w
 -/
-theorem dualLift_of_mem {φ : Module.Dual K W} {w : V} (hw : w in W) : W.dualLift φ w = φ ⟨w, hw⟩ :=
+theorem dualLift_of_mem {φ : Module.Dual K W} {w : V} (hw : w ∈ W) : W.dualLift φ w = φ ⟨w, hw⟩ :=
   dualLift_of_subtype ⟨w, hw⟩
 
 @[simp]
-/--
-theorem `dualRestrict_comp_dualLift` / 定理 `dualRestrict_comp_dualLift`
-
-English:
-theorem dualRestrict_comp_dualLift
-  given: (W : Subspace K V)
-  statement: W.dualRestrict.comp W.dualLift = 1
-  proof: by
-  ext φ x
-  simp
-
-中文:
-定理 dualRestrict_comp_dualLift
-  条件: (W : 子空间 K V)
-  结论: W.dualRestrict.comp W.dualLift = 1
-  证明: by
-  ext φ x
-  simp
+/-
+**Subspace.dualRestrict_comp_dualLift** 是 Mathlib 中的一个定理，位于命名空间 `Subspace`。
+形式化陈述：dualRestrict_comp_dualLift (W : Subspace K V) : W.dualRestrict.comp W.dual
+Lift = 1
+参数：W : Subspace K V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subspace.dualLift_of_subtype`：dualLift_of_subtype {φ : Module.Dual K W} 
+(w : W) : W.dualLift φ (w : V) = φ w
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem dualRestrict_comp_dualLift (W : Subspace K V) : W.dualRestrict.comp W.dualLift = 1 := by
   ext φ x
   simp
-
-/--
-theorem `dualRestrict_leftInverse` / 定理 `dualRestrict_leftInverse`
-
-English:
-theorem dualRestrict_leftInverse
-  given: (W : Subspace K V)
-  proof: fun x => by
-  rw [← LinearMap.comp_apply]; rw [dualRestrict_comp_dualLift]; rw [End.one_apply]
-
-中文:
-定理 dualRestrict_leftInverse
-  条件: (W : 子空间 K V)
-  证明: fun x => by
-  rw [← LinearMap.comp_apply]; rw [dualRestrict_comp_dualLift]; rw [End.one_apply]
-
-Depends on / 依赖: End.one_apply, LinearMap, LinearMap.comp_apply, comp_apply, dualRestrict_comp_dualLift, one_apply
+/-
+**Subspace.dualRestrict_leftInverse** 是 Mathlib 中的一个定理，位于命名空间 `Subspace`。
+形式化陈述：dualRestrict_leftInverse (W : Subspace K V) : Function.LeftInverse W.dualR
+estrict W.dualLift
+参数：W : Subspace K V。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.comp_apply`：comp_apply (x : M₁) : f.comp g x = f (g x)
+· 使用定理 `Subspace.dualRestrict_comp_dualLift`：dualRestrict_comp_dualLift (W : Sub
+space K V) : W.dualRestrict.comp W.dualLift = 1
+· 使用定理 `Module.End.one_apply`：one_apply (x : M) : (1 : Module.End R M) x = x
 -/
 theorem dualRestrict_leftInverse (W : Subspace K V) :
     Function.LeftInverse W.dualRestrict W.dualLift := fun x => by
-  rw [← LinearMap.comp_apply]; rw [dualRestrict_comp_dualLift]; rw [End.one_apply]
-
-/--
-theorem `dualLift_rightInverse` / 定理 `dualLift_rightInverse`
-
-English:
-theorem dualLift_rightInverse
-  given: (W : Subspace K V)
-  proof: W.dualRestrict_leftInverse
-
-中文:
-定理 dualLift_rightInverse
-  条件: (W : 子空间 K V)
-  证明: W.dualRestrict_leftInverse
-
-Depends on / 依赖: W.dualRestrict_leftInverse, dualRestrict_leftInverse
+  rw [← LinearMap.comp_apply, dualRestrict_comp_dualLift, End.one_apply]
+/-
+**Subspace.dualLift_rightInverse** 是 Mathlib 中的一个定理，位于命名空间 `Subspace`。
+形式化陈述：dualLift_rightInverse (W : Subspace K V) : Function.RightInverse W.dualLif
+t W.dualRestrict
+参数：W : Subspace K V。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subspace.dualRestrict_leftInverse`：dualRestrict_leftInverse (W : Subspac
+e K V) : Function.LeftInverse W.dualRestrict W.dualLift
 -/
 theorem dualLift_rightInverse (W : Subspace K V) :
     Function.RightInverse W.dualLift W.dualRestrict :=
   W.dualRestrict_leftInverse
-
-/--
-theorem `dualRestrict_surjective` / 定理 `dualRestrict_surjective`
-
-English:
-theorem dualRestrict_surjective
-  statement: Function.Surjective W.dualRestrict
-  proof: W.dualLift_rightInverse.surjective
-
-中文:
-定理 dualRestrict_surjective
-  结论: 函数.满射 W.dualRestrict
-  证明: W.dualLift_rightInverse.surjective
-
-Depends on / 依赖: ENNReal, ENNReal.lintegral_Lp_add_le, Pi.add_apply, W.dualLift_rightInverse.surjective, add_apply, dualLift_rightInverse, eLpNorm, enorm_add_le, hf.enorm, hg.enorm, lintegral_Lp_add_le, surjective
+/-
+**Subspace.dualRestrict_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Subspace`。
+形式化陈述：dualRestrict_surjective : Function.Surjective W.dualRestrict
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.RightInverse.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α
+ → β} {g : β → α}, Function.RightInverse g f → Function.Surjective f
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Subspace.dualLift_rightInverse`：dualLift_rightInverse (W : Subspace K V)
+ : Function.RightInverse W.dualLift W.dualRestrict
 -/
 theorem dualRestrict_surjective : Function.Surjective W.dualRestrict :=
   W.dualLift_rightInverse.surjective
-
-/--
-theorem `dualLift_injective` / 定理 `dualLift_injective`
-
-English:
-theorem dualLift_injective
-  statement: Function.Injective W.dualLift
-  proof: W.dualRestrict_leftInverse.injective
-
-中文:
-定理 dualLift_injective
-  结论: 函数.单射 W.dualLift
-  证明: W.dualRestrict_leftInverse.injective
-
-Depends on / 依赖: ENNReal, ENNReal.lintegral_Lp_add_le_of_le_one, Pi.add_apply, W.dualRestrict_leftInverse.injective, add_apply, dualRestrict_leftInverse, eLpNorm, enorm_add_le, hf.enorm, injective, lintegral_Lp_add_le_of_le_one
+/-
+**Subspace.dualLift_injective** 是 Mathlib 中的一个定理，位于命名空间 `Subspace`。
+形式化陈述：dualLift_injective : Function.Injective W.dualLift
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.LeftInverse.injective`：∀ {α : Sort u_1} {β : Sort u_2} {g : β →
+ α} {f : α → β}, Function.LeftInverse g f → Function.Injective f
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Subspace.dualRestrict_leftInverse`：dualRestrict_leftInverse (W : Subspac
+e K V) : Function.LeftInverse W.dualRestrict W.dualLift
 -/
 theorem dualLift_injective : Function.Injective W.dualLift :=
   W.dualRestrict_leftInverse.injective
 
-/--
-Definition of `quotAnnihilatorEquiv` / `quotAnnihilatorEquiv` 的定义
+/-- The quotient by the `dualAnnihilator` of a subspace is isomorphic to the
+  dual of that subspace. -/
+/-
+**Subspace.quotAnnihilatorEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Subspace`。
+形式化陈述：quotAnnihilatorEquiv (W : Subspace K V) : (Module.Dual K V ⧸ W.dualAnnihil
+ator) ≃ₗ[K] Module.Dual K W
+参数：W : Subspace K V。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Subspace.dualRestrict_surjective`：dualRestrict_surjective : Function.Sur
+jective W.dualRestrict
 
-English:
-definition quotAnnihilatorEquiv
-  signature: (W : Subspace K V)
-  body: (quotEquivOfEq _ _ W.dualRestrict_ker_eq_dualAnnihilator).symm.trans
-    W.dualRestrict.quotKerEquivOfSurjective dualRestrict_surjective
-
-@[simp]
-
-中文:
-定义 quotAnnihilatorEquiv
-  签名: (W : 子空间 K V)
-  定义体: (quotEquivOfEq _ _ W.dualRestrict_ker_eq_dualAnnihilator).symm.trans
-    W.dualRestrict.quotKerEquivOfSurjective dualRestrict_surjective
-
-@[simp]
-
-Depends on / 依赖: W.dualRestrict.quotKerEquivOfSurjective, W.dualRestrict_ker_eq_dualAnnihilator, dualRestrict, dualRestrict_ker_eq_dualAnnihilator, dualRestrict_surjective, quotEquivOfEq, quotKerEquivOfSurjective, symm.trans
+--- 原说明 ---
+The quotient by the `dualAnnihilator` of a subspace is isomorphic to the
+  dual of that subspace.
 -/
 noncomputable def quotAnnihilatorEquiv (W : Subspace K V) :
     (Module.Dual K V ⧸ W.dualAnnihilator) ≃ₗ[K] Module.Dual K W :=
-(quotEquivOfEq _ _ W.dualRestrict_ker_eq_dualAnnihilator).symm.trans
+  (quotEquivOfEq _ _ W.dualRestrict_ker_eq_dualAnnihilator).symm.trans <|
     W.dualRestrict.quotKerEquivOfSurjective dualRestrict_surjective
 
 @[simp]
-/--
-theorem `quotAnnihilatorEquiv_apply` / 定理 `quotAnnihilatorEquiv_apply`
-
-English:
-theorem quotAnnihilatorEquiv_apply
-  given: (W : Subspace K V) (φ : Module.Dual K V)
-  proof: by
-  ext
-  rfl
-
-中文:
-定理 quotAnnihilatorEquiv_apply
-  条件: (W : 子空间 K V) (φ : 模.对偶 K V)
-  证明: by
-  ext
-  rfl
+/-
+**Subspace.quotAnnihilatorEquiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `Subspace`。
+形式化陈述：quotAnnihilatorEquiv_apply (W : Subspace K V) (φ : Module.Dual K V) : W.qu
+otAnnihilatorEquiv (Submodule.Quotient.mk φ) = W.dualRestrict φ
+参数：W : Subspace K V；φ : Module.Dual K V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 theorem quotAnnihilatorEquiv_apply (W : Subspace K V) (φ : Module.Dual K V) :
     W.quotAnnihilatorEquiv (Submodule.Quotient.mk φ) = W.dualRestrict φ := by
   ext
   rfl
 
-/--
-Definition of `dualEquivDual` / `dualEquivDual` 的定义
+/-- The natural isomorphism from the dual of a subspace `W` to `W.dualLift.range`. -/
+/-
+**Subspace.dualEquivDual** 是 Mathlib 中的一个定义，位于命名空间 `Subspace`。
+形式化陈述：dualEquivDual (W : Subspace K V) : Module.Dual K W ≃ₗ[K] LinearMap.range W
+.dualLift
+参数：W : Subspace K V。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Subspace.dualLift_injective`：dualLift_injective : Function.Injective W.d
+ualLift
 
-English:
-definition dualEquivDual
-  signature: (W : Subspace K V)
-  body: LinearEquiv.ofInjective _ dualLift_injective
-
-中文:
-定义 dualEquivDual
-  签名: (W : 子空间 K V)
-  定义体: LinearEquiv.ofInjective _ dualLift_injective
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.ofInjective, dualLift_injective, ofInjective
+--- 原说明 ---
+The natural isomorphism from the dual of a subspace `W` to `W.dualLift.range`.
 -/
 noncomputable def dualEquivDual (W : Subspace K V) :
     Module.Dual K W ≃ₗ[K] LinearMap.range W.dualLift :=
   LinearEquiv.ofInjective _ dualLift_injective
-
-/--
-theorem `dualEquivDual_def` / 定理 `dualEquivDual_def`
-
-English:
-theorem dualEquivDual_def
-  given: (W : Subspace K V)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 dualEquivDual_def
-  条件: (W : 子空间 K V)
-  证明: rfl
-
-@[simp]
+/-
+**Subspace.dualEquivDual_def** 是 Mathlib 中的一个定理，位于命名空间 `Subspace`。
+形式化陈述：dualEquivDual_def (W : Subspace K V) : W.dualEquivDual.toLinearMap = W.dua
+lLift.rangeRestrict
+参数：W : Subspace K V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 theorem dualEquivDual_def (W : Subspace K V) :
     W.dualEquivDual.toLinearMap = W.dualLift.rangeRestrict :=
   rfl
 
 @[simp]
-/--
-theorem `dualEquivDual_apply` / 定理 `dualEquivDual_apply`
-
-English:
-theorem dualEquivDual_apply
-  given: (φ : Module.Dual K W)
-  proof: rfl
-
-中文:
-定理 dualEquivDual_apply
-  条件: (φ : 模.对偶 K W)
-  证明: rfl
+/-
+**Subspace.dualEquivDual_apply** 是 Mathlib 中的一个定理，位于命名空间 `Subspace`。
+形式化陈述：dualEquivDual_apply (φ : Module.Dual K W) : W.dualEquivDual φ = ⟨W.dualLif
+t φ, mem_range.2 ⟨φ, rfl⟩⟩
+参数：φ : Module.Dual K W。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 theorem dualEquivDual_apply (φ : Module.Dual K W) :
     W.dualEquivDual φ = ⟨W.dualLift φ, mem_range.2 ⟨φ, rfl⟩⟩ :=
@@ -1426,131 +1379,126 @@ section
 
 open FiniteDimensional Module
 
-/--
-Instance `instModuleDualFiniteDimensional` / 实例 `instModuleDualFiniteDimensional`
-
-English:
-instance instModuleDualFiniteDimensional
-  signature: [FiniteDimensional K V]
-  body: by
-  infer_instance
-
-@[simp]
-
-中文:
-实例 instModuleDualFiniteDimensional
-  签名: [有限维 K V]
-  定义体: by
-  infer_instance
-
-@[simp]
-
-Depends on / 依赖: infer_instance
+/-
+**Subspace.instModuleDualFiniteDimensional** 是 Mathlib 中的一个实例，位于命名空间 `Subspace`。
+形式化陈述：instModuleDualFiniteDimensional [FiniteDimensional K V] : FiniteDimensiona
+l K (Module.Dual K V)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Module.Projective.of_free`：∀ {R : Type u_1} [inst : Semiring R] {P : Typ
+e u_2} [inst_1 : AddCommMonoid P] [inst_2 : _root_.Module R P]   [Module.Free R 
+P], Module.Proj…
+· 使用定理 `Module.Free.of_divisionRing`：∀ (K : Type u_3) (V : Type u_4) [inst : Div
+isionRing K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V],   Module.Fr
+ee K V
 -/
 instance instModuleDualFiniteDimensional [FiniteDimensional K V] :
     FiniteDimensional K (Module.Dual K V) := by
   infer_instance
 
 @[simp]
-/--
-theorem `dual_finrank_eq` / 定理 `dual_finrank_eq`
-
-English:
-theorem dual_finrank_eq
-  statement: finrank K (Module.Dual K V) = finrank K V
-  proof: by
-  by_cases h : FiniteDimensional K V
-  · classical exact LinearEquiv.finrank_eq (Basis.ofVectorSpace K V).toDualEquiv.symm
-  rw [finrank_eq_zero_of_basis_imp_false]; rw [finrank_eq_zero_of_basis_imp_false]
-  · exact fun _ b => h (Module.Finite.of_basis b)
-  · exact fun _ b => h ((Module.finite_dual_iff K).mp <| Module.Finite.of_basis b)
-
-中文:
-定理 dual_finrank_eq
-  结论: finrank K (模.对偶 K V) = finrank K V
-  证明: by
-  by_cases h : FiniteDimensional K V
-  · classical exact LinearEquiv.finrank_eq (Basis.ofVectorSpace K V).toDualEquiv.symm
-  rw [finrank_eq_zero_of_basis_imp_false]; rw [finrank_eq_zero_of_basis_imp_false]
-  · exact fun _ b => h (Module.Finite.of_basis b)
-  · exact fun _ b => h ((Module.finite_dual_iff K).mp <| Module.Finite.of_basis b)
-
-Depends on / 依赖: Basis.ofVectorSpace, Finite, FiniteDimensional, LinearEquiv, LinearEquiv.finrank_eq, Module, Module.Finite.of_basis, Module.finite_dual_iff, classical, finite_dual_iff, finrank_eq, finrank_eq_zero_of_basis_imp_false, ofVectorSpace, of_basis, toDualEquiv, toDualEquiv.symm
+/-
+**Subspace.dual_finrank_eq** 是 Mathlib 中的一个定理，位于命名空间 `Subspace`。
+形式化陈述：dual_finrank_eq : finrank K (Module.Dual K V) = finrank K V
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LinearEquiv.finrank_eq`：finrank_eq (f : M ≃ₗ[R] N) : finrank R M = finra
+nk R N
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `finrank_eq_zero_of_basis_imp_false`：finrank_eq_zero_of_basis_imp_false (
+h : forall s : Finset M, Basis.{v} (s : Set M) R M -> False) : finrank R M = 0
+· 使用定理 `Module.Free.of_divisionRing`：∀ (K : Type u_3) (V : Type u_4) [inst : Div
+isionRing K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V],   Module.Fr
+ee K V
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Module.finite_dual_iff`：finite_dual_iff [Free K V] : Module.Finite K (Du
+al K V) ↔ Module.Finite K V
+· 使用定理 `Module.Finite.of_basis`：Module.Finite.of_basis {R M ι : Type*} [Semiring
+ R] [AddCommMonoid M] [Module R M] [_root_.Finite ι] (b : Basis ι R M) : Module.
+Finite R M
 -/
 theorem dual_finrank_eq : finrank K (Module.Dual K V) = finrank K V := by
   by_cases h : FiniteDimensional K V
   · classical exact LinearEquiv.finrank_eq (Basis.ofVectorSpace K V).toDualEquiv.symm
-  rw [finrank_eq_zero_of_basis_imp_false]; rw [finrank_eq_zero_of_basis_imp_false]
-  · exact fun _ b => h (Module.Finite.of_basis b)
-  · exact fun _ b => h ((Module.finite_dual_iff K).mp <| Module.Finite.of_basis b)
+  rw [finrank_eq_zero_of_basis_imp_false, finrank_eq_zero_of_basis_imp_false]
+  · exact fun _ b ↦ h (Module.Finite.of_basis b)
+  · exact fun _ b ↦ h ((Module.finite_dual_iff K).mp <| Module.Finite.of_basis b)
 
 variable [FiniteDimensional K V]
-
-/--
-theorem `dualAnnihilator_dualAnnihilator_eq` / 定理 `dualAnnihilator_dualAnnihilator_eq`
-
-English:
-theorem dualAnnihilator_dualAnnihilator_eq
-  given: (W : Subspace K V)
-  proof: by
-  have : _ = W := Subspace.dualAnnihilator_dualCoannihilator_eq
-  rw [dualCoannihilator]; rw [← Module.mapEvalEquiv_symm_apply] at this
-  rwa [← OrderIso.symm_apply_eq]
-
-中文:
-定理 dualAnnihilator_dualAnnihilator_eq
-  条件: (W : 子空间 K V)
-  证明: by
-  have : _ = W := Subspace.dualAnnihilator_dualCoannihilator_eq
-  rw [dualCoannihilator]; rw [← Module.mapEvalEquiv_symm_apply] at this
-  rwa [← OrderIso.symm_apply_eq]
-
-Depends on / 依赖: AEStronglyMeasurable, Finset, Finset.le_sum_of_subadditive_on_pred, Module, Module.mapEvalEquiv_symm_apply, OrderIso, OrderIso.symm_apply_eq, Subspace, Subspace.dualAnnihilator_dualCoannihilator_eq, _add_le, _zero, dualAnnihilator_dualCoannihilator_eq, dualCoannihilator, eLpNorm, hf.add, le_sum_of_subadditive_on_pred, mapEvalEquiv_symm_apply, symm_apply_eq, trans_le, zero_lt_one
+/-
+**Subspace.dualAnnihilator_dualAnnihilator_eq** 是 Mathlib 中的一个定理，位于命名空间 `Subspac
+e`。
+形式化陈述：dualAnnihilator_dualAnnihilator_eq (W : Subspace K V) : W.dualAnnihilator.
+dualAnnihilator = Module.mapEvalEquiv K V W
+参数：W : Subspace K V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subspace.dualAnnihilator_dualCoannihilator_eq`：dualAnnihilator_dualCoann
+ihilator_eq {W : Subspace K V} : W.dualAnnihilator.dualCoannihilator = W
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Module.instIsReflexiveOfFiniteOfProjective`：∀ (R : Type u_1) (N : Type u
+_3) [inst : CommSemiring R] [inst_1 : AddCommMonoid N] [inst_2 : _root_.Module R
+ N]   [Module.Finite R N] [Modul…
+· 使用定理 `Module.Projective.of_free`：∀ {R : Type u_1} [inst : Semiring R] {P : Typ
+e u_2} [inst_1 : AddCommMonoid P] [inst_2 : _root_.Module R P]   [Module.Free R 
+P], Module.Proj…
+· 使用定理 `Module.Free.of_divisionRing`：∀ (K : Type u_3) (V : Type u_4) [inst : Div
+isionRing K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V],   Module.Fr
+ee K V
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OrderIso.symm_apply_eq`：symm_apply_eq (e : α ≃o β) {x : α} {y : β} : e.s
+ymm y = x ↔ y = e x
+· 使用定理 `Module.mapEvalEquiv_symm_apply`：mapEvalEquiv_symm_apply (W'' : Submodule
+ R (Dual R (Dual R M))) : (mapEvalEquiv R M).symm W'' = W''.comap (Dual.eval R M
+)
+· 使用定理 `Submodule.dualCoannihilator.eq_1`：∀ {R : Type u_1} {M : Type u_2} [inst 
+: CommSemiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (Φ :
+ Submodule R (Module.D…
 -/
 theorem dualAnnihilator_dualAnnihilator_eq (W : Subspace K V) :
     W.dualAnnihilator.dualAnnihilator = Module.mapEvalEquiv K V W := by
   have : _ = W := Subspace.dualAnnihilator_dualCoannihilator_eq
-  rw [dualCoannihilator]; rw [← Module.mapEvalEquiv_symm_apply] at this
+  rw [dualCoannihilator, ← Module.mapEvalEquiv_symm_apply] at this
   rwa [← OrderIso.symm_apply_eq]
 
-/--
-Definition of `quotDualEquivAnnihilator` / `quotDualEquivAnnihilator` 的定义
+/-- The quotient by the dual is isomorphic to its dual annihilator. -/
+/-
+**Subspace.quotDualEquivAnnihilator** 是 Mathlib 中的一个定义，位于命名空间 `Subspace`。
+形式化陈述：quotDualEquivAnnihilator (W : Subspace K V) : (Module.Dual K V ⧸ LinearMap
+.range W.dualLift) ≃ₗ[K] W.dualAnnihilator
+参数：W : Subspace K V。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition quotDualEquivAnnihilator
-  signature: (W : Subspace K V)
-  body: LinearEquiv.quotEquivOfQuotEquiv LinearEquiv.trans W.quotAnnihilatorEquiv W.dualEquivDual
-
-中文:
-定义 quotDualEquivAnnihilator
-  签名: (W : 子空间 K V)
-  定义体: LinearEquiv.quotEquivOfQuotEquiv LinearEquiv.trans W.quotAnnihilatorEquiv W.dualEquivDual
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.quotEquivOfQuotEquiv, LinearEquiv.trans, W.dualEquivDual, W.quotAnnihilatorEquiv, dualEquivDual, quotAnnihilatorEquiv, quotEquivOfQuotEquiv
+--- 原说明 ---
+The quotient by the dual is isomorphic to its dual annihilator.
 -/
 noncomputable def quotDualEquivAnnihilator (W : Subspace K V) :
     (Module.Dual K V ⧸ LinearMap.range W.dualLift) ≃ₗ[K] W.dualAnnihilator :=
-LinearEquiv.quotEquivOfQuotEquiv LinearEquiv.trans W.quotAnnihilatorEquiv W.dualEquivDual
+  LinearEquiv.quotEquivOfQuotEquiv <| LinearEquiv.trans W.quotAnnihilatorEquiv W.dualEquivDual
 
 open scoped Classical in
-/--
-Definition of `quotEquivAnnihilator` / `quotEquivAnnihilator` 的定义
+/-- The quotient by a subspace is isomorphic to its dual annihilator. -/
+/-
+**Subspace.quotEquivAnnihilator** 是 Mathlib 中的一个定义，位于命名空间 `Subspace`。
+形式化陈述：quotEquivAnnihilator (W : Subspace K V) : (V ⧸ W) ≃ₗ[K] W.dualAnnihilator
+参数：W : Subspace K V。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition quotEquivAnnihilator
-  signature: (W : Subspace K V)
-  body: let φ := (Basis.ofVectorSpace K W).toDualEquiv.trans W.dualEquivDual
-  let ψ := LinearEquiv.quotEquivOfEquiv φ (Basis.ofVectorSpace K V).toDualEquiv
-  ψ ≪≫ₗ W.quotDualEquivAnnihilator
-
-中文:
-定义 quotEquivAnnihilator
-  签名: (W : 子空间 K V)
-  定义体: let φ := (Basis.ofVectorSpace K W).toDualEquiv.trans W.dualEquivDual
-  let ψ := LinearEquiv.quotEquivOfEquiv φ (Basis.ofVectorSpace K V).toDualEquiv
-  ψ ≪≫ₗ W.quotDualEquivAnnihilator
-
-Depends on / 依赖: Basis.ofVectorSpace, LinearEquiv, LinearEquiv.quotEquivOfEquiv, W.dualEquivDual, W.quotDualEquivAnnihilator, dualEquivDual, ofVectorSpace, quotDualEquivAnnihilator, quotEquivOfEquiv, toDualEquiv, toDualEquiv.trans
+--- 原说明 ---
+The quotient by a subspace is isomorphic to its dual annihilator.
 -/
 noncomputable def quotEquivAnnihilator (W : Subspace K V) : (V ⧸ W) ≃ₗ[K] W.dualAnnihilator :=
   let φ := (Basis.ofVectorSpace K W).toDualEquiv.trans W.dualEquivDual
@@ -1558,77 +1506,99 @@ noncomputable def quotEquivAnnihilator (W : Subspace K V) : (V ⧸ W) ≃ₗ[K] 
   ψ ≪≫ₗ W.quotDualEquivAnnihilator
 
 open Module
-
-/--
-theorem `finrank_add_finrank_dualAnnihilator_eq` / 定理 `finrank_add_finrank_dualAnnihilator_eq`
-
-English:
-theorem finrank_add_finrank_dualAnnihilator_eq
-  given: (W : Subspace K V)
-  proof: by
-  rw [← W.quotEquivAnnihilator.finrank_eq]; rw [add_comm]; rw [Submodule.finrank_quotient_add_finrank]
-
-@[simp]
-
-中文:
-定理 finrank_add_finrank_dualAnnihilator_eq
-  条件: (W : 子空间 K V)
-  证明: by
-  rw [← W.quotEquivAnnihilator.finrank_eq]; rw [add_comm]; rw [Submodule.finrank_quotient_add_finrank]
-
-@[simp]
-
-Depends on / 依赖: Submodule, Submodule.finrank_quotient_add_finrank, W.quotEquivAnnihilator.finrank_eq, add_comm, finrank_eq, finrank_quotient_add_finrank, quotEquivAnnihilator
+/-
+**Subspace.finrank_add_finrank_dualAnnihilator_eq** 是 Mathlib 中的一个定理，位于命名空间 `Sub
+space`。
+形式化陈述：finrank_add_finrank_dualAnnihilator_eq (W : Subspace K V) : finrank K W + 
+finrank K W.dualAnnihilator = finrank K V
+参数：W : Subspace K V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearEquiv.finrank_eq`：finrank_eq (f : M ≃ₗ[R] N) : finrank R M = finra
+nk R N
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用引理 `Submodule.finrank_quotient_add_finrank`：Submodule.finrank_quotient_add_f
+inrank [Module.Finite R M] (N : Submodule R M) : finrank R (M ⧸ N) + finrank R N
+ = finrank R M
+· 使用定理 `commRing_strongRankCondition`：∀ (R : Type u_1) [inst : CommRing R] [Nont
+rivial R], StrongRankCondition R
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
 -/
 theorem finrank_add_finrank_dualAnnihilator_eq (W : Subspace K V) :
     finrank K W + finrank K W.dualAnnihilator = finrank K V := by
-  rw [← W.quotEquivAnnihilator.finrank_eq]; rw [add_comm]; rw [Submodule.finrank_quotient_add_finrank]
+  rw [← W.quotEquivAnnihilator.finrank_eq, add_comm, Submodule.finrank_quotient_add_finrank]
 
 @[simp]
-/--
-theorem `finrank_dualCoannihilator_eq` / 定理 `finrank_dualCoannihilator_eq`
-
-English:
-theorem finrank_dualCoannihilator_eq
-  given: {Φ : Subspace K (Module.Dual K V)}
-  proof: by
-  rw [Submodule.dualCoannihilator]; rw [← Module.evalEquiv_toLinearMap]
-  exact LinearEquiv.finrank_eq (LinearEquiv.ofSubmodule' _ _)
-
-中文:
-定理 finrank_dualCoannihilator_eq
-  条件: {Φ : 子空间 K (模.对偶 K V)}
-  证明: by
-  rw [Submodule.dualCoannihilator]; rw [← Module.evalEquiv_toLinearMap]
-  exact LinearEquiv.finrank_eq (LinearEquiv.ofSubmodule' _ _)
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.finrank_eq, LinearEquiv.ofSubmodule, Module, Module.evalEquiv_toLinearMap, Submodule, Submodule.dualCoannihilator, dualCoannihilator, evalEquiv_toLinearMap, finrank_eq, ofSubmodule
+/-
+**Subspace.finrank_dualCoannihilator_eq** 是 Mathlib 中的一个定理，位于命名空间 `Subspace`。
+形式化陈述：finrank_dualCoannihilator_eq {Φ : Subspace K (Module.Dual K V)} : finrank 
+K Φ.dualCoannihilator = finrank K Φ.dualAnnihilator
+参数：Module.Dual K V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.dualCoannihilator.eq_1`：∀ {R : Type u_1} {M : Type u_2} [inst 
+: CommSemiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (Φ :
+ Submodule R (Module.D…
+· 使用定理 `Module.instIsReflexiveOfFiniteOfProjective`：∀ (R : Type u_1) (N : Type u
+_3) [inst : CommSemiring R] [inst_1 : AddCommMonoid N] [inst_2 : _root_.Module R
+ N]   [Module.Finite R N] [Modul…
+· 使用定理 `Module.Projective.of_free`：∀ {R : Type u_1} [inst : Semiring R] {P : Typ
+e u_2} [inst_1 : AddCommMonoid P] [inst_2 : _root_.Module R P]   [Module.Free R 
+P], Module.Proj…
+· 使用定理 `Module.Free.of_divisionRing`：∀ (K : Type u_3) (V : Type u_4) [inst : Div
+isionRing K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V],   Module.Fr
+ee K V
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Module.evalEquiv_toLinearMap`：∀ (R : Type u_3) (M : Type u_4) [inst : Co
+mmSemiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   [inst_3 
+: Module.IsReflexi…
+· 使用定理 `LinearEquiv.finrank_eq`：finrank_eq (f : M ≃ₗ[R] N) : finrank R M = finra
+nk R N
 -/
 theorem finrank_dualCoannihilator_eq {Φ : Subspace K (Module.Dual K V)} :
     finrank K Φ.dualCoannihilator = finrank K Φ.dualAnnihilator := by
-  rw [Submodule.dualCoannihilator]; rw [← Module.evalEquiv_toLinearMap]
+  rw [Submodule.dualCoannihilator, ← Module.evalEquiv_toLinearMap]
   exact LinearEquiv.finrank_eq (LinearEquiv.ofSubmodule' _ _)
-
-/--
-theorem `finrank_add_finrank_dualCoannihilator_eq` / 定理 `finrank_add_finrank_dualCoannihilator_eq`
-
-English:
-theorem finrank_add_finrank_dualCoannihilator_eq
-  given: (W : Subspace K (Module.Dual K V))
-  proof: by
-  rw [finrank_dualCoannihilator_eq]; rw [finrank_add_finrank_dualAnnihilator_eq]; rw [dual_finrank_eq]
-
-中文:
-定理 finrank_add_finrank_dualCoannihilator_eq
-  条件: (W : 子空间 K (模.对偶 K V))
-  证明: by
-  rw [finrank_dualCoannihilator_eq]; rw [finrank_add_finrank_dualAnnihilator_eq]; rw [dual_finrank_eq]
-
-Depends on / 依赖: dual_finrank_eq, finrank_add_finrank_dualAnnihilator_eq, finrank_dualCoannihilator_eq
+/-
+**Subspace.finrank_add_finrank_dualCoannihilator_eq** 是 Mathlib 中的一个定理，位于命名空间 `S
+ubspace`。
+形式化陈述：finrank_add_finrank_dualCoannihilator_eq (W : Subspace K (Module.Dual K V)
+) : finrank K W + finrank K W.dualCoannihilator = finrank K V
+参数：W : Subspace K (Module.Dual K V)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subspace.finrank_dualCoannihilator_eq`：finrank_dualCoannihilator_eq {Φ :
+ Subspace K (Module.Dual K V)} : finrank K Φ.dualCoannihilator = finrank K Φ.dua
+lAnnihilator
+· 使用定理 `Subspace.finrank_add_finrank_dualAnnihilator_eq`：finrank_add_finrank_dua
+lAnnihilator_eq (W : Subspace K V) : finrank K W + finrank K W.dualAnnihilator =
+ finrank K V
+· 使用定理 `Subspace.dual_finrank_eq`：dual_finrank_eq : finrank K (Module.Dual K V) 
+= finrank K V
 -/
 theorem finrank_add_finrank_dualCoannihilator_eq (W : Subspace K (Module.Dual K V)) :
     finrank K W + finrank K W.dualCoannihilator = finrank K V := by
-  rw [finrank_dualCoannihilator_eq]; rw [finrank_add_finrank_dualAnnihilator_eq]; rw [dual_finrank_eq]
+  rw [finrank_dualCoannihilator_eq, finrank_add_finrank_dualAnnihilator_eq, dual_finrank_eq]
 
 end
 
@@ -1643,33 +1613,33 @@ variable [CommRing R] [AddCommGroup M] [Module R M] [AddCommGroup M'] [Module R 
 
 namespace Submodule
 
-/--
-Definition of `dualCopairing` / `dualCopairing` 的定义
+/-- Given a submodule, corestrict to the pairing on `M ⧸ W` by
+simultaneously restricting to `W.dualAnnihilator`.
 
-English:
-definition dualCopairing
-  signature: (W : Submodule R M)
-  body: LinearMap.flip W.liftQ W.dualAnnihilator.subtype.flip (by
-    intro w hw
-    ext ⟨φ, hφ⟩
-    exact (mem_dualAnnihilator φ).mp hφ w hw)
+See `Subspace.dualCopairing_nondegenerate`. -/
+/-
+**Submodule.dualCopairing** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：dualCopairing (W : Submodule R M) : W.dualAnnihilator ->ₗ[R] M ⧸ W ->ₗ[R] 
+R
+参数：W : Submodule R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 dualCopairing
-  签名: (W : 子模 R M)
-  定义体: LinearMap.flip W.liftQ W.dualAnnihilator.subtype.flip (by
-    intro w hw
-    ext ⟨φ, hφ⟩
-    exact (mem_dualAnnihilator φ).mp hφ w hw)
+--- 原说明 ---
+Given a submodule, corestrict to the pairing on `M ⧸ W` by
+simultaneously restricting to `W.dualAnnihilator`.
 
-Depends on / 依赖: LinearMap, LinearMap.flip, W.dualAnnihilator.subtype.flip, W.liftQ, dualAnnihilator, eLpNorm, fun_prop, lintegral_trim, mem_dualAnnihilator, simp_rw, subtype
+See `Subspace.dualCopairing_nondegenerate`.
 -/
-def dualCopairing (W : Submodule R M) : W.dualAnnihilator ->ₗ[R] M ⧸ W ->ₗ[R] R :=
-LinearMap.flip W.liftQ W.dualAnnihilator.subtype.flip (by
+def dualCopairing (W : Submodule R M) : W.dualAnnihilator →ₗ[R] M ⧸ W →ₗ[R] R :=
+  LinearMap.flip <| W.liftQ W.dualAnnihilator.subtype.flip (by
     intro w hw
     ext ⟨φ, hφ⟩
     exact (mem_dualAnnihilator φ).mp hφ w hw)
-
+/-
+**Submodule.** 是 Mathlib 中的一个实例，位于命名空间 `Submodule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (W : Submodule R M) : FunLike (W.dualAnnihilator) M R where
   coe φ := φ.val
   coe_injective φ ψ h := by
@@ -1678,93 +1648,92 @@ instance (W : Submodule R M) : FunLike (W.dualAnnihilator) M R where
     exact h _
 
 @[simp]
-/--
-theorem `dualCopairing_apply` / 定理 `dualCopairing_apply`
-
-English:
-theorem dualCopairing_apply
-  given: {W : Submodule R M} (φ : W.dualAnnihilator) (x : M)
-  proof: rfl
-
-中文:
-定理 dualCopairing_apply
-  条件: {W : 子模 R M} (φ : W.dualAnnihilator) (x : M)
-  证明: rfl
+/-
+**Submodule.dualCopairing_apply** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：dualCopairing_apply {W : Submodule R M} (φ : W.dualAnnihilator) (x : M) : 
+W.dualCopairing φ (Quotient.mk x) = φ x
+参数：φ : W.dualAnnihilator；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 theorem dualCopairing_apply {W : Submodule R M} (φ : W.dualAnnihilator) (x : M) :
     W.dualCopairing φ (Quotient.mk x) = φ x :=
   rfl
 
-/--
-Definition of `dualPairing` / `dualPairing` 的定义
+/-- Given a submodule, restrict to the pairing on `W` by
+simultaneously corestricting to `Module.Dual R M ⧸ W.dualAnnihilator`.
+This is `Submodule.dualRestrict` factored through the quotient by its kernel (which
+is `W.dualAnnihilator` by definition).
 
-English:
-definition dualPairing
-  signature: (W : Submodule R M)
-  body: W.dualAnnihilator.liftQ W.dualRestrict le_rfl
+See `Subspace.dualPairing_nondegenerate`. -/
+/-
+**Submodule.dualPairing** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：dualPairing (W : Submodule R M) : Module.Dual R M ⧸ W.dualAnnihilator ->ₗ[
+R] W ->ₗ[R] R
+参数：W : Submodule R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+Given a submodule, restrict to the pairing on `W` by
+simultaneously corestricting to `Module.Dual R M ⧸ W.dualAnnihilator`.
+This is `Submodule.dualRestrict` factored through the quotient by its kernel (wh
+ich
+is `W.dualAnnihilator` by definition).
 
-中文:
-定义 dualPairing
-  签名: (W : 子模 R M)
-  定义体: W.dualAnnihilator.liftQ W.dualRestrict le_rfl
-
-@[simp]
-
-Depends on / 依赖: W.dualAnnihilator.liftQ, W.dualRestrict, dualAnnihilator, dualRestrict, le_rfl
+See `Subspace.dualPairing_nondegenerate`.
 -/
-def dualPairing (W : Submodule R M) : Module.Dual R M ⧸ W.dualAnnihilator ->ₗ[R] W ->ₗ[R] R :=
+def dualPairing (W : Submodule R M) : Module.Dual R M ⧸ W.dualAnnihilator →ₗ[R] W →ₗ[R] R :=
   W.dualAnnihilator.liftQ W.dualRestrict le_rfl
 
 @[simp]
-/--
-theorem `dualPairing_apply` / 定理 `dualPairing_apply`
-
-English:
-theorem dualPairing_apply
-  given: {W : Submodule R M} (φ : Module.Dual R M) (x : W)
-  proof: rfl
-
-中文:
-定理 dualPairing_apply
-  条件: {W : 子模 R M} (φ : 模.对偶 R M) (x : W)
-  证明: rfl
+/-
+**Submodule.dualPairing_apply** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：dualPairing_apply {W : Submodule R M} (φ : Module.Dual R M) (x : W) : W.du
+alPairing (Quotient.mk φ) x = φ x
+参数：φ : Module.Dual R M；x : W。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 theorem dualPairing_apply {W : Submodule R M} (φ : Module.Dual R M) (x : W) :
     W.dualPairing (Quotient.mk φ) x = φ x :=
   rfl
 
-/--
-theorem `range_dualMap_mkQ_eq` / 定理 `range_dualMap_mkQ_eq`
+/-- That $\operatorname{im}(q^* : (V/W)^* \to V^*) = \operatorname{ann}(W)$. -/
+/-
+**Submodule.range_dualMap_mkQ_eq** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：range_dualMap_mkQ_eq (W : Submodule R M) : LinearMap.range W.mkQ.dualMap =
+ W.dualAnnihilator
+参数：W : Submodule R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.mem_range`：mem_range [RingHomSurjective τ₁₂] {f : M ->ₛₗ[τ₁₂] 
+M₂} {x} : x in range f ↔ exists y, f y = x
+· 使用定理 `LinearMap.mem_range_self`：mem_range_self [RingHomSurjective τ₁₂] (f : M 
+->ₛₗ[τ₁₂] M₂) (x : M) : f x in range f
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Submodule.ker_mkQ`：ker_mkQ : ker p.mkQ = p
+· 使用定理 `LinearMap.range_dualMap_le_dualAnnihilator_ker`：range_dualMap_le_dualAnn
+ihilator_ker : LinearMap.range f.dualMap <= (ker f).dualAnnihilator
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 
-English:
-theorem range_dualMap_mkQ_eq
-  given: (W : Submodule R M)
-  proof: by
-  ext φ
-  rw [LinearMap.mem_range]
-  constructor
-  · rintro ⟨ψ, rfl⟩
-    have := LinearMap.mem_range_self W.mkQ.dualMap ψ
-    simpa only [ker_mkQ] using W.mkQ.range_dualMap_le_dualAnnihilator_ker this
-  · intro hφ
-    exists W.dualCopairing ⟨φ, hφ⟩
-
-中文:
-定理 range_dualMap_mkQ_eq
-  条件: (W : 子模 R M)
-  证明: by
-  ext φ
-  rw [LinearMap.mem_range]
-  constructor
-  · rintro ⟨ψ, rfl⟩
-    have := LinearMap.mem_range_self W.mkQ.dualMap ψ
-    simpa only [ker_mkQ] using W.mkQ.range_dualMap_le_dualAnnihilator_ker this
-  · intro hφ
-    exists W.dualCopairing ⟨φ, hφ⟩
-
-Depends on / 依赖: LinearMap, LinearMap.mem_range, LinearMap.mem_range_self, W.dualCopairing, W.mkQ.dualMap, W.mkQ.range_dualMap_le_dualAnnihilator_ker, dualCopairing, dualMap, ker_mkQ, mem_range, mem_range_self, range_dualMap_le_dualAnnihilator_ker
+--- 原说明 ---
+That $\operatorname{im}(q^* : (V/W)^* \to V^*) = \operatorname{ann}(W)$.
 -/
 theorem range_dualMap_mkQ_eq (W : Submodule R M) :
     LinearMap.range W.mkQ.dualMap = W.dualAnnihilator := by
@@ -1777,30 +1746,27 @@ theorem range_dualMap_mkQ_eq (W : Submodule R M) :
   · intro hφ
     exists W.dualCopairing ⟨φ, hφ⟩
 
-/--
-Definition of `dualQuotEquivDualAnnihilator` / `dualQuotEquivDualAnnihilator` 的定义
+/-- Equivalence $(M/W)^* \cong \operatorname{ann}(W)$. That is, there is a one-to-one
+correspondence between the dual of `M ⧸ W` and those elements of the dual of `M` that
+vanish on `W`.
 
-English:
-definition dualQuotEquivDualAnnihilator
-  signature: (W : Submodule R M)
-  body: LinearEquiv.ofLinearMap
-    (W.mkQ.dualMap.codRestrict W.dualAnnihilator fun φ =>
-      W.range_dualMap_mkQ_eq ▸ LinearMap.mem_range_self W.mkQ.dualMap φ)
-    W.dualCopairing (by ext; rfl) (by ext; rfl)
+The inverse of this is `Submodule.dualCopairing`. -/
+/-
+**Submodule.dualQuotEquivDualAnnihilator** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：dualQuotEquivDualAnnihilator (W : Submodule R M) : Module.Dual R (M ⧸ W) ≃
+ₗ[R] W.dualAnnihilator
+参数：W : Submodule R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+Equivalence $(M/W)^* \cong \operatorname{ann}(W)$. That is, there is a one-to-on
+e
+correspondence between the dual of `M ⧸ W` and those elements of the dual of `M`
+ that
+vanish on `W`.
 
-中文:
-定义 dualQuotEquivDualAnnihilator
-  签名: (W : 子模 R M)
-  定义体: LinearEquiv.ofLinearMap
-    (W.mkQ.dualMap.codRestrict W.dualAnnihilator fun φ =>
-      W.range_dualMap_mkQ_eq ▸ LinearMap.mem_range_self W.mkQ.dualMap φ)
-    W.dualCopairing (by ext; rfl) (by ext; rfl)
-
-@[simp]
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.ofLinearMap, LinearMap, LinearMap.mem_range_self, W.dualAnnihilator, W.dualCopairing, W.mkQ.dualMap, W.mkQ.dualMap.codRestrict, W.range_dualMap_mkQ_eq, codRestrict, dualAnnihilator, dualCopairing, dualMap, mem_range_self, ofLinearMap, range_dualMap_mkQ_eq
+The inverse of this is `Submodule.dualCopairing`.
 -/
 def dualQuotEquivDualAnnihilator (W : Submodule R M) :
     Module.Dual R (M ⧸ W) ≃ₗ[R] W.dualAnnihilator :=
@@ -1810,253 +1776,267 @@ def dualQuotEquivDualAnnihilator (W : Submodule R M) :
     W.dualCopairing (by ext; rfl) (by ext; rfl)
 
 @[simp]
-/--
-theorem `dualQuotEquivDualAnnihilator_apply` / 定理 `dualQuotEquivDualAnnihilator_apply`
-
-English:
-theorem dualQuotEquivDualAnnihilator_apply
-  given: (W : Submodule R M) (φ : Module.Dual R (M ⧸ W)) (x : M)
-  proof: rfl
-
-中文:
-定理 dualQuotEquivDualAnnihilator_apply
-  条件: (W : 子模 R M) (φ : 模.对偶 R (M ⧸ W)) (x : M)
-  证明: rfl
+/-
+**Submodule.dualQuotEquivDualAnnihilator_apply** 是 Mathlib 中的一个定理，位于命名空间 `Submod
+ule`。
+形式化陈述：dualQuotEquivDualAnnihilator_apply (W : Submodule R M) (φ : Module.Dual R 
+(M ⧸ W)) (x : M) : dualQuotEquivDualAnnihilator W φ x = φ (Quotient.mk x)
+参数：W : Submodule R M；φ : Module.Dual R (M ⧸ W)；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 theorem dualQuotEquivDualAnnihilator_apply (W : Submodule R M) (φ : Module.Dual R (M ⧸ W)) (x : M) :
     dualQuotEquivDualAnnihilator W φ x = φ (Quotient.mk x) :=
   rfl
-
-/--
-theorem `dualCopairing_eq` / 定理 `dualCopairing_eq`
-
-English:
-theorem dualCopairing_eq
-  given: (W : Submodule R M)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 dualCopairing_eq
-  条件: (W : 子模 R M)
-  证明: rfl
-
-@[simp]
+/-
+**Submodule.dualCopairing_eq** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：dualCopairing_eq (W : Submodule R M) : W.dualCopairing = (dualQuotEquivDua
+lAnnihilator W).symm.toLinearMap
+参数：W : Submodule R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 theorem dualCopairing_eq (W : Submodule R M) :
     W.dualCopairing = (dualQuotEquivDualAnnihilator W).symm.toLinearMap :=
   rfl
 
 @[simp]
-/--
-theorem `dualQuotEquivDualAnnihilator_symm_apply_mk` / 定理 `dualQuotEquivDualAnnihilator_symm_apply_mk`
-
-English:
-theorem dualQuotEquivDualAnnihilator_symm_apply_mk
-  statement: (W : Submodule R M) (φ : W.dualAnnihilator)
-  proof: rfl
-
-中文:
-定理 dualQuotEquivDualAnnihilator_symm_apply_mk
-  结论: (W : 子模 R M) (φ : W.dualAnnihilator)
-  证明: rfl
+/-
+**Submodule.dualQuotEquivDualAnnihilator_symm_apply_mk** 是 Mathlib 中的一个定理，位于命名空间
+ `Submodule`。
+形式化陈述：dualQuotEquivDualAnnihilator_symm_apply_mk (W : Submodule R M) (φ : W.dual
+Annihilator) (x : M) : (dualQuotEquivDualAnnihilator W).symm φ (Quotient.mk x) =
+ φ x
+参数：W : Submodule R M；φ : W.dualAnnihilator；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 theorem dualQuotEquivDualAnnihilator_symm_apply_mk (W : Submodule R M) (φ : W.dualAnnihilator)
     (x : M) : (dualQuotEquivDualAnnihilator W).symm φ (Quotient.mk x) = φ x :=
   rfl
-
-/--
-theorem `finite_dualAnnihilator_iff` / 定理 `finite_dualAnnihilator_iff`
-
-English:
-theorem finite_dualAnnihilator_iff
-  given: {W : Submodule R M} [Free R (M ⧸ W)]
-  proof: (Finite.equiv_iff W.dualQuotEquivDualAnnihilator.symm).trans (finite_dual_iff R)
-
-中文:
-定理 finite_dualAnnihilator_iff
-  条件: {W : 子模 R M} [自由 R (M ⧸ W)]
-  证明: (Finite.equiv_iff W.dualQuotEquivDualAnnihilator.symm).trans (finite_dual_iff R)
-
-Depends on / 依赖: Finite, Finite.equiv_iff, W.dualQuotEquivDualAnnihilator.symm, dualQuotEquivDualAnnihilator, equiv_iff, finite_dual_iff
+/-
+**Submodule.finite_dualAnnihilator_iff** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：finite_dualAnnihilator_iff {W : Submodule R M} [Free R (M ⧸ W)] : Module.F
+inite R W.dualAnnihilator ↔ Module.Finite R (M ⧸ W)
+参数：M ⧸ W。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Module.Finite.equiv_iff`：equiv_iff (e : M ≃ₗ[R] N) : Module.Finite R M ↔
+ Module.Finite R N
+· 使用定理 `Module.finite_dual_iff`：finite_dual_iff [Free K V] : Module.Finite K (Du
+al K V) ↔ Module.Finite K V
 -/
 theorem finite_dualAnnihilator_iff {W : Submodule R M} [Free R (M ⧸ W)] :
     Module.Finite R W.dualAnnihilator ↔ Module.Finite R (M ⧸ W) :=
   (Finite.equiv_iff W.dualQuotEquivDualAnnihilator.symm).trans (finite_dual_iff R)
-
-/--
-lemma `dualAnnihilator_eq_bot_iff'` / 引理 `dualAnnihilator_eq_bot_iff'`
-
-English:
-lemma dualAnnihilator_eq_bot_iff'
-  given: {W : Submodule R M}
-  proof: by
-  rw [W.dualQuotEquivDualAnnihilator.toEquiv.subsingleton_congr]; rw [subsingleton_iff_eq_bot]
-
-中文:
-引理 dualAnnihilator_eq_bot_iff'
-  条件: {W : 子模 R M}
-  证明: by
-  rw [W.dualQuotEquivDualAnnihilator.toEquiv.subsingleton_congr]; rw [subsingleton_iff_eq_bot]
-
-Depends on / 依赖: W.dualQuotEquivDualAnnihilator.toEquiv.subsingleton_congr, dualQuotEquivDualAnnihilator, subsingleton_congr, subsingleton_iff_eq_bot, toEquiv
+/-
+**Submodule.dualAnnihilator_eq_bot_iff'** 是 Mathlib 中的一个引理，位于命名空间 `Submodule`。
+形式化陈述：dualAnnihilator_eq_bot_iff' {W : Submodule R M} : W.dualAnnihilator = ⊥ ↔ 
+Subsingleton (Dual R (M ⧸ W))
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.subsingleton_congr`：subsingleton_congr (e : α ≃ β) : Subsingleton 
+α ↔ Subsingleton β
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Submodule.subsingleton_iff_eq_bot`：subsingleton_iff_eq_bot : Subsingleto
+n p ↔ p = ⊥
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma dualAnnihilator_eq_bot_iff' {W : Submodule R M} :
     W.dualAnnihilator = ⊥ ↔ Subsingleton (Dual R (M ⧸ W)) := by
-  rw [W.dualQuotEquivDualAnnihilator.toEquiv.subsingleton_congr]; rw [subsingleton_iff_eq_bot]
-
-/--
-lemma `dualAnnihilator_eq_bot_iff` / 引理 `dualAnnihilator_eq_bot_iff`
-
-English:
-lemma dualAnnihilator_eq_bot_iff
-  given: {W : Submodule R M} [Projective R (M ⧸ W)]
-  proof: by
-  rw [dualAnnihilator_eq_bot_iff']; rw [subsingleton_dual_iff]; rw [Quotient.subsingleton_iff]
-
-中文:
-引理 dualAnnihilator_eq_bot_iff
-  条件: {W : 子模 R M} [投射 R (M ⧸ W)]
-  证明: by
-  rw [dualAnnihilator_eq_bot_iff']; rw [subsingleton_dual_iff]; rw [Quotient.subsingleton_iff]
+  rw [W.dualQuotEquivDualAnnihilator.toEquiv.subsingleton_congr, subsingleton_iff_eq_bot]
+/-
+**Submodule.dualAnnihilator_eq_bot_iff** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : CommRing R] [inst_1 : AddCommGroup
+ M] [inst_2 : _root_.Module R M]   {W : Submodule R M} [Module.Projective R (M ⧸
+ W)], W.dualAnnihilator = ⊥ ↔ W = ⊤
+参数：M ⧸ W。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Submodule.dualAnnihilator_eq_bot_iff'`：dualAnnihilator_eq_bot_iff' {W : 
+Submodule R M} : W.dualAnnihilator = ⊥ ↔ Subsingleton (Dual R (M ⧸ W))
+· 使用定理 `Module.subsingleton_dual_iff`：subsingleton_dual_iff : Subsingleton (Dual
+ K V) ↔ Subsingleton V
+· 使用定理 `Submodule.Quotient.subsingleton_iff`：∀ {R : Type u_1} {M : Type u_2} [in
+st : Ring R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   {p : Submo
+dule R M}, Subsingleton (…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma dualAnnihilator_eq_bot_iff {W : Submodule R M} [Projective R (M ⧸ W)] :
     W.dualAnnihilator = ⊥ ↔ W = ⊤ := by
-  rw [dualAnnihilator_eq_bot_iff']; rw [subsingleton_dual_iff]; rw [Quotient.subsingleton_iff]
-
-/--
-lemma `dualAnnihilator_eq_top_iff` / 引理 `dualAnnihilator_eq_top_iff`
-
-English:
-lemma dualAnnihilator_eq_top_iff
-  given: {W : Submodule R M} [Projective R M]
-  proof: by
-  refine ⟨fun h => ?_, fun h => h ▸ dualAnnihilator_bot⟩
-  refine W.eq_bot_iff.mpr fun v hv => (forall_dual_apply_eq_zero_iff R v).mp fun f => ?_
-  refine (mem_dualAnnihilator f).mp ?_ v hv
-  simp [h]
-
-中文:
-引理 dualAnnihilator_eq_top_iff
-  条件: {W : 子模 R M} [投射 R M]
-  证明: by
-  refine ⟨fun h => ?_, fun h => h ▸ dualAnnihilator_bot⟩
-  refine W.eq_bot_iff.mpr fun v hv => (forall_dual_apply_eq_zero_iff R v).mp fun f => ?_
-  refine (mem_dualAnnihilator f).mp ?_ v hv
-  simp [h]
+  rw [dualAnnihilator_eq_bot_iff', subsingleton_dual_iff, Quotient.subsingleton_iff]
+/-
+**Submodule.dualAnnihilator_eq_top_iff** 是 Mathlib 中的一个定理，位于命名空间 `Submodule`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : CommRing R] [inst_1 : AddCommGroup
+ M] [inst_2 : _root_.Module R M]   {W : Submodule R M} [Module.Projective R M], 
+W.dualAnnihilator = ⊤ ↔ W = ⊥
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Submodule.eq_bot_iff`：∀ {R : Type u_1} {M : Type u_3} [inst : Semiring R
+] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (p : Submodule R M),
+ p = ⊥ ↔ ∀…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Module.forall_dual_apply_eq_zero_iff`：forall_dual_apply_eq_zero_iff (R :
+ Type*) [Semiring R] [Module R V] [Projective R V] (v : V) : (forall φ : Module.
+Dual R V, φ v = 0) ↔ v = 0
+· 使用定理 `Submodule.mem_dualAnnihilator`：mem_dualAnnihilator (φ : Module.Dual R M)
+ : φ in W.dualAnnihilator ↔ forall w in W, φ w = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.dualAnnihilator_bot`：dualAnnihilator_bot : (⊥ : Submodule R M)
+.dualAnnihilator = ⊤
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 @[simp] lemma dualAnnihilator_eq_top_iff {W : Submodule R M} [Projective R M] :
     W.dualAnnihilator = ⊤ ↔ W = ⊥ := by
-  refine ⟨fun h => ?_, fun h => h ▸ dualAnnihilator_bot⟩
-  refine W.eq_bot_iff.mpr fun v hv => (forall_dual_apply_eq_zero_iff R v).mp fun f => ?_
+  refine ⟨fun h ↦ ?_, fun h ↦ h ▸ dualAnnihilator_bot⟩
+  refine W.eq_bot_iff.mpr fun v hv ↦ (forall_dual_apply_eq_zero_iff R v).mp fun f ↦ ?_
   refine (mem_dualAnnihilator f).mp ?_ v hv
   simp [h]
 
 open LinearMap in
-/--
-Definition of `quotDualCoannihilatorToDual` / `quotDualCoannihilatorToDual` 的定义
+/-- The pairing between a submodule `W` of a dual module `Dual R M` and the quotient of
+`M` by the coannihilator of `W`, which is always nondegenerate. -/
+/-
+**Submodule.quotDualCoannihilatorToDual** 是 Mathlib 中的一个定义，位于命名空间 `Submodule`。
+形式化陈述：quotDualCoannihilatorToDual (W : Submodule R (Dual R M)) : M ⧸ W.dualCoann
+ihilator ->ₗ[R] Dual R W
+参数：W : Submodule R (Dual R M)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition quotDualCoannihilatorToDual
-  signature: (W : Submodule R (Dual R M))
-  body: liftQ _ (flip <| Submodule.subtype _) le_rfl
-
-@[simp]
-
-中文:
-定义 quotDualCoannihilatorToDual
-  签名: (W : 子模 R (对偶 R M))
-  定义体: liftQ _ (flip <| Submodule.subtype _) le_rfl
-
-@[simp]
-
-Depends on / 依赖: Submodule, Submodule.subtype, le_rfl, subtype
+--- 原说明 ---
+The pairing between a submodule `W` of a dual module `Dual R M` and the quotient
+ of
+`M` by the coannihilator of `W`, which is always nondegenerate.
 -/
 def quotDualCoannihilatorToDual (W : Submodule R (Dual R M)) :
-    M ⧸ W.dualCoannihilator ->ₗ[R] Dual R W :=
+    M ⧸ W.dualCoannihilator →ₗ[R] Dual R W :=
   liftQ _ (flip <| Submodule.subtype _) le_rfl
 
 @[simp]
-/--
-theorem `quotDualCoannihilatorToDual_apply` / 定理 `quotDualCoannihilatorToDual_apply`
-
-English:
-theorem quotDualCoannihilatorToDual_apply
-  given: (W : Submodule R (Dual R M)) (m : M) (w : W)
-  proof: rfl
-
-中文:
-定理 quotDualCoannihilatorToDual_apply
-  条件: (W : 子模 R (对偶 R M)) (m : M) (w : W)
-  证明: rfl
+/-
+**Submodule.quotDualCoannihilatorToDual_apply** 是 Mathlib 中的一个定理，位于命名空间 `Submodu
+le`。
+形式化陈述：quotDualCoannihilatorToDual_apply (W : Submodule R (Dual R M)) (m : M) (w 
+: W) : W.quotDualCoannihilatorToDual (Quotient.mk m) w = w.1 m
+参数：W : Submodule R (Dual R M)；m : M；w : W。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 theorem quotDualCoannihilatorToDual_apply (W : Submodule R (Dual R M)) (m : M) (w : W) :
     W.quotDualCoannihilatorToDual (Quotient.mk m) w = w.1 m := rfl
-
-/--
-theorem `quotDualCoannihilatorToDual_injective` / 定理 `quotDualCoannihilatorToDual_injective`
-
-English:
-theorem quotDualCoannihilatorToDual_injective
-  given: (W : Submodule R (Dual R M))
-  proof: LinearMap.ker_eq_bot.mp (ker_liftQ_eq_bot _ _ _ le_rfl)
-
-中文:
-定理 quotDualCoannihilatorToDual_injective
-  条件: (W : 子模 R (对偶 R M))
-  证明: LinearMap.ker_eq_bot.mp (ker_liftQ_eq_bot _ _ _ le_rfl)
-
-Depends on / 依赖: LinearMap, LinearMap.ker_eq_bot.mp, ker_eq_bot, ker_liftQ_eq_bot, le_rfl
+/-
+**Submodule.quotDualCoannihilatorToDual_injective** 是 Mathlib 中的一个定理，位于命名空间 `Sub
+module`。
+形式化陈述：quotDualCoannihilatorToDual_injective (W : Submodule R (Dual R M)) : Funct
+ion.Injective W.quotDualCoannihilatorToDual
+参数：W : Submodule R (Dual R M)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `LinearMap.ker_eq_bot`：ker_eq_bot {f : M ->ₛₗ[τ₁₂] M₂} : ker f = ⊥ ↔ Inje
+ctive f
+· 使用定理 `Submodule.ker_liftQ_eq_bot`：ker_liftQ_eq_bot (f : M ->ₛₗ[τ₁₂] M₂) (h) (h
+' : ker f <= p) : ker (p.liftQ f h) = ⊥
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
 theorem quotDualCoannihilatorToDual_injective (W : Submodule R (Dual R M)) :
     Function.Injective W.quotDualCoannihilatorToDual :=
   LinearMap.ker_eq_bot.mp (ker_liftQ_eq_bot _ _ _ le_rfl)
-
-/--
-theorem `flip_quotDualCoannihilatorToDual_injective` / 定理 `flip_quotDualCoannihilatorToDual_injective`
-
-English:
-theorem flip_quotDualCoannihilatorToDual_injective
-  given: (W : Submodule R (Dual R M))
-  proof: fun _ _ he => Subtype.ext LinearMap.ext fun m => DFunLike.congr_fun he ⟦m⟧
-
-中文:
-定理 flip_quotDualCoannihilatorToDual_injective
-  条件: (W : 子模 R (对偶 R M))
-  证明: fun _ _ he => Subtype.ext LinearMap.ext fun m => DFunLike.congr_fun he ⟦m⟧
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, LinearMap, LinearMap.ext, Subtype, Subtype.ext, congr_fun
+/-
+**Submodule.flip_quotDualCoannihilatorToDual_injective** 是 Mathlib 中的一个定理，位于命名空间
+ `Submodule`。
+形式化陈述：flip_quotDualCoannihilatorToDual_injective (W : Submodule R (Dual R M)) : 
+Function.Injective W.quotDualCoannihilatorToDual.flip
+参数：W : Submodule R (Dual R M)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用引理 `SMulCommClass.symm`：SMulCommClass.symm (M N α : Type*) [SMul M α] [SMul 
+N α] [SMulCommClass M N α] : SMulCommClass N M α where smul_comm a' a b
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 -/
 theorem flip_quotDualCoannihilatorToDual_injective (W : Submodule R (Dual R M)) :
     Function.Injective W.quotDualCoannihilatorToDual.flip :=
-fun _ _ he => Subtype.ext LinearMap.ext fun m => DFunLike.congr_fun he ⟦m⟧
+  fun _ _ he ↦ Subtype.ext <| LinearMap.ext fun m ↦ DFunLike.congr_fun he ⟦m⟧
 
 open LinearMap in
-/--
-theorem `quotDualCoannihilatorToDual_nondegenerate` / 定理 `quotDualCoannihilatorToDual_nondegenerate`
-
-English:
-theorem quotDualCoannihilatorToDual_nondegenerate
-  given: (W : Submodule R (Dual R M))
-  proof: by
-  rw [Nondegenerate]; rw [separatingLeft_iff_ker_eq_bot]; rw [separatingRight_iff_flip_ker_eq_bot]
-  simp_rw [ker_eq_bot]
-  exact ⟨W.quotDualCoannihilatorToDual_injective, W.flip_quotDualCoannihilatorToDual_injective⟩
-
-中文:
-定理 quotDualCoannihilatorToDual_nondegenerate
-  条件: (W : 子模 R (对偶 R M))
-  证明: by
-  rw [Nondegenerate]; rw [separatingLeft_iff_ker_eq_bot]; rw [separatingRight_iff_flip_ker_eq_bot]
-  simp_rw [ker_eq_bot]
-  exact ⟨W.quotDualCoannihilatorToDual_injective, W.flip_quotDualCoannihilatorToDual_injective⟩
-
-Depends on / 依赖: Nondegenerate, W.flip_quotDualCoannihilatorToDual_injective, W.quotDualCoannihilatorToDual_injective, flip_quotDualCoannihilatorToDual_injective, ker_eq_bot, quotDualCoannihilatorToDual_injective, separatingLeft_iff_ker_eq_bot, separatingRight_iff_flip_ker_eq_bot, simp_rw
+/-
+**Submodule.quotDualCoannihilatorToDual_nondegenerate** 是 Mathlib 中的一个定理，位于命名空间 
+`Submodule`。
+形式化陈述：quotDualCoannihilatorToDual_nondegenerate (W : Submodule R (Dual R M)) : W
+.quotDualCoannihilatorToDual.Nondegenerate
+参数：W : Submodule R (Dual R M)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.Nondegenerate.eq_1`：∀ {R : Type u_1} {R₁ : Type u_2} {R₂ : Typ
+e u_3} {M : Type u_5} {M₁ : Type u_6} {M₂ : Type u_7} [inst : CommSemiring R]   
+[inst_1 : AddCommM…
+· 使用定理 `LinearMap.separatingLeft_iff_ker_eq_bot`：separatingLeft_iff_ker_eq_bot {
+B : M₁ ->ₛₗ[I₁] M₂ ->ₛₗ[I₂] M} : B.SeparatingLeft ↔ LinearMap.ker B = ⊥
+· 使用引理 `SMulCommClass.symm`：SMulCommClass.symm (M N α : Type*) [SMul M α] [SMul 
+N α] [SMulCommClass M N α] : SMulCommClass N M α where smul_comm a' a b
+· 使用定理 `LinearMap.separatingRight_iff_flip_ker_eq_bot`：separatingRight_iff_flip_
+ker_eq_bot {B : M₁ ->ₛₗ[I₁] M₂ ->ₛₗ[I₂] M} : B.SeparatingRight ↔ LinearMap.ker B
+.flip = ⊥
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Submodule.quotDualCoannihilatorToDual_injective`：quotDualCoannihilatorTo
+Dual_injective (W : Submodule R (Dual R M)) : Function.Injective W.quotDualCoann
+ihilatorToDual
+· 使用定理 `Submodule.flip_quotDualCoannihilatorToDual_injective`：flip_quotDualCoann
+ihilatorToDual_injective (W : Submodule R (Dual R M)) : Function.Injective W.quo
+tDualCoannihilatorToDual.flip
 -/
 theorem quotDualCoannihilatorToDual_nondegenerate (W : Submodule R (Dual R M)) :
     W.quotDualCoannihilatorToDual.Nondegenerate := by
-  rw [Nondegenerate]; rw [separatingLeft_iff_ker_eq_bot]; rw [separatingRight_iff_flip_ker_eq_bot]
+  rw [Nondegenerate, separatingLeft_iff_ker_eq_bot, separatingRight_iff_flip_ker_eq_bot]
   simp_rw [ker_eq_bot]
   exact ⟨W.quotDualCoannihilatorToDual_injective, W.flip_quotDualCoannihilatorToDual_injective⟩
 
@@ -2066,78 +2046,78 @@ namespace LinearMap
 
 open Submodule
 
-/--
-theorem `range_dualMap_eq_dualAnnihilator_ker_of_surjective` / 定理 `range_dualMap_eq_dualAnnihilator_ker_of_surjective`
-
-English:
-theorem range_dualMap_eq_dualAnnihilator_ker_of_surjective
-  statement: (f : M ->ₗ[R] M')
-  proof: ((f.quotKerEquivOfSurjective hf).dualMap.range_comp _).trans
-    (LinearMap.ker f).range_dualMap_mkQ_eq
-
-中文:
-定理 range_dualMap_eq_dualAnnihilator_ker_of_surjective
-  结论: (f : M ->ₗ[R] M')
-  证明: ((f.quotKerEquivOfSurjective hf).dualMap.range_comp _).trans
-    (LinearMap.ker f).range_dualMap_mkQ_eq
-
-Depends on / 依赖: LinearMap, LinearMap.ker, dualMap, dualMap.range_comp, f.quotKerEquivOfSurjective, quotKerEquivOfSurjective, range_comp, range_dualMap_mkQ_eq
+/-
+**LinearMap.range_dualMap_eq_dualAnnihilator_ker_of_surjective** 是 Mathlib 中的一个定
+理，位于命名空间 `LinearMap`。
+形式化陈述：range_dualMap_eq_dualAnnihilator_ker_of_surjective (f : M ->ₗ[R] M') (hf :
+ Function.Surjective f) : LinearMap.range f.dualMap = (LinearMap.ker f).dualAnni
+hilator
+参数：f : M ->ₗ[R] M'；hf : Function.Surjective f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `LinearEquiv.range_comp`：range_comp [RingHomSurjective σ₂₃] [RingHomSurje
+ctive σ₁₃] : LinearMap.range (h.comp (e : M ->ₛₗ[σ₁₂] M₂) : M ->ₛₗ[σ₁₃] M₃) = Li
+nearMap.rang…
+· 使用定理 `Submodule.range_dualMap_mkQ_eq`：range_dualMap_mkQ_eq (W : Submodule R M)
+ : LinearMap.range W.mkQ.dualMap = W.dualAnnihilator
 -/
-theorem range_dualMap_eq_dualAnnihilator_ker_of_surjective (f : M ->ₗ[R] M')
+theorem range_dualMap_eq_dualAnnihilator_ker_of_surjective (f : M →ₗ[R] M')
     (hf : Function.Surjective f) : LinearMap.range f.dualMap = (LinearMap.ker f).dualAnnihilator :=
   ((f.quotKerEquivOfSurjective hf).dualMap.range_comp _).trans
     (LinearMap.ker f).range_dualMap_mkQ_eq
 
 -- Note, this can be specialized to the case where `R` is an injective `R`-module, or when
 -- `f.coker` is a projective `R`-module.
-/--
-theorem `range_dualMap_eq_dualAnnihilator_ker_of_subtype_range_surjective` / 定理 `range_dualMap_eq_dualAnnihilator_ker_of_subtype_range_surjective`
-
-English:
-theorem range_dualMap_eq_dualAnnihilator_ker_of_subtype_range_surjective
-  statement: (f : M ->ₗ[R] M')
-  proof: by
-  have rr_surj : Function.Surjective f.rangeRestrict := by
-    rw [← range_eq_top]; rw [range_rangeRestrict]
-  have := range_dualMap_eq_dualAnnihilator_ker_of_surjective f.rangeRestrict rr_surj
-  convert! this using 1
-  · calc
-      _ = range ((range f).subtype.comp f.rangeRestrict).dualMap := by simp
-      _ = _ := ?_
-    rw [← dualMap_comp_dualMap]; rw [range_comp_of_range_eq_top]
-    rwa [range_eq_top]
-  · apply congr_arg
-    exact (ker_rangeRestrict f).symm
-
-中文:
-定理 range_dualMap_eq_dualAnnihilator_ker_of_subtype_range_surjective
-  结论: (f : M ->ₗ[R] M')
-  证明: by
-  have rr_surj : Function.Surjective f.rangeRestrict := by
-    rw [← range_eq_top]; rw [range_rangeRestrict]
-  have := range_dualMap_eq_dualAnnihilator_ker_of_surjective f.rangeRestrict rr_surj
-  convert! this using 1
-  · calc
-      _ = range ((range f).subtype.comp f.rangeRestrict).dualMap := by simp
-      _ = _ := ?_
-    rw [← dualMap_comp_dualMap]; rw [range_comp_of_range_eq_top]
-    rwa [range_eq_top]
-  · apply congr_arg
-    exact (ker_rangeRestrict f).symm
-
-Depends on / 依赖: Function, Function.Surjective, Surjective, congr_arg, convert, dualMap, dualMap_comp_dualMap, f.rangeRestrict, ker_rangeRestrict, rangeRestrict, range_comp_of_range_eq_top, range_dualMap_eq_dualAnnihilator_ker_of_surjective, range_eq_top, range_rangeRestrict, rr_surj, subtype, subtype.comp
+/-
+**LinearMap.range_dualMap_eq_dualAnnihilator_ker_of_subtype_range_surjective** 是
+ Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：range_dualMap_eq_dualAnnihilator_ker_of_subtype_range_surjective (f : M ->
+ₗ[R] M') (hf : Function.Surjective (range f).subtype.dualMap) : LinearMap.range 
+f.dualMap = (ker f).dualAnnihilator
+参数：f : M ->ₗ[R] M'；hf : Function.Surjective (range f).subtype.dualMap。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.range_eq_top`：range_eq_top [RingHomSurjective τ₁₂] {f : M ->ₛₗ
+[τ₁₂] M₂} : range f = ⊤ ↔ Surjective f
+· 使用定理 `LinearMap.range_rangeRestrict`：∀ {R : Type u_1} {R₂ : Type u_2} {M : Typ
+e u_5} {M₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : Ad
+dCommMonoid M] [ins…
+· 使用定理 `LinearMap.range_dualMap_eq_dualAnnihilator_ker_of_surjective`：range_dual
+Map_eq_dualAnnihilator_ker_of_surjective (f : M ->ₗ[R] M') (hf : Function.Surjec
+tive f) : LinearMap.range f.dualMap = (LinearMap.k…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `LinearMap.dualMap_comp_dualMap`：LinearMap.dualMap_comp_dualMap {M₃ : Typ
+e*} [AddCommMonoid M₃] [Module R M₃] (f : M₁ ->ₗ[R] M₂) (g : M₂ ->ₗ[R] M₃) : f.d
+ualMap.comp g.dualMa…
+· 使用定理 `LinearMap.range_comp_of_range_eq_top`：range_comp_of_range_eq_top [RingHo
+mSurjective τ₁₂] [RingHomSurjective τ₂₃] [RingHomSurjective τ₁₃] {f : M ->ₛₗ[τ₁₂
+] M₂} (g : M₂ ->ₛₗ[τ₂₃] M₃…
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `LinearMap.ker_rangeRestrict`：ker_rangeRestrict : ker f.rangeRestrict = k
+er f
 -/
-theorem range_dualMap_eq_dualAnnihilator_ker_of_subtype_range_surjective (f : M ->ₗ[R] M')
+theorem range_dualMap_eq_dualAnnihilator_ker_of_subtype_range_surjective (f : M →ₗ[R] M')
     (hf : Function.Surjective (range f).subtype.dualMap) :
     LinearMap.range f.dualMap = (ker f).dualAnnihilator := by
   have rr_surj : Function.Surjective f.rangeRestrict := by
-    rw [← range_eq_top]; rw [range_rangeRestrict]
+    rw [← range_eq_top, range_rangeRestrict]
   have := range_dualMap_eq_dualAnnihilator_ker_of_surjective f.rangeRestrict rr_surj
   convert! this using 1
   · calc
       _ = range ((range f).subtype.comp f.rangeRestrict).dualMap := by simp
       _ = _ := ?_
-    rw [← dualMap_comp_dualMap]; rw [range_comp_of_range_eq_top]
+    rw [← dualMap_comp_dualMap, range_comp_of_range_eq_top]
     rwa [range_eq_top]
   · apply congr_arg
     exact (ker_rangeRestrict f).symm
@@ -2158,84 +2138,143 @@ namespace Module.Dual
 variable {f : Module.Dual K V₁}
 
 section
-variable (hf : f != 0)
+variable (hf : f ≠ 0)
 
-/--
-lemma `range_eq_top_of_ne_zero` / 引理 `range_eq_top_of_ne_zero`
-
-English:
-lemma range_eq_top_of_ne_zero
-  statement: {K V₁ : Type*} [DivisionSemiring K] [AddCommMonoid V₁] [Module K V₁]
-  proof: LinearMap.range_eq_top.mpr (LinearMap.surjective hf)
-
-中文:
-引理 range_eq_top_of_ne_zero
-  结论: {K V₁ : 类型} [除半环 K] [加法交换幺半群 V₁] [模 K V₁]
-  证明: LinearMap.range_eq_top.mpr (LinearMap.surjective hf)
-
-Depends on / 依赖: LinearMap, LinearMap.range_eq_top.mpr, LinearMap.surjective, range_eq_top, surjective
+/-
+**Module.Dual.range_eq_top_of_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `Module.Dual`。
+形式化陈述：range_eq_top_of_ne_zero {K V₁ : Type*} [DivisionSemiring K] [AddCommMonoid
+ V₁] [Module K V₁] {f : Module.Dual K V₁} (hf : f != 0) : LinearMap.range f = ⊤
+参数：hf : f != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LinearMap.range_eq_top`：range_eq_top [RingHomSurjective τ₁₂] {f : M ->ₛₗ
+[τ₁₂] M₂} : range f = ⊤ ↔ Surjective f
+· 使用定理 `LinearMap.surjective`：∀ {R : Type u_1} {M : Type u_2} [inst : AddCommMon
+oid M] [inst_1 : DivisionSemiring R] [inst_2 : _root_.Module R M]   {f : M →ₗ[R]
+ R}, f ≠ 0…
 -/
 lemma range_eq_top_of_ne_zero {K V₁ : Type*} [DivisionSemiring K] [AddCommMonoid V₁] [Module K V₁]
-    {f : Module.Dual K V₁} (hf : f != 0) : LinearMap.range f = ⊤ :=
+    {f : Module.Dual K V₁} (hf : f ≠ 0) : LinearMap.range f = ⊤ :=
   LinearMap.range_eq_top.mpr (LinearMap.surjective hf)
 
 variable [FiniteDimensional K V₁]
 include hf
-
-/--
-lemma `finrank_ker_add_one_of_ne_zero` / 引理 `finrank_ker_add_one_of_ne_zero`
-
-English:
-lemma finrank_ker_add_one_of_ne_zero
-  proof: by
-  suffices finrank K (LinearMap.range f) = 1 by
-    rw [← (LinearMap.ker f).finrank_quotient_add_finrank]; rw [add_comm]; rw [add_left_inj]; rw [f.quotKerEquivRange.finrank_eq]; rw [this]
-  rw [range_eq_top_of_ne_zero hf]; rw [finrank_top]; rw [finrank_self]
-
-中文:
-引理 finrank_ker_add_one_of_ne_zero
-  证明: by
-  suffices finrank K (LinearMap.range f) = 1 by
-    rw [← (LinearMap.ker f).finrank_quotient_add_finrank]; rw [add_comm]; rw [add_left_inj]; rw [f.quotKerEquivRange.finrank_eq]; rw [this]
-  rw [range_eq_top_of_ne_zero hf]; rw [finrank_top]; rw [finrank_self]
-
-Depends on / 依赖: LinearMap, LinearMap.ker, LinearMap.range, add_comm, add_left_inj, f.quotKerEquivRange.finrank_eq, finrank, finrank_eq, finrank_quotient_add_finrank, finrank_self, finrank_top, quotKerEquivRange, range_eq_top_of_ne_zero
+/-
+**Module.Dual.finrank_ker_add_one_of_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `Module.D
+ual`。
+形式化陈述：finrank_ker_add_one_of_ne_zero : finrank K (LinearMap.ker f) + 1 = finrank
+ K V₁
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Module.Dual.range_eq_top_of_ne_zero`：range_eq_top_of_ne_zero {K V₁ : Typ
+e*} [DivisionSemiring K] [AddCommMonoid V₁] [Module K V₁] {f : Module.Dual K V₁}
+ (hf : f != 0) : LinearMa…
+· 使用定理 `finrank_top`：finrank_top : finrank R (⊤ : Submodule R M) = finrank R M
+· 使用定理 `Module.finrank_self`：finrank_self : finrank R R = 1
+· 使用定理 `IsNoetherianRing.strongRankCondition`：∀ (R : Type u) [inst : Ring R] [No
+ntrivial R] [IsNoetherianRing R], StrongRankCondition R
+· 使用定理 `DivisionRing.toNontrivial`：∀ {K : Type u_2} [self : DivisionRing K], Non
+trivial K
+· 使用定理 `PrincipalIdealRing.isNoetherianRing`：∀ {R : Type u} [inst : Semiring R] 
+[IsPrincipalIdealRing R], IsNoetherianRing R
+· 使用定理 `DivisionSemiring.isPrincipalIdealRing`：∀ (K : Type u) [inst : DivisionSe
+miring K], IsPrincipalIdealRing K
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Submodule.finrank_quotient_add_finrank`：Submodule.finrank_quotient_add_f
+inrank [Module.Finite R M] (N : Submodule R M) : finrank R (M ⧸ N) + finrank R N
+ = finrank R M
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `add_left_inj`：∀ {G : Type u_1} [inst : Add G] [IsRightCancelAdd G] (a : 
+G) {b c : G}, b + a = c + a ↔ b = c
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `LinearEquiv.finrank_eq`：finrank_eq (f : M ≃ₗ[R] N) : finrank R M = finra
+nk R N
 -/
 lemma finrank_ker_add_one_of_ne_zero :
     finrank K (LinearMap.ker f) + 1 = finrank K V₁ := by
   suffices finrank K (LinearMap.range f) = 1 by
-    rw [← (LinearMap.ker f).finrank_quotient_add_finrank]; rw [add_comm]; rw [add_left_inj]; rw [f.quotKerEquivRange.finrank_eq]; rw [this]
-  rw [range_eq_top_of_ne_zero hf]; rw [finrank_top]; rw [finrank_self]
-
-/--
-lemma `isCompl_ker_of_disjoint_of_ne_bot` / 引理 `isCompl_ker_of_disjoint_of_ne_bot`
-
-English:
-lemma isCompl_ker_of_disjoint_of_ne_bot
-  statement: {p : Submodule K V₁}
-  proof: by
-refine ⟨hpf, codisjoint_iff.mpr eq_of_le_of_finrank_le le_top ?_⟩
-  have : finrank K ↑(LinearMap.ker f ⊔ p) = finrank K (LinearMap.ker f) + finrank K p := by
-    simp [← Submodule.finrank_sup_add_finrank_inf_eq (LinearMap.ker f) p, hpf.eq_bot]
-  rwa [finrank_top, this, ← finrank_ker_add_one_of_ne_zero hf, add_le_add_iff_left,
-    Submodule.one_le_finrank_iff]
-
-中文:
-引理 isCompl_ker_of_disjoint_of_ne_bot
-  结论: {p : 子模 K V₁}
-  证明: by
-refine ⟨hpf, codisjoint_iff.mpr eq_of_le_of_finrank_le le_top ?_⟩
-  have : finrank K ↑(LinearMap.ker f ⊔ p) = finrank K (LinearMap.ker f) + finrank K p := by
-    simp [← Submodule.finrank_sup_add_finrank_inf_eq (LinearMap.ker f) p, hpf.eq_bot]
-  rwa [finrank_top, this, ← finrank_ker_add_one_of_ne_zero hf, add_le_add_iff_left,
-    Submodule.one_le_finrank_iff]
-
-Depends on / 依赖: LinearMap, LinearMap.ker, Submodule, Submodule.finrank_sup_add_finrank_inf_eq, Submodule.one_le_finrank_iff, add_le_add_iff_left, codisjoint_iff, codisjoint_iff.mpr, eq_bot, eq_of_le_of_finrank_le, finrank, finrank_ker_add_one_of_ne_zero, finrank_sup_add_finrank_inf_eq, finrank_top, hpf.eq_bot, le_top, one_le_finrank_iff
+    rw [← (LinearMap.ker f).finrank_quotient_add_finrank, add_comm, add_left_inj,
+    f.quotKerEquivRange.finrank_eq, this]
+  rw [range_eq_top_of_ne_zero hf, finrank_top, finrank_self]
+/-
+**Module.Dual.isCompl_ker_of_disjoint_of_ne_bot** 是 Mathlib 中的一个引理，位于命名空间 `Modul
+e.Dual`。
+形式化陈述：isCompl_ker_of_disjoint_of_ne_bot {p : Submodule K V₁} (hpf : Disjoint (Li
+nearMap.ker f) p) (hp : p != ⊥) : IsCompl (LinearMap.ker f) p
+参数：hpf : Disjoint (LinearMap.ker f) p；hp : p != ⊥。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `codisjoint_iff`：∀ {α : Type u_1} [inst : SemilatticeSup α] [inst_1 : Ord
+erTop α] {a b : α}, Codisjoint a b ↔ a ⊔ b = ⊤
+· 使用定理 `Submodule.eq_of_le_of_finrank_le`：eq_of_le_of_finrank_le {S₁ S₂ : Submod
+ule K V} [FiniteDimensional K S₂] (hle : S₁ <= S₂) (hd : finrank K S₂ <= finrank
+ K S₁) : S₁ = S₂
+· 使用定理 `le_top`：le_top : a <= ⊤
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.finrank_sup_add_finrank_inf_eq`：finrank_sup_add_finrank_inf_eq
+ (s t : Submodule K V) [FiniteDimensional K s] [FiniteDimensional K t] : finrank
+ K ↑(s ⊔ t) + finrank K ↑(s ⊓ …
+· 使用定理 `DivisionRing.isDomain`：∀ {K : Type u_1} [inst : DivisionRing K], IsDomai
+n K
+· 使用定理 `instIsTorsionFreeOfIsDomainOfNoZeroSMulDivisors`：∀ {R : Type u_1} {M : T
+ype u_2} [inst : Semiring R] [IsDomain R] [inst_2 : AddCommGroup M] [inst_3 : _r
+oot_.Module R M]   [NoZeroSMulDivisor…
+· 使用定理 `GroupWithZero.toNoZeroSMulDivisors`：∀ {R : Type u_1} {M : Type u_2} [ins
+t : GroupWithZero R] [inst_1 : AddMonoid M] [inst_2 : DistribMulAction R M],   N
+oZeroSMulDivisors R M
+· 使用定理 `IsNoetherianRing.strongRankCondition`：∀ (R : Type u) [inst : Ring R] [No
+ntrivial R] [IsNoetherianRing R], StrongRankCondition R
+· 使用定理 `DivisionRing.toNontrivial`：∀ {K : Type u_2} [self : DivisionRing K], Non
+trivial K
+· 使用定理 `PrincipalIdealRing.isNoetherianRing`：∀ {R : Type u} [inst : Semiring R] 
+[IsPrincipalIdealRing R], IsNoetherianRing R
+· 使用定理 `DivisionSemiring.isPrincipalIdealRing`：∀ (K : Type u) [inst : DivisionSe
+miring K], IsPrincipalIdealRing K
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Disjoint.eq_bot`：Disjoint.eq_bot : Disjoint a b -> a ⊓ b = ⊥
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `finrank_top`：finrank_top : finrank R (⊤ : Submodule R M) = finrank R M
+· 使用引理 `Module.Dual.finrank_ker_add_one_of_ne_zero`：finrank_ker_add_one_of_ne_ze
+ro : finrank K (LinearMap.ker f) + 1 = finrank K V₁
+· 使用定理 `add_le_add_iff_left`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] [Ad
+dLeftMono α] [AddLeftReflectLE α] (a : α) {b c : α},   a + b ≤ a + c ↔ b ≤ c
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用引理 `Submodule.one_le_finrank_iff`：Submodule.one_le_finrank_iff [StrongRankCo
+ndition R] {S : Submodule R M} [Module.Finite R S] : 1 <= finrank R S ↔ S != ⊥
 -/
 lemma isCompl_ker_of_disjoint_of_ne_bot {p : Submodule K V₁}
-    (hpf : Disjoint (LinearMap.ker f) p) (hp : p != ⊥) :
+    (hpf : Disjoint (LinearMap.ker f) p) (hp : p ≠ ⊥) :
     IsCompl (LinearMap.ker f) p := by
-refine ⟨hpf, codisjoint_iff.mpr eq_of_le_of_finrank_le le_top ?_⟩
+  refine ⟨hpf, codisjoint_iff.mpr <| eq_of_le_of_finrank_le le_top ?_⟩
   have : finrank K ↑(LinearMap.ker f ⊔ p) = finrank K (LinearMap.ker f) + finrank K p := by
     simp [← Submodule.finrank_sup_add_finrank_inf_eq (LinearMap.ker f) p, hpf.eq_bot]
   rwa [finrank_top, this, ← finrank_ker_add_one_of_ne_zero hf, add_le_add_iff_left,
@@ -2243,70 +2282,86 @@ refine ⟨hpf, codisjoint_iff.mpr eq_of_le_of_finrank_le le_top ?_⟩
 
 end
 
-/--
-lemma `eq_of_ker_eq_of_apply_eq` / 引理 `eq_of_ker_eq_of_apply_eq`
-
-English:
-lemma eq_of_ker_eq_of_apply_eq
-  statement: [FiniteDimensional K V₁] {f g : Module.Dual K V₁} (x : V₁)
-  proof: by
-  let p := K ∙ x
-  have hp : p != ⊥ := by aesop
-  have hpf : Disjoint (LinearMap.ker f) p := by
-    rw [disjoint_iff]; rw [Submodule.eq_bot_iff]
-    rintro y ⟨hfy : f y = 0, hpy : y in p⟩
-    obtain ⟨t, rfl⟩ := Submodule.mem_span_singleton.mp hpy
-    have ht : t = 0 := by simpa [hx] using hfy
-    simp [ht]
-  have hf : f != 0 := by aesop
-  ext v
-  obtain ⟨y, hy, z, hz, rfl⟩ : existsᵉ (y in LinearMap.ker f) (z in p), y + z = v := by
-    have : v in (⊤ : Submodule K V₁) := Submodule.mem_top
-    rwa [← (isCompl_ker_of_disjoint_of_ne_bot hf hpf hp).sup_eq_top, Submodule.mem_sup] at this
-  have hy' : g y = 0 := by rwa [← LinearMap.mem_ker, ← h]
-  replace hy : f y = 0 := by rwa [LinearMap.mem_ker] at hy
-  obtain ⟨t, rfl⟩ := Submodule.mem_span_singleton.mp hz
-  simp [h', hy, hy']
-
-中文:
-引理 eq_of_ker_eq_of_apply_eq
-  结论: [有限维 K V₁] {f g : 模.对偶 K V₁} (x : V₁)
-  证明: by
-  let p := K ∙ x
-  have hp : p != ⊥ := by aesop
-  have hpf : Disjoint (LinearMap.ker f) p := by
-    rw [disjoint_iff]; rw [Submodule.eq_bot_iff]
-    rintro y ⟨hfy : f y = 0, hpy : y in p⟩
-    obtain ⟨t, rfl⟩ := Submodule.mem_span_singleton.mp hpy
-    have ht : t = 0 := by simpa [hx] using hfy
-    simp [ht]
-  have hf : f != 0 := by aesop
-  ext v
-  obtain ⟨y, hy, z, hz, rfl⟩ : existsᵉ (y in LinearMap.ker f) (z in p), y + z = v := by
-    have : v in (⊤ : Submodule K V₁) := Submodule.mem_top
-    rwa [← (isCompl_ker_of_disjoint_of_ne_bot hf hpf hp).sup_eq_top, Submodule.mem_sup] at this
-  have hy' : g y = 0 := by rwa [← LinearMap.mem_ker, ← h]
-  replace hy : f y = 0 := by rwa [LinearMap.mem_ker] at hy
-  obtain ⟨t, rfl⟩ := Submodule.mem_span_singleton.mp hz
-  simp [h', hy, hy']
-
-Depends on / 依赖: Disjoint, LinearMap, LinearMap.ker, Submodule, Submodule.eq_bot_iff, Submodule.mem_span_singleton.mp, Submodule.mem_top, disjoint_iff, eq_bot_iff, isCompl_ker_of_disjoint_of_ne_bo, mem_span_singleton, mem_top
+/-
+**Module.Dual.eq_of_ker_eq_of_apply_eq** 是 Mathlib 中的一个引理，位于命名空间 `Module.Dual`。
+形式化陈述：eq_of_ker_eq_of_apply_eq [FiniteDimensional K V₁] {f g : Module.Dual K V₁}
+ (x : V₁) (h : LinearMap.ker f = LinearMap.ker g) (h' : f x = g x) (hx : f x != 
+0) : f = g
+参数：x : V₁；h : LinearMap.ker f = LinearMap.ker g；h' : f x = g x；hx : f x != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Aesop.BuiltinRules.not_intro`：∀ {P : Prop}, (P → False) → ¬P
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `disjoint_iff`：disjoint_iff : Disjoint a b ↔ a ⊓ b = ⊥
+· 使用定理 `Submodule.eq_bot_iff`：∀ {R : Type u_1} {M : Type u_3} [inst : Semiring R
+] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   (p : Submodule R M),
+ p = ⊥ ↔ ∀…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Submodule.mem_span_singleton`：mem_span_singleton {y : M} : x in R ∙ y ↔ 
+exists a : R, a • y = x
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `DivisionRing.isDomain`：∀ {K : Type u_1} [inst : DivisionRing K], IsDomai
+n K
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Submodule.mem_top`：∀ {R : Type u_1} {M : Type u_3} [inst : Semiring R] [
+inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M] {x : M},   x ∈ ⊤
+· 使用定理 `Submodule.mem_sup`：mem_sup : x in p ⊔ p' ↔ exists y in p, exists z in p'
+, y + z = x
+· 使用定理 `IsCompl.sup_eq_top`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : Bounde
+dOrder α] {x y : α}, IsCompl x y → x ⊔ y = ⊤
+· 使用引理 `Module.Dual.isCompl_ker_of_disjoint_of_ne_bot`：isCompl_ker_of_disjoint_o
+f_ne_bot {p : Submodule K V₁} (hpf : Disjoint (LinearMap.ker f) p) (hp : p != ⊥)
+ : IsCompl (LinearMap.ker f) p
+（共 35 条，此处仅展示前 30 条）
 -/
 lemma eq_of_ker_eq_of_apply_eq [FiniteDimensional K V₁] {f g : Module.Dual K V₁} (x : V₁)
-    (h : LinearMap.ker f = LinearMap.ker g) (h' : f x = g x) (hx : f x != 0) :
+    (h : LinearMap.ker f = LinearMap.ker g) (h' : f x = g x) (hx : f x ≠ 0) :
     f = g := by
   let p := K ∙ x
-  have hp : p != ⊥ := by aesop
+  have hp : p ≠ ⊥ := by aesop
   have hpf : Disjoint (LinearMap.ker f) p := by
-    rw [disjoint_iff]; rw [Submodule.eq_bot_iff]
-    rintro y ⟨hfy : f y = 0, hpy : y in p⟩
+    rw [disjoint_iff, Submodule.eq_bot_iff]
+    rintro y ⟨hfy : f y = 0, hpy : y ∈ p⟩
     obtain ⟨t, rfl⟩ := Submodule.mem_span_singleton.mp hpy
     have ht : t = 0 := by simpa [hx] using hfy
     simp [ht]
-  have hf : f != 0 := by aesop
+  have hf : f ≠ 0 := by aesop
   ext v
-  obtain ⟨y, hy, z, hz, rfl⟩ : existsᵉ (y in LinearMap.ker f) (z in p), y + z = v := by
-    have : v in (⊤ : Submodule K V₁) := Submodule.mem_top
+  obtain ⟨y, hy, z, hz, rfl⟩ : ∃ᵉ (y ∈ LinearMap.ker f) (z ∈ p), y + z = v := by
+    have : v ∈ (⊤ : Submodule K V₁) := Submodule.mem_top
     rwa [← (isCompl_ker_of_disjoint_of_ne_bot hf hpf hp).sup_eq_top, Submodule.mem_sup] at this
   have hy' : g y = 0 := by rwa [← LinearMap.mem_ker, ← h]
   replace hy : f y = 0 := by rwa [LinearMap.mem_ker] at hy
@@ -2321,186 +2376,157 @@ namespace LinearMap
 
 variable {K V : Type*} [CommSemiring K] [AddCommMonoid V] [Module K V]
 
-/--
-theorem `id_separatingLeft` / 定理 `id_separatingLeft`
-
-English:
-theorem id_separatingLeft
-  statement: SeparatingLeft (M₁ := V ->ₗ[K] K) .id
-  proof: separatingLeft_iff_ker_eq_bot.mpr ker_id
-
-中文:
-定理 id_separatingLeft
-  结论: SeparatingLeft (M₁ := V ->ₗ[K] K) .id
-  证明: separatingLeft_iff_ker_eq_bot.mpr ker_id
+/-
+**LinearMap.id_separatingLeft** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：id_separatingLeft : SeparatingLeft (M₁
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LinearMap.separatingLeft_iff_ker_eq_bot`：separatingLeft_iff_ker_eq_bot {
+B : M₁ ->ₛₗ[I₁] M₂ ->ₛₗ[I₂] M} : B.SeparatingLeft ↔ LinearMap.ker B = ⊥
+· 使用定理 `LinearMap.ker_id`：ker_id : ker (LinearMap.id : M ->ₗ[R] M) = ⊥
 -/
-theorem id_separatingLeft : SeparatingLeft (M₁ := V ->ₗ[K] K) .id :=
+theorem id_separatingLeft : SeparatingLeft (M₁ := V →ₗ[K] K) .id :=
   separatingLeft_iff_ker_eq_bot.mpr ker_id
-
-/--
-theorem `eval_separatingRight` / 定理 `eval_separatingRight`
-
-English:
-theorem eval_separatingRight
-  statement: SeparatingRight (Dual.eval K V)
-  proof: id_separatingLeft
-
-中文:
-定理 eval_separatingRight
-  结论: SeparatingRight (对偶.eval K V)
-  证明: id_separatingLeft
-
-Depends on / 依赖: id_separatingLeft
+/-
+**LinearMap.eval_separatingRight** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：eval_separatingRight : SeparatingRight (Dual.eval K V)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.id_separatingLeft`：id_separatingLeft : SeparatingLeft (M₁
 -/
 theorem eval_separatingRight : SeparatingRight (Dual.eval K V) := id_separatingLeft
 
 variable [Module.Projective K V]
-
-/--
-theorem `id_separatingRight` / 定理 `id_separatingRight`
-
-English:
-theorem id_separatingRight
-  statement: SeparatingRight (M₁ := V ->ₗ[K] K) .id
-  proof: fun x => (forall_dual_apply_eq_zero_iff K x).mp
-
-中文:
-定理 id_separatingRight
-  结论: SeparatingRight (M₁ := V ->ₗ[K] K) .id
-  证明: fun x => (forall_dual_apply_eq_zero_iff K x).mp
+/-
+**LinearMap.id_separatingRight** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：id_separatingRight : SeparatingRight (M₁
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Module.forall_dual_apply_eq_zero_iff`：forall_dual_apply_eq_zero_iff (R :
+ Type*) [Semiring R] [Module R V] [Projective R V] (v : V) : (forall φ : Module.
+Dual R V, φ v = 0) ↔ v = 0
 -/
-theorem id_separatingRight : SeparatingRight (M₁ := V ->ₗ[K] K) .id :=
+theorem id_separatingRight : SeparatingRight (M₁ := V →ₗ[K] K) .id :=
   fun x => (forall_dual_apply_eq_zero_iff K x).mp
-
-/--
-theorem `eval_separatingLeft` / 定理 `eval_separatingLeft`
-
-English:
-theorem eval_separatingLeft
-  statement: SeparatingLeft (Dual.eval K V)
-  proof: id_separatingRight
-
-中文:
-定理 eval_separatingLeft
-  结论: SeparatingLeft (对偶.eval K V)
-  证明: id_separatingRight
-
-Depends on / 依赖: id_separatingRight
+/-
+**LinearMap.eval_separatingLeft** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：eval_separatingLeft : SeparatingLeft (Dual.eval K V)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.id_separatingRight`：id_separatingRight : SeparatingRight (M₁
 -/
 theorem eval_separatingLeft : SeparatingLeft (Dual.eval K V) := id_separatingRight
-
-/--
-theorem `id_nondegenerate` / 定理 `id_nondegenerate`
-
-English:
-theorem id_nondegenerate
-  statement: Nondegenerate (M₁ := V ->ₗ[K] K) .id
-  proof: ⟨id_separatingLeft, id_separatingRight⟩
-
-@[deprecated (since := "2026-04-02")]
-alias dualPairing_nondegenerate := id_nondegenerate
-
-中文:
-定理 id_nondegenerate
-  结论: 非退化 (M₁ := V ->ₗ[K] K) .id
-  证明: ⟨id_separatingLeft, id_separatingRight⟩
-
-@[deprecated (since := "2026-04-02")]
-alias dualPairing_nondegenerate := id_nondegenerate
+/-
+**LinearMap.id_nondegenerate** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：id_nondegenerate : Nondegenerate (M₁
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.id_separatingLeft`：id_separatingLeft : SeparatingLeft (M₁
+· 使用定理 `LinearMap.id_separatingRight`：id_separatingRight : SeparatingRight (M₁
 -/
-theorem id_nondegenerate : Nondegenerate (M₁ := V ->ₗ[K] K) .id :=
+theorem id_nondegenerate : Nondegenerate (M₁ := V →ₗ[K] K) .id :=
   ⟨id_separatingLeft, id_separatingRight⟩
 
 @[deprecated (since := "2026-04-02")]
 alias dualPairing_nondegenerate := id_nondegenerate
-
-/--
-theorem `eval_nondegenerate` / 定理 `eval_nondegenerate`
-
-English:
-theorem eval_nondegenerate
-  statement: Nondegenerate (Dual.eval K V)
-  proof: ⟨eval_separatingLeft, eval_separatingRight⟩
-
-中文:
-定理 eval_nondegenerate
-  结论: 非退化 (对偶.eval K V)
-  证明: ⟨eval_separatingLeft, eval_separatingRight⟩
-
-Depends on / 依赖: eval_separatingLeft, eval_separatingRight
+/-
+**LinearMap.eval_nondegenerate** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：eval_nondegenerate : Nondegenerate (Dual.eval K V)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `LinearMap.eval_separatingLeft`：eval_separatingLeft : SeparatingLeft (Dua
+l.eval K V)
+· 使用定理 `LinearMap.eval_separatingRight`：eval_separatingRight : SeparatingRight (
+Dual.eval K V)
 -/
 theorem eval_nondegenerate : Nondegenerate (Dual.eval K V) :=
   ⟨eval_separatingLeft, eval_separatingRight⟩
 
 variable {K V₁ V₂ : Type*} [Field K]
 variable [AddCommGroup V₁] [Module K V₁] [AddCommGroup V₂] [Module K V₂]
-
-/--
-theorem `dualMap_surjective_of_injective` / 定理 `dualMap_surjective_of_injective`
-
-English:
-theorem dualMap_surjective_of_injective
-  given: {f : V₁ ->ₗ[K] V₂} (hf : Function.Injective f)
-  proof: fun φ =>
-  have ⟨f', hf'⟩ := f.exists_leftInverse_of_injective (ker_eq_bot.mpr hf)
-  ⟨φ.comp f', ext fun x => congr(φ <| $hf' x)⟩
-
-中文:
-定理 dualMap_surjective_of_injective
-  条件: {f : V₁ ->ₗ[K] V₂} (hf : 函数.单射 f)
-  证明: fun φ =>
-  have ⟨f', hf'⟩ := f.exists_leftInverse_of_injective (ker_eq_bot.mpr hf)
-  ⟨φ.comp f', ext fun x => congr(φ <| $hf' x)⟩
+/-
+**LinearMap.dualMap_surjective_of_injective** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap
+`。
+形式化陈述：dualMap_surjective_of_injective {f : V₁ ->ₗ[K] V₂} (hf : Function.Injectiv
+e f) : Function.Surjective f.dualMap
+参数：hf : Function.Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `LinearMap.exists_leftInverse_of_injective`：LinearMap.exists_leftInverse_
+of_injective (f : V ->ₗ[K] V') (hf_inj : LinearMap.ker f = ⊥) : exists g : V' ->
+ₗ[K] V, g.comp f = LinearMap.id
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LinearMap.ker_eq_bot`：ker_eq_bot {f : M ->ₛₗ[τ₁₂] M₂} : ker f = ⊥ ↔ Inje
+ctive f
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-theorem dualMap_surjective_of_injective {f : V₁ ->ₗ[K] V₂} (hf : Function.Injective f) :
-    Function.Surjective f.dualMap := fun φ =>
+theorem dualMap_surjective_of_injective {f : V₁ →ₗ[K] V₂} (hf : Function.Injective f) :
+    Function.Surjective f.dualMap := fun φ ↦
   have ⟨f', hf'⟩ := f.exists_leftInverse_of_injective (ker_eq_bot.mpr hf)
-  ⟨φ.comp f', ext fun x => congr(φ <| $hf' x)⟩
-
-/--
-theorem `range_dualMap_eq_dualAnnihilator_ker` / 定理 `range_dualMap_eq_dualAnnihilator_ker`
-
-English:
-theorem range_dualMap_eq_dualAnnihilator_ker
-  given: (f : V₁ ->ₗ[K] V₂)
-  proof: range_dualMap_eq_dualAnnihilator_ker_of_subtype_range_surjective f
-    dualMap_surjective_of_injective (range f).injective_subtype
-
-中文:
-定理 range_dualMap_eq_dualAnnihilator_ker
-  条件: (f : V₁ ->ₗ[K] V₂)
-  证明: range_dualMap_eq_dualAnnihilator_ker_of_subtype_range_surjective f
-    dualMap_surjective_of_injective (range f).injective_subtype
-
-Depends on / 依赖: dualMap_surjective_of_injective, injective_subtype, range_dualMap_eq_dualAnnihilator_ker_of_subtype_range_surjective
+  ⟨φ.comp f', ext fun x ↦ congr(φ <| $hf' x)⟩
+/-
+**LinearMap.range_dualMap_eq_dualAnnihilator_ker** 是 Mathlib 中的一个定理，位于命名空间 `Line
+arMap`。
+形式化陈述：range_dualMap_eq_dualAnnihilator_ker (f : V₁ ->ₗ[K] V₂) : LinearMap.range 
+f.dualMap = (LinearMap.ker f).dualAnnihilator
+参数：f : V₁ ->ₗ[K] V₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.range_dualMap_eq_dualAnnihilator_ker_of_subtype_range_surjecti
+ve`：range_dualMap_eq_dualAnnihilator_ker_of_subtype_range_surjective (f : M ->ₗ[
+R] M') (hf : Function.Surjective (range f).subtype.dualMap) : Li…
+· 使用定理 `LinearMap.dualMap_surjective_of_injective`：dualMap_surjective_of_injecti
+ve {f : V₁ ->ₗ[K] V₂} (hf : Function.Injective f) : Function.Surjective f.dualMa
+p
+· 使用定理 `Submodule.injective_subtype`：injective_subtype : Injective p.subtype
 -/
-theorem range_dualMap_eq_dualAnnihilator_ker (f : V₁ ->ₗ[K] V₂) :
+theorem range_dualMap_eq_dualAnnihilator_ker (f : V₁ →ₗ[K] V₂) :
     LinearMap.range f.dualMap = (LinearMap.ker f).dualAnnihilator :=
-range_dualMap_eq_dualAnnihilator_ker_of_subtype_range_surjective f
+  range_dualMap_eq_dualAnnihilator_ker_of_subtype_range_surjective f <|
     dualMap_surjective_of_injective (range f).injective_subtype
 
 /-- For vector spaces, `f.dualMap` is surjective if and only if `f` is injective -/
 @[simp]
-/--
-theorem `dualMap_surjective_iff` / 定理 `dualMap_surjective_iff`
+/-
+**LinearMap.dualMap_surjective_iff** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：dualMap_surjective_iff {f : V₁ ->ₗ[K] V₂} : Function.Surjective f.dualMap 
+↔ Function.Injective f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.range_eq_top`：range_eq_top [RingHomSurjective τ₁₂] {f : M ->ₛₗ
+[τ₁₂] M₂} : range f = ⊤ ↔ Surjective f
+· 使用定理 `LinearMap.range_dualMap_eq_dualAnnihilator_ker`：range_dualMap_eq_dualAnn
+ihilator_ker (f : V₁ ->ₗ[K] V₂) : LinearMap.range f.dualMap = (LinearMap.ker f).
+dualAnnihilator
+· 使用定理 `Submodule.dualAnnihilator_bot`：dualAnnihilator_bot : (⊥ : Submodule R M)
+.dualAnnihilator = ⊤
+· 使用定理 `Subspace.dualAnnihilator_inj`：dualAnnihilator_inj {W W' : Subspace K V} 
+: W.dualAnnihilator = W'.dualAnnihilator ↔ W = W'
+· 使用定理 `LinearMap.ker_eq_bot`：ker_eq_bot {f : M ->ₛₗ[τ₁₂] M₂} : ker f = ⊥ ↔ Inje
+ctive f
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem dualMap_surjective_iff
-  given: {f : V₁ ->ₗ[K] V₂}
-  proof: by
-  rw [← LinearMap.range_eq_top]; rw [range_dualMap_eq_dualAnnihilator_ker]; rw [← Submodule.dualAnnihilator_bot]; rw [Subspace.dualAnnihilator_inj]; rw [LinearMap.ker_eq_bot]
-
-中文:
-定理 dualMap_surjective_iff
-  条件: {f : V₁ ->ₗ[K] V₂}
-  证明: by
-  rw [← LinearMap.range_eq_top]; rw [range_dualMap_eq_dualAnnihilator_ker]; rw [← Submodule.dualAnnihilator_bot]; rw [Subspace.dualAnnihilator_inj]; rw [LinearMap.ker_eq_bot]
-
-Depends on / 依赖: LinearMap, LinearMap.ker_eq_bot, LinearMap.range_eq_top, Submodule, Submodule.dualAnnihilator_bot, Subspace, Subspace.dualAnnihilator_inj, dualAnnihilator_bot, dualAnnihilator_inj, ker_eq_bot, range_dualMap_eq_dualAnnihilator_ker, range_eq_top
+--- 原说明 ---
+For vector spaces, `f.dualMap` is surjective if and only if `f` is injective
 -/
-theorem dualMap_surjective_iff {f : V₁ ->ₗ[K] V₂} :
+theorem dualMap_surjective_iff {f : V₁ →ₗ[K] V₂} :
     Function.Surjective f.dualMap ↔ Function.Injective f := by
-  rw [← LinearMap.range_eq_top]; rw [range_dualMap_eq_dualAnnihilator_ker]; rw [← Submodule.dualAnnihilator_bot]; rw [Subspace.dualAnnihilator_inj]; rw [LinearMap.ker_eq_bot]
+  rw [← LinearMap.range_eq_top, range_dualMap_eq_dualAnnihilator_ker,
+      ← Submodule.dualAnnihilator_bot, Subspace.dualAnnihilator_inj, LinearMap.ker_eq_bot]
 
 end LinearMap
 
@@ -2511,60 +2537,60 @@ namespace Subspace
 
 open Submodule
 
-/--
-theorem `dualPairing_eq` / 定理 `dualPairing_eq`
-
-English:
-theorem dualPairing_eq
-  given: (W : Subspace K V₁)
-  proof: by
-  ext
-  rfl
-
-中文:
-定理 dualPairing_eq
-  条件: (W : 子空间 K V₁)
-  证明: by
-  ext
-  rfl
+/-
+**Subspace.dualPairing_eq** 是 Mathlib 中的一个定理，位于命名空间 `Subspace`。
+形式化陈述：dualPairing_eq (W : Subspace K V₁) : W.dualPairing = W.quotAnnihilatorEqui
+v.toLinearMap
+参数：W : Subspace K V₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.linearMap_qext`：linearMap_qext ⦃f g : M ⧸ p ->ₛₗ[τ₁₂] M₂⦄ (h :
+ f.comp p.mkQ = g.comp p.mkQ) : f = g
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
 -/
 theorem dualPairing_eq (W : Subspace K V₁) :
     W.dualPairing = W.quotAnnihilatorEquiv.toLinearMap := by
   ext
   rfl
-
-/--
-theorem `dualPairing_nondegenerate` / 定理 `dualPairing_nondegenerate`
-
-English:
-theorem dualPairing_nondegenerate
-  given: (W : Subspace K V₁)
-  statement: W.dualPairing.Nondegenerate
-  proof: by
-  constructor
-  · rw [LinearMap.separatingLeft_iff_ker_eq_bot, dualPairing_eq]
-    apply LinearEquiv.ker
-  · intro x h
-    rw [← forall_dual_apply_eq_zero_iff K x]
-    intro φ
-    simpa only [Submodule.dualPairing_apply, dualLift_of_subtype] using
-      h (Submodule.Quotient.mk (W.dualLift φ))
-
-中文:
-定理 dualPairing_nondegenerate
-  条件: (W : 子空间 K V₁)
-  结论: W.dualPairing.非退化
-  证明: by
-  constructor
-  · rw [LinearMap.separatingLeft_iff_ker_eq_bot, dualPairing_eq]
-    apply LinearEquiv.ker
-  · intro x h
-    rw [← forall_dual_apply_eq_zero_iff K x]
-    intro φ
-    simpa only [Submodule.dualPairing_apply, dualLift_of_subtype] using
-      h (Submodule.Quotient.mk (W.dualLift φ))
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.ker, LinearMap, LinearMap.separatingLeft_iff_ker_eq_bot, Quotient, Submodule, Submodule.Quotient.mk, Submodule.dualPairing_apply, W.dualLift, dualLift, dualLift_of_subtype, dualPairing_apply, dualPairing_eq, forall_dual_apply_eq_zero_iff, separatingLeft_iff_ker_eq_bot
+/-
+**Subspace.dualPairing_nondegenerate** 是 Mathlib 中的一个定理，位于命名空间 `Subspace`。
+形式化陈述：dualPairing_nondegenerate (W : Subspace K V₁) : W.dualPairing.Nondegenerat
+e
+参数：W : Subspace K V₁。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.separatingLeft_iff_ker_eq_bot`：separatingLeft_iff_ker_eq_bot {
+B : M₁ ->ₛₗ[I₁] M₂ ->ₛₗ[I₂] M} : B.SeparatingLeft ↔ LinearMap.ker B = ⊥
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Subspace.dualPairing_eq`：dualPairing_eq (W : Subspace K V₁) : W.dualPair
+ing = W.quotAnnihilatorEquiv.toLinearMap
+· 使用定理 `LinearEquiv.ker`：∀ {R : Type u_1} {R₂ : Type u_2} {M : Type u_5} {M₂ : T
+ype u_7} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddCommMonoid M]
+ [ins…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Module.forall_dual_apply_eq_zero_iff`：forall_dual_apply_eq_zero_iff (R :
+ Type*) [Semiring R] [Module R V] [Projective R V] (v : V) : (forall φ : Module.
+Dual R V, φ v = 0) ↔ v = 0
+· 使用定理 `Module.Projective.of_free`：∀ {R : Type u_1} [inst : Semiring R] {P : Typ
+e u_2} [inst_1 : AddCommMonoid P] [inst_2 : _root_.Module R P]   [Module.Free R 
+P], Module.Proj…
+· 使用定理 `Module.Free.of_divisionRing`：∀ (K : Type u_3) (V : Type u_4) [inst : Div
+isionRing K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V],   Module.Fr
+ee K V
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Subspace.dualLift_of_subtype`：dualLift_of_subtype {φ : Module.Dual K W} 
+(w : W) : W.dualLift φ (w : V) = φ w
 -/
 theorem dualPairing_nondegenerate (W : Subspace K V₁) : W.dualPairing.Nondegenerate := by
   constructor
@@ -2575,37 +2601,34 @@ theorem dualPairing_nondegenerate (W : Subspace K V₁) : W.dualPairing.Nondegen
     intro φ
     simpa only [Submodule.dualPairing_apply, dualLift_of_subtype] using
       h (Submodule.Quotient.mk (W.dualLift φ))
-
-/--
-theorem `dualCopairing_nondegenerate` / 定理 `dualCopairing_nondegenerate`
-
-English:
-theorem dualCopairing_nondegenerate
-  given: (W : Subspace K V₁)
-  statement: W.dualCopairing.Nondegenerate
-  proof: by
-  constructor
-  · rw [LinearMap.separatingLeft_iff_ker_eq_bot, dualCopairing_eq]
-    apply LinearEquiv.ker
-  · rintro ⟨x⟩
-    simp only [Quotient.quot_mk_eq_mk, dualCopairing_apply, Quotient.mk_eq_zero]
-    rw [← forall_mem_dualAnnihilator_apply_eq_zero_iff]; rw [SetLike.forall]
-    exact id
-
-中文:
-定理 dualCopairing_nondegenerate
-  条件: (W : 子空间 K V₁)
-  结论: W.dualCopairing.非退化
-  证明: by
-  constructor
-  · rw [LinearMap.separatingLeft_iff_ker_eq_bot, dualCopairing_eq]
-    apply LinearEquiv.ker
-  · rintro ⟨x⟩
-    simp only [Quotient.quot_mk_eq_mk, dualCopairing_apply, Quotient.mk_eq_zero]
-    rw [← forall_mem_dualAnnihilator_apply_eq_zero_iff]; rw [SetLike.forall]
-    exact id
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.ker, LinearMap, LinearMap.separatingLeft_iff_ker_eq_bot, Quotient, Quotient.mk_eq_zero, Quotient.quot_mk_eq_mk, SetLike, SetLike.forall, dualCopairing_apply, dualCopairing_eq, forall_mem_dualAnnihilator_apply_eq_zero_iff, mk_eq_zero, quot_mk_eq_mk, separatingLeft_iff_ker_eq_bot
+/-
+**Subspace.dualCopairing_nondegenerate** 是 Mathlib 中的一个定理，位于命名空间 `Subspace`。
+形式化陈述：dualCopairing_nondegenerate (W : Subspace K V₁) : W.dualCopairing.Nondegen
+erate
+参数：W : Subspace K V₁。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.separatingLeft_iff_ker_eq_bot`：separatingLeft_iff_ker_eq_bot {
+B : M₁ ->ₛₗ[I₁] M₂ ->ₛₗ[I₂] M} : B.SeparatingLeft ↔ LinearMap.ker B = ⊥
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Submodule.dualCopairing_eq`：dualCopairing_eq (W : Submodule R M) : W.dua
+lCopairing = (dualQuotEquivDualAnnihilator W).symm.toLinearMap
+· 使用定理 `LinearEquiv.ker`：∀ {R : Type u_1} {R₂ : Type u_2} {M : Type u_5} {M₂ : T
+ype u_7} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddCommMonoid M]
+ [ins…
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subspace.forall_mem_dualAnnihilator_apply_eq_zero_iff`：forall_mem_dualAn
+nihilator_apply_eq_zero_iff (W : Subspace K V) (v : V) : (forall φ : Module.Dual
+ K V, φ in W.dualAnnihilator -> φ v = 0) ↔ …
+· 使用定理 `SetLike.forall`：∀ {A : Type u_1} {B : Type u_2} [i : SetLike A B] {p : A
+} {q : ↥p → Prop},   (∀ (x : ↥p), q x) ↔ ∀ (x : B) (h : x ∈ p), q ⟨x, h⟩
 -/
 theorem dualCopairing_nondegenerate (W : Subspace K V₁) : W.dualCopairing.Nondegenerate := by
   constructor
@@ -2613,57 +2636,57 @@ theorem dualCopairing_nondegenerate (W : Subspace K V₁) : W.dualCopairing.Nond
     apply LinearEquiv.ker
   · rintro ⟨x⟩
     simp only [Quotient.quot_mk_eq_mk, dualCopairing_apply, Quotient.mk_eq_zero]
-    rw [← forall_mem_dualAnnihilator_apply_eq_zero_iff]; rw [SetLike.forall]
+    rw [← forall_mem_dualAnnihilator_apply_eq_zero_iff, SetLike.forall]
     exact id
 
 -- Argument from https://math.stackexchange.com/a/2423263/172988
-/--
-theorem `dualAnnihilator_inf_eq` / 定理 `dualAnnihilator_inf_eq`
-
-English:
-theorem dualAnnihilator_inf_eq
-  given: (W W' : Subspace K V₁)
-  proof: by
-  refine le_antisymm ?_ (sup_dualAnnihilator_le_inf W W')
-  let F : V₁ ->ₗ[K] (V₁ ⧸ W) × V₁ ⧸ W' := (Submodule.mkQ W).prod (Submodule.mkQ W')
-  have : LinearMap.ker F = W ⊓ W' := by simp only [F, LinearMap.ker_prod, ker_mkQ]
-  rw [← this]; rw [← LinearMap.range_dualMap_eq_dualAnnihilator_ker]
-  intro φ
-  rw [LinearMap.mem_range]
-  rintro ⟨x, rfl⟩
-  rw [Submodule.mem_sup]
-  obtain ⟨⟨a, b⟩, rfl⟩ := (dualProdDualEquivDual K (V₁ ⧸ W) (V₁ ⧸ W')).surjective x
-  obtain ⟨a', rfl⟩ := (dualQuotEquivDualAnnihilator W).symm.surjective a
-  obtain ⟨b', rfl⟩ := (dualQuotEquivDualAnnihilator W').symm.surjective b
-  use a', a'.property, b', b'.property
-  rfl
-
-中文:
-定理 dualAnnihilator_inf_eq
-  条件: (W W' : 子空间 K V₁)
-  证明: by
-  refine le_antisymm ?_ (sup_dualAnnihilator_le_inf W W')
-  let F : V₁ ->ₗ[K] (V₁ ⧸ W) × V₁ ⧸ W' := (Submodule.mkQ W).prod (Submodule.mkQ W')
-  have : LinearMap.ker F = W ⊓ W' := by simp only [F, LinearMap.ker_prod, ker_mkQ]
-  rw [← this]; rw [← LinearMap.range_dualMap_eq_dualAnnihilator_ker]
-  intro φ
-  rw [LinearMap.mem_range]
-  rintro ⟨x, rfl⟩
-  rw [Submodule.mem_sup]
-  obtain ⟨⟨a, b⟩, rfl⟩ := (dualProdDualEquivDual K (V₁ ⧸ W) (V₁ ⧸ W')).surjective x
-  obtain ⟨a', rfl⟩ := (dualQuotEquivDualAnnihilator W).symm.surjective a
-  obtain ⟨b', rfl⟩ := (dualQuotEquivDualAnnihilator W').symm.surjective b
-  use a', a'.property, b', b'.property
-  rfl
-
-Depends on / 依赖: LinearMap, LinearMap.ker, LinearMap.ker_prod, LinearMap.mem_range, LinearMap.range_dualMap_eq_dualAnnihilator_ker, Submodule, Submodule.mem_sup, Submodule.mkQ, dualProdDualEquivDual, dualQuotEquivDualAnnihilator, ker_mkQ, ker_prod, le_antisymm, mem_range, mem_sup, range_dualMap_eq_dualAnnihilator_ker, sup_dualAnnihilator_le_inf, surjective
+/-
+**Subspace.dualAnnihilator_inf_eq** 是 Mathlib 中的一个定理，位于命名空间 `Subspace`。
+形式化陈述：dualAnnihilator_inf_eq (W W' : Subspace K V₁) : (W ⊓ W').dualAnnihilator =
+ W.dualAnnihilator ⊔ W'.dualAnnihilator
+参数：W W' : Subspace K V₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.ker_prod`：ker_prod (f : M ->ₗ[R] M₂) (g : M ->ₗ[R] M₃) : ker (
+prod f g) = ker f ⊓ ker g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Submodule.ker_mkQ`：ker_mkQ : ker p.mkQ = p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.range_dualMap_eq_dualAnnihilator_ker`：range_dualMap_eq_dualAnn
+ihilator_ker (f : V₁ ->ₗ[K] V₂) : LinearMap.range f.dualMap = (LinearMap.ker f).
+dualAnnihilator
+· 使用定理 `LinearMap.mem_range`：mem_range [RingHomSurjective τ₁₂] {f : M ->ₛₗ[τ₁₂] 
+M₂} {x} : x in range f ↔ exists y, f y = x
+· 使用定理 `Submodule.mem_sup`：mem_sup : x in p ⊔ p' ↔ exists y in p, exists z in p'
+, y + z = x
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LinearEquiv.surjective`：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {
+M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMono
+id M] [inst_…
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Submodule.sup_dualAnnihilator_le_inf`：sup_dualAnnihilator_le_inf (U V : 
+Submodule R M) : U.dualAnnihilator ⊔ V.dualAnnihilator <= (U ⊓ V).dualAnnihilato
+r
 -/
 theorem dualAnnihilator_inf_eq (W W' : Subspace K V₁) :
     (W ⊓ W').dualAnnihilator = W.dualAnnihilator ⊔ W'.dualAnnihilator := by
   refine le_antisymm ?_ (sup_dualAnnihilator_le_inf W W')
-  let F : V₁ ->ₗ[K] (V₁ ⧸ W) × V₁ ⧸ W' := (Submodule.mkQ W).prod (Submodule.mkQ W')
+  let F : V₁ →ₗ[K] (V₁ ⧸ W) × V₁ ⧸ W' := (Submodule.mkQ W).prod (Submodule.mkQ W')
   have : LinearMap.ker F = W ⊓ W' := by simp only [F, LinearMap.ker_prod, ker_mkQ]
-  rw [← this]; rw [← LinearMap.range_dualMap_eq_dualAnnihilator_ker]
+  rw [← this, ← LinearMap.range_dualMap_eq_dualAnnihilator_ker]
   intro φ
   rw [LinearMap.mem_range]
   rintro ⟨x, rfl⟩
@@ -2681,89 +2704,107 @@ theorem dualAnnihilator_inf_eq (W W' : Subspace K V₁) :
 -- true for infinite `ι`. One would need to add additional hypothesis on `W` (for example, it might
 -- be true when the family is inf-closed).
 -- TODO: generalize to `Sort`
-/--
-theorem `dualAnnihilator_iInf_eq` / 定理 `dualAnnihilator_iInf_eq`
-
-English:
-theorem dualAnnihilator_iInf_eq
-  given: {ι : Type*} [Finite ι] (W : ι -> Subspace K V₁)
-  proof: by
-  revert ι
-  apply Finite.induction_empty_option
-  · intro α β h hyp W
-    rw [← h.iInf_comp]; rw [hyp _]; rw [← h.iSup_comp]
-  · intro W
-    rw [iSup_of_empty']; rw [iInf_of_isEmpty]; rw [sInf_empty]; rw [sSup_empty]; rw [dualAnnihilator_top]
-  · intro α _ h W
-    rw [iInf_option]; rw [iSup_option]; rw [dualAnnihilator_inf_eq]; rw [h]
-
-中文:
-定理 dualAnnihilator_iInf_eq
-  条件: {ι : 类型} [有限 ι] (W : ι -> 子空间 K V₁)
-  证明: by
-  revert ι
-  apply Finite.induction_empty_option
-  · intro α β h hyp W
-    rw [← h.iInf_comp]; rw [hyp _]; rw [← h.iSup_comp]
-  · intro W
-    rw [iSup_of_empty']; rw [iInf_of_isEmpty]; rw [sInf_empty]; rw [sSup_empty]; rw [dualAnnihilator_top]
-  · intro α _ h W
-    rw [iInf_option]; rw [iSup_option]; rw [dualAnnihilator_inf_eq]; rw [h]
-
-Depends on / 依赖: Finite, Finite.induction_empty_option, dualAnnihilator_inf_eq, dualAnnihilator_top, h.iInf_comp, h.iSup_comp, iInf_comp, iInf_of_isEmpty, iInf_option, iSup_comp, iSup_of_empty, iSup_option, induction_empty_option, revert, sInf_empty, sSup_empty
+/-
+**Subspace.dualAnnihilator_iInf_eq** 是 Mathlib 中的一个定理，位于命名空间 `Subspace`。
+形式化陈述：dualAnnihilator_iInf_eq {ι : Type*} [Finite ι] (W : ι -> Subspace K V₁) : 
+(⨅ i : ι, W i).dualAnnihilator = ⨆ i : ι, (W i).dualAnnihilator
+参数：W : ι -> Subspace K V₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.induction_empty_option`：Finite.induction_empty_option {P : Type u
+ -> Prop} (of_equiv : forall {α β}, α ≃ β -> P α -> P β) (h_empty : P PEmpty) (h
+_option : forall {α…
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.iInf_comp`：∀ {α : Type u_1} {ι : Sort u_4} {ι' : Sort u_5} [inst :
+ InfSet α] {g : ι' → α} (e : ι ≃ ι'), ⨅ x, g (e x) = ⨅ y, g y
+· 使用定理 `Equiv.iSup_comp`：Equiv.iSup_comp {g : ι' -> α} (e : ι ≃ ι') : ⨆ x, g (e 
+x) = ⨆ y, g y
+· 使用定理 `iSup_of_empty'`：iSup_of_empty' {α ι} [SupSet α] [IsEmpty ι] (f : ι -> α)
+ : iSup f = sSup (∅ : Set α)
+· 使用定理 `iInf_of_isEmpty`：∀ {α : Type u_8} {ι : Sort u_9} [inst : InfSet α] [IsEm
+pty ι] (f : ι → α), iInf f = sInf ∅
+· 使用定理 `sInf_empty`：∀ {α : Type u_1} [inst : CompleteLattice α], sInf ∅ = ⊤
+· 使用定理 `sSup_empty`：sSup_empty : sSup ∅ = (⊥ : α)
+· 使用定理 `Submodule.dualAnnihilator_top`：dualAnnihilator_top : (⊤ : Submodule R M)
+.dualAnnihilator = ⊥
+· 使用定理 `iInf_option`：∀ {α : Type u_1} {β : Type u_2} [inst : CompleteLattice α] 
+(f : Option β → α), ⨅ o, f o = f none ⊓ ⨅ b, f (some b)
+· 使用定理 `iSup_option`：iSup_option (f : Option β -> α) : ⨆ o, f o = f none ⊔ ⨆ b, 
+f (Option.some b)
+· 使用定理 `Subspace.dualAnnihilator_inf_eq`：dualAnnihilator_inf_eq (W W' : Subspace
+ K V₁) : (W ⊓ W').dualAnnihilator = W.dualAnnihilator ⊔ W'.dualAnnihilator
 -/
-theorem dualAnnihilator_iInf_eq {ι : Type*} [Finite ι] (W : ι -> Subspace K V₁) :
+theorem dualAnnihilator_iInf_eq {ι : Type*} [Finite ι] (W : ι → Subspace K V₁) :
     (⨅ i : ι, W i).dualAnnihilator = ⨆ i : ι, (W i).dualAnnihilator := by
   revert ι
   apply Finite.induction_empty_option
   · intro α β h hyp W
-    rw [← h.iInf_comp]; rw [hyp _]; rw [← h.iSup_comp]
+    rw [← h.iInf_comp, hyp _, ← h.iSup_comp]
   · intro W
-    rw [iSup_of_empty']; rw [iInf_of_isEmpty]; rw [sInf_empty]; rw [sSup_empty]; rw [dualAnnihilator_top]
+    rw [iSup_of_empty', iInf_of_isEmpty, sInf_empty, sSup_empty, dualAnnihilator_top]
   · intro α _ h W
-    rw [iInf_option]; rw [iSup_option]; rw [dualAnnihilator_inf_eq]; rw [h]
+    rw [iInf_option, iSup_option, dualAnnihilator_inf_eq, h]
 
-/--
-theorem `isCompl_dualAnnihilator` / 定理 `isCompl_dualAnnihilator`
+/-- For vector spaces, dual annihilators carry direct sum decompositions
+to direct sum decompositions. -/
+/-
+**Subspace.isCompl_dualAnnihilator** 是 Mathlib 中的一个定理，位于命名空间 `Subspace`。
+形式化陈述：isCompl_dualAnnihilator {W W' : Subspace K V₁} (h : IsCompl W W') : IsComp
+l W.dualAnnihilator W'.dualAnnihilator
+参数：h : IsCompl W W'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isCompl_iff`：isCompl_iff [PartialOrder α] [BoundedOrder α] {a b : α} : I
+sCompl a b ↔ Disjoint a b ∧ Codisjoint a b
+· 使用定理 `disjoint_iff`：disjoint_iff : Disjoint a b ↔ a ⊓ b = ⊥
+· 使用定理 `codisjoint_iff`：∀ {α : Type u_1} [inst : SemilatticeSup α] [inst_1 : Ord
+erTop α] {a b : α}, Codisjoint a b ↔ a ⊔ b = ⊤
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subspace.dualAnnihilator_inf_eq`：dualAnnihilator_inf_eq (W W' : Subspace
+ K V₁) : (W ⊓ W').dualAnnihilator = W.dualAnnihilator ⊔ W'.dualAnnihilator
+· 使用定理 `Submodule.dualAnnihilator_sup_eq`：dualAnnihilator_sup_eq (U V : Submodul
+e R M) : (U ⊔ V).dualAnnihilator = U.dualAnnihilator ⊓ V.dualAnnihilator
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Submodule.dualAnnihilator_top`：dualAnnihilator_top : (⊤ : Submodule R M)
+.dualAnnihilator = ⊥
+· 使用定理 `Submodule.dualAnnihilator_bot`：dualAnnihilator_bot : (⊥ : Submodule R M)
+.dualAnnihilator = ⊤
 
-English:
-theorem isCompl_dualAnnihilator
-  given: {W W' : Subspace K V₁} (h : IsCompl W W')
-  proof: by
-  rw [isCompl_iff]; rw [disjoint_iff]; rw [codisjoint_iff] at h ⊢
-  rw [← dualAnnihilator_inf_eq]; rw [← dualAnnihilator_sup_eq]; rw [h.1]; rw [h.2]; rw [dualAnnihilator_top]; rw [dualAnnihilator_bot]
-  exact ⟨rfl, rfl⟩
-
-中文:
-定理 isCompl_dualAnnihilator
-  条件: {W W' : 子空间 K V₁} (h : 是补集 W W')
-  证明: by
-  rw [isCompl_iff]; rw [disjoint_iff]; rw [codisjoint_iff] at h ⊢
-  rw [← dualAnnihilator_inf_eq]; rw [← dualAnnihilator_sup_eq]; rw [h.1]; rw [h.2]; rw [dualAnnihilator_top]; rw [dualAnnihilator_bot]
-  exact ⟨rfl, rfl⟩
-
-Depends on / 依赖: codisjoint_iff, disjoint_iff, dualAnnihilator_bot, dualAnnihilator_inf_eq, dualAnnihilator_sup_eq, dualAnnihilator_top, isCompl_iff
+--- 原说明 ---
+For vector spaces, dual annihilators carry direct sum decompositions
+to direct sum decompositions.
 -/
 theorem isCompl_dualAnnihilator {W W' : Subspace K V₁} (h : IsCompl W W') :
     IsCompl W.dualAnnihilator W'.dualAnnihilator := by
-  rw [isCompl_iff]; rw [disjoint_iff]; rw [codisjoint_iff] at h ⊢
-  rw [← dualAnnihilator_inf_eq]; rw [← dualAnnihilator_sup_eq]; rw [h.1]; rw [h.2]; rw [dualAnnihilator_top]; rw [dualAnnihilator_bot]
+  rw [isCompl_iff, disjoint_iff, codisjoint_iff] at h ⊢
+  rw [← dualAnnihilator_inf_eq, ← dualAnnihilator_sup_eq, h.1, h.2, dualAnnihilator_top,
+    dualAnnihilator_bot]
   exact ⟨rfl, rfl⟩
 
-/--
-Definition of `dualQuotDistrib` / `dualQuotDistrib` 的定义
+/-- For finite-dimensional vector spaces, one can distribute duals over quotients by identifying
+`W.dualLift.range` with `W`. Note that this depends on a choice of splitting of `V₁`. -/
+/-
+**Subspace.dualQuotDistrib** 是 Mathlib 中的一个定义，位于命名空间 `Subspace`。
+形式化陈述：dualQuotDistrib [FiniteDimensional K V₁] (W : Subspace K V₁) : Module.Dual
+ K (V₁ ⧸ W) ≃ₗ[K] Module.Dual K V₁ ⧸ LinearMap.range W.dualLift
+参数：W : Subspace K V₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dualQuotDistrib
-  signature: [FiniteDimensional K V₁] (W : Subspace K V₁)
-  body: W.dualQuotEquivDualAnnihilator.trans W.quotDualEquivAnnihilator.symm
-
-中文:
-定义 dualQuotDistrib
-  签名: [有限维 K V₁] (W : 子空间 K V₁)
-  定义体: W.dualQuotEquivDualAnnihilator.trans W.quotDualEquivAnnihilator.symm
-
-Depends on / 依赖: W.dualQuotEquivDualAnnihilator.trans, W.quotDualEquivAnnihilator.symm, dualQuotEquivDualAnnihilator, quotDualEquivAnnihilator
+--- 原说明 ---
+For finite-dimensional vector spaces, one can distribute duals over quotients by
+ identifying
+`W.dualLift.range` with `W`. Note that this depends on a choice of splitting of 
+`V₁`.
 -/
 def dualQuotDistrib [FiniteDimensional K V₁] (W : Subspace K V₁) :
     Module.Dual K (V₁ ⧸ W) ≃ₗ[K] Module.Dual K V₁ ⧸ LinearMap.range W.dualLift :=
@@ -2778,230 +2819,191 @@ open Module LinearMap
 namespace LinearMap
 
 @[simp]
-/--
-theorem `finrank_range_dualMap_eq_finrank_range` / 定理 `finrank_range_dualMap_eq_finrank_range`
-
-English:
-theorem finrank_range_dualMap_eq_finrank_range
-  given: (f : V₁ ->ₗ[K] V₂)
-  proof: by
-  rw [congr_arg dualMap (show f = (range f).subtype.comp f.rangeRestrict by rfl)]; rw [← dualMap_comp_dualMap]; rw [range_comp]; rw [range_eq_top.mpr (dualMap_surjective_of_injective (range f).injective_subtype)]; rw [Submodule.map_top]; rw [finrank_range_of_inj]; rw [Subspace.dual_finrank_eq]
-  exact dualMap_injective_of_surjective (range_eq_top.mp f.range_rangeRestrict)
-
-中文:
-定理 finrank_range_dualMap_eq_finrank_range
-  条件: (f : V₁ ->ₗ[K] V₂)
-  证明: by
-  rw [congr_arg dualMap (show f = (range f).subtype.comp f.rangeRestrict by rfl)]; rw [← dualMap_comp_dualMap]; rw [range_comp]; rw [range_eq_top.mpr (dualMap_surjective_of_injective (range f).injective_subtype)]; rw [Submodule.map_top]; rw [finrank_range_of_inj]; rw [Subspace.dual_finrank_eq]
-  exact dualMap_injective_of_surjective (range_eq_top.mp f.range_rangeRestrict)
-
-Depends on / 依赖: Submodule, Submodule.map_top, Subspace, Subspace.dual_finrank_eq, congr_arg, dualMap, dualMap_comp_dualMap, dualMap_injective_of_surjective, dualMap_surjective_of_injective, dual_finrank_eq, f.rangeRestrict, f.range_rangeRestrict, finrank_range_of_inj, injective_subtype, map_top, rangeRestrict, range_comp, range_eq_top, range_eq_top.mp, range_eq_top.mpr
+/-
+**LinearMap.finrank_range_dualMap_eq_finrank_range** 是 Mathlib 中的一个定理，位于命名空间 `Li
+nearMap`。
+形式化陈述：finrank_range_dualMap_eq_finrank_range (f : V₁ ->ₗ[K] V₂) : finrank K (Lin
+earMap.range f.dualMap) = finrank K (LinearMap.range f)
+参数：f : V₁ ->ₗ[K] V₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.dualMap_comp_dualMap`：LinearMap.dualMap_comp_dualMap {M₃ : Typ
+e*} [AddCommMonoid M₃] [Module R M₃] (f : M₁ ->ₗ[R] M₂) (g : M₂ ->ₗ[R] M₃) : f.d
+ualMap.comp g.dualMa…
+· 使用定理 `LinearMap.range_comp`：range_comp [RingHomSurjective τ₁₂] [RingHomSurject
+ive τ₂₃] [RingHomSurjective τ₁₃] (f : M ->ₛₗ[τ₁₂] M₂) (g : M₂ ->ₛₗ[τ₂₃] M₃) : ra
+nge (g.com…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LinearMap.range_eq_top`：range_eq_top [RingHomSurjective τ₁₂] {f : M ->ₛₗ
+[τ₁₂] M₂} : range f = ⊤ ↔ Surjective f
+· 使用定理 `LinearMap.dualMap_surjective_of_injective`：dualMap_surjective_of_injecti
+ve {f : V₁ ->ₗ[K] V₂} (hf : Function.Injective f) : Function.Surjective f.dualMa
+p
+· 使用定理 `Submodule.injective_subtype`：injective_subtype : Injective p.subtype
+· 使用定理 `Submodule.map_top`：map_top [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) 
+: map f ⊤ = range f
+· 使用定理 `LinearMap.finrank_range_of_inj`：LinearMap.finrank_range_of_inj {f : M ->
+ₗ[R] N} (hf : Function.Injective f) : finrank R (LinearMap.range f) = finrank R 
+M
+· 使用定理 `LinearMap.dualMap_injective_of_surjective`：LinearMap.dualMap_injective_o
+f_surjective {f : M₁ ->ₗ[R] M₂} (hf : Function.Surjective f) : Function.Injectiv
+e f.dualMap
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `LinearMap.range_rangeRestrict`：∀ {R : Type u_1} {R₂ : Type u_2} {M : Typ
+e u_5} {M₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : Ad
+dCommMonoid M] [ins…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Subspace.dual_finrank_eq`：dual_finrank_eq : finrank K (Module.Dual K V) 
+= finrank K V
 -/
-theorem finrank_range_dualMap_eq_finrank_range (f : V₁ ->ₗ[K] V₂) :
+theorem finrank_range_dualMap_eq_finrank_range (f : V₁ →ₗ[K] V₂) :
     finrank K (LinearMap.range f.dualMap) = finrank K (LinearMap.range f) := by
-  rw [congr_arg dualMap (show f = (range f).subtype.comp f.rangeRestrict by rfl)]; rw [← dualMap_comp_dualMap]; rw [range_comp]; rw [range_eq_top.mpr (dualMap_surjective_of_injective (range f).injective_subtype)]; rw [Submodule.map_top]; rw [finrank_range_of_inj]; rw [Subspace.dual_finrank_eq]
+  rw [congr_arg dualMap (show f = (range f).subtype.comp f.rangeRestrict by rfl),
+    ← dualMap_comp_dualMap, range_comp,
+    range_eq_top.mpr (dualMap_surjective_of_injective (range f).injective_subtype),
+    Submodule.map_top, finrank_range_of_inj, Subspace.dual_finrank_eq]
   exact dualMap_injective_of_surjective (range_eq_top.mp f.range_rangeRestrict)
 
 /-- `f.dualMap` is injective if and only if `f` is surjective -/
 @[simp]
-/--
-theorem `dualMap_injective_iff` / 定理 `dualMap_injective_iff`
+/-
+**LinearMap.dualMap_injective_iff** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：dualMap_injective_iff {f : V₁ ->ₗ[K] V₂} : Function.Injective f.dualMap ↔ 
+Function.Surjective f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Function.mtr`：∀ {a b : Prop}, (¬a → ¬b) → b → a
+· 使用定理 `Submodule.exists_le_ker_of_lt_top`：Submodule.exists_le_ker_of_lt_top (p 
+: Submodule K V) (hp : p < ⊤) : exists (f : V ->ₗ[K] K), f != 0 ∧ p <= ker f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `lt_top_iff_ne_top`：lt_top_iff_ne_top : a < ⊤ ↔ a != ⊤
+· 使用定理 `Ne.eq_1`：∀ {α : Sort u} (a b : α), (a ≠ b) = ¬a = b
+· 使用定理 `LinearMap.range_eq_top`：range_eq_top [RingHomSurjective τ₁₂] {f : M ->ₛₗ
+[τ₁₂] M₂} : range f = ⊤ ↔ Surjective f
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `LinearMap.dualMap_injective_of_surjective`：LinearMap.dualMap_injective_o
+f_surjective {f : M₁ ->ₗ[R] M₂} (hf : Function.Surjective f) : Function.Injectiv
+e f.dualMap
 
-English:
-theorem dualMap_injective_iff
-  given: {f : V₁ ->ₗ[K] V₂}
-  proof: by
-  refine ⟨Function.mtr fun not_surj inj => ?_, dualMap_injective_of_surjective⟩
-  rw [← range_eq_top]; rw [← Ne]; rw [← lt_top_iff_ne_top] at not_surj
-  obtain ⟨φ, φ0, range_le_ker⟩ := (range f).exists_le_ker_of_lt_top not_surj
-  exact φ0 (inj <| ext fun x => range_le_ker ⟨x, rfl⟩)
-
-中文:
-定理 dualMap_injective_iff
-  条件: {f : V₁ ->ₗ[K] V₂}
-  证明: by
-  refine ⟨Function.mtr fun not_surj inj => ?_, dualMap_injective_of_surjective⟩
-  rw [← range_eq_top]; rw [← Ne]; rw [← lt_top_iff_ne_top] at not_surj
-  obtain ⟨φ, φ0, range_le_ker⟩ := (range f).exists_le_ker_of_lt_top not_surj
-  exact φ0 (inj <| ext fun x => range_le_ker ⟨x, rfl⟩)
-
-Depends on / 依赖: Function, Function.mtr, dualMap_injective_of_surjective, exists_le_ker_of_lt_top, lt_top_iff_ne_top, not_surj, range_eq_top, range_le_ker
+--- 原说明 ---
+`f.dualMap` is injective if and only if `f` is surjective
 -/
-theorem dualMap_injective_iff {f : V₁ ->ₗ[K] V₂} :
+theorem dualMap_injective_iff {f : V₁ →ₗ[K] V₂} :
     Function.Injective f.dualMap ↔ Function.Surjective f := by
-  refine ⟨Function.mtr fun not_surj inj => ?_, dualMap_injective_of_surjective⟩
-  rw [← range_eq_top]; rw [← Ne]; rw [← lt_top_iff_ne_top] at not_surj
+  refine ⟨Function.mtr fun not_surj inj ↦ ?_, dualMap_injective_of_surjective⟩
+  rw [← range_eq_top, ← Ne, ← lt_top_iff_ne_top] at not_surj
   obtain ⟨φ, φ0, range_le_ker⟩ := (range f).exists_le_ker_of_lt_top not_surj
-  exact φ0 (inj <| ext fun x => range_le_ker ⟨x, rfl⟩)
+  exact φ0 (inj <| ext fun x ↦ range_le_ker ⟨x, rfl⟩)
 
 /-- `f.dualMap` is bijective if and only if `f` is -/
 @[simp]
-/--
-theorem `dualMap_bijective_iff` / 定理 `dualMap_bijective_iff`
+/-
+**LinearMap.dualMap_bijective_iff** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：dualMap_bijective_iff {f : V₁ ->ₗ[K] V₂} : Function.Bijective f.dualMap ↔ 
+Function.Bijective f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem dualMap_bijective_iff
-  given: {f : V₁ ->ₗ[K] V₂}
-  proof: by
-  simp_rw [Function.Bijective, dualMap_surjective_iff, dualMap_injective_iff, and_comm]
-
-中文:
-定理 dualMap_bijective_iff
-  条件: {f : V₁ ->ₗ[K] V₂}
-  证明: by
-  simp_rw [Function.Bijective, dualMap_surjective_iff, dualMap_injective_iff, and_comm]
-
-Depends on / 依赖: Bijective, Function, Function.Bijective, and_comm, dualMap_injective_iff, dualMap_surjective_iff, simp_rw
+--- 原说明 ---
+`f.dualMap` is bijective if and only if `f` is
 -/
-theorem dualMap_bijective_iff {f : V₁ ->ₗ[K] V₂} :
+theorem dualMap_bijective_iff {f : V₁ →ₗ[K] V₂} :
     Function.Bijective f.dualMap ↔ Function.Bijective f := by
   simp_rw [Function.Bijective, dualMap_surjective_iff, dualMap_injective_iff, and_comm]
 
-variable {B : V₁ ->ₗ[K] V₂ ->ₗ[K] K}
+variable {B : V₁ →ₗ[K] V₂ →ₗ[K] K}
 
 @[simp]
-/--
-lemma `dualAnnihilator_ker_eq_range_flip` / 引理 `dualAnnihilator_ker_eq_range_flip`
-
-English:
-lemma dualAnnihilator_ker_eq_range_flip
-  given: [IsReflexive K V₂]
-  proof: by
-  change _ = range (B.dualMap.comp (Module.evalEquiv K V₂).toLinearMap)
-  rw [← range_dualMap_eq_dualAnnihilator_ker]; rw [range_comp_of_range_eq_top _ (LinearEquiv.range _)]
-
-中文:
-引理 dualAnnihilator_ker_eq_range_flip
-  条件: [是自反 K V₂]
-  证明: by
-  change _ = range (B.dualMap.comp (Module.evalEquiv K V₂).toLinearMap)
-  rw [← range_dualMap_eq_dualAnnihilator_ker]; rw [range_comp_of_range_eq_top _ (LinearEquiv.range _)]
-
-Depends on / 依赖: B.dualMap.comp, LinearEquiv, LinearEquiv.range, Module, Module.evalEquiv, dualMap, evalEquiv, range_comp_of_range_eq_top, range_dualMap_eq_dualAnnihilator_ker, toLinearMap
+/-
+**LinearMap.dualAnnihilator_ker_eq_range_flip** 是 Mathlib 中的一个引理，位于命名空间 `LinearM
+ap`。
+形式化陈述：dualAnnihilator_ker_eq_range_flip [IsReflexive K V₂] : (ker B).dualAnnihil
+ator = range B.flip
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用引理 `SMulCommClass.symm`：SMulCommClass.symm (M N α : Type*) [SMul M α] [SMul 
+N α] [SMulCommClass M N α] : SMulCommClass N M α where smul_comm a' a b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.range_dualMap_eq_dualAnnihilator_ker`：range_dualMap_eq_dualAnn
+ihilator_ker (f : V₁ ->ₗ[K] V₂) : LinearMap.range f.dualMap = (LinearMap.ker f).
+dualAnnihilator
+· 使用定理 `LinearMap.range_comp_of_range_eq_top`：range_comp_of_range_eq_top [RingHo
+mSurjective τ₁₂] [RingHomSurjective τ₂₃] [RingHomSurjective τ₁₃] {f : M ->ₛₗ[τ₁₂
+] M₂} (g : M₂ ->ₛₗ[τ₂₃] M₃…
+· 使用定理 `RingHomSurjective.invPair`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst : Sem
+iring R₁] [inst_1 : Semiring R₂] {σ₁ : R₁ →+* R₂} {σ₂ : R₂ →+* R₁}   [RingHomInv
+Pair σ₁ σ₂], Ri…
+· 使用定理 `LinearEquiv.range`：∀ {R : Type u_1} {R₂ : Type u_3} {M : Type u_5} {M₂ :
+ Type u_7} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddCommMonoid 
+M] [ins…
 -/
 lemma dualAnnihilator_ker_eq_range_flip [IsReflexive K V₂] :
     (ker B).dualAnnihilator = range B.flip := by
   change _ = range (B.dualMap.comp (Module.evalEquiv K V₂).toLinearMap)
-  rw [← range_dualMap_eq_dualAnnihilator_ker]; rw [range_comp_of_range_eq_top _ (LinearEquiv.range _)]
+  rw [← range_dualMap_eq_dualAnnihilator_ker, range_comp_of_range_eq_top _ (LinearEquiv.range _)]
 
 open Function
-
-/--
-theorem `flip_injective_iff₁` / 定理 `flip_injective_iff₁`
-
-English:
-theorem flip_injective_iff₁
-  given: [FiniteDimensional K V₁]
-  statement: Injective B.flip ↔ Surjective B
-  proof: by
-  rw [← dualMap_surjective_iff]; rw [← (evalEquiv K V₁).toEquiv.surjective_comp]; rfl
-
-中文:
-定理 flip_injective_iff₁
-  条件: [有限维 K V₁]
-  结论: 单射 B.flip ↔ 满射 B
-  证明: by
-  rw [← dualMap_surjective_iff]; rw [← (evalEquiv K V₁).toEquiv.surjective_comp]; rfl
-
-Depends on / 依赖: dualMap_surjective_iff, evalEquiv, surjective_comp, toEquiv, toEquiv.surjective_comp
+/-
+**LinearMap.flip_injective_iff** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem flip_injective_iff₁ [FiniteDimensional K V₁] : Injective B.flip ↔ Surjective B := by
-  rw [← dualMap_surjective_iff]; rw [← (evalEquiv K V₁).toEquiv.surjective_comp]; rfl
-
-/--
-theorem `flip_injective_iff₂` / 定理 `flip_injective_iff₂`
-
-English:
-theorem flip_injective_iff₂
-  given: [FiniteDimensional K V₂]
-  statement: Injective B.flip ↔ Surjective B
-  proof: by
-  rw [← dualMap_injective_iff]; exact (evalEquiv K V₂).toEquiv.injective_comp B.dualMap
-
-中文:
-定理 flip_injective_iff₂
-  条件: [有限维 K V₂]
-  结论: 单射 B.flip ↔ 满射 B
-  证明: by
-  rw [← dualMap_injective_iff]; exact (evalEquiv K V₂).toEquiv.injective_comp B.dualMap
-
-Depends on / 依赖: B.dualMap, dualMap, dualMap_injective_iff, evalEquiv, injective_comp, toEquiv, toEquiv.injective_comp
+  rw [← dualMap_surjective_iff, ← (evalEquiv K V₁).toEquiv.surjective_comp]; rfl
+/-
+**LinearMap.flip_injective_iff** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem flip_injective_iff₂ [FiniteDimensional K V₂] : Injective B.flip ↔ Surjective B := by
   rw [← dualMap_injective_iff]; exact (evalEquiv K V₂).toEquiv.injective_comp B.dualMap
-
-/--
-theorem `flip_surjective_iff₁` / 定理 `flip_surjective_iff₁`
-
-English:
-theorem flip_surjective_iff₁
-  given: [FiniteDimensional K V₁]
-  statement: Surjective B.flip ↔ Injective B
-  proof: flip_injective_iff₂.symm
-
-中文:
-定理 flip_surjective_iff₁
-  条件: [有限维 K V₁]
-  结论: 满射 B.flip ↔ 单射 B
-  证明: flip_injective_iff₂.symm
+/-
+**LinearMap.flip_surjective_iff** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem flip_surjective_iff₁ [FiniteDimensional K V₁] : Surjective B.flip ↔ Injective B :=
   flip_injective_iff₂.symm
-
-/--
-theorem `flip_surjective_iff₂` / 定理 `flip_surjective_iff₂`
-
-English:
-theorem flip_surjective_iff₂
-  given: [FiniteDimensional K V₂]
-  statement: Surjective B.flip ↔ Injective B
-  proof: flip_injective_iff₁.symm
-
-中文:
-定理 flip_surjective_iff₂
-  条件: [有限维 K V₂]
-  结论: 满射 B.flip ↔ 单射 B
-  证明: flip_injective_iff₁.symm
+/-
+**LinearMap.flip_surjective_iff** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem flip_surjective_iff₂ [FiniteDimensional K V₂] : Surjective B.flip ↔ Injective B :=
   flip_injective_iff₁.symm
-
-/--
-theorem `flip_bijective_iff₁` / 定理 `flip_bijective_iff₁`
-
-English:
-theorem flip_bijective_iff₁
-  given: [FiniteDimensional K V₁]
-  statement: Bijective B.flip ↔ Bijective B
-  proof: by
-  simp_rw [Bijective, flip_injective_iff₁, flip_surjective_iff₁, and_comm]
-
-中文:
-定理 flip_bijective_iff₁
-  条件: [有限维 K V₁]
-  结论: 双射 B.flip ↔ 双射 B
-  证明: by
-  simp_rw [Bijective, flip_injective_iff₁, flip_surjective_iff₁, and_comm]
-
-Depends on / 依赖: Bijective, and_comm, simp_rw
+/-
+**LinearMap.flip_bijective_iff** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem flip_bijective_iff₁ [FiniteDimensional K V₁] : Bijective B.flip ↔ Bijective B := by
   simp_rw [Bijective, flip_injective_iff₁, flip_surjective_iff₁, and_comm]
-
-/--
-theorem `flip_bijective_iff₂` / 定理 `flip_bijective_iff₂`
-
-English:
-theorem flip_bijective_iff₂
-  given: [FiniteDimensional K V₂]
-  statement: Bijective B.flip ↔ Bijective B
-  proof: flip_bijective_iff₁.symm
-
-中文:
-定理 flip_bijective_iff₂
-  条件: [有限维 K V₂]
-  结论: 双射 B.flip ↔ 双射 B
-  证明: flip_bijective_iff₁.symm
+/-
+**LinearMap.flip_bijective_iff** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem flip_bijective_iff₂ [FiniteDimensional K V₂] : Bijective B.flip ↔ Bijective B :=
   flip_bijective_iff₁.symm
@@ -3012,72 +3014,84 @@ namespace Subspace
 
 variable {K V : Type*} [Field K] [AddCommGroup V] [Module K V]
 
-/--
-theorem `quotDualCoannihilatorToDual_bijective` / 定理 `quotDualCoannihilatorToDual_bijective`
-
-English:
-theorem quotDualCoannihilatorToDual_bijective
-  given: (W : Subspace K (Dual K V)) [FiniteDimensional K W]
-  proof: ⟨W.quotDualCoannihilatorToDual_injective, letI : AddCommGroup W := inferInstance
-    flip_injective_iff₂.mp W.flip_quotDualCoannihilatorToDual_injective⟩
-
-中文:
-定理 quotDualCoannihilatorToDual_bijective
-  条件: (W : 子空间 K (对偶 K V)) [有限维 K W]
-  证明: ⟨W.quotDualCoannihilatorToDual_injective, letI : AddCommGroup W := inferInstance
-    flip_injective_iff₂.mp W.flip_quotDualCoannihilatorToDual_injective⟩
-
-Depends on / 依赖: AddCommGroup, W.flip_quotDualCoannihilatorToDual_injective, W.quotDualCoannihilatorToDual_injective, flip_quotDualCoannihilatorToDual_injective, quotDualCoannihilatorToDual_injective
+/-
+**Subspace.quotDualCoannihilatorToDual_bijective** 是 Mathlib 中的一个定理，位于命名空间 `Subs
+pace`。
+形式化陈述：quotDualCoannihilatorToDual_bijective (W : Subspace K (Dual K V)) [FiniteD
+imensional K W] : Function.Bijective W.quotDualCoannihilatorToDual
+参数：W : Subspace K (Dual K V)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Submodule.quotDualCoannihilatorToDual_injective`：quotDualCoannihilatorTo
+Dual_injective (W : Submodule R (Dual R M)) : Function.Injective W.quotDualCoann
+ihilatorToDual
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `SMulCommClass.symm`：SMulCommClass.symm (M N α : Type*) [SMul M α] [SMul 
+N α] [SMulCommClass M N α] : SMulCommClass N M α where smul_comm a' a b
+· 使用定理 `LinearMap.flip_injective_iff₂`：flip_injective_iff₂ [FiniteDimensional K 
+V₂] : Injective B.flip ↔ Surjective B
+· 使用定理 `Submodule.flip_quotDualCoannihilatorToDual_injective`：flip_quotDualCoann
+ihilatorToDual_injective (W : Submodule R (Dual R M)) : Function.Injective W.quo
+tDualCoannihilatorToDual.flip
 -/
 theorem quotDualCoannihilatorToDual_bijective (W : Subspace K (Dual K V)) [FiniteDimensional K W] :
     Function.Bijective W.quotDualCoannihilatorToDual :=
   ⟨W.quotDualCoannihilatorToDual_injective, letI : AddCommGroup W := inferInstance
     flip_injective_iff₂.mp W.flip_quotDualCoannihilatorToDual_injective⟩
-
-/--
-theorem `flip_quotDualCoannihilatorToDual_bijective` / 定理 `flip_quotDualCoannihilatorToDual_bijective`
-
-English:
-theorem flip_quotDualCoannihilatorToDual_bijective
-  statement: (W : Subspace K (Dual K V))
-  proof: letI : AddCommGroup W := inferInstance
-  flip_bijective_iff₂.mpr W.quotDualCoannihilatorToDual_bijective
-
-中文:
-定理 flip_quotDualCoannihilatorToDual_bijective
-  结论: (W : 子空间 K (对偶 K V))
-  证明: letI : AddCommGroup W := inferInstance
-  flip_bijective_iff₂.mpr W.quotDualCoannihilatorToDual_bijective
-
-Depends on / 依赖: AddCommGroup, W.quotDualCoannihilatorToDual_bijective, quotDualCoannihilatorToDual_bijective
+/-
+**Subspace.flip_quotDualCoannihilatorToDual_bijective** 是 Mathlib 中的一个定理，位于命名空间 
+`Subspace`。
+形式化陈述：flip_quotDualCoannihilatorToDual_bijective (W : Subspace K (Dual K V)) [Fi
+niteDimensional K W] : Function.Bijective W.quotDualCoannihilatorToDual.flip
+参数：W : Subspace K (Dual K V)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `SMulCommClass.symm`：SMulCommClass.symm (M N α : Type*) [SMul M α] [SMul 
+N α] [SMulCommClass M N α] : SMulCommClass N M α where smul_comm a' a b
+· 使用定理 `LinearMap.flip_bijective_iff₂`：flip_bijective_iff₂ [FiniteDimensional K 
+V₂] : Bijective B.flip ↔ Bijective B
+· 使用定理 `Subspace.quotDualCoannihilatorToDual_bijective`：quotDualCoannihilatorToD
+ual_bijective (W : Subspace K (Dual K V)) [FiniteDimensional K W] : Function.Bij
+ective W.quotDualCoannihilatorToDual
 -/
 theorem flip_quotDualCoannihilatorToDual_bijective (W : Subspace K (Dual K V))
     [FiniteDimensional K W] : Function.Bijective W.quotDualCoannihilatorToDual.flip :=
   letI : AddCommGroup W := inferInstance
   flip_bijective_iff₂.mpr W.quotDualCoannihilatorToDual_bijective
-
-/--
-theorem `dualCoannihilator_dualAnnihilator_eq` / 定理 `dualCoannihilator_dualAnnihilator_eq`
-
-English:
-theorem dualCoannihilator_dualAnnihilator_eq
-  given: {W : Subspace K (Dual K V)} [FiniteDimensional K W]
-  proof: let e := (LinearEquiv.ofBijective _ W.flip_quotDualCoannihilatorToDual_bijective).trans
-    (Submodule.dualQuotEquivDualAnnihilator _)
-  letI : AddCommGroup W := inferInstance
-  haveI : FiniteDimensional K W.dualCoannihilator.dualAnnihilator := LinearEquiv.finiteDimensional e
-  (eq_of_le_of_finrank_eq W.le_dualCoannihilator_dualAnnihilator e.finrank_eq).symm
-
-中文:
-定理 dualCoannihilator_dualAnnihilator_eq
-  条件: {W : 子空间 K (对偶 K V)} [有限维 K W]
-  证明: let e := (LinearEquiv.ofBijective _ W.flip_quotDualCoannihilatorToDual_bijective).trans
-    (Submodule.dualQuotEquivDualAnnihilator _)
-  letI : AddCommGroup W := inferInstance
-  haveI : FiniteDimensional K W.dualCoannihilator.dualAnnihilator := LinearEquiv.finiteDimensional e
-  (eq_of_le_of_finrank_eq W.le_dualCoannihilator_dualAnnihilator e.finrank_eq).symm
-
-Depends on / 依赖: AddCommGroup, FiniteDimensional, LinearEquiv, LinearEquiv.finiteDimensional, LinearEquiv.ofBijective, Submodule, Submodule.dualQuotEquivDualAnnihilator, W.dualCoannihilator.dualAnnihilator, W.flip_quotDualCoannihilatorToDual_bijective, W.le_dualCoannihilator_dualAnnihilator, dualAnnihilator, dualCoannihilator, dualQuotEquivDualAnnihilator, e.finrank_eq, eq_of_le_of_finrank_eq, finiteDimensional, finrank_eq, flip_quotDualCoannihilatorToDual_bijective, le_dualCoannihilator_dualAnnihilator, ofBijective
+/-
+**Subspace.dualCoannihilator_dualAnnihilator_eq** 是 Mathlib 中的一个定理，位于命名空间 `Subsp
+ace`。
+形式化陈述：dualCoannihilator_dualAnnihilator_eq {W : Subspace K (Dual K V)} [FiniteDi
+mensional K W] : W.dualCoannihilator.dualAnnihilator = W
+参数：Dual K V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用引理 `SMulCommClass.symm`：SMulCommClass.symm (M N α : Type*) [SMul M α] [SMul 
+N α] [SMulCommClass M N α] : SMulCommClass N M α where smul_comm a' a b
+· 使用定理 `Subspace.flip_quotDualCoannihilatorToDual_bijective`：flip_quotDualCoanni
+hilatorToDual_bijective (W : Subspace K (Dual K V)) [FiniteDimensional K W] : Fu
+nction.Bijective W.quotDualCoannihilatorT…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.eq_of_le_of_finrank_eq`：eq_of_le_of_finrank_eq {S₁ S₂ : Submod
+ule K V} [FiniteDimensional K S₂] (hle : S₁ <= S₂) (hd : finrank K S₁ = finrank 
+K S₂) : S₁ = S₂
+· 使用定理 `LinearEquiv.finiteDimensional`：∀ {K : Type u} {V : Type v} [inst : Divis
+ionRing K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V]   {V₂ : Type v
+'} [inst_3 : AddCom…
+· 使用定理 `Submodule.le_dualCoannihilator_dualAnnihilator`：le_dualCoannihilator_dua
+lAnnihilator (U : Submodule R (Module.Dual R M)) : U <= U.dualCoannihilator.dual
+Annihilator
+· 使用定理 `LinearEquiv.finrank_eq`：finrank_eq (f : M ≃ₗ[R] N) : finrank R M = finra
+nk R N
 -/
 theorem dualCoannihilator_dualAnnihilator_eq {W : Subspace K (Dual K V)} [FiniteDimensional K W] :
     W.dualCoannihilator.dualAnnihilator = W :=
@@ -3086,54 +3100,49 @@ theorem dualCoannihilator_dualAnnihilator_eq {W : Subspace K (Dual K V)} [Finite
   letI : AddCommGroup W := inferInstance
   haveI : FiniteDimensional K W.dualCoannihilator.dualAnnihilator := LinearEquiv.finiteDimensional e
   (eq_of_le_of_finrank_eq W.le_dualCoannihilator_dualAnnihilator e.finrank_eq).symm
-
-/--
-theorem `finiteDimensional_quot_dualCoannihilator_iff` / 定理 `finiteDimensional_quot_dualCoannihilator_iff`
-
-English:
-theorem finiteDimensional_quot_dualCoannihilator_iff
-  given: {W : Submodule K (Dual K V)}
-  proof: ⟨fun _ => FiniteDimensional.of_injective _ W.flip_quotDualCoannihilatorToDual_injective,
-    fun _ => FiniteDimensional.of_injective _ W.quotDualCoannihilatorToDual_injective⟩
-
-中文:
-定理 finiteDimensional_quot_dualCoannihilator_iff
-  条件: {W : 子模 K (对偶 K V)}
-  证明: ⟨fun _ => FiniteDimensional.of_injective _ W.flip_quotDualCoannihilatorToDual_injective,
-    fun _ => FiniteDimensional.of_injective _ W.quotDualCoannihilatorToDual_injective⟩
-
-Depends on / 依赖: FiniteDimensional, FiniteDimensional.of_injective, W.flip_quotDualCoannihilatorToDual_injective, W.quotDualCoannihilatorToDual_injective, flip_quotDualCoannihilatorToDual_injective, of_injective, quotDualCoannihilatorToDual_injective
+/-
+**Subspace.finiteDimensional_quot_dualCoannihilator_iff** 是 Mathlib 中的一个定理，位于命名空
+间 `Subspace`。
+形式化陈述：finiteDimensional_quot_dualCoannihilator_iff {W : Submodule K (Dual K V)} 
+: FiniteDimensional K (V ⧸ W.dualCoannihilator) ↔ FiniteDimensional K W
+参数：Dual K V。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `FiniteDimensional.of_injective`：of_injective (f : V ->ₗ[K] V₂) (w : Func
+tion.Injective f) [FiniteDimensional K V₂] : FiniteDimensional K V
+· 使用引理 `SMulCommClass.symm`：SMulCommClass.symm (M N α : Type*) [SMul M α] [SMul 
+N α] [SMulCommClass M N α] : SMulCommClass N M α where smul_comm a' a b
+· 使用定理 `Submodule.flip_quotDualCoannihilatorToDual_injective`：flip_quotDualCoann
+ihilatorToDual_injective (W : Submodule R (Dual R M)) : Function.Injective W.quo
+tDualCoannihilatorToDual.flip
+· 使用定理 `Submodule.quotDualCoannihilatorToDual_injective`：quotDualCoannihilatorTo
+Dual_injective (W : Submodule R (Dual R M)) : Function.Injective W.quotDualCoann
+ihilatorToDual
 -/
 theorem finiteDimensional_quot_dualCoannihilator_iff {W : Submodule K (Dual K V)} :
     FiniteDimensional K (V ⧸ W.dualCoannihilator) ↔ FiniteDimensional K W :=
-  ⟨fun _ => FiniteDimensional.of_injective _ W.flip_quotDualCoannihilatorToDual_injective,
-    fun _ => FiniteDimensional.of_injective _ W.quotDualCoannihilatorToDual_injective⟩
+  ⟨fun _ ↦ FiniteDimensional.of_injective _ W.flip_quotDualCoannihilatorToDual_injective,
+    fun _ ↦ FiniteDimensional.of_injective _ W.quotDualCoannihilatorToDual_injective⟩
 
 open OrderDual in
-/--
-Definition of `orderIsoFiniteCodimDim` / `orderIsoFiniteCodimDim` 的定义
+/-- For any vector space, `dualAnnihilator` and `dualCoannihilator` gives an antitone order
+  isomorphism between the finite-codimensional subspaces in the vector space and the
+  finite-dimensional subspaces in its dual. -/
+/-
+**Subspace.orderIsoFiniteCodimDim** 是 Mathlib 中的一个定义，位于命名空间 `Subspace`。
+形式化陈述：orderIsoFiniteCodimDim : {W : Subspace K V // FiniteDimensional K (V ⧸ W)}
+ ≃o {W : Subspace K (Dual K V) // FiniteDimensional K W}ᵒᵈ where toFun W
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition orderIsoFiniteCodimDim
-  signature: :
-  body: toDual ⟨W.1.dualAnnihilator, Submodule.finite_dualAnnihilator_iff.mpr W.2⟩
-  invFun W := ⟨(ofDual W).1.dualCoannihilator,
-    finiteDimensional_quot_dualCoannihilator_iff.mpr (ofDual W).2⟩
-  left_inv _ := Subtype.ext dualAnnihilator_dualCoannihilator_eq
-  right_inv W := have := (ofDual W).2; Subtype.ext dualCoannihilator_dualAnnihilator_eq
-  map_rel_iff' := dualAnnihilator_le_dualAnnihilator_iff
-
-中文:
-定义 orderIsoFiniteCodimDim
-  签名: :
-  定义体: toDual ⟨W.1.dualAnnihilator, Submodule.finite_dualAnnihilator_iff.mpr W.2⟩
-  invFun W := ⟨(ofDual W).1.dualCoannihilator,
-    finiteDimensional_quot_dualCoannihilator_iff.mpr (ofDual W).2⟩
-  left_inv _ := Subtype.ext dualAnnihilator_dualCoannihilator_eq
-  right_inv W := have := (ofDual W).2; Subtype.ext dualCoannihilator_dualAnnihilator_eq
-  map_rel_iff' := dualAnnihilator_le_dualAnnihilator_iff
-
-Depends on / 依赖: Submodule, Submodule.finite_dualAnnihilator_iff.mpr, dualAnnihilator, finite_dualAnnihilator_iff, toDual
+--- 原说明 ---
+For any vector space, `dualAnnihilator` and `dualCoannihilator` gives an antiton
+e order
+  isomorphism between the finite-codimensional subspaces in the vector space and
+ the
+  finite-dimensional subspaces in its dual.
 -/
 def orderIsoFiniteCodimDim :
     {W : Subspace K V // FiniteDimensional K (V ⧸ W)} ≃o
@@ -3146,28 +3155,27 @@ def orderIsoFiniteCodimDim :
   map_rel_iff' := dualAnnihilator_le_dualAnnihilator_iff
 
 open OrderDual in
-/--
-Definition of `orderIsoFiniteDimensional` / `orderIsoFiniteDimensional` 的定义
+/-- For any finite-dimensional vector space, `dualAnnihilator` and `dualCoannihilator` give
+  an antitone order isomorphism between the subspaces in the vector space and the subspaces
+  in its dual. -/
+/-
+**Subspace.orderIsoFiniteDimensional** 是 Mathlib 中的一个定义，位于命名空间 `Subspace`。
+形式化陈述：orderIsoFiniteDimensional [FiniteDimensional K V] : Subspace K V ≃o (Subsp
+ace K (Dual K V))ᵒᵈ where toFun W
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Subspace.dualAnnihilator_dualCoannihilator_eq`：dualAnnihilator_dualCoann
+ihilator_eq {W : Subspace K V} : W.dualAnnihilator.dualCoannihilator = W
+· 使用定理 `Subspace.dualAnnihilator_le_dualAnnihilator_iff`：dualAnnihilator_le_dual
+Annihilator_iff {W W' : Subspace K V} : W.dualAnnihilator <= W'.dualAnnihilator 
+↔ W' <= W
 
-English:
-definition orderIsoFiniteDimensional
-  signature: [FiniteDimensional K V]
-  body: toDual W.dualAnnihilator
-  invFun W := (ofDual W).dualCoannihilator
-  left_inv _ := dualAnnihilator_dualCoannihilator_eq
-  right_inv _ := dualCoannihilator_dualAnnihilator_eq
-  map_rel_iff' := dualAnnihilator_le_dualAnnihilator_iff
-
-中文:
-定义 orderIsoFiniteDimensional
-  签名: [有限维 K V]
-  定义体: toDual W.dualAnnihilator
-  invFun W := (ofDual W).dualCoannihilator
-  left_inv _ := dualAnnihilator_dualCoannihilator_eq
-  right_inv _ := dualCoannihilator_dualAnnihilator_eq
-  map_rel_iff' := dualAnnihilator_le_dualAnnihilator_iff
-
-Depends on / 依赖: W.dualAnnihilator, dualAnnihilator, toDual
+--- 原说明 ---
+For any finite-dimensional vector space, `dualAnnihilator` and `dualCoannihilato
+r` give
+  an antitone order isomorphism between the subspaces in the vector space and th
+e subspaces
+  in its dual.
 -/
 def orderIsoFiniteDimensional [FiniteDimensional K V] :
     Subspace K V ≃o (Subspace K (Dual K V))ᵒᵈ where
@@ -3178,34 +3186,44 @@ def orderIsoFiniteDimensional [FiniteDimensional K V] :
   map_rel_iff' := dualAnnihilator_le_dualAnnihilator_iff
 
 open Submodule in
-/--
-theorem `dualAnnihilator_dualAnnihilator_eq_map` / 定理 `dualAnnihilator_dualAnnihilator_eq_map`
-
-English:
-theorem dualAnnihilator_dualAnnihilator_eq_map
-  given: (W : Subspace K V) [FiniteDimensional K W]
-  proof: by
-  let e1 := (Free.chooseBasis K W).toDualEquiv ≪≫ₗ W.quotAnnihilatorEquiv.symm
-  have := e1.finiteDimensional
-  let e2 := (Free.chooseBasis K _).toDualEquiv ≪≫ₗ W.dualAnnihilator.dualQuotEquivDualAnnihilator
-  have := LinearEquiv.finiteDimensional (V₂ := W.dualAnnihilator.dualAnnihilator) e2
-  rw [eq_of_le_of_finrank_eq (map_le_dualAnnihilator_dualAnnihilator W)]
-  rw [← (equivMapOfInjective _ (eval_apply_injective K (V := V)) W).finrank_eq]; rw [e1.finrank_eq]
-  exact e2.finrank_eq
-
-中文:
-定理 dualAnnihilator_dualAnnihilator_eq_map
-  条件: (W : 子空间 K V) [有限维 K W]
-  证明: by
-  let e1 := (Free.chooseBasis K W).toDualEquiv ≪≫ₗ W.quotAnnihilatorEquiv.symm
-  have := e1.finiteDimensional
-  let e2 := (Free.chooseBasis K _).toDualEquiv ≪≫ₗ W.dualAnnihilator.dualQuotEquivDualAnnihilator
-  have := LinearEquiv.finiteDimensional (V₂ := W.dualAnnihilator.dualAnnihilator) e2
-  rw [eq_of_le_of_finrank_eq (map_le_dualAnnihilator_dualAnnihilator W)]
-  rw [← (equivMapOfInjective _ (eval_apply_injective K (V := V)) W).finrank_eq]; rw [e1.finrank_eq]
-  exact e2.finrank_eq
-
-Depends on / 依赖: Free.chooseBasis, LinearEquiv, LinearEquiv.finiteDimensional, W.dualAnnihilator.dualAnnihilator, W.dualAnnihilator.dualQuotEquivDualAnnihilator, W.quotAnnihilatorEquiv.symm, chooseBasis, dualAnnihilator, dualQuotEquivDualAnnihilator, e1.finiteDimensional, e1.finrank_eq, e2.finrank_eq, eq_of_le_of_finrank_eq, equivMapOfInjective, eval_apply_injective, finiteDimensional, finrank_eq, map_le_dualAnnihilator_dualAnnihilator, quotAnnihilatorEquiv, toDualEquiv
+/-
+**Subspace.dualAnnihilator_dualAnnihilator_eq_map** 是 Mathlib 中的一个定理，位于命名空间 `Sub
+space`。
+形式化陈述：dualAnnihilator_dualAnnihilator_eq_map (W : Subspace K V) [FiniteDimension
+al K W] : W.dualAnnihilator.dualAnnihilator = W.map (Dual.eval K V)
+参数：W : Subspace K V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Module.Free.of_divisionRing`：∀ (K : Type u_3) (V : Type u_4) [inst : Div
+isionRing K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V],   Module.Fr
+ee K V
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LinearEquiv.finiteDimensional`：∀ {K : Type u} {V : Type v} [inst : Divis
+ionRing K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V]   {V₂ : Type v
+'} [inst_3 : AddCom…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.eq_of_le_of_finrank_eq`：eq_of_le_of_finrank_eq {S₁ S₂ : Submod
+ule K V} [FiniteDimensional K S₂] (hle : S₁ <= S₂) (hd : finrank K S₁ = finrank 
+K S₂) : S₁ = S₂
+· 使用定理 `Subspace.map_le_dualAnnihilator_dualAnnihilator`：map_le_dualAnnihilator_
+dualAnnihilator (W : Subspace K V) : W.map (Module.Dual.eval K V) <= W.dualAnnih
+ilator.dualAnnihilator
+· 使用定理 `RingHomSurjective.invPair`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst : Sem
+iring R₁] [inst_1 : Semiring R₂] {σ₁ : R₁ →+* R₂} {σ₂ : R₂ →+* R₁}   [RingHomInv
+Pair σ₁ σ₂], Ri…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearEquiv.finrank_eq`：finrank_eq (f : M ≃ₗ[R] N) : finrank R M = finra
+nk R N
+· 使用定理 `Module.eval_apply_injective`：eval_apply_injective : Function.Injective (
+eval K V)
+· 使用定理 `Module.Projective.of_free`：∀ {R : Type u_1} [inst : Semiring R] {P : Typ
+e u_2} [inst_1 : AddCommMonoid P] [inst_2 : _root_.Module R P]   [Module.Free R 
+P], Module.Proj…
 -/
 theorem dualAnnihilator_dualAnnihilator_eq_map (W : Subspace K V) [FiniteDimensional K W] :
     W.dualAnnihilator.dualAnnihilator = W.map (Dual.eval K V) := by
@@ -3214,29 +3232,32 @@ theorem dualAnnihilator_dualAnnihilator_eq_map (W : Subspace K V) [FiniteDimensi
   let e2 := (Free.chooseBasis K _).toDualEquiv ≪≫ₗ W.dualAnnihilator.dualQuotEquivDualAnnihilator
   have := LinearEquiv.finiteDimensional (V₂ := W.dualAnnihilator.dualAnnihilator) e2
   rw [eq_of_le_of_finrank_eq (map_le_dualAnnihilator_dualAnnihilator W)]
-  rw [← (equivMapOfInjective _ (eval_apply_injective K (V := V)) W).finrank_eq]; rw [e1.finrank_eq]
+  rw [← (equivMapOfInjective _ (eval_apply_injective K (V := V)) W).finrank_eq, e1.finrank_eq]
   exact e2.finrank_eq
-
-/--
-theorem `map_dualCoannihilator` / 定理 `map_dualCoannihilator`
-
-English:
-theorem map_dualCoannihilator
-  given: (W : Subspace K (Dual K V)) [FiniteDimensional K V]
-  proof: by
-  rw [← dualAnnihilator_dualAnnihilator_eq_map]; rw [dualCoannihilator_dualAnnihilator_eq]
-
-中文:
-定理 map_dualCoannihilator
-  条件: (W : 子空间 K (对偶 K V)) [有限维 K V]
-  证明: by
-  rw [← dualAnnihilator_dualAnnihilator_eq_map]; rw [dualCoannihilator_dualAnnihilator_eq]
-
-Depends on / 依赖: dualAnnihilator_dualAnnihilator_eq_map, dualCoannihilator_dualAnnihilator_eq
+/-
+**Subspace.map_dualCoannihilator** 是 Mathlib 中的一个定理，位于命名空间 `Subspace`。
+形式化陈述：map_dualCoannihilator (W : Subspace K (Dual K V)) [FiniteDimensional K V] 
+: W.dualCoannihilator.map (Dual.eval K V) = W.dualAnnihilator
+参数：W : Subspace K (Dual K V)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subspace.dualAnnihilator_dualAnnihilator_eq_map`：dualAnnihilator_dualAnn
+ihilator_eq_map (W : Subspace K V) [FiniteDimensional K W] : W.dualAnnihilator.d
+ualAnnihilator = W.map (Dual.eval K V…
+· 使用定理 `Subspace.dualCoannihilator_dualAnnihilator_eq`：dualCoannihilator_dualAnn
+ihilator_eq {W : Subspace K (Dual K V)} [FiniteDimensional K W] : W.dualCoannihi
+lator.dualAnnihilator = W
 -/
 theorem map_dualCoannihilator (W : Subspace K (Dual K V)) [FiniteDimensional K V] :
     W.dualCoannihilator.map (Dual.eval K V) = W.dualAnnihilator := by
-  rw [← dualAnnihilator_dualAnnihilator_eq_map]; rw [dualCoannihilator_dualAnnihilator_eq]
+  rw [← dualAnnihilator_dualAnnihilator_eq_map, dualCoannihilator_dualAnnihilator_eq]
 
 end Subspace
 
@@ -3244,81 +3265,128 @@ end FiniteDimensional
 
 end VectorSpace
 
-/--
-theorem `span_flip_eq_top_iff_linearIndependent` / 定理 `span_flip_eq_top_iff_linearIndependent`
-
-English:
-theorem span_flip_eq_top_iff_linearIndependent
-  given: {ι α F} [Finite ι] [Field F] {f : ι -> α -> F}
-  proof: by
-  rw [linearIndependent_iff_ker]; rw [← Submodule.map_eq_top_iff (e := Finsupp.llift F F F ι)]; rw [← Subspace.dualCoannihilator_dualAnnihilator_eq (W := map ..)]; rw [dualAnnihilator_eq_top_iff]
-  congr!
-  rw [SetLike.ext'_iff]; rw [map_span]; rw [Submodule.coe_dualCoannihilator_span]; rw [← Set.range_comp]
-  ext
-  simp [funext_iff, Finsupp.linearCombination, Finsupp.sum, Finset.sum_apply, flip]
-
-中文:
-定理 span_flip_eq_top_iff_linearIndependent
-  条件: {ι α F} [有限 ι] [域 F] {f : ι -> α -> F}
-  证明: by
-  rw [linearIndependent_iff_ker]; rw [← Submodule.map_eq_top_iff (e := Finsupp.llift F F F ι)]; rw [← Subspace.dualCoannihilator_dualAnnihilator_eq (W := map ..)]; rw [dualAnnihilator_eq_top_iff]
-  congr!
-  rw [SetLike.ext'_iff]; rw [map_span]; rw [Submodule.coe_dualCoannihilator_span]; rw [← Set.range_comp]
-  ext
-  simp [funext_iff, Finsupp.linearCombination, Finsupp.sum, Finset.sum_apply, flip]
-
-Depends on / 依赖: Finset, Finset.sum_apply, Finsupp, Finsupp.linearCombination, Finsupp.llift, Finsupp.sum, Set.range_comp, SetLike, SetLike.ext, Submodule, Submodule.coe_dualCoannihilator_span, Submodule.map_eq_top_iff, Subspace, Subspace.dualCoannihilator_dualAnnihilator_eq, _iff, coe_dualCoannihilator_span, dualAnnihilator_eq_top_iff, dualCoannihilator_dualAnnihilator_eq, funext_iff, linearCombination
+/-
+**span_flip_eq_top_iff_linearIndependent** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：span_flip_eq_top_iff_linearIndependent {ι α F} [Finite ι] [Field F] {f : ι
+ -> α -> F} : span F (Set.range <| flip f) = ⊤ ↔ LinearIndependent F f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `linearIndependent_iff_ker`：linearIndependent_iff_ker : LinearIndependent
+ R v ↔ LinearMap.ker (Finsupp.linearCombination R v) = ⊥
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.map_eq_top_iff`：∀ {R : Type u_1} {R₂ : Type u_3} {M : Type u_5
+} {M₂ : Type u_7} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddComm
+Monoid M] [ins…
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Subspace.dualCoannihilator_dualAnnihilator_eq`：dualCoannihilator_dualAnn
+ihilator_eq {W : Subspace K (Dual K V)} [FiniteDimensional K W] : W.dualCoannihi
+lator.dualAnnihilator = W
+· 使用定理 `FiniteDimensional.instSubtypeMemSubmoduleMap`：∀ (K : Type u) {V : Type v
+} [inst : DivisionRing K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V]
+   {V₂ : Type v'} [inst_3 : AddCom…
+· 使用定理 `Submodule.dualAnnihilator_eq_top_iff`：∀ {R : Type u_1} {M : Type u_2} [i
+nst : CommRing R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   {W : 
+Submodule R M} [Module.Pro…
+· 使用定理 `Module.Projective.of_free`：∀ {R : Type u_1} [inst : Semiring R] {P : Typ
+e u_2} [inst_1 : AddCommMonoid P] [inst_2 : _root_.Module R P]   [Module.Free R 
+P], Module.Proj…
+· 使用定理 `Module.Free.finsupp`：∀ (R : Type u_1) (M : Type u_2) (ι : Type u_3) [ins
+t : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] [Modul
+e.Free R …
+· 使用定理 `iff_of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `SetLike.ext'_iff`：∀ {A : Type u_1} {B : Type u_2} [i : SetLike A B] {p q
+ : A}, p = q ↔ ↑p = ↑q
+· 使用定理 `Submodule.map_span`：map_span [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂
+) (s : Set M) : (span R s).map f = span R₂ (f '' s)
+· 使用引理 `Submodule.coe_dualCoannihilator_span`：coe_dualCoannihilator_span (s : Se
+t (Module.Dual R M)) : ((span R s).dualCoannihilator : Set M) = {x | forall f in
+ s, f x = 0}
+· 使用定理 `Set.range_comp`：range_comp (g : α -> β) (f : ι -> α) : range (g ∘ f) = g
+ '' range f
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Finset.sum_apply`：∀ {ι : Type u_1} {α : Type u_7} {M : α → Type u_8} [in
+st : (a : α) → AddCommMonoid (M a)] (a : α) (s : Finset ι)   (g : ι → (a : α) → 
+M a), …
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem span_flip_eq_top_iff_linearIndependent {ι α F} [Finite ι] [Field F] {f : ι -> α -> F} :
+theorem span_flip_eq_top_iff_linearIndependent {ι α F} [Finite ι] [Field F] {f : ι → α → F} :
     span F (Set.range <| flip f) = ⊤ ↔ LinearIndependent F f := by
-  rw [linearIndependent_iff_ker]; rw [← Submodule.map_eq_top_iff (e := Finsupp.llift F F F ι)]; rw [← Subspace.dualCoannihilator_dualAnnihilator_eq (W := map ..)]; rw [dualAnnihilator_eq_top_iff]
+  rw [linearIndependent_iff_ker, ← Submodule.map_eq_top_iff (e := Finsupp.llift F F F ι),
+    ← Subspace.dualCoannihilator_dualAnnihilator_eq (W := map ..), dualAnnihilator_eq_top_iff]
   congr!
-  rw [SetLike.ext'_iff]; rw [map_span]; rw [Submodule.coe_dualCoannihilator_span]; rw [← Set.range_comp]
+  rw [SetLike.ext'_iff, map_span, Submodule.coe_dualCoannihilator_span, ← Set.range_comp]
   ext
   simp [funext_iff, Finsupp.linearCombination, Finsupp.sum, Finset.sum_apply, flip]
-
-/--
-lemma `Module.exists_dual_forall_apply_eq_one` / 引理 `Module.exists_dual_forall_apply_eq_one`
-
-English:
-lemma Module.exists_dual_forall_apply_eq_one
-  statement: {ι K V : Type*} [Field K] [AddCommGroup V] [Module K V]
-  proof: by
-  replace hli : LinearIndepOn K id (v '' s) := LinearIndepOn.id_image hli
-let b : Basis _ K V := .mk (hli.linearIndepOn_extend (Set.subset_univ _)) by
-simpa using hli.span_extend_eq_span Set.subset_univ _
-  refine ⟨b.constr K 1, fun i hi => ?_⟩
-  replace hi : v i in hli.extend (Set.subset_univ _) :=
-hli.subset_extend _ Set.mem_image_of_mem v hi
-  let ri : hli.extend (Set.subset_univ _) := ⟨v i, hi⟩
-  have : b ri = v i := by simp [b, ri]
-  simp [← this]
-
-中文:
-引理 模.存在_dual_对任意_apply_eq_one
-  结论: {ι K V : 类型} [域 K] [加法交换群 V] [模 K V]
-  证明: by
-  replace hli : LinearIndepOn K id (v '' s) := LinearIndepOn.id_image hli
-let b : Basis _ K V := .mk (hli.linearIndepOn_extend (Set.subset_univ _)) by
-simpa using hli.span_extend_eq_span Set.subset_univ _
-  refine ⟨b.constr K 1, fun i hi => ?_⟩
-  replace hi : v i in hli.extend (Set.subset_univ _) :=
-hli.subset_extend _ Set.mem_image_of_mem v hi
-  let ri : hli.extend (Set.subset_univ _) := ⟨v i, hi⟩
-  have : b ri = v i := by simp [b, ri]
-  simp [← this]
-
-Depends on / 依赖: LinearIndepOn, LinearIndepOn.id_image, Set.mem_image_of_mem, Set.subset_univ, b.constr, constr, extend, hli.extend, hli.linearIndepOn_extend, hli.span_extend_eq_span, hli.subset_extend, id_image, linearIndepOn_extend, mem_image_of_mem, replace, span_extend_eq_span, subset_extend, subset_univ
+/-
+**Module.exists_dual_forall_apply_eq_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Module.exists_dual_forall_apply_eq_one {ι K V : Type*} [Field K] [AddCommG
+roup V] [Module K V] {s : Set ι} {v : ι -> V} (hli : LinearIndepOn K v s) : exis
+ts f : Dual K V, forall i in s, f (v i) = 1
+参数：hli : LinearIndepOn K v s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearIndepOn.id_image`：LinearIndepOn.id_image (hs : LinearIndepOn R v s
+) : LinearIndepOn R id (v '' s)
+· 使用定理 `Set.subset_univ`：subset_univ (s : Set α) : s subseteq univ
+· 使用定理 `LinearIndepOn.linearIndepOn_extend`：LinearIndepOn.linearIndepOn_extend (
+hs : LinearIndepOn K v s) (hst : s subseteq t) : LinearIndepOn K v (hs.extend hs
+t)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.range_coe_subtype`：range_coe_subtype {p : α -> Prop} : range ((↑
+) : Subtype p -> α) = { x | p x }
+· 使用定理 `Submodule.span_univ`：span_univ : span R (univ : Set M) = ⊤
+· 使用定理 `LinearIndepOn.span_extend_eq_span`：LinearIndepOn.span_extend_eq_span {s 
+t : Set V} (hs : LinearIndepOn K id s) (hst : s subseteq t) : span K (hs.extend 
+hst) = span K t
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LinearIndepOn.subset_extend`：LinearIndepOn.subset_extend (hs : LinearInd
+epOn K v s) (hst : s subseteq t) : s subseteq hs.extend hst
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Module.Basis.coe_mk`：coe_mk : ⇑(Basis.mk hli hsp) = v
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Module.Basis.constr_basis`：constr_basis (f : ι -> M') (i : ι) : (constr 
+(M'
 -/
 lemma Module.exists_dual_forall_apply_eq_one {ι K V : Type*} [Field K] [AddCommGroup V] [Module K V]
-    {s : Set ι} {v : ι -> V} (hli : LinearIndepOn K v s) :
-    exists f : Dual K V, forall i in s, f (v i) = 1 := by
+    {s : Set ι} {v : ι → V} (hli : LinearIndepOn K v s) :
+    ∃ f : Dual K V, ∀ i ∈ s, f (v i) = 1 := by
   replace hli : LinearIndepOn K id (v '' s) := LinearIndepOn.id_image hli
-let b : Basis _ K V := .mk (hli.linearIndepOn_extend (Set.subset_univ _)) by
-simpa using hli.span_extend_eq_span Set.subset_univ _
-  refine ⟨b.constr K 1, fun i hi => ?_⟩
-  replace hi : v i in hli.extend (Set.subset_univ _) :=
-hli.subset_extend _ Set.mem_image_of_mem v hi
+  let b : Basis _ K V := .mk (hli.linearIndepOn_extend (Set.subset_univ _)) <| by
+    simpa using hli.span_extend_eq_span <| Set.subset_univ _
+  refine ⟨b.constr K 1, fun i hi ↦ ?_⟩
+  replace hi : v i ∈ hli.extend (Set.subset_univ _) :=
+    hli.subset_extend _ <| Set.mem_image_of_mem v hi
   let ri : hli.extend (Set.subset_univ _) := ⟨v i, hi⟩
   have : b ri = v i := by simp [b, ri]
   simp [← this]
@@ -3343,62 +3411,97 @@ section
 variable [CommSemiring R] [AddCommMonoid M] [AddCommMonoid N]
 variable [Module R M] [Module R N]
 
-/--
-Definition of `dualDistrib` / `dualDistrib` 的定义
-
-English:
-definition dualDistrib
-  signature: : Dual R M otimes[R] Dual R N ->ₗ[R] Dual R (M otimes[R] N)
-  body: compRight _ (TensorProduct.lid R R) ∘ₗ homTensorHomMap (.id R) M N R R
-
-中文:
-定义 dualDistrib
-  签名: : 对偶 R M otimes[R] 对偶 R N ->ₗ[R] 对偶 R (M otimes[R] N)
-  定义体: compRight _ (TensorProduct.lid R R) ∘ₗ homTensorHomMap (.id R) M N R R
-
-Depends on / 依赖: TensorProduct, TensorProduct.lid, compRight, homTensorHomMap
+/-- The canonical linear map from `Dual M ⊗ Dual N` to `Dual (M ⊗ N)`,
+sending `f ⊗ g` to the composition of `TensorProduct.map f g` with
+the natural isomorphism `R ⊗ R ≃ R`.
 -/
-def dualDistrib : Dual R M otimes[R] Dual R N ->ₗ[R] Dual R (M otimes[R] N) :=
+/-
+**TensorProduct.dualDistrib** 是 Mathlib 中的一个定义，位于命名空间 `TensorProduct`。
+形式化陈述：dualDistrib : Dual R M otimes[R] Dual R N ->ₗ[R] Dual R (M otimes[R] N)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The canonical linear map from `Dual M ⊗ Dual N` to `Dual (M ⊗ N)`,
+sending `f ⊗ g` to the composition of `TensorProduct.map f g` with
+the natural isomorphism `R ⊗ R ≃ R`.
+-/
+def dualDistrib : Dual R M ⊗[R] Dual R N →ₗ[R] Dual R (M ⊗[R] N) :=
   compRight _ (TensorProduct.lid R R) ∘ₗ homTensorHomMap (.id R) M N R R
 
 variable {R M N}
 
 @[simp]
-/--
-theorem `dualDistrib_apply` / 定理 `dualDistrib_apply`
-
-English:
-theorem dualDistrib_apply
-  given: (f : Dual R M) (g : Dual R N) (m : M) (n : N)
-  proof: rfl
-
-中文:
-定理 dualDistrib_apply
-  条件: (f : 对偶 R M) (g : 对偶 R N) (m : M) (n : N)
-  证明: rfl
+/-
+**TensorProduct.dualDistrib_apply** 是 Mathlib 中的一个定理，位于命名空间 `TensorProduct`。
+形式化陈述：dualDistrib_apply (f : Dual R M) (g : Dual R N) (m : M) (n : N) : dualDist
+rib R M N (f otimesₜ g) (m otimesₜ n) = f m * g n
+参数：f : Dual R M；g : Dual R N；m : M；n : N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 theorem dualDistrib_apply (f : Dual R M) (g : Dual R N) (m : M) (n : N) :
-    dualDistrib R M N (f otimesₜ g) (m otimesₜ n) = f m * g n :=
+    dualDistrib R M N (f ⊗ₜ g) (m ⊗ₜ n) = f m * g n :=
   rfl
 
-/--
-lemma `dualDistrib_apply_comm` / 引理 `dualDistrib_apply_comm`
+/-- Simultaneously swapping both the ordering of the applied duals and the ordering of the
+tensor product argument preserves evaluation. -/
+/-
+**TensorProduct.dualDistrib_apply_comm** 是 Mathlib 中的一个引理，位于命名空间 `TensorProduct`
+。
+形式化陈述：dualDistrib_apply_comm (w : Dual R N otimes[R] Dual R M) (z : M otimes[R] 
+N) : dualDistrib R N M w (TensorProduct.comm R M N z) = dualDistrib R M N (Tenso
+rProduct.comm R _ _ w) z
+参数：w : Dual R N otimes[R] Dual R M；z : M otimes[R] N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `TensorProduct.induction_on`：∀ {R : Type u_1} [inst : CommSemiring R] {M 
+: Type u_7} {N : Type u_8} [inst_1 : AddCommMonoid M]   [inst_2 : AddCommMonoid 
+N] [inst_3 : _ro…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `SemilinearEquivClass.instSemilinearMapClass`：∀ {R : Type u_1} {S : Type 
+u_6} {M : Type u_7} {M₂ : Type u_9} (F : Type u_14) [inst : Semiring R] [inst_1 
+: Semiring S]   [inst_2 : AddComm…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 
-English:
-lemma dualDistrib_apply_comm
-  given: (w : Dual R N otimes[R] Dual R M) (z : M otimes[R] N)
-  proof: by
-  induction w <;> induction z <;> simp_all [mul_comm]
-
-中文:
-引理 dualDistrib_apply_comm
-  条件: (w : 对偶 R N otimes[R] 对偶 R M) (z : M otimes[R] N)
-  证明: by
-  induction w <;> induction z <;> simp_all [mul_comm]
-
-Depends on / 依赖: mul_comm
+--- 原说明 ---
+Simultaneously swapping both the ordering of the applied duals and the ordering 
+of the
+tensor product argument preserves evaluation.
 -/
-lemma dualDistrib_apply_comm (w : Dual R N otimes[R] Dual R M) (z : M otimes[R] N) :
+lemma dualDistrib_apply_comm (w : Dual R N ⊗[R] Dual R M) (z : M ⊗[R] N) :
     dualDistrib R N M w (TensorProduct.comm R M N z) =
       dualDistrib R M N (TensorProduct.comm R _ _ w) z := by
   induction w <;> induction z <;> simp_all [mul_comm]
@@ -3409,44 +3512,50 @@ namespace AlgebraTensorModule
 variable [CommSemiring R] [CommSemiring A] [Algebra R A] [AddCommMonoid M] [AddCommMonoid N]
 variable [Module R M] [Module A M] [Module R N] [IsScalarTower R A M]
 
-/--
-Definition of `dualDistrib` / `dualDistrib` 的定义
+/-- Heterobasic version of `TensorProduct.dualDistrib` -/
+/-
+**TensorProduct.AlgebraTensorModule.dualDistrib** 是 Mathlib 中的一个定义，位于命名空间 `Tenso
+rProduct.AlgebraTensorModule`。
+形式化陈述：dualDistrib : Dual A M otimes[R] Dual R N ->ₗ[A] Dual A (M otimes[R] N)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dualDistrib
-  signature: : Dual A M otimes[R] Dual R N ->ₗ[A] Dual A (M otimes[R] N)
-  body: compRight _ (Algebra.TensorProduct.rid R A A).toLinearMap ∘ₗ homTensorHomMap R A A M N A R
-
-中文:
-定义 dualDistrib
-  签名: : 对偶 A M otimes[R] 对偶 R N ->ₗ[A] 对偶 A (M otimes[R] N)
-  定义体: compRight _ (Algebra.TensorProduct.rid R A A).toLinearMap ∘ₗ homTensorHomMap R A A M N A R
-
-Depends on / 依赖: Algebra, Algebra.TensorProduct.rid, TensorProduct, compRight, homTensorHomMap, toLinearMap
+--- 原说明 ---
+Heterobasic version of `TensorProduct.dualDistrib`
 -/
-def dualDistrib : Dual A M otimes[R] Dual R N ->ₗ[A] Dual A (M otimes[R] N) :=
+def dualDistrib : Dual A M ⊗[R] Dual R N →ₗ[A] Dual A (M ⊗[R] N) :=
   compRight _ (Algebra.TensorProduct.rid R A A).toLinearMap ∘ₗ homTensorHomMap R A A M N A R
 
 variable {R M N}
 
 @[simp]
-/--
-theorem `dualDistrib_apply` / 定理 `dualDistrib_apply`
-
-English:
-theorem dualDistrib_apply
-  given: (f : Dual A M) (g : Dual R N) (m : M) (n : N)
-  proof: rfl
-
-中文:
-定理 dualDistrib_apply
-  条件: (f : 对偶 A M) (g : 对偶 R N) (m : M) (n : N)
-  证明: rfl
+/-
+**TensorProduct.AlgebraTensorModule.dualDistrib_apply** 是 Mathlib 中的一个定理，位于命名空间 
+`TensorProduct.AlgebraTensorModule`。
+形式化陈述：dualDistrib_apply (f : Dual A M) (g : Dual R N) (m : M) (n : N) : dualDist
+rib R A M N (f otimesₜ g) (m otimesₜ n) = g n • f m
+参数：f : Dual A M；g : Dual R N；m : M；n : N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
 -/
 theorem dualDistrib_apply (f : Dual A M) (g : Dual R N) (m : M) (n : N) :
-    dualDistrib R A M N (f otimesₜ g) (m otimesₜ n) = g n • f m :=
+    dualDistrib R A M N (f ⊗ₜ g) (m ⊗ₜ n) = g n • f m :=
   rfl
 
 end AlgebraTensorModule
 
 end TensorProduct
+

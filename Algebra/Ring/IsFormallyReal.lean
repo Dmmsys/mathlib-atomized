@@ -35,108 +35,83 @@ The property of being a sum of squares of nonzero elements (S) is defined induct
 if `s : R` is (S), and `a ≠ 0`, then `a * a + s` is (S).
 -/
 @[mk_iff]
-/--
-Inductive type `IsSumNonzeroSq` / 归纳类型 `IsSumNonzeroSq`
+/-
+**IsSumNonzeroSq** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{R : Type u_1} → [Mul R] → [Add R] → [Zero R] → R → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive IsSumNonzeroSq
-  parameters: [Mul R] [Add R] [Zero R]
-  constructors (2):
-    - sq: {a : R} (ha : a != 0) : IsSumNonzeroSq (a * a)
-    - sq_add: {a s : R} (ha : a != 0) (hs : IsSumNonzeroSq s) : IsSumNonzeroSq (a * a + s)
-
-中文:
-归纳类型 是SumNonzeroSq
-  参数: [乘法 R] [加法 R] [零 R]
-  构造子 (2 个):
-    - sq: {a : R} (ha : a != 0) : 是SumNonzeroSq (a * a)
-    - sq_add: {a s : R} (ha : a != 0) (hs : 是SumNonzeroSq s) : 是SumNonzeroSq (a * a + s)
+--- 原说明 ---
+The property of being a sum of squares of nonzero elements (S) is defined induct
+ively by:
+`a * a : R` is (S) for all nonzero `a`, and
+if `s : R` is (S), and `a ≠ 0`, then `a * a + s` is (S).
 -/
-inductive IsSumNonzeroSq [Mul R] [Add R] [Zero R] : R -> Prop
-  | sq {a : R} (ha : a != 0) : IsSumNonzeroSq (a * a)
-  | sq_add {a s : R} (ha : a != 0) (hs : IsSumNonzeroSq s) : IsSumNonzeroSq (a * a + s)
+inductive IsSumNonzeroSq [Mul R] [Add R] [Zero R] : R → Prop
+  | sq {a : R} (ha : a ≠ 0) : IsSumNonzeroSq (a * a)
+  | sq_add {a s : R} (ha : a ≠ 0) (hs : IsSumNonzeroSq s) : IsSumNonzeroSq (a * a + s)
 
 attribute [aesop 90%] IsSumNonzeroSq.sq
 
 @[aesop 90%]
-/--
-theorem `IsSumNonzeroSq.add` / 定理 `IsSumNonzeroSq.add`
-
-English:
-theorem IsSumNonzeroSq.add
-  statement: [AddMonoid R] [Mul R] {s₁ s₂ : R}
-  proof: by
-  induction h₁ <;> simp_all [sq_add, add_assoc]
-
-中文:
-定理 是SumNonzeroSq.add
-  结论: [加法幺半群 R] [乘法 R] {s₁ s₂ : R}
-  证明: by
-  induction h₁ <;> simp_all [sq_add, add_assoc]
-
-Depends on / 依赖: add_assoc, sq_add
+/-
+**IsSumNonzeroSq.add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsSumNonzeroSq.add [AddMonoid R] [Mul R] {s₁ s₂ : R} (h₁ : IsSumNonzeroSq 
+s₁) (h₂ : IsSumNonzeroSq s₂) : IsSumNonzeroSq (s₁ + s₂)
+参数：h₁ : IsSumNonzeroSq s₁；h₂ : IsSumNonzeroSq s₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
 -/
 theorem IsSumNonzeroSq.add [AddMonoid R] [Mul R] {s₁ s₂ : R}
     (h₁ : IsSumNonzeroSq s₁) (h₂ : IsSumNonzeroSq s₂) : IsSumNonzeroSq (s₁ + s₂) := by
   induction h₁ <;> simp_all [sq_add, add_assoc]
-
-/--
-theorem `IsSumNonzeroSq.isSumSq` / 定理 `IsSumNonzeroSq.isSumSq`
-
-English:
-theorem IsSumNonzeroSq.isSumSq
-  statement: [AddMonoid R] [Mul R] {s : R}
-  proof: by
-  induction h <;> aesop
-
-中文:
-定理 是SumNonzeroSq.isSumSq
-  结论: [加法幺半群 R] [乘法 R] {s : R}
-  证明: by
-  induction h <;> aesop
+/-
+**IsSumNonzeroSq.isSumSq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsSumNonzeroSq.isSumSq [AddMonoid R] [Mul R] {s : R} (h : IsSumNonzeroSq s
+) : IsSumSq s
+参数：h : IsSumNonzeroSq s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsSumSq.add`：IsSumSq.add [AddMonoid R] [Mul R] {s₁ s₂ : R} (h₁ : IsSumSq
+ s₁) (h₂ : IsSumSq s₂) : IsSumSq (s₁ + s₂)
 -/
 theorem IsSumNonzeroSq.isSumSq [AddMonoid R] [Mul R] {s : R}
     (h : IsSumNonzeroSq s) : IsSumSq s := by
   induction h <;> aesop
-
-/--
-theorem `isSumNonzeroSq_iff_isSumSq` / 定理 `isSumNonzeroSq_iff_isSumSq`
-
-English:
-theorem isSumNonzeroSq_iff_isSumSq
-  given: [NonUnitalNonAssocSemiring R] {s : R} (hs : s != 0)
-  proof: IsSumNonzeroSq.isSumSq
-  mpr h := by
-    induction h with
-    | zero => grind
-    | @sq_add a s hs ih =>
-    rcases eq_or_ne a 0 with (rfl | ne_a)
-    · simp_all
-    · rcases eq_or_ne s 0 with (rfl | ne_s)
-      · simpa using IsSumNonzeroSq.sq ne_a
-      · exact IsSumNonzeroSq.sq_add ne_a (ih ne_s)
-
-alias ⟨_, IsSumSq.isSumNonzeroSq_of_ne_zero⟩ := isSumNonzeroSq_iff_isSumSq
-
-中文:
-定理 isSumNonzeroSq_iff_isSumSq
-  条件: [非幺非结合半环 R] {s : R} (hs : s != 0)
-  证明: IsSumNonzeroSq.isSumSq
-  mpr h := by
-    induction h with
-    | zero => grind
-    | @sq_add a s hs ih =>
-    rcases eq_or_ne a 0 with (rfl | ne_a)
-    · simp_all
-    · rcases eq_or_ne s 0 with (rfl | ne_s)
-      · simpa using IsSumNonzeroSq.sq ne_a
-      · exact IsSumNonzeroSq.sq_add ne_a (ih ne_s)
-
-alias ⟨_, IsSumSq.isSumNonzeroSq_of_ne_zero⟩ := isSumNonzeroSq_iff_isSumSq
-
-Depends on / 依赖: IsSumNonzeroSq, IsSumNonzeroSq.isSumSq, isSumSq
+/-
+**isSumNonzeroSq_iff_isSumSq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isSumNonzeroSq_iff_isSumSq [NonUnitalNonAssocSemiring R] {s : R} (hs : s !
+= 0) : IsSumNonzeroSq s ↔ IsSumSq s where mp
+参数：hs : s != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSumNonzeroSq.isSumSq`：IsSumNonzeroSq.isSumSq [AddMonoid R] [Mul R] {s 
+: R} (h : IsSumNonzeroSq s) : IsSumSq s
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 -/
-theorem isSumNonzeroSq_iff_isSumSq [NonUnitalNonAssocSemiring R] {s : R} (hs : s != 0) :
+theorem isSumNonzeroSq_iff_isSumSq [NonUnitalNonAssocSemiring R] {s : R} (hs : s ≠ 0) :
     IsSumNonzeroSq s ↔ IsSumSq s where
   mp := IsSumNonzeroSq.isSumSq
   mpr h := by
@@ -158,86 +133,60 @@ variable [AddMonoid R] [Mul R] {s : R}
 variable (R) in
 /-- The subsemigroup of sums of squares of nonzero elements. -/
 @[simps]
-/--
-Definition of `sumNonzeroSq` / `sumNonzeroSq` 的定义
+/-
+**AddSubsemigroup.sumNonzeroSq** 是 Mathlib 中的一个定义，位于命名空间 `AddSubsemigroup`。
+形式化陈述：sumNonzeroSq : AddSubsemigroup R where carrier
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSumNonzeroSq.add`：IsSumNonzeroSq.add [AddMonoid R] [Mul R] {s₁ s₂ : R}
+ (h₁ : IsSumNonzeroSq s₁) (h₂ : IsSumNonzeroSq s₂) : IsSumNonzeroSq (s₁ + s₂)
 
-English:
-definition sumNonzeroSq
-  signature: : AddSubsemigroup R where
-  body: {s : R | IsSumNonzeroSq s}
-  add_mem' := .add
-
-中文:
-定义 sumNonzeroSq
-  签名: : 加法子半群 R where
-  定义体: {s : R | IsSumNonzeroSq s}
-  add_mem' := .add
-
-Depends on / 依赖: IsSumNonzeroSq
+--- 原说明 ---
+The subsemigroup of sums of squares of nonzero elements.
 -/
 def sumNonzeroSq : AddSubsemigroup R where
   carrier := {s : R | IsSumNonzeroSq s}
   add_mem' := .add
 
 attribute [norm_cast] coe_sumNonzeroSq
-
-/--
-theorem `mem_sumNonzeroSq` / 定理 `mem_sumNonzeroSq`
-
-English:
-theorem mem_sumNonzeroSq
-  statement: s in sumNonzeroSq R ↔ IsSumNonzeroSq s
-  proof: .rfl
-
-@[simp]
-
-中文:
-定理 mem_sumNonzeroSq
-  结论: s in sumNonzeroSq R ↔ 是SumNonzeroSq s
-  证明: .rfl
-
-@[simp]
+/-
+**AddSubsemigroup.mem_sumNonzeroSq** 是 Mathlib 中的一个定理，位于命名空间 `AddSubsemigroup`。
+形式化陈述：∀ {R : Type u_1} [inst : AddMonoid R] [inst_1 : Mul R] {s : R}, s ∈ AddSub
+semigroup.sumNonzeroSq R ↔ IsSumNonzeroSq s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] theorem mem_sumNonzeroSq : s in sumNonzeroSq R ↔ IsSumNonzeroSq s := .rfl
+@[simp] theorem mem_sumNonzeroSq : s ∈ sumNonzeroSq R ↔ IsSumNonzeroSq s := .rfl
 
 @[simp]
-/--
-theorem `closure_mul_self` / 定理 `closure_mul_self`
-
-English:
-theorem closure_mul_self
-  statement: closure {x * x | x != (0 : R)} = sumNonzeroSq R
-  proof: by
-  refine closure_eq_of_le (fun x hx => by aesop) (fun x hx => ?_)
-  -- TODO : fix aesop timeout and change to `induction hx <;> aesop`
-  induction hx with
-  | sq ha => aesop
-  | sq_add ha hs ih =>
-    -- `aesop` times out
-    apply add_mem
-    · apply AddSubsemigroup.mem_closure_of_mem
-      aesop
-    aesop
-
-中文:
-定理 closure_mul_self
-  结论: closure {x * x | x != (0 : R)} = sumNonzeroSq R
-  证明: by
-  refine closure_eq_of_le (fun x hx => by aesop) (fun x hx => ?_)
-  -- TODO : fix aesop timeout and change to `induction hx <;> aesop`
-  induction hx with
-  | sq ha => aesop
-  | sq_add ha hs ih =>
-    -- `aesop` times out
-    apply add_mem
-    · apply AddSubsemigroup.mem_closure_of_mem
-      aesop
-    aesop
-
-Depends on / 依赖: closure_eq_of_le
+/-
+**AddSubsemigroup.closure_mul_self** 是 Mathlib 中的一个定理，位于命名空间 `AddSubsemigroup`。
+形式化陈述：closure_mul_self : closure {x * x | x != (0 : R)} = sumNonzeroSq R
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubsemigroup.closure_eq_of_le`：∀ {M : Type u_1} [inst : Add M] {s : S
+et M} {S : AddSubsemigroup M},   s ⊆ ↑S → S ≤ AddSubsemigroup.closure s → AddSub
+semigroup.closure s = …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddSubsemigroup.coe_sumNonzeroSq`：∀ (R : Type u_1) [inst : AddMonoid R] 
+[inst_1 : Mul R], ↑(AddSubsemigroup.sumNonzeroSq R) = {s | IsSumNonzeroSq s}
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `AddSubsemigroup.mem_closure_of_mem`：∀ {M : Type u_1} [inst : Add M] {s :
+ Set M} {x : M}, x ∈ s → x ∈ AddSubsemigroup.closure s
+· 使用定理 `AddMemClass.add_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Add M} {inst_1 : SetLike S M} [self : AddMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `AddSubsemigroup.instAddMemClass`：∀ {M : Type u_1} [inst : Add M], AddMem
+Class (AddSubsemigroup M) M
 -/
-theorem closure_mul_self : closure {x * x | x != (0 : R)} = sumNonzeroSq R := by
-  refine closure_eq_of_le (fun x hx => by aesop) (fun x hx => ?_)
+theorem closure_mul_self : closure {x * x | x ≠ (0 : R)} = sumNonzeroSq R := by
+  refine closure_eq_of_le (fun x hx ↦ by aesop) (fun x hx ↦ ?_)
   -- TODO : fix aesop timeout and change to `induction hx <;> aesop`
   induction hx with
   | sq ha => aesop
@@ -254,217 +203,157 @@ end IsSumNonzeroSq
 
 variable (R) in
 /--
-Definition of `IsFormallyReal` / `IsFormallyReal` 的定义
+A ring is formally real if, whenever `∑ i, x i ^ 2 = 0`, we in fact have `x i = 0` for all `i`.
+-/
+/-
+**IsFormallyReal** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_1) → [AddCommMonoid R] → [Mul R] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsFormallyReal
-  parameters: [AddCommMonoid R] [Mul R]
-  axioms and operations (1):
-    - not_isSumNonzeroSq_zero : ¬ IsSumNonzeroSq (0 : R)
-
-中文:
-类 是Formally实数
-  参数: [加法交换幺半群 R] [乘法 R]
-  公理与运算 (1 个):
-    - not_isSumNonzeroSq_zero : ¬ 是SumNonzeroSq (0 : R)
-
-Depends on / 依赖: Scheme, Scheme.Hom.opensFunctor, infer_instance, opensFunctor
+--- 原说明 ---
+A ring is formally real if, whenever `∑ i, x i ^ 2 = 0`, we in fact have `x i = 
+0` for all `i`.
 -/
 class IsFormallyReal [AddCommMonoid R] [Mul R] : Prop where
   not_isSumNonzeroSq_zero : ¬ IsSumNonzeroSq (0 : R)
 
 namespace IsFormallyReal
 
-/--
-theorem `of_eq_zero_of_mul_self_of_eq_zero_of_add` / 定理 `of_eq_zero_of_mul_self_of_eq_zero_of_add`
-
-English:
-theorem of_eq_zero_of_mul_self_of_eq_zero_of_add
-  statement: [AddCommMonoid R] [Mul R]
-  proof: by
-    suffices forall (x : R), IsSumNonzeroSq x -> x != 0 by grind
-    intro x hx
-    induction hx with
-    | sq ha => grind
-    | @sq_add b s hb hs ih => grind [ha (IsSumSq.mul_self b) hs.isSumSq]
-
-中文:
-定理 of_eq_zero_of_mul_self_of_eq_zero_of_add
-  结论: [加法交换幺半群 R] [乘法 R]
-  证明: by
-    suffices forall (x : R), IsSumNonzeroSq x -> x != 0 by grind
-    intro x hx
-    induction hx with
-    | sq ha => grind
-    | @sq_add b s hb hs ih => grind [ha (IsSumSq.mul_self b) hs.isSumSq]
-
-Depends on / 依赖: Functor, Functor.PreservesOneHypercovers.of_coverPreserving, IsSumNonzeroSq, IsSumSq, IsSumSq.mul_self, PreservesOneHypercovers, Scheme, Scheme.Hom.coverPreserving_opensFunctor, coverPreserving_opensFunctor, hs.isSumSq, isSumSq, mul_self, of_coverPreserving, sq_add
+/-
+**IsFormallyReal.of_eq_zero_of_mul_self_of_eq_zero_of_add** 是 Mathlib 中的一个定理，位于命
+名空间 `IsFormallyReal`。
+形式化陈述：of_eq_zero_of_mul_self_of_eq_zero_of_add [AddCommMonoid R] [Mul R] (hz : f
+orall {a : R}, a * a = 0 -> a = 0) (ha : forall {s₁ s₂ : R}, IsSumSq s₁ -> IsSum
+Sq s₂ -> s₁ + s₂ = 0 -> s₁ = 0) : IsFormallyReal R where not_isSumNonzeroSq_zero
+参数：hz : forall {a : R}, a * a = 0 -> a = 0；ha : forall {s₁ s₂ : R}, IsSumSq s₁ -
+> IsSumSq s₂ -> s₁ + s₂ = 0 -> s₁ = 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem of_eq_zero_of_mul_self_of_eq_zero_of_add [AddCommMonoid R] [Mul R]
-    (hz : forall {a : R}, a * a = 0 -> a = 0)
-    (ha : forall {s₁ s₂ : R}, IsSumSq s₁ -> IsSumSq s₂ -> s₁ + s₂ = 0 -> s₁ = 0) : IsFormallyReal R where
+    (hz : ∀ {a : R}, a * a = 0 → a = 0)
+    (ha : ∀ {s₁ s₂ : R}, IsSumSq s₁ → IsSumSq s₂ → s₁ + s₂ = 0 → s₁ = 0) : IsFormallyReal R where
   not_isSumNonzeroSq_zero := by
-    suffices forall (x : R), IsSumNonzeroSq x -> x != 0 by grind
+    suffices ∀ (x : R), IsSumNonzeroSq x → x ≠ 0 by grind
     intro x hx
     induction hx with
     | sq ha => grind
     | @sq_add b s hb hs ih => grind [ha (IsSumSq.mul_self b) hs.isSumSq]
-
-/--
-theorem `of_eq_zero_of_eq_zero_of_mul_self_add` / 定理 `of_eq_zero_of_eq_zero_of_mul_self_add`
-
-English:
-theorem of_eq_zero_of_eq_zero_of_mul_self_add
-  statement: [NonUnitalNonAssocSemiring R]
-  proof: by
-    suffices forall (x : R), IsSumNonzeroSq x -> x != 0 by grind
-    intro x hx
-    induction hx with
-    | sq ha => exact fun hc => ha (h IsSumSq.zero (by simpa using hc))
-    | sq_add ha hs ih => grind [hs.isSumSq]
-
-中文:
-定理 of_eq_zero_of_eq_zero_of_mul_self_add
-  结论: [非幺非结合半环 R]
-  证明: by
-    suffices forall (x : R), IsSumNonzeroSq x -> x != 0 by grind
-    intro x hx
-    induction hx with
-    | sq ha => exact fun hc => ha (h IsSumSq.zero (by simpa using hc))
-    | sq_add ha hs ih => grind [hs.isSumSq]
-
-Depends on / 依赖: IsSumNonzeroSq, IsSumSq, IsSumSq.zero, hs.isSumSq, isSumSq, sq_add
+/-
+**IsFormallyReal.of_eq_zero_of_eq_zero_of_mul_self_add** 是 Mathlib 中的一个定理，位于命名空间
+ `IsFormallyReal`。
+形式化陈述：of_eq_zero_of_eq_zero_of_mul_self_add [NonUnitalNonAssocSemiring R] (h : f
+orall {s a : R}, IsSumSq s -> a * a + s = 0 -> a = 0) : IsFormallyReal R where n
+ot_isSumNonzeroSq_zero
+参数：h : forall {s a : R}, IsSumSq s -> a * a + s = 0 -> a = 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 -/
 theorem of_eq_zero_of_eq_zero_of_mul_self_add [NonUnitalNonAssocSemiring R]
-    (h : forall {s a : R}, IsSumSq s -> a * a + s = 0 -> a = 0) : IsFormallyReal R where
+    (h : ∀ {s a : R}, IsSumSq s → a * a + s = 0 → a = 0) : IsFormallyReal R where
   not_isSumNonzeroSq_zero := by
-    suffices forall (x : R), IsSumNonzeroSq x -> x != 0 by grind
+    suffices ∀ (x : R), IsSumNonzeroSq x → x ≠ 0 by grind
     intro x hx
     induction hx with
-    | sq ha => exact fun hc => ha (h IsSumSq.zero (by simpa using hc))
+    | sq ha => exact fun hc ↦ ha (h IsSumSq.zero (by simpa using hc))
     | sq_add ha hs ih => grind [hs.isSumSq]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Ring
-  signature: R] [LinearOrder R] [IsStrictOrderedRing R] : IsFormallyReal R
-  body: of_eq_zero_of_mul_self_of_eq_zero_of_add mul_self_eq_zero.mp
-    fun hs₁ hs₂ h => ((add_eq_zero_iff_of_nonneg (IsSumSq.nonneg hs₁) (IsSumSq.nonneg hs₂)).mp h).1
-
-中文:
-实例 [环
-  签名: R] [线性序 R] [是StrictOrdered环 R] : 是Formally实数 R
-  定义体: of_eq_zero_of_mul_self_of_eq_zero_of_add mul_self_eq_zero.mp
-    fun hs₁ hs₂ h => ((add_eq_zero_iff_of_nonneg (IsSumSq.nonneg hs₁) (IsSumSq.nonneg hs₂)).mp h).1
-
-Depends on / 依赖: IsSumSq, IsSumSq.nonneg, add_eq_zero_iff_of_nonneg, mul_self_eq_zero, mul_self_eq_zero.mp, nonneg, of_eq_zero_of_mul_self_of_eq_zero_of_add
+/-
+**IsFormallyReal.** 是 Mathlib 中的一个实例，位于命名空间 `IsFormallyReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Ring R] [LinearOrder R] [IsStrictOrderedRing R] : IsFormallyReal R :=
-of_eq_zero_of_mul_self_of_eq_zero_of_add mul_self_eq_zero.mp
-    fun hs₁ hs₂ h => ((add_eq_zero_iff_of_nonneg (IsSumSq.nonneg hs₁) (IsSumSq.nonneg hs₂)).mp h).1
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Ring
-  signature: R] [IsFormallyReal R] : IsReduced R
-  body: by
-  rw [isReduced_iff_pow_one_lt 2 (by lia)]
-  intro x hx
-  by_contra! hc
-exact not_isSumNonzeroSq_zero by simpa [← pow_two, hx] using IsSumNonzeroSq.sq hc
-
-中文:
-实例 [环
-  签名: R] [是Formally实数 R] : 是既约 R
-  定义体: by
-  rw [isReduced_iff_pow_one_lt 2 (by lia)]
-  intro x hx
-  by_contra! hc
-exact not_isSumNonzeroSq_zero by simpa [← pow_two, hx] using IsSumNonzeroSq.sq hc
-
-Depends on / 依赖: IsSumNonzeroSq, IsSumNonzeroSq.sq, isReduced_iff_pow_one_lt, not_isSumNonzeroSq_zero, pow_two
+  of_eq_zero_of_mul_self_of_eq_zero_of_add mul_self_eq_zero.mp <|
+    fun hs₁ hs₂ h ↦ ((add_eq_zero_iff_of_nonneg (IsSumSq.nonneg hs₁) (IsSumSq.nonneg hs₂)).mp h).1
+/-
+**IsFormallyReal.** 是 Mathlib 中的一个实例，位于命名空间 `IsFormallyReal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Ring R] [IsFormallyReal R] : IsReduced R := by
   rw [isReduced_iff_pow_one_lt 2 (by lia)]
   intro x hx
   by_contra! hc
-exact not_isSumNonzeroSq_zero by simpa [← pow_two, hx] using IsSumNonzeroSq.sq hc
-
-/--
-theorem `eq_zero_of_add_right` / 定理 `eq_zero_of_add_right`
-
-English:
-theorem eq_zero_of_add_right
-  statement: [NonUnitalNonAssocSemiring R] [IsFormallyReal R]
-  proof: by
-  by_contra! h₁
-  have h₂ : s₂ != 0 := fun hc => by simp_all
-  rw [← isSumNonzeroSq_iff_isSumSq h₁] at hs₁
-  rw [← isSumNonzeroSq_iff_isSumSq h₂] at hs₂
-  exact not_isSumNonzeroSq_zero (h ▸ IsSumNonzeroSq.add hs₁ hs₂)
-
-中文:
-定理 eq_zero_of_add_right
-  结论: [非幺非结合半环 R] [是Formally实数 R]
-  证明: by
-  by_contra! h₁
-  have h₂ : s₂ != 0 := fun hc => by simp_all
-  rw [← isSumNonzeroSq_iff_isSumSq h₁] at hs₁
-  rw [← isSumNonzeroSq_iff_isSumSq h₂] at hs₂
-  exact not_isSumNonzeroSq_zero (h ▸ IsSumNonzeroSq.add hs₁ hs₂)
-
-Depends on / 依赖: IsSumNonzeroSq, IsSumNonzeroSq.add, isSumNonzeroSq_iff_isSumSq, not_isSumNonzeroSq_zero
+  exact not_isSumNonzeroSq_zero <| by simpa [← pow_two, hx] using IsSumNonzeroSq.sq hc
+/-
+**IsFormallyReal.eq_zero_of_add_right** 是 Mathlib 中的一个定理，位于命名空间 `IsFormallyReal`
+。
+形式化陈述：eq_zero_of_add_right [NonUnitalNonAssocSemiring R] [IsFormallyReal R] {s₁ 
+s₂ : R} (hs₁ : IsSumSq s₁) (hs₂ : IsSumSq s₂) (h : s₁ + s₂ = 0) : s₁ = 0
+参数：hs₁ : IsSumSq s₁；hs₂ : IsSumSq s₂；h : s₁ + s₂ = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `IsFormallyReal.not_isSumNonzeroSq_zero`：∀ {R : Type u_1} {inst : AddComm
+Monoid R} {inst_1 : Mul R} [self : IsFormallyReal R], ¬IsSumNonzeroSq 0
+· 使用定理 `IsSumNonzeroSq.add`：IsSumNonzeroSq.add [AddMonoid R] [Mul R] {s₁ s₂ : R}
+ (h₁ : IsSumNonzeroSq s₁) (h₂ : IsSumNonzeroSq s₂) : IsSumNonzeroSq (s₁ + s₂)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `isSumNonzeroSq_iff_isSumSq`：isSumNonzeroSq_iff_isSumSq [NonUnitalNonAsso
+cSemiring R] {s : R} (hs : s != 0) : IsSumNonzeroSq s ↔ IsSumSq s where mp
 -/
 theorem eq_zero_of_add_right [NonUnitalNonAssocSemiring R] [IsFormallyReal R]
     {s₁ s₂ : R} (hs₁ : IsSumSq s₁) (hs₂ : IsSumSq s₂) (h : s₁ + s₂ = 0) : s₁ = 0 := by
   by_contra! h₁
-  have h₂ : s₂ != 0 := fun hc => by simp_all
+  have h₂ : s₂ ≠ 0 := fun hc ↦ by simp_all
   rw [← isSumNonzeroSq_iff_isSumSq h₁] at hs₁
   rw [← isSumNonzeroSq_iff_isSumSq h₂] at hs₂
   exact not_isSumNonzeroSq_zero (h ▸ IsSumNonzeroSq.add hs₁ hs₂)
-
-/--
-theorem `eq_zero_of_add_left` / 定理 `eq_zero_of_add_left`
-
-English:
-theorem eq_zero_of_add_left
-  statement: [NonUnitalNonAssocSemiring R] [IsFormallyReal R]
-  proof: by
-  simp_all [eq_zero_of_add_right hs₁ hs₂ h]
-
-中文:
-定理 eq_zero_of_add_left
-  结论: [非幺非结合半环 R] [是Formally实数 R]
-  证明: by
-  simp_all [eq_zero_of_add_right hs₁ hs₂ h]
-
-Depends on / 依赖: eq_zero_of_add_right
+/-
+**IsFormallyReal.eq_zero_of_add_left** 是 Mathlib 中的一个定理，位于命名空间 `IsFormallyReal`。
+形式化陈述：eq_zero_of_add_left [NonUnitalNonAssocSemiring R] [IsFormallyReal R] {s₁ s
+₂ : R} (hs₁ : IsSumSq s₁) (hs₂ : IsSumSq s₂) (h : s₁ + s₂ = 0) : s₂ = 0
+参数：hs₁ : IsSumSq s₁；hs₂ : IsSumSq s₂；h : s₁ + s₂ = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsFormallyReal.eq_zero_of_add_right`：eq_zero_of_add_right [NonUnitalNonA
+ssocSemiring R] [IsFormallyReal R] {s₁ s₂ : R} (hs₁ : IsSumSq s₁) (hs₂ : IsSumSq
+ s₂) (h : s₁ + s₂ = 0) : …
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem eq_zero_of_add_left [NonUnitalNonAssocSemiring R] [IsFormallyReal R]
     {s₁ s₂ : R} (hs₁ : IsSumSq s₁) (hs₂ : IsSumSq s₂) (h : s₁ + s₂ = 0) : s₂ = 0 := by
   simp_all [eq_zero_of_add_right hs₁ hs₂ h]
-
-/--
-theorem `eq_zero_of_isSumSq_of_neg_isSumSq` / 定理 `eq_zero_of_isSumSq_of_neg_isSumSq`
-
-English:
-theorem eq_zero_of_isSumSq_of_neg_isSumSq
-  statement: [NonUnitalNonAssocRing R] [IsFormallyReal R]
-  proof: eq_zero_of_add_right h₁ h₂ (by simp)
-
-中文:
-定理 eq_zero_of_isSumSq_of_neg_isSumSq
-  结论: [非幺非结合环 R] [是Formally实数 R]
-  证明: eq_zero_of_add_right h₁ h₂ (by simp)
-
-Depends on / 依赖: eq_zero_of_add_right
+/-
+**IsFormallyReal.eq_zero_of_isSumSq_of_neg_isSumSq** 是 Mathlib 中的一个定理，位于命名空间 `Is
+FormallyReal`。
+形式化陈述：eq_zero_of_isSumSq_of_neg_isSumSq [NonUnitalNonAssocRing R] [IsFormallyRea
+l R] {s : R} (h₁ : IsSumSq s) (h₂ : IsSumSq (-s)) : s = 0
+参数：h₁ : IsSumSq s；h₂ : IsSumSq (-s)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsFormallyReal.eq_zero_of_add_right`：eq_zero_of_add_right [NonUnitalNonA
+ssocSemiring R] [IsFormallyReal R] {s₁ s₂ : R} (hs₁ : IsSumSq s₁) (hs₂ : IsSumSq
+ s₂) (h : s₁ + s₂ = 0) : …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_neg_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a + -a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem eq_zero_of_isSumSq_of_neg_isSumSq [NonUnitalNonAssocRing R] [IsFormallyReal R]
     {s : R} (h₁ : IsSumSq s) (h₂ : IsSumSq (-s)) : s = 0 :=
   eq_zero_of_add_right h₁ h₂ (by simp)
 
 end IsFormallyReal
+

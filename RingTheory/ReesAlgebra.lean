@@ -34,72 +34,26 @@ variable {R M : Type u} [CommRing R] [AddCommGroup M] [Module R M] (I : Ideal R)
 
 open Polynomial
 
-/--
-Definition of `reesAlgebra` / `reesAlgebra` 的定义
+/-- The Rees algebra of an ideal `I`, defined as the subalgebra of `R[X]` whose `i`-th coefficient
+falls in `I ^ i`. -/
+/-
+**reesAlgebra** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：reesAlgebra : Subalgebra R R[X] where carrier
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reesAlgebra
-  signature: : Subalgebra R R[X] where
-  body: { f | forall i, f.coeff i in I ^ i }
-  mul_mem' hf hg i := by
-    rw [coeff_mul]
-    apply Ideal.sum_mem
-    rintro ⟨j, k⟩ e
-    rw [← Finset.mem_antidiagonal.mp e]; rw [pow_add]
-    exact Ideal.mul_mem_mul (hf j) (hg k)
-  one_mem' i := by
-    rw [coeff_one]
-    split_ifs with h
-    · subst h
-      simp
-    · simp
-  add_mem' hf hg i := by
-    rw [coeff_add]
-    exact Ideal.add_mem _ (hf i) (hg i)
-  zero_mem' _ := Ideal.zero_mem _
-  algebraMap_mem' r i := by
-    rw [algebraMap_apply]; rw [coeff_C]
-    split_ifs with h
-    · subst h
-      simp
-    · simp
-
-中文:
-定义 reesAlgebra
-  签名: : 子代数 R R[X] where
-  定义体: { f | forall i, f.coeff i in I ^ i }
-  mul_mem' hf hg i := by
-    rw [coeff_mul]
-    apply Ideal.sum_mem
-    rintro ⟨j, k⟩ e
-    rw [← Finset.mem_antidiagonal.mp e]; rw [pow_add]
-    exact Ideal.mul_mem_mul (hf j) (hg k)
-  one_mem' i := by
-    rw [coeff_one]
-    split_ifs with h
-    · subst h
-      simp
-    · simp
-  add_mem' hf hg i := by
-    rw [coeff_add]
-    exact Ideal.add_mem _ (hf i) (hg i)
-  zero_mem' _ := Ideal.zero_mem _
-  algebraMap_mem' r i := by
-    rw [algebraMap_apply]; rw [coeff_C]
-    split_ifs with h
-    · subst h
-      simp
-    · simp
-
-Depends on / 依赖: f.coeff
+--- 原说明 ---
+The Rees algebra of an ideal `I`, defined as the subalgebra of `R[X]` whose `i`-
+th coefficient
+falls in `I ^ i`.
 -/
 def reesAlgebra : Subalgebra R R[X] where
-  carrier := { f | forall i, f.coeff i in I ^ i }
+  carrier := { f | ∀ i, f.coeff i ∈ I ^ i }
   mul_mem' hf hg i := by
     rw [coeff_mul]
     apply Ideal.sum_mem
     rintro ⟨j, k⟩ e
-    rw [← Finset.mem_antidiagonal.mp e]; rw [pow_add]
+    rw [← Finset.mem_antidiagonal.mp e, pow_add]
     exact Ideal.mul_mem_mul (hf j) (hg k)
   one_mem' i := by
     rw [coeff_one]
@@ -112,170 +66,163 @@ def reesAlgebra : Subalgebra R R[X] where
     exact Ideal.add_mem _ (hf i) (hg i)
   zero_mem' _ := Ideal.zero_mem _
   algebraMap_mem' r i := by
-    rw [algebraMap_apply]; rw [coeff_C]
+    rw [algebraMap_apply, coeff_C]
     split_ifs with h
     · subst h
       simp
     · simp
-
-/--
-theorem `mem_reesAlgebra_iff` / 定理 `mem_reesAlgebra_iff`
-
-English:
-theorem mem_reesAlgebra_iff
-  given: (f : R[X])
-  statement: f in reesAlgebra I ↔ forall i, f.coeff i in I ^ i
-  proof: Iff.rfl
-
-中文:
-定理 mem_reesAlgebra_iff
-  条件: (f : R[X])
-  结论: f in reesAlgebra I ↔ 对任意 i, f.coeff i in I ^ i
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**mem_reesAlgebra_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_reesAlgebra_iff (f : R[X]) : f in reesAlgebra I ↔ forall i, f.coeff i 
+in I ^ i
+参数：f : R[X]。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_reesAlgebra_iff (f : R[X]) : f in reesAlgebra I ↔ forall i, f.coeff i in I ^ i :=
+theorem mem_reesAlgebra_iff (f : R[X]) : f ∈ reesAlgebra I ↔ ∀ i, f.coeff i ∈ I ^ i :=
   Iff.rfl
-
-/--
-theorem `mem_reesAlgebra_iff_support` / 定理 `mem_reesAlgebra_iff_support`
-
-English:
-theorem mem_reesAlgebra_iff_support
-  given: (f : R[X])
-  proof: by
-  apply forall_congr'
-  intro a
-  rw [mem_support_iff]; rw [Iff.comm]; rw [Classical.imp_iff_right_iff]; rw [Ne]; rw [← imp_iff_not_or]
-  exact fun e => e.symm ▸ (I ^ a).zero_mem
-
-中文:
-定理 mem_reesAlgebra_iff_support
-  条件: (f : R[X])
-  证明: by
-  apply forall_congr'
-  intro a
-  rw [mem_support_iff]; rw [Iff.comm]; rw [Classical.imp_iff_right_iff]; rw [Ne]; rw [← imp_iff_not_or]
-  exact fun e => e.symm ▸ (I ^ a).zero_mem
-
-Depends on / 依赖: Classical, Classical.imp_iff_right_iff, Iff.comm, Set.mem_union_left, e.symm, forall_congr, imp_iff_not_or, imp_iff_right_iff, inf_le_left, inf_le_right, le_inf, le_sup_left, le_sup_right, mem_support_iff, mem_union_left, sup_le, zero_mem
+/-
+**mem_reesAlgebra_iff_support** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_reesAlgebra_iff_support (f : R[X]) : f in reesAlgebra I ↔ forall i in 
+f.support, f.coeff i in I ^ i
+参数：f : R[X]。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.mem_support_iff`：mem_support_iff : n in p.support ↔ p.coeff n
+ != 0
+· 使用定理 `Iff.comm`：∀ {a b : Prop}, (a ↔ b) ↔ (b ↔ a)
+· 使用定理 `Classical.imp_iff_right_iff`：∀ {a b : Prop}, (a → b ↔ b) ↔ a ∨ b
+· 使用定理 `Ne.eq_1`：∀ {α : Sort u} (a b : α), (a ≠ b) = ¬a = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `imp_iff_not_or`：imp_iff_not_or : a -> b ↔ ¬a ∨ b
+· 使用定理 `Ideal.zero_mem`：∀ {α : Type u} [inst : Semiring α] (I : Ideal α), 0 ∈ I
 -/
 theorem mem_reesAlgebra_iff_support (f : R[X]) :
-    f in reesAlgebra I ↔ forall i in f.support, f.coeff i in I ^ i := by
+    f ∈ reesAlgebra I ↔ ∀ i ∈ f.support, f.coeff i ∈ I ^ i := by
   apply forall_congr'
   intro a
-  rw [mem_support_iff]; rw [Iff.comm]; rw [Classical.imp_iff_right_iff]; rw [Ne]; rw [← imp_iff_not_or]
+  rw [mem_support_iff, Iff.comm, Classical.imp_iff_right_iff, Ne, ← imp_iff_not_or]
   exact fun e => e.symm ▸ (I ^ a).zero_mem
-
-/--
-theorem `reesAlgebra.monomial_mem` / 定理 `reesAlgebra.monomial_mem`
-
-English:
-theorem reesAlgebra.monomial_mem
-  given: {I : Ideal R} {i : Nat} {r : R}
-  proof: by
-  simp +contextual [mem_reesAlgebra_iff_support, coeff_monomial, ←
-    imp_iff_not_or]
-
-中文:
-定理 reesAlgebra.monomial_mem
-  条件: {I : 理想 R} {i : 自然数} {r : R}
-  证明: by
-  simp +contextual [mem_reesAlgebra_iff_support, coeff_monomial, ←
-    imp_iff_not_or]
-
-Depends on / 依赖: coeff_monomial, contextual, imp_iff_not_or, mem_reesAlgebra_iff_support
+/-
+**reesAlgebra.monomial_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：reesAlgebra.monomial_mem {I : Ideal R} {i : Nat} {r : R} : monomial i r in
+ reesAlgebra I ↔ r in I ^ i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Polynomial.coeff_monomial`：coeff_monomial : coeff (monomial n a) m = if 
+n = m then a else 0
+· 使用定理 `Polynomial.coeff_monomial_same`：coeff_monomial_same (n : Nat) (c : R) : 
+(monomial n c).coeff n = c
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem reesAlgebra.monomial_mem {I : Ideal R} {i : Nat} {r : R} :
-    monomial i r in reesAlgebra I ↔ r in I ^ i := by
+theorem reesAlgebra.monomial_mem {I : Ideal R} {i : ℕ} {r : R} :
+    monomial i r ∈ reesAlgebra I ↔ r ∈ I ^ i := by
   simp +contextual [mem_reesAlgebra_iff_support, coeff_monomial, ←
     imp_iff_not_or]
-
-/--
-theorem `monomial_mem_adjoin_monomial` / 定理 `monomial_mem_adjoin_monomial`
-
-English:
-theorem monomial_mem_adjoin_monomial
-  given: {I : Ideal R} {n : Nat} {r : R} (hr : r in I ^ n)
-  proof: by
-  induction n generalizing r with
-  | zero => exact Subalgebra.algebraMap_mem _ _
-  | succ n hn =>
-    rw [pow_succ'] at hr
-    refine Submodule.smul_induction_on hr ?_ ?_
-    · intro r hr s hs
-      rw [add_comm n 1]; rw [smul_eq_mul]; rw [← monomial_mul_monomial]
-      exact Subalgebra.mul_mem _ (Algebra.subset_adjoin (Set.mem_image_of_mem _ hr)) (hn hs)
-    · intro x y hx hy
-      rw [map_add]
-      exact Subalgebra.add_mem _ hx hy
-
-中文:
-定理 monomial_mem_adjoin_monomial
-  条件: {I : 理想 R} {n : 自然数} {r : R} (hr : r in I ^ n)
-  证明: by
-  induction n generalizing r with
-  | zero => exact Subalgebra.algebraMap_mem _ _
-  | succ n hn =>
-    rw [pow_succ'] at hr
-    refine Submodule.smul_induction_on hr ?_ ?_
-    · intro r hr s hs
-      rw [add_comm n 1]; rw [smul_eq_mul]; rw [← monomial_mul_monomial]
-      exact Subalgebra.mul_mem _ (Algebra.subset_adjoin (Set.mem_image_of_mem _ hr)) (hn hs)
-    · intro x y hx hy
-      rw [map_add]
-      exact Subalgebra.add_mem _ hx hy
-
-Depends on / 依赖: Algebra, Algebra.subset_adjoin, Set.mem_image_of_mem, Subalgebra, Subalgebra.add_mem, Subalgebra.algebraMap_mem, Subalgebra.mul_mem, Submodule, Submodule.smul_induction_on, add_comm, add_mem, algebraMap_mem, generalizing, map_add, mem_image_of_mem, monomial_mul_monomial, mul_mem, pow_succ, smul_eq_mul, smul_induction_on
+/-
+**monomial_mem_adjoin_monomial** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：monomial_mem_adjoin_monomial {I : Ideal R} {n : Nat} {r : R} (hr : r in I 
+^ n) : monomial n r in Algebra.adjoin R (Submodule.map (monomial 1 : R ->ₗ[R] R[
+X]) I : Set R[X])
+参数：hr : r in I ^ n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Subalgebra.algebraMap_mem`：∀ {R : Type u} {A : Type v} [inst : CommSemir
+ing R] [inst_1 : Semiring A] [inst_2 : Algebra R A] (S : Subalgebra R A)   (r : 
+R), (algebraMap…
+· 使用定理 `Submodule.smul_induction_on`：smul_induction_on {p : M -> Prop} {x} (H : 
+x in I • N) (smul : forall r in I, forall n in N, p (r • n)) (add : forall x y, 
+p x -> p y -> p (…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_succ'`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (n : ℕ), a ^ (n + 
+1) = a * a ^ n
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.monomial_mul_monomial`：monomial_mul_monomial (n m : Nat) (r s
+ : R) : monomial n r * monomial m s = monomial (n + m) (r * s)
+· 使用定理 `Subalgebra.mul_mem`：∀ {R : Type u} {A : Type v} [inst : CommSemiring R] 
+[inst_1 : Semiring A] [inst_2 : Algebra R A] (S : Subalgebra R A)   {x y : A}, x
+ ∈ S → y…
+· 使用定理 `Algebra.subset_adjoin`：subset_adjoin : s subseteq adjoin R s
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `Subalgebra.add_mem`：∀ {R : Type u} {A : Type v} [inst : CommSemiring R] 
+[inst_1 : Semiring A] [inst_2 : Algebra R A] (S : Subalgebra R A)   {x y : A}, x
+ ∈ S → y…
 -/
-theorem monomial_mem_adjoin_monomial {I : Ideal R} {n : Nat} {r : R} (hr : r in I ^ n) :
-    monomial n r in Algebra.adjoin R (Submodule.map (monomial 1 : R ->ₗ[R] R[X]) I : Set R[X]) := by
+theorem monomial_mem_adjoin_monomial {I : Ideal R} {n : ℕ} {r : R} (hr : r ∈ I ^ n) :
+    monomial n r ∈ Algebra.adjoin R (Submodule.map (monomial 1 : R →ₗ[R] R[X]) I : Set R[X]) := by
   induction n generalizing r with
   | zero => exact Subalgebra.algebraMap_mem _ _
   | succ n hn =>
     rw [pow_succ'] at hr
     refine Submodule.smul_induction_on hr ?_ ?_
     · intro r hr s hs
-      rw [add_comm n 1]; rw [smul_eq_mul]; rw [← monomial_mul_monomial]
+      rw [add_comm n 1, smul_eq_mul, ← monomial_mul_monomial]
       exact Subalgebra.mul_mem _ (Algebra.subset_adjoin (Set.mem_image_of_mem _ hr)) (hn hs)
     · intro x y hx hy
       rw [map_add]
       exact Subalgebra.add_mem _ hx hy
-
-/--
-theorem `adjoin_monomial_eq_reesAlgebra` / 定理 `adjoin_monomial_eq_reesAlgebra`
-
-English:
-theorem adjoin_monomial_eq_reesAlgebra
-  proof: by
-  apply le_antisymm
-  · apply Algebra.adjoin_le _
-    rintro _ ⟨r, hr, rfl⟩
-    exact reesAlgebra.monomial_mem.mpr (by rwa [pow_one])
-  · intro p hp
-    rw [p.as_sum_support]
-    apply Subalgebra.sum_mem _ _
-    rintro i -
-    exact monomial_mem_adjoin_monomial (hp i)
-
-中文:
-定理 adjoin_monomial_eq_reesAlgebra
-  证明: by
-  apply le_antisymm
-  · apply Algebra.adjoin_le _
-    rintro _ ⟨r, hr, rfl⟩
-    exact reesAlgebra.monomial_mem.mpr (by rwa [pow_one])
-  · intro p hp
-    rw [p.as_sum_support]
-    apply Subalgebra.sum_mem _ _
-    rintro i -
-    exact monomial_mem_adjoin_monomial (hp i)
-
-Depends on / 依赖: Algebra, Algebra.adjoin_le, Subalgebra, Subalgebra.sum_mem, adjoin_le, as_sum_support, le_antisymm, monomial_mem, monomial_mem_adjoin_monomial, p.as_sum_support, pow_one, reesAlgebra, reesAlgebra.monomial_mem.mpr, sum_mem
+/-
+**adjoin_monomial_eq_reesAlgebra** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：adjoin_monomial_eq_reesAlgebra : Algebra.adjoin R (Submodule.map (monomial
+ 1 : R ->ₗ[R] R[X]) I : Set R[X]) = reesAlgebra I
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Algebra.adjoin_le`：adjoin_le {S : Subalgebra R A} (H : s subseteq S) : a
+djoin R s <= S
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `reesAlgebra.monomial_mem`：reesAlgebra.monomial_mem {I : Ideal R} {i : Na
+t} {r : R} : monomial i r in reesAlgebra I ↔ r in I ^ i
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `Polynomial.as_sum_support`：as_sum_support (p : R[X]) : p = ∑ i in p.supp
+ort, monomial i (p.coeff i)
+· 使用定理 `Subalgebra.sum_mem`：∀ {R : Type u} {A : Type v} [inst : CommSemiring R] 
+[inst_1 : Semiring A] [inst_2 : Algebra R A] (S : Subalgebra R A)   {ι : Type w}
+ {t : Fi…
+· 使用定理 `monomial_mem_adjoin_monomial`：monomial_mem_adjoin_monomial {I : Ideal R}
+ {n : Nat} {r : R} (hr : r in I ^ n) : monomial n r in Algebra.adjoin R (Submodu
+le.map (monomial 1…
 -/
 theorem adjoin_monomial_eq_reesAlgebra :
-    Algebra.adjoin R (Submodule.map (monomial 1 : R ->ₗ[R] R[X]) I : Set R[X]) = reesAlgebra I := by
+    Algebra.adjoin R (Submodule.map (monomial 1 : R →ₗ[R] R[X]) I : Set R[X]) = reesAlgebra I := by
   apply le_antisymm
   · apply Algebra.adjoin_le _
     rintro _ ⟨r, hr, rfl⟩
@@ -287,88 +234,44 @@ theorem adjoin_monomial_eq_reesAlgebra :
     exact monomial_mem_adjoin_monomial (hp i)
 
 variable {I}
-
-/--
-theorem `reesAlgebra.fg` / 定理 `reesAlgebra.fg`
-
-English:
-theorem reesAlgebra.fg
-  given: (hI : I.FG)
-  statement: (reesAlgebra I).FG
-  proof: by
-  classical
-    obtain ⟨s, hs⟩ := hI
-    rw [← adjoin_monomial_eq_reesAlgebra]; rw [← hs]
-    use s.image (monomial 1)
-    rw [Finset.coe_image]
-    change
-      _ =
-        Algebra.adjoin R
-          (Submodule.map (monomial 1 : R ->ₗ[R] R[X]) (Submodule.span R ↑s) : Set R[X])
-    rw [Submodule.map_span]; rw [Algebra.adjoin_span]
-
-中文:
-定理 reesAlgebra.fg
-  条件: (hI : I.FG)
-  结论: (reesAlgebra I).FG
-  证明: by
-  classical
-    obtain ⟨s, hs⟩ := hI
-    rw [← adjoin_monomial_eq_reesAlgebra]; rw [← hs]
-    use s.image (monomial 1)
-    rw [Finset.coe_image]
-    change
-      _ =
-        Algebra.adjoin R
-          (Submodule.map (monomial 1 : R ->ₗ[R] R[X]) (Submodule.span R ↑s) : Set R[X])
-    rw [Submodule.map_span]; rw [Algebra.adjoin_span]
-
-Depends on / 依赖: Algebra, Algebra.adjoin, Algebra.adjoin_span, Finset, Finset.coe_image, Submodule, Submodule.map, Submodule.map_span, Submodule.span, adjoin, adjoin_monomial_eq_reesAlgebra, adjoin_span, classical, coe_image, map_span, monomial, s.image
+/-
+**reesAlgebra.fg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：reesAlgebra.fg (hI : I.FG) : (reesAlgebra I).FG
+参数：hI : I.FG。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `adjoin_monomial_eq_reesAlgebra`：adjoin_monomial_eq_reesAlgebra : Algebra
+.adjoin R (Submodule.map (monomial 1 : R ->ₗ[R] R[X]) I : Set R[X]) = reesAlgebr
+a I
+· 使用定理 `Finset.coe_image`：coe_image : ↑(s.image f) = f '' ↑s
+· 使用定理 `Submodule.map_span`：map_span [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂
+) (s : Set M) : (span R s).map f = span R₂ (f '' s)
+· 使用定理 `Algebra.adjoin_span`：adjoin_span {s : Set A} : adjoin R (Submodule.span 
+R s : Set A) = adjoin R s
 -/
 theorem reesAlgebra.fg (hI : I.FG) : (reesAlgebra I).FG := by
   classical
     obtain ⟨s, hs⟩ := hI
-    rw [← adjoin_monomial_eq_reesAlgebra]; rw [← hs]
+    rw [← adjoin_monomial_eq_reesAlgebra, ← hs]
     use s.image (monomial 1)
     rw [Finset.coe_image]
     change
       _ =
         Algebra.adjoin R
-          (Submodule.map (monomial 1 : R ->ₗ[R] R[X]) (Submodule.span R ↑s) : Set R[X])
-    rw [Submodule.map_span]; rw [Algebra.adjoin_span]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsNoetherianRing
-  signature: R] : Algebra.FiniteType R (reesAlgebra I)
-  body: ⟨(reesAlgebra I).fg_top.mpr (reesAlgebra.fg <| IsNoetherian.noetherian I)⟩
-
-中文:
-实例 [是Noether环
-  签名: R] : 代数.有限型 R (reesAlgebra I)
-  定义体: ⟨(reesAlgebra I).fg_top.mpr (reesAlgebra.fg <| IsNoetherian.noetherian I)⟩
-
-Depends on / 依赖: IsNoetherian, IsNoetherian.noetherian, fg_top, fg_top.mpr, noetherian, reesAlgebra, reesAlgebra.fg
+          (Submodule.map (monomial 1 : R →ₗ[R] R[X]) (Submodule.span R ↑s) : Set R[X])
+    rw [Submodule.map_span, Algebra.adjoin_span]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsNoetherianRing R] : Algebra.FiniteType R (reesAlgebra I) :=
   ⟨(reesAlgebra I).fg_top.mpr (reesAlgebra.fg <| IsNoetherian.noetherian I)⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsNoetherianRing
-  signature: R] : IsNoetherianRing (reesAlgebra I)
-  body: Algebra.FiniteType.isNoetherianRing R _
-
-中文:
-实例 [是Noether环
-  签名: R] : 是Noether环 (reesAlgebra I)
-  定义体: Algebra.FiniteType.isNoetherianRing R _
-
-Depends on / 依赖: Algebra, Algebra.FiniteType.isNoetherianRing, FiniteType, isNoetherianRing
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsNoetherianRing R] : IsNoetherianRing (reesAlgebra I) :=
   Algebra.FiniteType.isNoetherianRing R _

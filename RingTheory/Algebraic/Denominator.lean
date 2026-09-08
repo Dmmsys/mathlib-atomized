@@ -40,38 +40,32 @@ variable (R : Type*) {S : Type*} [CommRing R]
 variable [IsPrincipalIdealRing R] [CommRing S] [Algebra R S]
 namespace Algebra
 
-/--
-Definition of `denominator` / `denominator` 的定义
+/-- The denominator of an element `x` of an `R`-algebra: a generator of the ideal of scalars
+`r : R` such that `r • x` is integral over `R`. It is nonzero as soon as `x` is algebraic over
+`R`; see `IsAlgebraic.denominator_ne_zero`. -/
+/-
+**Algebra.denominator** 是 Mathlib 中的一个定义，位于命名空间 `Algebra`。
+形式化陈述：denominator (x : S) : R
+参数：x : S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition denominator
-  signature: (x : S)
-  body: Submodule.IsPrincipal.generator ((integralClosure R S).toSubmodule.colon {x})
-
-中文:
-定义 denominator
-  签名: (x : S)
-  定义体: Submodule.IsPrincipal.generator ((integralClosure R S).toSubmodule.colon {x})
-
-Depends on / 依赖: IsPrincipal, Submodule, Submodule.IsPrincipal.generator, generator, integralClosure, toSubmodule, toSubmodule.colon
+--- 原说明 ---
+The denominator of an element `x` of an `R`-algebra: a generator of the ideal of
+ scalars
+`r : R` such that `r • x` is integral over `R`. It is nonzero as soon as `x` is 
+algebraic over
+`R`; see `IsAlgebraic.denominator_ne_zero`.
 -/
 noncomputable def denominator (x : S) : R :=
   Submodule.IsPrincipal.generator ((integralClosure R S).toSubmodule.colon {x})
-
-/--
-lemma `denominator_def` / 引理 `denominator_def`
-
-English:
-lemma denominator_def
-  given: (x : S)
-  proof: by
-  rfl
-
-中文:
-引理 denominator_def
-  条件: (x : S)
-  证明: by
-  rfl
+/-
+**Algebra.denominator_def** 是 Mathlib 中的一个引理，位于命名空间 `Algebra`。
+形式化陈述：denominator_def (x : S) : denominator R x = Submodule.IsPrincipal.generato
+r ((integralClosure R S).toSubmodule.colon {x})
+参数：x : S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma denominator_def (x : S) :
     denominator R x =
@@ -79,179 +73,153 @@ lemma denominator_def (x : S) :
   rfl
 
 variable {R}
-
-/--
-theorem `denominator_dvd_iff` / 定理 `denominator_dvd_iff`
-
-English:
-theorem denominator_dvd_iff
-  given: {r : R} {x : S}
-  proof: by
-  rw [denominator_def]; rw [← Submodule.IsPrincipal.mem_iff_generator_dvd]; rw [Submodule.mem_colon_singleton]; rw [Subalgebra.mem_toSubmodule]; rw [mem_integralClosure_iff]
-
-中文:
-定理 denominator_dvd_iff
-  条件: {r : R} {x : S}
-  证明: by
-  rw [denominator_def]; rw [← Submodule.IsPrincipal.mem_iff_generator_dvd]; rw [Submodule.mem_colon_singleton]; rw [Subalgebra.mem_toSubmodule]; rw [mem_integralClosure_iff]
-
-Depends on / 依赖: IsPrincipal, Subalgebra, Subalgebra.mem_toSubmodule, Submodule, Submodule.IsPrincipal.mem_iff_generator_dvd, Submodule.mem_colon_singleton, denominator_def, mem_colon_singleton, mem_iff_generator_dvd, mem_integralClosure_iff, mem_toSubmodule
+/-
+**Algebra.denominator_dvd_iff** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+形式化陈述：denominator_dvd_iff {r : R} {x : S} : denominator R x ∣ r ↔ IsIntegral R (
+r • x)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPrincipalIdealRing.principal`：∀ {R : Type u} {inst : Semiring R} [self
+ : IsPrincipalIdealRing R] (S : Ideal R), Submodule.IsPrincipal S
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Algebra.denominator_def`：denominator_def (x : S) : denominator R x = Sub
+module.IsPrincipal.generator ((integralClosure R S).toSubmodule.colon {x})
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.IsPrincipal.mem_iff_generator_dvd`：mem_iff_generator_dvd (S : 
+Ideal R) [S.IsPrincipal] {x : R} : x in S ↔ generator S ∣ x
+· 使用定理 `Submodule.mem_colon_singleton`：mem_colon_singleton {x : M} {r : R} : r i
+n N.colon {x} ↔ r • x in N
+· 使用定理 `Subalgebra.mem_toSubmodule`：mem_toSubmodule {x} : x in (toSubmodule S) ↔
+ x in S
+· 使用定理 `mem_integralClosure_iff`：mem_integralClosure_iff {a : A} : a in integral
+Closure R A ↔ IsIntegral R a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem denominator_dvd_iff {r : R} {x : S} :
     denominator R x ∣ r ↔ IsIntegral R (r • x) := by
-  rw [denominator_def]; rw [← Submodule.IsPrincipal.mem_iff_generator_dvd]; rw [Submodule.mem_colon_singleton]; rw [Subalgebra.mem_toSubmodule]; rw [mem_integralClosure_iff]
-
-/--
-theorem `isIntegral_denominator_smul` / 定理 `isIntegral_denominator_smul`
-
-English:
-theorem isIntegral_denominator_smul
-  given: (x : S)
-  statement: IsIntegral R (denominator R x • x)
-  proof: denominator_dvd_iff.mp dvd_rfl
-
-中文:
-定理 is整数egral_denominator_smul
-  条件: (x : S)
-  结论: 是整 R (denominator R x • x)
-  证明: denominator_dvd_iff.mp dvd_rfl
-
-Depends on / 依赖: denominator_dvd_iff, denominator_dvd_iff.mp, dvd_rfl
+  rw [denominator_def, ← Submodule.IsPrincipal.mem_iff_generator_dvd,
+    Submodule.mem_colon_singleton, Subalgebra.mem_toSubmodule, mem_integralClosure_iff]
+/-
+**Algebra.isIntegral_denominator_smul** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+形式化陈述：isIntegral_denominator_smul (x : S) : IsIntegral R (denominator R x • x)
+参数：x : S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Algebra.denominator_dvd_iff`：denominator_dvd_iff {r : R} {x : S} : denom
+inator R x ∣ r ↔ IsIntegral R (r • x)
+· 使用定理 `dvd_rfl`：dvd_rfl : forall {a : α}, a ∣ a
 -/
 theorem isIntegral_denominator_smul (x : S) : IsIntegral R (denominator R x • x) :=
   denominator_dvd_iff.mp dvd_rfl
 
-/--
-Definition of `natDenominator` / `natDenominator` 的定义
+/-- The natural-number denominator of an element `x` of a ring: it is the absolute value of the
+denominator of `x` over `ℤ`. -/
+/-
+**Algebra.natDenominator** 是 Mathlib 中的一个定义，位于命名空间 `Algebra`。
+形式化陈述：natDenominator (x : S) : Nat
+参数：x : S。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
 
-English:
-definition natDenominator
-  signature: (x : S)
-  body: (denominator Int x).natAbs
-
-中文:
-定义 natDenominator
-  签名: (x : S)
-  定义体: (denominator Int x).natAbs
-
-Depends on / 依赖: denominator, natAbs
+--- 原说明 ---
+The natural-number denominator of an element `x` of a ring: it is the absolute v
+alue of the
+denominator of `x` over `ℤ`.
 -/
-noncomputable def natDenominator (x : S) : Nat :=
-  (denominator Int x).natAbs
-
-/--
-theorem `natDenominator_def` / 定理 `natDenominator_def`
-
-English:
-theorem natDenominator_def
-  given: (x : S)
-  statement: natDenominator x = (denominator Int x).natAbs
-  proof: by
+noncomputable def natDenominator (x : S) : ℕ :=
+  (denominator ℤ x).natAbs
+/-
+**Algebra.natDenominator_def** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+形式化陈述：natDenominator_def (x : S) : natDenominator x = (denominator Int x).natAbs
+参数：x : S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem natDenominator_def (x : S) : natDenominator x = (denominator ℤ x).natAbs := by
   rfl
-
-中文:
-定理 natDenominator_def
-  条件: (x : S)
-  结论: natDenominator x = (denominator 整数 x).natAbs
-  证明: by
-  rfl
+/-
+**Algebra.natDenominator_dvd_iff** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+形式化陈述：natDenominator_dvd_iff {n : Nat} {x : S} : natDenominator x ∣ n ↔ IsIntegr
+al Int (n • x)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.natDenominator_def`：natDenominator_def (x : S) : natDenominator 
+x = (denominator Int x).natAbs
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.ofNat_dvd_right`：∀ {n : ℕ} {z : ℤ}, z ∣ ↑n ↔ z.natAbs ∣ n
+· 使用定理 `Algebra.denominator_dvd_iff`：denominator_dvd_iff {r : R} {x : S} : denom
+inator R x ∣ r ↔ IsIntegral R (r • x)
+· 使用定理 `natCast_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G) (n : ℕ),
+ ↑n • a = n • a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem natDenominator_def (x : S) : natDenominator x = (denominator Int x).natAbs := by
-  rfl
-
-/--
-theorem `natDenominator_dvd_iff` / 定理 `natDenominator_dvd_iff`
-
-English:
-theorem natDenominator_dvd_iff
-  given: {n : Nat} {x : S}
-  proof: by
-  rw [natDenominator_def]; rw [← Int.ofNat_dvd_right]; rw [denominator_dvd_iff]; rw [natCast_zsmul]
-
-中文:
-定理 natDenominator_dvd_iff
-  条件: {n : 自然数} {x : S}
-  证明: by
-  rw [natDenominator_def]; rw [← Int.ofNat_dvd_right]; rw [denominator_dvd_iff]; rw [natCast_zsmul]
-
-Depends on / 依赖: Int.ofNat_dvd_right, denominator_dvd_iff, natCast_zsmul, natDenominator_def, ofNat_dvd_right
+theorem natDenominator_dvd_iff {n : ℕ} {x : S} :
+    natDenominator x ∣ n ↔ IsIntegral ℤ (n • x) := by
+  rw [natDenominator_def, ← Int.ofNat_dvd_right, denominator_dvd_iff, natCast_zsmul]
+/-
+**Algebra.isIntegral_natDenominator_smul** 是 Mathlib 中的一个定理，位于命名空间 `Algebra`。
+形式化陈述：isIntegral_natDenominator_smul (x : S) : IsIntegral Int (natDenominator x 
+• x)
+参数：x : S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Algebra.natDenominator_dvd_iff`：natDenominator_dvd_iff {n : Nat} {x : S}
+ : natDenominator x ∣ n ↔ IsIntegral Int (n • x)
+· 使用定理 `dvd_rfl`：dvd_rfl : forall {a : α}, a ∣ a
 -/
-theorem natDenominator_dvd_iff {n : Nat} {x : S} :
-    natDenominator x ∣ n ↔ IsIntegral Int (n • x) := by
-  rw [natDenominator_def]; rw [← Int.ofNat_dvd_right]; rw [denominator_dvd_iff]; rw [natCast_zsmul]
-
-/--
-theorem `isIntegral_natDenominator_smul` / 定理 `isIntegral_natDenominator_smul`
-
-English:
-theorem isIntegral_natDenominator_smul
-  given: (x : S)
-  statement: IsIntegral Int (natDenominator x • x)
-  proof: natDenominator_dvd_iff.mp dvd_rfl
-
-中文:
-定理 is整数egral_natDenominator_smul
-  条件: (x : S)
-  结论: 是整 整数 (natDenominator x • x)
-  证明: natDenominator_dvd_iff.mp dvd_rfl
-
-Depends on / 依赖: dvd_rfl, natDenominator_dvd_iff, natDenominator_dvd_iff.mp
--/
-theorem isIntegral_natDenominator_smul (x : S) : IsIntegral Int (natDenominator x • x) :=
+theorem isIntegral_natDenominator_smul (x : S) : IsIntegral ℤ (natDenominator x • x) :=
   natDenominator_dvd_iff.mp dvd_rfl
 
 end Algebra
 
 namespace IsAlgebraic
 
-/--
-theorem `denominator_ne_zero` / 定理 `denominator_ne_zero`
-
-English:
-theorem denominator_ne_zero
-  given: {x : S} (hx : IsAlgebraic R x)
-  statement: Algebra.denominator R x != 0
-  proof: by
-  obtain ⟨r, hr0, hr⟩ := hx.exists_integral_multiple
-  exact ne_zero_of_dvd_ne_zero hr0 (Algebra.denominator_dvd_iff.mpr hr)
-
-中文:
-定理 denominator_ne_zero
-  条件: {x : S} (hx : 是代数 R x)
-  结论: 代数.denominator R x != 0
-  证明: by
-  obtain ⟨r, hr0, hr⟩ := hx.exists_integral_multiple
-  exact ne_zero_of_dvd_ne_zero hr0 (Algebra.denominator_dvd_iff.mpr hr)
-
-Depends on / 依赖: Algebra, Algebra.denominator_dvd_iff.mpr, denominator_dvd_iff, exists_integral_multiple, hx.exists_integral_multiple, ne_zero_of_dvd_ne_zero
+/-
+**IsAlgebraic.denominator_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `IsAlgebraic`。
+形式化陈述：denominator_ne_zero {x : S} (hx : IsAlgebraic R x) : Algebra.denominator R
+ x != 0
+参数：hx : IsAlgebraic R x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsAlgebraic.exists_integral_multiple`：exists_integral_multiple (hz : IsA
+lgebraic R z) : exists y != (0 : R), IsIntegral R (y • z)
+· 使用定理 `ne_zero_of_dvd_ne_zero`：ne_zero_of_dvd_ne_zero {p q : α} (h₁ : q != 0) (
+h₂ : p ∣ q) : p != 0
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Algebra.denominator_dvd_iff`：denominator_dvd_iff {r : R} {x : S} : denom
+inator R x ∣ r ↔ IsIntegral R (r • x)
 -/
-theorem denominator_ne_zero {x : S} (hx : IsAlgebraic R x) : Algebra.denominator R x != 0 := by
+theorem denominator_ne_zero {x : S} (hx : IsAlgebraic R x) : Algebra.denominator R x ≠ 0 := by
   obtain ⟨r, hr0, hr⟩ := hx.exists_integral_multiple
   exact ne_zero_of_dvd_ne_zero hr0 (Algebra.denominator_dvd_iff.mpr hr)
-
-/--
-theorem `natDenominator_ne_zero` / 定理 `natDenominator_ne_zero`
-
-English:
-theorem natDenominator_ne_zero
-  given: {x : S} (hx : IsAlgebraic Int x)
-  statement: Algebra.natDenominator x != 0
-  proof: by
-  rw [Algebra.natDenominator_def]; rw [Int.natAbs_ne_zero]
-  exact hx.denominator_ne_zero
-
-中文:
-定理 natDenominator_ne_zero
-  条件: {x : S} (hx : 是代数 整数 x)
-  结论: 代数.natDenominator x != 0
-  证明: by
-  rw [Algebra.natDenominator_def]; rw [Int.natAbs_ne_zero]
-  exact hx.denominator_ne_zero
-
-Depends on / 依赖: Algebra, Algebra.natDenominator_def, Int.natAbs_ne_zero, denominator_ne_zero, hx.denominator_ne_zero, natAbs_ne_zero, natDenominator_def
+/-
+**IsAlgebraic.natDenominator_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `IsAlgebraic`。
+形式化陈述：natDenominator_ne_zero {x : S} (hx : IsAlgebraic Int x) : Algebra.natDenom
+inator x != 0
+参数：hx : IsAlgebraic Int x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.natDenominator_def`：natDenominator_def (x : S) : natDenominator 
+x = (denominator Int x).natAbs
+· 使用定理 `Int.natAbs_ne_zero`：∀ {a : ℤ}, a.natAbs ≠ 0 ↔ a ≠ 0
+· 使用定理 `IsAlgebraic.denominator_ne_zero`：denominator_ne_zero {x : S} (hx : IsAlg
+ebraic R x) : Algebra.denominator R x != 0
 -/
-theorem natDenominator_ne_zero {x : S} (hx : IsAlgebraic Int x) : Algebra.natDenominator x != 0 := by
-  rw [Algebra.natDenominator_def]; rw [Int.natAbs_ne_zero]
+theorem natDenominator_ne_zero {x : S} (hx : IsAlgebraic ℤ x) : Algebra.natDenominator x ≠ 0 := by
+  rw [Algebra.natDenominator_def, Int.natAbs_ne_zero]
   exact hx.denominator_ne_zero
 
 end IsAlgebraic
@@ -259,8 +227,19 @@ end IsAlgebraic
 /- The algebraicity hypothesis in `IsAlgebraic.denominator_ne_zero` cannot be dropped: the
 variable `X` of `ℤ[X]` is transcendental over `ℤ`, so no nonzero multiple of it is integral and
 its denominator vanishes. -/
-example : Algebra.denominator Int (Polynomial.X : Polynomial Int) = 0 := by
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The algebraicity hypothesis in `IsAlgebraic.denominator_ne_zero` cannot be dropp
+ed: the
+variable `X` of `ℤ[X]` is transcendental over `ℤ`, so no nonzero multiple of it 
+is integral and
+its denominator vanishes.
+-/
+example : Algebra.denominator ℤ (Polynomial.X : Polynomial ℤ) = 0 := by
   by_contra h
-  exact Polynomial.transcendental_X Int
+  exact Polynomial.transcendental_X ℤ
     ((Algebra.isIntegral_denominator_smul _).isAlgebraic.of_smul
       (mem_nonZeroDivisors_of_ne_zero h))

@@ -34,124 +34,121 @@ variable
     [IsTopologicalAddGroup G] [ContinuousSMul 𝕜 G]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `LinearMap.toContinuousBilinearMap` / `LinearMap.toContinuousBilinearMap` 的定义
+/-- Building continuous bilinear maps from bilinear maps between finite dimensional topological
+  vector spaces over a complete field. -/
+/-
+**LinearMap.toContinuousBilinearMap** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：LinearMap.toContinuousBilinearMap (f : E ->ₗ[𝕜] F ->ₗ[𝕜] G) : E ->L[𝕜] F -
+>L[𝕜] G
+参数：f : E ->ₗ[𝕜] F ->ₗ[𝕜] G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition LinearMap.toContinuousBilinearMap
-  signature: (f : E ->ₗ[𝕜] F ->ₗ[𝕜] G)
-  body: IsLinearMap.mk' (fun x : E => f x |>.toContinuousLinearMap)
-.toContinuousLinearMap (by constructor <;> (intros; simp))
-
-@[simp]
-
-中文:
-定义 线性映射.toContinuousBilinearMap
-  签名: (f : E ->ₗ[𝕜] F ->ₗ[𝕜] G)
-  定义体: IsLinearMap.mk' (fun x : E => f x |>.toContinuousLinearMap)
-.toContinuousLinearMap (by constructor <;> (intros; simp))
-
-@[simp]
-
-Depends on / 依赖: IsLinearMap, IsLinearMap.mk, intros, toContinuousLinearMap
+--- 原说明 ---
+Building continuous bilinear maps from bilinear maps between finite dimensional 
+topological
+  vector spaces over a complete field.
 -/
-def LinearMap.toContinuousBilinearMap (f : E ->ₗ[𝕜] F ->ₗ[𝕜] G) : E ->L[𝕜] F ->L[𝕜] G :=
-  IsLinearMap.mk' (fun x : E => f x |>.toContinuousLinearMap)
-.toContinuousLinearMap (by constructor <;> (intros; simp))
+def LinearMap.toContinuousBilinearMap (f : E →ₗ[𝕜] F →ₗ[𝕜] G) : E →L[𝕜] F →L[𝕜] G :=
+  IsLinearMap.mk' (fun x : E ↦ f x |>.toContinuousLinearMap)
+      (by constructor <;> (intros; simp)) |>.toContinuousLinearMap
 
 @[simp]
-/--
-lemma `LinearMap.toContinuousBilinearMap_apply` / 引理 `LinearMap.toContinuousBilinearMap_apply`
-
-English:
-lemma LinearMap.toContinuousBilinearMap_apply
-  given: (f : E ->ₗ[𝕜] F ->ₗ[𝕜] G) (x : E) (y : F)
-  proof: rfl
-
-中文:
-引理 线性映射.toContinuousBilinearMap_apply
-  条件: (f : E ->ₗ[𝕜] F ->ₗ[𝕜] G) (x : E) (y : F)
-  证明: rfl
+/-
+**LinearMap.toContinuousBilinearMap_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：LinearMap.toContinuousBilinearMap_apply (f : E ->ₗ[𝕜] F ->ₗ[𝕜] G) (x : E) 
+(y : F) : f.toContinuousBilinearMap x y = f x y
+参数：f : E ->ₗ[𝕜] F ->ₗ[𝕜] G；x : E；y : F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `ContinuousSMul.continuousConstSMul`：∀ {M : Type u_1} {X : Type u_2} [ins
+t : TopologicalSpace M] [inst_1 : TopologicalSpace X] [inst_2 : SMul M X]   [Con
+tinuousSMul M X], Contin…
 -/
-lemma LinearMap.toContinuousBilinearMap_apply (f : E ->ₗ[𝕜] F ->ₗ[𝕜] G) (x : E) (y : F) :
+lemma LinearMap.toContinuousBilinearMap_apply (f : E →ₗ[𝕜] F →ₗ[𝕜] G) (x : E) (y : F) :
   f.toContinuousBilinearMap x y = f x y := rfl
 
-/--
-Definition of `IsBilinearMap.toContinuousBilinearMap` / `IsBilinearMap.toContinuousBilinearMap` 的定义
+/-- Building continuous bilinear maps from bilinear functions between finite dimensional topological
+  vector spaces over a complete field. -/
+/-
+**IsBilinearMap.toContinuousBilinearMap** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsBilinearMap.toContinuousBilinearMap {f : E -> F -> G} (h : IsBilinearMap
+ 𝕜 f) : E ->L[𝕜] F ->L[𝕜] G
+参数：h : IsBilinearMap 𝕜 f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsBilinearMap.toContinuousBilinearMap
-  body: h.toLinearMap.toContinuousBilinearMap
-
-@[simp]
-
-中文:
-定义 是双线性映射.toContinuousBilinearMap
-  定义体: h.toLinearMap.toContinuousBilinearMap
-
-@[simp]
-
-Depends on / 依赖: h.toLinearMap.toContinuousBilinearMap, toContinuousBilinearMap, toLinearMap
+--- 原说明 ---
+Building continuous bilinear maps from bilinear functions between finite dimensi
+onal topological
+  vector spaces over a complete field.
 -/
 def IsBilinearMap.toContinuousBilinearMap
-    {f : E -> F -> G} (h : IsBilinearMap 𝕜 f) : E ->L[𝕜] F ->L[𝕜] G :=
+    {f : E → F → G} (h : IsBilinearMap 𝕜 f) : E →L[𝕜] F →L[𝕜] G :=
   h.toLinearMap.toContinuousBilinearMap
 
 @[simp]
-/--
-lemma `IsBilinearMap.toContinuousBilinearMap_apply` / 引理 `IsBilinearMap.toContinuousBilinearMap_apply`
-
-English:
-lemma IsBilinearMap.toContinuousBilinearMap_apply
-  statement: {f : E -> F -> G} (h : IsBilinearMap 𝕜 f)
-  proof: rfl
-
-中文:
-引理 是双线性映射.toContinuousBilinearMap_apply
-  结论: {f : E -> F -> G} (h : 是双线性映射 𝕜 f)
-  证明: rfl
+/-
+**IsBilinearMap.toContinuousBilinearMap_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsBilinearMap.toContinuousBilinearMap_apply {f : E -> F -> G} (h : IsBilin
+earMap 𝕜 f) (x : E) (y : F) : h.toContinuousBilinearMap x y = f x y
+参数：h : IsBilinearMap 𝕜 f；x : E；y : F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `ContinuousSMul.continuousConstSMul`：∀ {M : Type u_1} {X : Type u_2} [ins
+t : TopologicalSpace M] [inst_1 : TopologicalSpace X] [inst_2 : SMul M X]   [Con
+tinuousSMul M X], Contin…
 -/
-lemma IsBilinearMap.toContinuousBilinearMap_apply {f : E -> F -> G} (h : IsBilinearMap 𝕜 f)
+lemma IsBilinearMap.toContinuousBilinearMap_apply {f : E → F → G} (h : IsBilinearMap 𝕜 f)
     (x : E) (y : F) :
   h.toContinuousBilinearMap x y = f x y := rfl
 
 variable (𝕜 E F) in
-/--
-Definition of `ContinuousLinearMap.evalL` / `ContinuousLinearMap.evalL` 的定义
+/-- Evaluation of continuous linear maps as a continuous linear map in the
+case of finite dimensional topological vector spaces over a complete field.
+See also `ContinuousLinearMap.apply` for the case of normed spaces.
 
-English:
-definition ContinuousLinearMap.evalL
-  signature: : E ->L[𝕜] (E ->L[𝕜] F) ->L[𝕜] F
-  body: .toContinuousBilinearMap .flip LinearMap.toContinuousLinearMap.symm.toLinearMap
-
-@[simp]
-
-中文:
-定义 连续线性映射.evalL
-  签名: : E ->L[𝕜] (E ->L[𝕜] F) ->L[𝕜] F
-  定义体: .toContinuousBilinearMap .flip LinearMap.toContinuousLinearMap.symm.toLinearMap
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.toContinuousLinearMap.symm.toLinearMap, toContinuousBilinearMap, toContinuousLinearMap, toLinearMap
+TODO: generalize the two constructions in the setting of maps from a bornological space to a locally
+convex one, or define a `NormableSpace` class to deduce this case from the normed case.
 -/
-def ContinuousLinearMap.evalL : E ->L[𝕜] (E ->L[𝕜] F) ->L[𝕜] F :=
-.toContinuousBilinearMap .flip LinearMap.toContinuousLinearMap.symm.toLinearMap
+/-
+**ContinuousLinearMap.evalL** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ContinuousLinearMap.evalL : E ->L[𝕜] (E ->L[𝕜] F) ->L[𝕜] F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Evaluation of continuous linear maps as a continuous linear map in the
+case of finite dimensional topological vector spaces over a complete field.
+See also `ContinuousLinearMap.apply` for the case of normed spaces.
+
+TODO: generalize the two constructions in the setting of maps from a bornologica
+l space to a locally
+convex one, or define a `NormableSpace` class to deduce this case from the norme
+d case.
+-/
+def ContinuousLinearMap.evalL : E →L[𝕜] (E →L[𝕜] F) →L[𝕜] F :=
+  LinearMap.toContinuousLinearMap.symm.toLinearMap |>.flip |>.toContinuousBilinearMap
 
 @[simp]
-/--
-lemma `ContinuousLinearMap.evalL_apply` / 引理 `ContinuousLinearMap.evalL_apply`
-
-English:
-lemma ContinuousLinearMap.evalL_apply
-  given: (x : E) (φ : E ->L[𝕜] F)
-  statement: φ.evalL 𝕜 E F x = φ x
-  proof: rfl
-
-中文:
-引理 连续线性映射.evalL_apply
-  条件: (x : E) (φ : E ->L[𝕜] F)
-  结论: φ.evalL 𝕜 E F x = φ x
-  证明: rfl
+/-
+**ContinuousLinearMap.evalL_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：ContinuousLinearMap.evalL_apply (x : E) (φ : E ->L[𝕜] F) : φ.evalL 𝕜 E F x
+ = φ x
+参数：x : E；φ : E ->L[𝕜] F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `ContinuousSMul.continuousConstSMul`：∀ {M : Type u_1} {X : Type u_2} [ins
+t : TopologicalSpace M] [inst_1 : TopologicalSpace X] [inst_2 : SMul M X]   [Con
+tinuousSMul M X], Contin…
 -/
-lemma ContinuousLinearMap.evalL_apply (x : E) (φ : E ->L[𝕜] F) : φ.evalL 𝕜 E F x = φ x := rfl
+lemma ContinuousLinearMap.evalL_apply (x : E) (φ : E →L[𝕜] F) : φ.evalL 𝕜 E F x = φ x := rfl

@@ -28,53 +28,30 @@ variable {R : Type*} [CommRing R]
 variable {A : Type u} {B : Type*} [CommRing A] [Algebra R A] [CommRing B] [Algebra A B]
 
 variable (A B) in
-/--
-Definition of `DescentAux` / `DescentAux` 的定义
+/-- (Implementation detail): If `S` is an `R`-algebra with presentation `P`
+and section `σ` of the projection `R[Xᵢ] ⧸ I^2 → S`, then a
+`DescentAux` structure contains the data necessary to reconstruct `σ`. -/
+/-
+**Algebra.Smooth.DescentAux** 是 Mathlib 中的一个结构，位于命名空间 `Algebra.Smooth`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure DescentAux
-  parameters: where
-  axioms and operations (11):
-    - vars : Type
-    - rels : Type
-    - P : Presentation A B vars rels
-    - σ : B ->ₐ[A] MvPolynomial vars A ⧸ P.ker ^ 2
-    - h : vars -> MvPolynomial vars A
-    - p : rels -> MvPolynomial rels (MvPolynomial vars A)
-    - hphom : forall (j : rels), (p j).IsHomogeneous 2
-    - hp : forall (j : rels), (eval P.relation) (p j) = (aeval h) (P.relation j)
-    - q : vars -> MvPolynomial rels P.Ring
-    - hqhom : forall (i : vars), (q i).IsHomogeneous 1
-    - hq : forall (i : vars), (eval P.relation) (q i) = h i - X i
-
-中文:
-结构 DescentAux
-  参数: where
-  公理与运算 (11 个):
-    - vars : 类型
-    - rels : 类型
-    - P : 呈现 A B vars rels
-    - σ : B ->ₐ[A] 多元多项式 vars A ⧸ P.ker ^ 2
-    - h : vars -> 多元多项式 vars A
-    - p : rels -> 多元多项式 rels (多元多项式 vars A)
-    - hphom : 对任意 (j : rels), (p j).IsHomogeneous 2
-    - hp : 对任意 (j : rels), (eval P.relation) (p j) = (aeval h) (P.relation j)
-    - q : vars -> 多元多项式 rels P.环
-    - hqhom : 对任意 (i : vars), (q i).IsHomogeneous 1
-    - hq : 对任意 (i : vars), (eval P.relation) (q i) = h i - X i
+--- 原说明 ---
+(Implementation detail): If `S` is an `R`-algebra with presentation `P`
+and section `σ` of the projection `R[Xᵢ] ⧸ I^2 → S`, then a
+`DescentAux` structure contains the data necessary to reconstruct `σ`.
 -/
 structure DescentAux where
   vars : Type
   rels : Type
   P : Presentation A B vars rels
-  σ : B ->ₐ[A] MvPolynomial vars A ⧸ P.ker ^ 2
-  h : vars -> MvPolynomial vars A
-  p : rels -> MvPolynomial rels (MvPolynomial vars A)
-  hphom : forall (j : rels), (p j).IsHomogeneous 2
-  hp : forall (j : rels), (eval P.relation) (p j) = (aeval h) (P.relation j)
-  q : vars -> MvPolynomial rels P.Ring
-  hqhom : forall (i : vars), (q i).IsHomogeneous 1
-  hq : forall (i : vars), (eval P.relation) (q i) = h i - X i
+  σ : B →ₐ[A] MvPolynomial vars A ⧸ P.ker ^ 2
+  h : vars → MvPolynomial vars A
+  p : rels → MvPolynomial rels (MvPolynomial vars A)
+  hphom : ∀ (j : rels), (p j).IsHomogeneous 2
+  hp : ∀ (j : rels), (eval P.relation) (p j) = (aeval h) (P.relation j)
+  q : vars → MvPolynomial rels P.Ring
+  hqhom : ∀ (i : vars), (q i).IsHomogeneous 1
+  hq : ∀ (i : vars), (eval P.relation) (q i) = h i - X i
 
 namespace DescentAux
 
@@ -82,225 +59,100 @@ variable (D : DescentAux A B)
 
 variable (R)
 
+/-- (Implementation detail): The finite type `R`-algebra. -/
 -- Note: `Set` has no computational content, but Lean still attempts to compile it.
 -- See https://github.com/leanprover/lean4/issues/14084.
-/--
-Definition of `subalgebra` / `subalgebra` 的定义
-
-English:
-definition subalgebra
-  signature: (D : DescentAux A B)
-  body: Algebra.adjoin R
-    (D.P.coeffs union
-      ((⋃ i, (D.h i).coeffs) union
-       (⋃ i, ⋃ x in (D.q i).coeffs, x.coeffs) union
-       (⋃ i, ⋃ x in (D.p i).coeffs, x.coeffs)) : Set A)
-
-中文:
-定义 subalgebra
-  签名: (D : DescentAux A B)
-  定义体: Algebra.adjoin R
-    (D.P.coeffs union
-      ((⋃ i, (D.h i).coeffs) union
-       (⋃ i, ⋃ x in (D.q i).coeffs, x.coeffs) union
-       (⋃ i, ⋃ x in (D.p i).coeffs, x.coeffs)) : Set A)
-
-Depends on / 依赖: Algebra, Algebra.adjoin, D.P.coeffs, adjoin, coeffs, x.coeffs
+/-
+**Algebra.Smooth.DescentAux.subalgebra** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Smooth
+.DescentAux`。
+形式化陈述：subalgebra (D : DescentAux A B) : Subalgebra R A
+参数：D : DescentAux A B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable def subalgebra (D : DescentAux A B) : Subalgebra R A :=
   Algebra.adjoin R
-    (D.P.coeffs union
-      ((⋃ i, (D.h i).coeffs) union
-       (⋃ i, ⋃ x in (D.q i).coeffs, x.coeffs) union
-       (⋃ i, ⋃ x in (D.p i).coeffs, x.coeffs)) : Set A)
+    (D.P.coeffs ∪
+      ((⋃ i, (D.h i).coeffs) ∪
+       (⋃ i, ⋃ x ∈ (D.q i).coeffs, x.coeffs) ∪
+       (⋃ i, ⋃ x ∈ (D.p i).coeffs, x.coeffs)) : Set A)
 
 -- Note: `Set` has no computational content, but Lean still attempts to compile it.
 -- See https://github.com/leanprover/lean4/issues/14084.
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CommRing (D.subalgebra R)
-  body: inferInstanceAs CommRing (Algebra.adjoin _ _)
-
-中文:
-实例 :
-  签名: 交换环 (D.subalgebra R)
-  定义体: inferInstanceAs CommRing (Algebra.adjoin _ _)
-
-Depends on / 依赖: Algebra, Algebra.adjoin, CommRing, adjoin
+/-
+**Algebra.Smooth.DescentAux.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.Smooth.DescentAu
+x`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : CommRing (D.subalgebra R) :=
-inferInstanceAs CommRing (Algebra.adjoin _ _)
+  inferInstanceAs <| CommRing (Algebra.adjoin _ _)
 
 -- Note: `Set` has no computational content, but Lean still attempts to compile it.
 -- See https://github.com/leanprover/lean4/issues/14084.
-/--
-Instance `algebra₀` / 实例 `algebra₀`
-
-English:
-instance algebra₀
-  signature: : Algebra R (D.subalgebra R)
-  body: inferInstanceAs Algebra R (Algebra.adjoin _ _)
-
-中文:
-实例 algebra₀
-  签名: : 代数 R (D.subalgebra R)
-  定义体: inferInstanceAs Algebra R (Algebra.adjoin _ _)
-
-Depends on / 依赖: Algebra, Algebra.adjoin, adjoin
+/-
+**Algebra.Smooth.DescentAux.algebra** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.Smooth.De
+scentAux`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance algebra₀ : Algebra R (D.subalgebra R) :=
-inferInstanceAs Algebra R (Algebra.adjoin _ _)
+  inferInstanceAs <| Algebra R (Algebra.adjoin _ _)
 
 -- Note: `Set` has no computational content, but Lean still attempts to compile it.
 -- See https://github.com/leanprover/lean4/issues/14084.
-/--
-Instance `algebra₁` / 实例 `algebra₁`
-
-English:
-instance algebra₁
-  signature: : Algebra (D.subalgebra R) A
-  body: inferInstanceAs Algebra (Algebra.adjoin _ _) A
-
-中文:
-实例 algebra₁
-  签名: : 代数 (D.subalgebra R) A
-  定义体: inferInstanceAs Algebra (Algebra.adjoin _ _) A
-
-Depends on / 依赖: Algebra, Algebra.adjoin, adjoin
+/-
+**Algebra.Smooth.DescentAux.algebra** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.Smooth.De
+scentAux`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance algebra₁ : Algebra (D.subalgebra R) A :=
-inferInstanceAs Algebra (Algebra.adjoin _ _) A
+  inferInstanceAs <| Algebra (Algebra.adjoin _ _) A
 
 -- Note: `Set` has no computational content, but Lean still attempts to compile it.
 -- See https://github.com/leanprover/lean4/issues/14084.
-/--
-Instance `algebra₂` / 实例 `algebra₂`
-
-English:
-instance algebra₂
-  signature: : Algebra (D.subalgebra R) B
-  body: inferInstanceAs Algebra (Algebra.adjoin _ _) B
-
-中文:
-实例 algebra₂
-  签名: : 代数 (D.subalgebra R) B
-  定义体: inferInstanceAs Algebra (Algebra.adjoin _ _) B
-
-Depends on / 依赖: Algebra, Algebra.adjoin, adjoin
+/-
+**Algebra.Smooth.DescentAux.algebra** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.Smooth.De
+scentAux`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance algebra₂ : Algebra (D.subalgebra R) B :=
-inferInstanceAs Algebra (Algebra.adjoin _ _) B
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsScalarTower (D.subalgebra R) A B
-  body: inferInstanceAs IsScalarTower (Algebra.adjoin _ _) _ _
-
-中文:
-实例 :
-  签名: 标量塔 (D.subalgebra R) A B
-  定义体: inferInstanceAs IsScalarTower (Algebra.adjoin _ _) _ _
-
-Depends on / 依赖: Algebra, Algebra.adjoin, IsScalarTower, adjoin
+  inferInstanceAs <| Algebra (Algebra.adjoin _ _) B
+/-
+**Algebra.Smooth.DescentAux.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.Smooth.DescentAu
+x`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsScalarTower (D.subalgebra R) A B :=
-inferInstanceAs IsScalarTower (Algebra.adjoin _ _) _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FaithfulSMul (D.subalgebra R) A
-  body: inferInstanceAs FaithfulSMul (Algebra.adjoin _ _) _
-
-中文:
-实例 :
-  签名: 忠实标量乘法 (D.subalgebra R) A
-  定义体: inferInstanceAs FaithfulSMul (Algebra.adjoin _ _) _
-
-Depends on / 依赖: Algebra, Algebra.adjoin, FaithfulSMul, adjoin
+  inferInstanceAs <| IsScalarTower (Algebra.adjoin _ _) _ _
+/-
+**Algebra.Smooth.DescentAux.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.Smooth.DescentAu
+x`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : FaithfulSMul (D.subalgebra R) A := inferInstanceAs FaithfulSMul (Algebra.adjoin _ _) _
-
-/--
-lemma `fg_subalgebra` / 引理 `fg_subalgebra`
-
-English:
-lemma fg_subalgebra
-  given: [Finite D.vars] [Finite D.rels]
-  statement: (D.subalgebra R).FG
-  proof: by
-  refine Subalgebra.fg_def.mpr ⟨_, ?_, rfl⟩
-  refine .union ?_ (.union (.union ?_ ?_) ?_)
-  · exact Presentation.finite_coeffs
-  · refine Set.finite_iUnion fun i => Finset.finite_toSet _
-  · refine Set.finite_iUnion fun i => ?_
-    exact Set.Finite.biUnion (Finset.finite_toSet _) (fun i hi => Finset.finite_toSet _)
-  · refine Set.finite_iUnion fun i => ?_
-    exact Set.Finite.biUnion (Finset.finite_toSet _) (fun i hi => Finset.finite_toSet _)
-
-中文:
-引理 fg_subalgebra
-  条件: [有限 D.vars] [有限 D.rels]
-  结论: (D.subalgebra R).FG
-  证明: by
-  refine Subalgebra.fg_def.mpr ⟨_, ?_, rfl⟩
-  refine .union ?_ (.union (.union ?_ ?_) ?_)
-  · exact Presentation.finite_coeffs
-  · refine Set.finite_iUnion fun i => Finset.finite_toSet _
-  · refine Set.finite_iUnion fun i => ?_
-    exact Set.Finite.biUnion (Finset.finite_toSet _) (fun i hi => Finset.finite_toSet _)
-  · refine Set.finite_iUnion fun i => ?_
-    exact Set.Finite.biUnion (Finset.finite_toSet _) (fun i hi => Finset.finite_toSet _)
-
-Depends on / 依赖: Finite, Finset, Finset.finite_toSet, Presentation, Presentation.finite_coeffs, Set.Finite.biUnion, Set.finite_iUnion, Subalgebra, Subalgebra.fg_def.mpr, biUnion, fg_def, finite_coeffs, finite_iUnion, finite_toSet
+instance : FaithfulSMul (D.subalgebra R) A := inferInstanceAs <| FaithfulSMul (Algebra.adjoin _ _) _
+/-
+**Algebra.Smooth.DescentAux.fg_subalgebra** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Smo
+oth.DescentAux`。
+形式化陈述：fg_subalgebra [Finite D.vars] [Finite D.rels] : (D.subalgebra R).FG
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fg_subalgebra [Finite D.vars] [Finite D.rels] : (D.subalgebra R).FG := by
   refine Subalgebra.fg_def.mpr ⟨_, ?_, rfl⟩
   refine .union ?_ (.union (.union ?_ ?_) ?_)
   · exact Presentation.finite_coeffs
-  · refine Set.finite_iUnion fun i => Finset.finite_toSet _
-  · refine Set.finite_iUnion fun i => ?_
-    exact Set.Finite.biUnion (Finset.finite_toSet _) (fun i hi => Finset.finite_toSet _)
-  · refine Set.finite_iUnion fun i => ?_
-    exact Set.Finite.biUnion (Finset.finite_toSet _) (fun i hi => Finset.finite_toSet _)
+  · refine Set.finite_iUnion fun i ↦ Finset.finite_toSet _
+  · refine Set.finite_iUnion fun i ↦ ?_
+    exact Set.Finite.biUnion (Finset.finite_toSet _) (fun i hi ↦ Finset.finite_toSet _)
+  · refine Set.finite_iUnion fun i ↦ ?_
+    exact Set.Finite.biUnion (Finset.finite_toSet _) (fun i hi ↦ Finset.finite_toSet _)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `hasCoeffs` / 实例 `hasCoeffs`
-
-English:
-instance hasCoeffs
-  signature: : D.P.HasCoeffs (D.subalgebra R) where
-  body: by
-    #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-    (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
-    without the `rw`. It is not yet clear whether this is due to defeq abuse in Mathlib or a
-    problem in the new canonicalizer; a minimization would help. The original proof was:
-    `grind [subalgebra, Subalgebra.setRange_algebraMap, Algebra.subset_adjoin]` -/
-    rw [Subalgebra.setRange_algebraMap]
-    grind [subalgebra, Algebra.subset_adjoin]
-
-中文:
-实例 hasCoeffs
-  签名: : D.P.有余effs (D.subalgebra R) where
-  定义体: by
-    #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-    (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
-    without the `rw`. It is not yet clear whether this is due to defeq abuse in Mathlib or a
-    problem in the new canonicalizer; a minimization would help. The original proof was:
-    `grind [subalgebra, Subalgebra.setRange_algebraMap, Algebra.subset_adjoin]` -/
-    rw [Subalgebra.setRange_algebraMap]
-    grind [subalgebra, Algebra.subset_adjoin]
-
-Depends on / 依赖: Algebra, Algebra.subset_adjoin, Before, Mathlib, Subalgebra, Subalgebra.setRange_algebraMap, adaptation_note, canonicalizer, closed, directed, github, github.com, leanprover, minimization, normalizer, original, problem, replacing, setRange_algebraMap, subalgebra
+/-
+**Algebra.Smooth.DescentAux.hasCoeffs** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.Smooth.
+DescentAux`。
+形式化陈述：hasCoeffs : D.P.HasCoeffs (D.subalgebra R) where coeffs_subset_range
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasCoeffs : D.P.HasCoeffs (D.subalgebra R) where
   coeffs_subset_range := by
@@ -318,43 +170,17 @@ local notation "f₀" =>
     (Ideal.span <| .range <| D.P.relationOfHasCoeffs (D.subalgebra R))
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `coeffs_h_subset` / 引理 `coeffs_h_subset`
-
-English:
-lemma coeffs_h_subset
-  given: (i)
-  statement: ↑(D.h i).coeffs subseteq Set.range ⇑(algebraMap (D.subalgebra R) A)
-  proof: by
-  have : ((D.h i).coeffs : Set _) subseteq ⋃ i, ((D.h i).coeffs : Set A) :=
-    Set.subset_iUnion_of_subset i subset_rfl
-  #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
-  without the `rw`. It is not yet clear whether this is due to defeq abuse in Mathlib or a
-  problem in the new canonicalizer; a minimization would help. The original proof was:
-  `grind [subalgebra, Subalgebra.setRange_algebraMap, Algebra.subset_adjoin]` -/
-  rw [Subalgebra.setRange_algebraMap]
-  grind [subalgebra, Algebra.subset_adjoin]
-
-中文:
-引理 coeffs_h_subset
-  条件: (i)
-  结论: ↑(D.h i).coeffs subseteq 集合.range ⇑(algebraMap (D.subalgebra R) A)
-  证明: by
-  have : ((D.h i).coeffs : Set _) subseteq ⋃ i, ((D.h i).coeffs : Set A) :=
-    Set.subset_iUnion_of_subset i subset_rfl
-  #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
-  without the `rw`. It is not yet clear whether this is due to defeq abuse in Mathlib or a
-  problem in the new canonicalizer; a minimization would help. The original proof was:
-  `grind [subalgebra, Subalgebra.setRange_algebraMap, Algebra.subset_adjoin]` -/
-  rw [Subalgebra.setRange_algebraMap]
-  grind [subalgebra, Algebra.subset_adjoin]
-
-Depends on / 依赖: Before, Mathlib, Set.subset_iUnion_of_subset, Subalgebra, Subalgebra.setRange_a, adaptation_note, canonicalizer, closed, coeffs, directed, github, github.com, leanprover, minimization, normalizer, original, problem, replacing, setRange_a, subalgebra
+/-
+**Algebra.Smooth.DescentAux.coeffs_h_subset** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.S
+mooth.DescentAux`。
+形式化陈述：coeffs_h_subset (i) : ↑(D.h i).coeffs subseteq Set.range ⇑(algebraMap (D.s
+ubalgebra R) A)
+参数：i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coeffs_h_subset (i) : ↑(D.h i).coeffs subseteq Set.range ⇑(algebraMap (D.subalgebra R) A) := by
-  have : ((D.h i).coeffs : Set _) subseteq ⋃ i, ((D.h i).coeffs : Set A) :=
+lemma coeffs_h_subset (i) : ↑(D.h i).coeffs ⊆ Set.range ⇑(algebraMap (D.subalgebra R) A) := by
+  have : ((D.h i).coeffs : Set _) ⊆ ⋃ i, ((D.h i).coeffs : Set A) :=
     Set.subset_iUnion_of_subset i subset_rfl
   #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
   (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
@@ -365,48 +191,20 @@ lemma coeffs_h_subset (i) : ↑(D.h i).coeffs subseteq Set.range ⇑(algebraMap 
   grind [subalgebra, Algebra.subset_adjoin]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `coeffs_p_subset` / 引理 `coeffs_p_subset`
-
-English:
-lemma coeffs_p_subset
-  given: (i)
-  proof: by
-  intro p hp
-  have : (p.coeffs : Set A) subseteq ⋃ i, ⋃ x in (D.p i).coeffs, ↑x.coeffs :=
-    Set.subset_iUnion_of_subset i (Set.subset_iUnion₂_of_subset p hp subset_rfl)
-  #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
-  without the `rw`. It is not yet clear whether this is due to defeq abuse in Mathlib or a
-  problem in the new canonicalizer; a minimization would help. The original proof was:
-  `grind [MvPolynomial.mem_range_map_iff_coeffs_subset, subalgebra,
-    Subalgebra.setRange_algebraMap, Algebra.subset_adjoin]` -/
-  rw [MvPolynomial.mem_range_map_iff_coeffs_subset]; rw [Subalgebra.setRange_algebraMap]
-  grind [subalgebra, Algebra.subset_adjoin]
-
-中文:
-引理 coeffs_p_subset
-  条件: (i)
-  证明: by
-  intro p hp
-  have : (p.coeffs : Set A) subseteq ⋃ i, ⋃ x in (D.p i).coeffs, ↑x.coeffs :=
-    Set.subset_iUnion_of_subset i (Set.subset_iUnion₂_of_subset p hp subset_rfl)
-  #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
-  without the `rw`. It is not yet clear whether this is due to defeq abuse in Mathlib or a
-  problem in the new canonicalizer; a minimization would help. The original proof was:
-  `grind [MvPolynomial.mem_range_map_iff_coeffs_subset, subalgebra,
-    Subalgebra.setRange_algebraMap, Algebra.subset_adjoin]` -/
-  rw [MvPolynomial.mem_range_map_iff_coeffs_subset]; rw [Subalgebra.setRange_algebraMap]
-  grind [subalgebra, Algebra.subset_adjoin]
-
-Depends on / 依赖: Before, D.subalgebra, D.vars, Mathlib, Set.subset_iUnion, Set.subset_iUnion_of_subset, adaptation_note, algebraMap, canonicalizer, closed, coeffs, directed, github, github.com, leanprover, normalizer, p.coeffs, problem, replacing, subalgebra
+/-
+**Algebra.Smooth.DescentAux.coeffs_p_subset** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.S
+mooth.DescentAux`。
+形式化陈述：coeffs_p_subset (i) : ↑(D.p i).coeffs subseteq Set.range (MvPolynomial.map
+ (σ
+参数：i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coeffs_p_subset (i) :
-    ↑(D.p i).coeffs subseteq
+    ↑(D.p i).coeffs ⊆
       Set.range (MvPolynomial.map (σ := D.vars) (algebraMap (D.subalgebra R) A)) := by
   intro p hp
-  have : (p.coeffs : Set A) subseteq ⋃ i, ⋃ x in (D.p i).coeffs, ↑x.coeffs :=
+  have : (p.coeffs : Set A) ⊆ ⋃ i, ⋃ x ∈ (D.p i).coeffs, ↑x.coeffs :=
     Set.subset_iUnion_of_subset i (Set.subset_iUnion₂_of_subset p hp subset_rfl)
   #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
   (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
@@ -414,52 +212,24 @@ lemma coeffs_p_subset (i) :
   problem in the new canonicalizer; a minimization would help. The original proof was:
   `grind [MvPolynomial.mem_range_map_iff_coeffs_subset, subalgebra,
     Subalgebra.setRange_algebraMap, Algebra.subset_adjoin]` -/
-  rw [MvPolynomial.mem_range_map_iff_coeffs_subset]; rw [Subalgebra.setRange_algebraMap]
+  rw [MvPolynomial.mem_range_map_iff_coeffs_subset, Subalgebra.setRange_algebraMap]
   grind [subalgebra, Algebra.subset_adjoin]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `coeffs_q_subset` / 引理 `coeffs_q_subset`
-
-English:
-lemma coeffs_q_subset
-  given: (i)
-  proof: by
-  intro q hq
-  have : (q.coeffs : Set A) subseteq ⋃ i, ⋃ x in (D.q i).coeffs, ↑(coeffs x) :=
-    Set.subset_iUnion_of_subset i (Set.subset_iUnion₂_of_subset q hq subset_rfl)
-  #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
-  without the `rw`. It is not yet clear whether this is due to defeq abuse in Mathlib or a
-  problem in the new canonicalizer; a minimization would help. The original proof was:
-  `grind [MvPolynomial.mem_range_map_iff_coeffs_subset, subalgebra,
-    Subalgebra.setRange_algebraMap, Algebra.subset_adjoin]` -/
-  rw [MvPolynomial.mem_range_map_iff_coeffs_subset]; rw [Subalgebra.setRange_algebraMap]
-  grind [subalgebra, Algebra.subset_adjoin]
-
-中文:
-引理 coeffs_q_subset
-  条件: (i)
-  证明: by
-  intro q hq
-  have : (q.coeffs : Set A) subseteq ⋃ i, ⋃ x in (D.q i).coeffs, ↑(coeffs x) :=
-    Set.subset_iUnion_of_subset i (Set.subset_iUnion₂_of_subset q hq subset_rfl)
-  #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-  (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
-  without the `rw`. It is not yet clear whether this is due to defeq abuse in Mathlib or a
-  problem in the new canonicalizer; a minimization would help. The original proof was:
-  `grind [MvPolynomial.mem_range_map_iff_coeffs_subset, subalgebra,
-    Subalgebra.setRange_algebraMap, Algebra.subset_adjoin]` -/
-  rw [MvPolynomial.mem_range_map_iff_coeffs_subset]; rw [Subalgebra.setRange_algebraMap]
-  grind [subalgebra, Algebra.subset_adjoin]
-
-Depends on / 依赖: Before, D.subalgebra, D.vars, Mathlib, Set.subset_iUnion, Set.subset_iUnion_of_subset, adaptation_note, algebraMap, canonicalize, canonicalizer, closed, coeffs, directed, github, github.com, leanprover, normalizer, problem, q.coeffs, replacing
+/-
+**Algebra.Smooth.DescentAux.coeffs_q_subset** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.S
+mooth.DescentAux`。
+形式化陈述：coeffs_q_subset (i) : ↑(D.q i).coeffs subseteq Set.range (MvPolynomial.map
+ (σ
+参数：i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coeffs_q_subset (i) :
-    ↑(D.q i).coeffs subseteq
+    ↑(D.q i).coeffs ⊆
       Set.range (MvPolynomial.map (σ := D.vars) (algebraMap (D.subalgebra R) A)) := by
   intro q hq
-  have : (q.coeffs : Set A) subseteq ⋃ i, ⋃ x in (D.q i).coeffs, ↑(coeffs x) :=
+  have : (q.coeffs : Set A) ⊆ ⋃ i, ⋃ x ∈ (D.q i).coeffs, ↑(coeffs x) :=
     Set.subset_iUnion_of_subset i (Set.subset_iUnion₂_of_subset q hq subset_rfl)
   #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
   (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
@@ -467,107 +237,33 @@ lemma coeffs_q_subset (i) :
   problem in the new canonicalizer; a minimization would help. The original proof was:
   `grind [MvPolynomial.mem_range_map_iff_coeffs_subset, subalgebra,
     Subalgebra.setRange_algebraMap, Algebra.subset_adjoin]` -/
-  rw [MvPolynomial.mem_range_map_iff_coeffs_subset]; rw [Subalgebra.setRange_algebraMap]
+  rw [MvPolynomial.mem_range_map_iff_coeffs_subset, Subalgebra.setRange_algebraMap]
   grind [subalgebra, Algebra.subset_adjoin]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `exists_kerSquareLift_comp_eq_id` / 引理 `exists_kerSquareLift_comp_eq_id`
-
-English:
-lemma exists_kerSquareLift_comp_eq_id
-  proof: by
-  choose p hp using fun i => (D.h i).mem_range_map_iff_coeffs_subset.mpr (D.coeffs_h_subset R i)
-  refine ⟨?_, ?_⟩
-  · refine Ideal.Quotient.liftₐ _ ((Ideal.Quotient.mkₐ _ _).comp <| aeval p) ?_
-    simp_rw [← RingHom.mem_ker, ← SetLike.le_def, Ideal.span_le, Set.range_subset_iff]
-    intro i
-    simp only [← AlgHom.comap_ker, Ideal.coe_comap, Set.mem_preimage, SetLike.mem_coe]
-    rw [← RingHom.ker_coe_toRingHom]; rw [Ideal.Quotient.mkₐ_ker]; rw [← RingHom.ker_coe_toRingHom]; rw [Ideal.Quotient.mkₐ_ker]
-    have hinj : Function.Injective
-        (MvPolynomial.map (σ := D.vars) (algebraMap (D.subalgebra R) A)) :=
-      map_injective _ (FaithfulSMul.algebraMap_injective (D.subalgebra R) A)
-    rw [Ideal.mem_span_pow_iff_exists_isHomogeneous]
-    obtain ⟨q, hq⟩ := (D.p i).mem_range_map_iff_coeffs_subset.mpr (D.coeffs_p_subset R i)
-    refine ⟨q, .of_map hinj ?_, hinj ?_⟩
-    · rw [hq]
-      exact D.hphom i
-    · simp_rw [map_eval, Function.comp_def, Presentation.map_relationOfHasCoeffs,
-        hq, D.hp, MvPolynomial.map_aeval, hp]
-      simp [MvPolynomial.eval₂_map_comp_C, Presentation.map_relationOfHasCoeffs, aeval_def]
-  · have hf₀ : Function.Surjective f₀ := Ideal.Quotient.mk_surjective
-    rw [← AlgHom.cancel_right hf₀]
-    refine MvPolynomial.algHom_ext fun i => ?_
-    suffices h : exists p', p'.IsHomogeneous 1 ∧ (eval (D.P.relationOfHasCoeffs (D.subalgebra R))) p' =
-        p i - X i by
-      -- Reducible def-eq issues caused by `RingHom.ker f.toRingHom` discrepancies
-      -- Can be fixed after #25138.
-      apply (Ideal.Quotient.mk_eq_mk_iff_sub_mem _ _).mpr
-      simpa [Ideal.mem_span_iff_exists_isHomogeneous, hp]
-    have hinj : Function.Injective
-        (MvPolynomial.map (σ := D.vars) (algebraMap (D.subalgebra R) A)) :=
-      map_injective _ (FaithfulSMul.algebraMap_injective (D.subalgebra R) A)
-    obtain ⟨t, ht⟩ := (D.q i).mem_range_map_iff_coeffs_subset.mpr (D.coeffs_q_subset R i)
-    refine ⟨t, .of_map hinj ?_, hinj ?_⟩
-    · rw [ht]
-      exact D.hqhom i
-    · simp [MvPolynomial.map_eval, Function.comp_def,
-        Presentation.map_relationOfHasCoeffs, ht, hq, hp]
-
-中文:
-引理 存在_kerSquareLift_comp_eq_id
-  证明: by
-  choose p hp using fun i => (D.h i).mem_range_map_iff_coeffs_subset.mpr (D.coeffs_h_subset R i)
-  refine ⟨?_, ?_⟩
-  · refine Ideal.Quotient.liftₐ _ ((Ideal.Quotient.mkₐ _ _).comp <| aeval p) ?_
-    simp_rw [← RingHom.mem_ker, ← SetLike.le_def, Ideal.span_le, Set.range_subset_iff]
-    intro i
-    simp only [← AlgHom.comap_ker, Ideal.coe_comap, Set.mem_preimage, SetLike.mem_coe]
-    rw [← RingHom.ker_coe_toRingHom]; rw [Ideal.Quotient.mkₐ_ker]; rw [← RingHom.ker_coe_toRingHom]; rw [Ideal.Quotient.mkₐ_ker]
-    have hinj : Function.Injective
-        (MvPolynomial.map (σ := D.vars) (algebraMap (D.subalgebra R) A)) :=
-      map_injective _ (FaithfulSMul.algebraMap_injective (D.subalgebra R) A)
-    rw [Ideal.mem_span_pow_iff_exists_isHomogeneous]
-    obtain ⟨q, hq⟩ := (D.p i).mem_range_map_iff_coeffs_subset.mpr (D.coeffs_p_subset R i)
-    refine ⟨q, .of_map hinj ?_, hinj ?_⟩
-    · rw [hq]
-      exact D.hphom i
-    · simp_rw [map_eval, Function.comp_def, Presentation.map_relationOfHasCoeffs,
-        hq, D.hp, MvPolynomial.map_aeval, hp]
-      simp [MvPolynomial.eval₂_map_comp_C, Presentation.map_relationOfHasCoeffs, aeval_def]
-  · have hf₀ : Function.Surjective f₀ := Ideal.Quotient.mk_surjective
-    rw [← AlgHom.cancel_right hf₀]
-    refine MvPolynomial.algHom_ext fun i => ?_
-    suffices h : exists p', p'.IsHomogeneous 1 ∧ (eval (D.P.relationOfHasCoeffs (D.subalgebra R))) p' =
-        p i - X i by
-      -- Reducible def-eq issues caused by `RingHom.ker f.toRingHom` discrepancies
-      -- Can be fixed after #25138.
-      apply (Ideal.Quotient.mk_eq_mk_iff_sub_mem _ _).mpr
-      simpa [Ideal.mem_span_iff_exists_isHomogeneous, hp]
-    have hinj : Function.Injective
-        (MvPolynomial.map (σ := D.vars) (algebraMap (D.subalgebra R) A)) :=
-      map_injective _ (FaithfulSMul.algebraMap_injective (D.subalgebra R) A)
-    obtain ⟨t, ht⟩ := (D.q i).mem_range_map_iff_coeffs_subset.mpr (D.coeffs_q_subset R i)
-    refine ⟨t, .of_map hinj ?_, hinj ?_⟩
-    · rw [ht]
-      exact D.hqhom i
-    · simp [MvPolynomial.map_eval, Function.comp_def,
-        Presentation.map_relationOfHasCoeffs, ht, hq, hp]
-
-Depends on / 依赖: AlgHom, AlgHom.comap_ker, D.coeffs_h_subset, Ideal.Quotient.lift, Ideal.Quotient.mk, Ideal.coe_comap, Ideal.span_le, Quotient, RingHom, RingHom.ker_coe_toRingHom, RingHom.mem_ker, Set.mem_preimage, Set.range_subset_iff, SetLike, SetLike.le_def, SetLike.mem_coe, coe_comap, coeffs_h_subset, comap_ker, ker_coe_toRingHom
+/-
+**Algebra.Smooth.DescentAux.exists_kerSquareLift_comp_eq_id** 是 Mathlib 中的一个引理，位
+于命名空间 `Algebra.Smooth.DescentAux`。
+形式化陈述：exists_kerSquareLift_comp_eq_id : exists (σ₀ : D.P.ModelOfHasCoeffs (D.sub
+algebra R) ->ₐ[D.subalgebra R] MvPolynomial D.vars (D.subalgebra R) ⧸ (RingHom.k
+er f₀ ^ 2)), (AlgHom.kerSquareLift f₀).comp σ₀ = .id (D.subalgebra R) (Presentat
+ion.ModelOfHasCoeffs (D.subalgebra R))
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma exists_kerSquareLift_comp_eq_id :
-    exists (σ₀ : D.P.ModelOfHasCoeffs (D.subalgebra R) ->ₐ[D.subalgebra R]
+    ∃ (σ₀ : D.P.ModelOfHasCoeffs (D.subalgebra R) →ₐ[D.subalgebra R]
         MvPolynomial D.vars (D.subalgebra R) ⧸ (RingHom.ker f₀ ^ 2)),
       (AlgHom.kerSquareLift f₀).comp σ₀ =
         .id (D.subalgebra R) (Presentation.ModelOfHasCoeffs (D.subalgebra R)) := by
-  choose p hp using fun i => (D.h i).mem_range_map_iff_coeffs_subset.mpr (D.coeffs_h_subset R i)
+  choose p hp using fun i ↦ (D.h i).mem_range_map_iff_coeffs_subset.mpr (D.coeffs_h_subset R i)
   refine ⟨?_, ?_⟩
   · refine Ideal.Quotient.liftₐ _ ((Ideal.Quotient.mkₐ _ _).comp <| aeval p) ?_
     simp_rw [← RingHom.mem_ker, ← SetLike.le_def, Ideal.span_le, Set.range_subset_iff]
     intro i
     simp only [← AlgHom.comap_ker, Ideal.coe_comap, Set.mem_preimage, SetLike.mem_coe]
-    rw [← RingHom.ker_coe_toRingHom]; rw [Ideal.Quotient.mkₐ_ker]; rw [← RingHom.ker_coe_toRingHom]; rw [Ideal.Quotient.mkₐ_ker]
+    rw [← RingHom.ker_coe_toRingHom, Ideal.Quotient.mkₐ_ker,
+      ← RingHom.ker_coe_toRingHom, Ideal.Quotient.mkₐ_ker]
     have hinj : Function.Injective
         (MvPolynomial.map (σ := D.vars) (algebraMap (D.subalgebra R) A)) :=
       map_injective _ (FaithfulSMul.algebraMap_injective (D.subalgebra R) A)
@@ -581,8 +277,8 @@ lemma exists_kerSquareLift_comp_eq_id :
       simp [MvPolynomial.eval₂_map_comp_C, Presentation.map_relationOfHasCoeffs, aeval_def]
   · have hf₀ : Function.Surjective f₀ := Ideal.Quotient.mk_surjective
     rw [← AlgHom.cancel_right hf₀]
-    refine MvPolynomial.algHom_ext fun i => ?_
-    suffices h : exists p', p'.IsHomogeneous 1 ∧ (eval (D.P.relationOfHasCoeffs (D.subalgebra R))) p' =
+    refine MvPolynomial.algHom_ext fun i ↦ ?_
+    suffices h : ∃ p', p'.IsHomogeneous 1 ∧ (eval (D.P.relationOfHasCoeffs (D.subalgebra R))) p' =
         p i - X i by
       -- Reducible def-eq issues caused by `RingHom.ker f.toRingHom` discrepancies
       -- Can be fixed after #25138.
@@ -611,13 +307,13 @@ Let `A` be an `R`-algebra. If `B` is a smooth `A`-algebra, there exists an
 See `Algebra.Smooth.exists_finiteType` for a version in terms of `Function.Injective`.
 -/
 public theorem exists_subalgebra_fg [Smooth A B] :
-    exists (A₀ : Subalgebra R A) (B₀ : Type u) (_ : CommRing B₀) (_ : Algebra A₀ B₀),
-      A₀.FG ∧ Smooth A₀ B₀ ∧ Nonempty (B ≃ₐ[A] A otimes[A₀] B₀) := by
+    ∃ (A₀ : Subalgebra R A) (B₀ : Type u) (_ : CommRing B₀) (_ : Algebra A₀ B₀),
+      A₀.FG ∧ Smooth A₀ B₀ ∧ Nonempty (B ≃ₐ[A] A ⊗[A₀] B₀) := by
   let P := Presentation.ofFinitePresentation A B
-  let f : P.Ring ->ₐ[A] B := IsScalarTower.toAlgHom _ _ _
+  let f : P.Ring →ₐ[A] B := IsScalarTower.toAlgHom _ _ _
   have hkerf : RingHom.ker f = Ideal.span (.range P.relation) :=
     P.span_range_relation_eq_ker.symm
-  obtain ⟨(σ : B ->ₐ[A] MvPolynomial _ A ⧸ RingHom.ker f ^ 2), hsig⟩ :=
+  obtain ⟨(σ : B →ₐ[A] MvPolynomial _ A ⧸ RingHom.ker f ^ 2), hsig⟩ :=
     (FormallySmooth.iff_split_surjection f P.algebraMap_surjective).mp inferInstance
   have (i : _) := Ideal.Quotient.mk_surjective (σ <| P.val i)
   choose h hh using this
@@ -637,7 +333,7 @@ public theorem exists_subalgebra_fg [Smooth A B] :
     -- Can be fixed after #25138.
     exact hh i ▸ congr($hsig (P.val i))
   have (i : Fin (Presentation.ofFinitePresentationVars A B)) :
-      h i - X i in Ideal.span (.range P.relation) := by
+      h i - X i ∈ Ideal.span (.range P.relation) := by
     simpa [P.span_range_relation_eq_ker, sub_eq_zero, f] using hsig i
   simp_rw [Ideal.mem_span_iff_exists_isHomogeneous] at this
   choose q hqhom hq using this
@@ -652,8 +348,8 @@ public theorem exists_subalgebra_fg [Smooth A B] :
 
 @[deprecated exists_subalgebra_fg (since := "2026-01-07")]
 public theorem exists_subalgebra_finiteType [Smooth A B] :
-    exists (A₀ : Subalgebra R A) (B₀ : Type u) (_ : CommRing B₀) (_ : Algebra A₀ B₀),
-      FiniteType R A₀ ∧ Smooth A₀ B₀ ∧ Nonempty (B ≃ₐ[A] A otimes[A₀] B₀) := by
+    ∃ (A₀ : Subalgebra R A) (B₀ : Type u) (_ : CommRing B₀) (_ : Algebra A₀ B₀),
+      FiniteType R A₀ ∧ Smooth A₀ B₀ ∧ Nonempty (B ≃ₐ[A] A ⊗[A₀] B₀) := by
   obtain ⟨A₀, B₀, _, _, h0, h1, h2⟩ := exists_subalgebra_fg R A B
   exact ⟨A₀, B₀, inferInstance, inferInstance, (Subalgebra.fg_iff_finiteType A₀).mp h0, h1, h2⟩
 
@@ -665,18 +361,18 @@ See `Algebra.Smooth.exists_subalgebra_fg` for a version in terms of `Subalgebra`
 -/
 @[stacks 00TP]
 public theorem exists_finiteType [Smooth A B] :
-    exists (A₀ : Type u) (B₀ : Type u) (_ : CommRing A₀) (_ : CommRing B₀)
+    ∃ (A₀ : Type u) (B₀ : Type u) (_ : CommRing A₀) (_ : CommRing B₀)
       (_ : Algebra R A₀) (_ : Algebra A₀ A) (_ : Algebra A₀ B₀),
       Function.Injective (algebraMap A₀ A) ∧ FiniteType R A₀ ∧ Smooth A₀ B₀ ∧
-      Nonempty (B ≃ₐ[A] A otimes[A₀] B₀) := by
+      Nonempty (B ≃ₐ[A] A ⊗[A₀] B₀) := by
   obtain ⟨A₀, B₀, _, _, hA₀, _, _⟩ := exists_subalgebra_fg R A B
   use A₀, B₀, inferInstance, inferInstance, inferInstance, inferInstance, inferInstance,
     Subtype.val_injective, ⟨A₀.fg_top.mpr hA₀⟩, inferInstance
 
 public theorem _root_.Algebra.IsStandardSmoothOfRelativeDimension.exists_subalgebra_fg
-    (n : Nat) [IsStandardSmoothOfRelativeDimension n A B] :
-    exists (A₀ : Subalgebra R A) (B₀ : Type u) (_ : CommRing B₀) (_ : Algebra A₀ B₀),
-      A₀.FG ∧ IsStandardSmoothOfRelativeDimension n A₀ B₀ ∧ Nonempty (B ≃ₐ[A] A otimes[A₀] B₀) := by
+    (n : ℕ) [IsStandardSmoothOfRelativeDimension n A B] :
+    ∃ (A₀ : Subalgebra R A) (B₀ : Type u) (_ : CommRing B₀) (_ : Algebra A₀ B₀),
+      A₀.FG ∧ IsStandardSmoothOfRelativeDimension n A₀ B₀ ∧ Nonempty (B ≃ₐ[A] A ⊗[A₀] B₀) := by
   obtain ⟨ι, σ, _, _, P, hP⟩ := IsStandardSmoothOfRelativeDimension.out (n := n) (R := A) (S := B)
   let A₀ := Algebra.adjoin R P.coeffs
   have : P.HasCoeffs A₀ := ⟨by simp [A₀]⟩
@@ -691,9 +387,10 @@ Let `A` be an `R`-algebra. If `B` is an etale `A`-algebra, there exists an
 -/
 @[stacks 00U2 "(8)"]
 public theorem _root_.Algebra.Etale.exists_subalgebra_fg [Etale A B] :
-    exists (A₀ : Subalgebra R A) (B₀ : Type u) (_ : CommRing B₀) (_ : Algebra A₀ B₀),
-      A₀.FG ∧ Etale A₀ B₀ ∧ Nonempty (B ≃ₐ[A] A otimes[A₀] B₀) := by
+    ∃ (A₀ : Subalgebra R A) (B₀ : Type u) (_ : CommRing B₀) (_ : Algebra A₀ B₀),
+      A₀.FG ∧ Etale A₀ B₀ ∧ Nonempty (B ≃ₐ[A] A ⊗[A₀] B₀) := by
   simp only [Etale.iff_isStandardSmoothOfRelativeDimension_zero] at *
   exact IsStandardSmoothOfRelativeDimension.exists_subalgebra_fg ..
 
 end Algebra.Smooth
+

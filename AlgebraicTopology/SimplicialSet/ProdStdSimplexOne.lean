@@ -27,113 +27,45 @@ namespace SSet
 
 namespace prodStdSimplex
 
-variable {p : Nat}
+variable {p : ℕ}
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 open stdSimplex in
-/--
-Definition of `nonDegenerateEquiv₁` / `nonDegenerateEquiv₁` 的定义
+/-- This is an enumeration of the `p + 1` nondegenerate dimension-`(p + 1)`
+simplices of `Δ[p] ⊗ Δ[1]`. It sends `i : Fin (p + 1)` to the nondegenerate
+simplex consisting of the vertices
+`(0, 0) ≤ (1,0) ≤ ... ≤ (i, 0) ≤ (i, 1) ≤ ... ≤ (p, 1)`. -/
+/-
+**SSet.prodStdSimplex.nonDegenerateEquiv** 是 Mathlib 中的一个定义，位于命名空间 `SSet.prodStd
+Simplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nonDegenerateEquiv₁
-  signature: :
-  body: Equiv.ofBijective
-    (fun i => ⟨⟨stdSimplex.objEquiv.{u}.symm (SimplexCategory.σ i),
-      objMk₁ i.succ.castSucc⟩, by
-      rw [nonDegenerate_max_dim_iff _ rfl]
-      ext j
-      dsimp
-      by_cases hj : j <= i.castSucc
-      · rw [objMk₁_of_castSucc_lt _ _ (by simpa),
-          Fin.coe_ofNat_eq_mod, Nat.zero_mod, add_zero]
-        change (i.predAbove j : Nat) = _
-        simp [Fin.predAbove_of_le_castSucc _ _ hj]
-      · simp only [not_le] at hj
-        rw [objMk₁_of_le_castSucc _ _ (by simpa)]; rw [objEquiv_symm_apply]
-        change (i.predAbove j : Nat) + 1 = _
-        rw [Fin.predAbove_of_castSucc_lt _ _ hj]; rw [Fin.val_pred]
-        lia⟩) (by
-    refine ⟨fun _ _ h => ?_, fun ⟨⟨s₁, s₂⟩, hs⟩ => ?_⟩
-    · simpa using stdSimplex.objMk₁_injective (congr_arg (Prod.snd ∘ Subtype.val) h)
-    · rw [nonDegenerate_max_dim_iff _ rfl] at hs
-      obtain ⟨i, rfl⟩ := stdSimplex.objMk₁_surjective s₂
-      obtain ⟨i, rfl⟩ := Fin.eq_succ_of_ne_zero (i := i) (by
-        rintro rfl
-        have := DFunLike.congr_fun hs 0
-        simp only [orderHomOfSimplex_coe,
-          stdSimplex.objMk₁_of_le_castSucc (0 : Fin (p + 3)) 0 (by simp)] at this
-        simp at this)
-      obtain ⟨i, rfl⟩ | rfl := i.eq_castSucc_or_eq_last
-      · exact ⟨i, nonDegenerate_ext₂ rfl rfl⟩
-      · have := DFunLike.congr_fun hs (Fin.last _)
-        simp only [Fin.succ_last, orderHomOfSimplex_coe,
-          OrderHom.id_coe, id_eq, Fin.ext_iff, Fin.val_last,
-          stdSimplex.objMk₁_of_castSucc_lt (Fin.last (p + 2))
-            (Fin.last (p + 1)) (by simp),
-          Fin.coe_ofNat_eq_mod, Nat.zero_mod, add_zero] at this
-        lia)
-
-中文:
-定义 nonDegenerateEquiv₁
-  签名: :
-  定义体: Equiv.ofBijective
-    (fun i => ⟨⟨stdSimplex.objEquiv.{u}.symm (SimplexCategory.σ i),
-      objMk₁ i.succ.castSucc⟩, by
-      rw [nonDegenerate_max_dim_iff _ rfl]
-      ext j
-      dsimp
-      by_cases hj : j <= i.castSucc
-      · rw [objMk₁_of_castSucc_lt _ _ (by simpa),
-          Fin.coe_ofNat_eq_mod, Nat.zero_mod, add_zero]
-        change (i.predAbove j : Nat) = _
-        simp [Fin.predAbove_of_le_castSucc _ _ hj]
-      · simp only [not_le] at hj
-        rw [objMk₁_of_le_castSucc _ _ (by simpa)]; rw [objEquiv_symm_apply]
-        change (i.predAbove j : Nat) + 1 = _
-        rw [Fin.predAbove_of_castSucc_lt _ _ hj]; rw [Fin.val_pred]
-        lia⟩) (by
-    refine ⟨fun _ _ h => ?_, fun ⟨⟨s₁, s₂⟩, hs⟩ => ?_⟩
-    · simpa using stdSimplex.objMk₁_injective (congr_arg (Prod.snd ∘ Subtype.val) h)
-    · rw [nonDegenerate_max_dim_iff _ rfl] at hs
-      obtain ⟨i, rfl⟩ := stdSimplex.objMk₁_surjective s₂
-      obtain ⟨i, rfl⟩ := Fin.eq_succ_of_ne_zero (i := i) (by
-        rintro rfl
-        have := DFunLike.congr_fun hs 0
-        simp only [orderHomOfSimplex_coe,
-          stdSimplex.objMk₁_of_le_castSucc (0 : Fin (p + 3)) 0 (by simp)] at this
-        simp at this)
-      obtain ⟨i, rfl⟩ | rfl := i.eq_castSucc_or_eq_last
-      · exact ⟨i, nonDegenerate_ext₂ rfl rfl⟩
-      · have := DFunLike.congr_fun hs (Fin.last _)
-        simp only [Fin.succ_last, orderHomOfSimplex_coe,
-          OrderHom.id_coe, id_eq, Fin.ext_iff, Fin.val_last,
-          stdSimplex.objMk₁_of_castSucc_lt (Fin.last (p + 2))
-            (Fin.last (p + 1)) (by simp),
-          Fin.coe_ofNat_eq_mod, Nat.zero_mod, add_zero] at this
-        lia)
-
-Depends on / 依赖: Equiv.ofBijective, Fin.coe_ofNat_eq_mod, Fin.predA, Fin.predAbove_of_le_castSucc, Nat.zero_mod, SimplexCategory, add_zero, castSucc, coe_ofNat_eq_mod, i.castSucc, i.predAbove, i.succ.castSucc, nonDegenerate_max_dim_iff, not_le, objEquiv, objEquiv_symm_apply, ofBijective, predAbove, predAbove_of_le_castSucc, stdSimplex
+--- 原说明 ---
+This is an enumeration of the `p + 1` nondegenerate dimension-`(p + 1)`
+simplices of `Δ[p] ⊗ Δ[1]`. It sends `i : Fin (p + 1)` to the nondegenerate
+simplex consisting of the vertices
+`(0, 0) ≤ (1,0) ≤ ... ≤ (i, 0) ≤ (i, 1) ≤ ... ≤ (p, 1)`.
 -/
 noncomputable def nonDegenerateEquiv₁ :
-    Fin (p + 1) ≃ (Δ[p] otimes Δ[1] : SSet.{u}).nonDegenerate (p + 1) :=
+    Fin (p + 1) ≃ (Δ[p] ⊗ Δ[1] : SSet.{u}).nonDegenerate (p + 1) :=
   Equiv.ofBijective
-    (fun i => ⟨⟨stdSimplex.objEquiv.{u}.symm (SimplexCategory.σ i),
+    (fun i ↦ ⟨⟨stdSimplex.objEquiv.{u}.symm (SimplexCategory.σ i),
       objMk₁ i.succ.castSucc⟩, by
       rw [nonDegenerate_max_dim_iff _ rfl]
       ext j
       dsimp
-      by_cases hj : j <= i.castSucc
+      by_cases hj : j ≤ i.castSucc
       · rw [objMk₁_of_castSucc_lt _ _ (by simpa),
           Fin.coe_ofNat_eq_mod, Nat.zero_mod, add_zero]
-        change (i.predAbove j : Nat) = _
+        change (i.predAbove j : ℕ) = _
         simp [Fin.predAbove_of_le_castSucc _ _ hj]
       · simp only [not_le] at hj
-        rw [objMk₁_of_le_castSucc _ _ (by simpa)]; rw [objEquiv_symm_apply]
-        change (i.predAbove j : Nat) + 1 = _
-        rw [Fin.predAbove_of_castSucc_lt _ _ hj]; rw [Fin.val_pred]
+        rw [objMk₁_of_le_castSucc _ _ (by simpa), objEquiv_symm_apply]
+        change (i.predAbove j : ℕ) + 1 = _
+        rw [Fin.predAbove_of_castSucc_lt _ _ hj, Fin.val_pred]
         lia⟩) (by
-    refine ⟨fun _ _ h => ?_, fun ⟨⟨s₁, s₂⟩, hs⟩ => ?_⟩
+    refine ⟨fun _ _ h ↦ ?_, fun ⟨⟨s₁, s₂⟩, hs⟩ ↦ ?_⟩
     · simpa using stdSimplex.objMk₁_injective (congr_arg (Prod.snd ∘ Subtype.val) h)
     · rw [nonDegenerate_max_dim_iff _ rfl] at hs
       obtain ⟨i, rfl⟩ := stdSimplex.objMk₁_surjective s₂
@@ -155,20 +87,10 @@ noncomputable def nonDegenerateEquiv₁ :
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `nonDegenerateEquiv₁_fst` / 引理 `nonDegenerateEquiv₁_fst`
-
-English:
-lemma nonDegenerateEquiv₁_fst
-  given: (i : Fin (p + 1))
-  proof: rfl
-
-中文:
-引理 nonDegenerateEquiv₁_fst
-  条件: (i : 有限集 (p + 1))
-  证明: rfl
-
-Depends on / 依赖: SimplexCategory
+/-
+**SSet.prodStdSimplex.nonDegenerateEquiv** 是 Mathlib 中的一个引理，位于命名空间 `SSet.prodStd
+Simplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma nonDegenerateEquiv₁_fst (i : Fin (p + 1)) :
     dsimp% (nonDegenerateEquiv₁ i).1.1 =
@@ -176,18 +98,10 @@ lemma nonDegenerateEquiv₁_fst (i : Fin (p + 1)) :
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `nonDegenerateEquiv₁_snd` / 引理 `nonDegenerateEquiv₁_snd`
-
-English:
-lemma nonDegenerateEquiv₁_snd
-  given: (i : Fin (p + 1))
-  proof: rfl
-
-中文:
-引理 nonDegenerateEquiv₁_snd
-  条件: (i : 有限集 (p + 1))
-  证明: rfl
+/-
+**SSet.prodStdSimplex.nonDegenerateEquiv** 是 Mathlib 中的一个引理，位于命名空间 `SSet.prodStd
+Simplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma nonDegenerateEquiv₁_snd (i : Fin (p + 1)) :
     dsimp% (nonDegenerateEquiv₁ i).1.2 =
@@ -196,3 +110,4 @@ lemma nonDegenerateEquiv₁_snd (i : Fin (p + 1)) :
 end prodStdSimplex
 
 end SSet
+

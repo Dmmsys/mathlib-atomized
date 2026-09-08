@@ -37,30 +37,29 @@ open EquivLike
 
 /-! ### Non-unital star ring homomorphisms -/
 
-/--
-Definition of `NonUnitalStarRingHom` / `NonUnitalStarRingHom` 的定义
+/-- A *non-unital ⋆-ring homomorphism* is a non-unital ring homomorphism between non-unital
+non-associative semirings `A` and `B` equipped with a `star` operation, and this homomorphism is
+also `star`-preserving. -/
+/-
+**NonUnitalStarRingHom** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(A : Type u_1) →   (B : Type u_2) →     [NonUnitalNonAssocSemiring A] → [S
+tar A] → [NonUnitalNonAssocSemiring B] → [Star B] → Type (max u_1 u_2)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure NonUnitalStarRingHom
-  parameters: (A B : Type*) [NonUnitalNonAssocSemiring A]
-  extends: A ->ₙ+* B
-  axioms and operations (1):
-    - map_star' : forall a : A, toFun (star a) = star (toFun a)
-
-中文:
-结构 非幺对合环态射
-  参数: (A B : 类型) [非幺非结合半环 A]
-  继承: A ->ₙ+* B
-  公理与运算 (1 个):
-    - map_star' : 对任意 a : A, toFun (star a) = star (toFun a)
+--- 原说明 ---
+A *non-unital ⋆-ring homomorphism* is a non-unital ring homomorphism between non
+-unital
+non-associative semirings `A` and `B` equipped with a `star` operation, and this
+ homomorphism is
+also `star`-preserving.
 -/
 structure NonUnitalStarRingHom (A B : Type*) [NonUnitalNonAssocSemiring A]
-    [Star A] [NonUnitalNonAssocSemiring B] [Star B] extends A ->ₙ+* B where
+    [Star A] [NonUnitalNonAssocSemiring B] [Star B] extends A →ₙ+* B where
   /-- By definition, a non-unital ⋆-ring homomorphism preserves the `star` operation. -/
-  map_star' : forall a : A, toFun (star a) = star (toFun a)
+  map_star' : ∀ a : A, toFun (star a) = star (toFun a)
 
 /-- `α →⋆ₙ+* β` denotes the type of non-unital ring homomorphisms from `α` to `β`. -/
-infixr:25 " ->⋆ₙ+* " => NonUnitalStarRingHom
+infixr:25 " →⋆ₙ+* " => NonUnitalStarRingHom
 
 /-- Reinterpret a non-unital star ring homomorphism as a non-unital ring homomorphism
 by forgetting the interaction with the star operation.
@@ -69,20 +68,21 @@ Users should not make use of this, but instead utilize the coercion obtained thr
 the `NonUnitalRingHomClass` instance. -/
 add_decl_doc NonUnitalStarRingHom.toNonUnitalRingHom
 
-/--
-Definition of `NonUnitalStarRingHomClass` / `NonUnitalStarRingHomClass` 的定义
+/-- `NonUnitalStarRingHomClass F A B` states that `F` is a type of non-unital ⋆-ring homomorphisms.
+You should also extend this typeclass when you extend `NonUnitalStarRingHom`. -/
+/-
+**NonUnitalStarRingHomClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_1) →   (A : outParam (Type u_2)) →     (B : outParam (Type u_3
+)) →       [inst : NonUnitalNonAssocSemiring A] →         [Star A] →           [
+inst_2 : NonUnitalNonAssocSemiring B] →             [Star B] → [inst_4 : FunLike
+ F A B] → [NonUnitalRingHomClass F A B] → Prop
+参数：Type u_2；Type u_3。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class NonUnitalStarRingHomClass
-  parameters: (F : Type*) (A B : outParam Type*)
-  extends: StarHomClass F A B
-  (no additional axioms)
-
-中文:
-类 非幺对合环态射类
-  参数: (F : 类型) (A B : outParam 类型)
-  继承: 对合态射类 F A B
-  (无附加公理)
+--- 原说明 ---
+`NonUnitalStarRingHomClass F A B` states that `F` is a type of non-unital ⋆-ring
+ homomorphisms.
+You should also extend this typeclass when you extend `NonUnitalStarRingHom`.
 -/
 class NonUnitalStarRingHomClass (F : Type*) (A B : outParam Type*)
     [NonUnitalNonAssocSemiring A] [Star A] [NonUnitalNonAssocSemiring B] [Star B]
@@ -98,43 +98,30 @@ variable [FunLike F A B] [NonUnitalRingHomClass F A B]
 /-- Turn an element of a type `F` satisfying `NonUnitalStarRingHomClass F A B` into an actual
 `NonUnitalStarRingHom`. This is declared as the default coercion from `F` to `A →⋆ₙ+ B`. -/
 @[coe]
-/--
-Definition of `toNonUnitalStarRingHom` / `toNonUnitalStarRingHom` 的定义
+/-
+**NonUnitalStarRingHomClass.toNonUnitalStarRingHom** 是 Mathlib 中的一个定义，位于命名空间 `No
+nUnitalStarRingHomClass`。
+形式化陈述：toNonUnitalStarRingHom [NonUnitalStarRingHomClass F A B] (f : F) : A ->⋆ₙ+
+* B
+参数：f : F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toNonUnitalStarRingHom
-  signature: [NonUnitalStarRingHomClass F A B] (f : F)
-  body: { (f : A ->ₙ+* B) with
-    map_star' := map_star f }
-
-中文:
-定义 toNonUnitalStarRingHom
-  签名: [非幺对合环态射类 F A B] (f : F)
-  定义体: { (f : A ->ₙ+* B) with
-    map_star' := map_star f }
-
-Depends on / 依赖: map_star
+--- 原说明 ---
+Turn an element of a type `F` satisfying `NonUnitalStarRingHomClass F A B` into 
+an actual
+`NonUnitalStarRingHom`. This is declared as the default coercion from `F` to `A 
+→⋆ₙ+ B`.
 -/
-def toNonUnitalStarRingHom [NonUnitalStarRingHomClass F A B] (f : F) : A ->⋆ₙ+* B :=
-  { (f : A ->ₙ+* B) with
+def toNonUnitalStarRingHom [NonUnitalStarRingHomClass F A B] (f : F) : A →⋆ₙ+* B :=
+  { (f : A →ₙ+* B) with
     map_star' := map_star f }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalStarRingHomClass
-  signature: F A B] : CoeHead F (A ->⋆ₙ+* B)
-  body: ⟨toNonUnitalStarRingHom⟩
-
-中文:
-实例 [非幺对合环态射类
-  签名: F A B] : CoeHead F (A ->⋆ₙ+* B)
-  定义体: ⟨toNonUnitalStarRingHom⟩
-
-Depends on / 依赖: toNonUnitalStarRingHom
+/-
+**NonUnitalStarRingHomClass.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalStarRingHomClas
+s`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [NonUnitalStarRingHomClass F A B] : CoeHead F (A ->⋆ₙ+* B) :=
+instance [NonUnitalStarRingHomClass F A B] : CoeHead F (A →⋆ₙ+* B) :=
   ⟨toNonUnitalStarRingHom⟩
 
 end NonUnitalStarRingHomClass
@@ -149,186 +136,99 @@ variable [NonUnitalNonAssocSemiring B] [Star B]
 variable [NonUnitalNonAssocSemiring C] [Star C]
 variable [NonUnitalNonAssocSemiring D] [Star D]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (A ->⋆ₙ+* B) A B
-  body: f.toFun
-  coe_injective := by rintro ⟨⟨⟨f, _⟩, _⟩, _⟩ ⟨⟨⟨g, _⟩, _⟩, _⟩ h; congr
-
-中文:
-实例 :
-  签名: 函数状 (A ->⋆ₙ+* B) A B
-  定义体: f.toFun
-  coe_injective := by rintro ⟨⟨⟨f, _⟩, _⟩, _⟩ ⟨⟨⟨g, _⟩, _⟩, _⟩ h; congr
-
-Depends on / 依赖: f.toFun
+/-
+**NonUnitalStarRingHom.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalStarRingHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : FunLike (A ->⋆ₙ+* B) A B where
+instance : FunLike (A →⋆ₙ+* B) A B where
   coe f := f.toFun
   coe_injective := by rintro ⟨⟨⟨f, _⟩, _⟩, _⟩ ⟨⟨⟨g, _⟩, _⟩, _⟩ h; congr
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NonUnitalRingHomClass (A ->⋆ₙ+* B) A B
-  body: f.map_mul'
-  map_add f := f.map_add'
-  map_zero f := f.map_zero'
-
-中文:
-实例 :
-  签名: 非幺环态射类 (A ->⋆ₙ+* B) A B
-  定义体: f.map_mul'
-  map_add f := f.map_add'
-  map_zero f := f.map_zero'
-
-Depends on / 依赖: f.map_mul, map_mul
+/-
+**NonUnitalStarRingHom.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalStarRingHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : NonUnitalRingHomClass (A ->⋆ₙ+* B) A B where
+instance : NonUnitalRingHomClass (A →⋆ₙ+* B) A B where
   map_mul f := f.map_mul'
   map_add f := f.map_add'
   map_zero f := f.map_zero'
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NonUnitalStarRingHomClass (A ->⋆ₙ+* B) A B
-  body: f.map_star'
-
-中文:
-实例 :
-  签名: 非幺对合环态射类 (A ->⋆ₙ+* B) A B
-  定义体: f.map_star'
-
-Depends on / 依赖: f.map_star, map_star
+/-
+**NonUnitalStarRingHom.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalStarRingHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : NonUnitalStarRingHomClass (A ->⋆ₙ+* B) A B where
+instance : NonUnitalStarRingHomClass (A →⋆ₙ+* B) A B where
   map_star f := f.map_star'
 
-/--
-Definition of `Simps.apply` / `Simps.apply` 的定义
+/-- See Note [custom simps projection] -/
+/-
+**NonUnitalStarRingHom.Simps.apply** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalStarRingH
+om.Simps`。
+形式化陈述：{A : Type u_1} →   {B : Type u_2} →     [inst : NonUnitalNonAssocSemiring 
+A] →       [inst_1 : Star A] → [inst_2 : NonUnitalNonAssocSemiring B] → [inst_3 
+: Star B] → (A →⋆ₙ+* B) → A → B
+参数：A →⋆ₙ+* B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.apply
-  signature: (f : A ->⋆ₙ+* B)
-  body: f
-
-initialize_simps_projections NonUnitalStarRingHom (toFun -> apply)
-
-@[simp]
-
-中文:
-定义 Simps.apply
-  签名: (f : A ->⋆ₙ+* B)
-  定义体: f
-
-initialize_simps_projections NonUnitalStarRingHom (toFun -> apply)
-
-@[simp]
+--- 原说明 ---
+See Note [custom simps projection]
 -/
-def Simps.apply (f : A ->⋆ₙ+* B) : A -> B := f
+def Simps.apply (f : A →⋆ₙ+* B) : A → B := f
 
-initialize_simps_projections NonUnitalStarRingHom (toFun -> apply)
-
-@[simp]
-/--
-theorem `coe_coe` / 定理 `coe_coe`
-
-English:
-theorem coe_coe
-  statement: {F : Type*} [FunLike F A B] [NonUnitalRingHomClass F A B]
-  proof: rfl
+initialize_simps_projections NonUnitalStarRingHom (toFun → apply)
 
 @[simp]
-
-中文:
-定理 coe_coe
-  结论: {F : 类型} [函数状 F A B] [非幺环态射类 F A B]
-  证明: rfl
-
-@[simp]
+/-
+**NonUnitalStarRingHom.coe_coe** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalStarRingHom`。
+形式化陈述：∀ {A : Type u_1} {B : Type u_2} [inst : NonUnitalNonAssocSemiring A] [inst
+_1 : Star A]   [inst_2 : NonUnitalNonAssocSemiring B] [inst_3 : Star B] {F : Typ
+e u_5} [inst_4 : FunLike F A B]   [inst_5 : NonUnitalRingHomClass F A B] [inst_6
+ : NonUnitalStarRingHomClass F A B] (f : F), ⇑↑f = ⇑f
+参数：f : F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem coe_coe {F : Type*} [FunLike F A B] [NonUnitalRingHomClass F A B]
-    [NonUnitalStarRingHomClass F A B] (f : F) : ⇑(f : A ->⋆ₙ+* B) = f :=
+    [NonUnitalStarRingHomClass F A B] (f : F) : ⇑(f : A →⋆ₙ+* B) = f :=
   rfl
 
 @[simp]
-/--
-theorem `coe_toNonUnitalRingHom` / 定理 `coe_toNonUnitalRingHom`
-
-English:
-theorem coe_toNonUnitalRingHom
-  given: (f : A ->⋆ₙ+* B)
-  statement: ⇑f.toNonUnitalRingHom = f
-  proof: rfl
-
-@[ext]
-
-中文:
-定理 coe_toNonUnitalRingHom
-  条件: (f : A ->⋆ₙ+* B)
-  结论: ⇑f.toNonUnitalRingHom = f
-  证明: rfl
-
-@[ext]
+/-
+**NonUnitalStarRingHom.coe_toNonUnitalRingHom** 是 Mathlib 中的一个定理，位于命名空间 `NonUnit
+alStarRingHom`。
+形式化陈述：coe_toNonUnitalRingHom (f : A ->⋆ₙ+* B) : ⇑f.toNonUnitalRingHom = f
+参数：f : A ->⋆ₙ+* B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_toNonUnitalRingHom (f : A ->⋆ₙ+* B) : ⇑f.toNonUnitalRingHom = f :=
+theorem coe_toNonUnitalRingHom (f : A →⋆ₙ+* B) : ⇑f.toNonUnitalRingHom = f :=
   rfl
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {f g : A ->⋆ₙ+* B} (h : forall x, f x = g x)
-  statement: f = g
-  proof: DFunLike.ext _ _ h
-
-中文:
-定理 ext
-  条件: {f g : A ->⋆ₙ+* B} (h : 对任意 x, f x = g x)
-  结论: f = g
-  证明: DFunLike.ext _ _ h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**NonUnitalStarRingHom.ext** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalStarRingHom`。
+形式化陈述：ext {f g : A ->⋆ₙ+* B} (h : forall x, f x = g x) : f = g
+参数：h : forall x, f x = g x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext {f g : A ->⋆ₙ+* B} (h : forall x, f x = g x) : f = g :=
+theorem ext {f g : A →⋆ₙ+* B} (h : ∀ x, f x = g x) : f = g :=
   DFunLike.ext _ _ h
 
-/--
-Definition of `copy` / `copy` 的定义
+/-- Copy of a `NonUnitalStarRingHom` with a new `toFun` equal to the old one. Useful
+to fix definitional equalities. -/
+/-
+**NonUnitalStarRingHom.copy** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalStarRingHom`。
+形式化陈述：{A : Type u_1} →   {B : Type u_2} →     [inst : NonUnitalNonAssocSemiring 
+A] →       [inst_1 : Star A] →         [inst_2 : NonUnitalNonAssocSemiring B] → 
+          [inst_3 : Star B] → (f : A →⋆ₙ+* B) → (f' : A → B) → f' = ⇑f → A →⋆ₙ+*
+ B
+参数：f : A →⋆ₙ+* B；f' : A → B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition copy
-  signature: (f : A ->⋆ₙ+* B) (f' : A -> B) (h : f' = f)
-  body: f'
-  map_zero' := h.symm ▸ map_zero f
-  map_add' := h.symm ▸ map_add f
-  map_mul' := h.symm ▸ map_mul f
-  map_star' := h.symm ▸ map_star f
-
-@[simp]
-
-中文:
-定义 copy
-  签名: (f : A ->⋆ₙ+* B) (f' : A -> B) (h : f' = f)
-  定义体: f'
-  map_zero' := h.symm ▸ map_zero f
-  map_add' := h.symm ▸ map_add f
-  map_mul' := h.symm ▸ map_mul f
-  map_star' := h.symm ▸ map_star f
-
-@[simp]
+--- 原说明 ---
+Copy of a `NonUnitalStarRingHom` with a new `toFun` equal to the old one. Useful
+to fix definitional equalities.
 -/
-protected def copy (f : A ->⋆ₙ+* B) (f' : A -> B) (h : f' = f) : A ->⋆ₙ+* B where
+protected def copy (f : A →⋆ₙ+* B) (f' : A → B) (h : f' = f) : A →⋆ₙ+* B where
   toFun := f'
   map_zero' := h.symm ▸ map_zero f
   map_add' := h.symm ▸ map_add f
@@ -336,90 +236,51 @@ protected def copy (f : A ->⋆ₙ+* B) (f' : A -> B) (h : f' = f) : A ->⋆ₙ+
   map_star' := h.symm ▸ map_star f
 
 @[simp]
-/--
-theorem `coe_copy` / 定理 `coe_copy`
-
-English:
-theorem coe_copy
-  given: (f : A ->⋆ₙ+* B) (f' : A -> B) (h : f' = f)
-  statement: ⇑(f.copy f' h) = f'
-  proof: rfl
-
-中文:
-定理 coe_copy
-  条件: (f : A ->⋆ₙ+* B) (f' : A -> B) (h : f' = f)
-  结论: ⇑(f.copy f' h) = f'
-  证明: rfl
+/-
+**NonUnitalStarRingHom.coe_copy** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalStarRingHom`
+。
+形式化陈述：coe_copy (f : A ->⋆ₙ+* B) (f' : A -> B) (h : f' = f) : ⇑(f.copy f' h) = f'
+参数：f : A ->⋆ₙ+* B；f' : A -> B；h : f' = f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_copy (f : A ->⋆ₙ+* B) (f' : A -> B) (h : f' = f) : ⇑(f.copy f' h) = f' :=
+theorem coe_copy (f : A →⋆ₙ+* B) (f' : A → B) (h : f' = f) : ⇑(f.copy f' h) = f' :=
   rfl
-
-/--
-theorem `copy_eq` / 定理 `copy_eq`
-
-English:
-theorem copy_eq
-  given: (f : A ->⋆ₙ+* B) (f' : A -> B) (h : f' = f)
-  statement: f.copy f' h = f
-  proof: DFunLike.ext' h
-
-@[simp]
-
-中文:
-定理 copy_eq
-  条件: (f : A ->⋆ₙ+* B) (f' : A -> B) (h : f' = f)
-  结论: f.copy f' h = f
-  证明: DFunLike.ext' h
-
-@[simp]
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**NonUnitalStarRingHom.copy_eq** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalStarRingHom`。
+形式化陈述：copy_eq (f : A ->⋆ₙ+* B) (f' : A -> B) (h : f' = f) : f.copy f' h = f
+参数：f : A ->⋆ₙ+* B；f' : A -> B；h : f' = f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext'`：ext' {f g : F} (h : (f : forall a : α, β a) = (g : forall
+ a : α, β a)) : f = g
 -/
-theorem copy_eq (f : A ->⋆ₙ+* B) (f' : A -> B) (h : f' = f) : f.copy f' h = f :=
+theorem copy_eq (f : A →⋆ₙ+* B) (f' : A → B) (h : f' = f) : f.copy f' h = f :=
   DFunLike.ext' h
 
 @[simp]
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: (f : A ->ₙ+* B) (h)
-  statement: ((⟨f, h⟩ : A ->⋆ₙ+* B) : A -> B) = f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_mk
-  条件: (f : A ->ₙ+* B) (h)
-  结论: ((⟨f, h⟩ : A ->⋆ₙ+* B) : A -> B) = f
-  证明: rfl
-
-@[simp]
+/-
+**NonUnitalStarRingHom.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalStarRingHom`。
+形式化陈述：coe_mk (f : A ->ₙ+* B) (h) : ((⟨f, h⟩ : A ->⋆ₙ+* B) : A -> B) = f
+参数：f : A ->ₙ+* B；h。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mk (f : A ->ₙ+* B) (h) : ((⟨f, h⟩ : A ->⋆ₙ+* B) : A -> B) = f := rfl
+theorem coe_mk (f : A →ₙ+* B) (h) : ((⟨f, h⟩ : A →⋆ₙ+* B) : A → B) = f := rfl
 
 @[simp]
-/--
-theorem `mk_coe` / 定理 `mk_coe`
-
-English:
-theorem mk_coe
-  given: (f : A ->⋆ₙ+* B) (h₁ h₂ h₃ h₄)
-  proof: by
-  ext
-  rfl
-
-中文:
-定理 mk_coe
-  条件: (f : A ->⋆ₙ+* B) (h₁ h₂ h₃ h₄)
-  证明: by
-  ext
-  rfl
+/-
+**NonUnitalStarRingHom.mk_coe** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalStarRingHom`。
+形式化陈述：mk_coe (f : A ->⋆ₙ+* B) (h₁ h₂ h₃ h₄) : (⟨⟨⟨f, h₁⟩, h₂, h₃⟩, h₄⟩ : A ->⋆ₙ+
+* B) = f
+参数：f : A ->⋆ₙ+* B；h₁ h₂ h₃ h₄。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalStarRingHom.ext`：ext {f g : A ->⋆ₙ+* B} (h : forall x, f x = g 
+x) : f = g
 -/
-theorem mk_coe (f : A ->⋆ₙ+* B) (h₁ h₂ h₃ h₄) :
-    (⟨⟨⟨f, h₁⟩, h₂, h₃⟩, h₄⟩ : A ->⋆ₙ+* B) = f := by
+theorem mk_coe (f : A →⋆ₙ+* B) (h₁ h₂ h₃ h₄) :
+    (⟨⟨⟨f, h₁⟩, h₂, h₃⟩, h₄⟩ : A →⋆ₙ+* B) = f := by
   ext
   rfl
 
@@ -427,206 +288,116 @@ section
 
 variable (A)
 
-/--
-Definition of `id` / `id` 的定义
+/-- The identity as a non-unital ⋆-ring homomorphism. -/
+/-
+**NonUnitalStarRingHom.id** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalStarRingHom`。
+形式化陈述：(A : Type u_1) → [inst : NonUnitalNonAssocSemiring A] → [inst_1 : Star A] 
+→ A →⋆ₙ+* A
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : A ->⋆ₙ+* A
-  body: { (1 : A ->ₙ+* A) with map_star' := fun _ => rfl }
-
-@[simp, norm_cast]
-
-中文:
-定义 id
-  签名: : A ->⋆ₙ+* A
-  定义体: { (1 : A ->ₙ+* A) with map_star' := fun _ => rfl }
-
-@[simp, norm_cast]
+--- 原说明 ---
+The identity as a non-unital ⋆-ring homomorphism.
 -/
-protected def id : A ->⋆ₙ+* A :=
-  { (1 : A ->ₙ+* A) with map_star' := fun _ => rfl }
+protected def id : A →⋆ₙ+* A :=
+  { (1 : A →ₙ+* A) with map_star' := fun _ => rfl }
 
 @[simp, norm_cast]
-/--
-theorem `coe_id` / 定理 `coe_id`
-
-English:
-theorem coe_id
-  statement: ⇑(NonUnitalStarRingHom.id A) = id
-  proof: rfl
-
-中文:
-定理 coe_id
-  结论: ⇑(非幺对合环态射.id A) = id
-  证明: rfl
+/-
+**NonUnitalStarRingHom.coe_id** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalStarRingHom`。
+形式化陈述：coe_id : ⇑(NonUnitalStarRingHom.id A) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_id : ⇑(NonUnitalStarRingHom.id A) = id :=
   rfl
 
 end
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- The composition of non-unital ⋆-ring homomorphisms, as a non-unital ⋆-ring homomorphism. -/
+/-
+**NonUnitalStarRingHom.comp** 是 Mathlib 中的一个定义，位于命名空间 `NonUnitalStarRingHom`。
+形式化陈述：comp (f : B ->⋆ₙ+* C) (g : A ->⋆ₙ+* B) : A ->⋆ₙ+* C
+参数：f : B ->⋆ₙ+* C；g : A ->⋆ₙ+* B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (f : B ->⋆ₙ+* C) (g : A ->⋆ₙ+* B)
-  body: { f.toNonUnitalRingHom.comp g.toNonUnitalRingHom with
-    map_star' := fun a => by simp [map_star, map_star] }
-
-@[simp]
-
-中文:
-定义 comp
-  签名: (f : B ->⋆ₙ+* C) (g : A ->⋆ₙ+* B)
-  定义体: { f.toNonUnitalRingHom.comp g.toNonUnitalRingHom with
-    map_star' := fun a => by simp [map_star, map_star] }
-
-@[simp]
-
-Depends on / 依赖: f.toNonUnitalRingHom.comp, g.toNonUnitalRingHom, map_star, toNonUnitalRingHom
+--- 原说明 ---
+The composition of non-unital ⋆-ring homomorphisms, as a non-unital ⋆-ring homom
+orphism.
 -/
-def comp (f : B ->⋆ₙ+* C) (g : A ->⋆ₙ+* B) : A ->⋆ₙ+* C :=
+def comp (f : B →⋆ₙ+* C) (g : A →⋆ₙ+* B) : A →⋆ₙ+* C :=
   { f.toNonUnitalRingHom.comp g.toNonUnitalRingHom with
     map_star' := fun a => by simp [map_star, map_star] }
 
 @[simp]
-/--
-theorem `coe_comp` / 定理 `coe_comp`
-
-English:
-theorem coe_comp
-  given: (f : B ->⋆ₙ+* C) (g : A ->⋆ₙ+* B)
-  statement: ⇑(comp f g) = f ∘ g
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_comp
-  条件: (f : B ->⋆ₙ+* C) (g : A ->⋆ₙ+* B)
-  结论: ⇑(comp f g) = f ∘ g
-  证明: rfl
-
-@[simp]
+/-
+**NonUnitalStarRingHom.coe_comp** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalStarRingHom`
+。
+形式化陈述：coe_comp (f : B ->⋆ₙ+* C) (g : A ->⋆ₙ+* B) : ⇑(comp f g) = f ∘ g
+参数：f : B ->⋆ₙ+* C；g : A ->⋆ₙ+* B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_comp (f : B ->⋆ₙ+* C) (g : A ->⋆ₙ+* B) : ⇑(comp f g) = f ∘ g :=
+theorem coe_comp (f : B →⋆ₙ+* C) (g : A →⋆ₙ+* B) : ⇑(comp f g) = f ∘ g :=
   rfl
 
 @[simp]
-/--
-theorem `comp_apply` / 定理 `comp_apply`
-
-English:
-theorem comp_apply
-  given: (f : B ->⋆ₙ+* C) (g : A ->⋆ₙ+* B) (a : A)
-  statement: comp f g a = f (g a)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_apply
-  条件: (f : B ->⋆ₙ+* C) (g : A ->⋆ₙ+* B) (a : A)
-  结论: comp f g a = f (g a)
-  证明: rfl
-
-@[simp]
+/-
+**NonUnitalStarRingHom.comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalStarRingHo
+m`。
+形式化陈述：comp_apply (f : B ->⋆ₙ+* C) (g : A ->⋆ₙ+* B) (a : A) : comp f g a = f (g a
+)
+参数：f : B ->⋆ₙ+* C；g : A ->⋆ₙ+* B；a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp_apply (f : B ->⋆ₙ+* C) (g : A ->⋆ₙ+* B) (a : A) : comp f g a = f (g a) :=
+theorem comp_apply (f : B →⋆ₙ+* C) (g : A →⋆ₙ+* B) (a : A) : comp f g a = f (g a) :=
   rfl
 
 @[simp]
-/--
-theorem `comp_assoc` / 定理 `comp_assoc`
-
-English:
-theorem comp_assoc
-  given: (f : C ->⋆ₙ+* D) (g : B ->⋆ₙ+* C) (h : A ->⋆ₙ+* B)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_assoc
-  条件: (f : C ->⋆ₙ+* D) (g : B ->⋆ₙ+* C) (h : A ->⋆ₙ+* B)
-  证明: rfl
-
-@[simp]
+/-
+**NonUnitalStarRingHom.comp_assoc** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalStarRingHo
+m`。
+形式化陈述：comp_assoc (f : C ->⋆ₙ+* D) (g : B ->⋆ₙ+* C) (h : A ->⋆ₙ+* B) : (f.comp g)
+.comp h = f.comp (g.comp h)
+参数：f : C ->⋆ₙ+* D；g : B ->⋆ₙ+* C；h : A ->⋆ₙ+* B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comp_assoc (f : C ->⋆ₙ+* D) (g : B ->⋆ₙ+* C) (h : A ->⋆ₙ+* B) :
+theorem comp_assoc (f : C →⋆ₙ+* D) (g : B →⋆ₙ+* C) (h : A →⋆ₙ+* B) :
     (f.comp g).comp h = f.comp (g.comp h) :=
   rfl
 
 @[simp]
-/--
-theorem `id_comp` / 定理 `id_comp`
-
-English:
-theorem id_comp
-  given: (f : A ->⋆ₙ+* B)
-  statement: (NonUnitalStarRingHom.id _).comp f = f
-  proof: ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 id_comp
-  条件: (f : A ->⋆ₙ+* B)
-  结论: (非幺对合环态射.id _).comp f = f
-  证明: ext fun _ => rfl
-
-@[simp]
+/-
+**NonUnitalStarRingHom.id_comp** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalStarRingHom`。
+形式化陈述：id_comp (f : A ->⋆ₙ+* B) : (NonUnitalStarRingHom.id _).comp f = f
+参数：f : A ->⋆ₙ+* B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalStarRingHom.ext`：ext {f g : A ->⋆ₙ+* B} (h : forall x, f x = g 
+x) : f = g
 -/
-theorem id_comp (f : A ->⋆ₙ+* B) : (NonUnitalStarRingHom.id _).comp f = f :=
+theorem id_comp (f : A →⋆ₙ+* B) : (NonUnitalStarRingHom.id _).comp f = f :=
   ext fun _ => rfl
 
 @[simp]
-/--
-theorem `comp_id` / 定理 `comp_id`
-
-English:
-theorem comp_id
-  given: (f : A ->⋆ₙ+* B)
-  statement: f.comp (NonUnitalStarRingHom.id _) = f
-  proof: ext fun _ => rfl
-
-中文:
-定理 comp_id
-  条件: (f : A ->⋆ₙ+* B)
-  结论: f.comp (非幺对合环态射.id _) = f
-  证明: ext fun _ => rfl
+/-
+**NonUnitalStarRingHom.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalStarRingHom`。
+形式化陈述：comp_id (f : A ->⋆ₙ+* B) : f.comp (NonUnitalStarRingHom.id _) = f
+参数：f : A ->⋆ₙ+* B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NonUnitalStarRingHom.ext`：ext {f g : A ->⋆ₙ+* B} (h : forall x, f x = g 
+x) : f = g
 -/
-theorem comp_id (f : A ->⋆ₙ+* B) : f.comp (NonUnitalStarRingHom.id _) = f :=
+theorem comp_id (f : A →⋆ₙ+* B) : f.comp (NonUnitalStarRingHom.id _) = f :=
   ext fun _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Monoid (A ->⋆ₙ+* A)
-  body: comp
-  mul_assoc := comp_assoc
-  one := NonUnitalStarRingHom.id A
-  one_mul := id_comp
-  mul_one := comp_id
-
-@[simp]
-
-中文:
-实例 :
-  签名: 幺半群 (A ->⋆ₙ+* A)
-  定义体: comp
-  mul_assoc := comp_assoc
-  one := NonUnitalStarRingHom.id A
-  one_mul := id_comp
-  mul_one := comp_id
-
-@[simp]
+/-
+**NonUnitalStarRingHom.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalStarRingHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Monoid (A ->⋆ₙ+* A) where
+instance : Monoid (A →⋆ₙ+* A) where
   mul := comp
   mul_assoc := comp_assoc
   one := NonUnitalStarRingHom.id A
@@ -634,38 +405,23 @@ instance : Monoid (A ->⋆ₙ+* A) where
   mul_one := comp_id
 
 @[simp]
-/--
-theorem `coe_one` / 定理 `coe_one`
-
-English:
-theorem coe_one
-  statement: ((1 : A ->⋆ₙ+* A) : A -> A) = id
-  proof: rfl
-
-中文:
-定理 coe_one
-  结论: ((1 : A ->⋆ₙ+* A) : A -> A) = id
-  证明: rfl
+/-
+**NonUnitalStarRingHom.coe_one** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalStarRingHom`。
+形式化陈述：coe_one : ((1 : A ->⋆ₙ+* A) : A -> A) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_one : ((1 : A ->⋆ₙ+* A) : A -> A) = id :=
+theorem coe_one : ((1 : A →⋆ₙ+* A) : A → A) = id :=
   rfl
-
-/--
-theorem `one_apply` / 定理 `one_apply`
-
-English:
-theorem one_apply
-  given: (a : A)
-  statement: (1 : A ->⋆ₙ+* A) a = a
-  proof: rfl
-
-中文:
-定理 one_apply
-  条件: (a : A)
-  结论: (1 : A ->⋆ₙ+* A) a = a
-  证明: rfl
+/-
+**NonUnitalStarRingHom.one_apply** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalStarRingHom
+`。
+形式化陈述：one_apply (a : A) : (1 : A ->⋆ₙ+* A) a = a
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem one_apply (a : A) : (1 : A ->⋆ₙ+* A) a = a :=
+theorem one_apply (a : A) : (1 : A →⋆ₙ+* A) a = a :=
   rfl
 
 end Basic
@@ -677,96 +433,45 @@ variable {A B C : Type*}
 variable [NonUnitalNonAssocSemiring A] [StarAddMonoid A]
 variable [NonUnitalNonAssocSemiring B] [StarAddMonoid B]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Zero (A ->⋆ₙ+* B)
-  body: ⟨{ (0 : NonUnitalRingHom A B) with map_star' := by simp }⟩
-
-中文:
-实例 :
-  签名: 零 (A ->⋆ₙ+* B)
-  定义体: ⟨{ (0 : NonUnitalRingHom A B) with map_star' := by simp }⟩
-
-Depends on / 依赖: NonUnitalRingHom, map_star
+/-
+**NonUnitalStarRingHom.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalStarRingHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Zero (A ->⋆ₙ+* B) :=
+instance : Zero (A →⋆ₙ+* B) :=
   ⟨{ (0 : NonUnitalRingHom A B) with map_star' := by simp }⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (A ->⋆ₙ+* B)
-  body: ⟨0⟩
-
-中文:
-实例 :
-  签名: 可居 (A ->⋆ₙ+* B)
-  定义体: ⟨0⟩
+/-
+**NonUnitalStarRingHom.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalStarRingHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Inhabited (A ->⋆ₙ+* B) :=
+instance : Inhabited (A →⋆ₙ+* B) :=
   ⟨0⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MonoidWithZero (A ->⋆ₙ+* A)
-  body: fun _ => ext fun _ => rfl
-  mul_zero := fun f => ext fun _ => map_zero f
-
-@[simp]
-
-中文:
-实例 :
-  签名: 带零幺半群 (A ->⋆ₙ+* A)
-  定义体: fun _ => ext fun _ => rfl
-  mul_zero := fun f => ext fun _ => map_zero f
-
-@[simp]
+/-
+**NonUnitalStarRingHom.** 是 Mathlib 中的一个实例，位于命名空间 `NonUnitalStarRingHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : MonoidWithZero (A ->⋆ₙ+* A) where
+instance : MonoidWithZero (A →⋆ₙ+* A) where
   zero_mul := fun _ => ext fun _ => rfl
   mul_zero := fun f => ext fun _ => map_zero f
 
 @[simp]
-/--
-theorem `coe_zero` / 定理 `coe_zero`
-
-English:
-theorem coe_zero
-  statement: ((0 : A ->⋆ₙ+* B) : A -> B) = 0
-  proof: rfl
-
-中文:
-定理 coe_zero
-  结论: ((0 : A ->⋆ₙ+* B) : A -> B) = 0
-  证明: rfl
+/-
+**NonUnitalStarRingHom.coe_zero** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalStarRingHom`
+。
+形式化陈述：coe_zero : ((0 : A ->⋆ₙ+* B) : A -> B) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_zero : ((0 : A ->⋆ₙ+* B) : A -> B) = 0 :=
+theorem coe_zero : ((0 : A →⋆ₙ+* B) : A → B) = 0 :=
   rfl
-
-/--
-theorem `zero_apply` / 定理 `zero_apply`
-
-English:
-theorem zero_apply
-  given: (a : A)
-  statement: (0 : A ->⋆ₙ+* B) a = 0
-  proof: rfl
-
-中文:
-定理 zero_apply
-  条件: (a : A)
-  结论: (0 : A ->⋆ₙ+* B) a = 0
-  证明: rfl
+/-
+**NonUnitalStarRingHom.zero_apply** 是 Mathlib 中的一个定理，位于命名空间 `NonUnitalStarRingHo
+m`。
+形式化陈述：zero_apply (a : A) : (0 : A ->⋆ₙ+* B) a = 0
+参数：a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem zero_apply (a : A) : (0 : A ->⋆ₙ+* B) a = 0 :=
+theorem zero_apply (a : A) : (0 : A →⋆ₙ+* B) a = 0 :=
   rfl
 
 end Zero
@@ -776,27 +481,26 @@ end NonUnitalStarRingHom
 
 /-! ### Star ring equivalences -/
 
-/--
-Definition of `StarRingEquiv` / `StarRingEquiv` 的定义
+/-- A *⋆-ring* equivalence is an equivalence preserving addition, multiplication, and the star
+operation, which allows for considering both unital and non-unital equivalences with a single
+structure. -/
+/-
+**StarRingEquiv** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(A : Type u_1) → (B : Type u_2) → [Add A] → [Add B] → [Mul A] → [Mul B] → 
+[Star A] → [Star B] → Type (max u_1 u_2)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure StarRingEquiv
-  parameters: (A B : Type*) [Add A] [Add B] [Mul A] [Mul B] [Star A] [Star B]
-  extends: A ≃+* B
-  axioms and operations (1):
-    - map_star' : forall a : A, toFun (star a) = star (toFun a)
-
-中文:
-结构 对合环等价
-  参数: (A B : 类型) [加法 A] [加法 B] [乘法 A] [乘法 B] [对合 A] [对合 B]
-  继承: A ≃+* B
-  公理与运算 (1 个):
-    - map_star' : 对任意 a : A, toFun (star a) = star (toFun a)
+--- 原说明 ---
+A *⋆-ring* equivalence is an equivalence preserving addition, multiplication, an
+d the star
+operation, which allows for considering both unital and non-unital equivalences 
+with a single
+structure.
 -/
 structure StarRingEquiv (A B : Type*) [Add A] [Add B] [Mul A] [Mul B] [Star A] [Star B]
     extends A ≃+* B where
   /-- By definition, a ⋆-ring equivalence preserves the `star` operation. -/
-  map_star' : forall a : A, toFun (star a) = star (toFun a)
+  map_star' : ∀ a : A, toFun (star a) = star (toFun a)
 
 @[inherit_doc] notation:25 A " ≃⋆+* " B => StarRingEquiv A B
 
@@ -804,38 +508,46 @@ structure StarRingEquiv (A B : Type*) [Add A] [Add B] [Mul A] [Mul B] [Star A] [
 operation. -/
 add_decl_doc StarRingEquiv.toRingEquiv
 
-/--
-Definition of `StarRingEquivClass` / `StarRingEquivClass` 的定义
+/-- `StarRingEquivClass F A B` asserts `F` is a type of bundled ⋆-ring equivalences between `A` and
+`B`.
+You should also extend this typeclass when you extend `StarRingEquiv`. -/
+/-
+**StarRingEquivClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_1) →   (A : outParam (Type u_2)) →     (B : outParam (Type u_3
+)) → [Add A] → [Mul A] → [Star A] → [Add B] → [Mul B] → [Star B] → [EquivLike F 
+A B] → Prop
+参数：Type u_2；Type u_3。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class StarRingEquivClass
-  parameters: (F : Type*) (A B : outParam Type*)
-  extends: RingEquivClass F A B
-  axioms and operations (1):
-    - map_star : forall (f : F) (a : A), f (star a) = star (f a)
-
-中文:
-类 对合环等价类
-  参数: (F : 类型) (A B : outParam 类型)
-  继承: 环等价类 F A B
-  公理与运算 (1 个):
-    - map_star : 对任意 (f : F) (a : A), f (star a) = star (f a)
+--- 原说明 ---
+`StarRingEquivClass F A B` asserts `F` is a type of bundled ⋆-ring equivalences 
+between `A` and
+`B`.
+You should also extend this typeclass when you extend `StarRingEquiv`.
 -/
 class StarRingEquivClass (F : Type*) (A B : outParam Type*)
     [Add A] [Mul A] [Star A] [Add B] [Mul B] [Star B] [EquivLike F A B] : Prop
     extends RingEquivClass F A B where
   /-- By definition, a ⋆-ring equivalence preserves the `star` operation. -/
-  map_star : forall (f : F) (a : A), f (star a) = star (f a)
+  map_star : ∀ (f : F) (a : A), f (star a) = star (f a)
 
 namespace StarRingEquivClass
 
 -- See note [lower instance priority]
+/-
+**StarRingEquivClass.** 是 Mathlib 中的一个实例，位于命名空间 `StarRingEquivClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 50) {F A B : Type*} [Add A] [Mul A] [Star A] [Add B] [Mul B] [Star B]
     [EquivLike F A B] [hF : StarRingEquivClass F A B] :
     StarHomClass F A B where
   __ := hF
 
 -- See note [lower instance priority]
+/-
+**StarRingEquivClass.** 是 Mathlib 中的一个实例，位于命名空间 `StarRingEquivClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) {F A B : Type*} [NonUnitalNonAssocSemiring A] [Star A]
     [NonUnitalNonAssocSemiring B] [Star B] [EquivLike F A B] [StarRingEquivClass F A B] :
     NonUnitalStarRingHomClass F A B where
@@ -843,42 +555,44 @@ instance (priority := 100) {F A B : Type*} [NonUnitalNonAssocSemiring A] [Star A
 /-- Turn an element of a type `F` satisfying `StarRingEquivClass F A B` into an actual
 `StarRingEquiv`. This is declared as the default coercion from `F` to `A ≃⋆+* B`. -/
 @[coe]
-/--
-Definition of `toStarRingEquiv` / `toStarRingEquiv` 的定义
+/-
+**StarRingEquivClass.toStarRingEquiv** 是 Mathlib 中的一个定义，位于命名空间 `StarRingEquivCla
+ss`。
+形式化陈述：toStarRingEquiv {F A B : Type*} [Add A] [Mul A] [Star A] [Add B] [Mul B] [
+Star B] [EquivLike F A B] [StarRingEquivClass F A B] (f : F) : A ≃⋆+* B
+参数：f : F。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `StarRingEquivClass.toRingEquivClass`：∀ {F : Type u_1} {A : outParam (Typ
+e u_2)} {B : outParam (Type u_3)} {inst : Add A} {inst_1 : Mul A} {inst_2 : Star
+ A}   {inst_3 : Add B} {i…
+· 使用定理 `StarRingEquivClass.map_star`：∀ {F : Type u_1} {A : outParam (Type u_2)} 
+{B : outParam (Type u_3)} {inst : Add A} {inst_1 : Mul A} {inst_2 : Star A}   {i
+nst_3 : Add B} {i…
 
-English:
-definition toStarRingEquiv
-  signature: {F A B : Type*} [Add A] [Mul A] [Star A] [Add B] [Mul B] [Star B]
-  body: { (RingEquivClass.toRingEquiv f : A ≃+* B) with
-    map_star' := map_star f }
-
-中文:
-定义 toStarRingEquiv
-  签名: {F A B : 类型} [加法 A] [乘法 A] [对合 A] [加法 B] [乘法 B] [对合 B]
-  定义体: { (RingEquivClass.toRingEquiv f : A ≃+* B) with
-    map_star' := map_star f }
-
-Depends on / 依赖: RingEquivClass, RingEquivClass.toRingEquiv, map_star, toRingEquiv
+--- 原说明 ---
+Turn an element of a type `F` satisfying `StarRingEquivClass F A B` into an actu
+al
+`StarRingEquiv`. This is declared as the default coercion from `F` to `A ≃⋆+* B`
+.
 -/
 def toStarRingEquiv {F A B : Type*} [Add A] [Mul A] [Star A] [Add B] [Mul B] [Star B]
     [EquivLike F A B] [StarRingEquivClass F A B] (f : F) : A ≃⋆+* B :=
   { (RingEquivClass.toRingEquiv f : A ≃+* B) with
     map_star' := map_star f }
 
-/--
-Instance `instCoeHead` / 实例 `instCoeHead`
+/-- Any type satisfying `StarRingEquivClass` can be cast into `StarRingEquiv` via
+`StarRingEquivClass.toStarRingEquiv`. -/
+/-
+**StarRingEquivClass.instCoeHead** 是 Mathlib 中的一个实例，位于命名空间 `StarRingEquivClass`。
+形式化陈述：instCoeHead {F A B : Type*} [Add A] [Mul A] [Star A] [Add B] [Mul B] [Star
+ B] [EquivLike F A B] [StarRingEquivClass F A B] : CoeHead F (A ≃⋆+* B)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instCoeHead
-  signature: {F A B : Type*} [Add A] [Mul A] [Star A] [Add B] [Mul B] [Star B]
-  body: ⟨toStarRingEquiv⟩
-
-中文:
-实例 instCoeHead
-  签名: {F A B : 类型} [加法 A] [乘法 A] [对合 A] [加法 B] [乘法 B] [对合 B]
-  定义体: ⟨toStarRingEquiv⟩
-
-Depends on / 依赖: toStarRingEquiv
+--- 原说明 ---
+Any type satisfying `StarRingEquivClass` can be cast into `StarRingEquiv` via
+`StarRingEquivClass.toStarRingEquiv`.
 -/
 instance instCoeHead {F A B : Type*} [Add A] [Mul A] [Star A] [Add B] [Mul B] [Star B]
     [EquivLike F A B] [StarRingEquivClass F A B] : CoeHead F (A ≃⋆+* B) :=
@@ -892,34 +606,9 @@ section Basic
 
 variable {A B C : Type*} [Add A] [Add B] [Mul A] [Mul B] [Star A] [Star B] [Add C] [Mul C] [Star C]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: EquivLike (A ≃⋆+* B) A B
-  body: f.toFun
-  inv f := f.invFun
-  left_inv f := f.left_inv
-  right_inv f := f.right_inv
-  coe_injective' f g h₁ h₂ := by
-    rcases f with ⟨⟨⟨_, _, _⟩, _⟩, _⟩
-    rcases g with ⟨⟨⟨_, _, _⟩, _⟩, _⟩
-    congr
-
-中文:
-实例 :
-  签名: 等价状 (A ≃⋆+* B) A B
-  定义体: f.toFun
-  inv f := f.invFun
-  left_inv f := f.left_inv
-  right_inv f := f.right_inv
-  coe_injective' f g h₁ h₂ := by
-    rcases f with ⟨⟨⟨_, _, _⟩, _⟩, _⟩
-    rcases g with ⟨⟨⟨_, _, _⟩, _⟩, _⟩
-    congr
-
-Depends on / 依赖: f.toFun
+/-
+**StarRingEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `StarRingEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : EquivLike (A ≃⋆+* B) A B where
   coe f := f.toFun
@@ -930,188 +619,87 @@ instance : EquivLike (A ≃⋆+* B) A B where
     rcases f with ⟨⟨⟨_, _, _⟩, _⟩, _⟩
     rcases g with ⟨⟨⟨_, _, _⟩, _⟩, _⟩
     congr
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: RingEquivClass (A ≃⋆+* B) A B
-  body: f.map_mul'
-  map_add f := f.map_add'
-
-中文:
-实例 :
-  签名: 环等价类 (A ≃⋆+* B) A B
-  定义体: f.map_mul'
-  map_add f := f.map_add'
-
-Depends on / 依赖: f.map_mul, map_mul
+/-
+**StarRingEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `StarRingEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : RingEquivClass (A ≃⋆+* B) A B where
   map_mul f := f.map_mul'
   map_add f := f.map_add'
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: StarRingEquivClass (A ≃⋆+* B) A B
-  body: map_star'
-
-中文:
-实例 :
-  签名: 对合环等价类 (A ≃⋆+* B) A B
-  定义体: map_star'
-
-Depends on / 依赖: map_star
+/-
+**StarRingEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `StarRingEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : StarRingEquivClass (A ≃⋆+* B) A B where
   map_star := map_star'
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Helper instance for cases where the inference via `EquivLike` is too hard. -/
+/-
+**StarRingEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `StarRingEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: FunLike (A ≃⋆+* B) A B
-  body: f.toFun
-  coe_injective := DFunLike.coe_injective
-
-中文:
-实例 :
-  签名: 函数状 (A ≃⋆+* B) A B
-  定义体: f.toFun
-  coe_injective := DFunLike.coe_injective
-
-Depends on / 依赖: f.toFun
+--- 原说明 ---
+Helper instance for cases where the inference via `EquivLike` is too hard.
 -/
 instance : FunLike (A ≃⋆+* B) A B where
   coe f := f.toFun
   coe_injective := DFunLike.coe_injective
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeOut (A ≃⋆+* B) (A ≃+* B)
-  body: toRingEquiv
-
-@[deprecated "Now a syntactic equality" (since := "2026-04-09"), nolint synTaut]
-
-中文:
-实例 :
-  签名: CoeOut (A ≃⋆+* B) (A ≃+* B)
-  定义体: toRingEquiv
-
-@[deprecated "Now a syntactic equality" (since := "2026-04-09"), nolint synTaut]
-
-Depends on / 依赖: toRingEquiv
+/-
+**StarRingEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `StarRingEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeOut (A ≃⋆+* B) (A ≃+* B) where coe := toRingEquiv
 
 @[deprecated "Now a syntactic equality" (since := "2026-04-09"), nolint synTaut]
-/--
-theorem `toRingEquiv_eq_coe` / 定理 `toRingEquiv_eq_coe`
-
-English:
-theorem toRingEquiv_eq_coe
-  given: (e : A ≃⋆+* B)
-  statement: e.toRingEquiv = e
-  proof: rfl
-
-@[ext]
-
-中文:
-定理 toRingEquiv_eq_coe
-  条件: (e : A ≃⋆+* B)
-  结论: e.toRingEquiv = e
-  证明: rfl
-
-@[ext]
+/-
+**StarRingEquiv.toRingEquiv_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `StarRingEquiv`。
+形式化陈述：toRingEquiv_eq_coe (e : A ≃⋆+* B) : e.toRingEquiv = e
+参数：e : A ≃⋆+* B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toRingEquiv_eq_coe (e : A ≃⋆+* B) : e.toRingEquiv = e :=
   rfl
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {f g : A ≃⋆+* B} (h : forall a, f a = g a)
-  statement: f = g
-  proof: DFunLike.ext f g h
-
-中文:
-定理 ext
-  条件: {f g : A ≃⋆+* B} (h : 对任意 a, f a = g a)
-  结论: f = g
-  证明: DFunLike.ext f g h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**StarRingEquiv.ext** 是 Mathlib 中的一个定理，位于命名空间 `StarRingEquiv`。
+形式化陈述：ext {f g : A ≃⋆+* B} (h : forall a, f a = g a) : f = g
+参数：h : forall a, f a = g a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext {f g : A ≃⋆+* B} (h : forall a, f a = g a) : f = g :=
+theorem ext {f g : A ≃⋆+* B} (h : ∀ a, f a = g a) : f = g :=
   DFunLike.ext f g h
 
 /-- The identity map as a star ring isomorphism. -/
 @[refl]
-/--
-Definition of `refl` / `refl` 的定义
+/-
+**StarRingEquiv.refl** 是 Mathlib 中的一个定义，位于命名空间 `StarRingEquiv`。
+形式化陈述：refl : A ≃⋆+* A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition refl
-  signature: : A ≃⋆+* A
-  body: { RingEquiv.refl A with
-    map_star' := fun _ => rfl }
-
-中文:
-定义 refl
-  签名: : A ≃⋆+* A
-  定义体: { RingEquiv.refl A with
-    map_star' := fun _ => rfl }
-
-Depends on / 依赖: RingEquiv, RingEquiv.refl, map_star
+--- 原说明 ---
+The identity map as a star ring isomorphism.
 -/
 def refl : A ≃⋆+* A :=
   { RingEquiv.refl A with
     map_star' := fun _ => rfl }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (A ≃⋆+* A)
-  body: ⟨refl⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 可居 (A ≃⋆+* A)
-  定义体: ⟨refl⟩
-
-@[simp]
+/-
+**StarRingEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `StarRingEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (A ≃⋆+* A) :=
   ⟨refl⟩
 
 @[simp]
-/--
-theorem `coe_refl` / 定理 `coe_refl`
-
-English:
-theorem coe_refl
-  statement: ⇑(refl : A ≃⋆+* A) = id
-  proof: rfl
-
-中文:
-定理 coe_refl
-  结论: ⇑(refl : A ≃⋆+* A) = id
-  证明: rfl
+/-
+**StarRingEquiv.coe_refl** 是 Mathlib 中的一个定理，位于命名空间 `StarRingEquiv`。
+形式化陈述：coe_refl : ⇑(refl : A ≃⋆+* A) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_refl : ⇑(refl : A ≃⋆+* A) = id :=
   rfl
@@ -1124,169 +712,102 @@ nonrec def symm (e : A ≃⋆+* B) : B ≃⋆+* A :=
       simpa only [apply_inv_apply, inv_apply_apply] using!
         congr_arg (inv e) (map_star e (inv e b)).symm }
 
-/--
-Definition of `Simps.apply` / `Simps.apply` 的定义
+/-- See Note [custom simps projection] -/
+/-
+**StarRingEquiv.Simps.apply** 是 Mathlib 中的一个定义，位于命名空间 `StarRingEquiv.Simps`。
+形式化陈述：{A : Type u_1} →   {B : Type u_2} →     [inst : Add A] →       [inst_1 : A
+dd B] →         [inst_2 : Mul A] → [inst_3 : Mul B] → [inst_4 : Star A] → [inst_
+5 : Star B] → (A ≃⋆+* B) → A → B
+参数：A ≃⋆+* B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.apply
-  signature: (e : A ≃⋆+* B)
-  body: e
-
-中文:
-定义 Simps.apply
-  签名: (e : A ≃⋆+* B)
-  定义体: e
+--- 原说明 ---
+See Note [custom simps projection]
 -/
-def Simps.apply (e : A ≃⋆+* B) : A -> B := e
+def Simps.apply (e : A ≃⋆+* B) : A → B := e
 
-/--
-Definition of `Simps.symm_apply` / `Simps.symm_apply` 的定义
+/-- See Note [custom simps projection] -/
+/-
+**StarRingEquiv.Simps.symm_apply** 是 Mathlib 中的一个定义，位于命名空间 `StarRingEquiv.Simps`
+。
+形式化陈述：{A : Type u_1} →   {B : Type u_2} →     [inst : Add A] →       [inst_1 : A
+dd B] →         [inst_2 : Mul A] → [inst_3 : Mul B] → [inst_4 : Star A] → [inst_
+5 : Star B] → (A ≃⋆+* B) → B → A
+参数：A ≃⋆+* B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.symm_apply
-  signature: (e : A ≃⋆+* B)
-  body: e.symm
-
-initialize_simps_projections StarRingEquiv (toFun -> apply, invFun -> symm_apply)
-
-@[simp]
-
-中文:
-定义 Simps.symm_apply
-  签名: (e : A ≃⋆+* B)
-  定义体: e.symm
-
-initialize_simps_projections StarRingEquiv (toFun -> apply, invFun -> symm_apply)
-
-@[simp]
+--- 原说明 ---
+See Note [custom simps projection]
 -/
-def Simps.symm_apply (e : A ≃⋆+* B) : B -> A :=
+def Simps.symm_apply (e : A ≃⋆+* B) : B → A :=
   e.symm
 
-initialize_simps_projections StarRingEquiv (toFun -> apply, invFun -> symm_apply)
+initialize_simps_projections StarRingEquiv (toFun → apply, invFun → symm_apply)
 
 @[simp]
-/--
-theorem `invFun_eq_symm` / 定理 `invFun_eq_symm`
-
-English:
-theorem invFun_eq_symm
-  given: {e : A ≃⋆+* B}
-  statement: EquivLike.inv e = e.symm
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 invFun_eq_symm
-  条件: {e : A ≃⋆+* B}
-  结论: 等价状.inv e = e.symm
-  证明: rfl
-
-@[simp]
+/-
+**StarRingEquiv.invFun_eq_symm** 是 Mathlib 中的一个定理，位于命名空间 `StarRingEquiv`。
+形式化陈述：invFun_eq_symm {e : A ≃⋆+* B} : EquivLike.inv e = e.symm
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem invFun_eq_symm {e : A ≃⋆+* B} : EquivLike.inv e = e.symm :=
   rfl
 
 @[simp]
-/--
-theorem `symm_symm` / 定理 `symm_symm`
-
-English:
-theorem symm_symm
-  given: (e : A ≃⋆+* B)
-  statement: e.symm.symm = e
-  proof: rfl
-
-中文:
-定理 symm_symm
-  条件: (e : A ≃⋆+* B)
-  结论: e.symm.symm = e
-  证明: rfl
+/-
+**StarRingEquiv.symm_symm** 是 Mathlib 中的一个定理，位于命名空间 `StarRingEquiv`。
+形式化陈述：symm_symm (e : A ≃⋆+* B) : e.symm.symm = e
+参数：e : A ≃⋆+* B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_symm (e : A ≃⋆+* B) : e.symm.symm = e := rfl
-
-/--
-theorem `symm_bijective` / 定理 `symm_bijective`
-
-English:
-theorem symm_bijective
-  statement: Function.Bijective (symm : (A ≃⋆+* B) -> B ≃⋆+* A)
-  proof: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
-
-中文:
-定理 symm_bijective
-  结论: 函数.双射 (symm : (A ≃⋆+* B) -> B ≃⋆+* A)
-  证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
-
-Depends on / 依赖: Function, Function.bijective_iff_has_inverse.mpr, bijective_iff_has_inverse, symm_symm
+/-
+**StarRingEquiv.symm_bijective** 是 Mathlib 中的一个定理，位于命名空间 `StarRingEquiv`。
+形式化陈述：symm_bijective : Function.Bijective (symm : (A ≃⋆+* B) -> B ≃⋆+* A)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.bijective_iff_has_inverse`：bijective_iff_has_inverse : Bijectiv
+e f ↔ exists g, LeftInverse g f ∧ RightInverse g f
+· 使用定理 `StarRingEquiv.symm_symm`：symm_symm (e : A ≃⋆+* B) : e.symm.symm = e
 -/
-theorem symm_bijective : Function.Bijective (symm : (A ≃⋆+* B) -> B ≃⋆+* A) :=
+theorem symm_bijective : Function.Bijective (symm : (A ≃⋆+* B) → B ≃⋆+* A) :=
   Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
-
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: (e h₁)
-  statement: ⇑(⟨e, h₁⟩ : A ≃⋆+* B) = e
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_mk
-  条件: (e h₁)
-  结论: ⇑(⟨e, h₁⟩ : A ≃⋆+* B) = e
-  证明: rfl
-
-@[simp]
+/-
+**StarRingEquiv.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `StarRingEquiv`。
+形式化陈述：∀ {A : Type u_1} {B : Type u_2} [inst : Add A] [inst_1 : Add B] [inst_2 : 
+Mul A] [inst_3 : Mul B] [inst_4 : Star A]   [inst_5 : Star B] (e : A ≃+* B) (h₁ 
+: ∀ (a : A), e.toFun (star a) = star (e.toFun a)),   ⇑{ toRingEquiv := e, map_st
+ar' := h₁ } = ⇑e
+参数：e : A ≃+* B；h₁ : ∀ (a : A), e.toFun (star a) = star (e.toFun a)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem coe_mk (e h₁) : ⇑(⟨e, h₁⟩ : A ≃⋆+* B) = e := rfl
 
 @[simp]
-/--
-theorem `mk_coe` / 定理 `mk_coe`
-
-English:
-theorem mk_coe
-  given: (e : A ≃⋆+* B) (e' h₁ h₂ h₃ h₄ h₅)
-  proof: ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 mk_coe
-  条件: (e : A ≃⋆+* B) (e' h₁ h₂ h₃ h₄ h₅)
-  证明: ext fun _ => rfl
-
-@[simp]
+/-
+**StarRingEquiv.mk_coe** 是 Mathlib 中的一个定理，位于命名空间 `StarRingEquiv`。
+形式化陈述：mk_coe (e : A ≃⋆+* B) (e' h₁ h₂ h₃ h₄ h₅) : (⟨⟨⟨e, e', h₁, h₂⟩, h₃, h₄⟩, h
+₅⟩ : A ≃⋆+* B) = e
+参数：e : A ≃⋆+* B；e' h₁ h₂ h₃ h₄ h₅。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StarRingEquiv.ext`：ext {f g : A ≃⋆+* B} (h : forall a, f a = g a) : f = 
+g
 -/
 theorem mk_coe (e : A ≃⋆+* B) (e' h₁ h₂ h₃ h₄ h₅) :
     (⟨⟨⟨e, e', h₁, h₂⟩, h₃, h₄⟩, h₅⟩ : A ≃⋆+* B) = e := ext fun _ => rfl
 
 @[simp]
-/--
-theorem `symm_mk` / 定理 `symm_mk`
-
-English:
-theorem symm_mk
-  given: (e : A ≃+* B) (h₁)
-  statement: dsimp%
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 symm_mk
-  条件: (e : A ≃+* B) (h₁)
-  结论: dsimp%
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: e.symm
+/-
+**StarRingEquiv.symm_mk** 是 Mathlib 中的一个定理，位于命名空间 `StarRingEquiv`。
+形式化陈述：symm_mk (e : A ≃+* B) (h₁) : dsimp% (⟨e, h₁⟩ : A ≃⋆+* B).symm = { (⟨e, h₁⟩
+ : A ≃⋆+* B).symm with toRingEquiv
+参数：e : A ≃+* B；h₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_mk (e : A ≃+* B) (h₁) : dsimp%
     (⟨e, h₁⟩ : A ≃⋆+* B).symm =
@@ -1295,205 +816,113 @@ theorem symm_mk (e : A ≃+* B) (h₁) : dsimp%
   rfl
 
 @[simp]
-/--
-theorem `refl_symm` / 定理 `refl_symm`
-
-English:
-theorem refl_symm
-  statement: (StarRingEquiv.refl : A ≃⋆+* A).symm = StarRingEquiv.refl
-  proof: rfl
-
-中文:
-定理 refl_symm
-  结论: (对合环等价.refl : A ≃⋆+* A).symm = 对合环等价.refl
-  证明: rfl
+/-
+**StarRingEquiv.refl_symm** 是 Mathlib 中的一个定理，位于命名空间 `StarRingEquiv`。
+形式化陈述：refl_symm : (StarRingEquiv.refl : A ≃⋆+* A).symm = StarRingEquiv.refl
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem refl_symm : (StarRingEquiv.refl : A ≃⋆+* A).symm = StarRingEquiv.refl :=
   rfl
 
 /-- Transitivity of `StarRingEquiv`. -/
 @[trans]
-/--
-Definition of `trans` / `trans` 的定义
+/-
+**StarRingEquiv.trans** 是 Mathlib 中的一个定义，位于命名空间 `StarRingEquiv`。
+形式化陈述：trans (e₁ : A ≃⋆+* B) (e₂ : B ≃⋆+* C) : A ≃⋆+* C
+参数：e₁ : A ≃⋆+* B；e₂ : B ≃⋆+* C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trans
-  signature: (e₁ : A ≃⋆+* B) (e₂ : B ≃⋆+* C)
-  body: { e₁.toRingEquiv.trans e₂.toRingEquiv with
-    map_star' := fun a =>
-      show e₂.toFun (e₁.toFun (star a)) = star (e₂.toFun (e₁.toFun a)) by
-        rw [e₁.map_star']; rw [e₂.map_star'] }
-
-@[simp]
-
-中文:
-定义 trans
-  签名: (e₁ : A ≃⋆+* B) (e₂ : B ≃⋆+* C)
-  定义体: { e₁.toRingEquiv.trans e₂.toRingEquiv with
-    map_star' := fun a =>
-      show e₂.toFun (e₁.toFun (star a)) = star (e₂.toFun (e₁.toFun a)) by
-        rw [e₁.map_star']; rw [e₂.map_star'] }
-
-@[simp]
-
-Depends on / 依赖: map_star, toRingEquiv, toRingEquiv.trans
+--- 原说明 ---
+Transitivity of `StarRingEquiv`.
 -/
 def trans (e₁ : A ≃⋆+* B) (e₂ : B ≃⋆+* C) : A ≃⋆+* C :=
   { e₁.toRingEquiv.trans e₂.toRingEquiv with
     map_star' := fun a =>
       show e₂.toFun (e₁.toFun (star a)) = star (e₂.toFun (e₁.toFun a)) by
-        rw [e₁.map_star']; rw [e₂.map_star'] }
+        rw [e₁.map_star', e₂.map_star'] }
 
 @[simp]
-/--
-theorem `apply_symm_apply` / 定理 `apply_symm_apply`
-
-English:
-theorem apply_symm_apply
-  given: (e : A ≃⋆+* B)
-  statement: forall x, e (e.symm x) = x
-  proof: e.toRingEquiv.apply_symm_apply
-
-@[simp]
-
-中文:
-定理 apply_symm_apply
-  条件: (e : A ≃⋆+* B)
-  结论: 对任意 x, e (e.symm x) = x
-  证明: e.toRingEquiv.apply_symm_apply
-
-@[simp]
-
-Depends on / 依赖: apply_symm_apply, e.toRingEquiv.apply_symm_apply, toRingEquiv
+/-
+**StarRingEquiv.apply_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `StarRingEquiv`。
+形式化陈述：apply_symm_apply (e : A ≃⋆+* B) : forall x, e (e.symm x) = x
+参数：e : A ≃⋆+* B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingEquiv.apply_symm_apply`：apply_symm_apply (e : R ≃+* S) : forall x, e
+ (e.symm x) = x
 -/
-theorem apply_symm_apply (e : A ≃⋆+* B) : forall x, e (e.symm x) = x :=
+theorem apply_symm_apply (e : A ≃⋆+* B) : ∀ x, e (e.symm x) = x :=
   e.toRingEquiv.apply_symm_apply
 
 @[simp]
-/--
-theorem `symm_apply_apply` / 定理 `symm_apply_apply`
-
-English:
-theorem symm_apply_apply
-  given: (e : A ≃⋆+* B)
-  statement: forall x, e.symm (e x) = x
-  proof: e.toRingEquiv.symm_apply_apply
-
-@[simp]
-
-中文:
-定理 symm_apply_apply
-  条件: (e : A ≃⋆+* B)
-  结论: 对任意 x, e.symm (e x) = x
-  证明: e.toRingEquiv.symm_apply_apply
-
-@[simp]
-
-Depends on / 依赖: e.toRingEquiv.symm_apply_apply, symm_apply_apply, toRingEquiv
+/-
+**StarRingEquiv.symm_apply_apply** 是 Mathlib 中的一个定理，位于命名空间 `StarRingEquiv`。
+形式化陈述：symm_apply_apply (e : A ≃⋆+* B) : forall x, e.symm (e x) = x
+参数：e : A ≃⋆+* B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingEquiv.symm_apply_apply`：symm_apply_apply (e : R ≃+* S) : forall x, e
+.symm (e x) = x
 -/
-theorem symm_apply_apply (e : A ≃⋆+* B) : forall x, e.symm (e x) = x :=
+theorem symm_apply_apply (e : A ≃⋆+* B) : ∀ x, e.symm (e x) = x :=
   e.toRingEquiv.symm_apply_apply
 
 @[simp]
-/--
-theorem `symm_trans_apply` / 定理 `symm_trans_apply`
-
-English:
-theorem symm_trans_apply
-  given: (e₁ : A ≃⋆+* B) (e₂ : B ≃⋆+* C) (x : C)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 symm_trans_apply
-  条件: (e₁ : A ≃⋆+* B) (e₂ : B ≃⋆+* C) (x : C)
-  证明: rfl
-
-@[simp]
+/-
+**StarRingEquiv.symm_trans_apply** 是 Mathlib 中的一个定理，位于命名空间 `StarRingEquiv`。
+形式化陈述：symm_trans_apply (e₁ : A ≃⋆+* B) (e₂ : B ≃⋆+* C) (x : C) : (e₁.trans e₂).s
+ymm x = e₁.symm (e₂.symm x)
+参数：e₁ : A ≃⋆+* B；e₂ : B ≃⋆+* C；x : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_trans_apply (e₁ : A ≃⋆+* B) (e₂ : B ≃⋆+* C) (x : C) :
     (e₁.trans e₂).symm x = e₁.symm (e₂.symm x) :=
   rfl
 
 @[simp]
-/--
-theorem `coe_trans` / 定理 `coe_trans`
-
-English:
-theorem coe_trans
-  given: (e₁ : A ≃⋆+* B) (e₂ : B ≃⋆+* C)
-  statement: ⇑(e₁.trans e₂) = e₂ ∘ e₁
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_trans
-  条件: (e₁ : A ≃⋆+* B) (e₂ : B ≃⋆+* C)
-  结论: ⇑(e₁.trans e₂) = e₂ ∘ e₁
-  证明: rfl
-
-@[simp]
+/-
+**StarRingEquiv.coe_trans** 是 Mathlib 中的一个定理，位于命名空间 `StarRingEquiv`。
+形式化陈述：coe_trans (e₁ : A ≃⋆+* B) (e₂ : B ≃⋆+* C) : ⇑(e₁.trans e₂) = e₂ ∘ e₁
+参数：e₁ : A ≃⋆+* B；e₂ : B ≃⋆+* C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_trans (e₁ : A ≃⋆+* B) (e₂ : B ≃⋆+* C) : ⇑(e₁.trans e₂) = e₂ ∘ e₁ :=
   rfl
 
 @[simp]
-/--
-theorem `trans_apply` / 定理 `trans_apply`
-
-English:
-theorem trans_apply
-  given: (e₁ : A ≃⋆+* B) (e₂ : B ≃⋆+* C) (x : A)
-  statement: (e₁.trans e₂) x = e₂ (e₁ x)
-  proof: rfl
-
-中文:
-定理 trans_apply
-  条件: (e₁ : A ≃⋆+* B) (e₂ : B ≃⋆+* C) (x : A)
-  结论: (e₁.trans e₂) x = e₂ (e₁ x)
-  证明: rfl
+/-
+**StarRingEquiv.trans_apply** 是 Mathlib 中的一个定理，位于命名空间 `StarRingEquiv`。
+形式化陈述：trans_apply (e₁ : A ≃⋆+* B) (e₂ : B ≃⋆+* C) (x : A) : (e₁.trans e₂) x = e₂
+ (e₁ x)
+参数：e₁ : A ≃⋆+* B；e₂ : B ≃⋆+* C；x : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem trans_apply (e₁ : A ≃⋆+* B) (e₂ : B ≃⋆+* C) (x : A) : (e₁.trans e₂) x = e₂ (e₁ x) :=
   rfl
-
-/--
-theorem `leftInverse_symm` / 定理 `leftInverse_symm`
-
-English:
-theorem leftInverse_symm
-  given: (e : A ≃⋆+* B)
-  statement: Function.LeftInverse e.symm e
-  proof: e.left_inv
-
-中文:
-定理 leftInverse_symm
-  条件: (e : A ≃⋆+* B)
-  结论: 函数.左逆 e.symm e
-  证明: e.left_inv
-
-Depends on / 依赖: e.left_inv, left_inv
+/-
+**StarRingEquiv.leftInverse_symm** 是 Mathlib 中的一个定理，位于命名空间 `StarRingEquiv`。
+形式化陈述：leftInverse_symm (e : A ≃⋆+* B) : Function.LeftInverse e.symm e
+参数：e : A ≃⋆+* B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
 -/
 theorem leftInverse_symm (e : A ≃⋆+* B) : Function.LeftInverse e.symm e :=
   e.left_inv
-
-/--
-theorem `rightInverse_symm` / 定理 `rightInverse_symm`
-
-English:
-theorem rightInverse_symm
-  given: (e : A ≃⋆+* B)
-  statement: Function.RightInverse e.symm e
-  proof: e.right_inv
-
-中文:
-定理 rightInverse_symm
-  条件: (e : A ≃⋆+* B)
-  结论: 函数.右逆 e.symm e
-  证明: e.right_inv
-
-Depends on / 依赖: e.right_inv, right_inv
+/-
+**StarRingEquiv.rightInverse_symm** 是 Mathlib 中的一个定理，位于命名空间 `StarRingEquiv`。
+形式化陈述：rightInverse_symm (e : A ≃⋆+* B) : Function.RightInverse e.symm e
+参数：e : A ≃⋆+* B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
 -/
 theorem rightInverse_symm (e : A ≃⋆+* B) : Function.RightInverse e.symm e :=
   e.right_inv
@@ -1512,32 +941,20 @@ variable [FunLike G B A]
 /-- If a (unital or non-unital) star ring morphism has an inverse, it is an isomorphism of
 star rings. -/
 @[simps]
-/--
-Definition of `ofStarRingHom` / `ofStarRingHom` 的定义
+/-
+**StarRingEquiv.ofStarRingHom** 是 Mathlib 中的一个定义，位于命名空间 `StarRingEquiv`。
+形式化陈述：ofStarRingHom (f : F) (g : G) (h₁ : forall x, g (f x) = x) (h₂ : forall x,
+ f (g x) = x) : A ≃⋆+* B where toFun
+参数：f : F；g : G；h₁ : forall x, g (f x) = x；h₂ : forall x, f (g x) = x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofStarRingHom
-  signature: (f : F) (g : G) (h₁ : forall x, g (f x) = x) (h₂ : forall x, f (g x) = x)
-  body: f
-  invFun := g
-  left_inv := h₁
-  right_inv := h₂
-  map_add' := map_add f
-  map_mul' := map_mul f
-  map_star' := map_star f
-
-中文:
-定义 ofStarRingHom
-  签名: (f : F) (g : G) (h₁ : 对任意 x, g (f x) = x) (h₂ : 对任意 x, f (g x) = x)
-  定义体: f
-  invFun := g
-  left_inv := h₁
-  right_inv := h₂
-  map_add' := map_add f
-  map_mul' := map_mul f
-  map_star' := map_star f
+--- 原说明 ---
+If a (unital or non-unital) star ring morphism has an inverse, it is an isomorph
+ism of
+star rings.
 -/
-def ofStarRingHom (f : F) (g : G) (h₁ : forall x, g (f x) = x) (h₂ : forall x, f (g x) = x) : A ≃⋆+* B where
+def ofStarRingHom (f : F) (g : G) (h₁ : ∀ x, g (f x) = x) (h₂ : ∀ x, f (g x) = x) : A ≃⋆+* B where
   toFun := f
   invFun := g
   left_inv := h₁
@@ -1546,64 +963,41 @@ def ofStarRingHom (f : F) (g : G) (h₁ : forall x, g (f x) = x) (h₂ : forall 
   map_mul' := map_mul f
   map_star' := map_star f
 
-/--
-Definition of `ofBijective` / `ofBijective` 的定义
+/-- Promote a bijective star ring homomorphism to a star ring equivalence. -/
+/-
+**StarRingEquiv.ofBijective** 是 Mathlib 中的一个定义，位于命名空间 `StarRingEquiv`。
+形式化陈述：ofBijective (f : F) (hf : Function.Bijective f) : A ≃⋆+* B
+参数：f : F；hf : Function.Bijective f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofBijective
-  signature: (f : F) (hf : Function.Bijective f)
-  body: { RingEquiv.ofBijective f (hf : Function.Bijective (f : A -> B)) with
-    toFun := f
-    map_star' := map_star f }
-
-@[simp]
-
-中文:
-定义 ofBijective
-  签名: (f : F) (hf : 函数.双射 f)
-  定义体: { RingEquiv.ofBijective f (hf : Function.Bijective (f : A -> B)) with
-    toFun := f
-    map_star' := map_star f }
-
-@[simp]
-
-Depends on / 依赖: Bijective, Function, Function.Bijective, RingEquiv, RingEquiv.ofBijective, map_star, ofBijective
+--- 原说明 ---
+Promote a bijective star ring homomorphism to a star ring equivalence.
 -/
 noncomputable def ofBijective (f : F) (hf : Function.Bijective f) : A ≃⋆+* B :=
-  { RingEquiv.ofBijective f (hf : Function.Bijective (f : A -> B)) with
+  { RingEquiv.ofBijective f (hf : Function.Bijective (f : A → B)) with
     toFun := f
     map_star' := map_star f }
 
 @[simp]
-/--
-theorem `coe_ofBijective` / 定理 `coe_ofBijective`
-
-English:
-theorem coe_ofBijective
-  given: {f : F} (hf : Function.Bijective f)
-  proof: rfl
-
-中文:
-定理 coe_ofBijective
-  条件: {f : F} (hf : 函数.双射 f)
-  证明: rfl
+/-
+**StarRingEquiv.coe_ofBijective** 是 Mathlib 中的一个定理，位于命名空间 `StarRingEquiv`。
+形式化陈述：coe_ofBijective {f : F} (hf : Function.Bijective f) : (StarRingEquiv.ofBij
+ective f hf : A -> B) = f
+参数：hf : Function.Bijective f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_ofBijective {f : F} (hf : Function.Bijective f) :
-    (StarRingEquiv.ofBijective f hf : A -> B) = f :=
+    (StarRingEquiv.ofBijective f hf : A → B) = f :=
   rfl
-
-/--
-theorem `ofBijective_apply` / 定理 `ofBijective_apply`
-
-English:
-theorem ofBijective_apply
-  given: {f : F} (hf : Function.Bijective f) (a : A)
-  proof: rfl
-
-中文:
-定理 ofBijective_apply
-  条件: {f : F} (hf : 函数.双射 f) (a : A)
-  证明: rfl
+/-
+**StarRingEquiv.ofBijective_apply** 是 Mathlib 中的一个定理，位于命名空间 `StarRingEquiv`。
+形式化陈述：ofBijective_apply {f : F} (hf : Function.Bijective f) (a : A) : (StarRingE
+quiv.ofBijective f hf) a = f a
+参数：hf : Function.Bijective f；a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofBijective_apply {f : F} (hf : Function.Bijective f) (a : A) :
     (StarRingEquiv.ofBijective f hf) a = f a :=
@@ -1612,3 +1006,4 @@ theorem ofBijective_apply {f : F} (hf : Function.Bijective f) (a : A) :
 end Bijective
 
 end StarRingEquiv
+

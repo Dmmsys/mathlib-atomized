@@ -36,339 +36,279 @@ section genericPoint
 
 /-- `x` is a generic point of `S` if `S` is the closure of `x`. -/
 @[stacks 004X "(1)"]
-/--
-Definition of `IsGenericPoint` / `IsGenericPoint` 的定义
+/-
+**IsGenericPoint** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsGenericPoint (x : α) (S : Set α) : Prop
+参数：x : α；S : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsGenericPoint
-  signature: (x : α) (S : Set α)
-  body: closure ({x} : Set α) = S
-
-中文:
-定义 IsGenericPoint
-  签名: (x : α) (S : 集合 α)
-  定义体: closure ({x} : Set α) = S
-
-Depends on / 依赖: closure
+--- 原说明 ---
+`x` is a generic point of `S` if `S` is the closure of `x`.
 -/
 def IsGenericPoint (x : α) (S : Set α) : Prop :=
   closure ({x} : Set α) = S
-
-/--
-theorem `isGenericPoint_def` / 定理 `isGenericPoint_def`
-
-English:
-theorem isGenericPoint_def
-  given: {x : α} {S : Set α}
-  statement: IsGenericPoint x S ↔ closure ({x} : Set α) = S
-  proof: Iff.rfl
-
-中文:
-定理 isGenericPoint_def
-  条件: {x : α} {S : 集合 α}
-  结论: IsGenericPoint x S ↔ closure ({x} : 集合 α) = S
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**isGenericPoint_def** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isGenericPoint_def {x : α} {S : Set α} : IsGenericPoint x S ↔ closure ({x}
+ : Set α) = S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem isGenericPoint_def {x : α} {S : Set α} : IsGenericPoint x S ↔ closure ({x} : Set α) = S :=
   Iff.rfl
-
-/--
-theorem `IsGenericPoint.def` / 定理 `IsGenericPoint.def`
-
-English:
-theorem IsGenericPoint.def
-  given: {x : α} {S : Set α} (h : IsGenericPoint x S)
-  proof: h
-
-中文:
-定理 IsGenericPoint.def
-  条件: {x : α} {S : 集合 α} (h : IsGenericPoint x S)
-  证明: h
+/-
+**IsGenericPoint.def** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsGenericPoint.def {x : α} {S : Set α} (h : IsGenericPoint x S) : closure 
+({x} : Set α) = S
+参数：h : IsGenericPoint x S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem IsGenericPoint.def {x : α} {S : Set α} (h : IsGenericPoint x S) :
     closure ({x} : Set α) = S :=
   h
-
-/--
-theorem `isGenericPoint_closure` / 定理 `isGenericPoint_closure`
-
-English:
-theorem isGenericPoint_closure
-  given: {x : α}
-  statement: IsGenericPoint x (closure ({x} : Set α))
-  proof: refl _
-
-中文:
-定理 isGenericPoint_closure
-  条件: {x : α}
-  结论: IsGenericPoint x (closure ({x} : 集合 α))
-  证明: refl _
+/-
+**isGenericPoint_closure** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isGenericPoint_closure {x : α} : IsGenericPoint x (closure ({x} : Set α))
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `refl`：refl [Std.Refl r] (a : α) : a ≺ a
+· 使用定理 `IsPreorder.toRefl`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsPreorde
+r α r], Std.Refl r
+· 使用定理 `IsEquiv.toIsPreorder`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsEqui
+v α r], IsPreorder α r
 -/
 theorem isGenericPoint_closure {x : α} : IsGenericPoint x (closure ({x} : Set α)) :=
   refl _
 
 variable {x y : α} {S U Z : Set α}
-
-/--
-theorem `isGenericPoint_iff_specializes` / 定理 `isGenericPoint_iff_specializes`
-
-English:
-theorem isGenericPoint_iff_specializes
-  statement: IsGenericPoint x S ↔ forall y, x ⤳ y ↔ y in S
-  proof: by
-  simp only [specializes_iff_mem_closure, IsGenericPoint, Set.ext_iff]
-
-中文:
-定理 isGenericPoint_iff_specializes
-  结论: IsGenericPoint x S ↔ 对任意 y, x ⤳ y ↔ y in S
-  证明: by
-  simp only [specializes_iff_mem_closure, IsGenericPoint, Set.ext_iff]
-
-Depends on / 依赖: IsGenericPoint, Set.ext_iff, ext_iff, specializes_iff_mem_closure
+/-
+**isGenericPoint_iff_specializes** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isGenericPoint_iff_specializes : IsGenericPoint x S ↔ forall y, x ⤳ y ↔ y 
+in S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem isGenericPoint_iff_specializes : IsGenericPoint x S ↔ forall y, x ⤳ y ↔ y in S := by
+theorem isGenericPoint_iff_specializes : IsGenericPoint x S ↔ ∀ y, x ⤳ y ↔ y ∈ S := by
   simp only [specializes_iff_mem_closure, IsGenericPoint, Set.ext_iff]
 
 namespace IsGenericPoint
 
-/--
-theorem `specializes_iff_mem` / 定理 `specializes_iff_mem`
-
-English:
-theorem specializes_iff_mem
-  given: (h : IsGenericPoint x S)
-  statement: x ⤳ y ↔ y in S
-  proof: isGenericPoint_iff_specializes.1 h y
-
-中文:
-定理 specializes_iff_mem
-  条件: (h : IsGenericPoint x S)
-  结论: x ⤳ y ↔ y in S
-  证明: isGenericPoint_iff_specializes.1 h y
-
-Depends on / 依赖: isGenericPoint_iff_specializes
+/-
+**IsGenericPoint.specializes_iff_mem** 是 Mathlib 中的一个定理，位于命名空间 `IsGenericPoint`。
+形式化陈述：specializes_iff_mem (h : IsGenericPoint x S) : x ⤳ y ↔ y in S
+参数：h : IsGenericPoint x S。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isGenericPoint_iff_specializes`：isGenericPoint_iff_specializes : IsGener
+icPoint x S ↔ forall y, x ⤳ y ↔ y in S
 -/
-theorem specializes_iff_mem (h : IsGenericPoint x S) : x ⤳ y ↔ y in S :=
+theorem specializes_iff_mem (h : IsGenericPoint x S) : x ⤳ y ↔ y ∈ S :=
   isGenericPoint_iff_specializes.1 h y
-
-/--
-theorem `specializes` / 定理 `specializes`
-
-English:
-theorem specializes
-  given: (h : IsGenericPoint x S) (h' : y in S)
-  statement: x ⤳ y
-  proof: h.specializes_iff_mem.2 h'
-
-中文:
-定理 specializes
-  条件: (h : IsGenericPoint x S) (h' : y in S)
-  结论: x ⤳ y
-  证明: h.specializes_iff_mem.2 h'
+/-
+**IsGenericPoint.specializes** 是 Mathlib 中的一个定理，位于命名空间 `IsGenericPoint`。
+形式化陈述：∀ {α : Type u_1} [inst : TopologicalSpace α] {x y : α} {S : Set α}, IsGene
+ricPoint x S → y ∈ S → x ⤳ y
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsGenericPoint.specializes_iff_mem`：specializes_iff_mem (h : IsGenericPo
+int x S) : x ⤳ y ↔ y in S
 -/
-protected theorem specializes (h : IsGenericPoint x S) (h' : y in S) : x ⤳ y :=
+protected theorem specializes (h : IsGenericPoint x S) (h' : y ∈ S) : x ⤳ y :=
   h.specializes_iff_mem.2 h'
-
-/--
-theorem `mem` / 定理 `mem`
-
-English:
-theorem mem
-  given: (h : IsGenericPoint x S)
-  statement: x in S
-  proof: h.specializes_iff_mem.1 specializes_rfl
-
-中文:
-定理 mem
-  条件: (h : IsGenericPoint x S)
-  结论: x in S
-  证明: h.specializes_iff_mem.1 specializes_rfl
+/-
+**IsGenericPoint.mem** 是 Mathlib 中的一个定理，位于命名空间 `IsGenericPoint`。
+形式化陈述：∀ {α : Type u_1} [inst : TopologicalSpace α] {x : α} {S : Set α}, IsGeneri
+cPoint x S → x ∈ S
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsGenericPoint.specializes_iff_mem`：specializes_iff_mem (h : IsGenericPo
+int x S) : x ⤳ y ↔ y in S
+· 使用定理 `specializes_rfl`：specializes_rfl : x ⤳ x
 -/
-protected theorem mem (h : IsGenericPoint x S) : x in S :=
+protected theorem mem (h : IsGenericPoint x S) : x ∈ S :=
   h.specializes_iff_mem.1 specializes_rfl
-
-/--
-theorem `isClosed` / 定理 `isClosed`
-
-English:
-theorem isClosed
-  given: (h : IsGenericPoint x S)
-  statement: IsClosed S
-  proof: h.def ▸ isClosed_closure
-
-中文:
-定理 isClosed
-  条件: (h : IsGenericPoint x S)
-  结论: 是闭集 S
-  证明: h.def ▸ isClosed_closure
+/-
+**IsGenericPoint.isClosed** 是 Mathlib 中的一个定理，位于命名空间 `IsGenericPoint`。
+形式化陈述：∀ {α : Type u_1} [inst : TopologicalSpace α] {x : α} {S : Set α}, IsGeneri
+cPoint x S → IsClosed S
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isClosed_closure`：isClosed_closure : IsClosed (closure s)
+· 使用定理 `IsGenericPoint.def`：IsGenericPoint.def {x : α} {S : Set α} (h : IsGeneri
+cPoint x S) : closure ({x} : Set α) = S
 -/
 protected theorem isClosed (h : IsGenericPoint x S) : IsClosed S :=
   h.def ▸ isClosed_closure
-
-/--
-theorem `isIrreducible` / 定理 `isIrreducible`
-
-English:
-theorem isIrreducible
-  given: (h : IsGenericPoint x S)
-  statement: IsIrreducible S
-  proof: h.def ▸ isIrreducible_singleton.closure
-
-中文:
-定理 isIrreducible
-  条件: (h : IsGenericPoint x S)
-  结论: 是不可约 S
-  证明: h.def ▸ isIrreducible_singleton.closure
+/-
+**IsGenericPoint.isIrreducible** 是 Mathlib 中的一个定理，位于命名空间 `IsGenericPoint`。
+形式化陈述：∀ {α : Type u_1} [inst : TopologicalSpace α] {x : α} {S : Set α}, IsGeneri
+cPoint x S → IsIrreducible S
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsIrreducible.closure`：∀ {X : Type u_1} [inst : TopologicalSpace X] {s :
+ Set X}, IsIrreducible s → IsIrreducible (closure s)
+· 使用定理 `isIrreducible_singleton`：isIrreducible_singleton {x} : IsIrreducible ({x
+} : Set X)
+· 使用定理 `IsGenericPoint.def`：IsGenericPoint.def {x : α} {S : Set α} (h : IsGeneri
+cPoint x S) : closure ({x} : Set α) = S
 -/
 protected theorem isIrreducible (h : IsGenericPoint x S) : IsIrreducible S :=
   h.def ▸ isIrreducible_singleton.closure
-
-/--
-theorem `inseparable` / 定理 `inseparable`
-
-English:
-theorem inseparable
-  given: (h : IsGenericPoint x S) (h' : IsGenericPoint y S)
-  proof: (h.specializes h'.mem).antisymm (h'.specializes h.mem)
-
-中文:
-定理 inseparable
-  条件: (h : IsGenericPoint x S) (h' : IsGenericPoint y S)
-  证明: (h.specializes h'.mem).antisymm (h'.specializes h.mem)
+/-
+**IsGenericPoint.inseparable** 是 Mathlib 中的一个定理，位于命名空间 `IsGenericPoint`。
+形式化陈述：∀ {α : Type u_1} [inst : TopologicalSpace α] {x y : α} {S : Set α},   IsGe
+nericPoint x S → IsGenericPoint y S → Inseparable x y
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Specializes.antisymm`：Specializes.antisymm (h₁ : x ⤳ y) (h₂ : y ⤳ x) : x
+ ~ᵢ y
+· 使用定理 `IsGenericPoint.specializes`：∀ {α : Type u_1} [inst : TopologicalSpace α]
+ {x y : α} {S : Set α}, IsGenericPoint x S → y ∈ S → x ⤳ y
+· 使用定理 `IsGenericPoint.mem`：∀ {α : Type u_1} [inst : TopologicalSpace α] {x : α}
+ {S : Set α}, IsGenericPoint x S → x ∈ S
 -/
 protected theorem inseparable (h : IsGenericPoint x S) (h' : IsGenericPoint y S) :
     Inseparable x y :=
   (h.specializes h'.mem).antisymm (h'.specializes h.mem)
 
-/--
-theorem `eq` / 定理 `eq`
+/-- In a T₀ space, each set has at most one generic point. -/
+/-
+**IsGenericPoint.eq** 是 Mathlib 中的一个定理，位于命名空间 `IsGenericPoint`。
+形式化陈述：∀ {α : Type u_1} [inst : TopologicalSpace α] {x y : α} {S : Set α} [T0Spac
+e α],   IsGenericPoint x S → IsGenericPoint y S → x = y
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Inseparable.eq`：Inseparable.eq [T0Space X] {x y : X} (h : Inseparable x 
+y) : x = y
+· 使用定理 `IsGenericPoint.inseparable`：∀ {α : Type u_1} [inst : TopologicalSpace α]
+ {x y : α} {S : Set α},   IsGenericPoint x S → IsGenericPoint y S → Inseparable 
+x y
 
-English:
-theorem eq
-  given: [T0Space α] (h : IsGenericPoint x S) (h' : IsGenericPoint y S)
-  statement: x = y
-  proof: (h.inseparable h').eq
-
-中文:
-定理 eq
-  条件: [T0空间 α] (h : IsGenericPoint x S) (h' : IsGenericPoint y S)
-  结论: x = y
-  证明: (h.inseparable h').eq
+--- 原说明 ---
+In a T₀ space, each set has at most one generic point.
 -/
 protected theorem eq [T0Space α] (h : IsGenericPoint x S) (h' : IsGenericPoint y S) : x = y :=
   (h.inseparable h').eq
-
-/--
-theorem `mem_open_set_iff` / 定理 `mem_open_set_iff`
-
-English:
-theorem mem_open_set_iff
-  given: (h : IsGenericPoint x S) (hU : IsOpen U)
-  statement: x in U ↔ (S inter U).Nonempty
-  proof: ⟨fun h' => ⟨x, h.mem, h'⟩, fun ⟨_y, hyS, hyU⟩ => (h.specializes hyS).mem_open hU hyU⟩
-
-中文:
-定理 mem_open_set_iff
-  条件: (h : IsGenericPoint x S) (hU : 是开集 U)
-  结论: x in U ↔ (S inter U).非空
-  证明: ⟨fun h' => ⟨x, h.mem, h'⟩, fun ⟨_y, hyS, hyU⟩ => (h.specializes hyS).mem_open hU hyU⟩
-
-Depends on / 依赖: h.mem, h.specializes, mem_open, specializes
+/-
+**IsGenericPoint.mem_open_set_iff** 是 Mathlib 中的一个定理，位于命名空间 `IsGenericPoint`。
+形式化陈述：mem_open_set_iff (h : IsGenericPoint x S) (hU : IsOpen U) : x in U ↔ (S in
+ter U).Nonempty
+参数：h : IsGenericPoint x S；hU : IsOpen U。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsGenericPoint.mem`：∀ {α : Type u_1} [inst : TopologicalSpace α] {x : α}
+ {S : Set α}, IsGenericPoint x S → x ∈ S
+· 使用定理 `Specializes.mem_open`：Specializes.mem_open (h : x ⤳ y) (hs : IsOpen s) (
+hy : y in s) : x in s
+· 使用定理 `IsGenericPoint.specializes`：∀ {α : Type u_1} [inst : TopologicalSpace α]
+ {x y : α} {S : Set α}, IsGenericPoint x S → y ∈ S → x ⤳ y
 -/
-theorem mem_open_set_iff (h : IsGenericPoint x S) (hU : IsOpen U) : x in U ↔ (S inter U).Nonempty :=
+theorem mem_open_set_iff (h : IsGenericPoint x S) (hU : IsOpen U) : x ∈ U ↔ (S ∩ U).Nonempty :=
   ⟨fun h' => ⟨x, h.mem, h'⟩, fun ⟨_y, hyS, hyU⟩ => (h.specializes hyS).mem_open hU hyU⟩
-
-/--
-theorem `disjoint_iff` / 定理 `disjoint_iff`
-
-English:
-theorem disjoint_iff
-  given: (h : IsGenericPoint x S) (hU : IsOpen U)
-  statement: Disjoint S U ↔ x ∉ U
-  proof: by
-  rw [h.mem_open_set_iff hU]; rw [← not_disjoint_iff_nonempty_inter]; rw [Classical.not_not]
-
-中文:
-定理 disjoint_iff
-  条件: (h : IsGenericPoint x S) (hU : 是开集 U)
-  结论: Disjoint S U ↔ x ∉ U
-  证明: by
-  rw [h.mem_open_set_iff hU]; rw [← not_disjoint_iff_nonempty_inter]; rw [Classical.not_not]
-
-Depends on / 依赖: Classical, Classical.not_not, h.mem_open_set_iff, mem_open_set_iff, not_disjoint_iff_nonempty_inter, not_not
+/-
+**IsGenericPoint.disjoint_iff** 是 Mathlib 中的一个定理，位于命名空间 `IsGenericPoint`。
+形式化陈述：disjoint_iff (h : IsGenericPoint x S) (hU : IsOpen U) : Disjoint S U ↔ x ∉
+ U
+参数：h : IsGenericPoint x S；hU : IsOpen U。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsGenericPoint.mem_open_set_iff`：mem_open_set_iff (h : IsGenericPoint x 
+S) (hU : IsOpen U) : x in U ↔ (S inter U).Nonempty
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Set.not_disjoint_iff_nonempty_inter`：not_disjoint_iff_nonempty_inter : ¬
+ Disjoint s t ↔ (s inter t).Nonempty
+· 使用定理 `Classical.not_not`：∀ {a : Prop}, ¬¬a ↔ a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem disjoint_iff (h : IsGenericPoint x S) (hU : IsOpen U) : Disjoint S U ↔ x ∉ U := by
-  rw [h.mem_open_set_iff hU]; rw [← not_disjoint_iff_nonempty_inter]; rw [Classical.not_not]
-
-/--
-theorem `mem_closed_set_iff` / 定理 `mem_closed_set_iff`
-
-English:
-theorem mem_closed_set_iff
-  given: (h : IsGenericPoint x S) (hZ : IsClosed Z)
-  statement: x in Z ↔ S subseteq Z
-  proof: by
-  rw [← h.def]; rw [hZ.closure_subset_iff]; rw [singleton_subset_iff]
-
-中文:
-定理 mem_closed_set_iff
-  条件: (h : IsGenericPoint x S) (hZ : 是闭集 Z)
-  结论: x in Z ↔ S subseteq Z
-  证明: by
-  rw [← h.def]; rw [hZ.closure_subset_iff]; rw [singleton_subset_iff]
-
-Depends on / 依赖: closure_subset_iff, h.def, hZ.closure_subset_iff, singleton_subset_iff
+  rw [h.mem_open_set_iff hU, ← not_disjoint_iff_nonempty_inter, Classical.not_not]
+/-
+**IsGenericPoint.mem_closed_set_iff** 是 Mathlib 中的一个定理，位于命名空间 `IsGenericPoint`。
+形式化陈述：mem_closed_set_iff (h : IsGenericPoint x S) (hZ : IsClosed Z) : x in Z ↔ S
+ subseteq Z
+参数：h : IsGenericPoint x S；hZ : IsClosed Z。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsGenericPoint.def`：IsGenericPoint.def {x : α} {S : Set α} (h : IsGeneri
+cPoint x S) : closure ({x} : Set α) = S
+· 使用定理 `IsClosed.closure_subset_iff`：IsClosed.closure_subset_iff (h₁ : IsClosed 
+t) : closure s subseteq t ↔ s subseteq t
+· 使用定理 `Set.singleton_subset_iff`：singleton_subset_iff {a : α} {s : Set α} : {a}
+ subseteq s ↔ a in s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_closed_set_iff (h : IsGenericPoint x S) (hZ : IsClosed Z) : x in Z ↔ S subseteq Z := by
-  rw [← h.def]; rw [hZ.closure_subset_iff]; rw [singleton_subset_iff]
-
-/--
-theorem `image` / 定理 `image`
-
-English:
-theorem image
-  given: (h : IsGenericPoint x S) {f : α -> β} (hf : Continuous f)
-  proof: by
-  rw [isGenericPoint_def]; rw [← h.def]; rw [← image_singleton]; rw [closure_image_closure hf]
-
-中文:
-定理 像
-  条件: (h : IsGenericPoint x S) {f : α -> β} (hf : 连续 f)
-  证明: by
-  rw [isGenericPoint_def]; rw [← h.def]; rw [← image_singleton]; rw [closure_image_closure hf]
+theorem mem_closed_set_iff (h : IsGenericPoint x S) (hZ : IsClosed Z) : x ∈ Z ↔ S ⊆ Z := by
+  rw [← h.def, hZ.closure_subset_iff, singleton_subset_iff]
+/-
+**IsGenericPoint.image** 是 Mathlib 中的一个定理，位于命名空间 `IsGenericPoint`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : TopologicalSpace α] [inst_1 : Topo
+logicalSpace β] {x : α} {S : Set α},   IsGenericPoint x S → ∀ {f : α → β}, Conti
+nuous f → IsGenericPoint (f x) (closure (f '' S))
+参数：f x；closure (f '' S)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isGenericPoint_def`：isGenericPoint_def {x : α} {S : Set α} : IsGenericPo
+int x S ↔ closure ({x} : Set α) = S
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsGenericPoint.def`：IsGenericPoint.def {x : α} {S : Set α} (h : IsGeneri
+cPoint x S) : closure ({x} : Set α) = S
+· 使用定理 `Set.image_singleton`：image_singleton {f : α -> β} {a : α} : f '' {a} = {
+f a}
+· 使用定理 `closure_image_closure`：closure_image_closure (h : Continuous f) : closur
+e (f '' closure s) = closure (f '' s)
 -/
-protected theorem image (h : IsGenericPoint x S) {f : α -> β} (hf : Continuous f) :
+protected theorem image (h : IsGenericPoint x S) {f : α → β} (hf : Continuous f) :
     IsGenericPoint (f x) (closure (f '' S)) := by
-  rw [isGenericPoint_def]; rw [← h.def]; rw [← image_singleton]; rw [closure_image_closure hf]
+  rw [isGenericPoint_def, ← h.def, ← image_singleton, closure_image_closure hf]
 
 end IsGenericPoint
 
-/--
-theorem `isGenericPoint_iff_forall_closed` / 定理 `isGenericPoint_iff_forall_closed`
-
-English:
-theorem isGenericPoint_iff_forall_closed
-  given: (hS : IsClosed S) (hxS : x in S)
-  proof: by
-  have : closure {x} subseteq S := closure_minimal (singleton_subset_iff.2 hxS) hS
-  simp_rw [IsGenericPoint, subset_antisymm_iff, this, true_and, closure, subset_sInter_iff,
-    mem_ofPred_eq, and_imp, singleton_subset_iff]
-
-中文:
-定理 isGenericPoint_iff_对任意_closed
-  条件: (hS : 是闭集 S) (hxS : x in S)
-  证明: by
-  have : closure {x} subseteq S := closure_minimal (singleton_subset_iff.2 hxS) hS
-  simp_rw [IsGenericPoint, subset_antisymm_iff, this, true_and, closure, subset_sInter_iff,
-    mem_ofPred_eq, and_imp, singleton_subset_iff]
-
-Depends on / 依赖: IsGenericPoint, and_imp, closure, closure_minimal, mem_ofPred_eq, simp_rw, singleton_subset_iff, subset_antisymm_iff, subset_sInter_iff, subseteq, true_and
+/-
+**isGenericPoint_iff_forall_closed** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isGenericPoint_iff_forall_closed (hS : IsClosed S) (hxS : x in S) : IsGene
+ricPoint x S ↔ forall Z : Set α, IsClosed Z -> x in Z -> S subseteq Z
+参数：hS : IsClosed S；hxS : x in S。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `closure_minimal`：closure_minimal (h₁ : s subseteq t) (h₂ : IsClosed t) :
+ closure s subseteq t
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.singleton_subset_iff`：singleton_subset_iff {a : α} {s : Set α} : {a}
+ subseteq s ↔ a in s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem isGenericPoint_iff_forall_closed (hS : IsClosed S) (hxS : x in S) :
-    IsGenericPoint x S ↔ forall Z : Set α, IsClosed Z -> x in Z -> S subseteq Z := by
-  have : closure {x} subseteq S := closure_minimal (singleton_subset_iff.2 hxS) hS
+theorem isGenericPoint_iff_forall_closed (hS : IsClosed S) (hxS : x ∈ S) :
+    IsGenericPoint x S ↔ ∀ Z : Set α, IsClosed Z → x ∈ Z → S ⊆ Z := by
+  have : closure {x} ⊆ S := closure_minimal (singleton_subset_iff.2 hxS) hS
   simp_rw [IsGenericPoint, subset_antisymm_iff, this, true_and, closure, subset_sInter_iff,
     mem_ofPred_eq, and_imp, singleton_subset_iff]
 
@@ -378,81 +318,66 @@ section Sober
 
 /-- A space is sober if every irreducible closed subset has a generic point. -/
 @[mk_iff, stacks 004X "(3)"]
-/--
-Definition of `QuasiSober` / `QuasiSober` 的定义
+/-
+**QuasiSober** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_3) → [TopologicalSpace α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class QuasiSober
-  parameters: (α : Type*) [TopologicalSpace α]
-  axioms and operations (1):
-    - sober : forall {S : Set α}, IsIrreducible S -> IsClosed S -> exists x, IsGenericPoint x S
-
-中文:
-类 拟醇
-  参数: (α : 类型) [拓扑空间 α]
-  公理与运算 (1 个):
-    - sober : 对任意 {S : 集合 α}, 是不可约 S -> 是闭集 S -> 存在 x, IsGenericPoint x S
+--- 原说明 ---
+A space is sober if every irreducible closed subset has a generic point.
 -/
 class QuasiSober (α : Type*) [TopologicalSpace α] : Prop where
-  sober : forall {S : Set α}, IsIrreducible S -> IsClosed S -> exists x, IsGenericPoint x S
+  sober : ∀ {S : Set α}, IsIrreducible S → IsClosed S → ∃ x, IsGenericPoint x S
 
-/--
-Definition of `IsIrreducible.genericPoint` / `IsIrreducible.genericPoint` 的定义
+/-- A generic point of the closure of an irreducible space. -/
+/-
+**IsIrreducible.genericPoint** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsIrreducible.genericPoint [QuasiSober α] {S : Set α} (hS : IsIrreducible 
+S) : α
+参数：hS : IsIrreducible S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsIrreducible.genericPoint
-  signature: [QuasiSober α] {S : Set α} (hS : IsIrreducible S)
-  body: (QuasiSober.sober hS.closure isClosed_closure).choose
-
-中文:
-定义 是不可约.genericPoint
-  签名: [拟醇 α] {S : 集合 α} (hS : 是不可约 S)
-  定义体: (QuasiSober.sober hS.closure isClosed_closure).choose
-
-Depends on / 依赖: QuasiSober, QuasiSober.sober, closure, hS.closure, isClosed_closure
+--- 原说明 ---
+A generic point of the closure of an irreducible space.
 -/
 noncomputable def IsIrreducible.genericPoint [QuasiSober α] {S : Set α} (hS : IsIrreducible S) :
     α :=
   (QuasiSober.sober hS.closure isClosed_closure).choose
-
-/--
-theorem `IsIrreducible.isGenericPoint_genericPoint_closure` / 定理 `IsIrreducible.isGenericPoint_genericPoint_closure`
-
-English:
-theorem IsIrreducible.isGenericPoint_genericPoint_closure
-  proof: (QuasiSober.sober hS.closure isClosed_closure).choose_spec
-
-中文:
-定理 是不可约.isGenericPoint_genericPoint_closure
-  证明: (QuasiSober.sober hS.closure isClosed_closure).choose_spec
-
-Depends on / 依赖: QuasiSober, QuasiSober.sober, choose_spec, closure, hS.closure, isClosed_closure
+/-
+**IsIrreducible.isGenericPoint_genericPoint_closure** 是 Mathlib 中的一个定理，位于命名空间 ``
+。
+形式化陈述：IsIrreducible.isGenericPoint_genericPoint_closure [QuasiSober α] {S : Set 
+α} (hS : IsIrreducible S) : IsGenericPoint hS.genericPoint (closure S)
+参数：hS : IsIrreducible S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `QuasiSober.sober`：∀ {α : Type u_3} {inst : TopologicalSpace α} [self : Q
+uasiSober α] {S : Set α},   IsIrreducible S → IsClosed S → ∃ x, IsGenericPoint x
+ S
+· 使用定理 `IsIrreducible.closure`：∀ {X : Type u_1} [inst : TopologicalSpace X] {s :
+ Set X}, IsIrreducible s → IsIrreducible (closure s)
+· 使用定理 `isClosed_closure`：isClosed_closure : IsClosed (closure s)
 -/
 theorem IsIrreducible.isGenericPoint_genericPoint_closure
     [QuasiSober α] {S : Set α} (hS : IsIrreducible S) :
     IsGenericPoint hS.genericPoint (closure S) :=
   (QuasiSober.sober hS.closure isClosed_closure).choose_spec
-
-/--
-theorem `IsIrreducible.isGenericPoint_genericPoint` / 定理 `IsIrreducible.isGenericPoint_genericPoint`
-
-English:
-theorem IsIrreducible.isGenericPoint_genericPoint
-  statement: [QuasiSober α] {S : Set α}
-  proof: by
-  convert! hS.isGenericPoint_genericPoint_closure; exact hS'.closure_eq.symm
-
-@[simp]
-
-中文:
-定理 是不可约.isGenericPoint_genericPoint
-  结论: [拟醇 α] {S : 集合 α}
-  证明: by
-  convert! hS.isGenericPoint_genericPoint_closure; exact hS'.closure_eq.symm
-
-@[simp]
-
-Depends on / 依赖: closure_eq, closure_eq.symm, convert, hS.isGenericPoint_genericPoint_closure, isGenericPoint_genericPoint_closure
+/-
+**IsIrreducible.isGenericPoint_genericPoint** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsIrreducible.isGenericPoint_genericPoint [QuasiSober α] {S : Set α} (hS :
+ IsIrreducible S) (hS' : IsClosed S) : IsGenericPoint hS.genericPoint S
+参数：hS : IsIrreducible S；hS' : IsClosed S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsClosed.closure_eq`：IsClosed.closure_eq : c.IsClosed x -> c x = x
+· 使用定理 `IsIrreducible.isGenericPoint_genericPoint_closure`：IsIrreducible.isGener
+icPoint_genericPoint_closure [QuasiSober α] {S : Set α} (hS : IsIrreducible S) :
+ IsGenericPoint hS.genericPoint (closur…
 -/
 theorem IsIrreducible.isGenericPoint_genericPoint [QuasiSober α] {S : Set α}
     (hS : IsIrreducible S) (hS' : IsClosed S) :
@@ -460,39 +385,32 @@ theorem IsIrreducible.isGenericPoint_genericPoint [QuasiSober α] {S : Set α}
   convert! hS.isGenericPoint_genericPoint_closure; exact hS'.closure_eq.symm
 
 @[simp]
-/--
-theorem `IsIrreducible.genericPoint_closure_eq` / 定理 `IsIrreducible.genericPoint_closure_eq`
-
-English:
-theorem IsIrreducible.genericPoint_closure_eq
-  given: [QuasiSober α] {S : Set α} (hS : IsIrreducible S)
-  proof: hS.isGenericPoint_genericPoint_closure
-
-中文:
-定理 是不可约.genericPoint_closure_eq
-  条件: [拟醇 α] {S : 集合 α} (hS : 是不可约 S)
-  证明: hS.isGenericPoint_genericPoint_closure
-
-Depends on / 依赖: hS.isGenericPoint_genericPoint_closure, isGenericPoint_genericPoint_closure
+/-
+**IsIrreducible.genericPoint_closure_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsIrreducible.genericPoint_closure_eq [QuasiSober α] {S : Set α} (hS : IsI
+rreducible S) : closure ({hS.genericPoint} : Set α) = closure S
+参数：hS : IsIrreducible S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsIrreducible.isGenericPoint_genericPoint_closure`：IsIrreducible.isGener
+icPoint_genericPoint_closure [QuasiSober α] {S : Set α} (hS : IsIrreducible S) :
+ IsGenericPoint hS.genericPoint (closur…
 -/
 theorem IsIrreducible.genericPoint_closure_eq [QuasiSober α] {S : Set α} (hS : IsIrreducible S) :
     closure ({hS.genericPoint} : Set α) = closure S :=
   hS.isGenericPoint_genericPoint_closure
-
-/--
-theorem `IsIrreducible.closure_genericPoint` / 定理 `IsIrreducible.closure_genericPoint`
-
-English:
-theorem IsIrreducible.closure_genericPoint
-  statement: [QuasiSober α] {S : Set α}
-  proof: hS.isGenericPoint_genericPoint_closure.trans hS'.closure_eq
-
-中文:
-定理 是不可约.closure_genericPoint
-  结论: [拟醇 α] {S : 集合 α}
-  证明: hS.isGenericPoint_genericPoint_closure.trans hS'.closure_eq
-
-Depends on / 依赖: closure_eq, hS.isGenericPoint_genericPoint_closure.trans, isGenericPoint_genericPoint_closure
+/-
+**IsIrreducible.closure_genericPoint** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsIrreducible.closure_genericPoint [QuasiSober α] {S : Set α} (hS : IsIrre
+ducible S) (hS' : IsClosed S) : closure ({hS.genericPoint} : Set α) = S
+参数：hS : IsIrreducible S；hS' : IsClosed S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `IsIrreducible.isGenericPoint_genericPoint_closure`：IsIrreducible.isGener
+icPoint_genericPoint_closure [QuasiSober α] {S : Set α} (hS : IsIrreducible S) :
+ IsGenericPoint hS.genericPoint (closur…
+· 使用定理 `IsClosed.closure_eq`：IsClosed.closure_eq : c.IsClosed x -> c x = x
 -/
 theorem IsIrreducible.closure_genericPoint [QuasiSober α] {S : Set α}
     (hS : IsIrreducible S) (hS' : IsClosed S) :
@@ -501,87 +419,79 @@ theorem IsIrreducible.closure_genericPoint [QuasiSober α] {S : Set α}
 
 variable (α)
 
-/--
-Definition of `genericPoint` / `genericPoint` 的定义
+/-- A generic point of a sober irreducible space. -/
+/-
+**genericPoint** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：genericPoint [QuasiSober α] [IrreducibleSpace α] : α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IrreducibleSpace.isIrreducible_univ`：IrreducibleSpace.isIrreducible_univ
+ (X : Type*) [TopologicalSpace X] [IrreducibleSpace X] : IsIrreducible (univ : S
+et X)
 
-English:
-definition genericPoint
-  signature: [QuasiSober α] [IrreducibleSpace α]
-  body: (IrreducibleSpace.isIrreducible_univ α).genericPoint
-
-中文:
-定义 genericPoint
-  签名: [拟醇 α] [不可约空间 α]
-  定义体: (IrreducibleSpace.isIrreducible_univ α).genericPoint
-
-Depends on / 依赖: IrreducibleSpace, IrreducibleSpace.isIrreducible_univ, genericPoint, isIrreducible_univ
+--- 原说明 ---
+A generic point of a sober irreducible space.
 -/
 noncomputable def genericPoint [QuasiSober α] [IrreducibleSpace α] : α :=
   (IrreducibleSpace.isIrreducible_univ α).genericPoint
-
-/--
-theorem `genericPoint_spec` / 定理 `genericPoint_spec`
-
-English:
-theorem genericPoint_spec
-  given: [QuasiSober α] [IrreducibleSpace α]
-  proof: by
-  simpa using! (IrreducibleSpace.isIrreducible_univ α).isGenericPoint_genericPoint_closure
-
-@[simp]
-
-中文:
-定理 genericPoint_spec
-  条件: [拟醇 α] [不可约空间 α]
-  证明: by
-  simpa using! (IrreducibleSpace.isIrreducible_univ α).isGenericPoint_genericPoint_closure
-
-@[simp]
-
-Depends on / 依赖: IrreducibleSpace, IrreducibleSpace.isIrreducible_univ, isGenericPoint_genericPoint_closure, isIrreducible_univ
+/-
+**genericPoint_spec** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：genericPoint_spec [QuasiSober α] [IrreducibleSpace α] : IsGenericPoint (ge
+nericPoint α) univ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IrreducibleSpace.isIrreducible_univ`：IrreducibleSpace.isIrreducible_univ
+ (X : Type*) [TopologicalSpace X] [IrreducibleSpace X] : IsIrreducible (univ : S
+et X)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsClosed.closure_eq`：IsClosed.closure_eq : c.IsClosed x -> c x = x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsIrreducible.isGenericPoint_genericPoint_closure`：IsIrreducible.isGener
+icPoint_genericPoint_closure [QuasiSober α] {S : Set α} (hS : IsIrreducible S) :
+ IsGenericPoint hS.genericPoint (closur…
 -/
 theorem genericPoint_spec [QuasiSober α] [IrreducibleSpace α] :
     IsGenericPoint (genericPoint α) univ := by
   simpa using! (IrreducibleSpace.isIrreducible_univ α).isGenericPoint_genericPoint_closure
 
 @[simp]
-/--
-theorem `genericPoint_closure` / 定理 `genericPoint_closure`
-
-English:
-theorem genericPoint_closure
-  given: [QuasiSober α] [IrreducibleSpace α]
-  proof: genericPoint_spec α
-
-中文:
-定理 genericPoint_closure
-  条件: [拟醇 α] [不可约空间 α]
-  证明: genericPoint_spec α
-
-Depends on / 依赖: genericPoint_spec
+/-
+**genericPoint_closure** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：genericPoint_closure [QuasiSober α] [IrreducibleSpace α] : closure ({gener
+icPoint α} : Set α) = univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `genericPoint_spec`：genericPoint_spec [QuasiSober α] [IrreducibleSpace α]
+ : IsGenericPoint (genericPoint α) univ
 -/
 theorem genericPoint_closure [QuasiSober α] [IrreducibleSpace α] :
     closure ({genericPoint α} : Set α) = univ :=
   genericPoint_spec α
 
 variable {α}
-
-/--
-theorem `genericPoint_specializes` / 定理 `genericPoint_specializes`
-
-English:
-theorem genericPoint_specializes
-  given: [QuasiSober α] [IrreducibleSpace α] (x : α)
-  statement: genericPoint α ⤳ x
-  proof: (IsIrreducible.isGenericPoint_genericPoint_closure _).specializes (by simp)
-
-中文:
-定理 genericPoint_specializes
-  条件: [拟醇 α] [不可约空间 α] (x : α)
-  结论: genericPoint α ⤳ x
-  证明: (IsIrreducible.isGenericPoint_genericPoint_closure _).specializes (by simp)
-
-Depends on / 依赖: IsIrreducible, IsIrreducible.isGenericPoint_genericPoint_closure, isGenericPoint_genericPoint_closure, specializes
+/-
+**genericPoint_specializes** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：genericPoint_specializes [QuasiSober α] [IrreducibleSpace α] (x : α) : gen
+ericPoint α ⤳ x
+参数：x : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsGenericPoint.specializes`：∀ {α : Type u_1} [inst : TopologicalSpace α]
+ {x y : α} {S : Set α}, IsGenericPoint x S → y ∈ S → x ⤳ y
+· 使用定理 `IrreducibleSpace.isIrreducible_univ`：IrreducibleSpace.isIrreducible_univ
+ (X : Type*) [TopologicalSpace X] [IrreducibleSpace X] : IsIrreducible (univ : S
+et X)
+· 使用定理 `IsIrreducible.isGenericPoint_genericPoint_closure`：IsIrreducible.isGener
+icPoint_genericPoint_closure [QuasiSober α] {S : Set α} (hS : IsIrreducible S) :
+ IsGenericPoint hS.genericPoint (closur…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsClosed.closure_eq`：IsClosed.closure_eq : c.IsClosed x -> c x = x
 -/
 theorem genericPoint_specializes [QuasiSober α] [IrreducibleSpace α] (x : α) : genericPoint α ⤳ x :=
   (IsIrreducible.isGenericPoint_genericPoint_closure _).specializes (by simp)
@@ -589,50 +499,20 @@ theorem genericPoint_specializes [QuasiSober α] [IrreducibleSpace α] (x : α) 
 attribute [local instance] specializationOrder
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `irreducibleSetEquivPoints` / `irreducibleSetEquivPoints` 的定义
+/-- The closed irreducible subsets of a sober space bijects with the points of the space. -/
+/-
+**irreducibleSetEquivPoints** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：irreducibleSetEquivPoints [QuasiSober α] [T0Space α] : TopologicalSpace.Ir
+reducibleCloseds α ≃o α where toFun s
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.IrreducibleCloseds.isIrreducible'`：∀ {α : Type u_4} [in
+st : TopologicalSpace α] (self : TopologicalSpace.IrreducibleCloseds α), IsIrred
+ucible self.carrier
 
-English:
-definition irreducibleSetEquivPoints
-  signature: [QuasiSober α] [T0Space α]
-  body: s.2.genericPoint
-  invFun x := ⟨closure ({x} : Set α), isIrreducible_singleton.closure, isClosed_closure⟩
-  left_inv s := by
-    refine TopologicalSpace.IrreducibleCloseds.ext ?_
-    simp only [IsIrreducible.genericPoint_closure_eq, TopologicalSpace.IrreducibleCloseds.coe_mk,
-      closure_eq_iff_isClosed.mpr s.3]
-    rfl
-  right_inv x := isIrreducible_singleton.closure.isGenericPoint_genericPoint_closure.eq
-      (by rw [closure_closure]; exact isGenericPoint_closure)
-  map_rel_iff' := by
-    rintro ⟨s, hs, hs'⟩ ⟨t, ht, ht'⟩
-    refine specializes_iff_closure_subset.trans ?_
-    simp
-    rfl
-
-@[simp]
-
-中文:
-定义 irreducibleSetEquivPoints
-  签名: [拟醇 α] [T0空间 α]
-  定义体: s.2.genericPoint
-  invFun x := ⟨closure ({x} : Set α), isIrreducible_singleton.closure, isClosed_closure⟩
-  left_inv s := by
-    refine TopologicalSpace.IrreducibleCloseds.ext ?_
-    simp only [IsIrreducible.genericPoint_closure_eq, TopologicalSpace.IrreducibleCloseds.coe_mk,
-      closure_eq_iff_isClosed.mpr s.3]
-    rfl
-  right_inv x := isIrreducible_singleton.closure.isGenericPoint_genericPoint_closure.eq
-      (by rw [closure_closure]; exact isGenericPoint_closure)
-  map_rel_iff' := by
-    rintro ⟨s, hs, hs'⟩ ⟨t, ht, ht'⟩
-    refine specializes_iff_closure_subset.trans ?_
-    simp
-    rfl
-
-@[simp]
-
-Depends on / 依赖: genericPoint
+--- 原说明 ---
+The closed irreducible subsets of a sober space bijects with the points of the s
+pace.
 -/
 noncomputable def irreducibleSetEquivPoints [QuasiSober α] [T0Space α] :
     TopologicalSpace.IrreducibleCloseds α ≃o α where
@@ -652,50 +532,58 @@ noncomputable def irreducibleSetEquivPoints [QuasiSober α] [T0Space α] :
     rfl
 
 @[simp]
-/--
-lemma `coe_irreducibleEquivPoints_symm_apply` / 引理 `coe_irreducibleEquivPoints_symm_apply`
-
-English:
-lemma coe_irreducibleEquivPoints_symm_apply
-  given: [QuasiSober α] [T0Space α] (x : α)
-  proof: rfl
-
-中文:
-引理 coe_irreducibleEquivPoints_symm_apply
-  条件: [拟醇 α] [T0空间 α] (x : α)
-  证明: rfl
+/-
+**coe_irreducibleEquivPoints_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：coe_irreducibleEquivPoints_symm_apply [QuasiSober α] [T0Space α] (x : α) :
+ (irreducibleSetEquivPoints.symm x : Set α) = closure {x}
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_irreducibleEquivPoints_symm_apply [QuasiSober α] [T0Space α] (x : α) :
     (irreducibleSetEquivPoints.symm x : Set α) = closure {x} := rfl
-
-/--
-lemma `Topology.IsClosedEmbedding.quasiSober` / 引理 `Topology.IsClosedEmbedding.quasiSober`
-
-English:
-lemma Topology.IsClosedEmbedding.quasiSober
-  given: {f : α -> β} (hf : IsClosedEmbedding f) [QuasiSober β]
-  proof: by
-    have hS'' := hS.image f hf.continuous.continuousOn
-    obtain ⟨x, hx⟩ := QuasiSober.sober hS'' (hf.isClosedMap _ hS')
-    obtain ⟨y, -, rfl⟩ := hx.mem
-    use y
-    apply image_injective.mpr hf.injective
-    rw [← hx.def]; rw [← hf.closure_image_eq]; rw [image_singleton]
-
-中文:
-引理 拓扑.是闭嵌入.quasiSober
-  条件: {f : α -> β} (hf : 是闭嵌入 f) [拟醇 β]
-  证明: by
-    have hS'' := hS.image f hf.continuous.continuousOn
-    obtain ⟨x, hx⟩ := QuasiSober.sober hS'' (hf.isClosedMap _ hS')
-    obtain ⟨y, -, rfl⟩ := hx.mem
-    use y
-    apply image_injective.mpr hf.injective
-    rw [← hx.def]; rw [← hf.closure_image_eq]; rw [image_singleton]
-
-Depends on / 依赖: QuasiSober, QuasiSober.sober, closure_image_eq, continuous, continuousOn, hS.image, hf.closure_image_eq, hf.continuous.continuousOn, hf.injective, hf.isClosedMap, hx.def, hx.mem, image_injective, image_injective.mpr, image_singleton, injective, isClosedMap
+/-
+**Topology.IsClosedEmbedding.quasiSober** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Topology.IsClosedEmbedding.quasiSober {f : α -> β} (hf : IsClosedEmbedding
+ f) [QuasiSober β] : QuasiSober α where sober hS hS'
+参数：hf : IsClosedEmbedding f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsIrreducible.image`：IsIrreducible.image (H : IsIrreducible s) (f : X ->
+ Y) (hf : ContinuousOn f s) : IsIrreducible (f '' s)
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
+· 使用定理 `Topology.IsClosedEmbedding.continuous`：∀ {X : Type u_1} {Y : Type u_2} {
+f : X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology
+.IsClosedEmbedding f → Cont…
+· 使用定理 `QuasiSober.sober`：∀ {α : Type u_3} {inst : TopologicalSpace α} [self : Q
+uasiSober α] {S : Set α},   IsIrreducible S → IsClosed S → ∃ x, IsGenericPoint x
+ S
+· 使用定理 `Topology.IsClosedEmbedding.isClosedMap`：∀ {X : Type u_1} {Y : Type u_2} 
+{f : X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topolog
+y.IsClosedEmbedding f → IsCl…
+· 使用定理 `IsGenericPoint.mem`：∀ {α : Type u_1} [inst : TopologicalSpace α] {x : α}
+ {S : Set α}, IsGenericPoint x S → x ∈ S
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.image_injective`：image_injective : Injective (image f) ↔ Injective f
+· 使用定理 `Topology.IsEmbedding.injective`：∀ {X : Type u_1} {Y : Type u_2} [tX : To
+pologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsEmbedding 
+f → Function.Injecti…
+· 使用定理 `Topology.IsClosedEmbedding.toIsEmbedding`：∀ {X : Type u_1} {Y : Type u_2
+} [tX : TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.Is
+ClosedEmbedding f → Topology.I…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsGenericPoint.def`：IsGenericPoint.def {x : α} {S : Set α} (h : IsGeneri
+cPoint x S) : closure ({x} : Set α) = S
+· 使用定理 `Topology.IsClosedEmbedding.closure_image_eq`：∀ {X : Type u_1} {Y : Type 
+u_2} {f : X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   To
+pology.IsClosedEmbedding f → ∀ (s…
+· 使用定理 `Set.image_singleton`：image_singleton {f : α -> β} {a : α} : f '' {a} = {
+f a}
 -/
-lemma Topology.IsClosedEmbedding.quasiSober {f : α -> β} (hf : IsClosedEmbedding f) [QuasiSober β] :
+lemma Topology.IsClosedEmbedding.quasiSober {f : α → β} (hf : IsClosedEmbedding f) [QuasiSober β] :
     QuasiSober α where
   sober hS hS' := by
     have hS'' := hS.image f hf.continuous.continuousOn
@@ -703,128 +591,158 @@ lemma Topology.IsClosedEmbedding.quasiSober {f : α -> β} (hf : IsClosedEmbeddi
     obtain ⟨y, -, rfl⟩ := hx.mem
     use y
     apply image_injective.mpr hf.injective
-    rw [← hx.def]; rw [← hf.closure_image_eq]; rw [image_singleton]
-
-/--
-theorem `Topology.IsOpenEmbedding.quasiSober` / 定理 `Topology.IsOpenEmbedding.quasiSober`
-
-English:
-theorem Topology.IsOpenEmbedding.quasiSober
-  given: {f : α -> β} (hf : IsOpenEmbedding f) [QuasiSober β]
-  proof: by
-    have hS'' := hS.image f hf.continuous.continuousOn
-    obtain ⟨x, hx⟩ := QuasiSober.sober hS''.closure isClosed_closure
-    obtain ⟨T, hT, rfl⟩ := hf.isInducing.isClosed_iff.mp hS'
-    rw [image_preimage_eq_inter_range] at hx hS''
-    have hxT : x in T := by
-      rw [← hT.closure_eq]
-      exact closure_mono inter_subset_left hx.mem
-    obtain ⟨y, rfl⟩ : x in range f := by
-      rw [hx.mem_open_set_iff hf.isOpen_range]
-      refine Nonempty.mono ?_ hS''.1
-      simpa using subset_closure
-    use y
-    change _ = _
-    rw [hf.isEmbedding.closure_eq_preimage_closure_image]; rw [image_singleton]; rw [show _ = _ from hx]
-    apply image_injective.mpr hf.injective
-    ext z
-    simp only [image_preimage_eq_inter_range, mem_inter_iff, and_congr_left_iff]
-    exact fun hy => ⟨fun h => hT.closure_eq ▸ closure_mono inter_subset_left h,
-      fun h => subset_closure ⟨h, hy⟩⟩
-
-中文:
-定理 拓扑.是开嵌入.quasiSober
-  条件: {f : α -> β} (hf : 是开嵌入 f) [拟醇 β]
-  证明: by
-    have hS'' := hS.image f hf.continuous.continuousOn
-    obtain ⟨x, hx⟩ := QuasiSober.sober hS''.closure isClosed_closure
-    obtain ⟨T, hT, rfl⟩ := hf.isInducing.isClosed_iff.mp hS'
-    rw [image_preimage_eq_inter_range] at hx hS''
-    have hxT : x in T := by
-      rw [← hT.closure_eq]
-      exact closure_mono inter_subset_left hx.mem
-    obtain ⟨y, rfl⟩ : x in range f := by
-      rw [hx.mem_open_set_iff hf.isOpen_range]
-      refine Nonempty.mono ?_ hS''.1
-      simpa using subset_closure
-    use y
-    change _ = _
-    rw [hf.isEmbedding.closure_eq_preimage_closure_image]; rw [image_singleton]; rw [show _ = _ from hx]
-    apply image_injective.mpr hf.injective
-    ext z
-    simp only [image_preimage_eq_inter_range, mem_inter_iff, and_congr_left_iff]
-    exact fun hy => ⟨fun h => hT.closure_eq ▸ closure_mono inter_subset_left h,
-      fun h => subset_closure ⟨h, hy⟩⟩
-
-Depends on / 依赖: Nonempty, Nonempty.mono, QuasiSober, QuasiSober.sober, closure, closure_eq, closure_eq_prei, closure_mono, continuous, continuousOn, hS.image, hT.closure_eq, hf.continuous.continuousOn, hf.isEmbedding.closure_eq_prei, hf.isInducing.isClosed_iff.mp, hf.isOpen_range, hx.mem, hx.mem_open_set_iff, image_preimage_eq_inter_range, inter_subset_left
+    rw [← hx.def, ← hf.closure_image_eq, image_singleton]
+/-
+**Topology.IsOpenEmbedding.quasiSober** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Topology.IsOpenEmbedding.quasiSober {f : α -> β} (hf : IsOpenEmbedding f) 
+[QuasiSober β] : QuasiSober α where sober hS hS'
+参数：hf : IsOpenEmbedding f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsIrreducible.image`：IsIrreducible.image (H : IsIrreducible s) (f : X ->
+ Y) (hf : ContinuousOn f s) : IsIrreducible (f '' s)
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
+· 使用定理 `Topology.IsOpenEmbedding.continuous`：∀ {X : Type u_1} {Y : Type u_2} {f 
+: X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.I
+sOpenEmbedding f → Contin…
+· 使用定理 `QuasiSober.sober`：∀ {α : Type u_3} {inst : TopologicalSpace α} [self : Q
+uasiSober α] {S : Set α},   IsIrreducible S → IsClosed S → ∃ x, IsGenericPoint x
+ S
+· 使用定理 `IsIrreducible.closure`：∀ {X : Type u_1} [inst : TopologicalSpace X] {s :
+ Set X}, IsIrreducible s → IsIrreducible (closure s)
+· 使用定理 `isClosed_closure`：isClosed_closure : IsClosed (closure s)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Topology.IsInducing.isClosed_iff`：isClosed_iff (hf : IsInducing f) {s : 
+Set X} : IsClosed s ↔ exists t, IsClosed t ∧ f ⁻¹' t = s
+· 使用定理 `Topology.IsOpenEmbedding.isInducing`：∀ {X : Type u_1} {Y : Type u_2} {f 
+: X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.I
+sOpenEmbedding f → Topolo…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsClosed.closure_eq`：IsClosed.closure_eq : c.IsClosed x -> c x = x
+· 使用定理 `closure_mono`：closure_mono (h : s subseteq t) : closure s subseteq closu
+re t
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `IsGenericPoint.mem`：∀ {α : Type u_1} [inst : TopologicalSpace α] {x : α}
+ {S : Set α}, IsGenericPoint x S → x ∈ S
+· 使用定理 `Set.image_preimage_eq_inter_range`：image_preimage_eq_inter_range {f : α 
+-> β} {t : Set β} : f '' f ⁻¹' t = t inter range f
+· 使用定理 `IsGenericPoint.mem_open_set_iff`：mem_open_set_iff (h : IsGenericPoint x 
+S) (hU : IsOpen U) : x in U ↔ (S inter U).Nonempty
+· 使用定理 `Topology.IsOpenEmbedding.isOpen_range`：∀ {X : Type u_1} {Y : Type u_2} [
+tX : TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsOpe
+nEmbedding f → IsOpen (Set.…
+· 使用定理 `Set.Nonempty.mono`：∀ {α : Type u} {s t : Set α}, s ⊆ t → s.Nonempty → t.
+Nonempty
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `subset_closure`：subset_closure : s subseteq closure s
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Topology.IsEmbedding.closure_eq_preimage_closure_image`：∀ {X : Type u_1}
+ {Y : Type u_2} {f : X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpa
+ce Y],   Topology.IsEmbedding f → ∀ (s : Set…
+· 使用定理 `Topology.IsOpenEmbedding.isEmbedding`：∀ {X : Type u_1} {Y : Type u_2} {f
+ : X → Y} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y],   Topology.
+IsOpenEmbedding f → Topolo…
+· 使用定理 `Set.image_singleton`：image_singleton {f : α -> β} {a : α} : f '' {a} = {
+f a}
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.image_injective`：image_injective : Injective (image f) ↔ Injective f
+· 使用定理 `Topology.IsEmbedding.injective`：∀ {X : Type u_1} {Y : Type u_2} [tX : To
+pologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsEmbedding 
+f → Function.Injecti…
+· 使用定理 `Topology.IsOpenEmbedding.toIsEmbedding`：∀ {X : Type u_1} {Y : Type u_2} 
+[tX : TopologicalSpace X] [tY : TopologicalSpace Y] {f : X → Y},   Topology.IsOp
+enEmbedding f → Topology.IsE…
+（共 33 条，此处仅展示前 30 条）
 -/
-theorem Topology.IsOpenEmbedding.quasiSober {f : α -> β} (hf : IsOpenEmbedding f) [QuasiSober β] :
+theorem Topology.IsOpenEmbedding.quasiSober {f : α → β} (hf : IsOpenEmbedding f) [QuasiSober β] :
     QuasiSober α where
   sober hS hS' := by
     have hS'' := hS.image f hf.continuous.continuousOn
     obtain ⟨x, hx⟩ := QuasiSober.sober hS''.closure isClosed_closure
     obtain ⟨T, hT, rfl⟩ := hf.isInducing.isClosed_iff.mp hS'
     rw [image_preimage_eq_inter_range] at hx hS''
-    have hxT : x in T := by
+    have hxT : x ∈ T := by
       rw [← hT.closure_eq]
       exact closure_mono inter_subset_left hx.mem
-    obtain ⟨y, rfl⟩ : x in range f := by
+    obtain ⟨y, rfl⟩ : x ∈ range f := by
       rw [hx.mem_open_set_iff hf.isOpen_range]
       refine Nonempty.mono ?_ hS''.1
       simpa using subset_closure
     use y
     change _ = _
-    rw [hf.isEmbedding.closure_eq_preimage_closure_image]; rw [image_singleton]; rw [show _ = _ from hx]
+    rw [hf.isEmbedding.closure_eq_preimage_closure_image, image_singleton, show _ = _ from hx]
     apply image_injective.mpr hf.injective
     ext z
     simp only [image_preimage_eq_inter_range, mem_inter_iff, and_congr_left_iff]
     exact fun hy => ⟨fun h => hT.closure_eq ▸ closure_mono inter_subset_left h,
       fun h => subset_closure ⟨h, hy⟩⟩
-
-/--
-lemma `TopologicalSpace.IsOpenCover.quasiSober_iff_forall` / 引理 `TopologicalSpace.IsOpenCover.quasiSober_iff_forall`
-
-English:
-lemma TopologicalSpace.IsOpenCover.quasiSober_iff_forall
-  statement: {ι : Type*} {U : ι -> Opens α}
-  proof: by
-  refine ⟨fun h i => (U i).isOpenEmbedding'.quasiSober, fun hU' => (quasiSober_iff _).mpr ?_⟩
-  · rintro t ⟨⟨x, hx⟩, h⟩ h'
-    obtain ⟨i, hi⟩ := hU.exists_mem x
-    have H : IsIrreducible ((↑) ⁻¹' t : Set (U i)) :=
-      ⟨⟨⟨x, hi⟩, hx⟩, h.preimage (U i).isOpenEmbedding'⟩
-    use H.genericPoint
-    apply le_antisymm
-    · simpa [h'.closure_subset_iff, h'.closure_eq] using!
-        continuous_subtype_val.closure_preimage_subset _ H.isGenericPoint_genericPoint_closure.mem
-    rw [← image_singleton]; rw [← closure_image_closure continuous_subtype_val]; rw [H.isGenericPoint_genericPoint_closure.def]
-    refine (subset_closure_inter_of_isPreirreducible_of_isOpen h (U i).isOpen ⟨x, ⟨hx, hi⟩⟩).trans
-      (closure_mono ?_)
-    simpa only [inter_comm t, ← Subtype.image_preimage_coe] using! Set.image_mono subset_closure
-
-中文:
-引理 拓扑空间.IsOpenCover.quasiSober_iff_对任意
-  结论: {ι : 类型} {U : ι -> Opens α}
-  证明: by
-  refine ⟨fun h i => (U i).isOpenEmbedding'.quasiSober, fun hU' => (quasiSober_iff _).mpr ?_⟩
-  · rintro t ⟨⟨x, hx⟩, h⟩ h'
-    obtain ⟨i, hi⟩ := hU.exists_mem x
-    have H : IsIrreducible ((↑) ⁻¹' t : Set (U i)) :=
-      ⟨⟨⟨x, hi⟩, hx⟩, h.preimage (U i).isOpenEmbedding'⟩
-    use H.genericPoint
-    apply le_antisymm
-    · simpa [h'.closure_subset_iff, h'.closure_eq] using!
-        continuous_subtype_val.closure_preimage_subset _ H.isGenericPoint_genericPoint_closure.mem
-    rw [← image_singleton]; rw [← closure_image_closure continuous_subtype_val]; rw [H.isGenericPoint_genericPoint_closure.def]
-    refine (subset_closure_inter_of_isPreirreducible_of_isOpen h (U i).isOpen ⟨x, ⟨hx, hi⟩⟩).trans
-      (closure_mono ?_)
-    simpa only [inter_comm t, ← Subtype.image_preimage_coe] using! Set.image_mono subset_closure
-
-Depends on / 依赖: H.genericPoint, H.isGenericPoint_genericPoint_closure.mem, IsIrreducible, closure_eq, closure_image_closure, closure_preimage_subset, closure_subset_iff, continuou, continuous_subtype_val, continuous_subtype_val.closure_preimage_subset, exists_mem, genericPoint, h.preimage, hU.exists_mem, image_singleton, isGenericPoint_genericPoint_closure, isOpenEmbedding, le_antisymm, preimage, quasiSober
+/-
+**TopologicalSpace.IsOpenCover.quasiSober_iff_forall** 是 Mathlib 中的一个引理，位于命名空间 `
+`。
+形式化陈述：TopologicalSpace.IsOpenCover.quasiSober_iff_forall {ι : Type*} {U : ι -> O
+pens α} (hU : TopologicalSpace.IsOpenCover U) : QuasiSober α ↔ forall i, QuasiSo
+ber (U i)
+参数：hU : TopologicalSpace.IsOpenCover U。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsOpenEmbedding.quasiSober`：Topology.IsOpenEmbedding.quasiSober
+ {f : α -> β} (hf : IsOpenEmbedding f) [QuasiSober β] : QuasiSober α where sober
+ hS hS'
+· 使用定理 `TopologicalSpace.Opens.isOpenEmbedding'`：isOpenEmbedding' (U : Opens α) 
+: IsOpenEmbedding (Subtype.val : U -> α)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `quasiSober_iff`：∀ (α : Type u_3) [inst : TopologicalSpace α],   QuasiSob
+er α ↔ ∀ {S : Set α}, IsIrreducible S → IsClosed S → ∃ x, IsGenericPoint x S
+· 使用引理 `TopologicalSpace.IsOpenCover.exists_mem`：exists_mem (hu : IsOpenCover u)
+ (a : X) : exists i, a in u i
+· 使用引理 `IsPreirreducible.preimage`：IsPreirreducible.preimage (ht : IsPreirreduci
+ble t) {f : Y -> X} (hf : IsOpenEmbedding f) : IsPreirreducible (f ⁻¹' t)
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `IsClosed.closure_subset_iff`：IsClosed.closure_subset_iff (h₁ : IsClosed 
+t) : closure s subseteq t ↔ s subseteq t
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsClosed.closure_eq`：IsClosed.closure_eq : c.IsClosed x -> c x = x
+· 使用定理 `Continuous.closure_preimage_subset`：Continuous.closure_preimage_subset (
+hf : Continuous f) (t : Set Y) : closure (f ⁻¹' t) subseteq f ⁻¹' closure t
+· 使用定理 `continuous_subtype_val`：continuous_subtype_val : Continuous (@Subtype.va
+l X p)
+· 使用定理 `IsGenericPoint.mem`：∀ {α : Type u_1} [inst : TopologicalSpace α] {x : α}
+ {S : Set α}, IsGenericPoint x S → x ∈ S
+· 使用定理 `IsIrreducible.isGenericPoint_genericPoint_closure`：IsIrreducible.isGener
+icPoint_genericPoint_closure [QuasiSober α] {S : Set α} (hS : IsIrreducible S) :
+ IsGenericPoint hS.genericPoint (closur…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_singleton`：image_singleton {f : α -> β} {a : α} : f '' {a} = {
+f a}
+· 使用定理 `closure_image_closure`：closure_image_closure (h : Continuous f) : closur
+e (f '' closure s) = closure (f '' s)
+· 使用定理 `IsGenericPoint.def`：IsGenericPoint.def {x : α} {S : Set α} (h : IsGeneri
+cPoint x S) : closure ({x} : Set α) = S
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `subset_closure_inter_of_isPreirreducible_of_isOpen`：subset_closure_inter
+_of_isPreirreducible_of_isOpen {S U : Set X} (hS : IsPreirreducible S) (hU : IsO
+pen U) (h : (S inter U).Nonempty) : S su…
+· 使用定理 `TopologicalSpace.Opens.isOpen`：∀ {α : Type u_2} [inst : TopologicalSpace
+ α] (U : TopologicalSpace.Opens α), IsOpen ↑U
+· 使用定理 `closure_mono`：closure_mono (h : s subseteq t) : closure s subseteq closu
+re t
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
+· 使用定理 `subset_closure`：subset_closure : s subseteq closure s
 -/
-lemma TopologicalSpace.IsOpenCover.quasiSober_iff_forall {ι : Type*} {U : ι -> Opens α}
-    (hU : TopologicalSpace.IsOpenCover U) : QuasiSober α ↔ forall i, QuasiSober (U i) := by
-  refine ⟨fun h i => (U i).isOpenEmbedding'.quasiSober, fun hU' => (quasiSober_iff _).mpr ?_⟩
+lemma TopologicalSpace.IsOpenCover.quasiSober_iff_forall {ι : Type*} {U : ι → Opens α}
+    (hU : TopologicalSpace.IsOpenCover U) : QuasiSober α ↔ ∀ i, QuasiSober (U i) := by
+  refine ⟨fun h i ↦ (U i).isOpenEmbedding'.quasiSober, fun hU' ↦ (quasiSober_iff _).mpr ?_⟩
   · rintro t ⟨⟨x, hx⟩, h⟩ h'
     obtain ⟨i, hi⟩ := hU.exists_mem x
     have H : IsIrreducible ((↑) ⁻¹' t : Set (U i)) :=
@@ -833,50 +751,67 @@ lemma TopologicalSpace.IsOpenCover.quasiSober_iff_forall {ι : Type*} {U : ι ->
     apply le_antisymm
     · simpa [h'.closure_subset_iff, h'.closure_eq] using!
         continuous_subtype_val.closure_preimage_subset _ H.isGenericPoint_genericPoint_closure.mem
-    rw [← image_singleton]; rw [← closure_image_closure continuous_subtype_val]; rw [H.isGenericPoint_genericPoint_closure.def]
+    rw [← image_singleton, ← closure_image_closure continuous_subtype_val,
+      H.isGenericPoint_genericPoint_closure.def]
     refine (subset_closure_inter_of_isPreirreducible_of_isOpen h (U i).isOpen ⟨x, ⟨hx, hi⟩⟩).trans
       (closure_mono ?_)
     simpa only [inter_comm t, ← Subtype.image_preimage_coe] using! Set.image_mono subset_closure
-
-/--
-lemma `TopologicalSpace.IsOpenCover.quasiSober` / 引理 `TopologicalSpace.IsOpenCover.quasiSober`
-
-English:
-lemma TopologicalSpace.IsOpenCover.quasiSober
-  statement: {ι : Type*} {U : ι -> Opens α}
-  proof: hU.quasiSober_iff_forall.mpr ‹_›
-
-中文:
-引理 拓扑空间.IsOpenCover.quasiSober
-  结论: {ι : 类型} {U : ι -> Opens α}
-  证明: hU.quasiSober_iff_forall.mpr ‹_›
-
-Depends on / 依赖: hU.quasiSober_iff_forall.mpr, quasiSober_iff_forall
+/-
+**TopologicalSpace.IsOpenCover.quasiSober** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：TopologicalSpace.IsOpenCover.quasiSober {ι : Type*} {U : ι -> Opens α} (hU
+ : TopologicalSpace.IsOpenCover U) [forall i, QuasiSober (U i)] : QuasiSober α
+参数：hU : TopologicalSpace.IsOpenCover U；U i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `TopologicalSpace.IsOpenCover.quasiSober_iff_forall`：TopologicalSpace.IsO
+penCover.quasiSober_iff_forall {ι : Type*} {U : ι -> Opens α} (hU : TopologicalS
+pace.IsOpenCover U) : QuasiSober α ↔ for…
 -/
-lemma TopologicalSpace.IsOpenCover.quasiSober {ι : Type*} {U : ι -> Opens α}
-    (hU : TopologicalSpace.IsOpenCover U) [forall i, QuasiSober (U i)] : QuasiSober α :=
+lemma TopologicalSpace.IsOpenCover.quasiSober {ι : Type*} {U : ι → Opens α}
+    (hU : TopologicalSpace.IsOpenCover U) [∀ i, QuasiSober (U i)] : QuasiSober α :=
   hU.quasiSober_iff_forall.mpr ‹_›
 
-/--
-theorem `quasiSober_of_open_cover` / 定理 `quasiSober_of_open_cover`
+/-- A space is quasi-sober if it can be covered by open quasi-sober subsets. -/
+/-
+**quasiSober_of_open_cover** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：quasiSober_of_open_cover (S : Set (Set α)) (hS : forall s : S, IsOpen (s :
+ Set α)) [forall s : S, QuasiSober s] (hS' : ⋃₀ S = ⊤) : QuasiSober α
+参数：S : Set (Set α)；hS : forall s : S, IsOpen (s : Set α)；hS' : ⋃₀ S = ⊤。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `TopologicalSpace.IsOpenCover.quasiSober`：TopologicalSpace.IsOpenCover.qu
+asiSober {ι : Type*} {U : ι -> Opens α} (hU : TopologicalSpace.IsOpenCover U) [f
+orall i, QuasiSober (U i)] : …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `isOpen_iUnion`：isOpen_iUnion {f : ι -> Set X} (h : forall i, IsOpen (f i
+)) : IsOpen (⋃ i, f i)
+· 使用定理 `Set.iUnion_coe_set`：iUnion_coe_set {α β : Type*} (s : Set α) (f : s -> S
+et β) : ⋃ i, f i = ⋃ i in s, f ⟨i, ‹i in s›⟩
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TopologicalSpace.Opens.iSup_mk`：iSup_mk {ι} (s : ι -> Set α) (h : forall
+ i, IsOpen (s i)) : (⨆ i, ⟨s i, h i⟩ : Opens α) = ⟨⋃ i, s i, isOpen_iUnion h⟩
+· 使用定理 `TopologicalSpace.Opens.mk.congr_simp`：∀ {α : Type u_2} [inst : Topologic
+alSpace α] (carrier carrier_1 : Set α) (e_carrier : carrier = carrier_1)   (is_o
+pen' : IsOpen carrier), { …
+· 使用定理 `Set.sUnion_eq_iUnion`：sUnion_eq_iUnion {s : Set (Set α)} : ⋃₀ s = ⋃ i : 
+s, i
 
-English:
-theorem quasiSober_of_open_cover
-  statement: (S : Set (Set α)) (hS : forall s : S, IsOpen (s : Set α))
-  proof: TopologicalSpace.IsOpenCover.quasiSober (U := fun s : S => ⟨s, hS s⟩) by
-    simpa [TopologicalSpace.IsOpenCover, ← SetLike.coe_set_eq, sUnion_eq_iUnion] using hS'
-
-中文:
-定理 quasiSober_of_open_cover
-  结论: (S : 集合 (集合 α)) (hS : 对任意 s : S, 是开集 (s : 集合 α))
-  证明: TopologicalSpace.IsOpenCover.quasiSober (U := fun s : S => ⟨s, hS s⟩) by
-    simpa [TopologicalSpace.IsOpenCover, ← SetLike.coe_set_eq, sUnion_eq_iUnion] using hS'
-
-Depends on / 依赖: IsOpenCover, SetLike, SetLike.coe_set_eq, TopologicalSpace, TopologicalSpace.IsOpenCover, TopologicalSpace.IsOpenCover.quasiSober, coe_set_eq, quasiSober, sUnion_eq_iUnion
+--- 原说明 ---
+A space is quasi-sober if it can be covered by open quasi-sober subsets.
 -/
-theorem quasiSober_of_open_cover (S : Set (Set α)) (hS : forall s : S, IsOpen (s : Set α))
-    [forall s : S, QuasiSober s] (hS' : ⋃₀ S = ⊤) : QuasiSober α :=
-TopologicalSpace.IsOpenCover.quasiSober (U := fun s : S => ⟨s, hS s⟩) by
+theorem quasiSober_of_open_cover (S : Set (Set α)) (hS : ∀ s : S, IsOpen (s : Set α))
+    [∀ s : S, QuasiSober s] (hS' : ⋃₀ S = ⊤) : QuasiSober α :=
+  TopologicalSpace.IsOpenCover.quasiSober (U := fun s : S ↦ ⟨s, hS s⟩) <| by
     simpa [TopologicalSpace.IsOpenCover, ← SetLike.coe_set_eq, sUnion_eq_iUnion] using hS'
 
 /--
@@ -884,6 +819,10 @@ Any R1 space is a quasi-sober space because any irreducible set is
 contained in the closure of a singleton.
 -/
 -- see note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) R1Space.quasiSober [R1Space α] : QuasiSober α where
   sober h hs := by
     obtain ⟨x, hx⟩ := h.nonempty
@@ -894,72 +833,61 @@ instance (priority := 100) R1Space.quasiSober [R1Space α] : QuasiSober α where
     · exact isPreirreducible_iff_forall_mem_subset_closure_singleton.mp h.isPreirreducible x hx
 
 open scoped Set.Notation in
-/--
-lemma `QuasiSober.of_subset` / 引理 `QuasiSober.of_subset`
-
-English:
-lemma QuasiSober.of_subset
-  given: {V W : Set α} [QuasiSober W] (hV : IsClosed (W ↓inter V)) (h : V subseteq W)
-  proof: Topology.IsClosedEmbedding.quasiSober .inclusion h hV
-
-中文:
-引理 拟醇.of_subset
-  条件: {V W : 集合 α} [拟醇 W] (hV : 是闭集 (W ↓inter V)) (h : V subseteq W)
-  证明: Topology.IsClosedEmbedding.quasiSober .inclusion h hV
-
-Depends on / 依赖: IsClosedEmbedding, Topology, Topology.IsClosedEmbedding.quasiSober, inclusion, quasiSober
+/-
+**QuasiSober.of_subset** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：QuasiSober.of_subset {V W : Set α} [QuasiSober W] (hV : IsClosed (W ↓inter
+ V)) (h : V subseteq W) : QuasiSober V
+参数：hV : IsClosed (W ↓inter V)；h : V subseteq W。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Topology.IsClosedEmbedding.quasiSober`：Topology.IsClosedEmbedding.quasiS
+ober {f : α -> β} (hf : IsClosedEmbedding f) [QuasiSober β] : QuasiSober α where
+ sober hS hS'
+· 使用定理 `Topology.IsClosedEmbedding.inclusion`：∀ {X : Type u} [inst : Topological
+Space X] {s t : Set X} (hst : s ⊆ t),   IsClosed (Subtype.val ⁻¹' s) → Topology.
+IsClosedEmbedding (Set.inc…
 -/
-lemma QuasiSober.of_subset {V W : Set α} [QuasiSober W] (hV : IsClosed (W ↓inter V)) (h : V subseteq W) :
-QuasiSober V := Topology.IsClosedEmbedding.quasiSober .inclusion h hV
-
-/--
-lemma `QuasiSober.inter_of_isClosed_of_quasiSober_left` / 引理 `QuasiSober.inter_of_isClosed_of_quasiSober_left`
-
-English:
-lemma QuasiSober.inter_of_isClosed_of_quasiSober_left
-  statement: {V : Set α} (W : Set α) [QuasiSober W]
-  proof: by
-  refine QuasiSober.of_subset ?_ (Set.inter_subset_left : W inter V subseteq W)
-  rw [Subtype.preimage_coe_self_inter W V]
-  exact IsClosed.preimage_val hV
-
-中文:
-引理 拟醇.inter_of_isClosed_of_quasiSober_left
-  结论: {V : 集合 α} (W : 集合 α) [拟醇 W]
-  证明: by
-  refine QuasiSober.of_subset ?_ (Set.inter_subset_left : W inter V subseteq W)
-  rw [Subtype.preimage_coe_self_inter W V]
-  exact IsClosed.preimage_val hV
-
-Depends on / 依赖: IsClosed, IsClosed.preimage_val, QuasiSober, QuasiSober.of_subset, Set.inter_subset_left, Subtype, Subtype.preimage_coe_self_inter, inter_subset_left, of_subset, preimage_coe_self_inter, preimage_val, subseteq
+lemma QuasiSober.of_subset {V W : Set α} [QuasiSober W] (hV : IsClosed (W ↓∩ V)) (h : V ⊆ W) :
+    QuasiSober V := Topology.IsClosedEmbedding.quasiSober <| .inclusion h hV
+/-
+**QuasiSober.inter_of_isClosed_of_quasiSober_left** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：QuasiSober.inter_of_isClosed_of_quasiSober_left {V : Set α} (W : Set α) [Q
+uasiSober W] (hV : IsClosed V) : QuasiSober (W inter V : Set α)
+参数：W : Set α；hV : IsClosed V。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `QuasiSober.of_subset`：QuasiSober.of_subset {V W : Set α} [QuasiSober W] 
+(hV : IsClosed (W ↓inter V)) (h : V subseteq W) : QuasiSober V
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.preimage_coe_self_inter`：preimage_coe_self_inter (s t : Set α) :
+ ((↑) : s -> α) ⁻¹' (s inter t) = ((↑) : s -> α) ⁻¹' t
+· 使用引理 `IsClosed.preimage_val`：IsClosed.preimage_val {s t : Set X} (ht : IsClose
+d t) : IsClosed (s ↓inter t)
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
 -/
 lemma QuasiSober.inter_of_isClosed_of_quasiSober_left {V : Set α} (W : Set α) [QuasiSober W]
-    (hV : IsClosed V) : QuasiSober (W inter V : Set α) := by
-  refine QuasiSober.of_subset ?_ (Set.inter_subset_left : W inter V subseteq W)
+    (hV : IsClosed V) : QuasiSober (W ∩ V : Set α) := by
+  refine QuasiSober.of_subset ?_ (Set.inter_subset_left : W ∩ V ⊆ W)
   rw [Subtype.preimage_coe_self_inter W V]
   exact IsClosed.preimage_val hV
-
-/--
-lemma `QuasiSober.inter_of_isClosed_of_quasiSober_right` / 引理 `QuasiSober.inter_of_isClosed_of_quasiSober_right`
-
-English:
-lemma QuasiSober.inter_of_isClosed_of_quasiSober_right
-  statement: {V : Set α} (W : Set α) [QuasiSober V]
-  proof: by
-  rw [inter_comm]
-  exact .inter_of_isClosed_of_quasiSober_left V hW
-
-中文:
-引理 拟醇.inter_of_isClosed_of_quasiSober_right
-  结论: {V : 集合 α} (W : 集合 α) [拟醇 V]
-  证明: by
-  rw [inter_comm]
-  exact .inter_of_isClosed_of_quasiSober_left V hW
-
-Depends on / 依赖: inter_comm, inter_of_isClosed_of_quasiSober_left
+/-
+**QuasiSober.inter_of_isClosed_of_quasiSober_right** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：QuasiSober.inter_of_isClosed_of_quasiSober_right {V : Set α} (W : Set α) [
+QuasiSober V] (hW : IsClosed W) : QuasiSober (W inter V : Set α)
+参数：W : Set α；hW : IsClosed W。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
+· 使用引理 `QuasiSober.inter_of_isClosed_of_quasiSober_left`：QuasiSober.inter_of_isC
+losed_of_quasiSober_left {V : Set α} (W : Set α) [QuasiSober W] (hV : IsClosed V
+) : QuasiSober (W inter V : Set α)
 -/
 lemma QuasiSober.inter_of_isClosed_of_quasiSober_right {V : Set α} (W : Set α) [QuasiSober V]
-    (hW : IsClosed W) : QuasiSober (W inter V : Set α) := by
+    (hW : IsClosed W) : QuasiSober (W ∩ V : Set α) := by
   rw [inter_comm]
   exact .inter_of_isClosed_of_quasiSober_left V hW
 
@@ -968,202 +896,146 @@ end Sober
 section genericPoints
 
 variable (α) in
-/--
-Definition of `genericPoints` / `genericPoints` 的定义
+/-- The set of generic points of irreducible components. -/
+/-
+**genericPoints** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：genericPoints : Set α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition genericPoints
-  signature: : Set α
-  body: { x | closure {x} in irreducibleComponents α }
-
-中文:
-定义 genericPoints
-  签名: : 集合 α
-  定义体: { x | closure {x} in irreducibleComponents α }
-
-Depends on / 依赖: closure, irreducibleComponents
+--- 原说明 ---
+The set of generic points of irreducible components.
 -/
-def genericPoints : Set α := { x | closure {x} in irreducibleComponents α }
+def genericPoints : Set α := { x | closure {x} ∈ irreducibleComponents α }
 
 namespace genericPoints
 
-/--
-Definition of `component` / `component` 的定义
+/-- The irreducible component of a generic point -/
+/-
+**genericPoints.component** 是 Mathlib 中的一个定义，位于命名空间 `genericPoints`。
+形式化陈述：component (x : genericPoints α) : irreducibleComponents α
+参数：x : genericPoints α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition component
-  signature: (x : genericPoints α)
-  body: ⟨closure {x.1}, x.2⟩
-
-中文:
-定义 component
-  签名: (x : genericPoints α)
-  定义体: ⟨closure {x.1}, x.2⟩
-
-Depends on / 依赖: closure
+--- 原说明 ---
+The irreducible component of a generic point
 -/
 def component (x : genericPoints α) : irreducibleComponents α :=
   ⟨closure {x.1}, x.2⟩
-
-/--
-lemma `isGenericPoint` / 引理 `isGenericPoint`
-
-English:
-lemma isGenericPoint
-  given: (x : genericPoints α)
-  statement: IsGenericPoint x.1 (component x).1
-  proof: rfl
-
-中文:
-引理 isGenericPoint
-  条件: (x : genericPoints α)
-  结论: IsGenericPoint x.1 (component x).1
-  证明: rfl
+/-
+**genericPoints.isGenericPoint** 是 Mathlib 中的一个引理，位于命名空间 `genericPoints`。
+形式化陈述：isGenericPoint (x : genericPoints α) : IsGenericPoint x.1 (component x).1
+参数：x : genericPoints α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma isGenericPoint (x : genericPoints α) : IsGenericPoint x.1 (component x).1 := rfl
-
-/--
-lemma `component_injective` / 引理 `component_injective`
-
-English:
-lemma component_injective
-  given: [T0Space α]
-  statement: Function.Injective (component (α := α))
-  proof: fun x y e => Subtype.ext ((isGenericPoint x).eq (e ▸ isGenericPoint y))
-
-中文:
-引理 component_injective
-  条件: [T0空间 α]
-  结论: 函数.单射 (component (α := α))
-  证明: fun x y e => Subtype.ext ((isGenericPoint x).eq (e ▸ isGenericPoint y))
+/-
+**genericPoints.component_injective** 是 Mathlib 中的一个引理，位于命名空间 `genericPoints`。
+形式化陈述：component_injective [T0Space α] : Function.Injective (component (α
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `IsGenericPoint.eq`：∀ {α : Type u_1} [inst : TopologicalSpace α] {x y : α
+} {S : Set α} [T0Space α],   IsGenericPoint x S → IsGenericPoint y S → x = y
+· 使用引理 `genericPoints.isGenericPoint`：isGenericPoint (x : genericPoints α) : IsG
+enericPoint x.1 (component x).1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma component_injective [T0Space α] : Function.Injective (component (α := α)) :=
-  fun x y e => Subtype.ext ((isGenericPoint x).eq (e ▸ isGenericPoint y))
+  fun x y e ↦ Subtype.ext ((isGenericPoint x).eq (e ▸ isGenericPoint y))
 
 /-- The generic point of an irreducible component. -/
 noncomputable
-/--
-Definition of `ofComponent` / `ofComponent` 的定义
-
-English:
-definition ofComponent
-  signature: [QuasiSober α] (x : irreducibleComponents α)
-  body: ⟨x.2.1.genericPoint, show _ in irreducibleComponents α from
-    (x.2.1.isGenericPoint_genericPoint (isClosed_of_mem_irreducibleComponents x.1 x.2)).symm ▸ x.2⟩
-
-中文:
-定义 ofComponent
-  签名: [拟醇 α] (x : irreducibleComponents α)
-  定义体: ⟨x.2.1.genericPoint, show _ in irreducibleComponents α from
-    (x.2.1.isGenericPoint_genericPoint (isClosed_of_mem_irreducibleComponents x.1 x.2)).symm ▸ x.2⟩
-
-Depends on / 依赖: genericPoint, irreducibleComponents, isClosed_of_mem_irreducibleComponents, isGenericPoint_genericPoint
+/-
+**genericPoints.ofComponent** 是 Mathlib 中的一个定义，位于命名空间 `genericPoints`。
+形式化陈述：ofComponent [QuasiSober α] (x : irreducibleComponents α) : genericPoints α
+参数：x : irreducibleComponents α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def ofComponent [QuasiSober α] (x : irreducibleComponents α) : genericPoints α :=
-  ⟨x.2.1.genericPoint, show _ in irreducibleComponents α from
+  ⟨x.2.1.genericPoint, show _ ∈ irreducibleComponents α from
     (x.2.1.isGenericPoint_genericPoint (isClosed_of_mem_irreducibleComponents x.1 x.2)).symm ▸ x.2⟩
-
-/--
-lemma `isGenericPoint_ofComponent` / 引理 `isGenericPoint_ofComponent`
-
-English:
-lemma isGenericPoint_ofComponent
-  given: [QuasiSober α] (x : irreducibleComponents α)
-  proof: x.2.1.isGenericPoint_genericPoint (isClosed_of_mem_irreducibleComponents x.1 x.2)
-
-@[simp]
-
-中文:
-引理 isGenericPoint_ofComponent
-  条件: [拟醇 α] (x : irreducibleComponents α)
-  证明: x.2.1.isGenericPoint_genericPoint (isClosed_of_mem_irreducibleComponents x.1 x.2)
-
-@[simp]
-
-Depends on / 依赖: isClosed_of_mem_irreducibleComponents, isGenericPoint_genericPoint
+/-
+**genericPoints.isGenericPoint_ofComponent** 是 Mathlib 中的一个引理，位于命名空间 `genericPoi
+nts`。
+形式化陈述：isGenericPoint_ofComponent [QuasiSober α] (x : irreducibleComponents α) : 
+IsGenericPoint (ofComponent x).1 x
+参数：x : irreducibleComponents α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsIrreducible.isGenericPoint_genericPoint`：IsIrreducible.isGenericPoint_
+genericPoint [QuasiSober α] {S : Set α} (hS : IsIrreducible S) (hS' : IsClosed S
+) : IsGenericPoint hS.genericPo…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `isClosed_of_mem_irreducibleComponents`：isClosed_of_mem_irreducibleCompon
+ents (s) (H : s in irreducibleComponents X) : IsClosed s
 -/
 lemma isGenericPoint_ofComponent [QuasiSober α] (x : irreducibleComponents α) :
     IsGenericPoint (ofComponent x).1 x :=
     x.2.1.isGenericPoint_genericPoint (isClosed_of_mem_irreducibleComponents x.1 x.2)
 
 @[simp]
-/--
-lemma `component_ofComponent` / 引理 `component_ofComponent`
-
-English:
-lemma component_ofComponent
-  given: [QuasiSober α] (x : irreducibleComponents α)
-  proof: Subtype.ext (isGenericPoint_ofComponent x)
-
-@[simp]
-
-中文:
-引理 component_ofComponent
-  条件: [拟醇 α] (x : irreducibleComponents α)
-  证明: Subtype.ext (isGenericPoint_ofComponent x)
-
-@[simp]
-
-Depends on / 依赖: Subtype, Subtype.ext, isGenericPoint_ofComponent
+/-
+**genericPoints.component_ofComponent** 是 Mathlib 中的一个引理，位于命名空间 `genericPoints`。
+形式化陈述：component_ofComponent [QuasiSober α] (x : irreducibleComponents α) : compo
+nent (ofComponent x) = x
+参数：x : irreducibleComponents α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用引理 `genericPoints.isGenericPoint_ofComponent`：isGenericPoint_ofComponent [Qu
+asiSober α] (x : irreducibleComponents α) : IsGenericPoint (ofComponent x).1 x
 -/
 lemma component_ofComponent [QuasiSober α] (x : irreducibleComponents α) :
     component (ofComponent x) = x :=
   Subtype.ext (isGenericPoint_ofComponent x)
 
 @[simp]
-/--
-lemma `ofComponent_component` / 引理 `ofComponent_component`
-
-English:
-lemma ofComponent_component
-  given: [T0Space α] [QuasiSober α] (x : genericPoints α)
-  proof: component_injective (component_ofComponent _)
-
-中文:
-引理 ofComponent_component
-  条件: [T0空间 α] [拟醇 α] (x : genericPoints α)
-  证明: component_injective (component_ofComponent _)
-
-Depends on / 依赖: component_injective, component_ofComponent
+/-
+**genericPoints.ofComponent_component** 是 Mathlib 中的一个引理，位于命名空间 `genericPoints`。
+形式化陈述：ofComponent_component [T0Space α] [QuasiSober α] (x : genericPoints α) : o
+fComponent (component x) = x
+参数：x : genericPoints α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `genericPoints.component_injective`：component_injective [T0Space α] : Fun
+ction.Injective (component (α
+· 使用引理 `genericPoints.component_ofComponent`：component_ofComponent [QuasiSober α
+] (x : irreducibleComponents α) : component (ofComponent x) = x
 -/
 lemma ofComponent_component [T0Space α] [QuasiSober α] (x : genericPoints α) :
     ofComponent (component x) = x :=
   component_injective (component_ofComponent _)
-
-/--
-lemma `component_surjective` / 引理 `component_surjective`
-
-English:
-lemma component_surjective
-  given: [QuasiSober α]
-  statement: Function.Surjective (component (α := α))
-  proof: Function.HasRightInverse.surjective ⟨ofComponent, component_ofComponent⟩
-
-中文:
-引理 component_surjective
-  条件: [拟醇 α]
-  结论: 函数.满射 (component (α := α))
-  证明: Function.HasRightInverse.surjective ⟨ofComponent, component_ofComponent⟩
+/-
+**genericPoints.component_surjective** 是 Mathlib 中的一个引理，位于命名空间 `genericPoints`。
+形式化陈述：component_surjective [QuasiSober α] : Function.Surjective (component (α
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.HasRightInverse.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f 
+: α → β}, Function.HasRightInverse f → Function.Surjective f
+· 使用引理 `genericPoints.component_ofComponent`：component_ofComponent [QuasiSober α
+] (x : irreducibleComponents α) : component (ofComponent x) = x
 -/
 lemma component_surjective [QuasiSober α] : Function.Surjective (component (α := α)) :=
   Function.HasRightInverse.surjective ⟨ofComponent, component_ofComponent⟩
-
-/--
-lemma `finite` / 引理 `finite`
-
-English:
-lemma finite
-  given: [T0Space α] (h : (irreducibleComponents α).Finite)
-  statement: (genericPoints α).Finite
-  proof: @Finite.of_injective _ _ h _ component_injective
-
-中文:
-引理 finite
-  条件: [T0空间 α] (h : (irreducibleComponents α).有限)
-  结论: (genericPoints α).有限
-  证明: @Finite.of_injective _ _ h _ component_injective
-
-Depends on / 依赖: Finite, Finite.of_injective, component_injective, of_injective
+/-
+**genericPoints.finite** 是 Mathlib 中的一个引理，位于命名空间 `genericPoints`。
+形式化陈述：finite [T0Space α] (h : (irreducibleComponents α).Finite) : (genericPoints
+ α).Finite
+参数：h : (irreducibleComponents α).Finite。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_injective`：Finite.of_injective {α β : Sort*} [Finite β] (f : α
+ -> β) (H : Injective f) : Finite α
+· 使用引理 `genericPoints.component_injective`：component_injective [T0Space α] : Fun
+ction.Injective (component (α
 -/
 lemma finite [T0Space α] (h : (irreducibleComponents α).Finite) : (genericPoints α).Finite :=
   @Finite.of_injective _ _ h _ component_injective
@@ -1171,82 +1043,77 @@ lemma finite [T0Space α] (h : (irreducibleComponents α).Finite) : (genericPoin
 /-- In a sober space, the generic points corresponds bijectively to irreducible components -/
 @[simps]
 noncomputable
-/--
-Definition of `equiv` / `equiv` 的定义
-
-English:
-definition equiv
-  signature: [T0Space α] [QuasiSober α]
-  body: ⟨component, ofComponent, ofComponent_component, component_ofComponent⟩
-
-中文:
-定义 equiv
-  签名: [T0空间 α] [拟醇 α]
-  定义体: ⟨component, ofComponent, ofComponent_component, component_ofComponent⟩
-
-Depends on / 依赖: component, component_ofComponent, ofComponent, ofComponent_component
+/-
+**genericPoints.equiv** 是 Mathlib 中的一个定义，位于命名空间 `genericPoints`。
+形式化陈述：equiv [T0Space α] [QuasiSober α] : genericPoints α ≃ irreducibleComponents
+ α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `genericPoints.ofComponent_component`：ofComponent_component [T0Space α] [
+QuasiSober α] (x : genericPoints α) : ofComponent (component x) = x
+· 使用引理 `genericPoints.component_ofComponent`：component_ofComponent [QuasiSober α
+] (x : irreducibleComponents α) : component (ofComponent x) = x
 -/
 def equiv [T0Space α] [QuasiSober α] : genericPoints α ≃ irreducibleComponents α :=
   ⟨component, ofComponent, ofComponent_component, component_ofComponent⟩
-
-/--
-lemma `closure` / 引理 `closure`
-
-English:
-lemma closure
-  given: [QuasiSober α]
-  statement: closure (genericPoints α) = Set.univ
-  proof: by
-  refine Set.eq_univ_iff_forall.mpr fun x => Set.subset_def.mp ?_ x mem_irreducibleComponent
-  refine (isGenericPoint_ofComponent
-    ⟨_, irreducibleComponent_mem_irreducibleComponents x⟩).symm.trans_subset (closure_mono ?_)
-  exact Set.singleton_subset_iff.mpr (ofComponent _).2
-
-中文:
-引理 closure
-  条件: [拟醇 α]
-  结论: closure (genericPoints α) = 集合.univ
-  证明: by
-  refine Set.eq_univ_iff_forall.mpr fun x => Set.subset_def.mp ?_ x mem_irreducibleComponent
-  refine (isGenericPoint_ofComponent
-    ⟨_, irreducibleComponent_mem_irreducibleComponents x⟩).symm.trans_subset (closure_mono ?_)
-  exact Set.singleton_subset_iff.mpr (ofComponent _).2
-
-Depends on / 依赖: Set.eq_univ_iff_forall.mpr, Set.singleton_subset_iff.mpr, Set.subset_def.mp, closure_mono, eq_univ_iff_forall, irreducibleComponent_mem_irreducibleComponents, isGenericPoint_ofComponent, mem_irreducibleComponent, ofComponent, singleton_subset_iff, subset_def, symm.trans_subset, trans_subset
+/-
+**genericPoints.closure** 是 Mathlib 中的一个引理，位于命名空间 `genericPoints`。
+形式化陈述：closure [QuasiSober α] : closure (genericPoints α) = Set.univ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.eq_univ_iff_forall`：eq_univ_iff_forall {s : Set α} : s = univ ↔ fora
+ll x, x in s
+· 使用定理 `Set.subset_def`：subset_def : (s subseteq t) = forall x, x in s -> x in t
+· 使用定理 `Eq.trans_subset`：∀ {α : Type u_1} [UsesSetNotationForOrder α] {a b c : α
+} [inst : LE α], a = b → b ⊆ c → a ⊆ c
+· 使用定理 `irreducibleComponent_mem_irreducibleComponents`：irreducibleComponent_mem
+_irreducibleComponents (x : X) : irreducibleComponent x in irreducibleComponents
+ X
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `genericPoints.isGenericPoint_ofComponent`：isGenericPoint_ofComponent [Qu
+asiSober α] (x : irreducibleComponents α) : IsGenericPoint (ofComponent x).1 x
+· 使用定理 `closure_mono`：closure_mono (h : s subseteq t) : closure s subseteq closu
+re t
+· 使用定理 `Set.singleton_subset_iff`：singleton_subset_iff {a : α} {s : Set α} : {a}
+ subseteq s ↔ a in s
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `mem_irreducibleComponent`：mem_irreducibleComponent {x : X} : x in irredu
+cibleComponent x
 -/
 lemma closure [QuasiSober α] : closure (genericPoints α) = Set.univ := by
-  refine Set.eq_univ_iff_forall.mpr fun x => Set.subset_def.mp ?_ x mem_irreducibleComponent
+  refine Set.eq_univ_iff_forall.mpr fun x ↦ Set.subset_def.mp ?_ x mem_irreducibleComponent
   refine (isGenericPoint_ofComponent
     ⟨_, irreducibleComponent_mem_irreducibleComponents x⟩).symm.trans_subset (closure_mono ?_)
   exact Set.singleton_subset_iff.mpr (ofComponent _).2
 
 end genericPoints
 
-/--
-lemma `genericPoints_eq_singleton` / 引理 `genericPoints_eq_singleton`
-
-English:
-lemma genericPoints_eq_singleton
-  given: [QuasiSober α] [IrreducibleSpace α] [T0Space α]
-  proof: by
-  ext x
-  rw [genericPoints]; rw [irreducibleComponents_eq_singleton]
-  exact ⟨((genericPoint_spec α).eq · |>.symm), (· ▸ genericPoint_spec α)⟩
-
-中文:
-引理 genericPoints_eq_singleton
-  条件: [拟醇 α] [不可约空间 α] [T0空间 α]
-  证明: by
-  ext x
-  rw [genericPoints]; rw [irreducibleComponents_eq_singleton]
-  exact ⟨((genericPoint_spec α).eq · |>.symm), (· ▸ genericPoint_spec α)⟩
-
-Depends on / 依赖: genericPoint_spec, genericPoints, irreducibleComponents_eq_singleton
+/-
+**genericPoints_eq_singleton** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：genericPoints_eq_singleton [QuasiSober α] [IrreducibleSpace α] [T0Space α]
+ : genericPoints α = {genericPoint α}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `genericPoints.eq_1`：∀ (α : Type u_1) [inst : TopologicalSpace α], generi
+cPoints α = {x | closure {x} ∈ irreducibleComponents α}
+· 使用定理 `irreducibleComponents_eq_singleton`：irreducibleComponents_eq_singleton [
+IrreducibleSpace X] : irreducibleComponents X = {univ}
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsGenericPoint.eq`：∀ {α : Type u_1} [inst : TopologicalSpace α] {x y : α
+} {S : Set α} [T0Space α],   IsGenericPoint x S → IsGenericPoint y S → x = y
+· 使用定理 `genericPoint_spec`：genericPoint_spec [QuasiSober α] [IrreducibleSpace α]
+ : IsGenericPoint (genericPoint α) univ
 -/
 lemma genericPoints_eq_singleton [QuasiSober α] [IrreducibleSpace α] [T0Space α] :
     genericPoints α = {genericPoint α} := by
   ext x
-  rw [genericPoints]; rw [irreducibleComponents_eq_singleton]
+  rw [genericPoints, irreducibleComponents_eq_singleton]
   exact ⟨((genericPoint_spec α).eq · |>.symm), (· ▸ genericPoint_spec α)⟩
 
 end genericPoints
+

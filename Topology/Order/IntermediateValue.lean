@@ -66,177 +66,151 @@ section
 variable {X : Type u} {α : Type v} [TopologicalSpace X] [LinearOrder α] [TopologicalSpace α]
   [OrderClosedTopology α]
 
-/--
-theorem `intermediate_value_univ₂` / 定理 `intermediate_value_univ₂`
+/-- Intermediate value theorem for two functions: if `f` and `g` are two continuous functions
+on a preconnected space and `f a ≤ g a` and `g b ≤ f b`, then for some `x` we have `f x = g x`. -/
+/-
+**intermediate_value_univ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：intermediate_value_univ [PreconnectedSpace X] (a b : X) {f : X -> α} (hf :
+ Continuous f) : Icc (f a) (f b) subseteq range f
+参数：a b : X；hf : Continuous f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `intermediate_value_univ₂`：intermediate_value_univ₂ [PreconnectedSpace X]
+ {a b : X} {f g : X -> α} (hf : Continuous f) (hg : Continuous g) (ha : f a <= g
+ a) (hb : g b …
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-theorem intermediate_value_univ₂
-  statement: [PreconnectedSpace X] {a b : X} {f g : X -> α} (hf : Continuous f)
-  proof: by
-  obtain ⟨x, _, hfg, hgf⟩ : (univ inter { x | f x <= g x ∧ g x <= f x }).Nonempty :=
-    isPreconnected_closed_iff.1 PreconnectedSpace.isPreconnected_univ _ _ (isClosed_le hf hg)
-      (isClosed_le hg hf) (fun _ _ => le_total _ _) ⟨a, trivial, ha⟩ ⟨b, trivial, hb⟩
-  exact ⟨x, le_antisymm hfg hgf⟩
-
-中文:
-定理 intermediate_value_univ₂
-  结论: [预连通空间 X] {a b : X} {f g : X -> α} (hf : 连续 f)
-  证明: by
-  obtain ⟨x, _, hfg, hgf⟩ : (univ inter { x | f x <= g x ∧ g x <= f x }).Nonempty :=
-    isPreconnected_closed_iff.1 PreconnectedSpace.isPreconnected_univ _ _ (isClosed_le hf hg)
-      (isClosed_le hg hf) (fun _ _ => le_total _ _) ⟨a, trivial, ha⟩ ⟨b, trivial, hb⟩
-  exact ⟨x, le_antisymm hfg hgf⟩
-
-Depends on / 依赖: Nonempty, PreconnectedSpace, PreconnectedSpace.isPreconnected_univ, isClosed_le, isPreconnected_closed_iff, isPreconnected_univ, le_antisymm, le_total
+--- 原说明 ---
+Intermediate value theorem for two functions: if `f` and `g` are two continuous 
+functions
+on a preconnected space and `f a ≤ g a` and `g b ≤ f b`, then for some `x` we ha
+ve `f x = g x`.
 -/
-theorem intermediate_value_univ₂ [PreconnectedSpace X] {a b : X} {f g : X -> α} (hf : Continuous f)
-    (hg : Continuous g) (ha : f a <= g a) (hb : g b <= f b) : exists x, f x = g x := by
-  obtain ⟨x, _, hfg, hgf⟩ : (univ inter { x | f x <= g x ∧ g x <= f x }).Nonempty :=
+theorem intermediate_value_univ₂ [PreconnectedSpace X] {a b : X} {f g : X → α} (hf : Continuous f)
+    (hg : Continuous g) (ha : f a ≤ g a) (hb : g b ≤ f b) : ∃ x, f x = g x := by
+  obtain ⟨x, _, hfg, hgf⟩ : (univ ∩ { x | f x ≤ g x ∧ g x ≤ f x }).Nonempty :=
     isPreconnected_closed_iff.1 PreconnectedSpace.isPreconnected_univ _ _ (isClosed_le hf hg)
       (isClosed_le hg hf) (fun _ _ => le_total _ _) ⟨a, trivial, ha⟩ ⟨b, trivial, hb⟩
   exact ⟨x, le_antisymm hfg hgf⟩
-
-/--
-theorem `intermediate_value_univ₂_eventually₁` / 定理 `intermediate_value_univ₂_eventually₁`
-
-English:
-theorem intermediate_value_univ₂_eventually₁
-  statement: [PreconnectedSpace X] {a : X} {l : Filter X} [NeBot l]
-  proof: let ⟨_, h⟩ := he.exists; intermediate_value_univ₂ hf hg ha h
-
-中文:
-定理 intermediate_value_univ₂_eventually₁
-  结论: [预连通空间 X] {a : X} {l : 滤子 X} [NeBot l]
-  证明: let ⟨_, h⟩ := he.exists; intermediate_value_univ₂ hf hg ha h
-
-Depends on / 依赖: he.exists
+/-
+**intermediate_value_univ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：intermediate_value_univ [PreconnectedSpace X] (a b : X) {f : X -> α} (hf :
+ Continuous f) : Icc (f a) (f b) subseteq range f
+参数：a b : X；hf : Continuous f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `intermediate_value_univ₂`：intermediate_value_univ₂ [PreconnectedSpace X]
+ {a b : X} {f g : X -> α} (hf : Continuous f) (hg : Continuous g) (ha : f a <= g
+ a) (hb : g b …
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem intermediate_value_univ₂_eventually₁ [PreconnectedSpace X] {a : X} {l : Filter X} [NeBot l]
-    {f g : X -> α} (hf : Continuous f) (hg : Continuous g) (ha : f a <= g a) (he : g <=ᶠ[l] f) :
-    exists x, f x = g x :=
+    {f g : X → α} (hf : Continuous f) (hg : Continuous g) (ha : f a ≤ g a) (he : g ≤ᶠ[l] f) :
+    ∃ x, f x = g x :=
   let ⟨_, h⟩ := he.exists; intermediate_value_univ₂ hf hg ha h
-
-/--
-theorem `intermediate_value_univ₂_eventually₂` / 定理 `intermediate_value_univ₂_eventually₂`
-
-English:
-theorem intermediate_value_univ₂_eventually₂
-  statement: [PreconnectedSpace X] {l₁ l₂ : Filter X} [NeBot l₁]
-  proof: let ⟨_, h₁⟩ := he₁.exists
-  let ⟨_, h₂⟩ := he₂.exists
-  intermediate_value_univ₂ hf hg h₁ h₂
-
-中文:
-定理 intermediate_value_univ₂_eventually₂
-  结论: [预连通空间 X] {l₁ l₂ : 滤子 X} [NeBot l₁]
-  证明: let ⟨_, h₁⟩ := he₁.exists
-  let ⟨_, h₂⟩ := he₂.exists
-  intermediate_value_univ₂ hf hg h₁ h₂
+/-
+**intermediate_value_univ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：intermediate_value_univ [PreconnectedSpace X] (a b : X) {f : X -> α} (hf :
+ Continuous f) : Icc (f a) (f b) subseteq range f
+参数：a b : X；hf : Continuous f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `intermediate_value_univ₂`：intermediate_value_univ₂ [PreconnectedSpace X]
+ {a b : X} {f g : X -> α} (hf : Continuous f) (hg : Continuous g) (ha : f a <= g
+ a) (hb : g b …
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem intermediate_value_univ₂_eventually₂ [PreconnectedSpace X] {l₁ l₂ : Filter X} [NeBot l₁]
-    [NeBot l₂] {f g : X -> α} (hf : Continuous f) (hg : Continuous g) (he₁ : f <=ᶠ[l₁] g)
-    (he₂ : g <=ᶠ[l₂] f) : exists x, f x = g x :=
+    [NeBot l₂] {f g : X → α} (hf : Continuous f) (hg : Continuous g) (he₁ : f ≤ᶠ[l₁] g)
+    (he₂ : g ≤ᶠ[l₂] f) : ∃ x, f x = g x :=
   let ⟨_, h₁⟩ := he₁.exists
   let ⟨_, h₂⟩ := he₂.exists
   intermediate_value_univ₂ hf hg h₁ h₂
 
-/--
-theorem `IsPreconnected.intermediate_value₂` / 定理 `IsPreconnected.intermediate_value₂`
+/-- Intermediate value theorem for two functions: if `f` and `g` are two functions continuous
+on a preconnected set `s` and for some `a b ∈ s` we have `f a ≤ g a` and `g b ≤ f b`,
+then for some `x ∈ s` we have `f x = g x`. -/
+/-
+**IsPreconnected.intermediate_value** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPreconnected.intermediate_value {s : Set X} (hs : IsPreconnected s) {a b
+ : X} (ha : a in s) (hb : b in s) {f : X -> α} (hf : ContinuousOn f s) : Icc (f 
+a) (f b) subseteq f '' s
+参数：hs : IsPreconnected s；ha : a in s；hb : b in s；hf : ContinuousOn f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.intermediate_value₂`：IsPreconnected.intermediate_value₂ {
+s : Set X} (hs : IsPreconnected s) {a b : X} (ha : a in s) (hb : b in s) {f g : 
+X -> α} (hf : Continuous…
+· 使用定理 `continuousOn_const`：continuousOn_const {s : Set α} {c : β} : ContinuousO
+n (fun _ => c) s
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-theorem IsPreconnected.intermediate_value₂
-  statement: {s : Set X} (hs : IsPreconnected s) {a b : X}
-  proof: let ⟨x, hx⟩ :=
-    @intermediate_value_univ₂ s α _ _ _ _ (Subtype.preconnectedSpace hs) ⟨a, ha⟩ ⟨b, hb⟩ _ _
-      (continuousOn_iff_continuous_domRestrict.1 hf)
-      (continuousOn_iff_continuous_domRestrict.1 hg) ha' hb'
-  ⟨x, x.2, hx⟩
-
-中文:
-定理 是预连通.intermediate_value₂
-  结论: {s : 集合 X} (hs : 是预连通 s) {a b : X}
-  证明: let ⟨x, hx⟩ :=
-    @intermediate_value_univ₂ s α _ _ _ _ (Subtype.preconnectedSpace hs) ⟨a, ha⟩ ⟨b, hb⟩ _ _
-      (continuousOn_iff_continuous_domRestrict.1 hf)
-      (continuousOn_iff_continuous_domRestrict.1 hg) ha' hb'
-  ⟨x, x.2, hx⟩
-
-Depends on / 依赖: Subtype, Subtype.preconnectedSpace, continuousOn_iff_continuous_domRestrict, preconnectedSpace
+--- 原说明 ---
+Intermediate value theorem for two functions: if `f` and `g` are two functions c
+ontinuous
+on a preconnected set `s` and for some `a b ∈ s` we have `f a ≤ g a` and `g b ≤ 
+f b`,
+then for some `x ∈ s` we have `f x = g x`.
 -/
 theorem IsPreconnected.intermediate_value₂ {s : Set X} (hs : IsPreconnected s) {a b : X}
-    (ha : a in s) (hb : b in s) {f g : X -> α} (hf : ContinuousOn f s) (hg : ContinuousOn g s)
-    (ha' : f a <= g a) (hb' : g b <= f b) : exists x in s, f x = g x :=
+    (ha : a ∈ s) (hb : b ∈ s) {f g : X → α} (hf : ContinuousOn f s) (hg : ContinuousOn g s)
+    (ha' : f a ≤ g a) (hb' : g b ≤ f b) : ∃ x ∈ s, f x = g x :=
   let ⟨x, hx⟩ :=
     @intermediate_value_univ₂ s α _ _ _ _ (Subtype.preconnectedSpace hs) ⟨a, ha⟩ ⟨b, hb⟩ _ _
       (continuousOn_iff_continuous_domRestrict.1 hf)
       (continuousOn_iff_continuous_domRestrict.1 hg) ha' hb'
   ⟨x, x.2, hx⟩
-
-/--
-theorem `IsPreconnected.intermediate_value₂_eventually₁` / 定理 `IsPreconnected.intermediate_value₂_eventually₁`
-
-English:
-theorem IsPreconnected.intermediate_value₂_eventually₁
-  statement: {s : Set X} (hs : IsPreconnected s) {a : X}
-  proof: by
-  rw [continuousOn_iff_continuous_domRestrict] at hf hg
-  obtain ⟨b, h⟩ :=
-    @intermediate_value_univ₂_eventually₁ _ _ _ _ _ _ (Subtype.preconnectedSpace hs) ⟨a, ha⟩ _
-      (comap_coe_neBot_of_le_principal hl) _ _ hf hg ha' (he.comap _)
-  exact ⟨b, b.prop, h⟩
-
-中文:
-定理 是预连通.intermediate_value₂_eventually₁
-  结论: {s : 集合 X} (hs : 是预连通 s) {a : X}
-  证明: by
-  rw [continuousOn_iff_continuous_domRestrict] at hf hg
-  obtain ⟨b, h⟩ :=
-    @intermediate_value_univ₂_eventually₁ _ _ _ _ _ _ (Subtype.preconnectedSpace hs) ⟨a, ha⟩ _
-      (comap_coe_neBot_of_le_principal hl) _ _ hf hg ha' (he.comap _)
-  exact ⟨b, b.prop, h⟩
-
-Depends on / 依赖: Subtype, Subtype.preconnectedSpace, b.prop, comap_coe_neBot_of_le_principal, continuousOn_iff_continuous_domRestrict, he.comap, preconnectedSpace
+/-
+**IsPreconnected.intermediate_value** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPreconnected.intermediate_value {s : Set X} (hs : IsPreconnected s) {a b
+ : X} (ha : a in s) (hb : b in s) {f : X -> α} (hf : ContinuousOn f s) : Icc (f 
+a) (f b) subseteq f '' s
+参数：hs : IsPreconnected s；ha : a in s；hb : b in s；hf : ContinuousOn f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.intermediate_value₂`：IsPreconnected.intermediate_value₂ {
+s : Set X} (hs : IsPreconnected s) {a b : X} (ha : a in s) (hb : b in s) {f g : 
+X -> α} (hf : Continuous…
+· 使用定理 `continuousOn_const`：continuousOn_const {s : Set α} {c : β} : ContinuousO
+n (fun _ => c) s
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem IsPreconnected.intermediate_value₂_eventually₁ {s : Set X} (hs : IsPreconnected s) {a : X}
-    {l : Filter X} (ha : a in s) [NeBot l] (hl : l <= 𝓟 s) {f g : X -> α} (hf : ContinuousOn f s)
-    (hg : ContinuousOn g s) (ha' : f a <= g a) (he : g <=ᶠ[l] f) : exists x in s, f x = g x := by
+    {l : Filter X} (ha : a ∈ s) [NeBot l] (hl : l ≤ 𝓟 s) {f g : X → α} (hf : ContinuousOn f s)
+    (hg : ContinuousOn g s) (ha' : f a ≤ g a) (he : g ≤ᶠ[l] f) : ∃ x ∈ s, f x = g x := by
   rw [continuousOn_iff_continuous_domRestrict] at hf hg
   obtain ⟨b, h⟩ :=
     @intermediate_value_univ₂_eventually₁ _ _ _ _ _ _ (Subtype.preconnectedSpace hs) ⟨a, ha⟩ _
       (comap_coe_neBot_of_le_principal hl) _ _ hf hg ha' (he.comap _)
   exact ⟨b, b.prop, h⟩
-
-/--
-theorem `IsPreconnected.intermediate_value₂_eventually₂` / 定理 `IsPreconnected.intermediate_value₂_eventually₂`
-
-English:
-theorem IsPreconnected.intermediate_value₂_eventually₂
-  statement: {s : Set X} (hs : IsPreconnected s)
-  proof: by
-  rw [continuousOn_iff_continuous_domRestrict] at hf hg
-  obtain ⟨b, h⟩ :=
-    @intermediate_value_univ₂_eventually₂ _ _ _ _ _ _ (Subtype.preconnectedSpace hs) _ _
-      (comap_coe_neBot_of_le_principal hl₁) (comap_coe_neBot_of_le_principal hl₂) _ _ hf hg
-      (he₁.comap _) (he₂.comap _)
-  exact ⟨b, b.prop, h⟩
-
-中文:
-定理 是预连通.intermediate_value₂_eventually₂
-  结论: {s : 集合 X} (hs : 是预连通 s)
-  证明: by
-  rw [continuousOn_iff_continuous_domRestrict] at hf hg
-  obtain ⟨b, h⟩ :=
-    @intermediate_value_univ₂_eventually₂ _ _ _ _ _ _ (Subtype.preconnectedSpace hs) _ _
-      (comap_coe_neBot_of_le_principal hl₁) (comap_coe_neBot_of_le_principal hl₂) _ _ hf hg
-      (he₁.comap _) (he₂.comap _)
-  exact ⟨b, b.prop, h⟩
-
-Depends on / 依赖: Subtype, Subtype.preconnectedSpace, b.prop, comap_coe_neBot_of_le_principal, continuousOn_iff_continuous_domRestrict, preconnectedSpace
+/-
+**IsPreconnected.intermediate_value** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPreconnected.intermediate_value {s : Set X} (hs : IsPreconnected s) {a b
+ : X} (ha : a in s) (hb : b in s) {f : X -> α} (hf : ContinuousOn f s) : Icc (f 
+a) (f b) subseteq f '' s
+参数：hs : IsPreconnected s；ha : a in s；hb : b in s；hf : ContinuousOn f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.intermediate_value₂`：IsPreconnected.intermediate_value₂ {
+s : Set X} (hs : IsPreconnected s) {a b : X} (ha : a in s) (hb : b in s) {f g : 
+X -> α} (hf : Continuous…
+· 使用定理 `continuousOn_const`：continuousOn_const {s : Set α} {c : β} : ContinuousO
+n (fun _ => c) s
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem IsPreconnected.intermediate_value₂_eventually₂ {s : Set X} (hs : IsPreconnected s)
-    {l₁ l₂ : Filter X} [NeBot l₁] [NeBot l₂] (hl₁ : l₁ <= 𝓟 s) (hl₂ : l₂ <= 𝓟 s) {f g : X -> α}
-    (hf : ContinuousOn f s) (hg : ContinuousOn g s) (he₁ : f <=ᶠ[l₁] g) (he₂ : g <=ᶠ[l₂] f) :
-    exists x in s, f x = g x := by
+    {l₁ l₂ : Filter X} [NeBot l₁] [NeBot l₂] (hl₁ : l₁ ≤ 𝓟 s) (hl₂ : l₂ ≤ 𝓟 s) {f g : X → α}
+    (hf : ContinuousOn f s) (hg : ContinuousOn g s) (he₁ : f ≤ᶠ[l₁] g) (he₂ : g ≤ᶠ[l₂] f) :
+    ∃ x ∈ s, f x = g x := by
   rw [continuousOn_iff_continuous_domRestrict] at hf hg
   obtain ⟨b, h⟩ :=
     @intermediate_value_univ₂_eventually₂ _ _ _ _ _ _ (Subtype.preconnectedSpace hs) _ _
@@ -244,239 +218,296 @@ theorem IsPreconnected.intermediate_value₂_eventually₂ {s : Set X} (hs : IsP
       (he₁.comap _) (he₂.comap _)
   exact ⟨b, b.prop, h⟩
 
-/--
-theorem `IsPreconnected.intermediate_value` / 定理 `IsPreconnected.intermediate_value`
+/-- **Intermediate Value Theorem** for continuous functions on connected sets. -/
+/-
+**IsPreconnected.intermediate_value** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPreconnected.intermediate_value {s : Set X} (hs : IsPreconnected s) {a b
+ : X} (ha : a in s) (hb : b in s) {f : X -> α} (hf : ContinuousOn f s) : Icc (f 
+a) (f b) subseteq f '' s
+参数：hs : IsPreconnected s；ha : a in s；hb : b in s；hf : ContinuousOn f s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.intermediate_value₂`：IsPreconnected.intermediate_value₂ {
+s : Set X} (hs : IsPreconnected s) {a b : X} (ha : a in s) (hb : b in s) {f g : 
+X -> α} (hf : Continuous…
+· 使用定理 `continuousOn_const`：continuousOn_const {s : Set α} {c : β} : ContinuousO
+n (fun _ => c) s
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-theorem IsPreconnected.intermediate_value
-  statement: {s : Set X} (hs : IsPreconnected s) {a b : X} (ha : a in s)
-  proof: fun _x hx =>
-  hs.intermediate_value₂ ha hb hf continuousOn_const hx.1 hx.2
-
-中文:
-定理 是预连通.intermediate_value
-  结论: {s : 集合 X} (hs : 是预连通 s) {a b : X} (ha : a in s)
-  证明: fun _x hx =>
-  hs.intermediate_value₂ ha hb hf continuousOn_const hx.1 hx.2
+--- 原说明 ---
+**Intermediate Value Theorem** for continuous functions on connected sets.
 -/
-theorem IsPreconnected.intermediate_value {s : Set X} (hs : IsPreconnected s) {a b : X} (ha : a in s)
-    (hb : b in s) {f : X -> α} (hf : ContinuousOn f s) : Icc (f a) (f b) subseteq f '' s := fun _x hx =>
+theorem IsPreconnected.intermediate_value {s : Set X} (hs : IsPreconnected s) {a b : X} (ha : a ∈ s)
+    (hb : b ∈ s) {f : X → α} (hf : ContinuousOn f s) : Icc (f a) (f b) ⊆ f '' s := fun _x hx =>
   hs.intermediate_value₂ ha hb hf continuousOn_const hx.1 hx.2
-
-/--
-theorem `IsPreconnected.intermediate_value_Ico` / 定理 `IsPreconnected.intermediate_value_Ico`
-
-English:
-theorem IsPreconnected.intermediate_value_Ico
-  statement: {s : Set X} (hs : IsPreconnected s) {a : X}
-  proof: fun _ h =>
-  hs.intermediate_value₂_eventually₁ ha hl hf continuousOn_const h.1 (ht.eventually_const_le h.2)
-
-中文:
-定理 是预连通.intermediate_value_Ico
-  结论: {s : 集合 X} (hs : 是预连通 s) {a : X}
-  证明: fun _ h =>
-  hs.intermediate_value₂_eventually₁ ha hl hf continuousOn_const h.1 (ht.eventually_const_le h.2)
+/-
+**IsPreconnected.intermediate_value_Ico** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPreconnected.intermediate_value_Ico {s : Set X} (hs : IsPreconnected s) 
+{a : X} {l : Filter X} (ha : a in s) [NeBot l] (hl : l <= 𝓟 s) {f : X -> α} (hf 
+: ContinuousOn f s) {v : α} (ht : Tendsto f l (𝓝 v)) : Ico (f a) v subseteq f ''
+ s
+参数：hs : IsPreconnected s；ha : a in s；hl : l <= 𝓟 s；hf : ContinuousOn f s；ht : Te
+ndsto f l (𝓝 v)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.intermediate_value₂_eventually₁`：IsPreconnected.intermedi
+ate_value₂_eventually₁ {s : Set X} (hs : IsPreconnected s) {a : X} {l : Filter X
+} (ha : a in s) [NeBot l] (hl : l <=…
+· 使用定理 `continuousOn_const`：continuousOn_const {s : Set α} {c : β} : ContinuousO
+n (fun _ => c) s
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Filter.Tendsto.eventually_const_le`：Filter.Tendsto.eventually_const_le {
+l : Filter γ} {f : γ -> α} {u v : α} (hv : u < v) (h : Tendsto f l (𝓝 v)) : fora
+llᶠ a in l, u <= f a
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem IsPreconnected.intermediate_value_Ico {s : Set X} (hs : IsPreconnected s) {a : X}
-    {l : Filter X} (ha : a in s) [NeBot l] (hl : l <= 𝓟 s) {f : X -> α} (hf : ContinuousOn f s) {v : α}
-    (ht : Tendsto f l (𝓝 v)) : Ico (f a) v subseteq f '' s := fun _ h =>
+    {l : Filter X} (ha : a ∈ s) [NeBot l] (hl : l ≤ 𝓟 s) {f : X → α} (hf : ContinuousOn f s) {v : α}
+    (ht : Tendsto f l (𝓝 v)) : Ico (f a) v ⊆ f '' s := fun _ h =>
   hs.intermediate_value₂_eventually₁ ha hl hf continuousOn_const h.1 (ht.eventually_const_le h.2)
-
-/--
-theorem `IsPreconnected.intermediate_value_Ioc` / 定理 `IsPreconnected.intermediate_value_Ioc`
-
-English:
-theorem IsPreconnected.intermediate_value_Ioc
-  statement: {s : Set X} (hs : IsPreconnected s) {a : X}
-  proof: fun _ h =>
-  (hs.intermediate_value₂_eventually₁ ha hl continuousOn_const hf h.2
-    (ht.eventually_le_const h.1)).imp fun _ h => h.imp_right Eq.symm
-
-中文:
-定理 是预连通.intermediate_value_Ioc
-  结论: {s : 集合 X} (hs : 是预连通 s) {a : X}
-  证明: fun _ h =>
-  (hs.intermediate_value₂_eventually₁ ha hl continuousOn_const hf h.2
-    (ht.eventually_le_const h.1)).imp fun _ h => h.imp_right Eq.symm
+/-
+**IsPreconnected.intermediate_value_Ioc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPreconnected.intermediate_value_Ioc {s : Set X} (hs : IsPreconnected s) 
+{a : X} {l : Filter X} (ha : a in s) [NeBot l] (hl : l <= 𝓟 s) {f : X -> α} (hf 
+: ContinuousOn f s) {v : α} (ht : Tendsto f l (𝓝 v)) : Ioc v (f a) subseteq f ''
+ s
+参数：hs : IsPreconnected s；ha : a in s；hl : l <= 𝓟 s；hf : ContinuousOn f s；ht : Te
+ndsto f l (𝓝 v)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `And.imp_right`：∀ {a b c : Prop}, (a → b) → c ∧ a → c ∧ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsPreconnected.intermediate_value₂_eventually₁`：IsPreconnected.intermedi
+ate_value₂_eventually₁ {s : Set X} (hs : IsPreconnected s) {a : X} {l : Filter X
+} (ha : a in s) [NeBot l] (hl : l <=…
+· 使用定理 `continuousOn_const`：continuousOn_const {s : Set α} {c : β} : ContinuousO
+n (fun _ => c) s
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Filter.Tendsto.eventually_le_const`：∀ {α : Type u} {γ : Type w} [inst : 
+TopologicalSpace α] [inst_1 : LinearOrder α] [ClosedIciTopology α] {l : Filter γ
+}   {f : γ → α} {u v : α…
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 theorem IsPreconnected.intermediate_value_Ioc {s : Set X} (hs : IsPreconnected s) {a : X}
-    {l : Filter X} (ha : a in s) [NeBot l] (hl : l <= 𝓟 s) {f : X -> α} (hf : ContinuousOn f s) {v : α}
-    (ht : Tendsto f l (𝓝 v)) : Ioc v (f a) subseteq f '' s := fun _ h =>
+    {l : Filter X} (ha : a ∈ s) [NeBot l] (hl : l ≤ 𝓟 s) {f : X → α} (hf : ContinuousOn f s) {v : α}
+    (ht : Tendsto f l (𝓝 v)) : Ioc v (f a) ⊆ f '' s := fun _ h =>
   (hs.intermediate_value₂_eventually₁ ha hl continuousOn_const hf h.2
     (ht.eventually_le_const h.1)).imp fun _ h => h.imp_right Eq.symm
-
-/--
-theorem `IsPreconnected.intermediate_value_Ioo` / 定理 `IsPreconnected.intermediate_value_Ioo`
-
-English:
-theorem IsPreconnected.intermediate_value_Ioo
-  statement: {s : Set X} (hs : IsPreconnected s) {l₁ l₂ : Filter X}
-  proof: fun _ h =>
-  hs.intermediate_value₂_eventually₂ hl₁ hl₂ hf continuousOn_const
-    (ht₁.eventually_le_const h.1) (ht₂.eventually_const_le h.2)
-
-中文:
-定理 是预连通.intermediate_value_Ioo
-  结论: {s : 集合 X} (hs : 是预连通 s) {l₁ l₂ : 滤子 X}
-  证明: fun _ h =>
-  hs.intermediate_value₂_eventually₂ hl₁ hl₂ hf continuousOn_const
-    (ht₁.eventually_le_const h.1) (ht₂.eventually_const_le h.2)
+/-
+**IsPreconnected.intermediate_value_Ioo** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPreconnected.intermediate_value_Ioo {s : Set X} (hs : IsPreconnected s) 
+{l₁ l₂ : Filter X} [NeBot l₁] [NeBot l₂] (hl₁ : l₁ <= 𝓟 s) (hl₂ : l₂ <= 𝓟 s) {f 
+: X -> α} (hf : ContinuousOn f s) {v₁ v₂ : α} (ht₁ : Tendsto f l₁ (𝓝 v₁)) (ht₂ :
+ Tendsto f l₂ (𝓝 v₂)) : Ioo v₁ v₂ subseteq f '' s
+参数：hs : IsPreconnected s；hl₁ : l₁ <= 𝓟 s；hl₂ : l₂ <= 𝓟 s；hf : ContinuousOn f s；h
+t₁ : Tendsto f l₁ (𝓝 v₁)；ht₂ : Tendsto f l₂ (𝓝 v₂)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.intermediate_value₂_eventually₂`：IsPreconnected.intermedi
+ate_value₂_eventually₂ {s : Set X} (hs : IsPreconnected s) {l₁ l₂ : Filter X} [N
+eBot l₁] [NeBot l₂] (hl₁ : l₁ <= 𝓟 s…
+· 使用定理 `continuousOn_const`：continuousOn_const {s : Set α} {c : β} : ContinuousO
+n (fun _ => c) s
+· 使用定理 `Filter.Tendsto.eventually_le_const`：∀ {α : Type u} {γ : Type w} [inst : 
+TopologicalSpace α] [inst_1 : LinearOrder α] [ClosedIciTopology α] {l : Filter γ
+}   {f : γ → α} {u v : α…
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Filter.Tendsto.eventually_const_le`：Filter.Tendsto.eventually_const_le {
+l : Filter γ} {f : γ -> α} {u v : α} (hv : u < v) (h : Tendsto f l (𝓝 v)) : fora
+llᶠ a in l, u <= f a
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem IsPreconnected.intermediate_value_Ioo {s : Set X} (hs : IsPreconnected s) {l₁ l₂ : Filter X}
-    [NeBot l₁] [NeBot l₂] (hl₁ : l₁ <= 𝓟 s) (hl₂ : l₂ <= 𝓟 s) {f : X -> α} (hf : ContinuousOn f s)
+    [NeBot l₁] [NeBot l₂] (hl₁ : l₁ ≤ 𝓟 s) (hl₂ : l₂ ≤ 𝓟 s) {f : X → α} (hf : ContinuousOn f s)
     {v₁ v₂ : α} (ht₁ : Tendsto f l₁ (𝓝 v₁)) (ht₂ : Tendsto f l₂ (𝓝 v₂)) :
-    Ioo v₁ v₂ subseteq f '' s := fun _ h =>
+    Ioo v₁ v₂ ⊆ f '' s := fun _ h =>
   hs.intermediate_value₂_eventually₂ hl₁ hl₂ hf continuousOn_const
     (ht₁.eventually_le_const h.1) (ht₂.eventually_const_le h.2)
-
-/--
-theorem `IsPreconnected.intermediate_value_Ici` / 定理 `IsPreconnected.intermediate_value_Ici`
-
-English:
-theorem IsPreconnected.intermediate_value_Ici
-  statement: {s : Set X} (hs : IsPreconnected s) {a : X}
-  proof: fun y h =>
-  hs.intermediate_value₂_eventually₁ ha hl hf continuousOn_const h (tendsto_atTop.1 ht y)
-
-中文:
-定理 是预连通.intermediate_value_Ici
-  结论: {s : 集合 X} (hs : 是预连通 s) {a : X}
-  证明: fun y h =>
-  hs.intermediate_value₂_eventually₁ ha hl hf continuousOn_const h (tendsto_atTop.1 ht y)
+/-
+**IsPreconnected.intermediate_value_Ici** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPreconnected.intermediate_value_Ici {s : Set X} (hs : IsPreconnected s) 
+{a : X} {l : Filter X} (ha : a in s) [NeBot l] (hl : l <= 𝓟 s) {f : X -> α} (hf 
+: ContinuousOn f s) (ht : Tendsto f l atTop) : Ici (f a) subseteq f '' s
+参数：hs : IsPreconnected s；ha : a in s；hl : l <= 𝓟 s；hf : ContinuousOn f s；ht : Te
+ndsto f l atTop。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.intermediate_value₂_eventually₁`：IsPreconnected.intermedi
+ate_value₂_eventually₁ {s : Set X} (hs : IsPreconnected s) {a : X} {l : Filter X
+} (ha : a in s) [NeBot l] (hl : l <=…
+· 使用定理 `continuousOn_const`：continuousOn_const {s : Set α} {c : β} : ContinuousO
+n (fun _ => c) s
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.tendsto_atTop`：tendsto_atTop [Preorder β] {m : α -> β} {f : Filte
+r α} : Tendsto m f atTop ↔ forall b, forallᶠ a in f, b <= m a
 -/
 theorem IsPreconnected.intermediate_value_Ici {s : Set X} (hs : IsPreconnected s) {a : X}
-    {l : Filter X} (ha : a in s) [NeBot l] (hl : l <= 𝓟 s) {f : X -> α} (hf : ContinuousOn f s)
-    (ht : Tendsto f l atTop) : Ici (f a) subseteq f '' s := fun y h =>
+    {l : Filter X} (ha : a ∈ s) [NeBot l] (hl : l ≤ 𝓟 s) {f : X → α} (hf : ContinuousOn f s)
+    (ht : Tendsto f l atTop) : Ici (f a) ⊆ f '' s := fun y h =>
   hs.intermediate_value₂_eventually₁ ha hl hf continuousOn_const h (tendsto_atTop.1 ht y)
-
-/--
-theorem `IsPreconnected.intermediate_value_Iic` / 定理 `IsPreconnected.intermediate_value_Iic`
-
-English:
-theorem IsPreconnected.intermediate_value_Iic
-  statement: {s : Set X} (hs : IsPreconnected s) {a : X}
-  proof: fun y h =>
-  (hs.intermediate_value₂_eventually₁ ha hl continuousOn_const hf h (tendsto_atBot.1 ht y)).imp
-    fun _ h => h.imp_right Eq.symm
-
-中文:
-定理 是预连通.intermediate_value_Iic
-  结论: {s : 集合 X} (hs : 是预连通 s) {a : X}
-  证明: fun y h =>
-  (hs.intermediate_value₂_eventually₁ ha hl continuousOn_const hf h (tendsto_atBot.1 ht y)).imp
-    fun _ h => h.imp_right Eq.symm
+/-
+**IsPreconnected.intermediate_value_Iic** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPreconnected.intermediate_value_Iic {s : Set X} (hs : IsPreconnected s) 
+{a : X} {l : Filter X} (ha : a in s) [NeBot l] (hl : l <= 𝓟 s) {f : X -> α} (hf 
+: ContinuousOn f s) (ht : Tendsto f l atBot) : Iic (f a) subseteq f '' s
+参数：hs : IsPreconnected s；ha : a in s；hl : l <= 𝓟 s；hf : ContinuousOn f s；ht : Te
+ndsto f l atBot。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `And.imp_right`：∀ {a b c : Prop}, (a → b) → c ∧ a → c ∧ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsPreconnected.intermediate_value₂_eventually₁`：IsPreconnected.intermedi
+ate_value₂_eventually₁ {s : Set X} (hs : IsPreconnected s) {a : X} {l : Filter X
+} (ha : a in s) [NeBot l] (hl : l <=…
+· 使用定理 `continuousOn_const`：continuousOn_const {s : Set α} {c : β} : ContinuousO
+n (fun _ => c) s
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.tendsto_atBot`：∀ {α : Type u_3} {β : Type u_4} [inst : Preorder β
+] {m : α → β} {f : Filter α},   Filter.Tendsto m f Filter.atBot ↔ ∀ (b : β), ∀ᶠ 
+(a : α) in…
 -/
 theorem IsPreconnected.intermediate_value_Iic {s : Set X} (hs : IsPreconnected s) {a : X}
-    {l : Filter X} (ha : a in s) [NeBot l] (hl : l <= 𝓟 s) {f : X -> α} (hf : ContinuousOn f s)
-    (ht : Tendsto f l atBot) : Iic (f a) subseteq f '' s := fun y h =>
+    {l : Filter X} (ha : a ∈ s) [NeBot l] (hl : l ≤ 𝓟 s) {f : X → α} (hf : ContinuousOn f s)
+    (ht : Tendsto f l atBot) : Iic (f a) ⊆ f '' s := fun y h =>
   (hs.intermediate_value₂_eventually₁ ha hl continuousOn_const hf h (tendsto_atBot.1 ht y)).imp
     fun _ h => h.imp_right Eq.symm
-
-/--
-theorem `IsPreconnected.intermediate_value_Ioi` / 定理 `IsPreconnected.intermediate_value_Ioi`
-
-English:
-theorem IsPreconnected.intermediate_value_Ioi
-  statement: {s : Set X} (hs : IsPreconnected s) {l₁ l₂ : Filter X}
-  proof: fun y h =>
-  hs.intermediate_value₂_eventually₂ hl₁ hl₂ hf continuousOn_const
-    (ht₁.eventually_le_const h) (ht₂.eventually_ge_atTop y)
-
-中文:
-定理 是预连通.intermediate_value_Ioi
-  结论: {s : 集合 X} (hs : 是预连通 s) {l₁ l₂ : 滤子 X}
-  证明: fun y h =>
-  hs.intermediate_value₂_eventually₂ hl₁ hl₂ hf continuousOn_const
-    (ht₁.eventually_le_const h) (ht₂.eventually_ge_atTop y)
+/-
+**IsPreconnected.intermediate_value_Ioi** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPreconnected.intermediate_value_Ioi {s : Set X} (hs : IsPreconnected s) 
+{l₁ l₂ : Filter X} [NeBot l₁] [NeBot l₂] (hl₁ : l₁ <= 𝓟 s) (hl₂ : l₂ <= 𝓟 s) {f 
+: X -> α} (hf : ContinuousOn f s) {v : α} (ht₁ : Tendsto f l₁ (𝓝 v)) (ht₂ : Tend
+sto f l₂ atTop) : Ioi v subseteq f '' s
+参数：hs : IsPreconnected s；hl₁ : l₁ <= 𝓟 s；hl₂ : l₂ <= 𝓟 s；hf : ContinuousOn f s；h
+t₁ : Tendsto f l₁ (𝓝 v)；ht₂ : Tendsto f l₂ atTop。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.intermediate_value₂_eventually₂`：IsPreconnected.intermedi
+ate_value₂_eventually₂ {s : Set X} (hs : IsPreconnected s) {l₁ l₂ : Filter X} [N
+eBot l₁] [NeBot l₂] (hl₁ : l₁ <= 𝓟 s…
+· 使用定理 `continuousOn_const`：continuousOn_const {s : Set α} {c : β} : ContinuousO
+n (fun _ => c) s
+· 使用定理 `Filter.Tendsto.eventually_le_const`：∀ {α : Type u} {γ : Type w} [inst : 
+TopologicalSpace α] [inst_1 : LinearOrder α] [ClosedIciTopology α] {l : Filter γ
+}   {f : γ → α} {u v : α…
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `Filter.Tendsto.eventually_ge_atTop`：∀ {α : Type u_3} {β : Type u_4} [ins
+t : Preorder β] {f : α → β} {l : Filter α},   Filter.Tendsto f l Filter.atTop → 
+∀ (c : β), ∀ᶠ (x : α) in…
 -/
 theorem IsPreconnected.intermediate_value_Ioi {s : Set X} (hs : IsPreconnected s) {l₁ l₂ : Filter X}
-    [NeBot l₁] [NeBot l₂] (hl₁ : l₁ <= 𝓟 s) (hl₂ : l₂ <= 𝓟 s) {f : X -> α} (hf : ContinuousOn f s)
-    {v : α} (ht₁ : Tendsto f l₁ (𝓝 v)) (ht₂ : Tendsto f l₂ atTop) : Ioi v subseteq f '' s := fun y h =>
+    [NeBot l₁] [NeBot l₂] (hl₁ : l₁ ≤ 𝓟 s) (hl₂ : l₂ ≤ 𝓟 s) {f : X → α} (hf : ContinuousOn f s)
+    {v : α} (ht₁ : Tendsto f l₁ (𝓝 v)) (ht₂ : Tendsto f l₂ atTop) : Ioi v ⊆ f '' s := fun y h =>
   hs.intermediate_value₂_eventually₂ hl₁ hl₂ hf continuousOn_const
     (ht₁.eventually_le_const h) (ht₂.eventually_ge_atTop y)
-
-/--
-theorem `IsPreconnected.intermediate_value_Iio` / 定理 `IsPreconnected.intermediate_value_Iio`
-
-English:
-theorem IsPreconnected.intermediate_value_Iio
-  statement: {s : Set X} (hs : IsPreconnected s) {l₁ l₂ : Filter X}
-  proof: fun y h =>
-  hs.intermediate_value₂_eventually₂ hl₁ hl₂ hf continuousOn_const (ht₁.eventually_le_atBot y)
-    (ht₂.eventually_const_le h)
-
-中文:
-定理 是预连通.intermediate_value_Iio
-  结论: {s : 集合 X} (hs : 是预连通 s) {l₁ l₂ : 滤子 X}
-  证明: fun y h =>
-  hs.intermediate_value₂_eventually₂ hl₁ hl₂ hf continuousOn_const (ht₁.eventually_le_atBot y)
-    (ht₂.eventually_const_le h)
+/-
+**IsPreconnected.intermediate_value_Iio** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPreconnected.intermediate_value_Iio {s : Set X} (hs : IsPreconnected s) 
+{l₁ l₂ : Filter X} [NeBot l₁] [NeBot l₂] (hl₁ : l₁ <= 𝓟 s) (hl₂ : l₂ <= 𝓟 s) {f 
+: X -> α} (hf : ContinuousOn f s) {v : α} (ht₁ : Tendsto f l₁ atBot) (ht₂ : Tend
+sto f l₂ (𝓝 v)) : Iio v subseteq f '' s
+参数：hs : IsPreconnected s；hl₁ : l₁ <= 𝓟 s；hl₂ : l₂ <= 𝓟 s；hf : ContinuousOn f s；h
+t₁ : Tendsto f l₁ atBot；ht₂ : Tendsto f l₂ (𝓝 v)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.intermediate_value₂_eventually₂`：IsPreconnected.intermedi
+ate_value₂_eventually₂ {s : Set X} (hs : IsPreconnected s) {l₁ l₂ : Filter X} [N
+eBot l₁] [NeBot l₂] (hl₁ : l₁ <= 𝓟 s…
+· 使用定理 `continuousOn_const`：continuousOn_const {s : Set α} {c : β} : ContinuousO
+n (fun _ => c) s
+· 使用定理 `Filter.Tendsto.eventually_le_atBot`：∀ {α : Type u_3} {β : Type u_4} [ins
+t : Preorder β] {f : α → β} {l : Filter α},   Filter.Tendsto f l Filter.atBot → 
+∀ (c : β), ∀ᶠ (x : α) in…
+· 使用定理 `Filter.Tendsto.eventually_const_le`：Filter.Tendsto.eventually_const_le {
+l : Filter γ} {f : γ -> α} {u v : α} (hv : u < v) (h : Tendsto f l (𝓝 v)) : fora
+llᶠ a in l, u <= f a
+· 使用定理 `instClosedIicTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIicTopology α
 -/
 theorem IsPreconnected.intermediate_value_Iio {s : Set X} (hs : IsPreconnected s) {l₁ l₂ : Filter X}
-    [NeBot l₁] [NeBot l₂] (hl₁ : l₁ <= 𝓟 s) (hl₂ : l₂ <= 𝓟 s) {f : X -> α} (hf : ContinuousOn f s)
-    {v : α} (ht₁ : Tendsto f l₁ atBot) (ht₂ : Tendsto f l₂ (𝓝 v)) : Iio v subseteq f '' s := fun y h =>
+    [NeBot l₁] [NeBot l₂] (hl₁ : l₁ ≤ 𝓟 s) (hl₂ : l₂ ≤ 𝓟 s) {f : X → α} (hf : ContinuousOn f s)
+    {v : α} (ht₁ : Tendsto f l₁ atBot) (ht₂ : Tendsto f l₂ (𝓝 v)) : Iio v ⊆ f '' s := fun y h =>
   hs.intermediate_value₂_eventually₂ hl₁ hl₂ hf continuousOn_const (ht₁.eventually_le_atBot y)
     (ht₂.eventually_const_le h)
-
-/--
-theorem `IsPreconnected.intermediate_value_Iii` / 定理 `IsPreconnected.intermediate_value_Iii`
-
-English:
-theorem IsPreconnected.intermediate_value_Iii
-  statement: {s : Set X} (hs : IsPreconnected s) {l₁ l₂ : Filter X}
-  proof: fun y _ =>
-  hs.intermediate_value₂_eventually₂ hl₁ hl₂ hf continuousOn_const (ht₁.eventually_le_atBot y)
-    (ht₂.eventually_ge_atTop y)
-
-中文:
-定理 是预连通.intermediate_value_Iii
-  结论: {s : 集合 X} (hs : 是预连通 s) {l₁ l₂ : 滤子 X}
-  证明: fun y _ =>
-  hs.intermediate_value₂_eventually₂ hl₁ hl₂ hf continuousOn_const (ht₁.eventually_le_atBot y)
-    (ht₂.eventually_ge_atTop y)
+/-
+**IsPreconnected.intermediate_value_Iii** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPreconnected.intermediate_value_Iii {s : Set X} (hs : IsPreconnected s) 
+{l₁ l₂ : Filter X} [NeBot l₁] [NeBot l₂] (hl₁ : l₁ <= 𝓟 s) (hl₂ : l₂ <= 𝓟 s) {f 
+: X -> α} (hf : ContinuousOn f s) (ht₁ : Tendsto f l₁ atBot) (ht₂ : Tendsto f l₂
+ atTop) : univ subseteq f '' s
+参数：hs : IsPreconnected s；hl₁ : l₁ <= 𝓟 s；hl₂ : l₂ <= 𝓟 s；hf : ContinuousOn f s；h
+t₁ : Tendsto f l₁ atBot；ht₂ : Tendsto f l₂ atTop。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.intermediate_value₂_eventually₂`：IsPreconnected.intermedi
+ate_value₂_eventually₂ {s : Set X} (hs : IsPreconnected s) {l₁ l₂ : Filter X} [N
+eBot l₁] [NeBot l₂] (hl₁ : l₁ <= 𝓟 s…
+· 使用定理 `continuousOn_const`：continuousOn_const {s : Set α} {c : β} : ContinuousO
+n (fun _ => c) s
+· 使用定理 `Filter.Tendsto.eventually_le_atBot`：∀ {α : Type u_3} {β : Type u_4} [ins
+t : Preorder β] {f : α → β} {l : Filter α},   Filter.Tendsto f l Filter.atBot → 
+∀ (c : β), ∀ᶠ (x : α) in…
+· 使用定理 `Filter.Tendsto.eventually_ge_atTop`：∀ {α : Type u_3} {β : Type u_4} [ins
+t : Preorder β] {f : α → β} {l : Filter α},   Filter.Tendsto f l Filter.atTop → 
+∀ (c : β), ∀ᶠ (x : α) in…
 -/
 theorem IsPreconnected.intermediate_value_Iii {s : Set X} (hs : IsPreconnected s) {l₁ l₂ : Filter X}
-    [NeBot l₁] [NeBot l₂] (hl₁ : l₁ <= 𝓟 s) (hl₂ : l₂ <= 𝓟 s) {f : X -> α} (hf : ContinuousOn f s)
-    (ht₁ : Tendsto f l₁ atBot) (ht₂ : Tendsto f l₂ atTop) : univ subseteq f '' s := fun y _ =>
+    [NeBot l₁] [NeBot l₂] (hl₁ : l₁ ≤ 𝓟 s) (hl₂ : l₂ ≤ 𝓟 s) {f : X → α} (hf : ContinuousOn f s)
+    (ht₁ : Tendsto f l₁ atBot) (ht₂ : Tendsto f l₂ atTop) : univ ⊆ f '' s := fun y _ =>
   hs.intermediate_value₂_eventually₂ hl₁ hl₂ hf continuousOn_const (ht₁.eventually_le_atBot y)
     (ht₂.eventually_ge_atTop y)
 
-/--
-theorem `intermediate_value_univ` / 定理 `intermediate_value_univ`
+/-- **Intermediate Value Theorem** for continuous functions on connected spaces. -/
+/-
+**intermediate_value_univ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：intermediate_value_univ [PreconnectedSpace X] (a b : X) {f : X -> α} (hf :
+ Continuous f) : Icc (f a) (f b) subseteq range f
+参数：a b : X；hf : Continuous f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `intermediate_value_univ₂`：intermediate_value_univ₂ [PreconnectedSpace X]
+ {a b : X} {f g : X -> α} (hf : Continuous f) (hg : Continuous g) (ha : f a <= g
+ a) (hb : g b …
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-theorem intermediate_value_univ
-  given: [PreconnectedSpace X] (a b : X) {f : X -> α} (hf : Continuous f)
-  proof: fun _ hx => intermediate_value_univ₂ hf continuous_const hx.1 hx.2
-
-中文:
-定理 intermediate_value_univ
-  条件: [预连通空间 X] (a b : X) {f : X -> α} (hf : 连续 f)
-  证明: fun _ hx => intermediate_value_univ₂ hf continuous_const hx.1 hx.2
-
-Depends on / 依赖: continuous_const
+--- 原说明 ---
+**Intermediate Value Theorem** for continuous functions on connected spaces.
 -/
-theorem intermediate_value_univ [PreconnectedSpace X] (a b : X) {f : X -> α} (hf : Continuous f) :
-    Icc (f a) (f b) subseteq range f := fun _ hx => intermediate_value_univ₂ hf continuous_const hx.1 hx.2
+theorem intermediate_value_univ [PreconnectedSpace X] (a b : X) {f : X → α} (hf : Continuous f) :
+    Icc (f a) (f b) ⊆ range f := fun _ hx => intermediate_value_univ₂ hf continuous_const hx.1 hx.2
 
-/--
-theorem `mem_range_of_exists_le_of_exists_ge` / 定理 `mem_range_of_exists_le_of_exists_ge`
+/-- **Intermediate Value Theorem** for continuous functions on connected spaces. -/
+/-
+**mem_range_of_exists_le_of_exists_ge** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_range_of_exists_le_of_exists_ge [PreconnectedSpace X] {c : α} {f : X -
+> α} (hf : Continuous f) (h₁ : exists a, f a <= c) (h₂ : exists b, c <= f b) : c
+ in range f
+参数：hf : Continuous f；h₁ : exists a, f a <= c；h₂ : exists b, c <= f b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `intermediate_value_univ`：intermediate_value_univ [PreconnectedSpace X] (
+a b : X) {f : X -> α} (hf : Continuous f) : Icc (f a) (f b) subseteq range f
 
-English:
-theorem mem_range_of_exists_le_of_exists_ge
-  statement: [PreconnectedSpace X] {c : α} {f : X -> α}
-  proof: let ⟨a, ha⟩ := h₁; let ⟨b, hb⟩ := h₂; intermediate_value_univ a b hf ⟨ha, hb⟩
-
-中文:
-定理 mem_range_of_存在_le_of_存在_ge
-  结论: [预连通空间 X] {c : α} {f : X -> α}
-  证明: let ⟨a, ha⟩ := h₁; let ⟨b, hb⟩ := h₂; intermediate_value_univ a b hf ⟨ha, hb⟩
-
-Depends on / 依赖: intermediate_value_univ
+--- 原说明 ---
+**Intermediate Value Theorem** for continuous functions on connected spaces.
 -/
-theorem mem_range_of_exists_le_of_exists_ge [PreconnectedSpace X] {c : α} {f : X -> α}
-    (hf : Continuous f) (h₁ : exists a, f a <= c) (h₂ : exists b, c <= f b) : c in range f :=
+theorem mem_range_of_exists_le_of_exists_ge [PreconnectedSpace X] {c : α} {f : X → α}
+    (hf : Continuous f) (h₁ : ∃ a, f a ≤ c) (h₂ : ∃ b, c ≤ f b) : c ∈ range f :=
   let ⟨a, ha⟩ := h₁; let ⟨b, hb⟩ := h₂; intermediate_value_univ a b hf ⟨ha, hb⟩
 
 /-!
@@ -495,337 +526,377 @@ In this section we prove the following results:
 -/
 
 
-/--
-theorem `IsPreconnected.Icc_subset` / 定理 `IsPreconnected.Icc_subset`
+/-- If a preconnected set contains endpoints of an interval, then it includes the whole interval. -/
+/-
+**IsPreconnected.Icc_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPreconnected.Icc_subset {s : Set α} (hs : IsPreconnected s) {a b : α} (h
+a : a in s) (hb : b in s) : Icc a b subseteq s
+参数：hs : IsPreconnected s；ha : a in s；hb : b in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_id`：image_id (s : Set α) : id '' s = s
+· 使用定理 `IsPreconnected.intermediate_value`：IsPreconnected.intermediate_value {s 
+: Set X} (hs : IsPreconnected s) {a b : X} (ha : a in s) (hb : b in s) {f : X ->
+ α} (hf : ContinuousOn …
+· 使用定理 `continuousOn_id`：continuousOn_id {s : Set α} : ContinuousOn id s
 
-English:
-theorem IsPreconnected.Icc_subset
-  statement: {s : Set α} (hs : IsPreconnected s) {a b : α} (ha : a in s)
-  proof: by
-  simpa only [image_id] using! hs.intermediate_value ha hb continuousOn_id
-
-中文:
-定理 是预连通.Icc_subset
-  结论: {s : 集合 α} (hs : 是预连通 s) {a b : α} (ha : a in s)
-  证明: by
-  simpa only [image_id] using! hs.intermediate_value ha hb continuousOn_id
-
-Depends on / 依赖: continuousOn_id, hs.intermediate_value, image_id, intermediate_value
+--- 原说明 ---
+If a preconnected set contains endpoints of an interval, then it includes the wh
+ole interval.
 -/
-theorem IsPreconnected.Icc_subset {s : Set α} (hs : IsPreconnected s) {a b : α} (ha : a in s)
-    (hb : b in s) : Icc a b subseteq s := by
+theorem IsPreconnected.Icc_subset {s : Set α} (hs : IsPreconnected s) {a b : α} (ha : a ∈ s)
+    (hb : b ∈ s) : Icc a b ⊆ s := by
   simpa only [image_id] using! hs.intermediate_value ha hb continuousOn_id
-
-/--
-theorem `IsPreconnected.ordConnected` / 定理 `IsPreconnected.ordConnected`
-
-English:
-theorem IsPreconnected.ordConnected
-  given: {s : Set α} (h : IsPreconnected s)
-  statement: OrdConnected s
-  proof: ⟨fun _ hx _ hy => h.Icc_subset hx hy⟩
-
-中文:
-定理 是预连通.ordConnected
-  条件: {s : 集合 α} (h : 是预连通 s)
-  结论: 序连通 s
-  证明: ⟨fun _ hx _ hy => h.Icc_subset hx hy⟩
-
-Depends on / 依赖: Icc_subset, h.Icc_subset
+/-
+**IsPreconnected.ordConnected** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPreconnected.ordConnected {s : Set α} (h : IsPreconnected s) : OrdConnec
+ted s
+参数：h : IsPreconnected s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.Icc_subset`：IsPreconnected.Icc_subset {s : Set α} (hs : I
+sPreconnected s) {a b : α} (ha : a in s) (hb : b in s) : Icc a b subseteq s
 -/
 theorem IsPreconnected.ordConnected {s : Set α} (h : IsPreconnected s) : OrdConnected s :=
   ⟨fun _ hx _ hy => h.Icc_subset hx hy⟩
 
-/--
-theorem `IsConnected.Icc_subset` / 定理 `IsConnected.Icc_subset`
+/-- If a preconnected set contains endpoints of an interval, then it includes the whole interval. -/
+/-
+**IsConnected.Icc_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsConnected.Icc_subset {s : Set α} (hs : IsConnected s) {a b : α} (ha : a 
+in s) (hb : b in s) : Icc a b subseteq s
+参数：hs : IsConnected s；ha : a in s；hb : b in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.Icc_subset`：IsPreconnected.Icc_subset {s : Set α} (hs : I
+sPreconnected s) {a b : α} (ha : a in s) (hb : b in s) : Icc a b subseteq s
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-theorem IsConnected.Icc_subset
-  statement: {s : Set α} (hs : IsConnected s) {a b : α} (ha : a in s)
-  proof: hs.2.Icc_subset ha hb
-
-中文:
-定理 是连通.Icc_subset
-  结论: {s : 集合 α} (hs : 是连通 s) {a b : α} (ha : a in s)
-  证明: hs.2.Icc_subset ha hb
-
-Depends on / 依赖: Icc_subset
+--- 原说明 ---
+If a preconnected set contains endpoints of an interval, then it includes the wh
+ole interval.
 -/
-theorem IsConnected.Icc_subset {s : Set α} (hs : IsConnected s) {a b : α} (ha : a in s)
-    (hb : b in s) : Icc a b subseteq s :=
+theorem IsConnected.Icc_subset {s : Set α} (hs : IsConnected s) {a b : α} (ha : a ∈ s)
+    (hb : b ∈ s) : Icc a b ⊆ s :=
   hs.2.Icc_subset ha hb
 
-/--
-theorem `IsPreconnected.eq_univ_of_unbounded` / 定理 `IsPreconnected.eq_univ_of_unbounded`
+/-- If a preconnected set in a linear order space is unbounded below and above, then it is the whole
+space. -/
+/-
+**IsPreconnected.eq_univ_of_unbounded** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPreconnected.eq_univ_of_unbounded {s : Set α} (hs : IsPreconnected s) (h
+b : ¬BddBelow s) (ha : ¬BddAbove s) : s = univ
+参数：hs : IsPreconnected s；hb : ¬BddBelow s；ha : ¬BddAbove s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_univ_of_forall`：eq_univ_of_forall {s : Set α} : (forall x, x in s
+) -> s = univ
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_bddBelow_iff`：∀ {α : Type u_4} [inst : LinearOrder α] {s : Set α}, ¬
+BddBelow s ↔ ∀ (x : α), ∃ y ∈ s, y < x
+· 使用定理 `not_bddAbove_iff`：not_bddAbove_iff {α : Type*} [LinearOrder α] {s : Set 
+α} : ¬BddAbove s ↔ forall x, exists y in s, x < y
+· 使用定理 `IsPreconnected.Icc_subset`：IsPreconnected.Icc_subset {s : Set α} (hs : I
+sPreconnected s) {a b : α} (ha : a in s) (hb : b in s) : Icc a b subseteq s
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 
-English:
-theorem IsPreconnected.eq_univ_of_unbounded
-  statement: {s : Set α} (hs : IsPreconnected s) (hb : ¬BddBelow s)
-  proof: by
-  refine eq_univ_of_forall fun x => ?_
-  obtain ⟨y, ys, hy⟩ : exists y in s, y < x := not_bddBelow_iff.1 hb x
-  obtain ⟨z, zs, hz⟩ : exists z in s, x < z := not_bddAbove_iff.1 ha x
-  exact hs.Icc_subset ys zs ⟨le_of_lt hy, le_of_lt hz⟩
-
-中文:
-定理 是预连通.eq_univ_of_unbounded
-  结论: {s : 集合 α} (hs : 是预连通 s) (hb : ¬BddBelow s)
-  证明: by
-  refine eq_univ_of_forall fun x => ?_
-  obtain ⟨y, ys, hy⟩ : exists y in s, y < x := not_bddBelow_iff.1 hb x
-  obtain ⟨z, zs, hz⟩ : exists z in s, x < z := not_bddAbove_iff.1 ha x
-  exact hs.Icc_subset ys zs ⟨le_of_lt hy, le_of_lt hz⟩
-
-Depends on / 依赖: Icc_subset, eq_univ_of_forall, hs.Icc_subset, le_of_lt, not_bddAbove_iff, not_bddBelow_iff
+--- 原说明 ---
+If a preconnected set in a linear order space is unbounded below and above, then
+ it is the whole
+space.
 -/
 theorem IsPreconnected.eq_univ_of_unbounded {s : Set α} (hs : IsPreconnected s) (hb : ¬BddBelow s)
     (ha : ¬BddAbove s) : s = univ := by
   refine eq_univ_of_forall fun x => ?_
-  obtain ⟨y, ys, hy⟩ : exists y in s, y < x := not_bddBelow_iff.1 hb x
-  obtain ⟨z, zs, hz⟩ : exists z in s, x < z := not_bddAbove_iff.1 ha x
+  obtain ⟨y, ys, hy⟩ : ∃ y ∈ s, y < x := not_bddBelow_iff.1 hb x
+  obtain ⟨z, zs, hz⟩ : ∃ z ∈ s, x < z := not_bddAbove_iff.1 ha x
   exact hs.Icc_subset ys zs ⟨le_of_lt hy, le_of_lt hz⟩
 
 end
 
 variable {α : Type u} [TopologicalSpace α]
 
-/--
-theorem `denselyOrdered_of_preconnectedSpace` / 定理 `denselyOrdered_of_preconnectedSpace`
-
-English:
-theorem denselyOrdered_of_preconnectedSpace
-  statement: [LinearOrder α] [OrderTopology α]
-  proof: by
-    suffices (Iio y inter Ioi x).Nonempty by grind [Set.inter_nonempty_iff_exists_left]
-    exact nonempty_inter (isOpen_Iio' y) (isOpen_Ioi' x) (Set.Iio_union_Ioi_of_lt hxy)
-      ⟨x, Set.mem_Iio.mpr hxy⟩ ⟨y, Set.mem_Ioi.mpr hxy⟩
-
-中文:
-定理 denselyOrdered_of_preconnectedSpace
-  结论: [线性序 α] [Order拓扑 α]
-  证明: by
-    suffices (Iio y inter Ioi x).Nonempty by grind [Set.inter_nonempty_iff_exists_left]
-    exact nonempty_inter (isOpen_Iio' y) (isOpen_Ioi' x) (Set.Iio_union_Ioi_of_lt hxy)
-      ⟨x, Set.mem_Iio.mpr hxy⟩ ⟨y, Set.mem_Ioi.mpr hxy⟩
-
-Depends on / 依赖: Iio_union_Ioi_of_lt, Nonempty, Set.Iio_union_Ioi_of_lt, Set.inter_nonempty_iff_exists_left, Set.mem_Iio.mpr, Set.mem_Ioi.mpr, inter_nonempty_iff_exists_left, isOpen_Iio, isOpen_Ioi, mem_Iio, mem_Ioi, nonempty_inter
+/-
+**denselyOrdered_of_preconnectedSpace** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：denselyOrdered_of_preconnectedSpace [LinearOrder α] [OrderTopology α] [Pre
+connectedSpace α] : DenselyOrdered α where dense x y hxy
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_inter`：nonempty_inter [PreconnectedSpace α] {s t : Set α} : IsO
+pen s -> IsOpen t -> s union t = univ -> s.Nonempty -> t.Nonempty -> (s inter t)
+.Non…
+· 使用定理 `isOpen_Iio'`：∀ {α : Type u} [ts : TopologicalSpace α] [inst : Preorder α
+] [OrderTopology α] (a : α), IsOpen (Set.Iio a)
+· 使用定理 `isOpen_Ioi'`：isOpen_Ioi' [OrderTopology α] (a : α) : IsOpen (Ioi a)
+· 使用定理 `Set.Iio_union_Ioi_of_lt`：Iio_union_Ioi_of_lt (h : a < b) : Iio b union I
+oi a = univ
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.mem_Iio`：∀ {α : Type u_1} [inst : Preorder α] {b x : α}, x ∈ Set.Iio
+ b ↔ x < b
+· 使用定理 `Set.mem_Ioi`：∀ {α : Type u_1} [inst : Preorder α] {b x : α}, x ∈ Set.Ioi
+ b ↔ b < x
 -/
 theorem denselyOrdered_of_preconnectedSpace [LinearOrder α] [OrderTopology α]
     [PreconnectedSpace α] : DenselyOrdered α where
   dense x y hxy := by
-    suffices (Iio y inter Ioi x).Nonempty by grind [Set.inter_nonempty_iff_exists_left]
+    suffices (Iio y ∩ Ioi x).Nonempty by grind [Set.inter_nonempty_iff_exists_left]
     exact nonempty_inter (isOpen_Iio' y) (isOpen_Ioi' x) (Set.Iio_union_Ioi_of_lt hxy)
       ⟨x, Set.mem_Iio.mpr hxy⟩ ⟨y, Set.mem_Ioi.mpr hxy⟩
 
 variable [ConditionallyCompleteLinearOrder α] [OrderTopology α]
 
-/--
-theorem `IsConnected.Ioo_csInf_csSup_subset` / 定理 `IsConnected.Ioo_csInf_csSup_subset`
+/-- A bounded connected subset of a conditionally complete linear order includes the open interval
+`(Inf s, Sup s)`. -/
+/-
+**IsConnected.Ioo_csInf_csSup_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsConnected.Ioo_csInf_csSup_subset {s : Set α} (hs : IsConnected s) (hb : 
+BddBelow s) (ha : BddAbove s) : Ioo (sInf s) (sSup s) subseteq s
+参数：hs : IsConnected s；hb : BddBelow s；ha : BddAbove s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isGLB_lt_iff`：∀ {α : Type u_1} [inst : LinearOrder α] {s : Set α} {a b :
+ α}, IsGLB s a → (a < b ↔ ∃ c ∈ s, c < b)
+· 使用定理 `isGLB_csInf`：∀ {α : Type u_1} [inst : ConditionallyCompleteLattice α] {s
+ : Set α},   s.Nonempty → autoParam (BddBelow s) isGLB_csInf._auto_1 → IsGLB s (
+s…
+· 使用定理 `IsConnected.nonempty`：IsConnected.nonempty {s : Set α} (h : IsConnected 
+s) : s.Nonempty
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `lt_isLUB_iff`：lt_isLUB_iff (h : IsLUB s a) : b < a ↔ exists c in s, b < 
+c
+· 使用定理 `isLUB_csSup`：isLUB_csSup (hn : s.Nonempty) (hb : BddAbove s
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `IsConnected.Icc_subset`：IsConnected.Icc_subset {s : Set α} (hs : IsConne
+cted s) {a b : α} (ha : a in s) (hb : b in s) : Icc a b subseteq s
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 
-English:
-theorem IsConnected.Ioo_csInf_csSup_subset
-  statement: {s : Set α} (hs : IsConnected s) (hb : BddBelow s)
-  proof: fun _x hx =>
-  let ⟨_y, ys, hy⟩ := (isGLB_lt_iff (isGLB_csInf hs.nonempty hb)).1 hx.1
-  let ⟨_z, zs, hz⟩ := (lt_isLUB_iff (isLUB_csSup hs.nonempty ha)).1 hx.2
-  hs.Icc_subset ys zs ⟨hy.le, hz.le⟩
-
-中文:
-定理 是连通.Ioo_csInf_csSup_subset
-  结论: {s : 集合 α} (hs : 是连通 s) (hb : BddBelow s)
-  证明: fun _x hx =>
-  let ⟨_y, ys, hy⟩ := (isGLB_lt_iff (isGLB_csInf hs.nonempty hb)).1 hx.1
-  let ⟨_z, zs, hz⟩ := (lt_isLUB_iff (isLUB_csSup hs.nonempty ha)).1 hx.2
-  hs.Icc_subset ys zs ⟨hy.le, hz.le⟩
+--- 原说明 ---
+A bounded connected subset of a conditionally complete linear order includes the
+ open interval
+`(Inf s, Sup s)`.
 -/
 theorem IsConnected.Ioo_csInf_csSup_subset {s : Set α} (hs : IsConnected s) (hb : BddBelow s)
-    (ha : BddAbove s) : Ioo (sInf s) (sSup s) subseteq s := fun _x hx =>
+    (ha : BddAbove s) : Ioo (sInf s) (sSup s) ⊆ s := fun _x hx =>
   let ⟨_y, ys, hy⟩ := (isGLB_lt_iff (isGLB_csInf hs.nonempty hb)).1 hx.1
   let ⟨_z, zs, hz⟩ := (lt_isLUB_iff (isLUB_csSup hs.nonempty ha)).1 hx.2
   hs.Icc_subset ys zs ⟨hy.le, hz.le⟩
-
-/--
-theorem `eq_Icc_csInf_csSup_of_connected_bdd_closed` / 定理 `eq_Icc_csInf_csSup_of_connected_bdd_closed`
-
-English:
-theorem eq_Icc_csInf_csSup_of_connected_bdd_closed
-  statement: {s : Set α} (hc : IsConnected s)
-  proof: (subset_Icc_csInf_csSup hb ha).antisymm
-    hc.Icc_subset (hcl.csInf_mem hc.nonempty hb) (hcl.csSup_mem hc.nonempty ha)
-
-中文:
-定理 eq_Icc_csInf_csSup_of_connected_bdd_closed
-  结论: {s : 集合 α} (hc : 是连通 s)
-  证明: (subset_Icc_csInf_csSup hb ha).antisymm
-    hc.Icc_subset (hcl.csInf_mem hc.nonempty hb) (hcl.csSup_mem hc.nonempty ha)
-
-Depends on / 依赖: Icc_subset, antisymm, csInf_mem, csSup_mem, hc.Icc_subset, hc.nonempty, hcl.csInf_mem, hcl.csSup_mem, nonempty, subset_Icc_csInf_csSup
+/-
+**eq_Icc_csInf_csSup_of_connected_bdd_closed** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：eq_Icc_csInf_csSup_of_connected_bdd_closed {s : Set α} (hc : IsConnected s
+) (hb : BddBelow s) (ha : BddAbove s) (hcl : IsClosed s) : s = Icc (sInf s) (sSu
+p s)
+参数：hc : IsConnected s；hb : BddBelow s；ha : BddAbove s；hcl : IsClosed s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `subset_Icc_csInf_csSup`：subset_Icc_csInf_csSup (hb : BddBelow s) (ha : B
+ddAbove s) : s subseteq Icc (sInf s) (sSup s)
+· 使用定理 `IsConnected.Icc_subset`：IsConnected.Icc_subset {s : Set α} (hs : IsConne
+cted s) {a b : α} (ha : a in s) (hb : b in s) : Icc a b subseteq s
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `IsClosed.csInf_mem`：IsClosed.csInf_mem {s : Set α} (hc : IsClosed s) (hs
+ : s.Nonempty) (B : BddBelow s) : sInf s in s
+· 使用定理 `IsConnected.nonempty`：IsConnected.nonempty {s : Set α} (h : IsConnected 
+s) : s.Nonempty
+· 使用定理 `IsClosed.csSup_mem`：IsClosed.csSup_mem {s : Set α} (hc : IsClosed s) (hs
+ : s.Nonempty) (B : BddAbove s) : sSup s in s
 -/
 theorem eq_Icc_csInf_csSup_of_connected_bdd_closed {s : Set α} (hc : IsConnected s)
     (hb : BddBelow s) (ha : BddAbove s) (hcl : IsClosed s) : s = Icc (sInf s) (sSup s) :=
-(subset_Icc_csInf_csSup hb ha).antisymm
+  (subset_Icc_csInf_csSup hb ha).antisymm <|
     hc.Icc_subset (hcl.csInf_mem hc.nonempty hb) (hcl.csSup_mem hc.nonempty ha)
-
-/--
-theorem `IsPreconnected.Ioi_csInf_subset` / 定理 `IsPreconnected.Ioi_csInf_subset`
-
-English:
-theorem IsPreconnected.Ioi_csInf_subset
-  statement: {s : Set α} (hs : IsPreconnected s) (hb : BddBelow s)
-  proof: fun x hx =>
-  have sne : s.Nonempty := nonempty_of_not_bddAbove ha
-  let ⟨_y, ys, hy⟩ : exists y in s, y < x := (isGLB_lt_iff (isGLB_csInf sne hb)).1 hx
-  let ⟨_z, zs, hz⟩ : exists z in s, x < z := not_bddAbove_iff.1 ha x
-  hs.Icc_subset ys zs ⟨hy.le, hz.le⟩
-
-中文:
-定理 是预连通.Ioi_csInf_subset
-  结论: {s : 集合 α} (hs : 是预连通 s) (hb : BddBelow s)
-  证明: fun x hx =>
-  have sne : s.Nonempty := nonempty_of_not_bddAbove ha
-  let ⟨_y, ys, hy⟩ : exists y in s, y < x := (isGLB_lt_iff (isGLB_csInf sne hb)).1 hx
-  let ⟨_z, zs, hz⟩ : exists z in s, x < z := not_bddAbove_iff.1 ha x
-  hs.Icc_subset ys zs ⟨hy.le, hz.le⟩
+/-
+**IsPreconnected.Ioi_csInf_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPreconnected.Ioi_csInf_subset {s : Set α} (hs : IsPreconnected s) (hb : 
+BddBelow s) (ha : ¬BddAbove s) : Ioi (sInf s) subseteq s
+参数：hs : IsPreconnected s；hb : BddBelow s；ha : ¬BddAbove s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_of_not_bddAbove`：nonempty_of_not_bddAbove [ha : Nonempty α] (h 
+: ¬BddAbove s) : s.Nonempty
+· 使用定理 `supSet_to_nonempty`：∀ (α : Type u_1) [SupSet α], Nonempty α
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isGLB_lt_iff`：∀ {α : Type u_1} [inst : LinearOrder α] {s : Set α} {a b :
+ α}, IsGLB s a → (a < b ↔ ∃ c ∈ s, c < b)
+· 使用定理 `isGLB_csInf`：∀ {α : Type u_1} [inst : ConditionallyCompleteLattice α] {s
+ : Set α},   s.Nonempty → autoParam (BddBelow s) isGLB_csInf._auto_1 → IsGLB s (
+s…
+· 使用定理 `not_bddAbove_iff`：not_bddAbove_iff {α : Type*} [LinearOrder α] {s : Set 
+α} : ¬BddAbove s ↔ forall x, exists y in s, x < y
+· 使用定理 `IsPreconnected.Icc_subset`：IsPreconnected.Icc_subset {s : Set α} (hs : I
+sPreconnected s) {a b : α} (ha : a in s) (hb : b in s) : Icc a b subseteq s
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
 theorem IsPreconnected.Ioi_csInf_subset {s : Set α} (hs : IsPreconnected s) (hb : BddBelow s)
-    (ha : ¬BddAbove s) : Ioi (sInf s) subseteq s := fun x hx =>
+    (ha : ¬BddAbove s) : Ioi (sInf s) ⊆ s := fun x hx =>
   have sne : s.Nonempty := nonempty_of_not_bddAbove ha
-  let ⟨_y, ys, hy⟩ : exists y in s, y < x := (isGLB_lt_iff (isGLB_csInf sne hb)).1 hx
-  let ⟨_z, zs, hz⟩ : exists z in s, x < z := not_bddAbove_iff.1 ha x
+  let ⟨_y, ys, hy⟩ : ∃ y ∈ s, y < x := (isGLB_lt_iff (isGLB_csInf sne hb)).1 hx
+  let ⟨_z, zs, hz⟩ : ∃ z ∈ s, x < z := not_bddAbove_iff.1 ha x
   hs.Icc_subset ys zs ⟨hy.le, hz.le⟩
-
-/--
-theorem `IsPreconnected.Iio_csSup_subset` / 定理 `IsPreconnected.Iio_csSup_subset`
-
-English:
-theorem IsPreconnected.Iio_csSup_subset
-  statement: {s : Set α} (hs : IsPreconnected s) (hb : ¬BddBelow s)
-  proof: IsPreconnected.Ioi_csInf_subset (α := αᵒᵈ) hs ha hb
-
-中文:
-定理 是预连通.Iio_csSup_subset
-  结论: {s : 集合 α} (hs : 是预连通 s) (hb : ¬BddBelow s)
-  证明: IsPreconnected.Ioi_csInf_subset (α := αᵒᵈ) hs ha hb
-
-Depends on / 依赖: Ioi_csInf_subset, IsPreconnected, IsPreconnected.Ioi_csInf_subset
+/-
+**IsPreconnected.Iio_csSup_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPreconnected.Iio_csSup_subset {s : Set α} (hs : IsPreconnected s) (hb : 
+¬BddBelow s) (ha : BddAbove s) : Iio (sSup s) subseteq s
+参数：hs : IsPreconnected s；hb : ¬BddBelow s；ha : BddAbove s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.Ioi_csInf_subset`：IsPreconnected.Ioi_csInf_subset {s : Se
+t α} (hs : IsPreconnected s) (hb : BddBelow s) (ha : ¬BddAbove s) : Ioi (sInf s)
+ subseteq s
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
 -/
 theorem IsPreconnected.Iio_csSup_subset {s : Set α} (hs : IsPreconnected s) (hb : ¬BddBelow s)
-    (ha : BddAbove s) : Iio (sSup s) subseteq s :=
+    (ha : BddAbove s) : Iio (sSup s) ⊆ s :=
   IsPreconnected.Ioi_csInf_subset (α := αᵒᵈ) hs ha hb
 
-/--
-theorem `IsPreconnected.mem_intervals` / 定理 `IsPreconnected.mem_intervals`
+/-- A preconnected set in a conditionally complete linear order is either one of the intervals
+`[Inf s, Sup s]`, `[Inf s, Sup s)`, `(Inf s, Sup s]`, `(Inf s, Sup s)`, `[Inf s, +∞)`,
+`(Inf s, +∞)`, `(-∞, Sup s]`, `(-∞, Sup s)`, `(-∞, +∞)`, or `∅`. The converse statement requires
+`α` to be densely ordered. -/
+/-
+**IsPreconnected.mem_intervals** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsPreconnected.mem_intervals {s : Set α} (hs : IsPreconnected s) : s in ({
+Icc (sInf s) (sSup s), Ico (sInf s) (sSup s), Ioc (sInf s) (sSup s), Ioo (sInf s
+) (sSup s), Ici (sInf s), Ioi (sInf s), Iic (sSup s), Iio (sSup s), univ, ∅} : S
+et (Set α))
+参数：hs : IsPreconnected s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `Set.mem_singleton`：mem_singleton (a : α) : a in ({a} : Set α)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.mem_of_subset_of_mem`：∀ {α : Type u} {s₁ s₂ : Set α} {a : α}, s₁ ⊆ s
+₂ → a ∈ s₁ → a ∈ s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `Set.mem_Icc_Ico_Ioc_Ioo_of_subset_of_subset`：mem_Icc_Ico_Ioc_Ioo_of_subs
+et_of_subset {s : Set α} (ho : Ioo a b subseteq s) (hc : s subseteq Icc a b) : s
+ in ({Icc a b, Ico a b, Ioc a b, …
+· 使用定理 `IsConnected.Ioo_csInf_csSup_subset`：IsConnected.Ioo_csInf_csSup_subset {
+s : Set α} (hs : IsConnected s) (hb : BddBelow s) (ha : BddAbove s) : Ioo (sInf 
+s) (sSup s) subseteq s
+· 使用定理 `subset_Icc_csInf_csSup`：subset_Icc_csInf_csSup (hb : BddBelow s) (ha : B
+ddAbove s) : s subseteq Icc (sInf s) (sSup s)
+· 使用定理 `Set.mem_Ici_Ioi_of_subset_of_subset`：∀ {α : Type u_1} [inst : PartialOrd
+er α] {a : α} {s : Set α}, Set.Ioi a ⊆ s → s ⊆ Set.Ici a → s ∈ {Set.Ici a, Set.I
+oi a}
+· 使用定理 `IsPreconnected.Ioi_csInf_subset`：IsPreconnected.Ioi_csInf_subset {s : Se
+t α} (hs : IsPreconnected s) (hb : BddBelow s) (ha : ¬BddAbove s) : Ioi (sInf s)
+ subseteq s
+· 使用定理 `csInf_le`：∀ {α : Type u_1} [inst : ConditionallyCompleteLattice α] {s : 
+Set α} {a : α}, BddBelow s → a ∈ s → sInf s ≤ a
+· 使用定理 `Set.mem_Iic_Iio_of_subset_of_subset`：mem_Iic_Iio_of_subset_of_subset {s 
+: Set α} (ho : Iio a subseteq s) (hc : s subseteq Iic a) : s in ({Iic a, Iio a} 
+: Set (Set α))
+· 使用定理 `IsPreconnected.Iio_csSup_subset`：IsPreconnected.Iio_csSup_subset {s : Se
+t α} (hs : IsPreconnected s) (hb : ¬BddBelow s) (ha : BddAbove s) : Iio (sSup s)
+ subseteq s
+· 使用定理 `le_csSup`：le_csSup (h₁ : BddAbove s) (h₂ : a in s) : a <= sSup s
+· 使用定理 `IsPreconnected.eq_univ_of_unbounded`：IsPreconnected.eq_univ_of_unbounded
+ {s : Set α} (hs : IsPreconnected s) (hb : ¬BddBelow s) (ha : ¬BddAbove s) : s =
+ univ
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
 
-English:
-theorem IsPreconnected.mem_intervals
-  given: {s : Set α} (hs : IsPreconnected s)
-  proof: by
-  rcases s.eq_empty_or_nonempty with (rfl | hne)
-  · apply_rules [Or.inr, mem_singleton]
-  have hs' : IsConnected s := ⟨hne, hs⟩
-  by_cases hb : BddBelow s <;> by_cases ha : BddAbove s
-· refine mem_of_subset_of_mem ?_ mem_Icc_Ico_Ioc_Ioo_of_subset_of_subset
-      (hs'.Ioo_csInf_csSup_subset hb ha) (subset_Icc_csInf_csSup hb ha)
-    simp only [insert_subset_iff, mem_insert_iff, mem_singleton_iff, true_or, or_true,
-      singleton_subset_iff, and_self]
-· refine Or.inr Or.inr Or.inr Or.inr ?_
-    rcases mem_Ici_Ioi_of_subset_of_subset (hs.Ioi_csInf_subset hb ha) fun x hx =>
-      csInf_le hb hx with hs | hs
-    · exact Or.inl hs
-    · exact Or.inr (Or.inl hs)
-  · iterate 6 apply Or.inr
-    rcases mem_Iic_Iio_of_subset_of_subset (hs.Iio_csSup_subset hb ha) fun x hx =>
-      le_csSup ha hx with hs | hs
-    · exact Or.inl hs
-    · exact Or.inr (Or.inl hs)
-  · iterate 8 apply Or.inr
-    exact Or.inl (hs.eq_univ_of_unbounded hb ha)
-
-中文:
-定理 是预连通.mem_intervals
-  条件: {s : 集合 α} (hs : 是预连通 s)
-  证明: by
-  rcases s.eq_empty_or_nonempty with (rfl | hne)
-  · apply_rules [Or.inr, mem_singleton]
-  have hs' : IsConnected s := ⟨hne, hs⟩
-  by_cases hb : BddBelow s <;> by_cases ha : BddAbove s
-· refine mem_of_subset_of_mem ?_ mem_Icc_Ico_Ioc_Ioo_of_subset_of_subset
-      (hs'.Ioo_csInf_csSup_subset hb ha) (subset_Icc_csInf_csSup hb ha)
-    simp only [insert_subset_iff, mem_insert_iff, mem_singleton_iff, true_or, or_true,
-      singleton_subset_iff, and_self]
-· refine Or.inr Or.inr Or.inr Or.inr ?_
-    rcases mem_Ici_Ioi_of_subset_of_subset (hs.Ioi_csInf_subset hb ha) fun x hx =>
-      csInf_le hb hx with hs | hs
-    · exact Or.inl hs
-    · exact Or.inr (Or.inl hs)
-  · iterate 6 apply Or.inr
-    rcases mem_Iic_Iio_of_subset_of_subset (hs.Iio_csSup_subset hb ha) fun x hx =>
-      le_csSup ha hx with hs | hs
-    · exact Or.inl hs
-    · exact Or.inr (Or.inl hs)
-  · iterate 8 apply Or.inr
-    exact Or.inl (hs.eq_univ_of_unbounded hb ha)
-
-Depends on / 依赖: BddAbove, BddBelow, Ioo_csInf_csSup_subset, IsConnected, Or.inr, and_self, apply_rules, eq_empty_or_nonempty, insert_subset_iff, mem_Icc_Ico_Ioc_Ioo_of_subset_of_subset, mem_Ici_Ioi_of_subs, mem_insert_iff, mem_of_subset_of_mem, mem_singleton, mem_singleton_iff, or_true, s.eq_empty_or_nonempty, singleton_subset_iff, subset_Icc_csInf_csSup, true_or
+--- 原说明 ---
+A preconnected set in a conditionally complete linear order is either one of the
+ intervals
+`[Inf s, Sup s]`, `[Inf s, Sup s)`, `(Inf s, Sup s]`, `(Inf s, Sup s)`, `[Inf s,
+ +∞)`,
+`(Inf s, +∞)`, `(-∞, Sup s]`, `(-∞, Sup s)`, `(-∞, +∞)`, or `∅`. The converse st
+atement requires
+`α` to be densely ordered.
 -/
 theorem IsPreconnected.mem_intervals {s : Set α} (hs : IsPreconnected s) :
-    s in
+    s ∈
       ({Icc (sInf s) (sSup s), Ico (sInf s) (sSup s), Ioc (sInf s) (sSup s), Ioo (sInf s) (sSup s),
           Ici (sInf s), Ioi (sInf s), Iic (sSup s), Iio (sSup s), univ, ∅} : Set (Set α)) := by
   rcases s.eq_empty_or_nonempty with (rfl | hne)
   · apply_rules [Or.inr, mem_singleton]
   have hs' : IsConnected s := ⟨hne, hs⟩
   by_cases hb : BddBelow s <;> by_cases ha : BddAbove s
-· refine mem_of_subset_of_mem ?_ mem_Icc_Ico_Ioc_Ioo_of_subset_of_subset
+  · refine mem_of_subset_of_mem ?_ <| mem_Icc_Ico_Ioc_Ioo_of_subset_of_subset
       (hs'.Ioo_csInf_csSup_subset hb ha) (subset_Icc_csInf_csSup hb ha)
     simp only [insert_subset_iff, mem_insert_iff, mem_singleton_iff, true_or, or_true,
       singleton_subset_iff, and_self]
-· refine Or.inr Or.inr Or.inr Or.inr ?_
-    rcases mem_Ici_Ioi_of_subset_of_subset (hs.Ioi_csInf_subset hb ha) fun x hx =>
+  · refine Or.inr <| Or.inr <| Or.inr <| Or.inr ?_
+    rcases mem_Ici_Ioi_of_subset_of_subset (hs.Ioi_csInf_subset hb ha) fun x hx ↦
       csInf_le hb hx with hs | hs
     · exact Or.inl hs
     · exact Or.inr (Or.inl hs)
   · iterate 6 apply Or.inr
-    rcases mem_Iic_Iio_of_subset_of_subset (hs.Iio_csSup_subset hb ha) fun x hx =>
+    rcases mem_Iic_Iio_of_subset_of_subset (hs.Iio_csSup_subset hb ha) fun x hx ↦
       le_csSup ha hx with hs | hs
     · exact Or.inl hs
     · exact Or.inr (Or.inl hs)
   · iterate 8 apply Or.inr
     exact Or.inl (hs.eq_univ_of_unbounded hb ha)
 
-/--
-theorem `setOfPred_isPreconnected_subset_of_ordered` / 定理 `setOfPred_isPreconnected_subset_of_ordered`
+/-- A preconnected set is either one of the intervals `Icc`, `Ico`, `Ioc`, `Ioo`, `Ici`, `Ioi`,
+`Iic`, `Iio`, or `univ`, or `∅`. The converse statement requires `α` to be densely ordered. Though
+one can represent `∅` as `(Inf ∅, Inf ∅)`, we include it into the list of possible cases to improve
+readability. -/
+/-
+**setOfPred_isPreconnected_subset_of_ordered** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：setOfPred_isPreconnected_subset_of_ordered : { s : Set α | IsPreconnected 
+s } subseteq -- bounded intervals (range (uncurry Icc) union range (uncurry Ico)
+ union range (uncurry Ioc) union range (uncurry Ioo)) union -- unbounded interva
+ls and `univ` (range Ici union range Ioi union range Iic union range Iio union {
+univ, ∅})
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.mem_intervals`：IsPreconnected.mem_intervals {s : Set α} (
+hs : IsPreconnected s) : s in ({Icc (sInf s) (sSup s), Ico (sInf s) (sSup s), Io
+c (sInf s) (sSup s…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.union_insert`：union_insert : s union insert a t = insert a (s union 
+t)
+· 使用定理 `Set.union_singleton`：union_singleton : s union {a} = insert a s
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem setOfPred_isPreconnected_subset_of_ordered
-  proof: by
-  intro s hs
-  rcases hs.mem_intervals with (hs | hs | hs | hs | hs | hs | hs | hs | hs | hs) <;> rw [hs] <;>
-    simp only [union_insert, union_singleton, mem_insert_iff, mem_union, mem_range, Prod.exists,
-      uncurry_apply_pair, exists_apply_eq_apply, true_or, or_true, exists_apply_eq_apply2]
-
-@[deprecated (since := "2026-07-09")]
-alias setOf_isPreconnected_subset_of_ordered := setOfPred_isPreconnected_subset_of_ordered
-
-中文:
-定理 setOfPred_isPreconnected_subset_of_ordered
-  证明: by
-  intro s hs
-  rcases hs.mem_intervals with (hs | hs | hs | hs | hs | hs | hs | hs | hs | hs) <;> rw [hs] <;>
-    simp only [union_insert, union_singleton, mem_insert_iff, mem_union, mem_range, Prod.exists,
-      uncurry_apply_pair, exists_apply_eq_apply, true_or, or_true, exists_apply_eq_apply2]
-
-@[deprecated (since := "2026-07-09")]
-alias setOf_isPreconnected_subset_of_ordered := setOfPred_isPreconnected_subset_of_ordered
-
-Depends on / 依赖: Prod.exists, exists_apply_eq_apply, exists_apply_eq_apply2, hs.mem_intervals, mem_insert_iff, mem_intervals, mem_range, mem_union, or_true, true_or, uncurry_apply_pair, union_insert, union_singleton
+--- 原说明 ---
+A preconnected set is either one of the intervals `Icc`, `Ico`, `Ioc`, `Ioo`, `I
+ci`, `Ioi`,
+`Iic`, `Iio`, or `univ`, or `∅`. The converse statement requires `α` to be dense
+ly ordered. Though
+one can represent `∅` as `(Inf ∅, Inf ∅)`, we include it into the list of possib
+le cases to improve
+readability.
 -/
 theorem setOfPred_isPreconnected_subset_of_ordered :
-    { s : Set α | IsPreconnected s } subseteq
+    { s : Set α | IsPreconnected s } ⊆
       -- bounded intervals
-      (range (uncurry Icc) union range (uncurry Ico) union range (uncurry Ioc) union range (uncurry Ioo)) union
+      (range (uncurry Icc) ∪ range (uncurry Ico) ∪ range (uncurry Ioc) ∪ range (uncurry Ioo)) ∪
       -- unbounded intervals and `univ`
-      (range Ici union range Ioi union range Iic union range Iio union {univ, ∅}) := by
+      (range Ici ∪ range Ioi ∪ range Iic ∪ range Iio ∪ {univ, ∅}) := by
   intro s hs
   rcases hs.mem_intervals with (hs | hs | hs | hs | hs | hs | hs | hs | hs | hs) <;> rw [hs] <;>
     simp only [union_insert, union_singleton, mem_insert_iff, mem_union, mem_range, Prod.exists,
@@ -842,391 +913,421 @@ conditionally complete linear order is preconnected.
 -/
 
 
-/--
-theorem `IsClosed.mem_of_ge_of_forall_exists_gt` / 定理 `IsClosed.mem_of_ge_of_forall_exists_gt`
+/-- A "continuous induction principle" for a closed interval: if a set `s` meets `[a, b]`
+on a closed subset, contains `a`, and the set `s ∩ [a, b)` has no maximal point, then `b ∈ s`. -/
+/-
+**IsClosed.mem_of_ge_of_forall_exists_gt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsClosed.mem_of_ge_of_forall_exists_gt {a b : α} {s : Set α} (hs : IsClose
+d (s inter Icc a b)) (ha : a in s) (hab : a <= b) (hgt : forall x in s inter Ico
+ a b, (s inter Ioc x b).Nonempty) : b in s
+参数：hs : IsClosed (s inter Icc a b)；ha : a in s；hab : a <= b；hgt : forall x in s 
+inter Ico a b, (s inter Ioc x b).Nonempty。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.left_mem_Icc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ Se
+t.Icc a b ↔ a ≤ b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `IsClosed.csSup_mem`：IsClosed.csSup_mem {s : Set α} (hc : IsClosed s) (hs
+ : s.Nonempty) (B : BddAbove s) : sSup s in s
+· 使用定理 `csSup_le`：csSup_le (h₁ : s.Nonempty) (h₂ : forall b in s, b <= a) : sSup
+ s <= a
+· 使用定理 `eq_or_lt_of_le`：eq_or_lt_of_le (h : a <= b) : a = b ∨ a < b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `not_lt_of_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `le_csSup`：le_csSup (h₁ : BddAbove s) (h₂ : a in s) : a <= sSup s
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 
-English:
-theorem IsClosed.mem_of_ge_of_forall_exists_gt
-  statement: {a b : α} {s : Set α} (hs : IsClosed (s inter Icc a b))
-  proof: by
-  let S := s inter Icc a b
-  replace ha : a in S := ⟨ha, left_mem_Icc.2 hab⟩
+--- 原说明 ---
+A "continuous induction principle" for a closed interval: if a set `s` meets `[a
+, b]`
+on a closed subset, contains `a`, and the set `s ∩ [a, b)` has no maximal point,
+ then `b ∈ s`.
+-/
+theorem IsClosed.mem_of_ge_of_forall_exists_gt {a b : α} {s : Set α} (hs : IsClosed (s ∩ Icc a b))
+    (ha : a ∈ s) (hab : a ≤ b) (hgt : ∀ x ∈ s ∩ Ico a b, (s ∩ Ioc x b).Nonempty) : b ∈ s := by
+  let S := s ∩ Icc a b
+  replace ha : a ∈ S := ⟨ha, left_mem_Icc.2 hab⟩
   have Sbd : BddAbove S := ⟨b, fun z hz => hz.2.2⟩
-  let c := sSup (s inter Icc a b)
-  have c_mem : c in S := hs.csSup_mem ⟨_, ha⟩ Sbd
-  have c_le : c <= b := csSup_le ⟨_, ha⟩ fun x hx => hx.2.2
+  let c := sSup (s ∩ Icc a b)
+  have c_mem : c ∈ S := hs.csSup_mem ⟨_, ha⟩ Sbd
+  have c_le : c ≤ b := csSup_le ⟨_, ha⟩ fun x hx => hx.2.2
   rcases eq_or_lt_of_le c_le with hc | hc
   · exact hc ▸ c_mem.1
   exfalso
   rcases hgt c ⟨c_mem.1, c_mem.2.1, hc⟩ with ⟨x, xs, cx, xb⟩
   exact not_lt_of_ge (le_csSup Sbd ⟨xs, le_trans (le_csSup Sbd ha) (le_of_lt cx), xb⟩) cx
 
-中文:
-定理 是闭集.mem_of_ge_of_对任意_存在_gt
-  结论: {a b : α} {s : 集合 α} (hs : 是闭集 (s inter 闭区间 a b))
-  证明: by
-  let S := s inter Icc a b
-  replace ha : a in S := ⟨ha, left_mem_Icc.2 hab⟩
-  have Sbd : BddAbove S := ⟨b, fun z hz => hz.2.2⟩
-  let c := sSup (s inter Icc a b)
-  have c_mem : c in S := hs.csSup_mem ⟨_, ha⟩ Sbd
-  have c_le : c <= b := csSup_le ⟨_, ha⟩ fun x hx => hx.2.2
-  rcases eq_or_lt_of_le c_le with hc | hc
-  · exact hc ▸ c_mem.1
-  exfalso
-  rcases hgt c ⟨c_mem.1, c_mem.2.1, hc⟩ with ⟨x, xs, cx, xb⟩
-  exact not_lt_of_ge (le_csSup Sbd ⟨xs, le_trans (le_csSup Sbd ha) (le_of_lt cx), xb⟩) cx
+/-- A "continuous induction principle" for a closed interval: if a set `s` meets `[a, b]`
+on a closed subset, contains `a`, and for any `a ≤ x < y ≤ b`, `x ∈ s`, the set `s ∩ (x, y]`
+is not empty, then `[a, b] ⊆ s`. -/
+/-
+**IsClosed.Icc_subset_of_forall_exists_gt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsClosed.Icc_subset_of_forall_exists_gt {a b : α} {s : Set α} (hs : IsClos
+ed (s inter Icc a b)) (ha : a in s) (hgt : forall x in s inter Ico a b, forall y
+ in Ioi x, (s inter Ioc x y).Nonempty) : Icc a b subseteq s
+参数：hs : IsClosed (s inter Icc a b)；ha : a in s；hgt : forall x in s inter Ico a b
+, forall y in Ioi x, (s inter Ioc x y).Nonempty。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsClosed.inter`：IsClosed.inter (h₁ : IsClosed s₁) (h₂ : IsClosed s₂) : I
+sClosed (s₁ inter s₂)
+· 使用定理 `isClosed_Icc`：isClosed_Icc {a b : α} : IsClosed (Icc a b)
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsClosed.mem_of_ge_of_forall_exists_gt`：IsClosed.mem_of_ge_of_forall_exi
+sts_gt {a b : α} {s : Set α} (hs : IsClosed (s inter Icc a b)) (ha : a in s) (ha
+b : a <= b) (hgt : forall x …
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Set.Ico_subset_Ico_right`：∀ {α : Type u_1} [inst : Preorder α] {a₁ a₂ b 
+: α}, a₂ ≤ a₁ → Set.Ico b a₂ ⊆ Set.Ico b a₁
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-Depends on / 依赖: BddAbove, c_le, c_mem, csSup_le, csSup_mem, eq_or_lt_of_le, hs.csSup_mem, le_csSup, le_of_lt, le_trans, left_mem_Icc, not_lt_of_ge, replace
+--- 原说明 ---
+A "continuous induction principle" for a closed interval: if a set `s` meets `[a
+, b]`
+on a closed subset, contains `a`, and for any `a ≤ x < y ≤ b`, `x ∈ s`, the set 
+`s ∩ (x, y]`
+is not empty, then `[a, b] ⊆ s`.
 -/
-theorem IsClosed.mem_of_ge_of_forall_exists_gt {a b : α} {s : Set α} (hs : IsClosed (s inter Icc a b))
-    (ha : a in s) (hab : a <= b) (hgt : forall x in s inter Ico a b, (s inter Ioc x b).Nonempty) : b in s := by
-  let S := s inter Icc a b
-  replace ha : a in S := ⟨ha, left_mem_Icc.2 hab⟩
-  have Sbd : BddAbove S := ⟨b, fun z hz => hz.2.2⟩
-  let c := sSup (s inter Icc a b)
-  have c_mem : c in S := hs.csSup_mem ⟨_, ha⟩ Sbd
-  have c_le : c <= b := csSup_le ⟨_, ha⟩ fun x hx => hx.2.2
-  rcases eq_or_lt_of_le c_le with hc | hc
-  · exact hc ▸ c_mem.1
-  exfalso
-  rcases hgt c ⟨c_mem.1, c_mem.2.1, hc⟩ with ⟨x, xs, cx, xb⟩
-  exact not_lt_of_ge (le_csSup Sbd ⟨xs, le_trans (le_csSup Sbd ha) (le_of_lt cx), xb⟩) cx
-
-/--
-theorem `IsClosed.Icc_subset_of_forall_exists_gt` / 定理 `IsClosed.Icc_subset_of_forall_exists_gt`
-
-English:
-theorem IsClosed.Icc_subset_of_forall_exists_gt
-  statement: {a b : α} {s : Set α} (hs : IsClosed (s inter Icc a b))
-  proof: by
+theorem IsClosed.Icc_subset_of_forall_exists_gt {a b : α} {s : Set α} (hs : IsClosed (s ∩ Icc a b))
+    (ha : a ∈ s) (hgt : ∀ x ∈ s ∩ Ico a b, ∀ y ∈ Ioi x, (s ∩ Ioc x y).Nonempty) : Icc a b ⊆ s := by
   intro y hy
-  have : IsClosed (s inter Icc a y) := by
-    suffices s inter Icc a y = s inter Icc a b inter Icc a y from this ▸ hs.inter isClosed_Icc
+  have : IsClosed (s ∩ Icc a y) := by
+    suffices s ∩ Icc a y = s ∩ Icc a b ∩ Icc a y from this ▸ hs.inter isClosed_Icc
     grind [inter_assoc, inter_eq_self_of_subset_right, Icc_subset_Icc_right]
-  exact IsClosed.mem_of_ge_of_forall_exists_gt this ha hy.1 fun x hx =>
+  exact IsClosed.mem_of_ge_of_forall_exists_gt this ha hy.1 fun x hx ↦
     hgt x ⟨hx.1, Ico_subset_Ico_right hy.2 hx.2⟩ y hx.2.2
 
-中文:
-定理 是闭集.Icc_subset_of_对任意_存在_gt
-  结论: {a b : α} {s : 集合 α} (hs : 是闭集 (s inter 闭区间 a b))
-  证明: by
-  intro y hy
-  have : IsClosed (s inter Icc a y) := by
-    suffices s inter Icc a y = s inter Icc a b inter Icc a y from this ▸ hs.inter isClosed_Icc
-    grind [inter_assoc, inter_eq_self_of_subset_right, Icc_subset_Icc_right]
-  exact IsClosed.mem_of_ge_of_forall_exists_gt this ha hy.1 fun x hx =>
-    hgt x ⟨hx.1, Ico_subset_Ico_right hy.2 hx.2⟩ y hx.2.2
+/-- A "continuous induction principle" for a closed interval: if a set `s` meets `[a, b]`
+on a closed subset, contains `b`, and the set `s ∩ (a, b]` has no minimal point, then `a ∈ s`. -/
+/-
+**IsClosed.mem_of_ge_of_forall_exists_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsClosed.mem_of_ge_of_forall_exists_lt {a b : α} {s : Set α} (hs : IsClose
+d (s inter Icc a b)) (hb : b in s) (hab : a <= b) (hgt : forall x in s inter Ioc
+ a b, (s inter Ico a x).Nonempty) : a in s
+参数：hs : IsClosed (s inter Icc a b)；hb : b in s；hab : a <= b；hgt : forall x in s 
+inter Ioc a b, (s inter Ico a x).Nonempty。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsClosed.mem_of_ge_of_forall_exists_gt`：IsClosed.mem_of_ge_of_forall_exi
+sts_gt {a b : α} {s : Set α} (hs : IsClosed (s inter Icc a b)) (ha : a in s) (ha
+b : a <= b) (hgt : forall x …
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.Icc_toDual`：Icc_toDual : Icc (toDual a) (toDual b) = ofDual ⁻¹' Icc 
+b a
+· 使用定理 `Set.preimage_inter`：preimage_inter {s t : Set β} : f ⁻¹' (s inter t) = f
+ ⁻¹' s inter f ⁻¹' t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.mem_image`：mem_image (f : α -> β) (s : Set α) (y : β) : y in f '' s 
+↔ exists x in s, f x = y
+· 使用引理 `Equiv.image_symm_eq_preimage`：image_symm_eq_preimage (e : α ≃ β) (s : Se
+t β) : e.symm '' s = e ⁻¹' s
+· 使用定理 `Set.Ico_toDual`：Ico_toDual : Ico (toDual a) (toDual b) = ofDual ⁻¹' Ioc 
+b a
+· 使用定理 `Set.Ioc_toDual`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},   Set.Io
+c (OrderDual.toDual b) (OrderDual.toDual a) = ⇑OrderDual.ofDual ⁻¹' Set.Ico a b
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
 
-Depends on / 依赖: Icc_subset_Icc_right, Ico_subset_Ico_right, IsClosed, IsClosed.mem_of_ge_of_forall_exists_gt, hs.inter, inter_assoc, inter_eq_self_of_subset_right, isClosed_Icc, mem_of_ge_of_forall_exists_gt
+--- 原说明 ---
+A "continuous induction principle" for a closed interval: if a set `s` meets `[a
+, b]`
+on a closed subset, contains `b`, and the set `s ∩ (a, b]` has no minimal point,
+ then `a ∈ s`.
 -/
-theorem IsClosed.Icc_subset_of_forall_exists_gt {a b : α} {s : Set α} (hs : IsClosed (s inter Icc a b))
-    (ha : a in s) (hgt : forall x in s inter Ico a b, forall y in Ioi x, (s inter Ioc x y).Nonempty) : Icc a b subseteq s := by
-  intro y hy
-  have : IsClosed (s inter Icc a y) := by
-    suffices s inter Icc a y = s inter Icc a b inter Icc a y from this ▸ hs.inter isClosed_Icc
-    grind [inter_assoc, inter_eq_self_of_subset_right, Icc_subset_Icc_right]
-  exact IsClosed.mem_of_ge_of_forall_exists_gt this ha hy.1 fun x hx =>
-    hgt x ⟨hx.1, Ico_subset_Ico_right hy.2 hx.2⟩ y hx.2.2
-
-/--
-theorem `IsClosed.mem_of_ge_of_forall_exists_lt` / 定理 `IsClosed.mem_of_ge_of_forall_exists_lt`
-
-English:
-theorem IsClosed.mem_of_ge_of_forall_exists_lt
-  statement: {a b : α} {s : Set α} (hs : IsClosed (s inter Icc a b))
-  proof: by
-  suffices OrderDual.toDual a in ofDual ⁻¹' s by aesop
-  have : IsClosed (OrderDual.ofDual ⁻¹' (s inter Icc a b)) := hs
-  rw [preimage_inter]; rw [← Icc_toDual] at this
-  apply this.mem_of_ge_of_forall_exists_gt (by simp_all) (by simp_all) (fun x hx => ?_)
-  rw [Ico_toDual]; rw [← preimage_inter]; rw [← Equiv.image_symm_eq_preimage]; rw [mem_image] at hx
+theorem IsClosed.mem_of_ge_of_forall_exists_lt {a b : α} {s : Set α} (hs : IsClosed (s ∩ Icc a b))
+    (hb : b ∈ s) (hab : a ≤ b) (hgt : ∀ x ∈ s ∩ Ioc a b, (s ∩ Ico a x).Nonempty) : a ∈ s := by
+  suffices OrderDual.toDual a ∈ ofDual ⁻¹' s by aesop
+  have : IsClosed (OrderDual.ofDual ⁻¹' (s ∩ Icc a b)) := hs
+  rw [preimage_inter, ← Icc_toDual] at this
+  apply this.mem_of_ge_of_forall_exists_gt (by simp_all) (by simp_all) (fun x hx ↦ ?_)
+  rw [Ico_toDual, ← preimage_inter, ← Equiv.image_symm_eq_preimage, mem_image] at hx
   aesop
 
-中文:
-定理 是闭集.mem_of_ge_of_对任意_存在_lt
-  结论: {a b : α} {s : 集合 α} (hs : 是闭集 (s inter 闭区间 a b))
-  证明: by
-  suffices OrderDual.toDual a in ofDual ⁻¹' s by aesop
-  have : IsClosed (OrderDual.ofDual ⁻¹' (s inter Icc a b)) := hs
-  rw [preimage_inter]; rw [← Icc_toDual] at this
-  apply this.mem_of_ge_of_forall_exists_gt (by simp_all) (by simp_all) (fun x hx => ?_)
-  rw [Ico_toDual]; rw [← preimage_inter]; rw [← Equiv.image_symm_eq_preimage]; rw [mem_image] at hx
-  aesop
+/-- A "continuous induction principle" for a closed interval: if a set `s` meets `[a, b]`
+on a closed subset, contains `b`, and for any `a ≤ y < x ≤ b`, `x ∈ s`, the set `s ∩ [y, x)`
+is not empty, then `[a, b] ⊆ s`. -/
+/-
+**IsClosed.Icc_subset_of_forall_exists_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsClosed.Icc_subset_of_forall_exists_lt {a b : α} {s : Set α} (hs : IsClos
+ed (s inter Icc a b)) (hb : b in s) (hgt : forall x in s inter Ioc a b, forall y
+ in Iio x, (s inter Ico y x).Nonempty) : Icc a b subseteq s
+参数：hs : IsClosed (s inter Icc a b)；hb : b in s；hgt : forall x in s inter Ioc a b
+, forall y in Iio x, (s inter Ico y x).Nonempty。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsClosed.inter`：IsClosed.inter (h₁ : IsClosed s₁) (h₂ : IsClosed s₂) : I
+sClosed (s₁ inter s₂)
+· 使用定理 `isClosed_Icc`：isClosed_Icc {a b : α} : IsClosed (Icc a b)
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsClosed.mem_of_ge_of_forall_exists_lt`：IsClosed.mem_of_ge_of_forall_exi
+sts_lt {a b : α} {s : Set α} (hs : IsClosed (s inter Icc a b)) (hb : b in s) (ha
+b : a <= b) (hgt : forall x …
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Set.Ioc_subset_Ioc_left`：Ioc_subset_Ioc_left (h : a₁ <= a₂) : Ioc a₂ b s
+ubseteq Ioc a₁ b
 
-Depends on / 依赖: Equiv.image_symm_eq_preimage, Icc_toDual, Ico_toDual, IsClosed, OrderDual, OrderDual.ofDual, OrderDual.toDual, image_symm_eq_preimage, mem_image, mem_of_ge_of_forall_exists_gt, ofDual, preimage_inter, this.mem_of_ge_of_forall_exists_gt, toDual
+--- 原说明 ---
+A "continuous induction principle" for a closed interval: if a set `s` meets `[a
+, b]`
+on a closed subset, contains `b`, and for any `a ≤ y < x ≤ b`, `x ∈ s`, the set 
+`s ∩ [y, x)`
+is not empty, then `[a, b] ⊆ s`.
 -/
-theorem IsClosed.mem_of_ge_of_forall_exists_lt {a b : α} {s : Set α} (hs : IsClosed (s inter Icc a b))
-    (hb : b in s) (hab : a <= b) (hgt : forall x in s inter Ioc a b, (s inter Ico a x).Nonempty) : a in s := by
-  suffices OrderDual.toDual a in ofDual ⁻¹' s by aesop
-  have : IsClosed (OrderDual.ofDual ⁻¹' (s inter Icc a b)) := hs
-  rw [preimage_inter]; rw [← Icc_toDual] at this
-  apply this.mem_of_ge_of_forall_exists_gt (by simp_all) (by simp_all) (fun x hx => ?_)
-  rw [Ico_toDual]; rw [← preimage_inter]; rw [← Equiv.image_symm_eq_preimage]; rw [mem_image] at hx
-  aesop
-
-/--
-theorem `IsClosed.Icc_subset_of_forall_exists_lt` / 定理 `IsClosed.Icc_subset_of_forall_exists_lt`
-
-English:
-theorem IsClosed.Icc_subset_of_forall_exists_lt
-  statement: {a b : α} {s : Set α} (hs : IsClosed (s inter Icc a b))
-  proof: by
+theorem IsClosed.Icc_subset_of_forall_exists_lt {a b : α} {s : Set α} (hs : IsClosed (s ∩ Icc a b))
+    (hb : b ∈ s) (hgt : ∀ x ∈ s ∩ Ioc a b, ∀ y ∈ Iio x, (s ∩ Ico y x).Nonempty) : Icc a b ⊆ s := by
   intro y hy
-  have : IsClosed (s inter Icc y b) := by
-    suffices s inter Icc y b = s inter Icc a b inter Icc y b from this ▸ hs.inter isClosed_Icc
+  have : IsClosed (s ∩ Icc y b) := by
+    suffices s ∩ Icc y b = s ∩ Icc a b ∩ Icc y b from this ▸ hs.inter isClosed_Icc
     grind [Icc_subset_Icc_left, inter_eq_self_of_subset_right, inter_assoc]
-  exact IsClosed.mem_of_ge_of_forall_exists_lt this hb hy.2 fun x hx =>
-    hgt x ⟨hx.1, Ioc_subset_Ioc_left hy.1 hx.2⟩ y hx.2.1
-
-中文:
-定理 是闭集.Icc_subset_of_对任意_存在_lt
-  结论: {a b : α} {s : 集合 α} (hs : 是闭集 (s inter 闭区间 a b))
-  证明: by
-  intro y hy
-  have : IsClosed (s inter Icc y b) := by
-    suffices s inter Icc y b = s inter Icc a b inter Icc y b from this ▸ hs.inter isClosed_Icc
-    grind [Icc_subset_Icc_left, inter_eq_self_of_subset_right, inter_assoc]
-  exact IsClosed.mem_of_ge_of_forall_exists_lt this hb hy.2 fun x hx =>
-    hgt x ⟨hx.1, Ioc_subset_Ioc_left hy.1 hx.2⟩ y hx.2.1
-
-Depends on / 依赖: Icc_subset_Icc_left, Ioc_subset_Ioc_left, IsClosed, IsClosed.mem_of_ge_of_forall_exists_lt, hs.inter, inter_assoc, inter_eq_self_of_subset_right, isClosed_Icc, mem_of_ge_of_forall_exists_lt
--/
-theorem IsClosed.Icc_subset_of_forall_exists_lt {a b : α} {s : Set α} (hs : IsClosed (s inter Icc a b))
-    (hb : b in s) (hgt : forall x in s inter Ioc a b, forall y in Iio x, (s inter Ico y x).Nonempty) : Icc a b subseteq s := by
-  intro y hy
-  have : IsClosed (s inter Icc y b) := by
-    suffices s inter Icc y b = s inter Icc a b inter Icc y b from this ▸ hs.inter isClosed_Icc
-    grind [Icc_subset_Icc_left, inter_eq_self_of_subset_right, inter_assoc]
-  exact IsClosed.mem_of_ge_of_forall_exists_lt this hb hy.2 fun x hx =>
+  exact IsClosed.mem_of_ge_of_forall_exists_lt this hb hy.2 fun x hx ↦
     hgt x ⟨hx.1, Ioc_subset_Ioc_left hy.1 hx.2⟩ y hx.2.1
 
 variable [DenselyOrdered α] {a b : α}
 
-/--
-lemma `IsClosed.Icc_subset_of_forall_mem_nhdsGT_of_Icc_subset` / 引理 `IsClosed.Icc_subset_of_forall_mem_nhdsGT_of_Icc_subset`
+/-- A "continuous induction principle" for a closed interval: if a set `s` meets `[a, b]`
+on a closed subset, contains `a`, and for any `x ∈ [a, b)` such that `[a, x]` is included in `s`,
+the set `s` includes some open neighborhood of `x` within `(x, +∞)`, then `[a, b] ⊆ s`. -/
+/-
+**IsClosed.Icc_subset_of_forall_mem_nhdsGT_of_Icc_subset** 是 Mathlib 中的一个引理，位于命名
+空间 ``。
+形式化陈述：IsClosed.Icc_subset_of_forall_mem_nhdsGT_of_Icc_subset {a b : α} {s : Set 
+α} (hs : IsClosed (s inter Icc a b)) (ha : a in s) (h : forall t in Ico a b, Icc
+ a t subseteq s -> s in 𝓝[>] t) : Icc a b subseteq s
+参数：hs : IsClosed (s inter Icc a b)；ha : a in s；h : forall t in Ico a b, Icc a t 
+subseteq s -> s in 𝓝[>] t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lt_or_ge`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a < b ∨ b ≤
+ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.Icc_eq_empty`：Icc_eq_empty (h : ¬a <= b) : Icc a b = ∅
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.left_mem_Icc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ Se
+t.Icc a b ↔ a ≤ b
+· 使用定理 `Set.Icc_self`：Icc_self (a : α) : Icc a a = {a}
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `le_csSup`：le_csSup (h₁ : BddAbove s) (h₂ : a in s) : a <= sSup s
+· 使用定理 `csSup_le`：csSup_le (h₁ : s.Nonempty) (h₂ : forall b in s, b <= a) : sSup
+ s <= a
+· 使用定理 `LE.le.eq_or_lt`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a = b ∨ a < b
+· 使用定理 `IsClosed.closure_subset_iff`：IsClosed.closure_subset_iff (h₁ : IsClosed 
+t) : closure s subseteq t ↔ s subseteq t
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用定理 `csSup_mem_closure`：csSup_mem_closure {s : Set α} (hs : s.Nonempty) (B : 
+BddAbove s) : sSup s in closure s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `lt_csSup_iff`：lt_csSup_iff (hb : BddAbove s) (hs : s.Nonempty) : a < sSu
+p s ↔ exists b in s, a < b
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `eq_of_le_of_not_lt`：eq_of_le_of_not_lt (h₁ : a <= b) (h₂ : ¬a < b) : a =
+ b
+· 使用定理 `mem_nhdsGT_iff_exists_Ioo_subset'`：mem_nhdsGT_iff_exists_Ioo_subset' {a 
+u' : α} {s : Set α} (hu' : a < u') : s in 𝓝[>] a ↔ exists u in Ioi a, Ioo a u su
+bseteq s
+· 使用定理 `exists_between`：exists_between [LT α] [DenselyOrdered α] {a₁ a₂ : α} : a
+₁ < a₂ -> exists a, a₁ < a ∧ a < a₂
+· 使用引理 `lt_min`：lt_min (h₁ : a < b) (h₂ : a < c) : a < min b c
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用引理 `ne_of_lt`：ne_of_lt (h : a < b) : a != b
+（共 39 条，此处仅展示前 30 条）
 
-English:
-lemma IsClosed.Icc_subset_of_forall_mem_nhdsGT_of_Icc_subset
-  statement: {a b : α} {s : Set α}
-  proof: by
-  rcases lt_or_ge b a with hab | hab
-  · simp_all
-  set A := {t in Icc a b | Icc a t subseteq s}
-  have a_mem : a in A := ⟨left_mem_Icc.mpr hab, by simp [ha]⟩
-  have bdd_A : BddAbove A := ⟨b, fun t ht => ht.1.2⟩
-  set t₁ := sSup A
-  have t₁_mem : t₁ in Icc a b := ⟨le_csSup bdd_A a_mem, csSup_le ⟨a, a_mem⟩ (fun t ht => ht.1.2)⟩
-  obtain ⟨⟨t₁a, t₁b⟩, ht₁⟩ : t₁ in A := by
-    refine ⟨t₁_mem, fun t ht => ?_⟩
-    rcases ht.2.eq_or_lt with rfl | h
-    · have : closure A subseteq s inter Icc a b := by
-        apply (closure_subset_iff hs).2 (fun t ht => ⟨?_, ht.1⟩)
-        have : t in Icc a t := ⟨ht.1.1, le_rfl⟩
-        exact ht.2 this
-      apply this.trans inter_subset_left
-      exact csSup_mem_closure ⟨a, a_mem⟩ bdd_A
-    · obtain ⟨c, cA, tc⟩ : exists c in A, t < c := (lt_csSup_iff bdd_A ⟨a, a_mem⟩).1 h
-      apply cA.2
-      exact ⟨ht.1, tc.le⟩
-  suffices t₁ = b by simpa [this] using ht₁
-  apply eq_of_le_of_not_lt t₁b fun t₁b' => ?_
-  obtain ⟨m, t₁m, H⟩ : exists m > t₁, Ioo t₁ m subseteq s :=
-    (mem_nhdsGT_iff_exists_Ioo_subset' t₁b').mp (h t₁ ⟨t₁a, t₁b'⟩ (fun s hs => ht₁ hs))
-  obtain ⟨t, hat, ht⟩ : exists t, t₁ < t ∧ t < min m b := exists_between (lt_min t₁m t₁b')
-  have : t in A := by
-    refine ⟨⟨by order, ht.le.trans (min_le_right _ _)⟩, fun t' ht' => ?_⟩
-    rcases le_or_gt t' t₁ with h't' | h't'
-    · exact ht₁ ⟨ht'.1, h't'⟩
-· exact H ⟨h't', ht'.2.trans_lt ht.trans_le min_le_left ..⟩
-  have : t <= t₁ := le_csSup bdd_A this
-  order
-
-中文:
-引理 是闭集.Icc_subset_of_对任意_mem_nhdsGT_of_Icc_subset
-  结论: {a b : α} {s : 集合 α}
-  证明: by
-  rcases lt_or_ge b a with hab | hab
-  · simp_all
-  set A := {t in Icc a b | Icc a t subseteq s}
-  have a_mem : a in A := ⟨left_mem_Icc.mpr hab, by simp [ha]⟩
-  have bdd_A : BddAbove A := ⟨b, fun t ht => ht.1.2⟩
-  set t₁ := sSup A
-  have t₁_mem : t₁ in Icc a b := ⟨le_csSup bdd_A a_mem, csSup_le ⟨a, a_mem⟩ (fun t ht => ht.1.2)⟩
-  obtain ⟨⟨t₁a, t₁b⟩, ht₁⟩ : t₁ in A := by
-    refine ⟨t₁_mem, fun t ht => ?_⟩
-    rcases ht.2.eq_or_lt with rfl | h
-    · have : closure A subseteq s inter Icc a b := by
-        apply (closure_subset_iff hs).2 (fun t ht => ⟨?_, ht.1⟩)
-        have : t in Icc a t := ⟨ht.1.1, le_rfl⟩
-        exact ht.2 this
-      apply this.trans inter_subset_left
-      exact csSup_mem_closure ⟨a, a_mem⟩ bdd_A
-    · obtain ⟨c, cA, tc⟩ : exists c in A, t < c := (lt_csSup_iff bdd_A ⟨a, a_mem⟩).1 h
-      apply cA.2
-      exact ⟨ht.1, tc.le⟩
-  suffices t₁ = b by simpa [this] using ht₁
-  apply eq_of_le_of_not_lt t₁b fun t₁b' => ?_
-  obtain ⟨m, t₁m, H⟩ : exists m > t₁, Ioo t₁ m subseteq s :=
-    (mem_nhdsGT_iff_exists_Ioo_subset' t₁b').mp (h t₁ ⟨t₁a, t₁b'⟩ (fun s hs => ht₁ hs))
-  obtain ⟨t, hat, ht⟩ : exists t, t₁ < t ∧ t < min m b := exists_between (lt_min t₁m t₁b')
-  have : t in A := by
-    refine ⟨⟨by order, ht.le.trans (min_le_right _ _)⟩, fun t' ht' => ?_⟩
-    rcases le_or_gt t' t₁ with h't' | h't'
-    · exact ht₁ ⟨ht'.1, h't'⟩
-· exact H ⟨h't', ht'.2.trans_lt ht.trans_le min_le_left ..⟩
-  have : t <= t₁ := le_csSup bdd_A this
-  order
-
-Depends on / 依赖: BddAbove, a_mem, bdd_A, closure, closure_subset_iff, csSup_le, eq_or_lt, le_csSup, left_mem_Icc, left_mem_Icc.mpr, lt_or_ge, subseteq
+--- 原说明 ---
+A "continuous induction principle" for a closed interval: if a set `s` meets `[a
+, b]`
+on a closed subset, contains `a`, and for any `x ∈ [a, b)` such that `[a, x]` is
+ included in `s`,
+the set `s` includes some open neighborhood of `x` within `(x, +∞)`, then `[a, b
+] ⊆ s`.
 -/
 lemma IsClosed.Icc_subset_of_forall_mem_nhdsGT_of_Icc_subset {a b : α} {s : Set α}
-    (hs : IsClosed (s inter Icc a b)) (ha : a in s)
-    (h : forall t in Ico a b, Icc a t subseteq s -> s in 𝓝[>] t) :
-    Icc a b subseteq s := by
+    (hs : IsClosed (s ∩ Icc a b)) (ha : a ∈ s)
+    (h : ∀ t ∈ Ico a b, Icc a t ⊆ s → s ∈ 𝓝[>] t) :
+    Icc a b ⊆ s := by
   rcases lt_or_ge b a with hab | hab
   · simp_all
-  set A := {t in Icc a b | Icc a t subseteq s}
-  have a_mem : a in A := ⟨left_mem_Icc.mpr hab, by simp [ha]⟩
-  have bdd_A : BddAbove A := ⟨b, fun t ht => ht.1.2⟩
+  set A := {t ∈ Icc a b | Icc a t ⊆ s}
+  have a_mem : a ∈ A := ⟨left_mem_Icc.mpr hab, by simp [ha]⟩
+  have bdd_A : BddAbove A := ⟨b, fun t ht ↦ ht.1.2⟩
   set t₁ := sSup A
-  have t₁_mem : t₁ in Icc a b := ⟨le_csSup bdd_A a_mem, csSup_le ⟨a, a_mem⟩ (fun t ht => ht.1.2)⟩
-  obtain ⟨⟨t₁a, t₁b⟩, ht₁⟩ : t₁ in A := by
-    refine ⟨t₁_mem, fun t ht => ?_⟩
+  have t₁_mem : t₁ ∈ Icc a b := ⟨le_csSup bdd_A a_mem, csSup_le ⟨a, a_mem⟩ (fun t ht ↦ ht.1.2)⟩
+  obtain ⟨⟨t₁a, t₁b⟩, ht₁⟩ : t₁ ∈ A := by
+    refine ⟨t₁_mem, fun t ht ↦ ?_⟩
     rcases ht.2.eq_or_lt with rfl | h
-    · have : closure A subseteq s inter Icc a b := by
-        apply (closure_subset_iff hs).2 (fun t ht => ⟨?_, ht.1⟩)
-        have : t in Icc a t := ⟨ht.1.1, le_rfl⟩
+    · have : closure A ⊆ s ∩ Icc a b := by
+        apply (closure_subset_iff hs).2 (fun t ht ↦ ⟨?_, ht.1⟩)
+        have : t ∈ Icc a t := ⟨ht.1.1, le_rfl⟩
         exact ht.2 this
       apply this.trans inter_subset_left
       exact csSup_mem_closure ⟨a, a_mem⟩ bdd_A
-    · obtain ⟨c, cA, tc⟩ : exists c in A, t < c := (lt_csSup_iff bdd_A ⟨a, a_mem⟩).1 h
+    · obtain ⟨c, cA, tc⟩ : ∃ c ∈ A, t < c := (lt_csSup_iff bdd_A ⟨a, a_mem⟩).1 h
       apply cA.2
       exact ⟨ht.1, tc.le⟩
   suffices t₁ = b by simpa [this] using ht₁
-  apply eq_of_le_of_not_lt t₁b fun t₁b' => ?_
-  obtain ⟨m, t₁m, H⟩ : exists m > t₁, Ioo t₁ m subseteq s :=
-    (mem_nhdsGT_iff_exists_Ioo_subset' t₁b').mp (h t₁ ⟨t₁a, t₁b'⟩ (fun s hs => ht₁ hs))
-  obtain ⟨t, hat, ht⟩ : exists t, t₁ < t ∧ t < min m b := exists_between (lt_min t₁m t₁b')
-  have : t in A := by
-    refine ⟨⟨by order, ht.le.trans (min_le_right _ _)⟩, fun t' ht' => ?_⟩
+  apply eq_of_le_of_not_lt t₁b fun t₁b' ↦ ?_
+  obtain ⟨m, t₁m, H⟩ : ∃ m > t₁, Ioo t₁ m ⊆ s :=
+    (mem_nhdsGT_iff_exists_Ioo_subset' t₁b').mp (h t₁ ⟨t₁a, t₁b'⟩ (fun s hs ↦ ht₁ hs))
+  obtain ⟨t, hat, ht⟩ : ∃ t, t₁ < t ∧ t < min m b := exists_between (lt_min t₁m t₁b')
+  have : t ∈ A := by
+    refine ⟨⟨by order, ht.le.trans (min_le_right _ _)⟩, fun t' ht' ↦ ?_⟩
     rcases le_or_gt t' t₁ with h't' | h't'
     · exact ht₁ ⟨ht'.1, h't'⟩
-· exact H ⟨h't', ht'.2.trans_lt ht.trans_le min_le_left ..⟩
-  have : t <= t₁ := le_csSup bdd_A this
+    · exact H ⟨h't', ht'.2.trans_lt <| ht.trans_le <| min_le_left ..⟩
+  have : t ≤ t₁ := le_csSup bdd_A this
   order
 
-/--
-theorem `IsClosed.Icc_subset_of_forall_mem_nhdsWithin` / 定理 `IsClosed.Icc_subset_of_forall_mem_nhdsWithin`
+/-- A "continuous induction principle" for a closed interval: if a set `s` meets `[a, b]`
+on a closed subset, contains `a`, and for any `x ∈ s ∩ [a, b)` the set `s` includes some open
+neighborhood of `x` within `(x, +∞)`, then `[a, b] ⊆ s`. -/
+/-
+**IsClosed.Icc_subset_of_forall_mem_nhdsWithin** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsClosed.Icc_subset_of_forall_mem_nhdsWithin {a b : α} {s : Set α} (hs : I
+sClosed (s inter Icc a b)) (ha : a in s) (hgt : forall x in s inter Ico a b, s i
+n 𝓝[>] x) : Icc a b subseteq s
+参数：hs : IsClosed (s inter Icc a b)；ha : a in s；hgt : forall x in s inter Ico a b
+, s in 𝓝[>] x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsClosed.Icc_subset_of_forall_mem_nhdsGT_of_Icc_subset`：IsClosed.Icc_sub
+set_of_forall_mem_nhdsGT_of_Icc_subset {a b : α} {s : Set α} (hs : IsClosed (s i
+nter Icc a b)) (ha : a in s) (h : forall t i…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `le_rfl`：le_rfl : a <= a
 
-English:
-theorem IsClosed.Icc_subset_of_forall_mem_nhdsWithin
-  statement: {a b : α} {s : Set α}
-  proof: hs.Icc_subset_of_forall_mem_nhdsGT_of_Icc_subset ha
-    (fun _t ht h't => hgt _ ⟨h't ⟨ht.1, le_rfl⟩, ht⟩)
-
-中文:
-定理 是闭集.Icc_subset_of_对任意_mem_nhdsWithin
-  结论: {a b : α} {s : 集合 α}
-  证明: hs.Icc_subset_of_forall_mem_nhdsGT_of_Icc_subset ha
-    (fun _t ht h't => hgt _ ⟨h't ⟨ht.1, le_rfl⟩, ht⟩)
-
-Depends on / 依赖: Icc_subset_of_forall_mem_nhdsGT_of_Icc_subset, hs.Icc_subset_of_forall_mem_nhdsGT_of_Icc_subset, le_rfl
+--- 原说明 ---
+A "continuous induction principle" for a closed interval: if a set `s` meets `[a
+, b]`
+on a closed subset, contains `a`, and for any `x ∈ s ∩ [a, b)` the set `s` inclu
+des some open
+neighborhood of `x` within `(x, +∞)`, then `[a, b] ⊆ s`.
 -/
 theorem IsClosed.Icc_subset_of_forall_mem_nhdsWithin {a b : α} {s : Set α}
-    (hs : IsClosed (s inter Icc a b)) (ha : a in s) (hgt : forall x in s inter Ico a b, s in 𝓝[>] x) :
-    Icc a b subseteq s :=
+    (hs : IsClosed (s ∩ Icc a b)) (ha : a ∈ s) (hgt : ∀ x ∈ s ∩ Ico a b, s ∈ 𝓝[>] x) :
+    Icc a b ⊆ s :=
   hs.Icc_subset_of_forall_mem_nhdsGT_of_Icc_subset ha
-    (fun _t ht h't => hgt _ ⟨h't ⟨ht.1, le_rfl⟩, ht⟩)
-
-/--
-theorem `isPreconnected_Icc_aux` / 定理 `isPreconnected_Icc_aux`
-
-English:
-theorem isPreconnected_Icc_aux
-  statement: (x y : α) (s t : Set α) (hxy : x <= y) (hs : IsClosed s)
-  proof: by
-  have xyab : Icc x y subseteq Icc a b := Icc_subset_Icc hx.1.1 hy.1.2
-  by_contra hst
-  suffices Icc x y subseteq s from
-hst ⟨y, xyab right_mem_Icc.2 hxy, this right_mem_Icc.2 hxy, hy.2⟩
-  apply (IsClosed.inter hs isClosed_Icc).Icc_subset_of_forall_mem_nhdsWithin hx.2
-  rintro z ⟨zs, hz⟩
-have zt : z in tᶜ := fun zt => hst ⟨z, xyab Ico_subset_Icc_self hz, zs, zt⟩
-  have : tᶜ inter Ioc z y in 𝓝[>] z := by
-    rw [← nhdsWithin_Ioc_eq_nhdsGT hz.2]
-    exact mem_nhdsWithin.2 ⟨tᶜ, ht.isOpen_compl, zt, Subset.rfl⟩
-  apply mem_of_superset this
-  have : Ioc z y subseteq s union t := fun w hw => hab (xyab ⟨le_trans hz.1 (le_of_lt hw.1), hw.2⟩)
-  exact fun w ⟨wt, wzy⟩ => (this wzy).elim id fun h => (wt h).elim
-
-中文:
-定理 isPreconnected_Icc_aux
-  结论: (x y : α) (s t : 集合 α) (hxy : x <= y) (hs : 是闭集 s)
-  证明: by
-  have xyab : Icc x y subseteq Icc a b := Icc_subset_Icc hx.1.1 hy.1.2
-  by_contra hst
-  suffices Icc x y subseteq s from
-hst ⟨y, xyab right_mem_Icc.2 hxy, this right_mem_Icc.2 hxy, hy.2⟩
-  apply (IsClosed.inter hs isClosed_Icc).Icc_subset_of_forall_mem_nhdsWithin hx.2
-  rintro z ⟨zs, hz⟩
-have zt : z in tᶜ := fun zt => hst ⟨z, xyab Ico_subset_Icc_self hz, zs, zt⟩
-  have : tᶜ inter Ioc z y in 𝓝[>] z := by
-    rw [← nhdsWithin_Ioc_eq_nhdsGT hz.2]
-    exact mem_nhdsWithin.2 ⟨tᶜ, ht.isOpen_compl, zt, Subset.rfl⟩
-  apply mem_of_superset this
-  have : Ioc z y subseteq s union t := fun w hw => hab (xyab ⟨le_trans hz.1 (le_of_lt hw.1), hw.2⟩)
-  exact fun w ⟨wt, wzy⟩ => (this wzy).elim id fun h => (wt h).elim
-
-Depends on / 依赖: Icc_subset_Icc, Icc_subset_of_forall_mem_nhdsWithin, Ico_subset_Icc_self, IsClosed, IsClosed.inter, Subset, Subset.rfl, ht.isOpen_compl, isClosed_Icc, isOpen_compl, mem_nhdsWithin, nhdsWithin_Ioc_eq_nhdsGT, right_mem_Icc, subseteq
+    (fun _t ht h't ↦ hgt _ ⟨h't ⟨ht.1, le_rfl⟩, ht⟩)
+/-
+**isPreconnected_Icc_aux** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPreconnected_Icc_aux (x y : α) (s t : Set α) (hxy : x <= y) (hs : IsClos
+ed s) (ht : IsClosed t) (hab : Icc a b subseteq s union t) (hx : x in Icc a b in
+ter s) (hy : y in Icc a b inter t) : (Icc a b inter (s inter t)).Nonempty
+参数：x y : α；s t : Set α；hxy : x <= y；hs : IsClosed s；ht : IsClosed t；hab : Icc a 
+b subseteq s union t；hx : x in Icc a b inter s；hy : y in Icc a b inter t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Icc_subset_Icc`：Icc_subset_Icc (ha : a₂ <= a₁) (hb : b₁ <= b₂) : Icc
+ a₁ b₁ subseteq Icc a₂ b₂
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `IsClosed.Icc_subset_of_forall_mem_nhdsWithin`：IsClosed.Icc_subset_of_for
+all_mem_nhdsWithin {a b : α} {s : Set α} (hs : IsClosed (s inter Icc a b)) (ha :
+ a in s) (hgt : forall x in s inte…
+· 使用定理 `IsClosed.inter`：IsClosed.inter (h₁ : IsClosed s₁) (h₂ : IsClosed s₂) : I
+sClosed (s₁ inter s₂)
+· 使用定理 `isClosed_Icc`：isClosed_Icc {a b : α} : IsClosed (Icc a b)
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `Set.Ico_subset_Icc_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Ico b a ⊆ Set.Icc b a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `nhdsWithin_Ioc_eq_nhdsGT`：∀ {α : Type u} [inst : TopologicalSpace α] [in
+st_1 : LinearOrder α] [ClosedIciTopology α] {a b : α},   b < a → nhdsWithin b (S
+et.Ioc b a) = …
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `mem_nhdsWithin`：mem_nhdsWithin {t : Set α} {a : α} {s : Set α} : t in 𝓝[
+s] a ↔ exists u, IsOpen u ∧ a in u ∧ u inter s subseteq t
+· 使用定理 `IsClosed.isOpen_compl`：∀ {X : Type u} {inst : TopologicalSpace X} {s : S
+et X} [self : IsClosed s], IsOpen sᶜ
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `Set.right_mem_Icc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ S
+et.Icc b a ↔ b ≤ a
 -/
-theorem isPreconnected_Icc_aux (x y : α) (s t : Set α) (hxy : x <= y) (hs : IsClosed s)
-    (ht : IsClosed t) (hab : Icc a b subseteq s union t) (hx : x in Icc a b inter s) (hy : y in Icc a b inter t) :
-    (Icc a b inter (s inter t)).Nonempty := by
-  have xyab : Icc x y subseteq Icc a b := Icc_subset_Icc hx.1.1 hy.1.2
+theorem isPreconnected_Icc_aux (x y : α) (s t : Set α) (hxy : x ≤ y) (hs : IsClosed s)
+    (ht : IsClosed t) (hab : Icc a b ⊆ s ∪ t) (hx : x ∈ Icc a b ∩ s) (hy : y ∈ Icc a b ∩ t) :
+    (Icc a b ∩ (s ∩ t)).Nonempty := by
+  have xyab : Icc x y ⊆ Icc a b := Icc_subset_Icc hx.1.1 hy.1.2
   by_contra hst
-  suffices Icc x y subseteq s from
-hst ⟨y, xyab right_mem_Icc.2 hxy, this right_mem_Icc.2 hxy, hy.2⟩
+  suffices Icc x y ⊆ s from
+    hst ⟨y, xyab <| right_mem_Icc.2 hxy, this <| right_mem_Icc.2 hxy, hy.2⟩
   apply (IsClosed.inter hs isClosed_Icc).Icc_subset_of_forall_mem_nhdsWithin hx.2
   rintro z ⟨zs, hz⟩
-have zt : z in tᶜ := fun zt => hst ⟨z, xyab Ico_subset_Icc_self hz, zs, zt⟩
-  have : tᶜ inter Ioc z y in 𝓝[>] z := by
+  have zt : z ∈ tᶜ := fun zt => hst ⟨z, xyab <| Ico_subset_Icc_self hz, zs, zt⟩
+  have : tᶜ ∩ Ioc z y ∈ 𝓝[>] z := by
     rw [← nhdsWithin_Ioc_eq_nhdsGT hz.2]
     exact mem_nhdsWithin.2 ⟨tᶜ, ht.isOpen_compl, zt, Subset.rfl⟩
   apply mem_of_superset this
-  have : Ioc z y subseteq s union t := fun w hw => hab (xyab ⟨le_trans hz.1 (le_of_lt hw.1), hw.2⟩)
+  have : Ioc z y ⊆ s ∪ t := fun w hw => hab (xyab ⟨le_trans hz.1 (le_of_lt hw.1), hw.2⟩)
   exact fun w ⟨wt, wzy⟩ => (this wzy).elim id fun h => (wt h).elim
 
-/--
-theorem `isPreconnected_Icc` / 定理 `isPreconnected_Icc`
+/-- A closed interval in a densely ordered conditionally complete linear order is preconnected. -/
+/-
+**isPreconnected_Icc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPreconnected_Icc : IsPreconnected (Icc a b)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `isPreconnected_closed_iff`：isPreconnected_closed_iff {s : Set α} : IsPre
+connected s ↔ forall t t', IsClosed t -> IsClosed t' -> s subseteq t union t' ->
+ (s inter t).No…
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `isPreconnected_Icc_aux`：isPreconnected_Icc_aux (x y : α) (s t : Set α) (
+hxy : x <= y) (hs : IsClosed s) (ht : IsClosed t) (hab : Icc a b subseteq s unio
+n t) (hx : x…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
+· 使用定理 `Set.union_comm`：union_comm (a b : Set α) : a union b = b union a
 
-English:
-theorem isPreconnected_Icc
-  statement: IsPreconnected (Icc a b)
-  proof: isPreconnected_closed_iff.2
-    (by
-      rintro s t hs ht hab ⟨x, hx⟩ ⟨y, hy⟩
-      -- This used to use `wlog`, but it was causing timeouts.
-      rcases le_total x y with h | h
-      · exact isPreconnected_Icc_aux x y s t h hs ht hab hx hy
-      · rw [inter_comm s t]
-        rw [union_comm s t] at hab
-        exact isPreconnected_Icc_aux y x t s h ht hs hab hy hx)
-
-中文:
-定理 isPreconnected_Icc
-  结论: 是预连通 (闭区间 a b)
-  证明: isPreconnected_closed_iff.2
-    (by
-      rintro s t hs ht hab ⟨x, hx⟩ ⟨y, hy⟩
-      -- This used to use `wlog`, but it was causing timeouts.
-      rcases le_total x y with h | h
-      · exact isPreconnected_Icc_aux x y s t h hs ht hab hx hy
-      · rw [inter_comm s t]
-        rw [union_comm s t] at hab
-        exact isPreconnected_Icc_aux y x t s h ht hs hab hy hx)
-
-Depends on / 依赖: isPreconnected_closed_iff
+--- 原说明 ---
+A closed interval in a densely ordered conditionally complete linear order is pr
+econnected.
 -/
 theorem isPreconnected_Icc : IsPreconnected (Icc a b) :=
   isPreconnected_closed_iff.2
@@ -1238,466 +1339,319 @@ theorem isPreconnected_Icc : IsPreconnected (Icc a b) :=
       · rw [inter_comm s t]
         rw [union_comm s t] at hab
         exact isPreconnected_Icc_aux y x t s h ht hs hab hy hx)
-
-/--
-theorem `isPreconnected_uIcc` / 定理 `isPreconnected_uIcc`
-
-English:
-theorem isPreconnected_uIcc
-  statement: IsPreconnected ([[a, b]])
-  proof: isPreconnected_Icc
-
-中文:
-定理 isPreconnected_uIcc
-  结论: 是预连通 ([[a, b]])
-  证明: isPreconnected_Icc
-
-Depends on / 依赖: isPreconnected_Icc
+/-
+**isPreconnected_uIcc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPreconnected_uIcc : IsPreconnected ([[a, b]])
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isPreconnected_Icc`：isPreconnected_Icc : IsPreconnected (Icc a b)
 -/
 theorem isPreconnected_uIcc : IsPreconnected ([[a, b]]) :=
   isPreconnected_Icc
-
-/--
-theorem `Set.OrdConnected.isPreconnected` / 定理 `Set.OrdConnected.isPreconnected`
-
-English:
-theorem Set.OrdConnected.isPreconnected
-  given: {s : Set α} (h : s.OrdConnected)
-  statement: IsPreconnected s
-  proof: isPreconnected_of_forall_pair fun x hx y hy =>
-    ⟨[[x, y]], h.uIcc_subset hx hy, left_mem_uIcc, right_mem_uIcc, isPreconnected_uIcc⟩
-
-中文:
-定理 集合.序连通.isPreconnected
-  条件: {s : 集合 α} (h : s.序连通)
-  结论: 是预连通 s
-  证明: isPreconnected_of_forall_pair fun x hx y hy =>
-    ⟨[[x, y]], h.uIcc_subset hx hy, left_mem_uIcc, right_mem_uIcc, isPreconnected_uIcc⟩
-
-Depends on / 依赖: h.uIcc_subset, isPreconnected_of_forall_pair, isPreconnected_uIcc, left_mem_uIcc, right_mem_uIcc, uIcc_subset
+/-
+**Set.OrdConnected.isPreconnected** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Set.OrdConnected.isPreconnected {s : Set α} (h : s.OrdConnected) : IsPreco
+nnected s
+参数：h : s.OrdConnected。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isPreconnected_of_forall_pair`：isPreconnected_of_forall_pair {s : Set α}
+ (H : forall x in s, forall y in s, exists t, t subseteq s ∧ x in t ∧ y in t ∧ I
+sPreconnected t) : …
+· 使用定理 `Set.OrdConnected.uIcc_subset`：∀ {α : Type u_1} [inst : LinearOrder α] {s
+ : Set α},   s.OrdConnected → ∀ ⦃x : α⦄, x ∈ s → ∀ ⦃y : α⦄, y ∈ s → Set.uIcc x y
+ ⊆ s
+· 使用定理 `Set.left_mem_uIcc`：∀ {α : Type u_1} [inst : Lattice α] {a b : α}, a ∈ Se
+t.uIcc a b
+· 使用定理 `Set.right_mem_uIcc`：∀ {α : Type u_1} [inst : Lattice α] {a b : α}, b ∈ S
+et.uIcc a b
+· 使用定理 `isPreconnected_uIcc`：isPreconnected_uIcc : IsPreconnected ([[a, b]])
 -/
 theorem Set.OrdConnected.isPreconnected {s : Set α} (h : s.OrdConnected) : IsPreconnected s :=
   isPreconnected_of_forall_pair fun x hx y hy =>
     ⟨[[x, y]], h.uIcc_subset hx hy, left_mem_uIcc, right_mem_uIcc, isPreconnected_uIcc⟩
-
-/--
-theorem `isPreconnected_iff_ordConnected` / 定理 `isPreconnected_iff_ordConnected`
-
-English:
-theorem isPreconnected_iff_ordConnected
-  given: {s : Set α}
-  statement: IsPreconnected s ↔ OrdConnected s
-  proof: ⟨IsPreconnected.ordConnected, Set.OrdConnected.isPreconnected⟩
-
-中文:
-定理 isPreconnected_iff_ordConnected
-  条件: {s : 集合 α}
-  结论: 是预连通 s ↔ 序连通 s
-  证明: ⟨IsPreconnected.ordConnected, Set.OrdConnected.isPreconnected⟩
-
-Depends on / 依赖: IsPreconnected, IsPreconnected.ordConnected, OrdConnected, Set.OrdConnected.isPreconnected, isPreconnected, ordConnected
+/-
+**isPreconnected_iff_ordConnected** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPreconnected_iff_ordConnected {s : Set α} : IsPreconnected s ↔ OrdConnec
+ted s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.ordConnected`：IsPreconnected.ordConnected {s : Set α} (h 
+: IsPreconnected s) : OrdConnected s
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `Set.OrdConnected.isPreconnected`：Set.OrdConnected.isPreconnected {s : Se
+t α} (h : s.OrdConnected) : IsPreconnected s
 -/
 theorem isPreconnected_iff_ordConnected {s : Set α} : IsPreconnected s ↔ OrdConnected s :=
   ⟨IsPreconnected.ordConnected, Set.OrdConnected.isPreconnected⟩
-
-/--
-theorem `isPreconnected_Ici` / 定理 `isPreconnected_Ici`
-
-English:
-theorem isPreconnected_Ici
-  statement: IsPreconnected (Ici a)
-  proof: ordConnected_Ici.isPreconnected
-
-中文:
-定理 isPreconnected_Ici
-  结论: 是预连通 (左闭右无界区间 a)
-  证明: ordConnected_Ici.isPreconnected
-
-Depends on / 依赖: isPreconnected, ordConnected_Ici, ordConnected_Ici.isPreconnected
+/-
+**isPreconnected_Ici** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPreconnected_Ici : IsPreconnected (Ici a)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.OrdConnected.isPreconnected`：Set.OrdConnected.isPreconnected {s : Se
+t α} (h : s.OrdConnected) : IsPreconnected s
 -/
 theorem isPreconnected_Ici : IsPreconnected (Ici a) :=
   ordConnected_Ici.isPreconnected
-
-/--
-theorem `isPreconnected_Iic` / 定理 `isPreconnected_Iic`
-
-English:
-theorem isPreconnected_Iic
-  statement: IsPreconnected (Iic a)
-  proof: ordConnected_Iic.isPreconnected
-
-中文:
-定理 isPreconnected_Iic
-  结论: 是预连通 (左无界右闭区间 a)
-  证明: ordConnected_Iic.isPreconnected
-
-Depends on / 依赖: isPreconnected, ordConnected_Iic, ordConnected_Iic.isPreconnected
+/-
+**isPreconnected_Iic** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPreconnected_Iic : IsPreconnected (Iic a)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.OrdConnected.isPreconnected`：Set.OrdConnected.isPreconnected {s : Se
+t α} (h : s.OrdConnected) : IsPreconnected s
+· 使用定理 `Set.ordConnected_Iic`：∀ {α : Type u_1} [inst : Preorder α] {a : α}, (Set
+.Iic a).OrdConnected
 -/
 theorem isPreconnected_Iic : IsPreconnected (Iic a) :=
   ordConnected_Iic.isPreconnected
-
-/--
-theorem `isPreconnected_Iio` / 定理 `isPreconnected_Iio`
-
-English:
-theorem isPreconnected_Iio
-  statement: IsPreconnected (Iio a)
-  proof: ordConnected_Iio.isPreconnected
-
-中文:
-定理 isPreconnected_Iio
-  结论: 是预连通 (左无界右开区间 a)
-  证明: ordConnected_Iio.isPreconnected
-
-Depends on / 依赖: isPreconnected, ordConnected_Iio, ordConnected_Iio.isPreconnected
+/-
+**isPreconnected_Iio** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPreconnected_Iio : IsPreconnected (Iio a)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.OrdConnected.isPreconnected`：Set.OrdConnected.isPreconnected {s : Se
+t α} (h : s.OrdConnected) : IsPreconnected s
+· 使用定理 `Set.ordConnected_Iio`：∀ {α : Type u_1} [inst : Preorder α] {a : α}, (Set
+.Iio a).OrdConnected
 -/
 theorem isPreconnected_Iio : IsPreconnected (Iio a) :=
   ordConnected_Iio.isPreconnected
-
-/--
-theorem `isPreconnected_Ioi` / 定理 `isPreconnected_Ioi`
-
-English:
-theorem isPreconnected_Ioi
-  statement: IsPreconnected (Ioi a)
-  proof: ordConnected_Ioi.isPreconnected
-
-中文:
-定理 isPreconnected_Ioi
-  结论: 是预连通 (左开右无界区间 a)
-  证明: ordConnected_Ioi.isPreconnected
-
-Depends on / 依赖: isPreconnected, ordConnected_Ioi, ordConnected_Ioi.isPreconnected
+/-
+**isPreconnected_Ioi** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPreconnected_Ioi : IsPreconnected (Ioi a)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.OrdConnected.isPreconnected`：Set.OrdConnected.isPreconnected {s : Se
+t α} (h : s.OrdConnected) : IsPreconnected s
 -/
 theorem isPreconnected_Ioi : IsPreconnected (Ioi a) :=
   ordConnected_Ioi.isPreconnected
-
-/--
-theorem `isPreconnected_Ioo` / 定理 `isPreconnected_Ioo`
-
-English:
-theorem isPreconnected_Ioo
-  statement: IsPreconnected (Ioo a b)
-  proof: ordConnected_Ioo.isPreconnected
-
-中文:
-定理 isPreconnected_Ioo
-  结论: 是预连通 (开区间 a b)
-  证明: ordConnected_Ioo.isPreconnected
-
-Depends on / 依赖: isPreconnected, ordConnected_Ioo, ordConnected_Ioo.isPreconnected
+/-
+**isPreconnected_Ioo** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPreconnected_Ioo : IsPreconnected (Ioo a b)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.OrdConnected.isPreconnected`：Set.OrdConnected.isPreconnected {s : Se
+t α} (h : s.OrdConnected) : IsPreconnected s
 -/
 theorem isPreconnected_Ioo : IsPreconnected (Ioo a b) :=
   ordConnected_Ioo.isPreconnected
-
-/--
-theorem `isPreconnected_uIoo` / 定理 `isPreconnected_uIoo`
-
-English:
-theorem isPreconnected_uIoo
-  statement: IsPreconnected (uIoo a b)
-  proof: isPreconnected_Ioo
-
-中文:
-定理 isPreconnected_uIoo
-  结论: 是预连通 (uIoo a b)
-  证明: isPreconnected_Ioo
-
-Depends on / 依赖: isPreconnected_Ioo
+/-
+**isPreconnected_uIoo** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPreconnected_uIoo : IsPreconnected (uIoo a b)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isPreconnected_Ioo`：isPreconnected_Ioo : IsPreconnected (Ioo a b)
 -/
 theorem isPreconnected_uIoo : IsPreconnected (uIoo a b) :=
   isPreconnected_Ioo
-
-/--
-theorem `isPreconnected_Ioc` / 定理 `isPreconnected_Ioc`
-
-English:
-theorem isPreconnected_Ioc
-  statement: IsPreconnected (Ioc a b)
-  proof: ordConnected_Ioc.isPreconnected
-
-中文:
-定理 isPreconnected_Ioc
-  结论: 是预连通 (左开右闭区间 a b)
-  证明: ordConnected_Ioc.isPreconnected
-
-Depends on / 依赖: isPreconnected, ordConnected_Ioc, ordConnected_Ioc.isPreconnected
+/-
+**isPreconnected_Ioc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPreconnected_Ioc : IsPreconnected (Ioc a b)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.OrdConnected.isPreconnected`：Set.OrdConnected.isPreconnected {s : Se
+t α} (h : s.OrdConnected) : IsPreconnected s
+· 使用定理 `Set.ordConnected_Ioc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, (S
+et.Ioc b a).OrdConnected
 -/
 theorem isPreconnected_Ioc : IsPreconnected (Ioc a b) :=
   ordConnected_Ioc.isPreconnected
-
-/--
-theorem `isPreconnected_uIoc` / 定理 `isPreconnected_uIoc`
-
-English:
-theorem isPreconnected_uIoc
-  statement: IsPreconnected (uIoc a b)
-  proof: isPreconnected_Ioc
-
-中文:
-定理 isPreconnected_uIoc
-  结论: 是预连通 (uIoc a b)
-  证明: isPreconnected_Ioc
-
-Depends on / 依赖: isPreconnected_Ioc
+/-
+**isPreconnected_uIoc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPreconnected_uIoc : IsPreconnected (uIoc a b)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isPreconnected_Ioc`：isPreconnected_Ioc : IsPreconnected (Ioc a b)
 -/
 theorem isPreconnected_uIoc : IsPreconnected (uIoc a b) :=
   isPreconnected_Ioc
-
-/--
-theorem `isPreconnected_Ico` / 定理 `isPreconnected_Ico`
-
-English:
-theorem isPreconnected_Ico
-  statement: IsPreconnected (Ico a b)
-  proof: ordConnected_Ico.isPreconnected
-
-中文:
-定理 isPreconnected_Ico
-  结论: 是预连通 (左闭右开区间 a b)
-  证明: ordConnected_Ico.isPreconnected
-
-Depends on / 依赖: isPreconnected, ordConnected_Ico, ordConnected_Ico.isPreconnected
+/-
+**isPreconnected_Ico** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPreconnected_Ico : IsPreconnected (Ico a b)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.OrdConnected.isPreconnected`：Set.OrdConnected.isPreconnected {s : Se
+t α} (h : s.OrdConnected) : IsPreconnected s
 -/
 theorem isPreconnected_Ico : IsPreconnected (Ico a b) :=
   ordConnected_Ico.isPreconnected
-
-/--
-theorem `isConnected_Ici` / 定理 `isConnected_Ici`
-
-English:
-theorem isConnected_Ici
-  statement: IsConnected (Ici a)
-  proof: ⟨nonempty_Ici, isPreconnected_Ici⟩
-
-中文:
-定理 isConnected_Ici
-  结论: 是连通 (左闭右无界区间 a)
-  证明: ⟨nonempty_Ici, isPreconnected_Ici⟩
-
-Depends on / 依赖: isPreconnected_Ici, nonempty_Ici
+/-
+**isConnected_Ici** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isConnected_Ici : IsConnected (Ici a)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.nonempty_Ici`：∀ {α : Type u_1} [inst : Preorder α] {a : α}, (Set.Ici
+ a).Nonempty
+· 使用定理 `isPreconnected_Ici`：isPreconnected_Ici : IsPreconnected (Ici a)
 -/
 theorem isConnected_Ici : IsConnected (Ici a) :=
   ⟨nonempty_Ici, isPreconnected_Ici⟩
-
-/--
-theorem `isConnected_Iic` / 定理 `isConnected_Iic`
-
-English:
-theorem isConnected_Iic
-  statement: IsConnected (Iic a)
-  proof: ⟨nonempty_Iic, isPreconnected_Iic⟩
-
-中文:
-定理 isConnected_Iic
-  结论: 是连通 (左无界右闭区间 a)
-  证明: ⟨nonempty_Iic, isPreconnected_Iic⟩
-
-Depends on / 依赖: isPreconnected_Iic, nonempty_Iic
+/-
+**isConnected_Iic** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isConnected_Iic : IsConnected (Iic a)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.nonempty_Iic`：nonempty_Iic : (Iic a).Nonempty
+· 使用定理 `isPreconnected_Iic`：isPreconnected_Iic : IsPreconnected (Iic a)
 -/
 theorem isConnected_Iic : IsConnected (Iic a) :=
   ⟨nonempty_Iic, isPreconnected_Iic⟩
-
-/--
-theorem `isConnected_Ioi` / 定理 `isConnected_Ioi`
-
-English:
-theorem isConnected_Ioi
-  given: [NoMaxOrder α]
-  statement: IsConnected (Ioi a)
-  proof: ⟨nonempty_Ioi, isPreconnected_Ioi⟩
-
-中文:
-定理 isConnected_Ioi
-  条件: [NoMax序 α]
-  结论: 是连通 (左开右无界区间 a)
-  证明: ⟨nonempty_Ioi, isPreconnected_Ioi⟩
-
-Depends on / 依赖: isPreconnected_Ioi, nonempty_Ioi
+/-
+**isConnected_Ioi** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isConnected_Ioi [NoMaxOrder α] : IsConnected (Ioi a)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.nonempty_Ioi`：∀ {α : Type u_1} [inst : Preorder α] {a : α} [NoMaxOrd
+er α], (Set.Ioi a).Nonempty
+· 使用定理 `isPreconnected_Ioi`：isPreconnected_Ioi : IsPreconnected (Ioi a)
 -/
 theorem isConnected_Ioi [NoMaxOrder α] : IsConnected (Ioi a) :=
   ⟨nonempty_Ioi, isPreconnected_Ioi⟩
-
-/--
-theorem `isConnected_Iio` / 定理 `isConnected_Iio`
-
-English:
-theorem isConnected_Iio
-  given: [NoMinOrder α]
-  statement: IsConnected (Iio a)
-  proof: ⟨nonempty_Iio, isPreconnected_Iio⟩
-
-中文:
-定理 isConnected_Iio
-  条件: [NoMin序 α]
-  结论: 是连通 (左无界右开区间 a)
-  证明: ⟨nonempty_Iio, isPreconnected_Iio⟩
-
-Depends on / 依赖: isPreconnected_Iio, nonempty_Iio
+/-
+**isConnected_Iio** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isConnected_Iio [NoMinOrder α] : IsConnected (Iio a)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.nonempty_Iio`：nonempty_Iio [NoMinOrder α] : (Iio a).Nonempty
+· 使用定理 `isPreconnected_Iio`：isPreconnected_Iio : IsPreconnected (Iio a)
 -/
 theorem isConnected_Iio [NoMinOrder α] : IsConnected (Iio a) :=
   ⟨nonempty_Iio, isPreconnected_Iio⟩
-
-/--
-theorem `isConnected_Icc` / 定理 `isConnected_Icc`
-
-English:
-theorem isConnected_Icc
-  given: (h : a <= b)
-  statement: IsConnected (Icc a b)
-  proof: ⟨nonempty_Icc.2 h, isPreconnected_Icc⟩
-
-中文:
-定理 isConnected_Icc
-  条件: (h : a <= b)
-  结论: 是连通 (闭区间 a b)
-  证明: ⟨nonempty_Icc.2 h, isPreconnected_Icc⟩
-
-Depends on / 依赖: isPreconnected_Icc, nonempty_Icc
+/-
+**isConnected_Icc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isConnected_Icc (h : a <= b) : IsConnected (Icc a b)
+参数：h : a <= b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.nonempty_Icc`：nonempty_Icc : (Icc a b).Nonempty ↔ a <= b
+· 使用定理 `isPreconnected_Icc`：isPreconnected_Icc : IsPreconnected (Icc a b)
 -/
-theorem isConnected_Icc (h : a <= b) : IsConnected (Icc a b) :=
+theorem isConnected_Icc (h : a ≤ b) : IsConnected (Icc a b) :=
   ⟨nonempty_Icc.2 h, isPreconnected_Icc⟩
-
-/--
-theorem `isConnected_Ioo` / 定理 `isConnected_Ioo`
-
-English:
-theorem isConnected_Ioo
-  given: (h : a < b)
-  statement: IsConnected (Ioo a b)
-  proof: ⟨nonempty_Ioo.2 h, isPreconnected_Ioo⟩
-
-中文:
-定理 isConnected_Ioo
-  条件: (h : a < b)
-  结论: 是连通 (开区间 a b)
-  证明: ⟨nonempty_Ioo.2 h, isPreconnected_Ioo⟩
-
-Depends on / 依赖: isPreconnected_Ioo, nonempty_Ioo
+/-
+**isConnected_Ioo** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isConnected_Ioo (h : a < b) : IsConnected (Ioo a b)
+参数：h : a < b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.nonempty_Ioo`：nonempty_Ioo [DenselyOrdered α] : (Ioo a b).Nonempty ↔
+ a < b
+· 使用定理 `isPreconnected_Ioo`：isPreconnected_Ioo : IsPreconnected (Ioo a b)
 -/
 theorem isConnected_Ioo (h : a < b) : IsConnected (Ioo a b) :=
   ⟨nonempty_Ioo.2 h, isPreconnected_Ioo⟩
-
-/--
-theorem `isConnected_uIoo` / 定理 `isConnected_uIoo`
-
-English:
-theorem isConnected_uIoo
-  given: (h : a != b)
-  statement: IsConnected (uIoo a b)
-  proof: ⟨nonempty_uIoo.2 h, isPreconnected_uIoo⟩
-
-中文:
-定理 isConnected_uIoo
-  条件: (h : a != b)
-  结论: 是连通 (uIoo a b)
-  证明: ⟨nonempty_uIoo.2 h, isPreconnected_uIoo⟩
-
-Depends on / 依赖: isPreconnected_uIoo, nonempty_uIoo
+/-
+**isConnected_uIoo** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isConnected_uIoo (h : a != b) : IsConnected (uIoo a b)
+参数：h : a != b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.nonempty_uIoo`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α} [De
+nselyOrdered α], (Set.uIoo a b).Nonempty ↔ a ≠ b
+· 使用定理 `isPreconnected_uIoo`：isPreconnected_uIoo : IsPreconnected (uIoo a b)
 -/
-theorem isConnected_uIoo (h : a != b) : IsConnected (uIoo a b) :=
+theorem isConnected_uIoo (h : a ≠ b) : IsConnected (uIoo a b) :=
   ⟨nonempty_uIoo.2 h, isPreconnected_uIoo⟩
-
-/--
-theorem `isConnected_Ioc` / 定理 `isConnected_Ioc`
-
-English:
-theorem isConnected_Ioc
-  given: (h : a < b)
-  statement: IsConnected (Ioc a b)
-  proof: ⟨nonempty_Ioc.2 h, isPreconnected_Ioc⟩
-
-中文:
-定理 isConnected_Ioc
-  条件: (h : a < b)
-  结论: 是连通 (左开右闭区间 a b)
-  证明: ⟨nonempty_Ioc.2 h, isPreconnected_Ioc⟩
-
-Depends on / 依赖: isPreconnected_Ioc, nonempty_Ioc
+/-
+**isConnected_Ioc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isConnected_Ioc (h : a < b) : IsConnected (Ioc a b)
+参数：h : a < b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.nonempty_Ioc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, (Set.I
+oc b a).Nonempty ↔ b < a
+· 使用定理 `isPreconnected_Ioc`：isPreconnected_Ioc : IsPreconnected (Ioc a b)
 -/
 theorem isConnected_Ioc (h : a < b) : IsConnected (Ioc a b) :=
   ⟨nonempty_Ioc.2 h, isPreconnected_Ioc⟩
-
-/--
-theorem `isConnected_uIoc` / 定理 `isConnected_uIoc`
-
-English:
-theorem isConnected_uIoc
-  given: (h : a != b)
-  statement: IsConnected (uIoc a b)
-  proof: ⟨nonempty_uIoc.2 h, isPreconnected_uIoc⟩
-
-中文:
-定理 isConnected_uIoc
-  条件: (h : a != b)
-  结论: 是连通 (uIoc a b)
-  证明: ⟨nonempty_uIoc.2 h, isPreconnected_uIoc⟩
-
-Depends on / 依赖: isPreconnected_uIoc, nonempty_uIoc
+/-
+**isConnected_uIoc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isConnected_uIoc (h : a != b) : IsConnected (uIoc a b)
+参数：h : a != b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.nonempty_uIoc`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, (S
+et.uIoc a b).Nonempty ↔ a ≠ b
+· 使用定理 `isPreconnected_uIoc`：isPreconnected_uIoc : IsPreconnected (uIoc a b)
 -/
-theorem isConnected_uIoc (h : a != b) : IsConnected (uIoc a b) :=
+theorem isConnected_uIoc (h : a ≠ b) : IsConnected (uIoc a b) :=
   ⟨nonempty_uIoc.2 h, isPreconnected_uIoc⟩
-
-/--
-theorem `isConnected_Ico` / 定理 `isConnected_Ico`
-
-English:
-theorem isConnected_Ico
-  given: (h : a < b)
-  statement: IsConnected (Ico a b)
-  proof: ⟨nonempty_Ico.2 h, isPreconnected_Ico⟩
-
-中文:
-定理 isConnected_Ico
-  条件: (h : a < b)
-  结论: 是连通 (左闭右开区间 a b)
-  证明: ⟨nonempty_Ico.2 h, isPreconnected_Ico⟩
-
-Depends on / 依赖: isPreconnected_Ico, nonempty_Ico
+/-
+**isConnected_Ico** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isConnected_Ico (h : a < b) : IsConnected (Ico a b)
+参数：h : a < b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.nonempty_Ico`：nonempty_Ico : (Ico a b).Nonempty ↔ a < b
+· 使用定理 `isPreconnected_Ico`：isPreconnected_Ico : IsPreconnected (Ico a b)
 -/
 theorem isConnected_Ico (h : a < b) : IsConnected (Ico a b) :=
   ⟨nonempty_Ico.2 h, isPreconnected_Ico⟩
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) ordered_connected_space : PreconnectedSpace α :=
   ⟨ordConnected_univ.isPreconnected⟩
 
-/--
-theorem `setOfPred_isPreconnected_eq_of_ordered` / 定理 `setOfPred_isPreconnected_eq_of_ordered`
+/-- In a dense conditionally complete linear order, the set of preconnected sets is exactly
+the set of the intervals `Icc`, `Ico`, `Ioc`, `Ioo`, `Ici`, `Ioi`, `Iic`, `Iio`, `(-∞, +∞)`,
+or `∅`. Though one can represent `∅` as `(sInf s, sInf s)`, we include it into the list of
+possible cases to improve readability. -/
+/-
+**setOfPred_isPreconnected_eq_of_ordered** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：setOfPred_isPreconnected_eq_of_ordered : { s : Set α | IsPreconnected s } 
+= -- bounded intervals range (uncurry Icc) union range (uncurry Ico) union range
+ (uncurry Ioc) union range (uncurry Ioo) union -- unbounded intervals and `univ`
+ (range Ici union range Ioi union range Iic union range Iio union {univ, ∅})
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `setOfPred_isPreconnected_subset_of_ordered`：setOfPred_isPreconnected_sub
+set_of_ordered : { s : Set α | IsPreconnected s } subseteq -- bounded intervals 
+(range (uncurry Icc) union range…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `ordered_connected_space`：∀ {α : Type u} [inst : TopologicalSpace α] [ins
+t_1 : ConditionallyCompleteLinearOrder α] [OrderTopology α]   [DenselyOrdered α]
+, Preconnecte…
 
-English:
-theorem setOfPred_isPreconnected_eq_of_ordered
-  proof: by
-  refine Subset.antisymm setOfPred_isPreconnected_subset_of_ordered ?_
-  simp only [subset_def, forall_mem_range, uncurry, or_imp, forall_and, mem_union,
-    mem_ofPred_eq, insert_eq, mem_singleton_iff, forall_eq, forall_true_iff, and_true,
-    isPreconnected_Icc, isPreconnected_Ico, isPreconnected_Ioc, isPreconnected_Ioo,
-    isPreconnected_Ioi, isPreconnected_Iio, isPreconnected_Ici, isPreconnected_Iic,
-    isPreconnected_univ, isPreconnected_empty]
-
-@[deprecated (since := "2026-07-09")]
-alias setOf_isPreconnected_eq_of_ordered := setOfPred_isPreconnected_eq_of_ordered
-
-中文:
-定理 setOfPred_isPreconnected_eq_of_ordered
-  证明: by
-  refine Subset.antisymm setOfPred_isPreconnected_subset_of_ordered ?_
-  simp only [subset_def, forall_mem_range, uncurry, or_imp, forall_and, mem_union,
-    mem_ofPred_eq, insert_eq, mem_singleton_iff, forall_eq, forall_true_iff, and_true,
-    isPreconnected_Icc, isPreconnected_Ico, isPreconnected_Ioc, isPreconnected_Ioo,
-    isPreconnected_Ioi, isPreconnected_Iio, isPreconnected_Ici, isPreconnected_Iic,
-    isPreconnected_univ, isPreconnected_empty]
-
-@[deprecated (since := "2026-07-09")]
-alias setOf_isPreconnected_eq_of_ordered := setOfPred_isPreconnected_eq_of_ordered
-
-Depends on / 依赖: Subset, Subset.antisymm, and_true, antisymm, forall_and, forall_eq, forall_mem_range, forall_true_iff, insert_eq, isPreconnected_Icc, isPreconnected_Ici, isPreconnected_Ico, isPreconnected_Iic, isPreconnected_Iio, isPreconnected_Ioc, isPreconnected_Ioi, isPreconnected_Ioo, isPreconnected_empty, isPreconnected_univ, mem_ofPred_eq
+--- 原说明 ---
+In a dense conditionally complete linear order, the set of preconnected sets is 
+exactly
+the set of the intervals `Icc`, `Ico`, `Ioc`, `Ioo`, `Ici`, `Ioi`, `Iic`, `Iio`,
+ `(-∞, +∞)`,
+or `∅`. Though one can represent `∅` as `(sInf s, sInf s)`, we include it into t
+he list of
+possible cases to improve readability.
 -/
 theorem setOfPred_isPreconnected_eq_of_ordered :
     { s : Set α | IsPreconnected s } =
       -- bounded intervals
-      range (uncurry Icc) union range (uncurry Ico) union range (uncurry Ioc) union range (uncurry Ioo) union
+      range (uncurry Icc) ∪ range (uncurry Ico) ∪ range (uncurry Ioc) ∪ range (uncurry Ioo) ∪
       -- unbounded intervals and `univ`
-      (range Ici union range Ioi union range Iic union range Iio union {univ, ∅}) := by
+      (range Ici ∪ range Ioi ∪ range Iic ∪ range Iio ∪ {univ, ∅}) := by
   refine Subset.antisymm setOfPred_isPreconnected_subset_of_ordered ?_
   simp only [subset_def, forall_mem_range, uncurry, or_imp, forall_and, mem_union,
     mem_ofPred_eq, insert_eq, mem_singleton_iff, forall_eq, forall_true_iff, and_true,
@@ -1708,44 +1662,55 @@ theorem setOfPred_isPreconnected_eq_of_ordered :
 @[deprecated (since := "2026-07-09")]
 alias setOf_isPreconnected_eq_of_ordered := setOfPred_isPreconnected_eq_of_ordered
 
-/--
-lemma `isTotallyDisconnected_iff_lt` / 引理 `isTotallyDisconnected_iff_lt`
+/-- This lemma characterizes when a subset `s` of a densely ordered conditionally complete linear
+order is totally disconnected with respect to the order topology: between any two distinct points
+of `s` must lie a point not in `s`. -/
+/-
+**isTotallyDisconnected_iff_lt** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：isTotallyDisconnected_iff_lt {s : Set α} : IsTotallyDisconnected s ↔ foral
+l x in s, forall y in s, x < y -> exists z ∉ s, z in Ioo x y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.not_nontrivial_iff`：not_nontrivial_iff : ¬s.Nontrivial ↔ s.Subsingle
+ton
+· 使用引理 `Set.not_ordConnected_inter_Icc_iff`：not_ordConnected_inter_Icc_iff (hx :
+ x in s) (hy : y in s) : ¬ OrdConnected (s inter Icc x y) ↔ exists z ∉ s, z in I
+oo x y
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Set.OrdConnected.out'`：∀ {α : Type u_1} {inst : Preorder α} {s : Set α} 
+[self : s.OrdConnected] ⦃x : α⦄,   x ∈ s → ∀ ⦃y : α⦄, y ∈ s → Set.Icc x y ⊆ s
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-lemma isTotallyDisconnected_iff_lt
-  given: {s : Set α}
-  proof: by
-  simp only [IsTotallyDisconnected, isPreconnected_iff_ordConnected, ← not_nontrivial_iff,
-    nontrivial_iff_exists_lt, not_exists, not_and]
-  refine ⟨fun h x hx y hy hxy => ?_, fun h t hts ht x hx y hy hxy => ?_⟩
-  · simp_rw [← not_ordConnected_inter_Icc_iff hx hy]
-    exact fun hs => h _ inter_subset_left hs _ ⟨hx, le_rfl, hxy.le⟩ _ ⟨hy, hxy.le, le_rfl⟩ hxy
-  · obtain ⟨z, h1z, h2z⟩ := h x (hts hx) y (hts hy) hxy
-exact h1z hts ht.1 hx hy ⟨h2z.1.le, h2z.2.le⟩
-
-中文:
-引理 isTotallyDisconnected_iff_lt
-  条件: {s : 集合 α}
-  证明: by
-  simp only [IsTotallyDisconnected, isPreconnected_iff_ordConnected, ← not_nontrivial_iff,
-    nontrivial_iff_exists_lt, not_exists, not_and]
-  refine ⟨fun h x hx y hy hxy => ?_, fun h t hts ht x hx y hy hxy => ?_⟩
-  · simp_rw [← not_ordConnected_inter_Icc_iff hx hy]
-    exact fun hs => h _ inter_subset_left hs _ ⟨hx, le_rfl, hxy.le⟩ _ ⟨hy, hxy.le, le_rfl⟩ hxy
-  · obtain ⟨z, h1z, h2z⟩ := h x (hts hx) y (hts hy) hxy
-exact h1z hts ht.1 hx hy ⟨h2z.1.le, h2z.2.le⟩
-
-Depends on / 依赖: IsTotallyDisconnected, hxy.le, inter_subset_left, isPreconnected_iff_ordConnected, le_rfl, nontrivial_iff_exists_lt, not_and, not_exists, not_nontrivial_iff, not_ordConnected_inter_Icc_iff, simp_rw
+--- 原说明 ---
+This lemma characterizes when a subset `s` of a densely ordered conditionally co
+mplete linear
+order is totally disconnected with respect to the order topology: between any tw
+o distinct points
+of `s` must lie a point not in `s`.
 -/
 lemma isTotallyDisconnected_iff_lt {s : Set α} :
-    IsTotallyDisconnected s ↔ forall x in s, forall y in s, x < y -> exists z ∉ s, z in Ioo x y := by
+    IsTotallyDisconnected s ↔ ∀ x ∈ s, ∀ y ∈ s, x < y → ∃ z ∉ s, z ∈ Ioo x y := by
   simp only [IsTotallyDisconnected, isPreconnected_iff_ordConnected, ← not_nontrivial_iff,
     nontrivial_iff_exists_lt, not_exists, not_and]
-  refine ⟨fun h x hx y hy hxy => ?_, fun h t hts ht x hx y hy hxy => ?_⟩
+  refine ⟨fun h x hx y hy hxy ↦ ?_, fun h t hts ht x hx y hy hxy ↦ ?_⟩
   · simp_rw [← not_ordConnected_inter_Icc_iff hx hy]
-    exact fun hs => h _ inter_subset_left hs _ ⟨hx, le_rfl, hxy.le⟩ _ ⟨hy, hxy.le, le_rfl⟩ hxy
+    exact fun hs ↦ h _ inter_subset_left hs _ ⟨hx, le_rfl, hxy.le⟩ _ ⟨hy, hxy.le, le_rfl⟩ hxy
   · obtain ⟨z, h1z, h2z⟩ := h x (hts hx) y (hts hy) hxy
-exact h1z hts ht.1 hx hy ⟨h2z.1.le, h2z.2.le⟩
+    exact h1z <| hts <| ht.1 hx hy ⟨h2z.1.le, h2z.2.le⟩
 
 /-!
 ### Intermediate Value Theorem on an interval
@@ -1760,744 +1725,938 @@ variable {δ : Type*} [LinearOrder δ] [TopologicalSpace δ] [OrderClosedTopolog
 /-- **Intermediate Value Theorem** for continuous functions on closed intervals, case
 `f a ≤ t ≤ f b`. -/
 @[wikidata Q245098]
-/--
-theorem `intermediate_value_Icc` / 定理 `intermediate_value_Icc`
+/-
+**intermediate_value_Icc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：intermediate_value_Icc {a b : α} (hab : a <= b) {f : α -> δ} (hf : Continu
+ousOn f (Icc a b)) : Icc (f a) (f b) subseteq f '' Icc a b
+参数：hab : a <= b；hf : ContinuousOn f (Icc a b)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.intermediate_value`：IsPreconnected.intermediate_value {s 
+: Set X} (hs : IsPreconnected s) {a b : X} (ha : a in s) (hb : b in s) {f : X ->
+ α} (hf : ContinuousOn …
+· 使用定理 `isPreconnected_Icc`：isPreconnected_Icc : IsPreconnected (Icc a b)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.left_mem_Icc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ Se
+t.Icc a b ↔ a ≤ b
+· 使用定理 `Set.right_mem_Icc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ S
+et.Icc b a ↔ b ≤ a
 
-English:
-theorem intermediate_value_Icc
-  given: {a b : α} (hab : a <= b) {f : α -> δ} (hf : ContinuousOn f (Icc a b))
-  proof: isPreconnected_Icc.intermediate_value (left_mem_Icc.2 hab) (right_mem_Icc.2 hab) hf
-
-中文:
-定理 intermediate_value_Icc
-  条件: {a b : α} (hab : a <= b) {f : α -> δ} (hf : ContinuousOn f (闭区间 a b))
-  证明: isPreconnected_Icc.intermediate_value (left_mem_Icc.2 hab) (right_mem_Icc.2 hab) hf
-
-Depends on / 依赖: intermediate_value, isPreconnected_Icc, isPreconnected_Icc.intermediate_value, left_mem_Icc, right_mem_Icc
+--- 原说明 ---
+**Intermediate Value Theorem** for continuous functions on closed intervals, cas
+e
+`f a ≤ t ≤ f b`.
 -/
-theorem intermediate_value_Icc {a b : α} (hab : a <= b) {f : α -> δ} (hf : ContinuousOn f (Icc a b)) :
-    Icc (f a) (f b) subseteq f '' Icc a b :=
+theorem intermediate_value_Icc {a b : α} (hab : a ≤ b) {f : α → δ} (hf : ContinuousOn f (Icc a b)) :
+    Icc (f a) (f b) ⊆ f '' Icc a b :=
   isPreconnected_Icc.intermediate_value (left_mem_Icc.2 hab) (right_mem_Icc.2 hab) hf
 
-/--
-theorem `intermediate_value_Icc'` / 定理 `intermediate_value_Icc'`
+/-- **Intermediate Value Theorem** for continuous functions on closed intervals, case
+`f a ≥ t ≥ f b`. -/
+/-
+**intermediate_value_Icc'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：intermediate_value_Icc' {a b : α} (hab : a <= b) {f : α -> δ} (hf : Contin
+uousOn f (Icc a b)) : Icc (f b) (f a) subseteq f '' Icc a b
+参数：hab : a <= b；hf : ContinuousOn f (Icc a b)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.intermediate_value`：IsPreconnected.intermediate_value {s 
+: Set X} (hs : IsPreconnected s) {a b : X} (ha : a in s) (hb : b in s) {f : X ->
+ α} (hf : ContinuousOn …
+· 使用定理 `isPreconnected_Icc`：isPreconnected_Icc : IsPreconnected (Icc a b)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.right_mem_Icc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ S
+et.Icc b a ↔ b ≤ a
+· 使用定理 `Set.left_mem_Icc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ Se
+t.Icc a b ↔ a ≤ b
 
-English:
-theorem intermediate_value_Icc'
-  statement: {a b : α} (hab : a <= b) {f : α -> δ}
-  proof: isPreconnected_Icc.intermediate_value (right_mem_Icc.2 hab) (left_mem_Icc.2 hab) hf
-
-中文:
-定理 intermediate_value_Icc'
-  结论: {a b : α} (hab : a <= b) {f : α -> δ}
-  证明: isPreconnected_Icc.intermediate_value (right_mem_Icc.2 hab) (left_mem_Icc.2 hab) hf
-
-Depends on / 依赖: intermediate_value, isPreconnected_Icc, isPreconnected_Icc.intermediate_value, left_mem_Icc, right_mem_Icc
+--- 原说明 ---
+**Intermediate Value Theorem** for continuous functions on closed intervals, cas
+e
+`f a ≥ t ≥ f b`.
 -/
-theorem intermediate_value_Icc' {a b : α} (hab : a <= b) {f : α -> δ}
-    (hf : ContinuousOn f (Icc a b)) : Icc (f b) (f a) subseteq f '' Icc a b :=
+theorem intermediate_value_Icc' {a b : α} (hab : a ≤ b) {f : α → δ}
+    (hf : ContinuousOn f (Icc a b)) : Icc (f b) (f a) ⊆ f '' Icc a b :=
   isPreconnected_Icc.intermediate_value (right_mem_Icc.2 hab) (left_mem_Icc.2 hab) hf
 
-/--
-theorem `intermediate_value_uIcc` / 定理 `intermediate_value_uIcc`
+/-- **Intermediate Value Theorem** for continuous functions on closed intervals, unordered case. -/
+/-
+**intermediate_value_uIcc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：intermediate_value_uIcc {a b : α} {f : α -> δ} (hf : ContinuousOn f [[a, b
+]]) : [[f a, f b]] subseteq f '' uIcc a b
+参数：hf : ContinuousOn f [[a, b]]。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Set.uIcc_of_le`：uIcc_of_le (h : a <= b) : [[a, b]] = Icc a b
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `IsPreconnected.intermediate_value`：IsPreconnected.intermediate_value {s 
+: Set X} (hs : IsPreconnected s) {a b : X} (ha : a in s) (hb : b in s) {f : X ->
+ α} (hf : ContinuousOn …
+· 使用定理 `isPreconnected_uIcc`：isPreconnected_uIcc : IsPreconnected ([[a, b]])
+· 使用引理 `Set.uIcc_of_ge`：uIcc_of_ge (h : b <= a) : [[a, b]] = Icc b a
 
-English:
-theorem intermediate_value_uIcc
-  given: {a b : α} {f : α -> δ} (hf : ContinuousOn f [[a, b]])
-  proof: by
-  cases le_total (f a) (f b) <;> simp [*, isPreconnected_uIcc.intermediate_value]
-
-中文:
-定理 intermediate_value_uIcc
-  条件: {a b : α} {f : α -> δ} (hf : ContinuousOn f [[a, b]])
-  证明: by
-  cases le_total (f a) (f b) <;> simp [*, isPreconnected_uIcc.intermediate_value]
-
-Depends on / 依赖: intermediate_value, isPreconnected_uIcc, isPreconnected_uIcc.intermediate_value, le_total
+--- 原说明 ---
+**Intermediate Value Theorem** for continuous functions on closed intervals, uno
+rdered case.
 -/
-theorem intermediate_value_uIcc {a b : α} {f : α -> δ} (hf : ContinuousOn f [[a, b]]) :
-    [[f a, f b]] subseteq f '' uIcc a b := by
+theorem intermediate_value_uIcc {a b : α} {f : α → δ} (hf : ContinuousOn f [[a, b]]) :
+    [[f a, f b]] ⊆ f '' uIcc a b := by
   cases le_total (f a) (f b) <;> simp [*, isPreconnected_uIcc.intermediate_value]
 
-/--
-theorem `exists_mem_uIcc_isFixedPt` / 定理 `exists_mem_uIcc_isFixedPt`
+/-- If `f : α → α` is continuous on `[[a, b]]`, `a ≤ f a`, and `f b ≤ b`,
+then `f` has a fixed point on `[[a, b]]`. -/
+/-
+**exists_mem_uIcc_isFixedPt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_mem_uIcc_isFixedPt {a b : α} {f : α -> α} (hf : ContinuousOn f (uIc
+c a b)) (ha : a <= f a) (hb : f b <= b) : exists c in [[a, b]], IsFixedPt f c
+参数：hf : ContinuousOn f (uIcc a b)；ha : a <= f a；hb : f b <= b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.intermediate_value₂`：IsPreconnected.intermediate_value₂ {
+s : Set X} (hs : IsPreconnected s) {a b : X} (ha : a in s) (hb : b in s) {f g : 
+X -> α} (hf : Continuous…
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `isPreconnected_uIcc`：isPreconnected_uIcc : IsPreconnected ([[a, b]])
+· 使用定理 `Set.right_mem_uIcc`：∀ {α : Type u_1} [inst : Lattice α] {a b : α}, b ∈ S
+et.uIcc a b
+· 使用定理 `Set.left_mem_uIcc`：∀ {α : Type u_1} [inst : Lattice α] {a b : α}, a ∈ Se
+t.uIcc a b
+· 使用定理 `continuousOn_id`：continuousOn_id {s : Set α} : ContinuousOn id s
 
-English:
-theorem exists_mem_uIcc_isFixedPt
-  statement: {a b : α} {f : α -> α} (hf : ContinuousOn f (uIcc a b))
-  proof: isPreconnected_uIcc.intermediate_value₂ right_mem_uIcc left_mem_uIcc hf continuousOn_id hb ha
-
-中文:
-定理 存在_mem_uIcc_isFixedPt
-  结论: {a b : α} {f : α -> α} (hf : ContinuousOn f (uIcc a b))
-  证明: isPreconnected_uIcc.intermediate_value₂ right_mem_uIcc left_mem_uIcc hf continuousOn_id hb ha
-
-Depends on / 依赖: continuousOn_id, isPreconnected_uIcc, isPreconnected_uIcc.intermediate_value, left_mem_uIcc, right_mem_uIcc
+--- 原说明 ---
+If `f : α → α` is continuous on `[[a, b]]`, `a ≤ f a`, and `f b ≤ b`,
+then `f` has a fixed point on `[[a, b]]`.
 -/
-theorem exists_mem_uIcc_isFixedPt {a b : α} {f : α -> α} (hf : ContinuousOn f (uIcc a b))
-    (ha : a <= f a) (hb : f b <= b) : exists c in [[a, b]], IsFixedPt f c :=
+theorem exists_mem_uIcc_isFixedPt {a b : α} {f : α → α} (hf : ContinuousOn f (uIcc a b))
+    (ha : a ≤ f a) (hb : f b ≤ b) : ∃ c ∈ [[a, b]], IsFixedPt f c :=
   isPreconnected_uIcc.intermediate_value₂ right_mem_uIcc left_mem_uIcc hf continuousOn_id hb ha
 
-/--
-theorem `exists_mem_Icc_isFixedPt` / 定理 `exists_mem_Icc_isFixedPt`
+/-- If `f : α → α` is continuous on `[a, b]`, `a ≤ b`, `a ≤ f a`, and `f b ≤ b`,
+then `f` has a fixed point on `[a, b]`.
 
-English:
-theorem exists_mem_Icc_isFixedPt
-  statement: {a b : α} {f : α -> α} (hf : ContinuousOn f (Icc a b))
-  proof: isPreconnected_Icc.intermediate_value₂
-    (right_mem_Icc.2 hle) (left_mem_Icc.2 hle) hf continuousOn_id hb ha
+In particular, if `[a, b]` is forward-invariant under `f`,
+then `f` has a fixed point on `[a, b]`, see `exists_mem_Icc_isFixedPt_of_mapsTo`. -/
+/-
+**exists_mem_Icc_isFixedPt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_mem_Icc_isFixedPt {a b : α} {f : α -> α} (hf : ContinuousOn f (Icc 
+a b)) (hle : a <= b) (ha : a <= f a) (hb : f b <= b) : exists c in Icc a b, IsFi
+xedPt f c
+参数：hf : ContinuousOn f (Icc a b)；hle : a <= b；ha : a <= f a；hb : f b <= b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.intermediate_value₂`：IsPreconnected.intermediate_value₂ {
+s : Set X} (hs : IsPreconnected s) {a b : X} (ha : a in s) (hb : b in s) {f g : 
+X -> α} (hf : Continuous…
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `isPreconnected_Icc`：isPreconnected_Icc : IsPreconnected (Icc a b)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.right_mem_Icc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ S
+et.Icc b a ↔ b ≤ a
+· 使用定理 `Set.left_mem_Icc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ Se
+t.Icc a b ↔ a ≤ b
+· 使用定理 `continuousOn_id`：continuousOn_id {s : Set α} : ContinuousOn id s
 
-中文:
-定理 存在_mem_Icc_isFixedPt
-  结论: {a b : α} {f : α -> α} (hf : ContinuousOn f (闭区间 a b))
-  证明: isPreconnected_Icc.intermediate_value₂
-    (right_mem_Icc.2 hle) (left_mem_Icc.2 hle) hf continuousOn_id hb ha
+--- 原说明 ---
+If `f : α → α` is continuous on `[a, b]`, `a ≤ b`, `a ≤ f a`, and `f b ≤ b`,
+then `f` has a fixed point on `[a, b]`.
 
-Depends on / 依赖: continuousOn_id, isPreconnected_Icc, isPreconnected_Icc.intermediate_value, left_mem_Icc, right_mem_Icc
+In particular, if `[a, b]` is forward-invariant under `f`,
+then `f` has a fixed point on `[a, b]`, see `exists_mem_Icc_isFixedPt_of_mapsTo`
+.
 -/
-theorem exists_mem_Icc_isFixedPt {a b : α} {f : α -> α} (hf : ContinuousOn f (Icc a b))
-    (hle : a <= b) (ha : a <= f a) (hb : f b <= b) : exists c in Icc a b, IsFixedPt f c :=
+theorem exists_mem_Icc_isFixedPt {a b : α} {f : α → α} (hf : ContinuousOn f (Icc a b))
+    (hle : a ≤ b) (ha : a ≤ f a) (hb : f b ≤ b) : ∃ c ∈ Icc a b, IsFixedPt f c :=
   isPreconnected_Icc.intermediate_value₂
     (right_mem_Icc.2 hle) (left_mem_Icc.2 hle) hf continuousOn_id hb ha
 
-/--
-theorem `exists_mem_Icc_isFixedPt_of_mapsTo` / 定理 `exists_mem_Icc_isFixedPt_of_mapsTo`
+/-- If a closed interval is forward-invariant under a continuous map `f : α → α`,
+then this map has a fixed point on this interval. -/
+/-
+**exists_mem_Icc_isFixedPt_of_mapsTo** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_mem_Icc_isFixedPt_of_mapsTo {a b : α} {f : α -> α} (hf : Continuous
+On f (Icc a b)) (hle : a <= b) (hmaps : MapsTo f (Icc a b) (Icc a b)) : exists c
+ in Icc a b, IsFixedPt f c
+参数：hf : ContinuousOn f (Icc a b)；hle : a <= b；hmaps : MapsTo f (Icc a b) (Icc a 
+b)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_mem_Icc_isFixedPt`：exists_mem_Icc_isFixedPt {a b : α} {f : α -> α
+} (hf : ContinuousOn f (Icc a b)) (hle : a <= b) (ha : a <= f a) (hb : f b <= b)
+ : exists c in…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.left_mem_Icc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ Se
+t.Icc a b ↔ a ≤ b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Set.right_mem_Icc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ S
+et.Icc b a ↔ b ≤ a
 
-English:
-theorem exists_mem_Icc_isFixedPt_of_mapsTo
-  statement: {a b : α} {f : α -> α} (hf : ContinuousOn f (Icc a b))
-  proof: exists_mem_Icc_isFixedPt hf hle (hmaps <| left_mem_Icc.2 hle).1 (hmaps <| right_mem_Icc.2 hle).2
-
-中文:
-定理 存在_mem_Icc_isFixedPt_of_mapsTo
-  结论: {a b : α} {f : α -> α} (hf : ContinuousOn f (闭区间 a b))
-  证明: exists_mem_Icc_isFixedPt hf hle (hmaps <| left_mem_Icc.2 hle).1 (hmaps <| right_mem_Icc.2 hle).2
-
-Depends on / 依赖: exists_mem_Icc_isFixedPt, left_mem_Icc, right_mem_Icc
+--- 原说明 ---
+If a closed interval is forward-invariant under a continuous map `f : α → α`,
+then this map has a fixed point on this interval.
 -/
-theorem exists_mem_Icc_isFixedPt_of_mapsTo {a b : α} {f : α -> α} (hf : ContinuousOn f (Icc a b))
-    (hle : a <= b) (hmaps : MapsTo f (Icc a b) (Icc a b)) : exists c in Icc a b, IsFixedPt f c :=
+theorem exists_mem_Icc_isFixedPt_of_mapsTo {a b : α} {f : α → α} (hf : ContinuousOn f (Icc a b))
+    (hle : a ≤ b) (hmaps : MapsTo f (Icc a b) (Icc a b)) : ∃ c ∈ Icc a b, IsFixedPt f c :=
   exists_mem_Icc_isFixedPt hf hle (hmaps <| left_mem_Icc.2 hle).1 (hmaps <| right_mem_Icc.2 hle).2
 
-/--
-theorem `exists_mem_uIcc_isFixedPt_of_mapsTo` / 定理 `exists_mem_uIcc_isFixedPt_of_mapsTo`
+/-- Version of `exists_mem_Icc_isFixedPt_of_mapsTo` using `Set.uIcc` -/
+/-
+**exists_mem_uIcc_isFixedPt_of_mapsTo** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_mem_uIcc_isFixedPt_of_mapsTo {a b : α} {f : α -> α} (hf : Continuou
+sOn f (uIcc a b)) (hmaps : MapsTo f (uIcc a b) (uIcc a b)) : exists c in uIcc a 
+b, IsFixedPt f c
+参数：hf : ContinuousOn f (uIcc a b)；hmaps : MapsTo f (uIcc a b) (uIcc a b)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_mem_Icc_isFixedPt_of_mapsTo`：exists_mem_Icc_isFixedPt_of_mapsTo {
+a b : α} {f : α -> α} (hf : ContinuousOn f (Icc a b)) (hle : a <= b) (hmaps : Ma
+psTo f (Icc a b) (Icc a …
+· 使用引理 `inf_left_le_sup_left`：inf_left_le_sup_left : (a ⊓ b) <= (c ⊔ b)
 
-English:
-theorem exists_mem_uIcc_isFixedPt_of_mapsTo
-  statement: {a b : α} {f : α -> α} (hf : ContinuousOn f (uIcc a b))
-  proof: exists_mem_Icc_isFixedPt_of_mapsTo hf inf_left_le_sup_left hmaps
-
-中文:
-定理 存在_mem_uIcc_isFixedPt_of_mapsTo
-  结论: {a b : α} {f : α -> α} (hf : ContinuousOn f (uIcc a b))
-  证明: exists_mem_Icc_isFixedPt_of_mapsTo hf inf_left_le_sup_left hmaps
-
-Depends on / 依赖: exists_mem_Icc_isFixedPt_of_mapsTo, inf_left_le_sup_left
+--- 原说明 ---
+Version of `exists_mem_Icc_isFixedPt_of_mapsTo` using `Set.uIcc`
 -/
-theorem exists_mem_uIcc_isFixedPt_of_mapsTo {a b : α} {f : α -> α} (hf : ContinuousOn f (uIcc a b))
-    (hmaps : MapsTo f (uIcc a b) (uIcc a b)) : exists c in uIcc a b, IsFixedPt f c :=
+theorem exists_mem_uIcc_isFixedPt_of_mapsTo {a b : α} {f : α → α} (hf : ContinuousOn f (uIcc a b))
+    (hmaps : MapsTo f (uIcc a b) (uIcc a b)) : ∃ c ∈ uIcc a b, IsFixedPt f c :=
   exists_mem_Icc_isFixedPt_of_mapsTo hf inf_left_le_sup_left hmaps
 
-/--
-theorem `exists_mem_Icc_isFixedPt_of_surjOn` / 定理 `exists_mem_Icc_isFixedPt_of_surjOn`
+/-- If a closed interval is contained in its own image under a continuous map `f : α → α`,
+then this map has a fixed point on this interval. -/
+/-
+**exists_mem_Icc_isFixedPt_of_surjOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_mem_Icc_isFixedPt_of_surjOn {a b : α} {f : α -> α} (hf : Continuous
+On f (Icc a b)) (hle : a <= b) (h_surj : SurjOn f (Icc a b) (Icc a b)) : exists 
+c in Icc a b, IsFixedPt f c
+参数：hf : ContinuousOn f (Icc a b)；hle : a <= b；h_surj : SurjOn f (Icc a b) (Icc a
+ b)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.left_mem_Icc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ Se
+t.Icc a b ↔ a ≤ b
+· 使用定理 `Set.right_mem_Icc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ S
+et.Icc b a ↔ b ≤ a
+· 使用定理 `IsPreconnected.intermediate_value₂`：IsPreconnected.intermediate_value₂ {
+s : Set X} (hs : IsPreconnected s) {a b : X} (ha : a in s) (hb : b in s) {f g : 
+X -> α} (hf : Continuous…
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `isPreconnected_Icc`：isPreconnected_Icc : IsPreconnected (Icc a b)
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `continuousOn_id`：continuousOn_id {s : Set α} : ContinuousOn id s
 
-English:
-theorem exists_mem_Icc_isFixedPt_of_surjOn
-  statement: {a b : α} {f : α -> α} (hf : ContinuousOn f (Icc a b))
-  proof: have ⟨x₀, hx₀⟩ := h_surj (left_mem_Icc.mpr hle)
-  have ⟨x₁, hx₁⟩ := h_surj (right_mem_Icc.mpr hle)
-  isPreconnected_Icc.intermediate_value₂
-    hx₀.1 hx₁.1 hf continuousOn_id (by grind) (by grind)
-
-中文:
-定理 存在_mem_Icc_isFixedPt_of_surjOn
-  结论: {a b : α} {f : α -> α} (hf : ContinuousOn f (闭区间 a b))
-  证明: have ⟨x₀, hx₀⟩ := h_surj (left_mem_Icc.mpr hle)
-  have ⟨x₁, hx₁⟩ := h_surj (right_mem_Icc.mpr hle)
-  isPreconnected_Icc.intermediate_value₂
-    hx₀.1 hx₁.1 hf continuousOn_id (by grind) (by grind)
-
-Depends on / 依赖: continuousOn_id, h_surj, isPreconnected_Icc, isPreconnected_Icc.intermediate_value, left_mem_Icc, left_mem_Icc.mpr, right_mem_Icc, right_mem_Icc.mpr
+--- 原说明 ---
+If a closed interval is contained in its own image under a continuous map `f : α
+ → α`,
+then this map has a fixed point on this interval.
 -/
-theorem exists_mem_Icc_isFixedPt_of_surjOn {a b : α} {f : α -> α} (hf : ContinuousOn f (Icc a b))
-    (hle : a <= b) (h_surj : SurjOn f (Icc a b) (Icc a b)) : exists c in Icc a b, IsFixedPt f c :=
+theorem exists_mem_Icc_isFixedPt_of_surjOn {a b : α} {f : α → α} (hf : ContinuousOn f (Icc a b))
+    (hle : a ≤ b) (h_surj : SurjOn f (Icc a b) (Icc a b)) : ∃ c ∈ Icc a b, IsFixedPt f c :=
   have ⟨x₀, hx₀⟩ := h_surj (left_mem_Icc.mpr hle)
   have ⟨x₁, hx₁⟩ := h_surj (right_mem_Icc.mpr hle)
   isPreconnected_Icc.intermediate_value₂
     hx₀.1 hx₁.1 hf continuousOn_id (by grind) (by grind)
 
-/--
-theorem `exists_mem_uIcc_isFixedPt_of_surjOn` / 定理 `exists_mem_uIcc_isFixedPt_of_surjOn`
+/-- Version of `exists_mem_Icc_isFixedPt_of_surjOn` using `Set.uIcc` -/
+/-
+**exists_mem_uIcc_isFixedPt_of_surjOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_mem_uIcc_isFixedPt_of_surjOn {a b : α} {f : α -> α} (hf : Continuou
+sOn f (uIcc a b)) (h_surj : SurjOn f (uIcc a b) (uIcc a b)) : exists c in uIcc a
+ b, IsFixedPt f c
+参数：hf : ContinuousOn f (uIcc a b)；h_surj : SurjOn f (uIcc a b) (uIcc a b)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_mem_Icc_isFixedPt_of_surjOn`：exists_mem_Icc_isFixedPt_of_surjOn {
+a b : α} {f : α -> α} (hf : ContinuousOn f (Icc a b)) (hle : a <= b) (h_surj : S
+urjOn f (Icc a b) (Icc a…
+· 使用引理 `inf_left_le_sup_left`：inf_left_le_sup_left : (a ⊓ b) <= (c ⊔ b)
 
-English:
-theorem exists_mem_uIcc_isFixedPt_of_surjOn
-  statement: {a b : α} {f : α -> α} (hf : ContinuousOn f (uIcc a b))
-  proof: exists_mem_Icc_isFixedPt_of_surjOn hf inf_left_le_sup_left h_surj
-
-中文:
-定理 存在_mem_uIcc_isFixedPt_of_surjOn
-  结论: {a b : α} {f : α -> α} (hf : ContinuousOn f (uIcc a b))
-  证明: exists_mem_Icc_isFixedPt_of_surjOn hf inf_left_le_sup_left h_surj
-
-Depends on / 依赖: exists_mem_Icc_isFixedPt_of_surjOn, h_surj, inf_left_le_sup_left
+--- 原说明 ---
+Version of `exists_mem_Icc_isFixedPt_of_surjOn` using `Set.uIcc`
 -/
-theorem exists_mem_uIcc_isFixedPt_of_surjOn {a b : α} {f : α -> α} (hf : ContinuousOn f (uIcc a b))
-    (h_surj : SurjOn f (uIcc a b) (uIcc a b)) : exists c in uIcc a b, IsFixedPt f c :=
+theorem exists_mem_uIcc_isFixedPt_of_surjOn {a b : α} {f : α → α} (hf : ContinuousOn f (uIcc a b))
+    (h_surj : SurjOn f (uIcc a b) (uIcc a b)) : ∃ c ∈ uIcc a b, IsFixedPt f c :=
   exists_mem_Icc_isFixedPt_of_surjOn hf inf_left_le_sup_left h_surj
-
-/--
-theorem `intermediate_value_Ico` / 定理 `intermediate_value_Ico`
-
-English:
-theorem intermediate_value_Ico
-  given: {a b : α} (hab : a <= b) {f : α -> δ} (hf : ContinuousOn f (Icc a b))
-  proof: Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.2 (not_lt_of_ge (he ▸ h.1))) fun hlt =>
-    @IsPreconnected.intermediate_value_Ico _ _ _ _ _ _ _ isPreconnected_Ico _ _ ⟨refl a, hlt⟩
-      (right_nhdsWithin_Ico_neBot hlt) inf_le_right _ (hf.mono Ico_subset_Icc_self) _
-      ((hf.continuousWithinAt ⟨hab, refl b⟩).mono Ico_subset_Icc_self)
-
-中文:
-定理 intermediate_value_Ico
-  条件: {a b : α} (hab : a <= b) {f : α -> δ} (hf : ContinuousOn f (闭区间 a b))
-  证明: Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.2 (not_lt_of_ge (he ▸ h.1))) fun hlt =>
-    @IsPreconnected.intermediate_value_Ico _ _ _ _ _ _ _ isPreconnected_Ico _ _ ⟨refl a, hlt⟩
-      (right_nhdsWithin_Ico_neBot hlt) inf_le_right _ (hf.mono Ico_subset_Icc_self) _
-      ((hf.continuousWithinAt ⟨hab, refl b⟩).mono Ico_subset_Icc_self)
-
-Depends on / 依赖: Ico_subset_Icc_self, IsPreconnected, IsPreconnected.intermediate_value_Ico, Or.elim, absurd, continuousWithinAt, eq_or_lt_of_le, hf.continuousWithinAt, hf.mono, inf_le_right, intermediate_value_Ico, isPreconnected_Ico, not_lt_of_ge, right_nhdsWithin_Ico_neBot
+/-
+**intermediate_value_Ico** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：intermediate_value_Ico {a b : α} (hab : a <= b) {f : α -> δ} (hf : Continu
+ousOn f (Icc a b)) : Ico (f a) (f b) subseteq f '' Ico a b
+参数：hab : a <= b；hf : ContinuousOn f (Icc a b)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `eq_or_lt_of_le`：eq_or_lt_of_le (h : a <= b) : a = b ∨ a < b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `not_lt_of_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `IsPreconnected.intermediate_value_Ico`：IsPreconnected.intermediate_value
+_Ico {s : Set X} (hs : IsPreconnected s) {a : X} {l : Filter X} (ha : a in s) [N
+eBot l] (hl : l <= 𝓟 s) {f …
+· 使用定理 `isPreconnected_Ico`：isPreconnected_Ico : IsPreconnected (Ico a b)
+· 使用引理 `refl`：refl [Std.Refl r] (a : α) : a ≺ a
+· 使用定理 `right_nhdsWithin_Ico_neBot`：right_nhdsWithin_Ico_neBot {a b : α} (H : a 
+< b) : NeBot (𝓝[Ico a b] b)
+· 使用定理 `inf_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+≤ b
+· 使用定理 `ContinuousOn.mono`：ContinuousOn.mono (hf : ContinuousOn f s) (h : t subs
+eteq s) : ContinuousOn f t
+· 使用定理 `Set.Ico_subset_Icc_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Ico b a ⊆ Set.Icc b a
+· 使用定理 `ContinuousWithinAt.mono`：ContinuousWithinAt.mono (h : ContinuousWithinAt
+ f t x) (hs : s subseteq t) : ContinuousWithinAt f s x
+· 使用定理 `ContinuousOn.continuousWithinAt`：ContinuousOn.continuousWithinAt (hf : C
+ontinuousOn f s) (hx : x in s) : ContinuousWithinAt f s x
 -/
-theorem intermediate_value_Ico {a b : α} (hab : a <= b) {f : α -> δ} (hf : ContinuousOn f (Icc a b)) :
-    Ico (f a) (f b) subseteq f '' Ico a b :=
+theorem intermediate_value_Ico {a b : α} (hab : a ≤ b) {f : α → δ} (hf : ContinuousOn f (Icc a b)) :
+    Ico (f a) (f b) ⊆ f '' Ico a b :=
   Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.2 (not_lt_of_ge (he ▸ h.1))) fun hlt =>
     @IsPreconnected.intermediate_value_Ico _ _ _ _ _ _ _ isPreconnected_Ico _ _ ⟨refl a, hlt⟩
       (right_nhdsWithin_Ico_neBot hlt) inf_le_right _ (hf.mono Ico_subset_Icc_self) _
       ((hf.continuousWithinAt ⟨hab, refl b⟩).mono Ico_subset_Icc_self)
-
-/--
-theorem `intermediate_value_Ico'` / 定理 `intermediate_value_Ico'`
-
-English:
-theorem intermediate_value_Ico'
-  statement: {a b : α} (hab : a <= b) {f : α -> δ}
-  proof: Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.1 (not_lt_of_ge (he ▸ h.2))) fun hlt =>
-    @IsPreconnected.intermediate_value_Ioc _ _ _ _ _ _ _ isPreconnected_Ico _ _ ⟨refl a, hlt⟩
-      (right_nhdsWithin_Ico_neBot hlt) inf_le_right _ (hf.mono Ico_subset_Icc_self) _
-      ((hf.continuousWithinAt ⟨hab, refl b⟩).mono Ico_subset_Icc_self)
-
-中文:
-定理 intermediate_value_Ico'
-  结论: {a b : α} (hab : a <= b) {f : α -> δ}
-  证明: Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.1 (not_lt_of_ge (he ▸ h.2))) fun hlt =>
-    @IsPreconnected.intermediate_value_Ioc _ _ _ _ _ _ _ isPreconnected_Ico _ _ ⟨refl a, hlt⟩
-      (right_nhdsWithin_Ico_neBot hlt) inf_le_right _ (hf.mono Ico_subset_Icc_self) _
-      ((hf.continuousWithinAt ⟨hab, refl b⟩).mono Ico_subset_Icc_self)
-
-Depends on / 依赖: Ico_subset_Icc_self, IsPreconnected, IsPreconnected.intermediate_value_Ioc, Or.elim, absurd, continuousWithinAt, eq_or_lt_of_le, hf.continuousWithinAt, hf.mono, inf_le_right, intermediate_value_Ioc, isPreconnected_Ico, not_lt_of_ge, right_nhdsWithin_Ico_neBot
+/-
+**intermediate_value_Ico'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：intermediate_value_Ico' {a b : α} (hab : a <= b) {f : α -> δ} (hf : Contin
+uousOn f (Icc a b)) : Ioc (f b) (f a) subseteq f '' Ico a b
+参数：hab : a <= b；hf : ContinuousOn f (Icc a b)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `eq_or_lt_of_le`：eq_or_lt_of_le (h : a <= b) : a = b ∨ a < b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `not_lt_of_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `IsPreconnected.intermediate_value_Ioc`：IsPreconnected.intermediate_value
+_Ioc {s : Set X} (hs : IsPreconnected s) {a : X} {l : Filter X} (ha : a in s) [N
+eBot l] (hl : l <= 𝓟 s) {f …
+· 使用定理 `isPreconnected_Ico`：isPreconnected_Ico : IsPreconnected (Ico a b)
+· 使用引理 `refl`：refl [Std.Refl r] (a : α) : a ≺ a
+· 使用定理 `right_nhdsWithin_Ico_neBot`：right_nhdsWithin_Ico_neBot {a b : α} (H : a 
+< b) : NeBot (𝓝[Ico a b] b)
+· 使用定理 `inf_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+≤ b
+· 使用定理 `ContinuousOn.mono`：ContinuousOn.mono (hf : ContinuousOn f s) (h : t subs
+eteq s) : ContinuousOn f t
+· 使用定理 `Set.Ico_subset_Icc_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Ico b a ⊆ Set.Icc b a
+· 使用定理 `ContinuousWithinAt.mono`：ContinuousWithinAt.mono (h : ContinuousWithinAt
+ f t x) (hs : s subseteq t) : ContinuousWithinAt f s x
+· 使用定理 `ContinuousOn.continuousWithinAt`：ContinuousOn.continuousWithinAt (hf : C
+ontinuousOn f s) (hx : x in s) : ContinuousWithinAt f s x
 -/
-theorem intermediate_value_Ico' {a b : α} (hab : a <= b) {f : α -> δ}
-    (hf : ContinuousOn f (Icc a b)) : Ioc (f b) (f a) subseteq f '' Ico a b :=
+theorem intermediate_value_Ico' {a b : α} (hab : a ≤ b) {f : α → δ}
+    (hf : ContinuousOn f (Icc a b)) : Ioc (f b) (f a) ⊆ f '' Ico a b :=
   Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.1 (not_lt_of_ge (he ▸ h.2))) fun hlt =>
     @IsPreconnected.intermediate_value_Ioc _ _ _ _ _ _ _ isPreconnected_Ico _ _ ⟨refl a, hlt⟩
       (right_nhdsWithin_Ico_neBot hlt) inf_le_right _ (hf.mono Ico_subset_Icc_self) _
       ((hf.continuousWithinAt ⟨hab, refl b⟩).mono Ico_subset_Icc_self)
-
-/--
-theorem `intermediate_value_Ioc` / 定理 `intermediate_value_Ioc`
-
-English:
-theorem intermediate_value_Ioc
-  given: {a b : α} (hab : a <= b) {f : α -> δ} (hf : ContinuousOn f (Icc a b))
-  proof: Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.2 (not_le_of_gt (he ▸ h.1))) fun hlt =>
-    @IsPreconnected.intermediate_value_Ioc _ _ _ _ _ _ _ isPreconnected_Ioc _ _ ⟨hlt, refl b⟩
-      (left_nhdsWithin_Ioc_neBot hlt) inf_le_right _ (hf.mono Ioc_subset_Icc_self) _
-      ((hf.continuousWithinAt ⟨refl a, hab⟩).mono Ioc_subset_Icc_self)
-
-中文:
-定理 intermediate_value_Ioc
-  条件: {a b : α} (hab : a <= b) {f : α -> δ} (hf : ContinuousOn f (闭区间 a b))
-  证明: Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.2 (not_le_of_gt (he ▸ h.1))) fun hlt =>
-    @IsPreconnected.intermediate_value_Ioc _ _ _ _ _ _ _ isPreconnected_Ioc _ _ ⟨hlt, refl b⟩
-      (left_nhdsWithin_Ioc_neBot hlt) inf_le_right _ (hf.mono Ioc_subset_Icc_self) _
-      ((hf.continuousWithinAt ⟨refl a, hab⟩).mono Ioc_subset_Icc_self)
-
-Depends on / 依赖: Ioc_subset_Icc_self, IsPreconnected, IsPreconnected.intermediate_value_Ioc, Or.elim, absurd, continuousWithinAt, eq_or_lt_of_le, hf.continuousWithinAt, hf.mono, inf_le_right, intermediate_value_Ioc, isPreconnected_Ioc, left_nhdsWithin_Ioc_neBot, not_le_of_gt
+/-
+**intermediate_value_Ioc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：intermediate_value_Ioc {a b : α} (hab : a <= b) {f : α -> δ} (hf : Continu
+ousOn f (Icc a b)) : Ioc (f a) (f b) subseteq f '' Ioc a b
+参数：hab : a <= b；hf : ContinuousOn f (Icc a b)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `eq_or_lt_of_le`：eq_or_lt_of_le (h : a <= b) : a = b ∨ a < b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `not_le_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `IsPreconnected.intermediate_value_Ioc`：IsPreconnected.intermediate_value
+_Ioc {s : Set X} (hs : IsPreconnected s) {a : X} {l : Filter X} (ha : a in s) [N
+eBot l] (hl : l <= 𝓟 s) {f …
+· 使用定理 `isPreconnected_Ioc`：isPreconnected_Ioc : IsPreconnected (Ioc a b)
+· 使用引理 `refl`：refl [Std.Refl r] (a : α) : a ≺ a
+· 使用定理 `left_nhdsWithin_Ioc_neBot`：left_nhdsWithin_Ioc_neBot {a b : α} (H : a < 
+b) : NeBot (𝓝[Ioc a b] a)
+· 使用定理 `inf_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+≤ b
+· 使用定理 `ContinuousOn.mono`：ContinuousOn.mono (hf : ContinuousOn f s) (h : t subs
+eteq s) : ContinuousOn f t
+· 使用定理 `Set.Ioc_subset_Icc_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Ioc a b ⊆ Set.Icc a b
+· 使用定理 `ContinuousWithinAt.mono`：ContinuousWithinAt.mono (h : ContinuousWithinAt
+ f t x) (hs : s subseteq t) : ContinuousWithinAt f s x
+· 使用定理 `ContinuousOn.continuousWithinAt`：ContinuousOn.continuousWithinAt (hf : C
+ontinuousOn f s) (hx : x in s) : ContinuousWithinAt f s x
 -/
-theorem intermediate_value_Ioc {a b : α} (hab : a <= b) {f : α -> δ} (hf : ContinuousOn f (Icc a b)) :
-    Ioc (f a) (f b) subseteq f '' Ioc a b :=
+theorem intermediate_value_Ioc {a b : α} (hab : a ≤ b) {f : α → δ} (hf : ContinuousOn f (Icc a b)) :
+    Ioc (f a) (f b) ⊆ f '' Ioc a b :=
   Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.2 (not_le_of_gt (he ▸ h.1))) fun hlt =>
     @IsPreconnected.intermediate_value_Ioc _ _ _ _ _ _ _ isPreconnected_Ioc _ _ ⟨hlt, refl b⟩
       (left_nhdsWithin_Ioc_neBot hlt) inf_le_right _ (hf.mono Ioc_subset_Icc_self) _
       ((hf.continuousWithinAt ⟨refl a, hab⟩).mono Ioc_subset_Icc_self)
-
-/--
-theorem `intermediate_value_Ioc'` / 定理 `intermediate_value_Ioc'`
-
-English:
-theorem intermediate_value_Ioc'
-  statement: {a b : α} (hab : a <= b) {f : α -> δ}
-  proof: Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.1 (not_le_of_gt (he ▸ h.2))) fun hlt =>
-    @IsPreconnected.intermediate_value_Ico _ _ _ _ _ _ _ isPreconnected_Ioc _ _ ⟨hlt, refl b⟩
-      (left_nhdsWithin_Ioc_neBot hlt) inf_le_right _ (hf.mono Ioc_subset_Icc_self) _
-      ((hf.continuousWithinAt ⟨refl a, hab⟩).mono Ioc_subset_Icc_self)
-
-中文:
-定理 intermediate_value_Ioc'
-  结论: {a b : α} (hab : a <= b) {f : α -> δ}
-  证明: Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.1 (not_le_of_gt (he ▸ h.2))) fun hlt =>
-    @IsPreconnected.intermediate_value_Ico _ _ _ _ _ _ _ isPreconnected_Ioc _ _ ⟨hlt, refl b⟩
-      (left_nhdsWithin_Ioc_neBot hlt) inf_le_right _ (hf.mono Ioc_subset_Icc_self) _
-      ((hf.continuousWithinAt ⟨refl a, hab⟩).mono Ioc_subset_Icc_self)
-
-Depends on / 依赖: Ioc_subset_Icc_self, IsPreconnected, IsPreconnected.intermediate_value_Ico, Or.elim, absurd, continuousWithinAt, eq_or_lt_of_le, hf.continuousWithinAt, hf.mono, inf_le_right, intermediate_value_Ico, isPreconnected_Ioc, left_nhdsWithin_Ioc_neBot, not_le_of_gt
+/-
+**intermediate_value_Ioc'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：intermediate_value_Ioc' {a b : α} (hab : a <= b) {f : α -> δ} (hf : Contin
+uousOn f (Icc a b)) : Ico (f b) (f a) subseteq f '' Ioc a b
+参数：hab : a <= b；hf : ContinuousOn f (Icc a b)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `eq_or_lt_of_le`：eq_or_lt_of_le (h : a <= b) : a = b ∨ a < b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `not_le_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `IsPreconnected.intermediate_value_Ico`：IsPreconnected.intermediate_value
+_Ico {s : Set X} (hs : IsPreconnected s) {a : X} {l : Filter X} (ha : a in s) [N
+eBot l] (hl : l <= 𝓟 s) {f …
+· 使用定理 `isPreconnected_Ioc`：isPreconnected_Ioc : IsPreconnected (Ioc a b)
+· 使用引理 `refl`：refl [Std.Refl r] (a : α) : a ≺ a
+· 使用定理 `left_nhdsWithin_Ioc_neBot`：left_nhdsWithin_Ioc_neBot {a b : α} (H : a < 
+b) : NeBot (𝓝[Ioc a b] a)
+· 使用定理 `inf_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+≤ b
+· 使用定理 `ContinuousOn.mono`：ContinuousOn.mono (hf : ContinuousOn f s) (h : t subs
+eteq s) : ContinuousOn f t
+· 使用定理 `Set.Ioc_subset_Icc_self`：∀ {α : Type u_1} [inst : Preorder α] {a b : α},
+ Set.Ioc a b ⊆ Set.Icc a b
+· 使用定理 `ContinuousWithinAt.mono`：ContinuousWithinAt.mono (h : ContinuousWithinAt
+ f t x) (hs : s subseteq t) : ContinuousWithinAt f s x
+· 使用定理 `ContinuousOn.continuousWithinAt`：ContinuousOn.continuousWithinAt (hf : C
+ontinuousOn f s) (hx : x in s) : ContinuousWithinAt f s x
 -/
-theorem intermediate_value_Ioc' {a b : α} (hab : a <= b) {f : α -> δ}
-    (hf : ContinuousOn f (Icc a b)) : Ico (f b) (f a) subseteq f '' Ioc a b :=
+theorem intermediate_value_Ioc' {a b : α} (hab : a ≤ b) {f : α → δ}
+    (hf : ContinuousOn f (Icc a b)) : Ico (f b) (f a) ⊆ f '' Ioc a b :=
   Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.1 (not_le_of_gt (he ▸ h.2))) fun hlt =>
     @IsPreconnected.intermediate_value_Ico _ _ _ _ _ _ _ isPreconnected_Ioc _ _ ⟨hlt, refl b⟩
       (left_nhdsWithin_Ioc_neBot hlt) inf_le_right _ (hf.mono Ioc_subset_Icc_self) _
       ((hf.continuousWithinAt ⟨refl a, hab⟩).mono Ioc_subset_Icc_self)
-
-/--
-theorem `intermediate_value_Ioo` / 定理 `intermediate_value_Ioo`
-
-English:
-theorem intermediate_value_Ioo
-  given: {a b : α} (hab : a <= b) {f : α -> δ} (hf : ContinuousOn f (Icc a b))
-  proof: Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.2 (not_lt_of_gt (he ▸ h.1))) fun hlt =>
-    @IsPreconnected.intermediate_value_Ioo _ _ _ _ _ _ _ isPreconnected_Ioo _ _
-      (left_nhdsWithin_Ioo_neBot hlt) (right_nhdsWithin_Ioo_neBot hlt) inf_le_right inf_le_right _
-      (hf.mono Ioo_subset_Icc_self) _ _
-      ((hf.continuousWithinAt ⟨refl a, hab⟩).mono Ioo_subset_Icc_self)
-      ((hf.continuousWithinAt ⟨hab, refl b⟩).mono Ioo_subset_Icc_self)
-
-中文:
-定理 intermediate_value_Ioo
-  条件: {a b : α} (hab : a <= b) {f : α -> δ} (hf : ContinuousOn f (闭区间 a b))
-  证明: Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.2 (not_lt_of_gt (he ▸ h.1))) fun hlt =>
-    @IsPreconnected.intermediate_value_Ioo _ _ _ _ _ _ _ isPreconnected_Ioo _ _
-      (left_nhdsWithin_Ioo_neBot hlt) (right_nhdsWithin_Ioo_neBot hlt) inf_le_right inf_le_right _
-      (hf.mono Ioo_subset_Icc_self) _ _
-      ((hf.continuousWithinAt ⟨refl a, hab⟩).mono Ioo_subset_Icc_self)
-      ((hf.continuousWithinAt ⟨hab, refl b⟩).mono Ioo_subset_Icc_self)
-
-Depends on / 依赖: Ioo_subset_Icc_self, IsPreconnected, IsPreconnected.intermediate_value_Ioo, Or.elim, absurd, continuousWithinAt, eq_or_lt_of_le, hf.continuousWithinAt, hf.mono, inf_le_right, intermediate_value_Ioo, isPreconnected_Ioo, left_nhdsWithin_Ioo_neBot, not_lt_of_gt, right_nhdsWithin_Ioo_neBot
+/-
+**intermediate_value_Ioo** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：intermediate_value_Ioo {a b : α} (hab : a <= b) {f : α -> δ} (hf : Continu
+ousOn f (Icc a b)) : Ioo (f a) (f b) subseteq f '' Ioo a b
+参数：hab : a <= b；hf : ContinuousOn f (Icc a b)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `eq_or_lt_of_le`：eq_or_lt_of_le (h : a <= b) : a = b ∨ a < b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `not_lt_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ < a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `IsPreconnected.intermediate_value_Ioo`：IsPreconnected.intermediate_value
+_Ioo {s : Set X} (hs : IsPreconnected s) {l₁ l₂ : Filter X} [NeBot l₁] [NeBot l₂
+] (hl₁ : l₁ <= 𝓟 s) (hl₂ : …
+· 使用定理 `isPreconnected_Ioo`：isPreconnected_Ioo : IsPreconnected (Ioo a b)
+· 使用定理 `left_nhdsWithin_Ioo_neBot`：left_nhdsWithin_Ioo_neBot {a b : α} (H : a < 
+b) : NeBot (𝓝[Ioo a b] a)
+· 使用定理 `right_nhdsWithin_Ioo_neBot`：right_nhdsWithin_Ioo_neBot {a b : α} (H : a 
+< b) : NeBot (𝓝[Ioo a b] b)
+· 使用定理 `inf_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+≤ b
+· 使用定理 `ContinuousOn.mono`：ContinuousOn.mono (hf : ContinuousOn f s) (h : t subs
+eteq s) : ContinuousOn f t
+· 使用定理 `Set.Ioo_subset_Icc_self`：Ioo_subset_Icc_self : Ioo a b subseteq Icc a b
+· 使用定理 `ContinuousWithinAt.mono`：ContinuousWithinAt.mono (h : ContinuousWithinAt
+ f t x) (hs : s subseteq t) : ContinuousWithinAt f s x
+· 使用定理 `ContinuousOn.continuousWithinAt`：ContinuousOn.continuousWithinAt (hf : C
+ontinuousOn f s) (hx : x in s) : ContinuousWithinAt f s x
+· 使用引理 `refl`：refl [Std.Refl r] (a : α) : a ≺ a
 -/
-theorem intermediate_value_Ioo {a b : α} (hab : a <= b) {f : α -> δ} (hf : ContinuousOn f (Icc a b)) :
-    Ioo (f a) (f b) subseteq f '' Ioo a b :=
+theorem intermediate_value_Ioo {a b : α} (hab : a ≤ b) {f : α → δ} (hf : ContinuousOn f (Icc a b)) :
+    Ioo (f a) (f b) ⊆ f '' Ioo a b :=
   Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.2 (not_lt_of_gt (he ▸ h.1))) fun hlt =>
     @IsPreconnected.intermediate_value_Ioo _ _ _ _ _ _ _ isPreconnected_Ioo _ _
       (left_nhdsWithin_Ioo_neBot hlt) (right_nhdsWithin_Ioo_neBot hlt) inf_le_right inf_le_right _
       (hf.mono Ioo_subset_Icc_self) _ _
       ((hf.continuousWithinAt ⟨refl a, hab⟩).mono Ioo_subset_Icc_self)
       ((hf.continuousWithinAt ⟨hab, refl b⟩).mono Ioo_subset_Icc_self)
-
-/--
-theorem `intermediate_value_Ioo'` / 定理 `intermediate_value_Ioo'`
-
-English:
-theorem intermediate_value_Ioo'
-  statement: {a b : α} (hab : a <= b) {f : α -> δ}
-  proof: Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.1 (not_lt_of_gt (he ▸ h.2))) fun hlt =>
-    @IsPreconnected.intermediate_value_Ioo _ _ _ _ _ _ _ isPreconnected_Ioo _ _
-      (right_nhdsWithin_Ioo_neBot hlt) (left_nhdsWithin_Ioo_neBot hlt) inf_le_right inf_le_right _
-      (hf.mono Ioo_subset_Icc_self) _ _
-      ((hf.continuousWithinAt ⟨hab, refl b⟩).mono Ioo_subset_Icc_self)
-      ((hf.continuousWithinAt ⟨refl a, hab⟩).mono Ioo_subset_Icc_self)
-
-中文:
-定理 intermediate_value_Ioo'
-  结论: {a b : α} (hab : a <= b) {f : α -> δ}
-  证明: Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.1 (not_lt_of_gt (he ▸ h.2))) fun hlt =>
-    @IsPreconnected.intermediate_value_Ioo _ _ _ _ _ _ _ isPreconnected_Ioo _ _
-      (right_nhdsWithin_Ioo_neBot hlt) (left_nhdsWithin_Ioo_neBot hlt) inf_le_right inf_le_right _
-      (hf.mono Ioo_subset_Icc_self) _ _
-      ((hf.continuousWithinAt ⟨hab, refl b⟩).mono Ioo_subset_Icc_self)
-      ((hf.continuousWithinAt ⟨refl a, hab⟩).mono Ioo_subset_Icc_self)
-
-Depends on / 依赖: Ioo_subset_Icc_self, IsPreconnected, IsPreconnected.intermediate_value_Ioo, Or.elim, absurd, continuousWithinAt, eq_or_lt_of_le, hf.continuousWithinAt, hf.mono, inf_le_right, intermediate_value_Ioo, isPreconnected_Ioo, left_nhdsWithin_Ioo_neBot, not_lt_of_gt, right_nhdsWithin_Ioo_neBot
+/-
+**intermediate_value_Ioo'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：intermediate_value_Ioo' {a b : α} (hab : a <= b) {f : α -> δ} (hf : Contin
+uousOn f (Icc a b)) : Ioo (f b) (f a) subseteq f '' Ioo a b
+参数：hab : a <= b；hf : ContinuousOn f (Icc a b)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `eq_or_lt_of_le`：eq_or_lt_of_le (h : a <= b) : a = b ∨ a < b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `not_lt_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ < a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `IsPreconnected.intermediate_value_Ioo`：IsPreconnected.intermediate_value
+_Ioo {s : Set X} (hs : IsPreconnected s) {l₁ l₂ : Filter X} [NeBot l₁] [NeBot l₂
+] (hl₁ : l₁ <= 𝓟 s) (hl₂ : …
+· 使用定理 `isPreconnected_Ioo`：isPreconnected_Ioo : IsPreconnected (Ioo a b)
+· 使用定理 `right_nhdsWithin_Ioo_neBot`：right_nhdsWithin_Ioo_neBot {a b : α} (H : a 
+< b) : NeBot (𝓝[Ioo a b] b)
+· 使用定理 `left_nhdsWithin_Ioo_neBot`：left_nhdsWithin_Ioo_neBot {a b : α} (H : a < 
+b) : NeBot (𝓝[Ioo a b] a)
+· 使用定理 `inf_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+≤ b
+· 使用定理 `ContinuousOn.mono`：ContinuousOn.mono (hf : ContinuousOn f s) (h : t subs
+eteq s) : ContinuousOn f t
+· 使用定理 `Set.Ioo_subset_Icc_self`：Ioo_subset_Icc_self : Ioo a b subseteq Icc a b
+· 使用定理 `ContinuousWithinAt.mono`：ContinuousWithinAt.mono (h : ContinuousWithinAt
+ f t x) (hs : s subseteq t) : ContinuousWithinAt f s x
+· 使用定理 `ContinuousOn.continuousWithinAt`：ContinuousOn.continuousWithinAt (hf : C
+ontinuousOn f s) (hx : x in s) : ContinuousWithinAt f s x
+· 使用引理 `refl`：refl [Std.Refl r] (a : α) : a ≺ a
 -/
-theorem intermediate_value_Ioo' {a b : α} (hab : a <= b) {f : α -> δ}
-    (hf : ContinuousOn f (Icc a b)) : Ioo (f b) (f a) subseteq f '' Ioo a b :=
+theorem intermediate_value_Ioo' {a b : α} (hab : a ≤ b) {f : α → δ}
+    (hf : ContinuousOn f (Icc a b)) : Ioo (f b) (f a) ⊆ f '' Ioo a b :=
   Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.1 (not_lt_of_gt (he ▸ h.2))) fun hlt =>
     @IsPreconnected.intermediate_value_Ioo _ _ _ _ _ _ _ isPreconnected_Ioo _ _
       (right_nhdsWithin_Ioo_neBot hlt) (left_nhdsWithin_Ioo_neBot hlt) inf_le_right inf_le_right _
       (hf.mono Ioo_subset_Icc_self) _ _
       ((hf.continuousWithinAt ⟨hab, refl b⟩).mono Ioo_subset_Icc_self)
       ((hf.continuousWithinAt ⟨refl a, hab⟩).mono Ioo_subset_Icc_self)
-
-/--
-theorem `intermediate_value_Ici` / 定理 `intermediate_value_Ici`
-
-English:
-theorem intermediate_value_Ici
-  statement: {a : α} {f : α -> δ} (hf : ContinuousOn f (Ici a))
-  proof: isPreconnected_Ici.intermediate_value_Ici self_mem_Ici
-    (le_principal_iff.mpr (Ici_mem_atTop a)) hf htop
-
-中文:
-定理 intermediate_value_Ici
-  结论: {a : α} {f : α -> δ} (hf : ContinuousOn f (左闭右无界区间 a))
-  证明: isPreconnected_Ici.intermediate_value_Ici self_mem_Ici
-    (le_principal_iff.mpr (Ici_mem_atTop a)) hf htop
-
-Depends on / 依赖: Ici_mem_atTop, intermediate_value_Ici, isPreconnected_Ici, isPreconnected_Ici.intermediate_value_Ici, le_principal_iff, le_principal_iff.mpr, self_mem_Ici
+/-
+**intermediate_value_Ici** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：intermediate_value_Ici {a : α} {f : α -> δ} (hf : ContinuousOn f (Ici a)) 
+(htop : Tendsto f atTop atTop) : Ici (f a) subseteq f '' Ici a
+参数：hf : ContinuousOn f (Ici a)；htop : Tendsto f atTop atTop。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.intermediate_value_Ici`：IsPreconnected.intermediate_value
+_Ici {s : Set X} (hs : IsPreconnected s) {a : X} {l : Filter X} (ha : a in s) [N
+eBot l] (hl : l <= 𝓟 s) {f …
+· 使用定理 `isPreconnected_Ici`：isPreconnected_Ici : IsPreconnected (Ici a)
+· 使用定理 `Set.self_mem_Ici`：∀ {α : Type u_1} [inst : Preorder α] {a : α}, a ∈ Set.
+Ici a
+· 使用定理 `SemilatticeSup.instIsDirectedOrder`：∀ {α : Type u_1} [inst : Semilattice
+Sup α], IsDirectedOrder α
+· 使用定理 `supSet_to_nonempty`：∀ (α : Type u_1) [SupSet α], Nonempty α
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.le_principal_iff`：le_principal_iff {s : Set α} {f : Filter α} : f
+ <= 𝓟 s ↔ s in f
+· 使用定理 `Filter.Ici_mem_atTop`：Ici_mem_atTop [Preorder α] (a : α) : Ici a in (atT
+op : Filter α)
 -/
-theorem intermediate_value_Ici {a : α} {f : α -> δ} (hf : ContinuousOn f (Ici a))
-    (htop : Tendsto f atTop atTop) : Ici (f a) subseteq f '' Ici a :=
+theorem intermediate_value_Ici {a : α} {f : α → δ} (hf : ContinuousOn f (Ici a))
+    (htop : Tendsto f atTop atTop) : Ici (f a) ⊆ f '' Ici a :=
   isPreconnected_Ici.intermediate_value_Ici self_mem_Ici
     (le_principal_iff.mpr (Ici_mem_atTop a)) hf htop
-
-/--
-theorem `intermediate_value_Ici'` / 定理 `intermediate_value_Ici'`
-
-English:
-theorem intermediate_value_Ici'
-  statement: {a : α} {f : α -> δ} (hf : ContinuousOn f (Ici a))
-  proof: isPreconnected_Ici.intermediate_value_Iic self_mem_Ici
-    (le_principal_iff.mpr (Ici_mem_atTop a)) hf htop
-
-中文:
-定理 intermediate_value_Ici'
-  结论: {a : α} {f : α -> δ} (hf : ContinuousOn f (左闭右无界区间 a))
-  证明: isPreconnected_Ici.intermediate_value_Iic self_mem_Ici
-    (le_principal_iff.mpr (Ici_mem_atTop a)) hf htop
-
-Depends on / 依赖: Ici_mem_atTop, intermediate_value_Iic, isPreconnected_Ici, isPreconnected_Ici.intermediate_value_Iic, le_principal_iff, le_principal_iff.mpr, self_mem_Ici
+/-
+**intermediate_value_Ici'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：intermediate_value_Ici' {a : α} {f : α -> δ} (hf : ContinuousOn f (Ici a))
+ (htop : Tendsto f atTop atBot) : Iic (f a) subseteq f '' Ici a
+参数：hf : ContinuousOn f (Ici a)；htop : Tendsto f atTop atBot。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.intermediate_value_Iic`：IsPreconnected.intermediate_value
+_Iic {s : Set X} (hs : IsPreconnected s) {a : X} {l : Filter X} (ha : a in s) [N
+eBot l] (hl : l <= 𝓟 s) {f …
+· 使用定理 `isPreconnected_Ici`：isPreconnected_Ici : IsPreconnected (Ici a)
+· 使用定理 `Set.self_mem_Ici`：∀ {α : Type u_1} [inst : Preorder α] {a : α}, a ∈ Set.
+Ici a
+· 使用定理 `SemilatticeSup.instIsDirectedOrder`：∀ {α : Type u_1} [inst : Semilattice
+Sup α], IsDirectedOrder α
+· 使用定理 `supSet_to_nonempty`：∀ (α : Type u_1) [SupSet α], Nonempty α
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.le_principal_iff`：le_principal_iff {s : Set α} {f : Filter α} : f
+ <= 𝓟 s ↔ s in f
+· 使用定理 `Filter.Ici_mem_atTop`：Ici_mem_atTop [Preorder α] (a : α) : Ici a in (atT
+op : Filter α)
 -/
-theorem intermediate_value_Ici' {a : α} {f : α -> δ} (hf : ContinuousOn f (Ici a))
-    (htop : Tendsto f atTop atBot) : Iic (f a) subseteq f '' Ici a :=
+theorem intermediate_value_Ici' {a : α} {f : α → δ} (hf : ContinuousOn f (Ici a))
+    (htop : Tendsto f atTop atBot) : Iic (f a) ⊆ f '' Ici a :=
   isPreconnected_Ici.intermediate_value_Iic self_mem_Ici
     (le_principal_iff.mpr (Ici_mem_atTop a)) hf htop
-
-/--
-theorem `intermediate_value_Iic` / 定理 `intermediate_value_Iic`
-
-English:
-theorem intermediate_value_Iic
-  statement: {a : α} {f : α -> δ} (hf : ContinuousOn f (Iic a))
-  proof: isPreconnected_Iic.intermediate_value_Iic self_mem_Iic
-    (le_principal_iff.mpr (Iic_mem_atBot a)) hf hbot
-
-中文:
-定理 intermediate_value_Iic
-  结论: {a : α} {f : α -> δ} (hf : ContinuousOn f (左无界右闭区间 a))
-  证明: isPreconnected_Iic.intermediate_value_Iic self_mem_Iic
-    (le_principal_iff.mpr (Iic_mem_atBot a)) hf hbot
-
-Depends on / 依赖: Iic_mem_atBot, intermediate_value_Iic, isPreconnected_Iic, isPreconnected_Iic.intermediate_value_Iic, le_principal_iff, le_principal_iff.mpr, self_mem_Iic
+/-
+**intermediate_value_Iic** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：intermediate_value_Iic {a : α} {f : α -> δ} (hf : ContinuousOn f (Iic a)) 
+(hbot : Tendsto f atBot atBot) : Iic (f a) subseteq f '' Iic a
+参数：hf : ContinuousOn f (Iic a)；hbot : Tendsto f atBot atBot。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.intermediate_value_Iic`：IsPreconnected.intermediate_value
+_Iic {s : Set X} (hs : IsPreconnected s) {a : X} {l : Filter X} (ha : a in s) [N
+eBot l] (hl : l <= 𝓟 s) {f …
+· 使用定理 `isPreconnected_Iic`：isPreconnected_Iic : IsPreconnected (Iic a)
+· 使用定理 `Set.self_mem_Iic`：∀ {α : Type u_1} [inst : Preorder α] {a : α}, a ∈ Set.
+Iic a
+· 使用定理 `Filter.atBot_neBot`：∀ {α : Type u_3} [inst : Preorder α] [IsCodirectedOr
+der α] [Nonempty α], Filter.atBot.NeBot
+· 使用定理 `SemilatticeInf.instIsCodirectedOrder`：∀ {α : Type u_1} [inst : Semilatti
+ceInf α], IsCodirectedOrder α
+· 使用定理 `supSet_to_nonempty`：∀ (α : Type u_1) [SupSet α], Nonempty α
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.le_principal_iff`：le_principal_iff {s : Set α} {f : Filter α} : f
+ <= 𝓟 s ↔ s in f
+· 使用定理 `Filter.Iic_mem_atBot`：∀ {α : Type u_3} [inst : Preorder α] (a : α), Set.
+Iic a ∈ Filter.atBot
 -/
-theorem intermediate_value_Iic {a : α} {f : α -> δ} (hf : ContinuousOn f (Iic a))
-    (hbot : Tendsto f atBot atBot) : Iic (f a) subseteq f '' Iic a :=
+theorem intermediate_value_Iic {a : α} {f : α → δ} (hf : ContinuousOn f (Iic a))
+    (hbot : Tendsto f atBot atBot) : Iic (f a) ⊆ f '' Iic a :=
   isPreconnected_Iic.intermediate_value_Iic self_mem_Iic
     (le_principal_iff.mpr (Iic_mem_atBot a)) hf hbot
-
-/--
-theorem `intermediate_value_Iic'` / 定理 `intermediate_value_Iic'`
-
-English:
-theorem intermediate_value_Iic'
-  statement: {a : α} {f : α -> δ} (hf : ContinuousOn f (Iic a))
-  proof: isPreconnected_Iic.intermediate_value_Ici self_mem_Iic
-    (le_principal_iff.mpr (Iic_mem_atBot a)) hf hbot
-
-中文:
-定理 intermediate_value_Iic'
-  结论: {a : α} {f : α -> δ} (hf : ContinuousOn f (左无界右闭区间 a))
-  证明: isPreconnected_Iic.intermediate_value_Ici self_mem_Iic
-    (le_principal_iff.mpr (Iic_mem_atBot a)) hf hbot
-
-Depends on / 依赖: Iic_mem_atBot, intermediate_value_Ici, isPreconnected_Iic, isPreconnected_Iic.intermediate_value_Ici, le_principal_iff, le_principal_iff.mpr, self_mem_Iic
+/-
+**intermediate_value_Iic'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：intermediate_value_Iic' {a : α} {f : α -> δ} (hf : ContinuousOn f (Iic a))
+ (hbot : Tendsto f atBot atTop) : Ici (f a) subseteq f '' Iic a
+参数：hf : ContinuousOn f (Iic a)；hbot : Tendsto f atBot atTop。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.intermediate_value_Ici`：IsPreconnected.intermediate_value
+_Ici {s : Set X} (hs : IsPreconnected s) {a : X} {l : Filter X} (ha : a in s) [N
+eBot l] (hl : l <= 𝓟 s) {f …
+· 使用定理 `isPreconnected_Iic`：isPreconnected_Iic : IsPreconnected (Iic a)
+· 使用定理 `Set.self_mem_Iic`：∀ {α : Type u_1} [inst : Preorder α] {a : α}, a ∈ Set.
+Iic a
+· 使用定理 `Filter.atBot_neBot`：∀ {α : Type u_3} [inst : Preorder α] [IsCodirectedOr
+der α] [Nonempty α], Filter.atBot.NeBot
+· 使用定理 `SemilatticeInf.instIsCodirectedOrder`：∀ {α : Type u_1} [inst : Semilatti
+ceInf α], IsCodirectedOrder α
+· 使用定理 `supSet_to_nonempty`：∀ (α : Type u_1) [SupSet α], Nonempty α
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.le_principal_iff`：le_principal_iff {s : Set α} {f : Filter α} : f
+ <= 𝓟 s ↔ s in f
+· 使用定理 `Filter.Iic_mem_atBot`：∀ {α : Type u_3} [inst : Preorder α] (a : α), Set.
+Iic a ∈ Filter.atBot
 -/
-theorem intermediate_value_Iic' {a : α} {f : α -> δ} (hf : ContinuousOn f (Iic a))
-    (hbot : Tendsto f atBot atTop) : Ici (f a) subseteq f '' Iic a :=
+theorem intermediate_value_Iic' {a : α} {f : α → δ} (hf : ContinuousOn f (Iic a))
+    (hbot : Tendsto f atBot atTop) : Ici (f a) ⊆ f '' Iic a :=
   isPreconnected_Iic.intermediate_value_Ici self_mem_Iic
     (le_principal_iff.mpr (Iic_mem_atBot a)) hf hbot
-
-/--
-theorem `intermediate_value_Ioi` / 定理 `intermediate_value_Ioi`
-
-English:
-theorem intermediate_value_Ioi
-  statement: {a : α} {f : α -> δ} (hf : ContinuousOn f (Ici a))
-  proof: by
+/-
+**intermediate_value_Ioi** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：intermediate_value_Ioi {a : α} {f : α -> δ} (hf : ContinuousOn f (Ici a)) 
+(htop : Tendsto f atTop atTop) : Ioi (f a) subseteq f '' Ioi a
+参数：hf : ContinuousOn f (Ici a)；htop : Tendsto f atTop atTop。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `intermediate_value_Ici`：intermediate_value_Ici {a : α} {f : α -> δ} (hf 
+: ContinuousOn f (Ici a)) (htop : Tendsto f atTop atTop) : Ici (f a) subseteq f 
+'' Ici a
+· 使用定理 `Set.mem_Ici_of_Ioi`：∀ {α : Type u_1} [inst : Preorder α] {a x : α}, x ∈ 
+Set.Ioi a → x ∈ Set.Ici a
+-/
+theorem intermediate_value_Ioi {a : α} {f : α → δ} (hf : ContinuousOn f (Ici a))
+    (htop : Tendsto f atTop atTop) : Ioi (f a) ⊆ f '' Ioi a := by
   intro y hy
   have := intermediate_value_Ici hf htop (mem_Ici_of_Ioi hy)
   grind
-
-中文:
-定理 intermediate_value_Ioi
-  结论: {a : α} {f : α -> δ} (hf : ContinuousOn f (左闭右无界区间 a))
-  证明: by
-  intro y hy
-  have := intermediate_value_Ici hf htop (mem_Ici_of_Ioi hy)
-  grind
-
-Depends on / 依赖: intermediate_value_Ici, mem_Ici_of_Ioi
+/-
+**intermediate_value_Ioi'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：intermediate_value_Ioi' {a : α} {f : α -> δ} (hf : ContinuousOn f (Ici a))
+ (htop : Tendsto f atTop atBot) : Iio (f a) subseteq f '' Ioi a
+参数：hf : ContinuousOn f (Ici a)；htop : Tendsto f atTop atBot。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `intermediate_value_Ici'`：intermediate_value_Ici' {a : α} {f : α -> δ} (h
+f : ContinuousOn f (Ici a)) (htop : Tendsto f atTop atBot) : Iic (f a) subseteq 
+f '' Ici a
+· 使用定理 `Set.mem_Iic_of_Iio`：∀ {α : Type u_1} [inst : Preorder α] {a x : α}, x ∈ 
+Set.Iio a → x ∈ Set.Iic a
 -/
-theorem intermediate_value_Ioi {a : α} {f : α -> δ} (hf : ContinuousOn f (Ici a))
-    (htop : Tendsto f atTop atTop) : Ioi (f a) subseteq f '' Ioi a := by
-  intro y hy
-  have := intermediate_value_Ici hf htop (mem_Ici_of_Ioi hy)
-  grind
-
-/--
-theorem `intermediate_value_Ioi'` / 定理 `intermediate_value_Ioi'`
-
-English:
-theorem intermediate_value_Ioi'
-  statement: {a : α} {f : α -> δ} (hf : ContinuousOn f (Ici a))
-  proof: by
+theorem intermediate_value_Ioi' {a : α} {f : α → δ} (hf : ContinuousOn f (Ici a))
+    (htop : Tendsto f atTop atBot) : Iio (f a) ⊆ f '' Ioi a := by
   intro y hy
   have := intermediate_value_Ici' hf htop (mem_Iic_of_Iio hy)
   grind
-
-中文:
-定理 intermediate_value_Ioi'
-  结论: {a : α} {f : α -> δ} (hf : ContinuousOn f (左闭右无界区间 a))
-  证明: by
-  intro y hy
-  have := intermediate_value_Ici' hf htop (mem_Iic_of_Iio hy)
-  grind
-
-Depends on / 依赖: intermediate_value_Ici, mem_Iic_of_Iio
+/-
+**intermediate_value_Iio** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：intermediate_value_Iio {a : α} {f : α -> δ} (hf : ContinuousOn f (Iic a)) 
+(hbot : Tendsto f atBot atBot) : Iio (f a) subseteq f '' Iio a
+参数：hf : ContinuousOn f (Iic a)；hbot : Tendsto f atBot atBot。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `intermediate_value_Iic`：intermediate_value_Iic {a : α} {f : α -> δ} (hf 
+: ContinuousOn f (Iic a)) (hbot : Tendsto f atBot atBot) : Iic (f a) subseteq f 
+'' Iic a
+· 使用定理 `Set.mem_Iic_of_Iio`：∀ {α : Type u_1} [inst : Preorder α] {a x : α}, x ∈ 
+Set.Iio a → x ∈ Set.Iic a
 -/
-theorem intermediate_value_Ioi' {a : α} {f : α -> δ} (hf : ContinuousOn f (Ici a))
-    (htop : Tendsto f atTop atBot) : Iio (f a) subseteq f '' Ioi a := by
-  intro y hy
-  have := intermediate_value_Ici' hf htop (mem_Iic_of_Iio hy)
-  grind
-
-/--
-theorem `intermediate_value_Iio` / 定理 `intermediate_value_Iio`
-
-English:
-theorem intermediate_value_Iio
-  statement: {a : α} {f : α -> δ} (hf : ContinuousOn f (Iic a))
-  proof: by
+theorem intermediate_value_Iio {a : α} {f : α → δ} (hf : ContinuousOn f (Iic a))
+    (hbot : Tendsto f atBot atBot) : Iio (f a) ⊆ f '' Iio a := by
   intro y hy
   have := intermediate_value_Iic hf hbot (mem_Iic_of_Iio hy)
   grind
-
-中文:
-定理 intermediate_value_Iio
-  结论: {a : α} {f : α -> δ} (hf : ContinuousOn f (左无界右闭区间 a))
-  证明: by
-  intro y hy
-  have := intermediate_value_Iic hf hbot (mem_Iic_of_Iio hy)
-  grind
-
-Depends on / 依赖: intermediate_value_Iic, mem_Iic_of_Iio
+/-
+**intermediate_value_Iio'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：intermediate_value_Iio' {a : α} {f : α -> δ} (hf : ContinuousOn f (Iic a))
+ (hbot : Tendsto f atBot atTop) : Ioi (f a) subseteq f '' Iio a
+参数：hf : ContinuousOn f (Iic a)；hbot : Tendsto f atBot atTop。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `intermediate_value_Iic'`：intermediate_value_Iic' {a : α} {f : α -> δ} (h
+f : ContinuousOn f (Iic a)) (hbot : Tendsto f atBot atTop) : Ici (f a) subseteq 
+f '' Iic a
+· 使用定理 `Set.mem_Ici_of_Ioi`：∀ {α : Type u_1} [inst : Preorder α] {a x : α}, x ∈ 
+Set.Ioi a → x ∈ Set.Ici a
 -/
-theorem intermediate_value_Iio {a : α} {f : α -> δ} (hf : ContinuousOn f (Iic a))
-    (hbot : Tendsto f atBot atBot) : Iio (f a) subseteq f '' Iio a := by
-  intro y hy
-  have := intermediate_value_Iic hf hbot (mem_Iic_of_Iio hy)
-  grind
-
-/--
-theorem `intermediate_value_Iio'` / 定理 `intermediate_value_Iio'`
-
-English:
-theorem intermediate_value_Iio'
-  statement: {a : α} {f : α -> δ} (hf : ContinuousOn f (Iic a))
-  proof: by
+theorem intermediate_value_Iio' {a : α} {f : α → δ} (hf : ContinuousOn f (Iic a))
+    (hbot : Tendsto f atBot atTop) : Ioi (f a) ⊆ f '' Iio a := by
   intro y hy
   have := intermediate_value_Iic' hf hbot (mem_Ici_of_Ioi hy)
   grind
 
-中文:
-定理 intermediate_value_Iio'
-  结论: {a : α} {f : α -> δ} (hf : ContinuousOn f (左无界右闭区间 a))
-  证明: by
-  intro y hy
-  have := intermediate_value_Iic' hf hbot (mem_Ici_of_Ioi hy)
-  grind
+/-- **Intermediate value theorem**: if `f` is continuous on an order-connected set `s` and `a`,
+`b` are two points of this set, then `f` sends `s` to a superset of `Icc (f a) (f b)`. -/
+/-
+**ContinuousOn.surjOn_Icc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.surjOn_Icc {s : Set α} [hs : OrdConnected s] {f : α -> δ} (hf
+ : ContinuousOn f s) {a b : α} (ha : a in s) (hb : b in s) : SurjOn f s (Icc (f 
+a) (f b))
+参数：hf : ContinuousOn f s；ha : a in s；hb : b in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.intermediate_value`：IsPreconnected.intermediate_value {s 
+: Set X} (hs : IsPreconnected s) {a b : X} (ha : a in s) (hb : b in s) {f : X ->
+ α} (hf : ContinuousOn …
+· 使用定理 `Set.OrdConnected.isPreconnected`：Set.OrdConnected.isPreconnected {s : Se
+t α} (h : s.OrdConnected) : IsPreconnected s
 
-Depends on / 依赖: intermediate_value_Iic, mem_Ici_of_Ioi
+--- 原说明 ---
+**Intermediate value theorem**: if `f` is continuous on an order-connected set `
+s` and `a`,
+`b` are two points of this set, then `f` sends `s` to a superset of `Icc (f a) (
+f b)`.
 -/
-theorem intermediate_value_Iio' {a : α} {f : α -> δ} (hf : ContinuousOn f (Iic a))
-    (hbot : Tendsto f atBot atTop) : Ioi (f a) subseteq f '' Iio a := by
-  intro y hy
-  have := intermediate_value_Iic' hf hbot (mem_Ici_of_Ioi hy)
-  grind
-
-/--
-theorem `ContinuousOn.surjOn_Icc` / 定理 `ContinuousOn.surjOn_Icc`
-
-English:
-theorem ContinuousOn.surjOn_Icc
-  statement: {s : Set α} [hs : OrdConnected s] {f : α -> δ}
-  proof: hs.isPreconnected.intermediate_value ha hb hf
-
-中文:
-定理 ContinuousOn.surjOn_Icc
-  结论: {s : 集合 α} [hs : 序连通 s] {f : α -> δ}
-  证明: hs.isPreconnected.intermediate_value ha hb hf
-
-Depends on / 依赖: hs.isPreconnected.intermediate_value, intermediate_value, isPreconnected
--/
-theorem ContinuousOn.surjOn_Icc {s : Set α} [hs : OrdConnected s] {f : α -> δ}
-    (hf : ContinuousOn f s) {a b : α} (ha : a in s) (hb : b in s) : SurjOn f s (Icc (f a) (f b)) :=
+theorem ContinuousOn.surjOn_Icc {s : Set α} [hs : OrdConnected s] {f : α → δ}
+    (hf : ContinuousOn f s) {a b : α} (ha : a ∈ s) (hb : b ∈ s) : SurjOn f s (Icc (f a) (f b)) :=
   hs.isPreconnected.intermediate_value ha hb hf
 
-/--
-theorem `ContinuousOn.surjOn_uIcc` / 定理 `ContinuousOn.surjOn_uIcc`
+/-- **Intermediate value theorem**: if `f` is continuous on an order-connected set `s` and `a`,
+`b` are two points of this set, then `f` sends `s` to a superset of `[f a, f b]`. -/
+/-
+**ContinuousOn.surjOn_uIcc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.surjOn_uIcc {s : Set α} [hs : OrdConnected s] {f : α -> δ} (h
+f : ContinuousOn f s) {a b : α} (ha : a in s) (hb : b in s) : SurjOn f s (uIcc (
+f a) (f b))
+参数：hf : ContinuousOn f s；ha : a in s；hb : b in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Set.uIcc_of_le`：uIcc_of_le (h : a <= b) : [[a, b]] = Icc a b
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `ContinuousOn.surjOn_Icc`：ContinuousOn.surjOn_Icc {s : Set α} [hs : OrdCo
+nnected s] {f : α -> δ} (hf : ContinuousOn f s) {a b : α} (ha : a in s) (hb : b 
+in s) : SurjO…
+· 使用引理 `Set.uIcc_of_ge`：uIcc_of_ge (h : b <= a) : [[a, b]] = Icc b a
 
-English:
-theorem ContinuousOn.surjOn_uIcc
-  statement: {s : Set α} [hs : OrdConnected s] {f : α -> δ}
-  proof: by
-  rcases le_total (f a) (f b) with hab | hab <;> simp [hf.surjOn_Icc, *]
-
-中文:
-定理 ContinuousOn.surjOn_uIcc
-  结论: {s : 集合 α} [hs : 序连通 s] {f : α -> δ}
-  证明: by
-  rcases le_total (f a) (f b) with hab | hab <;> simp [hf.surjOn_Icc, *]
-
-Depends on / 依赖: hf.surjOn_Icc, le_total, surjOn_Icc
+--- 原说明 ---
+**Intermediate value theorem**: if `f` is continuous on an order-connected set `
+s` and `a`,
+`b` are two points of this set, then `f` sends `s` to a superset of `[f a, f b]`
+.
 -/
-theorem ContinuousOn.surjOn_uIcc {s : Set α} [hs : OrdConnected s] {f : α -> δ}
-    (hf : ContinuousOn f s) {a b : α} (ha : a in s) (hb : b in s) :
+theorem ContinuousOn.surjOn_uIcc {s : Set α} [hs : OrdConnected s] {f : α → δ}
+    (hf : ContinuousOn f s) {a b : α} (ha : a ∈ s) (hb : b ∈ s) :
     SurjOn f s (uIcc (f a) (f b)) := by
   rcases le_total (f a) (f b) with hab | hab <;> simp [hf.surjOn_Icc, *]
 
-/--
-theorem `Continuous.surjective` / 定理 `Continuous.surjective`
+/-- A continuous function which tends to `Filter.atTop` along `Filter.atTop` and to `Filter.atBot`
+along `Filter.atBot` is surjective. -/
+/-
+**Continuous.surjective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.surjective {f : α -> δ} (hf : Continuous f) (h_top : Tendsto f 
+atTop atTop) (h_bot : Tendsto f atBot atBot) : Function.Surjective f
+参数：hf : Continuous f；h_top : Tendsto f atTop atTop；h_bot : Tendsto f atBot atBot
+。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mem_range_of_exists_le_of_exists_ge`：mem_range_of_exists_le_of_exists_ge
+ [PreconnectedSpace X] {c : α} {f : X -> α} (hf : Continuous f) (h₁ : exists a, 
+f a <= c) (h₂ : exists b,…
+· 使用定理 `ordered_connected_space`：∀ {α : Type u} [inst : TopologicalSpace α] [ins
+t_1 : ConditionallyCompleteLinearOrder α] [OrderTopology α]   [DenselyOrdered α]
+, Preconnecte…
+· 使用定理 `Filter.Eventually.exists`：∀ {α : Type u} {p : α → Prop} {f : Filter α} [
+f.NeBot], (∀ᶠ (x : α) in f, p x) → ∃ x, p x
+· 使用定理 `Filter.atBot_neBot`：∀ {α : Type u_3} [inst : Preorder α] [IsCodirectedOr
+der α] [Nonempty α], Filter.atBot.NeBot
+· 使用定理 `SemilatticeInf.instIsCodirectedOrder`：∀ {α : Type u_1} [inst : Semilatti
+ceInf α], IsCodirectedOrder α
+· 使用定理 `supSet_to_nonempty`：∀ (α : Type u_1) [SupSet α], Nonempty α
+· 使用定理 `Filter.Tendsto.eventually`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {
+l₁ : Filter α} {l₂ : Filter β} {p : β → Prop},   Filter.Tendsto f l₁ l₂ → (∀ᶠ (y
+ : β) in l₂, p …
+· 使用定理 `Filter.eventually_le_atBot`：∀ {α : Type u_3} [inst : Preorder α] (a : α)
+, ∀ᶠ (x : α) in Filter.atBot, x ≤ a
+· 使用定理 `SemilatticeSup.instIsDirectedOrder`：∀ {α : Type u_1} [inst : Semilattice
+Sup α], IsDirectedOrder α
+· 使用定理 `Filter.eventually_ge_atTop`：eventually_ge_atTop [Preorder α] (a : α) : f
+orallᶠ x in atTop, a <= x
 
-English:
-theorem Continuous.surjective
-  statement: {f : α -> δ} (hf : Continuous f) (h_top : Tendsto f atTop atTop)
-  proof: fun p =>
-  mem_range_of_exists_le_of_exists_ge hf (h_bot.eventually (eventually_le_atBot p)).exists
-    (h_top.eventually (eventually_ge_atTop p)).exists
-
-中文:
-定理 连续.surjective
-  结论: {f : α -> δ} (hf : 连续 f) (h_top : 收敛 f atTop atTop)
-  证明: fun p =>
-  mem_range_of_exists_le_of_exists_ge hf (h_bot.eventually (eventually_le_atBot p)).exists
-    (h_top.eventually (eventually_ge_atTop p)).exists
+--- 原说明 ---
+A continuous function which tends to `Filter.atTop` along `Filter.atTop` and to 
+`Filter.atBot`
+along `Filter.atBot` is surjective.
 -/
-theorem Continuous.surjective {f : α -> δ} (hf : Continuous f) (h_top : Tendsto f atTop atTop)
+theorem Continuous.surjective {f : α → δ} (hf : Continuous f) (h_top : Tendsto f atTop atTop)
     (h_bot : Tendsto f atBot atBot) : Function.Surjective f := fun p =>
   mem_range_of_exists_le_of_exists_ge hf (h_bot.eventually (eventually_le_atBot p)).exists
     (h_top.eventually (eventually_ge_atTop p)).exists
 
-/--
-theorem `Continuous.surjective'` / 定理 `Continuous.surjective'`
+/-- A continuous function which tends to `Filter.atBot` along `Filter.atTop` and to `Filter.atTop`
+along `Filter.atBot` is surjective. -/
+/-
+**Continuous.surjective'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.surjective' {f : α -> δ} (hf : Continuous f) (h_top : Tendsto f
+ atBot atTop) (h_bot : Tendsto f atTop atBot) : Function.Surjective f
+参数：hf : Continuous f；h_top : Tendsto f atBot atTop；h_bot : Tendsto f atTop atBot
+。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.surjective`：Continuous.surjective {f : α -> δ} (hf : Continuo
+us f) (h_top : Tendsto f atTop atTop) (h_bot : Tendsto f atBot atBot) : Function
+.Surjective…
+· 使用定理 `instOrderTopologyOrderDual`：∀ {α : Type u} [ts : TopologicalSpace α] [in
+st : Preorder α] [t : OrderTopology α], OrderTopology αᵒᵈ
 
-English:
-theorem Continuous.surjective'
-  statement: {f : α -> δ} (hf : Continuous f) (h_top : Tendsto f atBot atTop)
-  proof: Continuous.surjective (α := αᵒᵈ) hf h_top h_bot
-
-中文:
-定理 连续.surjective'
-  结论: {f : α -> δ} (hf : 连续 f) (h_top : 收敛 f atBot atTop)
-  证明: Continuous.surjective (α := αᵒᵈ) hf h_top h_bot
-
-Depends on / 依赖: Continuous, Continuous.surjective, h_bot, h_top, surjective
+--- 原说明 ---
+A continuous function which tends to `Filter.atBot` along `Filter.atTop` and to 
+`Filter.atTop`
+along `Filter.atBot` is surjective.
 -/
-theorem Continuous.surjective' {f : α -> δ} (hf : Continuous f) (h_top : Tendsto f atBot atTop)
+theorem Continuous.surjective' {f : α → δ} (hf : Continuous f) (h_top : Tendsto f atBot atTop)
     (h_bot : Tendsto f atTop atBot) : Function.Surjective f :=
   Continuous.surjective (α := αᵒᵈ) hf h_top h_bot
 
-/--
-theorem `ContinuousOn.surjOn_of_tendsto` / 定理 `ContinuousOn.surjOn_of_tendsto`
+/-- If a function `f : α → β` is continuous on a nonempty interval `s`, its restriction to `s`
+tends to `Filter.atBot : Filter β` along `Filter.atBot : Filter ↥s` and tends to
+`Filter.atTop : Filter β` along `Filter.atTop : Filter ↥s`, then the restriction of `f` to `s` is
+surjective. We formulate the conclusion as `Function.surjOn f s Set.univ`. -/
+/-
+**ContinuousOn.surjOn_of_tendsto** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.surjOn_of_tendsto {f : α -> δ} {s : Set α} [OrdConnected s] (
+hs : s.Nonempty) (hf : ContinuousOn f s) (hbot : Tendsto (fun x : s => f x) atBo
+t atBot) (htop : Tendsto (fun x : s => f x) atTop atTop) : SurjOn f s univ
+参数：hs : s.Nonempty；hf : ContinuousOn f s；hbot : Tendsto (fun x : s => f x) atBot
+ atBot；htop : Tendsto (fun x : s => f x) atTop atTop。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.surjOn_iff_surjective`：surjOn_iff_surjective : SurjOn f s univ ↔ Sur
+jective (s.domRestrict f)
+· 使用定理 `Continuous.surjective`：Continuous.surjective {f : α -> δ} (hf : Continuo
+us f) (h_top : Tendsto f atTop atTop) (h_bot : Tendsto f atBot atBot) : Function
+.Surjective…
+· 使用定理 `Set.Nonempty.to_subtype`：∀ {α : Type u} {s : Set α}, s.Nonempty → Nonemp
+ty ↑s
+· 使用定理 `ContinuousOn.domRestrict`：∀ {α : Type u_1} {β : Type u_2} [inst : Topolo
+gicalSpace α] [inst_1 : TopologicalSpace β] {f : α → β} {s : Set α},   Continuou
+sOn f s → Cont…
 
-English:
-theorem ContinuousOn.surjOn_of_tendsto
-  statement: {f : α -> δ} {s : Set α} [OrdConnected s] (hs : s.Nonempty)
-  proof: haveI := Classical.inhabited_of_nonempty hs.to_subtype
-surjOn_iff_surjective.2 hf.domRestrict.surjective htop hbot
-
-中文:
-定理 ContinuousOn.surjOn_of_tendsto
-  结论: {f : α -> δ} {s : 集合 α} [序连通 s] (hs : s.非空)
-  证明: haveI := Classical.inhabited_of_nonempty hs.to_subtype
-surjOn_iff_surjective.2 hf.domRestrict.surjective htop hbot
-
-Depends on / 依赖: Classical, Classical.inhabited_of_nonempty, domRestrict, hf.domRestrict.surjective, hs.to_subtype, inhabited_of_nonempty, surjOn_iff_surjective, surjective, to_subtype
+--- 原说明 ---
+If a function `f : α → β` is continuous on a nonempty interval `s`, its restrict
+ion to `s`
+tends to `Filter.atBot : Filter β` along `Filter.atBot : Filter ↥s` and tends to
+`Filter.atTop : Filter β` along `Filter.atTop : Filter ↥s`, then the restriction
+ of `f` to `s` is
+surjective. We formulate the conclusion as `Function.surjOn f s Set.univ`.
 -/
-theorem ContinuousOn.surjOn_of_tendsto {f : α -> δ} {s : Set α} [OrdConnected s] (hs : s.Nonempty)
+theorem ContinuousOn.surjOn_of_tendsto {f : α → δ} {s : Set α} [OrdConnected s] (hs : s.Nonempty)
     (hf : ContinuousOn f s) (hbot : Tendsto (fun x : s => f x) atBot atBot)
     (htop : Tendsto (fun x : s => f x) atTop atTop) : SurjOn f s univ :=
   haveI := Classical.inhabited_of_nonempty hs.to_subtype
-surjOn_iff_surjective.2 hf.domRestrict.surjective htop hbot
+  surjOn_iff_surjective.2 <| hf.domRestrict.surjective htop hbot
 
-/--
-theorem `ContinuousOn.surjOn_of_tendsto'` / 定理 `ContinuousOn.surjOn_of_tendsto'`
+/-- If a function `f : α → β` is continuous on a nonempty interval `s`, its restriction to `s`
+tends to `Filter.atTop : Filter β` along `Filter.atBot : Filter ↥s` and tends to
+`Filter.atBot : Filter β` along `Filter.atTop : Filter ↥s`, then the restriction of `f` to `s` is
+surjective. We formulate the conclusion as `Function.surjOn f s Set.univ`. -/
+/-
+**ContinuousOn.surjOn_of_tendsto'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.surjOn_of_tendsto' {f : α -> δ} {s : Set α} [OrdConnected s] 
+(hs : s.Nonempty) (hf : ContinuousOn f s) (hbot : Tendsto (fun x : s => f x) atB
+ot atTop) (htop : Tendsto (fun x : s => f x) atTop atBot) : SurjOn f s univ
+参数：hs : s.Nonempty；hf : ContinuousOn f s；hbot : Tendsto (fun x : s => f x) atBot
+ atTop；htop : Tendsto (fun x : s => f x) atTop atBot。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousOn.surjOn_of_tendsto`：ContinuousOn.surjOn_of_tendsto {f : α ->
+ δ} {s : Set α} [OrdConnected s] (hs : s.Nonempty) (hf : ContinuousOn f s) (hbot
+ : Tendsto (fun x : …
+· 使用定理 `instOrderClosedTopologyOrderDual`：∀ {α : Type u} [inst : TopologicalSpac
+e α] [inst_1 : Preorder α] [t : OrderClosedTopology α], OrderClosedTopology αᵒᵈ
 
-English:
-theorem ContinuousOn.surjOn_of_tendsto'
-  statement: {f : α -> δ} {s : Set α} [OrdConnected s] (hs : s.Nonempty)
-  proof: ContinuousOn.surjOn_of_tendsto (δ := δᵒᵈ) hs hf hbot htop
-
-中文:
-定理 ContinuousOn.surjOn_of_tendsto'
-  结论: {f : α -> δ} {s : 集合 α} [序连通 s] (hs : s.非空)
-  证明: ContinuousOn.surjOn_of_tendsto (δ := δᵒᵈ) hs hf hbot htop
-
-Depends on / 依赖: ContinuousOn, ContinuousOn.surjOn_of_tendsto, surjOn_of_tendsto
+--- 原说明 ---
+If a function `f : α → β` is continuous on a nonempty interval `s`, its restrict
+ion to `s`
+tends to `Filter.atTop : Filter β` along `Filter.atBot : Filter ↥s` and tends to
+`Filter.atBot : Filter β` along `Filter.atTop : Filter ↥s`, then the restriction
+ of `f` to `s` is
+surjective. We formulate the conclusion as `Function.surjOn f s Set.univ`.
 -/
-theorem ContinuousOn.surjOn_of_tendsto' {f : α -> δ} {s : Set α} [OrdConnected s] (hs : s.Nonempty)
+theorem ContinuousOn.surjOn_of_tendsto' {f : α → δ} {s : Set α} [OrdConnected s] (hs : s.Nonempty)
     (hf : ContinuousOn f s) (hbot : Tendsto (fun x : s => f x) atBot atTop)
     (htop : Tendsto (fun x : s => f x) atTop atBot) : SurjOn f s univ :=
   ContinuousOn.surjOn_of_tendsto (δ := δᵒᵈ) hs hf hbot htop
 
-
-/--
-theorem `Continuous.strictMono_of_inj_boundedOrder` / 定理 `Continuous.strictMono_of_inj_boundedOrder`
-
-English:
-theorem Continuous.strictMono_of_inj_boundedOrder
-  statement: [BoundedOrder α] {f : α -> δ}
-  proof: by
-  intro a b hab
-  by_contra! h
-have H : f b < f a := lt_of_le_of_ne h hf_i.ne hab.ne'
-  by_cases! ha : f a <= f ⊥
-  · obtain ⟨u, hu⟩ := intermediate_value_Ioc le_top hf_c.continuousOn ⟨H.trans_le ha, hf⟩
-    have : u = ⊥ := hf_i hu.2
-    simp_all
-  · by_cases! hb : f ⊥ < f b
-    · obtain ⟨u, hu⟩ := intermediate_value_Ioo bot_le hf_c.continuousOn ⟨hb, H⟩
-      rw [hf_i hu.2] at hu
-      exact (hab.trans hu.1.2).false
-· replace hb : f b < f ⊥ := lt_of_le_of_ne hb hf_i.ne (lt_of_lt_of_le' hab bot_le).ne'
-      obtain ⟨u, hu⟩ := intermediate_value_Ioo' hab.le hf_c.continuousOn ⟨hb, ha⟩
-      have : u = ⊥ := hf_i hu.2
-      simp_all
-
-中文:
-定理 连续.strictMono_of_inj_boundedOrder
-  结论: [有界序 α] {f : α -> δ}
-  证明: by
-  intro a b hab
-  by_contra! h
-have H : f b < f a := lt_of_le_of_ne h hf_i.ne hab.ne'
-  by_cases! ha : f a <= f ⊥
-  · obtain ⟨u, hu⟩ := intermediate_value_Ioc le_top hf_c.continuousOn ⟨H.trans_le ha, hf⟩
-    have : u = ⊥ := hf_i hu.2
-    simp_all
-  · by_cases! hb : f ⊥ < f b
-    · obtain ⟨u, hu⟩ := intermediate_value_Ioo bot_le hf_c.continuousOn ⟨hb, H⟩
-      rw [hf_i hu.2] at hu
-      exact (hab.trans hu.1.2).false
-· replace hb : f b < f ⊥ := lt_of_le_of_ne hb hf_i.ne (lt_of_lt_of_le' hab bot_le).ne'
-      obtain ⟨u, hu⟩ := intermediate_value_Ioo' hab.le hf_c.continuousOn ⟨hb, ha⟩
-      have : u = ⊥ := hf_i hu.2
-      simp_all
-
-Depends on / 依赖: H.trans_le, bot_le, continuousOn, hab.ne, hab.trans, hf_c, hf_c.continuousOn, hf_i, hf_i.ne, interm, intermediate_value_Ioc, intermediate_value_Ioo, le_top, lt_of_le_of_ne, lt_of_lt_of_le, replace, trans_le
+/-!
+### Monotonicity of injective continuous functions
 -/
-theorem Continuous.strictMono_of_inj_boundedOrder [BoundedOrder α] {f : α -> δ}
-    (hf_c : Continuous f) (hf : f ⊥ <= f ⊤) (hf_i : Injective f) : StrictMono f := by
+
+/-
+**Continuous.strictMono_of_inj_boundedOrder** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.strictMono_of_inj_boundedOrder [BoundedOrder α] {f : α -> δ} (h
+f_c : Continuous f) (hf : f ⊥ <= f ⊤) (hf_i : Injective f) : StrictMono f
+参数：hf_c : Continuous f；hf : f ⊥ <= f ⊤；hf_i : Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用引理 `lt_of_le_of_ne`：lt_of_le_of_ne : a <= b -> a != b -> a < b
+· 使用定理 `Function.Injective.ne`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, Func
+tion.Injective f → ∀ {a₁ a₂ : α}, a₁ ≠ a₂ → f a₁ ≠ f a₂
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `intermediate_value_Ioc`：intermediate_value_Ioc {a b : α} (hab : a <= b) 
+{f : α -> δ} (hf : ContinuousOn f (Icc a b)) : Ioc (f a) (f b) subseteq f '' Ioc
+ a b
+· 使用定理 `le_top`：le_top : a <= ⊤
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.Ioc_top`：Ioc_top : Ioc a ⊤ = Ioi a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `intermediate_value_Ioo`：intermediate_value_Ioo {a b : α} (hab : a <= b) 
+{f : α -> δ} (hf : ContinuousOn f (Icc a b)) : Ioo (f a) (f b) subseteq f '' Ioo
+ a b
+· 使用定理 `bot_le`：∀ {α : Type u} [inst : LE α] [inst_1 : OrderBot α] {a : α}, ⊥ ≤ 
+a
+· 使用定理 `LT.lt.false`：∀ {α : Type u_2} [inst : Preorder α] {a : α}, a < a → False
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `lt_of_lt_of_le'`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, b < a
+ → c ≤ b → c < a
+· 使用定理 `intermediate_value_Ioo'`：intermediate_value_Ioo' {a b : α} (hab : a <= b
+) {f : α -> δ} (hf : ContinuousOn f (Icc a b)) : Ioo (f b) (f a) subseteq f '' I
+oo a b
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+
+--- 原说明 ---
+### Monotonicity of injective continuous functions
+-/
+theorem Continuous.strictMono_of_inj_boundedOrder [BoundedOrder α] {f : α → δ}
+    (hf_c : Continuous f) (hf : f ⊥ ≤ f ⊤) (hf_i : Injective f) : StrictMono f := by
   intro a b hab
   by_contra! h
-have H : f b < f a := lt_of_le_of_ne h hf_i.ne hab.ne'
-  by_cases! ha : f a <= f ⊥
+  have H : f b < f a := lt_of_le_of_ne h <| hf_i.ne hab.ne'
+  by_cases! ha : f a ≤ f ⊥
   · obtain ⟨u, hu⟩ := intermediate_value_Ioc le_top hf_c.continuousOn ⟨H.trans_le ha, hf⟩
     have : u = ⊥ := hf_i hu.2
     simp_all
@@ -2505,296 +2664,328 @@ have H : f b < f a := lt_of_le_of_ne h hf_i.ne hab.ne'
     · obtain ⟨u, hu⟩ := intermediate_value_Ioo bot_le hf_c.continuousOn ⟨hb, H⟩
       rw [hf_i hu.2] at hu
       exact (hab.trans hu.1.2).false
-· replace hb : f b < f ⊥ := lt_of_le_of_ne hb hf_i.ne (lt_of_lt_of_le' hab bot_le).ne'
+    · replace hb : f b < f ⊥ := lt_of_le_of_ne hb <| hf_i.ne (lt_of_lt_of_le' hab bot_le).ne'
       obtain ⟨u, hu⟩ := intermediate_value_Ioo' hab.le hf_c.continuousOn ⟨hb, ha⟩
       have : u = ⊥ := hf_i hu.2
       simp_all
-
-/--
-theorem `Continuous.strictAnti_of_inj_boundedOrder` / 定理 `Continuous.strictAnti_of_inj_boundedOrder`
-
-English:
-theorem Continuous.strictAnti_of_inj_boundedOrder
-  statement: [BoundedOrder α] {f : α -> δ}
-  proof: hf_c.strictMono_of_inj_boundedOrder (δ := δᵒᵈ) hf hf_i
-
-中文:
-定理 连续.strictAnti_of_inj_boundedOrder
-  结论: [有界序 α] {f : α -> δ}
-  证明: hf_c.strictMono_of_inj_boundedOrder (δ := δᵒᵈ) hf hf_i
-
-Depends on / 依赖: hf_c, hf_c.strictMono_of_inj_boundedOrder, hf_i, strictMono_of_inj_boundedOrder
+/-
+**Continuous.strictAnti_of_inj_boundedOrder** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.strictAnti_of_inj_boundedOrder [BoundedOrder α] {f : α -> δ} (h
+f_c : Continuous f) (hf : f ⊤ <= f ⊥) (hf_i : Injective f) : StrictAnti f
+参数：hf_c : Continuous f；hf : f ⊤ <= f ⊥；hf_i : Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.strictMono_of_inj_boundedOrder`：Continuous.strictMono_of_inj_
+boundedOrder [BoundedOrder α] {f : α -> δ} (hf_c : Continuous f) (hf : f ⊥ <= f 
+⊤) (hf_i : Injective f) : Stric…
+· 使用定理 `instOrderClosedTopologyOrderDual`：∀ {α : Type u} [inst : TopologicalSpac
+e α] [inst_1 : Preorder α] [t : OrderClosedTopology α], OrderClosedTopology αᵒᵈ
 -/
-theorem Continuous.strictAnti_of_inj_boundedOrder [BoundedOrder α] {f : α -> δ}
-    (hf_c : Continuous f) (hf : f ⊤ <= f ⊥) (hf_i : Injective f) : StrictAnti f :=
+theorem Continuous.strictAnti_of_inj_boundedOrder [BoundedOrder α] {f : α → δ}
+    (hf_c : Continuous f) (hf : f ⊤ ≤ f ⊥) (hf_i : Injective f) : StrictAnti f :=
   hf_c.strictMono_of_inj_boundedOrder (δ := δᵒᵈ) hf hf_i
-
-/--
-theorem `Continuous.strictMono_of_inj_boundedOrder'` / 定理 `Continuous.strictMono_of_inj_boundedOrder'`
-
-English:
-theorem Continuous.strictMono_of_inj_boundedOrder'
-  statement: [BoundedOrder α] {f : α -> δ}
-  proof: (le_total (f ⊥) (f ⊤)).imp
-    (hf_c.strictMono_of_inj_boundedOrder · hf_i)
-    (hf_c.strictAnti_of_inj_boundedOrder · hf_i)
-
-中文:
-定理 连续.strictMono_of_inj_boundedOrder'
-  结论: [有界序 α] {f : α -> δ}
-  证明: (le_total (f ⊥) (f ⊤)).imp
-    (hf_c.strictMono_of_inj_boundedOrder · hf_i)
-    (hf_c.strictAnti_of_inj_boundedOrder · hf_i)
-
-Depends on / 依赖: hf_c, hf_c.strictAnti_of_inj_boundedOrder, hf_c.strictMono_of_inj_boundedOrder, hf_i, le_total, strictAnti_of_inj_boundedOrder, strictMono_of_inj_boundedOrder
+/-
+**Continuous.strictMono_of_inj_boundedOrder'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.strictMono_of_inj_boundedOrder' [BoundedOrder α] {f : α -> δ} (
+hf_c : Continuous f) (hf_i : Injective f) : StrictMono f ∨ StrictAnti f
+参数：hf_c : Continuous f；hf_i : Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用定理 `Continuous.strictMono_of_inj_boundedOrder`：Continuous.strictMono_of_inj_
+boundedOrder [BoundedOrder α] {f : α -> δ} (hf_c : Continuous f) (hf : f ⊥ <= f 
+⊤) (hf_i : Injective f) : Stric…
+· 使用定理 `Continuous.strictAnti_of_inj_boundedOrder`：Continuous.strictAnti_of_inj_
+boundedOrder [BoundedOrder α] {f : α -> δ} (hf_c : Continuous f) (hf : f ⊤ <= f 
+⊥) (hf_i : Injective f) : Stric…
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
 -/
-theorem Continuous.strictMono_of_inj_boundedOrder' [BoundedOrder α] {f : α -> δ}
+theorem Continuous.strictMono_of_inj_boundedOrder' [BoundedOrder α] {f : α → δ}
     (hf_c : Continuous f) (hf_i : Injective f) : StrictMono f ∨ StrictAnti f :=
   (le_total (f ⊥) (f ⊤)).imp
     (hf_c.strictMono_of_inj_boundedOrder · hf_i)
     (hf_c.strictAnti_of_inj_boundedOrder · hf_i)
 
-/--
-theorem `Continuous.strictMonoOn_of_inj_rigidity` / 定理 `Continuous.strictMonoOn_of_inj_rigidity`
+/-- Suppose `α` is equipped with a conditionally complete linear dense order and `f : α → δ` is
+continuous and injective. Then `f` is strictly monotone (increasing) if
+it is strictly monotone (increasing) on some closed interval `[a, b]`. -/
+/-
+**Continuous.strictMonoOn_of_inj_rigidity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.strictMonoOn_of_inj_rigidity {f : α -> δ} (hf_c : Continuous f)
+ (hf_i : Injective f) {a b : α} (hab : a < b) (hf_mono : StrictMonoOn f (Icc a b
+)) : StrictMono f
+参数：hf_c : Continuous f；hf_i : Injective f；hab : a < b；hf_mono : StrictMonoOn f (
+Icc a b)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `min_le_left`：min_le_left (a b : α) : min a b <= a
+· 使用定理 `le_max_left`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ max 
+a b
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `LE.le.trans'`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, b ≤ a → 
+c ≤ b → c ≤ a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Continuous.strictMono_of_inj_boundedOrder'`：Continuous.strictMono_of_inj
+_boundedOrder' [BoundedOrder α] {f : α -> δ} (hf_c : Continuous f) (hf_i : Injec
+tive f) : StrictMono f ∨ StrictA…
+· 使用定理 `ContinuousOn.domRestrict`：∀ {α : Type u_1} {β : Type u_2} [inst : Topolo
+gicalSpace α] [inst_1 : TopologicalSpace β] {f : α → β} {s : Set α},   Continuou
+sOn f s → Cont…
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
+· 使用定理 `Set.InjOn.injective`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α 
+→ β}, Set.InjOn f s → Function.Injective (s.domRestrict f)
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `strictMono_domRestrict`：strictMono_domRestrict : StrictMono (s.domRestri
+ct f) ↔ StrictMonoOn f s
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.strictAntiOn_iff_strictAnti`：strictAntiOn_iff_strictAnti : StrictAnt
+iOn f s ↔ StrictAnti fun a : s => f a
+· 使用定理 `Set.Icc_subset_Icc`：Icc_subset_Icc (ha : a₂ <= a₁) (hb : b₁ <= b₂) : Icc
+ a₁ b₁ subseteq Icc a₂ b₂
+· 使用定理 `StrictAntiOn.mono`：∀ {α : Type u_1} {β : Type u_2} {s s₂ : Set α} {f : α
+ → β} [inst : Preorder α] [inst_1 : Preorder β],   StrictAntiOn f s → s₂ ⊆ s → S
+trictAn…
+· 使用引理 `IsAntichain.of_strictMonoOn_antitoneOn`：IsAntichain.of_strictMonoOn_anti
+toneOn (hf : StrictMonoOn f s) (hf' : AntitoneOn f s) : IsAntichain (· <= ·) s
+· 使用定理 `StrictAntiOn.antitoneOn`：∀ {α : Type u} {β : Type v} [inst : PartialOrde
+r α] [inst_1 : Preorder β] {f : α → β} {s : Set α},   StrictAntiOn f s → Antiton
+eOn f s
+· 使用定理 `IsAntichain.not_lt`：IsAntichain.not_lt (hs : IsAntichain (· <= ·) s) (ha
+ : a in s) (hb : b in s) : ¬a < b
+· 使用定理 `Set.left_mem_Icc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ Se
+t.Icc a b ↔ a ≤ b
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Set.right_mem_Icc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ S
+et.Icc b a ↔ b ≤ a
+· 使用定理 `Or.resolve_right`：∀ {a b : Prop}, a ∨ b → ¬b → a
+· 使用引理 `min_le_right`：min_le_right (a b : α) : min a b <= b
+· 使用定理 `le_max_right`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), b ≤ max
+ a b
+· 使用定理 `StrictMonoOn.mono`：∀ {α : Type u_1} {β : Type u_2} {s s₂ : Set α} {f : α
+ → β} [inst : Preorder α] [inst_1 : Preorder β],   StrictMonoOn f s → s₂ ⊆ s → S
+trictMo…
 
-English:
-theorem Continuous.strictMonoOn_of_inj_rigidity
-  statement: {f : α -> δ}
-  proof: by
-  intro x y hxy
-  let s := min a x
-  let t := max b y
-  have hsa : s <= a := min_le_left a x
-  have hbt : b <= t := le_max_left b y
-  have hf_mono_st : StrictMonoOn f (Icc s t) ∨ StrictAntiOn f (Icc s t) := by
-have : Fact (s <= t) := ⟨hsa.trans hbt.trans' hab.le⟩
-    have := Continuous.strictMono_of_inj_boundedOrder' (f := Set.domRestrict (Icc s t) f)
-      hf_c.continuousOn.domRestrict hf_i.injOn.injective
-    exact this.imp strictMono_domRestrict.mp strictAntiOn_iff_strictAnti.mpr
-  have (h : StrictAntiOn f (Icc s t)) : False := by
-    have : Icc a b subseteq Icc s t := Icc_subset_Icc hsa hbt
-    replace : StrictAntiOn f (Icc a b) := StrictAntiOn.mono h this
-    replace : IsAntichain (· <= ·) (Icc a b) :=
-      IsAntichain.of_strictMonoOn_antitoneOn hf_mono this.antitoneOn
-    exact this.not_lt (left_mem_Icc.mpr (le_of_lt hab)) (right_mem_Icc.mpr (le_of_lt hab)) hab
-  replace hf_mono_st : StrictMonoOn f (Icc s t) := hf_mono_st.resolve_right this
-  have hsx : s <= x := min_le_right a x
-  have hyt : y <= t := le_max_right b y
-  replace : Icc x y subseteq Icc s t := Icc_subset_Icc hsx hyt
-  replace : StrictMonoOn f (Icc x y) := StrictMonoOn.mono hf_mono_st this
-  exact this (left_mem_Icc.mpr (le_of_lt hxy)) (right_mem_Icc.mpr (le_of_lt hxy)) hxy
-
-中文:
-定理 连续.strictMonoOn_of_inj_rigidity
-  结论: {f : α -> δ}
-  证明: by
-  intro x y hxy
-  let s := min a x
-  let t := max b y
-  have hsa : s <= a := min_le_left a x
-  have hbt : b <= t := le_max_left b y
-  have hf_mono_st : StrictMonoOn f (Icc s t) ∨ StrictAntiOn f (Icc s t) := by
-have : Fact (s <= t) := ⟨hsa.trans hbt.trans' hab.le⟩
-    have := Continuous.strictMono_of_inj_boundedOrder' (f := Set.domRestrict (Icc s t) f)
-      hf_c.continuousOn.domRestrict hf_i.injOn.injective
-    exact this.imp strictMono_domRestrict.mp strictAntiOn_iff_strictAnti.mpr
-  have (h : StrictAntiOn f (Icc s t)) : False := by
-    have : Icc a b subseteq Icc s t := Icc_subset_Icc hsa hbt
-    replace : StrictAntiOn f (Icc a b) := StrictAntiOn.mono h this
-    replace : IsAntichain (· <= ·) (Icc a b) :=
-      IsAntichain.of_strictMonoOn_antitoneOn hf_mono this.antitoneOn
-    exact this.not_lt (left_mem_Icc.mpr (le_of_lt hab)) (right_mem_Icc.mpr (le_of_lt hab)) hab
-  replace hf_mono_st : StrictMonoOn f (Icc s t) := hf_mono_st.resolve_right this
-  have hsx : s <= x := min_le_right a x
-  have hyt : y <= t := le_max_right b y
-  replace : Icc x y subseteq Icc s t := Icc_subset_Icc hsx hyt
-  replace : StrictMonoOn f (Icc x y) := StrictMonoOn.mono hf_mono_st this
-  exact this (left_mem_Icc.mpr (le_of_lt hxy)) (right_mem_Icc.mpr (le_of_lt hxy)) hxy
-
-Depends on / 依赖: Continuous, Continuous.strictMono_of_inj_boundedOrder, Set.domRestrict, StrictAntiOn, StrictMonoOn, continuousOn, domRestrict, hab.le, hbt.trans, hf_c, hf_c.continuousOn.domRestrict, hf_i, hf_i.injOn.injective, hf_mono_st, hsa.trans, injective, le_max_left, min_le_left, strictAntiOn_iff_strictAnti, strictAntiOn_iff_strictAnti.mpr
+--- 原说明 ---
+Suppose `α` is equipped with a conditionally complete linear dense order and `f 
+: α → δ` is
+continuous and injective. Then `f` is strictly monotone (increasing) if
+it is strictly monotone (increasing) on some closed interval `[a, b]`.
 -/
-theorem Continuous.strictMonoOn_of_inj_rigidity {f : α -> δ}
+theorem Continuous.strictMonoOn_of_inj_rigidity {f : α → δ}
     (hf_c : Continuous f) (hf_i : Injective f) {a b : α} (hab : a < b)
     (hf_mono : StrictMonoOn f (Icc a b)) : StrictMono f := by
   intro x y hxy
   let s := min a x
   let t := max b y
-  have hsa : s <= a := min_le_left a x
-  have hbt : b <= t := le_max_left b y
+  have hsa : s ≤ a := min_le_left a x
+  have hbt : b ≤ t := le_max_left b y
   have hf_mono_st : StrictMonoOn f (Icc s t) ∨ StrictAntiOn f (Icc s t) := by
-have : Fact (s <= t) := ⟨hsa.trans hbt.trans' hab.le⟩
+    have : Fact (s ≤ t) := ⟨hsa.trans <| hbt.trans' hab.le⟩
     have := Continuous.strictMono_of_inj_boundedOrder' (f := Set.domRestrict (Icc s t) f)
       hf_c.continuousOn.domRestrict hf_i.injOn.injective
     exact this.imp strictMono_domRestrict.mp strictAntiOn_iff_strictAnti.mpr
   have (h : StrictAntiOn f (Icc s t)) : False := by
-    have : Icc a b subseteq Icc s t := Icc_subset_Icc hsa hbt
+    have : Icc a b ⊆ Icc s t := Icc_subset_Icc hsa hbt
     replace : StrictAntiOn f (Icc a b) := StrictAntiOn.mono h this
-    replace : IsAntichain (· <= ·) (Icc a b) :=
+    replace : IsAntichain (· ≤ ·) (Icc a b) :=
       IsAntichain.of_strictMonoOn_antitoneOn hf_mono this.antitoneOn
     exact this.not_lt (left_mem_Icc.mpr (le_of_lt hab)) (right_mem_Icc.mpr (le_of_lt hab)) hab
   replace hf_mono_st : StrictMonoOn f (Icc s t) := hf_mono_st.resolve_right this
-  have hsx : s <= x := min_le_right a x
-  have hyt : y <= t := le_max_right b y
-  replace : Icc x y subseteq Icc s t := Icc_subset_Icc hsx hyt
+  have hsx : s ≤ x := min_le_right a x
+  have hyt : y ≤ t := le_max_right b y
+  replace : Icc x y ⊆ Icc s t := Icc_subset_Icc hsx hyt
   replace : StrictMonoOn f (Icc x y) := StrictMonoOn.mono hf_mono_st this
   exact this (left_mem_Icc.mpr (le_of_lt hxy)) (right_mem_Icc.mpr (le_of_lt hxy)) hxy
 
-/--
-theorem `ContinuousOn.strictMonoOn_of_injOn_Icc` / 定理 `ContinuousOn.strictMonoOn_of_injOn_Icc`
+/-- Suppose `f : [a, b] → δ` is
+continuous and injective. Then `f` is strictly monotone (increasing) if `f(a) ≤ f(b)`. -/
+/-
+**ContinuousOn.strictMonoOn_of_injOn_Icc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.strictMonoOn_of_injOn_Icc {a b : α} {f : α -> δ} (hab : a <= 
+b) (hfab : f a <= f b) (hf_c : ContinuousOn f (Icc a b)) (hf_i : InjOn f (Icc a 
+b)) : StrictMonoOn f (Icc a b)
+参数：hab : a <= b；hfab : f a <= f b；hf_c : ContinuousOn f (Icc a b)；hf_i : InjOn f
+ (Icc a b)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.of_domRestrict`：∀ {α : Type u_1} {β : Type u_2} [inst : Preor
+der α] [inst_1 : Preorder β] {f : α → β} {s : Set α},   StrictMono (s.domRestric
+t f) → StrictMo…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Continuous.strictMono_of_inj_boundedOrder`：Continuous.strictMono_of_inj_
+boundedOrder [BoundedOrder α] {f : α -> δ} (hf_c : Continuous f) (hf : f ⊥ <= f 
+⊤) (hf_i : Injective f) : Stric…
+· 使用定理 `ContinuousOn.domRestrict`：∀ {α : Type u_1} {β : Type u_2} [inst : Topolo
+gicalSpace α] [inst_1 : TopologicalSpace β] {f : α → β} {s : Set α},   Continuou
+sOn f s → Cont…
+· 使用定理 `Set.InjOn.injective`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α 
+→ β}, Set.InjOn f s → Function.Injective (s.domRestrict f)
 
-English:
-theorem ContinuousOn.strictMonoOn_of_injOn_Icc
-  statement: {a b : α} {f : α -> δ}
-  proof: by
-  have : Fact (a <= b) := ⟨hab⟩
-  refine StrictMono.of_domRestrict ?_
-  set g : Icc a b -> δ := Set.domRestrict (Icc a b) f
-  have hgab : g ⊥ <= g ⊤ := by aesop
-  exact Continuous.strictMono_of_inj_boundedOrder (f := g) hf_c.domRestrict hgab hf_i.injective
-
-中文:
-定理 ContinuousOn.strictMonoOn_of_injOn_Icc
-  结论: {a b : α} {f : α -> δ}
-  证明: by
-  have : Fact (a <= b) := ⟨hab⟩
-  refine StrictMono.of_domRestrict ?_
-  set g : Icc a b -> δ := Set.domRestrict (Icc a b) f
-  have hgab : g ⊥ <= g ⊤ := by aesop
-  exact Continuous.strictMono_of_inj_boundedOrder (f := g) hf_c.domRestrict hgab hf_i.injective
-
-Depends on / 依赖: Continuous, Continuous.strictMono_of_inj_boundedOrder, Set.domRestrict, StrictMono, StrictMono.of_domRestrict, domRestrict, hf_c, hf_c.domRestrict, hf_i, hf_i.injective, injective, of_domRestrict, strictMono_of_inj_boundedOrder
+--- 原说明 ---
+Suppose `f : [a, b] → δ` is
+continuous and injective. Then `f` is strictly monotone (increasing) if `f(a) ≤ 
+f(b)`.
 -/
-theorem ContinuousOn.strictMonoOn_of_injOn_Icc {a b : α} {f : α -> δ}
-    (hab : a <= b) (hfab : f a <= f b)
+theorem ContinuousOn.strictMonoOn_of_injOn_Icc {a b : α} {f : α → δ}
+    (hab : a ≤ b) (hfab : f a ≤ f b)
     (hf_c : ContinuousOn f (Icc a b)) (hf_i : InjOn f (Icc a b)) :
     StrictMonoOn f (Icc a b) := by
-  have : Fact (a <= b) := ⟨hab⟩
+  have : Fact (a ≤ b) := ⟨hab⟩
   refine StrictMono.of_domRestrict ?_
-  set g : Icc a b -> δ := Set.domRestrict (Icc a b) f
-  have hgab : g ⊥ <= g ⊤ := by aesop
+  set g : Icc a b → δ := Set.domRestrict (Icc a b) f
+  have hgab : g ⊥ ≤ g ⊤ := by aesop
   exact Continuous.strictMono_of_inj_boundedOrder (f := g) hf_c.domRestrict hgab hf_i.injective
 
-/--
-theorem `ContinuousOn.strictAntiOn_of_injOn_Icc` / 定理 `ContinuousOn.strictAntiOn_of_injOn_Icc`
+/-- Suppose `f : [a, b] → δ` is
+continuous and injective. Then `f` is strictly antitone (decreasing) if `f(b) ≤ f(a)`. -/
+/-
+**ContinuousOn.strictAntiOn_of_injOn_Icc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.strictAntiOn_of_injOn_Icc {a b : α} {f : α -> δ} (hab : a <= 
+b) (hfab : f b <= f a) (hf_c : ContinuousOn f (Icc a b)) (hf_i : InjOn f (Icc a 
+b)) : StrictAntiOn f (Icc a b)
+参数：hab : a <= b；hfab : f b <= f a；hf_c : ContinuousOn f (Icc a b)；hf_i : InjOn f
+ (Icc a b)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousOn.strictMonoOn_of_injOn_Icc`：ContinuousOn.strictMonoOn_of_inj
+On_Icc {a b : α} {f : α -> δ} (hab : a <= b) (hfab : f a <= f b) (hf_c : Continu
+ousOn f (Icc a b)) (hf_i : I…
+· 使用定理 `instOrderClosedTopologyOrderDual`：∀ {α : Type u} [inst : TopologicalSpac
+e α] [inst_1 : Preorder α] [t : OrderClosedTopology α], OrderClosedTopology αᵒᵈ
 
-English:
-theorem ContinuousOn.strictAntiOn_of_injOn_Icc
-  statement: {a b : α} {f : α -> δ}
-  proof: ContinuousOn.strictMonoOn_of_injOn_Icc (δ := δᵒᵈ) hab hfab hf_c hf_i
-
-中文:
-定理 ContinuousOn.strictAntiOn_of_injOn_Icc
-  结论: {a b : α} {f : α -> δ}
-  证明: ContinuousOn.strictMonoOn_of_injOn_Icc (δ := δᵒᵈ) hab hfab hf_c hf_i
-
-Depends on / 依赖: ContinuousOn, ContinuousOn.strictMonoOn_of_injOn_Icc, hf_c, hf_i, strictMonoOn_of_injOn_Icc
+--- 原说明 ---
+Suppose `f : [a, b] → δ` is
+continuous and injective. Then `f` is strictly antitone (decreasing) if `f(b) ≤ 
+f(a)`.
 -/
-theorem ContinuousOn.strictAntiOn_of_injOn_Icc {a b : α} {f : α -> δ}
-    (hab : a <= b) (hfab : f b <= f a)
+theorem ContinuousOn.strictAntiOn_of_injOn_Icc {a b : α} {f : α → δ}
+    (hab : a ≤ b) (hfab : f b ≤ f a)
     (hf_c : ContinuousOn f (Icc a b)) (hf_i : InjOn f (Icc a b)) :
     StrictAntiOn f (Icc a b) := ContinuousOn.strictMonoOn_of_injOn_Icc (δ := δᵒᵈ) hab hfab hf_c hf_i
 
-/--
-theorem `ContinuousOn.strictMonoOn_of_injOn_Icc'` / 定理 `ContinuousOn.strictMonoOn_of_injOn_Icc'`
+/-- Suppose `f : [a, b] → δ` is continuous and injective. Then `f` is strictly monotone
+or antitone (increasing or decreasing). -/
+/-
+**ContinuousOn.strictMonoOn_of_injOn_Icc'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.strictMonoOn_of_injOn_Icc' {a b : α} {f : α -> δ} (hab : a <=
+ b) (hf_c : ContinuousOn f (Icc a b)) (hf_i : InjOn f (Icc a b)) : StrictMonoOn 
+f (Icc a b) ∨ StrictAntiOn f (Icc a b)
+参数：hab : a <= b；hf_c : ContinuousOn f (Icc a b)；hf_i : InjOn f (Icc a b)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用定理 `ContinuousOn.strictMonoOn_of_injOn_Icc`：ContinuousOn.strictMonoOn_of_inj
+On_Icc {a b : α} {f : α -> δ} (hab : a <= b) (hfab : f a <= f b) (hf_c : Continu
+ousOn f (Icc a b)) (hf_i : I…
+· 使用定理 `ContinuousOn.strictAntiOn_of_injOn_Icc`：ContinuousOn.strictAntiOn_of_inj
+On_Icc {a b : α} {f : α -> δ} (hab : a <= b) (hfab : f b <= f a) (hf_c : Continu
+ousOn f (Icc a b)) (hf_i : I…
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
 
-English:
-theorem ContinuousOn.strictMonoOn_of_injOn_Icc'
-  statement: {a b : α} {f : α -> δ} (hab : a <= b)
-  proof: (le_total (f a) (f b)).imp
-    (ContinuousOn.strictMonoOn_of_injOn_Icc hab · hf_c hf_i)
-    (ContinuousOn.strictAntiOn_of_injOn_Icc hab · hf_c hf_i)
-
-中文:
-定理 ContinuousOn.strictMonoOn_of_injOn_Icc'
-  结论: {a b : α} {f : α -> δ} (hab : a <= b)
-  证明: (le_total (f a) (f b)).imp
-    (ContinuousOn.strictMonoOn_of_injOn_Icc hab · hf_c hf_i)
-    (ContinuousOn.strictAntiOn_of_injOn_Icc hab · hf_c hf_i)
-
-Depends on / 依赖: ContinuousOn, ContinuousOn.strictAntiOn_of_injOn_Icc, ContinuousOn.strictMonoOn_of_injOn_Icc, hf_c, hf_i, le_total, strictAntiOn_of_injOn_Icc, strictMonoOn_of_injOn_Icc
+--- 原说明 ---
+Suppose `f : [a, b] → δ` is continuous and injective. Then `f` is strictly monot
+one
+or antitone (increasing or decreasing).
 -/
-theorem ContinuousOn.strictMonoOn_of_injOn_Icc' {a b : α} {f : α -> δ} (hab : a <= b)
+theorem ContinuousOn.strictMonoOn_of_injOn_Icc' {a b : α} {f : α → δ} (hab : a ≤ b)
     (hf_c : ContinuousOn f (Icc a b)) (hf_i : InjOn f (Icc a b)) :
     StrictMonoOn f (Icc a b) ∨ StrictAntiOn f (Icc a b) :=
   (le_total (f a) (f b)).imp
     (ContinuousOn.strictMonoOn_of_injOn_Icc hab · hf_c hf_i)
     (ContinuousOn.strictAntiOn_of_injOn_Icc hab · hf_c hf_i)
 
-/--
-theorem `Continuous.strictMono_of_inj` / 定理 `Continuous.strictMono_of_inj`
+/-- Suppose `α` is equipped with a conditionally complete linear dense order and `f : α → δ` is
+continuous and injective. Then `f` is strictly monotone or antitone (increasing or decreasing). -/
+/-
+**Continuous.strictMono_of_inj** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.strictMono_of_inj {f : α -> δ} (hf_c : Continuous f) (hf_i : In
+jective f) : StrictMono f ∨ StrictAnti f
+参数：hf_c : Continuous f；hf_i : Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用定理 `Continuous.strictMonoOn_of_inj_rigidity`：Continuous.strictMonoOn_of_inj_
+rigidity {f : α -> δ} (hf_c : Continuous f) (hf_i : Injective f) {a b : α} (hab 
+: a < b) (hf_mono : StrictMon…
+· 使用定理 `instOrderClosedTopologyOrderDual`：∀ {α : Type u} [inst : TopologicalSpac
+e α] [inst_1 : Preorder α] [t : OrderClosedTopology α], OrderClosedTopology αᵒᵈ
+· 使用定理 `ContinuousOn.strictMonoOn_of_injOn_Icc'`：ContinuousOn.strictMonoOn_of_in
+jOn_Icc' {a b : α} {f : α -> δ} (hab : a <= b) (hf_c : ContinuousOn f (Icc a b))
+ (hf_i : InjOn f (Icc a b)) :…
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `subsingleton_or_nontrivial`：subsingleton_or_nontrivial (α : Type*) : Sub
+singleton α ∨ Nontrivial α
+· 使用定理 `Subsingleton.strictMono`：∀ {α : Type u} {β : Type v} [inst : Preorder α]
+ [inst_1 : Preorder β] [Subsingleton α] (f : α → β), StrictMono f
+· 使用定理 `exists_pair_lt`：exists_pair_lt (α : Type*) [Nontrivial α] [LinearOrder α
+] : exists x y : α, x < y
 
-English:
-theorem Continuous.strictMono_of_inj
-  statement: {f : α -> δ}
-  proof: by
-  have H {c d : α} (hcd : c < d) : StrictMono f ∨ StrictAnti f :=
-    (hf_c.continuousOn.strictMonoOn_of_injOn_Icc' hcd.le hf_i.injOn).imp
-      (hf_c.strictMonoOn_of_inj_rigidity hf_i hcd)
-      (hf_c.strictMonoOn_of_inj_rigidity (δ := δᵒᵈ) hf_i hcd)
-  cases subsingleton_or_nontrivial α with
-| inl h => exact Or.inl Subsingleton.strictMono f
-  | inr h =>
-    obtain ⟨a, b, hab⟩ := exists_pair_lt α
-    exact H hab
-
-中文:
-定理 连续.strictMono_of_inj
-  结论: {f : α -> δ}
-  证明: by
-  have H {c d : α} (hcd : c < d) : StrictMono f ∨ StrictAnti f :=
-    (hf_c.continuousOn.strictMonoOn_of_injOn_Icc' hcd.le hf_i.injOn).imp
-      (hf_c.strictMonoOn_of_inj_rigidity hf_i hcd)
-      (hf_c.strictMonoOn_of_inj_rigidity (δ := δᵒᵈ) hf_i hcd)
-  cases subsingleton_or_nontrivial α with
-| inl h => exact Or.inl Subsingleton.strictMono f
-  | inr h =>
-    obtain ⟨a, b, hab⟩ := exists_pair_lt α
-    exact H hab
-
-Depends on / 依赖: Or.inl, StrictAnti, StrictMono, Subsingleton, Subsingleton.strictMono, continuousOn, exists_pair_lt, hcd.le, hf_c, hf_c.continuousOn.strictMonoOn_of_injOn_Icc, hf_c.strictMonoOn_of_inj_rigidity, hf_i, hf_i.injOn, strictMono, strictMonoOn_of_injOn_Icc, strictMonoOn_of_inj_rigidity, subsingleton_or_nontrivial
+--- 原说明 ---
+Suppose `α` is equipped with a conditionally complete linear dense order and `f 
+: α → δ` is
+continuous and injective. Then `f` is strictly monotone or antitone (increasing 
+or decreasing).
 -/
-theorem Continuous.strictMono_of_inj {f : α -> δ}
+theorem Continuous.strictMono_of_inj {f : α → δ}
     (hf_c : Continuous f) (hf_i : Injective f) : StrictMono f ∨ StrictAnti f := by
   have H {c d : α} (hcd : c < d) : StrictMono f ∨ StrictAnti f :=
     (hf_c.continuousOn.strictMonoOn_of_injOn_Icc' hcd.le hf_i.injOn).imp
       (hf_c.strictMonoOn_of_inj_rigidity hf_i hcd)
       (hf_c.strictMonoOn_of_inj_rigidity (δ := δᵒᵈ) hf_i hcd)
   cases subsingleton_or_nontrivial α with
-| inl h => exact Or.inl Subsingleton.strictMono f
+  | inl h => exact Or.inl <| Subsingleton.strictMono f
   | inr h =>
     obtain ⟨a, b, hab⟩ := exists_pair_lt α
     exact H hab
 
-/--
-theorem `ContinuousOn.strictMonoOn_of_injOn_Ioo` / 定理 `ContinuousOn.strictMonoOn_of_injOn_Ioo`
+/-- Every continuous injective `f : (a, b) → δ` is strictly monotone
+or antitone (increasing or decreasing). -/
+/-
+**ContinuousOn.strictMonoOn_of_injOn_Ioo** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.strictMonoOn_of_injOn_Ioo {a b : α} {f : α -> δ} (hab : a < b
+) (hf_c : ContinuousOn f (Ioo a b)) (hf_i : InjOn f (Ioo a b)) : StrictMonoOn f 
+(Ioo a b) ∨ StrictAntiOn f (Ioo a b)
+参数：hab : a < b；hf_c : ContinuousOn f (Ioo a b)；hf_i : InjOn f (Ioo a b)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.nonempty_Ioo_subtype`：nonempty_Ioo_subtype [DenselyOrdered α] (h : a
+ < b) : Nonempty (Ioo a b)
+· 使用定理 `Continuous.strictMono_of_inj`：Continuous.strictMono_of_inj {f : α -> δ} 
+(hf_c : Continuous f) (hf_i : Injective f) : StrictMono f ∨ StrictAnti f
+· 使用定理 `ContinuousOn.domRestrict`：∀ {α : Type u_1} {β : Type u_2} [inst : Topolo
+gicalSpace α] [inst_1 : TopologicalSpace β] {f : α → β} {s : Set α},   Continuou
+sOn f s → Cont…
+· 使用定理 `Set.InjOn.injective`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : α 
+→ β}, Set.InjOn f s → Function.Injective (s.domRestrict f)
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `strictMono_domRestrict`：strictMono_domRestrict : StrictMono (s.domRestri
+ct f) ↔ StrictMonoOn f s
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.strictAntiOn_iff_strictAnti`：strictAntiOn_iff_strictAnti : StrictAnt
+iOn f s ↔ StrictAnti fun a : s => f a
 
-English:
-theorem ContinuousOn.strictMonoOn_of_injOn_Ioo
-  statement: {a b : α} {f : α -> δ} (hab : a < b)
-  proof: by
-  have : Inhabited (Ioo a b) := Classical.inhabited_of_nonempty (nonempty_Ioo_subtype hab)
-  let g : Ioo a b -> δ := Set.domRestrict (Ioo a b) f
-  have : StrictMono g ∨ StrictAnti g :=
-    Continuous.strictMono_of_inj hf_c.domRestrict hf_i.injective
-  exact this.imp strictMono_domRestrict.mp strictAntiOn_iff_strictAnti.mpr
-
-中文:
-定理 ContinuousOn.strictMonoOn_of_injOn_Ioo
-  结论: {a b : α} {f : α -> δ} (hab : a < b)
-  证明: by
-  have : Inhabited (Ioo a b) := Classical.inhabited_of_nonempty (nonempty_Ioo_subtype hab)
-  let g : Ioo a b -> δ := Set.domRestrict (Ioo a b) f
-  have : StrictMono g ∨ StrictAnti g :=
-    Continuous.strictMono_of_inj hf_c.domRestrict hf_i.injective
-  exact this.imp strictMono_domRestrict.mp strictAntiOn_iff_strictAnti.mpr
-
-Depends on / 依赖: Classical, Classical.inhabited_of_nonempty, Continuous, Continuous.strictMono_of_inj, Inhabited, Set.domRestrict, StrictAnti, StrictMono, domRestrict, hf_c, hf_c.domRestrict, hf_i, hf_i.injective, inhabited_of_nonempty, injective, nonempty_Ioo_subtype, strictAntiOn_iff_strictAnti, strictAntiOn_iff_strictAnti.mpr, strictMono_domRestrict, strictMono_domRestrict.mp
+--- 原说明 ---
+Every continuous injective `f : (a, b) → δ` is strictly monotone
+or antitone (increasing or decreasing).
 -/
-theorem ContinuousOn.strictMonoOn_of_injOn_Ioo {a b : α} {f : α -> δ} (hab : a < b)
+theorem ContinuousOn.strictMonoOn_of_injOn_Ioo {a b : α} {f : α → δ} (hab : a < b)
     (hf_c : ContinuousOn f (Ioo a b)) (hf_i : InjOn f (Ioo a b)) :
     StrictMonoOn f (Ioo a b) ∨ StrictAntiOn f (Ioo a b) := by
   have : Inhabited (Ioo a b) := Classical.inhabited_of_nonempty (nonempty_Ioo_subtype hab)
-  let g : Ioo a b -> δ := Set.domRestrict (Ioo a b) f
+  let g : Ioo a b → δ := Set.domRestrict (Ioo a b) f
   have : StrictMono g ∨ StrictAnti g :=
     Continuous.strictMono_of_inj hf_c.domRestrict hf_i.injective
   exact this.imp strictMono_domRestrict.mp strictAntiOn_iff_strictAnti.mpr
@@ -2803,452 +2994,498 @@ theorem ContinuousOn.strictMonoOn_of_injOn_Ioo {a b : α} {f : α -> δ} (hab : 
 ### Images of continuous monotone functions
 -/
 
-variable {a b : α} {f : α -> δ}
+variable {a b : α} {f : α → δ}
 
-/--
-theorem `ContinuousOn.image_Icc_of_monotoneOn` / 定理 `ContinuousOn.image_Icc_of_monotoneOn`
-
-English:
-theorem ContinuousOn.image_Icc_of_monotoneOn
-  statement: (hab : a <= b) (hf : ContinuousOn f (Icc a b))
-  proof: subset_antisymm (hmono.image_Icc_subset) (intermediate_value_Icc hab hf)
-
-中文:
-定理 ContinuousOn.image_Icc_of_monotoneOn
-  结论: (hab : a <= b) (hf : ContinuousOn f (闭区间 a b))
-  证明: subset_antisymm (hmono.image_Icc_subset) (intermediate_value_Icc hab hf)
-
-Depends on / 依赖: hmono.image_Icc_subset, image_Icc_subset, intermediate_value_Icc, subset_antisymm
+/-
+**ContinuousOn.image_Icc_of_monotoneOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.image_Icc_of_monotoneOn (hab : a <= b) (hf : ContinuousOn f (
+Icc a b)) (hmono : MonotoneOn f (Icc a b)) : f '' Icc a b = Icc (f a) (f b)
+参数：hab : a <= b；hf : ContinuousOn f (Icc a b)；hmono : MonotoneOn f (Icc a b)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_antisymm`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Pa
+rtialOrder α] {a b : α}, a ⊆ b → b ⊆ a → a = b
+· 使用引理 `MonotoneOn.image_Icc_subset`：MonotoneOn.image_Icc_subset (h : MonotoneOn
+ f (Icc a b)) : f '' Icc a b subseteq Icc (f a) (f b)
+· 使用定理 `intermediate_value_Icc`：intermediate_value_Icc {a b : α} (hab : a <= b) 
+{f : α -> δ} (hf : ContinuousOn f (Icc a b)) : Icc (f a) (f b) subseteq f '' Icc
+ a b
 -/
-theorem ContinuousOn.image_Icc_of_monotoneOn (hab : a <= b) (hf : ContinuousOn f (Icc a b))
+theorem ContinuousOn.image_Icc_of_monotoneOn (hab : a ≤ b) (hf : ContinuousOn f (Icc a b))
     (hmono : MonotoneOn f (Icc a b)) : f '' Icc a b = Icc (f a) (f b) :=
   subset_antisymm (hmono.image_Icc_subset) (intermediate_value_Icc hab hf)
-
-/--
-theorem `ContinuousOn.image_Icc_of_antitoneOn` / 定理 `ContinuousOn.image_Icc_of_antitoneOn`
-
-English:
-theorem ContinuousOn.image_Icc_of_antitoneOn
-  statement: (hab : a <= b) (hf : ContinuousOn f (Icc a b))
-  proof: subset_antisymm (hmono.image_Icc_subset) (intermediate_value_Icc' hab hf)
-
-中文:
-定理 ContinuousOn.image_Icc_of_antitoneOn
-  结论: (hab : a <= b) (hf : ContinuousOn f (闭区间 a b))
-  证明: subset_antisymm (hmono.image_Icc_subset) (intermediate_value_Icc' hab hf)
-
-Depends on / 依赖: hmono.image_Icc_subset, image_Icc_subset, intermediate_value_Icc, subset_antisymm
+/-
+**ContinuousOn.image_Icc_of_antitoneOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.image_Icc_of_antitoneOn (hab : a <= b) (hf : ContinuousOn f (
+Icc a b)) (hmono : AntitoneOn f (Icc a b)) : f '' Icc a b = Icc (f b) (f a)
+参数：hab : a <= b；hf : ContinuousOn f (Icc a b)；hmono : AntitoneOn f (Icc a b)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_antisymm`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Pa
+rtialOrder α] {a b : α}, a ⊆ b → b ⊆ a → a = b
+· 使用引理 `AntitoneOn.image_Icc_subset`：AntitoneOn.image_Icc_subset (h : AntitoneOn
+ f (Icc a b)) : f '' Icc a b subseteq Icc (f b) (f a)
+· 使用定理 `intermediate_value_Icc'`：intermediate_value_Icc' {a b : α} (hab : a <= b
+) {f : α -> δ} (hf : ContinuousOn f (Icc a b)) : Icc (f b) (f a) subseteq f '' I
+cc a b
 -/
-theorem ContinuousOn.image_Icc_of_antitoneOn (hab : a <= b) (hf : ContinuousOn f (Icc a b))
+theorem ContinuousOn.image_Icc_of_antitoneOn (hab : a ≤ b) (hf : ContinuousOn f (Icc a b))
     (hmono : AntitoneOn f (Icc a b)) : f '' Icc a b = Icc (f b) (f a) :=
   subset_antisymm (hmono.image_Icc_subset) (intermediate_value_Icc' hab hf)
-
-/--
-theorem `ContinuousOn.image_Ico_of_strictMonoOn` / 定理 `ContinuousOn.image_Ico_of_strictMonoOn`
-
-English:
-theorem ContinuousOn.image_Ico_of_strictMonoOn
-  statement: (hab : a <= b) (hf : ContinuousOn f (Icc a b))
-  proof: subset_antisymm (hmono.image_Ico_subset) (intermediate_value_Ico hab hf)
-
-中文:
-定理 ContinuousOn.image_Ico_of_strictMonoOn
-  结论: (hab : a <= b) (hf : ContinuousOn f (闭区间 a b))
-  证明: subset_antisymm (hmono.image_Ico_subset) (intermediate_value_Ico hab hf)
-
-Depends on / 依赖: hmono.image_Ico_subset, image_Ico_subset, intermediate_value_Ico, subset_antisymm
+/-
+**ContinuousOn.image_Ico_of_strictMonoOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.image_Ico_of_strictMonoOn (hab : a <= b) (hf : ContinuousOn f
+ (Icc a b)) (hmono : StrictMonoOn f (Icc a b)) : f '' Ico a b = Ico (f a) (f b)
+参数：hab : a <= b；hf : ContinuousOn f (Icc a b)；hmono : StrictMonoOn f (Icc a b)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_antisymm`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Pa
+rtialOrder α] {a b : α}, a ⊆ b → b ⊆ a → a = b
+· 使用引理 `StrictMonoOn.image_Ico_subset`：StrictMonoOn.image_Ico_subset (h : Strict
+MonoOn f (Icc a b)) : f '' Ico a b subseteq Ico (f a) (f b)
+· 使用定理 `intermediate_value_Ico`：intermediate_value_Ico {a b : α} (hab : a <= b) 
+{f : α -> δ} (hf : ContinuousOn f (Icc a b)) : Ico (f a) (f b) subseteq f '' Ico
+ a b
 -/
-theorem ContinuousOn.image_Ico_of_strictMonoOn (hab : a <= b) (hf : ContinuousOn f (Icc a b))
+theorem ContinuousOn.image_Ico_of_strictMonoOn (hab : a ≤ b) (hf : ContinuousOn f (Icc a b))
     (hmono : StrictMonoOn f (Icc a b)) : f '' Ico a b = Ico (f a) (f b) :=
   subset_antisymm (hmono.image_Ico_subset) (intermediate_value_Ico hab hf)
-
-/--
-theorem `ContinuousOn.image_Ico_of_strictAntiOn` / 定理 `ContinuousOn.image_Ico_of_strictAntiOn`
-
-English:
-theorem ContinuousOn.image_Ico_of_strictAntiOn
-  statement: (hab : a <= b) (hf : ContinuousOn f (Icc a b))
-  proof: subset_antisymm (hmono.image_Ico_subset) (intermediate_value_Ico' hab hf)
-
-中文:
-定理 ContinuousOn.image_Ico_of_strictAntiOn
-  结论: (hab : a <= b) (hf : ContinuousOn f (闭区间 a b))
-  证明: subset_antisymm (hmono.image_Ico_subset) (intermediate_value_Ico' hab hf)
-
-Depends on / 依赖: hmono.image_Ico_subset, image_Ico_subset, intermediate_value_Ico, subset_antisymm
+/-
+**ContinuousOn.image_Ico_of_strictAntiOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.image_Ico_of_strictAntiOn (hab : a <= b) (hf : ContinuousOn f
+ (Icc a b)) (hmono : StrictAntiOn f (Icc a b)) : f '' Ico a b = Ioc (f b) (f a)
+参数：hab : a <= b；hf : ContinuousOn f (Icc a b)；hmono : StrictAntiOn f (Icc a b)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_antisymm`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Pa
+rtialOrder α] {a b : α}, a ⊆ b → b ⊆ a → a = b
+· 使用引理 `StrictAntiOn.image_Ico_subset`：StrictAntiOn.image_Ico_subset (h : Strict
+AntiOn f (Icc a b)) : f '' Ico a b subseteq Ioc (f b) (f a)
+· 使用定理 `intermediate_value_Ico'`：intermediate_value_Ico' {a b : α} (hab : a <= b
+) {f : α -> δ} (hf : ContinuousOn f (Icc a b)) : Ioc (f b) (f a) subseteq f '' I
+co a b
 -/
-theorem ContinuousOn.image_Ico_of_strictAntiOn (hab : a <= b) (hf : ContinuousOn f (Icc a b))
+theorem ContinuousOn.image_Ico_of_strictAntiOn (hab : a ≤ b) (hf : ContinuousOn f (Icc a b))
     (hmono : StrictAntiOn f (Icc a b)) : f '' Ico a b = Ioc (f b) (f a) :=
   subset_antisymm (hmono.image_Ico_subset) (intermediate_value_Ico' hab hf)
-
-/--
-theorem `ContinuousOn.image_Ioc_of_strictMonoOn` / 定理 `ContinuousOn.image_Ioc_of_strictMonoOn`
-
-English:
-theorem ContinuousOn.image_Ioc_of_strictMonoOn
-  statement: (hab : a <= b) (hf : ContinuousOn f (Icc a b))
-  proof: subset_antisymm (hmono.image_Ioc_subset) (intermediate_value_Ioc hab hf)
-
-中文:
-定理 ContinuousOn.image_Ioc_of_strictMonoOn
-  结论: (hab : a <= b) (hf : ContinuousOn f (闭区间 a b))
-  证明: subset_antisymm (hmono.image_Ioc_subset) (intermediate_value_Ioc hab hf)
-
-Depends on / 依赖: hmono.image_Ioc_subset, image_Ioc_subset, intermediate_value_Ioc, subset_antisymm
+/-
+**ContinuousOn.image_Ioc_of_strictMonoOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.image_Ioc_of_strictMonoOn (hab : a <= b) (hf : ContinuousOn f
+ (Icc a b)) (hmono : StrictMonoOn f (Icc a b)) : f '' Ioc a b = Ioc (f a) (f b)
+参数：hab : a <= b；hf : ContinuousOn f (Icc a b)；hmono : StrictMonoOn f (Icc a b)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_antisymm`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Pa
+rtialOrder α] {a b : α}, a ⊆ b → b ⊆ a → a = b
+· 使用引理 `StrictMonoOn.image_Ioc_subset`：StrictMonoOn.image_Ioc_subset (h : Strict
+MonoOn f (Icc a b)) : f '' Ioc a b subseteq Ioc (f a) (f b)
+· 使用定理 `intermediate_value_Ioc`：intermediate_value_Ioc {a b : α} (hab : a <= b) 
+{f : α -> δ} (hf : ContinuousOn f (Icc a b)) : Ioc (f a) (f b) subseteq f '' Ioc
+ a b
 -/
-theorem ContinuousOn.image_Ioc_of_strictMonoOn (hab : a <= b) (hf : ContinuousOn f (Icc a b))
+theorem ContinuousOn.image_Ioc_of_strictMonoOn (hab : a ≤ b) (hf : ContinuousOn f (Icc a b))
     (hmono : StrictMonoOn f (Icc a b)) : f '' Ioc a b = Ioc (f a) (f b) :=
   subset_antisymm (hmono.image_Ioc_subset) (intermediate_value_Ioc hab hf)
-
-/--
-theorem `ContinuousOn.image_Ioc_of_strictAntiOn` / 定理 `ContinuousOn.image_Ioc_of_strictAntiOn`
-
-English:
-theorem ContinuousOn.image_Ioc_of_strictAntiOn
-  statement: (hab : a <= b) (hf : ContinuousOn f (Icc a b))
-  proof: subset_antisymm (hmono.image_Ioc_subset) (intermediate_value_Ioc' hab hf)
-
-中文:
-定理 ContinuousOn.image_Ioc_of_strictAntiOn
-  结论: (hab : a <= b) (hf : ContinuousOn f (闭区间 a b))
-  证明: subset_antisymm (hmono.image_Ioc_subset) (intermediate_value_Ioc' hab hf)
-
-Depends on / 依赖: hmono.image_Ioc_subset, image_Ioc_subset, intermediate_value_Ioc, subset_antisymm
+/-
+**ContinuousOn.image_Ioc_of_strictAntiOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.image_Ioc_of_strictAntiOn (hab : a <= b) (hf : ContinuousOn f
+ (Icc a b)) (hmono : StrictAntiOn f (Icc a b)) : f '' Ioc a b = Ico (f b) (f a)
+参数：hab : a <= b；hf : ContinuousOn f (Icc a b)；hmono : StrictAntiOn f (Icc a b)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_antisymm`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Pa
+rtialOrder α] {a b : α}, a ⊆ b → b ⊆ a → a = b
+· 使用引理 `StrictAntiOn.image_Ioc_subset`：StrictAntiOn.image_Ioc_subset (h : Strict
+AntiOn f (Icc a b)) : f '' Ioc a b subseteq Ico (f b) (f a)
+· 使用定理 `intermediate_value_Ioc'`：intermediate_value_Ioc' {a b : α} (hab : a <= b
+) {f : α -> δ} (hf : ContinuousOn f (Icc a b)) : Ico (f b) (f a) subseteq f '' I
+oc a b
 -/
-theorem ContinuousOn.image_Ioc_of_strictAntiOn (hab : a <= b) (hf : ContinuousOn f (Icc a b))
+theorem ContinuousOn.image_Ioc_of_strictAntiOn (hab : a ≤ b) (hf : ContinuousOn f (Icc a b))
     (hmono : StrictAntiOn f (Icc a b)) : f '' Ioc a b = Ico (f b) (f a) :=
   subset_antisymm (hmono.image_Ioc_subset) (intermediate_value_Ioc' hab hf)
-
-/--
-theorem `ContinuousOn.image_Ioo_of_strictMonoOn` / 定理 `ContinuousOn.image_Ioo_of_strictMonoOn`
-
-English:
-theorem ContinuousOn.image_Ioo_of_strictMonoOn
-  statement: (hab : a <= b) (hf : ContinuousOn f (Icc a b))
-  proof: subset_antisymm (hmono.image_Ioo_subset) (intermediate_value_Ioo hab hf)
-
-中文:
-定理 ContinuousOn.image_Ioo_of_strictMonoOn
-  结论: (hab : a <= b) (hf : ContinuousOn f (闭区间 a b))
-  证明: subset_antisymm (hmono.image_Ioo_subset) (intermediate_value_Ioo hab hf)
-
-Depends on / 依赖: hmono.image_Ioo_subset, image_Ioo_subset, intermediate_value_Ioo, subset_antisymm
+/-
+**ContinuousOn.image_Ioo_of_strictMonoOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.image_Ioo_of_strictMonoOn (hab : a <= b) (hf : ContinuousOn f
+ (Icc a b)) (hmono : StrictMonoOn f (Icc a b)) : f '' Ioo a b = Ioo (f a) (f b)
+参数：hab : a <= b；hf : ContinuousOn f (Icc a b)；hmono : StrictMonoOn f (Icc a b)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_antisymm`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Pa
+rtialOrder α] {a b : α}, a ⊆ b → b ⊆ a → a = b
+· 使用引理 `StrictMonoOn.image_Ioo_subset`：StrictMonoOn.image_Ioo_subset (h : Strict
+MonoOn f (Icc a b)) : f '' Ioo a b subseteq Ioo (f a) (f b)
+· 使用定理 `intermediate_value_Ioo`：intermediate_value_Ioo {a b : α} (hab : a <= b) 
+{f : α -> δ} (hf : ContinuousOn f (Icc a b)) : Ioo (f a) (f b) subseteq f '' Ioo
+ a b
 -/
-theorem ContinuousOn.image_Ioo_of_strictMonoOn (hab : a <= b) (hf : ContinuousOn f (Icc a b))
+theorem ContinuousOn.image_Ioo_of_strictMonoOn (hab : a ≤ b) (hf : ContinuousOn f (Icc a b))
     (hmono : StrictMonoOn f (Icc a b)) : f '' Ioo a b = Ioo (f a) (f b) :=
   subset_antisymm (hmono.image_Ioo_subset) (intermediate_value_Ioo hab hf)
-
-/--
-theorem `ContinuousOn.image_Ioo_of_strictAntiOn` / 定理 `ContinuousOn.image_Ioo_of_strictAntiOn`
-
-English:
-theorem ContinuousOn.image_Ioo_of_strictAntiOn
-  statement: (hab : a <= b) (hf : ContinuousOn f (Icc a b))
-  proof: subset_antisymm (hmono.image_Ioo_subset) (intermediate_value_Ioo' hab hf)
-
-中文:
-定理 ContinuousOn.image_Ioo_of_strictAntiOn
-  结论: (hab : a <= b) (hf : ContinuousOn f (闭区间 a b))
-  证明: subset_antisymm (hmono.image_Ioo_subset) (intermediate_value_Ioo' hab hf)
-
-Depends on / 依赖: hmono.image_Ioo_subset, image_Ioo_subset, intermediate_value_Ioo, subset_antisymm
+/-
+**ContinuousOn.image_Ioo_of_strictAntiOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.image_Ioo_of_strictAntiOn (hab : a <= b) (hf : ContinuousOn f
+ (Icc a b)) (hmono : StrictAntiOn f (Icc a b)) : f '' Ioo a b = Ioo (f b) (f a)
+参数：hab : a <= b；hf : ContinuousOn f (Icc a b)；hmono : StrictAntiOn f (Icc a b)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_antisymm`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Pa
+rtialOrder α] {a b : α}, a ⊆ b → b ⊆ a → a = b
+· 使用引理 `StrictAntiOn.image_Ioo_subset`：StrictAntiOn.image_Ioo_subset (h : Strict
+AntiOn f (Icc a b)) : f '' Ioo a b subseteq Ioo (f b) (f a)
+· 使用定理 `intermediate_value_Ioo'`：intermediate_value_Ioo' {a b : α} (hab : a <= b
+) {f : α -> δ} (hf : ContinuousOn f (Icc a b)) : Ioo (f b) (f a) subseteq f '' I
+oo a b
 -/
-theorem ContinuousOn.image_Ioo_of_strictAntiOn (hab : a <= b) (hf : ContinuousOn f (Icc a b))
+theorem ContinuousOn.image_Ioo_of_strictAntiOn (hab : a ≤ b) (hf : ContinuousOn f (Icc a b))
     (hmono : StrictAntiOn f (Icc a b)) : f '' Ioo a b = Ioo (f b) (f a) :=
   subset_antisymm (hmono.image_Ioo_subset) (intermediate_value_Ioo' hab hf)
-
-/--
-theorem `ContinuousOn.image_uIcc_of_monotoneOn` / 定理 `ContinuousOn.image_uIcc_of_monotoneOn`
-
-English:
-theorem ContinuousOn.image_uIcc_of_monotoneOn
-  statement: (hf : ContinuousOn f [[a, b]])
-  proof: subset_antisymm (hmono.image_uIcc_subset) (intermediate_value_uIcc hf)
-
-中文:
-定理 ContinuousOn.image_uIcc_of_monotoneOn
-  结论: (hf : ContinuousOn f [[a, b]])
-  证明: subset_antisymm (hmono.image_uIcc_subset) (intermediate_value_uIcc hf)
-
-Depends on / 依赖: hmono.image_uIcc_subset, image_uIcc_subset, intermediate_value_uIcc, subset_antisymm
+/-
+**ContinuousOn.image_uIcc_of_monotoneOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.image_uIcc_of_monotoneOn (hf : ContinuousOn f [[a, b]]) (hmon
+o : MonotoneOn f [[a, b]]) : f '' [[a, b]] = [[f a, f b]]
+参数：hf : ContinuousOn f [[a, b]]；hmono : MonotoneOn f [[a, b]]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_antisymm`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Pa
+rtialOrder α] {a b : α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `MonotoneOn.image_uIcc_subset`：∀ {α : Type u_1} {β : Type u_2} [inst : Li
+nearOrder α] [inst_1 : Lattice β] {f : α → β} {a b : α},   MonotoneOn f (Set.uIc
+c a b) → f '' Set.…
+· 使用定理 `intermediate_value_uIcc`：intermediate_value_uIcc {a b : α} {f : α -> δ} 
+(hf : ContinuousOn f [[a, b]]) : [[f a, f b]] subseteq f '' uIcc a b
 -/
 theorem ContinuousOn.image_uIcc_of_monotoneOn (hf : ContinuousOn f [[a, b]])
     (hmono : MonotoneOn f [[a, b]]) : f '' [[a, b]] = [[f a, f b]] :=
   subset_antisymm (hmono.image_uIcc_subset) (intermediate_value_uIcc hf)
-
-/--
-theorem `ContinuousOn.image_uIcc_of_antitoneOn` / 定理 `ContinuousOn.image_uIcc_of_antitoneOn`
-
-English:
-theorem ContinuousOn.image_uIcc_of_antitoneOn
-  statement: (hf : ContinuousOn f [[a, b]])
-  proof: subset_antisymm (hmono.image_uIcc_subset) (intermediate_value_uIcc hf)
-
-中文:
-定理 ContinuousOn.image_uIcc_of_antitoneOn
-  结论: (hf : ContinuousOn f [[a, b]])
-  证明: subset_antisymm (hmono.image_uIcc_subset) (intermediate_value_uIcc hf)
-
-Depends on / 依赖: hmono.image_uIcc_subset, image_uIcc_subset, intermediate_value_uIcc, subset_antisymm
+/-
+**ContinuousOn.image_uIcc_of_antitoneOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.image_uIcc_of_antitoneOn (hf : ContinuousOn f [[a, b]]) (hmon
+o : AntitoneOn f [[a, b]]) : f '' [[a, b]] = [[f a, f b]]
+参数：hf : ContinuousOn f [[a, b]]；hmono : AntitoneOn f [[a, b]]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_antisymm`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Pa
+rtialOrder α] {a b : α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `AntitoneOn.image_uIcc_subset`：∀ {α : Type u_1} {β : Type u_2} [inst : Li
+nearOrder α] [inst_1 : Lattice β] {f : α → β} {a b : α},   AntitoneOn f (Set.uIc
+c a b) → f '' Set.…
+· 使用定理 `intermediate_value_uIcc`：intermediate_value_uIcc {a b : α} {f : α -> δ} 
+(hf : ContinuousOn f [[a, b]]) : [[f a, f b]] subseteq f '' uIcc a b
 -/
 theorem ContinuousOn.image_uIcc_of_antitoneOn (hf : ContinuousOn f [[a, b]])
     (hmono : AntitoneOn f [[a, b]]) : f '' [[a, b]] = [[f a, f b]] :=
   subset_antisymm (hmono.image_uIcc_subset) (intermediate_value_uIcc hf)
-
-/--
-theorem `ContinuousOn.image_Ici_of_monotoneOn` / 定理 `ContinuousOn.image_Ici_of_monotoneOn`
-
-English:
-theorem ContinuousOn.image_Ici_of_monotoneOn
-  statement: (hf : ContinuousOn f (Ici a))
-  proof: subset_antisymm (hmono.image_Ici_subset) (intermediate_value_Ici hf htop)
-
-中文:
-定理 ContinuousOn.image_Ici_of_monotoneOn
-  结论: (hf : ContinuousOn f (左闭右无界区间 a))
-  证明: subset_antisymm (hmono.image_Ici_subset) (intermediate_value_Ici hf htop)
-
-Depends on / 依赖: hmono.image_Ici_subset, image_Ici_subset, intermediate_value_Ici, subset_antisymm
+/-
+**ContinuousOn.image_Ici_of_monotoneOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.image_Ici_of_monotoneOn (hf : ContinuousOn f (Ici a)) (hmono 
+: MonotoneOn f (Ici a)) (htop : Tendsto f atTop atTop) : f '' Ici a = Ici (f a)
+参数：hf : ContinuousOn f (Ici a)；hmono : MonotoneOn f (Ici a)；htop : Tendsto f atT
+op atTop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_antisymm`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Pa
+rtialOrder α] {a b : α}, a ⊆ b → b ⊆ a → a = b
+· 使用引理 `MonotoneOn.image_Ici_subset`：MonotoneOn.image_Ici_subset (h : MonotoneOn
+ f (Ici a)) : f '' Ici a subseteq Ici (f a)
+· 使用定理 `intermediate_value_Ici`：intermediate_value_Ici {a : α} {f : α -> δ} (hf 
+: ContinuousOn f (Ici a)) (htop : Tendsto f atTop atTop) : Ici (f a) subseteq f 
+'' Ici a
 -/
 theorem ContinuousOn.image_Ici_of_monotoneOn (hf : ContinuousOn f (Ici a))
     (hmono : MonotoneOn f (Ici a)) (htop : Tendsto f atTop atTop) : f '' Ici a = Ici (f a) :=
   subset_antisymm (hmono.image_Ici_subset) (intermediate_value_Ici hf htop)
-
-/--
-theorem `ContinuousOn.image_Ici_of_antitoneOn` / 定理 `ContinuousOn.image_Ici_of_antitoneOn`
-
-English:
-theorem ContinuousOn.image_Ici_of_antitoneOn
-  statement: (hf : ContinuousOn f (Ici a))
-  proof: subset_antisymm (hmono.image_Ici_subset) (intermediate_value_Ici' hf htop)
-
-中文:
-定理 ContinuousOn.image_Ici_of_antitoneOn
-  结论: (hf : ContinuousOn f (左闭右无界区间 a))
-  证明: subset_antisymm (hmono.image_Ici_subset) (intermediate_value_Ici' hf htop)
-
-Depends on / 依赖: hmono.image_Ici_subset, image_Ici_subset, intermediate_value_Ici, subset_antisymm
+/-
+**ContinuousOn.image_Ici_of_antitoneOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.image_Ici_of_antitoneOn (hf : ContinuousOn f (Ici a)) (hmono 
+: AntitoneOn f (Ici a)) (htop : Tendsto f atTop atBot) : f '' Ici a = Iic (f a)
+参数：hf : ContinuousOn f (Ici a)；hmono : AntitoneOn f (Ici a)；htop : Tendsto f atT
+op atBot。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_antisymm`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Pa
+rtialOrder α] {a b : α}, a ⊆ b → b ⊆ a → a = b
+· 使用引理 `AntitoneOn.image_Ici_subset`：AntitoneOn.image_Ici_subset (h : AntitoneOn
+ f (Ici a)) : f '' Ici a subseteq Iic (f a)
+· 使用定理 `intermediate_value_Ici'`：intermediate_value_Ici' {a : α} {f : α -> δ} (h
+f : ContinuousOn f (Ici a)) (htop : Tendsto f atTop atBot) : Iic (f a) subseteq 
+f '' Ici a
 -/
 theorem ContinuousOn.image_Ici_of_antitoneOn (hf : ContinuousOn f (Ici a))
     (hmono : AntitoneOn f (Ici a)) (htop : Tendsto f atTop atBot) : f '' Ici a = Iic (f a) :=
   subset_antisymm (hmono.image_Ici_subset) (intermediate_value_Ici' hf htop)
-
-/--
-theorem `ContinuousOn.image_Iic_of_monotoneOn` / 定理 `ContinuousOn.image_Iic_of_monotoneOn`
-
-English:
-theorem ContinuousOn.image_Iic_of_monotoneOn
-  statement: (hf : ContinuousOn f (Iic a))
-  proof: subset_antisymm (hmono.image_Iic_subset) (intermediate_value_Iic hf hbot)
-
-中文:
-定理 ContinuousOn.image_Iic_of_monotoneOn
-  结论: (hf : ContinuousOn f (左无界右闭区间 a))
-  证明: subset_antisymm (hmono.image_Iic_subset) (intermediate_value_Iic hf hbot)
-
-Depends on / 依赖: hmono.image_Iic_subset, image_Iic_subset, intermediate_value_Iic, subset_antisymm
+/-
+**ContinuousOn.image_Iic_of_monotoneOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.image_Iic_of_monotoneOn (hf : ContinuousOn f (Iic a)) (hmono 
+: MonotoneOn f (Iic a)) (hbot : Tendsto f atBot atBot) : f '' Iic a = Iic (f a)
+参数：hf : ContinuousOn f (Iic a)；hmono : MonotoneOn f (Iic a)；hbot : Tendsto f atB
+ot atBot。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_antisymm`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Pa
+rtialOrder α] {a b : α}, a ⊆ b → b ⊆ a → a = b
+· 使用引理 `MonotoneOn.image_Iic_subset`：MonotoneOn.image_Iic_subset (h : MonotoneOn
+ f (Iic b)) : f '' Iic b subseteq Iic (f b)
+· 使用定理 `intermediate_value_Iic`：intermediate_value_Iic {a : α} {f : α -> δ} (hf 
+: ContinuousOn f (Iic a)) (hbot : Tendsto f atBot atBot) : Iic (f a) subseteq f 
+'' Iic a
 -/
 theorem ContinuousOn.image_Iic_of_monotoneOn (hf : ContinuousOn f (Iic a))
     (hmono : MonotoneOn f (Iic a)) (hbot : Tendsto f atBot atBot) : f '' Iic a = Iic (f a) :=
   subset_antisymm (hmono.image_Iic_subset) (intermediate_value_Iic hf hbot)
-
-/--
-theorem `ContinuousOn.image_Iic_of_antitoneOn` / 定理 `ContinuousOn.image_Iic_of_antitoneOn`
-
-English:
-theorem ContinuousOn.image_Iic_of_antitoneOn
-  statement: (hf : ContinuousOn f (Iic a))
-  proof: subset_antisymm (hmono.image_Iic_subset) (intermediate_value_Iic' hf hbot)
-
-中文:
-定理 ContinuousOn.image_Iic_of_antitoneOn
-  结论: (hf : ContinuousOn f (左无界右闭区间 a))
-  证明: subset_antisymm (hmono.image_Iic_subset) (intermediate_value_Iic' hf hbot)
-
-Depends on / 依赖: hmono.image_Iic_subset, image_Iic_subset, intermediate_value_Iic, subset_antisymm
+/-
+**ContinuousOn.image_Iic_of_antitoneOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.image_Iic_of_antitoneOn (hf : ContinuousOn f (Iic a)) (hmono 
+: AntitoneOn f (Iic a)) (hbot : Tendsto f atBot atTop) : f '' Iic a = Ici (f a)
+参数：hf : ContinuousOn f (Iic a)；hmono : AntitoneOn f (Iic a)；hbot : Tendsto f atB
+ot atTop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_antisymm`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Pa
+rtialOrder α] {a b : α}, a ⊆ b → b ⊆ a → a = b
+· 使用引理 `AntitoneOn.image_Iic_subset`：AntitoneOn.image_Iic_subset (h : AntitoneOn
+ f (Iic b)) : f '' Iic b subseteq Ici (f b)
+· 使用定理 `intermediate_value_Iic'`：intermediate_value_Iic' {a : α} {f : α -> δ} (h
+f : ContinuousOn f (Iic a)) (hbot : Tendsto f atBot atTop) : Ici (f a) subseteq 
+f '' Iic a
 -/
 theorem ContinuousOn.image_Iic_of_antitoneOn (hf : ContinuousOn f (Iic a))
     (hmono : AntitoneOn f (Iic a)) (hbot : Tendsto f atBot atTop) : f '' Iic a = Ici (f a) :=
   subset_antisymm (hmono.image_Iic_subset) (intermediate_value_Iic' hf hbot)
-
-/--
-theorem `ContinuousOn.image_Ioi_of_strictMonoOn` / 定理 `ContinuousOn.image_Ioi_of_strictMonoOn`
-
-English:
-theorem ContinuousOn.image_Ioi_of_strictMonoOn
-  statement: (hf : ContinuousOn f (Ici a))
-  proof: subset_antisymm (hmono.image_Ioi_subset) (intermediate_value_Ioi hf htop)
-
-中文:
-定理 ContinuousOn.image_Ioi_of_strictMonoOn
-  结论: (hf : ContinuousOn f (左闭右无界区间 a))
-  证明: subset_antisymm (hmono.image_Ioi_subset) (intermediate_value_Ioi hf htop)
-
-Depends on / 依赖: hmono.image_Ioi_subset, image_Ioi_subset, intermediate_value_Ioi, subset_antisymm
+/-
+**ContinuousOn.image_Ioi_of_strictMonoOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.image_Ioi_of_strictMonoOn (hf : ContinuousOn f (Ici a)) (hmon
+o : StrictMonoOn f (Ici a)) (htop : Tendsto f atTop atTop) : f '' Ioi a = Ioi (f
+ a)
+参数：hf : ContinuousOn f (Ici a)；hmono : StrictMonoOn f (Ici a)；htop : Tendsto f a
+tTop atTop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_antisymm`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Pa
+rtialOrder α] {a b : α}, a ⊆ b → b ⊆ a → a = b
+· 使用引理 `StrictMonoOn.image_Ioi_subset`：StrictMonoOn.image_Ioi_subset (h : Strict
+MonoOn f (Ici a)) : f '' Ioi a subseteq Ioi (f a)
+· 使用定理 `intermediate_value_Ioi`：intermediate_value_Ioi {a : α} {f : α -> δ} (hf 
+: ContinuousOn f (Ici a)) (htop : Tendsto f atTop atTop) : Ioi (f a) subseteq f 
+'' Ioi a
 -/
 theorem ContinuousOn.image_Ioi_of_strictMonoOn (hf : ContinuousOn f (Ici a))
     (hmono : StrictMonoOn f (Ici a)) (htop : Tendsto f atTop atTop) : f '' Ioi a = Ioi (f a) :=
   subset_antisymm (hmono.image_Ioi_subset) (intermediate_value_Ioi hf htop)
-
-/--
-theorem `ContinuousOn.image_Ioi_of_strictAntiOn` / 定理 `ContinuousOn.image_Ioi_of_strictAntiOn`
-
-English:
-theorem ContinuousOn.image_Ioi_of_strictAntiOn
-  statement: (hf : ContinuousOn f (Ici a))
-  proof: subset_antisymm (hmono.image_Ioi_subset) (intermediate_value_Ioi' hf htop)
-
-中文:
-定理 ContinuousOn.image_Ioi_of_strictAntiOn
-  结论: (hf : ContinuousOn f (左闭右无界区间 a))
-  证明: subset_antisymm (hmono.image_Ioi_subset) (intermediate_value_Ioi' hf htop)
-
-Depends on / 依赖: hmono.image_Ioi_subset, image_Ioi_subset, intermediate_value_Ioi, subset_antisymm
+/-
+**ContinuousOn.image_Ioi_of_strictAntiOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.image_Ioi_of_strictAntiOn (hf : ContinuousOn f (Ici a)) (hmon
+o : StrictAntiOn f (Ici a)) (htop : Tendsto f atTop atBot) : f '' Ioi a = Iio (f
+ a)
+参数：hf : ContinuousOn f (Ici a)；hmono : StrictAntiOn f (Ici a)；htop : Tendsto f a
+tTop atBot。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_antisymm`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Pa
+rtialOrder α] {a b : α}, a ⊆ b → b ⊆ a → a = b
+· 使用引理 `StrictAntiOn.image_Ioi_subset`：StrictAntiOn.image_Ioi_subset (h : Strict
+AntiOn f (Ici a)) : f '' Ioi a subseteq Iio (f a)
+· 使用定理 `intermediate_value_Ioi'`：intermediate_value_Ioi' {a : α} {f : α -> δ} (h
+f : ContinuousOn f (Ici a)) (htop : Tendsto f atTop atBot) : Iio (f a) subseteq 
+f '' Ioi a
 -/
 theorem ContinuousOn.image_Ioi_of_strictAntiOn (hf : ContinuousOn f (Ici a))
     (hmono : StrictAntiOn f (Ici a)) (htop : Tendsto f atTop atBot) : f '' Ioi a = Iio (f a) :=
   subset_antisymm (hmono.image_Ioi_subset) (intermediate_value_Ioi' hf htop)
-
-/--
-theorem `ContinuousOn.image_Iio_of_strictMonoOn` / 定理 `ContinuousOn.image_Iio_of_strictMonoOn`
-
-English:
-theorem ContinuousOn.image_Iio_of_strictMonoOn
-  statement: (hf : ContinuousOn f (Iic a))
-  proof: subset_antisymm (hmono.image_Iio_subset) (intermediate_value_Iio hf hbot)
-
-中文:
-定理 ContinuousOn.image_Iio_of_strictMonoOn
-  结论: (hf : ContinuousOn f (左无界右闭区间 a))
-  证明: subset_antisymm (hmono.image_Iio_subset) (intermediate_value_Iio hf hbot)
-
-Depends on / 依赖: hmono.image_Iio_subset, image_Iio_subset, intermediate_value_Iio, subset_antisymm
+/-
+**ContinuousOn.image_Iio_of_strictMonoOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.image_Iio_of_strictMonoOn (hf : ContinuousOn f (Iic a)) (hmon
+o : StrictMonoOn f (Iic a)) (hbot : Tendsto f atBot atBot) : f '' Iio a = Iio (f
+ a)
+参数：hf : ContinuousOn f (Iic a)；hmono : StrictMonoOn f (Iic a)；hbot : Tendsto f a
+tBot atBot。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_antisymm`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Pa
+rtialOrder α] {a b : α}, a ⊆ b → b ⊆ a → a = b
+· 使用引理 `StrictMonoOn.image_Iio_subset`：StrictMonoOn.image_Iio_subset (h : Strict
+MonoOn f (Iic b)) : f '' Iio b subseteq Iio (f b)
+· 使用定理 `intermediate_value_Iio`：intermediate_value_Iio {a : α} {f : α -> δ} (hf 
+: ContinuousOn f (Iic a)) (hbot : Tendsto f atBot atBot) : Iio (f a) subseteq f 
+'' Iio a
 -/
 theorem ContinuousOn.image_Iio_of_strictMonoOn (hf : ContinuousOn f (Iic a))
     (hmono : StrictMonoOn f (Iic a)) (hbot : Tendsto f atBot atBot) : f '' Iio a = Iio (f a) :=
   subset_antisymm (hmono.image_Iio_subset) (intermediate_value_Iio hf hbot)
-
-/--
-theorem `ContinuousOn.image_Iio_of_strictAntiOn` / 定理 `ContinuousOn.image_Iio_of_strictAntiOn`
-
-English:
-theorem ContinuousOn.image_Iio_of_strictAntiOn
-  statement: (hf : ContinuousOn f (Iic a))
-  proof: subset_antisymm (hmono.image_Iio_subset) (intermediate_value_Iio' hf hbot)
-
-中文:
-定理 ContinuousOn.image_Iio_of_strictAntiOn
-  结论: (hf : ContinuousOn f (左无界右闭区间 a))
-  证明: subset_antisymm (hmono.image_Iio_subset) (intermediate_value_Iio' hf hbot)
-
-Depends on / 依赖: hmono.image_Iio_subset, image_Iio_subset, intermediate_value_Iio, subset_antisymm
+/-
+**ContinuousOn.image_Iio_of_strictAntiOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.image_Iio_of_strictAntiOn (hf : ContinuousOn f (Iic a)) (hmon
+o : StrictAntiOn f (Iic a)) (hbot : Tendsto f atBot atTop) : f '' Iio a = Ioi (f
+ a)
+参数：hf : ContinuousOn f (Iic a)；hmono : StrictAntiOn f (Iic a)；hbot : Tendsto f a
+tBot atTop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `subset_antisymm`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Pa
+rtialOrder α] {a b : α}, a ⊆ b → b ⊆ a → a = b
+· 使用引理 `StrictAntiOn.image_Iio_subset`：StrictAntiOn.image_Iio_subset (h : Strict
+AntiOn f (Iic b)) : f '' Iio b subseteq Ioi (f b)
+· 使用定理 `intermediate_value_Iio'`：intermediate_value_Iio' {a : α} {f : α -> δ} (h
+f : ContinuousOn f (Iic a)) (hbot : Tendsto f atBot atTop) : Ioi (f a) subseteq 
+f '' Iio a
 -/
 theorem ContinuousOn.image_Iio_of_strictAntiOn (hf : ContinuousOn f (Iic a))
     (hmono : StrictAntiOn f (Iic a)) (hbot : Tendsto f atBot atTop) : f '' Iio a = Ioi (f a) :=
   subset_antisymm (hmono.image_Iio_subset) (intermediate_value_Iio' hf hbot)
 
+/-!
+### Order-agnostic images under continuous strictly monotone maps
 
-/--
-theorem `Continuous.image_Icc_of_strictMono` / 定理 `Continuous.image_Icc_of_strictMono`
+If `f` is *globally* continuous and strictly monotone, each interval maps to the interval of its
+endpoint images with no `a ≤ b` hypothesis: when `a > b`, both sides are empty (since `f a > f b`).
+-/
 
-English:
-theorem Continuous.image_Icc_of_strictMono
-  given: (hf_c : Continuous f) (hf : StrictMono f)
-  proof: by
-  rcases le_or_gt a b with hab | hab
-  · exact hf_c.continuousOn.image_Icc_of_monotoneOn hab (hf.monotone.monotoneOn _)
-  · simp [not_le.mpr hab, not_le.mpr (hf hab)]
+/-
+**Continuous.image_Icc_of_strictMono** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.image_Icc_of_strictMono (hf_c : Continuous f) (hf : StrictMono 
+f) : f '' Icc a b = Icc (f a) (f b)
+参数：hf_c : Continuous f；hf : StrictMono f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_or_gt`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b <
+ a
+· 使用定理 `ContinuousOn.image_Icc_of_monotoneOn`：ContinuousOn.image_Icc_of_monotone
+On (hab : a <= b) (hf : ContinuousOn f (Icc a b)) (hmono : MonotoneOn f (Icc a b
+)) : f '' Icc a b = Icc (f…
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
+· 使用定理 `Monotone.monotoneOn`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [in
+st_1 : Preorder β] {f : α → β},   Monotone f → ∀ (s : Set α), MonotoneOn f s
+· 使用定理 `StrictMono.monotone`：∀ {α : Type u} {β : Type v} [inst : PartialOrder α]
+ [inst_1 : Preorder β] {f : α → β}, StrictMono f → Monotone f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.Icc_eq_empty`：Icc_eq_empty (h : ¬a <= b) : Icc a b = ∅
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Set.image_empty`：image_empty (f : α -> β) : f '' ∅ = ∅
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-中文:
-定理 连续.image_Icc_of_strictMono
-  条件: (hf_c : 连续 f) (hf : 严格递增 f)
-  证明: by
-  rcases le_or_gt a b with hab | hab
-  · exact hf_c.continuousOn.image_Icc_of_monotoneOn hab (hf.monotone.monotoneOn _)
-  · simp [not_le.mpr hab, not_le.mpr (hf hab)]
+--- 原说明 ---
+### Order-agnostic images under continuous strictly monotone maps
 
-Depends on / 依赖: continuousOn, hf.monotone.monotoneOn, hf_c, hf_c.continuousOn.image_Icc_of_monotoneOn, image_Icc_of_monotoneOn, le_or_gt, monotone, monotoneOn, not_le, not_le.mpr
+If `f` is *globally* continuous and strictly monotone, each interval maps to the
+ interval of its
+endpoint images with no `a ≤ b` hypothesis: when `a > b`, both sides are empty (
+since `f a > f b`).
 -/
 theorem Continuous.image_Icc_of_strictMono (hf_c : Continuous f) (hf : StrictMono f) :
     f '' Icc a b = Icc (f a) (f b) := by
   rcases le_or_gt a b with hab | hab
   · exact hf_c.continuousOn.image_Icc_of_monotoneOn hab (hf.monotone.monotoneOn _)
   · simp [not_le.mpr hab, not_le.mpr (hf hab)]
-
-/--
-theorem `Continuous.image_Ico_of_strictMono` / 定理 `Continuous.image_Ico_of_strictMono`
-
-English:
-theorem Continuous.image_Ico_of_strictMono
-  given: (hf_c : Continuous f) (hf : StrictMono f)
-  proof: by
-  rcases le_or_gt a b with hab | hab
-  · exact hf_c.continuousOn.image_Ico_of_strictMonoOn hab (hf.strictMonoOn _)
-  · simp [lt_asymm hab, lt_asymm (hf hab)]
-
-中文:
-定理 连续.image_Ico_of_strictMono
-  条件: (hf_c : 连续 f) (hf : 严格递增 f)
-  证明: by
-  rcases le_or_gt a b with hab | hab
-  · exact hf_c.continuousOn.image_Ico_of_strictMonoOn hab (hf.strictMonoOn _)
-  · simp [lt_asymm hab, lt_asymm (hf hab)]
-
-Depends on / 依赖: continuousOn, hf.strictMonoOn, hf_c, hf_c.continuousOn.image_Ico_of_strictMonoOn, image_Ico_of_strictMonoOn, le_or_gt, lt_asymm, strictMonoOn
+/-
+**Continuous.image_Ico_of_strictMono** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.image_Ico_of_strictMono (hf_c : Continuous f) (hf : StrictMono 
+f) : f '' Ico a b = Ico (f a) (f b)
+参数：hf_c : Continuous f；hf : StrictMono f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_or_gt`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b <
+ a
+· 使用定理 `ContinuousOn.image_Ico_of_strictMonoOn`：ContinuousOn.image_Ico_of_strict
+MonoOn (hab : a <= b) (hf : ContinuousOn f (Icc a b)) (hmono : StrictMonoOn f (I
+cc a b)) : f '' Ico a b = Ic…
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
+· 使用定理 `StrictMono.strictMonoOn`：∀ {α : Type u} {β : Type v} [inst : Preorder α]
+ [inst_1 : Preorder β] {f : α → β},   StrictMono f → ∀ (s : Set α), StrictMonoOn
+ f s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.Ico_eq_empty`：Ico_eq_empty (h : ¬a < b) : Ico a b = ∅
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用引理 `lt_asymm`：lt_asymm (h : a < b) : ¬b < a
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Set.image_empty`：image_empty (f : α -> β) : f '' ∅ = ∅
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem Continuous.image_Ico_of_strictMono (hf_c : Continuous f) (hf : StrictMono f) :
     f '' Ico a b = Ico (f a) (f b) := by
   rcases le_or_gt a b with hab | hab
   · exact hf_c.continuousOn.image_Ico_of_strictMonoOn hab (hf.strictMonoOn _)
   · simp [lt_asymm hab, lt_asymm (hf hab)]
-
-/--
-theorem `Continuous.image_Ioc_of_strictMono` / 定理 `Continuous.image_Ioc_of_strictMono`
-
-English:
-theorem Continuous.image_Ioc_of_strictMono
-  given: (hf_c : Continuous f) (hf : StrictMono f)
-  proof: by
-  rcases le_or_gt a b with hab | hab
-  · exact hf_c.continuousOn.image_Ioc_of_strictMonoOn hab (hf.strictMonoOn _)
-  · simp [lt_asymm hab, lt_asymm (hf hab)]
-
-中文:
-定理 连续.image_Ioc_of_strictMono
-  条件: (hf_c : 连续 f) (hf : 严格递增 f)
-  证明: by
-  rcases le_or_gt a b with hab | hab
-  · exact hf_c.continuousOn.image_Ioc_of_strictMonoOn hab (hf.strictMonoOn _)
-  · simp [lt_asymm hab, lt_asymm (hf hab)]
-
-Depends on / 依赖: continuousOn, hf.strictMonoOn, hf_c, hf_c.continuousOn.image_Ioc_of_strictMonoOn, image_Ioc_of_strictMonoOn, le_or_gt, lt_asymm, strictMonoOn
+/-
+**Continuous.image_Ioc_of_strictMono** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.image_Ioc_of_strictMono (hf_c : Continuous f) (hf : StrictMono 
+f) : f '' Ioc a b = Ioc (f a) (f b)
+参数：hf_c : Continuous f；hf : StrictMono f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_or_gt`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b <
+ a
+· 使用定理 `ContinuousOn.image_Ioc_of_strictMonoOn`：ContinuousOn.image_Ioc_of_strict
+MonoOn (hab : a <= b) (hf : ContinuousOn f (Icc a b)) (hmono : StrictMonoOn f (I
+cc a b)) : f '' Ioc a b = Io…
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
+· 使用定理 `StrictMono.strictMonoOn`：∀ {α : Type u} {β : Type v} [inst : Preorder α]
+ [inst_1 : Preorder β] {f : α → β},   StrictMono f → ∀ (s : Set α), StrictMonoOn
+ f s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.Ioc_eq_empty`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, ¬b < a
+ → Set.Ioc b a = ∅
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用引理 `lt_asymm`：lt_asymm (h : a < b) : ¬b < a
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Set.image_empty`：image_empty (f : α -> β) : f '' ∅ = ∅
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem Continuous.image_Ioc_of_strictMono (hf_c : Continuous f) (hf : StrictMono f) :
     f '' Ioc a b = Ioc (f a) (f b) := by
   rcases le_or_gt a b with hab | hab
   · exact hf_c.continuousOn.image_Ioc_of_strictMonoOn hab (hf.strictMonoOn _)
   · simp [lt_asymm hab, lt_asymm (hf hab)]
-
-/--
-theorem `Continuous.image_Ioo_of_strictMono` / 定理 `Continuous.image_Ioo_of_strictMono`
-
-English:
-theorem Continuous.image_Ioo_of_strictMono
-  given: (hf_c : Continuous f) (hf : StrictMono f)
-  proof: by
-  rcases le_or_gt a b with hab | hab
-  · exact hf_c.continuousOn.image_Ioo_of_strictMonoOn hab (hf.strictMonoOn _)
-  · simp [lt_asymm hab, lt_asymm (hf hab)]
-
-中文:
-定理 连续.image_Ioo_of_strictMono
-  条件: (hf_c : 连续 f) (hf : 严格递增 f)
-  证明: by
-  rcases le_or_gt a b with hab | hab
-  · exact hf_c.continuousOn.image_Ioo_of_strictMonoOn hab (hf.strictMonoOn _)
-  · simp [lt_asymm hab, lt_asymm (hf hab)]
-
-Depends on / 依赖: continuousOn, hf.strictMonoOn, hf_c, hf_c.continuousOn.image_Ioo_of_strictMonoOn, image_Ioo_of_strictMonoOn, le_or_gt, lt_asymm, strictMonoOn
+/-
+**Continuous.image_Ioo_of_strictMono** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Continuous.image_Ioo_of_strictMono (hf_c : Continuous f) (hf : StrictMono 
+f) : f '' Ioo a b = Ioo (f a) (f b)
+参数：hf_c : Continuous f；hf : StrictMono f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_or_gt`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b <
+ a
+· 使用定理 `ContinuousOn.image_Ioo_of_strictMonoOn`：ContinuousOn.image_Ioo_of_strict
+MonoOn (hab : a <= b) (hf : ContinuousOn f (Icc a b)) (hmono : StrictMonoOn f (I
+cc a b)) : f '' Ioo a b = Io…
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
+· 使用定理 `StrictMono.strictMonoOn`：∀ {α : Type u} {β : Type v} [inst : Preorder α]
+ [inst_1 : Preorder β] {f : α → β},   StrictMono f → ∀ (s : Set α), StrictMonoOn
+ f s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.Ioo_eq_empty`：Ioo_eq_empty (h : ¬a < b) : Ioo a b = ∅
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用引理 `lt_asymm`：lt_asymm (h : a < b) : ¬b < a
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Set.image_empty`：image_empty (f : α -> β) : f '' ∅ = ∅
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem Continuous.image_Ioo_of_strictMono (hf_c : Continuous f) (hf : StrictMono f) :
     f '' Ioo a b = Ioo (f a) (f b) := by

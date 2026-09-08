@@ -45,65 +45,89 @@ variable {R S : Type*} [CommRing R] [CommRing S] [Algebra R S] [IsDomain S]
   {G : Type*} [Group G] [MulSemiringAction G S] [SMulCommClass G R S] {f : R[X]}
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `Splits.toPermHom_apply_eq_one_or_isSwap_of_ncard_le_of_mem_inertia` / 定理 `Splits.toPermHom_apply_eq_one_or_isSwap_of_ncard_le_of_mem_inertia`
+/-- If the roots of `f` in `S` have at most one collision mod `p`, then a `MulSemiringAction` on
+the roots in `S` must be the identity permutation or a transposition.
 
-English:
-theorem Splits.toPermHom_apply_eq_one_or_isSwap_of_ncard_le_of_mem_inertia
-  proof: by
-  classical
-  by_cases hfp : f.map (algebraMap R (S ⧸ p)) = 0
-  · rw [rootSet_def f (S ⧸ p), aroots_def, hfp, roots_zero, Multiset.toFinset_zero,
-      Finset.coe_empty, Set.ncard_empty, zero_add, Set.ncard_le_one_iff_subsingleton,
-      ← Set.subsingleton_coe] at hp
-    exact Or.inl (Subsingleton.elim _ _)
-  let π : S ->ₐ[R] S ⧸ p := Ideal.Quotient.mkₐ R p
-  rw [← hf.image_rootSet_of_map_ne_zero π hfp]; rw [Set.ncard_le_ncard_image_add_one_iff] at hp
-  have hπ (x : S) : π (g • x) = π x := (Ideal.Quotient.mk_eq_mk_iff_sub_mem (g • x) x).mpr (hg x)
-  rw [or_iff_not_imp_left]; rw [Equiv.ext_iff]; rw [not_forall]
-  rintro ⟨x, hx : g • x != x⟩
-  refine ⟨g • x, x, hx, ?_⟩
-  ext z
-  simp only [Equiv.swap_apply_def, MulAction.toPermHom_apply, MulAction.toPerm_apply]
-  split_ifs with hz hz'
-  · subst hz
-    have key := hp (g • g • x) (g • g • x).2 (g • x) (g • x).2 (g • x) (g • x).2 x x.2
-      (by simp [hπ]) (by simp [hπ]) (by simpa [← rootSet.coe_smul]) (by simpa [← rootSet.coe_smul])
-    grind [rootSet.coe_smul]
-  · simp [hz']
-  · grind [rootSet.coe_smul, SetLike.coe_eq_coe]
+Such polynomials are called *Morse functions* in Section 4.4 of [serre-galois]. -/
+/-
+**Polynomial.Splits.toPermHom_apply_eq_one_or_isSwap_of_ncard_le_of_mem_inertia*
+* 是 Mathlib 中的一个定理，位于命名空间 `Polynomial.Splits`。
+形式化陈述：∀ {R : Type u_1} {S : Type u_2} [inst : CommRing R] [inst_1 : CommRing S] 
+[inst_2 : Algebra R S] [inst_3 : IsDomain S]   {G : Type u_3} [inst_4 : Group G]
+ [inst_5 : MulSemiringAction G S] [inst_6 : SMulCommClass G R S] {f : Polynomial
+ R}   [inst_7 : DecidableEq ↑(f.rootSet S)],   (Polynomial.map (algebraMap R S) 
+f).Splits →     ∀ (p : Ideal S) [inst_8 : p.IsPrime],       (f.rootSet S).ncard 
+≤ (f.rootSet (S ⧸ p)).ncard + 1 →         ∀ g ∈ Ideal.inertia G p,           (Mu
+lAction.toPermHom G ↑(f.rootSet S)) g = 1 ∨ ((MulAction.toPermHom G ↑(f.rootSet 
+S)) g).IsSwap
+参数：f.rootSet S；Polynomial.map (algebraMap R S) f；p : Ideal S；f.rootSet S；f.rootS
+et (S ⧸ p)；MulAction.toPermHom G ↑(f.rootSet S)；(MulAction.toPermHom G ↑(f.rootS
+et S)) g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.subsingleton_coe`：subsingleton_coe (s : Set α) : Subsingleton s ↔ s.
+Subsingleton
+· 使用定理 `Set.ncard_le_one_iff_subsingleton`：∀ {α : Type u_1} {s : Set α} [Finite 
+↑s], s.ncard ≤ 1 ↔ s.Subsingleton
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Set.ncard_empty`：∀ (α : Type u_3), ∅.ncard = 0
+· 使用定理 `Finset.coe_empty`：coe_empty : ((∅ : Finset α) : Set α) = ∅
+· 使用定理 `Multiset.toFinset_zero`：toFinset_zero : toFinset (0 : Multiset α) = ∅
+· 使用定理 `Polynomial.roots_zero`：roots_zero : (0 : R[X]).roots = 0
+· 使用定理 `Polynomial.aroots_def`：aroots_def (p : T[X]) (S) [CommRing S] [IsDomain 
+S] [Algebra T S] : p.aroots S = (p.map (algebraMap T S)).roots
+· 使用定理 `Polynomial.rootSet_def`：rootSet_def (p : T[X]) (S) [CommRing S] [IsDomai
+n S] [Algebra T S] [DecidableEq S] : p.rootSet S = (p.aroots S).toFinset
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ideal.Quotient.mk_eq_mk_iff_sub_mem`：mk_eq_mk_iff_sub_mem (x y : R) : mk
+ I x = mk I y ↔ x - y in I
+· 使用定理 `Classical.or_iff_not_imp_left`：∀ {a b : Prop}, a ∨ b ↔ ¬a → b
+· 使用定理 `Equiv.ext_iff`：∀ {α : Sort u} {β : Sort v} {f g : α ≃ β}, f = g ↔ ∀ (x :
+ α), f x = g x
+· 使用定理 `Classical.not_forall`：∀ {α : Sort u_1} {p : α → Prop}, (¬∀ (x : α), p x)
+ ↔ ∃ x, ¬p x
+· 使用定理 `Equiv.Perm.ext`：∀ {α : Sort u} {σ τ : Equiv.Perm α}, (∀ (x : α), σ x = τ
+ x) → σ = τ
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MulAction.toPermHom_apply`：∀ (G : Type u_1) (α : Type u_5) [inst : Group
+ G] [inst_1 : MulAction G α] (a : G),   (MulAction.toPermHom G α) a = MulAction.
+toPerm a
+· 使用定理 `MulAction.toPerm_apply`：∀ {α : Type u_5} {β : Type u_6} [inst : Group α]
+ [inst_1 : MulAction α β] (a : α) (x : β),   (MulAction.toPerm a) x = a • x
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `Set.ncard_le_ncard_image_add_one_iff`：Set.ncard_le_ncard_image_add_one_i
+ff {α β : Type*} (s : Set α) [Finite s] (f : α -> β) : s.ncard <= (f '' s).ncard
+ + 1 ↔ forall a in s, fora…
+· 使用定理 `Polynomial.Splits.image_rootSet_of_map_ne_zero`：∀ {R : Type u_1} [inst :
+ CommRing R] {f : Polynomial R} {A : Type u_2} {B : Type u_3} [inst_1 : CommRing
+ A]   [inst_2 : CommRing B] [inst_3 …
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+（共 33 条，此处仅展示前 30 条）
 
-中文:
-定理 Splits.toPermHom_apply_eq_one_or_isSwap_of_ncard_le_of_mem_inertia
-  证明: by
-  classical
-  by_cases hfp : f.map (algebraMap R (S ⧸ p)) = 0
-  · rw [rootSet_def f (S ⧸ p), aroots_def, hfp, roots_zero, Multiset.toFinset_zero,
-      Finset.coe_empty, Set.ncard_empty, zero_add, Set.ncard_le_one_iff_subsingleton,
-      ← Set.subsingleton_coe] at hp
-    exact Or.inl (Subsingleton.elim _ _)
-  let π : S ->ₐ[R] S ⧸ p := Ideal.Quotient.mkₐ R p
-  rw [← hf.image_rootSet_of_map_ne_zero π hfp]; rw [Set.ncard_le_ncard_image_add_one_iff] at hp
-  have hπ (x : S) : π (g • x) = π x := (Ideal.Quotient.mk_eq_mk_iff_sub_mem (g • x) x).mpr (hg x)
-  rw [or_iff_not_imp_left]; rw [Equiv.ext_iff]; rw [not_forall]
-  rintro ⟨x, hx : g • x != x⟩
-  refine ⟨g • x, x, hx, ?_⟩
-  ext z
-  simp only [Equiv.swap_apply_def, MulAction.toPermHom_apply, MulAction.toPerm_apply]
-  split_ifs with hz hz'
-  · subst hz
-    have key := hp (g • g • x) (g • g • x).2 (g • x) (g • x).2 (g • x) (g • x).2 x x.2
-      (by simp [hπ]) (by simp [hπ]) (by simpa [← rootSet.coe_smul]) (by simpa [← rootSet.coe_smul])
-    grind [rootSet.coe_smul]
-  · simp [hz']
-  · grind [rootSet.coe_smul, SetLike.coe_eq_coe]
+--- 原说明 ---
+If the roots of `f` in `S` have at most one collision mod `p`, then a `MulSemiri
+ngAction` on
+the roots in `S` must be the identity permutation or a transposition.
 
-Depends on / 依赖: Finset, Finset.coe_empty, Ideal.Quotient.mk, Ideal.Quotient.mk_eq_mk_iff_s, Multiset, Multiset.toFinset_zero, Or.inl, Quotient, Set.ncard_empty, Set.ncard_le_ncard_image_add_one_iff, Set.ncard_le_one_iff_subsingleton, Set.subsingleton_coe, Subsingleton, Subsingleton.elim, algebraMap, aroots_def, classical, coe_empty, f.map, hf.image_rootSet_of_map_ne_zero
+Such polynomials are called *Morse functions* in Section 4.4 of [serre-galois].
 -/
 theorem Splits.toPermHom_apply_eq_one_or_isSwap_of_ncard_le_of_mem_inertia
     [DecidableEq (f.rootSet S)] (hf : (f.map (algebraMap R S)).Splits)
-    (p : Ideal S) [p.IsPrime] (hp : (f.rootSet S).ncard <= (f.rootSet (S ⧸ p)).ncard + 1)
-    (g : G) (hg : g in p.inertia G) :
+    (p : Ideal S) [p.IsPrime] (hp : (f.rootSet S).ncard ≤ (f.rootSet (S ⧸ p)).ncard + 1)
+    (g : G) (hg : g ∈ p.inertia G) :
     MulAction.toPermHom G (f.rootSet S) g = 1 ∨ (MulAction.toPermHom G (f.rootSet S) g).IsSwap := by
   classical
   by_cases hfp : f.map (algebraMap R (S ⧸ p)) = 0
@@ -111,11 +135,11 @@ theorem Splits.toPermHom_apply_eq_one_or_isSwap_of_ncard_le_of_mem_inertia
       Finset.coe_empty, Set.ncard_empty, zero_add, Set.ncard_le_one_iff_subsingleton,
       ← Set.subsingleton_coe] at hp
     exact Or.inl (Subsingleton.elim _ _)
-  let π : S ->ₐ[R] S ⧸ p := Ideal.Quotient.mkₐ R p
-  rw [← hf.image_rootSet_of_map_ne_zero π hfp]; rw [Set.ncard_le_ncard_image_add_one_iff] at hp
+  let π : S →ₐ[R] S ⧸ p := Ideal.Quotient.mkₐ R p
+  rw [← hf.image_rootSet_of_map_ne_zero π hfp, Set.ncard_le_ncard_image_add_one_iff] at hp
   have hπ (x : S) : π (g • x) = π x := (Ideal.Quotient.mk_eq_mk_iff_sub_mem (g • x) x).mpr (hg x)
-  rw [or_iff_not_imp_left]; rw [Equiv.ext_iff]; rw [not_forall]
-  rintro ⟨x, hx : g • x != x⟩
+  rw [or_iff_not_imp_left, Equiv.ext_iff, not_forall]
+  rintro ⟨x, hx : g • x ≠ x⟩
   refine ⟨g • x, x, hx, ?_⟩
   ext z
   simp only [Equiv.swap_apply_def, MulAction.toPermHom_apply, MulAction.toPerm_apply]
@@ -127,36 +151,64 @@ theorem Splits.toPermHom_apply_eq_one_or_isSwap_of_ncard_le_of_mem_inertia
   · simp [hz']
   · grind [rootSet.coe_smul, SetLike.coe_eq_coe]
 
-/--
-theorem `Splits.surjective_toPermHom_of_iSup_inertia_eq_top` / 定理 `Splits.surjective_toPermHom_of_iSup_inertia_eq_top`
+/-- If the roots of `f` in `S` have at most one collision modulo each maximal ideal `m`, and if a
+group `G` acting transitively on the roots in `S` is generated by inertia subgroups, then `G`
+surjects onto the symmetric group `S_n`.
 
-English:
-theorem Splits.surjective_toPermHom_of_iSup_inertia_eq_top
-  proof: by
-  classical
-  apply surjective_of_isSwap_of_isPretransitive'
-      (⋃ m : MaximalSpectrum S, m.asIdeal.inertia G)
-  · intro σ hσ
-    obtain ⟨m, hm⟩ := Set.mem_iUnion.mp hσ
-    exact hf.toPermHom_apply_eq_one_or_isSwap_of_ncard_le_of_mem_inertia m.asIdeal (h m) σ hm
-  · simpa [Subgroup.closure_iUnion]
+Such polynomials are called *Morse functions* in Section 4.4 of [serre-galois]. -/
+/-
+**Polynomial.Splits.surjective_toPermHom_of_iSup_inertia_eq_top** 是 Mathlib 中的一个
+定理，位于命名空间 `Polynomial.Splits`。
+形式化陈述：∀ {R : Type u_1} {S : Type u_2} [inst : CommRing R] [inst_1 : CommRing S] 
+[inst_2 : Algebra R S] [inst_3 : IsDomain S]   {G : Type u_3} [inst_4 : Group G]
+ [inst_5 : MulSemiringAction G S] [inst_6 : SMulCommClass G R S] {f : Polynomial
+ R},   (Polynomial.map (algebraMap R S) f).Splits →     ∀ [MulAction.IsPretransi
+tive G ↑(f.rootSet S)],       (∀ (m : MaximalSpectrum S), (f.rootSet S).ncard ≤ 
+(f.rootSet (S ⧸ m.asIdeal)).ncard + 1) →         ⨆ m, Ideal.inertia G m.asIdeal 
+= ⊤ → Function.Surjective ⇑(MulAction.toPermHom G ↑(f.rootSet S))
+参数：Polynomial.map (algebraMap R S) f；f.rootSet S；∀ (m : MaximalSpectrum S), (f.r
+ootSet S).ncard ≤ (f.rootSet (S ⧸ m.asIdeal)).ncard + 1；MulAction.toPermHom G ↑(
+f.rootSet S)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Ideal.IsMaximal.isPrime'`：∀ {α : Type u} [inst : CommSemiring α] (I : Id
+eal α) [_H : I.IsMaximal], I.IsPrime
+· 使用定理 `MaximalSpectrum.isMaximal`：∀ {R : Type u_1} [inst : CommSemiring R] (sel
+f : MaximalSpectrum R), self.asIdeal.IsMaximal
+· 使用定理 `surjective_of_isSwap_of_isPretransitive'`：surjective_of_isSwap_of_isPret
+ransitive' [Finite α] (S : Set G) (hS1 : forall σ in S, MulAction.toPermHom G α 
+σ = 1 ∨ Perm.IsSwap (MulAction…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_iUnion`：mem_iUnion {x : α} {s : ι -> Set α} : (x in ⋃ i, s i) ↔ 
+exists i, x in s i
+· 使用定理 `Polynomial.Splits.toPermHom_apply_eq_one_or_isSwap_of_ncard_le_of_mem_in
+ertia`：∀ {R : Type u_1} {S : Type u_2} [inst : CommRing R] [inst_1 : CommRing S]
+ [inst_2 : Algebra R S] [inst_3 : IsDomain S]   {G : Type u_3} [ins…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Subgroup.closure_iUnion`：closure_iUnion {ι} (s : ι -> Set G) : closure (
+⋃ i, s i) = ⨆ i, closure (s i)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Subgroup.closure_eq`：closure_eq : closure (K : Set G) = K
 
-中文:
-定理 Splits.surjective_toPermHom_of_iSup_inertia_eq_top
-  证明: by
-  classical
-  apply surjective_of_isSwap_of_isPretransitive'
-      (⋃ m : MaximalSpectrum S, m.asIdeal.inertia G)
-  · intro σ hσ
-    obtain ⟨m, hm⟩ := Set.mem_iUnion.mp hσ
-    exact hf.toPermHom_apply_eq_one_or_isSwap_of_ncard_le_of_mem_inertia m.asIdeal (h m) σ hm
-  · simpa [Subgroup.closure_iUnion]
+--- 原说明 ---
+If the roots of `f` in `S` have at most one collision modulo each maximal ideal 
+`m`, and if a
+group `G` acting transitively on the roots in `S` is generated by inertia subgro
+ups, then `G`
+surjects onto the symmetric group `S_n`.
 
-Depends on / 依赖: MaximalSpectrum, Set.mem_iUnion.mp, Subgroup, Subgroup.closure_iUnion, asIdeal, classical, closure_iUnion, hf.toPermHom_apply_eq_one_or_isSwap_of_ncard_le_of_mem_inertia, inertia, m.asIdeal, m.asIdeal.inertia, mem_iUnion, surjective_of_isSwap_of_isPretransitive, toPermHom_apply_eq_one_or_isSwap_of_ncard_le_of_mem_inertia
+Such polynomials are called *Morse functions* in Section 4.4 of [serre-galois].
 -/
 theorem Splits.surjective_toPermHom_of_iSup_inertia_eq_top
     (hf : (f.map (algebraMap R S)).Splits) [MulAction.IsPretransitive G (f.rootSet S)]
-    (h : forall m : MaximalSpectrum S, (f.rootSet S).ncard <= (f.rootSet (S ⧸ m.asIdeal)).ncard + 1)
+    (h : ∀ m : MaximalSpectrum S, (f.rootSet S).ncard ≤ (f.rootSet (S ⧸ m.asIdeal)).ncard + 1)
     (hG : ⨆ m : MaximalSpectrum S, m.asIdeal.inertia G = ⊤) :
     Function.Surjective (MulAction.toPermHom G (f.rootSet S)) := by
   classical
@@ -168,3 +220,4 @@ theorem Splits.surjective_toPermHom_of_iSup_inertia_eq_top
   · simpa [Subgroup.closure_iUnion]
 
 end Polynomial
+

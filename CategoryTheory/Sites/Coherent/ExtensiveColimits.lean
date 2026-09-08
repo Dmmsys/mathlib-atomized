@@ -33,34 +33,26 @@ variable {A C J : Type*} [Category* A] [Category* C] [Category* J]
   [FinitaryExtensive C] [HasColimitsOfShape J A]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `isSheaf_pointwiseColimit` / 引理 `isSheaf_pointwiseColimit`
-
-English:
-lemma isSheaf_pointwiseColimit
-  statement: [PreservesFiniteProducts (colim (J := J) (C := A))]
-  proof: by
-  rw [Presheaf.isSheaf_iff_preservesFiniteProducts]
-  dsimp only [pointwiseCocone_pt]
-  apply +allowSynthFailures comp_preservesFiniteProducts
-  have : forall (i : J), PreservesFiniteProducts ((G ⋙ sheafToPresheaf _ A).obj i) := fun i => by
-    rw [← Presheaf.isSheaf_iff_preservesFiniteProducts]
-    exact (G.obj i).property
-  exact ⟨fun _ => preservesLimitsOfShape_of_evaluation _ _ fun d =>
-    inferInstanceAs (PreservesLimitsOfShape _ ((G ⋙ sheafToPresheaf _ _).obj d))⟩
-
-中文:
-引理 isSheaf_pointwiseColimit
-  结论: [保持FiniteProducts (colim (J := J) (C := A))]
-  证明: by
-  rw [Presheaf.isSheaf_iff_preservesFiniteProducts]
-  dsimp only [pointwiseCocone_pt]
-  apply +allowSynthFailures comp_preservesFiniteProducts
-  have : forall (i : J), PreservesFiniteProducts ((G ⋙ sheafToPresheaf _ A).obj i) := fun i => by
-    rw [← Presheaf.isSheaf_iff_preservesFiniteProducts]
-    exact (G.obj i).property
-  exact ⟨fun _ => preservesLimitsOfShape_of_evaluation _ _ fun d =>
-    inferInstanceAs (PreservesLimitsOfShape _ ((G ⋙ sheafToPresheaf _ _).obj d))⟩
+/-
+**CategoryTheory.isSheaf_pointwiseColimit** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory`。
+形式化陈述：isSheaf_pointwiseColimit [PreservesFiniteProducts (colim (J
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.FinitaryExtensive.toFinitaryPreExtensive`：∀ {C : Type u} 
+[inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.FinitaryExtensive C], 
+  CategoryTheory.FinitaryPreExtensive C
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Presheaf.isSheaf_iff_preservesFiniteProducts`：∀ {C : Type
+ u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {D : Type u_2}   [inst_1 : C
+ategoryTheory.Category.{v_2, u_2} D] [inst_2 : Ca…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.ObjectProperty.FullSubcategory.property`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] {P : CategoryTheory.ObjectProperty C}  
+ (self : P.FullSubcategory), P self.obj
+· 使用引理 `CategoryTheory.Limits.preservesLimitsOfShape_of_evaluation`：preservesLim
+itsOfShape_of_evaluation (F : D ⥤ K ⥤ C) (J : Type*) [Category* J] (_ : forall k
+ : K, PreservesLimitsOfShape J (F ⋙ (evaluation …
 -/
 lemma isSheaf_pointwiseColimit [PreservesFiniteProducts (colim (J := J) (C := A))]
     (G : J ⥤ Sheaf (extensiveTopology C) A) :
@@ -68,81 +60,35 @@ lemma isSheaf_pointwiseColimit [PreservesFiniteProducts (colim (J := J) (C := A)
   rw [Presheaf.isSheaf_iff_preservesFiniteProducts]
   dsimp only [pointwiseCocone_pt]
   apply +allowSynthFailures comp_preservesFiniteProducts
-  have : forall (i : J), PreservesFiniteProducts ((G ⋙ sheafToPresheaf _ A).obj i) := fun i => by
+  have : ∀ (i : J), PreservesFiniteProducts ((G ⋙ sheafToPresheaf _ A).obj i) := fun i ↦ by
     rw [← Presheaf.isSheaf_iff_preservesFiniteProducts]
     exact (G.obj i).property
-  exact ⟨fun _ => preservesLimitsOfShape_of_evaluation _ _ fun d =>
+  exact ⟨fun _ ↦ preservesLimitsOfShape_of_evaluation _ _ fun d ↦
     inferInstanceAs (PreservesLimitsOfShape _ ((G ⋙ sheafToPresheaf _ _).obj d))⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Preadditive
-  signature: A] : PreservesFiniteProducts (colim (J := J) (C := A)) where
-  body: by
-    apply +allowSynthFailures preservesProductsOfShape_of_preservesBiproductsOfShape
-    apply preservesBiproductsOfShape_of_preservesCoproductsOfShape
-
-中文:
-实例 [预加性
-  签名: A] : 保持FiniteProducts (colim (J := J) (C := A)) where
-  定义体: by
-    apply +allowSynthFailures preservesProductsOfShape_of_preservesBiproductsOfShape
-    apply preservesBiproductsOfShape_of_preservesCoproductsOfShape
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Preadditive A] : PreservesFiniteProducts (colim (J := J) (C := A)) where
   preserves _ := by
     apply +allowSynthFailures preservesProductsOfShape_of_preservesBiproductsOfShape
     apply preservesBiproductsOfShape_of_preservesCoproductsOfShape
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [PreservesFiniteProducts
-  signature: (colim (J := J) (C := A))] :
-  body: by
-    suffices CreatesColimit G (sheafToPresheaf (extensiveTopology C) A) from inferInstance
-    refine createsColimitOfIsSheaf _ (fun c hc => ?_)
-    let i : c.pt ≅ (G ⋙ sheafToPresheaf _ _).flip ⋙ colim :=
-      hc.coconePointUniqueUpToIso (pointwiseIsColimit _)
-    rw [Presheaf.isSheaf_of_iso_iff i]
-    exact isSheaf_pointwiseColimit _
-
-中文:
-实例 [保持FiniteProducts
-  签名: (colim (J := J) (C := A))] :
-  定义体: by
-    suffices CreatesColimit G (sheafToPresheaf (extensiveTopology C) A) from inferInstance
-    refine createsColimitOfIsSheaf _ (fun c hc => ?_)
-    let i : c.pt ≅ (G ⋙ sheafToPresheaf _ _).flip ⋙ colim :=
-      hc.coconePointUniqueUpToIso (pointwiseIsColimit _)
-    rw [Presheaf.isSheaf_of_iso_iff i]
-    exact isSheaf_pointwiseColimit _
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [PreservesFiniteProducts (colim (J := J) (C := A))] :
     PreservesColimitsOfShape J (sheafToPresheaf (extensiveTopology C) A) where
   preservesColimit {G} := by
     suffices CreatesColimit G (sheafToPresheaf (extensiveTopology C) A) from inferInstance
-    refine createsColimitOfIsSheaf _ (fun c hc => ?_)
+    refine createsColimitOfIsSheaf _ (fun c hc ↦ ?_)
     let i : c.pt ≅ (G ⋙ sheafToPresheaf _ _).flip ⋙ colim :=
       hc.coconePointUniqueUpToIso (pointwiseIsColimit _)
     rw [Presheaf.isSheaf_of_iso_iff i]
     exact isSheaf_pointwiseColimit _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Preadditive
-  signature: A] [HasFiniteColimits A] :
-  body: inferInstance
-
-中文:
-实例 [预加性
-  签名: A] [有有限余极限 A] :
-  定义体: inferInstance
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Preadditive A] [HasFiniteColimits A] :
     PreservesFiniteColimits (sheafToPresheaf (extensiveTopology C) A) where
@@ -151,3 +97,4 @@ instance [Preadditive A] [HasFiniteColimits A] :
 end
 
 end CategoryTheory
+

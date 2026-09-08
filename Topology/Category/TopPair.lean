@@ -27,18 +27,14 @@ universe u
 
 open TopologicalSpace TopCat CategoryTheory MonoidalCategory
 
-/--
-Definition of `TopPair` / `TopPair` 的定义
+/-- A pair of topological spaces consists of an embedding `f : A ⟶ X` in `TopCat`. -/
+/-
+**TopPair** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：TopPair
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation TopPair
-  body: MorphismProperty.Arrow TopCat.isEmbedding ⊤ ⊤
-
-中文:
-缩写 TopPair
-  定义体: MorphismProperty.Arrow TopCat.isEmbedding ⊤ ⊤
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.Arrow, TopCat, TopCat.isEmbedding, isEmbedding
+--- 原说明 ---
+A pair of topological spaces consists of an embedding `f : A ⟶ X` in `TopCat`.
 -/
 abbrev TopPair :=
   MorphismProperty.Arrow TopCat.isEmbedding ⊤ ⊤
@@ -47,199 +43,154 @@ namespace TopPair
 
 variable {X Y : TopPair.{u}}
 
-/--
-Definition of `fst` / `fst` 的定义
+/-- The first space of the pair -/
+/-
+**TopPair.fst** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopPair`。
+形式化陈述：fst : TopCat.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation fst
-  signature: : TopCat.{u}
-  body: X.right
-
-中文:
-缩写 fst
-  签名: : 顶元素范畴.{u}
-  定义体: X.right
-
-Depends on / 依赖: X.right
+--- 原说明 ---
+The first space of the pair
 -/
 abbrev fst : TopCat.{u} := X.right
 
-/--
-Definition of `snd` / `snd` 的定义
+/-- The second space of the pair -/
+/-
+**TopPair.snd** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopPair`。
+形式化陈述：snd : TopCat.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation snd
-  signature: : TopCat.{u}
-  body: X.left
-
-中文:
-缩写 snd
-  签名: : 顶元素范畴.{u}
-  定义体: X.left
-
-Depends on / 依赖: X.left
+--- 原说明 ---
+The second space of the pair
 -/
 abbrev snd : TopCat.{u} := X.left
 
-/--
-Definition of `map` / `map` 的定义
+/-- The embedding of the second into the first space -/
+/-
+**TopPair.map** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopPair`。
+形式化陈述：map : X.snd ⟶ X.fst
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation map
-  signature: : X.snd ⟶ X.fst
-  body: X.hom
-
-中文:
-缩写 map
-  签名: : X.snd ⟶ X.fst
-  定义体: X.hom
-
-Depends on / 依赖: X.hom
+--- 原说明 ---
+The embedding of the second into the first space
 -/
 abbrev map : X.snd ⟶ X.fst := X.hom
-
-/--
-lemma `isEmbedding_map` / 引理 `isEmbedding_map`
-
-English:
-lemma isEmbedding_map
-  given: (X : TopPair.{u})
-  statement: Topology.IsEmbedding X.map
-  proof: X.prop
-
-中文:
-引理 isEmbedding_map
-  条件: (X : TopPair.{u})
-  结论: 拓扑.是嵌入 X.map
-  证明: X.prop
-
-Depends on / 依赖: X.prop
+/-
+**TopPair.isEmbedding_map** 是 Mathlib 中的一个引理，位于命名空间 `TopPair`。
+形式化陈述：isEmbedding_map (X : TopPair.{u}) : Topology.IsEmbedding X.map
+参数：X : TopPair.{u}。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.Comma.prop`：∀ {A : Type u_1} [inst : Cat
+egoryTheory.Category.{v_1, u_1} A] {B : Type u_2}   [inst_1 : CategoryTheory.Cat
+egory.{v_2, u_2} B] {T : Type u_…
 -/
 lemma isEmbedding_map (X : TopPair.{u}) : Topology.IsEmbedding X.map := X.prop
 
-/--
-Definition of `of` / `of` 的定义
+/-- Construct a topological pair from its components. -/
+/-
+**TopPair.of** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopPair`。
+形式化陈述：of {A X : TopCat.{u}} (f : A ⟶ X) (h : Topology.IsEmbedding f) : TopPair.{
+u}
+参数：f : A ⟶ X；h : Topology.IsEmbedding f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation of
-  signature: {A X : TopCat.{u}} (f : A ⟶ X) (h : Topology.IsEmbedding f)
-  body: MorphismProperty.Arrow.mk (P := TopCat.isEmbedding) f h
-
-中文:
-缩写 of
-  签名: {A X : 顶元素范畴.{u}} (f : A ⟶ X) (h : 拓扑.是嵌入 f)
-  定义体: MorphismProperty.Arrow.mk (P := TopCat.isEmbedding) f h
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.Arrow.mk, TopCat, TopCat.isEmbedding, isEmbedding
+--- 原说明 ---
+Construct a topological pair from its components.
 -/
 abbrev of {A X : TopCat.{u}} (f : A ⟶ X) (h : Topology.IsEmbedding f) : TopPair.{u} :=
   MorphismProperty.Arrow.mk (P := TopCat.isEmbedding) f h
 
-/--
-Definition of `ofSubset` / `ofSubset` 的定义
+/-- Constructor for a topological pair (X, A) where A ⊆ X. -/
+/-
+**TopPair.ofSubset** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopPair`。
+形式化陈述：ofSubset {X : TopCat.{u}} (A : Set X) : TopPair.{u}
+参数：A : Set X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofSubset
-  signature: {X : TopCat.{u}} (A : Set X)
-  body: TopPair.of (A := (TopCat.of A))
-  (X := X) (TopCat.ofHom { toFun := Subtype.val }) Topology.IsEmbedding.subtypeVal
-
-中文:
-缩写 ofSubset
-  签名: {X : 顶元素范畴.{u}} (A : 集合 X)
-  定义体: TopPair.of (A := (TopCat.of A))
-  (X := X) (TopCat.ofHom { toFun := Subtype.val }) Topology.IsEmbedding.subtypeVal
-
-Depends on / 依赖: TopCat, TopCat.of, TopPair, TopPair.of
+--- 原说明 ---
+Constructor for a topological pair (X, A) where A ⊆ X.
 -/
 abbrev ofSubset {X : TopCat.{u}} (A : Set X) : TopPair.{u} := TopPair.of (A := (TopCat.of A))
   (X := X) (TopCat.ofHom { toFun := Subtype.val }) Topology.IsEmbedding.subtypeVal
 
-/--
-Definition of `ofTopCat` / `ofTopCat` 的定义
+/-- Constructs the topological pair `(X, ∅)` from `X : TopCat`. -/
+/-
+**TopPair.ofTopCat** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopPair`。
+形式化陈述：ofTopCat (X : TopCat.{u}) : TopPair.{u}
+参数：X : TopCat.{u}。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofTopCat
-  signature: (X : TopCat.{u})
-  body: TopPair.of (TopCat.isInitialPEmpty.to X) (Topology.IsOpenEmbedding.of_isEmpty _).1
-
-中文:
-缩写 ofTopCat
-  签名: (X : 顶元素范畴.{u})
-  定义体: TopPair.of (TopCat.isInitialPEmpty.to X) (Topology.IsOpenEmbedding.of_isEmpty _).1
-
-Depends on / 依赖: IsOpenEmbedding, TopCat, TopCat.isInitialPEmpty.to, TopPair, TopPair.of, Topology, Topology.IsOpenEmbedding.of_isEmpty, isInitialPEmpty, of_isEmpty
+--- 原说明 ---
+Constructs the topological pair `(X, ∅)` from `X : TopCat`.
 -/
 abbrev ofTopCat (X : TopCat.{u}) : TopPair.{u} :=
   TopPair.of (TopCat.isInitialPEmpty.to X) (Topology.IsOpenEmbedding.of_isEmpty _).1
 
-/--
-Definition of `ofHom` / `ofHom` 的定义
+/-- Construct a morphism in `TopPair` from its components. -/
+/-
+**TopPair.ofHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopPair`。
+形式化陈述：ofHom (f : X.fst ⟶ Y.fst) (g : X.snd ⟶ Y.snd) (w : g ≫ Y.map = X.map ≫ f
+参数：f : X.fst ⟶ Y.fst；g : X.snd ⟶ Y.snd。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
 
-English:
-abbreviation ofHom
-  signature: (f : X.fst ⟶ Y.fst) (g : X.snd ⟶ Y.snd) (w : g ≫ Y.map = X.map ≫ f := by cat_disch)
-  body: MorphismProperty.Arrow.homMk g f w
-
-中文:
-缩写 ofHom
-  签名: (f : X.fst ⟶ Y.fst) (g : X.snd ⟶ Y.snd) (w : g ≫ Y.map = X.map ≫ f := by cat_disch)
-  定义体: MorphismProperty.Arrow.homMk g f w
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.Arrow.homMk, cat_disch
+--- 原说明 ---
+Construct a morphism in `TopPair` from its components.
 -/
 abbrev ofHom (f : X.fst ⟶ Y.fst) (g : X.snd ⟶ Y.snd) (w : g ≫ Y.map = X.map ≫ f := by cat_disch) :=
   MorphismProperty.Arrow.homMk g f w
 
 variable {X Y Z : TopPair.{u}}
 
-/--
-Definition of `Hom.fst` / `Hom.fst` 的定义
+/-- The map between the first spaces -/
+/-
+**TopPair.Hom.fst** 是 Mathlib 中的一个定义，位于命名空间 `TopPair.Hom`。
+形式化陈述：{X Y : TopPair} → (X ⟶ Y) → (TopPair.fst ⟶ TopPair.fst)
+参数：X ⟶ Y；TopPair.fst ⟶ TopPair.fst。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
 
-English:
-abbreviation Hom.fst
-  signature: (f : X ⟶ Y)
-  body: f.hom.right
-
-中文:
-缩写 态射.fst
-  签名: (f : X ⟶ Y)
-  定义体: f.hom.right
+--- 原说明 ---
+The map between the first spaces
 -/
 abbrev Hom.fst (f : X ⟶ Y) : X.fst ⟶ Y.fst := f.hom.right
 
-/--
-Definition of `Hom.snd` / `Hom.snd` 的定义
+/-- The map between the second spaces -/
+/-
+**TopPair.Hom.snd** 是 Mathlib 中的一个定义，位于命名空间 `TopPair.Hom`。
+形式化陈述：{X Y : TopPair} → (X ⟶ Y) → (TopPair.snd ⟶ TopPair.snd)
+参数：X ⟶ Y；TopPair.snd ⟶ TopPair.snd。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
 
-English:
-abbreviation Hom.snd
-  signature: (f : X ⟶ Y)
-  body: f.hom.left
-
-@[reassoc, elementwise]
-
-中文:
-缩写 态射.snd
-  签名: (f : X ⟶ Y)
-  定义体: f.hom.left
-
-@[reassoc, elementwise]
+--- 原说明 ---
+The map between the second spaces
 -/
 abbrev Hom.snd (f : X ⟶ Y) : X.snd ⟶ Y.snd := f.hom.left
 
 @[reassoc, elementwise]
-/--
-lemma `Hom.w` / 引理 `Hom.w`
-
-English:
-lemma Hom.w
-  given: {X Y : TopPair.{u}} (f : X ⟶ Y)
-  proof: f.hom.w
-
-中文:
-引理 态射.w
-  条件: {X Y : TopPair.{u}} (f : X ⟶ Y)
-  证明: f.hom.w
+/-
+**TopPair.Hom.w** 是 Mathlib 中的一个定理，位于命名空间 `TopPair.Hom`。
+形式化陈述：∀ {X Y : TopPair} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.comp (TopPa
+ir.Hom.snd f) TopPair.map =     CategoryTheory.CategoryStruct.comp TopPair.map (
+TopPair.Hom.fst f)
+参数：f : X ⟶ Y；TopPair.Hom.snd f；TopPair.Hom.fst f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用定理 `CategoryTheory.CommaMorphism.w`：∀ {A : Type u₁} [inst : CategoryTheory.C
+ategory.{v₁, u₁} A] {B : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} B] 
+  {T : Type u₃} [ins…
 -/
 lemma Hom.w {X Y : TopPair.{u}} (f : X ⟶ Y) :
     Hom.snd f ≫ Y.map = X.map ≫ Hom.fst f :=
@@ -247,38 +198,30 @@ lemma Hom.w {X Y : TopPair.{u}} (f : X ⟶ Y) :
 
 attribute [local simp] Hom.w_apply
 
-/--
-Definition of `proj₁` / `proj₁` 的定义
+/-- The functor from topological pairs to topological spaces that forgets the second space, i.e. the
+projection to the first space. -/
+/-
+**TopPair.proj** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopPair`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation proj₁
-  signature: : TopPair.{u} ⥤ TopCat.{u}
-  body: MorphismProperty.Arrow.forget _ _ _ ⋙ CategoryTheory.Arrow.rightFunc
-
-中文:
-缩写 proj₁
-  签名: : TopPair.{u} ⥤ 顶元素范畴.{u}
-  定义体: MorphismProperty.Arrow.forget _ _ _ ⋙ CategoryTheory.Arrow.rightFunc
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Arrow.rightFunc, MorphismProperty, MorphismProperty.Arrow.forget, forget, rightFunc
+--- 原说明 ---
+The functor from topological pairs to topological spaces that forgets the second
+ space, i.e. the
+projection to the first space.
 -/
 abbrev proj₁ : TopPair.{u} ⥤ TopCat.{u} :=
   MorphismProperty.Arrow.forget _ _ _ ⋙ CategoryTheory.Arrow.rightFunc
 
-/--
-Definition of `proj₂` / `proj₂` 的定义
+/-- The functor from topological pairs to topological spaces that forgets the first space, i.e. the
+projection to the second space. -/
+/-
+**TopPair.proj** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopPair`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation proj₂
-  signature: : TopPair.{u} ⥤ TopCat.{u}
-  body: MorphismProperty.Arrow.forget _ _ _ ⋙ CategoryTheory.Arrow.leftFunc
-
-中文:
-缩写 proj₂
-  签名: : TopPair.{u} ⥤ 顶元素范畴.{u}
-  定义体: MorphismProperty.Arrow.forget _ _ _ ⋙ CategoryTheory.Arrow.leftFunc
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Arrow.leftFunc, MorphismProperty, MorphismProperty.Arrow.forget, forget, leftFunc
+--- 原说明 ---
+The functor from topological pairs to topological spaces that forgets the first 
+space, i.e. the
+projection to the second space.
 -/
 abbrev proj₂ : TopPair.{u} ⥤ TopCat.{u} :=
   MorphismProperty.Arrow.forget _ _ _ ⋙ CategoryTheory.Arrow.leftFunc
@@ -286,43 +229,37 @@ abbrev proj₂ : TopPair.{u} ⥤ TopCat.{u} :=
 /-- The inclusion functor from topological spaces to topological pairs that sends a space X to
 (X, ∅). -/
 @[simps]
-/--
-Definition of `incl` / `incl` 的定义
+/-
+**TopPair.incl** 是 Mathlib 中的一个定义，位于命名空间 `TopPair`。
+形式化陈述：incl : TopCat.{u} ⥤ TopPair.{u} where obj X
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
 
-English:
-definition incl
-  signature: : TopCat.{u} ⥤ TopPair.{u} where
-  body: ofTopCat X
-map f := TopPair.ofHom f (𝟙 _) by ext x; induction x
-
-中文:
-定义 incl
-  签名: : 顶元素范畴.{u} ⥤ TopPair.{u} where
-  定义体: ofTopCat X
-map f := TopPair.ofHom f (𝟙 _) by ext x; induction x
-
-Depends on / 依赖: ofTopCat
+--- 原说明 ---
+The inclusion functor from topological spaces to topological pairs that sends a 
+space X to
+(X, ∅).
 -/
 def incl : TopCat.{u} ⥤ TopPair.{u} where
   obj X := ofTopCat X
-map f := TopPair.ofHom f (𝟙 _) by ext x; induction x
+  map f := TopPair.ofHom f (𝟙 _) <| by ext x; induction x
 
-/--
-Definition of `diag` / `diag` 的定义
+/-- The functor from topological spaces to topological pairs that sends a space X to the identity
+morphism on X. -/
+/-
+**TopPair.diag** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopPair`。
+形式化陈述：diag : TopCat.{u} ⥤ TopPair.{u} where obj X
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
 
-English:
-abbreviation diag
-  signature: : TopCat.{u} ⥤ TopPair.{u} where
-  body: TopPair.of (𝟙 X) Topology.IsEmbedding.id
-  map f := TopPair.ofHom f f
-
-中文:
-缩写 diag
-  签名: : 顶元素范畴.{u} ⥤ TopPair.{u} where
-  定义体: TopPair.of (𝟙 X) Topology.IsEmbedding.id
-  map f := TopPair.ofHom f f
-
-Depends on / 依赖: IsEmbedding, TopPair, TopPair.of, Topology, Topology.IsEmbedding.id
+--- 原说明 ---
+The functor from topological spaces to topological pairs that sends a space X to
+ the identity
+morphism on X.
 -/
 abbrev diag : TopCat.{u} ⥤ TopPair.{u} where
   obj X := TopPair.of (𝟙 X) Topology.IsEmbedding.id
@@ -332,20 +269,12 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- The inclusion functor is left adjoint to the projection to the first component. -/
 @[simps]
-/--
-Definition of `inclAdjProj₁` / `inclAdjProj₁` 的定义
+/-
+**TopPair.inclAdjProj** 是 Mathlib 中的一个定义，位于命名空间 `TopPair`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inclAdjProj₁
-  signature: : incl ⊣ proj₁ where
-  body: 𝟙 X
-  counit.app X := TopPair.ofHom (𝟙 X.fst) (TopCat.isInitialPEmpty.to X.snd)
-
-中文:
-定义 inclAdjProj₁
-  签名: : incl ⊣ proj₁ where
-  定义体: 𝟙 X
-  counit.app X := TopPair.ofHom (𝟙 X.fst) (TopCat.isInitialPEmpty.to X.snd)
+--- 原说明 ---
+The inclusion functor is left adjoint to the projection to the first component.
 -/
 def inclAdjProj₁ : incl ⊣ proj₁ where
   unit.app X := 𝟙 X
@@ -353,24 +282,13 @@ def inclAdjProj₁ : incl ⊣ proj₁ where
 
 /-- The projection functor to the first component is left adjoint to the diagonal functor. -/
 @[simps]
-/--
-Definition of `proj₁AdjDiag` / `proj₁AdjDiag` 的定义
+/-
+**TopPair.proj** 是 Mathlib 中的一个定义，位于命名空间 `TopPair`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition proj₁AdjDiag
-  signature: : proj₁ ⊣ diag where
-  body: TopPair.ofHom (𝟙 X.fst) X.map
-  unit.naturality X Y f := MorphismProperty.Arrow.Hom.ext f.w (by cat_disch)
-  counit.app X := 𝟙 X
-
-中文:
-定义 proj₁AdjDiag
-  签名: : proj₁ ⊣ diag where
-  定义体: TopPair.ofHom (𝟙 X.fst) X.map
-  unit.naturality X Y f := MorphismProperty.Arrow.Hom.ext f.w (by cat_disch)
-  counit.app X := 𝟙 X
-
-Depends on / 依赖: TopPair, TopPair.ofHom, X.fst, X.map
+--- 原说明 ---
+The projection functor to the first component is left adjoint to the diagonal fu
+nctor.
 -/
 def proj₁AdjDiag : proj₁ ⊣ diag where
   unit.app X := TopPair.ofHom (𝟙 X.fst) X.map
@@ -378,20 +296,18 @@ def proj₁AdjDiag : proj₁ ⊣ diag where
   counit.app X := 𝟙 X
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `j` / `j` 的定义
+/-- The unique morphism (X, ∅) ⟶ (X, A) that is the identity on X. -/
+/-
+**TopPair.j** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopPair`。
+形式化陈述：j (X : TopPair.{u}) : TopPair.incl.obj X.fst ⟶ X
+参数：X : TopPair.{u}。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
 
-English:
-abbreviation j
-  signature: (X : TopPair.{u})
-  body: TopPair.ofHom (𝟙 _) (TopCat.isInitialPEmpty.to _)
-
-中文:
-缩写 j
-  签名: (X : TopPair.{u})
-  定义体: TopPair.ofHom (𝟙 _) (TopCat.isInitialPEmpty.to _)
-
-Depends on / 依赖: TopCat, TopCat.isInitialPEmpty.to, TopPair, TopPair.ofHom, isInitialPEmpty
+--- 原说明 ---
+The unique morphism (X, ∅) ⟶ (X, A) that is the identity on X.
 -/
 abbrev j (X : TopPair.{u}) : TopPair.incl.obj X.fst ⟶ X :=
   TopPair.ofHom (𝟙 _) (TopCat.isInitialPEmpty.to _)
@@ -399,26 +315,20 @@ abbrev j (X : TopPair.{u}) : TopPair.incl.obj X.fst ⟶ X :=
 /-- A homotopy of maps between topological pairs is a homotopy on the first space and a homotopy on
 the second space that fit in a commutative square with the maps of the pairs. -/
 @[ext]
-/--
-Definition of `Homotopy` / `Homotopy` 的定义
+/-
+**TopPair.Homotopy** 是 Mathlib 中的一个结构，位于命名空间 `TopPair`。
+形式化陈述：Homotopy (f g : X ⟶ Y) where /-- The homotopy on the first space. -/ fst :
+ TopCat.Homotopy (Hom.fst f) (Hom.fst g) /-- The homotopy on the second space. -
+/ snd : TopCat.Homotopy (Hom.snd f) (Hom.snd g) /-- The proof that the homotopie
+s fit into a commutative square with the maps of the pairs. -/ w : X.map ▷ _ ≫ f
+st.h = snd.h ≫ Y.map
+参数：f g : X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Homotopy
-  parameters: (f g : X ⟶ Y)
-  axioms and operations (3):
-    - fst : TopCat.Homotopy (Hom.fst f) (Hom.fst g)
-    - snd : TopCat.Homotopy (Hom.snd f) (Hom.snd g)
-    - w : X.map ▷ _ ≫ fst.h = snd.h ≫ Y.map  [default: by cat_disch]
-
-中文:
-结构 同伦
-  参数: (f g : X ⟶ Y)
-  公理与运算 (3 个):
-    - fst : 顶元素范畴.同伦 (态射.fst f) (态射.fst g)
-    - snd : 顶元素范畴.同伦 (态射.snd f) (态射.snd g)
-    - w : X.map ▷ _ ≫ fst.h = snd.h ≫ Y.map  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+A homotopy of maps between topological pairs is a homotopy on the first space an
+d a homotopy on
+the second space that fit in a commutative square with the maps of the pairs.
 -/
 structure Homotopy (f g : X ⟶ Y) where
   /-- The homotopy on the first space. -/
@@ -437,24 +347,29 @@ attribute [local simp] Homotopy.w Homotopy.w_apply
 namespace Homotopy
 
 @[local simp]
-/--
-lemma `w_apply'` / 引理 `w_apply'`
-
-English:
-lemma w_apply'
-  given: {f g : X ⟶ Y} (H : Homotopy f g) (x : TopPair.snd) (t : unitInterval)
-  proof: by
-  have := w_apply H (x, I.homeomorph.symm t)
-  cat_disch
-
-中文:
-引理 w_apply'
-  条件: {f g : X ⟶ Y} (H : 同伦 f g) (x : TopPair.snd) (t : unit整数erval)
-  证明: by
-  have := w_apply H (x, I.homeomorph.symm t)
-  cat_disch
-
-Depends on / 依赖: I.homeomorph.symm, cat_disch, homeomorph, w_apply
+/-
+**TopPair.Homotopy.w_apply'** 是 Mathlib 中的一个引理，位于命名空间 `TopPair.Homotopy`。
+形式化陈述：w_apply' {f g : X ⟶ Y} (H : Homotopy f g) (x : TopPair.snd) (t : unitInter
+val) : H.fst (t, X.map x) = Y.map (H.snd (t, x))
+参数：H : Homotopy f g；x : TopPair.snd；t : unitInterval。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用定理 `TopPair.Homotopy.w_apply`：∀ {X Y : TopPair} {f g : X ⟶ Y} (self : TopPai
+r.Homotopy f g)   (x : ↑(CategoryTheory.MonoidalCategoryStruct.tensorObj TopPair
+.snd TopCat.I)…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Homeomorph.apply_symm_apply`：apply_symm_apply (h : X ≃ₜ Y) (y : Y) : h (
+h.symm y) = y
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma w_apply' {f g : X ⟶ Y} (H : Homotopy f g) (x : TopPair.snd) (t : unitInterval) :
     H.fst (t, X.map x) = Y.map (H.snd (t, x)) := by
@@ -465,41 +380,25 @@ lemma w_apply' {f g : X ⟶ Y} (H : Homotopy f g) (x : TopPair.snd) (t : unitInt
 `TopCat.Homotopy.refl` on the first and second components.
 -/
 @[simps]
-/--
-Definition of `refl` / `refl` 的定义
+/-
+**TopPair.Homotopy.refl** 是 Mathlib 中的一个定义，位于命名空间 `TopPair.Homotopy`。
+形式化陈述：refl (f : X ⟶ Y) : Homotopy f f where fst
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
 
-English:
-definition refl
-  signature: (f : X ⟶ Y)
-  body: TopCat.Homotopy.refl (Hom.fst f)
-  snd := TopCat.Homotopy.refl (Hom.snd f)
-
-中文:
-定义 refl
-  签名: (f : X ⟶ Y)
-  定义体: TopCat.Homotopy.refl (Hom.fst f)
-  snd := TopCat.Homotopy.refl (Hom.snd f)
-
-Depends on / 依赖: Hom.fst, Homotopy, TopCat, TopCat.Homotopy.refl
+--- 原说明 ---
+Given a morphism `f` of topological pairs, we can define a `Homotopy f f` by
+`TopCat.Homotopy.refl` on the first and second components.
 -/
 def refl (f : X ⟶ Y) : Homotopy f f where
   fst := TopCat.Homotopy.refl (Hom.fst f)
   snd := TopCat.Homotopy.refl (Hom.snd f)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Homotopy (𝟙 X) (𝟙 X))
-  body: ⟨Homotopy.refl _⟩
-
-中文:
-实例 :
-  签名: 可居 (同伦 (𝟙 X) (𝟙 X))
-  定义体: ⟨Homotopy.refl _⟩
-
-Depends on / 依赖: Homotopy, Homotopy.refl
+/-
+**TopPair.Homotopy.** 是 Mathlib 中的一个实例，位于命名空间 `TopPair.Homotopy`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Homotopy (𝟙 X) (𝟙 X)) :=
   ⟨Homotopy.refl _⟩
@@ -509,71 +408,69 @@ set_option backward.isDefEq.respectTransparency.types false in
 the first and second components.
 -/
 @[simps]
-/--
-Definition of `symm` / `symm` 的定义
+/-
+**TopPair.Homotopy.symm** 是 Mathlib 中的一个定义，位于命名空间 `TopPair.Homotopy`。
+形式化陈述：symm {f₀ f₁ : X ⟶ Y} (F : Homotopy f₀ f₁) : Homotopy f₁ f₀ where fst
+参数：F : Homotopy f₀ f₁。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
 
-English:
-definition symm
-  signature: {f₀ f₁ : X ⟶ Y} (F : Homotopy f₀ f₁)
-  body: F.fst.symm
-  snd := F.snd.symm
-
-@[simp]
-
-中文:
-定义 symm
-  签名: {f₀ f₁ : X ⟶ Y} (F : 同伦 f₀ f₁)
-  定义体: F.fst.symm
-  snd := F.snd.symm
-
-@[simp]
-
-Depends on / 依赖: F.fst.symm
+--- 原说明 ---
+Given a `Homotopy f₀ f₁`, we can define a `Homotopy f₁ f₀` by `TopCat.Homotopy.s
+ymm` on
+the first and second components.
 -/
 def symm {f₀ f₁ : X ⟶ Y} (F : Homotopy f₀ f₁) : Homotopy f₁ f₀ where
   fst := F.fst.symm
   snd := F.snd.symm
 
 @[simp]
-/--
-theorem `symm_symm` / 定理 `symm_symm`
-
-English:
-theorem symm_symm
-  given: {f₀ f₁ : X ⟶ Y} (F : Homotopy f₀ f₁)
-  statement: F.symm.symm = F
-  proof: by
-  cat_disch
-
-中文:
-定理 symm_symm
-  条件: {f₀ f₁ : X ⟶ Y} (F : 同伦 f₀ f₁)
-  结论: F.symm.symm = F
-  证明: by
-  cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**TopPair.Homotopy.symm_symm** 是 Mathlib 中的一个定理，位于命名空间 `TopPair.Homotopy`。
+形式化陈述：symm_symm {f₀ f₁ : X ⟶ Y} (F : Homotopy f₀ f₁) : F.symm.symm = F
+参数：F : Homotopy f₀ f₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用定理 `TopPair.Homotopy.ext`：∀ {X Y : TopPair} {f g : X ⟶ Y} {x y : TopPair.Hom
+otopy f g}, x.fst = y.fst → x.snd = y.snd → x = y
+· 使用定理 `ContinuousMap.Homotopy.ext`：ext {F G : Homotopy f₀ f₁} (h : forall x, F 
+x = G x) : F = G
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `TopPair.Homotopy.symm_fst`：∀ {X Y : TopPair} {f₀ f₁ : X ⟶ Y} (F : TopPai
+r.Homotopy f₀ f₁), F.symm.fst = F.fst.symm
+· 使用定理 `ContinuousMap.Homotopy.symm_symm`：symm_symm {f₀ f₁ : C(X, Y)} (F : Homot
+opy f₀ f₁) : F.symm.symm = F
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `TopPair.Homotopy.symm_snd`：∀ {X Y : TopPair} {f₀ f₁ : X ⟶ Y} (F : TopPai
+r.Homotopy f₀ f₁), F.symm.snd = F.snd.symm
 -/
 theorem symm_symm {f₀ f₁ : X ⟶ Y} (F : Homotopy f₀ f₁) : F.symm.symm = F := by
   cat_disch
-
-/--
-theorem `symm_bijective` / 定理 `symm_bijective`
-
-English:
-theorem symm_bijective
-  given: {f₀ f₁ : X ⟶ Y}
-  proof: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
-
-中文:
-定理 symm_bijective
-  条件: {f₀ f₁ : X ⟶ Y}
-  证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
-
-Depends on / 依赖: Function, Function.bijective_iff_has_inverse.mpr, bijective_iff_has_inverse, symm_symm
+/-
+**TopPair.Homotopy.symm_bijective** 是 Mathlib 中的一个定理，位于命名空间 `TopPair.Homotopy`。
+形式化陈述：symm_bijective {f₀ f₁ : X ⟶ Y} : Function.Bijective (Homotopy.symm : Homot
+opy f₀ f₁ -> Homotopy f₁ f₀)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.bijective_iff_has_inverse`：bijective_iff_has_inverse : Bijectiv
+e f ↔ exists g, LeftInverse g f ∧ RightInverse g f
+· 使用定理 `TopPair.Homotopy.symm_symm`：symm_symm {f₀ f₁ : X ⟶ Y} (F : Homotopy f₀ f
+₁) : F.symm.symm = F
 -/
 theorem symm_bijective {f₀ f₁ : X ⟶ Y} :
-    Function.Bijective (Homotopy.symm : Homotopy f₀ f₁ -> Homotopy f₁ f₀) :=
+    Function.Bijective (Homotopy.symm : Homotopy f₀ f₁ → Homotopy f₁ f₀) :=
   Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
@@ -582,30 +479,19 @@ Given `Homotopy f₀ f₁` and `Homotopy f₁ f₂`, we can define a `Homotopy f
 `TopCat.Homotopy.trans` on the first and second components.
 -/
 @[simps]
-/--
-Definition of `trans` / `trans` 的定义
+/-
+**TopPair.Homotopy.trans** 是 Mathlib 中的一个定义，位于命名空间 `TopPair.Homotopy`。
+形式化陈述：trans {f₀ f₁ f₂ : X ⟶ Y} (F : Homotopy f₀ f₁) (G : Homotopy f₁ f₂) : Homot
+opy f₀ f₂ where fst
+参数：F : Homotopy f₀ f₁；G : Homotopy f₁ f₂。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
 
-English:
-definition trans
-  signature: {f₀ f₁ f₂ : X ⟶ Y} (F : Homotopy f₀ f₁) (G : Homotopy f₁ f₂)
-  body: F.fst.trans G.fst
-  snd := F.snd.trans G.snd
-  w := by
-    ext ⟨_, _⟩
-    simp only [TopCat.comp_app, Homotopy.h_hom_apply, ContinuousMap.Homotopy.trans_apply]
-    cat_disch
-
-中文:
-定义 trans
-  签名: {f₀ f₁ f₂ : X ⟶ Y} (F : 同伦 f₀ f₁) (G : 同伦 f₁ f₂)
-  定义体: F.fst.trans G.fst
-  snd := F.snd.trans G.snd
-  w := by
-    ext ⟨_, _⟩
-    simp only [TopCat.comp_app, Homotopy.h_hom_apply, ContinuousMap.Homotopy.trans_apply]
-    cat_disch
-
-Depends on / 依赖: F.fst.trans, G.fst
+--- 原说明 ---
+Given `Homotopy f₀ f₁` and `Homotopy f₁ f₂`, we can define a `Homotopy f₀ f₂` by
+`TopCat.Homotopy.trans` on the first and second components.
 -/
 noncomputable def trans {f₀ f₁ f₂ : X ⟶ Y} (F : Homotopy f₀ f₁) (G : Homotopy f₁ f₂) :
     Homotopy f₀ f₂ where
@@ -615,23 +501,19 @@ noncomputable def trans {f₀ f₁ f₂ : X ⟶ Y} (F : Homotopy f₀ f₁) (G :
     ext ⟨_, _⟩
     simp only [TopCat.comp_app, Homotopy.h_hom_apply, ContinuousMap.Homotopy.trans_apply]
     cat_disch
-
-/--
-theorem `symm_trans` / 定理 `symm_trans`
-
-English:
-theorem symm_trans
-  given: {f₀ f₁ f₂ : X ⟶ Y} (F : Homotopy f₀ f₁) (G : Homotopy f₁ f₂)
-  proof: by
-      ext : 1 <;> exact ContinuousMap.Homotopy.symm_trans _ _
-
-中文:
-定理 symm_trans
-  条件: {f₀ f₁ f₂ : X ⟶ Y} (F : 同伦 f₀ f₁) (G : 同伦 f₁ f₂)
-  证明: by
-      ext : 1 <;> exact ContinuousMap.Homotopy.symm_trans _ _
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.Homotopy.symm_trans, Homotopy, symm_trans
+/-
+**TopPair.Homotopy.symm_trans** 是 Mathlib 中的一个定理，位于命名空间 `TopPair.Homotopy`。
+形式化陈述：symm_trans {f₀ f₁ f₂ : X ⟶ Y} (F : Homotopy f₀ f₁) (G : Homotopy f₁ f₂) : 
+(F.trans G).symm = G.symm.trans F.symm
+参数：F : Homotopy f₀ f₁；G : Homotopy f₁ f₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用定理 `TopPair.Homotopy.ext`：∀ {X Y : TopPair} {f g : X ⟶ Y} {x y : TopPair.Hom
+otopy f g}, x.fst = y.fst → x.snd = y.snd → x = y
+· 使用定理 `ContinuousMap.Homotopy.symm_trans`：symm_trans {f₀ f₁ f₂ : C(X, Y)} (F : 
+Homotopy f₀ f₁) (G : Homotopy f₁ f₂) : (F.trans G).symm = G.symm.trans F.symm
 -/
 theorem symm_trans {f₀ f₁ f₂ : X ⟶ Y} (F : Homotopy f₀ f₁) (G : Homotopy f₁ f₂) :
     (F.trans G).symm = G.symm.trans F.symm := by
@@ -642,22 +524,20 @@ set_option backward.isDefEq.respectTransparency false in
 `Homotopy (f₀ ≫ g₀) (f₁ ≫ g₁)` by `TopCat.Homotopy.comp` on the first and second components.
 -/
 @[simps]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**TopPair.Homotopy.comp** 是 Mathlib 中的一个定义，位于命名空间 `TopPair.Homotopy`。
+形式化陈述：comp {f₀ f₁ : X ⟶ Y} {g₀ g₁ : Y ⟶ Z} (G : Homotopy g₀ g₁) (F : Homotopy f₀
+ f₁) : Homotopy (f₀ ≫ g₀) (f₁ ≫ g₁) where fst
+参数：G : Homotopy g₀ g₁；F : Homotopy f₀ f₁。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
 
-English:
-definition comp
-  signature: {f₀ f₁ : X ⟶ Y} {g₀ g₁ : Y ⟶ Z} (G : Homotopy g₀ g₁) (F : Homotopy f₀ f₁)
-  body: G.fst.comp F.fst
-  snd := G.snd.comp F.snd
-
-中文:
-定义 comp
-  签名: {f₀ f₁ : X ⟶ Y} {g₀ g₁ : Y ⟶ Z} (G : 同伦 g₀ g₁) (F : 同伦 f₀ f₁)
-  定义体: G.fst.comp F.fst
-  snd := G.snd.comp F.snd
-
-Depends on / 依赖: F.fst, G.fst.comp
+--- 原说明 ---
+If we have a `Homotopy g₀ g₁` and a `Homotopy f₀ f₁`, we can define a
+`Homotopy (f₀ ≫ g₀) (f₁ ≫ g₁)` by `TopCat.Homotopy.comp` on the first and second
+ components.
 -/
 def comp {f₀ f₁ : X ⟶ Y} {g₀ g₁ : Y ⟶ Z} (G : Homotopy g₀ g₁) (F : Homotopy f₀ f₁) :
     Homotopy (f₀ ≫ g₀) (f₁ ≫ g₁) where
@@ -666,41 +546,44 @@ def comp {f₀ f₁ : X ⟶ Y} {g₀ g₁ : Y ⟶ Z} (G : Homotopy g₀ g₁) (F
 
 end Homotopy
 
-/--
-Definition of `Homotopic` / `Homotopic` 的定义
+/-- Two maps between topological pairs are homotopic if there is a homotopy between them. -/
+/-
+**TopPair.Homotopic** 是 Mathlib 中的一个定义，位于命名空间 `TopPair`。
+形式化陈述：Homotopic (f g : X ⟶ Y)
+参数：f g : X ⟶ Y。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
 
-English:
-definition Homotopic
-  signature: (f g : X ⟶ Y)
-  body: Nonempty (Homotopy f g)
-
-中文:
-定义 同伦
-  签名: (f g : X ⟶ Y)
-  定义体: Nonempty (Homotopy f g)
-
-Depends on / 依赖: Homotopy, Nonempty
+--- 原说明 ---
+Two maps between topological pairs are homotopic if there is a homotopy between 
+them.
 -/
 def Homotopic (f g : X ⟶ Y) := Nonempty (Homotopy f g)
 
 namespace Homotopic
 
-/--
-theorem `equivalence` / 定理 `equivalence`
+/-- Two maps of topological pairs being homotopic defines an equivalence relation. -/
+/-
+**TopPair.Homotopic.equivalence** 是 Mathlib 中的一个定理，位于命名空间 `TopPair.Homotopic`。
+形式化陈述：equivalence : Equivalence (Homotopic (X
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用定理 `Nonempty.map`：Nonempty.map {α β} (f : α -> β) : Nonempty α -> Nonempty β
+ | ⟨h⟩ => ⟨f h⟩  protected theorem Nonempty.map2 {α β γ : Sort*} (f : α -> β -> 
+γ)…
+· 使用定理 `Nonempty.map2`：∀ {α : Sort u_3} {β : Sort u_4} {γ : Sort u_5} (f : α → β
+ → γ), Nonempty α → Nonempty β → Nonempty γ
 
-English:
-theorem equivalence
-  statement: Equivalence (Homotopic (X := X) (Y := Y))
-  proof: ⟨fun f => ⟨Homotopy.refl f⟩, fun h => h.map Homotopy.symm, fun h₀ h₁ => h₀.map2 Homotopy.trans h₁⟩
-
-中文:
-定理 equivalence
-  结论: 等价 (同伦 (X := X) (Y := Y))
-  证明: ⟨fun f => ⟨Homotopy.refl f⟩, fun h => h.map Homotopy.symm, fun h₀ h₁ => h₀.map2 Homotopy.trans h₁⟩
+--- 原说明 ---
+Two maps of topological pairs being homotopic defines an equivalence relation.
 -/
 theorem equivalence : Equivalence (Homotopic (X := X) (Y := Y)) :=
-  ⟨fun f => ⟨Homotopy.refl f⟩, fun h => h.map Homotopy.symm, fun h₀ h₁ => h₀.map2 Homotopy.trans h₁⟩
+  ⟨fun f ↦ ⟨Homotopy.refl f⟩, fun h ↦ h.map Homotopy.symm, fun h₀ h₁ ↦ h₀.map2 Homotopy.trans h₁⟩
 
 end Homotopic
 
 end TopPair
+

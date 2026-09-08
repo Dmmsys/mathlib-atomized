@@ -30,950 +30,845 @@ namespace Finset
 
 variable {α β γ : Type*} (s : Finset α) (t : Finset β)
 
-/--
-Definition of `disjSum` / `disjSum` 的定义
+/-- Disjoint sum of finsets. -/
+/-
+**Finset.disjSum** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：disjSum : Finset (α oplus β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition disjSum
-  signature: : Finset (α oplus β)
-  body: ⟨s.1.disjSum t.1, s.2.disjSum t.2⟩
-
-@[simp]
-
-中文:
-定义 disjSum
-  签名: : 有限集 (α oplus β)
-  定义体: ⟨s.1.disjSum t.1, s.2.disjSum t.2⟩
-
-@[simp]
-
-Depends on / 依赖: disjSum
+--- 原说明 ---
+Disjoint sum of finsets.
 -/
-def disjSum : Finset (α oplus β) :=
+def disjSum : Finset (α ⊕ β) :=
   ⟨s.1.disjSum t.1, s.2.disjSum t.2⟩
 
 @[simp]
-/--
-theorem `val_disjSum` / 定理 `val_disjSum`
-
-English:
-theorem val_disjSum
-  statement: (s.disjSum t).1 = s.1.disjSum t.1
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 val_disjSum
-  结论: (s.disjSum t).1 = s.1.disjSum t.1
-  证明: rfl
-
-@[simp]
+/-
+**Finset.val_disjSum** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：val_disjSum : (s.disjSum t).1 = s.1.disjSum t.1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem val_disjSum : (s.disjSum t).1 = s.1.disjSum t.1 :=
   rfl
 
 @[simp]
-/--
-theorem `empty_disjSum` / 定理 `empty_disjSum`
-
-English:
-theorem empty_disjSum
-  statement: (∅ : Finset α).disjSum t = t.map Embedding.inr
-  proof: val_inj.1 Multiset.zero_disjSum _
-
-@[simp]
-
-中文:
-定理 empty_disjSum
-  结论: (∅ : 有限集 α).disjSum t = t.map 嵌入.inr
-  证明: val_inj.1 Multiset.zero_disjSum _
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.zero_disjSum, val_inj, zero_disjSum
+/-
+**Finset.empty_disjSum** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：empty_disjSum : (∅ : Finset α).disjSum t = t.map Embedding.inr
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.val_inj`：val_inj {s t : Finset α} : s.1 = t.1 ↔ s = t
+· 使用定理 `Multiset.zero_disjSum`：zero_disjSum : (0 : Multiset α).disjSum t = t.map
+ inr
 -/
 theorem empty_disjSum : (∅ : Finset α).disjSum t = t.map Embedding.inr :=
-val_inj.1 Multiset.zero_disjSum _
+  val_inj.1 <| Multiset.zero_disjSum _
 
 @[simp]
-/--
-theorem `disjSum_empty` / 定理 `disjSum_empty`
-
-English:
-theorem disjSum_empty
-  statement: s.disjSum (∅ : Finset β) = s.map Embedding.inl
-  proof: val_inj.1 Multiset.disjSum_zero _
-
-@[simp]
-
-中文:
-定理 disjSum_empty
-  结论: s.disjSum (∅ : 有限集 β) = s.map 嵌入.inl
-  证明: val_inj.1 Multiset.disjSum_zero _
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.disjSum_zero, disjSum_zero, val_inj
+/-
+**Finset.disjSum_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：disjSum_empty : s.disjSum (∅ : Finset β) = s.map Embedding.inl
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.val_inj`：val_inj {s t : Finset α} : s.1 = t.1 ↔ s = t
+· 使用定理 `Multiset.disjSum_zero`：disjSum_zero : s.disjSum (0 : Multiset β) = s.map
+ inl
 -/
 theorem disjSum_empty : s.disjSum (∅ : Finset β) = s.map Embedding.inl :=
-val_inj.1 Multiset.disjSum_zero _
+  val_inj.1 <| Multiset.disjSum_zero _
 
 @[simp]
-/--
-theorem `card_disjSum` / 定理 `card_disjSum`
-
-English:
-theorem card_disjSum
-  statement: (s.disjSum t).card = s.card + t.card
-  proof: Multiset.card_disjSum _ _
-
-中文:
-定理 card_disjSum
-  结论: (s.disjSum t).card = s.card + t.card
-  证明: Multiset.card_disjSum _ _
-
-Depends on / 依赖: Multiset, Multiset.card_disjSum, card_disjSum
+/-
+**Finset.card_disjSum** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：card_disjSum : (s.disjSum t).card = s.card + t.card
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.card_disjSum`：card_disjSum : Multiset.card (s.disjSum t) = Mult
+iset.card s + Multiset.card t
 -/
 theorem card_disjSum : (s.disjSum t).card = s.card + t.card :=
   Multiset.card_disjSum _ _
-
-/--
-theorem `disjoint_map_inl_map_inr` / 定理 `disjoint_map_inl_map_inr`
-
-English:
-theorem disjoint_map_inl_map_inr
-  statement: Disjoint (s.map Embedding.inl) (t.map Embedding.inr)
-  proof: by
-  simp_rw [disjoint_left, mem_map]
-  rintro x ⟨a, _, rfl⟩ ⟨b, _, ⟨⟩⟩
-
-@[simp]
-
-中文:
-定理 disjoint_map_inl_map_inr
-  结论: Disjoint (s.map 嵌入.inl) (t.map 嵌入.inr)
-  证明: by
-  simp_rw [disjoint_left, mem_map]
-  rintro x ⟨a, _, rfl⟩ ⟨b, _, ⟨⟩⟩
-
-@[simp]
-
-Depends on / 依赖: disjoint_left, mem_map, simp_rw
+/-
+**Finset.disjoint_map_inl_map_inr** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：disjoint_map_inl_map_inr : Disjoint (s.map Embedding.inl) (t.map Embedding
+.inr)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
 -/
 theorem disjoint_map_inl_map_inr : Disjoint (s.map Embedding.inl) (t.map Embedding.inr) := by
   simp_rw [disjoint_left, mem_map]
   rintro x ⟨a, _, rfl⟩ ⟨b, _, ⟨⟩⟩
 
 @[simp]
-/--
-theorem `map_inl_disjUnion_map_inr` / 定理 `map_inl_disjUnion_map_inr`
-
-English:
-theorem map_inl_disjUnion_map_inr
-  proof: rfl
-
-中文:
-定理 map_inl_disjUnion_map_inr
-  证明: rfl
+/-
+**Finset.map_inl_disjUnion_map_inr** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：map_inl_disjUnion_map_inr : (s.map Embedding.inl).disjUnion (t.map Embeddi
+ng.inr) (disjoint_map_inl_map_inr _ _) = s.disjSum t
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.disjoint_map_inl_map_inr`：disjoint_map_inl_map_inr : Disjoint (s.
+map Embedding.inl) (t.map Embedding.inr)
 -/
 theorem map_inl_disjUnion_map_inr :
     (s.map Embedding.inl).disjUnion (t.map Embedding.inr) (disjoint_map_inl_map_inr _ _) =
       s.disjSum t :=
   rfl
 
-variable {s t} {s₁ s₂ : Finset α} {t₁ t₂ : Finset β} {a : α} {b : β} {x : α oplus β}
-
-/--
-theorem `mem_disjSum` / 定理 `mem_disjSum`
-
-English:
-theorem mem_disjSum
-  statement: x in s.disjSum t ↔ (exists a, a in s ∧ inl a = x) ∨ exists b, b in t ∧ inr b = x
-  proof: Multiset.mem_disjSum
-
-@[simp]
-
-中文:
-定理 mem_disjSum
-  结论: x in s.disjSum t ↔ (存在 a, a in s ∧ inl a = x) ∨ 存在 b, b in t ∧ inr b = x
-  证明: Multiset.mem_disjSum
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.mem_disjSum, mem_disjSum
+variable {s t} {s₁ s₂ : Finset α} {t₁ t₂ : Finset β} {a : α} {b : β} {x : α ⊕ β}
+/-
+**Finset.mem_disjSum** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：mem_disjSum : x in s.disjSum t ↔ (exists a, a in s ∧ inl a = x) ∨ exists b
+, b in t ∧ inr b = x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.mem_disjSum`：mem_disjSum : x in s.disjSum t ↔ (exists a, a in s
+ ∧ inl a = x) ∨ exists b, b in t ∧ inr b = x
 -/
-theorem mem_disjSum : x in s.disjSum t ↔ (exists a, a in s ∧ inl a = x) ∨ exists b, b in t ∧ inr b = x :=
+theorem mem_disjSum : x ∈ s.disjSum t ↔ (∃ a, a ∈ s ∧ inl a = x) ∨ ∃ b, b ∈ t ∧ inr b = x :=
   Multiset.mem_disjSum
 
 @[simp]
-/--
-theorem `inl_mem_disjSum` / 定理 `inl_mem_disjSum`
-
-English:
-theorem inl_mem_disjSum
-  statement: inl a in s.disjSum t ↔ a in s
-  proof: Multiset.inl_mem_disjSum
-
-@[simp]
-
-中文:
-定理 inl_mem_disjSum
-  结论: inl a in s.disjSum t ↔ a in s
-  证明: Multiset.inl_mem_disjSum
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.inl_mem_disjSum, inl_mem_disjSum
+/-
+**Finset.inl_mem_disjSum** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：inl_mem_disjSum : inl a in s.disjSum t ↔ a in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.inl_mem_disjSum`：inl_mem_disjSum : inl a in s.disjSum t ↔ a in 
+s
 -/
-theorem inl_mem_disjSum : inl a in s.disjSum t ↔ a in s :=
+theorem inl_mem_disjSum : inl a ∈ s.disjSum t ↔ a ∈ s :=
   Multiset.inl_mem_disjSum
 
 @[simp]
-/--
-theorem `inr_mem_disjSum` / 定理 `inr_mem_disjSum`
-
-English:
-theorem inr_mem_disjSum
-  statement: inr b in s.disjSum t ↔ b in t
-  proof: Multiset.inr_mem_disjSum
-
-@[simp]
-
-中文:
-定理 inr_mem_disjSum
-  结论: inr b in s.disjSum t ↔ b in t
-  证明: Multiset.inr_mem_disjSum
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.inr_mem_disjSum, inr_mem_disjSum
+/-
+**Finset.inr_mem_disjSum** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：inr_mem_disjSum : inr b in s.disjSum t ↔ b in t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.inr_mem_disjSum`：inr_mem_disjSum : inr b in s.disjSum t ↔ b in 
+t
 -/
-theorem inr_mem_disjSum : inr b in s.disjSum t ↔ b in t :=
+theorem inr_mem_disjSum : inr b ∈ s.disjSum t ↔ b ∈ t :=
   Multiset.inr_mem_disjSum
 
 @[simp]
-/--
-theorem `disjSum_eq_empty` / 定理 `disjSum_eq_empty`
-
-English:
-theorem disjSum_eq_empty
-  statement: s.disjSum t = ∅ ↔ s = ∅ ∧ t = ∅
-  proof: by simp [Finset.ext_iff]
-
-中文:
-定理 disjSum_eq_empty
-  结论: s.disjSum t = ∅ ↔ s = ∅ ∧ t = ∅
-  证明: by simp [Finset.ext_iff]
-
-Depends on / 依赖: Finset, Finset.ext_iff, ext_iff
+/-
+**Finset.disjSum_eq_empty** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：disjSum_eq_empty : s.disjSum t = ∅ ↔ s = ∅ ∧ t = ∅
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_false`：∀ (p : Prop), (p ↔ False) = ¬p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem disjSum_eq_empty : s.disjSum t = ∅ ↔ s = ∅ ∧ t = ∅ := by simp [Finset.ext_iff]
-
-/--
-theorem `disjSum_mono` / 定理 `disjSum_mono`
-
-English:
-theorem disjSum_mono
-  given: (hs : s₁ subseteq s₂) (ht : t₁ subseteq t₂)
-  statement: s₁.disjSum t₁ subseteq s₂.disjSum t₂
-  proof: val_le_iff.1 Multiset.disjSum_mono (val_le_iff.2 hs) (val_le_iff.2 ht)
-
-中文:
-定理 disjSum_mono
-  条件: (hs : s₁ subseteq s₂) (ht : t₁ subseteq t₂)
-  结论: s₁.disjSum t₁ subseteq s₂.disjSum t₂
-  证明: val_le_iff.1 Multiset.disjSum_mono (val_le_iff.2 hs) (val_le_iff.2 ht)
-
-Depends on / 依赖: Multiset, Multiset.disjSum_mono, disjSum_mono, val_le_iff
+/-
+**Finset.disjSum_mono** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：disjSum_mono (hs : s₁ subseteq s₂) (ht : t₁ subseteq t₂) : s₁.disjSum t₁ s
+ubseteq s₂.disjSum t₂
+参数：hs : s₁ subseteq s₂；ht : t₁ subseteq t₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.val_le_iff`：val_le_iff {s₁ s₂ : Finset α} : s₁.1 <= s₂.1 ↔ s₁ sub
+seteq s₂
+· 使用定理 `Multiset.disjSum_mono`：disjSum_mono (hs : s₁ <= s₂) (ht : t₁ <= t₂) : s₁
+.disjSum t₁ <= s₂.disjSum t₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 -/
-theorem disjSum_mono (hs : s₁ subseteq s₂) (ht : t₁ subseteq t₂) : s₁.disjSum t₁ subseteq s₂.disjSum t₂ :=
-val_le_iff.1 Multiset.disjSum_mono (val_le_iff.2 hs) (val_le_iff.2 ht)
-
-/--
-theorem `disjSum_mono_left` / 定理 `disjSum_mono_left`
-
-English:
-theorem disjSum_mono_left
-  given: (t : Finset β)
-  statement: Monotone fun s : Finset α => s.disjSum t
-  proof: fun _ _ hs => disjSum_mono hs Subset.rfl
-
-中文:
-定理 disjSum_mono_left
-  条件: (t : 有限集 β)
-  结论: 递增 fun s : 有限集 α => s.disjSum t
-  证明: fun _ _ hs => disjSum_mono hs Subset.rfl
-
-Depends on / 依赖: Subset, Subset.rfl, disjSum_mono
+theorem disjSum_mono (hs : s₁ ⊆ s₂) (ht : t₁ ⊆ t₂) : s₁.disjSum t₁ ⊆ s₂.disjSum t₂ :=
+  val_le_iff.1 <| Multiset.disjSum_mono (val_le_iff.2 hs) (val_le_iff.2 ht)
+/-
+**Finset.disjSum_mono_left** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：disjSum_mono_left (t : Finset β) : Monotone fun s : Finset α => s.disjSum 
+t
+参数：t : Finset β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.disjSum_mono`：disjSum_mono (hs : s₁ subseteq s₂) (ht : t₁ subsete
+q t₂) : s₁.disjSum t₁ subseteq s₂.disjSum t₂
+· 使用定理 `Finset.Subset.rfl`：∀ {α : Type u_1} {s : Finset α}, s ⊆ s
 -/
 theorem disjSum_mono_left (t : Finset β) : Monotone fun s : Finset α => s.disjSum t :=
   fun _ _ hs => disjSum_mono hs Subset.rfl
-
-/--
-theorem `disjSum_mono_right` / 定理 `disjSum_mono_right`
-
-English:
-theorem disjSum_mono_right
-  given: (s : Finset α)
-  statement: Monotone (s.disjSum : Finset β -> Finset (α oplus β))
-  proof: fun _ _ => disjSum_mono Subset.rfl
-
-中文:
-定理 disjSum_mono_right
-  条件: (s : 有限集 α)
-  结论: 递增 (s.disjSum : 有限集 β -> 有限集 (α oplus β))
-  证明: fun _ _ => disjSum_mono Subset.rfl
-
-Depends on / 依赖: Subset, Subset.rfl, disjSum_mono
+/-
+**Finset.disjSum_mono_right** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：disjSum_mono_right (s : Finset α) : Monotone (s.disjSum : Finset β -> Fins
+et (α oplus β))
+参数：s : Finset α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.disjSum_mono`：disjSum_mono (hs : s₁ subseteq s₂) (ht : t₁ subsete
+q t₂) : s₁.disjSum t₁ subseteq s₂.disjSum t₂
+· 使用定理 `Finset.Subset.rfl`：∀ {α : Type u_1} {s : Finset α}, s ⊆ s
 -/
-theorem disjSum_mono_right (s : Finset α) : Monotone (s.disjSum : Finset β -> Finset (α oplus β)) :=
+theorem disjSum_mono_right (s : Finset α) : Monotone (s.disjSum : Finset β → Finset (α ⊕ β)) :=
   fun _ _ => disjSum_mono Subset.rfl
-
-/--
-theorem `disjSum_ssubset_disjSum_of_ssubset_of_subset` / 定理 `disjSum_ssubset_disjSum_of_ssubset_of_subset`
-
-English:
-theorem disjSum_ssubset_disjSum_of_ssubset_of_subset
-  given: (hs : s₁ ⊂ s₂) (ht : t₁ subseteq t₂)
-  proof: val_lt_iff.1 disjSum_lt_disjSum_of_lt_of_le (val_lt_iff.2 hs) (val_le_iff.2 ht)
-
-中文:
-定理 disjSum_ssubset_disjSum_of_ssubset_of_subset
-  条件: (hs : s₁ ⊂ s₂) (ht : t₁ subseteq t₂)
-  证明: val_lt_iff.1 disjSum_lt_disjSum_of_lt_of_le (val_lt_iff.2 hs) (val_le_iff.2 ht)
-
-Depends on / 依赖: disjSum_lt_disjSum_of_lt_of_le, val_le_iff, val_lt_iff
+/-
+**Finset.disjSum_ssubset_disjSum_of_ssubset_of_subset** 是 Mathlib 中的一个定理，位于命名空间 
+`Finset`。
+形式化陈述：disjSum_ssubset_disjSum_of_ssubset_of_subset (hs : s₁ ⊂ s₂) (ht : t₁ subse
+teq t₂) : s₁.disjSum t₁ ⊂ s₂.disjSum t₂
+参数：hs : s₁ ⊂ s₂；ht : t₁ subseteq t₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.val_lt_iff`：val_lt_iff {s₁ s₂ : Finset α} : s₁.1 < s₂.1 ↔ s₁ ⊂ s₂
+· 使用定理 `Multiset.disjSum_lt_disjSum_of_lt_of_le`：disjSum_lt_disjSum_of_lt_of_le 
+(hs : s₁ < s₂) (ht : t₁ <= t₂) : s₁.disjSum t₁ < s₂.disjSum t₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.val_le_iff`：val_le_iff {s₁ s₂ : Finset α} : s₁.1 <= s₂.1 ↔ s₁ sub
+seteq s₂
 -/
-theorem disjSum_ssubset_disjSum_of_ssubset_of_subset (hs : s₁ ⊂ s₂) (ht : t₁ subseteq t₂) :
+theorem disjSum_ssubset_disjSum_of_ssubset_of_subset (hs : s₁ ⊂ s₂) (ht : t₁ ⊆ t₂) :
     s₁.disjSum t₁ ⊂ s₂.disjSum t₂ :=
-val_lt_iff.1 disjSum_lt_disjSum_of_lt_of_le (val_lt_iff.2 hs) (val_le_iff.2 ht)
-
-/--
-theorem `disjSum_ssubset_disjSum_of_subset_of_ssubset` / 定理 `disjSum_ssubset_disjSum_of_subset_of_ssubset`
-
-English:
-theorem disjSum_ssubset_disjSum_of_subset_of_ssubset
-  given: (hs : s₁ subseteq s₂) (ht : t₁ ⊂ t₂)
-  proof: val_lt_iff.1 disjSum_lt_disjSum_of_le_of_lt (val_le_iff.2 hs) (val_lt_iff.2 ht)
-
-中文:
-定理 disjSum_ssubset_disjSum_of_subset_of_ssubset
-  条件: (hs : s₁ subseteq s₂) (ht : t₁ ⊂ t₂)
-  证明: val_lt_iff.1 disjSum_lt_disjSum_of_le_of_lt (val_le_iff.2 hs) (val_lt_iff.2 ht)
-
-Depends on / 依赖: disjSum_lt_disjSum_of_le_of_lt, val_le_iff, val_lt_iff
+  val_lt_iff.1 <| disjSum_lt_disjSum_of_lt_of_le (val_lt_iff.2 hs) (val_le_iff.2 ht)
+/-
+**Finset.disjSum_ssubset_disjSum_of_subset_of_ssubset** 是 Mathlib 中的一个定理，位于命名空间 
+`Finset`。
+形式化陈述：disjSum_ssubset_disjSum_of_subset_of_ssubset (hs : s₁ subseteq s₂) (ht : t
+₁ ⊂ t₂) : s₁.disjSum t₁ ⊂ s₂.disjSum t₂
+参数：hs : s₁ subseteq s₂；ht : t₁ ⊂ t₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.val_lt_iff`：val_lt_iff {s₁ s₂ : Finset α} : s₁.1 < s₂.1 ↔ s₁ ⊂ s₂
+· 使用定理 `Multiset.disjSum_lt_disjSum_of_le_of_lt`：disjSum_lt_disjSum_of_le_of_lt 
+(hs : s₁ <= s₂) (ht : t₁ < t₂) : s₁.disjSum t₁ < s₂.disjSum t₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.val_le_iff`：val_le_iff {s₁ s₂ : Finset α} : s₁.1 <= s₂.1 ↔ s₁ sub
+seteq s₂
 -/
-theorem disjSum_ssubset_disjSum_of_subset_of_ssubset (hs : s₁ subseteq s₂) (ht : t₁ ⊂ t₂) :
+theorem disjSum_ssubset_disjSum_of_subset_of_ssubset (hs : s₁ ⊆ s₂) (ht : t₁ ⊂ t₂) :
     s₁.disjSum t₁ ⊂ s₂.disjSum t₂ :=
-val_lt_iff.1 disjSum_lt_disjSum_of_le_of_lt (val_le_iff.2 hs) (val_lt_iff.2 ht)
-
-/--
-theorem `disjSum_strictMono_left` / 定理 `disjSum_strictMono_left`
-
-English:
-theorem disjSum_strictMono_left
-  given: (t : Finset β)
-  statement: StrictMono fun s : Finset α => s.disjSum t
-  proof: fun _ _ hs => disjSum_ssubset_disjSum_of_ssubset_of_subset hs Subset.rfl
-
-中文:
-定理 disjSum_strictMono_left
-  条件: (t : 有限集 β)
-  结论: 严格递增 fun s : 有限集 α => s.disjSum t
-  证明: fun _ _ hs => disjSum_ssubset_disjSum_of_ssubset_of_subset hs Subset.rfl
-
-Depends on / 依赖: Subset, Subset.rfl, disjSum_ssubset_disjSum_of_ssubset_of_subset
+  val_lt_iff.1 <| disjSum_lt_disjSum_of_le_of_lt (val_le_iff.2 hs) (val_lt_iff.2 ht)
+/-
+**Finset.disjSum_strictMono_left** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：disjSum_strictMono_left (t : Finset β) : StrictMono fun s : Finset α => s.
+disjSum t
+参数：t : Finset β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.disjSum_ssubset_disjSum_of_ssubset_of_subset`：disjSum_ssubset_dis
+jSum_of_ssubset_of_subset (hs : s₁ ⊂ s₂) (ht : t₁ subseteq t₂) : s₁.disjSum t₁ ⊂
+ s₂.disjSum t₂
+· 使用定理 `Finset.Subset.rfl`：∀ {α : Type u_1} {s : Finset α}, s ⊆ s
 -/
 theorem disjSum_strictMono_left (t : Finset β) : StrictMono fun s : Finset α => s.disjSum t :=
   fun _ _ hs => disjSum_ssubset_disjSum_of_ssubset_of_subset hs Subset.rfl
-
-/--
-theorem `disjSum_strictMono_right` / 定理 `disjSum_strictMono_right`
-
-English:
-theorem disjSum_strictMono_right
-  given: (s : Finset α)
-  proof: fun _ _ =>
-  disjSum_ssubset_disjSum_of_subset_of_ssubset Subset.rfl
-
-中文:
-定理 disjSum_strictMono_right
-  条件: (s : 有限集 α)
-  证明: fun _ _ =>
-  disjSum_ssubset_disjSum_of_subset_of_ssubset Subset.rfl
+/-
+**Finset.disjSum_strictMono_right** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：disjSum_strictMono_right (s : Finset α) : StrictMono (s.disjSum : Finset β
+ -> Finset (α oplus β))
+参数：s : Finset α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.disjSum_ssubset_disjSum_of_subset_of_ssubset`：disjSum_ssubset_dis
+jSum_of_subset_of_ssubset (hs : s₁ subseteq s₂) (ht : t₁ ⊂ t₂) : s₁.disjSum t₁ ⊂
+ s₂.disjSum t₂
+· 使用定理 `Finset.Subset.rfl`：∀ {α : Type u_1} {s : Finset α}, s ⊆ s
 -/
 theorem disjSum_strictMono_right (s : Finset α) :
-    StrictMono (s.disjSum : Finset β -> Finset (α oplus β)) := fun _ _ =>
+    StrictMono (s.disjSum : Finset β → Finset (α ⊕ β)) := fun _ _ =>
   disjSum_ssubset_disjSum_of_subset_of_ssubset Subset.rfl
-
-/--
-lemma `disjSum_inj` / 引理 `disjSum_inj`
-
-English:
-lemma disjSum_inj
-  given: {α β : Type*} {s₁ s₂ : Finset α} {t₁ t₂ : Finset β}
-  proof: by
-  simp [Finset.ext_iff]
-
-中文:
-引理 disjSum_inj
-  条件: {α β : 类型} {s₁ s₂ : 有限集 α} {t₁ t₂ : 有限集 β}
-  证明: by
-  simp [Finset.ext_iff]
+/-
+**Finset.disjSum_inj** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_4} {β : Type u_5} {s₁ s₂ : Finset α} {t₁ t₂ : Finset β}, s₁.
+disjSum t₁ = s₂.disjSum t₂ ↔ s₁ = s₂ ∧ t₁ = t₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma disjSum_inj {α β : Type*} {s₁ s₂ : Finset α} {t₁ t₂ : Finset β} :
     s₁.disjSum t₁ = s₂.disjSum t₂ ↔ s₁ = s₂ ∧ t₁ = t₂ := by
   simp [Finset.ext_iff]
-
-/--
-lemma `Injective2_disjSum` / 引理 `Injective2_disjSum`
-
-English:
-lemma Injective2_disjSum
-  given: {α β : Type*}
-  statement: Function.Injective2 (@disjSum α β)
-  proof: fun _ _ _ _ => by simp [Finset.ext_iff]
-
-中文:
-引理 Injective2_disjSum
-  条件: {α β : 类型}
-  结论: 函数.Injective2 (@disjSum α β)
-  证明: fun _ _ _ _ => by simp [Finset.ext_iff]
-
-Depends on / 依赖: Finset, Finset.ext_iff, ext_iff
+/-
+**Finset.Injective2_disjSum** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：Injective2_disjSum {α β : Type*} : Function.Injective2 (@disjSum α β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
 -/
 lemma Injective2_disjSum {α β : Type*} : Function.Injective2 (@disjSum α β) :=
   fun _ _ _ _ => by simp [Finset.ext_iff]
 
 /--
-Definition of `toLeft` / `toLeft` 的定义
+Given a finset of elements `α ⊕ β`, extract all the elements of the form `α`. This
+forms a quasi-inverse to `disjSum`, in that it recovers its left input.
 
-English:
-definition toLeft
-  signature: (u : Finset (α oplus β))
-  body: u.filterMap (Sum.elim some fun _ => none) (by clear x; aesop)
-
-中文:
-定义 toLeft
-  签名: (u : 有限集 (α oplus β))
-  定义体: u.filterMap (Sum.elim some fun _ => none) (by clear x; aesop)
-
-Depends on / 依赖: Sum.elim, filterMap, u.filterMap
+See also `List.partitionMap`.
 -/
-def toLeft (u : Finset (α oplus β)) : Finset α :=
+/-
+**Finset.toLeft** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：toLeft (u : Finset (α oplus β)) : Finset α
+参数：u : Finset (α oplus β)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Given a finset of elements `α ⊕ β`, extract all the elements of the form `α`. Th
+is
+forms a quasi-inverse to `disjSum`, in that it recovers its left input.
+
+See also `List.partitionMap`.
+-/
+def toLeft (u : Finset (α ⊕ β)) : Finset α :=
   u.filterMap (Sum.elim some fun _ => none) (by clear x; aesop)
 
 /--
-Definition of `toRight` / `toRight` 的定义
+Given a finset of elements `α ⊕ β`, extract all the elements of the form `β`. This
+forms a quasi-inverse to `disjSum`, in that it recovers its right input.
 
-English:
-definition toRight
-  signature: (u : Finset (α oplus β))
-  body: u.filterMap (Sum.elim (fun _ => none) some) (by clear x; aesop)
-
-中文:
-定义 toRight
-  签名: (u : 有限集 (α oplus β))
-  定义体: u.filterMap (Sum.elim (fun _ => none) some) (by clear x; aesop)
-
-Depends on / 依赖: Sum.elim, filterMap, u.filterMap
+See also `List.partitionMap`.
 -/
-def toRight (u : Finset (α oplus β)) : Finset β :=
+/-
+**Finset.toRight** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：toRight (u : Finset (α oplus β)) : Finset β
+参数：u : Finset (α oplus β)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Given a finset of elements `α ⊕ β`, extract all the elements of the form `β`. Th
+is
+forms a quasi-inverse to `disjSum`, in that it recovers its right input.
+
+See also `List.partitionMap`.
+-/
+def toRight (u : Finset (α ⊕ β)) : Finset β :=
   u.filterMap (Sum.elim (fun _ => none) some) (by clear x; aesop)
 
-variable {u v : Finset (α oplus β)} {a : α} {b : β}
-
-/--
-lemma `mem_toLeft` / 引理 `mem_toLeft`
-
-English:
-lemma mem_toLeft
-  statement: a in u.toLeft ↔ .inl a in u
-  proof: by simp [toLeft]
-
-中文:
-引理 mem_toLeft
-  结论: a in u.toLeft ↔ .inl a in u
-  证明: by simp [toLeft]
+variable {u v : Finset (α ⊕ β)} {a : α} {b : β}
+/-
+**Finset.mem_toLeft** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {u : Finset (α ⊕ β)} {a : α}, a ∈ u.toLeft
+ ↔ Sum.inl a ∈ u
+参数：α ⊕ β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Option.some.injEq`：∀ {α : Type u} (val val_1 : α), (some val = some val_
+1) = (val = val_1)
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[simp] lemma mem_toLeft : a in u.toLeft ↔ .inl a in u := by simp [toLeft]
-/--
-lemma `mem_toRight` / 引理 `mem_toRight`
-
-English:
-lemma mem_toRight
-  statement: b in u.toRight ↔ .inr b in u
-  proof: by simp [toRight]
-
-@[gcongr]
-
-中文:
-引理 mem_toRight
-  结论: b in u.toRight ↔ .inr b in u
-  证明: by simp [toRight]
-
-@[gcongr]
+@[simp] lemma mem_toLeft : a ∈ u.toLeft ↔ .inl a ∈ u := by simp [toLeft]
+/-
+**Finset.mem_toRight** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {u : Finset (α ⊕ β)} {b : β}, b ∈ u.toRigh
+t ↔ Sum.inr b ∈ u
+参数：α ⊕ β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `Option.some.injEq`：∀ {α : Type u} (val val_1 : α), (some val = some val_
+1) = (val = val_1)
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[simp] lemma mem_toRight : b in u.toRight ↔ .inr b in u := by simp [toRight]
+@[simp] lemma mem_toRight : b ∈ u.toRight ↔ .inr b ∈ u := by simp [toRight]
 
 @[gcongr]
-/--
-lemma `toLeft_subset_toLeft` / 引理 `toLeft_subset_toLeft`
-
-English:
-lemma toLeft_subset_toLeft
-  statement: u subseteq v -> u.toLeft subseteq v.toLeft
-  proof: fun h _ => by simpa only [mem_toLeft] using @h _
-
-@[gcongr]
-
-中文:
-引理 toLeft_subset_toLeft
-  结论: u subseteq v -> u.toLeft subseteq v.toLeft
-  证明: fun h _ => by simpa only [mem_toLeft] using @h _
-
-@[gcongr]
-
-Depends on / 依赖: mem_toLeft
+/-
+**Finset.toLeft_subset_toLeft** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：toLeft_subset_toLeft : u subseteq v -> u.toLeft subseteq v.toLeft
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
-lemma toLeft_subset_toLeft : u subseteq v -> u.toLeft subseteq v.toLeft :=
+lemma toLeft_subset_toLeft : u ⊆ v → u.toLeft ⊆ v.toLeft :=
   fun h _ => by simpa only [mem_toLeft] using @h _
 
 @[gcongr]
-/--
-lemma `toRight_subset_toRight` / 引理 `toRight_subset_toRight`
-
-English:
-lemma toRight_subset_toRight
-  statement: u subseteq v -> u.toRight subseteq v.toRight
-  proof: fun h _ => by simpa only [mem_toRight] using @h _
-
-中文:
-引理 toRight_subset_toRight
-  结论: u subseteq v -> u.toRight subseteq v.toRight
-  证明: fun h _ => by simpa only [mem_toRight] using @h _
-
-Depends on / 依赖: mem_toRight
+/-
+**Finset.toRight_subset_toRight** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：toRight_subset_toRight : u subseteq v -> u.toRight subseteq v.toRight
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
-lemma toRight_subset_toRight : u subseteq v -> u.toRight subseteq v.toRight :=
+lemma toRight_subset_toRight : u ⊆ v → u.toRight ⊆ v.toRight :=
   fun h _ => by simpa only [mem_toRight] using @h _
-
-/--
-lemma `toLeft_monotone` / 引理 `toLeft_monotone`
-
-English:
-lemma toLeft_monotone
-  statement: Monotone (@toLeft α β)
-  proof: fun _ _ => toLeft_subset_toLeft
-
-中文:
-引理 toLeft_monotone
-  结论: 递增 (@toLeft α β)
-  证明: fun _ _ => toLeft_subset_toLeft
-
-Depends on / 依赖: toLeft_subset_toLeft
+/-
+**Finset.toLeft_monotone** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：toLeft_monotone : Monotone (@toLeft α β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.toLeft_subset_toLeft`：toLeft_subset_toLeft : u subseteq v -> u.to
+Left subseteq v.toLeft
 -/
 lemma toLeft_monotone : Monotone (@toLeft α β) := fun _ _ => toLeft_subset_toLeft
-/--
-lemma `toRight_monotone` / 引理 `toRight_monotone`
-
-English:
-lemma toRight_monotone
-  statement: Monotone (@toRight α β)
-  proof: fun _ _ => toRight_subset_toRight
-
-中文:
-引理 toRight_monotone
-  结论: 递增 (@toRight α β)
-  证明: fun _ _ => toRight_subset_toRight
-
-Depends on / 依赖: toRight_subset_toRight
+/-
+**Finset.toRight_monotone** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：toRight_monotone : Monotone (@toRight α β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.toRight_subset_toRight`：toRight_subset_toRight : u subseteq v -> 
+u.toRight subseteq v.toRight
 -/
 lemma toRight_monotone : Monotone (@toRight α β) := fun _ _ => toRight_subset_toRight
-
-/--
-lemma `toLeft_disjSum_toRight` / 引理 `toLeft_disjSum_toRight`
-
-English:
-lemma toLeft_disjSum_toRight
-  statement: u.toLeft.disjSum u.toRight = u
-  proof: by
-  ext (x | x) <;> simp
-
-中文:
-引理 toLeft_disjSum_toRight
-  结论: u.toLeft.disjSum u.toRight = u
-  证明: by
-  ext (x | x) <;> simp
+/-
+**Finset.toLeft_disjSum_toRight** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：toLeft_disjSum_toRight : u.toLeft.disjSum u.toRight = u
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma toLeft_disjSum_toRight : u.toLeft.disjSum u.toRight = u := by
   ext (x | x) <;> simp
-
-/--
-lemma `card_toLeft_add_card_toRight` / 引理 `card_toLeft_add_card_toRight`
-
-English:
-lemma card_toLeft_add_card_toRight
-  statement: #u.toLeft + #u.toRight = #u
-  proof: by
-  rw [← card_disjSum]; rw [toLeft_disjSum_toRight]
-
-中文:
-引理 card_toLeft_add_card_toRight
-  结论: #u.toLeft + #u.toRight = #u
-  证明: by
-  rw [← card_disjSum]; rw [toLeft_disjSum_toRight]
-
-Depends on / 依赖: card_disjSum, toLeft_disjSum_toRight
+/-
+**Finset.card_toLeft_add_card_toRight** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：card_toLeft_add_card_toRight : #u.toLeft + #u.toRight = #u
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.card_disjSum`：card_disjSum : (s.disjSum t).card = s.card + t.card
+· 使用引理 `Finset.toLeft_disjSum_toRight`：toLeft_disjSum_toRight : u.toLeft.disjSum
+ u.toRight = u
 -/
 lemma card_toLeft_add_card_toRight : #u.toLeft + #u.toRight = #u := by
-  rw [← card_disjSum]; rw [toLeft_disjSum_toRight]
-
-/--
-lemma `card_toLeft_le` / 引理 `card_toLeft_le`
-
-English:
-lemma card_toLeft_le
-  statement: #u.toLeft <= #u
-  proof: (Nat.le_add_right _ _).trans_eq card_toLeft_add_card_toRight
-
-中文:
-引理 card_toLeft_le
-  结论: #u.toLeft <= #u
-  证明: (Nat.le_add_right _ _).trans_eq card_toLeft_add_card_toRight
-
-Depends on / 依赖: Nat.le_add_right, card_toLeft_add_card_toRight, le_add_right, trans_eq
+  rw [← card_disjSum, toLeft_disjSum_toRight]
+/-
+**Finset.card_toLeft_le** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：card_toLeft_le : #u.toLeft <= #u
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用定理 `Nat.le_add_right`：∀ (n k : ℕ), n ≤ n + k
+· 使用引理 `Finset.card_toLeft_add_card_toRight`：card_toLeft_add_card_toRight : #u.t
+oLeft + #u.toRight = #u
 -/
-lemma card_toLeft_le : #u.toLeft <= #u :=
+lemma card_toLeft_le : #u.toLeft ≤ #u :=
   (Nat.le_add_right _ _).trans_eq card_toLeft_add_card_toRight
-
-/--
-lemma `card_toRight_le` / 引理 `card_toRight_le`
-
-English:
-lemma card_toRight_le
-  statement: #u.toRight <= #u
-  proof: (Nat.le_add_left _ _).trans_eq card_toLeft_add_card_toRight
-
-中文:
-引理 card_toRight_le
-  结论: #u.toRight <= #u
-  证明: (Nat.le_add_left _ _).trans_eq card_toLeft_add_card_toRight
-
-Depends on / 依赖: Nat.le_add_left, card_toLeft_add_card_toRight, le_add_left, trans_eq
+/-
+**Finset.card_toRight_le** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：card_toRight_le : #u.toRight <= #u
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用定理 `Nat.le_add_left`：∀ (n m : ℕ), n ≤ m + n
+· 使用引理 `Finset.card_toLeft_add_card_toRight`：card_toLeft_add_card_toRight : #u.t
+oLeft + #u.toRight = #u
 -/
-lemma card_toRight_le : #u.toRight <= #u :=
+lemma card_toRight_le : #u.toRight ≤ #u :=
   (Nat.le_add_left _ _).trans_eq card_toLeft_add_card_toRight
-
-/--
-lemma `toLeft_disjSum` / 引理 `toLeft_disjSum`
-
-English:
-lemma toLeft_disjSum
-  statement: (s.disjSum t).toLeft = s
-  proof: by ext x; simp
-
-中文:
-引理 toLeft_disjSum
-  结论: (s.disjSum t).toLeft = s
-  证明: by ext x; simp
+/-
+**Finset.toLeft_disjSum** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Finset α} {t : Finset β}, (s.disjSum 
+t).toLeft = s
+参数：s.disjSum t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma toLeft_disjSum : (s.disjSum t).toLeft = s := by ext x; simp
-
-/--
-lemma `toRight_disjSum` / 引理 `toRight_disjSum`
-
-English:
-lemma toRight_disjSum
-  statement: (s.disjSum t).toRight = t
-  proof: by ext x; simp
-
-中文:
-引理 toRight_disjSum
-  结论: (s.disjSum t).toRight = t
-  证明: by ext x; simp
+/-
+**Finset.toRight_disjSum** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {s : Finset α} {t : Finset β}, (s.disjSum 
+t).toRight = t
+参数：s.disjSum t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma toRight_disjSum : (s.disjSum t).toRight = t := by ext x; simp
-
-/--
-lemma `disjSum_eq_iff` / 引理 `disjSum_eq_iff`
-
-English:
-lemma disjSum_eq_iff
-  statement: s.disjSum t = u ↔ s = u.toLeft ∧ t = u.toRight
-  proof: ⟨fun h => by simp [← h], fun h => by simp [h, toLeft_disjSum_toRight]⟩
-
-中文:
-引理 disjSum_eq_iff
-  结论: s.disjSum t = u ↔ s = u.toLeft ∧ t = u.toRight
-  证明: ⟨fun h => by simp [← h], fun h => by simp [h, toLeft_disjSum_toRight]⟩
-
-Depends on / 依赖: toLeft_disjSum_toRight
+/-
+**Finset.disjSum_eq_iff** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：disjSum_eq_iff : s.disjSum t = u ↔ s = u.toLeft ∧ t = u.toRight
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.toLeft_disjSum`：∀ {α : Type u_1} {β : Type u_2} {s : Finset α} {t
+ : Finset β}, (s.disjSum t).toLeft = s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Finset.toRight_disjSum`：∀ {α : Type u_1} {β : Type u_2} {s : Finset α} {
+t : Finset β}, (s.disjSum t).toRight = t
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Finset.toLeft_disjSum_toRight`：toLeft_disjSum_toRight : u.toLeft.disjSum
+ u.toRight = u
 -/
 lemma disjSum_eq_iff : s.disjSum t = u ↔ s = u.toLeft ∧ t = u.toRight :=
   ⟨fun h => by simp [← h], fun h => by simp [h, toLeft_disjSum_toRight]⟩
-
-/--
-lemma `eq_disjSum_iff` / 引理 `eq_disjSum_iff`
-
-English:
-lemma eq_disjSum_iff
-  statement: u = s.disjSum t ↔ u.toLeft = s ∧ u.toRight = t
-  proof: ⟨fun h => by simp [h], fun h => by simp [← h, toLeft_disjSum_toRight]⟩
-
-中文:
-引理 eq_disjSum_iff
-  结论: u = s.disjSum t ↔ u.toLeft = s ∧ u.toRight = t
-  证明: ⟨fun h => by simp [h], fun h => by simp [← h, toLeft_disjSum_toRight]⟩
-
-Depends on / 依赖: toLeft_disjSum_toRight
+/-
+**Finset.eq_disjSum_iff** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：eq_disjSum_iff : u = s.disjSum t ↔ u.toLeft = s ∧ u.toRight = t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.toLeft_disjSum`：∀ {α : Type u_1} {β : Type u_2} {s : Finset α} {t
+ : Finset β}, (s.disjSum t).toLeft = s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Finset.toRight_disjSum`：∀ {α : Type u_1} {β : Type u_2} {s : Finset α} {
+t : Finset β}, (s.disjSum t).toRight = t
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Finset.toLeft_disjSum_toRight`：toLeft_disjSum_toRight : u.toLeft.disjSum
+ u.toRight = u
 -/
 lemma eq_disjSum_iff : u = s.disjSum t ↔ u.toLeft = s ∧ u.toRight = t :=
   ⟨fun h => by simp [h], fun h => by simp [← h, toLeft_disjSum_toRight]⟩
-
-/--
-lemma `disjSum_subset` / 引理 `disjSum_subset`
-
-English:
-lemma disjSum_subset
-  statement: s.disjSum t subseteq u ↔ s subseteq u.toLeft ∧ t subseteq u.toRight
-  proof: by simp [subset_iff]
-
-中文:
-引理 disjSum_subset
-  结论: s.disjSum t subseteq u ↔ s subseteq u.toLeft ∧ t subseteq u.toRight
-  证明: by simp [subset_iff]
-
-Depends on / 依赖: subset_iff
+/-
+**Finset.disjSum_subset** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：disjSum_subset : s.disjSum t subseteq u ↔ s subseteq u.toLeft ∧ t subseteq
+ u.toRight
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma disjSum_subset : s.disjSum t subseteq u ↔ s subseteq u.toLeft ∧ t subseteq u.toRight := by simp [subset_iff]
-/--
-lemma `subset_disjSum` / 引理 `subset_disjSum`
-
-English:
-lemma subset_disjSum
-  statement: u subseteq s.disjSum t ↔ u.toLeft subseteq s ∧ u.toRight subseteq t
-  proof: by simp [subset_iff]
-
-中文:
-引理 subset_disjSum
-  结论: u subseteq s.disjSum t ↔ u.toLeft subseteq s ∧ u.toRight subseteq t
-  证明: by simp [subset_iff]
-
-Depends on / 依赖: subset_iff
+lemma disjSum_subset : s.disjSum t ⊆ u ↔ s ⊆ u.toLeft ∧ t ⊆ u.toRight := by simp [subset_iff]
+/-
+**Finset.subset_disjSum** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：subset_disjSum : u subseteq s.disjSum t ↔ u.toLeft subseteq s ∧ u.toRight 
+subseteq t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma subset_disjSum : u subseteq s.disjSum t ↔ u.toLeft subseteq s ∧ u.toRight subseteq t := by simp [subset_iff]
-
-/--
-lemma `subset_map_inl` / 引理 `subset_map_inl`
-
-English:
-lemma subset_map_inl
-  statement: u subseteq s.map .inl ↔ u.toLeft subseteq s ∧ u.toRight = ∅
-  proof: by
+lemma subset_disjSum : u ⊆ s.disjSum t ↔ u.toLeft ⊆ s ∧ u.toRight ⊆ t := by simp [subset_iff]
+/-
+**Finset.subset_map_inl** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：subset_map_inl : u subseteq s.map .inl ↔ u.toLeft subseteq s ∧ u.toRight =
+ ∅
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+lemma subset_map_inl : u ⊆ s.map .inl ↔ u.toLeft ⊆ s ∧ u.toRight = ∅ := by
   simp [← disjSum_empty, subset_disjSum]
-
-中文:
-引理 subset_map_inl
-  结论: u subseteq s.map .inl ↔ u.toLeft subseteq s ∧ u.toRight = ∅
-  证明: by
-  simp [← disjSum_empty, subset_disjSum]
-
-Depends on / 依赖: disjSum_empty, subset_disjSum
+/-
+**Finset.subset_map_inr** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：subset_map_inr : u subseteq t.map .inr ↔ u.toLeft = ∅ ∧ u.toRight subseteq
+ t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma subset_map_inl : u subseteq s.map .inl ↔ u.toLeft subseteq s ∧ u.toRight = ∅ := by
-  simp [← disjSum_empty, subset_disjSum]
-
-/--
-lemma `subset_map_inr` / 引理 `subset_map_inr`
-
-English:
-lemma subset_map_inr
-  statement: u subseteq t.map .inr ↔ u.toLeft = ∅ ∧ u.toRight subseteq t
-  proof: by
+lemma subset_map_inr : u ⊆ t.map .inr ↔ u.toLeft = ∅ ∧ u.toRight ⊆ t := by
   simp [← empty_disjSum, subset_disjSum]
-
-中文:
-引理 subset_map_inr
-  结论: u subseteq t.map .inr ↔ u.toLeft = ∅ ∧ u.toRight subseteq t
-  证明: by
-  simp [← empty_disjSum, subset_disjSum]
-
-Depends on / 依赖: empty_disjSum, subset_disjSum
+/-
+**Finset.map_inl_subset_iff_subset_toLeft** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：map_inl_subset_iff_subset_toLeft : s.map .inl subseteq u ↔ s subseteq u.to
+Left
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma subset_map_inr : u subseteq t.map .inr ↔ u.toLeft = ∅ ∧ u.toRight subseteq t := by
-  simp [← empty_disjSum, subset_disjSum]
-
-/--
-lemma `map_inl_subset_iff_subset_toLeft` / 引理 `map_inl_subset_iff_subset_toLeft`
-
-English:
-lemma map_inl_subset_iff_subset_toLeft
-  statement: s.map .inl subseteq u ↔ s subseteq u.toLeft
-  proof: by
+lemma map_inl_subset_iff_subset_toLeft : s.map .inl ⊆ u ↔ s ⊆ u.toLeft := by
   simp [← disjSum_empty, disjSum_subset]
-
-中文:
-引理 map_inl_subset_iff_subset_toLeft
-  结论: s.map .inl subseteq u ↔ s subseteq u.toLeft
-  证明: by
-  simp [← disjSum_empty, disjSum_subset]
-
-Depends on / 依赖: disjSum_empty, disjSum_subset
+/-
+**Finset.map_inr_subset_iff_subset_toRight** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：map_inr_subset_iff_subset_toRight : t.map .inr subseteq u ↔ t subseteq u.t
+oRight
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma map_inl_subset_iff_subset_toLeft : s.map .inl subseteq u ↔ s subseteq u.toLeft := by
-  simp [← disjSum_empty, disjSum_subset]
-
-/--
-lemma `map_inr_subset_iff_subset_toRight` / 引理 `map_inr_subset_iff_subset_toRight`
-
-English:
-lemma map_inr_subset_iff_subset_toRight
-  statement: t.map .inr subseteq u ↔ t subseteq u.toRight
-  proof: by
+lemma map_inr_subset_iff_subset_toRight : t.map .inr ⊆ u ↔ t ⊆ u.toRight := by
   simp [← empty_disjSum, disjSum_subset]
-
-中文:
-引理 map_inr_subset_iff_subset_toRight
-  结论: t.map .inr subseteq u ↔ t subseteq u.toRight
-  证明: by
-  simp [← empty_disjSum, disjSum_subset]
-
-Depends on / 依赖: disjSum_subset, empty_disjSum
+/-
+**Finset.gc_map_inl_toLeft** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：gc_map_inl_toLeft : GaloisConnection (·.map (.inl : α ↪ α oplus β)) toLeft
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.map_inl_subset_iff_subset_toLeft`：map_inl_subset_iff_subset_toLef
+t : s.map .inl subseteq u ↔ s subseteq u.toLeft
 -/
-lemma map_inr_subset_iff_subset_toRight : t.map .inr subseteq u ↔ t subseteq u.toRight := by
-  simp [← empty_disjSum, disjSum_subset]
-
-/--
-lemma `gc_map_inl_toLeft` / 引理 `gc_map_inl_toLeft`
-
-English:
-lemma gc_map_inl_toLeft
-  statement: GaloisConnection (·.map (.inl : α ↪ α oplus β)) toLeft
-  proof: fun _ _ => map_inl_subset_iff_subset_toLeft
-
-中文:
-引理 gc_map_inl_toLeft
-  结论: GaloisConnection (·.map (.inl : α ↪ α oplus β)) toLeft
-  证明: fun _ _ => map_inl_subset_iff_subset_toLeft
-
-Depends on / 依赖: map_inl_subset_iff_subset_toLeft
+lemma gc_map_inl_toLeft : GaloisConnection (·.map (.inl : α ↪ α ⊕ β)) toLeft :=
+  fun _ _ ↦ map_inl_subset_iff_subset_toLeft
+/-
+**Finset.gc_map_inr_toRight** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：gc_map_inr_toRight : GaloisConnection (·.map (.inr : β ↪ α oplus β)) toRig
+ht
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.map_inr_subset_iff_subset_toRight`：map_inr_subset_iff_subset_toRi
+ght : t.map .inr subseteq u ↔ t subseteq u.toRight
 -/
-lemma gc_map_inl_toLeft : GaloisConnection (·.map (.inl : α ↪ α oplus β)) toLeft :=
-  fun _ _ => map_inl_subset_iff_subset_toLeft
-
-/--
-lemma `gc_map_inr_toRight` / 引理 `gc_map_inr_toRight`
-
-English:
-lemma gc_map_inr_toRight
-  statement: GaloisConnection (·.map (.inr : β ↪ α oplus β)) toRight
-  proof: fun _ _ => map_inr_subset_iff_subset_toRight
-
-中文:
-引理 gc_map_inr_toRight
-  结论: GaloisConnection (·.map (.inr : β ↪ α oplus β)) toRight
-  证明: fun _ _ => map_inr_subset_iff_subset_toRight
-
-Depends on / 依赖: map_inr_subset_iff_subset_toRight
--/
-lemma gc_map_inr_toRight : GaloisConnection (·.map (.inr : β ↪ α oplus β)) toRight :=
-  fun _ _ => map_inr_subset_iff_subset_toRight
-
-/--
-lemma `toLeft_map_sumComm` / 引理 `toLeft_map_sumComm`
-
-English:
-lemma toLeft_map_sumComm
-  statement: (u.map (Equiv.sumComm _ _).toEmbedding).toLeft = u.toRight
-  proof: by
-  ext x; simp
-
-中文:
-引理 toLeft_map_sumComm
-  结论: (u.map (等价.sumComm _ _).toEmbedding).toLeft = u.toRight
-  证明: by
-  ext x; simp
+lemma gc_map_inr_toRight : GaloisConnection (·.map (.inr : β ↪ α ⊕ β)) toRight :=
+  fun _ _ ↦ map_inr_subset_iff_subset_toRight
+/-
+**Finset.toLeft_map_sumComm** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {u : Finset (α ⊕ β)}, (Finset.map (Equiv.s
+umComm α β).toEmbedding u).toLeft = u.toRight
+参数：α ⊕ β；Finset.map (Equiv.sumComm α β).toEmbedding u。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Equiv.sumComm_apply`：∀ (α : Type u_9) (β : Type u_10), ⇑(Equiv.sumComm α
+ β) = Sum.swap
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma toLeft_map_sumComm : (u.map (Equiv.sumComm _ _).toEmbedding).toLeft = u.toRight := by
   ext x; simp
-
-/--
-lemma `toRight_map_sumComm` / 引理 `toRight_map_sumComm`
-
-English:
-lemma toRight_map_sumComm
-  statement: (u.map (Equiv.sumComm _ _).toEmbedding).toRight = u.toLeft
-  proof: by
-  ext x; simp
-
-中文:
-引理 toRight_map_sumComm
-  结论: (u.map (等价.sumComm _ _).toEmbedding).toRight = u.toLeft
-  证明: by
-  ext x; simp
+/-
+**Finset.toRight_map_sumComm** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {u : Finset (α ⊕ β)}, (Finset.map (Equiv.s
+umComm α β).toEmbedding u).toRight = u.toLeft
+参数：α ⊕ β；Finset.map (Equiv.sumComm α β).toEmbedding u。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Equiv.sumComm_apply`：∀ (α : Type u_9) (β : Type u_10), ⇑(Equiv.sumComm α
+ β) = Sum.swap
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma toRight_map_sumComm : (u.map (Equiv.sumComm _ _).toEmbedding).toRight = u.toLeft := by
   ext x; simp
-
-/--
-lemma `toLeft_cons_inl` / 引理 `toLeft_cons_inl`
-
-English:
-lemma toLeft_cons_inl
-  given: (ha)
-  proof: by ext y; simp
-
-中文:
-引理 toLeft_cons_inl
-  条件: (ha)
-  证明: by ext y; simp
+/-
+**Finset.toLeft_cons_inl** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {u : Finset (α ⊕ β)} {a : α} (ha : Sum.inl
+ a ∉ u),   (Finset.cons (Sum.inl a) u ha).toLeft = Finset.cons a u.toLeft ⋯
+参数：α ⊕ β；ha : Sum.inl a ∉ u；Finset.cons (Sum.inl a) u ha。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Sum.inl.injEq`：∀ {α : Type u} {β : Type v} (val val_1 : α), (Sum.inl val
+ = Sum.inl val_1) = (val = val_1)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma toLeft_cons_inl (ha) :
     (cons (inl a) u ha).toLeft = cons a u.toLeft (by simpa) := by ext y; simp
-/--
-lemma `toLeft_cons_inr` / 引理 `toLeft_cons_inr`
-
-English:
-lemma toLeft_cons_inr
-  given: (hb)
-  proof: by ext y; simp
-
-中文:
-引理 toLeft_cons_inr
-  条件: (hb)
-  证明: by ext y; simp
+/-
+**Finset.toLeft_cons_inr** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {u : Finset (α ⊕ β)} {b : β} (hb : Sum.inr
+ b ∉ u),   (Finset.cons (Sum.inr b) u hb).toLeft = u.toLeft
+参数：α ⊕ β；hb : Sum.inr b ∉ u；Finset.cons (Sum.inr b) u hb。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma toLeft_cons_inr (hb) :
     (cons (inr b) u hb).toLeft = u.toLeft := by ext y; simp
-/--
-lemma `toRight_cons_inl` / 引理 `toRight_cons_inl`
-
-English:
-lemma toRight_cons_inl
-  given: (ha)
-  proof: by ext y; simp
-
-中文:
-引理 toRight_cons_inl
-  条件: (ha)
-  证明: by ext y; simp
+/-
+**Finset.toRight_cons_inl** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {u : Finset (α ⊕ β)} {a : α} (ha : Sum.inl
+ a ∉ u),   (Finset.cons (Sum.inl a) u ha).toRight = u.toRight
+参数：α ⊕ β；ha : Sum.inl a ∉ u；Finset.cons (Sum.inl a) u ha。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma toRight_cons_inl (ha) :
     (cons (inl a) u ha).toRight = u.toRight := by ext y; simp
-/--
-lemma `toRight_cons_inr` / 引理 `toRight_cons_inr`
-
-English:
-lemma toRight_cons_inr
-  given: (hb)
-  proof: by ext y; simp
-
-中文:
-引理 toRight_cons_inr
-  条件: (hb)
-  证明: by ext y; simp
+/-
+**Finset.toRight_cons_inr** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {u : Finset (α ⊕ β)} {b : β} (hb : Sum.inr
+ b ∉ u),   (Finset.cons (Sum.inr b) u hb).toRight = Finset.cons b u.toRight ⋯
+参数：α ⊕ β；hb : Sum.inr b ∉ u；Finset.cons (Sum.inr b) u hb。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Sum.inr.injEq`：∀ {α : Type u} {β : Type v} (val val_1 : β), (Sum.inr val
+ = Sum.inr val_1) = (val = val_1)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma toRight_cons_inr (hb) :
     (cons (inr b) u hb).toRight = cons b u.toRight (by simpa) := by ext y; simp
@@ -981,183 +876,242 @@ lemma toRight_cons_inr
 section
 variable [DecidableEq α] [DecidableEq β]
 
-/--
-lemma `toLeft_image_swap` / 引理 `toLeft_image_swap`
-
-English:
-lemma toLeft_image_swap
-  statement: (u.image Sum.swap).toLeft = u.toRight
-  proof: by
-  ext x; simp
-
-中文:
-引理 toLeft_image_swap
-  结论: (u.像 和.swap).toLeft = u.toRight
-  证明: by
-  ext x; simp
+/-
+**Finset.toLeft_image_swap** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：toLeft_image_swap : (u.image Sum.swap).toLeft = u.toRight
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `Sum.inl.injEq`：∀ {α : Type u} {β : Type v} (val val_1 : α), (Sum.inl val
+ = Sum.inl val_1) = (val = val_1)
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma toLeft_image_swap : (u.image Sum.swap).toLeft = u.toRight := by
   ext x; simp
-
-/--
-lemma `toRight_image_swap` / 引理 `toRight_image_swap`
-
-English:
-lemma toRight_image_swap
-  statement: (u.image Sum.swap).toRight = u.toLeft
-  proof: by
-  ext x; simp
-
-中文:
-引理 toRight_image_swap
-  结论: (u.像 和.swap).toRight = u.toLeft
-  证明: by
-  ext x; simp
+/-
+**Finset.toRight_image_swap** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：toRight_image_swap : (u.image Sum.swap).toRight = u.toLeft
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Sum.inr.injEq`：∀ {α : Type u} {β : Type v} (val val_1 : β), (Sum.inr val
+ = Sum.inr val_1) = (val = val_1)
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma toRight_image_swap : (u.image Sum.swap).toRight = u.toLeft := by
   ext x; simp
-
-/--
-lemma `toLeft_insert_inl` / 引理 `toLeft_insert_inl`
-
-English:
-lemma toLeft_insert_inl
-  statement: (insert (inl a) u).toLeft = insert a u.toLeft
-  proof: by ext y; simp
-
-中文:
-引理 toLeft_insert_inl
-  结论: (insert (inl a) u).toLeft = insert a u.toLeft
-  证明: by ext y; simp
+/-
+**Finset.toLeft_insert_inl** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {u : Finset (α ⊕ β)} {a : α} [inst : Decid
+ableEq α] [inst_1 : DecidableEq β],   (insert (Sum.inl a) u).toLeft = insert a u
+.toLeft
+参数：α ⊕ β；insert (Sum.inl a) u。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Sum.inl.injEq`：∀ {α : Type u} {β : Type v} (val val_1 : α), (Sum.inl val
+ = Sum.inl val_1) = (val = val_1)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma toLeft_insert_inl : (insert (inl a) u).toLeft = insert a u.toLeft := by ext y; simp
-/--
-lemma `toLeft_insert_inr` / 引理 `toLeft_insert_inr`
-
-English:
-lemma toLeft_insert_inr
-  statement: (insert (inr b) u).toLeft = u.toLeft
-  proof: by ext y; simp
-
-中文:
-引理 toLeft_insert_inr
-  结论: (insert (inr b) u).toLeft = u.toLeft
-  证明: by ext y; simp
+/-
+**Finset.toLeft_insert_inr** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {u : Finset (α ⊕ β)} {b : β} [inst : Decid
+ableEq α] [inst_1 : DecidableEq β],   (insert (Sum.inr b) u).toLeft = u.toLeft
+参数：α ⊕ β；insert (Sum.inr b) u。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma toLeft_insert_inr : (insert (inr b) u).toLeft = u.toLeft := by ext y; simp
-/--
-lemma `toRight_insert_inl` / 引理 `toRight_insert_inl`
-
-English:
-lemma toRight_insert_inl
-  statement: (insert (inl a) u).toRight = u.toRight
-  proof: by ext y; simp
-
-中文:
-引理 toRight_insert_inl
-  结论: (insert (inl a) u).toRight = u.toRight
-  证明: by ext y; simp
+/-
+**Finset.toRight_insert_inl** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {u : Finset (α ⊕ β)} {a : α} [inst : Decid
+ableEq α] [inst_1 : DecidableEq β],   (insert (Sum.inl a) u).toRight = u.toRight
+参数：α ⊕ β；insert (Sum.inl a) u。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma toRight_insert_inl : (insert (inl a) u).toRight = u.toRight := by ext y; simp
-/--
-lemma `toRight_insert_inr` / 引理 `toRight_insert_inr`
-
-English:
-lemma toRight_insert_inr
-  statement: (insert (inr b) u).toRight = insert b u.toRight
-  proof: by ext y; simp
-
-中文:
-引理 toRight_insert_inr
-  结论: (insert (inr b) u).toRight = insert b u.toRight
-  证明: by ext y; simp
+/-
+**Finset.toRight_insert_inr** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {u : Finset (α ⊕ β)} {b : β} [inst : Decid
+ableEq α] [inst_1 : DecidableEq β],   (insert (Sum.inr b) u).toRight = insert b 
+u.toRight
+参数：α ⊕ β；insert (Sum.inr b) u。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Sum.inr.injEq`：∀ {α : Type u} {β : Type v} (val val_1 : β), (Sum.inr val
+ = Sum.inr val_1) = (val = val_1)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma toRight_insert_inr : (insert (inr b) u).toRight = insert b u.toRight := by ext y; simp
-
-/--
-lemma `toLeft_inter` / 引理 `toLeft_inter`
-
-English:
-lemma toLeft_inter
-  statement: (u inter v).toLeft = u.toLeft inter v.toLeft
-  proof: by ext x; simp
-
-中文:
-引理 toLeft_inter
-  结论: (u inter v).toLeft = u.toLeft inter v.toLeft
-  证明: by ext x; simp
+/-
+**Finset.toLeft_inter** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：toLeft_inter : (u inter v).toLeft = u.toLeft inter v.toLeft
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma toLeft_inter : (u inter v).toLeft = u.toLeft inter v.toLeft := by ext x; simp
-/--
-lemma `toRight_inter` / 引理 `toRight_inter`
-
-English:
-lemma toRight_inter
-  statement: (u inter v).toRight = u.toRight inter v.toRight
-  proof: by ext x; simp
-
-中文:
-引理 toRight_inter
-  结论: (u inter v).toRight = u.toRight inter v.toRight
-  证明: by ext x; simp
+lemma toLeft_inter : (u ∩ v).toLeft = u.toLeft ∩ v.toLeft := by ext x; simp
+/-
+**Finset.toRight_inter** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：toRight_inter : (u inter v).toRight = u.toRight inter v.toRight
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma toRight_inter : (u inter v).toRight = u.toRight inter v.toRight := by ext x; simp
-
-/--
-lemma `toLeft_union` / 引理 `toLeft_union`
-
-English:
-lemma toLeft_union
-  statement: (u union v).toLeft = u.toLeft union v.toLeft
-  proof: by ext x; simp
-
-中文:
-引理 toLeft_union
-  结论: (u union v).toLeft = u.toLeft union v.toLeft
-  证明: by ext x; simp
+lemma toRight_inter : (u ∩ v).toRight = u.toRight ∩ v.toRight := by ext x; simp
+/-
+**Finset.toLeft_union** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：toLeft_union : (u union v).toLeft = u.toLeft union v.toLeft
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma toLeft_union : (u union v).toLeft = u.toLeft union v.toLeft := by ext x; simp
-/--
-lemma `toRight_union` / 引理 `toRight_union`
-
-English:
-lemma toRight_union
-  statement: (u union v).toRight = u.toRight union v.toRight
-  proof: by ext x; simp
-
-中文:
-引理 toRight_union
-  结论: (u union v).toRight = u.toRight union v.toRight
-  证明: by ext x; simp
+lemma toLeft_union : (u ∪ v).toLeft = u.toLeft ∪ v.toLeft := by ext x; simp
+/-
+**Finset.toRight_union** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：toRight_union : (u union v).toRight = u.toRight union v.toRight
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma toRight_union : (u union v).toRight = u.toRight union v.toRight := by ext x; simp
-
-/--
-lemma `toLeft_sdiff` / 引理 `toLeft_sdiff`
-
-English:
-lemma toLeft_sdiff
-  statement: (u \ v).toLeft = u.toLeft \ v.toLeft
-  proof: by ext x; simp
-
-中文:
-引理 toLeft_sdiff
-  结论: (u \ v).toLeft = u.toLeft \ v.toLeft
-  证明: by ext x; simp
+lemma toRight_union : (u ∪ v).toRight = u.toRight ∪ v.toRight := by ext x; simp
+/-
+**Finset.toLeft_sdiff** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：toLeft_sdiff : (u \ v).toLeft = u.toLeft \ v.toLeft
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma toLeft_sdiff : (u \ v).toLeft = u.toLeft \ v.toLeft := by ext x; simp
-/--
-lemma `toRight_sdiff` / 引理 `toRight_sdiff`
-
-English:
-lemma toRight_sdiff
-  statement: (u \ v).toRight = u.toRight \ v.toRight
-  proof: by ext x; simp
-
-中文:
-引理 toRight_sdiff
-  结论: (u \ v).toRight = u.toRight \ v.toRight
-  证明: by ext x; simp
+/-
+**Finset.toRight_sdiff** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：toRight_sdiff : (u \ v).toRight = u.toRight \ v.toRight
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma toRight_sdiff : (u \ v).toRight = u.toRight \ v.toRight := by ext x; simp
 
@@ -1166,34 +1120,19 @@ end
 set_option backward.isDefEq.respectTransparency false in
 /-- Finsets on sum types are equivalent to pairs of finsets on each summand. -/
 @[simps apply_fst apply_snd]
-/--
-Definition of `sumEquiv` / `sumEquiv` 的定义
+/-
+**Finset.sumEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Finset`。
+形式化陈述：sumEquiv {α β : Type*} : Finset (α oplus β) ≃o Finset α × Finset β where t
+oFun s
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.toLeft_disjSum_toRight`：toLeft_disjSum_toRight : u.toLeft.disjSum
+ u.toRight = u
 
-English:
-definition sumEquiv
-  signature: {α β : Type*}
-  body: (s.toLeft, s.toRight)
-  invFun s := disjSum s.1 s.2
-  left_inv s := toLeft_disjSum_toRight
-  right_inv s := by simp
-  map_rel_iff' := by simp [← Finset.coe_subset, Set.subset_def]
-
-@[simp]
-
-中文:
-定义 sumEquiv
-  签名: {α β : 类型}
-  定义体: (s.toLeft, s.toRight)
-  invFun s := disjSum s.1 s.2
-  left_inv s := toLeft_disjSum_toRight
-  right_inv s := by simp
-  map_rel_iff' := by simp [← Finset.coe_subset, Set.subset_def]
-
-@[simp]
-
-Depends on / 依赖: s.toLeft, s.toRight, toLeft, toRight
+--- 原说明 ---
+Finsets on sum types are equivalent to pairs of finsets on each summand.
 -/
-def sumEquiv {α β : Type*} : Finset (α oplus β) ≃o Finset α × Finset β where
+def sumEquiv {α β : Type*} : Finset (α ⊕ β) ≃o Finset α × Finset β where
   toFun s := (s.toLeft, s.toRight)
   invFun s := disjSum s.1 s.2
   left_inv s := toLeft_disjSum_toRight
@@ -1201,66 +1140,65 @@ def sumEquiv {α β : Type*} : Finset (α oplus β) ≃o Finset α × Finset β 
   map_rel_iff' := by simp [← Finset.coe_subset, Set.subset_def]
 
 @[simp]
-/--
-lemma `sumEquiv_symm_apply` / 引理 `sumEquiv_symm_apply`
-
-English:
-lemma sumEquiv_symm_apply
-  given: {α β : Type*} (s : Finset α × Finset β)
-  proof: rfl
-
-中文:
-引理 sumEquiv_symm_apply
-  条件: {α β : 类型} (s : 有限集 α × 有限集 β)
-  证明: rfl
+/-
+**Finset.sumEquiv_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：sumEquiv_symm_apply {α β : Type*} (s : Finset α × Finset β) : sumEquiv.sym
+m s = disjSum s.1 s.2
+参数：s : Finset α × Finset β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma sumEquiv_symm_apply {α β : Type*} (s : Finset α × Finset β) :
     sumEquiv.symm s = disjSum s.1 s.2 := rfl
-
-/--
-theorem `map_disjSum` / 定理 `map_disjSum`
-
-English:
-theorem map_disjSum
-  given: (f : α oplus β ↪ γ)
-  proof: val_injective Multiset.map_disjSum _
-
-中文:
-定理 map_disjSum
-  条件: (f : α oplus β ↪ γ)
-  证明: val_injective Multiset.map_disjSum _
-
-Depends on / 依赖: Multiset, Multiset.map_disjSum, map_disjSum, val_injective
+/-
+**Finset.map_disjSum** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：map_disjSum (f : α oplus β ↪ γ) : (s.disjSum t).map f = (s.map (.trans .in
+l f)).disjUnion (t.map (.trans .inr f)) (by as_aux_lemma => simpa only [← map_ma
+p] using (Finset.disjoint_map f).2 (disjoint_map_inl_map_inr _ _))
+参数：f : α oplus β ↪ γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.val_injective`：val_injective : Injective (val : Finset α -> Multi
+set α)
+· 使用定理 `Multiset.map_disjSum`：map_disjSum (f : α oplus β -> γ) : (s.disjSum t).m
+ap f = s.map (f <| .inl ·) + t.map (f <| .inr ·)
 -/
-theorem map_disjSum (f : α oplus β ↪ γ) :
+theorem map_disjSum (f : α ⊕ β ↪ γ) :
     (s.disjSum t).map f =
       (s.map (.trans .inl f)).disjUnion (t.map (.trans .inr f)) (by
         as_aux_lemma =>
           simpa only [← map_map]
             using (Finset.disjoint_map f).2 (disjoint_map_inl_map_inr _ _)) :=
-val_injective Multiset.map_disjSum _
-
-/--
-lemma `fold_disjSum` / 引理 `fold_disjSum`
-
-English:
-lemma fold_disjSum
-  statement: (s : Finset α) (t : Finset β) (f : α oplus β -> γ) (b₁ b₂ : γ) (op : γ -> γ -> γ)
-  proof: by
-  simp_rw [fold, disjSum, Multiset.map_disjSum, fold_add]
-
-中文:
-引理 fold_disjSum
-  结论: (s : 有限集 α) (t : 有限集 β) (f : α oplus β -> γ) (b₁ b₂ : γ) (op : γ -> γ -> γ)
-  证明: by
-  simp_rw [fold, disjSum, Multiset.map_disjSum, fold_add]
-
-Depends on / 依赖: Multiset, Multiset.map_disjSum, disjSum, fold_add, map_disjSum, simp_rw
+  val_injective <| Multiset.map_disjSum _
+/-
+**Finset.fold_disjSum** 是 Mathlib 中的一个引理，位于命名空间 `Finset`。
+形式化陈述：fold_disjSum (s : Finset α) (t : Finset β) (f : α oplus β -> γ) (b₁ b₂ : γ
+) (op : γ -> γ -> γ) [Std.Commutative op] [Std.Associative op] : (s.disjSum t).f
+old op (op b₁ b₂) f = op (s.fold op b₁ (f <| .inl ·)) (t.fold op b₂ (f <| .inr ·
+))
+参数：s : Finset α；t : Finset β；f : α oplus β -> γ；b₁ b₂ : γ；op : γ -> γ -> γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.fold.congr_simp`：∀ {α : Type u_1} (op op_1 : α → α → α) (e_op :
+ op = op_1) [hc : Std.Commutative op] [ha : Std.Associative op]   (a a_1 : α), a
+ = a_1 → ∀ (a_…
+· 使用定理 `Multiset.map_disjSum`：map_disjSum (f : α oplus β -> γ) : (s.disjSum t).m
+ap f = s.map (f <| .inl ·) + t.map (f <| .inr ·)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Multiset.fold_add`：fold_add (b₁ b₂ : α) (s₁ s₂ : Multiset α) : (s₁ + s₂)
+.fold op (b₁ * b₂) = s₁.fold op b₁ * s₂.fold op b₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma fold_disjSum (s : Finset α) (t : Finset β) (f : α oplus β -> γ) (b₁ b₂ : γ) (op : γ -> γ -> γ)
+lemma fold_disjSum (s : Finset α) (t : Finset β) (f : α ⊕ β → γ) (b₁ b₂ : γ) (op : γ → γ → γ)
     [Std.Commutative op] [Std.Associative op] :
     (s.disjSum t).fold op (op b₁ b₂) f =
       op (s.fold op b₁ (f <| .inl ·)) (t.fold op b₂ (f <| .inr ·)) := by
   simp_rw [fold, disjSum, Multiset.map_disjSum, fold_add]
 
 end Finset
+

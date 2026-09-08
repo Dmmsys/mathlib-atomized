@@ -34,63 +34,34 @@ public section
 
 namespace Lean.Meta.RefinedDiscrTree
 
-/--
-Definition of `Context` / `Context` 的定义
+/-- The context for the `LazyM` monad -/
+/-
+**Lean.Meta.RefinedDiscrTree.Context** 是 Mathlib 中的一个结构，位于命名空间 `Lean.Meta.Refine
+dDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Context
-  parameters: where
-  axioms and operations (1):
-    - bvars : List FVarId
-
-中文:
-结构 余ntext
-  参数: where
-  公理与运算 (1 个):
-    - bvars : 列表 FVarId
+--- 原说明 ---
+The context for the `LazyM` monad
 -/
 private structure Context where
   /-- Variables that come from a lambda or forall binder.
   The list index gives the De Bruijn index. -/
   bvars : List FVarId
 
-/--
-Definition of `LazyM` / `LazyM` 的定义
+/-- The monad used for evaluating a `LazyEntry`. -/
+/-
+**Lean.Meta.RefinedDiscrTree.LazyM** 是 Mathlib 中的一个缩写定义，位于命名空间 `Lean.Meta.Refine
+dDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation LazyM
-  body: ReaderT Context StateT LazyEntry MetaM
-
-中文:
-缩写 LazyM
-  定义体: ReaderT Context StateT LazyEntry MetaM
+--- 原说明 ---
+The monad used for evaluating a `LazyEntry`.
 -/
-private abbrev LazyM := ReaderT Context StateT LazyEntry MetaM
-
-/--
-Definition of `mkLabelledStar` / `mkLabelledStar` 的定义
-
-English:
-definition mkLabelledStar
-  signature: (mvarId : MVarId)
-  body: modifyGet fun entry =>
-    if let some stars := entry.labelledStars? then
-      match stars.idxOf? mvarId with
-      | some idx => (.labelledStar idx, entry)
-      | none => (.labelledStar stars.size, { entry with labelledStars? := stars.push mvarId })
-    else
-      (.star, entry)
-
-中文:
-定义 mkLabelledStar
-  签名: (mvarId : MVarId)
-  定义体: modifyGet fun entry =>
-    if let some stars := entry.labelledStars? then
-      match stars.idxOf? mvarId with
-      | some idx => (.labelledStar idx, entry)
-      | none => (.labelledStar stars.size, { entry with labelledStars? := stars.push mvarId })
-    else
-      (.star, entry)
+private abbrev LazyM := ReaderT Context <| StateT LazyEntry MetaM
+/-
+**Lean.Meta.RefinedDiscrTree.mkLabelledStar** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta
+.RefinedDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private def mkLabelledStar (mvarId : MVarId) : LazyM Key :=
   modifyGet fun entry =>
@@ -109,34 +80,18 @@ In the case where we do index the lambda binders,
 `withLams` efficiently adds the lambdas and `key` to the result.
 -/
 @[inline]
-/--
-Definition of `withLams` / `withLams` 的定义
+/-
+**Lean.Meta.RefinedDiscrTree.withLams** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta.Refin
+edDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition withLams
-  signature: (lambdas : List FVarId) (key : Key)
-  body: do
-  match lambdas with
-  | [] => return key
-  | _ :: tail =>
-    -- Add `key` and `lambdas.length - 1` lambdas to the result, returning the final lambda.
-    modify ({ · with computedKeys := tail.foldl (init := [key]) (fun _ => .lam :: ·) })
-    return .lam
+--- 原说明 ---
+Sometimes, we need to not index lambda binders, in particular when the body is t
+he application of
+a metavariable.
 
-@[inline]
-
-中文:
-定义 withLams
-  签名: (lambdas : 列表 FVarId) (key : Key)
-  定义体: do
-  match lambdas with
-  | [] => return key
-  | _ :: tail =>
-    -- Add `key` and `lambdas.length - 1` lambdas to the result, returning the final lambda.
-    modify ({ · with computedKeys := tail.foldl (init := [key]) (fun _ => .lam :: ·) })
-    return .lam
-
-@[inline]
+In the case where we do index the lambda binders,
+`withLams` efficiently adds the lambdas and `key` to the result.
 -/
 private def withLams (lambdas : List FVarId) (key : Key) : StateT LazyEntry MetaM Key := do
   match lambdas with
@@ -147,20 +102,10 @@ private def withLams (lambdas : List FVarId) (key : Key) : StateT LazyEntry Meta
     return .lam
 
 @[inline]
-/--
-Definition of `encodingStepAux` / `encodingStepAux` 的定义
-
-English:
-definition encodingStepAux
-  signature: (e : Expr) (lambdas : List FVarId) (root : Bool)
-  body: do
-  withLams lambdas (← go)
-
-中文:
-定义 encodingStepAux
-  签名: (e : Expr) (lambdas : 列表 FVarId) (root : 布尔值)
-  定义体: do
-  withLams lambdas (← go)
+/-
+**Lean.Meta.RefinedDiscrTree.encodingStepAux** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Met
+a.RefinedDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private def encodingStepAux (e : Expr) (lambdas : List FVarId) (root : Bool) : LazyM Key := do
   withLams lambdas (← go)
@@ -211,40 +156,21 @@ where
   | .forallE .. =>
     setEAsPrevious
     return .forall
-  | .lit v => return .lit v
-  | .sort _ => return .sort
-  | .letE .. => return .opaque
-  | .lam .. => return .opaque
-  | _ => unreachable!
+  | .lit v      => return .lit v
+  | .sort _     => return .sort
+  | .letE ..    => return .opaque
+  | .lam ..     => return .opaque
+  | _           => unreachable!
 
-/--
-Definition of `etaPossibilities` / `etaPossibilities` 的定义
+/-- Run `k` on all pairs of body, bound variables that could possibly appear due to η-reduction -/
+/-
+**Lean.Meta.RefinedDiscrTree.etaPossibilities** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Me
+ta.RefinedDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition etaPossibilities
-  signature: (e : Expr) (lambdas : List FVarId) (root : Bool)
-  body: do
-  return (← (encodingStepAux e lambdas root).run (← read) |>.run entry) ::
-      (← match e, lambdas with
-      | .app f a, fvarId :: lambdas =>
-        if isStarWithArg (.fvar fvarId) a && !f.getAppFn.isMVar then
-          etaPossibilities f lambdas root entry
-        else
-          pure []
-      | _, _ => pure [])
-
-中文:
-定义 etaPossibilities
-  签名: (e : Expr) (lambdas : 列表 FVarId) (root : 布尔值)
-  定义体: do
-  return (← (encodingStepAux e lambdas root).run (← read) |>.run entry) ::
-      (← match e, lambdas with
-      | .app f a, fvarId :: lambdas =>
-        if isStarWithArg (.fvar fvarId) a && !f.getAppFn.isMVar then
-          etaPossibilities f lambdas root entry
-        else
-          pure []
-      | _, _ => pure [])
+--- 原说明 ---
+Run `k` on all pairs of body, bound variables that could possibly appear due to 
+η-reduction
 -/
 private def etaPossibilities (e : Expr) (lambdas : List FVarId) (root : Bool)
     (entry : LazyEntry) : ReaderT Context MetaM (List (Key × LazyEntry)) := do
@@ -258,46 +184,23 @@ private def etaPossibilities (e : Expr) (lambdas : List FVarId) (root : Bool)
       | _, _ => pure [])
 where
   /-- Check whether the expression is represented by `Key.star` and has `arg` as an argument. -/
-  isStarWithArg (arg : Expr) : Expr -> Bool
+  isStarWithArg (arg : Expr) : Expr → Bool
     | .app f a => if a == arg then f.getAppFn.isMVar else isStarWithArg arg f
     | _ => false
 
 /-- Repeatedly reduce while stripping lambda binders and introducing their variables -/
 @[specialize]
-/--
-Definition of `lambdaTelescopeReduce` / `lambdaTelescopeReduce` 的定义
+/-
+**Lean.Meta.RefinedDiscrTree.lambdaTelescopeReduce** 是 Mathlib 中的一个定义，位于命名空间 `Le
+an.Meta.RefinedDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lambdaTelescopeReduce
-  signature: {m} {α} [Nonempty (m α)] [Monad m] [MonadLiftT MetaM m]
-  body: do
-  /- expressions marked with `no_index` should be indexed with a star -/
-  if DiscrTree.hasNoindexAnnotation e then
-    noIndex lambdas
-  else
-    match ← DiscrTree.reduce e with
-    | .lam n d b bi =>
-      withLocalDecl n bi d fun fvar =>
-        lambdaTelescopeReduce (b.instantiate1 fvar) (fvar.fvarId! :: lambdas) noIndex k
-    | e => k e lambdas
-
-中文:
-定义 lambdaTelescopeReduce
-  签名: {m} {α} [非空 (m α)] [单子 m] [MonadLiftT MetaM m]
-  定义体: do
-  /- expressions marked with `no_index` should be indexed with a star -/
-  if DiscrTree.hasNoindexAnnotation e then
-    noIndex lambdas
-  else
-    match ← DiscrTree.reduce e with
-    | .lam n d b bi =>
-      withLocalDecl n bi d fun fvar =>
-        lambdaTelescopeReduce (b.instantiate1 fvar) (fvar.fvarId! :: lambdas) noIndex k
-    | e => k e lambdas
+--- 原说明 ---
+Repeatedly reduce while stripping lambda binders and introducing their variables
 -/
 private partial def lambdaTelescopeReduce {m} {α} [Nonempty (m α)] [Monad m] [MonadLiftT MetaM m]
-    [MonadControlT MetaM m] (e : Expr) (lambdas : List FVarId) (noIndex : List FVarId -> m α)
-    (k : Expr -> List FVarId -> m α) : m α := do
+    [MonadControlT MetaM m] (e : Expr) (lambdas : List FVarId) (noIndex : List FVarId → m α)
+    (k : Expr → List FVarId → m α) : m α := do
   /- expressions marked with `no_index` should be indexed with a star -/
   if DiscrTree.hasNoindexAnnotation e then
     noIndex lambdas
@@ -308,22 +211,14 @@ private partial def lambdaTelescopeReduce {m} {α} [Nonempty (m α)] [Monad m] [
         lambdaTelescopeReduce (b.instantiate1 fvar) (fvar.fvarId! :: lambdas) noIndex k
     | e => k e lambdas
 
-/--
-Definition of `encodingStepWithEta` / `encodingStepWithEta` 的定义
+/-- A single step in encoding an `Expr` into `Key`s. -/
+/-
+**Lean.Meta.RefinedDiscrTree.encodingStepWithEta** 是 Mathlib 中的一个定义，位于命名空间 `Lean
+.Meta.RefinedDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition encodingStepWithEta
-  signature: (e : Expr) (root : Bool)
-  body: lambdaTelescopeReduce e []
-    (fun lambdas => return [← (withLams lambdas .star).run entry])
-    (fun e lambdas => etaPossibilities e lambdas root entry)
-
-中文:
-定义 encodingStepWithEta
-  签名: (e : Expr) (root : 布尔值)
-  定义体: lambdaTelescopeReduce e []
-    (fun lambdas => return [← (withLams lambdas .star).run entry])
-    (fun e lambdas => etaPossibilities e lambdas root entry)
+--- 原说明 ---
+A single step in encoding an `Expr` into `Key`s.
 -/
 private def encodingStepWithEta (e : Expr) (root : Bool)
     (entry : LazyEntry) : ReaderT Context MetaM (List (Key × LazyEntry)) :=
@@ -331,128 +226,73 @@ private def encodingStepWithEta (e : Expr) (root : Bool)
     (fun lambdas => return [← (withLams lambdas .star).run entry])
     (fun e lambdas => etaPossibilities e lambdas root entry)
 
-/--
-Definition of `encodingStep` / `encodingStep` 的定义
+/-- A single step in encoding an `Expr` into `Key`s. -/
+/-
+**Lean.Meta.RefinedDiscrTree.encodingStep** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta.R
+efinedDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition encodingStep
-  signature: (e : Expr) (root : Bool)
-  body: do
-  lambdaTelescopeReduce e []
-    (fun lambdas => withLams lambdas .star)
-    (fun e lambdas => encodingStepAux e lambdas root)
-
-中文:
-定义 encodingStep
-  签名: (e : Expr) (root : 布尔值)
-  定义体: do
-  lambdaTelescopeReduce e []
-    (fun lambdas => withLams lambdas .star)
-    (fun e lambdas => encodingStepAux e lambdas root)
+--- 原说明 ---
+A single step in encoding an `Expr` into `Key`s.
 -/
 private def encodingStep (e : Expr) (root : Bool) : LazyM Key := do
   lambdaTelescopeReduce e []
     (fun lambdas => withLams lambdas .star)
     (fun e lambdas => encodingStepAux e lambdas root)
 
-/--
-Definition of `initializeLazyEntryWithEtaAux` / `initializeLazyEntryWithEtaAux` 的定义
+/-- Encode `e` as a sequence of keys, computing only the first `Key`. -/
+/-
+**Lean.Meta.RefinedDiscrTree.initializeLazyEntryWithEtaAux** 是 Mathlib 中的一个定义，位于
+命名空间 `Lean.Meta.RefinedDiscrTree`。
+形式化陈述：Expr → Bool → MetaM (List (Meta.RefinedDiscrTree.Key × Meta.RefinedDiscrTr
+ee.LazyEntry))
+参数：List (Meta.RefinedDiscrTree.Key × Meta.RefinedDiscrTree.LazyEntry)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition initializeLazyEntryWithEtaAux
-  signature: (e : Expr) (labelledStars : Bool)
-  body: do
-  (encodingStepWithEta e true (← mkInitLazyEntry labelledStars)).run { bvars := [] }
-
-中文:
-定义 initializeLazyEntryWithEtaAux
-  签名: (e : Expr) (labelledStars : 布尔值)
-  定义体: do
-  (encodingStepWithEta e true (← mkInitLazyEntry labelledStars)).run { bvars := [] }
+--- 原说明 ---
+Encode `e` as a sequence of keys, computing only the first `Key`.
 -/
 @[inline] def initializeLazyEntryWithEtaAux (e : Expr) (labelledStars : Bool) :
     MetaM (List (Key × LazyEntry)) := do
   (encodingStepWithEta e true (← mkInitLazyEntry labelledStars)).run { bvars := [] }
 
 
-/--
-Definition of `initializeLazyEntryWithEta` / `initializeLazyEntryWithEta` 的定义
+/-- Encode `e` as a sequence of keys, computing only the first `Key`. -/
+/-
+**Lean.Meta.RefinedDiscrTree.initializeLazyEntryWithEta** 是 Mathlib 中的一个定义，位于命名空
+间 `Lean.Meta.RefinedDiscrTree`。
+形式化陈述：initializeLazyEntryWithEta (e : Expr) (labelledStars : Bool
+参数：e : Expr。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition initializeLazyEntryWithEta
-  signature: (e : Expr) (labelledStars : Bool := true)
-  body: do
-  withReducible do initializeLazyEntryWithEtaAux e labelledStars
-
-中文:
-定义 initializeLazyEntryWithEta
-  签名: (e : Expr) (labelledStars : 布尔值 := true)
-  定义体: do
-  withReducible do initializeLazyEntryWithEtaAux e labelledStars
+--- 原说明 ---
+Encode `e` as a sequence of keys, computing only the first `Key`.
 -/
 def initializeLazyEntryWithEta (e : Expr) (labelledStars : Bool := true) :
     MetaM (List (Key × LazyEntry)) := do
   withReducible do initializeLazyEntryWithEtaAux e labelledStars
 
-/--
-Definition of `initializeLazyEntry` / `initializeLazyEntry` 的定义
+/-- Encode `e` as a sequence of keys, computing only the first `Key`. -/
+/-
+**Lean.Meta.RefinedDiscrTree.initializeLazyEntry** 是 Mathlib 中的一个定义，位于命名空间 `Lean
+.Meta.RefinedDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition initializeLazyEntry
-  signature: (e : Expr) (labelledStars : Bool)
-  body: do
-  ((encodingStep e true).run { bvars := [] }).run (← mkInitLazyEntry labelledStars)
-
-中文:
-定义 initializeLazyEntry
-  签名: (e : Expr) (labelledStars : 布尔值)
-  定义体: do
-  ((encodingStep e true).run { bvars := [] }).run (← mkInitLazyEntry labelledStars)
+--- 原说明 ---
+Encode `e` as a sequence of keys, computing only the first `Key`.
 -/
 private def initializeLazyEntry (e : Expr) (labelledStars : Bool) : MetaM (Key × LazyEntry) := do
   ((encodingStep e true).run { bvars := [] }).run (← mkInitLazyEntry labelledStars)
 
 
-/--
-Definition of `evalLazyEntryAux` / `evalLazyEntryAux` 的定义
+/-- Auxiliary function for `evalLazyEntry` -/
+/-
+**Lean.Meta.RefinedDiscrTree.evalLazyEntryAux** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Me
+ta.RefinedDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalLazyEntryAux
-  signature: (entry : LazyEntry) (eta : Bool)
-  body: do
-  match entry.stack with
-  | [] => return none
-  | stackEntry :: stack =>
-    let entry := { entry with stack }
-    match stackEntry with
-    | .star =>
-      return some [(.star, entry)]
-    | .expr { expr, bvars, lctx, localInsts, cfg } =>
-      withLCtx lctx localInsts do
-      withConfig (fun _ => cfg) do
-        if eta then
-          return some (← encodingStepWithEta expr false entry |>.run { bvars := bvars })
-        else
-          return some [← encodingStep expr false |>.run { bvars := bvars } |>.run entry]
-
-中文:
-定义 evalLazyEntryAux
-  签名: (entry : LazyEntry) (eta : 布尔值)
-  定义体: do
-  match entry.stack with
-  | [] => return none
-  | stackEntry :: stack =>
-    let entry := { entry with stack }
-    match stackEntry with
-    | .star =>
-      return some [(.star, entry)]
-    | .expr { expr, bvars, lctx, localInsts, cfg } =>
-      withLCtx lctx localInsts do
-      withConfig (fun _ => cfg) do
-        if eta then
-          return some (← encodingStepWithEta expr false entry |>.run { bvars := bvars })
-        else
-          return some [← encodingStep expr false |>.run { bvars := bvars } |>.run entry]
+--- 原说明 ---
+Auxiliary function for `evalLazyEntry`
 -/
 private partial def evalLazyEntryAux (entry : LazyEntry) (eta : Bool) :
     MetaM (Option (List (Key × LazyEntry))) := do
@@ -471,22 +311,16 @@ private partial def evalLazyEntryAux (entry : LazyEntry) (eta : Bool) :
         else
           return some [← encodingStep expr false |>.run { bvars := bvars } |>.run entry]
 
-/--
-Definition of `getStackEntries` / `getStackEntries` 的定义
+/-- Determine for each argument whether it should be ignored,
+and return a list consisting of one `StackEntry` for each argument. -/
+/-
+**Lean.Meta.RefinedDiscrTree.getStackEntries** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Met
+a.RefinedDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getStackEntries
-  signature: (fn : Expr) (args : Array Expr) (bvars : List FVarId)
-  body: do
-  let mut fnType ← inferType fn
-  loop fnType 0 0 []
-
-中文:
-定义 getStackEntries
-  签名: (fn : Expr) (args : 数组 Expr) (bvars : 列表 FVarId)
-  定义体: do
-  let mut fnType ← inferType fn
-  loop fnType 0 0 []
+--- 原说明 ---
+Determine for each argument whether it should be ignored,
+and return a list consisting of one `StackEntry` for each argument.
 -/
 private partial def getStackEntries (fn : Expr) (args : Array Expr) (bvars : List FVarId) :
     MetaM (List StackEntry) := do
@@ -522,61 +356,18 @@ where
     | .default => isProof arg
 
 /--
-Definition of `processPrevious` / `processPrevious` 的定义
+If `entry.previous.isSome`, then replace it with `none`, and add the required entries
+to `entry.stack`.
+-/
+/-
+**Lean.Meta.RefinedDiscrTree.processPrevious** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Met
+a.RefinedDiscrTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition processPrevious
-  signature: (entry : LazyEntry)
-  body: do
-  let some { expr, bvars, lctx, localInsts, cfg } := entry.previous | return entry
-  let entry := { entry with previous := none }
-  withLCtx lctx localInsts do withConfig (fun _ => cfg) do
-  expr.withApp fun fn args => do
-
-    let stackArgs (entry : LazyEntry) : MetaM LazyEntry := do
-      let entries ← getStackEntries fn args bvars
-      return { entry with stack := entries.reverseAux entry.stack }
-
-    match fn with
-    | .forallE n d b bi =>
-      let d' := .expr (← mkExprInfo d bvars)
-      let b' ← withLocalDecl n bi d fun fvar =>
-        return .expr (← mkExprInfo (b.instantiate1 fvar) (fvar.fvarId! :: bvars))
-      return { entry with stack := d' :: b' :: entry.stack }
-    | .proj n _ a =>
-      let entry ← stackArgs entry
-      if isClass (← getEnv) n then
-        return { entry with stack := .star :: entry.stack }
-      else
-        return { entry with stack := .expr (← mkExprInfo a bvars) :: entry.stack }
-    | _ => stackArgs entry
-
-中文:
-定义 processPrevious
-  签名: (entry : LazyEntry)
-  定义体: do
-  let some { expr, bvars, lctx, localInsts, cfg } := entry.previous | return entry
-  let entry := { entry with previous := none }
-  withLCtx lctx localInsts do withConfig (fun _ => cfg) do
-  expr.withApp fun fn args => do
-
-    let stackArgs (entry : LazyEntry) : MetaM LazyEntry := do
-      let entries ← getStackEntries fn args bvars
-      return { entry with stack := entries.reverseAux entry.stack }
-
-    match fn with
-    | .forallE n d b bi =>
-      let d' := .expr (← mkExprInfo d bvars)
-      let b' ← withLocalDecl n bi d fun fvar =>
-        return .expr (← mkExprInfo (b.instantiate1 fvar) (fvar.fvarId! :: bvars))
-      return { entry with stack := d' :: b' :: entry.stack }
-    | .proj n _ a =>
-      let entry ← stackArgs entry
-      if isClass (← getEnv) n then
-        return { entry with stack := .star :: entry.stack }
-      else
-        return { entry with stack := .expr (← mkExprInfo a bvars) :: entry.stack }
-    | _ => stackArgs entry
+--- 原说明 ---
+If `entry.previous.isSome`, then replace it with `none`, and add the required en
+tries
+to `entry.stack`.
 -/
 private def processPrevious (entry : LazyEntry) : MetaM LazyEntry := do
   let some { expr, bvars, lctx, localInsts, cfg } := entry.previous | return entry
@@ -602,30 +393,18 @@ private def processPrevious (entry : LazyEntry) : MetaM LazyEntry := do
         return { entry with stack := .expr (← mkExprInfo a bvars) :: entry.stack }
     | _ => stackArgs entry
 
-/--
-Definition of `evalLazyEntry` / `evalLazyEntry` 的定义
+/-- A single step in evaluating a `LazyEntry`. Allow multiple different outcomes. -/
+/-
+**Lean.Meta.RefinedDiscrTree.evalLazyEntry** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta.
+RefinedDiscrTree`。
+形式化陈述：evalLazyEntry (entry : LazyEntry) (eta : Bool) : MetaM (Option (List (Key 
+× LazyEntry)))
+参数：entry : LazyEntry；eta : Bool。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalLazyEntry
-  signature: (entry : LazyEntry) (eta : Bool)
-  body: do
-  if let key :: computedKeys := entry.computedKeys then
-    -- If there is already a result available, use it.
-    return some [(key, { entry with computedKeys })]
-  else withMCtx entry.mctx do
-    let entry ← processPrevious entry
-    evalLazyEntryAux entry eta
-
-中文:
-定义 evalLazyEntry
-  签名: (entry : LazyEntry) (eta : 布尔值)
-  定义体: do
-  if let key :: computedKeys := entry.computedKeys then
-    -- If there is already a result available, use it.
-    return some [(key, { entry with computedKeys })]
-  else withMCtx entry.mctx do
-    let entry ← processPrevious entry
-    evalLazyEntryAux entry eta
+--- 原说明 ---
+A single step in evaluating a `LazyEntry`. Allow multiple different outcomes.
 -/
 def evalLazyEntry (entry : LazyEntry) (eta : Bool) :
     MetaM (Option (List (Key × LazyEntry))) := do
@@ -636,24 +415,16 @@ def evalLazyEntry (entry : LazyEntry) (eta : Bool) :
     let entry ← processPrevious entry
     evalLazyEntryAux entry eta
 
-/--
-Definition of `encodeExprWithEta` / `encodeExprWithEta` 的定义
+/-- Return all encodings of `e` as a `Array Key`. This is used for testing. -/
+/-
+**Lean.Meta.RefinedDiscrTree.encodeExprWithEta** 是 Mathlib 中的一个定义，位于命名空间 `Lean.M
+eta.RefinedDiscrTree`。
+形式化陈述：Expr → Bool → MetaM (Array (Array Meta.RefinedDiscrTree.Key))
+参数：Array (Array Meta.RefinedDiscrTree.Key)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition encodeExprWithEta
-  signature: (e : Expr) (labelledStars : Bool)
-  body: withReducible do
-    let entries ← (encodingStepWithEta e true (← mkInitLazyEntry labelledStars)).run { bvars := [] }
-    let entries := entries.map fun (key, entry) => (#[key], entry)
-    go entries.toArray #[]
-
-中文:
-定义 encodeExprWithEta
-  签名: (e : Expr) (labelledStars : 布尔值)
-  定义体: withReducible do
-    let entries ← (encodingStepWithEta e true (← mkInitLazyEntry labelledStars)).run { bvars := [] }
-    let entries := entries.map fun (key, entry) => (#[key], entry)
-    go entries.toArray #[]
+--- 原说明 ---
+Return all encodings of `e` as a `Array Key`. This is used for testing.
 -/
 partial def encodeExprWithEta (e : Expr) (labelledStars : Bool) : MetaM (Array (Array Key)) :=
   withReducible do
@@ -683,26 +454,17 @@ where
       | none =>
         go todo (result.push keys)
 
-/--
-Definition of `LazyEntry.toList` / `LazyEntry.toList` 的定义
+/-- Completely evaluate a `LazyEntry`. -/
+/-
+**Lean.Meta.RefinedDiscrTree.LazyEntry.toList** 是 Mathlib 中的一个不透明定义，位于命名空间 `Lean
+.Meta.RefinedDiscrTree.LazyEntry`。
+形式化陈述：Meta.RefinedDiscrTree.LazyEntry → optParam (List Meta.RefinedDiscrTree.Key
+) [] → MetaM (List Meta.RefinedDiscrTree.Key)
+参数：List Meta.RefinedDiscrTree.Key；List Meta.RefinedDiscrTree.Key。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition LazyEntry.toList
-  signature: (entry : LazyEntry) (result : List Key := [])
-  body: do
-  match ← evalLazyEntry entry false with
-  | some [(key, entry')] => entry'.toList (key :: result)
-  | some _ => panic! "`evalLazyEntry` with `eta := false` can only give a singleton list"
-  | none => return result.reverse
-
-中文:
-定义 LazyEntry.toList
-  签名: (entry : LazyEntry) (result : 列表 Key := [])
-  定义体: do
-  match ← evalLazyEntry entry false with
-  | some [(key, entry')] => entry'.toList (key :: result)
-  | some _ => panic! "`evalLazyEntry` with `eta := false` can only give a singleton list"
-  | none => return result.reverse
+--- 原说明 ---
+Completely evaluate a `LazyEntry`.
 -/
 partial def LazyEntry.toList (entry : LazyEntry) (result : List Key := []) : MetaM (List Key) := do
   match ← evalLazyEntry entry false with
@@ -710,27 +472,23 @@ partial def LazyEntry.toList (entry : LazyEntry) (result : List Key := []) : Met
   | some _ => panic! "`evalLazyEntry` with `eta := false` can only give a singleton list"
   | none => return result.reverse
 
-/--
-Definition of `encodeExpr` / `encodeExpr` 的定义
+/-- Return the canonical encoding of `e` as a `Array Key`.
+This is used for looking up `e` in a `RefinedDiscrTree`. -/
+/-
+**Lean.Meta.RefinedDiscrTree.encodeExpr** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta.Ref
+inedDiscrTree`。
+形式化陈述：encodeExpr (e : Expr) (labelledStars : Bool) : MetaM (Key × List Key)
+参数：e : Expr；labelledStars : Bool。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition encodeExpr
-  signature: (e : Expr) (labelledStars : Bool)
-  body: withReducible do
-  let (key, entry) ← initializeLazyEntry e labelledStars
-  return (key, ← entry.toList)
-
-中文:
-定义 encodeExpr
-  签名: (e : Expr) (labelledStars : 布尔值)
-  定义体: withReducible do
-  let (key, entry) ← initializeLazyEntry e labelledStars
-  return (key, ← entry.toList)
-
-Depends on / 依赖: withReducible
+--- 原说明 ---
+Return the canonical encoding of `e` as a `Array Key`.
+This is used for looking up `e` in a `RefinedDiscrTree`.
 -/
 def encodeExpr (e : Expr) (labelledStars : Bool) : MetaM (Key × List Key) := withReducible do
   let (key, entry) ← initializeLazyEntry e labelledStars
   return (key, ← entry.toList)
 
 end Lean.Meta.RefinedDiscrTree
+

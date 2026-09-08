@@ -22,46 +22,52 @@ variable {M α : Type*} [Monoid M]
 
 variable {S : Type*} [SetLike S M] (s : S) [SubmonoidClass S M]
 
+/-
+**Submonoid.** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := low) [AddMonoid α] [DistribMulAction M α] : DistribMulAction s α where
   smul_zero r := smul_zero (r : M)
   smul_add r := smul_add (r : M)
 
-/--
-Instance `distribMulAction` / 实例 `distribMulAction`
+/-- The action by a submonoid is the action by the underlying monoid. -/
+/-
+**Submonoid.distribMulAction** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+形式化陈述：distribMulAction [AddMonoid α] [DistribMulAction M α] (S : Submonoid M) : 
+DistribMulAction S α
+参数：S : Submonoid M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance distribMulAction
-  signature: [AddMonoid α] [DistribMulAction M α] (S : Submonoid M)
-  body: inferInstance
-
-中文:
-实例 distribMulAction
-  签名: [加法幺半群 α] [分配乘法作用 M α] (S : 子幺半群 M)
-  定义体: inferInstance
+--- 原说明 ---
+The action by a submonoid is the action by the underlying monoid.
 -/
 instance distribMulAction [AddMonoid α] [DistribMulAction M α] (S : Submonoid M) :
     DistribMulAction S α :=
   inferInstance
-
+/-
+**Submonoid.** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := low) [Monoid α] [MulDistribMulAction M α] : MulDistribMulAction s α where
   smul_mul r := smul_mul' (r : M)
   smul_one r := smul_one (r : M)
 
-/--
-Instance `mulDistribMulAction` / 实例 `mulDistribMulAction`
+/-- The action by a submonoid is the action by the underlying monoid. -/
+/-
+**Submonoid.mulDistribMulAction** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+形式化陈述：mulDistribMulAction [Monoid α] [MulDistribMulAction M α] (S : Submonoid M)
+ : MulDistribMulAction S α
+参数：S : Submonoid M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance mulDistribMulAction
-  signature: [Monoid α] [MulDistribMulAction M α] (S : Submonoid M)
-  body: inferInstance
-
-中文:
-实例 mulDistribMulAction
-  签名: [幺半群 α] [MulDistribMul作用 M α] (S : 子幺半群 M)
-  定义体: inferInstance
+--- 原说明 ---
+The action by a submonoid is the action by the underlying monoid.
 -/
 instance mulDistribMulAction [Monoid α] [MulDistribMulAction M α] (S : Submonoid M) :
     MulDistribMulAction S α :=
   inferInstance
 
 end Submonoid
+

@@ -19,41 +19,26 @@ variable {R α : Type*} [Small.{v} α] [Semiring R] [AddCommMonoid α] [Module R
 
 namespace Shrink
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Module R (Shrink.{v} α)
-  body: (equivShrink α).symm.module R
-
-中文:
-实例 :
-  签名: 模 R (Shrink.{v} α)
-  定义体: (equivShrink α).symm.module R
-
-Depends on / 依赖: equivShrink, module, symm.module
+/-
+**Shrink.** 是 Mathlib 中的一个实例，位于命名空间 `Shrink`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Module R (Shrink.{v} α) := (equivShrink α).symm.module R
 
 variable (R α) in
 /-- Shrinking `α` to a smaller universe preserves module structure. -/
 @[simps!]
-/--
-Definition of `linearEquiv` / `linearEquiv` 的定义
+/-
+**Shrink.linearEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Shrink`。
+形式化陈述：linearEquiv : Shrink.{v} α ≃ₗ[R] α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition linearEquiv
-  signature: : Shrink.{v} α ≃ₗ[R] α
-  body: (equivShrink α).symm.linearEquiv _
-
-中文:
-定义 linearEquiv
-  签名: : Shrink.{v} α ≃ₗ[R] α
-  定义体: (equivShrink α).symm.linearEquiv _
-
-Depends on / 依赖: equivShrink, linearEquiv, symm.linearEquiv
+--- 原说明 ---
+Shrinking `α` to a smaller universe preserves module structure.
 -/
 def linearEquiv : Shrink.{v} α ≃ₗ[R] α := (equivShrink α).symm.linearEquiv _
 
 end Shrink
+

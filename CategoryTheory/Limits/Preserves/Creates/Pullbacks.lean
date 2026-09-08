@@ -20,45 +20,42 @@ namespace CategoryTheory.Limits
 
 variable {C : Type*} [Category* C] {D : Type*} [Category* D]
 
-/--
-lemma `HasPullback.of_createsLimit` / 引理 `HasPullback.of_createsLimit`
-
-English:
-lemma HasPullback.of_createsLimit
-  statement: (F : C ⥤ D) {X Y S : C} (f : X ⟶ S) (g : Y ⟶ S)
-  proof: have : HasLimit (cospan f g ⋙ F) := hasLimit_of_iso (cospanCompIso F f g).symm
-  hasLimit_of_created _ F
-
-中文:
-引理 HasPullback.of_createsLimit
-  结论: (F : C ⥤ D) {X Y S : C} (f : X ⟶ S) (g : Y ⟶ S)
-  证明: have : HasLimit (cospan f g ⋙ F) := hasLimit_of_iso (cospanCompIso F f g).symm
-  hasLimit_of_created _ F
-
-Depends on / 依赖: HasLimit, cospan, cospanCompIso, hasLimit_of_created, hasLimit_of_iso
+/-
+**CategoryTheory.Limits.HasPullback.of_createsLimit** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.Limits.HasPullback`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {D : Type u
+_2}   [inst_1 : CategoryTheory.Category.{v_2, u_2} D] (F : CategoryTheory.Functo
+r C D) {X Y S : C} (f : X ⟶ S) (g : Y ⟶ S)   [CategoryTheory.CreatesLimit (Categ
+oryTheory.Limits.cospan f g) F]   [CategoryTheory.Limits.HasPullback (F.map f) (
+F.map g)], CategoryTheory.Limits.HasPullback f g
+参数：F : CategoryTheory.Functor C D；f : X ⟶ S；g : Y ⟶ S；CategoryTheory.Limits.cosp
+an f g；F.map f；F.map g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasLimit_of_iso`：hasLimit_of_iso {F G : J ⥤ C} [Ha
+sLimit F] (α : F ≅ G) : HasLimit G
+· 使用定理 `CategoryTheory.hasLimit_of_created`：hasLimit_of_created (K : J ⥤ C) (F :
+ C ⥤ D) [HasLimit (K ⋙ F)] [CreatesLimit K F] : HasLimit K
 -/
 lemma HasPullback.of_createsLimit (F : C ⥤ D) {X Y S : C} (f : X ⟶ S) (g : Y ⟶ S)
     [CreatesLimit (cospan f g) F] [HasPullback (F.map f) (F.map g)] :
     HasPullback f g :=
   have : HasLimit (cospan f g ⋙ F) := hasLimit_of_iso (cospanCompIso F f g).symm
   hasLimit_of_created _ F
-
-/--
-lemma `HasPushout.of_createsColimit` / 引理 `HasPushout.of_createsColimit`
-
-English:
-lemma HasPushout.of_createsColimit
-  statement: (F : C ⥤ D) {X Y S : C} (f : S ⟶ X) (g : S ⟶ Y)
-  proof: have : HasColimit (span f g ⋙ F) := hasColimit_of_iso (spanCompIso F f g)
-  hasColimit_of_created _ F
-
-中文:
-引理 HasPushout.of_createsColimit
-  结论: (F : C ⥤ D) {X Y S : C} (f : S ⟶ X) (g : S ⟶ Y)
-  证明: have : HasColimit (span f g ⋙ F) := hasColimit_of_iso (spanCompIso F f g)
-  hasColimit_of_created _ F
-
-Depends on / 依赖: HasColimit, hasColimit_of_created, hasColimit_of_iso, spanCompIso
+/-
+**CategoryTheory.Limits.HasPushout.of_createsColimit** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Limits.HasPushout`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {D : Type u
+_2}   [inst_1 : CategoryTheory.Category.{v_2, u_2} D] (F : CategoryTheory.Functo
+r C D) {X Y S : C} (f : S ⟶ X) (g : S ⟶ Y)   [CategoryTheory.CreatesColimit (Cat
+egoryTheory.Limits.span f g) F]   [CategoryTheory.Limits.HasPushout (F.map f) (F
+.map g)], CategoryTheory.Limits.HasPushout f g
+参数：F : CategoryTheory.Functor C D；f : S ⟶ X；g : S ⟶ Y；CategoryTheory.Limits.span
+ f g；F.map f；F.map g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasColimit_of_iso`：hasColimit_of_iso {F G : J ⥤ C}
+ [HasColimit F] (α : G ≅ F) : HasColimit G
+· 使用定理 `CategoryTheory.hasColimit_of_created`：hasColimit_of_created (K : J ⥤ C) 
+(F : C ⥤ D) [HasColimit (K ⋙ F)] [CreatesColimit K F] : HasColimit K
 -/
 lemma HasPushout.of_createsColimit (F : C ⥤ D) {X Y S : C} (f : S ⟶ X) (g : S ⟶ Y)
     [CreatesColimit (span f g) F] [HasPushout (F.map f) (F.map g)] :
@@ -67,3 +64,4 @@ lemma HasPushout.of_createsColimit (F : C ⥤ D) {X Y S : C} (f : S ⟶ X) (g : 
   hasColimit_of_created _ F
 
 end CategoryTheory.Limits
+

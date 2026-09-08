@@ -32,20 +32,12 @@ section Lattice
 /-! `C(α, β)` is a lattice ordered group. -/
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-
+**ContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [PartialOrder
-  signature: β] [CommMonoid β] [IsOrderedMonoid β] [ContinuousMul β] :
-  body: mul_le_mul_left (hfg x) (c x)
-
-中文:
-实例 [偏序
-  签名: β] [交换幺半群 β] [是Ordered幺半群 β] [连续乘法 β] :
-  定义体: mul_le_mul_left (hfg x) (c x)
-
-Depends on / 依赖: mul_le_mul_left
+--- 原说明 ---
+`C(α, β)` is a lattice ordered group.
 -/
 instance [PartialOrder β] [CommMonoid β] [IsOrderedMonoid β] [ContinuousMul β] :
     IsOrderedMonoid C(α, β) where
@@ -54,45 +46,26 @@ instance [PartialOrder β] [CommMonoid β] [IsOrderedMonoid β] [ContinuousMul �
 variable [Group β] [IsTopologicalGroup β] [Lattice β] [TopologicalLattice β]
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-lemma `coe_mabs` / 引理 `coe_mabs`
-
-English:
-lemma coe_mabs
-  given: (f : C(α, β))
-  statement: ⇑|f|ₘ = |⇑f|ₘ
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 coe_mabs
-  条件: (f : C(α, β))
-  结论: ⇑|f|ₘ = |⇑f|ₘ
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**ContinuousMap.coe_mabs** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMap`。
+形式化陈述：coe_mabs (f : C(α, β)) : ⇑|f|ₘ = |⇑f|ₘ
+参数：f : C(α, β)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_mabs (f : C(α, β)) : ⇑|f|ₘ = |⇑f|ₘ := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `mabs_apply` / 引理 `mabs_apply`
-
-English:
-lemma mabs_apply
-  given: (f : C(α, β)) (x : α)
-  statement: |f|ₘ x = |f x|ₘ
-  proof: rfl
-
-中文:
-引理 mabs_apply
-  条件: (f : C(α, β)) (x : α)
-  结论: |f|ₘ x = |f x|ₘ
-  证明: rfl
+/-
+**ContinuousMap.mabs_apply** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMap`。
+形式化陈述：mabs_apply (f : C(α, β)) (x : α) : |f|ₘ x = |f x|ₘ
+参数：f : C(α, β)；x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mabs_apply (f : C(α, β)) (x : α) : |f|ₘ x = |f x|ₘ := rfl
 
 end Lattice
 
 end ContinuousMap
+

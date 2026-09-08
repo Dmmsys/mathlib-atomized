@@ -49,79 +49,64 @@ section Comma
 variable {A : Type*} [Category* A] {B : Type*} [Category* B] {T : Type*} [Category* T]
   (L : A ⥤ T) (R : B ⥤ T)
 
-/--
-lemma `costructuredArrow_iso_iff` / 引理 `costructuredArrow_iso_iff`
-
-English:
-lemma costructuredArrow_iso_iff
-  statement: (P : MorphismProperty T) [P.RespectsIso]
-  proof: P.comma_iso_iff e
-
-中文:
-引理 costructuredArrow_iso_iff
-  结论: (P : MorphismProperty T) [P.RespectsIso]
-  证明: P.comma_iso_iff e
-
-Depends on / 依赖: P.comma_iso_iff, comma_iso_iff
+/-
+**CategoryTheory.MorphismProperty.costructuredArrow_iso_iff** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：costructuredArrow_iso_iff (P : MorphismProperty T) [P.RespectsIso] {L : A 
+⥤ T} {X : T} {f g : CostructuredArrow L X} (e : f ≅ g) : P f.hom ↔ P g.hom
+参数：P : MorphismProperty T；e : f ≅ g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.MorphismProperty.comma_iso_iff`：comma_iso_iff (P : Morphi
+smProperty C) [P.RespectsIso] {A B : Type*} [Category* A] [Category* B] {L : A ⥤
+ C} {R : B ⥤ C} {f g : Comma L R} (…
 -/
 lemma costructuredArrow_iso_iff (P : MorphismProperty T) [P.RespectsIso]
     {L : A ⥤ T} {X : T} {f g : CostructuredArrow L X} (e : f ≅ g) :
     P f.hom ↔ P g.hom :=
   P.comma_iso_iff e
-
-/--
-lemma `structuredArrow_iso_iff` / 引理 `structuredArrow_iso_iff`
-
-English:
-lemma structuredArrow_iso_iff
-  statement: (P : MorphismProperty T) [P.RespectsIso]
-  proof: P.comma_iso_iff e
-
-中文:
-引理 structuredArrow_iso_iff
-  结论: (P : MorphismProperty T) [P.RespectsIso]
-  证明: P.comma_iso_iff e
-
-Depends on / 依赖: P.comma_iso_iff, comma_iso_iff
+/-
+**CategoryTheory.MorphismProperty.structuredArrow_iso_iff** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：structuredArrow_iso_iff (P : MorphismProperty T) [P.RespectsIso] {L : A ⥤ 
+T} {X : T} {f g : StructuredArrow X L} (e : f ≅ g) : P f.hom ↔ P g.hom
+参数：P : MorphismProperty T；e : f ≅ g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.MorphismProperty.comma_iso_iff`：comma_iso_iff (P : Morphi
+smProperty C) [P.RespectsIso] {A B : Type*} [Category* A] [Category* B] {L : A ⥤
+ C} {R : B ⥤ C} {f g : Comma L R} (…
 -/
 lemma structuredArrow_iso_iff (P : MorphismProperty T) [P.RespectsIso]
     {L : A ⥤ T} {X : T} {f g : StructuredArrow X L} (e : f ≅ g) :
     P f.hom ↔ P g.hom :=
   P.comma_iso_iff e
-
-/--
-lemma `over_iso_iff` / 引理 `over_iso_iff`
-
-English:
-lemma over_iso_iff
-  given: (P : MorphismProperty T) [P.RespectsIso] {X : T} {f g : Over X} (e : f ≅ g)
-  proof: P.comma_iso_iff e
-
-中文:
-引理 over_iso_iff
-  条件: (P : MorphismProperty T) [P.RespectsIso] {X : T} {f g : Over X} (e : f ≅ g)
-  证明: P.comma_iso_iff e
-
-Depends on / 依赖: P.comma_iso_iff, comma_iso_iff
+/-
+**CategoryTheory.MorphismProperty.over_iso_iff** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.MorphismProperty`。
+形式化陈述：over_iso_iff (P : MorphismProperty T) [P.RespectsIso] {X : T} {f g : Over 
+X} (e : f ≅ g) : P f.hom ↔ P g.hom
+参数：P : MorphismProperty T；e : f ≅ g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.MorphismProperty.comma_iso_iff`：comma_iso_iff (P : Morphi
+smProperty C) [P.RespectsIso] {A B : Type*} [Category* A] [Category* B] {L : A ⥤
+ C} {R : B ⥤ C} {f g : Comma L R} (…
 -/
 lemma over_iso_iff (P : MorphismProperty T) [P.RespectsIso] {X : T} {f g : Over X} (e : f ≅ g) :
     P f.hom ↔ P g.hom :=
   P.comma_iso_iff e
-
-/--
-lemma `under_iso_iff` / 引理 `under_iso_iff`
-
-English:
-lemma under_iso_iff
-  given: (P : MorphismProperty T) [P.RespectsIso] {X : T} {f g : Under X} (e : f ≅ g)
-  proof: P.comma_iso_iff e
-
-中文:
-引理 under_iso_iff
-  条件: (P : MorphismProperty T) [P.RespectsIso] {X : T} {f g : Under X} (e : f ≅ g)
-  证明: P.comma_iso_iff e
-
-Depends on / 依赖: P.comma_iso_iff, comma_iso_iff
+/-
+**CategoryTheory.MorphismProperty.under_iso_iff** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.MorphismProperty`。
+形式化陈述：under_iso_iff (P : MorphismProperty T) [P.RespectsIso] {X : T} {f g : Unde
+r X} (e : f ≅ g) : P f.hom ↔ P g.hom
+参数：P : MorphismProperty T；e : f ≅ g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.MorphismProperty.comma_iso_iff`：comma_iso_iff (P : Morphi
+smProperty C) [P.RespectsIso] {A B : Type*} [Category* A] [Category* B] {L : A ⥤
+ C} {R : B ⥤ C} {f g : Comma L R} (…
 -/
 lemma under_iso_iff (P : MorphismProperty T) [P.RespectsIso] {X : T} {f g : Under X} (e : f ≅ g) :
     P f.hom ↔ P g.hom :=
@@ -131,411 +116,276 @@ section
 
 variable {W : MorphismProperty T} {X : T}
 
-/--
-Definition of `commaObj` / `commaObj` 的定义
+/-- The object property on `Comma L R` induced by a morphism property. -/
+/-
+**CategoryTheory.MorphismProperty.commaObj** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.MorphismProperty`。
+形式化陈述：commaObj (W : MorphismProperty T) : ObjectProperty (Comma L R)
+参数：W : MorphismProperty T。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition commaObj
-  signature: (W : MorphismProperty T)
-  body: fun f => W f.hom
-
-中文:
-定义 commaObj
-  签名: (W : MorphismProperty T)
-  定义体: fun f => W f.hom
-
-Depends on / 依赖: f.hom
+--- 原说明 ---
+The object property on `Comma L R` induced by a morphism property.
 -/
 def commaObj (W : MorphismProperty T) : ObjectProperty (Comma L R) :=
-  fun f => W f.hom
-
-/--
-lemma `commaObj_iff` / 引理 `commaObj_iff`
-
-English:
-lemma commaObj_iff
-  given: (Y : Comma L R)
-  statement: W.commaObj L R Y ↔ W Y.hom
-  proof: .rfl
-
-中文:
-引理 commaObj_iff
-  条件: (Y : 交换a L R)
-  结论: W.commaObj L R Y ↔ W Y.hom
-  证明: .rfl
+  fun f ↦ W f.hom
+/-
+**CategoryTheory.MorphismProperty.commaObj_iff** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.MorphismProperty`。
+形式化陈述：∀ {A : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} A] {B : Type u
+_2}   [inst_1 : CategoryTheory.Category.{v_2, u_2} B] {T : Type u_3} [inst_2 : C
+ategoryTheory.Category.{v_3, u_3} T]   (L : CategoryTheory.Functor A T) (R : Cat
+egoryTheory.Functor B T) {W : CategoryTheory.MorphismProperty T}   (Y : Category
+Theory.Comma L R), CategoryTheory.MorphismProperty.commaObj L R W Y ↔ W Y.hom
+参数：L : CategoryTheory.Functor A T；R : CategoryTheory.Functor B T；Y : CategoryThe
+ory.Comma L R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma commaObj_iff (Y : Comma L R) : W.commaObj L R Y ↔ W Y.hom := .rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [W.RespectsIso]
-  signature: : (W.commaObj L R).IsClosedUnderIsomorphisms where
-  body: by
-    rwa [commaObj_iff, ← W.cancel_left_of_respectsIso (L.map e.hom.left), e.hom.w,
-      W.cancel_right_of_respectsIso]
-
-中文:
-实例 [W.RespectsIso]
-  签名: : (W.commaObj L R).在同构下封闭 where
-  定义体: by
-    rwa [commaObj_iff, ← W.cancel_left_of_respectsIso (L.map e.hom.left), e.hom.w,
-      W.cancel_right_of_respectsIso]
-
-Depends on / 依赖: L.map, W.cancel_left_of_respectsIso, W.cancel_right_of_respectsIso, cancel_left_of_respectsIso, cancel_right_of_respectsIso, commaObj_iff, e.hom.left, e.hom.w
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [W.RespectsIso] : (W.commaObj L R).IsClosedUnderIsomorphisms where
   of_iso {X Y} e h := by
     rwa [commaObj_iff, ← W.cancel_left_of_respectsIso (L.map e.hom.left), e.hom.w,
       W.cancel_right_of_respectsIso]
 
-/--
-Definition of `costructuredArrowObj` / `costructuredArrowObj` 的定义
+/-- The object property on `CostructuredArrow L X` induced by a morphism property. -/
+/-
+**CategoryTheory.MorphismProperty.costructuredArrowObj** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.MorphismProperty`。
+形式化陈述：costructuredArrowObj (W : MorphismProperty T) : ObjectProperty (Costructur
+edArrow L X)
+参数：W : MorphismProperty T。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition costructuredArrowObj
-  signature: (W : MorphismProperty T)
-  body: fun f => W f.hom
-
-中文:
-定义 costructuredArrowObj
-  签名: (W : MorphismProperty T)
-  定义体: fun f => W f.hom
-
-Depends on / 依赖: f.hom
+--- 原说明 ---
+The object property on `CostructuredArrow L X` induced by a morphism property.
 -/
 def costructuredArrowObj (W : MorphismProperty T) : ObjectProperty (CostructuredArrow L X) :=
-  fun f => W f.hom
-
-/--
-lemma `costructuredArrowObj_iff` / 引理 `costructuredArrowObj_iff`
-
-English:
-lemma costructuredArrowObj_iff
-  given: (Y : CostructuredArrow L X)
-  proof: .rfl
-
-中文:
-引理 costructuredArrowObj_iff
-  条件: (Y : CostructuredArrow L X)
-  证明: .rfl
+  fun f ↦ W f.hom
+/-
+**CategoryTheory.MorphismProperty.costructuredArrowObj_iff** 是 Mathlib 中的一个定理，位于
+命名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：∀ {A : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} A] {T : Type u
+_3}   [inst_1 : CategoryTheory.Category.{v_3, u_3} T] (L : CategoryTheory.Functo
+r A T)   {W : CategoryTheory.MorphismProperty T} {X : T} (Y : CategoryTheory.Cos
+tructuredArrow L X),   CategoryTheory.MorphismProperty.costructuredArrowObj L W 
+Y ↔ W Y.hom
+参数：L : CategoryTheory.Functor A T；Y : CategoryTheory.CostructuredArrow L X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma costructuredArrowObj_iff (Y : CostructuredArrow L X) :
     W.costructuredArrowObj L Y ↔ W Y.hom := .rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [W.RespectsIso]
-  signature: : (W.costructuredArrowObj L (X := X)).IsClosedUnderIsomorphisms
-  body: inferInstanceAs (W.commaObj _ _).IsClosedUnderIsomorphisms
-
-中文:
-实例 [W.RespectsIso]
-  签名: : (W.costructuredArrowObj L (X := X)).在同构下封闭
-  定义体: inferInstanceAs (W.commaObj _ _).IsClosedUnderIsomorphisms
-
-Depends on / 依赖: IsClosedUnderIsomorphisms
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [W.RespectsIso] : (W.costructuredArrowObj L (X := X)).IsClosedUnderIsomorphisms :=
-inferInstanceAs (W.commaObj _ _).IsClosedUnderIsomorphisms
+  inferInstanceAs <| (W.commaObj _ _).IsClosedUnderIsomorphisms
 
-/--
-Definition of `structuredArrowObj` / `structuredArrowObj` 的定义
+/-- The object property on `StructuredArrow X R` induced by a morphism property. -/
+/-
+**CategoryTheory.MorphismProperty.structuredArrowObj** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.MorphismProperty`。
+形式化陈述：structuredArrowObj (W : MorphismProperty T) : ObjectProperty (StructuredAr
+row X R)
+参数：W : MorphismProperty T。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition structuredArrowObj
-  signature: (W : MorphismProperty T)
-  body: fun f => W f.hom
-
-中文:
-定义 structuredArrowObj
-  签名: (W : MorphismProperty T)
-  定义体: fun f => W f.hom
-
-Depends on / 依赖: f.hom
+--- 原说明 ---
+The object property on `StructuredArrow X R` induced by a morphism property.
 -/
 def structuredArrowObj (W : MorphismProperty T) : ObjectProperty (StructuredArrow X R) :=
-  fun f => W f.hom
-
-/--
-lemma `structuredArrowObj_iff` / 引理 `structuredArrowObj_iff`
-
-English:
-lemma structuredArrowObj_iff
-  given: (Y : StructuredArrow X R)
-  proof: .rfl
-
-中文:
-引理 structuredArrowObj_iff
-  条件: (Y : 结构化箭头 X R)
-  证明: .rfl
+  fun f ↦ W f.hom
+/-
+**CategoryTheory.MorphismProperty.structuredArrowObj_iff** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：∀ {B : Type u_2} [inst : CategoryTheory.Category.{v_2, u_2} B] {T : Type u
+_3}   [inst_1 : CategoryTheory.Category.{v_3, u_3} T] (R : CategoryTheory.Functo
+r B T)   {W : CategoryTheory.MorphismProperty T} {X : T} (Y : CategoryTheory.Str
+ucturedArrow X R),   CategoryTheory.MorphismProperty.structuredArrowObj R W Y ↔ 
+W Y.hom
+参数：R : CategoryTheory.Functor B T；Y : CategoryTheory.StructuredArrow X R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma structuredArrowObj_iff (Y : StructuredArrow X R) :
     W.structuredArrowObj R Y ↔ W Y.hom := .rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [W.RespectsIso]
-  signature: : (W.structuredArrowObj L (X := X)).IsClosedUnderIsomorphisms
-  body: inferInstanceAs (W.commaObj _ _).IsClosedUnderIsomorphisms
-
-中文:
-实例 [W.RespectsIso]
-  签名: : (W.structuredArrowObj L (X := X)).在同构下封闭
-  定义体: inferInstanceAs (W.commaObj _ _).IsClosedUnderIsomorphisms
-
-Depends on / 依赖: IsClosedUnderIsomorphisms
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [W.RespectsIso] : (W.structuredArrowObj L (X := X)).IsClosedUnderIsomorphisms :=
-inferInstanceAs (W.commaObj _ _).IsClosedUnderIsomorphisms
+  inferInstanceAs <| (W.commaObj _ _).IsClosedUnderIsomorphisms
 
-/--
-Definition of `over` / `over` 的定义
+/-- The morphism property on `Over X` induced by a morphism property on `C`. -/
+/-
+**CategoryTheory.MorphismProperty.over** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.MorphismProperty`。
+形式化陈述：over (W : MorphismProperty T) {X : T} : MorphismProperty (Over X)
+参数：W : MorphismProperty T。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition over
-  signature: (W : MorphismProperty T) {X : T}
-  body: fun _ _ f => W f.left
-
-中文:
-定义 over
-  签名: (W : MorphismProperty T) {X : T}
-  定义体: fun _ _ f => W f.left
-
-Depends on / 依赖: f.left
+--- 原说明 ---
+The morphism property on `Over X` induced by a morphism property on `C`.
 -/
-def over (W : MorphismProperty T) {X : T} : MorphismProperty (Over X) := fun _ _ f => W f.left
-
-/--
-lemma `over_eq_inverseImage` / 引理 `over_eq_inverseImage`
-
-English:
-lemma over_eq_inverseImage
-  given: (W : MorphismProperty T) (X : T)
-  proof: rfl
-
-中文:
-引理 over_eq_inverseImage
-  条件: (W : MorphismProperty T) (X : T)
-  证明: rfl
+def over (W : MorphismProperty T) {X : T} : MorphismProperty (Over X) := fun _ _ f ↦ W f.left
+/-
+**CategoryTheory.MorphismProperty.over_eq_inverseImage** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.MorphismProperty`。
+形式化陈述：over_eq_inverseImage (W : MorphismProperty T) (X : T) : W.over = W.inverse
+Image (Over.forget X)
+参数：W : MorphismProperty T；X : T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma over_eq_inverseImage (W : MorphismProperty T) (X : T) :
     W.over = W.inverseImage (Over.forget X) := rfl
-
-/--
-lemma `over_iff` / 引理 `over_iff`
-
-English:
-lemma over_iff
-  given: {Y Z : Over X} (f : Y ⟶ Z)
-  statement: W.over f ↔ W f.left
-  proof: .rfl
-
-中文:
-引理 over_iff
-  条件: {Y Z : Over X} (f : Y ⟶ Z)
-  结论: W.over f ↔ W f.left
-  证明: .rfl
+/-
+**CategoryTheory.MorphismProperty.over_iff** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.MorphismProperty`。
+形式化陈述：∀ {T : Type u_3} [inst : CategoryTheory.Category.{v_3, u_3} T] {W : Catego
+ryTheory.MorphismProperty T} {X : T}   {Y Z : CategoryTheory.Over X} (f : Y ⟶ Z)
+, W.over f ↔ W (CategoryTheory.Over.Hom.left f)
+参数：f : Y ⟶ Z；CategoryTheory.Over.Hom.left f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma over_iff {Y Z : Over X} (f : Y ⟶ Z) : W.over f ↔ W f.left := .rfl
 
-/--
-Definition of `under` / `under` 的定义
+/-- The morphism property on `Under X` induced by a morphism property on `C`. -/
+/-
+**CategoryTheory.MorphismProperty.under** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.MorphismProperty`。
+形式化陈述：under (W : MorphismProperty T) {X : T} : MorphismProperty (Under X)
+参数：W : MorphismProperty T。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition under
-  signature: (W : MorphismProperty T) {X : T}
-  body: fun _ _ f => W f.right
-
-中文:
-定义 under
-  签名: (W : MorphismProperty T) {X : T}
-  定义体: fun _ _ f => W f.right
-
-Depends on / 依赖: f.right
+--- 原说明 ---
+The morphism property on `Under X` induced by a morphism property on `C`.
 -/
-def under (W : MorphismProperty T) {X : T} : MorphismProperty (Under X) := fun _ _ f => W f.right
-
-/--
-lemma `under_eq_inverseImage` / 引理 `under_eq_inverseImage`
-
-English:
-lemma under_eq_inverseImage
-  given: (W : MorphismProperty T) (X : T)
-  proof: rfl
-
-中文:
-引理 under_eq_inverseImage
-  条件: (W : MorphismProperty T) (X : T)
-  证明: rfl
+def under (W : MorphismProperty T) {X : T} : MorphismProperty (Under X) := fun _ _ f ↦ W f.right
+/-
+**CategoryTheory.MorphismProperty.under_eq_inverseImage** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.MorphismProperty`。
+形式化陈述：under_eq_inverseImage (W : MorphismProperty T) (X : T) : W.under = W.inver
+seImage (Under.forget X)
+参数：W : MorphismProperty T；X : T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma under_eq_inverseImage (W : MorphismProperty T) (X : T) :
     W.under = W.inverseImage (Under.forget X) := rfl
-
-/--
-lemma `under_iff` / 引理 `under_iff`
-
-English:
-lemma under_iff
-  given: {Y Z : Under X} (f : Y ⟶ Z)
-  statement: W.under f ↔ W f.right
-  proof: .rfl
-
-中文:
-引理 under_iff
-  条件: {Y Z : Under X} (f : Y ⟶ Z)
-  结论: W.under f ↔ W f.right
-  证明: .rfl
+/-
+**CategoryTheory.MorphismProperty.under_iff** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.MorphismProperty`。
+形式化陈述：∀ {T : Type u_3} [inst : CategoryTheory.Category.{v_3, u_3} T] {W : Catego
+ryTheory.MorphismProperty T} {X : T}   {Y Z : CategoryTheory.Under X} (f : Y ⟶ Z
+), W.under f ↔ W (CategoryTheory.Under.Hom.right f)
+参数：f : Y ⟶ Z；CategoryTheory.Under.Hom.right f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma under_iff {Y Z : Under X} (f : Y ⟶ Z) : W.under f ↔ W f.right := .rfl
 
-/--
-Definition of `overObj` / `overObj` 的定义
+/-- The object property on `Over X` induced by a morphism property. -/
+/-
+**CategoryTheory.MorphismProperty.overObj** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.MorphismProperty`。
+形式化陈述：overObj (W : MorphismProperty T) {X : T} : ObjectProperty (Over X)
+参数：W : MorphismProperty T。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition overObj
-  signature: (W : MorphismProperty T) {X : T}
-  body: fun f => W f.hom
-
-中文:
-定义 overObj
-  签名: (W : MorphismProperty T) {X : T}
-  定义体: fun f => W f.hom
-
-Depends on / 依赖: f.hom
+--- 原说明 ---
+The object property on `Over X` induced by a morphism property.
 -/
-def overObj (W : MorphismProperty T) {X : T} : ObjectProperty (Over X) := fun f => W f.hom
-
-/--
-lemma `overObj_iff` / 引理 `overObj_iff`
-
-English:
-lemma overObj_iff
-  given: (Y : Over X)
-  statement: W.overObj Y ↔ W Y.hom
-  proof: .rfl
-
-中文:
-引理 overObj_iff
-  条件: (Y : Over X)
-  结论: W.overObj Y ↔ W Y.hom
-  证明: .rfl
+def overObj (W : MorphismProperty T) {X : T} : ObjectProperty (Over X) := fun f ↦ W f.hom
+/-
+**CategoryTheory.MorphismProperty.overObj_iff** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.MorphismProperty`。
+形式化陈述：∀ {T : Type u_3} [inst : CategoryTheory.Category.{v_3, u_3} T] {W : Catego
+ryTheory.MorphismProperty T} {X : T}   (Y : CategoryTheory.Over X), W.overObj Y 
+↔ W Y.hom
+参数：Y : CategoryTheory.Over X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma overObj_iff (Y : Over X) : W.overObj Y ↔ W Y.hom := .rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [W.RespectsIso]
-  signature: : (W.overObj (X := X)).IsClosedUnderIsomorphisms
-  body: inferInstanceAs (W.commaObj _ _).IsClosedUnderIsomorphisms
-
-中文:
-实例 [W.RespectsIso]
-  签名: : (W.overObj (X := X)).在同构下封闭
-  定义体: inferInstanceAs (W.commaObj _ _).IsClosedUnderIsomorphisms
-
-Depends on / 依赖: IsClosedUnderIsomorphisms
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [W.RespectsIso] : (W.overObj (X := X)).IsClosedUnderIsomorphisms :=
-inferInstanceAs (W.commaObj _ _).IsClosedUnderIsomorphisms
+  inferInstanceAs <| (W.commaObj _ _).IsClosedUnderIsomorphisms
 
-/--
-Definition of `underObj` / `underObj` 的定义
+/-- The object property on `Under X` induced by a morphism property. -/
+/-
+**CategoryTheory.MorphismProperty.underObj** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.MorphismProperty`。
+形式化陈述：underObj (W : MorphismProperty T) {X : T} : ObjectProperty (Under X)
+参数：W : MorphismProperty T。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition underObj
-  signature: (W : MorphismProperty T) {X : T}
-  body: fun f => W f.hom
-
-中文:
-定义 underObj
-  签名: (W : MorphismProperty T) {X : T}
-  定义体: fun f => W f.hom
-
-Depends on / 依赖: f.hom
+--- 原说明 ---
+The object property on `Under X` induced by a morphism property.
 -/
-def underObj (W : MorphismProperty T) {X : T} : ObjectProperty (Under X) := fun f => W f.hom
-
-/--
-lemma `underObj_iff` / 引理 `underObj_iff`
-
-English:
-lemma underObj_iff
-  given: (Y : Under X)
-  statement: W.underObj Y ↔ W Y.hom
-  proof: .rfl
-
-中文:
-引理 underObj_iff
-  条件: (Y : Under X)
-  结论: W.underObj Y ↔ W Y.hom
-  证明: .rfl
+def underObj (W : MorphismProperty T) {X : T} : ObjectProperty (Under X) := fun f ↦ W f.hom
+/-
+**CategoryTheory.MorphismProperty.underObj_iff** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.MorphismProperty`。
+形式化陈述：∀ {T : Type u_3} [inst : CategoryTheory.Category.{v_3, u_3} T] {W : Catego
+ryTheory.MorphismProperty T} {X : T}   (Y : CategoryTheory.Under X), W.underObj 
+Y ↔ W Y.hom
+参数：Y : CategoryTheory.Under X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma underObj_iff (Y : Under X) : W.underObj Y ↔ W Y.hom := .rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [W.RespectsIso]
-  signature: : (W.underObj (X := X)).IsClosedUnderIsomorphisms
-  body: inferInstanceAs (W.commaObj _ _).IsClosedUnderIsomorphisms
-
-@[simp]
-
-中文:
-实例 [W.RespectsIso]
-  签名: : (W.underObj (X := X)).在同构下封闭
-  定义体: inferInstanceAs (W.commaObj _ _).IsClosedUnderIsomorphisms
-
-@[simp]
-
-Depends on / 依赖: IsClosedUnderIsomorphisms
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [W.RespectsIso] : (W.underObj (X := X)).IsClosedUnderIsomorphisms :=
-inferInstanceAs (W.commaObj _ _).IsClosedUnderIsomorphisms
+  inferInstanceAs <| (W.commaObj _ _).IsClosedUnderIsomorphisms
 
 @[simp]
-/--
-lemma `inverseImage_op_overObj` / 引理 `inverseImage_op_overObj`
-
-English:
-lemma inverseImage_op_overObj
-  given: (W : MorphismProperty T) {X : T}
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 inverseImage_op_overObj
-  条件: (W : MorphismProperty T) {X : T}
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.MorphismProperty.inverseImage_op_overObj** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：inverseImage_op_overObj (W : MorphismProperty T) {X : T} : W.overObj.op.in
+verseImage (Under.opEquivOpOver X).functor = W.op.underObj
+参数：W : MorphismProperty T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma inverseImage_op_overObj (W : MorphismProperty T) {X : T} :
     W.overObj.op.inverseImage (Under.opEquivOpOver X).functor = W.op.underObj := rfl
 
 @[simp]
-/--
-lemma `inverseImage_op_underObj` / 引理 `inverseImage_op_underObj`
-
-English:
-lemma inverseImage_op_underObj
-  given: (W : MorphismProperty T) {X : T}
-  proof: rfl
-
-中文:
-引理 inverseImage_op_underObj
-  条件: (W : MorphismProperty T) {X : T}
-  证明: rfl
+/-
+**CategoryTheory.MorphismProperty.inverseImage_op_underObj** 是 Mathlib 中的一个引理，位于
+命名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：inverseImage_op_underObj (W : MorphismProperty T) {X : T} : W.underObj.op.
+inverseImage (Over.opEquivOpUnder X).functor = W.op.overObj
+参数：W : MorphismProperty T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma inverseImage_op_underObj (W : MorphismProperty T) {X : T} :
     W.underObj.op.inverseImage (Over.opEquivOpUnder X).functor = W.op.overObj := rfl
@@ -548,22 +398,24 @@ variable (P : MorphismProperty T) (Q : MorphismProperty A) (W : MorphismProperty
 objects `X : Comma L R` where `X.hom` satisfies `P`. The morphisms are given by
 morphisms in `Comma L R` where the left one satisfies `Q` and the right one satisfies `W`. -/
 @[ext]
-/--
-Definition of `Comma` / `Comma` 的定义
+/-
+**CategoryTheory.MorphismProperty.Comma** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryThe
+ory.MorphismProperty`。
+形式化陈述：{A : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} A] →     {B 
+: Type u_2} →       [inst_1 : CategoryTheory.Category.{v_2, u_2} B] →         {T
+ : Type u_3} →           [inst_2 : CategoryTheory.Category.{v_3, u_3} T] →      
+       CategoryTheory.Functor A T →               CategoryTheory.Functor B T →  
+               CategoryTheory.MorphismProperty T →                   CategoryThe
+ory.MorphismProperty A → CategoryTheory.MorphismProperty B → Type (max (max u_1 
+u_2) v_3)
+参数：max (max u_1 u_2) v_3。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Comma
-  parameters: (Q : MorphismProperty A) (W : MorphismProperty B)
-  extends: Comma L R
-  axioms and operations (1):
-    - prop : P toComma.hom
-
-中文:
-结构 交换a
-  参数: (Q : MorphismProperty A) (W : MorphismProperty B)
-  继承: 交换a L R
-  公理与运算 (1 个):
-    - prop : P toComma.hom
+--- 原说明 ---
+`P.Comma L R Q W` is the subcategory of `Comma L R` consisting of
+objects `X : Comma L R` where `X.hom` satisfies `P`. The morphisms are given by
+morphisms in `Comma L R` where the left one satisfies `Q` and the right one sati
+sfies `W`.
 -/
 protected structure Comma (Q : MorphismProperty A) (W : MorphismProperty B) extends Comma L R where
   prop : P toComma.hom
@@ -575,145 +427,133 @@ variable {L R P Q W}
 /-- A morphism in `P.Comma L R Q W` is a morphism in `Comma L R` where the left
 hom satisfies `Q` and the right one satisfies `W`. -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**CategoryTheory.MorphismProperty.Comma.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `Categor
+yTheory.MorphismProperty.Comma`。
+形式化陈述：{A : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} A] →     {B 
+: Type u_2} →       [inst_1 : CategoryTheory.Category.{v_2, u_2} B] →         {T
+ : Type u_3} →           [inst_2 : CategoryTheory.Category.{v_3, u_3} T] →      
+       {L : CategoryTheory.Functor A T} →               {R : CategoryTheory.Func
+tor B T} →                 {P : CategoryTheory.MorphismProperty T} →            
+       {Q : CategoryTheory.MorphismProperty A} →                     {W : Catego
+ryTheory.MorphismProperty B} →                       CategoryTheory.MorphismProp
+erty.Comma L R P Q W →                         CategoryTheory.MorphismProperty.C
+omma L R P Q W → Type (max v_1 v_2)
+参数：max v_1 v_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (X Y : P.Comma L R Q W)
-  extends: CommaMorphism X.toComma Y.toComma
-  axioms and operations (2):
-    - prop_hom_left : Q toCommaMorphism.left
-    - prop_hom_right : W toCommaMorphism.right
-
-中文:
-结构 态射
-  参数: (X Y : P.交换a L R Q W)
-  继承: 交换a态射 X.toComma Y.toComma
-  公理与运算 (2 个):
-    - prop_hom_left : Q toCommaMorphism.left
-    - prop_hom_right : W toCommaMorphism.right
+--- 原说明 ---
+A morphism in `P.Comma L R Q W` is a morphism in `Comma L R` where the left
+hom satisfies `Q` and the right one satisfies `W`.
 -/
 structure Hom (X Y : P.Comma L R Q W) extends CommaMorphism X.toComma Y.toComma where
   prop_hom_left : Q toCommaMorphism.left
   prop_hom_right : W toCommaMorphism.right
 
-/--
-Definition of `Hom.hom` / `Hom.hom` 的定义
+/-- The underlying morphism of objects in `Comma L R`. -/
+/-
+**CategoryTheory.MorphismProperty.Comma.Hom.hom** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.MorphismProperty.Comma.Hom`。
+形式化陈述：{A : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} A] →     {B 
+: Type u_2} →       [inst_1 : CategoryTheory.Category.{v_2, u_2} B] →         {T
+ : Type u_3} →           [inst_2 : CategoryTheory.Category.{v_3, u_3} T] →      
+       {L : CategoryTheory.Functor A T} →               {R : CategoryTheory.Func
+tor B T} →                 {P : CategoryTheory.MorphismProperty T} →            
+       {Q : CategoryTheory.MorphismProperty A} →                     {W : Catego
+ryTheory.MorphismProperty B} →                       {X Y : CategoryTheory.Morph
+ismProperty.Comma L R P Q W} → X.Hom Y → (X.toComma ⟶ Y.toComma)
+参数：X.toComma ⟶ Y.toComma。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.hom
-  signature: {X Y : P.Comma L R Q W} (f : Comma.Hom X Y)
-  body: f.toCommaMorphism
-
-@[simp]
-
-中文:
-缩写 态射.hom
-  签名: {X Y : P.交换a L R Q W} (f : 交换a.态射 X Y)
-  定义体: f.toCommaMorphism
-
-@[simp]
+--- 原说明 ---
+The underlying morphism of objects in `Comma L R`.
 -/
 abbrev Hom.hom {X Y : P.Comma L R Q W} (f : Comma.Hom X Y) : X.toComma ⟶ Y.toComma :=
   f.toCommaMorphism
 
 @[simp]
-/--
-lemma `Hom.hom_mk` / 引理 `Hom.hom_mk`
-
-English:
-lemma Hom.hom_mk
-  given: {X Y : P.Comma L R Q W} (f : CommaMorphism X.toComma Y.toComma) (hf) (hg)
-  proof: rfl
-
-中文:
-引理 态射.hom_mk
-  条件: {X Y : P.交换a L R Q W} (f : 交换a态射 X.toComma Y.toComma) (hf) (hg)
-  证明: rfl
+/-
+**CategoryTheory.MorphismProperty.Comma.Hom.hom_mk** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.MorphismProperty.Comma.Hom`。
+形式化陈述：∀ {A : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} A] {B : Type u
+_2}   [inst_1 : CategoryTheory.Category.{v_2, u_2} B] {T : Type u_3} [inst_2 : C
+ategoryTheory.Category.{v_3, u_3} T]   {L : CategoryTheory.Functor A T} {R : Cat
+egoryTheory.Functor B T} {P : CategoryTheory.MorphismProperty T}   {Q : Category
+Theory.MorphismProperty A} {W : CategoryTheory.MorphismProperty B}   {X Y : Cate
+goryTheory.MorphismProperty.Comma L R P Q W} (f : CategoryTheory.CommaMorphism X
+.toComma Y.toComma)   (hf : Q f.left) (hg : W f.right), { toCommaMorphism := f, 
+prop_hom_left := hf, prop_hom_right := hg }.hom = f
+参数：f : CategoryTheory.CommaMorphism X.toComma Y.toComma；hf : Q f.left；hg : W f.r
+ight。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Hom.hom_mk {X Y : P.Comma L R Q W} (f : CommaMorphism X.toComma Y.toComma) (hf) (hg) :
     Comma.Hom.hom ⟨f, hf, hg⟩ = f := rfl
-
-/--
-lemma `Hom.hom_left` / 引理 `Hom.hom_left`
-
-English:
-lemma Hom.hom_left
-  given: {X Y : P.Comma L R Q W} (f : Comma.Hom X Y)
-  statement: f.hom.left = f.left
-  proof: rfl
-
-中文:
-引理 态射.hom_left
-  条件: {X Y : P.交换a L R Q W} (f : 交换a.态射 X Y)
-  结论: f.hom.left = f.left
-  证明: rfl
+/-
+**CategoryTheory.MorphismProperty.Comma.Hom.hom_left** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.MorphismProperty.Comma.Hom`。
+形式化陈述：∀ {A : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} A] {B : Type u
+_2}   [inst_1 : CategoryTheory.Category.{v_2, u_2} B] {T : Type u_3} [inst_2 : C
+ategoryTheory.Category.{v_3, u_3} T]   {L : CategoryTheory.Functor A T} {R : Cat
+egoryTheory.Functor B T} {P : CategoryTheory.MorphismProperty T}   {Q : Category
+Theory.MorphismProperty A} {W : CategoryTheory.MorphismProperty B}   {X Y : Cate
+goryTheory.MorphismProperty.Comma L R P Q W} (f : X.Hom Y), f.hom.left = f.left
+参数：f : X.Hom Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Hom.hom_left {X Y : P.Comma L R Q W} (f : Comma.Hom X Y) : f.hom.left = f.left := rfl
-
-/--
-lemma `Hom.hom_right` / 引理 `Hom.hom_right`
-
-English:
-lemma Hom.hom_right
-  given: {X Y : P.Comma L R Q W} (f : Comma.Hom X Y)
-  statement: f.hom.right = f.right
-  proof: rfl
-
-中文:
-引理 态射.hom_right
-  条件: {X Y : P.交换a L R Q W} (f : 交换a.态射 X Y)
-  结论: f.hom.right = f.right
-  证明: rfl
+/-
+**CategoryTheory.MorphismProperty.Comma.Hom.hom_right** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.MorphismProperty.Comma.Hom`。
+形式化陈述：∀ {A : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} A] {B : Type u
+_2}   [inst_1 : CategoryTheory.Category.{v_2, u_2} B] {T : Type u_3} [inst_2 : C
+ategoryTheory.Category.{v_3, u_3} T]   {L : CategoryTheory.Functor A T} {R : Cat
+egoryTheory.Functor B T} {P : CategoryTheory.MorphismProperty T}   {Q : Category
+Theory.MorphismProperty A} {W : CategoryTheory.MorphismProperty B}   {X Y : Cate
+goryTheory.MorphismProperty.Comma L R P Q W} (f : X.Hom Y), f.hom.right = f.righ
+t
+参数：f : X.Hom Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Hom.hom_right {X Y : P.Comma L R Q W} (f : Comma.Hom X Y) : f.hom.right = f.right := rfl
 
-/--
-Definition of `Hom.Simps.hom` / `Hom.Simps.hom` 的定义
+/-- See Note [custom simps projection] -/
+/-
+**CategoryTheory.MorphismProperty.Comma.Hom.Simps.hom** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.MorphismProperty.Comma.Hom.Simps`。
+形式化陈述：{A : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} A] →     {B 
+: Type u_2} →       [inst_1 : CategoryTheory.Category.{v_2, u_2} B] →         {T
+ : Type u_3} →           [inst_2 : CategoryTheory.Category.{v_3, u_3} T] →      
+       {L : CategoryTheory.Functor A T} →               {R : CategoryTheory.Func
+tor B T} →                 {P : CategoryTheory.MorphismProperty T} →            
+       {Q : CategoryTheory.MorphismProperty A} →                     {W : Catego
+ryTheory.MorphismProperty B} →                       {X Y : CategoryTheory.Morph
+ismProperty.Comma L R P Q W} → X.Hom Y → (X.toComma ⟶ Y.toComma)
+参数：X.toComma ⟶ Y.toComma。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.Simps.hom
-  signature: {X Y : P.Comma L R Q W} (f : X.Hom Y)
-  body: f.hom
-
-initialize_simps_projections Comma.Hom (toCommaMorphism -> hom)
-
-中文:
-定义 态射.Simps.hom
-  签名: {X Y : P.交换a L R Q W} (f : X.态射 Y)
-  定义体: f.hom
-
-initialize_simps_projections Comma.Hom (toCommaMorphism -> hom)
+--- 原说明 ---
+See Note [custom simps projection]
 -/
 def Hom.Simps.hom {X Y : P.Comma L R Q W} (f : X.Hom Y) :
     X.toComma ⟶ Y.toComma :=
   f.hom
 
-initialize_simps_projections Comma.Hom (toCommaMorphism -> hom)
+initialize_simps_projections Comma.Hom (toCommaMorphism → hom)
 
 /-- The identity morphism of an object in `P.Comma L R Q W`. -/
 @[simps]
-/--
-Definition of `id` / `id` 的定义
+/-
+**CategoryTheory.MorphismProperty.Comma.id** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.MorphismProperty.Comma`。
+形式化陈述：id [Q.ContainsIdentities] [W.ContainsIdentities] (X : P.Comma L R Q W) : C
+omma.Hom X X where left
+参数：X : P.Comma L R Q W。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: [Q.ContainsIdentities] [W.ContainsIdentities] (X : P.Comma L R Q W)
-  body: 𝟙 X.left
-  right := 𝟙 X.right
-  prop_hom_left := Q.id_mem X.toComma.left
-  prop_hom_right := W.id_mem X.toComma.right
-
-中文:
-定义 id
-  签名: [Q.余ntainsIdentities] [W.余ntainsIdentities] (X : P.交换a L R Q W)
-  定义体: 𝟙 X.left
-  right := 𝟙 X.right
-  prop_hom_left := Q.id_mem X.toComma.left
-  prop_hom_right := W.id_mem X.toComma.right
-
-Depends on / 依赖: X.left
+--- 原说明 ---
+The identity morphism of an object in `P.Comma L R Q W`.
 -/
 def id [Q.ContainsIdentities] [W.ContainsIdentities] (X : P.Comma L R Q W) : Comma.Hom X X where
   left := 𝟙 X.left
@@ -723,24 +563,23 @@ def id [Q.ContainsIdentities] [W.ContainsIdentities] (X : P.Comma L R Q W) : Com
 
 /-- Composition of morphisms in `P.Comma L R Q W`. -/
 @[simps]
-/--
-Definition of `Hom.comp` / `Hom.comp` 的定义
+/-
+**CategoryTheory.MorphismProperty.Comma.Hom.comp** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.MorphismProperty.Comma.Hom`。
+形式化陈述：{A : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} A] →     {B 
+: Type u_2} →       [inst_1 : CategoryTheory.Category.{v_2, u_2} B] →         {T
+ : Type u_3} →           [inst_2 : CategoryTheory.Category.{v_3, u_3} T] →      
+       {L : CategoryTheory.Functor A T} →               {R : CategoryTheory.Func
+tor B T} →                 {P : CategoryTheory.MorphismProperty T} →            
+       {Q : CategoryTheory.MorphismProperty A} →                     {W : Catego
+ryTheory.MorphismProperty B} →                       [Q.IsStableUnderComposition
+] →                         [W.IsStableUnderComposition] →                      
+     {X Y Z : CategoryTheory.MorphismProperty.Comma L R P Q W} → X.Hom Y → Y.Hom
+ Z → X.Hom Z
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.comp
-  signature: [Q.IsStableUnderComposition] [W.IsStableUnderComposition] {X Y Z : P.Comma L R Q W}
-  body: f.left ≫ g.left
-  right := f.right ≫ g.right
-  prop_hom_left := Q.comp_mem _ _ f.prop_hom_left g.prop_hom_left
-  prop_hom_right := W.comp_mem _ _ f.prop_hom_right g.prop_hom_right
-
-中文:
-定义 态射.comp
-  签名: [Q.是StableUnderComposition] [W.是StableUnderComposition] {X Y Z : P.交换a L R Q W}
-  定义体: f.left ≫ g.left
-  right := f.right ≫ g.right
-  prop_hom_left := Q.comp_mem _ _ f.prop_hom_left g.prop_hom_left
-  prop_hom_right := W.comp_mem _ _ f.prop_hom_right g.prop_hom_right
+--- 原说明 ---
+Composition of morphisms in `P.Comma L R Q W`.
 -/
 def Hom.comp [Q.IsStableUnderComposition] [W.IsStableUnderComposition] {X Y Z : P.Comma L R Q W}
     (f : Comma.Hom X Y) (g : Comma.Hom Y Z) :
@@ -753,71 +592,48 @@ def Hom.comp [Q.IsStableUnderComposition] [W.IsStableUnderComposition] {X Y Z : 
 variable [Q.IsMultiplicative] [W.IsMultiplicative]
 
 variable (L R P Q W) in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (P.Comma L R Q W)
-  body: X.Hom Y
-  id X := X.id
-  comp f g := f.comp g
-
-中文:
-实例 :
-  签名: 范畴 (P.交换a L R Q W)
-  定义体: X.Hom Y
-  id X := X.id
-  comp f g := f.comp g
-
-Depends on / 依赖: X.Hom
+/-
+**CategoryTheory.MorphismProperty.Comma.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.MorphismProperty.Comma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (P.Comma L R Q W) where
   Hom X Y := X.Hom Y
   id X := X.id
   comp f g := f.comp g
-
-/--
-lemma `toCommaMorphism_eq_hom` / 引理 `toCommaMorphism_eq_hom`
-
-English:
-lemma toCommaMorphism_eq_hom
-  given: {X Y : P.Comma L R Q W} (f : X ⟶ Y)
-  statement: f.toCommaMorphism = f.hom
-  proof: rfl
-
-中文:
-引理 toCommaMorphism_eq_hom
-  条件: {X Y : P.交换a L R Q W} (f : X ⟶ Y)
-  结论: f.toCommaMorphism = f.hom
-  证明: rfl
-
-Depends on / 依赖: isIso_hom, uniqueUpToIso
+/-
+**CategoryTheory.MorphismProperty.Comma.toCommaMorphism_eq_hom** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.MorphismProperty.Comma`。
+形式化陈述：toCommaMorphism_eq_hom {X Y : P.Comma L R Q W} (f : X ⟶ Y) : f.toCommaMorp
+hism = f.hom
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toCommaMorphism_eq_hom {X Y : P.Comma L R Q W} (f : X ⟶ Y) : f.toCommaMorphism = f.hom := rfl
 
 /-- Alternative `ext` lemma for `Comma.Hom`. -/
 @[ext]
-/--
-lemma `Hom.ext'` / 引理 `Hom.ext'`
+/-
+**CategoryTheory.MorphismProperty.Comma.Hom.ext'** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.MorphismProperty.Comma.Hom`。
+形式化陈述：∀ {A : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} A] {B : Type u
+_2}   [inst_1 : CategoryTheory.Category.{v_2, u_2} B] {T : Type u_3} [inst_2 : C
+ategoryTheory.Category.{v_3, u_3} T]   {L : CategoryTheory.Functor A T} {R : Cat
+egoryTheory.Functor B T} {P : CategoryTheory.MorphismProperty T}   {Q : Category
+Theory.MorphismProperty A} {W : CategoryTheory.MorphismProperty B} [inst_3 : Q.I
+sMultiplicative]   [inst_4 : W.IsMultiplicative] {X Y : CategoryTheory.MorphismP
+roperty.Comma L R P Q W} {f g : X ⟶ Y},   CategoryTheory.MorphismProperty.Comma.
+Hom.hom f = CategoryTheory.MorphismProperty.Comma.Hom.hom g → f = g
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.Comma.Hom.ext`：∀ {A : Type u_1} {inst : 
+CategoryTheory.Category.{v_1, u_1} A} {B : Type u_2}   {inst_1 : CategoryTheory.
+Category.{v_2, u_2} B} {T : Type u_…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 
-English:
-lemma Hom.ext'
-  given: {X Y : P.Comma L R Q W} {f g : X ⟶ Y} (h : f.hom = g.hom)
-  proof: Comma.Hom.ext
-  (congrArg CommaMorphism.left h)
-  (congrArg CommaMorphism.right h)
-
-@[simp]
-
-中文:
-引理 态射.ext'
-  条件: {X Y : P.交换a L R Q W} {f g : X ⟶ Y} (h : f.hom = g.hom)
-  证明: Comma.Hom.ext
-  (congrArg CommaMorphism.left h)
-  (congrArg CommaMorphism.right h)
-
-@[simp]
+--- 原说明 ---
+Alternative `ext` lemma for `Comma.Hom`.
 -/
 lemma Hom.ext' {X Y : P.Comma L R Q W} {f g : X ⟶ Y} (h : f.hom = g.hom) :
     f = g := Comma.Hom.ext
@@ -825,104 +641,69 @@ lemma Hom.ext' {X Y : P.Comma L R Q W} {f g : X ⟶ Y} (h : f.hom = g.hom) :
   (congrArg CommaMorphism.right h)
 
 @[simp]
-/--
-lemma `id_hom` / 引理 `id_hom`
-
-English:
-lemma id_hom
-  given: (X : P.Comma L R Q W)
-  statement: (𝟙 X : X ⟶ X).hom = 𝟙 X.toComma
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 id_hom
-  条件: (X : P.交换a L R Q W)
-  结论: (𝟙 X : X ⟶ X).hom = 𝟙 X.toComma
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.MorphismProperty.Comma.id_hom** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.MorphismProperty.Comma`。
+形式化陈述：id_hom (X : P.Comma L R Q W) : (𝟙 X : X ⟶ X).hom = 𝟙 X.toComma
+参数：X : P.Comma L R Q W。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma id_hom (X : P.Comma L R Q W) : (𝟙 X : X ⟶ X).hom = 𝟙 X.toComma := rfl
 
 @[simp]
-/--
-lemma `comp_hom` / 引理 `comp_hom`
-
-English:
-lemma comp_hom
-  given: {X Y Z : P.Comma L R Q W} (f : X ⟶ Y) (g : Y ⟶ Z)
-  proof: rfl
-
-@[reassoc]
-
-中文:
-引理 comp_hom
-  条件: {X Y Z : P.交换a L R Q W} (f : X ⟶ Y) (g : Y ⟶ Z)
-  证明: rfl
-
-@[reassoc]
+/-
+**CategoryTheory.MorphismProperty.Comma.comp_hom** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.MorphismProperty.Comma`。
+形式化陈述：comp_hom {X Y Z : P.Comma L R Q W} (f : X ⟶ Y) (g : Y ⟶ Z) : (f ≫ g).hom =
+ f.hom ≫ g.hom
+参数：f : X ⟶ Y；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comp_hom {X Y Z : P.Comma L R Q W} (f : X ⟶ Y) (g : Y ⟶ Z) :
     (f ≫ g).hom = f.hom ≫ g.hom := rfl
 
 @[reassoc]
-/--
-lemma `comp_left` / 引理 `comp_left`
-
-English:
-lemma comp_left
-  given: {X Y Z : P.Comma L R Q W} (f : X ⟶ Y) (g : Y ⟶ Z)
-  proof: rfl
-
-@[reassoc]
-
-中文:
-引理 comp_left
-  条件: {X Y Z : P.交换a L R Q W} (f : X ⟶ Y) (g : Y ⟶ Z)
-  证明: rfl
-
-@[reassoc]
+/-
+**CategoryTheory.MorphismProperty.Comma.comp_left** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.MorphismProperty.Comma`。
+形式化陈述：comp_left {X Y Z : P.Comma L R Q W} (f : X ⟶ Y) (g : Y ⟶ Z) : (f ≫ g).left
+ = f.left ≫ g.left
+参数：f : X ⟶ Y；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comp_left {X Y Z : P.Comma L R Q W} (f : X ⟶ Y) (g : Y ⟶ Z) :
     (f ≫ g).left = f.left ≫ g.left := rfl
 
 @[reassoc]
-/--
-lemma `comp_right` / 引理 `comp_right`
-
-English:
-lemma comp_right
-  given: {X Y Z : P.Comma L R Q W} (f : X ⟶ Y) (g : Y ⟶ Z)
-  proof: rfl
-
-中文:
-引理 comp_right
-  条件: {X Y Z : P.交换a L R Q W} (f : X ⟶ Y) (g : Y ⟶ Z)
-  证明: rfl
+/-
+**CategoryTheory.MorphismProperty.Comma.comp_right** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.MorphismProperty.Comma`。
+形式化陈述：comp_right {X Y Z : P.Comma L R Q W} (f : X ⟶ Y) (g : Y ⟶ Z) : (f ≫ g).rig
+ht = f.right ≫ g.right
+参数：f : X ⟶ Y；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comp_right {X Y Z : P.Comma L R Q W} (f : X ⟶ Y) (g : Y ⟶ Z) :
     (f ≫ g).right = f.right ≫ g.right := rfl
 
 /-- If `i` is an isomorphism in `Comma L R`, it is also a morphism in `P.Comma L R Q W`. -/
 @[simps hom]
-/--
-Definition of `homFromCommaOfIsIso` / `homFromCommaOfIsIso` 的定义
+/-
+**CategoryTheory.MorphismProperty.Comma.homFromCommaOfIsIso** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.MorphismProperty.Comma`。
+形式化陈述：homFromCommaOfIsIso [Q.RespectsIso] [W.RespectsIso] {X Y : P.Comma L R Q W
+} (i : X.toComma ⟶ Y.toComma) [IsIso i] : X ⟶ Y where __
+参数：i : X.toComma ⟶ Y.toComma。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homFromCommaOfIsIso
-  signature: [Q.RespectsIso] [W.RespectsIso] {X Y : P.Comma L R Q W}
-  body: i
-  prop_hom_left := Q.of_isIso i.left
-  prop_hom_right := W.of_isIso i.right
-
-中文:
-定义 homFromCommaOfIsIso
-  签名: [Q.RespectsIso] [W.RespectsIso] {X Y : P.交换a L R Q W}
-  定义体: i
-  prop_hom_left := Q.of_isIso i.left
-  prop_hom_right := W.of_isIso i.right
+--- 原说明 ---
+If `i` is an isomorphism in `Comma L R`, it is also a morphism in `P.Comma L R Q
+ W`.
 -/
 def homFromCommaOfIsIso [Q.RespectsIso] [W.RespectsIso] {X Y : P.Comma L R Q W}
     (i : X.toComma ⟶ Y.toComma) [IsIso i] :
@@ -930,27 +711,10 @@ def homFromCommaOfIsIso [Q.RespectsIso] [W.RespectsIso] {X Y : P.Comma L R Q W}
   __ := i
   prop_hom_left := Q.of_isIso i.left
   prop_hom_right := W.of_isIso i.right
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Q.RespectsIso]
-  signature: [W.RespectsIso] {X Y : P.Comma L R Q W} (i : X.toComma ⟶ Y.toComma)
-  body: by
-  constructor
-  use homFromCommaOfIsIso (inv i)
-  constructor <;> ext : 1 <;> simp
-
-中文:
-实例 [Q.RespectsIso]
-  签名: [W.RespectsIso] {X Y : P.交换a L R Q W} (i : X.toComma ⟶ Y.toComma)
-  定义体: by
-  constructor
-  use homFromCommaOfIsIso (inv i)
-  constructor <;> ext : 1 <;> simp
-
-Depends on / 依赖: homFromCommaOfIsIso
+/-
+**CategoryTheory.MorphismProperty.Comma.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.MorphismProperty.Comma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Q.RespectsIso] [W.RespectsIso] {X Y : P.Comma L R Q W} (i : X.toComma ⟶ Y.toComma)
     [IsIso i] : IsIso (homFromCommaOfIsIso i) := by
@@ -961,22 +725,19 @@ instance [Q.RespectsIso] [W.RespectsIso] {X Y : P.Comma L R Q W} (i : X.toComma 
 /-- Any isomorphism between objects of `P.Comma L R Q W` in `Comma L R` is also an isomorphism
 in `P.Comma L R Q W`. -/
 @[simps]
-/--
-Definition of `isoFromComma` / `isoFromComma` 的定义
+/-
+**CategoryTheory.MorphismProperty.Comma.isoFromComma** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.MorphismProperty.Comma`。
+形式化陈述：isoFromComma [Q.RespectsIso] [W.RespectsIso] {X Y : P.Comma L R Q W} (i : 
+X.toComma ≅ Y.toComma) : X ≅ Y where hom
+参数：i : X.toComma ≅ Y.toComma。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoFromComma
-  signature: [Q.RespectsIso] [W.RespectsIso] {X Y : P.Comma L R Q W}
-  body: homFromCommaOfIsIso i.hom
-  inv := homFromCommaOfIsIso i.inv
-
-中文:
-定义 isoFromComma
-  签名: [Q.RespectsIso] [W.RespectsIso] {X Y : P.交换a L R Q W}
-  定义体: homFromCommaOfIsIso i.hom
-  inv := homFromCommaOfIsIso i.inv
-
-Depends on / 依赖: homFromCommaOfIsIso, i.hom
+--- 原说明 ---
+Any isomorphism between objects of `P.Comma L R Q W` in `Comma L R` is also an i
+somorphism
+in `P.Comma L R Q W`.
 -/
 def isoFromComma [Q.RespectsIso] [W.RespectsIso] {X Y : P.Comma L R Q W}
     (i : X.toComma ≅ Y.toComma) : X ≅ Y where
@@ -986,20 +747,18 @@ def isoFromComma [Q.RespectsIso] [W.RespectsIso] {X Y : P.Comma L R Q W}
 /-- Constructor for isomorphisms in `P.Comma L R Q W` from isomorphisms of the left and right
 components and naturality in the forward direction. -/
 @[simps!]
-/--
-Definition of `isoMk` / `isoMk` 的定义
+/-
+**CategoryTheory.MorphismProperty.Comma.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.MorphismProperty.Comma`。
+形式化陈述：isoMk [Q.RespectsIso] [W.RespectsIso] {X Y : P.Comma L R Q W} (l : X.left 
+≅ Y.left) (r : X.right ≅ Y.right) (h : L.map l.hom ≫ Y.hom = X.hom ≫ R.map r.hom
+参数：l : X.left ≅ Y.left；r : X.right ≅ Y.right。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoMk
-  signature: [Q.RespectsIso] [W.RespectsIso] {X Y : P.Comma L R Q W} (l : X.left ≅ Y.left)
-  body: isoFromComma (CategoryTheory.Comma.isoMk l r h)
-
-中文:
-定义 isoMk
-  签名: [Q.RespectsIso] [W.RespectsIso] {X Y : P.交换a L R Q W} (l : X.left ≅ Y.left)
-  定义体: isoFromComma (CategoryTheory.Comma.isoMk l r h)
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Comma.isoMk, cat_disch, isoFromComma
+--- 原说明 ---
+Constructor for isomorphisms in `P.Comma L R Q W` from isomorphisms of the left 
+and right
+components and naturality in the forward direction.
 -/
 def isoMk [Q.RespectsIso] [W.RespectsIso] {X Y : P.Comma L R Q W} (l : X.left ≅ Y.left)
     (r : X.right ≅ Y.right) (h : L.map l.hom ≫ Y.hom = X.hom ≫ R.map r.hom := by cat_disch) :
@@ -1010,116 +769,82 @@ variable (L R P Q W)
 
 /-- The forgetful functor. -/
 @[simps]
-/--
-Definition of `forget` / `forget` 的定义
+/-
+**CategoryTheory.MorphismProperty.Comma.forget** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.MorphismProperty.Comma`。
+形式化陈述：forget : P.Comma L R Q W ⥤ Comma L R where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forget
-  signature: : P.Comma L R Q W ⥤ Comma L R where
-  body: X.toComma
-  map f := f.hom
-
-中文:
-定义 forget
-  签名: : P.交换a L R Q W ⥤ 交换a L R where
-  定义体: X.toComma
-  map f := f.hom
-
-Depends on / 依赖: X.toComma, toComma
+--- 原说明 ---
+The forgetful functor.
 -/
 def forget : P.Comma L R Q W ⥤ Comma L R where
   obj X := X.toComma
   map f := f.hom
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget L R P Q W).Faithful
-  body: Comma.Hom.ext'
-
-中文:
-实例 :
-  签名: (forget L R P Q W).忠实
-  定义体: Comma.Hom.ext'
-
-Depends on / 依赖: Comma.Hom.ext
+/-
+**CategoryTheory.MorphismProperty.Comma.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.MorphismProperty.Comma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget L R P Q W).Faithful where
   map_injective := Comma.Hom.ext'
 
 variable {L R P Q W}
-
+/-
+**CategoryTheory.MorphismProperty.Comma.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.MorphismProperty.Comma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : P.Comma L R Q W} (f : X ⟶ Y) [IsIso f] : IsIso f.hom :=
   (forget L R P Q W).map_isIso f
-
-/--
-lemma `hom_homFromCommaOfIsIso` / 引理 `hom_homFromCommaOfIsIso`
-
-English:
-lemma hom_homFromCommaOfIsIso
-  statement: [Q.RespectsIso] [W.RespectsIso] {X Y : P.Comma L R Q W}
-  proof: rfl
-
-中文:
-引理 hom_homFromCommaOfIsIso
-  结论: [Q.RespectsIso] [W.RespectsIso] {X Y : P.交换a L R Q W}
-  证明: rfl
+/-
+**CategoryTheory.MorphismProperty.Comma.hom_homFromCommaOfIsIso** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.MorphismProperty.Comma`。
+形式化陈述：hom_homFromCommaOfIsIso [Q.RespectsIso] [W.RespectsIso] {X Y : P.Comma L R
+ Q W} (i : X ⟶ Y) [IsIso i.hom] : homFromCommaOfIsIso i.hom = i
+参数：i : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_homFromCommaOfIsIso [Q.RespectsIso] [W.RespectsIso] {X Y : P.Comma L R Q W}
     (i : X ⟶ Y) [IsIso i.hom] :
     homFromCommaOfIsIso i.hom = i :=
   rfl
-
-/--
-lemma `inv_hom` / 引理 `inv_hom`
-
-English:
-lemma inv_hom
-  given: {X Y : P.Comma L R Q W} (f : X ⟶ Y) [IsIso f]
-  statement: (inv f).hom = inv f.hom
-  proof: by
-  apply IsIso.eq_inv_of_hom_inv_id
-  rw [← comp_hom]; rw [IsIso.hom_inv_id]; rw [id_hom]
-
-中文:
-引理 inv_hom
-  条件: {X Y : P.交换a L R Q W} (f : X ⟶ Y) [是同构 f]
-  结论: (inv f).hom = inv f.hom
-  证明: by
-  apply IsIso.eq_inv_of_hom_inv_id
-  rw [← comp_hom]; rw [IsIso.hom_inv_id]; rw [id_hom]
-
-Depends on / 依赖: IsIso.eq_inv_of_hom_inv_id, IsIso.hom_inv_id, comp_hom, eq_inv_of_hom_inv_id, hom_inv_id, id_hom
+/-
+**CategoryTheory.MorphismProperty.Comma.inv_hom** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.MorphismProperty.Comma`。
+形式化陈述：inv_hom {X Y : P.Comma L R Q W} (f : X ⟶ Y) [IsIso f] : (inv f).hom = inv 
+f.hom
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsIso.eq_inv_of_hom_inv_id`：eq_inv_of_hom_inv_id {f : X ⟶
+ Y} [IsIso f] {g : Y ⟶ X} (hom_inv_id : f ≫ g = 𝟙 X) : g = inv f
+· 使用定理 `CategoryTheory.MorphismProperty.Comma.instIsIsoCommaHom`：∀ {A : Type u_1
+} [inst : CategoryTheory.Category.{v_1, u_1} A] {B : Type u_2}   [inst_1 : Categ
+oryTheory.Category.{v_2, u_2} B] {T : Type u_…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.MorphismProperty.Comma.comp_hom`：comp_hom {X Y Z : P.Comm
+a L R Q W} (f : X ⟶ Y) (g : Y ⟶ Z) : (f ≫ g).hom = f.hom ≫ g.hom
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id`：hom_inv_id (f : X ⟶ Y) [I : IsIso f] : 
+f ≫ inv f = 𝟙 X
+· 使用引理 `CategoryTheory.MorphismProperty.Comma.id_hom`：id_hom (X : P.Comma L R Q 
+W) : (𝟙 X : X ⟶ X).hom = 𝟙 X.toComma
 -/
 lemma inv_hom {X Y : P.Comma L R Q W} (f : X ⟶ Y) [IsIso f] : (inv f).hom = inv f.hom := by
   apply IsIso.eq_inv_of_hom_inv_id
-  rw [← comp_hom]; rw [IsIso.hom_inv_id]; rw [id_hom]
+  rw [← comp_hom, IsIso.hom_inv_id, id_hom]
 
 variable (L R P Q W)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Q.RespectsIso]
-  signature: [W.RespectsIso]
-  body: by
-    simp only [forget_obj, forget_map] at hf
-    rw [← hom_homFromCommaOfIsIso f]
-    infer_instance
-
-中文:
-实例 [Q.RespectsIso]
-  签名: [W.RespectsIso]
-  定义体: by
-    simp only [forget_obj, forget_map] at hf
-    rw [← hom_homFromCommaOfIsIso f]
-    infer_instance
-
-Depends on / 依赖: forget_map, forget_obj, hom_homFromCommaOfIsIso, infer_instance
+/-
+**CategoryTheory.MorphismProperty.Comma.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.MorphismProperty.Comma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Q.RespectsIso] [W.RespectsIso] : (forget L R P Q W).ReflectsIsomorphisms where
   reflects f hf := by
@@ -1127,36 +852,29 @@ instance [Q.RespectsIso] [W.RespectsIso] : (forget L R P Q W).ReflectsIsomorphis
     rw [← hom_homFromCommaOfIsIso f]
     infer_instance
 
-/--
-Definition of `forgetFullyFaithful` / `forgetFullyFaithful` 的定义
+/-- The forgetful functor from the full subcategory of `Comma L R` defined by `P` is
+fully faithful. -/
+/-
+**CategoryTheory.MorphismProperty.Comma.forgetFullyFaithful** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.MorphismProperty.Comma`。
+形式化陈述：forgetFullyFaithful : (forget L R P ⊤ ⊤).FullyFaithful where preimage {X Y
+} f
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用定理 `trivial`：True
 
-English:
-definition forgetFullyFaithful
-  signature: : (forget L R P ⊤ ⊤).FullyFaithful where
-  body: ⟨f, trivial, trivial⟩
-
-中文:
-定义 forgetFullyFaithful
-  签名: : (forget L R P ⊤ ⊤).满忠实 where
-  定义体: ⟨f, trivial, trivial⟩
+--- 原说明 ---
+The forgetful functor from the full subcategory of `Comma L R` defined by `P` is
+fully faithful.
 -/
 def forgetFullyFaithful : (forget L R P ⊤ ⊤).FullyFaithful where
   preimage {X Y} f := ⟨f, trivial, trivial⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget L R P ⊤ ⊤).Full
-  body: Functor.FullyFaithful.full (forgetFullyFaithful L R P)
-
-中文:
-实例 :
-  签名: (forget L R P ⊤ ⊤).满
-  定义体: Functor.FullyFaithful.full (forgetFullyFaithful L R P)
-
-Depends on / 依赖: FullyFaithful, Functor, Functor.FullyFaithful.full, forgetFullyFaithful
+/-
+**CategoryTheory.MorphismProperty.Comma.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.MorphismProperty.Comma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget L R P ⊤ ⊤).Full :=
   Functor.FullyFaithful.full (forgetFullyFaithful L R P)
@@ -1166,26 +884,14 @@ section
 variable {L R}
 
 @[simp]
-/--
-lemma `eqToHom_left` / 引理 `eqToHom_left`
-
-English:
-lemma eqToHom_left
-  given: {X Y : P.Comma L R Q W} (h : X = Y)
-  proof: by
-  subst h
-  rfl
-
-@[simp]
-
-中文:
-引理 eqToHom_left
-  条件: {X Y : P.交换a L R Q W} (h : X = Y)
-  证明: by
-  subst h
-  rfl
-
-@[simp]
+/-
+**CategoryTheory.MorphismProperty.Comma.eqToHom_left** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.MorphismProperty.Comma`。
+形式化陈述：eqToHom_left {X Y : P.Comma L R Q W} (h : X = Y) : (eqToHom h).left = eqTo
+Hom (by rw [h])
+参数：h : X = Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma eqToHom_left {X Y : P.Comma L R Q W} (h : X = Y) :
     (eqToHom h).left = eqToHom (by rw [h]) := by
@@ -1193,22 +899,14 @@ lemma eqToHom_left {X Y : P.Comma L R Q W} (h : X = Y) :
   rfl
 
 @[simp]
-/--
-lemma `eqToHom_right` / 引理 `eqToHom_right`
-
-English:
-lemma eqToHom_right
-  given: {X Y : P.Comma L R Q W} (h : X = Y)
-  proof: by
-  subst h
-  rfl
-
-中文:
-引理 eqToHom_right
-  条件: {X Y : P.交换a L R Q W} (h : X = Y)
-  证明: by
-  subst h
-  rfl
+/-
+**CategoryTheory.MorphismProperty.Comma.eqToHom_right** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.MorphismProperty.Comma`。
+形式化陈述：eqToHom_right {X Y : P.Comma L R Q W} (h : X = Y) : (eqToHom h).right = eq
+ToHom (by rw [h])
+参数：h : X = Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma eqToHom_right {X Y : P.Comma L R Q W} (h : X = Y) :
     (eqToHom h).right = eqToHom (by rw [h]) := by
@@ -1220,80 +918,50 @@ end
 section
 
 variable {P P' : MorphismProperty T} {Q Q' : MorphismProperty A} {W W' : MorphismProperty B}
-  (hP : P <= P') (hQ : Q <= Q') (hW : W <= W')
+  (hP : P ≤ P') (hQ : Q ≤ Q') (hW : W ≤ W')
 
 variable [Q.IsMultiplicative] [Q'.IsMultiplicative] [W.IsMultiplicative] [W'.IsMultiplicative]
 
-/--
-Definition of `changeProp` / `changeProp` 的定义
+/-- Weaken the conditions on all components. -/
+/-
+**CategoryTheory.MorphismProperty.Comma.changeProp** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.MorphismProperty.Comma`。
+形式化陈述：changeProp : P.Comma L R Q W ⥤ P'.Comma L R Q' W' where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition changeProp
-  signature: : P.Comma L R Q W ⥤ P'.Comma L R Q' W' where
-  body: ⟨X.toComma, hP _ X.2⟩
-  map f := ⟨f.toCommaMorphism, hQ _ f.2, hW _ f.3⟩
-
-中文:
-定义 changeProp
-  签名: : P.交换a L R Q W ⥤ P'.交换a L R Q' W' where
-  定义体: ⟨X.toComma, hP _ X.2⟩
-  map f := ⟨f.toCommaMorphism, hQ _ f.2, hW _ f.3⟩
-
-Depends on / 依赖: X.toComma, toComma
+--- 原说明 ---
+Weaken the conditions on all components.
 -/
 def changeProp : P.Comma L R Q W ⥤ P'.Comma L R Q' W' where
   obj X := ⟨X.toComma, hP _ X.2⟩
   map f := ⟨f.toCommaMorphism, hQ _ f.2, hW _ f.3⟩
 
-/--
-Definition of `fullyFaithfulChangeProp` / `fullyFaithfulChangeProp` 的定义
+/-- Weakening the condition on the structure morphisms is fully faithful. -/
+/-
+**CategoryTheory.MorphismProperty.Comma.fullyFaithfulChangeProp** 是 Mathlib 中的一个
+定义，位于命名空间 `CategoryTheory.MorphismProperty.Comma`。
+形式化陈述：fullyFaithfulChangeProp : (changeProp (Q
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithfulChangeProp
-  signature: :
-  body: ⟨f.toCommaMorphism, f.2, f.3⟩
-
-中文:
-定义 fullyFaithfulChangeProp
-  签名: :
-  定义体: ⟨f.toCommaMorphism, f.2, f.3⟩
-
-Depends on / 依赖: FullyFaithful, le_rfl
+--- 原说明 ---
+Weakening the condition on the structure morphisms is fully faithful.
 -/
 def fullyFaithfulChangeProp :
     (changeProp (Q := Q) (W := W) L R hP le_rfl le_rfl).FullyFaithful where
   preimage f := ⟨f.toCommaMorphism, f.2, f.3⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (changeProp L R hP hQ hW).Faithful
-  body: by ext : 1; exact congr($(h).hom)
-
-中文:
-实例 :
-  签名: (changeProp L R hP hQ hW).忠实
-  定义体: by ext : 1; exact congr($(h).hom)
+/-
+**CategoryTheory.MorphismProperty.Comma.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.MorphismProperty.Comma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (changeProp L R hP hQ hW).Faithful where
   map_injective {X Y} f g h := by ext : 1; exact congr($(h).hom)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (changeProp (Q := Q) (W := W) L R hP le_rfl le_rfl).Full
-  body: (fullyFaithfulChangeProp ..).full
-
-中文:
-实例 :
-  签名: (changeProp (Q := Q) (W := W) L R hP le_rfl le_rfl).满
-  定义体: (fullyFaithfulChangeProp ..).full
-
-Depends on / 依赖: le_rfl
+/-
+**CategoryTheory.MorphismProperty.Comma.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.MorphismProperty.Comma`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (changeProp (Q := Q) (W := W) L R hP le_rfl le_rfl).Full :=
   (fullyFaithfulChangeProp ..).full
@@ -1308,35 +976,25 @@ variable {L₁ L₂ L₃ : A ⥤ T} {R₁ R₂ R₃ : B ⥤ T}
 /-- Lift a functor `F : C ⥤ Comma L R` to the subcategory `P.Comma L R Q W` under
 suitable assumptions on `F`. -/
 @[simps obj_toComma map_hom]
-/--
-Definition of `lift` / `lift` 的定义
+/-
+**CategoryTheory.MorphismProperty.Comma.lift** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.MorphismProperty.Comma`。
+形式化陈述：lift {C : Type*} [Category* C] (F : C ⥤ Comma L R) (hP : forall X, P (F.ob
+j X).hom) (hQ : forall {X Y} (f : X ⟶ Y), Q (F.map f).left) (hW : forall {X Y} (
+f : X ⟶ Y), W (F.map f).right) : C ⥤ P.Comma L R Q W where obj X
+参数：F : C ⥤ Comma L R；hP : forall X, P (F.obj X).hom；hQ : forall {X Y} (f : X ⟶ Y
+), Q (F.map f).left；hW : forall {X Y} (f : X ⟶ Y), W (F.map f).right。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: {C : Type*} [Category* C] (F : C ⥤ Comma L R)
-  body: { __ := F.obj X
-      prop := hP X }
-  map {X Y} f :=
-    { __ := F.map f
-      prop_hom_left := hQ f
-      prop_hom_right := hW f }
-
-中文:
-定义 lift
-  签名: {C : 类型} [范畴* C] (F : C ⥤ 交换a L R)
-  定义体: { __ := F.obj X
-      prop := hP X }
-  map {X Y} f :=
-    { __ := F.map f
-      prop_hom_left := hQ f
-      prop_hom_right := hW f }
-
-Depends on / 依赖: F.map, F.obj, prop_hom_left, prop_hom_right
+--- 原说明 ---
+Lift a functor `F : C ⥤ Comma L R` to the subcategory `P.Comma L R Q W` under
+suitable assumptions on `F`.
 -/
 def lift {C : Type*} [Category* C] (F : C ⥤ Comma L R)
-    (hP : forall X, P (F.obj X).hom)
-    (hQ : forall {X Y} (f : X ⟶ Y), Q (F.map f).left)
-    (hW : forall {X Y} (f : X ⟶ Y), W (F.map f).right) :
+    (hP : ∀ X, P (F.obj X).hom)
+    (hQ : ∀ {X Y} (f : X ⟶ Y), Q (F.map f).left)
+    (hW : ∀ {X Y} (f : X ⟶ Y), W (F.map f).right) :
     C ⥤ P.Comma L R Q W where
   obj X :=
     { __ := F.obj X
@@ -1349,50 +1007,49 @@ def lift {C : Type*} [Category* C] (F : C ⥤ Comma L R)
 variable (R) in
 /-- A natural transformation `L₁ ⟶ L₂` induces a functor `P.Comma L₂ R Q W ⥤ P.Comma L₁ R Q W`. -/
 @[simps!]
-/--
-Definition of `mapLeft` / `mapLeft` 的定义
+/-
+**CategoryTheory.MorphismProperty.Comma.mapLeft** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.MorphismProperty.Comma`。
+形式化陈述：mapLeft (l : L₁ ⟶ L₂) (hl : forall X : P.Comma L₂ R Q W, P (l.app X.left ≫
+ X.hom)) : P.Comma L₂ R Q W ⥤ P.Comma L₁ R Q W
+参数：l : L₁ ⟶ L₂；hl : forall X : P.Comma L₂ R Q W, P (l.app X.left ≫ X.hom)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.Comma.Hom.prop_hom_left`：∀ {A : Type u_1
+} [inst : CategoryTheory.Category.{v_1, u_1} A] {B : Type u_2}   [inst_1 : Categ
+oryTheory.Category.{v_2, u_2} B] {T : Type u_…
+· 使用定理 `CategoryTheory.MorphismProperty.Comma.Hom.prop_hom_right`：∀ {A : Type u_
+1} [inst : CategoryTheory.Category.{v_1, u_1} A] {B : Type u_2}   [inst_1 : Cate
+goryTheory.Category.{v_2, u_2} B] {T : Type u_…
 
-English:
-definition mapLeft
-  signature: (l : L₁ ⟶ L₂) (hl : forall X : P.Comma L₂ R Q W, P (l.app X.left ≫ X.hom))
-  body: lift (forget _ _ _ _ _ ⋙ CategoryTheory.Comma.mapLeft R l) hl
-    (fun f => f.prop_hom_left) (fun f => f.prop_hom_right)
-
-中文:
-定义 mapLeft
-  签名: (l : L₁ ⟶ L₂) (hl : 对任意 X : P.交换a L₂ R Q W, P (l.app X.left ≫ X.hom))
-  定义体: lift (forget _ _ _ _ _ ⋙ CategoryTheory.Comma.mapLeft R l) hl
-    (fun f => f.prop_hom_left) (fun f => f.prop_hom_right)
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Comma.mapLeft, f.prop_hom_left, f.prop_hom_right, forget, mapLeft, prop_hom_left, prop_hom_right
+--- 原说明 ---
+A natural transformation `L₁ ⟶ L₂` induces a functor `P.Comma L₂ R Q W ⥤ P.Comma
+ L₁ R Q W`.
 -/
-def mapLeft (l : L₁ ⟶ L₂) (hl : forall X : P.Comma L₂ R Q W, P (l.app X.left ≫ X.hom)) :
+def mapLeft (l : L₁ ⟶ L₂) (hl : ∀ X : P.Comma L₂ R Q W, P (l.app X.left ≫ X.hom)) :
     P.Comma L₂ R Q W ⥤ P.Comma L₁ R Q W :=
   lift (forget _ _ _ _ _ ⋙ CategoryTheory.Comma.mapLeft R l) hl
-    (fun f => f.prop_hom_left) (fun f => f.prop_hom_right)
+    (fun f ↦ f.prop_hom_left) (fun f ↦ f.prop_hom_right)
 
 set_option backward.isDefEq.respectTransparency.types false in
 variable (L R) in
 /-- The functor `P.Comma L R Q W ⥤ P.Comma L R Q W` induced by the identity natural transformation
 on `L` is naturally isomorphic to the identity functor. -/
 @[simps!]
-/--
-Definition of `mapLeftId` / `mapLeftId` 的定义
+/-
+**CategoryTheory.MorphismProperty.Comma.mapLeftId** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.MorphismProperty.Comma`。
+形式化陈述：mapLeftId [Q.RespectsIso] [W.RespectsIso] : mapLeft (P
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapLeftId
-  signature: [Q.RespectsIso] [W.RespectsIso]
-  body: NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
-
-中文:
-定义 mapLeftId
-  签名: [Q.RespectsIso] [W.RespectsIso]
-  定义体: NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
-
-Depends on / 依赖: X.prop
+--- 原说明 ---
+The functor `P.Comma L R Q W ⥤ P.Comma L R Q W` induced by the identity natural 
+transformation
+on `L` is naturally isomorphic to the identity functor.
 -/
 def mapLeftId [Q.RespectsIso] [W.RespectsIso] :
-    mapLeft (P := P) (Q := Q) (W := W) R (𝟙 L) (fun X => by simpa using X.prop) ≅ 𝟭 _ :=
+    mapLeft (P := P) (Q := Q) (W := W) R (𝟙 L) (fun X ↦ by simpa using X.prop) ≅ 𝟭 _ :=
   NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
 
 set_option backward.isDefEq.respectTransparency.types false in
@@ -1401,23 +1058,30 @@ variable (R) in
 transformations `l : L₁ ⟶ L₂` and `l' : L₂ ⟶ L₃` is naturally isomorphic to the composition of the
 two functors induced by these natural transformations. -/
 @[simps!]
-/--
-Definition of `mapLeftComp` / `mapLeftComp` 的定义
+/-
+**CategoryTheory.MorphismProperty.Comma.mapLeftComp** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.MorphismProperty.Comma`。
+形式化陈述：mapLeftComp [Q.RespectsIso] [W.RespectsIso] (l : L₁ ⟶ L₂) (l' : L₂ ⟶ L₃) (
+hl : forall (X : P.Comma L₂ R Q W), P (l.app X.left ≫ X.hom)) (hl' : forall (X :
+ P.Comma L₃ R Q W), P (l'.app X.left ≫ X.hom)) (hll' : forall (X : P.Comma L₃ R 
+Q W), P ((l ≫ l').app X.left ≫ X.hom)) : mapLeft (P
+参数：l : L₁ ⟶ L₂；l' : L₂ ⟶ L₃；hl : forall (X : P.Comma L₂ R Q W), P (l.app X.left 
+≫ X.hom)；hl' : forall (X : P.Comma L₃ R Q W), P (l'.app X.left ≫ X.hom)；hll' : f
+orall (X : P.Comma L₃ R Q W), P ((l ≫ l').app X.left ≫ X.hom)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapLeftComp
-  signature: [Q.RespectsIso] [W.RespectsIso] (l : L₁ ⟶ L₂) (l' : L₂ ⟶ L₃)
-  body: NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
-
-中文:
-定义 mapLeftComp
-  签名: [Q.RespectsIso] [W.RespectsIso] (l : L₁ ⟶ L₂) (l' : L₂ ⟶ L₃)
-  定义体: NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
+--- 原说明 ---
+The functor `P.Comma L₁ R Q W ⥤ P.Comma L₃ R Q W` induced by the composition of 
+two natural
+transformations `l : L₁ ⟶ L₂` and `l' : L₂ ⟶ L₃` is naturally isomorphic to the 
+composition of the
+two functors induced by these natural transformations.
 -/
 def mapLeftComp [Q.RespectsIso] [W.RespectsIso] (l : L₁ ⟶ L₂) (l' : L₂ ⟶ L₃)
-    (hl : forall (X : P.Comma L₂ R Q W), P (l.app X.left ≫ X.hom))
-    (hl' : forall (X : P.Comma L₃ R Q W), P (l'.app X.left ≫ X.hom))
-    (hll' : forall (X : P.Comma L₃ R Q W), P ((l ≫ l').app X.left ≫ X.hom)) :
+    (hl : ∀ (X : P.Comma L₂ R Q W), P (l.app X.left ≫ X.hom))
+    (hl' : ∀ (X : P.Comma L₃ R Q W), P (l'.app X.left ≫ X.hom))
+    (hll' : ∀ (X : P.Comma L₃ R Q W), P ((l ≫ l').app X.left ≫ X.hom)) :
     mapLeft (P := P) (Q := Q) (W := W) R (l ≫ l') hll' ≅
       mapLeft R l' hl' ⋙ mapLeft R l hl :=
   NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
@@ -1427,23 +1091,23 @@ variable (R) in
 /-- Two equal natural transformations `L₁ ⟶ L₂` yield naturally isomorphic functors
 `P.Comma L₁ R Q W ⥤ P.Comma L₂ R Q W`. -/
 @[simps!]
-/--
-Definition of `mapLeftEq` / `mapLeftEq` 的定义
+/-
+**CategoryTheory.MorphismProperty.Comma.mapLeftEq** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.MorphismProperty.Comma`。
+形式化陈述：mapLeftEq [Q.RespectsIso] [W.RespectsIso] (l l' : L₁ ⟶ L₂) (h : l = l') (h
+l : forall (X : P.Comma L₂ R Q W), P (l.app X.left ≫ X.hom)) : mapLeft R l hl ≅ 
+mapLeft R l' (h ▸ hl)
+参数：l l' : L₁ ⟶ L₂；h : l = l'；hl : forall (X : P.Comma L₂ R Q W), P (l.app X.left
+ ≫ X.hom)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapLeftEq
-  signature: [Q.RespectsIso] [W.RespectsIso] (l l' : L₁ ⟶ L₂) (h : l = l')
-  body: NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
-
-中文:
-定义 mapLeftEq
-  签名: [Q.RespectsIso] [W.RespectsIso] (l l' : L₁ ⟶ L₂) (h : l = l')
-  定义体: NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+Two equal natural transformations `L₁ ⟶ L₂` yield naturally isomorphic functors
+`P.Comma L₁ R Q W ⥤ P.Comma L₂ R Q W`.
 -/
 def mapLeftEq [Q.RespectsIso] [W.RespectsIso] (l l' : L₁ ⟶ L₂) (h : l = l')
-    (hl : forall (X : P.Comma L₂ R Q W), P (l.app X.left ≫ X.hom)) :
+    (hl : ∀ (X : P.Comma L₂ R Q W), P (l.app X.left ≫ X.hom)) :
     mapLeft R l hl ≅ mapLeft R l' (h ▸ hl) :=
   NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
 
@@ -1452,118 +1116,85 @@ variable (R) in
 /-- A natural isomorphism `L₁ ≅ L₂` induces an equivalence of categories
 `P.Comma L₁ R Q W ≌ P.Comma L₂ R Q W`. -/
 @[simps!]
-/--
-Definition of `mapLeftIso` / `mapLeftIso` 的定义
+/-
+**CategoryTheory.MorphismProperty.Comma.mapLeftIso** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.MorphismProperty.Comma`。
+形式化陈述：mapLeftIso [P.RespectsIso] [Q.RespectsIso] [W.RespectsIso] (e : L₁ ≅ L₂) :
+ P.Comma L₁ R Q W ≌ P.Comma L₂ R Q W where functor
+参数：e : L₁ ≅ L₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapLeftIso
-  signature: [P.RespectsIso] [Q.RespectsIso] [W.RespectsIso]
-  body: Comma.mapLeft R e.inv (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
-  inverse := Comma.mapLeft R e.hom (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
-  unitIso := (mapLeftId _ _).symm ≪≫
-    mapLeftEq _ _ _ e.hom_inv_id.symm (fun X => by simpa using X.prop) ≪≫
-    mapLeftComp _ _ _
-      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
-      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
-      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
-  counitIso :=
-    (mapLeftComp _ _ _
-      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
-      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
-      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)).symm ≪≫
-    mapLeftEq _ _ _ e.inv_hom_id
-      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop) ≪≫
-    mapLeftId _ _
-
-中文:
-定义 mapLeftIso
-  签名: [P.RespectsIso] [Q.RespectsIso] [W.RespectsIso]
-  定义体: Comma.mapLeft R e.inv (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
-  inverse := Comma.mapLeft R e.hom (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
-  unitIso := (mapLeftId _ _).symm ≪≫
-    mapLeftEq _ _ _ e.hom_inv_id.symm (fun X => by simpa using X.prop) ≪≫
-    mapLeftComp _ _ _
-      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
-      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
-      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
-  counitIso :=
-    (mapLeftComp _ _ _
-      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
-      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
-      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)).symm ≪≫
-    mapLeftEq _ _ _ e.inv_hom_id
-      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop) ≪≫
-    mapLeftId _ _
-
-Depends on / 依赖: Comma.mapLeft, P.cancel_left_of_respectsIso, X.prop, cancel_left_of_respectsIso, e.inv, mapLeft
+--- 原说明 ---
+A natural isomorphism `L₁ ≅ L₂` induces an equivalence of categories
+`P.Comma L₁ R Q W ≌ P.Comma L₂ R Q W`.
 -/
 def mapLeftIso [P.RespectsIso] [Q.RespectsIso] [W.RespectsIso]
       (e : L₁ ≅ L₂) :
     P.Comma L₁ R Q W ≌ P.Comma L₂ R Q W where
-  functor := Comma.mapLeft R e.inv (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
-  inverse := Comma.mapLeft R e.hom (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
+  functor := Comma.mapLeft R e.inv (fun X ↦ (P.cancel_left_of_respectsIso _ _).mpr X.prop)
+  inverse := Comma.mapLeft R e.hom (fun X ↦ (P.cancel_left_of_respectsIso _ _).mpr X.prop)
   unitIso := (mapLeftId _ _).symm ≪≫
-    mapLeftEq _ _ _ e.hom_inv_id.symm (fun X => by simpa using X.prop) ≪≫
+    mapLeftEq _ _ _ e.hom_inv_id.symm (fun X ↦ by simpa using X.prop) ≪≫
     mapLeftComp _ _ _
-      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
-      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
-      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
+      (fun X ↦ (P.cancel_left_of_respectsIso _ _).mpr X.prop)
+      (fun X ↦ (P.cancel_left_of_respectsIso _ _).mpr X.prop)
+      (fun X ↦ (P.cancel_left_of_respectsIso _ _).mpr X.prop)
   counitIso :=
     (mapLeftComp _ _ _
-      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
-      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)
-      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop)).symm ≪≫
+      (fun X ↦ (P.cancel_left_of_respectsIso _ _).mpr X.prop)
+      (fun X ↦ (P.cancel_left_of_respectsIso _ _).mpr X.prop)
+      (fun X ↦ (P.cancel_left_of_respectsIso _ _).mpr X.prop)).symm ≪≫
     mapLeftEq _ _ _ e.inv_hom_id
-      (fun X => (P.cancel_left_of_respectsIso _ _).mpr X.prop) ≪≫
+      (fun X ↦ (P.cancel_left_of_respectsIso _ _).mpr X.prop) ≪≫
     mapLeftId _ _
 
 variable (L) in
 /-- A natural transformation `R₁ ⟶ R₂` induces a functor `P.Comma L R₁ Q W ⥤ P.Comma L R₂ Q W`. -/
 @[simps!]
-/--
-Definition of `mapRight` / `mapRight` 的定义
+/-
+**CategoryTheory.MorphismProperty.Comma.mapRight** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.MorphismProperty.Comma`。
+形式化陈述：mapRight (r : R₁ ⟶ R₂) (hr : forall X : P.Comma L R₁ Q W, P (X.hom ≫ r.app
+ X.right)) : P.Comma L R₁ Q W ⥤ P.Comma L R₂ Q W
+参数：r : R₁ ⟶ R₂；hr : forall X : P.Comma L R₁ Q W, P (X.hom ≫ r.app X.right)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.Comma.Hom.prop_hom_left`：∀ {A : Type u_1
+} [inst : CategoryTheory.Category.{v_1, u_1} A] {B : Type u_2}   [inst_1 : Categ
+oryTheory.Category.{v_2, u_2} B] {T : Type u_…
+· 使用定理 `CategoryTheory.MorphismProperty.Comma.Hom.prop_hom_right`：∀ {A : Type u_
+1} [inst : CategoryTheory.Category.{v_1, u_1} A] {B : Type u_2}   [inst_1 : Cate
+goryTheory.Category.{v_2, u_2} B] {T : Type u_…
 
-English:
-definition mapRight
-  signature: (r : R₁ ⟶ R₂) (hr : forall X : P.Comma L R₁ Q W, P (X.hom ≫ r.app X.right))
-  body: lift (forget _ _ _ _ _ ⋙ CategoryTheory.Comma.mapRight L r) hr
-    (fun f => f.prop_hom_left) (fun f => f.prop_hom_right)
-
-中文:
-定义 mapRight
-  签名: (r : R₁ ⟶ R₂) (hr : 对任意 X : P.交换a L R₁ Q W, P (X.hom ≫ r.app X.right))
-  定义体: lift (forget _ _ _ _ _ ⋙ CategoryTheory.Comma.mapRight L r) hr
-    (fun f => f.prop_hom_left) (fun f => f.prop_hom_right)
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Comma.mapRight, f.prop_hom_left, f.prop_hom_right, forget, mapRight, prop_hom_left, prop_hom_right
+--- 原说明 ---
+A natural transformation `R₁ ⟶ R₂` induces a functor `P.Comma L R₁ Q W ⥤ P.Comma
+ L R₂ Q W`.
 -/
-def mapRight (r : R₁ ⟶ R₂) (hr : forall X : P.Comma L R₁ Q W, P (X.hom ≫ r.app X.right)) :
+def mapRight (r : R₁ ⟶ R₂) (hr : ∀ X : P.Comma L R₁ Q W, P (X.hom ≫ r.app X.right)) :
     P.Comma L R₁ Q W ⥤ P.Comma L R₂ Q W :=
   lift (forget _ _ _ _ _ ⋙ CategoryTheory.Comma.mapRight L r) hr
-    (fun f => f.prop_hom_left) (fun f => f.prop_hom_right)
+    (fun f ↦ f.prop_hom_left) (fun f ↦ f.prop_hom_right)
 
 set_option backward.isDefEq.respectTransparency.types false in
 variable (L R) in
 /-- The functor `P.Comma L R Q W ⥤ P.Comma L R Q W` induced by the identity natural transformation
 on `R` is naturally isomorphic to the identity functor. -/
 @[simps!]
-/--
-Definition of `mapRightId` / `mapRightId` 的定义
+/-
+**CategoryTheory.MorphismProperty.Comma.mapRightId** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.MorphismProperty.Comma`。
+形式化陈述：mapRightId [Q.RespectsIso] [W.RespectsIso] : mapRight (P
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapRightId
-  signature: [Q.RespectsIso] [W.RespectsIso]
-  body: NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
-
-中文:
-定义 mapRightId
-  签名: [Q.RespectsIso] [W.RespectsIso]
-  定义体: NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
-
-Depends on / 依赖: X.prop
+--- 原说明 ---
+The functor `P.Comma L R Q W ⥤ P.Comma L R Q W` induced by the identity natural 
+transformation
+on `R` is naturally isomorphic to the identity functor.
 -/
 def mapRightId [Q.RespectsIso] [W.RespectsIso] :
-    mapRight (P := P) (Q := Q) (W := W) L (𝟙 R) (fun X => by simpa using X.prop) ≅ 𝟭 _ :=
+    mapRight (P := P) (Q := Q) (W := W) L (𝟙 R) (fun X ↦ by simpa using X.prop) ≅ 𝟭 _ :=
   NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
 
 set_option backward.isDefEq.respectTransparency.types false in
@@ -1572,23 +1203,30 @@ variable (L) in
 transformations `r : R₁ ⟶ R₂` and `r' : R₂ ⟶ R₃` is naturally isomorphic to the composition of the
 functors induced by these natural transformations. -/
 @[simps!]
-/--
-Definition of `mapRightComp` / `mapRightComp` 的定义
+/-
+**CategoryTheory.MorphismProperty.Comma.mapRightComp** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.MorphismProperty.Comma`。
+形式化陈述：mapRightComp [Q.RespectsIso] [W.RespectsIso] (r : R₁ ⟶ R₂) (r' : R₂ ⟶ R₃) 
+(hr : forall (X : P.Comma L R₁ Q W), P (X.hom ≫ r.app X.right)) (hr' : forall (X
+ : P.Comma L R₂ Q W), P (X.hom ≫ r'.app X.right)) (hrr' : forall (X : P.Comma L 
+R₁ Q W), P (X.hom ≫ (r ≫ r').app X.right)) : mapRight (P
+参数：r : R₁ ⟶ R₂；r' : R₂ ⟶ R₃；hr : forall (X : P.Comma L R₁ Q W), P (X.hom ≫ r.app
+ X.right)；hr' : forall (X : P.Comma L R₂ Q W), P (X.hom ≫ r'.app X.right)；hrr' :
+ forall (X : P.Comma L R₁ Q W), P (X.hom ≫ (r ≫ r').app X.right)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapRightComp
-  signature: [Q.RespectsIso] [W.RespectsIso] (r : R₁ ⟶ R₂) (r' : R₂ ⟶ R₃)
-  body: NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
-
-中文:
-定义 mapRightComp
-  签名: [Q.RespectsIso] [W.RespectsIso] (r : R₁ ⟶ R₂) (r' : R₂ ⟶ R₃)
-  定义体: NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
+--- 原说明 ---
+The functor `P.Comma L R₁ Q W ⥤ P.Comma L R₃ Q W` induced by the composition of 
+the natural
+transformations `r : R₁ ⟶ R₂` and `r' : R₂ ⟶ R₃` is naturally isomorphic to the 
+composition of the
+functors induced by these natural transformations.
 -/
 def mapRightComp [Q.RespectsIso] [W.RespectsIso] (r : R₁ ⟶ R₂) (r' : R₂ ⟶ R₃)
-    (hr : forall (X : P.Comma L R₁ Q W), P (X.hom ≫ r.app X.right))
-    (hr' : forall (X : P.Comma L R₂ Q W), P (X.hom ≫ r'.app X.right))
-    (hrr' : forall (X : P.Comma L R₁ Q W), P (X.hom ≫ (r ≫ r').app X.right)) :
+    (hr : ∀ (X : P.Comma L R₁ Q W), P (X.hom ≫ r.app X.right))
+    (hr' : ∀ (X : P.Comma L R₂ Q W), P (X.hom ≫ r'.app X.right))
+    (hrr' : ∀ (X : P.Comma L R₁ Q W), P (X.hom ≫ (r ≫ r').app X.right)) :
     mapRight (P := P) (Q := Q) (W := W) L (r ≫ r') hrr' ≅
       mapRight L r hr ⋙ mapRight L r' hr' :=
   NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
@@ -1598,23 +1236,23 @@ variable (L) in
 /-- Two equal natural transformations `R₁ ⟶ R₂` yield naturally isomorphic functors
 `P.Comma L R₁ Q W ⥤ P.Comma L R₂ Q W`. -/
 @[simps!]
-/--
-Definition of `mapRightEq` / `mapRightEq` 的定义
+/-
+**CategoryTheory.MorphismProperty.Comma.mapRightEq** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.MorphismProperty.Comma`。
+形式化陈述：mapRightEq [Q.RespectsIso] [W.RespectsIso] (r r' : R₁ ⟶ R₂) (h : r = r') (
+hr : forall (X : P.Comma L R₁ Q W), P (X.hom ≫ r.app X.right)) : mapRight L r hr
+ ≅ mapRight L r' (h ▸ hr)
+参数：r r' : R₁ ⟶ R₂；h : r = r'；hr : forall (X : P.Comma L R₁ Q W), P (X.hom ≫ r.ap
+p X.right)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapRightEq
-  signature: [Q.RespectsIso] [W.RespectsIso] (r r' : R₁ ⟶ R₂) (h : r = r')
-  body: NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
-
-中文:
-定义 mapRightEq
-  签名: [Q.RespectsIso] [W.RespectsIso] (r r' : R₁ ⟶ R₂) (h : r = r')
-  定义体: NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+Two equal natural transformations `R₁ ⟶ R₂` yield naturally isomorphic functors
+`P.Comma L R₁ Q W ⥤ P.Comma L R₂ Q W`.
 -/
 def mapRightEq [Q.RespectsIso] [W.RespectsIso] (r r' : R₁ ⟶ R₂) (h : r = r')
-    (hr : forall (X : P.Comma L R₁ Q W), P (X.hom ≫ r.app X.right)) :
+    (hr : ∀ (X : P.Comma L R₁ Q W), P (X.hom ≫ r.app X.right)) :
     mapRight L r hr ≅ mapRight L r' (h ▸ hr) :=
   NatIso.ofComponents (fun X => isoMk (Iso.refl _) (Iso.refl _))
 
@@ -1623,69 +1261,37 @@ variable (L) in
 /-- A natural isomorphism `R₁ ≅ R₂` induces an equivalence of categories
 `P.Comma L R₁ Q W ≌ P.Comma L R₂ Q W`. -/
 @[simps!]
-/--
-Definition of `mapRightIso` / `mapRightIso` 的定义
+/-
+**CategoryTheory.MorphismProperty.Comma.mapRightIso** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.MorphismProperty.Comma`。
+形式化陈述：mapRightIso [P.RespectsIso] [Q.RespectsIso] [W.RespectsIso] (e : R₁ ≅ R₂) 
+: P.Comma L R₁ Q W ≌ P.Comma L R₂ Q W where functor
+参数：e : R₁ ≅ R₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapRightIso
-  signature: [P.RespectsIso] [Q.RespectsIso] [W.RespectsIso]
-  body: Comma.mapRight L e.hom (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
-  inverse := Comma.mapRight L e.inv (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
-  unitIso := (mapRightId _ _).symm ≪≫
-    mapRightEq _ _ _ e.hom_inv_id.symm (fun X => by simpa using X.prop) ≪≫
-    mapRightComp _ _ _
-      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
-      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
-      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
-  counitIso :=
-    (mapRightComp _ _ _
-      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
-      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
-      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)).symm ≪≫
-    mapRightEq _ _ _ e.inv_hom_id
-      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop) ≪≫
-    mapRightId _ _
-
-中文:
-定义 mapRightIso
-  签名: [P.RespectsIso] [Q.RespectsIso] [W.RespectsIso]
-  定义体: Comma.mapRight L e.hom (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
-  inverse := Comma.mapRight L e.inv (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
-  unitIso := (mapRightId _ _).symm ≪≫
-    mapRightEq _ _ _ e.hom_inv_id.symm (fun X => by simpa using X.prop) ≪≫
-    mapRightComp _ _ _
-      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
-      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
-      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
-  counitIso :=
-    (mapRightComp _ _ _
-      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
-      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
-      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)).symm ≪≫
-    mapRightEq _ _ _ e.inv_hom_id
-      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop) ≪≫
-    mapRightId _ _
-
-Depends on / 依赖: Comma.mapRight, P.cancel_right_of_respectsIso, X.prop, cancel_right_of_respectsIso, e.hom, mapRight
+--- 原说明 ---
+A natural isomorphism `R₁ ≅ R₂` induces an equivalence of categories
+`P.Comma L R₁ Q W ≌ P.Comma L R₂ Q W`.
 -/
 def mapRightIso [P.RespectsIso] [Q.RespectsIso] [W.RespectsIso]
       (e : R₁ ≅ R₂) :
     P.Comma L R₁ Q W ≌ P.Comma L R₂ Q W where
-  functor := Comma.mapRight L e.hom (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
-  inverse := Comma.mapRight L e.inv (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
+  functor := Comma.mapRight L e.hom (fun X ↦ (P.cancel_right_of_respectsIso _ _).mpr X.prop)
+  inverse := Comma.mapRight L e.inv (fun X ↦ (P.cancel_right_of_respectsIso _ _).mpr X.prop)
   unitIso := (mapRightId _ _).symm ≪≫
-    mapRightEq _ _ _ e.hom_inv_id.symm (fun X => by simpa using X.prop) ≪≫
+    mapRightEq _ _ _ e.hom_inv_id.symm (fun X ↦ by simpa using X.prop) ≪≫
     mapRightComp _ _ _
-      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
-      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
-      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
+      (fun X ↦ (P.cancel_right_of_respectsIso _ _).mpr X.prop)
+      (fun X ↦ (P.cancel_right_of_respectsIso _ _).mpr X.prop)
+      (fun X ↦ (P.cancel_right_of_respectsIso _ _).mpr X.prop)
   counitIso :=
     (mapRightComp _ _ _
-      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
-      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)
-      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop)).symm ≪≫
+      (fun X ↦ (P.cancel_right_of_respectsIso _ _).mpr X.prop)
+      (fun X ↦ (P.cancel_right_of_respectsIso _ _).mpr X.prop)
+      (fun X ↦ (P.cancel_right_of_respectsIso _ _).mpr X.prop)).symm ≪≫
     mapRightEq _ _ _ e.inv_hom_id
-      (fun X => (P.cancel_right_of_respectsIso _ _).mpr X.prop) ≪≫
+      (fun X ↦ (P.cancel_right_of_respectsIso _ _).mpr X.prop) ≪≫
     mapRightId _ _
 
 end Functoriality
@@ -1699,97 +1305,87 @@ section Arrow
 variable {T : Type*} [Category* T]
   (P Q W : MorphismProperty T) [Q.IsMultiplicative] [W.IsMultiplicative]
 
-/--
-Definition of `Arrow` / `Arrow` 的定义
+/-- Given a morphism property `P` on a category `T`, this is the
+subcategory of `Arrow T` defined by `P` where morphisms satisfy `Q` and `W` on the left and right,
+respectively. -/
+/-
+**CategoryTheory.MorphismProperty.Arrow** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.MorphismProperty`。
+形式化陈述：{T : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} T] →     Cat
+egoryTheory.MorphismProperty T →       CategoryTheory.MorphismProperty T → Categ
+oryTheory.MorphismProperty T → Type (max v_1 u_1)
+参数：max v_1 u_1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Arrow
-  signature: : Type _
-  body: P.Comma (𝟭 T) (𝟭 T) Q W
-
-中文:
-缩写 箭头
-  签名: : 类型 _
-  定义体: P.Comma (𝟭 T) (𝟭 T) Q W
+--- 原说明 ---
+Given a morphism property `P` on a category `T`, this is the
+subcategory of `Arrow T` defined by `P` where morphisms satisfy `Q` and `W` on t
+he left and right,
+respectively.
 -/
 protected abbrev Arrow : Type _ := P.Comma (𝟭 T) (𝟭 T) Q W
 
-/--
-Definition of `Arrow.forget` / `Arrow.forget` 的定义
+/-- The forgetful functor from the full subcategory of `Arrow T` defined by `P` to `Arrow T`. -/
+/-
+**CategoryTheory.MorphismProperty.Arrow.forget** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.MorphismProperty.Arrow`。
+形式化陈述：{T : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} T] →     (P 
+Q W : CategoryTheory.MorphismProperty T) →       [inst_1 : Q.IsMultiplicative] →
+         [inst_2 : W.IsMultiplicative] → CategoryTheory.Functor (P.Arrow Q W) (C
+ategoryTheory.Arrow T)
+参数：P Q W : CategoryTheory.MorphismProperty T；P.Arrow Q W；CategoryTheory.Arrow T。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Arrow.forget
-  signature: : P.Arrow Q W ⥤ Arrow T
-  body: Comma.forget (𝟭 T) (𝟭 T) P Q W
-
-中文:
-缩写 箭头.forget
-  签名: : P.箭头 Q W ⥤ 箭头 T
-  定义体: Comma.forget (𝟭 T) (𝟭 T) P Q W
+--- 原说明 ---
+The forgetful functor from the full subcategory of `Arrow T` defined by `P` to `
+Arrow T`.
 -/
 protected abbrev Arrow.forget : P.Arrow Q W ⥤ Arrow T := Comma.forget (𝟭 T) (𝟭 T) P Q W
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (Arrow.forget P Q W).Faithful
-  body: inferInstanceAs (Comma.forget _ _ _ _ _).Faithful
-
-中文:
-实例 :
-  签名: (箭头.forget P Q W).忠实
-  定义体: inferInstanceAs (Comma.forget _ _ _ _ _).Faithful
-
-Depends on / 依赖: Comma.forget, Faithful, forget
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : (Arrow.forget P Q W).Faithful := inferInstanceAs (Comma.forget _ _ _ _ _).Faithful
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (Arrow.forget P ⊤ ⊤).Full
-  body: inferInstanceAs (Comma.forget _ _ _ _ _).Full
-
-中文:
-实例 :
-  签名: (箭头.forget P ⊤ ⊤).满
-  定义体: inferInstanceAs (Comma.forget _ _ _ _ _).Full
-
-Depends on / 依赖: Comma.forget, forget
+instance : (Arrow.forget P Q W).Faithful := inferInstanceAs <| (Comma.forget _ _ _ _ _).Faithful
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : (Arrow.forget P ⊤ ⊤).Full := inferInstanceAs (Comma.forget _ _ _ _ _).Full
+instance : (Arrow.forget P ⊤ ⊤).Full := inferInstanceAs <| (Comma.forget _ _ _ _ _).Full
 
-/--
-lemma `Arrow.forget_comp_leftFunc_map` / 引理 `Arrow.forget_comp_leftFunc_map`
+/-- Occasionally useful for rewriting in the backwards direction. -/
+/-
+**CategoryTheory.MorphismProperty.Arrow.forget_comp_leftFunc_map** 是 Mathlib 中的一
+个定理，位于命名空间 `CategoryTheory.MorphismProperty.Arrow`。
+形式化陈述：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] (P Q W : Ca
+tegoryTheory.MorphismProperty T)   [inst_1 : Q.IsMultiplicative] [inst_2 : W.IsM
+ultiplicative] {A B : P.Arrow Q W} (f : A ⟶ B),   ((CategoryTheory.MorphismPrope
+rty.Arrow.forget P Q W).comp CategoryTheory.Arrow.leftFunc).map f = f.left
+参数：P Q W : CategoryTheory.MorphismProperty T；f : A ⟶ B；(CategoryTheory.MorphismP
+roperty.Arrow.forget P Q W).comp CategoryTheory.Arrow.leftFunc。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma Arrow.forget_comp_leftFunc_map
-  given: {A B : P.Arrow Q W} (f : A ⟶ B)
-  proof: rfl
-
-中文:
-引理 箭头.forget_comp_leftFunc_map
-  条件: {A B : P.箭头 Q W} (f : A ⟶ B)
-  证明: rfl
+--- 原说明 ---
+Occasionally useful for rewriting in the backwards direction.
 -/
 lemma Arrow.forget_comp_leftFunc_map {A B : P.Arrow Q W} (f : A ⟶ B) :
     (MorphismProperty.Arrow.forget P Q W ⋙ CategoryTheory.Arrow.leftFunc).map f = f.left := rfl
 
-/--
-lemma `Arrow.forget_comp_rightFunc_map` / 引理 `Arrow.forget_comp_rightFunc_map`
+/-- Occasionally useful for rewriting in the backwards direction. -/
+/-
+**CategoryTheory.MorphismProperty.Arrow.forget_comp_rightFunc_map** 是 Mathlib 中的
+一个定理，位于命名空间 `CategoryTheory.MorphismProperty.Arrow`。
+形式化陈述：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] (P Q W : Ca
+tegoryTheory.MorphismProperty T)   [inst_1 : Q.IsMultiplicative] [inst_2 : W.IsM
+ultiplicative] {A B : P.Arrow Q W} (f : A ⟶ B),   ((CategoryTheory.MorphismPrope
+rty.Arrow.forget P Q W).comp CategoryTheory.Arrow.rightFunc).map f = f.right
+参数：P Q W : CategoryTheory.MorphismProperty T；f : A ⟶ B；(CategoryTheory.MorphismP
+roperty.Arrow.forget P Q W).comp CategoryTheory.Arrow.rightFunc。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma Arrow.forget_comp_rightFunc_map
-  given: {A B : P.Arrow Q W} (f : A ⟶ B)
-  proof: rfl
-
-中文:
-引理 箭头.forget_comp_rightFunc_map
-  条件: {A B : P.箭头 Q W} (f : A ⟶ B)
-  证明: rfl
+--- 原说明 ---
+Occasionally useful for rewriting in the backwards direction.
 -/
 lemma Arrow.forget_comp_rightFunc_map {A B : P.Arrow Q W} (f : A ⟶ B) :
     (MorphismProperty.Arrow.forget P Q W ⋙ CategoryTheory.Arrow.rightFunc).map f = f.right := rfl
@@ -1798,22 +1394,23 @@ variable {P Q W}
 
 /-- Construct a morphism in `P.Arrow Q W` from a morphism in `Arrow T`. -/
 @[simps hom]
-/--
-Definition of `Arrow.Hom.mk` / `Arrow.Hom.mk` 的定义
+/-
+**CategoryTheory.MorphismProperty.Arrow.Hom.mk** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.MorphismProperty.Arrow.Hom`。
+形式化陈述：{T : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} T] →     {P 
+Q W : CategoryTheory.MorphismProperty T} →       [inst_1 : Q.IsMultiplicative] →
+         [inst_2 : W.IsMultiplicative] →           {A B : P.Arrow Q W} →        
+     (f :                 (CategoryTheory.MorphismProperty.Arrow.forget P Q W).o
+bj A ⟶                   (CategoryTheory.MorphismProperty.Arrow.forget P Q W).ob
+j B) →               Q (CategoryTheory.Arrow.Hom.left f) → W (CategoryTheory.Arr
+ow.Hom.right f) → (A ⟶ B)
+参数：f :                 (CategoryTheory.MorphismProperty.Arrow.forget P Q W).obj 
+A ⟶                   (CategoryTheory.MorphismProperty.Arrow.forget P Q W).obj B
+；CategoryTheory.Arrow.Hom.left f；CategoryTheory.Arrow.Hom.right f；A ⟶ B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Arrow.Hom.mk
-  signature: {A B : P.Arrow Q W} (f : (Arrow.forget _ _ _).obj A ⟶ (Arrow.forget _ _ _).obj B)
-  body: f
-  prop_hom_left := hfl
-  prop_hom_right := hfr
-
-中文:
-定义 箭头.态射.mk
-  签名: {A B : P.箭头 Q W} (f : (箭头.forget _ _ _).obj A ⟶ (箭头.forget _ _ _).obj B)
-  定义体: f
-  prop_hom_left := hfl
-  prop_hom_right := hfr
+--- 原说明 ---
+Construct a morphism in `P.Arrow Q W` from a morphism in `Arrow T`.
 -/
 def Arrow.Hom.mk {A B : P.Arrow Q W} (f : (Arrow.forget _ _ _).obj A ⟶ (Arrow.forget _ _ _).obj B)
     (hfl : Q f.left) (hfr : W f.right) : A ⟶ B where
@@ -1823,24 +1420,18 @@ def Arrow.Hom.mk {A B : P.Arrow Q W} (f : (Arrow.forget _ _ _).obj A ⟶ (Arrow.
 
 /-- Make an object of `P.Arrow Q X` from a morphism `f : A ⟶ B` and a proof of `P f`. -/
 @[simps hom left]
-/--
-Definition of `Arrow.mk` / `Arrow.mk` 的定义
+/-
+**CategoryTheory.MorphismProperty.Arrow.mk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.MorphismProperty.Arrow`。
+形式化陈述：{T : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} T] →     {P 
+Q W : CategoryTheory.MorphismProperty T} → {A B : T} → (f : A ⟶ B) → P f → P.Arr
+ow Q W
+参数：f : A ⟶ B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Arrow.mk
-  signature: {A B : T} (f : A ⟶ B) (hf : P f)
-  body: A
-  right := B
-  hom := f
-  prop := hf
-
-中文:
-定义 箭头.mk
-  签名: {A B : T} (f : A ⟶ B) (hf : P f)
-  定义体: A
-  right := B
-  hom := f
-  prop := hf
+--- 原说明 ---
+Make an object of `P.Arrow Q X` from a morphism `f : A ⟶ B` and a proof of `P f`
+.
 -/
 protected def Arrow.mk {A B : T} (f : A ⟶ B) (hf : P f) : P.Arrow Q W where
   left := A
@@ -1850,22 +1441,24 @@ protected def Arrow.mk {A B : T} (f : A ⟶ B) (hf : P f) : P.Arrow Q W where
 
 /-- Make a morphism in `P.Arrow Q X` from morphisms in `T` with compatibilities. -/
 @[simps hom]
-/--
-Definition of `Arrow.homMk` / `Arrow.homMk` 的定义
+/-
+**CategoryTheory.MorphismProperty.Arrow.homMk** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.MorphismProperty.Arrow`。
+形式化陈述：{T : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} T] →     {P 
+Q W : CategoryTheory.MorphismProperty T} →       [inst_1 : Q.IsMultiplicative] →
+         [inst_2 : W.IsMultiplicative] →           {A B : P.Arrow Q W} →        
+     (f : A.left ⟶ B.left) →               (g : A.right ⟶ B.right) →            
+     autoParam (CategoryTheory.CategoryStruct.comp f B.hom = CategoryTheory.Cate
+goryStruct.comp A.hom g)                     CategoryTheory.MorphismProperty.Arr
+ow.homMk._auto_1 →                   autoParam (Q f) CategoryTheory.MorphismProp
+erty.Arrow.homMk._auto_3 →                     autoParam (W g) CategoryTheory.Mo
+rphismProperty.Arrow.homMk._auto_5 → (A ⟶ B)
+参数：f : A.left ⟶ B.left；g : A.right ⟶ B.right；CategoryTheory.CategoryStruct.comp 
+f B.hom = CategoryTheory.CategoryStruct.comp A.hom g；Q f；W g；A ⟶ B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Arrow.homMk
-  signature: {A B : P.Arrow Q W} (f : A.left ⟶ B.left) (g : A.right ⟶ B.right)
-  body: CategoryTheory.Arrow.homMk f g w
-  prop_hom_left := hf
-  prop_hom_right := hg
-
-中文:
-定义 箭头.homMk
-  签名: {A B : P.箭头 Q W} (f : A.left ⟶ B.left) (g : A.right ⟶ B.right)
-  定义体: CategoryTheory.Arrow.homMk f g w
-  prop_hom_left := hf
-  prop_hom_right := hg
+--- 原说明 ---
+Make a morphism in `P.Arrow Q X` from morphisms in `T` with compatibilities.
 -/
 protected def Arrow.homMk {A B : P.Arrow Q W} (f : A.left ⟶ B.left) (g : A.right ⟶ B.right)
     (w : f ≫ B.hom = A.hom ≫ g := by cat_disch)
@@ -1876,22 +1469,26 @@ protected def Arrow.homMk {A B : P.Arrow Q W} (f : A.left ⟶ B.left) (g : A.rig
 
 /-- Make an isomorphism in `P.Arrow Q X` from isomorphisms in `T` with compatibilities. -/
 @[simps! hom_left inv_left]
-/--
-Definition of `Arrow.isoMk` / `Arrow.isoMk` 的定义
+/-
+**CategoryTheory.MorphismProperty.Arrow.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.MorphismProperty.Arrow`。
+形式化陈述：{T : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} T] →     {P 
+Q W : CategoryTheory.MorphismProperty T} →       [inst_1 : Q.IsMultiplicative] →
+         [inst_2 : W.IsMultiplicative] →           [Q.RespectsIso] →            
+ [W.RespectsIso] →               {A B : P.Arrow Q W} →                 (f : A.le
+ft ≅ B.left) →                   (g : A.right ≅ B.right) →                     a
+utoParam                         (CategoryTheory.CategoryStruct.comp f.hom B.hom
+ =                           CategoryTheory.CategoryStruct.comp A.hom g.hom)    
+                     CategoryTheory.MorphismProperty.Arrow.isoMk._auto_1 →      
+                 (A ≅ B)
+参数：f : A.left ≅ B.left；g : A.right ≅ B.right；CategoryTheory.CategoryStruct.comp 
+f.hom B.hom =                           CategoryTheory.CategoryStruct.comp A.hom
+ g.hom；A ≅ B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Arrow.isoMk
-  signature: [Q.RespectsIso] [W.RespectsIso] {A B : P.Arrow Q W}
-  body: Comma.isoMk f g
-
-@[ext]
-
-中文:
-定义 箭头.isoMk
-  签名: [Q.RespectsIso] [W.RespectsIso] {A B : P.箭头 Q W}
-  定义体: Comma.isoMk f g
-
-@[ext]
+--- 原说明 ---
+Make an isomorphism in `P.Arrow Q X` from isomorphisms in `T` with compatibiliti
+es.
 -/
 protected def Arrow.isoMk [Q.RespectsIso] [W.RespectsIso] {A B : P.Arrow Q W}
     (f : A.left ≅ B.left) (g : A.right ≅ B.right)
@@ -1899,28 +1496,19 @@ protected def Arrow.isoMk [Q.RespectsIso] [W.RespectsIso] {A B : P.Arrow Q W}
   Comma.isoMk f g
 
 @[ext]
-/--
-lemma `Arrow.Hom.ext` / 引理 `Arrow.Hom.ext`
-
-English:
-lemma Arrow.Hom.ext
-  statement: {A B : P.Arrow Q W} {f g : A ⟶ B}
-  proof: by
-  ext
-  · exact hl
-  · exact hr
-
-@[reassoc]
-
-中文:
-引理 箭头.态射.ext
-  结论: {A B : P.箭头 Q W} {f g : A ⟶ B}
-  证明: by
-  ext
-  · exact hl
-  · exact hr
-
-@[reassoc]
+/-
+**CategoryTheory.MorphismProperty.Arrow.Hom.ext** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.MorphismProperty.Arrow.Hom`。
+形式化陈述：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] {P Q W : Ca
+tegoryTheory.MorphismProperty T}   [inst_1 : Q.IsMultiplicative] [inst_2 : W.IsM
+ultiplicative] {A B : P.Arrow Q W} {f g : A ⟶ B},   f.left = g.left → f.right = 
+g.right → f = g
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.Comma.Hom.ext'`：∀ {A : Type u_1} [inst :
+ CategoryTheory.Category.{v_1, u_1} A] {B : Type u_2}   [inst_1 : CategoryTheory
+.Category.{v_2, u_2} B] {T : Type u_…
+· 使用引理 `CategoryTheory.Comma.hom_ext`：hom_ext (f g : X ⟶ Y) (h₁ : f.left = g.lef
+t) (h₂ : f.right = g.right) : f = g
 -/
 lemma Arrow.Hom.ext {A B : P.Arrow Q W} {f g : A ⟶ B}
     (hl : f.left = g.left) (hr : f.right = g.right) : f = g := by
@@ -1929,18 +1517,18 @@ lemma Arrow.Hom.ext {A B : P.Arrow Q W} {f g : A ⟶ B}
   · exact hr
 
 @[reassoc]
-/--
-lemma `Arrow.w` / 引理 `Arrow.w`
-
-English:
-lemma Arrow.w
-  given: {A B : P.Arrow Q W} (f : A ⟶ B)
-  proof: f.w
-
-中文:
-引理 箭头.w
-  条件: {A B : P.箭头 Q W} (f : A ⟶ B)
-  证明: f.w
+/-
+**CategoryTheory.MorphismProperty.Arrow.w** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.MorphismProperty.Arrow`。
+形式化陈述：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] {P Q W : Ca
+tegoryTheory.MorphismProperty T}   [inst_1 : Q.IsMultiplicative] [inst_2 : W.IsM
+ultiplicative] {A B : P.Arrow Q W} (f : A ⟶ B),   CategoryTheory.CategoryStruct.
+comp f.left B.hom = CategoryTheory.CategoryStruct.comp A.hom f.right
+参数：f : A ⟶ B。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CommaMorphism.w`：∀ {A : Type u₁} [inst : CategoryTheory.C
+ategory.{v₁, u₁} A] {B : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} B] 
+  {T : Type u₃} [ins…
 -/
 lemma Arrow.w {A B : P.Arrow Q W} (f : A ⟶ B) :
     f.left ≫ B.hom = A.hom ≫ f.right := f.w
@@ -1948,79 +1536,80 @@ lemma Arrow.w {A B : P.Arrow Q W} (f : A ⟶ B) :
 section
 
 variable {P' Q' W' : MorphismProperty T} [Q'.IsMultiplicative] [W'.IsMultiplicative]
-    (hPP' : P <= P') (hQQ' : Q <= Q')
+    (hPP' : P ≤ P') (hQQ' : Q ≤ Q')
 
-/--
-Definition of `Arrow.changeProp` / `Arrow.changeProp` 的定义
+/-- The natural inclusion induced by implications of morphism properties. -/
+/-
+**CategoryTheory.MorphismProperty.Arrow.changeProp** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.MorphismProperty.Arrow`。
+形式化陈述：{T : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} T] →     {P 
+Q W : CategoryTheory.MorphismProperty T} →       [inst_1 : Q.IsMultiplicative] →
+         [inst_2 : W.IsMultiplicative] →           {P' Q' W' : CategoryTheory.Mo
+rphismProperty T} →             [inst_3 : Q'.IsMultiplicative] →               [
+inst_4 : W'.IsMultiplicative] →                 P ≤ P' → Q ≤ Q' → W ≤ W' → Categ
+oryTheory.Functor (P.Arrow Q W) (P'.Arrow Q' W')
+参数：P.Arrow Q W；P'.Arrow Q' W'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Arrow.changeProp
-  signature: (hPP' : P <= P') (hQQ' : Q <= Q') (hWW' : W <= W')
-  body: Comma.changeProp _ _ hPP' hQQ' hWW'
-
-中文:
-缩写 箭头.changeProp
-  签名: (hPP' : P <= P') (hQQ' : Q <= Q') (hWW' : W <= W')
-  定义体: Comma.changeProp _ _ hPP' hQQ' hWW'
-
-Depends on / 依赖: Comma.changeProp, changeProp
+--- 原说明 ---
+The natural inclusion induced by implications of morphism properties.
 -/
-abbrev Arrow.changeProp (hPP' : P <= P') (hQQ' : Q <= Q') (hWW' : W <= W') :
+abbrev Arrow.changeProp (hPP' : P ≤ P') (hQQ' : Q ≤ Q') (hWW' : W ≤ W') :
     P.Arrow Q W ⥤ P'.Arrow Q' W' :=
   Comma.changeProp _ _ hPP' hQQ' hWW'
 
 -- `simps` on `Arrow.changeProp` fails to create this lemma
 @[simp]
-/--
-lemma `Arrow.changeProp_obj_left` / 引理 `Arrow.changeProp_obj_left`
-
-English:
-lemma Arrow.changeProp_obj_left
-  given: (hPP' : P <= P') (hQQ' : Q <= Q') (hWW' : W <= W') (Y : P.Arrow Q W)
-  proof: rfl
-
-中文:
-引理 箭头.changeProp_obj_left
-  条件: (hPP' : P <= P') (hQQ' : Q <= Q') (hWW' : W <= W') (Y : P.箭头 Q W)
-  证明: rfl
+/-
+**CategoryTheory.MorphismProperty.Arrow.changeProp_obj_left** 是 Mathlib 中的一个定理，位
+于命名空间 `CategoryTheory.MorphismProperty.Arrow`。
+形式化陈述：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] {P Q W : Ca
+tegoryTheory.MorphismProperty T}   [inst_1 : Q.IsMultiplicative] [inst_2 : W.IsM
+ultiplicative] {P' Q' W' : CategoryTheory.MorphismProperty T}   [inst_3 : Q'.IsM
+ultiplicative] [inst_4 : W'.IsMultiplicative] (hPP' : P ≤ P') (hQQ' : Q ≤ Q') (h
+WW' : W ≤ W')   (Y : P.Arrow Q W), ((CategoryTheory.MorphismProperty.Arrow.chang
+eProp hPP' hQQ' hWW').obj Y).left = Y.left
+参数：hPP' : P ≤ P'；hQQ' : Q ≤ Q'；hWW' : W ≤ W'；Y : P.Arrow Q W；(CategoryTheory.Mor
+phismProperty.Arrow.changeProp hPP' hQQ' hWW').obj Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma Arrow.changeProp_obj_left (hPP' : P <= P') (hQQ' : Q <= Q') (hWW' : W <= W') (Y : P.Arrow Q W) :
+lemma Arrow.changeProp_obj_left (hPP' : P ≤ P') (hQQ' : Q ≤ Q') (hWW' : W ≤ W') (Y : P.Arrow Q W) :
     ((changeProp hPP' hQQ' hWW').obj Y).left = Y.left := rfl
 
 -- `simps` on `Arrow.changeProp` fails to create this lemma
 @[simp]
-/--
-lemma `Arrow.changeProp_obj_right` / 引理 `Arrow.changeProp_obj_right`
-
-English:
-lemma Arrow.changeProp_obj_right
-  given: (hPP' : P <= P') (hQQ' : Q <= Q') (hWW' : W <= W') (Y : P.Arrow Q W)
-  proof: rfl
-
-中文:
-引理 箭头.changeProp_obj_right
-  条件: (hPP' : P <= P') (hQQ' : Q <= Q') (hWW' : W <= W') (Y : P.箭头 Q W)
-  证明: rfl
+/-
+**CategoryTheory.MorphismProperty.Arrow.changeProp_obj_right** 是 Mathlib 中的一个定理，
+位于命名空间 `CategoryTheory.MorphismProperty.Arrow`。
+形式化陈述：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] {P Q W : Ca
+tegoryTheory.MorphismProperty T}   [inst_1 : Q.IsMultiplicative] [inst_2 : W.IsM
+ultiplicative] {P' Q' W' : CategoryTheory.MorphismProperty T}   [inst_3 : Q'.IsM
+ultiplicative] [inst_4 : W'.IsMultiplicative] (hPP' : P ≤ P') (hQQ' : Q ≤ Q') (h
+WW' : W ≤ W')   (Y : P.Arrow Q W), ((CategoryTheory.MorphismProperty.Arrow.chang
+eProp hPP' hQQ' hWW').obj Y).right = Y.right
+参数：hPP' : P ≤ P'；hQQ' : Q ≤ Q'；hWW' : W ≤ W'；Y : P.Arrow Q W；(CategoryTheory.Mor
+phismProperty.Arrow.changeProp hPP' hQQ' hWW').obj Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma Arrow.changeProp_obj_right (hPP' : P <= P') (hQQ' : Q <= Q') (hWW' : W <= W') (Y : P.Arrow Q W) :
+lemma Arrow.changeProp_obj_right (hPP' : P ≤ P') (hQQ' : Q ≤ Q') (hWW' : W ≤ W') (Y : P.Arrow Q W) :
     ((changeProp hPP' hQQ' hWW').obj Y).right = Y.right := rfl
 
 -- `simps` on `Arrow.changeProp` fails to create this lemma
 @[simp]
-/--
-lemma `Arrow.changeProp_obj_hom` / 引理 `Arrow.changeProp_obj_hom`
-
-English:
-lemma Arrow.changeProp_obj_hom
-  given: (hPP' : P <= P') (hQQ' : Q <= Q') (hWW' : W <= W') (Y : P.Arrow Q W)
-  proof: rfl
-
-中文:
-引理 箭头.changeProp_obj_hom
-  条件: (hPP' : P <= P') (hQQ' : Q <= Q') (hWW' : W <= W') (Y : P.箭头 Q W)
-  证明: rfl
+/-
+**CategoryTheory.MorphismProperty.Arrow.changeProp_obj_hom** 是 Mathlib 中的一个定理，位于
+命名空间 `CategoryTheory.MorphismProperty.Arrow`。
+形式化陈述：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] {P Q W : Ca
+tegoryTheory.MorphismProperty T}   [inst_1 : Q.IsMultiplicative] [inst_2 : W.IsM
+ultiplicative] {P' Q' W' : CategoryTheory.MorphismProperty T}   [inst_3 : Q'.IsM
+ultiplicative] [inst_4 : W'.IsMultiplicative] (hPP' : P ≤ P') (hQQ' : Q ≤ Q') (h
+WW' : W ≤ W')   (Y : P.Arrow Q W), ((CategoryTheory.MorphismProperty.Arrow.chang
+eProp hPP' hQQ' hWW').obj Y).hom = Y.hom
+参数：hPP' : P ≤ P'；hQQ' : Q ≤ Q'；hWW' : W ≤ W'；Y : P.Arrow Q W；(CategoryTheory.Mor
+phismProperty.Arrow.changeProp hPP' hQQ' hWW').obj Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma Arrow.changeProp_obj_hom (hPP' : P <= P') (hQQ' : Q <= Q') (hWW' : W <= W') (Y : P.Arrow Q W) :
+lemma Arrow.changeProp_obj_hom (hPP' : P ≤ P') (hQQ' : Q ≤ Q') (hWW' : W ≤ W') (Y : P.Arrow Q W) :
     ((changeProp hPP' hQQ' hWW').obj Y).hom = Y.hom := rfl
 
 end
@@ -2031,83 +1620,71 @@ section Over
 
 variable {T : Type*} [Category* T] (P Q : MorphismProperty T) (X : T) [Q.IsMultiplicative]
 
-/--
-Definition of `Over` / `Over` 的定义
+/-- Given a morphism property `P` on a category `T` and an object `X : T`, this is the
+subcategory of `Over X` defined by `P` where morphisms satisfy `Q`. -/
+/-
+**CategoryTheory.MorphismProperty.Over** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.MorphismProperty`。
+形式化陈述：{T : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} T] →     Cat
+egoryTheory.MorphismProperty T → CategoryTheory.MorphismProperty T → T → Type (m
+ax v_1 u_1)
+参数：max v_1 u_1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Over
-  signature: : Type _
-  body: P.Comma (Functor.id T) (Functor.fromPUnit.{0} X) Q ⊤
-
-中文:
-缩写 Over
-  签名: : 类型 _
-  定义体: P.Comma (Functor.id T) (Functor.fromPUnit.{0} X) Q ⊤
+--- 原说明 ---
+Given a morphism property `P` on a category `T` and an object `X : T`, this is t
+he
+subcategory of `Over X` defined by `P` where morphisms satisfy `Q`.
 -/
 protected abbrev Over : Type _ :=
   P.Comma (Functor.id T) (Functor.fromPUnit.{0} X) Q ⊤
 
-/--
-Definition of `Over.forget` / `Over.forget` 的定义
+/-- The forgetful functor from the full subcategory of `Over X` defined by `P` to `Over X`. -/
+/-
+**CategoryTheory.MorphismProperty.Over.forget** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.MorphismProperty.Over`。
+形式化陈述：{T : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} T] →     (P 
+Q : CategoryTheory.MorphismProperty T) →       (X : T) → [inst_1 : Q.IsMultiplic
+ative] → CategoryTheory.Functor (P.Over Q X) (CategoryTheory.Over X)
+参数：P Q : CategoryTheory.MorphismProperty T；X : T；P.Over Q X；CategoryTheory.Over 
+X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Over.forget
-  signature: : P.Over Q X ⥤ Over X
-  body: Comma.forget (Functor.id T) (Functor.fromPUnit.{0} X) P Q ⊤
-
-中文:
-缩写 Over.forget
-  签名: : P.Over Q X ⥤ Over X
-  定义体: Comma.forget (Functor.id T) (Functor.fromPUnit.{0} X) P Q ⊤
+--- 原说明 ---
+The forgetful functor from the full subcategory of `Over X` defined by `P` to `O
+ver X`.
 -/
 protected abbrev Over.forget : P.Over Q X ⥤ Over X :=
   Comma.forget (Functor.id T) (Functor.fromPUnit.{0} X) P Q ⊤
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (Over.forget P Q X).Faithful
-  body: inferInstanceAs (Comma.forget _ _ _ _ _).Faithful
-
-中文:
-实例 :
-  签名: (Over.forget P Q X).忠实
-  定义体: inferInstanceAs (Comma.forget _ _ _ _ _).Faithful
-
-Depends on / 依赖: Comma.forget, Faithful, forget
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : (Over.forget P Q X).Faithful := inferInstanceAs (Comma.forget _ _ _ _ _).Faithful
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (Over.forget P ⊤ X).Full
-  body: inferInstanceAs (Comma.forget _ _ _ _ _).Full
-
-中文:
-实例 :
-  签名: (Over.forget P ⊤ X).满
-  定义体: inferInstanceAs (Comma.forget _ _ _ _ _).Full
-
-Depends on / 依赖: Comma.forget, forget
+instance : (Over.forget P Q X).Faithful := inferInstanceAs <| (Comma.forget _ _ _ _ _).Faithful
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : (Over.forget P ⊤ X).Full := inferInstanceAs (Comma.forget _ _ _ _ _).Full
+instance : (Over.forget P ⊤ X).Full := inferInstanceAs <| (Comma.forget _ _ _ _ _).Full
 
-/--
-lemma `Over.forget_comp_forget_map` / 引理 `Over.forget_comp_forget_map`
+/-- Occasionally useful for rewriting in the backwards direction. -/
+/-
+**CategoryTheory.MorphismProperty.Over.forget_comp_forget_map** 是 Mathlib 中的一个定理
+，位于命名空间 `CategoryTheory.MorphismProperty.Over`。
+形式化陈述：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] (P Q : Cate
+goryTheory.MorphismProperty T) (X : T)   [inst_1 : Q.IsMultiplicative] {A B : P.
+Over Q X} (f : A ⟶ B),   ((CategoryTheory.MorphismProperty.Over.forget P Q X).co
+mp (CategoryTheory.Over.forget X)).map f = f.left
+参数：P Q : CategoryTheory.MorphismProperty T；X : T；f : A ⟶ B；(CategoryTheory.Morph
+ismProperty.Over.forget P Q X).comp (CategoryTheory.Over.forget X)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
 
-English:
-lemma Over.forget_comp_forget_map
-  given: {A B : P.Over Q X} (f : A ⟶ B)
-  proof: rfl
-
-中文:
-引理 Over.forget_comp_forget_map
-  条件: {A B : P.Over Q X} (f : A ⟶ B)
-  证明: rfl
+--- 原说明 ---
+Occasionally useful for rewriting in the backwards direction.
 -/
 lemma Over.forget_comp_forget_map {A B : P.Over Q X} (f : A ⟶ B) :
     (MorphismProperty.Over.forget P Q X ⋙ CategoryTheory.Over.forget X).map f = f.left := rfl
@@ -2116,22 +1693,23 @@ variable {P Q X}
 
 /-- Construct a morphism in `P.Over Q X` from a morphism in `Over X`. -/
 @[simps hom]
-/--
-Definition of `Over.Hom.mk` / `Over.Hom.mk` 的定义
+/-
+**CategoryTheory.MorphismProperty.Over.Hom.mk** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.MorphismProperty.Over.Hom`。
+形式化陈述：{T : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} T] →     {P 
+Q : CategoryTheory.MorphismProperty T} →       {X : T} →         [inst_1 : Q.IsM
+ultiplicative] →           {A B : P.Over Q X} →             (f :                
+ (CategoryTheory.MorphismProperty.Over.forget P Q X).obj A ⟶                   (
+CategoryTheory.MorphismProperty.Over.forget P Q X).obj B) →               Q (Cat
+egoryTheory.Over.Hom.left f) → (A ⟶ B)
+参数：f :                 (CategoryTheory.MorphismProperty.Over.forget P Q X).obj A
+ ⟶                   (CategoryTheory.MorphismProperty.Over.forget P Q X).obj B；C
+ategoryTheory.Over.Hom.left f；A ⟶ B。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 
-English:
-definition Over.Hom.mk
-  signature: {A B : P.Over Q X}
-  body: f
-  prop_hom_left := hf
-  prop_hom_right := trivial
-
-中文:
-定义 Over.态射.mk
-  签名: {A B : P.Over Q X}
-  定义体: f
-  prop_hom_left := hf
-  prop_hom_right := trivial
+--- 原说明 ---
+Construct a morphism in `P.Over Q X` from a morphism in `Over X`.
 -/
 def Over.Hom.mk {A B : P.Over Q X}
     (f : (Over.forget _ _ _).obj A ⟶ (Over.forget _ _ _).obj B) (hf : Q f.left) : A ⟶ B where
@@ -2142,24 +1720,17 @@ def Over.Hom.mk {A B : P.Over Q X}
 variable (Q) in
 /-- Make an object of `P.Over Q X` from a morphism `f : A ⟶ X` and a proof of `P f`. -/
 @[simps hom left]
-/--
-Definition of `Over.mk` / `Over.mk` 的定义
+/-
+**CategoryTheory.MorphismProperty.Over.mk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.MorphismProperty.Over`。
+形式化陈述：{T : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} T] →     {P 
+: CategoryTheory.MorphismProperty T} →       (Q : CategoryTheory.MorphismPropert
+y T) → {X A : T} → (f : A ⟶ X) → P f → P.Over Q X
+参数：Q : CategoryTheory.MorphismProperty T；f : A ⟶ X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Over.mk
-  signature: {A : T} (f : A ⟶ X) (hf : P f)
-  body: A
-  right := ⟨⟨⟩⟩
-  hom := f
-  prop := hf
-
-中文:
-定义 Over.mk
-  签名: {A : T} (f : A ⟶ X) (hf : P f)
-  定义体: A
-  right := ⟨⟨⟩⟩
-  hom := f
-  prop := hf
+--- 原说明 ---
+Make an object of `P.Over Q X` from a morphism `f : A ⟶ X` and a proof of `P f`.
 -/
 protected def Over.mk {A : T} (f : A ⟶ X) (hf : P f) : P.Over Q X where
   left := A
@@ -2169,22 +1740,23 @@ protected def Over.mk {A : T} (f : A ⟶ X) (hf : P f) : P.Over Q X where
 
 /-- Make a morphism in `P.Over Q X` from a morphism in `T` with compatibilities. -/
 @[simps hom]
-/--
-Definition of `Over.homMk` / `Over.homMk` 的定义
+/-
+**CategoryTheory.MorphismProperty.Over.homMk** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.MorphismProperty.Over`。
+形式化陈述：{T : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} T] →     {P 
+Q : CategoryTheory.MorphismProperty T} →       {X : T} →         [inst_1 : Q.IsM
+ultiplicative] →           {A B : P.Over Q X} →             (f : A.left ⟶ B.left
+) →               autoParam (CategoryTheory.CategoryStruct.comp f B.hom = A.hom)
+                   CategoryTheory.MorphismProperty.Over.homMk._auto_1 →         
+        autoParam (Q f) CategoryTheory.MorphismProperty.Over.homMk._auto_3 → (A 
+⟶ B)
+参数：f : A.left ⟶ B.left；CategoryTheory.CategoryStruct.comp f B.hom = A.hom；Q f；A 
+⟶ B。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 
-English:
-definition Over.homMk
-  signature: {A B : P.Over Q X} (f : A.left ⟶ B.left)
-  body: CategoryTheory.Over.homMk f w
-  prop_hom_left := hf
-  prop_hom_right := trivial
-
-中文:
-定义 Over.homMk
-  签名: {A B : P.Over Q X} (f : A.left ⟶ B.left)
-  定义体: CategoryTheory.Over.homMk f w
-  prop_hom_left := hf
-  prop_hom_right := trivial
+--- 原说明 ---
+Make a morphism in `P.Over Q X` from a morphism in `T` with compatibilities.
 -/
 protected def Over.homMk {A B : P.Over Q X} (f : A.left ⟶ B.left)
     (w : f ≫ B.hom = A.hom := by cat_disch) (hf : Q f := by trivial) : A ⟶ B where
@@ -2194,18 +1766,22 @@ protected def Over.homMk {A B : P.Over Q X} (f : A.left ⟶ B.left)
 
 /-- Make an isomorphism in `P.Over Q X` from an isomorphism in `T` with compatibilities. -/
 @[simps! hom_left inv_left]
-/--
-Definition of `Over.isoMk` / `Over.isoMk` 的定义
+/-
+**CategoryTheory.MorphismProperty.Over.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.MorphismProperty.Over`。
+形式化陈述：{T : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} T] →     {P 
+Q : CategoryTheory.MorphismProperty T} →       {X : T} →         [inst_1 : Q.IsM
+ultiplicative] →           [Q.RespectsIso] →             {A B : P.Over Q X} →   
+            (f : A.left ≅ B.left) →                 autoParam (CategoryTheory.Ca
+tegoryStruct.comp f.hom B.hom = A.hom)                     CategoryTheory.Morphi
+smProperty.Over.isoMk._auto_1 →                   (A ≅ B)
+参数：f : A.left ≅ B.left；CategoryTheory.CategoryStruct.comp f.hom B.hom = A.hom；A 
+≅ B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Over.isoMk
-  signature: [Q.RespectsIso] {A B : P.Over Q X} (f : A.left ≅ B.left)
-  body: Comma.isoMk f (Discrete.eqToIso' rfl)
-
-中文:
-定义 Over.isoMk
-  签名: [Q.RespectsIso] {A B : P.Over Q X} (f : A.left ≅ B.left)
-  定义体: Comma.isoMk f (Discrete.eqToIso' rfl)
+--- 原说明 ---
+Make an isomorphism in `P.Over Q X` from an isomorphism in `T` with compatibilit
+ies.
 -/
 protected def Over.isoMk [Q.RespectsIso] {A B : P.Over Q X} (f : A.left ≅ B.left)
     (w : f.hom ≫ B.hom = A.hom := by cat_disch) : A ≅ B :=
@@ -2213,26 +1789,22 @@ protected def Over.isoMk [Q.RespectsIso] {A B : P.Over Q X} (f : A.left ≅ B.le
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[ext]
-/--
-lemma `Over.Hom.ext` / 引理 `Over.Hom.ext`
-
-English:
-lemma Over.Hom.ext
-  given: {A B : P.Over Q X} {f g : A ⟶ B} (h : f.left = g.left)
-  statement: f = g
-  proof: by
-  ext
-  · exact h
-  · simp
-
-中文:
-引理 Over.态射.ext
-  条件: {A B : P.Over Q X} {f g : A ⟶ B} (h : f.left = g.left)
-  结论: f = g
-  证明: by
-  ext
-  · exact h
-  · simp
+/-
+**CategoryTheory.MorphismProperty.Over.Hom.ext** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.MorphismProperty.Over.Hom`。
+形式化陈述：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] {P Q : Cate
+goryTheory.MorphismProperty T} {X : T}   [inst_1 : Q.IsMultiplicative] {A B : P.
+Over Q X} {f g : A ⟶ B}, f.left = g.left → f = g
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用定理 `CategoryTheory.MorphismProperty.Comma.Hom.ext'`：∀ {A : Type u_1} [inst :
+ CategoryTheory.Category.{v_1, u_1} A] {B : Type u_2}   [inst_1 : CategoryTheory
+.Category.{v_2, u_2} B] {T : Type u_…
+· 使用引理 `CategoryTheory.Comma.hom_ext`：hom_ext (f g : X ⟶ Y) (h₁ : f.left = g.lef
+t) (h₂ : f.right = g.right) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Over.Hom.ext {A B : P.Over Q X} {f g : A ⟶ B} (h : f.left = g.left) : f = g := by
   ext
@@ -2241,20 +1813,24 @@ lemma Over.Hom.ext {A B : P.Over Q X} {f g : A ⟶ B} (h : f.left = g.left) : f 
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc]
-/--
-lemma `Over.w` / 引理 `Over.w`
-
-English:
-lemma Over.w
-  given: {A B : P.Over Q X} (f : A ⟶ B)
-  proof: by
-  simp
-
-中文:
-引理 Over.w
-  条件: {A B : P.Over Q X} (f : A ⟶ B)
-  证明: by
-  simp
+/-
+**CategoryTheory.MorphismProperty.Over.w** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.MorphismProperty.Over`。
+形式化陈述：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] {P Q : Cate
+goryTheory.MorphismProperty T} {X : T}   [inst_1 : Q.IsMultiplicative] {A B : P.
+Over Q X} (f : A ⟶ B), CategoryTheory.CategoryStruct.comp f.left B.hom = A.hom
+参数：f : A ⟶ B。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Over.w`：w : φ.left ≫ g.hom = f.hom
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Over.w {A B : P.Over Q X} (f : A ⟶ B) :
     f.left ≫ B.hom = A.hom := by
@@ -2262,68 +1838,62 @@ lemma Over.w {A B : P.Over Q X} (f : A ⟶ B) :
 
 section
 
-variable {P' Q' : MorphismProperty T} [Q'.IsMultiplicative] (hPP' : P <= P') (hQQ' : Q <= Q')
+variable {P' Q' : MorphismProperty T} [Q'.IsMultiplicative] (hPP' : P ≤ P') (hQQ' : Q ≤ Q')
 
 variable (X) in
-/--
-Definition of `Over.changeProp` / `Over.changeProp` 的定义
+/-- The natural inclusion induced by implications of morphism properties. -/
+/-
+**CategoryTheory.MorphismProperty.Over.changeProp** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.MorphismProperty.Over`。
+形式化陈述：{T : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} T] →     {P 
+Q : CategoryTheory.MorphismProperty T} →       (X : T) →         [inst_1 : Q.IsM
+ultiplicative] →           {P' Q' : CategoryTheory.MorphismProperty T} →        
+     [inst_2 : Q'.IsMultiplicative] → P ≤ P' → Q ≤ Q' → CategoryTheory.Functor (
+P.Over Q X) (P'.Over Q' X)
+参数：X : T；P.Over Q X；P'.Over Q' X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Over.changeProp
-  signature: (hPP' : P <= P') (hQQ' : Q <= Q')
-  body: Comma.changeProp _ _ hPP' hQQ' le_rfl
-
-@[simp]
-
-中文:
-缩写 Over.changeProp
-  签名: (hPP' : P <= P') (hQQ' : Q <= Q')
-  定义体: Comma.changeProp _ _ hPP' hQQ' le_rfl
-
-@[simp]
-
-Depends on / 依赖: Comma.changeProp, changeProp, le_rfl
+--- 原说明 ---
+The natural inclusion induced by implications of morphism properties.
 -/
-abbrev Over.changeProp (hPP' : P <= P') (hQQ' : Q <= Q') :
+abbrev Over.changeProp (hPP' : P ≤ P') (hQQ' : Q ≤ Q') :
     P.Over Q X ⥤ P'.Over Q' X :=
   Comma.changeProp _ _ hPP' hQQ' le_rfl
 
 @[simp]
-/--
-lemma `Over.changeProp_obj_left` / 引理 `Over.changeProp_obj_left`
-
-English:
-lemma Over.changeProp_obj_left
-  given: (hPP' : P <= P') (hQQ' : Q <= Q') (Y : P.Over Q X)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 Over.changeProp_obj_left
-  条件: (hPP' : P <= P') (hQQ' : Q <= Q') (Y : P.Over Q X)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.MorphismProperty.Over.changeProp_obj_left** 是 Mathlib 中的一个定理，位于
+命名空间 `CategoryTheory.MorphismProperty.Over`。
+形式化陈述：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] {P Q : Cate
+goryTheory.MorphismProperty T} {X : T}   [inst_1 : Q.IsMultiplicative] {P' Q' : 
+CategoryTheory.MorphismProperty T} [inst_2 : Q'.IsMultiplicative]   (hPP' : P ≤ 
+P') (hQQ' : Q ≤ Q') (Y : P.Over Q X),   ((CategoryTheory.MorphismProperty.Over.c
+hangeProp X hPP' hQQ').obj Y).left = Y.left
+参数：hPP' : P ≤ P'；hQQ' : Q ≤ Q'；Y : P.Over Q X；(CategoryTheory.MorphismProperty.O
+ver.changeProp X hPP' hQQ').obj Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
 -/
-lemma Over.changeProp_obj_left (hPP' : P <= P') (hQQ' : Q <= Q') (Y : P.Over Q X) :
+lemma Over.changeProp_obj_left (hPP' : P ≤ P') (hQQ' : Q ≤ Q') (Y : P.Over Q X) :
     ((changeProp X hPP' hQQ').obj Y).left = Y.left := rfl
 
 @[simp]
-/--
-lemma `Over.changeProp_obj_hom` / 引理 `Over.changeProp_obj_hom`
-
-English:
-lemma Over.changeProp_obj_hom
-  given: (hPP' : P <= P') (hQQ' : Q <= Q') (Y : P.Over Q X)
-  proof: rfl
-
-中文:
-引理 Over.changeProp_obj_hom
-  条件: (hPP' : P <= P') (hQQ' : Q <= Q') (Y : P.Over Q X)
-  证明: rfl
+/-
+**CategoryTheory.MorphismProperty.Over.changeProp_obj_hom** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory.MorphismProperty.Over`。
+形式化陈述：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] {P Q : Cate
+goryTheory.MorphismProperty T} {X : T}   [inst_1 : Q.IsMultiplicative] {P' Q' : 
+CategoryTheory.MorphismProperty T} [inst_2 : Q'.IsMultiplicative]   (hPP' : P ≤ 
+P') (hQQ' : Q ≤ Q') (Y : P.Over Q X),   ((CategoryTheory.MorphismProperty.Over.c
+hangeProp X hPP' hQQ').obj Y).hom = Y.hom
+参数：hPP' : P ≤ P'；hQQ' : Q ≤ Q'；Y : P.Over Q X；(CategoryTheory.MorphismProperty.O
+ver.changeProp X hPP' hQQ').obj Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
 -/
-lemma Over.changeProp_obj_hom (hPP' : P <= P') (hQQ' : Q <= Q') (Y : P.Over Q X) :
+lemma Over.changeProp_obj_hom (hPP' : P ≤ P') (hQQ' : Q ≤ Q') (Y : P.Over Q X) :
     ((changeProp X hPP' hQQ').obj Y).hom = Y.hom := rfl
 
 end
@@ -2334,83 +1904,71 @@ section Under
 
 variable {T : Type*} [Category* T] (P Q : MorphismProperty T) (X : T) [Q.IsMultiplicative]
 
-/--
-Definition of `Under` / `Under` 的定义
+/-- Given a morphism property `P` on a category `T` and an object `X : T`, this is the
+subcategory of `Under X` defined by `P` where morphisms satisfy `Q`. -/
+/-
+**CategoryTheory.MorphismProperty.Under** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.MorphismProperty`。
+形式化陈述：{T : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} T] →     Cat
+egoryTheory.MorphismProperty T → CategoryTheory.MorphismProperty T → T → Type (m
+ax v_1 u_1)
+参数：max v_1 u_1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Under
-  signature: : Type _
-  body: P.Comma (Functor.fromPUnit.{0} X) (Functor.id T) ⊤ Q
-
-中文:
-缩写 Under
-  签名: : 类型 _
-  定义体: P.Comma (Functor.fromPUnit.{0} X) (Functor.id T) ⊤ Q
+--- 原说明 ---
+Given a morphism property `P` on a category `T` and an object `X : T`, this is t
+he
+subcategory of `Under X` defined by `P` where morphisms satisfy `Q`.
 -/
 protected abbrev Under : Type _ :=
   P.Comma (Functor.fromPUnit.{0} X) (Functor.id T) ⊤ Q
 
-/--
-Definition of `Under.forget` / `Under.forget` 的定义
+/-- The forgetful functor from the full subcategory of `Under X` defined by `P` to `Under X`. -/
+/-
+**CategoryTheory.MorphismProperty.Under.forget** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.MorphismProperty.Under`。
+形式化陈述：{T : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} T] →     (P 
+Q : CategoryTheory.MorphismProperty T) →       (X : T) → [inst_1 : Q.IsMultiplic
+ative] → CategoryTheory.Functor (P.Under Q X) (CategoryTheory.Under X)
+参数：P Q : CategoryTheory.MorphismProperty T；X : T；P.Under Q X；CategoryTheory.Unde
+r X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Under.forget
-  signature: : P.Under Q X ⥤ Under X
-  body: Comma.forget (Functor.fromPUnit.{0} X) (Functor.id T) P ⊤ Q
-
-中文:
-缩写 Under.forget
-  签名: : P.Under Q X ⥤ Under X
-  定义体: Comma.forget (Functor.fromPUnit.{0} X) (Functor.id T) P ⊤ Q
+--- 原说明 ---
+The forgetful functor from the full subcategory of `Under X` defined by `P` to `
+Under X`.
 -/
 protected abbrev Under.forget : P.Under Q X ⥤ Under X :=
   Comma.forget (Functor.fromPUnit.{0} X) (Functor.id T) P ⊤ Q
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (Under.forget P Q X).Faithful
-  body: inferInstanceAs (Comma.forget _ _ _ _ _).Faithful
-
-中文:
-实例 :
-  签名: (Under.forget P Q X).忠实
-  定义体: inferInstanceAs (Comma.forget _ _ _ _ _).Faithful
-
-Depends on / 依赖: Comma.forget, Faithful, forget
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : (Under.forget P Q X).Faithful := inferInstanceAs (Comma.forget _ _ _ _ _).Faithful
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (Under.forget P ⊤ X).Full
-  body: inferInstanceAs (Comma.forget _ _ _ _ _).Full
-
-中文:
-实例 :
-  签名: (Under.forget P ⊤ X).满
-  定义体: inferInstanceAs (Comma.forget _ _ _ _ _).Full
-
-Depends on / 依赖: Comma.forget, forget
+instance : (Under.forget P Q X).Faithful := inferInstanceAs <| (Comma.forget _ _ _ _ _).Faithful
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : (Under.forget P ⊤ X).Full := inferInstanceAs (Comma.forget _ _ _ _ _).Full
+instance : (Under.forget P ⊤ X).Full := inferInstanceAs <| (Comma.forget _ _ _ _ _).Full
 
-/--
-lemma `Under.forget_comp_forget_map` / 引理 `Under.forget_comp_forget_map`
+/-- Occasionally useful for rewriting in the backwards direction. -/
+/-
+**CategoryTheory.MorphismProperty.Under.forget_comp_forget_map** 是 Mathlib 中的一个定
+理，位于命名空间 `CategoryTheory.MorphismProperty.Under`。
+形式化陈述：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] (P Q : Cate
+goryTheory.MorphismProperty T) (X : T)   [inst_1 : Q.IsMultiplicative] {A B : P.
+Under Q X} (f : A ⟶ B),   ((CategoryTheory.MorphismProperty.Under.forget P Q X).
+comp (CategoryTheory.Under.forget X)).map f = f.right
+参数：P Q : CategoryTheory.MorphismProperty T；X : T；f : A ⟶ B；(CategoryTheory.Morph
+ismProperty.Under.forget P Q X).comp (CategoryTheory.Under.forget X)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
 
-English:
-lemma Under.forget_comp_forget_map
-  given: {A B : P.Under Q X} (f : A ⟶ B)
-  proof: rfl
-
-中文:
-引理 Under.forget_comp_forget_map
-  条件: {A B : P.Under Q X} (f : A ⟶ B)
-  证明: rfl
+--- 原说明 ---
+Occasionally useful for rewriting in the backwards direction.
 -/
 lemma Under.forget_comp_forget_map {A B : P.Under Q X} (f : A ⟶ B) :
     (MorphismProperty.Under.forget P Q X ⋙ CategoryTheory.Under.forget X).map f = f.right := rfl
@@ -2419,22 +1977,23 @@ variable {P Q X}
 
 /-- Construct a morphism in `P.Under Q X` from a morphism in `Under X`. -/
 @[simps hom]
-/--
-Definition of `Under.Hom.mk` / `Under.Hom.mk` 的定义
+/-
+**CategoryTheory.MorphismProperty.Under.Hom.mk** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.MorphismProperty.Under.Hom`。
+形式化陈述：{T : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} T] →     {P 
+Q : CategoryTheory.MorphismProperty T} →       {X : T} →         [inst_1 : Q.IsM
+ultiplicative] →           {A B : P.Under Q X} →             (f :               
+  (CategoryTheory.MorphismProperty.Under.forget P Q X).obj A ⟶                  
+ (CategoryTheory.MorphismProperty.Under.forget P Q X).obj B) →               Q (
+CategoryTheory.Under.Hom.right f) → (A ⟶ B)
+参数：f :                 (CategoryTheory.MorphismProperty.Under.forget P Q X).obj 
+A ⟶                   (CategoryTheory.MorphismProperty.Under.forget P Q X).obj B
+；CategoryTheory.Under.Hom.right f；A ⟶ B。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 
-English:
-definition Under.Hom.mk
-  signature: {A B : P.Under Q X}
-  body: f
-  prop_hom_left := trivial
-  prop_hom_right := hf
-
-中文:
-定义 Under.态射.mk
-  签名: {A B : P.Under Q X}
-  定义体: f
-  prop_hom_left := trivial
-  prop_hom_right := hf
+--- 原说明 ---
+Construct a morphism in `P.Under Q X` from a morphism in `Under X`.
 -/
 def Under.Hom.mk {A B : P.Under Q X}
     (f : (Under.forget _ _ _).obj A ⟶ (Under.forget _ _ _).obj B) (hf : Q f.right) : A ⟶ B where
@@ -2445,24 +2004,18 @@ def Under.Hom.mk {A B : P.Under Q X}
 variable (Q) in
 /-- Make an object of `P.Under Q X` from a morphism `f : A ⟶ X` and a proof of `P f`. -/
 @[simps hom left]
-/--
-Definition of `Under.mk` / `Under.mk` 的定义
+/-
+**CategoryTheory.MorphismProperty.Under.mk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.MorphismProperty.Under`。
+形式化陈述：{T : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} T] →     {P 
+: CategoryTheory.MorphismProperty T} →       (Q : CategoryTheory.MorphismPropert
+y T) → {X A : T} → (f : X ⟶ A) → P f → P.Under Q X
+参数：Q : CategoryTheory.MorphismProperty T；f : X ⟶ A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Under.mk
-  signature: {A : T} (f : X ⟶ A) (hf : P f)
-  body: ⟨⟨⟩⟩
-  right := A
-  hom := f
-  prop := hf
-
-中文:
-定义 Under.mk
-  签名: {A : T} (f : X ⟶ A) (hf : P f)
-  定义体: ⟨⟨⟩⟩
-  right := A
-  hom := f
-  prop := hf
+--- 原说明 ---
+Make an object of `P.Under Q X` from a morphism `f : A ⟶ X` and a proof of `P f`
+.
 -/
 protected def Under.mk {A : T} (f : X ⟶ A) (hf : P f) : P.Under Q X where
   left := ⟨⟨⟩⟩
@@ -2472,22 +2025,23 @@ protected def Under.mk {A : T} (f : X ⟶ A) (hf : P f) : P.Under Q X where
 
 /-- Make a morphism in `P.Under Q X` from a morphism in `T` with compatibilities. -/
 @[simps hom]
-/--
-Definition of `Under.homMk` / `Under.homMk` 的定义
+/-
+**CategoryTheory.MorphismProperty.Under.homMk** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.MorphismProperty.Under`。
+形式化陈述：{T : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} T] →     {P 
+Q : CategoryTheory.MorphismProperty T} →       {X : T} →         [inst_1 : Q.IsM
+ultiplicative] →           {A B : P.Under Q X} →             (f : A.right ⟶ B.ri
+ght) →               autoParam (CategoryTheory.CategoryStruct.comp A.hom f = B.h
+om)                   CategoryTheory.MorphismProperty.Under.homMk._auto_1 →     
+            autoParam (Q f) CategoryTheory.MorphismProperty.Under.homMk._auto_3 
+→ (A ⟶ B)
+参数：f : A.right ⟶ B.right；CategoryTheory.CategoryStruct.comp A.hom f = B.hom；Q f；
+A ⟶ B。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 
-English:
-definition Under.homMk
-  signature: {A B : P.Under Q X} (f : A.right ⟶ B.right)
-  body: CategoryTheory.Under.homMk f w
-  prop_hom_left := trivial
-  prop_hom_right := hf
-
-中文:
-定义 Under.homMk
-  签名: {A B : P.Under Q X} (f : A.right ⟶ B.right)
-  定义体: CategoryTheory.Under.homMk f w
-  prop_hom_left := trivial
-  prop_hom_right := hf
+--- 原说明 ---
+Make a morphism in `P.Under Q X` from a morphism in `T` with compatibilities.
 -/
 protected def Under.homMk {A B : P.Under Q X} (f : A.right ⟶ B.right)
     (w : A.hom ≫ f = B.hom := by cat_disch) (hf : Q f := by trivial) : A ⟶ B where
@@ -2497,18 +2051,22 @@ protected def Under.homMk {A B : P.Under Q X} (f : A.right ⟶ B.right)
 
 /-- Make an isomorphism in `P.Under Q X` from an isomorphism in `T` with compatibilities. -/
 @[simps! hom_right inv_right]
-/--
-Definition of `Under.isoMk` / `Under.isoMk` 的定义
+/-
+**CategoryTheory.MorphismProperty.Under.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.MorphismProperty.Under`。
+形式化陈述：{T : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} T] →     {P 
+Q : CategoryTheory.MorphismProperty T} →       {X : T} →         [inst_1 : Q.IsM
+ultiplicative] →           [Q.RespectsIso] →             {A B : P.Under Q X} →  
+             (f : A.right ≅ B.right) →                 autoParam (CategoryTheory
+.CategoryStruct.comp A.hom f.hom = B.hom)                     CategoryTheory.Mor
+phismProperty.Under.isoMk._auto_1 →                   (A ≅ B)
+参数：f : A.right ≅ B.right；CategoryTheory.CategoryStruct.comp A.hom f.hom = B.hom；
+A ≅ B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Under.isoMk
-  signature: [Q.RespectsIso] {A B : P.Under Q X} (f : A.right ≅ B.right)
-  body: Comma.isoMk (Discrete.eqToIso' rfl) f
-
-中文:
-定义 Under.isoMk
-  签名: [Q.RespectsIso] {A B : P.Under Q X} (f : A.right ≅ B.right)
-  定义体: Comma.isoMk (Discrete.eqToIso' rfl) f
+--- 原说明 ---
+Make an isomorphism in `P.Under Q X` from an isomorphism in `T` with compatibili
+ties.
 -/
 protected def Under.isoMk [Q.RespectsIso] {A B : P.Under Q X} (f : A.right ≅ B.right)
     (w : A.hom ≫ f.hom = B.hom := by cat_disch) : A ≅ B :=
@@ -2516,26 +2074,22 @@ protected def Under.isoMk [Q.RespectsIso] {A B : P.Under Q X} (f : A.right ≅ B
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[ext]
-/--
-lemma `Under.Hom.ext` / 引理 `Under.Hom.ext`
-
-English:
-lemma Under.Hom.ext
-  given: {A B : P.Under Q X} {f g : A ⟶ B} (h : f.right = g.right)
-  statement: f = g
-  proof: by
-  ext
-  · simp
-  · exact h
-
-中文:
-引理 Under.态射.ext
-  条件: {A B : P.Under Q X} {f g : A ⟶ B} (h : f.right = g.right)
-  结论: f = g
-  证明: by
-  ext
-  · simp
-  · exact h
+/-
+**CategoryTheory.MorphismProperty.Under.Hom.ext** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.MorphismProperty.Under.Hom`。
+形式化陈述：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] {P Q : Cate
+goryTheory.MorphismProperty T} {X : T}   [inst_1 : Q.IsMultiplicative] {A B : P.
+Under Q X} {f g : A ⟶ B}, f.right = g.right → f = g
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用定理 `CategoryTheory.MorphismProperty.Comma.Hom.ext'`：∀ {A : Type u_1} [inst :
+ CategoryTheory.Category.{v_1, u_1} A] {B : Type u_2}   [inst_1 : CategoryTheory
+.Category.{v_2, u_2} B] {T : Type u_…
+· 使用引理 `CategoryTheory.Comma.hom_ext`：hom_ext (f g : X ⟶ Y) (h₁ : f.left = g.lef
+t) (h₂ : f.right = g.right) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Under.Hom.ext {A B : P.Under Q X} {f g : A ⟶ B} (h : f.right = g.right) : f = g := by
   ext
@@ -2544,20 +2098,25 @@ lemma Under.Hom.ext {A B : P.Under Q X} {f g : A ⟶ B} (h : f.right = g.right) 
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc]
-/--
-lemma `Under.w` / 引理 `Under.w`
-
-English:
-lemma Under.w
-  given: {A B : P.Under Q X} (f : A ⟶ B)
-  proof: by
-  simp
-
-中文:
-引理 Under.w
-  条件: {A B : P.Under Q X} (f : A ⟶ B)
-  证明: by
-  simp
+/-
+**CategoryTheory.MorphismProperty.Under.w** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.MorphismProperty.Under`。
+形式化陈述：∀ {T : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} T] {P Q : Cate
+goryTheory.MorphismProperty T} {X : T}   [inst_1 : Q.IsMultiplicative] {A B : P.
+Under Q X} (f : A ⟶ B),   CategoryTheory.CategoryStruct.comp A.hom f.right = B.h
+om
+参数：f : A ⟶ B。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Under.w`：w : f.hom ≫ φ.right = g.hom
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Under.w {A B : P.Under Q X} (f : A ⟶ B) :
     A.hom ≫ f.right = B.hom := by
@@ -2568,18 +2127,23 @@ end Under
 variable {C D : Type*} [Category C] [Category D]
 variable (P : MorphismProperty D) (Q : MorphismProperty C) [Q.IsMultiplicative] (F : C ⥤ D) (X : D)
 
-/--
-Definition of `CostructuredArrow` / `CostructuredArrow` 的定义
+/-- Given a morphism property `P` on a category `C` and an object `X : C`, this is the
+subcategory of `CostructuredArrow F X` defined by `P` where morphisms satisfy `Q`. -/
+/-
+**CategoryTheory.MorphismProperty.CostructuredArrow** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.MorphismProperty`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{u
+_3, u_1} C] →       [inst_1 : CategoryTheory.Category.{u_4, u_2} D] →         Ca
+tegoryTheory.MorphismProperty D →           CategoryTheory.MorphismProperty C → 
+CategoryTheory.Functor C D → D → Type (max u_1 u_4)
+参数：max u_1 u_4。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation CostructuredArrow
-  signature: (P : MorphismProperty D) (Q : MorphismProperty C)
-  body: P.Comma F (Functor.fromPUnit.{0} X) Q ⊤
-
-中文:
-缩写 CostructuredArrow
-  签名: (P : MorphismProperty D) (Q : MorphismProperty C)
-  定义体: P.Comma F (Functor.fromPUnit.{0} X) Q ⊤
+--- 原说明 ---
+Given a morphism property `P` on a category `C` and an object `X : C`, this is t
+he
+subcategory of `CostructuredArrow F X` defined by `P` where morphisms satisfy `Q
+`.
 -/
 protected abbrev CostructuredArrow (P : MorphismProperty D) (Q : MorphismProperty C)
     (F : C ⥤ D) (X : D) :=
@@ -2590,24 +2154,20 @@ section CostructuredArrow
 variable {P F X} in
 /-- Construct an object of `P.CostructuredArrow Q F X` from a morphism `F.obj A ⟶ X`. -/
 @[simps left hom]
-/--
-Definition of `CostructuredArrow.mk` / `CostructuredArrow.mk` 的定义
+/-
+**CategoryTheory.MorphismProperty.CostructuredArrow.mk** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.MorphismProperty.CostructuredArrow`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{u
+_3, u_1} C] →       [inst_1 : CategoryTheory.Category.{u_4, u_2} D] →         {P
+ : CategoryTheory.MorphismProperty D} →           (Q : CategoryTheory.MorphismPr
+operty C) →             {F : CategoryTheory.Functor C D} → {X : D} → {A : C} → (
+f : F.obj A ⟶ X) → P f → P.CostructuredArrow Q F X
+参数：Q : CategoryTheory.MorphismProperty C；f : F.obj A ⟶ X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CostructuredArrow.mk
-  signature: {A : C} (f : F.obj A ⟶ X) (hf : P f)
-  body: A
-  right := ⟨⟨⟩⟩
-  hom := f
-  prop := hf
-
-中文:
-定义 CostructuredArrow.mk
-  签名: {A : C} (f : F.obj A ⟶ X) (hf : P f)
-  定义体: A
-  right := ⟨⟨⟩⟩
-  hom := f
-  prop := hf
+--- 原说明 ---
+Construct an object of `P.CostructuredArrow Q F X` from a morphism `F.obj A ⟶ X`
+.
 -/
 protected def CostructuredArrow.mk {A : C} (f : F.obj A ⟶ X) (hf : P f) :
     P.CostructuredArrow Q F X where
@@ -2620,26 +2180,27 @@ variable {P Q F X} in
 /-- Construct a morphism in `P.CostructuredArrow Q F X` by giving a morphism on the underlying
 objects of `C`. -/
 @[simps left]
-/--
-Definition of `CostructuredArrow.homMk` / `CostructuredArrow.homMk` 的定义
+/-
+**CategoryTheory.MorphismProperty.CostructuredArrow.homMk** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.MorphismProperty.CostructuredArrow`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{u
+_3, u_1} C] →       [inst_1 : CategoryTheory.Category.{u_4, u_2} D] →         {P
+ : CategoryTheory.MorphismProperty D} →           {Q : CategoryTheory.MorphismPr
+operty C} →             [inst_2 : Q.IsMultiplicative] →               {F : Categ
+oryTheory.Functor C D} →                 {X : D} →                   {A B : P.Co
+structuredArrow Q F X} →                     (f : A.left ⟶ B.left) →            
+           Q f →                         autoParam (CategoryTheory.CategoryStruc
+t.comp (F.map f) B.hom = A.hom)                             CategoryTheory.Morph
+ismProperty.CostructuredArrow.homMk._auto_1 →                           (A ⟶ B)
+参数：f : A.left ⟶ B.left；CategoryTheory.CategoryStruct.comp (F.map f) B.hom = A.ho
+m；A ⟶ B。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 
-English:
-definition CostructuredArrow.homMk
-  signature: {A B : P.CostructuredArrow Q F X} (f : A.left ⟶ B.left) (hf : Q f)
-  body: f
-  right := eqToHom (Subsingleton.elim _ _)
-  prop_hom_left := hf
-  prop_hom_right := trivial
-
-中文:
-定义 CostructuredArrow.homMk
-  签名: {A B : P.CostructuredArrow Q F X} (f : A.left ⟶ B.left) (hf : Q f)
-  定义体: f
-  right := eqToHom (Subsingleton.elim _ _)
-  prop_hom_left := hf
-  prop_hom_right := trivial
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim, cat_disch, eqToHom, prop_hom_left, prop_hom_right
+--- 原说明 ---
+Construct a morphism in `P.CostructuredArrow Q F X` by giving a morphism on the 
+underlying
+objects of `C`.
 -/
 def CostructuredArrow.homMk {A B : P.CostructuredArrow Q F X} (f : A.left ⟶ B.left) (hf : Q f)
     (w : F.map f ≫ B.hom = A.hom := by cat_disch) :
@@ -2652,20 +2213,29 @@ def CostructuredArrow.homMk {A B : P.CostructuredArrow Q F X} (f : A.left ⟶ B.
 set_option backward.isDefEq.respectTransparency.types false in
 variable {P Q F X} in
 @[ext]
-/--
-lemma `CostructuredArrow.Hom.ext` / 引理 `CostructuredArrow.Hom.ext`
-
-English:
-lemma CostructuredArrow.Hom.ext
-  statement: {A B : P.CostructuredArrow Q F X} {f g : A ⟶ B}
-  proof: by
-  ext <;> simp [h]
-
-中文:
-引理 CostructuredArrow.态射.ext
-  结论: {A B : P.CostructuredArrow Q F X} {f g : A ⟶ B}
-  证明: by
-  ext <;> simp [h]
+/-
+**CategoryTheory.MorphismProperty.CostructuredArrow.Hom.ext** 是 Mathlib 中的一个定理，位
+于命名空间 `CategoryTheory.MorphismProperty.CostructuredArrow.Hom`。
+形式化陈述：∀ {C : Type u_1} {D : Type u_2} [inst : CategoryTheory.Category.{u_3, u_1}
+ C]   [inst_1 : CategoryTheory.Category.{u_4, u_2} D] {P : CategoryTheory.Morphi
+smProperty D}   {Q : CategoryTheory.MorphismProperty C} [inst_2 : Q.IsMultiplica
+tive] {F : CategoryTheory.Functor C D} {X : D}   {A B : P.CostructuredArrow Q F 
+X} {f g : A ⟶ B}, f.left = g.left → f = g
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
+· 使用定理 `CategoryTheory.MorphismProperty.Comma.Hom.ext'`：∀ {A : Type u_1} [inst :
+ CategoryTheory.Category.{v_1, u_1} A] {B : Type u_2}   [inst_1 : CategoryTheory
+.Category.{v_2, u_2} B] {T : Type u_…
+· 使用引理 `CategoryTheory.Comma.hom_ext`：hom_ext (f g : X ⟶ Y) (h₁ : f.left = g.lef
+t) (h₂ : f.right = g.right) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma CostructuredArrow.Hom.ext {A B : P.CostructuredArrow Q F X} {f g : A ⟶ B}
     (h : f.left = g.left) : f = g := by
@@ -2675,22 +2245,27 @@ variable {P Q F X} in
 /-- Construct an isomorphism in `P.CostructuredArrow Q F X` by giving the isomorphism
 on the underlying objects of `C`. -/
 @[simps]
-/--
-Definition of `CostructuredArrow.isoMk` / `CostructuredArrow.isoMk` 的定义
+/-
+**CategoryTheory.MorphismProperty.CostructuredArrow.isoMk** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.MorphismProperty.CostructuredArrow`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{u
+_3, u_1} C] →       [inst_1 : CategoryTheory.Category.{u_4, u_2} D] →         {P
+ : CategoryTheory.MorphismProperty D} →           {Q : CategoryTheory.MorphismPr
+operty C} →             [inst_2 : Q.IsMultiplicative] →               {F : Categ
+oryTheory.Functor C D} →                 {X : D} →                   {A B : P.Co
+structuredArrow Q F X} →                     (f : A.left ≅ B.left) →            
+           Q f.hom →                         Q f.inv →                          
+ autoParam (CategoryTheory.CategoryStruct.comp (F.map f.hom) B.hom = A.hom)     
+                          CategoryTheory.MorphismProperty.CostructuredArrow.isoM
+k._auto_1 →                             (A ≅ B)
+参数：f : A.left ≅ B.left；CategoryTheory.CategoryStruct.comp (F.map f.hom) B.hom = 
+A.hom；A ≅ B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CostructuredArrow.isoMk
-  signature: {A B : P.CostructuredArrow Q F X} (f : A.left ≅ B.left) (hf : Q f.hom)
-  body: MorphismProperty.CostructuredArrow.homMk _ hf
-  inv := MorphismProperty.CostructuredArrow.homMk _ hf' (by simp [← w])
-
-中文:
-定义 CostructuredArrow.isoMk
-  签名: {A B : P.CostructuredArrow Q F X} (f : A.left ≅ B.left) (hf : Q f.hom)
-  定义体: MorphismProperty.CostructuredArrow.homMk _ hf
-  inv := MorphismProperty.CostructuredArrow.homMk _ hf' (by simp [← w])
-
-Depends on / 依赖: CostructuredArrow, MorphismProperty, MorphismProperty.CostructuredArrow.homMk, cat_disch
+--- 原说明 ---
+Construct an isomorphism in `P.CostructuredArrow Q F X` by giving the isomorphis
+m
+on the underlying objects of `C`.
 -/
 def CostructuredArrow.isoMk {A B : P.CostructuredArrow Q F X} (f : A.left ≅ B.left) (hf : Q f.hom)
     (hf' : Q f.inv)
@@ -2699,18 +2274,23 @@ def CostructuredArrow.isoMk {A B : P.CostructuredArrow Q F X} (f : A.left ≅ B.
   hom := MorphismProperty.CostructuredArrow.homMk _ hf
   inv := MorphismProperty.CostructuredArrow.homMk _ hf' (by simp [← w])
 
-/--
-Definition of `CostructuredArrow.forget` / `CostructuredArrow.forget` 的定义
+/-- The forgetful functor from the subcategory `P.CostructuredArrow Q F X`. -/
+/-
+**CategoryTheory.MorphismProperty.CostructuredArrow.forget** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.MorphismProperty.CostructuredArrow`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{u
+_3, u_1} C] →       [inst_1 : CategoryTheory.Category.{u_4, u_2} D] →         (P
+ : CategoryTheory.MorphismProperty D) →           (Q : CategoryTheory.MorphismPr
+operty C) →             [inst_2 : Q.IsMultiplicative] →               (F : Categ
+oryTheory.Functor C D) →                 (X : D) → CategoryTheory.Functor (P.Cos
+tructuredArrow Q F X) (CategoryTheory.CostructuredArrow F X)
+参数：P : CategoryTheory.MorphismProperty D；Q : CategoryTheory.MorphismProperty C；F
+ : CategoryTheory.Functor C D；X : D；P.CostructuredArrow Q F X；CategoryTheory.Cos
+tructuredArrow F X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation CostructuredArrow.forget
-  signature: :
-  body: Comma.forget _ _ _ _ _
-
-中文:
-缩写 CostructuredArrow.forget
-  签名: :
-  定义体: Comma.forget _ _ _ _ _
+--- 原说明 ---
+The forgetful functor from the subcategory `P.CostructuredArrow Q F X`.
 -/
 protected abbrev CostructuredArrow.forget :
     P.CostructuredArrow Q F X ⥤ CostructuredArrow F X :=
@@ -2718,47 +2298,29 @@ protected abbrev CostructuredArrow.forget :
 
 /-- Reinterpreting an `F`-costructured arrow `F.obj A ⟶ X` as an arrow over `X`. -/
 @[simps]
-/--
-Definition of `CostructuredArrow.toOver` / `CostructuredArrow.toOver` 的定义
+/-
+**CategoryTheory.MorphismProperty.CostructuredArrow.toOver** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.MorphismProperty.CostructuredArrow`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{u
+_3, u_1} C] →       [inst_1 : CategoryTheory.Category.{u_4, u_2} D] →         (P
+ : CategoryTheory.MorphismProperty D) →           (F : CategoryTheory.Functor C 
+D) → (X : D) → CategoryTheory.Functor (P.CostructuredArrow ⊤ F X) (P.Over ⊤ X)
+参数：P : CategoryTheory.MorphismProperty D；F : CategoryTheory.Functor C D；X : D；P.
+CostructuredArrow ⊤ F X；P.Over ⊤ X。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instTop`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C], ⊤.IsMultiplicative
 
-English:
-definition CostructuredArrow.toOver
-  signature: : P.CostructuredArrow ⊤ F X ⥤ P.Over ⊤ X where
-  body: Over.mk _ A.hom A.prop
-  map f := Over.homMk (F.map f.left) _
-
-中文:
-定义 CostructuredArrow.toOver
-  签名: : P.CostructuredArrow ⊤ F X ⥤ P.Over ⊤ X where
-  定义体: Over.mk _ A.hom A.prop
-  map f := Over.homMk (F.map f.left) _
+--- 原说明 ---
+Reinterpreting an `F`-costructured arrow `F.obj A ⟶ X` as an arrow over `X`.
 -/
 protected def CostructuredArrow.toOver : P.CostructuredArrow ⊤ F X ⥤ P.Over ⊤ X where
   obj A := Over.mk _ A.hom A.prop
   map f := Over.homMk (F.map f.left) _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [F.Faithful]
-  signature: : (CostructuredArrow.toOver P F X).Faithful
-  body: by
-  constructor
-  intro A B f g hfg
-  ext
-  exact F.map_injective congr($(hfg).left)
-
-中文:
-实例 [F.忠实]
-  签名: : (CostructuredArrow.toOver P F X).忠实
-  定义体: by
-  constructor
-  intro A B f g hfg
-  ext
-  exact F.map_injective congr($(hfg).left)
-
-Depends on / 依赖: F.map_injective, map_injective
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [F.Faithful] : (CostructuredArrow.toOver P F X).Faithful := by
   constructor
@@ -2767,30 +2329,10 @@ instance [F.Faithful] : (CostructuredArrow.toOver P F X).Faithful := by
   exact F.map_injective congr($(hfg).left)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [F.Full]
-  signature: : (CostructuredArrow.toOver P F X).Full
-  body: by
-  constructor
-  intro A B f
-  refine ⟨CostructuredArrow.homMk (F.preimage f.left) trivial ?_, ?_⟩
-  · simpa using f.w
-  · ext; simp
-
-中文:
-实例 [F.满]
-  签名: : (CostructuredArrow.toOver P F X).满
-  定义体: by
-  constructor
-  intro A B f
-  refine ⟨CostructuredArrow.homMk (F.preimage f.left) trivial ?_, ?_⟩
-  · simpa using f.w
-  · ext; simp
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.homMk, F.preimage, f.left, preimage
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [F.Full] : (CostructuredArrow.toOver P F X).Full := by
   constructor
@@ -2802,34 +2344,37 @@ instance [F.Full] : (CostructuredArrow.toOver P F X).Full := by
 end CostructuredArrow
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Instance `HasFactorization.over` / 实例 `HasFactorization.over`
-
-English:
-instance HasFactorization.over
-  body: by
-    let hf := W₁.factorizationData W₂ f.left
-    exact ⟨{
-      Z := .mk (hf.p ≫ Y.hom)
-      i := CategoryTheory.Over.homMk hf.i
-      p := CategoryTheory.Over.homMk hf.p
-      hi := hf.hi
-      hp := hf.hp
-    }⟩
-
-中文:
-实例 有分解.over
-  定义体: by
-    let hf := W₁.factorizationData W₂ f.left
-    exact ⟨{
-      Z := .mk (hf.p ≫ Y.hom)
-      i := CategoryTheory.Over.homMk hf.i
-      p := CategoryTheory.Over.homMk hf.p
-      hi := hf.hi
-      hp := hf.hp
-    }⟩
-
-Depends on / 依赖: HasFactorization
+/-
+**CategoryTheory.MorphismProperty.HasFactorization.over** 是 Mathlib 中的一个定理，位于命名空
+间 `CategoryTheory.MorphismProperty.HasFactorization`。
+形式化陈述：∀ {C : Type u_3} [inst : CategoryTheory.Category.{v_1, u_3} C] (W₁ W₂ : Ca
+tegoryTheory.MorphismProperty C)   [W₁.HasFactorization W₂] (S : C), W₁.over.Has
+Factorization W₂.over
+参数：W₁ W₂ : CategoryTheory.MorphismProperty C；S : C。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.MorphismProperty.MapFactorizationData.fac_assoc`：∀ {C : T
+ype u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {W₁ W₂ : CategoryTheory.M
+orphismProperty C} {X Y : C}   {f : X ⟶ Y} (self : W…
+· 使用定理 `CategoryTheory.Over.w`：w : φ.left ≫ g.hom = f.hom
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Over.OverMorphism.ext`：∀ {T : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} T] {X : T} {U V : CategoryTheory.Over X} {f g : U ⟶ V},  
+ CategoryTheory.Over.Hom.l…
+· 使用定理 `CategoryTheory.MorphismProperty.MapFactorizationData.fac`：∀ {C : Type u_
+1} [inst : CategoryTheory.Category.{v_1, u_1} C] {W₁ W₂ : CategoryTheory.Morphis
+mProperty C} {X Y : C}   {f : X ⟶ Y} (self : W…
+· 使用定理 `CategoryTheory.MorphismProperty.MapFactorizationData.hi`：∀ {C : Type u_1
+} [inst : CategoryTheory.Category.{v_1, u_1} C] {W₁ W₂ : CategoryTheory.Morphism
+Property C} {X Y : C}   {f : X ⟶ Y} (self : W…
+· 使用定理 `CategoryTheory.MorphismProperty.MapFactorizationData.hp`：∀ {C : Type u_1
+} [inst : CategoryTheory.Category.{v_1, u_1} C] {W₁ W₂ : CategoryTheory.Morphism
+Property C} {X Y : C}   {f : X ⟶ Y} (self : W…
 -/
 instance HasFactorization.over
     {C : Type*} [Category* C] (W₁ W₂ : MorphismProperty C)
@@ -2846,3 +2391,4 @@ instance HasFactorization.over
     }⟩
 
 end CategoryTheory.MorphismProperty
+

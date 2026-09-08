@@ -26,97 +26,67 @@ namespace Lean.Expr
 
 open Lean Meta
 
-/--
-Inductive type `ProdTree` / 归纳类型 `ProdTree`
+/-- A helper type to keep track of universe levels and types in iterated products. -/
+/-
+**Lean.Expr.ProdTree** 是 Mathlib 中的一个归纳类型，位于命名空间 `Lean.Expr`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive ProdTree
-  parameters: where
-  constructors (2):
-    - type: (tp : Expr) (l : Level)
-    - prod: (fst snd : ProdTree) (lfst lsnd : Level)
-
-中文:
-归纳类型 ProdTree
-  参数: where
-  构造子 (2 个):
-    - type: (tp : Expr) (l : Level)
-    - prod: (fst snd : ProdTree) (lfst lsnd : Level)
+--- 原说明 ---
+A helper type to keep track of universe levels and types in iterated products.
 -/
 inductive ProdTree where
   | type (tp : Expr) (l : Level)
   | prod (fst snd : ProdTree) (lfst lsnd : Level)
 deriving Repr
 
-/--
-Definition of `ProdTree.getType` / `ProdTree.getType` 的定义
+/-- The iterated product corresponding to a `ProdTree`. -/
+/-
+**Lean.Expr.ProdTree.getType** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr.ProdTree`。
+形式化陈述：Expr.ProdTree → Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ProdTree.getType
-  signature: : ProdTree -> Expr
-
-中文:
-定义 ProdTree.getType
-  签名: : ProdTree -> Expr
+--- 原说明 ---
+The iterated product corresponding to a `ProdTree`.
 -/
-def ProdTree.getType : ProdTree -> Expr
+def ProdTree.getType : ProdTree → Expr
   | type tp _ => tp
   | prod fst snd u v => mkAppN (.const ``Prod [u,v]) #[fst.getType, snd.getType]
 
-/--
-Definition of `ProdTree.size` / `ProdTree.size` 的定义
+/-- The number of types appearing in an iterated product encoded as a `ProdTree`. -/
+/-
+**Lean.Expr.ProdTree.size** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr.ProdTree`。
+形式化陈述：Expr.ProdTree → ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ProdTree.size
-  signature: : ProdTree -> Nat
-
-中文:
-定义 ProdTree.size
-  签名: : ProdTree -> 自然数
+--- 原说明 ---
+The number of types appearing in an iterated product encoded as a `ProdTree`.
 -/
-def ProdTree.size : ProdTree -> Nat
+def ProdTree.size : ProdTree → Nat
   | type _ _ => 1
   | prod fst snd _ _ => fst.size + snd.size
 
-/--
-Definition of `ProdTree.components` / `ProdTree.components` 的定义
+/-- The components of an iterated product, presented as a `ProdTree`. -/
+/-
+**Lean.Expr.ProdTree.components** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr.ProdTree`。
+形式化陈述：Expr.ProdTree → List Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ProdTree.components
-  signature: : ProdTree -> List Expr
-
-中文:
-定义 ProdTree.components
-  签名: : ProdTree -> 列表 Expr
-
-Depends on / 依赖: X.mkProdTree, Y.mkProdTree, consumeMData, e.consumeMData, indentExpr, inferType, mkProdTree, return, throwError
+--- 原说明 ---
+The components of an iterated product, presented as a `ProdTree`.
 -/
-def ProdTree.components : ProdTree -> List Expr
+def ProdTree.components : ProdTree → List Expr
   | type tp _ => [tp]
   | prod fst snd _ _ => fst.components ++ snd.components
 
-/--
-Definition of `mkProdTree` / `mkProdTree` 的定义
+/-- Make a `ProdTree` out of an `Expr`. -/
+/-
+**Lean.Expr.mkProdTree** 是 Mathlib 中的一个不透明定义，位于命名空间 `Lean.Expr`。
+形式化陈述：Expr → MetaM Expr.ProdTree
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkProdTree
-  signature: (e : Expr)
-  body: match e.consumeMData with
-    | .app (.app (.const ``Prod [u,v]) X) Y => do
-        return .prod (← X.mkProdTree) (← Y.mkProdTree) u v
-    | X => do
-      let some u := (← whnfD <| ← inferType X).type? | throwError "Not a type{indentExpr X}"
-      return .type X u
-
-中文:
-定义 mkProdTree
-  签名: (e : Expr)
-  定义体: match e.consumeMData with
-    | .app (.app (.const ``Prod [u,v]) X) Y => do
-        return .prod (← X.mkProdTree) (← Y.mkProdTree) u v
-    | X => do
-      let some u := (← whnfD <| ← inferType X).type? | throwError "Not a type{indentExpr X}"
-      return .type X u
+--- 原说明 ---
+Make a `ProdTree` out of an `Expr`.
 -/
 partial def mkProdTree (e : Expr) : MetaM ProdTree :=
   match e.consumeMData with
@@ -126,52 +96,54 @@ partial def mkProdTree (e : Expr) : MetaM ProdTree :=
       let some u := (← whnfD <| ← inferType X).type? | throwError "Not a type{indentExpr X}"
       return .type X u
 
-/--
-Definition of `ProdTree.unpack` / `ProdTree.unpack` 的定义
+/-- Given `P : ProdTree` representing an iterated product and `e : Expr` which
+should correspond to a term of the iterated product, this will return
+a list, whose items correspond to the leaves of `P` (i.e. the types appearing in the product),
+where each item is the appropriate composition of `Prod.fst` and `Prod.snd` applied to `e`
+resulting in an element of the type corresponding to the leaf.
 
-English:
-definition ProdTree.unpack
-  signature: (t : Expr)
-
-中文:
-定义 ProdTree.unpack
-  签名: (t : Expr)
+For example, if `P` corresponds to `(X × Y) × Z` and `t : (X × Y) × Z`, then this
+should return `[t.fst.fst, t.fst.snd, t.snd]`.
 -/
-def ProdTree.unpack (t : Expr) : ProdTree -> MetaM (List Expr)
+/-
+**Lean.Expr.ProdTree.unpack** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr.ProdTree`。
+形式化陈述：Expr → Expr.ProdTree → MetaM (List Expr)
+参数：List Expr。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Given `P : ProdTree` representing an iterated product and `e : Expr` which
+should correspond to a term of the iterated product, this will return
+a list, whose items correspond to the leaves of `P` (i.e. the types appearing in
+ the product),
+where each item is the appropriate composition of `Prod.fst` and `Prod.snd` appl
+ied to `e`
+resulting in an element of the type corresponding to the leaf.
+
+For example, if `P` corresponds to `(X × Y) × Z` and `t : (X × Y) × Z`, then thi
+s
+should return `[t.fst.fst, t.fst.snd, t.snd]`.
+-/
+def ProdTree.unpack (t : Expr) : ProdTree → MetaM (List Expr)
   | type _ _ => return [t]
   | prod fst snd u v => do
-let fst' ← fst.unpack mkAppN (.const ``Prod.fst [u,v]) #[fst.getType, snd.getType, t]
-let snd' ← snd.unpack mkAppN (.const ``Prod.snd [u,v]) #[fst.getType, snd.getType, t]
+      let fst' ← fst.unpack <| mkAppN (.const ``Prod.fst [u,v]) #[fst.getType, snd.getType, t]
+      let snd' ← snd.unpack <| mkAppN (.const ``Prod.snd [u,v]) #[fst.getType, snd.getType, t]
       return fst' ++ snd'
 
-/--
-Definition of `ProdTree.pack` / `ProdTree.pack` 的定义
+/-- This function should act as the "reverse" of `ProdTree.unpack`, constructing
+a term of the iterated product out of a list of terms of the types appearing in the product. -/
+/-
+**Lean.Expr.ProdTree.pack** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr.ProdTree`。
+形式化陈述：List Expr → Expr.ProdTree → MetaM Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ProdTree.pack
-  signature: (ts : List Expr)
-  body: fst.size
-    let sndSize := snd.size
-    unless ts.length == fstSize + sndSize do throwError "Failed due to size mismatch."
-.toArray.toList let tsfst := ts.toArray[:fstSize]
-.toArray.toList let tssnd := ts.toArray[fstSize:]
-    let mk : Expr := mkAppN (.const ``Prod.mk [u,v]) #[fst.getType, snd.getType]
-    return .app (.app mk (← fst.pack tsfst)) (← snd.pack tssnd)
-
-中文:
-定义 ProdTree.pack
-  签名: (ts : 列表 Expr)
-  定义体: fst.size
-    let sndSize := snd.size
-    unless ts.length == fstSize + sndSize do throwError "Failed due to size mismatch."
-.toArray.toList let tsfst := ts.toArray[:fstSize]
-.toArray.toList let tssnd := ts.toArray[fstSize:]
-    let mk : Expr := mkAppN (.const ``Prod.mk [u,v]) #[fst.getType, snd.getType]
-    return .app (.app mk (← fst.pack tsfst)) (← snd.pack tssnd)
-
-Depends on / 依赖: fst.size
+--- 原说明 ---
+This function should act as the "reverse" of `ProdTree.unpack`, constructing
+a term of the iterated product out of a list of terms of the types appearing in 
+the product.
 -/
-def ProdTree.pack (ts : List Expr) : ProdTree -> MetaM Expr
+def ProdTree.pack (ts : List Expr) : ProdTree → MetaM Expr
   | type _ _ => do
     match ts with
       | [] => throwError "Can't pack the empty list."
@@ -181,59 +153,43 @@ def ProdTree.pack (ts : List Expr) : ProdTree -> MetaM Expr
     let fstSize := fst.size
     let sndSize := snd.size
     unless ts.length == fstSize + sndSize do throwError "Failed due to size mismatch."
-.toArray.toList let tsfst := ts.toArray[:fstSize]
-.toArray.toList let tssnd := ts.toArray[fstSize:]
+    let tsfst := ts.toArray[:fstSize] |>.toArray.toList
+    let tssnd := ts.toArray[fstSize:] |>.toArray.toList
     let mk : Expr := mkAppN (.const ``Prod.mk [u,v]) #[fst.getType, snd.getType]
     return .app (.app mk (← fst.pack tsfst)) (← snd.pack tssnd)
 
-/--
-Definition of `ProdTree.convertTo` / `ProdTree.convertTo` 的定义
+/-- Converts a term `e` in an iterated product `P1` into a term of an iterated product `P2`.
+Here `e` is an `Expr` representing the term, and the iterated products are represented
+by terms of `ProdTree`. -/
+/-
+**Lean.Expr.ProdTree.convertTo** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr.ProdTree`。
+形式化陈述：Expr.ProdTree → Expr.ProdTree → Expr → MetaM Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ProdTree.convertTo
-  signature: (P1 P2 : ProdTree) (e : Expr)
-  body: return ← P2.pack ← P1.unpack e
-
-中文:
-定义 ProdTree.convertTo
-  签名: (P1 P2 : ProdTree) (e : Expr)
-  定义体: return ← P2.pack ← P1.unpack e
-
-Depends on / 依赖: P1.unpack, P2.pack, return, unpack
+--- 原说明 ---
+Converts a term `e` in an iterated product `P1` into a term of an iterated produ
+ct `P2`.
+Here `e` is an `Expr` representing the term, and the iterated products are repre
+sented
+by terms of `ProdTree`.
 -/
 def ProdTree.convertTo (P1 P2 : ProdTree) (e : Expr) : MetaM Expr :=
-return ← P2.pack ← P1.unpack e
+  return ← P2.pack <| ← P1.unpack e
 
-/--
-Definition of `mkProdFun` / `mkProdFun` 的定义
+/-- Given two expressions corresponding to iterated products of the same types, associated in
+possibly different ways, this constructs the "obvious" function from one to the other. -/
+/-
+**Lean.Expr.mkProdFun** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：mkProdFun (a b : Expr) : MetaM Expr
+参数：a b : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkProdFun
-  signature: (a b : Expr)
-  body: do
-  let pa ← a.mkProdTree
-  let pb ← b.mkProdTree
-  unless pa.components.length == pb.components.length do
-    throwError "The number of components in{indentD a}\nand{indentD b}\nmust match."
-  for (x,y) in pa.components.zip pb.components do
-    unless ← isDefEq x y do
-      throwError "Component{indentD x}\nis not definitionally equal to component{indentD y}."
-  withLocalDeclD `t a fun fvar => do
-    mkLambdaFVars #[fvar] (← pa.convertTo pb fvar)
-
-中文:
-定义 mkProdFun
-  签名: (a b : Expr)
-  定义体: do
-  let pa ← a.mkProdTree
-  let pb ← b.mkProdTree
-  unless pa.components.length == pb.components.length do
-    throwError "The number of components in{indentD a}\nand{indentD b}\nmust match."
-  for (x,y) in pa.components.zip pb.components do
-    unless ← isDefEq x y do
-      throwError "Component{indentD x}\nis not definitionally equal to component{indentD y}."
-  withLocalDeclD `t a fun fvar => do
-    mkLambdaFVars #[fvar] (← pa.convertTo pb fvar)
+--- 原说明 ---
+Given two expressions corresponding to iterated products of the same types, asso
+ciated in
+possibly different ways, this constructs the "obvious" function from one to the 
+other.
 -/
 def mkProdFun (a b : Expr) : MetaM Expr := do
   let pa ← a.mkProdTree
@@ -246,30 +202,18 @@ def mkProdFun (a b : Expr) : MetaM Expr := do
   withLocalDeclD `t a fun fvar => do
     mkLambdaFVars #[fvar] (← pa.convertTo pb fvar)
 
-/--
-Definition of `mkProdEquiv` / `mkProdEquiv` 的定义
+/-- Construct the equivalence between iterated products of the same type, associated
+in possibly different ways. -/
+/-
+**Lean.Expr.mkProdEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：mkProdEquiv (a b : Expr) : MetaM Expr
+参数：a b : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkProdEquiv
-  signature: (a b : Expr)
-  body: do
-  let some u := (← whnfD <| ← inferType a).type? | throwError "Not a type{indentExpr a}"
-  let some v := (← whnfD <| ← inferType b).type? | throwError "Not a type{indentExpr b}"
-  return mkAppN (.const ``Equiv.mk [.succ u,.succ v])
-    #[a, b, ← mkProdFun a b, ← mkProdFun b a,
-      .app (.const ``rfl [.succ u]) a,
-      .app (.const ``rfl [.succ v]) b]
-
-中文:
-定义 mkProdEquiv
-  签名: (a b : Expr)
-  定义体: do
-  let some u := (← whnfD <| ← inferType a).type? | throwError "Not a type{indentExpr a}"
-  let some v := (← whnfD <| ← inferType b).type? | throwError "Not a type{indentExpr b}"
-  return mkAppN (.const ``Equiv.mk [.succ u,.succ v])
-    #[a, b, ← mkProdFun a b, ← mkProdFun b a,
-      .app (.const ``rfl [.succ u]) a,
-      .app (.const ``rfl [.succ v]) b]
+--- 原说明 ---
+Construct the equivalence between iterated products of the same type, associated
+in possibly different ways.
 -/
 def mkProdEquiv (a b : Expr) : MetaM Expr := do
   let some u := (← whnfD <| ← inferType a).type? | throwError "Not a type{indentExpr a}"
@@ -289,36 +233,14 @@ syntax (name := prodAssocStx) "prod_assoc_internal%" : term
 open Elab Term in
 /-- Elaborator for `prod_assoc%`. -/
 @[term_elab prodAssocStx]
-/--
-Definition of `elabProdAssoc` / `elabProdAssoc` 的定义
+/-
+**Lean.Expr.elabProdAssoc** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Expr`。
+形式化陈述：elabProdAssoc : TermElab
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition elabProdAssoc
-  signature: : TermElab
-  body: fun stx expectedType? => do
-  match stx with
-  | `(prod_assoc_internal%) => do
-    let some expectedType ← tryPostponeIfHasMVars? expectedType?
-          | throwError "expected type must be known"
-    let .app (.app (.const ``Equiv _) a) b := expectedType
-          | throwError "Expected type{indentD expectedType}\nis not of the form `α ≃ β`."
-    mkProdEquiv a b
-  | _ => throwUnsupportedSyntax
-
-中文:
-定义 elabProdAssoc
-  签名: : TermElab
-  定义体: fun stx expectedType? => do
-  match stx with
-  | `(prod_assoc_internal%) => do
-    let some expectedType ← tryPostponeIfHasMVars? expectedType?
-          | throwError "expected type must be known"
-    let .app (.app (.const ``Equiv _) a) b := expectedType
-          | throwError "Expected type{indentD expectedType}\nis not of the form `α ≃ β`."
-    mkProdEquiv a b
-  | _ => throwUnsupportedSyntax
-
-Depends on / 依赖: expectedType
+--- 原说明 ---
+Elaborator for `prod_assoc%`.
 -/
 def elabProdAssoc : TermElab := fun stx expectedType? => do
   match stx with
@@ -346,3 +268,4 @@ example : (α × β) × (γ × δ) ≃ α × (β × γ) × δ :=
 macro "prod_assoc%" : term => `((prod_assoc_internal% : _ ≃ _))
 
 end Lean.Expr
+

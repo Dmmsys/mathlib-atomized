@@ -16,26 +16,31 @@ public import Mathlib.RingTheory.Ideal.Quotient.Defs
 
 public section
 
-/--
-theorem `CharP.ker_intAlgebraMap_eq_span` / 定理 `CharP.ker_intAlgebraMap_eq_span`
-
-English:
-theorem CharP.ker_intAlgebraMap_eq_span
-  proof: by
-  ext a
-  simp [CharP.intCast_eq_zero_iff R p, Ideal.mem_span_singleton]
-
-中文:
-定理 特征p.ker_intAlgebraMap_eq_span
-  证明: by
-  ext a
-  simp [CharP.intCast_eq_zero_iff R p, Ideal.mem_span_singleton]
-
-Depends on / 依赖: CharP.intCast_eq_zero_iff, Ideal.mem_span_singleton, intCast_eq_zero_iff, mem_span_singleton
+/-
+**CharP.ker_intAlgebraMap_eq_span** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：CharP.ker_intAlgebraMap_eq_span {R : Type*} [Ring R] (p : Nat) [CharP R p]
+ : RingHom.ker (algebraMap Int R) = Ideal.span {(p : Int)}
+参数：p : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.ext`：ext {I J : Ideal α} (h : forall x, x in I ↔ x in J) : I = J
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_intCast`：eq_intCast [FunLike F Int α] [RingHomClass F Int α] (f : F) 
+(n : Int) : f n = n
+· 使用引理 `CharP.intCast_eq_zero_iff`：intCast_eq_zero_iff (a : Int) : (a : R) = 0 ↔
+ (p : Int) ∣ a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem CharP.ker_intAlgebraMap_eq_span
-    {R : Type*} [Ring R] (p : Nat) [CharP R p] :
-    RingHom.ker (algebraMap Int R) = Ideal.span {(p : Int)} := by
+    {R : Type*} [Ring R] (p : ℕ) [CharP R p] :
+    RingHom.ker (algebraMap ℤ R) = Ideal.span {(p : ℤ)} := by
   ext a
   simp [CharP.intCast_eq_zero_iff R p, Ideal.mem_span_singleton]
 
@@ -44,181 +49,194 @@ variable {R : Type*} [CommRing R]
 namespace CharP
 
 variable (R) in
-/--
-theorem `quotient` / 定理 `quotient`
-
-English:
-theorem quotient
-  given: (p : Nat) [hp1 : Fact p.Prime] (hp2 : ↑p in nonunits R)
-  proof: have hp0 : (p : R ⧸ (Ideal.span {(p : R)} : Ideal R)) = 0 :=
-    map_natCast (Ideal.Quotient.mk (Ideal.span {(p : R)} : Ideal R)) p ▸
-      Ideal.Quotient.eq_zero_iff_mem.2 (Ideal.subset_span <| Set.mem_singleton _)
-ringChar.of_eq
-    Or.resolve_left ((Nat.dvd_prime hp1.1).1 <| ringChar.dvd hp0) fun h1 =>
-hp2
-isUnit_iff_dvd_one.2
-Ideal.mem_span_singleton.1
-Ideal.Quotient.eq_zero_iff_mem.1
-              @Subsingleton.elim _ (@CharOne.subsingleton _ _ (ringChar.of_eq h1)) _ _
-
-中文:
-定理 quotient
-  条件: (p : 自然数) [hp1 : Fact p.素] (hp2 : ↑p in nonunits R)
-  证明: have hp0 : (p : R ⧸ (Ideal.span {(p : R)} : Ideal R)) = 0 :=
-    map_natCast (Ideal.Quotient.mk (Ideal.span {(p : R)} : Ideal R)) p ▸
-      Ideal.Quotient.eq_zero_iff_mem.2 (Ideal.subset_span <| Set.mem_singleton _)
-ringChar.of_eq
-    Or.resolve_left ((Nat.dvd_prime hp1.1).1 <| ringChar.dvd hp0) fun h1 =>
-hp2
-isUnit_iff_dvd_one.2
-Ideal.mem_span_singleton.1
-Ideal.Quotient.eq_zero_iff_mem.1
-              @Subsingleton.elim _ (@CharOne.subsingleton _ _ (ringChar.of_eq h1)) _ _
-
-Depends on / 依赖: CharOne, CharOne.subsingleton, Ideal.Quotient.eq_zero_iff_mem, Ideal.Quotient.mk, Ideal.mem_span_singleton, Ideal.span, Ideal.subset_span, Nat.dvd_prime, Or.resolve_left, Quotient, Set.mem_singleton, Subsingleton, Subsingleton.elim, dvd_prime, eq_zero_iff_mem, isUnit_iff_dvd_one, map_natCast, mem_singleton, mem_span_singleton, of_eq
+/-
+**CharP.quotient** 是 Mathlib 中的一个定理，位于命名空间 `CharP`。
+形式化陈述：quotient (p : Nat) [hp1 : Fact p.Prime] (hp2 : ↑p in nonunits R) : CharP (
+R ⧸ (Ideal.span ({(p : R)} : Set R) : Ideal R)) p
+参数：p : Nat；hp2 : ↑p in nonunits R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ideal.Quotient.eq_zero_iff_mem`：eq_zero_iff_mem : mk I a = 0 ↔ a in I
+· 使用定理 `Ideal.subset_span`：subset_span {s : Set α} : s subseteq span s
+· 使用定理 `Set.mem_singleton`：mem_singleton (a : α) : a in ({a} : Set α)
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
+· 使用引理 `ringChar.of_eq`：of_eq {p : Nat} (h : ringChar R = p) : CharP R p
+· 使用定理 `Or.resolve_left`：∀ {a b : Prop}, a ∨ b → ¬a → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.dvd_prime`：dvd_prime {p m : Nat} (pp : Prime p) : m ∣ p ↔ m = 1 ∨ m 
+= p
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用引理 `ringChar.dvd`：dvd {x : Nat} (hx : (x : R) = 0) : ringChar R ∣ x
+· 使用定理 `isUnit_iff_dvd_one`：isUnit_iff_dvd_one {x : α} : IsUnit x ↔ x ∣ 1
+· 使用定理 `Ideal.mem_span_singleton`：mem_span_singleton {x y : α} : x in span ({y} 
+: Set α) ↔ y ∣ x
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `CharP.CharOne.subsingleton`：∀ {R : Type u_1} [inst : NonAssocSemiring R]
+ [CharP R 1], Subsingleton R
 -/
-theorem quotient (p : Nat) [hp1 : Fact p.Prime] (hp2 : ↑p in nonunits R) :
+theorem quotient (p : ℕ) [hp1 : Fact p.Prime] (hp2 : ↑p ∈ nonunits R) :
     CharP (R ⧸ (Ideal.span ({(p : R)} : Set R) : Ideal R)) p :=
   have hp0 : (p : R ⧸ (Ideal.span {(p : R)} : Ideal R)) = 0 :=
     map_natCast (Ideal.Quotient.mk (Ideal.span {(p : R)} : Ideal R)) p ▸
       Ideal.Quotient.eq_zero_iff_mem.2 (Ideal.subset_span <| Set.mem_singleton _)
-ringChar.of_eq
+  ringChar.of_eq <|
     Or.resolve_left ((Nat.dvd_prime hp1.1).1 <| ringChar.dvd hp0) fun h1 =>
-hp2
-isUnit_iff_dvd_one.2
-Ideal.mem_span_singleton.1
-Ideal.Quotient.eq_zero_iff_mem.1
+      hp2 <|
+        isUnit_iff_dvd_one.2 <|
+          Ideal.mem_span_singleton.1 <|
+            Ideal.Quotient.eq_zero_iff_mem.1 <|
               @Subsingleton.elim _ (@CharOne.subsingleton _ _ (ringChar.of_eq h1)) _ _
 
-/--
-theorem `quotient'` / 定理 `quotient'`
+/-- If an ideal does not contain any coercions of natural numbers other than zero, then its quotient
+inherits the characteristic of the underlying ring. -/
+/-
+**CharP.quotient'** 是 Mathlib 中的一个定理，位于命名空间 `CharP`。
+形式化陈述：quotient' (p : Nat) [CharP R p] (I : Ideal R) (h : forall x : Nat, (x : R)
+ in I -> (x : R) = 0) : CharP (R ⧸ I) p where cast_eq_zero_iff x
+参数：p : Nat；I : Ideal R；h : forall x : Nat, (x : R) in I -> (x : R) = 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CharP.cast_eq_zero_iff`：∀ (R : Type u_2) {inst : AddMonoidWithOne R} (p 
+: outParam ℕ) [self : CharP R p] (x : ℕ), ↑x = 0 ↔ p ∣ x
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Ideal.Quotient.eq`：∀ {R : Type u} [inst : Ring R] {I : Ideal R} {x y : R
+} [inst_1 : I.IsTwoSided],   (Ideal.Quotient.mk I) x = (Ideal.Quotient.mk I) y ↔
+ x - y …
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `Ideal.zero_mem`：∀ {α : Type u} [inst : Semiring α] (I : Ideal α), 0 ∈ I
 
-English:
-theorem quotient'
-  given: (p : Nat) [CharP R p] (I : Ideal R) (h : forall x : Nat, (x : R) in I -> (x : R) = 0)
-  proof: by
-    rw [← cast_eq_zero_iff R p x]; rw [← map_natCast (Ideal.Quotient.mk I)]
-    refine Ideal.Quotient.eq.trans (?_ : ↑x - 0 in I ↔ _)
-    rw [sub_zero]
-    exact ⟨h x, fun h' => h'.symm ▸ I.zero_mem⟩
-
-中文:
-定理 quotient'
-  条件: (p : 自然数) [特征p R p] (I : 理想 R) (h : 对任意 x : 自然数, (x : R) in I -> (x : R) = 0)
-  证明: by
-    rw [← cast_eq_zero_iff R p x]; rw [← map_natCast (Ideal.Quotient.mk I)]
-    refine Ideal.Quotient.eq.trans (?_ : ↑x - 0 in I ↔ _)
-    rw [sub_zero]
-    exact ⟨h x, fun h' => h'.symm ▸ I.zero_mem⟩
-
-Depends on / 依赖: FilteredColimits, FilteredColimits.nontrivial, I.zero_mem, Ideal.Quotient.eq.trans, Ideal.Quotient.mk, Quotient, cast_eq_zero_iff, getColimitCocone, map_natCast, nontrivial, sub_zero, zero_mem
+--- 原说明 ---
+If an ideal does not contain any coercions of natural numbers other than zero, t
+hen its quotient
+inherits the characteristic of the underlying ring.
 -/
-theorem quotient' (p : Nat) [CharP R p] (I : Ideal R) (h : forall x : Nat, (x : R) in I -> (x : R) = 0) :
+theorem quotient' (p : ℕ) [CharP R p] (I : Ideal R) (h : ∀ x : ℕ, (x : R) ∈ I → (x : R) = 0) :
     CharP (R ⧸ I) p where
   cast_eq_zero_iff x := by
-    rw [← cast_eq_zero_iff R p x]; rw [← map_natCast (Ideal.Quotient.mk I)]
-    refine Ideal.Quotient.eq.trans (?_ : ↑x - 0 in I ↔ _)
+    rw [← cast_eq_zero_iff R p x, ← map_natCast (Ideal.Quotient.mk I)]
+    refine Ideal.Quotient.eq.trans (?_ : ↑x - 0 ∈ I ↔ _)
     rw [sub_zero]
     exact ⟨h x, fun h' => h'.symm ▸ I.zero_mem⟩
 
-/--
-theorem `quotient_iff` / 定理 `quotient_iff`
+/-- `CharP.quotient'` as an `Iff`. -/
+/-
+**CharP.quotient_iff** 是 Mathlib 中的一个定理，位于命名空间 `CharP`。
+形式化陈述：quotient_iff (n : Nat) [CharP R n] (I : Ideal R) : CharP (R ⧸ I) n ↔ foral
+l x : Nat, ↑x in I -> (x : R) = 0
+参数：n : Nat；I : Ideal R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CharP.cast_eq_zero_iff`：∀ (R : Type u_2) {inst : AddMonoidWithOne R} (p 
+: outParam ℕ) [self : CharP R p] (x : ℕ), ↑x = 0 ↔ p ∣ x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Submodule.Quotient.mk_eq_zero`：mk_eq_zero : (mk x : M ⧸ p) = 0 ↔ x in p
+· 使用定理 `CharP.quotient'`：quotient' (p : Nat) [CharP R p] (I : Ideal R) (h : fora
+ll x : Nat, (x : R) in I -> (x : R) = 0) : CharP (R ⧸ I) p where cast_eq_zero_if
+f x
 
-English:
-theorem quotient_iff
-  given: (n : Nat) [CharP R n] (I : Ideal R)
-  proof: by
-  refine ⟨fun _ x hx => ?_, CharP.quotient' n I⟩
-  rw [CharP.cast_eq_zero_iff R n]; rw [← CharP.cast_eq_zero_iff (R ⧸ I) n _]
-  exact (Submodule.Quotient.mk_eq_zero I).mpr hx
-
-中文:
-定理 quotient_iff
-  条件: (n : 自然数) [特征p R n] (I : 理想 R)
-  证明: by
-  refine ⟨fun _ x hx => ?_, CharP.quotient' n I⟩
-  rw [CharP.cast_eq_zero_iff R n]; rw [← CharP.cast_eq_zero_iff (R ⧸ I) n _]
-  exact (Submodule.Quotient.mk_eq_zero I).mpr hx
-
-Depends on / 依赖: CharP.cast_eq_zero_iff, CharP.quotient, Quotient, Submodule, Submodule.Quotient.mk_eq_zero, cast_eq_zero_iff, mk_eq_zero, quotient
+--- 原说明 ---
+`CharP.quotient'` as an `Iff`.
 -/
-theorem quotient_iff (n : Nat) [CharP R n] (I : Ideal R) :
-    CharP (R ⧸ I) n ↔ forall x : Nat, ↑x in I -> (x : R) = 0 := by
+theorem quotient_iff (n : ℕ) [CharP R n] (I : Ideal R) :
+    CharP (R ⧸ I) n ↔ ∀ x : ℕ, ↑x ∈ I → (x : R) = 0 := by
   refine ⟨fun _ x hx => ?_, CharP.quotient' n I⟩
-  rw [CharP.cast_eq_zero_iff R n]; rw [← CharP.cast_eq_zero_iff (R ⧸ I) n _]
+  rw [CharP.cast_eq_zero_iff R n, ← CharP.cast_eq_zero_iff (R ⧸ I) n _]
   exact (Submodule.Quotient.mk_eq_zero I).mpr hx
 
-/--
-theorem `quotient_iff_le_ker_natCast` / 定理 `quotient_iff_le_ker_natCast`
+/-- `CharP.quotient_iff`, but stated in terms of inclusions of ideals. -/
+/-
+**CharP.quotient_iff_le_ker_natCast** 是 Mathlib 中的一个定理，位于命名空间 `CharP`。
+形式化陈述：quotient_iff_le_ker_natCast (n : Nat) [CharP R n] (I : Ideal R) : CharP (R
+ ⧸ I) n ↔ I.comap (Nat.castRingHom R) <= RingHom.ker (Nat.castRingHom R)
+参数：n : Nat；I : Ideal R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CharP.quotient_iff`：quotient_iff (n : Nat) [CharP R n] (I : Ideal R) : C
+harP (R ⧸ I) n ↔ forall x : Nat, ↑x in I -> (x : R) = 0
+· 使用定理 `RingHom.ker_eq_comap_bot`：ker_eq_comap_bot (f : F) : ker f = Ideal.comap
+ f ⊥
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem quotient_iff_le_ker_natCast
-  given: (n : Nat) [CharP R n] (I : Ideal R)
-  proof: by
-  rw [CharP.quotient_iff]; rw [RingHom.ker_eq_comap_bot]; rfl
-
-中文:
-定理 quotient_iff_le_ker_natCast
-  条件: (n : 自然数) [特征p R n] (I : 理想 R)
-  证明: by
-  rw [CharP.quotient_iff]; rw [RingHom.ker_eq_comap_bot]; rfl
-
-Depends on / 依赖: CharP.quotient_iff, RingHom, RingHom.ker_eq_comap_bot, ker_eq_comap_bot, quotient_iff
+--- 原说明 ---
+`CharP.quotient_iff`, but stated in terms of inclusions of ideals.
 -/
-theorem quotient_iff_le_ker_natCast (n : Nat) [CharP R n] (I : Ideal R) :
-    CharP (R ⧸ I) n ↔ I.comap (Nat.castRingHom R) <= RingHom.ker (Nat.castRingHom R) := by
-  rw [CharP.quotient_iff]; rw [RingHom.ker_eq_comap_bot]; rfl
+theorem quotient_iff_le_ker_natCast (n : ℕ) [CharP R n] (I : Ideal R) :
+    CharP (R ⧸ I) n ↔ I.comap (Nat.castRingHom R) ≤ RingHom.ker (Nat.castRingHom R) := by
+  rw [CharP.quotient_iff, RingHom.ker_eq_comap_bot]; rfl
 
 end CharP
 
-/--
-lemma `Ideal.natCast_mem_of_charP_quotient` / 引理 `Ideal.natCast_mem_of_charP_quotient`
-
-English:
-lemma Ideal.natCast_mem_of_charP_quotient
-  given: (p : Nat) (I : Ideal R) [CharP (R ⧸ I) p]
-  proof: Ideal.Quotient.eq_zero_iff_mem.mp by simp
-
-中文:
-引理 理想.natCast_mem_of_charP_quotient
-  条件: (p : 自然数) (I : 理想 R) [特征p (R ⧸ I) p]
-  证明: Ideal.Quotient.eq_zero_iff_mem.mp by simp
-
-Depends on / 依赖: Ideal.Quotient.eq_zero_iff_mem.mp, Quotient, eq_zero_iff_mem
+/-
+**Ideal.natCast_mem_of_charP_quotient** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Ideal.natCast_mem_of_charP_quotient (p : Nat) (I : Ideal R) [CharP (R ⧸ I)
+ p] : (p : R) in I
+参数：p : Nat；I : Ideal R；R ⧸ I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Ideal.Quotient.eq_zero_iff_mem`：eq_zero_iff_mem : mk I a = 0 ↔ a in I
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
+· 使用定理 `CharP.cast_eq_zero`：∀ (R : Type u_1) [inst : AddMonoidWithOne R] (p : ℕ)
+ [CharP R p], ↑p = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Ideal.natCast_mem_of_charP_quotient (p : Nat) (I : Ideal R) [CharP (R ⧸ I) p] :
-    (p : R) in I :=
-Ideal.Quotient.eq_zero_iff_mem.mp by simp
-
-/--
-theorem `Ideal.Quotient.index_eq_zero` / 定理 `Ideal.Quotient.index_eq_zero`
-
-English:
-theorem Ideal.Quotient.index_eq_zero
-  given: (I : Ideal R)
-  statement: (↑I.toAddSubgroup.index : R ⧸ I) = 0
-  proof: by
-  rw [AddSubgroup.index]; rw [Nat.card_eq]
-  split_ifs with hq; swap
-  · simp
-  let : Fintype (R ⧸ I) := @Fintype.ofFinite _ hq
-  exact Nat.cast_card_eq_zero (R ⧸ I)
-
-中文:
-定理 理想.商.index_eq_zero
-  条件: (I : 理想 R)
-  结论: (↑I.toAddSubgroup.index : R ⧸ I) = 0
-  证明: by
-  rw [AddSubgroup.index]; rw [Nat.card_eq]
-  split_ifs with hq; swap
-  · simp
-  let : Fintype (R ⧸ I) := @Fintype.ofFinite _ hq
-  exact Nat.cast_card_eq_zero (R ⧸ I)
-
-Depends on / 依赖: AddSubgroup, AddSubgroup.index, Fintype, Fintype.ofFinite, Nat.card_eq, Nat.cast_card_eq_zero, card_eq, cast_card_eq_zero, ofFinite, split_ifs
+lemma Ideal.natCast_mem_of_charP_quotient (p : ℕ) (I : Ideal R) [CharP (R ⧸ I) p] :
+    (p : R) ∈ I :=
+  Ideal.Quotient.eq_zero_iff_mem.mp <| by simp
+/-
+**Ideal.Quotient.index_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Ideal.Quotient.index_eq_zero (I : Ideal R) : (↑I.toAddSubgroup.index : R ⧸
+ I) = 0
+参数：I : Ideal R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddSubgroup.index.eq_1`：∀ {G : Type u_1} [inst : AddGroup G] (H : AddSub
+group G), H.index = Nat.card (G ⧸ H)
+· 使用定理 `Nat.card_eq`：Nat.card_eq (α : Type*) : Nat.card α = if _ : Finite α then
+ @Fintype.card α (Fintype.ofFinite α) else 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用引理 `Nat.cast_card_eq_zero`：Nat.cast_card_eq_zero (R) [AddGroupWithOne R] [Fi
+ntype R] : (Fintype.card R : R) = 0
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem Ideal.Quotient.index_eq_zero (I : Ideal R) : (↑I.toAddSubgroup.index : R ⧸ I) = 0 := by
-  rw [AddSubgroup.index]; rw [Nat.card_eq]
+  rw [AddSubgroup.index, Nat.card_eq]
   split_ifs with hq; swap
   · simp
   let : Fintype (R ⧸ I) := @Fintype.ofFinite _ hq

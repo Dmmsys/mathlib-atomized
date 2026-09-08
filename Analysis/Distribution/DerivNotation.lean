@@ -36,24 +36,21 @@ variable {ι ι' 𝕜 R V E F V₁ V₂ V₃ : Type*}
 open Fin
 
 /--
-Definition of `LineDeriv` / `LineDeriv` 的定义
+The notation typeclass for the line derivative.
+-/
+/-
+**LineDeriv** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → Type v → outParam (Type w) → Type (max (max u v) w)
+参数：Type w；max (max u v) w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class LineDeriv
-  parameters: (V : Type u) (E : Type v) (F : outParam (Type w))
-  axioms and operations (1):
-    - lineDerivOp : V -> E -> F
-
-中文:
-类 LineDeriv
-  参数: (V : 类型u) (E : 类型v) (F : outParam (类型 w))
-  公理与运算 (1 个):
-    - lineDerivOp : V -> E -> F
+--- 原说明 ---
+The notation typeclass for the line derivative.
 -/
 class LineDeriv (V : Type u) (E : Type v) (F : outParam (Type w)) where
   /-- `∂_{v} f` is the line derivative of `f` in direction `v`. The meaning of this notation is
   type-dependent. -/
-  lineDerivOp : V -> E -> F
+  lineDerivOp : V → E → F
 
 namespace LineDeriv
 
@@ -61,139 +58,77 @@ namespace LineDeriv
 
 variable {V E : Type*} [LineDeriv V E E]
 
-/--
-Definition of `iteratedLineDerivOp` / `iteratedLineDerivOp` 的定义
+/-- `∂^{m} f` is the iterated line derivative of `f`, where `m` is a finite number of (different)
+directions. -/
+/-
+**LineDeriv.iteratedLineDerivOp** 是 Mathlib 中的一个定义，位于命名空间 `LineDeriv`。
+形式化陈述：iteratedLineDerivOp {n : Nat} : (Fin n -> V) -> E -> E
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 
-English:
-definition iteratedLineDerivOp
-  signature: {n : Nat}
-  body: Nat.recOn n (fun _ => id) (fun _ rec y => LineDeriv.lineDerivOp (y 0) ∘ rec (tail y))
-
-@[inherit_doc] scoped notation "∂^{" v "}" => LineDeriv.iteratedLineDerivOp v
-
-@[simp]
-
-中文:
-定义 iteratedLineDerivOp
-  签名: {n : 自然数}
-  定义体: Nat.recOn n (fun _ => id) (fun _ rec y => LineDeriv.lineDerivOp (y 0) ∘ rec (tail y))
-
-@[inherit_doc] scoped notation "∂^{" v "}" => LineDeriv.iteratedLineDerivOp v
-
-@[simp]
-
-Depends on / 依赖: LineDeriv, LineDeriv.lineDerivOp, Nat.recOn, lineDerivOp
+--- 原说明 ---
+`∂^{m} f` is the iterated line derivative of `f`, where `m` is a finite number o
+f (different)
+directions.
 -/
-def iteratedLineDerivOp {n : Nat} : (Fin n -> V) -> E -> E :=
-  Nat.recOn n (fun _ => id) (fun _ rec y => LineDeriv.lineDerivOp (y 0) ∘ rec (tail y))
+def iteratedLineDerivOp {n : ℕ} : (Fin n → V) → E → E :=
+  Nat.recOn n (fun _ ↦ id) (fun _ rec y ↦ LineDeriv.lineDerivOp (y 0) ∘ rec (tail y))
 
 @[inherit_doc] scoped notation "∂^{" v "}" => LineDeriv.iteratedLineDerivOp v
 
 @[simp]
-/--
-theorem `iteratedLineDerivOp_fin_zero` / 定理 `iteratedLineDerivOp_fin_zero`
-
-English:
-theorem iteratedLineDerivOp_fin_zero
-  given: (m : Fin 0 -> V) (f : E)
-  statement: ∂^{m} f = f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 iteratedLineDerivOp_fin_zero
-  条件: (m : 有限集 0 -> V) (f : E)
-  结论: ∂^{m} f = f
-  证明: rfl
-
-@[simp]
+/-
+**LineDeriv.iteratedLineDerivOp_fin_zero** 是 Mathlib 中的一个定理，位于命名空间 `LineDeriv`。
+形式化陈述：iteratedLineDerivOp_fin_zero (m : Fin 0 -> V) (f : E) : ∂^{m} f = f
+参数：m : Fin 0 -> V；f : E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem iteratedLineDerivOp_fin_zero (m : Fin 0 -> V) (f : E) : ∂^{m} f = f :=
+theorem iteratedLineDerivOp_fin_zero (m : Fin 0 → V) (f : E) : ∂^{m} f = f :=
   rfl
 
 @[simp]
-/--
-theorem `iteratedLineDerivOp_one` / 定理 `iteratedLineDerivOp_one`
-
-English:
-theorem iteratedLineDerivOp_one
-  given: (m : Fin 1 -> V) (f : E)
-  statement: ∂^{m} f = ∂_{m 0} f
-  proof: rfl
-
-中文:
-定理 iteratedLineDerivOp_one
-  条件: (m : 有限集 1 -> V) (f : E)
-  结论: ∂^{m} f = ∂_{m 0} f
-  证明: rfl
+/-
+**LineDeriv.iteratedLineDerivOp_one** 是 Mathlib 中的一个定理，位于命名空间 `LineDeriv`。
+形式化陈述：iteratedLineDerivOp_one (m : Fin 1 -> V) (f : E) : ∂^{m} f = ∂_{m 0} f
+参数：m : Fin 1 -> V；f : E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem iteratedLineDerivOp_one (m : Fin 1 -> V) (f : E) : ∂^{m} f = ∂_{m 0} f :=
+theorem iteratedLineDerivOp_one (m : Fin 1 → V) (f : E) : ∂^{m} f = ∂_{m 0} f :=
   rfl
-
-/--
-theorem `iteratedLineDerivOp_succ_left` / 定理 `iteratedLineDerivOp_succ_left`
-
-English:
-theorem iteratedLineDerivOp_succ_left
-  given: {n : Nat} (m : Fin (n + 1) -> V) (f : E)
-  proof: rfl
-
-中文:
-定理 iteratedLineDerivOp_succ_left
-  条件: {n : 自然数} (m : 有限集 (n + 1) -> V) (f : E)
-  证明: rfl
+/-
+**LineDeriv.iteratedLineDerivOp_succ_left** 是 Mathlib 中的一个定理，位于命名空间 `LineDeriv`。
+形式化陈述：iteratedLineDerivOp_succ_left {n : Nat} (m : Fin (n + 1) -> V) (f : E) : ∂
+^{m} f = ∂_{m 0} (∂^{tail m} f)
+参数：m : Fin (n + 1) -> V；f : E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem iteratedLineDerivOp_succ_left {n : Nat} (m : Fin (n + 1) -> V) (f : E) :
+theorem iteratedLineDerivOp_succ_left {n : ℕ} (m : Fin (n + 1) → V) (f : E) :
     ∂^{m} f = ∂_{m 0} (∂^{tail m} f) :=
   rfl
-
-/--
-theorem `iteratedLineDerivOp_succ_right` / 定理 `iteratedLineDerivOp_succ_right`
-
-English:
-theorem iteratedLineDerivOp_succ_right
-  given: {n : Nat} (m : Fin (n + 1) -> V) (f : E)
-  proof: by
-  induction n with
-  | zero => rfl
-  -- The proof is `∂^{n + 2} = ∂ ∂^{n + 1} = ∂ ∂^n ∂ = ∂^{n+1} ∂`
-  | succ n IH =>
-    have hmzero : init m 0 = m 0 := by simp only [init_def, castSucc_zero]
-    have hmtail : tail m (last n) = m (last n.succ) := by
-      simp only [tail_def, succ_last]
-    calc
-      _ = ∂_{m 0} (∂^{tail m} f) := iteratedLineDerivOp_succ_left _ _
-      _ = ∂_{m 0} (∂^{init <| tail m} (∂_{tail m <| last n} f)) := by
-        congr 1
-        exact IH _
-      _ = _ := by
-        rw [hmtail]; rw [iteratedLineDerivOp_succ_left]; rw [hmzero]; rw [tail_init_eq_init_tail]
-
-@[simp]
-
-中文:
-定理 iteratedLineDerivOp_succ_right
-  条件: {n : 自然数} (m : 有限集 (n + 1) -> V) (f : E)
-  证明: by
-  induction n with
-  | zero => rfl
-  -- The proof is `∂^{n + 2} = ∂ ∂^{n + 1} = ∂ ∂^n ∂ = ∂^{n+1} ∂`
-  | succ n IH =>
-    have hmzero : init m 0 = m 0 := by simp only [init_def, castSucc_zero]
-    have hmtail : tail m (last n) = m (last n.succ) := by
-      simp only [tail_def, succ_last]
-    calc
-      _ = ∂_{m 0} (∂^{tail m} f) := iteratedLineDerivOp_succ_left _ _
-      _ = ∂_{m 0} (∂^{init <| tail m} (∂_{tail m <| last n} f)) := by
-        congr 1
-        exact IH _
-      _ = _ := by
-        rw [hmtail]; rw [iteratedLineDerivOp_succ_left]; rw [hmzero]; rw [tail_init_eq_init_tail]
-
-@[simp]
+/-
+**LineDeriv.iteratedLineDerivOp_succ_right** 是 Mathlib 中的一个定理，位于命名空间 `LineDeriv`
+。
+形式化陈述：iteratedLineDerivOp_succ_right {n : Nat} (m : Fin (n + 1) -> V) (f : E) : 
+∂^{m} f = ∂^{init m} (∂_{m (last n)} f)
+参数：m : Fin (n + 1) -> V；f : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `LineDeriv.iteratedLineDerivOp_succ_left`：iteratedLineDerivOp_succ_left {
+n : Nat} (m : Fin (n + 1) -> V) (f : E) : ∂^{m} f = ∂_{m 0} (∂^{tail m} f)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fin.tail_init_eq_init_tail`：tail_init_eq_init_tail {β : Sort*} (q : Fin 
+(n + 2) -> β) : tail (init q) = init (tail q)
 -/
-theorem iteratedLineDerivOp_succ_right {n : Nat} (m : Fin (n + 1) -> V) (f : E) :
+theorem iteratedLineDerivOp_succ_right {n : ℕ} (m : Fin (n + 1) → V) (f : E) :
     ∂^{m} f = ∂^{init m} (∂_{m (last n)} f) := by
   induction n with
   | zero => rfl
@@ -208,40 +143,30 @@ theorem iteratedLineDerivOp_succ_right {n : Nat} (m : Fin (n + 1) -> V) (f : E) 
         congr 1
         exact IH _
       _ = _ := by
-        rw [hmtail]; rw [iteratedLineDerivOp_succ_left]; rw [hmzero]; rw [tail_init_eq_init_tail]
+        rw [hmtail, iteratedLineDerivOp_succ_left, hmzero, tail_init_eq_init_tail]
 
 @[simp]
-/--
-theorem `iteratedLineDerivOp_const_eq_iter_lineDerivOp` / 定理 `iteratedLineDerivOp_const_eq_iter_lineDerivOp`
-
-English:
-theorem iteratedLineDerivOp_const_eq_iter_lineDerivOp
-  given: (n : Nat) (y : V) (f : E)
-  proof: by
-  induction n with
-  | zero => rfl
-  | succ n IH =>
-    rw [iteratedLineDerivOp_succ_left]; rw [Function.iterate_succ_apply']
-    congr
-
-中文:
-定理 iteratedLineDerivOp_const_eq_iter_lineDerivOp
-  条件: (n : 自然数) (y : V) (f : E)
-  证明: by
-  induction n with
-  | zero => rfl
-  | succ n IH =>
-    rw [iteratedLineDerivOp_succ_left]; rw [Function.iterate_succ_apply']
-    congr
-
-Depends on / 依赖: Function, Function.iterate_succ_apply, iterate_succ_apply, iteratedLineDerivOp_succ_left
+/-
+**LineDeriv.iteratedLineDerivOp_const_eq_iter_lineDerivOp** 是 Mathlib 中的一个定理，位于命
+名空间 `LineDeriv`。
+形式化陈述：iteratedLineDerivOp_const_eq_iter_lineDerivOp (n : Nat) (y : V) (f : E) : 
+∂^{fun (_ : Fin n) => y} f = ∂_{y}^[n] f
+参数：n : Nat；y : V；f : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LineDeriv.iteratedLineDerivOp_succ_left`：iteratedLineDerivOp_succ_left {
+n : Nat} (m : Fin (n + 1) -> V) (f : E) : ∂^{m} f = ∂_{m 0} (∂^{tail m} f)
+· 使用定理 `Function.iterate_succ_apply'`：iterate_succ_apply' (n : Nat) (x : α) : f^
+[n.succ] x = f (f^[n] x)
 -/
-theorem iteratedLineDerivOp_const_eq_iter_lineDerivOp (n : Nat) (y : V) (f : E) :
-    ∂^{fun (_ : Fin n) => y} f = ∂_{y}^[n] f := by
+theorem iteratedLineDerivOp_const_eq_iter_lineDerivOp (n : ℕ) (y : V) (f : E) :
+    ∂^{fun (_ : Fin n) ↦ y} f = ∂_{y}^[n] f := by
   induction n with
   | zero => rfl
   | succ n IH =>
-    rw [iteratedLineDerivOp_succ_left]; rw [Function.iterate_succ_apply']
+    rw [iteratedLineDerivOp_succ_left, Function.iterate_succ_apply']
     congr
 
 end LineDeriv
@@ -249,21 +174,24 @@ end LineDeriv
 open LineDeriv
 
 /--
-Definition of `LineDerivAdd` / `LineDerivAdd` 的定义
+The line derivative is additive, `∂_{v} (x + y) = ∂_{v} x + ∂_{v} y` for all `x y : E`
+and `∂_{v + w} x = ∂_{v} x + ∂_{w} y` for all `v w : V`.
 
-English:
-class LineDerivAdd
-  parameters: (V : Type u) (E : Type v) (F : outParam (Type w))
-  axioms and operations (2):
-    - lineDerivOp_add((v : V) (x y : E)) : ∂_{v} (x + y) = ∂_{v} x + ∂_{v} y
-    - lineDerivOp_left_add((v w : V) (x : E)) : ∂_{v + w} x = ∂_{v} x + ∂_{w} x
+Note that `lineDeriv` on functions is not additive.
+-/
+/-
+**LineDerivAdd** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(V : Type u) →   (E : Type v) →     (F : outParam (Type w)) → [AddCommGrou
+p V] → [AddCommGroup E] → [AddCommGroup F] → [LineDeriv V E F] → Prop
+参数：Type w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 LineDerivAdd
-  参数: (V : 类型u) (E : 类型v) (F : outParam (类型 w))
-  公理与运算 (2 个):
-    - lineDerivOp_add((v : V) (x y : E)) : ∂_{v} (x + y) = ∂_{v} x + ∂_{v} y
-    - lineDerivOp_left_add((v w : V) (x : E)) : ∂_{v + w} x = ∂_{v} x + ∂_{w} x
+--- 原说明 ---
+The line derivative is additive, `∂_{v} (x + y) = ∂_{v} x + ∂_{v} y` for all `x 
+y : E`
+and `∂_{v + w} x = ∂_{v} x + ∂_{w} y` for all `v w : V`.
+
+Note that `lineDeriv` on functions is not additive.
 -/
 class LineDerivAdd (V : Type u) (E : Type v) (F : outParam (Type w))
     [AddCommGroup V] [AddCommGroup E] [AddCommGroup F] [LineDeriv V E F] where
@@ -271,61 +199,61 @@ class LineDerivAdd (V : Type u) (E : Type v) (F : outParam (Type w))
   lineDerivOp_left_add (v w : V) (x : E) : ∂_{v + w} x = ∂_{v} x + ∂_{w} x
 
 /--
-Definition of `LineDerivSMul` / `LineDerivSMul` 的定义
+The line derivative commutes with scalar multiplication, `∂_{v} (r • x) = r • ∂_{v} x` for all
+`r : R` and `x : E`.
+-/
+/-
+**LineDerivSMul** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_11) →   (V : Type u) → (E : Type v) → (F : outParam (Type w)) 
+→ [SMul R E] → [SMul R F] → [LineDeriv V E F] → Prop
+参数：Type w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class LineDerivSMul
-  parameters: (R : Type*) (V : Type u) (E : Type v) (F : outParam (Type w))
-  axioms and operations (1):
-    - lineDerivOp_smul((v : V) (r : R) (x : E)) : ∂_{v} (r • x) = r • ∂_{v} x
-
-中文:
-类 LineDerivSMul
-  参数: (R : 类型) (V : 类型u) (E : 类型v) (F : outParam (类型 w))
-  公理与运算 (1 个):
-    - lineDerivOp_smul((v : V) (r : R) (x : E)) : ∂_{v} (r • x) = r • ∂_{v} x
+--- 原说明 ---
+The line derivative commutes with scalar multiplication, `∂_{v} (r • x) = r • ∂_
+{v} x` for all
+`r : R` and `x : E`.
 -/
 class LineDerivSMul (R : Type*) (V : Type u) (E : Type v) (F : outParam (Type w))
     [SMul R E] [SMul R F] [LineDeriv V E F] where
   lineDerivOp_smul (v : V) (r : R) (x : E) : ∂_{v} (r • x) = r • ∂_{v} x
 
 /--
-Definition of `LineDerivLeftSMul` / `LineDerivLeftSMul` 的定义
+The line derivative commutes with scalar multiplication, `∂_{r • v} x = r • ∂_{v} x` for all
+`r : R` and `v : V`.
+-/
+/-
+**LineDerivLeftSMul** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_11) →   (V : Type u) → (E : Type v) → (F : outParam (Type w)) 
+→ [SMul R V] → [SMul R F] → [LineDeriv V E F] → Prop
+参数：Type w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class LineDerivLeftSMul
-  parameters: (R : Type*) (V : Type u) (E : Type v) (F : outParam (Type w))
-  axioms and operations (1):
-    - lineDerivOp_left_smul((r : R) (v : V) (x : E)) : ∂_{r • v} x = r • ∂_{v} x
-
-中文:
-类 LineDerivLeftSMul
-  参数: (R : 类型) (V : 类型u) (E : 类型v) (F : outParam (类型 w))
-  公理与运算 (1 个):
-    - lineDerivOp_left_smul((r : R) (v : V) (x : E)) : ∂_{r • v} x = r • ∂_{v} x
+--- 原说明 ---
+The line derivative commutes with scalar multiplication, `∂_{r • v} x = r • ∂_{v
+} x` for all
+`r : R` and `v : V`.
 -/
 class LineDerivLeftSMul (R : Type*) (V : Type u) (E : Type v) (F : outParam (Type w))
     [SMul R V] [SMul R F] [LineDeriv V E F] where
   lineDerivOp_left_smul (r : R) (v : V) (x : E) : ∂_{r • v} x = r • ∂_{v} x
 
 /--
-Definition of `ContinuousLineDeriv` / `ContinuousLineDeriv` 的定义
+The line derivative is continuous.
+-/
+/-
+**ContinuousLineDeriv** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(V : Type u) →   (E : Type v) → (F : outParam (Type w)) → [TopologicalSpac
+e E] → [TopologicalSpace F] → [LineDeriv V E F] → Prop
+参数：Type w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class ContinuousLineDeriv
-  parameters: (V : Type u) (E : Type v) (F : outParam (Type w))
-  axioms and operations (1):
-    - continuous_lineDerivOp((v : V)) : Continuous (∂_{v} : E -> F)
-
-中文:
-类 余ntinuousLineDeriv
-  参数: (V : 类型u) (E : 类型v) (F : outParam (类型 w))
-  公理与运算 (1 个):
-    - continuous_lineDerivOp((v : V)) : 连续 (∂_{v} : E -> F)
+--- 原说明 ---
+The line derivative is continuous.
 -/
 class ContinuousLineDeriv (V : Type u) (E : Type v) (F : outParam (Type w))
     [TopologicalSpace E] [TopologicalSpace F] [LineDeriv V E F] where
-  continuous_lineDerivOp (v : V) : Continuous (∂_{v} : E -> F)
+  continuous_lineDerivOp (v : V) : Continuous (∂_{v} : E → F)
 
 attribute [fun_prop] ContinuousLineDeriv.continuous_lineDerivOp
 
@@ -342,147 +270,121 @@ section lineDerivOp
 variable [AddCommGroup V] [AddCommGroup E] [AddCommGroup F] [LineDeriv V E F] [LineDerivAdd V E F]
 
 @[simp]
-/--
-theorem `lineDerivOp_zero` / 定理 `lineDerivOp_zero`
-
-English:
-theorem lineDerivOp_zero
-  given: (v : V)
-  statement: ∂_{v} (0 : E) = 0
-  proof: map_zero (AddMonoidHom.mk' ∂_{v} (lineDerivOp_add v))
-
-@[simp]
-
-中文:
-定理 lineDerivOp_zero
-  条件: (v : V)
-  结论: ∂_{v} (0 : E) = 0
-  证明: map_zero (AddMonoidHom.mk' ∂_{v} (lineDerivOp_add v))
-
-@[simp]
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.mk, lineDerivOp_add, map_zero
+/-
+**LineDeriv.lineDerivOp_zero** 是 Mathlib 中的一个定理，位于命名空间 `LineDeriv`。
+形式化陈述：lineDerivOp_zero (v : V) : ∂_{v} (0 : E) = 0
+参数：v : V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `LineDerivAdd.lineDerivOp_add`：∀ {V : Type u} {E : Type v} {F : outParam 
+(Type w)} {inst : AddCommGroup V} {inst_1 : AddCommGroup E}   {inst_2 : AddCommG
+roup F} {inst_3 : …
 -/
 theorem lineDerivOp_zero (v : V) : ∂_{v} (0 : E) = 0 :=
   map_zero (AddMonoidHom.mk' ∂_{v} (lineDerivOp_add v))
 
 @[simp]
-/--
-theorem `lineDerivOp_neg` / 定理 `lineDerivOp_neg`
-
-English:
-theorem lineDerivOp_neg
-  given: (v : V) (x : E)
-  statement: ∂_{v} (-x) = - ∂_{v} x
-  proof: map_neg (AddMonoidHom.mk' ∂_{v} (lineDerivOp_add v)) x
-
-@[simp]
-
-中文:
-定理 lineDerivOp_neg
-  条件: (v : V) (x : E)
-  结论: ∂_{v} (-x) = - ∂_{v} x
-  证明: map_neg (AddMonoidHom.mk' ∂_{v} (lineDerivOp_add v)) x
-
-@[simp]
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.mk, lineDerivOp_add, map_neg
+/-
+**LineDeriv.lineDerivOp_neg** 是 Mathlib 中的一个定理，位于命名空间 `LineDeriv`。
+形式化陈述：lineDerivOp_neg (v : V) (x : E) : ∂_{v} (-x) = - ∂_{v} x
+参数：v : V；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `LineDerivAdd.lineDerivOp_add`：∀ {V : Type u} {E : Type v} {F : outParam 
+(Type w)} {inst : AddCommGroup V} {inst_1 : AddCommGroup E}   {inst_2 : AddCommG
+roup F} {inst_3 : …
 -/
 theorem lineDerivOp_neg (v : V) (x : E) : ∂_{v} (-x) = - ∂_{v} x :=
   map_neg (AddMonoidHom.mk' ∂_{v} (lineDerivOp_add v)) x
 
 @[simp]
-/--
-theorem `lineDerivOp_sum` / 定理 `lineDerivOp_sum`
-
-English:
-theorem lineDerivOp_sum
-  given: (v : V) (f : ι -> E) (s : Finset ι)
-  proof: map_sum (AddMonoidHom.mk' ∂_{v} (lineDerivOp_add v)) f s
-
-@[simp]
-
-中文:
-定理 lineDerivOp_sum
-  条件: (v : V) (f : ι -> E) (s : 有限集 ι)
-  证明: map_sum (AddMonoidHom.mk' ∂_{v} (lineDerivOp_add v)) f s
-
-@[simp]
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.mk, lineDerivOp_add, map_sum
+/-
+**LineDeriv.lineDerivOp_sum** 是 Mathlib 中的一个定理，位于命名空间 `LineDeriv`。
+形式化陈述：lineDerivOp_sum (v : V) (f : ι -> E) (s : Finset ι) : ∂_{v} (∑ i in s, f i
+) = ∑ i in s, ∂_{v} (f i)
+参数：v : V；f : ι -> E；s : Finset ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `LineDerivAdd.lineDerivOp_add`：∀ {V : Type u} {E : Type v} {F : outParam 
+(Type w)} {inst : AddCommGroup V} {inst_1 : AddCommGroup E}   {inst_2 : AddCommG
+roup F} {inst_3 : …
 -/
-theorem lineDerivOp_sum (v : V) (f : ι -> E) (s : Finset ι) :
-    ∂_{v} (∑ i in s, f i) = ∑ i in s, ∂_{v} (f i) :=
+theorem lineDerivOp_sum (v : V) (f : ι → E) (s : Finset ι) :
+    ∂_{v} (∑ i ∈ s, f i) = ∑ i ∈ s, ∂_{v} (f i) :=
   map_sum (AddMonoidHom.mk' ∂_{v} (lineDerivOp_add v)) f s
 
 @[simp]
-/--
-theorem `lineDerivOp_left_zero` / 定理 `lineDerivOp_left_zero`
-
-English:
-theorem lineDerivOp_left_zero
-  given: (x : E)
-  statement: ∂_{(0 : V)} x = 0
-  proof: map_zero (AddMonoidHom.mk' (∂_{·} x) (lineDerivOp_left_add · · x))
-
-@[simp]
-
-中文:
-定理 lineDerivOp_left_zero
-  条件: (x : E)
-  结论: ∂_{(0 : V)} x = 0
-  证明: map_zero (AddMonoidHom.mk' (∂_{·} x) (lineDerivOp_left_add · · x))
-
-@[simp]
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.mk, lineDerivOp_left_add, map_zero
+/-
+**LineDeriv.lineDerivOp_left_zero** 是 Mathlib 中的一个定理，位于命名空间 `LineDeriv`。
+形式化陈述：lineDerivOp_left_zero (x : E) : ∂_{(0 : V)} x = 0
+参数：x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `LineDerivAdd.lineDerivOp_left_add`：∀ {V : Type u} {E : Type v} {F : outP
+aram (Type w)} {inst : AddCommGroup V} {inst_1 : AddCommGroup E}   {inst_2 : Add
+CommGroup F} {inst_3 : …
 -/
 theorem lineDerivOp_left_zero (x : E) : ∂_{(0 : V)} x = 0 :=
   map_zero (AddMonoidHom.mk' (∂_{·} x) (lineDerivOp_left_add · · x))
 
 @[simp]
-/--
-theorem `lineDerivOp_left_neg` / 定理 `lineDerivOp_left_neg`
-
-English:
-theorem lineDerivOp_left_neg
-  given: (v : V) (x : E)
-  statement: ∂_{-v} x = - ∂_{v} x
-  proof: map_neg (AddMonoidHom.mk' (∂_{·} x) (lineDerivOp_left_add · · x)) v
-
-@[simp]
-
-中文:
-定理 lineDerivOp_left_neg
-  条件: (v : V) (x : E)
-  结论: ∂_{-v} x = - ∂_{v} x
-  证明: map_neg (AddMonoidHom.mk' (∂_{·} x) (lineDerivOp_left_add · · x)) v
-
-@[simp]
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.mk, lineDerivOp_left_add, map_neg
+/-
+**LineDeriv.lineDerivOp_left_neg** 是 Mathlib 中的一个定理，位于命名空间 `LineDeriv`。
+形式化陈述：lineDerivOp_left_neg (v : V) (x : E) : ∂_{-v} x = - ∂_{v} x
+参数：v : V；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `LineDerivAdd.lineDerivOp_left_add`：∀ {V : Type u} {E : Type v} {F : outP
+aram (Type w)} {inst : AddCommGroup V} {inst_1 : AddCommGroup E}   {inst_2 : Add
+CommGroup F} {inst_3 : …
 -/
 theorem lineDerivOp_left_neg (v : V) (x : E) : ∂_{-v} x = - ∂_{v} x :=
   map_neg (AddMonoidHom.mk' (∂_{·} x) (lineDerivOp_left_add · · x)) v
 
 @[simp]
-/--
-theorem `lineDerivOp_left_sum` / 定理 `lineDerivOp_left_sum`
-
-English:
-theorem lineDerivOp_left_sum
-  given: (f : ι -> V) (x : E) (s : Finset ι)
-  proof: map_sum (AddMonoidHom.mk' (∂_{·} x) (lineDerivOp_left_add · · x)) f s
-
-中文:
-定理 lineDerivOp_left_sum
-  条件: (f : ι -> V) (x : E) (s : 有限集 ι)
-  证明: map_sum (AddMonoidHom.mk' (∂_{·} x) (lineDerivOp_left_add · · x)) f s
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.mk, lineDerivOp_left_add, map_sum
+/-
+**LineDeriv.lineDerivOp_left_sum** 是 Mathlib 中的一个定理，位于命名空间 `LineDeriv`。
+形式化陈述：lineDerivOp_left_sum (f : ι -> V) (x : E) (s : Finset ι) : ∂_{∑ i in s, f 
+i} x = ∑ i in s, ∂_{f i} x
+参数：f : ι -> V；x : E；s : Finset ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `LineDerivAdd.lineDerivOp_left_add`：∀ {V : Type u} {E : Type v} {F : outP
+aram (Type w)} {inst : AddCommGroup V} {inst_1 : AddCommGroup E}   {inst_2 : Add
+CommGroup F} {inst_3 : …
 -/
-theorem lineDerivOp_left_sum (f : ι -> V) (x : E) (s : Finset ι) :
-    ∂_{∑ i in s, f i} x = ∑ i in s, ∂_{f i} x :=
+theorem lineDerivOp_left_sum (f : ι → V) (x : E) (s : Finset ι) :
+    ∂_{∑ i ∈ s, f i} x = ∑ i ∈ s, ∂_{f i} x :=
   map_sum (AddMonoidHom.mk' (∂_{·} x) (lineDerivOp_left_add · · x)) f s
 
 end lineDerivOp
@@ -494,45 +396,32 @@ variable [Ring R] [AddCommGroup E] [Module R E] [AddCommGroup F] [Module R F]
   [LineDeriv V E F] [LineDerivAdd V E F] [LineDerivSMul R V E F] [ContinuousLineDeriv V E F]
 
 variable (R E) in
-/--
-Definition of `lineDerivOpCLM` / `lineDerivOpCLM` 的定义
+/-- The line derivative as a continuous linear map. -/
+/-
+**LineDeriv.lineDerivOpCLM** 是 Mathlib 中的一个定义，位于命名空间 `LineDeriv`。
+形式化陈述：lineDerivOpCLM (m : V) : E ->L[R] F where toFun
+参数：m : V。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `LineDerivAdd.lineDerivOp_add`：∀ {V : Type u} {E : Type v} {F : outParam 
+(Type w)} {inst : AddCommGroup V} {inst_1 : AddCommGroup E}   {inst_2 : AddCommG
+roup F} {inst_3 : …
 
-English:
-definition lineDerivOpCLM
-  signature: (m : V)
-  body: ∂_{m}
-  map_add' := lineDerivOp_add m
-  map_smul' := lineDerivOp_smul m
-
-@[simp]
-
-中文:
-定义 lineDerivOpCLM
-  签名: (m : V)
-  定义体: ∂_{m}
-  map_add' := lineDerivOp_add m
-  map_smul' := lineDerivOp_smul m
-
-@[simp]
+--- 原说明 ---
+The line derivative as a continuous linear map.
 -/
-def lineDerivOpCLM (m : V) : E ->L[R] F where
+def lineDerivOpCLM (m : V) : E →L[R] F where
   toFun := ∂_{m}
   map_add' := lineDerivOp_add m
   map_smul' := lineDerivOp_smul m
 
 @[simp]
-/--
-theorem `lineDerivOpCLM_apply` / 定理 `lineDerivOpCLM_apply`
-
-English:
-theorem lineDerivOpCLM_apply
-  given: (m : V) (x : E)
-  proof: rfl
-
-中文:
-定理 lineDerivOpCLM_apply
-  条件: (m : V) (x : E)
-  证明: rfl
+/-
+**LineDeriv.lineDerivOpCLM_apply** 是 Mathlib 中的一个定理，位于命名空间 `LineDeriv`。
+形式化陈述：lineDerivOpCLM_apply (m : V) (x : E) : lineDerivOpCLM R E m x = ∂_{m} x
+参数：m : V；x : E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lineDerivOpCLM_apply (m : V) (x : E) :
     lineDerivOpCLM R E m x = ∂_{m} x := rfl
@@ -542,40 +431,30 @@ end lineDerivOpCLM
 section iteratedLineDerivOp
 
 variable [LineDeriv V E E]
-variable {n : Nat} (m : Fin n -> V)
+variable {n : ℕ} (m : Fin n → V)
 
 section add
 
 variable [AddCommGroup V] [AddCommGroup E] [LineDerivAdd V E E]
 
-/--
-theorem `iteratedLineDerivOp_add` / 定理 `iteratedLineDerivOp_add`
-
-English:
-theorem iteratedLineDerivOp_add
-  given: (x y : E)
-  proof: by
-  induction n with
-  | zero =>
-    simp
-  | succ n IH =>
-    simp_rw [iteratedLineDerivOp_succ_left, IH, lineDerivOp_add]
-
-@[simp]
-
-中文:
-定理 iteratedLineDerivOp_add
-  条件: (x y : E)
-  证明: by
-  induction n with
-  | zero =>
-    simp
-  | succ n IH =>
-    simp_rw [iteratedLineDerivOp_succ_left, IH, lineDerivOp_add]
-
-@[simp]
-
-Depends on / 依赖: iteratedLineDerivOp_succ_left, lineDerivOp_add, simp_rw
+/-
+**LineDeriv.iteratedLineDerivOp_add** 是 Mathlib 中的一个定理，位于命名空间 `LineDeriv`。
+形式化陈述：iteratedLineDerivOp_add (x y : E) : ∂^{m} (x + y) = ∂^{m} x + ∂^{m} y
+参数：x y : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `LineDerivAdd.lineDerivOp_add`：∀ {V : Type u} {E : Type v} {F : outParam 
+(Type w)} {inst : AddCommGroup V} {inst_1 : AddCommGroup E}   {inst_2 : AddCommG
+roup F} {inst_3 : …
 -/
 theorem iteratedLineDerivOp_add (x y : E) :
     ∂^{m} (x + y) = ∂^{m} x + ∂^{m} y := by
@@ -586,99 +465,81 @@ theorem iteratedLineDerivOp_add (x y : E) :
     simp_rw [iteratedLineDerivOp_succ_left, IH, lineDerivOp_add]
 
 @[simp]
-/--
-theorem `iteratedLineDerivOp_zero` / 定理 `iteratedLineDerivOp_zero`
-
-English:
-theorem iteratedLineDerivOp_zero
-  statement: ∂^{m} (0 : E) = 0
-  proof: map_zero (AddMonoidHom.mk' ∂^{m} (iteratedLineDerivOp_add m))
-
-@[simp]
-
-中文:
-定理 iteratedLineDerivOp_zero
-  结论: ∂^{m} (0 : E) = 0
-  证明: map_zero (AddMonoidHom.mk' ∂^{m} (iteratedLineDerivOp_add m))
-
-@[simp]
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.mk, iteratedLineDerivOp_add, map_zero
+/-
+**LineDeriv.iteratedLineDerivOp_zero** 是 Mathlib 中的一个定理，位于命名空间 `LineDeriv`。
+形式化陈述：iteratedLineDerivOp_zero : ∂^{m} (0 : E) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `LineDeriv.iteratedLineDerivOp_add`：iteratedLineDerivOp_add (x y : E) : ∂
+^{m} (x + y) = ∂^{m} x + ∂^{m} y
 -/
 theorem iteratedLineDerivOp_zero : ∂^{m} (0 : E) = 0 :=
   map_zero (AddMonoidHom.mk' ∂^{m} (iteratedLineDerivOp_add m))
 
 @[simp]
-/--
-theorem `iteratedLineDerivOp_neg` / 定理 `iteratedLineDerivOp_neg`
-
-English:
-theorem iteratedLineDerivOp_neg
-  given: (x : E)
-  statement: ∂^{m} (-x) = - ∂^{m} x
-  proof: map_neg (AddMonoidHom.mk' ∂^{m} (iteratedLineDerivOp_add m)) x
-
-@[simp]
-
-中文:
-定理 iteratedLineDerivOp_neg
-  条件: (x : E)
-  结论: ∂^{m} (-x) = - ∂^{m} x
-  证明: map_neg (AddMonoidHom.mk' ∂^{m} (iteratedLineDerivOp_add m)) x
-
-@[simp]
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.mk, iteratedLineDerivOp_add, map_neg
+/-
+**LineDeriv.iteratedLineDerivOp_neg** 是 Mathlib 中的一个定理，位于命名空间 `LineDeriv`。
+形式化陈述：iteratedLineDerivOp_neg (x : E) : ∂^{m} (-x) = - ∂^{m} x
+参数：x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `LineDeriv.iteratedLineDerivOp_add`：iteratedLineDerivOp_add (x y : E) : ∂
+^{m} (x + y) = ∂^{m} x + ∂^{m} y
 -/
 theorem iteratedLineDerivOp_neg (x : E) : ∂^{m} (-x) = - ∂^{m} x :=
   map_neg (AddMonoidHom.mk' ∂^{m} (iteratedLineDerivOp_add m)) x
 
 @[simp]
-/--
-theorem `iteratedLineDerivOp_sum` / 定理 `iteratedLineDerivOp_sum`
-
-English:
-theorem iteratedLineDerivOp_sum
-  given: (f : ι -> E) (s : Finset ι)
-  proof: map_sum (AddMonoidHom.mk' ∂^{m} (iteratedLineDerivOp_add m)) f s
-
-中文:
-定理 iteratedLineDerivOp_sum
-  条件: (f : ι -> E) (s : 有限集 ι)
-  证明: map_sum (AddMonoidHom.mk' ∂^{m} (iteratedLineDerivOp_add m)) f s
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.mk, iteratedLineDerivOp_add, map_sum
+/-
+**LineDeriv.iteratedLineDerivOp_sum** 是 Mathlib 中的一个定理，位于命名空间 `LineDeriv`。
+形式化陈述：iteratedLineDerivOp_sum (f : ι -> E) (s : Finset ι) : ∂^{m} (∑ i in s, f i
+) = ∑ i in s, ∂^{m} (f i)
+参数：f : ι -> E；s : Finset ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `LineDeriv.iteratedLineDerivOp_add`：iteratedLineDerivOp_add (x y : E) : ∂
+^{m} (x + y) = ∂^{m} x + ∂^{m} y
 -/
-theorem iteratedLineDerivOp_sum (f : ι -> E) (s : Finset ι) :
-    ∂^{m} (∑ i in s, f i) = ∑ i in s, ∂^{m} (f i) :=
+theorem iteratedLineDerivOp_sum (f : ι → E) (s : Finset ι) :
+    ∂^{m} (∑ i ∈ s, f i) = ∑ i ∈ s, ∂^{m} (f i) :=
   map_sum (AddMonoidHom.mk' ∂^{m} (iteratedLineDerivOp_add m)) f s
 
 end add
 
-/--
-theorem `iteratedLineDerivOp_smul` / 定理 `iteratedLineDerivOp_smul`
-
-English:
-theorem iteratedLineDerivOp_smul
-  given: [SMul R E] [LineDerivSMul R V E E] (r : R) (x : E)
-  proof: by
-  induction n with
-  | zero =>
-    simp
-  | succ n IH =>
-    simp_rw [iteratedLineDerivOp_succ_left, IH, lineDerivOp_smul]
-
-中文:
-定理 iteratedLineDerivOp_smul
-  条件: [标量乘法 R E] [LineDerivSMul R V E E] (r : R) (x : E)
-  证明: by
-  induction n with
-  | zero =>
-    simp
-  | succ n IH =>
-    simp_rw [iteratedLineDerivOp_succ_left, IH, lineDerivOp_smul]
-
-Depends on / 依赖: iteratedLineDerivOp_succ_left, lineDerivOp_smul, simp_rw
+/-
+**LineDeriv.iteratedLineDerivOp_smul** 是 Mathlib 中的一个定理，位于命名空间 `LineDeriv`。
+形式化陈述：iteratedLineDerivOp_smul [SMul R E] [LineDerivSMul R V E E] (r : R) (x : E
+) : ∂^{m} (r • x) = r • ∂^{m} x
+参数：r : R；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `LineDerivSMul.lineDerivOp_smul`：∀ {R : Type u_11} {V : Type u} {E : Type
+ v} {F : outParam (Type w)} {inst : SMul R E} {inst_1 : SMul R F}   {inst_2 : Li
+neDeriv V E F} [self…
 -/
 theorem iteratedLineDerivOp_smul [SMul R E] [LineDerivSMul R V E E] (r : R) (x : E) :
     ∂^{m} (r • x) = r • ∂^{m} x := by
@@ -691,33 +552,24 @@ theorem iteratedLineDerivOp_smul [SMul R E] [LineDerivSMul R V E E] (r : R) (x :
 variable [TopologicalSpace E]
 
 @[fun_prop]
-/--
-theorem `continuous_iteratedLineDerivOp` / 定理 `continuous_iteratedLineDerivOp`
-
-English:
-theorem continuous_iteratedLineDerivOp
-  given: [ContinuousLineDeriv V E E] {n : Nat} (m : Fin n -> V)
-  proof: by
-  induction n with
-  | zero =>
-    exact continuous_id
-  | succ n IH =>
-    exact (continuous_lineDerivOp _).comp (IH _)
-
-中文:
-定理 continuous_iteratedLineDerivOp
-  条件: [余ntinuousLineDeriv V E E] {n : 自然数} (m : 有限集 n -> V)
-  证明: by
-  induction n with
-  | zero =>
-    exact continuous_id
-  | succ n IH =>
-    exact (continuous_lineDerivOp _).comp (IH _)
-
-Depends on / 依赖: continuous_id, continuous_lineDerivOp
+/-
+**LineDeriv.continuous_iteratedLineDerivOp** 是 Mathlib 中的一个定理，位于命名空间 `LineDeriv`
+。
+形式化陈述：continuous_iteratedLineDerivOp [ContinuousLineDeriv V E E] {n : Nat} (m : 
+Fin n -> V) : Continuous (∂^{m} : E -> E)
+参数：m : Fin n -> V。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `ContinuousLineDeriv.continuous_lineDerivOp`：∀ {V : Type u} {E : Type v} 
+{F : outParam (Type w)} {inst : TopologicalSpace E} {inst_1 : TopologicalSpace F
+}   {inst_2 : LineDeriv V E F} […
 -/
-theorem continuous_iteratedLineDerivOp [ContinuousLineDeriv V E E] {n : Nat} (m : Fin n -> V) :
-    Continuous (∂^{m} : E -> E) := by
+theorem continuous_iteratedLineDerivOp [ContinuousLineDeriv V E E] {n : ℕ} (m : Fin n → V) :
+    Continuous (∂^{m} : E → E) := by
   induction n with
   | zero =>
     exact continuous_id
@@ -728,47 +580,34 @@ variable [Ring R] [AddCommGroup V] [AddCommGroup E] [Module R E]
   [LineDerivAdd V E E] [LineDerivSMul R V E E] [ContinuousLineDeriv V E E]
 
 variable (R E) in
-/--
-Definition of `iteratedLineDerivOpCLM` / `iteratedLineDerivOpCLM` 的定义
+/-- The iterated line derivative as a continuous linear map. -/
+/-
+**LineDeriv.iteratedLineDerivOpCLM** 是 Mathlib 中的一个定义，位于命名空间 `LineDeriv`。
+形式化陈述：iteratedLineDerivOpCLM {n : Nat} (m : Fin n -> V) : E ->L[R] E where toFun
+参数：m : Fin n -> V。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `LineDeriv.iteratedLineDerivOp_add`：iteratedLineDerivOp_add (x y : E) : ∂
+^{m} (x + y) = ∂^{m} x + ∂^{m} y
 
-English:
-definition iteratedLineDerivOpCLM
-  signature: {n : Nat} (m : Fin n -> V)
-  body: ∂^{m}
-  map_add' := iteratedLineDerivOp_add m
-  map_smul' := iteratedLineDerivOp_smul m
-
-@[simp]
-
-中文:
-定义 iteratedLineDerivOpCLM
-  签名: {n : 自然数} (m : 有限集 n -> V)
-  定义体: ∂^{m}
-  map_add' := iteratedLineDerivOp_add m
-  map_smul' := iteratedLineDerivOp_smul m
-
-@[simp]
+--- 原说明 ---
+The iterated line derivative as a continuous linear map.
 -/
-def iteratedLineDerivOpCLM {n : Nat} (m : Fin n -> V) : E ->L[R] E where
+def iteratedLineDerivOpCLM {n : ℕ} (m : Fin n → V) : E →L[R] E where
   toFun := ∂^{m}
   map_add' := iteratedLineDerivOp_add m
   map_smul' := iteratedLineDerivOp_smul m
 
 @[simp]
-/--
-theorem `iteratedLineDerivOpCLM_apply` / 定理 `iteratedLineDerivOpCLM_apply`
-
-English:
-theorem iteratedLineDerivOpCLM_apply
-  given: {n : Nat} (m : Fin n -> V) (x : E)
-  proof: rfl
-
-中文:
-定理 iteratedLineDerivOpCLM_apply
-  条件: {n : 自然数} (m : 有限集 n -> V) (x : E)
-  证明: rfl
+/-
+**LineDeriv.iteratedLineDerivOpCLM_apply** 是 Mathlib 中的一个定理，位于命名空间 `LineDeriv`。
+形式化陈述：iteratedLineDerivOpCLM_apply {n : Nat} (m : Fin n -> V) (x : E) : iterated
+LineDerivOpCLM R E m x = ∂^{m} x
+参数：m : Fin n -> V；x : E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem iteratedLineDerivOpCLM_apply {n : Nat} (m : Fin n -> V) (x : E) :
+theorem iteratedLineDerivOpCLM_apply {n : ℕ} (m : Fin n → V) (x : E) :
     iteratedLineDerivOpCLM R E m x = ∂^{m} x := rfl
 
 end iteratedLineDerivOp
@@ -778,23 +617,20 @@ end LineDeriv
 /-! ## Laplacian -/
 
 /--
-Definition of `Laplacian` / `Laplacian` 的定义
+The notation typeclass for the Laplace operator.
+-/
+/-
+**Laplacian** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type v → outParam (Type w) → Type (max v w)
+参数：Type w；max v w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Laplacian
-  parameters: (E : Type v) (F : outParam (Type w))
-  axioms and operations (1):
-    - laplacian : E -> F
-
-中文:
-类 Laplace算子
-  参数: (E : 类型v) (F : outParam (类型 w))
-  公理与运算 (1 个):
-    - laplacian : E -> F
+--- 原说明 ---
+The notation typeclass for the Laplace operator.
 -/
 class Laplacian (E : Type v) (F : outParam (Type w)) where
   /-- `Δ f` is the Laplacian of `f`. The meaning of this notation is type-dependent. -/
-  laplacian : E -> F
+  laplacian : E → F
 
 namespace Laplacian
 
@@ -819,102 +655,110 @@ variable [CommRing R] [AddCommGroup E] [Module R E]
 open InnerProductSpace TensorProduct
 
 variable (R) in
-/--
-Definition of `bilinearLineDerivTwo` / `bilinearLineDerivTwo` 的定义
+/-- The second derivative in terms `lineDerivOp` as a bilinear map.
 
-English:
-definition bilinearLineDerivTwo
-  signature: (f : V₁)
-  body: LinearMap.mk₂ R (∂_{·} <| ∂_{·} f) (by simp [lineDerivOp_left_add])
-    (by simp [lineDerivOp_left_smul]) (by simp [lineDerivOp_left_add, lineDerivOp_add])
-    (by simp [lineDerivOp_left_smul, lineDerivOp_smul])
+Mainly used to give an abstract definition of the Laplacian. -/
+/-
+**LineDeriv.bilinearLineDerivTwo** 是 Mathlib 中的一个定义，位于命名空间 `LineDeriv`。
+形式化陈述：bilinearLineDerivTwo (f : V₁) : E ->ₗ[R] E ->ₗ[R] V₃
+参数：f : V₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 bilinearLineDerivTwo
-  签名: (f : V₁)
-  定义体: LinearMap.mk₂ R (∂_{·} <| ∂_{·} f) (by simp [lineDerivOp_left_add])
-    (by simp [lineDerivOp_left_smul]) (by simp [lineDerivOp_left_add, lineDerivOp_add])
-    (by simp [lineDerivOp_left_smul, lineDerivOp_smul])
+--- 原说明 ---
+The second derivative in terms `lineDerivOp` as a bilinear map.
 
-Depends on / 依赖: LinearMap, LinearMap.mk, lineDerivOp_add, lineDerivOp_left_add, lineDerivOp_left_smul, lineDerivOp_smul
+Mainly used to give an abstract definition of the Laplacian.
 -/
-def bilinearLineDerivTwo (f : V₁) : E ->ₗ[R] E ->ₗ[R] V₃ :=
+def bilinearLineDerivTwo (f : V₁) : E →ₗ[R] E →ₗ[R] V₃ :=
   LinearMap.mk₂ R (∂_{·} <| ∂_{·} f) (by simp [lineDerivOp_left_add])
     (by simp [lineDerivOp_left_smul]) (by simp [lineDerivOp_left_add, lineDerivOp_add])
     (by simp [lineDerivOp_left_smul, lineDerivOp_smul])
 
 variable (R) in
-/--
-Definition of `tensorLineDerivTwo` / `tensorLineDerivTwo` 的定义
+/-- The second derivative in terms `lineDerivOp` as a linear map from the tensor product.
 
-English:
-definition tensorLineDerivTwo
-  signature: (f : V₁)
-  body: lift (bilinearLineDerivTwo R f)
+Mainly used to give an abstract definition of the Laplacian. -/
+/-
+**LineDeriv.tensorLineDerivTwo** 是 Mathlib 中的一个定义，位于命名空间 `LineDeriv`。
+形式化陈述：tensorLineDerivTwo (f : V₁) : E otimes[R] E ->ₗ[R] V₃
+参数：f : V₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 tensorLineDerivTwo
-  签名: (f : V₁)
-  定义体: lift (bilinearLineDerivTwo R f)
+--- 原说明 ---
+The second derivative in terms `lineDerivOp` as a linear map from the tensor pro
+duct.
 
-Depends on / 依赖: bilinearLineDerivTwo
+Mainly used to give an abstract definition of the Laplacian.
 -/
-def tensorLineDerivTwo (f : V₁) : E otimes[R] E ->ₗ[R] V₃ :=
+def tensorLineDerivTwo (f : V₁) : E ⊗[R] E →ₗ[R] V₃ :=
   lift (bilinearLineDerivTwo R f)
-
-/--
-lemma `tensorLineDerivTwo_eq_lineDerivOp_lineDerivOp` / 引理 `tensorLineDerivTwo_eq_lineDerivOp_lineDerivOp`
-
-English:
-lemma tensorLineDerivTwo_eq_lineDerivOp_lineDerivOp
-  given: (f : V₁) (v w : E)
-  proof: lift.tmul _ _
-
-中文:
-引理 tensorLineDerivTwo_eq_lineDerivOp_lineDerivOp
-  条件: (f : V₁) (v w : E)
-  证明: lift.tmul _ _
-
-Depends on / 依赖: lift.tmul
+/-
+**LineDeriv.tensorLineDerivTwo_eq_lineDerivOp_lineDerivOp** 是 Mathlib 中的一个引理，位于命
+名空间 `LineDeriv`。
+形式化陈述：tensorLineDerivTwo_eq_lineDerivOp_lineDerivOp (f : V₁) (v w : E) : tensorL
+ineDerivTwo R f (v otimesₜ[R] w) = ∂_{v} (∂_{w} f)
+参数：f : V₁；v w : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.lift.tmul`：∀ {R : Type u_1} {R₂ : Type u_2} [inst : CommSe
+miring R] [inst_1 : CommSemiring R₂] {σ₁₂ : R →+* R₂} {M : Type u_7}   {N : Type
+ u_8} {P₂ : T…
 -/
 lemma tensorLineDerivTwo_eq_lineDerivOp_lineDerivOp (f : V₁) (v w : E) :
-    tensorLineDerivTwo R f (v otimesₜ[R] w) = ∂_{v} (∂_{w} f) := lift.tmul _ _
+    tensorLineDerivTwo R f (v ⊗ₜ[R] w) = ∂_{v} (∂_{w} f) := lift.tmul _ _
 
 end TensorProduct
 
 section InnerProductSpace
 
-variable [NormedAddCommGroup E] [InnerProductSpace Real E] [FiniteDimensional Real E]
+variable [NormedAddCommGroup E] [InnerProductSpace ℝ E] [FiniteDimensional ℝ E]
 
 section LinearMap
 
-variable [Module Real V₂] [Module Real V₃]
+variable [Module ℝ V₂] [Module ℝ V₃]
   [LineDerivAdd E V₁ V₂] [LineDerivAdd E V₂ V₃]
-  [LineDerivSMul Real E V₂ V₃] [LineDerivLeftSMul Real E V₁ V₂] [LineDerivLeftSMul Real E V₂ V₃]
+  [LineDerivSMul ℝ E V₂ V₃] [LineDerivLeftSMul ℝ E V₁ V₂] [LineDerivLeftSMul ℝ E V₂ V₃]
 
 open TensorProduct InnerProductSpace
 
-/--
-theorem `tensorLineDerivTwo_canonicalCovariantTensor_eq_sum` / 定理 `tensorLineDerivTwo_canonicalCovariantTensor_eq_sum`
-
-English:
-theorem tensorLineDerivTwo_canonicalCovariantTensor_eq_sum
-  statement: [Fintype ι] (v : OrthonormalBasis ι Real E)
-  proof: by
-  simp [InnerProductSpace.canonicalCovariantTensor_eq_sum E v,
-    tensorLineDerivTwo_eq_lineDerivOp_lineDerivOp]
-
-中文:
-定理 tensorLineDerivTwo_canonicalCovariantTensor_eq_sum
-  结论: [有限类型 ι] (v : 正交标准基 ι 实数 E)
-  证明: by
-  simp [InnerProductSpace.canonicalCovariantTensor_eq_sum E v,
-    tensorLineDerivTwo_eq_lineDerivOp_lineDerivOp]
-
-Depends on / 依赖: InnerProductSpace, InnerProductSpace.canonicalCovariantTensor_eq_sum, canonicalCovariantTensor_eq_sum, tensorLineDerivTwo_eq_lineDerivOp_lineDerivOp
+/-
+**LineDeriv.tensorLineDerivTwo_canonicalCovariantTensor_eq_sum** 是 Mathlib 中的一个定
+理，位于命名空间 `LineDeriv`。
+形式化陈述：tensorLineDerivTwo_canonicalCovariantTensor_eq_sum [Fintype ι] (v : Orthon
+ormalBasis ι Real E) (f : V₁) : tensorLineDerivTwo Real f (canonicalCovariantTen
+sor E) = ∑ i, ∂_{v i} (∂_{v i} f)
+参数：v : OrthonormalBasis ι Real E；f : V₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `InnerProductSpace.canonicalCovariantTensor_eq_sum`：InnerProductSpace.can
+onicalCovariantTensor_eq_sum [FiniteDimensional Real E] {ι : Type*} [Fintype ι] 
+(v : OrthonormalBasis ι Real E) : Inner…
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用引理 `LineDeriv.tensorLineDerivTwo_eq_lineDerivOp_lineDerivOp`：tensorLineDeriv
+Two_eq_lineDerivOp_lineDerivOp (f : V₁) (v w : E) : tensorLineDerivTwo R f (v ot
+imesₜ[R] w) = ∂_{v} (∂_{w} f)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem tensorLineDerivTwo_canonicalCovariantTensor_eq_sum [Fintype ι] (v : OrthonormalBasis ι Real E)
-    (f : V₁) : tensorLineDerivTwo Real f (canonicalCovariantTensor E) = ∑ i, ∂_{v i} (∂_{v i} f) := by
+theorem tensorLineDerivTwo_canonicalCovariantTensor_eq_sum [Fintype ι] (v : OrthonormalBasis ι ℝ E)
+    (f : V₁) : tensorLineDerivTwo ℝ f (canonicalCovariantTensor E) = ∑ i, ∂_{v i} (∂_{v i} f) := by
   simp [InnerProductSpace.canonicalCovariantTensor_eq_sum E v,
     tensorLineDerivTwo_eq_lineDerivOp_lineDerivOp]
 
@@ -931,54 +775,50 @@ variable [CommRing R]
   [LineDerivAdd E V₂ V₃] [LineDerivSMul R E V₂ V₃] [ContinuousLineDeriv E V₂ V₃]
 
 variable (R E V₁) in
-/--
-Definition of `laplacianCLM` / `laplacianCLM` 的定义
+/-- The Laplacian defined by iterated `lineDerivOp` as a continuous linear map. -/
+/-
+**LineDeriv.laplacianCLM** 是 Mathlib 中的一个定义，位于命名空间 `LineDeriv`。
+形式化陈述：laplacianCLM : V₁ ->L[R] V₃
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition laplacianCLM
-  signature: : V₁ ->L[R] V₃
-  body: ∑ i, lineDerivOpCLM R V₂ (stdOrthonormalBasis Real E i) ∘L
-    lineDerivOpCLM R V₁ (stdOrthonormalBasis Real E i)
-
-中文:
-定义 laplacianCLM
-  签名: : V₁ ->L[R] V₃
-  定义体: ∑ i, lineDerivOpCLM R V₂ (stdOrthonormalBasis Real E i) ∘L
-    lineDerivOpCLM R V₁ (stdOrthonormalBasis Real E i)
-
-Depends on / 依赖: lineDerivOpCLM, stdOrthonormalBasis
+--- 原说明 ---
+The Laplacian defined by iterated `lineDerivOp` as a continuous linear map.
 -/
-def laplacianCLM : V₁ ->L[R] V₃ :=
-  ∑ i, lineDerivOpCLM R V₂ (stdOrthonormalBasis Real E i) ∘L
-    lineDerivOpCLM R V₁ (stdOrthonormalBasis Real E i)
+def laplacianCLM : V₁ →L[R] V₃ :=
+  ∑ i, lineDerivOpCLM R V₂ (stdOrthonormalBasis ℝ E i) ∘L
+    lineDerivOpCLM R V₁ (stdOrthonormalBasis ℝ E i)
 
 end definition
 
-variable [Module Real V₁] [Module Real V₂] [Module Real V₃]
+variable [Module ℝ V₁] [Module ℝ V₂] [Module ℝ V₃]
   [TopologicalSpace V₁] [TopologicalSpace V₂] [TopologicalSpace V₃] [IsTopologicalAddGroup V₃]
-  [LineDerivAdd E V₁ V₂] [LineDerivSMul Real E V₁ V₂] [ContinuousLineDeriv E V₁ V₂]
-  [LineDerivAdd E V₂ V₃] [LineDerivSMul Real E V₂ V₃] [ContinuousLineDeriv E V₂ V₃]
-  [LineDerivLeftSMul Real E V₁ V₂] [LineDerivLeftSMul Real E V₂ V₃]
+  [LineDerivAdd E V₁ V₂] [LineDerivSMul ℝ E V₁ V₂] [ContinuousLineDeriv E V₁ V₂]
+  [LineDerivAdd E V₂ V₃] [LineDerivSMul ℝ E V₂ V₃] [ContinuousLineDeriv E V₂ V₃]
+  [LineDerivLeftSMul ℝ E V₁ V₂] [LineDerivLeftSMul ℝ E V₂ V₃]
 
-/--
-theorem `laplacianCLM_eq_sum` / 定理 `laplacianCLM_eq_sum`
-
-English:
-theorem laplacianCLM_eq_sum
-  given: [Fintype ι] (v : OrthonormalBasis ι Real E) (f : V₁)
-  proof: by
-  simp [laplacianCLM, ← tensorLineDerivTwo_canonicalCovariantTensor_eq_sum]
-
-中文:
-定理 laplacianCLM_eq_sum
-  条件: [有限类型 ι] (v : 正交标准基 ι 实数 E) (f : V₁)
-  证明: by
-  simp [laplacianCLM, ← tensorLineDerivTwo_canonicalCovariantTensor_eq_sum]
-
-Depends on / 依赖: laplacianCLM, tensorLineDerivTwo_canonicalCovariantTensor_eq_sum
+/-
+**LineDeriv.laplacianCLM_eq_sum** 是 Mathlib 中的一个定理，位于命名空间 `LineDeriv`。
+形式化陈述：laplacianCLM_eq_sum [Fintype ι] (v : OrthonormalBasis ι Real E) (f : V₁) :
+ laplacianCLM Real E V₁ f = ∑ i, ∂_{v i} (∂_{v i} f)
+参数：v : OrthonormalBasis ι Real E；f : V₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sum_apply`：∀ {F : Type u_8} {α : Type u_9} {β : Type u_10} {ι : Type u_1
+1} [inst : FunLike F α β] [inst_1 : AddCommMonoid β]   [inst_2 : AddCommMonoid …
+· 使用定理 `ContinuousLinearMap.instIsZeroApply`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [
+inst : Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [
+inst_2 : TopologicalSpace…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem laplacianCLM_eq_sum [Fintype ι] (v : OrthonormalBasis ι Real E) (f : V₁) :
-    laplacianCLM Real E V₁ f = ∑ i, ∂_{v i} (∂_{v i} f) := by
+theorem laplacianCLM_eq_sum [Fintype ι] (v : OrthonormalBasis ι ℝ E) (f : V₁) :
+    laplacianCLM ℝ E V₁ f = ∑ i, ∂_{v i} (∂_{v i} f) := by
   simp [laplacianCLM, ← tensorLineDerivTwo_canonicalCovariantTensor_eq_sum]
 
 end ContinuousLinearMap
@@ -986,3 +826,4 @@ end ContinuousLinearMap
 end InnerProductSpace
 
 end LineDeriv
+

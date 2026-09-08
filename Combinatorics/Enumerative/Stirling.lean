@@ -45,275 +45,209 @@ open Nat
 namespace Nat
 
 /--
-Definition of `stirlingFirst` / `stirlingFirst` 的定义
-
-English:
-definition stirlingFirst
-  signature: : Nat -> Nat -> Nat
-
-中文:
-定义 stirlingFirst
-  签名: : 自然数 -> 自然数 -> 自然数
+`Nat.stirlingFirst n k` is the (unsigned) Stirling number of the first kind,
+counting the number of permutations of `n` elements with exactly `k` disjoint cycles.
 -/
-def stirlingFirst : Nat -> Nat -> Nat
+/-
+**Nat.stirlingFirst** 是 Mathlib 中的一个定义，位于命名空间 `Nat`。
+形式化陈述：ℕ → ℕ → ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`Nat.stirlingFirst n k` is the (unsigned) Stirling number of the first kind,
+counting the number of permutations of `n` elements with exactly `k` disjoint cy
+cles.
+-/
+def stirlingFirst : ℕ → ℕ → ℕ
   | 0, 0 => 1
   | 0, _ + 1 => 0
   | _ + 1, 0 => 0
   | n + 1, k + 1 => n * stirlingFirst n (k + 1) + stirlingFirst n k
 
 @[simp]
-/--
-theorem `stirlingFirst_zero` / 定理 `stirlingFirst_zero`
-
-English:
-theorem stirlingFirst_zero
-  statement: stirlingFirst 0 0 = 1
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 stirlingFirst_zero
-  结论: stirlingFirst 0 0 = 1
-  证明: rfl
-
-@[simp]
+/-
+**Nat.stirlingFirst_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：stirlingFirst_zero : stirlingFirst 0 0 = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem stirlingFirst_zero : stirlingFirst 0 0 = 1 :=
   rfl
 
 @[simp]
-/--
-theorem `stirlingFirst_zero_succ` / 定理 `stirlingFirst_zero_succ`
-
-English:
-theorem stirlingFirst_zero_succ
-  given: (k : Nat)
-  statement: stirlingFirst 0 (succ k) = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 stirlingFirst_zero_succ
-  条件: (k : 自然数)
-  结论: stirlingFirst 0 (succ k) = 0
-  证明: rfl
-
-@[simp]
+/-
+**Nat.stirlingFirst_zero_succ** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：stirlingFirst_zero_succ (k : Nat) : stirlingFirst 0 (succ k) = 0
+参数：k : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem stirlingFirst_zero_succ (k : Nat) : stirlingFirst 0 (succ k) = 0 :=
+theorem stirlingFirst_zero_succ (k : ℕ) : stirlingFirst 0 (succ k) = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `stirlingFirst_succ_zero` / 定理 `stirlingFirst_succ_zero`
-
-English:
-theorem stirlingFirst_succ_zero
-  given: (n : Nat)
-  statement: stirlingFirst (succ n) 0 = 0
-  proof: rfl
-
-中文:
-定理 stirlingFirst_succ_zero
-  条件: (n : 自然数)
-  结论: stirlingFirst (succ n) 0 = 0
-  证明: rfl
+/-
+**Nat.stirlingFirst_succ_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：stirlingFirst_succ_zero (n : Nat) : stirlingFirst (succ n) 0 = 0
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem stirlingFirst_succ_zero (n : Nat) : stirlingFirst (succ n) 0 = 0 :=
+theorem stirlingFirst_succ_zero (n : ℕ) : stirlingFirst (succ n) 0 = 0 :=
   rfl
-
-/--
-theorem `stirlingFirst_succ_left` / 定理 `stirlingFirst_succ_left`
-
-English:
-theorem stirlingFirst_succ_left
-  given: (n k : Nat) (hk : k != 0)
-  proof: by
-  obtain ⟨l, rfl⟩ := Nat.exists_eq_add_of_le' (Nat.pos_of_ne_zero hk)
-  rfl
-
-中文:
-定理 stirlingFirst_succ_left
-  条件: (n k : 自然数) (hk : k != 0)
-  证明: by
-  obtain ⟨l, rfl⟩ := Nat.exists_eq_add_of_le' (Nat.pos_of_ne_zero hk)
-  rfl
-
-Depends on / 依赖: Nat.exists_eq_add_of_le, Nat.pos_of_ne_zero, exists_eq_add_of_le, pos_of_ne_zero
+/-
+**Nat.stirlingFirst_succ_left** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：stirlingFirst_succ_left (n k : Nat) (hk : k != 0) : stirlingFirst (n + 1) 
+k = n * stirlingFirst n k + stirlingFirst n (k - 1)
+参数：n k : Nat；hk : k != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.exists_eq_add_of_le'`：∀ {m n : ℕ}, m ≤ n → ∃ k, n = k + m
+· 使用定理 `Nat.pos_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → 0 < n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem stirlingFirst_succ_left (n k : Nat) (hk : k != 0) :
+theorem stirlingFirst_succ_left (n k : ℕ) (hk : k ≠ 0) :
     stirlingFirst (n + 1) k = n * stirlingFirst n k + stirlingFirst n (k - 1) := by
   obtain ⟨l, rfl⟩ := Nat.exists_eq_add_of_le' (Nat.pos_of_ne_zero hk)
   rfl
-
-/--
-theorem `stirlingFirst_succ_right` / 定理 `stirlingFirst_succ_right`
-
-English:
-theorem stirlingFirst_succ_right
-  given: (n k : Nat) (hn : n != 0)
-  proof: by
-  obtain ⟨l, rfl⟩ := Nat.exists_eq_add_of_le' (Nat.pos_of_ne_zero hn)
-  rfl
-
-中文:
-定理 stirlingFirst_succ_right
-  条件: (n k : 自然数) (hn : n != 0)
-  证明: by
-  obtain ⟨l, rfl⟩ := Nat.exists_eq_add_of_le' (Nat.pos_of_ne_zero hn)
-  rfl
-
-Depends on / 依赖: Nat.exists_eq_add_of_le, Nat.pos_of_ne_zero, exists_eq_add_of_le, pos_of_ne_zero
+/-
+**Nat.stirlingFirst_succ_right** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：stirlingFirst_succ_right (n k : Nat) (hn : n != 0) : stirlingFirst n (k + 
+1) = (n - 1) * stirlingFirst (n - 1) (k + 1) + stirlingFirst (n - 1) k
+参数：n k : Nat；hn : n != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.exists_eq_add_of_le'`：∀ {m n : ℕ}, m ≤ n → ∃ k, n = k + m
+· 使用定理 `Nat.pos_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → 0 < n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem stirlingFirst_succ_right (n k : Nat) (hn : n != 0) :
+theorem stirlingFirst_succ_right (n k : ℕ) (hn : n ≠ 0) :
     stirlingFirst n (k + 1) =
       (n - 1) * stirlingFirst (n - 1) (k + 1) + stirlingFirst (n - 1) k := by
   obtain ⟨l, rfl⟩ := Nat.exists_eq_add_of_le' (Nat.pos_of_ne_zero hn)
   rfl
-
-/--
-theorem `stirlingFirst_succ_succ` / 定理 `stirlingFirst_succ_succ`
-
-English:
-theorem stirlingFirst_succ_succ
-  given: (n k : Nat)
-  proof: by
-  rfl
-
-中文:
-定理 stirlingFirst_succ_succ
-  条件: (n k : 自然数)
-  证明: by
-  rfl
+/-
+**Nat.stirlingFirst_succ_succ** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：stirlingFirst_succ_succ (n k : Nat) : stirlingFirst (n + 1) (k + 1) = n * 
+stirlingFirst n (k + 1) + stirlingFirst n k
+参数：n k : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem stirlingFirst_succ_succ (n k : Nat) :
+theorem stirlingFirst_succ_succ (n k : ℕ) :
     stirlingFirst (n + 1) (k + 1) = n * stirlingFirst n (k + 1) + stirlingFirst n k := by
   rfl
-
-/--
-theorem `stirlingFirst_eq_zero_of_lt` / 定理 `stirlingFirst_eq_zero_of_lt`
-
-English:
-theorem stirlingFirst_eq_zero_of_lt
-  statement: forall {n k : Nat}, n < k -> stirlingFirst n k = 0
-
-中文:
-定理 stirlingFirst_eq_zero_of_lt
-  结论: 对任意 {n k : 自然数}, n < k -> stirlingFirst n k = 0
+/-
+**Nat.stirlingFirst_eq_zero_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ {n k : ℕ}, n < k → n.stirlingFirst k = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem stirlingFirst_eq_zero_of_lt : forall {n k : Nat}, n < k -> stirlingFirst n k = 0
+theorem stirlingFirst_eq_zero_of_lt : ∀ {n k : ℕ}, n < k → stirlingFirst n k = 0
   | _, 0, hk => absurd hk (Nat.not_lt_zero _)
   | 0, _ + 1, _ => by rw [stirlingFirst]
   | n + 1, k + 1, hk => by
-    rw [stirlingFirst_succ_succ]; rw [stirlingFirst_eq_zero_of_lt (Nat.lt_of_succ_lt_succ hk)]; rw [stirlingFirst_eq_zero_of_lt (Nat.lt_of_succ_lt hk)]; rw [mul_zero]
-
-/--
-theorem `stirlingFirst_self` / 定理 `stirlingFirst_self`
-
-English:
-theorem stirlingFirst_self
-  given: (n : Nat)
-  statement: stirlingFirst n n = 1
-  proof: by
-  induction n <;> simp only [*, stirlingFirst, stirlingFirst_eq_zero_of_lt (Nat.lt_succ_self _),
-    mul_zero]
-
-中文:
-定理 stirlingFirst_self
-  条件: (n : 自然数)
-  结论: stirlingFirst n n = 1
-  证明: by
-  induction n <;> simp only [*, stirlingFirst, stirlingFirst_eq_zero_of_lt (Nat.lt_succ_self _),
-    mul_zero]
-
-Depends on / 依赖: Nat.lt_succ_self, lt_succ_self, mul_zero, stirlingFirst, stirlingFirst_eq_zero_of_lt
+    rw [stirlingFirst_succ_succ, stirlingFirst_eq_zero_of_lt (Nat.lt_of_succ_lt_succ hk),
+      stirlingFirst_eq_zero_of_lt (Nat.lt_of_succ_lt hk), mul_zero]
+/-
+**Nat.stirlingFirst_self** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：stirlingFirst_self (n : Nat) : stirlingFirst n n = 1
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.stirlingFirst_eq_zero_of_lt`：∀ {n k : ℕ}, n < k → n.stirlingFirst k 
+= 0
+· 使用定理 `Nat.lt_succ_self`：∀ (n : ℕ), n < n.succ
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
-theorem stirlingFirst_self (n : Nat) : stirlingFirst n n = 1 := by
+theorem stirlingFirst_self (n : ℕ) : stirlingFirst n n = 1 := by
   induction n <;> simp only [*, stirlingFirst, stirlingFirst_eq_zero_of_lt (Nat.lt_succ_self _),
     mul_zero]
-
-/--
-theorem `stirlingFirst_succ_self_left` / 定理 `stirlingFirst_succ_self_left`
-
-English:
-theorem stirlingFirst_succ_self_left
-  given: (n : Nat)
-  statement: stirlingFirst (n + 1) n = (n + 1).choose 2
-  proof: by
+/-
+**Nat.stirlingFirst_succ_self_left** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：stirlingFirst_succ_self_left (n : Nat) : stirlingFirst (n + 1) n = (n + 1)
+.choose 2
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Nat.choose_succ_self`：choose_succ_self (n : Nat) : choose n (succ n) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Nat.stirlingFirst_succ_succ`：stirlingFirst_succ_succ (n k : Nat) : stirl
+ingFirst (n + 1) (k + 1) = n * stirlingFirst n (k + 1) + stirlingFirst n k
+· 使用定理 `Nat.stirlingFirst_self`：stirlingFirst_self (n : Nat) : stirlingFirst n n
+ = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Nat.choose_succ_succ`：choose_succ_succ (n k : Nat) : choose (succ n) (su
+cc k) = choose n k + choose n (succ k)
+· 使用引理 `Nat.choose_one_right`：choose_one_right (n : Nat) : choose n 1 = n
+-/
+theorem stirlingFirst_succ_self_left (n : ℕ) : stirlingFirst (n + 1) n = (n + 1).choose 2 := by
   induction n with
   | zero => simp only [zero_add, stirlingFirst_succ_zero, choose_succ_self]
   | succ n ih =>
-    rw [stirlingFirst_succ_succ]; rw [ih]; rw [stirlingFirst_self]; rw [mul_one]; rw [Nat.choose_succ_succ (n + 1)]; rw [Nat.choose_one_right]
-
-中文:
-定理 stirlingFirst_succ_self_left
-  条件: (n : 自然数)
-  结论: stirlingFirst (n + 1) n = (n + 1).choose 2
-  证明: by
-  induction n with
-  | zero => simp only [zero_add, stirlingFirst_succ_zero, choose_succ_self]
-  | succ n ih =>
-    rw [stirlingFirst_succ_succ]; rw [ih]; rw [stirlingFirst_self]; rw [mul_one]; rw [Nat.choose_succ_succ (n + 1)]; rw [Nat.choose_one_right]
-
-Depends on / 依赖: Nat.choose_one_right, Nat.choose_succ_succ, choose_one_right, choose_succ_self, choose_succ_succ, mul_one, stirlingFirst_self, stirlingFirst_succ_succ, stirlingFirst_succ_zero, zero_add
+    rw [stirlingFirst_succ_succ, ih, stirlingFirst_self, mul_one, Nat.choose_succ_succ (n + 1),
+      Nat.choose_one_right]
+/-
+**Nat.stirlingFirst_one_right** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：stirlingFirst_one_right (n : Nat) : stirlingFirst (n + 1) 1 = n.factorial
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.stirlingFirst_succ_succ`：stirlingFirst_succ_succ (n k : Nat) : stirl
+ingFirst (n + 1) (k + 1) = n * stirlingFirst n (k + 1) + stirlingFirst n k
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Nat.stirlingFirst_succ_zero`：stirlingFirst_succ_zero (n : Nat) : stirlin
+gFirst (succ n) 0 = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem stirlingFirst_succ_self_left (n : Nat) : stirlingFirst (n + 1) n = (n + 1).choose 2 := by
-  induction n with
-  | zero => simp only [zero_add, stirlingFirst_succ_zero, choose_succ_self]
-  | succ n ih =>
-    rw [stirlingFirst_succ_succ]; rw [ih]; rw [stirlingFirst_self]; rw [mul_one]; rw [Nat.choose_succ_succ (n + 1)]; rw [Nat.choose_one_right]
-
-/--
-theorem `stirlingFirst_one_right` / 定理 `stirlingFirst_one_right`
-
-English:
-theorem stirlingFirst_one_right
-  given: (n : Nat)
-  statement: stirlingFirst (n + 1) 1 = n.factorial
-  proof: by
+theorem stirlingFirst_one_right (n : ℕ) : stirlingFirst (n + 1) 1 = n.factorial := by
   induction n with
   | zero => rfl
   | succ n hn =>
-    rw [stirlingFirst_succ_succ]; rw [zero_add]; rw [hn]; rw [stirlingFirst_succ_zero]
-    simp [Nat.factorial_succ]
-
-中文:
-定理 stirlingFirst_one_right
-  条件: (n : 自然数)
-  结论: stirlingFirst (n + 1) 1 = n.factorial
-  证明: by
-  induction n with
-  | zero => rfl
-  | succ n hn =>
-    rw [stirlingFirst_succ_succ]; rw [zero_add]; rw [hn]; rw [stirlingFirst_succ_zero]
-    simp [Nat.factorial_succ]
-
-Depends on / 依赖: Nat.factorial_succ, factorial_succ, stirlingFirst_succ_succ, stirlingFirst_succ_zero, zero_add
--/
-theorem stirlingFirst_one_right (n : Nat) : stirlingFirst (n + 1) 1 = n.factorial := by
-  induction n with
-  | zero => rfl
-  | succ n hn =>
-    rw [stirlingFirst_succ_succ]; rw [zero_add]; rw [hn]; rw [stirlingFirst_succ_zero]
+    rw [stirlingFirst_succ_succ, zero_add, hn, stirlingFirst_succ_zero]
     simp [Nat.factorial_succ]
 
 
 /--
-Definition of `stirlingSecond` / `stirlingSecond` 的定义
-
-English:
-definition stirlingSecond
-  signature: : Nat -> Nat -> Nat
-
-中文:
-定义 stirlingSecond
-  签名: : 自然数 -> 自然数 -> 自然数
-
-Depends on / 依赖: Functor, LawfulFunctor, ofLawfulFunctor
+`Nat.stirlingSecond n k` is the Stirling number of the second kind,
+counting the number of ways to partition a set of `n` elements into `k` nonempty subsets.
 -/
-def stirlingSecond : Nat -> Nat -> Nat
+/-
+**Nat.stirlingSecond** 是 Mathlib 中的一个定义，位于命名空间 `Nat`。
+形式化陈述：ℕ → ℕ → ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`Nat.stirlingSecond n k` is the Stirling number of the second kind,
+counting the number of ways to partition a set of `n` elements into `k` nonempty
+ subsets.
+-/
+def stirlingSecond : ℕ → ℕ → ℕ
   | 0, 0 => 1
   | 0, _ + 1 => 0
   | _ + 1, 0 => 0
@@ -321,233 +255,165 @@ def stirlingSecond : Nat -> Nat -> Nat
     (k + 1) * stirlingSecond n (k + 1) + stirlingSecond n k
 
 @[simp]
-/--
-theorem `stirlingSecond_zero` / 定理 `stirlingSecond_zero`
-
-English:
-theorem stirlingSecond_zero
-  statement: stirlingSecond 0 0 = 1
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 stirlingSecond_zero
-  结论: stirlingSecond 0 0 = 1
-  证明: rfl
-
-@[simp]
+/-
+**Nat.stirlingSecond_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：stirlingSecond_zero : stirlingSecond 0 0 = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem stirlingSecond_zero : stirlingSecond 0 0 = 1 :=
   rfl
 
 @[simp]
-/--
-theorem `stirlingSecond_zero_succ` / 定理 `stirlingSecond_zero_succ`
-
-English:
-theorem stirlingSecond_zero_succ
-  given: (k : Nat)
-  statement: stirlingSecond 0 (succ k) = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 stirlingSecond_zero_succ
-  条件: (k : 自然数)
-  结论: stirlingSecond 0 (succ k) = 0
-  证明: rfl
-
-@[simp]
+/-
+**Nat.stirlingSecond_zero_succ** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：stirlingSecond_zero_succ (k : Nat) : stirlingSecond 0 (succ k) = 0
+参数：k : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem stirlingSecond_zero_succ (k : Nat) : stirlingSecond 0 (succ k) = 0 :=
+theorem stirlingSecond_zero_succ (k : ℕ) : stirlingSecond 0 (succ k) = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `stirlingSecond_succ_zero` / 定理 `stirlingSecond_succ_zero`
-
-English:
-theorem stirlingSecond_succ_zero
-  given: (n : Nat)
-  statement: stirlingSecond (succ n) 0 = 0
-  proof: rfl
-
-中文:
-定理 stirlingSecond_succ_zero
-  条件: (n : 自然数)
-  结论: stirlingSecond (succ n) 0 = 0
-  证明: rfl
+/-
+**Nat.stirlingSecond_succ_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：stirlingSecond_succ_zero (n : Nat) : stirlingSecond (succ n) 0 = 0
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem stirlingSecond_succ_zero (n : Nat) : stirlingSecond (succ n) 0 = 0 :=
+theorem stirlingSecond_succ_zero (n : ℕ) : stirlingSecond (succ n) 0 = 0 :=
   rfl
-
-/--
-theorem `stirlingSecond_succ_left` / 定理 `stirlingSecond_succ_left`
-
-English:
-theorem stirlingSecond_succ_left
-  given: (n k : Nat) (hk : k != 0)
-  proof: by
-  obtain ⟨l, rfl⟩ := Nat.exists_eq_add_of_le' (Nat.pos_of_ne_zero hk)
-  rfl
-
-中文:
-定理 stirlingSecond_succ_left
-  条件: (n k : 自然数) (hk : k != 0)
-  证明: by
-  obtain ⟨l, rfl⟩ := Nat.exists_eq_add_of_le' (Nat.pos_of_ne_zero hk)
-  rfl
-
-Depends on / 依赖: Nat.exists_eq_add_of_le, Nat.pos_of_ne_zero, exists_eq_add_of_le, pos_of_ne_zero
+/-
+**Nat.stirlingSecond_succ_left** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：stirlingSecond_succ_left (n k : Nat) (hk : k != 0) : stirlingSecond (n + 1
+) k = k * stirlingSecond n k + stirlingSecond n (k - 1)
+参数：n k : Nat；hk : k != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.exists_eq_add_of_le'`：∀ {m n : ℕ}, m ≤ n → ∃ k, n = k + m
+· 使用定理 `Nat.pos_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → 0 < n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem stirlingSecond_succ_left (n k : Nat) (hk : k != 0) :
+theorem stirlingSecond_succ_left (n k : ℕ) (hk : k ≠ 0) :
     stirlingSecond (n + 1) k = k * stirlingSecond n k + stirlingSecond n (k - 1) := by
   obtain ⟨l, rfl⟩ := Nat.exists_eq_add_of_le' (Nat.pos_of_ne_zero hk)
   rfl
-
-/--
-theorem `stirlingSecond_succ_right` / 定理 `stirlingSecond_succ_right`
-
-English:
-theorem stirlingSecond_succ_right
-  given: (n k : Nat) (hn : n != 0)
-  proof: by
-  obtain ⟨l, rfl⟩ := Nat.exists_eq_add_of_le' (Nat.pos_of_ne_zero hn)
-  rfl
-
-中文:
-定理 stirlingSecond_succ_right
-  条件: (n k : 自然数) (hn : n != 0)
-  证明: by
-  obtain ⟨l, rfl⟩ := Nat.exists_eq_add_of_le' (Nat.pos_of_ne_zero hn)
-  rfl
-
-Depends on / 依赖: Nat.exists_eq_add_of_le, Nat.pos_of_ne_zero, Part.fix, exists_eq_add_of_le, pos_of_ne_zero
+/-
+**Nat.stirlingSecond_succ_right** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：stirlingSecond_succ_right (n k : Nat) (hn : n != 0) : stirlingSecond n (k 
++ 1) = (k + 1) * stirlingSecond (n - 1) (k + 1) + stirlingSecond (n - 1) k
+参数：n k : Nat；hn : n != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.exists_eq_add_of_le'`：∀ {m n : ℕ}, m ≤ n → ∃ k, n = k + m
+· 使用定理 `Nat.pos_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → 0 < n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem stirlingSecond_succ_right (n k : Nat) (hn : n != 0) :
+theorem stirlingSecond_succ_right (n k : ℕ) (hn : n ≠ 0) :
     stirlingSecond n (k + 1) =
       (k + 1) * stirlingSecond (n - 1) (k + 1) + stirlingSecond (n - 1) k := by
   obtain ⟨l, rfl⟩ := Nat.exists_eq_add_of_le' (Nat.pos_of_ne_zero hn)
   rfl
-
-/--
-theorem `stirlingSecond_succ_succ` / 定理 `stirlingSecond_succ_succ`
-
-English:
-theorem stirlingSecond_succ_succ
-  given: (n k : Nat)
-  proof: rfl
-
-中文:
-定理 stirlingSecond_succ_succ
-  条件: (n k : 自然数)
-  证明: rfl
+/-
+**Nat.stirlingSecond_succ_succ** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：stirlingSecond_succ_succ (n k : Nat) : stirlingSecond (n + 1) (k + 1) = (k
+ + 1) * stirlingSecond n (k + 1) + stirlingSecond n k
+参数：n k : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem stirlingSecond_succ_succ (n k : Nat) :
+theorem stirlingSecond_succ_succ (n k : ℕ) :
     stirlingSecond (n + 1) (k + 1) =
       (k + 1) * stirlingSecond n (k + 1) + stirlingSecond n k := rfl
-
-/--
-theorem `stirlingSecond_eq_zero_of_lt` / 定理 `stirlingSecond_eq_zero_of_lt`
-
-English:
-theorem stirlingSecond_eq_zero_of_lt
-  statement: forall {n k : Nat}, n < k -> stirlingSecond n k = 0
-
-中文:
-定理 stirlingSecond_eq_zero_of_lt
-  结论: 对任意 {n k : 自然数}, n < k -> stirlingSecond n k = 0
+/-
+**Nat.stirlingSecond_eq_zero_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ {n k : ℕ}, n < k → n.stirlingSecond k = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem stirlingSecond_eq_zero_of_lt : forall {n k : Nat}, n < k -> stirlingSecond n k = 0
+theorem stirlingSecond_eq_zero_of_lt : ∀ {n k : ℕ}, n < k → stirlingSecond n k = 0
   | _, 0, hk => absurd hk (Nat.not_lt_zero _)
   | 0, _ + 1, _ => by rw [stirlingSecond]
   | n + 1, k + 1, hk => by
     simp only [stirlingSecond_succ_succ, stirlingSecond_eq_zero_of_lt (Nat.lt_of_succ_lt_succ hk),
       stirlingSecond_eq_zero_of_lt (Nat.lt_of_succ_lt hk), mul_zero]
-
-/--
-theorem `stirlingSecond_self` / 定理 `stirlingSecond_self`
-
-English:
-theorem stirlingSecond_self
-  given: (n : Nat)
-  statement: stirlingSecond n n = 1
-  proof: by
-  induction n <;> simp only [*, stirlingSecond, stirlingSecond_eq_zero_of_lt (lt_succ_self _),
-    mul_zero]
-
-中文:
-定理 stirlingSecond_self
-  条件: (n : 自然数)
-  结论: stirlingSecond n n = 1
-  证明: by
-  induction n <;> simp only [*, stirlingSecond, stirlingSecond_eq_zero_of_lt (lt_succ_self _),
-    mul_zero]
-
-Depends on / 依赖: lt_succ_self, mul_zero, stirlingSecond, stirlingSecond_eq_zero_of_lt
+/-
+**Nat.stirlingSecond_self** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：stirlingSecond_self (n : Nat) : stirlingSecond n n = 1
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.stirlingSecond_eq_zero_of_lt`：∀ {n k : ℕ}, n < k → n.stirlingSecond 
+k = 0
+· 使用定理 `Nat.lt_succ_self`：∀ (n : ℕ), n < n.succ
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
-theorem stirlingSecond_self (n : Nat) : stirlingSecond n n = 1 := by
+theorem stirlingSecond_self (n : ℕ) : stirlingSecond n n = 1 := by
   induction n <;> simp only [*, stirlingSecond, stirlingSecond_eq_zero_of_lt (lt_succ_self _),
     mul_zero]
-
-/--
-theorem `stirlingSecond_one_right` / 定理 `stirlingSecond_one_right`
-
-English:
-theorem stirlingSecond_one_right
-  given: (n : Nat)
-  statement: stirlingSecond (n + 1) 1 = 1
-  proof: by
+/-
+**Nat.stirlingSecond_one_right** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：stirlingSecond_one_right (n : Nat) : stirlingSecond (n + 1) 1 = 1
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.stirlingSecond.eq_4`：∀ (n k : ℕ), n.succ.stirlingSecond k.succ = (k 
++ 1) * n.stirlingSecond (k + 1) + n.stirlingSecond k
+· 使用定理 `Nat.stirlingSecond_succ_zero`：stirlingSecond_succ_zero (n : Nat) : stirl
+ingSecond (succ n) 0 = 0
+-/
+theorem stirlingSecond_one_right (n : ℕ) : stirlingSecond (n + 1) 1 = 1 := by
   induction n with
   | zero => rfl
   | succ n ih => rw [stirlingSecond, stirlingSecond_succ_zero, ih]
-
-中文:
-定理 stirlingSecond_one_right
-  条件: (n : 自然数)
-  结论: stirlingSecond (n + 1) 1 = 1
-  证明: by
-  induction n with
-  | zero => rfl
-  | succ n ih => rw [stirlingSecond, stirlingSecond_succ_zero, ih]
-
-Depends on / 依赖: stirlingSecond, stirlingSecond_succ_zero
+/-
+**Nat.stirlingSecond_succ_self_left** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：stirlingSecond_succ_self_left (n : Nat) : stirlingSecond (n + 1) n = (n + 
+1).choose 2
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Nat.choose_succ_self`：choose_succ_self (n : Nat) : choose n (succ n) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Nat.stirlingSecond_succ_succ`：stirlingSecond_succ_succ (n k : Nat) : sti
+rlingSecond (n + 1) (k + 1) = (k + 1) * stirlingSecond n (k + 1) + stirlingSecon
+d n k
+· 使用定理 `Nat.stirlingSecond_self`：stirlingSecond_self (n : Nat) : stirlingSecond 
+n n = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Nat.choose_succ_succ`：choose_succ_succ (n k : Nat) : choose (succ n) (su
+cc k) = choose n k + choose n (succ k)
+· 使用引理 `Nat.choose_one_right`：choose_one_right (n : Nat) : choose n 1 = n
 -/
-theorem stirlingSecond_one_right (n : Nat) : stirlingSecond (n + 1) 1 = 1 := by
-  induction n with
-  | zero => rfl
-  | succ n ih => rw [stirlingSecond, stirlingSecond_succ_zero, ih]
-
-/--
-theorem `stirlingSecond_succ_self_left` / 定理 `stirlingSecond_succ_self_left`
-
-English:
-theorem stirlingSecond_succ_self_left
-  given: (n : Nat)
-  proof: by
-  induction n with
-  | zero => simp only [zero_add, stirlingSecond_succ_zero, choose_succ_self]
-  | succ n ih =>
-    rw [stirlingSecond_succ_succ]; rw [ih]; rw [stirlingSecond_self]; rw [mul_one]; rw [Nat.choose_succ_succ (n + 1)]; rw [Nat.choose_one_right]
-
-中文:
-定理 stirlingSecond_succ_self_left
-  条件: (n : 自然数)
-  证明: by
-  induction n with
-  | zero => simp only [zero_add, stirlingSecond_succ_zero, choose_succ_self]
-  | succ n ih =>
-    rw [stirlingSecond_succ_succ]; rw [ih]; rw [stirlingSecond_self]; rw [mul_one]; rw [Nat.choose_succ_succ (n + 1)]; rw [Nat.choose_one_right]
-
-Depends on / 依赖: Nat.choose_one_right, Nat.choose_succ_succ, choose_one_right, choose_succ_self, choose_succ_succ, mul_one, stirlingSecond_self, stirlingSecond_succ_succ, stirlingSecond_succ_zero, zero_add
--/
-theorem stirlingSecond_succ_self_left (n : Nat) :
+theorem stirlingSecond_succ_self_left (n : ℕ) :
     stirlingSecond (n + 1) n = (n + 1).choose 2 := by
   induction n with
   | zero => simp only [zero_add, stirlingSecond_succ_zero, choose_succ_self]
   | succ n ih =>
-    rw [stirlingSecond_succ_succ]; rw [ih]; rw [stirlingSecond_self]; rw [mul_one]; rw [Nat.choose_succ_succ (n + 1)]; rw [Nat.choose_one_right]
+    rw [stirlingSecond_succ_succ, ih, stirlingSecond_self, mul_one,
+      Nat.choose_succ_succ (n + 1), Nat.choose_one_right]
 
 end Nat
+

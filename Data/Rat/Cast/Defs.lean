@@ -33,191 +33,148 @@ assert_not_exists MulAction IsOrderedMonoid
 variable {F ι α β : Type*}
 
 namespace NNRat
-variable [DivisionSemiring α] {q r : Rat>=0}
+variable [DivisionSemiring α] {q r : ℚ≥0}
 
-/--
-lemma `cast_natCast` / 引理 `cast_natCast`
-
-English:
-lemma cast_natCast
-  given: (n : Nat)
-  statement: ((n : Rat>=0) : α) = n
-  proof: by simp [cast_def]
-
-中文:
-引理 cast_natCast
-  条件: (n : 自然数)
-  结论: ((n : 有理数>=0) : α) = n
-  证明: by simp [cast_def]
+/-
+**NNRat.cast_natCast** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ {α : Type u_3} [inst : DivisionSemiring α] (n : ℕ), ↑↑n = ↑n
+参数：n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `NNRat.cast_def`：cast_def (q : Rat>=0) : (q : K) = q.num / q.den
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp, norm_cast] lemma cast_natCast (n : Nat) : ((n : Rat>=0) : α) = n := by simp [cast_def]
-
-/--
-lemma `cast_ofNat` / 引理 `cast_ofNat`
-
-English:
-lemma cast_ofNat
-  given: (n : Nat) [n.AtLeastTwo]
-  proof: cast_natCast _
-
-中文:
-引理 cast_of自然数
-  条件: (n : 自然数) [n.AtLeastTwo]
-  证明: cast_natCast _
+@[simp, norm_cast] lemma cast_natCast (n : ℕ) : ((n : ℚ≥0) : α) = n := by simp [cast_def]
+/-
+**NNRat.cast_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ {α : Type u_3} [inst : DivisionSemiring α] (n : ℕ) [inst_1 : n.AtLeastTw
+o], ↑(OfNat.ofNat n) = OfNat.ofNat n
+参数：n : ℕ；OfNat.ofNat n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNRat.cast_natCast`：∀ {α : Type u_3} [inst : DivisionSemiring α] (n : ℕ)
+, ↑↑n = ↑n
 -/
-@[simp, norm_cast] lemma cast_ofNat (n : Nat) [n.AtLeastTwo] :
-    (ofNat(n) : Rat>=0) = (ofNat(n) : α) := cast_natCast _
-
-/--
-lemma `cast_zero` / 引理 `cast_zero`
-
-English:
-lemma cast_zero
-  statement: ((0 : Rat>=0) : α) = 0
-  proof: (cast_natCast _).trans Nat.cast_zero
-
-中文:
-引理 cast_zero
-  结论: ((0 : 有理数>=0) : α) = 0
-  证明: (cast_natCast _).trans Nat.cast_zero
+@[simp, norm_cast] lemma cast_ofNat (n : ℕ) [n.AtLeastTwo] :
+    (ofNat(n) : ℚ≥0) = (ofNat(n) : α) := cast_natCast _
+/-
+**NNRat.cast_zero** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ {α : Type u_3} [inst : DivisionSemiring α], ↑0 = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `NNRat.cast_natCast`：∀ {α : Type u_3} [inst : DivisionSemiring α] (n : ℕ)
+, ↑↑n = ↑n
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
 -/
-@[simp, norm_cast] lemma cast_zero : ((0 : Rat>=0) : α) = 0 := (cast_natCast _).trans Nat.cast_zero
-/--
-lemma `cast_one` / 引理 `cast_one`
-
-English:
-lemma cast_one
-  statement: ((1 : Rat>=0) : α) = 1
-  proof: (cast_natCast _).trans Nat.cast_one
-
-中文:
-引理 cast_one
-  结论: ((1 : 有理数>=0) : α) = 1
-  证明: (cast_natCast _).trans Nat.cast_one
+@[simp, norm_cast] lemma cast_zero : ((0 : ℚ≥0) : α) = 0 := (cast_natCast _).trans Nat.cast_zero
+/-
+**NNRat.cast_one** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ {α : Type u_3} [inst : DivisionSemiring α], ↑1 = 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `NNRat.cast_natCast`：∀ {α : Type u_3} [inst : DivisionSemiring α] (n : ℕ)
+, ↑↑n = ↑n
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
 -/
-@[simp, norm_cast] lemma cast_one : ((1 : Rat>=0) : α) = 1 := (cast_natCast _).trans Nat.cast_one
-
-/--
-lemma `cast_commute` / 引理 `cast_commute`
-
-English:
-lemma cast_commute
-  given: (q : Rat>=0) (a : α)
-  statement: Commute (↑q) a
-  proof: by
+@[simp, norm_cast] lemma cast_one : ((1 : ℚ≥0) : α) = 1 := (cast_natCast _).trans Nat.cast_one
+/-
+**NNRat.cast_commute** 是 Mathlib 中的一个引理，位于命名空间 `NNRat`。
+形式化陈述：cast_commute (q : Rat>=0) (a : α) : Commute (↑q) a
+参数：q : Rat>=0；a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `NNRat.cast_def`：cast_def (q : Rat>=0) : (q : K) = q.num / q.den
+· 使用定理 `Commute.div_left`：div_left (hac : Commute a c) (hbc : Commute b c) : Com
+mute (a / b) c
+· 使用定理 `Nat.cast_commute`：cast_commute (n : Nat) (x : α) : Commute (n : α) x
+-/
+lemma cast_commute (q : ℚ≥0) (a : α) : Commute (↑q) a := by
   simpa only [cast_def] using (q.num.cast_commute a).div_left (q.den.cast_commute a)
-
-中文:
-引理 cast_commute
-  条件: (q : 有理数>=0) (a : α)
-  结论: Commute (↑q) a
-  证明: by
-  simpa only [cast_def] using (q.num.cast_commute a).div_left (q.den.cast_commute a)
-
-Depends on / 依赖: cast_commute, cast_def, div_left, q.den.cast_commute, q.num.cast_commute
+/-
+**NNRat.commute_cast** 是 Mathlib 中的一个引理，位于命名空间 `NNRat`。
+形式化陈述：commute_cast (a : α) (q : Rat>=0) : Commute a q
+参数：a : α；q : Rat>=0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Commute.symm`：∀ {S : Type u_3} [inst : Mul S] {a b : S}, Commute a b → C
+ommute b a
+· 使用引理 `NNRat.cast_commute`：cast_commute (q : Rat>=0) (a : α) : Commute (↑q) a
 -/
-lemma cast_commute (q : Rat>=0) (a : α) : Commute (↑q) a := by
-  simpa only [cast_def] using (q.num.cast_commute a).div_left (q.den.cast_commute a)
-
-/--
-lemma `commute_cast` / 引理 `commute_cast`
-
-English:
-lemma commute_cast
-  given: (a : α) (q : Rat>=0)
-  statement: Commute a q
-  proof: (cast_commute ..).symm
-
-中文:
-引理 commute_cast
-  条件: (a : α) (q : 有理数>=0)
-  结论: Commute a q
-  证明: (cast_commute ..).symm
-
-Depends on / 依赖: cast_commute
+lemma commute_cast (a : α) (q : ℚ≥0) : Commute a q := (cast_commute ..).symm
+/-
+**NNRat.cast_comm** 是 Mathlib 中的一个引理，位于命名空间 `NNRat`。
+形式化陈述：cast_comm (q : Rat>=0) (a : α) : q * a = a * q
+参数：q : Rat>=0；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `NNRat.cast_commute`：cast_commute (q : Rat>=0) (a : α) : Commute (↑q) a
 -/
-lemma commute_cast (a : α) (q : Rat>=0) : Commute a q := (cast_commute ..).symm
-
-/--
-lemma `cast_comm` / 引理 `cast_comm`
-
-English:
-lemma cast_comm
-  given: (q : Rat>=0) (a : α)
-  statement: q * a = a * q
-  proof: cast_commute _ _
-
-中文:
-引理 cast_comm
-  条件: (q : 有理数>=0) (a : α)
-  结论: q * a = a * q
-  证明: cast_commute _ _
-
-Depends on / 依赖: cast_commute
--/
-lemma cast_comm (q : Rat>=0) (a : α) : q * a = a * q := cast_commute _ _
+lemma cast_comm (q : ℚ≥0) (a : α) : q * a = a * q := cast_commute _ _
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `cast_divNat_of_ne_zero` / 引理 `cast_divNat_of_ne_zero`
-
-English:
-lemma cast_divNat_of_ne_zero
-  given: (a : Nat) {b : Nat} (hb : (b : α) != 0)
-  proof: by
-  rcases e : divNat a b with ⟨⟨n, d, h, c⟩, hn⟩
-  rw [← Rat.num_nonneg] at hn
-  lift n to Nat using hn
-  have hd : (d : α) != 0 := by
-    refine fun hd => hb ?_
-    have : Rat.divInt a b = _ := congr_arg NNRat.cast e
-    obtain ⟨k, rfl⟩ : d ∣ b := by simpa [Int.natCast_dvd_natCast, this] using Rat.den_dvd a b
-    simp [*]
-  have hb' : b != 0 := by rintro rfl; exact hb Nat.cast_zero
-  simp_rw [Rat.mk_eq_divInt, mk_divInt, divNat_inj hb' h] at e
-  rw [cast_def]
-  dsimp
-  rw [Commute.div_eq_div_iff _ hd hb]
-  · norm_cast
-    rw [e]
-  exact b.commute_cast _
-
-@[norm_cast]
-
-中文:
-引理 cast_div自然数_of_ne_zero
-  条件: (a : 自然数) {b : 自然数} (hb : (b : α) != 0)
-  证明: by
-  rcases e : divNat a b with ⟨⟨n, d, h, c⟩, hn⟩
-  rw [← Rat.num_nonneg] at hn
-  lift n to Nat using hn
-  have hd : (d : α) != 0 := by
-    refine fun hd => hb ?_
-    have : Rat.divInt a b = _ := congr_arg NNRat.cast e
-    obtain ⟨k, rfl⟩ : d ∣ b := by simpa [Int.natCast_dvd_natCast, this] using Rat.den_dvd a b
-    simp [*]
-  have hb' : b != 0 := by rintro rfl; exact hb Nat.cast_zero
-  simp_rw [Rat.mk_eq_divInt, mk_divInt, divNat_inj hb' h] at e
-  rw [cast_def]
-  dsimp
-  rw [Commute.div_eq_div_iff _ hd hb]
-  · norm_cast
-    rw [e]
-  exact b.commute_cast _
-
-@[norm_cast]
+/-
+**NNRat.cast_divNat_of_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ {α : Type u_3} [inst : DivisionSemiring α] (a : ℕ) {b : ℕ}, ↑b ≠ 0 → ↑(N
+NRat.divNat a b) = ↑a / ↑b
+参数：a : ℕ；NNRat.divNat a b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Rat.mk'`：mk'_num_den (q : Rat) : mk' q.num q.den q.den_nz q.reduced = q
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `instCanLiftIntNatCastLeOfNat`：CanLift ℤ ℕ (fun n => ↑n) fun x => 0 ≤ x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Rat.num_nonneg`：∀ {q : ℚ}, 0 ≤ q.num ↔ 0 ≤ q
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Rat.den_dvd`：den_dvd (a b : Int) : ((a /. b).den : Int) ∣ b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.cast_mul`：∀ {α : Type u_1} [inst : NonAssocSemiring α] (m n : ℕ), ↑(
+m * n) = ↑m * ↑n
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用引理 `NNRat.cast_def`：cast_def (q : Rat>=0) : (q : K) = q.num / q.den
+· 使用定理 `Commute.div_eq_div_iff`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] {a b
+ c d : G₀},   Commute b d → b ≠ 0 → d ≠ 0 → (a / b = c / d ↔ a * d = c * b)
+· 使用定理 `Nat.commute_cast`：commute_cast (x : α) (n : Nat) : Commute x n
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `NNRat.divNat_inj`：divNat_inj (h₁ : d₁ != 0) (h₂ : d₂ != 0) : divNat n₁ d
+₁ = divNat n₂ d₂ ↔ n₁ * d₂ = n₂ * d₁
+· 使用定理 `Rat.mk_eq_divInt`：∀ {num : ℤ} {den : ℕ} {nz : den ≠ 0} {c : num.natAbs.C
+oprime den},   { num := num, den := den, den_nz := nz, reduced := c } = Rat.divI
+nt num…
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
 -/
-@[norm_cast] lemma cast_divNat_of_ne_zero (a : Nat) {b : Nat} (hb : (b : α) != 0) :
+@[norm_cast] lemma cast_divNat_of_ne_zero (a : ℕ) {b : ℕ} (hb : (b : α) ≠ 0) :
     divNat a b = (a / b : α) := by
   rcases e : divNat a b with ⟨⟨n, d, h, c⟩, hn⟩
   rw [← Rat.num_nonneg] at hn
-  lift n to Nat using hn
-  have hd : (d : α) != 0 := by
-    refine fun hd => hb ?_
+  lift n to ℕ using hn
+  have hd : (d : α) ≠ 0 := by
+    refine fun hd ↦ hb ?_
     have : Rat.divInt a b = _ := congr_arg NNRat.cast e
     obtain ⟨k, rfl⟩ : d ∣ b := by simpa [Int.natCast_dvd_natCast, this] using Rat.den_dvd a b
     simp [*]
-  have hb' : b != 0 := by rintro rfl; exact hb Nat.cast_zero
+  have hb' : b ≠ 0 := by rintro rfl; exact hb Nat.cast_zero
   simp_rw [Rat.mk_eq_divInt, mk_divInt, divNat_inj hb' h] at e
   rw [cast_def]
   dsimp
@@ -227,137 +184,135 @@ lemma cast_divNat_of_ne_zero
   exact b.commute_cast _
 
 @[norm_cast]
-/--
-lemma `cast_add_of_ne_zero` / 引理 `cast_add_of_ne_zero`
-
-English:
-lemma cast_add_of_ne_zero
-  given: (hq : (q.den : α) != 0) (hr : (r.den : α) != 0)
-  proof: by
-  rw [add_def]; rw [cast_divNat_of_ne_zero]; rw [cast_def]; rw [cast_def]; rw [mul_comm _ q.den]; rw [(Nat.commute_cast _ _).div_add_div (Nat.commute_cast _ _) hq hr]
-  · push_cast
-    rfl
-  · push_cast
-    exact mul_ne_zero hq hr
-
-@[norm_cast]
-
-中文:
-引理 cast_add_of_ne_zero
-  条件: (hq : (q.den : α) != 0) (hr : (r.den : α) != 0)
-  证明: by
-  rw [add_def]; rw [cast_divNat_of_ne_zero]; rw [cast_def]; rw [cast_def]; rw [mul_comm _ q.den]; rw [(Nat.commute_cast _ _).div_add_div (Nat.commute_cast _ _) hq hr]
-  · push_cast
-    rfl
-  · push_cast
-    exact mul_ne_zero hq hr
-
-@[norm_cast]
-
-Depends on / 依赖: Nat.commute_cast, add_def, cast_def, cast_divNat_of_ne_zero, commute_cast, div_add_div, mul_comm, mul_ne_zero, q.den
+/-
+**NNRat.cast_add_of_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `NNRat`。
+形式化陈述：cast_add_of_ne_zero (hq : (q.den : α) != 0) (hr : (r.den : α) != 0) : ↑(q 
++ r) = (q + r : α)
+参数：hq : (q.den : α) != 0；hr : (r.den : α) != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `NNRat.add_def`：add_def (q r : Rat>=0) : q + r = divNat (q.num * r.den + 
+r.num * q.den) (q.den * r.den)
+· 使用定理 `NNRat.cast_divNat_of_ne_zero`：∀ {α : Type u_3} [inst : DivisionSemiring 
+α] (a : ℕ) {b : ℕ}, ↑b ≠ 0 → ↑(NNRat.divNat a b) = ↑a / ↑b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_mul`：∀ {α : Type u_1} [inst : NonAssocSemiring α] (m n : ℕ), ↑(
+m * n) = ↑m * ↑n
+· 使用定理 `mul_ne_zero`：mul_ne_zero (ha : a != 0) (hb : b != 0) : a * b != 0
+· 使用定理 `GroupWithZero.noZeroDivisors`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀
+], NoZeroDivisors G₀
+· 使用引理 `NNRat.cast_def`：cast_def (q : Rat>=0) : (q : K) = q.num / q.den
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Commute.div_add_div`：∀ {K : Type u_1} [inst : DivisionSemiring K] {a b c
+ d : K},   Commute b c → Commute b d → b ≠ 0 → d ≠ 0 → a / b + c / d = (a * d + 
+b * c) / …
+· 使用定理 `Nat.commute_cast`：commute_cast (x : α) (n : Nat) : Commute x n
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
 -/
-lemma cast_add_of_ne_zero (hq : (q.den : α) != 0) (hr : (r.den : α) != 0) :
+lemma cast_add_of_ne_zero (hq : (q.den : α) ≠ 0) (hr : (r.den : α) ≠ 0) :
     ↑(q + r) = (q + r : α) := by
-  rw [add_def]; rw [cast_divNat_of_ne_zero]; rw [cast_def]; rw [cast_def]; rw [mul_comm _ q.den]; rw [(Nat.commute_cast _ _).div_add_div (Nat.commute_cast _ _) hq hr]
+  rw [add_def, cast_divNat_of_ne_zero, cast_def, cast_def, mul_comm _ q.den,
+    (Nat.commute_cast _ _).div_add_div (Nat.commute_cast _ _) hq hr]
   · push_cast
     rfl
   · push_cast
     exact mul_ne_zero hq hr
 
 @[norm_cast]
-/--
-lemma `cast_mul_of_ne_zero` / 引理 `cast_mul_of_ne_zero`
-
-English:
-lemma cast_mul_of_ne_zero
-  given: (hq : (q.den : α) != 0) (hr : (r.den : α) != 0)
-  proof: by
-  rw [mul_def]; rw [cast_divNat_of_ne_zero]; rw [cast_def]; rw [cast_def]; rw [(Nat.commute_cast _ _).div_mul_div_comm (Nat.commute_cast _ _)]
-  · push_cast
-    rfl
-  · push_cast
-    exact mul_ne_zero hq hr
-
-@[norm_cast]
-
-中文:
-引理 cast_mul_of_ne_zero
-  条件: (hq : (q.den : α) != 0) (hr : (r.den : α) != 0)
-  证明: by
-  rw [mul_def]; rw [cast_divNat_of_ne_zero]; rw [cast_def]; rw [cast_def]; rw [(Nat.commute_cast _ _).div_mul_div_comm (Nat.commute_cast _ _)]
-  · push_cast
-    rfl
-  · push_cast
-    exact mul_ne_zero hq hr
-
-@[norm_cast]
-
-Depends on / 依赖: Nat.commute_cast, cast_def, cast_divNat_of_ne_zero, commute_cast, div_mul_div_comm, mul_def, mul_ne_zero
+/-
+**NNRat.cast_mul_of_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `NNRat`。
+形式化陈述：cast_mul_of_ne_zero (hq : (q.den : α) != 0) (hr : (r.den : α) != 0) : ↑(q 
+* r) = (q * r : α)
+参数：hq : (q.den : α) != 0；hr : (r.den : α) != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `NNRat.mul_def`：mul_def (q r : Rat>=0) : q * r = divNat (q.num * r.num) (
+q.den * r.den)
+· 使用定理 `NNRat.cast_divNat_of_ne_zero`：∀ {α : Type u_3} [inst : DivisionSemiring 
+α] (a : ℕ) {b : ℕ}, ↑b ≠ 0 → ↑(NNRat.divNat a b) = ↑a / ↑b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_mul`：∀ {α : Type u_1} [inst : NonAssocSemiring α] (m n : ℕ), ↑(
+m * n) = ↑m * ↑n
+· 使用定理 `mul_ne_zero`：mul_ne_zero (ha : a != 0) (hb : b != 0) : a * b != 0
+· 使用定理 `GroupWithZero.noZeroDivisors`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀
+], NoZeroDivisors G₀
+· 使用引理 `NNRat.cast_def`：cast_def (q : Rat>=0) : (q : K) = q.num / q.den
+· 使用定理 `Commute.div_mul_div_comm`：∀ {G : Type u_1} [inst : DivisionMonoid G] {a 
+b c d : G},   Commute b d → Commute b⁻¹ c → a / b * (c / d) = a * c / (b * d)
+· 使用定理 `Nat.commute_cast`：commute_cast (x : α) (n : Nat) : Commute x n
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
 -/
-lemma cast_mul_of_ne_zero (hq : (q.den : α) != 0) (hr : (r.den : α) != 0) :
+lemma cast_mul_of_ne_zero (hq : (q.den : α) ≠ 0) (hr : (r.den : α) ≠ 0) :
     ↑(q * r) = (q * r : α) := by
-  rw [mul_def]; rw [cast_divNat_of_ne_zero]; rw [cast_def]; rw [cast_def]; rw [(Nat.commute_cast _ _).div_mul_div_comm (Nat.commute_cast _ _)]
+  rw [mul_def, cast_divNat_of_ne_zero, cast_def, cast_def,
+    (Nat.commute_cast _ _).div_mul_div_comm (Nat.commute_cast _ _)]
   · push_cast
     rfl
   · push_cast
     exact mul_ne_zero hq hr
 
 @[norm_cast]
-/--
-lemma `cast_inv_of_ne_zero` / 引理 `cast_inv_of_ne_zero`
-
-English:
-lemma cast_inv_of_ne_zero
-  given: (hq : (q.num : α) != 0)
-  statement: (q⁻¹ : Rat>=0) = (q⁻¹ : α)
-  proof: by
-  rw [inv_def]; rw [cast_divNat_of_ne_zero _ hq]; rw [cast_def]; rw [inv_div]
-
-@[norm_cast]
-
-中文:
-引理 cast_inv_of_ne_zero
-  条件: (hq : (q.num : α) != 0)
-  结论: (q⁻¹ : 有理数>=0) = (q⁻¹ : α)
-  证明: by
-  rw [inv_def]; rw [cast_divNat_of_ne_zero _ hq]; rw [cast_def]; rw [inv_div]
-
-@[norm_cast]
-
-Depends on / 依赖: cast_def, cast_divNat_of_ne_zero, inv_def, inv_div
+/-
+**NNRat.cast_inv_of_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `NNRat`。
+形式化陈述：cast_inv_of_ne_zero (hq : (q.num : α) != 0) : (q⁻¹ : Rat>=0) = (q⁻¹ : α)
+参数：hq : (q.num : α) != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `NNRat.inv_def`：inv_def (q : Rat>=0) : q⁻¹ = divNat q.den q.num
+· 使用定理 `NNRat.cast_divNat_of_ne_zero`：∀ {α : Type u_3} [inst : DivisionSemiring 
+α] (a : ℕ) {b : ℕ}, ↑b ≠ 0 → ↑(NNRat.divNat a b) = ↑a / ↑b
+· 使用引理 `NNRat.cast_def`：cast_def (q : Rat>=0) : (q : K) = q.num / q.den
+· 使用定理 `inv_div`：inv_div : (a / b)⁻¹ = b / a
 -/
-lemma cast_inv_of_ne_zero (hq : (q.num : α) != 0) : (q⁻¹ : Rat>=0) = (q⁻¹ : α) := by
-  rw [inv_def]; rw [cast_divNat_of_ne_zero _ hq]; rw [cast_def]; rw [inv_div]
+lemma cast_inv_of_ne_zero (hq : (q.num : α) ≠ 0) : (q⁻¹ : ℚ≥0) = (q⁻¹ : α) := by
+  rw [inv_def, cast_divNat_of_ne_zero _ hq, cast_def, inv_div]
 
 @[norm_cast]
-/--
-lemma `cast_div_of_ne_zero` / 引理 `cast_div_of_ne_zero`
-
-English:
-lemma cast_div_of_ne_zero
-  given: (hq : (q.den : α) != 0) (hr : (r.num : α) != 0)
-  proof: by
-  rw [div_def]; rw [cast_divNat_of_ne_zero]; rw [cast_def]; rw [cast_def]; rw [div_eq_mul_inv (_ / _)]; rw [inv_div]; rw [(Nat.commute_cast _ _).div_mul_div_comm (Nat.commute_cast _ _)]
-  · push_cast
-    rfl
-  · push_cast
-    exact mul_ne_zero hq hr
-
-中文:
-引理 cast_div_of_ne_zero
-  条件: (hq : (q.den : α) != 0) (hr : (r.num : α) != 0)
-  证明: by
-  rw [div_def]; rw [cast_divNat_of_ne_zero]; rw [cast_def]; rw [cast_def]; rw [div_eq_mul_inv (_ / _)]; rw [inv_div]; rw [(Nat.commute_cast _ _).div_mul_div_comm (Nat.commute_cast _ _)]
-  · push_cast
-    rfl
-  · push_cast
-    exact mul_ne_zero hq hr
-
-Depends on / 依赖: Nat.commute_cast, cast_def, cast_divNat_of_ne_zero, commute_cast, div_def, div_eq_mul_inv, div_mul_div_comm, inv_div, mul_ne_zero
+/-
+**NNRat.cast_div_of_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `NNRat`。
+形式化陈述：cast_div_of_ne_zero (hq : (q.den : α) != 0) (hr : (r.num : α) != 0) : ↑(q 
+/ r) = (q / r : α)
+参数：hq : (q.den : α) != 0；hr : (r.num : α) != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `NNRat.div_def`：div_def (p q : Rat>=0) : p / q = divNat (p.num * q.den) (
+p.den * q.num)
+· 使用定理 `NNRat.cast_divNat_of_ne_zero`：∀ {α : Type u_3} [inst : DivisionSemiring 
+α] (a : ℕ) {b : ℕ}, ↑b ≠ 0 → ↑(NNRat.divNat a b) = ↑a / ↑b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_mul`：∀ {α : Type u_1} [inst : NonAssocSemiring α] (m n : ℕ), ↑(
+m * n) = ↑m * ↑n
+· 使用定理 `mul_ne_zero`：mul_ne_zero (ha : a != 0) (hb : b != 0) : a * b != 0
+· 使用定理 `GroupWithZero.noZeroDivisors`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀
+], NoZeroDivisors G₀
+· 使用引理 `NNRat.cast_def`：cast_def (q : Rat>=0) : (q : K) = q.num / q.den
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `inv_div`：inv_div : (a / b)⁻¹ = b / a
+· 使用定理 `Commute.div_mul_div_comm`：∀ {G : Type u_1} [inst : DivisionMonoid G] {a 
+b c d : G},   Commute b d → Commute b⁻¹ c → a / b * (c / d) = a * c / (b * d)
+· 使用定理 `Nat.commute_cast`：commute_cast (x : α) (n : Nat) : Commute x n
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
 -/
-lemma cast_div_of_ne_zero (hq : (q.den : α) != 0) (hr : (r.num : α) != 0) :
+lemma cast_div_of_ne_zero (hq : (q.den : α) ≠ 0) (hr : (r.num : α) ≠ 0) :
     ↑(q / r) = (q / r : α) := by
-  rw [div_def]; rw [cast_divNat_of_ne_zero]; rw [cast_def]; rw [cast_def]; rw [div_eq_mul_inv (_ / _)]; rw [inv_div]; rw [(Nat.commute_cast _ _).div_mul_div_comm (Nat.commute_cast _ _)]
+  rw [div_def, cast_divNat_of_ne_zero, cast_def, cast_def, div_eq_mul_inv (_ / _),
+    inv_div, (Nat.commute_cast _ _).div_mul_div_comm (Nat.commute_cast _ _)]
   · push_cast
     rfl
   · push_cast
@@ -367,439 +322,411 @@ end NNRat
 
 namespace Rat
 
-variable [DivisionRing α] {p q : Rat}
+variable [DivisionRing α] {p q : ℚ}
 
 @[simp, norm_cast]
-/--
-theorem `cast_intCast` / 定理 `cast_intCast`
-
-English:
-theorem cast_intCast
-  given: (n : Int)
-  statement: ((n : Rat) : α) = n
-  proof: (cast_def _).trans show (n / (1 : Nat) : α) = n by rw [Nat.cast_one, div_one]
-
-@[simp, norm_cast]
-
-中文:
-定理 cast_intCast
-  条件: (n : 整数)
-  结论: ((n : 有理数) : α) = n
-  证明: (cast_def _).trans show (n / (1 : Nat) : α) = n by rw [Nat.cast_one, div_one]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Nat.cast_one, cast_def, cast_one, div_one
+/-
+**Rat.cast_intCast** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：cast_intCast (n : Int) : ((n : Rat) : α) = n
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Rat.cast_def`：cast_def (q : Rat) : (q : K) = q.num / q.den
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
 -/
-theorem cast_intCast (n : Int) : ((n : Rat) : α) = n :=
-(cast_def _).trans show (n / (1 : Nat) : α) = n by rw [Nat.cast_one, div_one]
+theorem cast_intCast (n : ℤ) : ((n : ℚ) : α) = n :=
+  (cast_def _).trans <| show (n / (1 : ℕ) : α) = n by rw [Nat.cast_one, div_one]
 
 @[simp, norm_cast]
-/--
-theorem `cast_natCast` / 定理 `cast_natCast`
-
-English:
-theorem cast_natCast
-  given: (n : Nat)
-  statement: ((n : Rat) : α) = n
-  proof: by
-  rw [← Int.cast_natCast]; rw [cast_intCast]; rw [Int.cast_natCast]
-
-中文:
-定理 cast_natCast
-  条件: (n : 自然数)
-  结论: ((n : 有理数) : α) = n
-  证明: by
-  rw [← Int.cast_natCast]; rw [cast_intCast]; rw [Int.cast_natCast]
-
-Depends on / 依赖: Int.cast_natCast, cast_intCast, cast_natCast
+/-
+**Rat.cast_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：cast_natCast (n : Nat) : ((n : Rat) : α) = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `Rat.cast_intCast`：cast_intCast (n : Int) : ((n : Rat) : α) = n
 -/
-theorem cast_natCast (n : Nat) : ((n : Rat) : α) = n := by
-  rw [← Int.cast_natCast]; rw [cast_intCast]; rw [Int.cast_natCast]
-
-
-/--
-lemma `cast_ofNat` / 引理 `cast_ofNat`
-
-English:
-lemma cast_ofNat
-  given: (n : Nat) [n.AtLeastTwo]
-  proof: by
+theorem cast_natCast (n : ℕ) : ((n : ℚ) : α) = n := by
+  rw [← Int.cast_natCast, cast_intCast, Int.cast_natCast]
+/-
+**Rat.cast_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：∀ {α : Type u_3} [inst : DivisionRing α] (n : ℕ) [inst_1 : n.AtLeastTwo], 
+↑(OfNat.ofNat n) = OfNat.ofNat n
+参数：n : ℕ；OfNat.ofNat n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Rat.cast_def`：cast_def (q : Rat) : (q : K) = q.num / q.den
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Int.cast_ofNat`：cast_ofNat (n : Nat) [n.AtLeastTwo] : ((ofNat(n) : Int) 
+: R) = ofNat(n)
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+@[simp, norm_cast] lemma cast_ofNat (n : ℕ) [n.AtLeastTwo] :
+    ((ofNat(n) : ℚ) : α) = (ofNat(n) : α) := by
   simp [cast_def]
 
 @[simp, norm_cast]
-
-中文:
-引理 cast_of自然数
-  条件: (n : 自然数) [n.AtLeastTwo]
-  证明: by
-  simp [cast_def]
-
-@[simp, norm_cast]
+/-
+**Rat.cast_zero** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：cast_zero : ((0 : Rat) : α) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Rat.cast_intCast`：cast_intCast (n : Int) : ((n : Rat) : α) = n
+· 使用定理 `Int.cast_zero`：cast_zero : ((0 : Int) : R) = 0
 -/
-@[simp, norm_cast] lemma cast_ofNat (n : Nat) [n.AtLeastTwo] :
-    ((ofNat(n) : Rat) : α) = (ofNat(n) : α) := by
-  simp [cast_def]
-
-@[simp, norm_cast]
-/--
-theorem `cast_zero` / 定理 `cast_zero`
-
-English:
-theorem cast_zero
-  statement: ((0 : Rat) : α) = 0
-  proof: (cast_intCast _).trans Int.cast_zero
-
-@[simp, norm_cast]
-
-中文:
-定理 cast_zero
-  结论: ((0 : 有理数) : α) = 0
-  证明: (cast_intCast _).trans Int.cast_zero
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Int.cast_zero, cast_intCast, cast_zero
--/
-theorem cast_zero : ((0 : Rat) : α) = 0 :=
+theorem cast_zero : ((0 : ℚ) : α) = 0 :=
   (cast_intCast _).trans Int.cast_zero
 
 @[simp, norm_cast]
-/--
-theorem `cast_one` / 定理 `cast_one`
-
-English:
-theorem cast_one
-  statement: ((1 : Rat) : α) = 1
-  proof: (cast_intCast _).trans Int.cast_one
-
-中文:
-定理 cast_one
-  结论: ((1 : 有理数) : α) = 1
-  证明: (cast_intCast _).trans Int.cast_one
-
-Depends on / 依赖: Int.cast_one, cast_intCast, cast_one
+/-
+**Rat.cast_one** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：cast_one : ((1 : Rat) : α) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Rat.cast_intCast`：cast_intCast (n : Int) : ((n : Rat) : α) = n
+· 使用定理 `Int.cast_one`：cast_one : ((1 : Int) : R) = 1
 -/
-theorem cast_one : ((1 : Rat) : α) = 1 :=
+theorem cast_one : ((1 : ℚ) : α) = 1 :=
   (cast_intCast _).trans Int.cast_one
-
-/--
-theorem `cast_commute` / 定理 `cast_commute`
-
-English:
-theorem cast_commute
-  given: (r : Rat) (a : α)
-  statement: Commute (↑r) a
-  proof: by
-  simpa only [cast_def] using (r.1.cast_commute a).div_left (r.2.cast_commute a)
-
-中文:
-定理 cast_commute
-  条件: (r : 有理数) (a : α)
-  结论: Commute (↑r) a
-  证明: by
-  simpa only [cast_def] using (r.1.cast_commute a).div_left (r.2.cast_commute a)
-
-Depends on / 依赖: cast_commute, cast_def, div_left
+/-
+**Rat.cast_commute** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：cast_commute (r : Rat) (a : α) : Commute (↑r) a
+参数：r : Rat；a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Rat.cast_def`：cast_def (q : Rat) : (q : K) = q.num / q.den
+· 使用定理 `Commute.div_left`：div_left (hac : Commute a c) (hbc : Commute b c) : Com
+mute (a / b) c
+· 使用定理 `Int.cast_commute`：∀ {α : Type u_3} [inst : NonAssocRing α] (n : ℤ) (a : 
+α), Commute (↑n) a
+· 使用定理 `Nat.cast_commute`：cast_commute (n : Nat) (x : α) : Commute (n : α) x
 -/
-theorem cast_commute (r : Rat) (a : α) : Commute (↑r) a := by
+theorem cast_commute (r : ℚ) (a : α) : Commute (↑r) a := by
   simpa only [cast_def] using (r.1.cast_commute a).div_left (r.2.cast_commute a)
-
-/--
-theorem `cast_comm` / 定理 `cast_comm`
-
-English:
-theorem cast_comm
-  given: (r : Rat) (a : α)
-  statement: (r : α) * a = a * r
-  proof: (cast_commute r a).eq
-
-中文:
-定理 cast_comm
-  条件: (r : 有理数) (a : α)
-  结论: (r : α) * a = a * r
-  证明: (cast_commute r a).eq
-
-Depends on / 依赖: cast_commute
+/-
+**Rat.cast_comm** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：cast_comm (r : Rat) (a : α) : (r : α) * a = a * r
+参数：r : Rat；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Commute.eq`：∀ {S : Type u_3} [inst : Mul S] {a b : S}, Commute a b → a *
+ b = b * a
+· 使用定理 `Rat.cast_commute`：cast_commute (r : Rat) (a : α) : Commute (↑r) a
 -/
-theorem cast_comm (r : Rat) (a : α) : (r : α) * a = a * r :=
+theorem cast_comm (r : ℚ) (a : α) : (r : α) * a = a * r :=
   (cast_commute r a).eq
-
-/--
-theorem `commute_cast` / 定理 `commute_cast`
-
-English:
-theorem commute_cast
-  given: (a : α) (r : Rat)
-  statement: Commute a r
-  proof: (r.cast_commute a).symm
-
-@[norm_cast]
-
-中文:
-定理 commute_cast
-  条件: (a : α) (r : 有理数)
-  结论: Commute a r
-  证明: (r.cast_commute a).symm
-
-@[norm_cast]
-
-Depends on / 依赖: cast_commute, r.cast_commute
+/-
+**Rat.commute_cast** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：commute_cast (a : α) (r : Rat) : Commute a r
+参数：a : α；r : Rat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Commute.symm`：∀ {S : Type u_3} [inst : Mul S] {a b : S}, Commute a b → C
+ommute b a
+· 使用定理 `Rat.cast_commute`：cast_commute (r : Rat) (a : α) : Commute (↑r) a
 -/
-theorem commute_cast (a : α) (r : Rat) : Commute a r :=
+theorem commute_cast (a : α) (r : ℚ) : Commute a r :=
   (r.cast_commute a).symm
 
 @[norm_cast]
-/--
-lemma `cast_divInt_of_ne_zero` / 引理 `cast_divInt_of_ne_zero`
-
-English:
-lemma cast_divInt_of_ne_zero
-  given: (a : Int) {b : Int} (b0 : (b : α) != 0)
-  statement: (a /. b : α) = a / b
-  proof: by
-  have b0' : b != 0 := by
-    refine mt ?_ b0
-    simp +contextual
-  rcases e : a /. b with ⟨n, d, h, c⟩
-  have d0 : (d : α) != 0 := by
-    intro d0
-    have dd := den_dvd a b
-    rcases show (d : Int) ∣ b by rwa [e] at dd with ⟨k, ke⟩
-    have : (b : α) = (d : α) * (k : α) := by rw [ke, Int.cast_mul, Int.cast_natCast]
-    rw [d0]; rw [zero_mul] at this
-    contradiction
-  rw [mk_eq_divInt] at e
-  have := congr_arg ((↑) : Int -> α)
-    ((divInt_eq_divInt_iff b0' <| ne_of_gt <| Int.natCast_pos.2 h.bot_lt).1 e)
-  rw [Int.cast_mul]; rw [Int.cast_mul]; rw [Int.cast_natCast] at this
-  rw [eq_comm]; rw [cast_def]; rw [div_eq_mul_inv]; rw [eq_div_iff_mul_eq d0]; rw [mul_assoc]; rw [(d.commute_cast _).eq]; rw [← mul_assoc]; rw [this]; rw [mul_assoc]; rw [mul_inv_cancel₀ b0]; rw [mul_one]
-
-@[norm_cast]
-
-中文:
-引理 cast_div整数_of_ne_zero
-  条件: (a : 整数) {b : 整数} (b0 : (b : α) != 0)
-  结论: (a /. b : α) = a / b
-  证明: by
-  have b0' : b != 0 := by
-    refine mt ?_ b0
-    simp +contextual
-  rcases e : a /. b with ⟨n, d, h, c⟩
-  have d0 : (d : α) != 0 := by
-    intro d0
-    have dd := den_dvd a b
-    rcases show (d : Int) ∣ b by rwa [e] at dd with ⟨k, ke⟩
-    have : (b : α) = (d : α) * (k : α) := by rw [ke, Int.cast_mul, Int.cast_natCast]
-    rw [d0]; rw [zero_mul] at this
-    contradiction
-  rw [mk_eq_divInt] at e
-  have := congr_arg ((↑) : Int -> α)
-    ((divInt_eq_divInt_iff b0' <| ne_of_gt <| Int.natCast_pos.2 h.bot_lt).1 e)
-  rw [Int.cast_mul]; rw [Int.cast_mul]; rw [Int.cast_natCast] at this
-  rw [eq_comm]; rw [cast_def]; rw [div_eq_mul_inv]; rw [eq_div_iff_mul_eq d0]; rw [mul_assoc]; rw [(d.commute_cast _).eq]; rw [← mul_assoc]; rw [this]; rw [mul_assoc]; rw [mul_inv_cancel₀ b0]; rw [mul_one]
-
-@[norm_cast]
-
-Depends on / 依赖: Int.c, Int.cast_mul, Int.cast_natCast, Int.natCast_pos, bot_lt, cast_mul, cast_natCast, congr_arg, contextual, den_dvd, divInt_eq_divInt_iff, h.bot_lt, mk_eq_divInt, natCast_pos, ne_of_gt, zero_mul
+/-
+**Rat.cast_divInt_of_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `Rat`。
+形式化陈述：cast_divInt_of_ne_zero (a : Int) {b : Int} (b0 : (b : α) != 0) : (a /. b :
+ α) = a / b
+参数：a : Int；b0 : (b : α) != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.cast_zero`：cast_zero : ((0 : Int) : R) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用引理 `Rat.mk'`：mk'_num_den (q : Rat) : mk' q.num q.den q.den_nz q.reduced = q
+· 使用定理 `Rat.den_dvd`：den_dvd (a b : Int) : ((a /. b).den : Int) ∣ b
+· 使用引理 `Int.cast_mul`：cast_mul {α : Type*} [NonAssocRing α] : forall m n, ((m * 
+n : Int) : α) = m * n
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Rat.divInt_eq_divInt_iff`：∀ {d₁ d₂ n₁ n₂ : ℤ}, d₁ ≠ 0 → d₂ ≠ 0 → (Rat.di
+vInt n₁ d₁ = Rat.divInt n₂ d₂ ↔ n₁ * d₂ = n₂ * d₁)
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Int.natCast_pos`：∀ {n : ℕ}, 0 < ↑n ↔ 0 < n
+· 使用定理 `Ne.bot_lt`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α] 
+{a : α}, a ≠ ⊥ → ⊥ < a
+· 使用定理 `Rat.mk_eq_divInt`：∀ {num : ℤ} {den : ℕ} {nz : den ≠ 0} {c : num.natAbs.C
+oprime den},   { num := num, den := den, den_nz := nz, reduced := c } = Rat.divI
+nt num…
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用引理 `Rat.cast_def`：cast_def (q : Rat) : (q : K) = q.num / q.den
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用引理 `eq_div_iff_mul_eq`：eq_div_iff_mul_eq (hc : c != 0) : a = b / c ↔ a * c =
+ b
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Commute.eq`：∀ {S : Type u_3} [inst : Mul S] {a b : S}, Commute a b → a *
+ b = b * a
+· 使用定理 `Nat.commute_cast`：commute_cast (x : α) (n : Nat) : Commute x n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+（共 32 条，此处仅展示前 30 条）
 -/
-lemma cast_divInt_of_ne_zero (a : Int) {b : Int} (b0 : (b : α) != 0) : (a /. b : α) = a / b := by
-  have b0' : b != 0 := by
+lemma cast_divInt_of_ne_zero (a : ℤ) {b : ℤ} (b0 : (b : α) ≠ 0) : (a /. b : α) = a / b := by
+  have b0' : b ≠ 0 := by
     refine mt ?_ b0
     simp +contextual
   rcases e : a /. b with ⟨n, d, h, c⟩
-  have d0 : (d : α) != 0 := by
+  have d0 : (d : α) ≠ 0 := by
     intro d0
     have dd := den_dvd a b
-    rcases show (d : Int) ∣ b by rwa [e] at dd with ⟨k, ke⟩
+    rcases show (d : ℤ) ∣ b by rwa [e] at dd with ⟨k, ke⟩
     have : (b : α) = (d : α) * (k : α) := by rw [ke, Int.cast_mul, Int.cast_natCast]
-    rw [d0]; rw [zero_mul] at this
+    rw [d0, zero_mul] at this
     contradiction
   rw [mk_eq_divInt] at e
-  have := congr_arg ((↑) : Int -> α)
+  have := congr_arg ((↑) : ℤ → α)
     ((divInt_eq_divInt_iff b0' <| ne_of_gt <| Int.natCast_pos.2 h.bot_lt).1 e)
-  rw [Int.cast_mul]; rw [Int.cast_mul]; rw [Int.cast_natCast] at this
-  rw [eq_comm]; rw [cast_def]; rw [div_eq_mul_inv]; rw [eq_div_iff_mul_eq d0]; rw [mul_assoc]; rw [(d.commute_cast _).eq]; rw [← mul_assoc]; rw [this]; rw [mul_assoc]; rw [mul_inv_cancel₀ b0]; rw [mul_one]
+  rw [Int.cast_mul, Int.cast_mul, Int.cast_natCast] at this
+  rw [eq_comm, cast_def, div_eq_mul_inv, eq_div_iff_mul_eq d0, mul_assoc, (d.commute_cast _).eq,
+    ← mul_assoc, this, mul_assoc, mul_inv_cancel₀ b0, mul_one]
 
 @[norm_cast]
-/--
-lemma `cast_mkRat_of_ne_zero` / 引理 `cast_mkRat_of_ne_zero`
-
-English:
-lemma cast_mkRat_of_ne_zero
-  given: (a : Int) {b : Nat} (hb : (b : α) != 0)
-  statement: (mkRat a b : α) = a / b
-  proof: by
-  rw [Rat.mkRat_eq_divInt]; rw [cast_divInt_of_ne_zero]; rw [Int.cast_natCast]; rwa [Int.cast_natCast]
-
-@[norm_cast]
-
-中文:
-引理 cast_mkRat_of_ne_zero
-  条件: (a : 整数) {b : 自然数} (hb : (b : α) != 0)
-  结论: (mkRat a b : α) = a / b
-  证明: by
-  rw [Rat.mkRat_eq_divInt]; rw [cast_divInt_of_ne_zero]; rw [Int.cast_natCast]; rwa [Int.cast_natCast]
-
-@[norm_cast]
-
-Depends on / 依赖: Int.cast_natCast, Rat.mkRat_eq_divInt, cast_divInt_of_ne_zero, cast_natCast, mkRat_eq_divInt
+/-
+**Rat.cast_mkRat_of_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `Rat`。
+形式化陈述：cast_mkRat_of_ne_zero (a : Int) {b : Nat} (hb : (b : α) != 0) : (mkRat a b
+ : α) = a / b
+参数：a : Int；hb : (b : α) != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Rat.mkRat_eq_divInt`：mkRat_eq_divInt (n d) : mkRat n d = n /. d
+· 使用引理 `Rat.cast_divInt_of_ne_zero`：cast_divInt_of_ne_zero (a : Int) {b : Int} (
+b0 : (b : α) != 0) : (a /. b : α) = a / b
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
 -/
-lemma cast_mkRat_of_ne_zero (a : Int) {b : Nat} (hb : (b : α) != 0) : (mkRat a b : α) = a / b := by
-  rw [Rat.mkRat_eq_divInt]; rw [cast_divInt_of_ne_zero]; rw [Int.cast_natCast]; rwa [Int.cast_natCast]
+lemma cast_mkRat_of_ne_zero (a : ℤ) {b : ℕ} (hb : (b : α) ≠ 0) : (mkRat a b : α) = a / b := by
+  rw [Rat.mkRat_eq_divInt, cast_divInt_of_ne_zero, Int.cast_natCast]; rwa [Int.cast_natCast]
 
 @[norm_cast]
-/--
-lemma `cast_add_of_ne_zero` / 引理 `cast_add_of_ne_zero`
-
-English:
-lemma cast_add_of_ne_zero
-  given: {q r : Rat} (hq : (q.den : α) != 0) (hr : (r.den : α) != 0)
-  proof: by
-  rw [add_def']; rw [cast_mkRat_of_ne_zero]; rw [cast_def]; rw [cast_def]; rw [mul_comm r.num]; rw [(Nat.cast_commute _ _).div_add_div (Nat.commute_cast _ _) hq hr]
+/-
+**Rat.cast_add_of_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `Rat`。
+形式化陈述：cast_add_of_ne_zero {q r : Rat} (hq : (q.den : α) != 0) (hr : (r.den : α) 
+!= 0) : (q + r : Rat) = (q + r : α)
+参数：hq : (q.den : α) != 0；hr : (r.den : α) != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Rat.add_def'`：∀ (a b : ℚ), a + b = mkRat (a.num * ↑b.den + b.num * ↑a.de
+n) (a.den * b.den)
+· 使用引理 `Rat.cast_mkRat_of_ne_zero`：cast_mkRat_of_ne_zero (a : Int) {b : Nat} (hb
+ : (b : α) != 0) : (mkRat a b : α) = a / b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_mul`：∀ {α : Type u_1} [inst : NonAssocSemiring α] (m n : ℕ), ↑(
+m * n) = ↑m * ↑n
+· 使用定理 `mul_ne_zero`：mul_ne_zero (ha : a != 0) (hb : b != 0) : a * b != 0
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `DivisionRing.isDomain`：∀ {K : Type u_1} [inst : DivisionRing K], IsDomai
+n K
+· 使用引理 `Rat.cast_def`：cast_def (q : Rat) : (q : K) = q.num / q.den
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Commute.div_add_div`：∀ {K : Type u_1} [inst : DivisionSemiring K] {a b c
+ d : K},   Commute b c → Commute b d → b ≠ 0 → d ≠ 0 → a / b + c / d = (a * d + 
+b * c) / …
+· 使用定理 `Nat.cast_commute`：cast_commute (n : Nat) (x : α) : Commute (n : α) x
+· 使用定理 `Nat.commute_cast`：commute_cast (x : α) (n : Nat) : Commute x n
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Int.cast_add`：∀ {R : Type u} [inst : AddGroupWithOne R] (m n : ℤ), ↑(m +
+ n) = ↑m + ↑n
+· 使用引理 `Int.cast_mul`：cast_mul {α : Type*} [NonAssocRing α] : forall m n, ((m * 
+n : Int) : α) = m * n
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+-/
+lemma cast_add_of_ne_zero {q r : ℚ} (hq : (q.den : α) ≠ 0) (hr : (r.den : α) ≠ 0) :
+    (q + r : ℚ) = (q + r : α) := by
+  rw [add_def', cast_mkRat_of_ne_zero, cast_def, cast_def, mul_comm r.num,
+    (Nat.cast_commute _ _).div_add_div (Nat.commute_cast _ _) hq hr]
   · push_cast
     rfl
   · push_cast
     exact mul_ne_zero hq hr
-
-中文:
-引理 cast_add_of_ne_zero
-  条件: {q r : 有理数} (hq : (q.den : α) != 0) (hr : (r.den : α) != 0)
-  证明: by
-  rw [add_def']; rw [cast_mkRat_of_ne_zero]; rw [cast_def]; rw [cast_def]; rw [mul_comm r.num]; rw [(Nat.cast_commute _ _).div_add_div (Nat.commute_cast _ _) hq hr]
-  · push_cast
-    rfl
-  · push_cast
-    exact mul_ne_zero hq hr
-
-Depends on / 依赖: Nat.cast_commute, Nat.commute_cast, add_def, cast_commute, cast_def, cast_mkRat_of_ne_zero, commute_cast, div_add_div, mul_comm, mul_ne_zero, r.num
+/-
+**Rat.cast_neg** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：∀ {α : Type u_3} [inst : DivisionRing α] (q : ℚ), ↑(-q) = -↑q
+参数：q : ℚ；-q。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Rat.cast_def`：cast_def (q : Rat) : (q : K) = q.num / q.den
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Int.cast_neg`：∀ {R : Type u} [inst : AddGroupWithOne R] (n : ℤ), ↑(-n) =
+ -↑n
+· 使用引理 `neg_div`：neg_div (a b : R) : -b / a = -(b / a)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma cast_add_of_ne_zero {q r : Rat} (hq : (q.den : α) != 0) (hr : (r.den : α) != 0) :
-    (q + r : Rat) = (q + r : α) := by
-  rw [add_def']; rw [cast_mkRat_of_ne_zero]; rw [cast_def]; rw [cast_def]; rw [mul_comm r.num]; rw [(Nat.cast_commute _ _).div_add_div (Nat.commute_cast _ _) hq hr]
-  · push_cast
-    rfl
-  · push_cast
-    exact mul_ne_zero hq hr
-
-/--
-lemma `cast_neg` / 引理 `cast_neg`
-
-English:
-lemma cast_neg
-  given: (q : Rat)
-  statement: ↑(-q) = (-q : α)
-  proof: by simp [cast_def, neg_div]
-
-中文:
-引理 cast_neg
-  条件: (q : 有理数)
-  结论: ↑(-q) = (-q : α)
-  证明: by simp [cast_def, neg_div]
--/
-@[simp, norm_cast] lemma cast_neg (q : Rat) : ↑(-q) = (-q : α) := by simp [cast_def, neg_div]
+@[simp, norm_cast] lemma cast_neg (q : ℚ) : ↑(-q) = (-q : α) := by simp [cast_def, neg_div]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `cast_sub_of_ne_zero` / 引理 `cast_sub_of_ne_zero`
-
-English:
-lemma cast_sub_of_ne_zero
-  given: (hp : (p.den : α) != 0) (hq : (q.den : α) != 0)
-  proof: by simp [sub_eq_add_neg, cast_add_of_ne_zero, hp, hq]
-
-中文:
-引理 cast_sub_of_ne_zero
-  条件: (hp : (p.den : α) != 0) (hq : (q.den : α) != 0)
-  证明: by simp [sub_eq_add_neg, cast_add_of_ne_zero, hp, hq]
+/-
+**Rat.cast_sub_of_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：∀ {α : Type u_3} [inst : DivisionRing α] {p q : ℚ}, ↑p.den ≠ 0 → ↑q.den ≠ 
+0 → ↑(p - q) = ↑p - ↑q
+参数：p - q。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用引理 `Rat.cast_add_of_ne_zero`：cast_add_of_ne_zero {q r : Rat} (hq : (q.den : 
+α) != 0) (hr : (r.den : α) != 0) : (q + r : Rat) = (q + r : α)
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Rat.cast_neg`：∀ {α : Type u_3} [inst : DivisionRing α] (q : ℚ), ↑(-q) = 
+-↑q
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[norm_cast] lemma cast_sub_of_ne_zero (hp : (p.den : α) != 0) (hq : (q.den : α) != 0) :
+@[norm_cast] lemma cast_sub_of_ne_zero (hp : (p.den : α) ≠ 0) (hq : (q.den : α) ≠ 0) :
     ↑(p - q) = (p - q : α) := by simp [sub_eq_add_neg, cast_add_of_ne_zero, hp, hq]
-
-/--
-lemma `cast_mul_of_ne_zero` / 引理 `cast_mul_of_ne_zero`
-
-English:
-lemma cast_mul_of_ne_zero
-  given: (hp : (p.den : α) != 0) (hq : (q.den : α) != 0)
-  proof: by
-  rw [mul_eq_mkRat]; rw [cast_mkRat_of_ne_zero]; rw [cast_def]; rw [cast_def]; rw [(Nat.commute_cast _ _).div_mul_div_comm (Int.commute_cast _ _)]
-  · push_cast
-    rfl
-  · push_cast
-    exact mul_ne_zero hp hq
-
-@[norm_cast]
-
-中文:
-引理 cast_mul_of_ne_zero
-  条件: (hp : (p.den : α) != 0) (hq : (q.den : α) != 0)
-  证明: by
-  rw [mul_eq_mkRat]; rw [cast_mkRat_of_ne_zero]; rw [cast_def]; rw [cast_def]; rw [(Nat.commute_cast _ _).div_mul_div_comm (Int.commute_cast _ _)]
-  · push_cast
-    rfl
-  · push_cast
-    exact mul_ne_zero hp hq
-
-@[norm_cast]
+/-
+**Rat.cast_mul_of_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：∀ {α : Type u_3} [inst : DivisionRing α] {p q : ℚ}, ↑p.den ≠ 0 → ↑q.den ≠ 
+0 → ↑(p * q) = ↑p * ↑q
+参数：p * q。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Rat.mul_eq_mkRat`：mul_eq_mkRat (q r : Rat) : q * r = mkRat (q.num * r.nu
+m) (q.den * r.den)
+· 使用引理 `Rat.cast_mkRat_of_ne_zero`：cast_mkRat_of_ne_zero (a : Int) {b : Nat} (hb
+ : (b : α) != 0) : (mkRat a b : α) = a / b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_mul`：∀ {α : Type u_1} [inst : NonAssocSemiring α] (m n : ℕ), ↑(
+m * n) = ↑m * ↑n
+· 使用定理 `mul_ne_zero`：mul_ne_zero (ha : a != 0) (hb : b != 0) : a * b != 0
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `DivisionRing.isDomain`：∀ {K : Type u_1} [inst : DivisionRing K], IsDomai
+n K
+· 使用引理 `Rat.cast_def`：cast_def (q : Rat) : (q : K) = q.num / q.den
+· 使用定理 `Commute.div_mul_div_comm`：∀ {G : Type u_1} [inst : DivisionMonoid G] {a 
+b c d : G},   Commute b d → Commute b⁻¹ c → a / b * (c / d) = a * c / (b * d)
+· 使用定理 `Nat.commute_cast`：commute_cast (x : α) (n : Nat) : Commute x n
+· 使用引理 `Int.commute_cast`：commute_cast (a : α) (n : Int) : Commute a n
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `Int.cast_mul`：cast_mul {α : Type*} [NonAssocRing α] : forall m n, ((m * 
+n : Int) : α) = m * n
 -/
-@[norm_cast] lemma cast_mul_of_ne_zero (hp : (p.den : α) != 0) (hq : (q.den : α) != 0) :
+@[norm_cast] lemma cast_mul_of_ne_zero (hp : (p.den : α) ≠ 0) (hq : (q.den : α) ≠ 0) :
     ↑(p * q) = (p * q : α) := by
-  rw [mul_eq_mkRat]; rw [cast_mkRat_of_ne_zero]; rw [cast_def]; rw [cast_def]; rw [(Nat.commute_cast _ _).div_mul_div_comm (Int.commute_cast _ _)]
+  rw [mul_eq_mkRat, cast_mkRat_of_ne_zero, cast_def, cast_def,
+    (Nat.commute_cast _ _).div_mul_div_comm (Int.commute_cast _ _)]
   · push_cast
     rfl
   · push_cast
     exact mul_ne_zero hp hq
 
 @[norm_cast]
-/--
-lemma `cast_inv_of_ne_zero` / 引理 `cast_inv_of_ne_zero`
-
-English:
-lemma cast_inv_of_ne_zero
-  given: (hq : (q.num : α) != 0)
-  statement: ↑(q⁻¹) = (q⁻¹ : α)
-  proof: by
-  rw [inv_def]; rw [cast_divInt_of_ne_zero _ hq]; rw [cast_def]; rw [inv_div]; rw [Int.cast_natCast]
-
-中文:
-引理 cast_inv_of_ne_zero
-  条件: (hq : (q.num : α) != 0)
-  结论: ↑(q⁻¹) = (q⁻¹ : α)
-  证明: by
-  rw [inv_def]; rw [cast_divInt_of_ne_zero _ hq]; rw [cast_def]; rw [inv_div]; rw [Int.cast_natCast]
-
-Depends on / 依赖: Int.cast_natCast, cast_def, cast_divInt_of_ne_zero, cast_natCast, inv_def, inv_div
+/-
+**Rat.cast_inv_of_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `Rat`。
+形式化陈述：cast_inv_of_ne_zero (hq : (q.num : α) != 0) : ↑(q⁻¹) = (q⁻¹ : α)
+参数：hq : (q.num : α) != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Rat.inv_def`：∀ (a : ℚ), a⁻¹ = Rat.divInt (↑a.den) a.num
+· 使用引理 `Rat.cast_divInt_of_ne_zero`：cast_divInt_of_ne_zero (a : Int) {b : Int} (
+b0 : (b : α) != 0) : (a /. b : α) = a / b
+· 使用引理 `Rat.cast_def`：cast_def (q : Rat) : (q : K) = q.num / q.den
+· 使用定理 `inv_div`：inv_div : (a / b)⁻¹ = b / a
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
 -/
-lemma cast_inv_of_ne_zero (hq : (q.num : α) != 0) : ↑(q⁻¹) = (q⁻¹ : α) := by
-  rw [inv_def]; rw [cast_divInt_of_ne_zero _ hq]; rw [cast_def]; rw [inv_div]; rw [Int.cast_natCast]
-
-/--
-lemma `cast_div_of_ne_zero` / 引理 `cast_div_of_ne_zero`
-
-English:
-lemma cast_div_of_ne_zero
-  given: (hp : (p.den : α) != 0) (hq : (q.num : α) != 0)
-  proof: by
-  rw [div_def']; rw [cast_divInt_of_ne_zero]; rw [cast_def]; rw [cast_def]; rw [div_eq_mul_inv (_ / _)]; rw [inv_div]; rw [(Int.commute_cast _ _).div_mul_div_comm (Nat.commute_cast _ _)]
-  · push_cast
-    rfl
-  · push_cast
-    exact mul_ne_zero hp hq
-
-中文:
-引理 cast_div_of_ne_zero
-  条件: (hp : (p.den : α) != 0) (hq : (q.num : α) != 0)
-  证明: by
-  rw [div_def']; rw [cast_divInt_of_ne_zero]; rw [cast_def]; rw [cast_def]; rw [div_eq_mul_inv (_ / _)]; rw [inv_div]; rw [(Int.commute_cast _ _).div_mul_div_comm (Nat.commute_cast _ _)]
-  · push_cast
-    rfl
-  · push_cast
-    exact mul_ne_zero hp hq
+lemma cast_inv_of_ne_zero (hq : (q.num : α) ≠ 0) : ↑(q⁻¹) = (q⁻¹ : α) := by
+  rw [inv_def, cast_divInt_of_ne_zero _ hq, cast_def, inv_div, Int.cast_natCast]
+/-
+**Rat.cast_div_of_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：∀ {α : Type u_3} [inst : DivisionRing α] {p q : ℚ}, ↑p.den ≠ 0 → ↑q.num ≠ 
+0 → ↑(p / q) = ↑p / ↑q
+参数：p / q。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Rat.div_def'`：div_def' (q r : Rat) : q / r = (q.num * r.den) /. (q.den *
+ r.num)
+· 使用引理 `Rat.cast_divInt_of_ne_zero`：cast_divInt_of_ne_zero (a : Int) {b : Int} (
+b0 : (b : α) != 0) : (a /. b : α) = a / b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Int.cast_mul`：cast_mul {α : Type*} [NonAssocRing α] : forall m n, ((m * 
+n : Int) : α) = m * n
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `mul_ne_zero`：mul_ne_zero (ha : a != 0) (hb : b != 0) : a * b != 0
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `DivisionRing.isDomain`：∀ {K : Type u_1} [inst : DivisionRing K], IsDomai
+n K
+· 使用引理 `Rat.cast_def`：cast_def (q : Rat) : (q : K) = q.num / q.den
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `inv_div`：inv_div : (a / b)⁻¹ = b / a
+· 使用定理 `Commute.div_mul_div_comm`：∀ {G : Type u_1} [inst : DivisionMonoid G] {a 
+b c d : G},   Commute b d → Commute b⁻¹ c → a / b * (c / d) = a * c / (b * d)
+· 使用引理 `Int.commute_cast`：commute_cast (a : α) (n : Int) : Commute a n
+· 使用定理 `Nat.commute_cast`：commute_cast (x : α) (n : Nat) : Commute x n
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
 -/
-@[norm_cast] lemma cast_div_of_ne_zero (hp : (p.den : α) != 0) (hq : (q.num : α) != 0) :
+@[norm_cast] lemma cast_div_of_ne_zero (hp : (p.den : α) ≠ 0) (hq : (q.num : α) ≠ 0) :
     ↑(p / q) = (p / q : α) := by
-  rw [div_def']; rw [cast_divInt_of_ne_zero]; rw [cast_def]; rw [cast_def]; rw [div_eq_mul_inv (_ / _)]; rw [inv_div]; rw [(Int.commute_cast _ _).div_mul_div_comm (Nat.commute_cast _ _)]
+  rw [div_def', cast_divInt_of_ne_zero, cast_def, cast_def, div_eq_mul_inv (_ / _), inv_div,
+    (Int.commute_cast _ _).div_mul_div_comm (Nat.commute_cast _ _)]
   · push_cast
     rfl
   · push_cast
@@ -811,82 +738,88 @@ open Rat
 
 variable [FunLike F α β]
 
-/--
-lemma `map_nnratCast` / 引理 `map_nnratCast`
-
-English:
-lemma map_nnratCast
-  statement: [DivisionSemiring α] [DivisionSemiring β] [RingHomClass F α β] (f : F)
-  proof: by simp_rw [NNRat.cast_def, map_div₀, map_natCast]
-
-@[simp]
-
-中文:
-引理 map_nnratCast
-  结论: [除半环 α] [除半环 β] [环态射类 F α β] (f : F)
-  证明: by simp_rw [NNRat.cast_def, map_div₀, map_natCast]
-
-@[simp]
+/-
+**map_nnratCast** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {F : Type u_1} {α : Type u_3} {β : Type u_4} [inst : FunLike F α β] [ins
+t_1 : DivisionSemiring α]   [inst_2 : DivisionSemiring β] [RingHomClass F α β] (
+f : F) (q : ℚ≥0), f ↑q = ↑q
+参数：f : F；q : ℚ≥0。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `NNRat.cast_def`：cast_def (q : Rat>=0) : (q : K) = q.num / q.den
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_div₀`：map_div₀ : f (a / b) = f a / f b
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma map_nnratCast [DivisionSemiring α] [DivisionSemiring β] [RingHomClass F α β] (f : F)
-    (q : Rat>=0) : f q = q := by simp_rw [NNRat.cast_def, map_div₀, map_natCast]
+    (q : ℚ≥0) : f q = q := by simp_rw [NNRat.cast_def, map_div₀, map_natCast]
 
 @[simp]
-/--
-lemma `eq_nnratCast` / 引理 `eq_nnratCast`
-
-English:
-lemma eq_nnratCast
-  given: [DivisionSemiring α] [FunLike F Rat>=0 α] [RingHomClass F Rat>=0 α] (f : F) (q : Rat>=0)
-  proof: by rw [← map_nnratCast f, NNRat.cast_id]
-
-@[simp]
-
-中文:
-引理 eq_nnratCast
-  条件: [除半环 α] [函数状 F 有理数>=0 α] [环态射类 F 有理数>=0 α] (f : F) (q : 有理数>=0)
-  证明: by rw [← map_nnratCast f, NNRat.cast_id]
-
-@[simp]
-
-Depends on / 依赖: NNRat.cast_id, cast_id, map_nnratCast
+/-
+**eq_nnratCast** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：eq_nnratCast [DivisionSemiring α] [FunLike F Rat>=0 α] [RingHomClass F Rat
+>=0 α] (f : F) (q : Rat>=0) : f q = q
+参数：f : F；q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_nnratCast`：∀ {F : Type u_1} {α : Type u_3} {β : Type u_4} [inst : Fu
+nLike F α β] [inst_1 : DivisionSemiring α]   [inst_2 : DivisionSemiring β] [Ring
+Hom…
+· 使用定理 `NNRat.cast_id`：∀ (n : ℚ≥0), ↑n = n
 -/
-lemma eq_nnratCast [DivisionSemiring α] [FunLike F Rat>=0 α] [RingHomClass F Rat>=0 α] (f : F) (q : Rat>=0) :
+lemma eq_nnratCast [DivisionSemiring α] [FunLike F ℚ≥0 α] [RingHomClass F ℚ≥0 α] (f : F) (q : ℚ≥0) :
     f q = q := by rw [← map_nnratCast f, NNRat.cast_id]
 
 @[simp]
-/--
-theorem `map_ratCast` / 定理 `map_ratCast`
-
-English:
-theorem map_ratCast
-  given: [DivisionRing α] [DivisionRing β] [RingHomClass F α β] (f : F) (q : Rat)
-  proof: by rw [cast_def, map_div₀, map_intCast, map_natCast, cast_def]
-
-中文:
-定理 map_ratCast
-  条件: [除环 α] [除环 β] [环态射类 F α β] (f : F) (q : 有理数)
-  证明: by rw [cast_def, map_div₀, map_intCast, map_natCast, cast_def]
-
-Depends on / 依赖: cast_def, map_intCast, map_natCast
+/-
+**map_ratCast** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_ratCast [DivisionRing α] [DivisionRing β] [RingHomClass F α β] (f : F)
+ (q : Rat) : f q = q
+参数：f : F；q : Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Rat.cast_def`：cast_def (q : Rat) : (q : K) = q.num / q.den
+· 使用定理 `map_div₀`：map_div₀ : f (a / b) = f a / f b
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `map_intCast`：map_intCast [FunLike F α β] [RingHomClass F α β] (f : F) (n
+ : Int) : f n = n
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
 -/
-theorem map_ratCast [DivisionRing α] [DivisionRing β] [RingHomClass F α β] (f : F) (q : Rat) :
+theorem map_ratCast [DivisionRing α] [DivisionRing β] [RingHomClass F α β] (f : F) (q : ℚ) :
     f q = q := by rw [cast_def, map_div₀, map_intCast, map_natCast, cast_def]
-
-/--
-lemma `eq_ratCast` / 引理 `eq_ratCast`
-
-English:
-lemma eq_ratCast
-  given: [DivisionRing α] [FunLike F Rat α] [RingHomClass F Rat α] (f : F) (q : Rat)
-  proof: by rw [← map_ratCast f, Rat.cast_id]
-
-中文:
-引理 eq_ratCast
-  条件: [除环 α] [函数状 F 有理数 α] [环态射类 F 有理数 α] (f : F) (q : 有理数)
-  证明: by rw [← map_ratCast f, Rat.cast_id]
+/-
+**eq_ratCast** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {F : Type u_1} {α : Type u_3} [inst : DivisionRing α] [inst_1 : FunLike 
+F ℚ α] [RingHomClass F ℚ α] (f : F) (q : ℚ),   f q = ↑q
+参数：f : F；q : ℚ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_ratCast`：map_ratCast [DivisionRing α] [DivisionRing β] [RingHomClass
+ F α β] (f : F) (q : Rat) : f q = q
+· 使用定理 `Rat.cast_id`：∀ (n : ℚ), ↑n = n
 -/
-@[simp] lemma eq_ratCast [DivisionRing α] [FunLike F Rat α] [RingHomClass F Rat α] (f : F) (q : Rat) :
+@[simp] lemma eq_ratCast [DivisionRing α] [FunLike F ℚ α] [RingHomClass F ℚ α] (f : F) (q : ℚ) :
     f q = q := by rw [← map_ratCast f, Rat.cast_id]
 
 namespace MonoidWithZeroHomClass
@@ -894,231 +827,295 @@ namespace MonoidWithZeroHomClass
 variable {M₀ : Type*} [MonoidWithZero M₀]
 
 section NNRat
-variable [FunLike F Rat>=0 M₀] [MonoidWithZeroHomClass F Rat>=0 M₀] {f g : F}
+variable [FunLike F ℚ≥0 M₀] [MonoidWithZeroHomClass F ℚ≥0 M₀] {f g : F}
 
-/--
-lemma `ext_nnrat'` / 引理 `ext_nnrat'`
+/-- If monoid with zero homs `f` and `g` from `ℚ≥0` agree on the naturals then they are equal. -/
+/-
+**MonoidWithZeroHomClass.ext_nnrat'** 是 Mathlib 中的一个引理，位于命名空间 `MonoidWithZeroHom
+Class`。
+形式化陈述：ext_nnrat' (h : forall n : Nat, f n = g n) : f = g
+参数：h : forall n : Nat, f n = g n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `NNRat.num_div_den`：num_div_den (q : Rat>=0) : (q.num : Rat>=0) / q.den =
+ q
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `eq_on_inv₀`：eq_on_inv₀ [MonoidWithZeroHomClass F' G₀ M₀'] (f g : F') (h 
+: f a = g a) : f a⁻¹ = g a⁻¹
 
-English:
-lemma ext_nnrat'
-  given: (h : forall n : Nat, f n = g n)
-  statement: f = g
-  proof: (DFunLike.ext f g) fun r => by
-    rw [← r.num_div_den]; rw [div_eq_mul_inv]; rw [map_mul]; rw [map_mul]; rw [h]; rw [eq_on_inv₀ f g]
-    apply h
-
-中文:
-引理 ext_nnrat'
-  条件: (h : 对任意 n : 自然数, f n = g n)
-  结论: f = g
-  证明: (DFunLike.ext f g) fun r => by
-    rw [← r.num_div_den]; rw [div_eq_mul_inv]; rw [map_mul]; rw [map_mul]; rw [h]; rw [eq_on_inv₀ f g]
-    apply h
-
-Depends on / 依赖: DFunLike, DFunLike.ext, div_eq_mul_inv, map_mul, num_div_den, r.num_div_den
+--- 原说明 ---
+If monoid with zero homs `f` and `g` from `ℚ≥0` agree on the naturals then they 
+are equal.
 -/
-lemma ext_nnrat' (h : forall n : Nat, f n = g n) : f = g :=
+lemma ext_nnrat' (h : ∀ n : ℕ, f n = g n) : f = g :=
   (DFunLike.ext f g) fun r => by
-    rw [← r.num_div_den]; rw [div_eq_mul_inv]; rw [map_mul]; rw [map_mul]; rw [h]; rw [eq_on_inv₀ f g]
+    rw [← r.num_div_den, div_eq_mul_inv, map_mul, map_mul, h, eq_on_inv₀ f g]
     apply h
 
 /-- If monoid with zero homs `f` and `g` from `ℚ≥0` agree on the naturals then they are equal.
 
 See note [partially-applied ext lemmas] for why `comp` is used here. -/
 @[ext]
-/--
-lemma `ext_nnrat` / 引理 `ext_nnrat`
+/-
+**MonoidWithZeroHomClass.ext_nnrat** 是 Mathlib 中的一个引理，位于命名空间 `MonoidWithZeroHomC
+lass`。
+形式化陈述：ext_nnrat {f g : Rat>=0 ->*₀ M₀} (h : f.comp (.ofClass (Nat.castRingHom Ra
+t>=0)) = g.comp (.ofClass (Nat.castRingHom Rat>=0))) : f = g
+参数：h : f.comp (.ofClass (Nat.castRingHom Rat>=0)) = g.comp (.ofClass (Nat.castRi
+ngHom Rat>=0))。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用引理 `MonoidWithZeroHomClass.ext_nnrat'`：ext_nnrat' (h : forall n : Nat, f n =
+ g n) : f = g
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 
-English:
-lemma ext_nnrat
-  statement: {f g : Rat>=0 ->*₀ M₀} (h : f.comp (.ofClass (Nat.castRingHom Rat>=0)) =
-  proof: ext_nnrat' DFunLike.congr_fun h
+--- 原说明 ---
+If monoid with zero homs `f` and `g` from `ℚ≥0` agree on the naturals then they 
+are equal.
 
-中文:
-引理 ext_nnrat
-  结论: {f g : 有理数>=0 ->*₀ M₀} (h : f.comp (.ofClass (自然数.castRingHom 有理数>=0)) =
-  证明: ext_nnrat' DFunLike.congr_fun h
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, ext_nnrat
+See note [partially-applied ext lemmas] for why `comp` is used here.
 -/
-lemma ext_nnrat {f g : Rat>=0 ->*₀ M₀} (h : f.comp (.ofClass (Nat.castRingHom Rat>=0)) =
-    g.comp (.ofClass (Nat.castRingHom Rat>=0))) : f = g :=
-ext_nnrat' DFunLike.congr_fun h
+lemma ext_nnrat {f g : ℚ≥0 →*₀ M₀} (h : f.comp (.ofClass (Nat.castRingHom ℚ≥0)) =
+    g.comp (.ofClass (Nat.castRingHom ℚ≥0))) : f = g :=
+  ext_nnrat' <| DFunLike.congr_fun h
 
-/--
-lemma `ext_nnrat_on_pnat` / 引理 `ext_nnrat_on_pnat`
+/-- If monoid with zero homs `f` and `g` from `ℚ≥0` agree on the positive naturals then they are
+equal. -/
+/-
+**MonoidWithZeroHomClass.ext_nnrat_on_pnat** 是 Mathlib 中的一个引理，位于命名空间 `MonoidWith
+ZeroHomClass`。
+形式化陈述：ext_nnrat_on_pnat (same_on_pnat : forall n : Nat, 0 < n -> f n = g n) : f 
+= g
+参数：same_on_pnat : forall n : Nat, 0 < n -> f n = g n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MonoidWithZeroHomClass.ext_nnrat'`：ext_nnrat' (h : forall n : Nat, f n =
+ g n) : f = g
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `ext_nat''`：ext_nat'' [ZeroHomClass F Nat A] (f g : F) (h_pos : forall {n
+ : Nat}, 0 < n -> f n = g n) : f = g
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
 
-English:
-lemma ext_nnrat_on_pnat
-  given: (same_on_pnat : forall n : Nat, 0 < n -> f n = g n)
-  statement: f = g
-  proof: ext_nnrat' DFunLike.congr_fun ext_nat''
-    ((.ofClass f : Rat>=0 ->*₀ M₀).comp (.ofClass (Nat.castRingHom Rat>=0)))
-    ((.ofClass g : Rat>=0 ->*₀ M₀).comp (.ofClass (Nat.castRingHom Rat>=0))) (by simpa)
-
-中文:
-引理 ext_nnrat_on_pnat
-  条件: (same_on_pnat : 对任意 n : 自然数, 0 < n -> f n = g n)
-  结论: f = g
-  证明: ext_nnrat' DFunLike.congr_fun ext_nat''
-    ((.ofClass f : Rat>=0 ->*₀ M₀).comp (.ofClass (Nat.castRingHom Rat>=0)))
-    ((.ofClass g : Rat>=0 ->*₀ M₀).comp (.ofClass (Nat.castRingHom Rat>=0))) (by simpa)
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, Nat.castRingHom, castRingHom, congr_fun, ext_nat, ext_nnrat, ofClass
+--- 原说明 ---
+If monoid with zero homs `f` and `g` from `ℚ≥0` agree on the positive naturals t
+hen they are
+equal.
 -/
-lemma ext_nnrat_on_pnat (same_on_pnat : forall n : Nat, 0 < n -> f n = g n) : f = g :=
-ext_nnrat' DFunLike.congr_fun ext_nat''
-    ((.ofClass f : Rat>=0 ->*₀ M₀).comp (.ofClass (Nat.castRingHom Rat>=0)))
-    ((.ofClass g : Rat>=0 ->*₀ M₀).comp (.ofClass (Nat.castRingHom Rat>=0))) (by simpa)
+lemma ext_nnrat_on_pnat (same_on_pnat : ∀ n : ℕ, 0 < n → f n = g n) : f = g :=
+  ext_nnrat' <| DFunLike.congr_fun <| ext_nat''
+    ((.ofClass f : ℚ≥0 →*₀ M₀).comp (.ofClass (Nat.castRingHom ℚ≥0)))
+    ((.ofClass g : ℚ≥0 →*₀ M₀).comp (.ofClass (Nat.castRingHom ℚ≥0))) (by simpa)
 
 end NNRat
 
 section Rat
-variable [FunLike F Rat M₀] [MonoidWithZeroHomClass F Rat M₀] {f g : F}
+variable [FunLike F ℚ M₀] [MonoidWithZeroHomClass F ℚ M₀] {f g : F}
 
-/--
-theorem `ext_rat'` / 定理 `ext_rat'`
+/-- If monoid with zero homs `f` and `g` from `ℚ` agree on the integers then they are equal. -/
+/-
+**MonoidWithZeroHomClass.ext_rat'** 是 Mathlib 中的一个定理，位于命名空间 `MonoidWithZeroHomCl
+ass`。
+形式化陈述：ext_rat' (h : forall m : Int, f m = g m) : f = g
+参数：h : forall m : Int, f m = g m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Rat.num_div_den`：num_div_den (r : Rat) : (r.num : Rat) / (r.den : Rat) =
+ r
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `eq_on_inv₀`：eq_on_inv₀ [MonoidWithZeroHomClass F' G₀ M₀'] (f g : F') (h 
+: f a = g a) : f a⁻¹ = g a⁻¹
 
-English:
-theorem ext_rat'
-  given: (h : forall m : Int, f m = g m)
-  statement: f = g
-  proof: (DFunLike.ext f g) fun r => by
-    rw [← r.num_div_den]; rw [div_eq_mul_inv]; rw [map_mul]; rw [map_mul]; rw [h]; rw [← Int.cast_natCast]; rw [eq_on_inv₀ f g]
-    apply h
-
-中文:
-定理 ext_rat'
-  条件: (h : 对任意 m : 整数, f m = g m)
-  结论: f = g
-  证明: (DFunLike.ext f g) fun r => by
-    rw [← r.num_div_den]; rw [div_eq_mul_inv]; rw [map_mul]; rw [map_mul]; rw [h]; rw [← Int.cast_natCast]; rw [eq_on_inv₀ f g]
-    apply h
-
-Depends on / 依赖: DFunLike, DFunLike.ext, Int.cast_natCast, cast_natCast, div_eq_mul_inv, map_mul, num_div_den, r.num_div_den
+--- 原说明 ---
+If monoid with zero homs `f` and `g` from `ℚ` agree on the integers then they ar
+e equal.
 -/
-theorem ext_rat' (h : forall m : Int, f m = g m) : f = g :=
+theorem ext_rat' (h : ∀ m : ℤ, f m = g m) : f = g :=
   (DFunLike.ext f g) fun r => by
-    rw [← r.num_div_den]; rw [div_eq_mul_inv]; rw [map_mul]; rw [map_mul]; rw [h]; rw [← Int.cast_natCast]; rw [eq_on_inv₀ f g]
+    rw [← r.num_div_den, div_eq_mul_inv, map_mul, map_mul, h, ← Int.cast_natCast,
+      eq_on_inv₀ f g]
     apply h
 
 /-- If monoid with zero homs `f` and `g` from `ℚ` agree on the integers then they are equal.
 
 See note [partially-applied ext lemmas] for why `comp` is used here. -/
 @[ext]
-/--
-theorem `ext_rat` / 定理 `ext_rat`
+/-
+**MonoidWithZeroHomClass.ext_rat** 是 Mathlib 中的一个定理，位于命名空间 `MonoidWithZeroHomCla
+ss`。
+形式化陈述：ext_rat {f g : Rat ->*₀ M₀} (h : f.comp (.ofClass (Int.castRingHom Rat)) =
+ g.comp (.ofClass (Int.castRingHom Rat))) : f = g
+参数：h : f.comp (.ofClass (Int.castRingHom Rat)) = g.comp (.ofClass (Int.castRingH
+om Rat))。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `MonoidWithZeroHomClass.ext_rat'`：ext_rat' (h : forall m : Int, f m = g m
+) : f = g
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 
-English:
-theorem ext_rat
-  statement: {f g : Rat ->*₀ M₀}
-  proof: ext_rat' DFunLike.congr_fun h
+--- 原说明 ---
+If monoid with zero homs `f` and `g` from `ℚ` agree on the integers then they ar
+e equal.
 
-中文:
-定理 ext_rat
-  结论: {f g : 有理数 ->*₀ M₀}
-  证明: ext_rat' DFunLike.congr_fun h
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, ext_rat
+See note [partially-applied ext lemmas] for why `comp` is used here.
 -/
-theorem ext_rat {f g : Rat ->*₀ M₀}
-    (h : f.comp (.ofClass (Int.castRingHom Rat)) = g.comp (.ofClass (Int.castRingHom Rat))) : f = g :=
-ext_rat' DFunLike.congr_fun h
+theorem ext_rat {f g : ℚ →*₀ M₀}
+    (h : f.comp (.ofClass (Int.castRingHom ℚ)) = g.comp (.ofClass (Int.castRingHom ℚ))) : f = g :=
+  ext_rat' <| DFunLike.congr_fun h
 
-/--
-theorem `ext_rat_on_pnat` / 定理 `ext_rat_on_pnat`
+/-- If monoid with zero homs `f` and `g` from `ℚ` agree on the positive naturals and `-1` then
+they are equal. -/
+/-
+**MonoidWithZeroHomClass.ext_rat_on_pnat** 是 Mathlib 中的一个定理，位于命名空间 `MonoidWithZe
+roHomClass`。
+形式化陈述：ext_rat_on_pnat (same_on_neg_one : f (-1) = g (-1)) (same_on_pnat : forall
+ n : Nat, 0 < n -> f n = g n) : f = g
+参数：same_on_neg_one : f (-1) = g (-1)；same_on_pnat : forall n : Nat, 0 < n -> f n
+ = g n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidWithZeroHomClass.ext_rat'`：ext_rat' (h : forall m : Int, f m = g m
+) : f = g
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `ext_int'`：ext_int' [MonoidWithZero α] [FunLike F Int α] [MonoidWithZeroH
+omClass F Int α] {f g : F} (h_neg_one : f (-1) = g (-1)) (h_pos : forall n : N…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Int.cast_neg`：∀ {R : Type u} [inst : AddGroupWithOne R] (n : ℤ), ↑(-n) =
+ -↑n
+· 使用定理 `Int.cast_one`：cast_one : ((1 : Int) : R) = 1
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
 
-English:
-theorem ext_rat_on_pnat
-  statement: (same_on_neg_one : f (-1) = g (-1))
-  proof: ext_rat'
-DFunLike.congr_fun
-      show
-        (.ofClass f : Rat ->*₀ M₀).comp (.ofClass (Int.castRingHom Rat)) =
-          (.ofClass g : Rat ->*₀ M₀).comp (.ofClass (Int.castRingHom Rat))
-        from ext_int' (by simpa) (by simpa)
-
-中文:
-定理 ext_rat_on_pnat
-  结论: (same_on_neg_one : f (-1) = g (-1))
-  证明: ext_rat'
-DFunLike.congr_fun
-      show
-        (.ofClass f : Rat ->*₀ M₀).comp (.ofClass (Int.castRingHom Rat)) =
-          (.ofClass g : Rat ->*₀ M₀).comp (.ofClass (Int.castRingHom Rat))
-        from ext_int' (by simpa) (by simpa)
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, Int.castRingHom, castRingHom, congr_fun, ext_int, ext_rat, ofClass
+--- 原说明 ---
+If monoid with zero homs `f` and `g` from `ℚ` agree on the positive naturals and
+ `-1` then
+they are equal.
 -/
 theorem ext_rat_on_pnat (same_on_neg_one : f (-1) = g (-1))
-    (same_on_pnat : forall n : Nat, 0 < n -> f n = g n) : f = g :=
-ext_rat'
-DFunLike.congr_fun
+    (same_on_pnat : ∀ n : ℕ, 0 < n → f n = g n) : f = g :=
+  ext_rat' <|
+    DFunLike.congr_fun <|
       show
-        (.ofClass f : Rat ->*₀ M₀).comp (.ofClass (Int.castRingHom Rat)) =
-          (.ofClass g : Rat ->*₀ M₀).comp (.ofClass (Int.castRingHom Rat))
+        (.ofClass f : ℚ →*₀ M₀).comp (.ofClass (Int.castRingHom ℚ)) =
+          (.ofClass g : ℚ →*₀ M₀).comp (.ofClass (Int.castRingHom ℚ))
         from ext_int' (by simpa) (by simpa)
 
 end Rat
 end MonoidWithZeroHomClass
 
-/--
-theorem `RingHom.ext_rat` / 定理 `RingHom.ext_rat`
+/-- Any two ring homomorphisms from `ℚ` to a semiring are equal. If the codomain is a division ring,
+then this lemma follows from `eq_ratCast`. -/
+/-
+**RingHom.ext_rat** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：RingHom.ext_rat {R : Type*} [Semiring R] [FunLike F Rat R] [RingHomClass F
+ Rat R] (f g : F) : f = g
+参数：f g : F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidWithZeroHomClass.ext_rat'`：ext_rat' (h : forall m : Int, f m = g m
+) : f = g
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `RingHom.congr_fun`：∀ {α : Type u_2} {β : Type u_3} {x : NonAssocSemiring
+ α} {x_1 : NonAssocSemiring β} {f g : α →+* β},   f = g → ∀ (x_2 : α), f x_2 = g
+ x_2
+· 使用定理 `RingHom.ext_int`：ext_int {R : Type*} [NonAssocSemiring R] (f g : Int ->+
+* R) : f = g
 
-English:
-theorem RingHom.ext_rat
-  given: {R : Type*} [Semiring R] [FunLike F Rat R] [RingHomClass F Rat R] (f g : F)
-  proof: MonoidWithZeroHomClass.ext_rat'
-RingHom.congr_fun
-      ((f : Rat ->+* R).comp (Int.castRingHom Rat)).ext_int ((g : Rat ->+* R).comp (Int.castRingHom Rat))
-
-中文:
-定理 环态射.ext_rat
-  条件: {R : 类型} [半环 R] [函数状 F 有理数 R] [环态射类 F 有理数 R] (f g : F)
-  证明: MonoidWithZeroHomClass.ext_rat'
-RingHom.congr_fun
-      ((f : Rat ->+* R).comp (Int.castRingHom Rat)).ext_int ((g : Rat ->+* R).comp (Int.castRingHom Rat))
-
-Depends on / 依赖: Int.castRingHom, MonoidWithZeroHomClass, MonoidWithZeroHomClass.ext_rat, RingHom, RingHom.congr_fun, castRingHom, congr_fun, ext_int, ext_rat
+--- 原说明 ---
+Any two ring homomorphisms from `ℚ` to a semiring are equal. If the codomain is 
+a division ring,
+then this lemma follows from `eq_ratCast`.
 -/
-theorem RingHom.ext_rat {R : Type*} [Semiring R] [FunLike F Rat R] [RingHomClass F Rat R] (f g : F) :
+theorem RingHom.ext_rat {R : Type*} [Semiring R] [FunLike F ℚ R] [RingHomClass F ℚ R] (f g : F) :
     f = g :=
-MonoidWithZeroHomClass.ext_rat'
-RingHom.congr_fun
-      ((f : Rat ->+* R).comp (Int.castRingHom Rat)).ext_int ((g : Rat ->+* R).comp (Int.castRingHom Rat))
-
-/--
-Instance `NNRat.subsingleton_ringHom` / 实例 `NNRat.subsingleton_ringHom`
-
-English:
-instance NNRat.subsingleton_ringHom
-  signature: {R : Type*} [Semiring R]
-  body: MonoidWithZeroHomClass.ext_nnrat' by simp
-
-中文:
-实例 NNRat.subsingleton_ringHom
-  签名: {R : 类型} [半环 R]
-  定义体: MonoidWithZeroHomClass.ext_nnrat' by simp
-
-Depends on / 依赖: MonoidWithZeroHomClass, MonoidWithZeroHomClass.ext_nnrat, ext_nnrat
+  MonoidWithZeroHomClass.ext_rat' <|
+    RingHom.congr_fun <|
+      ((f : ℚ →+* R).comp (Int.castRingHom ℚ)).ext_int ((g : ℚ →+* R).comp (Int.castRingHom ℚ))
+/-
+**NNRat.subsingleton_ringHom** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：NNRat.subsingleton_ringHom {R : Type*} [Semiring R] : Subsingleton (Rat>=0
+ ->+* R) where allEq f g
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `MonoidWithZeroHomClass.ext_nnrat'`：ext_nnrat' (h : forall n : Nat, f n =
+ g n) : f = g
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-instance NNRat.subsingleton_ringHom {R : Type*} [Semiring R] : Subsingleton (Rat>=0 ->+* R) where
-allEq f g := MonoidWithZeroHomClass.ext_nnrat' by simp
-
-/--
-Instance `Rat.subsingleton_ringHom` / 实例 `Rat.subsingleton_ringHom`
-
-English:
-instance Rat.subsingleton_ringHom
-  signature: {R : Type*} [Semiring R]
-  body: ⟨RingHom.ext_rat⟩
-
-中文:
-实例 有理数.subsingleton_ringHom
-  签名: {R : 类型} [半环 R]
-  定义体: ⟨RingHom.ext_rat⟩
-
-Depends on / 依赖: RingHom, RingHom.ext_rat, ext_rat
+instance NNRat.subsingleton_ringHom {R : Type*} [Semiring R] : Subsingleton (ℚ≥0 →+* R) where
+  allEq f g := MonoidWithZeroHomClass.ext_nnrat' <| by simp
+/-
+**Rat.subsingleton_ringHom** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Rat.subsingleton_ringHom {R : Type*} [Semiring R] : Subsingleton (Rat ->+*
+ R)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.ext_rat`：RingHom.ext_rat {R : Type*} [Semiring R] [FunLike F Rat
+ R] [RingHomClass F Rat R] (f g : F) : f = g
 -/
-instance Rat.subsingleton_ringHom {R : Type*} [Semiring R] : Subsingleton (Rat ->+* R) :=
+instance Rat.subsingleton_ringHom {R : Type*} [Semiring R] : Subsingleton (ℚ →+* R) :=
   ⟨RingHom.ext_rat⟩

@@ -19,31 +19,20 @@ This file defines monoid with zero, group with zero, and related structure insta
 
 assert_not_exists DenselyOrdered Ring
 
-variable {ι : Type*} {α : ι -> Type*}
+variable {ι : Type*} {α : ι → Type*}
 
 namespace Pi
 
 section MulZeroClass
-variable [forall i, MulZeroClass (α i)] [DecidableEq ι] {i : ι} {f : forall i, α i}
+variable [∀ i, MulZeroClass (α i)] [DecidableEq ι] {i : ι} {f : ∀ i, α i}
 
-/--
-Instance `mulZeroClass` / 实例 `mulZeroClass`
-
-English:
-instance mulZeroClass
-  signature: : MulZeroClass (forall i, α i) where
-  body: by intros; ext; exact zero_mul _
-  mul_zero := by intros; ext; exact mul_zero _
-
-中文:
-实例 mulZeroClass
-  签名: : 乘零类 (对任意 i, α i) where
-  定义体: by intros; ext; exact zero_mul _
-  mul_zero := by intros; ext; exact mul_zero _
-
-Depends on / 依赖: intros, mul_zero, nullHomotopicMap, nullHomotopicMap_f_of_not_rel_left, split_ifs, zero_mul
+/-
+**Pi.mulZeroClass** 是 Mathlib 中的一个实例，位于命名空间 `Pi`。
+形式化陈述：mulZeroClass : MulZeroClass (forall i, α i) where zero_mul
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance mulZeroClass : MulZeroClass (forall i, α i) where
+instance mulZeroClass : MulZeroClass (∀ i, α i) where
   zero_mul := by intros; ext; exact zero_mul _
   mul_zero := by intros; ext; exact mul_zero _
 
@@ -52,209 +41,138 @@ into a dependent family of `MulZeroClass`es, as functions supported at a point.
 
 This is the `MulHom` version of `Pi.single`. -/
 @[simps]
-/--
-Definition of `_root_.MulHom.single` / `_root_.MulHom.single` 的定义
+/-
+**Pi._root_.MulHom.single** 是 Mathlib 中的一个定义，位于命名空间 `Pi`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.MulHom.single
-  signature: (i : ι)
-  body: Pi.single i
-  map_mul' := Pi.single_op₂ (fun _ => (· * ·)) (fun _ => zero_mul _) _
+--- 原说明 ---
+The multiplicative homomorphism including a single `MulZeroClass`
+into a dependent family of `MulZeroClass`es, as functions supported at a point.
 
-中文:
-定义 _root_.乘法半群态射.single
-  签名: (i : ι)
-  定义体: Pi.single i
-  map_mul' := Pi.single_op₂ (fun _ => (· * ·)) (fun _ => zero_mul _) _
-
-Depends on / 依赖: Pi.single, single
+This is the `MulHom` version of `Pi.single`.
 -/
-def _root_.MulHom.single (i : ι) : α i ->ₙ* forall i, α i where
+def _root_.MulHom.single (i : ι) : α i →ₙ* ∀ i, α i where
   toFun := Pi.single i
-  map_mul' := Pi.single_op₂ (fun _ => (· * ·)) (fun _ => zero_mul _) _
-
-/--
-lemma `single_mul` / 引理 `single_mul`
-
-English:
-lemma single_mul
-  given: (i : ι) (x y : α i)
-  statement: single i (x * y) = single i x * single i y
-  proof: (MulHom.single _).map_mul _ _
-
-中文:
-引理 single_mul
-  条件: (i : ι) (x y : α i)
-  结论: single i (x * y) = single i x * single i y
-  证明: (MulHom.single _).map_mul _ _
-
-Depends on / 依赖: MulHom, MulHom.single, map_mul, nullHomotopicMap, nullHomotopicMap_f_of_not_rel_right, single, split_ifs
+  map_mul' := Pi.single_op₂ (fun _ ↦ (· * ·)) (fun _ ↦ zero_mul _) _
+/-
+**Pi.single_mul** 是 Mathlib 中的一个引理，位于命名空间 `Pi`。
+形式化陈述：single_mul (i : ι) (x y : α i) : single i (x * y) = single i x * single i 
+y
+参数：i : ι；x y : α i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulHom.map_mul`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul M] [inst_1 :
+ Mul N] (f : M →ₙ* N) (a b : M), f (a * b) = f a * f b
 -/
 lemma single_mul (i : ι) (x y : α i) : single i (x * y) = single i x * single i y :=
   (MulHom.single _).map_mul _ _
-
-/--
-lemma `single_mul_left_apply` / 引理 `single_mul_left_apply`
-
-English:
-lemma single_mul_left_apply
-  given: (i j : ι) (a : α i) (f : forall i, α i)
-  proof: (apply_single (fun i => (· * f i)) (fun _ => zero_mul _) _ _ _).symm
-
-中文:
-引理 single_mul_left_apply
-  条件: (i j : ι) (a : α i) (f : 对任意 i, α i)
-  证明: (apply_single (fun i => (· * f i)) (fun _ => zero_mul _) _ _ _).symm
-
-Depends on / 依赖: apply_single, zero_mul
+/-
+**Pi.single_mul_left_apply** 是 Mathlib 中的一个引理，位于命名空间 `Pi`。
+形式化陈述：single_mul_left_apply (i j : ι) (a : α i) (f : forall i, α i) : single i (
+a * f i) j = single i a j * f j
+参数：i j : ι；a : α i；f : forall i, α i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Pi.apply_single`：∀ {ι : Type u_1} {M : ι → Type u_6} {N : ι → Type u_7} 
+[inst : (i : ι) → Zero (M i)] [inst_1 : (i : ι) → Zero (N i)]   [inst_2 : Decida
+bleEq…
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
 -/
-lemma single_mul_left_apply (i j : ι) (a : α i) (f : forall i, α i) :
+lemma single_mul_left_apply (i j : ι) (a : α i) (f : ∀ i, α i) :
     single i (a * f i) j = single i a j * f j :=
-  (apply_single (fun i => (· * f i)) (fun _ => zero_mul _) _ _ _).symm
-
-/--
-lemma `single_mul_right_apply` / 引理 `single_mul_right_apply`
-
-English:
-lemma single_mul_right_apply
-  given: (i j : ι) (f : forall i, α i) (a : α i)
-  proof: (apply_single (f · * ·) (fun _ => mul_zero _) _ _ _).symm
-
-中文:
-引理 single_mul_right_apply
-  条件: (i j : ι) (f : 对任意 i, α i) (a : α i)
-  证明: (apply_single (f · * ·) (fun _ => mul_zero _) _ _ _).symm
-
-Depends on / 依赖: apply_single, mul_zero, nullHomotopicMap, nullHomotopicMap_f_eq_zero
+  (apply_single (fun i ↦ (· * f i)) (fun _ ↦ zero_mul _) _ _ _).symm
+/-
+**Pi.single_mul_right_apply** 是 Mathlib 中的一个引理，位于命名空间 `Pi`。
+形式化陈述：single_mul_right_apply (i j : ι) (f : forall i, α i) (a : α i) : single i 
+(f i * a) j = f j * single i a j
+参数：i j : ι；f : forall i, α i；a : α i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Pi.apply_single`：∀ {ι : Type u_1} {M : ι → Type u_6} {N : ι → Type u_7} 
+[inst : (i : ι) → Zero (M i)] [inst_1 : (i : ι) → Zero (N i)]   [inst_2 : Decida
+bleEq…
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
-lemma single_mul_right_apply (i j : ι) (f : forall i, α i) (a : α i) :
+lemma single_mul_right_apply (i j : ι) (f : ∀ i, α i) (a : α i) :
     single i (f i * a) j = f j * single i a j :=
-  (apply_single (f · * ·) (fun _ => mul_zero _) _ _ _).symm
-
-/--
-lemma `single_mul_left` / 引理 `single_mul_left`
-
-English:
-lemma single_mul_left
-  given: (a : α i)
-  statement: single i (a * f i) = single i a * f
-  proof: funext fun _ => single_mul_left_apply _ _ _ _
-
-中文:
-引理 single_mul_left
-  条件: (a : α i)
-  结论: single i (a * f i) = single i a * f
-  证明: funext fun _ => single_mul_left_apply _ _ _ _
-
-Depends on / 依赖: single_mul_left_apply
+  (apply_single (f · * ·) (fun _ ↦ mul_zero _) _ _ _).symm
+/-
+**Pi.single_mul_left** 是 Mathlib 中的一个引理，位于命名空间 `Pi`。
+形式化陈述：single_mul_left (a : α i) : single i (a * f i) = single i a * f
+参数：a : α i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `Pi.single_mul_left_apply`：single_mul_left_apply (i j : ι) (a : α i) (f :
+ forall i, α i) : single i (a * f i) j = single i a j * f j
 -/
 lemma single_mul_left (a : α i) : single i (a * f i) = single i a * f :=
-  funext fun _ => single_mul_left_apply _ _ _ _
-
-/--
-lemma `single_mul_right` / 引理 `single_mul_right`
-
-English:
-lemma single_mul_right
-  given: (a : α i)
-  statement: single i (f i * a) = f * single i a
-  proof: funext fun _ => single_mul_right_apply _ _ _ _
-
-中文:
-引理 single_mul_right
-  条件: (a : α i)
-  结论: single i (f i * a) = f * single i a
-  证明: funext fun _ => single_mul_right_apply _ _ _ _
-
-Depends on / 依赖: single_mul_right_apply
+  funext fun _ ↦ single_mul_left_apply _ _ _ _
+/-
+**Pi.single_mul_right** 是 Mathlib 中的一个引理，位于命名空间 `Pi`。
+形式化陈述：single_mul_right (a : α i) : single i (f i * a) = f * single i a
+参数：a : α i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `Pi.single_mul_right_apply`：single_mul_right_apply (i j : ι) (f : forall 
+i, α i) (a : α i) : single i (f i * a) j = f j * single i a j
 -/
 lemma single_mul_right (a : α i) : single i (f i * a) = f * single i a :=
-  funext fun _ => single_mul_right_apply _ _ _ _
+  funext fun _ ↦ single_mul_right_apply _ _ _ _
 
 end MulZeroClass
 
-/--
-Instance `mulZeroOneClass` / 实例 `mulZeroOneClass`
-
-English:
-instance mulZeroOneClass
-  signature: [forall i, MulZeroOneClass (α i)]
-  body: mulZeroClass
-  __ := mulOneClass
-
-中文:
-实例 mulZeroOneClass
-  签名: [对任意 i, 乘零幺类 (α i)]
-  定义体: mulZeroClass
-  __ := mulOneClass
-
-Depends on / 依赖: mulZeroClass
+/-
+**Pi.mulZeroOneClass** 是 Mathlib 中的一个实例，位于命名空间 `Pi`。
+形式化陈述：mulZeroOneClass [forall i, MulZeroOneClass (α i)] : MulZeroOneClass (foral
+l i, α i) where __
+参数：α i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance mulZeroOneClass [forall i, MulZeroOneClass (α i)] : MulZeroOneClass (forall i, α i) where
+instance mulZeroOneClass [∀ i, MulZeroOneClass (α i)] : MulZeroOneClass (∀ i, α i) where
   __ := mulZeroClass
   __ := mulOneClass
-
-/--
-Instance `monoidWithZero` / 实例 `monoidWithZero`
-
-English:
-instance monoidWithZero
-  signature: [forall i, MonoidWithZero (α i)]
-  body: monoid
-  __ := mulZeroClass
-
-中文:
-实例 monoidWithZero
-  签名: [对任意 i, 带零幺半群 (α i)]
-  定义体: monoid
-  __ := mulZeroClass
-
-Depends on / 依赖: monoid
+/-
+**Pi.monoidWithZero** 是 Mathlib 中的一个实例，位于命名空间 `Pi`。
+形式化陈述：monoidWithZero [forall i, MonoidWithZero (α i)] : MonoidWithZero (forall i
+, α i) where __
+参数：α i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance monoidWithZero [forall i, MonoidWithZero (α i)] : MonoidWithZero (forall i, α i) where
+instance monoidWithZero [∀ i, MonoidWithZero (α i)] : MonoidWithZero (∀ i, α i) where
   __ := monoid
   __ := mulZeroClass
-
-/--
-Instance `commMonoidWithZero` / 实例 `commMonoidWithZero`
-
-English:
-instance commMonoidWithZero
-  signature: [forall i, CommMonoidWithZero (α i)]
-  body: monoidWithZero
-  __ := commMonoid
-
-中文:
-实例 commMonoidWithZero
-  签名: [对任意 i, 带零交换幺半群 (α i)]
-  定义体: monoidWithZero
-  __ := commMonoid
-
-Depends on / 依赖: monoidWithZero
+/-
+**Pi.commMonoidWithZero** 是 Mathlib 中的一个实例，位于命名空间 `Pi`。
+形式化陈述：commMonoidWithZero [forall i, CommMonoidWithZero (α i)] : CommMonoidWithZe
+ro (forall i, α i) where __
+参数：α i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance commMonoidWithZero [forall i, CommMonoidWithZero (α i)] : CommMonoidWithZero (forall i, α i) where
+instance commMonoidWithZero [∀ i, CommMonoidWithZero (α i)] : CommMonoidWithZero (∀ i, α i) where
   __ := monoidWithZero
   __ := commMonoid
-
-/--
-Instance `semigroupWithZero` / 实例 `semigroupWithZero`
-
-English:
-instance semigroupWithZero
-  signature: [forall i, SemigroupWithZero (α i)]
-  body: semigroup
-  __ := mulZeroClass
-
-中文:
-实例 semigroupWithZero
-  签名: [对任意 i, 带零半群 (α i)]
-  定义体: semigroup
-  __ := mulZeroClass
-
-Depends on / 依赖: semigroup
+/-
+**Pi.semigroupWithZero** 是 Mathlib 中的一个实例，位于命名空间 `Pi`。
+形式化陈述：semigroupWithZero [forall i, SemigroupWithZero (α i)] : SemigroupWithZero 
+(forall i, α i) where __
+参数：α i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance semigroupWithZero [forall i, SemigroupWithZero (α i)] : SemigroupWithZero (forall i, α i) where
+instance semigroupWithZero [∀ i, SemigroupWithZero (α i)] : SemigroupWithZero (∀ i, α i) where
   __ := semigroup
   __ := mulZeroClass
 
 end Pi
+

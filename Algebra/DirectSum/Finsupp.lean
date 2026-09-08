@@ -32,124 +32,86 @@ section finsuppLequivDirectSum
 
 variable (R M) (ι : Type*) [DecidableEq ι]
 
-/--
-Definition of `finsuppLEquivDirectSum` / `finsuppLEquivDirectSum` 的定义
+/-- The finitely supported functions `ι →₀ M` are in linear equivalence with the direct sum of
+copies of M indexed by ι. -/
+/-
+**finsuppLEquivDirectSum** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：finsuppLEquivDirectSum : (ι ->₀ M) ≃ₗ[R] ⨁ _ : ι, M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finsuppLEquivDirectSum
-  signature: : (ι ->₀ M) ≃ₗ[R] ⨁ _ : ι, M
-  body: haveI : forall m : M, Decidable (m != 0) := Classical.decPred _
-  finsuppLequivDFinsupp R
-
-@[simp]
-
-中文:
-定义 finsuppLEquivDirectSum
-  签名: : (ι ->₀ M) ≃ₗ[R] ⨁ _ : ι, M
-  定义体: haveI : forall m : M, Decidable (m != 0) := Classical.decPred _
-  finsuppLequivDFinsupp R
-
-@[simp]
-
-Depends on / 依赖: Classical, Classical.decPred, Decidable, decPred, finsuppLequivDFinsupp
+--- 原说明 ---
+The finitely supported functions `ι →₀ M` are in linear equivalence with the dir
+ect sum of
+copies of M indexed by ι.
 -/
-def finsuppLEquivDirectSum : (ι ->₀ M) ≃ₗ[R] ⨁ _ : ι, M :=
-  haveI : forall m : M, Decidable (m != 0) := Classical.decPred _
+def finsuppLEquivDirectSum : (ι →₀ M) ≃ₗ[R] ⨁ _ : ι, M :=
+  haveI : ∀ m : M, Decidable (m ≠ 0) := Classical.decPred _
   finsuppLequivDFinsupp R
 
 @[simp]
-/--
-theorem `finsuppLEquivDirectSum_single` / 定理 `finsuppLEquivDirectSum_single`
-
-English:
-theorem finsuppLEquivDirectSum_single
-  given: (i : ι) (m : M)
-  proof: Finsupp.toDFinsupp_single i m
-
-@[simp]
-
-中文:
-定理 finsuppLEquivDirectSum_single
-  条件: (i : ι) (m : M)
-  证明: Finsupp.toDFinsupp_single i m
-
-@[simp]
-
-Depends on / 依赖: Finsupp, Finsupp.toDFinsupp_single, toDFinsupp_single
+/-
+**finsuppLEquivDirectSum_single** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finsuppLEquivDirectSum_single (i : ι) (m : M) : finsuppLEquivDirectSum R M
+ ι (Finsupp.single i m) = DirectSum.lof R ι _ i m
+参数：i : ι；m : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.toDFinsupp_single`：Finsupp.toDFinsupp_single (i : ι) (m : M) : (
+Finsupp.single i m).toDFinsupp = DFinsupp.single i m
 -/
 theorem finsuppLEquivDirectSum_single (i : ι) (m : M) :
     finsuppLEquivDirectSum R M ι (Finsupp.single i m) = DirectSum.lof R ι _ i m :=
   Finsupp.toDFinsupp_single i m
 
 @[simp]
-/--
-theorem `finsuppLEquivDirectSum_apply` / 定理 `finsuppLEquivDirectSum_apply`
-
-English:
-theorem finsuppLEquivDirectSum_apply
-  given: (m : ι ->₀ M) (i : ι)
-  proof: by
-  rfl
-
-@[simp]
-
-中文:
-定理 finsuppLEquivDirectSum_apply
-  条件: (m : ι ->₀ M) (i : ι)
-  证明: by
-  rfl
-
-@[simp]
+/-
+**finsuppLEquivDirectSum_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finsuppLEquivDirectSum_apply (m : ι ->₀ M) (i : ι) : finsuppLEquivDirectSu
+m R M ι m i = m i
+参数：m : ι ->₀ M；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem finsuppLEquivDirectSum_apply (m : ι ->₀ M) (i : ι) :
+theorem finsuppLEquivDirectSum_apply (m : ι →₀ M) (i : ι) :
     finsuppLEquivDirectSum R M ι m i = m i := by
   rfl
 
 @[simp]
-/--
-theorem `finsuppLEquivDirectSum_symm_lof` / 定理 `finsuppLEquivDirectSum_symm_lof`
-
-English:
-theorem finsuppLEquivDirectSum_symm_lof
-  given: (i : ι) (m : M)
-  proof: letI : forall m : M, Decidable (m != 0) := Classical.decPred _
-  DFinsupp.toFinsupp_single i m
-
-中文:
-定理 finsuppLEquivDirectSum_symm_lof
-  条件: (i : ι) (m : M)
-  证明: letI : forall m : M, Decidable (m != 0) := Classical.decPred _
-  DFinsupp.toFinsupp_single i m
-
-Depends on / 依赖: Classical, Classical.decPred, DFinsupp, DFinsupp.toFinsupp_single, Decidable, decPred, toFinsupp_single
+/-
+**finsuppLEquivDirectSum_symm_lof** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finsuppLEquivDirectSum_symm_lof (i : ι) (m : M) : (finsuppLEquivDirectSum 
+R M ι).symm (DirectSum.lof R ι _ i m) = Finsupp.single i m
+参数：i : ι；m : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFinsupp.toFinsupp_single`：DFinsupp.toFinsupp_single (i : ι) (m : M) : (
+DFinsupp.single i m : Π₀ _ : ι, M).toFinsupp = Finsupp.single i m
 -/
 theorem finsuppLEquivDirectSum_symm_lof (i : ι) (m : M) :
     (finsuppLEquivDirectSum R M ι).symm (DirectSum.lof R ι _ i m) = Finsupp.single i m :=
-  letI : forall m : M, Decidable (m != 0) := Classical.decPred _
+  letI : ∀ m : M, Decidable (m ≠ 0) := Classical.decPred _
   DFinsupp.toFinsupp_single i m
-
-/--
-theorem `lmap_finsuppLEquivDirectSum_eq` / 定理 `lmap_finsuppLEquivDirectSum_eq`
-
-English:
-theorem lmap_finsuppLEquivDirectSum_eq
-  statement: {N : Type*} [AddCommMonoid N] [Module R N]
-  proof: by
-  ext i
-  rfl
-
-中文:
-定理 lmap_finsuppLEquivDirectSum_eq
-  结论: {N : 类型} [加法交换幺半群 N] [模 R N]
-  证明: by
-  ext i
-  rfl
+/-
+**lmap_finsuppLEquivDirectSum_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lmap_finsuppLEquivDirectSum_eq {N : Type*} [AddCommMonoid N] [Module R N] 
+(ε : M ->ₗ[R] N) (m : ι ->₀ M) : (lmap fun _ => ε) ((finsuppLEquivDirectSum R M 
+ι) m) = (finsuppLEquivDirectSum R N ι) (m.mapRange ⇑ε ε.map_zero)
+参数：ε : M ->ₗ[R] N；m : ι ->₀ M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DirectSum.ext`：∀ {ι : Type v} {β : ι → Type w} [inst : (i : ι) → AddComm
+Monoid (β i)] {x y : DirectSum ι β},   (∀ (i : ι), x i = y i) → x = y
+· 使用定理 `LinearMap.map_zero`：∀ {R : Type u_1} {S : Type u_5} {M : Type u_8} {M₃ :
+ Type u_11} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid 
+M] [inst…
 -/
 theorem lmap_finsuppLEquivDirectSum_eq {N : Type*} [AddCommMonoid N] [Module R N]
-    (ε : M ->ₗ[R] N) (m : ι ->₀ M) :
-    (lmap fun _ => ε) ((finsuppLEquivDirectSum R M ι) m) =
+    (ε : M →ₗ[R] N) (m : ι →₀ M) :
+    (lmap fun _ ↦ ε) ((finsuppLEquivDirectSum R M ι) m) =
       (finsuppLEquivDirectSum R N ι) (m.mapRange ⇑ε ε.map_zero) := by
   ext i
   rfl
 
 end finsuppLequivDirectSum
+

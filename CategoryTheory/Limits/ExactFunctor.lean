@@ -33,397 +33,283 @@ section
 
 variable (C) (D)
 
-/--
-Definition of `leftExactFunctor` / `leftExactFunctor` 的定义
+/-- Left-exactness, as a property of objects in `C ⥤ D`. -/
+/-
+**CategoryTheory.leftExactFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：leftExactFunctor : ObjectProperty (C ⥤ D)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftExactFunctor
-  signature: : ObjectProperty (C ⥤ D)
-  body: fun F => PreservesFiniteLimits F
-
-中文:
-定义 leftExactFunctor
-  签名: : ObjectProperty (C ⥤ D)
-  定义体: fun F => PreservesFiniteLimits F
-
-Depends on / 依赖: PreservesFiniteLimits
+--- 原说明 ---
+Left-exactness, as a property of objects in `C ⥤ D`.
 -/
 def leftExactFunctor : ObjectProperty (C ⥤ D) :=
-  fun F => PreservesFiniteLimits F
+  fun F ↦ PreservesFiniteLimits F
 
 variable {C D} in
 @[simp]
-/--
-lemma `leftExactFunctor_iff` / 引理 `leftExactFunctor_iff`
-
-English:
-lemma leftExactFunctor_iff
-  given: (F : C ⥤ D)
-  proof: Iff.rfl
-
-中文:
-引理 leftExactFunctor_iff
-  条件: (F : C ⥤ D)
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**CategoryTheory.leftExactFunctor_iff** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`
+。
+形式化陈述：leftExactFunctor_iff (F : C ⥤ D) : leftExactFunctor C D F ↔ PreservesFinit
+eLimits F
+参数：F : C ⥤ D。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma leftExactFunctor_iff (F : C ⥤ D) :
     leftExactFunctor C D F ↔ PreservesFiniteLimits F := Iff.rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (leftExactFunctor C D).IsClosedUnderIsomorphisms
-  body: by
-    simp only [leftExactFunctor_iff] at h ⊢
-    exact preservesFiniteLimits_of_natIso e
-
-中文:
-实例 :
-  签名: (leftExactFunctor C D).在同构下封闭
-  定义体: by
-    simp only [leftExactFunctor_iff] at h ⊢
-    exact preservesFiniteLimits_of_natIso e
-
-Depends on / 依赖: leftExactFunctor_iff, preservesFiniteLimits_of_natIso
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (leftExactFunctor C D).IsClosedUnderIsomorphisms where
   of_iso e h := by
     simp only [leftExactFunctor_iff] at h ⊢
     exact preservesFiniteLimits_of_natIso e
 
-/--
-Definition of `LeftExactFunctor` / `LeftExactFunctor` 的定义
+/-- Bundled left-exact functors. -/
+/-
+**CategoryTheory.LeftExactFunctor** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory`。
+形式化陈述：LeftExactFunctor
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation LeftExactFunctor
-  body: (leftExactFunctor C D).FullSubcategory
-
-中文:
-缩写 LeftExactFunctor
-  定义体: (leftExactFunctor C D).FullSubcategory
-
-Depends on / 依赖: FullSubcategory, leftExactFunctor
+--- 原说明 ---
+Bundled left-exact functors.
 -/
 abbrev LeftExactFunctor := (leftExactFunctor C D).FullSubcategory
 
 /-- `C ⥤ₗ D` denotes left exact functors `C ⥤ D` -/
 infixr:26 " ⥤ₗ " => LeftExactFunctor
 
-/--
-Definition of `LeftExactFunctor.forget` / `LeftExactFunctor.forget` 的定义
+/-- A left exact functor is in particular a functor. -/
+/-
+**CategoryTheory.LeftExactFunctor.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.LeftExactFunctor`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     (D : T
+ype u₂) →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] → CategoryTheory.F
+unctor (C ⥤ₗ D) (CategoryTheory.Functor C D)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation LeftExactFunctor.forget
-  signature: : (C ⥤ₗ D) ⥤ C ⥤ D
-  body: ObjectProperty.ι _
-
-中文:
-缩写 LeftExactFunctor.forget
-  签名: : (C ⥤ₗ D) ⥤ C ⥤ D
-  定义体: ObjectProperty.ι _
-
-Depends on / 依赖: ObjectProperty
+--- 原说明 ---
+A left exact functor is in particular a functor.
 -/
 abbrev LeftExactFunctor.forget : (C ⥤ₗ D) ⥤ C ⥤ D :=
   ObjectProperty.ι _
 
-/--
-Definition of `LeftExactFunctor.fullyFaithful` / `LeftExactFunctor.fullyFaithful` 的定义
+/-- The inclusion of left exact functors into functors is fully faithful. -/
+/-
+**CategoryTheory.LeftExactFunctor.fullyFaithful** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.LeftExactFunctor`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     (D : T
+ype u₂) →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] → (CategoryTheory.
+LeftExactFunctor.forget C D).FullyFaithful
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation LeftExactFunctor.fullyFaithful
-  signature: : (LeftExactFunctor.forget C D).FullyFaithful
-  body: ObjectProperty.fullyFaithfulι _
-
-中文:
-缩写 LeftExactFunctor.fullyFaithful
-  签名: : (LeftExactFunctor.forget C D).满忠实
-  定义体: ObjectProperty.fullyFaithfulι _
-
-Depends on / 依赖: ObjectProperty, ObjectProperty.fullyFaithful
+--- 原说明 ---
+The inclusion of left exact functors into functors is fully faithful.
 -/
 abbrev LeftExactFunctor.fullyFaithful : (LeftExactFunctor.forget C D).FullyFaithful :=
   ObjectProperty.fullyFaithfulι _
 
-/--
-Definition of `rightExactFunctor` / `rightExactFunctor` 的定义
+/-- Right-exactness, as a property of objects in `C ⥤ D`. -/
+/-
+**CategoryTheory.rightExactFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：rightExactFunctor : ObjectProperty (C ⥤ D)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightExactFunctor
-  signature: : ObjectProperty (C ⥤ D)
-  body: fun F => PreservesFiniteColimits F
-
-中文:
-定义 rightExactFunctor
-  签名: : ObjectProperty (C ⥤ D)
-  定义体: fun F => PreservesFiniteColimits F
-
-Depends on / 依赖: PreservesFiniteColimits
+--- 原说明 ---
+Right-exactness, as a property of objects in `C ⥤ D`.
 -/
 def rightExactFunctor : ObjectProperty (C ⥤ D) :=
-  fun F => PreservesFiniteColimits F
+  fun F ↦ PreservesFiniteColimits F
 
 variable {C D} in
 @[simp]
-/--
-lemma `rightExactFunctor_iff` / 引理 `rightExactFunctor_iff`
-
-English:
-lemma rightExactFunctor_iff
-  given: (F : C ⥤ D)
-  proof: Iff.rfl
-
-中文:
-引理 rightExactFunctor_iff
-  条件: (F : C ⥤ D)
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**CategoryTheory.rightExactFunctor_iff** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+`。
+形式化陈述：rightExactFunctor_iff (F : C ⥤ D) : rightExactFunctor C D F ↔ PreservesFin
+iteColimits F
+参数：F : C ⥤ D。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma rightExactFunctor_iff (F : C ⥤ D) :
     rightExactFunctor C D F ↔ PreservesFiniteColimits F := Iff.rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (rightExactFunctor C D).IsClosedUnderIsomorphisms
-  body: by
-    simp only [rightExactFunctor_iff] at h ⊢
-    exact preservesFiniteColimits_of_natIso e
-
-中文:
-实例 :
-  签名: (rightExactFunctor C D).在同构下封闭
-  定义体: by
-    simp only [rightExactFunctor_iff] at h ⊢
-    exact preservesFiniteColimits_of_natIso e
-
-Depends on / 依赖: preservesFiniteColimits_of_natIso, rightExactFunctor_iff
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (rightExactFunctor C D).IsClosedUnderIsomorphisms where
   of_iso e h := by
     simp only [rightExactFunctor_iff] at h ⊢
     exact preservesFiniteColimits_of_natIso e
 
-/--
-Definition of `RightExactFunctor` / `RightExactFunctor` 的定义
+/-- Bundled right-exact functors. -/
+/-
+**CategoryTheory.RightExactFunctor** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory`。
+形式化陈述：RightExactFunctor
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation RightExactFunctor
-  body: (rightExactFunctor C D).FullSubcategory
-
-中文:
-缩写 RightExactFunctor
-  定义体: (rightExactFunctor C D).FullSubcategory
-
-Depends on / 依赖: FullSubcategory, rightExactFunctor
+--- 原说明 ---
+Bundled right-exact functors.
 -/
 abbrev RightExactFunctor := (rightExactFunctor C D).FullSubcategory
 
 /-- `C ⥤ᵣ D` denotes right exact functors `C ⥤ D` -/
 infixr:26 " ⥤ᵣ " => RightExactFunctor
 
-/--
-Definition of `RightExactFunctor.forget` / `RightExactFunctor.forget` 的定义
+/-- A right exact functor is in particular a functor. -/
+/-
+**CategoryTheory.RightExactFunctor.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.RightExactFunctor`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     (D : T
+ype u₂) →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] → CategoryTheory.F
+unctor (C ⥤ᵣ D) (CategoryTheory.Functor C D)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation RightExactFunctor.forget
-  signature: : (C ⥤ᵣ D) ⥤ C ⥤ D
-  body: ObjectProperty.ι _
-
-中文:
-缩写 RightExactFunctor.forget
-  签名: : (C ⥤ᵣ D) ⥤ C ⥤ D
-  定义体: ObjectProperty.ι _
-
-Depends on / 依赖: ObjectProperty
+--- 原说明 ---
+A right exact functor is in particular a functor.
 -/
 abbrev RightExactFunctor.forget : (C ⥤ᵣ D) ⥤ C ⥤ D :=
   ObjectProperty.ι _
 
-/--
-Definition of `RightExactFunctor.fullyFaithful` / `RightExactFunctor.fullyFaithful` 的定义
+/-- The inclusion of right exact functors into functors is fully faithful. -/
+/-
+**CategoryTheory.RightExactFunctor.fullyFaithful** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.RightExactFunctor`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     (D : T
+ype u₂) →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] → (CategoryTheory.
+RightExactFunctor.forget C D).FullyFaithful
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation RightExactFunctor.fullyFaithful
-  signature: : (RightExactFunctor.forget C D).FullyFaithful
-  body: ObjectProperty.fullyFaithfulι _
-
-中文:
-缩写 RightExactFunctor.fullyFaithful
-  签名: : (RightExactFunctor.forget C D).满忠实
-  定义体: ObjectProperty.fullyFaithfulι _
-
-Depends on / 依赖: ObjectProperty, ObjectProperty.fullyFaithful
+--- 原说明 ---
+The inclusion of right exact functors into functors is fully faithful.
 -/
 abbrev RightExactFunctor.fullyFaithful : (RightExactFunctor.forget C D).FullyFaithful :=
   ObjectProperty.fullyFaithfulι _
 
-/--
-Definition of `exactFunctor` / `exactFunctor` 的定义
+/-- Exactness, as a property of objects in `C ⥤ D`. -/
+/-
+**CategoryTheory.exactFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：exactFunctor : ObjectProperty (C ⥤ D)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition exactFunctor
-  signature: : ObjectProperty (C ⥤ D)
-  body: leftExactFunctor C D ⊓ rightExactFunctor C D
-
-中文:
-定义 exactFunctor
-  签名: : ObjectProperty (C ⥤ D)
-  定义体: leftExactFunctor C D ⊓ rightExactFunctor C D
-
-Depends on / 依赖: leftExactFunctor, rightExactFunctor
+--- 原说明 ---
+Exactness, as a property of objects in `C ⥤ D`.
 -/
 def exactFunctor : ObjectProperty (C ⥤ D) :=
   leftExactFunctor C D ⊓ rightExactFunctor C D
 
 variable {C D} in
 @[simp]
-/--
-lemma `exactFunctor_iff` / 引理 `exactFunctor_iff`
-
-English:
-lemma exactFunctor_iff
-  given: (F : C ⥤ D)
-  proof: Iff.rfl
-
-中文:
-引理 exactFunctor_iff
-  条件: (F : C ⥤ D)
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**CategoryTheory.exactFunctor_iff** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：exactFunctor_iff (F : C ⥤ D) : exactFunctor C D F ↔ PreservesFiniteLimits 
+F ∧ PreservesFiniteColimits F
+参数：F : C ⥤ D。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma exactFunctor_iff (F : C ⥤ D) :
     exactFunctor C D F ↔ PreservesFiniteLimits F ∧ PreservesFiniteColimits F := Iff.rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (exactFunctor C D).IsClosedUnderIsomorphisms
-  body: by
-  dsimp [exactFunctor]
-  infer_instance
-
-中文:
-实例 :
-  签名: (exactFunctor C D).在同构下封闭
-  定义体: by
-  dsimp [exactFunctor]
-  infer_instance
-
-Depends on / 依赖: exactFunctor, infer_instance
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (exactFunctor C D).IsClosedUnderIsomorphisms := by
   dsimp [exactFunctor]
   infer_instance
 
-/--
-Definition of `ExactFunctor` / `ExactFunctor` 的定义
+/-- Bundled exact functors. -/
+/-
+**CategoryTheory.ExactFunctor** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory`。
+形式化陈述：ExactFunctor
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ExactFunctor
-  body: (exactFunctor C D).FullSubcategory
-
-中文:
-缩写 ExactFunctor
-  定义体: (exactFunctor C D).FullSubcategory
-
-Depends on / 依赖: FullSubcategory, exactFunctor
+--- 原说明 ---
+Bundled exact functors.
 -/
 abbrev ExactFunctor := (exactFunctor C D).FullSubcategory
 
 /-- `C ⥤ₑ D` denotes exact functors `C ⥤ D` -/
 infixr:26 " ⥤ₑ " => ExactFunctor
 
-/--
-Definition of `ExactFunctor.forget` / `ExactFunctor.forget` 的定义
+/-- An exact functor is in particular a functor. -/
+/-
+**CategoryTheory.ExactFunctor.forget** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.E
+xactFunctor`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     (D : T
+ype u₂) →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] → CategoryTheory.F
+unctor (C ⥤ₑ D) (CategoryTheory.Functor C D)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ExactFunctor.forget
-  signature: : (C ⥤ₑ D) ⥤ C ⥤ D
-  body: ObjectProperty.ι _
-
-中文:
-缩写 ExactFunctor.forget
-  签名: : (C ⥤ₑ D) ⥤ C ⥤ D
-  定义体: ObjectProperty.ι _
-
-Depends on / 依赖: ObjectProperty
+--- 原说明 ---
+An exact functor is in particular a functor.
 -/
 abbrev ExactFunctor.forget : (C ⥤ₑ D) ⥤ C ⥤ D :=
   ObjectProperty.ι _
-
-/--
-lemma `exactFunctor_le_leftExactFunctor` / 引理 `exactFunctor_le_leftExactFunctor`
-
-English:
-lemma exactFunctor_le_leftExactFunctor
-  proof: fun _ h => h.1
-
-中文:
-引理 exactFunctor_le_leftExactFunctor
-  证明: fun _ h => h.1
+/-
+**CategoryTheory.exactFunctor_le_leftExactFunctor** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory`。
+形式化陈述：exactFunctor_le_leftExactFunctor : exactFunctor C D <= leftExactFunctor C 
+D
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 lemma exactFunctor_le_leftExactFunctor :
-    exactFunctor C D <= leftExactFunctor C D :=
-  fun _ h => h.1
-
-/--
-lemma `exactFunctor_le_rightExactFunctor` / 引理 `exactFunctor_le_rightExactFunctor`
-
-English:
-lemma exactFunctor_le_rightExactFunctor
-  proof: fun _ h => h.2
-
-中文:
-引理 exactFunctor_le_rightExactFunctor
-  证明: fun _ h => h.2
+    exactFunctor C D ≤ leftExactFunctor C D :=
+  fun _ h ↦ h.1
+/-
+**CategoryTheory.exactFunctor_le_rightExactFunctor** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory`。
+形式化陈述：exactFunctor_le_rightExactFunctor : exactFunctor C D <= rightExactFunctor 
+C D
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 lemma exactFunctor_le_rightExactFunctor :
-    exactFunctor C D <= rightExactFunctor C D :=
-  fun _ h => h.2
+    exactFunctor C D ≤ rightExactFunctor C D :=
+  fun _ h ↦ h.2
 
-/--
-Definition of `LeftExactFunctor.ofExact` / `LeftExactFunctor.ofExact` 的定义
+/-- Turn an exact functor into a left exact functor. -/
+/-
+**CategoryTheory.LeftExactFunctor.ofExact** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.LeftExactFunctor`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     (D : T
+ype u₂) → [inst_1 : CategoryTheory.Category.{v₂, u₂} D] → CategoryTheory.Functor
+ (C ⥤ₑ D) (C ⥤ₗ D)
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.exactFunctor_le_leftExactFunctor`：exactFunctor_le_leftExa
+ctFunctor : exactFunctor C D <= leftExactFunctor C D
 
-English:
-abbreviation LeftExactFunctor.ofExact
-  signature: : (C ⥤ₑ D) ⥤ C ⥤ₗ D
-  body: ObjectProperty.ιOfLE (exactFunctor_le_leftExactFunctor C D)
-
-中文:
-缩写 LeftExactFunctor.ofExact
-  签名: : (C ⥤ₑ D) ⥤ C ⥤ₗ D
-  定义体: ObjectProperty.ιOfLE (exactFunctor_le_leftExactFunctor C D)
-
-Depends on / 依赖: ObjectProperty, exactFunctor_le_leftExactFunctor
+--- 原说明 ---
+Turn an exact functor into a left exact functor.
 -/
 abbrev LeftExactFunctor.ofExact : (C ⥤ₑ D) ⥤ C ⥤ₗ D :=
   ObjectProperty.ιOfLE (exactFunctor_le_leftExactFunctor C D)
 
-/--
-Definition of `RightExactFunctor.ofExact` / `RightExactFunctor.ofExact` 的定义
+/-- Turn an exact functor into a left exact functor. -/
+/-
+**CategoryTheory.RightExactFunctor.ofExact** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.RightExactFunctor`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     (D : T
+ype u₂) → [inst_1 : CategoryTheory.Category.{v₂, u₂} D] → CategoryTheory.Functor
+ (C ⥤ₑ D) (C ⥤ᵣ D)
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.exactFunctor_le_rightExactFunctor`：exactFunctor_le_rightE
+xactFunctor : exactFunctor C D <= rightExactFunctor C D
 
-English:
-abbreviation RightExactFunctor.ofExact
-  signature: : (C ⥤ₑ D) ⥤ C ⥤ᵣ D
-  body: ObjectProperty.ιOfLE (exactFunctor_le_rightExactFunctor C D)
-
-中文:
-缩写 RightExactFunctor.ofExact
-  签名: : (C ⥤ₑ D) ⥤ C ⥤ᵣ D
-  定义体: ObjectProperty.ιOfLE (exactFunctor_le_rightExactFunctor C D)
-
-Depends on / 依赖: ObjectProperty, exactFunctor_le_rightExactFunctor
+--- 原说明 ---
+Turn an exact functor into a left exact functor.
 -/
 abbrev RightExactFunctor.ofExact : (C ⥤ₑ D) ⥤ C ⥤ᵣ D :=
   ObjectProperty.ιOfLE (exactFunctor_le_rightExactFunctor C D)
@@ -431,400 +317,304 @@ abbrev RightExactFunctor.ofExact : (C ⥤ₑ D) ⥤ C ⥤ᵣ D :=
 variable {C D}
 
 @[simp]
-/--
-theorem `LeftExactFunctor.ofExact_obj` / 定理 `LeftExactFunctor.ofExact_obj`
-
-English:
-theorem LeftExactFunctor.ofExact_obj
-  given: (F : C ⥤ₑ D)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 LeftExactFunctor.ofExact_obj
-  条件: (F : C ⥤ₑ D)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.LeftExactFunctor.ofExact_obj** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.LeftExactFunctor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : C ⥤ₑ D), (CategoryTheory.Le
+ftExactFunctor.ofExact C D).obj F = { obj := F.obj, property := ⋯ }
+参数：F : C ⥤ₑ D；CategoryTheory.LeftExactFunctor.ofExact C D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem LeftExactFunctor.ofExact_obj (F : C ⥤ₑ D) :
     (LeftExactFunctor.ofExact C D).obj F = ⟨F.1, F.2.1⟩ :=
   rfl
 
 @[simp]
-/--
-theorem `RightExactFunctor.ofExact_obj` / 定理 `RightExactFunctor.ofExact_obj`
-
-English:
-theorem RightExactFunctor.ofExact_obj
-  given: (F : C ⥤ₑ D)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 RightExactFunctor.ofExact_obj
-  条件: (F : C ⥤ₑ D)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.RightExactFunctor.ofExact_obj** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.RightExactFunctor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : C ⥤ₑ D), (CategoryTheory.Ri
+ghtExactFunctor.ofExact C D).obj F = { obj := F.obj, property := ⋯ }
+参数：F : C ⥤ₑ D；CategoryTheory.RightExactFunctor.ofExact C D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem RightExactFunctor.ofExact_obj (F : C ⥤ₑ D) :
     (RightExactFunctor.ofExact C D).obj F = ⟨F.1, F.2.2⟩ :=
   rfl
 
 @[simp]
-/--
-theorem `LeftExactFunctor.ofExact_map_hom` / 定理 `LeftExactFunctor.ofExact_map_hom`
-
-English:
-theorem LeftExactFunctor.ofExact_map_hom
-  given: {F G : C ⥤ₑ D} (α : F ⟶ G)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 LeftExactFunctor.ofExact_map_hom
-  条件: {F G : C ⥤ₑ D} (α : F ⟶ G)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.LeftExactFunctor.ofExact_map_hom** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.LeftExactFunctor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {F G : C ⥤ₑ D} (α : F ⟶ G), ((Ca
+tegoryTheory.LeftExactFunctor.ofExact C D).map α).hom = α.hom
+参数：α : F ⟶ G；(CategoryTheory.LeftExactFunctor.ofExact C D).map α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem LeftExactFunctor.ofExact_map_hom {F G : C ⥤ₑ D} (α : F ⟶ G) :
     ((LeftExactFunctor.ofExact C D).map α).hom = α.hom :=
   rfl
 
 @[simp]
-/--
-theorem `RightExactFunctor.ofExact_map_hom` / 定理 `RightExactFunctor.ofExact_map_hom`
-
-English:
-theorem RightExactFunctor.ofExact_map_hom
-  given: {F G : C ⥤ₑ D} (α : F ⟶ G)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 RightExactFunctor.ofExact_map_hom
-  条件: {F G : C ⥤ₑ D} (α : F ⟶ G)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.RightExactFunctor.ofExact_map_hom** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.RightExactFunctor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {F G : C ⥤ₑ D} (α : F ⟶ G), ((Ca
+tegoryTheory.RightExactFunctor.ofExact C D).map α).hom = α.hom
+参数：α : F ⟶ G；(CategoryTheory.RightExactFunctor.ofExact C D).map α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem RightExactFunctor.ofExact_map_hom {F G : C ⥤ₑ D} (α : F ⟶ G) :
     ((RightExactFunctor.ofExact C D).map α).hom = α.hom :=
   rfl
 
 @[simp]
-/--
-theorem `LeftExactFunctor.forget_obj` / 定理 `LeftExactFunctor.forget_obj`
-
-English:
-theorem LeftExactFunctor.forget_obj
-  given: (F : C ⥤ₗ D)
-  statement: (LeftExactFunctor.forget C D).obj F = F.1
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 LeftExactFunctor.forget_obj
-  条件: (F : C ⥤ₗ D)
-  结论: (LeftExactFunctor.forget C D).obj F = F.1
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.LeftExactFunctor.forget_obj** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.LeftExactFunctor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : C ⥤ₗ D), (CategoryTheory.Le
+ftExactFunctor.forget C D).obj F = F.obj
+参数：F : C ⥤ₗ D；CategoryTheory.LeftExactFunctor.forget C D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem LeftExactFunctor.forget_obj (F : C ⥤ₗ D) : (LeftExactFunctor.forget C D).obj F = F.1 :=
   rfl
 
 @[simp]
-/--
-theorem `RightExactFunctor.forget_obj` / 定理 `RightExactFunctor.forget_obj`
-
-English:
-theorem RightExactFunctor.forget_obj
-  given: (F : C ⥤ᵣ D)
-  statement: (RightExactFunctor.forget C D).obj F = F.1
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 RightExactFunctor.forget_obj
-  条件: (F : C ⥤ᵣ D)
-  结论: (RightExactFunctor.forget C D).obj F = F.1
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.RightExactFunctor.forget_obj** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.RightExactFunctor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : C ⥤ᵣ D), (CategoryTheory.Ri
+ghtExactFunctor.forget C D).obj F = F.obj
+参数：F : C ⥤ᵣ D；CategoryTheory.RightExactFunctor.forget C D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem RightExactFunctor.forget_obj (F : C ⥤ᵣ D) : (RightExactFunctor.forget C D).obj F = F.1 :=
   rfl
 
 @[simp]
-/--
-theorem `ExactFunctor.forget_obj` / 定理 `ExactFunctor.forget_obj`
-
-English:
-theorem ExactFunctor.forget_obj
-  given: (F : C ⥤ₑ D)
-  statement: (ExactFunctor.forget C D).obj F = F.1
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ExactFunctor.forget_obj
-  条件: (F : C ⥤ₑ D)
-  结论: (ExactFunctor.forget C D).obj F = F.1
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.ExactFunctor.forget_obj** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.ExactFunctor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : C ⥤ₑ D), (CategoryTheory.Ex
+actFunctor.forget C D).obj F = F.obj
+参数：F : C ⥤ₑ D；CategoryTheory.ExactFunctor.forget C D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ExactFunctor.forget_obj (F : C ⥤ₑ D) : (ExactFunctor.forget C D).obj F = F.1 :=
   rfl
 
 @[simp]
-/--
-theorem `LeftExactFunctor.forget_map` / 定理 `LeftExactFunctor.forget_map`
-
-English:
-theorem LeftExactFunctor.forget_map
-  given: {F G : C ⥤ₗ D} (α : F ⟶ G)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 LeftExactFunctor.forget_map
-  条件: {F G : C ⥤ₗ D} (α : F ⟶ G)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.LeftExactFunctor.forget_map** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.LeftExactFunctor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {F G : C ⥤ₗ D} (α : F ⟶ G), (Cat
+egoryTheory.LeftExactFunctor.forget C D).map α = α.hom
+参数：α : F ⟶ G；CategoryTheory.LeftExactFunctor.forget C D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem LeftExactFunctor.forget_map {F G : C ⥤ₗ D} (α : F ⟶ G) :
     (LeftExactFunctor.forget C D).map α = α.hom :=
   rfl
 
 @[simp]
-/--
-theorem `RightExactFunctor.forget_map` / 定理 `RightExactFunctor.forget_map`
-
-English:
-theorem RightExactFunctor.forget_map
-  given: {F G : C ⥤ᵣ D} (α : F ⟶ G)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 RightExactFunctor.forget_map
-  条件: {F G : C ⥤ᵣ D} (α : F ⟶ G)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.RightExactFunctor.forget_map** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.RightExactFunctor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {F G : C ⥤ᵣ D} (α : F ⟶ G), (Cat
+egoryTheory.RightExactFunctor.forget C D).map α = α.hom
+参数：α : F ⟶ G；CategoryTheory.RightExactFunctor.forget C D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem RightExactFunctor.forget_map {F G : C ⥤ᵣ D} (α : F ⟶ G) :
     (RightExactFunctor.forget C D).map α = α.hom :=
   rfl
 
 @[simp]
-/--
-theorem `ExactFunctor.forget_map` / 定理 `ExactFunctor.forget_map`
-
-English:
-theorem ExactFunctor.forget_map
-  given: {F G : C ⥤ₑ D} (α : F ⟶ G)
-  proof: rfl
-
-中文:
-定理 ExactFunctor.forget_map
-  条件: {F G : C ⥤ₑ D} (α : F ⟶ G)
-  证明: rfl
+/-
+**CategoryTheory.ExactFunctor.forget_map** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.ExactFunctor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {F G : C ⥤ₑ D} (α : F ⟶ G), (Cat
+egoryTheory.ExactFunctor.forget C D).map α = α.hom
+参数：α : F ⟶ G；CategoryTheory.ExactFunctor.forget C D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ExactFunctor.forget_map {F G : C ⥤ₑ D} (α : F ⟶ G) :
     (ExactFunctor.forget C D).map α = α.hom :=
   rfl
 
-/--
-Definition of `LeftExactFunctor.of` / `LeftExactFunctor.of` 的定义
+/-- Turn a left exact functor into an object of the category `LeftExactFunctor C D`. -/
+/-
+**CategoryTheory.LeftExactFunctor.of** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.L
+eftExactFunctor`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         (F : Cat
+egoryTheory.Functor C D) → [CategoryTheory.Limits.PreservesFiniteLimits F] → C ⥤
+ₗ D
+参数：F : CategoryTheory.Functor C D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition LeftExactFunctor.of
-  signature: (F : C ⥤ D) [PreservesFiniteLimits F]
-  body: ⟨F, by simpa⟩
-
-中文:
-定义 LeftExactFunctor.of
-  签名: (F : C ⥤ D) [保持FiniteLimits F]
-  定义体: ⟨F, by simpa⟩
+--- 原说明 ---
+Turn a left exact functor into an object of the category `LeftExactFunctor C D`.
 -/
 def LeftExactFunctor.of (F : C ⥤ D) [PreservesFiniteLimits F] : C ⥤ₗ D :=
   ⟨F, by simpa⟩
 
-/--
-Definition of `RightExactFunctor.of` / `RightExactFunctor.of` 的定义
+/-- Turn a right exact functor into an object of the category `RightExactFunctor C D`. -/
+/-
+**CategoryTheory.RightExactFunctor.of** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+RightExactFunctor`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         (F : Cat
+egoryTheory.Functor C D) → [CategoryTheory.Limits.PreservesFiniteColimits F] → C
+ ⥤ᵣ D
+参数：F : CategoryTheory.Functor C D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RightExactFunctor.of
-  signature: (F : C ⥤ D) [PreservesFiniteColimits F]
-  body: ⟨F, by simpa⟩
-
-中文:
-定义 RightExactFunctor.of
-  签名: (F : C ⥤ D) [保持FiniteColimits F]
-  定义体: ⟨F, by simpa⟩
+--- 原说明 ---
+Turn a right exact functor into an object of the category `RightExactFunctor C D
+`.
 -/
 def RightExactFunctor.of (F : C ⥤ D) [PreservesFiniteColimits F] : C ⥤ᵣ D :=
   ⟨F, by simpa⟩
 
-/--
-Definition of `ExactFunctor.of` / `ExactFunctor.of` 的定义
+/-- Turn an exact functor into an object of the category `ExactFunctor C D`. -/
+/-
+**CategoryTheory.ExactFunctor.of** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Exact
+Functor`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         (F : Cat
+egoryTheory.Functor C D) →           [CategoryTheory.Limits.PreservesFiniteLimit
+s F] → [CategoryTheory.Limits.PreservesFiniteColimits F] → C ⥤ₑ D
+参数：F : CategoryTheory.Functor C D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ExactFunctor.of
-  signature: (F : C ⥤ D) [PreservesFiniteLimits F] [PreservesFiniteColimits F]
-  body: ⟨F, by simp only [exactFunctor_iff]; constructor <;> assumption⟩
-
-@[simp]
-
-中文:
-定义 ExactFunctor.of
-  签名: (F : C ⥤ D) [保持FiniteLimits F] [保持FiniteColimits F]
-  定义体: ⟨F, by simp only [exactFunctor_iff]; constructor <;> assumption⟩
-
-@[simp]
-
-Depends on / 依赖: exactFunctor_iff
+--- 原说明 ---
+Turn an exact functor into an object of the category `ExactFunctor C D`.
 -/
 def ExactFunctor.of (F : C ⥤ D) [PreservesFiniteLimits F] [PreservesFiniteColimits F] : C ⥤ₑ D :=
   ⟨F, by simp only [exactFunctor_iff]; constructor <;> assumption⟩
 
 @[simp]
-/--
-theorem `LeftExactFunctor.of_fst` / 定理 `LeftExactFunctor.of_fst`
-
-English:
-theorem LeftExactFunctor.of_fst
-  given: (F : C ⥤ D) [PreservesFiniteLimits F]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 LeftExactFunctor.of_fst
-  条件: (F : C ⥤ D) [保持FiniteLimits F]
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.LeftExactFunctor.of_fst** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.LeftExactFunctor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheory.Functor C D)
+ [inst_2 : CategoryTheory.Limits.PreservesFiniteLimits F],   (CategoryTheory.Lef
+tExactFunctor.of F).obj = F
+参数：F : CategoryTheory.Functor C D；CategoryTheory.LeftExactFunctor.of F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem LeftExactFunctor.of_fst (F : C ⥤ D) [PreservesFiniteLimits F] :
     (LeftExactFunctor.of F).obj = F :=
   rfl
 
 @[simp]
-/--
-theorem `RightExactFunctor.of_fst` / 定理 `RightExactFunctor.of_fst`
-
-English:
-theorem RightExactFunctor.of_fst
-  given: (F : C ⥤ D) [PreservesFiniteColimits F]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 RightExactFunctor.of_fst
-  条件: (F : C ⥤ D) [保持FiniteColimits F]
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.RightExactFunctor.of_fst** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.RightExactFunctor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheory.Functor C D)
+ [inst_2 : CategoryTheory.Limits.PreservesFiniteColimits F],   (CategoryTheory.R
+ightExactFunctor.of F).obj = F
+参数：F : CategoryTheory.Functor C D；CategoryTheory.RightExactFunctor.of F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem RightExactFunctor.of_fst (F : C ⥤ D) [PreservesFiniteColimits F] :
     (RightExactFunctor.of F).obj = F :=
   rfl
 
 @[simp]
-/--
-theorem `ExactFunctor.of_fst` / 定理 `ExactFunctor.of_fst`
-
-English:
-theorem ExactFunctor.of_fst
-  given: (F : C ⥤ D) [PreservesFiniteLimits F] [PreservesFiniteColimits F]
-  proof: rfl
-
-中文:
-定理 ExactFunctor.of_fst
-  条件: (F : C ⥤ D) [保持FiniteLimits F] [保持FiniteColimits F]
-  证明: rfl
+/-
+**CategoryTheory.ExactFunctor.of_fst** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.E
+xactFunctor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheory.Functor C D)
+ [inst_2 : CategoryTheory.Limits.PreservesFiniteLimits F]   [inst_3 : CategoryTh
+eory.Limits.PreservesFiniteColimits F], (CategoryTheory.ExactFunctor.of F).obj =
+ F
+参数：F : CategoryTheory.Functor C D；CategoryTheory.ExactFunctor.of F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ExactFunctor.of_fst (F : C ⥤ D) [PreservesFiniteLimits F] [PreservesFiniteColimits F] :
     (ExactFunctor.of F).obj = F :=
   rfl
-
-/--
-theorem `LeftExactFunctor.forget_obj_of` / 定理 `LeftExactFunctor.forget_obj_of`
-
-English:
-theorem LeftExactFunctor.forget_obj_of
-  given: (F : C ⥤ D) [PreservesFiniteLimits F]
-  proof: rfl
-
-中文:
-定理 LeftExactFunctor.forget_obj_of
-  条件: (F : C ⥤ D) [保持FiniteLimits F]
-  证明: rfl
+/-
+**CategoryTheory.LeftExactFunctor.forget_obj_of** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.LeftExactFunctor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheory.Functor C D)
+ [inst_2 : CategoryTheory.Limits.PreservesFiniteLimits F],   (CategoryTheory.Lef
+tExactFunctor.forget C D).obj (CategoryTheory.LeftExactFunctor.of F) = F
+参数：F : CategoryTheory.Functor C D；CategoryTheory.LeftExactFunctor.forget C D；Cat
+egoryTheory.LeftExactFunctor.of F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem LeftExactFunctor.forget_obj_of (F : C ⥤ D) [PreservesFiniteLimits F] :
     (LeftExactFunctor.forget C D).obj (LeftExactFunctor.of F) = F :=
   rfl
-
-/--
-theorem `RightExactFunctor.forget_obj_of` / 定理 `RightExactFunctor.forget_obj_of`
-
-English:
-theorem RightExactFunctor.forget_obj_of
-  given: (F : C ⥤ D) [PreservesFiniteColimits F]
-  proof: rfl
-
-中文:
-定理 RightExactFunctor.forget_obj_of
-  条件: (F : C ⥤ D) [保持FiniteColimits F]
-  证明: rfl
+/-
+**CategoryTheory.RightExactFunctor.forget_obj_of** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.RightExactFunctor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheory.Functor C D)
+ [inst_2 : CategoryTheory.Limits.PreservesFiniteColimits F],   (CategoryTheory.R
+ightExactFunctor.forget C D).obj (CategoryTheory.RightExactFunctor.of F) = F
+参数：F : CategoryTheory.Functor C D；CategoryTheory.RightExactFunctor.forget C D；Ca
+tegoryTheory.RightExactFunctor.of F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem RightExactFunctor.forget_obj_of (F : C ⥤ D) [PreservesFiniteColimits F] :
     (RightExactFunctor.forget C D).obj (RightExactFunctor.of F) = F :=
   rfl
-
-/--
-theorem `ExactFunctor.forget_obj_of` / 定理 `ExactFunctor.forget_obj_of`
-
-English:
-theorem ExactFunctor.forget_obj_of
-  statement: (F : C ⥤ D) [PreservesFiniteLimits F]
-  proof: rfl
-
-中文:
-定理 ExactFunctor.forget_obj_of
-  结论: (F : C ⥤ D) [保持FiniteLimits F]
-  证明: rfl
+/-
+**CategoryTheory.ExactFunctor.forget_obj_of** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.ExactFunctor`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} 
+[inst_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheory.Functor C D)
+ [inst_2 : CategoryTheory.Limits.PreservesFiniteLimits F]   [inst_3 : CategoryTh
+eory.Limits.PreservesFiniteColimits F],   (CategoryTheory.ExactFunctor.forget C 
+D).obj (CategoryTheory.ExactFunctor.of F) = F
+参数：F : CategoryTheory.Functor C D；CategoryTheory.ExactFunctor.forget C D；Categor
+yTheory.ExactFunctor.of F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ExactFunctor.forget_obj_of (F : C ⥤ D) [PreservesFiniteLimits F]
     [PreservesFiniteColimits F] : (ExactFunctor.forget C D).obj (ExactFunctor.of F) = F :=
   rfl
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 noncomputable instance (F : C ⥤ₗ D) : PreservesFiniteLimits F.obj :=
   F.property
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 noncomputable instance (F : C ⥤ᵣ D) : PreservesFiniteColimits F.obj :=
   F.property
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 noncomputable instance (F : C ⥤ₑ D) : PreservesFiniteLimits F.obj :=
   F.property.1
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 noncomputable instance (F : C ⥤ₑ D) : PreservesFiniteColimits F.obj :=
   F.property.2
 
@@ -838,26 +628,19 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- Whiskering a left exact functor by a left exact functor yields a left exact functor. -/
 @[simps! obj_obj_obj obj_map map_app]
-/--
-Definition of `LeftExactFunctor.whiskeringLeft` / `LeftExactFunctor.whiskeringLeft` 的定义
+/-
+**CategoryTheory.LeftExactFunctor.whiskeringLeft** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.LeftExactFunctor`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     (D : T
+ype u₂) →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         (E : Typ
+e u₃) →           [inst_2 : CategoryTheory.Category.{v₃, u₃} E] →             Ca
+tegoryTheory.Functor (C ⥤ₗ D) (CategoryTheory.Functor (D ⥤ₗ E) (C ⥤ₗ E))
+参数：D ⥤ₗ E；C ⥤ₗ E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition LeftExactFunctor.whiskeringLeft
-  signature: : (C ⥤ₗ D) ⥤ (D ⥤ₗ E) ⥤ (C ⥤ₗ E) where
-  body: ObjectProperty.lift _ (forget _ _ ⋙ (Functor.whiskeringLeft C D E).obj F.obj)
-    (fun G => by dsimp; exact comp_preservesFiniteLimits _ _)
-  map {F G} η :=
-    { app H := ObjectProperty.homMk (((Functor.whiskeringLeft C D E).map η.hom).app H.obj) }
-
-中文:
-定义 LeftExactFunctor.whiskeringLeft
-  签名: : (C ⥤ₗ D) ⥤ (D ⥤ₗ E) ⥤ (C ⥤ₗ E) where
-  定义体: ObjectProperty.lift _ (forget _ _ ⋙ (Functor.whiskeringLeft C D E).obj F.obj)
-    (fun G => by dsimp; exact comp_preservesFiniteLimits _ _)
-  map {F G} η :=
-    { app H := ObjectProperty.homMk (((Functor.whiskeringLeft C D E).map η.hom).app H.obj) }
-
-Depends on / 依赖: F.obj, Functor, Functor.whiskeringLeft, ObjectProperty, ObjectProperty.lift, forget, whiskeringLeft
+--- 原说明 ---
+Whiskering a left exact functor by a left exact functor yields a left exact func
+tor.
 -/
 def LeftExactFunctor.whiskeringLeft : (C ⥤ₗ D) ⥤ (D ⥤ₗ E) ⥤ (C ⥤ₗ E) where
   obj F := ObjectProperty.lift _ (forget _ _ ⋙ (Functor.whiskeringLeft C D E).obj F.obj)
@@ -869,26 +652,19 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- Whiskering a left exact functor by a left exact functor yields a left exact functor. -/
 @[simps! obj_obj_obj obj_map map_app]
-/--
-Definition of `LeftExactFunctor.whiskeringRight` / `LeftExactFunctor.whiskeringRight` 的定义
+/-
+**CategoryTheory.LeftExactFunctor.whiskeringRight** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.LeftExactFunctor`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     (D : T
+ype u₂) →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         (E : Typ
+e u₃) →           [inst_2 : CategoryTheory.Category.{v₃, u₃} E] →             Ca
+tegoryTheory.Functor (D ⥤ₗ E) (CategoryTheory.Functor (C ⥤ₗ D) (C ⥤ₗ E))
+参数：C ⥤ₗ D；C ⥤ₗ E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition LeftExactFunctor.whiskeringRight
-  signature: : (D ⥤ₗ E) ⥤ (C ⥤ₗ D) ⥤ (C ⥤ₗ E) where
-  body: ObjectProperty.lift _ (forget _ _ ⋙ (Functor.whiskeringRight C D E).obj F.obj)
-    (fun G => by dsimp; exact comp_preservesFiniteLimits _ _)
-  map {F G} η :=
-    { app H := ObjectProperty.homMk (((Functor.whiskeringRight C D E).map η.hom).app H.obj) }
-
-中文:
-定义 LeftExactFunctor.whiskeringRight
-  签名: : (D ⥤ₗ E) ⥤ (C ⥤ₗ D) ⥤ (C ⥤ₗ E) where
-  定义体: ObjectProperty.lift _ (forget _ _ ⋙ (Functor.whiskeringRight C D E).obj F.obj)
-    (fun G => by dsimp; exact comp_preservesFiniteLimits _ _)
-  map {F G} η :=
-    { app H := ObjectProperty.homMk (((Functor.whiskeringRight C D E).map η.hom).app H.obj) }
-
-Depends on / 依赖: F.obj, Functor, Functor.whiskeringRight, ObjectProperty, ObjectProperty.lift, forget, whiskeringRight
+--- 原说明 ---
+Whiskering a left exact functor by a left exact functor yields a left exact func
+tor.
 -/
 def LeftExactFunctor.whiskeringRight : (D ⥤ₗ E) ⥤ (C ⥤ₗ D) ⥤ (C ⥤ₗ E) where
   obj F := ObjectProperty.lift _ (forget _ _ ⋙ (Functor.whiskeringRight C D E).obj F.obj)
@@ -900,26 +676,19 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- Whiskering a right exact functor by a right exact functor yields a right exact functor. -/
 @[simps! obj_obj_obj obj_map map_app]
-/--
-Definition of `RightExactFunctor.whiskeringLeft` / `RightExactFunctor.whiskeringLeft` 的定义
+/-
+**CategoryTheory.RightExactFunctor.whiskeringLeft** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.RightExactFunctor`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     (D : T
+ype u₂) →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         (E : Typ
+e u₃) →           [inst_2 : CategoryTheory.Category.{v₃, u₃} E] →             Ca
+tegoryTheory.Functor (C ⥤ᵣ D) (CategoryTheory.Functor (D ⥤ᵣ E) (C ⥤ᵣ E))
+参数：D ⥤ᵣ E；C ⥤ᵣ E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RightExactFunctor.whiskeringLeft
-  signature: : (C ⥤ᵣ D) ⥤ (D ⥤ᵣ E) ⥤ (C ⥤ᵣ E) where
-  body: ObjectProperty.lift _ (forget _ _ ⋙ (Functor.whiskeringLeft C D E).obj F.obj)
-    (fun G => by dsimp; exact comp_preservesFiniteColimits _ _)
-  map {F G} η :=
-    { app H := ObjectProperty.homMk (((Functor.whiskeringLeft C D E).map η.hom).app H.obj) }
-
-中文:
-定义 RightExactFunctor.whiskeringLeft
-  签名: : (C ⥤ᵣ D) ⥤ (D ⥤ᵣ E) ⥤ (C ⥤ᵣ E) where
-  定义体: ObjectProperty.lift _ (forget _ _ ⋙ (Functor.whiskeringLeft C D E).obj F.obj)
-    (fun G => by dsimp; exact comp_preservesFiniteColimits _ _)
-  map {F G} η :=
-    { app H := ObjectProperty.homMk (((Functor.whiskeringLeft C D E).map η.hom).app H.obj) }
-
-Depends on / 依赖: F.obj, Functor, Functor.whiskeringLeft, ObjectProperty, ObjectProperty.lift, forget, whiskeringLeft
+--- 原说明 ---
+Whiskering a right exact functor by a right exact functor yields a right exact f
+unctor.
 -/
 def RightExactFunctor.whiskeringLeft : (C ⥤ᵣ D) ⥤ (D ⥤ᵣ E) ⥤ (C ⥤ᵣ E) where
   obj F := ObjectProperty.lift _ (forget _ _ ⋙ (Functor.whiskeringLeft C D E).obj F.obj)
@@ -931,26 +700,19 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- Whiskering a right exact functor by a right exact functor yields a right exact functor. -/
 @[simps! obj_obj_obj obj_map map_app]
-/--
-Definition of `RightExactFunctor.whiskeringRight` / `RightExactFunctor.whiskeringRight` 的定义
+/-
+**CategoryTheory.RightExactFunctor.whiskeringRight** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.RightExactFunctor`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     (D : T
+ype u₂) →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         (E : Typ
+e u₃) →           [inst_2 : CategoryTheory.Category.{v₃, u₃} E] →             Ca
+tegoryTheory.Functor (D ⥤ᵣ E) (CategoryTheory.Functor (C ⥤ᵣ D) (C ⥤ᵣ E))
+参数：C ⥤ᵣ D；C ⥤ᵣ E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RightExactFunctor.whiskeringRight
-  signature: : (D ⥤ᵣ E) ⥤ (C ⥤ᵣ D) ⥤ (C ⥤ᵣ E) where
-  body: ObjectProperty.lift _ (forget _ _ ⋙ (Functor.whiskeringRight C D E).obj F.obj)
-    (fun G => by dsimp; exact comp_preservesFiniteColimits _ _)
-  map {F G} η :=
-    { app H := ObjectProperty.homMk (((Functor.whiskeringRight C D E).map η.hom).app H.obj) }
-
-中文:
-定义 RightExactFunctor.whiskeringRight
-  签名: : (D ⥤ᵣ E) ⥤ (C ⥤ᵣ D) ⥤ (C ⥤ᵣ E) where
-  定义体: ObjectProperty.lift _ (forget _ _ ⋙ (Functor.whiskeringRight C D E).obj F.obj)
-    (fun G => by dsimp; exact comp_preservesFiniteColimits _ _)
-  map {F G} η :=
-    { app H := ObjectProperty.homMk (((Functor.whiskeringRight C D E).map η.hom).app H.obj) }
-
-Depends on / 依赖: F.obj, Functor, Functor.whiskeringRight, ObjectProperty, ObjectProperty.lift, forget, whiskeringRight
+--- 原说明 ---
+Whiskering a right exact functor by a right exact functor yields a right exact f
+unctor.
 -/
 def RightExactFunctor.whiskeringRight : (D ⥤ᵣ E) ⥤ (C ⥤ᵣ D) ⥤ (C ⥤ᵣ E) where
   obj F := ObjectProperty.lift _ (forget _ _ ⋙ (Functor.whiskeringRight C D E).obj F.obj)
@@ -962,28 +724,18 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- Whiskering an exact functor by an exact functor yields an exact functor. -/
 @[simps! obj_obj_obj obj_map map_app]
-/--
-Definition of `ExactFunctor.whiskeringLeft` / `ExactFunctor.whiskeringLeft` 的定义
+/-
+**CategoryTheory.ExactFunctor.whiskeringLeft** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.ExactFunctor`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     (D : T
+ype u₂) →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         (E : Typ
+e u₃) →           [inst_2 : CategoryTheory.Category.{v₃, u₃} E] →             Ca
+tegoryTheory.Functor (C ⥤ₑ D) (CategoryTheory.Functor (D ⥤ₑ E) (C ⥤ₑ E))
+参数：D ⥤ₑ E；C ⥤ₑ E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ExactFunctor.whiskeringLeft
-  signature: : (C ⥤ₑ D) ⥤ (D ⥤ₑ E) ⥤ (C ⥤ₑ E) where
-  body: ObjectProperty.lift _ (forget _ _ ⋙ (Functor.whiskeringLeft C D E).obj F.obj)
-    (fun G => ⟨by dsimp; exact comp_preservesFiniteLimits _ _,
-      by dsimp; exact comp_preservesFiniteColimits _ _⟩)
-  map {F G} η :=
-    { app H := ObjectProperty.homMk (((Functor.whiskeringLeft C D E).map η.hom).app H.obj) }
-
-中文:
-定义 ExactFunctor.whiskeringLeft
-  签名: : (C ⥤ₑ D) ⥤ (D ⥤ₑ E) ⥤ (C ⥤ₑ E) where
-  定义体: ObjectProperty.lift _ (forget _ _ ⋙ (Functor.whiskeringLeft C D E).obj F.obj)
-    (fun G => ⟨by dsimp; exact comp_preservesFiniteLimits _ _,
-      by dsimp; exact comp_preservesFiniteColimits _ _⟩)
-  map {F G} η :=
-    { app H := ObjectProperty.homMk (((Functor.whiskeringLeft C D E).map η.hom).app H.obj) }
-
-Depends on / 依赖: F.obj, Functor, Functor.whiskeringLeft, ObjectProperty, ObjectProperty.lift, forget, whiskeringLeft
+--- 原说明 ---
+Whiskering an exact functor by an exact functor yields an exact functor.
 -/
 def ExactFunctor.whiskeringLeft : (C ⥤ₑ D) ⥤ (D ⥤ₑ E) ⥤ (C ⥤ₑ E) where
   obj F := ObjectProperty.lift _ (forget _ _ ⋙ (Functor.whiskeringLeft C D E).obj F.obj)
@@ -996,28 +748,18 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- Whiskering an exact functor by an exact functor yields an exact functor. -/
 @[simps! obj_obj_obj obj_map map_app]
-/--
-Definition of `ExactFunctor.whiskeringRight` / `ExactFunctor.whiskeringRight` 的定义
+/-
+**CategoryTheory.ExactFunctor.whiskeringRight** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.ExactFunctor`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     (D : T
+ype u₂) →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         (E : Typ
+e u₃) →           [inst_2 : CategoryTheory.Category.{v₃, u₃} E] →             Ca
+tegoryTheory.Functor (D ⥤ₑ E) (CategoryTheory.Functor (C ⥤ₑ D) (C ⥤ₑ E))
+参数：C ⥤ₑ D；C ⥤ₑ E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ExactFunctor.whiskeringRight
-  signature: : (D ⥤ₑ E) ⥤ (C ⥤ₑ D) ⥤ (C ⥤ₑ E) where
-  body: ObjectProperty.lift _ (forget _ _ ⋙ (Functor.whiskeringRight C D E).obj F.obj)
-    (fun G => ⟨by dsimp; exact comp_preservesFiniteLimits _ _,
-      by dsimp; exact comp_preservesFiniteColimits _ _⟩)
-  map {F G} η :=
-    { app H := ObjectProperty.homMk (((Functor.whiskeringRight C D E).map η.hom).app H.obj) }
-
-中文:
-定义 ExactFunctor.whiskeringRight
-  签名: : (D ⥤ₑ E) ⥤ (C ⥤ₑ D) ⥤ (C ⥤ₑ E) where
-  定义体: ObjectProperty.lift _ (forget _ _ ⋙ (Functor.whiskeringRight C D E).obj F.obj)
-    (fun G => ⟨by dsimp; exact comp_preservesFiniteLimits _ _,
-      by dsimp; exact comp_preservesFiniteColimits _ _⟩)
-  map {F G} η :=
-    { app H := ObjectProperty.homMk (((Functor.whiskeringRight C D E).map η.hom).app H.obj) }
-
-Depends on / 依赖: F.obj, Functor, Functor.whiskeringRight, ObjectProperty, ObjectProperty.lift, forget, whiskeringRight
+--- 原说明 ---
+Whiskering an exact functor by an exact functor yields an exact functor.
 -/
 def ExactFunctor.whiskeringRight : (D ⥤ₑ E) ⥤ (C ⥤ₑ D) ⥤ (C ⥤ₑ E) where
   obj F := ObjectProperty.lift _ (forget _ _ ⋙ (Functor.whiskeringRight C D E).obj F.obj)
@@ -1031,3 +773,4 @@ end
 end
 
 end CategoryTheory
+

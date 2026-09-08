@@ -16,22 +16,16 @@ public import Mathlib.Logic.Equiv.List
 
 namespace Equiv
 
-/--
-Definition of `arrayEquivList` / `arrayEquivList` 的定义
+/-- The natural equivalence between arrays and lists. -/
+/-
+**Equiv.arrayEquivList** 是 Mathlib 中的一个定义，位于命名空间 `Equiv`。
+形式化陈述：arrayEquivList (α : Type*) : Array α ≃ List α where toFun
+参数：α : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition arrayEquivList
-  signature: (α : Type*)
-  body: Array.toList
-  invFun := Array.mk
-
-中文:
-定义 arrayEquivList
-  签名: (α : 类型)
-  定义体: Array.toList
-  invFun := Array.mk
-
-Depends on / 依赖: Array.toList, toList
+--- 原说明 ---
+The natural equivalence between arrays and lists.
 -/
 def arrayEquivList (α : Type*) : Array α ≃ List α where
   toFun := Array.toList
@@ -55,45 +49,39 @@ instance for `array` was)
 -- variable {n : ℕ}
 
 -- instance : Traversable (Array' n) :=
--- @Equiv.traversable (flip Vector n) _ (fun α => Equiv.vectorEquivArray α n) _
+--   @Equiv.traversable (flip Vector n) _ (fun α => Equiv.vectorEquivArray α n) _
 
 -- instance : LawfulTraversable (Array' n) :=
--- @Equiv.isLawfulTraversable (flip Vector n) _ (fun α => Equiv.vectorEquivArray α n) _ _
+--   @Equiv.isLawfulTraversable (flip Vector n) _ (fun α => Equiv.vectorEquivArray α n) _ _
 
 -- end Array'
 
-/--
-Instance `Array.encodable` / 实例 `Array.encodable`
+/-- If `α` is encodable, then so is `Array α`. -/
+/-
+**Array.encodable** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Array.encodable {α} [Encodable α] : Encodable (Array α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Array.encodable
-  signature: {α} [Encodable α]
-  body: Encodable.ofEquiv _ (Equiv.arrayEquivList _)
-
-中文:
-实例 数组.encodable
-  签名: {α} [可编码 α]
-  定义体: Encodable.ofEquiv _ (Equiv.arrayEquivList _)
-
-Depends on / 依赖: Encodable, Encodable.ofEquiv, Equiv.arrayEquivList, arrayEquivList, ofEquiv
+--- 原说明 ---
+If `α` is encodable, then so is `Array α`.
 -/
 instance Array.encodable {α} [Encodable α] : Encodable (Array α) :=
   Encodable.ofEquiv _ (Equiv.arrayEquivList _)
 
-/--
-Instance `Array.countable` / 实例 `Array.countable`
+/-- If `α` is countable, then so is `Array α`. -/
+/-
+**Array.countable** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Array.countable {α} [Countable α] : Countable (Array α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Countable.of_equiv`：Countable.of_equiv (α : Sort*) [Countable α] (e : α 
+≃ β) : Countable β
+· 使用定理 `List.countable`：∀ {α : Type u_2} [Countable α], Countable (List α)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-instance Array.countable
-  signature: {α} [Countable α]
-  body: Countable.of_equiv _ (Equiv.arrayEquivList α).symm
-
-中文:
-实例 数组.countable
-  签名: {α} [可数 α]
-  定义体: Countable.of_equiv _ (Equiv.arrayEquivList α).symm
-
-Depends on / 依赖: Countable, Countable.of_equiv, Equiv.arrayEquivList, arrayEquivList, of_equiv
+--- 原说明 ---
+If `α` is countable, then so is `Array α`.
 -/
 instance Array.countable {α} [Countable α] : Countable (Array α) :=
   Countable.of_equiv _ (Equiv.arrayEquivList α).symm

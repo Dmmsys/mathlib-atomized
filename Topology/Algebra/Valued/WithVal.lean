@@ -39,22 +39,15 @@ noncomputable section
 
 variable {R Γ₀ : Type*} [LinearOrderedCommGroupWithZero Γ₀]
 
-/--
-Definition of `WithVal` / `WithVal` 的定义
+/-- Type synonym for a ring equipped with the topology coming from a valuation. -/
+/-
+**WithVal** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{R : Type u_1} →   {Γ₀ : Type u_2} → [inst : LinearOrderedCommGroupWithZer
+o Γ₀] → [inst_1 : Ring R] → Valuation R Γ₀ → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure WithVal
-  parameters: [Ring R] (v : Valuation R Γ₀)
-  axioms and operations (2):
-    - toVal((v)) : :
-    - ofVal : R
-
-中文:
-结构 WithVal
-  参数: [环 R] (v : 赋值 R Γ₀)
-  公理与运算 (2 个):
-    - toVal((v)) : :
-    - ofVal : R
+--- 原说明 ---
+Type synonym for a ring equipped with the topology coming from a valuation.
 -/
 structure WithVal [Ring R] (v : Valuation R Γ₀) where
   /-- Converts an element of `R` to an element of `WithVal v`. -/
@@ -78,742 +71,391 @@ section Ring
 
 variable [Ring R] (v : Valuation R Γ₀)
 
-/--
-lemma `ofVal_toVal` / 引理 `ofVal_toVal`
-
-English:
-lemma ofVal_toVal
-  given: (x : R)
-  statement: ofVal (toVal v x) = x
-  proof: rfl
-
-中文:
-引理 ofVal_toVal
-  条件: (x : R)
-  结论: ofVal (toVal v x) = x
-  证明: rfl
+/-
+**WithVal.ofVal_toVal** 是 Mathlib 中的一个引理，位于命名空间 `WithVal`。
+形式化陈述：ofVal_toVal (x : R) : ofVal (toVal v x) = x
+参数：x : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofVal_toVal (x : R) : ofVal (toVal v x) = x := rfl
-/--
-lemma `toVal_ofVal` / 引理 `toVal_ofVal`
-
-English:
-lemma toVal_ofVal
-  given: (x : WithVal v)
-  statement: toVal v (ofVal x) = x
-  proof: rfl
-
-中文:
-引理 toVal_ofVal
-  条件: (x : WithVal v)
-  结论: toVal v (ofVal x) = x
-  证明: rfl
+/-
+**WithVal.toVal_ofVal** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀)   (x : WithVal v), WithVal.toVal v x.of
+Val = x
+参数：v : Valuation R Γ₀；x : WithVal v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toVal_ofVal (x : WithVal v) : toVal v (ofVal x) = x := rfl
-
-/--
-lemma `ofVal_surjective` / 引理 `ofVal_surjective`
-
-English:
-lemma ofVal_surjective
-  statement: Function.Surjective (ofVal (v := v))
-  proof: Function.RightInverse.surjective ofVal_toVal _
-
-中文:
-引理 ofVal_surjective
-  结论: 函数.满射 (ofVal (v := v))
-  证明: Function.RightInverse.surjective ofVal_toVal _
+/-
+**WithVal.ofVal_surjective** 是 Mathlib 中的一个引理，位于命名空间 `WithVal`。
+形式化陈述：ofVal_surjective : Function.Surjective (ofVal (v
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.RightInverse.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α
+ → β} {g : β → α}, Function.RightInverse g f → Function.Surjective f
+· 使用引理 `WithVal.ofVal_toVal`：ofVal_toVal (x : R) : ofVal (toVal v x) = x
 -/
 lemma ofVal_surjective : Function.Surjective (ofVal (v := v)) :=
-Function.RightInverse.surjective ofVal_toVal _
-
-/--
-lemma `toVal_surjective` / 引理 `toVal_surjective`
-
-English:
-lemma toVal_surjective
-  statement: Function.Surjective (toVal v)
-  proof: Function.RightInverse.surjective toVal_ofVal _
-
-中文:
-引理 toVal_surjective
-  结论: 函数.满射 (toVal v)
-  证明: Function.RightInverse.surjective toVal_ofVal _
-
-Depends on / 依赖: Function, Function.RightInverse.surjective, RightInverse, surjective, toVal_ofVal
+  Function.RightInverse.surjective <| ofVal_toVal _
+/-
+**WithVal.toVal_surjective** 是 Mathlib 中的一个引理，位于命名空间 `WithVal`。
+形式化陈述：toVal_surjective : Function.Surjective (toVal v)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.RightInverse.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α
+ → β} {g : β → α}, Function.RightInverse g f → Function.Surjective f
+· 使用定理 `WithVal.toVal_ofVal`：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrde
+redCommGroupWithZero Γ₀] [inst_1 : Ring R] (v : Valuation R Γ₀)   (x : WithVal v
+), WithVa…
 -/
 lemma toVal_surjective : Function.Surjective (toVal v) :=
-Function.RightInverse.surjective toVal_ofVal _
-
-/--
-lemma `ofVal_injective` / 引理 `ofVal_injective`
-
-English:
-lemma ofVal_injective
-  statement: Function.Injective (ofVal (v := v))
-  proof: Function.LeftInverse.injective toVal_ofVal _
-
-中文:
-引理 ofVal_injective
-  结论: 函数.单射 (ofVal (v := v))
-  证明: Function.LeftInverse.injective toVal_ofVal _
+  Function.RightInverse.surjective <| toVal_ofVal _
+/-
+**WithVal.ofVal_injective** 是 Mathlib 中的一个引理，位于命名空间 `WithVal`。
+形式化陈述：ofVal_injective : Function.Injective (ofVal (v
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.LeftInverse.injective`：∀ {α : Sort u_1} {β : Sort u_2} {g : β →
+ α} {f : α → β}, Function.LeftInverse g f → Function.Injective f
+· 使用定理 `WithVal.toVal_ofVal`：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrde
+redCommGroupWithZero Γ₀] [inst_1 : Ring R] (v : Valuation R Γ₀)   (x : WithVal v
+), WithVa…
 -/
 lemma ofVal_injective : Function.Injective (ofVal (v := v)) :=
-Function.LeftInverse.injective toVal_ofVal _
-
-/--
-lemma `toVal_injective` / 引理 `toVal_injective`
-
-English:
-lemma toVal_injective
-  statement: Function.Injective (toVal v)
-  proof: Function.LeftInverse.injective ofVal_toVal _
-
-中文:
-引理 toVal_injective
-  结论: 函数.单射 (toVal v)
-  证明: Function.LeftInverse.injective ofVal_toVal _
-
-Depends on / 依赖: Function, Function.LeftInverse.injective, LeftInverse, injective, ofVal_toVal
+  Function.LeftInverse.injective <| toVal_ofVal _
+/-
+**WithVal.toVal_injective** 是 Mathlib 中的一个引理，位于命名空间 `WithVal`。
+形式化陈述：toVal_injective : Function.Injective (toVal v)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.LeftInverse.injective`：∀ {α : Sort u_1} {β : Sort u_2} {g : β →
+ α} {f : α → β}, Function.LeftInverse g f → Function.Injective f
+· 使用引理 `WithVal.ofVal_toVal`：ofVal_toVal (x : R) : ofVal (toVal v x) = x
 -/
 lemma toVal_injective : Function.Injective (toVal v) :=
-Function.LeftInverse.injective ofVal_toVal _
-
-/--
-lemma `ofVal_bijective` / 引理 `ofVal_bijective`
-
-English:
-lemma ofVal_bijective
-  statement: Function.Bijective (ofVal (v := v))
-  proof: ⟨ofVal_injective v, ofVal_surjective v⟩
-
-中文:
-引理 ofVal_bijective
-  结论: 函数.双射 (ofVal (v := v))
-  证明: ⟨ofVal_injective v, ofVal_surjective v⟩
+  Function.LeftInverse.injective <| ofVal_toVal _
+/-
+**WithVal.ofVal_bijective** 是 Mathlib 中的一个引理，位于命名空间 `WithVal`。
+形式化陈述：ofVal_bijective : Function.Bijective (ofVal (v
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WithVal.ofVal_injective`：ofVal_injective : Function.Injective (ofVal (v
+· 使用引理 `WithVal.ofVal_surjective`：ofVal_surjective : Function.Surjective (ofVal 
+(v
 -/
 lemma ofVal_bijective : Function.Bijective (ofVal (v := v)) :=
   ⟨ofVal_injective v, ofVal_surjective v⟩
-
-/--
-lemma `toVal_bijective` / 引理 `toVal_bijective`
-
-English:
-lemma toVal_bijective
-  statement: Function.Bijective (toVal v)
-  proof: ⟨toVal_injective v, toVal_surjective v⟩
-
-中文:
-引理 toVal_bijective
-  结论: 函数.双射 (toVal v)
-  证明: ⟨toVal_injective v, toVal_surjective v⟩
-
-Depends on / 依赖: toVal_injective, toVal_surjective
+/-
+**WithVal.toVal_bijective** 是 Mathlib 中的一个引理，位于命名空间 `WithVal`。
+形式化陈述：toVal_bijective : Function.Bijective (toVal v)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WithVal.toVal_injective`：toVal_injective : Function.Injective (toVal v)
+· 使用引理 `WithVal.toVal_surjective`：toVal_surjective : Function.Surjective (toVal 
+v)
 -/
 lemma toVal_bijective : Function.Bijective (toVal v) :=
   ⟨toVal_injective v, toVal_surjective v⟩
-
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Zero (WithVal v)
-  body: toVal _ 0
-
-中文:
-实例 :
-  签名: 零 (WithVal v)
-  定义体: toVal _ 0
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Zero (WithVal v) where zero := toVal _ 0
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: One (WithVal v)
-  body: toVal _ 1
-
-中文:
-实例 :
-  签名: 幺 (WithVal v)
-  定义体: toVal _ 1
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : One (WithVal v) where one := toVal _ 1
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Add (WithVal v)
-  body: toVal _ (x.ofVal + y.ofVal)
-
-中文:
-实例 :
-  签名: 加法 (WithVal v)
-  定义体: toVal _ (x.ofVal + y.ofVal)
-
-Depends on / 依赖: x.ofVal, y.ofVal
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Add (WithVal v) where add x y := toVal _ (x.ofVal + y.ofVal)
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Sub (WithVal v)
-  body: toVal _ (x.ofVal - y.ofVal)
-
-中文:
-实例 :
-  签名: 减法 (WithVal v)
-  定义体: toVal _ (x.ofVal - y.ofVal)
-
-Depends on / 依赖: x.ofVal, y.ofVal
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Sub (WithVal v) where sub x y := toVal _ (x.ofVal - y.ofVal)
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Neg (WithVal v)
-  body: toVal _ (-x.ofVal)
-
-中文:
-实例 :
-  签名: 取负 (WithVal v)
-  定义体: toVal _ (-x.ofVal)
-
-Depends on / 依赖: x.ofVal
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Neg (WithVal v) where neg x := toVal _ (-x.ofVal)
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mul (WithVal v)
-  body: toVal _ (x.ofVal * y.ofVal)
-
-中文:
-实例 :
-  签名: 乘法 (WithVal v)
-  定义体: toVal _ (x.ofVal * y.ofVal)
-
-Depends on / 依赖: x.ofVal, y.ofVal
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mul (WithVal v) where mul x y := toVal _ (x.ofVal * y.ofVal)
-instance {S} [SMul S R] : SMul S (WithVal v) where smul s x := toVal _ (s • x.ofVal)
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Pow (WithVal v) Nat
-  body: toVal _ (x.ofVal ^ n)
-
-中文:
-实例 :
-  签名: 幂 (WithVal v) 自然数
-  定义体: toVal _ (x.ofVal ^ n)
-
-Depends on / 依赖: x.ofVal
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Pow (WithVal v) Nat where pow x n := toVal _ (x.ofVal ^ n)
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NatCast (WithVal v)
-  body: toVal _ n
-
-中文:
-实例 :
-  签名: 自然数嵌入 (WithVal v)
-  定义体: toVal _ n
+instance {S} [SMul S R] : SMul S (WithVal v) where smul s x := toVal _ (s • x.ofVal)
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance : Pow (WithVal v) ℕ where pow x n := toVal _ (x.ofVal ^ n)
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : NatCast (WithVal v) where natCast n := toVal _ n
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IntCast (WithVal v)
-  body: toVal _ z
-
-中文:
-实例 :
-  签名: 整数嵌入 (WithVal v)
-  定义体: toVal _ z
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IntCast (WithVal v) where intCast z := toVal _ z
-
-/--
-lemma `toVal_zero` / 引理 `toVal_zero`
-
-English:
-lemma toVal_zero
-  statement: toVal v 0 = 0
-  proof: rfl
-
-中文:
-引理 toVal_zero
-  结论: toVal v 0 = 0
-  证明: rfl
+/-
+**WithVal.toVal_zero** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀),   WithVal.toVal v 0 = 0
+参数：v : Valuation R Γ₀。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toVal_zero : toVal v 0 = 0 := rfl
-
-/--
-lemma `ofVal_zero` / 引理 `ofVal_zero`
-
-English:
-lemma ofVal_zero
-  statement: ofVal (0 : WithVal v) = 0
-  proof: rfl
-
-中文:
-引理 ofVal_zero
-  结论: ofVal (0 : WithVal v) = 0
-  证明: rfl
+/-
+**WithVal.ofVal_zero** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀),   WithVal.ofVal 0 = 0
+参数：v : Valuation R Γ₀。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma ofVal_zero : ofVal (0 : WithVal v) = 0 := rfl
-
-/--
-lemma `toVal_one` / 引理 `toVal_one`
-
-English:
-lemma toVal_one
-  statement: toVal v 1 = 1
-  proof: rfl
-
-中文:
-引理 toVal_one
-  结论: toVal v 1 = 1
-  证明: rfl
+/-
+**WithVal.toVal_one** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀),   WithVal.toVal v 1 = 1
+参数：v : Valuation R Γ₀。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toVal_one : toVal v 1 = 1 := rfl
-
-/--
-lemma `ofVal_one` / 引理 `ofVal_one`
-
-English:
-lemma ofVal_one
-  statement: ofVal (1 : WithVal v) = 1
-  proof: rfl
-
-中文:
-引理 ofVal_one
-  结论: ofVal (1 : WithVal v) = 1
-  证明: rfl
+/-
+**WithVal.ofVal_one** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀),   WithVal.ofVal 1 = 1
+参数：v : Valuation R Γ₀。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma ofVal_one : ofVal (1 : WithVal v) = 1 := rfl
-
-/--
-lemma `toVal_add` / 引理 `toVal_add`
-
-English:
-lemma toVal_add
-  given: (x y : R)
-  statement: toVal v (x + y) = toVal v x + toVal v y
-  proof: rfl
-
-中文:
-引理 toVal_add
-  条件: (x y : R)
-  结论: toVal v (x + y) = toVal v x + toVal v y
-  证明: rfl
+/-
+**WithVal.toVal_add** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀)   (x y : R), WithVal.toVal v (x + y) = 
+WithVal.toVal v x + WithVal.toVal v y
+参数：v : Valuation R Γ₀；x y : R；x + y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toVal_add (x y : R) : toVal v (x + y) = toVal v x + toVal v y := rfl
-
-/--
-lemma `ofVal_add` / 引理 `ofVal_add`
-
-English:
-lemma ofVal_add
-  given: (x y : WithVal v)
-  statement: ofVal (x + y) = ofVal x + ofVal y
-  proof: rfl
-
-中文:
-引理 ofVal_add
-  条件: (x y : WithVal v)
-  结论: ofVal (x + y) = ofVal x + ofVal y
-  证明: rfl
+/-
+**WithVal.ofVal_add** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀)   (x y : WithVal v), (x + y).ofVal = x.
+ofVal + y.ofVal
+参数：v : Valuation R Γ₀；x y : WithVal v；x + y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma ofVal_add (x y : WithVal v) : ofVal (x + y) = ofVal x + ofVal y := rfl
-
-/--
-lemma `toVal_sub` / 引理 `toVal_sub`
-
-English:
-lemma toVal_sub
-  given: (x y : R)
-  statement: toVal v (x - y) = toVal v x - toVal v y
-  proof: rfl
-
-中文:
-引理 toVal_sub
-  条件: (x y : R)
-  结论: toVal v (x - y) = toVal v x - toVal v y
-  证明: rfl
+/-
+**WithVal.toVal_sub** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀)   (x y : R), WithVal.toVal v (x - y) = 
+WithVal.toVal v x - WithVal.toVal v y
+参数：v : Valuation R Γ₀；x y : R；x - y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toVal_sub (x y : R) : toVal v (x - y) = toVal v x - toVal v y := rfl
-
-/--
-lemma `ofVal_sub` / 引理 `ofVal_sub`
-
-English:
-lemma ofVal_sub
-  given: (x y : WithVal v)
-  statement: ofVal (x - y) = ofVal x - ofVal y
-  proof: rfl
-
-中文:
-引理 ofVal_sub
-  条件: (x y : WithVal v)
-  结论: ofVal (x - y) = ofVal x - ofVal y
-  证明: rfl
+/-
+**WithVal.ofVal_sub** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀)   (x y : WithVal v), (x - y).ofVal = x.
+ofVal - y.ofVal
+参数：v : Valuation R Γ₀；x y : WithVal v；x - y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma ofVal_sub (x y : WithVal v) : ofVal (x - y) = ofVal x - ofVal y := rfl
-
-/--
-lemma `toVal_mul` / 引理 `toVal_mul`
-
-English:
-lemma toVal_mul
-  given: (x y : R)
-  statement: toVal v (x * y) = toVal v x * toVal v y
-  proof: rfl
-
-中文:
-引理 toVal_mul
-  条件: (x y : R)
-  结论: toVal v (x * y) = toVal v x * toVal v y
-  证明: rfl
+/-
+**WithVal.toVal_mul** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀)   (x y : R), WithVal.toVal v (x * y) = 
+WithVal.toVal v x * WithVal.toVal v y
+参数：v : Valuation R Γ₀；x y : R；x * y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toVal_mul (x y : R) : toVal v (x * y) = toVal v x * toVal v y := rfl
-
-/--
-lemma `ofVal_mul` / 引理 `ofVal_mul`
-
-English:
-lemma ofVal_mul
-  given: (x y : WithVal v)
-  statement: ofVal (x * y) = ofVal x * ofVal y
-  proof: rfl
-
-中文:
-引理 ofVal_mul
-  条件: (x y : WithVal v)
-  结论: ofVal (x * y) = ofVal x * ofVal y
-  证明: rfl
+/-
+**WithVal.ofVal_mul** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀)   (x y : WithVal v), (x * y).ofVal = x.
+ofVal * y.ofVal
+参数：v : Valuation R Γ₀；x y : WithVal v；x * y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma ofVal_mul (x y : WithVal v) : ofVal (x * y) = ofVal x * ofVal y := rfl
-
-/--
-lemma `toVal_neg` / 引理 `toVal_neg`
-
-English:
-lemma toVal_neg
-  given: (x : R)
-  statement: toVal v (-x) = -toVal v x
-  proof: rfl
-
-中文:
-引理 toVal_neg
-  条件: (x : R)
-  结论: toVal v (-x) = -toVal v x
-  证明: rfl
+/-
+**WithVal.toVal_neg** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀)   (x : R), WithVal.toVal v (-x) = -With
+Val.toVal v x
+参数：v : Valuation R Γ₀；x : R；-x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toVal_neg (x : R) : toVal v (-x) = -toVal v x := rfl
-
-/--
-lemma `ofVal_neg` / 引理 `ofVal_neg`
-
-English:
-lemma ofVal_neg
-  given: (x : WithVal v)
-  statement: ofVal (-x) = -ofVal x
-  proof: rfl
-
-中文:
-引理 ofVal_neg
-  条件: (x : WithVal v)
-  结论: ofVal (-x) = -ofVal x
-  证明: rfl
+/-
+**WithVal.ofVal_neg** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀)   (x : WithVal v), (-x).ofVal = -x.ofVa
+l
+参数：v : Valuation R Γ₀；x : WithVal v；-x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma ofVal_neg (x : WithVal v) : ofVal (-x) = -ofVal x := rfl
-
-/--
-lemma `toVal_pow` / 引理 `toVal_pow`
-
-English:
-lemma toVal_pow
-  given: (x : R) (n : Nat)
-  statement: toVal v (x ^ n) = (toVal v x) ^ n
-  proof: rfl
-
-中文:
-引理 toVal_pow
-  条件: (x : R) (n : 自然数)
-  结论: toVal v (x ^ n) = (toVal v x) ^ n
-  证明: rfl
+/-
+**WithVal.toVal_pow** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀)   (x : R) (n : ℕ), WithVal.toVal v (x ^
+ n) = WithVal.toVal v x ^ n
+参数：v : Valuation R Γ₀；x : R；n : ℕ；x ^ n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma toVal_pow (x : R) (n : Nat) : toVal v (x ^ n) = (toVal v x) ^ n := rfl
-
-/--
-lemma `ofVal_pow` / 引理 `ofVal_pow`
-
-English:
-lemma ofVal_pow
-  given: (x : WithVal v) (n : Nat)
-  statement: ofVal (x ^ n) = (ofVal x) ^ n
-  proof: rfl
-
-中文:
-引理 ofVal_pow
-  条件: (x : WithVal v) (n : 自然数)
-  结论: ofVal (x ^ n) = (ofVal x) ^ n
-  证明: rfl
+@[simp] lemma toVal_pow (x : R) (n : ℕ) : toVal v (x ^ n) = (toVal v x) ^ n := rfl
+/-
+**WithVal.ofVal_pow** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀)   (x : WithVal v) (n : ℕ), (x ^ n).ofVa
+l = x.ofVal ^ n
+参数：v : Valuation R Γ₀；x : WithVal v；n : ℕ；x ^ n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma ofVal_pow (x : WithVal v) (n : Nat) : ofVal (x ^ n) = (ofVal x) ^ n := rfl
-
-/--
-theorem `toVal_smul` / 定理 `toVal_smul`
-
-English:
-theorem toVal_smul
-  given: {S} [SMul S R] (s : S) (r : R)
-  statement: toVal v (s • r) = s • toVal v r
-  proof: rfl
-
-中文:
-定理 toVal_smul
-  条件: {S} [标量乘法 S R] (s : S) (r : R)
-  结论: toVal v (s • r) = s • toVal v r
-  证明: rfl
+@[simp] lemma ofVal_pow (x : WithVal v) (n : ℕ) : ofVal (x ^ n) = (ofVal x) ^ n := rfl
+/-
+**WithVal.toVal_smul** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀)   {S : Type u_3} [inst_2 : SMul S R] (s
+ : S) (r : R), WithVal.toVal v (s • r) = s • WithVal.toVal v r
+参数：v : Valuation R Γ₀；s : S；r : R；s • r。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem toVal_smul {S} [SMul S R] (s : S) (r : R) : toVal v (s • r) = s • toVal v r := rfl
-
-/--
-theorem `ofVal_smul` / 定理 `ofVal_smul`
-
-English:
-theorem ofVal_smul
-  given: {S} [SMul S R] (s : S) (x : WithVal v)
-  statement: ofVal (s • x) = s • ofVal x
-  proof: rfl
-
-中文:
-定理 ofVal_smul
-  条件: {S} [标量乘法 S R] (s : S) (x : WithVal v)
-  结论: ofVal (s • x) = s • ofVal x
-  证明: rfl
+/-
+**WithVal.ofVal_smul** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀)   {S : Type u_3} [inst_2 : SMul S R] (s
+ : S) (x : WithVal v), (s • x).ofVal = s • x.ofVal
+参数：v : Valuation R Γ₀；s : S；x : WithVal v；s • x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem ofVal_smul {S} [SMul S R] (s : S) (x : WithVal v) : ofVal (s • x) = s • ofVal x :=
   rfl
-
-/--
-lemma `toVal_natCast` / 引理 `toVal_natCast`
-
-English:
-lemma toVal_natCast
-  given: (n : Nat)
-  statement: toVal v n = n
-  proof: rfl
-
-中文:
-引理 toVal_natCast
-  条件: (n : 自然数)
-  结论: toVal v n = n
-  证明: rfl
+/-
+**WithVal.toVal_natCast** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀)   (n : ℕ), WithVal.toVal v ↑n = ↑n
+参数：v : Valuation R Γ₀；n : ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma toVal_natCast (n : Nat) : toVal v n = n := rfl
-
-/--
-lemma `ofVal_natCast` / 引理 `ofVal_natCast`
-
-English:
-lemma ofVal_natCast
-  given: (n : Nat)
-  statement: ofVal (n : WithVal v) = n
-  proof: rfl
-
-中文:
-引理 ofVal_natCast
-  条件: (n : 自然数)
-  结论: ofVal (n : WithVal v) = n
-  证明: rfl
+@[simp] lemma toVal_natCast (n : ℕ) : toVal v n = n := rfl
+/-
+**WithVal.ofVal_natCast** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀)   (n : ℕ), (↑n).ofVal = ↑n
+参数：v : Valuation R Γ₀；n : ℕ；↑n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma ofVal_natCast (n : Nat) : ofVal (n : WithVal v) = n := rfl
-
-/--
-lemma `toVal_intCast` / 引理 `toVal_intCast`
-
-English:
-lemma toVal_intCast
-  given: (z : Int)
-  statement: toVal v z = z
-  proof: rfl
-
-中文:
-引理 toVal_intCast
-  条件: (z : 整数)
-  结论: toVal v z = z
-  证明: rfl
+@[simp] lemma ofVal_natCast (n : ℕ) : ofVal (n : WithVal v) = n := rfl
+/-
+**WithVal.toVal_intCast** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀)   (z : ℤ), WithVal.toVal v ↑z = ↑z
+参数：v : Valuation R Γ₀；z : ℤ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma toVal_intCast (z : Int) : toVal v z = z := rfl
-
-/--
-lemma `ofVal_intCast` / 引理 `ofVal_intCast`
-
-English:
-lemma ofVal_intCast
-  given: (z : Int)
-  statement: ofVal (z : WithVal v) = z
-  proof: rfl
-
-.ring _ instance : Ring (WithVal v) := fast_instance% ofVal_injective v
+@[simp] lemma toVal_intCast (z : ℤ) : toVal v z = z := rfl
+/-
+**WithVal.ofVal_intCast** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀)   (z : ℤ), (↑z).ofVal = ↑z
+参数：v : Valuation R Γ₀；z : ℤ；↑z。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+@[simp] lemma ofVal_intCast (z : ℤ) : ofVal (z : WithVal v) = z := rfl
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance : Ring (WithVal v) := fast_instance% ofVal_injective v |>.ring _
   (ofVal_zero _) (ofVal_one _) (ofVal_add _) (ofVal_mul _) (ofVal_neg _) (ofVal_sub _)
   (ofVal_smul _) (ofVal_smul _) (ofVal_pow _) (ofVal_natCast _) (ofVal_intCast _)
-
-中文:
-引理 ofVal_intCast
-  条件: (z : 整数)
-  结论: ofVal (z : WithVal v) = z
-  证明: rfl
-
-.ring _ instance : Ring (WithVal v) := fast_instance% ofVal_injective v
-  (ofVal_zero _) (ofVal_one _) (ofVal_add _) (ofVal_mul _) (ofVal_neg _) (ofVal_sub _)
-  (ofVal_smul _) (ofVal_smul _) (ofVal_pow _) (ofVal_natCast _) (ofVal_intCast _)
--/
-@[simp] lemma ofVal_intCast (z : Int) : ofVal (z : WithVal v) = z := rfl
-
-.ring _ instance : Ring (WithVal v) := fast_instance% ofVal_injective v
-  (ofVal_zero _) (ofVal_one _) (ofVal_add _) (ofVal_mul _) (ofVal_neg _) (ofVal_sub _)
-  (ofVal_smul _) (ofVal_smul _) (ofVal_pow _) (ofVal_natCast _) (ofVal_intCast _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (WithVal v)
-  body: ⟨0⟩
-
-中文:
-实例 :
-  签名: 可居 (WithVal v)
-  定义体: ⟨0⟩
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (WithVal v) := ⟨0⟩
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Preorder (WithVal v)
-  body: .lift (v ∘ ofVal)
-
-中文:
-实例 :
-  签名: 预序 (WithVal v)
-  定义体: .lift (v ∘ ofVal)
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Preorder (WithVal v) := .lift (v ∘ ofVal)
-
-/--
-theorem `le_def` / 定理 `le_def`
-
-English:
-theorem le_def
-  given: {v : Valuation R Γ₀} {a b : WithVal v}
-  statement: a <= b ↔ v a.ofVal <= v b.ofVal
-  proof: .rfl
-
-中文:
-定理 le_def
-  条件: {v : 赋值 R Γ₀} {a b : WithVal v}
-  结论: a <= b ↔ v a.ofVal <= v b.ofVal
-  证明: .rfl
+/-
+**WithVal.le_def** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：le_def {v : Valuation R Γ₀} {a b : WithVal v} : a <= b ↔ v a.ofVal <= v b.
+ofVal
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem le_def {v : Valuation R Γ₀} {a b : WithVal v} : a <= b ↔ v a.ofVal <= v b.ofVal := .rfl
-
-/--
-theorem `lt_def` / 定理 `lt_def`
-
-English:
-theorem lt_def
-  given: {v : Valuation R Γ₀} {a b : WithVal v}
-  statement: a < b ↔ v a.ofVal < v b.ofVal
-  proof: .rfl
-
-中文:
-定理 lt_def
-  条件: {v : 赋值 R Γ₀} {a b : WithVal v}
-  结论: a < b ↔ v a.ofVal < v b.ofVal
-  证明: .rfl
+theorem le_def {v : Valuation R Γ₀} {a b : WithVal v} : a ≤ b ↔ v a.ofVal ≤ v b.ofVal := .rfl
+/-
+**WithVal.lt_def** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：lt_def {v : Valuation R Γ₀} {a b : WithVal v} : a < b ↔ v a.ofVal < v b.of
+Val
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem lt_def {v : Valuation R Γ₀} {a b : WithVal v} : a < b ↔ v a.ofVal < v b.ofVal := .rfl
-
-/--
-lemma `toVal_eq_zero` / 引理 `toVal_eq_zero`
-
-English:
-lemma toVal_eq_zero
-  given: (x : R)
-  statement: toVal v x = 0 ↔ x = 0
-  proof: (toVal_injective v).eq_iff
-
-中文:
-引理 toVal_eq_zero
-  条件: (x : R)
-  结论: toVal v x = 0 ↔ x = 0
-  证明: (toVal_injective v).eq_iff
+/-
+**WithVal.toVal_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀)   (x : R), WithVal.toVal v x = 0 ↔ x = 
+0
+参数：v : Valuation R Γ₀；x : R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用引理 `WithVal.toVal_injective`：toVal_injective : Function.Injective (toVal v)
 -/
 @[simp] lemma toVal_eq_zero (x : R) : toVal v x = 0 ↔ x = 0 := (toVal_injective v).eq_iff
-
-/--
-lemma `ofVal_eq_zero` / 引理 `ofVal_eq_zero`
-
-English:
-lemma ofVal_eq_zero
-  given: (x : WithVal v)
-  statement: ofVal x = 0 ↔ x = 0
-  proof: (ofVal_injective v).eq_iff
-
-中文:
-引理 ofVal_eq_zero
-  条件: (x : WithVal v)
-  结论: ofVal x = 0 ↔ x = 0
-  证明: (ofVal_injective v).eq_iff
+/-
+**WithVal.ofVal_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀)   (x : WithVal v), x.ofVal = 0 ↔ x = 0
+参数：v : Valuation R Γ₀；x : WithVal v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用引理 `WithVal.ofVal_injective`：ofVal_injective : Function.Injective (ofVal (v
 -/
 @[simp] lemma ofVal_eq_zero (x : WithVal v) : ofVal x = 0 ↔ x = 0 := (ofVal_injective v).eq_iff
 
 /-- The canonical ring equivalence between `WithVal v` and `R`. -/
 @[simps apply symm_apply]
-/--
-Definition of `equiv` / `equiv` 的定义
+/-
+**WithVal.equiv** 是 Mathlib 中的一个定义，位于命名空间 `WithVal`。
+形式化陈述：equiv : WithVal v ≃+* R where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `WithVal.ofVal_mul`：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrdere
+dCommGroupWithZero Γ₀] [inst_1 : Ring R] (v : Valuation R Γ₀)   (x y : WithVal v
+), (x *…
+· 使用定理 `WithVal.ofVal_add`：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrdere
+dCommGroupWithZero Γ₀] [inst_1 : Ring R] (v : Valuation R Γ₀)   (x y : WithVal v
+), (x +…
 
-English:
-definition equiv
-  signature: : WithVal v ≃+* R where
-  body: ofVal
-  invFun := toVal v
-  map_add' := ofVal_add v
-  map_mul' := ofVal_mul v
-
-中文:
-定义 equiv
-  签名: : WithVal v ≃+* R where
-  定义体: ofVal
-  invFun := toVal v
-  map_add' := ofVal_add v
-  map_mul' := ofVal_mul v
+--- 原说明 ---
+The canonical ring equivalence between `WithVal v` and `R`.
 -/
 def equiv : WithVal v ≃+* R where
   toFun := ofVal
@@ -823,390 +465,210 @@ def equiv : WithVal v ≃+* R where
 
 variable {S : Type*} [Ring S] {Λ₀ : Type*} [LinearOrderedCommGroupWithZero Λ₀] (w : Valuation S Λ₀)
 
-/--
-Definition of `map` / `map` 的定义
+/-- Lift a ring hom to `WithVal`. -/
+/-
+**WithVal.map** 是 Mathlib 中的一个定义，位于命名空间 `WithVal`。
+形式化陈述：map (f : R ->+* S) : WithVal v ->+* WithVal w
+参数：f : R ->+* S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (f : R ->+* S)
-  body: (equiv w).symm.toRingHom.comp (f.comp (equiv v))
-
-中文:
-定义 map
-  签名: (f : R ->+* S)
-  定义体: (equiv w).symm.toRingHom.comp (f.comp (equiv v))
-
-Depends on / 依赖: f.comp, symm.toRingHom.comp, toRingHom
+--- 原说明 ---
+Lift a ring hom to `WithVal`.
 -/
-def map (f : R ->+* S) : WithVal v ->+* WithVal w := (equiv w).symm.toRingHom.comp (f.comp (equiv v))
-
-/--
-theorem `map_id` / 定理 `map_id`
-
-English:
-theorem map_id
-  statement: map v v (.id R) = .id (WithVal v)
-  proof: rfl
-
-中文:
-定理 map_id
-  结论: map v v (.id R) = .id (WithVal v)
-  证明: rfl
+def map (f : R →+* S) : WithVal v →+* WithVal w := (equiv w).symm.toRingHom.comp (f.comp (equiv v))
+/-
+**WithVal.map_id** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀),   WithVal.map v v (RingHom.id R) = Rin
+gHom.id (WithVal v)
+参数：v : Valuation R Γ₀；RingHom.id R；WithVal v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem map_id : map v v (.id R) = .id (WithVal v) := rfl
-
-/--
-theorem `map_comp` / 定理 `map_comp`
-
-English:
-theorem map_comp
-  given: {T : Type*} [Ring T] (u : Valuation T Γ₀) (f : S ->+* T) (g : R ->+* S)
-  proof: rfl
-
-中文:
-定理 map_comp
-  条件: {T : 类型} [环 T] (u : 赋值 T Γ₀) (f : S ->+* T) (g : R ->+* S)
-  证明: rfl
+/-
+**WithVal.map_comp** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀)   {S : Type u_3} [inst_2 : Ring S] {Λ₀ 
+: Type u_4} [inst_3 : LinearOrderedCommGroupWithZero Λ₀] (w : Valuation S Λ₀)   
+{T : Type u_5} [inst_4 : Ring T] (u : Valuation T Γ₀) (f : S →+* T) (g : R →+* S
+),   WithVal.map v u (f.comp g) = (WithVal.map w u f).comp (WithVal.map v w g)
+参数：v : Valuation R Γ₀；w : Valuation S Λ₀；u : Valuation T Γ₀；f : S →+* T；g : R →+
+* S；f.comp g；WithVal.map w u f；WithVal.map v w g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] theorem map_comp {T : Type*} [Ring T] (u : Valuation T Γ₀) (f : S ->+* T) (g : R ->+* S) :
+@[simp] theorem map_comp {T : Type*} [Ring T] (u : Valuation T Γ₀) (f : S →+* T) (g : R →+* S) :
     map v u (f.comp g) = (map w u f).comp (map v w g) := rfl
-
-/--
-theorem `map_apply` / 定理 `map_apply`
-
-English:
-theorem map_apply
-  given: (f : R ->+* S) (x : WithVal v)
-  statement: map v w f x = toVal w (f x.ofVal)
-  proof: rfl
-
-中文:
-定理 map_apply
-  条件: (f : R ->+* S) (x : WithVal v)
-  结论: map v w f x = toVal w (f x.ofVal)
-  证明: rfl
+/-
+**WithVal.map_apply** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀)   {S : Type u_3} [inst_2 : Ring S] {Λ₀ 
+: Type u_4} [inst_3 : LinearOrderedCommGroupWithZero Λ₀] (w : Valuation S Λ₀)   
+(f : R →+* S) (x : WithVal v), (WithVal.map v w f) x = WithVal.toVal w (f x.ofVa
+l)
+参数：v : Valuation R Γ₀；w : Valuation S Λ₀；f : R →+* S；x : WithVal v；WithVal.map v
+ w f；f x.ofVal。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] theorem map_apply (f : R ->+* S) (x : WithVal v) : map v w f x = toVal w (f x.ofVal) := rfl
+@[simp] theorem map_apply (f : R →+* S) (x : WithVal v) : map v w f x = toVal w (f x.ofVal) := rfl
 
-/--
-Definition of `congr` / `congr` 的定义
+/-- Lift a `RingEquiv` to `WithVal`. -/
+/-
+**WithVal.congr** 是 Mathlib 中的一个定义，位于命名空间 `WithVal`。
+形式化陈述：congr (f : R ≃+* S) : WithVal v ≃+* WithVal w where __
+参数：f : R ≃+* S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition congr
-  signature: (f : R ≃+* S)
-  body: map v w f.toRingHom
-  invFun := map w v f.symm.toRingHom
-  left_inv _ := by simp
-  right_inv _ := by simp
-
-中文:
-定义 congr
-  签名: (f : R ≃+* S)
-  定义体: map v w f.toRingHom
-  invFun := map w v f.symm.toRingHom
-  left_inv _ := by simp
-  right_inv _ := by simp
-
-Depends on / 依赖: f.toRingHom, toRingHom
+--- 原说明 ---
+Lift a `RingEquiv` to `WithVal`.
 -/
 def congr (f : R ≃+* S) : WithVal v ≃+* WithVal w where
   __ := map v w f.toRingHom
   invFun := map w v f.symm.toRingHom
   left_inv _ := by simp
   right_inv _ := by simp
-
-/--
-theorem `congr_refl` / 定理 `congr_refl`
-
-English:
-theorem congr_refl
-  statement: congr v v (.refl R) = .refl (WithVal v)
-  proof: rfl
-
-中文:
-定理 congr_refl
-  结论: congr v v (.refl R) = .refl (WithVal v)
-  证明: rfl
+/-
+**WithVal.congr_refl** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀),   WithVal.congr v v (RingEquiv.refl R)
+ = RingEquiv.refl (WithVal v)
+参数：v : Valuation R Γ₀；RingEquiv.refl R；WithVal v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem congr_refl : congr v v (.refl R) = .refl (WithVal v) := rfl
-
-/--
-theorem `congr_symm` / 定理 `congr_symm`
-
-English:
-theorem congr_symm
-  given: (f : R ≃+* S)
-  statement: (congr v w f).symm = congr w v f.symm
-  proof: rfl
-
-中文:
-定理 congr_symm
-  条件: (f : R ≃+* S)
-  结论: (congr v w f).symm = congr w v f.symm
-  证明: rfl
+/-
+**WithVal.congr_symm** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：congr_symm (f : R ≃+* S) : (congr v w f).symm = congr w v f.symm
+参数：f : R ≃+* S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem congr_symm (f : R ≃+* S) : (congr v w f).symm = congr w v f.symm := rfl
-
-/--
-theorem `congr_trans` / 定理 `congr_trans`
-
-English:
-theorem congr_trans
-  given: {T : Type*} [Ring T] (u : Valuation T Γ₀) (f : R ≃+* S) (g : S ≃+* T)
-  proof: rfl
-
-中文:
-定理 congr_trans
-  条件: {T : 类型} [环 T] (u : 赋值 T Γ₀) (f : R ≃+* S) (g : S ≃+* T)
-  证明: rfl
+/-
+**WithVal.congr_trans** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：congr_trans {T : Type*} [Ring T] (u : Valuation T Γ₀) (f : R ≃+* S) (g : S
+ ≃+* T) : congr v u (f.trans g) = (congr v w f).trans (congr w u g)
+参数：u : Valuation T Γ₀；f : R ≃+* S；g : S ≃+* T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem congr_trans {T : Type*} [Ring T] (u : Valuation T Γ₀) (f : R ≃+* S) (g : S ≃+* T) :
     congr v u (f.trans g) = (congr v w f).trans (congr w u g) := rfl
-
-/--
-theorem `congr_apply` / 定理 `congr_apply`
-
-English:
-theorem congr_apply
-  given: (f : R ≃+* S) (x : WithVal v)
-  proof: rfl
-
-中文:
-定理 congr_apply
-  条件: (f : R ≃+* S) (x : WithVal v)
-  证明: rfl
+/-
+**WithVal.congr_apply** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀)   {S : Type u_3} [inst_2 : Ring S] {Λ₀ 
+: Type u_4} [inst_3 : LinearOrderedCommGroupWithZero Λ₀] (w : Valuation S Λ₀)   
+(f : R ≃+* S) (x : WithVal v), (WithVal.congr v w f) x = WithVal.toVal w (f x.of
+Val)
+参数：v : Valuation R Γ₀；w : Valuation S Λ₀；f : R ≃+* S；x : WithVal v；WithVal.congr
+ v w f；f x.ofVal。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem congr_apply (f : R ≃+* S) (x : WithVal v) :
     congr v w f x = toVal w (f x.ofVal) := rfl
-
-/--
-theorem `congr_symm_apply` / 定理 `congr_symm_apply`
-
-English:
-theorem congr_symm_apply
-  given: (f : R ≃+* S) (x : WithVal w)
-  proof: rfl
-
-中文:
-定理 congr_symm_apply
-  条件: (f : R ≃+* S) (x : WithVal w)
-  证明: rfl
+/-
+**WithVal.congr_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀)   {S : Type u_3} [inst_2 : Ring S] {Λ₀ 
+: Type u_4} [inst_3 : LinearOrderedCommGroupWithZero Λ₀] (w : Valuation S Λ₀)   
+(f : R ≃+* S) (x : WithVal w), (WithVal.congr v w f).symm x = WithVal.toVal v (f
+.symm x.ofVal)
+参数：v : Valuation R Γ₀；w : Valuation S Λ₀；f : R ≃+* S；x : WithVal w；WithVal.congr
+ v w f；f.symm x.ofVal。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem congr_symm_apply (f : R ≃+* S) (x : WithVal w) :
     (congr v w f).symm x = toVal v (f.symm x.ofVal) := rfl
 
-/--
-Definition of `valuation` / `valuation` 的定义
+/-- Canonical valuation on the `WithVal v` type synonym. -/
+/-
+**WithVal.valuation** 是 Mathlib 中的一个定义，位于命名空间 `WithVal`。
+形式化陈述：valuation : Valuation (WithVal v) Γ₀
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition valuation
-  signature: : Valuation (WithVal v) Γ₀
-  body: v.comap (equiv v)
-
-中文:
-定义 valuation
-  签名: : 赋值 (WithVal v) Γ₀
-  定义体: v.comap (equiv v)
-
-Depends on / 依赖: v.comap
+--- 原说明 ---
+Canonical valuation on the `WithVal v` type synonym.
 -/
 def valuation : Valuation (WithVal v) Γ₀ := v.comap (equiv v)
-
-/--
-lemma `valuation_toVal` / 引理 `valuation_toVal`
-
-English:
-lemma valuation_toVal
-  given: (x : R)
-  statement: valuation v (toVal v x) = v x
-  proof: rfl
-
-中文:
-引理 valuation_toVal
-  条件: (x : R)
-  结论: valuation v (toVal v x) = v x
-  证明: rfl
+/-
+**WithVal.valuation_toVal** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀)   (x : R), (WithVal.valuation v) (WithV
+al.toVal v x) = v x
+参数：v : Valuation R Γ₀；x : R；WithVal.valuation v；WithVal.toVal v x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma valuation_toVal (x : R) : valuation v (toVal v x) = v x := rfl
-
-/--
-lemma `valuation_apply_eq_ofVal` / 引理 `valuation_apply_eq_ofVal`
-
-English:
-lemma valuation_apply_eq_ofVal
-  given: (x : WithVal v)
-  statement: valuation v x = v x.ofVal
-  proof: rfl
-
-中文:
-引理 valuation_apply_eq_ofVal
-  条件: (x : WithVal v)
-  结论: valuation v x = v x.ofVal
-  证明: rfl
+/-
+**WithVal.valuation_apply_eq_ofVal** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀)   (x : WithVal v), (WithVal.valuation v
+) x = v x.ofVal
+参数：v : Valuation R Γ₀；x : WithVal v；WithVal.valuation v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma valuation_apply_eq_ofVal (x : WithVal v) : valuation v x = v x.ofVal := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Valued (WithVal v) Γ₀
-  body: Valued.mk' (valuation v)
-
-中文:
-实例 :
-  签名: 赋值 (WithVal v) Γ₀
-  定义体: Valued.mk' (valuation v)
-
-Depends on / 依赖: Valued, Valued.mk, valuation
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Valued (WithVal v) Γ₀ := Valued.mk' (valuation v)
-
-/--
-theorem `apply_ofVal` / 定理 `apply_ofVal`
-
-English:
-theorem apply_ofVal
-  given: (r : WithVal v)
-  statement: v r.ofVal = Valued.v r
-  proof: rfl
-
-中文:
-定理 apply_ofVal
-  条件: (r : WithVal v)
-  结论: v r.ofVal = 赋值.v r
-  证明: rfl
+/-
+**WithVal.apply_ofVal** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：apply_ofVal (r : WithVal v) : v r.ofVal = Valued.v r
+参数：r : WithVal v。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem apply_ofVal (r : WithVal v) : v r.ofVal = Valued.v r := rfl
-
-/--
-theorem `val_apply_equiv` / 定理 `val_apply_equiv`
-
-English:
-theorem val_apply_equiv
-  given: (r : WithVal v)
-  statement: v (equiv v r) = Valued.v r
-  proof: rfl
-
-中文:
-定理 val_apply_equiv
-  条件: (r : WithVal v)
-  结论: v (equiv v r) = 赋值.v r
-  证明: rfl
+/-
+**WithVal.val_apply_equiv** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：val_apply_equiv (r : WithVal v) : v (equiv v r) = Valued.v r
+参数：r : WithVal v。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem val_apply_equiv (r : WithVal v) : v (equiv v r) = Valued.v r := rfl
-
-/--
-theorem `valued_toVal` / 定理 `valued_toVal`
-
-English:
-theorem valued_toVal
-  given: (r : R)
-  statement: Valued.v (toVal v r) = v r
-  proof: rfl
-
-@[deprecated (since := "2026-03-02")] alias apply_equiv := apply_ofVal
-@[deprecated (since := "2026-03-02")] alias apply_symm_equiv := valued_toVal
-
-中文:
-定理 valued_toVal
-  条件: (r : R)
-  结论: 赋值.v (toVal v r) = v r
-  证明: rfl
-
-@[deprecated (since := "2026-03-02")] alias apply_equiv := apply_ofVal
-@[deprecated (since := "2026-03-02")] alias apply_symm_equiv := valued_toVal
+/-
+**WithVal.valued_toVal** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] (v : Valuation R Γ₀)   (r : R), Valued.v (WithVal.toVal v r)
+ = v r
+参数：v : Valuation R Γ₀；r : R；WithVal.toVal v r。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem valued_toVal (r : R) : Valued.v (toVal v r) = v r := rfl
 
 @[deprecated (since := "2026-03-02")] alias apply_equiv := apply_ofVal
 @[deprecated (since := "2026-03-02")] alias apply_symm_equiv := valued_toVal
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CharZero
-  signature: R] : CharZero (WithVal v)
-  body: .of_addMonoidHom (equiv v).symm.toAddMonoidHom (by simp) (equiv v).symm.injective
-
-中文:
-实例 [特征零
-  签名: R] : 特征零 (WithVal v)
-  定义体: .of_addMonoidHom (equiv v).symm.toAddMonoidHom (by simp) (equiv v).symm.injective
-
-Depends on / 依赖: injective, of_addMonoidHom, symm.injective, symm.toAddMonoidHom, toAddMonoidHom
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CharZero R] : CharZero (WithVal v) :=
   .of_addMonoidHom (equiv v).symm.toAddMonoidHom (by simp) (equiv v).symm.injective
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ValuativeRel (WithVal v)
-  body: fast_instance% .ofValuation (valuation v)
-
-中文:
-实例 :
-  签名: ValuativeRel (WithVal v)
-  定义体: fast_instance% .ofValuation (valuation v)
-
-Depends on / 依赖: fast_instance, ofValuation, valuation
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ValuativeRel (WithVal v) := fast_instance% .ofValuation (valuation v)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (valuation v).Compatible
-  body: .ofValuation (valuation v)
-
-中文:
-实例 :
-  签名: (valuation v).余mpatible
-  定义体: .ofValuation (valuation v)
-
-Depends on / 依赖: ofValuation, valuation
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (valuation v).Compatible := .ofValuation (valuation v)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsValuativeTopology (WithVal v)
-  body: by
-    simp only [Set.image_add_left, Set.preimage_ofPred_eq, Valued.mem_nhds]
-    let e := ValuativeRel.ValueGroupWithZero.orderMonoidIso (valuation v)
-    apply e.unitsCongr.symm.exists_congr fun a => ?_
-    simp [-OrderMonoidIso.val_unitsCongr_symm_apply, OrderMonoidIso.unitsCongr_symm_apply,
-      e.lt_symm_apply, e, ← Valuation.restrict_def, sub_eq_neg_add]
-    rfl
-
-中文:
-实例 :
-  签名: 是赋值拓扑 (WithVal v)
-  定义体: by
-    simp only [Set.image_add_left, Set.preimage_ofPred_eq, Valued.mem_nhds]
-    let e := ValuativeRel.ValueGroupWithZero.orderMonoidIso (valuation v)
-    apply e.unitsCongr.symm.exists_congr fun a => ?_
-    simp [-OrderMonoidIso.val_unitsCongr_symm_apply, OrderMonoidIso.unitsCongr_symm_apply,
-      e.lt_symm_apply, e, ← Valuation.restrict_def, sub_eq_neg_add]
-    rfl
-
-Depends on / 依赖: OrderMonoidIso, OrderMonoidIso.unitsCongr_symm_apply, OrderMonoidIso.val_unitsCongr_symm_apply, Set.image_add_left, Set.preimage_ofPred_eq, Valuation, Valuation.restrict_def, ValuativeRel, ValuativeRel.ValueGroupWithZero.orderMonoidIso, ValueGroupWithZero, Valued, Valued.mem_nhds, e.lt_symm_apply, e.unitsCongr.symm.exists_congr, exists_congr, image_add_left, lt_symm_apply, mem_nhds, orderMonoidIso, preimage_ofPred_eq
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsValuativeTopology (WithVal v) where
   mem_nhds_iff {s x} := by
     simp only [Set.image_add_left, Set.preimage_ofPred_eq, Valued.mem_nhds]
     let e := ValuativeRel.ValueGroupWithZero.orderMonoidIso (valuation v)
-    apply e.unitsCongr.symm.exists_congr fun a => ?_
+    apply e.unitsCongr.symm.exists_congr fun a ↦ ?_
     simp [-OrderMonoidIso.val_unitsCongr_symm_apply, OrderMonoidIso.unitsCongr_symm_apply,
       e.lt_symm_apply, e, ← Valuation.restrict_def, sub_eq_neg_add]
     rfl
@@ -1217,20 +679,9 @@ section CommRing
 
 variable [CommRing R] (v : Valuation R Γ₀)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CommRing (WithVal v)
-  body: fast_instance% (equiv v).commRing
-
-中文:
-实例 :
-  签名: 交换环 (WithVal v)
-  定义体: fast_instance% (equiv v).commRing
-
-Depends on / 依赖: commRing, fast_instance
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CommRing (WithVal v) := fast_instance% (equiv v).commRing
 
@@ -1240,160 +691,79 @@ section Module
 
 variable [Ring R] (v : Valuation R Γ₀) {S : Type*}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: R S] : SMul (WithVal v) S where
-  body: ofVal x • s
-
-中文:
-实例 [标量乘法
-  签名: R S] : 标量乘法 (WithVal v) S where
-  定义体: ofVal x • s
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul R S] : SMul (WithVal v) S where
   smul x s := ofVal x • s
-
-/--
-theorem `smul_left_def` / 定理 `smul_left_def`
-
-English:
-theorem smul_left_def
-  given: [SMul R S] (x : WithVal v) (s : S)
-  statement: x • s = ofVal x • s
-  proof: rfl
-
-中文:
-定理 smul_left_def
-  条件: [标量乘法 R S] (x : WithVal v) (s : S)
-  结论: x • s = ofVal x • s
-  证明: rfl
+/-
+**WithVal.smul_left_def** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：smul_left_def [SMul R S] (x : WithVal v) (s : S) : x • s = ofVal x • s
+参数：x : WithVal v；s : S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_left_def [SMul R S] (x : WithVal v) (s : S) : x • s = ofVal x • s := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: R S] [FaithfulSMul R S] : FaithfulSMul (WithVal v) S where
-  body: ofVal_injective v FaithfulSMul.eq_of_smul_eq_smul h
-
-中文:
-实例 [标量乘法
-  签名: R S] [忠实标量乘法 R S] : 忠实标量乘法 (WithVal v) S where
-  定义体: ofVal_injective v FaithfulSMul.eq_of_smul_eq_smul h
-
-Depends on / 依赖: FaithfulSMul, FaithfulSMul.eq_of_smul_eq_smul, eq_of_smul_eq_smul, ofVal_injective
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul R S] [FaithfulSMul R S] : FaithfulSMul (WithVal v) S where
-eq_of_smul_eq_smul h := ofVal_injective v FaithfulSMul.eq_of_smul_eq_smul h
-
-/--
-theorem `smul_right_def` / 定理 `smul_right_def`
-
-English:
-theorem smul_right_def
-  given: [SMul S R] (s : S) (x : WithVal v)
-  statement: s • x = toVal v (s • ofVal x)
-  proof: rfl
-
-中文:
-定理 smul_right_def
-  条件: [标量乘法 S R] (s : S) (x : WithVal v)
-  结论: s • x = toVal v (s • ofVal x)
-  证明: rfl
+  eq_of_smul_eq_smul h := ofVal_injective v <| FaithfulSMul.eq_of_smul_eq_smul h
+/-
+**WithVal.smul_right_def** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：smul_right_def [SMul S R] (s : S) (x : WithVal v) : s • x = toVal v (s • o
+fVal x)
+参数：s : S；x : WithVal v。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_right_def [SMul S R] (s : S) (x : WithVal v) : s • x = toVal v (s • ofVal x) := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: S R] [FaithfulSMul S R] : FaithfulSMul S (WithVal v) where
-  body: by
-    simp only [smul_right_def, toVal.injEq] at h
-    exact FaithfulSMul.eq_of_smul_eq_smul fun r => h (toVal v r)
-
-中文:
-实例 [标量乘法
-  签名: S R] [忠实标量乘法 S R] : 忠实标量乘法 S (WithVal v) where
-  定义体: by
-    simp only [smul_right_def, toVal.injEq] at h
-    exact FaithfulSMul.eq_of_smul_eq_smul fun r => h (toVal v r)
-
-Depends on / 依赖: FaithfulSMul, FaithfulSMul.eq_of_smul_eq_smul, eq_of_smul_eq_smul, smul_right_def, toVal.injEq
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul S R] [FaithfulSMul S R] : FaithfulSMul S (WithVal v) where
   eq_of_smul_eq_smul h := by
     simp only [smul_right_def, toVal.injEq] at h
-    exact FaithfulSMul.eq_of_smul_eq_smul fun r => h (toVal v r)
-
+    exact FaithfulSMul.eq_of_smul_eq_smul fun r ↦ h (toVal v r)
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {P : Type*} [SMul S P] [SMul R S] [SMul R P]
     [IsScalarTower R S P] (v : Valuation R Γ₀) : IsScalarTower (WithVal v) S P where
   smul_assoc := by simp [smul_left_def]
-
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {P : Type*} [Ring S] [SMul P S] [SMul R S] [SMul P R]
     [IsScalarTower P R S] (v : Valuation S Γ₀) : IsScalarTower P R (WithVal v) :=
   (equiv v).isScalarTower P R
-
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {P : Type*} [Ring S] [SMul P R] [SMul S R] [SMul P S]
     [IsScalarTower P S R] (v : Valuation S Γ₀) : IsScalarTower P (WithVal v) R where
   smul_assoc := by simp [smul_right_def, smul_left_def, -toVal_smul]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCommMonoid
-  signature: S] [Module R S] : Module (WithVal v) S
-  body: fast_instance% .compHom S (equiv v).toRingHom
-
-中文:
-实例 [加法交换幺半群
-  签名: S] [模 R S] : 模 (WithVal v) S
-  定义体: fast_instance% .compHom S (equiv v).toRingHom
-
-Depends on / 依赖: compHom, fast_instance, toRingHom
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddCommMonoid S] [Module R S] : Module (WithVal v) S :=
   fast_instance% .compHom S (equiv v).toRingHom
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCommMonoid
-  signature: S] [Module R S] [Module.Finite R S] :
-  body: .of_restrictScalars_finite R (WithVal v) S
-
-中文:
-实例 [加法交换幺半群
-  签名: S] [模 R S] [模.有限 R S] :
-  定义体: .of_restrictScalars_finite R (WithVal v) S
-
-Depends on / 依赖: WithVal, of_restrictScalars_finite
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddCommMonoid S] [Module R S] [Module.Finite R S] :
     Module.Finite (WithVal v) S := .of_restrictScalars_finite R (WithVal v) S
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Semiring
-  signature: S] [Module S R] : Module S (WithVal v)
-  body: fast_instance% (equiv v).module S
-
-中文:
-实例 [半环
-  签名: S] [模 S R] : 模 S (WithVal v)
-  定义体: fast_instance% (equiv v).module S
-
-Depends on / 依赖: fast_instance, module
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Semiring S] [Module S R] : Module S (WithVal v) :=
   fast_instance% (equiv v).module S
@@ -1401,71 +771,41 @@ instance [Semiring S] [Module S R] : Module S (WithVal v) :=
 variable [Ring S] [Module R S] (v : Valuation S Γ₀)
 
 variable (R) in
-/--
-Definition of `linearEquiv` / `linearEquiv` 的定义
+/-- The canonical `R`-linear isomorphism between `WithVal v` and `S`, when `v : Valuation S Γ₀`. -/
+/-
+**WithVal.linearEquiv** 是 Mathlib 中的一个定义，位于命名空间 `WithVal`。
+形式化陈述：linearEquiv : WithVal v ≃ₗ[R] S
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition linearEquiv
-  signature: : WithVal v ≃ₗ[R] S
-  body: (equiv v).linearEquiv R
-
-中文:
-定义 linearEquiv
-  签名: : WithVal v ≃ₗ[R] S
-  定义体: (equiv v).linearEquiv R
-
-Depends on / 依赖: linearEquiv
+--- 原说明 ---
+The canonical `R`-linear isomorphism between `WithVal v` and `S`, when `v : Valu
+ation S Γ₀`.
 -/
 def linearEquiv : WithVal v ≃ₗ[R] S := (equiv v).linearEquiv R
-
-/--
-theorem `linearEquiv_apply` / 定理 `linearEquiv_apply`
-
-English:
-theorem linearEquiv_apply
-  given: (x : WithVal v)
-  statement: linearEquiv R v x = x.ofVal
-  proof: rfl
-
-中文:
-定理 linearEquiv_apply
-  条件: (x : WithVal v)
-  结论: linearEquiv R v x = x.ofVal
-  证明: rfl
+/-
+**WithVal.linearEquiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] {S : Type u_3}   [inst_2 : Ring S] [inst_3 : _root_.Module R
+ S] (v : Valuation S Γ₀) (x : WithVal v),   (WithVal.linearEquiv R v) x = x.ofVa
+l
+参数：v : Valuation S Γ₀；x : WithVal v；WithVal.linearEquiv R v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem linearEquiv_apply (x : WithVal v) : linearEquiv R v x = x.ofVal := rfl
-
-/--
-theorem `linearEquiv_symm_apply` / 定理 `linearEquiv_symm_apply`
-
-English:
-theorem linearEquiv_symm_apply
-  given: (x : S)
-  statement: (linearEquiv R v).symm x = toVal v x
-  proof: rfl
-
-中文:
-定理 linearEquiv_symm_apply
-  条件: (x : S)
-  结论: (linearEquiv R v).symm x = toVal v x
-  证明: rfl
+/-
+**WithVal.linearEquiv_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : Ring R] {S : Type u_3}   [inst_2 : Ring S] [inst_3 : _root_.Module R
+ S] (v : Valuation S Γ₀) (x : S),   (WithVal.linearEquiv R v).symm x = WithVal.t
+oVal v x
+参数：v : Valuation S Γ₀；x : S；WithVal.linearEquiv R v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem linearEquiv_symm_apply (x : S) : (linearEquiv R v).symm x = toVal v x := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Module.Finite
-  signature: R S] :
-  body: .equiv (linearEquiv R v).symm
-
-中文:
-实例 [模.有限
-  签名: R S] :
-  定义体: .equiv (linearEquiv R v).symm
-
-Depends on / 依赖: linearEquiv
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Module.Finite R S] :
     Module.Finite R (WithVal v) := .equiv (linearEquiv R v).symm
@@ -1480,62 +820,40 @@ section left
 
 variable [CommRing R] (v : Valuation R Γ₀) [Semiring S] [Algebra R S]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Algebra (WithVal v) S
-  body: fast_instance% {
-  algebraMap.toFun r := algebraMap R S (ofVal r)
-  __ := Algebra.compHom S (equiv v).toRingHom }
-
-中文:
-实例 :
-  签名: 代数 (WithVal v) S
-  定义体: fast_instance% {
-  algebraMap.toFun r := algebraMap R S (ofVal r)
-  __ := Algebra.compHom S (equiv v).toRingHom }
-
-Depends on / 依赖: fast_instance
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Algebra (WithVal v) S := fast_instance% {
   algebraMap.toFun r := algebraMap R S (ofVal r)
   __ := Algebra.compHom S (equiv v).toRingHom }
-
-/--
-theorem `algebraMap_left_apply` / 定理 `algebraMap_left_apply`
-
-English:
-theorem algebraMap_left_apply
-  given: (s : WithVal v)
-  proof: rfl
-
-中文:
-定理 algebraMap_left_apply
-  条件: (s : WithVal v)
-  证明: rfl
+/-
+**WithVal.algebraMap_left_apply** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：algebraMap_left_apply (s : WithVal v) : algebraMap (WithVal v) S s = algeb
+raMap R S s.ofVal
+参数：s : WithVal v。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algebraMap_left_apply (s : WithVal v) :
     algebraMap (WithVal v) S s = algebraMap R S s.ofVal := rfl
-
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {S : Type*} [CommSemiring S] [Algebra R S] [i : IsFractionRing R S] :
-    IsFractionRing (WithVal v) S := .of_ringEquiv_left (equiv v) (fun _ => rfl)
-
-/--
-theorem `algebraMap_left_injective` / 定理 `algebraMap_left_injective`
-
-English:
-theorem algebraMap_left_injective
-  given: (h : Function.Injective (algebraMap R S))
-  proof: h.comp (ofVal_injective v)
-
-中文:
-定理 algebraMap_left_injective
-  条件: (h : 函数.单射 (algebraMap R S))
-  证明: h.comp (ofVal_injective v)
-
-Depends on / 依赖: h.comp, ofVal_injective
+    IsFractionRing (WithVal v) S := .of_ringEquiv_left (equiv v) (fun _ ↦ rfl)
+/-
+**WithVal.algebraMap_left_injective** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：algebraMap_left_injective (h : Function.Injective (algebraMap R S)) : Func
+tion.Injective (algebraMap (WithVal v) S)
+参数：h : Function.Injective (algebraMap R S)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} 
+{g : β → γ} {f : α → β},   Function.Injective g → Function.Injective f → Functio
+n.Injective (…
+· 使用引理 `WithVal.ofVal_injective`：ofVal_injective : Function.Injective (ofVal (v
 -/
 theorem algebraMap_left_injective (h : Function.Injective (algebraMap R S)) :
     Function.Injective (algebraMap (WithVal v) S) := h.comp (ofVal_injective v)
@@ -1546,59 +864,34 @@ section right
 
 variable [CommSemiring R] [Ring S] [Algebra R S] (v : Valuation S Γ₀)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Algebra R (WithVal v)
-  body: fast_instance% {
-  (equiv v).algebra R with
-  algebraMap.toFun r := toVal v (algebraMap R S r) }
-
-中文:
-实例 :
-  签名: 代数 R (WithVal v)
-  定义体: fast_instance% {
-  (equiv v).algebra R with
-  algebraMap.toFun r := toVal v (algebraMap R S r) }
-
-Depends on / 依赖: fast_instance
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Algebra R (WithVal v) := fast_instance% {
   (equiv v).algebra R with
   algebraMap.toFun r := toVal v (algebraMap R S r) }
-
-/--
-theorem `algebraMap_right_apply` / 定理 `algebraMap_right_apply`
-
-English:
-theorem algebraMap_right_apply
-  given: (r : R)
-  proof: rfl
-
-中文:
-定理 algebraMap_right_apply
-  条件: (r : R)
-  证明: rfl
+/-
+**WithVal.algebraMap_right_apply** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：algebraMap_right_apply (r : R) : algebraMap R (WithVal v) r = toVal v (alg
+ebraMap R S r)
+参数：r : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algebraMap_right_apply (r : R) :
     algebraMap R (WithVal v) r = toVal v (algebraMap R S r) := rfl
-
-/--
-theorem `algebraMap_right_injective` / 定理 `algebraMap_right_injective`
-
-English:
-theorem algebraMap_right_injective
-  given: (h : Function.Injective (algebraMap R S))
-  proof: (toVal_injective v).comp h
-
-中文:
-定理 algebraMap_right_injective
-  条件: (h : 函数.单射 (algebraMap R S))
-  证明: (toVal_injective v).comp h
-
-Depends on / 依赖: toVal_injective
+/-
+**WithVal.algebraMap_right_injective** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：algebraMap_right_injective (h : Function.Injective (algebraMap R S)) : Fun
+ction.Injective (algebraMap R (WithVal v))
+参数：h : Function.Injective (algebraMap R S)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} 
+{g : β → γ} {f : α → β},   Function.Injective g → Function.Injective f → Functio
+n.Injective (…
+· 使用引理 `WithVal.toVal_injective`：toVal_injective : Function.Injective (toVal v)
 -/
 theorem algebraMap_right_injective (h : Function.Injective (algebraMap R S)) :
     Function.Injective (algebraMap R (WithVal v)) := (toVal_injective v).comp h
@@ -1608,57 +901,41 @@ end right
 variable [CommSemiring R] [Ring S] [Algebra R S] (v : Valuation S Γ₀)
 
 variable (R) in
-/--
-Definition of `algEquiv` / `algEquiv` 的定义
+/-- The canonical `R`-algebra isomorphism between `WithVal v` and `S`, when `v : Valuation S Γ₀`. -/
+/-
+**WithVal.algEquiv** 是 Mathlib 中的一个定义，位于命名空间 `WithVal`。
+形式化陈述：algEquiv : WithVal v ≃ₐ[R] S
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition algEquiv
-  signature: : WithVal v ≃ₐ[R] S
-  body: (equiv v).algEquiv R
-
-中文:
-定义 algEquiv
-  签名: : WithVal v ≃ₐ[R] S
-  定义体: (equiv v).algEquiv R
-
-Depends on / 依赖: algEquiv
+--- 原说明 ---
+The canonical `R`-algebra isomorphism between `WithVal v` and `S`, when `v : Val
+uation S Γ₀`.
 -/
 def algEquiv : WithVal v ≃ₐ[R] S := (equiv v).algEquiv R
-
-/--
-theorem `algEquiv_apply` / 定理 `algEquiv_apply`
-
-English:
-theorem algEquiv_apply
-  given: (x : WithVal v)
-  statement: algEquiv R v x = x.ofVal
-  proof: rfl
-
-中文:
-定理 algEquiv_apply
-  条件: (x : WithVal v)
-  结论: algEquiv R v x = x.ofVal
-  证明: rfl
+/-
+**WithVal.algEquiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] {S : Type u_3} [inst_1 : CommSemiring R]   [inst_2 : Ring S] [inst_3 : Algebra
+ R S] (v : Valuation S Γ₀) (x : WithVal v), (WithVal.algEquiv R v) x = x.ofVal
+参数：v : Valuation S Γ₀；x : WithVal v；WithVal.algEquiv R v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem algEquiv_apply (x : WithVal v) : algEquiv R v x = x.ofVal := rfl
-
-/--
-theorem `algEquiv_symm_apply` / 定理 `algEquiv_symm_apply`
-
-English:
-theorem algEquiv_symm_apply
-  given: (x : S)
-  statement: (algEquiv R v).symm x = toVal v x
-  proof: rfl
-
-中文:
-定理 algEquiv_symm_apply
-  条件: (x : S)
-  结论: (algEquiv R v).symm x = toVal v x
-  证明: rfl
+/-
+**WithVal.algEquiv_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] {S : Type u_3} [inst_1 : CommSemiring R]   [inst_2 : Ring S] [inst_3 : Algebra
+ R S] (v : Valuation S Γ₀) (x : S),   (WithVal.algEquiv R v).symm x = WithVal.to
+Val v x
+参数：v : Valuation S Γ₀；x : S；WithVal.algEquiv R v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem algEquiv_symm_apply (x : S) : (algEquiv R v).symm x = toVal v x := rfl
-
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {S : Type*} [CommRing S] [Algebra R S] (M : Submonoid R) [IsLocalization M S]
     (v : Valuation S Γ₀) : IsLocalization M (WithVal v) := by
   rwa [← IsLocalization.isLocalization_iff_of_algEquiv M (algEquiv R v).symm]
@@ -1669,267 +946,122 @@ section DivisionRing
 
 variable [DivisionRing R] (v : Valuation R Γ₀)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Div (WithVal v)
-  body: toVal _ (x.ofVal / y.ofVal)
-
-中文:
-实例 :
-  签名: 除法 (WithVal v)
-  定义体: toVal _ (x.ofVal / y.ofVal)
-
-Depends on / 依赖: x.ofVal, y.ofVal
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Div (WithVal v) where div x y := toVal _ (x.ofVal / y.ofVal)
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inv (WithVal v)
-  body: toVal _ x.ofVal⁻¹
-
-中文:
-实例 :
-  签名: 取逆 (WithVal v)
-  定义体: toVal _ x.ofVal⁻¹
-
-Depends on / 依赖: x.ofVal
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inv (WithVal v) where inv x := toVal _ x.ofVal⁻¹
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Pow (WithVal v) Int
-  body: toVal _ (x.ofVal ^ z)
-
-中文:
-实例 :
-  签名: 幂 (WithVal v) 整数
-  定义体: toVal _ (x.ofVal ^ z)
-
-Depends on / 依赖: x.ofVal
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Pow (WithVal v) Int where pow x z := toVal _ (x.ofVal ^ z)
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NNRatCast (WithVal v)
-  body: toVal _ q
-
-中文:
-实例 :
-  签名: 非负有理数嵌入 (WithVal v)
-  定义体: toVal _ q
+instance : Pow (WithVal v) ℤ where pow x z := toVal _ (x.ofVal ^ z)
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : NNRatCast (WithVal v) where nnratCast q := toVal _ q
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: RatCast (WithVal v)
-  body: toVal _ q
-
-中文:
-实例 :
-  签名: 有理数嵌入 (WithVal v)
-  定义体: toVal _ q
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : RatCast (WithVal v) where ratCast q := toVal _ q
-
-/--
-lemma `toVal_div` / 引理 `toVal_div`
-
-English:
-lemma toVal_div
-  given: (x y : R)
-  statement: toVal v (x / y) = toVal v x / toVal v y
-  proof: rfl
-
-中文:
-引理 toVal_div
-  条件: (x y : R)
-  结论: toVal v (x / y) = toVal v x / toVal v y
-  证明: rfl
+/-
+**WithVal.toVal_div** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : DivisionRing R]   (v : Valuation R Γ₀) (x y : R), WithVal.toVal v (x
+ / y) = WithVal.toVal v x / WithVal.toVal v y
+参数：v : Valuation R Γ₀；x y : R；x / y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toVal_div (x y : R) : toVal v (x / y) = toVal v x / toVal v y := rfl
-
-/--
-lemma `ofVal_div` / 引理 `ofVal_div`
-
-English:
-lemma ofVal_div
-  given: (x y : WithVal v)
-  statement: ofVal (x / y) = ofVal x / ofVal y
-  proof: rfl
-
-中文:
-引理 ofVal_div
-  条件: (x y : WithVal v)
-  结论: ofVal (x / y) = ofVal x / ofVal y
-  证明: rfl
+/-
+**WithVal.ofVal_div** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : DivisionRing R]   (v : Valuation R Γ₀) (x y : WithVal v), (x / y).of
+Val = x.ofVal / y.ofVal
+参数：v : Valuation R Γ₀；x y : WithVal v；x / y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma ofVal_div (x y : WithVal v) : ofVal (x / y) = ofVal x / ofVal y := rfl
-
-/--
-lemma `toVal_inv` / 引理 `toVal_inv`
-
-English:
-lemma toVal_inv
-  given: (x : R)
-  statement: toVal v x⁻¹ = (toVal v x)⁻¹
-  proof: rfl
-
-中文:
-引理 toVal_inv
-  条件: (x : R)
-  结论: toVal v x⁻¹ = (toVal v x)⁻¹
-  证明: rfl
+/-
+**WithVal.toVal_inv** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : DivisionRing R]   (v : Valuation R Γ₀) (x : R), WithVal.toVal v x⁻¹ 
+= (WithVal.toVal v x)⁻¹
+参数：v : Valuation R Γ₀；x : R；WithVal.toVal v x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toVal_inv (x : R) : toVal v x⁻¹ = (toVal v x)⁻¹ := rfl
-
-/--
-lemma `ofVal_inv` / 引理 `ofVal_inv`
-
-English:
-lemma ofVal_inv
-  given: (x : WithVal v)
-  statement: ofVal (x⁻¹) = (ofVal x)⁻¹
-  proof: rfl
-
-中文:
-引理 ofVal_inv
-  条件: (x : WithVal v)
-  结论: ofVal (x⁻¹) = (ofVal x)⁻¹
-  证明: rfl
+/-
+**WithVal.ofVal_inv** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : DivisionRing R]   (v : Valuation R Γ₀) (x : WithVal v), x⁻¹.ofVal = 
+x.ofVal⁻¹
+参数：v : Valuation R Γ₀；x : WithVal v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma ofVal_inv (x : WithVal v) : ofVal (x⁻¹) = (ofVal x)⁻¹ := rfl
-
-/--
-lemma `toVal_zpow` / 引理 `toVal_zpow`
-
-English:
-lemma toVal_zpow
-  given: (x : R) (z : Int)
-  statement: toVal v (x ^ z) = (toVal v x) ^ z
-  proof: rfl
-
-中文:
-引理 toVal_zpow
-  条件: (x : R) (z : 整数)
-  结论: toVal v (x ^ z) = (toVal v x) ^ z
-  证明: rfl
+/-
+**WithVal.toVal_zpow** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : DivisionRing R]   (v : Valuation R Γ₀) (x : R) (z : ℤ), WithVal.toVa
+l v (x ^ z) = WithVal.toVal v x ^ z
+参数：v : Valuation R Γ₀；x : R；z : ℤ；x ^ z。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma toVal_zpow (x : R) (z : Int) : toVal v (x ^ z) = (toVal v x) ^ z := rfl
-
-/--
-lemma `ofVal_zpow` / 引理 `ofVal_zpow`
-
-English:
-lemma ofVal_zpow
-  given: (x : WithVal v) (z : Int)
-  statement: ofVal (x ^ z) = (ofVal x) ^ z
-  proof: rfl
-
-中文:
-引理 ofVal_zpow
-  条件: (x : WithVal v) (z : 整数)
-  结论: ofVal (x ^ z) = (ofVal x) ^ z
-  证明: rfl
+@[simp] lemma toVal_zpow (x : R) (z : ℤ) : toVal v (x ^ z) = (toVal v x) ^ z := rfl
+/-
+**WithVal.ofVal_zpow** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : DivisionRing R]   (v : Valuation R Γ₀) (x : WithVal v) (z : ℤ), (x ^
+ z).ofVal = x.ofVal ^ z
+参数：v : Valuation R Γ₀；x : WithVal v；z : ℤ；x ^ z。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma ofVal_zpow (x : WithVal v) (z : Int) : ofVal (x ^ z) = (ofVal x) ^ z := rfl
-
-/--
-lemma `toVal_nnratCast` / 引理 `toVal_nnratCast`
-
-English:
-lemma toVal_nnratCast
-  given: (q : Rat>=0)
-  statement: toVal v q = q
-  proof: rfl
-
-中文:
-引理 toVal_nnratCast
-  条件: (q : 有理数>=0)
-  结论: toVal v q = q
-  证明: rfl
+@[simp] lemma ofVal_zpow (x : WithVal v) (z : ℤ) : ofVal (x ^ z) = (ofVal x) ^ z := rfl
+/-
+**WithVal.toVal_nnratCast** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : DivisionRing R]   (v : Valuation R Γ₀) (q : ℚ≥0), WithVal.toVal v ↑q
+ = ↑q
+参数：v : Valuation R Γ₀；q : ℚ≥0。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma toVal_nnratCast (q : Rat>=0) : toVal v q = q := rfl
-
-/--
-lemma `ofVal_nnratCast` / 引理 `ofVal_nnratCast`
-
-English:
-lemma ofVal_nnratCast
-  given: (q : Rat>=0)
-  statement: ofVal (q : WithVal v) = q
-  proof: rfl
-
-中文:
-引理 ofVal_nnratCast
-  条件: (q : 有理数>=0)
-  结论: ofVal (q : WithVal v) = q
-  证明: rfl
+@[simp] lemma toVal_nnratCast (q : ℚ≥0) : toVal v q = q := rfl
+/-
+**WithVal.ofVal_nnratCast** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : DivisionRing R]   (v : Valuation R Γ₀) (q : ℚ≥0), (↑q).ofVal = ↑q
+参数：v : Valuation R Γ₀；q : ℚ≥0；↑q。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma ofVal_nnratCast (q : Rat>=0) : ofVal (q : WithVal v) = q := rfl
-
-/--
-lemma `toVal_ratCast` / 引理 `toVal_ratCast`
-
-English:
-lemma toVal_ratCast
-  given: (q : Rat)
-  statement: toVal v q = q
-  proof: rfl
-
-中文:
-引理 toVal_ratCast
-  条件: (q : 有理数)
-  结论: toVal v q = q
-  证明: rfl
+@[simp] lemma ofVal_nnratCast (q : ℚ≥0) : ofVal (q : WithVal v) = q := rfl
+/-
+**WithVal.toVal_ratCast** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : DivisionRing R]   (v : Valuation R Γ₀) (q : ℚ), WithVal.toVal v ↑q =
+ ↑q
+参数：v : Valuation R Γ₀；q : ℚ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma toVal_ratCast (q : Rat) : toVal v q = q := rfl
-
-/--
-lemma `ofVal_ratCast` / 引理 `ofVal_ratCast`
-
-English:
-lemma ofVal_ratCast
-  given: (q : Rat)
-  statement: ofVal (q : WithVal v) = q
-  proof: rfl
-
-中文:
-引理 ofVal_ratCast
-  条件: (q : 有理数)
-  结论: ofVal (q : WithVal v) = q
-  证明: rfl
+@[simp] lemma toVal_ratCast (q : ℚ) : toVal v q = q := rfl
+/-
+**WithVal.ofVal_ratCast** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrderedCommGroupWithZero Γ₀
+] [inst_1 : DivisionRing R]   (v : Valuation R Γ₀) (q : ℚ), (↑q).ofVal = ↑q
+参数：v : Valuation R Γ₀；q : ℚ；↑q。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma ofVal_ratCast (q : Rat) : ofVal (q : WithVal v) = q := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: DivisionRing (WithVal v)
-  body: fast_instance% (equiv v).divisionRing
-
-中文:
-实例 :
-  签名: 除环 (WithVal v)
-  定义体: fast_instance% (equiv v).divisionRing
-
-Depends on / 依赖: divisionRing, fast_instance
+@[simp] lemma ofVal_ratCast (q : ℚ) : ofVal (q : WithVal v) = q := rfl
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : DivisionRing (WithVal v) := fast_instance% (equiv v).divisionRing
 
@@ -1939,22 +1071,18 @@ section Field
 
 variable [Field R] (v : Valuation R Γ₀)
 
-.field _ instance : Field (WithVal v) := fast_instance% ofVal_injective v
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance : Field (WithVal v) := fast_instance% ofVal_injective v |>.field _
   (ofVal_zero _) (ofVal_one _) (ofVal_add _) (ofVal_mul _) (ofVal_neg _) (ofVal_sub _)
   (ofVal_inv _) (ofVal_div _)
   (ofVal_smul _) (ofVal_smul _) (ofVal_smul _) (ofVal_smul _) (ofVal_pow _) (ofVal_zpow _)
   (ofVal_natCast _) (ofVal_intCast _) (ofVal_nnratCast _) (ofVal_ratCast _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NumberField
-  signature: R] : NumberField (WithVal v) where
-
-中文:
-实例 [数域
-  签名: R] : 数域 (WithVal v) where
+/-
+**WithVal.** 是 Mathlib 中的一个实例，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NumberField R] : NumberField (WithVal v) where
 
@@ -1968,82 +1096,75 @@ variable {Γ'₀ : Type*} [LinearOrderedCommGroupWithZero Γ'₀]
 
 /-- Canonical ring equivalence between `WithVal v` and `WithVal w`. -/
 @[deprecated "Use `WithVal.congr v w (.refl R)` instead" (since := "2026-01-27")]
-/--
-Definition of `equivWithVal` / `equivWithVal` 的定义
+/-
+**WithVal.equivWithVal** 是 Mathlib 中的一个定义，位于命名空间 `WithVal`。
+形式化陈述：equivWithVal (v : Valuation R Γ₀) (w : Valuation R Γ'₀) : WithVal v ≃+* Wi
+thVal w
+参数：v : Valuation R Γ₀；w : Valuation R Γ'₀。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivWithVal
-  signature: (v : Valuation R Γ₀) (w : Valuation R Γ'₀)
-  body: (equiv v).trans (equiv w).symm
-
-@[deprecated WithVal.congr_symm (since := "2026-01-27")]
-
-中文:
-定义 equivWithVal
-  签名: (v : 赋值 R Γ₀) (w : 赋值 R Γ'₀)
-  定义体: (equiv v).trans (equiv w).symm
-
-@[deprecated WithVal.congr_symm (since := "2026-01-27")]
+--- 原说明 ---
+Canonical ring equivalence between `WithVal v` and `WithVal w`.
 -/
 def equivWithVal (v : Valuation R Γ₀) (w : Valuation R Γ'₀) :
     WithVal v ≃+* WithVal w :=
   (equiv v).trans (equiv w).symm
 
 @[deprecated WithVal.congr_symm (since := "2026-01-27")]
-/--
-theorem `equivWithVal_symm` / 定理 `equivWithVal_symm`
-
-English:
-theorem equivWithVal_symm
-  given: (v : Valuation R Γ₀) (w : Valuation R Γ'₀)
-  proof: rfl
-
-@[deprecated "Use `WithVal.congr_apply` instead" (since := "2026-01-27")]
-
-中文:
-定理 equivWithVal_symm
-  条件: (v : 赋值 R Γ₀) (w : 赋值 R Γ'₀)
-  证明: rfl
-
-@[deprecated "Use `WithVal.congr_apply` instead" (since := "2026-01-27")]
+/-
+**WithVal.equivWithVal_symm** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：equivWithVal_symm (v : Valuation R Γ₀) (w : Valuation R Γ'₀) : (congr v w 
+(.refl R)).symm = congr w v (.refl R)
+参数：v : Valuation R Γ₀；w : Valuation R Γ'₀。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem equivWithVal_symm (v : Valuation R Γ₀) (w : Valuation R Γ'₀) :
     (congr v w (.refl R)).symm = congr w v (.refl R) := rfl
 
 @[deprecated "Use `WithVal.congr_apply` instead" (since := "2026-01-27")]
-/--
-theorem `equivWithVal_apply` / 定理 `equivWithVal_apply`
-
-English:
-theorem equivWithVal_apply
-  given: (v : Valuation R Γ₀) (w : Valuation R Γ'₀) {x : WithVal v}
-  proof: by simp
-
-@[deprecated "Use `WithVal.congr_symm_apply` instead" (since := "2026-01-27")]
-
-中文:
-定理 equivWithVal_apply
-  条件: (v : 赋值 R Γ₀) (w : 赋值 R Γ'₀) {x : WithVal v}
-  证明: by simp
-
-@[deprecated "Use `WithVal.congr_symm_apply` instead" (since := "2026-01-27")]
+/-
+**WithVal.equivWithVal_apply** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：equivWithVal_apply (v : Valuation R Γ₀) (w : Valuation R Γ'₀) {x : WithVal
+ v} : congr v w (.refl R) x = (equiv w).symm (equiv v x)
+参数：v : Valuation R Γ₀；w : Valuation R Γ'₀。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WithVal.equiv_apply`：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrde
+redCommGroupWithZero Γ₀] [inst_1 : Ring R] (v : Valuation R Γ₀)   (self : WithVa
+l v), (Wi…
+· 使用定理 `WithVal.equiv_symm_apply`：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : Linea
+rOrderedCommGroupWithZero Γ₀] [inst_1 : Ring R] (v : Valuation R Γ₀)   (ofVal : 
+R), (WithVal.e…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem equivWithVal_apply (v : Valuation R Γ₀) (w : Valuation R Γ'₀) {x : WithVal v} :
     congr v w (.refl R) x = (equiv w).symm (equiv v x) := by simp
 
 @[deprecated "Use `WithVal.congr_symm_apply` instead" (since := "2026-01-27")]
-/--
-theorem `equivWithVal_symm_apply` / 定理 `equivWithVal_symm_apply`
-
-English:
-theorem equivWithVal_symm_apply
-  given: (v : Valuation R Γ₀) (w : Valuation R Γ'₀) {x : WithVal w}
-  proof: by simp
-
-中文:
-定理 equivWithVal_symm_apply
-  条件: (v : 赋值 R Γ₀) (w : 赋值 R Γ'₀) {x : WithVal w}
-  证明: by simp
+/-
+**WithVal.equivWithVal_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：equivWithVal_symm_apply (v : Valuation R Γ₀) (w : Valuation R Γ'₀) {x : Wi
+thVal w} : (congr v w (.refl R)).symm x = (equiv v).symm (equiv w x)
+参数：v : Valuation R Γ₀；w : Valuation R Γ'₀。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WithVal.equiv_apply`：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrde
+redCommGroupWithZero Γ₀] [inst_1 : Ring R] (v : Valuation R Γ₀)   (self : WithVa
+l v), (Wi…
+· 使用定理 `WithVal.equiv_symm_apply`：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : Linea
+rOrderedCommGroupWithZero Γ₀] [inst_1 : Ring R] (v : Valuation R Γ₀)   (ofVal : 
+R), (WithVal.e…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem equivWithVal_symm_apply (v : Valuation R Γ₀) (w : Valuation R Γ'₀) {x : WithVal w} :
     (congr v w (.refl R)).symm x = (equiv v).symm (equiv w x) := by simp
@@ -2055,24 +1176,31 @@ variable {R : Type*} [Ring R] (v : Valuation R Γ₀)
 
 open MonoidWithZeroHom MonoidWithZeroHom.ValueGroup₀
 
-/--
-theorem `valueGroup_eq` / 定理 `valueGroup_eq`
-
-English:
-theorem valueGroup_eq
-  statement: valueGroup (.ofClass (Valued.v (R := WithVal v))) =
-  proof: by
-  simp [valueGroup, valueMonoid, ← (WithVal.ofVal_surjective v).range_comp]
-  rfl
-
-中文:
-定理 valueGroup_eq
-  结论: valueGroup (.ofClass (赋值.v (R := WithVal v))) =
-  证明: by
-  simp [valueGroup, valueMonoid, ← (WithVal.ofVal_surjective v).range_comp]
-  rfl
-
-Depends on / 依赖: WithVal
+/-
+**WithVal.valueGroup_eq** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：valueGroup_eq : valueGroup (.ofClass (Valued.v (R
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ValuationClass.toMonoidWithZeroHomClass`：∀ {F : Type u_7} {R : outParam 
+(Type u_5)} {Γ₀ : outParam (Type u_6)} {inst : LinearOrderedCommMonoidWithZero Γ
+₀}   {inst_1 : Ring R} {inst_…
+· 使用定理 `Valuation.instValuationClass`：∀ {R : Type u_3} {Γ₀ : Type u_4} [inst : R
+ing R] [inst_1 : LinearOrderedCommMonoidWithZero Γ₀],   ValuationClass (Valuatio
+n R Γ₀) R Γ₀
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Surjective.range_comp`：∀ {α : Type u_1} {ι : Sort u_3} {ι' : So
+rt u_4} {f : ι → ι'},   Function.Surjective f → ∀ (g : ι' → α), Set.range (g ∘ f
+) = Set.range g
+· 使用引理 `WithVal.ofVal_surjective`：ofVal_surjective : Function.Surjective (ofVal 
+(v
+· 使用定理 `Subsemigroup.mk.congr_simp`：∀ {M : Type u_3} [inst : Mul M] (carrier car
+rier_1 : Set M) (e_carrier : carrier = carrier_1)   (mul_mem' : ∀ {a b : M}, a ∈
+ carrier → b ∈ c…
+· 使用定理 `Submonoid.mk.congr_simp`：∀ {M : Type u_3} [inst : MulOneClass M] (toSubs
+emigroup toSubsemigroup_1 : Subsemigroup M)   (e_toSubsemigroup : toSubsemigroup
+ = toSubsemig…
 -/
 theorem valueGroup_eq : valueGroup (.ofClass (Valued.v (R := WithVal v))) =
     valueGroup (.ofClass v) := by
@@ -2082,110 +1210,78 @@ theorem valueGroup_eq : valueGroup (.ofClass (Valued.v (R := WithVal v))) =
 /-- The multiplicative equivalence between the `valueGroup` of the valuation on `WithVal v`
 and the valuation `v`. -/
 @[simps! apply symm_apply]
-/--
-Definition of `valueGroupEquiv` / `valueGroupEquiv` 的定义
+/-
+**WithVal.valueGroupEquiv** 是 Mathlib 中的一个定义，位于命名空间 `WithVal`。
+形式化陈述：valueGroupEquiv : valueGroup (.ofClass (Valued.v (R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition valueGroupEquiv
-  signature: :
-  body: Equiv.setCongr (by simp [valueGroup_eq v])
-  map_mul' := by simp [Equiv.setCongr, Equiv.subtypeEquivProp]
-
-中文:
-定义 valueGroupEquiv
-  签名: :
-  定义体: Equiv.setCongr (by simp [valueGroup_eq v])
-  map_mul' := by simp [Equiv.setCongr, Equiv.subtypeEquivProp]
-
-Depends on / 依赖: WithVal, ofClass, valueGroup
+--- 原说明 ---
+The multiplicative equivalence between the `valueGroup` of the valuation on `Wit
+hVal v`
+and the valuation `v`.
 -/
 def valueGroupEquiv :
     valueGroup (.ofClass (Valued.v (R := WithVal v))) ≃* valueGroup (.ofClass v) where
   __ := Equiv.setCongr (by simp [valueGroup_eq v])
   map_mul' := by simp [Equiv.setCongr, Equiv.subtypeEquivProp]
-
-/--
-theorem `strictMono_valueGroupEquiv` / 定理 `strictMono_valueGroupEquiv`
-
-English:
-theorem strictMono_valueGroupEquiv
-  statement: StrictMono (valueGroupEquiv v)
-  proof: fun _ _ _ => by simpa
-
-中文:
-定理 strictMono_valueGroupEquiv
-  结论: 严格递增 (valueGroupEquiv v)
-  证明: fun _ _ _ => by simpa
+/-
+**WithVal.strictMono_valueGroupEquiv** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：strictMono_valueGroupEquiv : StrictMono (valueGroupEquiv v)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ValuationClass.toMonoidWithZeroHomClass`：∀ {F : Type u_7} {R : outParam 
+(Type u_5)} {Γ₀ : outParam (Type u_6)} {inst : LinearOrderedCommMonoidWithZero Γ
+₀}   {inst_1 : Ring R} {inst_…
+· 使用定理 `Valuation.instValuationClass`：∀ {R : Type u_3} {Γ₀ : Type u_4} [inst : R
+ing R] [inst_1 : LinearOrderedCommMonoidWithZero Γ₀],   ValuationClass (Valuatio
+n R Γ₀) R Γ₀
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WithVal.valueGroupEquiv_apply`：∀ {Γ₀ : Type u_2} [inst : LinearOrderedCo
+mmGroupWithZero Γ₀] {R : Type u_3} [inst_1 : Ring R] (v : Valuation R Γ₀)   (a :
+ { a // (fun x => x…
 -/
 theorem strictMono_valueGroupEquiv : StrictMono (valueGroupEquiv v) :=
-  fun _ _ _ => by simpa
-
-/--
-theorem `strictMono_valueGroupEquiv_symm` / 定理 `strictMono_valueGroupEquiv_symm`
-
-English:
-theorem strictMono_valueGroupEquiv_symm
-  statement: StrictMono (valueGroupEquiv v).symm
-  proof: fun _ _ _ => by simpa
-
-中文:
-定理 strictMono_valueGroupEquiv_symm
-  结论: 严格递增 (valueGroupEquiv v).symm
-  证明: fun _ _ _ => by simpa
+  fun _ _ _ ↦ by simpa
+/-
+**WithVal.strictMono_valueGroupEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `WithVal`。
+形式化陈述：strictMono_valueGroupEquiv_symm : StrictMono (valueGroupEquiv v).symm
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ValuationClass.toMonoidWithZeroHomClass`：∀ {F : Type u_7} {R : outParam 
+(Type u_5)} {Γ₀ : outParam (Type u_6)} {inst : LinearOrderedCommMonoidWithZero Γ
+₀}   {inst_1 : Ring R} {inst_…
+· 使用定理 `Valuation.instValuationClass`：∀ {R : Type u_3} {Γ₀ : Type u_4} [inst : R
+ing R] [inst_1 : LinearOrderedCommMonoidWithZero Γ₀],   ValuationClass (Valuatio
+n R Γ₀) R Γ₀
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `WithVal.valueGroupEquiv_symm_apply`：∀ {Γ₀ : Type u_2} [inst : LinearOrde
+redCommGroupWithZero Γ₀] {R : Type u_3} [inst_1 : Ring R] (v : Valuation R Γ₀)  
+ (b : { b // (fun x => x…
 -/
 theorem strictMono_valueGroupEquiv_symm : StrictMono (valueGroupEquiv v).symm :=
-  fun _ _ _ => by simpa
+  fun _ _ _ ↦ by simpa
 
 set_option backward.isDefEq.respectTransparency.types false in
 /-- The order-preserving, multiplicative equivalence between the `ValueGroup₀` of the valuation
 on `WithVal v` and the valuation `v`. -/
 @[simps!]
-/--
-Definition of `valueGroupOrderIso₀` / `valueGroupOrderIso₀` 的定义
+/-
+**WithVal.valueGroupOrderIso** 是 Mathlib 中的一个定义，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition valueGroupOrderIso₀
-  signature: : ValueGroup₀ (.ofClass (Valued.v (R := WithVal v))) ≃*o
-  body: WithZero.map' (valueGroupEquiv v)
-  invFun := WithZero.map' (valueGroupEquiv v).symm
-  left_inv x := by
-    match x with
-    | 0 => simp
-    | .coe a => simp
-  right_inv y := by
-    match y with
-    | 0 => simp
-    | .coe b => simp
-  map_mul' := by simp
-  map_le_map_iff' {a b} := by
-    match a, b with
-    | 0, 0 => simp
-    | 0, .coe _ => simp
-    | .coe _, 0 => simp
-    | .coe a, .coe b => simp
-
-中文:
-定义 valueGroupOrderIso₀
-  签名: : ValueGroup₀ (.ofClass (赋值.v (R := WithVal v))) ≃*o
-  定义体: WithZero.map' (valueGroupEquiv v)
-  invFun := WithZero.map' (valueGroupEquiv v).symm
-  left_inv x := by
-    match x with
-    | 0 => simp
-    | .coe a => simp
-  right_inv y := by
-    match y with
-    | 0 => simp
-    | .coe b => simp
-  map_mul' := by simp
-  map_le_map_iff' {a b} := by
-    match a, b with
-    | 0, 0 => simp
-    | 0, .coe _ => simp
-    | .coe _, 0 => simp
-    | .coe a, .coe b => simp
-
-Depends on / 依赖: WithVal
+--- 原说明 ---
+The order-preserving, multiplicative equivalence between the `ValueGroup₀` of th
+e valuation
+on `WithVal v` and the valuation `v`.
 -/
 def valueGroupOrderIso₀ : ValueGroup₀ (.ofClass (Valued.v (R := WithVal v))) ≃*o
     ValueGroup₀ (.ofClass v) where
@@ -2206,87 +1302,33 @@ def valueGroupOrderIso₀ : ValueGroup₀ (.ofClass (Valued.v (R := WithVal v)))
     | 0, .coe _ => simp
     | .coe _, 0 => simp
     | .coe a, .coe b => simp
-
-/--
-lemma `valueGroupOrderIso₀_restrict` / 引理 `valueGroupOrderIso₀_restrict`
-
-English:
-lemma valueGroupOrderIso₀_restrict
-  given: (b : WithVal v)
-  proof: by
-  simp [(WithVal.valuation v).restrict_def, restrict₀_apply, ← valuation_apply_eq_ofVal,
-    v.restrict_def]
-  by_cases hb : v b.ofVal = 0 <;> simp [hb]
-
-中文:
-引理 valueGroupOrderIso₀_restrict
-  条件: (b : WithVal v)
-  证明: by
-  simp [(WithVal.valuation v).restrict_def, restrict₀_apply, ← valuation_apply_eq_ofVal,
-    v.restrict_def]
-  by_cases hb : v b.ofVal = 0 <;> simp [hb]
-
-Depends on / 依赖: WithVal, WithVal.valuation, b.ofVal, restrict_def, v.restrict_def, valuation, valuation_apply_eq_ofVal
+/-
+**WithVal.valueGroupOrderIso** 是 Mathlib 中的一个引理，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma valueGroupOrderIso₀_restrict (b : WithVal v) :
     valueGroupOrderIso₀ v ((WithVal.valuation v).restrict b) = v.restrict b.ofVal := by
   simp [(WithVal.valuation v).restrict_def, restrict₀_apply, ← valuation_apply_eq_ofVal,
     v.restrict_def]
   by_cases hb : v b.ofVal = 0 <;> simp [hb]
-
-/--
-lemma `valueGroupOrderIso₀_symm_restrict` / 引理 `valueGroupOrderIso₀_symm_restrict`
-
-English:
-lemma valueGroupOrderIso₀_symm_restrict
-  given: (b : R)
-  proof: by
-  simp [Valued.v.restrict_def, restrict₀_apply, ← apply_ofVal, v.restrict_def]
-  by_cases hb : v b = 0 <;> simp [hb]
-
-中文:
-引理 valueGroupOrderIso₀_symm_restrict
-  条件: (b : R)
-  证明: by
-  simp [Valued.v.restrict_def, restrict₀_apply, ← apply_ofVal, v.restrict_def]
-  by_cases hb : v b = 0 <;> simp [hb]
-
-Depends on / 依赖: Valued, Valued.v.restrict_def, apply_ofVal, restrict_def, v.restrict_def
+/-
+**WithVal.valueGroupOrderIso** 是 Mathlib 中的一个引理，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma valueGroupOrderIso₀_symm_restrict (b : R) :
     (valueGroupOrderIso₀ v).symm (Valuation.restrict v b) = Valued.v.restrict (toVal v b) := by
   simp [Valued.v.restrict_def, restrict₀_apply, ← apply_ofVal, v.restrict_def]
   by_cases hb : v b = 0 <;> simp [hb]
-
-/--
-lemma `strictMono_valueGroupOrderIso₀` / 引理 `strictMono_valueGroupOrderIso₀`
-
-English:
-lemma strictMono_valueGroupOrderIso₀
-  proof: WithZero.map'_strictMono (strictMono_valueGroupEquiv v)
-
-中文:
-引理 strictMono_valueGroupOrderIso₀
-  证明: WithZero.map'_strictMono (strictMono_valueGroupEquiv v)
-
-Depends on / 依赖: WithZero, WithZero.map, _strictMono, strictMono_valueGroupEquiv
+/-
+**WithVal.strictMono_valueGroupOrderIso** 是 Mathlib 中的一个引理，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma strictMono_valueGroupOrderIso₀ :
     StrictMono (WithVal.valueGroupOrderIso₀ v) :=
   WithZero.map'_strictMono (strictMono_valueGroupEquiv v)
-
-/--
-lemma `strictMono_valueGroupOrderIso₀_symm` / 引理 `strictMono_valueGroupOrderIso₀_symm`
-
-English:
-lemma strictMono_valueGroupOrderIso₀_symm
-  proof: WithZero.map'_strictMono (strictMono_valueGroupEquiv_symm v)
-
-中文:
-引理 strictMono_valueGroupOrderIso₀_symm
-  证明: WithZero.map'_strictMono (strictMono_valueGroupEquiv_symm v)
-
-Depends on / 依赖: WithZero, WithZero.map, _strictMono, strictMono_valueGroupEquiv_symm
+/-
+**WithVal.strictMono_valueGroupOrderIso** 是 Mathlib 中的一个引理，位于命名空间 `WithVal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma strictMono_valueGroupOrderIso₀_symm :
     StrictMono (WithVal.valueGroupOrderIso₀ v).symm :=
@@ -2304,22 +1346,22 @@ open WithVal
 
 variable {R : Type*} [Ring R] (v : Valuation R Γ₀)
 
-/--
-Definition of `Completion` / `Completion` 的定义
+/-- The completion of a field with respect to a valuation. -/
+/-
+**Valuation.Completion** 是 Mathlib 中的一个缩写定义，位于命名空间 `Valuation`。
+形式化陈述：Completion
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Completion
-  body: UniformSpace.Completion (WithVal v)
-
-中文:
-缩写 完备化
-  定义体: UniformSpace.Completion (WithVal v)
-
-Depends on / 依赖: Completion, UniformSpace, UniformSpace.Completion, WithVal
+--- 原说明 ---
+The completion of a field with respect to a valuation.
 -/
 abbrev Completion := UniformSpace.Completion (WithVal v)
 
 -- lower priority so that `Coe (WithVal v) v.Completion` uses `UniformSpace.Completion.instCoe`
+/-
+**Valuation.** 是 Mathlib 中的一个实例，位于命名空间 `Valuation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 99) : Coe R v.Completion where
   coe r := (WithVal.equiv v).symm r
 
@@ -2331,26 +1373,20 @@ equivalent. -/
 variable {R Γ₀ Γ₀' : Type*} [Ring R] [LinearOrderedCommGroupWithZero Γ₀]
   [LinearOrderedCommGroupWithZero Γ₀'] {v : Valuation R Γ₀} {w : Valuation R Γ₀'}
 
-/--
-Definition of `IsEquiv.orderRingIso` / `IsEquiv.orderRingIso` 的定义
+/-- If two valuations `v` and `w` are equivalent then `WithVal v` is order-isomorphic
+to `WithVal w`. -/
+/-
+**Valuation.IsEquiv.orderRingIso** 是 Mathlib 中的一个定义，位于命名空间 `Valuation.IsEquiv`。
+形式化陈述：{R : Type u_4} →   {Γ₀ : Type u_5} →     {Γ₀' : Type u_6} →       [inst : 
+Ring R] →         [inst_1 : LinearOrderedCommGroupWithZero Γ₀] →           [inst
+_2 : LinearOrderedCommGroupWithZero Γ₀'] →             {v : Valuation R Γ₀} → {w
+ : Valuation R Γ₀'} → v.IsEquiv w → WithVal v ≃+*o WithVal w
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsEquiv.orderRingIso
-  signature: (h : v.IsEquiv w)
-  body: WithVal.congr v w (.refl R)
-  map_le_map_iff' := h.symm ..
-
-@[simp]
-
-中文:
-定义 Is等价.orderRingIso
-  签名: (h : v.Is等价 w)
-  定义体: WithVal.congr v w (.refl R)
-  map_le_map_iff' := h.symm ..
-
-@[simp]
-
-Depends on / 依赖: WithVal, WithVal.congr
+--- 原说明 ---
+If two valuations `v` and `w` are equivalent then `WithVal v` is order-isomorphi
+c
+to `WithVal w`.
 -/
 def IsEquiv.orderRingIso (h : v.IsEquiv w) :
     WithVal v ≃+*o WithVal w where
@@ -2358,97 +1394,109 @@ def IsEquiv.orderRingIso (h : v.IsEquiv w) :
   map_le_map_iff' := h.symm ..
 
 @[simp]
-/--
-theorem `IsEquiv.orderRingIso_apply` / 定理 `IsEquiv.orderRingIso_apply`
-
-English:
-theorem IsEquiv.orderRingIso_apply
-  given: (h : v.IsEquiv w) (x : WithVal v)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 Is等价.orderRingIso_apply
-  条件: (h : v.Is等价 w) (x : WithVal v)
-  证明: rfl
-
-@[simp]
+/-
+**Valuation.IsEquiv.orderRingIso_apply** 是 Mathlib 中的一个定理，位于命名空间 `Valuation.IsEq
+uiv`。
+形式化陈述：∀ {R : Type u_4} {Γ₀ : Type u_5} {Γ₀' : Type u_6} [inst : Ring R] [inst_1 
+: LinearOrderedCommGroupWithZero Γ₀]   [inst_2 : LinearOrderedCommGroupWithZero 
+Γ₀'] {v : Valuation R Γ₀} {w : Valuation R Γ₀'} (h : v.IsEquiv w)   (x : WithVal
+ v), h.orderRingIso x = WithVal.toVal w x.ofVal
+参数：h : v.IsEquiv w；x : WithVal v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem IsEquiv.orderRingIso_apply (h : v.IsEquiv w) (x : WithVal v) :
     h.orderRingIso x = toVal w x.ofVal := rfl
 
 @[simp]
-/--
-theorem `IsEquiv.orderRingIso_symm_apply` / 定理 `IsEquiv.orderRingIso_symm_apply`
-
-English:
-theorem IsEquiv.orderRingIso_symm_apply
-  given: (h : v.IsEquiv w) (x : WithVal w)
-  proof: rfl
-
-中文:
-定理 Is等价.orderRingIso_symm_apply
-  条件: (h : v.Is等价 w) (x : WithVal w)
-  证明: rfl
+/-
+**Valuation.IsEquiv.orderRingIso_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Valuation
+.IsEquiv`。
+形式化陈述：∀ {R : Type u_4} {Γ₀ : Type u_5} {Γ₀' : Type u_6} [inst : Ring R] [inst_1 
+: LinearOrderedCommGroupWithZero Γ₀]   [inst_2 : LinearOrderedCommGroupWithZero 
+Γ₀'] {v : Valuation R Γ₀} {w : Valuation R Γ₀'} (h : v.IsEquiv w)   (x : WithVal
+ w), h.orderRingIso.symm x = WithVal.toVal v x.ofVal
+参数：h : v.IsEquiv w；x : WithVal w。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem IsEquiv.orderRingIso_symm_apply (h : v.IsEquiv w) (x : WithVal w) :
     h.orderRingIso.symm x = toVal v x.ofVal := rfl
 
 open MonoidWithZeroHom MonoidWithZeroHom.ValueGroup₀
-
-/--
-theorem `IsEquiv.uniformContinuous_equiv` / 定理 `IsEquiv.uniformContinuous_equiv`
-
-English:
-theorem IsEquiv.uniformContinuous_equiv
-  statement: [hval : Valued R Γ₀'] (hv : Valued.v = w)
-  proof: by
-  refine uniformContinuous_of_continuousAt_zero _ ?_
-  simp_rw [ContinuousAt, map_zero, (Valued.hasBasis_nhds_zero _ _).tendsto_iff
-    (Valued.hasBasis_nhds_zero _ _), true_and, forall_const]
-  intro γ
-  obtain ⟨r, s, hr₀, hs₀, hr⟩ := exists_div_eq_of_unit Valued.v γ
-  use .mk0 ((instValued v).v.restrict ((WithVal.equiv v).symm r) /
-    (instValued v).v.restrict ((WithVal.equiv v).symm s)) (by
-    simp [Valuation.restrict_def, restrict₀_eq_zero_iff, (eq_zero h (r := r)).ne, ← hv,
-      (eq_zero h (r := s)).ne, hr₀.ne', hs₀.ne'])
-  intro x hx
-  let y := (WithVal.equiv v) x
-  have hy : toVal v y = x := rfl
-  have hs0' : 0 < Valued.v.restrict (toVal v s) := by
-    simp [restrict_pos_iff, h.pos_iff, ← hv, hs₀]
-  have h' : v.restrict.IsEquiv w.restrict := h.restrict
-  rw [← hr]; rw [equiv_apply]; rw [Set.mem_ofPred_eq]; rw [lt_div_iff₀ ((restrict_pos_iff Valued.v s).mpr hs₀)]; rw [hv]; rw [← map_mul]; rw [← lt_def]; rw [← ofVal_mul]; rw [← hy]; rw [← toVal_mul]; rw [← h'.orderRingIso_apply]; rw [← h'.orderRingIso.lt_symm_apply]
-  simp only [toVal_mul, orderRingIso_symm_apply, lt_def, ofVal_mul, restrict_lt_iff]
-  simp only [equiv_symm_apply, Units.val_mk0, Set.mem_ofPred_eq, lt_div_iff₀ hs0'] at hx
-  rwa [← map_mul, restrict_lt_iff] at hx
-
-中文:
-定理 Is等价.uniformContinuous_equiv
-  结论: [hval : 赋值 R Γ₀'] (hv : 赋值.v = w)
-  证明: by
-  refine uniformContinuous_of_continuousAt_zero _ ?_
-  simp_rw [ContinuousAt, map_zero, (Valued.hasBasis_nhds_zero _ _).tendsto_iff
-    (Valued.hasBasis_nhds_zero _ _), true_and, forall_const]
-  intro γ
-  obtain ⟨r, s, hr₀, hs₀, hr⟩ := exists_div_eq_of_unit Valued.v γ
-  use .mk0 ((instValued v).v.restrict ((WithVal.equiv v).symm r) /
-    (instValued v).v.restrict ((WithVal.equiv v).symm s)) (by
-    simp [Valuation.restrict_def, restrict₀_eq_zero_iff, (eq_zero h (r := r)).ne, ← hv,
-      (eq_zero h (r := s)).ne, hr₀.ne', hs₀.ne'])
-  intro x hx
-  let y := (WithVal.equiv v) x
-  have hy : toVal v y = x := rfl
-  have hs0' : 0 < Valued.v.restrict (toVal v s) := by
-    simp [restrict_pos_iff, h.pos_iff, ← hv, hs₀]
-  have h' : v.restrict.IsEquiv w.restrict := h.restrict
-  rw [← hr]; rw [equiv_apply]; rw [Set.mem_ofPred_eq]; rw [lt_div_iff₀ ((restrict_pos_iff Valued.v s).mpr hs₀)]; rw [hv]; rw [← map_mul]; rw [← lt_def]; rw [← ofVal_mul]; rw [← hy]; rw [← toVal_mul]; rw [← h'.orderRingIso_apply]; rw [← h'.orderRingIso.lt_symm_apply]
-  simp only [toVal_mul, orderRingIso_symm_apply, lt_def, ofVal_mul, restrict_lt_iff]
-  simp only [equiv_symm_apply, Units.val_mk0, Set.mem_ofPred_eq, lt_div_iff₀ hs0'] at hx
-  rwa [← map_mul, restrict_lt_iff] at hx
-
-Depends on / 依赖: ContinuousAt, Valuation, Valuation.restrict_def, Valued, Valued.hasBasis_nhds_zero, Valued.v, WithVal, WithVal.equiv, eq_zero, exists_div_eq_of_unit, forall_const, hasBasis_nhds_zero, instValued, map_zero, restrict, restrict_def, simp_rw, tendsto_iff, true_and, uniformContinuous_of_continuousAt_zero
+/-
+**Valuation.IsEquiv.uniformContinuous_equiv** 是 Mathlib 中的一个定理，位于命名空间 `Valuation
+.IsEquiv`。
+形式化陈述：∀ {R : Type u_4} {Γ₀ : Type u_5} {Γ₀' : Type u_6} [inst : Ring R] [inst_1 
+: LinearOrderedCommGroupWithZero Γ₀]   [inst_2 : LinearOrderedCommGroupWithZero 
+Γ₀'] {v : Valuation R Γ₀} {w : Valuation R Γ₀'} [hval : Valued R Γ₀'],   Valued.
+v = w → v.IsEquiv w → UniformContinuous ⇑(WithVal.equiv v)
+参数：WithVal.equiv v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `uniformContinuous_of_continuousAt_zero`：∀ {α : Type u_1} {β : Type u_2} 
+[inst : UniformSpace α] [inst_1 : AddGroup α] [IsUniformAddGroup α] {hom : Type 
+u_3}   [inst_3 : UniformSpac…
+· 使用定理 `Valued.toIsUniformAddGroup`：∀ {R : Type u} {inst : Ring R} {Γ₀ : outPara
+m (Type v)} {inst_1 : LinearOrderedCommGroupWithZero Γ₀}   [self : Valued R Γ₀],
+ IsUniformAddGro…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `ValuationClass.toMonoidWithZeroHomClass`：∀ {F : Type u_7} {R : outParam 
+(Type u_5)} {Γ₀ : outParam (Type u_6)} {inst : LinearOrderedCommMonoidWithZero Γ
+₀}   {inst_1 : Ring R} {inst_…
+· 使用定理 `Valuation.instValuationClass`：∀ {R : Type u_3} {Γ₀ : Type u_4} [inst : R
+ing R] [inst_1 : LinearOrderedCommMonoidWithZero Γ₀],   ValuationClass (Valuatio
+n R Γ₀) R Γ₀
+· 使用定理 `Filter.HasBasis.tendsto_iff`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u
+_4} {ι' : Sort u_5} {la : Filter α} {pa : ι → Prop} {sa : ι → Set α}   {lb : Fil
+ter β} {pb : ι' →…
+· 使用定理 `Valued.hasBasis_nhds_zero`：hasBasis_nhds_zero : (𝓝 (0 : R)).HasBasis (fu
+n _ => True) fun γ : (MonoidWithZeroHom.ValueGroup₀ (.ofClass _i.v))ˣ => { x | v
+.restrict x < γ…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用引理 `Valuation.exists_div_eq_of_unit`：exists_div_eq_of_unit (γ : (ValueGroup₀
+ (.ofClass v))ˣ) : exists r s, 0 < v r ∧ 0 < v s ∧ v.restrict r / v.restrict s =
+ γ.1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `WithVal.equiv_symm_apply`：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : Linea
+rOrderedCommGroupWithZero Γ₀] [inst_1 : Ring R] (v : Valuation R Γ₀)   (ofVal : 
+R), (WithVal.e…
+· 使用定理 `Iff.ne`：∀ {α : Sort u_1} {β : Sort u_2} {a b : α} {c d : β}, (a = b ↔ c 
+= d) → (a ≠ b ↔ c ≠ d)
+· 使用定理 `Valuation.IsEquiv.eq_zero`：eq_zero (h : v₁.IsEquiv v₂) {r : R} : v₁ r = 
+0 ↔ v₂ r = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `not_false_eq_true`：(¬False) = True
+（共 52 条，此处仅展示前 30 条）
 -/
 theorem IsEquiv.uniformContinuous_equiv [hval : Valued R Γ₀'] (hv : Valued.v = w)
     (h : v.IsEquiv w) : UniformContinuous (WithVal.equiv v) := by
@@ -2467,71 +1515,93 @@ theorem IsEquiv.uniformContinuous_equiv [hval : Valued R Γ₀'] (hv : Valued.v 
   have hs0' : 0 < Valued.v.restrict (toVal v s) := by
     simp [restrict_pos_iff, h.pos_iff, ← hv, hs₀]
   have h' : v.restrict.IsEquiv w.restrict := h.restrict
-  rw [← hr]; rw [equiv_apply]; rw [Set.mem_ofPred_eq]; rw [lt_div_iff₀ ((restrict_pos_iff Valued.v s).mpr hs₀)]; rw [hv]; rw [← map_mul]; rw [← lt_def]; rw [← ofVal_mul]; rw [← hy]; rw [← toVal_mul]; rw [← h'.orderRingIso_apply]; rw [← h'.orderRingIso.lt_symm_apply]
+  rw [← hr, equiv_apply, Set.mem_ofPred_eq, lt_div_iff₀ ((restrict_pos_iff Valued.v s).mpr hs₀), hv,
+    ← map_mul, ← lt_def, ← ofVal_mul,
+    ← hy, ← toVal_mul, ←  h'.orderRingIso_apply, ← h'.orderRingIso.lt_symm_apply]
   simp only [toVal_mul, orderRingIso_symm_apply, lt_def, ofVal_mul, restrict_lt_iff]
   simp only [equiv_symm_apply, Units.val_mk0, Set.mem_ofPred_eq, lt_div_iff₀ hs0'] at hx
   rwa [← map_mul, restrict_lt_iff] at hx
-
-/--
-theorem `IsEquiv.uniformContinuous_equiv_symm` / 定理 `IsEquiv.uniformContinuous_equiv_symm`
-
-English:
-theorem IsEquiv.uniformContinuous_equiv_symm
-  statement: [hval : Valued R Γ₀'] (hv : Valued.v = w)
-  proof: by
-  refine uniformContinuous_of_continuousAt_zero _ ?_
-  simp_rw [ContinuousAt, map_zero, (Valued.hasBasis_nhds_zero _ _).tendsto_iff
-    (Valued.hasBasis_nhds_zero _ _), true_and, forall_const]
-  intro γ
-  obtain ⟨r, s, hr₀, hs₀, hr⟩ := exists_div_eq_of_unit Valued.v γ
-  have h' : w.restrict.IsEquiv v.restrict := h.restrict
-  use .mk0 ((Valued.v.restrict ((WithVal.equiv v) r)) /
-    (Valued.v.restrict ((WithVal.equiv v) s))) (by
-    simp only [equiv_apply, restrict_def, ne_eq, div_eq_zero_iff, restrict₀_eq_zero_iff, hv,
-      MonoidWithZeroHom.coe_ofClass, not_or, (eq_zero h (r := r.ofVal)).ne,
-      (eq_zero h (r := s.ofVal)).ne]
-    exact ⟨hr₀.ne', hs₀.ne'⟩)
-  intro x hx
-  simp only [equiv_symm_apply, Set.mem_ofPred_eq]
-  simp only [equiv_apply, Units.val_mk0, Set.mem_ofPred_eq] at hx
-  rw [lt_div_iff₀]; rw [← map_mul]; rw [restrict_lt_iff]; rw [hv]; rw [h.lt_iff_lt]; rw [map_mul] at hx
-  · rw [← hr, lt_div_iff₀ ((restrict_pos_iff Valued.v s).mpr hs₀), ← map_mul, ← lt_def,
-      ← h.orderRingIso_apply]
-    simp only [orderRingIso_apply, toVal_mul, lt_def, ofVal_mul, restrict_lt_iff]
-    rw [map_mul]
-    exact hx
-  · rw [restrict_pos_iff, hv, h.pos_iff]
-    exact hs₀
-
-中文:
-定理 Is等价.uniformContinuous_equiv_symm
-  结论: [hval : 赋值 R Γ₀'] (hv : 赋值.v = w)
-  证明: by
-  refine uniformContinuous_of_continuousAt_zero _ ?_
-  simp_rw [ContinuousAt, map_zero, (Valued.hasBasis_nhds_zero _ _).tendsto_iff
-    (Valued.hasBasis_nhds_zero _ _), true_and, forall_const]
-  intro γ
-  obtain ⟨r, s, hr₀, hs₀, hr⟩ := exists_div_eq_of_unit Valued.v γ
-  have h' : w.restrict.IsEquiv v.restrict := h.restrict
-  use .mk0 ((Valued.v.restrict ((WithVal.equiv v) r)) /
-    (Valued.v.restrict ((WithVal.equiv v) s))) (by
-    simp only [equiv_apply, restrict_def, ne_eq, div_eq_zero_iff, restrict₀_eq_zero_iff, hv,
-      MonoidWithZeroHom.coe_ofClass, not_or, (eq_zero h (r := r.ofVal)).ne,
-      (eq_zero h (r := s.ofVal)).ne]
-    exact ⟨hr₀.ne', hs₀.ne'⟩)
-  intro x hx
-  simp only [equiv_symm_apply, Set.mem_ofPred_eq]
-  simp only [equiv_apply, Units.val_mk0, Set.mem_ofPred_eq] at hx
-  rw [lt_div_iff₀]; rw [← map_mul]; rw [restrict_lt_iff]; rw [hv]; rw [h.lt_iff_lt]; rw [map_mul] at hx
-  · rw [← hr, lt_div_iff₀ ((restrict_pos_iff Valued.v s).mpr hs₀), ← map_mul, ← lt_def,
-      ← h.orderRingIso_apply]
-    simp only [orderRingIso_apply, toVal_mul, lt_def, ofVal_mul, restrict_lt_iff]
-    rw [map_mul]
-    exact hx
-  · rw [restrict_pos_iff, hv, h.pos_iff]
-    exact hs₀
-
-Depends on / 依赖: ContinuousAt, IsEquiv, Valued, Valued.hasBasis_nhds_zero, Valued.v, Valued.v.restrict, WithVal, WithVal.equiv, div_eq_zero_iff, equiv_apply, exists_div_eq_of_unit, forall_const, h.restrict, hasBasis_nhds_zero, map_zero, ne_eq, restrict, restrict_def, simp_rw, tendsto_iff
+/-
+**Valuation.IsEquiv.uniformContinuous_equiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `Valu
+ation.IsEquiv`。
+形式化陈述：∀ {R : Type u_4} {Γ₀ : Type u_5} {Γ₀' : Type u_6} [inst : Ring R] [inst_1 
+: LinearOrderedCommGroupWithZero Γ₀]   [inst_2 : LinearOrderedCommGroupWithZero 
+Γ₀'] {v : Valuation R Γ₀} {w : Valuation R Γ₀'} [hval : Valued R Γ₀'],   Valued.
+v = w → w.IsEquiv v → UniformContinuous ⇑(WithVal.equiv v).symm
+参数：WithVal.equiv v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `uniformContinuous_of_continuousAt_zero`：∀ {α : Type u_1} {β : Type u_2} 
+[inst : UniformSpace α] [inst_1 : AddGroup α] [IsUniformAddGroup α] {hom : Type 
+u_3}   [inst_3 : UniformSpac…
+· 使用定理 `Valued.toIsUniformAddGroup`：∀ {R : Type u} {inst : Ring R} {Γ₀ : outPara
+m (Type v)} {inst_1 : LinearOrderedCommGroupWithZero Γ₀}   [self : Valued R Γ₀],
+ IsUniformAddGro…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `ValuationClass.toMonoidWithZeroHomClass`：∀ {F : Type u_7} {R : outParam 
+(Type u_5)} {Γ₀ : outParam (Type u_6)} {inst : LinearOrderedCommMonoidWithZero Γ
+₀}   {inst_1 : Ring R} {inst_…
+· 使用定理 `Valuation.instValuationClass`：∀ {R : Type u_3} {Γ₀ : Type u_4} [inst : R
+ing R] [inst_1 : LinearOrderedCommMonoidWithZero Γ₀],   ValuationClass (Valuatio
+n R Γ₀) R Γ₀
+· 使用定理 `Filter.HasBasis.tendsto_iff`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u
+_4} {ι' : Sort u_5} {la : Filter α} {pa : ι → Prop} {sa : ι → Set α}   {lb : Fil
+ter β} {pb : ι' →…
+· 使用定理 `Valued.hasBasis_nhds_zero`：hasBasis_nhds_zero : (𝓝 (0 : R)).HasBasis (fu
+n _ => True) fun γ : (MonoidWithZeroHom.ValueGroup₀ (.ofClass _i.v))ˣ => { x | v
+.restrict x < γ…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用引理 `Valuation.exists_div_eq_of_unit`：exists_div_eq_of_unit (γ : (ValueGroup₀
+ (.ofClass v))ˣ) : exists r s, 0 < v r ∧ 0 < v s ∧ v.restrict r / v.restrict s =
+ γ.1
+· 使用定理 `Valuation.IsEquiv.restrict`：∀ {R : Type u_3} {Γ₀ : Type u_4} [inst : Rin
+g R] [inst_1 : LinearOrderedCommGroupWithZero Γ₀] (v : Valuation R Γ₀)   {Γ₀' : 
+Type u_7} [inst_…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `WithVal.equiv_apply`：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : LinearOrde
+redCommGroupWithZero Γ₀] [inst_1 : Ring R] (v : Valuation R Γ₀)   (self : WithVa
+l v), (Wi…
+· 使用定理 `MonoidWithZeroHom.ofClass.congr_simp`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : MulZeroOneClass α] [inst_1 : MulZeroOneClass β]   [inst_2 :
+ FunLike F α β] [inst_3 : …
+· 使用定理 `Iff.ne`：∀ {α : Sort u_1} {β : Sort u_2} {a b : α} {c d : β}, (a = b ↔ c 
+= d) → (a ≠ b ↔ c ≠ d)
+· 使用定理 `Valuation.IsEquiv.eq_zero`：eq_zero (h : v₁.IsEquiv v₂) {r : R} : v₁ r = 
+0 ↔ v₂ r = 0
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `WithVal.equiv_symm_apply`：∀ {R : Type u_1} {Γ₀ : Type u_2} [inst : Linea
+rOrderedCommGroupWithZero Γ₀] [inst_1 : Ring R] (v : Valuation R Γ₀)   (ofVal : 
+R), (WithVal.e…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+（共 45 条，此处仅展示前 30 条）
 -/
 theorem IsEquiv.uniformContinuous_equiv_symm [hval : Valued R Γ₀'] (hv : Valued.v = w)
     (h : w.IsEquiv v) : UniformContinuous (WithVal.equiv v).symm := by
@@ -2550,7 +1620,7 @@ theorem IsEquiv.uniformContinuous_equiv_symm [hval : Valued R Γ₀'] (hv : Valu
   intro x hx
   simp only [equiv_symm_apply, Set.mem_ofPred_eq]
   simp only [equiv_apply, Units.val_mk0, Set.mem_ofPred_eq] at hx
-  rw [lt_div_iff₀]; rw [← map_mul]; rw [restrict_lt_iff]; rw [hv]; rw [h.lt_iff_lt]; rw [map_mul] at hx
+  rw [lt_div_iff₀, ← map_mul, restrict_lt_iff, hv, h.lt_iff_lt, map_mul] at hx
   · rw [← hr, lt_div_iff₀ ((restrict_pos_iff Valued.v s).mpr hs₀), ← map_mul, ← lt_def,
       ← h.orderRingIso_apply]
     simp only [orderRingIso_apply, toVal_mul, lt_def, ofVal_mul, restrict_lt_iff]
@@ -2558,55 +1628,81 @@ theorem IsEquiv.uniformContinuous_equiv_symm [hval : Valued R Γ₀'] (hv : Valu
     exact hx
   · rw [restrict_pos_iff, hv, h.pos_iff]
     exact hs₀
-
-/--
-lemma `IsEquiv.uniformContinuous` / 引理 `IsEquiv.uniformContinuous`
-
-English:
-lemma IsEquiv.uniformContinuous
-  given: (h : v.IsEquiv w)
-  proof: by
-  have h_val : ((Valued.mk' v).v).IsEquiv (Valued.mk' w).v := h
-  have h_res : v.restrict.IsEquiv w.restrict := h_val.restrict
-  refine @uniformContinuous_of_continuousAt_zero _ _ (Valued.mk' w).toUniformSpace _ _
-    _ (Valued.mk' v).toUniformSpace _ _ _ _ (RingHom.id R) ?_
-  simp_rw [ContinuousAt, map_zero, (Valued.hasBasis_nhds_zero _ _).tendsto_iff
-    (Valued.hasBasis_nhds_zero _ _), true_and, forall_const]
-  intro x
-  let u := WithZero.unzero (Units.ne_zero x)
-  obtain ⟨a, ha, y, hu⟩ := (mem_valueGroup_iff_of_comm _).mp u.2
-  simp only [Set.mem_ofPred_eq, RingHom.id_apply]
-  set y₀ := h_val.orderMonoidIso x with hy₀_def
-  have hy₀_ne_zero : y₀ != 0 := by simp [hy₀_def]
-  set y := (Units.mk0 y₀ hy₀_ne_zero) with hy_def
-  use y
-  intro b hb
-  rwa [← h_val.orderMonoidIso_spec, hy_def, Units.val_mk0, hy₀_def,
-    h_val.orderMonoidIso.strictMono.lt_iff_lt] at hb
-
-中文:
-引理 Is等价.uniformContinuous
-  条件: (h : v.Is等价 w)
-  证明: by
-  have h_val : ((Valued.mk' v).v).IsEquiv (Valued.mk' w).v := h
-  have h_res : v.restrict.IsEquiv w.restrict := h_val.restrict
-  refine @uniformContinuous_of_continuousAt_zero _ _ (Valued.mk' w).toUniformSpace _ _
-    _ (Valued.mk' v).toUniformSpace _ _ _ _ (RingHom.id R) ?_
-  simp_rw [ContinuousAt, map_zero, (Valued.hasBasis_nhds_zero _ _).tendsto_iff
-    (Valued.hasBasis_nhds_zero _ _), true_and, forall_const]
-  intro x
-  let u := WithZero.unzero (Units.ne_zero x)
-  obtain ⟨a, ha, y, hu⟩ := (mem_valueGroup_iff_of_comm _).mp u.2
-  simp only [Set.mem_ofPred_eq, RingHom.id_apply]
-  set y₀ := h_val.orderMonoidIso x with hy₀_def
-  have hy₀_ne_zero : y₀ != 0 := by simp [hy₀_def]
-  set y := (Units.mk0 y₀ hy₀_ne_zero) with hy_def
-  use y
-  intro b hb
-  rwa [← h_val.orderMonoidIso_spec, hy_def, Units.val_mk0, hy₀_def,
-    h_val.orderMonoidIso.strictMono.lt_iff_lt] at hb
-
-Depends on / 依赖: ContinuousAt, IsEquiv, RingHom, RingHom.id, Units.ne_zero, Valued, Valued.hasBasis_nhds_zero, Valued.mk, WithZero, WithZero.unzero, forall_const, h_res, h_val, h_val.restrict, hasBasis_nhds_zero, map_zero, mem_valueGroup_iff_o, ne_zero, restrict, simp_rw
+/-
+**Valuation.IsEquiv.uniformContinuous** 是 Mathlib 中的一个定理，位于命名空间 `Valuation.IsEqu
+iv`。
+形式化陈述：∀ {R : Type u_4} {Γ₀ : Type u_5} {Γ₀' : Type u_6} [inst : Ring R] [inst_1 
+: LinearOrderedCommGroupWithZero Γ₀]   [inst_2 : LinearOrderedCommGroupWithZero 
+Γ₀'] {v : Valuation R Γ₀} {w : Valuation R Γ₀'},   v.IsEquiv w → UniformContinuo
+us ⇑(RingHom.id R)
+参数：RingHom.id R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ValuationClass.toMonoidWithZeroHomClass`：∀ {F : Type u_7} {R : outParam 
+(Type u_5)} {Γ₀ : outParam (Type u_6)} {inst : LinearOrderedCommMonoidWithZero Γ
+₀}   {inst_1 : Ring R} {inst_…
+· 使用定理 `Valuation.instValuationClass`：∀ {R : Type u_3} {Γ₀ : Type u_4} [inst : R
+ing R] [inst_1 : LinearOrderedCommMonoidWithZero Γ₀],   ValuationClass (Valuatio
+n R Γ₀) R Γ₀
+· 使用定理 `Valuation.IsEquiv.restrict`：∀ {R : Type u_3} {Γ₀ : Type u_4} [inst : Rin
+g R] [inst_1 : LinearOrderedCommGroupWithZero Γ₀] (v : Valuation R Γ₀)   {Γ₀' : 
+Type u_7} [inst_…
+· 使用定理 `uniformContinuous_of_continuousAt_zero`：∀ {α : Type u_1} {β : Type u_2} 
+[inst : UniformSpace α] [inst_1 : AddGroup α] [IsUniformAddGroup α] {hom : Type 
+u_3}   [inst_3 : UniformSpac…
+· 使用定理 `Valued.toIsUniformAddGroup`：∀ {R : Type u} {inst : Ring R} {Γ₀ : outPara
+m (Type v)} {inst_1 : LinearOrderedCommGroupWithZero Γ₀}   [self : Valued R Γ₀],
+ IsUniformAddGro…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `Filter.HasBasis.tendsto_iff`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u
+_4} {ι' : Sort u_5} {la : Filter α} {pa : ι → Prop} {sa : ι → Set α}   {lb : Fil
+ter β} {pb : ι' →…
+· 使用定理 `Valued.hasBasis_nhds_zero`：hasBasis_nhds_zero : (𝓝 (0 : R)).HasBasis (fu
+n _ => True) fun γ : (MonoidWithZeroHom.ValueGroup₀ (.ofClass _i.v))ˣ => { x | v
+.restrict x < γ…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Units.ne_zero`：ne_zero [Nontrivial M₀] (u : M₀ˣ) : (u : M₀) != 0
+· 使用定理 `WithZero.instNontrivial`：∀ {α : Type u} [Nonempty α], Nontrivial (WithZe
+ro α)
+· 使用定理 `Torsor.nonempty`：∀ {G : outParam (Type u_1)} {P : Type u_2} {inst : Grou
+p G} [self : Torsor G P], Nonempty P
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MonoidWithZeroHom.mem_valueGroup_iff_of_comm`：mem_valueGroup_iff_of_comm
+ {y : Bˣ} : y in valueGroup f ↔ exists a, f a != 0 ∧ exists x, f a * y = f x
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `MulEquivClass.toMonoidWithZeroHomClass`：∀ {F : Type u_1} {α : Type u_2} 
+{β : Type u_3} [inst : EquivLike F α β] [inst_1 : MulZeroOneClass α]   [inst_2 :
+ MulZeroOneClass β] [MulEqui…
+· 使用定理 `OrderMonoidIso.instMulEquivClass`：∀ {α : Type u_2} {β : Type u_3} [inst 
+: Preorder α] [inst_1 : Preorder β] [inst_2 : Mul α] [inst_3 : Mul β],   MulEqui
+vClass (α ≃*o β) α β
+· 使用定理 `not_false_eq_true`：(¬False) = True
+（共 35 条，此处仅展示前 30 条）
 -/
 lemma IsEquiv.uniformContinuous (h : v.IsEquiv w) :
     @UniformContinuous R R (Valued.mk' w).toUniformSpace (Valued.mk' v).toUniformSpace
@@ -2622,51 +1718,39 @@ lemma IsEquiv.uniformContinuous (h : v.IsEquiv w) :
   obtain ⟨a, ha, y, hu⟩ := (mem_valueGroup_iff_of_comm _).mp u.2
   simp only [Set.mem_ofPred_eq, RingHom.id_apply]
   set y₀ := h_val.orderMonoidIso x with hy₀_def
-  have hy₀_ne_zero : y₀ != 0 := by simp [hy₀_def]
+  have hy₀_ne_zero : y₀ ≠ 0 := by simp [hy₀_def]
   set y := (Units.mk0 y₀ hy₀_ne_zero) with hy_def
   use y
   intro b hb
   rwa [← h_val.orderMonoidIso_spec, hy_def, Units.val_mk0, hy₀_def,
     h_val.orderMonoidIso.strictMono.lt_iff_lt] at hb
-
-/--
-theorem `IsEquiv.uniformContinuous_congr` / 定理 `IsEquiv.uniformContinuous_congr`
-
-English:
-theorem IsEquiv.uniformContinuous_congr
-  given: (h : v.IsEquiv w)
-  proof: by
-  have hcomp : WithVal.congr v w (.refl R) = _ := RingEquiv.ext_iff.mpr (congrFun rfl)
-  have h1 := IsEquiv.uniformContinuous_equiv (hval := Valued.mk' w) rfl h
-  have h2 := IsEquiv.uniformContinuous_equiv_symm (hval := Valued.mk' v) rfl h
-  have hR : @UniformContinuous R R (Valued.mk' w).toUniformSpace (Valued.mk' v).toUniformSpace
-      (RingHom.id R) := h.uniformContinuous
-  apply @UniformContinuous.comp (WithVal v) R (WithVal w) _ (Valued.mk' w).toUniformSpace _
-    ((RingEquiv.refl R).trans (WithVal.equiv w).symm) (WithVal.equiv v) ?_ h1
-  exact @UniformContinuous.comp R R (WithVal w) (Valued.mk' w).toUniformSpace
-       (Valued.mk' v).toUniformSpace _ (WithVal.equiv w).symm (RingEquiv.refl R) h2 hR
-
-@[deprecated (since := "2026-01-27")]
-  alias IsEquiv.uniformContinuous_equivWithVal := IsEquiv.uniformContinuous_congr
-
-中文:
-定理 Is等价.uniformContinuous_congr
-  条件: (h : v.Is等价 w)
-  证明: by
-  have hcomp : WithVal.congr v w (.refl R) = _ := RingEquiv.ext_iff.mpr (congrFun rfl)
-  have h1 := IsEquiv.uniformContinuous_equiv (hval := Valued.mk' w) rfl h
-  have h2 := IsEquiv.uniformContinuous_equiv_symm (hval := Valued.mk' v) rfl h
-  have hR : @UniformContinuous R R (Valued.mk' w).toUniformSpace (Valued.mk' v).toUniformSpace
-      (RingHom.id R) := h.uniformContinuous
-  apply @UniformContinuous.comp (WithVal v) R (WithVal w) _ (Valued.mk' w).toUniformSpace _
-    ((RingEquiv.refl R).trans (WithVal.equiv w).symm) (WithVal.equiv v) ?_ h1
-  exact @UniformContinuous.comp R R (WithVal w) (Valued.mk' w).toUniformSpace
-       (Valued.mk' v).toUniformSpace _ (WithVal.equiv w).symm (RingEquiv.refl R) h2 hR
-
-@[deprecated (since := "2026-01-27")]
-  alias IsEquiv.uniformContinuous_equivWithVal := IsEquiv.uniformContinuous_congr
-
-Depends on / 依赖: IsEquiv, IsEquiv.uniformContinuous_equiv, IsEquiv.uniformContinuous_equiv_symm, RingEquiv, RingEquiv.ext_iff.mpr, RingEquiv.refl, RingHom, RingHom.id, UniformContinuous, UniformContinuous.comp, Valued, Valued.mk, WithVal, WithVal.congr, WithVal.equiv, ext_iff, h.uniformContinuous, toUniformSpace, uniformContinuous, uniformContinuous_equiv
+/-
+**Valuation.IsEquiv.uniformContinuous_congr** 是 Mathlib 中的一个定理，位于命名空间 `Valuation
+.IsEquiv`。
+形式化陈述：∀ {R : Type u_4} {Γ₀ : Type u_5} {Γ₀' : Type u_6} [inst : Ring R] [inst_1 
+: LinearOrderedCommGroupWithZero Γ₀]   [inst_2 : LinearOrderedCommGroupWithZero 
+Γ₀'] {v : Valuation R Γ₀} {w : Valuation R Γ₀'},   v.IsEquiv w → UniformContinuo
+us ⇑(WithVal.congr v w (RingEquiv.refl R))
+参数：WithVal.congr v w (RingEquiv.refl R)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `RingEquiv.ext_iff`：∀ {R : Type u_4} {S : Type u_5} [inst : Mul R] [inst_
+1 : Mul S] [inst_2 : Add R] [inst_3 : Add S] {f g : R ≃+* S},   f = g ↔ ∀ (x : R
+), f x …
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Valuation.IsEquiv.uniformContinuous_equiv`：∀ {R : Type u_4} {Γ₀ : Type u
+_5} {Γ₀' : Type u_6} [inst : Ring R] [inst_1 : LinearOrderedCommGroupWithZero Γ₀
+]   [inst_2 : LinearOrderedComm…
+· 使用定理 `Valuation.IsEquiv.uniformContinuous_equiv_symm`：∀ {R : Type u_4} {Γ₀ : T
+ype u_5} {Γ₀' : Type u_6} [inst : Ring R] [inst_1 : LinearOrderedCommGroupWithZe
+ro Γ₀]   [inst_2 : LinearOrderedComm…
+· 使用定理 `Valuation.IsEquiv.uniformContinuous`：∀ {R : Type u_4} {Γ₀ : Type u_5} {Γ
+₀' : Type u_6} [inst : Ring R] [inst_1 : LinearOrderedCommGroupWithZero Γ₀]   [i
+nst_2 : LinearOrderedComm…
+· 使用定理 `UniformContinuous.comp`：∀ {α : Type ua} {β : Type ub} {γ : Type uc} [ins
+t : UniformSpace α] [inst_1 : UniformSpace β] [inst_2 : UniformSpace γ]   {g : β
+ → γ} {f : α…
 -/
 theorem IsEquiv.uniformContinuous_congr (h : v.IsEquiv w) :
     UniformContinuous (WithVal.congr v w (.refl R)) := by
@@ -2683,108 +1767,158 @@ theorem IsEquiv.uniformContinuous_congr (h : v.IsEquiv w) :
 @[deprecated (since := "2026-01-27")]
   alias IsEquiv.uniformContinuous_equivWithVal := IsEquiv.uniformContinuous_congr
 
-/--
-Definition of `IsEquiv.uniformEquiv` / `IsEquiv.uniformEquiv` 的定义
+/-- If two valuations `v` and `w` are equivalent then `WithVal v` and `WithVal w` are
+isomorphic as uniform spaces. -/
+/-
+**Valuation.IsEquiv.uniformEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Valuation.IsEquiv`。
+形式化陈述：{R : Type u_4} →   {Γ₀ : Type u_5} →     {Γ₀' : Type u_6} →       [inst : 
+Ring R] →         [inst_1 : LinearOrderedCommGroupWithZero Γ₀] →           [inst
+_2 : LinearOrderedCommGroupWithZero Γ₀'] →             {v : Valuation R Γ₀} → {w
+ : Valuation R Γ₀'} → v.IsEquiv w → WithVal v ≃ᵤ WithVal w
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Valuation.IsEquiv.uniformContinuous_congr`：∀ {R : Type u_4} {Γ₀ : Type u
+_5} {Γ₀' : Type u_6} [inst : Ring R] [inst_1 : LinearOrderedCommGroupWithZero Γ₀
+]   [inst_2 : LinearOrderedComm…
 
-English:
-definition IsEquiv.uniformEquiv
-  signature: (h : v.IsEquiv w)
-  body: WithVal.congr v w (.refl R)
-  uniformContinuous_toFun := h.uniformContinuous_congr
-  uniformContinuous_invFun := h.symm.uniformContinuous_congr
-
-中文:
-定义 Is等价.uniformEquiv
-  签名: (h : v.Is等价 w)
-  定义体: WithVal.congr v w (.refl R)
-  uniformContinuous_toFun := h.uniformContinuous_congr
-  uniformContinuous_invFun := h.symm.uniformContinuous_congr
-
-Depends on / 依赖: WithVal, WithVal.congr
+--- 原说明 ---
+If two valuations `v` and `w` are equivalent then `WithVal v` and `WithVal w` ar
+e
+isomorphic as uniform spaces.
 -/
 def IsEquiv.uniformEquiv (h : v.IsEquiv w) : WithVal v ≃ᵤ WithVal w where
   __ := WithVal.congr v w (.refl R)
   uniformContinuous_toFun := h.uniformContinuous_congr
   uniformContinuous_invFun := h.symm.uniformContinuous_congr
 
-/--
-Definition of `_root_.WithVal.uniformEquiv` / `_root_.WithVal.uniformEquiv` 的定义
+/-- Let `v : Valuation R Γ₀`. If `R` has `Valued R Γ₀'` defined via construction through
+`w : Valuation R Γ₀'`, with `v` equivalent to `w`, then `WithVal.equiv` defines a uniform
+space isomorphism `WithVal v ≃ᵤ R`. -/
+/-
+**Valuation._root_.WithVal.uniformEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Valuation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.WithVal.uniformEquiv
-  signature: [Valued R Γ₀'] (hV : Valued.v = w) (h : v.IsEquiv w)
-  body: WithVal.equiv v
-  uniformContinuous_toFun := h.uniformContinuous_equiv hV
-  uniformContinuous_invFun := h.symm.uniformContinuous_equiv_symm hV
-
-中文:
-定义 _root_.WithVal.uniformEquiv
-  签名: [赋值 R Γ₀'] (hV : 赋值.v = w) (h : v.Is等价 w)
-  定义体: WithVal.equiv v
-  uniformContinuous_toFun := h.uniformContinuous_equiv hV
-  uniformContinuous_invFun := h.symm.uniformContinuous_equiv_symm hV
-
-Depends on / 依赖: WithVal, WithVal.equiv
+--- 原说明 ---
+Let `v : Valuation R Γ₀`. If `R` has `Valued R Γ₀'` defined via construction thr
+ough
+`w : Valuation R Γ₀'`, with `v` equivalent to `w`, then `WithVal.equiv` defines 
+a uniform
+space isomorphism `WithVal v ≃ᵤ R`.
 -/
 def _root_.WithVal.uniformEquiv [Valued R Γ₀'] (hV : Valued.v = w) (h : v.IsEquiv w) :
     WithVal v ≃ᵤ R where
   __ := WithVal.equiv v
   uniformContinuous_toFun := h.uniformContinuous_equiv hV
   uniformContinuous_invFun := h.symm.uniformContinuous_equiv_symm hV
-
-/--
-theorem `exists_div_eq_of_surjective` / 定理 `exists_div_eq_of_surjective`
-
-English:
-theorem exists_div_eq_of_surjective
-  statement: {K : Type*} [DivisionRing K] {Γ₀ : Type*}
-  proof: by
-  obtain ⟨r, hr⟩ := hv γ
-  exact ⟨r, 1, by simp [hr]⟩
-
-中文:
-定理 存在_div_eq_of_surjective
-  结论: {K : 类型} [除环 K] {Γ₀ : 类型}
-  证明: by
-  obtain ⟨r, hr⟩ := hv γ
-  exact ⟨r, 1, by simp [hr]⟩
+/-
+**Valuation.exists_div_eq_of_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Valuation`。
+形式化陈述：exists_div_eq_of_surjective {K : Type*} [DivisionRing K] {Γ₀ : Type*} [Lin
+earOrderedCommGroupWithZero Γ₀] {v : Valuation K Γ₀} (hv : Function.Surjective v
+) (γ : Γ₀ˣ) : exists r s, 0 < v r ∧ 0 < v s ∧ v r / v s = γ
+参数：hv : Function.Surjective v；γ : Γ₀ˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `ValuationClass.toMonoidWithZeroHomClass`：∀ {F : Type u_7} {R : outParam 
+(Type u_5)} {Γ₀ : outParam (Type u_6)} {inst : LinearOrderedCommMonoidWithZero Γ
+₀}   {inst_1 : Ring R} {inst_…
+· 使用定理 `Valuation.instValuationClass`：∀ {R : Type u_3} {Γ₀ : Type u_4} [inst : R
+ing R] [inst_1 : LinearOrderedCommMonoidWithZero Γ₀],   ValuationClass (Valuatio
+n R Γ₀) R Γ₀
+· 使用定理 `instZeroLEOneClassOfIsBotZeroClass`：∀ {α : Type u_1} [inst : LE α] [inst
+_1 : Zero α] [inst_2 : One α] [IsBotZeroClass α], ZeroLEOneClass α
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `GroupWithZero.toNontrivial`：∀ {G₀ : Type u} [self : GroupWithZero G₀], N
+ontrivial G₀
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 theorem exists_div_eq_of_surjective {K : Type*} [DivisionRing K] {Γ₀ : Type*}
     [LinearOrderedCommGroupWithZero Γ₀] {v : Valuation K Γ₀} (hv : Function.Surjective v)
-    (γ : Γ₀ˣ) : exists r s, 0 < v r ∧ 0 < v s ∧ v r / v s = γ := by
+    (γ : Γ₀ˣ) : ∃ r s, 0 < v r ∧ 0 < v s ∧ v r / v s = γ := by
   obtain ⟨r, hr⟩ := hv γ
   exact ⟨r, 1, by simp [hr]⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `restrict_exists_div_eq` / 定理 `restrict_exists_div_eq`
-
-English:
-theorem restrict_exists_div_eq
-  statement: {K : Type*} [DivisionRing K] {Γ₀ : Type*}
-  proof: by
-  obtain ⟨r, hr⟩ := ValueGroup₀.restrict₀_surjective (.ofClass v) γ
-  exact ⟨r, 1, by
-    simp only [map_one, zero_lt_one, restrict_def, hr, div_one, and_self, and_true]
-    rw [← map_zero v]
-    simpa [← hr] using embedding_strictMono (WithZero.pos_iff_ne_zero.mpr (Units.ne_zero γ))⟩
-
-中文:
-定理 restrict_存在_div_eq
-  结论: {K : 类型} [除环 K] {Γ₀ : 类型}
-  证明: by
-  obtain ⟨r, hr⟩ := ValueGroup₀.restrict₀_surjective (.ofClass v) γ
-  exact ⟨r, 1, by
-    simp only [map_one, zero_lt_one, restrict_def, hr, div_one, and_self, and_true]
-    rw [← map_zero v]
-    simpa [← hr] using embedding_strictMono (WithZero.pos_iff_ne_zero.mpr (Units.ne_zero γ))⟩
-
-Depends on / 依赖: Units.ne_zero, WithZero, WithZero.pos_iff_ne_zero.mpr, and_self, and_true, div_one, embedding_strictMono, map_one, map_zero, ne_zero, ofClass, pos_iff_ne_zero, restrict_def, zero_lt_one
+/-
+**Valuation.restrict_exists_div_eq** 是 Mathlib 中的一个定理，位于命名空间 `Valuation`。
+形式化陈述：restrict_exists_div_eq {K : Type*} [DivisionRing K] {Γ₀ : Type*} [LinearOr
+deredCommGroupWithZero Γ₀] (v : Valuation K Γ₀) (γ : (ValueGroup₀ (.ofClass v))ˣ
+) : exists r s, 0 < v r ∧ 0 < v s ∧ v.restrict r / v.restrict s = γ.1
+参数：v : Valuation K Γ₀；γ : (ValueGroup₀ (.ofClass v))ˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ValuationClass.toMonoidWithZeroHomClass`：∀ {F : Type u_7} {R : outParam 
+(Type u_5)} {Γ₀ : outParam (Type u_6)} {inst : LinearOrderedCommMonoidWithZero Γ
+₀}   {inst_1 : Ring R} {inst_…
+· 使用定理 `Valuation.instValuationClass`：∀ {R : Type u_3} {Γ₀ : Type u_4} [inst : R
+ing R] [inst_1 : LinearOrderedCommMonoidWithZero Γ₀],   ValuationClass (Valuatio
+n R Γ₀) R Γ₀
+· 使用定理 `MonoidWithZeroHom.ValueGroup₀.restrict₀_surjective`：∀ {A : Type u_1} {B 
+: Type u_2} [inst : GroupWithZero A] [inst_1 : GroupWithZero B] (f : A →*₀ B),  
+ Function.Surjective ⇑(MonoidWithZeroHom…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `instZeroLEOneClassOfIsBotZeroClass`：∀ {α : Type u_1} [inst : LE α] [inst
+_1 : Zero α] [inst_2 : One α] [IsBotZeroClass α], ZeroLEOneClass α
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `GroupWithZero.toNontrivial`：∀ {G₀ : Type u} [self : GroupWithZero G₀], N
+ontrivial G₀
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用引理 `MonoidWithZeroHom.ValueGroup₀.embedding_restrict₀`：embedding_restrict₀ (
+a : A) : ValueGroup₀.embedding (restrict₀ f a) = f a
+· 使用引理 `MonoidWithZeroHom.ValueGroup₀.embedding_strictMono`：embedding_strictMono
+ : StrictMono (embedding (f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `WithZero.pos_iff_ne_zero`：∀ {α : Type u_1} [inst : LT α] {x : WithZero α
+}, 0 < x ↔ x ≠ 0
+· 使用定理 `Units.ne_zero`：ne_zero [Nontrivial M₀] (u : M₀ˣ) : (u : M₀) != 0
+· 使用定理 `WithZero.instNontrivial`：∀ {α : Type u} [Nonempty α], Nontrivial (WithZe
+ro α)
+· 使用定理 `Torsor.nonempty`：∀ {G : outParam (Type u_1)} {P : Type u_2} {inst : Grou
+p G} [self : Torsor G P], Nonempty P
 -/
 theorem restrict_exists_div_eq {K : Type*} [DivisionRing K] {Γ₀ : Type*}
     [LinearOrderedCommGroupWithZero Γ₀] (v : Valuation K Γ₀)
     (γ : (ValueGroup₀ (.ofClass v))ˣ) :
-    exists r s, 0 < v r ∧ 0 < v s ∧ v.restrict r / v.restrict s = γ.1 := by
+    ∃ r s, 0 < v r ∧ 0 < v s ∧ v.restrict r / v.restrict s = γ.1 := by
   obtain ⟨r, hr⟩ := ValueGroup₀.restrict₀_surjective (.ofClass v) γ
   exact ⟨r, 1, by
     simp only [map_one, zero_lt_one, restrict_def, hr, div_one, and_self, and_true]
@@ -2792,52 +1926,73 @@ theorem restrict_exists_div_eq {K : Type*} [DivisionRing K] {Γ₀ : Type*}
     simpa [← hr] using embedding_strictMono (WithZero.pos_iff_ne_zero.mpr (Units.ne_zero γ))⟩
 
 open UniformSpace.Completion in
-/--
-theorem `IsEquiv.valuedCompletion_le_one_iff` / 定理 `IsEquiv.valuedCompletion_le_one_iff`
-
-English:
-theorem IsEquiv.valuedCompletion_le_one_iff
-  statement: {K : Type*} [Field K] {v : Valuation K Γ₀}
-  proof: by
-  induction x using induction_on with
-  | hp =>
-    have h1 (x : UniformSpace.Completion (WithVal v)) :
-      Valued.v x <= 1 ↔ Valued.v.restrict x <= 1 := by rw [restrict_le_one_iff]
-    simp_rw [h1]
-    convert!
-      (mapEquiv h.uniformEquiv).toHomeomorph.isClosed_setOfPred_iff
-        (Valued.isClopen_closedBall _ one_ne_zero) (Valued.isClopen_closedBall _ one_ne_zero)
-    rw [restrict_le_one_iff]
-    rfl
-  | ih a =>
-    simpa [Valued.valuedCompletion_apply] using! h.le_one_iff_le_one
-
-中文:
-定理 Is等价.valuedCompletion_le_one_iff
-  结论: {K : 类型} [域 K] {v : 赋值 K Γ₀}
-  证明: by
-  induction x using induction_on with
-  | hp =>
-    have h1 (x : UniformSpace.Completion (WithVal v)) :
-      Valued.v x <= 1 ↔ Valued.v.restrict x <= 1 := by rw [restrict_le_one_iff]
-    simp_rw [h1]
-    convert!
-      (mapEquiv h.uniformEquiv).toHomeomorph.isClosed_setOfPred_iff
-        (Valued.isClopen_closedBall _ one_ne_zero) (Valued.isClopen_closedBall _ one_ne_zero)
-    rw [restrict_le_one_iff]
-    rfl
-  | ih a =>
-    simpa [Valued.valuedCompletion_apply] using! h.le_one_iff_le_one
-
-Depends on / 依赖: Completion, UniformSpace, UniformSpace.Completion, Valued, Valued.isClopen_closedBall, Valued.v, Valued.v.restrict, Valued.valuedCompletion_apply, WithVal, convert, h.le_one_iff_le_one, h.uniformEquiv, induction_on, isClopen_closedBall, isClosed_setOfPred_iff, le_one_iff_le_one, mapEquiv, one_ne_zero, restrict, restrict_le_one_iff
+/-
+**Valuation.IsEquiv.valuedCompletion_le_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `Valua
+tion.IsEquiv`。
+形式化陈述：∀ {Γ₀ : Type u_5} {Γ₀' : Type u_6} [inst : LinearOrderedCommGroupWithZero 
+Γ₀]   [inst_1 : LinearOrderedCommGroupWithZero Γ₀'] {K : Type u_7} [inst_2 : Fie
+ld K] {v : Valuation K Γ₀}   {w : Valuation K Γ₀'} (h : v.IsEquiv w) {x : v.Comp
+letion},   Valued.v x ≤ 1 ↔ Valued.v ((UniformSpace.Completion.mapEquiv h.unifor
+mEquiv) x) ≤ 1
+参数：h : v.IsEquiv w；(UniformSpace.Completion.mapEquiv h.uniformEquiv) x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformSpace.Completion.induction_on`：induction_on {p : Completion α -> 
+Prop} (a : Completion α) (hp : IsClosed { a | p a }) (ih : forall a : α, p a) : 
+p a
+· 使用定理 `IsTopologicalDivisionRing.toIsTopologicalRing`：∀ {K : Type u_1} {inst : 
+DivisionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing 
+K],   IsTopologicalRing K
+· 使用定理 `Valued.isTopologicalDivisionRing`：∀ {K : Type u_1} [inst : DivisionRing 
+K] {Γ₀ : Type u_2} [inst_1 : LinearOrderedCommGroupWithZero Γ₀]   [inst_2 : Valu
+ed K Γ₀], IsTopologica…
+· 使用定理 `Valued.toIsUniformAddGroup`：∀ {R : Type u} {inst : Ring R} {Γ₀ : outPara
+m (Type v)} {inst_1 : LinearOrderedCommGroupWithZero Γ₀}   [self : Valued R Γ₀],
+ IsUniformAddGro…
+· 使用定理 `ValuationClass.toMonoidWithZeroHomClass`：∀ {F : Type u_7} {R : outParam 
+(Type u_5)} {Γ₀ : outParam (Type u_6)} {inst : LinearOrderedCommMonoidWithZero Γ
+₀}   {inst_1 : Ring R} {inst_…
+· 使用定理 `Valuation.instValuationClass`：∀ {R : Type u_3} {Γ₀ : Type u_4} [inst : R
+ing R] [inst_1 : LinearOrderedCommMonoidWithZero Γ₀],   ValuationClass (Valuatio
+n R Γ₀) R Γ₀
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Valuation.restrict_le_one_iff`：restrict_le_one_iff {x : R} : v.restrict 
+x <= 1 ↔ v x <= 1
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Homeomorph.isClosed_setOfPred_iff`：isClosed_setOfPred_iff {p : X -> Prop
+} {q : Y -> Prop} (f : X ≃ₜ Y) (hs : IsClopen {x | p x}) (ht : IsClopen {y | q y
+}) : IsClosed { x : X |…
+· 使用定理 `Valued.isClopen_closedBall`：isClopen_closedBall {r : ValueGroup₀ (.ofCla
+ss _i.v)} (hr : r != 0) : IsClopen {x | v.restrict x <= r}
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `WithZero.instNontrivial`：∀ {α : Type u} [Nonempty α], Nontrivial (WithZe
+ro α)
+· 使用定理 `Torsor.nonempty`：∀ {G : outParam (Type u_1)} {P : Type u_2} {inst : Grou
+p G} [self : Torsor G P], Nonempty P
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Valued.valuedCompletion_apply`：valuedCompletion_apply (x : K) : Valued.v
+ (x : hat K) = v x
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `UniformSpace.Completion.mapEquiv_coe`：mapEquiv_coe (e : α ≃ᵤ β) (a : α) 
+: mapEquiv e a = (e a)
+· 使用引理 `Valuation.IsEquiv.le_one_iff_le_one`：le_one_iff_le_one (h : v₁.IsEquiv v
+₂) {x : R} : v₁ x <= 1 ↔ v₂ x <= 1
 -/
 theorem IsEquiv.valuedCompletion_le_one_iff {K : Type*} [Field K] {v : Valuation K Γ₀}
     {w : Valuation K Γ₀'} (h : v.IsEquiv w) {x : v.Completion} :
-    Valued.v x <= 1 ↔ Valued.v (mapEquiv h.uniformEquiv x) <= 1 := by
+    Valued.v x ≤ 1 ↔ Valued.v (mapEquiv h.uniformEquiv x) ≤ 1 := by
   induction x using induction_on with
   | hp =>
     have h1 (x : UniformSpace.Completion (WithVal v)) :
-      Valued.v x <= 1 ↔ Valued.v.restrict x <= 1 := by rw [restrict_le_one_iff]
+      Valued.v x ≤ 1 ↔ Valued.v.restrict x ≤ 1 := by rw [restrict_le_one_iff]
     simp_rw [h1]
     convert!
       (mapEquiv h.uniformEquiv).toHomeomorph.isClosed_setOfPred_iff
@@ -2855,46 +2010,41 @@ namespace NumberField.RingOfIntegers
 
 variable {K : Type*} [Field K] [NumberField K] (v : Valuation K Γ₀)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeHead (𝓞 (WithVal v)) (WithVal v)
-  body: RingOfIntegers.val x
-
-中文:
-实例 :
-  签名: CoeHead (𝓞 (WithVal v)) (WithVal v)
-  定义体: RingOfIntegers.val x
-
-Depends on / 依赖: RingOfIntegers, RingOfIntegers.val
+/-
+**NumberField.RingOfIntegers.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.RingOfInteg
+ers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeHead (𝓞 (WithVal v)) (WithVal v) where
   coe x := RingOfIntegers.val x
-
-instance (R : Type*) [CommRing R] [Algebra R K] [IsIntegralClosure R Int K] :
-    IsIntegralClosure R Int (WithVal v) := .of_algEquiv _ (WithVal.algEquiv Int v).symm (fun _ => rfl)
+/-
+**NumberField.RingOfIntegers.** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.RingOfInteg
+ers`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (R : Type*) [CommRing R] [Algebra R K] [IsIntegralClosure R ℤ K] :
+    IsIntegralClosure R ℤ (WithVal v) := .of_algEquiv _ (WithVal.algEquiv ℤ v).symm (fun _ ↦ rfl)
 
 /-- The ring equivalence between `𝓞 (WithVal v)` and an integral closure of
 `ℤ` in `K`. -/
 @[simps!]
-/--
-Definition of `withValEquiv` / `withValEquiv` 的定义
+/-
+**NumberField.RingOfIntegers.withValEquiv** 是 Mathlib 中的一个定义，位于命名空间 `NumberField
+.RingOfIntegers`。
+形式化陈述：withValEquiv (R : Type*) [CommRing R] [Algebra R K] [IsIntegralClosure R I
+nt K] : 𝓞 (WithVal v) ≃+* R
+参数：R : Type*。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.RingOfIntegers.instIsIntegralClosureIntWithVal`：∀ {Γ₀ : Type
+ u_2} [inst : LinearOrderedCommGroupWithZero Γ₀] {K : Type u_3} [inst_1 : Field 
+K] (v : Valuation K Γ₀)   (R : Type u_4) [inst_2…
 
-English:
-definition withValEquiv
-  signature: (R : Type*) [CommRing R] [Algebra R K] [IsIntegralClosure R Int K]
-  body: NumberField.RingOfIntegers.equiv R
-
-中文:
-定义 withValEquiv
-  签名: (R : 类型) [交换环 R] [代数 R K] [是整闭包 R 整数 K]
-  定义体: NumberField.RingOfIntegers.equiv R
-
-Depends on / 依赖: NumberField, NumberField.RingOfIntegers.equiv, RingOfIntegers
+--- 原说明 ---
+The ring equivalence between `𝓞 (WithVal v)` and an integral closure of
+`ℤ` in `K`.
 -/
-def withValEquiv (R : Type*) [CommRing R] [Algebra R K] [IsIntegralClosure R Int K] :
+def withValEquiv (R : Type*) [CommRing R] [Algebra R K] [IsIntegralClosure R ℤ K] :
     𝓞 (WithVal v) ≃+* R := NumberField.RingOfIntegers.equiv R
 
 end NumberField.RingOfIntegers
@@ -2906,20 +2056,17 @@ open scoped NumberField in
 /-- The ring of integers of `WithVal v`, when `v` is a valuation on `ℚ`, is
 equivalent to `ℤ`. -/
 @[simps! apply]
-/--
-Definition of `Rat.ringOfIntegersWithValEquiv` / `Rat.ringOfIntegersWithValEquiv` 的定义
+/-
+**Rat.ringOfIntegersWithValEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Rat.ringOfIntegersWithValEquiv (v : Valuation Rat Γ₀) : 𝓞 (WithVal v) ≃+* 
+Int
+参数：v : Valuation Rat Γ₀。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Rat.ringOfIntegersWithValEquiv
-  signature: (v : Valuation Rat Γ₀)
-  body: NumberField.RingOfIntegers.withValEquiv v Int
-
-中文:
-定义 有理数.ringOf整数egersWithValEquiv
-  签名: (v : 赋值 有理数 Γ₀)
-  定义体: NumberField.RingOfIntegers.withValEquiv v Int
-
-Depends on / 依赖: NumberField, NumberField.RingOfIntegers.withValEquiv, RingOfIntegers, withValEquiv
+--- 原说明 ---
+The ring of integers of `WithVal v`, when `v` is a valuation on `ℚ`, is
+equivalent to `ℤ`.
 -/
-def Rat.ringOfIntegersWithValEquiv (v : Valuation Rat Γ₀) : 𝓞 (WithVal v) ≃+* Int :=
-  NumberField.RingOfIntegers.withValEquiv v Int
+def Rat.ringOfIntegersWithValEquiv (v : Valuation ℚ Γ₀) : 𝓞 (WithVal v) ≃+* ℤ :=
+  NumberField.RingOfIntegers.withValEquiv v ℤ

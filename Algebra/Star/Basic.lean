@@ -45,26 +45,21 @@ open MulOpposite
 
 variable {R : Type u}
 
-/--
-Definition of `StarMemClass` / `StarMemClass` 的定义
+/-- `StarMemClass S G` states `S` is a type of subsets `s ⊆ G` closed under star. -/
+/-
+**StarMemClass** 是 Mathlib 中的一个类，位于命名空间 ``。
+形式化陈述：StarMemClass (S R : Type*) [Star R] [SetLike S R] : Prop where /-- Closure
+ under star. -/ star_mem : forall {s : S} {r : R}, r in s -> star r in s  export
+ StarMemClass (star_mem)  attribute [aesop 90% (rule_sets
+参数：S R : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class StarMemClass
-  parameters: (S R : Type*) [Star R] [SetLike S R]
-  axioms and operations (1):
-    - star_mem : forall {s : S} {r : R}, r in s -> star r in s
-
-中文:
-类 StarMem类
-  参数: (S R : 类型) [对合 R] [集合状 S R]
-  公理与运算 (1 个):
-    - star_mem : 对任意 {s : S} {r : R}, r in s -> star r in s
-
-Depends on / 依赖: SetLike, star_mem
+--- 原说明 ---
+`StarMemClass S G` states `S` is a type of subsets `s ⊆ G` closed under star.
 -/
 class StarMemClass (S R : Type*) [Star R] [SetLike S R] : Prop where
   /-- Closure under star. -/
-  star_mem : forall {s : S} {r : R}, r in s -> star r in s
+  star_mem : ∀ {s : S} {r : R}, r ∈ s → star r ∈ s
 
 export StarMemClass (star_mem)
 
@@ -74,59 +69,34 @@ namespace StarMemClass
 
 variable {S : Type w} [Star R] [SetLike S R] [hS : StarMemClass S R] (s : S)
 
-/--
-Instance `instStar` / 实例 `instStar`
-
-English:
-instance instStar
-  signature: : Star s where
-  body: ⟨star (r : R), star_mem r.prop⟩
-
-中文:
-实例 instStar
-  签名: : 对合 s where
-  定义体: ⟨star (r : R), star_mem r.prop⟩
-
-Depends on / 依赖: r.prop, star_mem
+/-
+**StarMemClass.instStar** 是 Mathlib 中的一个实例，位于命名空间 `StarMemClass`。
+形式化陈述：instStar : Star s where star r
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instStar : Star s where
   star r := ⟨star (r : R), star_mem r.prop⟩
-
-/--
-lemma `coe_star` / 引理 `coe_star`
-
-English:
-lemma coe_star
-  given: (x : s)
-  statement: star x = star (x : R)
-  proof: rfl
-
-中文:
-引理 coe_star
-  条件: (x : s)
-  结论: star x = star (x : R)
-  证明: rfl
+/-
+**StarMemClass.coe_star** 是 Mathlib 中的一个定理，位于命名空间 `StarMemClass`。
+形式化陈述：∀ {R : Type u} {S : Type w} [inst : Star R] [inst_1 : SetLike S R] [hS : S
+tarMemClass S R] (s : S) (x : ↥s),   ↑(star x) = star ↑x
+参数：s : S；x : ↥s；star x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_star (x : s) : star x = star (x : R) := rfl
 
 end StarMemClass
 
-/--
-Definition of `InvolutiveStar` / `InvolutiveStar` 的定义
+/-- Typeclass for a star operation with is involutive.
+-/
+/-
+**InvolutiveStar** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class InvolutiveStar
-  parameters: (R : Type u)
-  extends: Star R
-  axioms and operations (1):
-    - star_involutive : Function.Involutive star
-
-中文:
-类 InvolutiveStar
-  参数: (R : 类型u)
-  继承: 对合 R
-  公理与运算 (1 个):
-    - star_involutive : 函数.对合 star
+--- 原说明 ---
+Typeclass for a star operation with is involutive.
 -/
 class InvolutiveStar (R : Type u) extends Star R where
   /-- Involutive condition. -/
@@ -135,135 +105,92 @@ class InvolutiveStar (R : Type u) extends Star R where
 export InvolutiveStar (star_involutive)
 
 @[simp]
-/--
-theorem `star_star` / 定理 `star_star`
-
-English:
-theorem star_star
-  given: [InvolutiveStar R] (r : R)
-  statement: star (star r) = r
-  proof: star_involutive _
-
-中文:
-定理 star_star
-  条件: [InvolutiveStar R] (r : R)
-  结论: star (star r) = r
-  证明: star_involutive _
-
-Depends on / 依赖: star_involutive
+/-
+**star_star** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_star [InvolutiveStar R] (r : R) : star (star r) = r
+参数：r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `InvolutiveStar.star_involutive`：∀ {R : Type u} [self : InvolutiveStar R]
+, Function.Involutive star
 -/
 theorem star_star [InvolutiveStar R] (r : R) : star (star r) = r :=
   star_involutive _
-
-/--
-lemma `star_mem_iff` / 引理 `star_mem_iff`
-
-English:
-lemma star_mem_iff
-  statement: {S : Type*} [SetLike S R] [InvolutiveStar R] [StarMemClass S R]
-  proof: ⟨fun h => star_star x ▸ star_mem h, fun h => star_mem h⟩
-
-中文:
-引理 star_mem_iff
-  结论: {S : 类型} [集合状 S R] [InvolutiveStar R] [StarMem类 S R]
-  证明: ⟨fun h => star_star x ▸ star_mem h, fun h => star_mem h⟩
-
-Depends on / 依赖: star_mem, star_star
+/-
+**star_mem_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：star_mem_iff {S : Type*} [SetLike S R] [InvolutiveStar R] [StarMemClass S 
+R] {s : S} {x : R} : star x in s ↔ x in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StarMemClass.star_mem`：∀ {S : Type u_1} {R : Type u_2} {inst : Star R} {
+inst_1 : SetLike S R} [self : StarMemClass S R] {s : S} {r : R},   r ∈ s → star 
+r ∈ s
+· 使用定理 `star_star`：star_star [InvolutiveStar R] (r : R) : star (star r) = r
 -/
 lemma star_mem_iff {S : Type*} [SetLike S R] [InvolutiveStar R] [StarMemClass S R]
-    {s : S} {x : R} : star x in s ↔ x in s :=
+    {s : S} {x : R} : star x ∈ s ↔ x ∈ s :=
   ⟨fun h => star_star x ▸ star_mem h, fun h => star_mem h⟩
-
-/--
-theorem `star_injective` / 定理 `star_injective`
-
-English:
-theorem star_injective
-  given: [InvolutiveStar R]
-  statement: Function.Injective (star : R -> R)
-  proof: Function.Involutive.injective star_involutive
-
-@[aesop 5% (rule_sets := [SetLike!])]
-
-中文:
-定理 star_injective
-  条件: [InvolutiveStar R]
-  结论: 函数.单射 (star : R -> R)
-  证明: Function.Involutive.injective star_involutive
-
-@[aesop 5% (rule_sets := [SetLike!])]
-
-Depends on / 依赖: Function, Function.Involutive.injective, Involutive, injective, star_involutive
+/-
+**star_injective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_injective [InvolutiveStar R] : Function.Injective (star : R -> R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Involutive.injective`：∀ {α : Sort u} {f : α → α}, Function.Invo
+lutive f → Function.Injective f
+· 使用定理 `InvolutiveStar.star_involutive`：∀ {R : Type u} [self : InvolutiveStar R]
+, Function.Involutive star
 -/
-theorem star_injective [InvolutiveStar R] : Function.Injective (star : R -> R) :=
+theorem star_injective [InvolutiveStar R] : Function.Injective (star : R → R) :=
   Function.Involutive.injective star_involutive
 
 @[aesop 5% (rule_sets := [SetLike!])]
-/--
-theorem `mem_of_star_mem` / 定理 `mem_of_star_mem`
-
-English:
-theorem mem_of_star_mem
-  statement: {S R : Type*} [InvolutiveStar R] [SetLike S R] [StarMemClass S R]
-  proof: by rw [← star_star r]; exact star_mem hr
-
-@[simp]
-
-中文:
-定理 mem_of_star_mem
-  结论: {S R : 类型} [InvolutiveStar R] [集合状 S R] [StarMem类 S R]
-  证明: by rw [← star_star r]; exact star_mem hr
-
-@[simp]
-
-Depends on / 依赖: star_mem, star_star
+/-
+**mem_of_star_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_of_star_mem {S R : Type*} [InvolutiveStar R] [SetLike S R] [StarMemCla
+ss S R] {s : S} {r : R} (hr : star r in s) : r in s
+参数：hr : star r in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `star_star`：star_star [InvolutiveStar R] (r : R) : star (star r) = r
+· 使用定理 `StarMemClass.star_mem`：∀ {S : Type u_1} {R : Type u_2} {inst : Star R} {
+inst_1 : SetLike S R} [self : StarMemClass S R] {s : S} {r : R},   r ∈ s → star 
+r ∈ s
 -/
 theorem mem_of_star_mem {S R : Type*} [InvolutiveStar R] [SetLike S R] [StarMemClass S R]
-    {s : S} {r : R} (hr : star r in s) : r in s := by rw [← star_star r]; exact star_mem hr
+    {s : S} {r : R} (hr : star r ∈ s) : r ∈ s := by rw [← star_star r]; exact star_mem hr
 
 @[simp]
-/--
-theorem `star_inj` / 定理 `star_inj`
-
-English:
-theorem star_inj
-  given: [InvolutiveStar R] {x y : R}
-  statement: star x = star y ↔ x = y
-  proof: star_injective.eq_iff
-
-中文:
-定理 star_inj
-  条件: [InvolutiveStar R] {x y : R}
-  结论: star x = star y ↔ x = y
-  证明: star_injective.eq_iff
-
-Depends on / 依赖: eq_iff, star_injective, star_injective.eq_iff
+/-
+**star_inj** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_inj [InvolutiveStar R] {x y : R} : star x = star y ↔ x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `star_injective`：star_injective [InvolutiveStar R] : Function.Injective (
+star : R -> R)
 -/
 theorem star_inj [InvolutiveStar R] {x y : R} : star x = star y ↔ x = y :=
   star_injective.eq_iff
 
 /-- `star` as an equivalence when it is involutive. -/
 @[simps! apply]
-/--
-Definition of `Equiv.Perm.star` / `Equiv.Perm.star` 的定义
+/-
+**Equiv.Perm.star** 是 Mathlib 中的一个定义，位于命名空间 `Equiv.Perm`。
+形式化陈述：{R : Type u} → [InvolutiveStar R] → Equiv.Perm R
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `InvolutiveStar.star_involutive`：∀ {R : Type u} [self : InvolutiveStar R]
+, Function.Involutive star
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
 
-English:
-definition Equiv.Perm.star
-  signature: [InvolutiveStar R]
-  body: star
-  invFun := star
-  __ : Equiv.Perm R := star_involutive.toPerm _
-
-@[simp]
-
-中文:
-定义 等价.置换.star
-  签名: [InvolutiveStar R]
-  定义体: star
-  invFun := star
-  __ : Equiv.Perm R := star_involutive.toPerm _
-
-@[simp]
+--- 原说明 ---
+`star` as an equivalence when it is involutive.
 -/
 protected def Equiv.Perm.star [InvolutiveStar R] : Equiv.Perm R where
   toFun := star
@@ -271,126 +198,89 @@ protected def Equiv.Perm.star [InvolutiveStar R] : Equiv.Perm R where
   __ : Equiv.Perm R := star_involutive.toPerm _
 
 @[simp]
-/--
-theorem `Equiv.Perm.symm_star` / 定理 `Equiv.Perm.symm_star`
-
-English:
-theorem Equiv.Perm.symm_star
-  given: [InvolutiveStar R]
-  proof: rfl
-
-中文:
-定理 等价.置换.symm_star
-  条件: [InvolutiveStar R]
-  证明: rfl
+/-
+**Equiv.Perm.symm_star** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Equiv.Perm.symm_star [InvolutiveStar R] : (Equiv.Perm.star : R ≃ R).symm =
+ Equiv.Perm.star
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem Equiv.Perm.symm_star [InvolutiveStar R] :
     (Equiv.Perm.star : R ≃ R).symm = Equiv.Perm.star :=
   rfl
-
-/--
-theorem `eq_star_of_eq_star` / 定理 `eq_star_of_eq_star`
-
-English:
-theorem eq_star_of_eq_star
-  given: [InvolutiveStar R] {r s : R} (h : r = star s)
-  statement: s = star r
-  proof: by
-  simp [h]
-
-中文:
-定理 eq_star_of_eq_star
-  条件: [InvolutiveStar R] {r s : R} (h : r = star s)
-  结论: s = star r
-  证明: by
-  simp [h]
+/-
+**eq_star_of_eq_star** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：eq_star_of_eq_star [InvolutiveStar R] {r s : R} (h : r = star s) : s = sta
+r r
+参数：h : r = star s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `star_star`：star_star [InvolutiveStar R] (r : R) : star (star r) = r
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem eq_star_of_eq_star [InvolutiveStar R] {r s : R} (h : r = star s) : s = star r := by
   simp [h]
-
-/--
-theorem `eq_star_iff_eq_star` / 定理 `eq_star_iff_eq_star`
-
-English:
-theorem eq_star_iff_eq_star
-  given: [InvolutiveStar R] {r s : R}
-  statement: r = star s ↔ s = star r
-  proof: ⟨eq_star_of_eq_star, eq_star_of_eq_star⟩
-
-中文:
-定理 eq_star_iff_eq_star
-  条件: [InvolutiveStar R] {r s : R}
-  结论: r = star s ↔ s = star r
-  证明: ⟨eq_star_of_eq_star, eq_star_of_eq_star⟩
-
-Depends on / 依赖: eq_star_of_eq_star
+/-
+**eq_star_iff_eq_star** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：eq_star_iff_eq_star [InvolutiveStar R] {r s : R} : r = star s ↔ s = star r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_star_of_eq_star`：eq_star_of_eq_star [InvolutiveStar R] {r s : R} (h :
+ r = star s) : s = star r
 -/
 theorem eq_star_iff_eq_star [InvolutiveStar R] {r s : R} : r = star s ↔ s = star r :=
   ⟨eq_star_of_eq_star, eq_star_of_eq_star⟩
-
-/--
-theorem `star_eq_iff_star_eq` / 定理 `star_eq_iff_star_eq`
-
-English:
-theorem star_eq_iff_star_eq
-  given: [InvolutiveStar R] {r s : R}
-  statement: star r = s ↔ star s = r
-  proof: eq_comm.trans eq_star_iff_eq_star.trans eq_comm
-
-中文:
-定理 star_eq_iff_star_eq
-  条件: [InvolutiveStar R] {r s : R}
-  结论: star r = s ↔ star s = r
-  证明: eq_comm.trans eq_star_iff_eq_star.trans eq_comm
-
-Depends on / 依赖: eq_comm, eq_comm.trans, eq_star_iff_eq_star, eq_star_iff_eq_star.trans
+/-
+**star_eq_iff_star_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_eq_iff_star_eq [InvolutiveStar R] {r s : R} : star r = s ↔ star s = r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `eq_star_iff_eq_star`：eq_star_iff_eq_star [InvolutiveStar R] {r s : R} : 
+r = star s ↔ s = star r
 -/
 theorem star_eq_iff_star_eq [InvolutiveStar R] {r s : R} : star r = s ↔ star s = r :=
-eq_comm.trans eq_star_iff_eq_star.trans eq_comm
+  eq_comm.trans <| eq_star_iff_eq_star.trans eq_comm
 
-/--
-Definition of `TrivialStar` / `TrivialStar` 的定义
+/-- Typeclass for a trivial star operation. This is mostly meant for `ℝ`.
+-/
+/-
+**TrivialStar** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u) → [Star R] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class TrivialStar
-  parameters: (R : Type u) [Star R]
-  axioms and operations (1):
-    - star_trivial : forall r : R, star r = r
-
-中文:
-类 TrivialStar
-  参数: (R : 类型u) [对合 R]
-  公理与运算 (1 个):
-    - star_trivial : 对任意 r : R, star r = r
+--- 原说明 ---
+Typeclass for a trivial star operation. This is mostly meant for `ℝ`.
 -/
 class TrivialStar (R : Type u) [Star R] : Prop where
   /-- Condition that star is trivial -/
-  star_trivial : forall r : R, star r = r
+  star_trivial : ∀ r : R, star r = r
 
 export TrivialStar (star_trivial)
 
 attribute [simp] star_trivial
 
-/--
-Definition of `StarMul` / `StarMul` 的定义
+/-- A \*-magma is a magma `R` with an involutive operation `star`
+such that `star (r * s) = star s * star r`.
+-/
+/-
+**StarMul** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u) → [Mul R] → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class StarMul
-  parameters: (R : Type u) [Mul R]
-  extends: InvolutiveStar R
-  axioms and operations (1):
-    - star_mul : forall r s : R, star (r * s) = star s * star r
-
-中文:
-类 StarMul
-  参数: (R : 类型u) [乘法 R]
-  继承: InvolutiveStar R
-  公理与运算 (1 个):
-    - star_mul : 对任意 r s : R, star (r * s) = star s * star r
+--- 原说明 ---
+A \*-magma is a magma `R` with an involutive operation `star`
+such that `star (r * s) = star s * star r`.
 -/
 class StarMul (R : Type u) [Mul R] extends InvolutiveStar R where
   /-- `star` skew-distributes over multiplication. -/
-  star_mul : forall r s : R, star (r * s) = star s * star r
+  star_mul : ∀ r s : R, star (r * s) = star s * star r
 
 export StarMul (star_mul)
 
@@ -400,73 +290,49 @@ section StarMul
 
 variable [Mul R] [StarMul R]
 
-/--
-theorem `star_star_mul` / 定理 `star_star_mul`
-
-English:
-theorem star_star_mul
-  given: (x y : R)
-  statement: star (star x * y) = star y * x
-  proof: by rw [star_mul, star_star]
-
-中文:
-定理 star_star_mul
-  条件: (x y : R)
-  结论: star (star x * y) = star y * x
-  证明: by rw [star_mul, star_star]
-
-Depends on / 依赖: star_mul, star_star
+/-
+**star_star_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_star_mul (x y : R) : star (star x * y) = star y * x
+参数：x y : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `StarMul.star_mul`：∀ {R : Type u} {inst : Mul R} [self : StarMul R] (r s 
+: R), star (r * s) = star s * star r
+· 使用定理 `star_star`：star_star [InvolutiveStar R] (r : R) : star (star r) = r
 -/
 theorem star_star_mul (x y : R) : star (star x * y) = star y * x := by rw [star_mul, star_star]
-
-/--
-theorem `star_mul_star` / 定理 `star_mul_star`
-
-English:
-theorem star_mul_star
-  given: (x y : R)
-  statement: star (x * star y) = y * star x
-  proof: by rw [star_mul, star_star]
-
-@[simp]
-
-中文:
-定理 star_mul_star
-  条件: (x y : R)
-  结论: star (x * star y) = y * star x
-  证明: by rw [star_mul, star_star]
-
-@[simp]
-
-Depends on / 依赖: star_mul, star_star
+/-
+**star_mul_star** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_mul_star (x y : R) : star (x * star y) = y * star x
+参数：x y : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `StarMul.star_mul`：∀ {R : Type u} {inst : Mul R} [self : StarMul R] (r s 
+: R), star (r * s) = star s * star r
+· 使用定理 `star_star`：star_star [InvolutiveStar R] (r : R) : star (star r) = r
 -/
 theorem star_mul_star (x y : R) : star (x * star y) = y * star x := by rw [star_mul, star_star]
 
 @[simp]
-/--
-theorem `semiconjBy_star_star_star` / 定理 `semiconjBy_star_star_star`
-
-English:
-theorem semiconjBy_star_star_star
-  given: {x y z : R}
-  proof: by
-  simp_rw [SemiconjBy, ← star_mul, star_inj, eq_comm]
-
-alias ⟨_, SemiconjBy.star_star_star⟩ := semiconjBy_star_star_star
-
-@[simp]
-
-中文:
-定理 semiconjBy_star_star_star
-  条件: {x y z : R}
-  证明: by
-  simp_rw [SemiconjBy, ← star_mul, star_inj, eq_comm]
-
-alias ⟨_, SemiconjBy.star_star_star⟩ := semiconjBy_star_star_star
-
-@[simp]
-
-Depends on / 依赖: SemiconjBy, eq_comm, simp_rw, star_inj, star_mul
+/-
+**semiconjBy_star_star_star** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：semiconjBy_star_star_star {x y z : R} : SemiconjBy (star x) (star z) (star
+ y) ↔ SemiconjBy x y z
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem semiconjBy_star_star_star {x y z : R} :
     SemiconjBy (star x) (star z) (star y) ↔ SemiconjBy x y z := by
@@ -475,57 +341,33 @@ theorem semiconjBy_star_star_star {x y z : R} :
 alias ⟨_, SemiconjBy.star_star_star⟩ := semiconjBy_star_star_star
 
 @[simp]
-/--
-theorem `commute_star_star` / 定理 `commute_star_star`
-
-English:
-theorem commute_star_star
-  given: {x y : R}
-  statement: Commute (star x) (star y) ↔ Commute x y
-  proof: semiconjBy_star_star_star
-
-alias ⟨_, Commute.star_star⟩ := commute_star_star
-
-中文:
-定理 commute_star_star
-  条件: {x y : R}
-  结论: Commute (star x) (star y) ↔ Commute x y
-  证明: semiconjBy_star_star_star
-
-alias ⟨_, Commute.star_star⟩ := commute_star_star
-
-Depends on / 依赖: semiconjBy_star_star_star
+/-
+**commute_star_star** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：commute_star_star {x y : R} : Commute (star x) (star y) ↔ Commute x y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `semiconjBy_star_star_star`：semiconjBy_star_star_star {x y z : R} : Semic
+onjBy (star x) (star z) (star y) ↔ SemiconjBy x y z
 -/
 theorem commute_star_star {x y : R} : Commute (star x) (star y) ↔ Commute x y :=
   semiconjBy_star_star_star
 
 alias ⟨_, Commute.star_star⟩ := commute_star_star
-
-/--
-theorem `commute_star_comm` / 定理 `commute_star_comm`
-
-English:
-theorem commute_star_comm
-  given: {x y : R}
-  statement: Commute (star x) y ↔ Commute x (star y)
-  proof: by
-  rw [← commute_star_star]; rw [star_star]
-
-alias ⟨Commute.star_right, Commute.star_left⟩ := commute_star_comm
-
-中文:
-定理 commute_star_comm
-  条件: {x y : R}
-  结论: Commute (star x) y ↔ Commute x (star y)
-  证明: by
-  rw [← commute_star_star]; rw [star_star]
-
-alias ⟨Commute.star_right, Commute.star_left⟩ := commute_star_comm
-
-Depends on / 依赖: commute_star_star, star_star
+/-
+**commute_star_comm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：commute_star_comm {x y : R} : Commute (star x) y ↔ Commute x (star y)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `commute_star_star`：commute_star_star {x y : R} : Commute (star x) (star 
+y) ↔ Commute x y
+· 使用定理 `star_star`：star_star [InvolutiveStar R] (r : R) : star (star r) = r
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem commute_star_comm {x y : R} : Commute (star x) y ↔ Commute x (star y) := by
-  rw [← commute_star_star]; rw [star_star]
+  rw [← commute_star_star, star_star]
 
 alias ⟨Commute.star_right, Commute.star_left⟩ := commute_star_comm
 
@@ -533,46 +375,36 @@ end StarMul
 
 /-- In a commutative ring, make `simp` prefer leaving the order unchanged. -/
 @[simp]
-/--
-theorem `star_mul'` / 定理 `star_mul'`
+/-
+**star_mul'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_mul' [CommMagma R] [StarMul R] (x y : R) : star (x * y) = star x * st
+ar y
+参数：x y : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `StarMul.star_mul`：∀ {R : Type u} {inst : Mul R} [self : StarMul R] (r s 
+: R), star (r * s) = star s * star r
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 
-English:
-theorem star_mul'
-  given: [CommMagma R] [StarMul R] (x y : R)
-  statement: star (x * y) = star x * star y
-  proof: (star_mul x y).trans (mul_comm _ _)
-
-中文:
-定理 star_mul'
-  条件: [交换原群 R] [StarMul R] (x y : R)
-  结论: star (x * y) = star x * star y
-  证明: (star_mul x y).trans (mul_comm _ _)
-
-Depends on / 依赖: mul_comm, star_mul
+--- 原说明 ---
+In a commutative ring, make `simp` prefer leaving the order unchanged.
 -/
 theorem star_mul' [CommMagma R] [StarMul R] (x y : R) : star (x * y) = star x * star y :=
   (star_mul x y).trans (mul_comm _ _)
 
 /-- `star` as a `MulEquiv` from `R` to `Rᵐᵒᵖ` -/
 @[simps apply]
-/--
-Definition of `starMulEquiv` / `starMulEquiv` 的定义
+/-
+**starMulEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：starMulEquiv [Mul R] [StarMul R] : R ≃* Rᵐᵒᵖ
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition starMulEquiv
-  signature: [Mul R] [StarMul R]
-  body: { (InvolutiveStar.star_involutive.toPerm star).trans opEquiv with
-    toFun := fun x => MulOpposite.op (star x)
-    map_mul' := fun x y => by simp only [star_mul, op_mul] }
-
-中文:
-定义 starMulEquiv
-  签名: [乘法 R] [StarMul R]
-  定义体: { (InvolutiveStar.star_involutive.toPerm star).trans opEquiv with
-    toFun := fun x => MulOpposite.op (star x)
-    map_mul' := fun x y => by simp only [star_mul, op_mul] }
-
-Depends on / 依赖: InvolutiveStar, InvolutiveStar.star_involutive.toPerm, MulOpposite, MulOpposite.op, map_mul, opEquiv, op_mul, star_involutive, star_mul, toPerm
+--- 原说明 ---
+`star` as a `MulEquiv` from `R` to `Rᵐᵒᵖ`
 -/
 def starMulEquiv [Mul R] [StarMul R] : R ≃* Rᵐᵒᵖ :=
   { (InvolutiveStar.star_involutive.toPerm star).trans opEquiv with
@@ -581,24 +413,18 @@ def starMulEquiv [Mul R] [StarMul R] : R ≃* Rᵐᵒᵖ :=
 
 /-- `star` as a `MulAut` for commutative `R`. -/
 @[simps apply]
-/--
-Definition of `starMulAut` / `starMulAut` 的定义
+/-
+**starMulAut** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：starMulAut [CommSemigroup R] [StarMul R] : MulAut R
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
 
-English:
-definition starMulAut
-  signature: [CommSemigroup R] [StarMul R]
-  body: { InvolutiveStar.star_involutive.toPerm star with
-    toFun := star
-    map_mul' := star_mul' }
-
-中文:
-定义 starMulAut
-  签名: [交换半群 R] [StarMul R]
-  定义体: { InvolutiveStar.star_involutive.toPerm star with
-    toFun := star
-    map_mul' := star_mul' }
-
-Depends on / 依赖: InvolutiveStar, InvolutiveStar.star_involutive.toPerm, map_mul, star_involutive, star_mul, toPerm
+--- 原说明 ---
+`star` as a `MulAut` for commutative `R`.
 -/
 def starMulAut [CommSemigroup R] [StarMul R] : MulAut R :=
   { InvolutiveStar.star_involutive.toPerm star with
@@ -607,171 +433,137 @@ def starMulAut [CommSemigroup R] [StarMul R] : MulAut R :=
 
 variable (R) in
 @[simp]
-/--
-theorem `star_one` / 定理 `star_one`
-
-English:
-theorem star_one
-  given: [MulOneClass R] [StarMul R]
-  statement: star (1 : R) = 1
-  proof: op_injective (starMulEquiv : R ≃* Rᵐᵒᵖ).map_one.trans op_one.symm
-
-@[simp]
-
-中文:
-定理 star_one
-  条件: [MulOne类 R] [StarMul R]
-  结论: star (1 : R) = 1
-  证明: op_injective (starMulEquiv : R ≃* Rᵐᵒᵖ).map_one.trans op_one.symm
-
-@[simp]
-
-Depends on / 依赖: map_one, map_one.trans, op_injective, op_one, op_one.symm, starMulEquiv
+/-
+**star_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_one [MulOneClass R] [StarMul R] : star (1 : R) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOpposite.op_injective`：op_injective : Injective (op : α -> αᵐᵒᵖ)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MulEquiv.map_one`：∀ {M : Type u_4} {N : Type u_5} [inst : MulOneClass M]
+ [inst_1 : MulOneClass N] (h : M ≃* N), h 1 = 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MulOpposite.op_one`：∀ {α : Type u_1} [inst : One α], MulOpposite.op 1 = 
+1
 -/
 theorem star_one [MulOneClass R] [StarMul R] : star (1 : R) = 1 :=
-op_injective (starMulEquiv : R ≃* Rᵐᵒᵖ).map_one.trans op_one.symm
+  op_injective <| (starMulEquiv : R ≃* Rᵐᵒᵖ).map_one.trans op_one.symm
 
 @[simp]
-/--
-lemma `Pi.star_mulSingle` / 引理 `Pi.star_mulSingle`
-
-English:
-lemma Pi.star_mulSingle
-  statement: {ι : Type*} {R : ι -> Type*} [DecidableEq ι] [forall i, MulOneClass (R i)]
-  proof: by
-  ext; exact apply_mulSingle (fun _ => star) (fun _ => star_one _) ..
-
-@[simp]
-
-中文:
-引理 依赖函数类型.star_mulSingle
-  结论: {ι : 类型} {R : ι -> 类型} [DecidableEq ι] [对任意 i, MulOne类 (R i)]
-  证明: by
-  ext; exact apply_mulSingle (fun _ => star) (fun _ => star_one _) ..
-
-@[simp]
-
-Depends on / 依赖: apply_mulSingle, star_one
+/-
+**Pi.star_mulSingle** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Pi.star_mulSingle {ι : Type*} {R : ι -> Type*} [DecidableEq ι] [forall i, 
+MulOneClass (R i)] [forall i, StarMul (R i)] (i : ι) (r : R i) : star (mulSingle
+ i r) = mulSingle i (star r)
+参数：R i；R i；i : ι；r : R i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `Pi.apply_mulSingle`：apply_mulSingle (f' : forall i, M i -> N i) (hf' : f
+orall i, f' i 1 = 1) (i : ι) (x : M i) (j : ι) : f' j (mulSingle i x j) = mulSin
+gle i (f…
+· 使用定理 `star_one`：star_one [MulOneClass R] [StarMul R] : star (1 : R) = 1
 -/
-lemma Pi.star_mulSingle {ι : Type*} {R : ι -> Type*} [DecidableEq ι] [forall i, MulOneClass (R i)]
-    [forall i, StarMul (R i)] (i : ι) (r : R i) : star (mulSingle i r) = mulSingle i (star r) := by
-  ext; exact apply_mulSingle (fun _ => star) (fun _ => star_one _) ..
+lemma Pi.star_mulSingle {ι : Type*} {R : ι → Type*} [DecidableEq ι] [∀ i, MulOneClass (R i)]
+    [∀ i, StarMul (R i)] (i : ι) (r : R i) : star (mulSingle i r) = mulSingle i (star r) := by
+  ext; exact apply_mulSingle (fun _ ↦ star) (fun _ ↦ star_one _) ..
 
 @[simp]
-/--
-theorem `star_pow` / 定理 `star_pow`
-
-English:
-theorem star_pow
-  given: [Monoid R] [StarMul R] (x : R) (n : Nat)
-  statement: star (x ^ n) = star x ^ n
-  proof: op_injective
-    ((starMulEquiv : R ≃* Rᵐᵒᵖ).toMonoidHom.map_pow x n).trans (op_pow (star x) n).symm
-
-@[simp]
-
-中文:
-定理 star_pow
-  条件: [幺半群 R] [StarMul R] (x : R) (n : 自然数)
-  结论: star (x ^ n) = star x ^ n
-  证明: op_injective
-    ((starMulEquiv : R ≃* Rᵐᵒᵖ).toMonoidHom.map_pow x n).trans (op_pow (star x) n).symm
-
-@[simp]
-
-Depends on / 依赖: map_pow, op_injective, op_pow, starMulEquiv, toMonoidHom, toMonoidHom.map_pow
+/-
+**star_pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_pow [Monoid R] [StarMul R] (x : R) (n : Nat) : star (x ^ n) = star x 
+^ n
+参数：x : R；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOpposite.op_injective`：op_injective : Injective (op : α -> αᵐᵒᵖ)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MonoidHom.map_pow`：∀ {M : Type u_4} {N : Type u_5} [inst : Monoid M] [in
+st_1 : Monoid N] (f : M →* N) (a : M) (n : ℕ), f (a ^ n) = f a ^ n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MulOpposite.op_pow`：∀ {α : Type u_1} [inst : Monoid α] (x : α) (n : ℕ), 
+MulOpposite.op (x ^ n) = MulOpposite.op x ^ n
 -/
-theorem star_pow [Monoid R] [StarMul R] (x : R) (n : Nat) : star (x ^ n) = star x ^ n :=
-op_injective
+theorem star_pow [Monoid R] [StarMul R] (x : R) (n : ℕ) : star (x ^ n) = star x ^ n :=
+  op_injective <|
     ((starMulEquiv : R ≃* Rᵐᵒᵖ).toMonoidHom.map_pow x n).trans (op_pow (star x) n).symm
 
 @[simp]
-/--
-theorem `star_inv` / 定理 `star_inv`
-
-English:
-theorem star_inv
-  given: [Group R] [StarMul R] (x : R)
-  statement: star x⁻¹ = (star x)⁻¹
-  proof: op_injective ((starMulEquiv : R ≃* Rᵐᵒᵖ).toMonoidHom.map_inv x).trans (op_inv (star x)).symm
-
-@[simp]
-
-中文:
-定理 star_inv
-  条件: [群 R] [StarMul R] (x : R)
-  结论: star x⁻¹ = (star x)⁻¹
-  证明: op_injective ((starMulEquiv : R ≃* Rᵐᵒᵖ).toMonoidHom.map_inv x).trans (op_inv (star x)).symm
-
-@[simp]
-
-Depends on / 依赖: map_inv, op_injective, op_inv, starMulEquiv, toMonoidHom, toMonoidHom.map_inv
+/-
+**star_inv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_inv [Group R] [StarMul R] (x : R) : star x⁻¹ = (star x)⁻¹
+参数：x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOpposite.op_injective`：op_injective : Injective (op : α -> αᵐᵒᵖ)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MonoidHom.map_inv`：∀ {α : Type u_2} {β : Type u_3} [inst : Group α] [ins
+t_1 : DivisionMonoid β] (f : α →* β) (a : α), f a⁻¹ = (f a)⁻¹
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MulOpposite.op_inv`：∀ {α : Type u_1} [inst : Inv α] (x : α), MulOpposite
+.op x⁻¹ = (MulOpposite.op x)⁻¹
 -/
 theorem star_inv [Group R] [StarMul R] (x : R) : star x⁻¹ = (star x)⁻¹ :=
-op_injective ((starMulEquiv : R ≃* Rᵐᵒᵖ).toMonoidHom.map_inv x).trans (op_inv (star x)).symm
+  op_injective <| ((starMulEquiv : R ≃* Rᵐᵒᵖ).toMonoidHom.map_inv x).trans (op_inv (star x)).symm
 
 @[simp]
-/--
-theorem `star_zpow` / 定理 `star_zpow`
-
-English:
-theorem star_zpow
-  given: [Group R] [StarMul R] (x : R) (z : Int)
-  statement: star (x ^ z) = star x ^ z
-  proof: op_injective
-    ((starMulEquiv : R ≃* Rᵐᵒᵖ).toMonoidHom.map_zpow x z).trans (op_zpow (star x) z).symm
-
-中文:
-定理 star_zpow
-  条件: [群 R] [StarMul R] (x : R) (z : 整数)
-  结论: star (x ^ z) = star x ^ z
-  证明: op_injective
-    ((starMulEquiv : R ≃* Rᵐᵒᵖ).toMonoidHom.map_zpow x z).trans (op_zpow (star x) z).symm
-
-Depends on / 依赖: map_zpow, op_injective, op_zpow, starMulEquiv, toMonoidHom, toMonoidHom.map_zpow
+/-
+**star_zpow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_zpow [Group R] [StarMul R] (x : R) (z : Int) : star (x ^ z) = star x 
+^ z
+参数：x : R；z : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOpposite.op_injective`：op_injective : Injective (op : α -> αᵐᵒᵖ)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MonoidHom.map_zpow`：∀ {α : Type u_2} {β : Type u_3} [inst : Group α] [in
+st_1 : DivisionMonoid β] (f : α →* β) (g : α) (n : ℤ),   f (g ^ n) = f g ^ n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MulOpposite.op_zpow`：∀ {α : Type u_1} [inst : DivInvMonoid α] (x : α) (z
+ : ℤ), MulOpposite.op (x ^ z) = MulOpposite.op x ^ z
 -/
-theorem star_zpow [Group R] [StarMul R] (x : R) (z : Int) : star (x ^ z) = star x ^ z :=
-op_injective
+theorem star_zpow [Group R] [StarMul R] (x : R) (z : ℤ) : star (x ^ z) = star x ^ z :=
+  op_injective <|
     ((starMulEquiv : R ≃* Rᵐᵒᵖ).toMonoidHom.map_zpow x z).trans (op_zpow (star x) z).symm
 
 /-- When multiplication is commutative, `star` preserves division. -/
 @[simp]
-/--
-theorem `star_div` / 定理 `star_div`
+/-
+**star_div** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_div [CommGroup R] [StarMul R] (x y : R) : star (x / y) = star x / sta
+r y
+参数：x y : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_div`：map_div [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f 
+: F) : forall a b, f (a / b) = f a / f b
+· 使用定理 `MulEquivClass.instMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N : T
+ype u_5} [inst : EquivLike F M N] [inst_1 : MulOneClass M]   [inst_2 : MulOneCla
+ss N] [MulEquivClass F…
+· 使用定理 `MulEquiv.instMulEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul 
+M] [inst_1 : Mul N], MulEquivClass (M ≃* N) M N
 
-English:
-theorem star_div
-  given: [CommGroup R] [StarMul R] (x y : R)
-  statement: star (x / y) = star x / star y
-  proof: map_div (starMulAut : R ≃* R) _ _
-
-中文:
-定理 star_div
-  条件: [交换群 R] [StarMul R] (x y : R)
-  结论: star (x / y) = star x / star y
-  证明: map_div (starMulAut : R ≃* R) _ _
-
-Depends on / 依赖: map_div, starMulAut
+--- 原说明 ---
+When multiplication is commutative, `star` preserves division.
 -/
 theorem star_div [CommGroup R] [StarMul R] (x y : R) : star (x / y) = star x / star y :=
   map_div (starMulAut : R ≃* R) _ _
 
-/--
-Definition of `starMulOfComm` / `starMulOfComm` 的定义
+/-- Any commutative monoid admits the trivial \*-structure.
 
-English:
-abbreviation starMulOfComm
-  signature: {R : Type*} [CommMonoid R]
-  body: x
-  star_involutive _ := rfl
-  star_mul := mul_comm
+See note [reducible non-instances].
+-/
+/-
+**starMulOfComm** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：starMulOfComm {R : Type*} [CommMonoid R] : StarMul R where star x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 starMulOfComm
-  签名: {R : 类型} [交换幺半群 R]
-  定义体: x
-  star_involutive _ := rfl
-  star_mul := mul_comm
+--- 原说明 ---
+Any commutative monoid admits the trivial \*-structure.
+
+See note [reducible non-instances].
 -/
 abbrev starMulOfComm {R : Type*} [CommMonoid R] : StarMul R where
   star x := x
@@ -782,46 +574,36 @@ section
 
 attribute [local instance] starMulOfComm
 
-/--
-theorem `star_id_of_comm` / 定理 `star_id_of_comm`
+/-- Note that since `starMulOfComm` is reducible, `simp` can already prove this. -/
+/-
+**star_id_of_comm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_id_of_comm {R : Type*} [CommMonoid R] {x : R} : star x = x
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem star_id_of_comm
-  given: {R : Type*} [CommMonoid R] {x : R}
-  statement: star x = x
-  proof: rfl
-
-中文:
-定理 star_id_of_comm
-  条件: {R : 类型} [交换幺半群 R] {x : R}
-  结论: star x = x
-  证明: rfl
+--- 原说明 ---
+Note that since `starMulOfComm` is reducible, `simp` can already prove this.
 -/
 theorem star_id_of_comm {R : Type*} [CommMonoid R] {x : R} : star x = x :=
   rfl
 
 end
 
-/--
-Definition of `StarAddMonoid` / `StarAddMonoid` 的定义
+/-- A \*-additive monoid `R` is an additive monoid with an involutive `star` operation which
+preserves addition. -/
+/-
+**StarAddMonoid** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u) → [AddMonoid R] → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class StarAddMonoid
-  parameters: (R : Type u) [AddMonoid R]
-  extends: InvolutiveStar R
-  axioms and operations (1):
-    - star_add : forall r s : R, star (r + s) = star r + star s
-
-中文:
-类 StarAdd幺半群
-  参数: (R : 类型u) [加法幺半群 R]
-  继承: InvolutiveStar R
-  公理与运算 (1 个):
-    - star_add : 对任意 r s : R, star (r + s) = star r + star s
+--- 原说明 ---
+A \*-additive monoid `R` is an additive monoid with an involutive `star` operati
+on which
+preserves addition.
 -/
 class StarAddMonoid (R : Type u) [AddMonoid R] extends InvolutiveStar R where
   /-- `star` commutes with addition -/
-  star_add : forall r s : R, star (r + s) = star r + star s
+  star_add : ∀ r s : R, star (r + s) = star r + star s
 
 export StarAddMonoid (star_add)
 
@@ -829,66 +611,40 @@ attribute [simp] star_add
 
 /-- `star` as an `AddEquiv` -/
 @[simps! apply]
-/--
-Definition of `starAddEquiv` / `starAddEquiv` 的定义
+/-
+**starAddEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：starAddEquiv [AddMonoid R] [StarAddMonoid R] : R ≃+ R where toEquiv
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `StarAddMonoid.star_add`：∀ {R : Type u} {inst : AddMonoid R} [self : Star
+AddMonoid R] (r s : R), star (r + s) = star r + star s
 
-English:
-definition starAddEquiv
-  signature: [AddMonoid R] [StarAddMonoid R]
-  body: Equiv.Perm.star
-  map_add' := star_add
-
-@[simp]
-
-中文:
-定义 starAddEquiv
-  签名: [加法幺半群 R] [StarAdd幺半群 R]
-  定义体: Equiv.Perm.star
-  map_add' := star_add
-
-@[simp]
-
-Depends on / 依赖: Equiv.Perm.star
+--- 原说明 ---
+`star` as an `AddEquiv`
 -/
 def starAddEquiv [AddMonoid R] [StarAddMonoid R] : R ≃+ R where
   toEquiv := Equiv.Perm.star
   map_add' := star_add
 
 @[simp]
-/--
-theorem `toEquiv_starAddEquiv` / 定理 `toEquiv_starAddEquiv`
-
-English:
-theorem toEquiv_starAddEquiv
-  given: [AddMonoid R] [StarAddMonoid R]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toEquiv_starAddEquiv
-  条件: [加法幺半群 R] [StarAdd幺半群 R]
-  证明: rfl
-
-@[simp]
+/-
+**toEquiv_starAddEquiv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toEquiv_starAddEquiv [AddMonoid R] [StarAddMonoid R] : (starAddEquiv : R ≃
++ R) = (Equiv.Perm.star : R ≃ R)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toEquiv_starAddEquiv [AddMonoid R] [StarAddMonoid R] :
     (starAddEquiv : R ≃+ R) = (Equiv.Perm.star : R ≃ R) :=
   rfl
 
 @[simp]
-/--
-theorem `symm_starAddEquiv` / 定理 `symm_starAddEquiv`
-
-English:
-theorem symm_starAddEquiv
-  given: [AddMonoid R] [StarAddMonoid R]
-  proof: rfl
-
-中文:
-定理 symm_starAddEquiv
-  条件: [加法幺半群 R] [StarAdd幺半群 R]
-  证明: rfl
+/-
+**symm_starAddEquiv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：symm_starAddEquiv [AddMonoid R] [StarAddMonoid R] : (starAddEquiv : R ≃+ R
+).symm = starAddEquiv
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_starAddEquiv [AddMonoid R] [StarAddMonoid R] :
     (starAddEquiv : R ≃+ R).symm = starAddEquiv :=
@@ -896,307 +652,222 @@ theorem symm_starAddEquiv [AddMonoid R] [StarAddMonoid R] :
 
 variable (R) in
 @[simp]
-/--
-theorem `star_zero` / 定理 `star_zero`
-
-English:
-theorem star_zero
-  given: [AddMonoid R] [StarAddMonoid R]
-  statement: star (0 : R) = 0
-  proof: (starAddEquiv : R ≃+ R).map_zero
-
-@[simp]
-
-中文:
-定理 star_zero
-  条件: [加法幺半群 R] [StarAdd幺半群 R]
-  结论: star (0 : R) = 0
-  证明: (starAddEquiv : R ≃+ R).map_zero
-
-@[simp]
-
-Depends on / 依赖: map_zero, starAddEquiv
+/-
+**star_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_zero [AddMonoid R] [StarAddMonoid R] : star (0 : R) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddEquiv.map_zero`：∀ {M : Type u_4} {N : Type u_5} [inst : AddZeroClass 
+M] [inst_1 : AddZeroClass N] (h : M ≃+ N), h 0 = 0
 -/
 theorem star_zero [AddMonoid R] [StarAddMonoid R] : star (0 : R) = 0 :=
   (starAddEquiv : R ≃+ R).map_zero
 
 @[simp]
-/--
-lemma `Pi.star_single` / 引理 `Pi.star_single`
-
-English:
-lemma Pi.star_single
-  statement: {ι : Type*} {R : ι -> Type*} [DecidableEq ι] [forall i, AddMonoid (R i)]
-  proof: by
-  ext; exact apply_single (fun _ => star) (fun _ => star_zero _) ..
-
-@[simp]
-
-中文:
-引理 依赖函数类型.star_single
-  结论: {ι : 类型} {R : ι -> 类型} [DecidableEq ι] [对任意 i, 加法幺半群 (R i)]
-  证明: by
-  ext; exact apply_single (fun _ => star) (fun _ => star_zero _) ..
-
-@[simp]
-
-Depends on / 依赖: apply_single, star_zero
+/-
+**Pi.star_single** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Pi.star_single {ι : Type*} {R : ι -> Type*} [DecidableEq ι] [forall i, Add
+Monoid (R i)] [forall i, StarAddMonoid (R i)] (i : ι) (r : R i) : star (single i
+ r) = single i (star r)
+参数：R i；R i；i : ι；r : R i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Pi.apply_single`：∀ {ι : Type u_1} {M : ι → Type u_6} {N : ι → Type u_7} 
+[inst : (i : ι) → Zero (M i)] [inst_1 : (i : ι) → Zero (N i)]   [inst_2 : Decida
+bleEq…
+· 使用定理 `star_zero`：star_zero [AddMonoid R] [StarAddMonoid R] : star (0 : R) = 0
 -/
-lemma Pi.star_single {ι : Type*} {R : ι -> Type*} [DecidableEq ι] [forall i, AddMonoid (R i)]
-    [forall i, StarAddMonoid (R i)] (i : ι) (r : R i) : star (single i r) = single i (star r) := by
-  ext; exact apply_single (fun _ => star) (fun _ => star_zero _) ..
+lemma Pi.star_single {ι : Type*} {R : ι → Type*} [DecidableEq ι] [∀ i, AddMonoid (R i)]
+    [∀ i, StarAddMonoid (R i)] (i : ι) (r : R i) : star (single i r) = single i (star r) := by
+  ext; exact apply_single (fun _ ↦ star) (fun _ ↦ star_zero _) ..
 
 @[simp]
-/--
-theorem `star_eq_zero` / 定理 `star_eq_zero`
-
-English:
-theorem star_eq_zero
-  given: [AddMonoid R] [StarAddMonoid R] {x : R}
-  statement: star x = 0 ↔ x = 0
-  proof: starAddEquiv.map_eq_zero_iff (M := R)
-
-中文:
-定理 star_eq_zero
-  条件: [加法幺半群 R] [StarAdd幺半群 R] {x : R}
-  结论: star x = 0 ↔ x = 0
-  证明: starAddEquiv.map_eq_zero_iff (M := R)
-
-Depends on / 依赖: map_eq_zero_iff, starAddEquiv, starAddEquiv.map_eq_zero_iff
+/-
+**star_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_eq_zero [AddMonoid R] [StarAddMonoid R] {x : R} : star x = 0 ↔ x = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddEquiv.map_eq_zero_iff`：∀ {M : Type u_4} {N : Type u_5} [inst : AddZer
+oClass M] [inst_1 : AddZeroClass N] (h : M ≃+ N) {x : M}, h x = 0 ↔ x = 0
 -/
 theorem star_eq_zero [AddMonoid R] [StarAddMonoid R] {x : R} : star x = 0 ↔ x = 0 :=
   starAddEquiv.map_eq_zero_iff (M := R)
-
-/--
-theorem `star_ne_zero` / 定理 `star_ne_zero`
-
-English:
-theorem star_ne_zero
-  given: [AddMonoid R] [StarAddMonoid R] {x : R}
-  statement: star x != 0 ↔ x != 0
-  proof: by
-  simp only [ne_eq, star_eq_zero]
-
-@[simp]
-
-中文:
-定理 star_ne_zero
-  条件: [加法幺半群 R] [StarAdd幺半群 R] {x : R}
-  结论: star x != 0 ↔ x != 0
-  证明: by
-  simp only [ne_eq, star_eq_zero]
-
-@[simp]
-
-Depends on / 依赖: ne_eq, star_eq_zero
+/-
+**star_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_ne_zero [AddMonoid R] [StarAddMonoid R] {x : R} : star x != 0 ↔ x != 
+0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem star_ne_zero [AddMonoid R] [StarAddMonoid R] {x : R} : star x != 0 ↔ x != 0 := by
+theorem star_ne_zero [AddMonoid R] [StarAddMonoid R] {x : R} : star x ≠ 0 ↔ x ≠ 0 := by
   simp only [ne_eq, star_eq_zero]
 
 @[simp]
-/--
-theorem `star_neg` / 定理 `star_neg`
-
-English:
-theorem star_neg
-  given: [AddGroup R] [StarAddMonoid R] (r : R)
-  statement: star (-r) = -star r
-  proof: (starAddEquiv : R ≃+ R).map_neg _
-
-@[simp]
-
-中文:
-定理 star_neg
-  条件: [加法群 R] [StarAdd幺半群 R] (r : R)
-  结论: star (-r) = -star r
-  证明: (starAddEquiv : R ≃+ R).map_neg _
-
-@[simp]
-
-Depends on / 依赖: map_neg, starAddEquiv
+/-
+**star_neg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_neg [AddGroup R] [StarAddMonoid R] (r : R) : star (-r) = -star r
+参数：r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddEquiv.map_neg`：∀ {G : Type u_7} {H : Type u_8} [inst : AddGroup G] [i
+nst_1 : SubtractionMonoid H] (h : G ≃+ H) (x : G), h (-x) = -h x
 -/
 theorem star_neg [AddGroup R] [StarAddMonoid R] (r : R) : star (-r) = -star r :=
   (starAddEquiv : R ≃+ R).map_neg _
 
 @[simp]
-/--
-theorem `star_sub` / 定理 `star_sub`
-
-English:
-theorem star_sub
-  given: [AddGroup R] [StarAddMonoid R] (r s : R)
-  statement: star (r - s) = star r - star s
-  proof: (starAddEquiv : R ≃+ R).map_sub _ _
-
-中文:
-定理 star_sub
-  条件: [加法群 R] [StarAdd幺半群 R] (r s : R)
-  结论: star (r - s) = star r - star s
-  证明: (starAddEquiv : R ≃+ R).map_sub _ _
-
-Depends on / 依赖: map_sub, starAddEquiv
+/-
+**star_sub** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_sub [AddGroup R] [StarAddMonoid R] (r s : R) : star (r - s) = star r 
+- star s
+参数：r s : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddEquiv.map_sub`：∀ {G : Type u_7} {H : Type u_8} [inst : AddGroup G] [i
+nst_1 : SubtractionMonoid H] (h : G ≃+ H) (x y : G),   h (x - y) = h x - h y
 -/
 theorem star_sub [AddGroup R] [StarAddMonoid R] (r s : R) : star (r - s) = star r - star s :=
   (starAddEquiv : R ≃+ R).map_sub _ _
-
-/--
-theorem `star_nsmul` / 定理 `star_nsmul`
-
-English:
-theorem star_nsmul
-  given: [AddMonoid R] [StarAddMonoid R] (n : Nat) (x : R)
-  statement: star (n • x) = n • star x
-  proof: (starAddEquiv : R ≃+ R).toAddMonoidHom.map_nsmul _ _
-
-中文:
-定理 star_nsmul
-  条件: [加法幺半群 R] [StarAdd幺半群 R] (n : 自然数) (x : R)
-  结论: star (n • x) = n • star x
-  证明: (starAddEquiv : R ≃+ R).toAddMonoidHom.map_nsmul _ _
-
-Depends on / 依赖: map_nsmul, starAddEquiv, toAddMonoidHom, toAddMonoidHom.map_nsmul
+/-
+**star_nsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_nsmul [AddMonoid R] [StarAddMonoid R] (n : Nat) (x : R) : star (n • x
+) = n • star x
+参数：n : Nat；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidHom.map_nsmul`：∀ {M : Type u_4} {N : Type u_5} [inst : AddMonoi
+d M] [inst_1 : AddMonoid N] (f : M →+ N) (n : ℕ) (a : M),   f (n • a) = n • f a
 -/
-theorem star_nsmul [AddMonoid R] [StarAddMonoid R] (n : Nat) (x : R) : star (n • x) = n • star x :=
+theorem star_nsmul [AddMonoid R] [StarAddMonoid R] (n : ℕ) (x : R) : star (n • x) = n • star x :=
   (starAddEquiv : R ≃+ R).toAddMonoidHom.map_nsmul _ _
-
-/--
-theorem `star_zsmul` / 定理 `star_zsmul`
-
-English:
-theorem star_zsmul
-  given: [AddGroup R] [StarAddMonoid R] (n : Int) (x : R)
-  statement: star (n • x) = n • star x
-  proof: (starAddEquiv : R ≃+ R).toAddMonoidHom.map_zsmul _ _
-
-中文:
-定理 star_zsmul
-  条件: [加法群 R] [StarAdd幺半群 R] (n : 整数) (x : R)
-  结论: star (n • x) = n • star x
-  证明: (starAddEquiv : R ≃+ R).toAddMonoidHom.map_zsmul _ _
-
-Depends on / 依赖: map_zsmul, starAddEquiv, toAddMonoidHom, toAddMonoidHom.map_zsmul
+/-
+**star_zsmul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_zsmul [AddGroup R] [StarAddMonoid R] (n : Int) (x : R) : star (n • x)
+ = n • star x
+参数：n : Int；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidHom.map_zsmul`：∀ {α : Type u_2} {β : Type u_3} [inst : AddGroup
+ α] [inst_1 : SubtractionMonoid β] (f : α →+ β) (n : ℤ) (g : α),   f (n • g) = n
+ • f g
 -/
-theorem star_zsmul [AddGroup R] [StarAddMonoid R] (n : Int) (x : R) : star (n • x) = n • star x :=
+theorem star_zsmul [AddGroup R] [StarAddMonoid R] (n : ℤ) (x : R) : star (n • x) = n • star x :=
   (starAddEquiv : R ≃+ R).toAddMonoidHom.map_zsmul _ _
 
-/--
-Definition of `StarRing` / `StarRing` 的定义
+/-- A \*-ring `R` is a non-unital, non-associative (semi)ring with an involutive `star` operation
+which is additive which makes `R` with its multiplicative structure into a \*-multiplication
+(i.e. `star (r * s) = star s * star r`). -/
+/-
+**StarRing** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u) → [NonUnitalNonAssocSemiring R] → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class StarRing
-  parameters: (R : Type u) [NonUnitalNonAssocSemiring R]
-  extends: StarMul R
-  axioms and operations (1):
-    - star_add : forall r s : R, star (r + s) = star r + star s
-
-中文:
-类 对合环
-  参数: (R : 类型u) [非幺非结合半环 R]
-  继承: StarMul R
-  公理与运算 (1 个):
-    - star_add : 对任意 r s : R, star (r + s) = star r + star s
+--- 原说明 ---
+A \*-ring `R` is a non-unital, non-associative (semi)ring with an involutive `st
+ar` operation
+which is additive which makes `R` with its multiplicative structure into a \*-mu
+ltiplication
+(i.e. `star (r * s) = star s * star r`).
 -/
 class StarRing (R : Type u) [NonUnitalNonAssocSemiring R] extends StarMul R where
   /-- `star` commutes with addition -/
-  star_add : forall r s : R, star (r + s) = star r + star s
-
+  star_add : ∀ r s : R, star (r + s) = star r + star s
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) StarRing.toStarAddMonoid [NonUnitalNonAssocSemiring R] [StarRing R] :
     StarAddMonoid R where
   star_add := StarRing.star_add
 
 /-- `star` as a `RingEquiv` from `R` to `Rᵐᵒᵖ` -/
 @[simps apply]
-/--
-Definition of `starRingEquiv` / `starRingEquiv` 的定义
+/-
+**starRingEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：starRingEquiv [NonUnitalNonAssocSemiring R] [StarRing R] : R ≃+* Rᵐᵒᵖ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition starRingEquiv
-  signature: [NonUnitalNonAssocSemiring R] [StarRing R]
-  body: { starAddEquiv.trans (MulOpposite.opAddEquiv : R ≃+ Rᵐᵒᵖ), starMulEquiv with
-    toFun := fun x => MulOpposite.op (star x) }
-
-@[simp, norm_cast]
-
-中文:
-定义 starRingEquiv
-  签名: [非幺非结合半环 R] [对合环 R]
-  定义体: { starAddEquiv.trans (MulOpposite.opAddEquiv : R ≃+ Rᵐᵒᵖ), starMulEquiv with
-    toFun := fun x => MulOpposite.op (star x) }
-
-@[simp, norm_cast]
-
-Depends on / 依赖: MulOpposite, MulOpposite.op, MulOpposite.opAddEquiv, opAddEquiv, starAddEquiv, starAddEquiv.trans, starMulEquiv
+--- 原说明 ---
+`star` as a `RingEquiv` from `R` to `Rᵐᵒᵖ`
 -/
 def starRingEquiv [NonUnitalNonAssocSemiring R] [StarRing R] : R ≃+* Rᵐᵒᵖ :=
   { starAddEquiv.trans (MulOpposite.opAddEquiv : R ≃+ Rᵐᵒᵖ), starMulEquiv with
     toFun := fun x => MulOpposite.op (star x) }
 
 @[simp, norm_cast]
-/--
-theorem `star_natCast` / 定理 `star_natCast`
-
-English:
-theorem star_natCast
-  given: [NonAssocSemiring R] [StarRing R] (n : Nat)
-  statement: star (n : R) = n
-  proof: (congr_arg unop (map_natCast (starRingEquiv : R ≃+* Rᵐᵒᵖ) n)).trans (unop_natCast _)
-
-@[simp]
-
-中文:
-定理 star_natCast
-  条件: [非结合半环 R] [对合环 R] (n : 自然数)
-  结论: star (n : R) = n
-  证明: (congr_arg unop (map_natCast (starRingEquiv : R ≃+* Rᵐᵒᵖ) n)).trans (unop_natCast _)
-
-@[simp]
-
-Depends on / 依赖: congr_arg, map_natCast, starRingEquiv, unop_natCast
+/-
+**star_natCast** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_natCast [NonAssocSemiring R] [StarRing R] (n : Nat) : star (n : R) = 
+n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
+· 使用定理 `MulOpposite.unop_natCast`：unop_natCast [NatCast R] (n : Nat) : unop (n :
+ Rᵐᵒᵖ) = n
 -/
-theorem star_natCast [NonAssocSemiring R] [StarRing R] (n : Nat) : star (n : R) = n :=
+theorem star_natCast [NonAssocSemiring R] [StarRing R] (n : ℕ) : star (n : R) = n :=
   (congr_arg unop (map_natCast (starRingEquiv : R ≃+* Rᵐᵒᵖ) n)).trans (unop_natCast _)
 
 @[simp]
-/--
-theorem `star_ofNat` / 定理 `star_ofNat`
-
-English:
-theorem star_ofNat
-  given: [NonAssocSemiring R] [StarRing R] (n : Nat) [n.AtLeastTwo]
-  proof: star_natCast _
-
-中文:
-定理 star_of自然数
-  条件: [非结合半环 R] [对合环 R] (n : 自然数) [n.AtLeastTwo]
-  证明: star_natCast _
-
-Depends on / 依赖: star_natCast
+/-
+**star_ofNat** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_ofNat [NonAssocSemiring R] [StarRing R] (n : Nat) [n.AtLeastTwo] : st
+ar (ofNat(n) : R) = ofNat(n)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `star_natCast`：star_natCast [NonAssocSemiring R] [StarRing R] (n : Nat) :
+ star (n : R) = n
 -/
-theorem star_ofNat [NonAssocSemiring R] [StarRing R] (n : Nat) [n.AtLeastTwo] :
+theorem star_ofNat [NonAssocSemiring R] [StarRing R] (n : ℕ) [n.AtLeastTwo] :
     star (ofNat(n) : R) = ofNat(n) :=
   star_natCast _
 
 section
 
 @[simp, norm_cast]
-/--
-theorem `star_intCast` / 定理 `star_intCast`
-
-English:
-theorem star_intCast
-  given: [NonAssocRing R] [StarRing R] (z : Int)
-  statement: star (z : R) = z
-  proof: (congr_arg unop <| map_intCast (starRingEquiv : R ≃+* Rᵐᵒᵖ) z).trans (unop_intCast _)
-
-中文:
-定理 star_intCast
-  条件: [非结合环 R] [对合环 R] (z : 整数)
-  结论: star (z : R) = z
-  证明: (congr_arg unop <| map_intCast (starRingEquiv : R ≃+* Rᵐᵒᵖ) z).trans (unop_intCast _)
-
-Depends on / 依赖: congr_arg, map_intCast, starRingEquiv, unop_intCast
+/-
+**star_intCast** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_intCast [NonAssocRing R] [StarRing R] (z : Int) : star (z : R) = z
+参数：z : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `map_intCast`：map_intCast [FunLike F α β] [RingHomClass F α β] (f : F) (n
+ : Int) : f n = n
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
+· 使用定理 `MulOpposite.unop_intCast`：unop_intCast [IntCast R] (n : Int) : unop (n :
+ Rᵐᵒᵖ) = n
 -/
-theorem star_intCast [NonAssocRing R] [StarRing R] (z : Int) : star (z : R) = z :=
+theorem star_intCast [NonAssocRing R] [StarRing R] (z : ℤ) : star (z : R) = z :=
   (congr_arg unop <| map_intCast (starRingEquiv : R ≃+* Rᵐᵒᵖ) z).trans (unop_intCast _)
 
 end
@@ -1207,20 +878,14 @@ variable [CommSemiring R] [StarRing R]
 
 /-- `star` as a ring automorphism, for commutative `R`. -/
 @[simps apply]
-/--
-Definition of `starRingAut` / `starRingAut` 的定义
+/-
+**starRingAut** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：starRingAut : RingAut R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition starRingAut
-  signature: : RingAut R
-  body: { starAddEquiv, starMulAut (R := R) with toFun := star, invFun := star }
-
-中文:
-定义 starRingAut
-  签名: : RingAut R
-  定义体: { starAddEquiv, starMulAut (R := R) with toFun := star, invFun := star }
-
-Depends on / 依赖: invFun, starAddEquiv, starMulAut
+--- 原说明 ---
+`star` as a ring automorphism, for commutative `R`.
 -/
 def starRingAut : RingAut R :=
   { starAddEquiv, starMulAut (R := R) with toFun := star, invFun := star }
@@ -1234,131 +899,93 @@ because the notation `E →ₗ⋆[R] F` for an `R`-conjugate-linear map (short f
 `E →ₛₗ[starRingEnd R] F`) does not pretty-print if there is a coercion involved, as would be the
 case for `(↑starRingAut : R →* R)`. -/
 @[implicit_reducible]
-/--
-Definition of `starRingEnd` / `starRingEnd` 的定义
+/-
+**starRingEnd** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：starRingEnd : R ->+* R where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition starRingEnd
-  signature: : R ->+* R where
-  body: star
-  __ := (@starRingAut R _ _).toRingHom
+--- 原说明 ---
+`star` as a ring endomorphism, for commutative `R`. This is used to denote compl
+ex
+conjugation, and is available under the notation `conj` in the scope `ComplexCon
+jugate`.
 
-@[inherit_doc]
-scoped[ComplexConjugate] notation "conj" => starRingEnd _
-
-中文:
-定义 starRingEnd
-  签名: : R ->+* R where
-  定义体: star
-  __ := (@starRingAut R _ _).toRingHom
-
-@[inherit_doc]
-scoped[ComplexConjugate] notation "conj" => starRingEnd _
+Note that this is the preferred form (over `starRingAut`, available under the sa
+me hypotheses)
+because the notation `E →ₗ⋆[R] F` for an `R`-conjugate-linear map (short for
+`E →ₛₗ[starRingEnd R] F`) does not pretty-print if there is a coercion involved,
+ as would be the
+case for `(↑starRingAut : R →* R)`.
 -/
-def starRingEnd : R ->+* R where
+def starRingEnd : R →+* R where
   toFun := star
   __ := (@starRingAut R _ _).toRingHom
 
 @[inherit_doc]
 scoped[ComplexConjugate] notation "conj" => starRingEnd _
 
-/--
-theorem `starRingEnd_apply` / 定理 `starRingEnd_apply`
+/-- This is not a simp lemma, since we usually want simp to keep `starRingEnd` bundled.
+For example, for complex conjugation, we don't want simp to turn `conj x`
+into the bare function `star x` automatically since most lemmas are about `conj x`. -/
+/-
+**starRingEnd_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：starRingEnd_apply (x : R) : starRingEnd R x = star x
+参数：x : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem starRingEnd_apply
-  given: (x : R)
-  statement: starRingEnd R x = star x
-  proof: rfl
-
-中文:
-定理 starRingEnd_apply
-  条件: (x : R)
-  结论: starRingEnd R x = star x
-  证明: rfl
+--- 原说明 ---
+This is not a simp lemma, since we usually want simp to keep `starRingEnd` bundl
+ed.
+For example, for complex conjugation, we don't want simp to turn `conj x`
+into the bare function `star x` automatically since most lemmas are about `conj 
+x`.
 -/
 theorem starRingEnd_apply (x : R) : starRingEnd R x = star x := rfl
 
 -- Not `@[simp]` because `simp` can already prove it.
-/--
-theorem `starRingEnd_self_apply` / 定理 `starRingEnd_self_apply`
-
-English:
-theorem starRingEnd_self_apply
-  given: (x : R)
-  statement: starRingEnd R (starRingEnd R x) = x
-  proof: star_star x
-
-中文:
-定理 starRingEnd_self_apply
-  条件: (x : R)
-  结论: starRingEnd R (starRingEnd R x) = x
-  证明: star_star x
-
-Depends on / 依赖: star_star
+/-
+**starRingEnd_self_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：starRingEnd_self_apply (x : R) : starRingEnd R (starRingEnd R x) = x
+参数：x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `star_star`：star_star [InvolutiveStar R] (r : R) : star (star r) = r
 -/
 theorem starRingEnd_self_apply (x : R) : starRingEnd R (starRingEnd R x) = x := star_star x
-
-/--
-Instance `RingHom.involutiveStar` / 实例 `RingHom.involutiveStar`
-
-English:
-instance RingHom.involutiveStar
-  signature: {S : Type*} [NonAssocSemiring S]
-  body: { star := fun f => RingHom.comp (starRingEnd R) f }
-  star_involutive := by
-    intro
-    ext
-    simp only [RingHom.coe_comp, Function.comp_apply, starRingEnd_self_apply]
-
-中文:
-实例 环态射.involutiveStar
-  签名: {S : 类型} [非结合半环 S]
-  定义体: { star := fun f => RingHom.comp (starRingEnd R) f }
-  star_involutive := by
-    intro
-    ext
-    simp only [RingHom.coe_comp, Function.comp_apply, starRingEnd_self_apply]
-
-Depends on / 依赖: RingHom, RingHom.comp, starRingEnd
+/-
+**RingHom.involutiveStar** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：RingHom.involutiveStar {S : Type*} [NonAssocSemiring S] : InvolutiveStar (
+S ->+* R) where toStar
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance RingHom.involutiveStar {S : Type*} [NonAssocSemiring S] : InvolutiveStar (S ->+* R) where
+instance RingHom.involutiveStar {S : Type*} [NonAssocSemiring S] : InvolutiveStar (S →+* R) where
   toStar := { star := fun f => RingHom.comp (starRingEnd R) f }
   star_involutive := by
     intro
     ext
     simp only [RingHom.coe_comp, Function.comp_apply, starRingEnd_self_apply]
-
-/--
-theorem `RingHom.star_def` / 定理 `RingHom.star_def`
-
-English:
-theorem RingHom.star_def
-  given: {S : Type*} [NonAssocSemiring S] (f : S ->+* R)
-  proof: rfl
-
-中文:
-定理 环态射.star_def
-  条件: {S : 类型} [非结合半环 S] (f : S ->+* R)
-  证明: rfl
+/-
+**RingHom.star_def** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：RingHom.star_def {S : Type*} [NonAssocSemiring S] (f : S ->+* R) : Star.st
+ar f = RingHom.comp (starRingEnd R) f
+参数：f : S ->+* R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem RingHom.star_def {S : Type*} [NonAssocSemiring S] (f : S ->+* R) :
+theorem RingHom.star_def {S : Type*} [NonAssocSemiring S] (f : S →+* R) :
     Star.star f = RingHom.comp (starRingEnd R) f := rfl
-
-/--
-theorem `RingHom.star_apply` / 定理 `RingHom.star_apply`
-
-English:
-theorem RingHom.star_apply
-  given: {S : Type*} [NonAssocSemiring S] (f : S ->+* R) (s : S)
-  proof: rfl
-
-中文:
-定理 环态射.star_apply
-  条件: {S : 类型} [非结合半环 S] (f : S ->+* R) (s : S)
-  证明: rfl
+/-
+**RingHom.star_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：RingHom.star_apply {S : Type*} [NonAssocSemiring S] (f : S ->+* R) (s : S)
+ : star f s = star (f s)
+参数：f : S ->+* R；s : S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem RingHom.star_apply {S : Type*} [NonAssocSemiring S] (f : S ->+* R) (s : S) :
+theorem RingHom.star_apply {S : Type*} [NonAssocSemiring S] (f : S →+* R) (s : S) :
     star f s = star (f s) := rfl
 
 -- A more convenient name for complex conjugation
@@ -1367,274 +994,214 @@ alias Complex.conj_conj := starRingEnd_self_apply
 alias RCLike.conj_conj := starRingEnd_self_apply
 
 open scoped ComplexConjugate
-
-/--
-lemma `conj_trivial` / 引理 `conj_trivial`
-
-English:
-lemma conj_trivial
-  given: [TrivialStar R] (a : R)
-  statement: conj a = a
-  proof: star_trivial _
-
-中文:
-引理 conj_trivial
-  条件: [TrivialStar R] (a : R)
-  结论: conj a = a
-  证明: star_trivial _
+/-
+**conj_trivial** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {R : Type u} [inst : CommSemiring R] [inst_1 : StarRing R] [TrivialStar 
+R] (a : R), (starRingEnd R) a = a
+参数：a : R；starRingEnd R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TrivialStar.star_trivial`：∀ {R : Type u} {inst : Star R} [self : Trivial
+Star R] (r : R), star r = r
 -/
 @[simp] lemma conj_trivial [TrivialStar R] (a : R) : conj a = a := star_trivial _
 
 end CommSemiring
 
 @[simp]
-/--
-theorem `star_inv₀` / 定理 `star_inv₀`
-
-English:
-theorem star_inv₀
-  given: [GroupWithZero R] [StarMul R] (x : R)
-  statement: star x⁻¹ = (star x)⁻¹
-  proof: op_injective (map_inv₀ (starMulEquiv : R ≃* Rᵐᵒᵖ) x).trans (op_inv (star x)).symm
-
-@[simp]
-
-中文:
-定理 star_inv₀
-  条件: [带零群 R] [StarMul R] (x : R)
-  结论: star x⁻¹ = (star x)⁻¹
-  证明: op_injective (map_inv₀ (starMulEquiv : R ≃* Rᵐᵒᵖ) x).trans (op_inv (star x)).symm
-
-@[simp]
-
-Depends on / 依赖: op_injective, op_inv, starMulEquiv
+/-
+**star_inv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_inv [Group R] [StarMul R] (x : R) : star x⁻¹ = (star x)⁻¹
+参数：x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOpposite.op_injective`：op_injective : Injective (op : α -> αᵐᵒᵖ)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MonoidHom.map_inv`：∀ {α : Type u_2} {β : Type u_3} [inst : Group α] [ins
+t_1 : DivisionMonoid β] (f : α →* β) (a : α), f a⁻¹ = (f a)⁻¹
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MulOpposite.op_inv`：∀ {α : Type u_1} [inst : Inv α] (x : α), MulOpposite
+.op x⁻¹ = (MulOpposite.op x)⁻¹
 -/
 theorem star_inv₀ [GroupWithZero R] [StarMul R] (x : R) : star x⁻¹ = (star x)⁻¹ :=
-op_injective (map_inv₀ (starMulEquiv : R ≃* Rᵐᵒᵖ) x).trans (op_inv (star x)).symm
+  op_injective <| (map_inv₀ (starMulEquiv : R ≃* Rᵐᵒᵖ) x).trans (op_inv (star x)).symm
 
 @[simp]
-/--
-theorem `star_zpow₀` / 定理 `star_zpow₀`
-
-English:
-theorem star_zpow₀
-  given: [GroupWithZero R] [StarMul R] (x : R) (z : Int)
-  statement: star (x ^ z) = star x ^ z
-  proof: op_injective (map_zpow₀ (starMulEquiv : R ≃* Rᵐᵒᵖ) x z).trans (op_zpow (star x) z).symm
-
-中文:
-定理 star_zpow₀
-  条件: [带零群 R] [StarMul R] (x : R) (z : 整数)
-  结论: star (x ^ z) = star x ^ z
-  证明: op_injective (map_zpow₀ (starMulEquiv : R ≃* Rᵐᵒᵖ) x z).trans (op_zpow (star x) z).symm
-
-Depends on / 依赖: op_injective, op_zpow, starMulEquiv
+/-
+**star_zpow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_zpow [Group R] [StarMul R] (x : R) (z : Int) : star (x ^ z) = star x 
+^ z
+参数：x : R；z : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOpposite.op_injective`：op_injective : Injective (op : α -> αᵐᵒᵖ)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MonoidHom.map_zpow`：∀ {α : Type u_2} {β : Type u_3} [inst : Group α] [in
+st_1 : DivisionMonoid β] (f : α →* β) (g : α) (n : ℤ),   f (g ^ n) = f g ^ n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MulOpposite.op_zpow`：∀ {α : Type u_1} [inst : DivInvMonoid α] (x : α) (z
+ : ℤ), MulOpposite.op (x ^ z) = MulOpposite.op x ^ z
 -/
-theorem star_zpow₀ [GroupWithZero R] [StarMul R] (x : R) (z : Int) : star (x ^ z) = star x ^ z :=
-op_injective (map_zpow₀ (starMulEquiv : R ≃* Rᵐᵒᵖ) x z).trans (op_zpow (star x) z).symm
+theorem star_zpow₀ [GroupWithZero R] [StarMul R] (x : R) (z : ℤ) : star (x ^ z) = star x ^ z :=
+  op_injective <| (map_zpow₀ (starMulEquiv : R ≃* Rᵐᵒᵖ) x z).trans (op_zpow (star x) z).symm
 
 /-- When multiplication is commutative, `star` preserves division. -/
 @[simp]
-/--
-theorem `star_div₀` / 定理 `star_div₀`
+/-
+**star_div** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_div [CommGroup R] [StarMul R] (x y : R) : star (x / y) = star x / sta
+r y
+参数：x y : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_div`：map_div [Group G] [DivisionMonoid H] [MonoidHomClass F G H] (f 
+: F) : forall a b, f (a / b) = f a / f b
+· 使用定理 `MulEquivClass.instMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N : T
+ype u_5} [inst : EquivLike F M N] [inst_1 : MulOneClass M]   [inst_2 : MulOneCla
+ss N] [MulEquivClass F…
+· 使用定理 `MulEquiv.instMulEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul 
+M] [inst_1 : Mul N], MulEquivClass (M ≃* N) M N
 
-English:
-theorem star_div₀
-  given: [CommGroupWithZero R] [StarMul R] (x y : R)
-  statement: star (x / y) = star x / star y
-  proof: by
-  apply op_injective
-  rw [division_def]; rw [op_div]; rw [mul_comm]; rw [star_mul]; rw [star_inv₀]; rw [op_mul]; rw [op_inv]
-
-中文:
-定理 star_div₀
-  条件: [带零交换群 R] [StarMul R] (x y : R)
-  结论: star (x / y) = star x / star y
-  证明: by
-  apply op_injective
-  rw [division_def]; rw [op_div]; rw [mul_comm]; rw [star_mul]; rw [star_inv₀]; rw [op_mul]; rw [op_inv]
-
-Depends on / 依赖: division_def, mul_comm, op_div, op_injective, op_inv, op_mul, star_mul
+--- 原说明 ---
+When multiplication is commutative, `star` preserves division.
 -/
 theorem star_div₀ [CommGroupWithZero R] [StarMul R] (x y : R) : star (x / y) = star x / star y := by
   apply op_injective
-  rw [division_def]; rw [op_div]; rw [mul_comm]; rw [star_mul]; rw [star_inv₀]; rw [op_mul]; rw [op_inv]
+  rw [division_def, op_div, mul_comm, star_mul, star_inv₀, op_mul, op_inv]
 
-/--
-Definition of `starRingOfComm` / `starRingOfComm` 的定义
+/-- Any commutative semiring admits the trivial \*-structure.
 
-English:
-abbreviation starRingOfComm
-  signature: {R : Type*} [CommSemiring R]
-  body: { starMulOfComm with
-    star_add := fun _ _ => rfl }
+See note [reducible non-instances].
+-/
+/-
+**starRingOfComm** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：starRingOfComm {R : Type*} [CommSemiring R] : StarRing R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 starRingOfComm
-  签名: {R : 类型} [交换半环 R]
-  定义体: { starMulOfComm with
-    star_add := fun _ _ => rfl }
+--- 原说明 ---
+Any commutative semiring admits the trivial \*-structure.
 
-Depends on / 依赖: starMulOfComm, star_add
+See note [reducible non-instances].
 -/
 abbrev starRingOfComm {R : Type*} [CommSemiring R] : StarRing R :=
   { starMulOfComm with
     star_add := fun _ _ => rfl }
-
-/--
-Instance `Nat.instStarRing` / 实例 `Nat.instStarRing`
-
-English:
-instance Nat.instStarRing
-  signature: : StarRing Nat
-  body: starRingOfComm
-
-中文:
-实例 自然数.instStarRing
-  签名: : 对合环 自然数
-  定义体: starRingOfComm
-
-Depends on / 依赖: starRingOfComm
+/-
+**Nat.instStarRing** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Nat.instStarRing : StarRing Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Nat.instStarRing : StarRing Nat := starRingOfComm
-/--
-Instance `Int.instStarRing` / 实例 `Int.instStarRing`
-
-English:
-instance Int.instStarRing
-  signature: : StarRing Int
-  body: starRingOfComm
-
-中文:
-实例 整数.instStarRing
-  签名: : 对合环 整数
-  定义体: starRingOfComm
-
-Depends on / 依赖: starRingOfComm
+instance Nat.instStarRing : StarRing ℕ := starRingOfComm
+/-
+**Int.instStarRing** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Int.instStarRing : StarRing Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Int.instStarRing : StarRing Int := starRingOfComm
-/--
-Instance `Nat.instTrivialStar` / 实例 `Nat.instTrivialStar`
-
-English:
-instance Nat.instTrivialStar
-  signature: : TrivialStar Nat
-  body: ⟨fun _ => rfl⟩
-
-中文:
-实例 自然数.instTrivialStar
-  签名: : TrivialStar 自然数
-  定义体: ⟨fun _ => rfl⟩
+instance Int.instStarRing : StarRing ℤ := starRingOfComm
+/-
+**Nat.instTrivialStar** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Nat.instTrivialStar : TrivialStar Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Nat.instTrivialStar : TrivialStar Nat := ⟨fun _ => rfl⟩
-/--
-Instance `Int.instTrivialStar` / 实例 `Int.instTrivialStar`
-
-English:
-instance Int.instTrivialStar
-  signature: : TrivialStar Int
-  body: ⟨fun _ => rfl⟩
-
-中文:
-实例 整数.instTrivialStar
-  签名: : TrivialStar 整数
-  定义体: ⟨fun _ => rfl⟩
+instance Nat.instTrivialStar : TrivialStar ℕ := ⟨fun _ ↦ rfl⟩
+/-
+**Int.instTrivialStar** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Int.instTrivialStar : TrivialStar Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Int.instTrivialStar : TrivialStar Int := ⟨fun _ => rfl⟩
+instance Int.instTrivialStar : TrivialStar ℤ := ⟨fun _ ↦ rfl⟩
 
-/--
-Definition of `StarModule` / `StarModule` 的定义
+/-- A star module `A` over a star ring `R` is a module which is a star additive monoid,
+and the two star structures are compatible in the sense
+`star (r • a) = star r • star a`.
 
-English:
-class StarModule
-  parameters: (R : Type u) (A : Type v) [Star R] [Star A] [SMul R A]
-  axioms and operations (1):
-    - star_smul : forall (r : R) (a : A), star (r • a) = star r • star a
+Note that it is up to the user of this typeclass to enforce
+`[Semiring R] [StarRing R] [AddCommMonoid A] [StarAddMonoid A] [Module R A]`, and that
+the statement only requires `[Star R] [Star A] [SMul R A]`.
 
-中文:
-类 对合模
-  参数: (R : 类型u) (A : 类型v) [对合 R] [对合 A] [标量乘法 R A]
-  公理与运算 (1 个):
-    - star_smul : 对任意 (r : R) (a : A), star (r • a) = star r • star a
+If used as `[CommRing R] [StarRing R] [Semiring A] [StarRing A] [Algebra R A]`, this represents a
+star algebra.
+-/
+/-
+**StarModule** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u) → (A : Type v) → [Star R] → [Star A] → [SMul R A] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A star module `A` over a star ring `R` is a module which is a star additive mono
+id,
+and the two star structures are compatible in the sense
+`star (r • a) = star r • star a`.
+
+Note that it is up to the user of this typeclass to enforce
+`[Semiring R] [StarRing R] [AddCommMonoid A] [StarAddMonoid A] [Module R A]`, an
+d that
+the statement only requires `[Star R] [Star A] [SMul R A]`.
+
+If used as `[CommRing R] [StarRing R] [Semiring A] [StarRing A] [Algebra R A]`, 
+this represents a
+star algebra.
 -/
 class StarModule (R : Type u) (A : Type v) [Star R] [Star A] [SMul R A] : Prop where
   /-- `star` commutes with scalar multiplication -/
-  star_smul : forall (r : R) (a : A), star (r • a) = star r • star a
+  star_smul : ∀ (r : R) (a : A), star (r • a) = star r • star a
 
 export StarModule (star_smul)
 
 attribute [simp] star_smul
 
-/--
-Instance `StarMul.toStarModule` / 实例 `StarMul.toStarModule`
+/-- A commutative star monoid is a star module over itself via `Monoid.toMulAction`. -/
+/-
+**StarMul.toStarModule** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：StarMul.toStarModule [CommMonoid R] [StarMul R] : StarModule R R
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `star_mul'`：star_mul' [CommMagma R] [StarMul R] (x y : R) : star (x * y) 
+= star x * star y
 
-English:
-instance StarMul.toStarModule
-  signature: [CommMonoid R] [StarMul R]
-  body: ⟨star_mul'⟩
-
-中文:
-实例 StarMul.toStarModule
-  签名: [交换幺半群 R] [StarMul R]
-  定义体: ⟨star_mul'⟩
-
-Depends on / 依赖: star_mul
+--- 原说明 ---
+A commutative star monoid is a star module over itself via `Monoid.toMulAction`.
 -/
 instance StarMul.toStarModule [CommMonoid R] [StarMul R] : StarModule R R :=
   ⟨star_mul'⟩
-
-/--
-Instance `StarAddMonoid.toStarModuleNat` / 实例 `StarAddMonoid.toStarModuleNat`
-
-English:
-instance StarAddMonoid.toStarModuleNat
-  signature: {α} [AddMonoid α] [StarAddMonoid α]
-  body: star_nsmul
-
-中文:
-实例 StarAdd幺半群.toStarModule自然数
-  签名: {α} [加法幺半群 α] [StarAdd幺半群 α]
-  定义体: star_nsmul
-
-Depends on / 依赖: star_nsmul
+/-
+**StarAddMonoid.toStarModuleNat** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：StarAddMonoid.toStarModuleNat {α} [AddMonoid α] [StarAddMonoid α] : StarMo
+dule Nat α where star_smul
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `star_nsmul`：star_nsmul [AddMonoid R] [StarAddMonoid R] (n : Nat) (x : R)
+ : star (n • x) = n • star x
 -/
-instance StarAddMonoid.toStarModuleNat {α} [AddMonoid α] [StarAddMonoid α] : StarModule Nat α where
+instance StarAddMonoid.toStarModuleNat {α} [AddMonoid α] [StarAddMonoid α] : StarModule ℕ α where
   star_smul := star_nsmul
-
-/--
-Instance `StarAddMonoid.toStarModuleInt` / 实例 `StarAddMonoid.toStarModuleInt`
-
-English:
-instance StarAddMonoid.toStarModuleInt
-  signature: {α} [AddGroup α] [StarAddMonoid α]
-  body: star_zsmul
-
-中文:
-实例 StarAdd幺半群.toStarModule整数
-  签名: {α} [加法群 α] [StarAdd幺半群 α]
-  定义体: star_zsmul
-
-Depends on / 依赖: star_zsmul
+/-
+**StarAddMonoid.toStarModuleInt** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：StarAddMonoid.toStarModuleInt {α} [AddGroup α] [StarAddMonoid α] : StarMod
+ule Int α where star_smul
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `star_zsmul`：star_zsmul [AddGroup R] [StarAddMonoid R] (n : Int) (x : R) 
+: star (n • x) = n • star x
 -/
-instance StarAddMonoid.toStarModuleInt {α} [AddGroup α] [StarAddMonoid α] : StarModule Int α where
+instance StarAddMonoid.toStarModuleInt {α} [AddGroup α] [StarAddMonoid α] : StarModule ℤ α where
   star_smul := star_zsmul
 
 namespace RingHomInvPair
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Instance needed to define star-linear maps over a commutative star ring
+(ex: conjugate-linear maps when R = ℂ). -/
+/-
+**RingHomInvPair.** 是 Mathlib 中的一个实例，位于命名空间 `RingHomInvPair`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [CommSemiring
-  signature: R] [StarRing R] : RingHomInvPair (starRingEnd R) (starRingEnd R)
-  body: ⟨RingHom.ext star_star, RingHom.ext star_star⟩
-
-中文:
-实例 [交换半环
-  签名: R] [对合环 R] : RingHomInvPair (starRingEnd R) (starRingEnd R)
-  定义体: ⟨RingHom.ext star_star, RingHom.ext star_star⟩
-
-Depends on / 依赖: RingHom, RingHom.ext, star_star
+--- 原说明 ---
+Instance needed to define star-linear maps over a commutative star ring
+(ex: conjugate-linear maps when R = ℂ).
 -/
 instance [CommSemiring R] [StarRing R] : RingHomInvPair (starRingEnd R) (starRingEnd R) :=
   ⟨RingHom.ext star_star, RingHom.ext star_star⟩
@@ -1643,24 +1210,21 @@ end RingHomInvPair
 
 section
 
-/--
-Definition of `StarHomClass` / `StarHomClass` 的定义
+/-- `StarHomClass F R S` states that `F` is a type of `star`-preserving maps from `R` to `S`. -/
+/-
+**StarHomClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_1) → (R : outParam (Type u_2)) → (S : outParam (Type u_3)) → [
+Star R] → [Star S] → [FunLike F R S] → Prop
+参数：Type u_2；Type u_3。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class StarHomClass
-  parameters: (F : Type*) (R S : outParam Type*) [Star R] [Star S] [FunLike F R S]
-  axioms and operations (1):
-    - map_star : forall (f : F) (r : R), f (star r) = star (f r)
-
-中文:
-类 对合态射类
-  参数: (F : 类型) (R S : outParam 类型) [对合 R] [对合 S] [函数状 F R S]
-  公理与运算 (1 个):
-    - map_star : 对任意 (f : F) (r : R), f (star r) = star (f r)
+--- 原说明 ---
+`StarHomClass F R S` states that `F` is a type of `star`-preserving maps from `R
+` to `S`.
 -/
 class StarHomClass (F : Type*) (R S : outParam Type*) [Star R] [Star S] [FunLike F R S] : Prop where
   /-- the maps preserve star -/
-  map_star : forall (f : F) (r : R), f (star r) = star (f r)
+  map_star : ∀ (f : F) (r : R), f (star r) = star (f r)
 
 export StarHomClass (map_star)
 
@@ -1673,600 +1237,482 @@ namespace Units
 
 variable [Monoid R] [StarMul R]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: StarMul Rˣ
-  body: { val := star u
-      inv := star ↑u⁻¹
-val_inv := (star_mul _ _).symm.trans (congr_arg star u.inv_val).trans star_one _
-inv_val := (star_mul _ _).symm.trans (congr_arg star u.val_inv).trans star_one _ }
-  star_involutive _ := Units.ext (star_involutive _)
-  star_mul _ _ := Units.ext (star_mul _ _)
-
-@[simp]
-
-中文:
-实例 :
-  签名: StarMul Rˣ
-  定义体: { val := star u
-      inv := star ↑u⁻¹
-val_inv := (star_mul _ _).symm.trans (congr_arg star u.inv_val).trans star_one _
-inv_val := (star_mul _ _).symm.trans (congr_arg star u.val_inv).trans star_one _ }
-  star_involutive _ := Units.ext (star_involutive _)
-  star_mul _ _ := Units.ext (star_mul _ _)
-
-@[simp]
-
-Depends on / 依赖: Units.ext, congr_arg, inv_val, star_involutive, star_mul, star_one, symm.trans, u.inv_val, u.val_inv, val_inv
+/-
+**Units.** 是 Mathlib 中的一个实例，位于命名空间 `Units`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : StarMul Rˣ where
   star u :=
     { val := star u
       inv := star ↑u⁻¹
-val_inv := (star_mul _ _).symm.trans (congr_arg star u.inv_val).trans star_one _
-inv_val := (star_mul _ _).symm.trans (congr_arg star u.val_inv).trans star_one _ }
+      val_inv := (star_mul _ _).symm.trans <| (congr_arg star u.inv_val).trans <| star_one _
+      inv_val := (star_mul _ _).symm.trans <| (congr_arg star u.val_inv).trans <| star_one _ }
   star_involutive _ := Units.ext (star_involutive _)
   star_mul _ _ := Units.ext (star_mul _ _)
 
 @[simp]
-/--
-theorem `coe_star` / 定理 `coe_star`
-
-English:
-theorem coe_star
-  given: (u : Rˣ)
-  statement: ↑(star u) = (star ↑u : R)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_star
-  条件: (u : Rˣ)
-  结论: ↑(star u) = (star ↑u : R)
-  证明: rfl
-
-@[simp]
+/-
+**Units.coe_star** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：coe_star (u : Rˣ) : ↑(star u) = (star ↑u : R)
+参数：u : Rˣ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_star (u : Rˣ) : ↑(star u) = (star ↑u : R) :=
   rfl
 
 @[simp]
-/--
-theorem `coe_star_inv` / 定理 `coe_star_inv`
-
-English:
-theorem coe_star_inv
-  given: (u : Rˣ)
-  statement: ↑(star u)⁻¹ = (star ↑u⁻¹ : R)
-  proof: rfl
-
-中文:
-定理 coe_star_inv
-  条件: (u : Rˣ)
-  结论: ↑(star u)⁻¹ = (star ↑u⁻¹ : R)
-  证明: rfl
+/-
+**Units.coe_star_inv** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：coe_star_inv (u : Rˣ) : ↑(star u)⁻¹ = (star ↑u⁻¹ : R)
+参数：u : Rˣ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_star_inv (u : Rˣ) : ↑(star u)⁻¹ = (star ↑u⁻¹ : R) :=
   rfl
-
+/-
+**Units.** 是 Mathlib 中的一个实例，位于命名空间 `Units`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {A : Type*} [Star A] [SMul R A] [StarModule R A] : StarModule Rˣ A :=
   ⟨fun u a => star_smul (u : R) a⟩
 
 end Units
 
 @[aesop safe apply]
-/--
-theorem `IsUnit.star` / 定理 `IsUnit.star`
-
-English:
-theorem IsUnit.star
-  given: [Monoid R] [StarMul R] {a : R}
-  statement: IsUnit a -> IsUnit (star a)
-
-中文:
-定理 是单位.star
-  条件: [幺半群 R] [StarMul R] {a : R}
-  结论: 是单位 a -> 是单位 (star a)
+/-
+**IsUnit.star** 是 Mathlib 中的一个定理，位于命名空间 `IsUnit`。
+形式化陈述：∀ {R : Type u} [inst : Monoid R] [inst_1 : StarMul R] {a : R}, IsUnit a → 
+IsUnit (star a)
+参数：star a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem IsUnit.star [Monoid R] [StarMul R] {a : R} : IsUnit a -> IsUnit (star a)
+protected theorem IsUnit.star [Monoid R] [StarMul R] {a : R} : IsUnit a → IsUnit (star a)
   | ⟨u, hu⟩ => ⟨Star.star u, hu ▸ rfl⟩
 
 @[simp, grind =]
-/--
-theorem `isUnit_star` / 定理 `isUnit_star`
-
-English:
-theorem isUnit_star
-  given: [Monoid R] [StarMul R] {a : R}
-  statement: IsUnit (star a) ↔ IsUnit a
-  proof: ⟨fun h => star_star a ▸ h.star, IsUnit.star⟩
-
-@[grind _=_]
-
-中文:
-定理 isUnit_star
-  条件: [幺半群 R] [StarMul R] {a : R}
-  结论: 是单位 (star a) ↔ 是单位 a
-  证明: ⟨fun h => star_star a ▸ h.star, IsUnit.star⟩
-
-@[grind _=_]
-
-Depends on / 依赖: IsUnit, IsUnit.star, h.star, star_star
+/-
+**isUnit_star** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isUnit_star [Monoid R] [StarMul R] {a : R} : IsUnit (star a) ↔ IsUnit a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUnit.star`：∀ {R : Type u} [inst : Monoid R] [inst_1 : StarMul R] {a : 
+R}, IsUnit a → IsUnit (star a)
+· 使用定理 `star_star`：star_star [InvolutiveStar R] (r : R) : star (star r) = r
 -/
 theorem isUnit_star [Monoid R] [StarMul R] {a : R} : IsUnit (star a) ↔ IsUnit a :=
   ⟨fun h => star_star a ▸ h.star, IsUnit.star⟩
 
 @[grind _=_]
-/--
-theorem `Ring.inverse_star` / 定理 `Ring.inverse_star`
-
-English:
-theorem Ring.inverse_star
-  given: [Semiring R] [StarRing R] (a : R)
-  proof: by
-  by_cases ha : IsUnit a
-  · obtain ⟨u, rfl⟩ := ha
-    rw [Ring.inverse_unit]; rw [← Units.coe_star]; rw [Ring.inverse_unit]; rw [← Units.coe_star_inv]
-  rw [Ring.inverse_non_unit _ ha]; rw [Ring.inverse_non_unit _ (mt isUnit_star.mp ha)]; rw [star_zero]
-
-中文:
-定理 环.inverse_star
-  条件: [半环 R] [对合环 R] (a : R)
-  证明: by
-  by_cases ha : IsUnit a
-  · obtain ⟨u, rfl⟩ := ha
-    rw [Ring.inverse_unit]; rw [← Units.coe_star]; rw [Ring.inverse_unit]; rw [← Units.coe_star_inv]
-  rw [Ring.inverse_non_unit _ ha]; rw [Ring.inverse_non_unit _ (mt isUnit_star.mp ha)]; rw [star_zero]
-
-Depends on / 依赖: IsUnit, Ring.inverse_non_unit, Ring.inverse_unit, Units.coe_star, Units.coe_star_inv, coe_star, coe_star_inv, inverse_non_unit, inverse_unit, isUnit_star, isUnit_star.mp, star_zero
+/-
+**Ring.inverse_star** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Ring.inverse_star [Semiring R] [StarRing R] (a : R) : (star a)⁻¹ʳ = star (
+a⁻¹ʳ)
+参数：a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ring.inverse_unit`：inverse_unit (u : M₀ˣ) : (u : M₀)⁻¹ʳ = (u⁻¹ : M₀ˣ)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Units.coe_star`：coe_star (u : Rˣ) : ↑(star u) = (star ↑u : R)
+· 使用定理 `Units.coe_star_inv`：coe_star_inv (u : Rˣ) : ↑(star u)⁻¹ = (star ↑u⁻¹ : R
+)
+· 使用定理 `Ring.inverse_non_unit`：inverse_non_unit (x : M₀) (h : ¬IsUnit x) : x⁻¹ʳ 
+= 0
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isUnit_star`：isUnit_star [Monoid R] [StarMul R] {a : R} : IsUnit (star a
+) ↔ IsUnit a
+· 使用定理 `star_zero`：star_zero [AddMonoid R] [StarAddMonoid R] : star (0 : R) = 0
 -/
 theorem Ring.inverse_star [Semiring R] [StarRing R] (a : R) :
     (star a)⁻¹ʳ = star (a⁻¹ʳ) := by
   by_cases ha : IsUnit a
   · obtain ⟨u, rfl⟩ := ha
-    rw [Ring.inverse_unit]; rw [← Units.coe_star]; rw [Ring.inverse_unit]; rw [← Units.coe_star_inv]
-  rw [Ring.inverse_non_unit _ ha]; rw [Ring.inverse_non_unit _ (mt isUnit_star.mp ha)]; rw [star_zero]
-
-/--
-Instance `Invertible.star` / 实例 `Invertible.star`
-
-English:
-instance Invertible.star
-  signature: {R : Type*} [MulOneClass R] [StarMul R] (r : R) [Invertible r]
-  body: Star.star (⅟r)
-  invOf_mul_self := by rw [← star_mul, mul_invOf_self, star_one]
-  mul_invOf_self := by rw [← star_mul, invOf_mul_self, star_one]
-
-中文:
-实例 可逆.star
-  签名: {R : 类型} [MulOne类 R] [StarMul R] (r : R) [可逆 r]
-  定义体: Star.star (⅟r)
-  invOf_mul_self := by rw [← star_mul, mul_invOf_self, star_one]
-  mul_invOf_self := by rw [← star_mul, invOf_mul_self, star_one]
+    rw [Ring.inverse_unit, ← Units.coe_star, Ring.inverse_unit, ← Units.coe_star_inv]
+  rw [Ring.inverse_non_unit _ ha, Ring.inverse_non_unit _ (mt isUnit_star.mp ha), star_zero]
+/-
+**Invertible.star** 是 Mathlib 中的一个定义，位于命名空间 `Invertible`。
+形式化陈述：{R : Type u_1} → [inst : MulOneClass R] → [inst_1 : StarMul R] → (r : R) →
+ [Invertible r] → Invertible (star r)
+参数：r : R；star r。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected instance Invertible.star {R : Type*} [MulOneClass R] [StarMul R] (r : R) [Invertible r] :
     Invertible (star r) where
   invOf := Star.star (⅟r)
   invOf_mul_self := by rw [← star_mul, mul_invOf_self, star_one]
   mul_invOf_self := by rw [← star_mul, invOf_mul_self, star_one]
-
-/--
-theorem `star_invOf` / 定理 `star_invOf`
-
-English:
-theorem star_invOf
-  statement: {R : Type*} [Monoid R] [StarMul R] (r : R) [Invertible r]
-  proof: by
-  rw [← mul_one (star (⅟r))]; rw [← mul_invOf_self (star r)]; rw [← mul_assoc]; rw [← star_mul]
-  simp
-
-中文:
-定理 star_invOf
-  结论: {R : 类型} [幺半群 R] [StarMul R] (r : R) [可逆 r]
-  证明: by
-  rw [← mul_one (star (⅟r))]; rw [← mul_invOf_self (star r)]; rw [← mul_assoc]; rw [← star_mul]
-  simp
-
-Depends on / 依赖: mul_assoc, mul_invOf_self, mul_one, star_mul
+/-
+**star_invOf** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_invOf {R : Type*} [Monoid R] [StarMul R] (r : R) [Invertible r] [Inve
+rtible (star r)] : star (⅟r) = ⅟(star r)
+参数：r : R；star r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `mul_invOf_self`：mul_invOf_self [Mul α] [One α] (a : α) [Invertible a] : 
+a * ⅟a = 1
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `StarMul.star_mul`：∀ {R : Type u} {inst : Mul R} [self : StarMul R] (r s 
+: R), star (r * s) = star s * star r
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_invOf_self'`：mul_invOf_self' [Mul α] [One α] (a : α) {_ : Invertible
+ a} : a * ⅟a = 1
+· 使用定理 `star_one`：star_one [MulOneClass R] [StarMul R] : star (1 : R) = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem star_invOf {R : Type*} [Monoid R] [StarMul R] (r : R) [Invertible r]
     [Invertible (star r)] : star (⅟r) = ⅟(star r) := by
-  rw [← mul_one (star (⅟r))]; rw [← mul_invOf_self (star r)]; rw [← mul_assoc]; rw [← star_mul]
+  rw [← mul_one (star (⅟r)), ← mul_invOf_self (star r), ← mul_assoc, ← star_mul]
   simp
 
 section Regular
 
-/--
-theorem `IsLeftRegular.star` / 定理 `IsLeftRegular.star`
-
-English:
-theorem IsLeftRegular.star
-  given: [Mul R] [StarMul R] {x : R} (hx : IsLeftRegular x)
-  proof: fun a b h => star_injective hx by simpa using congr_arg Star.star h
-
-中文:
-定理 IsLeftRegular.star
-  条件: [乘法 R] [StarMul R] {x : R} (hx : IsLeftRegular x)
-  证明: fun a b h => star_injective hx by simpa using congr_arg Star.star h
+/-
+**IsLeftRegular.star** 是 Mathlib 中的一个定理，位于命名空间 `IsLeftRegular`。
+形式化陈述：∀ {R : Type u} [inst : Mul R] [inst_1 : StarMul R] {x : R}, IsLeftRegular 
+x → IsRightRegular (star x)
+参数：star x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `star_injective`：star_injective [InvolutiveStar R] : Function.Injective (
+star : R -> R)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `StarMul.star_mul`：∀ {R : Type u} {inst : Mul R} [self : StarMul R] (r s 
+: R), star (r * s) = star s * star r
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `star_star`：star_star [InvolutiveStar R] (r : R) : star (star r) = r
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 protected theorem IsLeftRegular.star [Mul R] [StarMul R] {x : R} (hx : IsLeftRegular x) :
     IsRightRegular (star x) :=
-fun a b h => star_injective hx by simpa using congr_arg Star.star h
-
-/--
-theorem `IsRightRegular.star` / 定理 `IsRightRegular.star`
-
-English:
-theorem IsRightRegular.star
-  given: [Mul R] [StarMul R] {x : R} (hx : IsRightRegular x)
-  proof: fun a b h => star_injective hx by simpa using congr_arg Star.star h
-
-中文:
-定理 IsRightRegular.star
-  条件: [乘法 R] [StarMul R] {x : R} (hx : IsRightRegular x)
-  证明: fun a b h => star_injective hx by simpa using congr_arg Star.star h
+  fun a b h => star_injective <| hx <| by simpa using congr_arg Star.star h
+/-
+**IsRightRegular.star** 是 Mathlib 中的一个定理，位于命名空间 `IsRightRegular`。
+形式化陈述：∀ {R : Type u} [inst : Mul R] [inst_1 : StarMul R] {x : R}, IsRightRegular
+ x → IsLeftRegular (star x)
+参数：star x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `star_injective`：star_injective [InvolutiveStar R] : Function.Injective (
+star : R -> R)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `StarMul.star_mul`：∀ {R : Type u} {inst : Mul R} [self : StarMul R] (r s 
+: R), star (r * s) = star s * star r
+· 使用定理 `star_star`：star_star [InvolutiveStar R] (r : R) : star (star r) = r
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 protected theorem IsRightRegular.star [Mul R] [StarMul R] {x : R} (hx : IsRightRegular x) :
     IsLeftRegular (star x) :=
-fun a b h => star_injective hx by simpa using congr_arg Star.star h
-
-/--
-theorem `IsRegular.star` / 定理 `IsRegular.star`
-
-English:
-theorem IsRegular.star
-  given: [Mul R] [StarMul R] {x : R} (hx : IsRegular x)
-  proof: ⟨hx.right.star, hx.left.star⟩
-
-@[simp]
-
-中文:
-定理 是正则.star
-  条件: [乘法 R] [StarMul R] {x : R} (hx : 是正则 x)
-  证明: ⟨hx.right.star, hx.left.star⟩
-
-@[simp]
+  fun a b h => star_injective <| hx <| by simpa using congr_arg Star.star h
+/-
+**IsRegular.star** 是 Mathlib 中的一个定理，位于命名空间 `IsRegular`。
+形式化陈述：∀ {R : Type u} [inst : Mul R] [inst_1 : StarMul R] {x : R}, IsRegular x → 
+IsRegular (star x)
+参数：star x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsRightRegular.star`：∀ {R : Type u} [inst : Mul R] [inst_1 : StarMul R] 
+{x : R}, IsRightRegular x → IsLeftRegular (star x)
+· 使用定理 `IsRegular.right`：∀ {R : Type u_1} [inst : Mul R] {c : R}, IsRegular c → 
+IsRightRegular c
+· 使用定理 `IsLeftRegular.star`：∀ {R : Type u} [inst : Mul R] [inst_1 : StarMul R] {
+x : R}, IsLeftRegular x → IsRightRegular (star x)
+· 使用定理 `IsRegular.left`：∀ {R : Type u_1} [inst : Mul R] {c : R}, IsRegular c → I
+sLeftRegular c
 -/
 protected theorem IsRegular.star [Mul R] [StarMul R] {x : R} (hx : IsRegular x) :
     IsRegular (star x) :=
   ⟨hx.right.star, hx.left.star⟩
 
 @[simp]
-/--
-theorem `isRightRegular_star_iff` / 定理 `isRightRegular_star_iff`
-
-English:
-theorem isRightRegular_star_iff
-  given: [Mul R] [StarMul R] {x : R}
-  proof: ⟨fun h => star_star x ▸ h.star, (·.star)⟩
-
-@[simp]
-
-中文:
-定理 isRightRegular_star_iff
-  条件: [乘法 R] [StarMul R] {x : R}
-  证明: ⟨fun h => star_star x ▸ h.star, (·.star)⟩
-
-@[simp]
-
-Depends on / 依赖: h.star, star_star
+/-
+**isRightRegular_star_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isRightRegular_star_iff [Mul R] [StarMul R] {x : R} : IsRightRegular (star
+ x) ↔ IsLeftRegular x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsRightRegular.star`：∀ {R : Type u} [inst : Mul R] [inst_1 : StarMul R] 
+{x : R}, IsRightRegular x → IsLeftRegular (star x)
+· 使用定理 `star_star`：star_star [InvolutiveStar R] (r : R) : star (star r) = r
+· 使用定理 `IsLeftRegular.star`：∀ {R : Type u} [inst : Mul R] [inst_1 : StarMul R] {
+x : R}, IsLeftRegular x → IsRightRegular (star x)
 -/
 theorem isRightRegular_star_iff [Mul R] [StarMul R] {x : R} :
     IsRightRegular (star x) ↔ IsLeftRegular x :=
   ⟨fun h => star_star x ▸ h.star, (·.star)⟩
 
 @[simp]
-/--
-theorem `isLeftRegular_star_iff` / 定理 `isLeftRegular_star_iff`
-
-English:
-theorem isLeftRegular_star_iff
-  given: [Mul R] [StarMul R] {x : R}
-  proof: ⟨fun h => star_star x ▸ h.star, (·.star)⟩
-
-@[simp]
-
-中文:
-定理 isLeftRegular_star_iff
-  条件: [乘法 R] [StarMul R] {x : R}
-  证明: ⟨fun h => star_star x ▸ h.star, (·.star)⟩
-
-@[simp]
-
-Depends on / 依赖: h.star, star_star
+/-
+**isLeftRegular_star_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isLeftRegular_star_iff [Mul R] [StarMul R] {x : R} : IsLeftRegular (star x
+) ↔ IsRightRegular x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLeftRegular.star`：∀ {R : Type u} [inst : Mul R] [inst_1 : StarMul R] {
+x : R}, IsLeftRegular x → IsRightRegular (star x)
+· 使用定理 `star_star`：star_star [InvolutiveStar R] (r : R) : star (star r) = r
+· 使用定理 `IsRightRegular.star`：∀ {R : Type u} [inst : Mul R] [inst_1 : StarMul R] 
+{x : R}, IsRightRegular x → IsLeftRegular (star x)
 -/
 theorem isLeftRegular_star_iff [Mul R] [StarMul R] {x : R} :
     IsLeftRegular (star x) ↔ IsRightRegular x :=
   ⟨fun h => star_star x ▸ h.star, (·.star)⟩
 
 @[simp]
-/--
-theorem `isRegular_star_iff` / 定理 `isRegular_star_iff`
-
-English:
-theorem isRegular_star_iff
-  given: [Mul R] [StarMul R] {x : R}
-  proof: by
-  rw [isRegular_iff]; rw [isRegular_iff]; rw [isRightRegular_star_iff]; rw [isLeftRegular_star_iff]; rw [and_comm]
-
-中文:
-定理 isRegular_star_iff
-  条件: [乘法 R] [StarMul R] {x : R}
-  证明: by
-  rw [isRegular_iff]; rw [isRegular_iff]; rw [isRightRegular_star_iff]; rw [isLeftRegular_star_iff]; rw [and_comm]
-
-Depends on / 依赖: and_comm, isLeftRegular_star_iff, isRegular_iff, isRightRegular_star_iff
+/-
+**isRegular_star_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isRegular_star_iff [Mul R] [StarMul R] {x : R} : IsRegular (star x) ↔ IsRe
+gular x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isRegular_iff`：isRegular_iff {c : R} : IsRegular c ↔ IsLeftRegular c ∧ I
+sRightRegular c
+· 使用定理 `isRightRegular_star_iff`：isRightRegular_star_iff [Mul R] [StarMul R] {x 
+: R} : IsRightRegular (star x) ↔ IsLeftRegular x
+· 使用定理 `isLeftRegular_star_iff`：isLeftRegular_star_iff [Mul R] [StarMul R] {x : 
+R} : IsLeftRegular (star x) ↔ IsRightRegular x
+· 使用定理 `and_comm`：∀ {a b : Prop}, a ∧ b ↔ b ∧ a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem isRegular_star_iff [Mul R] [StarMul R] {x : R} :
     IsRegular (star x) ↔ IsRegular x := by
-  rw [isRegular_iff]; rw [isRegular_iff]; rw [isRightRegular_star_iff]; rw [isLeftRegular_star_iff]; rw [and_comm]
+  rw [isRegular_iff, isRegular_iff, isRightRegular_star_iff, isLeftRegular_star_iff, and_comm]
 
 end Regular
 
 namespace Function.Injective
 
-variable {S : Type v} (f : R -> S)
+variable {S : Type v} (f : R → S)
 
-/--
-Definition of `involutiveStar` / `involutiveStar` 的定义
+/-- Given a type endowed with `star`, that `star` is involutive if it admits an injective map that
+preserves `star` to a type with whose `star` is involutive. See note [reducible non-instances]. -/
+/-
+**Function.Injective.involutiveStar** 是 Mathlib 中的一个定义，位于命名空间 `Function.Injectiv
+e`。
+形式化陈述：{R : Type u} →   {S : Type v} →     (f : R → S) →       [inst : Star R] → 
+        [inst_1 : InvolutiveStar S] → Function.Injective f → (∀ (x : R), f (star
+ x) = star (f x)) → InvolutiveStar R
+参数：f : R → S；∀ (x : R), f (star x) = star (f x)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation involutiveStar
-  signature: [Star R] [InvolutiveStar S] (hf : Injective f)
-  body: hf by rw [star, star, star_star]
-
-中文:
-缩写 involutiveStar
-  签名: [对合 R] [InvolutiveStar S] (hf : 单射 f)
-  定义体: hf by rw [star, star, star_star]
+--- 原说明 ---
+Given a type endowed with `star`, that `star` is involutive if it admits an inje
+ctive map that
+preserves `star` to a type with whose `star` is involutive. See note [reducible 
+non-instances].
 -/
 protected abbrev involutiveStar [Star R] [InvolutiveStar S] (hf : Injective f)
-    (star : forall x, f (star x) = star (f x)) : InvolutiveStar R where
-star_involutive r := hf by rw [star, star, star_star]
+    (star : ∀ x, f (star x) = star (f x)) : InvolutiveStar R where
+  star_involutive r := hf <| by rw [star, star, star_star]
 
-/--
-Definition of `starMul` / `starMul` 的定义
+/-- A type endowed with `star` and `*` is a star magma if it admits an injective map that
+preserves `star` and `*` to star magma.  See note [reducible non-instances]. -/
+/-
+**Function.Injective.starMul** 是 Mathlib 中的一个定义，位于命名空间 `Function.Injective`。
+形式化陈述：{R : Type u} →   {S : Type v} →     (f : R → S) →       [inst : Star R] → 
+        [inst_1 : Mul R] →           [inst_2 : Mul S] →             [inst_3 : St
+arMul S] →               Function.Injective f →                 (∀ (x : R), f (s
+tar x) = star (f x)) → (∀ (x y : R), f (x * y) = f x * f y) → StarMul R
+参数：f : R → S；∀ (x : R), f (star x) = star (f x)；∀ (x y : R), f (x * y) = f x * f
+ y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation starMul
-  signature: [Star R] [Mul R] [Mul S] [StarMul S] (hf : Injective f)
-  body: hf.involutiveStar _ star
-star_mul x y := hf by rw [star, mul, star_mul, mul, star, star]
-
-中文:
-缩写 starMul
-  签名: [对合 R] [乘法 R] [乘法 S] [StarMul S] (hf : 单射 f)
-  定义体: hf.involutiveStar _ star
-star_mul x y := hf by rw [star, mul, star_mul, mul, star, star]
+--- 原说明 ---
+A type endowed with `star` and `*` is a star magma if it admits an injective map
+ that
+preserves `star` and `*` to star magma.  See note [reducible non-instances].
 -/
 protected abbrev starMul [Star R] [Mul R] [Mul S] [StarMul S] (hf : Injective f)
-    (star : forall x, f (star x) = star (f x)) (mul : forall x y, f (x * y) = f x * f y) :
+    (star : ∀ x, f (star x) = star (f x)) (mul : ∀ x y, f (x * y) = f x * f y) :
     StarMul R where
   toInvolutiveStar := hf.involutiveStar _ star
-star_mul x y := hf by rw [star, mul, star_mul, mul, star, star]
+  star_mul x y := hf <| by rw [star, mul, star_mul, mul, star, star]
 
-/--
-Definition of `starAddMonoid` / `starAddMonoid` 的定义
+/-- A additive monoid endowed with `star` is an additive star monoid if it admits an injective map
+that preserves `star` and `+` to an additive star monoid.  See note [reducible non-instances]. -/
+/-
+**Function.Injective.starAddMonoid** 是 Mathlib 中的一个定义，位于命名空间 `Function.Injective
+`。
+形式化陈述：{R : Type u} →   {S : Type v} →     (f : R → S) →       [inst : Star R] → 
+        [inst_1 : AddMonoid R] →           [inst_2 : AddMonoid S] →             
+[inst_3 : StarAddMonoid S] →               Function.Injective f →               
+  (∀ (x : R), f (star x) = star (f x)) → (∀ (x y : R), f (x + y) = f x + f y) → 
+StarAddMonoid R
+参数：f : R → S；∀ (x : R), f (star x) = star (f x)；∀ (x y : R), f (x + y) = f x + f
+ y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation starAddMonoid
-  signature: [Star R] [AddMonoid R] [AddMonoid S] [StarAddMonoid S]
-  body: hf.involutiveStar f star
-star_add x y := hf by rw [star, add, star_add, add, star, star]
-
-中文:
-缩写 starAddMonoid
-  签名: [对合 R] [加法幺半群 R] [加法幺半群 S] [StarAdd幺半群 S]
-  定义体: hf.involutiveStar f star
-star_add x y := hf by rw [star, add, star_add, add, star, star]
+--- 原说明 ---
+A additive monoid endowed with `star` is an additive star monoid if it admits an
+ injective map
+that preserves `star` and `+` to an additive star monoid.  See note [reducible n
+on-instances].
 -/
 protected abbrev starAddMonoid [Star R] [AddMonoid R] [AddMonoid S] [StarAddMonoid S]
-    (hf : Injective f) (star : forall x, f (star x) = star (f x)) (add : forall x y, f (x + y) = f x + f y) :
+    (hf : Injective f) (star : ∀ x, f (star x) = star (f x)) (add : ∀ x y, f (x + y) = f x + f y) :
     StarAddMonoid R where
   toInvolutiveStar := hf.involutiveStar f star
-star_add x y := hf by rw [star, add, star_add, add, star, star]
+  star_add x y := hf <| by rw [star, add, star_add, add, star, star]
 
-/--
-Definition of `starRing` / `starRing` 的定义
+/-- A non-unital non-associative ring endowed with `star` is a star ring if it admits an injective
+map that preserves `star`, `*` and `+` to a star ring. See note [reducible non-instances]. -/
+/-
+**Function.Injective.starRing** 是 Mathlib 中的一个定义，位于命名空间 `Function.Injective`。
+形式化陈述：{R : Type u} →   {S : Type v} →     (f : R → S) →       [inst : Star R] → 
+        [inst_1 : NonUnitalNonAssocSemiring R] →           [inst_2 : NonUnitalNo
+nAssocSemiring S] →             [inst_3 : StarRing S] →               Function.I
+njective f →                 (∀ (x : R), f (star x) = star (f x)) →             
+      (∀ (x y : R), f (x + y) = f x + f y) → (∀ (x y : R), f (x * y) = f x * f y
+) → StarRing R
+参数：f : R → S；∀ (x : R), f (star x) = star (f x)；∀ (x y : R), f (x + y) = f x + f
+ y；∀ (x y : R), f (x * y) = f x * f y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation starRing
-  signature: [Star R] [NonUnitalNonAssocSemiring R] [NonUnitalNonAssocSemiring S]
-  body: { hf.starMul f star mul, hf.starAddMonoid f star add with }
-
-中文:
-缩写 starRing
-  签名: [对合 R] [非幺非结合半环 R] [非幺非结合半环 S]
-  定义体: { hf.starMul f star mul, hf.starAddMonoid f star add with }
+--- 原说明 ---
+A non-unital non-associative ring endowed with `star` is a star ring if it admit
+s an injective
+map that preserves `star`, `*` and `+` to a star ring. See note [reducible non-i
+nstances].
 -/
 protected abbrev starRing [Star R] [NonUnitalNonAssocSemiring R] [NonUnitalNonAssocSemiring S]
-    [StarRing S] (hf : Injective f) (star : forall x, f (star x) = star (f x))
-    (add : forall x y, f (x + y) = f x + f y) (mul : forall x y, f (x * y) = f x * f y) :
+    [StarRing S] (hf : Injective f) (star : ∀ x, f (star x) = star (f x))
+    (add : ∀ x y, f (x + y) = f x + f y) (mul : ∀ x y, f (x * y) = f x * f y) :
     StarRing R :=
   { hf.starMul f star mul, hf.starAddMonoid f star add with }
 
-/--
-lemma `starModule` / 引理 `starModule`
+/-- A type endowed with `star` is a star module over some other type with `star` if it admits an
+injective map that preserves `star` and `•` to a star module. See note [reducible non-instances]. -/
+/-
+**Function.Injective.starModule** 是 Mathlib 中的一个定理，位于命名空间 `Function.Injective`。
+形式化陈述：∀ {R : Type u} {S : Type v} (f : R → S) (𝕜 : Type u_1) [inst : Star 𝕜] [in
+st_1 : SMul 𝕜 R] [inst_2 : Star R]   [inst_3 : SMul 𝕜 S] [inst_4 : Star S] [Star
+Module 𝕜 S],   Function.Injective f →     (∀ (x : R), f (star x) = star (f x)) →
+ (∀ (r : 𝕜) (x : R), f (r • x) = r • f x) → StarModule 𝕜 R
+参数：f : R → S；𝕜 : Type u_1；∀ (x : R), f (star x) = star (f x)；∀ (r : 𝕜) (x : R), 
+f (r • x) = r • f x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `StarModule.star_smul`：∀ {R : Type u} {A : Type v} {inst : Star R} {inst_
+1 : Star A} {inst_2 : SMul R A} [self : StarModule R A] (r : R)   (a : A), star 
+(r • a) = …
 
-English:
-lemma starModule
-  statement: (𝕜 : Type*) [Star 𝕜] [SMul 𝕜 R]
-  proof: hf by rw [star, smul, star_smul, smul, star]
-
-中文:
-引理 starModule
-  结论: (𝕜 : 类型) [对合 𝕜] [标量乘法 𝕜 R]
-  证明: hf by rw [star, smul, star_smul, smul, star]
+--- 原说明 ---
+A type endowed with `star` is a star module over some other type with `star` if 
+it admits an
+injective map that preserves `star` and `•` to a star module. See note [reducibl
+e non-instances].
 -/
 protected lemma starModule (𝕜 : Type*) [Star 𝕜] [SMul 𝕜 R]
     [Star R] [SMul 𝕜 S] [Star S] [StarModule 𝕜 S] (hf : Injective f)
-    (star : forall x, f (star x) = star (f x)) (smul : forall (r : 𝕜) x, f (r • x) = r • f x) :
+    (star : ∀ x, f (star x) = star (f x)) (smul : ∀ (r : 𝕜) x, f (r • x) = r • f x) :
     StarModule 𝕜 R where
-star_smul r x := hf by rw [star, smul, star_smul, smul, star]
+  star_smul r x := hf <| by rw [star, smul, star_smul, smul, star]
 
 end Function.Injective
 
 namespace MulOpposite
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The opposite type carries the same star operation. -/
+/-
+**MulOpposite.** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [Star
-  signature: R] : Star Rᵐᵒᵖ where star r
-  body: op (star r.unop)
-
-@[simp]
-
-中文:
-实例 [对合
-  签名: R] : 对合 Rᵐᵒᵖ where star r
-  定义体: op (star r.unop)
-
-@[simp]
-
-Depends on / 依赖: r.unop
+--- 原说明 ---
+The opposite type carries the same star operation.
 -/
 instance [Star R] : Star Rᵐᵒᵖ where star r := op (star r.unop)
 
 @[simp]
-/--
-theorem `unop_star` / 定理 `unop_star`
-
-English:
-theorem unop_star
-  given: [Star R] (r : Rᵐᵒᵖ)
-  statement: unop (star r) = star (unop r)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 unop_star
-  条件: [对合 R] (r : Rᵐᵒᵖ)
-  结论: unop (star r) = star (unop r)
-  证明: rfl
-
-@[simp]
+/-
+**MulOpposite.unop_star** 是 Mathlib 中的一个定理，位于命名空间 `MulOpposite`。
+形式化陈述：unop_star [Star R] (r : Rᵐᵒᵖ) : unop (star r) = star (unop r)
+参数：r : Rᵐᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem unop_star [Star R] (r : Rᵐᵒᵖ) : unop (star r) = star (unop r) :=
   rfl
 
 @[simp]
-/--
-theorem `op_star` / 定理 `op_star`
-
-English:
-theorem op_star
-  given: [Star R] (r : R)
-  statement: op (star r) = star (op r)
-  proof: rfl
-
-中文:
-定理 op_star
-  条件: [对合 R] (r : R)
-  结论: op (star r) = star (op r)
-  证明: rfl
+/-
+**MulOpposite.op_star** 是 Mathlib 中的一个定理，位于命名空间 `MulOpposite`。
+形式化陈述：op_star [Star R] (r : R) : op (star r) = star (op r)
+参数：r : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem op_star [Star R] (r : R) : op (star r) = star (op r) :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [InvolutiveStar
-  signature: R] : InvolutiveStar Rᵐᵒᵖ where
-  body: unop_injective (star_star r.unop)
-
-中文:
-实例 [InvolutiveStar
-  签名: R] : InvolutiveStar Rᵐᵒᵖ where
-  定义体: unop_injective (star_star r.unop)
-
-Depends on / 依赖: Nat.cast_mul, cast_mul, even_or_odd, even_two_mul, if_neg, if_pos, mul_div_cancel_left, n.even_or_odd, n.mul_div_cancel_left, n.not_even_two_mul_add_one, not_even_two_mul_add_one, r.unop, right_ne_zero_of_mul, star_star, two_pos, unop_injective
+/-
+**MulOpposite.** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [InvolutiveStar R] : InvolutiveStar Rᵐᵒᵖ where
   star_involutive r := unop_injective (star_star r.unop)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mul
-  signature: R] [StarMul R] : StarMul Rᵐᵒᵖ where
-  body: unop_injective (star_mul y.unop x.unop)
-
-中文:
-实例 [乘法
-  签名: R] [StarMul R] : StarMul Rᵐᵒᵖ where
-  定义体: unop_injective (star_mul y.unop x.unop)
-
-Depends on / 依赖: W.coeff_pre, W.natDegree_pre, _ne_zero, natDegree_eq_of_le_of_coeff_ne_zero, star_mul, unop_injective, x.unop, y.unop
+/-
+**MulOpposite.** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Mul R] [StarMul R] : StarMul Rᵐᵒᵖ where
   star_mul x y := unop_injective (star_mul y.unop x.unop)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddMonoid
-  signature: R] [StarAddMonoid R] : StarAddMonoid Rᵐᵒᵖ where
-  body: unop_injective (star_add x.unop y.unop)
-
-中文:
-实例 [加法幺半群
-  签名: R] [StarAdd幺半群 R] : StarAdd幺半群 Rᵐᵒᵖ where
-  定义体: unop_injective (star_add x.unop y.unop)
-
-Depends on / 依赖: AtLeastTwo, Nat.AtLeastTwo.prop.trans, Nat.div_pos_iff, Nat.pow_le_pow_left, Nat.sub_le_sub_right, W.natDegree_pre, div_pos_iff, pow_le_pow_left, simp_rw, split_ifs, star_add, sub_le_sub_right, true_and, unop_injective, x.unop, y.unop, zero_lt_two
+/-
+**MulOpposite.** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddMonoid R] [StarAddMonoid R] : StarAddMonoid Rᵐᵒᵖ where
   star_add x y := unop_injective (star_add x.unop y.unop)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalSemiring
-  signature: R] [StarRing R] : StarRing Rᵐᵒᵖ where
-  body: unop_injective (star_add x.unop y.unop)
-
-中文:
-实例 [非幺半环
-  签名: R] [对合环 R] : 对合环 Rᵐᵒᵖ where
-  定义体: unop_injective (star_add x.unop y.unop)
-
-Depends on / 依赖: star_add, unop_injective, x.unop, y.unop
+/-
+**MulOpposite.** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalSemiring R] [StarRing R] : StarRing Rᵐᵒᵖ where
   star_add x y := unop_injective (star_add x.unop y.unop)
-
+/-
+**MulOpposite.** 是 Mathlib 中的一个实例，位于命名空间 `MulOpposite`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {M : Type*} [Star R] [Star M] [SMul R M] [StarModule R M] :
     StarModule R Mᵐᵒᵖ where
   star_smul r x := unop_injective (star_smul r x.unop)
 
 end MulOpposite
 
-/--
-Instance `StarSemigroup.toOpposite_starModule` / 实例 `StarSemigroup.toOpposite_starModule`
+/-- A commutative star monoid is a star module over its opposite via
+`Monoid.toOppositeMulAction`. -/
+/-
+**StarSemigroup.toOpposite_starModule** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：StarSemigroup.toOpposite_starModule [CommMonoid R] [StarMul R] : StarModul
+e Rᵐᵒᵖ R
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `star_mul'`：star_mul' [CommMagma R] [StarMul R] (x y : R) : star (x * y) 
+= star x * star y
 
-English:
-instance StarSemigroup.toOpposite_starModule
-  signature: [CommMonoid R] [StarMul R]
-  body: ⟨fun r s => star_mul' s r.unop⟩
-
-中文:
-实例 StarSemigroup.toOpposite_starModule
-  签名: [交换幺半群 R] [StarMul R]
-  定义体: ⟨fun r s => star_mul' s r.unop⟩
-
-Depends on / 依赖: W.natDegree_pre, _pos, ne_zero_of_natDegree_gt, r.unop, star_mul
+--- 原说明 ---
+A commutative star monoid is a star module over its opposite via
+`Monoid.toOppositeMulAction`.
 -/
 instance StarSemigroup.toOpposite_starModule [CommMonoid R] [StarMul R] :
     StarModule Rᵐᵒᵖ R :=

@@ -113,67 +113,60 @@ variable (f g q : A⟦X⟧) (r : A[X]) (I : Ideal A)
 image of `g` in `(A / I)⟦X⟧` (defined to be zero if such image is zero, in which case
 it's mathematically not considered). -/
 @[mk_iff]
-/--
-Definition of `IsWeierstrassDivisionAt` / `IsWeierstrassDivisionAt` 的定义
+/-
+**PowerSeries.IsWeierstrassDivisionAt** 是 Mathlib 中的一个归纳类型，位于命名空间 `PowerSeries`。
+形式化陈述：{A : Type u_1} → [inst : CommRing A] → PowerSeries A → PowerSeries A → Pow
+erSeries A → Polynomial A → Ideal A → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsWeierstrassDivisionAt
-  parameters: : Prop where
-  axioms and operations (2):
-    - degree_lt : r.degree < (g.map (Ideal.Quotient.mk I)).order.toNat
-    - eq_mul_add : f = g * q + r
-
-中文:
-结构 是WeierstrassDivisionAt
-  参数: : 命题 where
-  公理与运算 (2 个):
-    - degree_lt : r.degree < (g.map (理想.商.mk I)).order.to自然数
-    - eq_mul_add : f = g * q + r
+--- 原说明 ---
+Let `f`, `g` be power series over `A`, `I` be an ideal of `A`,
+`PowerSeries.IsWeierstrassDivisionAt f g q r I` is a `Prop` which asserts that a
+ power series
+`q` and a polynomial `r` of degree `< n` satisfy `f = g * q + r`, where `n` is t
+he order of the
+image of `g` in `(A / I)⟦X⟧` (defined to be zero if such image is zero, in which
+ case
+it's mathematically not considered).
 -/
 structure IsWeierstrassDivisionAt : Prop where
   degree_lt : r.degree < (g.map (Ideal.Quotient.mk I)).order.toNat
   eq_mul_add : f = g * q + r
 
-/--
-Definition of `IsWeierstrassDivision` / `IsWeierstrassDivision` 的定义
+/-- Version of `PowerSeries.IsWeierstrassDivisionAt` for local rings with respect to
+its maximal ideal. -/
+/-
+**PowerSeries.IsWeierstrassDivision** 是 Mathlib 中的一个缩写定义，位于命名空间 `PowerSeries`。
+形式化陈述：IsWeierstrassDivision [IsLocalRing A] : Prop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsWeierstrassDivision
-  signature: [IsLocalRing A]
-  body: f.IsWeierstrassDivisionAt g q r (IsLocalRing.maximalIdeal A)
-
-中文:
-缩写 IsWeierstrassDivision
-  签名: [是局部环 A]
-  定义体: f.IsWeierstrassDivisionAt g q r (IsLocalRing.maximalIdeal A)
-
-Depends on / 依赖: IsLocalRing, IsLocalRing.maximalIdeal, IsWeierstrassDivisionAt, f.IsWeierstrassDivisionAt, maximalIdeal
+--- 原说明 ---
+Version of `PowerSeries.IsWeierstrassDivisionAt` for local rings with respect to
+its maximal ideal.
 -/
 abbrev IsWeierstrassDivision [IsLocalRing A] : Prop :=
   f.IsWeierstrassDivisionAt g q r (IsLocalRing.maximalIdeal A)
-
-/--
-theorem `isWeierstrassDivisionAt_zero` / 定理 `isWeierstrassDivisionAt_zero`
-
-English:
-theorem isWeierstrassDivisionAt_zero
-  statement: IsWeierstrassDivisionAt 0 g 0 0 I
-  proof: by
-  constructor
-  · rw [Polynomial.degree_zero]
-    exact WithBot.bot_lt_coe _
-  · simp
-
-中文:
-定理 isWeierstrassDivisionAt_zero
-  结论: 是WeierstrassDivisionAt 0 g 0 0 I
-  证明: by
-  constructor
-  · rw [Polynomial.degree_zero]
-    exact WithBot.bot_lt_coe _
-  · simp
-
-Depends on / 依赖: Polynomial, Polynomial.degree_zero, WithBot, WithBot.bot_lt_coe, bot_lt_coe, degree_zero
+/-
+**PowerSeries.isWeierstrassDivisionAt_zero** 是 Mathlib 中的一个定理，位于命名空间 `PowerSerie
+s`。
+形式化陈述：isWeierstrassDivisionAt_zero : IsWeierstrassDivisionAt 0 g 0 0 I
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.degree_zero`：degree_zero : degree (0 : R[X]) = ⊥
+· 使用引理 `WithBot.bot_lt_coe`：bot_lt_coe (a : α) : ⊥ < (a : WithBot α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem isWeierstrassDivisionAt_zero : IsWeierstrassDivisionAt 0 g 0 0 I := by
   constructor
@@ -185,82 +178,162 @@ variable {f g q r I}
 
 namespace IsWeierstrassDivisionAt
 
-/--
-theorem `coeff_f_sub_r_mem` / 定理 `coeff_f_sub_r_mem`
-
-English:
-theorem coeff_f_sub_r_mem
-  statement: (H : f.IsWeierstrassDivisionAt g q r I)
-  proof: by
-  replace H := H.2
-  rw [← sub_eq_iff_eq_add] at H
-  rw [H]
-  refine coeff_mul_mem_ideal_of_coeff_left_mem_ideal i (fun j hj => ?_) i le_rfl
-  have := coeff_of_lt_order_toNat _ (lt_of_le_of_lt hj hi)
-  rwa [coeff_map, ← RingHom.mem_ker, Ideal.mk_ker] at this
-
-中文:
-定理 coeff_f_sub_r_mem
-  结论: (H : f.是WeierstrassDivisionAt g q r I)
-  证明: by
-  replace H := H.2
-  rw [← sub_eq_iff_eq_add] at H
-  rw [H]
-  refine coeff_mul_mem_ideal_of_coeff_left_mem_ideal i (fun j hj => ?_) i le_rfl
-  have := coeff_of_lt_order_toNat _ (lt_of_le_of_lt hj hi)
-  rwa [coeff_map, ← RingHom.mem_ker, Ideal.mk_ker] at this
-
-Depends on / 依赖: Ideal.mk_ker, RingHom, RingHom.mem_ker, coeff_map, coeff_mul_mem_ideal_of_coeff_left_mem_ideal, coeff_of_lt_order_toNat, le_rfl, lt_of_le_of_lt, mem_ker, mk_ker, replace, sub_eq_iff_eq_add
+/-
+**PowerSeries.IsWeierstrassDivisionAt.coeff_f_sub_r_mem** 是 Mathlib 中的一个定理，位于命名空
+间 `PowerSeries.IsWeierstrassDivisionAt`。
+形式化陈述：coeff_f_sub_r_mem (H : f.IsWeierstrassDivisionAt g q r I) {i : Nat} (hi : 
+i < (g.map (Ideal.Quotient.mk I)).order.toNat) : coeff i (f - r : A⟦X⟧) in I
+参数：H : f.IsWeierstrassDivisionAt g q r I；hi : i < (g.map (Ideal.Quotient.mk I)).
+order.toNat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `PowerSeries.IsWeierstrassDivisionAt.eq_mul_add`：∀ {A : Type u_1} [inst :
+ CommRing A] {f g q : PowerSeries A} {r : Polynomial A} {I : Ideal A},   f.IsWei
+erstrassDivisionAt g q r I → f = g *…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_eq_iff_eq_add`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a -
+ b = c ↔ a = c + b
+· 使用定理 `PowerSeries.coeff_mul_mem_ideal_of_coeff_left_mem_ideal`：coeff_mul_mem_i
+deal_of_coeff_left_mem_ideal (hf : forall i <= n, coeff i f in I) : forall i <= 
+n, coeff i (f * g) in I
+· 使用定理 `PowerSeries.coeff_of_lt_order_toNat`：coeff_of_lt_order_toNat (n : Nat) (
+h : n < φ.order.toNat) : coeff n φ = 0
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `Ideal.mk_ker`：mk_ker {I : Ideal R} [I.IsTwoSided] : ker (Quotient.mk I) 
+= I
+· 使用定理 `RingHom.mem_ker`：∀ {R : Type u} {S : Type v} {F : Type u_1} [inst : Semi
+ring R] [inst_1 : Semiring S] [inst_2 : FunLike F R S]   [rcf : RingHomClass F R
+ S] {…
+· 使用定理 `PowerSeries.coeff_map`：coeff_map (n : Nat) (φ : R⟦X⟧) : coeff n (map f φ
+) = f (coeff n φ)
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
 theorem coeff_f_sub_r_mem (H : f.IsWeierstrassDivisionAt g q r I)
-    {i : Nat} (hi : i < (g.map (Ideal.Quotient.mk I)).order.toNat) :
-    coeff i (f - r : A⟦X⟧) in I := by
+    {i : ℕ} (hi : i < (g.map (Ideal.Quotient.mk I)).order.toNat) :
+    coeff i (f - r : A⟦X⟧) ∈ I := by
   replace H := H.2
   rw [← sub_eq_iff_eq_add] at H
   rw [H]
-  refine coeff_mul_mem_ideal_of_coeff_left_mem_ideal i (fun j hj => ?_) i le_rfl
+  refine coeff_mul_mem_ideal_of_coeff_left_mem_ideal i (fun j hj ↦ ?_) i le_rfl
   have := coeff_of_lt_order_toNat _ (lt_of_le_of_lt hj hi)
   rwa [coeff_map, ← RingHom.mem_ker, Ideal.mk_ker] at this
-
-/--
-theorem `add` / 定理 `add`
-
-English:
-theorem add
-  statement: {f' q' r'} (H : f.IsWeierstrassDivisionAt g q r I)
-  proof: ⟨(Polynomial.degree_add_le _ _).trans_lt (sup_lt_iff.2 ⟨H.degree_lt, H'.degree_lt⟩), by
-    rw [H.eq_mul_add]; rw [H'.eq_mul_add]; rw [Polynomial.coe_add]; ring⟩
-
-中文:
-定理 add
-  结论: {f' q' r'} (H : f.是WeierstrassDivisionAt g q r I)
-  证明: ⟨(Polynomial.degree_add_le _ _).trans_lt (sup_lt_iff.2 ⟨H.degree_lt, H'.degree_lt⟩), by
-    rw [H.eq_mul_add]; rw [H'.eq_mul_add]; rw [Polynomial.coe_add]; ring⟩
-
-Depends on / 依赖: H.degree_lt, H.eq_mul_add, Polynomial, Polynomial.coe_add, Polynomial.degree_add_le, coe_add, degree_add_le, degree_lt, eq_mul_add, sup_lt_iff, trans_lt
+/-
+**PowerSeries.IsWeierstrassDivisionAt.add** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries
+.IsWeierstrassDivisionAt`。
+形式化陈述：add {f' q' r'} (H : f.IsWeierstrassDivisionAt g q r I) (H' : f'.IsWeierstr
+assDivisionAt g q' r' I) : (f + f').IsWeierstrassDivisionAt g (q + q') (r + r') 
+I
+参数：H : f.IsWeierstrassDivisionAt g q r I；H' : f'.IsWeierstrassDivisionAt g q' r'
+ I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Polynomial.degree_add_le`：degree_add_le (p q : R[X]) : degree (p + q) <=
+ max (degree p) (degree q)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `sup_lt_iff`：sup_lt_iff : b ⊔ c < a ↔ b < a ∧ c < a
+· 使用定理 `PowerSeries.IsWeierstrassDivisionAt.degree_lt`：∀ {A : Type u_1} [inst : 
+CommRing A] {f g q : PowerSeries A} {r : Polynomial A} {I : Ideal A},   f.IsWeie
+rstrassDivisionAt g q r I → r.degre…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.IsWeierstrassDivisionAt.eq_mul_add`：∀ {A : Type u_1} [inst :
+ CommRing A] {f g q : PowerSeries A} {r : Polynomial A} {I : Ideal A},   f.IsWei
+erstrassDivisionAt g q r I → f = g *…
+· 使用定理 `Polynomial.coe_add`：coe_add : ((φ + ψ : R[X]) : PowerSeries R) = φ + ψ
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_lt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a₂ b c : R} (a₁ : R), a₂ + b = c → a₁ + a₂ + b = a₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_gt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a b₂ c : R} (b₁ : R), a + b₂ = c → a + (b₁ + b₂) = b₁ + c
 -/
 theorem add {f' q' r'} (H : f.IsWeierstrassDivisionAt g q r I)
     (H' : f'.IsWeierstrassDivisionAt g q' r' I) :
     (f + f').IsWeierstrassDivisionAt g (q + q') (r + r') I :=
   ⟨(Polynomial.degree_add_le _ _).trans_lt (sup_lt_iff.2 ⟨H.degree_lt, H'.degree_lt⟩), by
-    rw [H.eq_mul_add]; rw [H'.eq_mul_add]; rw [Polynomial.coe_add]; ring⟩
-
-/--
-theorem `smul` / 定理 `smul`
-
-English:
-theorem smul
-  given: (H : f.IsWeierstrassDivisionAt g q r I) (a : A)
-  proof: ⟨(Polynomial.degree_smul_le a _).trans_lt H.degree_lt, by
-    simp [H.eq_mul_add, Algebra.smul_def, mul_add, mul_left_comm]⟩
-
-中文:
-定理 smul
-  条件: (H : f.是WeierstrassDivisionAt g q r I) (a : A)
-  证明: ⟨(Polynomial.degree_smul_le a _).trans_lt H.degree_lt, by
-    simp [H.eq_mul_add, Algebra.smul_def, mul_add, mul_left_comm]⟩
-
-Depends on / 依赖: Algebra, Algebra.smul_def, H.degree_lt, H.eq_mul_add, Polynomial, Polynomial.degree_smul_le, degree_lt, degree_smul_le, eq_mul_add, mul_add, mul_left_comm, smul_def, trans_lt
+    rw [H.eq_mul_add, H'.eq_mul_add, Polynomial.coe_add]; ring⟩
+/-
+**PowerSeries.IsWeierstrassDivisionAt.smul** 是 Mathlib 中的一个定理，位于命名空间 `PowerSerie
+s.IsWeierstrassDivisionAt`。
+形式化陈述：smul (H : f.IsWeierstrassDivisionAt g q r I) (a : A) : (a • f).IsWeierstra
+ssDivisionAt g (a • q) (a • r) I
+参数：H : f.IsWeierstrassDivisionAt g q r I；a : A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Polynomial.degree_smul_le`：degree_smul_le {S : Type*} [SMulZeroClass S R
+] (a : S) (p : R[X]) : degree (a • p) <= degree p
+· 使用定理 `PowerSeries.IsWeierstrassDivisionAt.degree_lt`：∀ {A : Type u_1} [inst : 
+CommRing A] {f g q : PowerSeries A} {r : Polynomial A} {I : Ideal A},   f.IsWeie
+rstrassDivisionAt g q r I → r.degre…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.IsWeierstrassDivisionAt.eq_mul_add`：∀ {A : Type u_1} [inst :
+ CommRing A] {f g q : PowerSeries A} {r : Polynomial A} {I : Ideal A},   f.IsWei
+erstrassDivisionAt g q r I → f = g *…
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_left_comm`：mul_left_comm (a b c : G) : a * (b * c) = b * (a * c)
+· 使用定理 `Polynomial.coe_mul`：coe_mul : ((φ * ψ : R[X]) : PowerSeries R) = φ * ψ
+· 使用定理 `Polynomial.coe_C`：coe_C (a : R) : ((C a : R[X]) : PowerSeries R) = Power
+Series.C a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem smul (H : f.IsWeierstrassDivisionAt g q r I) (a : A) :
     (a • f).IsWeierstrassDivisionAt g (a • q) (a • r) I :=
@@ -275,122 +348,110 @@ section IsWeierstrassDivisorAt
 
 variable (g : A⟦X⟧) (I : Ideal A)
 
-/--
-Definition of `IsWeierstrassDivisorAt` / `IsWeierstrassDivisorAt` 的定义
+/-- `PowerSeries.IsWeierstrassDivisorAt g I` is a `Prop` which asserts that the `n`-th coefficient
+of `g` is a unit, where `n` is the order of the
+image of `g` in `(A / I)⟦X⟧` (defined to be zero if such image is zero, in which case
+it's mathematically not considered).
 
-English:
-definition IsWeierstrassDivisorAt
-  signature: : Prop
-  body: IsUnit (coeff (g.map (Ideal.Quotient.mk I)).order.toNat g)
+This property guarantees that if the ring is `I`-adic complete, then `g` can be used as a divisor
+in Weierstrass division (`PowerSeries.IsWeierstrassDivisorAt.isWeierstrassDivisionAt_div_mod`). -/
+/-
+**PowerSeries.IsWeierstrassDivisorAt** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries`。
+形式化陈述：IsWeierstrassDivisorAt : Prop
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
 
-中文:
-定义 IsWeierstrassDivisorAt
-  签名: : 命题
-  定义体: IsUnit (coeff (g.map (Ideal.Quotient.mk I)).order.toNat g)
+--- 原说明 ---
+`PowerSeries.IsWeierstrassDivisorAt g I` is a `Prop` which asserts that the `n`-
+th coefficient
+of `g` is a unit, where `n` is the order of the
+image of `g` in `(A / I)⟦X⟧` (defined to be zero if such image is zero, in which
+ case
+it's mathematically not considered).
 
-Depends on / 依赖: Ideal.Quotient.mk, IsUnit, Quotient, g.map, order.toNat
+This property guarantees that if the ring is `I`-adic complete, then `g` can be 
+used as a divisor
+in Weierstrass division (`PowerSeries.IsWeierstrassDivisorAt.isWeierstrassDivisi
+onAt_div_mod`).
 -/
 def IsWeierstrassDivisorAt : Prop :=
   IsUnit (coeff (g.map (Ideal.Quotient.mk I)).order.toNat g)
 
-/--
-Definition of `IsWeierstrassDivisor` / `IsWeierstrassDivisor` 的定义
+/-- Version of `PowerSeries.IsWeierstrassDivisorAt` for local rings with respect to
+its maximal ideal. -/
+/-
+**PowerSeries.IsWeierstrassDivisor** 是 Mathlib 中的一个缩写定义，位于命名空间 `PowerSeries`。
+形式化陈述：IsWeierstrassDivisor [IsLocalRing A] : Prop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsWeierstrassDivisor
-  signature: [IsLocalRing A]
-  body: g.IsWeierstrassDivisorAt (IsLocalRing.maximalIdeal A)
-
-中文:
-缩写 IsWeierstrassDivisor
-  签名: [是局部环 A]
-  定义体: g.IsWeierstrassDivisorAt (IsLocalRing.maximalIdeal A)
-
-Depends on / 依赖: IsLocalRing, IsLocalRing.maximalIdeal, IsWeierstrassDivisorAt, g.IsWeierstrassDivisorAt, maximalIdeal
+--- 原说明 ---
+Version of `PowerSeries.IsWeierstrassDivisorAt` for local rings with respect to
+its maximal ideal.
 -/
 abbrev IsWeierstrassDivisor [IsLocalRing A] : Prop :=
   g.IsWeierstrassDivisorAt (IsLocalRing.maximalIdeal A)
 
 variable {g} in
-/--
-theorem `IsWeierstrassDivisor.of_map_ne_zero` / 定理 `IsWeierstrassDivisor.of_map_ne_zero`
+/-- If `g` is a power series over a local ring such that
+its image in the residue field is not zero, then `g` can be used as a Weierstrass divisor. -/
+/-
+**PowerSeries.IsWeierstrassDivisor.of_map_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Pow
+erSeries.IsWeierstrassDivisor`。
+形式化陈述：∀ {A : Type u_1} [inst : CommRing A] {g : PowerSeries A} [inst_1 : IsLocal
+Ring A],   (PowerSeries.map (IsLocalRing.residue A)) g ≠ 0 → g.IsWeierstrassDivi
+sor
+参数：PowerSeries.map (IsLocalRing.residue A)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.IsWeierstrassDivisor.eq_1`：∀ {A : Type u_1} [inst : CommRing
+ A] (g : PowerSeries A) [inst_1 : IsLocalRing A],   g.IsWeierstrassDivisor = g.I
+sWeierstrassDivisorAt (IsLo…
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.eq_1`：∀ {A : Type u_1} [inst : CommRi
+ng A] (g : PowerSeries A) (I : Ideal A),   g.IsWeierstrassDivisorAt I = IsUnit (
+(PowerSeries.coeff ((PowerSer…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsLocalRing.notMem_maximalIdeal`：notMem_maximalIdeal {x : R} : x ∉ maxim
+alIdeal R ↔ IsUnit x
+· 使用定理 `PowerSeries.coeff_order`：coeff_order (h : φ != 0) : coeff φ.order.toNat 
+φ != 0
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₄`：contrapose₄ {p q : Prop} : (q -> 
+p) -> (¬ p -> ¬ q)
+· 使用定理 `PowerSeries.coeff_map`：coeff_map (n : Nat) (φ : R⟦X⟧) : coeff n (map f φ
+) = f (coeff n φ)
+· 使用引理 `IsLocalRing.residue_eq_zero_iff`：residue_eq_zero_iff (x : R) : residue R
+ x = 0 ↔ x in maximalIdeal R
 
-English:
-theorem IsWeierstrassDivisor.of_map_ne_zero
-  statement: [IsLocalRing A]
-  proof: by
-  rw [IsWeierstrassDivisor]; rw [IsWeierstrassDivisorAt]; rw [← IsLocalRing.notMem_maximalIdeal]
-  have h := coeff_order hg
-  contrapose h
-  rwa [coeff_map, IsLocalRing.residue_eq_zero_iff]
-
-中文:
-定理 IsWeierstrassDivisor.of_map_ne_zero
-  结论: [是局部环 A]
-  证明: by
-  rw [IsWeierstrassDivisor]; rw [IsWeierstrassDivisorAt]; rw [← IsLocalRing.notMem_maximalIdeal]
-  have h := coeff_order hg
-  contrapose h
-  rwa [coeff_map, IsLocalRing.residue_eq_zero_iff]
-
-Depends on / 依赖: IsLocalRing, IsLocalRing.notMem_maximalIdeal, IsLocalRing.residue_eq_zero_iff, IsWeierstrassDivisor, IsWeierstrassDivisorAt, coeff_map, coeff_order, contrapose, notMem_maximalIdeal, residue_eq_zero_iff
+--- 原说明 ---
+If `g` is a power series over a local ring such that
+its image in the residue field is not zero, then `g` can be used as a Weierstras
+s divisor.
 -/
 theorem IsWeierstrassDivisor.of_map_ne_zero [IsLocalRing A]
-    (hg : g.map (IsLocalRing.residue A) != 0) : g.IsWeierstrassDivisor := by
-  rw [IsWeierstrassDivisor]; rw [IsWeierstrassDivisorAt]; rw [← IsLocalRing.notMem_maximalIdeal]
+    (hg : g.map (IsLocalRing.residue A) ≠ 0) : g.IsWeierstrassDivisor := by
+  rw [IsWeierstrassDivisor, IsWeierstrassDivisorAt, ← IsLocalRing.notMem_maximalIdeal]
   have h := coeff_order hg
   contrapose h
   rwa [coeff_map, IsLocalRing.residue_eq_zero_iff]
-
-/--
-theorem `_root_.Polynomial.IsDistinguishedAt.isWeierstrassDivisorAt` / 定理 `_root_.Polynomial.IsDistinguishedAt.isWeierstrassDivisorAt`
-
-English:
-theorem _root_.Polynomial.IsDistinguishedAt.isWeierstrassDivisorAt
-  statement: {g : A[X]} {I : Ideal A}
-  proof: by
-  have : g.natDegree = _ := congr(ENat.toNat $(H.coe_natDegree_eq_order_map g 1
-    (by rwa [constantCoeff_one, ← Ideal.ne_top_iff_one]) (by simp)))
-  simp [IsWeierstrassDivisorAt, ← this, H.monic.leadingCoeff]
-
-中文:
-定理 _root_.多项式.是DistinguishedAt.isWeierstrassDivisorAt
-  结论: {g : A[X]} {I : 理想 A}
-  证明: by
-  have : g.natDegree = _ := congr(ENat.toNat $(H.coe_natDegree_eq_order_map g 1
-    (by rwa [constantCoeff_one, ← Ideal.ne_top_iff_one]) (by simp)))
-  simp [IsWeierstrassDivisorAt, ← this, H.monic.leadingCoeff]
-
-Depends on / 依赖: ENat.toNat, H.coe_natDegree_eq_order_map, H.monic.leadingCoeff, Ideal.ne_top_iff_one, IsWeierstrassDivisorAt, coe_natDegree_eq_order_map, constantCoeff_one, g.natDegree, leadingCoeff, natDegree, ne_top_iff_one
+/-
+**PowerSeries._root_.Polynomial.IsDistinguishedAt.isWeierstrassDivisorAt** 是 Mat
+hlib 中的一个定理，位于命名空间 `PowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Polynomial.IsDistinguishedAt.isWeierstrassDivisorAt {g : A[X]} {I : Ideal A}
-    (H : g.IsDistinguishedAt I) (hI : I != ⊤) : IsWeierstrassDivisorAt g I := by
+    (H : g.IsDistinguishedAt I) (hI : I ≠ ⊤) : IsWeierstrassDivisorAt g I := by
   have : g.natDegree = _ := congr(ENat.toNat $(H.coe_natDegree_eq_order_map g 1
     (by rwa [constantCoeff_one, ← Ideal.ne_top_iff_one]) (by simp)))
   simp [IsWeierstrassDivisorAt, ← this, H.monic.leadingCoeff]
-
-/--
-theorem `_root_.Polynomial.IsDistinguishedAt.isWeierstrassDivisorAt'` / 定理 `_root_.Polynomial.IsDistinguishedAt.isWeierstrassDivisorAt'`
-
-English:
-theorem _root_.Polynomial.IsDistinguishedAt.isWeierstrassDivisorAt'
-  statement: {g : A[X]} {I : Ideal A}
-  proof: by
-  rcases eq_or_ne I ⊤ with rfl | hI
-  · have := ‹IsHausdorff ⊤ A›.subsingleton
-    exact isUnit_of_subsingleton _
-  exact H.isWeierstrassDivisorAt hI
-
-中文:
-定理 _root_.多项式.是DistinguishedAt.isWeierstrassDivisorAt'
-  结论: {g : A[X]} {I : 理想 A}
-  证明: by
-  rcases eq_or_ne I ⊤ with rfl | hI
-  · have := ‹IsHausdorff ⊤ A›.subsingleton
-    exact isUnit_of_subsingleton _
-  exact H.isWeierstrassDivisorAt hI
-
-Depends on / 依赖: FintypeCat, FintypeCat.toProfiniteFullyFaithful.full, H.isWeierstrassDivisorAt, IsHausdorff, eq_or_ne, isUnit_of_subsingleton, isWeierstrassDivisorAt, subsingleton, toProfiniteFullyFaithful
+/-
+**PowerSeries._root_.Polynomial.IsDistinguishedAt.isWeierstrassDivisorAt'** 是 Ma
+thlib 中的一个定理，位于命名空间 `PowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Polynomial.IsDistinguishedAt.isWeierstrassDivisorAt' {g : A[X]} {I : Ideal A}
     (H : g.IsDistinguishedAt I) [IsHausdorff I A] : IsWeierstrassDivisorAt g I := by
@@ -398,32 +459,12 @@ theorem _root_.Polynomial.IsDistinguishedAt.isWeierstrassDivisorAt' {g : A[X]} {
   · have := ‹IsHausdorff ⊤ A›.subsingleton
     exact isUnit_of_subsingleton _
   exact H.isWeierstrassDivisorAt hI
-
-/--
-theorem `coeff_trunc_order_mem` / 定理 `coeff_trunc_order_mem`
-
-English:
-theorem coeff_trunc_order_mem
-  given: (i : Nat)
-  proof: by
-  rw [coeff_trunc]
-  split_ifs with h
-  · simpa [← RingHom.mem_ker] using coeff_of_lt_order_toNat _ h
-  · exact zero_mem _
-
-中文:
-定理 coeff_trunc_order_mem
-  条件: (i : 自然数)
-  证明: by
-  rw [coeff_trunc]
-  split_ifs with h
-  · simpa [← RingHom.mem_ker] using coeff_of_lt_order_toNat _ h
-  · exact zero_mem _
-
-Depends on / 依赖: Finite
+/-
+**PowerSeries.coeff_trunc_order_mem** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem coeff_trunc_order_mem (i : Nat) :
-    (g.trunc (g.map (Ideal.Quotient.mk I)).order.toNat).coeff i in I := by
+private theorem coeff_trunc_order_mem (i : ℕ) :
+    (g.trunc (g.map (Ideal.Quotient.mk I)).order.toNat).coeff i ∈ I := by
   rw [coeff_trunc]
   split_ifs with h
   · simpa [← RingHom.mem_ker] using coeff_of_lt_order_toNat _ h
@@ -434,113 +475,121 @@ namespace IsWeierstrassDivisorAt
 variable {g I} (H : g.IsWeierstrassDivisorAt I)
 include H
 
-/--
-theorem `isUnit_shift` / 定理 `isUnit_shift`
-
-English:
-theorem isUnit_shift
-  statement: IsUnit mk fun i =>
-  proof: by
-  simpa [isUnit_iff_constantCoeff]
-
-中文:
-定理 isUnit_shift
-  结论: 是单位 mk fun i =>
-  证明: by
-  simpa [isUnit_iff_constantCoeff]
-
-Depends on / 依赖: Finite, isUnit_iff_constantCoeff
+/-
+**PowerSeries.IsWeierstrassDivisorAt.isUnit_shift** 是 Mathlib 中的一个定理，位于命名空间 `Pow
+erSeries.IsWeierstrassDivisorAt`。
+形式化陈述：isUnit_shift : IsUnit mk fun i => coeff (i + (g.map (Ideal.Quotient.mk I))
+.order.toNat) g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
 -/
-theorem isUnit_shift : IsUnit mk fun i =>
+theorem isUnit_shift : IsUnit <| mk fun i ↦
     coeff (i + (g.map (Ideal.Quotient.mk I)).order.toNat) g := by
   simpa [isUnit_iff_constantCoeff]
 
-/--
-Definition of `seq` / `seq` 的定义
+/-- The inductively constructed sequence `qₖ` in the proof of Weierstrass division. -/
+/-
+**PowerSeries.IsWeierstrassDivisorAt.seq** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries.
+IsWeierstrassDivisorAt`。
+形式化陈述：{A : Type u_1} →   [inst : CommRing A] →     {g : PowerSeries A} → {I : Id
+eal A} → g.IsWeierstrassDivisorAt I → PowerSeries A → ℕ → PowerSeries A
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition seq
-  signature: (H : g.IsWeierstrassDivisorAt I) (f : A⟦X⟧)
-
-中文:
-定义 seq
-  签名: (H : g.IsWeierstrassDivisorAt I) (f : A⟦X⟧)
+--- 原说明 ---
+The inductively constructed sequence `qₖ` in the proof of Weierstrass division.
 -/
-noncomputable def seq (H : g.IsWeierstrassDivisorAt I) (f : A⟦X⟧) : Nat -> A⟦X⟧
+noncomputable def seq (H : g.IsWeierstrassDivisorAt I) (f : A⟦X⟧) : ℕ → A⟦X⟧
   | 0 => 0
   | k + 1 =>
-    H.seq f k + (mk fun i => coeff (i + (g.map (Ideal.Quotient.mk I)).order.toNat)
+    H.seq f k + (mk fun i ↦ coeff (i + (g.map (Ideal.Quotient.mk I)).order.toNat)
       (f - g * H.seq f k)) * H.isUnit_shift.unit⁻¹
 
 variable (a : A) (f f' : A⟦X⟧)
-
-/--
-theorem `coeff_seq_mem` / 定理 `coeff_seq_mem`
-
-English:
-theorem coeff_seq_mem
-  given: (k : Nat) {i : Nat} (hi : i >= (g.map (Ideal.Quotient.mk I)).order.toNat)
-  proof: by
-  induction k generalizing hi i with
-  | zero => simp
-  | succ k hq =>
-    rw [seq]
-    set q := H.seq f k
-    set s := f - g * q
-    set n := (g.map (Ideal.Quotient.mk I)).order.toNat
-    have hs := s.eq_X_pow_mul_shift_add_trunc n
-    set s₀ := s.trunc n
-    set s₁ := PowerSeries.mk fun i => coeff (i + n) s
-    set q' := q + s₁ * H.isUnit_shift.unit⁻¹
-    have key : f - g * q' = (s₀ : A⟦X⟧) - (g.trunc n : A⟦X⟧) * s₁ * H.isUnit_shift.unit⁻¹ := by
-      trans s + g * (q - q')
-      · simp_rw [s]; ring
-      simp_rw [q']
-      rw [sub_add_cancel_left]; rw [mul_neg]; rw [← mul_assoc]; rw [mul_right_comm]
-      nth_rw 1 [g.eq_X_pow_mul_shift_add_trunc n]
-      rw [add_mul]; rw [mul_assoc]; rw [IsUnit.mul_val_inv]; rw [hs]
-      ring
-    rw [key]; rw [map_sub]; rw [Polynomial.coeff_coe]; rw [coeff_trunc]; rw [if_neg hi.not_gt]; rw [zero_sub]; rw [neg_mem_iff]; rw [pow_succ']
-    refine coeff_mul_mem_ideal_of_coeff_left_mem_ideal' (fun i => ?_) i
-    refine coeff_mul_mem_ideal_mul_ideal_of_coeff_mem_ideal'
-      (by simp [n, g.coeff_trunc_order_mem]) (fun i => ?_) i
-    rw [coeff_mk]
-    exact hq (by simp)
-
-中文:
-定理 coeff_seq_mem
-  条件: (k : 自然数) {i : 自然数} (hi : i >= (g.map (理想.商.mk I)).order.to自然数)
-  证明: by
-  induction k generalizing hi i with
-  | zero => simp
-  | succ k hq =>
-    rw [seq]
-    set q := H.seq f k
-    set s := f - g * q
-    set n := (g.map (Ideal.Quotient.mk I)).order.toNat
-    have hs := s.eq_X_pow_mul_shift_add_trunc n
-    set s₀ := s.trunc n
-    set s₁ := PowerSeries.mk fun i => coeff (i + n) s
-    set q' := q + s₁ * H.isUnit_shift.unit⁻¹
-    have key : f - g * q' = (s₀ : A⟦X⟧) - (g.trunc n : A⟦X⟧) * s₁ * H.isUnit_shift.unit⁻¹ := by
-      trans s + g * (q - q')
-      · simp_rw [s]; ring
-      simp_rw [q']
-      rw [sub_add_cancel_left]; rw [mul_neg]; rw [← mul_assoc]; rw [mul_right_comm]
-      nth_rw 1 [g.eq_X_pow_mul_shift_add_trunc n]
-      rw [add_mul]; rw [mul_assoc]; rw [IsUnit.mul_val_inv]; rw [hs]
-      ring
-    rw [key]; rw [map_sub]; rw [Polynomial.coeff_coe]; rw [coeff_trunc]; rw [if_neg hi.not_gt]; rw [zero_sub]; rw [neg_mem_iff]; rw [pow_succ']
-    refine coeff_mul_mem_ideal_of_coeff_left_mem_ideal' (fun i => ?_) i
-    refine coeff_mul_mem_ideal_mul_ideal_of_coeff_mem_ideal'
-      (by simp [n, g.coeff_trunc_order_mem]) (fun i => ?_) i
-    rw [coeff_mk]
-    exact hq (by simp)
-
-Depends on / 依赖: H.isUnit_shift.unit, H.seq, Ideal.Quotient.mk, PowerSeries, PowerSeries.mk, Quotient, eq_X_pow_mul_shift_add_trunc, g.map, g.trunc, generalizing, isUnit_shift, order.toNat, s.eq_X_pow_mul_shift_add_trunc, s.trunc, simp_rw, sub_add_cancel_left
+/-
+**PowerSeries.IsWeierstrassDivisorAt.coeff_seq_mem** 是 Mathlib 中的一个定理，位于命名空间 `Po
+werSeries.IsWeierstrassDivisorAt`。
+形式化陈述：coeff_seq_mem (k : Nat) {i : Nat} (hi : i >= (g.map (Ideal.Quotient.mk I))
+.order.toNat) : coeff i (f - g * H.seq f k) in I ^ k
+参数：k : Nat；hi : i >= (g.map (Ideal.Quotient.mk I)).order.toNat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Ideal.one_eq_top`：one_eq_top : (1 : Ideal R) = ⊤
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.isUnit_shift`：isUnit_shift : IsUnit m
+k fun i => coeff (i + (g.map (Ideal.Quotient.mk I)).order.toNat) g
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.seq.eq_2`：∀ {A : Type u_1} [inst : Co
+mmRing A] {g : PowerSeries A} {I : Ideal A} (H : g.IsWeierstrassDivisorAt I)   (
+f : PowerSeries A) (k : ℕ),   H.s…
+· 使用引理 `PowerSeries.eq_X_pow_mul_shift_add_trunc`：eq_X_pow_mul_shift_add_trunc (
+n : Nat) (f : R⟦X⟧) : f = X ^ n * (mk fun i => coeff (i + n) f) + (f.trunc n : R
+⟦X⟧)
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
+（共 88 条，此处仅展示前 30 条）
 -/
-theorem coeff_seq_mem (k : Nat) {i : Nat} (hi : i >= (g.map (Ideal.Quotient.mk I)).order.toNat) :
-    coeff i (f - g * H.seq f k) in I ^ k := by
+theorem coeff_seq_mem (k : ℕ) {i : ℕ} (hi : i ≥ (g.map (Ideal.Quotient.mk I)).order.toNat) :
+    coeff i (f - g * H.seq f k) ∈ I ^ k := by
   induction k generalizing hi i with
   | zero => simp
   | succ k hq =>
@@ -550,428 +599,528 @@ theorem coeff_seq_mem (k : Nat) {i : Nat} (hi : i >= (g.map (Ideal.Quotient.mk I
     set n := (g.map (Ideal.Quotient.mk I)).order.toNat
     have hs := s.eq_X_pow_mul_shift_add_trunc n
     set s₀ := s.trunc n
-    set s₁ := PowerSeries.mk fun i => coeff (i + n) s
+    set s₁ := PowerSeries.mk fun i ↦ coeff (i + n) s
     set q' := q + s₁ * H.isUnit_shift.unit⁻¹
     have key : f - g * q' = (s₀ : A⟦X⟧) - (g.trunc n : A⟦X⟧) * s₁ * H.isUnit_shift.unit⁻¹ := by
       trans s + g * (q - q')
       · simp_rw [s]; ring
       simp_rw [q']
-      rw [sub_add_cancel_left]; rw [mul_neg]; rw [← mul_assoc]; rw [mul_right_comm]
+      rw [sub_add_cancel_left, mul_neg, ← mul_assoc, mul_right_comm]
       nth_rw 1 [g.eq_X_pow_mul_shift_add_trunc n]
-      rw [add_mul]; rw [mul_assoc]; rw [IsUnit.mul_val_inv]; rw [hs]
+      rw [add_mul, mul_assoc, IsUnit.mul_val_inv, hs]
       ring
-    rw [key]; rw [map_sub]; rw [Polynomial.coeff_coe]; rw [coeff_trunc]; rw [if_neg hi.not_gt]; rw [zero_sub]; rw [neg_mem_iff]; rw [pow_succ']
-    refine coeff_mul_mem_ideal_of_coeff_left_mem_ideal' (fun i => ?_) i
+    rw [key, map_sub, Polynomial.coeff_coe, coeff_trunc, if_neg hi.not_gt, zero_sub, neg_mem_iff,
+      pow_succ']
+    refine coeff_mul_mem_ideal_of_coeff_left_mem_ideal' (fun i ↦ ?_) i
     refine coeff_mul_mem_ideal_mul_ideal_of_coeff_mem_ideal'
-      (by simp [n, g.coeff_trunc_order_mem]) (fun i => ?_) i
+      (by simp [n, g.coeff_trunc_order_mem]) (fun i ↦ ?_) i
     rw [coeff_mk]
     exact hq (by simp)
-
-/--
-theorem `coeff_seq_succ_sub_seq_mem` / 定理 `coeff_seq_succ_sub_seq_mem`
-
-English:
-theorem coeff_seq_succ_sub_seq_mem
-  given: (k i : Nat)
-  proof: by
-  rw [seq]; rw [add_sub_cancel_left]
-  refine coeff_mul_mem_ideal_of_coeff_left_mem_ideal' (fun i => ?_) i
-  rw [coeff_mk]
-  exact H.coeff_seq_mem f k (by simp)
-
-@[simp]
-
-中文:
-定理 coeff_seq_succ_sub_seq_mem
-  条件: (k i : 自然数)
-  证明: by
-  rw [seq]; rw [add_sub_cancel_left]
-  refine coeff_mul_mem_ideal_of_coeff_left_mem_ideal' (fun i => ?_) i
-  rw [coeff_mk]
-  exact H.coeff_seq_mem f k (by simp)
-
-@[simp]
-
-Depends on / 依赖: H.coeff_seq_mem, add_sub_cancel_left, coeff_mk, coeff_mul_mem_ideal_of_coeff_left_mem_ideal, coeff_seq_mem
+/-
+**PowerSeries.IsWeierstrassDivisorAt.coeff_seq_succ_sub_seq_mem** 是 Mathlib 中的一个
+定理，位于命名空间 `PowerSeries.IsWeierstrassDivisorAt`。
+形式化陈述：coeff_seq_succ_sub_seq_mem (k i : Nat) : coeff i (H.seq f (k + 1) - H.seq 
+f k) in I ^ k
+参数：k i : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.isUnit_shift`：isUnit_shift : IsUnit m
+k fun i => coeff (i + (g.map (Ideal.Quotient.mk I)).order.toNat) g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.seq.eq_2`：∀ {A : Type u_1} [inst : Co
+mmRing A] {g : PowerSeries A} {I : Ideal A} (H : g.IsWeierstrassDivisorAt I)   (
+f : PowerSeries A) (k : ℕ),   H.s…
+· 使用定理 `add_sub_cancel_left`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G),
+ a + b - a = b
+· 使用定理 `PowerSeries.coeff_mul_mem_ideal_of_coeff_left_mem_ideal'`：coeff_mul_mem_
+ideal_of_coeff_left_mem_ideal' (hf : forall i, coeff i f in I) : forall i, coeff
+ i (f * g) in I
+· 使用定理 `PowerSeries.coeff_mk`：coeff_mk (n : Nat) (f : Nat -> R) : coeff n (mk f)
+ = f n
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.coeff_seq_mem`：coeff_seq_mem (k : Nat
+) {i : Nat} (hi : i >= (g.map (Ideal.Quotient.mk I)).order.toNat) : coeff i (f -
+ g * H.seq f k) in I ^ k
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsRightCancelAdd.addRightReflectLE_of_addRightReflectLT`：∀ (N : Type u_2
+) [inst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightReflect
+LT N],   AddRightReflectLE N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
 -/
-theorem coeff_seq_succ_sub_seq_mem (k i : Nat) :
-    coeff i (H.seq f (k + 1) - H.seq f k) in I ^ k := by
-  rw [seq]; rw [add_sub_cancel_left]
-  refine coeff_mul_mem_ideal_of_coeff_left_mem_ideal' (fun i => ?_) i
+theorem coeff_seq_succ_sub_seq_mem (k i : ℕ) :
+    coeff i (H.seq f (k + 1) - H.seq f k) ∈ I ^ k := by
+  rw [seq, add_sub_cancel_left]
+  refine coeff_mul_mem_ideal_of_coeff_left_mem_ideal' (fun i ↦ ?_) i
   rw [coeff_mk]
   exact H.coeff_seq_mem f k (by simp)
 
 @[simp]
-/--
-theorem `seq_zero` / 定理 `seq_zero`
-
-English:
-theorem seq_zero
-  statement: H.seq f 0 = 0
-  proof: rfl
-
-中文:
-定理 seq_zero
-  结论: H.seq f 0 = 0
-  证明: rfl
+/-
+**PowerSeries.IsWeierstrassDivisorAt.seq_zero** 是 Mathlib 中的一个定理，位于命名空间 `PowerSe
+ries.IsWeierstrassDivisorAt`。
+形式化陈述：seq_zero : H.seq f 0 = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem seq_zero : H.seq f 0 = 0 := rfl
-
-/--
-theorem `seq_one` / 定理 `seq_one`
-
-English:
-theorem seq_one
-  statement: H.seq f 1 = (PowerSeries.mk fun i => coeff
-  proof: by
-  simp_rw [seq, mul_zero, zero_add, sub_zero]
-
-中文:
-定理 seq_one
-  结论: H.seq f 1 = (幂级数.mk fun i => coeff
-  证明: by
-  simp_rw [seq, mul_zero, zero_add, sub_zero]
-
-Depends on / 依赖: mul_zero, simp_rw, sub_zero, zero_add
+/-
+**PowerSeries.IsWeierstrassDivisorAt.seq_one** 是 Mathlib 中的一个定理，位于命名空间 `PowerSer
+ies.IsWeierstrassDivisorAt`。
+形式化陈述：seq_one : H.seq f 1 = (PowerSeries.mk fun i => coeff (i + (g.map (Ideal.Qu
+otient.mk I)).order.toNat) f) * H.isUnit_shift.unit⁻¹
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.isUnit_shift`：isUnit_shift : IsUnit m
+k fun i => coeff (i + (g.map (Ideal.Quotient.mk I)).order.toNat) g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem seq_one : H.seq f 1 = (PowerSeries.mk fun i => coeff
+theorem seq_one : H.seq f 1 = (PowerSeries.mk fun i ↦ coeff
     (i + (g.map (Ideal.Quotient.mk I)).order.toNat) f) * H.isUnit_shift.unit⁻¹ := by
   simp_rw [seq, mul_zero, zero_add, sub_zero]
 
-/--
-Definition of `divCoeff` / `divCoeff` 的定义
+/-- The (bundled version of) coefficient of the limit `q` of the
+inductively constructed sequence `qₖ` in the proof of Weierstrass division. -/
+/-
+**PowerSeries.IsWeierstrassDivisorAt.divCoeff** 是 Mathlib 中的一个定义，位于命名空间 `PowerSe
+ries.IsWeierstrassDivisorAt`。
+形式化陈述：divCoeff [IsPrecomplete I A] (i : Nat)
+参数：i : Nat。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition divCoeff
-  signature: [IsPrecomplete I A] (i : Nat)
-  body: Classical.indefiniteDescription _ IsPrecomplete.prec' (I := I)
-    (fun k => coeff i (H.seq f k)) fun {m} {n} hn => by
+--- 原说明 ---
+The (bundled version of) coefficient of the limit `q` of the
+inductively constructed sequence `qₖ` in the proof of Weierstrass division.
+-/
+noncomputable def divCoeff [IsPrecomplete I A] (i : ℕ) :=
+  Classical.indefiniteDescription _ <| IsPrecomplete.prec' (I := I)
+    (fun k ↦ coeff i (H.seq f k)) fun {m} {n} hn ↦ by
       induction n, hn using Nat.le_induction with
       | base => rw [SModEq.def]
       | succ n hn ih =>
         refine ih.trans (SModEq.symm ?_)
-        rw [SModEq.sub_mem]; rw [smul_eq_mul]; rw [Ideal.mul_top]; rw [← map_sub]
+        rw [SModEq.sub_mem, smul_eq_mul, Ideal.mul_top, ← map_sub]
         exact Ideal.pow_le_pow_right hn (H.coeff_seq_succ_sub_seq_mem f n i)
 
-中文:
-定义 divCoeff
-  签名: [是Precomplete I A] (i : 自然数)
-  定义体: Classical.indefiniteDescription _ IsPrecomplete.prec' (I := I)
-    (fun k => coeff i (H.seq f k)) fun {m} {n} hn => by
-      induction n, hn using Nat.le_induction with
-      | base => rw [SModEq.def]
-      | succ n hn ih =>
-        refine ih.trans (SModEq.symm ?_)
-        rw [SModEq.sub_mem]; rw [smul_eq_mul]; rw [Ideal.mul_top]; rw [← map_sub]
-        exact Ideal.pow_le_pow_right hn (H.coeff_seq_succ_sub_seq_mem f n i)
+/-- The limit `q` of the
+inductively constructed sequence `qₖ` in the proof of Weierstrass division. -/
+/-
+**PowerSeries.IsWeierstrassDivisorAt.div** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries.
+IsWeierstrassDivisorAt`。
+形式化陈述：div [IsPrecomplete I A] : A⟦X⟧
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: Classical, Classical.indefiniteDescription, H.coeff_seq_succ_sub_seq_mem, H.seq, Ideal.mul_top, Ideal.pow_le_pow_right, IsPrecomplete, IsPrecomplete.prec, Nat.le_induction, SModEq, SModEq.def, SModEq.sub_mem, SModEq.symm, coeff_seq_succ_sub_seq_mem, ih.trans, indefiniteDescription, le_induction, map_sub, mul_top, pow_le_pow_right
+--- 原说明 ---
+The limit `q` of the
+inductively constructed sequence `qₖ` in the proof of Weierstrass division.
 -/
-noncomputable def divCoeff [IsPrecomplete I A] (i : Nat) :=
-Classical.indefiniteDescription _ IsPrecomplete.prec' (I := I)
-    (fun k => coeff i (H.seq f k)) fun {m} {n} hn => by
-      induction n, hn using Nat.le_induction with
-      | base => rw [SModEq.def]
-      | succ n hn ih =>
-        refine ih.trans (SModEq.symm ?_)
-        rw [SModEq.sub_mem]; rw [smul_eq_mul]; rw [Ideal.mul_top]; rw [← map_sub]
-        exact Ideal.pow_le_pow_right hn (H.coeff_seq_succ_sub_seq_mem f n i)
-
-/--
-Definition of `div` / `div` 的定义
-
-English:
-definition div
-  signature: [IsPrecomplete I A]
-  body: PowerSeries.mk fun i => (H.divCoeff f i).1
-
-中文:
-定义 div
-  签名: [是Precomplete I A]
-  定义体: PowerSeries.mk fun i => (H.divCoeff f i).1
-
-Depends on / 依赖: H.divCoeff, PowerSeries, PowerSeries.mk, divCoeff
+noncomputable def div [IsPrecomplete I A] : A⟦X⟧ := PowerSeries.mk fun i ↦ (H.divCoeff f i).1
+/-
+**PowerSeries.IsWeierstrassDivisorAt.coeff_div** 是 Mathlib 中的一个定理，位于命名空间 `PowerS
+eries.IsWeierstrassDivisorAt`。
+形式化陈述：coeff_div [IsPrecomplete I A] (i : Nat) : coeff i (H.div f) = (H.divCoeff 
+f i).1
+参数：i : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.coeff_mk`：coeff_mk (n : Nat) (f : Nat -> R) : coeff n (mk f)
+ = f n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-noncomputable def div [IsPrecomplete I A] : A⟦X⟧ := PowerSeries.mk fun i => (H.divCoeff f i).1
-
-/--
-theorem `coeff_div` / 定理 `coeff_div`
-
-English:
-theorem coeff_div
-  given: [IsPrecomplete I A] (i : Nat)
-  statement: coeff i (H.div f) = (H.divCoeff f i).1
-  proof: by
+theorem coeff_div [IsPrecomplete I A] (i : ℕ) : coeff i (H.div f) = (H.divCoeff f i).1 := by
   simp [div]
-
-中文:
-定理 coeff_div
-  条件: [是Precomplete I A] (i : 自然数)
-  结论: coeff i (H.div f) = (H.divCoeff f i).1
-  证明: by
-  simp [div]
+/-
+**PowerSeries.IsWeierstrassDivisorAt.coeff_div_sub_seq_mem** 是 Mathlib 中的一个定理，位于
+命名空间 `PowerSeries.IsWeierstrassDivisorAt`。
+形式化陈述：coeff_div_sub_seq_mem [IsPrecomplete I A] (k i : Nat) : coeff i (H.div f -
+ (H.seq f k)) in I ^ k
+参数：k i : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.coeff_div`：coeff_div [IsPrecomplete I
+ A] (i : Nat) : coeff i (H.div f) = (H.divCoeff f i).1
+· 使用定理 `Ideal.mul_top`：mul_top [I.IsTwoSided] : I * ⊤ = I
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `SModEq.symm`：∀ {R : Type u_1} [inst : Ring R] {M : Type u_4} [inst_1 : A
+ddCommGroup M] [inst_2 : _root_.Module R M]   {U : Submodule R M} {x y : M}, x ≡
+ …
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem coeff_div [IsPrecomplete I A] (i : Nat) : coeff i (H.div f) = (H.divCoeff f i).1 := by
-  simp [div]
-
-/--
-theorem `coeff_div_sub_seq_mem` / 定理 `coeff_div_sub_seq_mem`
-
-English:
-theorem coeff_div_sub_seq_mem
-  given: [IsPrecomplete I A] (k i : Nat)
-  proof: by
+theorem coeff_div_sub_seq_mem [IsPrecomplete I A] (k i : ℕ) :
+    coeff i (H.div f - (H.seq f k)) ∈ I ^ k := by
   simpa [coeff_div, SModEq.sub_mem] using ((H.divCoeff f i).2 k).symm
 
-中文:
-定理 coeff_div_sub_seq_mem
-  条件: [是Precomplete I A] (k i : 自然数)
-  证明: by
-  simpa [coeff_div, SModEq.sub_mem] using ((H.divCoeff f i).2 k).symm
+/-- The remainder `r` in the proof of Weierstrass division. -/
+/-
+**PowerSeries.IsWeierstrassDivisorAt.mod** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries.
+IsWeierstrassDivisorAt`。
+形式化陈述：mod [IsPrecomplete I A] : A[X]
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
 
-Depends on / 依赖: H.divCoeff, SModEq, SModEq.sub_mem, coeff_div, divCoeff, sub_mem
--/
-theorem coeff_div_sub_seq_mem [IsPrecomplete I A] (k i : Nat) :
-    coeff i (H.div f - (H.seq f k)) in I ^ k := by
-  simpa [coeff_div, SModEq.sub_mem] using ((H.divCoeff f i).2 k).symm
-
-/--
-Definition of `mod` / `mod` 的定义
-
-English:
-definition mod
-  signature: [IsPrecomplete I A]
-  body: (f - g * H.div f).trunc (g.map (Ideal.Quotient.mk I)).order.toNat
-
-中文:
-定义 mod
-  签名: [是Precomplete I A]
-  定义体: (f - g * H.div f).trunc (g.map (Ideal.Quotient.mk I)).order.toNat
-
-Depends on / 依赖: H.div, Ideal.Quotient.mk, Quotient, g.map, order.toNat
+--- 原说明 ---
+The remainder `r` in the proof of Weierstrass division.
 -/
 noncomputable def mod [IsPrecomplete I A] : A[X] :=
   (f - g * H.div f).trunc (g.map (Ideal.Quotient.mk I)).order.toNat
 
-/--
-theorem `isWeierstrassDivisionAt_div_mod` / 定理 `isWeierstrassDivisionAt_div_mod`
+/-- If the ring is `I`-adic complete, then `g` can be used as a divisor in Weierstrass division. -/
+/-
+**PowerSeries.IsWeierstrassDivisorAt.isWeierstrassDivisionAt_div_mod** 是 Mathlib
+ 中的一个定理，位于命名空间 `PowerSeries.IsWeierstrassDivisorAt`。
+形式化陈述：isWeierstrassDivisionAt_div_mod [IsAdicComplete I A] : f.IsWeierstrassDivi
+sionAt g (H.div f) (H.mod f) I
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsAdicComplete.toIsPrecomplete`：∀ {R : Type u_1} {inst : CommRing R} {I 
+: Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}
+   [self : IsAdicCom…
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `IsHausdorff.subsingleton`：∀ {R : Type u_1} [inst : CommRing R] {M : Type
+ u_4} [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M],   IsHausdorff ⊤ M 
+→ Subsingleton…
+· 使用定理 `IsAdicComplete.toIsHausdorff`：∀ {R : Type u_1} {inst : CommRing R} {I : 
+Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}  
+ [self : IsAdicCom…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `PowerSeries.instSubsingleton`：∀ {R : Type u_1} [Semiring R] [Subsingleto
+n R], Subsingleton (PowerSeries R)
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `PowerSeries.isWeierstrassDivisionAt_zero`：isWeierstrassDivisionAt_zero :
+ IsWeierstrassDivisionAt 0 g 0 0 I
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PowerSeries.degree_trunc_lt`：degree_trunc_lt (f : R⟦X⟧) (n) : (trunc n f
+).degree < n
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.mod.eq_1`：∀ {A : Type u_1} [inst : Co
+mmRing A] {g : PowerSeries A} {I : Ideal A} (H : g.IsWeierstrassDivisorAt I)   (
+f : PowerSeries A) [inst_1 : IsPr…
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `sub_eq_iff_eq_add`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a -
+ b = c ↔ a = c + b
+· 使用定理 `PowerSeries.ext`：ext {φ ψ : R⟦X⟧} (h : forall n, coeff n φ = coeff n ψ) 
+: φ = ψ
+· 使用定理 `Polynomial.coeff_coe`：coeff_coe (n) : PowerSeries.coeff n φ = coeff φ n
+· 使用定理 `PowerSeries.coeff_trunc`：coeff_trunc (m) (n) (φ : R⟦X⟧) : (trunc n φ).co
+eff m = if m < n then coeff m φ else 0
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `IsHausdorff.haus'`：∀ {R : Type u_1} {inst : CommRing R} {I : Ideal R} {M
+ : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}   [self : Is
+Hausdor…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `SModEq.zero`：zero : x ≡ 0 [SMOD U] ↔ x in U
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `Ideal.mul_top`：mul_top [I.IsTwoSided] : I * ⊤ = I
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+（共 64 条，此处仅展示前 30 条）
 
-English:
-theorem isWeierstrassDivisionAt_div_mod
-  given: [IsAdicComplete I A]
-  proof: by
-  rcases eq_or_ne I ⊤ with rfl | hI
-  · have := ‹IsAdicComplete ⊤ A›.toIsHausdorff.subsingleton
-    rw [Subsingleton.elim f 0]; rw [Subsingleton.elim (H.div 0) 0]; rw [Subsingleton.elim (H.mod 0) 0]
-    exact g.isWeierstrassDivisionAt_zero _
-  constructor
-  · exact degree_trunc_lt _ _
-  · rw [mod, add_comm, ← sub_eq_iff_eq_add]
-    ext i
-    rw [Polynomial.coeff_coe]; rw [coeff_trunc]
-    split_ifs with hi
-    · rfl
-    refine IsHausdorff.haus' (I := I) _ fun k => ?_
-    rw [SModEq.zero]; rw [smul_eq_mul]; rw [Ideal.mul_top]; rw [show f - g * H.div f =
-      f - g * (H.seq f k) - g * (H.div f - (H.seq f k)) by ring]; rw [map_sub]
-exact Ideal.sub_mem _ (H.coeff_seq_mem f k (not_lt.1 hi))
-      coeff_mul_mem_ideal_of_coeff_right_mem_ideal' (H.coeff_div_sub_seq_mem f k) i
-
-中文:
-定理 isWeierstrassDivisionAt_div_mod
-  条件: [是AdicComplete I A]
-  证明: by
-  rcases eq_or_ne I ⊤ with rfl | hI
-  · have := ‹IsAdicComplete ⊤ A›.toIsHausdorff.subsingleton
-    rw [Subsingleton.elim f 0]; rw [Subsingleton.elim (H.div 0) 0]; rw [Subsingleton.elim (H.mod 0) 0]
-    exact g.isWeierstrassDivisionAt_zero _
-  constructor
-  · exact degree_trunc_lt _ _
-  · rw [mod, add_comm, ← sub_eq_iff_eq_add]
-    ext i
-    rw [Polynomial.coeff_coe]; rw [coeff_trunc]
-    split_ifs with hi
-    · rfl
-    refine IsHausdorff.haus' (I := I) _ fun k => ?_
-    rw [SModEq.zero]; rw [smul_eq_mul]; rw [Ideal.mul_top]; rw [show f - g * H.div f =
-      f - g * (H.seq f k) - g * (H.div f - (H.seq f k)) by ring]; rw [map_sub]
-exact Ideal.sub_mem _ (H.coeff_seq_mem f k (not_lt.1 hi))
-      coeff_mul_mem_ideal_of_coeff_right_mem_ideal' (H.coeff_div_sub_seq_mem f k) i
-
-Depends on / 依赖: H.div, H.mod, Ideal.mul_top, IsAdicComplete, IsHausdorff, IsHausdorff.haus, Polynomial, Polynomial.coeff_coe, SModEq, SModEq.zero, Subsingleton, Subsingleton.elim, add_comm, coeff_coe, coeff_trunc, degree_trunc_lt, eq_or_ne, g.isWeierstrassDivisionAt_zero, isWeierstrassDivisionAt_zero, mul_top
+--- 原说明 ---
+If the ring is `I`-adic complete, then `g` can be used as a divisor in Weierstra
+ss division.
 -/
 theorem isWeierstrassDivisionAt_div_mod [IsAdicComplete I A] :
     f.IsWeierstrassDivisionAt g (H.div f) (H.mod f) I := by
   rcases eq_or_ne I ⊤ with rfl | hI
   · have := ‹IsAdicComplete ⊤ A›.toIsHausdorff.subsingleton
-    rw [Subsingleton.elim f 0]; rw [Subsingleton.elim (H.div 0) 0]; rw [Subsingleton.elim (H.mod 0) 0]
+    rw [Subsingleton.elim f 0, Subsingleton.elim (H.div 0) 0, Subsingleton.elim (H.mod 0) 0]
     exact g.isWeierstrassDivisionAt_zero _
   constructor
   · exact degree_trunc_lt _ _
   · rw [mod, add_comm, ← sub_eq_iff_eq_add]
     ext i
-    rw [Polynomial.coeff_coe]; rw [coeff_trunc]
+    rw [Polynomial.coeff_coe, coeff_trunc]
     split_ifs with hi
     · rfl
-    refine IsHausdorff.haus' (I := I) _ fun k => ?_
-    rw [SModEq.zero]; rw [smul_eq_mul]; rw [Ideal.mul_top]; rw [show f - g * H.div f =
-      f - g * (H.seq f k) - g * (H.div f - (H.seq f k)) by ring]; rw [map_sub]
-exact Ideal.sub_mem _ (H.coeff_seq_mem f k (not_lt.1 hi))
+    refine IsHausdorff.haus' (I := I) _ fun k ↦ ?_
+    rw [SModEq.zero, smul_eq_mul, Ideal.mul_top, show f - g * H.div f =
+      f - g * (H.seq f k) - g * (H.div f - (H.seq f k)) by ring, map_sub]
+    exact Ideal.sub_mem _ (H.coeff_seq_mem f k (not_lt.1 hi)) <|
       coeff_mul_mem_ideal_of_coeff_right_mem_ideal' (H.coeff_div_sub_seq_mem f k) i
 
-/--
-theorem `eq_zero_of_mul_eq` / 定理 `eq_zero_of_mul_eq`
+/-- If `g * q = r` for some power series `q` and some polynomial `r` whose degree is `< n`,
+then `q` and `r` are all zero. This implies the uniqueness of Weierstrass division. -/
+/-
+**PowerSeries.IsWeierstrassDivisorAt.eq_zero_of_mul_eq** 是 Mathlib 中的一个定理，位于命名空间
+ `PowerSeries.IsWeierstrassDivisorAt`。
+形式化陈述：eq_zero_of_mul_eq [IsHausdorff I A] {q : A⟦X⟧} {r : A[X]} (hdeg : r.degree
+ < (g.map (Ideal.Quotient.mk I)).order.toNat) (heq : g * q = r) : q = 0 ∧ r = 0
+参数：hdeg : r.degree < (g.map (Ideal.Quotient.mk I)).order.toNat；heq : g * q = r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Ideal.one_eq_top`：one_eq_top : (1 : Ideal R) = ⊤
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `lt_or_ge`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a < b ∨ b ≤
+ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `PowerSeries.eq_X_pow_mul_shift_add_trunc`：eq_X_pow_mul_shift_add_trunc (
+n : Nat) (f : R⟦X⟧) : f = X ^ n * (mk fun i => coeff (i + n) f) + (f.trunc n : R
+⟦X⟧)
+· 使用定理 `pow_succ'`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (n : ℕ), a ^ (n + 
+1) = a * a ^ n
+· 使用定理 `PowerSeries.coeff_mul_mem_ideal_mul_ideal_of_coeff_mem_ideal`：coeff_mul_
+mem_ideal_mul_ideal_of_coeff_mem_ideal (hf : forall i <= n, coeff i f in I) (hg 
+: forall i <= n, coeff i g in J) : forall i <= n, …
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `Polynomial.coeff_coe`：coeff_coe (n) : PowerSeries.coeff n φ = coeff φ n
+· 使用定理 `Ideal.add_mem`：∀ {α : Type u} [inst : Semiring α] (I : Ideal α) {a b : α
+}, a ∈ I → b ∈ I → a + b ∈ I
+· 使用定理 `PowerSeries.coeff_X_pow_mul'`：coeff_X_pow_mul' (p : R⟦X⟧) (n d : Nat) : 
+coeff d (X ^ n * p) = ite (n <= d) (coeff (d - n) p) 0
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `_private.Mathlib.RingTheory.PowerSeries.WeierstrassPreparation.0.PowerSe
+ries.coeff_trunc_order_mem`：∀ {A : Type u_1} [inst : CommRing A] (g : PowerSerie
+s A) (I : Ideal A) (i : ℕ),   ((PowerSeries.trunc ((PowerSeries.map (Ideal.Quoti
+ent.mk I…
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `Polynomial.coeff_eq_zero_of_degree_lt`：coeff_eq_zero_of_degree_lt (h : d
+egree p < n) : coeff p n = 0
+· 使用引理 `lt_of_lt_of_le`：lt_of_lt_of_le (hab : a < b) (hbc : b <= c) : a < c
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.isUnit_shift`：isUnit_shift : IsUnit m
+k fun i => coeff (i + (g.map (Ideal.Quotient.mk I)).order.toNat) g
+（共 53 条，此处仅展示前 30 条）
 
-English:
-theorem eq_zero_of_mul_eq
-  statement: [IsHausdorff I A]
-  proof: by
-  suffices forall k i, coeff i q in I ^ k by
-    have hq : q = 0 := by
-      ext i
-      refine IsHausdorff.haus' (I := I) _ fun k => ?_
-      rw [SModEq.zero]; rw [smul_eq_mul]; rw [Ideal.mul_top]
-      exact this _ _
-    rw [hq]; rw [mul_zero]; rw [Eq.comm]; rw [Polynomial.coe_eq_zero_iff] at heq
-    exact ⟨hq, heq⟩
-  intro k
-  induction k with
-  | zero => simp
-  | succ k ih =>
-    rw [g.eq_X_pow_mul_shift_add_trunc (g.map (Ideal.Quotient.mk I)).order.toNat] at heq
-    have h1 : forall i, coeff i r in I ^ (k + 1) := fun i => by
-      rcases lt_or_ge i (g.map (Ideal.Quotient.mk I)).order.toNat with hi | hi
-      · rw [← heq, pow_succ']
-        refine coeff_mul_mem_ideal_mul_ideal_of_coeff_mem_ideal i (fun j hj => ?_)
-          (fun j _ => ih j) i le_rfl
-        rw [map_add]; rw [Polynomial.coeff_coe]
-        refine Ideal.add_mem _ ?_ (g.coeff_trunc_order_mem I j)
-        simp_rw [coeff_X_pow_mul', if_neg (lt_of_le_of_lt hj hi).not_ge, zero_mem]
-      simp_rw [Polynomial.coeff_coe,
-        Polynomial.coeff_eq_zero_of_degree_lt (lt_of_lt_of_le hdeg (by simpa)), zero_mem]
-    rw [add_mul]; rw [mul_comm (X ^ _)]; rw [← eq_sub_iff_add_eq] at heq
-    replace heq := congr(H.isUnit_shift.unit⁻¹ * $heq)
-    rw [← mul_assoc]; rw [← mul_assoc]; rw [IsUnit.val_inv_mul]; rw [one_mul] at heq
-    intro i
-    rw [← coeff_X_pow_mul _ (g.map (Ideal.Quotient.mk I)).order.toNat i]; rw [heq]
-    refine coeff_mul_mem_ideal_of_coeff_right_mem_ideal' (fun i => ?_) _
-    rw [map_sub]
-    refine Ideal.sub_mem _ (h1 _) ?_
-    rw [pow_succ']
-    refine coeff_mul_mem_ideal_mul_ideal_of_coeff_mem_ideal' (fun i => ?_) ih _
-    simp_rw [Polynomial.coeff_coe, g.coeff_trunc_order_mem]
-
-中文:
-定理 eq_zero_of_mul_eq
-  结论: [是豪斯多夫 I A]
-  证明: by
-  suffices forall k i, coeff i q in I ^ k by
-    have hq : q = 0 := by
-      ext i
-      refine IsHausdorff.haus' (I := I) _ fun k => ?_
-      rw [SModEq.zero]; rw [smul_eq_mul]; rw [Ideal.mul_top]
-      exact this _ _
-    rw [hq]; rw [mul_zero]; rw [Eq.comm]; rw [Polynomial.coe_eq_zero_iff] at heq
-    exact ⟨hq, heq⟩
-  intro k
-  induction k with
-  | zero => simp
-  | succ k ih =>
-    rw [g.eq_X_pow_mul_shift_add_trunc (g.map (Ideal.Quotient.mk I)).order.toNat] at heq
-    have h1 : forall i, coeff i r in I ^ (k + 1) := fun i => by
-      rcases lt_or_ge i (g.map (Ideal.Quotient.mk I)).order.toNat with hi | hi
-      · rw [← heq, pow_succ']
-        refine coeff_mul_mem_ideal_mul_ideal_of_coeff_mem_ideal i (fun j hj => ?_)
-          (fun j _ => ih j) i le_rfl
-        rw [map_add]; rw [Polynomial.coeff_coe]
-        refine Ideal.add_mem _ ?_ (g.coeff_trunc_order_mem I j)
-        simp_rw [coeff_X_pow_mul', if_neg (lt_of_le_of_lt hj hi).not_ge, zero_mem]
-      simp_rw [Polynomial.coeff_coe,
-        Polynomial.coeff_eq_zero_of_degree_lt (lt_of_lt_of_le hdeg (by simpa)), zero_mem]
-    rw [add_mul]; rw [mul_comm (X ^ _)]; rw [← eq_sub_iff_add_eq] at heq
-    replace heq := congr(H.isUnit_shift.unit⁻¹ * $heq)
-    rw [← mul_assoc]; rw [← mul_assoc]; rw [IsUnit.val_inv_mul]; rw [one_mul] at heq
-    intro i
-    rw [← coeff_X_pow_mul _ (g.map (Ideal.Quotient.mk I)).order.toNat i]; rw [heq]
-    refine coeff_mul_mem_ideal_of_coeff_right_mem_ideal' (fun i => ?_) _
-    rw [map_sub]
-    refine Ideal.sub_mem _ (h1 _) ?_
-    rw [pow_succ']
-    refine coeff_mul_mem_ideal_mul_ideal_of_coeff_mem_ideal' (fun i => ?_) ih _
-    simp_rw [Polynomial.coeff_coe, g.coeff_trunc_order_mem]
-
-Depends on / 依赖: Eq.comm, Ideal.Quotient.mk, Ideal.mul_top, IsHausdorff, IsHausdorff.haus, Polynomial, Polynomial.coe_eq_zero_iff, Quotient, SModEq, SModEq.zero, coe_eq_zero_iff, eq_X_pow_mul_shift_add_trunc, g.eq_X_pow_mul_shift_add_trunc, g.map, lt_or_ge, mul_top, mul_zero, order.toNat, smul_eq_mul
+--- 原说明 ---
+If `g * q = r` for some power series `q` and some polynomial `r` whose degree is
+ `< n`,
+then `q` and `r` are all zero. This implies the uniqueness of Weierstrass divisi
+on.
 -/
 theorem eq_zero_of_mul_eq [IsHausdorff I A]
     {q : A⟦X⟧} {r : A[X]} (hdeg : r.degree < (g.map (Ideal.Quotient.mk I)).order.toNat)
     (heq : g * q = r) : q = 0 ∧ r = 0 := by
-  suffices forall k i, coeff i q in I ^ k by
+  suffices ∀ k i, coeff i q ∈ I ^ k by
     have hq : q = 0 := by
       ext i
-      refine IsHausdorff.haus' (I := I) _ fun k => ?_
-      rw [SModEq.zero]; rw [smul_eq_mul]; rw [Ideal.mul_top]
+      refine IsHausdorff.haus' (I := I) _ fun k ↦ ?_
+      rw [SModEq.zero, smul_eq_mul, Ideal.mul_top]
       exact this _ _
-    rw [hq]; rw [mul_zero]; rw [Eq.comm]; rw [Polynomial.coe_eq_zero_iff] at heq
+    rw [hq, mul_zero, Eq.comm, Polynomial.coe_eq_zero_iff] at heq
     exact ⟨hq, heq⟩
   intro k
   induction k with
   | zero => simp
   | succ k ih =>
     rw [g.eq_X_pow_mul_shift_add_trunc (g.map (Ideal.Quotient.mk I)).order.toNat] at heq
-    have h1 : forall i, coeff i r in I ^ (k + 1) := fun i => by
+    have h1 : ∀ i, coeff i r ∈ I ^ (k + 1) := fun i ↦ by
       rcases lt_or_ge i (g.map (Ideal.Quotient.mk I)).order.toNat with hi | hi
       · rw [← heq, pow_succ']
-        refine coeff_mul_mem_ideal_mul_ideal_of_coeff_mem_ideal i (fun j hj => ?_)
-          (fun j _ => ih j) i le_rfl
-        rw [map_add]; rw [Polynomial.coeff_coe]
+        refine coeff_mul_mem_ideal_mul_ideal_of_coeff_mem_ideal i (fun j hj ↦ ?_)
+          (fun j _ ↦ ih j) i le_rfl
+        rw [map_add, Polynomial.coeff_coe]
         refine Ideal.add_mem _ ?_ (g.coeff_trunc_order_mem I j)
         simp_rw [coeff_X_pow_mul', if_neg (lt_of_le_of_lt hj hi).not_ge, zero_mem]
       simp_rw [Polynomial.coeff_coe,
         Polynomial.coeff_eq_zero_of_degree_lt (lt_of_lt_of_le hdeg (by simpa)), zero_mem]
-    rw [add_mul]; rw [mul_comm (X ^ _)]; rw [← eq_sub_iff_add_eq] at heq
+    rw [add_mul, mul_comm (X ^ _), ← eq_sub_iff_add_eq] at heq
     replace heq := congr(H.isUnit_shift.unit⁻¹ * $heq)
-    rw [← mul_assoc]; rw [← mul_assoc]; rw [IsUnit.val_inv_mul]; rw [one_mul] at heq
+    rw [← mul_assoc, ← mul_assoc, IsUnit.val_inv_mul, one_mul] at heq
     intro i
-    rw [← coeff_X_pow_mul _ (g.map (Ideal.Quotient.mk I)).order.toNat i]; rw [heq]
-    refine coeff_mul_mem_ideal_of_coeff_right_mem_ideal' (fun i => ?_) _
+    rw [← coeff_X_pow_mul _ (g.map (Ideal.Quotient.mk I)).order.toNat i, heq]
+    refine coeff_mul_mem_ideal_of_coeff_right_mem_ideal' (fun i ↦ ?_) _
     rw [map_sub]
     refine Ideal.sub_mem _ (h1 _) ?_
     rw [pow_succ']
-    refine coeff_mul_mem_ideal_mul_ideal_of_coeff_mem_ideal' (fun i => ?_) ih _
+    refine coeff_mul_mem_ideal_mul_ideal_of_coeff_mem_ideal' (fun i ↦ ?_) ih _
     simp_rw [Polynomial.coeff_coe, g.coeff_trunc_order_mem]
 
-/--
-theorem `eq_of_mul_add_eq_mul_add` / 定理 `eq_of_mul_add_eq_mul_add`
+/-- If `g * q + r = g * q' + r'` for some power series `q`, `q'` and some polynomials `r`, `r'`
+whose degrees are `< n`, then `q = q'` and `r = r'` are all zero.
+This implies the uniqueness of Weierstrass division. -/
+/-
+**PowerSeries.IsWeierstrassDivisorAt.eq_of_mul_add_eq_mul_add** 是 Mathlib 中的一个定理
+，位于命名空间 `PowerSeries.IsWeierstrassDivisorAt`。
+形式化陈述：eq_of_mul_add_eq_mul_add [IsHausdorff I A] {q q' : A⟦X⟧} {r r' : A[X]} (hr
+ : r.degree < (g.map (Ideal.Quotient.mk I)).order.toNat) (hr' : r'.degree < (g.m
+ap (Ideal.Quotient.mk I)).order.toNat) (heq : g * q + r = g * q' + r') : q = q' 
+∧ r = r'
+参数：hr : r.degree < (g.map (Ideal.Quotient.mk I)).order.toNat；hr' : r'.degree < (
+g.map (Ideal.Quotient.mk I)).order.toNat；heq : g * q + r = g * q' + r'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Polynomial.coe_sub`：coe_sub (p q : R[X]) : ((p - q : R[X]) : PowerSeries
+ R) = p - q
+· 使用定理 `mul_sub`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), a 
+* (b - c) = a * b - a * c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_sub_iff_add_eq`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a =
+ b - c ↔ a + c = b
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_lt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a₂ b c : R} (a₁ : R), a₂ + b = c → a₁ + a₂ + b = a₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_pf`：∀ {R : Type u_2} [inst : CommRing R] 
+{a b c d : R}, -b = c → a + c = d → a - b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_mul`：∀ {R : Type u_2} [inst : CommRing R]
+ (a₁ : R) (a₂ : ℕ) {a₃ b : R}, -a₃ = b → -(a₁ ^ a₂ * a₃) = a₁ ^ a₂ * b
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+（共 42 条，此处仅展示前 30 条）
 
-English:
-theorem eq_of_mul_add_eq_mul_add
-  statement: [IsHausdorff I A] {q q' : A⟦X⟧} {r r' : A[X]}
-  proof: by
-  replace heq : g * (q - q') = ↑(r' - r) := by
-    rw [← eq_sub_iff_add_eq] at heq
-    rw [Polynomial.coe_sub]; rw [mul_sub]; rw [heq]
-    ring
-  have h := H.eq_zero_of_mul_eq (lt_of_le_of_lt (r'.degree_sub_le r) (max_lt hr' hr)) heq
-  simp_rw [sub_eq_zero] at h
-  exact ⟨h.1, h.2.symm⟩
-
-@[simp]
-
-中文:
-定理 eq_of_mul_add_eq_mul_add
-  结论: [是豪斯多夫 I A] {q q' : A⟦X⟧} {r r' : A[X]}
-  证明: by
-  replace heq : g * (q - q') = ↑(r' - r) := by
-    rw [← eq_sub_iff_add_eq] at heq
-    rw [Polynomial.coe_sub]; rw [mul_sub]; rw [heq]
-    ring
-  have h := H.eq_zero_of_mul_eq (lt_of_le_of_lt (r'.degree_sub_le r) (max_lt hr' hr)) heq
-  simp_rw [sub_eq_zero] at h
-  exact ⟨h.1, h.2.symm⟩
-
-@[simp]
-
-Depends on / 依赖: H.eq_zero_of_mul_eq, Polynomial, Polynomial.coe_sub, coe_sub, degree_sub_le, eq_sub_iff_add_eq, eq_zero_of_mul_eq, lt_of_le_of_lt, max_lt, mul_sub, replace, simp_rw, sub_eq_zero
+--- 原说明 ---
+If `g * q + r = g * q' + r'` for some power series `q`, `q'` and some polynomial
+s `r`, `r'`
+whose degrees are `< n`, then `q = q'` and `r = r'` are all zero.
+This implies the uniqueness of Weierstrass division.
 -/
 theorem eq_of_mul_add_eq_mul_add [IsHausdorff I A] {q q' : A⟦X⟧} {r r' : A[X]}
     (hr : r.degree < (g.map (Ideal.Quotient.mk I)).order.toNat)
@@ -979,41 +1128,43 @@ theorem eq_of_mul_add_eq_mul_add [IsHausdorff I A] {q q' : A⟦X⟧} {r r' : A[X
     (heq : g * q + r = g * q' + r') : q = q' ∧ r = r' := by
   replace heq : g * (q - q') = ↑(r' - r) := by
     rw [← eq_sub_iff_add_eq] at heq
-    rw [Polynomial.coe_sub]; rw [mul_sub]; rw [heq]
+    rw [Polynomial.coe_sub, mul_sub, heq]
     ring
   have h := H.eq_zero_of_mul_eq (lt_of_le_of_lt (r'.degree_sub_le r) (max_lt hr' hr)) heq
   simp_rw [sub_eq_zero] at h
   exact ⟨h.1, h.2.symm⟩
 
 @[simp]
-/--
-theorem `div_add` / 定理 `div_add`
-
-English:
-theorem div_add
-  given: [IsAdicComplete I A]
-  statement: H.div (f + f') = H.div f + H.div f'
-  proof: by
-  have H1 := (H.isWeierstrassDivisionAt_div_mod f).add (H.isWeierstrassDivisionAt_div_mod f')
-  have H2 := H.isWeierstrassDivisionAt_div_mod (f + f')
-  exact (H.eq_of_mul_add_eq_mul_add H2.degree_lt H1.degree_lt
-    (H2.eq_mul_add.symm.trans H1.eq_mul_add)).1
-
-@[simp]
-
-中文:
-定理 div_add
-  条件: [是AdicComplete I A]
-  结论: H.div (f + f') = H.div f + H.div f'
-  证明: by
-  have H1 := (H.isWeierstrassDivisionAt_div_mod f).add (H.isWeierstrassDivisionAt_div_mod f')
-  have H2 := H.isWeierstrassDivisionAt_div_mod (f + f')
-  exact (H.eq_of_mul_add_eq_mul_add H2.degree_lt H1.degree_lt
-    (H2.eq_mul_add.symm.trans H1.eq_mul_add)).1
-
-@[simp]
-
-Depends on / 依赖: H.eq_of_mul_add_eq_mul_add, H.isWeierstrassDivisionAt_div_mod, H1.degree_lt, H1.eq_mul_add, H2.degree_lt, H2.eq_mul_add.symm.trans, degree_lt, eq_mul_add, eq_of_mul_add_eq_mul_add, isWeierstrassDivisionAt_div_mod
+/-
+**PowerSeries.IsWeierstrassDivisorAt.div_add** 是 Mathlib 中的一个定理，位于命名空间 `PowerSer
+ies.IsWeierstrassDivisorAt`。
+形式化陈述：div_add [IsAdicComplete I A] : H.div (f + f') = H.div f + H.div f'
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsAdicComplete.toIsPrecomplete`：∀ {R : Type u_1} {inst : CommRing R} {I 
+: Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}
+   [self : IsAdicCom…
+· 使用定理 `PowerSeries.IsWeierstrassDivisionAt.add`：add {f' q' r'} (H : f.IsWeierst
+rassDivisionAt g q r I) (H' : f'.IsWeierstrassDivisionAt g q' r' I) : (f + f').I
+sWeierstrassDivisionAt g (q +…
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.isWeierstrassDivisionAt_div_mod`：isWe
+ierstrassDivisionAt_div_mod [IsAdicComplete I A] : f.IsWeierstrassDivisionAt g (
+H.div f) (H.mod f) I
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.eq_of_mul_add_eq_mul_add`：eq_of_mul_a
+dd_eq_mul_add [IsHausdorff I A] {q q' : A⟦X⟧} {r r' : A[X]} (hr : r.degree < (g.
+map (Ideal.Quotient.mk I)).order.toNat) (hr' : r'…
+· 使用定理 `IsAdicComplete.toIsHausdorff`：∀ {R : Type u_1} {inst : CommRing R} {I : 
+Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}  
+ [self : IsAdicCom…
+· 使用定理 `PowerSeries.IsWeierstrassDivisionAt.degree_lt`：∀ {A : Type u_1} [inst : 
+CommRing A] {f g q : PowerSeries A} {r : Polynomial A} {I : Ideal A},   f.IsWeie
+rstrassDivisionAt g q r I → r.degre…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PowerSeries.IsWeierstrassDivisionAt.eq_mul_add`：∀ {A : Type u_1} [inst :
+ CommRing A] {f g q : PowerSeries A} {r : Polynomial A} {I : Ideal A},   f.IsWei
+erstrassDivisionAt g q r I → f = g *…
 -/
 theorem div_add [IsAdicComplete I A] : H.div (f + f') = H.div f + H.div f' := by
   have H1 := (H.isWeierstrassDivisionAt_div_mod f).add (H.isWeierstrassDivisionAt_div_mod f')
@@ -1022,34 +1173,35 @@ theorem div_add [IsAdicComplete I A] : H.div (f + f') = H.div f + H.div f' := by
     (H2.eq_mul_add.symm.trans H1.eq_mul_add)).1
 
 @[simp]
-/--
-theorem `div_smul` / 定理 `div_smul`
-
-English:
-theorem div_smul
-  given: [IsAdicComplete I A]
-  statement: H.div (a • f) = a • H.div f
-  proof: by
-  have H1 := (H.isWeierstrassDivisionAt_div_mod f).smul a
-  have H2 := H.isWeierstrassDivisionAt_div_mod (a • f)
-  exact (H.eq_of_mul_add_eq_mul_add H2.degree_lt H1.degree_lt
-    (H2.eq_mul_add.symm.trans H1.eq_mul_add)).1
-
-@[simp]
-
-中文:
-定理 div_smul
-  条件: [是AdicComplete I A]
-  结论: H.div (a • f) = a • H.div f
-  证明: by
-  have H1 := (H.isWeierstrassDivisionAt_div_mod f).smul a
-  have H2 := H.isWeierstrassDivisionAt_div_mod (a • f)
-  exact (H.eq_of_mul_add_eq_mul_add H2.degree_lt H1.degree_lt
-    (H2.eq_mul_add.symm.trans H1.eq_mul_add)).1
-
-@[simp]
-
-Depends on / 依赖: H.eq_of_mul_add_eq_mul_add, H.isWeierstrassDivisionAt_div_mod, H1.degree_lt, H1.eq_mul_add, H2.degree_lt, H2.eq_mul_add.symm.trans, degree_lt, eq_mul_add, eq_of_mul_add_eq_mul_add, isWeierstrassDivisionAt_div_mod
+/-
+**PowerSeries.IsWeierstrassDivisorAt.div_smul** 是 Mathlib 中的一个定理，位于命名空间 `PowerSe
+ries.IsWeierstrassDivisorAt`。
+形式化陈述：div_smul [IsAdicComplete I A] : H.div (a • f) = a • H.div f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsAdicComplete.toIsPrecomplete`：∀ {R : Type u_1} {inst : CommRing R} {I 
+: Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}
+   [self : IsAdicCom…
+· 使用定理 `PowerSeries.IsWeierstrassDivisionAt.smul`：smul (H : f.IsWeierstrassDivis
+ionAt g q r I) (a : A) : (a • f).IsWeierstrassDivisionAt g (a • q) (a • r) I
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.isWeierstrassDivisionAt_div_mod`：isWe
+ierstrassDivisionAt_div_mod [IsAdicComplete I A] : f.IsWeierstrassDivisionAt g (
+H.div f) (H.mod f) I
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.eq_of_mul_add_eq_mul_add`：eq_of_mul_a
+dd_eq_mul_add [IsHausdorff I A] {q q' : A⟦X⟧} {r r' : A[X]} (hr : r.degree < (g.
+map (Ideal.Quotient.mk I)).order.toNat) (hr' : r'…
+· 使用定理 `IsAdicComplete.toIsHausdorff`：∀ {R : Type u_1} {inst : CommRing R} {I : 
+Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}  
+ [self : IsAdicCom…
+· 使用定理 `PowerSeries.IsWeierstrassDivisionAt.degree_lt`：∀ {A : Type u_1} [inst : 
+CommRing A] {f g q : PowerSeries A} {r : Polynomial A} {I : Ideal A},   f.IsWeie
+rstrassDivisionAt g q r I → r.degre…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PowerSeries.IsWeierstrassDivisionAt.eq_mul_add`：∀ {A : Type u_1} [inst :
+ CommRing A] {f g q : PowerSeries A} {r : Polynomial A} {I : Ideal A},   f.IsWei
+erstrassDivisionAt g q r I → f = g *…
 -/
 theorem div_smul [IsAdicComplete I A] : H.div (a • f) = a • H.div f := by
   have H1 := (H.isWeierstrassDivisionAt_div_mod f).smul a
@@ -1058,61 +1210,60 @@ theorem div_smul [IsAdicComplete I A] : H.div (a • f) = a • H.div f := by
     (H2.eq_mul_add.symm.trans H1.eq_mul_add)).1
 
 @[simp]
-/--
-theorem `div_zero` / 定理 `div_zero`
-
-English:
-theorem div_zero
-  given: [IsAdicComplete I A]
-  statement: H.div 0 = 0
-  proof: by
-  simpa using H.div_smul 0 0
-
-@[simp]
-
-中文:
-定理 div_zero
-  条件: [是AdicComplete I A]
-  结论: H.div 0 = 0
-  证明: by
-  simpa using H.div_smul 0 0
-
-@[simp]
-
-Depends on / 依赖: H.div_smul, div_smul
+/-
+**PowerSeries.IsWeierstrassDivisorAt.div_zero** 是 Mathlib 中的一个定理，位于命名空间 `PowerSe
+ries.IsWeierstrassDivisorAt`。
+形式化陈述：div_zero [IsAdicComplete I A] : H.div 0 = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsAdicComplete.toIsPrecomplete`：∀ {R : Type u_1} {inst : CommRing R} {I 
+: Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}
+   [self : IsAdicCom…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.div_smul`：div_smul [IsAdicComplete I 
+A] : H.div (a • f) = a • H.div f
 -/
 theorem div_zero [IsAdicComplete I A] : H.div 0 = 0 := by
   simpa using H.div_smul 0 0
 
 @[simp]
-/--
-theorem `mod_add` / 定理 `mod_add`
-
-English:
-theorem mod_add
-  given: [IsAdicComplete I A]
-  statement: H.mod (f + f') = H.mod f + H.mod f'
-  proof: by
-  have H1 := (H.isWeierstrassDivisionAt_div_mod f).add (H.isWeierstrassDivisionAt_div_mod f')
-  have H2 := H.isWeierstrassDivisionAt_div_mod (f + f')
-  exact (H.eq_of_mul_add_eq_mul_add H2.degree_lt H1.degree_lt
-    (H2.eq_mul_add.symm.trans H1.eq_mul_add)).2
-
-@[simp]
-
-中文:
-定理 mod_add
-  条件: [是AdicComplete I A]
-  结论: H.mod (f + f') = H.mod f + H.mod f'
-  证明: by
-  have H1 := (H.isWeierstrassDivisionAt_div_mod f).add (H.isWeierstrassDivisionAt_div_mod f')
-  have H2 := H.isWeierstrassDivisionAt_div_mod (f + f')
-  exact (H.eq_of_mul_add_eq_mul_add H2.degree_lt H1.degree_lt
-    (H2.eq_mul_add.symm.trans H1.eq_mul_add)).2
-
-@[simp]
-
-Depends on / 依赖: H.eq_of_mul_add_eq_mul_add, H.isWeierstrassDivisionAt_div_mod, H1.degree_lt, H1.eq_mul_add, H2.degree_lt, H2.eq_mul_add.symm.trans, degree_lt, eq_mul_add, eq_of_mul_add_eq_mul_add, isWeierstrassDivisionAt_div_mod
+/-
+**PowerSeries.IsWeierstrassDivisorAt.mod_add** 是 Mathlib 中的一个定理，位于命名空间 `PowerSer
+ies.IsWeierstrassDivisorAt`。
+形式化陈述：mod_add [IsAdicComplete I A] : H.mod (f + f') = H.mod f + H.mod f'
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsAdicComplete.toIsPrecomplete`：∀ {R : Type u_1} {inst : CommRing R} {I 
+: Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}
+   [self : IsAdicCom…
+· 使用定理 `PowerSeries.IsWeierstrassDivisionAt.add`：add {f' q' r'} (H : f.IsWeierst
+rassDivisionAt g q r I) (H' : f'.IsWeierstrassDivisionAt g q' r' I) : (f + f').I
+sWeierstrassDivisionAt g (q +…
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.isWeierstrassDivisionAt_div_mod`：isWe
+ierstrassDivisionAt_div_mod [IsAdicComplete I A] : f.IsWeierstrassDivisionAt g (
+H.div f) (H.mod f) I
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.eq_of_mul_add_eq_mul_add`：eq_of_mul_a
+dd_eq_mul_add [IsHausdorff I A] {q q' : A⟦X⟧} {r r' : A[X]} (hr : r.degree < (g.
+map (Ideal.Quotient.mk I)).order.toNat) (hr' : r'…
+· 使用定理 `IsAdicComplete.toIsHausdorff`：∀ {R : Type u_1} {inst : CommRing R} {I : 
+Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}  
+ [self : IsAdicCom…
+· 使用定理 `PowerSeries.IsWeierstrassDivisionAt.degree_lt`：∀ {A : Type u_1} [inst : 
+CommRing A] {f g q : PowerSeries A} {r : Polynomial A} {I : Ideal A},   f.IsWeie
+rstrassDivisionAt g q r I → r.degre…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PowerSeries.IsWeierstrassDivisionAt.eq_mul_add`：∀ {A : Type u_1} [inst :
+ CommRing A] {f g q : PowerSeries A} {r : Polynomial A} {I : Ideal A},   f.IsWei
+erstrassDivisionAt g q r I → f = g *…
 -/
 theorem mod_add [IsAdicComplete I A] : H.mod (f + f') = H.mod f + H.mod f' := by
   have H1 := (H.isWeierstrassDivisionAt_div_mod f).add (H.isWeierstrassDivisionAt_div_mod f')
@@ -1121,34 +1272,35 @@ theorem mod_add [IsAdicComplete I A] : H.mod (f + f') = H.mod f + H.mod f' := by
     (H2.eq_mul_add.symm.trans H1.eq_mul_add)).2
 
 @[simp]
-/--
-theorem `mod_smul` / 定理 `mod_smul`
-
-English:
-theorem mod_smul
-  given: [IsAdicComplete I A]
-  statement: H.mod (a • f) = a • H.mod f
-  proof: by
-  have H1 := (H.isWeierstrassDivisionAt_div_mod f).smul a
-  have H2 := H.isWeierstrassDivisionAt_div_mod (a • f)
-  exact (H.eq_of_mul_add_eq_mul_add H2.degree_lt H1.degree_lt
-    (H2.eq_mul_add.symm.trans H1.eq_mul_add)).2
-
-@[simp]
-
-中文:
-定理 mod_smul
-  条件: [是AdicComplete I A]
-  结论: H.mod (a • f) = a • H.mod f
-  证明: by
-  have H1 := (H.isWeierstrassDivisionAt_div_mod f).smul a
-  have H2 := H.isWeierstrassDivisionAt_div_mod (a • f)
-  exact (H.eq_of_mul_add_eq_mul_add H2.degree_lt H1.degree_lt
-    (H2.eq_mul_add.symm.trans H1.eq_mul_add)).2
-
-@[simp]
-
-Depends on / 依赖: H.eq_of_mul_add_eq_mul_add, H.isWeierstrassDivisionAt_div_mod, H1.degree_lt, H1.eq_mul_add, H2.degree_lt, H2.eq_mul_add.symm.trans, degree_lt, eq_mul_add, eq_of_mul_add_eq_mul_add, isWeierstrassDivisionAt_div_mod
+/-
+**PowerSeries.IsWeierstrassDivisorAt.mod_smul** 是 Mathlib 中的一个定理，位于命名空间 `PowerSe
+ries.IsWeierstrassDivisorAt`。
+形式化陈述：mod_smul [IsAdicComplete I A] : H.mod (a • f) = a • H.mod f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsAdicComplete.toIsPrecomplete`：∀ {R : Type u_1} {inst : CommRing R} {I 
+: Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}
+   [self : IsAdicCom…
+· 使用定理 `PowerSeries.IsWeierstrassDivisionAt.smul`：smul (H : f.IsWeierstrassDivis
+ionAt g q r I) (a : A) : (a • f).IsWeierstrassDivisionAt g (a • q) (a • r) I
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.isWeierstrassDivisionAt_div_mod`：isWe
+ierstrassDivisionAt_div_mod [IsAdicComplete I A] : f.IsWeierstrassDivisionAt g (
+H.div f) (H.mod f) I
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.eq_of_mul_add_eq_mul_add`：eq_of_mul_a
+dd_eq_mul_add [IsHausdorff I A] {q q' : A⟦X⟧} {r r' : A[X]} (hr : r.degree < (g.
+map (Ideal.Quotient.mk I)).order.toNat) (hr' : r'…
+· 使用定理 `IsAdicComplete.toIsHausdorff`：∀ {R : Type u_1} {inst : CommRing R} {I : 
+Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}  
+ [self : IsAdicCom…
+· 使用定理 `PowerSeries.IsWeierstrassDivisionAt.degree_lt`：∀ {A : Type u_1} [inst : 
+CommRing A] {f g q : PowerSeries A} {r : Polynomial A} {I : Ideal A},   f.IsWeie
+rstrassDivisionAt g q r I → r.degre…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PowerSeries.IsWeierstrassDivisionAt.eq_mul_add`：∀ {A : Type u_1} [inst :
+ CommRing A] {f g q : PowerSeries A} {r : Polynomial A} {I : Ideal A},   f.IsWei
+erstrassDivisionAt g q r I → f = g *…
 -/
 theorem mod_smul [IsAdicComplete I A] : H.mod (a • f) = a • H.mod f := by
   have H1 := (H.isWeierstrassDivisionAt_div_mod f).smul a
@@ -1157,83 +1309,51 @@ theorem mod_smul [IsAdicComplete I A] : H.mod (a • f) = a • H.mod f := by
     (H2.eq_mul_add.symm.trans H1.eq_mul_add)).2
 
 @[simp]
-/--
-theorem `mod_zero` / 定理 `mod_zero`
-
-English:
-theorem mod_zero
-  given: [IsAdicComplete I A]
-  statement: H.mod 0 = 0
-  proof: by
-  simpa using H.mod_smul 0 0
-
-中文:
-定理 mod_zero
-  条件: [是AdicComplete I A]
-  结论: H.mod 0 = 0
-  证明: by
-  simpa using H.mod_smul 0 0
-
-Depends on / 依赖: H.mod_smul, mod_smul
+/-
+**PowerSeries.IsWeierstrassDivisorAt.mod_zero** 是 Mathlib 中的一个定理，位于命名空间 `PowerSe
+ries.IsWeierstrassDivisorAt`。
+形式化陈述：mod_zero [IsAdicComplete I A] : H.mod 0 = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsAdicComplete.toIsPrecomplete`：∀ {R : Type u_1} {inst : CommRing R} {I 
+: Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}
+   [self : IsAdicCom…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.mod.congr_simp`：∀ {A : Type u_1} [ins
+t : CommRing A] {g g_1 : PowerSeries A} (e_g : g = g_1) {I I_1 : Ideal A} (e_I :
+ I = I_1)   (H : g.IsWeierstrassDivisor…
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.mod_smul`：mod_smul [IsAdicComplete I 
+A] : H.mod (a • f) = a • H.mod f
 -/
 theorem mod_zero [IsAdicComplete I A] : H.mod 0 = 0 := by
   simpa using H.mod_smul 0 0
 
-/--
-Definition of `mod'` / `mod'` 的定义
+/-- The remainder map `PowerSeries.IsWeierstrassDivisorAt.mod` induces a linear map
+`A⟦X⟧ / (g) →ₗ[A] A[X]`. -/
+/-
+**PowerSeries.IsWeierstrassDivisorAt.mod'** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries
+.IsWeierstrassDivisorAt`。
+形式化陈述：mod' [IsAdicComplete I A] : A⟦X⟧ ⧸ Ideal.span {g} ->ₗ[A] A[X] where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mod'
-  signature: [IsAdicComplete I A]
-  body: Quotient.lift (fun f => H.mod f) fun f f' hf => by
-    have hf := (Submodule.quotientRel_def (p := Ideal.span {g})).mp hf
-    rw [Ideal.mem_span_singleton'] at hf
-    obtain ⟨a, ha⟩ := hf
-    obtain ⟨hf1, hf2⟩ := H.isWeierstrassDivisionAt_div_mod f
-    obtain ⟨hf'1, hf'2⟩ := H.isWeierstrassDivisionAt_div_mod f'
-    rw [eq_sub_iff_add_eq]; rw [hf2]; rw [hf'2]; rw [← add_assoc]; rw [mul_comm]; rw [← mul_add] at ha
-    exact (H.eq_of_mul_add_eq_mul_add hf'1 hf1 ha).2.symm
-  map_add' f f' := by
-    obtain ⟨f, rfl⟩ := Ideal.Quotient.mk_surjective f
-    obtain ⟨f', rfl⟩ := Ideal.Quotient.mk_surjective f'
-    exact H.mod_add f f'
-  map_smul' a f := by
-    obtain ⟨f, rfl⟩ := Ideal.Quotient.mk_surjective f
-    exact H.mod_smul a f
-
-@[simp]
-
-中文:
-定义 mod'
-  签名: [是AdicComplete I A]
-  定义体: Quotient.lift (fun f => H.mod f) fun f f' hf => by
-    have hf := (Submodule.quotientRel_def (p := Ideal.span {g})).mp hf
-    rw [Ideal.mem_span_singleton'] at hf
-    obtain ⟨a, ha⟩ := hf
-    obtain ⟨hf1, hf2⟩ := H.isWeierstrassDivisionAt_div_mod f
-    obtain ⟨hf'1, hf'2⟩ := H.isWeierstrassDivisionAt_div_mod f'
-    rw [eq_sub_iff_add_eq]; rw [hf2]; rw [hf'2]; rw [← add_assoc]; rw [mul_comm]; rw [← mul_add] at ha
-    exact (H.eq_of_mul_add_eq_mul_add hf'1 hf1 ha).2.symm
-  map_add' f f' := by
-    obtain ⟨f, rfl⟩ := Ideal.Quotient.mk_surjective f
-    obtain ⟨f', rfl⟩ := Ideal.Quotient.mk_surjective f'
-    exact H.mod_add f f'
-  map_smul' a f := by
-    obtain ⟨f, rfl⟩ := Ideal.Quotient.mk_surjective f
-    exact H.mod_smul a f
-
-@[simp]
-
-Depends on / 依赖: H.eq_of_mul_add_eq_mul_add, H.isWeierstrassDivisionAt_div_mod, H.mod, Ideal.Quotient, Ideal.mem_span_singleton, Ideal.span, Quotient, Quotient.lift, Submodule, Submodule.quotientRel_def, add_assoc, eq_of_mul_add_eq_mul_add, eq_sub_iff_add_eq, isWeierstrassDivisionAt_div_mod, map_add, mem_span_singleton, mul_add, mul_comm, quotientRel_def
+--- 原说明 ---
+The remainder map `PowerSeries.IsWeierstrassDivisorAt.mod` induces a linear map
+`A⟦X⟧ / (g) →ₗ[A] A[X]`.
 -/
-noncomputable def mod' [IsAdicComplete I A] : A⟦X⟧ ⧸ Ideal.span {g} ->ₗ[A] A[X] where
-  toFun := Quotient.lift (fun f => H.mod f) fun f f' hf => by
+noncomputable def mod' [IsAdicComplete I A] : A⟦X⟧ ⧸ Ideal.span {g} →ₗ[A] A[X] where
+  toFun := Quotient.lift (fun f ↦ H.mod f) fun f f' hf ↦ by
     have hf := (Submodule.quotientRel_def (p := Ideal.span {g})).mp hf
     rw [Ideal.mem_span_singleton'] at hf
     obtain ⟨a, ha⟩ := hf
     obtain ⟨hf1, hf2⟩ := H.isWeierstrassDivisionAt_div_mod f
     obtain ⟨hf'1, hf'2⟩ := H.isWeierstrassDivisionAt_div_mod f'
-    rw [eq_sub_iff_add_eq]; rw [hf2]; rw [hf'2]; rw [← add_assoc]; rw [mul_comm]; rw [← mul_add] at ha
+    rw [eq_sub_iff_add_eq, hf2, hf'2, ← add_assoc, mul_comm, ← mul_add] at ha
     exact (H.eq_of_mul_add_eq_mul_add hf'1 hf1 ha).2.symm
   map_add' f f' := by
     obtain ⟨f, rfl⟩ := Ideal.Quotient.mk_surjective f
@@ -1244,68 +1364,90 @@ noncomputable def mod' [IsAdicComplete I A] : A⟦X⟧ ⧸ Ideal.span {g} ->ₗ[
     exact H.mod_smul a f
 
 @[simp]
-/--
-theorem `mod'_mk_eq_mod` / 定理 `mod'_mk_eq_mod`
-
-English:
-theorem mod'_mk_eq_mod
-  given: [IsAdicComplete I A] {f : A⟦X⟧}
-  proof: rfl
-
-中文:
-定理 mod'_mk_eq_mod
-  条件: [是AdicComplete I A] {f : A⟦X⟧}
-  证明: rfl
+/-
+**PowerSeries.IsWeierstrassDivisorAt.mod'_mk_eq_mod** 是 Mathlib 中的一个定理，位于命名空间 `P
+owerSeries.IsWeierstrassDivisorAt`。
+形式化陈述：∀ {A : Type u_1} [inst : CommRing A] {g : PowerSeries A} {I : Ideal A} (H 
+: g.IsWeierstrassDivisorAt I)   [inst_1 : IsAdicComplete I A] {f : PowerSeries A
+}, H.mod' ((Ideal.Quotient.mk (Ideal.span {g})) f) = H.mod f
+参数：H : g.IsWeierstrassDivisorAt I；(Ideal.Quotient.mk (Ideal.span {g})) f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
 -/
 theorem mod'_mk_eq_mod [IsAdicComplete I A] {f : A⟦X⟧} :
     H.mod' (Ideal.Quotient.mk _ f) = H.mod f := rfl
-
-/--
-theorem `div_coe_eq_zero` / 定理 `div_coe_eq_zero`
-
-English:
-theorem div_coe_eq_zero
-  statement: [IsAdicComplete I A] {r : A[X]}
-  proof: by
-  obtain ⟨h1, h2⟩ := H.isWeierstrassDivisionAt_div_mod r
-  exact (H.eq_of_mul_add_eq_mul_add (q := H.div r) (q' := 0) h1 hr (by simpa using h2.symm)).1
-
-中文:
-定理 div_coe_eq_zero
-  结论: [是AdicComplete I A] {r : A[X]}
-  证明: by
-  obtain ⟨h1, h2⟩ := H.isWeierstrassDivisionAt_div_mod r
-  exact (H.eq_of_mul_add_eq_mul_add (q := H.div r) (q' := 0) h1 hr (by simpa using h2.symm)).1
-
-Depends on / 依赖: H.div, H.eq_of_mul_add_eq_mul_add, H.isWeierstrassDivisionAt_div_mod, eq_of_mul_add_eq_mul_add, h2.symm, isWeierstrassDivisionAt_div_mod
+/-
+**PowerSeries.IsWeierstrassDivisorAt.div_coe_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `
+PowerSeries.IsWeierstrassDivisorAt`。
+形式化陈述：div_coe_eq_zero [IsAdicComplete I A] {r : A[X]} (hr : r.degree < (g.map (I
+deal.Quotient.mk I)).order.toNat) : H.div r = 0
+参数：hr : r.degree < (g.map (Ideal.Quotient.mk I)).order.toNat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `IsAdicComplete.toIsPrecomplete`：∀ {R : Type u_1} {inst : CommRing R} {I 
+: Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}
+   [self : IsAdicCom…
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.isWeierstrassDivisionAt_div_mod`：isWe
+ierstrassDivisionAt_div_mod [IsAdicComplete I A] : f.IsWeierstrassDivisionAt g (
+H.div f) (H.mod f) I
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.eq_of_mul_add_eq_mul_add`：eq_of_mul_a
+dd_eq_mul_add [IsHausdorff I A] {q q' : A⟦X⟧} {r r' : A[X]} (hr : r.degree < (g.
+map (Ideal.Quotient.mk I)).order.toNat) (hr' : r'…
+· 使用定理 `IsAdicComplete.toIsHausdorff`：∀ {R : Type u_1} {inst : CommRing R} {I : 
+Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}  
+ [self : IsAdicCom…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem div_coe_eq_zero [IsAdicComplete I A] {r : A[X]}
     (hr : r.degree < (g.map (Ideal.Quotient.mk I)).order.toNat) : H.div r = 0 := by
   obtain ⟨h1, h2⟩ := H.isWeierstrassDivisionAt_div_mod r
   exact (H.eq_of_mul_add_eq_mul_add (q := H.div r) (q' := 0) h1 hr (by simpa using h2.symm)).1
-
-/--
-theorem `mod_coe_eq_self` / 定理 `mod_coe_eq_self`
-
-English:
-theorem mod_coe_eq_self
-  statement: [IsAdicComplete I A] {r : A[X]}
-  proof: by
-  obtain ⟨h1, h2⟩ := H.isWeierstrassDivisionAt_div_mod r
-  exact (H.eq_of_mul_add_eq_mul_add (q := H.div r) (q' := 0) h1 hr (by simpa using h2.symm)).2
-
-@[simp]
-
-中文:
-定理 mod_coe_eq_self
-  结论: [是AdicComplete I A] {r : A[X]}
-  证明: by
-  obtain ⟨h1, h2⟩ := H.isWeierstrassDivisionAt_div_mod r
-  exact (H.eq_of_mul_add_eq_mul_add (q := H.div r) (q' := 0) h1 hr (by simpa using h2.symm)).2
-
-@[simp]
-
-Depends on / 依赖: H.div, H.eq_of_mul_add_eq_mul_add, H.isWeierstrassDivisionAt_div_mod, eq_of_mul_add_eq_mul_add, h2.symm, isWeierstrassDivisionAt_div_mod
+/-
+**PowerSeries.IsWeierstrassDivisorAt.mod_coe_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `
+PowerSeries.IsWeierstrassDivisorAt`。
+形式化陈述：mod_coe_eq_self [IsAdicComplete I A] {r : A[X]} (hr : r.degree < (g.map (I
+deal.Quotient.mk I)).order.toNat) : H.mod r = r
+参数：hr : r.degree < (g.map (Ideal.Quotient.mk I)).order.toNat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `IsAdicComplete.toIsPrecomplete`：∀ {R : Type u_1} {inst : CommRing R} {I 
+: Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}
+   [self : IsAdicCom…
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.isWeierstrassDivisionAt_div_mod`：isWe
+ierstrassDivisionAt_div_mod [IsAdicComplete I A] : f.IsWeierstrassDivisionAt g (
+H.div f) (H.mod f) I
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.eq_of_mul_add_eq_mul_add`：eq_of_mul_a
+dd_eq_mul_add [IsHausdorff I A] {q q' : A⟦X⟧} {r r' : A[X]} (hr : r.degree < (g.
+map (Ideal.Quotient.mk I)).order.toNat) (hr' : r'…
+· 使用定理 `IsAdicComplete.toIsHausdorff`：∀ {R : Type u_1} {inst : CommRing R} {I : 
+Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}  
+ [self : IsAdicCom…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem mod_coe_eq_self [IsAdicComplete I A] {r : A[X]}
     (hr : r.degree < (g.map (Ideal.Quotient.mk I)).order.toNat) : H.mod r = r := by
@@ -1313,35 +1455,49 @@ theorem mod_coe_eq_self [IsAdicComplete I A] {r : A[X]}
   exact (H.eq_of_mul_add_eq_mul_add (q := H.div r) (q' := 0) h1 hr (by simpa using h2.symm)).2
 
 @[simp]
-/--
-theorem `mk_mod'_eq_self` / 定理 `mk_mod'_eq_self`
-
-English:
-theorem mk_mod'_eq_self
-  given: [IsAdicComplete I A] {f : A⟦X⟧ ⧸ Ideal.span {g}}
-  proof: by
-  obtain ⟨f, rfl⟩ := Ideal.Quotient.mk_surjective f
-  rw [mod'_mk_eq_mod]; rw [Eq.comm]; rw [Ideal.Quotient.mk_eq_mk_iff_sub_mem]; rw [Ideal.mem_span_singleton']
-  use H.div f
-  rw [eq_sub_iff_add_eq]; rw [mul_comm]; rw [(H.isWeierstrassDivisionAt_div_mod f).2.symm]
-
-中文:
-定理 mk_mod'_eq_self
-  条件: [是AdicComplete I A] {f : A⟦X⟧ ⧸ 理想.span {g}}
-  证明: by
-  obtain ⟨f, rfl⟩ := Ideal.Quotient.mk_surjective f
-  rw [mod'_mk_eq_mod]; rw [Eq.comm]; rw [Ideal.Quotient.mk_eq_mk_iff_sub_mem]; rw [Ideal.mem_span_singleton']
-  use H.div f
-  rw [eq_sub_iff_add_eq]; rw [mul_comm]; rw [(H.isWeierstrassDivisionAt_div_mod f).2.symm]
-
-Depends on / 依赖: Eq.comm, H.div, H.isWeierstrassDivisionAt_div_mod, Ideal.Quotient.mk_eq_mk_iff_sub_mem, Ideal.Quotient.mk_surjective, Ideal.mem_span_singleton, Quotient, _mk_eq_mod, eq_sub_iff_add_eq, isWeierstrassDivisionAt_div_mod, mem_span_singleton, mk_eq_mk_iff_sub_mem, mk_surjective, mul_comm
+/-
+**PowerSeries.IsWeierstrassDivisorAt.mk_mod'_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `
+PowerSeries.IsWeierstrassDivisorAt`。
+形式化陈述：∀ {A : Type u_1} [inst : CommRing A] {g : PowerSeries A} {I : Ideal A} (H 
+: g.IsWeierstrassDivisorAt I)   [inst_1 : IsAdicComplete I A] {f : PowerSeries A
+ ⧸ Ideal.span {g}},   (Ideal.Quotient.mk (Ideal.span {g})) ↑(H.mod' f) = f
+参数：H : g.IsWeierstrassDivisorAt I；Ideal.Quotient.mk (Ideal.span {g})；H.mod' f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Ideal.Quotient.mk_surjective`：mk_surjective : Function.Surjective (mk I)
+· 使用定理 `IsAdicComplete.toIsPrecomplete`：∀ {R : Type u_1} {inst : CommRing R} {I 
+: Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}
+   [self : IsAdicCom…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.mod'_mk_eq_mod`：∀ {A : Type u_1} [ins
+t : CommRing A] {g : PowerSeries A} {I : Ideal A} (H : g.IsWeierstrassDivisorAt 
+I)   [inst_1 : IsAdicComplete I A] {f :…
+· 使用定理 `Eq.comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Ideal.Quotient.mk_eq_mk_iff_sub_mem`：mk_eq_mk_iff_sub_mem (x y : R) : mk
+ I x = mk I y ↔ x - y in I
+· 使用定理 `Ideal.mem_span_singleton'`：mem_span_singleton' {x y : α} : x in span ({y
+} : Set α) ↔ exists a, a * y = x
+· 使用定理 `eq_sub_iff_add_eq`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a =
+ b - c ↔ a + c = b
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PowerSeries.IsWeierstrassDivisionAt.eq_mul_add`：∀ {A : Type u_1} [inst :
+ CommRing A] {f g q : PowerSeries A} {r : Polynomial A} {I : Ideal A},   f.IsWei
+erstrassDivisionAt g q r I → f = g *…
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.isWeierstrassDivisionAt_div_mod`：isWe
+ierstrassDivisionAt_div_mod [IsAdicComplete I A] : f.IsWeierstrassDivisionAt g (
+H.div f) (H.mod f) I
 -/
 theorem mk_mod'_eq_self [IsAdicComplete I A] {f : A⟦X⟧ ⧸ Ideal.span {g}} :
     Ideal.Quotient.mk _ (H.mod' f : A⟦X⟧) = f := by
   obtain ⟨f, rfl⟩ := Ideal.Quotient.mk_surjective f
-  rw [mod'_mk_eq_mod]; rw [Eq.comm]; rw [Ideal.Quotient.mk_eq_mk_iff_sub_mem]; rw [Ideal.mem_span_singleton']
+  rw [mod'_mk_eq_mod, Eq.comm, Ideal.Quotient.mk_eq_mk_iff_sub_mem, Ideal.mem_span_singleton']
   use H.div f
-  rw [eq_sub_iff_add_eq]; rw [mul_comm]; rw [(H.isWeierstrassDivisionAt_div_mod f).2.symm]
+  rw [eq_sub_iff_add_eq, mul_comm, (H.isWeierstrassDivisionAt_div_mod f).2.symm]
 
 end IsWeierstrassDivisorAt
 
@@ -1352,80 +1508,18 @@ include H
 
 /-- A distinguished polynomial `g` induces a natural isomorphism `A[X] / (g) ≃ₐ[A] A⟦X⟧ / (g)`. -/
 @[simps! apply symm_apply]
-/--
-Definition of `_root_.Polynomial.IsDistinguishedAt.algEquivQuotient` / `_root_.Polynomial.IsDistinguishedAt.algEquivQuotient` 的定义
+/-
+**PowerSeries._root_.Polynomial.IsDistinguishedAt.algEquivQuotient** 是 Mathlib 中
+的一个定义，位于命名空间 `PowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.Polynomial.IsDistinguishedAt.algEquivQuotient
-  signature: :
-  body: Ideal.quotientMapₐ _ (Polynomial.coeToPowerSeries.algHom A) fun a ha => by
-    obtain ⟨b, hb⟩ := Ideal.mem_span_singleton'.1 ha
-    simp only [Ideal.mem_comap, Polynomial.coeToPowerSeries.algHom_apply, Algebra.algebraMap_self,
-      map_id, id_eq, Ideal.mem_span_singleton']
-    exact ⟨b, by simp [← hb]⟩
-  invFun := Ideal.Quotient.mk _ ∘ H.isWeierstrassDivisorAt'.mod'
-  left_inv f := by
-    rcases subsingleton_or_nontrivial A with _ | _
-    · have : Subsingleton A[X] := inferInstance
-      have : Subsingleton (A[X] ⧸ Ideal.span {g}) := Quot.Subsingleton
-      exact Subsingleton.elim _ _
-    have hI : I != ⊤ := by
-      rintro rfl
-      exact not_subsingleton _ ‹IsAdicComplete ⊤ A›.toIsHausdorff.subsingleton
-    have := Ideal.Quotient.nontrivial_iff.mpr hI
-    obtain ⟨f, hfdeg, rfl⟩ : exists r : A[X], r.degree < g.degree ∧ Ideal.Quotient.mk _ r = f := by
-      obtain ⟨f, rfl⟩ := Ideal.Quotient.mk_surjective f
-      refine ⟨f %ₘ g, Polynomial.degree_modByMonic_lt f H.monic, ?_⟩
-      rw [Eq.comm]; rw [Ideal.Quotient.mk_eq_mk_iff_sub_mem]; rw [Ideal.mem_span_singleton']
-      exact ⟨f /ₘ g, by rw [Polynomial.modByMonic_eq_sub_mul_div]; ring⟩
-    have h1 : g.degree = ((g : A⟦X⟧).map (Ideal.Quotient.mk I)).order.toNat := by
-      convert!
-        H.degree_eq_coe_lift_order_map g 1 (by rwa [constantCoeff_one, ← Ideal.ne_top_iff_one])
-          (by simp)
-      exact (ENat.lift_eq_toNat_of_lt_top _).symm
-    dsimp
-    rw [Ideal.Quotient.mk_eq_mk_iff_sub_mem]; rw [Ideal.mem_span_singleton']
-    exact ⟨0, by simp [H.isWeierstrassDivisorAt'.mod_coe_eq_self (hfdeg.trans_eq h1)]⟩
-  right_inv f := by exact H.isWeierstrassDivisorAt'.mk_mod'_eq_self
-
-中文:
-定义 _root_.多项式.是DistinguishedAt.algEquivQuotient
-  签名: :
-  定义体: Ideal.quotientMapₐ _ (Polynomial.coeToPowerSeries.algHom A) fun a ha => by
-    obtain ⟨b, hb⟩ := Ideal.mem_span_singleton'.1 ha
-    simp only [Ideal.mem_comap, Polynomial.coeToPowerSeries.algHom_apply, Algebra.algebraMap_self,
-      map_id, id_eq, Ideal.mem_span_singleton']
-    exact ⟨b, by simp [← hb]⟩
-  invFun := Ideal.Quotient.mk _ ∘ H.isWeierstrassDivisorAt'.mod'
-  left_inv f := by
-    rcases subsingleton_or_nontrivial A with _ | _
-    · have : Subsingleton A[X] := inferInstance
-      have : Subsingleton (A[X] ⧸ Ideal.span {g}) := Quot.Subsingleton
-      exact Subsingleton.elim _ _
-    have hI : I != ⊤ := by
-      rintro rfl
-      exact not_subsingleton _ ‹IsAdicComplete ⊤ A›.toIsHausdorff.subsingleton
-    have := Ideal.Quotient.nontrivial_iff.mpr hI
-    obtain ⟨f, hfdeg, rfl⟩ : exists r : A[X], r.degree < g.degree ∧ Ideal.Quotient.mk _ r = f := by
-      obtain ⟨f, rfl⟩ := Ideal.Quotient.mk_surjective f
-      refine ⟨f %ₘ g, Polynomial.degree_modByMonic_lt f H.monic, ?_⟩
-      rw [Eq.comm]; rw [Ideal.Quotient.mk_eq_mk_iff_sub_mem]; rw [Ideal.mem_span_singleton']
-      exact ⟨f /ₘ g, by rw [Polynomial.modByMonic_eq_sub_mul_div]; ring⟩
-    have h1 : g.degree = ((g : A⟦X⟧).map (Ideal.Quotient.mk I)).order.toNat := by
-      convert!
-        H.degree_eq_coe_lift_order_map g 1 (by rwa [constantCoeff_one, ← Ideal.ne_top_iff_one])
-          (by simp)
-      exact (ENat.lift_eq_toNat_of_lt_top _).symm
-    dsimp
-    rw [Ideal.Quotient.mk_eq_mk_iff_sub_mem]; rw [Ideal.mem_span_singleton']
-    exact ⟨0, by simp [H.isWeierstrassDivisorAt'.mod_coe_eq_self (hfdeg.trans_eq h1)]⟩
-  right_inv f := by exact H.isWeierstrassDivisorAt'.mk_mod'_eq_self
-
-Depends on / 依赖: Algebra, Algebra.algebraMap_self, H.isWeierstrassDivisorAt, Ideal.Quotient.mk, Ideal.mem_comap, Ideal.mem_span_singleton, Ideal.quotientMap, Ideal.span, Polynomial, Polynomial.coeToPowerSeries.algHom, Polynomial.coeToPowerSeries.algHom_apply, Quotient, Subsingleton, algHom, algHom_apply, algebraMap_self, coeToPowerSeries, id_eq, invFun, isWeierstrassDivisorAt
+--- 原说明 ---
+A distinguished polynomial `g` induces a natural isomorphism `A[X] / (g) ≃ₐ[A] A
+⟦X⟧ / (g)`.
 -/
 noncomputable def _root_.Polynomial.IsDistinguishedAt.algEquivQuotient :
     (A[X] ⧸ Ideal.span {g}) ≃ₐ[A] A⟦X⟧ ⧸ Ideal.span {(g : A⟦X⟧)} where
-  __ := Ideal.quotientMapₐ _ (Polynomial.coeToPowerSeries.algHom A) fun a ha => by
+  __ := Ideal.quotientMapₐ _ (Polynomial.coeToPowerSeries.algHom A) fun a ha ↦ by
     obtain ⟨b, hb⟩ := Ideal.mem_span_singleton'.1 ha
     simp only [Ideal.mem_comap, Polynomial.coeToPowerSeries.algHom_apply, Algebra.algebraMap_self,
       map_id, id_eq, Ideal.mem_span_singleton']
@@ -1436,14 +1530,14 @@ noncomputable def _root_.Polynomial.IsDistinguishedAt.algEquivQuotient :
     · have : Subsingleton A[X] := inferInstance
       have : Subsingleton (A[X] ⧸ Ideal.span {g}) := Quot.Subsingleton
       exact Subsingleton.elim _ _
-    have hI : I != ⊤ := by
+    have hI : I ≠ ⊤ := by
       rintro rfl
       exact not_subsingleton _ ‹IsAdicComplete ⊤ A›.toIsHausdorff.subsingleton
     have := Ideal.Quotient.nontrivial_iff.mpr hI
-    obtain ⟨f, hfdeg, rfl⟩ : exists r : A[X], r.degree < g.degree ∧ Ideal.Quotient.mk _ r = f := by
+    obtain ⟨f, hfdeg, rfl⟩ : ∃ r : A[X], r.degree < g.degree ∧ Ideal.Quotient.mk _ r = f := by
       obtain ⟨f, rfl⟩ := Ideal.Quotient.mk_surjective f
       refine ⟨f %ₘ g, Polynomial.degree_modByMonic_lt f H.monic, ?_⟩
-      rw [Eq.comm]; rw [Ideal.Quotient.mk_eq_mk_iff_sub_mem]; rw [Ideal.mem_span_singleton']
+      rw [Eq.comm, Ideal.Quotient.mk_eq_mk_iff_sub_mem, Ideal.mem_span_singleton']
       exact ⟨f /ₘ g, by rw [Polynomial.modByMonic_eq_sub_mul_div]; ring⟩
     have h1 : g.degree = ((g : A⟦X⟧).map (Ideal.Quotient.mk I)).order.toNat := by
       convert!
@@ -1451,7 +1545,7 @@ noncomputable def _root_.Polynomial.IsDistinguishedAt.algEquivQuotient :
           (by simp)
       exact (ENat.lift_eq_toNat_of_lt_top _).symm
     dsimp
-    rw [Ideal.Quotient.mk_eq_mk_iff_sub_mem]; rw [Ideal.mem_span_singleton']
+    rw [Ideal.Quotient.mk_eq_mk_iff_sub_mem, Ideal.mem_span_singleton']
     exact ⟨0, by simp [H.isWeierstrassDivisorAt'.mod_coe_eq_self (hfdeg.trans_eq h1)]⟩
   right_inv f := by exact H.isWeierstrassDivisorAt'.mk_mod'_eq_self
 
@@ -1464,99 +1558,90 @@ section IsLocalRing
 variable [IsLocalRing A] (a : A) (f f' g : A⟦X⟧)
 
 variable {g} in
-/--
-theorem `exists_isWeierstrassDivision` / 定理 `exists_isWeierstrassDivision`
+/-- **Weierstrass division** ([washington_cyclotomic], Proposition 7.2): let `f`, `g` be
+power series over a complete local ring, such that
+the image of `g` in the residue field is not zero. Let `n` be the order of the image of `g` in the
+residue field. Then there exists a power series `q` and a polynomial `r` of degree `< n`, such that
+`f = g * q + r`. -/
+/-
+**PowerSeries.exists_isWeierstrassDivision** 是 Mathlib 中的一个定理，位于命名空间 `PowerSerie
+s`。
+形式化陈述：exists_isWeierstrassDivision [IsAdicComplete (IsLocalRing.maximalIdeal A) 
+A] (hg : g.map (IsLocalRing.residue A) != 0) : exists q r, f.IsWeierstrassDivisi
+on g q r
+参数：IsLocalRing.maximalIdeal A；hg : g.map (IsLocalRing.residue A) != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.IsWeierstrassDivisor.of_map_ne_zero`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} [inst_1 : IsLocalRing A],   (PowerSeries.map (
+IsLocalRing.residue A)) g ≠ 0 → g.IsW…
+· 使用定理 `IsAdicComplete.toIsPrecomplete`：∀ {R : Type u_1} {inst : CommRing R} {I 
+: Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}
+   [self : IsAdicCom…
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.isWeierstrassDivisionAt_div_mod`：isWe
+ierstrassDivisionAt_div_mod [IsAdicComplete I A] : f.IsWeierstrassDivisionAt g (
+H.div f) (H.mod f) I
 
-English:
-theorem exists_isWeierstrassDivision
-  statement: [IsAdicComplete (IsLocalRing.maximalIdeal A) A]
-  proof: ⟨_, _, (IsWeierstrassDivisor.of_map_ne_zero hg).isWeierstrassDivisionAt_div_mod f⟩
-
-中文:
-定理 存在_isWeierstrassDivision
-  结论: [是AdicComplete (是局部环.maximalIdeal A) A]
-  证明: ⟨_, _, (IsWeierstrassDivisor.of_map_ne_zero hg).isWeierstrassDivisionAt_div_mod f⟩
-
-Depends on / 依赖: IsWeierstrassDivisor, IsWeierstrassDivisor.of_map_ne_zero, isWeierstrassDivisionAt_div_mod, of_map_ne_zero
+--- 原说明 ---
+**Weierstrass division** ([washington_cyclotomic], Proposition 7.2): let `f`, `g
+` be
+power series over a complete local ring, such that
+the image of `g` in the residue field is not zero. Let `n` be the order of the i
+mage of `g` in the
+residue field. Then there exists a power series `q` and a polynomial `r` of degr
+ee `< n`, such that
+`f = g * q + r`.
 -/
 theorem exists_isWeierstrassDivision [IsAdicComplete (IsLocalRing.maximalIdeal A) A]
-    (hg : g.map (IsLocalRing.residue A) != 0) : exists q r, f.IsWeierstrassDivision g q r :=
+    (hg : g.map (IsLocalRing.residue A) ≠ 0) : ∃ q r, f.IsWeierstrassDivision g q r :=
   ⟨_, _, (IsWeierstrassDivisor.of_map_ne_zero hg).isWeierstrassDivisionAt_div_mod f⟩
 
 -- Unfortunately there is no Unicode subscript `w`.
 
-/--
-Definition of `weierstrassDiv` / `weierstrassDiv` 的定义
+/-- The quotient `q` in Weierstrass division, denoted by `f /ʷ g`. Note that when the image of
+`g` in the residue field is zero, this is defined to be zero. -/
+/-
+**PowerSeries.weierstrassDiv** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries`。
+形式化陈述：weierstrassDiv [IsPrecomplete (IsLocalRing.maximalIdeal A) A] : A⟦X⟧
+参数：IsLocalRing.maximalIdeal A。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.IsWeierstrassDivisor.of_map_ne_zero`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} [inst_1 : IsLocalRing A],   (PowerSeries.map (
+IsLocalRing.residue A)) g ≠ 0 → g.IsW…
 
-English:
-definition weierstrassDiv
-  signature: [IsPrecomplete (IsLocalRing.maximalIdeal A) A]
-  body: open scoped Classical in
-  if hg : g.map (IsLocalRing.residue A) != 0 then
-    (IsWeierstrassDivisor.of_map_ne_zero hg).div f
-  else
-    0
-
-中文:
-定义 weierstrassDiv
-  签名: [是Precomplete (是局部环.maximalIdeal A) A]
-  定义体: open scoped Classical in
-  if hg : g.map (IsLocalRing.residue A) != 0 then
-    (IsWeierstrassDivisor.of_map_ne_zero hg).div f
-  else
-    0
-
-Depends on / 依赖: Classical, IsLocalRing, IsLocalRing.residue, IsWeierstrassDivisor, IsWeierstrassDivisor.of_map_ne_zero, g.map, of_map_ne_zero, residue, scoped
+--- 原说明 ---
+The quotient `q` in Weierstrass division, denoted by `f /ʷ g`. Note that when th
+e image of
+`g` in the residue field is zero, this is defined to be zero.
 -/
 noncomputable def weierstrassDiv [IsPrecomplete (IsLocalRing.maximalIdeal A) A] : A⟦X⟧ :=
   open scoped Classical in
-  if hg : g.map (IsLocalRing.residue A) != 0 then
+  if hg : g.map (IsLocalRing.residue A) ≠ 0 then
     (IsWeierstrassDivisor.of_map_ne_zero hg).div f
   else
     0
 
-/--
-Definition of `weierstrassMod` / `weierstrassMod` 的定义
+/-- The remainder `r` in Weierstrass division, denoted by `f %ʷ g`. Note that when the image of
+`g` in the residue field is zero, this is defined to be zero. -/
+/-
+**PowerSeries.weierstrassMod** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries`。
+形式化陈述：weierstrassMod [IsPrecomplete (IsLocalRing.maximalIdeal A) A] : A[X]
+参数：IsLocalRing.maximalIdeal A。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.IsWeierstrassDivisor.of_map_ne_zero`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} [inst_1 : IsLocalRing A],   (PowerSeries.map (
+IsLocalRing.residue A)) g ≠ 0 → g.IsW…
 
-English:
-definition weierstrassMod
-  signature: [IsPrecomplete (IsLocalRing.maximalIdeal A) A]
-  body: open scoped Classical in
-  if hg : g.map (IsLocalRing.residue A) != 0 then
-    (IsWeierstrassDivisor.of_map_ne_zero hg).mod f
-  else
-    0
-
-@[inherit_doc]
-infixl:70 " /ʷ " => weierstrassDiv
-
-@[inherit_doc]
-infixl:70 " %ʷ " => weierstrassMod
-
-@[simp]
-
-中文:
-定义 weierstrassMod
-  签名: [是Precomplete (是局部环.maximalIdeal A) A]
-  定义体: open scoped Classical in
-  if hg : g.map (IsLocalRing.residue A) != 0 then
-    (IsWeierstrassDivisor.of_map_ne_zero hg).mod f
-  else
-    0
-
-@[inherit_doc]
-infixl:70 " /ʷ " => weierstrassDiv
-
-@[inherit_doc]
-infixl:70 " %ʷ " => weierstrassMod
-
-@[simp]
-
-Depends on / 依赖: Classical, IsLocalRing, IsLocalRing.residue, IsWeierstrassDivisor, IsWeierstrassDivisor.of_map_ne_zero, g.map, of_map_ne_zero, residue, scoped
+--- 原说明 ---
+The remainder `r` in Weierstrass division, denoted by `f %ʷ g`. Note that when t
+he image of
+`g` in the residue field is zero, this is defined to be zero.
 -/
 noncomputable def weierstrassMod [IsPrecomplete (IsLocalRing.maximalIdeal A) A] : A[X] :=
   open scoped Classical in
-  if hg : g.map (IsLocalRing.residue A) != 0 then
+  if hg : g.map (IsLocalRing.residue A) ≠ 0 then
     (IsWeierstrassDivisor.of_map_ne_zero hg).mod f
   else
     0
@@ -1568,93 +1653,109 @@ infixl:70 " /ʷ " => weierstrassDiv
 infixl:70 " %ʷ " => weierstrassMod
 
 @[simp]
-/--
-theorem `weierstrassDiv_zero_right` / 定理 `weierstrassDiv_zero_right`
-
-English:
-theorem weierstrassDiv_zero_right
-  given: [IsPrecomplete (IsLocalRing.maximalIdeal A) A]
-  statement: f /ʷ 0 = 0
-  proof: by
-  rw [weierstrassDiv]; rw [dif_neg (by simp)]
-
-alias weierstrassDiv_zero := weierstrassDiv_zero_right
-
-@[simp]
-
-中文:
-定理 weierstrassDiv_zero_right
-  条件: [是Precomplete (是局部环.maximalIdeal A) A]
-  结论: f /ʷ 0 = 0
-  证明: by
-  rw [weierstrassDiv]; rw [dif_neg (by simp)]
-
-alias weierstrassDiv_zero := weierstrassDiv_zero_right
-
-@[simp]
-
-Depends on / 依赖: dif_neg, weierstrassDiv
+/-
+**PowerSeries.weierstrassDiv_zero_right** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：weierstrassDiv_zero_right [IsPrecomplete (IsLocalRing.maximalIdeal A) A] :
+ f /ʷ 0 = 0
+参数：IsLocalRing.maximalIdeal A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.IsWeierstrassDivisor.of_map_ne_zero`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} [inst_1 : IsLocalRing A],   (PowerSeries.map (
+IsLocalRing.residue A)) g ≠ 0 → g.IsW…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.weierstrassDiv.eq_1`：∀ {A : Type u_1} [inst : CommRing A] [i
+nst_1 : IsLocalRing A] (f g : PowerSeries A)   [inst_2 : IsPrecomplete (IsLocalR
+ing.maximalIdeal A) A…
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 theorem weierstrassDiv_zero_right [IsPrecomplete (IsLocalRing.maximalIdeal A) A] : f /ʷ 0 = 0 := by
-  rw [weierstrassDiv]; rw [dif_neg (by simp)]
+  rw [weierstrassDiv, dif_neg (by simp)]
 
 alias weierstrassDiv_zero := weierstrassDiv_zero_right
 
 @[simp]
-/--
-theorem `weierstrassMod_zero_right` / 定理 `weierstrassMod_zero_right`
-
-English:
-theorem weierstrassMod_zero_right
-  given: [IsPrecomplete (IsLocalRing.maximalIdeal A) A]
-  statement: f %ʷ 0 = 0
-  proof: by
-  rw [weierstrassMod]; rw [dif_neg (by simp)]
-
-alias weierstrassMod_zero := weierstrassMod_zero_right
-
-中文:
-定理 weierstrassMod_zero_right
-  条件: [是Precomplete (是局部环.maximalIdeal A) A]
-  结论: f %ʷ 0 = 0
-  证明: by
-  rw [weierstrassMod]; rw [dif_neg (by simp)]
-
-alias weierstrassMod_zero := weierstrassMod_zero_right
-
-Depends on / 依赖: dif_neg, weierstrassMod
+/-
+**PowerSeries.weierstrassMod_zero_right** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：weierstrassMod_zero_right [IsPrecomplete (IsLocalRing.maximalIdeal A) A] :
+ f %ʷ 0 = 0
+参数：IsLocalRing.maximalIdeal A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.IsWeierstrassDivisor.of_map_ne_zero`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} [inst_1 : IsLocalRing A],   (PowerSeries.map (
+IsLocalRing.residue A)) g ≠ 0 → g.IsW…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.weierstrassMod.eq_1`：∀ {A : Type u_1} [inst : CommRing A] [i
+nst_1 : IsLocalRing A] (f g : PowerSeries A)   [inst_2 : IsPrecomplete (IsLocalR
+ing.maximalIdeal A) A…
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 theorem weierstrassMod_zero_right [IsPrecomplete (IsLocalRing.maximalIdeal A) A] : f %ʷ 0 = 0 := by
-  rw [weierstrassMod]; rw [dif_neg (by simp)]
+  rw [weierstrassMod, dif_neg (by simp)]
 
 alias weierstrassMod_zero := weierstrassMod_zero_right
-
-/--
-theorem `degree_weierstrassMod_lt` / 定理 `degree_weierstrassMod_lt`
-
-English:
-theorem degree_weierstrassMod_lt
-  given: [IsPrecomplete (IsLocalRing.maximalIdeal A) A]
-  proof: by
-  rw [weierstrassMod]
-  split_ifs with hg
-  · exact degree_trunc_lt _ _
-  · nontriviality A
-    rw [Polynomial.degree_zero]
-    exact WithBot.bot_lt_coe _
-
-中文:
-定理 degree_weierstrassMod_lt
-  条件: [是Precomplete (是局部环.maximalIdeal A) A]
-  证明: by
-  rw [weierstrassMod]
-  split_ifs with hg
-  · exact degree_trunc_lt _ _
-  · nontriviality A
-    rw [Polynomial.degree_zero]
-    exact WithBot.bot_lt_coe _
-
-Depends on / 依赖: Polynomial, Polynomial.degree_zero, WithBot, WithBot.bot_lt_coe, bot_lt_coe, degree_trunc_lt, degree_zero, nontriviality, split_ifs, weierstrassMod
+/-
+**PowerSeries.degree_weierstrassMod_lt** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：degree_weierstrassMod_lt [IsPrecomplete (IsLocalRing.maximalIdeal A) A] : 
+(f %ʷ g).degree < (g.map (IsLocalRing.residue A)).order.toNat
+参数：IsLocalRing.maximalIdeal A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.IsWeierstrassDivisor.of_map_ne_zero`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} [inst_1 : IsLocalRing A],   (PowerSeries.map (
+IsLocalRing.residue A)) g ≠ 0 → g.IsW…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.weierstrassMod.eq_1`：∀ {A : Type u_1} [inst : CommRing A] [i
+nst_1 : IsLocalRing A] (f g : PowerSeries A)   [inst_2 : IsPrecomplete (IsLocalR
+ing.maximalIdeal A) A…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `PowerSeries.degree_trunc_lt`：degree_trunc_lt (f : R⟦X⟧) (n) : (trunc n f
+).degree < n
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `Polynomial.degree_zero`：degree_zero : degree (0 : R[X]) = ⊥
+· 使用引理 `WithBot.bot_lt_coe`：bot_lt_coe (a : α) : ⊥ < (a : WithBot α)
 -/
 theorem degree_weierstrassMod_lt [IsPrecomplete (IsLocalRing.maximalIdeal A) A] :
     (f %ʷ g).degree < (g.map (IsLocalRing.residue A)).order.toNat := by
@@ -1667,48 +1768,63 @@ theorem degree_weierstrassMod_lt [IsPrecomplete (IsLocalRing.maximalIdeal A) A] 
 
 section
 
-variable {g} (hg : g.map (IsLocalRing.residue A) != 0)
+variable {g} (hg : g.map (IsLocalRing.residue A) ≠ 0)
 include hg
 
-/--
-theorem `isWeierstrassDivision_weierstrassDiv_weierstrassMod` / 定理 `isWeierstrassDivision_weierstrassDiv_weierstrassMod`
-
-English:
-theorem isWeierstrassDivision_weierstrassDiv_weierstrassMod
-  proof: by
-  simp_rw [weierstrassDiv, weierstrassMod, dif_pos hg]
-  exact (IsWeierstrassDivisor.of_map_ne_zero hg).isWeierstrassDivisionAt_div_mod f
-
-中文:
-定理 isWeierstrassDivision_weierstrassDiv_weierstrassMod
-  证明: by
-  simp_rw [weierstrassDiv, weierstrassMod, dif_pos hg]
-  exact (IsWeierstrassDivisor.of_map_ne_zero hg).isWeierstrassDivisionAt_div_mod f
-
-Depends on / 依赖: IsWeierstrassDivisor, IsWeierstrassDivisor.of_map_ne_zero, dif_pos, isWeierstrassDivisionAt_div_mod, of_map_ne_zero, simp_rw, weierstrassDiv, weierstrassMod
+/-
+**PowerSeries.isWeierstrassDivision_weierstrassDiv_weierstrassMod** 是 Mathlib 中的
+一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：isWeierstrassDivision_weierstrassDiv_weierstrassMod [IsAdicComplete (IsLoc
+alRing.maximalIdeal A) A] : f.IsWeierstrassDivision g (f /ʷ g) (f %ʷ g)
+参数：IsLocalRing.maximalIdeal A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsAdicComplete.toIsPrecomplete`：∀ {R : Type u_1} {inst : CommRing R} {I 
+: Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}
+   [self : IsAdicCom…
+· 使用定理 `PowerSeries.IsWeierstrassDivisor.of_map_ne_zero`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} [inst_1 : IsLocalRing A],   (PowerSeries.map (
+IsLocalRing.residue A)) g ≠ 0 → g.IsW…
+· 使用定理 `PowerSeries.IsWeierstrassDivision.congr_simp`：∀ {A : Type u_1} [inst : C
+ommRing A] (f f_1 : PowerSeries A),   f = f_1 →     ∀ (g g_1 : PowerSeries A),  
+     g = g_1 →         ∀ (q q_1 : …
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.isWeierstrassDivisionAt_div_mod`：isWe
+ierstrassDivisionAt_div_mod [IsAdicComplete I A] : f.IsWeierstrassDivisionAt g (
+H.div f) (H.mod f) I
 -/
 theorem isWeierstrassDivision_weierstrassDiv_weierstrassMod
     [IsAdicComplete (IsLocalRing.maximalIdeal A) A] :
     f.IsWeierstrassDivision g (f /ʷ g) (f %ʷ g) := by
   simp_rw [weierstrassDiv, weierstrassMod, dif_pos hg]
   exact (IsWeierstrassDivisor.of_map_ne_zero hg).isWeierstrassDivisionAt_div_mod f
-
-/--
-theorem `eq_mul_weierstrassDiv_add_weierstrassMod` / 定理 `eq_mul_weierstrassDiv_add_weierstrassMod`
-
-English:
-theorem eq_mul_weierstrassDiv_add_weierstrassMod
-  proof: by
-  simp_rw [weierstrassDiv, weierstrassMod, dif_pos hg]
-  exact ((IsWeierstrassDivisor.of_map_ne_zero hg).isWeierstrassDivisionAt_div_mod f).2
-
-中文:
-定理 eq_mul_weierstrassDiv_add_weierstrassMod
-  证明: by
-  simp_rw [weierstrassDiv, weierstrassMod, dif_pos hg]
-  exact ((IsWeierstrassDivisor.of_map_ne_zero hg).isWeierstrassDivisionAt_div_mod f).2
-
-Depends on / 依赖: IsWeierstrassDivisor, IsWeierstrassDivisor.of_map_ne_zero, dif_pos, isWeierstrassDivisionAt_div_mod, of_map_ne_zero, simp_rw, weierstrassDiv, weierstrassMod
+/-
+**PowerSeries.eq_mul_weierstrassDiv_add_weierstrassMod** 是 Mathlib 中的一个定理，位于命名空间
+ `PowerSeries`。
+形式化陈述：eq_mul_weierstrassDiv_add_weierstrassMod [IsAdicComplete (IsLocalRing.maxi
+malIdeal A) A] : f = g * (f /ʷ g) + (f %ʷ g)
+参数：IsLocalRing.maximalIdeal A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsAdicComplete.toIsPrecomplete`：∀ {R : Type u_1} {inst : CommRing R} {I 
+: Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}
+   [self : IsAdicCom…
+· 使用定理 `PowerSeries.IsWeierstrassDivisor.of_map_ne_zero`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} [inst_1 : IsLocalRing A],   (PowerSeries.map (
+IsLocalRing.residue A)) g ≠ 0 → g.IsW…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `PowerSeries.IsWeierstrassDivisionAt.eq_mul_add`：∀ {A : Type u_1} [inst :
+ CommRing A] {f g q : PowerSeries A} {r : Polynomial A} {I : Ideal A},   f.IsWei
+erstrassDivisionAt g q r I → f = g *…
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.isWeierstrassDivisionAt_div_mod`：isWe
+ierstrassDivisionAt_div_mod [IsAdicComplete I A] : f.IsWeierstrassDivisionAt g (
+H.div f) (H.mod f) I
 -/
 theorem eq_mul_weierstrassDiv_add_weierstrassMod
     [IsAdicComplete (IsLocalRing.maximalIdeal A) A] :
@@ -1717,40 +1833,74 @@ theorem eq_mul_weierstrassDiv_add_weierstrassMod
   exact ((IsWeierstrassDivisor.of_map_ne_zero hg).isWeierstrassDivisionAt_div_mod f).2
 
 variable {f} in
-/--
-theorem `IsWeierstrassDivision.elim` / 定理 `IsWeierstrassDivision.elim`
+/-- The quotient `q` and the remainder `r` in the Weierstrass division are unique.
 
-English:
-theorem IsWeierstrassDivision.elim
-  statement: [IsHausdorff (IsLocalRing.maximalIdeal A) A]
-  proof: (IsWeierstrassDivisor.of_map_ne_zero hg).eq_of_mul_add_eq_mul_add H.1 H2.1 (H.2.symm.trans H2.2)
+This result is stated using two `PowerSeries.IsWeierstrassDivision` assertions, and only requires
+the ring being Hausdorff with respect to the maximal ideal. If you want `q` and `r` equal to
+`f /ʷ g` and `f %ʷ g`, use `PowerSeries.IsWeierstrassDivision.unique`
+instead, which requires the ring being complete with respect to the maximal ideal. -/
+/-
+**PowerSeries.IsWeierstrassDivision.elim** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries.
+IsWeierstrassDivision`。
+形式化陈述：∀ {A : Type u_1} [inst : CommRing A] [inst_1 : IsLocalRing A] {f g : Power
+Series A},   (PowerSeries.map (IsLocalRing.residue A)) g ≠ 0 →     ∀ [IsHausdorf
+f (IsLocalRing.maximalIdeal A) A] {q q' : PowerSeries A} {r r' : Polynomial A}, 
+      f.IsWeierstrassDivision g q r → f.IsWeierstrassDivision g q' r' → q = q' ∧
+ r = r'
+参数：PowerSeries.map (IsLocalRing.residue A)；IsLocalRing.maximalIdeal A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.eq_of_mul_add_eq_mul_add`：eq_of_mul_a
+dd_eq_mul_add [IsHausdorff I A] {q q' : A⟦X⟧} {r r' : A[X]} (hr : r.degree < (g.
+map (Ideal.Quotient.mk I)).order.toNat) (hr' : r'…
+· 使用定理 `PowerSeries.IsWeierstrassDivisor.of_map_ne_zero`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} [inst_1 : IsLocalRing A],   (PowerSeries.map (
+IsLocalRing.residue A)) g ≠ 0 → g.IsW…
+· 使用定理 `PowerSeries.IsWeierstrassDivisionAt.degree_lt`：∀ {A : Type u_1} [inst : 
+CommRing A] {f g q : PowerSeries A} {r : Polynomial A} {I : Ideal A},   f.IsWeie
+rstrassDivisionAt g q r I → r.degre…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PowerSeries.IsWeierstrassDivisionAt.eq_mul_add`：∀ {A : Type u_1} [inst :
+ CommRing A] {f g q : PowerSeries A} {r : Polynomial A} {I : Ideal A},   f.IsWei
+erstrassDivisionAt g q r I → f = g *…
 
-中文:
-定理 IsWeierstrassDivision.elim
-  结论: [是豪斯多夫 (是局部环.maximalIdeal A) A]
-  证明: (IsWeierstrassDivisor.of_map_ne_zero hg).eq_of_mul_add_eq_mul_add H.1 H2.1 (H.2.symm.trans H2.2)
+--- 原说明 ---
+The quotient `q` and the remainder `r` in the Weierstrass division are unique.
 
-Depends on / 依赖: IsWeierstrassDivisor, IsWeierstrassDivisor.of_map_ne_zero, eq_of_mul_add_eq_mul_add, of_map_ne_zero, symm.trans
+This result is stated using two `PowerSeries.IsWeierstrassDivision` assertions, 
+and only requires
+the ring being Hausdorff with respect to the maximal ideal. If you want `q` and 
+`r` equal to
+`f /ʷ g` and `f %ʷ g`, use `PowerSeries.IsWeierstrassDivision.unique`
+instead, which requires the ring being complete with respect to the maximal idea
+l.
 -/
 theorem IsWeierstrassDivision.elim [IsHausdorff (IsLocalRing.maximalIdeal A) A]
     {q q' : A⟦X⟧} {r r' : A[X]}
     (H : f.IsWeierstrassDivision g q r) (H2 : f.IsWeierstrassDivision g q' r') : q = q' ∧ r = r' :=
   (IsWeierstrassDivisor.of_map_ne_zero hg).eq_of_mul_add_eq_mul_add H.1 H2.1 (H.2.symm.trans H2.2)
 
-/--
-theorem `IsWeierstrassDivision.eq_zero` / 定理 `IsWeierstrassDivision.eq_zero`
+/-- If `q` and `r` are quotient and remainder in the Weierstrass division `0 / g`, then they are
+equal to `0`. -/
+/-
+**PowerSeries.IsWeierstrassDivision.eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeri
+es.IsWeierstrassDivision`。
+形式化陈述：∀ {A : Type u_1} [inst : CommRing A] [inst_1 : IsLocalRing A] {g : PowerSe
+ries A},   (PowerSeries.map (IsLocalRing.residue A)) g ≠ 0 →     ∀ [IsHausdorff 
+(IsLocalRing.maximalIdeal A) A] {q : PowerSeries A} {r : Polynomial A},       Po
+werSeries.IsWeierstrassDivision 0 g q r → q = 0 ∧ r = 0
+参数：PowerSeries.map (IsLocalRing.residue A)；IsLocalRing.maximalIdeal A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.IsWeierstrassDivision.elim`：∀ {A : Type u_1} [inst : CommRin
+g A] [inst_1 : IsLocalRing A] {f g : PowerSeries A},   (PowerSeries.map (IsLocal
+Ring.residue A)) g ≠ 0 →    …
+· 使用定理 `PowerSeries.isWeierstrassDivisionAt_zero`：isWeierstrassDivisionAt_zero :
+ IsWeierstrassDivisionAt 0 g 0 0 I
 
-English:
-theorem IsWeierstrassDivision.eq_zero
-  statement: [IsHausdorff (IsLocalRing.maximalIdeal A) A]
-  proof: H.elim hg (g.isWeierstrassDivisionAt_zero _)
-
-中文:
-定理 IsWeierstrassDivision.eq_zero
-  结论: [是豪斯多夫 (是局部环.maximalIdeal A) A]
-  证明: H.elim hg (g.isWeierstrassDivisionAt_zero _)
-
-Depends on / 依赖: H.elim, g.isWeierstrassDivisionAt_zero, isWeierstrassDivisionAt_zero
+--- 原说明 ---
+If `q` and `r` are quotient and remainder in the Weierstrass division `0 / g`, t
+hen they are
+equal to `0`.
 -/
 theorem IsWeierstrassDivision.eq_zero [IsHausdorff (IsLocalRing.maximalIdeal A) A]
     {q : A⟦X⟧} {r : A[X]}
@@ -1758,20 +1908,34 @@ theorem IsWeierstrassDivision.eq_zero [IsHausdorff (IsLocalRing.maximalIdeal A) 
   H.elim hg (g.isWeierstrassDivisionAt_zero _)
 
 variable {f} in
-/--
-theorem `IsWeierstrassDivision.unique` / 定理 `IsWeierstrassDivision.unique`
+/-- If `q` and `r` are quotient and remainder in the Weierstrass division `f / g`, then they are
+equal to `f /ʷ g` and `f %ʷ g`. -/
+/-
+**PowerSeries.IsWeierstrassDivision.unique** 是 Mathlib 中的一个定理，位于命名空间 `PowerSerie
+s.IsWeierstrassDivision`。
+形式化陈述：∀ {A : Type u_1} [inst : CommRing A] [inst_1 : IsLocalRing A] {f g : Power
+Series A},   (PowerSeries.map (IsLocalRing.residue A)) g ≠ 0 →     ∀ [inst_2 : I
+sAdicComplete (IsLocalRing.maximalIdeal A) A] {q : PowerSeries A} {r : Polynomia
+l A},       f.IsWeierstrassDivision g q r → q = f /ʷ g ∧ r = f %ʷ g
+参数：PowerSeries.map (IsLocalRing.residue A)；IsLocalRing.maximalIdeal A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.IsWeierstrassDivision.elim`：∀ {A : Type u_1} [inst : CommRin
+g A] [inst_1 : IsLocalRing A] {f g : PowerSeries A},   (PowerSeries.map (IsLocal
+Ring.residue A)) g ≠ 0 →    …
+· 使用定理 `IsAdicComplete.toIsHausdorff`：∀ {R : Type u_1} {inst : CommRing R} {I : 
+Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}  
+ [self : IsAdicCom…
+· 使用定理 `IsAdicComplete.toIsPrecomplete`：∀ {R : Type u_1} {inst : CommRing R} {I 
+: Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}
+   [self : IsAdicCom…
+· 使用定理 `PowerSeries.isWeierstrassDivision_weierstrassDiv_weierstrassMod`：isWeier
+strassDivision_weierstrassDiv_weierstrassMod [IsAdicComplete (IsLocalRing.maxima
+lIdeal A) A] : f.IsWeierstrassDivision g (f /ʷ g) (f …
 
-English:
-theorem IsWeierstrassDivision.unique
-  statement: [IsAdicComplete (IsLocalRing.maximalIdeal A) A]
-  proof: H.elim hg (f.isWeierstrassDivision_weierstrassDiv_weierstrassMod hg)
-
-中文:
-定理 IsWeierstrassDivision.unique
-  结论: [是AdicComplete (是局部环.maximalIdeal A) A]
-  证明: H.elim hg (f.isWeierstrassDivision_weierstrassDiv_weierstrassMod hg)
-
-Depends on / 依赖: H.elim, f.isWeierstrassDivision_weierstrassDiv_weierstrassMod, isWeierstrassDivision_weierstrassDiv_weierstrassMod
+--- 原说明 ---
+If `q` and `r` are quotient and remainder in the Weierstrass division `f / g`, t
+hen they are
+equal to `f /ʷ g` and `f %ʷ g`.
 -/
 theorem IsWeierstrassDivision.unique [IsAdicComplete (IsLocalRing.maximalIdeal A) A]
     {q : A⟦X⟧} {r : A[X]}
@@ -1781,28 +1945,35 @@ theorem IsWeierstrassDivision.unique [IsAdicComplete (IsLocalRing.maximalIdeal A
 end
 
 @[simp]
-/--
-theorem `add_weierstrassDiv` / 定理 `add_weierstrassDiv`
-
-English:
-theorem add_weierstrassDiv
-  given: [IsAdicComplete (IsLocalRing.maximalIdeal A) A]
-  proof: by
-  simp_rw [weierstrassDiv]
-  split_ifs <;> simp
-
-@[simp]
-
-中文:
-定理 add_weierstrassDiv
-  条件: [是AdicComplete (是局部环.maximalIdeal A) A]
-  证明: by
-  simp_rw [weierstrassDiv]
-  split_ifs <;> simp
-
-@[simp]
-
-Depends on / 依赖: simp_rw, split_ifs, weierstrassDiv
+/-
+**PowerSeries.add_weierstrassDiv** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：add_weierstrassDiv [IsAdicComplete (IsLocalRing.maximalIdeal A) A] : (f + 
+f') /ʷ g = f /ʷ g + f' /ʷ g
+参数：IsLocalRing.maximalIdeal A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsAdicComplete.toIsPrecomplete`：∀ {R : Type u_1} {inst : CommRing R} {I 
+: Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}
+   [self : IsAdicCom…
+· 使用定理 `PowerSeries.IsWeierstrassDivisor.of_map_ne_zero`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} [inst_1 : IsLocalRing A],   (PowerSeries.map (
+IsLocalRing.residue A)) g ≠ 0 → g.IsW…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.div_add`：div_add [IsAdicComplete I A]
+ : H.div (f + f') = H.div f + H.div f'
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 -/
 theorem add_weierstrassDiv [IsAdicComplete (IsLocalRing.maximalIdeal A) A] :
     (f + f') /ʷ g = f /ʷ g + f' /ʷ g := by
@@ -1810,28 +1981,35 @@ theorem add_weierstrassDiv [IsAdicComplete (IsLocalRing.maximalIdeal A) A] :
   split_ifs <;> simp
 
 @[simp]
-/--
-theorem `smul_weierstrassDiv` / 定理 `smul_weierstrassDiv`
-
-English:
-theorem smul_weierstrassDiv
-  given: [IsAdicComplete (IsLocalRing.maximalIdeal A) A]
-  proof: by
-  simp_rw [weierstrassDiv]
-  split_ifs <;> simp
-
-@[simp]
-
-中文:
-定理 smul_weierstrassDiv
-  条件: [是AdicComplete (是局部环.maximalIdeal A) A]
-  证明: by
-  simp_rw [weierstrassDiv]
-  split_ifs <;> simp
-
-@[simp]
-
-Depends on / 依赖: epi_iff_surjective, i.proj_surjective, proj_surjective, simp_rw, split_ifs, weierstrassDiv
+/-
+**PowerSeries.smul_weierstrassDiv** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：smul_weierstrassDiv [IsAdicComplete (IsLocalRing.maximalIdeal A) A] : (a •
+ f) /ʷ g = a • (f /ʷ g)
+参数：IsLocalRing.maximalIdeal A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsAdicComplete.toIsPrecomplete`：∀ {R : Type u_1} {inst : CommRing R} {I 
+: Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}
+   [self : IsAdicCom…
+· 使用定理 `PowerSeries.IsWeierstrassDivisor.of_map_ne_zero`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} [inst_1 : IsLocalRing A],   (PowerSeries.map (
+IsLocalRing.residue A)) g ≠ 0 → g.IsW…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.div_smul`：div_smul [IsAdicComplete I 
+A] : H.div (a • f) = a • H.div f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
 -/
 theorem smul_weierstrassDiv [IsAdicComplete (IsLocalRing.maximalIdeal A) A] :
     (a • f) /ʷ g = a • (f /ʷ g) := by
@@ -1839,34 +2017,32 @@ theorem smul_weierstrassDiv [IsAdicComplete (IsLocalRing.maximalIdeal A) A] :
   split_ifs <;> simp
 
 @[simp]
-/--
-theorem `weierstrassDiv_zero_left` / 定理 `weierstrassDiv_zero_left`
-
-English:
-theorem weierstrassDiv_zero_left
-  given: [IsAdicComplete (IsLocalRing.maximalIdeal A) A]
-  statement: 0 /ʷ g = 0
-  proof: by
-  simp_rw [weierstrassDiv]
-  split_ifs <;> simp
-
-alias zero_weierstrassDiv := weierstrassDiv_zero_left
-
-@[simp]
-
-中文:
-定理 weierstrassDiv_zero_left
-  条件: [是AdicComplete (是局部环.maximalIdeal A) A]
-  结论: 0 /ʷ g = 0
-  证明: by
-  simp_rw [weierstrassDiv]
-  split_ifs <;> simp
-
-alias zero_weierstrassDiv := weierstrassDiv_zero_left
-
-@[simp]
-
-Depends on / 依赖: simp_rw, split_ifs, weierstrassDiv
+/-
+**PowerSeries.weierstrassDiv_zero_left** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：weierstrassDiv_zero_left [IsAdicComplete (IsLocalRing.maximalIdeal A) A] :
+ 0 /ʷ g = 0
+参数：IsLocalRing.maximalIdeal A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsAdicComplete.toIsPrecomplete`：∀ {R : Type u_1} {inst : CommRing R} {I 
+: Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}
+   [self : IsAdicCom…
+· 使用定理 `PowerSeries.IsWeierstrassDivisor.of_map_ne_zero`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} [inst_1 : IsLocalRing A],   (PowerSeries.map (
+IsLocalRing.residue A)) g ≠ 0 → g.IsW…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.div_zero`：div_zero [IsAdicComplete I 
+A] : H.div 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
 -/
 theorem weierstrassDiv_zero_left [IsAdicComplete (IsLocalRing.maximalIdeal A) A] : 0 /ʷ g = 0 := by
   simp_rw [weierstrassDiv]
@@ -1875,28 +2051,35 @@ theorem weierstrassDiv_zero_left [IsAdicComplete (IsLocalRing.maximalIdeal A) A]
 alias zero_weierstrassDiv := weierstrassDiv_zero_left
 
 @[simp]
-/--
-theorem `add_weierstrassMod` / 定理 `add_weierstrassMod`
-
-English:
-theorem add_weierstrassMod
-  given: [IsAdicComplete (IsLocalRing.maximalIdeal A) A]
-  proof: by
-  simp_rw [weierstrassMod]
-  split_ifs <;> simp
-
-@[simp]
-
-中文:
-定理 add_weierstrassMod
-  条件: [是AdicComplete (是局部环.maximalIdeal A) A]
-  证明: by
-  simp_rw [weierstrassMod]
-  split_ifs <;> simp
-
-@[simp]
-
-Depends on / 依赖: simp_rw, split_ifs, weierstrassMod
+/-
+**PowerSeries.add_weierstrassMod** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：add_weierstrassMod [IsAdicComplete (IsLocalRing.maximalIdeal A) A] : (f + 
+f') %ʷ g = f %ʷ g + f' %ʷ g
+参数：IsLocalRing.maximalIdeal A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsAdicComplete.toIsPrecomplete`：∀ {R : Type u_1} {inst : CommRing R} {I 
+: Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}
+   [self : IsAdicCom…
+· 使用定理 `PowerSeries.IsWeierstrassDivisor.of_map_ne_zero`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} [inst_1 : IsLocalRing A],   (PowerSeries.map (
+IsLocalRing.residue A)) g ≠ 0 → g.IsW…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.mod_add`：mod_add [IsAdicComplete I A]
+ : H.mod (f + f') = H.mod f + H.mod f'
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 -/
 theorem add_weierstrassMod [IsAdicComplete (IsLocalRing.maximalIdeal A) A] :
     (f + f') %ʷ g = f %ʷ g + f' %ʷ g := by
@@ -1904,28 +2087,35 @@ theorem add_weierstrassMod [IsAdicComplete (IsLocalRing.maximalIdeal A) A] :
   split_ifs <;> simp
 
 @[simp]
-/--
-theorem `smul_weierstrassMod` / 定理 `smul_weierstrassMod`
-
-English:
-theorem smul_weierstrassMod
-  given: [IsAdicComplete (IsLocalRing.maximalIdeal A) A]
-  proof: by
-  simp_rw [weierstrassMod]
-  split_ifs <;> simp
-
-@[simp]
-
-中文:
-定理 smul_weierstrassMod
-  条件: [是AdicComplete (是局部环.maximalIdeal A) A]
-  证明: by
-  simp_rw [weierstrassMod]
-  split_ifs <;> simp
-
-@[simp]
-
-Depends on / 依赖: simp_rw, split_ifs, weierstrassMod
+/-
+**PowerSeries.smul_weierstrassMod** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：smul_weierstrassMod [IsAdicComplete (IsLocalRing.maximalIdeal A) A] : (a •
+ f) %ʷ g = a • (f %ʷ g)
+参数：IsLocalRing.maximalIdeal A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsAdicComplete.toIsPrecomplete`：∀ {R : Type u_1} {inst : CommRing R} {I 
+: Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}
+   [self : IsAdicCom…
+· 使用定理 `PowerSeries.IsWeierstrassDivisor.of_map_ne_zero`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} [inst_1 : IsLocalRing A],   (PowerSeries.map (
+IsLocalRing.residue A)) g ≠ 0 → g.IsW…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.mod_smul`：mod_smul [IsAdicComplete I 
+A] : H.mod (a • f) = a • H.mod f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
 -/
 theorem smul_weierstrassMod [IsAdicComplete (IsLocalRing.maximalIdeal A) A] :
     (a • f) %ʷ g = a • (f %ʷ g) := by
@@ -1933,30 +2123,32 @@ theorem smul_weierstrassMod [IsAdicComplete (IsLocalRing.maximalIdeal A) A] :
   split_ifs <;> simp
 
 @[simp]
-/--
-theorem `weierstrassMod_zero_left` / 定理 `weierstrassMod_zero_left`
-
-English:
-theorem weierstrassMod_zero_left
-  given: [IsAdicComplete (IsLocalRing.maximalIdeal A) A]
-  statement: 0 %ʷ g = 0
-  proof: by
-  simp_rw [weierstrassMod]
-  split_ifs <;> simp
-
-alias zero_weierstrassMod := weierstrassMod_zero_left
-
-中文:
-定理 weierstrassMod_zero_left
-  条件: [是AdicComplete (是局部环.maximalIdeal A) A]
-  结论: 0 %ʷ g = 0
-  证明: by
-  simp_rw [weierstrassMod]
-  split_ifs <;> simp
-
-alias zero_weierstrassMod := weierstrassMod_zero_left
-
-Depends on / 依赖: simp_rw, split_ifs, weierstrassMod
+/-
+**PowerSeries.weierstrassMod_zero_left** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：weierstrassMod_zero_left [IsAdicComplete (IsLocalRing.maximalIdeal A) A] :
+ 0 %ʷ g = 0
+参数：IsLocalRing.maximalIdeal A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsAdicComplete.toIsPrecomplete`：∀ {R : Type u_1} {inst : CommRing R} {I 
+: Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}
+   [self : IsAdicCom…
+· 使用定理 `PowerSeries.IsWeierstrassDivisor.of_map_ne_zero`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} [inst_1 : IsLocalRing A],   (PowerSeries.map (
+IsLocalRing.residue A)) g ≠ 0 → g.IsW…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `PowerSeries.IsWeierstrassDivisorAt.mod_zero`：mod_zero [IsAdicComplete I 
+A] : H.mod 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
 -/
 theorem weierstrassMod_zero_left [IsAdicComplete (IsLocalRing.maximalIdeal A) A] : 0 %ʷ g = 0 := by
   simp_rw [weierstrassMod]
@@ -1976,44 +2168,39 @@ end IsLocalRing
 then `PowerSeries.IsWeierstrassFactorizationAt g f h I` is a `Prop` which asserts that `f` is
 distinguished at `I`, `h` is a unit, such that `g = f * h`. -/
 @[mk_iff]
-/--
-Definition of `IsWeierstrassFactorizationAt` / `IsWeierstrassFactorizationAt` 的定义
+/-
+**PowerSeries.IsWeierstrassFactorizationAt** 是 Mathlib 中的一个归纳类型，位于命名空间 `PowerSer
+ies`。
+形式化陈述：{A : Type u_1} → [inst : CommRing A] → PowerSeries A → Polynomial A → Powe
+rSeries A → Ideal A → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsWeierstrassFactorizationAt
-  parameters: (g : A⟦X⟧) (f : A[X]) (h : A⟦X⟧) (I : Ideal A)
-  axioms and operations (3):
-    - isDistinguishedAt : f.IsDistinguishedAt I
-    - isUnit : IsUnit h
-    - eq_mul : g = f * h
-
-中文:
-结构 是WeierstrassFactorizationAt
-  参数: (g : A⟦X⟧) (f : A[X]) (h : A⟦X⟧) (I : 理想 A)
-  公理与运算 (3 个):
-    - isDistinguishedAt : f.是DistinguishedAt I
-    - isUnit : 是单位 h
-    - eq_mul : g = f * h
+--- 原说明 ---
+If `f` is a polynomial over `A`, `g` and `h` are power series over `A`,
+then `PowerSeries.IsWeierstrassFactorizationAt g f h I` is a `Prop` which assert
+s that `f` is
+distinguished at `I`, `h` is a unit, such that `g = f * h`.
 -/
 structure IsWeierstrassFactorizationAt (g : A⟦X⟧) (f : A[X]) (h : A⟦X⟧) (I : Ideal A) : Prop where
   isDistinguishedAt : f.IsDistinguishedAt I
   isUnit : IsUnit h
   eq_mul : g = f * h
 
-/--
-Definition of `IsWeierstrassFactorization` / `IsWeierstrassFactorization` 的定义
+/-- Version of `PowerSeries.IsWeierstrassFactorizationAt` for local rings with respect to
+its maximal ideal. -/
+/-
+**PowerSeries.IsWeierstrassFactorization** 是 Mathlib 中的一个缩写定义，位于命名空间 `PowerSerie
+s`。
+形式化陈述：IsWeierstrassFactorization (g : A⟦X⟧) (f : A[X]) (h : A⟦X⟧) [IsLocalRing A
+] : Prop
+参数：g : A⟦X⟧；f : A[X]；h : A⟦X⟧。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsWeierstrassFactorization
-  signature: (g : A⟦X⟧) (f : A[X]) (h : A⟦X⟧) [IsLocalRing A]
-  body: g.IsWeierstrassFactorizationAt f h (IsLocalRing.maximalIdeal A)
-
-中文:
-缩写 IsWeierstrassFactorization
-  签名: (g : A⟦X⟧) (f : A[X]) (h : A⟦X⟧) [是局部环 A]
-  定义体: g.IsWeierstrassFactorizationAt f h (IsLocalRing.maximalIdeal A)
-
-Depends on / 依赖: IsLocalRing, IsLocalRing.maximalIdeal, IsWeierstrassFactorizationAt, g.IsWeierstrassFactorizationAt, maximalIdeal
+--- 原说明 ---
+Version of `PowerSeries.IsWeierstrassFactorizationAt` for local rings with respe
+ct to
+its maximal ideal.
 -/
 abbrev IsWeierstrassFactorization (g : A⟦X⟧) (f : A[X]) (h : A⟦X⟧) [IsLocalRing A] : Prop :=
   g.IsWeierstrassFactorizationAt f h (IsLocalRing.maximalIdeal A)
@@ -2023,185 +2210,300 @@ namespace IsWeierstrassFactorizationAt
 variable {g : A⟦X⟧} {f : A[X]} {h : A⟦X⟧} {I : Ideal A} (H : g.IsWeierstrassFactorizationAt f h I)
 include H
 
-/--
-theorem `map_ne_zero_of_ne_top` / 定理 `map_ne_zero_of_ne_top`
-
-English:
-theorem map_ne_zero_of_ne_top
-  given: (hI : I != ⊤)
-  statement: g.map (Ideal.Quotient.mk I) != 0
-  proof: by
-  have := Ideal.Quotient.nontrivial_iff.mpr hI
-  rw [congr(map (Ideal.Quotient.mk I) $(H.eq_mul))]; rw [map_mul]; rw [← Polynomial.polynomial_map_coe]; rw [ne_eq]; rw [(H.isUnit.map _).mul_left_eq_zero]
-  exact_mod_cast f.map_monic_ne_zero (f := Ideal.Quotient.mk I) H.isDistinguishedAt.monic
-
-中文:
-定理 map_ne_zero_of_ne_top
-  条件: (hI : I != ⊤)
-  结论: g.map (理想.商.mk I) != 0
-  证明: by
-  have := Ideal.Quotient.nontrivial_iff.mpr hI
-  rw [congr(map (Ideal.Quotient.mk I) $(H.eq_mul))]; rw [map_mul]; rw [← Polynomial.polynomial_map_coe]; rw [ne_eq]; rw [(H.isUnit.map _).mul_left_eq_zero]
-  exact_mod_cast f.map_monic_ne_zero (f := Ideal.Quotient.mk I) H.isDistinguishedAt.monic
-
-Depends on / 依赖: H.eq_mul, H.isDistinguishedAt.monic, H.isUnit.map, Ideal.Quotient.mk, Ideal.Quotient.nontrivial_iff.mpr, Polynomial, Polynomial.polynomial_map_coe, Quotient, eq_mul, f.map_monic_ne_zero, isDistinguishedAt, isUnit, map_monic_ne_zero, map_mul, mul_left_eq_zero, ne_eq, nontrivial_iff, polynomial_map_coe
+/-
+**PowerSeries.IsWeierstrassFactorizationAt.map_ne_zero_of_ne_top** 是 Mathlib 中的一
+个定理，位于命名空间 `PowerSeries.IsWeierstrassFactorizationAt`。
+形式化陈述：map_ne_zero_of_ne_top (hI : I != ⊤) : g.map (Ideal.Quotient.mk I) != 0
+参数：hI : I != ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ideal.Quotient.nontrivial_iff`：∀ {R : Type u_3} [inst : Ring R] {I : Ide
+al R}, Nontrivial (R ⧸ I) ↔ I ≠ ⊤
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.eq_mul`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} {f : Polynomial A} {h : PowerSeries A} {I : Id
+eal A},   g.IsWeierstrassFactorizatio…
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Polynomial.polynomial_map_coe`：polynomial_map_coe {U V : Type*} [CommSem
+iring U] [CommSemiring V] {φ : U ->+* V} {f : Polynomial U} : Polynomial.map φ f
+ = PowerSeries.map …
+· 使用定理 `ne_eq`：∀ {α : Sort u_1} (a b : α), (a ≠ b) = ¬a = b
+· 使用定理 `IsUnit.mul_left_eq_zero`：mul_left_eq_zero {a b : M₀} (hb : IsUnit b) : a
+ * b = 0 ↔ a = 0
+· 使用定理 `IsUnit.map`：map [MonoidHomClass F M N] (f : F) {x : M} (h : IsUnit x) : 
+IsUnit (f x)
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.isUnit`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} {f : Polynomial A} {h : PowerSeries A} {I : Id
+eal A},   g.IsWeierstrassFactorizatio…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Polynomial.map_monic_ne_zero`：map_monic_ne_zero (hp : p.Monic) [Nontrivi
+al S] : p.map f != 0
+· 使用定理 `Polynomial.IsDistinguishedAt.monic`：∀ {R : Type u_1} [inst : CommRing R]
+ {f : Polynomial R} {I : Ideal R}, f.IsDistinguishedAt I → f.Monic
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.isDistinguishedAt`：∀ {A : Type 
+u_1} [inst : CommRing A] {g : PowerSeries A} {f : Polynomial A} {h : PowerSeries
+ A} {I : Ideal A},   g.IsWeierstrassFactorizatio…
 -/
-theorem map_ne_zero_of_ne_top (hI : I != ⊤) : g.map (Ideal.Quotient.mk I) != 0 := by
+theorem map_ne_zero_of_ne_top (hI : I ≠ ⊤) : g.map (Ideal.Quotient.mk I) ≠ 0 := by
   have := Ideal.Quotient.nontrivial_iff.mpr hI
-  rw [congr(map (Ideal.Quotient.mk I) $(H.eq_mul))]; rw [map_mul]; rw [← Polynomial.polynomial_map_coe]; rw [ne_eq]; rw [(H.isUnit.map _).mul_left_eq_zero]
+  rw [congr(map (Ideal.Quotient.mk I) $(H.eq_mul)), map_mul, ← Polynomial.polynomial_map_coe, ne_eq,
+    (H.isUnit.map _).mul_left_eq_zero]
   exact_mod_cast f.map_monic_ne_zero (f := Ideal.Quotient.mk I) H.isDistinguishedAt.monic
-
-/--
-theorem `degree_eq_coe_lift_order_map_of_ne_top` / 定理 `degree_eq_coe_lift_order_map_of_ne_top`
-
-English:
-theorem degree_eq_coe_lift_order_map_of_ne_top
-  given: (hI : I != ⊤)
-  proof: by
-  refine H.isDistinguishedAt.degree_eq_coe_lift_order_map g h ?_ H.eq_mul
-  contrapose hI
-  exact Ideal.eq_top_of_isUnit_mem _ hI (isUnit_iff_constantCoeff.1 H.isUnit)
-
-中文:
-定理 degree_eq_coe_lift_order_map_of_ne_top
-  条件: (hI : I != ⊤)
-  证明: by
-  refine H.isDistinguishedAt.degree_eq_coe_lift_order_map g h ?_ H.eq_mul
-  contrapose hI
-  exact Ideal.eq_top_of_isUnit_mem _ hI (isUnit_iff_constantCoeff.1 H.isUnit)
-
-Depends on / 依赖: H.eq_mul, H.isDistinguishedAt.degree_eq_coe_lift_order_map, H.isUnit, Ideal.eq_top_of_isUnit_mem, contrapose, degree_eq_coe_lift_order_map, eq_mul, eq_top_of_isUnit_mem, isDistinguishedAt, isUnit, isUnit_iff_constantCoeff
+/-
+**PowerSeries.IsWeierstrassFactorizationAt.degree_eq_coe_lift_order_map_of_ne_to
+p** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries.IsWeierstrassFactorizationAt`。
+形式化陈述：degree_eq_coe_lift_order_map_of_ne_top (hI : I != ⊤) : f.degree = (g.map (
+Ideal.Quotient.mk I)).order.lift (order_finite_iff_ne_zero.2 (H.map_ne_zero_of_n
+e_top hI))
+参数：hI : I != ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Polynomial.IsDistinguishedAt.degree_eq_coe_lift_order_map`：degree_eq_coe
+_lift_order_map (distinguish : g.IsDistinguishedAt I) (notMem : PowerSeries.cons
+tantCoeff h ∉ I) (eq : f = g * h) : g.degree = …
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.isDistinguishedAt`：∀ {A : Type 
+u_1} [inst : CommRing A] {g : PowerSeries A} {f : Polynomial A} {h : PowerSeries
+ A} {I : Ideal A},   g.IsWeierstrassFactorizatio…
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₄`：contrapose₄ {p q : Prop} : (q -> 
+p) -> (¬ p -> ¬ q)
+· 使用定理 `Ideal.eq_top_of_isUnit_mem`：eq_top_of_isUnit_mem {x} (hx : x in I) (h : 
+IsUnit x) : I = ⊤
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `PowerSeries.isUnit_iff_constantCoeff`：isUnit_iff_constantCoeff {φ : R⟦X⟧
+} : IsUnit φ ↔ IsUnit (constantCoeff φ)
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.isUnit`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} {f : Polynomial A} {h : PowerSeries A} {I : Id
+eal A},   g.IsWeierstrassFactorizatio…
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.eq_mul`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} {f : Polynomial A} {h : PowerSeries A} {I : Id
+eal A},   g.IsWeierstrassFactorizatio…
 -/
-theorem degree_eq_coe_lift_order_map_of_ne_top (hI : I != ⊤) :
+theorem degree_eq_coe_lift_order_map_of_ne_top (hI : I ≠ ⊤) :
     f.degree = (g.map (Ideal.Quotient.mk I)).order.lift
       (order_finite_iff_ne_zero.2 (H.map_ne_zero_of_ne_top hI)) := by
   refine H.isDistinguishedAt.degree_eq_coe_lift_order_map g h ?_ H.eq_mul
   contrapose hI
   exact Ideal.eq_top_of_isUnit_mem _ hI (isUnit_iff_constantCoeff.1 H.isUnit)
-
-/--
-theorem `natDegree_eq_toNat_order_map_of_ne_top` / 定理 `natDegree_eq_toNat_order_map_of_ne_top`
-
-English:
-theorem natDegree_eq_toNat_order_map_of_ne_top
-  given: (hI : I != ⊤)
-  proof: by
-  rw [Polynomial.natDegree]; rw [H.degree_eq_coe_lift_order_map_of_ne_top hI]; rw [ENat.lift_eq_toNat_of_lt_top]
-  exact WithBot.unbotD_coe _ _
-
-中文:
-定理 natDegree_eq_to自然数_order_map_of_ne_top
-  条件: (hI : I != ⊤)
-  证明: by
-  rw [Polynomial.natDegree]; rw [H.degree_eq_coe_lift_order_map_of_ne_top hI]; rw [ENat.lift_eq_toNat_of_lt_top]
-  exact WithBot.unbotD_coe _ _
-
-Depends on / 依赖: ENat.lift_eq_toNat_of_lt_top, H.degree_eq_coe_lift_order_map_of_ne_top, Polynomial, Polynomial.natDegree, WithBot, WithBot.unbotD_coe, degree_eq_coe_lift_order_map_of_ne_top, lift_eq_toNat_of_lt_top, natDegree, unbotD_coe
+/-
+**PowerSeries.IsWeierstrassFactorizationAt.natDegree_eq_toNat_order_map_of_ne_to
+p** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries.IsWeierstrassFactorizationAt`。
+形式化陈述：natDegree_eq_toNat_order_map_of_ne_top (hI : I != ⊤) : f.natDegree = (g.ma
+p (Ideal.Quotient.mk I)).order.toNat
+参数：hI : I != ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.natDegree.eq_1`：∀ {R : Type u} [inst : Semiring R] (p : Polyn
+omial R), p.natDegree = WithBot.unbotD 0 p.degree
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `PowerSeries.order_finite_iff_ne_zero`：order_finite_iff_ne_zero : (order 
+φ < ⊤) ↔ φ != 0
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.map_ne_zero_of_ne_top`：map_ne_z
+ero_of_ne_top (hI : I != ⊤) : g.map (Ideal.Quotient.mk I) != 0
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.degree_eq_coe_lift_order_map_of
+_ne_top`：degree_eq_coe_lift_order_map_of_ne_top (hI : I != ⊤) : f.degree = (g.ma
+p (Ideal.Quotient.mk I)).order.lift (order_finite_iff_ne_zero.2 (H.ma…
+· 使用定理 `ENat.lift_eq_toNat_of_lt_top`：lift_eq_toNat_of_lt_top {x : Nat∞} (hx : x
+ < ⊤) : x.lift hx = x.toNat
+· 使用定理 `WithBot.unbotD_coe`：unbotD_coe {α} (d x : α) : unbotD d x = x
 -/
-theorem natDegree_eq_toNat_order_map_of_ne_top (hI : I != ⊤) :
+theorem natDegree_eq_toNat_order_map_of_ne_top (hI : I ≠ ⊤) :
     f.natDegree = (g.map (Ideal.Quotient.mk I)).order.toNat := by
-  rw [Polynomial.natDegree]; rw [H.degree_eq_coe_lift_order_map_of_ne_top hI]; rw [ENat.lift_eq_toNat_of_lt_top]
+  rw [Polynomial.natDegree, H.degree_eq_coe_lift_order_map_of_ne_top hI,
+    ENat.lift_eq_toNat_of_lt_top]
   exact WithBot.unbotD_coe _ _
 
 /-- If `g = f * h` is a Weierstrass factorization, then there is a
 natural isomorphism `A[X] / (f) ≃ₐ[A] A⟦X⟧ / (g)`. -/
 @[simps! apply]
-/--
-Definition of `algEquivQuotient` / `algEquivQuotient` 的定义
+/-
+**PowerSeries.IsWeierstrassFactorizationAt.algEquivQuotient** 是 Mathlib 中的一个定义，位
+于命名空间 `PowerSeries.IsWeierstrassFactorizationAt`。
+形式化陈述：algEquivQuotient [IsAdicComplete I A] : (A[X] ⧸ Ideal.span {f}) ≃ₐ[A] A⟦X⟧
+ ⧸ Ideal.span {g}
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.isDistinguishedAt`：∀ {A : Type 
+u_1} [inst : CommRing A] {g : PowerSeries A} {f : Polynomial A} {h : PowerSeries
+ A} {I : Ideal A},   g.IsWeierstrassFactorizatio…
 
-English:
-definition algEquivQuotient
-  signature: [IsAdicComplete I A]
-  body: H.isDistinguishedAt.algEquivQuotient.trans Ideal.quotientEquivAlgOfEq A
-    by rw [H.eq_mul, Ideal.span_singleton_mul_right_unit H.isUnit]
-
-@[simp]
-
-中文:
-定义 algEquivQuotient
-  签名: [是AdicComplete I A]
-  定义体: H.isDistinguishedAt.algEquivQuotient.trans Ideal.quotientEquivAlgOfEq A
-    by rw [H.eq_mul, Ideal.span_singleton_mul_right_unit H.isUnit]
-
-@[simp]
-
-Depends on / 依赖: H.eq_mul, H.isDistinguishedAt.algEquivQuotient.trans, H.isUnit, Ideal.quotientEquivAlgOfEq, Ideal.span_singleton_mul_right_unit, algEquivQuotient, eq_mul, isDistinguishedAt, isUnit, quotientEquivAlgOfEq, span_singleton_mul_right_unit
+--- 原说明 ---
+If `g = f * h` is a Weierstrass factorization, then there is a
+natural isomorphism `A[X] / (f) ≃ₐ[A] A⟦X⟧ / (g)`.
 -/
 noncomputable def algEquivQuotient [IsAdicComplete I A] :
     (A[X] ⧸ Ideal.span {f}) ≃ₐ[A] A⟦X⟧ ⧸ Ideal.span {g} :=
-H.isDistinguishedAt.algEquivQuotient.trans Ideal.quotientEquivAlgOfEq A
+  H.isDistinguishedAt.algEquivQuotient.trans <| Ideal.quotientEquivAlgOfEq A <|
     by rw [H.eq_mul, Ideal.span_singleton_mul_right_unit H.isUnit]
 
 @[simp]
-/--
-theorem `algEquivQuotient_symm_apply` / 定理 `algEquivQuotient_symm_apply`
-
-English:
-theorem algEquivQuotient_symm_apply
-  given: [IsAdicComplete I A] (x : A⟦X⟧ ⧸ Ideal.span {g})
-  proof: by
-  simp [algEquivQuotient]
-
-中文:
-定理 algEquivQuotient_symm_apply
-  条件: [是AdicComplete I A] (x : A⟦X⟧ ⧸ 理想.span {g})
-  证明: by
-  simp [algEquivQuotient]
-
-Depends on / 依赖: algEquivQuotient
+/-
+**PowerSeries.IsWeierstrassFactorizationAt.algEquivQuotient_symm_apply** 是 Mathl
+ib 中的一个定理，位于命名空间 `PowerSeries.IsWeierstrassFactorizationAt`。
+形式化陈述：algEquivQuotient_symm_apply [IsAdicComplete I A] (x : A⟦X⟧ ⧸ Ideal.span {g
+}) : H.algEquivQuotient.symm x = Ideal.Quotient.mk _ (H.isDistinguishedAt.isWeie
+rstrassDivisorAt'.mod' <| Ideal.quotientEquivAlgOfEq A (by rw [H.eq_mul, Ideal.s
+pan_singleton_mul_right_unit H.isUnit]) x)
+参数：x : A⟦X⟧ ⧸ Ideal.span {g}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Polynomial.IsDistinguishedAt.isWeierstrassDivisorAt'`：∀ {A : Type u_1} [
+inst : CommRing A] {g : Polynomial A} {I : Ideal A},   g.IsDistinguishedAt I → ∀
+ [IsHausdorff I A], (↑g).IsWeierstrassDivi…
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.isDistinguishedAt`：∀ {A : Type 
+u_1} [inst : CommRing A] {g : PowerSeries A} {f : Polynomial A} {h : PowerSeries
+ A} {I : Ideal A},   g.IsWeierstrassFactorizatio…
+· 使用定理 `IsAdicComplete.toIsHausdorff`：∀ {R : Type u_1} {inst : CommRing R} {I : 
+Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}  
+ [self : IsAdicCom…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.quotientEquivAlgOfEq_symm`：quotientEquivAlgOfEq_symm {I J : Ideal 
+A} [I.IsTwoSided] [J.IsTwoSided] (h : I = J) : (quotientEquivAlgOfEq R₁ h).symm 
+= quotientEquivAlgOfE…
+· 使用定理 `Polynomial.IsDistinguishedAt.algEquivQuotient_symm_apply`：∀ {A : Type u_
+1} [inst : CommRing A] {g : Polynomial A} {I : Ideal A} (H : g.IsDistinguishedAt
+ I)   [inst_1 : IsAdicComplete I A] (a : Power…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem algEquivQuotient_symm_apply [IsAdicComplete I A] (x : A⟦X⟧ ⧸ Ideal.span {g}) :
     H.algEquivQuotient.symm x = Ideal.Quotient.mk _
       (H.isDistinguishedAt.isWeierstrassDivisorAt'.mod' <| Ideal.quotientEquivAlgOfEq A
         (by rw [H.eq_mul, Ideal.span_singleton_mul_right_unit H.isUnit]) x) := by
   simp [algEquivQuotient]
-
-/--
-theorem `mul` / 定理 `mul`
-
-English:
-theorem mul
-  given: {g' : A⟦X⟧} {f' : A[X]} {h' : A⟦X⟧} (H' : g'.IsWeierstrassFactorizationAt f' h' I)
-  proof: ⟨H.isDistinguishedAt.mul H'.isDistinguishedAt, H.isUnit.mul H'.isUnit, by
-    rw [H.eq_mul]; rw [H'.eq_mul]; rw [Polynomial.coe_mul]; ring⟩
-
-中文:
-定理 mul
-  条件: {g' : A⟦X⟧} {f' : A[X]} {h' : A⟦X⟧} (H' : g'.是WeierstrassFactorizationAt f' h' I)
-  证明: ⟨H.isDistinguishedAt.mul H'.isDistinguishedAt, H.isUnit.mul H'.isUnit, by
-    rw [H.eq_mul]; rw [H'.eq_mul]; rw [Polynomial.coe_mul]; ring⟩
-
-Depends on / 依赖: H.eq_mul, H.isDistinguishedAt.mul, H.isUnit.mul, Polynomial, Polynomial.coe_mul, coe_mul, eq_mul, isDistinguishedAt, isUnit
+/-
+**PowerSeries.IsWeierstrassFactorizationAt.mul** 是 Mathlib 中的一个定理，位于命名空间 `PowerS
+eries.IsWeierstrassFactorizationAt`。
+形式化陈述：mul {g' : A⟦X⟧} {f' : A[X]} {h' : A⟦X⟧} (H' : g'.IsWeierstrassFactorizatio
+nAt f' h' I) : (g * g').IsWeierstrassFactorizationAt (f * f') (h * h') I
+参数：H' : g'.IsWeierstrassFactorizationAt f' h' I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Polynomial.IsDistinguishedAt.mul`：mul {f f' : R[X]} {I : Ideal R} (hf : 
+f.IsDistinguishedAt I) (hf' : f'.IsDistinguishedAt I) : (f * f').IsDistinguished
+At I
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.isDistinguishedAt`：∀ {A : Type 
+u_1} [inst : CommRing A] {g : PowerSeries A} {f : Polynomial A} {h : PowerSeries
+ A} {I : Ideal A},   g.IsWeierstrassFactorizatio…
+· 使用定理 `IsUnit.mul`：∀ {M : Type u_1} [inst : Monoid M] {a b : M}, IsUnit a → IsU
+nit b → IsUnit (a * b)
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.isUnit`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} {f : Polynomial A} {h : PowerSeries A} {I : Id
+eal A},   g.IsWeierstrassFactorizatio…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.eq_mul`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} {f : Polynomial A} {h : PowerSeries A} {I : Id
+eal A},   g.IsWeierstrassFactorizatio…
+· 使用定理 `Polynomial.coe_mul`：coe_mul : ((φ * ψ : R[X]) : PowerSeries R) = φ * ψ
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
 -/
 theorem mul {g' : A⟦X⟧} {f' : A[X]} {h' : A⟦X⟧} (H' : g'.IsWeierstrassFactorizationAt f' h' I) :
     (g * g').IsWeierstrassFactorizationAt (f * f') (h * h') I :=
   ⟨H.isDistinguishedAt.mul H'.isDistinguishedAt, H.isUnit.mul H'.isUnit, by
-    rw [H.eq_mul]; rw [H'.eq_mul]; rw [Polynomial.coe_mul]; ring⟩
-
-/--
-theorem `smul` / 定理 `smul`
-
-English:
-theorem smul
-  given: {a : A} (ha : IsUnit a)
-  statement: (a • g).IsWeierstrassFactorizationAt f (a • h) I
-  proof: by
-  refine ⟨H.isDistinguishedAt, ?_, ?_⟩
-  · rw [Algebra.smul_def]
-    exact (ha.map _).mul H.isUnit
-  · simp [H.eq_mul]
-
-中文:
-定理 smul
-  条件: {a : A} (ha : 是单位 a)
-  结论: (a • g).是WeierstrassFactorizationAt f (a • h) I
-  证明: by
-  refine ⟨H.isDistinguishedAt, ?_, ?_⟩
-  · rw [Algebra.smul_def]
-    exact (ha.map _).mul H.isUnit
-  · simp [H.eq_mul]
-
-Depends on / 依赖: Algebra, Algebra.smul_def, H.eq_mul, H.isDistinguishedAt, H.isUnit, eq_mul, ha.map, isDistinguishedAt, isUnit, smul_def
+    rw [H.eq_mul, H'.eq_mul, Polynomial.coe_mul]; ring⟩
+/-
+**PowerSeries.IsWeierstrassFactorizationAt.smul** 是 Mathlib 中的一个定理，位于命名空间 `Power
+Series.IsWeierstrassFactorizationAt`。
+形式化陈述：smul {a : A} (ha : IsUnit a) : (a • g).IsWeierstrassFactorizationAt f (a •
+ h) I
+参数：ha : IsUnit a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.isDistinguishedAt`：∀ {A : Type 
+u_1} [inst : CommRing A] {g : PowerSeries A} {f : Polynomial A} {h : PowerSeries
+ A} {I : Ideal A},   g.IsWeierstrassFactorizatio…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
+· 使用定理 `IsUnit.mul`：∀ {M : Type u_1} [inst : Monoid M] {a b : M}, IsUnit a → IsU
+nit b → IsUnit (a * b)
+· 使用定理 `IsUnit.map`：map [MonoidHomClass F M N] (f : F) {x : M} (h : IsUnit x) : 
+IsUnit (f x)
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.isUnit`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} {f : Polynomial A} {h : PowerSeries A} {I : Id
+eal A},   g.IsWeierstrassFactorizatio…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.eq_mul`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} {f : Polynomial A} {h : PowerSeries A} {I : Id
+eal A},   g.IsWeierstrassFactorizatio…
+· 使用定理 `Algebra.mul_smul_comm`：∀ {R : Type u} {A : Type w} [inst : CommSemiring 
+R] [inst_1 : Semiring A] [inst_2 : Algebra R A] (s : R) (x y : A),   x * s • y =
+ s • (x * y…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem smul {a : A} (ha : IsUnit a) : (a • g).IsWeierstrassFactorizationAt f (a • h) I := by
   refine ⟨H.isDistinguishedAt, ?_, ?_⟩
@@ -2218,55 +2520,53 @@ namespace IsWeierstrassFactorization
 variable {g : A⟦X⟧} {f : A[X]} {h : A⟦X⟧} (H : g.IsWeierstrassFactorization f h)
 include H
 
-/--
-theorem `map_ne_zero` / 定理 `map_ne_zero`
-
-English:
-theorem map_ne_zero
-  statement: g.map (IsLocalRing.residue A) != 0
-  proof: H.map_ne_zero_of_ne_top (Ideal.IsMaximal.ne_top inferInstance)
-
-中文:
-定理 map_ne_zero
-  结论: g.map (是局部环.residue A) != 0
-  证明: H.map_ne_zero_of_ne_top (Ideal.IsMaximal.ne_top inferInstance)
-
-Depends on / 依赖: H.map_ne_zero_of_ne_top, Ideal.IsMaximal.ne_top, IsMaximal, map_ne_zero_of_ne_top, ne_top
+/-
+**PowerSeries.IsWeierstrassFactorization.map_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `
+PowerSeries.IsWeierstrassFactorization`。
+形式化陈述：map_ne_zero : g.map (IsLocalRing.residue A) != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.map_ne_zero_of_ne_top`：map_ne_z
+ero_of_ne_top (hI : I != ⊤) : g.map (Ideal.Quotient.mk I) != 0
+· 使用定理 `Ideal.IsMaximal.ne_top`：∀ {α : Type u} [inst : Semiring α] {I : Ideal α}
+, I.IsMaximal → I ≠ ⊤
+· 使用定理 `IsLocalRing.maximalIdeal.isMaximal`：∀ (R : Type u_1) [inst : CommSemirin
+g R] [inst_1 : IsLocalRing R], (IsLocalRing.maximalIdeal R).IsMaximal
 -/
-theorem map_ne_zero : g.map (IsLocalRing.residue A) != 0 :=
+theorem map_ne_zero : g.map (IsLocalRing.residue A) ≠ 0 :=
   H.map_ne_zero_of_ne_top (Ideal.IsMaximal.ne_top inferInstance)
-
-/--
-theorem `degree_eq_coe_lift_order_map` / 定理 `degree_eq_coe_lift_order_map`
-
-English:
-theorem degree_eq_coe_lift_order_map
-  statement: f.degree = (g.map (IsLocalRing.residue A)).order.lift
-  proof: H.degree_eq_coe_lift_order_map_of_ne_top (Ideal.IsMaximal.ne_top inferInstance)
-
-中文:
-定理 degree_eq_coe_lift_order_map
-  结论: f.degree = (g.map (是局部环.residue A)).order.lift
-  证明: H.degree_eq_coe_lift_order_map_of_ne_top (Ideal.IsMaximal.ne_top inferInstance)
-
-Depends on / 依赖: H.degree_eq_coe_lift_order_map_of_ne_top, Ideal.IsMaximal.ne_top, IsMaximal, degree_eq_coe_lift_order_map_of_ne_top, ne_top
+/-
+**PowerSeries.IsWeierstrassFactorization.degree_eq_coe_lift_order_map** 是 Mathli
+b 中的一个定理，位于命名空间 `PowerSeries.IsWeierstrassFactorization`。
+形式化陈述：degree_eq_coe_lift_order_map : f.degree = (g.map (IsLocalRing.residue A)).
+order.lift (order_finite_iff_ne_zero.2 H.map_ne_zero)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.degree_eq_coe_lift_order_map_of
+_ne_top`：degree_eq_coe_lift_order_map_of_ne_top (hI : I != ⊤) : f.degree = (g.ma
+p (Ideal.Quotient.mk I)).order.lift (order_finite_iff_ne_zero.2 (H.ma…
+· 使用定理 `Ideal.IsMaximal.ne_top`：∀ {α : Type u} [inst : Semiring α] {I : Ideal α}
+, I.IsMaximal → I ≠ ⊤
+· 使用定理 `IsLocalRing.maximalIdeal.isMaximal`：∀ (R : Type u_1) [inst : CommSemirin
+g R] [inst_1 : IsLocalRing R], (IsLocalRing.maximalIdeal R).IsMaximal
 -/
 theorem degree_eq_coe_lift_order_map : f.degree = (g.map (IsLocalRing.residue A)).order.lift
     (order_finite_iff_ne_zero.2 H.map_ne_zero) :=
   H.degree_eq_coe_lift_order_map_of_ne_top (Ideal.IsMaximal.ne_top inferInstance)
-
-/--
-theorem `natDegree_eq_toNat_order_map` / 定理 `natDegree_eq_toNat_order_map`
-
-English:
-theorem natDegree_eq_toNat_order_map
-  proof: H.natDegree_eq_toNat_order_map_of_ne_top (Ideal.IsMaximal.ne_top inferInstance)
-
-中文:
-定理 natDegree_eq_to自然数_order_map
-  证明: H.natDegree_eq_toNat_order_map_of_ne_top (Ideal.IsMaximal.ne_top inferInstance)
-
-Depends on / 依赖: H.natDegree_eq_toNat_order_map_of_ne_top, Ideal.IsMaximal.ne_top, IsMaximal, natDegree_eq_toNat_order_map_of_ne_top, ne_top
+/-
+**PowerSeries.IsWeierstrassFactorization.natDegree_eq_toNat_order_map** 是 Mathli
+b 中的一个定理，位于命名空间 `PowerSeries.IsWeierstrassFactorization`。
+形式化陈述：natDegree_eq_toNat_order_map : f.natDegree = (g.map (IsLocalRing.residue A
+)).order.toNat
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.natDegree_eq_toNat_order_map_of
+_ne_top`：natDegree_eq_toNat_order_map_of_ne_top (hI : I != ⊤) : f.natDegree = (g
+.map (Ideal.Quotient.mk I)).order.toNat
+· 使用定理 `Ideal.IsMaximal.ne_top`：∀ {α : Type u} [inst : Semiring α] {I : Ideal α}
+, I.IsMaximal → I ≠ ⊤
+· 使用定理 `IsLocalRing.maximalIdeal.isMaximal`：∀ (R : Type u_1) [inst : CommSemirin
+g R] [inst_1 : IsLocalRing R], (IsLocalRing.maximalIdeal R).IsMaximal
 -/
 theorem natDegree_eq_toNat_order_map :
     f.natDegree = (g.map (IsLocalRing.residue A)).order.toNat :=
@@ -2274,49 +2574,77 @@ theorem natDegree_eq_toNat_order_map :
 
 end IsWeierstrassFactorization
 
-/--
-theorem `IsWeierstrassDivision.isUnit_of_map_ne_zero` / 定理 `IsWeierstrassDivision.isUnit_of_map_ne_zero`
-
-English:
-theorem IsWeierstrassDivision.isUnit_of_map_ne_zero
-  proof: by
-  obtain ⟨H1 : r.degree < (g.map (IsLocalRing.residue A)).order.toNat, H2⟩ := H
-  set n := (g.map (IsLocalRing.residue A)).order.toNat
-  replace H2 := congr(coeff n (($H2).map (IsLocalRing.residue A)))
-  simp_rw [map_pow, map_X, coeff_X_pow_self, map_add, map_mul, coeff_map,
-    Polynomial.coeff_coe, Polynomial.coeff_eq_zero_of_degree_lt H1, map_zero, add_zero] at H2
-  rw [isUnit_iff_constantCoeff]; rw [← isUnit_map_iff (IsLocalRing.residue A)]
-  rw [coeff_mul]; rw [← Finset.sum_subset (s₁ := {(n]; rw [0)}) (by simp) (fun p hp hnotMem => ?_)]; rw [Finset.sum_singleton]; rw [coeff_map]; rw [coeff_map]; rw [coeff_zero_eq_constantCoeff]; rw [mul_comm] at H2
-  · exact .of_mul_eq_one _ H2.symm
-  · rw [coeff_of_lt_order p.1 ?_]
-    · rw [zero_mul]
-    · rw [← ENat.lt_lift_iff (h := order_finite_iff_ne_zero.2 hg), ENat.lift_eq_toNat_of_lt_top]
-      refine (Finset.HasAntidiagonal.antidiagonal.fst_le hp).lt_of_ne ?_
-      contrapose hnotMem
-      rwa [Finset.mem_singleton, Finset.HasAntidiagonal.antidiagonal_congr hp (by simp)]
-
-中文:
-定理 IsWeierstrassDivision.isUnit_of_map_ne_zero
-  证明: by
-  obtain ⟨H1 : r.degree < (g.map (IsLocalRing.residue A)).order.toNat, H2⟩ := H
-  set n := (g.map (IsLocalRing.residue A)).order.toNat
-  replace H2 := congr(coeff n (($H2).map (IsLocalRing.residue A)))
-  simp_rw [map_pow, map_X, coeff_X_pow_self, map_add, map_mul, coeff_map,
-    Polynomial.coeff_coe, Polynomial.coeff_eq_zero_of_degree_lt H1, map_zero, add_zero] at H2
-  rw [isUnit_iff_constantCoeff]; rw [← isUnit_map_iff (IsLocalRing.residue A)]
-  rw [coeff_mul]; rw [← Finset.sum_subset (s₁ := {(n]; rw [0)}) (by simp) (fun p hp hnotMem => ?_)]; rw [Finset.sum_singleton]; rw [coeff_map]; rw [coeff_map]; rw [coeff_zero_eq_constantCoeff]; rw [mul_comm] at H2
-  · exact .of_mul_eq_one _ H2.symm
-  · rw [coeff_of_lt_order p.1 ?_]
-    · rw [zero_mul]
-    · rw [← ENat.lt_lift_iff (h := order_finite_iff_ne_zero.2 hg), ENat.lift_eq_toNat_of_lt_top]
-      refine (Finset.HasAntidiagonal.antidiagonal.fst_le hp).lt_of_ne ?_
-      contrapose hnotMem
-      rwa [Finset.mem_singleton, Finset.HasAntidiagonal.antidiagonal_congr hp (by simp)]
-
-Depends on / 依赖: Finset, Finset.sum_subset, IsLocalRing, IsLocalRing.residue, Polynomial, Polynomial.coeff_coe, Polynomial.coeff_eq_zero_of_degree_lt, add_zero, coeff_X_pow_self, coeff_coe, coeff_eq_zero_of_degree_lt, coeff_map, coeff_mul, degree, g.map, isUnit_iff_constantCoeff, isUnit_map_iff, map_X, map_add, map_mul
+/-
+**PowerSeries.IsWeierstrassDivision.isUnit_of_map_ne_zero** 是 Mathlib 中的一个定理，位于命
+名空间 `PowerSeries.IsWeierstrassDivision`。
+形式化陈述：∀ {A : Type u_1} [inst : CommRing A] [inst_1 : IsLocalRing A] {g q : Power
+Series A} {r : Polynomial A},   (PowerSeries.map (IsLocalRing.residue A)) g ≠ 0 
+→     (PowerSeries.X ^ ((PowerSeries.map (IsLocalRing.residue A)) g).order.toNat
+).IsWeierstrassDivision g q r → IsUnit q
+参数：PowerSeries.map (IsLocalRing.residue A)；PowerSeries.X ^ ((PowerSeries.map (Is
+LocalRing.residue A)) g).order.toNat。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PowerSeries.isUnit_iff_constantCoeff`：isUnit_iff_constantCoeff {φ : R⟦X⟧
+} : IsUnit φ ↔ IsUnit (constantCoeff φ)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `isUnit_map_iff`：isUnit_map_iff (f : F) [IsLocalHom f] (a : R) : IsUnit (
+f a) ↔ IsUnit a
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `IsLocalRing.instIsLocalHomResidueFieldRingHomResidue`：∀ (R : Type u_1) [
+inst : CommRing R] [inst_1 : IsLocalRing R], IsLocalHom (IsLocalRing.residue R)
+· 使用定理 `IsUnit.of_mul_eq_one`：IsUnit.of_mul_eq_one [Monoid M] [IsDedekindFiniteM
+onoid M] {a : M} (b : M) (h : a * b = 1) : IsUnit a
+· 使用定理 `instIsDedekindFiniteMonoid`：∀ (M : Type u_2) [inst : CommMonoid M], IsDe
+dekindFiniteMonoid M
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `PowerSeries.coeff_zero_eq_constantCoeff`：coeff_zero_eq_constantCoeff : ⇑
+(coeff (R
+· 使用定理 `PowerSeries.coeff_map`：coeff_map (n : Nat) (φ : R⟦X⟧) : coeff n (map f φ
+) = f (coeff n φ)
+· 使用定理 `Finset.sum_singleton`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] (f : ι → M) (a : ι), ∑ x ∈ {a}, f x = f a
+· 使用定理 `Finset.sum_subset`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [i
+nst : AddCommMonoid M] {f : ι → M},   s₁ ⊆ s₂ → (∀ x ∈ s₂, x ∉ s₁ → f x = 0) → ∑
+ x ∈ s₁…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `PowerSeries.coeff_of_lt_order`：coeff_of_lt_order (n : Nat) (h : ↑n < ord
+er φ) : coeff n φ = 0
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `PowerSeries.order_finite_iff_ne_zero`：order_finite_iff_ne_zero : (order 
+φ < ⊤) ↔ φ != 0
+· 使用定理 `ENat.lt_lift_iff`：∀ {x : ℕ} {n : ℕ∞} {h : n < ⊤}, x < n.lift h ↔ ↑x < n
+· 使用定理 `ENat.lift_eq_toNat_of_lt_top`：lift_eq_toNat_of_lt_top {x : Nat∞} (hx : x
+ < ⊤) : x.lift hx = x.toNat
+· 使用定理 `LE.le.lt_of_ne`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a ≠ b → a < b
+· 使用定理 `Finset.HasAntidiagonal.antidiagonal.fst_le`：∀ {A : Type u_1} [inst : Add
+CommMonoid A] [inst_1 : PartialOrder A] [CanonicallyOrderedAdd A]   [inst_3 : Fi
+nset.HasAntidiagonal A] {n : A} …
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₄`：contrapose₄ {p q : Prop} : (q -> 
+p) -> (¬ p -> ¬ q)
+· 使用定理 `Finset.mem_singleton`：mem_singleton {a b : α} : b in ({a} : Finset α) ↔ 
+b = a
+· 使用定理 `Finset.HasAntidiagonal.antidiagonal_congr`：∀ {A : Type u_1} [inst : AddC
+ancelMonoid A] [inst_1 : Finset.HasAntidiagonal A] {p q : A × A} {n : A},   p ∈ 
+Finset.HasAntidiagonal.antidiag…
+（共 46 条，此处仅展示前 30 条）
 -/
 theorem IsWeierstrassDivision.isUnit_of_map_ne_zero
-    {g q : A⟦X⟧} {r : A[X]} (hg : g.map (IsLocalRing.residue A) != 0)
+    {g q : A⟦X⟧} {r : A[X]} (hg : g.map (IsLocalRing.residue A) ≠ 0)
     (H : (X ^ (g.map (IsLocalRing.residue A)).order.toNat).IsWeierstrassDivision g q r) :
     IsUnit q := by
   obtain ⟨H1 : r.degree < (g.map (IsLocalRing.residue A)).order.toNat, H2⟩ := H
@@ -2324,8 +2652,9 @@ theorem IsWeierstrassDivision.isUnit_of_map_ne_zero
   replace H2 := congr(coeff n (($H2).map (IsLocalRing.residue A)))
   simp_rw [map_pow, map_X, coeff_X_pow_self, map_add, map_mul, coeff_map,
     Polynomial.coeff_coe, Polynomial.coeff_eq_zero_of_degree_lt H1, map_zero, add_zero] at H2
-  rw [isUnit_iff_constantCoeff]; rw [← isUnit_map_iff (IsLocalRing.residue A)]
-  rw [coeff_mul]; rw [← Finset.sum_subset (s₁ := {(n]; rw [0)}) (by simp) (fun p hp hnotMem => ?_)]; rw [Finset.sum_singleton]; rw [coeff_map]; rw [coeff_map]; rw [coeff_zero_eq_constantCoeff]; rw [mul_comm] at H2
+  rw [isUnit_iff_constantCoeff, ← isUnit_map_iff (IsLocalRing.residue A)]
+  rw [coeff_mul, ← Finset.sum_subset (s₁ := {(n, 0)}) (by simp) (fun p hp hnotMem ↦ ?_),
+    Finset.sum_singleton, coeff_map, coeff_map, coeff_zero_eq_constantCoeff, mul_comm] at H2
   · exact .of_mul_eq_one _ H2.symm
   · rw [coeff_of_lt_order p.1 ?_]
     · rw [zero_mul]
@@ -2333,52 +2662,81 @@ theorem IsWeierstrassDivision.isUnit_of_map_ne_zero
       refine (Finset.HasAntidiagonal.antidiagonal.fst_le hp).lt_of_ne ?_
       contrapose hnotMem
       rwa [Finset.mem_singleton, Finset.HasAntidiagonal.antidiagonal_congr hp (by simp)]
-
-/--
-theorem `IsWeierstrassDivision.isWeierstrassFactorization` / 定理 `IsWeierstrassDivision.isWeierstrassFactorization`
-
-English:
-theorem IsWeierstrassDivision.isWeierstrassFactorization
-  proof: by
-  have H1 : r.degree < (g.map (IsLocalRing.residue A)).order.toNat := H.1
-  set n := (g.map (IsLocalRing.residue A)).order.toNat
-  set f := Polynomial.X ^ n - r
-  replace H1 : r.degree < (Polynomial.X (R := A) ^ n).degree := by rwa [Polynomial.degree_X_pow]
-  have hfdeg : f.natDegree = n := by
-    suffices f.degree = n by rw [Polynomial.natDegree, this]; rfl
-    rw [Polynomial.degree_sub_eq_left_of_degree_lt H1]; rw [Polynomial.degree_X_pow]
-  refine ⟨⟨⟨fun {i} hi => ?_⟩, .sub_of_left (Polynomial.monic_X_pow _) H1⟩, Units.isUnit _, ?_⟩
-  · rw [hfdeg] at hi
-    simp_rw [f, Polynomial.coeff_sub, Polynomial.coeff_X_pow, if_neg hi.ne, zero_sub, neg_mem_iff]
-    have := H.coeff_f_sub_r_mem hi
-    rwa [map_sub, coeff_X_pow, if_neg hi.ne, zero_sub, neg_mem_iff, Polynomial.coeff_coe] at this
-  · have := congr($(H.2) * ↑(H.isUnit_of_map_ne_zero hg).unit⁻¹)
-    rw [add_mul]; rw [mul_assoc]; rw [IsUnit.mul_val_inv]; rw [mul_one]; rw [← sub_eq_iff_eq_add] at this
-    simp_rw [← this, f, Polynomial.coe_sub, Polynomial.coe_pow, Polynomial.coe_X, sub_mul]
-
-中文:
-定理 IsWeierstrassDivision.isWeierstrassFactorization
-  证明: by
-  have H1 : r.degree < (g.map (IsLocalRing.residue A)).order.toNat := H.1
-  set n := (g.map (IsLocalRing.residue A)).order.toNat
-  set f := Polynomial.X ^ n - r
-  replace H1 : r.degree < (Polynomial.X (R := A) ^ n).degree := by rwa [Polynomial.degree_X_pow]
-  have hfdeg : f.natDegree = n := by
-    suffices f.degree = n by rw [Polynomial.natDegree, this]; rfl
-    rw [Polynomial.degree_sub_eq_left_of_degree_lt H1]; rw [Polynomial.degree_X_pow]
-  refine ⟨⟨⟨fun {i} hi => ?_⟩, .sub_of_left (Polynomial.monic_X_pow _) H1⟩, Units.isUnit _, ?_⟩
-  · rw [hfdeg] at hi
-    simp_rw [f, Polynomial.coeff_sub, Polynomial.coeff_X_pow, if_neg hi.ne, zero_sub, neg_mem_iff]
-    have := H.coeff_f_sub_r_mem hi
-    rwa [map_sub, coeff_X_pow, if_neg hi.ne, zero_sub, neg_mem_iff, Polynomial.coeff_coe] at this
-  · have := congr($(H.2) * ↑(H.isUnit_of_map_ne_zero hg).unit⁻¹)
-    rw [add_mul]; rw [mul_assoc]; rw [IsUnit.mul_val_inv]; rw [mul_one]; rw [← sub_eq_iff_eq_add] at this
-    simp_rw [← this, f, Polynomial.coe_sub, Polynomial.coe_pow, Polynomial.coe_X, sub_mul]
-
-Depends on / 依赖: IsLocalRing, IsLocalRing.residue, Polynomial, Polynomial.X, Polynomial.degree_X_pow, Polynomial.degree_sub_eq_left_of_degree_lt, Polynomial.monic_X_pow, Polynomial.natDegree, degree, degree_X_pow, degree_sub_eq_left_of_degree_lt, f.degree, f.natDegree, g.map, monic_X_pow, natDegree, order.toNat, r.degree, replace, residue
+/-
+**PowerSeries.IsWeierstrassDivision.isWeierstrassFactorization** 是 Mathlib 中的一个定
+理，位于命名空间 `PowerSeries.IsWeierstrassDivision`。
+形式化陈述：∀ {A : Type u_1} [inst : CommRing A] [inst_1 : IsLocalRing A] {g q : Power
+Series A} {r : Polynomial A}   (hg : (PowerSeries.map (IsLocalRing.residue A)) g
+ ≠ 0)   (H : (PowerSeries.X ^ ((PowerSeries.map (IsLocalRing.residue A)) g).orde
+r.toNat).IsWeierstrassDivision g q r),   g.IsWeierstrassFactorization (Polynomia
+l.X ^ ((PowerSeries.map (IsLocalRing.residue A)) g).order.toNat - r) ↑⋯.unit⁻¹
+参数：hg : (PowerSeries.map (IsLocalRing.residue A)) g ≠ 0；H : (PowerSeries.X ^ ((P
+owerSeries.map (IsLocalRing.residue A)) g).order.toNat).IsWeierstrassDivision g 
+q r；Polynomial.X ^ ((PowerSeries.map (IsLocalRing.residue A)) g).order.toNat - r
+。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.IsWeierstrassDivisionAt.degree_lt`：∀ {A : Type u_1} [inst : 
+CommRing A] {f g q : PowerSeries A} {r : Polynomial A} {I : Ideal A},   f.IsWeie
+rstrassDivisionAt g q r I → r.degre…
+· 使用定理 `PowerSeries.IsWeierstrassDivision.isUnit_of_map_ne_zero`：∀ {A : Type u_1
+} [inst : CommRing A] [inst_1 : IsLocalRing A] {g q : PowerSeries A} {r : Polyno
+mial A},   (PowerSeries.map (IsLocalRing.resi…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.degree_X_pow`：degree_X_pow : degree ((X : R[X]) ^ n) = n
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Polynomial.degree_sub_eq_left_of_degree_lt`：degree_sub_eq_left_of_degree
+_lt (h : degree q < degree p) : degree (p - q) = degree p
+· 使用定理 `Polynomial.natDegree.eq_1`：∀ {R : Type u} [inst : Semiring R] (p : Polyn
+omial R), p.natDegree = WithBot.unbotD 0 p.degree
+· 使用定理 `Polynomial.coeff_sub`：coeff_sub (p q : R[X]) (n : Nat) : coeff (p - q) n
+ = coeff p n - coeff q n
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Polynomial.coeff_X_pow`：coeff_X_pow (k n : Nat) : coeff (X ^ k : R[X]) n
+ = if n = k then 1 else 0
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `zero_sub`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 0 - a = -a
+· 使用定理 `NonUnitalSubringClass.toNegMemClass`：∀ {S : Type u_1} {R : Type u} {inst
+ : NonUnitalNonAssocRing R} {inst_1 : SetLike S R}   [self : NonUnitalSubringCla
+ss S R], NegMemClass S R
+· 使用定理 `instNonUnitalSubringClassIdeal`：∀ {R : Type u_1} [inst : Ring R], NonUni
+talSubringClass (Ideal R) R
+· 使用定理 `PowerSeries.IsWeierstrassDivisionAt.coeff_f_sub_r_mem`：coeff_f_sub_r_mem
+ (H : f.IsWeierstrassDivisionAt g q r I) {i : Nat} (hi : i < (g.map (Ideal.Quoti
+ent.mk I)).order.toNat) : coeff i (f - r : …
+· 使用定理 `Polynomial.coeff_coe`：coeff_coe (n) : PowerSeries.coeff n φ = coeff φ n
+· 使用定理 `neg_mem_iff`：∀ {S : Type u_3} {G : Type u_4} [inst : InvolutiveNeg G] {x
+ : SetLike S G} [NegMemClass S G] {H : S} {x_1 : G},   -x_1 ∈ H ↔ x_1 ∈ H
+· 使用定理 `PowerSeries.coeff_X_pow`：coeff_X_pow (m n : Nat) : coeff m ((X : R⟦X⟧) ^
+ n) = if m = n then 1 else 0
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `Polynomial.Monic.sub_of_left`：∀ {R : Type u} [inst : Ring R] {p q : Poly
+nomial R}, p.Monic → q.degree < p.degree → (p - q).Monic
+· 使用定理 `Polynomial.monic_X_pow`：monic_X_pow (n : Nat) : Monic (X ^ n : R[X])
+· 使用定理 `Units.isUnit`：∀ {M : Type u_1} [inst : Monoid M] (u : Mˣ), IsUnit ↑u
+· 使用定理 `PowerSeries.IsWeierstrassDivisionAt.eq_mul_add`：∀ {A : Type u_1} [inst :
+ CommRing A] {f g q : PowerSeries A} {r : Polynomial A} {I : Ideal A},   f.IsWei
+erstrassDivisionAt g q r I → f = g *…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_eq_iff_eq_add`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a -
+ b = c ↔ a = c + b
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `IsUnit.mul_val_inv`：mul_val_inv (h : IsUnit a) : a * ↑h.unit⁻¹ = 1
+（共 40 条，此处仅展示前 30 条）
 -/
 theorem IsWeierstrassDivision.isWeierstrassFactorization
-    {g q : A⟦X⟧} {r : A[X]} (hg : g.map (IsLocalRing.residue A) != 0)
+    {g q : A⟦X⟧} {r : A[X]} (hg : g.map (IsLocalRing.residue A) ≠ 0)
     (H : (X ^ (g.map (IsLocalRing.residue A)).order.toNat).IsWeierstrassDivision g q r) :
     g.IsWeierstrassFactorization
       (Polynomial.X ^ (g.map (IsLocalRing.residue A)).order.toNat - r)
@@ -2389,46 +2747,80 @@ theorem IsWeierstrassDivision.isWeierstrassFactorization
   replace H1 : r.degree < (Polynomial.X (R := A) ^ n).degree := by rwa [Polynomial.degree_X_pow]
   have hfdeg : f.natDegree = n := by
     suffices f.degree = n by rw [Polynomial.natDegree, this]; rfl
-    rw [Polynomial.degree_sub_eq_left_of_degree_lt H1]; rw [Polynomial.degree_X_pow]
-  refine ⟨⟨⟨fun {i} hi => ?_⟩, .sub_of_left (Polynomial.monic_X_pow _) H1⟩, Units.isUnit _, ?_⟩
+    rw [Polynomial.degree_sub_eq_left_of_degree_lt H1, Polynomial.degree_X_pow]
+  refine ⟨⟨⟨fun {i} hi ↦ ?_⟩, .sub_of_left (Polynomial.monic_X_pow _) H1⟩, Units.isUnit _, ?_⟩
   · rw [hfdeg] at hi
     simp_rw [f, Polynomial.coeff_sub, Polynomial.coeff_X_pow, if_neg hi.ne, zero_sub, neg_mem_iff]
     have := H.coeff_f_sub_r_mem hi
     rwa [map_sub, coeff_X_pow, if_neg hi.ne, zero_sub, neg_mem_iff, Polynomial.coeff_coe] at this
   · have := congr($(H.2) * ↑(H.isUnit_of_map_ne_zero hg).unit⁻¹)
-    rw [add_mul]; rw [mul_assoc]; rw [IsUnit.mul_val_inv]; rw [mul_one]; rw [← sub_eq_iff_eq_add] at this
+    rw [add_mul, mul_assoc, IsUnit.mul_val_inv, mul_one, ← sub_eq_iff_eq_add] at this
     simp_rw [← this, f, Polynomial.coe_sub, Polynomial.coe_pow, Polynomial.coe_X, sub_mul]
-
-/--
-theorem `IsWeierstrassFactorization.isWeierstrassDivision` / 定理 `IsWeierstrassFactorization.isWeierstrassDivision`
-
-English:
-theorem IsWeierstrassFactorization.isWeierstrassDivision
-  proof: by
-  set n := (g.map (IsLocalRing.residue A)).order.toNat with hn
-  constructor
-  · refine (Polynomial.degree_sub_lt_left ?_ (Polynomial.monic_X_pow n).ne_zero ?_).trans_eq
-      (by simpa)
-    · simp_rw [H.degree_eq_coe_lift_order_map, Polynomial.degree_X_pow, n,
-        ENat.lift_eq_toNat_of_lt_top]
-    · rw [(Polynomial.monic_X_pow n).leadingCoeff, H.isDistinguishedAt.monic.leadingCoeff]
-  · simp_rw [H.eq_mul, mul_assoc, IsUnit.mul_val_inv, mul_one, Polynomial.coe_sub,
-      Polynomial.coe_pow, Polynomial.coe_X, add_sub_cancel]
-
-中文:
-定理 IsWeierstrassFactorization.isWeierstrassDivision
-  证明: by
-  set n := (g.map (IsLocalRing.residue A)).order.toNat with hn
-  constructor
-  · refine (Polynomial.degree_sub_lt_left ?_ (Polynomial.monic_X_pow n).ne_zero ?_).trans_eq
-      (by simpa)
-    · simp_rw [H.degree_eq_coe_lift_order_map, Polynomial.degree_X_pow, n,
-        ENat.lift_eq_toNat_of_lt_top]
-    · rw [(Polynomial.monic_X_pow n).leadingCoeff, H.isDistinguishedAt.monic.leadingCoeff]
-  · simp_rw [H.eq_mul, mul_assoc, IsUnit.mul_val_inv, mul_one, Polynomial.coe_sub,
-      Polynomial.coe_pow, Polynomial.coe_X, add_sub_cancel]
-
-Depends on / 依赖: ENat.lift_eq_toNat_of_lt_top, H.degree_eq_coe_lift_order_map, H.eq_mul, H.isDistinguishedAt.monic.leadingCoeff, IsLocalRing, IsLocalRing.residue, IsUnit, IsUnit.mul_val_inv, Polynomial, Polynomial.coe_X, Polynomial.coe_pow, Polynomial.coe_sub, Polynomial.degree_X_pow, Polynomial.degree_sub_lt_left, Polynomial.monic_X_pow, add_sub_cancel, coe_X, coe_pow, coe_sub, degree_X_pow
+/-
+**PowerSeries.IsWeierstrassFactorization.isWeierstrassDivision** 是 Mathlib 中的一个定
+理，位于命名空间 `PowerSeries.IsWeierstrassFactorization`。
+形式化陈述：∀ {A : Type u_1} [inst : CommRing A] [inst_1 : IsLocalRing A] {g : PowerSe
+ries A} {f : Polynomial A} {h : PowerSeries A}   (H : g.IsWeierstrassFactorizati
+on f h),   (PowerSeries.X ^ ((PowerSeries.map (IsLocalRing.residue A)) g).order.
+toNat).IsWeierstrassDivision g (↑⋯.unit⁻¹)     (Polynomial.X ^ ((PowerSeries.map
+ (IsLocalRing.residue A)) g).order.toNat - f)
+参数：H : g.IsWeierstrassFactorization f h；PowerSeries.X ^ ((PowerSeries.map (IsLoc
+alRing.residue A)) g).order.toNat；↑⋯.unit⁻¹；Polynomial.X ^ ((PowerSeries.map (Is
+LocalRing.residue A)) g).order.toNat - f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.isUnit`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} {f : Polynomial A} {h : PowerSeries A} {I : Id
+eal A},   g.IsWeierstrassFactorizatio…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LT.lt.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LT α], a < b → b = 
+c → a < c
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Polynomial.degree_sub_lt_left`：degree_sub_lt_left (hd : degree p = degre
+e q) (hp0 : p != 0) (hlc : leadingCoeff p = leadingCoeff q) : degree (p - q) < d
+egree p
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `PowerSeries.order_finite_iff_ne_zero`：order_finite_iff_ne_zero : (order 
+φ < ⊤) ↔ φ != 0
+· 使用定理 `PowerSeries.IsWeierstrassFactorization.map_ne_zero`：map_ne_zero : g.map 
+(IsLocalRing.residue A) != 0
+· 使用定理 `PowerSeries.IsWeierstrassFactorization.degree_eq_coe_lift_order_map`：deg
+ree_eq_coe_lift_order_map : f.degree = (g.map (IsLocalRing.residue A)).order.lif
+t (order_finite_iff_ne_zero.2 H.map_ne_zero)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Polynomial.degree_X_pow`：degree_X_pow : degree ((X : R[X]) ^ n) = n
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `ENat.lift_eq_toNat_of_lt_top`：lift_eq_toNat_of_lt_top {x : Nat∞} (hx : x
+ < ⊤) : x.lift hx = x.toNat
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Polynomial.Monic.ne_zero`：∀ {R : Type u} [inst : Semiring R] [Nontrivial
+ R] {p : Polynomial R}, p.Monic → p ≠ 0
+· 使用定理 `Polynomial.monic_X_pow`：monic_X_pow (n : Nat) : Monic (X ^ n : R[X])
+· 使用定理 `Polynomial.Monic.leadingCoeff`：∀ {R : Type u} [inst : Semiring R] {p : P
+olynomial R}, p.Monic → p.leadingCoeff = 1
+· 使用定理 `Polynomial.IsDistinguishedAt.monic`：∀ {R : Type u_1} [inst : CommRing R]
+ {f : Polynomial R} {I : Ideal R}, f.IsDistinguishedAt I → f.Monic
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.isDistinguishedAt`：∀ {A : Type 
+u_1} [inst : CommRing A] {g : PowerSeries A} {f : Polynomial A} {h : PowerSeries
+ A} {I : Ideal A},   g.IsWeierstrassFactorizatio…
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.eq_mul`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} {f : Polynomial A} {h : PowerSeries A} {I : Id
+eal A},   g.IsWeierstrassFactorizatio…
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `IsUnit.mul_val_inv`：mul_val_inv (h : IsUnit a) : a * ↑h.unit⁻¹ = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用引理 `Polynomial.coe_sub`：coe_sub (p q : R[X]) : ((p - q : R[X]) : PowerSeries
+ R) = p - q
+· 使用定理 `Polynomial.coe_pow`：coe_pow (n : Nat) : ((φ ^ n : R[X]) : PowerSeries R)
+ = (φ : PowerSeries R) ^ n
+· 使用定理 `Polynomial.coe_X`：coe_X : ((X : R[X]) : PowerSeries R) = PowerSeries.X
+· 使用定理 `add_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G), a + 
+(b - a) = b
 -/
 theorem IsWeierstrassFactorization.isWeierstrassDivision
     {g : A⟦X⟧} {f : A[X]} {h : A⟦X⟧} (H : g.IsWeierstrassFactorization f h) :
@@ -2444,377 +2836,505 @@ theorem IsWeierstrassFactorization.isWeierstrassDivision
   · simp_rw [H.eq_mul, mul_assoc, IsUnit.mul_val_inv, mul_one, Polynomial.coe_sub,
       Polynomial.coe_pow, Polynomial.coe_X, add_sub_cancel]
 
-/--
-theorem `IsWeierstrassFactorization.elim` / 定理 `IsWeierstrassFactorization.elim`
+/-- The `f` and `h` in the Weierstrass preparation theorem are unique.
 
-English:
-theorem IsWeierstrassFactorization.elim
-  statement: [IsHausdorff (IsLocalRing.maximalIdeal A) A]
-  proof: by
-  obtain ⟨h1, h2⟩ := H.isWeierstrassDivision.elim H.map_ne_zero H2.isWeierstrassDivision
-  rw [← Units.ext_iff]; rw [inv_inj]; rw [Units.ext_iff] at h1
-  exact ⟨by simpa using h2, h1⟩
+This result is stated using two `PowerSeries.IsWeierstrassFactorization` assertions, and only
+requires the ring being Hausdorff with respect to the maximal ideal. If you want `f` and `h` equal
+to `PowerSeries.weierstrassDistinguished` and `PowerSeries.weierstrassUnit`,
+use `PowerSeries.IsWeierstrassFactorization.unique` instead, which requires the ring being
+complete with respect to the maximal ideal. -/
+/-
+**PowerSeries.IsWeierstrassFactorization.elim** 是 Mathlib 中的一个定理，位于命名空间 `PowerSe
+ries.IsWeierstrassFactorization`。
+形式化陈述：∀ {A : Type u_1} [inst : CommRing A] [inst_1 : IsLocalRing A] [IsHausdorff
+ (IsLocalRing.maximalIdeal A) A]   {g : PowerSeries A} {f f' : Polynomial A} {h 
+h' : PowerSeries A},   g.IsWeierstrassFactorization f h → g.IsWeierstrassFactori
+zation f' h' → f = f' ∧ h = h'
+参数：IsLocalRing.maximalIdeal A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.isUnit`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} {f : Polynomial A} {h : PowerSeries A} {I : Id
+eal A},   g.IsWeierstrassFactorizatio…
+· 使用定理 `PowerSeries.IsWeierstrassDivision.elim`：∀ {A : Type u_1} [inst : CommRin
+g A] [inst_1 : IsLocalRing A] {f g : PowerSeries A},   (PowerSeries.map (IsLocal
+Ring.residue A)) g ≠ 0 →    …
+· 使用定理 `PowerSeries.IsWeierstrassFactorization.map_ne_zero`：map_ne_zero : g.map 
+(IsLocalRing.residue A) != 0
+· 使用定理 `PowerSeries.IsWeierstrassFactorization.isWeierstrassDivision`：∀ {A : Typ
+e u_1} [inst : CommRing A] [inst_1 : IsLocalRing A] {g : PowerSeries A} {f : Pol
+ynomial A} {h : PowerSeries A}   (H : g.IsWeierstr…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Units.ext_iff`：∀ {α : Type u} [inst : Monoid α] {u v : αˣ}, u = v ↔ ↑u =
+ ↑v
+· 使用定理 `inv_inj`：inv_inj : a⁻¹ = b⁻¹ ↔ a = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-中文:
-定理 IsWeierstrassFactorization.elim
-  结论: [是豪斯多夫 (是局部环.maximalIdeal A) A]
-  证明: by
-  obtain ⟨h1, h2⟩ := H.isWeierstrassDivision.elim H.map_ne_zero H2.isWeierstrassDivision
-  rw [← Units.ext_iff]; rw [inv_inj]; rw [Units.ext_iff] at h1
-  exact ⟨by simpa using h2, h1⟩
+--- 原说明 ---
+The `f` and `h` in the Weierstrass preparation theorem are unique.
 
-Depends on / 依赖: H.isWeierstrassDivision.elim, H.map_ne_zero, H2.isWeierstrassDivision, Units.ext_iff, ext_iff, inv_inj, isWeierstrassDivision, map_ne_zero
+This result is stated using two `PowerSeries.IsWeierstrassFactorization` asserti
+ons, and only
+requires the ring being Hausdorff with respect to the maximal ideal. If you want
+ `f` and `h` equal
+to `PowerSeries.weierstrassDistinguished` and `PowerSeries.weierstrassUnit`,
+use `PowerSeries.IsWeierstrassFactorization.unique` instead, which requires the 
+ring being
+complete with respect to the maximal ideal.
 -/
 theorem IsWeierstrassFactorization.elim [IsHausdorff (IsLocalRing.maximalIdeal A) A]
     {g : A⟦X⟧} {f f' : A[X]} {h h' : A⟦X⟧} (H : g.IsWeierstrassFactorization f h)
     (H2 : g.IsWeierstrassFactorization f' h') : f = f' ∧ h = h' := by
   obtain ⟨h1, h2⟩ := H.isWeierstrassDivision.elim H.map_ne_zero H2.isWeierstrassDivision
-  rw [← Units.ext_iff]; rw [inv_inj]; rw [Units.ext_iff] at h1
+  rw [← Units.ext_iff, inv_inj, Units.ext_iff] at h1
   exact ⟨by simpa using h2, h1⟩
 
 section IsAdicComplete
 
 variable [IsAdicComplete (IsLocalRing.maximalIdeal A) A] {a : A} {g g' : A⟦X⟧} {f : A[X]} {h : A⟦X⟧}
 
-/--
-theorem `exists_isWeierstrassFactorization` / 定理 `exists_isWeierstrassFactorization`
+/-- **Weierstrass preparation theorem** ([washington_cyclotomic], Theorem 7.3):
+let `g` be a power series over a complete local ring,
+such that its image in the residue field is not zero. Then there exists a distinguished
+polynomial `f` and a power series `h` which is a unit, such that `g = f * h`. -/
+/-
+**PowerSeries.exists_isWeierstrassFactorization** 是 Mathlib 中的一个定理，位于命名空间 `Power
+Series`。
+形式化陈述：exists_isWeierstrassFactorization (hg : g.map (IsLocalRing.residue A) != 0
+) : exists f h, g.IsWeierstrassFactorization f h
+参数：hg : g.map (IsLocalRing.residue A) != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.exists_isWeierstrassDivision`：exists_isWeierstrassDivision [
+IsAdicComplete (IsLocalRing.maximalIdeal A) A] (hg : g.map (IsLocalRing.residue 
+A) != 0) : exists q r, f.IsWei…
+· 使用定理 `PowerSeries.IsWeierstrassDivision.isUnit_of_map_ne_zero`：∀ {A : Type u_1
+} [inst : CommRing A] [inst_1 : IsLocalRing A] {g q : PowerSeries A} {r : Polyno
+mial A},   (PowerSeries.map (IsLocalRing.resi…
+· 使用定理 `PowerSeries.IsWeierstrassDivision.isWeierstrassFactorization`：∀ {A : Typ
+e u_1} [inst : CommRing A] [inst_1 : IsLocalRing A] {g q : PowerSeries A} {r : P
+olynomial A}   (hg : (PowerSeries.map (IsLocalRing…
 
-English:
-theorem exists_isWeierstrassFactorization
-  given: (hg : g.map (IsLocalRing.residue A) != 0)
-  proof: by
-  obtain ⟨q, r, H⟩ :=
-    (X ^ (g.map (IsLocalRing.residue A)).order.toNat).exists_isWeierstrassDivision hg
-  exact ⟨_, _, H.isWeierstrassFactorization hg⟩
-
-中文:
-定理 存在_isWeierstrassFactorization
-  条件: (hg : g.map (是局部环.residue A) != 0)
-  证明: by
-  obtain ⟨q, r, H⟩ :=
-    (X ^ (g.map (IsLocalRing.residue A)).order.toNat).exists_isWeierstrassDivision hg
-  exact ⟨_, _, H.isWeierstrassFactorization hg⟩
-
-Depends on / 依赖: H.isWeierstrassFactorization, IsLocalRing, IsLocalRing.residue, exists_isWeierstrassDivision, g.map, isWeierstrassFactorization, order.toNat, residue
+--- 原说明 ---
+**Weierstrass preparation theorem** ([washington_cyclotomic], Theorem 7.3):
+let `g` be a power series over a complete local ring,
+such that its image in the residue field is not zero. Then there exists a distin
+guished
+polynomial `f` and a power series `h` which is a unit, such that `g = f * h`.
 -/
-theorem exists_isWeierstrassFactorization (hg : g.map (IsLocalRing.residue A) != 0) :
-    exists f h, g.IsWeierstrassFactorization f h := by
+theorem exists_isWeierstrassFactorization (hg : g.map (IsLocalRing.residue A) ≠ 0) :
+    ∃ f h, g.IsWeierstrassFactorization f h := by
   obtain ⟨q, r, H⟩ :=
     (X ^ (g.map (IsLocalRing.residue A)).order.toNat).exists_isWeierstrassDivision hg
   exact ⟨_, _, H.isWeierstrassFactorization hg⟩
 
 variable (g) in
-/--
-Definition of `weierstrassDistinguished` / `weierstrassDistinguished` 的定义
+/-- The `f` in the Weierstrass preparation theorem. -/
+/-
+**PowerSeries.weierstrassDistinguished** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries`。
+形式化陈述：weierstrassDistinguished (hg : g.map (IsLocalRing.residue A) != 0) : A[X]
+参数：hg : g.map (IsLocalRing.residue A) != 0。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.exists_isWeierstrassFactorization`：exists_isWeierstrassFacto
+rization (hg : g.map (IsLocalRing.residue A) != 0) : exists f h, g.IsWeierstrass
+Factorization f h
 
-English:
-definition weierstrassDistinguished
-  signature: (hg : g.map (IsLocalRing.residue A) != 0)
-  body: (g.exists_isWeierstrassFactorization hg).choose
-
-中文:
-定义 weierstrassDistinguished
-  签名: (hg : g.map (是局部环.residue A) != 0)
-  定义体: (g.exists_isWeierstrassFactorization hg).choose
-
-Depends on / 依赖: exists_isWeierstrassFactorization, g.exists_isWeierstrassFactorization
+--- 原说明 ---
+The `f` in the Weierstrass preparation theorem.
 -/
-noncomputable def weierstrassDistinguished (hg : g.map (IsLocalRing.residue A) != 0) : A[X] :=
+noncomputable def weierstrassDistinguished (hg : g.map (IsLocalRing.residue A) ≠ 0) : A[X] :=
   (g.exists_isWeierstrassFactorization hg).choose
 
 variable (g) in
-/--
-Definition of `weierstrassUnit` / `weierstrassUnit` 的定义
+/-- The `h` in the Weierstrass preparation theorem. -/
+/-
+**PowerSeries.weierstrassUnit** 是 Mathlib 中的一个定义，位于命名空间 `PowerSeries`。
+形式化陈述：weierstrassUnit (hg : g.map (IsLocalRing.residue A) != 0) : A⟦X⟧
+参数：hg : g.map (IsLocalRing.residue A) != 0。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.exists_isWeierstrassFactorization`：exists_isWeierstrassFacto
+rization (hg : g.map (IsLocalRing.residue A) != 0) : exists f h, g.IsWeierstrass
+Factorization f h
 
-English:
-definition weierstrassUnit
-  signature: (hg : g.map (IsLocalRing.residue A) != 0)
-  body: (g.exists_isWeierstrassFactorization hg).choose_spec.choose
-
-中文:
-定义 weierstrassUnit
-  签名: (hg : g.map (是局部环.residue A) != 0)
-  定义体: (g.exists_isWeierstrassFactorization hg).choose_spec.choose
-
-Depends on / 依赖: choose_spec, choose_spec.choose, exists_isWeierstrassFactorization, g.exists_isWeierstrassFactorization
+--- 原说明 ---
+The `h` in the Weierstrass preparation theorem.
 -/
-noncomputable def weierstrassUnit (hg : g.map (IsLocalRing.residue A) != 0) : A⟦X⟧ :=
+noncomputable def weierstrassUnit (hg : g.map (IsLocalRing.residue A) ≠ 0) : A⟦X⟧ :=
   (g.exists_isWeierstrassFactorization hg).choose_spec.choose
-
-/--
-theorem `isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit` / 定理 `isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit`
-
-English:
-theorem isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
-  proof: (g.exists_isWeierstrassFactorization hg).choose_spec.choose_spec
-
-中文:
-定理 isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
-  证明: (g.exists_isWeierstrassFactorization hg).choose_spec.choose_spec
-
-Depends on / 依赖: choose_spec, choose_spec.choose_spec, exists_isWeierstrassFactorization, g.exists_isWeierstrassFactorization
+/-
+**PowerSeries.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUni
+t** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit (hg : 
+g.map (IsLocalRing.residue A) != 0) : g.IsWeierstrassFactorization (g.weierstras
+sDistinguished hg) (g.weierstrassUnit hg)
+参数：hg : g.map (IsLocalRing.residue A) != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `PowerSeries.exists_isWeierstrassFactorization`：exists_isWeierstrassFacto
+rization (hg : g.map (IsLocalRing.residue A) != 0) : exists f h, g.IsWeierstrass
+Factorization f h
 -/
 theorem isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
-    (hg : g.map (IsLocalRing.residue A) != 0) :
+    (hg : g.map (IsLocalRing.residue A) ≠ 0) :
     g.IsWeierstrassFactorization (g.weierstrassDistinguished hg) (g.weierstrassUnit hg) :=
   (g.exists_isWeierstrassFactorization hg).choose_spec.choose_spec
 
-/--
-Definition of `algEquivQuotientWeierstrassDistinguished` / `algEquivQuotientWeierstrassDistinguished` 的定义
+/-- If `g` is a power series over a complete local ring,
+such that its image in the residue field is not zero, then there is a natural isomorphism
+`A[X] / (f) ≃ₐ[A] A⟦X⟧ / (g)` where `f` is `PowerSeries.weierstrassDistinguished g`. -/
+/-
+**PowerSeries.algEquivQuotientWeierstrassDistinguished** 是 Mathlib 中的一个缩写定义，位于命名
+空间 `PowerSeries`。
+形式化陈述：algEquivQuotientWeierstrassDistinguished (hg : g.map (IsLocalRing.residue 
+A) != 0)
+参数：hg : g.map (IsLocalRing.residue A) != 0。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.isWeierstrassFactorization_weierstrassDistinguished_weierstr
+assUnit`：isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit (hg
+ : g.map (IsLocalRing.residue A) != 0) : g.IsWeierstrassFactorization…
 
-English:
-abbreviation algEquivQuotientWeierstrassDistinguished
-  body: (g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit hg).algEquivQuotient
-
-中文:
-缩写 algEquivQuotientWeierstrassDistinguished
-  定义体: (g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit hg).algEquivQuotient
-
-Depends on / 依赖: algEquivQuotient, g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit, isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
+--- 原说明 ---
+If `g` is a power series over a complete local ring,
+such that its image in the residue field is not zero, then there is a natural is
+omorphism
+`A[X] / (f) ≃ₐ[A] A⟦X⟧ / (g)` where `f` is `PowerSeries.weierstrassDistinguished
+ g`.
 -/
 noncomputable abbrev algEquivQuotientWeierstrassDistinguished
-    (hg : g.map (IsLocalRing.residue A) != 0) :=
+    (hg : g.map (IsLocalRing.residue A) ≠ 0) :=
   (g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit hg).algEquivQuotient
-
-/--
-theorem `isDistinguishedAt_weierstrassDistinguished` / 定理 `isDistinguishedAt_weierstrassDistinguished`
-
-English:
-theorem isDistinguishedAt_weierstrassDistinguished
-  given: (hg : g.map (IsLocalRing.residue A) != 0)
-  proof: (g.exists_isWeierstrassFactorization hg).choose_spec.choose_spec.isDistinguishedAt
-
-中文:
-定理 isDistinguishedAt_weierstrassDistinguished
-  条件: (hg : g.map (是局部环.residue A) != 0)
-  证明: (g.exists_isWeierstrassFactorization hg).choose_spec.choose_spec.isDistinguishedAt
-
-Depends on / 依赖: choose_spec, choose_spec.choose_spec.isDistinguishedAt, exists_isWeierstrassFactorization, g.exists_isWeierstrassFactorization, isDistinguishedAt
+/-
+**PowerSeries.isDistinguishedAt_weierstrassDistinguished** 是 Mathlib 中的一个定理，位于命名
+空间 `PowerSeries`。
+形式化陈述：isDistinguishedAt_weierstrassDistinguished (hg : g.map (IsLocalRing.residu
+e A) != 0) : (g.weierstrassDistinguished hg).IsDistinguishedAt (IsLocalRing.maxi
+malIdeal A)
+参数：hg : g.map (IsLocalRing.residue A) != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.isDistinguishedAt`：∀ {A : Type 
+u_1} [inst : CommRing A] {g : PowerSeries A} {f : Polynomial A} {h : PowerSeries
+ A} {I : Ideal A},   g.IsWeierstrassFactorizatio…
+· 使用定理 `PowerSeries.exists_isWeierstrassFactorization`：exists_isWeierstrassFacto
+rization (hg : g.map (IsLocalRing.residue A) != 0) : exists f h, g.IsWeierstrass
+Factorization f h
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 -/
-theorem isDistinguishedAt_weierstrassDistinguished (hg : g.map (IsLocalRing.residue A) != 0) :
+theorem isDistinguishedAt_weierstrassDistinguished (hg : g.map (IsLocalRing.residue A) ≠ 0) :
     (g.weierstrassDistinguished hg).IsDistinguishedAt (IsLocalRing.maximalIdeal A) :=
   (g.exists_isWeierstrassFactorization hg).choose_spec.choose_spec.isDistinguishedAt
-
-/--
-theorem `isUnit_weierstrassUnit` / 定理 `isUnit_weierstrassUnit`
-
-English:
-theorem isUnit_weierstrassUnit
-  given: (hg : g.map (IsLocalRing.residue A) != 0)
-  proof: (g.exists_isWeierstrassFactorization hg).choose_spec.choose_spec.isUnit
-
-中文:
-定理 isUnit_weierstrassUnit
-  条件: (hg : g.map (是局部环.residue A) != 0)
-  证明: (g.exists_isWeierstrassFactorization hg).choose_spec.choose_spec.isUnit
-
-Depends on / 依赖: choose_spec, choose_spec.choose_spec.isUnit, exists_isWeierstrassFactorization, g.exists_isWeierstrassFactorization, isUnit
+/-
+**PowerSeries.isUnit_weierstrassUnit** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：isUnit_weierstrassUnit (hg : g.map (IsLocalRing.residue A) != 0) : IsUnit 
+(g.weierstrassUnit hg)
+参数：hg : g.map (IsLocalRing.residue A) != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.isUnit`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} {f : Polynomial A} {h : PowerSeries A} {I : Id
+eal A},   g.IsWeierstrassFactorizatio…
+· 使用定理 `PowerSeries.exists_isWeierstrassFactorization`：exists_isWeierstrassFacto
+rization (hg : g.map (IsLocalRing.residue A) != 0) : exists f h, g.IsWeierstrass
+Factorization f h
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 -/
-theorem isUnit_weierstrassUnit (hg : g.map (IsLocalRing.residue A) != 0) :
+theorem isUnit_weierstrassUnit (hg : g.map (IsLocalRing.residue A) ≠ 0) :
     IsUnit (g.weierstrassUnit hg) :=
   (g.exists_isWeierstrassFactorization hg).choose_spec.choose_spec.isUnit
-
-/--
-theorem `eq_weierstrassDistinguished_mul_weierstrassUnit` / 定理 `eq_weierstrassDistinguished_mul_weierstrassUnit`
-
-English:
-theorem eq_weierstrassDistinguished_mul_weierstrassUnit
-  given: (hg : g.map (IsLocalRing.residue A) != 0)
-  proof: (g.exists_isWeierstrassFactorization hg).choose_spec.choose_spec.eq_mul
-
-中文:
-定理 eq_weierstrassDistinguished_mul_weierstrassUnit
-  条件: (hg : g.map (是局部环.residue A) != 0)
-  证明: (g.exists_isWeierstrassFactorization hg).choose_spec.choose_spec.eq_mul
-
-Depends on / 依赖: choose_spec, choose_spec.choose_spec.eq_mul, eq_mul, exists_isWeierstrassFactorization, g.exists_isWeierstrassFactorization
+/-
+**PowerSeries.eq_weierstrassDistinguished_mul_weierstrassUnit** 是 Mathlib 中的一个定理
+，位于命名空间 `PowerSeries`。
+形式化陈述：eq_weierstrassDistinguished_mul_weierstrassUnit (hg : g.map (IsLocalRing.r
+esidue A) != 0) : g = g.weierstrassDistinguished hg * g.weierstrassUnit hg
+参数：hg : g.map (IsLocalRing.residue A) != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.eq_mul`：∀ {A : Type u_1} [inst 
+: CommRing A] {g : PowerSeries A} {f : Polynomial A} {h : PowerSeries A} {I : Id
+eal A},   g.IsWeierstrassFactorizatio…
+· 使用定理 `PowerSeries.exists_isWeierstrassFactorization`：exists_isWeierstrassFacto
+rization (hg : g.map (IsLocalRing.residue A) != 0) : exists f h, g.IsWeierstrass
+Factorization f h
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 -/
-theorem eq_weierstrassDistinguished_mul_weierstrassUnit (hg : g.map (IsLocalRing.residue A) != 0) :
+theorem eq_weierstrassDistinguished_mul_weierstrassUnit (hg : g.map (IsLocalRing.residue A) ≠ 0) :
     g = g.weierstrassDistinguished hg * g.weierstrassUnit hg :=
   (g.exists_isWeierstrassFactorization hg).choose_spec.choose_spec.eq_mul
 
-/--
-theorem `IsWeierstrassFactorization.unique` / 定理 `IsWeierstrassFactorization.unique`
+/-- The `f` and `h` in Weierstrass preparation theorem are equal
+to `PowerSeries.weierstrassDistinguished` and `PowerSeries.weierstrassUnit`. -/
+/-
+**PowerSeries.IsWeierstrassFactorization.unique** 是 Mathlib 中的一个定理，位于命名空间 `Power
+Series.IsWeierstrassFactorization`。
+形式化陈述：∀ {A : Type u_1} [inst : CommRing A] [inst_1 : IsLocalRing A] [inst_2 : Is
+AdicComplete (IsLocalRing.maximalIdeal A) A]   {g : PowerSeries A} {f : Polynomi
+al A} {h : PowerSeries A},   g.IsWeierstrassFactorization f h →     ∀ (hg : (Pow
+erSeries.map (IsLocalRing.residue A)) g ≠ 0),       f = g.weierstrassDistinguish
+ed hg ∧ h = g.weierstrassUnit hg
+参数：IsLocalRing.maximalIdeal A；hg : (PowerSeries.map (IsLocalRing.residue A)) g ≠
+ 0。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerSeries.IsWeierstrassFactorization.elim`：∀ {A : Type u_1} [inst : Co
+mmRing A] [inst_1 : IsLocalRing A] [IsHausdorff (IsLocalRing.maximalIdeal A) A] 
+  {g : PowerSeries A} {f f' : Pol…
+· 使用定理 `IsAdicComplete.toIsHausdorff`：∀ {R : Type u_1} {inst : CommRing R} {I : 
+Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}  
+ [self : IsAdicCom…
+· 使用定理 `PowerSeries.isWeierstrassFactorization_weierstrassDistinguished_weierstr
+assUnit`：isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit (hg
+ : g.map (IsLocalRing.residue A) != 0) : g.IsWeierstrassFactorization…
 
-English:
-theorem IsWeierstrassFactorization.unique
-  proof: H.elim (g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit hg)
-
-@[simp]
-
-中文:
-定理 IsWeierstrassFactorization.unique
-  证明: H.elim (g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit hg)
-
-@[simp]
-
-Depends on / 依赖: H.elim, g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit, isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
+--- 原说明 ---
+The `f` and `h` in Weierstrass preparation theorem are equal
+to `PowerSeries.weierstrassDistinguished` and `PowerSeries.weierstrassUnit`.
 -/
 theorem IsWeierstrassFactorization.unique
-    (H : g.IsWeierstrassFactorization f h) (hg : g.map (IsLocalRing.residue A) != 0) :
+    (H : g.IsWeierstrassFactorization f h) (hg : g.map (IsLocalRing.residue A) ≠ 0) :
     f = g.weierstrassDistinguished hg ∧ h = g.weierstrassUnit hg :=
   H.elim (g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit hg)
 
 @[simp]
-/--
-theorem `weierstrassDistinguished_mul` / 定理 `weierstrassDistinguished_mul`
-
-English:
-theorem weierstrassDistinguished_mul
-  given: (hg : (g * g').map (IsLocalRing.residue A) != 0)
-  proof: by
-  have H := g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
-    (fun h => hg (by simp [h]))
-  have H' := g'.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
-    (fun h => hg (by simp [h]))
-  have H'' := (g * g').isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit hg
-  exact (H''.elim (H.mul H')).1
-
-@[simp]
-
-中文:
-定理 weierstrassDistinguished_mul
-  条件: (hg : (g * g').map (是局部环.residue A) != 0)
-  证明: by
-  have H := g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
-    (fun h => hg (by simp [h]))
-  have H' := g'.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
-    (fun h => hg (by simp [h]))
-  have H'' := (g * g').isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit hg
-  exact (H''.elim (H.mul H')).1
-
-@[simp]
-
-Depends on / 依赖: H.mul, g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit, isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
+/-
+**PowerSeries.weierstrassDistinguished_mul** 是 Mathlib 中的一个定理，位于命名空间 `PowerSerie
+s`。
+形式化陈述：weierstrassDistinguished_mul (hg : (g * g').map (IsLocalRing.residue A) !=
+ 0) : (g * g').weierstrassDistinguished hg = g.weierstrassDistinguished (fun h =
+> hg (by simp [h])) * g'.weierstrassDistinguished (fun h => hg (by simp [h]))
+参数：hg : (g * g').map (IsLocalRing.residue A) != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `PowerSeries.isWeierstrassFactorization_weierstrassDistinguished_weierstr
+assUnit`：isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit (hg
+ : g.map (IsLocalRing.residue A) != 0) : g.IsWeierstrassFactorization…
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `PowerSeries.IsWeierstrassFactorization.elim`：∀ {A : Type u_1} [inst : Co
+mmRing A] [inst_1 : IsLocalRing A] [IsHausdorff (IsLocalRing.maximalIdeal A) A] 
+  {g : PowerSeries A} {f f' : Pol…
+· 使用定理 `IsAdicComplete.toIsHausdorff`：∀ {R : Type u_1} {inst : CommRing R} {I : 
+Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}  
+ [self : IsAdicCom…
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.mul`：mul {g' : A⟦X⟧} {f' : A[X]
+} {h' : A⟦X⟧} (H' : g'.IsWeierstrassFactorizationAt f' h' I) : (g * g').IsWeiers
+trassFactorizationAt (f * f') (h *…
 -/
-theorem weierstrassDistinguished_mul (hg : (g * g').map (IsLocalRing.residue A) != 0) :
+theorem weierstrassDistinguished_mul (hg : (g * g').map (IsLocalRing.residue A) ≠ 0) :
     (g * g').weierstrassDistinguished hg =
-      g.weierstrassDistinguished (fun h => hg (by simp [h])) *
-        g'.weierstrassDistinguished (fun h => hg (by simp [h])) := by
+      g.weierstrassDistinguished (fun h ↦ hg (by simp [h])) *
+        g'.weierstrassDistinguished (fun h ↦ hg (by simp [h])) := by
   have H := g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
-    (fun h => hg (by simp [h]))
+    (fun h ↦ hg (by simp [h]))
   have H' := g'.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
-    (fun h => hg (by simp [h]))
+    (fun h ↦ hg (by simp [h]))
   have H'' := (g * g').isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit hg
   exact (H''.elim (H.mul H')).1
 
 @[simp]
-/--
-theorem `weierstrassUnit_mul` / 定理 `weierstrassUnit_mul`
-
-English:
-theorem weierstrassUnit_mul
-  given: (hg : (g * g').map (IsLocalRing.residue A) != 0)
-  proof: by
-  have H := g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
-    (fun h => hg (by simp [h]))
-  have H' := g'.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
-    (fun h => hg (by simp [h]))
-  have H'' := (g * g').isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit hg
-  exact (H''.elim (H.mul H')).2
-
-@[simp]
-
-中文:
-定理 weierstrassUnit_mul
-  条件: (hg : (g * g').map (是局部环.residue A) != 0)
-  证明: by
-  have H := g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
-    (fun h => hg (by simp [h]))
-  have H' := g'.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
-    (fun h => hg (by simp [h]))
-  have H'' := (g * g').isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit hg
-  exact (H''.elim (H.mul H')).2
-
-@[simp]
-
-Depends on / 依赖: H.mul, g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit, isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
+/-
+**PowerSeries.weierstrassUnit_mul** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：weierstrassUnit_mul (hg : (g * g').map (IsLocalRing.residue A) != 0) : (g 
+* g').weierstrassUnit hg = g.weierstrassUnit (fun h => hg (by simp [h])) * g'.we
+ierstrassUnit (fun h => hg (by simp [h]))
+参数：hg : (g * g').map (IsLocalRing.residue A) != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `PowerSeries.isWeierstrassFactorization_weierstrassDistinguished_weierstr
+assUnit`：isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit (hg
+ : g.map (IsLocalRing.residue A) != 0) : g.IsWeierstrassFactorization…
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `PowerSeries.IsWeierstrassFactorization.elim`：∀ {A : Type u_1} [inst : Co
+mmRing A] [inst_1 : IsLocalRing A] [IsHausdorff (IsLocalRing.maximalIdeal A) A] 
+  {g : PowerSeries A} {f f' : Pol…
+· 使用定理 `IsAdicComplete.toIsHausdorff`：∀ {R : Type u_1} {inst : CommRing R} {I : 
+Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}  
+ [self : IsAdicCom…
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.mul`：mul {g' : A⟦X⟧} {f' : A[X]
+} {h' : A⟦X⟧} (H' : g'.IsWeierstrassFactorizationAt f' h' I) : (g * g').IsWeiers
+trassFactorizationAt (f * f') (h *…
 -/
-theorem weierstrassUnit_mul (hg : (g * g').map (IsLocalRing.residue A) != 0) :
+theorem weierstrassUnit_mul (hg : (g * g').map (IsLocalRing.residue A) ≠ 0) :
     (g * g').weierstrassUnit hg =
-      g.weierstrassUnit (fun h => hg (by simp [h])) *
-        g'.weierstrassUnit (fun h => hg (by simp [h])) := by
+      g.weierstrassUnit (fun h ↦ hg (by simp [h])) *
+        g'.weierstrassUnit (fun h ↦ hg (by simp [h])) := by
   have H := g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
-    (fun h => hg (by simp [h]))
+    (fun h ↦ hg (by simp [h]))
   have H' := g'.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
-    (fun h => hg (by simp [h]))
+    (fun h ↦ hg (by simp [h]))
   have H'' := (g * g').isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit hg
   exact (H''.elim (H.mul H')).2
 
 @[simp]
-/--
-theorem `weierstrassDistinguished_smul` / 定理 `weierstrassDistinguished_smul`
-
-English:
-theorem weierstrassDistinguished_smul
-  given: (hg : (a • g).map (IsLocalRing.residue A) != 0)
-  proof: by
-  have H := g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
-    (fun h => hg (by simp [Algebra.smul_def, h]))
-  have H' := (a • g).isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit hg
-  have ha : IsLocalRing.residue A a != 0 := fun h => hg (by simp [Algebra.smul_def, h])
-  exact (H'.elim (H.smul (by simpa using ha))).1
-
-@[simp]
-
-中文:
-定理 weierstrassDistinguished_smul
-  条件: (hg : (a • g).map (是局部环.residue A) != 0)
-  证明: by
-  have H := g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
-    (fun h => hg (by simp [Algebra.smul_def, h]))
-  have H' := (a • g).isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit hg
-  have ha : IsLocalRing.residue A a != 0 := fun h => hg (by simp [Algebra.smul_def, h])
-  exact (H'.elim (H.smul (by simpa using ha))).1
-
-@[simp]
-
-Depends on / 依赖: Algebra, Algebra.smul_def, H.smul, IsLocalRing, IsLocalRing.residue, g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit, isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit, residue, smul_def
+/-
+**PowerSeries.weierstrassDistinguished_smul** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeri
+es`。
+形式化陈述：weierstrassDistinguished_smul (hg : (a • g).map (IsLocalRing.residue A) !=
+ 0) : (a • g).weierstrassDistinguished hg = g.weierstrassDistinguished (fun h =>
+ hg (by simp [Algebra.smul_def, h]))
+参数：hg : (a • g).map (IsLocalRing.residue A) != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `PowerSeries.map_C`：map_C (r : R) : map f (C r) = C (f r)
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `PowerSeries.isWeierstrassFactorization_weierstrassDistinguished_weierstr
+assUnit`：isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit (hg
+ : g.map (IsLocalRing.residue A) != 0) : g.IsWeierstrassFactorization…
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `PowerSeries.IsWeierstrassFactorization.elim`：∀ {A : Type u_1} [inst : Co
+mmRing A] [inst_1 : IsLocalRing A] [IsHausdorff (IsLocalRing.maximalIdeal A) A] 
+  {g : PowerSeries A} {f f' : Pol…
+· 使用定理 `IsAdicComplete.toIsHausdorff`：∀ {R : Type u_1} {inst : CommRing R} {I : 
+Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}  
+ [self : IsAdicCom…
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.smul`：smul {a : A} (ha : IsUnit
+ a) : (a • g).IsWeierstrassFactorizationAt f (a • h) I
 -/
-theorem weierstrassDistinguished_smul (hg : (a • g).map (IsLocalRing.residue A) != 0) :
+theorem weierstrassDistinguished_smul (hg : (a • g).map (IsLocalRing.residue A) ≠ 0) :
     (a • g).weierstrassDistinguished hg =
-      g.weierstrassDistinguished (fun h => hg (by simp [Algebra.smul_def, h])) := by
+      g.weierstrassDistinguished (fun h ↦ hg (by simp [Algebra.smul_def, h])) := by
   have H := g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
-    (fun h => hg (by simp [Algebra.smul_def, h]))
+    (fun h ↦ hg (by simp [Algebra.smul_def, h]))
   have H' := (a • g).isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit hg
-  have ha : IsLocalRing.residue A a != 0 := fun h => hg (by simp [Algebra.smul_def, h])
+  have ha : IsLocalRing.residue A a ≠ 0 := fun h ↦ hg (by simp [Algebra.smul_def, h])
   exact (H'.elim (H.smul (by simpa using ha))).1
 
 @[simp]
-/--
-theorem `weierstrassUnit_smul` / 定理 `weierstrassUnit_smul`
-
-English:
-theorem weierstrassUnit_smul
-  given: (hg : (a • g).map (IsLocalRing.residue A) != 0)
-  proof: by
-  have H := g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
-    (fun h => hg (by simp [Algebra.smul_def, h]))
-  have H' := (a • g).isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit hg
-  have ha : IsLocalRing.residue A a != 0 := fun h => hg (by simp [Algebra.smul_def, h])
-  exact (H'.elim (H.smul (by simpa using ha))).2
-
-中文:
-定理 weierstrassUnit_smul
-  条件: (hg : (a • g).map (是局部环.residue A) != 0)
-  证明: by
-  have H := g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
-    (fun h => hg (by simp [Algebra.smul_def, h]))
-  have H' := (a • g).isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit hg
-  have ha : IsLocalRing.residue A a != 0 := fun h => hg (by simp [Algebra.smul_def, h])
-  exact (H'.elim (H.smul (by simpa using ha))).2
-
-Depends on / 依赖: Algebra, Algebra.smul_def, H.smul, IsLocalRing, IsLocalRing.residue, g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit, isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit, residue, smul_def
+/-
+**PowerSeries.weierstrassUnit_smul** 是 Mathlib 中的一个定理，位于命名空间 `PowerSeries`。
+形式化陈述：weierstrassUnit_smul (hg : (a • g).map (IsLocalRing.residue A) != 0) : (a 
+• g).weierstrassUnit hg = a • g.weierstrassUnit (fun h => hg (by simp [Algebra.s
+mul_def, h]))
+参数：hg : (a • g).map (IsLocalRing.residue A) != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `PowerSeries.map_C`：map_C (r : R) : map f (C r) = C (f r)
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `PowerSeries.isWeierstrassFactorization_weierstrassDistinguished_weierstr
+assUnit`：isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit (hg
+ : g.map (IsLocalRing.residue A) != 0) : g.IsWeierstrassFactorization…
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `PowerSeries.IsWeierstrassFactorization.elim`：∀ {A : Type u_1} [inst : Co
+mmRing A] [inst_1 : IsLocalRing A] [IsHausdorff (IsLocalRing.maximalIdeal A) A] 
+  {g : PowerSeries A} {f f' : Pol…
+· 使用定理 `IsAdicComplete.toIsHausdorff`：∀ {R : Type u_1} {inst : CommRing R} {I : 
+Ideal R} {M : Type u_4} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}  
+ [self : IsAdicCom…
+· 使用定理 `PowerSeries.IsWeierstrassFactorizationAt.smul`：smul {a : A} (ha : IsUnit
+ a) : (a • g).IsWeierstrassFactorizationAt f (a • h) I
 -/
-theorem weierstrassUnit_smul (hg : (a • g).map (IsLocalRing.residue A) != 0) :
+theorem weierstrassUnit_smul (hg : (a • g).map (IsLocalRing.residue A) ≠ 0) :
     (a • g).weierstrassUnit hg =
-      a • g.weierstrassUnit (fun h => hg (by simp [Algebra.smul_def, h])) := by
+      a • g.weierstrassUnit (fun h ↦ hg (by simp [Algebra.smul_def, h])) := by
   have H := g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
-    (fun h => hg (by simp [Algebra.smul_def, h]))
+    (fun h ↦ hg (by simp [Algebra.smul_def, h]))
   have H' := (a • g).isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit hg
-  have ha : IsLocalRing.residue A a != 0 := fun h => hg (by simp [Algebra.smul_def, h])
+  have ha : IsLocalRing.residue A a ≠ 0 := fun h ↦ hg (by simp [Algebra.smul_def, h])
   exact (H'.elim (H.smul (by simpa using ha))).2
 
 end IsAdicComplete
 
 end PowerSeries
+

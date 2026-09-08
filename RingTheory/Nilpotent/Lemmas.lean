@@ -26,218 +26,196 @@ open Function Module Set
 
 variable {R S : Type*} {x y : R}
 
-/--
-theorem `RingHom.ker_isRadical_iff_reduced_of_surjective` / 定理 `RingHom.ker_isRadical_iff_reduced_of_surjective`
-
-English:
-theorem RingHom.ker_isRadical_iff_reduced_of_surjective
-  statement: {S F} [CommSemiring R] [Semiring S]
-  proof: by
-  simp_rw [isReduced_iff, hf.forall, IsNilpotent, ← map_pow, ← RingHom.mem_ker]
-  rfl
-
-中文:
-定理 环态射.ker_isRadical_iff_reduced_of_surjective
-  结论: {S F} [交换半环 R] [半环 S]
-  证明: by
-  simp_rw [isReduced_iff, hf.forall, IsNilpotent, ← map_pow, ← RingHom.mem_ker]
-  rfl
-
-Depends on / 依赖: IsNilpotent, RingHom, RingHom.mem_ker, hf.forall, isReduced_iff, map_pow, mem_ker, simp_rw
+/-
+**RingHom.ker_isRadical_iff_reduced_of_surjective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：RingHom.ker_isRadical_iff_reduced_of_surjective {S F} [CommSemiring R] [Se
+miring S] [FunLike F R S] [RingHomClass F R S] {f : F} (hf : Function.Surjective
+ f) : (RingHom.ker f).IsRadical ↔ IsReduced S
+参数：hf : Function.Surjective f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem RingHom.ker_isRadical_iff_reduced_of_surjective {S F} [CommSemiring R] [Semiring S]
     [FunLike F R S] [RingHomClass F R S] {f : F} (hf : Function.Surjective f) :
     (RingHom.ker f).IsRadical ↔ IsReduced S := by
   simp_rw [isReduced_iff, hf.forall, IsNilpotent, ← map_pow, ← RingHom.mem_ker]
   rfl
-
-/--
-theorem `isRadical_iff_span_singleton` / 定理 `isRadical_iff_span_singleton`
-
-English:
-theorem isRadical_iff_span_singleton
-  given: [CommSemiring R]
-  proof: by
-  simp_rw [IsRadical, ← Ideal.mem_span_singleton]
-  exact forall_comm.trans (forall_congr' fun r => exists_imp.symm)
-
-中文:
-定理 isRadical_iff_span_singleton
-  条件: [交换半环 R]
-  证明: by
-  simp_rw [IsRadical, ← Ideal.mem_span_singleton]
-  exact forall_comm.trans (forall_congr' fun r => exists_imp.symm)
-
-Depends on / 依赖: Ideal.mem_span_singleton, IsRadical, exists_imp, exists_imp.symm, forall_comm, forall_comm.trans, forall_congr, mem_span_singleton, simp_rw
+/-
+**isRadical_iff_span_singleton** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isRadical_iff_span_singleton [CommSemiring R] : IsRadical y ↔ (Ideal.span 
+({y} : Set R)).IsRadical
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `forall_comm`：∀ {α : Sort u_2} {β : Sort u_1} {p : α → β → Prop}, (∀ (a :
+ α) (b : β), p a b) ↔ ∀ (b : β) (a : α), p a b
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `exists_imp`：∀ {α : Sort u_1} {p : α → Prop} {b : Prop}, (∃ x, p x) → b ↔
+ ∀ (x : α), p x → b
 -/
 theorem isRadical_iff_span_singleton [CommSemiring R] :
     IsRadical y ↔ (Ideal.span ({y} : Set R)).IsRadical := by
   simp_rw [IsRadical, ← Ideal.mem_span_singleton]
   exact forall_comm.trans (forall_congr' fun r => exists_imp.symm)
-
-/--
-theorem `isNilpotent_iff_zero_mem_powers` / 定理 `isNilpotent_iff_zero_mem_powers`
-
-English:
-theorem isNilpotent_iff_zero_mem_powers
-  given: [Monoid R] [Zero R] {x : R}
-  proof: Iff.rfl
-
-中文:
-定理 isNilpotent_iff_zero_mem_powers
-  条件: [幺半群 R] [零 R] {x : R}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**isNilpotent_iff_zero_mem_powers** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isNilpotent_iff_zero_mem_powers [Monoid R] [Zero R] {x : R} : IsNilpotent 
+x ↔ 0 in Submonoid.powers x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem isNilpotent_iff_zero_mem_powers [Monoid R] [Zero R] {x : R} :
-    IsNilpotent x ↔ 0 in Submonoid.powers x := Iff.rfl
+    IsNilpotent x ↔ 0 ∈ Submonoid.powers x := Iff.rfl
 
 section CommSemiring
 
 variable [CommSemiring R] {x y : R}
 
-/--
-Definition of `nilradical` / `nilradical` 的定义
+/-- The nilradical of a commutative semiring is the ideal of nilpotent elements. -/
+/-
+**nilradical** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：nilradical (R : Type*) [CommSemiring R] : Ideal R
+参数：R : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nilradical
-  signature: (R : Type*) [CommSemiring R]
-  body: (0 : Ideal R).radical
-
-中文:
-定义 nilradical
-  签名: (R : 类型) [交换半环 R]
-  定义体: (0 : Ideal R).radical
-
-Depends on / 依赖: radical
+--- 原说明 ---
+The nilradical of a commutative semiring is the ideal of nilpotent elements.
 -/
 def nilradical (R : Type*) [CommSemiring R] : Ideal R :=
   (0 : Ideal R).radical
-
-/--
-theorem `mem_nilradical` / 定理 `mem_nilradical`
-
-English:
-theorem mem_nilradical
-  statement: x in nilradical R ↔ IsNilpotent x
-  proof: Iff.rfl
-
-中文:
-定理 mem_nilradical
-  结论: x in nilradical R ↔ 是幂零 x
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**mem_nilradical** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_nilradical : x in nilradical R ↔ IsNilpotent x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_nilradical : x in nilradical R ↔ IsNilpotent x :=
+theorem mem_nilradical : x ∈ nilradical R ↔ IsNilpotent x :=
   Iff.rfl
-
-/--
-theorem `nilradical_eq_sInf` / 定理 `nilradical_eq_sInf`
-
-English:
-theorem nilradical_eq_sInf
-  given: (R : Type*) [CommSemiring R]
-  proof: (Ideal.radical_eq_sInf ⊥).trans by simp_rw [and_iff_right bot_le]
-
-中文:
-定理 nilradical_eq_sInf
-  条件: (R : 类型) [交换半环 R]
-  证明: (Ideal.radical_eq_sInf ⊥).trans by simp_rw [and_iff_right bot_le]
-
-Depends on / 依赖: Ideal.radical_eq_sInf, and_iff_right, bot_le, radical_eq_sInf, simp_rw
+/-
+**nilradical_eq_sInf** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nilradical_eq_sInf (R : Type*) [CommSemiring R] : nilradical R = sInf { J 
+: Ideal R | J.IsPrime }
+参数：R : Type*。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Ideal.radical_eq_sInf`：radical_eq_sInf (I : Ideal R) : radical I = sInf 
+{ J : Ideal R | I <= J ∧ IsPrime J }
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `and_iff_right`：∀ {a b : Prop}, a → (a ∧ b ↔ b)
+· 使用定理 `bot_le`：∀ {α : Type u} [inst : LE α] [inst_1 : OrderBot α] {a : α}, ⊥ ≤ 
+a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem nilradical_eq_sInf (R : Type*) [CommSemiring R] :
     nilradical R = sInf { J : Ideal R | J.IsPrime } :=
-(Ideal.radical_eq_sInf ⊥).trans by simp_rw [and_iff_right bot_le]
-
-/--
-theorem `nilpotent_iff_mem_prime` / 定理 `nilpotent_iff_mem_prime`
-
-English:
-theorem nilpotent_iff_mem_prime
-  statement: IsNilpotent x ↔ forall J : Ideal R, J.IsPrime -> x in J
-  proof: by
-  rw [← mem_nilradical]; rw [nilradical_eq_sInf]; rw [Submodule.mem_sInf]
-  rfl
-
-中文:
-定理 nilpotent_iff_mem_prime
-  结论: 是幂零 x ↔ 对任意 J : 理想 R, J.是素 -> x in J
-  证明: by
-  rw [← mem_nilradical]; rw [nilradical_eq_sInf]; rw [Submodule.mem_sInf]
-  rfl
-
-Depends on / 依赖: Submodule, Submodule.mem_sInf, mem_nilradical, mem_sInf, nilradical_eq_sInf
+  (Ideal.radical_eq_sInf ⊥).trans <| by simp_rw [and_iff_right bot_le]
+/-
+**nilpotent_iff_mem_prime** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nilpotent_iff_mem_prime : IsNilpotent x ↔ forall J : Ideal R, J.IsPrime ->
+ x in J
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mem_nilradical`：mem_nilradical : x in nilradical R ↔ IsNilpotent x
+· 使用定理 `nilradical_eq_sInf`：nilradical_eq_sInf (R : Type*) [CommSemiring R] : ni
+lradical R = sInf { J : Ideal R | J.IsPrime }
+· 使用定理 `Submodule.mem_sInf`：mem_sInf {S : Set (Submodule R M)} {x : M} : x in sI
+nf S ↔ forall p in S, x in p
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem nilpotent_iff_mem_prime : IsNilpotent x ↔ forall J : Ideal R, J.IsPrime -> x in J := by
-  rw [← mem_nilradical]; rw [nilradical_eq_sInf]; rw [Submodule.mem_sInf]
+theorem nilpotent_iff_mem_prime : IsNilpotent x ↔ ∀ J : Ideal R, J.IsPrime → x ∈ J := by
+  rw [← mem_nilradical, nilradical_eq_sInf, Submodule.mem_sInf]
   rfl
-
-/--
-theorem `nilradical_le_prime` / 定理 `nilradical_le_prime`
-
-English:
-theorem nilradical_le_prime
-  given: (J : Ideal R) [H : J.IsPrime]
-  statement: nilradical R <= J
-  proof: (nilradical_eq_sInf R).symm ▸ sInf_le H
-
-@[simp]
-
-中文:
-定理 nilradical_le_prime
-  条件: (J : 理想 R) [H : J.是素]
-  结论: nilradical R <= J
-  证明: (nilradical_eq_sInf R).symm ▸ sInf_le H
-
-@[simp]
-
-Depends on / 依赖: nilradical_eq_sInf, sInf_le
+/-
+**nilradical_le_prime** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nilradical_le_prime (J : Ideal R) [H : J.IsPrime] : nilradical R <= J
+参数：J : Ideal R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sInf_le`：∀ {α : Type u_1} [inst : CompleteSemilatticeInf α] {s : Set α} 
+{a : α}, a ∈ s → sInf s ≤ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `nilradical_eq_sInf`：nilradical_eq_sInf (R : Type*) [CommSemiring R] : ni
+lradical R = sInf { J : Ideal R | J.IsPrime }
 -/
-theorem nilradical_le_prime (J : Ideal R) [H : J.IsPrime] : nilradical R <= J :=
+theorem nilradical_le_prime (J : Ideal R) [H : J.IsPrime] : nilradical R ≤ J :=
   (nilradical_eq_sInf R).symm ▸ sInf_le H
 
 @[simp]
-/--
-theorem `nilradical_eq_zero` / 定理 `nilradical_eq_zero`
-
-English:
-theorem nilradical_eq_zero
-  given: (R : Type*) [CommSemiring R] [IsReduced R]
-  statement: nilradical R = 0
-  proof: Ideal.ext fun _ => isNilpotent_iff_eq_zero
-
-中文:
-定理 nilradical_eq_zero
-  条件: (R : 类型) [交换半环 R] [是既约 R]
-  结论: nilradical R = 0
-  证明: Ideal.ext fun _ => isNilpotent_iff_eq_zero
-
-Depends on / 依赖: Ideal.ext, isNilpotent_iff_eq_zero
+/-
+**nilradical_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nilradical_eq_zero (R : Type*) [CommSemiring R] [IsReduced R] : nilradical
+ R = 0
+参数：R : Type*。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.ext`：ext {I J : Ideal α} (h : forall x, x in I ↔ x in J) : I = J
+· 使用定理 `isNilpotent_iff_eq_zero`：isNilpotent_iff_eq_zero [MonoidWithZero R] [IsR
+educed R] : IsNilpotent x ↔ x = 0
 -/
 theorem nilradical_eq_zero (R : Type*) [CommSemiring R] [IsReduced R] : nilradical R = 0 :=
   Ideal.ext fun _ => isNilpotent_iff_eq_zero
-
-/--
-theorem `nilradical_eq_bot_iff` / 定理 `nilradical_eq_bot_iff`
-
-English:
-theorem nilradical_eq_bot_iff
-  given: {R : Type*} [CommSemiring R]
-  statement: nilradical R = ⊥ ↔ IsReduced R
-  proof: by
-  simp_rw [eq_bot_iff, SetLike.le_def, Submodule.mem_bot, mem_nilradical, isReduced_iff]
-
-中文:
-定理 nilradical_eq_bot_iff
-  条件: {R : 类型} [交换半环 R]
-  结论: nilradical R = ⊥ ↔ 是既约 R
-  证明: by
-  simp_rw [eq_bot_iff, SetLike.le_def, Submodule.mem_bot, mem_nilradical, isReduced_iff]
-
-Depends on / 依赖: SetLike, SetLike.le_def, Submodule, Submodule.mem_bot, eq_bot_iff, isReduced_iff, le_def, mem_bot, mem_nilradical, simp_rw
+/-
+**nilradical_eq_bot_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nilradical_eq_bot_iff {R : Type*} [CommSemiring R] : nilradical R = ⊥ ↔ Is
+Reduced R
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `instIsConcreteLE`：∀ (A : Type u_1) (B : Type u_2) [inst : SetLike A B], 
+IsConcreteLE A B
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem nilradical_eq_bot_iff {R : Type*} [CommSemiring R] : nilradical R = ⊥ ↔ IsReduced R := by
   simp_rw [eq_bot_iff, SetLike.le_def, Submodule.mem_bot, mem_nilradical, isReduced_iff]
@@ -249,32 +227,22 @@ namespace LinearMap
 variable (R) {A : Type v} [CommSemiring R] [Semiring A] [Algebra R A]
 
 @[simp]
-/--
-theorem `isNilpotent_mulLeft_iff` / 定理 `isNilpotent_mulLeft_iff`
-
-English:
-theorem isNilpotent_mulLeft_iff
-  given: (a : A)
-  statement: IsNilpotent (mulLeft R a) ↔ IsNilpotent a
-  proof: by
-  constructor <;> rintro ⟨n, hn⟩ <;> use n <;>
-      simp only [mulLeft_eq_zero_iff, pow_mulLeft] at hn ⊢ <;>
-    exact hn
-
-@[simp]
-
-中文:
-定理 isNilpotent_mulLeft_iff
-  条件: (a : A)
-  结论: 是幂零 (mulLeft R a) ↔ 是幂零 a
-  证明: by
-  constructor <;> rintro ⟨n, hn⟩ <;> use n <;>
-      simp only [mulLeft_eq_zero_iff, pow_mulLeft] at hn ⊢ <;>
-    exact hn
-
-@[simp]
-
-Depends on / 依赖: mulLeft_eq_zero_iff, pow_mulLeft
+/-
+**LinearMap.isNilpotent_mulLeft_iff** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：isNilpotent_mulLeft_iff (a : A) : IsNilpotent (mulLeft R a) ↔ IsNilpotent 
+a
+参数：a : A。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.pow_mulLeft`：pow_mulLeft (a : A) (n : Nat) : mulLeft R a ^ n =
+ mulLeft R (a ^ n)
 -/
 theorem isNilpotent_mulLeft_iff (a : A) : IsNilpotent (mulLeft R a) ↔ IsNilpotent a := by
   constructor <;> rintro ⟨n, hn⟩ <;> use n <;>
@@ -282,28 +250,22 @@ theorem isNilpotent_mulLeft_iff (a : A) : IsNilpotent (mulLeft R a) ↔ IsNilpot
     exact hn
 
 @[simp]
-/--
-theorem `isNilpotent_mulRight_iff` / 定理 `isNilpotent_mulRight_iff`
-
-English:
-theorem isNilpotent_mulRight_iff
-  given: (a : A)
-  statement: IsNilpotent (mulRight R a) ↔ IsNilpotent a
-  proof: by
-  constructor <;> rintro ⟨n, hn⟩ <;> use n <;>
-      simp only [mulRight_eq_zero_iff, pow_mulRight] at hn ⊢ <;>
-    exact hn
-
-中文:
-定理 isNilpotent_mulRight_iff
-  条件: (a : A)
-  结论: 是幂零 (mulRight R a) ↔ 是幂零 a
-  证明: by
-  constructor <;> rintro ⟨n, hn⟩ <;> use n <;>
-      simp only [mulRight_eq_zero_iff, pow_mulRight] at hn ⊢ <;>
-    exact hn
-
-Depends on / 依赖: mulRight_eq_zero_iff, pow_mulRight
+/-
+**LinearMap.isNilpotent_mulRight_iff** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：isNilpotent_mulRight_iff (a : A) : IsNilpotent (mulRight R a) ↔ IsNilpoten
+t a
+参数：a : A。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.pow_mulRight`：pow_mulRight (a : A) (n : Nat) : mulRight R a ^ 
+n = mulRight R (a ^ n)
 -/
 theorem isNilpotent_mulRight_iff (a : A) : IsNilpotent (mulRight R a) ↔ IsNilpotent a := by
   constructor <;> rintro ⟨n, hn⟩ <;> use n <;>
@@ -314,56 +276,51 @@ variable {R}
 variable {ι M : Type*} [Fintype ι] [DecidableEq ι] [AddCommMonoid M] [Module R M]
 
 @[simp]
-/--
-lemma `isNilpotent_toMatrix_iff` / 引理 `isNilpotent_toMatrix_iff`
-
-English:
-lemma isNilpotent_toMatrix_iff
-  given: (b : Basis ι R M) (f : M ->ₗ[R] M)
-  proof: by
-  refine exists_congr fun k => ?_
-  rw [toMatrix_pow]
-  exact (toMatrix b b).map_eq_zero_iff
-
-中文:
-引理 isNilpotent_toMatrix_iff
-  条件: (b : 基 ι R M) (f : M ->ₗ[R] M)
-  证明: by
-  refine exists_congr fun k => ?_
-  rw [toMatrix_pow]
-  exact (toMatrix b b).map_eq_zero_iff
-
-Depends on / 依赖: exists_congr, map_eq_zero_iff, toMatrix, toMatrix_pow
+/-
+**LinearMap.isNilpotent_toMatrix_iff** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap`。
+形式化陈述：isNilpotent_toMatrix_iff (b : Basis ι R M) (f : M ->ₗ[R] M) : IsNilpotent 
+(toMatrix b b f) ↔ IsNilpotent f
+参数：b : Basis ι R M；f : M ->ₗ[R] M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_congr`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a) 
+→ ((∃ a, p a) ↔ ∃ a, q a)
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `LinearMap.toMatrix_pow`：LinearMap.toMatrix_pow (f : M₁ ->ₗ[R] M₁) (k : N
+at) : (toMatrix v₁ v₁ f) ^ k = toMatrix v₁ v₁ (f ^ k)
+· 使用定理 `LinearEquiv.map_eq_zero_iff`：map_eq_zero_iff {x : M} : e x = 0 ↔ x = 0
 -/
-lemma isNilpotent_toMatrix_iff (b : Basis ι R M) (f : M ->ₗ[R] M) :
+lemma isNilpotent_toMatrix_iff (b : Basis ι R M) (f : M →ₗ[R] M) :
     IsNilpotent (toMatrix b b f) ↔ IsNilpotent f := by
-  refine exists_congr fun k => ?_
+  refine exists_congr fun k ↦ ?_
   rw [toMatrix_pow]
   exact (toMatrix b b).map_eq_zero_iff
 
 end LinearMap
 
 @[simp]
-/--
-lemma `Matrix.isNilpotent_toLin'_iff` / 引理 `Matrix.isNilpotent_toLin'_iff`
-
-English:
-lemma Matrix.isNilpotent_toLin'_iff
-  statement: {ι : Type*} [DecidableEq ι] [Fintype ι] [CommSemiring R]
-  proof: by
-  have : A.toLin'.toMatrix (Pi.basisFun R ι) (Pi.basisFun R ι) = A := LinearMap.toMatrix'_toLin' A
-  conv_rhs => rw [← this]
-  rw [LinearMap.isNilpotent_toMatrix_iff]
-
-中文:
-引理 矩阵.isNilpotent_toLin'_iff
-  结论: {ι : 类型} [DecidableEq ι] [有限类型 ι] [交换半环 R]
-  证明: by
-  have : A.toLin'.toMatrix (Pi.basisFun R ι) (Pi.basisFun R ι) = A := LinearMap.toMatrix'_toLin' A
-  conv_rhs => rw [← this]
-  rw [LinearMap.isNilpotent_toMatrix_iff]
-
-Depends on / 依赖: A.toLin, LinearMap, LinearMap.isNilpotent_toMatrix_iff, LinearMap.toMatrix, Pi.basisFun, _toLin, basisFun, conv_rhs, isNilpotent_toMatrix_iff, toMatrix
+/-
+**Matrix.isNilpotent_toLin'_iff** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {R : Type u_1} {ι : Type u_3} [inst : DecidableEq ι] [inst_1 : Fintype ι
+] [inst_2 : CommSemiring R]   (A : Matrix ι ι R), IsNilpotent (Matrix.toLin' A) 
+↔ IsNilpotent A
+参数：A : Matrix ι ι R；Matrix.toLin' A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LinearMap.toMatrix'_toLin'`：∀ {R : Type u_1} [inst : CommSemiring R] {m 
+: Type u_4} {n : Type u_5} [inst_1 : DecidableEq n] [inst_2 : Fintype n]   (M : 
+Matrix m n R), L…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `LinearMap.isNilpotent_toMatrix_iff`：isNilpotent_toMatrix_iff (b : Basis 
+ι R M) (f : M ->ₗ[R] M) : IsNilpotent (toMatrix b b f) ↔ IsNilpotent f
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma Matrix.isNilpotent_toLin'_iff {ι : Type*} [DecidableEq ι] [Fintype ι] [CommSemiring R]
     (A : Matrix ι ι R) :
@@ -379,103 +336,115 @@ section
 variable {M : Type*} [Semiring R] [AddCommMonoid M] [Module R M]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `isNilpotent_restrict_of_le` / 引理 `isNilpotent_restrict_of_le`
-
-English:
-lemma isNilpotent_restrict_of_le
-  statement: {f : End R M} {p q : Submodule R M}
-  proof: by
-  obtain ⟨n, hn⟩ := hf
-  use n
-  ext ⟨x, hx⟩
-  replace hn := DFunLike.congr_fun hn ⟨x, h hx⟩
-  simp_rw [LinearMap.zero_apply, ZeroMemClass.coe_zero, ZeroMemClass.coe_eq_zero] at hn ⊢
-  rw [Module.End.pow_restrict]; rw [LinearMap.restrict_apply] at hn ⊢
-  ext
-  exact (congr_arg Subtype.val hn :)
-
-中文:
-引理 isNilpotent_restrict_of_le
-  结论: {f : End R M} {p q : 子模 R M}
-  证明: by
-  obtain ⟨n, hn⟩ := hf
-  use n
-  ext ⟨x, hx⟩
-  replace hn := DFunLike.congr_fun hn ⟨x, h hx⟩
-  simp_rw [LinearMap.zero_apply, ZeroMemClass.coe_zero, ZeroMemClass.coe_eq_zero] at hn ⊢
-  rw [Module.End.pow_restrict]; rw [LinearMap.restrict_apply] at hn ⊢
-  ext
-  exact (congr_arg Subtype.val hn :)
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, LinearMap, LinearMap.restrict_apply, LinearMap.zero_apply, Module, Module.End.pow_restrict, Subtype, Subtype.val, ZeroMemClass, ZeroMemClass.coe_eq_zero, ZeroMemClass.coe_zero, coe_eq_zero, coe_zero, congr_arg, congr_fun, pow_restrict, replace, restrict_apply, simp_rw
+/-
+**Module.End.isNilpotent_restrict_of_le** 是 Mathlib 中的一个引理，位于命名空间 `Module.End`。
+形式化陈述：isNilpotent_restrict_of_le {f : End R M} {p q : Submodule R M} {hp : MapsT
+o f p p} {hq : MapsTo f q q} (h : p <= q) (hf : IsNilpotent (f.restrict hq)) : I
+sNilpotent (f.restrict hp)
+参数：h : p <= q；hf : IsNilpotent (f.restrict hq)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `Module.End.pow_apply_mem_of_forall_mem`：∀ {R : Type u_1} {M : Type u_5} 
+[inst : Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   {f
+' : M →ₗ[R] M} {p : Submodul…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.End.pow_restrict`：∀ {R : Type u_1} {M : Type u_5} [inst : Semirin
+g R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   {f' : M →ₗ[R] M} 
+{p : Submodul…
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `LinearMap.restrict_apply`：restrict_apply {f : M ->ₛₗ[σ₁₂] M₂} {p : Submo
+dule R M} {q : Submodule R₂ M₂} (hf : forall x in p, f x in q) (x : p) : f.restr
+ict hf x = ⟨f …
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 lemma isNilpotent_restrict_of_le {f : End R M} {p q : Submodule R M}
-    {hp : MapsTo f p p} {hq : MapsTo f q q} (h : p <= q) (hf : IsNilpotent (f.restrict hq)) :
+    {hp : MapsTo f p p} {hq : MapsTo f q q} (h : p ≤ q) (hf : IsNilpotent (f.restrict hq)) :
     IsNilpotent (f.restrict hp) := by
   obtain ⟨n, hn⟩ := hf
   use n
   ext ⟨x, hx⟩
   replace hn := DFunLike.congr_fun hn ⟨x, h hx⟩
   simp_rw [LinearMap.zero_apply, ZeroMemClass.coe_zero, ZeroMemClass.coe_eq_zero] at hn ⊢
-  rw [Module.End.pow_restrict]; rw [LinearMap.restrict_apply] at hn ⊢
+  rw [Module.End.pow_restrict, LinearMap.restrict_apply] at hn ⊢
   ext
   exact (congr_arg Subtype.val hn :)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `isNilpotent.restrict` / 引理 `isNilpotent.restrict`
-
-English:
-lemma isNilpotent.restrict
-  proof: by
-  obtain ⟨n, hn⟩ := hnil
-  exact ⟨n, LinearMap.ext fun m => by simp only [Module.End.pow_restrict n, hn,
-    LinearMap.restrict_apply, LinearMap.zero_apply]; rfl⟩
-
-中文:
-引理 isNilpotent.restrict
-  证明: by
-  obtain ⟨n, hn⟩ := hnil
-  exact ⟨n, LinearMap.ext fun m => by simp only [Module.End.pow_restrict n, hn,
-    LinearMap.restrict_apply, LinearMap.zero_apply]; rfl⟩
-
-Depends on / 依赖: LinearMap, LinearMap.ext, LinearMap.restrict_apply, LinearMap.zero_apply, Module, Module.End.pow_restrict, pow_restrict, restrict_apply, zero_apply
+/-
+**Module.End.isNilpotent.restrict** 是 Mathlib 中的一个定理，位于命名空间 `Module.End.isNilpot
+ent`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_3} [inst : Semiring R] [inst_1 : AddCommMonoi
+d M] [inst_2 : _root_.Module R M]   {f : M →ₗ[R] M} {p : Submodule R M} (hf : Se
+t.MapsTo ⇑f ↑p ↑p), IsNilpotent f → IsNilpotent (f.restrict hf)
+参数：hf : Set.MapsTo ⇑f ↑p ↑p；f.restrict hf。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Module.End.pow_apply_mem_of_forall_mem`：∀ {R : Type u_1} {M : Type u_5} 
+[inst : Semiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   {f
+' : M →ₗ[R] M} {p : Submodul…
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Module.End.pow_restrict`：∀ {R : Type u_1} {M : Type u_5} [inst : Semirin
+g R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   {f' : M →ₗ[R] M} 
+{p : Submodul…
+· 使用定理 `LinearMap.restrict.congr_simp`：∀ {R : Type u_1} {R₂ : Type u_3} {M : Typ
+e u_5} {M₂ : Type u_7} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : Ad
+dCommMonoid M] [ins…
 -/
 lemma isNilpotent.restrict
-    {f : M ->ₗ[R] M} {p : Submodule R M} (hf : MapsTo f p p) (hnil : IsNilpotent f) :
+    {f : M →ₗ[R] M} {p : Submodule R M} (hf : MapsTo f p p) (hnil : IsNilpotent f) :
     IsNilpotent (f.restrict hf) := by
   obtain ⟨n, hn⟩ := hnil
-  exact ⟨n, LinearMap.ext fun m => by simp only [Module.End.pow_restrict n, hn,
+  exact ⟨n, LinearMap.ext fun m ↦ by simp only [Module.End.pow_restrict n, hn,
     LinearMap.restrict_apply, LinearMap.zero_apply]; rfl⟩
 
 end
 
 variable {M : Type v} [Ring R] [AddCommGroup M] [Module R M]
-variable {f : Module.End R M} {p : Submodule R M} (hp : p <= p.comap f)
+variable {f : Module.End R M} {p : Submodule R M} (hp : p ≤ p.comap f)
 
-/--
-theorem `IsNilpotent.mapQ` / 定理 `IsNilpotent.mapQ`
-
-English:
-theorem IsNilpotent.mapQ
-  given: (hnp : IsNilpotent f)
-  statement: IsNilpotent (p.mapQ p f hp)
-  proof: by
-  obtain ⟨k, hk⟩ := hnp
-  use k
-  simp [← p.mapQ_pow, hk]
-
-中文:
-定理 是幂零.mapQ
-  条件: (hnp : 是幂零 f)
-  结论: 是幂零 (p.mapQ p f hp)
-  证明: by
-  obtain ⟨k, hk⟩ := hnp
-  use k
-  simp [← p.mapQ_pow, hk]
-
-Depends on / 依赖: mapQ_pow, p.mapQ_pow
+/-
+**Module.End.IsNilpotent.mapQ** 是 Mathlib 中的一个定理，位于命名空间 `Module.End.IsNilpotent`
+。
+形式化陈述：∀ {R : Type u_1} {M : Type v} [inst : Ring R] [inst_1 : AddCommGroup M] [i
+nst_2 : _root_.Module R M]   {f : Module.End R M} {p : Submodule R M} (hp : p ≤ 
+Submodule.comap f p), IsNilpotent f → IsNilpotent (p.mapQ p f hp)
+参数：hp : p ≤ Submodule.comap f p；p.mapQ p f hp。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.le_comap_pow_of_le_comap`：le_comap_pow_of_le_comap (p : Submod
+ule R M) {f : M ->ₗ[R] M} (h : p <= p.comap f) (k : Nat) : p <= p.comap (f ^ k)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.mapQ_pow`：mapQ_pow {f : M ->ₗ[R] M} (h : p <= p.comap f) (k : 
+Nat) (h' : p <= p.comap (f ^ k)
+· 使用定理 `Submodule.mapQ.congr_simp`：∀ {R : Type u_1} {M : Type u_2} [inst : Ring 
+R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   (p : Submodule R M) 
+{R₂ : Type u_3}…
+· 使用定理 `Submodule.mapQ_zero`：mapQ_zero (h : p <= q.comap (0 : M ->ₛₗ[τ₁₂] M₂)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem IsNilpotent.mapQ (hnp : IsNilpotent f) : IsNilpotent (p.mapQ p f hp) := by
   obtain ⟨k, hk⟩ := hnp
@@ -483,3 +452,4 @@ theorem IsNilpotent.mapQ (hnp : IsNilpotent f) : IsNilpotent (p.mapQ p f hp) := 
   simp [← p.mapQ_pow, hk]
 
 end Module.End
+

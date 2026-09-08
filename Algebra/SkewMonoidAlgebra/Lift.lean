@@ -26,27 +26,24 @@ section lift
 variable [CommSemiring k] [Monoid G] [Monoid H]
 variable {A B : Type*} [Semiring A] [Algebra k A] [Semiring B] [Algebra k B]
 
-/--
-Definition of `liftNCAlgHom` / `liftNCAlgHom` 的定义
+/-- `liftNCRingHom` as an `AlgHom`, for when `f` is an `AlgHom` -/
+/-
+**SkewMonoidAlgebra.liftNCAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `SkewMonoidAlgebra`。
+形式化陈述：liftNCAlgHom [MulSemiringAction G A] [SMulCommClass G k A] (f : A ->ₐ[k] B
+) (g : G ->* B) (h_comm : forall {x y}, (f (y • x)) * g y = (g y) * (f x)) : Ske
+wMonoidAlgebra A G ->ₐ[k] B where __
+参数：f : A ->ₐ[k] B；g : G ->* B；h_comm : forall {x y}, (f (y • x)) * g y = (g y) *
+ (f x)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftNCAlgHom
-  signature: [MulSemiringAction G A] [SMulCommClass G k A] (f : A ->ₐ[k] B)
-  body: liftNCRingHom (f : A ->+* B) g h_comm
-  commutes' := by simp [liftNCRingHom]
-
-中文:
-定义 liftNCAlgHom
-  签名: [MulSemiring作用 G A] [标量交换类 G k A] (f : A ->ₐ[k] B)
-  定义体: liftNCRingHom (f : A ->+* B) g h_comm
-  commutes' := by simp [liftNCRingHom]
-
-Depends on / 依赖: h_comm, liftNCRingHom
+--- 原说明 ---
+`liftNCRingHom` as an `AlgHom`, for when `f` is an `AlgHom`
 -/
-def liftNCAlgHom [MulSemiringAction G A] [SMulCommClass G k A] (f : A ->ₐ[k] B)
-    (g : G ->* B) (h_comm : forall {x y}, (f (y • x)) * g y = (g y) * (f x)) :
-    SkewMonoidAlgebra A G ->ₐ[k] B where
-  __ := liftNCRingHom (f : A ->+* B) g h_comm
+def liftNCAlgHom [MulSemiringAction G A] [SMulCommClass G k A] (f : A →ₐ[k] B)
+    (g : G →* B) (h_comm : ∀ {x y}, (f (y • x)) * g y = (g y) * (f x)) :
+    SkewMonoidAlgebra A G →ₐ[k] B where
+  __ := liftNCRingHom (f : A →+* B) g h_comm
   commutes' := by simp [liftNCRingHom]
 
 /- Hypotheses needed for `k`-algebra homomorphism from `SkewMonoidAlgebra k G`-/
@@ -54,49 +51,24 @@ variable [MulSemiringAction G k] [SMulCommClass G k k]
 
 variable (k G A)
 
-/--
-Definition of `lift` / `lift` 的定义
+/-- Any monoid homomorphism `G →* A` can be lifted to an algebra homomorphism
+  `SkewMonoidAlgebra k G →ₐ[k] A`. -/
+/-
+**SkewMonoidAlgebra.lift** 是 Mathlib 中的一个定义，位于命名空间 `SkewMonoidAlgebra`。
+形式化陈述：lift : (G ->* A) ≃ (AlgHom k (SkewMonoidAlgebra k G) A) where invFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: : (G ->* A) ≃ (AlgHom k (SkewMonoidAlgebra k G) A) where
-  body: (f : SkewMonoidAlgebra k G ->* A).comp (of k G)
-  toFun F := by
-    apply liftNCAlgHom (Algebra.ofId k A) F
-    simp_rw [show forall (g : G) (r : k), g • r = r by
-        exact fun _ _ => smul_algebraMap _ (algebraMap k k _)]
-    exact Algebra.commutes _ _
-  left_inv f := by
-    ext
-    simp [liftNCAlgHom, liftNCRingHom]
-  right_inv F := by
-    ext
-    simp [liftNCAlgHom, liftNCRingHom]
-
-中文:
-定义 lift
-  签名: : (G ->* A) ≃ (代数态射 k (斜幺半群代数 k G) A) where
-  定义体: (f : SkewMonoidAlgebra k G ->* A).comp (of k G)
-  toFun F := by
-    apply liftNCAlgHom (Algebra.ofId k A) F
-    simp_rw [show forall (g : G) (r : k), g • r = r by
-        exact fun _ _ => smul_algebraMap _ (algebraMap k k _)]
-    exact Algebra.commutes _ _
-  left_inv f := by
-    ext
-    simp [liftNCAlgHom, liftNCRingHom]
-  right_inv F := by
-    ext
-    simp [liftNCAlgHom, liftNCRingHom]
-
-Depends on / 依赖: SkewMonoidAlgebra
+--- 原说明 ---
+Any monoid homomorphism `G →* A` can be lifted to an algebra homomorphism
+  `SkewMonoidAlgebra k G →ₐ[k] A`.
 -/
-def lift : (G ->* A) ≃ (AlgHom k (SkewMonoidAlgebra k G) A) where
-  invFun f := (f : SkewMonoidAlgebra k G ->* A).comp (of k G)
+def lift : (G →* A) ≃ (AlgHom k (SkewMonoidAlgebra k G) A) where
+  invFun f := (f : SkewMonoidAlgebra k G →* A).comp (of k G)
   toFun F := by
     apply liftNCAlgHom (Algebra.ofId k A) F
-    simp_rw [show forall (g : G) (r : k), g • r = r by
-        exact fun _ _ => smul_algebraMap _ (algebraMap k k _)]
+    simp_rw [show ∀ (g : G) (r : k), g • r = r by
+        exact fun _ _ ↦ smul_algebraMap _ (algebraMap k k _)]
     exact Algebra.commutes _ _
   left_inv f := by
     ext
@@ -106,171 +78,154 @@ def lift : (G ->* A) ≃ (AlgHom k (SkewMonoidAlgebra k G) A) where
     simp [liftNCAlgHom, liftNCRingHom]
 
 variable {k G A}
-
-/--
-theorem `lift_apply'` / 定理 `lift_apply'`
-
-English:
-theorem lift_apply'
-  given: (F : G ->* A) (f : SkewMonoidAlgebra k G)
-  proof: rfl
-
-中文:
-定理 lift_apply'
-  条件: (F : G ->* A) (f : 斜幺半群代数 k G)
-  证明: rfl
+/-
+**SkewMonoidAlgebra.lift_apply'** 是 Mathlib 中的一个定理，位于命名空间 `SkewMonoidAlgebra`。
+形式化陈述：lift_apply' (F : G ->* A) (f : SkewMonoidAlgebra k G) : lift k G A F f = f
+.sum fun a b => algebraMap k A b * F a
+参数：F : G ->* A；f : SkewMonoidAlgebra k G。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lift_apply' (F : G ->* A) (f : SkewMonoidAlgebra k G) :
-    lift k G A F f = f.sum fun a b => algebraMap k A b * F a := rfl
-
-/--
-theorem `lift_apply` / 定理 `lift_apply`
-
-English:
-theorem lift_apply
-  given: (F : G ->* A) (f : SkewMonoidAlgebra k G)
-  proof: by simp [lift_apply', Algebra.smul_def]
-
-中文:
-定理 lift_apply
-  条件: (F : G ->* A) (f : 斜幺半群代数 k G)
-  证明: by simp [lift_apply', Algebra.smul_def]
-
-Depends on / 依赖: Algebra, Algebra.smul_def, lift_apply, smul_def
+theorem lift_apply' (F : G →* A) (f : SkewMonoidAlgebra k G) :
+    lift k G A F f = f.sum fun a b ↦ algebraMap k A b * F a := rfl
+/-
+**SkewMonoidAlgebra.lift_apply** 是 Mathlib 中的一个定理，位于命名空间 `SkewMonoidAlgebra`。
+形式化陈述：lift_apply (F : G ->* A) (f : SkewMonoidAlgebra k G) : lift k G A F f = f.
+sum fun a b => b • F a
+参数：F : G ->* A；f : SkewMonoidAlgebra k G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem lift_apply (F : G ->* A) (f : SkewMonoidAlgebra k G) :
-    lift k G A F f = f.sum fun a b => b • F a := by simp [lift_apply', Algebra.smul_def]
-
-/--
-theorem `lift_def` / 定理 `lift_def`
-
-English:
-theorem lift_def
-  given: (F : G ->* A)
-  statement: (lift k G A F : SkewMonoidAlgebra k G -> A) =
-  proof: rfl
+theorem lift_apply (F : G →* A) (f : SkewMonoidAlgebra k G) :
+    lift k G A F f = f.sum fun a b ↦ b • F a := by simp [lift_apply', Algebra.smul_def]
+/-
+**SkewMonoidAlgebra.lift_def** 是 Mathlib 中的一个定理，位于命名空间 `SkewMonoidAlgebra`。
+形式化陈述：lift_def (F : G ->* A) : (lift k G A F : SkewMonoidAlgebra k G -> A) = lif
+tNC ((algebraMap k A : k ->+* A) : k ->+ A) F
+参数：F : G ->* A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem lift_def (F : G →* A) : (lift k G A F : SkewMonoidAlgebra k G → A) =
+    liftNC ((algebraMap k A : k →+* A) : k →+ A) F := rfl
 
 @[simp]
-
-中文:
-定理 lift_def
-  条件: (F : G ->* A)
-  结论: (lift k G A F : 斜幺半群代数 k G -> A) =
-  证明: rfl
-
-@[simp]
--/
-theorem lift_def (F : G ->* A) : (lift k G A F : SkewMonoidAlgebra k G -> A) =
-    liftNC ((algebraMap k A : k ->+* A) : k ->+ A) F := rfl
-
-@[simp]
-/--
-theorem `lift_symm_apply` / 定理 `lift_symm_apply`
-
-English:
-theorem lift_symm_apply
-  given: (F : AlgHom k (SkewMonoidAlgebra k G) A) (x : G)
-  proof: rfl
-
-中文:
-定理 lift_symm_apply
-  条件: (F : 代数态射 k (斜幺半群代数 k G) A) (x : G)
-  证明: rfl
+/-
+**SkewMonoidAlgebra.lift_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `SkewMonoidAlgebra
+`。
+形式化陈述：lift_symm_apply (F : AlgHom k (SkewMonoidAlgebra k G) A) (x : G) : (lift k
+ G A).symm F x = F (single x 1)
+参数：F : AlgHom k (SkewMonoidAlgebra k G) A；x : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem lift_symm_apply (F : AlgHom k (SkewMonoidAlgebra k G) A) (x : G) :
     (lift k G A).symm F x = F (single x 1) := rfl
-
-/--
-theorem `lift_of` / 定理 `lift_of`
-
-English:
-theorem lift_of
-  given: (F : G ->* A) (x)
-  statement: lift k G A F (of k G x) = F x
-  proof: by
-  rw [of_apply]; rw [← lift_symm_apply]; rw [Equiv.symm_apply_apply]
-
-@[simp]
-
-中文:
-定理 lift_of
-  条件: (F : G ->* A) (x)
-  结论: lift k G A F (of k G x) = F x
-  证明: by
-  rw [of_apply]; rw [← lift_symm_apply]; rw [Equiv.symm_apply_apply]
-
-@[simp]
-
-Depends on / 依赖: Equiv.symm_apply_apply, lift_symm_apply, of_apply, symm_apply_apply
+/-
+**SkewMonoidAlgebra.lift_of** 是 Mathlib 中的一个定理，位于命名空间 `SkewMonoidAlgebra`。
+形式化陈述：lift_of (F : G ->* A) (x) : lift k G A F (of k G x) = F x
+参数：F : G ->* A；x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SkewMonoidAlgebra.of_apply`：of_apply (a : G) : (of k G) a = single a 1
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SkewMonoidAlgebra.lift_symm_apply`：lift_symm_apply (F : AlgHom k (SkewMo
+noidAlgebra k G) A) (x : G) : (lift k G A).symm F x = F (single x 1)
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
 -/
-theorem lift_of (F : G ->* A) (x) : lift k G A F (of k G x) = F x := by
-  rw [of_apply]; rw [← lift_symm_apply]; rw [Equiv.symm_apply_apply]
+theorem lift_of (F : G →* A) (x) : lift k G A F (of k G x) = F x := by
+  rw [of_apply, ← lift_symm_apply, Equiv.symm_apply_apply]
 
 @[simp]
-/--
-theorem `lift_single` / 定理 `lift_single`
-
-English:
-theorem lift_single
-  given: (F : G ->* A) (a b)
-  statement: lift k G A F (single a b) = b • F a
-  proof: by
-  rw [lift_def]; rw [liftNC_single]; rw [Algebra.smul_def]; rw [AddMonoidHom.coe_coe]
-
-中文:
-定理 lift_single
-  条件: (F : G ->* A) (a b)
-  结论: lift k G A F (single a b) = b • F a
-  证明: by
-  rw [lift_def]; rw [liftNC_single]; rw [Algebra.smul_def]; rw [AddMonoidHom.coe_coe]
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.coe_coe, Algebra, Algebra.smul_def, coe_coe, liftNC_single, lift_def, smul_def
+/-
+**SkewMonoidAlgebra.lift_single** 是 Mathlib 中的一个定理，位于命名空间 `SkewMonoidAlgebra`。
+形式化陈述：lift_single (F : G ->* A) (a b) : lift k G A F (single a b) = b • F a
+参数：F : G ->* A；a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SkewMonoidAlgebra.lift_def`：lift_def (F : G ->* A) : (lift k G A F : Ske
+wMonoidAlgebra k G -> A) = liftNC ((algebraMap k A : k ->+* A) : k ->+ A) F
+· 使用定理 `SkewMonoidAlgebra.liftNC_single`：∀ {k : Type u_1} {G : Type u_2} [inst :
+ AddCommMonoid k] {R : Type u_5} [inst_1 : NonUnitalNonAssocSemiring R]   (f : k
+ →+ R) (g : G → R) (a…
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
+· 使用定理 `AddMonoidHom.coe_coe`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [in
+st : AddZero M] [inst_1 : AddZero N] [inst_2 : FunLike F M N]   [inst_3 : AddMon
+oidHomClas…
 -/
-theorem lift_single (F : G ->* A) (a b) : lift k G A F (single a b) = b • F a := by
-  rw [lift_def]; rw [liftNC_single]; rw [Algebra.smul_def]; rw [AddMonoidHom.coe_coe]
-
-/--
-theorem `lift_unique'` / 定理 `lift_unique'`
-
-English:
-theorem lift_unique'
-  given: (F : AlgHom k (SkewMonoidAlgebra k G) A)
-  proof: ((lift k G A).apply_symm_apply F).symm
-
-中文:
-定理 lift_unique'
-  条件: (F : 代数态射 k (斜幺半群代数 k G) A)
-  证明: ((lift k G A).apply_symm_apply F).symm
-
-Depends on / 依赖: apply_symm_apply
+theorem lift_single (F : G →* A) (a b) : lift k G A F (single a b) = b • F a := by
+  rw [lift_def, liftNC_single, Algebra.smul_def, AddMonoidHom.coe_coe]
+/-
+**SkewMonoidAlgebra.lift_unique'** 是 Mathlib 中的一个定理，位于命名空间 `SkewMonoidAlgebra`。
+形式化陈述：lift_unique' (F : AlgHom k (SkewMonoidAlgebra k G) A) : F = lift k G A ((F
+ : SkewMonoidAlgebra k G ->* A).comp (of k G))
+参数：F : AlgHom k (SkewMonoidAlgebra k G) A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
 -/
 theorem lift_unique' (F : AlgHom k (SkewMonoidAlgebra k G) A) :
-    F = lift k G A ((F : SkewMonoidAlgebra k G ->* A).comp (of k G)) :=
+    F = lift k G A ((F : SkewMonoidAlgebra k G →* A).comp (of k G)) :=
   ((lift k G A).apply_symm_apply F).symm
 
-/--
-theorem `lift_unique` / 定理 `lift_unique`
+/-- Decomposition of a `k`-algebra homomorphism from `SkewMonoidAlgebra k G` by
+  its values on `F (single a 1)`. -/
+/-
+**SkewMonoidAlgebra.lift_unique** 是 Mathlib 中的一个定理，位于命名空间 `SkewMonoidAlgebra`。
+形式化陈述：lift_unique (F : AlgHom k (SkewMonoidAlgebra k G) A) (f : SkewMonoidAlgebr
+a k G) : F f = f.sum fun a b => b • F (single a 1)
+参数：F : AlgHom k (SkewMonoidAlgebra k G) A；f : SkewMonoidAlgebra k G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SkewMonoidAlgebra.lift_unique'`：lift_unique' (F : AlgHom k (SkewMonoidAl
+gebra k G) A) : F = lift k G A ((F : SkewMonoidAlgebra k G ->* A).comp (of k G))
+· 使用定理 `SkewMonoidAlgebra.lift_apply`：lift_apply (F : G ->* A) (f : SkewMonoidAl
+gebra k G) : lift k G A F f = f.sum fun a b => b • F a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `SkewMonoidAlgebra.of_apply`：of_apply (a : G) : (of k G) a = single a 1
 
-English:
-theorem lift_unique
-  statement: (F : AlgHom k (SkewMonoidAlgebra k G) A)
-  proof: by
-  conv_lhs =>
-    rw [lift_unique' F]
-    simp [lift_apply]
-
-中文:
-定理 lift_unique
-  结论: (F : 代数态射 k (斜幺半群代数 k G) A)
-  证明: by
-  conv_lhs =>
-    rw [lift_unique' F]
-    simp [lift_apply]
-
-Depends on / 依赖: conv_lhs, lift_apply, lift_unique
+--- 原说明 ---
+Decomposition of a `k`-algebra homomorphism from `SkewMonoidAlgebra k G` by
+  its values on `F (single a 1)`.
 -/
 theorem lift_unique (F : AlgHom k (SkewMonoidAlgebra k G) A)
-    (f : SkewMonoidAlgebra k G) : F f = f.sum fun a b => b • F (single a 1) := by
+    (f : SkewMonoidAlgebra k G) : F f = f.sum fun a b ↦ b • F (single a 1) := by
   conv_lhs =>
     rw [lift_unique' F]
     simp [lift_apply]
@@ -278,28 +233,27 @@ theorem lift_unique (F : AlgHom k (SkewMonoidAlgebra k G) A)
 /-- If `f : G → H` is a multiplicative homomorphism between two monoids, then
 `mapDomain f` is an algebra homomorphism between their monoid algebras. -/
 @[simps!]
-/--
-Definition of `mapDomainAlgHom` / `mapDomainAlgHom` 的定义
+/-
+**SkewMonoidAlgebra.mapDomainAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `SkewMonoidAlgebra
+`。
+形式化陈述：mapDomainAlgHom (k A : Type*) [CommSemiring k] [Semiring A] [Algebra k A] 
+{H F : Type*} [Monoid H] [FunLike F G H] [MonoidHomClass F G H] [MulSemiringActi
+on G A] [MulSemiringAction H A] [SMulCommClass G k A] [SMulCommClass H k A] {f :
+ F} (hf : forall (a : G) (x : A), a • x = (f a) • x) : SkewMonoidAlgebra A G ->ₐ
+[k] SkewMonoidAlgebra A H where __
+参数：k A : Type*；hf : forall (a : G) (x : A), a • x = (f a) • x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapDomainAlgHom
-  signature: (k A : Type*) [CommSemiring k] [Semiring A] [Algebra k A] {H F : Type*}
-  body: mapDomainRingHom hf
-  commutes' := by simp [mapDomainRingHom]
-
-中文:
-定义 mapDomainAlgHom
-  签名: (k A : 类型) [交换半环 k] [半环 A] [代数 k A] {H F : 类型}
-  定义体: mapDomainRingHom hf
-  commutes' := by simp [mapDomainRingHom]
-
-Depends on / 依赖: mapDomainRingHom
+--- 原说明 ---
+If `f : G → H` is a multiplicative homomorphism between two monoids, then
+`mapDomain f` is an algebra homomorphism between their monoid algebras.
 -/
 def mapDomainAlgHom (k A : Type*) [CommSemiring k] [Semiring A] [Algebra k A] {H F : Type*}
     [Monoid H] [FunLike F G H] [MonoidHomClass F G H] [MulSemiringAction G A]
     [MulSemiringAction H A] [SMulCommClass G k A] [SMulCommClass H k A] {f : F}
-    (hf : forall (a : G) (x : A), a • x = (f a) • x) :
-    SkewMonoidAlgebra A G ->ₐ[k] SkewMonoidAlgebra A H where
+    (hf : ∀ (a : G) (x : A), a • x = (f a) • x) :
+    SkewMonoidAlgebra A G →ₐ[k] SkewMonoidAlgebra A H where
   __ := mapDomainRingHom hf
   commutes' := by simp [mapDomainRingHom]
 
@@ -313,52 +267,51 @@ variable [AddCommMonoid k]
 `equivMapDomain f l : SkewMonoidAlgebra k H` (computably) by mapping the support forwards
 and the function backwards. -/
 @[simps]
-/--
-Definition of `equivMapDomain` / `equivMapDomain` 的定义
+/-
+**SkewMonoidAlgebra.equivMapDomain** 是 Mathlib 中的一个定义，位于命名空间 `SkewMonoidAlgebra`
+。
+形式化陈述：equivMapDomain (f : G ≃ H) (l : SkewMonoidAlgebra k G) : SkewMonoidAlgebra
+ k H where coeff
+参数：f : G ≃ H；l : SkewMonoidAlgebra k G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivMapDomain
-  signature: (f : G ≃ H) (l : SkewMonoidAlgebra k G)
-  body: l.coeff.equivMapDomain f
-
-@[deprecated (since := "2026-07-06")] alias toFinsupp_equivMapDomain := coeff_equivMapDomain
-
-中文:
-定义 equivMapDomain
-  签名: (f : G ≃ H) (l : 斜幺半群代数 k G)
-  定义体: l.coeff.equivMapDomain f
-
-@[deprecated (since := "2026-07-06")] alias toFinsupp_equivMapDomain := coeff_equivMapDomain
-
-Depends on / 依赖: equivMapDomain, l.coeff.equivMapDomain
+--- 原说明 ---
+Given `f : G ≃ H`, we can map `l : SkewMonoidAlgebra k G` to
+`equivMapDomain f l : SkewMonoidAlgebra k H` (computably) by mapping the support
+ forwards
+and the function backwards.
 -/
 def equivMapDomain (f : G ≃ H) (l : SkewMonoidAlgebra k G) : SkewMonoidAlgebra k H where
   coeff := l.coeff.equivMapDomain f
 
 @[deprecated (since := "2026-07-06")] alias toFinsupp_equivMapDomain := coeff_equivMapDomain
-
-/--
-theorem `equivMapDomain_eq_mapDomain` / 定理 `equivMapDomain_eq_mapDomain`
-
-English:
-theorem equivMapDomain_eq_mapDomain
-  given: (f : G ≃ H) (l : SkewMonoidAlgebra k G)
-  proof: by
-  apply coeff_injective
-  ext x
-  simp_rw [coeff_equivMapDomain, Finsupp.equivMapDomain_apply, coeff_mapDomain,
-    Finsupp.mapDomain_equiv_apply]
-
-中文:
-定理 equivMapDomain_eq_mapDomain
-  条件: (f : G ≃ H) (l : 斜幺半群代数 k G)
-  证明: by
-  apply coeff_injective
-  ext x
-  simp_rw [coeff_equivMapDomain, Finsupp.equivMapDomain_apply, coeff_mapDomain,
-    Finsupp.mapDomain_equiv_apply]
-
-Depends on / 依赖: Finsupp, Finsupp.equivMapDomain_apply, Finsupp.mapDomain_equiv_apply, coeff_equivMapDomain, coeff_injective, coeff_mapDomain, equivMapDomain_apply, mapDomain_equiv_apply, simp_rw
+/-
+**SkewMonoidAlgebra.equivMapDomain_eq_mapDomain** 是 Mathlib 中的一个定理，位于命名空间 `SkewM
+onoidAlgebra`。
+形式化陈述：equivMapDomain_eq_mapDomain (f : G ≃ H) (l : SkewMonoidAlgebra k G) : equi
+vMapDomain f l = mapDomain f l
+参数：f : G ≃ H；l : SkewMonoidAlgebra k G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SkewMonoidAlgebra.coeff_injective`：coeff_injective : Function.Injective 
+(coeff : SkewMonoidAlgebra k G -> Finsupp _ _)
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SkewMonoidAlgebra.coeff_equivMapDomain`：∀ {k : Type u_1} {G : Type u_2} 
+{H : Type u_3} [inst : AddCommMonoid k] (f : G ≃ H) (l : SkewMonoidAlgebra k G),
+   (SkewMonoidAlgebra.equivM…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用引理 `SkewMonoidAlgebra.coeff_mapDomain`：coeff_mapDomain : (mapDomain f v).coe
+ff = Finsupp.mapDomain f v.coeff
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finsupp.mapDomain_equiv_apply`：mapDomain_equiv_apply {f : α ≃ β} (x : α 
+->₀ M) (a : β) : mapDomain f x a = x (f.symm a)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem equivMapDomain_eq_mapDomain (f : G ≃ H) (l : SkewMonoidAlgebra k G) :
     equivMapDomain f l = mapDomain f l := by
@@ -366,25 +319,19 @@ theorem equivMapDomain_eq_mapDomain (f : G ≃ H) (l : SkewMonoidAlgebra k G) :
   ext x
   simp_rw [coeff_equivMapDomain, Finsupp.equivMapDomain_apply, coeff_mapDomain,
     Finsupp.mapDomain_equiv_apply]
-
-/--
-theorem `equivMapDomain_trans` / 定理 `equivMapDomain_trans`
-
-English:
-theorem equivMapDomain_trans
-  statement: {G' G'' : Type*} (f : G ≃ G') (g : G' ≃ G'')
-  proof: by
-  ext x; rfl
-
-@[simp]
-
-中文:
-定理 equivMapDomain_trans
-  结论: {G' G'' : 类型} (f : G ≃ G') (g : G' ≃ G'')
-  证明: by
-  ext x; rfl
-
-@[simp]
+/-
+**SkewMonoidAlgebra.equivMapDomain_trans** 是 Mathlib 中的一个定理，位于命名空间 `SkewMonoidAl
+gebra`。
+形式化陈述：equivMapDomain_trans {G' G'' : Type*} (f : G ≃ G') (g : G' ≃ G'') (l : Ske
+wMonoidAlgebra k G) : equivMapDomain (f.trans g) l = equivMapDomain g (equivMapD
+omain f l)
+参数：f : G ≃ G'；g : G' ≃ G''；l : SkewMonoidAlgebra k G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SkewMonoidAlgebra.ext`：ext {p q : SkewMonoidAlgebra k G} : (forall a, co
+eff p a = coeff q a) -> p = q
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 -/
 theorem equivMapDomain_trans {G' G'' : Type*} (f : G ≃ G') (g : G' ≃ G'')
     (l : SkewMonoidAlgebra k G) :
@@ -392,49 +339,44 @@ theorem equivMapDomain_trans {G' G'' : Type*} (f : G ≃ G') (g : G' ≃ G'')
   ext x; rfl
 
 @[simp]
-/--
-theorem `equivMapDomain_refl` / 定理 `equivMapDomain_refl`
-
-English:
-theorem equivMapDomain_refl
-  given: (l : SkewMonoidAlgebra k G)
-  statement: equivMapDomain (Equiv.refl _) l = l
-  proof: by
-  ext x; rfl
-
-@[simp]
-
-中文:
-定理 equivMapDomain_refl
-  条件: (l : 斜幺半群代数 k G)
-  结论: equivMapDomain (等价.refl _) l = l
-  证明: by
-  ext x; rfl
-
-@[simp]
+/-
+**SkewMonoidAlgebra.equivMapDomain_refl** 是 Mathlib 中的一个定理，位于命名空间 `SkewMonoidAlg
+ebra`。
+形式化陈述：equivMapDomain_refl (l : SkewMonoidAlgebra k G) : equivMapDomain (Equiv.re
+fl _) l = l
+参数：l : SkewMonoidAlgebra k G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SkewMonoidAlgebra.ext`：ext {p q : SkewMonoidAlgebra k G} : (forall a, co
+eff p a = coeff q a) -> p = q
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
 theorem equivMapDomain_refl (l : SkewMonoidAlgebra k G) : equivMapDomain (Equiv.refl _) l = l := by
   ext x; rfl
 
 @[simp]
-/--
-theorem `equivMapDomain_single` / 定理 `equivMapDomain_single`
-
-English:
-theorem equivMapDomain_single
-  given: (f : G ≃ H) (a : G) (b : k)
-  proof: by
-  apply coeff_injective
-  simp_rw [coeff_equivMapDomain, single, Finsupp.equivMapDomain_single]
-
-中文:
-定理 equivMapDomain_single
-  条件: (f : G ≃ H) (a : G) (b : k)
-  证明: by
-  apply coeff_injective
-  simp_rw [coeff_equivMapDomain, single, Finsupp.equivMapDomain_single]
-
-Depends on / 依赖: Finsupp, Finsupp.equivMapDomain_single, coeff_equivMapDomain, coeff_injective, equivMapDomain_single, simp_rw, single
+/-
+**SkewMonoidAlgebra.equivMapDomain_single** 是 Mathlib 中的一个定理，位于命名空间 `SkewMonoidA
+lgebra`。
+形式化陈述：equivMapDomain_single (f : G ≃ H) (a : G) (b : k) : equivMapDomain f (sing
+le a b) = single (f a) b
+参数：f : G ≃ H；a : G；b : k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SkewMonoidAlgebra.coeff_injective`：coeff_injective : Function.Injective 
+(coeff : SkewMonoidAlgebra k G -> Finsupp _ _)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SkewMonoidAlgebra.coeff_equivMapDomain`：∀ {k : Type u_1} {G : Type u_2} 
+{H : Type u_3} [inst : AddCommMonoid k] (f : G ≃ H) (l : SkewMonoidAlgebra k G),
+   (SkewMonoidAlgebra.equivM…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finsupp.equivMapDomain_single`：equivMapDomain_single (f : α ≃ β) (a : α)
+ (b : M) : equivMapDomain f (single a b) = single (f a) b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem equivMapDomain_single (f : G ≃ H) (a : G) (b : k) :
     equivMapDomain f (single a b) = single (f a) b := by
@@ -451,60 +393,47 @@ set_option linter.style.whitespace false in -- manual alignment is not recognise
 /-- Given `AddCommMonoid A` and `e : G ≃ H`, `domCongr e` is the corresponding `Equiv` between
 `SkewMonoidAlgebra A G` and `SkewMonoidAlgebra A H`. -/
 @[simps apply]
-/--
-Definition of `domCongr` / `domCongr` 的定义
+/-
+**SkewMonoidAlgebra.domCongr** 是 Mathlib 中的一个定义，位于命名空间 `SkewMonoidAlgebra`。
+形式化陈述：domCongr [AddCommMonoid A] (e : G ≃ H) : SkewMonoidAlgebra A G ≃+ SkewMono
+idAlgebra A H where toFun
+参数：e : G ≃ H。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition domCongr
-  signature: [AddCommMonoid A] (e : G ≃ H)
-  body: equivMapDomain e
-  invFun := equivMapDomain e.symm
-  left_inv v := by simp [← equivMapDomain_trans]
-  right_inv v := by simp [← equivMapDomain_trans]
-  map_add' a b := by simp [equivMapDomain_eq_mapDomain, map_add]
-
-中文:
-定义 domCongr
-  签名: [加法交换幺半群 A] (e : G ≃ H)
-  定义体: equivMapDomain e
-  invFun := equivMapDomain e.symm
-  left_inv v := by simp [← equivMapDomain_trans]
-  right_inv v := by simp [← equivMapDomain_trans]
-  map_add' a b := by simp [equivMapDomain_eq_mapDomain, map_add]
-
-Depends on / 依赖: equivMapDomain
+--- 原说明 ---
+Given `AddCommMonoid A` and `e : G ≃ H`, `domCongr e` is the corresponding `Equi
+v` between
+`SkewMonoidAlgebra A G` and `SkewMonoidAlgebra A H`.
 -/
 def domCongr [AddCommMonoid A] (e : G ≃ H) : SkewMonoidAlgebra A G ≃+ SkewMonoidAlgebra A H where
-  toFun := equivMapDomain e
-  invFun := equivMapDomain e.symm
-  left_inv v := by simp [← equivMapDomain_trans]
-  right_inv v := by simp [← equivMapDomain_trans]
+  toFun        := equivMapDomain e
+  invFun       := equivMapDomain e.symm
+  left_inv v   := by simp [← equivMapDomain_trans]
+  right_inv v  := by simp [← equivMapDomain_trans]
   map_add' a b := by simp [equivMapDomain_eq_mapDomain, map_add]
 
-/--
-Definition of `domLCongr` / `domLCongr` 的定义
+/-- An equivalence of domains induces a linear equivalence of finitely supported functions.
 
-English:
-definition domLCongr
-  signature: [Semiring k] [AddCommMonoid A] [Module k A] (e : G ≃ H)
-  body: (domCongr e : SkewMonoidAlgebra A G ≃+ SkewMonoidAlgebra A H).toLinearEquiv by
-    simp only [domCongr_apply]
-    intro c x
-    simp_rw [equivMapDomain_eq_mapDomain, mapDomain_smul]
+This is `domCongr` as a `LinearEquiv`. -/
+/-
+**SkewMonoidAlgebra.domLCongr** 是 Mathlib 中的一个定义，位于命名空间 `SkewMonoidAlgebra`。
+形式化陈述：domLCongr [Semiring k] [AddCommMonoid A] [Module k A] (e : G ≃ H) : SkewMo
+noidAlgebra A G ≃ₗ[k] SkewMonoidAlgebra A H
+参数：e : G ≃ H。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 domLCongr
-  签名: [半环 k] [加法交换幺半群 A] [模 k A] (e : G ≃ H)
-  定义体: (domCongr e : SkewMonoidAlgebra A G ≃+ SkewMonoidAlgebra A H).toLinearEquiv by
-    simp only [domCongr_apply]
-    intro c x
-    simp_rw [equivMapDomain_eq_mapDomain, mapDomain_smul]
+--- 原说明 ---
+An equivalence of domains induces a linear equivalence of finitely supported fun
+ctions.
 
-Depends on / 依赖: SkewMonoidAlgebra, domCongr, domCongr_apply, equivMapDomain_eq_mapDomain, mapDomain_smul, simp_rw, toLinearEquiv
+This is `domCongr` as a `LinearEquiv`.
 -/
 def domLCongr [Semiring k] [AddCommMonoid A] [Module k A] (e : G ≃ H) :
     SkewMonoidAlgebra A G ≃ₗ[k] SkewMonoidAlgebra A H :=
-(domCongr e : SkewMonoidAlgebra A G ≃+ SkewMonoidAlgebra A H).toLinearEquiv by
+  (domCongr e : SkewMonoidAlgebra A G ≃+ SkewMonoidAlgebra A H).toLinearEquiv <| by
     simp only [domCongr_apply]
     intro c x
     simp_rw [equivMapDomain_eq_mapDomain, mapDomain_smul]
@@ -514,145 +443,131 @@ variable (k A)
 variable [Monoid G] [Monoid H] [Semiring A] [CommSemiring k] [Algebra k A] [MulSemiringAction G A]
   [MulSemiringAction H A] [SMulCommClass G k A] [SMulCommClass H k A]
 
-/--
-Definition of `domCongrAlg` / `domCongrAlg` 的定义
+/-- If `e : G ≃* H` is a multiplicative equivalence between two monoids and
+` ∀ (a : G) (x : A), a • x = (e a) • x`, then `SkewMonoidAlgebra.domCongr e` is an
+algebra equivalence between their skew monoid algebras. -/
+/-
+**SkewMonoidAlgebra.domCongrAlg** 是 Mathlib 中的一个定义，位于命名空间 `SkewMonoidAlgebra`。
+形式化陈述：domCongrAlg {e : G ≃* H} (he : forall (a : G) (x : A), a • x = (e a) • x) 
+: SkewMonoidAlgebra A G ≃ₐ[k] SkewMonoidAlgebra A H
+参数：he : forall (a : G) (x : A), a • x = (e a) • x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition domCongrAlg
-  signature: {e : G ≃* H} (he : forall (a : G) (x : A), a • x = (e a) • x)
-  body: AlgEquiv.ofLinearEquiv
-    (domLCongr e : SkewMonoidAlgebra A G ≃ₗ[k] SkewMonoidAlgebra A H)
-    ((equivMapDomain_eq_mapDomain _ _).trans <| mapDomain_one e)
-    (fun f g => (equivMapDomain_eq_mapDomain _ _).trans <| (mapDomain_mul f g he).trans <|
-        congr_arg₂ _ (equivMapDomain_eq_mapDomain _ _).symm (equivMapDomain_eq_mapDomain _ _).symm)
-
-中文:
-定义 domCongrAlg
-  签名: {e : G ≃* H} (he : 对任意 (a : G) (x : A), a • x = (e a) • x)
-  定义体: AlgEquiv.ofLinearEquiv
-    (domLCongr e : SkewMonoidAlgebra A G ≃ₗ[k] SkewMonoidAlgebra A H)
-    ((equivMapDomain_eq_mapDomain _ _).trans <| mapDomain_one e)
-    (fun f g => (equivMapDomain_eq_mapDomain _ _).trans <| (mapDomain_mul f g he).trans <|
-        congr_arg₂ _ (equivMapDomain_eq_mapDomain _ _).symm (equivMapDomain_eq_mapDomain _ _).symm)
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.ofLinearEquiv, SkewMonoidAlgebra, domLCongr, equivMapDomain_eq_mapDomain, mapDomain_mul, mapDomain_one, ofLinearEquiv
+--- 原说明 ---
+If `e : G ≃* H` is a multiplicative equivalence between two monoids and
+` ∀ (a : G) (x : A), a • x = (e a) • x`, then `SkewMonoidAlgebra.domCongr e` is 
+an
+algebra equivalence between their skew monoid algebras.
 -/
-def domCongrAlg {e : G ≃* H} (he : forall (a : G) (x : A), a • x = (e a) • x) :
+def domCongrAlg {e : G ≃* H} (he : ∀ (a : G) (x : A), a • x = (e a) • x) :
     SkewMonoidAlgebra A G ≃ₐ[k] SkewMonoidAlgebra A H :=
   AlgEquiv.ofLinearEquiv
     (domLCongr e : SkewMonoidAlgebra A G ≃ₗ[k] SkewMonoidAlgebra A H)
     ((equivMapDomain_eq_mapDomain _ _).trans <| mapDomain_one e)
-    (fun f g => (equivMapDomain_eq_mapDomain _ _).trans <| (mapDomain_mul f g he).trans <|
+    (fun f g ↦ (equivMapDomain_eq_mapDomain _ _).trans <| (mapDomain_mul f g he).trans <|
         congr_arg₂ _ (equivMapDomain_eq_mapDomain _ _).symm (equivMapDomain_eq_mapDomain _ _).symm)
-
-/--
-theorem `domCongrAlg_toAlgHom` / 定理 `domCongrAlg_toAlgHom`
-
-English:
-theorem domCongrAlg_toAlgHom
-  given: {e : G ≃* H} (he : forall (a : G) (x : A), a • x = (e a) • x)
-  proof: AlgHom.ext fun _ => equivMapDomain_eq_mapDomain _ _
-
-中文:
-定理 domCongrAlg_toAlgHom
-  条件: {e : G ≃* H} (he : 对任意 (a : G) (x : A), a • x = (e a) • x)
-  证明: AlgHom.ext fun _ => equivMapDomain_eq_mapDomain _ _
-
-Depends on / 依赖: AlgHom, AlgHom.ext, equivMapDomain_eq_mapDomain
+/-
+**SkewMonoidAlgebra.domCongrAlg_toAlgHom** 是 Mathlib 中的一个定理，位于命名空间 `SkewMonoidAl
+gebra`。
+形式化陈述：domCongrAlg_toAlgHom {e : G ≃* H} (he : forall (a : G) (x : A), a • x = (e
+ a) • x) : (domCongrAlg k A he).toAlgHom = mapDomainAlgHom k A he
+参数：he : forall (a : G) (x : A), a • x = (e a) • x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.ext`：ext {φ₁ φ₂ : A ->ₐ[R] B} (H : forall x, φ₁ x = φ₂ x) : φ₁ = 
+φ₂
+· 使用定理 `MulEquivClass.instMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N : T
+ype u_5} [inst : EquivLike F M N] [inst_1 : MulOneClass M]   [inst_2 : MulOneCla
+ss N] [MulEquivClass F…
+· 使用定理 `MulEquiv.instMulEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul 
+M] [inst_1 : Mul N], MulEquivClass (M ≃* N) M N
+· 使用定理 `SkewMonoidAlgebra.equivMapDomain_eq_mapDomain`：equivMapDomain_eq_mapDoma
+in (f : G ≃ H) (l : SkewMonoidAlgebra k G) : equivMapDomain f l = mapDomain f l
 -/
-theorem domCongrAlg_toAlgHom {e : G ≃* H} (he : forall (a : G) (x : A), a • x = (e a) • x) :
+theorem domCongrAlg_toAlgHom {e : G ≃* H} (he : ∀ (a : G) (x : A), a • x = (e a) • x) :
     (domCongrAlg k A he).toAlgHom = mapDomainAlgHom k A he :=
-AlgHom.ext fun _ => equivMapDomain_eq_mapDomain _ _
-
-/--
-theorem `domCongrAlg_apply` / 定理 `domCongrAlg_apply`
-
-English:
-theorem domCongrAlg_apply
-  statement: {e : G ≃* H} (he : forall (a : G) (x : A), a • x = (e a) • x)
-  proof: rfl
-
-中文:
-定理 domCongrAlg_apply
-  结论: {e : G ≃* H} (he : 对任意 (a : G) (x : A), a • x = (e a) • x)
-  证明: rfl
+  AlgHom.ext <| fun _ ↦ equivMapDomain_eq_mapDomain _ _
+/-
+**SkewMonoidAlgebra.domCongrAlg_apply** 是 Mathlib 中的一个定理，位于命名空间 `SkewMonoidAlgeb
+ra`。
+形式化陈述：∀ (k : Type u_1) {G : Type u_2} {H : Type u_3} (A : Type u_4) [inst : Mono
+id G] [inst_1 : Monoid H]   [inst_2 : Semiring A] [inst_3 : CommSemiring k] [ins
+t_4 : Algebra k A] [inst_5 : MulSemiringAction G A]   [inst_6 : MulSemiringActio
+n H A] [inst_7 : SMulCommClass G k A] [inst_8 : SMulCommClass H k A] {e : G ≃* H
+}   (he : ∀ (a : G) (x : A), a • x = e a • x) (f : SkewMonoidAlgebra A G) (h : H
+),   ((SkewMonoidAlgebra.domCongrAlg k A he) f).coeff h = f.coeff (e.symm h)
+参数：k : Type u_1；A : Type u_4；he : ∀ (a : G) (x : A), a • x = e a • x；f : SkewMon
+oidAlgebra A G；h : H；(SkewMonoidAlgebra.domCongrAlg k A he) f；e.symm h。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] theorem domCongrAlg_apply {e : G ≃* H} (he : forall (a : G) (x : A), a • x = (e a) • x)
+@[simp] theorem domCongrAlg_apply {e : G ≃* H} (he : ∀ (a : G) (x : A), a • x = (e a) • x)
     (f : SkewMonoidAlgebra A G) (h : H) : (domCongrAlg k A he f).coeff h = f.coeff (e.symm h) :=
   rfl
-
-/--
-theorem `domCongr_support` / 定理 `domCongr_support`
-
-English:
-theorem domCongr_support
-  statement: {e : G ≃* H} (he : forall (a : G) (x : A), a • x = (e a) • x)
-  proof: rfl
-
-中文:
-定理 domCongr_support
-  结论: {e : G ≃* H} (he : 对任意 (a : G) (x : A), a • x = (e a) • x)
-  证明: rfl
+/-
+**SkewMonoidAlgebra.domCongr_support** 是 Mathlib 中的一个定理，位于命名空间 `SkewMonoidAlgebr
+a`。
+形式化陈述：∀ (k : Type u_1) {G : Type u_2} {H : Type u_3} (A : Type u_4) [inst : Mono
+id G] [inst_1 : Monoid H]   [inst_2 : Semiring A] [inst_3 : CommSemiring k] [ins
+t_4 : Algebra k A] [inst_5 : MulSemiringAction G A]   [inst_6 : MulSemiringActio
+n H A] [inst_7 : SMulCommClass G k A] [inst_8 : SMulCommClass H k A] {e : G ≃* H
+}   (he : ∀ (a : G) (x : A), a • x = e a • x) (f : SkewMonoidAlgebra A G),   ((S
+kewMonoidAlgebra.domCongrAlg k A he) f).support = Finset.map (↑e).toEmbedding f.
+support
+参数：k : Type u_1；A : Type u_4；he : ∀ (a : G) (x : A), a • x = e a • x；f : SkewMon
+oidAlgebra A G；(SkewMonoidAlgebra.domCongrAlg k A he) f；↑e。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] theorem domCongr_support {e : G ≃* H} (he : forall (a : G) (x : A), a • x = (e a) • x)
+@[simp] theorem domCongr_support {e : G ≃* H} (he : ∀ (a : G) (x : A), a • x = (e a) • x)
     (f : SkewMonoidAlgebra A G) : (domCongrAlg k A he f).support = f.support.map e :=
   rfl
-
-/--
-theorem `domCongr_single` / 定理 `domCongr_single`
-
-English:
-theorem domCongr_single
-  statement: {e : G ≃* H} (he : forall (a : G) (x : A), a • x = (e a) • x)
-  proof: equivMapDomain_single ..
-
-中文:
-定理 domCongr_single
-  结论: {e : G ≃* H} (he : 对任意 (a : G) (x : A), a • x = (e a) • x)
-  证明: equivMapDomain_single ..
+/-
+**SkewMonoidAlgebra.domCongr_single** 是 Mathlib 中的一个定理，位于命名空间 `SkewMonoidAlgebra
+`。
+形式化陈述：∀ (k : Type u_1) {G : Type u_2} {H : Type u_3} (A : Type u_4) [inst : Mono
+id G] [inst_1 : Monoid H]   [inst_2 : Semiring A] [inst_3 : CommSemiring k] [ins
+t_4 : Algebra k A] [inst_5 : MulSemiringAction G A]   [inst_6 : MulSemiringActio
+n H A] [inst_7 : SMulCommClass G k A] [inst_8 : SMulCommClass H k A] {e : G ≃* H
+}   (he : ∀ (a : G) (x : A), a • x = e a • x) (g : G) (a : A),   (SkewMonoidAlge
+bra.domCongrAlg k A he) (SkewMonoidAlgebra.single g a) = SkewMonoidAlgebra.singl
+e (e g) a
+参数：k : Type u_1；A : Type u_4；he : ∀ (a : G) (x : A), a • x = e a • x；g : G；a : A
+；SkewMonoidAlgebra.domCongrAlg k A he；SkewMonoidAlgebra.single g a；e g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SkewMonoidAlgebra.equivMapDomain_single`：equivMapDomain_single (f : G ≃ 
+H) (a : G) (b : k) : equivMapDomain f (single a b) = single (f a) b
 -/
-@[simp] theorem domCongr_single {e : G ≃* H} (he : forall (a : G) (x : A), a • x = (e a) • x)
+@[simp] theorem domCongr_single {e : G ≃* H} (he : ∀ (a : G) (x : A), a • x = (e a) • x)
     (g : G) (a : A) : domCongrAlg k A he (single g a) = single (e g) a :=
   equivMapDomain_single ..
-
-/--
-theorem `domCongr_refl` / 定理 `domCongr_refl`
-
-English:
-theorem domCongr_refl
-  proof: by
-  apply AlgEquiv.ext
-  aesop
-
-中文:
-定理 domCongr_refl
-  证明: by
-  apply AlgEquiv.ext
-  aesop
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.ext, AlgEquiv.refl, MulEquiv, MulEquiv.refl
+/-
+**SkewMonoidAlgebra.domCongr_refl** 是 Mathlib 中的一个定理，位于命名空间 `SkewMonoidAlgebra`。
+形式化陈述：domCongr_refl : domCongrAlg k A (e
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.ext`：ext {f g : A₁ ≃ₐ[R] A₂} (h : forall a, f a = g a) : f = g
+· 使用定理 `SkewMonoidAlgebra.ext`：ext {p q : SkewMonoidAlgebra k G} : (forall a, co
+eff p a = coeff q a) -> p = q
 -/
 theorem domCongr_refl :
-    domCongrAlg k A (e := MulEquiv.refl G) (fun _ _ => rfl) = AlgEquiv.refl := by
+    domCongrAlg k A (e := MulEquiv.refl G) (fun _ _ ↦ rfl) = AlgEquiv.refl := by
   apply AlgEquiv.ext
   aesop
-
-/--
-theorem `domCongr_symm` / 定理 `domCongr_symm`
-
-English:
-theorem domCongr_symm
-  given: {e : G ≃* H} (he : forall (a : G) (x : A), a • x = (e a) • x)
-  proof: rfl
-
-中文:
-定理 domCongr_symm
-  条件: {e : G ≃* H} (he : 对任意 (a : G) (x : A), a • x = (e a) • x)
-  证明: rfl
+/-
+**SkewMonoidAlgebra.domCongr_symm** 是 Mathlib 中的一个定理，位于命名空间 `SkewMonoidAlgebra`。
+形式化陈述：∀ (k : Type u_1) {G : Type u_2} {H : Type u_3} (A : Type u_4) [inst : Mono
+id G] [inst_1 : Monoid H]   [inst_2 : Semiring A] [inst_3 : CommSemiring k] [ins
+t_4 : Algebra k A] [inst_5 : MulSemiringAction G A]   [inst_6 : MulSemiringActio
+n H A] [inst_7 : SMulCommClass G k A] [inst_8 : SMulCommClass H k A] {e : G ≃* H
+}   (he : ∀ (a : G) (x : A), a • x = e a • x),   (SkewMonoidAlgebra.domCongrAlg 
+k A he).symm = SkewMonoidAlgebra.domCongrAlg k A ⋯
+参数：k : Type u_1；A : Type u_4；he : ∀ (a : G) (x : A), a • x = e a • x；SkewMonoidA
+lgebra.domCongrAlg k A he。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] theorem domCongr_symm {e : G ≃* H} (he : forall (a : G) (x : A), a • x = (e a) • x) :
+@[simp] theorem domCongr_symm {e : G ≃* H} (he : ∀ (a : G) (x : A), a • x = (e a) • x) :
     (domCongrAlg k A he).symm =
-      domCongrAlg (e := e.symm) _ _ (fun a x => by rw [he, MulEquiv.apply_symm_apply]) :=
+      domCongrAlg (e := e.symm) _ _ (fun a x ↦ by rw [he, MulEquiv.apply_symm_apply]) :=
   rfl
 
 end domCongr
@@ -665,44 +580,34 @@ variable {V : Type*} [AddCommMonoid V] [Module k V] [Module (SkewMonoidAlgebra k
   [IsScalarTower k (SkewMonoidAlgebra k G) V]
 
 set_option linter.style.whitespace false in -- manual alignment is not recognised
-/--
-Definition of `submoduleOfSmulMem` / `submoduleOfSmulMem` 的定义
+/-- A submodule over `k` which is stable under scalar multiplication by elements of `G` is a
+submodule over `SkewMonoidAlgebra k G` -/
+/-
+**SkewMonoidAlgebra.submoduleOfSmulMem** 是 Mathlib 中的一个定义，位于命名空间 `SkewMonoidAlge
+bra`。
+形式化陈述：submoduleOfSmulMem (W : Submodule k V) (h : forall (g : G) (v : V), v in W
+ -> of k G g • v in W) : Submodule (SkewMonoidAlgebra k G) V where carrier
+参数：W : Submodule k V；h : forall (g : G) (v : V), v in W -> of k G g • v in W。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition submoduleOfSmulMem
-  signature: (W : Submodule k V) (h : forall (g : G) (v : V), v in W -> of k G g • v in W)
-  body: W
-  zero_mem' := W.zero_mem'
-  add_mem' := W.add_mem'
-  smul_mem' := by
-    intro f v hv
-    rw [← sum_single f]; rw [sum_def]; rw [Finsupp.sum]; rw [Finset.sum_smul]
-    simp_rw [← smul_of, smul_assoc]
-    exact Submodule.sum_smul_mem W _ fun g _ => h g v hv
-
-中文:
-定义 submoduleOfSmulMem
-  签名: (W : 子模 k V) (h : 对任意 (g : G) (v : V), v in W -> of k G g • v in W)
-  定义体: W
-  zero_mem' := W.zero_mem'
-  add_mem' := W.add_mem'
-  smul_mem' := by
-    intro f v hv
-    rw [← sum_single f]; rw [sum_def]; rw [Finsupp.sum]; rw [Finset.sum_smul]
-    simp_rw [← smul_of, smul_assoc]
-    exact Submodule.sum_smul_mem W _ fun g _ => h g v hv
+--- 原说明 ---
+A submodule over `k` which is stable under scalar multiplication by elements of 
+`G` is a
+submodule over `SkewMonoidAlgebra k G`
 -/
-def submoduleOfSmulMem (W : Submodule k V) (h : forall (g : G) (v : V), v in W -> of k G g • v in W) :
+def submoduleOfSmulMem (W : Submodule k V) (h : ∀ (g : G) (v : V), v ∈ W → of k G g • v ∈ W) :
     Submodule (SkewMonoidAlgebra k G) V where
-  carrier := W
+  carrier   := W
   zero_mem' := W.zero_mem'
-  add_mem' := W.add_mem'
+  add_mem'  := W.add_mem'
   smul_mem' := by
     intro f v hv
-    rw [← sum_single f]; rw [sum_def]; rw [Finsupp.sum]; rw [Finset.sum_smul]
+    rw [← sum_single f, sum_def, Finsupp.sum, Finset.sum_smul]
     simp_rw [← smul_of, smul_assoc]
-    exact Submodule.sum_smul_mem W _ fun g _ => h g v hv
+    exact Submodule.sum_smul_mem W _ fun g _ ↦ h g v hv
 
 end Submodule
 
 end SkewMonoidAlgebra
+

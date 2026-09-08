@@ -30,101 +30,88 @@ variable {C D : Type*} [Category* C] [Category* D] [Abelian C] [Abelian D]
   [HasDerivedCategory C] [HasDerivedCategory D]
   (F : C ⥤ D) [F.Additive] [EnoughInjectives C]
 
-/--
-Definition of `rightDerivedFunctorPlus` / `rightDerivedFunctorPlus` 的定义
+/-- The right derived functor `DerivedCategory.Plus C ⥤ DerivedCategory.Plus D`
+when `F : C ⥤ D` is an additive functor between abelian categories and
+`C` has enough injectives. -/
+/-
+**CategoryTheory.Functor.rightDerivedFunctorPlus** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Functor`。
+形式化陈述：rightDerivedFunctorPlus : DerivedCategory.Plus C ⥤ DerivedCategory.Plus D
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `DerivedCategory.instHasZeroObject`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : HasDerivedCa
+tegory C], CategoryTheo…
+· 使用定理 `DerivedCategory.instAdditiveShiftFunctorInt`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : Ha
+sDerivedCategory C] (n : ℤ), (Cat…
+· 使用定理 `DerivedCategory.Plus.instIsLocalizationPlusQhQuasiIso`：∀ (C : Type u_1) 
+[inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Abelian C
+]   [inst_2 : HasDerivedCategory C], Derive…
 
-English:
-definition rightDerivedFunctorPlus
-  signature: :
-  body: (F.mapHomotopyCategoryPlus ⋙ DerivedCategory.Plus.Qh).totalRightDerived DerivedCategory.Plus.Qh
-    (HomotopyCategory.Plus.quasiIso C)
-
-中文:
-定义 rightDerivedFunctorPlus
-  签名: :
-  定义体: (F.mapHomotopyCategoryPlus ⋙ DerivedCategory.Plus.Qh).totalRightDerived DerivedCategory.Plus.Qh
-    (HomotopyCategory.Plus.quasiIso C)
-
-Depends on / 依赖: DerivedCategory, DerivedCategory.Plus.Qh, F.mapHomotopyCategoryPlus, HomotopyCategory, HomotopyCategory.Plus.quasiIso, mapHomotopyCategoryPlus, quasiIso, totalRightDerived
+--- 原说明 ---
+The right derived functor `DerivedCategory.Plus C ⥤ DerivedCategory.Plus D`
+when `F : C ⥤ D` is an additive functor between abelian categories and
+`C` has enough injectives.
 -/
 noncomputable def rightDerivedFunctorPlus :
     DerivedCategory.Plus C ⥤ DerivedCategory.Plus D :=
   (F.mapHomotopyCategoryPlus ⋙ DerivedCategory.Plus.Qh).totalRightDerived DerivedCategory.Plus.Qh
     (HomotopyCategory.Plus.quasiIso C)
 
-/--
-Definition of `rightDerivedFunctorPlusUnit` / `rightDerivedFunctorPlusUnit` 的定义
+/-- The natural transformation that is part of the data of
+the right derived functor `DerivedCategory.Plus C ⥤ DerivedCategory.Plus D`
+when `F : C ⥤ D` is an additive functor between abelian categories and
+`C` has enough injectives. -/
+/-
+**CategoryTheory.Functor.rightDerivedFunctorPlusUnit** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Functor`。
+形式化陈述：rightDerivedFunctorPlusUnit : F.mapHomotopyCategoryPlus ⋙ DerivedCategory.
+Plus.Qh ⟶ DerivedCategory.Plus.Qh ⋙ F.rightDerivedFunctorPlus
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `DerivedCategory.instHasZeroObject`：∀ {C : Type u} [inst : CategoryTheory
+.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : HasDerivedCa
+tegory C], CategoryTheo…
+· 使用定理 `DerivedCategory.instAdditiveShiftFunctorInt`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.Abelian C]   [inst_2 : Ha
+sDerivedCategory C] (n : ℤ), (Cat…
+· 使用定理 `DerivedCategory.Plus.instIsLocalizationPlusQhQuasiIso`：∀ (C : Type u_1) 
+[inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Abelian C
+]   [inst_2 : HasDerivedCategory C], Derive…
 
-English:
-definition rightDerivedFunctorPlusUnit
-  signature: :
-  body: (F.mapHomotopyCategoryPlus ⋙ DerivedCategory.Plus.Qh).totalRightDerivedUnit
-    DerivedCategory.Plus.Qh (HomotopyCategory.Plus.quasiIso C)
-
-中文:
-定义 rightDerivedFunctorPlusUnit
-  签名: :
-  定义体: (F.mapHomotopyCategoryPlus ⋙ DerivedCategory.Plus.Qh).totalRightDerivedUnit
-    DerivedCategory.Plus.Qh (HomotopyCategory.Plus.quasiIso C)
-
-Depends on / 依赖: DerivedCategory, DerivedCategory.Plus.Qh, F.mapHomotopyCategoryPlus, HomotopyCategory, HomotopyCategory.Plus.quasiIso, mapHomotopyCategoryPlus, quasiIso, totalRightDerivedUnit
+--- 原说明 ---
+The natural transformation that is part of the data of
+the right derived functor `DerivedCategory.Plus C ⥤ DerivedCategory.Plus D`
+when `F : C ⥤ D` is an additive functor between abelian categories and
+`C` has enough injectives.
 -/
 noncomputable def rightDerivedFunctorPlusUnit :
     F.mapHomotopyCategoryPlus ⋙ DerivedCategory.Plus.Qh ⟶
       DerivedCategory.Plus.Qh ⋙ F.rightDerivedFunctorPlus :=
   (F.mapHomotopyCategoryPlus ⋙ DerivedCategory.Plus.Qh).totalRightDerivedUnit
     DerivedCategory.Plus.Qh (HomotopyCategory.Plus.quasiIso C)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  body: by
-  dsimp only [rightDerivedFunctorPlus, rightDerivedFunctorPlusUnit]
-  infer_instance
-
-example (X : HomotopyCategory.Plus (InjectiveObject C)) :
-    IsIso (F.rightDerivedFunctorPlusUnit.app
-      ((InjectiveObject.ι C).mapHomotopyCategoryPlus.obj X)) := by
-  infer_instance
-
-example (K : CochainComplex.Plus (InjectiveObject C)) :
-    IsIso (F.rightDerivedFunctorPlusUnit.app
-      ((HomotopyCategory.Plus.quotient C).obj
-        ((InjectiveObject.ι C).mapCochainComplexPlus.obj K))) := by
-  infer_instance
-
-中文:
-实例 :
-  定义体: by
-  dsimp only [rightDerivedFunctorPlus, rightDerivedFunctorPlusUnit]
-  infer_instance
-
-example (X : HomotopyCategory.Plus (InjectiveObject C)) :
-    IsIso (F.rightDerivedFunctorPlusUnit.app
-      ((InjectiveObject.ι C).mapHomotopyCategoryPlus.obj X)) := by
-  infer_instance
-
-example (K : CochainComplex.Plus (InjectiveObject C)) :
-    IsIso (F.rightDerivedFunctorPlusUnit.app
-      ((HomotopyCategory.Plus.quotient C).obj
-        ((InjectiveObject.ι C).mapCochainComplexPlus.obj K))) := by
-  infer_instance
-
-Depends on / 依赖: infer_instance, rightDerivedFunctorPlus, rightDerivedFunctorPlusUnit
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance :
     F.rightDerivedFunctorPlus.IsRightDerivedFunctor
       F.rightDerivedFunctorPlusUnit (HomotopyCategory.Plus.quasiIso C) := by
   dsimp only [rightDerivedFunctorPlus, rightDerivedFunctorPlusUnit]
   infer_instance
-
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example (X : HomotopyCategory.Plus (InjectiveObject C)) :
     IsIso (F.rightDerivedFunctorPlusUnit.app
       ((InjectiveObject.ι C).mapHomotopyCategoryPlus.obj X)) := by
   infer_instance
-
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example (K : CochainComplex.Plus (InjectiveObject C)) :
     IsIso (F.rightDerivedFunctorPlusUnit.app
       ((HomotopyCategory.Plus.quotient C).obj
@@ -134,3 +121,4 @@ example (K : CochainComplex.Plus (InjectiveObject C)) :
 end Functor
 
 end CategoryTheory
+

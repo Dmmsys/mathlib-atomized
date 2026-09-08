@@ -48,115 +48,159 @@ variable {X E : Type*} [TopologicalSpace X] [HereditarilyLindelofSpace X] [Linea
 -- Note: we shouldn't really need a topology on `E`: we just want the conclusion of
 -- `SeparableSpace` + `Dense.exists_between`.
 
-/--
-theorem `exists_countable_upperSemicontinuous_isGLB` / 定理 `exists_countable_upperSemicontinuous_isGLB`
+/-- If a function `s : X → E` can be written as the infimum of a family `𝓕` of upper semicontinuous
+functions then, assuming that `X` is hereditarily Lindelöf (for example, second countable),
+`s` can in fact be written as the infimum of some *countable* subfamily `𝓕'`.
 
-English:
-theorem exists_countable_upperSemicontinuous_isGLB
-  statement: {s : X -> E} {𝓕 : Set (X -> E)}
-  proof: by
-  simp_rw [isGLB_pi] at *
-  rcases exists_countable_dense E with ⟨D, D_count, D_dense⟩
-  let U (f : X -> E) (d : E) : Set X := {x | f x < d}
-.isOpen_preimage d have U_open {f} (hf : f in 𝓕) (d : E) : IsOpen (U f d) := h𝓕_cont f hf
-  have (d : E) : {x | s x < d} = ⋃ f : 𝓕, U f d := by
-    ext x
-    simp [U, isGLB_lt_iff (h𝓕 x)]
-  have (d : E) : exists A subseteq 𝓕, A.Countable ∧ {x | s x < d} = ⋃ f in A, U f d := by
-    simp_rw [this d]
-    rcases eq_open_union_countable (fun f : 𝓕 => U f d) (fun f => U_open f.2 d) with ⟨t, t_count, ht⟩
-    use (↑) '' t, image_val_subset, t_count.image _
-    rw [← ht]; rw [biUnion_image]
-  choose A A_sub A_count hA using this
-  set 𝓕' := ⋃ d in D, A d
-  have 𝓕'_sub : 𝓕' subseteq 𝓕 := iUnion₂_subset fun d _ => A_sub d
-  use 𝓕', 𝓕'_sub, D_count.biUnion fun d _ => A_count d
-  refine fun x => ⟨lowerBounds_mono_set (image_mono 𝓕'_sub) (h𝓕 x).1, fun e he => ?_⟩
-  by_contra! H
-  rcases D_dense.exists_between H with ⟨d, d_mem, hd⟩
-  obtain ⟨f, f_mem, hf⟩ : exists f in A d, f x < d := by
-    have : x in {y | s y < d} := hd.1
-    simpa only [hA d, mem_iUnion₂, exists_prop, U, mem_ofPred_eq] using this
-  suffices e < e by simpa
-.trans hd.2 exact (he (mem_image_of_mem _ (mem_iUnion₂_of_mem d_mem f_mem))).trans_lt hf
+This is implication a) ⇒ b) in
+[N. Bourbaki, *Topologie Générale*, Chapitre IX, Appendice I, Proposition 3][bourbaki1974]
 
-中文:
-定理 存在_countable_upperSemicontinuous_isGLB
-  结论: {s : X -> E} {𝓕 : 集合 (X -> E)}
-  证明: by
-  simp_rw [isGLB_pi] at *
-  rcases exists_countable_dense E with ⟨D, D_count, D_dense⟩
-  let U (f : X -> E) (d : E) : Set X := {x | f x < d}
-.isOpen_preimage d have U_open {f} (hf : f in 𝓕) (d : E) : IsOpen (U f d) := h𝓕_cont f hf
-  have (d : E) : {x | s x < d} = ⋃ f : 𝓕, U f d := by
-    ext x
-    simp [U, isGLB_lt_iff (h𝓕 x)]
-  have (d : E) : exists A subseteq 𝓕, A.Countable ∧ {x | s x < d} = ⋃ f in A, U f d := by
-    simp_rw [this d]
-    rcases eq_open_union_countable (fun f : 𝓕 => U f d) (fun f => U_open f.2 d) with ⟨t, t_count, ht⟩
-    use (↑) '' t, image_val_subset, t_count.image _
-    rw [← ht]; rw [biUnion_image]
-  choose A A_sub A_count hA using this
-  set 𝓕' := ⋃ d in D, A d
-  have 𝓕'_sub : 𝓕' subseteq 𝓕 := iUnion₂_subset fun d _ => A_sub d
-  use 𝓕', 𝓕'_sub, D_count.biUnion fun d _ => A_count d
-  refine fun x => ⟨lowerBounds_mono_set (image_mono 𝓕'_sub) (h𝓕 x).1, fun e he => ?_⟩
-  by_contra! H
-  rcases D_dense.exists_between H with ⟨d, d_mem, hd⟩
-  obtain ⟨f, f_mem, hf⟩ : exists f in A d, f x < d := by
-    have : x in {y | s y < d} := hd.1
-    simpa only [hA d, mem_iUnion₂, exists_prop, U, mem_ofPred_eq] using this
-  suffices e < e by simpa
-.trans hd.2 exact (he (mem_image_of_mem _ (mem_iUnion₂_of_mem d_mem f_mem))).trans_lt hf
+See the module docstring for a discussion of the assumptions on `E`. -/
+/-
+**exists_countable_upperSemicontinuous_isGLB** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_countable_upperSemicontinuous_isGLB {s : X -> E} {𝓕 : Set (X -> E)}
+ (h𝓕_cont : forall f in 𝓕, UpperSemicontinuous f) (h𝓕 : IsGLB 𝓕 s) : exists 𝓕' s
+ubseteq 𝓕, 𝓕'.Countable ∧ IsGLB 𝓕' s
+参数：X -> E；h𝓕_cont : forall f in 𝓕, UpperSemicontinuous f；h𝓕 : IsGLB 𝓕 s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `TopologicalSpace.exists_countable_dense`：exists_countable_dense [Separab
+leSpace α] : exists s : Set α, s.Countable ∧ Dense s
+· 使用定理 `UpperSemicontinuous.isOpen_preimage`：UpperSemicontinuous.isOpen_preimage
+ (hf : UpperSemicontinuous f) (y : β) : IsOpen (f ⁻¹' Iio y)
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `isGLB_lt_iff`：∀ {α : Type u_1} [inst : LinearOrder α] {s : Set α} {a b :
+ α}, IsGLB s a → (a < b ↔ ∃ c ∈ s, c < b)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `Set.iUnion_coe_set`：iUnion_coe_set {α β : Type*} (s : Set α) (f : s -> S
+et β) : ⋃ i, f i = ⋃ i in s, f ⟨i, ‹i in s›⟩
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用引理 `eq_open_union_countable`：eq_open_union_countable [HereditarilyLindelofSp
+ace X] {ι : Type*} (U : ι -> Set X) (h : forall i, IsOpen (U i)) : exists t : Se
+t ι, t.Counta…
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Set.image_val_subset`：image_val_subset : (γ : Set α) subseteq β
+· 使用定理 `Set.Countable.image`：∀ {α : Type u} {β : Type v} {s : Set α}, s.Countabl
+e → ∀ (f : α → β), (f '' s).Countable
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.biUnion_image`：biUnion_image : ⋃ x in f '' s, g x = ⋃ y in s, g (f y
+)
+· 使用定理 `Set.iUnion₂_subset`：iUnion₂_subset {s : forall i, κ i -> Set α} {t : Set
+ α} (h : forall i j, s i j subseteq t) : ⋃ (i) (j), s i j subseteq t
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Set.Countable.biUnion`：∀ {α : Type u} {β : Type v} {s : Set α} {t : (a :
+ α) → a ∈ s → Set β},   s.Countable → (∀ (a : α) (ha : a ∈ s), (t a ha).Countabl
+e) → (⋃ a, …
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `lowerBounds_mono_set`：∀ {α : Type u_1} [inst : Preorder α] ⦃s t : Set α⦄
+, s ⊆ t → lowerBounds t ⊆ lowerBounds s
+· 使用引理 `Set.image_mono`：image_mono (h : s subseteq t) : f '' s subseteq f '' t
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `Dense.exists_between`：Dense.exists_between [DenselyOrdered α] {s : Set α
+} (hs : Dense s) {x y : α} (h : x < y) : exists z in s, z in Ioo x y
+（共 35 条，此处仅展示前 30 条）
 
-Depends on / 依赖: A.Countable, Countable, D_count, D_dense, IsOpen, U_open, eq_open_union_countable, exists_countable_dense, isGLB_lt_iff, isGLB_pi, isOpen_preimage, simp_rw, subseteq
+--- 原说明 ---
+If a function `s : X → E` can be written as the infimum of a family `𝓕` of upper
+ semicontinuous
+functions then, assuming that `X` is hereditarily Lindelöf (for example, second 
+countable),
+`s` can in fact be written as the infimum of some *countable* subfamily `𝓕'`.
+
+This is implication a) ⇒ b) in
+[N. Bourbaki, *Topologie Générale*, Chapitre IX, Appendice I, Proposition 3][bou
+rbaki1974]
+
+See the module docstring for a discussion of the assumptions on `E`.
 -/
-theorem exists_countable_upperSemicontinuous_isGLB {s : X -> E} {𝓕 : Set (X -> E)}
-    (h𝓕_cont : forall f in 𝓕, UpperSemicontinuous f) (h𝓕 : IsGLB 𝓕 s) :
-    exists 𝓕' subseteq 𝓕, 𝓕'.Countable ∧ IsGLB 𝓕' s := by
+theorem exists_countable_upperSemicontinuous_isGLB {s : X → E} {𝓕 : Set (X → E)}
+    (h𝓕_cont : ∀ f ∈ 𝓕, UpperSemicontinuous f) (h𝓕 : IsGLB 𝓕 s) :
+    ∃ 𝓕' ⊆ 𝓕, 𝓕'.Countable ∧ IsGLB 𝓕' s := by
   simp_rw [isGLB_pi] at *
   rcases exists_countable_dense E with ⟨D, D_count, D_dense⟩
-  let U (f : X -> E) (d : E) : Set X := {x | f x < d}
-.isOpen_preimage d have U_open {f} (hf : f in 𝓕) (d : E) : IsOpen (U f d) := h𝓕_cont f hf
+  let U (f : X → E) (d : E) : Set X := {x | f x < d}
+  have U_open {f} (hf : f ∈ 𝓕) (d : E) : IsOpen (U f d) := h𝓕_cont f hf |>.isOpen_preimage d
   have (d : E) : {x | s x < d} = ⋃ f : 𝓕, U f d := by
     ext x
     simp [U, isGLB_lt_iff (h𝓕 x)]
-  have (d : E) : exists A subseteq 𝓕, A.Countable ∧ {x | s x < d} = ⋃ f in A, U f d := by
+  have (d : E) : ∃ A ⊆ 𝓕, A.Countable ∧ {x | s x < d} = ⋃ f ∈ A, U f d := by
     simp_rw [this d]
-    rcases eq_open_union_countable (fun f : 𝓕 => U f d) (fun f => U_open f.2 d) with ⟨t, t_count, ht⟩
+    rcases eq_open_union_countable (fun f : 𝓕 ↦ U f d) (fun f ↦ U_open f.2 d) with ⟨t, t_count, ht⟩
     use (↑) '' t, image_val_subset, t_count.image _
-    rw [← ht]; rw [biUnion_image]
+    rw [← ht, biUnion_image]
   choose A A_sub A_count hA using this
-  set 𝓕' := ⋃ d in D, A d
-  have 𝓕'_sub : 𝓕' subseteq 𝓕 := iUnion₂_subset fun d _ => A_sub d
-  use 𝓕', 𝓕'_sub, D_count.biUnion fun d _ => A_count d
-  refine fun x => ⟨lowerBounds_mono_set (image_mono 𝓕'_sub) (h𝓕 x).1, fun e he => ?_⟩
+  set 𝓕' := ⋃ d ∈ D, A d
+  have 𝓕'_sub : 𝓕' ⊆ 𝓕 := iUnion₂_subset fun d _ ↦ A_sub d
+  use 𝓕', 𝓕'_sub, D_count.biUnion fun d _ ↦ A_count d
+  refine fun x ↦ ⟨lowerBounds_mono_set (image_mono 𝓕'_sub) (h𝓕 x).1, fun e he ↦ ?_⟩
   by_contra! H
   rcases D_dense.exists_between H with ⟨d, d_mem, hd⟩
-  obtain ⟨f, f_mem, hf⟩ : exists f in A d, f x < d := by
-    have : x in {y | s y < d} := hd.1
+  obtain ⟨f, f_mem, hf⟩ : ∃ f ∈ A d, f x < d := by
+    have : x ∈ {y | s y < d} := hd.1
     simpa only [hA d, mem_iUnion₂, exists_prop, U, mem_ofPred_eq] using this
   suffices e < e by simpa
-.trans hd.2 exact (he (mem_image_of_mem _ (mem_iUnion₂_of_mem d_mem f_mem))).trans_lt hf
+  exact (he (mem_image_of_mem _ (mem_iUnion₂_of_mem d_mem f_mem))).trans_lt hf |>.trans hd.2
 
-/--
-theorem `exists_countable_lowerSemicontinuous_isLUB` / 定理 `exists_countable_lowerSemicontinuous_isLUB`
+/-- If a function `s : X → E` can be written as the supremum of a family `𝓕` of lower semicontinuous
+functions then, assuming that `X` is hereditarily Lindelöf (for example, second countable),
+`s` can in fact be written as the supremum of some *countable* subfamily `𝓕'`.
 
-English:
-theorem exists_countable_lowerSemicontinuous_isLUB
-  statement: {s : X -> E} {𝓕 : Set (X -> E)}
-  proof: exists_countable_upperSemicontinuous_isGLB (E := Eᵒᵈ) h𝓕_cont h𝓕
+This is implication a) ⇒ b) in
+[N. Bourbaki, *Topologie Générale*, Chapitre IX, Appendice I, Proposition 3][bourbaki1974]
 
-中文:
-定理 存在_countable_lowerSemicontinuous_isLUB
-  结论: {s : X -> E} {𝓕 : 集合 (X -> E)}
-  证明: exists_countable_upperSemicontinuous_isGLB (E := Eᵒᵈ) h𝓕_cont h𝓕
+See the module docstring for a discussion of the assumptions on `E`. -/
+/-
+**exists_countable_lowerSemicontinuous_isLUB** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_countable_lowerSemicontinuous_isLUB {s : X -> E} {𝓕 : Set (X -> E)}
+ (h𝓕_cont : forall f in 𝓕, LowerSemicontinuous f) (h𝓕 : IsLUB 𝓕 s) : exists 𝓕' s
+ubseteq 𝓕, 𝓕'.Countable ∧ IsLUB 𝓕' s
+参数：X -> E；h𝓕_cont : forall f in 𝓕, LowerSemicontinuous f；h𝓕 : IsLUB 𝓕 s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_countable_upperSemicontinuous_isGLB`：exists_countable_upperSemico
+ntinuous_isGLB {s : X -> E} {𝓕 : Set (X -> E)} (h𝓕_cont : forall f in 𝓕, UpperSe
+micontinuous f) (h𝓕 : IsGLB 𝓕 s)…
+· 使用定理 `instOrderClosedTopologyOrderDual`：∀ {α : Type u} [inst : TopologicalSpac
+e α] [inst_1 : Preorder α] [t : OrderClosedTopology α], OrderClosedTopology αᵒᵈ
+· 使用定理 `instSeparableSpaceOrderDual`：∀ {α : Type u} [inst : TopologicalSpace α] 
+[h : TopologicalSpace.SeparableSpace α], TopologicalSpace.SeparableSpace αᵒᵈ
 
-Depends on / 依赖: exists_countable_upperSemicontinuous_isGLB
+--- 原说明 ---
+If a function `s : X → E` can be written as the supremum of a family `𝓕` of lowe
+r semicontinuous
+functions then, assuming that `X` is hereditarily Lindelöf (for example, second 
+countable),
+`s` can in fact be written as the supremum of some *countable* subfamily `𝓕'`.
+
+This is implication a) ⇒ b) in
+[N. Bourbaki, *Topologie Générale*, Chapitre IX, Appendice I, Proposition 3][bou
+rbaki1974]
+
+See the module docstring for a discussion of the assumptions on `E`.
 -/
-theorem exists_countable_lowerSemicontinuous_isLUB {s : X -> E} {𝓕 : Set (X -> E)}
-    (h𝓕_cont : forall f in 𝓕, LowerSemicontinuous f) (h𝓕 : IsLUB 𝓕 s) :
-    exists 𝓕' subseteq 𝓕, 𝓕'.Countable ∧ IsLUB 𝓕' s :=
+theorem exists_countable_lowerSemicontinuous_isLUB {s : X → E} {𝓕 : Set (X → E)}
+    (h𝓕_cont : ∀ f ∈ 𝓕, LowerSemicontinuous f) (h𝓕 : IsLUB 𝓕 s) :
+    ∃ 𝓕' ⊆ 𝓕, 𝓕'.Countable ∧ IsLUB 𝓕' s :=
   exists_countable_upperSemicontinuous_isGLB (E := Eᵒᵈ) h𝓕_cont h𝓕
 
 end
+

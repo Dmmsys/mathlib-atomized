@@ -52,82 +52,44 @@ open scoped BigOperators ComplexConjugate
 
 section
 
-local notation "𝓚" => algebraMap Real _
+local notation "𝓚" => algebraMap ℝ _
 
 /--
-Definition of `RCLike` / `RCLike` 的定义
+This typeclass captures properties shared by ℝ and ℂ, with an API that closely matches that of ℂ.
+-/
+/-
+**RCLike** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：semiOutParam (Type u_1) → Type u_1
+参数：Type u_1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class RCLike
-  parameters: (K : semiOutParam Type*)
-  extends: DenselyNormedField K, StarRing K, 
-  axioms and operations (18):
-    - re : K ->+ Real
-    - im : K ->+ Real
-    - I : K
-    - I_re_ax : re I = 0
-    - I_mul_I_ax : I = 0 ∨ I * I = -1
-    - re_add_im_ax : forall z : K, 𝓚 (re z) + 𝓚 (im z) * I = z
-    - ofReal_re_ax : forall r : Real, re (𝓚 r) = r
-    - ofReal_im_ax : forall r : Real, im (𝓚 r) = 0
-    - mul_re_ax : forall z w : K, re (z * w) = re z * re w - im z * im w
-    - mul_im_ax : forall z w : K, im (z * w) = re z * im w + im z * re w
-    - conj_re_ax : forall z : K, re (conj z) = re z
-    - conj_im_ax : forall z : K, im (conj z) = -im z
-    - conj_I_ax : conj I = -I
-    - norm_sq_eq_def_ax : forall z : K, ‖z‖ ^ 2 = re z * re z + im z * im z
-    - mul_im_I_ax : forall z : K, im z * im I = im z
-    - [toPartialOrder : PartialOrder K]
-    - le_iff_re_im({z w : K}) : z <= w ↔ re z <= re w ∧ im z = im w
-    - [toDecidableEq : DecidableEq K]
-
-中文:
-类 RCLike
-  参数: (K : semiOutParam 类型)
-  继承: DenselyNormedField K, 对合环 K, 
-  公理与运算 (18 个):
-    - re : K ->+ 实数
-    - im : K ->+ 实数
-    - I : K
-    - I_re_ax : re I = 0
-    - I_mul_I_ax : I = 0 ∨ I * I = -1
-    - re_add_im_ax : 对任意 z : K, 𝓚 (re z) + 𝓚 (im z) * I = z
-    - ofReal_re_ax : 对任意 r : 实数, re (𝓚 r) = r
-    - ofReal_im_ax : 对任意 r : 实数, im (𝓚 r) = 0
-    - mul_re_ax : 对任意 z w : K, re (z * w) = re z * re w - im z * im w
-    - mul_im_ax : 对任意 z w : K, im (z * w) = re z * im w + im z * re w
-    - conj_re_ax : 对任意 z : K, re (conj z) = re z
-    - conj_im_ax : 对任意 z : K, im (conj z) = -im z
-    - conj_I_ax : conj I = -I
-    - norm_sq_eq_def_ax : 对任意 z : K, ‖z‖ ^ 2 = re z * re z + im z * im z
-    - mul_im_I_ax : 对任意 z : K, im z * im I = im z
-    - [toPartialOrder : 偏序 K]
-    - le_iff_re_im({z w : K}) : z <= w ↔ re z <= re w ∧ im z = im w
-    - [toDecidableEq : DecidableEq K]
+--- 原说明 ---
+This typeclass captures properties shared by ℝ and ℂ, with an API that closely m
+atches that of ℂ.
 -/
 class RCLike (K : semiOutParam Type*) extends DenselyNormedField K, StarRing K,
-    NormedAlgebra Real K, CompleteSpace K where
+    NormedAlgebra ℝ K, CompleteSpace K where
   /-- The real part as an additive monoid homomorphism -/
-  re : K ->+ Real
+  re : K →+ ℝ
   /-- The imaginary part as an additive monoid homomorphism -/
-  im : K ->+ Real
+  im : K →+ ℝ
   /-- Imaginary unit in `K`. Meant to be set to `0` for `K = ℝ`. -/
   I : K
   I_re_ax : re I = 0
   I_mul_I_ax : I = 0 ∨ I * I = -1
-  re_add_im_ax : forall z : K, 𝓚 (re z) + 𝓚 (im z) * I = z
-  ofReal_re_ax : forall r : Real, re (𝓚 r) = r
-  ofReal_im_ax : forall r : Real, im (𝓚 r) = 0
-  mul_re_ax : forall z w : K, re (z * w) = re z * re w - im z * im w
-  mul_im_ax : forall z w : K, im (z * w) = re z * im w + im z * re w
-  conj_re_ax : forall z : K, re (conj z) = re z
-  conj_im_ax : forall z : K, im (conj z) = -im z
+  re_add_im_ax : ∀ z : K, 𝓚 (re z) + 𝓚 (im z) * I = z
+  ofReal_re_ax : ∀ r : ℝ, re (𝓚 r) = r
+  ofReal_im_ax : ∀ r : ℝ, im (𝓚 r) = 0
+  mul_re_ax : ∀ z w : K, re (z * w) = re z * re w - im z * im w
+  mul_im_ax : ∀ z w : K, im (z * w) = re z * im w + im z * re w
+  conj_re_ax : ∀ z : K, re (conj z) = re z
+  conj_im_ax : ∀ z : K, im (conj z) = -im z
   conj_I_ax : conj I = -I
-  norm_sq_eq_def_ax : forall z : K, ‖z‖ ^ 2 = re z * re z + im z * im z
-  mul_im_I_ax : forall z : K, im z * im I = im z
+  norm_sq_eq_def_ax : ∀ z : K, ‖z‖ ^ 2 = re z * re z + im z * im z
+  mul_im_I_ax : ∀ z : K, im z * im I = im z
   /-- only an instance in the `ComplexOrder` scope -/
   [toPartialOrder : PartialOrder K]
-  le_iff_re_im {z w : K} : z <= w ↔ re z <= re w ∧ im z = im w
+  le_iff_re_im {z w : K} : z ≤ w ↔ re z ≤ re w ∧ im z = im w
   -- note we cannot put this in the `extends` clause
   [toDecidableEq : DecidableEq K]
 
@@ -141,1373 +103,993 @@ variable {K E : Type*} [RCLike K]
 
 namespace RCLike
 
-/--
-Definition of `ofReal` / `ofReal` 的定义
+/-- Coercion from `ℝ` to an `RCLike` field. -/
+/-
+**RCLike.ofReal** 是 Mathlib 中的一个定义，位于命名空间 `RCLike`。
+形式化陈述：{K : Type u_1} → [RCLike K] → ℝ → K
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofReal
-  signature: : Real -> K
-  body: Algebra.cast
-
-中文:
-缩写 of实数
-  签名: : 实数 -> K
-  定义体: Algebra.cast
+--- 原说明 ---
+Coercion from `ℝ` to an `RCLike` field.
 -/
-@[coe] abbrev ofReal : Real -> K := Algebra.cast
+@[coe] abbrev ofReal : ℝ → K := Algebra.cast
 
 /-- The priority must be set at 900 to ensure that coercions are tried in the right order.
 See Note [coercion into rings], or `Mathlib/Data/Nat/Cast/Basic.lean` for more details. -/
-noncomputable instance (priority := 900) algebraMapCoe : CoeTC Real K :=
+/-
+**RCLike.** 是 Mathlib 中的一个实例，位于命名空间 `RCLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The priority must be set at 900 to ensure that coercions are tried in the right 
+order.
+See Note [coercion into rings], or `Mathlib/Data/Nat/Cast/Basic.lean` for more d
+etails.
+-/
+noncomputable instance (priority := 900) algebraMapCoe : CoeTC ℝ K :=
   ⟨ofReal⟩
-
-/--
-theorem `ofReal_alg` / 定理 `ofReal_alg`
-
-English:
-theorem ofReal_alg
-  given: (x : Real)
-  statement: (x : K) = x • (1 : K)
-  proof: Algebra.algebraMap_eq_smul_one x
-
-中文:
-定理 of实数_alg
-  条件: (x : 实数)
-  结论: (x : K) = x • (1 : K)
-  证明: Algebra.algebraMap_eq_smul_one x
-
-Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, algebraMap_eq_smul_one
+/-
+**RCLike.ofReal_alg** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_alg (x : Real) : (x : K) = x • (1 : K)
+参数：x : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.algebraMap_eq_smul_one`：algebraMap_eq_smul_one (r : R) : algebra
+Map R A r = r • (1 : A)
 -/
-theorem ofReal_alg (x : Real) : (x : K) = x • (1 : K) :=
+theorem ofReal_alg (x : ℝ) : (x : K) = x • (1 : K) :=
   Algebra.algebraMap_eq_smul_one x
-
-/--
-theorem `real_smul_eq_coe_mul` / 定理 `real_smul_eq_coe_mul`
-
-English:
-theorem real_smul_eq_coe_mul
-  given: (r : Real) (z : K)
-  statement: r • z = (r : K) * z
-  proof: Algebra.smul_def r z
-
-中文:
-定理 real_smul_eq_coe_mul
-  条件: (r : 实数) (z : K)
-  结论: r • z = (r : K) * z
-  证明: Algebra.smul_def r z
-
-Depends on / 依赖: Algebra, Algebra.smul_def, smul_def
+/-
+**RCLike.real_smul_eq_coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：real_smul_eq_coe_mul (r : Real) (z : K) : r • z = (r : K) * z
+参数：r : Real；z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
 -/
-theorem real_smul_eq_coe_mul (r : Real) (z : K) : r • z = (r : K) * z :=
+theorem real_smul_eq_coe_mul (r : ℝ) (z : K) : r • z = (r : K) * z :=
   Algebra.smul_def r z
-
-/--
-theorem `real_smul_eq_coe_smul` / 定理 `real_smul_eq_coe_smul`
-
-English:
-theorem real_smul_eq_coe_smul
-  statement: [AddCommGroup E] [Module K E] [Module Real E] [IsScalarTower Real K E]
-  proof: by rw [RCLike.ofReal_alg, smul_one_smul]
-
-中文:
-定理 real_smul_eq_coe_smul
-  结论: [加法交换群 E] [模 K E] [模 实数 E] [标量塔 实数 K E]
-  证明: by rw [RCLike.ofReal_alg, smul_one_smul]
-
-Depends on / 依赖: RCLike, RCLike.ofReal_alg, ofReal_alg, smul_one_smul
+/-
+**RCLike.real_smul_eq_coe_smul** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：real_smul_eq_coe_smul [AddCommGroup E] [Module K E] [Module Real E] [IsSca
+larTower Real K E] (r : Real) (x : E) : r • x = (r : K) • x
+参数：r : Real；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.ofReal_alg`：ofReal_alg (x : Real) : (x : K) = x • (1 : K)
+· 使用引理 `smul_one_smul`：smul_one_smul {M} (N) [Monoid N] [SMul M N] [MulAction N 
+α] [SMul M α] [IsScalarTower M N α] (x : M) (y : α) : (x • (1 : N)) • y = x • y
 -/
-theorem real_smul_eq_coe_smul [AddCommGroup E] [Module K E] [Module Real E] [IsScalarTower Real K E]
-    (r : Real) (x : E) : r • x = (r : K) • x := by rw [RCLike.ofReal_alg, smul_one_smul]
-
-/--
-theorem `algebraMap_eq_ofReal` / 定理 `algebraMap_eq_ofReal`
-
-English:
-theorem algebraMap_eq_ofReal
-  statement: ⇑(algebraMap Real K) = ofReal
-  proof: rfl
-
-@[simp, rclike_simps]
-
-中文:
-定理 algebraMap_eq_of实数
-  结论: ⇑(algebraMap 实数 K) = of实数
-  证明: rfl
-
-@[simp, rclike_simps]
+theorem real_smul_eq_coe_smul [AddCommGroup E] [Module K E] [Module ℝ E] [IsScalarTower ℝ K E]
+    (r : ℝ) (x : E) : r • x = (r : K) • x := by rw [RCLike.ofReal_alg, smul_one_smul]
+/-
+**RCLike.algebraMap_eq_ofReal** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：algebraMap_eq_ofReal : ⇑(algebraMap Real K) = ofReal
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem algebraMap_eq_ofReal : ⇑(algebraMap Real K) = ofReal :=
+theorem algebraMap_eq_ofReal : ⇑(algebraMap ℝ K) = ofReal :=
   rfl
 
 @[simp, rclike_simps]
-/--
-theorem `re_add_im` / 定理 `re_add_im`
-
-English:
-theorem re_add_im
-  given: (z : K)
-  statement: (re z : K) + im z * I = z
-  proof: RCLike.re_add_im_ax z
-
-@[simp, norm_cast, rclike_simps]
-
-中文:
-定理 re_add_im
-  条件: (z : K)
-  结论: (re z : K) + im z * I = z
-  证明: RCLike.re_add_im_ax z
-
-@[simp, norm_cast, rclike_simps]
-
-Depends on / 依赖: RCLike, RCLike.re_add_im_ax, re_add_im_ax
+/-
+**RCLike.re_add_im** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：re_add_im (z : K) : (re z : K) + im z * I = z
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.re_add_im_ax`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K] (
+z : K),   (algebraMap ℝ K) (RCLike.re z) + (algebraMap ℝ K) (RCLike.im z) * RCLi
+ke.I = z
 -/
 theorem re_add_im (z : K) : (re z : K) + im z * I = z :=
   RCLike.re_add_im_ax z
 
 @[simp, norm_cast, rclike_simps]
-/--
-theorem `ofReal_re` / 定理 `ofReal_re`
-
-English:
-theorem ofReal_re
-  statement: forall r : Real, re (r : K) = r
-  proof: RCLike.ofReal_re_ax
-
-@[simp, norm_cast, rclike_simps]
-
-中文:
-定理 of实数_re
-  结论: 对任意 r : 实数, re (r : K) = r
-  证明: RCLike.ofReal_re_ax
-
-@[simp, norm_cast, rclike_simps]
-
-Depends on / 依赖: RCLike, RCLike.ofReal_re_ax, ofReal_re_ax
+/-
+**RCLike.ofReal_re** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_re : forall r : Real, re (r : K) = r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.ofReal_re_ax`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K] (
+r : ℝ), RCLike.re ((algebraMap ℝ K) r) = r
 -/
-theorem ofReal_re : forall r : Real, re (r : K) = r :=
+theorem ofReal_re : ∀ r : ℝ, re (r : K) = r :=
   RCLike.ofReal_re_ax
 
 @[simp, norm_cast, rclike_simps]
-/--
-theorem `ofReal_im` / 定理 `ofReal_im`
-
-English:
-theorem ofReal_im
-  statement: forall r : Real, im (r : K) = 0
-  proof: RCLike.ofReal_im_ax
-
-@[simp, rclike_simps]
-
-中文:
-定理 of实数_im
-  结论: 对任意 r : 实数, im (r : K) = 0
-  证明: RCLike.ofReal_im_ax
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: RCLike, RCLike.ofReal_im_ax, ofReal_im_ax
+/-
+**RCLike.ofReal_im** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_im : forall r : Real, im (r : K) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.ofReal_im_ax`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K] (
+r : ℝ), RCLike.im ((algebraMap ℝ K) r) = 0
 -/
-theorem ofReal_im : forall r : Real, im (r : K) = 0 :=
+theorem ofReal_im : ∀ r : ℝ, im (r : K) = 0 :=
   RCLike.ofReal_im_ax
 
 @[simp, rclike_simps]
-/--
-theorem `mul_re` / 定理 `mul_re`
-
-English:
-theorem mul_re
-  statement: forall z w : K, re (z * w) = re z * re w - im z * im w
-  proof: RCLike.mul_re_ax
-
-@[simp, rclike_simps]
-
-中文:
-定理 mul_re
-  结论: 对任意 z w : K, re (z * w) = re z * re w - im z * im w
-  证明: RCLike.mul_re_ax
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: RCLike, RCLike.mul_re_ax, mul_re_ax
+/-
+**RCLike.mul_re** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：mul_re : forall z w : K, re (z * w) = re z * re w - im z * im w
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.mul_re_ax`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K] (z w
+ : K),   RCLike.re (z * w) = RCLike.re z * RCLike.re w - RCLike.im z * RCLike.im
+ w
 -/
-theorem mul_re : forall z w : K, re (z * w) = re z * re w - im z * im w :=
+theorem mul_re : ∀ z w : K, re (z * w) = re z * re w - im z * im w :=
   RCLike.mul_re_ax
 
 @[simp, rclike_simps]
-/--
-theorem `mul_im` / 定理 `mul_im`
-
-English:
-theorem mul_im
-  statement: forall z w : K, im (z * w) = re z * im w + im z * re w
-  proof: RCLike.mul_im_ax
-
-中文:
-定理 mul_im
-  结论: 对任意 z w : K, im (z * w) = re z * im w + im z * re w
-  证明: RCLike.mul_im_ax
-
-Depends on / 依赖: RCLike, RCLike.mul_im_ax, mul_im_ax
+/-
+**RCLike.mul_im** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：mul_im : forall z w : K, im (z * w) = re z * im w + im z * re w
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.mul_im_ax`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K] (z w
+ : K),   RCLike.im (z * w) = RCLike.re z * RCLike.im w + RCLike.im z * RCLike.re
+ w
 -/
-theorem mul_im : forall z w : K, im (z * w) = re z * im w + im z * re w :=
+theorem mul_im : ∀ z w : K, im (z * w) = re z * im w + im z * re w :=
   RCLike.mul_im_ax
-
-/--
-theorem `ext_iff` / 定理 `ext_iff`
-
-English:
-theorem ext_iff
-  given: {z w : K}
-  statement: z = w ↔ re z = re w ∧ im z = im w
-  proof: ⟨fun h => h ▸ ⟨rfl, rfl⟩, fun ⟨h₁, h₂⟩ => re_add_im z ▸ re_add_im w ▸ h₁ ▸ h₂ ▸ rfl⟩
-
-中文:
-定理 ext_iff
-  条件: {z w : K}
-  结论: z = w ↔ re z = re w ∧ im z = im w
-  证明: ⟨fun h => h ▸ ⟨rfl, rfl⟩, fun ⟨h₁, h₂⟩ => re_add_im z ▸ re_add_im w ▸ h₁ ▸ h₂ ▸ rfl⟩
-
-Depends on / 依赖: X.property, property, re_add_im
+/-
+**RCLike.ext_iff** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ext_iff {z w : K} : z = w ↔ re z = re w ∧ im z = im w
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.re_add_im`：re_add_im (z : K) : (re z : K) + im z * I = z
 -/
 theorem ext_iff {z w : K} : z = w ↔ re z = re w ∧ im z = im w :=
   ⟨fun h => h ▸ ⟨rfl, rfl⟩, fun ⟨h₁, h₂⟩ => re_add_im z ▸ re_add_im w ▸ h₁ ▸ h₂ ▸ rfl⟩
-
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {z w : K} (hre : re z = re w) (him : im z = im w)
-  statement: z = w
-  proof: ext_iff.2 ⟨hre, him⟩
-
-@[norm_cast]
-
-中文:
-定理 ext
-  条件: {z w : K} (hre : re z = re w) (him : im z = im w)
-  结论: z = w
-  证明: ext_iff.2 ⟨hre, him⟩
-
-@[norm_cast]
-
-Depends on / 依赖: ext_iff
+/-
+**RCLike.ext** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ext {z w : K} (hre : re z = re w) (him : im z = im w) : z = w
+参数：hre : re z = re w；him : im z = im w。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `RCLike.ext_iff`：ext_iff {z w : K} : z = w ↔ re z = re w ∧ im z = im w
 -/
 theorem ext {z w : K} (hre : re z = re w) (him : im z = im w) : z = w :=
   ext_iff.2 ⟨hre, him⟩
 
 @[norm_cast]
-/--
-theorem `ofReal_zero` / 定理 `ofReal_zero`
-
-English:
-theorem ofReal_zero
-  statement: ((0 : Real) : K) = 0
-  proof: algebraMap.coe_zero
-
-@[rclike_simps]
-
-中文:
-定理 of实数_zero
-  结论: ((0 : 实数) : K) = 0
-  证明: algebraMap.coe_zero
-
-@[rclike_simps]
-
-Depends on / 依赖: algebraMap, algebraMap.coe_zero, coe_zero
+/-
+**RCLike.ofReal_zero** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_zero : ((0 : Real) : K) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `algebraMap.coe_zero`：coe_zero : (↑(0 : R) : A) = 0
 -/
-theorem ofReal_zero : ((0 : Real) : K) = 0 :=
+theorem ofReal_zero : ((0 : ℝ) : K) = 0 :=
   algebraMap.coe_zero
 
 @[rclike_simps]
-/--
-theorem `zero_re` / 定理 `zero_re`
-
-English:
-theorem zero_re
-  statement: re (0 : K) = (0 : Real)
-  proof: map_zero re
-
-@[rclike_simps]
-
-中文:
-定理 zero_re
-  结论: re (0 : K) = (0 : 实数)
-  证明: map_zero re
-
-@[rclike_simps]
-
-Depends on / 依赖: map_zero
+/-
+**RCLike.zero_re** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：zero_re : re (0 : K) = (0 : Real)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
-theorem zero_re : re (0 : K) = (0 : Real) :=
+theorem zero_re : re (0 : K) = (0 : ℝ) :=
   map_zero re
 
 @[rclike_simps]
-/--
-theorem `zero_im` / 定理 `zero_im`
-
-English:
-theorem zero_im
-  statement: im (0 : K) = (0 : Real)
-  proof: map_zero im
-
-@[norm_cast]
-
-中文:
-定理 zero_im
-  结论: im (0 : K) = (0 : 实数)
-  证明: map_zero im
-
-@[norm_cast]
-
-Depends on / 依赖: map_zero
+/-
+**RCLike.zero_im** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：zero_im : im (0 : K) = (0 : Real)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
 -/
-theorem zero_im : im (0 : K) = (0 : Real) :=
+theorem zero_im : im (0 : K) = (0 : ℝ) :=
   map_zero im
 
 @[norm_cast]
-/--
-theorem `ofReal_one` / 定理 `ofReal_one`
-
-English:
-theorem ofReal_one
-  statement: ((1 : Real) : K) = 1
-  proof: map_one (algebraMap Real K)
-
-@[simp, rclike_simps]
-
-中文:
-定理 of实数_one
-  结论: ((1 : 实数) : K) = 1
-  证明: map_one (algebraMap Real K)
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: algebraMap, map_one
+/-
+**RCLike.ofReal_one** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_one : ((1 : Real) : K) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 -/
-theorem ofReal_one : ((1 : Real) : K) = 1 :=
-  map_one (algebraMap Real K)
+theorem ofReal_one : ((1 : ℝ) : K) = 1 :=
+  map_one (algebraMap ℝ K)
 
 @[simp, rclike_simps]
-/--
-theorem `one_re` / 定理 `one_re`
-
-English:
-theorem one_re
-  statement: re (1 : K) = 1
-  proof: by rw [← ofReal_one, ofReal_re]
-
-@[simp, rclike_simps]
-
-中文:
-定理 one_re
-  结论: re (1 : K) = 1
-  证明: by rw [← ofReal_one, ofReal_re]
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: ofReal_one, ofReal_re
+/-
+**RCLike.one_re** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：one_re : re (1 : K) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.ofReal_one`：ofReal_one : ((1 : Real) : K) = 1
+· 使用定理 `RCLike.ofReal_re`：ofReal_re : forall r : Real, re (r : K) = r
 -/
 theorem one_re : re (1 : K) = 1 := by rw [← ofReal_one, ofReal_re]
 
 @[simp, rclike_simps]
-/--
-theorem `one_im` / 定理 `one_im`
-
-English:
-theorem one_im
-  statement: im (1 : K) = 0
-  proof: by rw [← ofReal_one, ofReal_im]
-
-中文:
-定理 one_im
-  结论: im (1 : K) = 0
-  证明: by rw [← ofReal_one, ofReal_im]
-
-Depends on / 依赖: ofReal_im, ofReal_one
+/-
+**RCLike.one_im** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：one_im : im (1 : K) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.ofReal_one`：ofReal_one : ((1 : Real) : K) = 1
+· 使用定理 `RCLike.ofReal_im`：ofReal_im : forall r : Real, im (r : K) = 0
 -/
 theorem one_im : im (1 : K) = 0 := by rw [← ofReal_one, ofReal_im]
-
-/--
-theorem `ofReal_injective` / 定理 `ofReal_injective`
-
-English:
-theorem ofReal_injective
-  statement: Function.Injective ((↑) : Real -> K)
-  proof: (algebraMap Real K).injective
-
-@[norm_cast]
-
-中文:
-定理 of实数_injective
-  结论: 函数.单射 ((↑) : 实数 -> K)
-  证明: (algebraMap Real K).injective
-
-@[norm_cast]
-
-Depends on / 依赖: algebraMap, injective
+/-
+**RCLike.ofReal_injective** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_injective : Function.Injective ((↑) : Real -> K)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.injective`：∀ {R : Type u_2} {S : Type u_3} [inst : NonAssocRing 
+R] [IsSimpleRing R] [inst_2 : NonAssocSemiring S] [Nontrivial S]   (f : R →+* S)
+, Funct…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `DivisionRing.toNontrivial`：∀ {K : Type u_2} [self : DivisionRing K], Non
+trivial K
 -/
-theorem ofReal_injective : Function.Injective ((↑) : Real -> K) :=
-  (algebraMap Real K).injective
+theorem ofReal_injective : Function.Injective ((↑) : ℝ → K) :=
+  (algebraMap ℝ K).injective
 
 @[norm_cast]
-/--
-theorem `ofReal_inj` / 定理 `ofReal_inj`
-
-English:
-theorem ofReal_inj
-  given: {z w : Real}
-  statement: (z : K) = (w : K) ↔ z = w
-  proof: algebraMap.coe_inj _ _
-
-中文:
-定理 of实数_inj
-  条件: {z w : 实数}
-  结论: (z : K) = (w : K) ↔ z = w
-  证明: algebraMap.coe_inj _ _
-
-Depends on / 依赖: algebraMap, algebraMap.coe_inj, coe_inj
+/-
+**RCLike.ofReal_inj** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_inj {z w : Real} : (z : K) = (w : K) ↔ z = w
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `algebraMap.coe_inj`：coe_inj {a b : R} : (↑a : A) = ↑b ↔ a = b
+· 使用定理 `instFaithfulSMul_1`：∀ (R : Type u_1) (A : Type u_2) [inst : CommRing R] 
+[inst_1 : Semiring A] [inst_2 : Algebra R A] [IsSimpleRing R]   [Nontrivial A], 
+Faithful…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `DivisionRing.toNontrivial`：∀ {K : Type u_2} [self : DivisionRing K], Non
+trivial K
 -/
-theorem ofReal_inj {z w : Real} : (z : K) = (w : K) ↔ z = w :=
+theorem ofReal_inj {z w : ℝ} : (z : K) = (w : K) ↔ z = w :=
   algebraMap.coe_inj _ _
-
-/--
-theorem `ofReal_eq_zero` / 定理 `ofReal_eq_zero`
-
-English:
-theorem ofReal_eq_zero
-  given: {x : Real}
-  statement: (x : K) = 0 ↔ x = 0
-  proof: algebraMap.coe_eq_zero_iff _ _ _
-
-中文:
-定理 of实数_eq_zero
-  条件: {x : 实数}
-  结论: (x : K) = 0 ↔ x = 0
-  证明: algebraMap.coe_eq_zero_iff _ _ _
-
-Depends on / 依赖: algebraMap, algebraMap.coe_eq_zero_iff, coe_eq_zero_iff
+/-
+**RCLike.ofReal_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_eq_zero {x : Real} : (x : K) = 0 ↔ x = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `algebraMap.coe_eq_zero_iff`：coe_eq_zero_iff (a : R) : (↑a : A) = 0 ↔ a =
+ 0
+· 使用定理 `instFaithfulSMul_1`：∀ (R : Type u_1) (A : Type u_2) [inst : CommRing R] 
+[inst_1 : Semiring A] [inst_2 : Algebra R A] [IsSimpleRing R]   [Nontrivial A], 
+Faithful…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `DivisionRing.toNontrivial`：∀ {K : Type u_2} [self : DivisionRing K], Non
+trivial K
 -/
-theorem ofReal_eq_zero {x : Real} : (x : K) = 0 ↔ x = 0 :=
+theorem ofReal_eq_zero {x : ℝ} : (x : K) = 0 ↔ x = 0 :=
   algebraMap.coe_eq_zero_iff _ _ _
-
-/--
-theorem `ofReal_ne_zero` / 定理 `ofReal_ne_zero`
-
-English:
-theorem ofReal_ne_zero
-  given: {x : Real}
-  statement: (x : K) != 0 ↔ x != 0
-  proof: ofReal_eq_zero.not
-
-@[rclike_simps, norm_cast]
-
-中文:
-定理 of实数_ne_zero
-  条件: {x : 实数}
-  结论: (x : K) != 0 ↔ x != 0
-  证明: ofReal_eq_zero.not
-
-@[rclike_simps, norm_cast]
-
-Depends on / 依赖: ofReal_eq_zero, ofReal_eq_zero.not
+/-
+**RCLike.ofReal_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_ne_zero {x : Real} : (x : K) != 0 ↔ x != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `RCLike.ofReal_eq_zero`：ofReal_eq_zero {x : Real} : (x : K) = 0 ↔ x = 0
 -/
-theorem ofReal_ne_zero {x : Real} : (x : K) != 0 ↔ x != 0 :=
+theorem ofReal_ne_zero {x : ℝ} : (x : K) ≠ 0 ↔ x ≠ 0 :=
   ofReal_eq_zero.not
 
 @[rclike_simps, norm_cast]
-/--
-theorem `ofReal_add` / 定理 `ofReal_add`
-
-English:
-theorem ofReal_add
-  given: (r s : Real)
-  statement: ((r + s : Real) : K) = r + s
-  proof: algebraMap.coe_add _ _
-
-@[rclike_simps, norm_cast]
-
-中文:
-定理 of实数_add
-  条件: (r s : 实数)
-  结论: ((r + s : 实数) : K) = r + s
-  证明: algebraMap.coe_add _ _
-
-@[rclike_simps, norm_cast]
-
-Depends on / 依赖: algebraMap, algebraMap.coe_add, coe_add
+/-
+**RCLike.ofReal_add** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_add (r s : Real) : ((r + s : Real) : K) = r + s
+参数：r s : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `algebraMap.coe_add`：coe_add (a b : R) : (↑(a + b : R) : A) = ↑a + ↑b
 -/
-theorem ofReal_add (r s : Real) : ((r + s : Real) : K) = r + s :=
+theorem ofReal_add (r s : ℝ) : ((r + s : ℝ) : K) = r + s :=
   algebraMap.coe_add _ _
 
 @[rclike_simps, norm_cast]
-/--
-theorem `ofReal_neg` / 定理 `ofReal_neg`
-
-English:
-theorem ofReal_neg
-  given: (r : Real)
-  statement: ((-r : Real) : K) = -r
-  proof: algebraMap.coe_neg r
-
-@[rclike_simps, norm_cast]
-
-中文:
-定理 of实数_neg
-  条件: (r : 实数)
-  结论: ((-r : 实数) : K) = -r
-  证明: algebraMap.coe_neg r
-
-@[rclike_simps, norm_cast]
-
-Depends on / 依赖: algebraMap, algebraMap.coe_neg, coe_neg
+/-
+**RCLike.ofReal_neg** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_neg (r : Real) : ((-r : Real) : K) = -r
+参数：r : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `algebraMap.coe_neg`：coe_neg (x : R) : (↑(-x : R) : A) = -↑x
 -/
-theorem ofReal_neg (r : Real) : ((-r : Real) : K) = -r :=
+theorem ofReal_neg (r : ℝ) : ((-r : ℝ) : K) = -r :=
   algebraMap.coe_neg r
 
 @[rclike_simps, norm_cast]
-/--
-theorem `ofReal_sub` / 定理 `ofReal_sub`
-
-English:
-theorem ofReal_sub
-  given: (r s : Real)
-  statement: ((r - s : Real) : K) = r - s
-  proof: map_sub (algebraMap Real K) r s
-
-@[rclike_simps, norm_cast]
-
-中文:
-定理 of实数_sub
-  条件: (r s : 实数)
-  结论: ((r - s : 实数) : K) = r - s
-  证明: map_sub (algebraMap Real K) r s
-
-@[rclike_simps, norm_cast]
-
-Depends on / 依赖: algebraMap, map_sub
+/-
+**RCLike.ofReal_sub** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_sub (r s : Real) : ((r - s : Real) : K) = r - s
+参数：r s : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
 -/
-theorem ofReal_sub (r s : Real) : ((r - s : Real) : K) = r - s :=
-  map_sub (algebraMap Real K) r s
+theorem ofReal_sub (r s : ℝ) : ((r - s : ℝ) : K) = r - s :=
+  map_sub (algebraMap ℝ K) r s
 
 @[rclike_simps, norm_cast]
-/--
-theorem `ofReal_sum` / 定理 `ofReal_sum`
-
-English:
-theorem ofReal_sum
-  given: {α : Type*} (s : Finset α) (f : α -> Real)
-  proof: map_sum (algebraMap Real K) _ _
+/-
+**RCLike.ofReal_sum** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_sum {α : Type*} (s : Finset α) (f : α -> Real) : ((∑ i in s, f i : 
+Real) : K) = ∑ i in s, (f i : K)
+参数：s : Finset α；f : α -> Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+-/
+theorem ofReal_sum {α : Type*} (s : Finset α) (f : α → ℝ) :
+    ((∑ i ∈ s, f i : ℝ) : K) = ∑ i ∈ s, (f i : K) :=
+  map_sum (algebraMap ℝ K) _ _
 
 @[simp, rclike_simps, norm_cast]
-
-中文:
-定理 of实数_sum
-  条件: {α : 类型} (s : 有限集 α) (f : α -> 实数)
-  证明: map_sum (algebraMap Real K) _ _
-
-@[simp, rclike_simps, norm_cast]
-
-Depends on / 依赖: algebraMap, map_sum
+/-
+**RCLike.ofReal_finsupp_sum** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_finsupp_sum {α M : Type*} [Zero M] (f : α ->₀ M) (g : α -> M -> Rea
+l) : ((f.sum fun a b => g a b : Real) : K) = f.sum fun a b => (g a b : K)
+参数：f : α ->₀ M；g : α -> M -> Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_finsuppSum`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10} {P : Typ
+e u_11} [inst : Zero M] [inst_1 : AddCommMonoid N]   [inst_2 : AddCommMonoid P] 
+{H :…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
 -/
-theorem ofReal_sum {α : Type*} (s : Finset α) (f : α -> Real) :
-    ((∑ i in s, f i : Real) : K) = ∑ i in s, (f i : K) :=
-  map_sum (algebraMap Real K) _ _
-
-@[simp, rclike_simps, norm_cast]
-/--
-theorem `ofReal_finsupp_sum` / 定理 `ofReal_finsupp_sum`
-
-English:
-theorem ofReal_finsupp_sum
-  given: {α M : Type*} [Zero M] (f : α ->₀ M) (g : α -> M -> Real)
-  proof: map_finsuppSum (algebraMap Real K) f g
+theorem ofReal_finsupp_sum {α M : Type*} [Zero M] (f : α →₀ M) (g : α → M → ℝ) :
+    ((f.sum fun a b => g a b : ℝ) : K) = f.sum fun a b => (g a b : K) :=
+  map_finsuppSum (algebraMap ℝ K) f g
 
 @[rclike_simps, norm_cast]
-
-中文:
-定理 of实数_finsupp_sum
-  条件: {α M : 类型} [零 M] (f : α ->₀ M) (g : α -> M -> 实数)
-  证明: map_finsuppSum (algebraMap Real K) f g
-
-@[rclike_simps, norm_cast]
-
-Depends on / 依赖: algebraMap, map_finsuppSum
+/-
+**RCLike.ofReal_mul** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_mul (r s : Real) : ((r * s : Real) : K) = r * s
+参数：r s : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `algebraMap.coe_mul`：coe_mul (a b : R) : (↑(a * b : R) : A) = ↑a * ↑b
 -/
-theorem ofReal_finsupp_sum {α M : Type*} [Zero M] (f : α ->₀ M) (g : α -> M -> Real) :
-    ((f.sum fun a b => g a b : Real) : K) = f.sum fun a b => (g a b : K) :=
-  map_finsuppSum (algebraMap Real K) f g
-
-@[rclike_simps, norm_cast]
-/--
-theorem `ofReal_mul` / 定理 `ofReal_mul`
-
-English:
-theorem ofReal_mul
-  given: (r s : Real)
-  statement: ((r * s : Real) : K) = r * s
-  proof: algebraMap.coe_mul _ _
-
-@[rclike_simps, norm_cast]
-
-中文:
-定理 of实数_mul
-  条件: (r s : 实数)
-  结论: ((r * s : 实数) : K) = r * s
-  证明: algebraMap.coe_mul _ _
-
-@[rclike_simps, norm_cast]
-
-Depends on / 依赖: algebraMap, algebraMap.coe_mul, coe_mul
--/
-theorem ofReal_mul (r s : Real) : ((r * s : Real) : K) = r * s :=
+theorem ofReal_mul (r s : ℝ) : ((r * s : ℝ) : K) = r * s :=
   algebraMap.coe_mul _ _
 
 @[rclike_simps, norm_cast]
-/--
-theorem `ofReal_pow` / 定理 `ofReal_pow`
-
-English:
-theorem ofReal_pow
-  given: (r : Real) (n : Nat)
-  statement: ((r ^ n : Real) : K) = (r : K) ^ n
-  proof: map_pow (algebraMap Real K) r n
+/-
+**RCLike.ofReal_pow** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_pow (r : Real) (n : Nat) : ((r ^ n : Real) : K) = (r : K) ^ n
+参数：r : Real；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+-/
+theorem ofReal_pow (r : ℝ) (n : ℕ) : ((r ^ n : ℝ) : K) = (r : K) ^ n :=
+  map_pow (algebraMap ℝ K) r n
 
 @[rclike_simps, norm_cast]
-
-中文:
-定理 of实数_pow
-  条件: (r : 实数) (n : 自然数)
-  结论: ((r ^ n : 实数) : K) = (r : K) ^ n
-  证明: map_pow (algebraMap Real K) r n
-
-@[rclike_simps, norm_cast]
-
-Depends on / 依赖: algebraMap, map_pow
+/-
+**RCLike.ofReal_prod** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_prod {α : Type*} (s : Finset α) (f : α -> Real) : ((∏ i in s, f i :
+ Real) : K) = ∏ i in s, (f i : K)
+参数：s : Finset α；f : α -> Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_prod`：map_prod [CommMonoid M] [CommMonoid N] {G : Type*} [FunLike G 
+M N] [MonoidHomClass G M N] (g : G) (f : ι -> M) (s : Finset ι) : g (∏ x in s,…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 -/
-theorem ofReal_pow (r : Real) (n : Nat) : ((r ^ n : Real) : K) = (r : K) ^ n :=
-  map_pow (algebraMap Real K) r n
-
-@[rclike_simps, norm_cast]
-/--
-theorem `ofReal_prod` / 定理 `ofReal_prod`
-
-English:
-theorem ofReal_prod
-  given: {α : Type*} (s : Finset α) (f : α -> Real)
-  proof: map_prod (algebraMap Real K) _ _
+theorem ofReal_prod {α : Type*} (s : Finset α) (f : α → ℝ) :
+    ((∏ i ∈ s, f i : ℝ) : K) = ∏ i ∈ s, (f i : K) :=
+  map_prod (algebraMap ℝ K) _ _
 
 @[simp, rclike_simps, norm_cast]
-
-中文:
-定理 of实数_prod
-  条件: {α : 类型} (s : 有限集 α) (f : α -> 实数)
-  证明: map_prod (algebraMap Real K) _ _
-
-@[simp, rclike_simps, norm_cast]
-
-Depends on / 依赖: Finite, Finite.of_equiv, InducedCategory, InducedCategory.homEquiv.trans, TypeCat, TypeCat.homEquiv, algebraMap, homEquiv, map_prod, of_equiv
+/-
+**RCLike.ofReal_finsuppProd** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_finsuppProd {α M : Type*} [Zero M] (f : α ->₀ M) (g : α -> M -> Rea
+l) : ((f.prod fun a b => g a b : Real) : K) = f.prod fun a b => (g a b : K)
+参数：f : α ->₀ M；g : α -> M -> Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_finsuppProd`：map_finsuppProd [Zero M] [CommMonoid N] [CommMonoid P] 
+{H : Type*} [FunLike H N P] [MonoidHomClass H N P] (h : H) (f : α ->₀ M) (g : α 
+-> M …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 -/
-theorem ofReal_prod {α : Type*} (s : Finset α) (f : α -> Real) :
-    ((∏ i in s, f i : Real) : K) = ∏ i in s, (f i : K) :=
-  map_prod (algebraMap Real K) _ _
-
-@[simp, rclike_simps, norm_cast]
-/--
-theorem `ofReal_finsuppProd` / 定理 `ofReal_finsuppProd`
-
-English:
-theorem ofReal_finsuppProd
-  given: {α M : Type*} [Zero M] (f : α ->₀ M) (g : α -> M -> Real)
-  proof: map_finsuppProd _ f g
-
-@[simp, norm_cast, rclike_simps]
-
-中文:
-定理 of实数_finsuppProd
-  条件: {α M : 类型} [零 M] (f : α ->₀ M) (g : α -> M -> 实数)
-  证明: map_finsuppProd _ f g
-
-@[simp, norm_cast, rclike_simps]
-
-Depends on / 依赖: Finite, Finite.of_injective, Iso.ext, map_finsuppProd, of_injective
--/
-theorem ofReal_finsuppProd {α M : Type*} [Zero M] (f : α ->₀ M) (g : α -> M -> Real) :
-    ((f.prod fun a b => g a b : Real) : K) = f.prod fun a b => (g a b : K) :=
+theorem ofReal_finsuppProd {α M : Type*} [Zero M] (f : α →₀ M) (g : α → M → ℝ) :
+    ((f.prod fun a b => g a b : ℝ) : K) = f.prod fun a b => (g a b : K) :=
   map_finsuppProd _ f g
 
 @[simp, norm_cast, rclike_simps]
-/--
-theorem `real_smul_ofReal` / 定理 `real_smul_ofReal`
-
-English:
-theorem real_smul_ofReal
-  given: (r x : Real)
-  statement: r • (x : K) = (r : K) * (x : K)
-  proof: real_smul_eq_coe_mul _ _
-
-@[rclike_simps]
-
-中文:
-定理 real_smul_of实数
-  条件: (r x : 实数)
-  结论: r • (x : K) = (r : K) * (x : K)
-  证明: real_smul_eq_coe_mul _ _
-
-@[rclike_simps]
-
-Depends on / 依赖: Finite, real_smul_eq_coe_mul
+/-
+**RCLike.real_smul_ofReal** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：real_smul_ofReal (r x : Real) : r • (x : K) = (r : K) * (x : K)
+参数：r x : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.real_smul_eq_coe_mul`：real_smul_eq_coe_mul (r : Real) (z : K) : r
+ • z = (r : K) * z
 -/
-theorem real_smul_ofReal (r x : Real) : r • (x : K) = (r : K) * (x : K) :=
+theorem real_smul_ofReal (r x : ℝ) : r • (x : K) = (r : K) * (x : K) :=
   real_smul_eq_coe_mul _ _
 
 @[rclike_simps]
-/--
-theorem `re_ofReal_mul` / 定理 `re_ofReal_mul`
-
-English:
-theorem re_ofReal_mul
-  given: (r : Real) (z : K)
-  statement: re (↑r * z) = r * re z
-  proof: by
+/-
+**RCLike.re_ofReal_mul** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：re_ofReal_mul (r : Real) (z : K) : re (↑r * z) = r * re z
+参数：r : Real；z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.mul_re`：mul_re : forall z w : K, re (z * w) = re z * re w - im z 
+* im w
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `RCLike.ofReal_re`：ofReal_re : forall r : Real, re (r : K) = r
+· 使用定理 `RCLike.ofReal_im`：ofReal_im : forall r : Real, im (r : K) = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem re_ofReal_mul (r : ℝ) (z : K) : re (↑r * z) = r * re z := by
   simp only [mul_re, ofReal_im, zero_mul, ofReal_re, sub_zero]
 
 @[rclike_simps]
-
-中文:
-定理 re_of实数_mul
-  条件: (r : 实数) (z : K)
-  结论: re (↑r * z) = r * re z
-  证明: by
-  simp only [mul_re, ofReal_im, zero_mul, ofReal_re, sub_zero]
-
-@[rclike_simps]
-
-Depends on / 依赖: mul_re, ofReal_im, ofReal_re, sub_zero, zero_mul
+/-
+**RCLike.re_mul_ofReal** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：re_mul_ofReal (z : K) (r : Real) : re (z * ↑r) = re z * r
+参数：z : K；r : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `RCLike.re_ofReal_mul`：re_ofReal_mul (r : Real) (z : K) : re (↑r * z) = r
+ * re z
 -/
-theorem re_ofReal_mul (r : Real) (z : K) : re (↑r * z) = r * re z := by
-  simp only [mul_re, ofReal_im, zero_mul, ofReal_re, sub_zero]
+theorem re_mul_ofReal (z : K) (r : ℝ) : re (z * ↑r) = re z * r := by
+  rw [mul_comm, re_ofReal_mul, mul_comm]
 
 @[rclike_simps]
-/--
-theorem `re_mul_ofReal` / 定理 `re_mul_ofReal`
-
-English:
-theorem re_mul_ofReal
-  given: (z : K) (r : Real)
-  statement: re (z * ↑r) = re z * r
-  proof: by
-  rw [mul_comm]; rw [re_ofReal_mul]; rw [mul_comm]
-
-@[rclike_simps]
-
-中文:
-定理 re_mul_of实数
-  条件: (z : K) (r : 实数)
-  结论: re (z * ↑r) = re z * r
-  证明: by
-  rw [mul_comm]; rw [re_ofReal_mul]; rw [mul_comm]
-
-@[rclike_simps]
-
-Depends on / 依赖: mul_comm, re_ofReal_mul
+/-
+**RCLike.im_ofReal_mul** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：im_ofReal_mul (r : Real) (z : K) : im (↑r * z) = r * im z
+参数：r : Real；z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.mul_im`：mul_im : forall z w : K, im (z * w) = re z * im w + im z 
+* re w
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `RCLike.ofReal_re`：ofReal_re : forall r : Real, re (r : K) = r
+· 使用定理 `RCLike.ofReal_im`：ofReal_im : forall r : Real, im (r : K) = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem re_mul_ofReal (z : K) (r : Real) : re (z * ↑r) = re z * r := by
-  rw [mul_comm]; rw [re_ofReal_mul]; rw [mul_comm]
-
-@[rclike_simps]
-/--
-theorem `im_ofReal_mul` / 定理 `im_ofReal_mul`
-
-English:
-theorem im_ofReal_mul
-  given: (r : Real) (z : K)
-  statement: im (↑r * z) = r * im z
-  proof: by
+theorem im_ofReal_mul (r : ℝ) (z : K) : im (↑r * z) = r * im z := by
   simp only [add_zero, ofReal_im, zero_mul, ofReal_re, mul_im]
 
 @[rclike_simps]
-
-中文:
-定理 im_of实数_mul
-  条件: (r : 实数) (z : K)
-  结论: im (↑r * z) = r * im z
-  证明: by
-  simp only [add_zero, ofReal_im, zero_mul, ofReal_re, mul_im]
-
-@[rclike_simps]
-
-Depends on / 依赖: add_zero, mul_im, ofReal_im, ofReal_re, zero_mul
+/-
+**RCLike.im_mul_ofReal** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：im_mul_ofReal (z : K) (r : Real) : im (z * ↑r) = im z * r
+参数：z : K；r : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `RCLike.im_ofReal_mul`：im_ofReal_mul (r : Real) (z : K) : im (↑r * z) = r
+ * im z
 -/
-theorem im_ofReal_mul (r : Real) (z : K) : im (↑r * z) = r * im z := by
-  simp only [add_zero, ofReal_im, zero_mul, ofReal_re, mul_im]
+theorem im_mul_ofReal (z : K) (r : ℝ) : im (z * ↑r) = im z * r := by
+  rw [mul_comm, im_ofReal_mul, mul_comm]
 
 @[rclike_simps]
-/--
-theorem `im_mul_ofReal` / 定理 `im_mul_ofReal`
-
-English:
-theorem im_mul_ofReal
-  given: (z : K) (r : Real)
-  statement: im (z * ↑r) = im z * r
-  proof: by
-  rw [mul_comm]; rw [im_ofReal_mul]; rw [mul_comm]
-
-@[rclike_simps]
-
-中文:
-定理 im_mul_of实数
-  条件: (z : K) (r : 实数)
-  结论: im (z * ↑r) = im z * r
-  证明: by
-  rw [mul_comm]; rw [im_ofReal_mul]; rw [mul_comm]
-
-@[rclike_simps]
-
-Depends on / 依赖: im_ofReal_mul, mul_comm
+/-
+**RCLike.smul_re** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：smul_re (r : Real) (z : K) : re (r • z) = r * re z
+参数：r : Real；z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.real_smul_eq_coe_mul`：real_smul_eq_coe_mul (r : Real) (z : K) : r
+ • z = (r : K) * z
+· 使用定理 `RCLike.re_ofReal_mul`：re_ofReal_mul (r : Real) (z : K) : re (↑r * z) = r
+ * re z
 -/
-theorem im_mul_ofReal (z : K) (r : Real) : im (z * ↑r) = im z * r := by
-  rw [mul_comm]; rw [im_ofReal_mul]; rw [mul_comm]
+theorem smul_re (r : ℝ) (z : K) : re (r • z) = r * re z := by
+  rw [real_smul_eq_coe_mul, re_ofReal_mul]
 
 @[rclike_simps]
-/--
-theorem `smul_re` / 定理 `smul_re`
-
-English:
-theorem smul_re
-  given: (r : Real) (z : K)
-  statement: re (r • z) = r * re z
-  proof: by
-  rw [real_smul_eq_coe_mul]; rw [re_ofReal_mul]
-
-@[rclike_simps]
-
-中文:
-定理 smul_re
-  条件: (r : 实数) (z : K)
-  结论: re (r • z) = r * re z
-  证明: by
-  rw [real_smul_eq_coe_mul]; rw [re_ofReal_mul]
-
-@[rclike_simps]
-
-Depends on / 依赖: re_ofReal_mul, real_smul_eq_coe_mul
+/-
+**RCLike.smul_im** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：smul_im (r : Real) (z : K) : im (r • z) = r * im z
+参数：r : Real；z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.real_smul_eq_coe_mul`：real_smul_eq_coe_mul (r : Real) (z : K) : r
+ • z = (r : K) * z
+· 使用定理 `RCLike.im_ofReal_mul`：im_ofReal_mul (r : Real) (z : K) : im (↑r * z) = r
+ * im z
 -/
-theorem smul_re (r : Real) (z : K) : re (r • z) = r * re z := by
-  rw [real_smul_eq_coe_mul]; rw [re_ofReal_mul]
-
-@[rclike_simps]
-/--
-theorem `smul_im` / 定理 `smul_im`
-
-English:
-theorem smul_im
-  given: (r : Real) (z : K)
-  statement: im (r • z) = r * im z
-  proof: by
-  rw [real_smul_eq_coe_mul]; rw [im_ofReal_mul]
+theorem smul_im (r : ℝ) (z : K) : im (r • z) = r * im z := by
+  rw [real_smul_eq_coe_mul, im_ofReal_mul]
 
 @[rclike_simps, norm_cast]
-
-中文:
-定理 smul_im
-  条件: (r : 实数) (z : K)
-  结论: im (r • z) = r * im z
-  证明: by
-  rw [real_smul_eq_coe_mul]; rw [im_ofReal_mul]
-
-@[rclike_simps, norm_cast]
-
-Depends on / 依赖: im_ofReal_mul, real_smul_eq_coe_mul
+/-
+**RCLike.norm_ofReal** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：norm_ofReal (r : Real) : ‖(r : K)‖ = |r|
+参数：r : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `norm_algebraMap'`：norm_algebraMap' [NormOneClass 𝕜'] (x : 𝕜) : ‖algebraM
+ap 𝕜 𝕜' x‖ = ‖x‖
+· 使用定理 `NormedDivisionRing.to_normOneClass`：∀ {α : Type u_2} [inst : NormedDivis
+ionRing α], NormOneClass α
 -/
-theorem smul_im (r : Real) (z : K) : im (r • z) = r * im z := by
-  rw [real_smul_eq_coe_mul]; rw [im_ofReal_mul]
-
-@[rclike_simps, norm_cast]
-/--
-theorem `norm_ofReal` / 定理 `norm_ofReal`
-
-English:
-theorem norm_ofReal
-  given: (r : Real)
-  statement: ‖(r : K)‖ = |r|
-  proof: norm_algebraMap' K r
-
-@[simp]
-
-中文:
-定理 norm_of实数
-  条件: (r : 实数)
-  结论: ‖(r : K)‖ = |r|
-  证明: norm_algebraMap' K r
-
-@[simp]
-
-Depends on / 依赖: norm_algebraMap
--/
-theorem norm_ofReal (r : Real) : ‖(r : K)‖ = |r| :=
+theorem norm_ofReal (r : ℝ) : ‖(r : K)‖ = |r| :=
   norm_algebraMap' K r
 
 @[simp]
-/--
-theorem `re_ofReal_pow` / 定理 `re_ofReal_pow`
-
-English:
-theorem re_ofReal_pow
-  given: (a : Real) (n : Nat)
-  statement: re ((a : K) ^ n) = a ^ n
-  proof: by
-  rw [← ofReal_pow]; rw [@ofReal_re]
-
-@[simp]
-
-中文:
-定理 re_of实数_pow
-  条件: (a : 实数) (n : 自然数)
-  结论: re ((a : K) ^ n) = a ^ n
-  证明: by
-  rw [← ofReal_pow]; rw [@ofReal_re]
-
-@[simp]
-
-Depends on / 依赖: ofReal_pow, ofReal_re
+/-
+**RCLike.re_ofReal_pow** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：re_ofReal_pow (a : Real) (n : Nat) : re ((a : K) ^ n) = a ^ n
+参数：a : Real；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.ofReal_pow`：ofReal_pow (r : Real) (n : Nat) : ((r ^ n : Real) : K
+) = (r : K) ^ n
+· 使用定理 `RCLike.ofReal_re`：ofReal_re : forall r : Real, re (r : K) = r
 -/
-theorem re_ofReal_pow (a : Real) (n : Nat) : re ((a : K) ^ n) = a ^ n := by
-  rw [← ofReal_pow]; rw [@ofReal_re]
+theorem re_ofReal_pow (a : ℝ) (n : ℕ) : re ((a : K) ^ n) = a ^ n := by
+  rw [← ofReal_pow, @ofReal_re]
 
 @[simp]
-/--
-theorem `im_ofReal_pow` / 定理 `im_ofReal_pow`
-
-English:
-theorem im_ofReal_pow
-  given: (a : Real) (n : Nat)
-  statement: im ((a : K) ^ n) = 0
-  proof: by
-  rw [← @ofReal_pow]; rw [@ofReal_im_ax]
-
-中文:
-定理 im_of实数_pow
-  条件: (a : 实数) (n : 自然数)
-  结论: im ((a : K) ^ n) = 0
-  证明: by
-  rw [← @ofReal_pow]; rw [@ofReal_im_ax]
-
-Depends on / 依赖: ofReal_im_ax, ofReal_pow
+/-
+**RCLike.im_ofReal_pow** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：im_ofReal_pow (a : Real) (n : Nat) : im ((a : K) ^ n) = 0
+参数：a : Real；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.ofReal_pow`：ofReal_pow (r : Real) (n : Nat) : ((r ^ n : Real) : K
+) = (r : K) ^ n
+· 使用定理 `RCLike.ofReal_im_ax`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K] (
+r : ℝ), RCLike.im ((algebraMap ℝ K) r) = 0
 -/
-theorem im_ofReal_pow (a : Real) (n : Nat) : im ((a : K) ^ n) = 0 := by
-  rw [← @ofReal_pow]; rw [@ofReal_im_ax]
+theorem im_ofReal_pow (a : ℝ) (n : ℕ) : im ((a : K) ^ n) = 0 := by
+  rw [← @ofReal_pow, @ofReal_im_ax]
 
 /-! ### Characteristic zero -/
 
 -- see Note [lower instance priority]
 /-- ℝ and ℂ are both of characteristic zero. -/
+/-
+**RCLike.** 是 Mathlib 中的一个实例，位于命名空间 `RCLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+ℝ and ℂ are both of characteristic zero.
+-/
 instance (priority := 100) charZero_rclike : CharZero K :=
-  (RingHom.charZero_iff (algebraMap Real K).injective).1 inferInstance
+  (RingHom.charZero_iff (algebraMap ℝ K).injective).1 inferInstance
 
 @[rclike_simps, norm_cast]
-/--
-lemma `ofReal_expect` / 引理 `ofReal_expect`
-
-English:
-lemma ofReal_expect
-  given: {α : Type*} (s : Finset α) (f : α -> Real)
-  statement: 𝔼 i in s, f i = 𝔼 i in s, (f i : K)
-  proof: map_expect (algebraMap ..) ..
-
-@[norm_cast]
-
-中文:
-引理 of实数_expect
-  条件: {α : 类型} (s : 有限集 α) (f : α -> 实数)
-  结论: 𝔼 i in s, f i = 𝔼 i in s, (f i : K)
-  证明: map_expect (algebraMap ..) ..
-
-@[norm_cast]
-
-Depends on / 依赖: algebraMap, map_expect
+/-
+**RCLike.ofReal_expect** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_expect {α : Type*} (s : Finset α) (f : α -> Real) : 𝔼 i in s, f i =
+ 𝔼 i in s, (f i : K)
+参数：s : Finset α；f : α -> Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_expect`：∀ {ι : Type u_1} {M : Type u_4} {N : Type u_5} [inst : AddCo
+mmMonoid M] [inst_1 : _root_.Module ℚ≥0 M]   [inst_2 : AddCommMonoid N] [inst_3 
+…
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `RCLike.charZero_rclike`：∀ {K : Type u_1} [inst : RCLike K], CharZero K
+· 使用定理 `RingHomClass.toLinearMapClassNNRat`：∀ {F : Type u_1} {R : Type u_2} {S :
+ Type u_3} [inst : DivisionSemiring R] [inst_1 : CharZero R]   [inst_2 : Divisio
+nSemiring S] [inst_3 : C…
 -/
-lemma ofReal_expect {α : Type*} (s : Finset α) (f : α -> Real) : 𝔼 i in s, f i = 𝔼 i in s, (f i : K) :=
+lemma ofReal_expect {α : Type*} (s : Finset α) (f : α → ℝ) : 𝔼 i ∈ s, f i = 𝔼 i ∈ s, (f i : K) :=
   map_expect (algebraMap ..) ..
 
 @[norm_cast]
-/--
-lemma `ofReal_balance` / 引理 `ofReal_balance`
-
-English:
-lemma ofReal_balance
-  given: {ι : Type*} [Fintype ι] (f : ι -> Real) (i : ι)
-  proof: map_balance (algebraMap ..) ..
-
-中文:
-引理 of实数_balance
-  条件: {ι : 类型} [有限类型 ι] (f : ι -> 实数) (i : ι)
-  证明: map_balance (algebraMap ..) ..
-
-Depends on / 依赖: algebraMap, map_balance
+/-
+**RCLike.ofReal_balance** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_balance {ι : Type*} [Fintype ι] (f : ι -> Real) (i : ι) : ((balance
+ f i : Real) : K) = balance ((↑) ∘ f) i
+参数：f : ι -> Real；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fintype.map_balance`：∀ {ι : Type u_1} {H : Type u_2} {F : Type u_3} {G :
+ Type u_4} [inst : Fintype ι] [inst_1 : AddCommGroup G]   [inst_2 : _root_.Modul
+e ℚ≥0 G] …
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `RCLike.charZero_rclike`：∀ {K : Type u_1} [inst : RCLike K], CharZero K
+· 使用定理 `RingHomClass.toLinearMapClassNNRat`：∀ {F : Type u_1} {R : Type u_2} {S :
+ Type u_3} [inst : DivisionSemiring R] [inst_1 : CharZero R]   [inst_2 : Divisio
+nSemiring S] [inst_3 : C…
 -/
-lemma ofReal_balance {ι : Type*} [Fintype ι] (f : ι -> Real) (i : ι) :
-    ((balance f i : Real) : K) = balance ((↑) ∘ f) i := map_balance (algebraMap ..) ..
-
-/--
-lemma `ofReal_comp_balance` / 引理 `ofReal_comp_balance`
-
-English:
-lemma ofReal_comp_balance
-  given: {ι : Type*} [Fintype ι] (f : ι -> Real)
-  proof: funext ofReal_balance _
-
-中文:
-引理 of实数_comp_balance
-  条件: {ι : 类型} [有限类型 ι] (f : ι -> 实数)
-  证明: funext ofReal_balance _
+lemma ofReal_balance {ι : Type*} [Fintype ι] (f : ι → ℝ) (i : ι) :
+    ((balance f i : ℝ) : K) = balance ((↑) ∘ f) i := map_balance (algebraMap ..) ..
+/-
+**RCLike.ofReal_comp_balance** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：∀ {K : Type u_1} [inst : RCLike K] {ι : Type u_3} [inst_1 : Fintype ι] (f 
+: ι → ℝ),   RCLike.ofReal ∘ Fintype.balance f = Fintype.balance (RCLike.ofReal ∘
+ f)
+参数：f : ι → ℝ；RCLike.ofReal ∘ f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `RCLike.charZero_rclike`：∀ {K : Type u_1} [inst : RCLike K], CharZero K
+· 使用引理 `RCLike.ofReal_balance`：ofReal_balance {ι : Type*} [Fintype ι] (f : ι -> 
+Real) (i : ι) : ((balance f i : Real) : K) = balance ((↑) ∘ f) i
 -/
-@[simp] lemma ofReal_comp_balance {ι : Type*} [Fintype ι] (f : ι -> Real) :
-ofReal ∘ balance f = balance (ofReal ∘ f : ι -> K) := funext ofReal_balance _
+@[simp] lemma ofReal_comp_balance {ι : Type*} [Fintype ι] (f : ι → ℝ) :
+    ofReal ∘ balance f = balance (ofReal ∘ f : ι → K) := funext <| ofReal_balance _
 
 /-! ### The imaginary unit, `I` -/
 
 /-- The imaginary unit. -/
 @[simp, rclike_simps]
-/--
-theorem `I_re` / 定理 `I_re`
+/-
+**RCLike.I_re** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：I_re : re (I : K) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.I_re_ax`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K], RCLik
+e.re RCLike.I = 0
 
-English:
-theorem I_re
-  statement: re (I : K) = 0
-  proof: I_re_ax
-
-@[simp, rclike_simps]
-
-中文:
-定理 I_re
-  结论: re (I : K) = 0
-  证明: I_re_ax
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: I_re_ax
+--- 原说明 ---
+The imaginary unit.
 -/
 theorem I_re : re (I : K) = 0 :=
   I_re_ax
 
 @[simp, rclike_simps]
-/--
-theorem `I_im` / 定理 `I_im`
-
-English:
-theorem I_im
-  given: (z : K)
-  statement: im z * im (I : K) = im z
-  proof: mul_im_I_ax z
-
-@[simp, rclike_simps]
-
-中文:
-定理 I_im
-  条件: (z : K)
-  结论: im z * im (I : K) = im z
-  证明: mul_im_I_ax z
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: mul_im_I_ax
+/-
+**RCLike.I_im** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：I_im (z : K) : im z * im (I : K) = im z
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.mul_im_I_ax`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K] (z
+ : K), RCLike.im z * RCLike.im RCLike.I = RCLike.im z
 -/
 theorem I_im (z : K) : im z * im (I : K) = im z :=
   mul_im_I_ax z
 
 @[simp, rclike_simps]
-/--
-theorem `I_im'` / 定理 `I_im'`
-
-English:
-theorem I_im'
-  given: (z : K)
-  statement: im (I : K) * im z = im z
-  proof: by rw [mul_comm, I_im]
-
-中文:
-定理 I_im'
-  条件: (z : K)
-  结论: im (I : K) * im z = im z
-  证明: by rw [mul_comm, I_im]
-
-Depends on / 依赖: I_im, mul_comm
+/-
+**RCLike.I_im'** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：I_im' (z : K) : im (I : K) * im z = im z
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `RCLike.I_im`：I_im (z : K) : im z * im (I : K) = im z
 -/
 theorem I_im' (z : K) : im (I : K) * im z = im z := by rw [mul_comm, I_im]
 
 -- Not `@[simp]` since `simp` can prove this.
 @[rclike_simps]
-/--
-theorem `I_mul_re` / 定理 `I_mul_re`
-
-English:
-theorem I_mul_re
-  given: (z : K)
-  statement: re (I * z) = -im z
-  proof: by
-  simp only [I_re, zero_sub, I_im', zero_mul, mul_re]
-
-中文:
-定理 I_mul_re
-  条件: (z : K)
-  结论: re (I * z) = -im z
-  证明: by
-  simp only [I_re, zero_sub, I_im', zero_mul, mul_re]
-
-Depends on / 依赖: I_im, I_re, mul_re, zero_mul, zero_sub
+/-
+**RCLike.I_mul_re** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：I_mul_re (z : K) : re (I * z) = -im z
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.mul_re`：mul_re : forall z w : K, re (z * w) = re z * re w - im z 
+* im w
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `RCLike.I_re`：I_re : re (I : K) = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `RCLike.I_im'`：I_im' (z : K) : im (I : K) * im z = im z
+· 使用定理 `zero_sub`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 0 - a = -a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem I_mul_re (z : K) : re (I * z) = -im z := by
   simp only [I_re, zero_sub, I_im', zero_mul, mul_re]
-
-/--
-theorem `I_mul_I` / 定理 `I_mul_I`
-
-English:
-theorem I_mul_I
-  statement: (I : K) = 0 ∨ (I : K) * I = -1
-  proof: I_mul_I_ax
-
-中文:
-定理 I_mul_I
-  结论: (I : K) = 0 ∨ (I : K) * I = -1
-  证明: I_mul_I_ax
-
-Depends on / 依赖: I_mul_I_ax
+/-
+**RCLike.I_mul_I** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：I_mul_I : (I : K) = 0 ∨ (I : K) * I = -1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.I_mul_I_ax`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K], RC
+Like.I = 0 ∨ RCLike.I * RCLike.I = -1
 -/
 theorem I_mul_I : (I : K) = 0 ∨ (I : K) * I = -1 :=
   I_mul_I_ax
 
 variable (𝕜) in
-/--
-lemma `I_eq_zero_or_im_I_eq_one` / 引理 `I_eq_zero_or_im_I_eq_one`
-
-English:
-lemma I_eq_zero_or_im_I_eq_one
-  statement: (I : K) = 0 ∨ im (I : K) = 1
-  proof: .imp_right fun h => by simpa [h] using (I_mul_re (I : K)).symm I_mul_I (K := K)
-
-@[simp, rclike_simps]
-
-中文:
-引理 I_eq_zero_or_im_I_eq_one
-  结论: (I : K) = 0 ∨ im (I : K) = 1
-  证明: .imp_right fun h => by simpa [h] using (I_mul_re (I : K)).symm I_mul_I (K := K)
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: I_mul_I, I_mul_re, imp_right
+/-
+**RCLike.I_eq_zero_or_im_I_eq_one** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：I_eq_zero_or_im_I_eq_one : (I : K) = 0 ∨ im (I : K) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.imp_right`：∀ {b c a : Prop}, (b → c) → a ∨ b → a ∨ c
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `RCLike.one_re`：one_re : re (1 : K) = 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.I_mul_re`：I_mul_re (z : K) : re (I * z) = -im z
+· 使用定理 `RCLike.I_mul_I`：I_mul_I : (I : K) = 0 ∨ (I : K) * I = -1
 -/
 lemma I_eq_zero_or_im_I_eq_one : (I : K) = 0 ∨ im (I : K) = 1 :=
-.imp_right fun h => by simpa [h] using (I_mul_re (I : K)).symm I_mul_I (K := K)
+  I_mul_I (K := K) |>.imp_right fun h ↦ by simpa [h] using (I_mul_re (I : K)).symm
 
 @[simp, rclike_simps]
-/--
-theorem `conj_re` / 定理 `conj_re`
-
-English:
-theorem conj_re
-  given: (z : K)
-  statement: re (conj z) = re z
-  proof: RCLike.conj_re_ax z
-
-@[simp, rclike_simps]
-
-中文:
-定理 conj_re
-  条件: (z : K)
-  结论: re (conj z) = re z
-  证明: RCLike.conj_re_ax z
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: RCLike, RCLike.conj_re_ax, conj_re_ax
+/-
+**RCLike.conj_re** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：conj_re (z : K) : re (conj z) = re z
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.conj_re_ax`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K] (z 
+: K), RCLike.re ((starRingEnd K) z) = RCLike.re z
 -/
 theorem conj_re (z : K) : re (conj z) = re z :=
   RCLike.conj_re_ax z
 
 @[simp, rclike_simps]
-/--
-theorem `conj_im` / 定理 `conj_im`
-
-English:
-theorem conj_im
-  given: (z : K)
-  statement: im (conj z) = -im z
-  proof: RCLike.conj_im_ax z
-
-@[simp, rclike_simps]
-
-中文:
-定理 conj_im
-  条件: (z : K)
-  结论: im (conj z) = -im z
-  证明: RCLike.conj_im_ax z
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: RCLike, RCLike.conj_im_ax, conj_im_ax
+/-
+**RCLike.conj_im** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：conj_im (z : K) : im (conj z) = -im z
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.conj_im_ax`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K] (z 
+: K), RCLike.im ((starRingEnd K) z) = -RCLike.im z
 -/
 theorem conj_im (z : K) : im (conj z) = -im z :=
   RCLike.conj_im_ax z
 
 @[simp, rclike_simps]
-/--
-theorem `conj_I` / 定理 `conj_I`
-
-English:
-theorem conj_I
-  statement: conj (I : K) = -I
-  proof: RCLike.conj_I_ax
-
-@[simp, rclike_simps]
-
-中文:
-定理 conj_I
-  结论: conj (I : K) = -I
-  证明: RCLike.conj_I_ax
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: RCLike, RCLike.conj_I_ax, conj_I_ax
+/-
+**RCLike.conj_I** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：conj_I : conj (I : K) = -I
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.conj_I_ax`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K], (st
+arRingEnd K) RCLike.I = -RCLike.I
 -/
 theorem conj_I : conj (I : K) = -I :=
   RCLike.conj_I_ax
 
 @[simp, rclike_simps]
-/--
-theorem `conj_ofReal` / 定理 `conj_ofReal`
-
-English:
-theorem conj_ofReal
-  given: (r : Real)
-  statement: conj (r : K) = (r : K)
-  proof: by
+/-
+**RCLike.conj_ofReal** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：conj_ofReal (r : Real) : conj (r : K) = (r : K)
+参数：r : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.ext_iff`：ext_iff {z w : K} : z = w ↔ re z = re w ∧ im z = im w
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `RCLike.conj_re`：conj_re (z : K) : re (conj z) = re z
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `RCLike.conj_im`：conj_im (z : K) : im (conj z) = -im z
+· 使用定理 `RCLike.ofReal_im`：ofReal_im : forall r : Real, im (r : K) = 0
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
+-/
+theorem conj_ofReal (r : ℝ) : conj (r : K) = (r : K) := by
   rw [ext_iff]
   simp only [ofReal_im, conj_im, conj_re, and_self_iff, neg_zero]
-
-中文:
-定理 conj_of实数
-  条件: (r : 实数)
-  结论: conj (r : K) = (r : K)
-  证明: by
-  rw [ext_iff]
-  simp only [ofReal_im, conj_im, conj_re, and_self_iff, neg_zero]
-
-Depends on / 依赖: and_self_iff, conj_im, conj_re, ext_iff, neg_zero, ofReal_im
+/-
+**RCLike.conj_nat_cast** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：conj_nat_cast (n : Nat) : conj (n : K) = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
 -/
-theorem conj_ofReal (r : Real) : conj (r : K) = (r : K) := by
-  rw [ext_iff]
-  simp only [ofReal_im, conj_im, conj_re, and_self_iff, neg_zero]
-
-/--
-theorem `conj_nat_cast` / 定理 `conj_nat_cast`
-
-English:
-theorem conj_nat_cast
-  given: (n : Nat)
-  statement: conj (n : K) = n
-  proof: map_natCast _ _
-
-中文:
-定理 conj_nat_cast
-  条件: (n : 自然数)
-  结论: conj (n : K) = n
-  证明: map_natCast _ _
-
-Depends on / 依赖: map_natCast
+theorem conj_nat_cast (n : ℕ) : conj (n : K) = n := map_natCast _ _
+/-
+**RCLike.conj_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：conj_ofNat (n : Nat) [n.AtLeastTwo] : conj (ofNat(n) : K) = ofNat(n)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_ofNat`：map_ofNat [FunLike F R S] [RingHomClass F R S] (f : F) (n : N
+at) [Nat.AtLeastTwo n] : (f ofNat(n) : S) = OfNat.ofNat n
 -/
-theorem conj_nat_cast (n : Nat) : conj (n : K) = n := map_natCast _ _
-
-/--
-theorem `conj_ofNat` / 定理 `conj_ofNat`
-
-English:
-theorem conj_ofNat
-  given: (n : Nat) [n.AtLeastTwo]
-  statement: conj (ofNat(n) : K) = ofNat(n)
-  proof: map_ofNat _ _
-
-@[rclike_simps, simp]
-
-中文:
-定理 conj_of自然数
-  条件: (n : 自然数) [n.AtLeastTwo]
-  结论: conj (of自然数(n) : K) = of自然数(n)
-  证明: map_ofNat _ _
-
-@[rclike_simps, simp]
-
-Depends on / 依赖: map_ofNat
--/
-theorem conj_ofNat (n : Nat) [n.AtLeastTwo] : conj (ofNat(n) : K) = ofNat(n) :=
+theorem conj_ofNat (n : ℕ) [n.AtLeastTwo] : conj (ofNat(n) : K) = ofNat(n) :=
   map_ofNat _ _
 
 @[rclike_simps, simp]
-/--
-theorem `conj_neg_I` / 定理 `conj_neg_I`
-
-English:
-theorem conj_neg_I
-  statement: conj (-I) = (I : K)
-  proof: by rw [map_neg, conj_I, neg_neg]
-
-中文:
-定理 conj_neg_I
-  结论: conj (-I) = (I : K)
-  证明: by rw [map_neg, conj_I, neg_neg]
-
-Depends on / 依赖: Category, Category.assoc, D.t_fac, conj_I, map_neg, neg_neg, t_fac
+/-
+**RCLike.conj_neg_I** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：conj_neg_I : conj (-I) = (I : K)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `RCLike.charZero_rclike`：∀ {K : Type u_1} [inst : RCLike K], CharZero K
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `RingHomClass.toLinearMapClassNNRat`：∀ {F : Type u_1} {R : Type u_2} {S :
+ Type u_3} [inst : DivisionSemiring R] [inst_1 : CharZero R]   [inst_2 : Divisio
+nSemiring S] [inst_3 : C…
+· 使用定理 `RCLike.conj_I`：conj_I : conj (I : K) = -I
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
 -/
 theorem conj_neg_I : conj (-I) = (I : K) := by rw [map_neg, conj_I, neg_neg]
-
-/--
-theorem `conj_eq_re_sub_im` / 定理 `conj_eq_re_sub_im`
-
-English:
-theorem conj_eq_re_sub_im
-  given: (z : K)
-  statement: conj z = re z - im z * I
-  proof: (congr_arg conj (re_add_im z).symm).trans by
-    rw [map_add]; rw [map_mul]; rw [conj_I]; rw [conj_ofReal]; rw [conj_ofReal]; rw [mul_neg]; rw [sub_eq_add_neg]
-
-中文:
-定理 conj_eq_re_sub_im
-  条件: (z : K)
-  结论: conj z = re z - im z * I
-  证明: (congr_arg conj (re_add_im z).symm).trans by
-    rw [map_add]; rw [map_mul]; rw [conj_I]; rw [conj_ofReal]; rw [conj_ofReal]; rw [mul_neg]; rw [sub_eq_add_neg]
-
-Depends on / 依赖: Category, Category.assoc, D.t_fac, congr_arg, conj_I, conj_ofReal, map_add, map_mul, mul_neg, re_add_im, sub_eq_add_neg, t_fac
+/-
+**RCLike.conj_eq_re_sub_im** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：conj_eq_re_sub_im (z : K) : conj z = re z - im z * I
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.re_add_im`：re_add_im (z : K) : (re z : K) + im z * I = z
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `RCLike.charZero_rclike`：∀ {K : Type u_1} [inst : RCLike K], CharZero K
+· 使用定理 `RingHomClass.toLinearMapClassNNRat`：∀ {F : Type u_1} {R : Type u_2} {S :
+ Type u_3} [inst : DivisionSemiring R] [inst_1 : CharZero R]   [inst_2 : Divisio
+nSemiring S] [inst_3 : C…
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `RCLike.conj_I`：conj_I : conj (I : K) = -I
+· 使用定理 `RCLike.conj_ofReal`：conj_ofReal (r : Real) : conj (r : K) = (r : K)
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
 -/
 theorem conj_eq_re_sub_im (z : K) : conj z = re z - im z * I :=
-(congr_arg conj (re_add_im z).symm).trans by
-    rw [map_add]; rw [map_mul]; rw [conj_I]; rw [conj_ofReal]; rw [conj_ofReal]; rw [mul_neg]; rw [sub_eq_add_neg]
-
-/--
-theorem `sub_conj` / 定理 `sub_conj`
-
-English:
-theorem sub_conj
-  given: (z : K)
-  statement: z - conj z = 2 * im z * I
-  proof: calc
-    z - conj z = re z + im z * I - (re z - im z * I) := by rw [re_add_im, ← conj_eq_re_sub_im]
-    _ = 2 * im z * I := by rw [add_sub_sub_cancel, ← two_mul, mul_assoc]
-
-@[rclike_simps]
-
-中文:
-定理 sub_conj
-  条件: (z : K)
-  结论: z - conj z = 2 * im z * I
-  证明: calc
-    z - conj z = re z + im z * I - (re z - im z * I) := by rw [re_add_im, ← conj_eq_re_sub_im]
-    _ = 2 * im z * I := by rw [add_sub_sub_cancel, ← two_mul, mul_assoc]
-
-@[rclike_simps]
-
-Depends on / 依赖: add_sub_sub_cancel, conj_eq_re_sub_im, mul_assoc, re_add_im, two_mul
+  (congr_arg conj (re_add_im z).symm).trans <| by
+    rw [map_add, map_mul, conj_I, conj_ofReal, conj_ofReal, mul_neg, sub_eq_add_neg]
+/-
+**RCLike.sub_conj** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：sub_conj (z : K) : z - conj z = 2 * im z * I
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.re_add_im`：re_add_im (z : K) : (re z : K) + im z * I = z
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.conj_eq_re_sub_im`：conj_eq_re_sub_im (z : K) : conj z = re z - im
+ z * I
+· 使用定理 `add_sub_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b c : G)
+, a + b - (a - c) = b + c
+· 使用定理 `two_mul`：two_mul (n : α) : 2 * n = n + n
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 -/
 theorem sub_conj (z : K) : z - conj z = 2 * im z * I :=
   calc
@@ -1515,923 +1097,929 @@ theorem sub_conj (z : K) : z - conj z = 2 * im z * I :=
     _ = 2 * im z * I := by rw [add_sub_sub_cancel, ← two_mul, mul_assoc]
 
 @[rclike_simps]
-/--
-theorem `conj_smul` / 定理 `conj_smul`
-
-English:
-theorem conj_smul
-  given: (r : Real) (z : K)
-  statement: conj (r • z) = r • conj z
-  proof: by
-  rw [conj_eq_re_sub_im]; rw [conj_eq_re_sub_im]; rw [smul_re]; rw [smul_im]; rw [ofReal_mul]; rw [ofReal_mul]; rw [real_smul_eq_coe_mul r (_ - _)]; rw [mul_sub]; rw [mul_assoc]
-
-中文:
-定理 conj_smul
-  条件: (r : 实数) (z : K)
-  结论: conj (r • z) = r • conj z
-  证明: by
-  rw [conj_eq_re_sub_im]; rw [conj_eq_re_sub_im]; rw [smul_re]; rw [smul_im]; rw [ofReal_mul]; rw [ofReal_mul]; rw [real_smul_eq_coe_mul r (_ - _)]; rw [mul_sub]; rw [mul_assoc]
-
-Depends on / 依赖: cancel_mono, conj_eq_re_sub_im, mul_assoc, mul_sub, ofReal_mul, pullback, pullback.fst, real_smul_eq_coe_mul, smul_im, smul_re, t_fac, t_fac_assoc
+/-
+**RCLike.conj_smul** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：conj_smul (r : Real) (z : K) : conj (r • z) = r • conj z
+参数：r : Real；z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.conj_eq_re_sub_im`：conj_eq_re_sub_im (z : K) : conj z = re z - im
+ z * I
+· 使用定理 `RCLike.smul_re`：smul_re (r : Real) (z : K) : re (r • z) = r * re z
+· 使用定理 `RCLike.smul_im`：smul_im (r : Real) (z : K) : im (r • z) = r * im z
+· 使用定理 `RCLike.ofReal_mul`：ofReal_mul (r s : Real) : ((r * s : Real) : K) = r * 
+s
+· 使用定理 `RCLike.real_smul_eq_coe_mul`：real_smul_eq_coe_mul (r : Real) (z : K) : r
+ • z = (r : K) * z
+· 使用定理 `mul_sub`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), a 
+* (b - c) = a * b - a * c
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 -/
-theorem conj_smul (r : Real) (z : K) : conj (r • z) = r • conj z := by
-  rw [conj_eq_re_sub_im]; rw [conj_eq_re_sub_im]; rw [smul_re]; rw [smul_im]; rw [ofReal_mul]; rw [ofReal_mul]; rw [real_smul_eq_coe_mul r (_ - _)]; rw [mul_sub]; rw [mul_assoc]
-
-/--
-theorem `add_conj` / 定理 `add_conj`
-
-English:
-theorem add_conj
-  given: (z : K)
-  statement: z + conj z = 2 * re z
-  proof: calc
-    z + conj z = re z + im z * I + (re z - im z * I) := by rw [re_add_im, conj_eq_re_sub_im]
-    _ = 2 * re z := by rw [add_add_sub_cancel, two_mul]
-
-中文:
-定理 add_conj
-  条件: (z : K)
-  结论: z + conj z = 2 * re z
-  证明: calc
-    z + conj z = re z + im z * I + (re z - im z * I) := by rw [re_add_im, conj_eq_re_sub_im]
-    _ = 2 * re z := by rw [add_add_sub_cancel, two_mul]
-
-Depends on / 依赖: add_add_sub_cancel, conj_eq_re_sub_im, re_add_im, two_mul
+theorem conj_smul (r : ℝ) (z : K) : conj (r • z) = r • conj z := by
+  rw [conj_eq_re_sub_im, conj_eq_re_sub_im, smul_re, smul_im, ofReal_mul, ofReal_mul,
+    real_smul_eq_coe_mul r (_ - _), mul_sub, mul_assoc]
+/-
+**RCLike.add_conj** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：add_conj (z : K) : z + conj z = 2 * re z
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.re_add_im`：re_add_im (z : K) : (re z : K) + im z * I = z
+· 使用定理 `RCLike.conj_eq_re_sub_im`：conj_eq_re_sub_im (z : K) : conj z = re z - im
+ z * I
+· 使用定理 `add_add_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b c : G)
+, a + c + (b - c) = a + b
+· 使用定理 `two_mul`：two_mul (n : α) : 2 * n = n + n
 -/
 theorem add_conj (z : K) : z + conj z = 2 * re z :=
   calc
     z + conj z = re z + im z * I + (re z - im z * I) := by rw [re_add_im, conj_eq_re_sub_im]
     _ = 2 * re z := by rw [add_add_sub_cancel, two_mul]
-
-/--
-theorem `re_eq_add_conj` / 定理 `re_eq_add_conj`
-
-English:
-theorem re_eq_add_conj
-  given: (z : K)
-  statement: ↑(re z) = (z + conj z) / 2
-  proof: by
-  rw [add_conj]; rw [mul_div_cancel_left₀ (re z : K) two_ne_zero]
-
-中文:
-定理 re_eq_add_conj
-  条件: (z : K)
-  结论: ↑(re z) = (z + conj z) / 2
-  证明: by
-  rw [add_conj]; rw [mul_div_cancel_left₀ (re z : K) two_ne_zero]
-
-Depends on / 依赖: D.cocycle, add_conj, cocycle, two_ne_zero
+/-
+**RCLike.re_eq_add_conj** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：re_eq_add_conj (z : K) : ↑(re z) = (z + conj z) / 2
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.add_conj`：add_conj (z : K) : z + conj z = 2 * re z
+· 使用定理 `mul_div_cancel_left₀`：∀ {M₀ : Type u_1} [inst : CommMonoidWithZero M₀] [
+inst_1 : Div M₀] [MulDivCancelClass M₀] (b : M₀) {a : M₀},   a ≠ 0 → a * b / a =
+ b
+· 使用定理 `GroupWithZero.toMulDivCancelClass`：∀ {G₀ : Type u} [inst : GroupWithZero
+ G₀], MulDivCancelClass G₀
+· 使用引理 `two_ne_zero`：two_ne_zero [OfNat α 2] [NeZero (2 : α)] : (2 : α) != 0
+· 使用定理 `RCLike.charZero_rclike`：∀ {K : Type u_1} [inst : RCLike K], CharZero K
 -/
 theorem re_eq_add_conj (z : K) : ↑(re z) = (z + conj z) / 2 := by
-  rw [add_conj]; rw [mul_div_cancel_left₀ (re z : K) two_ne_zero]
-
-/--
-theorem `im_eq_conj_sub` / 定理 `im_eq_conj_sub`
-
-English:
-theorem im_eq_conj_sub
-  given: (z : K)
-  statement: ↑(im z) = I * (conj z - z) / 2
-  proof: by
-  rw [← neg_inj]; rw [← ofReal_neg]; rw [← I_mul_re]; rw [re_eq_add_conj]; rw [map_mul]; rw [conj_I]; rw [← neg_div]; rw [← mul_neg]; rw [neg_sub]; rw [mul_sub]; rw [neg_mul]; rw [sub_eq_add_neg]
-
-中文:
-定理 im_eq_conj_sub
-  条件: (z : K)
-  结论: ↑(im z) = I * (conj z - z) / 2
-  证明: by
-  rw [← neg_inj]; rw [← ofReal_neg]; rw [← I_mul_re]; rw [re_eq_add_conj]; rw [map_mul]; rw [conj_I]; rw [← neg_div]; rw [← mul_neg]; rw [neg_sub]; rw [mul_sub]; rw [neg_mul]; rw [sub_eq_add_neg]
-
-Depends on / 依赖: D.cocycle, I_mul_re, IsIso.eq_inv_of_hom_inv_id, cancel_mono, cocycle, conj_I, eq_inv_of_hom_inv_id, map_mul, mul_neg, mul_sub, neg_div, neg_inj, neg_mul, neg_sub, ofReal_neg, pullback, pullback.fst, re_eq_add_conj, sub_eq_add_neg, t_fac
+  rw [add_conj, mul_div_cancel_left₀ (re z : K) two_ne_zero]
+/-
+**RCLike.im_eq_conj_sub** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：im_eq_conj_sub (z : K) : ↑(im z) = I * (conj z - z) / 2
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `neg_inj`：∀ {G : Type u_3} [inst : InvolutiveNeg G] {a b : G}, -a = -b ↔ 
+a = b
+· 使用定理 `RCLike.ofReal_neg`：ofReal_neg (r : Real) : ((-r : Real) : K) = -r
+· 使用定理 `RCLike.I_mul_re`：I_mul_re (z : K) : re (I * z) = -im z
+· 使用定理 `RCLike.re_eq_add_conj`：re_eq_add_conj (z : K) : ↑(re z) = (z + conj z) /
+ 2
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `RCLike.conj_I`：conj_I : conj (I : K) = -I
+· 使用引理 `neg_div`：neg_div (a b : R) : -b / a = -(b / a)
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `neg_sub`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α), -(a - 
+b) = b - a
+· 使用定理 `mul_sub`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), a 
+* (b - c) = a * b - a * c
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
 -/
 theorem im_eq_conj_sub (z : K) : ↑(im z) = I * (conj z - z) / 2 := by
-  rw [← neg_inj]; rw [← ofReal_neg]; rw [← I_mul_re]; rw [re_eq_add_conj]; rw [map_mul]; rw [conj_I]; rw [← neg_div]; rw [← mul_neg]; rw [neg_sub]; rw [mul_sub]; rw [neg_mul]; rw [sub_eq_add_neg]
+  rw [← neg_inj, ← ofReal_neg, ← I_mul_re, re_eq_add_conj, map_mul, conj_I, ← neg_div, ← mul_neg,
+    neg_sub, mul_sub, neg_mul, sub_eq_add_neg]
 
 open List in
-/--
-theorem `is_real_TFAE` / 定理 `is_real_TFAE`
+/-- There are several equivalent ways to say that a number `z` is in fact a real number. -/
+/-
+**RCLike.is_real_TFAE** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：is_real_TFAE (z : K) : TFAE [conj z = z, exists r : Real, (r : K) = z, ↑(r
+e z) = z, im z = 0, IsSelfAdjoint z]
+参数：z : K。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.ofReal_inj`：ofReal_inj {z w : Real} : (z : K) = (w : K) ↔ z = w
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `RCLike.im_eq_conj_sub`：im_eq_conj_sub (z : K) : ↑(im z) = I * (conj z - 
+z) / 2
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `zero_div`：zero_div (a : G₀) : 0 / a = 0
+· 使用定理 `RCLike.ofReal_zero`：ofReal_zero : ((0 : Real) : K) = 0
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `RCLike.re_add_im`：re_add_im (z : K) : (re z : K) + im z * I = z
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `RCLike.conj_ofReal`：conj_ofReal (r : Real) : conj (r : K) = (r : K)
+· 使用定理 `isSelfAdjoint_iff`：∀ {R : Type u_1} [inst : Star R] {x : R}, IsSelfAdjoi
+nt x ↔ star x = x
+· 使用定理 `List.tfae_of_cycle`：tfae_of_cycle {a b} {l : List Prop} (h_chain : List.
+IsChain (· -> ·) (a :: b :: l)) (h_last : getLastD l b -> a) : TFAE (a :: b :: l
+)
 
-English:
-theorem is_real_TFAE
-  given: (z : K)
-  proof: by
-  tfae_have 1 -> 4
-  | h => by
-    rw [← @ofReal_inj K]; rw [im_eq_conj_sub]; rw [h]; rw [sub_self]; rw [mul_zero]; rw [zero_div]; rw [ofReal_zero]
-  tfae_have 4 -> 3
-  | h => by
-    conv_rhs => rw [← re_add_im z, h, ofReal_zero, zero_mul, add_zero]
-  tfae_have 3 -> 2 := fun h => ⟨_, h⟩
-  tfae_have 2 -> 1 := fun ⟨r, hr⟩ => hr ▸ conj_ofReal _
-  tfae_have 1 -> 5 := fun _ => by rwa [isSelfAdjoint_iff]
-  tfae_have 5 -> 1 := fun hz => by rwa [isSelfAdjoint_iff] at hz
-  tfae_finish
-
-中文:
-定理 is_real_TFAE
-  条件: (z : K)
-  证明: by
-  tfae_have 1 -> 4
-  | h => by
-    rw [← @ofReal_inj K]; rw [im_eq_conj_sub]; rw [h]; rw [sub_self]; rw [mul_zero]; rw [zero_div]; rw [ofReal_zero]
-  tfae_have 4 -> 3
-  | h => by
-    conv_rhs => rw [← re_add_im z, h, ofReal_zero, zero_mul, add_zero]
-  tfae_have 3 -> 2 := fun h => ⟨_, h⟩
-  tfae_have 2 -> 1 := fun ⟨r, hr⟩ => hr ▸ conj_ofReal _
-  tfae_have 1 -> 5 := fun _ => by rwa [isSelfAdjoint_iff]
-  tfae_have 5 -> 1 := fun hz => by rwa [isSelfAdjoint_iff] at hz
-  tfae_finish
-
-Depends on / 依赖: add_zero, conj_ofReal, conv_rhs, im_eq_conj_sub, isSelfAdjoint_iff, mul_zero, ofReal_inj, ofReal_zero, re_add_im, sub_self, tfae_finish, tfae_have, zero_div, zero_mul
+--- 原说明 ---
+There are several equivalent ways to say that a number `z` is in fact a real num
+ber.
 -/
 theorem is_real_TFAE (z : K) :
-    TFAE [conj z = z, exists r : Real, (r : K) = z, ↑(re z) = z, im z = 0, IsSelfAdjoint z] := by
-  tfae_have 1 -> 4
+    TFAE [conj z = z, ∃ r : ℝ, (r : K) = z, ↑(re z) = z, im z = 0, IsSelfAdjoint z] := by
+  tfae_have 1 → 4
   | h => by
-    rw [← @ofReal_inj K]; rw [im_eq_conj_sub]; rw [h]; rw [sub_self]; rw [mul_zero]; rw [zero_div]; rw [ofReal_zero]
-  tfae_have 4 -> 3
+    rw [← @ofReal_inj K, im_eq_conj_sub, h, sub_self, mul_zero, zero_div,
+      ofReal_zero]
+  tfae_have 4 → 3
   | h => by
     conv_rhs => rw [← re_add_im z, h, ofReal_zero, zero_mul, add_zero]
-  tfae_have 3 -> 2 := fun h => ⟨_, h⟩
-  tfae_have 2 -> 1 := fun ⟨r, hr⟩ => hr ▸ conj_ofReal _
-  tfae_have 1 -> 5 := fun _ => by rwa [isSelfAdjoint_iff]
-  tfae_have 5 -> 1 := fun hz => by rwa [isSelfAdjoint_iff] at hz
+  tfae_have 3 → 2 := fun h => ⟨_, h⟩
+  tfae_have 2 → 1 := fun ⟨r, hr⟩ => hr ▸ conj_ofReal _
+  tfae_have 1 → 5 := fun _ => by rwa [isSelfAdjoint_iff]
+  tfae_have 5 → 1 := fun hz => by rwa [isSelfAdjoint_iff] at hz
   tfae_finish
 
 set_option linter.style.whitespace false in -- manual alignment is not recognised
-/--
-theorem `conj_eq_iff_real` / 定理 `conj_eq_iff_real`
-
-English:
-theorem conj_eq_iff_real
-  given: {z : K}
-  statement: conj z = z ↔ exists r : Real, z = (r : K)
-  proof: calc
-    _ ↔ exists r : Real, (r : K) = z := (is_real_TFAE z).out 0 1
-    _ ↔ _ := by simp only [eq_comm]
-
-中文:
-定理 conj_eq_iff_real
-  条件: {z : K}
-  结论: conj z = z ↔ 存在 r : 实数, z = (r : K)
-  证明: calc
-    _ ↔ exists r : Real, (r : K) = z := (is_real_TFAE z).out 0 1
-    _ ↔ _ := by simp only [eq_comm]
-
-Depends on / 依赖: eq_comm, is_real_TFAE
+/-
+**RCLike.conj_eq_iff_real** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：conj_eq_iff_real {z : K} : conj z = z ↔ exists r : Real, z = (r : K)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.TFAE.out`：∀ {l : List Prop},   l.TFAE →     ∀ (n₁ n₂ : ℕ) {a b : Pr
+op},       autoParam (l[n₁]? = some a) List.TFAE.out._auto_1 → autoParam (l[n₂]?
+ = …
+· 使用定理 `RCLike.is_real_TFAE`：is_real_TFAE (z : K) : TFAE [conj z = z, exists r :
+ Real, (r : K) = z, ↑(re z) = z, im z = 0, IsSelfAdjoint z]
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem conj_eq_iff_real {z : K} : conj z = z ↔ exists r : Real, z = (r : K) :=
+theorem conj_eq_iff_real {z : K} : conj z = z ↔ ∃ r : ℝ, z = (r : K) :=
   calc
-    _ ↔ exists r : Real, (r : K) = z := (is_real_TFAE z).out 0 1
-    _ ↔ _ := by simp only [eq_comm]
-
-/--
-theorem `conj_eq_iff_re` / 定理 `conj_eq_iff_re`
-
-English:
-theorem conj_eq_iff_re
-  given: {z : K}
-  statement: conj z = z ↔ (re z : K) = z
-  proof: (is_real_TFAE z).out 0 2
-
-中文:
-定理 conj_eq_iff_re
-  条件: {z : K}
-  结论: conj z = z ↔ (re z : K) = z
-  证明: (is_real_TFAE z).out 0 2
-
-Depends on / 依赖: is_real_TFAE
+    _ ↔ ∃ r : ℝ, (r : K) = z := (is_real_TFAE z).out 0 1
+    _ ↔ _                    := by simp only [eq_comm]
+/-
+**RCLike.conj_eq_iff_re** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：conj_eq_iff_re {z : K} : conj z = z ↔ (re z : K) = z
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.TFAE.out`：∀ {l : List Prop},   l.TFAE →     ∀ (n₁ n₂ : ℕ) {a b : Pr
+op},       autoParam (l[n₁]? = some a) List.TFAE.out._auto_1 → autoParam (l[n₂]?
+ = …
+· 使用定理 `RCLike.is_real_TFAE`：is_real_TFAE (z : K) : TFAE [conj z = z, exists r :
+ Real, (r : K) = z, ↑(re z) = z, im z = 0, IsSelfAdjoint z]
 -/
 theorem conj_eq_iff_re {z : K} : conj z = z ↔ (re z : K) = z :=
   (is_real_TFAE z).out 0 2
-
-/--
-theorem `conj_eq_iff_im` / 定理 `conj_eq_iff_im`
-
-English:
-theorem conj_eq_iff_im
-  given: {z : K}
-  statement: conj z = z ↔ im z = 0
-  proof: (is_real_TFAE z).out 0 3
-
-@[simp]
-
-中文:
-定理 conj_eq_iff_im
-  条件: {z : K}
-  结论: conj z = z ↔ im z = 0
-  证明: (is_real_TFAE z).out 0 3
-
-@[simp]
-
-Depends on / 依赖: is_real_TFAE
+/-
+**RCLike.conj_eq_iff_im** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：conj_eq_iff_im {z : K} : conj z = z ↔ im z = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.TFAE.out`：∀ {l : List Prop},   l.TFAE →     ∀ (n₁ n₂ : ℕ) {a b : Pr
+op},       autoParam (l[n₁]? = some a) List.TFAE.out._auto_1 → autoParam (l[n₂]?
+ = …
+· 使用定理 `RCLike.is_real_TFAE`：is_real_TFAE (z : K) : TFAE [conj z = z, exists r :
+ Real, (r : K) = z, ↑(re z) = z, im z = 0, IsSelfAdjoint z]
 -/
 theorem conj_eq_iff_im {z : K} : conj z = z ↔ im z = 0 :=
   (is_real_TFAE z).out 0 3
 
 @[simp]
-/--
-theorem `star_def` / 定理 `star_def`
-
-English:
-theorem star_def
-  statement: (Star.star : K -> K) = conj
-  proof: rfl
-
-中文:
-定理 star_def
-  结论: (对合.star : K -> K) = conj
-  证明: rfl
+/-
+**RCLike.star_def** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：star_def : (Star.star : K -> K) = conj
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem star_def : (Star.star : K -> K) = conj :=
+theorem star_def : (Star.star : K → K) = conj :=
   rfl
-
-/--
-lemma `im_eq_zero_iff_isSelfAdjoint` / 引理 `im_eq_zero_iff_isSelfAdjoint`
-
-English:
-lemma im_eq_zero_iff_isSelfAdjoint
-  given: {x : K}
-  statement: im x = 0 ↔ IsSelfAdjoint x
-  proof: .out 3 4 is_real_TFAE x
-
-中文:
-引理 im_eq_zero_iff_isSelfAdjoint
-  条件: {x : K}
-  结论: im x = 0 ↔ IsSelfAdjoint x
-  证明: .out 3 4 is_real_TFAE x
-
-Depends on / 依赖: is_real_TFAE
+/-
+**RCLike.im_eq_zero_iff_isSelfAdjoint** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：im_eq_zero_iff_isSelfAdjoint {x : K} : im x = 0 ↔ IsSelfAdjoint x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.TFAE.out`：∀ {l : List Prop},   l.TFAE →     ∀ (n₁ n₂ : ℕ) {a b : Pr
+op},       autoParam (l[n₁]? = some a) List.TFAE.out._auto_1 → autoParam (l[n₂]?
+ = …
+· 使用定理 `RCLike.is_real_TFAE`：is_real_TFAE (z : K) : TFAE [conj z = z, exists r :
+ Real, (r : K) = z, ↑(re z) = z, im z = 0, IsSelfAdjoint z]
 -/
 lemma im_eq_zero_iff_isSelfAdjoint {x : K} : im x = 0 ↔ IsSelfAdjoint x :=
-.out 3 4 is_real_TFAE x
-
-/--
-lemma `re_eq_ofReal_of_isSelfAdjoint` / 引理 `re_eq_ofReal_of_isSelfAdjoint`
-
-English:
-lemma re_eq_ofReal_of_isSelfAdjoint
-  given: {x : K} {y : Real} (hx : IsSelfAdjoint x)
-  proof: by
-  simp [RCLike.ext_iff (K := K), hx, im_eq_zero_iff_isSelfAdjoint]
-
-中文:
-引理 re_eq_of实数_of_isSelfAdjoint
-  条件: {x : K} {y : 实数} (hx : IsSelfAdjoint x)
-  证明: by
-  simp [RCLike.ext_iff (K := K), hx, im_eq_zero_iff_isSelfAdjoint]
-
-Depends on / 依赖: RCLike, RCLike.ext_iff, ext_iff, im_eq_zero_iff_isSelfAdjoint
+  is_real_TFAE x |>.out 3 4
+/-
+**RCLike.re_eq_ofReal_of_isSelfAdjoint** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：re_eq_ofReal_of_isSelfAdjoint {x : K} {y : Real} (hx : IsSelfAdjoint x) : 
+re x = y ↔ x = y
+参数：hx : IsSelfAdjoint x。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.ext_iff`：ext_iff {z w : K} : z = w ↔ re z = re w ∧ im z = im w
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `RCLike.ofReal_re`：ofReal_re : forall r : Real, re (r : K) = r
+· 使用定理 `RCLike.ofReal_im`：ofReal_im : forall r : Real, im (r : K) = 0
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma re_eq_ofReal_of_isSelfAdjoint {x : K} {y : Real} (hx : IsSelfAdjoint x) :
+lemma re_eq_ofReal_of_isSelfAdjoint {x : K} {y : ℝ} (hx : IsSelfAdjoint x) :
     re x = y ↔ x = y := by
   simp [RCLike.ext_iff (K := K), hx, im_eq_zero_iff_isSelfAdjoint]
-
-/--
-lemma `ofReal_eq_re_of_isSelfAdjoint` / 引理 `ofReal_eq_re_of_isSelfAdjoint`
-
-English:
-lemma ofReal_eq_re_of_isSelfAdjoint
-  given: {x : K} {y : Real} (hx : IsSelfAdjoint x)
-  proof: by
-  simpa [eq_comm] using re_eq_ofReal_of_isSelfAdjoint hx
-
-中文:
-引理 of实数_eq_re_of_isSelfAdjoint
-  条件: {x : K} {y : 实数} (hx : IsSelfAdjoint x)
-  证明: by
-  simpa [eq_comm] using re_eq_ofReal_of_isSelfAdjoint hx
-
-Depends on / 依赖: eq_comm, re_eq_ofReal_of_isSelfAdjoint
+/-
+**RCLike.ofReal_eq_re_of_isSelfAdjoint** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_eq_re_of_isSelfAdjoint {x : K} {y : Real} (hx : IsSelfAdjoint x) : 
+y = re x ↔ y = x
+参数：hx : IsSelfAdjoint x。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `RCLike.re_eq_ofReal_of_isSelfAdjoint`：re_eq_ofReal_of_isSelfAdjoint {x :
+ K} {y : Real} (hx : IsSelfAdjoint x) : re x = y ↔ x = y
 -/
-lemma ofReal_eq_re_of_isSelfAdjoint {x : K} {y : Real} (hx : IsSelfAdjoint x) :
+lemma ofReal_eq_re_of_isSelfAdjoint {x : K} {y : ℝ} (hx : IsSelfAdjoint x) :
     y = re x ↔ y = x := by
   simpa [eq_comm] using re_eq_ofReal_of_isSelfAdjoint hx
 
 variable (K)
 
-/--
-Definition of `conjToRingEquiv` / `conjToRingEquiv` 的定义
+/-- Conjugation as a ring equivalence. This is used to convert the inner product into a
+sesquilinear product. -/
+/-
+**RCLike.conjToRingEquiv** 是 Mathlib 中的一个缩写定义，位于命名空间 `RCLike`。
+形式化陈述：conjToRingEquiv : K ≃+* Kᵐᵒᵖ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation conjToRingEquiv
-  signature: : K ≃+* Kᵐᵒᵖ
-  body: starRingEquiv
-
-中文:
-缩写 conjToRingEquiv
-  签名: : K ≃+* Kᵐᵒᵖ
-  定义体: starRingEquiv
-
-Depends on / 依赖: starRingEquiv
+--- 原说明 ---
+Conjugation as a ring equivalence. This is used to convert the inner product int
+o a
+sesquilinear product.
 -/
 abbrev conjToRingEquiv : K ≃+* Kᵐᵒᵖ :=
   starRingEquiv
 
 variable {K} {z : K}
 
-/--
-Definition of `normSq` / `normSq` 的定义
+/-- The norm squared function. -/
+/-
+**RCLike.normSq** 是 Mathlib 中的一个定义，位于命名空间 `RCLike`。
+形式化陈述：normSq : K ->*₀ Real where toFun z
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition normSq
-  signature: : K ->*₀ Real where
-  body: re z * re z + im z * im z
-  map_zero' := by simp only [add_zero, mul_zero, map_zero]
-  map_one' := by simp only [one_im, add_zero, mul_one, one_re, mul_zero]
-  map_mul' z w := by
-    simp only [mul_im, mul_re]
-    ring
-
-中文:
-定义 normSq
-  签名: : K ->*₀ 实数 where
-  定义体: re z * re z + im z * im z
-  map_zero' := by simp only [add_zero, mul_zero, map_zero]
-  map_one' := by simp only [one_im, add_zero, mul_one, one_re, mul_zero]
-  map_mul' z w := by
-    simp only [mul_im, mul_re]
-    ring
+--- 原说明 ---
+The norm squared function.
 -/
-def normSq : K ->*₀ Real where
+def normSq : K →*₀ ℝ where
   toFun z := re z * re z + im z * im z
   map_zero' := by simp only [add_zero, mul_zero, map_zero]
   map_one' := by simp only [one_im, add_zero, mul_one, one_re, mul_zero]
   map_mul' z w := by
     simp only [mul_im, mul_re]
     ring
-
-/--
-theorem `normSq_apply` / 定理 `normSq_apply`
-
-English:
-theorem normSq_apply
-  given: (z : K)
-  statement: normSq z = re z * re z + im z * im z
-  proof: rfl
-
-中文:
-定理 normSq_apply
-  条件: (z : K)
-  结论: normSq z = re z * re z + im z * im z
-  证明: rfl
+/-
+**RCLike.normSq_apply** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：normSq_apply (z : K) : normSq z = re z * re z + im z * im z
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem normSq_apply (z : K) : normSq z = re z * re z + im z * im z :=
   rfl
-
-/--
-theorem `norm_sq_eq_def` / 定理 `norm_sq_eq_def`
-
-English:
-theorem norm_sq_eq_def
-  given: {z : K}
-  statement: ‖z‖ ^ 2 = re z * re z + im z * im z
-  proof: norm_sq_eq_def_ax z
-
-中文:
-定理 norm_sq_eq_def
-  条件: {z : K}
-  结论: ‖z‖ ^ 2 = re z * re z + im z * im z
-  证明: norm_sq_eq_def_ax z
-
-Depends on / 依赖: norm_sq_eq_def_ax
+/-
+**RCLike.norm_sq_eq_def** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：norm_sq_eq_def {z : K} : ‖z‖ ^ 2 = re z * re z + im z * im z
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.norm_sq_eq_def_ax`：∀ {K : semiOutParam (Type u_1)} [self : RCLike
+ K] (z : K),   ‖z‖ ^ 2 = RCLike.re z * RCLike.re z + RCLike.im z * RCLike.im z
 -/
 theorem norm_sq_eq_def {z : K} : ‖z‖ ^ 2 = re z * re z + im z * im z :=
   norm_sq_eq_def_ax z
-
-/--
-theorem `normSq_eq_def'` / 定理 `normSq_eq_def'`
-
-English:
-theorem normSq_eq_def'
-  given: (z : K)
-  statement: normSq z = ‖z‖ ^ 2
-  proof: norm_sq_eq_def.symm
-
-@[rclike_simps]
-
-中文:
-定理 normSq_eq_def'
-  条件: (z : K)
-  结论: normSq z = ‖z‖ ^ 2
-  证明: norm_sq_eq_def.symm
-
-@[rclike_simps]
-
-Depends on / 依赖: norm_sq_eq_def, norm_sq_eq_def.symm
+/-
+**RCLike.normSq_eq_def'** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：normSq_eq_def' (z : K) : normSq z = ‖z‖ ^ 2
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.norm_sq_eq_def`：norm_sq_eq_def {z : K} : ‖z‖ ^ 2 = re z * re z + 
+im z * im z
 -/
 theorem normSq_eq_def' (z : K) : normSq z = ‖z‖ ^ 2 :=
   norm_sq_eq_def.symm
 
 @[rclike_simps]
-/--
-theorem `normSq_zero` / 定理 `normSq_zero`
-
-English:
-theorem normSq_zero
-  statement: normSq (0 : K) = 0
-  proof: normSq.map_zero
-
-@[rclike_simps]
-
-中文:
-定理 normSq_zero
-  结论: normSq (0 : K) = 0
-  证明: normSq.map_zero
-
-@[rclike_simps]
-
-Depends on / 依赖: map_zero, normSq, normSq.map_zero
+/-
+**RCLike.normSq_zero** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：normSq_zero : normSq (0 : K) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidWithZeroHom.map_zero`：∀ {α : Type u_2} {β : Type u_3} [inst : MulZ
+eroOneClass α] [inst_1 : MulZeroOneClass β] (f : α →*₀ β), f 0 = 0
 -/
 theorem normSq_zero : normSq (0 : K) = 0 :=
   normSq.map_zero
 
 @[rclike_simps]
-/--
-theorem `normSq_one` / 定理 `normSq_one`
-
-English:
-theorem normSq_one
-  statement: normSq (1 : K) = 1
-  proof: normSq.map_one
-
-中文:
-定理 normSq_one
-  结论: normSq (1 : K) = 1
-  证明: normSq.map_one
-
-Depends on / 依赖: isLimitOfHasPullbackOfPreservesLimit, map_one, normSq, normSq.map_one
+/-
+**RCLike.normSq_one** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：normSq_one : normSq (1 : K) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidWithZeroHom.map_one`：∀ {α : Type u_2} {β : Type u_3} [inst : MulZe
+roOneClass α] [inst_1 : MulZeroOneClass β] (f : α →*₀ β), f 1 = 1
 -/
 theorem normSq_one : normSq (1 : K) = 1 :=
   normSq.map_one
-
-/--
-theorem `normSq_nonneg` / 定理 `normSq_nonneg`
-
-English:
-theorem normSq_nonneg
-  given: (z : K)
-  statement: 0 <= normSq z
-  proof: add_nonneg (mul_self_nonneg _) (mul_self_nonneg _)
-
-中文:
-定理 normSq_nonneg
-  条件: (z : K)
-  结论: 0 <= normSq z
-  证明: add_nonneg (mul_self_nonneg _) (mul_self_nonneg _)
-
-Depends on / 依赖: add_nonneg, mul_self_nonneg
+/-
+**RCLike.normSq_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：normSq_nonneg (z : K) : 0 <= normSq z
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_nonneg`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1 : Preorder 
+α] [AddLeftMono α] {a b : α}, 0 ≤ a → 0 ≤ b → 0 ≤ a + b
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用引理 `mul_self_nonneg`：mul_self_nonneg [ExistsAddOfLE R] [PosMulMono R] [AddLe
+ftMono R] (a : R) : 0 <= a * a
+· 使用定理 `AddGroup.existsAddOfLE`：∀ (α : Type u) [inst : AddGroup α] [inst_1 : LE 
+α], ExistsAddOfLE α
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
 -/
-theorem normSq_nonneg (z : K) : 0 <= normSq z :=
+theorem normSq_nonneg (z : K) : 0 ≤ normSq z :=
   add_nonneg (mul_self_nonneg _) (mul_self_nonneg _)
 
 -- Not `@[simp]` since `simp` can prove this.
 @[rclike_simps]
-/--
-theorem `normSq_eq_zero` / 定理 `normSq_eq_zero`
-
-English:
-theorem normSq_eq_zero
-  given: {z : K}
-  statement: normSq z = 0 ↔ z = 0
-  proof: map_eq_zero _
-
-@[simp, rclike_simps]
-
-中文:
-定理 normSq_eq_zero
-  条件: {z : K}
-  结论: normSq z = 0 ↔ z = 0
-  证明: map_eq_zero _
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: map_eq_zero
+/-
+**RCLike.normSq_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：normSq_eq_zero {z : K} : normSq z = 0 ↔ z = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_eq_zero`：map_eq_zero : f a = 0 ↔ a = 0
 -/
 theorem normSq_eq_zero {z : K} : normSq z = 0 ↔ z = 0 :=
   map_eq_zero _
 
 @[simp, rclike_simps]
-/--
-theorem `normSq_pos` / 定理 `normSq_pos`
-
-English:
-theorem normSq_pos
-  given: {z : K}
-  statement: 0 < normSq z ↔ z != 0
-  proof: by
-  rw [lt_iff_le_and_ne]; rw [Ne]; rw [eq_comm]; simp [normSq_nonneg]
-
-@[simp, rclike_simps]
-
-中文:
-定理 normSq_pos
-  条件: {z : K}
-  结论: 0 < normSq z ↔ z != 0
-  证明: by
-  rw [lt_iff_le_and_ne]; rw [Ne]; rw [eq_comm]; simp [normSq_nonneg]
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: eq_comm, lt_iff_le_and_ne, normSq_nonneg
+/-
+**RCLike.normSq_pos** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：normSq_pos {z : K} : 0 < normSq z ↔ z != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `lt_iff_le_and_ne`：lt_iff_le_and_ne : a < b ↔ a <= b ∧ a != b
+· 使用定理 `Ne.eq_1`：∀ {α : Sort u} (a b : α), (a ≠ b) = ¬a = b
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem normSq_pos {z : K} : 0 < normSq z ↔ z != 0 := by
-  rw [lt_iff_le_and_ne]; rw [Ne]; rw [eq_comm]; simp [normSq_nonneg]
+theorem normSq_pos {z : K} : 0 < normSq z ↔ z ≠ 0 := by
+  rw [lt_iff_le_and_ne, Ne, eq_comm]; simp [normSq_nonneg]
 
 @[simp, rclike_simps]
-/--
-theorem `normSq_neg` / 定理 `normSq_neg`
-
-English:
-theorem normSq_neg
-  given: (z : K)
-  statement: normSq (-z) = normSq z
-  proof: by simp only [normSq_eq_def', norm_neg]
-
-@[simp, rclike_simps]
-
-中文:
-定理 normSq_neg
-  条件: (z : K)
-  结论: normSq (-z) = normSq z
-  证明: by simp only [normSq_eq_def', norm_neg]
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: normSq_eq_def, norm_neg
+/-
+**RCLike.normSq_neg** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：normSq_neg (z : K) : normSq (-z) = normSq z
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.normSq_eq_def'`：normSq_eq_def' (z : K) : normSq z = ‖z‖ ^ 2
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `norm_neg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), ‖-a‖ =
+ ‖a‖
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem normSq_neg (z : K) : normSq (-z) = normSq z := by simp only [normSq_eq_def', norm_neg]
 
 @[simp, rclike_simps]
-/--
-theorem `normSq_conj` / 定理 `normSq_conj`
-
-English:
-theorem normSq_conj
-  given: (z : K)
-  statement: normSq (conj z) = normSq z
-  proof: by
-  simp only [normSq_apply, neg_mul, mul_neg, neg_neg, rclike_simps]
-
-中文:
-定理 normSq_conj
-  条件: (z : K)
-  结论: normSq (conj z) = normSq z
-  证明: by
-  simp only [normSq_apply, neg_mul, mul_neg, neg_neg, rclike_simps]
-
-Depends on / 依赖: mul_neg, neg_mul, neg_neg, normSq_apply, rclike_simps
+/-
+**RCLike.normSq_conj** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：normSq_conj (z : K) : normSq (conj z) = normSq z
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `RCLike.conj_re`：conj_re (z : K) : re (conj z) = re z
+· 使用定理 `RCLike.conj_im`：conj_im (z : K) : im (conj z) = -im z
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem normSq_conj (z : K) : normSq (conj z) = normSq z := by
   simp only [normSq_apply, neg_mul, mul_neg, neg_neg, rclike_simps]
 
 -- Not `@[simp]` since `simp` can prove this.
 @[rclike_simps]
-/--
-theorem `normSq_mul` / 定理 `normSq_mul`
-
-English:
-theorem normSq_mul
-  given: (z w : K)
-  statement: normSq (z * w) = normSq z * normSq w
-  proof: map_mul _ z w
-
-中文:
-定理 normSq_mul
-  条件: (z w : K)
-  结论: normSq (z * w) = normSq z * normSq w
-  证明: map_mul _ z w
-
-Depends on / 依赖: map_mul
+/-
+**RCLike.normSq_mul** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：normSq_mul (z w : K) : normSq (z * w) = normSq z * normSq w
+参数：z w : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
 -/
 theorem normSq_mul (z w : K) : normSq (z * w) = normSq z * normSq w :=
   map_mul _ z w
-
-/--
-theorem `normSq_add` / 定理 `normSq_add`
-
-English:
-theorem normSq_add
-  given: (z w : K)
-  statement: normSq (z + w) = normSq z + normSq w + 2 * re (z * conj w)
-  proof: by
-  simp only [normSq_apply, map_add, rclike_simps]
-  ring
-
-中文:
-定理 normSq_add
-  条件: (z w : K)
-  结论: normSq (z + w) = normSq z + normSq w + 2 * re (z * conj w)
-  证明: by
-  simp only [normSq_apply, map_add, rclike_simps]
-  ring
-
-Depends on / 依赖: map_add, normSq_apply, rclike_simps
+/-
+**RCLike.normSq_add** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：normSq_add (z w : K) : normSq (z + w) = normSq z + normSq w + 2 * re (z * 
+conj w)
+参数：z w : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `RCLike.mul_re`：mul_re : forall z w : K, re (z * w) = re z * re w - im z 
+* im w
+· 使用定理 `RCLike.conj_re`：conj_re (z : K) : re (conj z) = re z
+· 使用定理 `RCLike.conj_im`：conj_im (z : K) : im (conj z) = -im z
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_lt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a₂ b c : R} (a₁ : R), a₂ + b = c → a₁ + a₂ + b = a₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pp_pf_overlap`：∀ {R : Type u_1} [inst : C
+ommSemiring R] {a₂ b₂ c : R} {ea eb e : ℕ} (x : R),   ea + eb = e → a₂ * b₂ = c 
+→ x ^ ea * a₂ * (x ^ eb * b₂) = x …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_add`：∀ {α : Type u_1} [inst : AddMonoidWithOn
+e α] {f : α → α → α} {a b : α} {a' b' c : ℕ},   f = HAdd.hAdd →     Mathlib.Meta
+.NormNum.IsNat a a' …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_gt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a b₂ c : R} (b₁ : R), a + b₂ = c → a + (b₁ + b₂) = b₁ + c
+（共 48 条，此处仅展示前 30 条）
 -/
 theorem normSq_add (z w : K) : normSq (z + w) = normSq z + normSq w + 2 * re (z * conj w) := by
   simp only [normSq_apply, map_add, rclike_simps]
   ring
-
-/--
-theorem `re_sq_le_normSq` / 定理 `re_sq_le_normSq`
-
-English:
-theorem re_sq_le_normSq
-  given: (z : K)
-  statement: re z * re z <= normSq z
-  proof: le_add_of_nonneg_right (mul_self_nonneg _)
-
-中文:
-定理 re_sq_le_normSq
-  条件: (z : K)
-  结论: re z * re z <= normSq z
-  证明: le_add_of_nonneg_right (mul_self_nonneg _)
-
-Depends on / 依赖: le_add_of_nonneg_right, mul_self_nonneg
+/-
+**RCLike.re_sq_le_normSq** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：re_sq_le_normSq (z : K) : re z * re z <= normSq z
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_add_of_nonneg_right`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1
+ : LE α] [AddLeftMono α] {a b : α}, 0 ≤ b → a ≤ a + b
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用引理 `mul_self_nonneg`：mul_self_nonneg [ExistsAddOfLE R] [PosMulMono R] [AddLe
+ftMono R] (a : R) : 0 <= a * a
+· 使用定理 `AddGroup.existsAddOfLE`：∀ (α : Type u) [inst : AddGroup α] [inst_1 : LE 
+α], ExistsAddOfLE α
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
 -/
-theorem re_sq_le_normSq (z : K) : re z * re z <= normSq z :=
+theorem re_sq_le_normSq (z : K) : re z * re z ≤ normSq z :=
   le_add_of_nonneg_right (mul_self_nonneg _)
-
-/--
-theorem `im_sq_le_normSq` / 定理 `im_sq_le_normSq`
-
-English:
-theorem im_sq_le_normSq
-  given: (z : K)
-  statement: im z * im z <= normSq z
-  proof: le_add_of_nonneg_left (mul_self_nonneg _)
-
-中文:
-定理 im_sq_le_normSq
-  条件: (z : K)
-  结论: im z * im z <= normSq z
-  证明: le_add_of_nonneg_left (mul_self_nonneg _)
-
-Depends on / 依赖: le_add_of_nonneg_left, mul_self_nonneg
+/-
+**RCLike.im_sq_le_normSq** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：im_sq_le_normSq (z : K) : im z * im z <= normSq z
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_add_of_nonneg_left`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1 
+: LE α] [AddRightMono α] {a b : α}, 0 ≤ b → a ≤ b + a
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用引理 `mul_self_nonneg`：mul_self_nonneg [ExistsAddOfLE R] [PosMulMono R] [AddLe
+ftMono R] (a : R) : 0 <= a * a
+· 使用定理 `AddGroup.existsAddOfLE`：∀ (α : Type u) [inst : AddGroup α] [inst_1 : LE 
+α], ExistsAddOfLE α
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
 -/
-theorem im_sq_le_normSq (z : K) : im z * im z <= normSq z :=
+theorem im_sq_le_normSq (z : K) : im z * im z ≤ normSq z :=
   le_add_of_nonneg_left (mul_self_nonneg _)
-
-/--
-theorem `mul_conj` / 定理 `mul_conj`
-
-English:
-theorem mul_conj
-  given: (z : K)
-  statement: z * conj z = ‖z‖ ^ 2
-  proof: by
-  apply ext <;> simp [← ofReal_pow, norm_sq_eq_def, mul_comm]
-
-中文:
-定理 mul_conj
-  条件: (z : K)
-  结论: z * conj z = ‖z‖ ^ 2
-  证明: by
-  apply ext <;> simp [← ofReal_pow, norm_sq_eq_def, mul_comm]
-
-Depends on / 依赖: mul_comm, norm_sq_eq_def, ofReal_pow
+/-
+**RCLike.mul_conj** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：mul_conj (z : K) : z * conj z = ‖z‖ ^ 2
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.ext`：ext {z w : K} (hre : re z = re w) (him : im z = im w) : z = 
+w
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.mul_re`：mul_re : forall z w : K, re (z * w) = re z * re w - im z 
+* im w
+· 使用定理 `RCLike.conj_re`：conj_re (z : K) : re (conj z) = re z
+· 使用定理 `RCLike.conj_im`：conj_im (z : K) : im (conj z) = -im z
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `sub_neg_eq_add`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α),
+ a - -b = a + b
+· 使用定理 `RCLike.norm_sq_eq_def`：norm_sq_eq_def {z : K} : ‖z‖ ^ 2 = re z * re z + 
+im z * im z
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `RCLike.charZero_rclike`：∀ {K : Type u_1} [inst : RCLike K], CharZero K
+· 使用定理 `RingHomClass.toLinearMapClassNNRat`：∀ {F : Type u_1} {R : Type u_2} {S :
+ Type u_3} [inst : DivisionSemiring R] [inst_1 : CharZero R]   [inst_2 : Divisio
+nSemiring S] [inst_3 : C…
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `RCLike.ofReal_re`：ofReal_re : forall r : Real, re (r : K) = r
+· 使用定理 `RCLike.ofReal_im`：ofReal_im : forall r : Real, im (r : K) = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `RCLike.mul_im`：mul_im : forall z w : K, im (z * w) = re z * im w + im z 
+* re w
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `neg_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), -a + a = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+（共 31 条，此处仅展示前 30 条）
 -/
 theorem mul_conj (z : K) : z * conj z = ‖z‖ ^ 2 := by
   apply ext <;> simp [← ofReal_pow, norm_sq_eq_def, mul_comm]
-
-/--
-theorem `conj_mul` / 定理 `conj_mul`
-
-English:
-theorem conj_mul
-  given: (z : K)
-  statement: conj z * z = ‖z‖ ^ 2
-  proof: by rw [mul_comm, mul_conj]
-
-中文:
-定理 conj_mul
-  条件: (z : K)
-  结论: conj z * z = ‖z‖ ^ 2
-  证明: by rw [mul_comm, mul_conj]
-
-Depends on / 依赖: mul_comm, mul_conj
+/-
+**RCLike.conj_mul** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：conj_mul (z : K) : conj z * z = ‖z‖ ^ 2
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `RCLike.mul_conj`：mul_conj (z : K) : z * conj z = ‖z‖ ^ 2
 -/
 theorem conj_mul (z : K) : conj z * z = ‖z‖ ^ 2 := by rw [mul_comm, mul_conj]
-
-/--
-lemma `inv_eq_conj` / 引理 `inv_eq_conj`
-
-English:
-lemma inv_eq_conj
-  given: (hz : ‖z‖ = 1)
-  statement: z⁻¹ = conj z
-  proof: inv_eq_of_mul_eq_one_left by simp_rw [conj_mul, hz, algebraMap.coe_one, one_pow]
-
-中文:
-引理 inv_eq_conj
-  条件: (hz : ‖z‖ = 1)
-  结论: z⁻¹ = conj z
-  证明: inv_eq_of_mul_eq_one_left by simp_rw [conj_mul, hz, algebraMap.coe_one, one_pow]
-
-Depends on / 依赖: algebraMap, algebraMap.coe_one, coe_one, conj_mul, inv_eq_of_mul_eq_one_left, one_pow, simp_rw
+/-
+**RCLike.inv_eq_conj** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：inv_eq_conj (hz : ‖z‖ = 1) : z⁻¹ = conj z
+参数：hz : ‖z‖ = 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `inv_eq_of_mul_eq_one_left`：inv_eq_of_mul_eq_one_left (h : a * b = 1) : b
+⁻¹ = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.conj_mul`：conj_mul (z : K) : conj z * z = ‖z‖ ^ 2
+· 使用定理 `algebraMap.coe_one`：coe_one : (↑(1 : R) : A) = 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma inv_eq_conj (hz : ‖z‖ = 1) : z⁻¹ = conj z :=
-inv_eq_of_mul_eq_one_left by simp_rw [conj_mul, hz, algebraMap.coe_one, one_pow]
-
-/--
-theorem `normSq_sub` / 定理 `normSq_sub`
-
-English:
-theorem normSq_sub
-  given: (z w : K)
-  statement: normSq (z - w) = normSq z + normSq w - 2 * re (z * conj w)
-  proof: by
-  simp only [normSq_add, sub_eq_add_neg, map_neg, mul_neg, normSq_neg, map_neg]
-
-中文:
-定理 normSq_sub
-  条件: (z w : K)
-  结论: normSq (z - w) = normSq z + normSq w - 2 * re (z * conj w)
-  证明: by
-  simp only [normSq_add, sub_eq_add_neg, map_neg, mul_neg, normSq_neg, map_neg]
-
-Depends on / 依赖: map_neg, mul_neg, normSq_add, normSq_neg, sub_eq_add_neg
+  inv_eq_of_mul_eq_one_left <| by simp_rw [conj_mul, hz, algebraMap.coe_one, one_pow]
+/-
+**RCLike.normSq_sub** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：normSq_sub (z w : K) : normSq (z - w) = normSq z + normSq w - 2 * re (z * 
+conj w)
+参数：z w : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `RCLike.normSq_add`：normSq_add (z w : K) : normSq (z + w) = normSq z + no
+rmSq w + 2 * re (z * conj w)
+· 使用定理 `RCLike.normSq_neg`：normSq_neg (z : K) : normSq (-z) = normSq z
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `RCLike.charZero_rclike`：∀ {K : Type u_1} [inst : RCLike K], CharZero K
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `RingHomClass.toLinearMapClassNNRat`：∀ {F : Type u_1} {R : Type u_2} {S :
+ Type u_3} [inst : DivisionSemiring R] [inst_1 : CharZero R]   [inst_2 : Divisio
+nSemiring S] [inst_3 : C…
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem normSq_sub (z w : K) : normSq (z - w) = normSq z + normSq w - 2 * re (z * conj w) := by
   simp only [normSq_add, sub_eq_add_neg, map_neg, mul_neg, normSq_neg, map_neg]
-
-/--
-theorem `sqrt_normSq_eq_norm` / 定理 `sqrt_normSq_eq_norm`
-
-English:
-theorem sqrt_normSq_eq_norm
-  given: {z : K}
-  statement: √(normSq z) = ‖z‖
-  proof: by
-  rw [normSq_eq_def']; rw [Real.sqrt_sq (norm_nonneg _)]
-
-中文:
-定理 sqrt_normSq_eq_norm
-  条件: {z : K}
-  结论: √(normSq z) = ‖z‖
-  证明: by
-  rw [normSq_eq_def']; rw [Real.sqrt_sq (norm_nonneg _)]
-
-Depends on / 依赖: Real.sqrt_sq, normSq_eq_def, norm_nonneg, sqrt_sq
+/-
+**RCLike.sqrt_normSq_eq_norm** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：sqrt_normSq_eq_norm {z : K} : √(normSq z) = ‖z‖
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.normSq_eq_def'`：normSq_eq_def' (z : K) : normSq z = ‖z‖ ^ 2
+· 使用定理 `Real.sqrt_sq`：sqrt_sq (h : 0 <= x) : √(x ^ 2) = x
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
 -/
 theorem sqrt_normSq_eq_norm {z : K} : √(normSq z) = ‖z‖ := by
-  rw [normSq_eq_def']; rw [Real.sqrt_sq (norm_nonneg _)]
+  rw [normSq_eq_def', Real.sqrt_sq (norm_nonneg _)]
 
 /-! ### Inversion -/
 
 @[rclike_simps, norm_cast]
-/--
-theorem `ofReal_inv` / 定理 `ofReal_inv`
+/-
+**RCLike.ofReal_inv** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_inv (r : Real) : ((r⁻¹ : Real) : K) = (r : K)⁻¹
+参数：r : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_inv₀`：map_inv₀ : f a⁻¹ = (f a)⁻¹
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 
-English:
-theorem ofReal_inv
-  given: (r : Real)
-  statement: ((r⁻¹ : Real) : K) = (r : K)⁻¹
-  proof: map_inv₀ _ r
-
-中文:
-定理 of实数_inv
-  条件: (r : 实数)
-  结论: ((r⁻¹ : 实数) : K) = (r : K)⁻¹
-  证明: map_inv₀ _ r
+--- 原说明 ---
+### Inversion
 -/
-theorem ofReal_inv (r : Real) : ((r⁻¹ : Real) : K) = (r : K)⁻¹ :=
+theorem ofReal_inv (r : ℝ) : ((r⁻¹ : ℝ) : K) = (r : K)⁻¹ :=
   map_inv₀ _ r
-
-/--
-theorem `inv_def` / 定理 `inv_def`
-
-English:
-theorem inv_def
-  given: (z : K)
-  statement: z⁻¹ = conj z * ((‖z‖ ^ 2)⁻¹ : Real)
-  proof: by
-  rcases eq_or_ne z 0 with (rfl | h₀)
-  · simp
-  · apply inv_eq_of_mul_eq_one_right
-    rw [← mul_assoc]; rw [mul_conj]; rw [ofReal_inv]; rw [ofReal_pow]; rw [mul_inv_cancel₀]
-    simpa
-
-@[simp, rclike_simps]
-
-中文:
-定理 inv_def
-  条件: (z : K)
-  结论: z⁻¹ = conj z * ((‖z‖ ^ 2)⁻¹ : 实数)
-  证明: by
-  rcases eq_or_ne z 0 with (rfl | h₀)
-  · simp
-  · apply inv_eq_of_mul_eq_one_right
-    rw [← mul_assoc]; rw [mul_conj]; rw [ofReal_inv]; rw [ofReal_pow]; rw [mul_inv_cancel₀]
-    simpa
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: eq_or_ne, inv_eq_of_mul_eq_one_right, mul_assoc, mul_conj, ofReal_inv, ofReal_pow
+/-
+**RCLike.inv_def** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：inv_def (z : K) : z⁻¹ = conj z * ((‖z‖ ^ 2)⁻¹ : Real)
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inv_zero`：∀ {G₀ : Type u} [inst : GroupWithZero G₀], 0⁻¹ = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `norm_zero`：∀ {E : Type u_5} [inst : SeminormedAddGroup E], ‖0‖ = 0
+· 使用定理 `zero_pow`：zero_pow {b : Nat} (_ : 0 < b) : (0 : R) ^ b = 0
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `inv_eq_of_mul_eq_one_right`：inv_eq_of_mul_eq_one_right : a * b = 1 -> a⁻
+¹ = b
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `RCLike.mul_conj`：mul_conj (z : K) : z * conj z = ‖z‖ ^ 2
+· 使用定理 `RCLike.ofReal_inv`：ofReal_inv (r : Real) : ((r⁻¹ : Real) : K) = (r : K)⁻
+¹
+· 使用定理 `RCLike.ofReal_pow`：ofReal_pow (r : Real) (n : Nat) : ((r ^ n : Real) : K
+) = (r : K) ^ n
+· 使用引理 `mul_inv_cancel₀`：mul_inv_cancel₀ (h : a != 0) : a * a⁻¹ = 1
+· 使用定理 `isReduced_of_noZeroDivisors`：∀ {M₀ : Type u_1} [inst : MonoidWithZero M₀
+] [NoZeroDivisors M₀], IsReduced M₀
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `instNontrivialOfCharZero`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [
+CharZero α], Nontrivial α
+· 使用定理 `RCLike.charZero_rclike`：∀ {K : Type u_1} [inst : RCLike K], CharZero K
 -/
-theorem inv_def (z : K) : z⁻¹ = conj z * ((‖z‖ ^ 2)⁻¹ : Real) := by
+theorem inv_def (z : K) : z⁻¹ = conj z * ((‖z‖ ^ 2)⁻¹ : ℝ) := by
   rcases eq_or_ne z 0 with (rfl | h₀)
   · simp
   · apply inv_eq_of_mul_eq_one_right
-    rw [← mul_assoc]; rw [mul_conj]; rw [ofReal_inv]; rw [ofReal_pow]; rw [mul_inv_cancel₀]
+    rw [← mul_assoc, mul_conj, ofReal_inv, ofReal_pow, mul_inv_cancel₀]
     simpa
 
 @[simp, rclike_simps]
-/--
-theorem `inv_re` / 定理 `inv_re`
-
-English:
-theorem inv_re
-  given: (z : K)
-  statement: re z⁻¹ = re z / normSq z
-  proof: by
-  rw [inv_def]; rw [normSq_eq_def']; rw [mul_comm]; rw [re_ofReal_mul]; rw [conj_re]; rw [div_eq_inv_mul]
-
-@[simp, rclike_simps]
-
-中文:
-定理 inv_re
-  条件: (z : K)
-  结论: re z⁻¹ = re z / normSq z
-  证明: by
-  rw [inv_def]; rw [normSq_eq_def']; rw [mul_comm]; rw [re_ofReal_mul]; rw [conj_re]; rw [div_eq_inv_mul]
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: conj_re, dif_neg, dif_pos, div_eq_inv_mul, eqToHom, inv_def, mul_comm, normSq_eq_def, re_ofReal_mul
+/-
+**RCLike.inv_re** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：inv_re (z : K) : re z⁻¹ = re z / normSq z
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.inv_def`：inv_def (z : K) : z⁻¹ = conj z * ((‖z‖ ^ 2)⁻¹ : Real)
+· 使用定理 `RCLike.normSq_eq_def'`：normSq_eq_def' (z : K) : normSq z = ‖z‖ ^ 2
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `RCLike.re_ofReal_mul`：re_ofReal_mul (r : Real) (z : K) : re (↑r * z) = r
+ * re z
+· 使用定理 `RCLike.conj_re`：conj_re (z : K) : re (conj z) = re z
+· 使用定理 `div_eq_inv_mul`：div_eq_inv_mul : a / b = b⁻¹ * a
 -/
 theorem inv_re (z : K) : re z⁻¹ = re z / normSq z := by
-  rw [inv_def]; rw [normSq_eq_def']; rw [mul_comm]; rw [re_ofReal_mul]; rw [conj_re]; rw [div_eq_inv_mul]
+  rw [inv_def, normSq_eq_def', mul_comm, re_ofReal_mul, conj_re, div_eq_inv_mul]
 
 @[simp, rclike_simps]
-/--
-theorem `inv_im` / 定理 `inv_im`
-
-English:
-theorem inv_im
-  given: (z : K)
-  statement: im z⁻¹ = -im z / normSq z
-  proof: by
-  rw [inv_def]; rw [normSq_eq_def']; rw [mul_comm]; rw [im_ofReal_mul]; rw [conj_im]; rw [div_eq_inv_mul]
-
-中文:
-定理 inv_im
-  条件: (z : K)
-  结论: im z⁻¹ = -im z / normSq z
-  证明: by
-  rw [inv_def]; rw [normSq_eq_def']; rw [mul_comm]; rw [im_ofReal_mul]; rw [conj_im]; rw [div_eq_inv_mul]
-
-Depends on / 依赖: GlueData, conj_im, div_eq_inv_mul, im_ofReal_mul, infer_instance, inv_def, mul_comm, normSq_eq_def, split_ifs
+/-
+**RCLike.inv_im** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：inv_im (z : K) : im z⁻¹ = -im z / normSq z
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.inv_def`：inv_def (z : K) : z⁻¹ = conj z * ((‖z‖ ^ 2)⁻¹ : Real)
+· 使用定理 `RCLike.normSq_eq_def'`：normSq_eq_def' (z : K) : normSq z = ‖z‖ ^ 2
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `RCLike.im_ofReal_mul`：im_ofReal_mul (r : Real) (z : K) : im (↑r * z) = r
+ * im z
+· 使用定理 `RCLike.conj_im`：conj_im (z : K) : im (conj z) = -im z
+· 使用定理 `div_eq_inv_mul`：div_eq_inv_mul : a / b = b⁻¹ * a
 -/
 theorem inv_im (z : K) : im z⁻¹ = -im z / normSq z := by
-  rw [inv_def]; rw [normSq_eq_def']; rw [mul_comm]; rw [im_ofReal_mul]; rw [conj_im]; rw [div_eq_inv_mul]
-
-/--
-theorem `div_re` / 定理 `div_re`
-
-English:
-theorem div_re
-  given: (z w : K)
-  statement: re (z / w) = re z * re w / normSq w + im z * im w / normSq w
-  proof: by
-  simp only [div_eq_mul_inv, mul_assoc, sub_eq_add_neg, neg_mul, mul_neg, neg_neg,
-    rclike_simps]
-
-中文:
-定理 div_re
-  条件: (z w : K)
-  结论: re (z / w) = re z * re w / normSq w + im z * im w / normSq w
-  证明: by
-  simp only [div_eq_mul_inv, mul_assoc, sub_eq_add_neg, neg_mul, mul_neg, neg_neg,
-    rclike_simps]
-
-Depends on / 依赖: GlueData, div_eq_mul_inv, infer_instance, mul_assoc, mul_neg, neg_mul, neg_neg, rclike_simps, reduceDIte, sub_eq_add_neg
+  rw [inv_def, normSq_eq_def', mul_comm, im_ofReal_mul, conj_im, div_eq_inv_mul]
+/-
+**RCLike.div_re** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：div_re (z w : K) : re (z / w) = re z * re w / normSq w + im z * im w / nor
+mSq w
+参数：z w : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `RCLike.mul_re`：mul_re : forall z w : K, re (z * w) = re z * re w - im z 
+* im w
+· 使用定理 `RCLike.inv_re`：inv_re (z : K) : re z⁻¹ = re z / normSq z
+· 使用定理 `RCLike.inv_im`：inv_im (z : K) : im z⁻¹ = -im z / normSq z
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem div_re (z w : K) : re (z / w) = re z * re w / normSq w + im z * im w / normSq w := by
   simp only [div_eq_mul_inv, mul_assoc, sub_eq_add_neg, neg_mul, mul_neg, neg_neg,
     rclike_simps]
-
-/--
-theorem `div_im` / 定理 `div_im`
-
-English:
-theorem div_im
-  given: (z w : K)
-  statement: im (z / w) = im z * re w / normSq w - re z * im w / normSq w
-  proof: by
-  simp only [div_eq_mul_inv, mul_assoc, sub_eq_add_neg, add_comm, neg_mul, mul_neg,
-    rclike_simps]
-
-中文:
-定理 div_im
-  条件: (z w : K)
-  结论: im (z / w) = im z * re w / normSq w - re z * im w / normSq w
-  证明: by
-  simp only [div_eq_mul_inv, mul_assoc, sub_eq_add_neg, add_comm, neg_mul, mul_neg,
-    rclike_simps]
-
-Depends on / 依赖: D.f_hasPullback, GlueData, add_comm, allowSynthFailures, convert, dif_pos, div_eq_mul_inv, eqToHom, f_hasPullback, hasPullback_of_left_iso, hasPullback_of_right_iso, infer_instance, mul_assoc, mul_neg, neg_mul, rclike_simps, sub_eq_add_neg
+/-
+**RCLike.div_im** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：div_im (z w : K) : im (z / w) = im z * re w / normSq w - re z * im w / nor
+mSq w
+参数：z w : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `RCLike.mul_im`：mul_im : forall z w : K, im (z * w) = re z * im w + im z 
+* re w
+· 使用定理 `RCLike.inv_im`：inv_im (z : K) : im z⁻¹ = -im z / normSq z
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `RCLike.inv_re`：inv_re (z : K) : re z⁻¹ = re z / normSq z
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem div_im (z w : K) : im (z / w) = im z * re w / normSq w - re z * im w / normSq w := by
   simp only [div_eq_mul_inv, mul_assoc, sub_eq_add_neg, add_comm, neg_mul, mul_neg,
@@ -2439,223 +2027,268 @@ theorem div_im (z w : K) : im (z / w) = im z * re w / normSq w - re z * im w / n
 
 -- Not `@[simp]` since `simp` can prove this
 @[rclike_simps]
-/--
-theorem `conj_inv` / 定理 `conj_inv`
-
-English:
-theorem conj_inv
-  given: (x : K)
-  statement: conj x⁻¹ = (conj x)⁻¹
-  proof: star_inv₀ _
-
-中文:
-定理 conj_inv
-  条件: (x : K)
-  结论: conj x⁻¹ = (conj x)⁻¹
-  证明: star_inv₀ _
-
-Depends on / 依赖: Ne.symm, allowSynthFailures, dif_neg, eqToHom, infer_instance, pullback, pullback.fst, pullback.map, pullback.snd, pullbackSymmetry, pullback_snd_i
+/-
+**RCLike.conj_inv** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：conj_inv (x : K) : conj x⁻¹ = (conj x)⁻¹
+参数：x : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `star_inv₀`：star_inv₀ [GroupWithZero R] [StarMul R] (x : R) : star x⁻¹ = 
+(star x)⁻¹
 -/
 theorem conj_inv (x : K) : conj x⁻¹ = (conj x)⁻¹ :=
   star_inv₀ _
-
-/--
-lemma `conj_div` / 引理 `conj_div`
-
-English:
-lemma conj_div
-  given: (x y : K)
-  statement: conj (x / y) = conj x / conj y
-  proof: map_div' conj conj_inv _ _
-
-中文:
-引理 conj_div
-  条件: (x y : K)
-  结论: conj (x / y) = conj x / conj y
-  证明: map_div' conj conj_inv _ _
-
-Depends on / 依赖: conj_inv, map_div
+/-
+**RCLike.conj_div** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：conj_div (x y : K) : conj (x / y) = conj x / conj y
+参数：x y : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_div'`：map_div' [DivInvMonoid G] [DivInvMonoid H] [MulHomClass F G H]
+ (f : F) (hf : forall a, f a⁻¹ = (f a)⁻¹) (a b : G) : f (a / b) = f a / f b
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `RCLike.conj_inv`：conj_inv (x : K) : conj x⁻¹ = (conj x)⁻¹
 -/
 lemma conj_div (x y : K) : conj (x / y) = conj x / conj y := map_div' conj conj_inv _ _
 
 --TODO: Do we rather want the map as an explicit definition?
-/--
-lemma `exists_norm_eq_mul_self` / 引理 `exists_norm_eq_mul_self`
-
-English:
-lemma exists_norm_eq_mul_self
-  given: (x : K)
-  statement: exists c, ‖c‖ = 1 ∧ ↑‖x‖ = c * x
-  proof: by
-  obtain rfl | hx := eq_or_ne x 0
-  · exact ⟨1, by simp⟩
-  · exact ⟨‖x‖ / x, by simp [norm_ne_zero_iff.2, hx]⟩
-
-中文:
-引理 存在_norm_eq_mul_self
-  条件: (x : K)
-  结论: 存在 c, ‖c‖ = 1 ∧ ↑‖x‖ = c * x
-  证明: by
-  obtain rfl | hx := eq_or_ne x 0
-  · exact ⟨1, by simp⟩
-  · exact ⟨‖x‖ / x, by simp [norm_ne_zero_iff.2, hx]⟩
-
-Depends on / 依赖: eq_or_ne, norm_ne_zero_iff
+/-
+**RCLike.exists_norm_eq_mul_self** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：exists_norm_eq_mul_self (x : K) : exists c, ‖c‖ = 1 ∧ ↑‖x‖ = c * x
+参数：x : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `NormOneClass.norm_one`：∀ {α : Type u_5} {inst : Norm α} {inst_1 : One α}
+ [self : NormOneClass α], ‖1‖ = 1
+· 使用定理 `NormedDivisionRing.to_normOneClass`：∀ {α : Type u_2} [inst : NormedDivis
+ionRing α], NormOneClass α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `norm_zero`：∀ {E : Type u_5} [inst : SeminormedAddGroup E], ‖0‖ = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `norm_div`：norm_div (a b : α) : ‖a / b‖ = ‖a‖ / ‖b‖
+· 使用定理 `norm_algebraMap'`：norm_algebraMap' [NormOneClass 𝕜'] (x : 𝕜) : ‖algebraM
+ap 𝕜 𝕜' x‖ = ‖x‖
+· 使用定理 `norm_norm`：∀ {E : Type u_5} [inst : SeminormedAddCommGroup E] (x : E), ‖
+‖x‖‖ = ‖x‖
+· 使用定理 `div_self`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] {a : G₀}, a ≠ 0 → 
+a / a = 1
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `norm_ne_zero_iff`：∀ {E : Type u_5} [inst : NormedAddGroup E] {a : E}, ‖a
+‖ ≠ 0 ↔ a ≠ 0
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `IsUnit.div_mul_cancel`：∀ {α : Type u} [inst : DivisionMonoid α] {b : α},
+ IsUnit b → ∀ (a : α), a / b * b = a
 -/
-lemma exists_norm_eq_mul_self (x : K) : exists c, ‖c‖ = 1 ∧ ↑‖x‖ = c * x := by
+lemma exists_norm_eq_mul_self (x : K) : ∃ c, ‖c‖ = 1 ∧ ↑‖x‖ = c * x := by
   obtain rfl | hx := eq_or_ne x 0
   · exact ⟨1, by simp⟩
   · exact ⟨‖x‖ / x, by simp [norm_ne_zero_iff.2, hx]⟩
-
-/--
-lemma `exists_norm_mul_eq_self` / 引理 `exists_norm_mul_eq_self`
-
-English:
-lemma exists_norm_mul_eq_self
-  given: (x : K)
-  statement: exists c, ‖c‖ = 1 ∧ c * ‖x‖ = x
-  proof: by
+/-
+**RCLike.exists_norm_mul_eq_self** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：exists_norm_mul_eq_self (x : K) : exists c, ‖c‖ = 1 ∧ c * ‖x‖ = x
+参数：x : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `NormOneClass.norm_one`：∀ {α : Type u_5} {inst : Norm α} {inst_1 : One α}
+ [self : NormOneClass α], ‖1‖ = 1
+· 使用定理 `NormedDivisionRing.to_normOneClass`：∀ {α : Type u_2} [inst : NormedDivis
+ionRing α], NormOneClass α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `norm_zero`：∀ {E : Type u_5} [inst : SeminormedAddGroup E], ‖0‖ = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `norm_div`：norm_div (a b : α) : ‖a / b‖ = ‖a‖ / ‖b‖
+· 使用定理 `norm_algebraMap'`：norm_algebraMap' [NormOneClass 𝕜'] (x : 𝕜) : ‖algebraM
+ap 𝕜 𝕜' x‖ = ‖x‖
+· 使用定理 `norm_norm`：∀ {E : Type u_5} [inst : SeminormedAddCommGroup E] (x : E), ‖
+‖x‖‖ = ‖x‖
+· 使用定理 `div_self`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] {a : G₀}, a ≠ 0 → 
+a / a = 1
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `norm_ne_zero_iff`：∀ {E : Type u_5} [inst : NormedAddGroup E] {a : E}, ‖a
+‖ ≠ 0 ↔ a ≠ 0
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `IsUnit.div_mul_cancel`：∀ {α : Type u} [inst : DivisionMonoid α] {b : α},
+ IsUnit b → ∀ (a : α), a / b * b = a
+· 使用定理 `instNontrivialOfCharZero`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [
+CharZero α], Nontrivial α
+· 使用定理 `RCLike.charZero_rclike`：∀ {K : Type u_1} [inst : RCLike K], CharZero K
+-/
+lemma exists_norm_mul_eq_self (x : K) : ∃ c, ‖c‖ = 1 ∧ c * ‖x‖ = x := by
   obtain rfl | hx := eq_or_ne x 0
   · exact ⟨1, by simp⟩
   · exact ⟨x / ‖x‖, by simp [norm_ne_zero_iff.2, hx]⟩
 
 @[rclike_simps, norm_cast]
-
-中文:
-引理 存在_norm_mul_eq_self
-  条件: (x : K)
-  结论: 存在 c, ‖c‖ = 1 ∧ c * ‖x‖ = x
-  证明: by
-  obtain rfl | hx := eq_or_ne x 0
-  · exact ⟨1, by simp⟩
-  · exact ⟨x / ‖x‖, by simp [norm_ne_zero_iff.2, hx]⟩
+/-
+**RCLike.ofReal_div** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_div (r s : Real) : ((r / s : Real) : K) = r / s
+参数：r s : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_div₀`：map_div₀ : f (a / b) = f a / f b
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+-/
+theorem ofReal_div (r s : ℝ) : ((r / s : ℝ) : K) = r / s :=
+  map_div₀ (algebraMap ℝ K) r s
+/-
+**RCLike.div_re_ofReal** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：div_re_ofReal {z : K} {r : Real} : re (z / r) = re z / r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_eq_inv_mul`：div_eq_inv_mul : a / b = b⁻¹ * a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.ofReal_inv`：ofReal_inv (r : Real) : ((r⁻¹ : Real) : K) = (r : K)⁻
+¹
+· 使用定理 `RCLike.re_ofReal_mul`：re_ofReal_mul (r : Real) (z : K) : re (↑r * z) = r
+ * re z
+-/
+theorem div_re_ofReal {z : K} {r : ℝ} : re (z / r) = re z / r := by
+  rw [div_eq_inv_mul, div_eq_inv_mul, ← ofReal_inv, re_ofReal_mul]
 
 @[rclike_simps, norm_cast]
-
-Depends on / 依赖: eq_or_ne, norm_ne_zero_iff
+/-
+**RCLike.ofReal_zpow** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_zpow (r : Real) (n : Int) : ((r ^ n : Real) : K) = (r : K) ^ n
+参数：r : Real；n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_zpow₀`：map_zpow₀ {F G₀ G₀' : Type*} [GroupWithZero G₀] [GroupWithZer
+o G₀'] [FunLike F G₀ G₀'] [MonoidWithZeroHomClass F G₀ G₀'] (f : F) (x : G₀) (n…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 -/
-lemma exists_norm_mul_eq_self (x : K) : exists c, ‖c‖ = 1 ∧ c * ‖x‖ = x := by
-  obtain rfl | hx := eq_or_ne x 0
-  · exact ⟨1, by simp⟩
-  · exact ⟨x / ‖x‖, by simp [norm_ne_zero_iff.2, hx]⟩
-
-@[rclike_simps, norm_cast]
-/--
-theorem `ofReal_div` / 定理 `ofReal_div`
-
-English:
-theorem ofReal_div
-  given: (r s : Real)
-  statement: ((r / s : Real) : K) = r / s
-  proof: map_div₀ (algebraMap Real K) r s
-
-中文:
-定理 of实数_div
-  条件: (r s : 实数)
-  结论: ((r / s : 实数) : K) = r / s
-  证明: map_div₀ (algebraMap Real K) r s
-
-Depends on / 依赖: algebraMap
+theorem ofReal_zpow (r : ℝ) (n : ℤ) : ((r ^ n : ℝ) : K) = (r : K) ^ n :=
+  map_zpow₀ (algebraMap ℝ K) r n
+/-
+**RCLike.I_mul_I_of_nonzero** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：I_mul_I_of_nonzero : (I : K) != 0 -> (I : K) * I = -1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.resolve_left`：∀ {a b : Prop}, a ∨ b → ¬a → b
+· 使用定理 `RCLike.I_mul_I_ax`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K], RC
+Like.I = 0 ∨ RCLike.I * RCLike.I = -1
 -/
-theorem ofReal_div (r s : Real) : ((r / s : Real) : K) = r / s :=
-  map_div₀ (algebraMap Real K) r s
-
-/--
-theorem `div_re_ofReal` / 定理 `div_re_ofReal`
-
-English:
-theorem div_re_ofReal
-  given: {z : K} {r : Real}
-  statement: re (z / r) = re z / r
-  proof: by
-  rw [div_eq_inv_mul]; rw [div_eq_inv_mul]; rw [← ofReal_inv]; rw [re_ofReal_mul]
-
-@[rclike_simps, norm_cast]
-
-中文:
-定理 div_re_of实数
-  条件: {z : K} {r : 实数}
-  结论: re (z / r) = re z / r
-  证明: by
-  rw [div_eq_inv_mul]; rw [div_eq_inv_mul]; rw [← ofReal_inv]; rw [re_ofReal_mul]
-
-@[rclike_simps, norm_cast]
-
-Depends on / 依赖: div_eq_inv_mul, ofReal_inv, re_ofReal_mul
--/
-theorem div_re_ofReal {z : K} {r : Real} : re (z / r) = re z / r := by
-  rw [div_eq_inv_mul]; rw [div_eq_inv_mul]; rw [← ofReal_inv]; rw [re_ofReal_mul]
-
-@[rclike_simps, norm_cast]
-/--
-theorem `ofReal_zpow` / 定理 `ofReal_zpow`
-
-English:
-theorem ofReal_zpow
-  given: (r : Real) (n : Int)
-  statement: ((r ^ n : Real) : K) = (r : K) ^ n
-  proof: map_zpow₀ (algebraMap Real K) r n
-
-中文:
-定理 of实数_zpow
-  条件: (r : 实数) (n : 整数)
-  结论: ((r ^ n : 实数) : K) = (r : K) ^ n
-  证明: map_zpow₀ (algebraMap Real K) r n
-
-Depends on / 依赖: algebraMap
--/
-theorem ofReal_zpow (r : Real) (n : Int) : ((r ^ n : Real) : K) = (r : K) ^ n :=
-  map_zpow₀ (algebraMap Real K) r n
-
-/--
-theorem `I_mul_I_of_nonzero` / 定理 `I_mul_I_of_nonzero`
-
-English:
-theorem I_mul_I_of_nonzero
-  statement: (I : K) != 0 -> (I : K) * I = -1
-  proof: I_mul_I_ax.resolve_left
-
-@[simp, rclike_simps]
-
-中文:
-定理 I_mul_I_of_nonzero
-  结论: (I : K) != 0 -> (I : K) * I = -1
-  证明: I_mul_I_ax.resolve_left
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: I_mul_I_ax, I_mul_I_ax.resolve_left, resolve_left
--/
-theorem I_mul_I_of_nonzero : (I : K) != 0 -> (I : K) * I = -1 :=
+theorem I_mul_I_of_nonzero : (I : K) ≠ 0 → (I : K) * I = -1 :=
   I_mul_I_ax.resolve_left
 
 @[simp, rclike_simps]
-/--
-theorem `inv_I` / 定理 `inv_I`
-
-English:
-theorem inv_I
-  statement: (I : K)⁻¹ = -I
-  proof: by
-  by_cases h : (I : K) = 0
-  · simp [h]
-  · field_simp
-    linear_combination I_mul_I_of_nonzero h
-
-@[simp, rclike_simps]
-
-中文:
-定理 inv_I
-  结论: (I : K)⁻¹ = -I
-  证明: by
-  by_cases h : (I : K) = 0
-  · simp [h]
-  · field_simp
-    linear_combination I_mul_I_of_nonzero h
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: I_mul_I_of_nonzero, linear_combination
+/-
+**RCLike.inv_I** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：inv_I : (I : K)⁻¹ = -I
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inv_zero`：∀ {G₀ : Type u} [inst : GroupWithZero G₀], 0⁻¹ = 0
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_eq_cancel_eq`：eq_eq_cancel_eq {M : Type*} [M
+onoidWithZero M] [IsLeftCancelMulZero M] {e₁ e₂ f₁ f₂ L : M} (H₁ : e₁ = L * f₁) 
+(H₂ : e₂ = L * f₂) (HL : L != …
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `instIsCancelMulZero`：∀ {G₀ : Type u_2} [inst : GroupWithZero G₀], IsCanc
+elMulZero G₀
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_mul_of_eq_eq_eq_mul`：eq_mul_of_eq_eq_eq_mul 
+{M : Type*} [Mul M] {a b c D e f : M} (h₁ : a = b) (h₂ : b = c) (h₃ : c = D * e)
+ (h₄ : e = f) : a = D * f
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.inv_eq_eval`：inv_eq_eval [CommGroupWithZero 
+M] {l : NF M} {x : M} (h : x = l.eval) : x⁻¹ = (l⁻¹).eval
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.atom_eq_eval`：atom_eq_eval [GroupWithZero M]
+ (x : M) : x = NF.eval [(1, x)]
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_cons_mul_eval`：eval_cons_mul_eval [Comm
+GroupWithZero M] (n : Int) (e : M) {L l l' : NF M} (h : L.eval * l.eval = l'.eva
+l) : ((n, e) ::ᵣ L).eval * l.eval = …
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_div_of_eq_one_of_subst`：eq_div_of_eq_one_of_
+subst {M : Type*} [DivInvOneMonoid M] {l l_n n : M} (h : l = l_n / 1) (hn : l_n 
+= n) : l = n
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.mul_eq_eval₂`：mul_eq_eval₂ [CommGroupWithZer
+o M] (r₁ r₂ : Int) (x : M) {l₁ l₂ l : NF M} (h : l₁.eval * l₂.eval = l.eval) : (
+(r₁, x) ::ᵣ l₁).eval * ((r₂, x…
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.cons_eq_div_of_eq_div`：cons_eq_div_of_eq_div
+ [CommGroupWithZero M] (n : Int) (e : M) {t t_n t_d : NF M} (h : t.eval = t_n.ev
+al / t_d.eval) : ((n, e) ::ᵣ t).eval = …
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.eval_cons`：∀ {M : Type u_1} [inst : CommGrou
+pWithZero M] (p : ℤ × M) (l : Mathlib.Tactic.FieldSimp.NF M),   (p ::ᵣ l).eval =
+ l.eval * Mathlib.Tactic.Fi…
+· 使用定理 `Mathlib.Tactic.FieldSimp.zpow'_ofNat`：∀ {α : Type u_1} [inst : GroupWith
+Zero α] (a : α) {n : ℕ}, n ≠ 0 → Mathlib.Tactic.FieldSimp.zpow' a ↑n = a ^ n
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.cons_ne_zero`：cons_ne_zero [GroupWithZero M]
+ (r : Int) {x : M} (hx : x != 0) {l : NF M} (hl : l.eval != 0) : ((r, x) ::ᵣ l).
+eval != 0
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `GroupWithZero.toNontrivial`：∀ {G₀ : Type u} [self : GroupWithZero G₀], N
+ontrivial G₀
+· 使用定理 `Mathlib.Tactic.LinearCombination.eq_of_eq`：eq_of_eq [Add α] [IsRightCanc
+elAdd α] (p : (a : α) = b) (H : a' + b = b' + a) : a' = b'
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+（共 73 条，此处仅展示前 30 条）
 -/
 theorem inv_I : (I : K)⁻¹ = -I := by
   by_cases h : (I : K) = 0
@@ -2664,1364 +2297,1079 @@ theorem inv_I : (I : K)⁻¹ = -I := by
     linear_combination I_mul_I_of_nonzero h
 
 @[simp, rclike_simps]
-/--
-theorem `div_I` / 定理 `div_I`
-
-English:
-theorem div_I
-  given: (z : K)
-  statement: z / I = -(z * I)
-  proof: by rw [div_eq_mul_inv, inv_I, mul_neg]
-
-中文:
-定理 div_I
-  条件: (z : K)
-  结论: z / I = -(z * I)
-  证明: by rw [div_eq_mul_inv, inv_I, mul_neg]
-
-Depends on / 依赖: div_eq_mul_inv, inv_I, mul_neg
+/-
+**RCLike.div_I** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：div_I (z : K) : z / I = -(z * I)
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `RCLike.inv_I`：inv_I : (I : K)⁻¹ = -I
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
 -/
 theorem div_I (z : K) : z / I = -(z * I) := by rw [div_eq_mul_inv, inv_I, mul_neg]
 
 -- Not `@[simp]` since `simp` can prove this.
 @[rclike_simps]
-/--
-theorem `normSq_inv` / 定理 `normSq_inv`
-
-English:
-theorem normSq_inv
-  given: (z : K)
-  statement: normSq z⁻¹ = (normSq z)⁻¹
-  proof: map_inv₀ normSq z
-
-中文:
-定理 normSq_inv
-  条件: (z : K)
-  结论: normSq z⁻¹ = (normSq z)⁻¹
-  证明: map_inv₀ normSq z
-
-Depends on / 依赖: normSq
+/-
+**RCLike.normSq_inv** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：normSq_inv (z : K) : normSq z⁻¹ = (normSq z)⁻¹
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_inv₀`：map_inv₀ : f a⁻¹ = (f a)⁻¹
 -/
 theorem normSq_inv (z : K) : normSq z⁻¹ = (normSq z)⁻¹ :=
   map_inv₀ normSq z
 
 -- Not `@[simp]` since `simp` can prove this.
 @[rclike_simps]
-/--
-theorem `normSq_div` / 定理 `normSq_div`
-
-English:
-theorem normSq_div
-  given: (z w : K)
-  statement: normSq (z / w) = normSq z / normSq w
-  proof: map_div₀ normSq z w
-
-@[simp 1100, rclike_simps]
-
-中文:
-定理 normSq_div
-  条件: (z w : K)
-  结论: normSq (z / w) = normSq z / normSq w
-  证明: map_div₀ normSq z w
-
-@[simp 1100, rclike_simps]
-
-Depends on / 依赖: normSq
+/-
+**RCLike.normSq_div** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：normSq_div (z w : K) : normSq (z / w) = normSq z / normSq w
+参数：z w : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_div₀`：map_div₀ : f (a / b) = f a / f b
 -/
 theorem normSq_div (z w : K) : normSq (z / w) = normSq z / normSq w :=
   map_div₀ normSq z w
 
 @[simp 1100, rclike_simps]
-/--
-theorem `norm_conj` / 定理 `norm_conj`
-
-English:
-theorem norm_conj
-  given: (z : K)
-  statement: ‖conj z‖ = ‖z‖
-  proof: by simp only [← sqrt_normSq_eq_norm, normSq_conj]
-
-中文:
-定理 norm_conj
-  条件: (z : K)
-  结论: ‖conj z‖ = ‖z‖
-  证明: by simp only [← sqrt_normSq_eq_norm, normSq_conj]
-
-Depends on / 依赖: normSq_conj, sqrt_normSq_eq_norm
+/-
+**RCLike.norm_conj** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：norm_conj (z : K) : ‖conj z‖ = ‖z‖
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.normSq_conj`：normSq_conj (z : K) : normSq (conj z) = normSq z
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem norm_conj (z : K) : ‖conj z‖ = ‖z‖ := by simp only [← sqrt_normSq_eq_norm, normSq_conj]
-
-/--
-lemma `nnnorm_conj` / 引理 `nnnorm_conj`
-
-English:
-lemma nnnorm_conj
-  given: (z : K)
-  statement: ‖conj z‖₊ = ‖z‖₊
-  proof: by simp [nnnorm]
-
-中文:
-引理 nnnorm_conj
-  条件: (z : K)
-  结论: ‖conj z‖₊ = ‖z‖₊
-  证明: by simp [nnnorm]
+/-
+**RCLike.nnnorm_conj** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：∀ {K : Type u_1} [inst : RCLike K] (z : K), ‖(starRingEnd K) z‖₊ = ‖z‖₊
+参数：z : K；starRingEnd K。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `RCLike.norm_conj`：norm_conj (z : K) : ‖conj z‖ = ‖z‖
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NNReal.mk.congr_simp`：∀ (x x_1 : ℝ) (e_x : x = x_1) (hx : 0 ≤ x), NNReal
+.mk x hx = NNReal.mk x_1 ⋯
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp 1100, rclike_simps] lemma nnnorm_conj (z : K) : ‖conj z‖₊ = ‖z‖₊ := by simp [nnnorm]
-
-/--
-lemma `enorm_conj` / 引理 `enorm_conj`
-
-English:
-lemma enorm_conj
-  given: (z : K)
-  statement: ‖conj z‖ₑ = ‖z‖ₑ
-  proof: by simp [enorm]
-
-中文:
-引理 enorm_conj
-  条件: (z : K)
-  结论: ‖conj z‖ₑ = ‖z‖ₑ
-  证明: by simp [enorm]
+/-
+**RCLike.enorm_conj** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：∀ {K : Type u_1} [inst : RCLike K] (z : K), ‖(starRingEnd K) z‖ₑ = ‖z‖ₑ
+参数：z : K；starRingEnd K。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.nnnorm_conj`：∀ {K : Type u_1} [inst : RCLike K] (z : K), ‖(starRi
+ngEnd K) z‖₊ = ‖z‖₊
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp 1100, rclike_simps] lemma enorm_conj (z : K) : ‖conj z‖ₑ = ‖z‖ₑ := by simp [enorm]
-
-instance (priority := 100) : CStarRing K where
-norm_mul_self_le x := le_of_eq ((norm_mul _ _).trans <| congr_arg (· * ‖x‖) (norm_conj _)).symm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: StarModule Real K
-  body: by
-    apply RCLike.ext <;> simp [RCLike.smul_re, RCLike.smul_im]
-
-中文:
-实例 :
-  签名: 对合模 实数 K
-  定义体: by
-    apply RCLike.ext <;> simp [RCLike.smul_re, RCLike.smul_im]
-
-Depends on / 依赖: RCLike, RCLike.ext, RCLike.smul_im, RCLike.smul_re, smul_im, smul_re
+/-
+**RCLike.** 是 Mathlib 中的一个实例，位于命名空间 `RCLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : StarModule Real K where
+instance (priority := 100) : CStarRing K where
+  norm_mul_self_le x := le_of_eq <| ((norm_mul _ _).trans <| congr_arg (· * ‖x‖) (norm_conj _)).symm
+/-
+**RCLike.** 是 Mathlib 中的一个实例，位于命名空间 `RCLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance : StarModule ℝ K where
   star_smul r a := by
     apply RCLike.ext <;> simp [RCLike.smul_re, RCLike.smul_im]
 
 /-! ### Cast lemmas -/
 
 @[rclike_simps, norm_cast]
-/--
-theorem `ofReal_natCast` / 定理 `ofReal_natCast`
+/-
+**RCLike.ofReal_natCast** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_natCast (n : Nat) : ((n : Real) : K) = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
 
-English:
-theorem ofReal_natCast
-  given: (n : Nat)
-  statement: ((n : Real) : K) = n
-  proof: map_natCast (algebraMap Real K) n
-
-@[simp, rclike_simps]
-
-中文:
-定理 of实数_natCast
-  条件: (n : 自然数)
-  结论: ((n : 实数) : K) = n
-  证明: map_natCast (algebraMap Real K) n
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: algebraMap, map_natCast
+--- 原说明 ---
+### Cast lemmas
 -/
-theorem ofReal_natCast (n : Nat) : ((n : Real) : K) = n :=
-  map_natCast (algebraMap Real K) n
+theorem ofReal_natCast (n : ℕ) : ((n : ℝ) : K) = n :=
+  map_natCast (algebraMap ℝ K) n
 
 @[simp, rclike_simps]
-/--
-theorem `natCast_re` / 定理 `natCast_re`
-
-English:
-theorem natCast_re
-  given: (n : Nat)
-  statement: re (n : K) = n
-  proof: by rw [← ofReal_natCast, ofReal_re]
+/-
+**RCLike.natCast_re** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：natCast_re (n : Nat) : re (n : K) = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.ofReal_natCast`：ofReal_natCast (n : Nat) : ((n : Real) : K) = n
+· 使用定理 `RCLike.ofReal_re`：ofReal_re : forall r : Real, re (r : K) = r
+-/
+theorem natCast_re (n : ℕ) : re (n : K) = n := by rw [← ofReal_natCast, ofReal_re]
 
 @[simp, rclike_simps, norm_cast]
-
-中文:
-定理 natCast_re
-  条件: (n : 自然数)
-  结论: re (n : K) = n
-  证明: by rw [← ofReal_natCast, ofReal_re]
-
-@[simp, rclike_simps, norm_cast]
-
-Depends on / 依赖: ofReal_natCast, ofReal_re
+/-
+**RCLike.natCast_im** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：natCast_im (n : Nat) : im (n : K) = 0
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.ofReal_natCast`：ofReal_natCast (n : Nat) : ((n : Real) : K) = n
+· 使用定理 `RCLike.ofReal_im`：ofReal_im : forall r : Real, im (r : K) = 0
 -/
-theorem natCast_re (n : Nat) : re (n : K) = n := by rw [← ofReal_natCast, ofReal_re]
-
-@[simp, rclike_simps, norm_cast]
-/--
-theorem `natCast_im` / 定理 `natCast_im`
-
-English:
-theorem natCast_im
-  given: (n : Nat)
-  statement: im (n : K) = 0
-  proof: by rw [← ofReal_natCast, ofReal_im]
+theorem natCast_im (n : ℕ) : im (n : K) = 0 := by rw [← ofReal_natCast, ofReal_im]
 @[simp, rclike_simps]
-
-中文:
-定理 natCast_im
-  条件: (n : 自然数)
-  结论: im (n : K) = 0
-  证明: by rw [← ofReal_natCast, ofReal_im]
-@[simp, rclike_simps]
-
-Depends on / 依赖: ofReal_im, ofReal_natCast, rclike_simps
+/-
+**RCLike.ofNat_re** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofNat_re (n : Nat) [n.AtLeastTwo] : re (ofNat(n) : K) = ofNat(n)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.natCast_re`：natCast_re (n : Nat) : re (n : K) = n
 -/
-theorem natCast_im (n : Nat) : im (n : K) = 0 := by rw [← ofReal_natCast, ofReal_im]
-@[simp, rclike_simps]
-/--
-theorem `ofNat_re` / 定理 `ofNat_re`
-
-English:
-theorem ofNat_re
-  given: (n : Nat) [n.AtLeastTwo]
-  statement: re (ofNat(n) : K) = ofNat(n)
-  proof: natCast_re n
-@[simp, rclike_simps]
-
-中文:
-定理 of自然数_re
-  条件: (n : 自然数) [n.AtLeastTwo]
-  结论: re (of自然数(n) : K) = of自然数(n)
-  证明: natCast_re n
-@[simp, rclike_simps]
-
-Depends on / 依赖: natCast_re, rclike_simps
--/
-theorem ofNat_re (n : Nat) [n.AtLeastTwo] : re (ofNat(n) : K) = ofNat(n) :=
+theorem ofNat_re (n : ℕ) [n.AtLeastTwo] : re (ofNat(n) : K) = ofNat(n) :=
   natCast_re n
 @[simp, rclike_simps]
-/--
-theorem `ofNat_im` / 定理 `ofNat_im`
-
-English:
-theorem ofNat_im
-  given: (n : Nat) [n.AtLeastTwo]
-  statement: im (ofNat(n) : K) = 0
-  proof: natCast_im n
-
-@[rclike_simps, norm_cast]
-
-中文:
-定理 of自然数_im
-  条件: (n : 自然数) [n.AtLeastTwo]
-  结论: im (of自然数(n) : K) = 0
-  证明: natCast_im n
-
-@[rclike_simps, norm_cast]
-
-Depends on / 依赖: natCast_im
+/-
+**RCLike.ofNat_im** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofNat_im (n : Nat) [n.AtLeastTwo] : im (ofNat(n) : K) = 0
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.natCast_im`：natCast_im (n : Nat) : im (n : K) = 0
 -/
-theorem ofNat_im (n : Nat) [n.AtLeastTwo] : im (ofNat(n) : K) = 0 :=
+theorem ofNat_im (n : ℕ) [n.AtLeastTwo] : im (ofNat(n) : K) = 0 :=
   natCast_im n
 
 @[rclike_simps, norm_cast]
-/--
-theorem `ofReal_ofNat` / 定理 `ofReal_ofNat`
-
-English:
-theorem ofReal_ofNat
-  given: (n : Nat) [n.AtLeastTwo]
-  statement: ((ofNat(n) : Real) : K) = ofNat(n)
-  proof: ofReal_natCast n
-
-中文:
-定理 of实数_of自然数
-  条件: (n : 自然数) [n.AtLeastTwo]
-  结论: ((of自然数(n) : 实数) : K) = of自然数(n)
-  证明: ofReal_natCast n
-
-Depends on / 依赖: ofReal_natCast
+/-
+**RCLike.ofReal_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_ofNat (n : Nat) [n.AtLeastTwo] : ((ofNat(n) : Real) : K) = ofNat(n)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.ofReal_natCast`：ofReal_natCast (n : Nat) : ((n : Real) : K) = n
 -/
-theorem ofReal_ofNat (n : Nat) [n.AtLeastTwo] : ((ofNat(n) : Real) : K) = ofNat(n) :=
+theorem ofReal_ofNat (n : ℕ) [n.AtLeastTwo] : ((ofNat(n) : ℝ) : K) = ofNat(n) :=
   ofReal_natCast n
-
-/--
-theorem `ofNat_mul_re` / 定理 `ofNat_mul_re`
-
-English:
-theorem ofNat_mul_re
-  given: (n : Nat) [n.AtLeastTwo] (z : K)
-  proof: by
-  rw [← ofReal_ofNat]; rw [re_ofReal_mul]
-
-中文:
-定理 of自然数_mul_re
-  条件: (n : 自然数) [n.AtLeastTwo] (z : K)
-  证明: by
-  rw [← ofReal_ofNat]; rw [re_ofReal_mul]
-
-Depends on / 依赖: ofReal_ofNat, re_ofReal_mul
+/-
+**RCLike.ofNat_mul_re** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofNat_mul_re (n : Nat) [n.AtLeastTwo] (z : K) : re (ofNat(n) * z) = ofNat(
+n) * re z
+参数：n : Nat；z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.ofReal_ofNat`：ofReal_ofNat (n : Nat) [n.AtLeastTwo] : ((ofNat(n) 
+: Real) : K) = ofNat(n)
+· 使用定理 `RCLike.re_ofReal_mul`：re_ofReal_mul (r : Real) (z : K) : re (↑r * z) = r
+ * re z
 -/
-theorem ofNat_mul_re (n : Nat) [n.AtLeastTwo] (z : K) :
+theorem ofNat_mul_re (n : ℕ) [n.AtLeastTwo] (z : K) :
     re (ofNat(n) * z) = ofNat(n) * re z := by
-  rw [← ofReal_ofNat]; rw [re_ofReal_mul]
-
-/--
-theorem `ofNat_mul_im` / 定理 `ofNat_mul_im`
-
-English:
-theorem ofNat_mul_im
-  given: (n : Nat) [n.AtLeastTwo] (z : K)
-  proof: by
-  rw [← ofReal_ofNat]; rw [im_ofReal_mul]
-
-@[rclike_simps, norm_cast]
-
-中文:
-定理 of自然数_mul_im
-  条件: (n : 自然数) [n.AtLeastTwo] (z : K)
-  证明: by
-  rw [← ofReal_ofNat]; rw [im_ofReal_mul]
-
-@[rclike_simps, norm_cast]
-
-Depends on / 依赖: im_ofReal_mul, ofReal_ofNat
+  rw [← ofReal_ofNat, re_ofReal_mul]
+/-
+**RCLike.ofNat_mul_im** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofNat_mul_im (n : Nat) [n.AtLeastTwo] (z : K) : im (ofNat(n) * z) = ofNat(
+n) * im z
+参数：n : Nat；z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.ofReal_ofNat`：ofReal_ofNat (n : Nat) [n.AtLeastTwo] : ((ofNat(n) 
+: Real) : K) = ofNat(n)
+· 使用定理 `RCLike.im_ofReal_mul`：im_ofReal_mul (r : Real) (z : K) : im (↑r * z) = r
+ * im z
 -/
-theorem ofNat_mul_im (n : Nat) [n.AtLeastTwo] (z : K) :
+theorem ofNat_mul_im (n : ℕ) [n.AtLeastTwo] (z : K) :
     im (ofNat(n) * z) = ofNat(n) * im z := by
-  rw [← ofReal_ofNat]; rw [im_ofReal_mul]
+  rw [← ofReal_ofNat, im_ofReal_mul]
 
 @[rclike_simps, norm_cast]
-/--
-theorem `ofReal_intCast` / 定理 `ofReal_intCast`
-
-English:
-theorem ofReal_intCast
-  given: (n : Int)
-  statement: ((n : Real) : K) = n
-  proof: map_intCast _ n
-
-@[simp, rclike_simps]
-
-中文:
-定理 of实数_intCast
-  条件: (n : 整数)
-  结论: ((n : 实数) : K) = n
-  证明: map_intCast _ n
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: map_intCast
+/-
+**RCLike.ofReal_intCast** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_intCast (n : Int) : ((n : Real) : K) = n
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_intCast`：map_intCast [FunLike F α β] [RingHomClass F α β] (f : F) (n
+ : Int) : f n = n
 -/
-theorem ofReal_intCast (n : Int) : ((n : Real) : K) = n :=
+theorem ofReal_intCast (n : ℤ) : ((n : ℝ) : K) = n :=
   map_intCast _ n
 
 @[simp, rclike_simps]
-/--
-theorem `intCast_re` / 定理 `intCast_re`
-
-English:
-theorem intCast_re
-  given: (n : Int)
-  statement: re (n : K) = n
-  proof: by rw [← ofReal_intCast, ofReal_re]
+/-
+**RCLike.intCast_re** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：intCast_re (n : Int) : re (n : K) = n
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.ofReal_intCast`：ofReal_intCast (n : Int) : ((n : Real) : K) = n
+· 使用定理 `RCLike.ofReal_re`：ofReal_re : forall r : Real, re (r : K) = r
+-/
+theorem intCast_re (n : ℤ) : re (n : K) = n := by rw [← ofReal_intCast, ofReal_re]
 
 @[simp, rclike_simps, norm_cast]
-
-中文:
-定理 intCast_re
-  条件: (n : 整数)
-  结论: re (n : K) = n
-  证明: by rw [← ofReal_intCast, ofReal_re]
-
-@[simp, rclike_simps, norm_cast]
-
-Depends on / 依赖: ofReal_intCast, ofReal_re
+/-
+**RCLike.intCast_im** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：intCast_im (n : Int) : im (n : K) = 0
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.ofReal_intCast`：ofReal_intCast (n : Int) : ((n : Real) : K) = n
+· 使用定理 `RCLike.ofReal_im`：ofReal_im : forall r : Real, im (r : K) = 0
 -/
-theorem intCast_re (n : Int) : re (n : K) = n := by rw [← ofReal_intCast, ofReal_re]
-
-@[simp, rclike_simps, norm_cast]
-/--
-theorem `intCast_im` / 定理 `intCast_im`
-
-English:
-theorem intCast_im
-  given: (n : Int)
-  statement: im (n : K) = 0
-  proof: by rw [← ofReal_intCast, ofReal_im]
+theorem intCast_im (n : ℤ) : im (n : K) = 0 := by rw [← ofReal_intCast, ofReal_im]
 
 @[rclike_simps, norm_cast]
-
-中文:
-定理 intCast_im
-  条件: (n : 整数)
-  结论: im (n : K) = 0
-  证明: by rw [← ofReal_intCast, ofReal_im]
-
-@[rclike_simps, norm_cast]
-
-Depends on / 依赖: ofReal_im, ofReal_intCast
+/-
+**RCLike.ofReal_nnratCast** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_nnratCast (n : Rat>=0) : ((n : Real) : K) = n
+参数：n : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_nnratCast`：∀ {F : Type u_1} {α : Type u_3} {β : Type u_4} [inst : Fu
+nLike F α β] [inst_1 : DivisionSemiring α]   [inst_2 : DivisionSemiring β] [Ring
+Hom…
 -/
-theorem intCast_im (n : Int) : im (n : K) = 0 := by rw [← ofReal_intCast, ofReal_im]
-
-@[rclike_simps, norm_cast]
-/--
-theorem `ofReal_nnratCast` / 定理 `ofReal_nnratCast`
-
-English:
-theorem ofReal_nnratCast
-  given: (n : Rat>=0)
-  statement: ((n : Real) : K) = n
-  proof: map_nnratCast _ n
-
-@[simp, rclike_simps]
-
-中文:
-定理 of实数_nnratCast
-  条件: (n : 有理数>=0)
-  结论: ((n : 实数) : K) = n
-  证明: map_nnratCast _ n
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: map_nnratCast
--/
-theorem ofReal_nnratCast (n : Rat>=0) : ((n : Real) : K) = n :=
+theorem ofReal_nnratCast (n : ℚ≥0) : ((n : ℝ) : K) = n :=
   map_nnratCast _ n
 
 @[simp, rclike_simps]
-/--
-theorem `nnratCast_re` / 定理 `nnratCast_re`
-
-English:
-theorem nnratCast_re
-  given: (q : Rat>=0)
-  statement: re (q : K) = q
-  proof: by rw [← ofReal_nnratCast, ofReal_re]
+/-
+**RCLike.nnratCast_re** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：nnratCast_re (q : Rat>=0) : re (q : K) = q
+参数：q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.ofReal_nnratCast`：ofReal_nnratCast (n : Rat>=0) : ((n : Real) : K
+) = n
+· 使用定理 `RCLike.ofReal_re`：ofReal_re : forall r : Real, re (r : K) = r
+-/
+theorem nnratCast_re (q : ℚ≥0) : re (q : K) = q := by rw [← ofReal_nnratCast, ofReal_re]
 
 @[simp, rclike_simps, norm_cast]
-
-中文:
-定理 nnratCast_re
-  条件: (q : 有理数>=0)
-  结论: re (q : K) = q
-  证明: by rw [← ofReal_nnratCast, ofReal_re]
-
-@[simp, rclike_simps, norm_cast]
-
-Depends on / 依赖: ofReal_nnratCast, ofReal_re
+/-
+**RCLike.nnratCast_im** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：nnratCast_im (q : Rat>=0) : im (q : K) = 0
+参数：q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.ofReal_nnratCast`：ofReal_nnratCast (n : Rat>=0) : ((n : Real) : K
+) = n
+· 使用定理 `RCLike.ofReal_im`：ofReal_im : forall r : Real, im (r : K) = 0
 -/
-theorem nnratCast_re (q : Rat>=0) : re (q : K) = q := by rw [← ofReal_nnratCast, ofReal_re]
-
-@[simp, rclike_simps, norm_cast]
-/--
-theorem `nnratCast_im` / 定理 `nnratCast_im`
-
-English:
-theorem nnratCast_im
-  given: (q : Rat>=0)
-  statement: im (q : K) = 0
-  proof: by rw [← ofReal_nnratCast, ofReal_im]
+theorem nnratCast_im (q : ℚ≥0) : im (q : K) = 0 := by rw [← ofReal_nnratCast, ofReal_im]
 
 @[rclike_simps, norm_cast]
-
-中文:
-定理 nnratCast_im
-  条件: (q : 有理数>=0)
-  结论: im (q : K) = 0
-  证明: by rw [← ofReal_nnratCast, ofReal_im]
-
-@[rclike_simps, norm_cast]
-
-Depends on / 依赖: ofReal_im, ofReal_nnratCast
+/-
+**RCLike.ofReal_ratCast** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_ratCast (n : Rat) : ((n : Real) : K) = n
+参数：n : Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_ratCast`：map_ratCast [DivisionRing α] [DivisionRing β] [RingHomClass
+ F α β] (f : F) (q : Rat) : f q = q
 -/
-theorem nnratCast_im (q : Rat>=0) : im (q : K) = 0 := by rw [← ofReal_nnratCast, ofReal_im]
-
-@[rclike_simps, norm_cast]
-/--
-theorem `ofReal_ratCast` / 定理 `ofReal_ratCast`
-
-English:
-theorem ofReal_ratCast
-  given: (n : Rat)
-  statement: ((n : Real) : K) = n
-  proof: map_ratCast _ n
-
-@[simp, rclike_simps]
-
-中文:
-定理 of实数_ratCast
-  条件: (n : 有理数)
-  结论: ((n : 实数) : K) = n
-  证明: map_ratCast _ n
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: map_ratCast
--/
-theorem ofReal_ratCast (n : Rat) : ((n : Real) : K) = n :=
+theorem ofReal_ratCast (n : ℚ) : ((n : ℝ) : K) = n :=
   map_ratCast _ n
 
 @[simp, rclike_simps]
-/--
-theorem `ratCast_re` / 定理 `ratCast_re`
-
-English:
-theorem ratCast_re
-  given: (q : Rat)
-  statement: re (q : K) = q
-  proof: by rw [← ofReal_ratCast, ofReal_re]
-
-@[simp, rclike_simps, norm_cast]
-
-中文:
-定理 ratCast_re
-  条件: (q : 有理数)
-  结论: re (q : K) = q
-  证明: by rw [← ofReal_ratCast, ofReal_re]
-
-@[simp, rclike_simps, norm_cast]
-
-Depends on / 依赖: ofReal_ratCast, ofReal_re
+/-
+**RCLike.ratCast_re** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ratCast_re (q : Rat) : re (q : K) = q
+参数：q : Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.ofReal_ratCast`：ofReal_ratCast (n : Rat) : ((n : Real) : K) = n
+· 使用定理 `RCLike.ofReal_re`：ofReal_re : forall r : Real, re (r : K) = r
 -/
-theorem ratCast_re (q : Rat) : re (q : K) = q := by rw [← ofReal_ratCast, ofReal_re]
+theorem ratCast_re (q : ℚ) : re (q : K) = q := by rw [← ofReal_ratCast, ofReal_re]
 
 @[simp, rclike_simps, norm_cast]
-/--
-theorem `ratCast_im` / 定理 `ratCast_im`
-
-English:
-theorem ratCast_im
-  given: (q : Rat)
-  statement: im (q : K) = 0
-  proof: by rw [← ofReal_ratCast, ofReal_im]
-
-中文:
-定理 ratCast_im
-  条件: (q : 有理数)
-  结论: im (q : K) = 0
-  证明: by rw [← ofReal_ratCast, ofReal_im]
-
-Depends on / 依赖: ofReal_im, ofReal_ratCast
+/-
+**RCLike.ratCast_im** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ratCast_im (q : Rat) : im (q : K) = 0
+参数：q : Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.ofReal_ratCast`：ofReal_ratCast (n : Rat) : ((n : Real) : K) = n
+· 使用定理 `RCLike.ofReal_im`：ofReal_im : forall r : Real, im (r : K) = 0
 -/
-theorem ratCast_im (q : Rat) : im (q : K) = 0 := by rw [← ofReal_ratCast, ofReal_im]
+theorem ratCast_im (q : ℚ) : im (q : K) = 0 := by rw [← ofReal_ratCast, ofReal_im]
 
 open OfScientific (ofScientific)
 
 @[rclike_simps, norm_cast]
-/--
-theorem `ofReal_ofScientific` / 定理 `ofReal_ofScientific`
-
-English:
-theorem ofReal_ofScientific
-  given: (m : Nat) (s : Bool) (e : Nat)
-  proof: ofReal_nnratCast _
-
-@[simp, rclike_simps]
-
-中文:
-定理 of实数_ofScientific
-  条件: (m : 自然数) (s : 布尔值) (e : 自然数)
-  证明: ofReal_nnratCast _
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: ofReal_nnratCast
+/-
+**RCLike.ofReal_ofScientific** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_ofScientific (m : Nat) (s : Bool) (e : Nat) : ((ofScientific m s e 
+: Real) : K) = ofScientific m s e
+参数：m : Nat；s : Bool；e : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.ofReal_nnratCast`：ofReal_nnratCast (n : Rat>=0) : ((n : Real) : K
+) = n
+· 使用定理 `Rat.ofScientific_nonneg`：ofScientific_nonneg (m : Nat) (s : Bool) (e : N
+at) : 0 <= Rat.ofScientific m s e
 -/
-theorem ofReal_ofScientific (m : Nat) (s : Bool) (e : Nat) :
-    ((ofScientific m s e : Real) : K) = ofScientific m s e := ofReal_nnratCast _
+theorem ofReal_ofScientific (m : ℕ) (s : Bool) (e : ℕ) :
+    ((ofScientific m s e : ℝ) : K) = ofScientific m s e := ofReal_nnratCast _
 
 @[simp, rclike_simps]
-/--
-theorem `ofScientific_re` / 定理 `ofScientific_re`
-
-English:
-theorem ofScientific_re
-  given: (m : Nat) (s : Bool) (e : Nat)
-  proof: by rw [← ofReal_ofScientific, ofReal_re]
-
-@[simp, rclike_simps, norm_cast]
-
-中文:
-定理 ofScientific_re
-  条件: (m : 自然数) (s : 布尔值) (e : 自然数)
-  证明: by rw [← ofReal_ofScientific, ofReal_re]
-
-@[simp, rclike_simps, norm_cast]
-
-Depends on / 依赖: ofReal_ofScientific, ofReal_re
+/-
+**RCLike.ofScientific_re** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofScientific_re (m : Nat) (s : Bool) (e : Nat) : re (ofScientific m s e : 
+K) = ofScientific m s e
+参数：m : Nat；s : Bool；e : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.ofReal_ofScientific`：ofReal_ofScientific (m : Nat) (s : Bool) (e 
+: Nat) : ((ofScientific m s e : Real) : K) = ofScientific m s e
+· 使用定理 `RCLike.ofReal_re`：ofReal_re : forall r : Real, re (r : K) = r
 -/
-theorem ofScientific_re (m : Nat) (s : Bool) (e : Nat) :
+theorem ofScientific_re (m : ℕ) (s : Bool) (e : ℕ) :
     re (ofScientific m s e : K) = ofScientific m s e := by rw [← ofReal_ofScientific, ofReal_re]
 
 @[simp, rclike_simps, norm_cast]
-/--
-theorem `ofScientific_im` / 定理 `ofScientific_im`
-
-English:
-theorem ofScientific_im
-  given: (m : Nat) (s : Bool) (e : Nat)
-  proof: by rw [← ofReal_ofScientific, ofReal_im]
-
-中文:
-定理 ofScientific_im
-  条件: (m : 自然数) (s : 布尔值) (e : 自然数)
-  证明: by rw [← ofReal_ofScientific, ofReal_im]
-
-Depends on / 依赖: ofReal_im, ofReal_ofScientific
+/-
+**RCLike.ofScientific_im** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofScientific_im (m : Nat) (s : Bool) (e : Nat) : im (ofScientific m s e : 
+K) = 0
+参数：m : Nat；s : Bool；e : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.ofReal_ofScientific`：ofReal_ofScientific (m : Nat) (s : Bool) (e 
+: Nat) : ((ofScientific m s e : Real) : K) = ofScientific m s e
+· 使用定理 `RCLike.ofReal_im`：ofReal_im : forall r : Real, im (r : K) = 0
 -/
-theorem ofScientific_im (m : Nat) (s : Bool) (e : Nat) :
+theorem ofScientific_im (m : ℕ) (s : Bool) (e : ℕ) :
     im (ofScientific m s e : K) = 0 := by rw [← ofReal_ofScientific, ofReal_im]
 
+/-! ### Norm -/
 
-/--
-theorem `norm_of_nonneg` / 定理 `norm_of_nonneg`
+/-
+**RCLike.norm_of_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：norm_of_nonneg {r : Real} (h : 0 <= r) : ‖(r : K)‖ = r
+参数：h : 0 <= r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `RCLike.norm_ofReal`：norm_ofReal (r : Real) : ‖(r : K)‖ = |r|
+· 使用定理 `abs_of_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α]
+ {a : α} [AddLeftMono α], 0 ≤ a → |a| = a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
 
-English:
-theorem norm_of_nonneg
-  given: {r : Real} (h : 0 <= r)
-  statement: ‖(r : K)‖ = r
-  proof: (norm_ofReal _).trans (abs_of_nonneg h)
-
-@[simp 1100, rclike_simps, norm_cast]
-
-中文:
-定理 norm_of_nonneg
-  条件: {r : 实数} (h : 0 <= r)
-  结论: ‖(r : K)‖ = r
-  证明: (norm_ofReal _).trans (abs_of_nonneg h)
-
-@[simp 1100, rclike_simps, norm_cast]
-
-Depends on / 依赖: abs_of_nonneg, norm_ofReal
+--- 原说明 ---
+### Norm
 -/
-theorem norm_of_nonneg {r : Real} (h : 0 <= r) : ‖(r : K)‖ = r :=
+theorem norm_of_nonneg {r : ℝ} (h : 0 ≤ r) : ‖(r : K)‖ = r :=
   (norm_ofReal _).trans (abs_of_nonneg h)
 
 @[simp 1100, rclike_simps, norm_cast]
-/--
-theorem `norm_natCast` / 定理 `norm_natCast`
-
-English:
-theorem norm_natCast
-  given: (n : Nat)
-  statement: ‖(n : K)‖ = n
-  proof: by
+/-
+**RCLike.norm_natCast** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：norm_natCast (n : Nat) : ‖(n : K)‖ = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.ofReal_natCast`：ofReal_natCast (n : Nat) : ((n : Real) : K) = n
+· 使用定理 `RCLike.norm_of_nonneg`：norm_of_nonneg {r : Real} (h : 0 <= r) : ‖(r : K)
+‖ = r
+· 使用定理 `Nat.cast_nonneg`：cast_nonneg {α} [Semiring α] [PartialOrder α] [IsOrdere
+dRing α] (n : Nat) : 0 <= (n : α)
+-/
+theorem norm_natCast (n : ℕ) : ‖(n : K)‖ = n := by
   rw [← ofReal_natCast]
   exact norm_of_nonneg (Nat.cast_nonneg n)
-
-中文:
-定理 norm_natCast
-  条件: (n : 自然数)
-  结论: ‖(n : K)‖ = n
-  证明: by
-  rw [← ofReal_natCast]
-  exact norm_of_nonneg (Nat.cast_nonneg n)
-
-Depends on / 依赖: Nat.cast_nonneg, cast_nonneg, norm_of_nonneg, ofReal_natCast
+/-
+**RCLike.nnnorm_natCast** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：∀ {K : Type u_1} [inst : RCLike K] (n : ℕ), ‖↑n‖₊ = ↑n
+参数：n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `RCLike.norm_natCast`：norm_natCast (n : Nat) : ‖(n : K)‖ = n
+· 使用定理 `NNReal.mk.congr_simp`：∀ (x x_1 : ℝ) (e_x : x = x_1) (hx : 0 ≤ x), NNReal
+.mk x hx = NNReal.mk x_1 ⋯
+· 使用定理 `NNReal.mk_natCast`：mk_natCast (n : Nat) : NNReal.mk (n : Real) (n.cast_n
+onneg) = n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem norm_natCast (n : Nat) : ‖(n : K)‖ = n := by
-  rw [← ofReal_natCast]
-  exact norm_of_nonneg (Nat.cast_nonneg n)
-
-/--
-lemma `nnnorm_natCast` / 引理 `nnnorm_natCast`
-
-English:
-lemma nnnorm_natCast
-  given: (n : Nat)
-  statement: ‖(n : K)‖₊ = n
-  proof: by simp [nnnorm]
+@[simp, rclike_simps, norm_cast] lemma nnnorm_natCast (n : ℕ) : ‖(n : K)‖₊ = n := by simp [nnnorm]
 
 @[simp, rclike_simps]
-
-中文:
-引理 nnnorm_natCast
-  条件: (n : 自然数)
-  结论: ‖(n : K)‖₊ = n
-  证明: by simp [nnnorm]
-
-@[simp, rclike_simps]
+/-
+**RCLike.norm_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：norm_ofNat (n : Nat) [n.AtLeastTwo] : ‖(ofNat(n) : K)‖ = ofNat(n)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.norm_natCast`：norm_natCast (n : Nat) : ‖(n : K)‖ = n
 -/
-@[simp, rclike_simps, norm_cast] lemma nnnorm_natCast (n : Nat) : ‖(n : K)‖₊ = n := by simp [nnnorm]
-
-@[simp, rclike_simps]
-/--
-theorem `norm_ofNat` / 定理 `norm_ofNat`
-
-English:
-theorem norm_ofNat
-  given: (n : Nat) [n.AtLeastTwo]
-  statement: ‖(ofNat(n) : K)‖ = ofNat(n)
-  proof: norm_natCast n
-
-@[simp, rclike_simps]
-
-中文:
-定理 norm_of自然数
-  条件: (n : 自然数) [n.AtLeastTwo]
-  结论: ‖(of自然数(n) : K)‖ = of自然数(n)
-  证明: norm_natCast n
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: norm_natCast
--/
-theorem norm_ofNat (n : Nat) [n.AtLeastTwo] : ‖(ofNat(n) : K)‖ = ofNat(n) :=
+theorem norm_ofNat (n : ℕ) [n.AtLeastTwo] : ‖(ofNat(n) : K)‖ = ofNat(n) :=
   norm_natCast n
 
 @[simp, rclike_simps]
-/--
-lemma `nnnorm_ofNat` / 引理 `nnnorm_ofNat`
-
-English:
-lemma nnnorm_ofNat
-  given: (n : Nat) [n.AtLeastTwo]
-  statement: ‖(ofNat(n) : K)‖₊ = ofNat(n)
-  proof: nnnorm_natCast n
-
-中文:
-引理 nnnorm_of自然数
-  条件: (n : 自然数) [n.AtLeastTwo]
-  结论: ‖(of自然数(n) : K)‖₊ = of自然数(n)
-  证明: nnnorm_natCast n
-
-Depends on / 依赖: nnnorm_natCast
+/-
+**RCLike.nnnorm_ofNat** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：nnnorm_ofNat (n : Nat) [n.AtLeastTwo] : ‖(ofNat(n) : K)‖₊ = ofNat(n)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.nnnorm_natCast`：∀ {K : Type u_1} [inst : RCLike K] (n : ℕ), ‖↑n‖₊
+ = ↑n
 -/
-lemma nnnorm_ofNat (n : Nat) [n.AtLeastTwo] : ‖(ofNat(n) : K)‖₊ = ofNat(n) :=
+lemma nnnorm_ofNat (n : ℕ) [n.AtLeastTwo] : ‖(ofNat(n) : K)‖₊ = ofNat(n) :=
   nnnorm_natCast n
-
-/--
-lemma `norm_two` / 引理 `norm_two`
-
-English:
-lemma norm_two
-  statement: ‖(2 : K)‖ = 2
-  proof: norm_ofNat 2
-
-中文:
-引理 norm_two
-  结论: ‖(2 : K)‖ = 2
-  证明: norm_ofNat 2
-
-Depends on / 依赖: norm_ofNat
+/-
+**RCLike.norm_two** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：norm_two : ‖(2 : K)‖ = 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.norm_ofNat`：norm_ofNat (n : Nat) [n.AtLeastTwo] : ‖(ofNat(n) : K)
+‖ = ofNat(n)
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 lemma norm_two : ‖(2 : K)‖ = 2 := norm_ofNat 2
-/--
-lemma `nnnorm_two` / 引理 `nnnorm_two`
-
-English:
-lemma nnnorm_two
-  statement: ‖(2 : K)‖₊ = 2
-  proof: nnnorm_ofNat 2
-
-@[simp, rclike_simps, norm_cast]
-
-中文:
-引理 nnnorm_two
-  结论: ‖(2 : K)‖₊ = 2
-  证明: nnnorm_ofNat 2
-
-@[simp, rclike_simps, norm_cast]
-
-Depends on / 依赖: nnnorm_ofNat
+/-
+**RCLike.nnnorm_two** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：nnnorm_two : ‖(2 : K)‖₊ = 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `RCLike.nnnorm_ofNat`：nnnorm_ofNat (n : Nat) [n.AtLeastTwo] : ‖(ofNat(n) 
+: K)‖₊ = ofNat(n)
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 lemma nnnorm_two : ‖(2 : K)‖₊ = 2 := nnnorm_ofNat 2
 
 @[simp, rclike_simps, norm_cast]
-/--
-lemma `norm_nnratCast` / 引理 `norm_nnratCast`
-
-English:
-lemma norm_nnratCast
-  given: (q : Rat>=0)
-  statement: ‖(q : K)‖ = q
-  proof: by
-  rw [← ofReal_nnratCast]; exact norm_of_nonneg q.cast_nonneg
-
-@[simp, rclike_simps, norm_cast]
-
-中文:
-引理 norm_nnratCast
-  条件: (q : 有理数>=0)
-  结论: ‖(q : K)‖ = q
-  证明: by
-  rw [← ofReal_nnratCast]; exact norm_of_nonneg q.cast_nonneg
-
-@[simp, rclike_simps, norm_cast]
-
-Depends on / 依赖: cast_nonneg, norm_of_nonneg, ofReal_nnratCast, q.cast_nonneg
+/-
+**RCLike.norm_nnratCast** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：norm_nnratCast (q : Rat>=0) : ‖(q : K)‖ = q
+参数：q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.ofReal_nnratCast`：ofReal_nnratCast (n : Rat>=0) : ((n : Real) : K
+) = n
+· 使用定理 `RCLike.norm_of_nonneg`：norm_of_nonneg {r : Real} (h : 0 <= r) : ‖(r : K)
+‖ = r
+· 使用引理 `NNRat.cast_nonneg`：NNRat.cast_nonneg (q : Rat>=0) : 0 <= (q : α)
 -/
-lemma norm_nnratCast (q : Rat>=0) : ‖(q : K)‖ = q := by
+lemma norm_nnratCast (q : ℚ≥0) : ‖(q : K)‖ = q := by
   rw [← ofReal_nnratCast]; exact norm_of_nonneg q.cast_nonneg
 
 @[simp, rclike_simps, norm_cast]
-/--
-lemma `nnnorm_nnratCast` / 引理 `nnnorm_nnratCast`
-
-English:
-lemma nnnorm_nnratCast
-  given: (q : Rat>=0)
-  statement: ‖(q : K)‖₊ = q
-  proof: by simp [nnnorm]; rfl
-
-中文:
-引理 nnnorm_nnratCast
-  条件: (q : 有理数>=0)
-  结论: ‖(q : K)‖₊ = q
-  证明: by simp [nnnorm]; rfl
-
-Depends on / 依赖: nnnorm
+/-
+**RCLike.nnnorm_nnratCast** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：nnnorm_nnratCast (q : Rat>=0) : ‖(q : K)‖₊ = q
+参数：q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用引理 `RCLike.norm_nnratCast`：norm_nnratCast (q : Rat>=0) : ‖(q : K)‖ = q
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NNReal.mk.congr_simp`：∀ (x x_1 : ℝ) (e_x : x = x_1) (hx : 0 ≤ x), NNReal
+.mk x hx = NNReal.mk x_1 ⋯
 -/
-lemma nnnorm_nnratCast (q : Rat>=0) : ‖(q : K)‖₊ = q := by simp [nnnorm]; rfl
+lemma nnnorm_nnratCast (q : ℚ≥0) : ‖(q : K)‖₊ = q := by simp [nnnorm]; rfl
 
 variable (K) in
-/--
-lemma `norm_nsmul` / 引理 `norm_nsmul`
-
-English:
-lemma norm_nsmul
-  given: [NormedAddCommGroup E] [NormedSpace K E] (n : Nat) (x : E)
-  statement: ‖n • x‖ = n • ‖x‖
-  proof: by
-  simpa [Nat.cast_smul_eq_nsmul] using norm_smul (n : K) x
-
-中文:
-引理 norm_nsmul
-  条件: [赋范交换加群 E] [赋范空间 K E] (n : 自然数) (x : E)
-  结论: ‖n • x‖ = n • ‖x‖
-  证明: by
-  simpa [Nat.cast_smul_eq_nsmul] using norm_smul (n : K) x
-
-Depends on / 依赖: Nat.cast_smul_eq_nsmul, cast_smul_eq_nsmul, norm_smul
+/-
+**RCLike.norm_nsmul** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：norm_nsmul [NormedAddCommGroup E] [NormedSpace K E] (n : Nat) (x : E) : ‖n
+ • x‖ = n • ‖x‖
+参数：n : Nat；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nsmul_eq_mul`：∀ {α : Type u} [inst : NonAssocSemiring α] (n : ℕ) (a : α)
+, n • a = ↑n * a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `RCLike.norm_natCast`：norm_natCast (n : Nat) : ‖(n : K)‖ = n
+· 使用引理 `norm_smul`：norm_smul [Norm α] [Norm β] [SMul α β] [NormSMulClass α β] (r
+ : α) (x : β) : ‖r • x‖ = ‖r‖ * ‖x‖
+· 使用定理 `NormedSpace.toNormSMulClass`：∀ {𝕜 : Type u_1} {E : Type u_3} [inst : Nor
+medField 𝕜] [inst_1 : SeminormedAddCommGroup E] [inst_2 : NormedSpace 𝕜 E],   No
+rmSMulClass 𝕜 E
 -/
-lemma norm_nsmul [NormedAddCommGroup E] [NormedSpace K E] (n : Nat) (x : E) : ‖n • x‖ = n • ‖x‖ := by
+lemma norm_nsmul [NormedAddCommGroup E] [NormedSpace K E] (n : ℕ) (x : E) : ‖n • x‖ = n • ‖x‖ := by
   simpa [Nat.cast_smul_eq_nsmul] using norm_smul (n : K) x
 
 variable (K) in
-/--
-lemma `nnnorm_nsmul` / 引理 `nnnorm_nsmul`
-
-English:
-lemma nnnorm_nsmul
-  given: [NormedAddCommGroup E] [NormedSpace K E] (n : Nat) (x : E)
-  proof: by simpa [Nat.cast_smul_eq_nsmul] using nnnorm_smul (n : K) x
-
-中文:
-引理 nnnorm_nsmul
-  条件: [赋范交换加群 E] [赋范空间 K E] (n : 自然数) (x : E)
-  证明: by simpa [Nat.cast_smul_eq_nsmul] using nnnorm_smul (n : K) x
-
-Depends on / 依赖: Nat.cast_smul_eq_nsmul, cast_smul_eq_nsmul, nnnorm_smul
+/-
+**RCLike.nnnorm_nsmul** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：nnnorm_nsmul [NormedAddCommGroup E] [NormedSpace K E] (n : Nat) (x : E) : 
+‖n • x‖₊ = n • ‖x‖₊
+参数：n : Nat；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nsmul_eq_mul`：∀ {α : Type u} [inst : NonAssocSemiring α] (n : ℕ) (a : α)
+, n • a = ↑n * a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `Nat.cast_smul_eq_nsmul`：Nat.cast_smul_eq_nsmul (n : Nat) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `RCLike.nnnorm_natCast`：∀ {K : Type u_1} [inst : RCLike K] (n : ℕ), ‖↑n‖₊
+ = ↑n
+· 使用定理 `nnnorm_smul`：nnnorm_smul (r : α) (x : β) : ‖r • x‖₊ = ‖r‖₊ * ‖x‖₊
+· 使用定理 `NormedSpace.toNormSMulClass`：∀ {𝕜 : Type u_1} {E : Type u_3} [inst : Nor
+medField 𝕜] [inst_1 : SeminormedAddCommGroup E] [inst_2 : NormedSpace 𝕜 E],   No
+rmSMulClass 𝕜 E
 -/
-lemma nnnorm_nsmul [NormedAddCommGroup E] [NormedSpace K E] (n : Nat) (x : E) :
+lemma nnnorm_nsmul [NormedAddCommGroup E] [NormedSpace K E] (n : ℕ) (x : E) :
     ‖n • x‖₊ = n • ‖x‖₊ := by simpa [Nat.cast_smul_eq_nsmul] using nnnorm_smul (n : K) x
-
-/--
-theorem `mul_self_norm` / 定理 `mul_self_norm`
-
-English:
-theorem mul_self_norm
-  given: (z : K)
-  statement: ‖z‖ * ‖z‖ = normSq z
-  proof: by rw [normSq_eq_def', sq]
-
-中文:
-定理 mul_self_norm
-  条件: (z : K)
-  结论: ‖z‖ * ‖z‖ = normSq z
-  证明: by rw [normSq_eq_def', sq]
-
-Depends on / 依赖: normSq_eq_def
+/-
+**RCLike.mul_self_norm** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：mul_self_norm (z : K) : ‖z‖ * ‖z‖ = normSq z
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.normSq_eq_def'`：normSq_eq_def' (z : K) : normSq z = ‖z‖ ^ 2
+· 使用定理 `sq`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
 -/
 theorem mul_self_norm (z : K) : ‖z‖ * ‖z‖ = normSq z := by rw [normSq_eq_def', sq]
 
 attribute [rclike_simps] norm_zero norm_one norm_eq_zero abs_norm norm_inv norm_div
-
-/--
-theorem `abs_re_le_norm` / 定理 `abs_re_le_norm`
-
-English:
-theorem abs_re_le_norm
-  given: (z : K)
-  statement: |re z| <= ‖z‖
-  proof: by
-  rw [mul_self_le_mul_self_iff (abs_nonneg _) (norm_nonneg _)]; rw [abs_mul_abs_self]; rw [mul_self_norm]
-  apply re_sq_le_normSq
-
-中文:
-定理 abs_re_le_norm
-  条件: (z : K)
-  结论: |re z| <= ‖z‖
-  证明: by
-  rw [mul_self_le_mul_self_iff (abs_nonneg _) (norm_nonneg _)]; rw [abs_mul_abs_self]; rw [mul_self_norm]
-  apply re_sq_le_normSq
-
-Depends on / 依赖: abs_mul_abs_self, abs_nonneg, mul_self_le_mul_self_iff, mul_self_norm, norm_nonneg, re_sq_le_normSq
+/-
+**RCLike.abs_re_le_norm** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：abs_re_le_norm (z : K) : |re z| <= ‖z‖
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_self_le_mul_self_iff`：mul_self_le_mul_self_iff [PosMulStrictMono R] 
+[MulPosMono R] {a b : R} (h1 : 0 <= a) (h2 : 0 <= b) : a <= b ↔ a * a <= b * b
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `abs_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] [A
+ddLeftMono α] [AddRightMono α] (a : α), 0 ≤ |a|
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `abs_mul_abs_self`：∀ {α : Type u_1} [inst : Ring α] [inst_1 : LinearOrder
+ α] (a : α), |a| * |a| = a * a
+· 使用定理 `RCLike.mul_self_norm`：mul_self_norm (z : K) : ‖z‖ * ‖z‖ = normSq z
+· 使用定理 `RCLike.re_sq_le_normSq`：re_sq_le_normSq (z : K) : re z * re z <= normSq 
+z
 -/
-theorem abs_re_le_norm (z : K) : |re z| <= ‖z‖ := by
-  rw [mul_self_le_mul_self_iff (abs_nonneg _) (norm_nonneg _)]; rw [abs_mul_abs_self]; rw [mul_self_norm]
+theorem abs_re_le_norm (z : K) : |re z| ≤ ‖z‖ := by
+  rw [mul_self_le_mul_self_iff (abs_nonneg _) (norm_nonneg _), abs_mul_abs_self, mul_self_norm]
   apply re_sq_le_normSq
-
-/--
-theorem `abs_im_le_norm` / 定理 `abs_im_le_norm`
-
-English:
-theorem abs_im_le_norm
-  given: (z : K)
-  statement: |im z| <= ‖z‖
-  proof: by
-  rw [mul_self_le_mul_self_iff (abs_nonneg _) (norm_nonneg _)]; rw [abs_mul_abs_self]; rw [mul_self_norm]
-  apply im_sq_le_normSq
-
-中文:
-定理 abs_im_le_norm
-  条件: (z : K)
-  结论: |im z| <= ‖z‖
-  证明: by
-  rw [mul_self_le_mul_self_iff (abs_nonneg _) (norm_nonneg _)]; rw [abs_mul_abs_self]; rw [mul_self_norm]
-  apply im_sq_le_normSq
-
-Depends on / 依赖: abs_mul_abs_self, abs_nonneg, im_sq_le_normSq, mul_self_le_mul_self_iff, mul_self_norm, norm_nonneg
+/-
+**RCLike.abs_im_le_norm** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：abs_im_le_norm (z : K) : |im z| <= ‖z‖
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_self_le_mul_self_iff`：mul_self_le_mul_self_iff [PosMulStrictMono R] 
+[MulPosMono R] {a b : R} (h1 : 0 <= a) (h2 : 0 <= b) : a <= b ↔ a * a <= b * b
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `abs_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] [A
+ddLeftMono α] [AddRightMono α] (a : α), 0 ≤ |a|
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `abs_mul_abs_self`：∀ {α : Type u_1} [inst : Ring α] [inst_1 : LinearOrder
+ α] (a : α), |a| * |a| = a * a
+· 使用定理 `RCLike.mul_self_norm`：mul_self_norm (z : K) : ‖z‖ * ‖z‖ = normSq z
+· 使用定理 `RCLike.im_sq_le_normSq`：im_sq_le_normSq (z : K) : im z * im z <= normSq 
+z
 -/
-theorem abs_im_le_norm (z : K) : |im z| <= ‖z‖ := by
-  rw [mul_self_le_mul_self_iff (abs_nonneg _) (norm_nonneg _)]; rw [abs_mul_abs_self]; rw [mul_self_norm]
+theorem abs_im_le_norm (z : K) : |im z| ≤ ‖z‖ := by
+  rw [mul_self_le_mul_self_iff (abs_nonneg _) (norm_nonneg _), abs_mul_abs_self, mul_self_norm]
   apply im_sq_le_normSq
-
-/--
-theorem `norm_re_le_norm` / 定理 `norm_re_le_norm`
-
-English:
-theorem norm_re_le_norm
-  given: (z : K)
-  statement: ‖re z‖ <= ‖z‖
-  proof: abs_re_le_norm z
-
-中文:
-定理 norm_re_le_norm
-  条件: (z : K)
-  结论: ‖re z‖ <= ‖z‖
-  证明: abs_re_le_norm z
-
-Depends on / 依赖: abs_re_le_norm
+/-
+**RCLike.norm_re_le_norm** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：norm_re_le_norm (z : K) : ‖re z‖ <= ‖z‖
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.abs_re_le_norm`：abs_re_le_norm (z : K) : |re z| <= ‖z‖
 -/
-theorem norm_re_le_norm (z : K) : ‖re z‖ <= ‖z‖ :=
+theorem norm_re_le_norm (z : K) : ‖re z‖ ≤ ‖z‖ :=
   abs_re_le_norm z
-
-/--
-theorem `norm_im_le_norm` / 定理 `norm_im_le_norm`
-
-English:
-theorem norm_im_le_norm
-  given: (z : K)
-  statement: ‖im z‖ <= ‖z‖
-  proof: abs_im_le_norm z
-
-中文:
-定理 norm_im_le_norm
-  条件: (z : K)
-  结论: ‖im z‖ <= ‖z‖
-  证明: abs_im_le_norm z
-
-Depends on / 依赖: abs_im_le_norm
+/-
+**RCLike.norm_im_le_norm** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：norm_im_le_norm (z : K) : ‖im z‖ <= ‖z‖
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.abs_im_le_norm`：abs_im_le_norm (z : K) : |im z| <= ‖z‖
 -/
-theorem norm_im_le_norm (z : K) : ‖im z‖ <= ‖z‖ :=
+theorem norm_im_le_norm (z : K) : ‖im z‖ ≤ ‖z‖ :=
   abs_im_le_norm z
-
-/--
-theorem `re_le_norm` / 定理 `re_le_norm`
-
-English:
-theorem re_le_norm
-  given: (z : K)
-  statement: re z <= ‖z‖
-  proof: (abs_le.1 (abs_re_le_norm z)).2
-
-中文:
-定理 re_le_norm
-  条件: (z : K)
-  结论: re z <= ‖z‖
-  证明: (abs_le.1 (abs_re_le_norm z)).2
-
-Depends on / 依赖: abs_le, abs_re_le_norm
+/-
+**RCLike.re_le_norm** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：re_le_norm (z : K) : re z <= ‖z‖
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `abs_le`：∀ {G : Type u_1} [inst : AddCommGroup G] [inst_1 : LinearOrder G
+] [IsOrderedAddMonoid G] {a b : G},   |a| ≤ b ↔ -b ≤ a ∧ a ≤ b
+· 使用定理 `RCLike.abs_re_le_norm`：abs_re_le_norm (z : K) : |re z| <= ‖z‖
 -/
-theorem re_le_norm (z : K) : re z <= ‖z‖ :=
+theorem re_le_norm (z : K) : re z ≤ ‖z‖ :=
   (abs_le.1 (abs_re_le_norm z)).2
-
-/--
-theorem `im_le_norm` / 定理 `im_le_norm`
-
-English:
-theorem im_le_norm
-  given: (z : K)
-  statement: im z <= ‖z‖
-  proof: (abs_le.1 (abs_im_le_norm _)).2
-
-中文:
-定理 im_le_norm
-  条件: (z : K)
-  结论: im z <= ‖z‖
-  证明: (abs_le.1 (abs_im_le_norm _)).2
-
-Depends on / 依赖: abs_im_le_norm, abs_le
+/-
+**RCLike.im_le_norm** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：im_le_norm (z : K) : im z <= ‖z‖
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `abs_le`：∀ {G : Type u_1} [inst : AddCommGroup G] [inst_1 : LinearOrder G
+] [IsOrderedAddMonoid G] {a b : G},   |a| ≤ b ↔ -b ≤ a ∧ a ≤ b
+· 使用定理 `RCLike.abs_im_le_norm`：abs_im_le_norm (z : K) : |im z| <= ‖z‖
 -/
-theorem im_le_norm (z : K) : im z <= ‖z‖ :=
+theorem im_le_norm (z : K) : im z ≤ ‖z‖ :=
   (abs_le.1 (abs_im_le_norm _)).2
-
-/--
-theorem `im_eq_zero_of_le` / 定理 `im_eq_zero_of_le`
-
-English:
-theorem im_eq_zero_of_le
-  given: {a : K} (h : ‖a‖ <= re a)
-  statement: im a = 0
-  proof: by
-  simpa only [mul_self_norm a, normSq_apply, left_eq_add, mul_self_eq_zero]
-    using congr_arg (fun z => z * z) ((re_le_norm a).antisymm h)
-
-中文:
-定理 im_eq_zero_of_le
-  条件: {a : K} (h : ‖a‖ <= re a)
-  结论: im a = 0
-  证明: by
-  simpa only [mul_self_norm a, normSq_apply, left_eq_add, mul_self_eq_zero]
-    using congr_arg (fun z => z * z) ((re_le_norm a).antisymm h)
-
-Depends on / 依赖: antisymm, congr_arg, left_eq_add, mul_self_eq_zero, mul_self_norm, normSq_apply, re_le_norm
+/-
+**RCLike.im_eq_zero_of_le** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：im_eq_zero_of_le {a : K} (h : ‖a‖ <= re a) : im a = 0
+参数：h : ‖a‖ <= re a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.mul_self_norm`：mul_self_norm (z : K) : ‖z‖ * ‖z‖ = normSq z
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `RCLike.re_le_norm`：re_le_norm (z : K) : re z <= ‖z‖
 -/
-theorem im_eq_zero_of_le {a : K} (h : ‖a‖ <= re a) : im a = 0 := by
+theorem im_eq_zero_of_le {a : K} (h : ‖a‖ ≤ re a) : im a = 0 := by
   simpa only [mul_self_norm a, normSq_apply, left_eq_add, mul_self_eq_zero]
     using congr_arg (fun z => z * z) ((re_le_norm a).antisymm h)
-
-/--
-theorem `re_eq_self_of_le` / 定理 `re_eq_self_of_le`
-
-English:
-theorem re_eq_self_of_le
-  given: {a : K} (h : ‖a‖ <= re a)
-  statement: (re a : K) = a
-  proof: by
-  rw [← conj_eq_iff_re]; rw [conj_eq_iff_im]; rw [im_eq_zero_of_le h]
-
-中文:
-定理 re_eq_self_of_le
-  条件: {a : K} (h : ‖a‖ <= re a)
-  结论: (re a : K) = a
-  证明: by
-  rw [← conj_eq_iff_re]; rw [conj_eq_iff_im]; rw [im_eq_zero_of_le h]
-
-Depends on / 依赖: conj_eq_iff_im, conj_eq_iff_re, im_eq_zero_of_le
+/-
+**RCLike.re_eq_self_of_le** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：re_eq_self_of_le {a : K} (h : ‖a‖ <= re a) : (re a : K) = a
+参数：h : ‖a‖ <= re a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.conj_eq_iff_re`：conj_eq_iff_re {z : K} : conj z = z ↔ (re z : K) 
+= z
+· 使用定理 `RCLike.conj_eq_iff_im`：conj_eq_iff_im {z : K} : conj z = z ↔ im z = 0
+· 使用定理 `RCLike.im_eq_zero_of_le`：im_eq_zero_of_le {a : K} (h : ‖a‖ <= re a) : im
+ a = 0
 -/
-theorem re_eq_self_of_le {a : K} (h : ‖a‖ <= re a) : (re a : K) = a := by
-  rw [← conj_eq_iff_re]; rw [conj_eq_iff_im]; rw [im_eq_zero_of_le h]
+theorem re_eq_self_of_le {a : K} (h : ‖a‖ ≤ re a) : (re a : K) = a := by
+  rw [← conj_eq_iff_re, conj_eq_iff_im, im_eq_zero_of_le h]
 
 open IsAbsoluteValue
-
-/--
-theorem `abs_re_div_norm_le_one` / 定理 `abs_re_div_norm_le_one`
-
-English:
-theorem abs_re_div_norm_le_one
-  given: (z : K)
-  statement: |re z / ‖z‖| <= 1
-  proof: by
-  rw [abs_div]; rw [abs_norm]
-  exact div_le_one_of_le₀ (abs_re_le_norm _) (norm_nonneg _)
-
-中文:
-定理 abs_re_div_norm_le_one
-  条件: (z : K)
-  结论: |re z / ‖z‖| <= 1
-  证明: by
-  rw [abs_div]; rw [abs_norm]
-  exact div_le_one_of_le₀ (abs_re_le_norm _) (norm_nonneg _)
-
-Depends on / 依赖: abs_div, abs_norm, abs_re_le_norm, norm_nonneg
+/-
+**RCLike.abs_re_div_norm_le_one** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：abs_re_div_norm_le_one (z : K) : |re z / ‖z‖| <= 1
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `abs_div`：abs_div (a b : α) : |a / b| = |a| / |b|
+· 使用定理 `abs_norm`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (z : E), |‖z‖| 
+= ‖z‖
+· 使用引理 `div_le_one_of_le₀`：div_le_one_of_le₀ [ZeroLEOneClass G₀] (h : a <= b) (h
+b : 0 <= b) : a / b <= 1
+· 使用定理 `MulPosReflectLE.toMulPosReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [MulPosReflectLE α], MulPosReflectLT α
+· 使用定理 `MulPosStrictMono.toMulPosReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [MulPosStrictMono α], MulPosReflectLE α
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
+· 使用定理 `RCLike.abs_re_le_norm`：abs_re_le_norm (z : K) : |re z| <= ‖z‖
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
 -/
-theorem abs_re_div_norm_le_one (z : K) : |re z / ‖z‖| <= 1 := by
-  rw [abs_div]; rw [abs_norm]
+theorem abs_re_div_norm_le_one (z : K) : |re z / ‖z‖| ≤ 1 := by
+  rw [abs_div, abs_norm]
   exact div_le_one_of_le₀ (abs_re_le_norm _) (norm_nonneg _)
-
-/--
-theorem `abs_im_div_norm_le_one` / 定理 `abs_im_div_norm_le_one`
-
-English:
-theorem abs_im_div_norm_le_one
-  given: (z : K)
-  statement: |im z / ‖z‖| <= 1
-  proof: by
-  rw [abs_div]; rw [abs_norm]
-  exact div_le_one_of_le₀ (abs_im_le_norm _) (norm_nonneg _)
-
-中文:
-定理 abs_im_div_norm_le_one
-  条件: (z : K)
-  结论: |im z / ‖z‖| <= 1
-  证明: by
-  rw [abs_div]; rw [abs_norm]
-  exact div_le_one_of_le₀ (abs_im_le_norm _) (norm_nonneg _)
-
-Depends on / 依赖: abs_div, abs_im_le_norm, abs_norm, norm_nonneg
+/-
+**RCLike.abs_im_div_norm_le_one** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：abs_im_div_norm_le_one (z : K) : |im z / ‖z‖| <= 1
+参数：z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `abs_div`：abs_div (a b : α) : |a / b| = |a| / |b|
+· 使用定理 `abs_norm`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (z : E), |‖z‖| 
+= ‖z‖
+· 使用引理 `div_le_one_of_le₀`：div_le_one_of_le₀ [ZeroLEOneClass G₀] (h : a <= b) (h
+b : 0 <= b) : a / b <= 1
+· 使用定理 `MulPosReflectLE.toMulPosReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [MulPosReflectLE α], MulPosReflectLT α
+· 使用定理 `MulPosStrictMono.toMulPosReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [MulPosStrictMono α], MulPosReflectLE α
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
+· 使用定理 `RCLike.abs_im_le_norm`：abs_im_le_norm (z : K) : |im z| <= ‖z‖
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
 -/
-theorem abs_im_div_norm_le_one (z : K) : |im z / ‖z‖| <= 1 := by
-  rw [abs_div]; rw [abs_norm]
+theorem abs_im_div_norm_le_one (z : K) : |im z / ‖z‖| ≤ 1 := by
+  rw [abs_div, abs_norm]
   exact div_le_one_of_le₀ (abs_im_le_norm _) (norm_nonneg _)
-
-/--
-theorem `norm_I_of_ne_zero` / 定理 `norm_I_of_ne_zero`
-
-English:
-theorem norm_I_of_ne_zero
-  given: (hI : (I : K) != 0)
-  statement: ‖(I : K)‖ = 1
-  proof: by
-  rw [← mul_self_inj_of_nonneg (norm_nonneg I) zero_le_one]; rw [one_mul]; rw [← norm_mul]; rw [I_mul_I_of_nonzero hI]; rw [norm_neg]; rw [norm_one]
-
-中文:
-定理 norm_I_of_ne_zero
-  条件: (hI : (I : K) != 0)
-  结论: ‖(I : K)‖ = 1
-  证明: by
-  rw [← mul_self_inj_of_nonneg (norm_nonneg I) zero_le_one]; rw [one_mul]; rw [← norm_mul]; rw [I_mul_I_of_nonzero hI]; rw [norm_neg]; rw [norm_one]
-
-Depends on / 依赖: I_mul_I_of_nonzero, mul_self_inj_of_nonneg, norm_mul, norm_neg, norm_nonneg, norm_one, one_mul, zero_le_one
+/-
+**RCLike.norm_I_of_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：norm_I_of_ne_zero (hI : (I : K) != 0) : ‖(I : K)‖ = 1
+参数：hI : (I : K) != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_self_inj_of_nonneg`：mul_self_inj_of_nonneg {α : Type*} [CommRing α] 
+[NoZeroDivisors α] [PartialOrder α] [IsStrictOrderedRing α] {a b : α} (a0 : 0 <=
+ a) (b0 : 0 …
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `norm_nonneg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), 0 ≤
+ ‖a‖
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `norm_mul`：∀ {α : Type u_2} [inst : Norm α] [inst_1 : Mul α] [NormMulClas
+s α] (a b : α), ‖a * b‖ = ‖a‖ * ‖b‖
+· 使用定理 `RCLike.I_mul_I_of_nonzero`：I_mul_I_of_nonzero : (I : K) != 0 -> (I : K) 
+* I = -1
+· 使用定理 `norm_neg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), ‖-a‖ =
+ ‖a‖
+· 使用定理 `NormOneClass.norm_one`：∀ {α : Type u_5} {inst : Norm α} {inst_1 : One α}
+ [self : NormOneClass α], ‖1‖ = 1
+· 使用定理 `NormedDivisionRing.to_normOneClass`：∀ {α : Type u_2} [inst : NormedDivis
+ionRing α], NormOneClass α
 -/
-theorem norm_I_of_ne_zero (hI : (I : K) != 0) : ‖(I : K)‖ = 1 := by
-  rw [← mul_self_inj_of_nonneg (norm_nonneg I) zero_le_one]; rw [one_mul]; rw [← norm_mul]; rw [I_mul_I_of_nonzero hI]; rw [norm_neg]; rw [norm_one]
-
-/--
-theorem `norm_I` / 定理 `norm_I`
-
-English:
-theorem norm_I
-  statement: ‖(I : K)‖ = if (I : K) = 0 then 0 else 1
-  proof: by
-  grind [norm_I_of_ne_zero, norm_eq_zero]
-
-中文:
-定理 norm_I
-  结论: ‖(I : K)‖ = if (I : K) = 0 then 0 else 1
-  证明: by
-  grind [norm_I_of_ne_zero, norm_eq_zero]
-
-Depends on / 依赖: norm_I_of_ne_zero, norm_eq_zero
+theorem norm_I_of_ne_zero (hI : (I : K) ≠ 0) : ‖(I : K)‖ = 1 := by
+  rw [← mul_self_inj_of_nonneg (norm_nonneg I) zero_le_one, one_mul, ← norm_mul,
+    I_mul_I_of_nonzero hI, norm_neg, norm_one]
+/-
+**RCLike.norm_I** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：norm_I : ‖(I : K)‖ = if (I : K) = 0 then 0 else 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem norm_I : ‖(I : K)‖ = if (I : K) = 0 then 0 else 1 := by
   grind [norm_I_of_ne_zero, norm_eq_zero]
-
-/--
-theorem `re_eq_norm_of_mul_conj` / 定理 `re_eq_norm_of_mul_conj`
-
-English:
-theorem re_eq_norm_of_mul_conj
-  given: (x : K)
-  statement: re (x * conj x) = ‖x * conj x‖
-  proof: by
-  rw [mul_conj]; rw [← ofReal_pow]; simp [-map_pow]
-
-中文:
-定理 re_eq_norm_of_mul_conj
-  条件: (x : K)
-  结论: re (x * conj x) = ‖x * conj x‖
-  证明: by
-  rw [mul_conj]; rw [← ofReal_pow]; simp [-map_pow]
-
-Depends on / 依赖: map_pow, mul_conj, ofReal_pow
+/-
+**RCLike.re_eq_norm_of_mul_conj** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：re_eq_norm_of_mul_conj (x : K) : re (x * conj x) = ‖x * conj x‖
+参数：x : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.mul_conj`：mul_conj (z : K) : z * conj z = ‖z‖ ^ 2
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.ofReal_pow`：ofReal_pow (r : Real) (n : Nat) : ((r ^ n : Real) : K
+) = (r : K) ^ n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `RCLike.ofReal_re`：ofReal_re : forall r : Real, re (r : K) = r
+· 使用定理 `norm_algebraMap'`：norm_algebraMap' [NormOneClass 𝕜'] (x : 𝕜) : ‖algebraM
+ap 𝕜 𝕜' x‖ = ‖x‖
+· 使用定理 `NormedDivisionRing.to_normOneClass`：∀ {α : Type u_2} [inst : NormedDivis
+ionRing α], NormOneClass α
+· 使用定理 `norm_pow`：norm_pow (a : α) : forall n : Nat, ‖a ^ n‖ = ‖a‖ ^ n
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `norm_norm`：∀ {E : Type u_5} [inst : SeminormedAddCommGroup E] (x : E), ‖
+‖x‖‖ = ‖x‖
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem re_eq_norm_of_mul_conj (x : K) : re (x * conj x) = ‖x * conj x‖ := by
-  rw [mul_conj]; rw [← ofReal_pow]; simp [-map_pow]
-
-/--
-theorem `norm_sq_re_add_conj` / 定理 `norm_sq_re_add_conj`
-
-English:
-theorem norm_sq_re_add_conj
-  given: (x : K)
-  statement: ‖x + conj x‖ ^ 2 = re (x + conj x) ^ 2
-  proof: by
-  rw [add_conj]; rw [← ofReal_ofNat]; rw [← ofReal_mul]; rw [norm_ofReal]; rw [sq_abs]; rw [ofReal_re]
-
-中文:
-定理 norm_sq_re_add_conj
-  条件: (x : K)
-  结论: ‖x + conj x‖ ^ 2 = re (x + conj x) ^ 2
-  证明: by
-  rw [add_conj]; rw [← ofReal_ofNat]; rw [← ofReal_mul]; rw [norm_ofReal]; rw [sq_abs]; rw [ofReal_re]
-
-Depends on / 依赖: add_conj, norm_ofReal, ofReal_mul, ofReal_ofNat, ofReal_re, sq_abs
+  rw [mul_conj, ← ofReal_pow]; simp [-map_pow]
+/-
+**RCLike.norm_sq_re_add_conj** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：norm_sq_re_add_conj (x : K) : ‖x + conj x‖ ^ 2 = re (x + conj x) ^ 2
+参数：x : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.add_conj`：add_conj (z : K) : z + conj z = 2 * re z
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.ofReal_ofNat`：ofReal_ofNat (n : Nat) [n.AtLeastTwo] : ((ofNat(n) 
+: Real) : K) = ofNat(n)
+· 使用定理 `RCLike.ofReal_mul`：ofReal_mul (r s : Real) : ((r * s : Real) : K) = r * 
+s
+· 使用定理 `RCLike.norm_ofReal`：norm_ofReal (r : Real) : ‖(r : K)‖ = |r|
+· 使用定理 `sq_abs`：∀ {α : Type u_1} [inst : Ring α] [inst_1 : LinearOrder α] (a : α
+), |a| ^ 2 = a ^ 2
+· 使用定理 `RCLike.ofReal_re`：ofReal_re : forall r : Real, re (r : K) = r
 -/
 theorem norm_sq_re_add_conj (x : K) : ‖x + conj x‖ ^ 2 = re (x + conj x) ^ 2 := by
-  rw [add_conj]; rw [← ofReal_ofNat]; rw [← ofReal_mul]; rw [norm_ofReal]; rw [sq_abs]; rw [ofReal_re]
-
-/--
-theorem `norm_sq_re_conj_add` / 定理 `norm_sq_re_conj_add`
-
-English:
-theorem norm_sq_re_conj_add
-  given: (x : K)
-  statement: ‖conj x + x‖ ^ 2 = re (conj x + x) ^ 2
-  proof: by
-  rw [add_comm]; rw [norm_sq_re_add_conj]
-
-中文:
-定理 norm_sq_re_conj_add
-  条件: (x : K)
-  结论: ‖conj x + x‖ ^ 2 = re (conj x + x) ^ 2
-  证明: by
-  rw [add_comm]; rw [norm_sq_re_add_conj]
-
-Depends on / 依赖: add_comm, norm_sq_re_add_conj
+  rw [add_conj, ← ofReal_ofNat, ← ofReal_mul, norm_ofReal, sq_abs, ofReal_re]
+/-
+**RCLike.norm_sq_re_conj_add** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：norm_sq_re_conj_add (x : K) : ‖conj x + x‖ ^ 2 = re (conj x + x) ^ 2
+参数：x : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `RCLike.norm_sq_re_add_conj`：norm_sq_re_add_conj (x : K) : ‖x + conj x‖ ^
+ 2 = re (x + conj x) ^ 2
 -/
 theorem norm_sq_re_conj_add (x : K) : ‖conj x + x‖ ^ 2 = re (conj x + x) ^ 2 := by
-  rw [add_comm]; rw [norm_sq_re_add_conj]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NormSMulClass Int K
-  body: by
-    rw [zsmul_eq_mul]; rw [norm_mul]; rw [← ofReal_intCast]; rw [norm_ofReal]; rw [Int.norm_eq_abs]
-
-中文:
-实例 :
-  签名: NormSMul类 整数 K
-  定义体: by
-    rw [zsmul_eq_mul]; rw [norm_mul]; rw [← ofReal_intCast]; rw [norm_ofReal]; rw [Int.norm_eq_abs]
-
-Depends on / 依赖: Int.norm_eq_abs, norm_eq_abs, norm_mul, norm_ofReal, ofReal_intCast, zsmul_eq_mul
+  rw [add_comm, norm_sq_re_add_conj]
+/-
+**RCLike.** 是 Mathlib 中的一个实例，位于命名空间 `RCLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : NormSMulClass Int K where
+instance : NormSMulClass ℤ K where
   norm_smul r x := by
-    rw [zsmul_eq_mul]; rw [norm_mul]; rw [← ofReal_intCast]; rw [norm_ofReal]; rw [Int.norm_eq_abs]
+    rw [zsmul_eq_mul, norm_mul, ← ofReal_intCast, norm_ofReal, Int.norm_eq_abs]
 
+/-! ### Cauchy sequences -/
 
-/--
-theorem `isCauSeq_re` / 定理 `isCauSeq_re`
+/-
+**RCLike.isCauSeq_re** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：isCauSeq_re (f : CauSeq K norm) : IsCauSeq abs fun n => re (f n)
+参数：f : CauSeq K norm。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `RCLike.abs_re_le_norm`：abs_re_le_norm (z : K) : |re z| <= ‖z‖
+· 使用定理 `CauSeq.cauchy`：cauchy (f : CauSeq β abv) : forall {ε}, 0 < ε -> exists i
+, forall j >= i, abv (f j - f i) < ε
 
-English:
-theorem isCauSeq_re
-  given: (f : CauSeq K norm)
-  statement: IsCauSeq abs fun n => re (f n)
-  proof: fun _ ε0 =>
-  (f.cauchy ε0).imp fun i H j ij =>
-    lt_of_le_of_lt (by simpa only [map_sub] using abs_re_le_norm (f j - f i)) (H _ ij)
-
-中文:
-定理 isCauSeq_re
-  条件: (f : CauSeq K norm)
-  结论: IsCauSeq abs fun n => re (f n)
-  证明: fun _ ε0 =>
-  (f.cauchy ε0).imp fun i H j ij =>
-    lt_of_le_of_lt (by simpa only [map_sub] using abs_re_le_norm (f j - f i)) (H _ ij)
+--- 原说明 ---
+### Cauchy sequences
 -/
 theorem isCauSeq_re (f : CauSeq K norm) : IsCauSeq abs fun n => re (f n) := fun _ ε0 =>
   (f.cauchy ε0).imp fun i H j ij =>
     lt_of_le_of_lt (by simpa only [map_sub] using abs_re_le_norm (f j - f i)) (H _ ij)
-
-/--
-theorem `isCauSeq_im` / 定理 `isCauSeq_im`
-
-English:
-theorem isCauSeq_im
-  given: (f : CauSeq K norm)
-  statement: IsCauSeq abs fun n => im (f n)
-  proof: fun _ ε0 =>
-  (f.cauchy ε0).imp fun i H j ij =>
-    lt_of_le_of_lt (by simpa only [map_sub] using abs_im_le_norm (f j - f i)) (H _ ij)
-
-中文:
-定理 isCauSeq_im
-  条件: (f : CauSeq K norm)
-  结论: IsCauSeq abs fun n => im (f n)
-  证明: fun _ ε0 =>
-  (f.cauchy ε0).imp fun i H j ij =>
-    lt_of_le_of_lt (by simpa only [map_sub] using abs_im_le_norm (f j - f i)) (H _ ij)
+/-
+**RCLike.isCauSeq_im** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：isCauSeq_im (f : CauSeq K norm) : IsCauSeq abs fun n => im (f n)
+参数：f : CauSeq K norm。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `RCLike.abs_im_le_norm`：abs_im_le_norm (z : K) : |im z| <= ‖z‖
+· 使用定理 `CauSeq.cauchy`：cauchy (f : CauSeq β abv) : forall {ε}, 0 < ε -> exists i
+, forall j >= i, abv (f j - f i) < ε
 -/
 theorem isCauSeq_im (f : CauSeq K norm) : IsCauSeq abs fun n => im (f n) := fun _ ε0 =>
   (f.cauchy ε0).imp fun i H j ij =>
     lt_of_le_of_lt (by simpa only [map_sub] using abs_im_le_norm (f j - f i)) (H _ ij)
 
-/--
-Definition of `cauSeqRe` / `cauSeqRe` 的定义
+/-- The real part of a K Cauchy sequence, as a real Cauchy sequence. -/
+/-
+**RCLike.cauSeqRe** 是 Mathlib 中的一个定义，位于命名空间 `RCLike`。
+形式化陈述：cauSeqRe (f : CauSeq K norm) : CauSeq Real abs
+参数：f : CauSeq K norm。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.isCauSeq_re`：isCauSeq_re (f : CauSeq K norm) : IsCauSeq abs fun n
+ => re (f n)
 
-English:
-definition cauSeqRe
-  signature: (f : CauSeq K norm)
-  body: ⟨_, isCauSeq_re f⟩
-
-中文:
-定义 cauSeqRe
-  签名: (f : CauSeq K norm)
-  定义体: ⟨_, isCauSeq_re f⟩
-
-Depends on / 依赖: isCauSeq_re
+--- 原说明 ---
+The real part of a K Cauchy sequence, as a real Cauchy sequence.
 -/
-noncomputable def cauSeqRe (f : CauSeq K norm) : CauSeq Real abs :=
+noncomputable def cauSeqRe (f : CauSeq K norm) : CauSeq ℝ abs :=
   ⟨_, isCauSeq_re f⟩
 
-/--
-Definition of `cauSeqIm` / `cauSeqIm` 的定义
+/-- The imaginary part of a K Cauchy sequence, as a real Cauchy sequence. -/
+/-
+**RCLike.cauSeqIm** 是 Mathlib 中的一个定义，位于命名空间 `RCLike`。
+形式化陈述：cauSeqIm (f : CauSeq K norm) : CauSeq Real abs
+参数：f : CauSeq K norm。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.isCauSeq_im`：isCauSeq_im (f : CauSeq K norm) : IsCauSeq abs fun n
+ => im (f n)
 
-English:
-definition cauSeqIm
-  signature: (f : CauSeq K norm)
-  body: ⟨_, isCauSeq_im f⟩
-
-中文:
-定义 cauSeqIm
-  签名: (f : CauSeq K norm)
-  定义体: ⟨_, isCauSeq_im f⟩
-
-Depends on / 依赖: isCauSeq_im
+--- 原说明 ---
+The imaginary part of a K Cauchy sequence, as a real Cauchy sequence.
 -/
-noncomputable def cauSeqIm (f : CauSeq K norm) : CauSeq Real abs :=
+noncomputable def cauSeqIm (f : CauSeq K norm) : CauSeq ℝ abs :=
   ⟨_, isCauSeq_im f⟩
-
-/--
-theorem `isCauSeq_norm` / 定理 `isCauSeq_norm`
-
-English:
-theorem isCauSeq_norm
-  given: {f : Nat -> K} (hf : IsCauSeq norm f)
-  statement: IsCauSeq abs (norm ∘ f)
-  proof: fun ε ε0 =>
-  let ⟨i, hi⟩ := hf ε ε0
-  ⟨i, fun j hj => lt_of_le_of_lt (abs_norm_sub_norm_le _ _) (hi j hj)⟩
-
-中文:
-定理 isCauSeq_norm
-  条件: {f : 自然数 -> K} (hf : IsCauSeq norm f)
-  结论: IsCauSeq abs (norm ∘ f)
-  证明: fun ε ε0 =>
-  let ⟨i, hi⟩ := hf ε ε0
-  ⟨i, fun j hj => lt_of_le_of_lt (abs_norm_sub_norm_le _ _) (hi j hj)⟩
+/-
+**RCLike.isCauSeq_norm** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：isCauSeq_norm {f : Nat -> K} (hf : IsCauSeq norm f) : IsCauSeq abs (norm ∘
+ f)
+参数：hf : IsCauSeq norm f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `abs_norm_sub_norm_le`：∀ {E : Type u_5} [inst : SeminormedAddCommGroup E]
+ (a b : E), |‖a‖ - ‖b‖| ≤ ‖a - b‖
 -/
-theorem isCauSeq_norm {f : Nat -> K} (hf : IsCauSeq norm f) : IsCauSeq abs (norm ∘ f) := fun ε ε0 =>
+theorem isCauSeq_norm {f : ℕ → K} (hf : IsCauSeq norm f) : IsCauSeq abs (norm ∘ f) := fun ε ε0 =>
   let ⟨i, hi⟩ := hf ε ε0
   ⟨i, fun j hj => lt_of_le_of_lt (abs_norm_sub_norm_le _ _) (hi j hj)⟩
-
-/--
-lemma `I_mem_skewAdjoint` / 引理 `I_mem_skewAdjoint`
-
-English:
-lemma I_mem_skewAdjoint
-  statement: I in skewAdjoint K
-  proof: by simp [skewAdjoint.mem_iff]
-
-中文:
-引理 I_mem_skewAdjoint
-  结论: I in skewAdjoint K
-  证明: by simp [skewAdjoint.mem_iff]
-
-Depends on / 依赖: mem_iff, skewAdjoint, skewAdjoint.mem_iff
+/-
+**RCLike.I_mem_skewAdjoint** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：I_mem_skewAdjoint : I in skewAdjoint K
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.conj_I`：conj_I : conj (I : K) = -I
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma I_mem_skewAdjoint : I in skewAdjoint K := by simp [skewAdjoint.mem_iff]
+lemma I_mem_skewAdjoint : I ∈ skewAdjoint K := by simp [skewAdjoint.mem_iff]
 
 end RCLike
 
@@ -4030,97 +3378,47 @@ variable {A : Type*} [AddCommGroup A] [StarAddMonoid A] [Module K A] [StarModule
 
 open RCLike
 
-/--
-lemma `IsSelfAdjoint.I_smul_mem_skewAdjoint` / 引理 `IsSelfAdjoint.I_smul_mem_skewAdjoint`
-
-English:
-lemma IsSelfAdjoint.I_smul_mem_skewAdjoint
-  given: (h : IsSelfAdjoint a)
-  proof: h.smul_mem_skewAdjoint I_mem_skewAdjoint
-
-中文:
-引理 IsSelfAdjoint.I_smul_mem_skewAdjoint
-  条件: (h : IsSelfAdjoint a)
-  证明: h.smul_mem_skewAdjoint I_mem_skewAdjoint
-
-Depends on / 依赖: I_mem_skewAdjoint, h.smul_mem_skewAdjoint, smul_mem_skewAdjoint
+/-
+**IsSelfAdjoint.I_smul_mem_skewAdjoint** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsSelfAdjoint.I_smul_mem_skewAdjoint (h : IsSelfAdjoint a) : (I : K) • a i
+n skewAdjoint A
+参数：h : IsSelfAdjoint a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsSelfAdjoint.smul_mem_skewAdjoint`：IsSelfAdjoint.smul_mem_skewAdjoint [
+Ring R] [AddCommGroup A] [Module R A] [StarAddMonoid R] [StarAddMonoid A] [StarM
+odule R A] {r : R} (hr :…
+· 使用引理 `RCLike.I_mem_skewAdjoint`：I_mem_skewAdjoint : I in skewAdjoint K
 -/
 lemma IsSelfAdjoint.I_smul_mem_skewAdjoint (h : IsSelfAdjoint a) :
-    (I : K) • a in skewAdjoint A := h.smul_mem_skewAdjoint I_mem_skewAdjoint
-
-/--
-lemma `IsSelfAdjoint.I_smul_of_mem_skewAdjoint` / 引理 `IsSelfAdjoint.I_smul_of_mem_skewAdjoint`
-
-English:
-lemma IsSelfAdjoint.I_smul_of_mem_skewAdjoint
-  given: (h : a in skewAdjoint A)
-  proof: isSelfAdjoint_smul_of_mem_skewAdjoint I_mem_skewAdjoint h
-
-中文:
-引理 IsSelfAdjoint.I_smul_of_mem_skewAdjoint
-  条件: (h : a in skewAdjoint A)
-  证明: isSelfAdjoint_smul_of_mem_skewAdjoint I_mem_skewAdjoint h
-
-Depends on / 依赖: I_mem_skewAdjoint, isSelfAdjoint_smul_of_mem_skewAdjoint
+    (I : K) • a ∈ skewAdjoint A := h.smul_mem_skewAdjoint I_mem_skewAdjoint
+/-
+**IsSelfAdjoint.I_smul_of_mem_skewAdjoint** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsSelfAdjoint.I_smul_of_mem_skewAdjoint (h : a in skewAdjoint A) : IsSelfA
+djoint ((I : K) • a)
+参数：h : a in skewAdjoint A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isSelfAdjoint_smul_of_mem_skewAdjoint`：isSelfAdjoint_smul_of_mem_skewAdj
+oint [Ring R] [AddCommGroup A] [Module R A] [StarAddMonoid R] [StarAddMonoid A] 
+[StarModule R A] {r : R} (h…
+· 使用引理 `RCLike.I_mem_skewAdjoint`：I_mem_skewAdjoint : I in skewAdjoint K
 -/
-lemma IsSelfAdjoint.I_smul_of_mem_skewAdjoint (h : a in skewAdjoint A) :
+lemma IsSelfAdjoint.I_smul_of_mem_skewAdjoint (h : a ∈ skewAdjoint A) :
     IsSelfAdjoint ((I : K) • a) := isSelfAdjoint_smul_of_mem_skewAdjoint I_mem_skewAdjoint h
 
 end
 
 section Instances
 
-/--
-Instance `Real.instRCLike` / 实例 `Real.instRCLike`
-
-English:
-instance Real.instRCLike
-  signature: : RCLike Real where
-  body: AddMonoidHom.id Real
-  im := 0
-  I := 0
-  I_re_ax := by simp only [map_zero]
-  I_mul_I_ax := Or.intro_left _ rfl
-  re_add_im_ax z := by
-    simp only [add_zero, mul_zero, Algebra.algebraMap_self, RingHom.id_apply, AddMonoidHom.id_apply]
-  ofReal_re_ax _ := rfl
-  ofReal_im_ax _ := rfl
-  mul_re_ax z w := by simp only [sub_zero, mul_zero, AddMonoidHom.zero_apply, AddMonoidHom.id_apply]
-  mul_im_ax z w := by simp only [add_zero, zero_mul, mul_zero, AddMonoidHom.zero_apply]
-  conj_re_ax z := by simp only [starRingEnd_apply, star_id_of_comm]
-  conj_im_ax _ := by simp only [neg_zero, AddMonoidHom.zero_apply]
-  conj_I_ax := by simp only [map_zero, neg_zero]
-  norm_sq_eq_def_ax z := by simp only [sq, Real.norm_eq_abs, ← abs_mul, abs_mul_self z, add_zero,
-    mul_zero, AddMonoidHom.zero_apply, AddMonoidHom.id_apply]
-  mul_im_I_ax _ := by simp only [mul_zero, AddMonoidHom.zero_apply]
-  le_iff_re_im := (and_iff_left rfl).symm
-
-中文:
-实例 实数.instRCLike
-  签名: : RCLike 实数 where
-  定义体: AddMonoidHom.id Real
-  im := 0
-  I := 0
-  I_re_ax := by simp only [map_zero]
-  I_mul_I_ax := Or.intro_left _ rfl
-  re_add_im_ax z := by
-    simp only [add_zero, mul_zero, Algebra.algebraMap_self, RingHom.id_apply, AddMonoidHom.id_apply]
-  ofReal_re_ax _ := rfl
-  ofReal_im_ax _ := rfl
-  mul_re_ax z w := by simp only [sub_zero, mul_zero, AddMonoidHom.zero_apply, AddMonoidHom.id_apply]
-  mul_im_ax z w := by simp only [add_zero, zero_mul, mul_zero, AddMonoidHom.zero_apply]
-  conj_re_ax z := by simp only [starRingEnd_apply, star_id_of_comm]
-  conj_im_ax _ := by simp only [neg_zero, AddMonoidHom.zero_apply]
-  conj_I_ax := by simp only [map_zero, neg_zero]
-  norm_sq_eq_def_ax z := by simp only [sq, Real.norm_eq_abs, ← abs_mul, abs_mul_self z, add_zero,
-    mul_zero, AddMonoidHom.zero_apply, AddMonoidHom.id_apply]
-  mul_im_I_ax _ := by simp only [mul_zero, AddMonoidHom.zero_apply]
-  le_iff_re_im := (and_iff_left rfl).symm
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.id
+/-
+**Real.instRCLike** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Real.instRCLike : RCLike Real where re
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable instance Real.instRCLike : RCLike Real where
-  re := AddMonoidHom.id Real
+noncomputable instance Real.instRCLike : RCLike ℝ where
+  re := AddMonoidHom.id ℝ
   im := 0
   I := 0
   I_re_ax := by simp only [map_zero]
@@ -4148,75 +3446,83 @@ variable [NormedField E] [CharZero E] [NormedSpace K E]
 include K
 
 variable (K) in
-/--
-lemma `norm_nnqsmul` / 引理 `norm_nnqsmul`
-
-English:
-lemma norm_nnqsmul
-  given: (q : Rat>=0) (x : E)
-  statement: ‖q • x‖ = q • ‖x‖
-  proof: by
-  simpa [NNRat.cast_smul_eq_nnqsmul] using! norm_smul (q : K) x
-
-中文:
-引理 norm_nnqsmul
-  条件: (q : 有理数>=0) (x : E)
-  结论: ‖q • x‖ = q • ‖x‖
-  证明: by
-  simpa [NNRat.cast_smul_eq_nnqsmul] using! norm_smul (q : K) x
-
-Depends on / 依赖: NNRat.cast_smul_eq_nnqsmul, cast_smul_eq_nnqsmul, norm_smul
+/-
+**RCLike.norm_nnqsmul** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：norm_nnqsmul (q : Rat>=0) (x : E) : ‖q • x‖ = q • ‖x‖
+参数：q : Rat>=0；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `NNRat.cast_smul_eq_nnqsmul`：NNRat.cast_smul_eq_nnqsmul (R : Type*) [Divi
+sionSemiring R] [MulAction R M] [MulAction Rat>=0 M] [IsScalarTower Rat>=0 R M] 
+(q : Rat>=0) (x …
+· 使用定理 `RCLike.charZero_rclike`：∀ {K : Type u_1} [inst : RCLike K], CharZero K
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `RCLike.norm_nnratCast`：norm_nnratCast (q : Rat>=0) : ‖(q : K)‖ = q
+· 使用引理 `norm_smul`：norm_smul [Norm α] [Norm β] [SMul α β] [NormSMulClass α β] (r
+ : α) (x : β) : ‖r • x‖ = ‖r‖ * ‖x‖
+· 使用定理 `NormedSpace.toNormSMulClass`：∀ {𝕜 : Type u_1} {E : Type u_3} [inst : Nor
+medField 𝕜] [inst_1 : SeminormedAddCommGroup E] [inst_2 : NormedSpace 𝕜 E],   No
+rmSMulClass 𝕜 E
 -/
-lemma norm_nnqsmul (q : Rat>=0) (x : E) : ‖q • x‖ = q • ‖x‖ := by
+lemma norm_nnqsmul (q : ℚ≥0) (x : E) : ‖q • x‖ = q • ‖x‖ := by
   simpa [NNRat.cast_smul_eq_nnqsmul] using! norm_smul (q : K) x
 
 variable (K) in
-/--
-lemma `nnnorm_nnqsmul` / 引理 `nnnorm_nnqsmul`
-
-English:
-lemma nnnorm_nnqsmul
-  given: (q : Rat>=0) (x : E)
-  statement: ‖q • x‖₊ = q • ‖x‖₊
-  proof: by
-  simpa [NNRat.cast_smul_eq_nnqsmul] using! nnnorm_smul (q : K) x
-
-@[bound]
-
-中文:
-引理 nnnorm_nnqsmul
-  条件: (q : 有理数>=0) (x : E)
-  结论: ‖q • x‖₊ = q • ‖x‖₊
-  证明: by
-  simpa [NNRat.cast_smul_eq_nnqsmul] using! nnnorm_smul (q : K) x
-
-@[bound]
-
-Depends on / 依赖: NNRat.cast_smul_eq_nnqsmul, cast_smul_eq_nnqsmul, nnnorm_smul
+/-
+**RCLike.nnnorm_nnqsmul** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：nnnorm_nnqsmul (q : Rat>=0) (x : E) : ‖q • x‖₊ = q • ‖x‖₊
+参数：q : Rat>=0；x : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `NNRat.cast_smul_eq_nnqsmul`：NNRat.cast_smul_eq_nnqsmul (R : Type*) [Divi
+sionSemiring R] [MulAction R M] [MulAction Rat>=0 M] [IsScalarTower Rat>=0 R M] 
+(q : Rat>=0) (x …
+· 使用定理 `RCLike.charZero_rclike`：∀ {K : Type u_1} [inst : RCLike K], CharZero K
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `RCLike.nnnorm_nnratCast`：nnnorm_nnratCast (q : Rat>=0) : ‖(q : K)‖₊ = q
+· 使用定理 `nnnorm_smul`：nnnorm_smul (r : α) (x : β) : ‖r • x‖₊ = ‖r‖₊ * ‖x‖₊
+· 使用定理 `NormedSpace.toNormSMulClass`：∀ {𝕜 : Type u_1} {E : Type u_3} [inst : Nor
+medField 𝕜] [inst_1 : SeminormedAddCommGroup E] [inst_2 : NormedSpace 𝕜 E],   No
+rmSMulClass 𝕜 E
 -/
-lemma nnnorm_nnqsmul (q : Rat>=0) (x : E) : ‖q • x‖₊ = q • ‖x‖₊ := by
+lemma nnnorm_nnqsmul (q : ℚ≥0) (x : E) : ‖q • x‖₊ = q • ‖x‖₊ := by
   simpa [NNRat.cast_smul_eq_nnqsmul] using! nnnorm_smul (q : K) x
 
 @[bound]
-/--
-lemma `norm_expect_le` / 引理 `norm_expect_le`
-
-English:
-lemma norm_expect_le
-  given: {ι : Type*} {s : Finset ι} {f : ι -> E}
-  statement: ‖𝔼 i in s, f i‖ <= 𝔼 i in s, ‖f i‖
-  proof: Finset.le_expect_of_subadditive norm_zero norm_add_le fun _ _ => by rw [norm_nnqsmul K]
-
-中文:
-引理 norm_expect_le
-  条件: {ι : 类型} {s : 有限集 ι} {f : ι -> E}
-  结论: ‖𝔼 i in s, f i‖ <= 𝔼 i in s, ‖f i‖
-  证明: Finset.le_expect_of_subadditive norm_zero norm_add_le fun _ _ => by rw [norm_nnqsmul K]
-
-Depends on / 依赖: Finset, Finset.le_expect_of_subadditive, le_expect_of_subadditive, norm_add_le, norm_nnqsmul, norm_zero
+/-
+**RCLike.norm_expect_le** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：norm_expect_le {ι : Type*} {s : Finset ι} {f : ι -> E} : ‖𝔼 i in s, f i‖ <
+= 𝔼 i in s, ‖f i‖
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.le_expect_of_subadditive`：le_expect_of_subadditive (h_zero : m 0 
+= 0) (h_add : forall a b, m (a + b) <= m a + m b) (h_div : forall (n : Nat) a, m
+ (a /Rat n) = m a /Ra…
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `PosSMulStrictMono.toPosSMulMono`：∀ {α : Type u_1} {β : Type u_2} [inst :
+ Zero α] [inst_1 : Zero β] [inst_2 : SMulWithZero α β] [inst_3 : PartialOrder α]
+   [inst_4 : PartialO…
+· 使用定理 `norm_zero`：∀ {E : Type u_5} [inst : SeminormedAddGroup E], ‖0‖ = 0
+· 使用定理 `norm_add_le`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a b : E), ‖
+a + b‖ ≤ ‖a‖ + ‖b‖
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `RCLike.norm_nnqsmul`：norm_nnqsmul (q : Rat>=0) (x : E) : ‖q • x‖ = q • ‖
+x‖
 -/
-lemma norm_expect_le {ι : Type*} {s : Finset ι} {f : ι -> E} : ‖𝔼 i in s, f i‖ <= 𝔼 i in s, ‖f i‖ :=
-  Finset.le_expect_of_subadditive norm_zero norm_add_le fun _ _ => by rw [norm_nnqsmul K]
+lemma norm_expect_le {ι : Type*} {s : Finset ι} {f : ι → E} : ‖𝔼 i ∈ s, f i‖ ≤ 𝔼 i ∈ s, ‖f i‖ :=
+  Finset.le_expect_of_subadditive norm_zero norm_add_le fun _ _ ↦ by rw [norm_nnqsmul K]
 
 end NormedField
 
@@ -4225,32 +3531,24 @@ section Order
 open scoped ComplexOrder
 variable {z w : K}
 
-/--
-theorem `lt_iff_re_im` / 定理 `lt_iff_re_im`
-
-English:
-theorem lt_iff_re_im
-  statement: z < w ↔ re z < re w ∧ im z = im w
-  proof: by
-  simp_rw [lt_iff_le_and_ne, @RCLike.le_iff_re_im K]
-  constructor
-  · rintro ⟨⟨hr, hi⟩, heq⟩
-    exact ⟨⟨hr, mt (fun hreq => ext hreq hi) heq⟩, hi⟩
-  · rintro ⟨⟨hr, hrn⟩, hi⟩
-    exact ⟨⟨hr, hi⟩, ne_of_apply_ne _ hrn⟩
-
-中文:
-定理 lt_iff_re_im
-  结论: z < w ↔ re z < re w ∧ im z = im w
-  证明: by
-  simp_rw [lt_iff_le_and_ne, @RCLike.le_iff_re_im K]
-  constructor
-  · rintro ⟨⟨hr, hi⟩, heq⟩
-    exact ⟨⟨hr, mt (fun hreq => ext hreq hi) heq⟩, hi⟩
-  · rintro ⟨⟨hr, hrn⟩, hi⟩
-    exact ⟨⟨hr, hi⟩, ne_of_apply_ne _ hrn⟩
-
-Depends on / 依赖: RCLike, RCLike.le_iff_re_im, le_iff_re_im, lt_iff_le_and_ne, ne_of_apply_ne, simp_rw
+/-
+**RCLike.lt_iff_re_im** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：lt_iff_re_im : z < w ↔ re z < re w ∧ im z = im w
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `RCLike.le_iff_re_im`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K] {
+z w : K},   z ≤ w ↔ RCLike.re z ≤ RCLike.re w ∧ RCLike.im z = RCLike.im w
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `RCLike.ext`：ext {z w : K} (hre : re z = re w) (him : im z = im w) : z = 
+w
+· 使用定理 `ne_of_apply_ne`：∀ {α : Sort u_1} {β : Sort u_2} (f : α → β) {x y : α}, f
+ x ≠ f y → x ≠ y
 -/
 theorem lt_iff_re_im : z < w ↔ re z < re w ∧ im z = im w := by
   simp_rw [lt_iff_le_and_ne, @RCLike.le_iff_re_im K]
@@ -4259,571 +3557,571 @@ theorem lt_iff_re_im : z < w ↔ re z < re w ∧ im z = im w := by
     exact ⟨⟨hr, mt (fun hreq => ext hreq hi) heq⟩, hi⟩
   · rintro ⟨⟨hr, hrn⟩, hi⟩
     exact ⟨⟨hr, hi⟩, ne_of_apply_ne _ hrn⟩
-
-/--
-theorem `nonneg_iff` / 定理 `nonneg_iff`
-
-English:
-theorem nonneg_iff
-  statement: 0 <= z ↔ 0 <= re z ∧ im z = 0
-  proof: by
-  simpa only [map_zero, eq_comm] using le_iff_re_im (z := 0) (w := z)
-
-中文:
-定理 nonneg_iff
-  结论: 0 <= z ↔ 0 <= re z ∧ im z = 0
-  证明: by
-  simpa only [map_zero, eq_comm] using le_iff_re_im (z := 0) (w := z)
-
-Depends on / 依赖: eq_comm, le_iff_re_im, map_zero
+/-
+**RCLike.nonneg_iff** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：nonneg_iff : 0 <= z ↔ 0 <= re z ∧ im z = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `RCLike.le_iff_re_im`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K] {
+z w : K},   z ≤ w ↔ RCLike.re z ≤ RCLike.re w ∧ RCLike.im z = RCLike.im w
 -/
-theorem nonneg_iff : 0 <= z ↔ 0 <= re z ∧ im z = 0 := by
+theorem nonneg_iff : 0 ≤ z ↔ 0 ≤ re z ∧ im z = 0 := by
   simpa only [map_zero, eq_comm] using le_iff_re_im (z := 0) (w := z)
-
-/--
-theorem `pos_iff` / 定理 `pos_iff`
-
-English:
-theorem pos_iff
-  statement: 0 < z ↔ 0 < re z ∧ im z = 0
-  proof: by
-  simpa only [map_zero, eq_comm] using lt_iff_re_im (z := 0) (w := z)
-
-中文:
-定理 pos_iff
-  结论: 0 < z ↔ 0 < re z ∧ im z = 0
-  证明: by
-  simpa only [map_zero, eq_comm] using lt_iff_re_im (z := 0) (w := z)
-
-Depends on / 依赖: eq_comm, lt_iff_re_im, map_zero
+/-
+**RCLike.pos_iff** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：pos_iff : 0 < z ↔ 0 < re z ∧ im z = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `RCLike.lt_iff_re_im`：lt_iff_re_im : z < w ↔ re z < re w ∧ im z = im w
 -/
 theorem pos_iff : 0 < z ↔ 0 < re z ∧ im z = 0 := by
   simpa only [map_zero, eq_comm] using lt_iff_re_im (z := 0) (w := z)
-
-/--
-theorem `nonpos_iff` / 定理 `nonpos_iff`
-
-English:
-theorem nonpos_iff
-  statement: z <= 0 ↔ re z <= 0 ∧ im z = 0
-  proof: by
-  simpa only [map_zero] using le_iff_re_im (z := z) (w := 0)
-
-中文:
-定理 nonpos_iff
-  结论: z <= 0 ↔ re z <= 0 ∧ im z = 0
-  证明: by
-  simpa only [map_zero] using le_iff_re_im (z := z) (w := 0)
-
-Depends on / 依赖: le_iff_re_im, map_zero
+/-
+**RCLike.nonpos_iff** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：nonpos_iff : z <= 0 ↔ re z <= 0 ∧ im z = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `RCLike.le_iff_re_im`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K] {
+z w : K},   z ≤ w ↔ RCLike.re z ≤ RCLike.re w ∧ RCLike.im z = RCLike.im w
 -/
-theorem nonpos_iff : z <= 0 ↔ re z <= 0 ∧ im z = 0 := by
+theorem nonpos_iff : z ≤ 0 ↔ re z ≤ 0 ∧ im z = 0 := by
   simpa only [map_zero] using le_iff_re_im (z := z) (w := 0)
-
-/--
-theorem `neg_iff` / 定理 `neg_iff`
-
-English:
-theorem neg_iff
-  statement: z < 0 ↔ re z < 0 ∧ im z = 0
-  proof: by
-  simpa only [map_zero] using lt_iff_re_im (z := z) (w := 0)
-
-中文:
-定理 neg_iff
-  结论: z < 0 ↔ re z < 0 ∧ im z = 0
-  证明: by
-  simpa only [map_zero] using lt_iff_re_im (z := z) (w := 0)
-
-Depends on / 依赖: lt_iff_re_im, map_zero
+/-
+**RCLike.neg_iff** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：neg_iff : z < 0 ↔ re z < 0 ∧ im z = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `RCLike.lt_iff_re_im`：lt_iff_re_im : z < w ↔ re z < re w ∧ im z = im w
 -/
 theorem neg_iff : z < 0 ↔ re z < 0 ∧ im z = 0 := by
   simpa only [map_zero] using lt_iff_re_im (z := z) (w := 0)
-
-/--
-lemma `nonneg_iff_exists_ofReal` / 引理 `nonneg_iff_exists_ofReal`
-
-English:
-lemma nonneg_iff_exists_ofReal
-  statement: 0 <= z ↔ exists x >= (0 : Real), x = z
-  proof: by
-  simp_rw [nonneg_iff (K := K), ext_iff (K := K)]; aesop
-
-中文:
-引理 nonneg_iff_存在_of实数
-  结论: 0 <= z ↔ 存在 x >= (0 : 实数), x = z
-  证明: by
-  simp_rw [nonneg_iff (K := K), ext_iff (K := K)]; aesop
-
-Depends on / 依赖: ext_iff, nonneg_iff, simp_rw
+/-
+**RCLike.nonneg_iff_exists_ofReal** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：nonneg_iff_exists_ofReal : 0 <= z ↔ exists x >= (0 : Real), x = z
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.nonneg_iff`：nonneg_iff : 0 <= z ↔ 0 <= re z ∧ im z = 0
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `RCLike.ext_iff`：ext_iff {z w : K} : z = w ↔ re z = re w ∧ im z = im w
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `RCLike.ofReal_re`：ofReal_re : forall r : Real, re (r : K) = r
+· 使用定理 `RCLike.ofReal_im`：ofReal_im : forall r : Real, im (r : K) = 0
+· 使用定理 `Exists.elim`：∀ {α : Sort u} {p : α → Prop} {b : Prop}, (∃ x, p x) → (∀ (
+a : α), p a → b) → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 -/
-lemma nonneg_iff_exists_ofReal : 0 <= z ↔ exists x >= (0 : Real), x = z := by
+lemma nonneg_iff_exists_ofReal : 0 ≤ z ↔ ∃ x ≥ (0 : ℝ), x = z := by
   simp_rw [nonneg_iff (K := K), ext_iff (K := K)]; aesop
-
-/--
-lemma `pos_iff_exists_ofReal` / 引理 `pos_iff_exists_ofReal`
-
-English:
-lemma pos_iff_exists_ofReal
-  statement: 0 < z ↔ exists x > (0 : Real), x = z
-  proof: by
-  simp_rw [pos_iff (K := K), ext_iff (K := K)]; aesop
-
-中文:
-引理 pos_iff_存在_of实数
-  结论: 0 < z ↔ 存在 x > (0 : 实数), x = z
-  证明: by
-  simp_rw [pos_iff (K := K), ext_iff (K := K)]; aesop
-
-Depends on / 依赖: ext_iff, pos_iff, simp_rw
+/-
+**RCLike.pos_iff_exists_ofReal** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：pos_iff_exists_ofReal : 0 < z ↔ exists x > (0 : Real), x = z
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.pos_iff`：pos_iff : 0 < z ↔ 0 < re z ∧ im z = 0
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `RCLike.ext_iff`：ext_iff {z w : K} : z = w ↔ re z = re w ∧ im z = im w
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `RCLike.ofReal_re`：ofReal_re : forall r : Real, re (r : K) = r
+· 使用定理 `RCLike.ofReal_im`：ofReal_im : forall r : Real, im (r : K) = 0
+· 使用定理 `Exists.elim`：∀ {α : Sort u} {p : α → Prop} {b : Prop}, (∃ x, p x) → (∀ (
+a : α), p a → b) → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 -/
-lemma pos_iff_exists_ofReal : 0 < z ↔ exists x > (0 : Real), x = z := by
+lemma pos_iff_exists_ofReal : 0 < z ↔ ∃ x > (0 : ℝ), x = z := by
   simp_rw [pos_iff (K := K), ext_iff (K := K)]; aesop
-
-/--
-lemma `nonpos_iff_exists_ofReal` / 引理 `nonpos_iff_exists_ofReal`
-
-English:
-lemma nonpos_iff_exists_ofReal
-  statement: z <= 0 ↔ exists x <= (0 : Real), x = z
-  proof: by
-  simp_rw [nonpos_iff (K := K), ext_iff (K := K)]; aesop
-
-中文:
-引理 nonpos_iff_存在_of实数
-  结论: z <= 0 ↔ 存在 x <= (0 : 实数), x = z
-  证明: by
-  simp_rw [nonpos_iff (K := K), ext_iff (K := K)]; aesop
-
-Depends on / 依赖: ext_iff, nonpos_iff, simp_rw
+/-
+**RCLike.nonpos_iff_exists_ofReal** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：nonpos_iff_exists_ofReal : z <= 0 ↔ exists x <= (0 : Real), x = z
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.nonpos_iff`：nonpos_iff : z <= 0 ↔ re z <= 0 ∧ im z = 0
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `RCLike.ext_iff`：ext_iff {z w : K} : z = w ↔ re z = re w ∧ im z = im w
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `RCLike.ofReal_re`：ofReal_re : forall r : Real, re (r : K) = r
+· 使用定理 `RCLike.ofReal_im`：ofReal_im : forall r : Real, im (r : K) = 0
+· 使用定理 `Exists.elim`：∀ {α : Sort u} {p : α → Prop} {b : Prop}, (∃ x, p x) → (∀ (
+a : α), p a → b) → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 -/
-lemma nonpos_iff_exists_ofReal : z <= 0 ↔ exists x <= (0 : Real), x = z := by
+lemma nonpos_iff_exists_ofReal : z ≤ 0 ↔ ∃ x ≤ (0 : ℝ), x = z := by
   simp_rw [nonpos_iff (K := K), ext_iff (K := K)]; aesop
-
-/--
-lemma `neg_iff_exists_ofReal` / 引理 `neg_iff_exists_ofReal`
-
-English:
-lemma neg_iff_exists_ofReal
-  statement: z < 0 ↔ exists x < (0 : Real), x = z
-  proof: by
+/-
+**RCLike.neg_iff_exists_ofReal** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：neg_iff_exists_ofReal : z < 0 ↔ exists x < (0 : Real), x = z
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.neg_iff`：neg_iff : z < 0 ↔ re z < 0 ∧ im z = 0
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `RCLike.ext_iff`：ext_iff {z w : K} : z = w ↔ re z = re w ∧ im z = im w
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `RCLike.ofReal_re`：ofReal_re : forall r : Real, re (r : K) = r
+· 使用定理 `RCLike.ofReal_im`：ofReal_im : forall r : Real, im (r : K) = 0
+· 使用定理 `Exists.elim`：∀ {α : Sort u} {p : α → Prop} {b : Prop}, (∃ x, p x) → (∀ (
+a : α), p a → b) → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+-/
+lemma neg_iff_exists_ofReal : z < 0 ↔ ∃ x < (0 : ℝ), x = z := by
   simp_rw [neg_iff (K := K), ext_iff (K := K)]; aesop
 
 @[simp, norm_cast]
-
-中文:
-引理 neg_iff_存在_of实数
-  结论: z < 0 ↔ 存在 x < (0 : 实数), x = z
-  证明: by
-  simp_rw [neg_iff (K := K), ext_iff (K := K)]; aesop
-
-@[simp, norm_cast]
-
-Depends on / 依赖: ext_iff, neg_iff, simp_rw
+/-
+**RCLike.ofReal_le_ofReal** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_le_ofReal {x y : Real} : (x : K) <= (y : K) ↔ x <= y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.le_iff_re_im`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K] {
+z w : K},   z ≤ w ↔ RCLike.re z ≤ RCLike.re w ∧ RCLike.im z = RCLike.im w
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `RCLike.ofReal_re`：ofReal_re : forall r : Real, re (r : K) = r
+· 使用定理 `RCLike.ofReal_im`：ofReal_im : forall r : Real, im (r : K) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma neg_iff_exists_ofReal : z < 0 ↔ exists x < (0 : Real), x = z := by
-  simp_rw [neg_iff (K := K), ext_iff (K := K)]; aesop
-
-@[simp, norm_cast]
-/--
-lemma `ofReal_le_ofReal` / 引理 `ofReal_le_ofReal`
-
-English:
-lemma ofReal_le_ofReal
-  given: {x y : Real}
-  statement: (x : K) <= (y : K) ↔ x <= y
-  proof: by
+lemma ofReal_le_ofReal {x y : ℝ} : (x : K) ≤ (y : K) ↔ x ≤ y := by
   rw [le_iff_re_im]
   simp
 
 @[simp, norm_cast]
-
-中文:
-引理 of实数_le_of实数
-  条件: {x y : 实数}
-  结论: (x : K) <= (y : K) ↔ x <= y
-  证明: by
-  rw [le_iff_re_im]
-  simp
-
-@[simp, norm_cast]
-
-Depends on / 依赖: le_iff_re_im
+/-
+**RCLike.ofReal_lt_ofReal** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_lt_ofReal {x y : Real} : (x : K) < (y : K) ↔ x < y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.lt_iff_re_im`：lt_iff_re_im : z < w ↔ re z < re w ∧ im z = im w
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `RCLike.ofReal_re`：ofReal_re : forall r : Real, re (r : K) = r
+· 使用定理 `RCLike.ofReal_im`：ofReal_im : forall r : Real, im (r : K) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma ofReal_le_ofReal {x y : Real} : (x : K) <= (y : K) ↔ x <= y := by
-  rw [le_iff_re_im]
-  simp
-
-@[simp, norm_cast]
-/--
-lemma `ofReal_lt_ofReal` / 引理 `ofReal_lt_ofReal`
-
-English:
-lemma ofReal_lt_ofReal
-  given: {x y : Real}
-  statement: (x : K) < (y : K) ↔ x < y
-  proof: by
+lemma ofReal_lt_ofReal {x y : ℝ} : (x : K) < (y : K) ↔ x < y := by
   rw [lt_iff_re_im]
   simp
 
 @[simp, norm_cast]
-
-中文:
-引理 of实数_lt_of实数
-  条件: {x y : 实数}
-  结论: (x : K) < (y : K) ↔ x < y
-  证明: by
-  rw [lt_iff_re_im]
-  simp
-
-@[simp, norm_cast]
-
-Depends on / 依赖: lt_iff_re_im
+/-
+**RCLike.ofReal_nonneg** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_nonneg {x : Real} : 0 <= (x : K) ↔ 0 <= x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.ofReal_zero`：ofReal_zero : ((0 : Real) : K) = 0
+· 使用引理 `RCLike.ofReal_le_ofReal`：ofReal_le_ofReal {x y : Real} : (x : K) <= (y :
+ K) ↔ x <= y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma ofReal_lt_ofReal {x y : Real} : (x : K) < (y : K) ↔ x < y := by
-  rw [lt_iff_re_im]
-  simp
+lemma ofReal_nonneg {x : ℝ} : 0 ≤ (x : K) ↔ 0 ≤ x := by
+  rw [← ofReal_zero, ofReal_le_ofReal]
 
 @[simp, norm_cast]
-/--
-lemma `ofReal_nonneg` / 引理 `ofReal_nonneg`
-
-English:
-lemma ofReal_nonneg
-  given: {x : Real}
-  statement: 0 <= (x : K) ↔ 0 <= x
-  proof: by
-  rw [← ofReal_zero]; rw [ofReal_le_ofReal]
-
-@[simp, norm_cast]
-
-中文:
-引理 of实数_nonneg
-  条件: {x : 实数}
-  结论: 0 <= (x : K) ↔ 0 <= x
-  证明: by
-  rw [← ofReal_zero]; rw [ofReal_le_ofReal]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: ofReal_le_ofReal, ofReal_zero
+/-
+**RCLike.ofReal_nonpos** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_nonpos {x : Real} : (x : K) <= 0 ↔ x <= 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.ofReal_zero`：ofReal_zero : ((0 : Real) : K) = 0
+· 使用引理 `RCLike.ofReal_le_ofReal`：ofReal_le_ofReal {x y : Real} : (x : K) <= (y :
+ K) ↔ x <= y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma ofReal_nonneg {x : Real} : 0 <= (x : K) ↔ 0 <= x := by
-  rw [← ofReal_zero]; rw [ofReal_le_ofReal]
+lemma ofReal_nonpos {x : ℝ} : (x : K) ≤ 0 ↔ x ≤ 0 := by
+  rw [← ofReal_zero, ofReal_le_ofReal]
 
 @[simp, norm_cast]
-/--
-lemma `ofReal_nonpos` / 引理 `ofReal_nonpos`
-
-English:
-lemma ofReal_nonpos
-  given: {x : Real}
-  statement: (x : K) <= 0 ↔ x <= 0
-  proof: by
-  rw [← ofReal_zero]; rw [ofReal_le_ofReal]
-
-@[simp, norm_cast]
-
-中文:
-引理 of实数_nonpos
-  条件: {x : 实数}
-  结论: (x : K) <= 0 ↔ x <= 0
-  证明: by
-  rw [← ofReal_zero]; rw [ofReal_le_ofReal]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: ofReal_le_ofReal, ofReal_zero
+/-
+**RCLike.ofReal_pos** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_pos {x : Real} : 0 < (x : K) ↔ 0 < x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.ofReal_zero`：ofReal_zero : ((0 : Real) : K) = 0
+· 使用引理 `RCLike.ofReal_lt_ofReal`：ofReal_lt_ofReal {x y : Real} : (x : K) < (y : 
+K) ↔ x < y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma ofReal_nonpos {x : Real} : (x : K) <= 0 ↔ x <= 0 := by
-  rw [← ofReal_zero]; rw [ofReal_le_ofReal]
+lemma ofReal_pos {x : ℝ} : 0 < (x : K) ↔ 0 < x := by
+  rw [← ofReal_zero, ofReal_lt_ofReal]
 
 @[simp, norm_cast]
-/--
-lemma `ofReal_pos` / 引理 `ofReal_pos`
-
-English:
-lemma ofReal_pos
-  given: {x : Real}
-  statement: 0 < (x : K) ↔ 0 < x
-  proof: by
-  rw [← ofReal_zero]; rw [ofReal_lt_ofReal]
-
-@[simp, norm_cast]
-
-中文:
-引理 of实数_pos
-  条件: {x : 实数}
-  结论: 0 < (x : K) ↔ 0 < x
-  证明: by
-  rw [← ofReal_zero]; rw [ofReal_lt_ofReal]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: ofReal_lt_ofReal, ofReal_zero
+/-
+**RCLike.ofReal_lt_zero** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_lt_zero {x : Real} : (x : K) < 0 ↔ x < 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.ofReal_zero`：ofReal_zero : ((0 : Real) : K) = 0
+· 使用引理 `RCLike.ofReal_lt_ofReal`：ofReal_lt_ofReal {x y : Real} : (x : K) < (y : 
+K) ↔ x < y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma ofReal_pos {x : Real} : 0 < (x : K) ↔ 0 < x := by
-  rw [← ofReal_zero]; rw [ofReal_lt_ofReal]
-
-@[simp, norm_cast]
-/--
-lemma `ofReal_lt_zero` / 引理 `ofReal_lt_zero`
-
-English:
-lemma ofReal_lt_zero
-  given: {x : Real}
-  statement: (x : K) < 0 ↔ x < 0
-  proof: by
-  rw [← ofReal_zero]; rw [ofReal_lt_ofReal]
-
-中文:
-引理 of实数_lt_zero
-  条件: {x : 实数}
-  结论: (x : K) < 0 ↔ x < 0
-  证明: by
-  rw [← ofReal_zero]; rw [ofReal_lt_ofReal]
-
-Depends on / 依赖: ofReal_lt_ofReal, ofReal_zero
--/
-lemma ofReal_lt_zero {x : Real} : (x : K) < 0 ↔ x < 0 := by
-  rw [← ofReal_zero]; rw [ofReal_lt_ofReal]
-
-/--
-lemma `norm_le_re_iff_eq_norm` / 引理 `norm_le_re_iff_eq_norm`
-
-English:
-lemma norm_le_re_iff_eq_norm
-  given: {z : K}
-  proof: by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · have h' : ‖z‖ = re z := (le_antisymm (re_le_norm z) h).symm
-    rw [h']; rw [re_eq_self_of_le h]
-  · rw [h]
-    simp
-
-中文:
-引理 norm_le_re_iff_eq_norm
-  条件: {z : K}
-  证明: by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · have h' : ‖z‖ = re z := (le_antisymm (re_le_norm z) h).symm
-    rw [h']; rw [re_eq_self_of_le h]
-  · rw [h]
-    simp
-
-Depends on / 依赖: le_antisymm, re_eq_self_of_le, re_le_norm
+lemma ofReal_lt_zero {x : ℝ} : (x : K) < 0 ↔ x < 0 := by
+  rw [← ofReal_zero, ofReal_lt_ofReal]
+/-
+**RCLike.norm_le_re_iff_eq_norm** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：norm_le_re_iff_eq_norm {z : K} : ‖z‖ <= re z ↔ z = ‖z‖
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `RCLike.re_le_norm`：re_le_norm (z : K) : re z <= ‖z‖
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.re_eq_self_of_le`：re_eq_self_of_le {a : K} (h : ‖a‖ <= re a) : (r
+e a : K) = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `norm_algebraMap'`：norm_algebraMap' [NormOneClass 𝕜'] (x : 𝕜) : ‖algebraM
+ap 𝕜 𝕜' x‖ = ‖x‖
+· 使用定理 `NormedDivisionRing.to_normOneClass`：∀ {α : Type u_2} [inst : NormedDivis
+ionRing α], NormOneClass α
+· 使用定理 `norm_norm`：∀ {E : Type u_5} [inst : SeminormedAddCommGroup E] (x : E), ‖
+‖x‖‖ = ‖x‖
+· 使用定理 `RCLike.ofReal_re`：ofReal_re : forall r : Real, re (r : K) = r
 -/
 lemma norm_le_re_iff_eq_norm {z : K} :
-    ‖z‖ <= re z ↔ z = ‖z‖ := by
-  refine ⟨fun h => ?_, fun h => ?_⟩
+    ‖z‖ ≤ re z ↔ z = ‖z‖ := by
+  refine ⟨fun h ↦ ?_, fun h ↦ ?_⟩
   · have h' : ‖z‖ = re z := (le_antisymm (re_le_norm z) h).symm
-    rw [h']; rw [re_eq_self_of_le h]
+    rw [h', re_eq_self_of_le h]
   · rw [h]
     simp
-
-/--
-lemma `re_le_neg_norm_iff_eq_neg_norm` / 引理 `re_le_neg_norm_iff_eq_neg_norm`
-
-English:
-lemma re_le_neg_norm_iff_eq_neg_norm
-  given: {z : K}
-  proof: by
-  simpa [neg_eq_iff_eq_neg, le_neg] using norm_le_re_iff_eq_norm (z := -z)
-
-中文:
-引理 re_le_neg_norm_iff_eq_neg_norm
-  条件: {z : K}
-  证明: by
-  simpa [neg_eq_iff_eq_neg, le_neg] using norm_le_re_iff_eq_norm (z := -z)
-
-Depends on / 依赖: le_neg, neg_eq_iff_eq_neg, norm_le_re_iff_eq_norm
+/-
+**RCLike.re_le_neg_norm_iff_eq_neg_norm** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：re_le_neg_norm_iff_eq_neg_norm {z : K} : re z <= -‖z‖ ↔ z = -‖z‖
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `norm_neg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), ‖-a‖ =
+ ‖a‖
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用引理 `RCLike.norm_le_re_iff_eq_norm`：norm_le_re_iff_eq_norm {z : K} : ‖z‖ <= r
+e z ↔ z = ‖z‖
 -/
 lemma re_le_neg_norm_iff_eq_neg_norm {z : K} :
-    re z <= -‖z‖ ↔ z = -‖z‖ := by
+    re z ≤ -‖z‖ ↔ z = -‖z‖ := by
   simpa [neg_eq_iff_eq_neg, le_neg] using norm_le_re_iff_eq_norm (z := -z)
-
-/--
-lemma `norm_of_nonneg'` / 引理 `norm_of_nonneg'`
-
-English:
-lemma norm_of_nonneg'
-  given: {x : K} (hx : 0 <= x)
-  statement: ‖x‖ = x
-  proof: by
-  rw [eq_comm]; rw [← norm_le_re_iff_eq_norm]; rw [← sqrt_normSq_eq_norm]; rw [normSq_apply]
-  simp [nonneg_iff.mp hx]
-
-中文:
-引理 norm_of_nonneg'
-  条件: {x : K} (hx : 0 <= x)
-  结论: ‖x‖ = x
-  证明: by
-  rw [eq_comm]; rw [← norm_le_re_iff_eq_norm]; rw [← sqrt_normSq_eq_norm]; rw [normSq_apply]
-  simp [nonneg_iff.mp hx]
-
-Depends on / 依赖: eq_comm, nonneg_iff, nonneg_iff.mp, normSq_apply, norm_le_re_iff_eq_norm, sqrt_normSq_eq_norm
+/-
+**RCLike.norm_of_nonneg'** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：norm_of_nonneg' {x : K} (hx : 0 <= x) : ‖x‖ = x
+参数：hx : 0 <= x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `RCLike.norm_le_re_iff_eq_norm`：norm_le_re_iff_eq_norm {z : K} : ‖z‖ <= r
+e z ↔ z = ‖z‖
+· 使用定理 `RCLike.sqrt_normSq_eq_norm`：sqrt_normSq_eq_norm {z : K} : √(normSq z) = 
+‖z‖
+· 使用定理 `RCLike.normSq_apply`：normSq_apply (z : K) : normSq z = re z * re z + im 
+z * im z
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `RCLike.nonneg_iff`：nonneg_iff : 0 <= z ↔ 0 <= re z ∧ im z = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Real.sqrt_mul_self`：sqrt_mul_self (h : 0 <= x) : √(x * x) = x
 -/
-lemma norm_of_nonneg' {x : K} (hx : 0 <= x) : ‖x‖ = x := by
-  rw [eq_comm]; rw [← norm_le_re_iff_eq_norm]; rw [← sqrt_normSq_eq_norm]; rw [normSq_apply]
+lemma norm_of_nonneg' {x : K} (hx : 0 ≤ x) : ‖x‖ = x := by
+  rw [eq_comm, ← norm_le_re_iff_eq_norm, ← sqrt_normSq_eq_norm, normSq_apply]
   simp [nonneg_iff.mp hx]
-
-/--
-lemma `re_nonneg_of_nonneg` / 引理 `re_nonneg_of_nonneg`
-
-English:
-lemma re_nonneg_of_nonneg
-  given: {x : K} (hx : IsSelfAdjoint x)
-  statement: 0 <= re x ↔ 0 <= x
-  proof: by
+/-
+**RCLike.re_nonneg_of_nonneg** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：re_nonneg_of_nonneg {x : K} (hx : IsSelfAdjoint x) : 0 <= re x ↔ 0 <= x
+参数：hx : IsSelfAdjoint x。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.nonneg_iff`：nonneg_iff : 0 <= z ↔ 0 <= re z ∧ im z = 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `RCLike.conj_eq_iff_im`：conj_eq_iff_im {z : K} : conj z = z ↔ im z = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+lemma re_nonneg_of_nonneg {x : K} (hx : IsSelfAdjoint x) : 0 ≤ re x ↔ 0 ≤ x := by
   simp [nonneg_iff (K := K), conj_eq_iff_im.mp hx]
 
 @[gcongr]
-
-中文:
-引理 re_nonneg_of_nonneg
-  条件: {x : K} (hx : IsSelfAdjoint x)
-  结论: 0 <= re x ↔ 0 <= x
-  证明: by
-  simp [nonneg_iff (K := K), conj_eq_iff_im.mp hx]
-
-@[gcongr]
-
-Depends on / 依赖: conj_eq_iff_im, conj_eq_iff_im.mp, nonneg_iff
+/-
+**RCLike.re_le_re** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：re_le_re {x y : K} (h : x <= y) : re x <= re y
+参数：h : x <= y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.le_iff_re_im`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K] {
+z w : K},   z ≤ w ↔ RCLike.re z ≤ RCLike.re w ∧ RCLike.im z = RCLike.im w
 -/
-lemma re_nonneg_of_nonneg {x : K} (hx : IsSelfAdjoint x) : 0 <= re x ↔ 0 <= x := by
-  simp [nonneg_iff (K := K), conj_eq_iff_im.mp hx]
-
-@[gcongr]
-/--
-lemma `re_le_re` / 引理 `re_le_re`
-
-English:
-lemma re_le_re
-  given: {x y : K} (h : x <= y)
-  statement: re x <= re y
-  proof: by
+lemma re_le_re {x y : K} (h : x ≤ y) : re x ≤ re y := by
   rw [RCLike.le_iff_re_im] at h
   exact h.1
-
-中文:
-引理 re_le_re
-  条件: {x y : K} (h : x <= y)
-  结论: re x <= re y
-  证明: by
-  rw [RCLike.le_iff_re_im] at h
-  exact h.1
-
-Depends on / 依赖: RCLike, RCLike.le_iff_re_im, le_iff_re_im
+/-
+**RCLike.re_monotone** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：re_monotone : Monotone (re : K -> Real)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `RCLike.re_le_re`：re_le_re {x y : K} (h : x <= y) : re x <= re y
 -/
-lemma re_le_re {x y : K} (h : x <= y) : re x <= re y := by
-  rw [RCLike.le_iff_re_im] at h
-  exact h.1
-
-/--
-lemma `re_monotone` / 引理 `re_monotone`
-
-English:
-lemma re_monotone
-  statement: Monotone (re : K -> Real)
-  proof: fun _ _ => re_le_re
-
-中文:
-引理 re_monotone
-  结论: 递增 (re : K -> 实数)
-  证明: fun _ _ => re_le_re
-
-Depends on / 依赖: re_le_re
--/
-lemma re_monotone : Monotone (re : K -> Real) :=
+lemma re_monotone : Monotone (re : K → ℝ) :=
   fun _ _ => re_le_re
-
-/--
-lemma `inv_pos_of_pos` / 引理 `inv_pos_of_pos`
-
-English:
-lemma inv_pos_of_pos
-  given: (hz : 0 < z)
-  statement: 0 < z⁻¹
-  proof: by
-  rw [pos_iff_exists_ofReal] at hz
-  obtain ⟨x, hx, hx'⟩ := hz
-  rw [← hx']; rw [← ofReal_inv]; rw [ofReal_pos]
-  exact inv_pos_of_pos hx
-
-中文:
-引理 inv_pos_of_pos
-  条件: (hz : 0 < z)
-  结论: 0 < z⁻¹
-  证明: by
-  rw [pos_iff_exists_ofReal] at hz
-  obtain ⟨x, hx, hx'⟩ := hz
-  rw [← hx']; rw [← ofReal_inv]; rw [ofReal_pos]
-  exact inv_pos_of_pos hx
+/-
+**RCLike.inv_pos_of_pos** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：∀ {K : Type u_1} [inst : RCLike K] {z : K}, 0 < z → 0 < z⁻¹
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `RCLike.pos_iff_exists_ofReal`：pos_iff_exists_ofReal : 0 < z ↔ exists x >
+ (0 : Real), x = z
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.ofReal_inv`：ofReal_inv (r : Real) : ((r⁻¹ : Real) : K) = (r : K)⁻
+¹
+· 使用引理 `RCLike.ofReal_pos`：ofReal_pos {x : Real} : 0 < (x : K) ↔ 0 < x
+· 使用定理 `inv_pos_of_pos`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] [inst_1 : Pa
+rtialOrder G₀] [PosMulReflectLT G₀] {a : G₀}, 0 < a → 0 < a⁻¹
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
 -/
 protected lemma inv_pos_of_pos (hz : 0 < z) : 0 < z⁻¹ := by
   rw [pos_iff_exists_ofReal] at hz
   obtain ⟨x, hx, hx'⟩ := hz
-  rw [← hx']; rw [← ofReal_inv]; rw [ofReal_pos]
+  rw [← hx', ← ofReal_inv, ofReal_pos]
   exact inv_pos_of_pos hx
-
-/--
-lemma `inv_pos` / 引理 `inv_pos`
-
-English:
-lemma inv_pos
-  statement: 0 < z⁻¹ ↔ 0 < z
-  proof: by
-  refine ⟨fun h => ?_, fun h => RCLike.inv_pos_of_pos h⟩
-  rw [← inv_inv z]
-  exact RCLike.inv_pos_of_pos h
-
-中文:
-引理 inv_pos
-  结论: 0 < z⁻¹ ↔ 0 < z
-  证明: by
-  refine ⟨fun h => ?_, fun h => RCLike.inv_pos_of_pos h⟩
-  rw [← inv_inv z]
-  exact RCLike.inv_pos_of_pos h
+/-
+**RCLike.inv_pos** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：∀ {K : Type u_1} [inst : RCLike K] {z : K}, 0 < z⁻¹ ↔ 0 < z
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `RCLike.inv_pos_of_pos`：∀ {K : Type u_1} [inst : RCLike K] {z : K}, 0 < z
+ → 0 < z⁻¹
 -/
 protected lemma inv_pos : 0 < z⁻¹ ↔ 0 < z := by
   refine ⟨fun h => ?_, fun h => RCLike.inv_pos_of_pos h⟩
   rw [← inv_inv z]
   exact RCLike.inv_pos_of_pos h
 
-/--
-lemma `toStarOrderedRing` / 引理 `toStarOrderedRing`
+/-- With `z ≤ w` iff `w - z` is real and nonnegative, `ℝ` and `ℂ` are star ordered rings.
+(That is, a star ring in which the nonnegative elements are those of the form `star z * z`.)
 
-English:
-lemma toStarOrderedRing
-  statement: StarOrderedRing K
-  proof: StarOrderedRing.of_nonneg_iff'
-    (h_add := fun {x y} hxy z => by
-      rw [RCLike.le_iff_re_im] at *
-      simpa [map_add, add_le_add_iff_left, add_right_inj] using hxy)
-    (h_nonneg_iff := fun x => by
-      rw [nonneg_iff]
-      refine ⟨fun h => ⟨√(re x), by simp [ext_iff (K := K), h.1, h.2]⟩, ?_⟩
-      rintro ⟨s, rfl⟩
-      simp [mul_comm, mul_self_nonneg, add_nonneg])
+Note this is only an instance with `open scoped ComplexOrder`. -/
+/-
+**RCLike.toStarOrderedRing** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：toStarOrderedRing : StarOrderedRing K
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `StarOrderedRing.of_nonneg_iff'`：of_nonneg_iff' [NonUnitalRing R] [Partia
+lOrder R] [StarRing R] (h_add : forall {x y : R}, x <= y -> forall z, z + x <= z
+ + y) (h_nonneg_iff …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.le_iff_re_im`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K] {
+z w : K},   z ≤ w ↔ RCLike.re z ≤ RCLike.re w ∧ RCLike.im z = RCLike.im w
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `RCLike.nonneg_iff`：nonneg_iff : 0 <= z ↔ 0 <= re z ∧ im z = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `RCLike.conj_ofReal`：conj_ofReal (r : Real) : conj (r : K) = (r : K)
+· 使用定理 `RCLike.ext_iff`：ext_iff {z w : K} : z = w ↔ re z = re w ∧ im z = im w
+· 使用定理 `RCLike.mul_re`：mul_re : forall z w : K, re (z * w) = re z * re w - im z 
+* im w
+· 使用定理 `RCLike.ofReal_re`：ofReal_re : forall r : Real, re (r : K) = r
+· 使用定理 `Real.mul_self_sqrt`：mul_self_sqrt (h : 0 <= x) : √x * √x = x
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `RCLike.ofReal_im`：ofReal_im : forall r : Real, im (r : K) = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `RCLike.mul_im`：mul_im : forall z w : K, im (z * w) = re z * im w + im z 
+* re w
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+（共 39 条，此处仅展示前 30 条）
 
-scoped[ComplexOrder] attribute [instance] RCLike.toStarOrderedRing
+--- 原说明 ---
+With `z ≤ w` iff `w - z` is real and nonnegative, `ℝ` and `ℂ` are star ordered r
+ings.
+(That is, a star ring in which the nonnegative elements are those of the form `s
+tar z * z`.)
 
-中文:
-引理 toStarOrderedRing
-  结论: StarOrdered环 K
-  证明: StarOrderedRing.of_nonneg_iff'
-    (h_add := fun {x y} hxy z => by
-      rw [RCLike.le_iff_re_im] at *
-      simpa [map_add, add_le_add_iff_left, add_right_inj] using hxy)
-    (h_nonneg_iff := fun x => by
-      rw [nonneg_iff]
-      refine ⟨fun h => ⟨√(re x), by simp [ext_iff (K := K), h.1, h.2]⟩, ?_⟩
-      rintro ⟨s, rfl⟩
-      simp [mul_comm, mul_self_nonneg, add_nonneg])
-
-scoped[ComplexOrder] attribute [instance] RCLike.toStarOrderedRing
-
-Depends on / 依赖: RCLike, RCLike.le_iff_re_im, StarOrderedRing, StarOrderedRing.of_nonneg_iff, add_le_add_iff_left, add_nonneg, add_right_inj, ext_iff, h_add, h_nonneg_iff, le_iff_re_im, map_add, mul_comm, mul_self_nonneg, nonneg_iff, of_nonneg_iff
+Note this is only an instance with `open scoped ComplexOrder`.
 -/
 lemma toStarOrderedRing : StarOrderedRing K :=
   StarOrderedRing.of_nonneg_iff'
@@ -4832,169 +4130,263 @@ lemma toStarOrderedRing : StarOrderedRing K :=
       simpa [map_add, add_le_add_iff_left, add_right_inj] using hxy)
     (h_nonneg_iff := fun x => by
       rw [nonneg_iff]
-      refine ⟨fun h => ⟨√(re x), by simp [ext_iff (K := K), h.1, h.2]⟩, ?_⟩
+      refine ⟨fun h ↦ ⟨√(re x), by simp [ext_iff (K := K), h.1, h.2]⟩, ?_⟩
       rintro ⟨s, rfl⟩
       simp [mul_comm, mul_self_nonneg, add_nonneg])
 
 scoped[ComplexOrder] attribute [instance] RCLike.toStarOrderedRing
-
-/--
-lemma `toZeroLEOneClass` / 引理 `toZeroLEOneClass`
-
-English:
-lemma toZeroLEOneClass
-  statement: ZeroLEOneClass K where
-  proof: by simp [@RCLike.le_iff_re_im K]
-
-scoped[ComplexOrder] attribute [instance] RCLike.toZeroLEOneClass
-
-中文:
-引理 toZeroLEOneClass
-  结论: ZeroLEOne类 K where
-  证明: by simp [@RCLike.le_iff_re_im K]
-
-scoped[ComplexOrder] attribute [instance] RCLike.toZeroLEOneClass
-
-Depends on / 依赖: RCLike, RCLike.le_iff_re_im, le_iff_re_im
+/-
+**RCLike.toZeroLEOneClass** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：toZeroLEOneClass : ZeroLEOneClass K where zero_le_one
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `RCLike.le_iff_re_im`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K] {
+z w : K},   z ≤ w ↔ RCLike.re z ≤ RCLike.re w ∧ RCLike.im z = RCLike.im w
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `RCLike.one_re`：one_re : re (1 : K) = 1
+· 使用定理 `RCLike.one_im`：one_im : im (1 : K) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 lemma toZeroLEOneClass : ZeroLEOneClass K where
   zero_le_one := by simp [@RCLike.le_iff_re_im K]
 
 scoped[ComplexOrder] attribute [instance] RCLike.toZeroLEOneClass
-
-/--
-lemma `toIsOrderedAddMonoid` / 引理 `toIsOrderedAddMonoid`
-
-English:
-lemma toIsOrderedAddMonoid
-  statement: IsOrderedAddMonoid K where
-  proof: add_le_add_left
-
-scoped[ComplexOrder] attribute [instance] RCLike.toIsOrderedAddMonoid
-
-中文:
-引理 toIsOrderedAddMonoid
-  结论: 是OrderedAdd幺半群 K where
-  证明: add_le_add_left
-
-scoped[ComplexOrder] attribute [instance] RCLike.toIsOrderedAddMonoid
-
-Depends on / 依赖: add_le_add_left
+/-
+**RCLike.toIsOrderedAddMonoid** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：toIsOrderedAddMonoid : IsOrderedAddMonoid K where add_le_add_left _ _
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_le_add_left`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] [i : Ad
+dRightMono α] {b c : α}, b ≤ c → ∀ (a : α), b + a ≤ c + a
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedCancelAddMonoid.toIsOrderedAddMonoid`：∀ {α : Type u_2} {inst : 
+AddCommMonoid α} {inst_1 : Preorder α} [self : IsOrderedCancelAddMonoid α],   Is
+OrderedAddMonoid α
+· 使用定理 `IsOrderedAddMonoid.toIsOrderedCancelAddMonoid`：∀ {α : Type u} [inst : Ad
+dCommGroup α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], IsOrderedCancelAddMo
+noid α
+· 使用定理 `StarOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} [inst : NonUnital
+Semiring R] [inst_1 : PartialOrder R] [inst_2 : StarRing R] [StarOrderedRing R],
+   IsOrderedAddMonoid R
+· 使用引理 `RCLike.toStarOrderedRing`：toStarOrderedRing : StarOrderedRing K
 -/
 lemma toIsOrderedAddMonoid : IsOrderedAddMonoid K where
   add_le_add_left _ _ := add_le_add_left
 
 scoped[ComplexOrder] attribute [instance] RCLike.toIsOrderedAddMonoid
 
-/--
-lemma `toIsStrictOrderedRing` / 引理 `toIsStrictOrderedRing`
+/-- With `z ≤ w` iff `w - z` is real and nonnegative, `ℝ` and `ℂ` are strictly ordered rings.
 
-English:
-lemma toIsStrictOrderedRing
-  statement: IsStrictOrderedRing K
-  proof: .of_mul_pos fun z w hz hw => by
-    rw [lt_iff_re_im]; rw [map_zero] at hz hw ⊢
-    simp [mul_re, mul_im, ← hz.2, ← hw.2, mul_pos hz.1 hw.1]
+Note this is only an instance with `open scoped ComplexOrder`. -/
+/-
+**RCLike.toIsStrictOrderedRing** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：toIsStrictOrderedRing : IsStrictOrderedRing K
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsStrictOrderedRing.of_mul_pos`：IsStrictOrderedRing.of_mul_pos [Ring R] 
+[PartialOrder R] [IsOrderedAddMonoid R] [ZeroLEOneClass R] [Nontrivial R] (mul_p
+os : forall a b : R,…
+· 使用引理 `RCLike.toIsOrderedAddMonoid`：toIsOrderedAddMonoid : IsOrderedAddMonoid K
+ where add_le_add_left _ _
+· 使用引理 `RCLike.toZeroLEOneClass`：toZeroLEOneClass : ZeroLEOneClass K where zero_
+le_one
+· 使用定理 `instNontrivialOfCharZero`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [
+CharZero α], Nontrivial α
+· 使用定理 `RCLike.charZero_rclike`：∀ {K : Type u_1} [inst : RCLike K], CharZero K
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.lt_iff_re_im`：lt_iff_re_im : z < w ↔ re z < re w ∧ im z = im w
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `RCLike.mul_re`：mul_re : forall z w : K, re (z * w) = re z * re w - im z 
+* im w
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `mul_pos`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 : Pr
+eorder α] [PosMulStrictMono α], 0 < a → 0 < b → 0 < a * b
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `RCLike.mul_im`：mul_im : forall z w : K, im (z * w) = re z * im w + im z 
+* re w
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 
-scoped[ComplexOrder] attribute [instance] RCLike.toIsStrictOrderedRing
+--- 原说明 ---
+With `z ≤ w` iff `w - z` is real and nonnegative, `ℝ` and `ℂ` are strictly order
+ed rings.
 
-中文:
-引理 toIsStrictOrderedRing
-  结论: 是StrictOrdered环 K
-  证明: .of_mul_pos fun z w hz hw => by
-    rw [lt_iff_re_im]; rw [map_zero] at hz hw ⊢
-    simp [mul_re, mul_im, ← hz.2, ← hw.2, mul_pos hz.1 hw.1]
-
-scoped[ComplexOrder] attribute [instance] RCLike.toIsStrictOrderedRing
-
-Depends on / 依赖: lt_iff_re_im, map_zero, mul_im, mul_pos, mul_re, of_mul_pos
+Note this is only an instance with `open scoped ComplexOrder`.
 -/
 lemma toIsStrictOrderedRing : IsStrictOrderedRing K :=
-  .of_mul_pos fun z w hz hw => by
-    rw [lt_iff_re_im]; rw [map_zero] at hz hw ⊢
+  .of_mul_pos fun z w hz hw ↦ by
+    rw [lt_iff_re_im, map_zero] at hz hw ⊢
     simp [mul_re, mul_im, ← hz.2, ← hw.2, mul_pos hz.1 hw.1]
 
 scoped[ComplexOrder] attribute [instance] RCLike.toIsStrictOrderedRing
-
-/--
-lemma `toPosMulReflectLT` / 引理 `toPosMulReflectLT`
-
-English:
-lemma toPosMulReflectLT
-  statement: PosMulReflectLT K where
-  proof: by
-    rintro ⟨x, hx⟩ y z hyz
-    dsimp at *
-    rw [RCLike.le_iff_re_im]; rw [map_zero]; rw [map_zero]; rw [eq_comm] at hx
-    obtain ⟨r, rfl⟩ := ((is_real_TFAE x).out 3 1).1 hx.2
-    simp only [RCLike.lt_iff_re_im (K := K), mul_re, ofReal_re, ofReal_im, zero_mul, sub_zero,
-      mul_im, add_zero, mul_eq_mul_left_iff] at hyz ⊢
-refine ⟨lt_of_mul_lt_mul_of_nonneg_left hyz.1 by simpa using hx, hyz.2.resolve_right ?_⟩
-    rintro rfl
-    simp at hyz
-
-scoped[ComplexOrder] attribute [instance] RCLike.toPosMulReflectLT
-
-中文:
-引理 toPosMulReflectLT
-  结论: 正乘反映严格偏序 K where
-  证明: by
-    rintro ⟨x, hx⟩ y z hyz
-    dsimp at *
-    rw [RCLike.le_iff_re_im]; rw [map_zero]; rw [map_zero]; rw [eq_comm] at hx
-    obtain ⟨r, rfl⟩ := ((is_real_TFAE x).out 3 1).1 hx.2
-    simp only [RCLike.lt_iff_re_im (K := K), mul_re, ofReal_re, ofReal_im, zero_mul, sub_zero,
-      mul_im, add_zero, mul_eq_mul_left_iff] at hyz ⊢
-refine ⟨lt_of_mul_lt_mul_of_nonneg_left hyz.1 by simpa using hx, hyz.2.resolve_right ?_⟩
-    rintro rfl
-    simp at hyz
-
-scoped[ComplexOrder] attribute [instance] RCLike.toPosMulReflectLT
-
-Depends on / 依赖: RCLike, RCLike.le_iff_re_im, RCLike.lt_iff_re_im, add_zero, eq_comm, is_real_TFAE, le_iff_re_im, lt_iff_re_im, lt_of_mul_lt_mul_of_nonneg_left, map_zero, mul_eq_mul_left_iff, mul_im, mul_re, ofReal_im, ofReal_re, resolve_right, sub_zero, zero_mul
+/-
+**RCLike.toPosMulReflectLT** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：toPosMulReflectLT : PosMulReflectLT K where elim
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.TFAE.out`：∀ {l : List Prop},   l.TFAE →     ∀ (n₁ n₂ : ℕ) {a b : Pr
+op},       autoParam (l[n₁]? = some a) List.TFAE.out._auto_1 → autoParam (l[n₂]?
+ = …
+· 使用定理 `RCLike.is_real_TFAE`：is_real_TFAE (z : K) : TFAE [conj z = z, exists r :
+ Real, (r : K) = z, ↑(re z) = z, im z = 0, IsSelfAdjoint z]
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `RCLike.le_iff_re_im`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K] {
+z w : K},   z ≤ w ↔ RCLike.re z ≤ RCLike.re w ∧ RCLike.im z = RCLike.im w
+· 使用定理 `RCLike.lt_iff_re_im`：lt_iff_re_im : z < w ↔ re z < re w ∧ im z = im w
+· 使用定理 `lt_of_mul_lt_mul_of_nonneg_left`：∀ {α : Type u_1} [inst : Mul α] [inst_1
+ : Zero α] [inst_2 : Preorder α] {a b c : α} [PosMulReflectLT α],   a * b < a * 
+c → 0 ≤ a → b < c
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `RCLike.mul_re`：mul_re : forall z w : K, re (z * w) = re z * re w - im z 
+* im w
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `RCLike.ofReal_re`：ofReal_re : forall r : Real, re (r : K) = r
+· 使用定理 `RCLike.ofReal_im`：ofReal_im : forall r : Real, im (r : K) = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `RCLike.mul_im`：mul_im : forall z w : K, im (z * w) = re z * im w + im z 
+* re w
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `Real.instIsDomain`：IsDomain ℝ
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+（共 34 条，此处仅展示前 30 条）
 -/
 lemma toPosMulReflectLT : PosMulReflectLT K where
   elim := by
     rintro ⟨x, hx⟩ y z hyz
     dsimp at *
-    rw [RCLike.le_iff_re_im]; rw [map_zero]; rw [map_zero]; rw [eq_comm] at hx
+    rw [RCLike.le_iff_re_im, map_zero, map_zero, eq_comm] at hx
     obtain ⟨r, rfl⟩ := ((is_real_TFAE x).out 3 1).1 hx.2
     simp only [RCLike.lt_iff_re_im (K := K), mul_re, ofReal_re, ofReal_im, zero_mul, sub_zero,
       mul_im, add_zero, mul_eq_mul_left_iff] at hyz ⊢
-refine ⟨lt_of_mul_lt_mul_of_nonneg_left hyz.1 by simpa using hx, hyz.2.resolve_right ?_⟩
+    refine ⟨lt_of_mul_lt_mul_of_nonneg_left hyz.1 <| by simpa using hx, hyz.2.resolve_right ?_⟩
     rintro rfl
     simp at hyz
 
 scoped[ComplexOrder] attribute [instance] RCLike.toPosMulReflectLT
-
-/--
-theorem `toIsStrictOrderedModule` / 定理 `toIsStrictOrderedModule`
-
-English:
-theorem toIsStrictOrderedModule
-  statement: IsStrictOrderedModule Real K where
-  proof: by
-    simpa [RCLike.lt_iff_re_im (K := K), smul_re, smul_im, hr, hr.ne'] using hab
-  smul_lt_smul_of_pos_right a ha r₁ r₂ hr := by
-    obtain ⟨hare, haim⟩ := RCLike.lt_iff_re_im.1 ha
-    simp_all [RCLike.lt_iff_re_im (K := K), smul_re, smul_im]
-
-scoped[ComplexOrder] attribute [instance] RCLike.toIsStrictOrderedModule
-
-中文:
-定理 toIsStrictOrderedModule
-  结论: 是StrictOrdered模 实数 K where
-  证明: by
-    simpa [RCLike.lt_iff_re_im (K := K), smul_re, smul_im, hr, hr.ne'] using hab
-  smul_lt_smul_of_pos_right a ha r₁ r₂ hr := by
-    obtain ⟨hare, haim⟩ := RCLike.lt_iff_re_im.1 ha
-    simp_all [RCLike.lt_iff_re_im (K := K), smul_re, smul_im]
-
-scoped[ComplexOrder] attribute [instance] RCLike.toIsStrictOrderedModule
-
-Depends on / 依赖: RCLike, RCLike.lt_iff_re_im, hr.ne, lt_iff_re_im, smul_im, smul_lt_smul_of_pos_right, smul_re
+/-
+**RCLike.toIsStrictOrderedModule** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：toIsStrictOrderedModule : IsStrictOrderedModule Real K where smul_lt_smul_
+of_pos_left r hr a b hab
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `RCLike.lt_iff_re_im`：lt_iff_re_im : z < w ↔ re z < re w ∧ im z = im w
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.smul_re`：smul_re (r : Real) (z : K) : re (r • z) = r * re z
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用引理 `RCLike.toPosMulReflectLT`：toPosMulReflectLT : PosMulReflectLT K where el
+im
+· 使用定理 `RCLike.smul_im`：smul_im (r : Real) (z : K) : im (r • z) = r * im z
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `Real.instIsDomain`：IsDomain ℝ
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `IsCancelMulZero.toIsRightCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} 
+{inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsRightCancelMulZero M₀
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
+· 使用定理 `MulPosReflectLE.toMulPosReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [MulPosReflectLE α], MulPosReflectLT α
+· 使用定理 `MulPosStrictMono.toMulPosReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [MulPosStrictMono α], MulPosReflectLE α
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
 -/
-theorem toIsStrictOrderedModule : IsStrictOrderedModule Real K where
+theorem toIsStrictOrderedModule : IsStrictOrderedModule ℝ K where
   smul_lt_smul_of_pos_left r hr a b hab := by
     simpa [RCLike.lt_iff_re_im (K := K), smul_re, smul_im, hr, hr.ne'] using hab
   smul_lt_smul_of_pos_right a ha r₁ r₂ hr := by
@@ -5002,37 +4394,65 @@ theorem toIsStrictOrderedModule : IsStrictOrderedModule Real K where
     simp_all [RCLike.lt_iff_re_im (K := K), smul_re, smul_im]
 
 scoped[ComplexOrder] attribute [instance] RCLike.toIsStrictOrderedModule
-
-/--
-theorem `ofReal_mul_pos_iff` / 定理 `ofReal_mul_pos_iff`
-
-English:
-theorem ofReal_mul_pos_iff
-  given: (x : Real) (z : K)
-  proof: by
-  simp only [pos_iff (K := K), neg_iff (K := K), re_ofReal_mul, im_ofReal_mul]
-  obtain hx | hx | hx := lt_trichotomy x 0
-  · simp only [mul_pos_iff, not_lt_of_gt hx, false_and, hx, true_and, false_or, mul_eq_zero, hx.ne,
-      or_false]
-  · simp only [hx, zero_mul, lt_self_iff_false, false_and, false_or]
-  · simp only [mul_pos_iff, hx, true_and, not_lt_of_gt hx, false_and, or_false, mul_eq_zero,
-      hx.ne', false_or]
-
-中文:
-定理 of实数_mul_pos_iff
-  条件: (x : 实数) (z : K)
-  证明: by
-  simp only [pos_iff (K := K), neg_iff (K := K), re_ofReal_mul, im_ofReal_mul]
-  obtain hx | hx | hx := lt_trichotomy x 0
-  · simp only [mul_pos_iff, not_lt_of_gt hx, false_and, hx, true_and, false_or, mul_eq_zero, hx.ne,
-      or_false]
-  · simp only [hx, zero_mul, lt_self_iff_false, false_and, false_or]
-  · simp only [mul_pos_iff, hx, true_and, not_lt_of_gt hx, false_and, or_false, mul_eq_zero,
-      hx.ne', false_or]
-
-Depends on / 依赖: false_and, false_or, hx.ne, im_ofReal_mul, lt_self_iff_false, lt_trichotomy, mul_eq_zero, mul_pos_iff, neg_iff, not_lt_of_gt, or_false, pos_iff, re_ofReal_mul, true_and, zero_mul
+/-
+**RCLike.ofReal_mul_pos_iff** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_mul_pos_iff (x : Real) (z : K) : 0 < x * z ↔ (x < 0 ∧ z < 0) ∨ (0 <
+ x ∧ 0 < z)
+参数：x : Real；z : K。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `RCLike.pos_iff`：pos_iff : 0 < z ↔ 0 < re z ∧ im z = 0
+· 使用定理 `RCLike.re_ofReal_mul`：re_ofReal_mul (r : Real) (z : K) : re (↑r * z) = r
+ * re z
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `RCLike.im_ofReal_mul`：im_ofReal_mul (r : Real) (z : K) : im (↑r * z) = r
+ * im z
+· 使用定理 `RCLike.neg_iff`：neg_iff : z < 0 ↔ re z < 0 ∧ im z = 0
+· 使用引理 `lt_trichotomy`：lt_trichotomy (a b : α) : a < b ∨ a = b ∨ b < a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `StarOrderedRing.toExistsAddOfLE`：∀ {R : Type u_1} [inst : NonUnitalSemir
+ing R] [inst_1 : PartialOrder R] [inst_2 : StarRing R] [StarOrderedRing R],   Ex
+istsAddOfLE R
+· 使用引理 `RCLike.toStarOrderedRing`：toStarOrderedRing : StarOrderedRing K
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_lt_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ < a
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+（共 31 条，此处仅展示前 30 条）
 -/
-theorem ofReal_mul_pos_iff (x : Real) (z : K) :
+theorem ofReal_mul_pos_iff (x : ℝ) (z : K) :
     0 < x * z ↔ (x < 0 ∧ z < 0) ∨ (0 < x ∧ 0 < z) := by
   simp only [pos_iff (K := K), neg_iff (K := K), re_ofReal_mul, im_ofReal_mul]
   obtain hx | hx | hx := lt_trichotomy x 0
@@ -5041,64 +4461,76 @@ theorem ofReal_mul_pos_iff (x : Real) (z : K) :
   · simp only [hx, zero_mul, lt_self_iff_false, false_and, false_or]
   · simp only [mul_pos_iff, hx, true_and, not_lt_of_gt hx, false_and, or_false, mul_eq_zero,
       hx.ne', false_or]
-
-/--
-theorem `ofReal_mul_neg_iff` / 定理 `ofReal_mul_neg_iff`
-
-English:
-theorem ofReal_mul_neg_iff
-  given: (x : Real) (z : K)
-  proof: by
-  simpa only [mul_neg, neg_pos, neg_neg_iff_pos] using ofReal_mul_pos_iff x (-z)
-
-中文:
-定理 of实数_mul_neg_iff
-  条件: (x : 实数) (z : K)
-  证明: by
-  simpa only [mul_neg, neg_pos, neg_neg_iff_pos] using ofReal_mul_pos_iff x (-z)
-
-Depends on / 依赖: mul_neg, neg_neg_iff_pos, neg_pos, ofReal_mul_pos_iff
+/-
+**RCLike.ofReal_mul_neg_iff** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_mul_neg_iff (x : Real) (z : K) : x * z < 0 ↔ (x < 0 ∧ 0 < z) ∨ (0 <
+ x ∧ z < 0)
+参数：x : Real；z : K。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用引理 `RCLike.toIsOrderedAddMonoid`：toIsOrderedAddMonoid : IsOrderedAddMonoid K
+ where add_le_add_left _ _
+· 使用定理 `RCLike.ofReal_mul_pos_iff`：ofReal_mul_pos_iff (x : Real) (z : K) : 0 < x
+ * z ↔ (x < 0 ∧ z < 0) ∨ (0 < x ∧ 0 < z)
 -/
-theorem ofReal_mul_neg_iff (x : Real) (z : K) :
+theorem ofReal_mul_neg_iff (x : ℝ) (z : K) :
     x * z < 0 ↔ (x < 0 ∧ 0 < z) ∨ (0 < x ∧ z < 0) := by
   simpa only [mul_neg, neg_pos, neg_neg_iff_pos] using ofReal_mul_pos_iff x (-z)
-
-/--
-lemma `instPosMulReflectLE` / 引理 `instPosMulReflectLE`
-
-English:
-lemma instPosMulReflectLE
-  statement: PosMulReflectLE K where
-  proof: by
-    obtain ⟨a', ha1, ha2⟩ := pos_iff_exists_ofReal.mp a.2
-    rw [← sub_nonneg]
-    #adaptation_note /-- 2025-03-29 need beta reduce for https://github.com/leanprover/lean4/issues/7717 -/
-    beta_reduce at h
-    rw [← ha2]; rw [← sub_nonneg]; rw [← mul_sub]; rw [le_iff_lt_or_eq] at h
-    rcases h with h | h
-    · rw [ofReal_mul_pos_iff] at h
-exact le_of_lt h.rec (False.elim <| not_lt_of_gt ·.1 ha1) (·.2)
-    · exact ((mul_eq_zero_iff_left <| ofReal_ne_zero.mpr ha1.ne').mp h.symm).ge
-
-scoped[ComplexOrder] attribute [instance] RCLike.instPosMulReflectLE
-
-中文:
-引理 instPosMulReflectLE
-  结论: 正乘反映偏序 K where
-  证明: by
-    obtain ⟨a', ha1, ha2⟩ := pos_iff_exists_ofReal.mp a.2
-    rw [← sub_nonneg]
-    #adaptation_note /-- 2025-03-29 need beta reduce for https://github.com/leanprover/lean4/issues/7717 -/
-    beta_reduce at h
-    rw [← ha2]; rw [← sub_nonneg]; rw [← mul_sub]; rw [le_iff_lt_or_eq] at h
-    rcases h with h | h
-    · rw [ofReal_mul_pos_iff] at h
-exact le_of_lt h.rec (False.elim <| not_lt_of_gt ·.1 ha1) (·.2)
-    · exact ((mul_eq_zero_iff_left <| ofReal_ne_zero.mpr ha1.ne').mp h.symm).ge
-
-scoped[ComplexOrder] attribute [instance] RCLike.instPosMulReflectLE
-
-Depends on / 依赖: False.elim, adaptation_note, beta_reduce, github, github.com, h.rec, h.symm, ha1.ne, issues, le_iff_lt_or_eq, le_of_lt, leanprover, mul_eq_zero_iff_left, mul_sub, not_lt_of_gt, ofReal_mul_pos_iff, ofReal_ne_zero, ofReal_ne_zero.mpr, pos_iff_exists_ofReal, pos_iff_exists_ofReal.mp
+/-
+**RCLike.instPosMulReflectLE** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：instPosMulReflectLE : PosMulReflectLE K where elim a b c h
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `RCLike.pos_iff_exists_ofReal`：pos_iff_exists_ofReal : 0 < z ↔ exists x >
+ (0 : Real), x = z
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_nonneg`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [AddRight
+Mono α] {a b : α}, 0 ≤ a - b ↔ b ≤ a
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用引理 `RCLike.toIsOrderedAddMonoid`：toIsOrderedAddMonoid : IsOrderedAddMonoid K
+ where add_le_add_left _ _
+· 使用引理 `le_iff_lt_or_eq`：le_iff_lt_or_eq : a <= b ↔ a < b ∨ a = b
+· 使用定理 `mul_sub`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), a 
+* (b - c) = a * b - a * c
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `not_lt_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ < a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `RCLike.ofReal_mul_pos_iff`：ofReal_mul_pos_iff (x : Real) (z : K) : 0 < x
+ * z ↔ (x < 0 ∧ z < 0) ∨ (0 < x ∧ 0 < z)
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `mul_eq_zero_iff_left`：mul_eq_zero_iff_left (ha : a != 0) : a * b = 0 ↔ b
+ = 0
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `RCLike.ofReal_ne_zero`：ofReal_ne_zero {x : Real} : (x : K) != 0 ↔ x != 0
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
 -/
 lemma instPosMulReflectLE : PosMulReflectLE K where
   elim a b c h := by
@@ -5106,32 +4538,22 @@ lemma instPosMulReflectLE : PosMulReflectLE K where
     rw [← sub_nonneg]
     #adaptation_note /-- 2025-03-29 need beta reduce for https://github.com/leanprover/lean4/issues/7717 -/
     beta_reduce at h
-    rw [← ha2]; rw [← sub_nonneg]; rw [← mul_sub]; rw [le_iff_lt_or_eq] at h
+    rw [← ha2, ← sub_nonneg, ← mul_sub, le_iff_lt_or_eq] at h
     rcases h with h | h
     · rw [ofReal_mul_pos_iff] at h
-exact le_of_lt h.rec (False.elim <| not_lt_of_gt ·.1 ha1) (·.2)
+      exact le_of_lt <| h.rec (False.elim <| not_lt_of_gt ·.1 ha1) (·.2)
     · exact ((mul_eq_zero_iff_left <| ofReal_ne_zero.mpr ha1.ne').mp h.symm).ge
 
 scoped[ComplexOrder] attribute [instance] RCLike.instPosMulReflectLE
-
-/--
-lemma `instMulPosReflectLE` / 引理 `instMulPosReflectLE`
-
-English:
-lemma instMulPosReflectLE
-  statement: MulPosReflectLE K
-  proof: PosMulReflectLE.toMulPosReflectLE
-
-scoped[ComplexOrder] attribute [instance] RCLike.instMulPosReflectLE
-
-中文:
-引理 instMulPosReflectLE
-  结论: 乘正反映偏序 K
-  证明: PosMulReflectLE.toMulPosReflectLE
-
-scoped[ComplexOrder] attribute [instance] RCLike.instMulPosReflectLE
-
-Depends on / 依赖: PosMulReflectLE, PosMulReflectLE.toMulPosReflectLE, toMulPosReflectLE
+/-
+**RCLike.instMulPosReflectLE** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：instMulPosReflectLE : MulPosReflectLE K
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PosMulReflectLE.toMulPosReflectLE`：PosMulReflectLE.toMulPosReflectLE [Po
+sMulReflectLE α] : MulPosReflectLE α
+· 使用引理 `RCLike.instPosMulReflectLE`：instPosMulReflectLE : PosMulReflectLE K wher
+e elim a b c h
 -/
 lemma instMulPosReflectLE : MulPosReflectLE K := PosMulReflectLE.toMulPosReflectLE
 
@@ -5141,432 +4563,248 @@ end Order
 
 section CleanupLemmas
 
-local notation "reR" => @RCLike.re Real _
-local notation "imR" => @RCLike.im Real _
-local notation "IR" => @RCLike.I Real _
-local notation "normSqR" => @RCLike.normSq Real _
+local notation "reR" => @RCLike.re ℝ _
+local notation "imR" => @RCLike.im ℝ _
+local notation "IR" => @RCLike.I ℝ _
+local notation "normSqR" => @RCLike.normSq ℝ _
 
 @[simp, rclike_simps]
-/--
-theorem `re_to_real` / 定理 `re_to_real`
-
-English:
-theorem re_to_real
-  given: {x : Real}
-  statement: reR x = x
-  proof: rfl
-
-@[simp, rclike_simps]
-
-中文:
-定理 re_to_real
-  条件: {x : 实数}
-  结论: reR x = x
-  证明: rfl
-
-@[simp, rclike_simps]
+/-
+**RCLike.re_to_real** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：re_to_real {x : Real} : reR x = x
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem re_to_real {x : Real} : reR x = x :=
+theorem re_to_real {x : ℝ} : reR x = x :=
   rfl
 
 @[simp, rclike_simps]
-/--
-theorem `im_to_real` / 定理 `im_to_real`
-
-English:
-theorem im_to_real
-  given: {x : Real}
-  statement: imR x = 0
-  proof: rfl
-
-@[rclike_simps]
-
-中文:
-定理 im_to_real
-  条件: {x : 实数}
-  结论: imR x = 0
-  证明: rfl
-
-@[rclike_simps]
+/-
+**RCLike.im_to_real** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：im_to_real {x : Real} : imR x = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem im_to_real {x : Real} : imR x = 0 :=
+theorem im_to_real {x : ℝ} : imR x = 0 :=
   rfl
 
 @[rclike_simps]
-/--
-theorem `conj_to_real` / 定理 `conj_to_real`
-
-English:
-theorem conj_to_real
-  given: {x : Real}
-  statement: conj x = x
-  proof: rfl
-
-@[simp, rclike_simps]
-
-中文:
-定理 conj_to_real
-  条件: {x : 实数}
-  结论: conj x = x
-  证明: rfl
-
-@[simp, rclike_simps]
+/-
+**RCLike.conj_to_real** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：conj_to_real {x : Real} : conj x = x
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem conj_to_real {x : Real} : conj x = x :=
+theorem conj_to_real {x : ℝ} : conj x = x :=
   rfl
 
 @[simp, rclike_simps]
-/--
-theorem `I_to_real` / 定理 `I_to_real`
-
-English:
-theorem I_to_real
-  statement: IR = 0
-  proof: rfl
-
-@[simp, rclike_simps]
-
-中文:
-定理 I_to_real
-  结论: IR = 0
-  证明: rfl
-
-@[simp, rclike_simps]
+/-
+**RCLike.I_to_real** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：I_to_real : IR = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem I_to_real : IR = 0 :=
   rfl
 
 @[simp, rclike_simps]
-/--
-theorem `normSq_to_real` / 定理 `normSq_to_real`
-
-English:
-theorem normSq_to_real
-  given: {x : Real}
-  statement: normSq x = x * x
-  proof: by simp [RCLike.normSq]
-
-@[simp]
-
-中文:
-定理 normSq_to_real
-  条件: {x : 实数}
-  结论: normSq x = x * x
-  证明: by simp [RCLike.normSq]
-
-@[simp]
-
-Depends on / 依赖: RCLike, RCLike.normSq, normSq
+/-
+**RCLike.normSq_to_real** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：normSq_to_real {x : Real} : normSq x = x * x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `ZeroHom.mk.congr_simp`：∀ {M : Type u_10} {N : Type u_11} [inst : Zero M]
+ [inst_1 : Zero N] (toFun toFun_1 : M → N) (e_toFun : toFun = toFun_1)   (map_ze
+ro' : toFun…
+· 使用定理 `MonoidWithZeroHom.mk.congr_simp`：∀ {α : Type u_7} {β : Type u_8} [inst :
+ MulZeroOneClass α] [inst_1 : MulZeroOneClass β]   (toZeroHom toZeroHom_1 : Zero
+Hom α β) (e_toZeroHom…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem normSq_to_real {x : Real} : normSq x = x * x := by simp [RCLike.normSq]
+theorem normSq_to_real {x : ℝ} : normSq x = x * x := by simp [RCLike.normSq]
 
 @[simp]
-/--
-theorem `ofReal_real_eq_id` / 定理 `ofReal_real_eq_id`
-
-English:
-theorem ofReal_real_eq_id
-  statement: @ofReal Real _ = id
-  proof: rfl
-
-中文:
-定理 of实数_real_eq_id
-  结论: @of实数 实数 _ = id
-  证明: rfl
-
-Depends on / 依赖: IsIso.of_groupoid, of_groupoid
+/-
+**RCLike.ofReal_real_eq_id** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofReal_real_eq_id : @ofReal Real _ = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofReal_real_eq_id : @ofReal Real _ = id :=
+theorem ofReal_real_eq_id : @ofReal ℝ _ = id :=
   rfl
 
 end CleanupLemmas
 
 section LinearMaps
 
-/--
-Definition of `reLm` / `reLm` 的定义
+/-- The real part in an `RCLike` field, as a linear map. -/
+/-
+**RCLike.reLm** 是 Mathlib 中的一个定义，位于命名空间 `RCLike`。
+形式化陈述：reLm : K ->ₗ[Real] Real
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.smul_re`：smul_re (r : Real) (z : K) : re (r • z) = r * re z
 
-English:
-definition reLm
-  signature: : K ->ₗ[Real] Real
-  body: { re with map_smul' := smul_re }
-
-@[simp, rclike_simps]
-
-中文:
-定义 reLm
-  签名: : K ->ₗ[实数] 实数
-  定义体: { re with map_smul' := smul_re }
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: map_smul, smul_re
+--- 原说明 ---
+The real part in an `RCLike` field, as a linear map.
 -/
-noncomputable def reLm : K ->ₗ[Real] Real :=
+noncomputable def reLm : K →ₗ[ℝ] ℝ :=
   { re with map_smul' := smul_re }
 
 @[simp, rclike_simps]
-/--
-theorem `reLm_coe` / 定理 `reLm_coe`
-
-English:
-theorem reLm_coe
-  statement: (reLm : K -> Real) = re
-  proof: rfl
-
-中文:
-定理 reLm_coe
-  结论: (reLm : K -> 实数) = re
-  证明: rfl
+/-
+**RCLike.reLm_coe** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：reLm_coe : (reLm : K -> Real) = re
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem reLm_coe : (reLm : K -> Real) = re :=
+theorem reLm_coe : (reLm : K → ℝ) = re :=
   rfl
 
-/--
-Definition of `reCLM` / `reCLM` 的定义
+/-- The real part in an `RCLike` field, as a continuous linear map. -/
+/-
+**RCLike.reCLM** 是 Mathlib 中的一个定义，位于命名空间 `RCLike`。
+形式化陈述：reCLM : StrongDual Real K
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reCLM
-  signature: : StrongDual Real K
-  body: reLm.mkContinuous 1 fun x => by
-    rw [one_mul]
-    exact abs_re_le_norm x
-
-@[simp, rclike_simps, norm_cast]
-
-中文:
-定义 reCLM
-  签名: : StrongDual 实数 K
-  定义体: reLm.mkContinuous 1 fun x => by
-    rw [one_mul]
-    exact abs_re_le_norm x
-
-@[simp, rclike_simps, norm_cast]
-
-Depends on / 依赖: HasInvolutiveReverse, Quiver, Quiver.HasInvolutiveReverse, abs_re_le_norm, groupoidHasInvolutiveReverse, mkContinuous, one_mul, reLm.mkContinuous
+--- 原说明 ---
+The real part in an `RCLike` field, as a continuous linear map.
 -/
-noncomputable def reCLM : StrongDual Real K :=
+noncomputable def reCLM : StrongDual ℝ K :=
   reLm.mkContinuous 1 fun x => by
     rw [one_mul]
     exact abs_re_le_norm x
 
 @[simp, rclike_simps, norm_cast]
-/--
-theorem `reCLM_coe` / 定理 `reCLM_coe`
-
-English:
-theorem reCLM_coe
-  statement: ((reCLM : StrongDual Real K) : K ->ₗ[Real] Real) = reLm
-  proof: rfl
-
-@[simp, rclike_simps]
-
-中文:
-定理 reCLM_coe
-  结论: ((reCLM : StrongDual 实数 K) : K ->ₗ[实数] 实数) = reLm
-  证明: rfl
-
-@[simp, rclike_simps]
+/-
+**RCLike.reCLM_coe** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：reCLM_coe : ((reCLM : StrongDual Real K) : K ->ₗ[Real] Real) = reLm
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem reCLM_coe : ((reCLM : StrongDual Real K) : K ->ₗ[Real] Real) = reLm :=
+theorem reCLM_coe : ((reCLM : StrongDual ℝ K) : K →ₗ[ℝ] ℝ) = reLm :=
   rfl
 
 @[simp, rclike_simps]
-/--
-theorem `reCLM_apply` / 定理 `reCLM_apply`
-
-English:
-theorem reCLM_apply
-  statement: ((reCLM : StrongDual Real K) : K -> Real) = re
-  proof: rfl
-
-@[continuity, fun_prop]
-
-中文:
-定理 reCLM_apply
-  结论: ((reCLM : StrongDual 实数 K) : K -> 实数) = re
-  证明: rfl
-
-@[continuity, fun_prop]
+/-
+**RCLike.reCLM_apply** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：reCLM_apply : ((reCLM : StrongDual Real K) : K -> Real) = re
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem reCLM_apply : ((reCLM : StrongDual Real K) : K -> Real) = re :=
+theorem reCLM_apply : ((reCLM : StrongDual ℝ K) : K → ℝ) = re :=
   rfl
 
 @[continuity, fun_prop]
-/--
-theorem `continuous_re` / 定理 `continuous_re`
-
-English:
-theorem continuous_re
-  statement: Continuous (re : K -> Real)
-  proof: reCLM.continuous
-
-中文:
-定理 continuous_re
-  结论: 连续 (re : K -> 实数)
-  证明: reCLM.continuous
-
-Depends on / 依赖: continuous, reCLM.continuous
+/-
+**RCLike.continuous_re** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：continuous_re : Continuous (re : K -> Real)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.continuous`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst 
+: Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [inst_
+2 : TopologicalSpace…
 -/
-theorem continuous_re : Continuous (re : K -> Real) :=
+theorem continuous_re : Continuous (re : K → ℝ) :=
   reCLM.continuous
 
-/--
-Definition of `imLm` / `imLm` 的定义
+/-- The imaginary part in an `RCLike` field, as a linear map. -/
+/-
+**RCLike.imLm** 是 Mathlib 中的一个定义，位于命名空间 `RCLike`。
+形式化陈述：imLm : K ->ₗ[Real] Real
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.smul_im`：smul_im (r : Real) (z : K) : im (r • z) = r * im z
 
-English:
-definition imLm
-  signature: : K ->ₗ[Real] Real
-  body: { im with map_smul' := smul_im }
-
-@[simp, rclike_simps]
-
-中文:
-定义 imLm
-  签名: : K ->ₗ[实数] 实数
-  定义体: { im with map_smul' := smul_im }
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: map_smul, smul_im
+--- 原说明 ---
+The imaginary part in an `RCLike` field, as a linear map.
 -/
-noncomputable def imLm : K ->ₗ[Real] Real :=
+noncomputable def imLm : K →ₗ[ℝ] ℝ :=
   { im with map_smul' := smul_im }
 
 @[simp, rclike_simps]
-/--
-theorem `imLm_coe` / 定理 `imLm_coe`
-
-English:
-theorem imLm_coe
-  statement: (imLm : K -> Real) = im
-  proof: rfl
-
-中文:
-定理 imLm_coe
-  结论: (imLm : K -> 实数) = im
-  证明: rfl
+/-
+**RCLike.imLm_coe** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：imLm_coe : (imLm : K -> Real) = im
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem imLm_coe : (imLm : K -> Real) = im :=
+theorem imLm_coe : (imLm : K → ℝ) = im :=
   rfl
 
-/--
-Definition of `imCLM` / `imCLM` 的定义
+/-- The imaginary part in an `RCLike` field, as a continuous linear map. -/
+/-
+**RCLike.imCLM** 是 Mathlib 中的一个定义，位于命名空间 `RCLike`。
+形式化陈述：imCLM : StrongDual Real K
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition imCLM
-  signature: : StrongDual Real K
-  body: imLm.mkContinuous 1 fun x => by
-    rw [one_mul]
-    exact abs_im_le_norm x
-
-@[simp, rclike_simps, norm_cast]
-
-中文:
-定义 imCLM
-  签名: : StrongDual 实数 K
-  定义体: imLm.mkContinuous 1 fun x => by
-    rw [one_mul]
-    exact abs_im_le_norm x
-
-@[simp, rclike_simps, norm_cast]
-
-Depends on / 依赖: abs_im_le_norm, imLm.mkContinuous, mkContinuous, one_mul
+--- 原说明 ---
+The imaginary part in an `RCLike` field, as a continuous linear map.
 -/
-noncomputable def imCLM : StrongDual Real K :=
+noncomputable def imCLM : StrongDual ℝ K :=
   imLm.mkContinuous 1 fun x => by
     rw [one_mul]
     exact abs_im_le_norm x
 
 @[simp, rclike_simps, norm_cast]
-/--
-theorem `imCLM_coe` / 定理 `imCLM_coe`
-
-English:
-theorem imCLM_coe
-  statement: ((imCLM : StrongDual Real K) : K ->ₗ[Real] Real) = imLm
-  proof: rfl
-
-@[simp, rclike_simps]
-
-中文:
-定理 imCLM_coe
-  结论: ((imCLM : StrongDual 实数 K) : K ->ₗ[实数] 实数) = imLm
-  证明: rfl
-
-@[simp, rclike_simps]
+/-
+**RCLike.imCLM_coe** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：imCLM_coe : ((imCLM : StrongDual Real K) : K ->ₗ[Real] Real) = imLm
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem imCLM_coe : ((imCLM : StrongDual Real K) : K ->ₗ[Real] Real) = imLm :=
+theorem imCLM_coe : ((imCLM : StrongDual ℝ K) : K →ₗ[ℝ] ℝ) = imLm :=
   rfl
 
 @[simp, rclike_simps]
-/--
-theorem `imCLM_apply` / 定理 `imCLM_apply`
-
-English:
-theorem imCLM_apply
-  statement: ((imCLM : StrongDual Real K) : K -> Real) = im
-  proof: rfl
-
-@[continuity, fun_prop]
-
-中文:
-定理 imCLM_apply
-  结论: ((imCLM : StrongDual 实数 K) : K -> 实数) = im
-  证明: rfl
-
-@[continuity, fun_prop]
+/-
+**RCLike.imCLM_apply** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：imCLM_apply : ((imCLM : StrongDual Real K) : K -> Real) = im
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem imCLM_apply : ((imCLM : StrongDual Real K) : K -> Real) = im :=
+theorem imCLM_apply : ((imCLM : StrongDual ℝ K) : K → ℝ) = im :=
   rfl
 
 @[continuity, fun_prop]
-/--
-theorem `continuous_im` / 定理 `continuous_im`
-
-English:
-theorem continuous_im
-  statement: Continuous (im : K -> Real)
-  proof: imCLM.continuous
-
-中文:
-定理 continuous_im
-  结论: 连续 (im : K -> 实数)
-  证明: imCLM.continuous
-
-Depends on / 依赖: continuous, imCLM.continuous
+/-
+**RCLike.continuous_im** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：continuous_im : Continuous (im : K -> Real)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.continuous`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst 
+: Semiring R₁] [inst_1 : Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ : Type u_4}   [inst_
+2 : TopologicalSpace…
 -/
-theorem continuous_im : Continuous (im : K -> Real) :=
+theorem continuous_im : Continuous (im : K → ℝ) :=
   imCLM.continuous
 
-/--
-Definition of `conjAe` / `conjAe` 的定义
+/-- Conjugate as an `ℝ`-algebra equivalence -/
+/-
+**RCLike.conjAe** 是 Mathlib 中的一个定义，位于命名空间 `RCLike`。
+形式化陈述：conjAe : K ≃ₐ[Real] K
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.conj_ofReal`：conj_ofReal (r : Real) : conj (r : K) = (r : K)
 
-English:
-definition conjAe
-  signature: : K ≃ₐ[Real] K
-  body: { conj with
-    invFun := conj
-    left_inv := conj_conj
-    right_inv := conj_conj
-    commutes' := conj_ofReal }
-
-@[simp, rclike_simps]
-
-中文:
-定义 conjAe
-  签名: : K ≃ₐ[实数] K
-  定义体: { conj with
-    invFun := conj
-    left_inv := conj_conj
-    right_inv := conj_conj
-    commutes' := conj_ofReal }
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: commutes, conj_conj, conj_ofReal, invFun, left_inv, right_inv
+--- 原说明 ---
+Conjugate as an `ℝ`-algebra equivalence
 -/
-def conjAe : K ≃ₐ[Real] K :=
+def conjAe : K ≃ₐ[ℝ] K :=
   { conj with
     invFun := conj
     left_inv := conj_conj
@@ -5574,556 +4812,451 @@ def conjAe : K ≃ₐ[Real] K :=
     commutes' := conj_ofReal }
 
 @[simp, rclike_simps]
-/--
-theorem `conjAe_coe` / 定理 `conjAe_coe`
-
-English:
-theorem conjAe_coe
-  statement: (conjAe : K -> K) = conj
-  proof: rfl
-
-中文:
-定理 conjAe_coe
-  结论: (conjAe : K -> K) = conj
-  证明: rfl
+/-
+**RCLike.conjAe_coe** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：conjAe_coe : (conjAe : K -> K) = conj
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem conjAe_coe : (conjAe : K -> K) = conj :=
+theorem conjAe_coe : (conjAe : K → K) = conj :=
   rfl
 
-/--
-Definition of `conjLIE` / `conjLIE` 的定义
+/-- Conjugate as a linear isometry -/
+/-
+**RCLike.conjLIE** 是 Mathlib 中的一个定义，位于命名空间 `RCLike`。
+形式化陈述：conjLIE : K ≃ₗᵢ[Real] K
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.norm_conj`：norm_conj (z : K) : ‖conj z‖ = ‖z‖
 
-English:
-definition conjLIE
-  signature: : K ≃ₗᵢ[Real] K
-  body: ⟨conjAe.toLinearEquiv, norm_conj⟩
-
-@[simp, rclike_simps]
-
-中文:
-定义 conjLIE
-  签名: : K ≃ₗᵢ[实数] K
-  定义体: ⟨conjAe.toLinearEquiv, norm_conj⟩
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: conjAe, conjAe.toLinearEquiv, norm_conj, toLinearEquiv
+--- 原说明 ---
+Conjugate as a linear isometry
 -/
-noncomputable def conjLIE : K ≃ₗᵢ[Real] K :=
+noncomputable def conjLIE : K ≃ₗᵢ[ℝ] K :=
   ⟨conjAe.toLinearEquiv, norm_conj⟩
 
 @[simp, rclike_simps]
-/--
-theorem `conjLIE_apply` / 定理 `conjLIE_apply`
-
-English:
-theorem conjLIE_apply
-  statement: (conjLIE : K -> K) = conj
-  proof: rfl
-
-中文:
-定理 conjLIE_apply
-  结论: (conjLIE : K -> K) = conj
-  证明: rfl
+/-
+**RCLike.conjLIE_apply** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：conjLIE_apply : (conjLIE : K -> K) = conj
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem conjLIE_apply : (conjLIE : K -> K) = conj :=
+theorem conjLIE_apply : (conjLIE : K → K) = conj :=
   rfl
 
-/--
-Definition of `conjCLE` / `conjCLE` 的定义
+/-- Conjugate as a continuous linear equivalence -/
+/-
+**RCLike.conjCLE** 是 Mathlib 中的一个定义，位于命名空间 `RCLike`。
+形式化陈述：conjCLE : K ≃L[Real] K
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition conjCLE
-  signature: : K ≃L[Real] K
-  body: @conjLIE K _
-
-@[simp, rclike_simps]
-
-中文:
-定义 conjCLE
-  签名: : K ≃L[实数] K
-  定义体: @conjLIE K _
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: conjLIE
+--- 原说明 ---
+Conjugate as a continuous linear equivalence
 -/
-noncomputable def conjCLE : K ≃L[Real] K :=
+noncomputable def conjCLE : K ≃L[ℝ] K :=
   @conjLIE K _
 
 @[simp, rclike_simps]
-/--
-theorem `conjCLE_coe` / 定理 `conjCLE_coe`
-
-English:
-theorem conjCLE_coe
-  statement: (@conjCLE K _).toLinearEquiv = conjAe.toLinearEquiv
-  proof: rfl
-
-@[simp, rclike_simps]
-
-中文:
-定理 conjCLE_coe
-  结论: (@conjCLE K _).toLinearEquiv = conjAe.toLinearEquiv
-  证明: rfl
-
-@[simp, rclike_simps]
+/-
+**RCLike.conjCLE_coe** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：conjCLE_coe : (@conjCLE K _).toLinearEquiv = conjAe.toLinearEquiv
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem conjCLE_coe : (@conjCLE K _).toLinearEquiv = conjAe.toLinearEquiv :=
   rfl
 
 @[simp, rclike_simps]
-/--
-theorem `conjCLE_apply` / 定理 `conjCLE_apply`
-
-English:
-theorem conjCLE_apply
-  statement: (conjCLE : K -> K) = conj
-  proof: rfl
-
-中文:
-定理 conjCLE_apply
-  结论: (conjCLE : K -> K) = conj
-  证明: rfl
+/-
+**RCLike.conjCLE_apply** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：conjCLE_apply : (conjCLE : K -> K) = conj
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem conjCLE_apply : (conjCLE : K -> K) = conj :=
+theorem conjCLE_apply : (conjCLE : K → K) = conj :=
   rfl
-
+/-
+**RCLike.** 是 Mathlib 中的一个实例，位于命名空间 `RCLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) : ContinuousStar K :=
   ⟨conjLIE.continuous⟩
 
 @[continuity]
-/--
-theorem `continuous_conj` / 定理 `continuous_conj`
-
-English:
-theorem continuous_conj
-  statement: Continuous (conj : K -> K)
-  proof: continuous_star
-
-中文:
-定理 continuous_conj
-  结论: 连续 (conj : K -> K)
-  证明: continuous_star
-
-Depends on / 依赖: continuous_star
+/-
+**RCLike.continuous_conj** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：continuous_conj : Continuous (conj : K -> K)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousStar.continuous_star`：∀ {R : Type u_1} {inst : TopologicalSpac
+e R} {inst_1 : Star R} [self : ContinuousStar R], Continuous star
+· 使用定理 `RCLike.instContinuousStar`：∀ {K : Type u_1} [inst : RCLike K], Continuou
+sStar K
 -/
-theorem continuous_conj : Continuous (conj : K -> K) :=
+theorem continuous_conj : Continuous (conj : K → K) :=
   continuous_star
 
-/--
-Definition of `ofRealAm` / `ofRealAm` 的定义
+/-- The `ℝ → K` coercion, as an algebra map. -/
+/-
+**RCLike.ofRealAm** 是 Mathlib 中的一个定义，位于命名空间 `RCLike`。
+形式化陈述：ofRealAm : Real ->ₐ[Real] K
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofRealAm
-  signature: : Real ->ₐ[Real] K
-  body: Algebra.ofId Real K
-
-@[simp, rclike_simps]
-
-中文:
-定义 of实数Am
-  签名: : 实数 ->ₐ[实数] K
-  定义体: Algebra.ofId Real K
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: Algebra, Algebra.ofId
+--- 原说明 ---
+The `ℝ → K` coercion, as an algebra map.
 -/
-noncomputable def ofRealAm : Real ->ₐ[Real] K :=
-  Algebra.ofId Real K
+noncomputable def ofRealAm : ℝ →ₐ[ℝ] K :=
+  Algebra.ofId ℝ K
 
 @[simp, rclike_simps]
-/--
-theorem `ofRealAm_coe` / 定理 `ofRealAm_coe`
-
-English:
-theorem ofRealAm_coe
-  statement: (ofRealAm : Real -> K) = ofReal
-  proof: rfl
-
-中文:
-定理 of实数Am_coe
-  结论: (of实数Am : 实数 -> K) = of实数
-  证明: rfl
+/-
+**RCLike.ofRealAm_coe** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofRealAm_coe : (ofRealAm : Real -> K) = ofReal
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofRealAm_coe : (ofRealAm : Real -> K) = ofReal :=
+theorem ofRealAm_coe : (ofRealAm : ℝ → K) = ofReal :=
   rfl
 
 variable (K) in
-/--
-Definition of `ofRealStarAlgHom` / `ofRealStarAlgHom` 的定义
+/-- The `ℝ → K` coercion, as a ⋆-algebra map. -/
+/-
+**RCLike.ofRealStarAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `RCLike`。
+形式化陈述：ofRealStarAlgHom : Real ->⋆ₐ[Real] K
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.instStarModuleReal`：∀ {K : Type u_1} [inst : RCLike K], StarModul
+e ℝ K
 
-English:
-definition ofRealStarAlgHom
-  signature: : Real ->⋆ₐ[Real] K
-  body: .ofId Real K
-
-中文:
-定义 of实数StarAlgHom
-  签名: : 实数 ->⋆ₐ[实数] K
-  定义体: .ofId Real K
+--- 原说明 ---
+The `ℝ → K` coercion, as a ⋆-algebra map.
 -/
-noncomputable def ofRealStarAlgHom : Real ->⋆ₐ[Real] K := .ofId Real K
-
-/--
-theorem `coe_ofRealStarAlgHom` / 定理 `coe_ofRealStarAlgHom`
-
-English:
-theorem coe_ofRealStarAlgHom
-  statement: (ofRealStarAlgHom K : Real -> K) = ofReal
-  proof: rfl
-
-中文:
-定理 coe_of实数StarAlgHom
-  结论: (of实数StarAlgHom K : 实数 -> K) = of实数
-  证明: rfl
+noncomputable def ofRealStarAlgHom : ℝ →⋆ₐ[ℝ] K := .ofId ℝ K
+/-
+**RCLike.coe_ofRealStarAlgHom** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：∀ {K : Type u_1} [inst : RCLike K], ⇑(RCLike.ofRealStarAlgHom K) = RCLike.
+ofReal
+参数：RCLike.ofRealStarAlgHom K。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] theorem coe_ofRealStarAlgHom : (ofRealStarAlgHom K : Real -> K) = ofReal := rfl
-/--
-lemma `toAlgHom_ofRealStarAlgHom` / 引理 `toAlgHom_ofRealStarAlgHom`
-
-English:
-lemma toAlgHom_ofRealStarAlgHom
-  statement: (ofRealStarAlgHom K).toAlgHom = ofRealAm
-  proof: rfl
-
-中文:
-引理 toAlgHom_of实数StarAlgHom
-  结论: (of实数StarAlgHom K).toAlgHom = of实数Am
-  证明: rfl
+@[simp] theorem coe_ofRealStarAlgHom : (ofRealStarAlgHom K : ℝ → K) = ofReal := rfl
+/-
+**RCLike.toAlgHom_ofRealStarAlgHom** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：∀ {K : Type u_1} [inst : RCLike K], ↑(RCLike.ofRealStarAlgHom K) = RCLike.
+ofRealAm
+参数：RCLike.ofRealStarAlgHom K。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toAlgHom_ofRealStarAlgHom : (ofRealStarAlgHom K).toAlgHom = ofRealAm := rfl
 
-/--
-Definition of `ofRealLI` / `ofRealLI` 的定义
+/-- The ℝ → K coercion, as a linear isometry -/
+/-
+**RCLike.ofRealLI** 是 Mathlib 中的一个定义，位于命名空间 `RCLike`。
+形式化陈述：ofRealLI : Real ->ₗᵢ[Real] K where toLinearMap
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.norm_ofReal`：norm_ofReal (r : Real) : ‖(r : K)‖ = |r|
 
-English:
-definition ofRealLI
-  signature: : Real ->ₗᵢ[Real] K where
-  body: ofRealAm.toLinearMap
-  norm_map' := norm_ofReal
-
-@[simp, rclike_simps]
-
-中文:
-定义 of实数LI
-  签名: : 实数 ->ₗᵢ[实数] K where
-  定义体: ofRealAm.toLinearMap
-  norm_map' := norm_ofReal
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: ofRealAm, ofRealAm.toLinearMap, toLinearMap
+--- 原说明 ---
+The ℝ → K coercion, as a linear isometry
 -/
-noncomputable def ofRealLI : Real ->ₗᵢ[Real] K where
+noncomputable def ofRealLI : ℝ →ₗᵢ[ℝ] K where
   toLinearMap := ofRealAm.toLinearMap
   norm_map' := norm_ofReal
 
 @[simp, rclike_simps]
-/--
-theorem `ofRealLI_apply` / 定理 `ofRealLI_apply`
-
-English:
-theorem ofRealLI_apply
-  statement: (ofRealLI : Real -> K) = ofReal
-  proof: rfl
-
-中文:
-定理 of实数LI_apply
-  结论: (of实数LI : 实数 -> K) = of实数
-  证明: rfl
+/-
+**RCLike.ofRealLI_apply** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofRealLI_apply : (ofRealLI : Real -> K) = ofReal
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofRealLI_apply : (ofRealLI : Real -> K) = ofReal :=
+theorem ofRealLI_apply : (ofRealLI : ℝ → K) = ofReal :=
   rfl
 
-/--
-Definition of `ofRealCLM` / `ofRealCLM` 的定义
+/-- The `ℝ → K` coercion, as a continuous linear map -/
+/-
+**RCLike.ofRealCLM** 是 Mathlib 中的一个定义，位于命名空间 `RCLike`。
+形式化陈述：ofRealCLM : Real ->L[Real] K
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofRealCLM
-  signature: : Real ->L[Real] K
-  body: ofRealLI.toContinuousLinearMap
-
-@[simp, rclike_simps]
-
-中文:
-定义 of实数CLM
-  签名: : 实数 ->L[实数] K
-  定义体: ofRealLI.toContinuousLinearMap
-
-@[simp, rclike_simps]
-
-Depends on / 依赖: ofRealLI, ofRealLI.toContinuousLinearMap, toContinuousLinearMap
+--- 原说明 ---
+The `ℝ → K` coercion, as a continuous linear map
 -/
-noncomputable def ofRealCLM : Real ->L[Real] K :=
+noncomputable def ofRealCLM : ℝ →L[ℝ] K :=
   ofRealLI.toContinuousLinearMap
 
 @[simp, rclike_simps]
-/--
-theorem `ofRealCLM_coe` / 定理 `ofRealCLM_coe`
-
-English:
-theorem ofRealCLM_coe
-  statement: (@ofRealCLM K _ : Real ->ₗ[Real] K) = ofRealAm.toLinearMap
-  proof: rfl
-
-@[simp, rclike_simps]
-
-中文:
-定理 of实数CLM_coe
-  结论: (@of实数CLM K _ : 实数 ->ₗ[实数] K) = of实数Am.toLinearMap
-  证明: rfl
-
-@[simp, rclike_simps]
+/-
+**RCLike.ofRealCLM_coe** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofRealCLM_coe : (@ofRealCLM K _ : Real ->ₗ[Real] K) = ofRealAm.toLinearMap
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofRealCLM_coe : (@ofRealCLM K _ : Real ->ₗ[Real] K) = ofRealAm.toLinearMap :=
+theorem ofRealCLM_coe : (@ofRealCLM K _ : ℝ →ₗ[ℝ] K) = ofRealAm.toLinearMap :=
   rfl
 
 @[simp, rclike_simps]
-/--
-theorem `ofRealCLM_apply` / 定理 `ofRealCLM_apply`
-
-English:
-theorem ofRealCLM_apply
-  statement: (ofRealCLM : Real -> K) = ofReal
-  proof: rfl
-
-@[continuity, fun_prop]
-
-中文:
-定理 of实数CLM_apply
-  结论: (of实数CLM : 实数 -> K) = of实数
-  证明: rfl
-
-@[continuity, fun_prop]
+/-
+**RCLike.ofRealCLM_apply** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：ofRealCLM_apply : (ofRealCLM : Real -> K) = ofReal
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofRealCLM_apply : (ofRealCLM : Real -> K) = ofReal :=
+theorem ofRealCLM_apply : (ofRealCLM : ℝ → K) = ofReal :=
   rfl
 
 @[continuity, fun_prop]
-/--
-theorem `continuous_ofReal` / 定理 `continuous_ofReal`
-
-English:
-theorem continuous_ofReal
-  statement: Continuous (ofReal : Real -> K)
-  proof: ofRealLI.continuous
-
-@[continuity]
-
-中文:
-定理 continuous_of实数
-  结论: 连续 (of实数 : 实数 -> K)
-  证明: ofRealLI.continuous
-
-@[continuity]
-
-Depends on / 依赖: continuous, ofRealLI, ofRealLI.continuous
+/-
+**RCLike.continuous_ofReal** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：continuous_ofReal : Continuous (ofReal : Real -> K)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearIsometry.continuous`：∀ {R : Type u_1} {R₂ : Type u_2} {E : Type u_
+5} {E₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R₂]   {σ₁₂ : R →+* R₂}
+ [inst_2 : Semi…
 -/
-theorem continuous_ofReal : Continuous (ofReal : Real -> K) :=
+theorem continuous_ofReal : Continuous (ofReal : ℝ → K) :=
   ofRealLI.continuous
 
 @[continuity]
-/--
-theorem `continuous_normSq` / 定理 `continuous_normSq`
-
-English:
-theorem continuous_normSq
-  statement: Continuous (normSq : K -> Real)
-  proof: (continuous_re.mul continuous_re).add (continuous_im.mul continuous_im)
-
-中文:
-定理 continuous_normSq
-  结论: 连续 (normSq : K -> 实数)
-  证明: (continuous_re.mul continuous_re).add (continuous_im.mul continuous_im)
-
-Depends on / 依赖: continuous_im, continuous_im.mul, continuous_re, continuous_re.mul
+/-
+**RCLike.continuous_normSq** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：continuous_normSq : Continuous (normSq : K -> Real)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.add`：∀ {M : Type u_1} [inst : TopologicalSpace M] [inst_1 : A
+dd M] [ContinuousAdd M] {X : Type u_2}   [inst_3 : TopologicalSpace X] {f g : X 
+→ M}…
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `Continuous.mul`：Continuous.mul (hf : Continuous f) (hg : Continuous g) :
+ Continuous (f * g)
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `RCLike.continuous_re`：continuous_re : Continuous (re : K -> Real)
+· 使用定理 `RCLike.continuous_im`：continuous_im : Continuous (im : K -> Real)
 -/
-theorem continuous_normSq : Continuous (normSq : K -> Real) :=
+theorem continuous_normSq : Continuous (normSq : K → ℝ) :=
   (continuous_re.mul continuous_re).add (continuous_im.mul continuous_im)
-
-/--
-theorem `lipschitzWith_ofReal` / 定理 `lipschitzWith_ofReal`
-
-English:
-theorem lipschitzWith_ofReal
-  statement: LipschitzWith 1 (ofReal : Real -> K)
-  proof: ofRealLI.lipschitz
-
-中文:
-定理 lipschitzWith_of实数
-  结论: LipschitzWith 1 (of实数 : 实数 -> K)
-  证明: ofRealLI.lipschitz
-
-Depends on / 依赖: lipschitz, ofRealLI, ofRealLI.lipschitz
+/-
+**RCLike.lipschitzWith_ofReal** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：lipschitzWith_ofReal : LipschitzWith 1 (ofReal : Real -> K)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearIsometry.lipschitz`：∀ {R : Type u_1} {R₂ : Type u_2} {E : Type u_5
+} {E₂ : Type u_6} [inst : Semiring R] [inst_1 : Semiring R₂]   {σ₁₂ : R →+* R₂} 
+[inst_2 : Semi…
 -/
-theorem lipschitzWith_ofReal : LipschitzWith 1 (ofReal : Real -> K) :=
+theorem lipschitzWith_ofReal : LipschitzWith 1 (ofReal : ℝ → K) :=
   ofRealLI.lipschitz
-
-/--
-lemma `lipschitzWith_re` / 引理 `lipschitzWith_re`
-
-English:
-lemma lipschitzWith_re
-  statement: LipschitzWith 1 (re (K := K))
-  proof: by
-  intro x y
-  simp only [ENNReal.coe_one, one_mul, edist_eq_enorm_sub]
-  calc ‖re x - re y‖ₑ
-  _ = ‖re (x - y)‖ₑ := by rw [map_sub re x y]
-  _ <= ‖x - y‖ₑ := by rw [enorm_le_iff_norm_le]; exact norm_re_le_norm (x - y)
-
-中文:
-引理 lipschitzWith_re
-  结论: LipschitzWith 1 (re (K := K))
-  证明: by
-  intro x y
-  simp only [ENNReal.coe_one, one_mul, edist_eq_enorm_sub]
-  calc ‖re x - re y‖ₑ
-  _ = ‖re (x - y)‖ₑ := by rw [map_sub re x y]
-  _ <= ‖x - y‖ₑ := by rw [enorm_le_iff_norm_le]; exact norm_re_le_norm (x - y)
-
-Depends on / 依赖: ENNReal, ENNReal.coe_one, coe_one, edist_eq_enorm_sub, enorm_le_iff_norm_le, map_sub, norm_re_le_norm, one_mul
+/-
+**RCLike.lipschitzWith_re** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：lipschitzWith_re : LipschitzWith 1 (re (K
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `edist_eq_enorm_sub`：∀ {E : Type u_5} [inst : SeminormedAddCommGroup E] (
+a b : E), edist a b = ‖a - b‖ₑ
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `enorm_le_iff_norm_le`：∀ {E : Type u_5} {F : Type u_6} [inst : Seminormed
+AddGroup E] [inst_1 : SeminormedAddGroup F] {x : E} {y : F},   ‖x‖ₑ ≤ ‖y‖ₑ ↔ ‖x‖
+ ≤ ‖y‖
+· 使用定理 `RCLike.norm_re_le_norm`：norm_re_le_norm (z : K) : ‖re z‖ <= ‖z‖
 -/
 lemma lipschitzWith_re : LipschitzWith 1 (re (K := K)) := by
   intro x y
   simp only [ENNReal.coe_one, one_mul, edist_eq_enorm_sub]
   calc ‖re x - re y‖ₑ
   _ = ‖re (x - y)‖ₑ := by rw [map_sub re x y]
-  _ <= ‖x - y‖ₑ := by rw [enorm_le_iff_norm_le]; exact norm_re_le_norm (x - y)
-
-/--
-lemma `lipschitzWith_im` / 引理 `lipschitzWith_im`
-
-English:
-lemma lipschitzWith_im
-  statement: LipschitzWith 1 (im (K := K))
-  proof: by
-  intro x y
-  simp only [ENNReal.coe_one, one_mul, edist_eq_enorm_sub]
-  calc ‖im x - im y‖ₑ
-  _ = ‖im (x - y)‖ₑ := by rw [map_sub im x y]
-  _ <= ‖x - y‖ₑ := by rw [enorm_le_iff_norm_le]; exact norm_im_le_norm (x - y)
-
-中文:
-引理 lipschitzWith_im
-  结论: LipschitzWith 1 (im (K := K))
-  证明: by
-  intro x y
-  simp only [ENNReal.coe_one, one_mul, edist_eq_enorm_sub]
-  calc ‖im x - im y‖ₑ
-  _ = ‖im (x - y)‖ₑ := by rw [map_sub im x y]
-  _ <= ‖x - y‖ₑ := by rw [enorm_le_iff_norm_le]; exact norm_im_le_norm (x - y)
-
-Depends on / 依赖: ENNReal, ENNReal.coe_one, coe_one, edist_eq_enorm_sub, enorm_le_iff_norm_le, map_sub, norm_im_le_norm, one_mul
+  _ ≤ ‖x - y‖ₑ := by rw [enorm_le_iff_norm_le]; exact norm_re_le_norm (x - y)
+/-
+**RCLike.lipschitzWith_im** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：lipschitzWith_im : LipschitzWith 1 (im (K
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `edist_eq_enorm_sub`：∀ {E : Type u_5} [inst : SeminormedAddCommGroup E] (
+a b : E), edist a b = ‖a - b‖ₑ
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `enorm_le_iff_norm_le`：∀ {E : Type u_5} {F : Type u_6} [inst : Seminormed
+AddGroup E] [inst_1 : SeminormedAddGroup F] {x : E} {y : F},   ‖x‖ₑ ≤ ‖y‖ₑ ↔ ‖x‖
+ ≤ ‖y‖
+· 使用定理 `RCLike.norm_im_le_norm`：norm_im_le_norm (z : K) : ‖im z‖ <= ‖z‖
 -/
 lemma lipschitzWith_im : LipschitzWith 1 (im (K := K)) := by
   intro x y
   simp only [ENNReal.coe_one, one_mul, edist_eq_enorm_sub]
   calc ‖im x - im y‖ₑ
   _ = ‖im (x - y)‖ₑ := by rw [map_sub im x y]
-  _ <= ‖x - y‖ₑ := by rw [enorm_le_iff_norm_le]; exact norm_im_le_norm (x - y)
+  _ ≤ ‖x - y‖ₑ := by rw [enorm_le_iff_norm_le]; exact norm_im_le_norm (x - y)
 
-/--
-Definition of `map` / `map` 的定义
+/-- The canonical map between `RCLike` types. It maps `x : 𝕜` to `re x + im x * I`. -/
+/-
+**RCLike.map** 是 Mathlib 中的一个定义，位于命名空间 `RCLike`。
+形式化陈述：(𝕜 : Type u_3) → (𝕜' : Type u_4) → [inst : RCLike 𝕜] → [inst_1 : RCLike 𝕜'
+] → 𝕜 →L[ℝ] 𝕜'
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (𝕜 𝕜' : Type*) [RCLike 𝕜] [RCLike 𝕜']
-  body: re x + im x * (I : 𝕜')
-  map_add' _ _ := by simp only [map_add, add_mul]; ring
-  map_smul' _ _ := by simp [real_smul_eq_coe_mul, mul_assoc]
-
-中文:
-定义 map
-  签名: (𝕜 𝕜' : 类型) [RCLike 𝕜] [RCLike 𝕜']
-  定义体: re x + im x * (I : 𝕜')
-  map_add' _ _ := by simp only [map_add, add_mul]; ring
-  map_smul' _ _ := by simp [real_smul_eq_coe_mul, mul_assoc]
+--- 原说明 ---
+The canonical map between `RCLike` types. It maps `x : 𝕜` to `re x + im x * I`.
 -/
-@[simps] def map (𝕜 𝕜' : Type*) [RCLike 𝕜] [RCLike 𝕜'] : 𝕜 ->L[Real] 𝕜' where
+@[simps] def map (𝕜 𝕜' : Type*) [RCLike 𝕜] [RCLike 𝕜'] : 𝕜 →L[ℝ] 𝕜' where
   toFun x := re x + im x * (I : 𝕜')
   map_add' _ _ := by simp only [map_add, add_mul]; ring
   map_smul' _ _ := by simp [real_smul_eq_coe_mul, mul_assoc]
-
-/--
-theorem `map_same_eq_id` / 定理 `map_same_eq_id`
-
-English:
-theorem map_same_eq_id
-  statement: map K K = .id Real K
-  proof: by ext; simp
-
-中文:
-定理 map_same_eq_id
-  结论: map K K = .id 实数 K
-  证明: by ext; simp
+/-
+**RCLike.map_same_eq_id** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：∀ {K : Type u_1} [inst : RCLike K], RCLike.map K K = ContinuousLinearMap.i
+d ℝ K
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.map_apply`：∀ (𝕜 : Type u_3) (𝕜' : Type u_4) [inst : RCLike 𝕜] [in
+st_1 : RCLike 𝕜'] (x : 𝕜),   (RCLike.map 𝕜 𝕜') x = ↑(RCLike.re x) + ↑(RCLike.im 
+x) * R…
+· 使用定理 `RCLike.re_add_im`：re_add_im (z : K) : (re z : K) + im z * I = z
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] theorem map_same_eq_id : map K K = .id Real K := by ext; simp
-
-/--
-theorem `map_to_real` / 定理 `map_to_real`
-
-English:
-theorem map_to_real
-  statement: map K Real = reCLM
-  proof: by
-  ext; simp only [map_apply, I, mul_zero, add_zero]; rfl
-
-中文:
-定理 map_to_real
-  结论: map K 实数 = reCLM
-  证明: by
-  ext; simp only [map_apply, I, mul_zero, add_zero]; rfl
+@[simp] theorem map_same_eq_id : map K K = .id ℝ K := by ext; simp
+/-
+**RCLike.map_to_real** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：∀ {K : Type u_1} [inst : RCLike K], RCLike.map K ℝ = RCLike.reCLM
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext`：ext {f g : M₁ ->SL[σ₁₂] M₂} (h : forall x, f x 
+= g x) : f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `RCLike.map_apply`：∀ (𝕜 : Type u_3) (𝕜' : Type u_4) [inst : RCLike 𝕜] [in
+st_1 : RCLike 𝕜'] (x : 𝕜),   (RCLike.map 𝕜 𝕜') x = ↑(RCLike.re x) + ↑(RCLike.im 
+x) * R…
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 -/
-@[simp] theorem map_to_real : map K Real = reCLM := by
+@[simp] theorem map_to_real : map K ℝ = reCLM := by
   ext; simp only [map_apply, I, mul_zero, add_zero]; rfl
-
-/--
-theorem `map_from_real` / 定理 `map_from_real`
-
-English:
-theorem map_from_real
-  statement: map Real K = ofRealCLM
-  proof: by ext; simp
-
-中文:
-定理 map_from_real
-  结论: map 实数 K = of实数CLM
-  证明: by ext; simp
+/-
+**RCLike.map_from_real** 是 Mathlib 中的一个定理，位于命名空间 `RCLike`。
+形式化陈述：∀ {K : Type u_1} [inst : RCLike K], RCLike.map ℝ K = RCLike.ofRealCLM
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousLinearMap.ext_ring`：ext_ring [TopologicalSpace R₁] {f g : R₁ -
+>L[R₁] M₁} (h : f 1 = g 1) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RCLike.map_apply`：∀ (𝕜 : Type u_3) (𝕜' : Type u_4) [inst : RCLike 𝕜] [in
+st_1 : RCLike 𝕜'] (x : 𝕜),   (RCLike.map 𝕜 𝕜') x = ↑(RCLike.re x) + ↑(RCLike.im 
+x) * R…
+· 使用定理 `RCLike.one_re`：one_re : re (1 : K) = 1
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `RCLike.one_im`：one_im : im (1 : K) = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] theorem map_from_real : map Real K = ofRealCLM := by ext; simp
+@[simp] theorem map_from_real : map ℝ K = ofRealCLM := by ext; simp
 
 open scoped ComplexOrder in
-/--
-lemma `instOrderClosedTopology` / 引理 `instOrderClosedTopology`
-
-English:
-lemma instOrderClosedTopology
-  statement: OrderClosedTopology K where
-  proof: by
-    conv in _ <= _ => rw [RCLike.le_iff_re_im]
-    simp_rw [Set.ofPred_and]
-    refine IsClosed.inter (isClosed_le ?_ ?_) (isClosed_eq ?_ ?_) <;> fun_prop
-
-scoped[ComplexOrder] attribute [instance] RCLike.instOrderClosedTopology
-
-中文:
-引理 instOrderClosedTopology
-  结论: OrderClosed拓扑 K where
-  证明: by
-    conv in _ <= _ => rw [RCLike.le_iff_re_im]
-    simp_rw [Set.ofPred_and]
-    refine IsClosed.inter (isClosed_le ?_ ?_) (isClosed_eq ?_ ?_) <;> fun_prop
-
-scoped[ComplexOrder] attribute [instance] RCLike.instOrderClosedTopology
-
-Depends on / 依赖: IsClosed, IsClosed.inter, RCLike, RCLike.le_iff_re_im, Set.ofPred_and, fun_prop, isClosed_eq, isClosed_le, le_iff_re_im, ofPred_and, simp_rw
+/-
+**RCLike.instOrderClosedTopology** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：instOrderClosedTopology : OrderClosedTopology K where isClosed_le'
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `RCLike.le_iff_re_im`：∀ {K : semiOutParam (Type u_1)} [self : RCLike K] {
+z w : K},   z ≤ w ↔ RCLike.re z ≤ RCLike.re w ∧ RCLike.im z = RCLike.im w
+· 使用定理 `IsClosed.inter`：IsClosed.inter (h₁ : IsClosed s₁) (h₂ : IsClosed s₂) : I
+sClosed (s₁ inter s₂)
+· 使用定理 `isClosed_le`：isClosed_le [TopologicalSpace β] {f g : β -> α} (hf : Conti
+nuous f) (hg : Continuous g) : IsClosed { b | f b <= g b }
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `Continuous.comp'`：Continuous.comp' {g : Y -> Z} (hg : Continuous g) (hf 
+: Continuous f) : Continuous (fun x => g (f x))
+· 使用定理 `RCLike.continuous_re`：continuous_re : Continuous (re : K -> Real)
+· 使用定理 `Continuous.fst`：Continuous.fst {f : X -> Y × Z} (hf : Continuous f) : Co
+ntinuous fun x : X => (f x).1
+· 使用定理 `continuous_id'`：continuous_id' : Continuous (fun (x : X) => x)
+· 使用定理 `Continuous.snd`：Continuous.snd {f : X -> Y × Z} (hf : Continuous f) : Co
+ntinuous fun x : X => (f x).2
+· 使用定理 `isClosed_eq`：isClosed_eq [T2Space X] {f g : Y -> X} (hf : Continuous f) 
+(hg : Continuous g) : IsClosed { y : Y | f y = g y }
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `RCLike.continuous_im`：continuous_im : Continuous (im : K -> Real)
 -/
 lemma instOrderClosedTopology : OrderClosedTopology K where
   isClosed_le' := by
-    conv in _ <= _ => rw [RCLike.le_iff_re_im]
+    conv in _ ≤ _ => rw [RCLike.le_iff_re_im]
     simp_rw [Set.ofPred_and]
     refine IsClosed.inter (isClosed_le ?_ ?_) (isClosed_eq ?_ ?_) <;> fun_prop
 
@@ -6138,57 +5271,45 @@ Here we gather results that depend on whether `K` is `ℝ`.
 -/
 section CaseSpecific
 
-/--
-lemma `im_eq_zero` / 引理 `im_eq_zero`
-
-English:
-lemma im_eq_zero
-  given: (h : I = (0 : K)) (z : K)
-  statement: im z = 0
-  proof: by
-  rw [← re_add_im z]; rw [h]
-  simp
-
-中文:
-引理 im_eq_zero
-  条件: (h : I = (0 : K)) (z : K)
-  结论: im z = 0
-  证明: by
-  rw [← re_add_im z]; rw [h]
-  simp
-
-Depends on / 依赖: re_add_im
+/-
+**RCLike.im_eq_zero** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：im_eq_zero (h : I = (0 : K)) (z : K) : im z = 0
+参数：h : I = (0 : K)；z : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RCLike.re_add_im`：re_add_im (z : K) : (re z : K) + im z * I = z
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `RCLike.ofReal_im`：ofReal_im : forall r : Real, im (r : K) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma im_eq_zero (h : I = (0 : K)) (z : K) : im z = 0 := by
-  rw [← re_add_im z]; rw [h]
+  rw [← re_add_im z, h]
   simp
 
 /-- The natural isomorphism between `𝕜` satisfying `RCLike 𝕜` and `ℝ` when `RCLike.I = 0`. -/
 @[simps]
-/--
-Definition of `realRingEquiv` / `realRingEquiv` 的定义
+/-
+**RCLike.realRingEquiv** 是 Mathlib 中的一个定义，位于命名空间 `RCLike`。
+形式化陈述：realRingEquiv (h : I = (0 : K)) : K ≃+* Real where toFun
+参数：h : I = (0 : K)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.ofReal_re`：ofReal_re : forall r : Real, re (r : K) = r
 
-English:
-definition realRingEquiv
-  signature: (h : I = (0 : K))
-  body: re
-  invFun := (↑)
-  left_inv x := by nth_rw 2 [← re_add_im x]; simp [h]
-  right_inv := ofReal_re
-  map_add' := map_add re
-  map_mul' := by simp [im_eq_zero h]
-
-中文:
-定义 realRingEquiv
-  签名: (h : I = (0 : K))
-  定义体: re
-  invFun := (↑)
-  left_inv x := by nth_rw 2 [← re_add_im x]; simp [h]
-  right_inv := ofReal_re
-  map_add' := map_add re
-  map_mul' := by simp [im_eq_zero h]
+--- 原说明 ---
+The natural isomorphism between `𝕜` satisfying `RCLike 𝕜` and `ℝ` when `RCLike.I
+ = 0`.
 -/
-def realRingEquiv (h : I = (0 : K)) : K ≃+* Real where
+def realRingEquiv (h : I = (0 : K)) : K ≃+* ℝ where
   toFun := re
   invFun := (↑)
   left_inv x := by nth_rw 2 [← re_add_im x]; simp [h]
@@ -6199,87 +5320,119 @@ def realRingEquiv (h : I = (0 : K)) : K ≃+* Real where
 /-- The natural `ℝ`-linear isometry equivalence between `𝕜` satisfying `RCLike 𝕜` and `ℝ` when
 `RCLike.I = 0`. -/
 @[simps]
-/--
-Definition of `realLinearIsometryEquiv` / `realLinearIsometryEquiv` 的定义
+/-
+**RCLike.realLinearIsometryEquiv** 是 Mathlib 中的一个定义，位于命名空间 `RCLike`。
+形式化陈述：realLinearIsometryEquiv (h : I = (0 : K)) : K ≃ₗᵢ[Real] Real where map_smu
+l'
+参数：h : I = (0 : K)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `RCLike.smul_re`：smul_re (r : Real) (z : K) : re (r • z) = r * re z
 
-English:
-definition realLinearIsometryEquiv
-  signature: (h : I = (0 : K))
-  body: smul_re
-  norm_map' z := by rw [← re_add_im z]; simp [-re_add_im, h]
-  __ := realRingEquiv h
-
-中文:
-定义 realLinearIsometryEquiv
-  签名: (h : I = (0 : K))
-  定义体: smul_re
-  norm_map' z := by rw [← re_add_im z]; simp [-re_add_im, h]
-  __ := realRingEquiv h
-
-Depends on / 依赖: smul_re
+--- 原说明 ---
+The natural `ℝ`-linear isometry equivalence between `𝕜` satisfying `RCLike 𝕜` an
+d `ℝ` when
+`RCLike.I = 0`.
 -/
-noncomputable def realLinearIsometryEquiv (h : I = (0 : K)) : K ≃ₗᵢ[Real] Real where
+noncomputable def realLinearIsometryEquiv (h : I = (0 : K)) : K ≃ₗᵢ[ℝ] ℝ where
   map_smul' := smul_re
   norm_map' z := by rw [← re_add_im z]; simp [-re_add_im, h]
   __ := realRingEquiv h
 
 end CaseSpecific
 
-/--
-lemma `norm_le_im_iff_eq_I_mul_norm` / 引理 `norm_le_im_iff_eq_I_mul_norm`
-
-English:
-lemma norm_le_im_iff_eq_I_mul_norm
-  given: {z : K}
-  proof: by
-  obtain (h | h) := I_eq_zero_or_im_I_eq_one (K := K)
-  · simp [h, im_eq_zero]
-  · have : (I : K) != 0 := fun _ => by simp_all
-    rw [← mul_right_inj' (neg_ne_zero.mpr this)]
-    convert! norm_le_re_iff_eq_norm (z := -I * z) using 2
-    all_goals simp [neg_mul, ← mul_assoc, I_mul_I_of_nonzero this, norm_I_of_ne_zero this]
-
-中文:
-引理 norm_le_im_iff_eq_I_mul_norm
-  条件: {z : K}
-  证明: by
-  obtain (h | h) := I_eq_zero_or_im_I_eq_one (K := K)
-  · simp [h, im_eq_zero]
-  · have : (I : K) != 0 := fun _ => by simp_all
-    rw [← mul_right_inj' (neg_ne_zero.mpr this)]
-    convert! norm_le_re_iff_eq_norm (z := -I * z) using 2
-    all_goals simp [neg_mul, ← mul_assoc, I_mul_I_of_nonzero this, norm_I_of_ne_zero this]
-
-Depends on / 依赖: I_eq_zero_or_im_I_eq_one, I_mul_I_of_nonzero, all_goals, convert, im_eq_zero, mul_assoc, mul_right_inj, neg_mul, neg_ne_zero, neg_ne_zero.mpr, norm_I_of_ne_zero, norm_le_re_iff_eq_norm
+/-
+**RCLike.norm_le_im_iff_eq_I_mul_norm** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`。
+形式化陈述：norm_le_im_iff_eq_I_mul_norm {z : K} : ‖z‖ <= im z ↔ z = I * ‖z‖
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `RCLike.I_eq_zero_or_im_I_eq_one`：I_eq_zero_or_im_I_eq_one : (I : K) = 0 
+∨ im (I : K) = 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `RCLike.im_eq_zero`：im_eq_zero (h : I = (0 : K)) (z : K) : im z = 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `mul_right_inj'`：mul_right_inj' (ha : a != 0) : a * b = a * c ↔ b = c
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `neg_ne_zero`：∀ {α : Type u_1} [inst : SubtractionMonoid α] {a : α}, -a ≠
+ 0 ↔ a ≠ 0
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `norm_neg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), ‖-a‖ =
+ ‖a‖
+· 使用定理 `norm_mul`：∀ {α : Type u_2} [inst : Norm α] [inst_1 : Mul α] [NormMulClas
+s α] (a b : α), ‖a * b‖ = ‖a‖ * ‖b‖
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `RCLike.norm_I_of_ne_zero`：norm_I_of_ne_zero (hI : (I : K) != 0) : ‖(I : 
+K)‖ = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RCLike.mul_re`：mul_re : forall z w : K, re (z * w) = re z * re w - im z 
+* im w
+（共 36 条，此处仅展示前 30 条）
 -/
 lemma norm_le_im_iff_eq_I_mul_norm {z : K} :
-    ‖z‖ <= im z ↔ z = I * ‖z‖ := by
+    ‖z‖ ≤ im z ↔ z = I * ‖z‖ := by
   obtain (h | h) := I_eq_zero_or_im_I_eq_one (K := K)
   · simp [h, im_eq_zero]
-  · have : (I : K) != 0 := fun _ => by simp_all
+  · have : (I : K) ≠ 0 := fun _ ↦ by simp_all
     rw [← mul_right_inj' (neg_ne_zero.mpr this)]
     convert! norm_le_re_iff_eq_norm (z := -I * z) using 2
     all_goals simp [neg_mul, ← mul_assoc, I_mul_I_of_nonzero this, norm_I_of_ne_zero this]
-
-/--
-lemma `im_le_neg_norm_iff_eq_neg_I_mul_norm` / 引理 `im_le_neg_norm_iff_eq_neg_I_mul_norm`
-
-English:
-lemma im_le_neg_norm_iff_eq_neg_I_mul_norm
-  given: {z : K}
-  proof: by
-  simpa [neg_eq_iff_eq_neg, le_neg] using norm_le_im_iff_eq_I_mul_norm (z := -z)
-
-中文:
-引理 im_le_neg_norm_iff_eq_neg_I_mul_norm
-  条件: {z : K}
-  证明: by
-  simpa [neg_eq_iff_eq_neg, le_neg] using norm_le_im_iff_eq_I_mul_norm (z := -z)
-
-Depends on / 依赖: le_neg, neg_eq_iff_eq_neg, norm_le_im_iff_eq_I_mul_norm
+/-
+**RCLike.im_le_neg_norm_iff_eq_neg_I_mul_norm** 是 Mathlib 中的一个引理，位于命名空间 `RCLike`
+。
+形式化陈述：im_le_neg_norm_iff_eq_neg_I_mul_norm {z : K} : im z <= -‖z‖ ↔ z = -(I * ‖z
+‖)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `norm_neg`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a : E), ‖-a‖ =
+ ‖a‖
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用引理 `RCLike.norm_le_im_iff_eq_I_mul_norm`：norm_le_im_iff_eq_I_mul_norm {z : K
+} : ‖z‖ <= im z ↔ z = I * ‖z‖
 -/
 lemma im_le_neg_norm_iff_eq_neg_I_mul_norm {z : K} :
-    im z <= -‖z‖ ↔ z = -(I * ‖z‖) := by
+    im z ≤ -‖z‖ ↔ z = -(I * ‖z‖) := by
   simpa [neg_eq_iff_eq_neg, le_neg] using norm_le_im_iff_eq_I_mul_norm (z := -z)
 
 end RCLike
@@ -6287,161 +5440,82 @@ end RCLike
 namespace AddChar
 variable {G : Type*} [Finite G]
 
-/--
-lemma `inv_apply_eq_conj` / 引理 `inv_apply_eq_conj`
-
-English:
-lemma inv_apply_eq_conj
-  given: [AddLeftCancelMonoid G] (ψ : AddChar G K) (x : G)
-  statement: (ψ x)⁻¹ = conj (ψ x)
-  proof: RCLike.inv_eq_conj norm_apply _ _
-
-中文:
-引理 inv_apply_eq_conj
-  条件: [加法左消去幺半群 G] (ψ : 加法特征 G K) (x : G)
-  结论: (ψ x)⁻¹ = conj (ψ x)
-  证明: RCLike.inv_eq_conj norm_apply _ _
-
-Depends on / 依赖: RCLike, RCLike.inv_eq_conj, inv_eq_conj, norm_apply
+/-
+**AddChar.inv_apply_eq_conj** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：inv_apply_eq_conj [AddLeftCancelMonoid G] (ψ : AddChar G K) (x : G) : (ψ x
+)⁻¹ = conj (ψ x)
+参数：ψ : AddChar G K；x : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `RCLike.inv_eq_conj`：inv_eq_conj (hz : ‖z‖ = 1) : z⁻¹ = conj z
+· 使用定理 `AddChar.norm_apply`：∀ {α : Type u_1} [inst : NormedRing α] [NormMulClass
+ α] [NormOneClass α] {G : Type u_3} [inst_3 : AddLeftCancelMonoid G]   [Finite G
+] (ψ : A…
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `NormedDivisionRing.to_normOneClass`：∀ {α : Type u_2} [inst : NormedDivis
+ionRing α], NormOneClass α
 -/
 lemma inv_apply_eq_conj [AddLeftCancelMonoid G] (ψ : AddChar G K) (x : G) : (ψ x)⁻¹ = conj (ψ x) :=
-RCLike.inv_eq_conj norm_apply _ _
-
-/--
-lemma `map_neg_eq_conj` / 引理 `map_neg_eq_conj`
-
-English:
-lemma map_neg_eq_conj
-  given: [AddCommGroup G] (ψ : AddChar G K) (x : G)
-  statement: ψ (-x) = conj (ψ x)
-  proof: by
-  rw [map_neg_eq_inv]; rw [inv_apply_eq_conj]
-
-中文:
-引理 map_neg_eq_conj
-  条件: [加法交换群 G] (ψ : 加法特征 G K) (x : G)
-  结论: ψ (-x) = conj (ψ x)
-  证明: by
-  rw [map_neg_eq_inv]; rw [inv_apply_eq_conj]
-
-Depends on / 依赖: inv_apply_eq_conj, map_neg_eq_inv
+  RCLike.inv_eq_conj <| norm_apply _ _
+/-
+**AddChar.map_neg_eq_conj** 是 Mathlib 中的一个引理，位于命名空间 `AddChar`。
+形式化陈述：map_neg_eq_conj [AddCommGroup G] (ψ : AddChar G K) (x : G) : ψ (-x) = conj
+ (ψ x)
+参数：ψ : AddChar G K；x : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AddChar.map_neg_eq_inv`：map_neg_eq_inv (ψ : AddChar A M) (a : A) : ψ (-a
+) = (ψ a)⁻¹
+· 使用引理 `AddChar.inv_apply_eq_conj`：inv_apply_eq_conj [AddLeftCancelMonoid G] (ψ 
+: AddChar G K) (x : G) : (ψ x)⁻¹ = conj (ψ x)
 -/
 lemma map_neg_eq_conj [AddCommGroup G] (ψ : AddChar G K) (x : G) : ψ (-x) = conj (ψ x) := by
-  rw [map_neg_eq_inv]; rw [inv_apply_eq_conj]
+  rw [map_neg_eq_inv, inv_apply_eq_conj]
 
 end AddChar
 
 section
 
-/--
-Definition of `IsRCLikeNormedField` / `IsRCLikeNormedField` 的定义
+/-- A mixin over a normed field, saying that the norm field structure is the same as `ℝ` or `ℂ`.
+To endow such a field with a compatible `RCLike` structure in a proof, use
+`letI := IsRCLikeNormedField.rclike 𝕜`. -/
+/-
+**IsRCLikeNormedField** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(𝕜 : Type u_3) → [hk : NormedField 𝕜] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsRCLikeNormedField
-  parameters: (𝕜 : Type*) [hk : NormedField 𝕜]
-  axioms and operations (1):
-    - out : exists h : RCLike 𝕜, hk = h.toNormedField
-
-中文:
-类 是RCLikeNormedField
-  参数: (𝕜 : 类型) [hk : 赋范域 𝕜]
-  公理与运算 (1 个):
-    - out : 存在 h : RCLike 𝕜, hk = h.toNormedField
+--- 原说明 ---
+A mixin over a normed field, saying that the norm field structure is the same as
+ `ℝ` or `ℂ`.
+To endow such a field with a compatible `RCLike` structure in a proof, use
+`letI := IsRCLikeNormedField.rclike 𝕜`.
 -/
 class IsRCLikeNormedField (𝕜 : Type*) [hk : NormedField 𝕜] : Prop where
-  out : exists h : RCLike 𝕜, hk = h.toNormedField
-
+  out : ∃ h : RCLike 𝕜, hk = h.toNormedField
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) (𝕜 : Type*) [h : RCLike 𝕜] : IsRCLikeNormedField 𝕜 := ⟨⟨h, rfl⟩⟩
 
 /-- A copy of an `RCLike` field in which the `NormedField` field is adjusted to be become defeq
 to a propeq one. -/
 @[instance_reducible]
-/--
-Definition of `RCLike.copy_of_normedField` / `RCLike.copy_of_normedField` 的定义
+/-
+**RCLike.copy_of_normedField** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：RCLike.copy_of_normedField {𝕜 : Type*} (h : RCLike 𝕜) (hk : NormedField 𝕜)
+ (h'' : hk = h.toNormedField) : RCLike 𝕜 where __
+参数：h : RCLike 𝕜；hk : NormedField 𝕜；h'' : hk = h.toNormedField。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RCLike.copy_of_normedField
-  signature: {𝕜 : Type*} (h : RCLike 𝕜) (hk : NormedField 𝕜)
-  body: hk
-  toPartialOrder := h.toPartialOrder
-  toDecidableEq := h.toDecidableEq
-  complete := by subst h''; exact h.complete
-  lt_norm_lt := by subst h''; exact h.lt_norm_lt
-  -- star fields
-  star := (@StarMul.toInvolutiveStar _ (_) (@StarRing.toStarMul _ (_) h.toStarRing)).star
-  star_involutive := by subst h''; exact h.star_involutive
-  star_mul := by subst h''; exact h.star_mul
-  star_add := by subst h''; exact h.star_add
-  -- algebra fields
-  smul := (@Algebra.toSMul _ _ _ (_) (@NormedAlgebra.toAlgebra _ _ _ (_) h.toNormedAlgebra)).smul
-  algebraMap :=
-  { toFun := @Algebra.algebraMap _ _ _ (_) (@NormedAlgebra.toAlgebra _ _ _ (_) h.toNormedAlgebra)
-    map_one' := by subst h''; exact h.algebraMap.map_one'
-    map_mul' := by subst h''; exact h.algebraMap.map_mul'
-    map_zero' := by subst h''; exact h.algebraMap.map_zero'
-    map_add' := by subst h''; exact h.algebraMap.map_add' }
-  commutes' := by subst h''; exact h.commutes'
-  smul_def' := by subst h''; exact h.smul_def'
-  norm_smul_le := by subst h''; exact h.norm_smul_le
-  -- RCLike fields
-  re := by subst h''; exact h.re
-  im := by subst h''; exact h.im
-  I := h.I
-  I_re_ax := by subst h''; exact h.I_re_ax
-  I_mul_I_ax := by subst h''; exact h.I_mul_I_ax
-  re_add_im_ax := by subst h''; exact h.re_add_im_ax
-  ofReal_re_ax := by subst h''; exact h.ofReal_re_ax
-  ofReal_im_ax := by subst h''; exact h.ofReal_im_ax
-  mul_re_ax := by subst h''; exact h.mul_re_ax
-  mul_im_ax := by subst h''; exact h.mul_im_ax
-  conj_re_ax := by subst h''; exact h.conj_re_ax
-  conj_im_ax := by subst h''; exact h.conj_im_ax
-  conj_I_ax := by subst h''; exact h.conj_I_ax
-  norm_sq_eq_def_ax := by subst h''; exact h.norm_sq_eq_def_ax
-  mul_im_I_ax := by subst h''; exact h.mul_im_I_ax
-  le_iff_re_im := by subst h''; exact h.le_iff_re_im
-
-中文:
-定义 RCLike.copy_of_normedField
-  签名: {𝕜 : 类型} (h : RCLike 𝕜) (hk : 赋范域 𝕜)
-  定义体: hk
-  toPartialOrder := h.toPartialOrder
-  toDecidableEq := h.toDecidableEq
-  complete := by subst h''; exact h.complete
-  lt_norm_lt := by subst h''; exact h.lt_norm_lt
-  -- star fields
-  star := (@StarMul.toInvolutiveStar _ (_) (@StarRing.toStarMul _ (_) h.toStarRing)).star
-  star_involutive := by subst h''; exact h.star_involutive
-  star_mul := by subst h''; exact h.star_mul
-  star_add := by subst h''; exact h.star_add
-  -- algebra fields
-  smul := (@Algebra.toSMul _ _ _ (_) (@NormedAlgebra.toAlgebra _ _ _ (_) h.toNormedAlgebra)).smul
-  algebraMap :=
-  { toFun := @Algebra.algebraMap _ _ _ (_) (@NormedAlgebra.toAlgebra _ _ _ (_) h.toNormedAlgebra)
-    map_one' := by subst h''; exact h.algebraMap.map_one'
-    map_mul' := by subst h''; exact h.algebraMap.map_mul'
-    map_zero' := by subst h''; exact h.algebraMap.map_zero'
-    map_add' := by subst h''; exact h.algebraMap.map_add' }
-  commutes' := by subst h''; exact h.commutes'
-  smul_def' := by subst h''; exact h.smul_def'
-  norm_smul_le := by subst h''; exact h.norm_smul_le
-  -- RCLike fields
-  re := by subst h''; exact h.re
-  im := by subst h''; exact h.im
-  I := h.I
-  I_re_ax := by subst h''; exact h.I_re_ax
-  I_mul_I_ax := by subst h''; exact h.I_mul_I_ax
-  re_add_im_ax := by subst h''; exact h.re_add_im_ax
-  ofReal_re_ax := by subst h''; exact h.ofReal_re_ax
-  ofReal_im_ax := by subst h''; exact h.ofReal_im_ax
-  mul_re_ax := by subst h''; exact h.mul_re_ax
-  mul_im_ax := by subst h''; exact h.mul_im_ax
-  conj_re_ax := by subst h''; exact h.conj_re_ax
-  conj_im_ax := by subst h''; exact h.conj_im_ax
-  conj_I_ax := by subst h''; exact h.conj_I_ax
-  norm_sq_eq_def_ax := by subst h''; exact h.norm_sq_eq_def_ax
-  mul_im_I_ax := by subst h''; exact h.mul_im_I_ax
-  le_iff_re_im := by subst h''; exact h.le_iff_re_im
+--- 原说明 ---
+A copy of an `RCLike` field in which the `NormedField` field is adjusted to be b
+ecome defeq
+to a propeq one.
 -/
 noncomputable def RCLike.copy_of_normedField {𝕜 : Type*} (h : RCLike 𝕜) (hk : NormedField 𝕜)
     (h'' : hk = h.toNormedField) : RCLike 𝕜 where
@@ -6485,26 +5559,27 @@ noncomputable def RCLike.copy_of_normedField {𝕜 : Type*} (h : RCLike 𝕜) (h
   le_iff_re_im := by subst h''; exact h.le_iff_re_im
 
 /-- Given a normed field `𝕜` satisfying `IsRCLikeNormedField 𝕜`, build an associated `RCLike 𝕜`
+/-
+**on** 是 Mathlib 中的一个结构，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 structure on `𝕜` which is definitionally compatible with the given normed field structure. -/
 @[instance_reducible]
-/--
-Definition of `IsRCLikeNormedField.rclike` / `IsRCLikeNormedField.rclike` 的定义
+/-
+**IsRCLikeNormedField.rclike** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsRCLikeNormedField.rclike (𝕜 : Type*) [hk : NormedField 𝕜] [h : IsRCLikeN
+ormedField 𝕜] : RCLike 𝕜
+参数：𝕜 : Type*。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsRCLikeNormedField.out`：∀ {𝕜 : Type u_3} {hk : NormedField 𝕜} [self : I
+sRCLikeNormedField 𝕜], ∃ h, hk = h.toNormedField
 
-English:
-definition IsRCLikeNormedField.rclike
-  signature: (𝕜 : Type*)
-  body: by
-  choose p hp using h.out
-  exact p.copy_of_normedField hk hp
-
-中文:
-定义 是RCLikeNormedField.rclike
-  签名: (𝕜 : 类型)
-  定义体: by
-  choose p hp using h.out
-  exact p.copy_of_normedField hk hp
-
-Depends on / 依赖: copy_of_normedField, h.out, p.copy_of_normedField
+--- 原说明 ---
+Given a normed field `𝕜` satisfying `IsRCLikeNormedField 𝕜`, build an associated
+ `RCLike 𝕜`
+structure on `𝕜` which is definitionally compatible with the given normed field 
+structure.
 -/
 noncomputable def IsRCLikeNormedField.rclike (𝕜 : Type*)
     [hk : NormedField 𝕜] [h : IsRCLikeNormedField 𝕜] : RCLike 𝕜 := by
@@ -6517,138 +5592,131 @@ namespace LinearIsometryEquiv
 variable {𝕜 V W G : Type*} [RCLike 𝕜] [SeminormedAddCommGroup V] [Module 𝕜 V]
   [SeminormedAddCommGroup W] [NormedSpace 𝕜 W] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Left scalar multiplication of a unit with norm one and a linear isometric equivalence,
+as a linear isometric equivalence. -/
+/-
+**LinearIsometryEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `LinearIsometryEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: SMul (unitary 𝕜) (V ≃ₗᵢ[𝕜] W)
-  body: { __ := Unitary.toUnits α • e.toLinearEquiv
-    norm_map' _ := by simp [norm_smul] }
-
-中文:
-实例 :
-  签名: 标量乘法 (unitary 𝕜) (V ≃ₗᵢ[𝕜] W)
-  定义体: { __ := Unitary.toUnits α • e.toLinearEquiv
-    norm_map' _ := by simp [norm_smul] }
-
-Depends on / 依赖: Unitary, Unitary.toUnits, e.toLinearEquiv, norm_map, norm_smul, toLinearEquiv, toUnits
+--- 原说明 ---
+Left scalar multiplication of a unit with norm one and a linear isometric equiva
+lence,
+as a linear isometric equivalence.
 -/
 instance : SMul (unitary 𝕜) (V ≃ₗᵢ[𝕜] W) where smul α e :=
   { __ := Unitary.toUnits α • e.toLinearEquiv
     norm_map' _ := by simp [norm_smul] }
-
-/--
-theorem `smul_apply` / 定理 `smul_apply`
-
-English:
-theorem smul_apply
-  given: (e : V ≃ₗᵢ[𝕜] W) (α : unitary 𝕜) (x : V)
-  proof: rfl
-
-中文:
-定理 smul_apply
-  条件: (e : V ≃ₗᵢ[𝕜] W) (α : unitary 𝕜) (x : V)
-  证明: rfl
+/-
+**LinearIsometryEquiv.smul_apply** 是 Mathlib 中的一个定理，位于命名空间 `LinearIsometryEquiv`
+。
+形式化陈述：∀ {𝕜 : Type u_3} {V : Type u_4} {W : Type u_5} [inst : RCLike 𝕜] [inst_1 :
+ SeminormedAddCommGroup V]   [inst_2 : _root_.Module 𝕜 V] [inst_3 : SeminormedAd
+dCommGroup W] [inst_4 : NormedSpace 𝕜 W] (e : V ≃ₗᵢ[𝕜] W)   (α : ↥(unitary 𝕜)) (
+x : V), (α • e) x = ↑α • e x
+参数：e : V ≃ₗᵢ[𝕜] W；α : ↥(unitary 𝕜)；x : V；α • e。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem smul_apply (e : V ≃ₗᵢ[𝕜] W) (α : unitary 𝕜) (x : V) :
     (α • e) x = (α : 𝕜) • e x := rfl
-
-/--
-theorem `symm_smul_apply` / 定理 `symm_smul_apply`
-
-English:
-theorem symm_smul_apply
-  given: (e : V ≃ₗᵢ[𝕜] W) (α : unitary 𝕜) (x : W)
-  proof: rfl
-
-中文:
-定理 symm_smul_apply
-  条件: (e : V ≃ₗᵢ[𝕜] W) (α : unitary 𝕜) (x : W)
-  证明: rfl
+/-
+**LinearIsometryEquiv.symm_smul_apply** 是 Mathlib 中的一个定理，位于命名空间 `LinearIsometryE
+quiv`。
+形式化陈述：symm_smul_apply (e : V ≃ₗᵢ[𝕜] W) (α : unitary 𝕜) (x : W) : (α • e).symm x 
+= (↑α⁻¹ : 𝕜) • e.symm x
+参数：e : V ≃ₗᵢ[𝕜] W；α : unitary 𝕜；x : W。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_smul_apply (e : V ≃ₗᵢ[𝕜] W) (α : unitary 𝕜) (x : W) :
     (α • e).symm x = (↑α⁻¹ : 𝕜) • e.symm x := rfl
-
-/--
-theorem `symm_units_smul` / 定理 `symm_units_smul`
-
-English:
-theorem symm_units_smul
-  given: (e : G ≃ₗᵢ[𝕜] W) (α : unitary 𝕜)
-  proof: by ext; simp [symm_smul_apply]
-
-中文:
-定理 symm_units_smul
-  条件: (e : G ≃ₗᵢ[𝕜] W) (α : unitary 𝕜)
-  证明: by ext; simp [symm_smul_apply]
+/-
+**LinearIsometryEquiv.symm_units_smul** 是 Mathlib 中的一个定理，位于命名空间 `LinearIsometryE
+quiv`。
+形式化陈述：∀ {𝕜 : Type u_3} {W : Type u_5} {G : Type u_6} [inst : RCLike 𝕜] [inst_1 :
+ SeminormedAddCommGroup W]   [inst_2 : NormedSpace 𝕜 W] [inst_3 : SeminormedAddC
+ommGroup G] [inst_4 : NormedSpace 𝕜 G] (e : G ≃ₗᵢ[𝕜] W)   (α : ↥(unitary 𝕜)), (α
+ • e).symm = α⁻¹ • e.symm
+参数：e : G ≃ₗᵢ[𝕜] W；α : ↥(unitary 𝕜)；α • e。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearIsometryEquiv.ext`：ext {e e' : E ≃ₛₗᵢ[σ₁₂] E₂} (h : forall x, e x 
+= e' x) : e = e'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] theorem symm_units_smul (e : G ≃ₗᵢ[𝕜] W) (α : unitary 𝕜) :
     (α • e).symm = α⁻¹ • e.symm := by ext; simp [symm_smul_apply]
-
-/--
-theorem `toLinearEquiv_smul` / 定理 `toLinearEquiv_smul`
-
-English:
-theorem toLinearEquiv_smul
-  given: (e : V ≃ₗᵢ[𝕜] W) (α : unitary 𝕜)
-  proof: rfl
-
-中文:
-定理 toLinearEquiv_smul
-  条件: (e : V ≃ₗᵢ[𝕜] W) (α : unitary 𝕜)
-  证明: rfl
+/-
+**LinearIsometryEquiv.toLinearEquiv_smul** 是 Mathlib 中的一个定理，位于命名空间 `LinearIsomet
+ryEquiv`。
+形式化陈述：∀ {𝕜 : Type u_3} {V : Type u_4} {W : Type u_5} [inst : RCLike 𝕜] [inst_1 :
+ SeminormedAddCommGroup V]   [inst_2 : _root_.Module 𝕜 V] [inst_3 : SeminormedAd
+dCommGroup W] [inst_4 : NormedSpace 𝕜 W] (e : V ≃ₗᵢ[𝕜] W)   (α : ↥(unitary 𝕜)), 
+(α • e).toLinearEquiv = Unitary.toUnits α • e.toLinearEquiv
+参数：e : V ≃ₗᵢ[𝕜] W；α : ↥(unitary 𝕜)；α • e。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem toLinearEquiv_smul (e : V ≃ₗᵢ[𝕜] W) (α : unitary 𝕜) :
     (α • e).toLinearEquiv = Unitary.toUnits α • e.toLinearEquiv := rfl
-
-/--
-theorem `toContinuousLinearEquiv_smul` / 定理 `toContinuousLinearEquiv_smul`
-
-English:
-theorem toContinuousLinearEquiv_smul
-  given: (e : G ≃ₗᵢ[𝕜] W) (α : unitary 𝕜)
-  proof: rfl
-
-中文:
-定理 toContinuousLinearEquiv_smul
-  条件: (e : G ≃ₗᵢ[𝕜] W) (α : unitary 𝕜)
-  证明: rfl
+/-
+**LinearIsometryEquiv.toContinuousLinearEquiv_smul** 是 Mathlib 中的一个定理，位于命名空间 `Li
+nearIsometryEquiv`。
+形式化陈述：∀ {𝕜 : Type u_3} {W : Type u_5} {G : Type u_6} [inst : RCLike 𝕜] [inst_1 :
+ SeminormedAddCommGroup W]   [inst_2 : NormedSpace 𝕜 W] [inst_3 : SeminormedAddC
+ommGroup G] [inst_4 : NormedSpace 𝕜 G] (e : G ≃ₗᵢ[𝕜] W)   (α : ↥(unitary 𝕜)), ↑(
+α • e) = Unitary.toUnits α • ↑e
+参数：e : G ≃ₗᵢ[𝕜] W；α : ↥(unitary 𝕜)；α • e。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem toContinuousLinearEquiv_smul (e : G ≃ₗᵢ[𝕜] W) (α : unitary 𝕜) :
     (α • e).toContinuousLinearEquiv = Unitary.toUnits α • e.toContinuousLinearEquiv := rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `smul_trans` / 定理 `smul_trans`
-
-English:
-theorem smul_trans
-  given: (α : unitary 𝕜) (e : V ≃ₗᵢ[𝕜] G) (f : G ≃ₗᵢ[𝕜] W)
-  proof: by ext; simp
-
-中文:
-定理 smul_trans
-  条件: (α : unitary 𝕜) (e : V ≃ₗᵢ[𝕜] G) (f : G ≃ₗᵢ[𝕜] W)
-  证明: by ext; simp
+/-
+**LinearIsometryEquiv.smul_trans** 是 Mathlib 中的一个定理，位于命名空间 `LinearIsometryEquiv`
+。
+形式化陈述：smul_trans (α : unitary 𝕜) (e : V ≃ₗᵢ[𝕜] G) (f : G ≃ₗᵢ[𝕜] W) : (α • e).tra
+ns f = α • (e.trans f)
+参数：α : unitary 𝕜；e : V ≃ₗᵢ[𝕜] G；f : G ≃ₗᵢ[𝕜] W。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearIsometryEquiv.ext`：ext {e e' : E ≃ₛₗᵢ[σ₁₂] E₂} (h : forall x, e x 
+= e' x) : e = e'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `SemilinearIsometryClass.toSemilinearMapClass`：∀ {𝓕 : Type u_11} {R : out
+Param (Type u_12)} {R₂ : outParam (Type u_13)} {inst : Semiring R} {inst_1 : Sem
+iring R₂}   {σ₁₂ : outParam (R →+*…
+· 使用定理 `SemilinearIsometryEquivClass.toSemilinearIsometryClass`：∀ {R : Type u_1}
+ {R₂ : Type u_2} {E : Type u_5} {E₂ : Type u_6} (𝓕 : Type u_10) [inst : Semiring
+ R]   [inst_1 : Semiring R₂] {σ₁₂ : R →+* R₂…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem smul_trans (α : unitary 𝕜) (e : V ≃ₗᵢ[𝕜] G) (f : G ≃ₗᵢ[𝕜] W) :
     (α • e).trans f = α • (e.trans f) := by ext; simp
-
-/--
-theorem `trans_smul` / 定理 `trans_smul`
-
-English:
-theorem trans_smul
-  given: (α : unitary 𝕜) (e : V ≃ₗᵢ[𝕜] G) (f : G ≃ₗᵢ[𝕜] W)
-  proof: by ext; simp
-
-中文:
-定理 trans_smul
-  条件: (α : unitary 𝕜) (e : V ≃ₗᵢ[𝕜] G) (f : G ≃ₗᵢ[𝕜] W)
-  证明: by ext; simp
+/-
+**LinearIsometryEquiv.trans_smul** 是 Mathlib 中的一个定理，位于命名空间 `LinearIsometryEquiv`
+。
+形式化陈述：trans_smul (α : unitary 𝕜) (e : V ≃ₗᵢ[𝕜] G) (f : G ≃ₗᵢ[𝕜] W) : e.trans (α 
+• f) = α • (e.trans f)
+参数：α : unitary 𝕜；e : V ≃ₗᵢ[𝕜] G；f : G ≃ₗᵢ[𝕜] W。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearIsometryEquiv.ext`：ext {e e' : E ≃ₛₗᵢ[σ₁₂] E₂} (h : forall x, e x 
+= e' x) : e = e'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem trans_smul (α : unitary 𝕜) (e : V ≃ₗᵢ[𝕜] G) (f : G ≃ₗᵢ[𝕜] W) :
     e.trans (α • f) = α • (e.trans f) := by ext; simp
 
 end LinearIsometryEquiv
+

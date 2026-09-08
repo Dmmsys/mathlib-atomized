@@ -50,7 +50,7 @@ Using `CompHausLike`, we can now define
 `CompHaus := CompHausLike (fun _ ↦ True)`
 `Profinite := CompHausLike (fun X ↦ TotallyDisconnectedSpace X)`.
 `Stonean := CompHausLike (fun X ↦ ExtremallyDisconnected X)`.
-`LightProfinite := CompHausLike (fun X ↦ TotallyDisconnectedSpace X ∧ SecondCountableTopology X)`.
+`LightProfinite := CompHausLike  (fun X ↦ TotallyDisconnectedSpace X ∧ SecondCountableTopology X)`.
 
 These four categories are important building blocks of condensed objects (see the files
 `Condensed.Basic` and `Condensed.Light.Basic`). These categories share many properties and often,
@@ -69,28 +69,17 @@ universe u
 
 open CategoryTheory
 
-variable (P : TopCat.{u} -> Prop)
+variable (P : TopCat.{u} → Prop)
 
-/--
-Definition of `CompHausLike` / `CompHausLike` 的定义
+/-- The type of Compact Hausdorff topological spaces satisfying an additional property `P`. -/
+/-
+**CompHausLike** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(TopCat → Prop) → Type (u + 1)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CompHausLike
-  parameters: where
-  axioms and operations (4):
-    - toTop : TopCat
-    - [is_compact : CompactSpace toTop]
-    - [is_hausdorff : T2Space toTop]
-    - prop : P toTop
-
-中文:
-结构 余mpHausLike
-  参数: where
-  公理与运算 (4 个):
-    - toTop : 顶元素范畴
-    - [is_compact : 紧空间 toTop]
-    - [is_hausdorff : T2空间 toTop]
-    - prop : P toTop
+--- 原说明 ---
+The type of Compact Hausdorff topological spaces satisfying an additional proper
+ty `P`.
 -/
 structure CompHausLike where
   /-- The underlying topological space of an object of `CompHausLike P`. -/
@@ -106,187 +95,107 @@ namespace CompHausLike
 
 attribute [instance] is_compact is_hausdorff
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort (CompHausLike P) (Type u)
-  body: ⟨fun X => X.toTop⟩
-
-中文:
-实例 :
-  签名: CoeSort (余mpHausLike P) (类型u)
-  定义体: ⟨fun X => X.toTop⟩
-
-Depends on / 依赖: X.toTop
+/-
+**CompHausLike.** 是 Mathlib 中的一个实例，位于命名空间 `CompHausLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort (CompHausLike P) (Type u) :=
   ⟨fun X => X.toTop⟩
-
-/--
-Instance `category` / 实例 `category`
-
-English:
-instance category
-  signature: : Category (CompHausLike P)
-  body: inferInstanceAs Category (InducedCategory _ toTop)
-
-中文:
-实例 category
-  签名: : 范畴 (余mpHausLike P)
-  定义体: inferInstanceAs Category (InducedCategory _ toTop)
-
-Depends on / 依赖: Category, InducedCategory
+/-
+**CompHausLike.category** 是 Mathlib 中的一个实例，位于命名空间 `CompHausLike`。
+形式化陈述：category : Category (CompHausLike P)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance category : Category (CompHausLike P) :=
-inferInstanceAs Category (InducedCategory _ toTop)
-
-/--
-Instance `concreteCategory` / 实例 `concreteCategory`
-
-English:
-instance concreteCategory
-  signature: : ConcreteCategory (CompHausLike P) (C(·, ·))
-  body: inferInstanceAs ConcreteCategory (InducedCategory _ toTop) _
-
-中文:
-实例 concreteCategory
-  签名: : 余ncrete范畴 (余mpHausLike P) (C(·, ·))
-  定义体: inferInstanceAs ConcreteCategory (InducedCategory _ toTop) _
-
-Depends on / 依赖: ConcreteCategory, InducedCategory
+  inferInstanceAs <| Category (InducedCategory _ toTop)
+/-
+**CompHausLike.concreteCategory** 是 Mathlib 中的一个实例，位于命名空间 `CompHausLike`。
+形式化陈述：concreteCategory : ConcreteCategory (CompHausLike P) (C(·, ·))
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance concreteCategory : ConcreteCategory (CompHausLike P) (C(·, ·)) :=
-inferInstanceAs ConcreteCategory (InducedCategory _ toTop) _
-
-/--
-Instance `hasForget₂` / 实例 `hasForget₂`
-
-English:
-instance hasForget₂
-  signature: : HasForget₂ (CompHausLike P) TopCat
-  body: inferInstanceAs HasForget₂ (InducedCategory _ toTop) _
-
-中文:
-实例 hasForget₂
-  签名: : 有Forget₂ (余mpHausLike P) 顶元素范畴
-  定义体: inferInstanceAs HasForget₂ (InducedCategory _ toTop) _
-
-Depends on / 依赖: InducedCategory
+  inferInstanceAs <| ConcreteCategory (InducedCategory _ toTop) _
+/-
+**CompHausLike.hasForget** 是 Mathlib 中的一个实例，位于命名空间 `CompHausLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasForget₂ : HasForget₂ (CompHausLike P) TopCat :=
-inferInstanceAs HasForget₂ (InducedCategory _ toTop) _
+  inferInstanceAs <| HasForget₂ (InducedCategory _ toTop) _
 
 variable (X : Type u) [TopologicalSpace X] [CompactSpace X] [T2Space X]
 
-/--
-Definition of `HasProp` / `HasProp` 的定义
+/-- This wraps the predicate `P : TopCat → Prop` in a typeclass. -/
+/-
+**CompHausLike.HasProp** 是 Mathlib 中的一个归纳类型，位于命名空间 `CompHausLike`。
+形式化陈述：(TopCat → Prop) → (X : Type u) → [TopologicalSpace X] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasProp
-  parameters: : Prop where
-  axioms and operations (1):
-    - hasProp : P (TopCat.of X)
-
-中文:
-类 有命题
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - hasProp : P (顶元素范畴.of X)
+--- 原说明 ---
+This wraps the predicate `P : TopCat → Prop` in a typeclass.
 -/
 class HasProp : Prop where
   hasProp : P (TopCat.of X)
-
+/-
+**CompHausLike.** 是 Mathlib 中的一个实例，位于命名空间 `CompHausLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : CompHausLike P) : HasProp P X := ⟨X.4⟩
 
 variable [HasProp P X]
 
-/--
-Definition of `of` / `of` 的定义
+/-- A constructor for objects of the category `CompHausLike P`,
+taking a type, and bundling the compact Hausdorff topology
+found by typeclass inference. -/
+/-
+**CompHausLike.of** 是 Mathlib 中的一个缩写定义，位于命名空间 `CompHausLike`。
+形式化陈述：of : CompHausLike P where toTop
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CompHausLike.HasProp.hasProp`：∀ {P : TopCat → Prop} {X : Type u} {inst :
+ TopologicalSpace X} [self : CompHausLike.HasProp P X], P (TopCat.of X)
 
-English:
-abbreviation of
-  signature: : CompHausLike P where
-  body: TopCat.of X
-  is_compact := ‹_›
-  is_hausdorff := ‹_›
-  prop := HasProp.hasProp
-
-中文:
-缩写 of
-  签名: : 余mpHausLike P where
-  定义体: TopCat.of X
-  is_compact := ‹_›
-  is_hausdorff := ‹_›
-  prop := HasProp.hasProp
-
-Depends on / 依赖: TopCat, TopCat.of
+--- 原说明 ---
+A constructor for objects of the category `CompHausLike P`,
+taking a type, and bundling the compact Hausdorff topology
+found by typeclass inference.
 -/
 abbrev of : CompHausLike P where
   toTop := TopCat.of X
   is_compact := ‹_›
   is_hausdorff := ‹_›
   prop := HasProp.hasProp
-
-/--
-theorem `coe_of` / 定理 `coe_of`
-
-English:
-theorem coe_of
-  statement: (CompHausLike.of P X : Type _) = X
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_of
-  结论: (余mpHausLike.of P X : 类型 _) = X
-  证明: rfl
-
-@[simp]
+/-
+**CompHausLike.coe_of** 是 Mathlib 中的一个定理，位于命名空间 `CompHausLike`。
+形式化陈述：coe_of : (CompHausLike.of P X : Type _) = X
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_of : (CompHausLike.of P X : Type _) = X := rfl
 
 @[simp]
-/--
-theorem `coe_id` / 定理 `coe_id`
-
-English:
-theorem coe_id
-  given: (X : CompHausLike P)
-  statement: (𝟙 X : X -> X) = id
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_id
-  条件: (X : 余mpHausLike P)
-  结论: (𝟙 X : X -> X) = id
-  证明: rfl
-
-@[simp]
+/-
+**CompHausLike.coe_id** 是 Mathlib 中的一个定理，位于命名空间 `CompHausLike`。
+形式化陈述：coe_id (X : CompHausLike P) : (𝟙 X : X -> X) = id
+参数：X : CompHausLike P。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_id (X : CompHausLike P) : (𝟙 X : X -> X) = id :=
+theorem coe_id (X : CompHausLike P) : (𝟙 X : X → X) = id :=
   rfl
 
 @[simp]
-/--
-theorem `coe_comp` / 定理 `coe_comp`
-
-English:
-theorem coe_comp
-  given: {X Y Z : CompHausLike P} (f : X ⟶ Y) (g : Y ⟶ Z)
-  proof: rfl
-
-中文:
-定理 coe_comp
-  条件: {X Y Z : 余mpHausLike P} (f : X ⟶ Y) (g : Y ⟶ Z)
-  证明: rfl
+/-
+**CompHausLike.coe_comp** 是 Mathlib 中的一个定理，位于命名空间 `CompHausLike`。
+形式化陈述：coe_comp {X Y Z : CompHausLike P} (f : X ⟶ Y) (g : Y ⟶ Z) : (f ≫ g : X -> 
+Z) = (g ∘ f)
+参数：f : X ⟶ Y；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_comp {X Y Z : CompHausLike P} (f : X ⟶ Y) (g : Y ⟶ Z) :
-    (f ≫ g : X -> Z) = (g ∘ f) :=
+    (f ≫ g : X → Z) = (g ∘ f) :=
   rfl
 
 section
@@ -294,67 +203,52 @@ section
 variable {X} {Y : Type u} [TopologicalSpace Y] [CompactSpace Y] [T2Space Y] [HasProp P Y]
 variable {Z : Type u} [TopologicalSpace Z] [CompactSpace Z] [T2Space Z] [HasProp P Z]
 
-/--
-Definition of `ofHom` / `ofHom` 的定义
+/-- Typecheck a continuous map as a morphism in the category `CompHausLike P`. -/
+/-
+**CompHausLike.ofHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `CompHausLike`。
+形式化陈述：ofHom (f : C(X, Y)) : of P X ⟶ of P Y
+参数：f : C(X, Y)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofHom
-  signature: (f : C(X, Y))
-  body: ConcreteCategory.ofHom f
-
-中文:
-缩写 ofHom
-  签名: (f : C(X, Y))
-  定义体: ConcreteCategory.ofHom f
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom
+--- 原说明 ---
+Typecheck a continuous map as a morphism in the category `CompHausLike P`.
 -/
 abbrev ofHom (f : C(X, Y)) : of P X ⟶ of P Y := ConcreteCategory.ofHom f
-
-/--
-lemma `hom_ofHom` / 引理 `hom_ofHom`
-
-English:
-lemma hom_ofHom
-  given: (f : C(X, Y))
-  statement: ConcreteCategory.hom (ofHom P f) = f
-  proof: rfl
-
-中文:
-引理 hom_ofHom
-  条件: (f : C(X, Y))
-  结论: 余ncrete范畴.hom (ofHom P f) = f
-  证明: rfl
+/-
+**CompHausLike.hom_ofHom** 是 Mathlib 中的一个定理，位于命名空间 `CompHausLike`。
+形式化陈述：∀ (P : TopCat → Prop) {X : Type u} [inst : TopologicalSpace X] [inst_1 : C
+ompactSpace X] [inst_2 : T2Space X]   [inst_3 : CompHausLike.HasProp P X] {Y : T
+ype u} [inst_4 : TopologicalSpace Y] [inst_5 : CompactSpace Y]   [inst_6 : T2Spa
+ce Y] [inst_7 : CompHausLike.HasProp P Y] (f : C(X, Y)),   CategoryTheory.Concre
+teCategory.hom (CompHausLike.ofHom P f) = f
+参数：P : TopCat → Prop；f : C(X, Y)；CompHausLike.ofHom P f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma hom_ofHom (f : C(X, Y)) : ConcreteCategory.hom (ofHom P f) = f := rfl
-
-/--
-lemma `ofHom_id` / 引理 `ofHom_id`
-
-English:
-lemma ofHom_id
-  statement: ofHom P (ContinuousMap.id X) = 𝟙 (of _ X)
-  proof: rfl
-
-中文:
-引理 ofHom_id
-  结论: ofHom P (连续映射.id X) = 𝟙 (of _ X)
-  证明: rfl
+/-
+**CompHausLike.ofHom_id** 是 Mathlib 中的一个定理，位于命名空间 `CompHausLike`。
+形式化陈述：∀ (P : TopCat → Prop) {X : Type u} [inst : TopologicalSpace X] [inst_1 : C
+ompactSpace X] [inst_2 : T2Space X]   [inst_3 : CompHausLike.HasProp P X],   Com
+pHausLike.ofHom P (ContinuousMap.id X) = CategoryTheory.CategoryStruct.id (CompH
+ausLike.of P X)
+参数：P : TopCat → Prop；ContinuousMap.id X；CompHausLike.of P X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma ofHom_id : ofHom P (ContinuousMap.id X) = 𝟙 (of _ X) := rfl
-
-/--
-lemma `ofHom_comp` / 引理 `ofHom_comp`
-
-English:
-lemma ofHom_comp
-  given: (f : C(X, Y)) (g : C(Y, Z))
-  proof: rfl
-
-中文:
-引理 ofHom_comp
-  条件: (f : C(X, Y)) (g : C(Y, Z))
-  证明: rfl
+/-
+**CompHausLike.ofHom_comp** 是 Mathlib 中的一个定理，位于命名空间 `CompHausLike`。
+形式化陈述：∀ (P : TopCat → Prop) {X : Type u} [inst : TopologicalSpace X] [inst_1 : C
+ompactSpace X] [inst_2 : T2Space X]   [inst_3 : CompHausLike.HasProp P X] {Y : T
+ype u} [inst_4 : TopologicalSpace Y] [inst_5 : CompactSpace Y]   [inst_6 : T2Spa
+ce Y] [inst_7 : CompHausLike.HasProp P Y] {Z : Type u} [inst_8 : TopologicalSpac
+e Z]   [inst_9 : CompactSpace Z] [inst_10 : T2Space Z] [inst_11 : CompHausLike.H
+asProp P Z] (f : C(X, Y)) (g : C(Y, Z)),   CompHausLike.ofHom P (g.comp f) = Cat
+egoryTheory.CategoryStruct.comp (CompHausLike.ofHom P f) (CompHausLike.ofHom P g
+)
+参数：P : TopCat → Prop；f : C(X, Y)；g : C(Y, Z)；g.comp f；CompHausLike.ofHom P f；Com
+pHausLike.ofHom P g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma ofHom_comp (f : C(X, Y)) (g : C(Y, Z)) :
     ofHom P (g.comp f) = ofHom _ f ≫ ofHom _ g := rfl
@@ -365,26 +259,23 @@ variable {P}
 
 /-- If `P` implies `P'`, then there is a functor from `CompHausLike P` to `CompHausLike P'`. -/
 @[simps map]
-/--
-Definition of `toCompHausLike` / `toCompHausLike` 的定义
+/-
+**CompHausLike.toCompHausLike** 是 Mathlib 中的一个定义，位于命名空间 `CompHausLike`。
+形式化陈述：toCompHausLike {P P' : TopCat -> Prop} (h : forall (X : CompHausLike P), P
+ X.toTop -> P' X.toTop) : CompHausLike P ⥤ CompHausLike P' where obj X
+参数：h : forall (X : CompHausLike P), P X.toTop -> P' X.toTop。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CompHausLike.is_compact`：∀ {P : TopCat → Prop} (self : CompHausLike P), 
+CompactSpace ↑self.toTop
+· 使用定理 `CompHausLike.is_hausdorff`：∀ {P : TopCat → Prop} (self : CompHausLike P)
+, T2Space ↑self.toTop
 
-English:
-definition toCompHausLike
-  signature: {P P' : TopCat -> Prop} (h : forall (X : CompHausLike P), P X.toTop -> P' X.toTop)
-  body: haveI : HasProp P' X := ⟨(h _ X.prop)⟩
-    CompHausLike.of _ X
-  map {X Y} f := ConcreteCategory.ofHom f.hom.hom
-
-中文:
-定义 toCompHausLike
-  签名: {P P' : 顶元素范畴 -> 命题} (h : 对任意 (X : 余mpHausLike P), P X.toTop -> P' X.toTop)
-  定义体: haveI : HasProp P' X := ⟨(h _ X.prop)⟩
-    CompHausLike.of _ X
-  map {X Y} f := ConcreteCategory.ofHom f.hom.hom
-
-Depends on / 依赖: CompHausLike, CompHausLike.of, ConcreteCategory, ConcreteCategory.ofHom, HasProp, X.prop, f.hom.hom
+--- 原说明 ---
+If `P` implies `P'`, then there is a functor from `CompHausLike P` to `CompHausL
+ike P'`.
 -/
-def toCompHausLike {P P' : TopCat -> Prop} (h : forall (X : CompHausLike P), P X.toTop -> P' X.toTop) :
+def toCompHausLike {P P' : TopCat → Prop} (h : ∀ (X : CompHausLike P), P X.toTop → P' X.toTop) :
     CompHausLike P ⥤ CompHausLike P' where
   obj X :=
     haveI : HasProp P' X := ⟨(h _ X.prop)⟩
@@ -393,57 +284,33 @@ def toCompHausLike {P P' : TopCat -> Prop} (h : forall (X : CompHausLike P), P X
 
 section
 
-variable {P P' : TopCat -> Prop} (h : forall (X : CompHausLike P), P X.toTop -> P' X.toTop)
+variable {P P' : TopCat → Prop} (h : ∀ (X : CompHausLike P), P X.toTop → P' X.toTop)
 
-/--
-Definition of `fullyFaithfulToCompHausLike` / `fullyFaithfulToCompHausLike` 的定义
+/-- If `P` implies `P'`, then the functor from `CompHausLike P` to `CompHausLike P'` is fully
+faithful. -/
+/-
+**CompHausLike.fullyFaithfulToCompHausLike** 是 Mathlib 中的一个定义，位于命名空间 `CompHausLi
+ke`。
+形式化陈述：fullyFaithfulToCompHausLike : (toCompHausLike h).FullyFaithful where preim
+age f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithfulToCompHausLike
-  signature: : (toCompHausLike h).FullyFaithful where
-  body: ConcreteCategory.ofHom f.hom.hom
-
-中文:
-定义 fullyFaithfulToCompHausLike
-  签名: : (toCompHausLike h).满忠实 where
-  定义体: ConcreteCategory.ofHom f.hom.hom
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, f.hom.hom
+--- 原说明 ---
+If `P` implies `P'`, then the functor from `CompHausLike P` to `CompHausLike P'`
+ is fully
+faithful.
 -/
 def fullyFaithfulToCompHausLike : (toCompHausLike h).FullyFaithful where
   preimage f := ConcreteCategory.ofHom f.hom.hom
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (toCompHausLike h).Full
-  body: (fullyFaithfulToCompHausLike h).full
-
-中文:
-实例 :
-  签名: (toCompHausLike h).满
-  定义体: (fullyFaithfulToCompHausLike h).full
-
-Depends on / 依赖: fullyFaithfulToCompHausLike
+/-
+**CompHausLike.** 是 Mathlib 中的一个实例，位于命名空间 `CompHausLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (toCompHausLike h).Full := (fullyFaithfulToCompHausLike h).full
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (toCompHausLike h).Faithful
-  body: (fullyFaithfulToCompHausLike h).faithful
-
-中文:
-实例 :
-  签名: (toCompHausLike h).忠实
-  定义体: (fullyFaithfulToCompHausLike h).faithful
-
-Depends on / 依赖: faithful, fullyFaithfulToCompHausLike
+/-
+**CompHausLike.** 是 Mathlib 中的一个实例，位于命名空间 `CompHausLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (toCompHausLike h).Faithful := (fullyFaithfulToCompHausLike h).faithful
 
@@ -453,145 +320,129 @@ variable (P)
 
 /-- The fully faithful embedding of `CompHausLike P` in `TopCat`. -/
 @[simps! map]
-/--
-Definition of `compHausLikeToTop` / `compHausLikeToTop` 的定义
+/-
+**CompHausLike.compHausLikeToTop** 是 Mathlib 中的一个定义，位于命名空间 `CompHausLike`。
+形式化陈述：compHausLikeToTop : CompHausLike.{u} P ⥤ TopCat.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compHausLikeToTop
-  signature: : CompHausLike.{u} P ⥤ TopCat.{u}
-  body: inducedFunctor _
-
-中文:
-定义 compHausLikeToTop
-  签名: : 余mpHausLike.{u} P ⥤ 顶元素范畴.{u}
-  定义体: inducedFunctor _
-
-Depends on / 依赖: inducedFunctor
+--- 原说明 ---
+The fully faithful embedding of `CompHausLike P` in `TopCat`.
 -/
 def compHausLikeToTop : CompHausLike.{u} P ⥤ TopCat.{u} :=
   inducedFunctor _
 -- The `Full, Faithful` instances should be constructed by a deriving handler.
 -- https://github.com/leanprover-community/mathlib4/issues/380
-
-example {P P' : TopCat -> Prop} (h : forall (X : CompHausLike P), P X.toTop -> P' X.toTop) :
+/-
+**CompHausLike.** 是 Mathlib 中的一个示例，位于命名空间 `CompHausLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example {P P' : TopCat → Prop} (h : ∀ (X : CompHausLike P), P X.toTop → P' X.toTop) :
     toCompHausLike h ⋙ compHausLikeToTop P' = compHausLikeToTop P := rfl
 
-/--
-Definition of `fullyFaithfulCompHausLikeToTop` / `fullyFaithfulCompHausLikeToTop` 的定义
+/-- The functor from `CompHausLike P` to `TopCat` is fully faithful. -/
+/-
+**CompHausLike.fullyFaithfulCompHausLikeToTop** 是 Mathlib 中的一个定义，位于命名空间 `CompHau
+sLike`。
+形式化陈述：fullyFaithfulCompHausLikeToTop : (compHausLikeToTop P).FullyFaithful
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithfulCompHausLikeToTop
-  signature: : (compHausLikeToTop P).FullyFaithful
-  body: fullyFaithfulInducedFunctor _
-
-中文:
-定义 fullyFaithfulCompHausLikeToTop
-  签名: : (compHausLikeToTop P).满忠实
-  定义体: fullyFaithfulInducedFunctor _
-
-Depends on / 依赖: fullyFaithfulInducedFunctor
+--- 原说明 ---
+The functor from `CompHausLike P` to `TopCat` is fully faithful.
 -/
 def fullyFaithfulCompHausLikeToTop : (compHausLikeToTop P).FullyFaithful :=
   fullyFaithfulInducedFunctor _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (compHausLikeToTop P).Full
-  body: inferInstanceAs (inducedFunctor _).Full
-
-中文:
-实例 :
-  签名: (compHausLikeToTop P).满
-  定义体: inferInstanceAs (inducedFunctor _).Full
-
-Depends on / 依赖: inducedFunctor
+/-
+**CompHausLike.** 是 Mathlib 中的一个实例，位于命名空间 `CompHausLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (compHausLikeToTop P).Full :=
   inferInstanceAs (inducedFunctor _).Full
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (compHausLikeToTop P).Faithful
-  body: inferInstanceAs (inducedFunctor _).Faithful
-
-中文:
-实例 :
-  签名: (compHausLikeToTop P).忠实
-  定义体: inferInstanceAs (inducedFunctor _).Faithful
-
-Depends on / 依赖: Faithful, inducedFunctor
+/-
+**CompHausLike.** 是 Mathlib 中的一个实例，位于命名空间 `CompHausLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (compHausLikeToTop P).Faithful :=
   inferInstanceAs (inducedFunctor _).Faithful
-
+/-
+**CompHausLike.** 是 Mathlib 中的一个实例，位于命名空间 `CompHausLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : CompHausLike P) : CompactSpace ((compHausLikeToTop P).obj X) :=
   inferInstanceAs (CompactSpace X.toTop)
-
+/-
+**CompHausLike.** 是 Mathlib 中的一个实例，位于命名空间 `CompHausLike`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : CompHausLike P) : T2Space ((compHausLikeToTop P).obj X) :=
   inferInstanceAs (T2Space X.toTop)
 
 variable {P}
-
-/--
-theorem `epi_of_surjective` / 定理 `epi_of_surjective`
-
-English:
-theorem epi_of_surjective
-  given: {X Y : CompHausLike.{u} P} (f : X ⟶ Y) (hf : Function.Surjective f)
-  proof: by
-  rw [← CategoryTheory.ofHom_epi_iff_surjective] at hf
-  exact (forget (CompHausLike P)).epi_of_epi_map hf
-
-中文:
-定理 epi_of_surjective
-  条件: {X Y : 余mpHausLike.{u} P} (f : X ⟶ Y) (hf : 函数.满射 f)
-  证明: by
-  rw [← CategoryTheory.ofHom_epi_iff_surjective] at hf
-  exact (forget (CompHausLike P)).epi_of_epi_map hf
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.ofHom_epi_iff_surjective, CompHausLike, epi_of_epi_map, forget, ofHom_epi_iff_surjective
+/-
+**CompHausLike.epi_of_surjective** 是 Mathlib 中的一个定理，位于命名空间 `CompHausLike`。
+形式化陈述：epi_of_surjective {X Y : CompHausLike.{u} P} (f : X ⟶ Y) (hf : Function.Su
+rjective f) : Epi f
+参数：f : X ⟶ Y；hf : Function.Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.epi_of_epi_map`：epi_of_epi_map (F : C ⥤ D) [Refle
+ctsEpimorphisms F] {X Y : C} {f : X ⟶ Y} (h : Epi (F.map f)) : Epi f
+· 使用定理 `CategoryTheory.Functor.reflectsEpimorphisms_of_faithful`：∀ {C : Type u₁}
+ [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryThe
+ory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.instFaithfulForget`：∀ (C : Type u_1) [inst : CategoryTheo
+ry.Category.{v_1, u_1} C] {FC : outParam (C → C → Type u_2)}   {CC : outParam (C
+ → Type w)} [inst_1 : o…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.ofHom_epi_iff_surjective`：ofHom_epi_iff_surjective {X Y :
+ Type u} (f : X -> Y) : Epi (ofHom f) ↔ Function.Surjective f
 -/
 theorem epi_of_surjective {X Y : CompHausLike.{u} P} (f : X ⟶ Y) (hf : Function.Surjective f) :
     Epi f := by
   rw [← CategoryTheory.ofHom_epi_iff_surjective] at hf
   exact (forget (CompHausLike P)).epi_of_epi_map hf
-
-/--
-theorem `mono_iff_injective` / 定理 `mono_iff_injective`
-
-English:
-theorem mono_iff_injective
-  given: {X Y : CompHausLike.{u} P} (f : X ⟶ Y)
-  proof: by
-  constructor
-  · intro hf x₁ x₂ h
-    let g₁ : X ⟶ X := ofHom _ ⟨fun _ => x₁, continuous_const⟩
-    let g₂ : X ⟶ X := ofHom _ ⟨fun _ => x₂, continuous_const⟩
-    have : g₁ ≫ f = g₂ ≫ f := by ext; exact h
-    exact CategoryTheory.congr_fun ((cancel_mono _).mp this) x₁
-  · rw [← CategoryTheory.ofHom_mono_iff_injective]
-    apply (forget (CompHausLike P)).mono_of_mono_map
-
-中文:
-定理 mono_iff_injective
-  条件: {X Y : 余mpHausLike.{u} P} (f : X ⟶ Y)
-  证明: by
-  constructor
-  · intro hf x₁ x₂ h
-    let g₁ : X ⟶ X := ofHom _ ⟨fun _ => x₁, continuous_const⟩
-    let g₂ : X ⟶ X := ofHom _ ⟨fun _ => x₂, continuous_const⟩
-    have : g₁ ≫ f = g₂ ≫ f := by ext; exact h
-    exact CategoryTheory.congr_fun ((cancel_mono _).mp this) x₁
-  · rw [← CategoryTheory.ofHom_mono_iff_injective]
-    apply (forget (CompHausLike P)).mono_of_mono_map
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.congr_fun, CategoryTheory.ofHom_mono_iff_injective, CompHausLike, cancel_mono, congr_fun, continuous_const, forget, mono_of_mono_map, ofHom_mono_iff_injective
+/-
+**CompHausLike.mono_iff_injective** 是 Mathlib 中的一个定理，位于命名空间 `CompHausLike`。
+形式化陈述：mono_iff_injective {X Y : CompHausLike.{u} P} (f : X ⟶ Y) : Mono f ↔ Funct
+ion.Injective f
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CompHausLike.is_compact`：∀ {P : TopCat → Prop} (self : CompHausLike P), 
+CompactSpace ↑self.toTop
+· 使用定理 `CompHausLike.is_hausdorff`：∀ {P : TopCat → Prop} (self : CompHausLike P)
+, T2Space ↑self.toTop
+· 使用定理 `CompHausLike.instHasPropCarrierToTop`：∀ (P : TopCat → Prop) (X : CompHau
+sLike P), CompHausLike.HasProp P ↑X.toTop
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
+· 使用定理 `CategoryTheory.ConcreteCategory.ext`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y
+ : C) → FunLike (FC X Y) …
+· 使用定理 `ContinuousMap.ext`：ext {f g : C(X, Y)} (h : forall a, f a = g a) : f = g
+· 使用定理 `CategoryTheory.congr_fun`：∀ {C : Type u_1} [inst : CategoryTheory.Catego
+ry.{v_1, u_1} C] {FC : outParam (C → C → Type u_2)}   {CC : outParam (C → Type w
+)} [inst_1 : o…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.ofHom_mono_iff_injective`：ofHom_mono_iff_injective {X Y :
+ Type u} (f : X -> Y) : Mono (ofHom f) ↔ Function.Injective f
+· 使用定理 `CategoryTheory.Functor.mono_of_mono_map`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.reflectsMonomorphisms_of_faithful`：∀ {C : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTh
+eory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.instFaithfulForget`：∀ (C : Type u_1) [inst : CategoryTheo
+ry.Category.{v_1, u_1} C] {FC : outParam (C → C → Type u_2)}   {CC : outParam (C
+ → Type w)} [inst_1 : o…
 -/
 theorem mono_iff_injective {X Y : CompHausLike.{u} P} (f : X ⟶ Y) :
     Mono f ↔ Function.Injective f := by
@@ -604,62 +455,67 @@ theorem mono_iff_injective {X Y : CompHausLike.{u} P} (f : X ⟶ Y) :
   · rw [← CategoryTheory.ofHom_mono_iff_injective]
     apply (forget (CompHausLike P)).mono_of_mono_map
 
-/--
-theorem `isClosedMap` / 定理 `isClosedMap`
+/-- Any continuous function on compact Hausdorff spaces is a closed map. -/
+/-
+**CompHausLike.isClosedMap** 是 Mathlib 中的一个定理，位于命名空间 `CompHausLike`。
+形式化陈述：isClosedMap {X Y : CompHausLike.{u} P} (f : X ⟶ Y) : IsClosedMap f
+参数：f : X ⟶ Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCompact.isClosed`：IsCompact.isClosed [T2Space X] {s : Set X} (hs : IsC
+ompact s) : IsClosed s
+· 使用定理 `CompHausLike.is_hausdorff`：∀ {P : TopCat → Prop} (self : CompHausLike P)
+, T2Space ↑self.toTop
+· 使用定理 `IsCompact.image`：IsCompact.image {f : X -> Y} (hs : IsCompact s) (hf : C
+ontinuous f) : IsCompact (f '' s)
+· 使用定理 `IsClosed.isCompact`：IsClosed.isCompact [CompactSpace X] (h : IsClosed s)
+ : IsCompact s
+· 使用定理 `CompHausLike.is_compact`：∀ {P : TopCat → Prop} (self : CompHausLike P), 
+CompactSpace ↑self.toTop
+· 使用定理 `ContinuousMap.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] (f : C(X, Y)), Continuous ⇑f
 
-English:
-theorem isClosedMap
-  given: {X Y : CompHausLike.{u} P} (f : X ⟶ Y)
-  statement: IsClosedMap f
-  proof: fun _ hC =>
-  (hC.isCompact.image f.hom.hom.continuous).isClosed
-
-中文:
-定理 isClosedMap
-  条件: {X Y : 余mpHausLike.{u} P} (f : X ⟶ Y)
-  结论: 是闭映射 f
-  证明: fun _ hC =>
-  (hC.isCompact.image f.hom.hom.continuous).isClosed
+--- 原说明 ---
+Any continuous function on compact Hausdorff spaces is a closed map.
 -/
 theorem isClosedMap {X Y : CompHausLike.{u} P} (f : X ⟶ Y) : IsClosedMap f := fun _ hC =>
   (hC.isCompact.image f.hom.hom.continuous).isClosed
 
-/--
-theorem `isIso_of_bijective` / 定理 `isIso_of_bijective`
+/-- Any continuous bijection of compact Hausdorff spaces is an isomorphism. -/
+/-
+**CompHausLike.isIso_of_bijective** 是 Mathlib 中的一个定理，位于命名空间 `CompHausLike`。
+形式化陈述：isIso_of_bijective {X Y : CompHausLike.{u} P} (f : X ⟶ Y) (bij : Function.
+Bijective f) : IsIso f
+参数：f : X ⟶ Y；bij : Function.Bijective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `continuous_iff_isClosed`：continuous_iff_isClosed : Continuous f ↔ forall
+ s, IsClosed s -> IsClosed (f ⁻¹' s)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Equiv.image_eq_preimage_symm`：image_eq_preimage_symm (e : α ≃ β) (s : Se
+t α) : e '' s = e.symm ⁻¹' s
+· 使用定理 `CompHausLike.isClosedMap`：isClosedMap {X Y : CompHausLike.{u} P} (f : X 
+⟶ Y) : IsClosedMap f
+· 使用定理 `CompHausLike.is_compact`：∀ {P : TopCat → Prop} (self : CompHausLike P), 
+CompactSpace ↑self.toTop
+· 使用定理 `CompHausLike.is_hausdorff`：∀ {P : TopCat → Prop} (self : CompHausLike P)
+, T2Space ↑self.toTop
+· 使用定理 `CompHausLike.instHasPropCarrierToTop`：∀ (P : TopCat → Prop) (X : CompHau
+sLike P), CompHausLike.HasProp P ↑X.toTop
+· 使用定理 `CategoryTheory.ConcreteCategory.ext`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y
+ : C) → FunLike (FC X Y) …
+· 使用定理 `ContinuousMap.ext`：ext {f g : C(X, Y)} (h : forall a, f a = g a) : f = g
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
 
-English:
-theorem isIso_of_bijective
-  given: {X Y : CompHausLike.{u} P} (f : X ⟶ Y) (bij : Function.Bijective f)
-  proof: by
-  let E := Equiv.ofBijective _ bij
-  have hE : Continuous E.symm := by
-    rw [continuous_iff_isClosed]
-    intro S hS
-    rw [← E.image_eq_preimage_symm]
-    exact isClosedMap f S hS
-  refine ⟨⟨ofHom _ ⟨E.symm, hE⟩, ?_, ?_⟩⟩
-  · ext x
-    apply E.symm_apply_apply
-  · ext x
-    apply E.apply_symm_apply
-
-中文:
-定理 isIso_of_bijective
-  条件: {X Y : 余mpHausLike.{u} P} (f : X ⟶ Y) (bij : 函数.双射 f)
-  证明: by
-  let E := Equiv.ofBijective _ bij
-  have hE : Continuous E.symm := by
-    rw [continuous_iff_isClosed]
-    intro S hS
-    rw [← E.image_eq_preimage_symm]
-    exact isClosedMap f S hS
-  refine ⟨⟨ofHom _ ⟨E.symm, hE⟩, ?_, ?_⟩⟩
-  · ext x
-    apply E.symm_apply_apply
-  · ext x
-    apply E.apply_symm_apply
-
-Depends on / 依赖: Continuous, E.apply_symm_apply, E.image_eq_preimage_symm, E.symm, E.symm_apply_apply, Equiv.ofBijective, apply_symm_apply, continuous_iff_isClosed, image_eq_preimage_symm, isClosedMap, ofBijective, symm_apply_apply
+--- 原说明 ---
+Any continuous bijection of compact Hausdorff spaces is an isomorphism.
 -/
 theorem isIso_of_bijective {X Y : CompHausLike.{u} P} (f : X ⟶ Y) (bij : Function.Bijective f) :
     IsIso f := by
@@ -674,42 +530,37 @@ theorem isIso_of_bijective {X Y : CompHausLike.{u} P} (f : X ⟶ Y) (bij : Funct
     apply E.symm_apply_apply
   · ext x
     apply E.apply_symm_apply
-
-/--
-Instance `forget_reflectsIsomorphisms` / 实例 `forget_reflectsIsomorphisms`
-
-English:
-instance forget_reflectsIsomorphisms
-  signature: :
-  body: ⟨by intro A B f hf; rw [isIso_iff_bijective] at hf; exact isIso_of_bijective _ hf⟩
-
-中文:
-实例 forget_reflectsIsomorphisms
-  签名: :
-  定义体: ⟨by intro A B f hf; rw [isIso_iff_bijective] at hf; exact isIso_of_bijective _ hf⟩
-
-Depends on / 依赖: isIso_iff_bijective, isIso_of_bijective
+/-
+**CompHausLike.forget_reflectsIsomorphisms** 是 Mathlib 中的一个实例，位于命名空间 `CompHausLi
+ke`。
+形式化陈述：forget_reflectsIsomorphisms : (forget (CompHausLike.{u} P)).ReflectsIsomor
+phisms
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CompHausLike.isIso_of_bijective`：isIso_of_bijective {X Y : CompHausLike.
+{u} P} (f : X ⟶ Y) (bij : Function.Bijective f) : IsIso f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.isIso_iff_bijective`：isIso_iff_bijective {X Y : Type u} (
+f : X ⟶ Y) : IsIso f ↔ Function.Bijective f
 -/
 instance forget_reflectsIsomorphisms :
     (forget (CompHausLike.{u} P)).ReflectsIsomorphisms :=
   ⟨by intro A B f hf; rw [isIso_iff_bijective] at hf; exact isIso_of_bijective _ hf⟩
 
-/--
-Definition of `isoOfBijective` / `isoOfBijective` 的定义
+/-- Any continuous bijection of compact Hausdorff spaces induces an isomorphism. -/
+/-
+**CompHausLike.isoOfBijective** 是 Mathlib 中的一个定义，位于命名空间 `CompHausLike`。
+形式化陈述：isoOfBijective {X Y : CompHausLike.{u} P} (f : X ⟶ Y) (bij : Function.Bije
+ctive f) : X ≅ Y
+参数：f : X ⟶ Y；bij : Function.Bijective f。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CompHausLike.isIso_of_bijective`：isIso_of_bijective {X Y : CompHausLike.
+{u} P} (f : X ⟶ Y) (bij : Function.Bijective f) : IsIso f
 
-English:
-definition isoOfBijective
-  signature: {X Y : CompHausLike.{u} P} (f : X ⟶ Y)
-  body: letI := isIso_of_bijective _ bij
-  asIso f
-
-中文:
-定义 isoOfBijective
-  签名: {X Y : 余mpHausLike.{u} P} (f : X ⟶ Y)
-  定义体: letI := isIso_of_bijective _ bij
-  asIso f
-
-Depends on / 依赖: isIso_of_bijective
+--- 原说明 ---
+Any continuous bijection of compact Hausdorff spaces induces an isomorphism.
 -/
 noncomputable def isoOfBijective {X Y : CompHausLike.{u} P} (f : X ⟶ Y)
     (bij : Function.Bijective f) : X ≅ Y :=
@@ -718,102 +569,83 @@ noncomputable def isoOfBijective {X Y : CompHausLike.{u} P} (f : X ⟶ Y)
 
 /-- Construct an isomorphism from a homeomorphism. -/
 @[simps!]
-/--
-Definition of `isoOfHomeo` / `isoOfHomeo` 的定义
+/-
+**CompHausLike.isoOfHomeo** 是 Mathlib 中的一个定义，位于命名空间 `CompHausLike`。
+形式化陈述：isoOfHomeo {X Y : CompHausLike.{u} P} (f : X ≃ₜ Y) : X ≅ Y
+参数：f : X ≃ₜ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoOfHomeo
-  signature: {X Y : CompHausLike.{u} P} (f : X ≃ₜ Y)
-  body: (fullyFaithfulCompHausLikeToTop P).preimageIso (TopCat.isoOfHomeo f)
-
-中文:
-定义 isoOfHomeo
-  签名: {X Y : 余mpHausLike.{u} P} (f : X ≃ₜ Y)
-  定义体: (fullyFaithfulCompHausLikeToTop P).preimageIso (TopCat.isoOfHomeo f)
-
-Depends on / 依赖: TopCat, TopCat.isoOfHomeo, fullyFaithfulCompHausLikeToTop, isoOfHomeo, preimageIso
+--- 原说明 ---
+Construct an isomorphism from a homeomorphism.
 -/
 def isoOfHomeo {X Y : CompHausLike.{u} P} (f : X ≃ₜ Y) : X ≅ Y :=
   (fullyFaithfulCompHausLikeToTop P).preimageIso (TopCat.isoOfHomeo f)
 
 /-- Construct a homeomorphism from an isomorphism. -/
 @[simps!]
-/--
-Definition of `homeoOfIso` / `homeoOfIso` 的定义
+/-
+**CompHausLike.homeoOfIso** 是 Mathlib 中的一个定义，位于命名空间 `CompHausLike`。
+形式化陈述：homeoOfIso {X Y : CompHausLike.{u} P} (f : X ≅ Y) : X ≃ₜ Y
+参数：f : X ≅ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homeoOfIso
-  signature: {X Y : CompHausLike.{u} P} (f : X ≅ Y)
-  body: TopCat.homeoOfIso (compHausLikeToTop P).mapIso f
-
-中文:
-定义 homeoOfIso
-  签名: {X Y : 余mpHausLike.{u} P} (f : X ≅ Y)
-  定义体: TopCat.homeoOfIso (compHausLikeToTop P).mapIso f
-
-Depends on / 依赖: TopCat, TopCat.homeoOfIso, compHausLikeToTop, homeoOfIso, mapIso
+--- 原说明 ---
+Construct a homeomorphism from an isomorphism.
 -/
 def homeoOfIso {X Y : CompHausLike.{u} P} (f : X ≅ Y) : X ≃ₜ Y :=
-TopCat.homeoOfIso (compHausLikeToTop P).mapIso f
+  TopCat.homeoOfIso <| (compHausLikeToTop P).mapIso f
 
 /-- The equivalence between isomorphisms in `CompHaus` and homeomorphisms
 of topological spaces. -/
 @[simps]
-/--
-Definition of `isoEquivHomeo` / `isoEquivHomeo` 的定义
+/-
+**CompHausLike.isoEquivHomeo** 是 Mathlib 中的一个定义，位于命名空间 `CompHausLike`。
+形式化陈述：isoEquivHomeo {X Y : CompHausLike.{u} P} : (X ≅ Y) ≃ (X ≃ₜ Y) where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoEquivHomeo
-  signature: {X Y : CompHausLike.{u} P}
-  body: homeoOfIso
-  invFun := isoOfHomeo
-
-中文:
-定义 isoEquivHomeo
-  签名: {X Y : 余mpHausLike.{u} P}
-  定义体: homeoOfIso
-  invFun := isoOfHomeo
-
-Depends on / 依赖: homeoOfIso
+--- 原说明 ---
+The equivalence between isomorphisms in `CompHaus` and homeomorphisms
+of topological spaces.
 -/
 def isoEquivHomeo {X Y : CompHausLike.{u} P} : (X ≅ Y) ≃ (X ≃ₜ Y) where
   toFun := homeoOfIso
   invFun := isoOfHomeo
 
-/--
-Definition of `const` / `const` 的定义
+/-- A constant map as a morphism in `CompHausLike` -/
+/-
+**CompHausLike.const** 是 Mathlib 中的一个定义，位于命名空间 `CompHausLike`。
+形式化陈述：const {P : TopCat.{u} -> Prop} (T : CompHausLike.{u} P) {S : CompHausLike.
+{u} P} (s : S) : T ⟶ S
+参数：T : CompHausLike.{u} P；s : S。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CompHausLike.is_compact`：∀ {P : TopCat → Prop} (self : CompHausLike P), 
+CompactSpace ↑self.toTop
+· 使用定理 `CompHausLike.is_hausdorff`：∀ {P : TopCat → Prop} (self : CompHausLike P)
+, T2Space ↑self.toTop
+· 使用定理 `CompHausLike.instHasPropCarrierToTop`：∀ (P : TopCat → Prop) (X : CompHau
+sLike P), CompHausLike.HasProp P ↑X.toTop
 
-English:
-definition const
-  signature: {P : TopCat.{u} -> Prop}
-  body: ofHom _ (ContinuousMap.const _ s)
-
-中文:
-定义 const
-  签名: {P : 顶元素范畴.{u} -> 命题}
-  定义体: ofHom _ (ContinuousMap.const _ s)
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.const
+--- 原说明 ---
+A constant map as a morphism in `CompHausLike`
 -/
-def const {P : TopCat.{u} -> Prop}
+def const {P : TopCat.{u} → Prop}
     (T : CompHausLike.{u} P) {S : CompHausLike.{u} P} (s : S) : T ⟶ S :=
   ofHom _ (ContinuousMap.const _ s)
-
-/--
-lemma `const_comp` / 引理 `const_comp`
-
-English:
-lemma const_comp
-  statement: {P : TopCat.{u} -> Prop} {S T U : CompHausLike.{u} P}
-  proof: rfl
-
-中文:
-引理 const_comp
-  结论: {P : 顶元素范畴.{u} -> 命题} {S T U : 余mpHausLike.{u} P}
-  证明: rfl
+/-
+**CompHausLike.const_comp** 是 Mathlib 中的一个引理，位于命名空间 `CompHausLike`。
+形式化陈述：const_comp {P : TopCat.{u} -> Prop} {S T U : CompHausLike.{u} P} (s : S) (
+g : S ⟶ U) : T.const s ≫ g = T.const (g s)
+参数：s : S；g : S ⟶ U。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma const_comp {P : TopCat.{u} -> Prop} {S T U : CompHausLike.{u} P}
+lemma const_comp {P : TopCat.{u} → Prop} {S T U : CompHausLike.{u} P}
     (s : S) (g : S ⟶ U) : T.const s ≫ g = T.const (g s) :=
   rfl
 
 end CompHausLike
+

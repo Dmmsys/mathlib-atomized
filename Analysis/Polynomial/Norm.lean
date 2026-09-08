@@ -46,49 +46,61 @@ variable {A : Type*} [SeminormedRing A] (p : Polynomial A)
 
 namespace Polynomial
 
-/--
-Definition of `supNorm` / `supNorm` 的定义
+/-- The sup norm of a polynomial on a semi-normed ring, defined as the maximum of its coefficients.
+Often called the _(naive) height_ of the polynomial.
 
-English:
-definition supNorm
-  signature: : Real
-  body: p.gaussNorm (SeminormedRing.toRingSeminorm A) 1
+This is defined in terms of `Polynomial.gaussNorm`. -/
+/-
+**Polynomial.supNorm** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：supNorm : Real
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 supNorm
-  签名: : 实数
-  定义体: p.gaussNorm (SeminormedRing.toRingSeminorm A) 1
+--- 原说明 ---
+The sup norm of a polynomial on a semi-normed ring, defined as the maximum of it
+s coefficients.
+Often called the _(naive) height_ of the polynomial.
 
-Depends on / 依赖: SeminormedRing, SeminormedRing.toRingSeminorm, gaussNorm, p.gaussNorm, toRingSeminorm
+This is defined in terms of `Polynomial.gaussNorm`.
 -/
-noncomputable def supNorm : Real := p.gaussNorm (SeminormedRing.toRingSeminorm A) 1
+noncomputable def supNorm : ℝ := p.gaussNorm (SeminormedRing.toRingSeminorm A) 1
 
-/--
-lemma `supNorm_def'` / 引理 `supNorm_def'`
+/-- The direct definition of the supNorm -/
+/-
+**Polynomial.supNorm_def'** 是 Mathlib 中的一个引理，位于命名空间 `Polynomial`。
+形式化陈述：supNorm_def' : p.supNorm = if hp : p.support.Nonempty then p.support.sup' 
+hp (norm ∘ p.coeff) else 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.sup'`：sup'_one [SemilatticeSup β] (f : α -> β) : sup' 1 one_nonem
+pty f = f 1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `Finset.sup'_congr`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeSu
+p α] {s : Finset β} (H : s.Nonempty) {t : Finset β} {f g : β → α}   (h₁ : s = t)
+, (∀ x …
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma supNorm_def'
-  statement: p.supNorm =
-  proof: by
-  split_ifs with h
-  · simp only [supNorm, gaussNorm, h, ↓reduceDIte, one_pow, mul_one, Function.comp_apply]
-    congr
-  · simp [supNorm, gaussNorm, h]
-
-@[simp]
-
-中文:
-引理 supNorm_def'
-  结论: p.supNorm =
-  证明: by
-  split_ifs with h
-  · simp only [supNorm, gaussNorm, h, ↓reduceDIte, one_pow, mul_one, Function.comp_apply]
-    congr
-  · simp [supNorm, gaussNorm, h]
-
-@[simp]
-
-Depends on / 依赖: Function, Function.comp_apply, comp_apply, gaussNorm, mul_one, one_pow, reduceDIte, split_ifs, supNorm
+--- 原说明 ---
+The direct definition of the supNorm
 -/
 lemma supNorm_def' : p.supNorm =
     if hp : p.support.Nonempty then p.support.sup' hp (norm ∘ p.coeff) else 0 := by
@@ -98,204 +110,207 @@ lemma supNorm_def' : p.supNorm =
   · simp [supNorm, gaussNorm, h]
 
 @[simp]
-/--
-lemma `supNorm_zero` / 引理 `supNorm_zero`
-
-English:
-lemma supNorm_zero
-  statement: (0 : A[X]).supNorm = 0
-  proof: gaussNorm_zero ..
-
-中文:
-引理 supNorm_zero
-  结论: (0 : A[X]).supNorm = 0
-  证明: gaussNorm_zero ..
-
-Depends on / 依赖: gaussNorm_zero
+/-
+**Polynomial.supNorm_zero** 是 Mathlib 中的一个引理，位于命名空间 `Polynomial`。
+形式化陈述：supNorm_zero : (0 : A[X]).supNorm = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Polynomial.gaussNorm_zero`：gaussNorm_zero : gaussNorm v c 0 = 0
 -/
 lemma supNorm_zero : (0 : A[X]).supNorm = 0 := gaussNorm_zero ..
-
-/--
-lemma `supNorm_nonneg` / 引理 `supNorm_nonneg`
-
-English:
-lemma supNorm_nonneg
-  statement: 0 <= p.supNorm
-  proof: by
-  apply gaussNorm_nonneg
-  norm_num
-
-@[simp]
-
-中文:
-引理 supNorm_nonneg
-  结论: 0 <= p.supNorm
-  证明: by
-  apply gaussNorm_nonneg
-  norm_num
-
-@[simp]
-
-Depends on / 依赖: gaussNorm_nonneg
+/-
+**Polynomial.supNorm_nonneg** 是 Mathlib 中的一个引理，位于命名空间 `Polynomial`。
+形式化陈述：supNorm_nonneg : 0 <= p.supNorm
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.gaussNorm_nonneg`：gaussNorm_nonneg (hc : 0 <= c) : 0 <= p.gau
+ssNorm v c
+· 使用定理 `RingSeminormClass.toNonnegHomClass`：∀ {F : Type u_2} {α : Type u_3} {β :
+ Type u_4} [inst : FunLike F α β] [inst_1 : NonUnitalNonAssocRing α]   [inst_2 :
+ Semiring β] [inst_3 : L…
+· 使用定理 `Mathlib.Meta.NormNum.isNat_le_true`：∀ {α : Type u_1} [inst : Semiring α]
+ [inst_1 : PartialOrder α] [IsOrderedRing α] {a b : α} {a' b' : ℕ},   Mathlib.Me
+ta.NormNum.IsNat a a' → …
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
 -/
-lemma supNorm_nonneg : 0 <= p.supNorm := by
+lemma supNorm_nonneg : 0 ≤ p.supNorm := by
   apply gaussNorm_nonneg
   norm_num
 
 @[simp]
-/--
-lemma `supNorm_C` / 引理 `supNorm_C`
-
-English:
-lemma supNorm_C
-  given: {a : A}
-  statement: (C a).supNorm = ‖a‖
-  proof: gaussNorm_C ..
-
-@[simp]
-
-中文:
-引理 supNorm_C
-  条件: {a : A}
-  结论: (C a).supNorm = ‖a‖
-  证明: gaussNorm_C ..
-
-@[simp]
-
-Depends on / 依赖: gaussNorm_C
+/-
+**Polynomial.supNorm_C** 是 Mathlib 中的一个引理，位于命名空间 `Polynomial`。
+形式化陈述：supNorm_C {a : A} : (C a).supNorm = ‖a‖
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Polynomial.gaussNorm_C`：gaussNorm_C (r : R) : (C r).gaussNorm v c = v r
+· 使用定理 `AddGroupSeminormClass.toZeroHomClass`：∀ {F : Type u_2} {α : Type u_3} {β
+ : Type u_4} [inst : FunLike F α β] [inst_1 : AddGroup α] [inst_2 : AddCommMonoi
+d β]   [inst_3 : PartialOr…
+· 使用定理 `RingSeminormClass.toAddGroupSeminormClass`：∀ {F : Type u_7} {α : outPara
+m (Type u_8)} {β : outParam (Type u_9)} {inst : NonUnitalNonAssocRing α}   {inst
+_1 : Semiring β} {inst_2 : Part…
 -/
 lemma supNorm_C {a : A} : (C a).supNorm = ‖a‖ := gaussNorm_C ..
 
 @[simp]
-/--
-lemma `supNorm_monomial` / 引理 `supNorm_monomial`
-
-English:
-lemma supNorm_monomial
-  given: (n : Nat) {a : A}
-  statement: (monomial n a).supNorm = ‖a‖
-  proof: by
-  by_cases ha : a = 0
-  · simp [ha]
-  · simp [supNorm, gaussNorm, support_monomial n ha]
-
-@[simp]
-
-中文:
-引理 supNorm_monomial
-  条件: (n : 自然数) {a : A}
-  结论: (monomial n a).supNorm = ‖a‖
-  证明: by
-  by_cases ha : a = 0
-  · simp [ha]
-  · simp [supNorm, gaussNorm, support_monomial n ha]
-
-@[simp]
-
-Depends on / 依赖: gaussNorm, supNorm, support_monomial
+/-
+**Polynomial.supNorm_monomial** 是 Mathlib 中的一个引理，位于命名空间 `Polynomial`。
+形式化陈述：supNorm_monomial (n : Nat) {a : A} : (monomial n a).supNorm = ‖a‖
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.monomial_zero_right`：monomial_zero_right (n : Nat) : monomial
+ n (0 : R) = 0
+· 使用引理 `Polynomial.supNorm_zero`：supNorm_zero : (0 : A[X]).supNorm = 0
+· 使用定理 `norm_zero`：∀ {E : Type u_5} [inst : SeminormedAddGroup E], ‖0‖ = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Finset.sup'`：sup'_one [SemilatticeSup β] (f : α -> β) : sup' 1 one_nonem
+pty f = f 1
+· 使用定理 `Polynomial.support_monomial`：support_monomial (n) {a : R} (h : a != 0) :
+ (monomial n a).support = singleton n
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `Finset.sup'.congr_simp`：∀ {α : Type u_2} {β : Type u_3} [inst : Semilatt
+iceSup α] (s s_1 : Finset β) (e_s : s = s_1) (H : s.Nonempty)   (f f_1 : β → α),
+ f = f_1 → s…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Polynomial.coeff_monomial_same`：coeff_monomial_same (n : Nat) (c : R) : 
+(monomial n c).coeff n = c
 -/
-lemma supNorm_monomial (n : Nat) {a : A} : (monomial n a).supNorm = ‖a‖ := by
+lemma supNorm_monomial (n : ℕ) {a : A} : (monomial n a).supNorm = ‖a‖ := by
   by_cases ha : a = 0
   · simp [ha]
   · simp [supNorm, gaussNorm, support_monomial n ha]
 
 @[simp]
-/--
-lemma `supNorm_X` / 引理 `supNorm_X`
-
-English:
-lemma supNorm_X
-  given: [NormOneClass A]
-  statement: (X : A[X]).supNorm = 1
-  proof: by
-  rw [← monomial_one_one_eq_X]; rw [supNorm_monomial]; rw [norm_one]
-
-中文:
-引理 supNorm_X
-  条件: [NormOne类 A]
-  结论: (X : A[X]).supNorm = 1
-  证明: by
-  rw [← monomial_one_one_eq_X]; rw [supNorm_monomial]; rw [norm_one]
-
-Depends on / 依赖: monomial_one_one_eq_X, norm_one, supNorm_monomial
+/-
+**Polynomial.supNorm_X** 是 Mathlib 中的一个引理，位于命名空间 `Polynomial`。
+形式化陈述：supNorm_X [NormOneClass A] : (X : A[X]).supNorm = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.monomial_one_one_eq_X`：monomial_one_one_eq_X : monomial 1 (1 
+: R) = X
+· 使用引理 `Polynomial.supNorm_monomial`：supNorm_monomial (n : Nat) {a : A} : (monom
+ial n a).supNorm = ‖a‖
+· 使用定理 `NormOneClass.norm_one`：∀ {α : Type u_5} {inst : Norm α} {inst_1 : One α}
+ [self : NormOneClass α], ‖1‖ = 1
 -/
 lemma supNorm_X [NormOneClass A] : (X : A[X]).supNorm = 1 := by
-  rw [← monomial_one_one_eq_X]; rw [supNorm_monomial]; rw [norm_one]
-
-/--
-lemma `le_supNorm` / 引理 `le_supNorm`
-
-English:
-lemma le_supNorm
-  given: (i : Nat)
-  statement: ‖p.coeff i‖ <= p.supNorm
-  proof: by
-  simpa using! le_gaussNorm (SeminormedRing.toRingSeminorm A) p (by norm_num : (0 : Real) <= 1) i
-
-中文:
-引理 le_supNorm
-  条件: (i : 自然数)
-  结论: ‖p.coeff i‖ <= p.supNorm
-  证明: by
-  simpa using! le_gaussNorm (SeminormedRing.toRingSeminorm A) p (by norm_num : (0 : Real) <= 1) i
-
-Depends on / 依赖: SeminormedRing, SeminormedRing.toRingSeminorm, le_gaussNorm, toRingSeminorm
+  rw [← monomial_one_one_eq_X, supNorm_monomial, norm_one]
+/-
+**Polynomial.le_supNorm** 是 Mathlib 中的一个引理，位于命名空间 `Polynomial`。
+形式化陈述：le_supNorm (i : Nat) : ‖p.coeff i‖ <= p.supNorm
+参数：i : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用引理 `Polynomial.le_gaussNorm`：le_gaussNorm (hc : 0 <= c) (i : Nat) : v (p.coe
+ff i) * c ^ i <= p.gaussNorm v c
+· 使用定理 `AddGroupSeminormClass.toZeroHomClass`：∀ {F : Type u_2} {α : Type u_3} {β
+ : Type u_4} [inst : FunLike F α β] [inst_1 : AddGroup α] [inst_2 : AddCommMonoi
+d β]   [inst_3 : PartialOr…
+· 使用定理 `RingSeminormClass.toAddGroupSeminormClass`：∀ {F : Type u_7} {α : outPara
+m (Type u_8)} {β : outParam (Type u_9)} {inst : NonUnitalNonAssocRing α}   {inst
+_1 : Semiring β} {inst_2 : Part…
+· 使用定理 `RingSeminormClass.toNonnegHomClass`：∀ {F : Type u_2} {α : Type u_3} {β :
+ Type u_4} [inst : FunLike F α β] [inst_1 : NonUnitalNonAssocRing α]   [inst_2 :
+ Semiring β] [inst_3 : L…
+· 使用定理 `Mathlib.Meta.NormNum.isNat_le_true`：∀ {α : Type u_1} [inst : Semiring α]
+ [inst_1 : PartialOrder α] [IsOrderedRing α] {a b : α} {a' b' : ℕ},   Mathlib.Me
+ta.NormNum.IsNat a a' → …
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
 -/
-lemma le_supNorm (i : Nat) : ‖p.coeff i‖ <= p.supNorm := by
-  simpa using! le_gaussNorm (SeminormedRing.toRingSeminorm A) p (by norm_num : (0 : Real) <= 1) i
-
-/--
-lemma `exists_eq_supNorm` / 引理 `exists_eq_supNorm`
-
-English:
-lemma exists_eq_supNorm
-  statement: exists i : Nat, p.supNorm = ‖p.coeff i‖
-  proof: by
-  simpa using! p.exists_eq_gaussNorm (SeminormedRing.toRingSeminorm A) 1
-
-中文:
-引理 存在_eq_supNorm
-  结论: 存在 i : 自然数, p.supNorm = ‖p.coeff i‖
-  证明: by
-  simpa using! p.exists_eq_gaussNorm (SeminormedRing.toRingSeminorm A) 1
-
-Depends on / 依赖: SeminormedRing, SeminormedRing.toRingSeminorm, exists_eq_gaussNorm, p.exists_eq_gaussNorm, toRingSeminorm
+lemma le_supNorm (i : ℕ) : ‖p.coeff i‖ ≤ p.supNorm := by
+  simpa using! le_gaussNorm (SeminormedRing.toRingSeminorm A) p (by norm_num : (0 : ℝ) ≤ 1) i
+/-
+**Polynomial.exists_eq_supNorm** 是 Mathlib 中的一个引理，位于命名空间 `Polynomial`。
+形式化陈述：exists_eq_supNorm : exists i : Nat, p.supNorm = ‖p.coeff i‖
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Polynomial.exists_eq_gaussNorm`：exists_eq_gaussNorm : exists i, p.gaussN
+orm v c = v (p.coeff i) * c ^ i
+· 使用定理 `AddGroupSeminormClass.toZeroHomClass`：∀ {F : Type u_2} {α : Type u_3} {β
+ : Type u_4} [inst : FunLike F α β] [inst_1 : AddGroup α] [inst_2 : AddCommMonoi
+d β]   [inst_3 : PartialOr…
+· 使用定理 `RingSeminormClass.toAddGroupSeminormClass`：∀ {F : Type u_7} {α : outPara
+m (Type u_8)} {β : outParam (Type u_9)} {inst : NonUnitalNonAssocRing α}   {inst
+_1 : Semiring β} {inst_2 : Part…
 -/
-lemma exists_eq_supNorm : exists i : Nat, p.supNorm = ‖p.coeff i‖ := by
+lemma exists_eq_supNorm : ∃ i : ℕ, p.supNorm = ‖p.coeff i‖ := by
   simpa using! p.exists_eq_gaussNorm (SeminormedRing.toRingSeminorm A) 1
-
-/--
-lemma `isGreatest_supNorm` / 引理 `isGreatest_supNorm`
-
-English:
-lemma isGreatest_supNorm
-  statement: IsGreatest (Set.range (‖p.coeff ·‖)) p.supNorm
-  proof: ⟨by simpa [eq_comm] using exists_eq_supNorm p, by simpa [mem_upperBounds] using le_supNorm p⟩
-
-中文:
-引理 isGreatest_supNorm
-  结论: IsGreatest (集合.range (‖p.coeff ·‖)) p.supNorm
-  证明: ⟨by simpa [eq_comm] using exists_eq_supNorm p, by simpa [mem_upperBounds] using le_supNorm p⟩
-
-Depends on / 依赖: eq_comm, exists_eq_supNorm, le_supNorm, mem_upperBounds
+/-
+**Polynomial.isGreatest_supNorm** 是 Mathlib 中的一个引理，位于命名空间 `Polynomial`。
+形式化陈述：isGreatest_supNorm : IsGreatest (Set.range (‖p.coeff ·‖)) p.supNorm
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `Polynomial.exists_eq_supNorm`：exists_eq_supNorm : exists i : Nat, p.supN
+orm = ‖p.coeff i‖
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用引理 `Polynomial.le_supNorm`：le_supNorm (i : Nat) : ‖p.coeff i‖ <= p.supNorm
 -/
 lemma isGreatest_supNorm : IsGreatest (Set.range (‖p.coeff ·‖)) p.supNorm :=
   ⟨by simpa [eq_comm] using exists_eq_supNorm p, by simpa [mem_upperBounds] using le_supNorm p⟩
 
-/--
-lemma `supNorm_eq_iSup` / 引理 `supNorm_eq_iSup`
+/-- The supNorm can also be defined with an iSup. Note that this uses the fact that `norm` is both
+a `ZeroHom` and `NonnegHom` so is not _a priori_ true from the `gaussNorm` definition. -/
+/-
+**Polynomial.supNorm_eq_iSup** 是 Mathlib 中的一个引理，位于命名空间 `Polynomial`。
+形式化陈述：supNorm_eq_iSup : p.supNorm = ⨆ i, ‖p.coeff i‖
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsGreatest.csSup_eq`：IsGreatest.csSup_eq (H : IsGreatest s a) : sSup s =
+ a
+· 使用引理 `Polynomial.isGreatest_supNorm`：isGreatest_supNorm : IsGreatest (Set.rang
+e (‖p.coeff ·‖)) p.supNorm
 
-English:
-lemma supNorm_eq_iSup
-  statement: p.supNorm = ⨆ i, ‖p.coeff i‖
-  proof: p.isGreatest_supNorm.csSup_eq.symm
-
-中文:
-引理 supNorm_eq_iSup
-  结论: p.supNorm = ⨆ i, ‖p.coeff i‖
-  证明: p.isGreatest_supNorm.csSup_eq.symm
-
-Depends on / 依赖: csSup_eq, isGreatest_supNorm, p.isGreatest_supNorm.csSup_eq.symm
+--- 原说明 ---
+The supNorm can also be defined with an iSup. Note that this uses the fact that 
+`norm` is both
+a `ZeroHom` and `NonnegHom` so is not _a priori_ true from the `gaussNorm` defin
+ition.
 -/
 lemma supNorm_eq_iSup : p.supNorm = ⨆ i, ‖p.coeff i‖ := p.isGreatest_supNorm.csSup_eq.symm
 
@@ -308,23 +323,35 @@ namespace Polynomial
 
 variable {A : Type*} [NormedRing A] (p : Polynomial A)
 
-/--
-lemma `supNorm_eq_zero_iff` / 引理 `supNorm_eq_zero_iff`
-
-English:
-lemma supNorm_eq_zero_iff
-  statement: p.supNorm = 0 ↔ p = 0
-  proof: gaussNorm_eq_zero_iff _ _ (by simp) (by simp)
-
-中文:
-引理 supNorm_eq_zero_iff
-  结论: p.supNorm = 0 ↔ p = 0
-  证明: gaussNorm_eq_zero_iff _ _ (by simp) (by simp)
-
-Depends on / 依赖: gaussNorm_eq_zero_iff
+/-
+**Polynomial.supNorm_eq_zero_iff** 是 Mathlib 中的一个引理，位于命名空间 `Polynomial`。
+形式化陈述：supNorm_eq_zero_iff : p.supNorm = 0 ↔ p = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.gaussNorm_eq_zero_iff`：gaussNorm_eq_zero_iff (h_eq_zero : for
+all x : R, v x = 0 -> x = 0) (hc : 0 < c) : p.gaussNorm v c = 0 ↔ p = 0
+· 使用定理 `AddGroupSeminormClass.toZeroHomClass`：∀ {F : Type u_2} {α : Type u_3} {β
+ : Type u_4} [inst : FunLike F α β] [inst_1 : AddGroup α] [inst_2 : AddCommMonoi
+d β]   [inst_3 : PartialOr…
+· 使用定理 `RingSeminormClass.toAddGroupSeminormClass`：∀ {F : Type u_7} {α : outPara
+m (Type u_8)} {β : outParam (Type u_9)} {inst : NonUnitalNonAssocRing α}   {inst
+_1 : Semiring β} {inst_2 : Part…
+· 使用定理 `RingSeminormClass.toNonnegHomClass`：∀ {F : Type u_2} {α : Type u_3} {β :
+ Type u_4} [inst : FunLike F α β] [inst_1 : NonUnitalNonAssocRing α]   [inst_2 :
+ Semiring β] [inst_3 : L…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
 -/
 lemma supNorm_eq_zero_iff : p.supNorm = 0 ↔ p = 0 := gaussNorm_eq_zero_iff _ _ (by simp) (by simp)
 
 end Polynomial
 
 end supnorm_norm
+

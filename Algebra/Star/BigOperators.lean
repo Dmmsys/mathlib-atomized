@@ -20,121 +20,113 @@ public section
 variable {R : Type*}
 
 @[simp]
-/--
-theorem `star_prod` / 定理 `star_prod`
-
-English:
-theorem star_prod
-  given: [CommMonoid R] [StarMul R] {α : Type*} (s : Finset α) (f : α -> R)
-  proof: map_prod (starMulAut : R ≃* R) _ _
-
-@[simp]
-
-中文:
-定理 star_prod
-  条件: [交换幺半群 R] [StarMul R] {α : 类型} (s : 有限集 α) (f : α -> R)
-  证明: map_prod (starMulAut : R ≃* R) _ _
-
-@[simp]
-
-Depends on / 依赖: map_prod, starMulAut
+/-
+**star_prod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_prod [CommMonoid R] [StarMul R] {α : Type*} (s : Finset α) (f : α -> 
+R) : star (∏ x in s, f x) = ∏ x in s, star (f x)
+参数：s : Finset α；f : α -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_prod`：map_prod [CommMonoid M] [CommMonoid N] {G : Type*} [FunLike G 
+M N] [MonoidHomClass G M N] (g : G) (f : ι -> M) (s : Finset ι) : g (∏ x in s,…
+· 使用定理 `MulEquivClass.instMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N : T
+ype u_5} [inst : EquivLike F M N] [inst_1 : MulOneClass M]   [inst_2 : MulOneCla
+ss N] [MulEquivClass F…
+· 使用定理 `MulEquiv.instMulEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul 
+M] [inst_1 : Mul N], MulEquivClass (M ≃* N) M N
 -/
-theorem star_prod [CommMonoid R] [StarMul R] {α : Type*} (s : Finset α) (f : α -> R) :
-    star (∏ x in s, f x) = ∏ x in s, star (f x) := map_prod (starMulAut : R ≃* R) _ _
+theorem star_prod [CommMonoid R] [StarMul R] {α : Type*} (s : Finset α) (f : α → R) :
+    star (∏ x ∈ s, f x) = ∏ x ∈ s, star (f x) := map_prod (starMulAut : R ≃* R) _ _
 
 @[simp]
-/--
-theorem `star_sum` / 定理 `star_sum`
-
-English:
-theorem star_sum
-  given: [AddCommMonoid R] [StarAddMonoid R] {α : Type*} (s : Finset α) (f : α -> R)
-  proof: map_sum (starAddEquiv : R ≃+ R) _ _
-
-@[aesop safe apply (rule_sets := [CStarAlgebra])]
-
-中文:
-定理 star_sum
-  条件: [加法交换幺半群 R] [StarAdd幺半群 R] {α : 类型} (s : 有限集 α) (f : α -> R)
-  证明: map_sum (starAddEquiv : R ≃+ R) _ _
-
-@[aesop safe apply (rule_sets := [CStarAlgebra])]
-
-Depends on / 依赖: map_sum, starAddEquiv
+/-
+**star_sum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_sum [AddCommMonoid R] [StarAddMonoid R] {α : Type*} (s : Finset α) (f
+ : α -> R) : star (∑ x in s, f x) = ∑ x in s, star (f x)
+参数：s : Finset α；f : α -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
 -/
-theorem star_sum [AddCommMonoid R] [StarAddMonoid R] {α : Type*} (s : Finset α) (f : α -> R) :
-    star (∑ x in s, f x) = ∑ x in s, star (f x) := map_sum (starAddEquiv : R ≃+ R) _ _
+theorem star_sum [AddCommMonoid R] [StarAddMonoid R] {α : Type*} (s : Finset α) (f : α → R) :
+    star (∑ x ∈ s, f x) = ∑ x ∈ s, star (f x) := map_sum (starAddEquiv : R ≃+ R) _ _
 
 @[aesop safe apply (rule_sets := [CStarAlgebra])]
-/--
-theorem `isSelfAdjoint_sum` / 定理 `isSelfAdjoint_sum`
-
-English:
-theorem isSelfAdjoint_sum
-  statement: {ι : Type*} [AddCommMonoid R] [StarAddMonoid R] (s : Finset ι)
-  proof: by
-  simpa [IsSelfAdjoint, star_sum] using Finset.sum_congr rfl fun _ hi => h _ hi
-
-@[simp]
-
-中文:
-定理 isSelfAdjoint_sum
-  结论: {ι : 类型} [加法交换幺半群 R] [StarAdd幺半群 R] (s : 有限集 ι)
-  证明: by
-  simpa [IsSelfAdjoint, star_sum] using Finset.sum_congr rfl fun _ hi => h _ hi
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.sum_congr, IsSelfAdjoint, star_sum, sum_congr
+/-
+**isSelfAdjoint_sum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isSelfAdjoint_sum {ι : Type*} [AddCommMonoid R] [StarAddMonoid R] (s : Fin
+set ι) {x : ι -> R} (h : forall i in s, IsSelfAdjoint (x i)) : IsSelfAdjoint (∑ 
+i in s, x i)
+参数：s : Finset ι；h : forall i in s, IsSelfAdjoint (x i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `star_sum`：star_sum [AddCommMonoid R] [StarAddMonoid R] {α : Type*} (s : 
+Finset α) (f : α -> R) : star (∑ x in s, f x) = ∑ x in s, star (f x)
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
 -/
 theorem isSelfAdjoint_sum {ι : Type*} [AddCommMonoid R] [StarAddMonoid R] (s : Finset ι)
-    {x : ι -> R} (h : forall i in s, IsSelfAdjoint (x i)) : IsSelfAdjoint (∑ i in s, x i) := by
+    {x : ι → R} (h : ∀ i ∈ s, IsSelfAdjoint (x i)) : IsSelfAdjoint (∑ i ∈ s, x i) := by
   simpa [IsSelfAdjoint, star_sum] using Finset.sum_congr rfl fun _ hi => h _ hi
 
 @[simp]
-/--
-theorem `star_finsuppSum` / 定理 `star_finsuppSum`
-
-English:
-theorem star_finsuppSum
-  statement: {ι : Type*} {M : Type*} [Zero M] [AddCommMonoid R] [StarAddMonoid R]
-  proof: by
-  simp [Finsupp.sum]
-
-@[simp]
-
-中文:
-定理 star_finsuppSum
-  结论: {ι : 类型} {M : 类型} [零 M] [加法交换幺半群 R] [StarAdd幺半群 R]
-  证明: by
-  simp [Finsupp.sum]
-
-@[simp]
-
-Depends on / 依赖: Finsupp, Finsupp.sum
+/-
+**star_finsuppSum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_finsuppSum {ι : Type*} {M : Type*} [Zero M] [AddCommMonoid R] [StarAd
+dMonoid R] (s : ι ->₀ M) (f : ι -> M -> R) : star (s.sum f) = s.sum (fun i m => 
+star f i m)
+参数：s : ι ->₀ M；f : ι -> M -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `star_sum`：star_sum [AddCommMonoid R] [StarAddMonoid R] {α : Type*} (s : 
+Finset α) (f : α -> R) : star (∑ x in s, f x) = ∑ x in s, star (f x)
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem star_finsuppSum {ι : Type*} {M : Type*} [Zero M] [AddCommMonoid R] [StarAddMonoid R]
-    (s : ι ->₀ M) (f : ι -> M -> R) : star (s.sum f) = s.sum (fun i m => star f i m) := by
+    (s : ι →₀ M) (f : ι → M → R) : star (s.sum f) = s.sum (fun i m ↦ star f i m) := by
   simp [Finsupp.sum]
 
 @[simp]
-/--
-theorem `star_finsuppProd` / 定理 `star_finsuppProd`
-
-English:
-theorem star_finsuppProd
-  statement: {ι : Type*} {M : Type*} [Zero M] [CommMonoid R] [StarMul R]
-  proof: by
-  simp [Finsupp.prod]
-
-中文:
-定理 star_finsuppProd
-  结论: {ι : 类型} {M : 类型} [零 M] [交换幺半群 R] [StarMul R]
-  证明: by
-  simp [Finsupp.prod]
-
-Depends on / 依赖: Finsupp, Finsupp.prod
+/-
+**star_finsuppProd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_finsuppProd {ι : Type*} {M : Type*} [Zero M] [CommMonoid R] [StarMul 
+R] (s : ι ->₀ M) (f : ι -> M -> R) : star (s.prod f) = s.prod (fun i m => star f
+ i m)
+参数：s : ι ->₀ M；f : ι -> M -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `star_prod`：star_prod [CommMonoid R] [StarMul R] {α : Type*} (s : Finset 
+α) (f : α -> R) : star (∏ x in s, f x) = ∏ x in s, star (f x)
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem star_finsuppProd {ι : Type*} {M : Type*} [Zero M] [CommMonoid R] [StarMul R]
-    (s : ι ->₀ M) (f : ι -> M -> R) : star (s.prod f) = s.prod (fun i m => star f i m) := by
+    (s : ι →₀ M) (f : ι → M → R) : star (s.prod f) = s.prod (fun i m ↦ star f i m) := by
   simp [Finsupp.prod]

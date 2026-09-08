@@ -28,8 +28,8 @@ and the statement (written in CNF format) and the proof (in LRAT format).
 For example:
 ```
 lrat_proof foo
-  "p cnf 2 4 1 2 0 -1 2 0 1 -2 0 -1 -2 0"
-  "5 -2 0 4 3 0 5 d 3 4 0 6 1 0 5 1 0 6 d 1 0 7 0 5 2 6 0"
+  "p cnf 2 4  1 2 0  -1 2 0  1 -2 0  -1 -2 0"
+  "5 -2 0 4 3 0  5 d 3 4 0  6 1 0 5 1 0  6 d 1 0  7 0 5 2 6 0"
 ```
 produces a theorem:
 ```
@@ -49,78 +49,52 @@ open Std (HashMap)
 
 namespace Sat
 
-/--
-Inductive type `Literal` / 归纳类型 `Literal`
+/-- A literal is a positive or negative occurrence of an atomic propositional variable.
+  Note that unlike DIMACS, 0 is a valid variable index. -/
+/-
+**Sat.Literal** 是 Mathlib 中的一个归纳类型，位于命名空间 `Sat`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Literal
-  constructors (2):
-    - pos: Nat -> Literal
-    - neg: Nat -> Literal
-
-中文:
-归纳类型 Literal
-  构造子 (2 个):
-    - pos: 自然数 -> Literal
-    - neg: 自然数 -> Literal
+--- 原说明 ---
+A literal is a positive or negative occurrence of an atomic propositional variab
+le.
+  Note that unlike DIMACS, 0 is a valid variable index.
 -/
 inductive Literal
-  | pos : Nat -> Literal
-  | neg : Nat -> Literal
+  | pos : Nat → Literal
+  | neg : Nat → Literal
 
-/--
-Definition of `Literal.ofInt` / `Literal.ofInt` 的定义
+/-- Construct a literal. Positive numbers are translated to positive literals,
+  and negative numbers become negative literals. The input is assumed to be nonzero. -/
+/-
+**Sat.Literal.ofInt** 是 Mathlib 中的一个定义，位于命名空间 `Sat.Literal`。
+形式化陈述：ℤ → Sat.Literal
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Literal.ofInt
-  signature: (i : Int)
-  body: if i < 0 then Literal.neg (-i-1).toNat else Literal.pos (i-1).toNat
-
-中文:
-定义 Literal.of整数
-  签名: (i : 整数)
-  定义体: if i < 0 then Literal.neg (-i-1).toNat else Literal.pos (i-1).toNat
-
-Depends on / 依赖: Literal, Literal.neg, Literal.pos
+--- 原说明 ---
+Construct a literal. Positive numbers are translated to positive literals,
+  and negative numbers become negative literals. The input is assumed to be nonz
+ero.
 -/
 def Literal.ofInt (i : Int) : Literal :=
   if i < 0 then Literal.neg (-i-1).toNat else Literal.pos (i-1).toNat
 
-/--
-Definition of `Literal.negate` / `Literal.negate` 的定义
+/-- Swap the polarity of a literal. -/
+/-
+**Sat.Literal.negate** 是 Mathlib 中的一个定义，位于命名空间 `Sat.Literal`。
+形式化陈述：Sat.Literal → Sat.Literal
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Literal.negate
-  signature: : Literal -> Literal
-
-中文:
-定义 Literal.negate
-  签名: : Literal -> Literal
+--- 原说明 ---
+Swap the polarity of a literal.
 -/
-def Literal.negate : Literal -> Literal
+def Literal.negate : Literal → Literal
   | pos i => neg i
   | neg i => pos i
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ToExpr Literal
-  body: mkConst ``Literal
-  toExpr
-  | Literal.pos i => mkApp (mkConst ``Literal.pos) (mkRawNatLit i)
-  | Literal.neg i => mkApp (mkConst ``Literal.neg) (mkRawNatLit i)
-
-中文:
-实例 :
-  签名: ToExpr Literal
-  定义体: mkConst ``Literal
-  toExpr
-  | Literal.pos i => mkApp (mkConst ``Literal.pos) (mkRawNatLit i)
-  | Literal.neg i => mkApp (mkConst ``Literal.neg) (mkRawNatLit i)
-
-Depends on / 依赖: Literal, mkConst
+/-
+**Sat.** 是 Mathlib 中的一个实例，位于命名空间 `Sat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ToExpr Literal where
   toTypeExpr := mkConst ``Literal
@@ -128,612 +102,530 @@ instance : ToExpr Literal where
   | Literal.pos i => mkApp (mkConst ``Literal.pos) (mkRawNatLit i)
   | Literal.neg i => mkApp (mkConst ``Literal.neg) (mkRawNatLit i)
 
-/--
-Definition of `Clause` / `Clause` 的定义
+/-- A clause is a list of literals, thought of as a disjunction like `a ∨ b ∨ ¬c`. -/
+/-
+**Sat.Clause** 是 Mathlib 中的一个定义，位于命名空间 `Sat`。
+形式化陈述：Clause
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Clause
-  body: List Literal
-
-中文:
-定义 Clause
-  定义体: List Literal
-
-Depends on / 依赖: Literal
+--- 原说明 ---
+A clause is a list of literals, thought of as a disjunction like `a ∨ b ∨ ¬c`.
 -/
 def Clause := List Literal
 
-/--
-Definition of `Clause.nil` / `Clause.nil` 的定义
+/-- The empty clause -/
+/-
+**Sat.Clause.nil** 是 Mathlib 中的一个定义，位于命名空间 `Sat.Clause`。
+形式化陈述：Sat.Clause
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Clause.nil
-  signature: : Clause
-  body: []
-
-中文:
-定义 Clause.nil
-  签名: : Clause
-  定义体: []
+--- 原说明 ---
+The empty clause
 -/
 def Clause.nil : Clause := []
 
-/--
-Definition of `Clause.cons` / `Clause.cons` 的定义
+/-- Append a literal to a clause. -/
+/-
+**Sat.Clause.cons** 是 Mathlib 中的一个定义，位于命名空间 `Sat.Clause`。
+形式化陈述：Sat.Literal → Sat.Clause → Sat.Clause
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Clause.cons
-  signature: : Literal -> Clause -> Clause
-  body: List.cons
-
-中文:
-定义 Clause.cons
-  签名: : Literal -> Clause -> Clause
-  定义体: List.cons
-
-Depends on / 依赖: List.cons
+--- 原说明 ---
+Append a literal to a clause.
 -/
-def Clause.cons : Literal -> Clause -> Clause := List.cons
+def Clause.cons : Literal → Clause → Clause := List.cons
 
-/--
-Definition of `Fmla` / `Fmla` 的定义
+/-- A formula is a list of clauses, thought of as a conjunction like `(a ∨ b) ∧ c ∧ (¬c ∨ ¬d)`. -/
+/-
+**Sat.Fmla** 是 Mathlib 中的一个缩写定义，位于命名空间 `Sat`。
+形式化陈述：Fmla
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Fmla
-  body: List Clause
-
-中文:
-缩写 Fmla
-  定义体: List Clause
-
-Depends on / 依赖: Clause
+--- 原说明 ---
+A formula is a list of clauses, thought of as a conjunction like `(a ∨ b) ∧ c ∧ 
+(¬c ∨ ¬d)`.
 -/
 abbrev Fmla := List Clause
 
-/--
-Definition of `Fmla.one` / `Fmla.one` 的定义
+/-- A single clause as a formula. -/
+/-
+**Sat.Fmla.one** 是 Mathlib 中的一个定义，位于命名空间 `Sat.Fmla`。
+形式化陈述：Sat.Clause → Sat.Fmla
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Fmla.one
-  signature: (c : Clause)
-  body: [c]
-
-中文:
-定义 Fmla.one
-  签名: (c : Clause)
-  定义体: [c]
+--- 原说明 ---
+A single clause as a formula.
 -/
 def Fmla.one (c : Clause) : Fmla := [c]
 
-/--
-Definition of `Fmla.and` / `Fmla.and` 的定义
+/-- A conjunction of formulas. -/
+/-
+**Sat.Fmla.and** 是 Mathlib 中的一个定义，位于命名空间 `Sat.Fmla`。
+形式化陈述：Sat.Fmla → Sat.Fmla → Sat.Fmla
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Fmla.and
-  signature: (a b : Fmla)
-  body: a ++ b
-
-中文:
-定义 Fmla.and
-  签名: (a b : Fmla)
-  定义体: a ++ b
+--- 原说明 ---
+A conjunction of formulas.
 -/
 def Fmla.and (a b : Fmla) : Fmla := a ++ b
 
-/--
-Definition of `Fmla.subsumes` / `Fmla.subsumes` 的定义
+/-- Formula `f` subsumes `f'` if all the clauses in `f'` are in `f`.
+We use this to prove that all clauses in the formula are subsumed by it. -/
+/-
+**Sat.Fmla.subsumes** 是 Mathlib 中的一个归纳类型，位于命名空间 `Sat.Fmla`。
+形式化陈述：Sat.Fmla → Sat.Fmla → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Fmla.subsumes
-  parameters: (f f' : Fmla)
-  axioms and operations (1):
-    - prop : forall x, x in f' -> x in f
-
-中文:
-结构 Fmla.subsumes
-  参数: (f f' : Fmla)
-  公理与运算 (1 个):
-    - prop : 对任意 x, x in f' -> x in f
+--- 原说明 ---
+Formula `f` subsumes `f'` if all the clauses in `f'` are in `f`.
+We use this to prove that all clauses in the formula are subsumed by it.
 -/
 structure Fmla.subsumes (f f' : Fmla) : Prop where
-  prop : forall x, x in f' -> x in f
-
-/--
-theorem `Fmla.subsumes_self` / 定理 `Fmla.subsumes_self`
-
-English:
-theorem Fmla.subsumes_self
-  given: (f : Fmla)
-  statement: f.subsumes f
-  proof: ⟨fun _ h => h⟩
-
-中文:
-定理 Fmla.subsumes_self
-  条件: (f : Fmla)
-  结论: f.subsumes f
-  证明: ⟨fun _ h => h⟩
+  prop : ∀ x, x ∈ f' → x ∈ f
+/-
+**Sat.Fmla.subsumes_self** 是 Mathlib 中的一个定理，位于命名空间 `Sat.Fmla`。
+形式化陈述：∀ (f : Sat.Fmla), f.subsumes f
+参数：f : Sat.Fmla。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Fmla.subsumes_self (f : Fmla) : f.subsumes f := ⟨fun _ h => h⟩
-/--
-theorem `Fmla.subsumes_left` / 定理 `Fmla.subsumes_left`
-
-English:
-theorem Fmla.subsumes_left
-  given: (f f₁ f₂ : Fmla) (H : f.subsumes (f₁.and f₂))
-  statement: f.subsumes f₁
-  proof: ⟨fun _ h => H.1 _ List.mem_append.2 Or.inl h⟩
-
-中文:
-定理 Fmla.subsumes_left
-  条件: (f f₁ f₂ : Fmla) (H : f.subsumes (f₁.and f₂))
-  结论: f.subsumes f₁
-  证明: ⟨fun _ h => H.1 _ List.mem_append.2 Or.inl h⟩
-
-Depends on / 依赖: List.mem_append, Or.inl, mem_append
+theorem Fmla.subsumes_self (f : Fmla) : f.subsumes f := ⟨fun _ h ↦ h⟩
+/-
+**Sat.Fmla.subsumes_left** 是 Mathlib 中的一个定理，位于命名空间 `Sat.Fmla`。
+形式化陈述：∀ (f f₁ f₂ : Sat.Fmla), f.subsumes (f₁.and f₂) → f.subsumes f₁
+参数：f f₁ f₂ : Sat.Fmla；f₁.and f₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sat.Fmla.subsumes.prop`：∀ {f f' : Sat.Fmla}, f.subsumes f' → ∀ x ∈ f', x
+ ∈ f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.mem_append`：∀ {α : Type u_1} {a : α} {s t : List α}, a ∈ s ++ t ↔ a
+ ∈ s ∨ a ∈ t
 -/
 theorem Fmla.subsumes_left (f f₁ f₂ : Fmla) (H : f.subsumes (f₁.and f₂)) : f.subsumes f₁ :=
-⟨fun _ h => H.1 _ List.mem_append.2 Or.inl h⟩
-/--
-theorem `Fmla.subsumes_right` / 定理 `Fmla.subsumes_right`
-
-English:
-theorem Fmla.subsumes_right
-  given: (f f₁ f₂ : Fmla) (H : f.subsumes (f₁.and f₂))
-  statement: f.subsumes f₂
-  proof: ⟨fun _ h => H.1 _ List.mem_append.2 Or.inr h⟩
-
-中文:
-定理 Fmla.subsumes_right
-  条件: (f f₁ f₂ : Fmla) (H : f.subsumes (f₁.and f₂))
-  结论: f.subsumes f₂
-  证明: ⟨fun _ h => H.1 _ List.mem_append.2 Or.inr h⟩
-
-Depends on / 依赖: List.mem_append, Or.inr, mem_append
+  ⟨fun _ h ↦ H.1 _ <| List.mem_append.2 <| Or.inl h⟩
+/-
+**Sat.Fmla.subsumes_right** 是 Mathlib 中的一个定理，位于命名空间 `Sat.Fmla`。
+形式化陈述：∀ (f f₁ f₂ : Sat.Fmla), f.subsumes (f₁.and f₂) → f.subsumes f₂
+参数：f f₁ f₂ : Sat.Fmla；f₁.and f₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sat.Fmla.subsumes.prop`：∀ {f f' : Sat.Fmla}, f.subsumes f' → ∀ x ∈ f', x
+ ∈ f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.mem_append`：∀ {α : Type u_1} {a : α} {s t : List α}, a ∈ s ++ t ↔ a
+ ∈ s ∨ a ∈ t
 -/
 theorem Fmla.subsumes_right (f f₁ f₂ : Fmla) (H : f.subsumes (f₁.and f₂)) : f.subsumes f₂ :=
-⟨fun _ h => H.1 _ List.mem_append.2 Or.inr h⟩
+  ⟨fun _ h ↦ H.1 _ <| List.mem_append.2 <| Or.inr h⟩
 
-/--
-Definition of `Valuation` / `Valuation` 的定义
+/-- A valuation is an assignment of values to all the propositional variables. -/
+/-
+**Sat.Valuation** 是 Mathlib 中的一个定义，位于命名空间 `Sat`。
+形式化陈述：Valuation
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Valuation
-  body: Nat -> Prop
-
-中文:
-定义 赋值
-  定义体: Nat -> Prop
+--- 原说明 ---
+A valuation is an assignment of values to all the propositional variables.
 -/
-def Valuation := Nat -> Prop
+def Valuation := Nat → Prop
 
-/--
-Definition of `Valuation.neg` / `Valuation.neg` 的定义
+/-- `v.neg lit` asserts that literal `lit` is falsified in the valuation. -/
+/-
+**Sat.Valuation.neg** 是 Mathlib 中的一个定义，位于命名空间 `Sat.Valuation`。
+形式化陈述：Sat.Valuation → Sat.Literal → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Valuation.neg
-  signature: (v : Valuation)
-
-中文:
-定义 赋值.neg
-  签名: (v : 赋值)
+--- 原说明 ---
+`v.neg lit` asserts that literal `lit` is falsified in the valuation.
 -/
-def Valuation.neg (v : Valuation) : Literal -> Prop
+def Valuation.neg (v : Valuation) : Literal → Prop
   | Literal.pos i => ¬ v i
   | Literal.neg i => v i
 
-/--
-Definition of `Valuation.satisfies` / `Valuation.satisfies` 的定义
+/-- `v.satisfies c` asserts that clause `c` satisfied by the valuation.
+It is written in a negative way: A clause like `a ∨ ¬b ∨ c` is rewritten as
+`¬a → b → ¬c → False`, so we are asserting that it is not the case that
+all literals in the clause are falsified. -/
+/-
+**Sat.Valuation.satisfies** 是 Mathlib 中的一个定义，位于命名空间 `Sat.Valuation`。
+形式化陈述：Sat.Valuation → Sat.Clause → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Valuation.satisfies
-  signature: (v : Valuation)
-
-中文:
-定义 赋值.satisfies
-  签名: (v : 赋值)
+--- 原说明 ---
+`v.satisfies c` asserts that clause `c` satisfied by the valuation.
+It is written in a negative way: A clause like `a ∨ ¬b ∨ c` is rewritten as
+`¬a → b → ¬c → False`, so we are asserting that it is not the case that
+all literals in the clause are falsified.
 -/
-def Valuation.satisfies (v : Valuation) : Clause -> Prop
+def Valuation.satisfies (v : Valuation) : Clause → Prop
   | [] => False
-  | l::c => v.neg l -> v.satisfies c
+  | l::c => v.neg l → v.satisfies c
 termination_by structural ps => ps
 
-/--
-Definition of `Valuation.satisfies_fmla` / `Valuation.satisfies_fmla` 的定义
+/-- `v.satisfies_fmla f` asserts that formula `f` is satisfied by the valuation.
+A formula is satisfied if all clauses in it are satisfied. -/
+/-
+**Sat.Valuation.satisfies_fmla** 是 Mathlib 中的一个归纳类型，位于命名空间 `Sat.Valuation`。
+形式化陈述：Sat.Valuation → Sat.Fmla → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Valuation.satisfies_fmla
-  parameters: (v : Valuation) (f : Fmla)
-  axioms and operations (1):
-    - prop : forall c, c in f -> v.satisfies c
-
-中文:
-结构 赋值.satisfies_fmla
-  参数: (v : 赋值) (f : Fmla)
-  公理与运算 (1 个):
-    - prop : 对任意 c, c in f -> v.satisfies c
+--- 原说明 ---
+`v.satisfies_fmla f` asserts that formula `f` is satisfied by the valuation.
+A formula is satisfied if all clauses in it are satisfied.
 -/
 structure Valuation.satisfies_fmla (v : Valuation) (f : Fmla) : Prop where
-  prop : forall c, c in f -> v.satisfies c
+  prop : ∀ c, c ∈ f → v.satisfies c
 
-/--
-Definition of `Fmla.proof` / `Fmla.proof` 的定义
+/-- `f.proof c` asserts that `c` is derivable from `f`. -/
+/-
+**Sat.Fmla.proof** 是 Mathlib 中的一个定义，位于命名空间 `Sat.Fmla`。
+形式化陈述：Sat.Fmla → Sat.Clause → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Fmla.proof
-  signature: (f : Fmla) (c : Clause)
-  body: forall v : Valuation, v.satisfies_fmla f -> v.satisfies c
-
-中文:
-定义 Fmla.proof
-  签名: (f : Fmla) (c : Clause)
-  定义体: forall v : Valuation, v.satisfies_fmla f -> v.satisfies c
-
-Depends on / 依赖: Valuation, satisfies, satisfies_fmla, v.satisfies, v.satisfies_fmla
+--- 原说明 ---
+`f.proof c` asserts that `c` is derivable from `f`.
 -/
 def Fmla.proof (f : Fmla) (c : Clause) : Prop :=
-  forall v : Valuation, v.satisfies_fmla f -> v.satisfies c
+  ∀ v : Valuation, v.satisfies_fmla f → v.satisfies c
 
-/--
-theorem `Fmla.proof_of_subsumes` / 定理 `Fmla.proof_of_subsumes`
+/-- If `f` subsumes `c` (i.e. `c ∈ f`), then `f.proof c`. -/
+/-
+**Sat.Fmla.proof_of_subsumes** 是 Mathlib 中的一个定理，位于命名空间 `Sat.Fmla`。
+形式化陈述：∀ {f : Sat.Fmla} {c : Sat.Clause}, f.subsumes (Sat.Fmla.one c) → f.proof c
+参数：Sat.Fmla.one c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sat.Valuation.satisfies_fmla.prop`：∀ {v : Sat.Valuation} {f : Sat.Fmla},
+ v.satisfies_fmla f → ∀ c ∈ f, v.satisfies c
+· 使用定理 `Sat.Fmla.subsumes.prop`：∀ {f f' : Sat.Fmla}, f.subsumes f' → ∀ x ∈ f', x
+ ∈ f
 
-English:
-theorem Fmla.proof_of_subsumes
-  statement: {f : Fmla} {c : Clause}
-  proof: fun _ h => h.1 _ H.1 _ List.Mem.head ..
-
-中文:
-定理 Fmla.proof_of_subsumes
-  结论: {f : Fmla} {c : Clause}
-  证明: fun _ h => h.1 _ H.1 _ List.Mem.head ..
-
-Depends on / 依赖: List.Mem.head
+--- 原说明 ---
+If `f` subsumes `c` (i.e. `c ∈ f`), then `f.proof c`.
 -/
 theorem Fmla.proof_of_subsumes {f : Fmla} {c : Clause}
     (H : Fmla.subsumes f (Fmla.one c)) : f.proof c :=
-fun _ h => h.1 _ H.1 _ List.Mem.head ..
+  fun _ h ↦ h.1 _ <| H.1 _ <| List.Mem.head ..
 
-/--
-theorem `Valuation.by_cases` / 定理 `Valuation.by_cases`
+/-- The core unit-propagation step.
 
-English:
-theorem Valuation.by_cases
-  statement: {v : Valuation} {l}
-  proof: match l with
-| Literal.pos _ => h₂ h₁
-| Literal.neg _ => h₁ h₂
+We have a local context of assumptions `¬l'` (sometimes called an assignment)
+and we wish to add `¬l` to the context, that is, we want to prove `l` is also falsified.
+This is because there is a clause `a ∨ b ∨ ¬l` in the global context
+such that all literals in the clause are falsified except for `¬l`;
+so in the context `h₁` where we suppose that `¬l` is falsified,
+the clause itself is falsified so we can prove `False`.
+We continue the proof in `h₂`, with the assumption that `l` is falsified. -/
+/-
+**Sat.Valuation.by_cases** 是 Mathlib 中的一个定理，位于命名空间 `Sat.Valuation`。
+形式化陈述：∀ {v : Sat.Valuation} {l : Sat.Literal}, (v.neg l.negate → False) → (v.neg
+ l → False) → False
+参数：v.neg l.negate → False；v.neg l → False。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定理 赋值.by_cases
-  结论: {v : 赋值} {l}
-  证明: match l with
-| Literal.pos _ => h₂ h₁
-| Literal.neg _ => h₁ h₂
+--- 原说明 ---
+The core unit-propagation step.
 
-Depends on / 依赖: Literal, Literal.neg, Literal.pos
+We have a local context of assumptions `¬l'` (sometimes called an assignment)
+and we wish to add `¬l` to the context, that is, we want to prove `l` is also fa
+lsified.
+This is because there is a clause `a ∨ b ∨ ¬l` in the global context
+such that all literals in the clause are falsified except for `¬l`;
+so in the context `h₁` where we suppose that `¬l` is falsified,
+the clause itself is falsified so we can prove `False`.
+We continue the proof in `h₂`, with the assumption that `l` is falsified.
 -/
 theorem Valuation.by_cases {v : Valuation} {l}
-    (h₁ : v.neg l.negate -> False) (h₂ : v.neg l -> False) : False :=
+    (h₁ : v.neg l.negate → False) (h₂ : v.neg l → False) : False :=
 match l with
 | Literal.pos _ => h₂ h₁
 | Literal.neg _ => h₁ h₂
 
-/--
-Definition of `Valuation.implies` / `Valuation.implies` 的定义
+/-- `v.implies p [a, b, c] 0` definitionally unfolds to `(v 0 ↔ a) → (v 1 ↔ b) → (v 2 ↔ c) → p`.
+This is used to introduce assumptions about the first `n` values of `v` during reification. -/
+/-
+**Sat.Valuation.implies** 是 Mathlib 中的一个定义，位于命名空间 `Sat.Valuation`。
+形式化陈述：Sat.Valuation → Prop → List Prop → ℕ → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Valuation.implies
-  signature: (v : Valuation) (p : Prop)
-
-中文:
-定义 赋值.implies
-  签名: (v : 赋值) (p : 命题)
+--- 原说明 ---
+`v.implies p [a, b, c] 0` definitionally unfolds to `(v 0 ↔ a) → (v 1 ↔ b) → (v 
+2 ↔ c) → p`.
+This is used to introduce assumptions about the first `n` values of `v` during r
+eification.
 -/
-def Valuation.implies (v : Valuation) (p : Prop) : List Prop -> Nat -> Prop
+def Valuation.implies (v : Valuation) (p : Prop) : List Prop → Nat → Prop
   | [], _ => p
-  | a::as, n => (v n ↔ a) -> v.implies p as (n + 1)
+  | a::as, n => (v n ↔ a) → v.implies p as (n + 1)
 termination_by structural ps => ps
 
-/--
-Definition of `Valuation.mk` / `Valuation.mk` 的定义
+/-- `Valuation.mk [a, b, c]` is a valuation which is `a` at 0, `b` at 1 and `c` at 2, and false
+everywhere else. -/
+/-
+**Sat.Valuation.mk** 是 Mathlib 中的一个定义，位于命名空间 `Sat.Valuation`。
+形式化陈述：List Prop → Sat.Valuation
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Valuation.mk
-  signature: : List Prop -> Valuation
-
-中文:
-定义 赋值.mk
-  签名: : 列表 命题 -> 赋值
+--- 原说明 ---
+`Valuation.mk [a, b, c]` is a valuation which is `a` at 0, `b` at 1 and `c` at 2
+, and false
+everywhere else.
 -/
-def Valuation.mk : List Prop -> Valuation
+def Valuation.mk : List Prop → Valuation
   | [], _ => False
   | a::_, 0 => a
   | _::as, n + 1 => mk as n
 termination_by structural ps => ps
 
-/--
-theorem `Valuation.mk_implies` / 定理 `Valuation.mk_implies`
+/-- The fundamental relationship between `mk` and `implies`:
+`(mk ps).implies p ps 0` is equivalent to `p`. -/
+/-
+**Sat.Valuation.mk_implies** 是 Mathlib 中的一个定理，位于命名空间 `Sat.Valuation`。
+形式化陈述：∀ {p : Prop} {as ps : List Prop} (as₁ : List Prop),   as = as₁.reverseAux 
+ps → (Sat.Valuation.mk as).implies p ps as₁.length → p
+参数：as₁ : List Prop；Sat.Valuation.mk as。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `List.reverseAux_eq`：∀ {α : Type u_1} {as bs : List α}, as.reverseAux bs 
+= as.reverse ++ bs
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `List.reverse_cons`：∀ {α : Type u} {a : α} {as : List α}, (a :: as).rever
+se = as.reverse ++ [a]
+· 使用定理 `List.append_assoc`：∀ {α : Type u} (as bs cs : List α), as ++ bs ++ cs = 
+as ++ (bs ++ cs)
+· 使用定理 `Nat.succ_add`：∀ (n m : ℕ), n.succ + m = (n + m).succ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem Valuation.mk_implies
-  given: {p} {as ps} (as₁)
-  statement: as = List.reverseAux as₁ ps ->
-  proof: by
-  induction ps generalizing as₁ with
-  | nil => exact fun _ => id
-  | cons a as ih =>
-    refine fun e H => @ih (a::as₁) e (H ?_)
-    subst e; clear ih H
-    suffices forall n n', n' = List.length as₁ + n ->
-      forall bs, mk (as₁.reverseAux bs) n' ↔ mk bs n from this 0 _ rfl (a::as)
-    induction as₁ with
-    | nil => simp
-    | cons b as₁ ih => simpa using! fun n bs => ih (n + 1) _ (Nat.succ_add ..) _
-
-中文:
-定理 赋值.mk_implies
-  条件: {p} {as ps} (as₁)
-  结论: as = 列表.reverseAux as₁ ps ->
-  证明: by
-  induction ps generalizing as₁ with
-  | nil => exact fun _ => id
-  | cons a as ih =>
-    refine fun e H => @ih (a::as₁) e (H ?_)
-    subst e; clear ih H
-    suffices forall n n', n' = List.length as₁ + n ->
-      forall bs, mk (as₁.reverseAux bs) n' ↔ mk bs n from this 0 _ rfl (a::as)
-    induction as₁ with
-    | nil => simp
-    | cons b as₁ ih => simpa using! fun n bs => ih (n + 1) _ (Nat.succ_add ..) _
-
-Depends on / 依赖: List.length, Nat.succ_add, generalizing, length, reverseAux, succ_add
+--- 原说明 ---
+The fundamental relationship between `mk` and `implies`:
+`(mk ps).implies p ps 0` is equivalent to `p`.
 -/
-theorem Valuation.mk_implies {p} {as ps} (as₁) : as = List.reverseAux as₁ ps ->
-    (Valuation.mk as).implies p ps as₁.length -> p := by
+theorem Valuation.mk_implies {p} {as ps} (as₁) : as = List.reverseAux as₁ ps →
+    (Valuation.mk as).implies p ps as₁.length → p := by
   induction ps generalizing as₁ with
-  | nil => exact fun _ => id
+  | nil => exact fun _ ↦ id
   | cons a as ih =>
-    refine fun e H => @ih (a::as₁) e (H ?_)
+    refine fun e H ↦ @ih (a::as₁) e (H ?_)
     subst e; clear ih H
-    suffices forall n n', n' = List.length as₁ + n ->
-      forall bs, mk (as₁.reverseAux bs) n' ↔ mk bs n from this 0 _ rfl (a::as)
+    suffices ∀ n n', n' = List.length as₁ + n →
+      ∀ bs, mk (as₁.reverseAux bs) n' ↔ mk bs n from this 0 _ rfl (a::as)
     induction as₁ with
     | nil => simp
-    | cons b as₁ ih => simpa using! fun n bs => ih (n + 1) _ (Nat.succ_add ..) _
+    | cons b as₁ ih => simpa using! fun n bs ↦ ih (n + 1) _ (Nat.succ_add ..) _
 
-/--
-Definition of `Fmla.reify` / `Fmla.reify` 的定义
+/-- Asserts that `¬⟦f⟧_v` implies `p`. -/
+/-
+**Sat.Fmla.reify** 是 Mathlib 中的一个归纳类型，位于命名空间 `Sat.Fmla`。
+形式化陈述：Sat.Valuation → Sat.Fmla → Prop → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Fmla.reify
-  parameters: (v : Valuation) (f : Fmla) (p : Prop)
-  axioms and operations (1):
-    - prop : ¬ v.satisfies_fmla f -> p
-
-中文:
-结构 Fmla.reify
-  参数: (v : 赋值) (f : Fmla) (p : 命题)
-  公理与运算 (1 个):
-    - prop : ¬ v.satisfies_fmla f -> p
+--- 原说明 ---
+Asserts that `¬⟦f⟧_v` implies `p`.
 -/
 structure Fmla.reify (v : Valuation) (f : Fmla) (p : Prop) : Prop where
-  prop : ¬ v.satisfies_fmla f -> p
+  prop : ¬ v.satisfies_fmla f → p
 
 variable {v : Valuation}
 
-/--
-theorem `Fmla.refute` / 定理 `Fmla.refute`
+/-- If `f` is unsatisfiable, and every `v` which agrees with `ps` implies `¬⟦f⟧_v → p`, then `p`.
+Equivalently, there exists a valuation `v` which agrees with `ps`,
+and every such valuation yields `¬⟦f⟧_v` because `f` is unsatisfiable. -/
+/-
+**Sat.Fmla.refute** 是 Mathlib 中的一个定理，位于命名空间 `Sat.Fmla`。
+形式化陈述：∀ {p : Prop} {ps : List Prop} (f : Sat.Fmla),   f.proof [] → (∀ (v : Sat.V
+aluation), v.implies (Sat.Fmla.reify v f p) ps 0) → p
+参数：f : Sat.Fmla；∀ (v : Sat.Valuation), v.implies (Sat.Fmla.reify v f p) ps 0。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sat.Fmla.reify.prop`：∀ {v : Sat.Valuation} {f : Sat.Fmla} {p : Prop}, Sa
+t.Fmla.reify v f p → ¬v.satisfies_fmla f → p
+· 使用定理 `Sat.Valuation.mk_implies`：∀ {p : Prop} {as ps : List Prop} (as₁ : List P
+rop),   as = as₁.reverseAux ps → (Sat.Valuation.mk as).implies p ps as₁.length →
+ p
 
-English:
-theorem Fmla.refute
-  statement: {p : Prop} {ps} (f : Fmla) (hf : f.proof [])
-  proof: (Valuation.mk_implies [] rfl (hv _)).1 (hf _)
-
-中文:
-定理 Fmla.refute
-  结论: {p : 命题} {ps} (f : Fmla) (hf : f.proof [])
-  证明: (Valuation.mk_implies [] rfl (hv _)).1 (hf _)
-
-Depends on / 依赖: Valuation, Valuation.mk_implies, mk_implies
+--- 原说明 ---
+If `f` is unsatisfiable, and every `v` which agrees with `ps` implies `¬⟦f⟧_v → 
+p`, then `p`.
+Equivalently, there exists a valuation `v` which agrees with `ps`,
+and every such valuation yields `¬⟦f⟧_v` because `f` is unsatisfiable.
 -/
 theorem Fmla.refute {p : Prop} {ps} (f : Fmla) (hf : f.proof [])
-    (hv : forall v, Valuation.implies v (Fmla.reify v f p) ps 0) : p :=
+    (hv : ∀ v, Valuation.implies v (Fmla.reify v f p) ps 0) : p :=
   (Valuation.mk_implies [] rfl (hv _)).1 (hf _)
 
-/--
-theorem `Fmla.reify_or` / 定理 `Fmla.reify_or`
+/-- Negation turns AND into OR, so `¬⟦f₁ ∧ f₂⟧_v ≡ ¬⟦f₁⟧_v ∨ ¬⟦f₂⟧_v`. -/
+/-
+**Sat.Fmla.reify_or** 是 Mathlib 中的一个定理，位于命名空间 `Sat.Fmla`。
+形式化陈述：∀ {v : Sat.Valuation} {f₁ : Sat.Fmla} {a : Prop} {f₂ : Sat.Fmla} {b : Prop
+},   Sat.Fmla.reify v f₁ a → Sat.Fmla.reify v f₂ b → Sat.Fmla.reify v (f₁.and f₂
+) (a ∨ b)
+参数：f₁.and f₂；a ∨ b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `by_contra`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.mem_append`：∀ {α : Type u_1} {a : α} {s t : List α}, a ∈ s ++ t ↔ a
+ ∈ s ∨ a ∈ t
+· 使用定理 `Sat.Fmla.reify.prop`：∀ {v : Sat.Valuation} {f : Sat.Fmla} {p : Prop}, Sa
+t.Fmla.reify v f p → ¬v.satisfies_fmla f → p
+· 使用定理 `Sat.Valuation.satisfies_fmla.prop`：∀ {v : Sat.Valuation} {f : Sat.Fmla},
+ v.satisfies_fmla f → ∀ c ∈ f, v.satisfies c
 
-English:
-theorem Fmla.reify_or
-  statement: {f₁ : Fmla} {a : Prop} {f₂ : Fmla} {b : Prop}
-  proof: by
-  refine ⟨fun H => by_contra fun hn => H ⟨fun c h => by_contra fun hn' => ?_⟩⟩
-  rcases List.mem_append.1 h with h | h
-· exact hn Or.inl h₁.1 fun Hc => hn' Hc.1 _ h
-· exact hn Or.inr h₂.1 fun Hc => hn' Hc.1 _ h
-
-中文:
-定理 Fmla.reify_or
-  结论: {f₁ : Fmla} {a : 命题} {f₂ : Fmla} {b : 命题}
-  证明: by
-  refine ⟨fun H => by_contra fun hn => H ⟨fun c h => by_contra fun hn' => ?_⟩⟩
-  rcases List.mem_append.1 h with h | h
-· exact hn Or.inl h₁.1 fun Hc => hn' Hc.1 _ h
-· exact hn Or.inr h₂.1 fun Hc => hn' Hc.1 _ h
-
-Depends on / 依赖: List.mem_append, Or.inl, Or.inr, mem_append
+--- 原说明 ---
+Negation turns AND into OR, so `¬⟦f₁ ∧ f₂⟧_v ≡ ¬⟦f₁⟧_v ∨ ¬⟦f₂⟧_v`.
 -/
 theorem Fmla.reify_or {f₁ : Fmla} {a : Prop} {f₂ : Fmla} {b : Prop}
     (h₁ : Fmla.reify v f₁ a) (h₂ : Fmla.reify v f₂ b) : Fmla.reify v (f₁.and f₂) (a ∨ b) := by
-  refine ⟨fun H => by_contra fun hn => H ⟨fun c h => by_contra fun hn' => ?_⟩⟩
+  refine ⟨fun H ↦ by_contra fun hn ↦ H ⟨fun c h ↦ by_contra fun hn' ↦ ?_⟩⟩
   rcases List.mem_append.1 h with h | h
-· exact hn Or.inl h₁.1 fun Hc => hn' Hc.1 _ h
-· exact hn Or.inr h₂.1 fun Hc => hn' Hc.1 _ h
+  · exact hn <| Or.inl <| h₁.1 fun Hc ↦ hn' <| Hc.1 _ h
+  · exact hn <| Or.inr <| h₂.1 fun Hc ↦ hn' <| Hc.1 _ h
 
-/--
-Definition of `Clause.reify` / `Clause.reify` 的定义
+/-- Asserts that `¬⟦c⟧_v` implies `p`. -/
+/-
+**Sat.Clause.reify** 是 Mathlib 中的一个归纳类型，位于命名空间 `Sat.Clause`。
+形式化陈述：Sat.Valuation → Sat.Clause → Prop → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Clause.reify
-  parameters: (v : Valuation) (c : Clause) (p : Prop)
-  axioms and operations (1):
-    - prop : ¬ v.satisfies c -> p
-
-中文:
-结构 Clause.reify
-  参数: (v : 赋值) (c : Clause) (p : 命题)
-  公理与运算 (1 个):
-    - prop : ¬ v.satisfies c -> p
+--- 原说明 ---
+Asserts that `¬⟦c⟧_v` implies `p`.
 -/
 structure Clause.reify (v : Valuation) (c : Clause) (p : Prop) : Prop where
-  prop : ¬ v.satisfies c -> p
+  prop : ¬ v.satisfies c → p
 
-/--
-theorem `Fmla.reify_one` / 定理 `Fmla.reify_one`
+/-- Reification of a single clause formula. -/
+/-
+**Sat.Fmla.reify_one** 是 Mathlib 中的一个定理，位于命名空间 `Sat.Fmla`。
+形式化陈述：∀ {v : Sat.Valuation} {c : Sat.Clause} {a : Prop}, Sat.Clause.reify v c a 
+→ Sat.Fmla.reify v (Sat.Fmla.one c) a
+参数：Sat.Fmla.one c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sat.Clause.reify.prop`：∀ {v : Sat.Valuation} {c : Sat.Clause} {p : Prop}
+, Sat.Clause.reify v c p → ¬v.satisfies c → p
 
-English:
-theorem Fmla.reify_one
-  given: {c : Clause} {a : Prop} (h : Clause.reify v c a)
-  proof: ⟨fun H => h.1 fun h => H ⟨fun | _, List.Mem.head .. => h⟩⟩
-
-中文:
-定理 Fmla.reify_one
-  条件: {c : Clause} {a : 命题} (h : Clause.reify v c a)
-  证明: ⟨fun H => h.1 fun h => H ⟨fun | _, List.Mem.head .. => h⟩⟩
-
-Depends on / 依赖: List.Mem.head
+--- 原说明 ---
+Reification of a single clause formula.
 -/
 theorem Fmla.reify_one {c : Clause} {a : Prop} (h : Clause.reify v c a) :
     Fmla.reify v (Fmla.one c) a :=
-  ⟨fun H => h.1 fun h => H ⟨fun | _, List.Mem.head .. => h⟩⟩
+  ⟨fun H ↦ h.1 fun h ↦ H ⟨fun | _, List.Mem.head .. => h⟩⟩
 
-/--
-Definition of `Literal.reify` / `Literal.reify` 的定义
+/-- Asserts that `¬⟦l⟧_v` implies `p`. -/
+/-
+**Sat.Literal.reify** 是 Mathlib 中的一个归纳类型，位于命名空间 `Sat.Literal`。
+形式化陈述：Sat.Valuation → Sat.Literal → Prop → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Literal.reify
-  parameters: (v : Valuation) (l : Literal) (p : Prop)
-  axioms and operations (1):
-    - prop : v.neg l -> p
-
-中文:
-结构 Literal.reify
-  参数: (v : 赋值) (l : Literal) (p : 命题)
-  公理与运算 (1 个):
-    - prop : v.neg l -> p
+--- 原说明 ---
+Asserts that `¬⟦l⟧_v` implies `p`.
 -/
 structure Literal.reify (v : Valuation) (l : Literal) (p : Prop) : Prop where
-  prop : v.neg l -> p
+  prop : v.neg l → p
 
-/--
-theorem `Clause.reify_and` / 定理 `Clause.reify_and`
+/-- Negation turns OR into AND, so `¬⟦l ∨ c⟧_v ≡ ¬⟦l⟧_v ∧ ¬⟦c⟧_v`. -/
+/-
+**Sat.Clause.reify_and** 是 Mathlib 中的一个定理，位于命名空间 `Sat.Clause`。
+形式化陈述：∀ {v : Sat.Valuation} {l : Sat.Literal} {a : Prop} {c : Sat.Clause} {b : P
+rop},   Sat.Literal.reify v l a → Sat.Clause.reify v c b → Sat.Clause.reify v (S
+at.Clause.cons l c) (a ∧ b)
+参数：Sat.Clause.cons l c；a ∧ b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sat.Literal.reify.prop`：∀ {v : Sat.Valuation} {l : Sat.Literal} {p : Pro
+p}, Sat.Literal.reify v l p → v.neg l → p
+· 使用定理 `by_contra`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `Sat.Clause.reify.prop`：∀ {v : Sat.Valuation} {c : Sat.Clause} {p : Prop}
+, Sat.Clause.reify v c p → ¬v.satisfies c → p
 
-English:
-theorem Clause.reify_and
-  statement: {l : Literal} {a : Prop} {c : Clause} {b : Prop}
-  proof: ⟨fun H => ⟨h₁.1 (by_contra fun hn => H hn.elim), h₂.1 fun h => H fun _ => h⟩⟩
-
-中文:
-定理 Clause.reify_and
-  结论: {l : Literal} {a : 命题} {c : Clause} {b : 命题}
-  证明: ⟨fun H => ⟨h₁.1 (by_contra fun hn => H hn.elim), h₂.1 fun h => H fun _ => h⟩⟩
-
-Depends on / 依赖: hn.elim
+--- 原说明 ---
+Negation turns OR into AND, so `¬⟦l ∨ c⟧_v ≡ ¬⟦l⟧_v ∧ ¬⟦c⟧_v`.
 -/
 theorem Clause.reify_and {l : Literal} {a : Prop} {c : Clause} {b : Prop}
     (h₁ : Literal.reify v l a) (h₂ : Clause.reify v c b) :
     Clause.reify v (Clause.cons l c) (a ∧ b) :=
-  ⟨fun H => ⟨h₁.1 (by_contra fun hn => H hn.elim), h₂.1 fun h => H fun _ => h⟩⟩
+  ⟨fun H ↦ ⟨h₁.1 (by_contra fun hn ↦ H hn.elim), h₂.1 fun h ↦ H fun _ ↦ h⟩⟩
 
-/--
-theorem `Clause.reify_zero` / 定理 `Clause.reify_zero`
+/-- The reification of the empty clause is `True`: `¬⟦⊥⟧_v ≡ True`. -/
+/-
+**Sat.Clause.reify_zero** 是 Mathlib 中的一个定理，位于命名空间 `Sat.Clause`。
+形式化陈述：∀ {v : Sat.Valuation}, Sat.Clause.reify v Sat.Clause.nil True
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 
-English:
-theorem Clause.reify_zero
-  statement: Clause.reify v Clause.nil True
-  proof: ⟨fun _ => trivial⟩
-
-中文:
-定理 Clause.reify_zero
-  结论: Clause.reify v Clause.nil 真
-  证明: ⟨fun _ => trivial⟩
+--- 原说明 ---
+The reification of the empty clause is `True`: `¬⟦⊥⟧_v ≡ True`.
 -/
-theorem Clause.reify_zero : Clause.reify v Clause.nil True := ⟨fun _ => trivial⟩
+theorem Clause.reify_zero : Clause.reify v Clause.nil True := ⟨fun _ ↦ trivial⟩
 
-/--
-theorem `Clause.reify_one` / 定理 `Clause.reify_one`
+/-- The reification of a singleton clause `¬⟦l⟧_v ≡ ¬⟦l⟧_v`. -/
+/-
+**Sat.Clause.reify_one** 是 Mathlib 中的一个定理，位于命名空间 `Sat.Clause`。
+形式化陈述：∀ {v : Sat.Valuation} {l : Sat.Literal} {a : Prop},   Sat.Literal.reify v 
+l a → Sat.Clause.reify v (Sat.Clause.cons l Sat.Clause.nil) a
+参数：Sat.Clause.cons l Sat.Clause.nil。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Sat.Clause.reify.prop`：∀ {v : Sat.Valuation} {c : Sat.Clause} {p : Prop}
+, Sat.Clause.reify v c p → ¬v.satisfies c → p
+· 使用定理 `Sat.Clause.reify_and`：∀ {v : Sat.Valuation} {l : Sat.Literal} {a : Prop}
+ {c : Sat.Clause} {b : Prop},   Sat.Literal.reify v l a → Sat.Clause.reify v c b
+ → Sat.Cla…
+· 使用定理 `Sat.Clause.reify_zero`：∀ {v : Sat.Valuation}, Sat.Clause.reify v Sat.Cla
+use.nil True
 
-English:
-theorem Clause.reify_one
-  statement: {l : Literal} {a : Prop}
-  proof: ⟨fun H => ((Clause.reify_and h₁ Clause.reify_zero).1 H).1⟩
-
-中文:
-定理 Clause.reify_one
-  结论: {l : Literal} {a : 命题}
-  证明: ⟨fun H => ((Clause.reify_and h₁ Clause.reify_zero).1 H).1⟩
-
-Depends on / 依赖: Clause, Clause.reify_and, Clause.reify_zero, reify_and, reify_zero
+--- 原说明 ---
+The reification of a singleton clause `¬⟦l⟧_v ≡ ¬⟦l⟧_v`.
 -/
 theorem Clause.reify_one {l : Literal} {a : Prop}
     (h₁ : Literal.reify v l a) : Clause.reify v (Clause.nil.cons l) a :=
-  ⟨fun H => ((Clause.reify_and h₁ Clause.reify_zero).1 H).1⟩
+  ⟨fun H ↦ ((Clause.reify_and h₁ Clause.reify_zero).1 H).1⟩
 
-/--
-theorem `Literal.reify_pos` / 定理 `Literal.reify_pos`
+/-- The reification of a positive literal `¬⟦a⟧_v ≡ ¬a`. -/
+/-
+**Sat.Literal.reify_pos** 是 Mathlib 中的一个定理，位于命名空间 `Sat.Literal`。
+形式化陈述：∀ {v : Sat.Valuation} {a : Prop} {n : ℕ}, (v n ↔ a) → Sat.Literal.reify v 
+(Sat.Literal.pos n) ¬a
+参数：v n ↔ a；Sat.Literal.pos n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 
-English:
-theorem Literal.reify_pos
-  given: {a : Prop} {n : Nat} (h : v n ↔ a)
-  statement: (Literal.pos n).reify v ¬a
-  proof: ⟨mt h.2⟩
-
-中文:
-定理 Literal.reify_pos
-  条件: {a : 命题} {n : 自然数} (h : v n ↔ a)
-  结论: (Literal.pos n).reify v ¬a
-  证明: ⟨mt h.2⟩
+--- 原说明 ---
+The reification of a positive literal `¬⟦a⟧_v ≡ ¬a`.
 -/
-theorem Literal.reify_pos {a : Prop} {n : Nat} (h : v n ↔ a) : (Literal.pos n).reify v ¬a := ⟨mt h.2⟩
+theorem Literal.reify_pos {a : Prop} {n : ℕ} (h : v n ↔ a) : (Literal.pos n).reify v ¬a := ⟨mt h.2⟩
 
-/--
-theorem `Literal.reify_neg` / 定理 `Literal.reify_neg`
+/-- The reification of a negative literal `¬⟦¬a⟧_v ≡ a`. -/
+/-
+**Sat.Literal.reify_neg** 是 Mathlib 中的一个定理，位于命名空间 `Sat.Literal`。
+形式化陈述：∀ {v : Sat.Valuation} {a : Prop} {n : ℕ}, (v n ↔ a) → Sat.Literal.reify v 
+(Sat.Literal.neg n) a
+参数：v n ↔ a；Sat.Literal.neg n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 
-English:
-theorem Literal.reify_neg
-  given: {a : Prop} {n : Nat} (h : v n ↔ a)
-  statement: (Literal.neg n).reify v a
-  proof: ⟨h.1⟩
-
-中文:
-定理 Literal.reify_neg
-  条件: {a : 命题} {n : 自然数} (h : v n ↔ a)
-  结论: (Literal.neg n).reify v a
-  证明: ⟨h.1⟩
+--- 原说明 ---
+The reification of a negative literal `¬⟦¬a⟧_v ≡ a`.
 -/
-theorem Literal.reify_neg {a : Prop} {n : Nat} (h : v n ↔ a) : (Literal.neg n).reify v a := ⟨h.1⟩
+theorem Literal.reify_neg {a : Prop} {n : ℕ} (h : v n ↔ a) : (Literal.neg n).reify v a := ⟨h.1⟩
 
 end Sat
 
 namespace Mathlib.Tactic.Sat
 
-/--
-Definition of `Clause` / `Clause` 的定义
+/-- The representation of a global clause. -/
+/-
+**Mathlib.Tactic.Sat.Clause** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic.Sat`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Clause
-  parameters: where
-  axioms and operations (3):
-    - lits : Array Int
-    - expr : Expr
-    - proof : Expr
-
-中文:
-结构 Clause
-  参数: where
-  公理与运算 (3 个):
-    - lits : 数组 整数
-    - expr : Expr
-    - proof : Expr
+--- 原说明 ---
+The representation of a global clause.
 -/
 structure Clause where
   /-- The list of literals as read from the input file -/
@@ -747,54 +639,36 @@ structure Clause where
   directly is likely to crash lean for larger examples. -/
   proof : Expr
 
-/--
-Definition of `buildClause` / `buildClause` 的定义
+/-- Construct the clause expression from the input list. For example `[1, -2]` is translated to
+`Clause.cons (Literal.pos 1) (Clause.cons (Literal.neg 2) Clause.nil)`. -/
+/-
+**Mathlib.Tactic.Sat.buildClause** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Sat`。
+形式化陈述：buildClause (arr : Array Int) : Expr
+参数：arr : Array Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition buildClause
-  signature: (arr : Array Int)
-  body: let nil := mkConst ``Sat.Clause.nil
-  let cons := mkConst ``Sat.Clause.cons
-  arr.foldr (fun i e => mkApp2 cons (toExpr <| Sat.Literal.ofInt i) e) nil
-
-中文:
-定义 buildClause
-  签名: (arr : 数组 整数)
-  定义体: let nil := mkConst ``Sat.Clause.nil
-  let cons := mkConst ``Sat.Clause.cons
-  arr.foldr (fun i e => mkApp2 cons (toExpr <| Sat.Literal.ofInt i) e) nil
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Sheaf, Clause, IsGrothendieckAbelian, Literal, Sat.Clause.cons, Sat.Clause.nil, Sat.Literal.ofInt, arr.foldr, mkApp2, mkConst, toExpr
+--- 原说明 ---
+Construct the clause expression from the input list. For example `[1, -2]` is tr
+anslated to
+`Clause.cons (Literal.pos 1) (Clause.cons (Literal.neg 2) Clause.nil)`.
 -/
 def buildClause (arr : Array Int) : Expr :=
-  let nil := mkConst ``Sat.Clause.nil
+  let nil  := mkConst ``Sat.Clause.nil
   let cons := mkConst ``Sat.Clause.cons
-  arr.foldr (fun i e => mkApp2 cons (toExpr <| Sat.Literal.ofInt i) e) nil
+  arr.foldr (fun i e ↦ mkApp2 cons (toExpr <| Sat.Literal.ofInt i) e) nil
 
-/--
-Definition of `buildConj` / `buildConj` 的定义
+/-- Constructs the formula expression from the input CNF, as a balanced tree of `Fmla.and` nodes. -/
+/-
+**Mathlib.Tactic.Sat.buildConj** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Tactic.Sat`
+。
+形式化陈述：Array (Array ℤ) → ℕ → ℕ → Expr
+参数：Array ℤ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition buildConj
-  signature: (arr : Array (Array Int)) (start stop : Nat)
-  body: match stop - start with
-  | 0 => panic! "empty"
-  | 1 => mkApp (mkConst ``Sat.Fmla.one) (buildClause arr[start]!)
-  | len =>
-    let mid := start + len / 2
-    mkApp2 (mkConst ``Sat.Fmla.and) (buildConj arr start mid) (buildConj arr mid stop)
-
-中文:
-定义 buildConj
-  签名: (arr : 数组 (数组 整数)) (start stop : 自然数)
-  定义体: match stop - start with
-  | 0 => panic! "empty"
-  | 1 => mkApp (mkConst ``Sat.Fmla.one) (buildClause arr[start]!)
-  | len =>
-    let mid := start + len / 2
-    mkApp2 (mkConst ``Sat.Fmla.and) (buildConj arr start mid) (buildConj arr mid stop)
-
-Depends on / 依赖: Additive, Functor, Functor.whiskeringLeft, OpenNhds, OpenNhds.inclusion, Presheaf, Presheaf.stalkFunctor, cat_disch, inclusion, infer_instance, stalkFunctor, whiskeringLeft
+--- 原说明 ---
+Constructs the formula expression from the input CNF, as a balanced tree of `Fml
+a.and` nodes.
 -/
 partial def buildConj (arr : Array (Array Int)) (start stop : Nat) : Expr :=
   match stop - start with
@@ -804,46 +678,19 @@ partial def buildConj (arr : Array (Array Int)) (start stop : Nat) : Expr :=
     let mid := start + len / 2
     mkApp2 (mkConst ``Sat.Fmla.and) (buildConj arr start mid) (buildConj arr mid stop)
 
-/--
-Definition of `buildClauses` / `buildClauses` 的定义
+/-- Constructs the proofs of `⊢ ctx.proof c` for each clause `c` in `ctx`.
+The proofs are stashed in a `HashMap` keyed on the clause ID. -/
+/-
+**Mathlib.Tactic.Sat.buildClauses** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Tactic.S
+at`。
+形式化陈述：Array (Array ℤ) →   Expr → ℕ → ℕ → Expr → Expr → ℕ × Std.HashMap ℕ Mathlib
+.Tactic.Sat.Clause → ℕ × Std.HashMap ℕ Mathlib.Tactic.Sat.Clause
+参数：Array ℤ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition buildClauses
-  signature: (arr : Array (Array Int)) (ctx : Expr) (start stop : Nat)
-  body: match stop - start with
-  | 0 => panic! "empty"
-  | 1 =>
-    let c := f.appArg!
-    let proof := mkApp3 (mkConst ``Sat.Fmla.proof_of_subsumes) ctx c p
-    let n := accum.1 + 1
-    (n, accum.2.insert n { lits := arr[start]!, expr := c, proof })
-  | len =>
-    let mid := start + len / 2
-    let f₁ := f.appFn!.appArg!
-    let f₂ := f.appArg!
-    let p₁ := mkApp4 (mkConst ``Sat.Fmla.subsumes_left) ctx f₁ f₂ p
-    let p₂ := mkApp4 (mkConst ``Sat.Fmla.subsumes_right) ctx f₁ f₂ p
-    let accum := buildClauses arr ctx start mid f₁ p₁ accum
-    buildClauses arr ctx mid stop f₂ p₂ accum
-
-中文:
-定义 buildClauses
-  签名: (arr : 数组 (数组 整数)) (ctx : Expr) (start stop : 自然数)
-  定义体: match stop - start with
-  | 0 => panic! "empty"
-  | 1 =>
-    let c := f.appArg!
-    let proof := mkApp3 (mkConst ``Sat.Fmla.proof_of_subsumes) ctx c p
-    let n := accum.1 + 1
-    (n, accum.2.insert n { lits := arr[start]!, expr := c, proof })
-  | len =>
-    let mid := start + len / 2
-    let f₁ := f.appFn!.appArg!
-    let f₂ := f.appArg!
-    let p₁ := mkApp4 (mkConst ``Sat.Fmla.subsumes_left) ctx f₁ f₂ p
-    let p₂ := mkApp4 (mkConst ``Sat.Fmla.subsumes_right) ctx f₁ f₂ p
-    let accum := buildClauses arr ctx start mid f₁ p₁ accum
-    buildClauses arr ctx mid stop f₂ p₂ accum
+--- 原说明 ---
+Constructs the proofs of `⊢ ctx.proof c` for each clause `c` in `ctx`.
+The proofs are stashed in a `HashMap` keyed on the clause ID.
 -/
 partial def buildClauses (arr : Array (Array Int)) (ctx : Expr) (start stop : Nat)
     (f p : Expr) (accum : Nat × HashMap Nat Clause) : Nat × HashMap Nat Clause :=
@@ -863,26 +710,22 @@ partial def buildClauses (arr : Array (Array Int)) (ctx : Expr) (start stop : Na
     let accum := buildClauses arr ctx start mid f₁ p₁ accum
     buildClauses arr ctx mid stop f₂ p₂ accum
 
-/--
-Definition of `LClause` / `LClause` 的定义
+/-- A localized clause reference.
+It is the same as `Clause` except that the proof is now a local variable. -/
+/-
+**Mathlib.Tactic.Sat.LClause** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Tactic.Sat`。
+形式化陈述：LClause where /-- The list of literals as read from the input file -/ lits
+ : Array Int /-- The clause expression of type `Clause` -/ expr : Expr /-- The b
+ound variable index of the hypothesis asserting `⊢ ctx.proof c`, _counting from 
+the outside and 1-based_. (We use this numbering because we will need to referen
+ce the variable from multiple binder depths.) -/ depth : Nat  /-- Construct an i
+ndividual proof step `⊢ ctx.proof c`.  * `db`: the current global context * `ns`
+, `clause`: the new clause
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure LClause
-  parameters: where
-  axioms and operations (3):
-    - lits : Array Int
-    - expr : Expr
-    - depth : Nat
-
-中文:
-结构 LClause
-  参数: where
-  公理与运算 (3 个):
-    - lits : 数组 整数
-    - expr : Expr
-    - depth : 自然数
-
-Depends on / 依赖: clause
+--- 原说明 ---
+A localized clause reference.
+It is the same as `Clause` except that the proof is now a local variable. -/
 -/
 structure LClause where
   /-- The list of literals as read from the input file -/
@@ -894,134 +737,83 @@ structure LClause where
   reference the variable from multiple binder depths.) -/
   depth : Nat
 
-/--
-Definition of `buildProofStep` / `buildProofStep` 的定义
+/-- Construct an individual proof step `⊢ ctx.proof c`.
 
-English:
-definition buildProofStep
-  signature: (db : HashMap Nat Clause)
-  body: Id.run do
-  let mut lams := #[]
-  let mut args := #[]
-  let mut gctx : HashMap Nat LClause := {}
-  -- step 1
-  for i in pf do
-    let i := i.natAbs
-    let some cl := db[i]? | return Except.error "missing clause"
-    if !gctx.contains i then
-      lams := lams.push (mkApp2 (mkConst ``Sat.Fmla.proof) ctx cl.expr)
-      args := args.push cl.proof
-      gctx := gctx.insert i {
-        lits := cl.lits
-        expr := cl.expr
-        depth := args.size
-      }
-  let n := args.size
-  -- step 2
-  let mut f :=
-    (mkAppN · args) ∘
-    lams.foldr (mkLambda `c default) ∘
-    mkLambda `v default (mkConst ``Sat.Valuation) ∘
-    mkLambda `hv default (mkApp2 (mkConst ``Sat.Valuation.satisfies_fmla) (mkBVar 0) ctx)
-  let v depth := mkBVar (depth + 1)
-  let hv depth := mkBVar depth
-  lams := #[]
-  let mut clause := clause
-  let mut depth := 0
-  let mut lctx : HashMap Int Nat := {}
-  for i in ns do
-    let l := clause.appFn!.appArg!
-    clause := clause.appArg!
-    lams := lams.push (mkApp2 (mkConst ``Sat.Valuation.neg) (v depth) l)
-    depth := depth.succ
-    lctx := lctx.insert i depth
-  f := f ∘ lams.foldr (mkLambda `h default)
-  -- step 3
-  for (step : Int) in pf do
-    if step < 0 then return Except.error "unimplemented: RAT step"
-    let some cl := gctx[step.toNat]? | return Except.error "missing clause"
-    let mut unit := none
-    for i in cl.lits do
-      unless lctx.contains i do
-        if unit.isSome then return Except.error s!"not unit: {cl.lits}"
-        depth := depth.succ
-        unit := some i
-    let mut pr := mkApp2 (mkBVar (depth + n + 2 - cl.depth)) (v depth) (hv depth)
-    for i in cl.lits do
-pr := mkApp pr mkBVar (match lctx[i]? with | some k => depth - k | _ => 0)
-let some u := unit | return Except.ok f pr
-let lit := toExpr Sat.Literal.ofInt u
-let nlit := toExpr Sat.Literal.ofInt (-u)
-    let d1 := depth-1
-let app := mkApp3 (mkConst ``Sat.Valuation.by_cases) (v d1) nlit
-      mkLambda `h default (mkApp2 (mkConst ``Sat.Valuation.neg) (v d1) lit) pr
-    let dom := mkApp2 (mkConst ``Sat.Valuation.neg) (v d1) nlit
-f := fun e => f mkApp app mkLambda `h default dom e
-    lctx := lctx.insert (-u) depth
-  return Except.error s!"no refutation: {ns}, {pf}, {lctx.toList}"
+  * `db`: the current global context
+  * `ns`, `clause`: the new clause
+  * `pf`: the LRAT proof trace
+  * `ctx`: the main formula
 
-中文:
-定义 buildProofStep
-  签名: (db : HashMap 自然数 Clause)
-  定义体: Id.run do
-  let mut lams := #[]
-  let mut args := #[]
-  let mut gctx : HashMap Nat LClause := {}
-  -- step 1
-  for i in pf do
-    let i := i.natAbs
-    let some cl := db[i]? | return Except.error "missing clause"
-    if !gctx.contains i then
-      lams := lams.push (mkApp2 (mkConst ``Sat.Fmla.proof) ctx cl.expr)
-      args := args.push cl.proof
-      gctx := gctx.insert i {
-        lits := cl.lits
-        expr := cl.expr
-        depth := args.size
-      }
-  let n := args.size
-  -- step 2
-  let mut f :=
-    (mkAppN · args) ∘
-    lams.foldr (mkLambda `c default) ∘
-    mkLambda `v default (mkConst ``Sat.Valuation) ∘
-    mkLambda `hv default (mkApp2 (mkConst ``Sat.Valuation.satisfies_fmla) (mkBVar 0) ctx)
-  let v depth := mkBVar (depth + 1)
-  let hv depth := mkBVar depth
-  lams := #[]
-  let mut clause := clause
-  let mut depth := 0
-  let mut lctx : HashMap Int Nat := {}
-  for i in ns do
-    let l := clause.appFn!.appArg!
-    clause := clause.appArg!
-    lams := lams.push (mkApp2 (mkConst ``Sat.Valuation.neg) (v depth) l)
-    depth := depth.succ
-    lctx := lctx.insert i depth
-  f := f ∘ lams.foldr (mkLambda `h default)
-  -- step 3
-  for (step : Int) in pf do
-    if step < 0 then return Except.error "unimplemented: RAT step"
-    let some cl := gctx[step.toNat]? | return Except.error "missing clause"
-    let mut unit := none
-    for i in cl.lits do
-      unless lctx.contains i do
-        if unit.isSome then return Except.error s!"not unit: {cl.lits}"
-        depth := depth.succ
-        unit := some i
-    let mut pr := mkApp2 (mkBVar (depth + n + 2 - cl.depth)) (v depth) (hv depth)
-    for i in cl.lits do
-pr := mkApp pr mkBVar (match lctx[i]? with | some k => depth - k | _ => 0)
-let some u := unit | return Except.ok f pr
-let lit := toExpr Sat.Literal.ofInt u
-let nlit := toExpr Sat.Literal.ofInt (-u)
-    let d1 := depth-1
-let app := mkApp3 (mkConst ``Sat.Valuation.by_cases) (v d1) nlit
-      mkLambda `h default (mkApp2 (mkConst ``Sat.Valuation.neg) (v d1) lit) pr
-    let dom := mkApp2 (mkConst ``Sat.Valuation.neg) (v d1) nlit
-f := fun e => f mkApp app mkLambda `h default dom e
-    lctx := lctx.insert (-u) depth
-  return Except.error s!"no refutation: {ns}, {pf}, {lctx.toList}"
+  The proof has three steps:
+
+  1. Introduce local assumptions `have h1 : ctx.proof c1 := p1` for each clause `c1`
+     referenced in the proof. We actually do all the introductions at once,
+     as in `(fun h1 h2 h3 ↦ ...) p1 p2 p3`, because we want `p_i` to not be under any binders
+     to avoid the cost of `instantiate` during typechecking and get the benefits of dag-like
+     sharing in the `pi` (which are themselves previous proof steps which may be large terms).
+     The hypotheses are in `gctx`, keyed on the clause ID.
+
+  2. Unfold `⊢ ctx.proof [a, b, c]` to
+     `∀ v, v.satisfies_fmla ctx → v.neg a → v.neg b → v.neg c → False` and `intro v hv ha hb hc`,
+     storing each `ha : v.neg a` in `lctx`, keyed on the literal `a`.
+
+  3. For each LRAT step `hc : ctx.proof [x, y]`, `hc v hv : v.neg x → v.neg y → False`.
+     We look for a literal that is not falsified in the clause. Since it is a unit propagation
+     step, there can be at most one such literal.
+     * If `x` is the non-falsified clause, let `x'` denote the negated literal of `x`.
+       Then `x'.negate` reduces to `x`, so `hnx : v.neg x'.negate |- hc v hv hnx hy : False`,
+       so we construct the term
+         `by_cases (fun hnx : v.neg x'.negate ↦ hc v hv hnx hy) (fun hx : v.neg x ↦ ...)`
+       and `hx` is added to the local context.
+     * If all clauses are falsified, then we are done: `hc v hv hx hy : False`.
+-/
+/-
+**Mathlib.Tactic.Sat.buildProofStep** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Sa
+t`。
+形式化陈述：Std.HashMap ℕ Mathlib.Tactic.Sat.Clause → Array ℤ → Array ℤ → Expr → Expr 
+→ Except String Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Construct an individual proof step `⊢ ctx.proof c`.
+
+  * `db`: the current global context
+  * `ns`, `clause`: the new clause
+  * `pf`: the LRAT proof trace
+  * `ctx`: the main formula
+
+  The proof has three steps:
+
+  1. Introduce local assumptions `have h1 : ctx.proof c1 := p1` for each clause 
+`c1`
+     referenced in the proof. We actually do all the introductions at once,
+     as in `(fun h1 h2 h3 ↦ ...) p1 p2 p3`, because we want `p_i` to not be unde
+r any binders
+     to avoid the cost of `instantiate` during typechecking and get the benefits
+ of dag-like
+     sharing in the `pi` (which are themselves previous proof steps which may be
+ large terms).
+     The hypotheses are in `gctx`, keyed on the clause ID.
+
+  2. Unfold `⊢ ctx.proof [a, b, c]` to
+     `∀ v, v.satisfies_fmla ctx → v.neg a → v.neg b → v.neg c → False` and `intr
+o v hv ha hb hc`,
+     storing each `ha : v.neg a` in `lctx`, keyed on the literal `a`.
+
+  3. For each LRAT step `hc : ctx.proof [x, y]`, `hc v hv : v.neg x → v.neg y → 
+False`.
+     We look for a literal that is not falsified in the clause. Since it is a un
+it propagation
+     step, there can be at most one such literal.
+     * If `x` is the non-falsified clause, let `x'` denote the negated literal o
+f `x`.
+       Then `x'.negate` reduces to `x`, so `hnx : v.neg x'.negate |- hc v hv hnx
+ hy : False`,
+       so we construct the term
+         `by_cases (fun hnx : v.neg x'.negate ↦ hc v hv hnx hy) (fun hx : v.neg 
+x ↦ ...)`
+       and `hx` is added to the local context.
+     * If all clauses are falsified, then we are done: `hc v hv hx hy : False`.
 -/
 partial def buildProofStep (db : HashMap Nat Clause)
     (ns pf : Array Int) (ctx clause : Expr) : Except String Expr := Id.run do
@@ -1072,32 +864,33 @@ partial def buildProofStep (db : HashMap Nat Clause)
         unit := some i
     let mut pr := mkApp2 (mkBVar (depth + n + 2 - cl.depth)) (v depth) (hv depth)
     for i in cl.lits do
-pr := mkApp pr mkBVar (match lctx[i]? with | some k => depth - k | _ => 0)
-let some u := unit | return Except.ok f pr
-let lit := toExpr Sat.Literal.ofInt u
-let nlit := toExpr Sat.Literal.ofInt (-u)
+      pr := mkApp pr <| mkBVar (match lctx[i]? with | some k => depth - k | _ => 0)
+    let some u := unit | return Except.ok <| f pr
+    let lit := toExpr <| Sat.Literal.ofInt u
+    let nlit := toExpr <| Sat.Literal.ofInt (-u)
     let d1 := depth-1
-let app := mkApp3 (mkConst ``Sat.Valuation.by_cases) (v d1) nlit
+    let app := mkApp3 (mkConst ``Sat.Valuation.by_cases) (v d1) nlit <|
       mkLambda `h default (mkApp2 (mkConst ``Sat.Valuation.neg) (v d1) lit) pr
     let dom := mkApp2 (mkConst ``Sat.Valuation.neg) (v d1) nlit
-f := fun e => f mkApp app mkLambda `h default dom e
+    f := fun e ↦ f <| mkApp app <| mkLambda `h default dom e
     lctx := lctx.insert (-u) depth
   return Except.error s!"no refutation: {ns}, {pf}, {lctx.toList}"
 
-/--
-Inductive type `LRATStep` / 归纳类型 `LRATStep`
+/-- An LRAT step is either an addition or a deletion step. -/
+/-
+**Mathlib.Tactic.Sat.LRATStep** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic.Sat`。
+形式化陈述：LRATStep | /-- An addition step, with the clause ID, the clause literal li
+st, and the proof trace -/ add (id : Nat) (lits : Array Int) (proof : Array Int)
+ : LRATStep | /-- A (multiple) deletion step, which deletes all the listed claus
+e IDs from the context -/ del (ids : Array Nat) : LRATStep  /-- Build the main p
+roof of `⊢ ctx.proof []` using the LRAT proof trace.  * `arr`: The input CNF * `
+ctx`: The abbreviated formula, a constant like `foo.ctx_1` * `ctx'`: The definit
+ional expansion of the for
+参数：id : Nat；lits : Array Int；proof : Array Int。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive LRATStep
-  constructors (2):
-    - /--: An addition step, with the clause ID, the clause literal list, and the proof trace -/ add (id : Nat) (lits : Array Int) (proof : Array Int) : LRATStep
-    - /--: A (multiple) deletion step, which deletes all the listed clause IDs from the context -/ del (ids : Array Nat) : LRATStep
-
-中文:
-归纳类型 LRATStep
-  构造子 (2 个):
-    - /--: An addition step, with the clause ID, the clause literal list, and the proof trace -/ add (id : 自然数) (lits : 数组 整数) (proof : 数组 整数) : LRATStep
-    - /--: A (multiple) deletion step, which deletes all the listed clause IDs from the context -/ del (ids : 数组 自然数) : LRATStep
+--- 原说明 ---
+An LRAT step is either an addition or a deletion step. -/
 -/
 inductive LRATStep
   | /-- An addition step, with the clause ID, the clause literal list, and the proof trace -/
@@ -1105,44 +898,28 @@ inductive LRATStep
   | /-- A (multiple) deletion step, which deletes all the listed clause IDs from the context -/
     del (ids : Array Nat) : LRATStep
 
-/--
-Definition of `buildProof` / `buildProof` 的定义
+/-- Build the main proof of `⊢ ctx.proof []` using the LRAT proof trace.
 
-English:
-definition buildProof
-  signature: (arr : Array (Array Int)) (ctx ctx' : Expr)
-  body: do
-  let p := mkApp (mkConst ``Sat.Fmla.subsumes_self) ctx
-  let mut db := (buildClauses arr ctx 0 arr.size ctx' p default).2
-  for step in steps do
-    match step with
-    | LRATStep.del ds => db := ds.foldl (·.erase ·) db
-    | LRATStep.add i ns pf =>
-      let e := buildClause ns
-      match buildProofStep db ns pf ctx e with
-      | Except.ok proof =>
-        if ns.isEmpty then return proof
-        db := db.insert i { lits := ns, expr := e, proof }
-      | Except.error msg => throwError msg
-  throwError "failed to prove empty clause"
+  * `arr`: The input CNF
+  * `ctx`: The abbreviated formula, a constant like `foo.ctx_1`
+  * `ctx'`: The definitional expansion of the formula, a tree of `Fmla.and` nodes
+  * `steps`: The input LRAT proof trace
+-/
+/-
+**Mathlib.Tactic.Sat.buildProof** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Sat`。
+形式化陈述：Array (Array ℤ) → Expr → Expr → Array Mathlib.Tactic.Sat.LRATStep → MetaM 
+Expr
+参数：Array ℤ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 buildProof
-  签名: (arr : 数组 (数组 整数)) (ctx ctx' : Expr)
-  定义体: do
-  let p := mkApp (mkConst ``Sat.Fmla.subsumes_self) ctx
-  let mut db := (buildClauses arr ctx 0 arr.size ctx' p default).2
-  for step in steps do
-    match step with
-    | LRATStep.del ds => db := ds.foldl (·.erase ·) db
-    | LRATStep.add i ns pf =>
-      let e := buildClause ns
-      match buildProofStep db ns pf ctx e with
-      | Except.ok proof =>
-        if ns.isEmpty then return proof
-        db := db.insert i { lits := ns, expr := e, proof }
-      | Except.error msg => throwError msg
-  throwError "failed to prove empty clause"
+--- 原说明 ---
+Build the main proof of `⊢ ctx.proof []` using the LRAT proof trace.
+
+  * `arr`: The input CNF
+  * `ctx`: The abbreviated formula, a constant like `foo.ctx_1`
+  * `ctx'`: The definitional expansion of the formula, a tree of `Fmla.and` node
+s
+  * `steps`: The input LRAT proof trace
 -/
 partial def buildProof (arr : Array (Array Int)) (ctx ctx' : Expr)
     (steps : Array LRATStep) : MetaM Expr := do
@@ -1160,54 +937,61 @@ partial def buildProof (arr : Array (Array Int)) (ctx ctx' : Expr)
       | Except.error msg => throwError msg
   throwError "failed to prove empty clause"
 
-/--
-Definition of `buildReify` / `buildReify` 的定义
+/-- Build the type and value of the reified theorem. This rewrites all the SAT definitions
+into standard operators on `Prop`, for example if the formula is `[[1, 2], [-1, 2], [-2]]` then
+this produces a proof of `⊢ ∀ a b : Prop, (a ∧ b) ∨ (¬a ∧ b) ∨ ¬b`. We use the input `nvars` to
+decide how many quantifiers to use.
 
-English:
-definition buildReify
-  signature: (ctx ctx' proof : Expr) (nvars : Nat)
-  body: Id.run do
-  let (e, pr) := reifyFmla ctx'
-  let mut pr := pr
-  for i in [0:nvars] do
-    let j := nvars-i-1
-    let ty := mkApp2 (mkConst ``Iff) (mkApp (mkBVar j) (mkRawNatLit j)) (mkBVar nvars)
-    pr := mkLambda `h default ty pr
-  pr := mkLambda `v default (mkConst ``Sat.Valuation) pr
-  let mut e := e.lowerLooseBVars (nvars+1) (nvars+1)
-  let cons := mkApp (mkConst ``List.cons [.zero]) (mkSort .zero)
-  let nil := mkApp (mkConst ``List.nil [.zero]) (mkSort .zero)
-  let rec mkPS depth e
-  | 0 => e
-  | n + 1 => mkPS (depth+1) (mkApp2 cons (mkBVar depth) e) n
-  pr := mkApp5 (mkConst ``Sat.Fmla.refute) e (mkPS 0 nil nvars) ctx proof pr
-  for _ in [0:nvars] do
-    e := mkForall `a default (mkSort .zero) e
-    pr := mkLambda `a default (mkSort .zero) pr
-  pure (e, pr)
+Most of the proof is under `2 * nvars + 1` quantifiers
+`a1 .. an : Prop, v : Valuation, h1 : v 0 ↔ a1, ... hn : v (n-1) ↔ an ⊢ ...`, and we do the index
+arithmetic by hand.
 
-中文:
-定义 buildReify
-  签名: (ctx ctx' proof : Expr) (nvars : 自然数)
-  定义体: Id.run do
-  let (e, pr) := reifyFmla ctx'
-  let mut pr := pr
-  for i in [0:nvars] do
-    let j := nvars-i-1
-    let ty := mkApp2 (mkConst ``Iff) (mkApp (mkBVar j) (mkRawNatLit j)) (mkBVar nvars)
-    pr := mkLambda `h default ty pr
-  pr := mkLambda `v default (mkConst ``Sat.Valuation) pr
-  let mut e := e.lowerLooseBVars (nvars+1) (nvars+1)
-  let cons := mkApp (mkConst ``List.cons [.zero]) (mkSort .zero)
-  let nil := mkApp (mkConst ``List.nil [.zero]) (mkSort .zero)
-  let rec mkPS depth e
-  | 0 => e
-  | n + 1 => mkPS (depth+1) (mkApp2 cons (mkBVar depth) e) n
-  pr := mkApp5 (mkConst ``Sat.Fmla.refute) e (mkPS 0 nil nvars) ctx proof pr
-  for _ in [0:nvars] do
-    e := mkForall `a default (mkSort .zero) e
-    pr := mkLambda `a default (mkSort .zero) pr
-  pure (e, pr)
+  1. First, we call `reifyFormula ctx'` which returns `a` and `pr : reify v ctx' a`
+  2. Then we build `fun (v : Valuation) (h1 : v 0 ↔ a1) ... (hn : v (n-1) ↔ an) ↦ pr`
+  3. We have to lower expression `a` from step 1 out of the quantifiers by lowering all variable
+     indices by `nvars+1`. This is okay because `v` and `h1..hn` do not appear in `a`.
+  4. We construct the expression `ps`, which is `a1 .. an : Prop ⊢ [a1, ..., an] : List Prop`
+  5. `refute ctx (hf : ctx.proof []) (fun v h1 .. hn ↦ pr) : a` forces some definitional unfolding
+     since `fun h1 .. hn ↦ pr` should have type `implies v (reify v ctx a) [a1, ..., an] a`,
+     which involves unfolding `implies` n times as well as `ctx ↦ ctx'`.
+  6. Finally, we `intro a1 ... an` so that we have a proof of `∀ a1 ... an, a`.
+-/
+/-
+**Mathlib.Tactic.Sat.buildReify** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Sat`。
+形式化陈述：Expr → Expr → Expr → ℕ → Expr × Expr
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.zero_lt_one`：0 < 1
+
+--- 原说明 ---
+Build the type and value of the reified theorem. This rewrites all the SAT defin
+itions
+into standard operators on `Prop`, for example if the formula is `[[1, 2], [-1, 
+2], [-2]]` then
+this produces a proof of `⊢ ∀ a b : Prop, (a ∧ b) ∨ (¬a ∧ b) ∨ ¬b`. We use the i
+nput `nvars` to
+decide how many quantifiers to use.
+
+Most of the proof is under `2 * nvars + 1` quantifiers
+`a1 .. an : Prop, v : Valuation, h1 : v 0 ↔ a1, ... hn : v (n-1) ↔ an ⊢ ...`, an
+d we do the index
+arithmetic by hand.
+
+  1. First, we call `reifyFormula ctx'` which returns `a` and `pr : reify v ctx'
+ a`
+  2. Then we build `fun (v : Valuation) (h1 : v 0 ↔ a1) ... (hn : v (n-1) ↔ an) 
+↦ pr`
+  3. We have to lower expression `a` from step 1 out of the quantifiers by lower
+ing all variable
+     indices by `nvars+1`. This is okay because `v` and `h1..hn` do not appear i
+n `a`.
+  4. We construct the expression `ps`, which is `a1 .. an : Prop ⊢ [a1, ..., an]
+ : List Prop`
+  5. `refute ctx (hf : ctx.proof []) (fun v h1 .. hn ↦ pr) : a` forces some defi
+nitional unfolding
+     since `fun h1 .. hn ↦ pr` should have type `implies v (reify v ctx a) [a1, 
+..., an] a`,
+     which involves unfolding `implies` n times as well as `ctx ↦ ctx'`.
+  6. Finally, we `intro a1 ... an` so that we have a proof of `∀ a1 ... an, a`.
 -/
 partial def buildReify (ctx ctx' proof : Expr) (nvars : Nat) : Expr × Expr := Id.run do
   let (e, pr) := reifyFmla ctx'
@@ -1281,115 +1065,78 @@ open Lean
 namespace Parser
 open Lean Std.Internal.Parsec String
 
-/--
-Definition of `parseNat` / `parseNat` 的定义
+/-- Parse a natural number -/
+/-
+**Mathlib.Tactic.Sat.Parser.parseNat** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.S
+at.Parser`。
+形式化陈述：parseNat : String.Parser Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition parseNat
-  signature: : String.Parser Nat
-  body: Json.Parser.natMaybeZero
-
-中文:
-定义 parse自然数
-  签名: : String.Parser 自然数
-  定义体: Json.Parser.natMaybeZero
-
-Depends on / 依赖: Json.Parser.natMaybeZero, Parser, natMaybeZero
+--- 原说明 ---
+Parse a natural number
 -/
 def parseNat : String.Parser Nat := Json.Parser.natMaybeZero
 
-/--
-Definition of `parseInt` / `parseInt` 的定义
+/-- Parse an integer -/
+/-
+**Mathlib.Tactic.Sat.Parser.parseInt** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.S
+at.Parser`。
+形式化陈述：parseInt : String.Parser Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition parseInt
-  signature: : String.Parser Int
-  body: do
-if (← peek!) = '-' then skip; pure -(← parseNat) else parseNat
-
-中文:
-定义 parse整数
-  签名: : String.Parser 整数
-  定义体: do
-if (← peek!) = '-' then skip; pure -(← parseNat) else parseNat
+--- 原说明 ---
+Parse an integer
 -/
 def parseInt : String.Parser Int := do
-if (← peek!) = '-' then skip; pure -(← parseNat) else parseNat
+  if (← peek!) = '-' then skip; pure <| -(← parseNat) else parseNat
 
-/--
-Definition of `parseInts` / `parseInts` 的定义
+/-- Parse a list of integers terminated by 0 -/
+/-
+**Mathlib.Tactic.Sat.Parser.parseInts** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Tact
+ic.Sat.Parser`。
+形式化陈述：optParam (Array ℤ) #[] → Std.Internal.Parsec.String.Parser (Array ℤ)
+参数：Array ℤ；Array ℤ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition parseInts
-  signature: (arr : Array Int := #[])
-  body: do
-  match ← parseInt <* ws with
-  | 0 => pure arr
-  | n => parseInts (arr.push n)
-
-中文:
-定义 parse整数s
-  签名: (arr : 数组 整数 := #[])
-  定义体: do
-  match ← parseInt <* ws with
-  | 0 => pure arr
-  | n => parseInts (arr.push n)
+--- 原说明 ---
+Parse a list of integers terminated by 0
 -/
 partial def parseInts (arr : Array Int := #[]) : String.Parser (Array Int) := do
   match ← parseInt <* ws with
   | 0 => pure arr
   | n => parseInts (arr.push n)
 
-/--
-Definition of `parseNats` / `parseNats` 的定义
+/-- Parse a list of natural numbers terminated by 0 -/
+/-
+**Mathlib.Tactic.Sat.Parser.parseNats** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Tact
+ic.Sat.Parser`。
+形式化陈述：optParam (Array ℕ) #[] → Std.Internal.Parsec.String.Parser (Array ℕ)
+参数：Array ℕ；Array ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition parseNats
-  signature: (arr : Array Nat := #[])
-  body: do
-  match ← parseNat <* ws with
-  | 0 => pure arr
-  | n => parseNats (arr.push n)
-
-中文:
-定义 parse自然数s
-  签名: (arr : 数组 自然数 := #[])
-  定义体: do
-  match ← parseNat <* ws with
-  | 0 => pure arr
-  | n => parseNats (arr.push n)
+--- 原说明 ---
+Parse a list of natural numbers terminated by 0
 -/
 partial def parseNats (arr : Array Nat := #[]) : String.Parser (Array Nat) := do
   match ← parseNat <* ws with
   | 0 => pure arr
   | n => parseNats (arr.push n)
 
-/--
-Definition of `parseDimacs` / `parseDimacs` 的定义
+/-- Parse a DIMACS format `.cnf` file.
+This is not very robust; we assume the file has had comments stripped. -/
+/-
+**Mathlib.Tactic.Sat.Parser.parseDimacs** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tacti
+c.Sat.Parser`。
+形式化陈述：parseDimacs : String.Parser (Nat × Array (Array Int))
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.zero_lt_one`：0 < 1
 
-English:
-definition parseDimacs
-  signature: : String.Parser (Nat × Array (Array Int))
-  body: do
-  pstring "p cnf" *> ws
-  let nvars ← parseNat <* ws
-  let nclauses ← parseNat <* ws
-  let mut clauses := Array.mkEmpty nclauses
-  for _ in [:nclauses] do
-    clauses := clauses.push (← parseInts)
-  pure (nvars, clauses)
-
-中文:
-定义 parseDimacs
-  签名: : String.Parser (自然数 × 数组 (数组 整数))
-  定义体: do
-  pstring "p cnf" *> ws
-  let nvars ← parseNat <* ws
-  let nclauses ← parseNat <* ws
-  let mut clauses := Array.mkEmpty nclauses
-  for _ in [:nclauses] do
-    clauses := clauses.push (← parseInts)
-  pure (nvars, clauses)
+--- 原说明 ---
+Parse a DIMACS format `.cnf` file.
+This is not very robust; we assume the file has had comments stripped.
 -/
 def parseDimacs : String.Parser (Nat × Array (Array Int)) := do
   pstring "p cnf" *> ws
@@ -1400,96 +1147,51 @@ def parseDimacs : String.Parser (Nat × Array (Array Int)) := do
     clauses := clauses.push (← parseInts)
   pure (nvars, clauses)
 
-/--
-Definition of `parseLRAT` / `parseLRAT` 的定义
+/-- Parse an LRAT file into a list of steps. -/
+/-
+**Mathlib.Tactic.Sat.Parser.parseLRAT** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.
+Sat.Parser`。
+形式化陈述：parseLRAT : String.Parser (Array LRATStep)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition parseLRAT
-  signature: : String.Parser (Array LRATStep)
-  body: many do
-  let step ← parseNat <* ws
-if (← peek!) = 'd' then skip <* ws; pure LRATStep.del (← parseNats)
-else ws; pure LRATStep.add step (← parseInts) (← parseInts)
-
-中文:
-定义 parseLRAT
-  签名: : String.Parser (数组 LRATStep)
-  定义体: many do
-  let step ← parseNat <* ws
-if (← peek!) = 'd' then skip <* ws; pure LRATStep.del (← parseNats)
-else ws; pure LRATStep.add step (← parseInts) (← parseInts)
+--- 原说明 ---
+Parse an LRAT file into a list of steps.
 -/
 def parseLRAT : String.Parser (Array LRATStep) := many do
   let step ← parseNat <* ws
-if (← peek!) = 'd' then skip <* ws; pure LRATStep.del (← parseNats)
-else ws; pure LRATStep.add step (← parseInts) (← parseInts)
+  if (← peek!) = 'd' then skip <* ws; pure <| LRATStep.del (← parseNats)
+  else ws; pure <| LRATStep.add step (← parseInts) (← parseInts)
 
 end Parser
 
 open Std.Internal
 
-/--
-Definition of `fromLRATAux` / `fromLRATAux` 的定义
+/-- Core of `fromLRAT`. Constructs the context and main proof definitions,
+but not the reification theorem. Returns:
 
-English:
-definition fromLRATAux
-  signature: (cnf lrat : String) (name : Name)
-  body: do
-  let Parsec.ParseResult.success _ (nvars, arr) := Parser.parseDimacs ⟨_, cnf.startPos⟩
-    | throwError "parse CNF failed"
-  if arr.isEmpty then throwError "empty CNF"
-  let ctx' := buildConj arr 0 arr.size
-  let ctxName ← mkAuxDeclName (name ++ `ctx)
-addDecl Declaration.defnDecl {
-    name := ctxName
-    levelParams := []
-    type := mkConst ``Sat.Fmla
-    value := ctx'
-    hints := ReducibilityHints.regular 0
-    safety := DefinitionSafety.safe
-  }
-  let ctx := mkConst ctxName
-  let Parsec.ParseResult.success _ steps := Parser.parseLRAT ⟨_, lrat.startPos⟩
-    | throwError "parse LRAT failed"
-  let proof ← buildProof arr ctx ctx' steps
-  let declName ← mkAuxDeclName (name ++ `proof)
-addDecl Declaration.thmDecl {
-    name := declName
-    levelParams := []
-    type := mkApp2 (mkConst ``Sat.Fmla.proof) ctx (buildClause #[])
-    value := proof
-  }
-  return (nvars, ctx, ctx', mkConst declName)
+  * `nvars`: the number of variables specified in the CNF file
+  * `ctx`: The abbreviated formula, a constant like `foo.ctx_1`
+  * `ctx'`: The definitional expansion of the formula, a tree of `Fmla.and` nodes
+  * `proof`: A proof of `ctx.proof []`
+-/
+/-
+**Mathlib.Tactic.Sat.fromLRATAux** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Sat`。
+形式化陈述：fromLRATAux (cnf lrat : String) (name : Name) : MetaM (Nat × Expr × Expr ×
+ Expr)
+参数：cnf lrat : String；name : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 fromLRATAux
-  签名: (cnf lrat : String) (name : Name)
-  定义体: do
-  let Parsec.ParseResult.success _ (nvars, arr) := Parser.parseDimacs ⟨_, cnf.startPos⟩
-    | throwError "parse CNF failed"
-  if arr.isEmpty then throwError "empty CNF"
-  let ctx' := buildConj arr 0 arr.size
-  let ctxName ← mkAuxDeclName (name ++ `ctx)
-addDecl Declaration.defnDecl {
-    name := ctxName
-    levelParams := []
-    type := mkConst ``Sat.Fmla
-    value := ctx'
-    hints := ReducibilityHints.regular 0
-    safety := DefinitionSafety.safe
-  }
-  let ctx := mkConst ctxName
-  let Parsec.ParseResult.success _ steps := Parser.parseLRAT ⟨_, lrat.startPos⟩
-    | throwError "parse LRAT failed"
-  let proof ← buildProof arr ctx ctx' steps
-  let declName ← mkAuxDeclName (name ++ `proof)
-addDecl Declaration.thmDecl {
-    name := declName
-    levelParams := []
-    type := mkApp2 (mkConst ``Sat.Fmla.proof) ctx (buildClause #[])
-    value := proof
-  }
-  return (nvars, ctx, ctx', mkConst declName)
+--- 原说明 ---
+Core of `fromLRAT`. Constructs the context and main proof definitions,
+but not the reification theorem. Returns:
+
+  * `nvars`: the number of variables specified in the CNF file
+  * `ctx`: The abbreviated formula, a constant like `foo.ctx_1`
+  * `ctx'`: The definitional expansion of the formula, a tree of `Fmla.and` node
+s
+  * `proof`: A proof of `ctx.proof []`
 -/
 def fromLRATAux (cnf lrat : String) (name : Name) : MetaM (Nat × Expr × Expr × Expr) := do
   let Parsec.ParseResult.success _ (nvars, arr) := Parser.parseDimacs ⟨_, cnf.startPos⟩
@@ -1497,50 +1199,54 @@ def fromLRATAux (cnf lrat : String) (name : Name) : MetaM (Nat × Expr × Expr �
   if arr.isEmpty then throwError "empty CNF"
   let ctx' := buildConj arr 0 arr.size
   let ctxName ← mkAuxDeclName (name ++ `ctx)
-addDecl Declaration.defnDecl {
+  addDecl <| Declaration.defnDecl {
     name := ctxName
     levelParams := []
-    type := mkConst ``Sat.Fmla
-    value := ctx'
-    hints := ReducibilityHints.regular 0
-    safety := DefinitionSafety.safe
+    type        := mkConst ``Sat.Fmla
+    value       := ctx'
+    hints       := ReducibilityHints.regular 0
+    safety      := DefinitionSafety.safe
   }
   let ctx := mkConst ctxName
   let Parsec.ParseResult.success _ steps := Parser.parseLRAT ⟨_, lrat.startPos⟩
     | throwError "parse LRAT failed"
   let proof ← buildProof arr ctx ctx' steps
   let declName ← mkAuxDeclName (name ++ `proof)
-addDecl Declaration.thmDecl {
+  addDecl <| Declaration.thmDecl {
     name := declName
     levelParams := []
-    type := mkApp2 (mkConst ``Sat.Fmla.proof) ctx (buildClause #[])
-    value := proof
+    type        := mkApp2 (mkConst ``Sat.Fmla.proof) ctx (buildClause #[])
+    value       := proof
   }
   return (nvars, ctx, ctx', mkConst declName)
 
-/--
-Definition of `fromLRAT` / `fromLRAT` 的定义
+/-- Main entry point. Given strings `cnf` and `lrat` with unparsed file data, and a name `name`,
+adds `theorem name : type := proof` where `type` is a propositional theorem like
+`∀ (a a_1 : Prop), (¬a ∧ ¬a_1 ∨ a ∧ ¬a_1) ∨ ¬a ∧ a_1 ∨ a ∧ a_1`.
 
-English:
-definition fromLRAT
-  signature: (cnf lrat : String) (name : Name)
-  body: do
-  let (nvars, ctx, ctx', proof) ← fromLRATAux cnf lrat name
-  let (type, value) := buildReify ctx ctx' proof nvars
-addDecl Declaration.thmDecl { name, levelParams := [], type, value }
+Also creates auxiliaries named `name.ctx_1` (for the CNF formula)
+and `name.proof_1` (for the LRAT proof), with `name` itself containing the reification proof. -/
+/-
+**Mathlib.Tactic.Sat.fromLRAT** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Sat`。
+形式化陈述：fromLRAT (cnf lrat : String) (name : Name) : MetaM Unit
+参数：cnf lrat : String；name : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 fromLRAT
-  签名: (cnf lrat : String) (name : Name)
-  定义体: do
-  let (nvars, ctx, ctx', proof) ← fromLRATAux cnf lrat name
-  let (type, value) := buildReify ctx ctx' proof nvars
-addDecl Declaration.thmDecl { name, levelParams := [], type, value }
+--- 原说明 ---
+Main entry point. Given strings `cnf` and `lrat` with unparsed file data, and a 
+name `name`,
+adds `theorem name : type := proof` where `type` is a propositional theorem like
+`∀ (a a_1 : Prop), (¬a ∧ ¬a_1 ∨ a ∧ ¬a_1) ∨ ¬a ∧ a_1 ∨ a ∧ a_1`.
+
+Also creates auxiliaries named `name.ctx_1` (for the CNF formula)
+and `name.proof_1` (for the LRAT proof), with `name` itself containing the reifi
+cation proof.
 -/
 def fromLRAT (cnf lrat : String) (name : Name) : MetaM Unit := do
   let (nvars, ctx, ctx', proof) ← fromLRATAux cnf lrat name
   let (type, value) := buildReify ctx ctx' proof nvars
-addDecl Declaration.thmDecl { name, levelParams := [], type, value }
+  addDecl <| Declaration.thmDecl { name, levelParams := [], type, value }
 
 open Elab Term
 
@@ -1554,8 +1260,8 @@ and the statement (written in CNF format) and the proof (in LRAT format).
 For example:
 ```
 lrat_proof foo
-  "p cnf 2 4 1 2 0 -1 2 0 1 -2 0 -1 -2 0"
-  "5 -2 0 4 3 0 5 d 3 4 0 6 1 0 5 1 0 6 d 1 0 7 0 5 2 6 0"
+  "p cnf 2 4  1 2 0  -1 2 0  1 -2 0  -1 -2 0"
+  "5 -2 0 4 3 0  5 d 3 4 0  6 1 0 5 1 0  6 d 1 0  7 0 5 2 6 0"
 ```
 produces a theorem:
 ```
@@ -1575,7 +1281,7 @@ elab "lrat_proof " n:(ident <|> "example")
     let lrat ← unsafe evalTerm String (mkConst ``String) lrat
     let go := do
       fromLRAT cnf lrat name
-.run' addTermInfo' n (← mkConstWithLevelParams name) (isBinder := true)
+      addTermInfo' n (← mkConstWithLevelParams name) (isBinder := true) |>.run'
     if n.1.isIdent then go else withoutModifyingEnv go
 
 lrat_proof example
@@ -1593,8 +1299,8 @@ lrat_proof example
    7 0 5 2 6 0"
 
 -- lrat_proof full2
--- (include_str "full2.cnf")
--- (include_str "full2.lrat")
+--   (include_str "full2.cnf")
+--   (include_str "full2.lrat")
 
 /--
 A macro for producing SAT proofs from CNF / LRAT files.
@@ -1605,8 +1311,8 @@ the statement (written in CNF format) and the proof (in LRAT format).
 For example:
 ```
 def foo := from_lrat
-  "p cnf 2 4 1 2 0 -1 2 0 1 -2 0 -1 -2 0"
-  "5 -2 0 4 3 0 5 d 3 4 0 6 1 0 5 1 0 6 d 1 0 7 0 5 2 6 0"
+  "p cnf 2 4  1 2 0  -1 2 0  1 -2 0  -1 -2 0"
+  "5 -2 0 4 3 0  5 d 3 4 0  6 1 0 5 1 0  6 d 1 0  7 0 5 2 6 0"
 ```
 produces a theorem:
 ```
@@ -1628,10 +1334,15 @@ elab "from_lrat " cnf:term:max ppSpace lrat:term:max : term => do
   fromLRAT cnf lrat name
   return mkConst name
 
-example : forall (a b : Prop), (¬a ∧ ¬b ∨ a ∧ ¬b) ∨ ¬a ∧ b ∨ a ∧ b := from_lrat
-  "p cnf 2 4 1 2 0 -1 2 0 1 -2 0 -1 -2 0"
-  "5 -2 0 4 3 0 5 d 3 4 0 6 1 0 5 1 0 6 d 1 0 7 0 5 2 6 0"
+/-
+**Mathlib.Tactic.Sat.** 是 Mathlib 中的一个示例，位于命名空间 `Mathlib.Tactic.Sat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example : ∀ (a b : Prop), (¬a ∧ ¬b ∨ a ∧ ¬b) ∨ ¬a ∧ b ∨ a ∧ b := from_lrat
+  "p cnf 2 4  1 2 0  -1 2 0  1 -2 0  -1 -2 0"
+  "5 -2 0 4 3 0  5 d 3 4 0  6 1 0 5 1 0  6 d 1 0  7 0 5 2 6 0"
 
 end Sat
 
 end Mathlib.Tactic
+

@@ -66,48 +66,74 @@ noncomputable section
 universe u v
 
 -- This class doesn't really make sense on a predicate
-/--
-Definition of `IsAdjoinRoot` / `IsAdjoinRoot` 的定义
+/-- `IsAdjoinRoot S f` states that the ring `S` can be constructed by adjoining a specified root
+of the polynomial `f : R[X]` to `R`.
 
-English:
-structure IsAdjoinRoot
-  parameters: {R : Type u} (S : Type v) [CommSemiring R] [Semiring S] [Algebra R S]
-  axioms and operations (3):
-    - map : R[X] ->ₐ[R] S
-    - map_surjective : Function.Surjective map
-    - ker_map : RingHom.ker map = Ideal.span {f}
+Compare `PowerBasis R S`, which does not explicitly specify which polynomial we adjoin a root of
+(in particular `f` does not need to be the minimal polynomial of the root we adjoin),
+and `AdjoinRoot` which constructs a new type.
 
-中文:
-结构 是AdjoinRoot
-  参数: {R : 类型u} (S : 类型v) [交换半环 R] [半环 S] [代数 R S]
-  公理与运算 (3 个):
-    - map : R[X] ->ₐ[R] S
-    - map_surjective : 函数.满射 map
-    - ker_map : 环态射.ker map = 理想.span {f}
+This is not a typeclass because the choice of root given `S` and `f` is not unique.
+-/
+/-
+**IsAdjoinRoot** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{R : Type u} →   (S : Type v) → [inst : CommSemiring R] → [inst_1 : Semiri
+ng S] → [Algebra R S] → Polynomial R → Type (max u v)
+参数：S : Type v；max u v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`IsAdjoinRoot S f` states that the ring `S` can be constructed by adjoining a sp
+ecified root
+of the polynomial `f : R[X]` to `R`.
+
+Compare `PowerBasis R S`, which does not explicitly specify which polynomial we 
+adjoin a root of
+(in particular `f` does not need to be the minimal polynomial of the root we adj
+oin),
+and `AdjoinRoot` which constructs a new type.
+
+This is not a typeclass because the choice of root given `S` and `f` is not uniq
+ue.
 -/
 structure IsAdjoinRoot {R : Type u} (S : Type v) [CommSemiring R] [Semiring S] [Algebra R S]
     (f : R[X]) : Type max u v where
-  map : R[X] ->ₐ[R] S
+  map : R[X] →ₐ[R] S
   map_surjective : Function.Surjective map
   ker_map : RingHom.ker map = Ideal.span {f}
 
 -- This class doesn't really make sense on a predicate
-/--
-Definition of `IsAdjoinRootMonic` / `IsAdjoinRootMonic` 的定义
+/-- `IsAdjoinRootMonic S f` states that the ring `S` can be constructed by adjoining a specified
+root of the monic polynomial `f : R[X]` to `R`.
 
-English:
-structure IsAdjoinRootMonic
-  parameters: {R : Type u} (S : Type v) [CommSemiring R] [Semiring S] [Algebra R S]
-  extends: IsAdjoinRoot S f
-  axioms and operations (1):
-    - monic : Monic f
+As long as `f` is monic, there is a well-defined representation of elements of `S` as polynomials
+in `R[X]` of degree lower than `deg f` (see `modByMonicHom` and `coeff`). In particular,
+we have `IsAdjoinRootMonic.powerBasis`.
 
-中文:
-结构 是AdjoinRootMonic
-  参数: {R : 类型u} (S : 类型v) [交换半环 R] [半环 S] [代数 R S]
-  继承: 是AdjoinRoot S f
-  公理与运算 (1 个):
-    - monic : Monic f
+Bundling `Monic` into this structure is very useful when working with explicit `f`s such as
+`X^2 - C a * X - C b` since it saves you carrying around the proofs of monicity.
+-/
+/-
+**IsAdjoinRootMonic** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{R : Type u} →   (S : Type v) → [inst : CommSemiring R] → [inst_1 : Semiri
+ng S] → [Algebra R S] → Polynomial R → Type (max u v)
+参数：S : Type v；max u v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`IsAdjoinRootMonic S f` states that the ring `S` can be constructed by adjoining
+ a specified
+root of the monic polynomial `f : R[X]` to `R`.
+
+As long as `f` is monic, there is a well-defined representation of elements of `
+S` as polynomials
+in `R[X]` of degree lower than `deg f` (see `modByMonicHom` and `coeff`). In par
+ticular,
+we have `IsAdjoinRootMonic.powerBasis`.
+
+Bundling `Monic` into this structure is very useful when working with explicit `
+f`s such as
+`X^2 - C a * X - C b` since it saves you carrying around the proofs of monicity.
 -/
 structure IsAdjoinRootMonic {R : Type u} (S : Type v) [CommSemiring R] [Semiring S] [Algebra R S]
     (f : R[X]) extends IsAdjoinRoot S f where
@@ -121,616 +147,560 @@ namespace IsAdjoinRoot
 
 variable (h : IsAdjoinRoot S f)
 
-/--
-Definition of `root` / `root` 的定义
+/-- `(h : IsAdjoinRoot S f).root` is the root of `f` that can be adjoined to generate `S`. -/
+/-
+**IsAdjoinRoot.root** 是 Mathlib 中的一个定义，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：root : S
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition root
-  signature: : S
-  body: h.map X
-
-中文:
-定义 root
-  签名: : S
-  定义体: h.map X
-
-Depends on / 依赖: h.map
+--- 原说明 ---
+`(h : IsAdjoinRoot S f).root` is the root of `f` that can be adjoined to generat
+e `S`.
 -/
 def root : S := h.map X
-
-/--
-theorem `algebraMap_apply` / 定理 `algebraMap_apply`
-
-English:
-theorem algebraMap_apply
-  given: (x : R)
-  proof: AlgHom.algebraMap_eq_apply h.map rfl
-
-中文:
-定理 algebraMap_apply
-  条件: (x : R)
-  证明: AlgHom.algebraMap_eq_apply h.map rfl
-
-Depends on / 依赖: AlgHom, AlgHom.algebraMap_eq_apply, algebraMap_eq_apply, h.map
+/-
+**IsAdjoinRoot.algebraMap_apply** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：algebraMap_apply (x : R) : algebraMap R S x = h.map (Polynomial.C x)
+参数：x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.algebraMap_eq_apply`：algebraMap_eq_apply (f : A ->ₐ[R] B) {y : R}
+ {x : A} (h : algebraMap R A y = x) : algebraMap R B y = f x
 -/
 theorem algebraMap_apply (x : R) :
     algebraMap R S x = h.map (Polynomial.C x) := AlgHom.algebraMap_eq_apply h.map rfl
-
-/--
-theorem `mem_ker_map` / 定理 `mem_ker_map`
-
-English:
-theorem mem_ker_map
-  given: {p}
-  statement: p in RingHom.ker h.map ↔ f ∣ p
-  proof: by
-  rw [h.ker_map]; rw [Ideal.mem_span_singleton]
-
-@[simp]
-
-中文:
-定理 mem_ker_map
-  条件: {p}
-  结论: p in 环态射.ker h.map ↔ f ∣ p
-  证明: by
-  rw [h.ker_map]; rw [Ideal.mem_span_singleton]
-
-@[simp]
-
-Depends on / 依赖: Ideal.mem_span_singleton, h.ker_map, ker_map, mem_span_singleton
+/-
+**IsAdjoinRoot.mem_ker_map** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：mem_ker_map {p} : p in RingHom.ker h.map ↔ f ∣ p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsAdjoinRoot.ker_map`：∀ {R : Type u} {S : Type v} [inst : CommSemiring R
+] [inst_1 : Semiring S] [inst_2 : Algebra R S] {f : Polynomial R}   (self : IsAd
+joinRoot S…
+· 使用定理 `Ideal.mem_span_singleton`：mem_span_singleton {x y : α} : x in span ({y} 
+: Set α) ↔ y ∣ x
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_ker_map {p} : p in RingHom.ker h.map ↔ f ∣ p := by
-  rw [h.ker_map]; rw [Ideal.mem_span_singleton]
+theorem mem_ker_map {p} : p ∈ RingHom.ker h.map ↔ f ∣ p := by
+  rw [h.ker_map, Ideal.mem_span_singleton]
 
 @[simp]
-/--
-theorem `map_eq_zero_iff` / 定理 `map_eq_zero_iff`
-
-English:
-theorem map_eq_zero_iff
-  given: {p}
-  statement: h.map p = 0 ↔ f ∣ p
-  proof: by simpa using h.mem_ker_map
-
-@[simp]
-
-中文:
-定理 map_eq_zero_iff
-  条件: {p}
-  结论: h.map p = 0 ↔ f ∣ p
-  证明: by simpa using h.mem_ker_map
-
-@[simp]
-
-Depends on / 依赖: h.mem_ker_map, mem_ker_map
+/-
+**IsAdjoinRoot.map_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：map_eq_zero_iff {p} : h.map p = 0 ↔ f ∣ p
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsAdjoinRoot.mem_ker_map`：mem_ker_map {p} : p in RingHom.ker h.map ↔ f ∣
+ p
 -/
 theorem map_eq_zero_iff {p} : h.map p = 0 ↔ f ∣ p := by simpa using h.mem_ker_map
 
 @[simp]
-/--
-theorem `map_X` / 定理 `map_X`
-
-English:
-theorem map_X
-  statement: h.map X = h.root
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 map_X
-  结论: h.map X = h.root
-  证明: rfl
-
-@[simp]
+/-
+**IsAdjoinRoot.map_X** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：map_X : h.map X = h.root
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem map_X : h.map X = h.root := rfl
 
 @[simp]
-/--
-theorem `map_self` / 定理 `map_self`
-
-English:
-theorem map_self
-  statement: h.map f = 0
-  proof: by simp
-
-@[simp]
-
-中文:
-定理 map_self
-  结论: h.map f = 0
-  证明: by simp
-
-@[simp]
+/-
+**IsAdjoinRoot.map_self** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：map_self : h.map f = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
 theorem map_self : h.map f = 0 := by simp
 
 @[simp]
-/--
-theorem `aeval_root_eq_map` / 定理 `aeval_root_eq_map`
-
-English:
-theorem aeval_root_eq_map
-  statement: aeval h.root = h.map
-  proof: by ext; simp
-
-中文:
-定理 aeval_root_eq_map
-  结论: aeval h.root = h.map
-  证明: by ext; simp
+/-
+**IsAdjoinRoot.aeval_root_eq_map** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：aeval_root_eq_map : aeval h.root = h.map
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.algHom_ext`：algHom_ext {f g : R[X] ->ₐ[R] B} (hX : f X = g X)
+ : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.aeval_X`：aeval_X : aeval x (X : R[X]) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem aeval_root_eq_map : aeval h.root = h.map := by ext; simp
-
-/--
-theorem `aeval_root_self` / 定理 `aeval_root_self`
-
-English:
-theorem aeval_root_self
-  statement: aeval h.root f = 0
-  proof: by simp
-
-中文:
-定理 aeval_root_self
-  结论: aeval h.root f = 0
-  证明: by simp
+/-
+**IsAdjoinRoot.aeval_root_self** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：aeval_root_self : aeval h.root f = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsAdjoinRoot.aeval_root_eq_map`：aeval_root_eq_map : aeval h.root = h.map
+· 使用定理 `IsAdjoinRoot.map_self`：map_self : h.map f = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem aeval_root_self : aeval h.root f = 0 := by simp
-
-/--
-theorem `adjoin_root_eq_top` / 定理 `adjoin_root_eq_top`
-
-English:
-theorem adjoin_root_eq_top
-  statement: Algebra.adjoin R {h.root} = ⊤
-  proof: by
-  rw [Algebra.adjoin_singleton_eq_range_aeval]; rw [AlgHom.range_eq_top]; rw [aeval_root_eq_map]
-  exact h.map_surjective
-
-中文:
-定理 adjoin_root_eq_top
-  结论: 代数.adjoin R {h.root} = ⊤
-  证明: by
-  rw [Algebra.adjoin_singleton_eq_range_aeval]; rw [AlgHom.range_eq_top]; rw [aeval_root_eq_map]
-  exact h.map_surjective
-
-Depends on / 依赖: AlgHom, AlgHom.range_eq_top, Algebra, Algebra.adjoin_singleton_eq_range_aeval, adjoin_singleton_eq_range_aeval, aeval_root_eq_map, h.map_surjective, map_surjective, range_eq_top
+/-
+**IsAdjoinRoot.adjoin_root_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：adjoin_root_eq_top : Algebra.adjoin R {h.root} = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.adjoin_singleton_eq_range_aeval`：adjoin_singleton_eq_range_aeval
+ (x : A) : adjoin R {x} = (aeval x).range
+· 使用定理 `AlgHom.range_eq_top`：∀ {R : Type u} {A : Type v} {B : Type w} [inst : Co
+mmSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [inst_3 : Semiring 
+B] [inst_…
+· 使用定理 `IsAdjoinRoot.aeval_root_eq_map`：aeval_root_eq_map : aeval h.root = h.map
+· 使用定理 `IsAdjoinRoot.map_surjective`：∀ {R : Type u} {S : Type v} [inst : CommSem
+iring R] [inst_1 : Semiring S] [inst_2 : Algebra R S] {f : Polynomial R}   (self
+ : IsAdjoinRoot S…
 -/
 theorem adjoin_root_eq_top : Algebra.adjoin R {h.root} = ⊤ := by
-  rw [Algebra.adjoin_singleton_eq_range_aeval]; rw [AlgHom.range_eq_top]; rw [aeval_root_eq_map]
+  rw [Algebra.adjoin_singleton_eq_range_aeval, AlgHom.range_eq_top, aeval_root_eq_map]
   exact h.map_surjective
 
-/--
-theorem `ext_map` / 定理 `ext_map`
+/-- Extensionality of the `IsAdjoinRoot` structure itself. See `IsAdjoinRootMonic.ext_elem`
+for extensionality of the ring elements. -/
+/-
+**IsAdjoinRoot.ext_map** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：ext_map (h' : IsAdjoinRoot S f) (eq : forall x, h.map x = h'.map x) : h = 
+h'
+参数：h' : IsAdjoinRoot S f；eq : forall x, h.map x = h'.map x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `AlgHom.ext`：ext {φ₁ φ₂ : A ->ₐ[R] B} (H : forall x, φ₁ x = φ₂ x) : φ₁ = 
+φ₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem ext_map
-  given: (h' : IsAdjoinRoot S f) (eq : forall x, h.map x = h'.map x)
-  statement: h = h'
-  proof: by
-  cases h; cases h'; congr
-  exact AlgHom.ext eq
-
-中文:
-定理 ext_map
-  条件: (h' : 是AdjoinRoot S f) (eq : 对任意 x, h.map x = h'.map x)
-  结论: h = h'
-  证明: by
-  cases h; cases h'; congr
-  exact AlgHom.ext eq
-
-Depends on / 依赖: AlgHom, AlgHom.ext
+--- 原说明 ---
+Extensionality of the `IsAdjoinRoot` structure itself. See `IsAdjoinRootMonic.ex
+t_elem`
+for extensionality of the ring elements.
 -/
-theorem ext_map (h' : IsAdjoinRoot S f) (eq : forall x, h.map x = h'.map x) : h = h' := by
+theorem ext_map (h' : IsAdjoinRoot S f) (eq : ∀ x, h.map x = h'.map x) : h = h' := by
   cases h; cases h'; congr
   exact AlgHom.ext eq
 
 /-- Extensionality of the `IsAdjoinRoot` structure itself. See `IsAdjoinRootMonic.ext_elem`
 for extensionality of the ring elements. -/
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
+/-
+**IsAdjoinRoot.ext** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：ext (h' : IsAdjoinRoot S f) (eq : h.root = h'.root) : h = h'
+参数：h' : IsAdjoinRoot S f；eq : h.root = h'.root。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsAdjoinRoot.ext_map`：ext_map (h' : IsAdjoinRoot S f) (eq : forall x, h.
+map x = h'.map x) : h = h'
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsAdjoinRoot.aeval_root_eq_map`：aeval_root_eq_map : aeval h.root = h.map
 
-English:
-theorem ext
-  given: (h' : IsAdjoinRoot S f) (eq : h.root = h'.root)
-  statement: h = h'
-  proof: h.ext_map h' (fun x => by rw [← h.aeval_root_eq_map, ← h'.aeval_root_eq_map, eq])
-
-中文:
-定理 ext
-  条件: (h' : 是AdjoinRoot S f) (eq : h.root = h'.root)
-  结论: h = h'
-  证明: h.ext_map h' (fun x => by rw [← h.aeval_root_eq_map, ← h'.aeval_root_eq_map, eq])
-
-Depends on / 依赖: aeval_root_eq_map, ext_map, h.aeval_root_eq_map, h.ext_map
+--- 原说明 ---
+Extensionality of the `IsAdjoinRoot` structure itself. See `IsAdjoinRootMonic.ex
+t_elem`
+for extensionality of the ring elements.
 -/
 theorem ext (h' : IsAdjoinRoot S f) (eq : h.root = h'.root) : h = h' :=
   h.ext_map h' (fun x => by rw [← h.aeval_root_eq_map, ← h'.aeval_root_eq_map, eq])
 
-/--
-Definition of `repr` / `repr` 的定义
+/-- Choose an arbitrary representative so that `h.map (h.repr x) = x`.
 
-English:
-definition repr
-  signature: (x : S)
-  body: (h.map_surjective x).choose
+If `f` is monic, use `IsAdjoinRootMonic.modByMonicHom` for a unique choice of representative.
+-/
+/-
+**IsAdjoinRoot.repr** 是 Mathlib 中的一个定义，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：repr (x : S) : R[X]
+参数：x : S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+Choose an arbitrary representative so that `h.map (h.repr x) = x`.
 
-中文:
-定义 repr
-  签名: (x : S)
-  定义体: (h.map_surjective x).choose
-
-@[simp]
-
-Depends on / 依赖: h.map_surjective, map_surjective
+If `f` is monic, use `IsAdjoinRootMonic.modByMonicHom` for a unique choice of re
+presentative.
 -/
 def repr (x : S) : R[X] := (h.map_surjective x).choose
 
 @[simp]
-/--
-theorem `map_repr` / 定理 `map_repr`
-
-English:
-theorem map_repr
-  given: (x : S)
-  statement: h.map (h.repr x) = x
-  proof: (h.map_surjective x).choose_spec
-
-中文:
-定理 map_repr
-  条件: (x : S)
-  结论: h.map (h.repr x) = x
-  证明: (h.map_surjective x).choose_spec
-
-Depends on / 依赖: choose_spec, h.map_surjective, map_surjective
+/-
+**IsAdjoinRoot.map_repr** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：map_repr (x : S) : h.map (h.repr x) = x
+参数：x : S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `IsAdjoinRoot.map_surjective`：∀ {R : Type u} {S : Type v} [inst : CommSem
+iring R] [inst_1 : Semiring S] [inst_2 : Algebra R S] {f : Polynomial R}   (self
+ : IsAdjoinRoot S…
 -/
 theorem map_repr (x : S) : h.map (h.repr x) = x := (h.map_surjective x).choose_spec
 
-/--
-theorem `repr_zero_mem_span` / 定理 `repr_zero_mem_span`
+/-- `repr` preserves zero, up to multiples of `f` -/
+/-
+**IsAdjoinRoot.repr_zero_mem_span** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：repr_zero_mem_span : h.repr 0 in Ideal.span ({f} : Set R[X])
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsAdjoinRoot.ker_map`：∀ {R : Type u} {S : Type v} [inst : CommSemiring R
+] [inst_1 : Semiring S] [inst_2 : Algebra R S] {f : Polynomial R}   (self : IsAd
+joinRoot S…
+· 使用定理 `IsAdjoinRoot.map_repr`：map_repr (x : S) : h.map (h.repr x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem repr_zero_mem_span
-  statement: h.repr 0 in Ideal.span ({f} : Set R[X])
-  proof: by simp [← h.ker_map]
-
-中文:
-定理 repr_zero_mem_span
-  结论: h.repr 0 in 理想.span ({f} : 集合 R[X])
-  证明: by simp [← h.ker_map]
-
-Depends on / 依赖: h.ker_map, ker_map
+--- 原说明 ---
+`repr` preserves zero, up to multiples of `f`
 -/
-theorem repr_zero_mem_span : h.repr 0 in Ideal.span ({f} : Set R[X]) := by simp [← h.ker_map]
+theorem repr_zero_mem_span : h.repr 0 ∈ Ideal.span ({f} : Set R[X]) := by simp [← h.ker_map]
 
-/--
-theorem `repr_add_sub_repr_add_repr_mem_span` / 定理 `repr_add_sub_repr_add_repr_mem_span`
+/-- `repr` preserves addition, up to multiples of `f` -/
+/-
+**IsAdjoinRoot.repr_add_sub_repr_add_repr_mem_span** 是 Mathlib 中的一个定理，位于命名空间 `Is
+AdjoinRoot`。
+形式化陈述：repr_add_sub_repr_add_repr_mem_span (x y : S) : h.repr (x + y) - (h.repr x
+ + h.repr y) in Ideal.span ({f} : Set R[X])
+参数：x y : S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsAdjoinRoot.ker_map`：∀ {R : Type u} {S : Type v} [inst : CommSemiring R
+] [inst_1 : Semiring S] [inst_2 : Algebra R S] {f : Polynomial R}   (self : IsAd
+joinRoot S…
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `IsAdjoinRoot.map_repr`：map_repr (x : S) : h.map (h.repr x) = x
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem repr_add_sub_repr_add_repr_mem_span
-  given: (x y : S)
-  proof: by simp [← h.ker_map]
-
-中文:
-定理 repr_add_sub_repr_add_repr_mem_span
-  条件: (x y : S)
-  证明: by simp [← h.ker_map]
-
-Depends on / 依赖: h.ker_map, ker_map
+--- 原说明 ---
+`repr` preserves addition, up to multiples of `f`
 -/
 theorem repr_add_sub_repr_add_repr_mem_span (x y : S) :
-    h.repr (x + y) - (h.repr x + h.repr y) in Ideal.span ({f} : Set R[X]) := by simp [← h.ker_map]
+    h.repr (x + y) - (h.repr x + h.repr y) ∈ Ideal.span ({f} : Set R[X]) := by simp [← h.ker_map]
 
 section Equiv
 
 variable {T : Type*} [Ring T] [Algebra R T]
 
-/--
-Definition of `adjoinRootAlgEquiv` / `adjoinRootAlgEquiv` 的定义
+/-- Algebra isomorphism with `R[X]/(f)`. -/
+/-
+**IsAdjoinRoot.adjoinRootAlgEquiv** 是 Mathlib 中的一个定义，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：adjoinRootAlgEquiv : AdjoinRoot f ≃ₐ[R] S
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition adjoinRootAlgEquiv
-  signature: : AdjoinRoot f ≃ₐ[R] S
-  body: (Ideal.quotientEquivAlgOfEq R h.ker_map.symm).trans
-    Ideal.quotientKerAlgEquivOfSurjective h.map_surjective
-
-@[simp]
-
-中文:
-定义 adjoinRootAlgEquiv
-  签名: : AdjoinRoot f ≃ₐ[R] S
-  定义体: (Ideal.quotientEquivAlgOfEq R h.ker_map.symm).trans
-    Ideal.quotientKerAlgEquivOfSurjective h.map_surjective
-
-@[simp]
-
-Depends on / 依赖: Ideal.quotientEquivAlgOfEq, Ideal.quotientKerAlgEquivOfSurjective, h.ker_map.symm, h.map_surjective, ker_map, map_surjective, quotientEquivAlgOfEq, quotientKerAlgEquivOfSurjective
+--- 原说明 ---
+Algebra isomorphism with `R[X]/(f)`.
 -/
 def adjoinRootAlgEquiv : AdjoinRoot f ≃ₐ[R] S :=
-(Ideal.quotientEquivAlgOfEq R h.ker_map.symm).trans
+  (Ideal.quotientEquivAlgOfEq R h.ker_map.symm).trans <|
     Ideal.quotientKerAlgEquivOfSurjective h.map_surjective
 
 @[simp]
-/--
-theorem `adjoinRootAlgEquiv_apply_mk` / 定理 `adjoinRootAlgEquiv_apply_mk`
-
-English:
-theorem adjoinRootAlgEquiv_apply_mk
-  given: (g : R[X])
-  proof: rfl
-
-中文:
-定理 adjoinRootAlgEquiv_apply_mk
-  条件: (g : R[X])
-  证明: rfl
+/-
+**IsAdjoinRoot.adjoinRootAlgEquiv_apply_mk** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRo
+ot`。
+形式化陈述：adjoinRootAlgEquiv_apply_mk (g : R[X]) : h.adjoinRootAlgEquiv (AdjoinRoot.
+mk f g) = h.map g
+参数：g : R[X]。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem adjoinRootAlgEquiv_apply_mk (g : R[X]) :
     h.adjoinRootAlgEquiv (AdjoinRoot.mk f g) = h.map g := rfl
-
-/--
-theorem `adjoinRootAlgEquiv_apply_eq_map` / 定理 `adjoinRootAlgEquiv_apply_eq_map`
-
-English:
-theorem adjoinRootAlgEquiv_apply_eq_map
-  given: (a : AdjoinRoot f)
-  proof: by
-  rw (occs := [1]) [← (AdjoinRoot.mk_surjective a).choose_spec, adjoinRootAlgEquiv_apply_mk]
-
-中文:
-定理 adjoinRootAlgEquiv_apply_eq_map
-  条件: (a : AdjoinRoot f)
-  证明: by
-  rw (occs := [1]) [← (AdjoinRoot.mk_surjective a).choose_spec, adjoinRootAlgEquiv_apply_mk]
-
-Depends on / 依赖: AdjoinRoot, AdjoinRoot.mk_surjective, adjoinRootAlgEquiv_apply_mk, choose_spec, mk_surjective
+/-
+**IsAdjoinRoot.adjoinRootAlgEquiv_apply_eq_map** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjo
+inRoot`。
+形式化陈述：adjoinRootAlgEquiv_apply_eq_map (a : AdjoinRoot f) : h.adjoinRootAlgEquiv 
+a = h.map (AdjoinRoot.mk_surjective a).choose
+参数：a : AdjoinRoot f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AdjoinRoot.mk_surjective`：mk_surjective : Function.Surjective (mk g)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `IsAdjoinRoot.adjoinRootAlgEquiv_apply_mk`：adjoinRootAlgEquiv_apply_mk (g
+ : R[X]) : h.adjoinRootAlgEquiv (AdjoinRoot.mk f g) = h.map g
 -/
 theorem adjoinRootAlgEquiv_apply_eq_map (a : AdjoinRoot f) :
     h.adjoinRootAlgEquiv a = h.map (AdjoinRoot.mk_surjective a).choose := by
   rw (occs := [1]) [← (AdjoinRoot.mk_surjective a).choose_spec, adjoinRootAlgEquiv_apply_mk]
-
-/--
-theorem `adjoinRootAlgEquiv_symm_apply_eq_mk` / 定理 `adjoinRootAlgEquiv_symm_apply_eq_mk`
-
-English:
-theorem adjoinRootAlgEquiv_symm_apply_eq_mk
-  given: (a : S)
-  proof: by
-  rw (occs := [1]) [AlgEquiv.symm_apply_eq, ← h.map_repr a, adjoinRootAlgEquiv_apply_mk]
-
-@[simp]
-
-中文:
-定理 adjoinRootAlgEquiv_symm_apply_eq_mk
-  条件: (a : S)
-  证明: by
-  rw (occs := [1]) [AlgEquiv.symm_apply_eq, ← h.map_repr a, adjoinRootAlgEquiv_apply_mk]
-
-@[simp]
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.symm_apply_eq, adjoinRootAlgEquiv_apply_mk, h.map_repr, map_repr, symm_apply_eq
+/-
+**IsAdjoinRoot.adjoinRootAlgEquiv_symm_apply_eq_mk** 是 Mathlib 中的一个定理，位于命名空间 `Is
+AdjoinRoot`。
+形式化陈述：adjoinRootAlgEquiv_symm_apply_eq_mk (a : S) : h.adjoinRootAlgEquiv.symm a 
+= AdjoinRoot.mk f (h.repr a)
+参数：a : S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgEquiv.symm_apply_eq`：symm_apply_eq (e : A₁ ≃ₐ[R] A₂) {x y} : e.symm x
+ = y ↔ x = e y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsAdjoinRoot.map_repr`：map_repr (x : S) : h.map (h.repr x) = x
+· 使用定理 `IsAdjoinRoot.adjoinRootAlgEquiv_apply_mk`：adjoinRootAlgEquiv_apply_mk (g
+ : R[X]) : h.adjoinRootAlgEquiv (AdjoinRoot.mk f g) = h.map g
 -/
 theorem adjoinRootAlgEquiv_symm_apply_eq_mk (a : S) :
     h.adjoinRootAlgEquiv.symm a = AdjoinRoot.mk f (h.repr a) := by
   rw (occs := [1]) [AlgEquiv.symm_apply_eq, ← h.map_repr a, adjoinRootAlgEquiv_apply_mk]
 
 @[simp]
-/--
-theorem `adjoinRootAlgEquiv_apply_root` / 定理 `adjoinRootAlgEquiv_apply_root`
-
-English:
-theorem adjoinRootAlgEquiv_apply_root
-  statement: h.adjoinRootAlgEquiv (AdjoinRoot.root f) = h.root
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 adjoinRootAlgEquiv_apply_root
-  结论: h.adjoinRootAlgEquiv (AdjoinRoot.root f) = h.root
-  证明: rfl
-
-@[simp]
+/-
+**IsAdjoinRoot.adjoinRootAlgEquiv_apply_root** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoin
+Root`。
+形式化陈述：adjoinRootAlgEquiv_apply_root : h.adjoinRootAlgEquiv (AdjoinRoot.root f) =
+ h.root
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem adjoinRootAlgEquiv_apply_root : h.adjoinRootAlgEquiv (AdjoinRoot.root f) = h.root := rfl
 
 @[simp]
-/--
-theorem `adjoinRootAlgEquiv_symm_apply_root` / 定理 `adjoinRootAlgEquiv_symm_apply_root`
-
-English:
-theorem adjoinRootAlgEquiv_symm_apply_root
-  statement: h.adjoinRootAlgEquiv.symm h.root = AdjoinRoot.root f
-  proof: (AlgEquiv.symm_apply_eq h.adjoinRootAlgEquiv).mpr rfl
-
-中文:
-定理 adjoinRootAlgEquiv_symm_apply_root
-  结论: h.adjoinRootAlgEquiv.symm h.root = AdjoinRoot.root f
-  证明: (AlgEquiv.symm_apply_eq h.adjoinRootAlgEquiv).mpr rfl
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.symm_apply_eq, adjoinRootAlgEquiv, h.adjoinRootAlgEquiv, symm_apply_eq
+/-
+**IsAdjoinRoot.adjoinRootAlgEquiv_symm_apply_root** 是 Mathlib 中的一个定理，位于命名空间 `IsA
+djoinRoot`。
+形式化陈述：adjoinRootAlgEquiv_symm_apply_root : h.adjoinRootAlgEquiv.symm h.root = Ad
+joinRoot.root f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `AlgEquiv.symm_apply_eq`：symm_apply_eq (e : A₁ ≃ₐ[R] A₂) {x y} : e.symm x
+ = y ↔ x = e y
 -/
 theorem adjoinRootAlgEquiv_symm_apply_root : h.adjoinRootAlgEquiv.symm h.root = AdjoinRoot.root f :=
   (AlgEquiv.symm_apply_eq h.adjoinRootAlgEquiv).mpr rfl
 
 variable (h' : IsAdjoinRoot T f)
 
-/--
-Definition of `algEquiv` / `algEquiv` 的定义
+/-- Adjoining a root gives a unique algebra up to isomorphism.
 
-English:
-definition algEquiv
-  signature: : S ≃ₐ[R] T
-  body: h.adjoinRootAlgEquiv.symm.trans h'.adjoinRootAlgEquiv
+This is the converse of `IsAdjoinRoot.ofAlgEquiv`: this turns an `IsAdjoinRoot` into an
+`AlgEquiv`, and `IsAdjoinRoot.ofAlgEquiv` turns an `AlgEquiv` into an `IsAdjoinRoot`.
+-/
+/-
+**IsAdjoinRoot.algEquiv** 是 Mathlib 中的一个定义，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：algEquiv : S ≃ₐ[R] T
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 algEquiv
-  签名: : S ≃ₐ[R] T
-  定义体: h.adjoinRootAlgEquiv.symm.trans h'.adjoinRootAlgEquiv
+--- 原说明 ---
+Adjoining a root gives a unique algebra up to isomorphism.
 
-Depends on / 依赖: adjoinRootAlgEquiv, h.adjoinRootAlgEquiv.symm.trans
+This is the converse of `IsAdjoinRoot.ofAlgEquiv`: this turns an `IsAdjoinRoot` 
+into an
+`AlgEquiv`, and `IsAdjoinRoot.ofAlgEquiv` turns an `AlgEquiv` into an `IsAdjoinR
+oot`.
 -/
 def algEquiv : S ≃ₐ[R] T := h.adjoinRootAlgEquiv.symm.trans h'.adjoinRootAlgEquiv
-
-/--
-theorem `algEquiv_def` / 定理 `algEquiv_def`
-
-English:
-theorem algEquiv_def
-  statement: h.algEquiv h' = h.adjoinRootAlgEquiv.symm.trans h'.adjoinRootAlgEquiv
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 algEquiv_def
-  结论: h.algEquiv h' = h.adjoinRootAlgEquiv.symm.trans h'.adjoinRootAlgEquiv
-  证明: rfl
-
-@[simp]
+/-
+**IsAdjoinRoot.algEquiv_def** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：algEquiv_def : h.algEquiv h' = h.adjoinRootAlgEquiv.symm.trans h'.adjoinRo
+otAlgEquiv
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algEquiv_def : h.algEquiv h' = h.adjoinRootAlgEquiv.symm.trans h'.adjoinRootAlgEquiv := rfl
 
 @[simp]
-/--
-theorem `algEquiv_root` / 定理 `algEquiv_root`
-
-English:
-theorem algEquiv_root
-  statement: h.algEquiv h' h.root = h'.root
-  proof: by simp [algEquiv_def]
-
-@[simp]
-
-中文:
-定理 algEquiv_root
-  结论: h.algEquiv h' h.root = h'.root
-  证明: by simp [algEquiv_def]
-
-@[simp]
-
-Depends on / 依赖: algEquiv_def
+/-
+**IsAdjoinRoot.algEquiv_root** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：algEquiv_root : h.algEquiv h' h.root = h'.root
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsAdjoinRoot.adjoinRootAlgEquiv_symm_apply_root`：adjoinRootAlgEquiv_symm
+_apply_root : h.adjoinRootAlgEquiv.symm h.root = AdjoinRoot.root f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem algEquiv_root : h.algEquiv h' h.root = h'.root := by simp [algEquiv_def]
 
 @[simp]
-/--
-theorem `algEquiv_map` / 定理 `algEquiv_map`
-
-English:
-theorem algEquiv_map
-  statement: AlgHom.comp (h.algEquiv h') h.map = h'.map
-  proof: by
-  ext; simp
-
-@[simp]
-
-中文:
-定理 algEquiv_map
-  结论: 代数态射.comp (h.algEquiv h') h.map = h'.map
-  证明: by
-  ext; simp
-
-@[simp]
+/-
+**IsAdjoinRoot.algEquiv_map** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：algEquiv_map : AlgHom.comp (h.algEquiv h') h.map = h'.map
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.algHom_ext`：algHom_ext {f g : R[X] ->ₐ[R] B} (hX : f X = g X)
+ : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsAdjoinRoot.algEquiv_root`：algEquiv_root : h.algEquiv h' h.root = h'.ro
+ot
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem algEquiv_map : AlgHom.comp (h.algEquiv h') h.map = h'.map := by
   ext; simp
 
 @[simp]
-/--
-theorem `algEquiv_apply_map` / 定理 `algEquiv_apply_map`
-
-English:
-theorem algEquiv_apply_map
-  given: (z : R[X])
-  statement: h.algEquiv h' (h.map z) = h'.map z
-  proof: by
-  rw [← h.algEquiv_map h']; simp [-algEquiv_map]
-
-中文:
-定理 algEquiv_apply_map
-  条件: (z : R[X])
-  结论: h.algEquiv h' (h.map z) = h'.map z
-  证明: by
-  rw [← h.algEquiv_map h']; simp [-algEquiv_map]
-
-Depends on / 依赖: algEquiv_map, h.algEquiv_map
+/-
+**IsAdjoinRoot.algEquiv_apply_map** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：algEquiv_apply_map (z : R[X]) : h.algEquiv h' (h.map z) = h'.map z
+参数：z : R[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsAdjoinRoot.algEquiv_map`：algEquiv_map : AlgHom.comp (h.algEquiv h') h.
+map = h'.map
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem algEquiv_apply_map (z : R[X]) : h.algEquiv h' (h.map z) = h'.map z := by
   rw [← h.algEquiv_map h']; simp [-algEquiv_map]
-
-/--
-theorem `algEquiv_self` / 定理 `algEquiv_self`
-
-English:
-theorem algEquiv_self
-  statement: h.algEquiv h = AlgEquiv.refl
-  proof: by ext; simp [algEquiv_def]
-
-中文:
-定理 algEquiv_self
-  结论: h.algEquiv h = 代数等价.refl
-  证明: by ext; simp [algEquiv_def]
+/-
+**IsAdjoinRoot.algEquiv_self** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : CommRing R] [inst_1 : Ring S] {f : Pol
+ynomial R} [inst_2 : Algebra R S]   (h : IsAdjoinRoot S f), h.algEquiv h = AlgEq
+uiv.refl
+参数：h : IsAdjoinRoot S f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.ext`：ext {f g : A₁ ≃ₐ[R] A₂} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgEquiv.symm_trans_self`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA₂
+} [inst : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [inst_
+3 : Algebra R …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] theorem algEquiv_self : h.algEquiv h = AlgEquiv.refl := by ext; simp [algEquiv_def]
-
-/--
-theorem `algEquiv_symm` / 定理 `algEquiv_symm`
-
-English:
-theorem algEquiv_symm
-  statement: (h.algEquiv h').symm = h'.algEquiv h
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 algEquiv_symm
-  结论: (h.algEquiv h').symm = h'.algEquiv h
-  证明: rfl
-
-@[simp]
+/-
+**IsAdjoinRoot.algEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : CommRing R] [inst_1 : Ring S] {f : Pol
+ynomial R} [inst_2 : Algebra R S]   (h : IsAdjoinRoot S f) {T : Type u_1} [inst_
+3 : Ring T] [inst_4 : Algebra R T] (h' : IsAdjoinRoot T f),   (h.algEquiv h').sy
+mm = h'.algEquiv h
+参数：h : IsAdjoinRoot S f；h' : IsAdjoinRoot T f；h.algEquiv h'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem algEquiv_symm : (h.algEquiv h').symm = h'.algEquiv h := rfl
 
 @[simp]
-/--
-theorem `algEquiv_algEquiv` / 定理 `algEquiv_algEquiv`
-
-English:
-theorem algEquiv_algEquiv
-  given: {U : Type*} [Ring U] [Algebra R U] (h'' : IsAdjoinRoot U f) (x)
-  proof: by simp [algEquiv_def]
-
-@[simp]
-
-中文:
-定理 algEquiv_algEquiv
-  条件: {U : 类型} [环 U] [代数 R U] (h'' : 是AdjoinRoot U f) (x)
-  证明: by simp [algEquiv_def]
-
-@[simp]
-
-Depends on / 依赖: algEquiv_def
+/-
+**IsAdjoinRoot.algEquiv_algEquiv** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：algEquiv_algEquiv {U : Type*} [Ring U] [Algebra R U] (h'' : IsAdjoinRoot U
+ f) (x) : (h'.algEquiv h'') (h.algEquiv h' x) = h.algEquiv h'' x
+参数：h'' : IsAdjoinRoot U f；x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgEquiv.symm_apply_apply`：symm_apply_apply (e : A₁ ≃ₐ[R] A₂) : forall x
+, e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem algEquiv_algEquiv {U : Type*} [Ring U] [Algebra R U] (h'' : IsAdjoinRoot U f) (x) :
     (h'.algEquiv h'') (h.algEquiv h' x) = h.algEquiv h'' x := by simp [algEquiv_def]
 
 @[simp]
-/--
-theorem `algEquiv_trans` / 定理 `algEquiv_trans`
-
-English:
-theorem algEquiv_trans
-  given: {U : Type*} [Ring U] [Algebra R U] (h'' : IsAdjoinRoot U f)
-  proof: by ext; simp
-
-中文:
-定理 algEquiv_trans
-  条件: {U : 类型} [环 U] [代数 R U] (h'' : 是AdjoinRoot U f)
-  证明: by ext; simp
+/-
+**IsAdjoinRoot.algEquiv_trans** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：algEquiv_trans {U : Type*} [Ring U] [Algebra R U] (h'' : IsAdjoinRoot U f)
+ : (h.algEquiv h').trans (h'.algEquiv h'') = h.algEquiv h''
+参数：h'' : IsAdjoinRoot U f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.ext`：ext {f g : A₁ ≃ₐ[R] A₂} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsAdjoinRoot.algEquiv_algEquiv`：algEquiv_algEquiv {U : Type*} [Ring U] [
+Algebra R U] (h'' : IsAdjoinRoot U f) (x) : (h'.algEquiv h'') (h.algEquiv h' x) 
+= h.algEquiv h'' x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem algEquiv_trans {U : Type*} [Ring U] [Algebra R U] (h'' : IsAdjoinRoot U f) :
     (h.algEquiv h').trans (h'.algEquiv h'') = h.algEquiv h'' := by ext; simp
@@ -741,74 +711,58 @@ This is the converse of `IsAdjoinRoot.algEquiv`: this turns an `AlgEquiv` into a
 and `IsAdjoinRoot.algEquiv` turns an `IsAdjoinRoot` into an `AlgEquiv`.
 -/
 @[simps! map_apply]
-/--
-Definition of `ofAlgEquiv` / `ofAlgEquiv` 的定义
+/-
+**IsAdjoinRoot.ofAlgEquiv** 是 Mathlib 中的一个定义，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：ofAlgEquiv (e : S ≃ₐ[R] T) : IsAdjoinRoot T f where map
+参数：e : S ≃ₐ[R] T。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofAlgEquiv
-  signature: (e : S ≃ₐ[R] T)
-  body: (e : S ->ₐ[R] T).comp h.map
-  map_surjective := e.surjective.comp h.map_surjective
-  ker_map := by ext; simp [Ideal.mem_span_singleton]
+--- 原说明 ---
+Transfer `IsAdjoinRoot` across an algebra isomorphism.
 
-中文:
-定义 ofAlgEquiv
-  签名: (e : S ≃ₐ[R] T)
-  定义体: (e : S ->ₐ[R] T).comp h.map
-  map_surjective := e.surjective.comp h.map_surjective
-  ker_map := by ext; simp [Ideal.mem_span_singleton]
-
-Depends on / 依赖: h.map
+This is the converse of `IsAdjoinRoot.algEquiv`: this turns an `AlgEquiv` into a
+n `IsAdjoinRoot`,
+and `IsAdjoinRoot.algEquiv` turns an `IsAdjoinRoot` into an `AlgEquiv`.
 -/
 def ofAlgEquiv (e : S ≃ₐ[R] T) : IsAdjoinRoot T f where
-  map := (e : S ->ₐ[R] T).comp h.map
+  map := (e : S →ₐ[R] T).comp h.map
   map_surjective := e.surjective.comp h.map_surjective
   ker_map := by ext; simp [Ideal.mem_span_singleton]
-
-/--
-theorem `ofAlgEquiv_root` / 定理 `ofAlgEquiv_root`
-
-English:
-theorem ofAlgEquiv_root
-  given: (e : S ≃ₐ[R] T)
-  statement: (h.ofAlgEquiv e).root = e h.root
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofAlgEquiv_root
-  条件: (e : S ≃ₐ[R] T)
-  结论: (h.ofAlgEquiv e).root = e h.root
-  证明: rfl
-
-@[simp]
+/-
+**IsAdjoinRoot.ofAlgEquiv_root** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : CommRing R] [inst_1 : Ring S] {f : Pol
+ynomial R} [inst_2 : Algebra R S]   (h : IsAdjoinRoot S f) {T : Type u_1} [inst_
+3 : Ring T] [inst_4 : Algebra R T] (e : S ≃ₐ[R] T),   (h.ofAlgEquiv e).root = e 
+h.root
+参数：h : IsAdjoinRoot S f；e : S ≃ₐ[R] T；h.ofAlgEquiv e。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem ofAlgEquiv_root (e : S ≃ₐ[R] T) : (h.ofAlgEquiv e).root = e h.root := rfl
 
 @[simp]
-/--
-theorem `algEquiv_ofAlgEquiv` / 定理 `algEquiv_ofAlgEquiv`
-
-English:
-theorem algEquiv_ofAlgEquiv
-  given: {U : Type*} [Ring U] [Algebra R U] (e : T ≃ₐ[R] U)
-  proof: by
-  ext a
-  simp [algEquiv_def, AlgEquiv.trans_apply, adjoinRootAlgEquiv_apply_eq_map, ofAlgEquiv_map_apply]
-
-@[simp]
-
-中文:
-定理 algEquiv_ofAlgEquiv
-  条件: {U : 类型} [环 U] [代数 R U] (e : T ≃ₐ[R] U)
-  证明: by
-  ext a
-  simp [algEquiv_def, AlgEquiv.trans_apply, adjoinRootAlgEquiv_apply_eq_map, ofAlgEquiv_map_apply]
-
-@[simp]
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.trans_apply, adjoinRootAlgEquiv_apply_eq_map, algEquiv_def, ofAlgEquiv_map_apply, trans_apply
+/-
+**IsAdjoinRoot.algEquiv_ofAlgEquiv** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：algEquiv_ofAlgEquiv {U : Type*} [Ring U] [Algebra R U] (e : T ≃ₐ[R] U) : h
+.algEquiv (h'.ofAlgEquiv e) = (h.algEquiv h').trans e
+参数：e : T ≃ₐ[R] U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.ext`：ext {f g : A₁ ≃ₐ[R] A₂} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `AdjoinRoot.mk_surjective`：mk_surjective : Function.Surjective (mk g)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsAdjoinRoot.adjoinRootAlgEquiv_apply_eq_map`：adjoinRootAlgEquiv_apply_e
+q_map (a : AdjoinRoot f) : h.adjoinRootAlgEquiv a = h.map (AdjoinRoot.mk_surject
+ive a).choose
+· 使用定理 `IsAdjoinRoot.ofAlgEquiv_map_apply`：∀ {R : Type u} {S : Type v} [inst : C
+ommRing R] [inst_1 : Ring S] {f : Polynomial R} [inst_2 : Algebra R S]   (h : Is
+AdjoinRoot S f) {T : Ty…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem algEquiv_ofAlgEquiv {U : Type*} [Ring U] [Algebra R U] (e : T ≃ₐ[R] U) :
     h.algEquiv (h'.ofAlgEquiv e) = (h.algEquiv h').trans e := by
@@ -816,28 +770,31 @@ theorem algEquiv_ofAlgEquiv {U : Type*} [Ring U] [Algebra R U] (e : T ≃ₐ[R] 
   simp [algEquiv_def, AlgEquiv.trans_apply, adjoinRootAlgEquiv_apply_eq_map, ofAlgEquiv_map_apply]
 
 @[simp]
-/--
-theorem `ofAlgEquiv_algEquiv` / 定理 `ofAlgEquiv_algEquiv`
-
-English:
-theorem ofAlgEquiv_algEquiv
-  statement: {U : Type*} [Ring U] [Algebra R U] (h'' : IsAdjoinRoot U f)
-  proof: by
-  ext a
-  simp_rw [algEquiv_def, AlgEquiv.trans_apply, EmbeddingLike.apply_eq_iff_eq,
-           AlgEquiv.symm_apply_eq, adjoinRootAlgEquiv_apply_eq_map, ofAlgEquiv_map_apply,
-           ← adjoinRootAlgEquiv_apply_eq_map, AlgEquiv.apply_symm_apply]
-
-中文:
-定理 ofAlgEquiv_algEquiv
-  结论: {U : 类型} [环 U] [代数 R U] (h'' : 是AdjoinRoot U f)
-  证明: by
-  ext a
-  simp_rw [algEquiv_def, AlgEquiv.trans_apply, EmbeddingLike.apply_eq_iff_eq,
-           AlgEquiv.symm_apply_eq, adjoinRootAlgEquiv_apply_eq_map, ofAlgEquiv_map_apply,
-           ← adjoinRootAlgEquiv_apply_eq_map, AlgEquiv.apply_symm_apply]
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.apply_symm_apply, AlgEquiv.symm_apply_eq, AlgEquiv.trans_apply, EmbeddingLike, EmbeddingLike.apply_eq_iff_eq, adjoinRootAlgEquiv_apply_eq_map, algEquiv_def, apply_eq_iff_eq, apply_symm_apply, ofAlgEquiv_map_apply, simp_rw, symm_apply_eq, trans_apply
+/-
+**IsAdjoinRoot.ofAlgEquiv_algEquiv** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：ofAlgEquiv_algEquiv {U : Type*} [Ring U] [Algebra R U] (h'' : IsAdjoinRoot
+ U f) (e : S ≃ₐ[R] T) : (h.ofAlgEquiv e).algEquiv h'' = e.symm.trans (h.algEquiv
+ h'')
+参数：h'' : IsAdjoinRoot U f；e : S ≃ₐ[R] T。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.ext`：ext {f g : A₁ ≃ₐ[R] A₂} (h : forall a, f a = g a) : f = g
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `AdjoinRoot.mk_surjective`：mk_surjective : Function.Surjective (mk g)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsAdjoinRoot.adjoinRootAlgEquiv_apply_eq_map`：adjoinRootAlgEquiv_apply_e
+q_map (a : AdjoinRoot f) : h.adjoinRootAlgEquiv a = h.map (AdjoinRoot.mk_surject
+ive a).choose
+· 使用定理 `IsAdjoinRoot.ofAlgEquiv_map_apply`：∀ {R : Type u} {S : Type v} [inst : C
+ommRing R] [inst_1 : Ring S] {f : Polynomial R} [inst_2 : Algebra R S]   (h : Is
+AdjoinRoot S f) {T : Ty…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `AlgEquiv.apply_symm_apply`：apply_symm_apply (e : A₁ ≃ₐ[R] A₂) : forall x
+, e (e.symm x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem ofAlgEquiv_algEquiv {U : Type*} [Ring U] [Algebra R U] (h'' : IsAdjoinRoot U f)
     (e : S ≃ₐ[R] T) : (h.ofAlgEquiv e).algEquiv h'' = e.symm.trans (h.algEquiv h'') := by
@@ -850,66 +807,44 @@ end Equiv
 
 section lift
 
-variable {T : Type*} [CommRing T] {i : R ->+* T} {x : T}
+variable {T : Type*} [CommRing T] {i : R →+* T} {x : T}
 
 section
 variable (hx : f.eval₂ i x = 0)
 include hx
 
-/--
-theorem `eval₂_repr_eq_eval₂_of_map_eq` / 定理 `eval₂_repr_eq_eval₂_of_map_eq`
+/-- Auxiliary lemma for `IsAdjoinRoot.lift` -/
+/-
+**IsAdjoinRoot.eval** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem eval₂_repr_eq_eval₂_of_map_eq
-  statement: (z : S) (w : R[X])
-  proof: by
-  rw [eq_comm]; rw [← sub_eq_zero]; rw [← h.map_repr z]; rw [← map_sub]; rw [h.map_eq_zero_iff] at hzw
-  obtain ⟨y, hy⟩ := hzw
-  rw [← sub_eq_zero]; rw [← eval₂_sub]; rw [hy]; rw [eval₂_mul]; rw [hx]; rw [zero_mul]
-
-中文:
-定理 eval₂_repr_eq_eval₂_of_map_eq
-  结论: (z : S) (w : R[X])
-  证明: by
-  rw [eq_comm]; rw [← sub_eq_zero]; rw [← h.map_repr z]; rw [← map_sub]; rw [h.map_eq_zero_iff] at hzw
-  obtain ⟨y, hy⟩ := hzw
-  rw [← sub_eq_zero]; rw [← eval₂_sub]; rw [hy]; rw [eval₂_mul]; rw [hx]; rw [zero_mul]
-
-Depends on / 依赖: eq_comm, h.map_eq_zero_iff, h.map_repr, map_eq_zero_iff, map_repr, map_sub, sub_eq_zero, zero_mul
+--- 原说明 ---
+Auxiliary lemma for `IsAdjoinRoot.lift`
 -/
 theorem eval₂_repr_eq_eval₂_of_map_eq (z : S) (w : R[X])
     (hzw : h.map w = z) : (h.repr z).eval₂ i x = w.eval₂ i x := by
-  rw [eq_comm]; rw [← sub_eq_zero]; rw [← h.map_repr z]; rw [← map_sub]; rw [h.map_eq_zero_iff] at hzw
+  rw [eq_comm, ← sub_eq_zero, ← h.map_repr z, ← map_sub, h.map_eq_zero_iff] at hzw
   obtain ⟨y, hy⟩ := hzw
-  rw [← sub_eq_zero]; rw [← eval₂_sub]; rw [hy]; rw [eval₂_mul]; rw [hx]; rw [zero_mul]
+  rw [← sub_eq_zero, ← eval₂_sub, hy, eval₂_mul, hx, zero_mul]
 
 variable (i x)
 
 -- To match `AdjoinRoot.lift`
-/--
-Definition of `lift` / `lift` 的定义
+/-- Lift a ring homomorphism `R →+* T` to `S →+* T` by specifying a root `x` of `f` in `T`,
+where `S` is given by adjoining a root of `f` to `R`. -/
+/-
+**IsAdjoinRoot.lift** 是 Mathlib 中的一个定义，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：lift (hx : f.eval₂ i x = 0) : S ->+* T where toFun z
+参数：hx : f.eval₂ i x = 0。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: (hx : f.eval₂ i x = 0)
-  body: (h.repr z).eval₂ i x
-  map_zero' := by simp [h.eval₂_repr_eq_eval₂_of_map_eq hx _ _ (map_zero _)]
-  map_add' z w := by simp [h.eval₂_repr_eq_eval₂_of_map_eq hx _ (h.repr z + h.repr w)]
-  map_one' := by simp [h.eval₂_repr_eq_eval₂_of_map_eq hx _ _ (map_one _)]
-  map_mul' z w := by simp [h.eval₂_repr_eq_eval₂_of_map_eq hx _ (h.repr z * h.repr w)]
-
-中文:
-定义 lift
-  签名: (hx : f.eval₂ i x = 0)
-  定义体: (h.repr z).eval₂ i x
-  map_zero' := by simp [h.eval₂_repr_eq_eval₂_of_map_eq hx _ _ (map_zero _)]
-  map_add' z w := by simp [h.eval₂_repr_eq_eval₂_of_map_eq hx _ (h.repr z + h.repr w)]
-  map_one' := by simp [h.eval₂_repr_eq_eval₂_of_map_eq hx _ _ (map_one _)]
-  map_mul' z w := by simp [h.eval₂_repr_eq_eval₂_of_map_eq hx _ (h.repr z * h.repr w)]
-
-Depends on / 依赖: h.repr
+--- 原说明 ---
+Lift a ring homomorphism `R →+* T` to `S →+* T` by specifying a root `x` of `f` 
+in `T`,
+where `S` is given by adjoining a root of `f` to `R`.
 -/
-def lift (hx : f.eval₂ i x = 0) : S ->+* T where
+def lift (hx : f.eval₂ i x = 0) : S →+* T where
   toFun z := (h.repr z).eval₂ i x
   map_zero' := by simp [h.eval₂_repr_eq_eval₂_of_map_eq hx _ _ (map_zero _)]
   map_add' z w := by simp [h.eval₂_repr_eq_eval₂_of_map_eq hx _ (h.repr z + h.repr w)]
@@ -919,120 +854,159 @@ def lift (hx : f.eval₂ i x = 0) : S ->+* T where
 variable {i x}
 
 @[simp]
-/--
-theorem `lift_map` / 定理 `lift_map`
-
-English:
-theorem lift_map
-  given: (z : R[X])
-  statement: h.lift i x hx (h.map z) = z.eval₂ i x
-  proof: by
-  simp [lift, h.eval₂_repr_eq_eval₂_of_map_eq hx _ _ rfl]
-
-@[simp]
-
-中文:
-定理 lift_map
-  条件: (z : R[X])
-  结论: h.lift i x hx (h.map z) = z.eval₂ i x
-  证明: by
-  simp [lift, h.eval₂_repr_eq_eval₂_of_map_eq hx _ _ rfl]
-
-@[simp]
-
-Depends on / 依赖: h.eval
+/-
+**IsAdjoinRoot.lift_map** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：lift_map (z : R[X]) : h.lift i x hx (h.map z) = z.eval₂ i x
+参数：z : R[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsAdjoinRoot.eval₂_repr_eq_eval₂_of_map_eq`：eval₂_repr_eq_eval₂_of_map_e
+q (z : S) (w : R[X]) (hzw : h.map w = z) : (h.repr z).eval₂ i x = w.eval₂ i x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem lift_map (z : R[X]) : h.lift i x hx (h.map z) = z.eval₂ i x := by
   simp [lift, h.eval₂_repr_eq_eval₂_of_map_eq hx _ _ rfl]
 
 @[simp]
-/--
-theorem `lift_root` / 定理 `lift_root`
-
-English:
-theorem lift_root
-  statement: h.lift i x hx h.root = x
-  proof: by
-  rw [← h.map_X]; rw [lift_map]; rw [eval₂_X]
-
-@[simp]
-
-中文:
-定理 lift_root
-  结论: h.lift i x hx h.root = x
-  证明: by
-  rw [← h.map_X]; rw [lift_map]; rw [eval₂_X]
-
-@[simp]
-
-Depends on / 依赖: h.map_X, lift_map, map_X
+/-
+**IsAdjoinRoot.lift_root** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：lift_root : h.lift i x hx h.root = x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsAdjoinRoot.map_X`：map_X : h.map X = h.root
+· 使用定理 `IsAdjoinRoot.lift_map`：lift_map (z : R[X]) : h.lift i x hx (h.map z) = z
+.eval₂ i x
+· 使用定理 `Polynomial.eval₂_X`：eval₂_X : X.eval₂ f x = x
 -/
 theorem lift_root : h.lift i x hx h.root = x := by
-  rw [← h.map_X]; rw [lift_map]; rw [eval₂_X]
+  rw [← h.map_X, lift_map, eval₂_X]
 
 @[simp]
-/--
-theorem `lift_algebraMap` / 定理 `lift_algebraMap`
-
-English:
-theorem lift_algebraMap
-  given: (a : R)
-  statement: h.lift i x hx (algebraMap R S a) = i a
-  proof: by
-  simp [h.algebraMap_apply]
-
-中文:
-定理 lift_algebraMap
-  条件: (a : R)
-  结论: h.lift i x hx (algebraMap R S a) = i a
-  证明: by
-  simp [h.algebraMap_apply]
-
-Depends on / 依赖: algebraMap_apply, h.algebraMap_apply
+/-
+**IsAdjoinRoot.lift_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：lift_algebraMap (a : R) : h.lift i x hx (algebraMap R S a) = i a
+参数：a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsAdjoinRoot.algebraMap_apply`：algebraMap_apply (x : R) : algebraMap R S
+ x = h.map (Polynomial.C x)
+· 使用定理 `IsAdjoinRoot.lift_map`：lift_map (z : R[X]) : h.lift i x hx (h.map z) = z
+.eval₂ i x
+· 使用定理 `Polynomial.eval₂_C`：eval₂_C : (C a).eval₂ f x = f a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem lift_algebraMap (a : R) : h.lift i x hx (algebraMap R S a) = i a := by
   simp [h.algebraMap_apply]
 
-/--
-theorem `apply_eq_lift` / 定理 `apply_eq_lift`
+/-- Auxiliary lemma for `apply_eq_lift` -/
+/-
+**IsAdjoinRoot.apply_eq_lift** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：apply_eq_lift (g : S ->+* T) (hmap : forall a, g (algebraMap R S a) = i a)
+ (hroot : g h.root = x) (a : S) : g a = h.lift i x hx a
+参数：g : S ->+* T；hmap : forall a, g (algebraMap R S a) = i a；hroot : g h.root = x
+；a : S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsAdjoinRoot.map_repr`：map_repr (x : S) : h.map (h.repr x) = x
+· 使用定理 `Polynomial.as_sum_range_C_mul_X_pow`：as_sum_range_C_mul_X_pow (p : R[X])
+ : p = ∑ i in range (p.natDegree + 1), C (coeff p i) * X ^ i
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `NonUnitalAlgSemiHomClass.toDistribMulActionSemiHomClass`：∀ {F : Type u_1
+} {R : outParam (Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 
+: Monoid S}   {φ : outParam (R →* S)} {A : ou…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `IsAdjoinRoot.algebraMap_apply`：algebraMap_apply (x : R) : algebraMap R S
+ x = h.map (Polynomial.C x)
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `IsAdjoinRoot.lift_algebraMap`：lift_algebraMap (a : R) : h.lift i x hx (a
+lgebraMap R S a) = i a
+· 使用定理 `IsAdjoinRoot.lift_root`：lift_root : h.lift i x hx h.root = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem apply_eq_lift
-  statement: (g : S ->+* T) (hmap : forall a, g (algebraMap R S a) = i a)
-  proof: by
-  rw [← h.map_repr a]; rw [Polynomial.as_sum_range_C_mul_X_pow (h.repr a)]
-  simp [← h.algebraMap_apply, *]
-
-中文:
-定理 apply_eq_lift
-  结论: (g : S ->+* T) (hmap : 对任意 a, g (algebraMap R S a) = i a)
-  证明: by
-  rw [← h.map_repr a]; rw [Polynomial.as_sum_range_C_mul_X_pow (h.repr a)]
-  simp [← h.algebraMap_apply, *]
-
-Depends on / 依赖: Polynomial, Polynomial.as_sum_range_C_mul_X_pow, algebraMap_apply, as_sum_range_C_mul_X_pow, h.algebraMap_apply, h.map_repr, h.repr, map_repr
+--- 原说明 ---
+Auxiliary lemma for `apply_eq_lift`
 -/
-theorem apply_eq_lift (g : S ->+* T) (hmap : forall a, g (algebraMap R S a) = i a)
+theorem apply_eq_lift (g : S →+* T) (hmap : ∀ a, g (algebraMap R S a) = i a)
     (hroot : g h.root = x) (a : S) : g a = h.lift i x hx a := by
-  rw [← h.map_repr a]; rw [Polynomial.as_sum_range_C_mul_X_pow (h.repr a)]
+  rw [← h.map_repr a, Polynomial.as_sum_range_C_mul_X_pow (h.repr a)]
   simp [← h.algebraMap_apply, *]
 
-/--
-theorem `eq_lift` / 定理 `eq_lift`
+/-- Unicity of `lift`: a map that agrees on `R` and `h.root` agrees with `lift` everywhere. -/
+/-
+**IsAdjoinRoot.eq_lift** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：eq_lift (g : S ->+* T) (hmap : forall a, g (algebraMap R S a) = i a) (hroo
+t : g h.root = x) : g = h.lift i x hx
+参数：g : S ->+* T；hmap : forall a, g (algebraMap R S a) = i a；hroot : g h.root = x
+。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `IsAdjoinRoot.apply_eq_lift`：apply_eq_lift (g : S ->+* T) (hmap : forall 
+a, g (algebraMap R S a) = i a) (hroot : g h.root = x) (a : S) : g a = h.lift i x
+ hx a
 
-English:
-theorem eq_lift
-  given: (g : S ->+* T) (hmap : forall a, g (algebraMap R S a) = i a) (hroot : g h.root = x)
-  proof: RingHom.ext (h.apply_eq_lift hx g hmap hroot)
-
-中文:
-定理 eq_lift
-  条件: (g : S ->+* T) (hmap : 对任意 a, g (algebraMap R S a) = i a) (hroot : g h.root = x)
-  证明: RingHom.ext (h.apply_eq_lift hx g hmap hroot)
-
-Depends on / 依赖: RingHom, RingHom.ext, apply_eq_lift, h.apply_eq_lift
+--- 原说明 ---
+Unicity of `lift`: a map that agrees on `R` and `h.root` agrees with `lift` ever
+ywhere.
 -/
-theorem eq_lift (g : S ->+* T) (hmap : forall a, g (algebraMap R S a) = i a) (hroot : g h.root = x) :
+theorem eq_lift (g : S →+* T) (hmap : ∀ a, g (algebraMap R S a) = i a) (hroot : g h.root = x) :
     g = h.lift i x hx := RingHom.ext (h.apply_eq_lift hx g hmap hroot)
 
 end
@@ -1041,142 +1015,129 @@ variable [Algebra R T] (hx' : aeval x f = 0)
 
 variable (x) in
 -- To match `AdjoinRoot.liftHom`
-/--
-Definition of `liftHom` / `liftHom` 的定义
+/-- Lift the algebra map `R → T` to `S →ₐ[R] T` by specifying a root `x` of `f` in `T`,
+where `S` is given by adjoining a root of `f` to `R`. -/
+/-
+**IsAdjoinRoot.liftHom** 是 Mathlib 中的一个定义，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：liftHom : S ->ₐ[R] T
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftHom
-  signature: : S ->ₐ[R] T
-  body: { h.lift (algebraMap R T) x hx' with commutes' a := h.lift_algebraMap hx' a }
-
-@[simp]
-
-中文:
-定义 liftHom
-  签名: : S ->ₐ[R] T
-  定义体: { h.lift (algebraMap R T) x hx' with commutes' a := h.lift_algebraMap hx' a }
-
-@[simp]
-
-Depends on / 依赖: algebraMap, commutes, h.lift, h.lift_algebraMap, lift_algebraMap
+--- 原说明 ---
+Lift the algebra map `R → T` to `S →ₐ[R] T` by specifying a root `x` of `f` in `
+T`,
+where `S` is given by adjoining a root of `f` to `R`.
 -/
-def liftHom : S ->ₐ[R] T :=
+def liftHom : S →ₐ[R] T :=
   { h.lift (algebraMap R T) x hx' with commutes' a := h.lift_algebraMap hx' a }
 
 @[simp]
-/--
-theorem `coe_liftHom` / 定理 `coe_liftHom`
-
-English:
-theorem coe_liftHom
-  statement: (h.liftHom x hx' : S ->+* T) = h.lift (algebraMap R T) x hx'
-  proof: rfl
-
-中文:
-定理 coe_liftHom
-  结论: (h.liftHom x hx' : S ->+* T) = h.lift (algebraMap R T) x hx'
-  证明: rfl
+/-
+**IsAdjoinRoot.coe_liftHom** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：coe_liftHom : (h.liftHom x hx' : S ->+* T) = h.lift (algebraMap R T) x hx'
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
 -/
-theorem coe_liftHom : (h.liftHom x hx' : S ->+* T) = h.lift (algebraMap R T) x hx' := rfl
-
-/--
-theorem `lift_algebraMap_apply` / 定理 `lift_algebraMap_apply`
-
-English:
-theorem lift_algebraMap_apply
-  given: (z : S)
-  statement: h.lift (algebraMap R T) x hx' z = h.liftHom x hx' z
-  proof: rfl
-
-中文:
-定理 lift_algebraMap_apply
-  条件: (z : S)
-  结论: h.lift (algebraMap R T) x hx' z = h.liftHom x hx' z
-  证明: rfl
+theorem coe_liftHom : (h.liftHom x hx' : S →+* T) = h.lift (algebraMap R T) x hx' := rfl
+/-
+**IsAdjoinRoot.lift_algebraMap_apply** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：lift_algebraMap_apply (z : S) : h.lift (algebraMap R T) x hx' z = h.liftHo
+m x hx' z
+参数：z : S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lift_algebraMap_apply (z : S) : h.lift (algebraMap R T) x hx' z = h.liftHom x hx' z := rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `liftHom_map` / 定理 `liftHom_map`
-
-English:
-theorem liftHom_map
-  given: (z : R[X])
-  statement: h.liftHom x hx' (h.map z) = aeval x z
-  proof: by
-  rw [← lift_algebraMap_apply]; rw [lift_map]; rw [aeval_def]
-
-中文:
-定理 liftHom_map
-  条件: (z : R[X])
-  结论: h.liftHom x hx' (h.map z) = aeval x z
-  证明: by
-  rw [← lift_algebraMap_apply]; rw [lift_map]; rw [aeval_def]
-
-Depends on / 依赖: aeval_def, lift_algebraMap_apply, lift_map
+/-
+**IsAdjoinRoot.liftHom_map** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：liftHom_map (z : R[X]) : h.liftHom x hx' (h.map z) = aeval x z
+参数：z : R[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsAdjoinRoot.lift_algebraMap_apply`：lift_algebraMap_apply (z : S) : h.li
+ft (algebraMap R T) x hx' z = h.liftHom x hx' z
+· 使用定理 `IsAdjoinRoot.lift_map`：lift_map (z : R[X]) : h.lift i x hx (h.map z) = z
+.eval₂ i x
+· 使用定理 `Polynomial.aeval_def`：aeval_def (p : R[X]) : aeval x p = eval₂ (algebraM
+ap R A) x p
 -/
 theorem liftHom_map (z : R[X]) : h.liftHom x hx' (h.map z) = aeval x z := by
-  rw [← lift_algebraMap_apply]; rw [lift_map]; rw [aeval_def]
+  rw [← lift_algebraMap_apply, lift_map, aeval_def]
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `liftHom_root` / 定理 `liftHom_root`
-
-English:
-theorem liftHom_root
-  statement: h.liftHom x hx' h.root = x
-  proof: by rw [← lift_algebraMap_apply, lift_root]
-
-中文:
-定理 liftHom_root
-  结论: h.liftHom x hx' h.root = x
-  证明: by rw [← lift_algebraMap_apply, lift_root]
-
-Depends on / 依赖: lift_algebraMap_apply, lift_root
+/-
+**IsAdjoinRoot.liftHom_root** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：liftHom_root : h.liftHom x hx' h.root = x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsAdjoinRoot.lift_algebraMap_apply`：lift_algebraMap_apply (z : S) : h.li
+ft (algebraMap R T) x hx' z = h.liftHom x hx' z
+· 使用定理 `IsAdjoinRoot.lift_root`：lift_root : h.lift i x hx h.root = x
 -/
 theorem liftHom_root : h.liftHom x hx' h.root = x := by rw [← lift_algebraMap_apply, lift_root]
 
-/--
-theorem `eq_liftHom` / 定理 `eq_liftHom`
+/-- Unicity of `liftHom`: a map that agrees on `h.root` agrees with `liftHom` everywhere. -/
+/-
+**IsAdjoinRoot.eq_liftHom** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：eq_liftHom (g : S ->ₐ[R] T) (hroot : g h.root = x) : g = h.liftHom x hx'
+参数：g : S ->ₐ[R] T；hroot : g h.root = x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.ext`：ext {φ₁ φ₂ : A ->ₐ[R] B} (H : forall x, φ₁ x = φ₂ x) : φ₁ = 
+φ₂
+· 使用定理 `IsAdjoinRoot.apply_eq_lift`：apply_eq_lift (g : S ->+* T) (hmap : forall 
+a, g (algebraMap R S a) = i a) (hroot : g h.root = x) (a : S) : g a = h.lift i x
+ hx a
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `AlgHom.commutes`：commutes (r : R) : φ (algebraMap R A r) = algebraMap R 
+B r
 
-English:
-theorem eq_liftHom
-  given: (g : S ->ₐ[R] T) (hroot : g h.root = x)
-  statement: g = h.liftHom x hx'
-  proof: AlgHom.ext (h.apply_eq_lift hx' g g.commutes hroot)
-
-中文:
-定理 eq_liftHom
-  条件: (g : S ->ₐ[R] T) (hroot : g h.root = x)
-  结论: g = h.liftHom x hx'
-  证明: AlgHom.ext (h.apply_eq_lift hx' g g.commutes hroot)
-
-Depends on / 依赖: AlgHom, AlgHom.ext, apply_eq_lift, commutes, g.commutes, h.apply_eq_lift
+--- 原说明 ---
+Unicity of `liftHom`: a map that agrees on `h.root` agrees with `liftHom` everyw
+here.
 -/
-theorem eq_liftHom (g : S ->ₐ[R] T) (hroot : g h.root = x) : g = h.liftHom x hx' :=
+theorem eq_liftHom (g : S →ₐ[R] T) (hroot : g h.root = x) : g = h.liftHom x hx' :=
   AlgHom.ext (h.apply_eq_lift hx' g g.commutes hroot)
 
 end lift
 
-/--
-theorem `isAlgebraic_root` / 定理 `isAlgebraic_root`
-
-English:
-theorem isAlgebraic_root
-  given: (hf : f != 0)
-  statement: IsAlgebraic R h.root
-  proof: ⟨f, by simp [hf]⟩
-
-中文:
-定理 isAlgebraic_root
-  条件: (hf : f != 0)
-  结论: 是代数 R h.root
-  证明: ⟨f, by simp [hf]⟩
+/-
+**IsAdjoinRoot.isAlgebraic_root** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：isAlgebraic_root (hf : f != 0) : IsAlgebraic R h.root
+参数：hf : f != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `IsAdjoinRoot.aeval_root_eq_map`：aeval_root_eq_map : aeval h.root = h.map
+· 使用定理 `IsAdjoinRoot.map_self`：map_self : h.map f = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
-theorem isAlgebraic_root (hf : f != 0) : IsAlgebraic R h.root := ⟨f, by simp [hf]⟩
+theorem isAlgebraic_root (hf : f ≠ 0) : IsAlgebraic R h.root := ⟨f, by simp [hf]⟩
 
 end IsAdjoinRoot
 
@@ -1184,124 +1145,85 @@ namespace AdjoinRoot
 
 variable (f)
 
-/--
-Definition of `isAdjoinRoot` / `isAdjoinRoot` 的定义
+/-- `AdjoinRoot f` is indeed given by adjoining a root of `f`. -/
+/-
+**AdjoinRoot.isAdjoinRoot** 是 Mathlib 中的一个定义，位于命名空间 `AdjoinRoot`。
+形式化陈述：{R : Type u} → [inst : CommRing R] → (f : Polynomial R) → IsAdjoinRoot (Ad
+joinRoot f) f
+参数：f : Polynomial R；AdjoinRoot f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isAdjoinRoot
-  signature: : IsAdjoinRoot (AdjoinRoot f) f where
-  body: AdjoinRoot.mkₐ f
-  map_surjective := Ideal.Quotient.mkₐ_surjective _ _
-  ker_map := by ext; simp [Ideal.mem_span_singleton]
-
-中文:
-定义 isAdjoinRoot
-  签名: : 是AdjoinRoot (AdjoinRoot f) f where
-  定义体: AdjoinRoot.mkₐ f
-  map_surjective := Ideal.Quotient.mkₐ_surjective _ _
-  ker_map := by ext; simp [Ideal.mem_span_singleton]
+--- 原说明 ---
+`AdjoinRoot f` is indeed given by adjoining a root of `f`.
 -/
 protected def isAdjoinRoot : IsAdjoinRoot (AdjoinRoot f) f where
   map := AdjoinRoot.mkₐ f
   map_surjective := Ideal.Quotient.mkₐ_surjective _ _
   ker_map := by ext; simp [Ideal.mem_span_singleton]
 
-/--
-Definition of `isAdjoinRootMonic` / `isAdjoinRootMonic` 的定义
+/-- `AdjoinRoot f` is indeed given by adjoining a root of `f`. If `f` is monic this is more
+powerful than `AdjoinRoot.isAdjoinRoot`. -/
+/-
+**AdjoinRoot.isAdjoinRootMonic** 是 Mathlib 中的一个定义，位于命名空间 `AdjoinRoot`。
+形式化陈述：{R : Type u} → [inst : CommRing R] → (f : Polynomial R) → f.Monic → IsAdjo
+inRootMonic (AdjoinRoot f) f
+参数：f : Polynomial R；AdjoinRoot f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isAdjoinRootMonic
-  signature: (hf : Monic f)
-  body: AdjoinRoot.isAdjoinRoot f
-  monic := hf
-
-@[simp]
-
-中文:
-定义 isAdjoinRootMonic
-  签名: (hf : Monic f)
-  定义体: AdjoinRoot.isAdjoinRoot f
-  monic := hf
-
-@[simp]
+--- 原说明 ---
+`AdjoinRoot f` is indeed given by adjoining a root of `f`. If `f` is monic this 
+is more
+powerful than `AdjoinRoot.isAdjoinRoot`.
 -/
 protected def isAdjoinRootMonic (hf : Monic f) : IsAdjoinRootMonic (AdjoinRoot f) f where
   __ := AdjoinRoot.isAdjoinRoot f
   monic := hf
 
 @[simp]
-/--
-theorem `isAdjoinRootMonic_toAdjoinRoot` / 定理 `isAdjoinRootMonic_toAdjoinRoot`
-
-English:
-theorem isAdjoinRootMonic_toAdjoinRoot
-  given: (hf : Monic f)
-  proof: rfl
-
-中文:
-定理 isAdjoinRootMonic_toAdjoinRoot
-  条件: (hf : Monic f)
-  证明: rfl
+/-
+**AdjoinRoot.isAdjoinRootMonic_toAdjoinRoot** 是 Mathlib 中的一个定理，位于命名空间 `AdjoinRoo
+t`。
+形式化陈述：isAdjoinRootMonic_toAdjoinRoot (hf : Monic f) : (AdjoinRoot.isAdjoinRootMo
+nic f hf).toIsAdjoinRoot = AdjoinRoot.isAdjoinRoot f
+参数：hf : Monic f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isAdjoinRootMonic_toAdjoinRoot (hf : Monic f) :
     (AdjoinRoot.isAdjoinRootMonic f hf).toIsAdjoinRoot = AdjoinRoot.isAdjoinRoot f := rfl
-
-/--
-theorem `isAdjoinRoot_map_eq_mkₐ` / 定理 `isAdjoinRoot_map_eq_mkₐ`
-
-English:
-theorem isAdjoinRoot_map_eq_mkₐ
-  statement: (AdjoinRoot.isAdjoinRoot f).map = AdjoinRoot.mkₐ f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 isAdjoinRoot_map_eq_mkₐ
-  结论: (AdjoinRoot.isAdjoinRoot f).map = AdjoinRoot.mkₐ f
-  证明: rfl
-
-@[simp]
+/-
+**AdjoinRoot.isAdjoinRoot_map_eq_mk** 是 Mathlib 中的一个定理，位于命名空间 `AdjoinRoot`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem isAdjoinRoot_map_eq_mkₐ : (AdjoinRoot.isAdjoinRoot f).map = AdjoinRoot.mkₐ f := rfl
 
 @[simp]
-/--
-theorem `isAdjoinRoot_root_eq_root` / 定理 `isAdjoinRoot_root_eq_root`
-
-English:
-theorem isAdjoinRoot_root_eq_root
-  statement: (AdjoinRoot.isAdjoinRoot f).root = AdjoinRoot.root f
-  proof: by
-  simp [AdjoinRoot.isAdjoinRoot, IsAdjoinRoot.root]
-
-中文:
-定理 isAdjoinRoot_root_eq_root
-  结论: (AdjoinRoot.isAdjoinRoot f).root = AdjoinRoot.root f
-  证明: by
-  simp [AdjoinRoot.isAdjoinRoot, IsAdjoinRoot.root]
-
-Depends on / 依赖: AdjoinRoot, AdjoinRoot.isAdjoinRoot, IsAdjoinRoot, IsAdjoinRoot.root, isAdjoinRoot
+/-
+**AdjoinRoot.isAdjoinRoot_root_eq_root** 是 Mathlib 中的一个定理，位于命名空间 `AdjoinRoot`。
+形式化陈述：isAdjoinRoot_root_eq_root : (AdjoinRoot.isAdjoinRoot f).root = AdjoinRoot.
+root f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem isAdjoinRoot_root_eq_root : (AdjoinRoot.isAdjoinRoot f).root = AdjoinRoot.root f := by
   simp [AdjoinRoot.isAdjoinRoot, IsAdjoinRoot.root]
 
 end AdjoinRoot
 
-/--
-Definition of `IsAdjoinRoot.ofAdjoinRootEquiv` / `IsAdjoinRoot.ofAdjoinRootEquiv` 的定义
+/-- If `S` is `R`-isomorphic to `R[X]/(f)`, then `S` is given by adjoining a root of `f`. -/
+/-
+**IsAdjoinRoot.ofAdjoinRootEquiv** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：IsAdjoinRoot.ofAdjoinRootEquiv (e : AdjoinRoot f ≃ₐ[R] S) : IsAdjoinRoot S
+ f
+参数：e : AdjoinRoot f ≃ₐ[R] S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsAdjoinRoot.ofAdjoinRootEquiv
-  signature: (e : AdjoinRoot f ≃ₐ[R] S)
-  body: ofAlgEquiv (AdjoinRoot.isAdjoinRoot f) e
-
-中文:
-缩写 是AdjoinRoot.ofAdjoinRootEquiv
-  签名: (e : AdjoinRoot f ≃ₐ[R] S)
-  定义体: ofAlgEquiv (AdjoinRoot.isAdjoinRoot f) e
-
-Depends on / 依赖: AdjoinRoot, AdjoinRoot.isAdjoinRoot, isAdjoinRoot, ofAlgEquiv
+--- 原说明 ---
+If `S` is `R`-isomorphic to `R[X]/(f)`, then `S` is given by adjoining a root of
+ `f`.
 -/
 abbrev IsAdjoinRoot.ofAdjoinRootEquiv (e : AdjoinRoot f ≃ₐ[R] S) : IsAdjoinRoot S f :=
   ofAlgEquiv (AdjoinRoot.isAdjoinRoot f) e
@@ -1312,279 +1234,208 @@ variable (h : IsAdjoinRootMonic S f)
 
 open IsAdjoinRoot
 
-/--
-theorem `map_modByMonic` / 定理 `map_modByMonic`
-
-English:
-theorem map_modByMonic
-  given: (g : R[X])
-  statement: h.map (g %ₘ f) = h.map g
-  proof: by
-  rw [← RingHom.sub_mem_ker_iff]; rw [mem_ker_map]; rw [modByMonic_eq_sub_mul_div]; rw [sub_right_comm]; rw [sub_self]; rw [zero_sub]; rw [dvd_neg]
-  exact ⟨_, rfl⟩
-
-中文:
-定理 map_modByMonic
-  条件: (g : R[X])
-  结论: h.map (g %ₘ f) = h.map g
-  证明: by
-  rw [← RingHom.sub_mem_ker_iff]; rw [mem_ker_map]; rw [modByMonic_eq_sub_mul_div]; rw [sub_right_comm]; rw [sub_self]; rw [zero_sub]; rw [dvd_neg]
-  exact ⟨_, rfl⟩
-
-Depends on / 依赖: RingHom, RingHom.sub_mem_ker_iff, dvd_neg, mem_ker_map, modByMonic_eq_sub_mul_div, sub_mem_ker_iff, sub_right_comm, sub_self, zero_sub
+/-
+**IsAdjoinRootMonic.map_modByMonic** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRootMonic`
+。
+形式化陈述：map_modByMonic (g : R[X]) : h.map (g %ₘ f) = h.map g
+参数：g : R[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RingHom.sub_mem_ker_iff`：sub_mem_ker_iff {x y} : x - y in ker f ↔ f x = 
+f y
+· 使用定理 `IsAdjoinRoot.mem_ker_map`：mem_ker_map {p} : p in RingHom.ker h.map ↔ f ∣
+ p
+· 使用定理 `Polynomial.modByMonic_eq_sub_mul_div`：modByMonic_eq_sub_mul_div : forall
+ p q : R[X], p %ₘ q = p - q * (p /ₘ q) | p, q => letI
+· 使用定理 `sub_right_comm`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b c
+ : α), a - b - c = a - c - b
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `zero_sub`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 0 - a = -a
+· 使用定理 `dvd_neg`：dvd_neg : a ∣ -b ↔ a ∣ b
 -/
 theorem map_modByMonic (g : R[X]) : h.map (g %ₘ f) = h.map g := by
-  rw [← RingHom.sub_mem_ker_iff]; rw [mem_ker_map]; rw [modByMonic_eq_sub_mul_div]; rw [sub_right_comm]; rw [sub_self]; rw [zero_sub]; rw [dvd_neg]
+  rw [← RingHom.sub_mem_ker_iff, mem_ker_map, modByMonic_eq_sub_mul_div, sub_right_comm,
+    sub_self, zero_sub, dvd_neg]
   exact ⟨_, rfl⟩
-
-/--
-theorem `modByMonic_repr_map` / 定理 `modByMonic_repr_map`
-
-English:
-theorem modByMonic_repr_map
-  given: (g : R[X])
-  statement: h.repr (h.map g) %ₘ f = g %ₘ f
-  proof: modByMonic_eq_of_dvd_sub h.monic by rw [← h.mem_ker_map, RingHom.sub_mem_ker_iff, map_repr]
-
-中文:
-定理 modByMonic_repr_map
-  条件: (g : R[X])
-  结论: h.repr (h.map g) %ₘ f = g %ₘ f
-  证明: modByMonic_eq_of_dvd_sub h.monic by rw [← h.mem_ker_map, RingHom.sub_mem_ker_iff, map_repr]
-
-Depends on / 依赖: RingHom, RingHom.sub_mem_ker_iff, h.mem_ker_map, h.monic, map_repr, mem_ker_map, modByMonic_eq_of_dvd_sub, sub_mem_ker_iff
+/-
+**IsAdjoinRootMonic.modByMonic_repr_map** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRootM
+onic`。
+形式化陈述：modByMonic_repr_map (g : R[X]) : h.repr (h.map g) %ₘ f = g %ₘ f
+参数：g : R[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Polynomial.modByMonic_eq_of_dvd_sub`：modByMonic_eq_of_dvd_sub (hq : q.Mo
+nic) (h : q ∣ p₁ - p₂) : p₁ %ₘ q = p₂ %ₘ q
+· 使用定理 `IsAdjoinRootMonic.monic`：∀ {R : Type u} {S : Type v} [inst : CommSemirin
+g R] [inst_1 : Semiring S] [inst_2 : Algebra R S] {f : Polynomial R}   (self : I
+sAdjoinRootMo…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsAdjoinRoot.mem_ker_map`：mem_ker_map {p} : p in RingHom.ker h.map ↔ f ∣
+ p
+· 使用定理 `RingHom.sub_mem_ker_iff`：sub_mem_ker_iff {x y} : x - y in ker f ↔ f x = 
+f y
+· 使用定理 `IsAdjoinRoot.map_repr`：map_repr (x : S) : h.map (h.repr x) = x
 -/
 theorem modByMonic_repr_map (g : R[X]) : h.repr (h.map g) %ₘ f = g %ₘ f :=
-modByMonic_eq_of_dvd_sub h.monic by rw [← h.mem_ker_map, RingHom.sub_mem_ker_iff, map_repr]
+  modByMonic_eq_of_dvd_sub h.monic <| by rw [← h.mem_ker_map, RingHom.sub_mem_ker_iff, map_repr]
 
-/--
-Definition of `modByMonicHom` / `modByMonicHom` 的定义
+/-- `IsAdjoinRoot.modByMonicHom` sends the equivalence class of `f` mod `g` to `f %ₘ g`. -/
+/-
+**IsAdjoinRootMonic.modByMonicHom** 是 Mathlib 中的一个定义，位于命名空间 `IsAdjoinRootMonic`。
+形式化陈述：modByMonicHom : S ->ₗ[R] R[X] where toFun x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition modByMonicHom
-  signature: : S ->ₗ[R] R[X] where
-  body: h.repr x %ₘ f
-  map_add' x y := by
-    conv_lhs =>
-      rw [← h.map_repr x]; rw [← h.map_repr y]; rw [← map_add]; rw [h.modByMonic_repr_map]; rw [add_modByMonic]
-  map_smul' c x := by
-    rw [RingHom.id_apply]; rw [← h.map_repr x]; rw [Algebra.smul_def]; rw [h.algebraMap_apply]; rw [← map_mul]; rw [h.modByMonic_repr_map]; rw [← smul_eq_C_mul]; rw [smul_modByMonic]; rw [h.map_repr]
-
-@[simp]
-
-中文:
-定义 modByMonicHom
-  签名: : S ->ₗ[R] R[X] where
-  定义体: h.repr x %ₘ f
-  map_add' x y := by
-    conv_lhs =>
-      rw [← h.map_repr x]; rw [← h.map_repr y]; rw [← map_add]; rw [h.modByMonic_repr_map]; rw [add_modByMonic]
-  map_smul' c x := by
-    rw [RingHom.id_apply]; rw [← h.map_repr x]; rw [Algebra.smul_def]; rw [h.algebraMap_apply]; rw [← map_mul]; rw [h.modByMonic_repr_map]; rw [← smul_eq_C_mul]; rw [smul_modByMonic]; rw [h.map_repr]
-
-@[simp]
-
-Depends on / 依赖: h.repr
+--- 原说明 ---
+`IsAdjoinRoot.modByMonicHom` sends the equivalence class of `f` mod `g` to `f %ₘ
+ g`.
 -/
-def modByMonicHom : S ->ₗ[R] R[X] where
+def modByMonicHom : S →ₗ[R] R[X] where
   toFun x := h.repr x %ₘ f
   map_add' x y := by
     conv_lhs =>
-      rw [← h.map_repr x]; rw [← h.map_repr y]; rw [← map_add]; rw [h.modByMonic_repr_map]; rw [add_modByMonic]
+      rw [← h.map_repr x, ← h.map_repr y, ← map_add, h.modByMonic_repr_map, add_modByMonic]
   map_smul' c x := by
-    rw [RingHom.id_apply]; rw [← h.map_repr x]; rw [Algebra.smul_def]; rw [h.algebraMap_apply]; rw [← map_mul]; rw [h.modByMonic_repr_map]; rw [← smul_eq_C_mul]; rw [smul_modByMonic]; rw [h.map_repr]
+    rw [RingHom.id_apply, ← h.map_repr x, Algebra.smul_def, h.algebraMap_apply, ← map_mul,
+        h.modByMonic_repr_map, ← smul_eq_C_mul, smul_modByMonic, h.map_repr]
 
 @[simp]
-/--
-theorem `modByMonicHom_map` / 定理 `modByMonicHom_map`
-
-English:
-theorem modByMonicHom_map
-  given: (g : R[X])
-  statement: h.modByMonicHom (h.map g) = g %ₘ f
-  proof: h.modByMonic_repr_map g
-
-@[simp]
-
-中文:
-定理 modByMonicHom_map
-  条件: (g : R[X])
-  结论: h.modByMonicHom (h.map g) = g %ₘ f
-  证明: h.modByMonic_repr_map g
-
-@[simp]
-
-Depends on / 依赖: h.modByMonic_repr_map, modByMonic_repr_map
+/-
+**IsAdjoinRootMonic.modByMonicHom_map** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRootMon
+ic`。
+形式化陈述：modByMonicHom_map (g : R[X]) : h.modByMonicHom (h.map g) = g %ₘ f
+参数：g : R[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsAdjoinRootMonic.modByMonic_repr_map`：modByMonic_repr_map (g : R[X]) : 
+h.repr (h.map g) %ₘ f = g %ₘ f
 -/
 theorem modByMonicHom_map (g : R[X]) : h.modByMonicHom (h.map g) = g %ₘ f :=
   h.modByMonic_repr_map g
 
 @[simp]
-/--
-theorem `map_modByMonicHom` / 定理 `map_modByMonicHom`
-
-English:
-theorem map_modByMonicHom
-  given: (x : S)
-  statement: h.map (h.modByMonicHom x) = x
-  proof: by
-  simp [modByMonicHom, map_modByMonic, map_repr]
-
-@[simp]
-
-中文:
-定理 map_modByMonicHom
-  条件: (x : S)
-  结论: h.map (h.modByMonicHom x) = x
-  证明: by
-  simp [modByMonicHom, map_modByMonic, map_repr]
-
-@[simp]
-
-Depends on / 依赖: map_modByMonic, map_repr, modByMonicHom
+/-
+**IsAdjoinRootMonic.map_modByMonicHom** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRootMon
+ic`。
+形式化陈述：map_modByMonicHom (x : S) : h.map (h.modByMonicHom x) = x
+参数：x : S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsAdjoinRootMonic.map_modByMonic`：map_modByMonic (g : R[X]) : h.map (g %
+ₘ f) = h.map g
+· 使用定理 `IsAdjoinRoot.map_repr`：map_repr (x : S) : h.map (h.repr x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem map_modByMonicHom (x : S) : h.map (h.modByMonicHom x) = x := by
   simp [modByMonicHom, map_modByMonic, map_repr]
 
 @[simp]
-/--
-theorem `modByMonicHom_root_pow` / 定理 `modByMonicHom_root_pow`
-
-English:
-theorem modByMonicHom_root_pow
-  given: {n : Nat} (hdeg : n < natDegree f)
-  proof: by
-  nontriviality R
-  rw [← h.map_X]; rw [← map_pow]; rw [modByMonicHom_map]; rw [modByMonic_eq_self_iff h.monic]; rw [degree_X_pow]
-  contrapose! hdeg
-  simpa [natDegree_le_iff_degree_le] using hdeg
-
-@[simp]
-
-中文:
-定理 modByMonicHom_root_pow
-  条件: {n : 自然数} (hdeg : n < natDegree f)
-  证明: by
-  nontriviality R
-  rw [← h.map_X]; rw [← map_pow]; rw [modByMonicHom_map]; rw [modByMonic_eq_self_iff h.monic]; rw [degree_X_pow]
-  contrapose! hdeg
-  simpa [natDegree_le_iff_degree_le] using hdeg
-
-@[simp]
-
-Depends on / 依赖: contrapose, degree_X_pow, h.map_X, h.monic, map_X, map_pow, modByMonicHom_map, modByMonic_eq_self_iff, natDegree_le_iff_degree_le, nontriviality
+/-
+**IsAdjoinRootMonic.modByMonicHom_root_pow** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRo
+otMonic`。
+形式化陈述：modByMonicHom_root_pow {n : Nat} (hdeg : n < natDegree f) : h.modByMonicHo
+m (h.root ^ n) = X ^ n
+参数：hdeg : n < natDegree f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.Nontriviality.subsingleton_or_nontrivial_elim`：subsinglet
+on_or_nontrivial_elim {p : Prop} {α : Type u} (h₁ : Subsingleton α -> p) (h₂ : N
+ontrivial α -> p) : p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsAdjoinRoot.map_X`：map_X : h.map X = h.root
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `IsAdjoinRootMonic.modByMonicHom_map`：modByMonicHom_map (g : R[X]) : h.mo
+dByMonicHom (h.map g) = g %ₘ f
+· 使用定理 `Polynomial.modByMonic_eq_self_iff`：modByMonic_eq_self_iff [Nontrivial R]
+ (hq : Monic q) : p %ₘ q = p ↔ degree p < degree q
+· 使用定理 `IsAdjoinRootMonic.monic`：∀ {R : Type u} {S : Type v} [inst : CommSemirin
+g R] [inst_1 : Semiring S] [inst_2 : Algebra R S] {f : Polynomial R}   (self : I
+sAdjoinRootMo…
+· 使用定理 `Polynomial.degree_X_pow`：degree_X_pow : degree ((X : R[X]) ^ n) = n
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
-theorem modByMonicHom_root_pow {n : Nat} (hdeg : n < natDegree f) :
+theorem modByMonicHom_root_pow {n : ℕ} (hdeg : n < natDegree f) :
     h.modByMonicHom (h.root ^ n) = X ^ n := by
   nontriviality R
-  rw [← h.map_X]; rw [← map_pow]; rw [modByMonicHom_map]; rw [modByMonic_eq_self_iff h.monic]; rw [degree_X_pow]
+  rw [← h.map_X, ← map_pow, modByMonicHom_map, modByMonic_eq_self_iff h.monic, degree_X_pow]
   contrapose! hdeg
   simpa [natDegree_le_iff_degree_le] using hdeg
 
 @[simp]
-/--
-theorem `modByMonicHom_root` / 定理 `modByMonicHom_root`
-
-English:
-theorem modByMonicHom_root
-  given: (hdeg : 1 < natDegree f)
-  statement: h.modByMonicHom h.root = X
-  proof: by
-  simpa using modByMonicHom_root_pow h hdeg
-
-中文:
-定理 modByMonicHom_root
-  条件: (hdeg : 1 < natDegree f)
-  结论: h.modByMonicHom h.root = X
-  证明: by
-  simpa using modByMonicHom_root_pow h hdeg
-
-Depends on / 依赖: modByMonicHom_root_pow
+/-
+**IsAdjoinRootMonic.modByMonicHom_root** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRootMo
+nic`。
+形式化陈述：modByMonicHom_root (hdeg : 1 < natDegree f) : h.modByMonicHom h.root = X
+参数：hdeg : 1 < natDegree f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `IsAdjoinRootMonic.modByMonicHom_root_pow`：modByMonicHom_root_pow {n : Na
+t} (hdeg : n < natDegree f) : h.modByMonicHom (h.root ^ n) = X ^ n
 -/
 theorem modByMonicHom_root (hdeg : 1 < natDegree f) : h.modByMonicHom h.root = X := by
   simpa using modByMonicHom_root_pow h hdeg
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `basis` / `basis` 的定义
+/-- The basis on `S` generated by powers of `h.root`.
 
-English:
-definition basis
-  signature: : Basis (Fin (natDegree f)) R S where
-  body: (h.modByMonicHom x).toFinsupp.coeff.comapDomain _ Fin.val_injective.injOn
-repr.invFun g := h.map ofFinsupp .ofCoeff g.mapDomain Fin.val
-  repr.left_inv x := by
-    nontriviality R using Algebra.subsingleton R S
-    dsimp
-    rw [Finsupp.mapDomain_comapDomain]; rw [Polynomial.eta]; rw [h.map_modByMonicHom x]
-    · exact Fin.val_injective
-    intro i hi
-    refine Set.mem_range.mpr ⟨⟨i, ?_⟩, rfl⟩
-    contrapose! hi
-    simp only [Polynomial.toFinsupp_apply, Classical.not_not, Finsupp.mem_support_iff, Ne,
-      modByMonicHom, LinearMap.coe_mk, Finset.mem_coe]
-    obtain rfl | hf := eq_or_ne f 1
-    · simp
-· exact coeff_eq_zero_of_natDegree_lt (natDegree_modByMonic_lt _ h.monic hf).trans_le hi
-  repr.right_inv g := by
-    nontriviality R
-    ext i
-    simp only [h.modByMonicHom_map, Finsupp.comapDomain_apply, Polynomial.toFinsupp_apply]
-    rw [(Polynomial.modByMonic_eq_self_iff h.monic).mpr]; rw [Polynomial.coeff]
-    · rw [Finsupp.mapDomain_apply Fin.val_injective]
-    rw [degree_eq_natDegree h.monic.ne_zero]; rw [degree_lt_iff_coeff_zero]
-    intro m hm
-    rw [Polynomial.coeff]
-    rw [Finsupp.mapDomain_of_notMem_range]
-    rw [Set.mem_range]; rw [not_exists]
-    rintro i rfl
-    exact i.prop.not_ge hm
-  repr.map_add' := by simp [Finsupp.comapDomain_add_of_injective Fin.val_injective]
-  repr.map_smul' := by simp [Finsupp.comapDomain_smul_of_injective Fin.val_injective]
+Auxiliary definition for `IsAdjoinRootMonic.powerBasis`. -/
+/-
+**IsAdjoinRootMonic.basis** 是 Mathlib 中的一个定义，位于命名空间 `IsAdjoinRootMonic`。
+形式化陈述：basis : Basis (Fin (natDegree f)) R S where repr.toFun x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 basis
-  签名: : 基 (有限集 (natDegree f)) R S where
-  定义体: (h.modByMonicHom x).toFinsupp.coeff.comapDomain _ Fin.val_injective.injOn
-repr.invFun g := h.map ofFinsupp .ofCoeff g.mapDomain Fin.val
-  repr.left_inv x := by
-    nontriviality R using Algebra.subsingleton R S
-    dsimp
-    rw [Finsupp.mapDomain_comapDomain]; rw [Polynomial.eta]; rw [h.map_modByMonicHom x]
-    · exact Fin.val_injective
-    intro i hi
-    refine Set.mem_range.mpr ⟨⟨i, ?_⟩, rfl⟩
-    contrapose! hi
-    simp only [Polynomial.toFinsupp_apply, Classical.not_not, Finsupp.mem_support_iff, Ne,
-      modByMonicHom, LinearMap.coe_mk, Finset.mem_coe]
-    obtain rfl | hf := eq_or_ne f 1
-    · simp
-· exact coeff_eq_zero_of_natDegree_lt (natDegree_modByMonic_lt _ h.monic hf).trans_le hi
-  repr.right_inv g := by
-    nontriviality R
-    ext i
-    simp only [h.modByMonicHom_map, Finsupp.comapDomain_apply, Polynomial.toFinsupp_apply]
-    rw [(Polynomial.modByMonic_eq_self_iff h.monic).mpr]; rw [Polynomial.coeff]
-    · rw [Finsupp.mapDomain_apply Fin.val_injective]
-    rw [degree_eq_natDegree h.monic.ne_zero]; rw [degree_lt_iff_coeff_zero]
-    intro m hm
-    rw [Polynomial.coeff]
-    rw [Finsupp.mapDomain_of_notMem_range]
-    rw [Set.mem_range]; rw [not_exists]
-    rintro i rfl
-    exact i.prop.not_ge hm
-  repr.map_add' := by simp [Finsupp.comapDomain_add_of_injective Fin.val_injective]
-  repr.map_smul' := by simp [Finsupp.comapDomain_smul_of_injective Fin.val_injective]
+--- 原说明 ---
+The basis on `S` generated by powers of `h.root`.
 
-Depends on / 依赖: Fin.val_injective.injOn, comapDomain, h.modByMonicHom, modByMonicHom, toFinsupp, toFinsupp.coeff.comapDomain, val_injective
+Auxiliary definition for `IsAdjoinRootMonic.powerBasis`.
 -/
 def basis : Basis (Fin (natDegree f)) R S where
   repr.toFun x := (h.modByMonicHom x).toFinsupp.coeff.comapDomain _ Fin.val_injective.injOn
-repr.invFun g := h.map ofFinsupp .ofCoeff g.mapDomain Fin.val
+  repr.invFun g := h.map <| ofFinsupp <| .ofCoeff <| g.mapDomain Fin.val
   repr.left_inv x := by
     nontriviality R using Algebra.subsingleton R S
     dsimp
-    rw [Finsupp.mapDomain_comapDomain]; rw [Polynomial.eta]; rw [h.map_modByMonicHom x]
+    rw [Finsupp.mapDomain_comapDomain, Polynomial.eta, h.map_modByMonicHom x]
     · exact Fin.val_injective
     intro i hi
     refine Set.mem_range.mpr ⟨⟨i, ?_⟩, rfl⟩
@@ -1593,18 +1444,18 @@ repr.invFun g := h.map ofFinsupp .ofCoeff g.mapDomain Fin.val
       modByMonicHom, LinearMap.coe_mk, Finset.mem_coe]
     obtain rfl | hf := eq_or_ne f 1
     · simp
-· exact coeff_eq_zero_of_natDegree_lt (natDegree_modByMonic_lt _ h.monic hf).trans_le hi
+    · exact coeff_eq_zero_of_natDegree_lt <| (natDegree_modByMonic_lt _ h.monic hf).trans_le hi
   repr.right_inv g := by
     nontriviality R
     ext i
     simp only [h.modByMonicHom_map, Finsupp.comapDomain_apply, Polynomial.toFinsupp_apply]
-    rw [(Polynomial.modByMonic_eq_self_iff h.monic).mpr]; rw [Polynomial.coeff]
+    rw [(Polynomial.modByMonic_eq_self_iff h.monic).mpr, Polynomial.coeff]
     · rw [Finsupp.mapDomain_apply Fin.val_injective]
-    rw [degree_eq_natDegree h.monic.ne_zero]; rw [degree_lt_iff_coeff_zero]
+    rw [degree_eq_natDegree h.monic.ne_zero, degree_lt_iff_coeff_zero]
     intro m hm
     rw [Polynomial.coeff]
     rw [Finsupp.mapDomain_of_notMem_range]
-    rw [Set.mem_range]; rw [not_exists]
+    rw [Set.mem_range, not_exists]
     rintro i rfl
     exact i.prop.not_ge hm
   repr.map_add' := by simp [Finsupp.comapDomain_add_of_injective Fin.val_injective]
@@ -1612,102 +1463,73 @@ repr.invFun g := h.map ofFinsupp .ofCoeff g.mapDomain Fin.val
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `basis_apply` / 定理 `basis_apply`
-
-English:
-theorem basis_apply
-  given: (i)
-  statement: h.basis i = h.root ^ (i : Nat)
-  proof: Basis.apply_eq_iff.mpr by simp [IsAdjoinRootMonic.basis]
-
-include h in
-
-中文:
-定理 basis_apply
-  条件: (i)
-  结论: h.basis i = h.root ^ (i : 自然数)
-  证明: Basis.apply_eq_iff.mpr by simp [IsAdjoinRootMonic.basis]
-
-include h in
-
-Depends on / 依赖: Basis.apply_eq_iff.mpr, IsAdjoinRootMonic, IsAdjoinRootMonic.basis, apply_eq_iff
+/-
+**IsAdjoinRootMonic.basis_apply** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRootMonic`。
+形式化陈述：basis_apply (i) : h.basis i = h.root ^ (i : Nat)
+参数：i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Module.Basis.apply_eq_iff`：apply_eq_iff {b : Basis ι R M} {x : M} {i : ι
+} : b i = x ↔ b.repr x = Finsupp.single i 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsAdjoinRootMonic.modByMonicHom_root_pow`：modByMonicHom_root_pow {n : Na
+t} (hdeg : n < natDegree f) : h.modByMonicHom (h.root ^ n) = X ^ n
+· 使用定理 `Polynomial.toFinsupp_X_pow`：toFinsupp_X_pow (n : Nat) : (X ^ n).toFinsup
+p = .single n (1 : R)
+· 使用定理 `Finsupp.comapDomain.congr_simp`：∀ {α : Type u_1} {β : Type u_2} {M : Typ
+e u_5} [inst : Zero M] (f f_1 : α → β) (e_f : f = f_1) (l l_1 : β →₀ M)   (e_l :
+ l = l_1) (hf : Set.…
+· 使用定理 `Finsupp.comapDomain_single`：comapDomain_single (f : α -> β) (a : α) (m :
+ M) (hif : Set.InjOn f (f ⁻¹' (single (f a) m).support)) : comapDomain f (Finsup
+p.single (f a) m…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem basis_apply (i) : h.basis i = h.root ^ (i : Nat) :=
-Basis.apply_eq_iff.mpr by simp [IsAdjoinRootMonic.basis]
+theorem basis_apply (i) : h.basis i = h.root ^ (i : ℕ) :=
+  Basis.apply_eq_iff.mpr <| by simp [IsAdjoinRootMonic.basis]
 
 include h in
-/--
-theorem `deg_pos` / 定理 `deg_pos`
-
-English:
-theorem deg_pos
-  given: [Nontrivial S]
-  statement: 0 < natDegree f
-  proof: by
-  rcases h.basis.index_nonempty with ⟨⟨i, hi⟩⟩
-  exact Nat.zero_lt_of_lt hi
-
-include h in
-
-中文:
-定理 deg_pos
-  条件: [非平凡 S]
-  结论: 0 < natDegree f
-  证明: by
-  rcases h.basis.index_nonempty with ⟨⟨i, hi⟩⟩
-  exact Nat.zero_lt_of_lt hi
-
-include h in
-
-Depends on / 依赖: Nat.zero_lt_of_lt, h.basis.index_nonempty, index_nonempty, zero_lt_of_lt
+/-
+**IsAdjoinRootMonic.deg_pos** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRootMonic`。
+形式化陈述：deg_pos [Nontrivial S] : 0 < natDegree f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Basis.index_nonempty`：index_nonempty (b : Basis ι R M) [Nontrivia
+l M] : Nonempty ι
+· 使用定理 `Nat.zero_lt_of_lt`：∀ {a b : ℕ}, a < b → 0 < b
 -/
 theorem deg_pos [Nontrivial S] : 0 < natDegree f := by
   rcases h.basis.index_nonempty with ⟨⟨i, hi⟩⟩
   exact Nat.zero_lt_of_lt hi
 
 include h in
-/--
-theorem `deg_ne_zero` / 定理 `deg_ne_zero`
-
-English:
-theorem deg_ne_zero
-  given: [Nontrivial S]
-  statement: natDegree f != 0
-  proof: h.deg_pos.ne'
-
-中文:
-定理 deg_ne_zero
-  条件: [非平凡 S]
-  结论: natDegree f != 0
-  证明: h.deg_pos.ne'
-
-Depends on / 依赖: deg_pos, h.deg_pos.ne
+/-
+**IsAdjoinRootMonic.deg_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRootMonic`。
+形式化陈述：deg_ne_zero [Nontrivial S] : natDegree f != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `IsAdjoinRootMonic.deg_pos`：deg_pos [Nontrivial S] : 0 < natDegree f
 -/
-theorem deg_ne_zero [Nontrivial S] : natDegree f != 0 := h.deg_pos.ne'
+theorem deg_ne_zero [Nontrivial S] : natDegree f ≠ 0 := h.deg_pos.ne'
 
 /-- If `f` is monic, the powers of `h.root` form a basis. -/
 @[simps! gen dim basis]
-/--
-Definition of `powerBasis` / `powerBasis` 的定义
+/-
+**IsAdjoinRootMonic.powerBasis** 是 Mathlib 中的一个定义，位于命名空间 `IsAdjoinRootMonic`。
+形式化陈述：powerBasis : PowerBasis R S where gen
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsAdjoinRootMonic.basis_apply`：basis_apply (i) : h.basis i = h.root ^ (i
+ : Nat)
 
-English:
-definition powerBasis
-  signature: : PowerBasis R S where
-  body: h.root
-  dim := natDegree f
-  basis := h.basis
-  basis_eq_pow := h.basis_apply
-
-中文:
-定义 powerBasis
-  签名: : PowerBasis R S where
-  定义体: h.root
-  dim := natDegree f
-  basis := h.basis
-  basis_eq_pow := h.basis_apply
-
-Depends on / 依赖: h.root
+--- 原说明 ---
+If `f` is monic, the powers of `h.root` form a basis.
 -/
 def powerBasis : PowerBasis R S where
   gen := h.root
@@ -1717,110 +1539,75 @@ def powerBasis : PowerBasis R S where
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `basis_repr` / 定理 `basis_repr`
-
-English:
-theorem basis_repr
-  given: (x : S) (i : Fin (natDegree f))
-  proof: by
-  simp [IsAdjoinRootMonic.basis, toFinsupp_apply]
-
-中文:
-定理 basis_repr
-  条件: (x : S) (i : 有限集 (natDegree f))
-  证明: by
-  simp [IsAdjoinRootMonic.basis, toFinsupp_apply]
-
-Depends on / 依赖: IsAdjoinRootMonic, IsAdjoinRootMonic.basis, toFinsupp_apply
+/-
+**IsAdjoinRootMonic.basis_repr** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRootMonic`。
+形式化陈述：basis_repr (x : S) (i : Fin (natDegree f)) : h.basis.repr x i = (h.modByMo
+nicHom x).coeff (i : Nat)
+参数：x : S；i : Fin (natDegree f)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.toFinsupp_apply`：toFinsupp_apply (f : R[X]) (i) : f.toFinsupp
+.coeff i = f.coeff i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem basis_repr (x : S) (i : Fin (natDegree f)) :
-    h.basis.repr x i = (h.modByMonicHom x).coeff (i : Nat) := by
+    h.basis.repr x i = (h.modByMonicHom x).coeff (i : ℕ) := by
   simp [IsAdjoinRootMonic.basis, toFinsupp_apply]
-
-/--
-theorem `basis_one` / 定理 `basis_one`
-
-English:
-theorem basis_one
-  given: (hdeg : 1 < natDegree f)
-  statement: h.basis ⟨1, hdeg⟩ = h.root
-  proof: by
-  rw [h.basis_apply]; rw [Fin.val_mk]; rw [pow_one]
-
-include h in
-
-中文:
-定理 basis_one
-  条件: (hdeg : 1 < natDegree f)
-  结论: h.basis ⟨1, hdeg⟩ = h.root
-  证明: by
-  rw [h.basis_apply]; rw [Fin.val_mk]; rw [pow_one]
-
-include h in
-
-Depends on / 依赖: Fin.val_mk, basis_apply, h.basis_apply, pow_one, val_mk
+/-
+**IsAdjoinRootMonic.basis_one** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRootMonic`。
+形式化陈述：basis_one (hdeg : 1 < natDegree f) : h.basis ⟨1, hdeg⟩ = h.root
+参数：hdeg : 1 < natDegree f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsAdjoinRootMonic.basis_apply`：basis_apply (i) : h.basis i = h.root ^ (i
+ : Nat)
+· 使用定理 `Fin.val_mk`：∀ {m n : ℕ} (h : m < n), ↑⟨m, h⟩ = m
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
 -/
 theorem basis_one (hdeg : 1 < natDegree f) : h.basis ⟨1, hdeg⟩ = h.root := by
-  rw [h.basis_apply]; rw [Fin.val_mk]; rw [pow_one]
+  rw [h.basis_apply, Fin.val_mk, pow_one]
 
 include h in
-/--
-theorem `finite` / 定理 `finite`
-
-English:
-theorem finite
-  statement: Module.Finite R S
-  proof: (powerBasis h).finite
-
-include h in
-
-中文:
-定理 finite
-  结论: 模.有限 R S
-  证明: (powerBasis h).finite
-
-include h in
-
-Depends on / 依赖: finite, powerBasis
+/-
+**IsAdjoinRootMonic.finite** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRootMonic`。
+形式化陈述：finite : Module.Finite R S
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerBasis.finite`：finite (pb : PowerBasis R S) : Module.Finite R S
 -/
 theorem finite : Module.Finite R S := (powerBasis h).finite
 
 include h in
-/--
-theorem `finrank` / 定理 `finrank`
-
-English:
-theorem finrank
-  given: [StrongRankCondition R]
-  statement: Module.finrank R S = f.natDegree
-  proof: (powerBasis h).finrank
-
-中文:
-定理 finrank
-  条件: [StrongRankCondition R]
-  结论: 模.finrank R S = f.natDegree
-  证明: (powerBasis h).finrank
-
-Depends on / 依赖: finrank, powerBasis
+/-
+**IsAdjoinRootMonic.finrank** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRootMonic`。
+形式化陈述：finrank [StrongRankCondition R] : Module.finrank R S = f.natDegree
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PowerBasis.finrank`：finrank [StrongRankCondition R] (pb : PowerBasis R S
+) : Module.finrank R S = pb.dim
 -/
 theorem finrank [StrongRankCondition R] : Module.finrank R S = f.natDegree :=
   (powerBasis h).finrank
 
 /--
-theorem `_root_.finrank_quotient_span_eq_natDegree'` / 定理 `_root_.finrank_quotient_span_eq_natDegree'`
+See `finrank_quotient_span_eq_natDegree` for a more general version over a field.
+-/
+/-
+**IsAdjoinRootMonic._root_.finrank_quotient_span_eq_natDegree'** 是 Mathlib 中的一个定
+理，位于命名空间 `IsAdjoinRootMonic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.finrank_quotient_span_eq_natDegree'
-  given: [StrongRankCondition R] (hf : f.Monic)
-  proof: (AdjoinRoot.isAdjoinRootMonic _ hf).finrank
-
-中文:
-定理 _root_.finrank_quotient_span_eq_natDegree'
-  条件: [StrongRankCondition R] (hf : f.Monic)
-  证明: (AdjoinRoot.isAdjoinRootMonic _ hf).finrank
-
-Depends on / 依赖: AdjoinRoot, AdjoinRoot.isAdjoinRootMonic, finrank, isAdjoinRootMonic
+--- 原说明 ---
+See `finrank_quotient_span_eq_natDegree` for a more general version over a field
+.
 -/
 theorem _root_.finrank_quotient_span_eq_natDegree' [StrongRankCondition R] (hf : f.Monic) :
     Module.finrank R (R[X] ⧸ Ideal.span {f}) = f.natDegree :=
@@ -1828,193 +1615,171 @@ theorem _root_.finrank_quotient_span_eq_natDegree' [StrongRankCondition R] (hf :
 
 /-- `IsAdjoinRootMonic.liftPolyₗ` lifts a linear map on polynomials to a linear map on `S`. -/
 @[simps!]
-/--
-Definition of `liftPolyₗ` / `liftPolyₗ` 的定义
+/-
+**IsAdjoinRootMonic.liftPoly** 是 Mathlib 中的一个定义，位于命名空间 `IsAdjoinRootMonic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftPolyₗ
-  signature: {T : Type*} [AddCommGroup T] [Module R T] (g : R[X] ->ₗ[R] T)
-  body: g.comp h.modByMonicHom
-
-中文:
-定义 liftPolyₗ
-  签名: {T : 类型} [加法交换群 T] [模 R T] (g : R[X] ->ₗ[R] T)
-  定义体: g.comp h.modByMonicHom
-
-Depends on / 依赖: g.comp, h.modByMonicHom, modByMonicHom
+--- 原说明 ---
+`IsAdjoinRootMonic.liftPolyₗ` lifts a linear map on polynomials to a linear map 
+on `S`.
 -/
-def liftPolyₗ {T : Type*} [AddCommGroup T] [Module R T] (g : R[X] ->ₗ[R] T) : S ->ₗ[R] T :=
+def liftPolyₗ {T : Type*} [AddCommGroup T] [Module R T] (g : R[X] →ₗ[R] T) : S →ₗ[R] T :=
   g.comp h.modByMonicHom
 
-/--
-Definition of `coeff` / `coeff` 的定义
-
-English:
-definition coeff
-  signature: : S ->ₗ[R] Nat -> R
-  body: h.liftPolyₗ
-    { toFun := Polynomial.coeff
-      map_add' p q := funext (Polynomial.coeff_add p q)
-      map_smul' c p := funext (Polynomial.coeff_smul c p) }
-
-中文:
-定义 coeff
-  签名: : S ->ₗ[R] 自然数 -> R
-  定义体: h.liftPolyₗ
-    { toFun := Polynomial.coeff
-      map_add' p q := funext (Polynomial.coeff_add p q)
-      map_smul' c p := funext (Polynomial.coeff_smul c p) }
-
-Depends on / 依赖: Polynomial, Polynomial.coeff, Polynomial.coeff_add, Polynomial.coeff_smul, coeff_add, coeff_smul, h.liftPoly, map_add, map_smul
+/-- `IsAdjoinRootMonic.coeff h x i` is the `i`th coefficient of the representative of `x : S`.
 -/
-def coeff : S ->ₗ[R] Nat -> R :=
+/-
+**IsAdjoinRootMonic.coeff** 是 Mathlib 中的一个定义，位于命名空间 `IsAdjoinRootMonic`。
+形式化陈述：coeff : S ->ₗ[R] Nat -> R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`IsAdjoinRootMonic.coeff h x i` is the `i`th coefficient of the representative o
+f `x : S`.
+-/
+def coeff : S →ₗ[R] ℕ → R :=
   h.liftPolyₗ
     { toFun := Polynomial.coeff
       map_add' p q := funext (Polynomial.coeff_add p q)
       map_smul' c p := funext (Polynomial.coeff_smul c p) }
-
-/--
-theorem `coeff_apply_lt` / 定理 `coeff_apply_lt`
-
-English:
-theorem coeff_apply_lt
-  given: (z : S) (i : Nat) (hi : i < natDegree f)
-  proof: by
-  simp [coeff]
-
-中文:
-定理 coeff_apply_lt
-  条件: (z : S) (i : 自然数) (hi : i < natDegree f)
-  证明: by
-  simp [coeff]
+/-
+**IsAdjoinRootMonic.coeff_apply_lt** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRootMonic`
+。
+形式化陈述：coeff_apply_lt (z : S) (i : Nat) (hi : i < natDegree f) : h.coeff z i = h.
+basis.repr z ⟨i, hi⟩
+参数：z : S；i : Nat；hi : i < natDegree f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `IsAdjoinRootMonic.liftPolyₗ_apply`：∀ {R : Type u} {S : Type v} [inst : C
+ommRing R] [inst_1 : Ring S] {f : Polynomial R} [inst_2 : Algebra R S]   (h : Is
+AdjoinRootMonic S f) {T…
+· 使用定理 `IsAdjoinRootMonic.basis_repr`：basis_repr (x : S) (i : Fin (natDegree f))
+ : h.basis.repr x i = (h.modByMonicHom x).coeff (i : Nat)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem coeff_apply_lt (z : S) (i : Nat) (hi : i < natDegree f) :
+theorem coeff_apply_lt (z : S) (i : ℕ) (hi : i < natDegree f) :
     h.coeff z i = h.basis.repr z ⟨i, hi⟩ := by
   simp [coeff]
-
-/--
-theorem `coeff_apply_coe` / 定理 `coeff_apply_coe`
-
-English:
-theorem coeff_apply_coe
-  given: (z : S) (i : Fin (natDegree f))
-  statement: h.coeff z i = h.basis.repr z i
-  proof: h.coeff_apply_lt z i i.prop
-
-中文:
-定理 coeff_apply_coe
-  条件: (z : S) (i : 有限集 (natDegree f))
-  结论: h.coeff z i = h.basis.repr z i
-  证明: h.coeff_apply_lt z i i.prop
-
-Depends on / 依赖: coeff_apply_lt, h.coeff_apply_lt, i.prop
+/-
+**IsAdjoinRootMonic.coeff_apply_coe** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRootMonic
+`。
+形式化陈述：coeff_apply_coe (z : S) (i : Fin (natDegree f)) : h.coeff z i = h.basis.re
+pr z i
+参数：z : S；i : Fin (natDegree f)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsAdjoinRootMonic.coeff_apply_lt`：coeff_apply_lt (z : S) (i : Nat) (hi :
+ i < natDegree f) : h.coeff z i = h.basis.repr z ⟨i, hi⟩
+· 使用定理 `Fin.prop`：∀ {n : ℕ} (a : Fin n), ↑a < n
 -/
 theorem coeff_apply_coe (z : S) (i : Fin (natDegree f)) : h.coeff z i = h.basis.repr z i :=
   h.coeff_apply_lt z i i.prop
-
-/--
-theorem `coeff_apply_le` / 定理 `coeff_apply_le`
-
-English:
-theorem coeff_apply_le
-  given: (z : S) (i : Nat) (hi : natDegree f <= i)
-  statement: h.coeff z i = 0
-  proof: by
-  simp only [coeff, liftPolyₗ_apply, LinearMap.coe_mk, AddHom.coe_mk]
-  nontriviality R
-  exact
-    Polynomial.coeff_eq_zero_of_degree_lt
-      ((degree_modByMonic_lt _ h.monic).trans_le (Polynomial.degree_le_of_natDegree_le hi))
-
-中文:
-定理 coeff_apply_le
-  条件: (z : S) (i : 自然数) (hi : natDegree f <= i)
-  结论: h.coeff z i = 0
-  证明: by
-  simp only [coeff, liftPolyₗ_apply, LinearMap.coe_mk, AddHom.coe_mk]
-  nontriviality R
-  exact
-    Polynomial.coeff_eq_zero_of_degree_lt
-      ((degree_modByMonic_lt _ h.monic).trans_le (Polynomial.degree_le_of_natDegree_le hi))
-
-Depends on / 依赖: AddHom, AddHom.coe_mk, LinearMap, LinearMap.coe_mk, Polynomial, Polynomial.coeff_eq_zero_of_degree_lt, Polynomial.degree_le_of_natDegree_le, coe_mk, coeff_eq_zero_of_degree_lt, degree_le_of_natDegree_le, degree_modByMonic_lt, h.monic, nontriviality, trans_le
+/-
+**IsAdjoinRootMonic.coeff_apply_le** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRootMonic`
+。
+形式化陈述：coeff_apply_le (z : S) (i : Nat) (hi : natDegree f <= i) : h.coeff z i = 0
+参数：z : S；i : Nat；hi : natDegree f <= i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `IsAdjoinRootMonic.liftPolyₗ_apply`：∀ {R : Type u} {S : Type v} [inst : C
+ommRing R] [inst_1 : Ring S] {f : Polynomial R} [inst_2 : Algebra R S]   (h : Is
+AdjoinRootMonic S f) {T…
+· 使用定理 `Mathlib.Tactic.Nontriviality.subsingleton_or_nontrivial_elim`：subsinglet
+on_or_nontrivial_elim {p : Prop} {α : Type u} (h₁ : Subsingleton α -> p) (h₂ : N
+ontrivial α -> p) : p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Polynomial.coeff_eq_zero_of_degree_lt`：coeff_eq_zero_of_degree_lt (h : d
+egree p < n) : coeff p n = 0
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Polynomial.degree_modByMonic_lt`：degree_modByMonic_lt [Nontrivial R] : f
+orall (p : R[X]) {q : R[X]} (_hq : Monic q), degree (p %ₘ q) < degree q | p, q, 
+hq => letI
+· 使用定理 `IsAdjoinRootMonic.monic`：∀ {R : Type u} {S : Type v} [inst : CommSemirin
+g R] [inst_1 : Semiring S] [inst_2 : Algebra R S] {f : Polynomial R}   (self : I
+sAdjoinRootMo…
+· 使用定理 `Polynomial.degree_le_of_natDegree_le`：∀ {R : Type u} [inst : Semiring R]
+ {p : Polynomial R} {n : ℕ}, p.natDegree ≤ n → p.degree ≤ ↑n
 -/
-theorem coeff_apply_le (z : S) (i : Nat) (hi : natDegree f <= i) : h.coeff z i = 0 := by
+theorem coeff_apply_le (z : S) (i : ℕ) (hi : natDegree f ≤ i) : h.coeff z i = 0 := by
   simp only [coeff, liftPolyₗ_apply, LinearMap.coe_mk, AddHom.coe_mk]
   nontriviality R
   exact
     Polynomial.coeff_eq_zero_of_degree_lt
       ((degree_modByMonic_lt _ h.monic).trans_le (Polynomial.degree_le_of_natDegree_le hi))
-
-/--
-theorem `coeff_apply` / 定理 `coeff_apply`
-
-English:
-theorem coeff_apply
-  given: (z : S) (i : Nat)
-  proof: by
-  split_ifs with hi
-  · exact h.coeff_apply_lt z i hi
-  · exact h.coeff_apply_le z i (le_of_not_gt hi)
-
-中文:
-定理 coeff_apply
-  条件: (z : S) (i : 自然数)
-  证明: by
-  split_ifs with hi
-  · exact h.coeff_apply_lt z i hi
-  · exact h.coeff_apply_le z i (le_of_not_gt hi)
-
-Depends on / 依赖: coeff_apply_le, coeff_apply_lt, h.coeff_apply_le, h.coeff_apply_lt, le_of_not_gt, split_ifs
+/-
+**IsAdjoinRootMonic.coeff_apply** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRootMonic`。
+形式化陈述：coeff_apply (z : S) (i : Nat) : h.coeff z i = if hi : i < natDegree f then
+ h.basis.repr z ⟨i, hi⟩ else 0
+参数：z : S；i : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `IsAdjoinRootMonic.coeff_apply_lt`：coeff_apply_lt (z : S) (i : Nat) (hi :
+ i < natDegree f) : h.coeff z i = h.basis.repr z ⟨i, hi⟩
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `IsAdjoinRootMonic.coeff_apply_le`：coeff_apply_le (z : S) (i : Nat) (hi :
+ natDegree f <= i) : h.coeff z i = 0
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
 -/
-theorem coeff_apply (z : S) (i : Nat) :
+theorem coeff_apply (z : S) (i : ℕ) :
     h.coeff z i = if hi : i < natDegree f then h.basis.repr z ⟨i, hi⟩ else 0 := by
   split_ifs with hi
   · exact h.coeff_apply_lt z i hi
   · exact h.coeff_apply_le z i (le_of_not_gt hi)
-
-/--
-theorem `coeff_root_pow` / 定理 `coeff_root_pow`
-
-English:
-theorem coeff_root_pow
-  given: {n} (hn : n < natDegree f)
-  statement: h.coeff (h.root ^ n) = Pi.single n 1
-  proof: by
-  ext i
-  rw [coeff_apply]
-  split_ifs with hi
-  · calc
-      h.basis.repr (h.root ^ n) ⟨i, _⟩ = h.basis.repr (h.basis ⟨n, hn⟩) ⟨i, hi⟩ := by
-        rw [h.basis_apply]; rw [Fin.val_mk]
-      _ = Pi.single (M := fun _ => R) ((⟨n, hn⟩ : Fin _) : Nat) (1 : (fun _ => R) n)
-        ↑(⟨i, _⟩ : Fin _) := by
-        rw [h.basis.repr_self]; rw [← Finsupp.single_eq_pi_single]; rw [Finsupp.single_apply_left Fin.val_injective]
-      _ = Pi.single (M := fun _ => R) n 1 i := by rw [Fin.val_mk, Fin.val_mk]
-  · rw [Pi.single_eq_of_ne]
-    rintro rfl
-    simp [hi] at hn
-
-中文:
-定理 coeff_root_pow
-  条件: {n} (hn : n < natDegree f)
-  结论: h.coeff (h.root ^ n) = 依赖函数类型.single n 1
-  证明: by
-  ext i
-  rw [coeff_apply]
-  split_ifs with hi
-  · calc
-      h.basis.repr (h.root ^ n) ⟨i, _⟩ = h.basis.repr (h.basis ⟨n, hn⟩) ⟨i, hi⟩ := by
-        rw [h.basis_apply]; rw [Fin.val_mk]
-      _ = Pi.single (M := fun _ => R) ((⟨n, hn⟩ : Fin _) : Nat) (1 : (fun _ => R) n)
-        ↑(⟨i, _⟩ : Fin _) := by
-        rw [h.basis.repr_self]; rw [← Finsupp.single_eq_pi_single]; rw [Finsupp.single_apply_left Fin.val_injective]
-      _ = Pi.single (M := fun _ => R) n 1 i := by rw [Fin.val_mk, Fin.val_mk]
-  · rw [Pi.single_eq_of_ne]
-    rintro rfl
-    simp [hi] at hn
-
-Depends on / 依赖: Fin.val_injective, Fin.val_mk, Finsupp, Finsupp.single_apply_left, Finsupp.single_eq_pi_single, Pi.single, Pi.single_eq_of_ne, basis_apply, coeff_apply, h.basis, h.basis.repr, h.basis.repr_self, h.basis_apply, h.root, repr_self, single, single_apply_left, single_eq_of_ne, single_eq_pi_single, split_ifs
+/-
+**IsAdjoinRootMonic.coeff_root_pow** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRootMonic`
+。
+形式化陈述：coeff_root_pow {n} (hn : n < natDegree f) : h.coeff (h.root ^ n) = Pi.sing
+le n 1
+参数：hn : n < natDegree f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsAdjoinRootMonic.coeff_apply`：coeff_apply (z : S) (i : Nat) : h.coeff z
+ i = if hi : i < natDegree f then h.basis.repr z ⟨i, hi⟩ else 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `IsAdjoinRootMonic.basis_apply`：basis_apply (i) : h.basis i = h.root ^ (i
+ : Nat)
+· 使用定理 `Fin.val_mk`：∀ {m n : ℕ} (h : m < n), ↑⟨m, h⟩ = m
+· 使用定理 `Module.Basis.repr_self`：repr_self : b.repr (b i) = Finsupp.single i 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finsupp.single_eq_pi_single`：single_eq_pi_single [DecidableEq α] (a : α)
+ (b : M) : ⇑(single a b) = Pi.single a b
+· 使用定理 `Finsupp.single_apply_left`：single_apply_left {f : α -> β} (hf : Function
+.Injective f) (x z : α) (y : M) : single (f x) y (f z) = single x y z
+· 使用定理 `Fin.val_injective`：val_injective : Function.Injective (@Fin.val n)
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `Pi.single_eq_of_ne`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) 
+→ Zero (M i)] [inst_1 : DecidableEq ι] {i i' : ι},   i' ≠ i → ∀ (x : M i), Pi.si
+ngle i x…
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
 -/
 theorem coeff_root_pow {n} (hn : n < natDegree f) : h.coeff (h.root ^ n) = Pi.single n 1 := by
   ext i
@@ -2022,168 +1787,151 @@ theorem coeff_root_pow {n} (hn : n < natDegree f) : h.coeff (h.root ^ n) = Pi.si
   split_ifs with hi
   · calc
       h.basis.repr (h.root ^ n) ⟨i, _⟩ = h.basis.repr (h.basis ⟨n, hn⟩) ⟨i, hi⟩ := by
-        rw [h.basis_apply]; rw [Fin.val_mk]
-      _ = Pi.single (M := fun _ => R) ((⟨n, hn⟩ : Fin _) : Nat) (1 : (fun _ => R) n)
+        rw [h.basis_apply, Fin.val_mk]
+      _ = Pi.single (M := fun _ => R) ((⟨n, hn⟩ : Fin _) : ℕ) (1 : (fun _ => R) n)
         ↑(⟨i, _⟩ : Fin _) := by
-        rw [h.basis.repr_self]; rw [← Finsupp.single_eq_pi_single]; rw [Finsupp.single_apply_left Fin.val_injective]
+        rw [h.basis.repr_self, ← Finsupp.single_eq_pi_single,
+          Finsupp.single_apply_left Fin.val_injective]
       _ = Pi.single (M := fun _ => R) n 1 i := by rw [Fin.val_mk, Fin.val_mk]
   · rw [Pi.single_eq_of_ne]
     rintro rfl
     simp [hi] at hn
-
-/--
-theorem `coeff_one` / 定理 `coeff_one`
-
-English:
-theorem coeff_one
-  given: [Nontrivial S]
-  statement: h.coeff 1 = Pi.single 0 1
-  proof: by
-  rw [← h.coeff_root_pow h.deg_pos]; rw [pow_zero]
-
-中文:
-定理 coeff_one
-  条件: [非平凡 S]
-  结论: h.coeff 1 = 依赖函数类型.single 0 1
-  证明: by
-  rw [← h.coeff_root_pow h.deg_pos]; rw [pow_zero]
-
-Depends on / 依赖: coeff_root_pow, deg_pos, h.coeff_root_pow, h.deg_pos, pow_zero
+/-
+**IsAdjoinRootMonic.coeff_one** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRootMonic`。
+形式化陈述：coeff_one [Nontrivial S] : h.coeff 1 = Pi.single 0 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsAdjoinRootMonic.coeff_root_pow`：coeff_root_pow {n} (hn : n < natDegree
+ f) : h.coeff (h.root ^ n) = Pi.single n 1
+· 使用定理 `IsAdjoinRootMonic.deg_pos`：deg_pos [Nontrivial S] : 0 < natDegree f
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
 -/
 theorem coeff_one [Nontrivial S] : h.coeff 1 = Pi.single 0 1 := by
-  rw [← h.coeff_root_pow h.deg_pos]; rw [pow_zero]
-
-/--
-theorem `coeff_root` / 定理 `coeff_root`
-
-English:
-theorem coeff_root
-  given: (hdeg : 1 < natDegree f)
-  statement: h.coeff h.root = Pi.single 1 1
-  proof: by
-  rw [← h.coeff_root_pow hdeg]; rw [pow_one]
-
-中文:
-定理 coeff_root
-  条件: (hdeg : 1 < natDegree f)
-  结论: h.coeff h.root = 依赖函数类型.single 1 1
-  证明: by
-  rw [← h.coeff_root_pow hdeg]; rw [pow_one]
-
-Depends on / 依赖: coeff_root_pow, h.coeff_root_pow, pow_one
+  rw [← h.coeff_root_pow h.deg_pos, pow_zero]
+/-
+**IsAdjoinRootMonic.coeff_root** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRootMonic`。
+形式化陈述：coeff_root (hdeg : 1 < natDegree f) : h.coeff h.root = Pi.single 1 1
+参数：hdeg : 1 < natDegree f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsAdjoinRootMonic.coeff_root_pow`：coeff_root_pow {n} (hn : n < natDegree
+ f) : h.coeff (h.root ^ n) = Pi.single n 1
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
 -/
 theorem coeff_root (hdeg : 1 < natDegree f) : h.coeff h.root = Pi.single 1 1 := by
-  rw [← h.coeff_root_pow hdeg]; rw [pow_one]
-
-/--
-theorem `coeff_algebraMap` / 定理 `coeff_algebraMap`
-
-English:
-theorem coeff_algebraMap
-  given: [Nontrivial S] (x : R)
-  statement: h.coeff (algebraMap R S x) = Pi.single 0 x
-  proof: by
-  ext i
-  rw [Algebra.algebraMap_eq_smul_one]; rw [map_smul]; rw [coeff_one]; rw [Pi.smul_apply]; rw [smul_eq_mul]
-  refine (Pi.apply_single (fun _ y => x * y) ?_ 0 1 i).trans (by simp)
-  simp
-
-中文:
-定理 coeff_algebraMap
-  条件: [非平凡 S] (x : R)
-  结论: h.coeff (algebraMap R S x) = 依赖函数类型.single 0 x
-  证明: by
-  ext i
-  rw [Algebra.algebraMap_eq_smul_one]; rw [map_smul]; rw [coeff_one]; rw [Pi.smul_apply]; rw [smul_eq_mul]
-  refine (Pi.apply_single (fun _ y => x * y) ?_ 0 1 i).trans (by simp)
-  simp
-
-Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, Pi.apply_single, Pi.smul_apply, algebraMap_eq_smul_one, apply_single, coeff_one, map_smul, smul_apply, smul_eq_mul
+  rw [← h.coeff_root_pow hdeg, pow_one]
+/-
+**IsAdjoinRootMonic.coeff_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRootMoni
+c`。
+形式化陈述：coeff_algebraMap [Nontrivial S] (x : R) : h.coeff (algebraMap R S x) = Pi.
+single 0 x
+参数：x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.algebraMap_eq_smul_one`：algebraMap_eq_smul_one (r : R) : algebra
+Map R A r = r • (1 : A)
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `IsAdjoinRootMonic.coeff_one`：coeff_one [Nontrivial S] : h.coeff 1 = Pi.s
+ingle 0 1
+· 使用定理 `Pi.smul_apply`：∀ {ι : Type u_1} {α : Type u_2} {M : ι → Type u_5} [inst 
+: (i : ι) → SMul α (M i)] (a : α) (f : (i : ι) → M i) (i : ι),   (a • f) i = a •
+ f …
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Pi.apply_single`：∀ {ι : Type u_1} {M : ι → Type u_6} {N : ι → Type u_7} 
+[inst : (i : ι) → Zero (M i)] [inst_1 : (i : ι) → Zero (N i)]   [inst_2 : Decida
+bleEq…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Pi.single_congr`：∀ {ι : Type u_1} [inst : DecidableEq ι] {M : Type u_9} 
+[inst_1 : Zero M] {i₁ i₂ : ι},   i₁ = i₂ → ∀ {x₁ x₂ : M}, x₁ = x₂ → ∀ {j₁ j₂ : ι
+}, j₁…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
 theorem coeff_algebraMap [Nontrivial S] (x : R) : h.coeff (algebraMap R S x) = Pi.single 0 x := by
   ext i
-  rw [Algebra.algebraMap_eq_smul_one]; rw [map_smul]; rw [coeff_one]; rw [Pi.smul_apply]; rw [smul_eq_mul]
+  rw [Algebra.algebraMap_eq_smul_one, map_smul, coeff_one, Pi.smul_apply, smul_eq_mul]
   refine (Pi.apply_single (fun _ y => x * y) ?_ 0 1 i).trans (by simp)
   simp
-
-/--
-theorem `ext_elem` / 定理 `ext_elem`
-
-English:
-theorem ext_elem
-  given: ⦃x y
-  statement: S⦄ (hxy : forall i < natDegree f, h.coeff x i = h.coeff y i) : x = y
-  proof: EquivLike.injective h.basis.equivFun
-    funext fun i => by
-      rw [Basis.equivFun_apply]; rw [← h.coeff_apply_coe]; rw [Basis.equivFun_apply]; rw [← h.coeff_apply_coe]; rw [hxy i i.prop]
-
-中文:
-定理 ext_elem
-  条件: ⦃x y
-  结论: S⦄ (hxy : 对任意 i < natDegree f, h.coeff x i = h.coeff y i) : x = y
-  证明: EquivLike.injective h.basis.equivFun
-    funext fun i => by
-      rw [Basis.equivFun_apply]; rw [← h.coeff_apply_coe]; rw [Basis.equivFun_apply]; rw [← h.coeff_apply_coe]; rw [hxy i i.prop]
-
-Depends on / 依赖: Basis.equivFun_apply, EquivLike, EquivLike.injective, coeff_apply_coe, equivFun, equivFun_apply, h.basis.equivFun, h.coeff_apply_coe, i.prop, injective
+/-
+**IsAdjoinRootMonic.ext_elem** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRootMonic`。
+形式化陈述：ext_elem ⦃x y : S⦄ (hxy : forall i < natDegree f, h.coeff x i = h.coeff y 
+i) : x = y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EquivLike.injective`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4} [ins
+t : EquivLike E α β] (e : E), Function.Injective ⇑e
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.Basis.equivFun_apply`：∀ {ι : Type u_1} {R : Type u_3} {M : Type u
+_6} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M
+] [inst_3 : Finit…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsAdjoinRootMonic.coeff_apply_coe`：coeff_apply_coe (z : S) (i : Fin (nat
+Degree f)) : h.coeff z i = h.basis.repr z i
+· 使用定理 `Fin.prop`：∀ {n : ℕ} (a : Fin n), ↑a < n
 -/
-theorem ext_elem ⦃x y : S⦄ (hxy : forall i < natDegree f, h.coeff x i = h.coeff y i) : x = y :=
-EquivLike.injective h.basis.equivFun
+theorem ext_elem ⦃x y : S⦄ (hxy : ∀ i < natDegree f, h.coeff x i = h.coeff y i) : x = y :=
+  EquivLike.injective h.basis.equivFun <|
     funext fun i => by
-      rw [Basis.equivFun_apply]; rw [← h.coeff_apply_coe]; rw [Basis.equivFun_apply]; rw [← h.coeff_apply_coe]; rw [hxy i i.prop]
-
-/--
-theorem `ext_elem_iff` / 定理 `ext_elem_iff`
-
-English:
-theorem ext_elem_iff
-  given: {x y : S}
-  statement: x = y ↔ forall i < natDegree f, h.coeff x i = h.coeff y i
-  proof: ⟨fun hxy _ _=> hxy ▸ rfl, fun hxy => h.ext_elem hxy⟩
-
-中文:
-定理 ext_elem_iff
-  条件: {x y : S}
-  结论: x = y ↔ 对任意 i < natDegree f, h.coeff x i = h.coeff y i
-  证明: ⟨fun hxy _ _=> hxy ▸ rfl, fun hxy => h.ext_elem hxy⟩
-
-Depends on / 依赖: ext_elem, h.ext_elem
+      rw [Basis.equivFun_apply, ← h.coeff_apply_coe, Basis.equivFun_apply, ← h.coeff_apply_coe,
+        hxy i i.prop]
+/-
+**IsAdjoinRootMonic.ext_elem_iff** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRootMonic`。
+形式化陈述：ext_elem_iff {x y : S} : x = y ↔ forall i < natDegree f, h.coeff x i = h.c
+oeff y i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsAdjoinRootMonic.ext_elem`：ext_elem ⦃x y : S⦄ (hxy : forall i < natDegr
+ee f, h.coeff x i = h.coeff y i) : x = y
 -/
-theorem ext_elem_iff {x y : S} : x = y ↔ forall i < natDegree f, h.coeff x i = h.coeff y i :=
+theorem ext_elem_iff {x y : S} : x = y ↔ ∀ i < natDegree f, h.coeff x i = h.coeff y i :=
   ⟨fun hxy _ _=> hxy ▸ rfl, fun hxy => h.ext_elem hxy⟩
-
-/--
-theorem `coeff_injective` / 定理 `coeff_injective`
-
-English:
-theorem coeff_injective
-  statement: Function.Injective h.coeff
-  proof: fun _ _ hxy =>
-  h.ext_elem fun _ _ => hxy ▸ rfl
-
-中文:
-定理 coeff_injective
-  结论: 函数.单射 h.coeff
-  证明: fun _ _ hxy =>
-  h.ext_elem fun _ _ => hxy ▸ rfl
+/-
+**IsAdjoinRootMonic.coeff_injective** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRootMonic
+`。
+形式化陈述：coeff_injective : Function.Injective h.coeff
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsAdjoinRootMonic.ext_elem`：ext_elem ⦃x y : S⦄ (hxy : forall i < natDegr
+ee f, h.coeff x i = h.coeff y i) : x = y
 -/
 theorem coeff_injective : Function.Injective h.coeff := fun _ _ hxy =>
   h.ext_elem fun _ _ => hxy ▸ rfl
-
-/--
-theorem `isIntegral_root` / 定理 `isIntegral_root`
-
-English:
-theorem isIntegral_root
-  statement: IsIntegral R h.root
-  proof: ⟨f, h.monic, h.aeval_root_self⟩
-
-中文:
-定理 is整数egral_root
-  结论: 是整 R h.root
-  证明: ⟨f, h.monic, h.aeval_root_self⟩
-
-Depends on / 依赖: aeval_root_self, h.aeval_root_self, h.monic
+/-
+**IsAdjoinRootMonic.isIntegral_root** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRootMonic
+`。
+形式化陈述：isIntegral_root : IsIntegral R h.root
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsAdjoinRootMonic.monic`：∀ {R : Type u} {S : Type v} [inst : CommSemirin
+g R] [inst_1 : Semiring S] [inst_2 : Algebra R S] {f : Polynomial R}   (self : I
+sAdjoinRootMo…
+· 使用定理 `IsAdjoinRoot.aeval_root_self`：aeval_root_self : aeval h.root f = 0
 -/
 theorem isIntegral_root : IsIntegral R h.root := ⟨f, h.monic, h.aeval_root_self⟩
 
@@ -2203,42 +1951,36 @@ section lift
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `lift_self_apply` / 定理 `lift_self_apply`
-
-English:
-theorem lift_self_apply
-  given: (x : S)
-  statement: h.lift (algebraMap R S) h.root h.aeval_root_self x = x
-  proof: by
-  rw [← h.map_repr x]; rw [lift_map]; rw [← aeval_def]; rw [h.aeval_root_eq_map]
-
-中文:
-定理 lift_self_apply
-  条件: (x : S)
-  结论: h.lift (algebraMap R S) h.root h.aeval_root_self x = x
-  证明: by
-  rw [← h.map_repr x]; rw [lift_map]; rw [← aeval_def]; rw [h.aeval_root_eq_map]
-
-Depends on / 依赖: aeval_def, aeval_root_eq_map, h.aeval_root_eq_map, h.map_repr, lift_map, map_repr
+/-
+**IsAdjoinRoot.lift_self_apply** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：lift_self_apply (x : S) : h.lift (algebraMap R S) h.root h.aeval_root_self
+ x = x
+参数：x : S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsAdjoinRoot.aeval_root_self`：aeval_root_self : aeval h.root f = 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsAdjoinRoot.map_repr`：map_repr (x : S) : h.map (h.repr x) = x
+· 使用定理 `IsAdjoinRoot.lift_map`：lift_map (z : R[X]) : h.lift i x hx (h.map z) = z
+.eval₂ i x
+· 使用定理 `Polynomial.aeval_def`：aeval_def (p : R[X]) : aeval x p = eval₂ (algebraM
+ap R A) x p
+· 使用定理 `IsAdjoinRoot.aeval_root_eq_map`：aeval_root_eq_map : aeval h.root = h.map
 -/
 theorem lift_self_apply (x : S) : h.lift (algebraMap R S) h.root h.aeval_root_self x = x := by
-  rw [← h.map_repr x]; rw [lift_map]; rw [← aeval_def]; rw [h.aeval_root_eq_map]
-
-/--
-theorem `lift_self` / 定理 `lift_self`
-
-English:
-theorem lift_self
-  statement: h.lift (algebraMap R S) h.root h.aeval_root_self = RingHom.id S
-  proof: RingHom.ext h.lift_self_apply
-
-中文:
-定理 lift_self
-  结论: h.lift (algebraMap R S) h.root h.aeval_root_self = 环态射.id S
-  证明: RingHom.ext h.lift_self_apply
-
-Depends on / 依赖: RingHom, RingHom.ext, h.lift_self_apply, lift_self_apply
+  rw [← h.map_repr x, lift_map, ← aeval_def, h.aeval_root_eq_map]
+/-
+**IsAdjoinRoot.lift_self** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：lift_self : h.lift (algebraMap R S) h.root h.aeval_root_self = RingHom.id 
+S
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `IsAdjoinRoot.aeval_root_self`：aeval_root_self : aeval h.root f = 0
+· 使用定理 `IsAdjoinRoot.lift_self_apply`：lift_self_apply (x : S) : h.lift (algebraM
+ap R S) h.root h.aeval_root_self x = x
 -/
 theorem lift_self : h.lift (algebraMap R S) h.root h.aeval_root_self = RingHom.id S :=
   RingHom.ext h.lift_self_apply
@@ -2252,79 +1994,56 @@ variable [IsDomain R] [IsDomain S] [IsTorsionFree R S] [IsIntegrallyClosed R]
 
 /-- If `α` generates `S` as an algebra, then `S` is given by adjoining a root of `minpoly R α`. -/
 @[simps]
-/--
-Definition of `mkOfAdjoinEqTop` / `mkOfAdjoinEqTop` 的定义
+/-
+**IsAdjoinRoot.mkOfAdjoinEqTop** 是 Mathlib 中的一个定义，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：mkOfAdjoinEqTop : IsAdjoinRoot S (minpoly R α) where map
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkOfAdjoinEqTop
-  signature: : IsAdjoinRoot S (minpoly R α) where
-  body: aeval α
-  map_surjective := by
-    rw [← Set.range_eq_univ]; rw [← AlgHom.coe_range]; rw [← Algebra.adjoin_singleton_eq_range_aeval]; rw [hα₂]; rw [Algebra.coe_top]
-  ker_map := by
-    ext
-    simpa [Ideal.mem_span_singleton] using minpoly.isIntegrallyClosed_dvd_iff hα _
-
-中文:
-定义 mkOfAdjoinEqTop
-  签名: : 是AdjoinRoot S (minpoly R α) where
-  定义体: aeval α
-  map_surjective := by
-    rw [← Set.range_eq_univ]; rw [← AlgHom.coe_range]; rw [← Algebra.adjoin_singleton_eq_range_aeval]; rw [hα₂]; rw [Algebra.coe_top]
-  ker_map := by
-    ext
-    simpa [Ideal.mem_span_singleton] using minpoly.isIntegrallyClosed_dvd_iff hα _
+--- 原说明 ---
+If `α` generates `S` as an algebra, then `S` is given by adjoining a root of `mi
+npoly R α`.
 -/
 def mkOfAdjoinEqTop : IsAdjoinRoot S (minpoly R α) where
   map := aeval α
   map_surjective := by
-    rw [← Set.range_eq_univ]; rw [← AlgHom.coe_range]; rw [← Algebra.adjoin_singleton_eq_range_aeval]; rw [hα₂]; rw [Algebra.coe_top]
+    rw [← Set.range_eq_univ, ← AlgHom.coe_range, ← Algebra.adjoin_singleton_eq_range_aeval,
+      hα₂, Algebra.coe_top]
   ker_map := by
     ext
     simpa [Ideal.mem_span_singleton] using minpoly.isIntegrallyClosed_dvd_iff hα _
 
-/--
-Definition of `_root_.IsAdjoinRootMonic.mkOfAdjoinEqTop` / `_root_.IsAdjoinRootMonic.mkOfAdjoinEqTop` 的定义
+/-- If `α` generates `S` as an algebra, then `S` is given by adjoining a root of `minpoly R α`. -/
+/-
+**IsAdjoinRoot._root_.IsAdjoinRootMonic.mkOfAdjoinEqTop** 是 Mathlib 中的一个缩写定义，位于命
+名空间 `IsAdjoinRoot`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation _root_.IsAdjoinRootMonic.mkOfAdjoinEqTop
-  signature: : IsAdjoinRootMonic S (minpoly R α) where
-  body: IsAdjoinRoot.mkOfAdjoinEqTop hα hα₂
-  monic := minpoly.monic hα
-
-@[simp]
-
-中文:
-缩写 _root_.是AdjoinRootMonic.mkOfAdjoinEqTop
-  签名: : 是AdjoinRootMonic S (minpoly R α) where
-  定义体: IsAdjoinRoot.mkOfAdjoinEqTop hα hα₂
-  monic := minpoly.monic hα
-
-@[simp]
-
-Depends on / 依赖: IsAdjoinRoot, IsAdjoinRoot.mkOfAdjoinEqTop, mkOfAdjoinEqTop
+--- 原说明 ---
+If `α` generates `S` as an algebra, then `S` is given by adjoining a root of `mi
+npoly R α`.
 -/
 abbrev _root_.IsAdjoinRootMonic.mkOfAdjoinEqTop : IsAdjoinRootMonic S (minpoly R α) where
   __ := IsAdjoinRoot.mkOfAdjoinEqTop hα hα₂
   monic := minpoly.monic hα
 
 @[simp]
-/--
-theorem `mkOfAdjoinEqTop_root` / 定理 `mkOfAdjoinEqTop_root`
-
-English:
-theorem mkOfAdjoinEqTop_root
-  statement: (IsAdjoinRoot.mkOfAdjoinEqTop hα hα₂).root = α
-  proof: by
-  simp [IsAdjoinRoot.root]
-
-中文:
-定理 mkOfAdjoinEqTop_root
-  结论: (是AdjoinRoot.mkOfAdjoinEqTop hα hα₂).root = α
-  证明: by
-  simp [IsAdjoinRoot.root]
-
-Depends on / 依赖: IsAdjoinRoot, IsAdjoinRoot.root
+/-
+**IsAdjoinRoot.mkOfAdjoinEqTop_root** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：mkOfAdjoinEqTop_root : (IsAdjoinRoot.mkOfAdjoinEqTop hα hα₂).root = α
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsAdjoinRoot.mkOfAdjoinEqTop_map`：∀ {R : Type u} {S : Type v} [inst : Co
+mmRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S] [inst_3 : IsDomain R]   [
+inst_4 : IsDomain S] […
+· 使用定理 `Polynomial.aeval_X`：aeval_X : aeval x (X : R[X]) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem mkOfAdjoinEqTop_root : (IsAdjoinRoot.mkOfAdjoinEqTop hα hα₂).root = α := by
   simp [IsAdjoinRoot.root]
@@ -2336,43 +2055,40 @@ section Equiv
 variable {T : Type*} [CommRing T] [Algebra R T] (h' : IsAdjoinRoot T f) {U : Type*} [CommRing U]
 
 @[simp]
-/--
-theorem `lift_algEquiv` / 定理 `lift_algEquiv`
-
-English:
-theorem lift_algEquiv
-  given: (i : R ->+* U) (x hx z)
-  proof: by rw [← h.map_repr z]; simp [-map_repr]
-
-@[simp]
-
-中文:
-定理 lift_algEquiv
-  条件: (i : R ->+* U) (x hx z)
-  证明: by rw [← h.map_repr z]; simp [-map_repr]
-
-@[simp]
-
-Depends on / 依赖: h.map_repr, map_repr
+/-
+**IsAdjoinRoot.lift_algEquiv** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：lift_algEquiv (i : R ->+* U) (x hx z) : h'.lift i x hx (h.algEquiv h' z) =
+ h.lift i x hx z
+参数：i : R ->+* U；x hx z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsAdjoinRoot.map_repr`：map_repr (x : S) : h.map (h.repr x) = x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `IsAdjoinRoot.algEquiv_apply_map`：algEquiv_apply_map (z : R[X]) : h.algEq
+uiv h' (h.map z) = h'.map z
+· 使用定理 `IsAdjoinRoot.lift_map`：lift_map (z : R[X]) : h.lift i x hx (h.map z) = z
+.eval₂ i x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem lift_algEquiv (i : R ->+* U) (x hx z) :
+theorem lift_algEquiv (i : R →+* U) (x hx z) :
     h'.lift i x hx (h.algEquiv h' z) = h.lift i x hx z := by rw [← h.map_repr z]; simp [-map_repr]
 
 @[simp]
-/--
-theorem `liftHom_algEquiv` / 定理 `liftHom_algEquiv`
-
-English:
-theorem liftHom_algEquiv
-  given: [Algebra R U] (x : U) (hx z)
-  proof: h.lift_algEquiv h' _ _ hx _
-
-中文:
-定理 liftHom_algEquiv
-  条件: [代数 R U] (x : U) (hx z)
-  证明: h.lift_algEquiv h' _ _ hx _
-
-Depends on / 依赖: h.lift_algEquiv, lift_algEquiv
+/-
+**IsAdjoinRoot.liftHom_algEquiv** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：liftHom_algEquiv [Algebra R U] (x : U) (hx z) : h'.liftHom x hx (h.algEqui
+v h' z) = h.liftHom x hx z
+参数：x : U；hx z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsAdjoinRoot.lift_algEquiv`：lift_algEquiv (i : R ->+* U) (x hx z) : h'.l
+ift i x hx (h.algEquiv h' z) = h.lift i x hx z
 -/
 theorem liftHom_algEquiv [Algebra R U] (x : U) (hx z) :
     h'.liftHom x hx (h.algEquiv h' z) = h.liftHom x hx z := h.lift_algEquiv h' _ _ hx _
@@ -2385,44 +2101,52 @@ namespace IsAdjoinRootMonic
 
 variable (h : IsAdjoinRootMonic S f)
 
-/--
-theorem `minpoly_eq` / 定理 `minpoly_eq`
-
-English:
-theorem minpoly_eq
-  statement: [IsDomain R] [IsDomain S] [IsTorsionFree R S] [IsIntegrallyClosed R]
-  proof: let ⟨q, hq⟩ := minpoly.isIntegrallyClosed_dvd h.isIntegral_root h.aeval_root_self
-symm
-eq_of_monic_of_associated h.monic (minpoly.monic h.isIntegral_root) by
-      convert!
-Associated.mul_left (minpoly R h.root)
-associated_one_iff_isUnit.2
-(hirr.isUnit_or_isUnit hq).resolve_left minpoly.not_isUnit R h.root
-      rw [mul_one]
-
-中文:
-定理 minpoly_eq
-  结论: [是整环 R] [是整环 S] [是无挠 R S] [是整闭 R]
-  证明: let ⟨q, hq⟩ := minpoly.isIntegrallyClosed_dvd h.isIntegral_root h.aeval_root_self
-symm
-eq_of_monic_of_associated h.monic (minpoly.monic h.isIntegral_root) by
-      convert!
-Associated.mul_left (minpoly R h.root)
-associated_one_iff_isUnit.2
-(hirr.isUnit_or_isUnit hq).resolve_left minpoly.not_isUnit R h.root
-      rw [mul_one]
-
-Depends on / 依赖: Associated, Associated.mul_left, aeval_root_self, associated_one_iff_isUnit, convert, eq_of_monic_of_associated, h.aeval_root_self, h.isIntegral_root, h.monic, h.root, hirr.isUnit_or_isUnit, isIntegral_root, isIntegrallyClosed_dvd, isUnit_or_isUnit, minpoly, minpoly.isIntegrallyClosed_dvd, minpoly.monic, minpoly.not_isUnit, mul_left, mul_one
+/-
+**IsAdjoinRootMonic.minpoly_eq** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRootMonic`。
+形式化陈述：minpoly_eq [IsDomain R] [IsDomain S] [IsTorsionFree R S] [IsIntegrallyClos
+ed R] (hirr : Irreducible f) : minpoly R h.root = f
+参数：hirr : Irreducible f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `minpoly.isIntegrallyClosed_dvd`：isIntegrallyClosed_dvd {s : S} (hs : IsI
+ntegral R s) {p : R[X]} (hp : Polynomial.aeval s p = 0) : minpoly R s ∣ p
+· 使用定理 `IsAdjoinRootMonic.isIntegral_root`：isIntegral_root : IsIntegral R h.root
+· 使用定理 `IsAdjoinRoot.aeval_root_self`：aeval_root_self : aeval h.root f = 0
+· 使用引理 `symm`：symm [Std.Symm r] : a ≺ b -> b ≺ a
+· 使用定理 `IsEquiv.toSymm`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsEquiv α r]
+, Std.Symm r
+· 使用定理 `Polynomial.eq_of_monic_of_associated`：eq_of_monic_of_associated (hp : p.
+Monic) (hq : q.Monic) (hpq : Associated p q) : p = q
+· 使用定理 `IsAdjoinRootMonic.monic`：∀ {R : Type u} {S : Type v} [inst : CommSemirin
+g R] [inst_1 : Semiring S] [inst_2 : Algebra R S] {f : Polynomial R}   (self : I
+sAdjoinRootMo…
+· 使用定理 `minpoly.monic`：monic (hx : IsIntegral A x) : Monic (minpoly A x)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Associated.mul_left`：Associated.mul_left [Monoid M] (a : M) {b c : M} (h
+ : b ~ᵤ c) : a * b ~ᵤ a * c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `associated_one_iff_isUnit`：associated_one_iff_isUnit [Monoid M] {a : M} 
+: (a : M) ~ᵤ 1 ↔ IsUnit a
+· 使用定理 `Or.resolve_left`：∀ {a b : Prop}, a ∨ b → ¬a → b
+· 使用定理 `Irreducible.isUnit_or_isUnit`：∀ {M : Type u_1} [inst : Monoid M] {p : M}
+, Irreducible p → ∀ ⦃a b : M⦄, p = a * b → IsUnit a ∨ IsUnit b
+· 使用定理 `minpoly.not_isUnit`：not_isUnit [Nontrivial B] : ¬IsUnit (minpoly A x)
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
 -/
 theorem minpoly_eq [IsDomain R] [IsDomain S] [IsTorsionFree R S] [IsIntegrallyClosed R]
   (hirr : Irreducible f) : minpoly R h.root = f :=
   let ⟨q, hq⟩ := minpoly.isIntegrallyClosed_dvd h.isIntegral_root h.aeval_root_self
-symm
-eq_of_monic_of_associated h.monic (minpoly.monic h.isIntegral_root) by
+  symm <|
+    eq_of_monic_of_associated h.monic (minpoly.monic h.isIntegral_root) <| by
       convert!
-Associated.mul_left (minpoly R h.root)
-associated_one_iff_isUnit.2
-(hirr.isUnit_or_isUnit hq).resolve_left minpoly.not_isUnit R h.root
+        Associated.mul_left (minpoly R h.root) <|
+          associated_one_iff_isUnit.2 <|
+            (hirr.isUnit_or_isUnit hq).resolve_left <| minpoly.not_isUnit R h.root
       rw [mul_one]
 
 set_option backward.isDefEq.respectTransparency.types false in
@@ -2430,48 +2154,20 @@ set_option backward.isDefEq.respectTransparency.types false in
 then `S` is given by adjoining a root of `minpoly R α`.
 Does not require that `R` is an integral domain, unlike `mkOfAdjoinEqTop`. -/
 @[simps]
-/--
-Definition of `mkOfAdjoinEqTop'` / `mkOfAdjoinEqTop'` 的定义
+/-
+**IsAdjoinRootMonic.mkOfAdjoinEqTop'** 是 Mathlib 中的一个定义，位于命名空间 `IsAdjoinRootMoni
+c`。
+形式化陈述：mkOfAdjoinEqTop' [Module.Finite R S] [Module.Free R S] {α : S} (hα : Algeb
+ra.adjoin R {α} = ⊤) : IsAdjoinRootMonic S (minpoly R α) where __ : IsAdjoinRoot
+ S (minpoly R α)
+参数：hα : Algebra.adjoin R {α} = ⊤。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkOfAdjoinEqTop'
-  signature: [Module.Finite R S] [Module.Free R S] {α : S} (hα : Algebra.adjoin R {α} = ⊤)
-  body: have monic := minpoly.monic (Algebra.IsIntegral.isIntegral (R := R) α)
-    haveI := monic.free_adjoinRoot
-    haveI := monic.finite_adjoinRoot
-    let φ := AdjoinRoot.liftAlgHom _ (Algebra.ofId R S) _ (minpoly.aeval R α)
-IsAdjoinRoot.ofAdjoinRootEquiv AlgEquiv.ofBijective φ by
-      refine OrzechProperty.bijective_of_surjective_of_finrank_le φ.toLinearMap (fun s => ?_) ?_
-      · rw [Algebra.adjoin_singleton_eq_range_aeval, AlgHom.range_eq_top] at hα
-        rcases hα s with ⟨p, hp⟩
-        exact ⟨AdjoinRoot.mk (minpoly R α) p, by simp [φ, ← aeval_def, hp]⟩
-      · nontriviality R
-        exact finrank_quotient_span_eq_natDegree' monic ▸ minpoly.natDegree_le α
-  map := aeval α
-  monic := minpoly.monic (Algebra.IsIntegral.isIntegral α)
-
-@[simp]
-
-中文:
-定义 mkOfAdjoinEqTop'
-  签名: [模.有限 R S] [模.自由 R S] {α : S} (hα : 代数.adjoin R {α} = ⊤)
-  定义体: have monic := minpoly.monic (Algebra.IsIntegral.isIntegral (R := R) α)
-    haveI := monic.free_adjoinRoot
-    haveI := monic.finite_adjoinRoot
-    let φ := AdjoinRoot.liftAlgHom _ (Algebra.ofId R S) _ (minpoly.aeval R α)
-IsAdjoinRoot.ofAdjoinRootEquiv AlgEquiv.ofBijective φ by
-      refine OrzechProperty.bijective_of_surjective_of_finrank_le φ.toLinearMap (fun s => ?_) ?_
-      · rw [Algebra.adjoin_singleton_eq_range_aeval, AlgHom.range_eq_top] at hα
-        rcases hα s with ⟨p, hp⟩
-        exact ⟨AdjoinRoot.mk (minpoly R α) p, by simp [φ, ← aeval_def, hp]⟩
-      · nontriviality R
-        exact finrank_quotient_span_eq_natDegree' monic ▸ minpoly.natDegree_le α
-  map := aeval α
-  monic := minpoly.monic (Algebra.IsIntegral.isIntegral α)
-
-@[simp]
-
-Depends on / 依赖: AdjoinRoot, AdjoinRoot.liftAlgHom, AdjoinRoot.mk, AlgEquiv, AlgEquiv.ofBijective, AlgHom, AlgHom.range_eq_top, Algebra, Algebra.IsIntegral.isIntegral, Algebra.adjoin_singleton_eq_range_aeval, Algebra.ofId, IsAdjoinRoot, IsAdjoinRoot.ofAdjoinRootEquiv, IsIntegral, OrzechProperty, OrzechProperty.bijective_of_surjective_of_finrank_le, adjoin_singleton_eq_range_aeval, bijective_of_surjective_of_finrank_le, finite_adjoinRoot, free_adjoinRoot
+--- 原说明 ---
+If `α` generates `S` as an algebra and `S` is free and finite,
+then `S` is given by adjoining a root of `minpoly R α`.
+Does not require that `R` is an integral domain, unlike `mkOfAdjoinEqTop`.
 -/
 def mkOfAdjoinEqTop' [Module.Finite R S] [Module.Free R S] {α : S} (hα : Algebra.adjoin R {α} = ⊤) :
     IsAdjoinRootMonic S (minpoly R α) where
@@ -2480,8 +2176,8 @@ def mkOfAdjoinEqTop' [Module.Finite R S] [Module.Free R S] {α : S} (hα : Algeb
     haveI := monic.free_adjoinRoot
     haveI := monic.finite_adjoinRoot
     let φ := AdjoinRoot.liftAlgHom _ (Algebra.ofId R S) _ (minpoly.aeval R α)
-IsAdjoinRoot.ofAdjoinRootEquiv AlgEquiv.ofBijective φ by
-      refine OrzechProperty.bijective_of_surjective_of_finrank_le φ.toLinearMap (fun s => ?_) ?_
+    IsAdjoinRoot.ofAdjoinRootEquiv <| AlgEquiv.ofBijective φ <| by
+      refine OrzechProperty.bijective_of_surjective_of_finrank_le φ.toLinearMap (fun s ↦ ?_) ?_
       · rw [Algebra.adjoin_singleton_eq_range_aeval, AlgHom.range_eq_top] at hα
         rcases hα s with ⟨p, hp⟩
         exact ⟨AdjoinRoot.mk (minpoly R α) p, by simp [φ, ← aeval_def, hp]⟩
@@ -2491,18 +2187,25 @@ IsAdjoinRoot.ofAdjoinRootEquiv AlgEquiv.ofBijective φ by
   monic := minpoly.monic (Algebra.IsIntegral.isIntegral α)
 
 @[simp]
-/--
-theorem `mkOfAdjoinEqTop'_root` / 定理 `mkOfAdjoinEqTop'_root`
-
-English:
-theorem mkOfAdjoinEqTop'_root
-  proof: by
-  simp [IsAdjoinRoot.root]
-
-中文:
-定理 mkOfAdjoinEqTop'_root
-  证明: by
-  simp [IsAdjoinRoot.root]
+/-
+**IsAdjoinRootMonic.mkOfAdjoinEqTop'_root** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoo
+tMonic`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : CommRing R] [inst_1 : CommRing S] [ins
+t_2 : Algebra R S]   [inst_3 : Module.Finite R S] [inst_4 : Module.Free R S] {α 
+: S} (hα : R[α] = ⊤),   (IsAdjoinRootMonic.mkOfAdjoinEqTop' hα).root = α
+参数：hα : R[α] = ⊤；IsAdjoinRootMonic.mkOfAdjoinEqTop' hα。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsAdjoinRootMonic.mkOfAdjoinEqTop'_map`：∀ {R : Type u} {S : Type v} [ins
+t : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   [inst_3 : Module.
+Finite R S] [inst_4 : Module…
+· 使用定理 `Polynomial.aeval_X`：aeval_X : aeval x (X : R[X]) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem mkOfAdjoinEqTop'_root
     [Module.Finite R S] [Module.Free R S]
@@ -2516,30 +2219,54 @@ section Algebra
 
 open AdjoinRoot IsAdjoinRoot minpoly PowerBasis IsAdjoinRootMonic Algebra
 
-/--
-theorem `Algebra.adjoin.powerBasis'_minpoly_gen` / 定理 `Algebra.adjoin.powerBasis'_minpoly_gen`
-
-English:
-theorem Algebra.adjoin.powerBasis'_minpoly_gen
-  statement: [IsDomain R] [IsDomain S] [IsTorsionFree R S]
-  proof: by
-  have := isDomain_of_prime (prime_of_isIntegrallyClosed hx')
-  have :=
-    noZeroSMulDivisors_of_prime_of_degree_ne_zero (prime_of_isIntegrallyClosed hx')
-      (degree_pos hx').ne'
-  rw [← minpolyGen_eq]; rw [adjoin.powerBasis']; rw [minpolyGen_map]; rw [minpolyGen_eq]; rw [AdjoinRoot.powerBasis'_gen]; rw [← isAdjoinRoot_root_eq_root _]; rw [← isAdjoinRootMonic_toAdjoinRoot _ (monic hx')]; rw [minpoly_eq (AdjoinRoot.isAdjoinRootMonic _ (monic hx')) (irreducible hx')]
-
-中文:
-定理 代数.adjoin.powerBasis'_minpoly_gen
-  结论: [是整环 R] [是整环 S] [是无挠 R S]
-  证明: by
-  have := isDomain_of_prime (prime_of_isIntegrallyClosed hx')
-  have :=
-    noZeroSMulDivisors_of_prime_of_degree_ne_zero (prime_of_isIntegrallyClosed hx')
-      (degree_pos hx').ne'
-  rw [← minpolyGen_eq]; rw [adjoin.powerBasis']; rw [minpolyGen_map]; rw [minpolyGen_eq]; rw [AdjoinRoot.powerBasis'_gen]; rw [← isAdjoinRoot_root_eq_root _]; rw [← isAdjoinRootMonic_toAdjoinRoot _ (monic hx')]; rw [minpoly_eq (AdjoinRoot.isAdjoinRootMonic _ (monic hx')) (irreducible hx')]
-
-Depends on / 依赖: AdjoinRoot, AdjoinRoot.isAdjoinRootMonic, AdjoinRoot.powerBasis, _gen, adjoin, adjoin.powerBasis, degree_pos, irreducible, isAdjoinRootMonic, isAdjoinRootMonic_toAdjoinRoot, isAdjoinRoot_root_eq_root, isDomain_of_prime, minpolyGen_eq, minpolyGen_map, minpoly_eq, noZeroSMulDivisors_of_prime_of_degree_ne_zero, powerBasis, prime_of_isIntegrallyClosed
+/-
+**Algebra.adjoin.powerBasis'_minpoly_gen** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.adjo
+in`。
+形式化陈述：∀ {R : Type u} {S : Type v} [inst : CommRing R] [inst_1 : CommRing S] [ins
+t_2 : Algebra R S] [inst_3 : IsDomain R]   [inst_4 : IsDomain S] [inst_5 : Modul
+e.IsTorsionFree R S] [inst_6 : IsIntegrallyClosed R] {x : S}   (hx' : IsIntegral
+ R x), minpoly R x = minpoly R (Algebra.adjoin.powerBasis' hx').gen
+参数：hx' : IsIntegral R x；Algebra.adjoin.powerBasis' hx'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AdjoinRoot.isDomain_of_prime`：isDomain_of_prime (hf : Prime f) : IsDomai
+n (AdjoinRoot f)
+· 使用定理 `minpoly.prime_of_isIntegrallyClosed`：prime_of_isIntegrallyClosed {x : S}
+ (hx : IsIntegral R x) : Prime (minpoly R x)
+· 使用定理 `AdjoinRoot.noZeroSMulDivisors_of_prime_of_degree_ne_zero`：noZeroSMulDivi
+sors_of_prime_of_degree_ne_zero [IsDomain R] (hf : Prime f) (hf' : f.degree != 0
+) : IsTorsionFree R (AdjoinRoot f)
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `minpoly.degree_pos`：degree_pos [Nontrivial B] (hx : IsIntegral A x) : 0 
+< degree (minpoly A x)
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `Algebra.adjoin.powerBasis'`：Algebra.adjoin.powerBasis'_minpoly_gen [IsDo
+main R] [IsDomain S] [IsTorsionFree R S] [IsIntegrallyClosed R] {x : S} (hx' : I
+sIntegral R x) :…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PowerBasis.minpolyGen_eq`：minpolyGen_eq (pb : PowerBasis A S) : pb.minpo
+lyGen = minpoly A pb.gen
+· 使用定理 `Algebra.adjoin.powerBasis'.eq_1`：∀ {R : Type u_1} {S : Type u_2} [inst :
+ CommRing R] [inst_1 : CommRing S] [inst_2 : IsDomain R] [inst_3 : Algebra R S] 
+  [inst_4 : IsIntegra…
+· 使用定理 `PowerBasis.minpolyGen_map`：minpolyGen_map (pb : PowerBasis A S) (e : S ≃
+ₐ[A] S') : (pb.map e).minpolyGen = pb.minpolyGen
+· 使用定理 `AdjoinRoot.powerBasis'_gen`：∀ {R : Type u_1} [inst : CommRing R] {g : Po
+lynomial R} (hg : g.Monic),   (AdjoinRoot.powerBasis' hg).gen = AdjoinRoot.root 
+g
+· 使用定理 `AdjoinRoot.isAdjoinRoot_root_eq_root`：isAdjoinRoot_root_eq_root : (Adjoi
+nRoot.isAdjoinRoot f).root = AdjoinRoot.root f
+· 使用定理 `minpoly.monic`：monic (hx : IsIntegral A x) : Monic (minpoly A x)
+· 使用定理 `AdjoinRoot.isAdjoinRootMonic_toAdjoinRoot`：isAdjoinRootMonic_toAdjoinRoo
+t (hf : Monic f) : (AdjoinRoot.isAdjoinRootMonic f hf).toIsAdjoinRoot = AdjoinRo
+ot.isAdjoinRoot f
+· 使用定理 `IsAdjoinRootMonic.minpoly_eq`：minpoly_eq [IsDomain R] [IsDomain S] [IsTo
+rsionFree R S] [IsIntegrallyClosed R] (hirr : Irreducible f) : minpoly R h.root 
+= f
+· 使用定理 `minpoly.irreducible`：irreducible (hx : IsIntegral A x) : Irreducible (mi
+npoly A x)
 -/
 theorem Algebra.adjoin.powerBasis'_minpoly_gen [IsDomain R] [IsDomain S] [IsTorsionFree R S]
     [IsIntegrallyClosed R] {x : S} (hx' : IsIntegral R x) :
@@ -2548,7 +2275,10 @@ theorem Algebra.adjoin.powerBasis'_minpoly_gen [IsDomain R] [IsDomain S] [IsTors
   have :=
     noZeroSMulDivisors_of_prime_of_degree_ne_zero (prime_of_isIntegrallyClosed hx')
       (degree_pos hx').ne'
-  rw [← minpolyGen_eq]; rw [adjoin.powerBasis']; rw [minpolyGen_map]; rw [minpolyGen_eq]; rw [AdjoinRoot.powerBasis'_gen]; rw [← isAdjoinRoot_root_eq_root _]; rw [← isAdjoinRootMonic_toAdjoinRoot _ (monic hx')]; rw [minpoly_eq (AdjoinRoot.isAdjoinRootMonic _ (monic hx')) (irreducible hx')]
+  rw [← minpolyGen_eq, adjoin.powerBasis', minpolyGen_map, minpolyGen_eq,
+    AdjoinRoot.powerBasis'_gen, ← isAdjoinRoot_root_eq_root _,
+    ← isAdjoinRootMonic_toAdjoinRoot _ (monic hx'),
+    minpoly_eq (AdjoinRoot.isAdjoinRootMonic _ (monic hx')) (irreducible hx')]
 
 end Algebra
 
@@ -2562,59 +2292,46 @@ variable {F E : Type*} [Field F] [Field E] [Algebra F E] {f : F[X]}
 
 namespace IsAdjoinRoot
 
-/--
-theorem `primitive_element_root` / 定理 `primitive_element_root`
-
-English:
-theorem primitive_element_root
-  given: (h : IsAdjoinRoot E f)
-  statement: F⟮h.root⟯ = ⊤
-  proof: IntermediateField.adjoin_eq_top_of_algebra F {h.root} (adjoin_root_eq_top h)
-
-中文:
-定理 primitive_element_root
-  条件: (h : 是AdjoinRoot E f)
-  结论: F⟮h.root⟯ = ⊤
-  证明: IntermediateField.adjoin_eq_top_of_algebra F {h.root} (adjoin_root_eq_top h)
-
-Depends on / 依赖: CompactSpace, IntermediateField, IntermediateField.adjoin_eq_top_of_algebra, NoetherianSpace, NoetherianSpace.compactSpace, adjoin_eq_top_of_algebra, adjoin_root_eq_top, compactSpace, h.root
+/-
+**IsAdjoinRoot.primitive_element_root** 是 Mathlib 中的一个定理，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：primitive_element_root (h : IsAdjoinRoot E f) : F⟮h.root⟯ = ⊤
+参数：h : IsAdjoinRoot E f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IntermediateField.adjoin_eq_top_of_algebra`：adjoin_eq_top_of_algebra (hS
+ : Algebra.adjoin F S = ⊤) : adjoin F S = ⊤
+· 使用定理 `IsAdjoinRoot.adjoin_root_eq_top`：adjoin_root_eq_top : Algebra.adjoin R {
+h.root} = ⊤
 -/
 theorem primitive_element_root (h : IsAdjoinRoot E f) : F⟮h.root⟯ = ⊤ :=
   IntermediateField.adjoin_eq_top_of_algebra F {h.root} (adjoin_root_eq_top h)
 
-/--
-Definition of `mkOfPrimitiveElement` / `mkOfPrimitiveElement` 的定义
+/-- If `α` is primitive in `E/f`, then `E` is given by adjoining a root of `minpoly F α`. -/
+/-
+**IsAdjoinRoot.mkOfPrimitiveElement** 是 Mathlib 中的一个缩写定义，位于命名空间 `IsAdjoinRoot`。
+形式化陈述：mkOfPrimitiveElement {α : E} (hα : IsIntegral F α) (hα₂ : F⟮α⟯ = ⊤) : IsAd
+joinRoot E (minpoly F α)
+参数：hα : IsIntegral F α；hα₂ : F⟮α⟯ = ⊤。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation mkOfPrimitiveElement
-  signature: {α : E} (hα : IsIntegral F α) (hα₂ : F⟮α⟯ = ⊤)
-  body: mkOfAdjoinEqTop hα (Algebra.adjoin_eq_top_of_primitive_element hα.isAlgebraic hα₂)
-
-中文:
-缩写 mkOfPrimitiveElement
-  签名: {α : E} (hα : 是整 F α) (hα₂ : F⟮α⟯ = ⊤)
-  定义体: mkOfAdjoinEqTop hα (Algebra.adjoin_eq_top_of_primitive_element hα.isAlgebraic hα₂)
-
-Depends on / 依赖: Algebra, Algebra.adjoin_eq_top_of_primitive_element, adjoin_eq_top_of_primitive_element, isAlgebraic, mkOfAdjoinEqTop
+--- 原说明 ---
+If `α` is primitive in `E/f`, then `E` is given by adjoining a root of `minpoly 
+F α`.
 -/
 abbrev mkOfPrimitiveElement {α : E} (hα : IsIntegral F α) (hα₂ : F⟮α⟯ = ⊤) :
     IsAdjoinRoot E (minpoly F α) :=
   mkOfAdjoinEqTop hα (Algebra.adjoin_eq_top_of_primitive_element hα.isAlgebraic hα₂)
 
-/--
-Definition of `_root_.IsAdjoinRootMonic.mkOfPrimitiveElement` / `_root_.IsAdjoinRootMonic.mkOfPrimitiveElement` 的定义
+/-- If `α` is primitive in `E/f`, then `E` is given by adjoining a root of `minpoly F α`. -/
+/-
+**IsAdjoinRoot._root_.IsAdjoinRootMonic.mkOfPrimitiveElement** 是 Mathlib 中的一个缩写定
+义，位于命名空间 `IsAdjoinRoot`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation _root_.IsAdjoinRootMonic.mkOfPrimitiveElement
-  body: IsAdjoinRoot.mkOfPrimitiveElement hα hα₂
-  monic := minpoly.monic hα
-
-中文:
-缩写 _root_.是AdjoinRootMonic.mkOfPrimitiveElement
-  定义体: IsAdjoinRoot.mkOfPrimitiveElement hα hα₂
-  monic := minpoly.monic hα
-
-Depends on / 依赖: IsAdjoinRoot, IsAdjoinRoot.mkOfPrimitiveElement, mkOfPrimitiveElement
+--- 原说明 ---
+If `α` is primitive in `E/f`, then `E` is given by adjoining a root of `minpoly 
+F α`.
 -/
 abbrev _root_.IsAdjoinRootMonic.mkOfPrimitiveElement
     {α : E} (hα : IsIntegral F α) (hα₂ : F⟮α⟯ = ⊤) : IsAdjoinRootMonic E (minpoly F α) where
@@ -2624,3 +2341,4 @@ abbrev _root_.IsAdjoinRootMonic.mkOfPrimitiveElement
 end IsAdjoinRoot
 
 end Field
+

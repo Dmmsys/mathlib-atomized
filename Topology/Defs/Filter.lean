@@ -128,29 +128,23 @@ open scoped Topology
 neighborhoods of `x` forms a filter, the neighborhood filter at `x`, is here defined as the
 infimum over the principal filters of all open sets containing `x`. -/
 irreducible_def nhds (x : X) : Filter X :=
-  ⨅ s in { s : Set X | x in s ∧ IsOpen s }, 𝓟 s
+  ⨅ s ∈ { s : Set X | x ∈ s ∧ IsOpen s }, 𝓟 s
 
 @[inherit_doc]
 scoped[Topology] notation "𝓝" => nhds
 
-/--
-Definition of `nhdsWithin` / `nhdsWithin` 的定义
+/-- The "neighborhood within" filter. Elements of `𝓝[s] x` are sets containing the
+intersection of `s` and a neighborhood of `x`. -/
+/-
+**nhdsWithin** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：nhdsWithin (x : X) (s : Set X) : Filter X
+参数：x : X；s : Set X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nhdsWithin
-  signature: (x : X) (s : Set X)
-  body: 𝓝 x ⊓ 𝓟 s
-
-@[inherit_doc]
-scoped[Topology] notation "𝓝[" s "] " x:100 => nhdsWithin x s
-
-中文:
-定义 nhdsWithin
-  签名: (x : X) (s : 集合 X)
-  定义体: 𝓝 x ⊓ 𝓟 s
-
-@[inherit_doc]
-scoped[Topology] notation "𝓝[" s "] " x:100 => nhdsWithin x s
+--- 原说明 ---
+The "neighborhood within" filter. Elements of `𝓝[s] x` are sets containing the
+intersection of `s` and a neighborhood of `x`.
 -/
 def nhdsWithin (x : X) (s : Set X) : Filter X :=
   𝓝 x ⊓ 𝓟 s
@@ -159,14 +153,14 @@ def nhdsWithin (x : X) (s : Set X) : Filter X :=
 scoped[Topology] notation "𝓝[" s "] " x:100 => nhdsWithin x s
 
 /-- Notation for the filter of punctured neighborhoods of a point. -/
-scoped[Topology] notation3 (name := nhdsNE) "𝓝[!=] " x:100 =>
+scoped[Topology] notation3 (name := nhdsNE) "𝓝[≠] " x:100 =>
   nhdsWithin x (@singleton _ (Set _) Set.instSingletonSet x)ᶜ
 
 /-- Notation for the filter of right neighborhoods of a point. -/
-scoped[Topology] notation3 (name := nhdsGE) "𝓝[>=] " x:100 => nhdsWithin x (Set.Ici x)
+scoped[Topology] notation3 (name := nhdsGE) "𝓝[≥] " x:100 => nhdsWithin x (Set.Ici x)
 
 /-- Notation for the filter of left neighborhoods of a point. -/
-scoped[Topology] notation3 (name := nhdsLE) "𝓝[<=] " x:100 => nhdsWithin x (Set.Iic x)
+scoped[Topology] notation3 (name := nhdsLE) "𝓝[≤] " x:100 => nhdsWithin x (Set.Iic x)
 
 /-- Notation for the filter of punctured right neighborhoods of a point. -/
 scoped[Topology] notation3 (name := nhdsGT) "𝓝[>] " x:100 => nhdsWithin x (Set.Ioi x)
@@ -174,163 +168,177 @@ scoped[Topology] notation3 (name := nhdsGT) "𝓝[>] " x:100 => nhdsWithin x (Se
 /-- Notation for the filter of punctured left neighborhoods of a point. -/
 scoped[Topology] notation3 (name := nhdsLT) "𝓝[<] " x:100 => nhdsWithin x (Set.Iio x)
 
-/--
-Definition of `nhdsSet` / `nhdsSet` 的定义
+/-- The filter of neighborhoods of a set in a topological space. -/
+/-
+**nhdsSet** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：nhdsSet (s : Set X) : Filter X
+参数：s : Set X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nhdsSet
-  signature: (s : Set X)
-  body: sSup (nhds '' s)
-
-@[inherit_doc] scoped[Topology] notation "𝓝ˢ" => nhdsSet
-
-中文:
-定义 nhdsSet
-  签名: (s : 集合 X)
-  定义体: sSup (nhds '' s)
-
-@[inherit_doc] scoped[Topology] notation "𝓝ˢ" => nhdsSet
+--- 原说明 ---
+The filter of neighborhoods of a set in a topological space.
 -/
 def nhdsSet (s : Set X) : Filter X :=
   sSup (nhds '' s)
 
 @[inherit_doc] scoped[Topology] notation "𝓝ˢ" => nhdsSet
 
-/--
-Definition of `nhdsSetWithin` / `nhdsSetWithin` 的定义
+/-- The "neighbourhood within" filter for sets. Elements of `𝓝[t] s` are sets containing the
+intersection of `t` and a neighbourhood of `s`. -/
+/-
+**nhdsSetWithin** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：nhdsSetWithin (s t : Set X) : Filter X
+参数：s t : Set X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nhdsSetWithin
-  signature: (s t : Set X)
-  body: 𝓝ˢ s ⊓ 𝓟 t
-
-@[inherit_doc] scoped[Topology] notation "𝓝ˢ[" t "] " s:100 => nhdsSetWithin s t
-
-中文:
-定义 nhdsSetWithin
-  签名: (s t : 集合 X)
-  定义体: 𝓝ˢ s ⊓ 𝓟 t
-
-@[inherit_doc] scoped[Topology] notation "𝓝ˢ[" t "] " s:100 => nhdsSetWithin s t
+--- 原说明 ---
+The "neighbourhood within" filter for sets. Elements of `𝓝[t] s` are sets contai
+ning the
+intersection of `t` and a neighbourhood of `s`.
 -/
 def nhdsSetWithin (s t : Set X) : Filter X := 𝓝ˢ s ⊓ 𝓟 t
 
 @[inherit_doc] scoped[Topology] notation "𝓝ˢ[" t "] " s:100 => nhdsSetWithin s t
 
-/--
-Definition of `nhdsKer` / `nhdsKer` 的定义
+/-- The *neighborhoods kernel* of a set is the intersection of all its neighborhoods. In an
+Alexandrov-discrete space, this is the smallest neighborhood of the set. -/
+/-
+**nhdsKer** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：nhdsKer (s : Set X) : Set X
+参数：s : Set X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nhdsKer
-  signature: (s : Set X)
-  body: (𝓝ˢ s).ker
-
-中文:
-定义 nhdsKer
-  签名: (s : 集合 X)
-  定义体: (𝓝ˢ s).ker
+--- 原说明 ---
+The *neighborhoods kernel* of a set is the intersection of all its neighborhoods
+. In an
+Alexandrov-discrete space, this is the smallest neighborhood of the set.
 -/
 def nhdsKer (s : Set X) : Set X := (𝓝ˢ s).ker
 
 /-- A function between topological spaces is continuous at a point `x₀`
 if `f x` tends to `f x₀` when `x` tends to `x₀`. -/
 @[fun_prop]
-/--
-Definition of `ContinuousAt` / `ContinuousAt` 的定义
+/-
+**ContinuousAt** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ContinuousAt (f : X -> Y) (x : X)
+参数：f : X -> Y；x : X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ContinuousAt
-  signature: (f : X -> Y) (x : X)
-  body: Tendsto f (𝓝 x) (𝓝 (f x))
-
-中文:
-定义 ContinuousAt
-  签名: (f : X -> Y) (x : X)
-  定义体: Tendsto f (𝓝 x) (𝓝 (f x))
-
-Depends on / 依赖: Tendsto
+--- 原说明 ---
+A function between topological spaces is continuous at a point `x₀`
+if `f x` tends to `f x₀` when `x` tends to `x₀`.
 -/
-def ContinuousAt (f : X -> Y) (x : X) :=
+def ContinuousAt (f : X → Y) (x : X) :=
   Tendsto f (𝓝 x) (𝓝 (f x))
 
 /-- A function between topological spaces is continuous at a point `x₀` within a subset `s`
 if `f x` tends to `f x₀` when `x` tends to `x₀` while staying within `s`. -/
 @[fun_prop]
-/--
-Definition of `ContinuousWithinAt` / `ContinuousWithinAt` 的定义
+/-
+**ContinuousWithinAt** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ContinuousWithinAt (f : X -> Y) (s : Set X) (x : X) : Prop
+参数：f : X -> Y；s : Set X；x : X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ContinuousWithinAt
-  signature: (f : X -> Y) (s : Set X) (x : X)
-  body: Tendsto f (𝓝[s] x) (𝓝 (f x))
-
-中文:
-定义 ContinuousWithinAt
-  签名: (f : X -> Y) (s : 集合 X) (x : X)
-  定义体: Tendsto f (𝓝[s] x) (𝓝 (f x))
-
-Depends on / 依赖: Tendsto
+--- 原说明 ---
+A function between topological spaces is continuous at a point `x₀` within a sub
+set `s`
+if `f x` tends to `f x₀` when `x` tends to `x₀` while staying within `s`.
 -/
-def ContinuousWithinAt (f : X -> Y) (s : Set X) (x : X) : Prop :=
+def ContinuousWithinAt (f : X → Y) (s : Set X) (x : X) : Prop :=
   Tendsto f (𝓝[s] x) (𝓝 (f x))
 
 /-- A function between topological spaces is continuous on a subset `s`
 when it's continuous at every point of `s` within `s`. -/
 @[fun_prop]
-/--
-Definition of `ContinuousOn` / `ContinuousOn` 的定义
+/-
+**ContinuousOn** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ContinuousOn (f : X -> Y) (s : Set X) : Prop
+参数：f : X -> Y；s : Set X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ContinuousOn
-  signature: (f : X -> Y) (s : Set X)
-  body: forall x in s, ContinuousWithinAt f s x
-
-中文:
-定义 ContinuousOn
-  签名: (f : X -> Y) (s : 集合 X)
-  定义体: forall x in s, ContinuousWithinAt f s x
-
-Depends on / 依赖: ContinuousWithinAt
+--- 原说明 ---
+A function between topological spaces is continuous on a subset `s`
+when it's continuous at every point of `s` within `s`.
 -/
-def ContinuousOn (f : X -> Y) (s : Set X) : Prop :=
-  forall x in s, ContinuousWithinAt f s x
+def ContinuousOn (f : X → Y) (s : Set X) : Prop :=
+  ∀ x ∈ s, ContinuousWithinAt f s x
 
-/--
-Definition of `Specializes` / `Specializes` 的定义
+/-- `x` specializes to `y` (notation: `x ⤳ y`) if either of the following equivalent properties
+hold:
 
-English:
-definition Specializes
-  signature: (x y : X)
-  body: 𝓝 x <= 𝓝 y
+* `𝓝 x ≤ 𝓝 y`; this property is used as the definition;
+* `pure x ≤ 𝓝 y`; in other words, any neighbourhood of `y` contains `x`;
+* `y ∈ closure {x}`;
+* `closure {y} ⊆ closure {x}`;
+* for any closed set `s` we have `x ∈ s → y ∈ s`;
+* for any open set `s` we have `y ∈ s → x ∈ s`;
+* `y` is a cluster point of the filter `pure x = 𝓟 {x}`.
 
-@[inherit_doc]
-infixl:300 " ⤳ " => Specializes
+This relation defines a `Preorder` on `X`. If `X` is a T₀ space, then this preorder is a partial
+order. If `X` is a T₁ space, then this partial order is trivial : `x ⤳ y ↔ x = y`. -/
+/-
+**Specializes** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Specializes (x y : X) : Prop
+参数：x y : X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 Specializes
-  签名: (x y : X)
-  定义体: 𝓝 x <= 𝓝 y
+--- 原说明 ---
+`x` specializes to `y` (notation: `x ⤳ y`) if either of the following equivalent
+ properties
+hold:
 
-@[inherit_doc]
-infixl:300 " ⤳ " => Specializes
+* `𝓝 x ≤ 𝓝 y`; this property is used as the definition;
+* `pure x ≤ 𝓝 y`; in other words, any neighbourhood of `y` contains `x`;
+* `y ∈ closure {x}`;
+* `closure {y} ⊆ closure {x}`;
+* for any closed set `s` we have `x ∈ s → y ∈ s`;
+* for any open set `s` we have `y ∈ s → x ∈ s`;
+* `y` is a cluster point of the filter `pure x = 𝓟 {x}`.
+
+This relation defines a `Preorder` on `X`. If `X` is a T₀ space, then this preor
+der is a partial
+order. If `X` is a T₁ space, then this partial order is trivial : `x ⤳ y ↔ x = y
+`.
 -/
-def Specializes (x y : X) : Prop := 𝓝 x <= 𝓝 y
+def Specializes (x y : X) : Prop := 𝓝 x ≤ 𝓝 y
 
 @[inherit_doc]
 infixl:300 " ⤳ " => Specializes
 
-/--
-Definition of `Inseparable` / `Inseparable` 的定义
+/-- Two points `x` and `y` in a topological space are `Inseparable`, or *topologically
+indistinguishable*, if any of the following equivalent properties hold:
 
-English:
-definition Inseparable
-  signature: (x y : X)
-  body: 𝓝 x = 𝓝 y
+- `𝓝 x = 𝓝 y`; we use this property as the definition;
+- for any open set `s`, `x ∈ s ↔ y ∈ s`, see `inseparable_iff_forall_isOpen`;
+- for any closed set `s`, `x ∈ s ↔ y ∈ s`, see `inseparable_iff_forall_isClosed`;
+- `x ∈ closure {y}` and `y ∈ closure {x}`, see `inseparable_iff_mem_closure`;
+- `closure {x} = closure {y}`, see `inseparable_iff_closure_eq`.
+-/
+/-
+**Inseparable** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Inseparable (x y : X) : Prop
+参数：x y : X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 不可分
-  签名: (x y : X)
-  定义体: 𝓝 x = 𝓝 y
+--- 原说明 ---
+Two points `x` and `y` in a topological space are `Inseparable`, or *topological
+ly
+indistinguishable*, if any of the following equivalent properties hold:
+
+- `𝓝 x = 𝓝 y`; we use this property as the definition;
+- for any open set `s`, `x ∈ s ↔ y ∈ s`, see `inseparable_iff_forall_isOpen`;
+- for any closed set `s`, `x ∈ s ↔ y ∈ s`, see `inseparable_iff_forall_isClosed`
+;
+- `x ∈ closure {y}` and `y ∈ closure {x}`, see `inseparable_iff_mem_closure`;
+- `closure {x} = closure {y}`, see `inseparable_iff_closure_eq`.
 -/
 def Inseparable (x y : X) : Prop :=
   𝓝 x = 𝓝 y
@@ -339,24 +347,19 @@ variable (X)
 
 /-- Specialization forms a preorder on the topological space. -/
 @[instance_reducible]
-/--
-Definition of `specializationPreorder` / `specializationPreorder` 的定义
+/-
+**specializationPreorder** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：specializationPreorder : Preorder X
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Preorder.le_refl`：∀ {α : Type u_2} [self : Preorder α] (a : α), a ≤ a
+· 使用定理 `Preorder.le_trans`：∀ {α : Type u_2} [self : Preorder α] (a b c : α), a ≤
+ b → b ≤ c → a ≤ c
+· 使用定理 `Preorder.lt_iff_le_not_ge`：∀ {α : Type u_2} [self : Preorder α] (a b : α
+), a < b ↔ a ≤ b ∧ ¬b ≤ a
 
-English:
-definition specializationPreorder
-  signature: : Preorder X
-  body: { Preorder.lift (OrderDual.toDual ∘ 𝓝) with
-    le := fun x y => y ⤳ x
-    lt := fun x y => y ⤳ x ∧ ¬x ⤳ y }
-
-中文:
-定义 specializationPreorder
-  签名: : 预序 X
-  定义体: { Preorder.lift (OrderDual.toDual ∘ 𝓝) with
-    le := fun x y => y ⤳ x
-    lt := fun x y => y ⤳ x ∧ ¬x ⤳ y }
-
-Depends on / 依赖: OrderDual, OrderDual.toDual, Preorder, Preorder.lift, toDual
+--- 原说明 ---
+Specialization forms a preorder on the topological space.
 -/
 def specializationPreorder : Preorder X :=
   { Preorder.lift (OrderDual.toDual ∘ 𝓝) with
@@ -365,35 +368,29 @@ def specializationPreorder : Preorder X :=
 
 /-- A `setoid` version of `Inseparable`, used to define the `SeparationQuotient`. -/
 @[instance_reducible]
-/--
-Definition of `inseparableSetoid` / `inseparableSetoid` 的定义
+/-
+**inseparableSetoid** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：inseparableSetoid : Setoid X
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Setoid.iseqv`：∀ {α : Sort u} [self : Setoid α], Equivalence ⇑self
 
-English:
-definition inseparableSetoid
-  signature: : Setoid X
-  body: { Setoid.comap 𝓝 ⊥ with r := Inseparable }
-
-中文:
-定义 inseparableSetoid
-  签名: : 集合等价关系 X
-  定义体: { Setoid.comap 𝓝 ⊥ with r := Inseparable }
-
-Depends on / 依赖: Inseparable, Setoid, Setoid.comap
+--- 原说明 ---
+A `setoid` version of `Inseparable`, used to define the `SeparationQuotient`.
 -/
 def inseparableSetoid : Setoid X := { Setoid.comap 𝓝 ⊥ with r := Inseparable }
 
-/--
-Definition of `SeparationQuotient` / `SeparationQuotient` 的定义
+/-- The quotient of a topological space by its `inseparableSetoid`. Also called the Kolmogorov
+quotient. This quotient is guaranteed to be a T₀ space. -/
+/-
+**SeparationQuotient** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：SeparationQuotient
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SeparationQuotient
-  body: Quotient (inseparableSetoid X)
-
-中文:
-定义 SeparationQuotient
-  定义体: Quotient (inseparableSetoid X)
-
-Depends on / 依赖: Quotient, inseparableSetoid
+--- 原说明 ---
+The quotient of a topological space by its `inseparableSetoid`. Also called the 
+Kolmogorov
+quotient. This quotient is guaranteed to be a T₀ space.
 -/
 def SeparationQuotient := Quotient (inseparableSetoid X)
 
@@ -402,254 +399,257 @@ variable {X}
 section Lim
 
 
-/--
-Definition of `Filter.lim` / `Filter.lim` 的定义
+/-- If `f` is a filter, then `Filter.lim f` is a limit of the filter, if it exists. -/
+/-
+**Filter.lim** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Filter.lim [Nonempty X] (f : Filter X) : X
+参数：f : Filter X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Filter.lim
-  signature: [Nonempty X] (f : Filter X)
-  body: Classical.epsilon fun x => f <= 𝓝 x
-
-中文:
-定义 滤子.lim
-  签名: [非空 X] (f : 滤子 X)
-  定义体: Classical.epsilon fun x => f <= 𝓝 x
-
-Depends on / 依赖: Classical, Classical.epsilon, epsilon
+--- 原说明 ---
+If `f` is a filter, then `Filter.lim f` is a limit of the filter, if it exists.
 -/
 noncomputable def Filter.lim [Nonempty X] (f : Filter X) : X :=
-  Classical.epsilon fun x => f <= 𝓝 x
+  Classical.epsilon fun x => f ≤ 𝓝 x
 
-/--
-Definition of `Filter.limUnder` / `Filter.limUnder` 的定义
+/-- If `f` is a filter in `α` and `g : α → X` is a function, then `Filter.limUnder f g` is a limit
+of `g` at `f`, if it exists. -/
+/-
+**Filter.limUnder** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Filter.limUnder {α : Type*} [Nonempty X] (f : Filter α) (g : α -> X) : X
+参数：f : Filter α；g : α -> X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Filter.limUnder
-  signature: {α : Type*} [Nonempty X] (f : Filter α) (g : α -> X)
-  body: lim (f.map g)
-
-中文:
-定义 滤子.limUnder
-  签名: {α : 类型} [非空 X] (f : 滤子 α) (g : α -> X)
-  定义体: lim (f.map g)
-
-Depends on / 依赖: f.map
+--- 原说明 ---
+If `f` is a filter in `α` and `g : α → X` is a function, then `Filter.limUnder f
+ g` is a limit
+of `g` at `f`, if it exists.
 -/
-noncomputable def Filter.limUnder {α : Type*} [Nonempty X] (f : Filter α) (g : α -> X) : X :=
+noncomputable def Filter.limUnder {α : Type*} [Nonempty X] (f : Filter α) (g : α → X) : X :=
   lim (f.map g)
 
 end Lim
 
-/--
-Definition of `ClusterPt` / `ClusterPt` 的定义
+/-- A point `x` is a cluster point of a filter `F` if `𝓝 x ⊓ F ≠ ⊥`.
+Also known as an accumulation point or a limit point, but beware that terminology varies.
+This is *not* the same as asking `𝓝[≠] x ⊓ F ≠ ⊥`, which is called `AccPt` in Mathlib.
+See `mem_closure_iff_clusterPt` in particular. -/
+/-
+**ClusterPt** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ClusterPt (x : X) (F : Filter X) : Prop
+参数：x : X；F : Filter X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ClusterPt
-  signature: (x : X) (F : Filter X)
-  body: NeBot (𝓝 x ⊓ F)
-
-中文:
-定义 ClusterPt
-  签名: (x : X) (F : 滤子 X)
-  定义体: NeBot (𝓝 x ⊓ F)
+--- 原说明 ---
+A point `x` is a cluster point of a filter `F` if `𝓝 x ⊓ F ≠ ⊥`.
+Also known as an accumulation point or a limit point, but beware that terminolog
+y varies.
+This is *not* the same as asking `𝓝[≠] x ⊓ F ≠ ⊥`, which is called `AccPt` in Ma
+thlib.
+See `mem_closure_iff_clusterPt` in particular.
 -/
 def ClusterPt (x : X) (F : Filter X) : Prop :=
   NeBot (𝓝 x ⊓ F)
 
-/--
-Definition of `MapClusterPt` / `MapClusterPt` 的定义
+/-- A point `x` is a cluster point of a sequence `u` along a filter `F` if it is a cluster point
+of `map u F`. -/
+/-
+**MapClusterPt** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：MapClusterPt {ι : Type*} (x : X) (F : Filter ι) (u : ι -> X) : Prop
+参数：x : X；F : Filter ι；u : ι -> X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MapClusterPt
-  signature: {ι : Type*} (x : X) (F : Filter ι) (u : ι -> X)
-  body: ClusterPt x (map u F)
-
-中文:
-定义 MapClusterPt
-  签名: {ι : 类型} (x : X) (F : 滤子 ι) (u : ι -> X)
-  定义体: ClusterPt x (map u F)
-
-Depends on / 依赖: ClusterPt
+--- 原说明 ---
+A point `x` is a cluster point of a sequence `u` along a filter `F` if it is a c
+luster point
+of `map u F`.
 -/
-def MapClusterPt {ι : Type*} (x : X) (F : Filter ι) (u : ι -> X) : Prop :=
+def MapClusterPt {ι : Type*} (x : X) (F : Filter ι) (u : ι → X) : Prop :=
   ClusterPt x (map u F)
 
-/--
-Definition of `AccPt` / `AccPt` 的定义
+/-- A point `x` is an accumulation point of a filter `F` if `𝓝[≠] x ⊓ F ≠ ⊥`.
+See also `ClusterPt`. -/
+/-
+**AccPt** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：AccPt (x : X) (F : Filter X) : Prop
+参数：x : X；F : Filter X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AccPt
-  signature: (x : X) (F : Filter X)
-  body: NeBot (𝓝[!=] x ⊓ F)
-
-中文:
-定义 聚点
-  签名: (x : X) (F : 滤子 X)
-  定义体: NeBot (𝓝[!=] x ⊓ F)
+--- 原说明 ---
+A point `x` is an accumulation point of a filter `F` if `𝓝[≠] x ⊓ F ≠ ⊥`.
+See also `ClusterPt`.
 -/
 def AccPt (x : X) (F : Filter X) : Prop :=
-  NeBot (𝓝[!=] x ⊓ F)
+  NeBot (𝓝[≠] x ⊓ F)
 
-/--
-Definition of `IsCompact` / `IsCompact` 的定义
+/-- A set `s` is compact if for every nontrivial filter `f` that contains `s`,
+there exists `a ∈ s` such that every set of `f` meets every neighborhood of `a`. -/
+/-
+**IsCompact** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：IsCompact (s : Set X)
+参数：s : Set X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsCompact
-  signature: (s : Set X)
-  body: forall ⦃f⦄ [NeBot f], f <= 𝓟 s -> exists x in s, ClusterPt x f
-
-中文:
-定义 是紧集
-  签名: (s : 集合 X)
-  定义体: forall ⦃f⦄ [NeBot f], f <= 𝓟 s -> exists x in s, ClusterPt x f
-
-Depends on / 依赖: ClusterPt
+--- 原说明 ---
+A set `s` is compact if for every nontrivial filter `f` that contains `s`,
+there exists `a ∈ s` such that every set of `f` meets every neighborhood of `a`.
 -/
 def IsCompact (s : Set X) :=
-  forall ⦃f⦄ [NeBot f], f <= 𝓟 s -> exists x in s, ClusterPt x f
+  ∀ ⦃f⦄ [NeBot f], f ≤ 𝓟 s → ∃ x ∈ s, ClusterPt x f
 
 variable (X) in
 /-- Type class for compact spaces. Separation is sometimes included in the definition, especially
 in the French literature, but we do not include it here. -/
 @[wikidata Q381892]
-/--
-Definition of `CompactSpace` / `CompactSpace` 的定义
+/-
+**CompactSpace** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(X : Type u_1) → [TopologicalSpace X] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class CompactSpace
-  parameters: : Prop where
-  axioms and operations (1):
-    - isCompact_univ : IsCompact (Set.univ : Set X)
-
-中文:
-类 紧空间
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - isCompact_univ : 是紧集 (集合.univ : 集合 X)
+--- 原说明 ---
+Type class for compact spaces. Separation is sometimes included in the definitio
+n, especially
+in the French literature, but we do not include it here.
 -/
 class CompactSpace : Prop where
   /-- In a compact space, `Set.univ` is a compact set. -/
   isCompact_univ : IsCompact (Set.univ : Set X)
 
 variable (X) in
-/--
-Definition of `NoncompactSpace` / `NoncompactSpace` 的定义
+/-- `X` is a noncompact topological space if it is not a compact space. -/
+/-
+**NoncompactSpace** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(X : Type u_1) → [TopologicalSpace X] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class NoncompactSpace
-  parameters: : Prop where
-  axioms and operations (1):
-    - noncompact_univ : ¬IsCompact (Set.univ : Set X)
-
-中文:
-类 Noncompact空间
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - noncompact_univ : ¬是紧集 (集合.univ : 集合 X)
+--- 原说明 ---
+`X` is a noncompact topological space if it is not a compact space.
 -/
 class NoncompactSpace : Prop where
   /-- In a noncompact space, `Set.univ` is not a compact set. -/
   noncompact_univ : ¬IsCompact (Set.univ : Set X)
 
-/--
-Definition of `WeaklyLocallyCompactSpace` / `WeaklyLocallyCompactSpace` 的定义
+/-- We say that a topological space is a *weakly locally compact space*,
+if each point of this space admits a compact neighborhood. -/
+/-
+**WeaklyLocallyCompactSpace** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(X : Type u_3) → [TopologicalSpace X] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class WeaklyLocallyCompactSpace
-  parameters: (X : Type*) [TopologicalSpace X]
-  axioms and operations (1):
-    - exists_compact_mem_nhds((x : X)) : exists s, IsCompact s ∧ s in 𝓝 x
-
-中文:
-类 WeaklyLocallyCompact空间
-  参数: (X : 类型) [拓扑空间 X]
-  公理与运算 (1 个):
-    - exists_compact_mem_nhds((x : X)) : 存在 s, 是紧集 s ∧ s in 𝓝 x
+--- 原说明 ---
+We say that a topological space is a *weakly locally compact space*,
+if each point of this space admits a compact neighborhood.
 -/
 class WeaklyLocallyCompactSpace (X : Type*) [TopologicalSpace X] : Prop where
   /-- Every point of a weakly locally compact space admits a compact neighborhood. -/
-  exists_compact_mem_nhds (x : X) : exists s, IsCompact s ∧ s in 𝓝 x
+  exists_compact_mem_nhds (x : X) : ∃ s, IsCompact s ∧ s ∈ 𝓝 x
 
 export WeaklyLocallyCompactSpace (exists_compact_mem_nhds)
 
-/--
-Definition of `LocallyCompactSpace` / `LocallyCompactSpace` 的定义
+/-- There are various definitions of "locally compact space" in the literature,
+which agree for Hausdorff spaces but not in general.
+This one is the precise condition on X needed
+for the evaluation map `C(X, Y) × X → Y` to be continuous for all `Y`
+when `C(X, Y)` is given the compact-open topology.
 
-English:
-class LocallyCompactSpace
-  parameters: (X : Type*) [TopologicalSpace X]
-  axioms and operations (1):
-    - local_compact_nhds : forall (x : X), forall n in 𝓝 x, exists s in 𝓝 x, s subseteq n ∧ IsCompact s
+See also `WeaklyLocallyCompactSpace`, a typeclass that only assumes
+that each point has a compact neighborhood. -/
+/-
+**LocallyCompactSpace** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(X : Type u_3) → [TopologicalSpace X] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 局部紧空间
-  参数: (X : 类型) [拓扑空间 X]
-  公理与运算 (1 个):
-    - local_compact_nhds : 对任意 (x : X), 对任意 n in 𝓝 x, 存在 s in 𝓝 x, s subseteq n ∧ 是紧集 s
+--- 原说明 ---
+There are various definitions of "locally compact space" in the literature,
+which agree for Hausdorff spaces but not in general.
+This one is the precise condition on X needed
+for the evaluation map `C(X, Y) × X → Y` to be continuous for all `Y`
+when `C(X, Y)` is given the compact-open topology.
+
+See also `WeaklyLocallyCompactSpace`, a typeclass that only assumes
+that each point has a compact neighborhood.
 -/
 class LocallyCompactSpace (X : Type*) [TopologicalSpace X] : Prop where
   /-- In a locally compact space,
   every neighbourhood of every point contains a compact neighbourhood of that same point. -/
-  local_compact_nhds : forall (x : X), forall n in 𝓝 x, exists s in 𝓝 x, s subseteq n ∧ IsCompact s
+  local_compact_nhds : ∀ (x : X), ∀ n ∈ 𝓝 x, ∃ s ∈ 𝓝 x, s ⊆ n ∧ IsCompact s
 
-/--
-Definition of `LocallyCompactPair` / `LocallyCompactPair` 的定义
+/-- We say that `X` and `Y` are a locally compact pair of topological spaces,
+if for any continuous map `f : X → Y`, a point `x : X`, and a neighbourhood `s ∈ 𝓝 (f x)`,
+there exists a compact neighbourhood `K ∈ 𝓝 x` such that `f` maps `K` to `s`.
 
-English:
-class LocallyCompactPair
-  parameters: (X Y : Type*) [TopologicalSpace X] [TopologicalSpace Y]
-  axioms and operations (1):
-    - exists_mem_nhds_isCompact_mapsTo : forall {f : X -> Y} {x : X} {s : Set Y}, Continuous f -> s in 𝓝 (f x) -> exists K in 𝓝 x, IsCompact K ∧ Set.MapsTo f K s
+This is a technical assumption that appears in several theorems,
+most notably in `ContinuousMap.continuous_comp'` and `ContinuousMap.continuous_eval`.
+It is satisfied in two cases:
 
-中文:
-类 LocallyCompactPair
-  参数: (X Y : 类型) [拓扑空间 X] [拓扑空间 Y]
-  公理与运算 (1 个):
-    - exists_mem_nhds_isCompact_mapsTo : 对任意 {f : X -> Y} {x : X} {s : 集合 Y}, 连续 f -> s in 𝓝 (f x) -> 存在 K in 𝓝 x, 是紧集 K ∧ 集合.映射到 f K s
+- if `X` is a locally compact topological space, for obvious reasons;
+- if `X` is a weakly locally compact topological space and `Y` is an R₁ space;
+  this fact is a simple generalization of the theorem
+  saying that a weakly locally compact R₁ topological space is locally compact.
+-/
+/-
+**LocallyCompactPair** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(X : Type u_3) → (Y : Type u_4) → [TopologicalSpace X] → [TopologicalSpace
+ Y] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+We say that `X` and `Y` are a locally compact pair of topological spaces,
+if for any continuous map `f : X → Y`, a point `x : X`, and a neighbourhood `s ∈
+ 𝓝 (f x)`,
+there exists a compact neighbourhood `K ∈ 𝓝 x` such that `f` maps `K` to `s`.
+
+This is a technical assumption that appears in several theorems,
+most notably in `ContinuousMap.continuous_comp'` and `ContinuousMap.continuous_e
+val`.
+It is satisfied in two cases:
+
+- if `X` is a locally compact topological space, for obvious reasons;
+- if `X` is a weakly locally compact topological space and `Y` is an R₁ space;
+  this fact is a simple generalization of the theorem
+  saying that a weakly locally compact R₁ topological space is locally compact.
 -/
 class LocallyCompactPair (X Y : Type*) [TopologicalSpace X] [TopologicalSpace Y] : Prop where
   /-- If `f : X → Y` is a continuous map in a locally compact pair of topological spaces
   and `s : Set Y` is a neighbourhood of `f x`, `x : X`,
   then there exists a compact neighbourhood `K` of `x` such that `f` maps `K` to `s`. -/
-  exists_mem_nhds_isCompact_mapsTo : forall {f : X -> Y} {x : X} {s : Set Y},
-    Continuous f -> s in 𝓝 (f x) -> exists K in 𝓝 x, IsCompact K ∧ Set.MapsTo f K s
+  exists_mem_nhds_isCompact_mapsTo : ∀ {f : X → Y} {x : X} {s : Set Y},
+    Continuous f → s ∈ 𝓝 (f x) → ∃ K ∈ 𝓝 x, IsCompact K ∧ Set.MapsTo f K s
 
 export LocallyCompactPair (exists_mem_nhds_isCompact_mapsTo)
 
 variable (X) in
-/--
-Definition of `Filter.cocompact` / `Filter.cocompact` 的定义
+/-- `Filter.cocompact` is the filter generated by complements to compact sets. -/
+/-
+**Filter.cocompact** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Filter.cocompact : Filter X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Filter.cocompact
-  signature: : Filter X
-  body: ⨅ (s : Set X) (_ : IsCompact s), 𝓟 sᶜ
-
-中文:
-定义 滤子.cocompact
-  签名: : 滤子 X
-  定义体: ⨅ (s : Set X) (_ : IsCompact s), 𝓟 sᶜ
-
-Depends on / 依赖: IsCompact
+--- 原说明 ---
+`Filter.cocompact` is the filter generated by complements to compact sets.
 -/
 def Filter.cocompact : Filter X :=
   ⨅ (s : Set X) (_ : IsCompact s), 𝓟 sᶜ
 
 variable (X) in
-/--
-Definition of `Filter.coclosedCompact` / `Filter.coclosedCompact` 的定义
+/-- `Filter.coclosedCompact` is the filter generated by complements to closed compact sets.
+In a Hausdorff space, this is the same as `Filter.cocompact`. -/
+/-
+**Filter.coclosedCompact** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Filter.coclosedCompact : Filter X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Filter.coclosedCompact
-  signature: : Filter X
-  body: ⨅ (s : Set X) (_ : IsClosed s) (_ : IsCompact s), 𝓟 sᶜ
-
-中文:
-定义 滤子.coclosedCompact
-  签名: : 滤子 X
-  定义体: ⨅ (s : Set X) (_ : IsClosed s) (_ : IsCompact s), 𝓟 sᶜ
-
-Depends on / 依赖: IsClosed, IsCompact
+--- 原说明 ---
+`Filter.coclosedCompact` is the filter generated by complements to closed compac
+t sets.
+In a Hausdorff space, this is the same as `Filter.cocompact`.
 -/
 def Filter.coclosedCompact : Filter X :=
   ⨅ (s : Set X) (_ : IsClosed s) (_ : IsCompact s), 𝓟 sᶜ

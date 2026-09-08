@@ -66,263 +66,207 @@ a Coxeter matrix and the standard geometric representation of a Coxeter group.
 /-- A *Coxeter matrix* is a symmetric matrix of natural numbers whose diagonal entries are equal to
 1 and whose off-diagonal entries are not equal to 1. -/
 @[ext]
-/--
-Definition of `CoxeterMatrix` / `CoxeterMatrix` 的定义
+/-
+**CoxeterMatrix** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：CoxeterMatrix (B : Type*) where /-- The underlying matrix of the Coxeter m
+atrix. -/ M : Matrix B B Nat isSymm : M.IsSymm
+参数：B : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CoxeterMatrix
-  parameters: (B : Type*)
-  axioms and operations (4):
-    - M : Matrix B B Nat
-    - isSymm : M.IsSymm  [default: by decide]
-    - diagonal(i) : M i i = 1  [default: by decide]
-    - off_diagonal(i i') : i != i' -> M i i' != 1  [default: by decide]
-
-中文:
-结构 余xeterMatrix
-  参数: (B : 类型)
-  公理与运算 (4 个):
-    - M : 矩阵 B B 自然数
-    - isSymm : M.是Symm  [默认: by decide]
-    - diagonal(i) : M i i = 1  [默认: by decide]
-    - off_diagonal(i i') : i != i' -> M i i' != 1  [默认: by decide]
-
-Depends on / 依赖: diagonal, off_diagonal
+--- 原说明 ---
+A *Coxeter matrix* is a symmetric matrix of natural numbers whose diagonal entri
+es are equal to
+1 and whose off-diagonal entries are not equal to 1.
 -/
 structure CoxeterMatrix (B : Type*) where
   /-- The underlying matrix of the Coxeter matrix. -/
-  M : Matrix B B Nat
+  M : Matrix B B ℕ
   isSymm : M.IsSymm := by decide
   diagonal i : M i i = 1 := by decide
-  off_diagonal i i' : i != i' -> M i i' != 1 := by decide
+  off_diagonal i i' : i ≠ i' → M i i' ≠ 1 := by decide
 
 namespace CoxeterMatrix
 
 variable {B : Type*}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- A Coxeter matrix can be coerced to a matrix. -/
+/-
+**CoxeterMatrix.** 是 Mathlib 中的一个实例，位于命名空间 `CoxeterMatrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: CoeFun (CoxeterMatrix B) fun _ => (Matrix B B Nat)
-  body: ⟨M⟩
-
-中文:
-实例 :
-  签名: CoeFun (余xeterMatrix B) fun _ => (矩阵 B B 自然数)
-  定义体: ⟨M⟩
+--- 原说明 ---
+A Coxeter matrix can be coerced to a matrix.
 -/
-instance : CoeFun (CoxeterMatrix B) fun _ => (Matrix B B Nat) := ⟨M⟩
+instance : CoeFun (CoxeterMatrix B) fun _ ↦ (Matrix B B ℕ) := ⟨M⟩
 
 variable {B' : Type*} (e : B ≃ B') (M : CoxeterMatrix B)
 
 attribute [simp] diagonal
-
-/--
-theorem `symmetric` / 定理 `symmetric`
-
-English:
-theorem symmetric
-  given: (i i' : B)
-  statement: M i i' = M i' i
-  proof: M.isSymm.apply i' i
-
-中文:
-定理 symmetric
-  条件: (i i' : B)
-  结论: M i i' = M i' i
-  证明: M.isSymm.apply i' i
-
-Depends on / 依赖: M.isSymm.apply, isSymm
+/-
+**CoxeterMatrix.symmetric** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterMatrix`。
+形式化陈述：symmetric (i i' : B) : M i i' = M i' i
+参数：i i' : B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.IsSymm.apply`：∀ {α : Type u_1} {n : Type u_3} {A : Matrix n n α},
+ A.IsSymm → ∀ (i j : n), A j i = A i j
+· 使用定理 `CoxeterMatrix.isSymm`：∀ {B : Type u_1} (self : CoxeterMatrix B), self.M.
+IsSymm
 -/
 theorem symmetric (i i' : B) : M i i' = M i' i := M.isSymm.apply i' i
 
-/--
-Definition of `reindex` / `reindex` 的定义
+/-- The Coxeter matrix formed by reindexing via the bijection `e : B ≃ B'`. -/
+/-
+**CoxeterMatrix.reindex** 是 Mathlib 中的一个定义，位于命名空间 `CoxeterMatrix`。
+形式化陈述：{B : Type u_1} → {B' : Type u_2} → B ≃ B' → CoxeterMatrix B → CoxeterMatri
+x B'
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reindex
-  signature: : CoxeterMatrix B' where
-  body: Matrix.reindex e e M
-  isSymm := M.isSymm.submatrix _
-  diagonal i := M.diagonal (e.symm i)
-  off_diagonal i i' h := M.off_diagonal (e.symm i) (e.symm i') (e.symm.injective.ne h)
-
-中文:
-定义 reindex
-  签名: : 余xeterMatrix B' where
-  定义体: Matrix.reindex e e M
-  isSymm := M.isSymm.submatrix _
-  diagonal i := M.diagonal (e.symm i)
-  off_diagonal i i' h := M.off_diagonal (e.symm i) (e.symm i') (e.symm.injective.ne h)
+--- 原说明 ---
+The Coxeter matrix formed by reindexing via the bijection `e : B ≃ B'`.
 -/
 protected def reindex : CoxeterMatrix B' where
   M := Matrix.reindex e e M
   isSymm := M.isSymm.submatrix _
   diagonal i := M.diagonal (e.symm i)
   off_diagonal i i' h := M.off_diagonal (e.symm i) (e.symm i') (e.symm.injective.ne h)
-
-/--
-theorem `reindex_apply` / 定理 `reindex_apply`
-
-English:
-theorem reindex_apply
-  given: (i i' : B')
-  statement: M.reindex e i i' = M (e.symm i) (e.symm i')
-  proof: rfl
-
-中文:
-定理 reindex_apply
-  条件: (i i' : B')
-  结论: M.reindex e i i' = M (e.symm i) (e.symm i')
-  证明: rfl
+/-
+**CoxeterMatrix.reindex_apply** 是 Mathlib 中的一个定理，位于命名空间 `CoxeterMatrix`。
+形式化陈述：reindex_apply (i i' : B') : M.reindex e i i' = M (e.symm i) (e.symm i')
+参数：i i' : B'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem reindex_apply (i i' : B') : M.reindex e i i' = M (e.symm i) (e.symm i') := rfl
 
-variable (n : Nat)
+variable (n : ℕ)
 
-/--
-Definition of `A` / `A` 的定义
+/-- The Coxeter matrix of type Aₙ.
 
-English:
-definition A
-  signature: : CoxeterMatrix (Fin n) where
-  body: Matrix.of fun i j : Fin n =>
-    if i = j then 1
-      else (if (j : Nat) + 1 = i ∨ (i : Nat) + 1 = j then 3 else 2)
-  isSymm := by unfold Matrix.IsSymm; aesop
-  diagonal := by simp
-  off_diagonal := by aesop
+The corresponding Coxeter-Dynkin diagram is:
+```
+    o --- o --- o ⬝ ⬝ ⬝ ⬝ o --- o
+```
+-/
+/-
+**CoxeterMatrix.A** 是 Mathlib 中的一个定义，位于命名空间 `CoxeterMatrix`。
+形式化陈述：(n : ℕ) → CoxeterMatrix (Fin n)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[deprecated (since := "2026-03-25")] alias Aₙ := CoxeterMatrix.A
+--- 原说明 ---
+The Coxeter matrix of type Aₙ.
 
-中文:
-定义 A
-  签名: : 余xeterMatrix (有限集 n) where
-  定义体: Matrix.of fun i j : Fin n =>
-    if i = j then 1
-      else (if (j : Nat) + 1 = i ∨ (i : Nat) + 1 = j then 3 else 2)
-  isSymm := by unfold Matrix.IsSymm; aesop
-  diagonal := by simp
-  off_diagonal := by aesop
-
-@[deprecated (since := "2026-03-25")] alias Aₙ := CoxeterMatrix.A
+The corresponding Coxeter-Dynkin diagram is:
+```
+    o --- o --- o ⬝ ⬝ ⬝ ⬝ o --- o
+```
 -/
 protected def A : CoxeterMatrix (Fin n) where
-  M := Matrix.of fun i j : Fin n =>
+  M := Matrix.of fun i j : Fin n ↦
     if i = j then 1
-      else (if (j : Nat) + 1 = i ∨ (i : Nat) + 1 = j then 3 else 2)
+      else (if (j : ℕ) + 1 = i ∨ (i : ℕ) + 1 = j then 3 else 2)
   isSymm := by unfold Matrix.IsSymm; aesop
   diagonal := by simp
   off_diagonal := by aesop
 
 @[deprecated (since := "2026-03-25")] alias Aₙ := CoxeterMatrix.A
 
-/--
-Definition of `B` / `B` 的定义
+/-- The Coxeter matrix of type Bₙ.
 
-English:
-definition B
-  signature: : CoxeterMatrix (Fin n) where
-  body: Matrix.of fun i j : Fin n =>
-    if i = j then 1
-      else (if i = n - 1 ∧ j = n - 2 ∨ j = n - 1 ∧ i = n - 2 then 4
-        else (if (j : Nat) + 1 = i ∨ (i : Nat) + 1 = j then 3 else 2))
-  isSymm := by unfold Matrix.IsSymm; aesop
-  diagonal := by simp
-  off_diagonal := by aesop
+The corresponding Coxeter-Dynkin diagram is:
+```
+       4
+    o --- o --- o ⬝ ⬝ ⬝ ⬝ o --- o
+```
+-/
+/-
+**CoxeterMatrix.B** 是 Mathlib 中的一个定义，位于命名空间 `CoxeterMatrix`。
+形式化陈述：(n : ℕ) → CoxeterMatrix (Fin n)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[deprecated (since := "2026-03-25")] alias Bₙ := CoxeterMatrix.B
+--- 原说明 ---
+The Coxeter matrix of type Bₙ.
 
-中文:
-定义 B
-  签名: : 余xeterMatrix (有限集 n) where
-  定义体: Matrix.of fun i j : Fin n =>
-    if i = j then 1
-      else (if i = n - 1 ∧ j = n - 2 ∨ j = n - 1 ∧ i = n - 2 then 4
-        else (if (j : Nat) + 1 = i ∨ (i : Nat) + 1 = j then 3 else 2))
-  isSymm := by unfold Matrix.IsSymm; aesop
-  diagonal := by simp
-  off_diagonal := by aesop
-
-@[deprecated (since := "2026-03-25")] alias Bₙ := CoxeterMatrix.B
+The corresponding Coxeter-Dynkin diagram is:
+```
+       4
+    o --- o --- o ⬝ ⬝ ⬝ ⬝ o --- o
+```
 -/
 protected def B : CoxeterMatrix (Fin n) where
-  M := Matrix.of fun i j : Fin n =>
+  M := Matrix.of fun i j : Fin n ↦
     if i = j then 1
       else (if i = n - 1 ∧ j = n - 2 ∨ j = n - 1 ∧ i = n - 2 then 4
-        else (if (j : Nat) + 1 = i ∨ (i : Nat) + 1 = j then 3 else 2))
+        else (if (j : ℕ) + 1 = i ∨ (i : ℕ) + 1 = j then 3 else 2))
   isSymm := by unfold Matrix.IsSymm; aesop
   diagonal := by simp
   off_diagonal := by aesop
 
 @[deprecated (since := "2026-03-25")] alias Bₙ := CoxeterMatrix.B
 
-/--
-Definition of `D` / `D` 的定义
+/-- The Coxeter matrix of type Dₙ.
 
-English:
-definition D
-  signature: : CoxeterMatrix (Fin n) where
-  body: Matrix.of fun i j : Fin n =>
-    if i = j then 1
-      else (if i = n - 1 ∧ j = n - 3 ∨ j = n - 1 ∧ i = n - 3 then 3
-        else (if (j : Nat) + 1 = i ∨ (i : Nat) + 1 = j then 3 else 2))
-  isSymm := by unfold Matrix.IsSymm; aesop
-  diagonal := by simp
-  off_diagonal := by aesop
+The corresponding Coxeter-Dynkin diagram is:
+```
+    o
+     \
+      o --- o ⬝ ⬝ ⬝ ⬝ o --- o
+     /
+    o
+```
+-/
+/-
+**CoxeterMatrix.D** 是 Mathlib 中的一个定义，位于命名空间 `CoxeterMatrix`。
+形式化陈述：(n : ℕ) → CoxeterMatrix (Fin n)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[deprecated (since := "2026-03-25")] alias Dₙ := CoxeterMatrix.D
+--- 原说明 ---
+The Coxeter matrix of type Dₙ.
 
-中文:
-定义 D
-  签名: : 余xeterMatrix (有限集 n) where
-  定义体: Matrix.of fun i j : Fin n =>
-    if i = j then 1
-      else (if i = n - 1 ∧ j = n - 3 ∨ j = n - 1 ∧ i = n - 3 then 3
-        else (if (j : Nat) + 1 = i ∨ (i : Nat) + 1 = j then 3 else 2))
-  isSymm := by unfold Matrix.IsSymm; aesop
-  diagonal := by simp
-  off_diagonal := by aesop
-
-@[deprecated (since := "2026-03-25")] alias Dₙ := CoxeterMatrix.D
+The corresponding Coxeter-Dynkin diagram is:
+```
+    o
+     \
+      o --- o ⬝ ⬝ ⬝ ⬝ o --- o
+     /
+    o
+```
 -/
 protected def D : CoxeterMatrix (Fin n) where
-  M := Matrix.of fun i j : Fin n =>
+  M := Matrix.of fun i j : Fin n ↦
     if i = j then 1
       else (if i = n - 1 ∧ j = n - 3 ∨ j = n - 1 ∧ i = n - 3 then 3
-        else (if (j : Nat) + 1 = i ∨ (i : Nat) + 1 = j then 3 else 2))
+        else (if (j : ℕ) + 1 = i ∨ (i : ℕ) + 1 = j then 3 else 2))
   isSymm := by unfold Matrix.IsSymm; aesop
   diagonal := by simp
   off_diagonal := by aesop
 
 @[deprecated (since := "2026-03-25")] alias Dₙ := CoxeterMatrix.D
 
-/--
-Definition of `I` / `I` 的定义
+/-- The Coxeter matrix of type I₂(m).
 
-English:
-definition I
-  signature: (m : Nat)
-  body: Matrix.of fun i j => if i = j then 1 else m + 2
-  isSymm := by unfold Matrix.IsSymm; aesop
-  diagonal := by simp
-  off_diagonal := by simp
-
-@[deprecated (since := "2026-03-25")] alias I₂ₙ := CoxeterMatrix.I
-
-中文:
-定义 I
-  签名: (m : 自然数)
-  定义体: Matrix.of fun i j => if i = j then 1 else m + 2
-  isSymm := by unfold Matrix.IsSymm; aesop
-  diagonal := by simp
-  off_diagonal := by simp
-
-@[deprecated (since := "2026-03-25")] alias I₂ₙ := CoxeterMatrix.I
+The corresponding Coxeter-Dynkin diagram is:
+```
+     m + 2
+    o --- o
+```
 -/
-protected def I (m : Nat) : CoxeterMatrix (Fin 2) where
+/-
+**CoxeterMatrix.I** 是 Mathlib 中的一个定义，位于命名空间 `CoxeterMatrix`。
+形式化陈述：ℕ → CoxeterMatrix (Fin 2)
+参数：Fin 2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The Coxeter matrix of type I₂(m).
+
+The corresponding Coxeter-Dynkin diagram is:
+```
+     m + 2
+    o --- o
+```
+-/
+protected def I (m : ℕ) : CoxeterMatrix (Fin 2) where
   M := Matrix.of fun i j => if i = j then 1 else m + 2
   isSymm := by unfold Matrix.IsSymm; aesop
   diagonal := by simp
@@ -331,28 +275,28 @@ protected def I (m : Nat) : CoxeterMatrix (Fin 2) where
 @[deprecated (since := "2026-03-25")] alias I₂ₙ := CoxeterMatrix.I
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `E₆` / `E₆` 的定义
+/-- The Coxeter matrix of type E₆.
 
-English:
-definition E₆
-  signature: : CoxeterMatrix (Fin 6) where
-  body: !![1, 2, 3, 2, 2, 2;
-          2, 1, 2, 3, 2, 2;
-          3, 2, 1, 3, 2, 2;
-          2, 3, 3, 1, 3, 2;
-          2, 2, 2, 3, 1, 3;
-          2, 2, 2, 2, 3, 1]
+The corresponding Coxeter-Dynkin diagram is:
+```
+                o
+                |
+    o --- o --- o --- o --- o
+```
+-/
+/-
+**CoxeterMatrix.E** 是 Mathlib 中的一个定义，位于命名空间 `CoxeterMatrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 E₆
-  签名: : 余xeterMatrix (有限集 6) where
-  定义体: !![1, 2, 3, 2, 2, 2;
-          2, 1, 2, 3, 2, 2;
-          3, 2, 1, 3, 2, 2;
-          2, 3, 3, 1, 3, 2;
-          2, 2, 2, 3, 1, 3;
-          2, 2, 2, 2, 3, 1]
+--- 原说明 ---
+The Coxeter matrix of type E₆.
+
+The corresponding Coxeter-Dynkin diagram is:
+```
+                o
+                |
+    o --- o --- o --- o --- o
+```
 -/
 def E₆ : CoxeterMatrix (Fin 6) where
   M := !![1, 2, 3, 2, 2, 2;
@@ -363,30 +307,28 @@ def E₆ : CoxeterMatrix (Fin 6) where
           2, 2, 2, 2, 3, 1]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `E₇` / `E₇` 的定义
+/-- The Coxeter matrix of type E₇.
 
-English:
-definition E₇
-  signature: : CoxeterMatrix (Fin 7) where
-  body: !![1, 2, 3, 2, 2, 2, 2;
-          2, 1, 2, 3, 2, 2, 2;
-          3, 2, 1, 3, 2, 2, 2;
-          2, 3, 3, 1, 3, 2, 2;
-          2, 2, 2, 3, 1, 3, 2;
-          2, 2, 2, 2, 3, 1, 3;
-          2, 2, 2, 2, 2, 3, 1]
+The corresponding Coxeter-Dynkin diagram is:
+```
+                o
+                |
+    o --- o --- o --- o --- o --- o
+```
+-/
+/-
+**CoxeterMatrix.E** 是 Mathlib 中的一个定义，位于命名空间 `CoxeterMatrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 E₇
-  签名: : 余xeterMatrix (有限集 7) where
-  定义体: !![1, 2, 3, 2, 2, 2, 2;
-          2, 1, 2, 3, 2, 2, 2;
-          3, 2, 1, 3, 2, 2, 2;
-          2, 3, 3, 1, 3, 2, 2;
-          2, 2, 2, 3, 1, 3, 2;
-          2, 2, 2, 2, 3, 1, 3;
-          2, 2, 2, 2, 2, 3, 1]
+--- 原说明 ---
+The Coxeter matrix of type E₇.
+
+The corresponding Coxeter-Dynkin diagram is:
+```
+                o
+                |
+    o --- o --- o --- o --- o --- o
+```
 -/
 def E₇ : CoxeterMatrix (Fin 7) where
   M := !![1, 2, 3, 2, 2, 2, 2;
@@ -398,32 +340,28 @@ def E₇ : CoxeterMatrix (Fin 7) where
           2, 2, 2, 2, 2, 3, 1]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `E₈` / `E₈` 的定义
+/-- The Coxeter matrix of type E₈.
 
-English:
-definition E₈
-  signature: : CoxeterMatrix (Fin 8) where
-  body: !![1, 2, 3, 2, 2, 2, 2, 2;
-          2, 1, 2, 3, 2, 2, 2, 2;
-          3, 2, 1, 3, 2, 2, 2, 2;
-          2, 3, 3, 1, 3, 2, 2, 2;
-          2, 2, 2, 3, 1, 3, 2, 2;
-          2, 2, 2, 2, 3, 1, 3, 2;
-          2, 2, 2, 2, 2, 3, 1, 3;
-          2, 2, 2, 2, 2, 2, 3, 1]
+The corresponding Coxeter-Dynkin diagram is:
+```
+                o
+                |
+    o --- o --- o --- o --- o --- o --- o
+```
+-/
+/-
+**CoxeterMatrix.E** 是 Mathlib 中的一个定义，位于命名空间 `CoxeterMatrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 E₈
-  签名: : 余xeterMatrix (有限集 8) where
-  定义体: !![1, 2, 3, 2, 2, 2, 2, 2;
-          2, 1, 2, 3, 2, 2, 2, 2;
-          3, 2, 1, 3, 2, 2, 2, 2;
-          2, 3, 3, 1, 3, 2, 2, 2;
-          2, 2, 2, 3, 1, 3, 2, 2;
-          2, 2, 2, 2, 3, 1, 3, 2;
-          2, 2, 2, 2, 2, 3, 1, 3;
-          2, 2, 2, 2, 2, 2, 3, 1]
+--- 原说明 ---
+The Coxeter matrix of type E₈.
+
+The corresponding Coxeter-Dynkin diagram is:
+```
+                o
+                |
+    o --- o --- o --- o --- o --- o --- o
+```
 -/
 def E₈ : CoxeterMatrix (Fin 8) where
   M := !![1, 2, 3, 2, 2, 2, 2, 2;
@@ -436,24 +374,26 @@ def E₈ : CoxeterMatrix (Fin 8) where
           2, 2, 2, 2, 2, 2, 3, 1]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `F₄` / `F₄` 的定义
+/-- The Coxeter matrix of type F₄.
 
-English:
-definition F₄
-  signature: : CoxeterMatrix (Fin 4) where
-  body: !![1, 3, 2, 2;
-          3, 1, 4, 2;
-          2, 4, 1, 3;
-          2, 2, 3, 1]
+The corresponding Coxeter-Dynkin diagram is:
+```
+             4
+    o --- o --- o --- o
+```
+-/
+/-
+**CoxeterMatrix.F** 是 Mathlib 中的一个定义，位于命名空间 `CoxeterMatrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 F₄
-  签名: : 余xeterMatrix (有限集 4) where
-  定义体: !![1, 3, 2, 2;
-          3, 1, 4, 2;
-          2, 4, 1, 3;
-          2, 2, 3, 1]
+--- 原说明 ---
+The Coxeter matrix of type F₄.
+
+The corresponding Coxeter-Dynkin diagram is:
+```
+             4
+    o --- o --- o --- o
+```
 -/
 def F₄ : CoxeterMatrix (Fin 4) where
   M := !![1, 3, 2, 2;
@@ -462,42 +402,52 @@ def F₄ : CoxeterMatrix (Fin 4) where
           2, 2, 3, 1]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `G₂` / `G₂` 的定义
+/-- The Coxeter matrix of type G₂.
 
-English:
-definition G₂
-  signature: : CoxeterMatrix (Fin 2) where
-  body: !![1, 6;
-          6, 1]
+The corresponding Coxeter-Dynkin diagram is:
+```
+       6
+    o --- o
+```
+-/
+/-
+**CoxeterMatrix.G** 是 Mathlib 中的一个定义，位于命名空间 `CoxeterMatrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 G₂
-  签名: : 余xeterMatrix (有限集 2) where
-  定义体: !![1, 6;
-          6, 1]
+--- 原说明 ---
+The Coxeter matrix of type G₂.
+
+The corresponding Coxeter-Dynkin diagram is:
+```
+       6
+    o --- o
+```
 -/
 def G₂ : CoxeterMatrix (Fin 2) where
   M := !![1, 6;
           6, 1]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `H₃` / `H₃` 的定义
+/-- The Coxeter matrix of type H₃.
 
-English:
-definition H₃
-  signature: : CoxeterMatrix (Fin 3) where
-  body: !![1, 3, 2;
-          3, 1, 5;
-          2, 5, 1]
+The corresponding Coxeter-Dynkin diagram is:
+```
+       5
+    o --- o --- o
+```
+-/
+/-
+**CoxeterMatrix.H** 是 Mathlib 中的一个定义，位于命名空间 `CoxeterMatrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 H₃
-  签名: : 余xeterMatrix (有限集 3) where
-  定义体: !![1, 3, 2;
-          3, 1, 5;
-          2, 5, 1]
+--- 原说明 ---
+The Coxeter matrix of type H₃.
+
+The corresponding Coxeter-Dynkin diagram is:
+```
+       5
+    o --- o --- o
+```
 -/
 def H₃ : CoxeterMatrix (Fin 3) where
   M := !![1, 3, 2;
@@ -505,24 +455,26 @@ def H₃ : CoxeterMatrix (Fin 3) where
           2, 5, 1]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `H₄` / `H₄` 的定义
+/-- The Coxeter matrix of type H₄.
 
-English:
-definition H₄
-  signature: : CoxeterMatrix (Fin 4) where
-  body: !![1, 3, 2, 2;
-          3, 1, 3, 2;
-          2, 3, 1, 5;
-          2, 2, 5, 1]
+The corresponding Coxeter-Dynkin diagram is:
+```
+       5
+    o --- o --- o --- o
+```
+-/
+/-
+**CoxeterMatrix.H** 是 Mathlib 中的一个定义，位于命名空间 `CoxeterMatrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 H₄
-  签名: : 余xeterMatrix (有限集 4) where
-  定义体: !![1, 3, 2, 2;
-          3, 1, 3, 2;
-          2, 3, 1, 5;
-          2, 2, 5, 1]
+--- 原说明 ---
+The Coxeter matrix of type H₄.
+
+The corresponding Coxeter-Dynkin diagram is:
+```
+       5
+    o --- o --- o --- o
+```
 -/
 def H₄ : CoxeterMatrix (Fin 4) where
   M := !![1, 3, 2, 2;
@@ -531,3 +483,4 @@ def H₄ : CoxeterMatrix (Fin 4) where
           2, 2, 5, 1]
 
 end CoxeterMatrix
+

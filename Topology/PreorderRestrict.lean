@@ -19,91 +19,62 @@ public section
 
 namespace Preorder
 
-variable {α : Type*} [Preorder α] {X : α -> Type*} [forall i, TopologicalSpace (X i)]
+variable {α : Type*} [Preorder α] {X : α → Type*} [∀ i, TopologicalSpace (X i)]
 
 @[continuity, fun_prop]
-/--
-theorem `continuous_restrictLe` / 定理 `continuous_restrictLe`
-
-English:
-theorem continuous_restrictLe
-  given: (a : α)
-  statement: Continuous (restrictLe (π := X) a)
-  proof: Pi.continuous_domRestrict _
-
-@[continuity, fun_prop]
-
-中文:
-定理 continuous_restrictLe
-  条件: (a : α)
-  结论: 连续 (restrictLe (π := X) a)
-  证明: Pi.continuous_domRestrict _
-
-@[continuity, fun_prop]
+/-
+**Preorder.continuous_restrictLe** 是 Mathlib 中的一个定理，位于命名空间 `Preorder`。
+形式化陈述：continuous_restrictLe (a : α) : Continuous (restrictLe (π
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Pi.continuous_domRestrict`：Pi.continuous_domRestrict (S : Set ι) : Conti
+nuous (S.domRestrict : (forall i : ι, A i) -> (forall i : S, A i))
 -/
 theorem continuous_restrictLe (a : α) : Continuous (restrictLe (π := X) a) :=
   Pi.continuous_domRestrict _
 
 @[continuity, fun_prop]
-/--
-theorem `continuous_restrictLe₂` / 定理 `continuous_restrictLe₂`
-
-English:
-theorem continuous_restrictLe₂
-  given: {a b : α} (hab : a <= b)
-  statement: Continuous (restrictLe₂ (π := X) hab)
-  proof: Pi.continuous_domRestrict₂ _
-
-中文:
-定理 continuous_restrictLe₂
-  条件: {a b : α} (hab : a <= b)
-  结论: 连续 (restrictLe₂ (π := X) hab)
-  证明: Pi.continuous_domRestrict₂ _
+/-
+**Preorder.continuous_restrictLe** 是 Mathlib 中的一个定理，位于命名空间 `Preorder`。
+形式化陈述：continuous_restrictLe (a : α) : Continuous (restrictLe (π
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Pi.continuous_domRestrict`：Pi.continuous_domRestrict (S : Set ι) : Conti
+nuous (S.domRestrict : (forall i : ι, A i) -> (forall i : S, A i))
 -/
-theorem continuous_restrictLe₂ {a b : α} (hab : a <= b) : Continuous (restrictLe₂ (π := X) hab) :=
+theorem continuous_restrictLe₂ {a b : α} (hab : a ≤ b) : Continuous (restrictLe₂ (π := X) hab) :=
   Pi.continuous_domRestrict₂ _
 
 variable [LocallyFiniteOrderBot α]
 
 @[continuity, fun_prop]
-/--
-theorem `continuous_frestrictLe` / 定理 `continuous_frestrictLe`
-
-English:
-theorem continuous_frestrictLe
-  given: (a : α)
-  statement: Continuous (frestrictLe (π := X) a)
-  proof: Finset.continuous_restrict _
-
-@[continuity, fun_prop]
-
-中文:
-定理 continuous_frestrictLe
-  条件: (a : α)
-  结论: 连续 (frestrictLe (π := X) a)
-  证明: Finset.continuous_restrict _
-
-@[continuity, fun_prop]
+/-
+**Preorder.continuous_frestrictLe** 是 Mathlib 中的一个定理，位于命名空间 `Preorder`。
+形式化陈述：continuous_frestrictLe (a : α) : Continuous (frestrictLe (π
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.continuous_restrict`：Finset.continuous_restrict (s : Finset ι) : 
+Continuous (s.restrict (π
 -/
 theorem continuous_frestrictLe (a : α) : Continuous (frestrictLe (π := X) a) :=
   Finset.continuous_restrict _
 
 @[continuity, fun_prop]
-/--
-theorem `continuous_frestrictLe₂` / 定理 `continuous_frestrictLe₂`
-
-English:
-theorem continuous_frestrictLe₂
-  given: {a b : α} (hab : a <= b)
-  proof: Finset.continuous_restrict₂ _
-
-中文:
-定理 continuous_frestrictLe₂
-  条件: {a b : α} (hab : a <= b)
-  证明: Finset.continuous_restrict₂ _
+/-
+**Preorder.continuous_frestrictLe** 是 Mathlib 中的一个定理，位于命名空间 `Preorder`。
+形式化陈述：continuous_frestrictLe (a : α) : Continuous (frestrictLe (π
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.continuous_restrict`：Finset.continuous_restrict (s : Finset ι) : 
+Continuous (s.restrict (π
 -/
-theorem continuous_frestrictLe₂ {a b : α} (hab : a <= b) :
+theorem continuous_frestrictLe₂ {a b : α} (hab : a ≤ b) :
     Continuous (frestrictLe₂ (π := X) hab) :=
   Finset.continuous_restrict₂ _
 
 end Preorder
+

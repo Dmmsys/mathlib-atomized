@@ -24,60 +24,39 @@ namespace CatCenter
 variable {C : Type u} [Category.{v} C] [Preadditive C]
 
 @[simp]
-/--
-lemma `app_add` / 引理 `app_add`
-
-English:
-lemma app_add
-  given: (z₁ z₂ : CatCenter C) (X : C)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 app_add
-  条件: (z₁ z₂ : CatCenter C) (X : C)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.CatCenter.app_add** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Cat
+Center`。
+形式化陈述：app_add (z₁ z₂ : CatCenter C) (X : C) : (z₁ + z₂).app X = z₁.app X + z₂.ap
+p X
+参数：z₁ z₂ : CatCenter C；X : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma app_add (z₁ z₂ : CatCenter C) (X : C) :
     (z₁ + z₂).app X = z₁.app X + z₂.app X := rfl
 
 @[simp]
-/--
-lemma `app_sub` / 引理 `app_sub`
-
-English:
-lemma app_sub
-  given: (z₁ z₂ : CatCenter C) (X : C)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 app_sub
-  条件: (z₁ z₂ : CatCenter C) (X : C)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.CatCenter.app_sub** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Cat
+Center`。
+形式化陈述：app_sub (z₁ z₂ : CatCenter C) (X : C) : (z₁ - z₂).app X = z₁.app X - z₂.ap
+p X
+参数：z₁ z₂ : CatCenter C；X : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma app_sub (z₁ z₂ : CatCenter C) (X : C) :
     (z₁ - z₂).app X = z₁.app X - z₂.app X := rfl
 
 @[simp]
-/--
-lemma `app_neg` / 引理 `app_neg`
-
-English:
-lemma app_neg
-  given: (z : CatCenter C) (X : C)
-  proof: rfl
-
-中文:
-引理 app_neg
-  条件: (z : CatCenter C) (X : C)
-  证明: rfl
+/-
+**CategoryTheory.CatCenter.app_neg** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Cat
+Center`。
+形式化陈述：app_neg (z : CatCenter C) (X : C) : (-z).app X = - z.app X
+参数：z : CatCenter C；X : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma app_neg (z : CatCenter C) (X : C) :
     (-z).app X = - z.app X := rfl
@@ -85,3 +64,4 @@ lemma app_neg (z : CatCenter C) (X : C) :
 end CatCenter
 
 end CategoryTheory
+

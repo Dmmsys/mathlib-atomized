@@ -54,43 +54,27 @@ section EdgeFinset
 
 variable {G₁ G₂ : SimpleGraph V} [Fintype G.edgeSet] [Fintype G₁.edgeSet] [Fintype G₂.edgeSet]
 
-/--
-Definition of `edgeFinset` / `edgeFinset` 的定义
+/-- The `edgeSet` of the graph as a `Finset`. -/
+/-
+**SimpleGraph.edgeFinset** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph`。
+形式化陈述：edgeFinset : Finset (Sym2 V)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition edgeFinset
-  signature: : Finset (Sym2 V)
-  body: Set.toFinset G.edgeSet
-
-@[simp, norm_cast]
-
-中文:
-定义 edgeFinset
-  签名: : 有限集 (Sym2 V)
-  定义体: Set.toFinset G.edgeSet
-
-@[simp, norm_cast]
-
-Depends on / 依赖: G.edgeSet, Set.toFinset, edgeSet, toFinset
+--- 原说明 ---
+The `edgeSet` of the graph as a `Finset`.
 -/
 def edgeFinset : Finset (Sym2 V) :=
   Set.toFinset G.edgeSet
 
 @[simp, norm_cast]
-/--
-theorem `coe_edgeFinset` / 定理 `coe_edgeFinset`
-
-English:
-theorem coe_edgeFinset
-  statement: (G.edgeFinset : Set (Sym2 V)) = G.edgeSet
-  proof: Set.coe_toFinset _
-
-中文:
-定理 coe_edgeFinset
-  结论: (G.edgeFinset : 集合 (Sym2 V)) = G.edgeSet
-  证明: Set.coe_toFinset _
-
-Depends on / 依赖: Set.coe_toFinset, coe_toFinset
+/-
+**SimpleGraph.coe_edgeFinset** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：coe_edgeFinset : (G.edgeFinset : Set (Sym2 V)) = G.edgeSet
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.coe_toFinset`：coe_toFinset (s : Set α) [Fintype s] : (↑s.toFinset : 
+Set α) = s
 -/
 theorem coe_edgeFinset : (G.edgeFinset : Set (Sym2 V)) = G.edgeSet :=
   Set.coe_toFinset _
@@ -98,143 +82,108 @@ theorem coe_edgeFinset : (G.edgeFinset : Set (Sym2 V)) = G.edgeSet :=
 variable {G}
 
 @[simp]
-/--
-theorem `mem_edgeFinset` / 定理 `mem_edgeFinset`
-
-English:
-theorem mem_edgeFinset
-  statement: e in G.edgeFinset ↔ e in G.edgeSet
-  proof: Set.mem_toFinset
-
-中文:
-定理 mem_edgeFinset
-  结论: e in G.edgeFinset ↔ e in G.edgeSet
-  证明: Set.mem_toFinset
-
-Depends on / 依赖: Set.mem_toFinset, mem_toFinset
+/-
+**SimpleGraph.mem_edgeFinset** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：mem_edgeFinset : e in G.edgeFinset ↔ e in G.edgeSet
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_toFinset`：mem_toFinset {s : Set α} [Fintype s] {a : α} : a in s.
+toFinset ↔ a in s
 -/
-theorem mem_edgeFinset : e in G.edgeFinset ↔ e in G.edgeSet :=
+theorem mem_edgeFinset : e ∈ G.edgeFinset ↔ e ∈ G.edgeSet :=
   Set.mem_toFinset
-
-/--
-theorem `not_isDiag_of_mem_edgeFinset` / 定理 `not_isDiag_of_mem_edgeFinset`
-
-English:
-theorem not_isDiag_of_mem_edgeFinset
-  statement: e in G.edgeFinset -> ¬e.IsDiag
-  proof: not_isDiag_of_mem_edgeSet _ ∘ mem_edgeFinset.1
-
-中文:
-定理 not_isDiag_of_mem_edgeFinset
-  结论: e in G.edgeFinset -> ¬e.IsDiag
-  证明: not_isDiag_of_mem_edgeSet _ ∘ mem_edgeFinset.1
-
-Depends on / 依赖: mem_edgeFinset, not_isDiag_of_mem_edgeSet
+/-
+**SimpleGraph.not_isDiag_of_mem_edgeFinset** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGrap
+h`。
+形式化陈述：not_isDiag_of_mem_edgeFinset : e in G.edgeFinset -> ¬e.IsDiag
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.not_isDiag_of_mem_edgeSet`：not_isDiag_of_mem_edgeSet : e in 
+edgeSet G -> ¬e.IsDiag
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `SimpleGraph.mem_edgeFinset`：mem_edgeFinset : e in G.edgeFinset ↔ e in G.
+edgeSet
 -/
-theorem not_isDiag_of_mem_edgeFinset : e in G.edgeFinset -> ¬e.IsDiag :=
+theorem not_isDiag_of_mem_edgeFinset : e ∈ G.edgeFinset → ¬e.IsDiag :=
   not_isDiag_of_mem_edgeSet _ ∘ mem_edgeFinset.1
 
-/--
-theorem `card_toFinset_mem_edgeFinset` / 定理 `card_toFinset_mem_edgeFinset`
+/-- Mapping an edge to a finite set produces a finset of size `2`. -/
+/-
+**SimpleGraph.card_toFinset_mem_edgeFinset** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGrap
+h`。
+形式化陈述：card_toFinset_mem_edgeFinset [DecidableEq V] (e : G.edgeFinset) : (e : Sym
+2 V).toFinset.card = 2
+参数：e : G.edgeFinset。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Sym2.card_toFinset_of_not_isDiag`：card_toFinset_of_not_isDiag (z : Sym2 
+α) (h : ¬z.IsDiag) : #(z : Sym2 α).toFinset = 2
+· 使用定理 `SimpleGraph.not_isDiag_of_mem_edgeFinset`：not_isDiag_of_mem_edgeFinset :
+ e in G.edgeFinset -> ¬e.IsDiag
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
 
-English:
-theorem card_toFinset_mem_edgeFinset
-  given: [DecidableEq V] (e : G.edgeFinset)
-  proof: Sym2.card_toFinset_of_not_isDiag e.val (G.not_isDiag_of_mem_edgeFinset e.prop)
-
-@[simp]
-
-中文:
-定理 card_toFinset_mem_edgeFinset
-  条件: [DecidableEq V] (e : G.edgeFinset)
-  证明: Sym2.card_toFinset_of_not_isDiag e.val (G.not_isDiag_of_mem_edgeFinset e.prop)
-
-@[simp]
-
-Depends on / 依赖: G.not_isDiag_of_mem_edgeFinset, Sym2.card_toFinset_of_not_isDiag, card_toFinset_of_not_isDiag, e.prop, e.val, not_isDiag_of_mem_edgeFinset
+--- 原说明 ---
+Mapping an edge to a finite set produces a finset of size `2`.
 -/
 theorem card_toFinset_mem_edgeFinset [DecidableEq V] (e : G.edgeFinset) :
     (e : Sym2 V).toFinset.card = 2 :=
   Sym2.card_toFinset_of_not_isDiag e.val (G.not_isDiag_of_mem_edgeFinset e.prop)
 
 @[simp]
-/--
-theorem `edgeFinset_inj` / 定理 `edgeFinset_inj`
-
-English:
-theorem edgeFinset_inj
-  statement: G₁.edgeFinset = G₂.edgeFinset ↔ G₁ = G₂
-  proof: by simp [edgeFinset]
-
-@[simp]
-
-中文:
-定理 edgeFinset_inj
-  结论: G₁.edgeFinset = G₂.edgeFinset ↔ G₁ = G₂
-  证明: by simp [edgeFinset]
-
-@[simp]
-
-Depends on / 依赖: edgeFinset
+/-
+**SimpleGraph.edgeFinset_inj** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：edgeFinset_inj : G₁.edgeFinset = G₂.edgeFinset ↔ G₁ = G₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RelEmbedding.instEmbeddingLike`：∀ {α : Type u_1} {β : Type u_2} {r : α →
+ α → Prop} {s : β → β → Prop}, EmbeddingLike (r ↪r s) α β
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem edgeFinset_inj : G₁.edgeFinset = G₂.edgeFinset ↔ G₁ = G₂ := by simp [edgeFinset]
 
 @[simp]
-/--
-theorem `edgeFinset_subset_edgeFinset` / 定理 `edgeFinset_subset_edgeFinset`
-
-English:
-theorem edgeFinset_subset_edgeFinset
-  statement: G₁.edgeFinset subseteq G₂.edgeFinset ↔ G₁ <= G₂
-  proof: by
-  simp [edgeFinset]
-
-@[simp]
-
-中文:
-定理 edgeFinset_subset_edgeFinset
-  结论: G₁.edgeFinset subseteq G₂.edgeFinset ↔ G₁ <= G₂
-  证明: by
-  simp [edgeFinset]
-
-@[simp]
-
-Depends on / 依赖: edgeFinset
+/-
+**SimpleGraph.edgeFinset_subset_edgeFinset** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGrap
+h`。
+形式化陈述：edgeFinset_subset_edgeFinset : G₁.edgeFinset subseteq G₂.edgeFinset ↔ G₁ <
+= G₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.coe_toFinset`：coe_toFinset (s : Set α) [Fintype s] : (↑s.toFinset : 
+Set α) = s
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem edgeFinset_subset_edgeFinset : G₁.edgeFinset subseteq G₂.edgeFinset ↔ G₁ <= G₂ := by
+theorem edgeFinset_subset_edgeFinset : G₁.edgeFinset ⊆ G₂.edgeFinset ↔ G₁ ≤ G₂ := by
   simp [edgeFinset]
 
 @[simp]
-/--
-theorem `edgeFinset_ssubset_edgeFinset` / 定理 `edgeFinset_ssubset_edgeFinset`
-
-English:
-theorem edgeFinset_ssubset_edgeFinset
-  statement: G₁.edgeFinset ⊂ G₂.edgeFinset ↔ G₁ < G₂
-  proof: by
-  simp [edgeFinset]
-
-@[mono, gcongr] alias ⟨_, edgeFinset_mono⟩ := edgeFinset_subset_edgeFinset
-
-@[mono, gcongr]
-alias ⟨_, edgeFinset_strict_mono⟩ := edgeFinset_ssubset_edgeFinset
-
-@[simp]
-
-中文:
-定理 edgeFinset_ssubset_edgeFinset
-  结论: G₁.edgeFinset ⊂ G₂.edgeFinset ↔ G₁ < G₂
-  证明: by
-  simp [edgeFinset]
-
-@[mono, gcongr] alias ⟨_, edgeFinset_mono⟩ := edgeFinset_subset_edgeFinset
-
-@[mono, gcongr]
-alias ⟨_, edgeFinset_strict_mono⟩ := edgeFinset_ssubset_edgeFinset
-
-@[simp]
-
-Depends on / 依赖: edgeFinset
+/-
+**SimpleGraph.edgeFinset_ssubset_edgeFinset** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGra
+ph`。
+形式化陈述：edgeFinset_ssubset_edgeFinset : G₁.edgeFinset ⊂ G₂.edgeFinset ↔ G₁ < G₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.coe_toFinset`：coe_toFinset (s : Set α) [Fintype s] : (↑s.toFinset : 
+Set α) = s
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem edgeFinset_ssubset_edgeFinset : G₁.edgeFinset ⊂ G₂.edgeFinset ↔ G₁ < G₂ := by
   simp [edgeFinset]
@@ -245,222 +194,194 @@ theorem edgeFinset_ssubset_edgeFinset : G₁.edgeFinset ⊂ G₂.edgeFinset ↔ 
 alias ⟨_, edgeFinset_strict_mono⟩ := edgeFinset_ssubset_edgeFinset
 
 @[simp]
-/--
-theorem `edgeFinset_bot` / 定理 `edgeFinset_bot`
-
-English:
-theorem edgeFinset_bot
-  statement: (⊥ : SimpleGraph V).edgeFinset = ∅
-  proof: by simp [edgeFinset]
-
-@[simp]
-
-中文:
-定理 edgeFinset_bot
-  结论: (⊥ : 简单图 V).edgeFinset = ∅
-  证明: by simp [edgeFinset]
-
-@[simp]
-
-Depends on / 依赖: edgeFinset
+/-
+**SimpleGraph.edgeFinset_bot** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：edgeFinset_bot : (⊥ : SimpleGraph V).edgeFinset = ∅
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.toFinset_congr`：toFinset_congr {s t : Set α} [Fintype s] [Fintype t]
+ (h : s = t) : toFinset s = toFinset t
+· 使用定理 `SimpleGraph.edgeSet_bot`：edgeSet_bot : (⊥ : SimpleGraph V).edgeSet = ∅
+· 使用定理 `Set.toFinset_empty`：toFinset_empty [Fintype (∅ : Set α)] : (∅ : Set α).t
+oFinset = ∅
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem edgeFinset_bot : (⊥ : SimpleGraph V).edgeFinset = ∅ := by simp [edgeFinset]
 
 @[simp]
-/--
-theorem `edgeFinset_sup` / 定理 `edgeFinset_sup`
-
-English:
-theorem edgeFinset_sup
-  given: [Fintype (edgeSet (G₁ ⊔ G₂))] [DecidableEq V]
-  proof: by simp [edgeFinset]
-
-@[simp]
-
-中文:
-定理 edgeFinset_sup
-  条件: [有限类型 (edgeSet (G₁ ⊔ G₂))] [DecidableEq V]
-  证明: by simp [edgeFinset]
-
-@[simp]
-
-Depends on / 依赖: edgeFinset
+/-
+**SimpleGraph.edgeFinset_sup** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：edgeFinset_sup [Fintype (edgeSet (G₁ ⊔ G₂))] [DecidableEq V] : (G₁ ⊔ G₂).e
+dgeFinset = G₁.edgeFinset union G₂.edgeFinset
+参数：edgeSet (G₁ ⊔ G₂)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.toFinset_congr`：toFinset_congr {s t : Set α} [Fintype s] [Fintype t]
+ (h : s = t) : toFinset s = toFinset t
+· 使用定理 `SimpleGraph.edgeSet_sup`：edgeSet_sup : (G₁ ⊔ G₂).edgeSet = G₁.edgeSet un
+ion G₂.edgeSet
+· 使用定理 `Set.toFinset_union`：toFinset_union [Fintype (s union t : Set _)] : (s un
+ion t).toFinset = s.toFinset union t.toFinset
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem edgeFinset_sup [Fintype (edgeSet (G₁ ⊔ G₂))] [DecidableEq V] :
-    (G₁ ⊔ G₂).edgeFinset = G₁.edgeFinset union G₂.edgeFinset := by simp [edgeFinset]
+    (G₁ ⊔ G₂).edgeFinset = G₁.edgeFinset ∪ G₂.edgeFinset := by simp [edgeFinset]
 
 @[simp]
-/--
-theorem `edgeFinset_inf` / 定理 `edgeFinset_inf`
-
-English:
-theorem edgeFinset_inf
-  given: [Fintype (G₁ ⊓ G₂).edgeSet] [DecidableEq V]
-  proof: by
-  simp [edgeFinset]
-
-@[simp]
-
-中文:
-定理 edgeFinset_inf
-  条件: [有限类型 (G₁ ⊓ G₂).edgeSet] [DecidableEq V]
-  证明: by
-  simp [edgeFinset]
-
-@[simp]
-
-Depends on / 依赖: edgeFinset
+/-
+**SimpleGraph.edgeFinset_inf** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：edgeFinset_inf [Fintype (G₁ ⊓ G₂).edgeSet] [DecidableEq V] : (G₁ ⊓ G₂).edg
+eFinset = G₁.edgeFinset inter G₂.edgeFinset
+参数：G₁ ⊓ G₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.toFinset_congr`：toFinset_congr {s t : Set α} [Fintype s] [Fintype t]
+ (h : s = t) : toFinset s = toFinset t
+· 使用定理 `SimpleGraph.edgeSet_inf`：edgeSet_inf : (G₁ ⊓ G₂).edgeSet = G₁.edgeSet in
+ter G₂.edgeSet
+· 使用定理 `Set.toFinset_inter`：toFinset_inter [Fintype (s inter t : Set _)] : (s in
+ter t).toFinset = s.toFinset inter t.toFinset
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem edgeFinset_inf [Fintype (G₁ ⊓ G₂).edgeSet] [DecidableEq V] :
-    (G₁ ⊓ G₂).edgeFinset = G₁.edgeFinset inter G₂.edgeFinset := by
+    (G₁ ⊓ G₂).edgeFinset = G₁.edgeFinset ∩ G₂.edgeFinset := by
   simp [edgeFinset]
 
 @[simp]
-/--
-theorem `edgeFinset_sdiff` / 定理 `edgeFinset_sdiff`
-
-English:
-theorem edgeFinset_sdiff
-  given: [DecidableEq V]
-  proof: by simp [edgeFinset]
-
-@[simp]
-
-中文:
-定理 edgeFinset_sdiff
-  条件: [DecidableEq V]
-  证明: by simp [edgeFinset]
-
-@[simp]
-
-Depends on / 依赖: edgeFinset
+/-
+**SimpleGraph.edgeFinset_sdiff** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：edgeFinset_sdiff [DecidableEq V] : (G₁ \ G₂).edgeFinset = G₁.edgeFinset \ 
+G₂.edgeFinset
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.toFinset_congr`：toFinset_congr {s t : Set α} [Fintype s] [Fintype t]
+ (h : s = t) : toFinset s = toFinset t
+· 使用定理 `SimpleGraph.edgeSet_sdiff`：edgeSet_sdiff : (G₁ \ G₂).edgeSet = G₁.edgeSe
+t \ G₂.edgeSet
+· 使用定理 `Set.toFinset_sdiff`：toFinset_sdiff [Fintype (s \ t : Set _)] : (s \ t).t
+oFinset = s.toFinset \ t.toFinset
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem edgeFinset_sdiff [DecidableEq V] :
     (G₁ \ G₂).edgeFinset = G₁.edgeFinset \ G₂.edgeFinset := by simp [edgeFinset]
 
 @[simp]
-/--
-lemma `disjoint_edgeFinset` / 引理 `disjoint_edgeFinset`
-
-English:
-lemma disjoint_edgeFinset
-  statement: Disjoint G₁.edgeFinset G₂.edgeFinset ↔ Disjoint G₁ G₂
-  proof: by
-  simp_rw [← Finset.disjoint_coe, coe_edgeFinset, disjoint_edgeSet]
-
-@[simp]
-
-中文:
-引理 disjoint_edgeFinset
-  结论: Disjoint G₁.edgeFinset G₂.edgeFinset ↔ Disjoint G₁ G₂
-  证明: by
-  simp_rw [← Finset.disjoint_coe, coe_edgeFinset, disjoint_edgeSet]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.disjoint_coe, coe_edgeFinset, disjoint_coe, disjoint_edgeSet, simp_rw
+/-
+**SimpleGraph.disjoint_edgeFinset** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：disjoint_edgeFinset : Disjoint G₁.edgeFinset G₂.edgeFinset ↔ Disjoint G₁ G
+₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `SimpleGraph.coe_edgeFinset`：coe_edgeFinset : (G.edgeFinset : Set (Sym2 V
+)) = G.edgeSet
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma disjoint_edgeFinset : Disjoint G₁.edgeFinset G₂.edgeFinset ↔ Disjoint G₁ G₂ := by
   simp_rw [← Finset.disjoint_coe, coe_edgeFinset, disjoint_edgeSet]
 
 @[simp]
-/--
-lemma `edgeFinset_eq_empty` / 引理 `edgeFinset_eq_empty`
-
-English:
-lemma edgeFinset_eq_empty
-  statement: G.edgeFinset = ∅ ↔ G = ⊥
-  proof: by
-  rw [← edgeFinset_bot]; rw [edgeFinset_inj]
-
-@[simp]
-
-中文:
-引理 edgeFinset_eq_empty
-  结论: G.edgeFinset = ∅ ↔ G = ⊥
-  证明: by
-  rw [← edgeFinset_bot]; rw [edgeFinset_inj]
-
-@[simp]
-
-Depends on / 依赖: edgeFinset_bot, edgeFinset_inj
+/-
+**SimpleGraph.edgeFinset_eq_empty** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：edgeFinset_eq_empty : G.edgeFinset = ∅ ↔ G = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.edgeFinset_bot`：edgeFinset_bot : (⊥ : SimpleGraph V).edgeFin
+set = ∅
+· 使用定理 `SimpleGraph.edgeFinset_inj`：edgeFinset_inj : G₁.edgeFinset = G₂.edgeFins
+et ↔ G₁ = G₂
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma edgeFinset_eq_empty : G.edgeFinset = ∅ ↔ G = ⊥ := by
-  rw [← edgeFinset_bot]; rw [edgeFinset_inj]
+  rw [← edgeFinset_bot, edgeFinset_inj]
 
 @[simp]
-/--
-lemma `edgeFinset_nonempty` / 引理 `edgeFinset_nonempty`
-
-English:
-lemma edgeFinset_nonempty
-  statement: G.edgeFinset.Nonempty ↔ G != ⊥
-  proof: by
-  rw [Finset.nonempty_iff_ne_empty]; rw [edgeFinset_eq_empty.ne]
-
-中文:
-引理 edgeFinset_nonempty
-  结论: G.edgeFinset.非空 ↔ G != ⊥
-  证明: by
-  rw [Finset.nonempty_iff_ne_empty]; rw [edgeFinset_eq_empty.ne]
-
-Depends on / 依赖: Finset, Finset.nonempty_iff_ne_empty, edgeFinset_eq_empty, edgeFinset_eq_empty.ne, nonempty_iff_ne_empty
+/-
+**SimpleGraph.edgeFinset_nonempty** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：edgeFinset_nonempty : G.edgeFinset.Nonempty ↔ G != ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.nonempty_iff_ne_empty`：nonempty_iff_ne_empty {s : Finset α} : s.N
+onempty ↔ s != ∅
+· 使用定理 `Iff.ne`：∀ {α : Sort u_1} {β : Sort u_2} {a b : α} {c d : β}, (a = b ↔ c 
+= d) → (a ≠ b ↔ c ≠ d)
+· 使用引理 `SimpleGraph.edgeFinset_eq_empty`：edgeFinset_eq_empty : G.edgeFinset = ∅ 
+↔ G = ⊥
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma edgeFinset_nonempty : G.edgeFinset.Nonempty ↔ G != ⊥ := by
-  rw [Finset.nonempty_iff_ne_empty]; rw [edgeFinset_eq_empty.ne]
-
-/--
-theorem `edgeFinset_card` / 定理 `edgeFinset_card`
-
-English:
-theorem edgeFinset_card
-  statement: #G.edgeFinset = Fintype.card G.edgeSet
-  proof: Set.toFinset_card _
-
-中文:
-定理 edgeFinset_card
-  结论: #G.edgeFinset = 有限类型.card G.edgeSet
-  证明: Set.toFinset_card _
-
-Depends on / 依赖: Set.toFinset_card, toFinset_card
+lemma edgeFinset_nonempty : G.edgeFinset.Nonempty ↔ G ≠ ⊥ := by
+  rw [Finset.nonempty_iff_ne_empty, edgeFinset_eq_empty.ne]
+/-
+**SimpleGraph.edgeFinset_card** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：edgeFinset_card : #G.edgeFinset = Fintype.card G.edgeSet
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.toFinset_card`：toFinset_card {α : Type*} (s : Set α) [Fintype s] : s
+.toFinset.card = Fintype.card s
 -/
 theorem edgeFinset_card : #G.edgeFinset = Fintype.card G.edgeSet :=
   Set.toFinset_card _
-
-/--
-theorem `card_edgeSet` / 定理 `card_edgeSet`
-
-English:
-theorem card_edgeSet
-  statement: Fintype.card G.edgeSet = #G.edgeFinset
-  proof: .symm Set.toFinset_card _
-
-中文:
-定理 card_edgeSet
-  结论: 有限类型.card G.edgeSet = #G.edgeFinset
-  证明: .symm Set.toFinset_card _
-
-Depends on / 依赖: Set.toFinset_card, toFinset_card
+/-
+**SimpleGraph.card_edgeSet** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：card_edgeSet : Fintype.card G.edgeSet = #G.edgeFinset
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.toFinset_card`：toFinset_card {α : Type*} (s : Set α) [Fintype s] : s
+.toFinset.card = Fintype.card s
 -/
 theorem card_edgeSet : Fintype.card G.edgeSet = #G.edgeFinset :=
-.symm Set.toFinset_card _
-
-/--
-theorem `edgeSet_univ_card` / 定理 `edgeSet_univ_card`
-
-English:
-theorem edgeSet_univ_card
-  statement: #(univ : Finset G.edgeSet) = #G.edgeFinset
-  proof: by
-  simp [card_edgeSet]
-
-中文:
-定理 edgeSet_univ_card
-  结论: #(univ : 有限集 G.edgeSet) = #G.edgeFinset
-  证明: by
-  simp [card_edgeSet]
-
-Depends on / 依赖: card_edgeSet
+  .symm <| Set.toFinset_card _
+/-
+**SimpleGraph.edgeSet_univ_card** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：edgeSet_univ_card : #(univ : Finset G.edgeSet) = #G.edgeFinset
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.card_edgeSet`：card_edgeSet : Fintype.card G.edgeSet = #G.edg
+eFinset
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem edgeSet_univ_card : #(univ : Finset G.edgeSet) = #G.edgeFinset := by
   simp [card_edgeSet]
@@ -468,67 +389,85 @@ theorem edgeSet_univ_card : #(univ : Finset G.edgeSet) = #G.edgeFinset := by
 variable [Fintype V]
 
 @[simp]
-/--
-theorem `edgeFinset_top` / 定理 `edgeFinset_top`
-
-English:
-theorem edgeFinset_top
-  given: [DecidableEq V]
-  proof: by simp [← coe_inj]
-
-中文:
-定理 edgeFinset_top
-  条件: [DecidableEq V]
-  证明: by simp [← coe_inj]
-
-Depends on / 依赖: coe_inj
+/-
+**SimpleGraph.edgeFinset_top** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：edgeFinset_top [DecidableEq V] : (⊤ : SimpleGraph V).edgeFinset = Sym2.dia
+gSetᶜ.toFinset
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.toFinset_compl`：toFinset_compl [Fintype α] [Fintype (sᶜ : Set _)] : 
+sᶜ.toFinset = s.toFinsetᶜ
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `SimpleGraph.coe_edgeFinset`：coe_edgeFinset : (G.edgeFinset : Set (Sym2 V
+)) = G.edgeSet
+· 使用定理 `SimpleGraph.edgeSet_top`：edgeSet_top : (⊤ : SimpleGraph V).edgeSet = Sym
+2.diagSetᶜ
+· 使用定理 `Finset.coe_compl`：coe_compl (s : Finset α) : ↑sᶜ = (↑s : Set α)ᶜ
+· 使用定理 `Set.coe_toFinset`：coe_toFinset (s : Set α) [Fintype s] : (↑s.toFinset : 
+Set α) = s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem edgeFinset_top [DecidableEq V] :
     (⊤ : SimpleGraph V).edgeFinset = Sym2.diagSetᶜ.toFinset := by simp [← coe_inj]
 
-/--
-theorem `card_edgeFinset_top_eq_card_choose_two` / 定理 `card_edgeFinset_top_eq_card_choose_two`
+/-- The complete graph on `n` vertices has `n.choose 2` edges. -/
+/-
+**SimpleGraph.card_edgeFinset_top_eq_card_choose_two** 是 Mathlib 中的一个定理，位于命名空间 `
+SimpleGraph`。
+形式化陈述：card_edgeFinset_top_eq_card_choose_two [DecidableEq V] : #(⊤ : SimpleGraph
+ V).edgeFinset = (Fintype.card V).choose 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.toFinset_card`：toFinset_card {α : Type*} (s : Set α) [Fintype s] : s
+.toFinset.card = Fintype.card s
+· 使用定理 `Fintype.card_congr'`：card_congr' {α β} [Fintype α] [Fintype β] (h : α = 
+β) : card α = card β
+· 使用定理 `SimpleGraph.edgeSet_top`：edgeSet_top : (⊤ : SimpleGraph V).edgeSet = Sym
+2.diagSetᶜ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem card_edgeFinset_top_eq_card_choose_two
-  given: [DecidableEq V]
-  proof: by
-  simp_rw [edgeFinset, Set.toFinset_card, edgeSet_top, ← Sym2.card_diagSet_compl]
-
-中文:
-定理 card_edgeFinset_top_eq_card_choose_two
-  条件: [DecidableEq V]
-  证明: by
-  simp_rw [edgeFinset, Set.toFinset_card, edgeSet_top, ← Sym2.card_diagSet_compl]
-
-Depends on / 依赖: Set.toFinset_card, Sym2.card_diagSet_compl, card_diagSet_compl, edgeFinset, edgeSet_top, simp_rw, toFinset_card
+--- 原说明 ---
+The complete graph on `n` vertices has `n.choose 2` edges.
 -/
 theorem card_edgeFinset_top_eq_card_choose_two [DecidableEq V] :
     #(⊤ : SimpleGraph V).edgeFinset = (Fintype.card V).choose 2 := by
   simp_rw [edgeFinset, Set.toFinset_card, edgeSet_top, ← Sym2.card_diagSet_compl]
 
-/--
-theorem `card_edgeFinset_le_card_choose_two` / 定理 `card_edgeFinset_le_card_choose_two`
+/-- Any graph on `n` vertices has at most `n.choose 2` edges. -/
+/-
+**SimpleGraph.card_edgeFinset_le_card_choose_two** 是 Mathlib 中的一个定理，位于命名空间 `Simp
+leGraph`。
+形式化陈述：card_edgeFinset_le_card_choose_two : #G.edgeFinset <= (Fintype.card V).cho
+ose 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.card_edgeFinset_top_eq_card_choose_two`：card_edgeFinset_top_
+eq_card_choose_two [DecidableEq V] : #(⊤ : SimpleGraph V).edgeFinset = (Fintype.
+card V).choose 2
+· 使用定理 `Finset.card_le_card`：card_le_card : s subseteq t -> #s <= #t
+· 使用定理 `SimpleGraph.edgeFinset_mono`：∀ {V : Type u_1} {G₁ G₂ : SimpleGraph V} [i
+nst : Fintype ↑G₁.edgeSet] [inst_1 : Fintype ↑G₂.edgeSet],   G₁ ≤ G₂ → G₁.edgeFi
+nset ⊆ G₂.edgeFin…
+· 使用定理 `le_top`：le_top : a <= ⊤
 
-English:
-theorem card_edgeFinset_le_card_choose_two
-  statement: #G.edgeFinset <= (Fintype.card V).choose 2
-  proof: by
-  classical
-  rw [← card_edgeFinset_top_eq_card_choose_two]
-  exact card_le_card (edgeFinset_mono le_top)
-
-中文:
-定理 card_edgeFinset_le_card_choose_two
-  结论: #G.edgeFinset <= (有限类型.card V).choose 2
-  证明: by
-  classical
-  rw [← card_edgeFinset_top_eq_card_choose_two]
-  exact card_le_card (edgeFinset_mono le_top)
-
-Depends on / 依赖: card_edgeFinset_top_eq_card_choose_two, card_le_card, classical, edgeFinset_mono, le_top
+--- 原说明 ---
+Any graph on `n` vertices has at most `n.choose 2` edges.
 -/
-theorem card_edgeFinset_le_card_choose_two : #G.edgeFinset <= (Fintype.card V).choose 2 := by
+theorem card_edgeFinset_le_card_choose_two : #G.edgeFinset ≤ (Fintype.card V).choose 2 := by
   classical
   rw [← card_edgeFinset_top_eq_card_choose_two]
   exact card_le_card (edgeFinset_mono le_top)
@@ -541,7 +480,7 @@ section FiniteAt
 ## Finiteness at a vertex
 
 This section contains definitions and lemmas concerning vertices that
-have finitely many adjacent vertices. We denote this condition by
+have finitely many adjacent vertices.  We denote this condition by
 `Fintype (G.neighborSet v)`.
 
 We define `G.neighborFinset v` to be the `Finset` version of `G.neighborSet v`.
@@ -550,302 +489,265 @@ Use `neighborFinset_eq_filter` to rewrite this definition as a `Finset.filter` e
 
 variable (v) [Fintype (G.neighborSet v)]
 
-/--
-Definition of `neighborFinset` / `neighborFinset` 的定义
+/-- `G.neighborFinset v` is the `Finset` version of `G.neighborSet v` in case `G` is
+locally finite at `v`. -/
+/-
+**SimpleGraph.neighborFinset** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph`。
+形式化陈述：neighborFinset : Finset V
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition neighborFinset
-  signature: : Finset V
-  body: (G.neighborSet v).toFinset
-
-中文:
-定义 neighborFinset
-  签名: : 有限集 V
-  定义体: (G.neighborSet v).toFinset
-
-Depends on / 依赖: G.neighborSet, neighborSet, toFinset
+--- 原说明 ---
+`G.neighborFinset v` is the `Finset` version of `G.neighborSet v` in case `G` is
+locally finite at `v`.
 -/
 def neighborFinset : Finset V :=
   (G.neighborSet v).toFinset
-
-/--
-theorem `neighborFinset_def` / 定理 `neighborFinset_def`
-
-English:
-theorem neighborFinset_def
-  statement: G.neighborFinset v = (G.neighborSet v).toFinset
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 neighborFinset_def
-  结论: G.neighborFinset v = (G.neighborSet v).toFinset
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**SimpleGraph.neighborFinset_def** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：neighborFinset_def : G.neighborFinset v = (G.neighborSet v).toFinset
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem neighborFinset_def : G.neighborFinset v = (G.neighborSet v).toFinset :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_neighborFinset` / 定理 `coe_neighborFinset`
-
-English:
-theorem coe_neighborFinset
-  statement: (G.neighborFinset v : Set V) = G.neighborSet v
-  proof: Set.coe_toFinset _
-
-@[simp]
-
-中文:
-定理 coe_neighborFinset
-  结论: (G.neighborFinset v : 集合 V) = G.neighborSet v
-  证明: Set.coe_toFinset _
-
-@[simp]
-
-Depends on / 依赖: Set.coe_toFinset, coe_toFinset
+/-
+**SimpleGraph.coe_neighborFinset** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：coe_neighborFinset : (G.neighborFinset v : Set V) = G.neighborSet v
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.coe_toFinset`：coe_toFinset (s : Set α) [Fintype s] : (↑s.toFinset : 
+Set α) = s
 -/
 theorem coe_neighborFinset : (G.neighborFinset v : Set V) = G.neighborSet v :=
   Set.coe_toFinset _
 
 @[simp]
-/--
-theorem `mem_neighborFinset` / 定理 `mem_neighborFinset`
-
-English:
-theorem mem_neighborFinset
-  given: (w : V)
-  statement: w in G.neighborFinset v ↔ G.Adj v w
-  proof: Set.mem_toFinset
-
-中文:
-定理 mem_neighborFinset
-  条件: (w : V)
-  结论: w in G.neighborFinset v ↔ G.伴随 v w
-  证明: Set.mem_toFinset
-
-Depends on / 依赖: Set.mem_toFinset, mem_toFinset
+/-
+**SimpleGraph.mem_neighborFinset** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：mem_neighborFinset (w : V) : w in G.neighborFinset v ↔ G.Adj v w
+参数：w : V。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_toFinset`：mem_toFinset {s : Set α} [Fintype s] {a : α} : a in s.
+toFinset ↔ a in s
 -/
-theorem mem_neighborFinset (w : V) : w in G.neighborFinset v ↔ G.Adj v w :=
+theorem mem_neighborFinset (w : V) : w ∈ G.neighborFinset v ↔ G.Adj v w :=
   Set.mem_toFinset
-
-/--
-theorem `notMem_neighborFinset_self` / 定理 `notMem_neighborFinset_self`
-
-English:
-theorem notMem_neighborFinset_self
-  statement: v ∉ G.neighborFinset v
-  proof: by simp
-
-中文:
-定理 notMem_neighborFinset_self
-  结论: v ∉ G.neighborFinset v
-  证明: by simp
+/-
+**SimpleGraph.notMem_neighborFinset_self** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`
+。
+形式化陈述：notMem_neighborFinset_self : v ∉ G.neighborFinset v
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 theorem notMem_neighborFinset_self : v ∉ G.neighborFinset v := by simp
-
-/--
-theorem `neighborFinset_disjoint_singleton` / 定理 `neighborFinset_disjoint_singleton`
-
-English:
-theorem neighborFinset_disjoint_singleton
-  statement: Disjoint (G.neighborFinset v) {v}
-  proof: Finset.disjoint_singleton_right.mpr notMem_neighborFinset_self _ _
-
-中文:
-定理 neighborFinset_disjoint_singleton
-  结论: Disjoint (G.neighborFinset v) {v}
-  证明: Finset.disjoint_singleton_right.mpr notMem_neighborFinset_self _ _
-
-Depends on / 依赖: Finset, Finset.disjoint_singleton_right.mpr, disjoint_singleton_right, notMem_neighborFinset_self
+/-
+**SimpleGraph.neighborFinset_disjoint_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Simpl
+eGraph`。
+形式化陈述：neighborFinset_disjoint_singleton : Disjoint (G.neighborFinset v) {v}
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.disjoint_singleton_right`：disjoint_singleton_right : Disjoint s (
+singleton a) ↔ a ∉ s
+· 使用定理 `SimpleGraph.notMem_neighborFinset_self`：notMem_neighborFinset_self : v ∉
+ G.neighborFinset v
 -/
 theorem neighborFinset_disjoint_singleton : Disjoint (G.neighborFinset v) {v} :=
-Finset.disjoint_singleton_right.mpr notMem_neighborFinset_self _ _
-
-/--
-theorem `singleton_disjoint_neighborFinset` / 定理 `singleton_disjoint_neighborFinset`
-
-English:
-theorem singleton_disjoint_neighborFinset
-  statement: Disjoint {v} (G.neighborFinset v)
-  proof: Finset.disjoint_singleton_left.mpr notMem_neighborFinset_self _ _
-
-中文:
-定理 singleton_disjoint_neighborFinset
-  结论: Disjoint {v} (G.neighborFinset v)
-  证明: Finset.disjoint_singleton_left.mpr notMem_neighborFinset_self _ _
-
-Depends on / 依赖: Finset, Finset.disjoint_singleton_left.mpr, disjoint_singleton_left, notMem_neighborFinset_self
+  Finset.disjoint_singleton_right.mpr <| notMem_neighborFinset_self _ _
+/-
+**SimpleGraph.singleton_disjoint_neighborFinset** 是 Mathlib 中的一个定理，位于命名空间 `Simpl
+eGraph`。
+形式化陈述：singleton_disjoint_neighborFinset : Disjoint {v} (G.neighborFinset v)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.disjoint_singleton_left`：disjoint_singleton_left : Disjoint (sing
+leton a) s ↔ a ∉ s
+· 使用定理 `SimpleGraph.notMem_neighborFinset_self`：notMem_neighborFinset_self : v ∉
+ G.neighborFinset v
 -/
 theorem singleton_disjoint_neighborFinset : Disjoint {v} (G.neighborFinset v) :=
-Finset.disjoint_singleton_left.mpr notMem_neighborFinset_self _ _
-
-/--
-theorem `neighborFinset_bot` / 定理 `neighborFinset_bot`
-
-English:
-theorem neighborFinset_bot
-  given: [Fintype ((⊥ : SimpleGraph V).neighborSet v)]
-  proof: by
-  ext; simp
-
-@[simp]
-
-中文:
-定理 neighborFinset_bot
-  条件: [有限类型 ((⊥ : 简单图 V).neighborSet v)]
-  证明: by
-  ext; simp
-
-@[simp]
+  Finset.disjoint_singleton_left.mpr <| notMem_neighborFinset_self _ _
+/-
+**SimpleGraph.neighborFinset_bot** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：neighborFinset_bot [Fintype ((⊥ : SimpleGraph V).neighborSet v)] : (⊥ : Si
+mpleGraph V).neighborFinset v = ∅
+参数：(⊥ : SimpleGraph V).neighborSet v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem neighborFinset_bot [Fintype ((⊥ : SimpleGraph V).neighborSet v)] :
     (⊥ : SimpleGraph V).neighborFinset v = ∅ := by
   ext; simp
 
 @[simp]
-/--
-theorem `neighborFinset_top` / 定理 `neighborFinset_top`
-
-English:
-theorem neighborFinset_top
-  given: [Fintype V] [DecidableEq V]
-  proof: by
-  simp [← Finset.coe_inj]
-
-@[simp]
-
-中文:
-定理 neighborFinset_top
-  条件: [有限类型 V] [DecidableEq V]
-  证明: by
-  simp [← Finset.coe_inj]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.coe_inj, coe_inj
+/-
+**SimpleGraph.neighborFinset_top** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：neighborFinset_top [Fintype V] [DecidableEq V] : (⊤ : SimpleGraph V).neigh
+borFinset v = {v}ᶜ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.coe_neighborFinset`：coe_neighborFinset : (G.neighborFinset v
+ : Set V) = G.neighborSet v
+· 使用定理 `SimpleGraph.neighborSet_top`：neighborSet_top : neighborSet ⊤ v = {v}ᶜ
+· 使用定理 `Finset.coe_compl`：coe_compl (s : Finset α) : ↑sᶜ = (↑s : Set α)ᶜ
+· 使用定理 `Finset.coe_singleton`：coe_singleton (a : α) : (({a} : Finset α) : Set α)
+ = {a}
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem neighborFinset_top [Fintype V] [DecidableEq V] :
     (⊤ : SimpleGraph V).neighborFinset v = {v}ᶜ := by
   simp [← Finset.coe_inj]
 
 @[simp]
-/--
-theorem `neighborFinset_sup` / 定理 `neighborFinset_sup`
-
-English:
-theorem neighborFinset_sup
-  statement: [DecidableEq V] {G₁ G₂ : SimpleGraph V}
-  proof: by
-  simp [← Finset.coe_inj]
-
-@[simp]
-
-中文:
-定理 neighborFinset_sup
-  结论: [DecidableEq V] {G₁ G₂ : 简单图 V}
-  证明: by
-  simp [← Finset.coe_inj]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.coe_inj, coe_inj
+/-
+**SimpleGraph.neighborFinset_sup** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：neighborFinset_sup [DecidableEq V] {G₁ G₂ : SimpleGraph V} [Fintype ((G₁ ⊔
+ G₂).neighborSet v)] [Fintype (G₁.neighborSet v)] [Fintype (G₂.neighborSet v)] :
+ (G₁ ⊔ G₂).neighborFinset v = G₁.neighborFinset v union G₂.neighborFinset v
+参数：(G₁ ⊔ G₂).neighborSet v；G₁.neighborSet v；G₂.neighborSet v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.coe_neighborFinset`：coe_neighborFinset : (G.neighborFinset v
+ : Set V) = G.neighborSet v
+· 使用定理 `Finset.coe_union`：coe_union (s₁ s₂ : Finset α) : ↑(s₁ union s₂) = (s₁ un
+ion s₂ : Set α)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem neighborFinset_sup [DecidableEq V] {G₁ G₂ : SimpleGraph V}
     [Fintype ((G₁ ⊔ G₂).neighborSet v)] [Fintype (G₁.neighborSet v)] [Fintype (G₂.neighborSet v)] :
-    (G₁ ⊔ G₂).neighborFinset v = G₁.neighborFinset v union G₂.neighborFinset v := by
+    (G₁ ⊔ G₂).neighborFinset v = G₁.neighborFinset v ∪ G₂.neighborFinset v := by
   simp [← Finset.coe_inj]
 
 @[simp]
-/--
-theorem `neighborFinset_inf` / 定理 `neighborFinset_inf`
-
-English:
-theorem neighborFinset_inf
-  statement: [DecidableEq V] {G₁ G₂ : SimpleGraph V}
-  proof: by
-  simp [← Finset.coe_inj]
-
-@[simp]
-
-中文:
-定理 neighborFinset_inf
-  结论: [DecidableEq V] {G₁ G₂ : 简单图 V}
-  证明: by
-  simp [← Finset.coe_inj]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.coe_inj, coe_inj
+/-
+**SimpleGraph.neighborFinset_inf** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：neighborFinset_inf [DecidableEq V] {G₁ G₂ : SimpleGraph V} [Fintype ((G₁ ⊓
+ G₂).neighborSet v)] [Fintype (G₁.neighborSet v)] [Fintype (G₂.neighborSet v)] :
+ (G₁ ⊓ G₂).neighborFinset v = G₁.neighborFinset v inter G₂.neighborFinset v
+参数：(G₁ ⊓ G₂).neighborSet v；G₁.neighborSet v；G₂.neighborSet v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.coe_neighborFinset`：coe_neighborFinset : (G.neighborFinset v
+ : Set V) = G.neighborSet v
+· 使用定理 `Finset.coe_inter`：coe_inter (s₁ s₂ : Finset α) : ↑(s₁ inter s₂) = (s₁ in
+ter s₂ : Set α)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem neighborFinset_inf [DecidableEq V] {G₁ G₂ : SimpleGraph V}
     [Fintype ((G₁ ⊓ G₂).neighborSet v)] [Fintype (G₁.neighborSet v)] [Fintype (G₂.neighborSet v)] :
-    (G₁ ⊓ G₂).neighborFinset v = G₁.neighborFinset v inter G₂.neighborFinset v := by
+    (G₁ ⊓ G₂).neighborFinset v = G₁.neighborFinset v ∩ G₂.neighborFinset v := by
   simp [← Finset.coe_inj]
 
 @[simp]
-/--
-theorem `neighborFinset_sdiff` / 定理 `neighborFinset_sdiff`
-
-English:
-theorem neighborFinset_sdiff
-  statement: [DecidableEq V] {G₁ G₂ : SimpleGraph V}
-  proof: by
-  simp [← Finset.coe_inj]
-
-中文:
-定理 neighborFinset_sdiff
-  结论: [DecidableEq V] {G₁ G₂ : 简单图 V}
-  证明: by
-  simp [← Finset.coe_inj]
-
-Depends on / 依赖: Finset, Finset.coe_inj, coe_inj
+/-
+**SimpleGraph.neighborFinset_sdiff** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：neighborFinset_sdiff [DecidableEq V] {G₁ G₂ : SimpleGraph V} [Fintype ((G₁
+ \ G₂).neighborSet v)] [Fintype (G₁.neighborSet v)] [Fintype (G₂.neighborSet v)]
+ : (G₁ \ G₂).neighborFinset v = G₁.neighborFinset v \ G₂.neighborFinset v
+参数：(G₁ \ G₂).neighborSet v；G₁.neighborSet v；G₂.neighborSet v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.coe_neighborFinset`：coe_neighborFinset : (G.neighborFinset v
+ : Set V) = G.neighborSet v
+· 使用定理 `Finset.coe_sdiff`：coe_sdiff (s₁ s₂ : Finset α) : ↑(s₁ \ s₂) = (s₁ \ s₂ :
+ Set α)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem neighborFinset_sdiff [DecidableEq V] {G₁ G₂ : SimpleGraph V}
     [Fintype ((G₁ \ G₂).neighborSet v)] [Fintype (G₁.neighborSet v)] [Fintype (G₂.neighborSet v)] :
     (G₁ \ G₂).neighborFinset v = G₁.neighborFinset v \ G₂.neighborFinset v := by
   simp [← Finset.coe_inj]
-
-/--
-theorem `disjoint_neighborFinset_of_disjoint` / 定理 `disjoint_neighborFinset_of_disjoint`
-
-English:
-theorem disjoint_neighborFinset_of_disjoint
-  given: [Fintype <| H.neighborSet v] (h : Disjoint G H)
-  proof: by
-  simp [← Finset.disjoint_coe, disjoint_neighborSet.mpr h v]
-
-中文:
-定理 disjoint_neighborFinset_of_disjoint
-  条件: [有限类型 <| H.neighborSet v] (h : Disjoint G H)
-  证明: by
-  simp [← Finset.disjoint_coe, disjoint_neighborSet.mpr h v]
-
-Depends on / 依赖: Finset, Finset.disjoint_coe, disjoint_coe, disjoint_neighborSet, disjoint_neighborSet.mpr
+/-
+**SimpleGraph.disjoint_neighborFinset_of_disjoint** 是 Mathlib 中的一个定理，位于命名空间 `Sim
+pleGraph`。
+形式化陈述：disjoint_neighborFinset_of_disjoint [Fintype <| H.neighborSet v] (h : Disj
+oint G H) : Disjoint (G.neighborFinset v) (H.neighborFinset v)
+参数：h : Disjoint G H。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.coe_neighborFinset`：coe_neighborFinset : (G.neighborFinset v
+ : Set V) = G.neighborSet v
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `SimpleGraph.disjoint_neighborSet`：disjoint_neighborSet : (forall v, Disj
+oint (G.neighborSet v) (H.neighborSet v)) ↔ Disjoint G H
 -/
 theorem disjoint_neighborFinset_of_disjoint [Fintype <| H.neighborSet v] (h : Disjoint G H) :
     Disjoint (G.neighborFinset v) (H.neighborFinset v) := by
   simp [← Finset.disjoint_coe, disjoint_neighborSet.mpr h v]
-
-/--
-theorem `neighborFinset_sup_of_disjoint` / 定理 `neighborFinset_sup_of_disjoint`
-
-English:
-theorem neighborFinset_sup_of_disjoint
-  statement: {G₁ G₂ : SimpleGraph V}
-  proof: by
-  simp [← Finset.coe_inj, Finset.coe_disjUnion]
-
-中文:
-定理 neighborFinset_sup_of_disjoint
-  结论: {G₁ G₂ : 简单图 V}
-  证明: by
-  simp [← Finset.coe_inj, Finset.coe_disjUnion]
-
-Depends on / 依赖: Finset, Finset.coe_disjUnion, Finset.coe_inj, coe_disjUnion, coe_inj
+/-
+**SimpleGraph.neighborFinset_sup_of_disjoint** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGr
+aph`。
+形式化陈述：neighborFinset_sup_of_disjoint {G₁ G₂ : SimpleGraph V} [Fintype ((G₁ ⊔ G₂)
+.neighborSet v)] [Fintype (G₁.neighborSet v)] [Fintype (G₂.neighborSet v)] (h : 
+Disjoint G₁ G₂) : (G₁ ⊔ G₂).neighborFinset v = (G₁.neighborFinset v).disjUnion (
+G₂.neighborFinset v) (disjoint_neighborFinset_of_disjoint G₁ G₂ v h)
+参数：(G₁ ⊔ G₂).neighborSet v；G₁.neighborSet v；G₂.neighborSet v；h : Disjoint G₁ G₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `SimpleGraph.disjoint_neighborFinset_of_disjoint`：disjoint_neighborFinset
+_of_disjoint [Fintype <| H.neighborSet v] (h : Disjoint G H) : Disjoint (G.neigh
+borFinset v) (H.neighborFinset v)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.coe_neighborFinset`：coe_neighborFinset : (G.neighborFinset v
+ : Set V) = G.neighborSet v
+· 使用定理 `Finset.coe_disjUnion`：coe_disjUnion {s t : Finset α} (h : Disjoint s t) 
+: (disjUnion s t h : Set α) = (s : Set α) union t
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem neighborFinset_sup_of_disjoint {G₁ G₂ : SimpleGraph V}
     [Fintype ((G₁ ⊔ G₂).neighborSet v)] [Fintype (G₁.neighborSet v)] [Fintype (G₂.neighborSet v)]
@@ -854,47 +756,40 @@ theorem neighborFinset_sup_of_disjoint {G₁ G₂ : SimpleGraph V}
       (G₁.neighborFinset v).disjUnion (G₂.neighborFinset v)
         (disjoint_neighborFinset_of_disjoint G₁ G₂ v h) := by
   simp [← Finset.coe_inj, Finset.coe_disjUnion]
-
-/--
-lemma `neighborFinset_eq_empty` / 引理 `neighborFinset_eq_empty`
-
-English:
-lemma neighborFinset_eq_empty
-  statement: G.neighborFinset v = ∅ ↔ G.IsIsolated v
-  proof: by
-  simp [neighborFinset, IsIsolated, Set.ext_iff]
-
-中文:
-引理 neighborFinset_eq_empty
-  结论: G.neighborFinset v = ∅ ↔ G.IsIsolated v
-  证明: by
-  simp [neighborFinset, IsIsolated, Set.ext_iff]
+/-
+**SimpleGraph.neighborFinset_eq_empty** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：∀ {V : Type u_1} (G : SimpleGraph V) (v : V) [inst : Fintype ↑(G.neighborS
+et v)],   G.neighborFinset v = ∅ ↔ G.IsIsolated v
+参数：G : SimpleGraph V；v : V；G.neighborSet v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `iff_false`：∀ (p : Prop), (p ↔ False) = ¬p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma neighborFinset_eq_empty : G.neighborFinset v = ∅ ↔ G.IsIsolated v := by
   simp [neighborFinset, IsIsolated, Set.ext_iff]
-
-/--
-lemma `neighborFinset_nonempty` / 引理 `neighborFinset_nonempty`
-
-English:
-lemma neighborFinset_nonempty
-  statement: (G.neighborFinset v).Nonempty ↔ ¬ G.IsIsolated v
-  proof: by
-  simp [nonempty_iff_ne_empty]
-
-protected alias ⟨IsIsolated.of_neighborFinset_eq_empty, IsIsolated.neighborFinset_eq_empty⟩
-    := neighborFinset_eq_empty
-
-中文:
-引理 neighborFinset_nonempty
-  结论: (G.neighborFinset v).非空 ↔ ¬ G.IsIsolated v
-  证明: by
-  simp [nonempty_iff_ne_empty]
-
-protected alias ⟨IsIsolated.of_neighborFinset_eq_empty, IsIsolated.neighborFinset_eq_empty⟩
-    := neighborFinset_eq_empty
-
-Depends on / 依赖: Equiv.ulift.symm, Finite, Finite.of_equiv, of_equiv
+/-
+**SimpleGraph.neighborFinset_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：∀ {V : Type u_1} (G : SimpleGraph V) (v : V) [inst : Fintype ↑(G.neighborS
+et v)],   (G.neighborFinset v).Nonempty ↔ ¬G.IsIsolated v
+参数：G : SimpleGraph V；v : V；G.neighborSet v；G.neighborFinset v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma neighborFinset_nonempty : (G.neighborFinset v).Nonempty ↔ ¬ G.IsIsolated v := by
   simp [nonempty_iff_ne_empty]
@@ -904,695 +799,567 @@ protected alias ⟨IsIsolated.of_neighborFinset_eq_empty, IsIsolated.neighborFin
 
 attribute [simp] IsIsolated.neighborFinset_eq_empty
 
-/--
-Definition of `degree` / `degree` 的定义
+/-- `G.degree v` is the number of vertices adjacent to `v`. -/
+/-
+**SimpleGraph.degree** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph`。
+形式化陈述：degree : Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition degree
-  signature: : Nat
-  body: #(G.neighborFinset v)
-
-@[simp]
-
-中文:
-定义 degree
-  签名: : 自然数
-  定义体: #(G.neighborFinset v)
-
-@[simp]
-
-Depends on / 依赖: G.neighborFinset, neighborFinset
+--- 原说明 ---
+`G.degree v` is the number of vertices adjacent to `v`.
 -/
-def degree : Nat := #(G.neighborFinset v)
+def degree : ℕ := #(G.neighborFinset v)
 
 @[simp]
-/--
-theorem `card_neighborFinset_eq_degree` / 定理 `card_neighborFinset_eq_degree`
-
-English:
-theorem card_neighborFinset_eq_degree
-  statement: #(G.neighborFinset v) = G.degree v
-  proof: rfl
-
-中文:
-定理 card_neighborFinset_eq_degree
-  结论: #(G.neighborFinset v) = G.degree v
-  证明: rfl
+/-
+**SimpleGraph.card_neighborFinset_eq_degree** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGra
+ph`。
+形式化陈述：card_neighborFinset_eq_degree : #(G.neighborFinset v) = G.degree v
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem card_neighborFinset_eq_degree : #(G.neighborFinset v) = G.degree v := rfl
-
-/--
-theorem `card_neighborSet_eq_degree` / 定理 `card_neighborSet_eq_degree`
-
-English:
-theorem card_neighborSet_eq_degree
-  statement: Fintype.card (G.neighborSet v) = G.degree v
-  proof: (Set.toFinset_card _).symm
-
-中文:
-定理 card_neighborSet_eq_degree
-  结论: 有限类型.card (G.neighborSet v) = G.degree v
-  证明: (Set.toFinset_card _).symm
-
-Depends on / 依赖: Set.toFinset_card, toFinset_card
+/-
+**SimpleGraph.card_neighborSet_eq_degree** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`
+。
+形式化陈述：card_neighborSet_eq_degree : Fintype.card (G.neighborSet v) = G.degree v
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.toFinset_card`：toFinset_card {α : Type*} (s : Set α) [Fintype s] : s
+.toFinset.card = Fintype.card s
 -/
 theorem card_neighborSet_eq_degree : Fintype.card (G.neighborSet v) = G.degree v :=
   (Set.toFinset_card _).symm
-
-/--
-lemma `degree_eq_zero` / 引理 `degree_eq_zero`
-
-English:
-lemma degree_eq_zero
-  statement: G.degree v = 0 ↔ G.IsIsolated v
-  proof: by simp [← card_neighborFinset_eq_degree]
-
-中文:
-引理 degree_eq_zero
-  结论: G.degree v = 0 ↔ G.IsIsolated v
-  证明: by simp [← card_neighborFinset_eq_degree]
-
-Depends on / 依赖: card_neighborFinset_eq_degree
+/-
+**SimpleGraph.degree_eq_zero** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：degree_eq_zero : G.degree v = 0 ↔ G.IsIsolated v
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma degree_eq_zero : G.degree v = 0 ↔ G.IsIsolated v := by simp [← card_neighborFinset_eq_degree]
-/--
-lemma `degree_pos` / 引理 `degree_pos`
-
-English:
-lemma degree_pos
-  statement: 0 < G.degree v ↔ ¬ G.IsIsolated v
-  proof: by simp [← card_neighborFinset_eq_degree]
-
-protected alias ⟨IsIsolated.of_degree_eq_zero, IsIsolated.degree_eq_zero⟩ := degree_eq_zero
-
-中文:
-引理 degree_pos
-  结论: 0 < G.degree v ↔ ¬ G.IsIsolated v
-  证明: by simp [← card_neighborFinset_eq_degree]
-
-protected alias ⟨IsIsolated.of_degree_eq_zero, IsIsolated.degree_eq_zero⟩ := degree_eq_zero
-
-Depends on / 依赖: Equiv.ulift.infinite_iff, card_neighborFinset_eq_degree, infinite_iff
+/-
+**SimpleGraph.degree_pos** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：degree_pos : 0 < G.degree v ↔ ¬ G.IsIsolated v
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma degree_pos : 0 < G.degree v ↔ ¬ G.IsIsolated v := by simp [← card_neighborFinset_eq_degree]
 
 protected alias ⟨IsIsolated.of_degree_eq_zero, IsIsolated.degree_eq_zero⟩ := degree_eq_zero
 
 attribute [simp] IsIsolated.degree_eq_zero
-
-/--
-theorem `degree_pos_iff_exists_adj` / 定理 `degree_pos_iff_exists_adj`
-
-English:
-theorem degree_pos_iff_exists_adj
-  statement: 0 < G.degree v ↔ exists w, G.Adj v w
-  proof: by
-  simp only [degree, card_pos, Finset.Nonempty, mem_neighborFinset]
-
-中文:
-定理 degree_pos_iff_存在_adj
-  结论: 0 < G.degree v ↔ 存在 w, G.伴随 v w
-  证明: by
-  simp only [degree, card_pos, Finset.Nonempty, mem_neighborFinset]
-
-Depends on / 依赖: Finset, Finset.Nonempty, Nonempty, card_pos, degree, mem_neighborFinset
+/-
+**SimpleGraph.degree_pos_iff_exists_adj** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：degree_pos_iff_exists_adj : 0 < G.degree v ↔ exists w, G.Adj v w
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem degree_pos_iff_exists_adj : 0 < G.degree v ↔ exists w, G.Adj v w := by
+theorem degree_pos_iff_exists_adj : 0 < G.degree v ↔ ∃ w, G.Adj v w := by
   simp only [degree, card_pos, Finset.Nonempty, mem_neighborFinset]
 
 variable {G v} in
-/--
-theorem `degree_pos_iff_nonempty` / 定理 `degree_pos_iff_nonempty`
-
-English:
-theorem degree_pos_iff_nonempty
-  statement: 0 < G.degree v ↔ (G.neighborSet v).Nonempty
-  proof: G.degree_pos_iff_exists_adj v
-
-中文:
-定理 degree_pos_iff_nonempty
-  结论: 0 < G.degree v ↔ (G.neighborSet v).非空
-  证明: G.degree_pos_iff_exists_adj v
-
-Depends on / 依赖: G.degree_pos_iff_exists_adj, degree_pos_iff_exists_adj
+/-
+**SimpleGraph.degree_pos_iff_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：degree_pos_iff_nonempty : 0 < G.degree v ↔ (G.neighborSet v).Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.degree_pos_iff_exists_adj`：degree_pos_iff_exists_adj : 0 < G
+.degree v ↔ exists w, G.Adj v w
 -/
 theorem degree_pos_iff_nonempty : 0 < G.degree v ↔ (G.neighborSet v).Nonempty :=
   G.degree_pos_iff_exists_adj v
 
 variable {G v} in
-/--
-theorem `Adj.degree_pos_left` / 定理 `Adj.degree_pos_left`
-
-English:
-theorem Adj.degree_pos_left
-  given: {w : V} (h : G.Adj v w)
-  statement: 0 < G.degree v
-  proof: G.degree_pos_iff_nonempty.mpr ⟨_, h⟩
-
-中文:
-定理 伴随.degree_pos_left
-  条件: {w : V} (h : G.伴随 v w)
-  结论: 0 < G.degree v
-  证明: G.degree_pos_iff_nonempty.mpr ⟨_, h⟩
-
-Depends on / 依赖: G.degree_pos_iff_nonempty.mpr, degree_pos_iff_nonempty
+/-
+**SimpleGraph.Adj.degree_pos_left** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Adj`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {v : V} [inst : Fintype ↑(G.neighborS
+et v)] {w : V}, G.Adj v w → 0 < G.degree v
+参数：G.neighborSet v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `SimpleGraph.degree_pos_iff_nonempty`：degree_pos_iff_nonempty : 0 < G.deg
+ree v ↔ (G.neighborSet v).Nonempty
 -/
 theorem Adj.degree_pos_left {w : V} (h : G.Adj v w) : 0 < G.degree v :=
   G.degree_pos_iff_nonempty.mpr ⟨_, h⟩
 
 variable {G v} in
-/--
-theorem `Adj.degree_pos_right` / 定理 `Adj.degree_pos_right`
-
-English:
-theorem Adj.degree_pos_right
-  given: {w : V} (h : G.Adj w v)
-  statement: 0 < G.degree v
-  proof: h.symm.degree_pos_left
-
-中文:
-定理 伴随.degree_pos_right
-  条件: {w : V} (h : G.伴随 w v)
-  结论: 0 < G.degree v
-  证明: h.symm.degree_pos_left
-
-Depends on / 依赖: degree_pos_left, h.symm.degree_pos_left
+/-
+**SimpleGraph.Adj.degree_pos_right** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Adj`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {v : V} [inst : Fintype ↑(G.neighborS
+et v)] {w : V}, G.Adj w v → 0 < G.degree v
+参数：G.neighborSet v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.Adj.degree_pos_left`：∀ {V : Type u_1} {G : SimpleGraph V} {v
+ : V} [inst : Fintype ↑(G.neighborSet v)] {w : V}, G.Adj v w → 0 < G.degree v
+· 使用定理 `SimpleGraph.Adj.symm`：∀ {V : Type u} {G : SimpleGraph V} {u v : V}, G.Ad
+j u v → G.Adj v u
 -/
 theorem Adj.degree_pos_right {w : V} (h : G.Adj w v) : 0 < G.degree v :=
   h.symm.degree_pos_left
-
-/--
-theorem `degree_pos_iff_mem_support` / 定理 `degree_pos_iff_mem_support`
-
-English:
-theorem degree_pos_iff_mem_support
-  statement: 0 < G.degree v ↔ v in G.support
-  proof: by
-  rw [G.degree_pos_iff_exists_adj v]; rw [mem_support]
-
-中文:
-定理 degree_pos_iff_mem_support
-  结论: 0 < G.degree v ↔ v in G.support
-  证明: by
-  rw [G.degree_pos_iff_exists_adj v]; rw [mem_support]
-
-Depends on / 依赖: G.degree_pos_iff_exists_adj, degree_pos_iff_exists_adj, mem_support
+/-
+**SimpleGraph.degree_pos_iff_mem_support** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`
+。
+形式化陈述：degree_pos_iff_mem_support : 0 < G.degree v ↔ v in G.support
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.degree_pos_iff_exists_adj`：degree_pos_iff_exists_adj : 0 < G
+.degree v ↔ exists w, G.Adj v w
+· 使用定理 `SimpleGraph.mem_support`：mem_support {v : V} : v in G.support ↔ exists w
+, G.Adj v w
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem degree_pos_iff_mem_support : 0 < G.degree v ↔ v in G.support := by
-  rw [G.degree_pos_iff_exists_adj v]; rw [mem_support]
-
-/--
-theorem `degree_eq_zero_iff_notMem_support` / 定理 `degree_eq_zero_iff_notMem_support`
-
-English:
-theorem degree_eq_zero_iff_notMem_support
-  statement: G.degree v = 0 ↔ v ∉ G.support
-  proof: by
-  rw [← G.degree_pos_iff_mem_support v]; rw [Nat.pos_iff_ne_zero]; rw [not_ne_iff]
-
-中文:
-定理 degree_eq_zero_iff_notMem_support
-  结论: G.degree v = 0 ↔ v ∉ G.support
-  证明: by
-  rw [← G.degree_pos_iff_mem_support v]; rw [Nat.pos_iff_ne_zero]; rw [not_ne_iff]
-
-Depends on / 依赖: G.degree_pos_iff_mem_support, Nat.pos_iff_ne_zero, degree_pos_iff_mem_support, not_ne_iff, pos_iff_ne_zero
+theorem degree_pos_iff_mem_support : 0 < G.degree v ↔ v ∈ G.support := by
+  rw [G.degree_pos_iff_exists_adj v, mem_support]
+/-
+**SimpleGraph.degree_eq_zero_iff_notMem_support** 是 Mathlib 中的一个定理，位于命名空间 `Simpl
+eGraph`。
+形式化陈述：degree_eq_zero_iff_notMem_support : G.degree v = 0 ↔ v ∉ G.support
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.degree_pos_iff_mem_support`：degree_pos_iff_mem_support : 0 <
+ G.degree v ↔ v in G.support
+· 使用定理 `Nat.pos_iff_ne_zero`：∀ {n : ℕ}, 0 < n ↔ n ≠ 0
+· 使用定理 `not_ne_iff`：not_ne_iff {α : Sort*} {a b : α} : ¬a != b ↔ a = b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem degree_eq_zero_iff_notMem_support : G.degree v = 0 ↔ v ∉ G.support := by
-  rw [← G.degree_pos_iff_mem_support v]; rw [Nat.pos_iff_ne_zero]; rw [not_ne_iff]
-
-/--
-theorem `degree_eq_zero_of_subsingleton` / 定理 `degree_eq_zero_of_subsingleton`
-
-English:
-theorem degree_eq_zero_of_subsingleton
-  statement: {G : SimpleGraph V} (v : V) [Fintype (G.neighborSet v)]
-  proof: by
-  simp
-
-中文:
-定理 degree_eq_zero_of_subsingleton
-  结论: {G : 简单图 V} (v : V) [有限类型 (G.neighborSet v)]
-  证明: by
-  simp
+  rw [← G.degree_pos_iff_mem_support v, Nat.pos_iff_ne_zero, not_ne_iff]
+/-
+**SimpleGraph.degree_eq_zero_of_subsingleton** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGr
+aph`。
+形式化陈述：degree_eq_zero_of_subsingleton {G : SimpleGraph V} (v : V) [Fintype (G.nei
+ghborSet v)] [Subsingleton V] : G.degree v = 0
+参数：v : V；G.neighborSet v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.IsIsolated.degree_eq_zero`：∀ {V : Type u_1} (G : SimpleGraph
+ V) (v : V) [inst : Fintype ↑(G.neighborSet v)], G.IsIsolated v → G.degree v = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem degree_eq_zero_of_subsingleton {G : SimpleGraph V} (v : V) [Fintype (G.neighborSet v)]
     [Subsingleton V] : G.degree v = 0 := by
   simp
-
-/--
-theorem `nontrivial_of_degree_ne_zero` / 定理 `nontrivial_of_degree_ne_zero`
-
-English:
-theorem nontrivial_of_degree_ne_zero
-  statement: {G : SimpleGraph V} {v : V} [Fintype (G.neighborSet v)]
-  proof: nontrivial_of_not_isIsolated .not.mp h G.degree_eq_zero v
-
-中文:
-定理 nontrivial_of_degree_ne_zero
-  结论: {G : 简单图 V} {v : V} [有限类型 (G.neighborSet v)]
-  证明: nontrivial_of_not_isIsolated .not.mp h G.degree_eq_zero v
-
-Depends on / 依赖: G.degree_eq_zero, degree_eq_zero, nontrivial_of_not_isIsolated, not.mp
+/-
+**SimpleGraph.nontrivial_of_degree_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGrap
+h`。
+形式化陈述：nontrivial_of_degree_ne_zero {G : SimpleGraph V} {v : V} [Fintype (G.neigh
+borSet v)] (h : G.degree v != 0) : Nontrivial V
+参数：G.neighborSet v；h : G.degree v != 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.nontrivial_of_not_isIsolated`：nontrivial_of_not_isIsolated (
+h : ¬G.IsIsolated v) : Nontrivial V
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用引理 `SimpleGraph.degree_eq_zero`：degree_eq_zero : G.degree v = 0 ↔ G.IsIsolat
+ed v
 -/
 theorem nontrivial_of_degree_ne_zero {G : SimpleGraph V} {v : V} [Fintype (G.neighborSet v)]
-    (h : G.degree v != 0) : Nontrivial V :=
-nontrivial_of_not_isIsolated .not.mp h G.degree_eq_zero v
-
-/--
-theorem `degree_eq_one_iff_existsUnique_adj` / 定理 `degree_eq_one_iff_existsUnique_adj`
-
-English:
-theorem degree_eq_one_iff_existsUnique_adj
-  given: {G : SimpleGraph V} {v : V} [Fintype (G.neighborSet v)]
-  proof: by
-  rw [degree]; rw [Finset.card_eq_one]; rw [Finset.singleton_iff_unique_mem]
-  simp only [mem_neighborFinset]
-
-中文:
-定理 degree_eq_one_iff_存在Unique_adj
-  条件: {G : 简单图 V} {v : V} [有限类型 (G.neighborSet v)]
-  证明: by
-  rw [degree]; rw [Finset.card_eq_one]; rw [Finset.singleton_iff_unique_mem]
-  simp only [mem_neighborFinset]
-
-Depends on / 依赖: Finset, Finset.card_eq_one, Finset.singleton_iff_unique_mem, card_eq_one, degree, mem_neighborFinset, singleton_iff_unique_mem
+    (h : G.degree v ≠ 0) : Nontrivial V :=
+  nontrivial_of_not_isIsolated <| G.degree_eq_zero v |>.not.mp h
+/-
+**SimpleGraph.degree_eq_one_iff_existsUnique_adj** 是 Mathlib 中的一个定理，位于命名空间 `Simp
+leGraph`。
+形式化陈述：degree_eq_one_iff_existsUnique_adj {G : SimpleGraph V} {v : V} [Fintype (G
+.neighborSet v)] : G.degree v = 1 ↔ exists! w : V, G.Adj v w
+参数：G.neighborSet v。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.degree.eq_1`：∀ {V : Type u_1} (G : SimpleGraph V) (v : V) [i
+nst : Fintype ↑(G.neighborSet v)], G.degree v = (G.neighborFinset v).card
+· 使用定理 `Finset.card_eq_one`：card_eq_one : #s = 1 ↔ exists a, s = {a}
+· 使用定理 `Finset.singleton_iff_unique_mem`：singleton_iff_unique_mem (s : Finset α)
+ : (exists a, s = {a}) ↔ exists! a, a in s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem degree_eq_one_iff_existsUnique_adj {G : SimpleGraph V} {v : V} [Fintype (G.neighborSet v)] :
-    G.degree v = 1 ↔ exists! w : V, G.Adj v w := by
-  rw [degree]; rw [Finset.card_eq_one]; rw [Finset.singleton_iff_unique_mem]
+    G.degree v = 1 ↔ ∃! w : V, G.Adj v w := by
+  rw [degree, Finset.card_eq_one, Finset.singleton_iff_unique_mem]
   simp only [mem_neighborFinset]
-
-/--
-theorem `degree_compl` / 定理 `degree_compl`
-
-English:
-theorem degree_compl
-  given: [Fintype (Gᶜ.neighborSet v)] [Fintype V]
-  proof: by
-  classical
-    rw [← card_neighborSet_union_compl_neighborSet G v]; rw [Set.toFinset_union]
-    simp [card_union_of_disjoint (Set.disjoint_toFinset.mpr (compl_neighborSet_disjoint G v)),
-      card_neighborSet_eq_degree]
-
-中文:
-定理 degree_compl
-  条件: [有限类型 (Gᶜ.neighborSet v)] [有限类型 V]
-  证明: by
-  classical
-    rw [← card_neighborSet_union_compl_neighborSet G v]; rw [Set.toFinset_union]
-    simp [card_union_of_disjoint (Set.disjoint_toFinset.mpr (compl_neighborSet_disjoint G v)),
-      card_neighborSet_eq_degree]
-
-Depends on / 依赖: Set.disjoint_toFinset.mpr, Set.toFinset_union, card_neighborSet_eq_degree, card_neighborSet_union_compl_neighborSet, card_union_of_disjoint, classical, compl_neighborSet_disjoint, disjoint_toFinset, toFinset_union
+/-
+**SimpleGraph.degree_compl** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：degree_compl [Fintype (Gᶜ.neighborSet v)] [Fintype V] : Gᶜ.degree v = Fint
+ype.card V - 1 - G.degree v
+参数：Gᶜ.neighborSet v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.card_neighborSet_union_compl_neighborSet`：card_neighborSet_u
+nion_compl_neighborSet [Fintype V] (G : SimpleGraph V) (v : V) [Fintype (G.neigh
+borSet v union Gᶜ.neighborSet v : Set V)] …
+· 使用定理 `Set.toFinset_union`：toFinset_union [Fintype (s union t : Set _)] : (s un
+ion t).toFinset = s.toFinset union t.toFinset
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.card_union_of_disjoint`：∀ {α : Type u_1} {s t : Finset α} [inst :
+ DecidableEq α], Disjoint s t → (s ∪ t).card = s.card + t.card
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.disjoint_toFinset`：disjoint_toFinset [Fintype s] [Fintype t] : Disjo
+int s.toFinset t.toFinset ↔ Disjoint s t
+· 使用定理 `SimpleGraph.compl_neighborSet_disjoint`：compl_neighborSet_disjoint (G : 
+SimpleGraph V) (v : V) : Disjoint (G.neighborSet v) (Gᶜ.neighborSet v)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Set.toFinset_card`：toFinset_card {α : Type*} (s : Set α) [Fintype s] : s
+.toFinset.card = Fintype.card s
+· 使用定理 `SimpleGraph.card_neighborSet_eq_degree`：card_neighborSet_eq_degree : Fin
+type.card (G.neighborSet v) = G.degree v
+· 使用定理 `Nat.add_sub_cancel_left`：∀ (n m : ℕ), n + m - n = m
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem degree_compl [Fintype (Gᶜ.neighborSet v)] [Fintype V] :
     Gᶜ.degree v = Fintype.card V - 1 - G.degree v := by
   classical
-    rw [← card_neighborSet_union_compl_neighborSet G v]; rw [Set.toFinset_union]
+    rw [← card_neighborSet_union_compl_neighborSet G v, Set.toFinset_union]
     simp [card_union_of_disjoint (Set.disjoint_toFinset.mpr (compl_neighborSet_disjoint G v)),
       card_neighborSet_eq_degree]
-
-/--
-Instance `incidenceSetFintype` / 实例 `incidenceSetFintype`
-
-English:
-instance incidenceSetFintype
-  signature: [DecidableEq V]
-  body: Fintype.ofEquiv (G.neighborSet v) (G.incidenceSetEquivNeighborSet v).symm
-
-中文:
-实例 incidenceSetFintype
-  签名: [DecidableEq V]
-  定义体: Fintype.ofEquiv (G.neighborSet v) (G.incidenceSetEquivNeighborSet v).symm
-
-Depends on / 依赖: Fintype, Fintype.ofEquiv, G.incidenceSetEquivNeighborSet, G.neighborSet, incidenceSetEquivNeighborSet, neighborSet, ofEquiv
+/-
+**SimpleGraph.incidenceSetFintype** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph`。
+形式化陈述：incidenceSetFintype [DecidableEq V] : Fintype (G.incidenceSet v)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 instance incidenceSetFintype [DecidableEq V] : Fintype (G.incidenceSet v) :=
   Fintype.ofEquiv (G.neighborSet v) (G.incidenceSetEquivNeighborSet v).symm
 
-/--
-Definition of `incidenceFinset` / `incidenceFinset` 的定义
+/-- This is the `Finset` version of `incidenceSet`. -/
+/-
+**SimpleGraph.incidenceFinset** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph`。
+形式化陈述：incidenceFinset [DecidableEq V] : Finset (Sym2 V)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition incidenceFinset
-  signature: [DecidableEq V]
-  body: (G.incidenceSet v).toFinset
-
-中文:
-定义 incidenceFinset
-  签名: [DecidableEq V]
-  定义体: (G.incidenceSet v).toFinset
-
-Depends on / 依赖: G.incidenceSet, incidenceSet, toFinset
+--- 原说明 ---
+This is the `Finset` version of `incidenceSet`.
 -/
 def incidenceFinset [DecidableEq V] : Finset (Sym2 V) :=
   (G.incidenceSet v).toFinset
-
-/--
-theorem `card_incidenceSet_eq_degree` / 定理 `card_incidenceSet_eq_degree`
-
-English:
-theorem card_incidenceSet_eq_degree
-  given: [DecidableEq V]
-  proof: by
-  rw [Fintype.card_congr (G.incidenceSetEquivNeighborSet v)]; rw [card_neighborSet_eq_degree]
-
-@[simp, norm_cast]
-
-中文:
-定理 card_incidenceSet_eq_degree
-  条件: [DecidableEq V]
-  证明: by
-  rw [Fintype.card_congr (G.incidenceSetEquivNeighborSet v)]; rw [card_neighborSet_eq_degree]
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Fintype, Fintype.card_congr, G.incidenceSetEquivNeighborSet, card_congr, card_neighborSet_eq_degree, incidenceSetEquivNeighborSet
+/-
+**SimpleGraph.card_incidenceSet_eq_degree** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph
+`。
+形式化陈述：card_incidenceSet_eq_degree [DecidableEq V] : Fintype.card (G.incidenceSet
+ v) = G.degree v
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fintype.card_congr`：card_congr {α β} [Fintype α] [Fintype β] (f : α ≃ β)
+ : card α = card β
+· 使用定理 `SimpleGraph.card_neighborSet_eq_degree`：card_neighborSet_eq_degree : Fin
+type.card (G.neighborSet v) = G.degree v
 -/
 theorem card_incidenceSet_eq_degree [DecidableEq V] :
     Fintype.card (G.incidenceSet v) = G.degree v := by
-  rw [Fintype.card_congr (G.incidenceSetEquivNeighborSet v)]; rw [card_neighborSet_eq_degree]
+  rw [Fintype.card_congr (G.incidenceSetEquivNeighborSet v), card_neighborSet_eq_degree]
 
 @[simp, norm_cast]
-/--
-theorem `coe_incidenceFinset` / 定理 `coe_incidenceFinset`
-
-English:
-theorem coe_incidenceFinset
-  given: [DecidableEq V]
-  proof: by
-  simp [incidenceFinset]
-
-@[simp]
-
-中文:
-定理 coe_incidenceFinset
-  条件: [DecidableEq V]
-  证明: by
-  simp [incidenceFinset]
-
-@[simp]
-
-Depends on / 依赖: incidenceFinset
+/-
+**SimpleGraph.coe_incidenceFinset** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：coe_incidenceFinset [DecidableEq V] : (G.incidenceFinset v : Set (Sym2 V))
+ = G.incidenceSet v
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.coe_toFinset`：coe_toFinset (s : Set α) [Fintype s] : (↑s.toFinset : 
+Set α) = s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem coe_incidenceFinset [DecidableEq V] :
     (G.incidenceFinset v : Set (Sym2 V)) = G.incidenceSet v := by
   simp [incidenceFinset]
 
 @[simp]
-/--
-theorem `card_incidenceFinset_eq_degree` / 定理 `card_incidenceFinset_eq_degree`
-
-English:
-theorem card_incidenceFinset_eq_degree
-  given: [DecidableEq V]
-  statement: #(G.incidenceFinset v) = G.degree v
-  proof: by
-  rw [← G.card_incidenceSet_eq_degree]
-  apply Set.toFinset_card
-
-@[simp]
-
-中文:
-定理 card_incidenceFinset_eq_degree
-  条件: [DecidableEq V]
-  结论: #(G.incidenceFinset v) = G.degree v
-  证明: by
-  rw [← G.card_incidenceSet_eq_degree]
-  apply Set.toFinset_card
-
-@[simp]
-
-Depends on / 依赖: G.card_incidenceSet_eq_degree, Set.toFinset_card, card_incidenceSet_eq_degree, toFinset_card
+/-
+**SimpleGraph.card_incidenceFinset_eq_degree** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGr
+aph`。
+形式化陈述：card_incidenceFinset_eq_degree [DecidableEq V] : #(G.incidenceFinset v) = 
+G.degree v
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.card_incidenceSet_eq_degree`：card_incidenceSet_eq_degree [De
+cidableEq V] : Fintype.card (G.incidenceSet v) = G.degree v
+· 使用定理 `Set.toFinset_card`：toFinset_card {α : Type*} (s : Set α) [Fintype s] : s
+.toFinset.card = Fintype.card s
 -/
 theorem card_incidenceFinset_eq_degree [DecidableEq V] : #(G.incidenceFinset v) = G.degree v := by
   rw [← G.card_incidenceSet_eq_degree]
   apply Set.toFinset_card
 
 @[simp]
-/--
-theorem `mem_incidenceFinset` / 定理 `mem_incidenceFinset`
-
-English:
-theorem mem_incidenceFinset
-  given: [DecidableEq V] (e : Sym2 V)
-  proof: Set.mem_toFinset
-
-中文:
-定理 mem_incidenceFinset
-  条件: [DecidableEq V] (e : Sym2 V)
-  证明: Set.mem_toFinset
-
-Depends on / 依赖: Equiv.pprodEquivProdPLift.symm, Set.mem_toFinset, mem_toFinset, of_equiv, pprodEquivProdPLift
+/-
+**SimpleGraph.mem_incidenceFinset** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：mem_incidenceFinset [DecidableEq V] (e : Sym2 V) : e in G.incidenceFinset 
+v ↔ e in G.incidenceSet v
+参数：e : Sym2 V。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_toFinset`：mem_toFinset {s : Set α} [Fintype s] {a : α} : a in s.
+toFinset ↔ a in s
 -/
 theorem mem_incidenceFinset [DecidableEq V] (e : Sym2 V) :
-    e in G.incidenceFinset v ↔ e in G.incidenceSet v :=
+    e ∈ G.incidenceFinset v ↔ e ∈ G.incidenceSet v :=
   Set.mem_toFinset
-
-/--
-theorem `incidenceFinset_eq_filter` / 定理 `incidenceFinset_eq_filter`
-
-English:
-theorem incidenceFinset_eq_filter
-  given: [DecidableEq V] [Fintype G.edgeSet]
-  proof: by
-  ext ⟨⟨⟩⟩
-  simp [mk'_mem_incidenceSet_iff]
-
-中文:
-定理 incidenceFinset_eq_filter
-  条件: [DecidableEq V] [有限类型 G.edgeSet]
-  证明: by
-  ext ⟨⟨⟩⟩
-  simp [mk'_mem_incidenceSet_iff]
-
-Depends on / 依赖: _mem_incidenceSet_iff
+/-
+**SimpleGraph.incidenceFinset_eq_filter** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：incidenceFinset_eq_filter [DecidableEq V] [Fintype G.edgeSet] : G.incidenc
+eFinset v = {e in G.edgeFinset | v in e}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem incidenceFinset_eq_filter [DecidableEq V] [Fintype G.edgeSet] :
-    G.incidenceFinset v = {e in G.edgeFinset | v in e} := by
+    G.incidenceFinset v = {e ∈ G.edgeFinset | v ∈ e} := by
   ext ⟨⟨⟩⟩
   simp [mk'_mem_incidenceSet_iff]
-
-/--
-theorem `incidenceFinset_subset` / 定理 `incidenceFinset_subset`
-
-English:
-theorem incidenceFinset_subset
-  given: [DecidableEq V] [Fintype G.edgeSet]
-  proof: Set.toFinset_subset_toFinset.mpr (G.incidenceSet_subset v)
-
-中文:
-定理 incidenceFinset_subset
-  条件: [DecidableEq V] [有限类型 G.edgeSet]
-  证明: Set.toFinset_subset_toFinset.mpr (G.incidenceSet_subset v)
-
-Depends on / 依赖: G.incidenceSet_subset, Set.toFinset_subset_toFinset.mpr, incidenceSet_subset, toFinset_subset_toFinset
+/-
+**SimpleGraph.incidenceFinset_subset** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：incidenceFinset_subset [DecidableEq V] [Fintype G.edgeSet] : G.incidenceFi
+nset v subseteq G.edgeFinset
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.toFinset_subset_toFinset`：toFinset_subset_toFinset [Fintype s] [Fint
+ype t] : s.toFinset subseteq t.toFinset ↔ s subseteq t
+· 使用定理 `SimpleGraph.incidenceSet_subset`：incidenceSet_subset (v : V) : G.inciden
+ceSet v subseteq G.edgeSet
 -/
 theorem incidenceFinset_subset [DecidableEq V] [Fintype G.edgeSet] :
-    G.incidenceFinset v subseteq G.edgeFinset :=
+    G.incidenceFinset v ⊆ G.edgeFinset :=
   Set.toFinset_subset_toFinset.mpr (G.incidenceSet_subset v)
-
-/--
-theorem `disjoint_incidenceFinset_of_disjoint` / 定理 `disjoint_incidenceFinset_of_disjoint`
-
-English:
-theorem disjoint_incidenceFinset_of_disjoint
-  statement: [DecidableEq V] [Fintype <| H.neighborSet v]
-  proof: by
-  simp [← Finset.disjoint_coe, disjoint_incidenceSet.mpr h v]
-
-中文:
-定理 disjoint_incidenceFinset_of_disjoint
-  结论: [DecidableEq V] [有限类型 <| H.neighborSet v]
-  证明: by
-  simp [← Finset.disjoint_coe, disjoint_incidenceSet.mpr h v]
-
-Depends on / 依赖: Finset, Finset.disjoint_coe, disjoint_coe, disjoint_incidenceSet, disjoint_incidenceSet.mpr
+/-
+**SimpleGraph.disjoint_incidenceFinset_of_disjoint** 是 Mathlib 中的一个定理，位于命名空间 `Si
+mpleGraph`。
+形式化陈述：disjoint_incidenceFinset_of_disjoint [DecidableEq V] [Fintype <| H.neighbo
+rSet v] (h : Disjoint G H) : Disjoint (G.incidenceFinset v) (H.incidenceFinset v
+)
+参数：h : Disjoint G H。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.coe_incidenceFinset`：coe_incidenceFinset [DecidableEq V] : (
+G.incidenceFinset v : Set (Sym2 V)) = G.incidenceSet v
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `SimpleGraph.disjoint_incidenceSet`：disjoint_incidenceSet : (forall v, Di
+sjoint (G.incidenceSet v) (H.incidenceSet v)) ↔ Disjoint G H
 -/
 theorem disjoint_incidenceFinset_of_disjoint [DecidableEq V] [Fintype <| H.neighborSet v]
     (h : Disjoint G H) : Disjoint (G.incidenceFinset v) (H.incidenceFinset v) := by
   simp [← Finset.disjoint_coe, disjoint_incidenceSet.mpr h v]
 
-/--
-theorem `degree_le_card_edgeFinset` / 定理 `degree_le_card_edgeFinset`
+/-- The degree of a vertex is at most the number of edges. -/
+/-
+**SimpleGraph.degree_le_card_edgeFinset** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：degree_le_card_edgeFinset [Fintype G.edgeSet] : G.degree v <= #G.edgeFinse
+t
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.card_incidenceFinset_eq_degree`：card_incidenceFinset_eq_degr
+ee [DecidableEq V] : #(G.incidenceFinset v) = G.degree v
+· 使用定理 `Finset.card_le_card`：card_le_card : s subseteq t -> #s <= #t
+· 使用定理 `SimpleGraph.incidenceFinset_subset`：incidenceFinset_subset [DecidableEq 
+V] [Fintype G.edgeSet] : G.incidenceFinset v subseteq G.edgeFinset
 
-English:
-theorem degree_le_card_edgeFinset
-  given: [Fintype G.edgeSet]
-  proof: by
-  classical
-  rw [← card_incidenceFinset_eq_degree]
-  exact card_le_card (G.incidenceFinset_subset v)
-
-中文:
-定理 degree_le_card_edgeFinset
-  条件: [有限类型 G.edgeSet]
-  证明: by
-  classical
-  rw [← card_incidenceFinset_eq_degree]
-  exact card_le_card (G.incidenceFinset_subset v)
-
-Depends on / 依赖: G.incidenceFinset_subset, card_incidenceFinset_eq_degree, card_le_card, classical, incidenceFinset_subset
+--- 原说明 ---
+The degree of a vertex is at most the number of edges.
 -/
 theorem degree_le_card_edgeFinset [Fintype G.edgeSet] :
-    G.degree v <= #G.edgeFinset := by
+    G.degree v ≤ #G.edgeFinset := by
   classical
   rw [← card_incidenceFinset_eq_degree]
   exact card_le_card (G.incidenceFinset_subset v)
 
 variable {G v}
 
-/--
-lemma `degree_le_of_le` / 引理 `degree_le_of_le`
+/-- If `G ≤ H` then `G.degree v ≤ H.degree v` for any vertex `v`. -/
+/-
+**SimpleGraph.degree_le_of_le** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：degree_le_of_le {H : SimpleGraph V} [Fintype (H.neighborSet v)] (hle : G <
+= H) : G.degree v <= H.degree v
+参数：H.neighborSet v；hle : G <= H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.card_le_card`：card_le_card {s t : Set α} [Fintype s] [Fintype t] (hs
+ub : s subseteq t) : Fintype.card s <= Fintype.card t
 
-English:
-lemma degree_le_of_le
-  given: {H : SimpleGraph V} [Fintype (H.neighborSet v)] (hle : G <= H)
-  proof: by
-  simp_rw [← card_neighborSet_eq_degree]
-  exact Set.card_le_card fun v hv => hle hv
-
-中文:
-引理 degree_le_of_le
-  条件: {H : 简单图 V} [有限类型 (H.neighborSet v)] (hle : G <= H)
-  证明: by
-  simp_rw [← card_neighborSet_eq_degree]
-  exact Set.card_le_card fun v hv => hle hv
-
-Depends on / 依赖: Set.card_le_card, card_le_card, card_neighborSet_eq_degree, simp_rw
+--- 原说明 ---
+If `G ≤ H` then `G.degree v ≤ H.degree v` for any vertex `v`.
 -/
-lemma degree_le_of_le {H : SimpleGraph V} [Fintype (H.neighborSet v)] (hle : G <= H) :
-    G.degree v <= H.degree v := by
+lemma degree_le_of_le {H : SimpleGraph V} [Fintype (H.neighborSet v)] (hle : G ≤ H) :
+    G.degree v ≤ H.degree v := by
   simp_rw [← card_neighborSet_eq_degree]
   exact Set.card_le_card fun v hv => hle hv
-
-/--
-theorem `degree_lt_card_verts` / 定理 `degree_lt_card_verts`
-
-English:
-theorem degree_lt_card_verts
-  given: [Fintype V] [DecidableRel G.Adj] (v : V)
-  proof: Finset.card_lt_univ_of_notMem G.notMem_neighborFinset_self v
-
-中文:
-定理 degree_lt_card_verts
-  条件: [有限类型 V] [DecidableRel G.伴随] (v : V)
-  证明: Finset.card_lt_univ_of_notMem G.notMem_neighborFinset_self v
-
-Depends on / 依赖: Finset, Finset.card_lt_univ_of_notMem, G.notMem_neighborFinset_self, card_lt_univ_of_notMem, notMem_neighborFinset_self
+/-
+**SimpleGraph.degree_lt_card_verts** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：degree_lt_card_verts [Fintype V] [DecidableRel G.Adj] (v : V) : G.degree v
+ < Fintype.card V
+参数：v : V。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.card_lt_univ_of_notMem`：Finset.card_lt_univ_of_notMem [Fintype α]
+ {s : Finset α} {x : α} (hx : x ∉ s) : #s < Fintype.card α
+· 使用定理 `SimpleGraph.notMem_neighborFinset_self`：notMem_neighborFinset_self : v ∉
+ G.neighborFinset v
 -/
 theorem degree_lt_card_verts [Fintype V] [DecidableRel G.Adj] (v : V) :
     G.degree v < Fintype.card V :=
-Finset.card_lt_univ_of_notMem G.notMem_neighborFinset_self v
+  Finset.card_lt_univ_of_notMem <| G.notMem_neighborFinset_self v
 
 end FiniteAt
 
 section LocallyFinite
 
-/--
-Definition of `LocallyFinite` / `LocallyFinite` 的定义
+/-- A graph is locally finite if every vertex has a finite neighbor set. -/
+/-
+**SimpleGraph.LocallyFinite** 是 Mathlib 中的一个缩写定义，位于命名空间 `SimpleGraph`。
+形式化陈述：LocallyFinite
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation LocallyFinite
-  body: forall v : V, Fintype (G.neighborSet v)
-
-中文:
-缩写 局部有限
-  定义体: forall v : V, Fintype (G.neighborSet v)
-
-Depends on / 依赖: Fintype, G.neighborSet, neighborSet
+--- 原说明 ---
+A graph is locally finite if every vertex has a finite neighbor set.
 -/
 abbrev LocallyFinite :=
-  forall v : V, Fintype (G.neighborSet v)
+  ∀ v : V, Fintype (G.neighborSet v)
 
 variable [LocallyFinite G]
 
 /-- A locally finite simple graph is regular of degree `d` if every vertex has degree `d`. -/
 @[wikidata Q826467]
-/--
-Definition of `IsRegularOfDegree` / `IsRegularOfDegree` 的定义
+/-
+**SimpleGraph.IsRegularOfDegree** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph`。
+形式化陈述：IsRegularOfDegree (d : Nat) : Prop
+参数：d : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsRegularOfDegree
-  signature: (d : Nat)
-  body: forall v : V, G.degree v = d
-
-中文:
-定义 IsRegularOfDegree
-  签名: (d : 自然数)
-  定义体: forall v : V, G.degree v = d
-
-Depends on / 依赖: G.degree, degree
+--- 原说明 ---
+A locally finite simple graph is regular of degree `d` if every vertex has degre
+e `d`.
 -/
-def IsRegularOfDegree (d : Nat) : Prop :=
-  forall v : V, G.degree v = d
+def IsRegularOfDegree (d : ℕ) : Prop :=
+  ∀ v : V, G.degree v = d
 
 variable {G}
-
-/--
-theorem `IsRegularOfDegree.degree_eq` / 定理 `IsRegularOfDegree.degree_eq`
-
-English:
-theorem IsRegularOfDegree.degree_eq
-  given: {d : Nat} (h : G.IsRegularOfDegree d) (v : V)
-  statement: G.degree v = d
-  proof: h v
-
-中文:
-定理 IsRegularOfDegree.degree_eq
-  条件: {d : 自然数} (h : G.IsRegularOfDegree d) (v : V)
-  结论: G.degree v = d
-  证明: h v
+/-
+**SimpleGraph.IsRegularOfDegree.degree_eq** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph
+.IsRegularOfDegree`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} [inst : G.LocallyFinite] {d : ℕ}, G.I
+sRegularOfDegree d → ∀ (v : V), G.degree v = d
+参数：v : V。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem IsRegularOfDegree.degree_eq {d : Nat} (h : G.IsRegularOfDegree d) (v : V) : G.degree v = d :=
+theorem IsRegularOfDegree.degree_eq {d : ℕ} (h : G.IsRegularOfDegree d) (v : V) : G.degree v = d :=
   h v
 
 /-- The empty graph is regular of any degree `d` -/
 @[simp]
-/--
-theorem `IsRegularOfDegree.of_isEmpty` / 定理 `IsRegularOfDegree.of_isEmpty`
+/-
+**SimpleGraph.IsRegularOfDegree.of_isEmpty** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGrap
+h.IsRegularOfDegree`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} [inst : G.LocallyFinite] [IsEmpty V] 
+{d : ℕ}, G.IsRegularOfDegree d
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem IsRegularOfDegree.of_isEmpty
-  given: [IsEmpty V] {d : Nat}
-  statement: G.IsRegularOfDegree d
-  proof: IsEmpty.elim ‹_›
-
-中文:
-定理 IsRegularOfDegree.of_isEmpty
-  条件: [是空 V] {d : 自然数}
-  结论: G.IsRegularOfDegree d
-  证明: IsEmpty.elim ‹_›
-
-Depends on / 依赖: IsEmpty, IsEmpty.elim
+--- 原说明 ---
+The empty graph is regular of any degree `d`
 -/
-theorem IsRegularOfDegree.of_isEmpty [IsEmpty V] {d : Nat} : G.IsRegularOfDegree d :=
+theorem IsRegularOfDegree.of_isEmpty [IsEmpty V] {d : ℕ} : G.IsRegularOfDegree d :=
   IsEmpty.elim ‹_›
-
-/--
-theorem `IsRegularOfDegree.compl` / 定理 `IsRegularOfDegree.compl`
-
-English:
-theorem IsRegularOfDegree.compl
-  statement: [Fintype V] [DecidableEq V] {G : SimpleGraph V} [DecidableRel G.Adj]
-  proof: by
-  intro v
-  rw [degree_compl]; rw [h v]
-
-中文:
-定理 IsRegularOfDegree.compl
-  结论: [有限类型 V] [DecidableEq V] {G : 简单图 V} [DecidableRel G.伴随]
-  证明: by
-  intro v
-  rw [degree_compl]; rw [h v]
-
-Depends on / 依赖: degree_compl
+/-
+**SimpleGraph.IsRegularOfDegree.compl** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.IsR
+egularOfDegree`。
+形式化陈述：∀ {V : Type u_1} [inst : Fintype V] [inst_1 : DecidableEq V] {G : SimpleGr
+aph V} [inst_2 : DecidableRel G.Adj] {k : ℕ},   G.IsRegularOfDegree k → Gᶜ.IsReg
+ularOfDegree (Fintype.card V - 1 - k)
+参数：Fintype.card V - 1 - k。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.degree_compl`：degree_compl [Fintype (Gᶜ.neighborSet v)] [Fin
+type V] : Gᶜ.degree v = Fintype.card V - 1 - G.degree v
 -/
 theorem IsRegularOfDegree.compl [Fintype V] [DecidableEq V] {G : SimpleGraph V} [DecidableRel G.Adj]
-    {k : Nat} (h : G.IsRegularOfDegree k) : Gᶜ.IsRegularOfDegree (Fintype.card V - 1 - k) := by
+    {k : ℕ} (h : G.IsRegularOfDegree k) : Gᶜ.IsRegularOfDegree (Fintype.card V - 1 - k) := by
   intro v
-  rw [degree_compl]; rw [h v]
+  rw [degree_compl, h v]
 
 end LocallyFinite
 
@@ -1602,60 +1369,66 @@ variable [Fintype V]
 
 /-- `Fintype` for `neighborSet` -/
 @[deprecated inferInstance (since := "2026-04-29")]
-/--
-Definition of `neighborSetFintype` / `neighborSetFintype` 的定义
+/-
+**SimpleGraph.neighborSetFintype** 是 Mathlib 中的一个缩写定义，位于命名空间 `SimpleGraph`。
+形式化陈述：neighborSetFintype [DecidableRel G.Adj] (v : V) : Fintype (G.neighborSet v
+)
+参数：v : V。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation neighborSetFintype
-  signature: [DecidableRel G.Adj] (v : V)
-  body: inferInstance
-
-中文:
-缩写 neighborSetFintype
-  签名: [DecidableRel G.伴随] (v : V)
-  定义体: inferInstance
+--- 原说明 ---
+`Fintype` for `neighborSet`
 -/
 abbrev neighborSetFintype [DecidableRel G.Adj] (v : V) : Fintype (G.neighborSet v) :=
   inferInstance
-
-/--
-theorem `neighborFinset_eq_filter` / 定理 `neighborFinset_eq_filter`
-
-English:
-theorem neighborFinset_eq_filter
-  given: {v : V} [DecidableRel G.Adj]
-  proof: by ext; simp
-
-中文:
-定理 neighborFinset_eq_filter
-  条件: {v : V} [DecidableRel G.伴随]
-  证明: by ext; simp
+/-
+**SimpleGraph.neighborFinset_eq_filter** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：neighborFinset_eq_filter {v : V} [DecidableRel G.Adj] : G.neighborFinset v
+ = ({w | G.Adj v w} : Finset _)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem neighborFinset_eq_filter {v : V} [DecidableRel G.Adj] :
     G.neighborFinset v = ({w | G.Adj v w} : Finset _) := by ext; simp
-
-/--
-theorem `neighborFinset_compl` / 定理 `neighborFinset_compl`
-
-English:
-theorem neighborFinset_compl
-  given: [DecidableEq V] [DecidableRel G.Adj] (v : V)
-  proof: by
-  simp only [neighborFinset, neighborSet_compl, Set.toFinset_sdiff, Set.toFinset_compl,
-    Set.toFinset_singleton]
-
-@[simp]
-
-中文:
-定理 neighborFinset_compl
-  条件: [DecidableEq V] [DecidableRel G.伴随] (v : V)
-  证明: by
-  simp only [neighborFinset, neighborSet_compl, Set.toFinset_sdiff, Set.toFinset_compl,
-    Set.toFinset_singleton]
-
-@[simp]
-
-Depends on / 依赖: Set.toFinset_compl, Set.toFinset_sdiff, Set.toFinset_singleton, neighborFinset, neighborSet_compl, toFinset_compl, toFinset_sdiff, toFinset_singleton
+/-
+**SimpleGraph.neighborFinset_compl** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：neighborFinset_compl [DecidableEq V] [DecidableRel G.Adj] (v : V) : Gᶜ.nei
+ghborFinset v = (G.neighborFinset v)ᶜ \ {v}
+参数：v : V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.toFinset_congr`：toFinset_congr {s t : Set α} [Fintype s] [Fintype t]
+ (h : s = t) : toFinset s = toFinset t
+· 使用定理 `SimpleGraph.neighborSet_compl`：neighborSet_compl (G : SimpleGraph V) (v 
+: V) : Gᶜ.neighborSet v = (G.neighborSet v)ᶜ \ {v}
+· 使用定理 `Set.toFinset_sdiff`：toFinset_sdiff [Fintype (s \ t : Set _)] : (s \ t).t
+oFinset = s.toFinset \ t.toFinset
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Set.toFinset_compl`：toFinset_compl [Fintype α] [Fintype (sᶜ : Set _)] : 
+sᶜ.toFinset = s.toFinsetᶜ
+· 使用定理 `Set.toFinset_singleton`：toFinset_singleton (a : α) [Fintype ({a} : Set α
+)] : ({a} : Set α).toFinset = {a}
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem neighborFinset_compl [DecidableEq V] [DecidableRel G.Adj] (v : V) :
     Gᶜ.neighborFinset v = (G.neighborFinset v)ᶜ \ {v} := by
@@ -1663,209 +1436,202 @@ theorem neighborFinset_compl [DecidableEq V] [DecidableRel G.Adj] (v : V) :
     Set.toFinset_singleton]
 
 @[simp]
-/--
-theorem `complete_graph_degree` / 定理 `complete_graph_degree`
-
-English:
-theorem complete_graph_degree
-  given: [DecidableEq V] (v : V)
-  proof: by
-  simp_rw [degree, neighborFinset_eq_filter, top_adj, filter_ne]
-  rw [card_erase_of_mem (mem_univ v)]; rw [card_univ]
-
-中文:
-定理 complete_graph_degree
-  条件: [DecidableEq V] (v : V)
-  证明: by
-  simp_rw [degree, neighborFinset_eq_filter, top_adj, filter_ne]
-  rw [card_erase_of_mem (mem_univ v)]; rw [card_univ]
-
-Depends on / 依赖: card_erase_of_mem, card_univ, degree, filter_ne, mem_univ, neighborFinset_eq_filter, simp_rw, top_adj
+/-
+**SimpleGraph.complete_graph_degree** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：complete_graph_degree [DecidableEq V] (v : V) : (completeGraph V).degree v
+ = Fintype.card V - 1
+参数：v : V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.neighborFinset_eq_filter`：neighborFinset_eq_filter {v : V} [
+DecidableRel G.Adj] : G.neighborFinset v = ({w | G.Adj v w} : Finset _)
+· 使用定理 `Finset.filter_congr`：∀ {α : Type u_1} {p q : α → Prop} [inst : Decidable
+Pred p] [inst_1 : DecidablePred q] {s : Finset α},   (∀ x ∈ s, p x ↔ q x) → Fins
+et.filter…
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Finset.filter_ne`：filter_ne [DecidableEq β] (s : Finset β) (b : β) : (s.
+filter fun a => b != a) = s.erase b
+· 使用定理 `Finset.card_erase_of_mem`：card_erase_of_mem : a in s -> #(s.erase a) = #
+s - 1
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
+· 使用定理 `Finset.card_univ`：Finset.card_univ [Fintype α] : #(univ : Finset α) = Fi
+ntype.card α
 -/
 theorem complete_graph_degree [DecidableEq V] (v : V) :
     (completeGraph V).degree v = Fintype.card V - 1 := by
   simp_rw [degree, neighborFinset_eq_filter, top_adj, filter_ne]
-  rw [card_erase_of_mem (mem_univ v)]; rw [card_univ]
-
-/--
-theorem `bot_degree` / 定理 `bot_degree`
-
-English:
-theorem bot_degree
-  given: (v : V)
-  statement: (⊥ : SimpleGraph V).degree v = 0
-  proof: by
-  simp
-
-中文:
-定理 bot_degree
-  条件: (v : V)
-  结论: (⊥ : 简单图 V).degree v = 0
-  证明: by
-  simp
+  rw [card_erase_of_mem (mem_univ v), card_univ]
+/-
+**SimpleGraph.bot_degree** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：bot_degree (v : V) : (⊥ : SimpleGraph V).degree v = 0
+参数：v : V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.IsIsolated.degree_eq_zero`：∀ {V : Type u_1} (G : SimpleGraph
+ V) (v : V) [inst : Fintype ↑(G.neighborSet v)], G.IsIsolated v → G.degree v = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem bot_degree (v : V) : (⊥ : SimpleGraph V).degree v = 0 := by
   simp
-
-/--
-theorem `IsRegularOfDegree.top` / 定理 `IsRegularOfDegree.top`
-
-English:
-theorem IsRegularOfDegree.top
-  given: [DecidableEq V]
-  proof: by
-  simp [IsRegularOfDegree]
-
-@[simp]
-
-中文:
-定理 IsRegularOfDegree.top
-  条件: [DecidableEq V]
-  证明: by
-  simp [IsRegularOfDegree]
-
-@[simp]
-
-Depends on / 依赖: IsRegularOfDegree
+/-
+**SimpleGraph.IsRegularOfDegree.top** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.IsReg
+ularOfDegree`。
+形式化陈述：∀ {V : Type u_1} [inst : Fintype V] [inst_1 : DecidableEq V], ⊤.IsRegularO
+fDegree (Fintype.card V - 1)
+参数：Fintype.card V - 1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.complete_graph_degree`：complete_graph_degree [DecidableEq V]
+ (v : V) : (completeGraph V).degree v = Fintype.card V - 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem IsRegularOfDegree.top [DecidableEq V] :
     (⊤ : SimpleGraph V).IsRegularOfDegree (Fintype.card V - 1) := by
   simp [IsRegularOfDegree]
 
 @[simp]
-/--
-theorem `IsRegularOfDegree.bot` / 定理 `IsRegularOfDegree.bot`
-
-English:
-theorem IsRegularOfDegree.bot
-  statement: (⊥ : SimpleGraph V).IsRegularOfDegree 0
-  proof: bot_degree
-
-中文:
-定理 IsRegularOfDegree.bot
-  结论: (⊥ : 简单图 V).IsRegularOfDegree 0
-  证明: bot_degree
-
-Depends on / 依赖: bot_degree
+/-
+**SimpleGraph.IsRegularOfDegree.bot** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.IsReg
+ularOfDegree`。
+形式化陈述：∀ {V : Type u_1} [inst : Fintype V], ⊥.IsRegularOfDegree 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.bot_degree`：bot_degree (v : V) : (⊥ : SimpleGraph V).degree 
+v = 0
 -/
 theorem IsRegularOfDegree.bot : (⊥ : SimpleGraph V).IsRegularOfDegree 0 :=
   bot_degree
 
-/--
-Definition of `minDegree` / `minDegree` 的定义
+/-- The minimum degree of all vertices (and `0` if there are no vertices).
+The key properties of this are given in `exists_minimal_degree_vertex`, `minDegree_le_degree`
+and `le_minDegree_of_forall_le_degree`. -/
+/-
+**SimpleGraph.minDegree** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph`。
+形式化陈述：minDegree [DecidableRel G.Adj] : Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition minDegree
-  signature: [DecidableRel G.Adj]
-  body: WithTop.untopD 0 (univ.image fun v => G.degree v).min
-
-中文:
-定义 minDegree
-  签名: [DecidableRel G.伴随]
-  定义体: WithTop.untopD 0 (univ.image fun v => G.degree v).min
-
-Depends on / 依赖: G.degree, WithTop, WithTop.untopD, degree, univ.image, untopD
+--- 原说明 ---
+The minimum degree of all vertices (and `0` if there are no vertices).
+The key properties of this are given in `exists_minimal_degree_vertex`, `minDegr
+ee_le_degree`
+and `le_minDegree_of_forall_le_degree`.
 -/
-def minDegree [DecidableRel G.Adj] : Nat :=
+def minDegree [DecidableRel G.Adj] : ℕ :=
   WithTop.untopD 0 (univ.image fun v => G.degree v).min
 
-/--
-theorem `exists_minimal_degree_vertex` / 定理 `exists_minimal_degree_vertex`
+/-- There exists a vertex of minimal degree. Note the assumption of being nonempty is necessary, as
+the lemma implies there exists a vertex. -/
+/-
+**SimpleGraph.exists_minimal_degree_vertex** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGrap
+h`。
+形式化陈述：exists_minimal_degree_vertex [DecidableRel G.Adj] [Nonempty V] : exists v,
+ G.minDegree = G.degree v
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem exists_minimal_degree_vertex
-  given: [DecidableRel G.Adj] [Nonempty V]
-  proof: by
-  grind [minDegree, WithTop.untopD_coe, min_mem_image_coe <| univ_nonempty.image (G.degree ·)]
-
-中文:
-定理 存在_minimal_degree_vertex
-  条件: [DecidableRel G.伴随] [非空 V]
-  证明: by
-  grind [minDegree, WithTop.untopD_coe, min_mem_image_coe <| univ_nonempty.image (G.degree ·)]
-
-Depends on / 依赖: G.degree, WithTop, WithTop.untopD_coe, degree, minDegree, min_mem_image_coe, univ_nonempty, univ_nonempty.image, untopD_coe
+--- 原说明 ---
+There exists a vertex of minimal degree. Note the assumption of being nonempty i
+s necessary, as
+the lemma implies there exists a vertex.
 -/
 theorem exists_minimal_degree_vertex [DecidableRel G.Adj] [Nonempty V] :
-    exists v, G.minDegree = G.degree v := by
+    ∃ v, G.minDegree = G.degree v := by
   grind [minDegree, WithTop.untopD_coe, min_mem_image_coe <| univ_nonempty.image (G.degree ·)]
 
-/--
-theorem `minDegree_le_degree` / 定理 `minDegree_le_degree`
+/-- The minimum degree in the graph is at most the degree of any particular vertex. -/
+/-
+**SimpleGraph.minDegree_le_degree** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：minDegree_le_degree [DecidableRel G.Adj] (v : V) : G.minDegree <= G.degree
+ v
+参数：v : V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WithTop.untopD_le`：∀ {α : Type u_1} [inst : PartialOrder α] {y : WithTop
+ α} {a b : α}, y ≤ ↑b → WithTop.untopD a y ≤ b
+· 使用定理 `Finset.min_le`：min_le {a : α} {s : Finset α} (as : a in s) : s.min <= a
+· 使用定理 `Finset.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {a} (h : a in s) 
+: f a in s.image f
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
 
-English:
-theorem minDegree_le_degree
-  given: [DecidableRel G.Adj] (v : V)
-  statement: G.minDegree <= G.degree v
-  proof: WithTop.untopD_le Finset.min_le mem_image_of_mem (G.degree ·) mem_univ v
-
-中文:
-定理 minDegree_le_degree
-  条件: [DecidableRel G.伴随] (v : V)
-  结论: G.minDegree <= G.degree v
-  证明: WithTop.untopD_le Finset.min_le mem_image_of_mem (G.degree ·) mem_univ v
-
-Depends on / 依赖: Finset, Finset.min_le, G.degree, WithTop, WithTop.untopD_le, degree, mem_image_of_mem, mem_univ, min_le, untopD_le
+--- 原说明 ---
+The minimum degree in the graph is at most the degree of any particular vertex.
 -/
-theorem minDegree_le_degree [DecidableRel G.Adj] (v : V) : G.minDegree <= G.degree v :=
-WithTop.untopD_le Finset.min_le mem_image_of_mem (G.degree ·) mem_univ v
+theorem minDegree_le_degree [DecidableRel G.Adj] (v : V) : G.minDegree ≤ G.degree v :=
+  WithTop.untopD_le <| Finset.min_le <| mem_image_of_mem (G.degree ·) <| mem_univ v
 
-/--
-theorem `le_minDegree_of_forall_le_degree` / 定理 `le_minDegree_of_forall_le_degree`
+/-- In a nonempty graph, if `k` is at most the degree of every vertex, it is at most the minimum
+degree. Note the assumption that the graph is nonempty is necessary as long as `G.minDegree` is
+defined to be a natural. -/
+/-
+**SimpleGraph.le_minDegree_of_forall_le_degree** 是 Mathlib 中的一个定理，位于命名空间 `Simple
+Graph`。
+形式化陈述：le_minDegree_of_forall_le_degree [DecidableRel G.Adj] [Nonempty V] (k : Na
+t) (h : forall v, k <= G.degree v) : k <= G.minDegree
+参数：k : Nat；h : forall v, k <= G.degree v。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.exists_minimal_degree_vertex`：exists_minimal_degree_vertex [
+DecidableRel G.Adj] [Nonempty V] : exists v, G.minDegree = G.degree v
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 
-English:
-theorem le_minDegree_of_forall_le_degree
-  statement: [DecidableRel G.Adj] [Nonempty V] (k : Nat)
-  proof: by
-  rcases G.exists_minimal_degree_vertex with ⟨v, hv⟩
-  rw [hv]
-  apply h
-
-@[simp]
-
-中文:
-定理 le_minDegree_of_对任意_le_degree
-  结论: [DecidableRel G.伴随] [非空 V] (k : 自然数)
-  证明: by
-  rcases G.exists_minimal_degree_vertex with ⟨v, hv⟩
-  rw [hv]
-  apply h
-
-@[simp]
-
-Depends on / 依赖: G.exists_minimal_degree_vertex, exists_minimal_degree_vertex
+--- 原说明 ---
+In a nonempty graph, if `k` is at most the degree of every vertex, it is at most
+ the minimum
+degree. Note the assumption that the graph is nonempty is necessary as long as `
+G.minDegree` is
+defined to be a natural.
 -/
-theorem le_minDegree_of_forall_le_degree [DecidableRel G.Adj] [Nonempty V] (k : Nat)
-    (h : forall v, k <= G.degree v) : k <= G.minDegree := by
+theorem le_minDegree_of_forall_le_degree [DecidableRel G.Adj] [Nonempty V] (k : ℕ)
+    (h : ∀ v, k ≤ G.degree v) : k ≤ G.minDegree := by
   rcases G.exists_minimal_degree_vertex with ⟨v, hv⟩
   rw [hv]
   apply h
 
 @[simp]
-/--
-lemma `minDegree_of_subsingleton` / 引理 `minDegree_of_subsingleton`
-
-English:
-lemma minDegree_of_subsingleton
-  given: [DecidableRel G.Adj] [Subsingleton V]
-  statement: G.minDegree = 0
-  proof: by
-  cases isEmpty_or_nonempty V <;>
-    simp [minDegree, Finset.image_const]
-
-@[deprecated (since := "2026-06-15")] alias minDegree_of_isEmpty := minDegree_of_subsingleton
-
-中文:
-引理 minDegree_of_subsingleton
-  条件: [DecidableRel G.伴随] [子单例 V]
-  结论: G.minDegree = 0
-  证明: by
-  cases isEmpty_or_nonempty V <;>
-    simp [minDegree, Finset.image_const]
-
-@[deprecated (since := "2026-06-15")] alias minDegree_of_isEmpty := minDegree_of_subsingleton
-
-Depends on / 依赖: Finset, Finset.image_const, image_const, isEmpty_or_nonempty, minDegree
+/-
+**SimpleGraph.minDegree_of_subsingleton** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：minDegree_of_subsingleton [DecidableRel G.Adj] [Subsingleton V] : G.minDeg
+ree = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `SimpleGraph.IsIsolated.degree_eq_zero`：∀ {V : Type u_1} (G : SimpleGraph
+ V) (v : V) [inst : Fintype ↑(G.neighborSet v)], G.IsIsolated v → G.degree v = 0
+· 使用定理 `Finset.univ_eq_empty`：univ_eq_empty [IsEmpty α] : (univ : Finset α) = ∅
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Finset.image_const`：image_const {s : Finset α} (h : s.Nonempty) (b : β) 
+: (s.image fun _ => b) = singleton b
+· 使用定理 `Finset.min_singleton`：min_singleton {a : α} : Finset.min {a} = (a : With
+Top α)
 -/
 lemma minDegree_of_subsingleton [DecidableRel G.Adj] [Subsingleton V] : G.minDegree = 0 := by
   cases isEmpty_or_nonempty V <;>
@@ -1876,56 +1642,59 @@ lemma minDegree_of_subsingleton [DecidableRel G.Adj] [Subsingleton V] : G.minDeg
 variable {G} in
 /-- If `G` is a subgraph of `H` then `G.minDegree ≤ H.minDegree`. -/
 @[gcongr]
-/--
-lemma `minDegree_le_minDegree` / 引理 `minDegree_le_minDegree`
+/-
+**SimpleGraph.minDegree_le_minDegree** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：minDegree_le_minDegree {H : SimpleGraph V} [DecidableRel G.Adj] [Decidable
+Rel H.Adj] (hle : G <= H) : G.minDegree <= H.minDegree
+参数：hle : G <= H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SimpleGraph.minDegree_of_subsingleton`：minDegree_of_subsingleton [Decida
+bleRel G.Adj] [Subsingleton V] : G.minDegree = 0
+· 使用定理 `IsEmpty.instSubsingleton`：∀ {α : Sort u} [IsEmpty α], Subsingleton α
+· 使用定理 `SimpleGraph.le_minDegree_of_forall_le_degree`：le_minDegree_of_forall_le_
+degree [DecidableRel G.Adj] [Nonempty V] (k : Nat) (h : forall v, k <= G.degree 
+v) : k <= G.minDegree
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `SimpleGraph.minDegree_le_degree`：minDegree_le_degree [DecidableRel G.Adj
+] (v : V) : G.minDegree <= G.degree v
+· 使用引理 `SimpleGraph.degree_le_of_le`：degree_le_of_le {H : SimpleGraph V} [Fintyp
+e (H.neighborSet v)] (hle : G <= H) : G.degree v <= H.degree v
 
-English:
-lemma minDegree_le_minDegree
-  statement: {H : SimpleGraph V} [DecidableRel G.Adj] [DecidableRel H.Adj]
-  proof: by
-  cases isEmpty_or_nonempty V
-  · simp
-  · apply le_minDegree_of_forall_le_degree
-    exact fun v => (G.minDegree_le_degree v).trans (G.degree_le_of_le hle)
-
-中文:
-引理 minDegree_le_minDegree
-  结论: {H : 简单图 V} [DecidableRel G.伴随] [DecidableRel H.伴随]
-  证明: by
-  cases isEmpty_or_nonempty V
-  · simp
-  · apply le_minDegree_of_forall_le_degree
-    exact fun v => (G.minDegree_le_degree v).trans (G.degree_le_of_le hle)
-
-Depends on / 依赖: G.degree_le_of_le, G.minDegree_le_degree, degree_le_of_le, isEmpty_or_nonempty, le_minDegree_of_forall_le_degree, minDegree_le_degree
+--- 原说明 ---
+If `G` is a subgraph of `H` then `G.minDegree ≤ H.minDegree`.
 -/
 lemma minDegree_le_minDegree {H : SimpleGraph V} [DecidableRel G.Adj] [DecidableRel H.Adj]
-    (hle : G <= H) : G.minDegree <= H.minDegree := by
+    (hle : G ≤ H) : G.minDegree ≤ H.minDegree := by
   cases isEmpty_or_nonempty V
   · simp
   · apply le_minDegree_of_forall_le_degree
-    exact fun v => (G.minDegree_le_degree v).trans (G.degree_le_of_le hle)
+    exact fun v ↦ (G.minDegree_le_degree v).trans (G.degree_le_of_le hle)
 
-/--
-theorem `minDegree_lt_card` / 定理 `minDegree_lt_card`
+/-- In a nonempty graph, the minimal degree is less than the number of vertices. -/
+/-
+**SimpleGraph.minDegree_lt_card** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：minDegree_lt_card [DecidableRel G.Adj] [Nonempty V] : G.minDegree < Fintyp
+e.card V
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.exists_minimal_degree_vertex`：exists_minimal_degree_vertex [
+DecidableRel G.Adj] [Nonempty V] : exists v, G.minDegree = G.degree v
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.degree_lt_card_verts`：degree_lt_card_verts [Fintype V] [Deci
+dableRel G.Adj] (v : V) : G.degree v < Fintype.card V
 
-English:
-theorem minDegree_lt_card
-  given: [DecidableRel G.Adj] [Nonempty V]
-  proof: by
-  have ⟨v, hv⟩ := G.exists_minimal_degree_vertex
-  rw [hv]
-  apply degree_lt_card_verts
-
-中文:
-定理 minDegree_lt_card
-  条件: [DecidableRel G.伴随] [非空 V]
-  证明: by
-  have ⟨v, hv⟩ := G.exists_minimal_degree_vertex
-  rw [hv]
-  apply degree_lt_card_verts
-
-Depends on / 依赖: Fintype, Fintype.ofFinite, G.exists_minimal_degree_vertex, degree_lt_card_verts, exists_minimal_degree_vertex, infer_instance, ofFinite
+--- 原说明 ---
+In a nonempty graph, the minimal degree is less than the number of vertices.
 -/
 theorem minDegree_lt_card [DecidableRel G.Adj] [Nonempty V] :
     G.minDegree < Fintype.card V := by
@@ -1933,94 +1702,89 @@ theorem minDegree_lt_card [DecidableRel G.Adj] [Nonempty V] :
   rw [hv]
   apply degree_lt_card_verts
 
-/--
-Definition of `maxDegree` / `maxDegree` 的定义
+/-- The maximum degree of all vertices (and `0` if there are no vertices).
+The key properties of this are given in `exists_maximal_degree_vertex`, `degree_le_maxDegree`
+and `maxDegree_le_of_forall_degree_le`. -/
+/-
+**SimpleGraph.maxDegree** 是 Mathlib 中的一个定义，位于命名空间 `SimpleGraph`。
+形式化陈述：maxDegree [DecidableRel G.Adj] : Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition maxDegree
-  signature: [DecidableRel G.Adj]
-  body: WithBot.unbotD 0 (univ.image fun v => G.degree v).max
-
-中文:
-定义 maxDegree
-  签名: [DecidableRel G.伴随]
-  定义体: WithBot.unbotD 0 (univ.image fun v => G.degree v).max
-
-Depends on / 依赖: Equiv.psigmaEquivSigmaPLift, G.degree, WithBot, WithBot.unbotD, degree, of_equiv, psigmaEquivSigmaPLift, unbotD, univ.image
+--- 原说明 ---
+The maximum degree of all vertices (and `0` if there are no vertices).
+The key properties of this are given in `exists_maximal_degree_vertex`, `degree_
+le_maxDegree`
+and `maxDegree_le_of_forall_degree_le`.
 -/
-def maxDegree [DecidableRel G.Adj] : Nat :=
+def maxDegree [DecidableRel G.Adj] : ℕ :=
   WithBot.unbotD 0 (univ.image fun v => G.degree v).max
 
-/--
-theorem `exists_maximal_degree_vertex` / 定理 `exists_maximal_degree_vertex`
+/-- There exists a vertex of maximal degree. Note the assumption of being nonempty is necessary, as
+the lemma implies there exists a vertex. -/
+/-
+**SimpleGraph.exists_maximal_degree_vertex** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGrap
+h`。
+形式化陈述：exists_maximal_degree_vertex [DecidableRel G.Adj] [Nonempty V] : exists v,
+ G.maxDegree = G.degree v
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem exists_maximal_degree_vertex
-  given: [DecidableRel G.Adj] [Nonempty V]
-  proof: by
-  grind [maxDegree, WithBot.unbotD_coe, max_mem_image_coe <| univ_nonempty.image (G.degree ·)]
-
-中文:
-定理 存在_maximal_degree_vertex
-  条件: [DecidableRel G.伴随] [非空 V]
-  证明: by
-  grind [maxDegree, WithBot.unbotD_coe, max_mem_image_coe <| univ_nonempty.image (G.degree ·)]
-
-Depends on / 依赖: G.degree, WithBot, WithBot.unbotD_coe, degree, maxDegree, max_mem_image_coe, unbotD_coe, univ_nonempty, univ_nonempty.image
+--- 原说明 ---
+There exists a vertex of maximal degree. Note the assumption of being nonempty i
+s necessary, as
+the lemma implies there exists a vertex.
 -/
 theorem exists_maximal_degree_vertex [DecidableRel G.Adj] [Nonempty V] :
-    exists v, G.maxDegree = G.degree v := by
+    ∃ v, G.maxDegree = G.degree v := by
   grind [maxDegree, WithBot.unbotD_coe, max_mem_image_coe <| univ_nonempty.image (G.degree ·)]
 
-/--
-theorem `degree_le_maxDegree` / 定理 `degree_le_maxDegree`
+/-- The maximum degree in the graph is at least the degree of any particular vertex. -/
+/-
+**SimpleGraph.degree_le_maxDegree** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：degree_le_maxDegree [DecidableRel G.Adj] (v : V) : G.degree v <= G.maxDegr
+ee
+参数：v : V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `WithBot.le_unbotD`：le_unbotD (hy : b <= y) : b <= y.unbotD a
+· 使用定理 `Finset.le_max`：le_max {a : α} {s : Finset α} (as : a in s) : ↑a <= s.max
+· 使用定理 `Finset.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {a} (h : a in s) 
+: f a in s.image f
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
 
-English:
-theorem degree_le_maxDegree
-  given: [DecidableRel G.Adj] (v : V)
-  statement: G.degree v <= G.maxDegree
-  proof: WithBot.le_unbotD Finset.le_max mem_image_of_mem (G.degree ·) mem_univ v
-
-@[simp]
-
-中文:
-定理 degree_le_maxDegree
-  条件: [DecidableRel G.伴随] (v : V)
-  结论: G.degree v <= G.maxDegree
-  证明: WithBot.le_unbotD Finset.le_max mem_image_of_mem (G.degree ·) mem_univ v
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.le_max, G.degree, WithBot, WithBot.le_unbotD, degree, le_max, le_unbotD, mem_image_of_mem, mem_univ
+--- 原说明 ---
+The maximum degree in the graph is at least the degree of any particular vertex.
 -/
-theorem degree_le_maxDegree [DecidableRel G.Adj] (v : V) : G.degree v <= G.maxDegree :=
-WithBot.le_unbotD Finset.le_max mem_image_of_mem (G.degree ·) mem_univ v
+theorem degree_le_maxDegree [DecidableRel G.Adj] (v : V) : G.degree v ≤ G.maxDegree :=
+  WithBot.le_unbotD <| Finset.le_max <| mem_image_of_mem (G.degree ·) <| mem_univ v
 
 @[simp]
-/--
-lemma `maxDegree_of_subsingleton` / 引理 `maxDegree_of_subsingleton`
-
-English:
-lemma maxDegree_of_subsingleton
-  given: [DecidableRel G.Adj] [Subsingleton V]
-  statement: G.maxDegree = 0
-  proof: by
-  cases isEmpty_or_nonempty V <;>
-    simp [maxDegree, Finset.image_const]
-
-@[deprecated (since := "2026-06-15")] alias maxDegree_of_isEmpty := maxDegree_of_subsingleton
-
-中文:
-引理 maxDegree_of_subsingleton
-  条件: [DecidableRel G.伴随] [子单例 V]
-  结论: G.maxDegree = 0
-  证明: by
-  cases isEmpty_or_nonempty V <;>
-    simp [maxDegree, Finset.image_const]
-
-@[deprecated (since := "2026-06-15")] alias maxDegree_of_isEmpty := maxDegree_of_subsingleton
-
-Depends on / 依赖: Finset, Finset.image_const, image_const, isEmpty_or_nonempty, maxDegree
+/-
+**SimpleGraph.maxDegree_of_subsingleton** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：maxDegree_of_subsingleton [DecidableRel G.Adj] [Subsingleton V] : G.maxDeg
+ree = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `SimpleGraph.IsIsolated.degree_eq_zero`：∀ {V : Type u_1} (G : SimpleGraph
+ V) (v : V) [inst : Fintype ↑(G.neighborSet v)], G.IsIsolated v → G.degree v = 0
+· 使用定理 `Finset.univ_eq_empty`：univ_eq_empty [IsEmpty α] : (univ : Finset α) = ∅
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Finset.image_const`：image_const {s : Finset α} (h : s.Nonempty) (b : β) 
+: (s.image fun _ => b) = singleton b
+· 使用定理 `Finset.max_singleton`：max_singleton {a : α} : Finset.max {a} = (a : With
+Bot α)
 -/
 lemma maxDegree_of_subsingleton [DecidableRel G.Adj] [Subsingleton V] : G.maxDegree = 0 := by
   cases isEmpty_or_nonempty V <;>
@@ -2028,117 +1792,123 @@ lemma maxDegree_of_subsingleton [DecidableRel G.Adj] [Subsingleton V] : G.maxDeg
 
 @[deprecated (since := "2026-06-15")] alias maxDegree_of_isEmpty := maxDegree_of_subsingleton
 
-/--
-theorem `maxDegree_le_of_forall_degree_le` / 定理 `maxDegree_le_of_forall_degree_le`
+/-- In a graph, if `k` is at least the degree of every vertex, then it is at least the maximum
+degree. -/
+/-
+**SimpleGraph.maxDegree_le_of_forall_degree_le** 是 Mathlib 中的一个定理，位于命名空间 `Simple
+Graph`。
+形式化陈述：maxDegree_le_of_forall_degree_le [DecidableRel G.Adj] (k : Nat) (h : foral
+l v, G.degree v <= k) : G.maxDegree <= k
+参数：k : Nat；h : forall v, G.degree v <= k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SimpleGraph.maxDegree_of_subsingleton`：maxDegree_of_subsingleton [Decida
+bleRel G.Adj] [Subsingleton V] : G.maxDegree = 0
+· 使用定理 `IsEmpty.instSubsingleton`：∀ {α : Sort u} [IsEmpty α], Subsingleton α
+· 使用定理 `SimpleGraph.exists_maximal_degree_vertex`：exists_maximal_degree_vertex [
+DecidableRel G.Adj] [Nonempty V] : exists v, G.maxDegree = G.degree v
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem maxDegree_le_of_forall_degree_le
-  given: [DecidableRel G.Adj] (k : Nat) (h : forall v, G.degree v <= k)
-  proof: by
-  cases isEmpty_or_nonempty V
-  · simp
-  · obtain ⟨_, hv⟩ := G.exists_maximal_degree_vertex
-    exact hv ▸ h _
-
-中文:
-定理 maxDegree_le_of_对任意_degree_le
-  条件: [DecidableRel G.伴随] (k : 自然数) (h : 对任意 v, G.degree v <= k)
-  证明: by
-  cases isEmpty_or_nonempty V
-  · simp
-  · obtain ⟨_, hv⟩ := G.exists_maximal_degree_vertex
-    exact hv ▸ h _
-
-Depends on / 依赖: Equiv.plift, Equiv.plift.psumCongr, Equiv.psumEquivSum, G.exists_maximal_degree_vertex, exists_maximal_degree_vertex, isEmpty_or_nonempty, of_equiv, psumCongr, psumEquivSum, symm.trans
+--- 原说明 ---
+In a graph, if `k` is at least the degree of every vertex, then it is at least t
+he maximum
+degree.
 -/
-theorem maxDegree_le_of_forall_degree_le [DecidableRel G.Adj] (k : Nat) (h : forall v, G.degree v <= k) :
-    G.maxDegree <= k := by
+theorem maxDegree_le_of_forall_degree_le [DecidableRel G.Adj] (k : ℕ) (h : ∀ v, G.degree v ≤ k) :
+    G.maxDegree ≤ k := by
   cases isEmpty_or_nonempty V
   · simp
   · obtain ⟨_, hv⟩ := G.exists_maximal_degree_vertex
     exact hv ▸ h _
-
-/--
-theorem `IsRegularOfDegree.maxDegree_eq` / 定理 `IsRegularOfDegree.maxDegree_eq`
-
-English:
-theorem IsRegularOfDegree.maxDegree_eq
-  statement: [Nonempty V] [DecidableRel G.Adj] {d : Nat}
-  proof: by
-  simp [maxDegree, h.degree_eq, Finset.image_const]
-
-@[simp]
-
-中文:
-定理 IsRegularOfDegree.maxDegree_eq
-  结论: [非空 V] [DecidableRel G.伴随] {d : 自然数}
-  证明: by
-  simp [maxDegree, h.degree_eq, Finset.image_const]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.image_const, degree_eq, h.degree_eq, image_const, maxDegree
+/-
+**SimpleGraph.IsRegularOfDegree.maxDegree_eq** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGr
+aph.IsRegularOfDegree`。
+形式化陈述：∀ {V : Type u_1} (G : SimpleGraph V) [inst : Fintype V] [Nonempty V] [inst
+_2 : DecidableRel G.Adj] {d : ℕ},   G.IsRegularOfDegree d → G.maxDegree = d
+参数：G : SimpleGraph V。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `SimpleGraph.IsRegularOfDegree.degree_eq`：∀ {V : Type u_1} {G : SimpleGra
+ph V} [inst : G.LocallyFinite] {d : ℕ}, G.IsRegularOfDegree d → ∀ (v : V), G.deg
+ree v = d
+· 使用定理 `Finset.image_const`：image_const {s : Finset α} (h : s.Nonempty) (b : β) 
+: (s.image fun _ => b) = singleton b
+· 使用定理 `Finset.max_singleton`：max_singleton {a : α} : Finset.max {a} = (a : With
+Bot α)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem IsRegularOfDegree.maxDegree_eq [Nonempty V] [DecidableRel G.Adj] {d : Nat}
+theorem IsRegularOfDegree.maxDegree_eq [Nonempty V] [DecidableRel G.Adj] {d : ℕ}
     (h : G.IsRegularOfDegree d) : G.maxDegree = d := by
   simp [maxDegree, h.degree_eq, Finset.image_const]
 
 @[simp]
-/--
-lemma `maxDegree_bot_eq_zero` / 引理 `maxDegree_bot_eq_zero`
-
-English:
-lemma maxDegree_bot_eq_zero
-  statement: (⊥ : SimpleGraph V).maxDegree = 0
-  proof: Nat.le_zero.1 maxDegree_le_of_forall_degree_le _ _ (by simp)
-
-中文:
-引理 maxDegree_bot_eq_zero
-  结论: (⊥ : 简单图 V).maxDegree = 0
-  证明: Nat.le_zero.1 maxDegree_le_of_forall_degree_le _ _ (by simp)
-
-Depends on / 依赖: Nat.le_zero, le_zero, maxDegree_le_of_forall_degree_le
+/-
+**SimpleGraph.maxDegree_bot_eq_zero** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：maxDegree_bot_eq_zero : (⊥ : SimpleGraph V).maxDegree = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.le_zero`：∀ {i : ℕ}, i ≤ 0 ↔ i = 0
+· 使用定理 `SimpleGraph.maxDegree_le_of_forall_degree_le`：maxDegree_le_of_forall_deg
+ree_le [DecidableRel G.Adj] (k : Nat) (h : forall v, G.degree v <= k) : G.maxDeg
+ree <= k
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.IsIsolated.degree_eq_zero`：∀ {V : Type u_1} (G : SimpleGraph
+ V) (v : V) [inst : Fintype ↑(G.neighborSet v)], G.IsIsolated v → G.degree v = 0
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 lemma maxDegree_bot_eq_zero : (⊥ : SimpleGraph V).maxDegree = 0 :=
-Nat.le_zero.1 maxDegree_le_of_forall_degree_le _ _ (by simp)
+  Nat.le_zero.1 <| maxDegree_le_of_forall_degree_le _ _ (by simp)
 
 variable {G} in
 @[simp]
-/--
-theorem `maxDegree_eq_zero_iff` / 定理 `maxDegree_eq_zero_iff`
-
-English:
-theorem maxDegree_eq_zero_iff
-  given: [DecidableRel G.Adj]
-  statement: G.maxDegree = 0 ↔ G = ⊥
-  proof: by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · rw [eq_bot_iff_isIsolated]
-    intro v
-    grind [degree_eq_zero, G.degree_le_maxDegree v]
-  · convert maxDegree_bot_eq_zero
-    assumption
-
-@[simp]
-
-中文:
-定理 maxDegree_eq_zero_iff
-  条件: [DecidableRel G.伴随]
-  结论: G.maxDegree = 0 ↔ G = ⊥
-  证明: by
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · rw [eq_bot_iff_isIsolated]
-    intro v
-    grind [degree_eq_zero, G.degree_le_maxDegree v]
-  · convert maxDegree_bot_eq_zero
-    assumption
-
-@[simp]
-
-Depends on / 依赖: G.degree_le_maxDegree, convert, degree_eq_zero, degree_le_maxDegree, eq_bot_iff_isIsolated, maxDegree_bot_eq_zero
+/-
+**SimpleGraph.maxDegree_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：maxDegree_eq_zero_iff [DecidableRel G.Adj] : G.maxDegree = 0 ↔ G = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.eq_bot_iff_isIsolated`：eq_bot_iff_isIsolated : G = ⊥ ↔ foral
+l v, G.IsIsolated v
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Lean.Meta.FastSubsingleton.elim`：∀ {α : Sort u} [h : Meta.FastSubsinglet
+on α] (a b : α), a = b
+· 使用定理 `Fintype.instFastSubsingleton`：∀ (α : Type u_4), Meta.FastSubsingleton (F
+intype α)
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `Lean.Meta.instFastSubsingletonForall`：∀ {α : Sort u} {β : α → Sort v} [i
+nst : ∀ (x : α), Meta.FastSubsingleton (β x)], Meta.FastSubsingleton ((x : α) → 
+β x)
+· 使用定理 `Lean.Meta.instFastSubsingletonDecidable`：∀ {p : Prop}, Meta.FastSubsingl
+eton (Decidable p)
+· 使用引理 `SimpleGraph.maxDegree_bot_eq_zero`：maxDegree_bot_eq_zero : (⊥ : SimpleGr
+aph V).maxDegree = 0
 -/
 theorem maxDegree_eq_zero_iff [DecidableRel G.Adj] : G.maxDegree = 0 ↔ G = ⊥ := by
-  refine ⟨fun h => ?_, fun h => ?_⟩
+  refine ⟨fun h ↦ ?_, fun h ↦ ?_⟩
   · rw [eq_bot_iff_isIsolated]
     intro v
     grind [degree_eq_zero, G.degree_le_maxDegree v]
@@ -2146,32 +1916,33 @@ theorem maxDegree_eq_zero_iff [DecidableRel G.Adj] : G.maxDegree = 0 ↔ G = ⊥
     assumption
 
 @[simp]
-/--
-lemma `maxDegree_top` / 引理 `maxDegree_top`
-
-English:
-lemma maxDegree_top
-  given: [DecidableEq V]
-  statement: (⊤ : SimpleGraph V).maxDegree = Fintype.card V - 1
-  proof: by
-  cases isEmpty_or_nonempty V
-  · simp
-  exact IsRegularOfDegree.top.maxDegree_eq
-
-@[simp]
-
-中文:
-引理 maxDegree_top
-  条件: [DecidableEq V]
-  结论: (⊤ : 简单图 V).maxDegree = 有限类型.card V - 1
-  证明: by
-  cases isEmpty_or_nonempty V
-  · simp
-  exact IsRegularOfDegree.top.maxDegree_eq
-
-@[simp]
-
-Depends on / 依赖: IsRegularOfDegree, IsRegularOfDegree.top.maxDegree_eq, isEmpty_or_nonempty, maxDegree_eq
+/-
+**SimpleGraph.maxDegree_top** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：maxDegree_top [DecidableEq V] : (⊤ : SimpleGraph V).maxDegree = Fintype.ca
+rd V - 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SimpleGraph.maxDegree_of_subsingleton`：maxDegree_of_subsingleton [Decida
+bleRel G.Adj] [Subsingleton V] : G.maxDegree = 0
+· 使用定理 `IsEmpty.instSubsingleton`：∀ {α : Sort u} [IsEmpty α], Subsingleton α
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Fintype.card_eq_zero`：∀ {α : Type u_1} [inst : Fintype α] [IsEmpty α], F
+intype.card α = 0
+· 使用定理 `Nat.sub_eq_zero_of_le`：∀ {n m : ℕ}, n ≤ m → n - m = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `SimpleGraph.IsRegularOfDegree.maxDegree_eq`：∀ {V : Type u_1} (G : Simple
+Graph V) [inst : Fintype V] [Nonempty V] [inst_2 : DecidableRel G.Adj] {d : ℕ}, 
+  G.IsRegularOfDegree d → G.maxD…
+· 使用定理 `SimpleGraph.IsRegularOfDegree.top`：∀ {V : Type u_1} [inst : Fintype V] [
+inst_1 : DecidableEq V], ⊤.IsRegularOfDegree (Fintype.card V - 1)
 -/
 lemma maxDegree_top [DecidableEq V] : (⊤ : SimpleGraph V).maxDegree = Fintype.card V - 1 := by
   cases isEmpty_or_nonempty V
@@ -2179,155 +1950,151 @@ lemma maxDegree_top [DecidableEq V] : (⊤ : SimpleGraph V).maxDegree = Fintype.
   exact IsRegularOfDegree.top.maxDegree_eq
 
 @[simp]
-/--
-lemma `minDegree_le_maxDegree` / 引理 `minDegree_le_maxDegree`
-
-English:
-lemma minDegree_le_maxDegree
-  given: [DecidableRel G.Adj]
-  statement: G.minDegree <= G.maxDegree
-  proof: by
-  by_cases! he : IsEmpty V
-  · simp
-  · exact he.elim fun v => (minDegree_le_degree _ v).trans (degree_le_maxDegree _ v)
-
-中文:
-引理 minDegree_le_maxDegree
-  条件: [DecidableRel G.伴随]
-  结论: G.minDegree <= G.maxDegree
-  证明: by
-  by_cases! he : IsEmpty V
-  · simp
-  · exact he.elim fun v => (minDegree_le_degree _ v).trans (degree_le_maxDegree _ v)
-
-Depends on / 依赖: IsEmpty, degree_le_maxDegree, he.elim, minDegree_le_degree
+/-
+**SimpleGraph.minDegree_le_maxDegree** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：minDegree_le_maxDegree [DecidableRel G.Adj] : G.minDegree <= G.maxDegree
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SimpleGraph.minDegree_of_subsingleton`：minDegree_of_subsingleton [Decida
+bleRel G.Adj] [Subsingleton V] : G.minDegree = 0
+· 使用定理 `IsEmpty.instSubsingleton`：∀ {α : Sort u} [IsEmpty α], Subsingleton α
+· 使用引理 `SimpleGraph.maxDegree_of_subsingleton`：maxDegree_of_subsingleton [Decida
+bleRel G.Adj] [Subsingleton V] : G.maxDegree = 0
+· 使用定理 `Nonempty.elim`：∀ {α : Sort u} {p : Prop}, Nonempty α → (∀ (a : α), p) → 
+p
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `SimpleGraph.minDegree_le_degree`：minDegree_le_degree [DecidableRel G.Adj
+] (v : V) : G.minDegree <= G.degree v
+· 使用定理 `SimpleGraph.degree_le_maxDegree`：degree_le_maxDegree [DecidableRel G.Adj
+] (v : V) : G.degree v <= G.maxDegree
 -/
-lemma minDegree_le_maxDegree [DecidableRel G.Adj] : G.minDegree <= G.maxDegree := by
+lemma minDegree_le_maxDegree [DecidableRel G.Adj] : G.minDegree ≤ G.maxDegree := by
   by_cases! he : IsEmpty V
   · simp
-  · exact he.elim fun v => (minDegree_le_degree _ v).trans (degree_le_maxDegree _ v)
-
-/--
-theorem `IsRegularOfDegree.minDegree_eq` / 定理 `IsRegularOfDegree.minDegree_eq`
-
-English:
-theorem IsRegularOfDegree.minDegree_eq
-  statement: [Nonempty V] [DecidableRel G.Adj] {d : Nat}
-  proof: by
-  simp [minDegree, h.degree_eq, Finset.image_const]
-
-@[simp]
-
-中文:
-定理 IsRegularOfDegree.minDegree_eq
-  结论: [非空 V] [DecidableRel G.伴随] {d : 自然数}
-  证明: by
-  simp [minDegree, h.degree_eq, Finset.image_const]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.image_const, degree_eq, h.degree_eq, image_const, minDegree
+  · exact he.elim fun v ↦ (minDegree_le_degree _ v).trans (degree_le_maxDegree _ v)
+/-
+**SimpleGraph.IsRegularOfDegree.minDegree_eq** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGr
+aph.IsRegularOfDegree`。
+形式化陈述：∀ {V : Type u_1} (G : SimpleGraph V) [inst : Fintype V] [Nonempty V] [inst
+_2 : DecidableRel G.Adj] {d : ℕ},   G.IsRegularOfDegree d → G.minDegree = d
+参数：G : SimpleGraph V。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `SimpleGraph.IsRegularOfDegree.degree_eq`：∀ {V : Type u_1} {G : SimpleGra
+ph V} [inst : G.LocallyFinite] {d : ℕ}, G.IsRegularOfDegree d → ∀ (v : V), G.deg
+ree v = d
+· 使用定理 `Finset.image_const`：image_const {s : Finset α} (h : s.Nonempty) (b : β) 
+: (s.image fun _ => b) = singleton b
+· 使用定理 `Finset.min_singleton`：min_singleton {a : α} : Finset.min {a} = (a : With
+Top α)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem IsRegularOfDegree.minDegree_eq [Nonempty V] [DecidableRel G.Adj] {d : Nat}
+theorem IsRegularOfDegree.minDegree_eq [Nonempty V] [DecidableRel G.Adj] {d : ℕ}
     (h : G.IsRegularOfDegree d) : G.minDegree = d := by
   simp [minDegree, h.degree_eq, Finset.image_const]
 
 @[simp]
-/--
-lemma `minDegree_bot_eq_zero` / 引理 `minDegree_bot_eq_zero`
-
-English:
-lemma minDegree_bot_eq_zero
-  statement: (⊥ : SimpleGraph V).minDegree = 0
-  proof: Nat.le_zero.1 (minDegree_le_maxDegree _).trans (by simp)
-
-中文:
-引理 minDegree_bot_eq_zero
-  结论: (⊥ : 简单图 V).minDegree = 0
-  证明: Nat.le_zero.1 (minDegree_le_maxDegree _).trans (by simp)
-
-Depends on / 依赖: Nat.le_zero, le_zero, minDegree_le_maxDegree
+/-
+**SimpleGraph.minDegree_bot_eq_zero** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：minDegree_bot_eq_zero : (⊥ : SimpleGraph V).minDegree = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.le_zero`：∀ {i : ℕ}, i ≤ 0 ↔ i = 0
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `SimpleGraph.minDegree_le_maxDegree`：minDegree_le_maxDegree [DecidableRel
+ G.Adj] : G.minDegree <= G.maxDegree
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SimpleGraph.maxDegree_bot_eq_zero`：maxDegree_bot_eq_zero : (⊥ : SimpleGr
+aph V).maxDegree = 0
 -/
 lemma minDegree_bot_eq_zero : (⊥ : SimpleGraph V).minDegree = 0 :=
-Nat.le_zero.1 (minDegree_le_maxDegree _).trans (by simp)
+  Nat.le_zero.1 <| (minDegree_le_maxDegree _).trans (by simp)
 
 variable {G} in
-/--
-theorem `minDegree_eq_zero_iff` / 定理 `minDegree_eq_zero_iff`
-
-English:
-theorem minDegree_eq_zero_iff
-  given: [DecidableRel G.Adj] [Nonempty V]
-  proof: by
-  refine ⟨fun h => ?_, fun ⟨v, hv⟩ => ?_⟩
-  · grind [G.exists_minimal_degree_vertex, degree_eq_zero]
-  · grind [G.minDegree_le_degree v, degree_eq_zero]
-
-中文:
-定理 minDegree_eq_zero_iff
-  条件: [DecidableRel G.伴随] [非空 V]
-  证明: by
-  refine ⟨fun h => ?_, fun ⟨v, hv⟩ => ?_⟩
-  · grind [G.exists_minimal_degree_vertex, degree_eq_zero]
-  · grind [G.minDegree_le_degree v, degree_eq_zero]
-
-Depends on / 依赖: G.exists_minimal_degree_vertex, G.minDegree_le_degree, degree_eq_zero, exists_minimal_degree_vertex, minDegree_le_degree
+/-
+**SimpleGraph.minDegree_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：minDegree_eq_zero_iff [DecidableRel G.Adj] [Nonempty V] : G.minDegree = 0 
+↔ exists v, G.IsIsolated v
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem minDegree_eq_zero_iff [DecidableRel G.Adj] [Nonempty V] :
-    G.minDegree = 0 ↔ exists v, G.IsIsolated v := by
-  refine ⟨fun h => ?_, fun ⟨v, hv⟩ => ?_⟩
+    G.minDegree = 0 ↔ ∃ v, G.IsIsolated v := by
+  refine ⟨fun h ↦ ?_, fun ⟨v, hv⟩ ↦ ?_⟩
   · grind [G.exists_minimal_degree_vertex, degree_eq_zero]
   · grind [G.minDegree_le_degree v, degree_eq_zero]
 
 variable {G} in
-/--
-theorem `minDegree_eq_zero_iff_support_ne` / 定理 `minDegree_eq_zero_iff_support_ne`
-
-English:
-theorem minDegree_eq_zero_iff_support_ne
-  given: [DecidableRel G.Adj] [Nonempty V]
-  proof: by
-  simp [Set.ne_univ_iff_exists_notMem, minDegree_eq_zero_iff]
-
-@[simp]
-
-中文:
-定理 minDegree_eq_zero_iff_support_ne
-  条件: [DecidableRel G.伴随] [非空 V]
-  证明: by
-  simp [Set.ne_univ_iff_exists_notMem, minDegree_eq_zero_iff]
-
-@[simp]
-
-Depends on / 依赖: Set.ne_univ_iff_exists_notMem, minDegree_eq_zero_iff, ne_univ_iff_exists_notMem
+/-
+**SimpleGraph.minDegree_eq_zero_iff_support_ne** 是 Mathlib 中的一个定理，位于命名空间 `Simple
+Graph`。
+形式化陈述：minDegree_eq_zero_iff_support_ne [DecidableRel G.Adj] [Nonempty V] : G.min
+Degree = 0 ↔ G.support != .univ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem minDegree_eq_zero_iff_support_ne [DecidableRel G.Adj] [Nonempty V] :
-    G.minDegree = 0 ↔ G.support != .univ := by
+    G.minDegree = 0 ↔ G.support ≠ .univ := by
   simp [Set.ne_univ_iff_exists_notMem, minDegree_eq_zero_iff]
 
 @[simp]
-/--
-lemma `minDegree_top` / 引理 `minDegree_top`
-
-English:
-lemma minDegree_top
-  given: [DecidableEq V]
-  statement: (⊤ : SimpleGraph V).minDegree = Fintype.card V - 1
-  proof: by
-  cases isEmpty_or_nonempty V
-  · simp
-  exact IsRegularOfDegree.top.minDegree_eq
-
-中文:
-引理 minDegree_top
-  条件: [DecidableEq V]
-  结论: (⊤ : 简单图 V).minDegree = 有限类型.card V - 1
-  证明: by
-  cases isEmpty_or_nonempty V
-  · simp
-  exact IsRegularOfDegree.top.minDegree_eq
-
-Depends on / 依赖: IsRegularOfDegree, IsRegularOfDegree.top.minDegree_eq, isEmpty_or_nonempty, minDegree_eq
+/-
+**SimpleGraph.minDegree_top** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：minDegree_top [DecidableEq V] : (⊤ : SimpleGraph V).minDegree = Fintype.ca
+rd V - 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SimpleGraph.minDegree_of_subsingleton`：minDegree_of_subsingleton [Decida
+bleRel G.Adj] [Subsingleton V] : G.minDegree = 0
+· 使用定理 `IsEmpty.instSubsingleton`：∀ {α : Sort u} [IsEmpty α], Subsingleton α
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Fintype.card_eq_zero`：∀ {α : Type u_1} [inst : Fintype α] [IsEmpty α], F
+intype.card α = 0
+· 使用定理 `Nat.sub_eq_zero_of_le`：∀ {n m : ℕ}, n ≤ m → n - m = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `SimpleGraph.IsRegularOfDegree.minDegree_eq`：∀ {V : Type u_1} (G : Simple
+Graph V) [inst : Fintype V] [Nonempty V] [inst_2 : DecidableRel G.Adj] {d : ℕ}, 
+  G.IsRegularOfDegree d → G.minD…
+· 使用定理 `SimpleGraph.IsRegularOfDegree.top`：∀ {V : Type u_1} [inst : Fintype V] [
+inst_1 : DecidableEq V], ⊤.IsRegularOfDegree (Fintype.card V - 1)
 -/
 lemma minDegree_top [DecidableEq V] : (⊤ : SimpleGraph V).minDegree = Fintype.card V - 1 := by
   cases isEmpty_or_nonempty V
@@ -2335,248 +2102,263 @@ lemma minDegree_top [DecidableEq V] : (⊤ : SimpleGraph V).minDegree = Fintype.
   exact IsRegularOfDegree.top.minDegree_eq
 
 /--
-theorem `maxDegree_lt_card_verts` / 定理 `maxDegree_lt_card_verts`
+The maximum degree of a nonempty graph is less than the number of vertices. Note that the assumption
+that `V` is nonempty is necessary, as otherwise this would assert the existence of a
+natural number less than zero. -/
+/-
+**SimpleGraph.maxDegree_lt_card_verts** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：maxDegree_lt_card_verts [DecidableRel G.Adj] [Nonempty V] : G.maxDegree < 
+Fintype.card V
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.exists_maximal_degree_vertex`：exists_maximal_degree_vertex [
+DecidableRel G.Adj] [Nonempty V] : exists v, G.maxDegree = G.degree v
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.degree_lt_card_verts`：degree_lt_card_verts [Fintype V] [Deci
+dableRel G.Adj] (v : V) : G.degree v < Fintype.card V
 
-English:
-theorem maxDegree_lt_card_verts
-  given: [DecidableRel G.Adj] [Nonempty V]
-  proof: by
-  obtain ⟨v, hv⟩ := G.exists_maximal_degree_vertex
-  rw [hv]
-  apply G.degree_lt_card_verts v
-
-中文:
-定理 maxDegree_lt_card_verts
-  条件: [DecidableRel G.伴随] [非空 V]
-  证明: by
-  obtain ⟨v, hv⟩ := G.exists_maximal_degree_vertex
-  rw [hv]
-  apply G.degree_lt_card_verts v
-
-Depends on / 依赖: G.degree_lt_card_verts, G.exists_maximal_degree_vertex, degree_lt_card_verts, exists_maximal_degree_vertex
+--- 原说明 ---
+The maximum degree of a nonempty graph is less than the number of vertices. Note
+ that the assumption
+that `V` is nonempty is necessary, as otherwise this would assert the existence 
+of a
+natural number less than zero.
 -/
 theorem maxDegree_lt_card_verts [DecidableRel G.Adj] [Nonempty V] :
     G.maxDegree < Fintype.card V := by
   obtain ⟨v, hv⟩ := G.exists_maximal_degree_vertex
   rw [hv]
   apply G.degree_lt_card_verts v
-
-/--
-theorem `card_commonNeighbors_le_degree_left` / 定理 `card_commonNeighbors_le_degree_left`
-
-English:
-theorem card_commonNeighbors_le_degree_left
-  given: [DecidableRel G.Adj] (v w : V)
-  proof: by
-  rw [← card_neighborSet_eq_degree]
-  exact Set.card_le_card Set.inter_subset_left
-
-中文:
-定理 card_commonNeighbors_le_degree_left
-  条件: [DecidableRel G.伴随] (v w : V)
-  证明: by
-  rw [← card_neighborSet_eq_degree]
-  exact Set.card_le_card Set.inter_subset_left
-
-Depends on / 依赖: Set.card_le_card, Set.inter_subset_left, card_le_card, card_neighborSet_eq_degree, inter_subset_left
+/-
+**SimpleGraph.card_commonNeighbors_le_degree_left** 是 Mathlib 中的一个定理，位于命名空间 `Sim
+pleGraph`。
+形式化陈述：card_commonNeighbors_le_degree_left [DecidableRel G.Adj] (v w : V) : Finty
+pe.card (G.commonNeighbors v w) <= G.degree v
+参数：v w : V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.card_neighborSet_eq_degree`：card_neighborSet_eq_degree : Fin
+type.card (G.neighborSet v) = G.degree v
+· 使用定理 `Set.card_le_card`：card_le_card {s t : Set α} [Fintype s] [Fintype t] (hs
+ub : s subseteq t) : Fintype.card s <= Fintype.card t
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
 -/
 theorem card_commonNeighbors_le_degree_left [DecidableRel G.Adj] (v w : V) :
-    Fintype.card (G.commonNeighbors v w) <= G.degree v := by
+    Fintype.card (G.commonNeighbors v w) ≤ G.degree v := by
   rw [← card_neighborSet_eq_degree]
   exact Set.card_le_card Set.inter_subset_left
-
-/--
-theorem `card_commonNeighbors_le_degree_right` / 定理 `card_commonNeighbors_le_degree_right`
-
-English:
-theorem card_commonNeighbors_le_degree_right
-  given: [DecidableRel G.Adj] (v w : V)
-  proof: by
-  simp_rw [commonNeighbors_symm _ v w, card_commonNeighbors_le_degree_left]
-
-中文:
-定理 card_commonNeighbors_le_degree_right
-  条件: [DecidableRel G.伴随] (v w : V)
-  证明: by
-  simp_rw [commonNeighbors_symm _ v w, card_commonNeighbors_le_degree_left]
-
-Depends on / 依赖: card_commonNeighbors_le_degree_left, commonNeighbors_symm, simp_rw
+/-
+**SimpleGraph.card_commonNeighbors_le_degree_right** 是 Mathlib 中的一个定理，位于命名空间 `Si
+mpleGraph`。
+形式化陈述：card_commonNeighbors_le_degree_right [DecidableRel G.Adj] (v w : V) : Fint
+ype.card (G.commonNeighbors v w) <= G.degree w
+参数：v w : V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fintype.card_congr'`：card_congr' {α β} [Fintype α] [Fintype β] (h : α = 
+β) : card α = card β
+· 使用定理 `SimpleGraph.commonNeighbors_symm`：commonNeighbors_symm (v w : V) : G.com
+monNeighbors v w = G.commonNeighbors w v
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 -/
 theorem card_commonNeighbors_le_degree_right [DecidableRel G.Adj] (v w : V) :
-    Fintype.card (G.commonNeighbors v w) <= G.degree w := by
+    Fintype.card (G.commonNeighbors v w) ≤ G.degree w := by
   simp_rw [commonNeighbors_symm _ v w, card_commonNeighbors_le_degree_left]
-
-/--
-theorem `card_commonNeighbors_lt_card_verts` / 定理 `card_commonNeighbors_lt_card_verts`
-
-English:
-theorem card_commonNeighbors_lt_card_verts
-  given: [DecidableRel G.Adj] (v w : V)
-  proof: Nat.lt_of_le_of_lt (G.card_commonNeighbors_le_degree_left _ _) (G.degree_lt_card_verts v)
-
-中文:
-定理 card_commonNeighbors_lt_card_verts
-  条件: [DecidableRel G.伴随] (v w : V)
-  证明: Nat.lt_of_le_of_lt (G.card_commonNeighbors_le_degree_left _ _) (G.degree_lt_card_verts v)
-
-Depends on / 依赖: G.card_commonNeighbors_le_degree_left, G.degree_lt_card_verts, Nat.lt_of_le_of_lt, card_commonNeighbors_le_degree_left, degree_lt_card_verts, lt_of_le_of_lt
+/-
+**SimpleGraph.card_commonNeighbors_lt_card_verts** 是 Mathlib 中的一个定理，位于命名空间 `Simp
+leGraph`。
+形式化陈述：card_commonNeighbors_lt_card_verts [DecidableRel G.Adj] (v w : V) : Fintyp
+e.card (G.commonNeighbors v w) < Fintype.card V
+参数：v w : V。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.lt_of_le_of_lt`：∀ {n m k : ℕ}, n ≤ m → m < k → n < k
+· 使用定理 `SimpleGraph.card_commonNeighbors_le_degree_left`：card_commonNeighbors_le
+_degree_left [DecidableRel G.Adj] (v w : V) : Fintype.card (G.commonNeighbors v 
+w) <= G.degree v
+· 使用定理 `SimpleGraph.degree_lt_card_verts`：degree_lt_card_verts [Fintype V] [Deci
+dableRel G.Adj] (v : V) : G.degree v < Fintype.card V
 -/
 theorem card_commonNeighbors_lt_card_verts [DecidableRel G.Adj] (v w : V) :
     Fintype.card (G.commonNeighbors v w) < Fintype.card V :=
   Nat.lt_of_le_of_lt (G.card_commonNeighbors_le_degree_left _ _) (G.degree_lt_card_verts v)
 
-/--
-theorem `Adj.card_commonNeighbors_lt_degree` / 定理 `Adj.card_commonNeighbors_lt_degree`
+/-- If the condition `G.Adj v w` fails, then `card_commonNeighbors_le_degree` is
+the best we can do in general. -/
+/-
+**SimpleGraph.Adj.card_commonNeighbors_lt_degree** 是 Mathlib 中的一个定理，位于命名空间 `Simp
+leGraph.Adj`。
+形式化陈述：∀ {V : Type u_1} [inst : Fintype V] {G : SimpleGraph V} [inst_1 : Decidabl
+eRel G.Adj] {v w : V},   G.Adj v w → Fintype.card ↑(G.commonNeighbors v w) < G.d
+egree v
+参数：G.commonNeighbors v w。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.toFinset_card`：toFinset_card {α : Type*} (s : Set α) [Fintype s] : s
+.toFinset.card = Fintype.card s
+· 使用定理 `Finset.card_lt_card`：∀ {α : Type u_1} {s t : Finset α}, s ⊂ t → s.card <
+ t.card
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.ssubset_iff`：ssubset_iff : s ⊂ t ↔ exists a ∉ s, insert a s subse
+teq t
+· 使用定理 `Set.mem_toFinset`：mem_toFinset {s : Set α} [Fintype s] {a : α} : a in s.
+toFinset ↔ a in s
+· 使用定理 `SimpleGraph.notMem_commonNeighbors_right`：notMem_commonNeighbors_right (
+v w : V) : w ∉ G.commonNeighbors v w
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `SimpleGraph.coe_neighborFinset`：coe_neighborFinset : (G.neighborFinset v
+ : Set V) = G.neighborSet v
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `SimpleGraph.commonNeighbors_subset_neighborSet_left`：commonNeighbors_sub
+set_neighborSet_left (v w : V) : G.commonNeighbors v w subseteq G.neighborSet v
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
 
-English:
-theorem Adj.card_commonNeighbors_lt_degree
-  statement: {G : SimpleGraph V} [DecidableRel G.Adj] {v w : V}
-  proof: by
-  classical
-  rw [← Set.toFinset_card]
-refine Finset.card_lt_card Finset.ssubset_iff.mpr ⟨w, ?_, ?_⟩
-  · rw [Set.mem_toFinset]
-    apply notMem_commonNeighbors_right
-  · simpa [Finset.insert_subset_iff, G.commonNeighbors_subset_neighborSet_left v w]
-
-中文:
-定理 伴随.card_commonNeighbors_lt_degree
-  结论: {G : 简单图 V} [DecidableRel G.伴随] {v w : V}
-  证明: by
-  classical
-  rw [← Set.toFinset_card]
-refine Finset.card_lt_card Finset.ssubset_iff.mpr ⟨w, ?_, ?_⟩
-  · rw [Set.mem_toFinset]
-    apply notMem_commonNeighbors_right
-  · simpa [Finset.insert_subset_iff, G.commonNeighbors_subset_neighborSet_left v w]
-
-Depends on / 依赖: Finset, Finset.card_lt_card, Finset.insert_subset_iff, Finset.ssubset_iff.mpr, G.commonNeighbors_subset_neighborSet_left, Set.mem_toFinset, Set.toFinset_card, card_lt_card, classical, commonNeighbors_subset_neighborSet_left, insert_subset_iff, mem_toFinset, notMem_commonNeighbors_right, ssubset_iff, toFinset_card
+--- 原说明 ---
+If the condition `G.Adj v w` fails, then `card_commonNeighbors_le_degree` is
+the best we can do in general.
 -/
 theorem Adj.card_commonNeighbors_lt_degree {G : SimpleGraph V} [DecidableRel G.Adj] {v w : V}
     (h : G.Adj v w) : Fintype.card (G.commonNeighbors v w) < G.degree v := by
   classical
   rw [← Set.toFinset_card]
-refine Finset.card_lt_card Finset.ssubset_iff.mpr ⟨w, ?_, ?_⟩
+  refine Finset.card_lt_card <| Finset.ssubset_iff.mpr ⟨w, ?_, ?_⟩
   · rw [Set.mem_toFinset]
     apply notMem_commonNeighbors_right
   · simpa [Finset.insert_subset_iff, G.commonNeighbors_subset_neighborSet_left v w]
-
-/--
-theorem `card_commonNeighbors_top` / 定理 `card_commonNeighbors_top`
-
-English:
-theorem card_commonNeighbors_top
-  given: [DecidableEq V] {v w : V} (h : v != w)
-  proof: by
-  simp [commonNeighbors_top_eq, ← Set.toFinset_card, Finset.card_sdiff, h]
-
-中文:
-定理 card_commonNeighbors_top
-  条件: [DecidableEq V] {v w : V} (h : v != w)
-  证明: by
-  simp [commonNeighbors_top_eq, ← Set.toFinset_card, Finset.card_sdiff, h]
-
-Depends on / 依赖: Finset, Finset.card_sdiff, Set.toFinset_card, card_sdiff, commonNeighbors_top_eq, toFinset_card
+/-
+**SimpleGraph.card_commonNeighbors_top** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：card_commonNeighbors_top [DecidableEq V] {v w : V} (h : v != w) : Fintype.
+card (commonNeighbors ⊤ v w) = Fintype.card V - 2
+参数：h : v != w。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fintype.card_congr'`：card_congr' {α β} [Fintype α] [Fintype β] (h : α = 
+β) : card α = card β
+· 使用定理 `SimpleGraph.commonNeighbors_top_eq`：commonNeighbors_top_eq {v w : V} : (
+⊤ : SimpleGraph V).commonNeighbors v w = Set.univ \ {v, w}
+· 使用定理 `Set.toFinset_sdiff`：toFinset_sdiff [Fintype (s \ t : Set _)] : (s \ t).t
+oFinset = s.toFinset \ t.toFinset
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Set.toFinset_univ`：toFinset_univ [Fintype α] [Fintype (Set.univ : Set α)
+] : (Set.univ : Set α).toFinset = Finset.univ
+· 使用定理 `Set.toFinset_insert`：toFinset_insert [DecidableEq α] {a : α} {s : Set α}
+ [Fintype (insert a s : Set α)] [Fintype s] : (insert a s).toFinset = insert a s
+.toFinset
+· 使用定理 `Set.toFinset_singleton`：toFinset_singleton (a : α) [Fintype ({a} : Set α
+)] : ({a} : Set α).toFinset = {a}
+· 使用定理 `Finset.card_sdiff`：card_sdiff : #(t \ s) = #t - #(s inter t)
+· 使用定理 `Finset.inter_univ`：∀ {α : Type u_1} [inst : Fintype α] [inst_1 : Decidab
+leEq α] (s : Finset α), s ∩ Finset.univ = s
+· 使用定理 `Finset.card_insert_of_notMem`：card_insert_of_notMem (h : a ∉ s) : #(inse
+rt a s) = #s + 1
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Finset.card_singleton`：card_singleton (a : α) : #{a} = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem card_commonNeighbors_top [DecidableEq V] {v w : V} (h : v != w) :
+theorem card_commonNeighbors_top [DecidableEq V] {v w : V} (h : v ≠ w) :
     Fintype.card (commonNeighbors ⊤ v w) = Fintype.card V - 2 := by
   simp [commonNeighbors_top_eq, ← Set.toFinset_card, Finset.card_sdiff, h]
-
-/--
-lemma `insert_neighborFinset_eq_univ` / 引理 `insert_neighborFinset_eq_univ`
-
-English:
-lemma insert_neighborFinset_eq_univ
-  given: [DecidableEq V] [DecidableRel G.Adj] (v : V)
-  proof: by
-  simp only [Finset.ext_iff, mem_insert, mem_neighborFinset, IsUniversal]
-  grind
-
-中文:
-引理 insert_neighborFinset_eq_univ
-  条件: [DecidableEq V] [DecidableRel G.伴随] (v : V)
-  证明: by
-  simp only [Finset.ext_iff, mem_insert, mem_neighborFinset, IsUniversal]
-  grind
+/-
+**SimpleGraph.insert_neighborFinset_eq_univ** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGra
+ph`。
+形式化陈述：∀ {V : Type u_1} (G : SimpleGraph V) [inst : Fintype V] [inst_1 : Decidabl
+eEq V] [inst_2 : DecidableRel G.Adj] (v : V),   insert v (G.neighborFinset v) = 
+Finset.univ ↔ G.IsUniversal v
+参数：G : SimpleGraph V；v : V；G.neighborFinset v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
 -/
 @[simp] lemma insert_neighborFinset_eq_univ [DecidableEq V] [DecidableRel G.Adj] (v : V) :
     insert v (G.neighborFinset v) = univ ↔ G.IsUniversal v := by
   simp only [Finset.ext_iff, mem_insert, mem_neighborFinset, IsUniversal]
   grind
-
-/--
-lemma `neighborFinset_eq_erase_univ` / 引理 `neighborFinset_eq_erase_univ`
-
-English:
-lemma neighborFinset_eq_erase_univ
-  given: [DecidableEq V] [DecidableRel G.Adj] (v : V)
-  proof: by
-  grind [insert_neighborFinset_eq_univ, notMem_neighborFinset_self]
-
-@[simp]
-
-中文:
-引理 neighborFinset_eq_erase_univ
-  条件: [DecidableEq V] [DecidableRel G.伴随] (v : V)
-  证明: by
-  grind [insert_neighborFinset_eq_univ, notMem_neighborFinset_self]
-
-@[simp]
+/-
+**SimpleGraph.neighborFinset_eq_erase_univ** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGrap
+h`。
+形式化陈述：∀ {V : Type u_1} (G : SimpleGraph V) [inst : Fintype V] [inst_1 : Decidabl
+eEq V] [inst_2 : DecidableRel G.Adj] (v : V),   G.neighborFinset v = Finset.univ
+.erase v ↔ G.IsUniversal v
+参数：G : SimpleGraph V；v : V。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma neighborFinset_eq_erase_univ [DecidableEq V] [DecidableRel G.Adj] (v : V) :
     G.neighborFinset v = univ.erase v ↔ G.IsUniversal v := by
   grind [insert_neighborFinset_eq_univ, notMem_neighborFinset_self]
 
 @[simp]
-/--
-lemma `degree_eq_card_sub_one` / 引理 `degree_eq_card_sub_one`
-
-English:
-lemma degree_eq_card_sub_one
-  given: [DecidableRel G.Adj] (v : V)
-  proof: by
-  classical
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · rw [← G.insert_neighborFinset_eq_univ v, ← Finset.card_eq_iff_eq_univ]
-    simp [h, Nat.sub_add_cancel <| Fintype.card_pos_iff.mpr ⟨v⟩]
-  · simp [← card_neighborFinset_eq_degree, (G.neighborFinset_eq_erase_univ v).mpr h]
-
-中文:
-引理 degree_eq_card_sub_one
-  条件: [DecidableRel G.伴随] (v : V)
-  证明: by
-  classical
-  refine ⟨fun h => ?_, fun h => ?_⟩
-  · rw [← G.insert_neighborFinset_eq_univ v, ← Finset.card_eq_iff_eq_univ]
-    simp [h, Nat.sub_add_cancel <| Fintype.card_pos_iff.mpr ⟨v⟩]
-  · simp [← card_neighborFinset_eq_degree, (G.neighborFinset_eq_erase_univ v).mpr h]
-
-Depends on / 依赖: Finset, Finset.card_eq_iff_eq_univ, Fintype, Fintype.card_pos_iff.mpr, G.insert_neighborFinset_eq_univ, G.neighborFinset_eq_erase_univ, Nat.sub_add_cancel, card_eq_iff_eq_univ, card_neighborFinset_eq_degree, card_pos_iff, classical, insert_neighborFinset_eq_univ, neighborFinset_eq_erase_univ, sub_add_cancel
+/-
+**SimpleGraph.degree_eq_card_sub_one** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：degree_eq_card_sub_one [DecidableRel G.Adj] (v : V) : G.degree v = Fintype
+.card V - 1 ↔ G.IsUniversal v
+参数：v : V。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.insert_neighborFinset_eq_univ`：∀ {V : Type u_1} (G : SimpleG
+raph V) [inst : Fintype V] [inst_1 : DecidableEq V] [inst_2 : DecidableRel G.Adj
+] (v : V),   insert v (G.neighb…
+· 使用定理 `Finset.card_eq_iff_eq_univ`：Finset.card_eq_iff_eq_univ [Fintype α] (s : 
+Finset α) : #s = Fintype.card α ↔ s = univ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.card_insert_of_notMem`：card_insert_of_notMem (h : a ∉ s) : #(inse
+rt a s) = #s + 1
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Nat.sub_add_cancel`：∀ {n m : ℕ}, m ≤ n → n - m + m = n
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Fintype.card_pos_iff`：card_pos_iff : 0 < card α ↔ Nonempty α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `SimpleGraph.neighborFinset_eq_erase_univ`：∀ {V : Type u_1} (G : SimpleGr
+aph V) [inst : Fintype V] [inst_1 : DecidableEq V] [inst_2 : DecidableRel G.Adj]
+ (v : V),   G.neighborFinset v…
+· 使用定理 `Finset.card_erase_of_mem`：card_erase_of_mem : a in s -> #(s.erase a) = #
+s - 1
 -/
 lemma degree_eq_card_sub_one [DecidableRel G.Adj] (v : V) :
     G.degree v = Fintype.card V - 1 ↔ G.IsUniversal v := by
   classical
-  refine ⟨fun h => ?_, fun h => ?_⟩
+  refine ⟨fun h ↦ ?_, fun h ↦ ?_⟩
   · rw [← G.insert_neighborFinset_eq_univ v, ← Finset.card_eq_iff_eq_univ]
     simp [h, Nat.sub_add_cancel <| Fintype.card_pos_iff.mpr ⟨v⟩]
   · simp [← card_neighborFinset_eq_degree, (G.neighborFinset_eq_erase_univ v).mpr h]
-
-/--
-lemma `degree_lt_card_sub_one` / 引理 `degree_lt_card_sub_one`
-
-English:
-lemma degree_lt_card_sub_one
-  given: [DecidableRel G.Adj] (v : V)
-  proof: by
-  grind [degree_eq_card_sub_one, Nat.le_sub_one_of_lt <| G.degree_lt_card_verts v]
-
-中文:
-引理 degree_lt_card_sub_one
-  条件: [DecidableRel G.伴随] (v : V)
-  证明: by
-  grind [degree_eq_card_sub_one, Nat.le_sub_one_of_lt <| G.degree_lt_card_verts v]
-
-Depends on / 依赖: G.degree_lt_card_verts, Nat.le_sub_one_of_lt, degree_eq_card_sub_one, degree_lt_card_verts, le_sub_one_of_lt
+/-
+**SimpleGraph.degree_lt_card_sub_one** 是 Mathlib 中的一个引理，位于命名空间 `SimpleGraph`。
+形式化陈述：degree_lt_card_sub_one [DecidableRel G.Adj] (v : V) : G.degree v < Fintype
+.card V - 1 ↔ ¬ G.IsUniversal v
+参数：v : V。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma degree_lt_card_sub_one [DecidableRel G.Adj] (v : V) :
     G.degree v < Fintype.card V - 1 ↔ ¬ G.IsUniversal v := by
@@ -2588,445 +2370,501 @@ namespace Iso
 
 variable {G} {W : Type*} {G' : SimpleGraph W}
 
-/--
-theorem `card_edgeFinset_eq` / 定理 `card_edgeFinset_eq`
-
-English:
-theorem card_edgeFinset_eq
-  given: (f : G ≃g G') [Fintype G.edgeSet] [Fintype G'.edgeSet]
-  proof: by
-  apply Finset.card_eq_of_equiv
-  simpa using f.mapEdgeSet
-
-中文:
-定理 card_edgeFinset_eq
-  条件: (f : G ≃g G') [有限类型 G.edgeSet] [有限类型 G'.edgeSet]
-  证明: by
-  apply Finset.card_eq_of_equiv
-  simpa using f.mapEdgeSet
-
-Depends on / 依赖: Finset, Finset.card_eq_of_equiv, card_eq_of_equiv, f.mapEdgeSet, mapEdgeSet
+/-
+**SimpleGraph.Iso.card_edgeFinset_eq** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Iso`
+。
+形式化陈述：card_edgeFinset_eq (f : G ≃g G') [Fintype G.edgeSet] [Fintype G'.edgeSet] 
+: #G.edgeFinset = #G'.edgeFinset
+参数：f : G ≃g G'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.card_eq_of_equiv`：Finset.card_eq_of_equiv {s : Finset α} {t : Fin
+set β} (i : s ≃ t) : #s = #t
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 theorem card_edgeFinset_eq (f : G ≃g G') [Fintype G.edgeSet] [Fintype G'.edgeSet] :
     #G.edgeFinset = #G'.edgeFinset := by
   apply Finset.card_eq_of_equiv
   simpa using f.mapEdgeSet
-
-/--
-theorem `degree_eq` / 定理 `degree_eq`
-
-English:
-theorem degree_eq
-  statement: (f : G ≃g G') (x : V)
-  proof: by
-  rw [← card_neighborSet_eq_degree]; rw [← card_neighborSet_eq_degree]; rw [← Fintype.card_congr (mapNeighborSet f x).symm]
-
-中文:
-定理 degree_eq
-  结论: (f : G ≃g G') (x : V)
-  证明: by
-  rw [← card_neighborSet_eq_degree]; rw [← card_neighborSet_eq_degree]; rw [← Fintype.card_congr (mapNeighborSet f x).symm]
+/-
+**SimpleGraph.Iso.degree_eq** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Iso`。
+形式化陈述：∀ {V : Type u_1} {G : SimpleGraph V} {W : Type u_2} {G' : SimpleGraph W} (
+f : G ≃g G') (x : V)   [inst : Fintype ↑(G.neighborSet x)] [inst_1 : Fintype ↑(G
+'.neighborSet (f x))], G'.degree (f x) = G.degree x
+参数：f : G ≃g G'；x : V；G.neighborSet x；G'.neighborSet (f x)；f x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.card_neighborSet_eq_degree`：card_neighborSet_eq_degree : Fin
+type.card (G.neighborSet v) = G.degree v
+· 使用定理 `Fintype.card_congr`：card_congr {α β} [Fintype α] [Fintype β] (f : α ≃ β)
+ : card α = card β
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 @[simp] theorem degree_eq (f : G ≃g G') (x : V)
     [Fintype ↑(G.neighborSet x)] [Fintype ↑(G'.neighborSet (f x))] :
     G'.degree (f x) = G.degree x := by
-  rw [← card_neighborSet_eq_degree]; rw [← card_neighborSet_eq_degree]; rw [← Fintype.card_congr (mapNeighborSet f x).symm]
+  rw [← card_neighborSet_eq_degree, ← card_neighborSet_eq_degree,
+    ← Fintype.card_congr (mapNeighborSet f x).symm]
 
 variable [Fintype V] [DecidableRel G.Adj] [Fintype W] [DecidableRel G'.Adj]
-
-/--
-theorem `minDegree_eq` / 定理 `minDegree_eq`
-
-English:
-theorem minDegree_eq
-  given: (f : G ≃g G')
-  statement: G.minDegree = G'.minDegree
-  proof: by
-  classical
-  have : (G'.degree ·) ∘ f = (G.degree ·) := funext (f.degree_eq ·)
-  rw [minDegree]; rw [minDegree]; rw [← this]; rw [← image_image]; rw [Finset.image_univ_of_surjective f.surjective]
-
-中文:
-定理 minDegree_eq
-  条件: (f : G ≃g G')
-  结论: G.minDegree = G'.minDegree
-  证明: by
-  classical
-  have : (G'.degree ·) ∘ f = (G.degree ·) := funext (f.degree_eq ·)
-  rw [minDegree]; rw [minDegree]; rw [← this]; rw [← image_image]; rw [Finset.image_univ_of_surjective f.surjective]
-
-Depends on / 依赖: Finset, Finset.image_univ_of_surjective, G.degree, classical, degree, degree_eq, f.degree_eq, f.surjective, image_image, image_univ_of_surjective, minDegree, surjective
+/-
+**SimpleGraph.Iso.minDegree_eq** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Iso`。
+形式化陈述：minDegree_eq (f : G ≃g G') : G.minDegree = G'.minDegree
+参数：f : G ≃g G'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `SimpleGraph.Iso.degree_eq`：∀ {V : Type u_1} {G : SimpleGraph V} {W : Typ
+e u_2} {G' : SimpleGraph W} (f : G ≃g G') (x : V)   [inst : Fintype ↑(G.neighbor
+Set x)] [inst_1…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.minDegree.eq_1`：∀ {V : Type u_1} (G : SimpleGraph V) [inst :
+ Fintype V] [inst_1 : DecidableRel G.Adj],   G.minDegree = WithTop.untopD 0 (Fin
+set.image (fun v…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.image_image`：image_image [DecidableEq γ] {g : β -> γ} : (s.image 
+f).image g = s.image (g ∘ f)
+· 使用定理 `Finset.image_univ_of_surjective`：image_univ_of_surjective [Fintype β] {f
+ : β -> α} (hf : Surjective f) : univ.image f = univ
+· 使用定理 `RelIso.surjective`：∀ {α : Type u_1} {β : Type u_2} {r : α → α → Prop} {s
+ : β → β → Prop} (e : r ≃r s), Function.Surjective ⇑e
 -/
 theorem minDegree_eq (f : G ≃g G') : G.minDegree = G'.minDegree := by
   classical
   have : (G'.degree ·) ∘ f = (G.degree ·) := funext (f.degree_eq ·)
-  rw [minDegree]; rw [minDegree]; rw [← this]; rw [← image_image]; rw [Finset.image_univ_of_surjective f.surjective]
-
-/--
-theorem `maxDegree_eq` / 定理 `maxDegree_eq`
-
-English:
-theorem maxDegree_eq
-  given: (f : G ≃g G')
-  statement: G.maxDegree = G'.maxDegree
-  proof: by
-  classical
-  have : (G'.degree ·) ∘ f = (G.degree ·) := funext (f.degree_eq ·)
-  rw [maxDegree]; rw [maxDegree]; rw [← this]; rw [← image_image]; rw [Finset.image_univ_of_surjective f.surjective]
-
-中文:
-定理 maxDegree_eq
-  条件: (f : G ≃g G')
-  结论: G.maxDegree = G'.maxDegree
-  证明: by
-  classical
-  have : (G'.degree ·) ∘ f = (G.degree ·) := funext (f.degree_eq ·)
-  rw [maxDegree]; rw [maxDegree]; rw [← this]; rw [← image_image]; rw [Finset.image_univ_of_surjective f.surjective]
-
-Depends on / 依赖: Finset, Finset.image_univ_of_surjective, G.degree, classical, degree, degree_eq, f.degree_eq, f.surjective, image_image, image_univ_of_surjective, maxDegree, surjective
+  rw [minDegree, minDegree, ← this, ← image_image, Finset.image_univ_of_surjective f.surjective]
+/-
+**SimpleGraph.Iso.maxDegree_eq** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph.Iso`。
+形式化陈述：maxDegree_eq (f : G ≃g G') : G.maxDegree = G'.maxDegree
+参数：f : G ≃g G'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `SimpleGraph.Iso.degree_eq`：∀ {V : Type u_1} {G : SimpleGraph V} {W : Typ
+e u_2} {G' : SimpleGraph W} (f : G ≃g G') (x : V)   [inst : Fintype ↑(G.neighbor
+Set x)] [inst_1…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.maxDegree.eq_1`：∀ {V : Type u_1} (G : SimpleGraph V) [inst :
+ Fintype V] [inst_1 : DecidableRel G.Adj],   G.maxDegree = WithBot.unbotD 0 (Fin
+set.image (fun v…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.image_image`：image_image [DecidableEq γ] {g : β -> γ} : (s.image 
+f).image g = s.image (g ∘ f)
+· 使用定理 `Finset.image_univ_of_surjective`：image_univ_of_surjective [Fintype β] {f
+ : β -> α} (hf : Surjective f) : univ.image f = univ
+· 使用定理 `RelIso.surjective`：∀ {α : Type u_1} {β : Type u_2} {r : α → α → Prop} {s
+ : β → β → Prop} (e : r ≃r s), Function.Surjective ⇑e
 -/
 theorem maxDegree_eq (f : G ≃g G') : G.maxDegree = G'.maxDegree := by
   classical
   have : (G'.degree ·) ∘ f = (G.degree ·) := funext (f.degree_eq ·)
-  rw [maxDegree]; rw [maxDegree]; rw [← this]; rw [← image_image]; rw [Finset.image_univ_of_surjective f.surjective]
+  rw [maxDegree, maxDegree, ← this, ← image_image, Finset.image_univ_of_surjective f.surjective]
 
 end Iso
 
 section Support
 
-variable {s : Set V} [DecidablePred (· in s)] [Fintype V] {G : SimpleGraph V} [DecidableRel G.Adj]
+variable {s : Set V} [DecidablePred (· ∈ s)] [Fintype V] {G : SimpleGraph V} [DecidableRel G.Adj]
 
-/--
-lemma `edgeFinset_subset_sym2_of_support_subset` / 引理 `edgeFinset_subset_sym2_of_support_subset`
-
-English:
-lemma edgeFinset_subset_sym2_of_support_subset
-  given: (h : G.support subseteq s)
-  proof: by
-  rw [← coe_subset]; rw [coe_sym2]; rw [edgeFinset]; rw [Set.coe_toFinset]; rw [Set.coe_toFinset]
-  exact edgeSet_subset_sym2_iff.mpr h
-
-中文:
-引理 edgeFinset_subset_sym2_of_support_subset
-  条件: (h : G.support subseteq s)
-  证明: by
-  rw [← coe_subset]; rw [coe_sym2]; rw [edgeFinset]; rw [Set.coe_toFinset]; rw [Set.coe_toFinset]
-  exact edgeSet_subset_sym2_iff.mpr h
-
-Depends on / 依赖: Set.coe_toFinset, coe_subset, coe_sym2, coe_toFinset, edgeFinset, edgeSet_subset_sym2_iff, edgeSet_subset_sym2_iff.mpr
+/-
+**SimpleGraph.edgeFinset_subset_sym2_of_support_subset** 是 Mathlib 中的一个引理，位于命名空间
+ `SimpleGraph`。
+形式化陈述：edgeFinset_subset_sym2_of_support_subset (h : G.support subseteq s) : G.ed
+geFinset subseteq s.toFinset.sym2
+参数：h : G.support subseteq s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.coe_subset`：coe_subset {s₁ s₂ : Finset α} : (s₁ : Set α) subseteq
+ s₂ ↔ s₁ subseteq s₂
+· 使用定理 `Finset.coe_sym2`：∀ {α : Type u_1} {m : Finset α}, ↑m.sym2 = (↑m).sym2
+· 使用定理 `SimpleGraph.edgeFinset.eq_1`：∀ {V : Type u_1} (G : SimpleGraph V) [inst 
+: Fintype ↑G.edgeSet], G.edgeFinset = G.edgeSet.toFinset
+· 使用定理 `Set.coe_toFinset`：coe_toFinset (s : Set α) [Fintype s] : (↑s.toFinset : 
+Set α) = s
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `SimpleGraph.edgeSet_subset_sym2_iff`：edgeSet_subset_sym2_iff {s : Set V}
+ : G.edgeSet subseteq s.sym2 ↔ G.support subseteq s
 -/
-lemma edgeFinset_subset_sym2_of_support_subset (h : G.support subseteq s) :
-    G.edgeFinset subseteq s.toFinset.sym2 := by
-  rw [← coe_subset]; rw [coe_sym2]; rw [edgeFinset]; rw [Set.coe_toFinset]; rw [Set.coe_toFinset]
+lemma edgeFinset_subset_sym2_of_support_subset (h : G.support ⊆ s) :
+    G.edgeFinset ⊆ s.toFinset.sym2 := by
+  rw [← coe_subset, coe_sym2, edgeFinset, Set.coe_toFinset, Set.coe_toFinset]
   exact edgeSet_subset_sym2_iff.mpr h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: DecidablePred (· in G.support)
-  body: inferInstanceAs DecidablePred (· in { v | exists w, G.Adj v w })
-
-中文:
-实例 :
-  签名: DecidablePred (· in G.support)
-  定义体: inferInstanceAs DecidablePred (· in { v | exists w, G.Adj v w })
-
-Depends on / 依赖: DecidablePred, G.Adj
+/-
+**SimpleGraph.** 是 Mathlib 中的一个实例，位于命名空间 `SimpleGraph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : DecidablePred (· in G.support) :=
-inferInstanceAs DecidablePred (· in { v | exists w, G.Adj v w })
-
-/--
-theorem `map_edgeFinset_induce` / 定理 `map_edgeFinset_induce`
-
-English:
-theorem map_edgeFinset_induce
-  given: [DecidableEq V]
-  proof: by
-  aesop (add simp [Finset.ext_iff, Sym2.exists, Sym2.forall, adj_comm])
-
-中文:
-定理 map_edgeFinset_induce
-  条件: [DecidableEq V]
-  证明: by
-  aesop (add simp [Finset.ext_iff, Sym2.exists, Sym2.forall, adj_comm])
-
-Depends on / 依赖: Finset, Finset.ext_iff, Sym2.exists, Sym2.forall, adj_comm, ext_iff
+instance : DecidablePred (· ∈ G.support) :=
+  inferInstanceAs <| DecidablePred (· ∈ { v | ∃ w, G.Adj v w })
+/-
+**SimpleGraph.map_edgeFinset_induce** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：map_edgeFinset_induce [DecidableEq V] : (G.induce s).edgeFinset.map (Embed
+ding.subtype (· in s)).sym2Map = G.edgeFinset inter s.toFinset.sym2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Function.Embedding.sym2Map_apply`：∀ {α : Type u_1} {β : Type u_2} (f : α
+ ↪ β) (a : Sym2 α), f.sym2Map a = Sym2.map (⇑f) a
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Prod.mk.injEq`：∀ {α : Type u} {β : Type v} (fst : α) (snd : β) (fst_1 : 
+α) (snd_1 : β),   ((fst, snd) = (fst_1, snd_1)) = (fst = fst_1 ∧ snd = snd_1)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
 -/
 theorem map_edgeFinset_induce [DecidableEq V] :
-    (G.induce s).edgeFinset.map (Embedding.subtype (· in s)).sym2Map
-      = G.edgeFinset inter s.toFinset.sym2 := by
+    (G.induce s).edgeFinset.map (Embedding.subtype (· ∈ s)).sym2Map
+      = G.edgeFinset ∩ s.toFinset.sym2 := by
   aesop (add simp [Finset.ext_iff, Sym2.exists, Sym2.forall, adj_comm])
-
-/--
-theorem `map_edgeFinset_induce_of_support_subset` / 定理 `map_edgeFinset_induce_of_support_subset`
-
-English:
-theorem map_edgeFinset_induce_of_support_subset
-  given: (h : G.support subseteq s)
-  proof: by
-  classical
-  simpa [map_edgeFinset_induce] using edgeFinset_subset_sym2_of_support_subset h
-
-中文:
-定理 map_edgeFinset_induce_of_support_subset
-  条件: (h : G.support subseteq s)
-  证明: by
-  classical
-  simpa [map_edgeFinset_induce] using edgeFinset_subset_sym2_of_support_subset h
-
-Depends on / 依赖: classical, edgeFinset_subset_sym2_of_support_subset, map_edgeFinset_induce
+/-
+**SimpleGraph.map_edgeFinset_induce_of_support_subset** 是 Mathlib 中的一个定理，位于命名空间 
+`SimpleGraph`。
+形式化陈述：map_edgeFinset_induce_of_support_subset (h : G.support subseteq s) : (G.in
+duce s).edgeFinset.map (Embedding.subtype (· in s)).sym2Map = G.edgeFinset
+参数：h : G.support subseteq s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.map_edgeFinset_induce`：map_edgeFinset_induce [DecidableEq V]
+ : (G.induce s).edgeFinset.map (Embedding.subtype (· in s)).sym2Map = G.edgeFins
+et inter s.toFinset.sym…
+· 使用引理 `SimpleGraph.edgeFinset_subset_sym2_of_support_subset`：edgeFinset_subset_
+sym2_of_support_subset (h : G.support subseteq s) : G.edgeFinset subseteq s.toFi
+nset.sym2
 -/
-theorem map_edgeFinset_induce_of_support_subset (h : G.support subseteq s) :
-    (G.induce s).edgeFinset.map (Embedding.subtype (· in s)).sym2Map = G.edgeFinset := by
+theorem map_edgeFinset_induce_of_support_subset (h : G.support ⊆ s) :
+    (G.induce s).edgeFinset.map (Embedding.subtype (· ∈ s)).sym2Map = G.edgeFinset := by
   classical
   simpa [map_edgeFinset_induce] using edgeFinset_subset_sym2_of_support_subset h
 
-/--
-theorem `card_edgeFinset_induce_of_support_subset` / 定理 `card_edgeFinset_induce_of_support_subset`
+/-- If the support of the simple graph `G` is a subset of the set `s`, then the induced subgraph of
+`s` has the same number of edges as `G`. -/
+/-
+**SimpleGraph.card_edgeFinset_induce_of_support_subset** 是 Mathlib 中的一个定理，位于命名空间
+ `SimpleGraph`。
+形式化陈述：card_edgeFinset_induce_of_support_subset (h : G.support subseteq s) : #(G.
+induce s).edgeFinset = #G.edgeFinset
+参数：h : G.support subseteq s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.map_edgeFinset_induce_of_support_subset`：map_edgeFinset_indu
+ce_of_support_subset (h : G.support subseteq s) : (G.induce s).edgeFinset.map (E
+mbedding.subtype (· in s)).sym2Map = G.ed…
+· 使用定理 `Finset.card_map`：card_map (f : α ↪ β) : #(s.map f) = #s
 
-English:
-theorem card_edgeFinset_induce_of_support_subset
-  given: (h : G.support subseteq s)
-  proof: by
-  rw [← map_edgeFinset_induce_of_support_subset h]; rw [card_map]
-
-中文:
-定理 card_edgeFinset_induce_of_support_subset
-  条件: (h : G.support subseteq s)
-  证明: by
-  rw [← map_edgeFinset_induce_of_support_subset h]; rw [card_map]
-
-Depends on / 依赖: card_map, map_edgeFinset_induce_of_support_subset
+--- 原说明 ---
+If the support of the simple graph `G` is a subset of the set `s`, then the indu
+ced subgraph of
+`s` has the same number of edges as `G`.
 -/
-theorem card_edgeFinset_induce_of_support_subset (h : G.support subseteq s) :
+theorem card_edgeFinset_induce_of_support_subset (h : G.support ⊆ s) :
     #(G.induce s).edgeFinset = #G.edgeFinset := by
-  rw [← map_edgeFinset_induce_of_support_subset h]; rw [card_map]
-
-/--
-theorem `card_edgeFinset_induce_support` / 定理 `card_edgeFinset_induce_support`
-
-English:
-theorem card_edgeFinset_induce_support
-  proof: card_edgeFinset_induce_of_support_subset subset_rfl
-
-中文:
-定理 card_edgeFinset_induce_support
-  证明: card_edgeFinset_induce_of_support_subset subset_rfl
-
-Depends on / 依赖: card_edgeFinset_induce_of_support_subset, subset_rfl
+  rw [← map_edgeFinset_induce_of_support_subset h, card_map]
+/-
+**SimpleGraph.card_edgeFinset_induce_support** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGr
+aph`。
+形式化陈述：card_edgeFinset_induce_support : #(G.induce G.support).edgeFinset = #G.edg
+eFinset
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.card_edgeFinset_induce_of_support_subset`：card_edgeFinset_in
+duce_of_support_subset (h : G.support subseteq s) : #(G.induce s).edgeFinset = #
+G.edgeFinset
+· 使用定理 `subset_rfl`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorde
+r α] {a : α}, a ⊆ a
 -/
 theorem card_edgeFinset_induce_support :
     #(G.induce G.support).edgeFinset = #G.edgeFinset :=
   card_edgeFinset_induce_of_support_subset subset_rfl
-
-/--
-theorem `map_neighborFinset_induce` / 定理 `map_neighborFinset_induce`
-
-English:
-theorem map_neighborFinset_induce
-  given: [DecidableEq V] (v : s)
-  proof: by
-  ext; simp
-
-中文:
-定理 map_neighborFinset_induce
-  条件: [DecidableEq V] (v : s)
-  证明: by
-  ext; simp
+/-
+**SimpleGraph.map_neighborFinset_induce** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：map_neighborFinset_induce [DecidableEq V] (v : s) : ((G.induce s).neighbor
+Finset v).map (.subtype (· in s)) = G.neighborFinset v inter s.toFinset
+参数：v : s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem map_neighborFinset_induce [DecidableEq V] (v : s) :
-    ((G.induce s).neighborFinset v).map (.subtype (· in s)) = G.neighborFinset v inter s.toFinset := by
+    ((G.induce s).neighborFinset v).map (.subtype (· ∈ s)) = G.neighborFinset v ∩ s.toFinset := by
   ext; simp
-
-/--
-theorem `map_neighborFinset_induce_of_neighborSet_subset` / 定理 `map_neighborFinset_induce_of_neighborSet_subset`
-
-English:
-theorem map_neighborFinset_induce_of_neighborSet_subset
-  given: {v : s} (h : G.neighborSet v subseteq s)
-  proof: by
-  classical
-  rwa [← Set.toFinset_subset_toFinset, ← neighborFinset_def, ← inter_eq_left,
-    ← map_neighborFinset_induce v] at h
-
-中文:
-定理 map_neighborFinset_induce_of_neighborSet_subset
-  条件: {v : s} (h : G.neighborSet v subseteq s)
-  证明: by
-  classical
-  rwa [← Set.toFinset_subset_toFinset, ← neighborFinset_def, ← inter_eq_left,
-    ← map_neighborFinset_induce v] at h
-
-Depends on / 依赖: Set.toFinset_subset_toFinset, classical, inter_eq_left, map_neighborFinset_induce, neighborFinset_def, toFinset_subset_toFinset
+/-
+**SimpleGraph.map_neighborFinset_induce_of_neighborSet_subset** 是 Mathlib 中的一个定理
+，位于命名空间 `SimpleGraph`。
+形式化陈述：map_neighborFinset_induce_of_neighborSet_subset {v : s} (h : G.neighborSet
+ v subseteq s) : ((G.induce s).neighborFinset v).map (.subtype (· in s)) = G.nei
+ghborFinset v
+参数：h : G.neighborSet v subseteq s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.map_neighborFinset_induce`：map_neighborFinset_induce [Decida
+bleEq V] (v : s) : ((G.induce s).neighborFinset v).map (.subtype (· in s)) = G.n
+eighborFinset v inter s.toF…
+· 使用定理 `Finset.inter_eq_left`：∀ {α : Type u_1} [inst : DecidableEq α] {s t : Fin
+set α}, s ∩ t = s ↔ s ⊆ t
+· 使用定理 `SimpleGraph.neighborFinset_def`：neighborFinset_def : G.neighborFinset v 
+= (G.neighborSet v).toFinset
+· 使用定理 `Set.toFinset_subset_toFinset`：toFinset_subset_toFinset [Fintype s] [Fint
+ype t] : s.toFinset subseteq t.toFinset ↔ s subseteq t
 -/
-theorem map_neighborFinset_induce_of_neighborSet_subset {v : s} (h : G.neighborSet v subseteq s) :
-    ((G.induce s).neighborFinset v).map (.subtype (· in s)) = G.neighborFinset v := by
+theorem map_neighborFinset_induce_of_neighborSet_subset {v : s} (h : G.neighborSet v ⊆ s) :
+    ((G.induce s).neighborFinset v).map (.subtype (· ∈ s)) = G.neighborFinset v := by
   classical
   rwa [← Set.toFinset_subset_toFinset, ← neighborFinset_def, ← inter_eq_left,
     ← map_neighborFinset_induce v] at h
 
-/--
-theorem `degree_induce_of_neighborSet_subset` / 定理 `degree_induce_of_neighborSet_subset`
+/-- If the neighbor set of a vertex `v` is a subset of `s`, then the degree of the vertex in the
+induced subgraph of `s` is the same as in `G`. -/
+/-
+**SimpleGraph.degree_induce_of_neighborSet_subset** 是 Mathlib 中的一个定理，位于命名空间 `Sim
+pleGraph`。
+形式化陈述：degree_induce_of_neighborSet_subset {v : s} (h : G.neighborSet v subseteq 
+s) : (G.induce s).degree v = G.degree v
+参数：h : G.neighborSet v subseteq s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SimpleGraph.map_neighborFinset_induce_of_neighborSet_subset`：map_neighbo
+rFinset_induce_of_neighborSet_subset {v : s} (h : G.neighborSet v subseteq s) : 
+((G.induce s).neighborFinset v).map (.subtype (· …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.card_map`：card_map (f : α ↪ β) : #(s.map f) = #s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem degree_induce_of_neighborSet_subset
-  given: {v : s} (h : G.neighborSet v subseteq s)
-  proof: by
-  simp_rw [← card_neighborFinset_eq_degree,
-    ← map_neighborFinset_induce_of_neighborSet_subset h, card_map]
-
-中文:
-定理 degree_induce_of_neighborSet_subset
-  条件: {v : s} (h : G.neighborSet v subseteq s)
-  证明: by
-  simp_rw [← card_neighborFinset_eq_degree,
-    ← map_neighborFinset_induce_of_neighborSet_subset h, card_map]
-
-Depends on / 依赖: card_map, card_neighborFinset_eq_degree, map_neighborFinset_induce_of_neighborSet_subset, simp_rw
+--- 原说明 ---
+If the neighbor set of a vertex `v` is a subset of `s`, then the degree of the v
+ertex in the
+induced subgraph of `s` is the same as in `G`.
 -/
-theorem degree_induce_of_neighborSet_subset {v : s} (h : G.neighborSet v subseteq s) :
+theorem degree_induce_of_neighborSet_subset {v : s} (h : G.neighborSet v ⊆ s) :
     (G.induce s).degree v = G.degree v := by
   simp_rw [← card_neighborFinset_eq_degree,
     ← map_neighborFinset_induce_of_neighborSet_subset h, card_map]
 
-/--
-theorem `degree_induce_of_support_subset` / 定理 `degree_induce_of_support_subset`
+/-- If the support of the simple graph `G` is a subset of the set `s`, then the degree of vertices
+in the induced subgraph of `s` are the same as in `G`. -/
+/-
+**SimpleGraph.degree_induce_of_support_subset** 是 Mathlib 中的一个定理，位于命名空间 `SimpleG
+raph`。
+形式化陈述：degree_induce_of_support_subset (h : G.support subseteq s) (v : s) : (G.in
+duce s).degree v = G.degree v
+参数：h : G.support subseteq s；v : s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.degree_induce_of_neighborSet_subset`：degree_induce_of_neighb
+orSet_subset {v : s} (h : G.neighborSet v subseteq s) : (G.induce s).degree v = 
+G.degree v
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `SimpleGraph.neighborSet_subset_support`：neighborSet_subset_support (v : 
+V) : G.neighborSet v subseteq G.support
 
-English:
-theorem degree_induce_of_support_subset
-  given: (h : G.support subseteq s) (v : s)
-  proof: degree_induce_of_neighborSet_subset (G.neighborSet_subset_support v).trans h
-
-@[simp]
-
-中文:
-定理 degree_induce_of_support_subset
-  条件: (h : G.support subseteq s) (v : s)
-  证明: degree_induce_of_neighborSet_subset (G.neighborSet_subset_support v).trans h
-
-@[simp]
-
-Depends on / 依赖: G.neighborSet_subset_support, degree_induce_of_neighborSet_subset, neighborSet_subset_support
+--- 原说明 ---
+If the support of the simple graph `G` is a subset of the set `s`, then the degr
+ee of vertices
+in the induced subgraph of `s` are the same as in `G`.
 -/
-theorem degree_induce_of_support_subset (h : G.support subseteq s) (v : s) :
+theorem degree_induce_of_support_subset (h : G.support ⊆ s) (v : s) :
     (G.induce s).degree v = G.degree v :=
-degree_induce_of_neighborSet_subset (G.neighborSet_subset_support v).trans h
+  degree_induce_of_neighborSet_subset <| (G.neighborSet_subset_support v).trans h
 
 @[simp]
-/--
-theorem `degree_induce_support` / 定理 `degree_induce_support`
-
-English:
-theorem degree_induce_support
-  given: (v : G.support)
-  proof: degree_induce_of_support_subset subset_rfl v
-
-中文:
-定理 degree_induce_support
-  条件: (v : G.support)
-  证明: degree_induce_of_support_subset subset_rfl v
-
-Depends on / 依赖: degree_induce_of_support_subset, subset_rfl
+/-
+**SimpleGraph.degree_induce_support** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：degree_induce_support (v : G.support) : (G.induce G.support).degree v = G.
+degree v
+参数：v : G.support。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SimpleGraph.degree_induce_of_support_subset`：degree_induce_of_support_su
+bset (h : G.support subseteq s) (v : s) : (G.induce s).degree v = G.degree v
+· 使用定理 `subset_rfl`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preorde
+r α] {a : α}, a ⊆ a
 -/
 theorem degree_induce_support (v : G.support) :
     (G.induce G.support).degree v = G.degree v :=
   degree_induce_of_support_subset subset_rfl v
-
-/--
-theorem `le_minDegree_induce_of_support_subset` / 定理 `le_minDegree_induce_of_support_subset`
-
-English:
-theorem le_minDegree_induce_of_support_subset
-  given: (h : G.support subseteq s)
-  proof: by
-  cases isEmpty_or_nonempty V
-  · simp
-  rcases s.eq_empty_or_nonempty with (rfl | hs)
-  · simp [minDegree_eq_zero_iff_support_ne, Set.subset_empty_iff.mp h, Set.empty_ne_univ]
-  have := hs.to_subtype
-  refine le_minDegree_of_forall_le_degree _ _ fun v => ?_
-  grw [G.minDegree_le_degree v, degree_induce_of_neighborSet_subset]
-  grw [neighborSet_subset_support, h]
-
-中文:
-定理 le_minDegree_induce_of_support_subset
-  条件: (h : G.support subseteq s)
-  证明: by
-  cases isEmpty_or_nonempty V
-  · simp
-  rcases s.eq_empty_or_nonempty with (rfl | hs)
-  · simp [minDegree_eq_zero_iff_support_ne, Set.subset_empty_iff.mp h, Set.empty_ne_univ]
-  have := hs.to_subtype
-  refine le_minDegree_of_forall_le_degree _ _ fun v => ?_
-  grw [G.minDegree_le_degree v, degree_induce_of_neighborSet_subset]
-  grw [neighborSet_subset_support, h]
-
-Depends on / 依赖: G.minDegree_le_degree, Set.empty_ne_univ, Set.subset_empty_iff.mp, degree_induce_of_neighborSet_subset, empty_ne_univ, eq_empty_or_nonempty, hs.to_subtype, isEmpty_or_nonempty, le_minDegree_of_forall_le_degree, minDegree_eq_zero_iff_support_ne, minDegree_le_degree, neighborSet_subset_support, s.eq_empty_or_nonempty, subset_empty_iff, to_subtype
+/-
+**SimpleGraph.le_minDegree_induce_of_support_subset** 是 Mathlib 中的一个定理，位于命名空间 `S
+impleGraph`。
+形式化陈述：le_minDegree_induce_of_support_subset (h : G.support subseteq s) : G.minDe
+gree <= (G.induce s).minDegree
+参数：h : G.support subseteq s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SimpleGraph.minDegree_of_subsingleton`：minDegree_of_subsingleton [Decida
+bleRel G.Adj] [Subsingleton V] : G.minDegree = 0
+· 使用定理 `IsEmpty.instSubsingleton`：∀ {α : Sort u} [IsEmpty α], Subsingleton α
+· 使用定理 `Set.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Set α) : s = ∅ ∨ s.N
+onempty
+· 使用定理 `Set.instIsEmptyElemEmptyCollection`：∀ (α : Type u), IsEmpty ↑∅
+· 使用定理 `Nat.le_zero_eq`：∀ (a : ℕ), (a ≤ 0) = (a = 0)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.subset_empty_iff`：subset_empty_iff {s : Set α} : s subseteq ∅ ↔ s = 
+∅
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.Nonempty.to_subtype`：∀ {α : Type u} {s : Set α}, s.Nonempty → Nonemp
+ty ↑s
+· 使用定理 `SimpleGraph.le_minDegree_of_forall_le_degree`：le_minDegree_of_forall_le_
+degree [DecidableRel G.Adj] [Nonempty V] (k : Nat) (h : forall v, k <= G.degree 
+v) : k <= G.minDegree
+· 使用定理 `le_imp_le_of_le_of_le`：le_imp_le_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a <= b -> c <= d
+· 使用定理 `SimpleGraph.minDegree_le_degree`：minDegree_le_degree [DecidableRel G.Adj
+] (v : V) : G.minDegree <= G.degree v
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `SimpleGraph.degree_induce_of_neighborSet_subset`：degree_induce_of_neighb
+orSet_subset {v : s} (h : G.neighborSet v subseteq s) : (G.induce s).degree v = 
+G.degree v
+· 使用引理 `SimpleGraph.neighborSet_subset_support`：neighborSet_subset_support (v : 
+V) : G.neighborSet v subseteq G.support
 -/
-theorem le_minDegree_induce_of_support_subset (h : G.support subseteq s) :
-    G.minDegree <= (G.induce s).minDegree := by
+theorem le_minDegree_induce_of_support_subset (h : G.support ⊆ s) :
+    G.minDegree ≤ (G.induce s).minDegree := by
   cases isEmpty_or_nonempty V
   · simp
   rcases s.eq_empty_or_nonempty with (rfl | hs)
   · simp [minDegree_eq_zero_iff_support_ne, Set.subset_empty_iff.mp h, Set.empty_ne_univ]
   have := hs.to_subtype
-  refine le_minDegree_of_forall_le_degree _ _ fun v => ?_
+  refine le_minDegree_of_forall_le_degree _ _ fun v ↦ ?_
   grw [G.minDegree_le_degree v, degree_induce_of_neighborSet_subset]
   grw [neighborSet_subset_support, h]
-
-/--
-theorem `filter_edgeFinset_toFinset_subset` / 定理 `filter_edgeFinset_toFinset_subset`
-
-English:
-theorem filter_edgeFinset_toFinset_subset
-  given: [DecidableEq V] (s : Finset V)
-  proof: by
-  simp [subset_iff, ← mem_sym2_iff, filter_mem_eq_inter]
-
-中文:
-定理 filter_edgeFinset_toFinset_subset
-  条件: [DecidableEq V] (s : 有限集 V)
-  证明: by
-  simp [subset_iff, ← mem_sym2_iff, filter_mem_eq_inter]
-
-Depends on / 依赖: filter_mem_eq_inter, mem_sym2_iff, subset_iff
+/-
+**SimpleGraph.filter_edgeFinset_toFinset_subset** 是 Mathlib 中的一个定理，位于命名空间 `Simpl
+eGraph`。
+形式化陈述：filter_edgeFinset_toFinset_subset [DecidableEq V] (s : Finset V) : {e in G
+.edgeFinset | e.toFinset subseteq s} = G.edgeFinset inter s.sym2
+参数：s : Finset V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.filter_congr`：∀ {α : Type u_1} {p q : α → Prop} [inst : Decidable
+Pred p] [inst_1 : DecidablePred q] {s : Finset α},   (∀ x ∈ s, p x ↔ q x) → Fins
+et.filter…
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Finset.filter_mem_eq_inter`：filter_mem_eq_inter {s t : Finset α} [forall
+ i, Decidable (i in t)] : (s.filter fun i => i in t) = s inter t
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem filter_edgeFinset_toFinset_subset [DecidableEq V] (s : Finset V) :
-    {e in G.edgeFinset | e.toFinset subseteq s} = G.edgeFinset inter s.sym2 := by
+    {e ∈ G.edgeFinset | e.toFinset ⊆ s} = G.edgeFinset ∩ s.sym2 := by
   simp [subset_iff, ← mem_sym2_iff, filter_mem_eq_inter]
 
-/--
-theorem `card_filter_edgeFinset_toFinset_subset` / 定理 `card_filter_edgeFinset_toFinset_subset`
+/-- The edges whose vertices lie in `s` are in bijection with the edges of the induced
+subgraph `G.induce s`. -/
+/-
+**SimpleGraph.card_filter_edgeFinset_toFinset_subset** 是 Mathlib 中的一个定理，位于命名空间 `
+SimpleGraph`。
+形式化陈述：card_filter_edgeFinset_toFinset_subset [DecidableEq V] (s : Finset V) : #{
+e in G.edgeFinset | e.toFinset subseteq s} = #(G.induce ↑s).edgeFinset
+参数：s : Finset V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.map_edgeFinset_induce`：map_edgeFinset_induce [DecidableEq V]
+ : (G.induce s).edgeFinset.map (Embedding.subtype (· in s)).sym2Map = G.edgeFins
+et inter s.toFinset.sym…
+· 使用定理 `SimpleGraph.filter_edgeFinset_toFinset_subset`：filter_edgeFinset_toFinse
+t_subset [DecidableEq V] (s : Finset V) : {e in G.edgeFinset | e.toFinset subset
+eq s} = G.edgeFinset inter s.sym2
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Lean.Meta.FastSubsingleton.elim`：∀ {α : Sort u} [h : Meta.FastSubsinglet
+on α] (a b : α), a = b
+· 使用定理 `Fintype.instFastSubsingleton`：∀ (α : Type u_4), Meta.FastSubsingleton (F
+intype α)
+· 使用定理 `Finset.toFinset_coe`：Finset.toFinset_coe (s : Finset α) [Fintype (s : Se
+t α)] : (s : Set α).toFinset = s
+· 使用定理 `Finset.card_map`：card_map (f : α ↪ β) : #(s.map f) = #s
 
-English:
-theorem card_filter_edgeFinset_toFinset_subset
-  given: [DecidableEq V] (s : Finset V)
-  proof: by
-  have h := congrArg Finset.card (map_edgeFinset_induce (s := (↑s : Set V)) (G := G))
-  rw [card_map]; rw [toFinset_coe] at h
-  rw [filter_edgeFinset_toFinset_subset]
-  convert h.symm using 1
-  congr!
-
-中文:
-定理 card_filter_edgeFinset_toFinset_subset
-  条件: [DecidableEq V] (s : 有限集 V)
-  证明: by
-  have h := congrArg Finset.card (map_edgeFinset_induce (s := (↑s : Set V)) (G := G))
-  rw [card_map]; rw [toFinset_coe] at h
-  rw [filter_edgeFinset_toFinset_subset]
-  convert h.symm using 1
-  congr!
-
-Depends on / 依赖: Finset, Finset.card, card_map, convert, filter_edgeFinset_toFinset_subset, h.symm, map_edgeFinset_induce, toFinset_coe
+--- 原说明 ---
+The edges whose vertices lie in `s` are in bijection with the edges of the induc
+ed
+subgraph `G.induce s`.
 -/
 theorem card_filter_edgeFinset_toFinset_subset [DecidableEq V] (s : Finset V) :
-    #{e in G.edgeFinset | e.toFinset subseteq s} = #(G.induce ↑s).edgeFinset := by
+    #{e ∈ G.edgeFinset | e.toFinset ⊆ s} = #(G.induce ↑s).edgeFinset := by
   have h := congrArg Finset.card (map_edgeFinset_induce (s := (↑s : Set V)) (G := G))
-  rw [card_map]; rw [toFinset_coe] at h
+  rw [card_map, toFinset_coe] at h
   rw [filter_edgeFinset_toFinset_subset]
   convert h.symm using 1
   congr!
@@ -3038,51 +2876,44 @@ section Map
 variable [Fintype V] {W : Type*} [Fintype W] [DecidableEq W]
 
 @[simp]
-/--
-theorem `edgeFinset_map` / 定理 `edgeFinset_map`
-
-English:
-theorem edgeFinset_map
-  given: (f : V ↪ W) (G : SimpleGraph V) [DecidableRel G.Adj]
-  proof: by
-  rw [← Finset.coe_inj]
-  push_cast
-  exact G.edgeSet_map f
-
-中文:
-定理 edgeFinset_map
-  条件: (f : V ↪ W) (G : 简单图 V) [DecidableRel G.伴随]
-  证明: by
-  rw [← Finset.coe_inj]
-  push_cast
-  exact G.edgeSet_map f
-
-Depends on / 依赖: Finset, Finset.coe_inj, G.edgeSet_map, coe_inj, edgeSet_map
+/-
+**SimpleGraph.edgeFinset_map** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：edgeFinset_map (f : V ↪ W) (G : SimpleGraph V) [DecidableRel G.Adj] : (G.m
+ap f).edgeFinset = G.edgeFinset.map f.sym2Map
+参数：f : V ↪ W；G : SimpleGraph V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.coe_inj`：coe_inj {s₁ s₂ : Finset α} : (s₁ : Set α) = s₂ ↔ s₁ = s₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `SimpleGraph.coe_edgeFinset`：coe_edgeFinset : (G.edgeFinset : Set (Sym2 V
+)) = G.edgeSet
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.coe_map`：coe_map (f : α ↪ β) (s : Finset α) : (s.map f : Set β) =
+ f '' s
+· 使用定理 `SimpleGraph.edgeSet_map`：edgeSet_map (f : V ↪ W) (G : SimpleGraph V) : (
+G.map f).edgeSet = f.sym2Map '' G.edgeSet
 -/
 theorem edgeFinset_map (f : V ↪ W) (G : SimpleGraph V) [DecidableRel G.Adj] :
     (G.map f).edgeFinset = G.edgeFinset.map f.sym2Map := by
   rw [← Finset.coe_inj]
   push_cast
   exact G.edgeSet_map f
-
-/--
-theorem `card_edgeFinset_map` / 定理 `card_edgeFinset_map`
-
-English:
-theorem card_edgeFinset_map
-  given: (f : V ↪ W) (G : SimpleGraph V) [DecidableRel G.Adj]
-  proof: by
-  rw [edgeFinset_map]
-  exact G.edgeFinset.card_map f.sym2Map
-
-中文:
-定理 card_edgeFinset_map
-  条件: (f : V ↪ W) (G : 简单图 V) [DecidableRel G.伴随]
-  证明: by
-  rw [edgeFinset_map]
-  exact G.edgeFinset.card_map f.sym2Map
-
-Depends on / 依赖: G.edgeFinset.card_map, card_map, edgeFinset, edgeFinset_map, f.sym2Map, sym2Map
+/-
+**SimpleGraph.card_edgeFinset_map** 是 Mathlib 中的一个定理，位于命名空间 `SimpleGraph`。
+形式化陈述：card_edgeFinset_map (f : V ↪ W) (G : SimpleGraph V) [DecidableRel G.Adj] :
+ #(G.map f).edgeFinset = #G.edgeFinset
+参数：f : V ↪ W；G : SimpleGraph V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimpleGraph.edgeFinset_map`：edgeFinset_map (f : V ↪ W) (G : SimpleGraph 
+V) [DecidableRel G.Adj] : (G.map f).edgeFinset = G.edgeFinset.map f.sym2Map
+· 使用定理 `Finset.card_map`：card_map (f : α ↪ β) : #(s.map f) = #s
 -/
 theorem card_edgeFinset_map (f : V ↪ W) (G : SimpleGraph V) [DecidableRel G.Adj] :
     #(G.map f).edgeFinset = #G.edgeFinset := by
@@ -3092,3 +2923,4 @@ theorem card_edgeFinset_map (f : V ↪ W) (G : SimpleGraph V) [DecidableRel G.Ad
 end Map
 
 end SimpleGraph
+

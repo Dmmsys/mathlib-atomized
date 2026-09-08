@@ -37,57 +37,39 @@ open Bicategory
 /-- Constructor for pseudofunctors from a locally discrete bicategory. In that
 case, we do not need to provide the `map₂` field of pseudofunctors. -/
 @[simps obj map mapId mapComp]
-/--
-Definition of `pseudofunctorOfIsLocallyDiscrete` / `pseudofunctorOfIsLocallyDiscrete` 的定义
+/-
+**CategoryTheory.pseudofunctorOfIsLocallyDiscrete** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory`。
+形式化陈述：pseudofunctorOfIsLocallyDiscrete {B C : Type*} [Bicategory B] [IsLocallyDi
+screte B] [Bicategory C] (obj : B -> C) (map : forall {b b' : B}, (b ⟶ b') -> (o
+bj b ⟶ obj b')) (mapId : forall (b : B), map (𝟙 b) ≅ 𝟙 _) (mapComp : forall {b₀ 
+b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂), map (f ≫ g) ≅ map f ≫ map g) (map₂_assoc
+iator : forall {b₀ b₁ b₂ b₃ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂) (h : b₂ ⟶ b₃), (map
+Comp (f ≫ g) h).hom ≫ (mapComp f g).hom ▷ map h ≫ (α_ (map f) (map g) (map h)).h
+om ≫ map f ◁ (mapComp g h)
+参数：obj : B -> C；map : forall {b b' : B}, (b ⟶ b') -> (obj b ⟶ obj b')；mapId : fo
+rall (b : B), map (𝟙 b) ≅ 𝟙 _；mapComp : forall {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g :
+ b₁ ⟶ b₂), map (f ≫ g) ≅ map f ≫ map g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pseudofunctorOfIsLocallyDiscrete
-  body: obj
-  map := map
-  map₂ φ := eqToHom (by
-    obtain rfl := obj_ext_of_isDiscrete φ
-    dsimp)
-  mapId := mapId
-  mapComp := mapComp
-  map₂_whisker_left _ _ _ η := by
-    obtain rfl := obj_ext_of_isDiscrete η
-    simp
-  map₂_whisker_right η _ := by
-    obtain rfl := obj_ext_of_isDiscrete η
-    simp
-
-中文:
-定义 pseudofunctorOfIsLocallyDiscrete
-  定义体: obj
-  map := map
-  map₂ φ := eqToHom (by
-    obtain rfl := obj_ext_of_isDiscrete φ
-    dsimp)
-  mapId := mapId
-  mapComp := mapComp
-  map₂_whisker_left _ _ _ η := by
-    obtain rfl := obj_ext_of_isDiscrete η
-    simp
-  map₂_whisker_right η _ := by
-    obtain rfl := obj_ext_of_isDiscrete η
-    simp
-
-Depends on / 依赖: cat_disch, eqToHom, fun_, mapComp, obj_ext_of_isDiscrete
+--- 原说明 ---
+Constructor for pseudofunctors from a locally discrete bicategory. In that
+case, we do not need to provide the `map₂` field of pseudofunctors.
 -/
 def pseudofunctorOfIsLocallyDiscrete
     {B C : Type*} [Bicategory B] [IsLocallyDiscrete B] [Bicategory C]
-    (obj : B -> C)
-    (map : forall {b b' : B}, (b ⟶ b') -> (obj b ⟶ obj b'))
-    (mapId : forall (b : B), map (𝟙 b) ≅ 𝟙 _)
-    (mapComp : forall {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂), map (f ≫ g) ≅ map f ≫ map g)
-    (map₂_associator : forall {b₀ b₁ b₂ b₃ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂) (h : b₂ ⟶ b₃),
+    (obj : B → C)
+    (map : ∀ {b b' : B}, (b ⟶ b') → (obj b ⟶ obj b'))
+    (mapId : ∀ (b : B), map (𝟙 b) ≅ 𝟙 _)
+    (mapComp : ∀ {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂), map (f ≫ g) ≅ map f ≫ map g)
+    (map₂_associator : ∀ {b₀ b₁ b₂ b₃ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂) (h : b₂ ⟶ b₃),
       (mapComp (f ≫ g) h).hom ≫
         (mapComp f g).hom ▷ map h ≫ (α_ (map f) (map g) (map h)).hom ≫
           map f ◁ (mapComp g h).inv ≫ (mapComp f (g ≫ h)).inv = eqToHom (by simp) := by cat_disch)
-    (map₂_left_unitor : forall {b₀ b₁ : B} (f : b₀ ⟶ b₁),
-      (mapComp (𝟙 b₀) f).hom ≫ (mapId b₀).hom ▷ map f ≫ (fun_ (map f)).hom = eqToHom (by simp) := by
+    (map₂_left_unitor : ∀ {b₀ b₁ : B} (f : b₀ ⟶ b₁),
+      (mapComp (𝟙 b₀) f).hom ≫ (mapId b₀).hom ▷ map f ≫ (λ_ (map f)).hom = eqToHom (by simp) := by
         cat_disch)
-    (map₂_right_unitor : forall {b₀ b₁ : B} (f : b₀ ⟶ b₁),
+    (map₂_right_unitor : ∀ {b₀ b₁ : B} (f : b₀ ⟶ b₁),
       (mapComp f (𝟙 b₁)).hom ≫ map f ◁ (mapId b₁).hom ≫ (ρ_ (map f)).hom = eqToHom (by simp) := by
         cat_disch) :
     B ⥤ᵖ C where
@@ -108,57 +90,39 @@ def pseudofunctorOfIsLocallyDiscrete
 /-- Constructor for oplax functors from a locally discrete bicategory. In that
 case, we do not need to provide the `map₂` field of oplax functors. -/
 @[simps obj map mapId mapComp]
-/--
-Definition of `oplaxFunctorOfIsLocallyDiscrete` / `oplaxFunctorOfIsLocallyDiscrete` 的定义
+/-
+**CategoryTheory.oplaxFunctorOfIsLocallyDiscrete** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory`。
+形式化陈述：oplaxFunctorOfIsLocallyDiscrete {B C : Type*} [Bicategory B] [IsLocallyDis
+crete B] [Bicategory C] (obj : B -> C) (map : forall {b b' : B}, (b ⟶ b') -> (ob
+j b ⟶ obj b')) (mapId : forall (b : B), map (𝟙 b) ⟶ 𝟙 _) (mapComp : forall {b₀ b
+₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂), map (f ≫ g) ⟶ map f ≫ map g) (map₂_associ
+ator : forall {b₀ b₁ b₂ b₃ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂) (h : b₂ ⟶ b₃), eqToH
+om (by simp) ≫ mapComp f (g ≫ h) ≫ map f ◁ mapComp g h = mapComp (f ≫ g) h ≫ map
+Comp f g ▷ map h ≫ (α_ (ma
+参数：obj : B -> C；map : forall {b b' : B}, (b ⟶ b') -> (obj b ⟶ obj b')；mapId : fo
+rall (b : B), map (𝟙 b) ⟶ 𝟙 _；mapComp : forall {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g :
+ b₁ ⟶ b₂), map (f ≫ g) ⟶ map f ≫ map g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition oplaxFunctorOfIsLocallyDiscrete
-  body: obj
-  map := map
-  map₂ φ := eqToHom (by
-    obtain rfl := obj_ext_of_isDiscrete φ
-    dsimp)
-  mapId := mapId
-  mapComp := mapComp
-  mapComp_naturality_left η := by
-    obtain rfl := obj_ext_of_isDiscrete η
-    simp
-  mapComp_naturality_right _ _ _ η := by
-    obtain rfl := obj_ext_of_isDiscrete η
-    simp
-
-中文:
-定义 oplaxFunctorOfIsLocallyDiscrete
-  定义体: obj
-  map := map
-  map₂ φ := eqToHom (by
-    obtain rfl := obj_ext_of_isDiscrete φ
-    dsimp)
-  mapId := mapId
-  mapComp := mapComp
-  mapComp_naturality_left η := by
-    obtain rfl := obj_ext_of_isDiscrete η
-    simp
-  mapComp_naturality_right _ _ _ η := by
-    obtain rfl := obj_ext_of_isDiscrete η
-    simp
-
-Depends on / 依赖: cat_disch, eqToHom, fun_, mapComp, mapComp_naturality_left, obj_e, obj_ext_of_isDiscrete
+--- 原说明 ---
+Constructor for oplax functors from a locally discrete bicategory. In that
+case, we do not need to provide the `map₂` field of oplax functors.
 -/
 def oplaxFunctorOfIsLocallyDiscrete
     {B C : Type*} [Bicategory B] [IsLocallyDiscrete B] [Bicategory C]
-    (obj : B -> C)
-    (map : forall {b b' : B}, (b ⟶ b') -> (obj b ⟶ obj b'))
-    (mapId : forall (b : B), map (𝟙 b) ⟶ 𝟙 _)
-    (mapComp : forall {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂), map (f ≫ g) ⟶ map f ≫ map g)
-    (map₂_associator : forall {b₀ b₁ b₂ b₃ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂) (h : b₂ ⟶ b₃),
+    (obj : B → C)
+    (map : ∀ {b b' : B}, (b ⟶ b') → (obj b ⟶ obj b'))
+    (mapId : ∀ (b : B), map (𝟙 b) ⟶ 𝟙 _)
+    (mapComp : ∀ {b₀ b₁ b₂ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂), map (f ≫ g) ⟶ map f ≫ map g)
+    (map₂_associator : ∀ {b₀ b₁ b₂ b₃ : B} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂) (h : b₂ ⟶ b₃),
       eqToHom (by simp) ≫ mapComp f (g ≫ h) ≫ map f ◁ mapComp g h =
         mapComp (f ≫ g) h ≫ mapComp f g ▷ map h ≫ (α_ (map f) (map g) (map h)).hom := by
           cat_disch)
-    (map₂_left_unitor : forall {b₀ b₁ : B} (f : b₀ ⟶ b₁),
-      mapComp (𝟙 b₀) f ≫ mapId b₀ ▷ map f ≫ (fun_ (map f)).hom = eqToHom (by simp) := by
+    (map₂_left_unitor : ∀ {b₀ b₁ : B} (f : b₀ ⟶ b₁),
+      mapComp (𝟙 b₀) f ≫ mapId b₀ ▷ map f ≫ (λ_ (map f)).hom = eqToHom (by simp) := by
         cat_disch)
-    (map₂_right_unitor : forall {b₀ b₁ : B} (f : b₀ ⟶ b₁),
+    (map₂_right_unitor : ∀ {b₀ b₁ : B} (f : b₀ ⟶ b₁),
       mapComp f (𝟙 b₁) ≫ map f ◁ mapId b₁ ≫ (ρ_ (map f)).hom = eqToHom (by simp) := by
         cat_disch) :
     B ⥤ᵒᵖᴸ C where
@@ -185,36 +149,29 @@ A functor between two categories `C` and `D` can be lifted to a pseudofunctor be
 corresponding locally discrete bicategories.
 -/
 @[simps! obj map mapId mapComp]
-/--
-Definition of `Functor.toPseudofunctor` / `Functor.toPseudofunctor` 的定义
+/-
+**CategoryTheory.Functor.toPseudofunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Functor`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         Ca
+tegoryTheory.Functor C D →           CategoryTheory.Pseudofunctor (CategoryTheor
+y.LocallyDiscrete C) (CategoryTheory.LocallyDiscrete D)
+参数：CategoryTheory.LocallyDiscrete C；CategoryTheory.LocallyDiscrete D。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Bicategory.instIsLocallyDiscreteLocallyDiscrete`：∀ (C : T
+ype u_1) [inst : CategoryTheory.Category.{v_1, u_1} C],   CategoryTheory.Bicateg
+ory.IsLocallyDiscrete (CategoryTheory.LocallyDiscret…
 
-English:
-definition Functor.toPseudofunctor
-  signature: : LocallyDiscrete C ⥤ᵖ (LocallyDiscrete D)
-  body: pseudofunctorOfIsLocallyDiscrete
-    (fun ⟨X⟩ => .mk <| F.obj X) (fun ⟨f⟩ => (F.map f).toLoc)
-    (fun ⟨X⟩ => eqToIso (by simp [CategoryStruct.id]))
-    (fun ⟨f⟩ ⟨g⟩ => eqToIso (by simp [CategoryStruct.comp]))
-
-@[deprecated (since := "2026-02-08")] alias Functor.toPseudoFunctor := Functor.toPseudofunctor
-
-中文:
-定义 函子.toPseudofunctor
-  签名: : LocallyDiscrete C ⥤ᵖ (LocallyDiscrete D)
-  定义体: pseudofunctorOfIsLocallyDiscrete
-    (fun ⟨X⟩ => .mk <| F.obj X) (fun ⟨f⟩ => (F.map f).toLoc)
-    (fun ⟨X⟩ => eqToIso (by simp [CategoryStruct.id]))
-    (fun ⟨f⟩ ⟨g⟩ => eqToIso (by simp [CategoryStruct.comp]))
-
-@[deprecated (since := "2026-02-08")] alias Functor.toPseudoFunctor := Functor.toPseudofunctor
-
-Depends on / 依赖: CategoryStruct, CategoryStruct.comp, CategoryStruct.id, F.map, F.obj, eqToIso, pseudofunctorOfIsLocallyDiscrete
+--- 原说明 ---
+A functor between two categories `C` and `D` can be lifted to a pseudofunctor be
+tween the
+corresponding locally discrete bicategories.
 -/
 def Functor.toPseudofunctor : LocallyDiscrete C ⥤ᵖ (LocallyDiscrete D) :=
   pseudofunctorOfIsLocallyDiscrete
-    (fun ⟨X⟩ => .mk <| F.obj X) (fun ⟨f⟩ => (F.map f).toLoc)
-    (fun ⟨X⟩ => eqToIso (by simp [CategoryStruct.id]))
-    (fun ⟨f⟩ ⟨g⟩ => eqToIso (by simp [CategoryStruct.comp]))
+    (fun ⟨X⟩ ↦ .mk <| F.obj X) (fun ⟨f⟩ ↦ (F.map f).toLoc)
+    (fun ⟨X⟩ ↦ eqToIso (by simp [CategoryStruct.id]))
+    (fun ⟨f⟩ ⟨g⟩ ↦ eqToIso (by simp [CategoryStruct.comp]))
 
 @[deprecated (since := "2026-02-08")] alias Functor.toPseudoFunctor := Functor.toPseudofunctor
 
@@ -225,20 +182,22 @@ corresponding locally discrete bicategories.
 This is just an abbreviation of `Functor.toPseudofunctor.toOplax`.
 -/
 @[simps! map]
-/--
-Definition of `Functor.toOplaxFunctor` / `Functor.toOplaxFunctor` 的定义
+/-
+**CategoryTheory.Functor.toOplaxFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Functor`。
+形式化陈述：{C : Type u_1} →   {D : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_2, u_2} D] →         Ca
+tegoryTheory.Functor C D →           CategoryTheory.OplaxFunctor (CategoryTheory
+.LocallyDiscrete C) (CategoryTheory.LocallyDiscrete D)
+参数：CategoryTheory.LocallyDiscrete C；CategoryTheory.LocallyDiscrete D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Functor.toOplaxFunctor
-  signature: : LocallyDiscrete C ⥤ᵒᵖᴸ (LocallyDiscrete D)
-  body: F.toPseudofunctor.toOplax
+--- 原说明 ---
+A functor between two categories `C` and `D` can be lifted to an oplax functor b
+etween the
+corresponding locally discrete bicategories.
 
-中文:
-缩写 函子.toOplaxFunctor
-  签名: : LocallyDiscrete C ⥤ᵒᵖᴸ (LocallyDiscrete D)
-  定义体: F.toPseudofunctor.toOplax
-
-Depends on / 依赖: F.toPseudofunctor.toOplax, toOplax, toPseudofunctor
+This is just an abbreviation of `Functor.toPseudofunctor.toOplax`.
 -/
 abbrev Functor.toOplaxFunctor : LocallyDiscrete C ⥤ᵒᵖᴸ (LocallyDiscrete D) :=
   F.toPseudofunctor.toOplax
@@ -257,36 +216,29 @@ If `B` is a strict bicategory and `I` is a (1-)category, any functor (of 1-categ
 be promoted to a pseudofunctor from `LocallyDiscrete I` to `B`.
 -/
 @[simps! obj map mapId mapComp]
-/--
-Definition of `Functor.toPseudofunctor'` / `Functor.toPseudofunctor'` 的定义
+/-
+**CategoryTheory.Functor.toPseudofunctor'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Functor`。
+形式化陈述：{I : Type u_1} →   {B : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} I] →       [inst_1 : CategoryTheory.Bicategory B] →         [inst_2 : C
+ategoryTheory.Bicategory.Strict B] →           CategoryTheory.Functor I B → Cate
+goryTheory.Pseudofunctor (CategoryTheory.LocallyDiscrete I) B
+参数：CategoryTheory.LocallyDiscrete I。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Bicategory.instIsLocallyDiscreteLocallyDiscrete`：∀ (C : T
+ype u_1) [inst : CategoryTheory.Category.{v_1, u_1} C],   CategoryTheory.Bicateg
+ory.IsLocallyDiscrete (CategoryTheory.LocallyDiscret…
 
-English:
-definition Functor.toPseudofunctor'
-  signature: : LocallyDiscrete I ⥤ᵖ B
-  body: pseudofunctorOfIsLocallyDiscrete
-    (fun ⟨X⟩ => F.obj X) (fun ⟨f⟩ => F.map f)
-    (fun ⟨X⟩ => eqToIso (by simp [CategoryStruct.id]))
-    (fun f g => eqToIso (by obtain ⟨f⟩ := f; obtain ⟨g⟩ := g; simp [CategoryStruct.comp]))
-
-@[deprecated (since := "2026-02-08")] alias Functor.toPseudoFunctor' := Functor.toPseudofunctor'
-
-中文:
-定义 函子.toPseudofunctor'
-  签名: : LocallyDiscrete I ⥤ᵖ B
-  定义体: pseudofunctorOfIsLocallyDiscrete
-    (fun ⟨X⟩ => F.obj X) (fun ⟨f⟩ => F.map f)
-    (fun ⟨X⟩ => eqToIso (by simp [CategoryStruct.id]))
-    (fun f g => eqToIso (by obtain ⟨f⟩ := f; obtain ⟨g⟩ := g; simp [CategoryStruct.comp]))
-
-@[deprecated (since := "2026-02-08")] alias Functor.toPseudoFunctor' := Functor.toPseudofunctor'
-
-Depends on / 依赖: CategoryStruct, CategoryStruct.comp, CategoryStruct.id, F.map, F.obj, eqToIso, pseudofunctorOfIsLocallyDiscrete
+--- 原说明 ---
+If `B` is a strict bicategory and `I` is a (1-)category, any functor (of 1-categ
+ories) `I ⥤ B` can
+be promoted to a pseudofunctor from `LocallyDiscrete I` to `B`.
 -/
 def Functor.toPseudofunctor' : LocallyDiscrete I ⥤ᵖ B :=
   pseudofunctorOfIsLocallyDiscrete
-    (fun ⟨X⟩ => F.obj X) (fun ⟨f⟩ => F.map f)
-    (fun ⟨X⟩ => eqToIso (by simp [CategoryStruct.id]))
-    (fun f g => eqToIso (by obtain ⟨f⟩ := f; obtain ⟨g⟩ := g; simp [CategoryStruct.comp]))
+    (fun ⟨X⟩ ↦ F.obj X) (fun ⟨f⟩ ↦ F.map f)
+    (fun ⟨X⟩ ↦ eqToIso (by simp [CategoryStruct.id]))
+    (fun f g ↦ eqToIso (by obtain ⟨f⟩ := f; obtain ⟨g⟩ := g; simp [CategoryStruct.comp]))
 
 @[deprecated (since := "2026-02-08")] alias Functor.toPseudoFunctor' := Functor.toPseudofunctor'
 
@@ -295,20 +247,20 @@ If `B` is a strict bicategory and `I` is a (1-)category, any functor (of 1-categ
 be promoted to an oplax functor from `LocallyDiscrete I` to `B`.
 -/
 @[simps! map]
-/--
-Definition of `Functor.toOplaxFunctor'` / `Functor.toOplaxFunctor'` 的定义
+/-
+**CategoryTheory.Functor.toOplaxFunctor'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Functor`。
+形式化陈述：{I : Type u_1} →   {B : Type u_2} →     [inst : CategoryTheory.Category.{v
+_1, u_1} I] →       [inst_1 : CategoryTheory.Bicategory B] →         [inst_2 : C
+ategoryTheory.Bicategory.Strict B] →           CategoryTheory.Functor I B → Cate
+goryTheory.OplaxFunctor (CategoryTheory.LocallyDiscrete I) B
+参数：CategoryTheory.LocallyDiscrete I。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Functor.toOplaxFunctor'
-  signature: : LocallyDiscrete I ⥤ᵒᵖᴸ B
-  body: F.toPseudofunctor'.toOplax
-
-中文:
-缩写 函子.toOplaxFunctor'
-  签名: : LocallyDiscrete I ⥤ᵒᵖᴸ B
-  定义体: F.toPseudofunctor'.toOplax
-
-Depends on / 依赖: F.toPseudofunctor, toOplax, toPseudofunctor
+--- 原说明 ---
+If `B` is a strict bicategory and `I` is a (1-)category, any functor (of 1-categ
+ories) `I ⥤ B` can
+be promoted to an oplax functor from `LocallyDiscrete I` to `B`.
 -/
 abbrev Functor.toOplaxFunctor' : LocallyDiscrete I ⥤ᵒᵖᴸ B :=
   F.toPseudofunctor'.toOplax
@@ -320,45 +272,49 @@ namespace LocallyDiscrete
 /-- Constructor for pseudofunctors from a locally discrete bicategory. In that
 case, we do not need to provide the `map₂` field of pseudofunctors. -/
 @[simps! obj map mapId mapComp]
-/--
-Definition of `mkPseudofunctor` / `mkPseudofunctor` 的定义
+/-
+**CategoryTheory.LocallyDiscrete.mkPseudofunctor** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.LocallyDiscrete`。
+形式化陈述：mkPseudofunctor {B₀ C : Type*} [Category* B₀] [Bicategory C] (obj : B₀ -> 
+C) (map : forall {b b' : B₀}, (b ⟶ b') -> (obj b ⟶ obj b')) (mapId : forall (b :
+ B₀), map (𝟙 b) ≅ 𝟙 _) (mapComp : forall {b₀ b₁ b₂ : B₀} (f : b₀ ⟶ b₁) (g : b₁ ⟶
+ b₂), map (f ≫ g) ≅ map f ≫ map g) (map₂_associator : forall {b₀ b₁ b₂ b₃ : B₀} 
+(f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂) (h : b₂ ⟶ b₃), (mapComp (f ≫ g) h).hom ≫ (mapComp f 
+g).hom ▷ map h ≫ (α_ (map f) (map g) (map h)).hom ≫ map f ◁ (mapComp g h).inv ≫ 
+(mapComp f (g ≫ h)).inv = 
+参数：obj : B₀ -> C；map : forall {b b' : B₀}, (b ⟶ b') -> (obj b ⟶ obj b')；mapId : 
+forall (b : B₀), map (𝟙 b) ≅ 𝟙 _；mapComp : forall {b₀ b₁ b₂ : B₀} (f : b₀ ⟶ b₁) 
+(g : b₁ ⟶ b₂), map (f ≫ g) ≅ map f ≫ map g。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Bicategory.instIsLocallyDiscreteLocallyDiscrete`：∀ (C : T
+ype u_1) [inst : CategoryTheory.Category.{v_1, u_1} C],   CategoryTheory.Bicateg
+ory.IsLocallyDiscrete (CategoryTheory.LocallyDiscret…
 
-English:
-definition mkPseudofunctor
-  signature: {B₀ C : Type*} [Category* B₀] [Bicategory C]
-  body: pseudofunctorOfIsLocallyDiscrete (fun b => obj b.as) (fun f => map f.as)
-    (fun _ => mapId _) (fun _ _ => mapComp _ _) (fun _ _ _ => map₂_associator _ _ _)
-    (fun _ => map₂_left_unitor _) (fun _ => map₂_right_unitor _)
-
-中文:
-定义 mkPseudofunctor
-  签名: {B₀ C : 类型} [范畴* B₀] [双范畴 C]
-  定义体: pseudofunctorOfIsLocallyDiscrete (fun b => obj b.as) (fun f => map f.as)
-    (fun _ => mapId _) (fun _ _ => mapComp _ _) (fun _ _ _ => map₂_associator _ _ _)
-    (fun _ => map₂_left_unitor _) (fun _ => map₂_right_unitor _)
-
-Depends on / 依赖: LocallyDiscrete, b.as, cat_disch, eqToHom, f.as, fun_, mapComp, pseudofunctorOfIsLocallyDiscrete
+--- 原说明 ---
+Constructor for pseudofunctors from a locally discrete bicategory. In that
+case, we do not need to provide the `map₂` field of pseudofunctors.
 -/
 def mkPseudofunctor {B₀ C : Type*} [Category* B₀] [Bicategory C]
-    (obj : B₀ -> C)
-    (map : forall {b b' : B₀}, (b ⟶ b') -> (obj b ⟶ obj b'))
-    (mapId : forall (b : B₀), map (𝟙 b) ≅ 𝟙 _)
-    (mapComp : forall {b₀ b₁ b₂ : B₀} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂), map (f ≫ g) ≅ map f ≫ map g)
-    (map₂_associator : forall {b₀ b₁ b₂ b₃ : B₀} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂) (h : b₂ ⟶ b₃),
+    (obj : B₀ → C)
+    (map : ∀ {b b' : B₀}, (b ⟶ b') → (obj b ⟶ obj b'))
+    (mapId : ∀ (b : B₀), map (𝟙 b) ≅ 𝟙 _)
+    (mapComp : ∀ {b₀ b₁ b₂ : B₀} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂), map (f ≫ g) ≅ map f ≫ map g)
+    (map₂_associator : ∀ {b₀ b₁ b₂ b₃ : B₀} (f : b₀ ⟶ b₁) (g : b₁ ⟶ b₂) (h : b₂ ⟶ b₃),
       (mapComp (f ≫ g) h).hom ≫
         (mapComp f g).hom ▷ map h ≫ (α_ (map f) (map g) (map h)).hom ≫
           map f ◁ (mapComp g h).inv ≫ (mapComp f (g ≫ h)).inv = eqToHom (by simp) := by cat_disch)
-    (map₂_left_unitor : forall {b₀ b₁ : B₀} (f : b₀ ⟶ b₁),
-      (mapComp (𝟙 b₀) f).hom ≫ (mapId b₀).hom ▷ map f ≫ (fun_ (map f)).hom = eqToHom (by simp) := by
+    (map₂_left_unitor : ∀ {b₀ b₁ : B₀} (f : b₀ ⟶ b₁),
+      (mapComp (𝟙 b₀) f).hom ≫ (mapId b₀).hom ▷ map f ≫ (λ_ (map f)).hom = eqToHom (by simp) := by
         cat_disch)
-    (map₂_right_unitor : forall {b₀ b₁ : B₀} (f : b₀ ⟶ b₁),
+    (map₂_right_unitor : ∀ {b₀ b₁ : B₀} (f : b₀ ⟶ b₁),
       (mapComp f (𝟙 b₁)).hom ≫ map f ◁ (mapId b₁).hom ≫ (ρ_ (map f)).hom = eqToHom (by simp) := by
         cat_disch) :
     LocallyDiscrete B₀ ⥤ᵖ C :=
-  pseudofunctorOfIsLocallyDiscrete (fun b => obj b.as) (fun f => map f.as)
-    (fun _ => mapId _) (fun _ _ => mapComp _ _) (fun _ _ _ => map₂_associator _ _ _)
-    (fun _ => map₂_left_unitor _) (fun _ => map₂_right_unitor _)
+  pseudofunctorOfIsLocallyDiscrete (fun b ↦ obj b.as) (fun f ↦ map f.as)
+    (fun _ ↦ mapId _) (fun _ _ ↦ mapComp _ _) (fun _ _ _ ↦ map₂_associator _ _ _)
+    (fun _ ↦ map₂_left_unitor _) (fun _ ↦ map₂_right_unitor _)
 
 end LocallyDiscrete
 
 end CategoryTheory
+

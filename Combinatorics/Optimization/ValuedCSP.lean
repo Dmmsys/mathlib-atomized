@@ -41,392 +41,338 @@ General-Valued CSP subsumes Min-Cost-Hom (including 3-SAT for example) and Finit
 Regarding `C` we want to support `Bool`, `Nat`, `ENat`, `Int`, `Rat`, `NNRat`,
 `Real`, `NNReal`, `EReal`, `ENNReal`, and tuples made of any of those types. -/
 @[nolint unusedArguments]
-/--
-Definition of `ValuedCSP` / `ValuedCSP` 的定义
+/-
+**ValuedCSP** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：ValuedCSP (D C : Type*) [AddCommMonoid C] [PartialOrder C] [IsOrderedAddMo
+noid C]
+参数：D C : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ValuedCSP
-  signature: (D C : Type*) [AddCommMonoid C] [PartialOrder C] [IsOrderedAddMonoid C]
-  body: Set (Σ (n : Nat), (Fin n -> D) -> C) -- Cost functions `D^n → C` for any `n`
-
-中文:
-缩写 ValuedCSP
-  签名: (D C : 类型) [加法交换幺半群 C] [偏序 C] [是OrderedAdd幺半群 C]
-  定义体: Set (Σ (n : Nat), (Fin n -> D) -> C) -- Cost functions `D^n → C` for any `n`
-
-Depends on / 依赖: functions
+--- 原说明 ---
+A template for a valued CSP problem over a domain `D` with costs in `C`.
+Regarding `C` we want to support `Bool`, `Nat`, `ENat`, `Int`, `Rat`, `NNRat`,
+`Real`, `NNReal`, `EReal`, `ENNReal`, and tuples made of any of those types.
 -/
 abbrev ValuedCSP (D C : Type*) [AddCommMonoid C] [PartialOrder C] [IsOrderedAddMonoid C] :=
-  Set (Σ (n : Nat), (Fin n -> D) -> C) -- Cost functions `D^n → C` for any `n`
+  Set (Σ (n : ℕ), (Fin n → D) → C) -- Cost functions `D^n → C` for any `n`
 
 variable {D C : Type*} [AddCommMonoid C] [PartialOrder C] [IsOrderedAddMonoid C]
 
-/--
-Definition of `ValuedCSP.Term` / `ValuedCSP.Term` 的定义
+/-- A term in a valued CSP instance over the template `Γ`. -/
+/-
+**ValuedCSP.Term** 是 Mathlib 中的一个归纳类型，位于命名空间 `ValuedCSP`。
+形式化陈述：{D : Type u_1} →   {C : Type u_2} →     [inst : AddCommMonoid C] →       [
+inst_1 : PartialOrder C] →         [inst_2 : IsOrderedAddMonoid C] → ValuedCSP D
+ C → Type u_3 → Type (max (max u_1 u_2) u_3)
+参数：max (max u_1 u_2) u_3。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ValuedCSP.Term
-  parameters: (Γ : ValuedCSP D C) (ι : Type*)
-  axioms and operations (4):
-    - n : Nat
-    - f : (Fin n -> D) -> C
-    - inΓ : ⟨n, f⟩ in Γ
-    - app : Fin n -> ι
-
-中文:
-结构 ValuedCSP.项
-  参数: (Γ : ValuedCSP D C) (ι : 类型)
-  公理与运算 (4 个):
-    - n : 自然数
-    - f : (有限集 n -> D) -> C
-    - inΓ : ⟨n, f⟩ in Γ
-    - app : 有限集 n -> ι
+--- 原说明 ---
+A term in a valued CSP instance over the template `Γ`.
 -/
 structure ValuedCSP.Term (Γ : ValuedCSP D C) (ι : Type*) where
   /-- Arity of the function -/
-  n : Nat
+  n : ℕ
   /-- Which cost function is instantiated -/
-  f : (Fin n -> D) -> C
+  f : (Fin n → D) → C
   /-- The cost function comes from the template -/
-  inΓ : ⟨n, f⟩ in Γ
+  inΓ : ⟨n, f⟩ ∈ Γ
   /-- Which variables are plugged as arguments to the cost function -/
-  app : Fin n -> ι
+  app : Fin n → ι
 
-/--
-Definition of `ValuedCSP.Term.evalSolution` / `ValuedCSP.Term.evalSolution` 的定义
+/-- Evaluation of a `Γ` term `t` for given solution `x`. -/
+/-
+**ValuedCSP.Term.evalSolution** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ValuedCSP.Term.evalSolution {Γ : ValuedCSP D C} {ι : Type*} (t : Γ.Term ι)
+ (x : ι -> D) : C
+参数：t : Γ.Term ι；x : ι -> D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ValuedCSP.Term.evalSolution
-  signature: {Γ : ValuedCSP D C} {ι : Type*}
-  body: t.f (x ∘ t.app)
-
-中文:
-定义 ValuedCSP.项.evalSolution
-  签名: {Γ : ValuedCSP D C} {ι : 类型}
-  定义体: t.f (x ∘ t.app)
-
-Depends on / 依赖: Countable, Countable.of_equiv, Equiv.ulift.symm, of_equiv, t.app
+--- 原说明 ---
+Evaluation of a `Γ` term `t` for given solution `x`.
 -/
 def ValuedCSP.Term.evalSolution {Γ : ValuedCSP D C} {ι : Type*}
-    (t : Γ.Term ι) (x : ι -> D) : C :=
+    (t : Γ.Term ι) (x : ι → D) : C :=
   t.f (x ∘ t.app)
 
-/--
-Definition of `ValuedCSP.Instance` / `ValuedCSP.Instance` 的定义
+/-- A valued CSP instance over the template `Γ` with variables indexed by `ι`. -/
+/-
+**ValuedCSP.Instance** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：ValuedCSP.Instance (Γ : ValuedCSP D C) (ι : Type*) : Type _
+参数：Γ : ValuedCSP D C；ι : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ValuedCSP.Instance
-  signature: (Γ : ValuedCSP D C) (ι : Type*)
-  body: Multiset (Γ.Term ι)
-
-中文:
-缩写 ValuedCSP.Instance
-  签名: (Γ : ValuedCSP D C) (ι : 类型)
-  定义体: Multiset (Γ.Term ι)
-
-Depends on / 依赖: Multiset
+--- 原说明 ---
+A valued CSP instance over the template `Γ` with variables indexed by `ι`.
 -/
 abbrev ValuedCSP.Instance (Γ : ValuedCSP D C) (ι : Type*) : Type _ :=
   Multiset (Γ.Term ι)
 
-/--
-Definition of `ValuedCSP.Instance.evalSolution` / `ValuedCSP.Instance.evalSolution` 的定义
+/-- Evaluation of a `Γ` instance `I` for given solution `x`. -/
+/-
+**ValuedCSP.Instance.evalSolution** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ValuedCSP.Instance.evalSolution {Γ : ValuedCSP D C} {ι : Type*} (I : Γ.Ins
+tance ι) (x : ι -> D) : C
+参数：I : Γ.Instance ι；x : ι -> D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ValuedCSP.Instance.evalSolution
-  signature: {Γ : ValuedCSP D C} {ι : Type*}
-  body: (I.map (·.evalSolution x)).sum
-
-中文:
-定义 ValuedCSP.Instance.evalSolution
-  签名: {Γ : ValuedCSP D C} {ι : 类型}
-  定义体: (I.map (·.evalSolution x)).sum
-
-Depends on / 依赖: Countable, I.map, Subsingleton, Subsingleton.to_countable, evalSolution, to_countable
+--- 原说明 ---
+Evaluation of a `Γ` instance `I` for given solution `x`.
 -/
 def ValuedCSP.Instance.evalSolution {Γ : ValuedCSP D C} {ι : Type*}
-    (I : Γ.Instance ι) (x : ι -> D) : C :=
+    (I : Γ.Instance ι) (x : ι → D) : C :=
   (I.map (·.evalSolution x)).sum
 
-/--
-Definition of `ValuedCSP.Instance.IsOptimumSolution` / `ValuedCSP.Instance.IsOptimumSolution` 的定义
+/-- Condition for `x` being an optimum solution (min) to given `Γ` instance `I`. -/
+/-
+**ValuedCSP.Instance.IsOptimumSolution** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ValuedCSP.Instance.IsOptimumSolution {Γ : ValuedCSP D C} {ι : Type*} (I : 
+Γ.Instance ι) (x : ι -> D) : Prop
+参数：I : Γ.Instance ι；x : ι -> D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ValuedCSP.Instance.IsOptimumSolution
-  signature: {Γ : ValuedCSP D C} {ι : Type*}
-  body: forall y : ι -> D, I.evalSolution x <= I.evalSolution y
-
-中文:
-定义 ValuedCSP.Instance.IsOptimumSolution
-  签名: {Γ : ValuedCSP D C} {ι : 类型}
-  定义体: forall y : ι -> D, I.evalSolution x <= I.evalSolution y
-
-Depends on / 依赖: Countable, I.evalSolution, Subtype, Subtype.countable, countable, evalSolution
+--- 原说明 ---
+Condition for `x` being an optimum solution (min) to given `Γ` instance `I`.
 -/
 def ValuedCSP.Instance.IsOptimumSolution {Γ : ValuedCSP D C} {ι : Type*}
-    (I : Γ.Instance ι) (x : ι -> D) : Prop :=
-  forall y : ι -> D, I.evalSolution x <= I.evalSolution y
+    (I : Γ.Instance ι) (x : ι → D) : Prop :=
+  ∀ y : ι → D, I.evalSolution x ≤ I.evalSolution y
 
-/--
-Definition of `Function.HasMaxCutPropertyAt` / `Function.HasMaxCutPropertyAt` 的定义
+/-- Function `f` has Max-Cut property at labels `a` and `b` when `argmin f` is exactly
+`{ ![a, b], ![b, a] }`. -/
+/-
+**Function.HasMaxCutPropertyAt** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Function.HasMaxCutPropertyAt (f : (Fin 2 -> D) -> C) (a b : D) : Prop
+参数：f : (Fin 2 -> D) -> C；a b : D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Function.HasMaxCutPropertyAt
-  signature: (f : (Fin 2 -> D) -> C) (a b : D)
-  body: f ![a, b] = f ![b, a] ∧
-    forall x y : D, f ![a, b] <= f ![x, y] ∧ (f ![a, b] = f ![x, y] -> a = x ∧ b = y ∨ a = y ∧ b = x)
-
-中文:
-定义 函数.HasMaxCutPropertyAt
-  签名: (f : (有限集 2 -> D) -> C) (a b : D)
-  定义体: f ![a, b] = f ![b, a] ∧
-    forall x y : D, f ![a, b] <= f ![x, y] ∧ (f ![a, b] = f ![x, y] -> a = x ∧ b = y ∨ a = y ∧ b = x)
-
-Depends on / 依赖: Fin.eq_of_val_eq, Function, Function.Injective.countable, Injective, countable, eq_of_val_eq
+--- 原说明 ---
+Function `f` has Max-Cut property at labels `a` and `b` when `argmin f` is exact
+ly
+`{ ![a, b], ![b, a] }`.
 -/
-def Function.HasMaxCutPropertyAt (f : (Fin 2 -> D) -> C) (a b : D) : Prop :=
+def Function.HasMaxCutPropertyAt (f : (Fin 2 → D) → C) (a b : D) : Prop :=
   f ![a, b] = f ![b, a] ∧
-    forall x y : D, f ![a, b] <= f ![x, y] ∧ (f ![a, b] = f ![x, y] -> a = x ∧ b = y ∨ a = y ∧ b = x)
+    ∀ x y : D, f ![a, b] ≤ f ![x, y] ∧ (f ![a, b] = f ![x, y] → a = x ∧ b = y ∨ a = y ∧ b = x)
 
-/--
-Definition of `Function.HasMaxCutProperty` / `Function.HasMaxCutProperty` 的定义
+/-- Function `f` has Max-Cut property at some two non-identical labels. -/
+/-
+**Function.HasMaxCutProperty** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Function.HasMaxCutProperty (f : (Fin 2 -> D) -> C) : Prop
+参数：f : (Fin 2 -> D) -> C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Function.HasMaxCutProperty
-  signature: (f : (Fin 2 -> D) -> C)
-  body: exists a b : D, a != b ∧ f.HasMaxCutPropertyAt a b
-
-中文:
-定义 函数.HasMaxCutProperty
-  签名: (f : (有限集 2 -> D) -> C)
-  定义体: exists a b : D, a != b ∧ f.HasMaxCutPropertyAt a b
-
-Depends on / 依赖: Countable, Finite, Finite.to_countable, HasMaxCutPropertyAt, f.HasMaxCutPropertyAt, to_countable
+--- 原说明 ---
+Function `f` has Max-Cut property at some two non-identical labels.
 -/
-def Function.HasMaxCutProperty (f : (Fin 2 -> D) -> C) : Prop :=
-  exists a b : D, a != b ∧ f.HasMaxCutPropertyAt a b
+def Function.HasMaxCutProperty (f : (Fin 2 → D) → C) : Prop :=
+  ∃ a b : D, a ≠ b ∧ f.HasMaxCutPropertyAt a b
 
-/--
-Definition of `FractionalOperation` / `FractionalOperation` 的定义
+/-- Fractional operation is a finite unordered collection of D^m → D possibly with duplicates. -/
+/-
+**FractionalOperation** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：FractionalOperation (D : Type*) (m : Nat) : Type _
+参数：D : Type*；m : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation FractionalOperation
-  signature: (D : Type*) (m : Nat)
-  body: Multiset ((Fin m -> D) -> D)
-
-中文:
-缩写 FractionalOperation
-  签名: (D : 类型) (m : 自然数)
-  定义体: Multiset ((Fin m -> D) -> D)
-
-Depends on / 依赖: Multiset
+--- 原说明 ---
+Fractional operation is a finite unordered collection of D^m → D possibly with d
+uplicates.
 -/
-abbrev FractionalOperation (D : Type*) (m : Nat) : Type _ :=
-  Multiset ((Fin m -> D) -> D)
+abbrev FractionalOperation (D : Type*) (m : ℕ) : Type _ :=
+  Multiset ((Fin m → D) → D)
 
-variable {m : Nat}
+variable {m : ℕ}
 
 /-- Arity of the "output" of the fractional operation. -/
 @[simp]
-/--
-Definition of `FractionalOperation.size` / `FractionalOperation.size` 的定义
+/-
+**FractionalOperation.size** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：FractionalOperation.size (ω : FractionalOperation D m) : Nat
+参数：ω : FractionalOperation D m。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FractionalOperation.size
-  signature: (ω : FractionalOperation D m)
-  body: ω.card
-
-中文:
-定义 FractionalOperation.size
-  签名: (ω : FractionalOperation D m)
-  定义体: ω.card
-
-Depends on / 依赖: Countable, Prop.countable, countable
+--- 原说明 ---
+Arity of the "output" of the fractional operation.
 -/
-def FractionalOperation.size (ω : FractionalOperation D m) : Nat := ω.card
+def FractionalOperation.size (ω : FractionalOperation D m) : ℕ := ω.card
 
-/--
-Definition of `FractionalOperation.IsValid` / `FractionalOperation.IsValid` 的定义
+/-- Fractional operation is valid iff nonempty. -/
+/-
+**FractionalOperation.IsValid** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：FractionalOperation.IsValid (ω : FractionalOperation D m) : Prop
+参数：ω : FractionalOperation D m。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FractionalOperation.IsValid
-  signature: (ω : FractionalOperation D m)
-  body: ω != ∅
-
-中文:
-定义 FractionalOperation.IsValid
-  签名: (ω : FractionalOperation D m)
-  定义体: ω != ∅
+--- 原说明 ---
+Fractional operation is valid iff nonempty.
 -/
 def FractionalOperation.IsValid (ω : FractionalOperation D m) : Prop :=
-  ω != ∅
+  ω ≠ ∅
 
-/--
-lemma `FractionalOperation.IsValid.contains` / 引理 `FractionalOperation.IsValid.contains`
+/-- Valid fractional operation contains an operation. -/
+/-
+**FractionalOperation.IsValid.contains** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：FractionalOperation.IsValid.contains {ω : FractionalOperation D m} (valid 
+: ω.IsValid) : exists g : (Fin m -> D) -> D, g in ω
+参数：valid : ω.IsValid。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.exists_mem_of_ne_zero`：exists_mem_of_ne_zero {s : Multiset α} :
+ s != 0 -> exists a : α, a in s
 
-English:
-lemma FractionalOperation.IsValid.contains
-  given: {ω : FractionalOperation D m} (valid : ω.IsValid)
-  proof: Multiset.exists_mem_of_ne_zero valid
-
-中文:
-引理 FractionalOperation.IsValid.contains
-  条件: {ω : FractionalOperation D m} (valid : ω.IsValid)
-  证明: Multiset.exists_mem_of_ne_zero valid
-
-Depends on / 依赖: Multiset, Multiset.exists_mem_of_ne_zero, exists_mem_of_ne_zero
+--- 原说明 ---
+Valid fractional operation contains an operation.
 -/
 lemma FractionalOperation.IsValid.contains {ω : FractionalOperation D m} (valid : ω.IsValid) :
-    exists g : (Fin m -> D) -> D, g in ω :=
+    ∃ g : (Fin m → D) → D, g ∈ ω :=
   Multiset.exists_mem_of_ne_zero valid
 
-/--
-Definition of `FractionalOperation.tt` / `FractionalOperation.tt` 的定义
+/-- Fractional operation applied to a transposed table of values. -/
+/-
+**FractionalOperation.tt** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：FractionalOperation.tt {ι : Type*} (ω : FractionalOperation D m) (x : Fin 
+m -> ι -> D) : Multiset (ι -> D)
+参数：ω : FractionalOperation D m；x : Fin m -> ι -> D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FractionalOperation.tt
-  signature: {ι : Type*} (ω : FractionalOperation D m) (x : Fin m -> ι -> D)
-  body: ω.map (fun (g : (Fin m -> D) -> D) (i : ι) => g ((Function.swap x) i))
-
-中文:
-定义 FractionalOperation.tt
-  签名: {ι : 类型} (ω : FractionalOperation D m) (x : 有限集 m -> ι -> D)
-  定义体: ω.map (fun (g : (Fin m -> D) -> D) (i : ι) => g ((Function.swap x) i))
-
-Depends on / 依赖: Countable, Function, Function.swap, Quotient, Quotient.countable, countable
+--- 原说明 ---
+Fractional operation applied to a transposed table of values.
 -/
-def FractionalOperation.tt {ι : Type*} (ω : FractionalOperation D m) (x : Fin m -> ι -> D) :
-    Multiset (ι -> D) :=
-  ω.map (fun (g : (Fin m -> D) -> D) (i : ι) => g ((Function.swap x) i))
+def FractionalOperation.tt {ι : Type*} (ω : FractionalOperation D m) (x : Fin m → ι → D) :
+    Multiset (ι → D) :=
+  ω.map (fun (g : (Fin m → D) → D) (i : ι) => g ((Function.swap x) i))
 
-/--
-Definition of `Function.AdmitsFractional` / `Function.AdmitsFractional` 的定义
+/-- Cost function admits given fractional operation, i.e., `ω` improves `f` in the `≤` sense. -/
+/-
+**Function.AdmitsFractional** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Function.AdmitsFractional {n : Nat} (f : (Fin n -> D) -> C) (ω : Fractiona
+lOperation D m) : Prop
+参数：f : (Fin n -> D) -> C；ω : FractionalOperation D m。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Function.AdmitsFractional
-  signature: {n : Nat} (f : (Fin n -> D) -> C) (ω : FractionalOperation D m)
-  body: forall x : (Fin m -> (Fin n -> D)),
-    m • ((ω.tt x).map f).sum <= ω.size • Finset.univ.sum (fun i => f (x i))
-
-中文:
-定义 函数.AdmitsFractional
-  签名: {n : 自然数} (f : (有限集 n -> D) -> C) (ω : FractionalOperation D m)
-  定义体: forall x : (Fin m -> (Fin n -> D)),
-    m • ((ω.tt x).map f).sum <= ω.size • Finset.univ.sum (fun i => f (x i))
-
-Depends on / 依赖: Countable, Finset, Finset.univ.sum, Quotient, Setoid
+--- 原说明 ---
+Cost function admits given fractional operation, i.e., `ω` improves `f` in the `
+≤` sense.
 -/
-def Function.AdmitsFractional {n : Nat} (f : (Fin n -> D) -> C) (ω : FractionalOperation D m) : Prop :=
-  forall x : (Fin m -> (Fin n -> D)),
-    m • ((ω.tt x).map f).sum <= ω.size • Finset.univ.sum (fun i => f (x i))
+def Function.AdmitsFractional {n : ℕ} (f : (Fin n → D) → C) (ω : FractionalOperation D m) : Prop :=
+  ∀ x : (Fin m → (Fin n → D)),
+    m • ((ω.tt x).map f).sum ≤ ω.size • Finset.univ.sum (fun i => f (x i))
 
-/--
-Definition of `FractionalOperation.IsFractionalPolymorphismFor` / `FractionalOperation.IsFractionalPolymorphismFor` 的定义
+/-- Fractional operation is a fractional polymorphism for given VCSP template. -/
+/-
+**FractionalOperation.IsFractionalPolymorphismFor** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：FractionalOperation.IsFractionalPolymorphismFor (ω : FractionalOperation D
+ m) (Γ : ValuedCSP D C) : Prop
+参数：ω : FractionalOperation D m；Γ : ValuedCSP D C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FractionalOperation.IsFractionalPolymorphismFor
-  body: forall f in Γ, f.snd.AdmitsFractional ω
-
-中文:
-定义 FractionalOperation.IsFractionalPolymorphismFor
-  定义体: forall f in Γ, f.snd.AdmitsFractional ω
-
-Depends on / 依赖: AdmitsFractional, f.snd.AdmitsFractional
+--- 原说明 ---
+Fractional operation is a fractional polymorphism for given VCSP template.
 -/
 def FractionalOperation.IsFractionalPolymorphismFor
     (ω : FractionalOperation D m) (Γ : ValuedCSP D C) : Prop :=
-  forall f in Γ, f.snd.AdmitsFractional ω
+  ∀ f ∈ Γ, f.snd.AdmitsFractional ω
 
-/--
-Definition of `FractionalOperation.IsSymmetric` / `FractionalOperation.IsSymmetric` 的定义
+/-- Fractional operation is symmetric. -/
+/-
+**FractionalOperation.IsSymmetric** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：FractionalOperation.IsSymmetric (ω : FractionalOperation D m) : Prop
+参数：ω : FractionalOperation D m。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FractionalOperation.IsSymmetric
-  signature: (ω : FractionalOperation D m)
-  body: forall x y : (Fin m -> D), List.Perm (List.ofFn x) (List.ofFn y) -> forall g in ω, g x = g y
-
-中文:
-定义 FractionalOperation.IsSymmetric
-  签名: (ω : FractionalOperation D m)
-  定义体: forall x y : (Fin m -> D), List.Perm (List.ofFn x) (List.ofFn y) -> forall g in ω, g x = g y
-
-Depends on / 依赖: List.Perm, List.ofFn
+--- 原说明 ---
+Fractional operation is symmetric.
 -/
 def FractionalOperation.IsSymmetric (ω : FractionalOperation D m) : Prop :=
-  forall x y : (Fin m -> D), List.Perm (List.ofFn x) (List.ofFn y) -> forall g in ω, g x = g y
+  ∀ x y : (Fin m → D), List.Perm (List.ofFn x) (List.ofFn y) → ∀ g ∈ ω, g x = g y
 
-/--
-Definition of `FractionalOperation.IsSymmetricFractionalPolymorphismFor` / `FractionalOperation.IsSymmetricFractionalPolymorphismFor` 的定义
+/-- Fractional operation is a symmetric fractional polymorphism for given VCSP template. -/
+/-
+**FractionalOperation.IsSymmetricFractionalPolymorphismFor** 是 Mathlib 中的一个定义，位于
+命名空间 ``。
+形式化陈述：FractionalOperation.IsSymmetricFractionalPolymorphismFor (ω : FractionalOp
+eration D m) (Γ : ValuedCSP D C) : Prop
+参数：ω : FractionalOperation D m；Γ : ValuedCSP D C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FractionalOperation.IsSymmetricFractionalPolymorphismFor
-  body: ω.IsFractionalPolymorphismFor Γ ∧ ω.IsSymmetric
-
-中文:
-定义 FractionalOperation.IsSymmetricFractionalPolymorphismFor
-  定义体: ω.IsFractionalPolymorphismFor Γ ∧ ω.IsSymmetric
-
-Depends on / 依赖: IsFractionalPolymorphismFor, IsSymmetric
+--- 原说明 ---
+Fractional operation is a symmetric fractional polymorphism for given VCSP templ
+ate.
 -/
 def FractionalOperation.IsSymmetricFractionalPolymorphismFor
     (ω : FractionalOperation D m) (Γ : ValuedCSP D C) : Prop :=
   ω.IsFractionalPolymorphismFor Γ ∧ ω.IsSymmetric
-
-/--
-lemma `Function.HasMaxCutPropertyAt.rows_lt_aux` / 引理 `Function.HasMaxCutPropertyAt.rows_lt_aux`
-
-English:
-lemma Function.HasMaxCutPropertyAt.rows_lt_aux
-  statement: {C : Type*} [PartialOrder C]
-  proof: by
-  rw [FractionalOperation.tt]; rw [Multiset.mem_map] at rin
-  rw [show r = ![r 0]; rw [r 1] by simp [← List.ofFn_inj]]
-  apply lt_of_le_of_ne (mcf.right (r 0) (r 1)).left
-  intro equ
-  have asymm : r 0 != r 1 := by
-    rcases (mcf.right (r 0) (r 1)).right equ with ⟨ha0, hb1⟩ | ⟨ha1, hb0⟩
-    · rw [ha0, hb1] at hab
-      exact hab
-    · rw [ha1, hb0] at hab
-      exact hab.symm
-  apply asymm
-  obtain ⟨o, in_omega, rfl⟩ := rin
-  change o (fun j => ![![a, b], ![b, a]] j 0) = o (fun j => ![![a, b], ![b, a]] j 1)
-  convert! symmega ![a, b] ![b, a] (by simp [List.Perm.swap]) o in_omega using 2 <;>
-    simp [Matrix.const_fin1_eq]
-
-中文:
-引理 函数.HasMaxCutPropertyAt.rows_lt_aux
-  结论: {C : 类型} [偏序 C]
-  证明: by
-  rw [FractionalOperation.tt]; rw [Multiset.mem_map] at rin
-  rw [show r = ![r 0]; rw [r 1] by simp [← List.ofFn_inj]]
-  apply lt_of_le_of_ne (mcf.right (r 0) (r 1)).left
-  intro equ
-  have asymm : r 0 != r 1 := by
-    rcases (mcf.right (r 0) (r 1)).right equ with ⟨ha0, hb1⟩ | ⟨ha1, hb0⟩
-    · rw [ha0, hb1] at hab
-      exact hab
-    · rw [ha1, hb0] at hab
-      exact hab.symm
-  apply asymm
-  obtain ⟨o, in_omega, rfl⟩ := rin
-  change o (fun j => ![![a, b], ![b, a]] j 0) = o (fun j => ![![a, b], ![b, a]] j 1)
-  convert! symmega ![a, b] ![b, a] (by simp [List.Perm.swap]) o in_omega using 2 <;>
-    simp [Matrix.const_fin1_eq]
-
-Depends on / 依赖: FractionalOperation, FractionalOperation.tt, List.ofFn_inj, Multiset, Multiset.mem_map, convert, hab.symm, in_omega, lt_of_le_of_ne, mcf.right, mem_map, ofFn_inj, symmega
+/-
+**Function.HasMaxCutPropertyAt.rows_lt_aux** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Function.HasMaxCutPropertyAt.rows_lt_aux {C : Type*} [PartialOrder C] {f :
+ (Fin 2 -> D) -> C} {a b : D} (mcf : f.HasMaxCutPropertyAt a b) (hab : a != b) {
+ω : FractionalOperation D 2} (symmega : ω.IsSymmetric) {r : Fin 2 -> D} (rin : r
+ in (ω.tt ![![a, b], ![b, a]])) : f ![a, b] < f r
+参数：Fin 2 -> D；mcf : f.HasMaxCutPropertyAt a b；hab : a != b；symmega : ω.IsSymmetr
+ic；rin : r in (ω.tt ![![a, b], ![b, a]])。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `List.ofFn_succ`：∀ {α : Type u_1} {n : ℕ} {f : Fin (n + 1) → α}, List.ofF
+n f = f 0 :: List.ofFn fun i => f i.succ
+· 使用定理 `List.ofFn_zero`：∀ {α : Type u_1} {f : Fin 0 → α}, List.ofFn f = []
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Matrix.cons_val_succ`：cons_val_succ (x : α) (u : Fin m -> α) (i : Fin m)
+ : vecCons x u i.succ = u i
+· 使用定理 `Matrix.cons_val_fin_one`：cons_val_fin_one (x : α) (u : Fin 0 -> α) : for
+all (i : Fin 1), vecCons x u i = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `lt_of_le_of_ne`：lt_of_le_of_ne : a <= b -> a != b -> a < b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `Multiset.mem_map`：mem_map {f : α -> β} {b : β} {s : Multiset α} : b in m
+ap f s ↔ exists a, a in s ∧ f a = b
+· 使用定理 `FractionalOperation.tt.eq_1`：∀ {D : Type u_1} {m : ℕ} {ι : Type u_3} (ω 
+: FractionalOperation D m) (x : Fin m → ι → D),   ω.tt x = Multiset.map (fun g i
+ => g (Function.s…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Matrix.cons_val'`：cons_val' (v : n' -> α) (B : Fin m -> n' -> α) (i j) :
+ vecCons v B i j = vecCons (v j) (fun i => B i j) i
+· 使用引理 `Matrix.const_fin1_eq`：const_fin1_eq (x : α) : (fun _ : Fin 1 => x) = ![x
+]
 -/
 lemma Function.HasMaxCutPropertyAt.rows_lt_aux {C : Type*} [PartialOrder C]
-    {f : (Fin 2 -> D) -> C} {a b : D} (mcf : f.HasMaxCutPropertyAt a b) (hab : a != b)
+    {f : (Fin 2 → D) → C} {a b : D} (mcf : f.HasMaxCutPropertyAt a b) (hab : a ≠ b)
     {ω : FractionalOperation D 2} (symmega : ω.IsSymmetric)
-    {r : Fin 2 -> D} (rin : r in (ω.tt ![![a, b], ![b, a]])) :
+    {r : Fin 2 → D} (rin : r ∈ (ω.tt ![![a, b], ![b, a]])) :
     f ![a, b] < f r := by
-  rw [FractionalOperation.tt]; rw [Multiset.mem_map] at rin
-  rw [show r = ![r 0]; rw [r 1] by simp [← List.ofFn_inj]]
+  rw [FractionalOperation.tt, Multiset.mem_map] at rin
+  rw [show r = ![r 0, r 1] by simp [← List.ofFn_inj]]
   apply lt_of_le_of_ne (mcf.right (r 0) (r 1)).left
   intro equ
-  have asymm : r 0 != r 1 := by
+  have asymm : r 0 ≠ r 1 := by
     rcases (mcf.right (r 0) (r 1)).right equ with ⟨ha0, hb1⟩ | ⟨ha1, hb0⟩
     · rw [ha0, hb1] at hab
       exact hab
@@ -439,82 +385,89 @@ lemma Function.HasMaxCutPropertyAt.rows_lt_aux {C : Type*} [PartialOrder C]
     simp [Matrix.const_fin1_eq]
 
 variable {C : Type*} [AddCommMonoid C] [PartialOrder C] [IsOrderedCancelAddMonoid C]
-
-/--
-lemma `Function.HasMaxCutProperty.forbids_commutativeFractionalPolymorphism` / 引理 `Function.HasMaxCutProperty.forbids_commutativeFractionalPolymorphism`
-
-English:
-lemma Function.HasMaxCutProperty.forbids_commutativeFractionalPolymorphism
-  proof: by
-  intro contr
-  obtain ⟨a, b, hab, mcfab⟩ := mcf
-  specialize contr ![![a, b], ![b, a]]
-  rw [Fin.sum_univ_two']; rw [← mcfab.left]; rw [← two_nsmul] at contr
-  have sharp :
-    2 • ((ω.tt ![![a, b], ![b, a]]).map (fun _ => f ![a, b])).sum <
-    2 • ((ω.tt ![![a, b], ![b, a]]).map f).sum := by
-    have half_sharp :
-      ((ω.tt ![![a, b], ![b, a]]).map (fun _ => f ![a, b])).sum <
-      ((ω.tt ![![a, b], ![b, a]]).map f).sum := by
-      apply Multiset.sum_lt_sum
-      · intro r rin
-        exact le_of_lt (mcfab.rows_lt_aux hab symmega rin)
-      · obtain ⟨g, _⟩ := valid.contains
-        have : (fun i => g ((Function.swap ![![a, b], ![b, a]]) i)) in ω.tt ![![a, b], ![b, a]] := by
-          simp only [FractionalOperation.tt, Multiset.mem_map]
-          use g
-        exact ⟨_, this, mcfab.rows_lt_aux hab symmega this⟩
-    rw [two_nsmul]; rw [two_nsmul]
-    exact add_lt_add half_sharp half_sharp
-  have impos : 2 • (ω.map (fun _ => f ![a, b])).sum < ω.size • 2 • f ![a, b] := by
-    convert! lt_of_lt_of_le sharp contr
-    simp [FractionalOperation.tt, Multiset.map_map]
-  have rhs_swap : ω.size • 2 • f ![a, b] = 2 • ω.size • f ![a, b] := nsmul_left_comm ..
-  have distrib : (ω.map (fun _ => f ![a, b])).sum = ω.size • f ![a, b] := by simp
-  rw [rhs_swap]; rw [distrib] at impos
-  exact ne_of_lt impos rfl
-
-中文:
-引理 函数.HasMaxCutProperty.forbids_commutativeFractionalPolymorphism
-  证明: by
-  intro contr
-  obtain ⟨a, b, hab, mcfab⟩ := mcf
-  specialize contr ![![a, b], ![b, a]]
-  rw [Fin.sum_univ_two']; rw [← mcfab.left]; rw [← two_nsmul] at contr
-  have sharp :
-    2 • ((ω.tt ![![a, b], ![b, a]]).map (fun _ => f ![a, b])).sum <
-    2 • ((ω.tt ![![a, b], ![b, a]]).map f).sum := by
-    have half_sharp :
-      ((ω.tt ![![a, b], ![b, a]]).map (fun _ => f ![a, b])).sum <
-      ((ω.tt ![![a, b], ![b, a]]).map f).sum := by
-      apply Multiset.sum_lt_sum
-      · intro r rin
-        exact le_of_lt (mcfab.rows_lt_aux hab symmega rin)
-      · obtain ⟨g, _⟩ := valid.contains
-        have : (fun i => g ((Function.swap ![![a, b], ![b, a]]) i)) in ω.tt ![![a, b], ![b, a]] := by
-          simp only [FractionalOperation.tt, Multiset.mem_map]
-          use g
-        exact ⟨_, this, mcfab.rows_lt_aux hab symmega this⟩
-    rw [two_nsmul]; rw [two_nsmul]
-    exact add_lt_add half_sharp half_sharp
-  have impos : 2 • (ω.map (fun _ => f ![a, b])).sum < ω.size • 2 • f ![a, b] := by
-    convert! lt_of_lt_of_le sharp contr
-    simp [FractionalOperation.tt, Multiset.map_map]
-  have rhs_swap : ω.size • 2 • f ![a, b] = 2 • ω.size • f ![a, b] := nsmul_left_comm ..
-  have distrib : (ω.map (fun _ => f ![a, b])).sum = ω.size • f ![a, b] := by simp
-  rw [rhs_swap]; rw [distrib] at impos
-  exact ne_of_lt impos rfl
-
-Depends on / 依赖: Fin.sum_univ_two, Multiset, Multiset.sum_lt_sum, half_sharp, le_of_lt, mcfab.left, mcfab.rows_lt_aux, rows_lt_aux, specialize, sum_lt_sum, sum_univ_two, symmega, two_nsmul
+/-
+**Function.HasMaxCutProperty.forbids_commutativeFractionalPolymorphism** 是 Mathl
+ib 中的一个引理，位于命名空间 ``。
+形式化陈述：Function.HasMaxCutProperty.forbids_commutativeFractionalPolymorphism {f : 
+(Fin 2 -> D) -> C} (mcf : f.HasMaxCutProperty) {ω : FractionalOperation D 2} (va
+lid : ω.IsValid) (symmega : ω.IsSymmetric) : ¬ f.AdmitsFractional ω
+参数：Fin 2 -> D；mcf : f.HasMaxCutProperty；valid : ω.IsValid；symmega : ω.IsSymmetri
+c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.sum_lt_sum`：∀ {ι : Type u_1} {α : Type u_2} [inst : AddCommMono
+id α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α]   [AddLeftStrictMono α]
+ {s : Mul…
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedCancelAddMonoid.toIsOrderedAddMonoid`：∀ {α : Type u_2} {inst : 
+AddCommMonoid α} {inst_1 : Preorder α} [self : IsOrderedCancelAddMonoid α],   Is
+OrderedAddMonoid α
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用引理 `Function.HasMaxCutPropertyAt.rows_lt_aux`：Function.HasMaxCutPropertyAt.r
+ows_lt_aux {C : Type*} [PartialOrder C] {f : (Fin 2 -> D) -> C} {a b : D} (mcf :
+ f.HasMaxCutPropertyAt a b) (h…
+· 使用引理 `FractionalOperation.IsValid.contains`：FractionalOperation.IsValid.contai
+ns {ω : FractionalOperation D m} (valid : ω.IsValid) : exists g : (Fin m -> D) -
+> D, g in ω
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `two_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 2 • a = a + a
+· 使用定理 `add_lt_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftStrictMono α] [AddRightStrictMono α] {a b c d : α},   a < b → c < d → a + c < 
+…
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `IsCancelAdd.toIsLeftCancelAdd`：∀ {G : Type u} {inst : Add G} [self : IsC
+ancelAdd G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedCancelAddMonoid.toIsCancelAdd`：∀ {α : Type u_1} [inst : AddComm
+Monoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], IsCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLT`：∀ {α : Type u_1} [inst : Ad
+dCommMonoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], AddLeftRe
+flectLT α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Multiset.map_const'`：∀ {α : Type u_1} {β : Type v} (s : Multiset α) (b :
+ β), Multiset.map (fun x => b) s = Multiset.replicate s.card b
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
+· 使用定理 `Multiset.map_map`：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : m
+ap g (map f s) = map (g ∘ f) s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `lt_of_lt_of_le`：lt_of_lt_of_le (hab : a < b) (hbc : b <= c) : a < c
+（共 36 条，此处仅展示前 30 条）
 -/
 lemma Function.HasMaxCutProperty.forbids_commutativeFractionalPolymorphism
-    {f : (Fin 2 -> D) -> C} (mcf : f.HasMaxCutProperty)
+    {f : (Fin 2 → D) → C} (mcf : f.HasMaxCutProperty)
     {ω : FractionalOperation D 2} (valid : ω.IsValid) (symmega : ω.IsSymmetric) :
     ¬ f.AdmitsFractional ω := by
   intro contr
   obtain ⟨a, b, hab, mcfab⟩ := mcf
   specialize contr ![![a, b], ![b, a]]
-  rw [Fin.sum_univ_two']; rw [← mcfab.left]; rw [← two_nsmul] at contr
+  rw [Fin.sum_univ_two', ← mcfab.left, ← two_nsmul] at contr
   have sharp :
     2 • ((ω.tt ![![a, b], ![b, a]]).map (fun _ => f ![a, b])).sum <
     2 • ((ω.tt ![![a, b], ![b, a]]).map f).sum := by
@@ -525,16 +478,16 @@ lemma Function.HasMaxCutProperty.forbids_commutativeFractionalPolymorphism
       · intro r rin
         exact le_of_lt (mcfab.rows_lt_aux hab symmega rin)
       · obtain ⟨g, _⟩ := valid.contains
-        have : (fun i => g ((Function.swap ![![a, b], ![b, a]]) i)) in ω.tt ![![a, b], ![b, a]] := by
+        have : (fun i => g ((Function.swap ![![a, b], ![b, a]]) i)) ∈ ω.tt ![![a, b], ![b, a]] := by
           simp only [FractionalOperation.tt, Multiset.mem_map]
           use g
         exact ⟨_, this, mcfab.rows_lt_aux hab symmega this⟩
-    rw [two_nsmul]; rw [two_nsmul]
+    rw [two_nsmul, two_nsmul]
     exact add_lt_add half_sharp half_sharp
   have impos : 2 • (ω.map (fun _ => f ![a, b])).sum < ω.size • 2 • f ![a, b] := by
     convert! lt_of_lt_of_le sharp contr
     simp [FractionalOperation.tt, Multiset.map_map]
   have rhs_swap : ω.size • 2 • f ![a, b] = 2 • ω.size • f ![a, b] := nsmul_left_comm ..
   have distrib : (ω.map (fun _ => f ![a, b])).sum = ω.size • f ![a, b] := by simp
-  rw [rhs_swap]; rw [distrib] at impos
+  rw [rhs_swap, distrib] at impos
   exact ne_of_lt impos rfl

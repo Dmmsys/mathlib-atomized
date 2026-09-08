@@ -31,107 +31,68 @@ namespace CategoryTheory
 /-- The Kleisli category on the (type-)monad `m`. Note that the monad is not assumed to be lawful
 yet. -/
 @[nolint unusedArguments]
-/--
-Definition of `KleisliCat` / `KleisliCat` 的定义
+/-
+**CategoryTheory.KleisliCat** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：KleisliCat (_ : Type u -> Type v)
+参数：_ : Type u -> Type v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition KleisliCat
-  signature: (_ : Type u -> Type v)
-  body: Type u
-
-中文:
-定义 KleisliCat
-  签名: (_ : 类型u -> 类型v)
-  定义体: Type u
+--- 原说明 ---
+The Kleisli category on the (type-)monad `m`. Note that the monad is not assumed
+ to be lawful
+yet.
 -/
-def KleisliCat (_ : Type u -> Type v) :=
+def KleisliCat (_ : Type u → Type v) :=
   Type u
 
-/--
-Definition of `KleisliCat.mk` / `KleisliCat.mk` 的定义
+/-- Construct an object of the Kleisli category from a type. -/
+/-
+**CategoryTheory.KleisliCat.mk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Kleisli
+Cat`。
+形式化陈述：(m : Type u → Type u_1) → Type u → CategoryTheory.KleisliCat m
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition KleisliCat.mk
-  signature: (m) (α : Type u)
-  body: α
-
-中文:
-定义 KleisliCat.mk
-  签名: (m) (α : 类型u)
-  定义体: α
+--- 原说明 ---
+Construct an object of the Kleisli category from a type.
 -/
 def KleisliCat.mk (m) (α : Type u) : KleisliCat m :=
   α
-
-/--
-Instance `KleisliCat.categoryStruct` / 实例 `KleisliCat.categoryStruct`
-
-English:
-instance KleisliCat.categoryStruct
-  signature: {m} [Monad.{u, v} m]
-  body: α -> m β
-  id _ x := pure x
-  comp f g := f >=> g
-
-@[ext]
-
-中文:
-实例 KleisliCat.categoryStruct
-  签名: {m} [单子.{u, v} m]
-  定义体: α -> m β
-  id _ x := pure x
-  comp f g := f >=> g
-
-@[ext]
+/-
+**CategoryTheory.KleisliCat.categoryStruct** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.KleisliCat`。
+形式化陈述：{m : Type u → Type v} → [Monad m] → CategoryTheory.CategoryStruct.{max u v
+, u + 1} (CategoryTheory.KleisliCat m)
+参数：CategoryTheory.KleisliCat m。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance KleisliCat.categoryStruct {m} [Monad.{u, v} m] :
     CategoryStruct (KleisliCat m) where
-  Hom α β := α -> m β
+  Hom α β := α → m β
   id _ x := pure x
   comp f g := f >=> g
 
 @[ext]
-/--
-theorem `KleisliCat.ext` / 定理 `KleisliCat.ext`
-
-English:
-theorem KleisliCat.ext
-  statement: {m} [Monad.{u, v} m] (α β : KleisliCat m)
-  proof: funext h
-
-中文:
-定理 KleisliCat.ext
-  结论: {m} [单子.{u, v} m] (α β : KleisliCat m)
-  证明: funext h
+/-
+**CategoryTheory.KleisliCat.ext** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Kleisl
+iCat`。
+形式化陈述：∀ {m : Type u → Type v} [inst : Monad m] (α β : CategoryTheory.KleisliCat 
+m) (f g : α ⟶ β),   (∀ (x : α), f x = g x) → f = g
+参数：α β : CategoryTheory.KleisliCat m；f g : α ⟶ β；∀ (x : α), f x = g x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 theorem KleisliCat.ext {m} [Monad.{u, v} m] (α β : KleisliCat m)
-    (f g : α ⟶ β) (h : forall x, f x = g x) : f = g := funext h
+    (f g : α ⟶ β) (h : ∀ x, f x = g x) : f = g := funext h
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `KleisliCat.category` / 实例 `KleisliCat.category`
-
-English:
-instance KleisliCat.category
-  signature: {m} [Monad.{u, v} m] [LawfulMonad m]
-  body: by
-  refine { id_comp := ?_, comp_id := ?_, assoc := ?_ } <;> intros <;>
-  ext <;>
-  simp +unfoldPartialApp [CategoryStruct.id, CategoryStruct.comp, (· >=> ·)]
-
-@[simp]
-
-中文:
-实例 KleisliCat.category
-  签名: {m} [单子.{u, v} m] [合法单子 m]
-  定义体: by
-  refine { id_comp := ?_, comp_id := ?_, assoc := ?_ } <;> intros <;>
-  ext <;>
-  simp +unfoldPartialApp [CategoryStruct.id, CategoryStruct.comp, (· >=> ·)]
-
-@[simp]
-
-Depends on / 依赖: CategoryStruct, CategoryStruct.comp, CategoryStruct.id, comp_id, id_comp, intros, unfoldPartialApp
+/-
+**CategoryTheory.KleisliCat.category** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.K
+leisliCat`。
+形式化陈述：{m : Type u → Type v} →   [inst : Monad m] → [LawfulMonad m] → CategoryThe
+ory.Category.{max u v, u + 1} (CategoryTheory.KleisliCat m)
+参数：CategoryTheory.KleisliCat m。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance KleisliCat.category {m} [Monad.{u, v} m] [LawfulMonad m] : Category (KleisliCat m) := by
   refine { id_comp := ?_, comp_id := ?_, assoc := ?_ } <;> intros <;>
@@ -139,58 +100,40 @@ instance KleisliCat.category {m} [Monad.{u, v} m] [LawfulMonad m] : Category (Kl
   simp +unfoldPartialApp [CategoryStruct.id, CategoryStruct.comp, (· >=> ·)]
 
 @[simp]
-/--
-theorem `KleisliCat.id_def` / 定理 `KleisliCat.id_def`
-
-English:
-theorem KleisliCat.id_def
-  given: {m} [Monad m] (α : KleisliCat m)
-  statement: 𝟙 α = @pure m _ α
-  proof: rfl
-
-中文:
-定理 KleisliCat.id_def
-  条件: {m} [单子 m] (α : KleisliCat m)
-  结论: 𝟙 α = @pure m _ α
-  证明: rfl
+/-
+**CategoryTheory.KleisliCat.id_def** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Kle
+isliCat`。
+形式化陈述：∀ {m : Type u_1 → Type u_2} [inst : Monad m] (α : CategoryTheory.KleisliCa
+t m),   CategoryTheory.CategoryStruct.id α = pure
+参数：α : CategoryTheory.KleisliCat m。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem KleisliCat.id_def {m} [Monad m] (α : KleisliCat m) : 𝟙 α = @pure m _ α :=
   rfl
-
-/--
-theorem `KleisliCat.comp_def` / 定理 `KleisliCat.comp_def`
-
-English:
-theorem KleisliCat.comp_def
-  given: {m} [Monad m] (α β γ : KleisliCat m) (xs : α ⟶ β) (ys : β ⟶ γ) (a : α)
-  proof: rfl
-
-中文:
-定理 KleisliCat.comp_def
-  条件: {m} [单子 m] (α β γ : KleisliCat m) (xs : α ⟶ β) (ys : β ⟶ γ) (a : α)
-  证明: rfl
+/-
+**CategoryTheory.KleisliCat.comp_def** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.K
+leisliCat`。
+形式化陈述：∀ {m : Type u_1 → Type u_2} [inst : Monad m] (α β γ : CategoryTheory.Kleis
+liCat m) (xs : α ⟶ β) (ys : β ⟶ γ) (a : α),   CategoryTheory.CategoryStruct.comp
+ xs ys a = xs a >>= ys
+参数：α β γ : CategoryTheory.KleisliCat m；xs : α ⟶ β；ys : β ⟶ γ；a : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem KleisliCat.comp_def {m} [Monad m] (α β γ : KleisliCat m) (xs : α ⟶ β) (ys : β ⟶ γ) (a : α) :
     (xs ≫ ys) a = xs a >>= ys :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (KleisliCat id)
-  body: ⟨PUnit⟩
-
-中文:
-实例 :
-  签名: 可居 (KleisliCat id)
-  定义体: ⟨PUnit⟩
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (KleisliCat id) :=
   ⟨PUnit⟩
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {α : Type u} [Inhabited α] : Inhabited (KleisliCat.mk id α) :=
   ⟨show α from default⟩
 
 end CategoryTheory
+

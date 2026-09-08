@@ -32,77 +32,72 @@ namespace CategoryTheory.Limits
 variable {C : Type u₁} [Category.{v₁} C]
 variable {J : Type u₂} [Category.{v₂} J]
 
-/--
-Instance `has_cofiltered_limits_op_of_has_filtered_colimits` / 实例 `has_cofiltered_limits_op_of_has_filtered_colimits`
-
-English:
-instance has_cofiltered_limits_op_of_has_filtered_colimits
-  signature: [HasFilteredColimitsOfSize.{v₂, u₂} C]
-  body: hasLimitsOfShape_op_of_hasColimitsOfShape
-
-中文:
-实例 has_cofiltered_limits_op_of_has_filtered_colimits
-  签名: [有FilteredColimitsOfSize.{v₂, u₂} C]
-  定义体: hasLimitsOfShape_op_of_hasColimitsOfShape
-
-Depends on / 依赖: hasLimitsOfShape_op_of_hasColimitsOfShape
+/-
+**CategoryTheory.Limits.has_cofiltered_limits_op_of_has_filtered_colimits** 是 Ma
+thlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：has_cofiltered_limits_op_of_has_filtered_colimits [HasFilteredColimitsOfSi
+ze.{v₂, u₂} C] : HasCofilteredLimitsOfSize.{v₂, u₂} Cᵒᵖ where HasLimitsOfShape _
+ _ _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasLimitsOfShape_op_of_hasColimitsOfShape`：hasLimi
+tsOfShape_op_of_hasColimitsOfShape [HasColimitsOfShape Jᵒᵖ C] : HasLimitsOfShape
+ J Cᵒᵖ
+· 使用定理 `CategoryTheory.Limits.hasColimitsOfShape_of_has_filtered_colimits`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C]   [CategoryTheory.Limits.Has
+FilteredColimitsOfSize.{w', w, v, u} C] (I : Type w)   …
 -/
 instance has_cofiltered_limits_op_of_has_filtered_colimits [HasFilteredColimitsOfSize.{v₂, u₂} C] :
     HasCofilteredLimitsOfSize.{v₂, u₂} Cᵒᵖ where
   HasLimitsOfShape _ _ _ := hasLimitsOfShape_op_of_hasColimitsOfShape
-
-/--
-theorem `has_cofiltered_limits_of_has_filtered_colimits_op` / 定理 `has_cofiltered_limits_of_has_filtered_colimits_op`
-
-English:
-theorem has_cofiltered_limits_of_has_filtered_colimits_op
-  given: [HasFilteredColimitsOfSize.{v₂, u₂} Cᵒᵖ]
-  proof: { HasLimitsOfShape := fun _ _ _ => hasLimitsOfShape_of_hasColimitsOfShape_op }
-
-中文:
-定理 has_cofiltered_limits_of_has_filtered_colimits_op
-  条件: [有FilteredColimitsOfSize.{v₂, u₂} Cᵒᵖ]
-  证明: { HasLimitsOfShape := fun _ _ _ => hasLimitsOfShape_of_hasColimitsOfShape_op }
-
-Depends on / 依赖: HasLimitsOfShape, hasLimitsOfShape_of_hasColimitsOfShape_op
+/-
+**CategoryTheory.Limits.has_cofiltered_limits_of_has_filtered_colimits_op** 是 Ma
+thlib 中的一个定理，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：has_cofiltered_limits_of_has_filtered_colimits_op [HasFilteredColimitsOfSi
+ze.{v₂, u₂} Cᵒᵖ] : HasCofilteredLimitsOfSize.{v₂, u₂} C
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasLimitsOfShape_of_hasColimitsOfShape_op`：hasLimi
+tsOfShape_of_hasColimitsOfShape_op [HasColimitsOfShape Jᵒᵖ Cᵒᵖ] : HasLimitsOfSha
+pe J C
+· 使用定理 `CategoryTheory.Limits.hasColimitsOfShape_of_has_filtered_colimits`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C]   [CategoryTheory.Limits.Has
+FilteredColimitsOfSize.{w', w, v, u} C] (I : Type w)   …
 -/
 theorem has_cofiltered_limits_of_has_filtered_colimits_op [HasFilteredColimitsOfSize.{v₂, u₂} Cᵒᵖ] :
     HasCofilteredLimitsOfSize.{v₂, u₂} C :=
   { HasLimitsOfShape := fun _ _ _ => hasLimitsOfShape_of_hasColimitsOfShape_op }
-
-/--
-Instance `has_filtered_colimits_op_of_has_cofiltered_limits` / 实例 `has_filtered_colimits_op_of_has_cofiltered_limits`
-
-English:
-instance has_filtered_colimits_op_of_has_cofiltered_limits
-  signature: [HasCofilteredLimitsOfSize.{v₂, u₂} C]
-  body: inferInstance
-
-中文:
-实例 has_filtered_colimits_op_of_has_cofiltered_limits
-  签名: [有余filteredLimitsOfSize.{v₂, u₂} C]
-  定义体: inferInstance
+/-
+**CategoryTheory.Limits.has_filtered_colimits_op_of_has_cofiltered_limits** 是 Ma
+thlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：has_filtered_colimits_op_of_has_cofiltered_limits [HasCofilteredLimitsOfSi
+ze.{v₂, u₂} C] : HasFilteredColimitsOfSize.{v₂, u₂} Cᵒᵖ where HasColimitsOfShape
+ _ _ _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasLimitsOfShape_of_has_cofiltered_limits`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C]   [CategoryTheory.Limits.HasCo
+filteredLimitsOfSize.{w', w, v, u} C] (I : Type w)   …
 -/
 instance has_filtered_colimits_op_of_has_cofiltered_limits [HasCofilteredLimitsOfSize.{v₂, u₂} C] :
     HasFilteredColimitsOfSize.{v₂, u₂} Cᵒᵖ where HasColimitsOfShape _ _ _ := inferInstance
-
-/--
-theorem `has_filtered_colimits_of_has_cofiltered_limits_op` / 定理 `has_filtered_colimits_of_has_cofiltered_limits_op`
-
-English:
-theorem has_filtered_colimits_of_has_cofiltered_limits_op
-  given: [HasCofilteredLimitsOfSize.{v₂, u₂} Cᵒᵖ]
-  proof: { HasColimitsOfShape := fun _ _ _ => hasColimitsOfShape_of_hasLimitsOfShape_op }
-
-中文:
-定理 has_filtered_colimits_of_has_cofiltered_limits_op
-  条件: [有余filteredLimitsOfSize.{v₂, u₂} Cᵒᵖ]
-  证明: { HasColimitsOfShape := fun _ _ _ => hasColimitsOfShape_of_hasLimitsOfShape_op }
-
-Depends on / 依赖: HasColimitsOfShape, hasColimitsOfShape_of_hasLimitsOfShape_op
+/-
+**CategoryTheory.Limits.has_filtered_colimits_of_has_cofiltered_limits_op** 是 Ma
+thlib 中的一个定理，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：has_filtered_colimits_of_has_cofiltered_limits_op [HasCofilteredLimitsOfSi
+ze.{v₂, u₂} Cᵒᵖ] : HasFilteredColimitsOfSize.{v₂, u₂} C
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasColimitsOfShape_of_hasLimitsOfShape_op`：hasColi
+mitsOfShape_of_hasLimitsOfShape_op [HasLimitsOfShape Jᵒᵖ Cᵒᵖ] : HasColimitsOfSha
+pe J C
+· 使用定理 `CategoryTheory.Limits.hasLimitsOfShape_of_has_cofiltered_limits`：∀ {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C]   [CategoryTheory.Limits.HasCo
+filteredLimitsOfSize.{w', w, v, u} C] (I : Type w)   …
 -/
 theorem has_filtered_colimits_of_has_cofiltered_limits_op [HasCofilteredLimitsOfSize.{v₂, u₂} Cᵒᵖ] :
     HasFilteredColimitsOfSize.{v₂, u₂} C :=
   { HasColimitsOfShape := fun _ _ _ => hasColimitsOfShape_of_hasLimitsOfShape_op }
 
 end CategoryTheory.Limits
+

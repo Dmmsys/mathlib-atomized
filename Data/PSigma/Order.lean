@@ -39,7 +39,7 @@ are.
 public section
 
 
-variable {ι : Type*} {α : ι -> Type*}
+variable {ι : Type*} {α : ι → Type*}
 
 namespace PSigma
 
@@ -50,100 +50,41 @@ notation3 "Σₗ' " (...) ", " r:(scoped p => _root_.Lex (PSigma.{_ + 1, _ + 1} 
 
 namespace Lex
 
-/--
-Instance `le` / 实例 `le`
+/-- The lexicographical `≤` on a sigma type. -/
+/-
+**PSigma.Lex.le** 是 Mathlib 中的一个实例，位于命名空间 `PSigma.Lex`。
+形式化陈述：le [LT ι] [forall i, LE (α i)] : LE (Σₗ' i, α i)
+参数：α i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance le
-  signature: [LT ι] [forall i, LE (α i)]
-  body: ⟨Lex (· < ·) fun _ => (· <= ·)⟩
-
-中文:
-实例 le
-  签名: [LT ι] [对任意 i, LE (α i)]
-  定义体: ⟨Lex (· < ·) fun _ => (· <= ·)⟩
+--- 原说明 ---
+The lexicographical `≤` on a sigma type.
 -/
-instance le [LT ι] [forall i, LE (α i)] : LE (Σₗ' i, α i) :=
-  ⟨Lex (· < ·) fun _ => (· <= ·)⟩
+instance le [LT ι] [∀ i, LE (α i)] : LE (Σₗ' i, α i) :=
+  ⟨Lex (· < ·) fun _ => (· ≤ ·)⟩
 
-/--
-Instance `lt` / 实例 `lt`
+/-- The lexicographical `<` on a sigma type. -/
+/-
+**PSigma.Lex.lt** 是 Mathlib 中的一个实例，位于命名空间 `PSigma.Lex`。
+形式化陈述：lt [LT ι] [forall i, LT (α i)] : LT (Σₗ' i, α i)
+参数：α i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance lt
-  signature: [LT ι] [forall i, LT (α i)]
-  body: ⟨Lex (· < ·) fun _ => (· < ·)⟩
-
-中文:
-实例 lt
-  签名: [LT ι] [对任意 i, LT (α i)]
-  定义体: ⟨Lex (· < ·) fun _ => (· < ·)⟩
+--- 原说明 ---
+The lexicographical `<` on a sigma type.
 -/
-instance lt [LT ι] [forall i, LT (α i)] : LT (Σₗ' i, α i) :=
+instance lt [LT ι] [∀ i, LT (α i)] : LT (Σₗ' i, α i) :=
   ⟨Lex (· < ·) fun _ => (· < ·)⟩
-
-/--
-Instance `preorder` / 实例 `preorder`
-
-English:
-instance preorder
-  signature: [Preorder ι] [forall i, Preorder (α i)]
-  body: { Lex.le, Lex.lt with
-    le_refl := fun ⟨_, _⟩ => Lex.right _ le_rfl,
-    le_trans := by
-      rintro ⟨a₁, b₁⟩ ⟨a₂, b₂⟩ ⟨a₃, b₃⟩ ⟨h₁r⟩ ⟨h₂r⟩
-      · left
-        apply lt_trans
-        repeat' assumption
-      · left
-        assumption
-      · left
-        assumption
-      · right
-        apply le_trans
-        repeat' assumption,
-    lt_iff_le_not_ge := by
-      refine fun a b => ⟨fun hab => ⟨hab.mono_right fun i a b => le_of_lt, ?_⟩, ?_⟩
-      · rintro (⟨i, a, hji⟩ | ⟨i, hba⟩) <;> obtain ⟨_, _, hij⟩ | ⟨_, hab⟩ := hab
-        · exact hij.not_gt hji
-        · exact lt_irrefl _ hji
-        · exact lt_irrefl _ hij
-        · exact hab.not_ge hba
-      · rintro ⟨⟨j, b, hij⟩ | ⟨i, hab⟩, hba⟩
-        · exact Lex.left _ _ hij
-        · exact Lex.right _ (hab.lt_of_not_ge fun h => hba <| Lex.right _ h) }
-
-中文:
-实例 preorder
-  签名: [预序 ι] [对任意 i, 预序 (α i)]
-  定义体: { Lex.le, Lex.lt with
-    le_refl := fun ⟨_, _⟩ => Lex.right _ le_rfl,
-    le_trans := by
-      rintro ⟨a₁, b₁⟩ ⟨a₂, b₂⟩ ⟨a₃, b₃⟩ ⟨h₁r⟩ ⟨h₂r⟩
-      · left
-        apply lt_trans
-        repeat' assumption
-      · left
-        assumption
-      · left
-        assumption
-      · right
-        apply le_trans
-        repeat' assumption,
-    lt_iff_le_not_ge := by
-      refine fun a b => ⟨fun hab => ⟨hab.mono_right fun i a b => le_of_lt, ?_⟩, ?_⟩
-      · rintro (⟨i, a, hji⟩ | ⟨i, hba⟩) <;> obtain ⟨_, _, hij⟩ | ⟨_, hab⟩ := hab
-        · exact hij.not_gt hji
-        · exact lt_irrefl _ hji
-        · exact lt_irrefl _ hij
-        · exact hab.not_ge hba
-      · rintro ⟨⟨j, b, hij⟩ | ⟨i, hab⟩, hba⟩
-        · exact Lex.left _ _ hij
-        · exact Lex.right _ (hab.lt_of_not_ge fun h => hba <| Lex.right _ h) }
-
-Depends on / 依赖: Lex.le, Lex.lt, Lex.right, hab.mono_right, hij.not_gt, le_of_lt, le_refl, le_rfl, le_trans, lt_iff_le_not_ge, lt_irrefl, lt_trans, mono_right, not_gt, repeat
+/-
+**PSigma.Lex.preorder** 是 Mathlib 中的一个实例，位于命名空间 `PSigma.Lex`。
+形式化陈述：preorder [Preorder ι] [forall i, Preorder (α i)] : Preorder (Σₗ' i, α i)
+参数：α i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance preorder [Preorder ι] [forall i, Preorder (α i)] : Preorder (Σₗ' i, α i) :=
+instance preorder [Preorder ι] [∀ i, Preorder (α i)] : Preorder (Σₗ' i, α i) :=
   { Lex.le, Lex.lt with
     le_refl := fun ⟨_, _⟩ => Lex.right _ le_rfl,
     le_trans := by
@@ -169,34 +110,19 @@ instance preorder [Preorder ι] [forall i, Preorder (α i)] : Preorder (Σₗ' i
         · exact Lex.left _ _ hij
         · exact Lex.right _ (hab.lt_of_not_ge fun h => hba <| Lex.right _ h) }
 
-/--
-Instance `partialOrder` / 实例 `partialOrder`
+/-- Dictionary / lexicographic `PartialOrder` for dependent pairs. -/
+/-
+**PSigma.Lex.partialOrder** 是 Mathlib 中的一个实例，位于命名空间 `PSigma.Lex`。
+形式化陈述：partialOrder [PartialOrder ι] [forall i, PartialOrder (α i)] : PartialOrde
+r (Σₗ' i, α i)
+参数：α i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance partialOrder
-  signature: [PartialOrder ι] [forall i, PartialOrder (α i)]
-  body: { Lex.preorder with
-    le_antisymm := by
-      rintro ⟨a₁, b₁⟩ ⟨a₂, b₂⟩ (⟨_, _, hlt₁⟩ | ⟨_, hlt₁⟩) (⟨_, _, hlt₂⟩ | ⟨_, hlt₂⟩)
-      · exact (lt_irrefl a₁ <| hlt₁.trans hlt₂).elim
-      · exact (lt_irrefl a₁ hlt₁).elim
-      · exact (lt_irrefl a₁ hlt₂).elim
-      · rw [hlt₁.antisymm hlt₂] }
-
-中文:
-实例 partialOrder
-  签名: [偏序 ι] [对任意 i, 偏序 (α i)]
-  定义体: { Lex.preorder with
-    le_antisymm := by
-      rintro ⟨a₁, b₁⟩ ⟨a₂, b₂⟩ (⟨_, _, hlt₁⟩ | ⟨_, hlt₁⟩) (⟨_, _, hlt₂⟩ | ⟨_, hlt₂⟩)
-      · exact (lt_irrefl a₁ <| hlt₁.trans hlt₂).elim
-      · exact (lt_irrefl a₁ hlt₁).elim
-      · exact (lt_irrefl a₁ hlt₂).elim
-      · rw [hlt₁.antisymm hlt₂] }
-
-Depends on / 依赖: Lex.preorder, antisymm, le_antisymm, lt_irrefl, preorder
+--- 原说明 ---
+Dictionary / lexicographic `PartialOrder` for dependent pairs.
 -/
-instance partialOrder [PartialOrder ι] [forall i, PartialOrder (α i)] : PartialOrder (Σₗ' i, α i) :=
+instance partialOrder [PartialOrder ι] [∀ i, PartialOrder (α i)] : PartialOrder (Σₗ' i, α i) :=
   { Lex.preorder with
     le_antisymm := by
       rintro ⟨a₁, b₁⟩ ⟨a₂, b₂⟩ (⟨_, _, hlt₁⟩ | ⟨_, hlt₁⟩) (⟨_, _, hlt₂⟩ | ⟨_, hlt₂⟩)
@@ -205,42 +131,19 @@ instance partialOrder [PartialOrder ι] [forall i, PartialOrder (α i)] : Partia
       · exact (lt_irrefl a₁ hlt₂).elim
       · rw [hlt₁.antisymm hlt₂] }
 
-/--
-Instance `linearOrder` / 实例 `linearOrder`
+/-- Dictionary / lexicographic `LinearOrder` for pairs. -/
+/-
+**PSigma.Lex.linearOrder** 是 Mathlib 中的一个实例，位于命名空间 `PSigma.Lex`。
+形式化陈述：linearOrder [LinearOrder ι] [forall i, LinearOrder (α i)] : LinearOrder (Σ
+ₗ' i, α i)
+参数：α i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance linearOrder
-  signature: [LinearOrder ι] [forall i, LinearOrder (α i)]
-  body: { Lex.partialOrder with
-    le_total := by
-      rintro ⟨i, a⟩ ⟨j, b⟩
-      obtain hij | rfl | hji := lt_trichotomy i j
-      · exact Or.inl (Lex.left _ _ hij)
-      · obtain hab | hba := le_total a b
-        · exact Or.inl (Lex.right _ hab)
-        · exact Or.inr (Lex.right _ hba)
-      · exact Or.inr (Lex.left _ _ hji),
-    toDecidableEq := PSigma.decidableEq, toDecidableLE := Lex.decidable _ _,
-    toDecidableLT := Lex.decidable _ _ }
-
-中文:
-实例 linearOrder
-  签名: [线性序 ι] [对任意 i, 线性序 (α i)]
-  定义体: { Lex.partialOrder with
-    le_total := by
-      rintro ⟨i, a⟩ ⟨j, b⟩
-      obtain hij | rfl | hji := lt_trichotomy i j
-      · exact Or.inl (Lex.left _ _ hij)
-      · obtain hab | hba := le_total a b
-        · exact Or.inl (Lex.right _ hab)
-        · exact Or.inr (Lex.right _ hba)
-      · exact Or.inr (Lex.left _ _ hji),
-    toDecidableEq := PSigma.decidableEq, toDecidableLE := Lex.decidable _ _,
-    toDecidableLT := Lex.decidable _ _ }
-
-Depends on / 依赖: Lex.decidable, Lex.left, Lex.partialOrder, Lex.right, Or.inl, Or.inr, PSigma, PSigma.decidableEq, decidable, decidableEq, le_total, lt_trichotomy, partialOrder, toDecidableEq, toDecidableLE, toDecidableLT
+--- 原说明 ---
+Dictionary / lexicographic `LinearOrder` for pairs.
 -/
-instance linearOrder [LinearOrder ι] [forall i, LinearOrder (α i)] : LinearOrder (Σₗ' i, α i) :=
+instance linearOrder [LinearOrder ι] [∀ i, LinearOrder (α i)] : LinearOrder (Σₗ' i, α i) :=
   { Lex.partialOrder with
     le_total := by
       rintro ⟨i, a⟩ ⟨j, b⟩
@@ -253,28 +156,19 @@ instance linearOrder [LinearOrder ι] [forall i, LinearOrder (α i)] : LinearOrd
     toDecidableEq := PSigma.decidableEq, toDecidableLE := Lex.decidable _ _,
     toDecidableLT := Lex.decidable _ _ }
 
-/--
-Instance `orderBot` / 实例 `orderBot`
+/-- The lexicographical linear order on a sigma type. -/
+/-
+**PSigma.Lex.orderBot** 是 Mathlib 中的一个实例，位于命名空间 `PSigma.Lex`。
+形式化陈述：orderBot [PartialOrder ι] [OrderBot ι] [forall i, Preorder (α i)] [OrderBo
+t (α ⊥)] : OrderBot (Σₗ' i, α i) where bot
+参数：α i；α ⊥。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance orderBot
-  signature: [PartialOrder ι] [OrderBot ι] [forall i, Preorder (α i)] [OrderBot (α ⊥)]
-  body: ⟨⊥, ⊥⟩
-  bot_le := fun ⟨a, b⟩ => by
-    obtain rfl | ha := eq_bot_or_bot_lt a
-    · exact Lex.right _ bot_le
-    · exact Lex.left _ _ ha
-
-中文:
-实例 orderBot
-  签名: [偏序 ι] [有底序 ι] [对任意 i, 预序 (α i)] [有底序 (α ⊥)]
-  定义体: ⟨⊥, ⊥⟩
-  bot_le := fun ⟨a, b⟩ => by
-    obtain rfl | ha := eq_bot_or_bot_lt a
-    · exact Lex.right _ bot_le
-    · exact Lex.left _ _ ha
+--- 原说明 ---
+The lexicographical linear order on a sigma type.
 -/
-instance orderBot [PartialOrder ι] [OrderBot ι] [forall i, Preorder (α i)] [OrderBot (α ⊥)] :
+instance orderBot [PartialOrder ι] [OrderBot ι] [∀ i, Preorder (α i)] [OrderBot (α ⊥)] :
     OrderBot (Σₗ' i, α i) where
   bot := ⟨⊥, ⊥⟩
   bot_le := fun ⟨a, b⟩ => by
@@ -282,28 +176,19 @@ instance orderBot [PartialOrder ι] [OrderBot ι] [forall i, Preorder (α i)] [O
     · exact Lex.right _ bot_le
     · exact Lex.left _ _ ha
 
-/--
-Instance `orderTop` / 实例 `orderTop`
+/-- The lexicographical linear order on a sigma type. -/
+/-
+**PSigma.Lex.orderTop** 是 Mathlib 中的一个实例，位于命名空间 `PSigma.Lex`。
+形式化陈述：orderTop [PartialOrder ι] [OrderTop ι] [forall i, Preorder (α i)] [OrderTo
+p (α ⊤)] : OrderTop (Σₗ' i, α i) where top
+参数：α i；α ⊤。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance orderTop
-  signature: [PartialOrder ι] [OrderTop ι] [forall i, Preorder (α i)] [OrderTop (α ⊤)]
-  body: ⟨⊤, ⊤⟩
-  le_top := fun ⟨a, b⟩ => by
-    obtain rfl | ha := eq_top_or_lt_top a
-    · exact Lex.right _ le_top
-    · exact Lex.left _ _ ha
-
-中文:
-实例 orderTop
-  签名: [偏序 ι] [有顶序 ι] [对任意 i, 预序 (α i)] [有顶序 (α ⊤)]
-  定义体: ⟨⊤, ⊤⟩
-  le_top := fun ⟨a, b⟩ => by
-    obtain rfl | ha := eq_top_or_lt_top a
-    · exact Lex.right _ le_top
-    · exact Lex.left _ _ ha
+--- 原说明 ---
+The lexicographical linear order on a sigma type.
 -/
-instance orderTop [PartialOrder ι] [OrderTop ι] [forall i, Preorder (α i)] [OrderTop (α ⊤)] :
+instance orderTop [PartialOrder ι] [OrderTop ι] [∀ i, Preorder (α i)] [OrderTop (α ⊤)] :
     OrderTop (Σₗ' i, α i) where
   top := ⟨⊤, ⊤⟩
   le_top := fun ⟨a, b⟩ => by
@@ -311,54 +196,36 @@ instance orderTop [PartialOrder ι] [OrderTop ι] [forall i, Preorder (α i)] [O
     · exact Lex.right _ le_top
     · exact Lex.left _ _ ha
 
-/--
-Instance `boundedOrder` / 实例 `boundedOrder`
+/-- The lexicographical linear order on a sigma type. -/
+/-
+**PSigma.Lex.boundedOrder** 是 Mathlib 中的一个实例，位于命名空间 `PSigma.Lex`。
+形式化陈述：boundedOrder [PartialOrder ι] [BoundedOrder ι] [forall i, Preorder (α i)] 
+[OrderBot (α ⊥)] [OrderTop (α ⊤)] : BoundedOrder (Σₗ' i, α i)
+参数：α i；α ⊥；α ⊤。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance boundedOrder
-  signature: [PartialOrder ι] [BoundedOrder ι] [forall i, Preorder (α i)] [OrderBot (α ⊥)]
-  body: { Lex.orderBot, Lex.orderTop with }
-
-中文:
-实例 boundedOrder
-  签名: [偏序 ι] [有界序 ι] [对任意 i, 预序 (α i)] [有底序 (α ⊥)]
-  定义体: { Lex.orderBot, Lex.orderTop with }
-
-Depends on / 依赖: Lex.orderBot, Lex.orderTop, orderBot, orderTop
+--- 原说明 ---
+The lexicographical linear order on a sigma type.
 -/
-instance boundedOrder [PartialOrder ι] [BoundedOrder ι] [forall i, Preorder (α i)] [OrderBot (α ⊥)]
+instance boundedOrder [PartialOrder ι] [BoundedOrder ι] [∀ i, Preorder (α i)] [OrderBot (α ⊥)]
     [OrderTop (α ⊤)] : BoundedOrder (Σₗ' i, α i) :=
   { Lex.orderBot, Lex.orderTop with }
-
-/--
-Instance `denselyOrdered` / 实例 `denselyOrdered`
-
-English:
-instance denselyOrdered
-  signature: [Preorder ι] [DenselyOrdered ι] [forall i, Nonempty (α i)] [forall i, Preorder (α i)]
-  body: ⟨by
-    rintro ⟨i, a⟩ ⟨j, b⟩ (⟨_, _, h⟩ | @⟨_, _, b, h⟩)
-    · obtain ⟨k, hi, hj⟩ := exists_between h
-      obtain ⟨c⟩ : Nonempty (α k) := inferInstance
-      exact ⟨⟨k, c⟩, left _ _ hi, left _ _ hj⟩
-    · obtain ⟨c, ha, hb⟩ := exists_between h
-      exact ⟨⟨i, c⟩, right _ ha, right _ hb⟩⟩
-
-中文:
-实例 denselyOrdered
-  签名: [预序 ι] [稠密序 ι] [对任意 i, 非空 (α i)] [对任意 i, 预序 (α i)]
-  定义体: ⟨by
-    rintro ⟨i, a⟩ ⟨j, b⟩ (⟨_, _, h⟩ | @⟨_, _, b, h⟩)
-    · obtain ⟨k, hi, hj⟩ := exists_between h
-      obtain ⟨c⟩ : Nonempty (α k) := inferInstance
-      exact ⟨⟨k, c⟩, left _ _ hi, left _ _ hj⟩
-    · obtain ⟨c, ha, hb⟩ := exists_between h
-      exact ⟨⟨i, c⟩, right _ ha, right _ hb⟩⟩
-
-Depends on / 依赖: Nonempty, exists_between
+/-
+**PSigma.Lex.denselyOrdered** 是 Mathlib 中的一个实例，位于命名空间 `PSigma.Lex`。
+形式化陈述：denselyOrdered [Preorder ι] [DenselyOrdered ι] [forall i, Nonempty (α i)] 
+[forall i, Preorder (α i)] [forall i, DenselyOrdered (α i)] : DenselyOrdered (Σₗ
+' i, α i)
+参数：α i；α i；α i。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_between`：exists_between [LT α] [DenselyOrdered α] {a₁ a₂ : α} : a
+₁ < a₂ -> exists a, a₁ < a ∧ a < a₂
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-instance denselyOrdered [Preorder ι] [DenselyOrdered ι] [forall i, Nonempty (α i)] [forall i, Preorder (α i)]
-    [forall i, DenselyOrdered (α i)] : DenselyOrdered (Σₗ' i, α i) :=
+instance denselyOrdered [Preorder ι] [DenselyOrdered ι] [∀ i, Nonempty (α i)] [∀ i, Preorder (α i)]
+    [∀ i, DenselyOrdered (α i)] : DenselyOrdered (Σₗ' i, α i) :=
   ⟨by
     rintro ⟨i, a⟩ ⟨j, b⟩ (⟨_, _, h⟩ | @⟨_, _, b, h⟩)
     · obtain ⟨k, hi, hj⟩ := exists_between h
@@ -366,187 +233,115 @@ instance denselyOrdered [Preorder ι] [DenselyOrdered ι] [forall i, Nonempty (�
       exact ⟨⟨k, c⟩, left _ _ hi, left _ _ hj⟩
     · obtain ⟨c, ha, hb⟩ := exists_between h
       exact ⟨⟨i, c⟩, right _ ha, right _ hb⟩⟩
-
-/--
-Instance `denselyOrdered_of_noMaxOrder` / 实例 `denselyOrdered_of_noMaxOrder`
-
-English:
-instance denselyOrdered_of_noMaxOrder
-  signature: [Preorder ι] [forall i, Preorder (α i)]
-  body: ⟨by
-    rintro ⟨i, a⟩ ⟨j, b⟩ (⟨_, _, h⟩ | @⟨_, _, b, h⟩)
-    · obtain ⟨c, ha⟩ := exists_gt a
-      exact ⟨⟨i, c⟩, right _ ha, left _ _ h⟩
-    · obtain ⟨c, ha, hb⟩ := exists_between h
-      exact ⟨⟨i, c⟩, right _ ha, right _ hb⟩⟩
-
-中文:
-实例 denselyOrdered_of_noMaxOrder
-  签名: [预序 ι] [对任意 i, 预序 (α i)]
-  定义体: ⟨by
-    rintro ⟨i, a⟩ ⟨j, b⟩ (⟨_, _, h⟩ | @⟨_, _, b, h⟩)
-    · obtain ⟨c, ha⟩ := exists_gt a
-      exact ⟨⟨i, c⟩, right _ ha, left _ _ h⟩
-    · obtain ⟨c, ha, hb⟩ := exists_between h
-      exact ⟨⟨i, c⟩, right _ ha, right _ hb⟩⟩
-
-Depends on / 依赖: exists_between, exists_gt
+/-
+**PSigma.Lex.denselyOrdered_of_noMaxOrder** 是 Mathlib 中的一个实例，位于命名空间 `PSigma.Lex`
+。
+形式化陈述：denselyOrdered_of_noMaxOrder [Preorder ι] [forall i, Preorder (α i)] [fora
+ll i, DenselyOrdered (α i)] [forall i, NoMaxOrder (α i)] : DenselyOrdered (Σₗ' i
+, α i)
+参数：α i；α i；α i。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `NoMaxOrder.exists_gt`：∀ {α : Type u_3} {inst : LT α} [self : NoMaxOrder 
+α] (a : α), ∃ b, a < b
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `exists_between`：exists_between [LT α] [DenselyOrdered α] {a₁ a₂ : α} : a
+₁ < a₂ -> exists a, a₁ < a ∧ a < a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-instance denselyOrdered_of_noMaxOrder [Preorder ι] [forall i, Preorder (α i)]
-    [forall i, DenselyOrdered (α i)] [forall i, NoMaxOrder (α i)] : DenselyOrdered (Σₗ' i, α i) :=
+instance denselyOrdered_of_noMaxOrder [Preorder ι] [∀ i, Preorder (α i)]
+    [∀ i, DenselyOrdered (α i)] [∀ i, NoMaxOrder (α i)] : DenselyOrdered (Σₗ' i, α i) :=
   ⟨by
     rintro ⟨i, a⟩ ⟨j, b⟩ (⟨_, _, h⟩ | @⟨_, _, b, h⟩)
     · obtain ⟨c, ha⟩ := exists_gt a
       exact ⟨⟨i, c⟩, right _ ha, left _ _ h⟩
     · obtain ⟨c, ha, hb⟩ := exists_between h
       exact ⟨⟨i, c⟩, right _ ha, right _ hb⟩⟩
-
-/--
-Instance `denselyOrdered_of_noMinOrder` / 实例 `denselyOrdered_of_noMinOrder`
-
-English:
-instance denselyOrdered_of_noMinOrder
-  signature: [Preorder ι] [forall i, Preorder (α i)]
-  body: ⟨by
-    rintro ⟨i, a⟩ ⟨j, b⟩ (⟨_, _, h⟩ | @⟨_, _, b, h⟩)
-    · obtain ⟨c, hb⟩ := exists_lt b
-      exact ⟨⟨j, c⟩, left _ _ h, right _ hb⟩
-    · obtain ⟨c, ha, hb⟩ := exists_between h
-      exact ⟨⟨i, c⟩, right _ ha, right _ hb⟩⟩
-
-中文:
-实例 denselyOrdered_of_noMinOrder
-  签名: [预序 ι] [对任意 i, 预序 (α i)]
-  定义体: ⟨by
-    rintro ⟨i, a⟩ ⟨j, b⟩ (⟨_, _, h⟩ | @⟨_, _, b, h⟩)
-    · obtain ⟨c, hb⟩ := exists_lt b
-      exact ⟨⟨j, c⟩, left _ _ h, right _ hb⟩
-    · obtain ⟨c, ha, hb⟩ := exists_between h
-      exact ⟨⟨i, c⟩, right _ ha, right _ hb⟩⟩
-
-Depends on / 依赖: exists_between, exists_lt
+/-
+**PSigma.Lex.denselyOrdered_of_noMinOrder** 是 Mathlib 中的一个实例，位于命名空间 `PSigma.Lex`
+。
+形式化陈述：denselyOrdered_of_noMinOrder [Preorder ι] [forall i, Preorder (α i)] [fora
+ll i, DenselyOrdered (α i)] [forall i, NoMinOrder (α i)] : DenselyOrdered (Σₗ' i
+, α i)
+参数：α i；α i；α i。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `NoMinOrder.exists_lt`：∀ {α : Type u_3} {inst : LT α} [self : NoMinOrder 
+α] (a : α), ∃ b, b < a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `exists_between`：exists_between [LT α] [DenselyOrdered α] {a₁ a₂ : α} : a
+₁ < a₂ -> exists a, a₁ < a ∧ a < a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-instance denselyOrdered_of_noMinOrder [Preorder ι] [forall i, Preorder (α i)]
-    [forall i, DenselyOrdered (α i)] [forall i, NoMinOrder (α i)] : DenselyOrdered (Σₗ' i, α i) :=
+instance denselyOrdered_of_noMinOrder [Preorder ι] [∀ i, Preorder (α i)]
+    [∀ i, DenselyOrdered (α i)] [∀ i, NoMinOrder (α i)] : DenselyOrdered (Σₗ' i, α i) :=
   ⟨by
     rintro ⟨i, a⟩ ⟨j, b⟩ (⟨_, _, h⟩ | @⟨_, _, b, h⟩)
     · obtain ⟨c, hb⟩ := exists_lt b
       exact ⟨⟨j, c⟩, left _ _ h, right _ hb⟩
     · obtain ⟨c, ha, hb⟩ := exists_between h
       exact ⟨⟨i, c⟩, right _ ha, right _ hb⟩⟩
-
-/--
-Instance `noMaxOrder_of_nonempty` / 实例 `noMaxOrder_of_nonempty`
-
-English:
-instance noMaxOrder_of_nonempty
-  signature: [Preorder ι] [forall i, Preorder (α i)] [NoMaxOrder ι]
-  body: ⟨by
-    rintro ⟨i, a⟩
-    obtain ⟨j, h⟩ := exists_gt i
-    obtain ⟨b⟩ : Nonempty (α j) := inferInstance
-    exact ⟨⟨j, b⟩, left _ _ h⟩⟩
-
-中文:
-实例 noMaxOrder_of_nonempty
-  签名: [预序 ι] [对任意 i, 预序 (α i)] [NoMax序 ι]
-  定义体: ⟨by
-    rintro ⟨i, a⟩
-    obtain ⟨j, h⟩ := exists_gt i
-    obtain ⟨b⟩ : Nonempty (α j) := inferInstance
-    exact ⟨⟨j, b⟩, left _ _ h⟩⟩
-
-Depends on / 依赖: Nonempty, exists_gt
+/-
+**PSigma.Lex.noMaxOrder_of_nonempty** 是 Mathlib 中的一个实例，位于命名空间 `PSigma.Lex`。
+形式化陈述：noMaxOrder_of_nonempty [Preorder ι] [forall i, Preorder (α i)] [NoMaxOrder
+ ι] [forall i, Nonempty (α i)] : NoMaxOrder (Σₗ' i, α i)
+参数：α i；α i。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `NoMaxOrder.exists_gt`：∀ {α : Type u_3} {inst : LT α} [self : NoMaxOrder 
+α] (a : α), ∃ b, a < b
 -/
-instance noMaxOrder_of_nonempty [Preorder ι] [forall i, Preorder (α i)] [NoMaxOrder ι]
-    [forall i, Nonempty (α i)] : NoMaxOrder (Σₗ' i, α i) :=
+instance noMaxOrder_of_nonempty [Preorder ι] [∀ i, Preorder (α i)] [NoMaxOrder ι]
+    [∀ i, Nonempty (α i)] : NoMaxOrder (Σₗ' i, α i) :=
   ⟨by
     rintro ⟨i, a⟩
     obtain ⟨j, h⟩ := exists_gt i
     obtain ⟨b⟩ : Nonempty (α j) := inferInstance
     exact ⟨⟨j, b⟩, left _ _ h⟩⟩
-
-/--
-Instance `noMinOrder_of_nonempty` / 实例 `noMinOrder_of_nonempty`
-
-English:
-instance noMinOrder_of_nonempty
-  signature: [Preorder ι] [forall i, Preorder (α i)] [NoMinOrder ι]
-  body: ⟨by
-    rintro ⟨i, a⟩
-    obtain ⟨j, h⟩ := exists_lt i
-    obtain ⟨b⟩ : Nonempty (α j) := inferInstance
-    exact ⟨⟨j, b⟩, left _ _ h⟩⟩
-
-中文:
-实例 noMinOrder_of_nonempty
-  签名: [预序 ι] [对任意 i, 预序 (α i)] [NoMin序 ι]
-  定义体: ⟨by
-    rintro ⟨i, a⟩
-    obtain ⟨j, h⟩ := exists_lt i
-    obtain ⟨b⟩ : Nonempty (α j) := inferInstance
-    exact ⟨⟨j, b⟩, left _ _ h⟩⟩
-
-Depends on / 依赖: Nonempty, exists_lt
+/-
+**PSigma.Lex.noMinOrder_of_nonempty** 是 Mathlib 中的一个实例，位于命名空间 `PSigma.Lex`。
+形式化陈述：noMinOrder_of_nonempty [Preorder ι] [forall i, Preorder (α i)] [NoMinOrder
+ ι] [forall i, Nonempty (α i)] : NoMinOrder (Σₗ' i, α i)
+参数：α i；α i。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `NoMinOrder.exists_lt`：∀ {α : Type u_3} {inst : LT α} [self : NoMinOrder 
+α] (a : α), ∃ b, b < a
 -/
-instance noMinOrder_of_nonempty [Preorder ι] [forall i, Preorder (α i)] [NoMinOrder ι]
-    [forall i, Nonempty (α i)] : NoMinOrder (Σₗ' i, α i) :=
+instance noMinOrder_of_nonempty [Preorder ι] [∀ i, Preorder (α i)] [NoMinOrder ι]
+    [∀ i, Nonempty (α i)] : NoMinOrder (Σₗ' i, α i) :=
   ⟨by
     rintro ⟨i, a⟩
     obtain ⟨j, h⟩ := exists_lt i
     obtain ⟨b⟩ : Nonempty (α j) := inferInstance
     exact ⟨⟨j, b⟩, left _ _ h⟩⟩
-
-/--
-Instance `noMaxOrder` / 实例 `noMaxOrder`
-
-English:
-instance noMaxOrder
-  signature: [Preorder ι] [forall i, Preorder (α i)] [forall i, NoMaxOrder (α i)]
-  body: ⟨by
-    rintro ⟨i, a⟩
-    obtain ⟨b, h⟩ := exists_gt a
-    exact ⟨⟨i, b⟩, right _ h⟩⟩
-
-中文:
-实例 noMaxOrder
-  签名: [预序 ι] [对任意 i, 预序 (α i)] [对任意 i, NoMax序 (α i)]
-  定义体: ⟨by
-    rintro ⟨i, a⟩
-    obtain ⟨b, h⟩ := exists_gt a
-    exact ⟨⟨i, b⟩, right _ h⟩⟩
-
-Depends on / 依赖: exists_gt
+/-
+**PSigma.Lex.noMaxOrder** 是 Mathlib 中的一个实例，位于命名空间 `PSigma.Lex`。
+形式化陈述：noMaxOrder [Preorder ι] [forall i, Preorder (α i)] [forall i, NoMaxOrder (
+α i)] : NoMaxOrder (Σₗ' i, α i)
+参数：α i；α i。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `NoMaxOrder.exists_gt`：∀ {α : Type u_3} {inst : LT α} [self : NoMaxOrder 
+α] (a : α), ∃ b, a < b
 -/
-instance noMaxOrder [Preorder ι] [forall i, Preorder (α i)] [forall i, NoMaxOrder (α i)] :
+instance noMaxOrder [Preorder ι] [∀ i, Preorder (α i)] [∀ i, NoMaxOrder (α i)] :
     NoMaxOrder (Σₗ' i, α i) :=
   ⟨by
     rintro ⟨i, a⟩
     obtain ⟨b, h⟩ := exists_gt a
     exact ⟨⟨i, b⟩, right _ h⟩⟩
-
-/--
-Instance `noMinOrder` / 实例 `noMinOrder`
-
-English:
-instance noMinOrder
-  signature: [Preorder ι] [forall i, Preorder (α i)] [forall i, NoMinOrder (α i)]
-  body: ⟨by
-    rintro ⟨i, a⟩
-    obtain ⟨b, h⟩ := exists_lt a
-    exact ⟨⟨i, b⟩, right _ h⟩⟩
-
-中文:
-实例 noMinOrder
-  签名: [预序 ι] [对任意 i, 预序 (α i)] [对任意 i, NoMin序 (α i)]
-  定义体: ⟨by
-    rintro ⟨i, a⟩
-    obtain ⟨b, h⟩ := exists_lt a
-    exact ⟨⟨i, b⟩, right _ h⟩⟩
-
-Depends on / 依赖: exists_lt
+/-
+**PSigma.Lex.noMinOrder** 是 Mathlib 中的一个实例，位于命名空间 `PSigma.Lex`。
+形式化陈述：noMinOrder [Preorder ι] [forall i, Preorder (α i)] [forall i, NoMinOrder (
+α i)] : NoMinOrder (Σₗ' i, α i)
+参数：α i；α i。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `NoMinOrder.exists_lt`：∀ {α : Type u_3} {inst : LT α} [self : NoMinOrder 
+α] (a : α), ∃ b, b < a
 -/
-instance noMinOrder [Preorder ι] [forall i, Preorder (α i)] [forall i, NoMinOrder (α i)] :
+instance noMinOrder [Preorder ι] [∀ i, Preorder (α i)] [∀ i, NoMinOrder (α i)] :
     NoMinOrder (Σₗ' i, α i) :=
   ⟨by
     rintro ⟨i, a⟩
@@ -556,3 +351,4 @@ instance noMinOrder [Preorder ι] [forall i, Preorder (α i)] [forall i, NoMinOr
 end Lex
 
 end PSigma
+

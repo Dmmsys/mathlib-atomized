@@ -26,21 +26,17 @@ namespace Rat
 
 open Denumerable
 
-/--
-Instance `instDenumerable` / 实例 `instDenumerable`
+/-- **Denumerability of the Rational Numbers** -/
+/-
+**Rat.instDenumerable** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+形式化陈述：instDenumerable : Denumerable Rat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instDenumerable
-  signature: : Denumerable Rat
-  body: ofEncodableOfInfinite Rat
-
-中文:
-实例 instDenumerable
-  签名: : 可枚举 有理数
-  定义体: ofEncodableOfInfinite Rat
-
-Depends on / 依赖: ofEncodableOfInfinite
+--- 原说明 ---
+**Denumerability of the Rational Numbers**
 -/
-instance instDenumerable : Denumerable Rat := ofEncodableOfInfinite Rat
+instance instDenumerable : Denumerable ℚ := ofEncodableOfInfinite ℚ
 
 end Rat
+

@@ -29,24 +29,15 @@ variable (X : TopCat.{u})
 of paths from `x` to `y`, defined using a morphism `I ⟶ X`.
 Set `TopCat.pathEquiv` for the relation with `_root_.Path x y`. -/
 @[ext]
-/--
-Definition of `Path` / `Path` 的定义
+/-
+**TopCat.Path** 是 Mathlib 中的一个归纳类型，位于命名空间 `TopCat`。
+形式化陈述：(X : TopCat) → ↑X → ↑X → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Path
-  parameters: (x y : X)
-  axioms and operations (3):
-    - hom : I ⟶ X
-    - hom₀ : hom 0 = x  [default: by cat_disch]
-    - hom₁ : hom 1 = y  [default: by cat_disch]
-
-中文:
-结构 道路
-  参数: (x y : X)
-  公理与运算 (3 个):
-    - hom : I ⟶ X
-    - hom₀ : hom 0 = x  [默认: by cat_disch]
-    - hom₁ : hom 1 = y  [默认: by cat_disch]
+--- 原说明 ---
+Given two points `x` and `y` of `X : TopCat`, this is the type
+of paths from `x` to `y`, defined using a morphism `I ⟶ X`.
+Set `TopCat.pathEquiv` for the relation with `_root_.Path x y`.
 -/
 protected structure Path (x y : X) where
   /-- a morphism from the unit interval -/
@@ -59,32 +50,18 @@ attribute [simp] Path.hom₀ Path.hom₁
 variable {X} in
 /-- The bijection between `TopCat.Path X x y` and `_root_.Path x y`. -/
 @[simps!]
-/--
-Definition of `pathEquiv` / `pathEquiv` 的定义
+/-
+**TopCat.pathEquiv** 是 Mathlib 中的一个定义，位于命名空间 `TopCat`。
+形式化陈述：pathEquiv {x y : X} : X.Path x y ≃ _root_.Path x y where toFun p
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `TopCat.Path.hom₀`：∀ {X : TopCat} {x y : ↑X} (self : X.Path x y), (Catego
+ryTheory.ConcreteCategory.hom self.hom) 0 = x
+· 使用定理 `TopCat.Path.hom₁`：∀ {X : TopCat} {x y : ↑X} (self : X.Path x y), (Catego
+ryTheory.ConcreteCategory.hom self.hom) 1 = y
 
-English:
-definition pathEquiv
-  signature: {x y : X}
-  body: { toContinuousMap := p.hom.hom.comp TopCat.I.homeomorph.symm
-      source' := p.hom₀
-      target' := p.hom₁ }
-  invFun p :=
-    { hom := ofHom (p.toContinuousMap.comp (toContinuousMap TopCat.I.homeomorph))
-      hom₀ := p.source'
-      hom₁ := p.target' }
-
-中文:
-定义 pathEquiv
-  签名: {x y : X}
-  定义体: { toContinuousMap := p.hom.hom.comp TopCat.I.homeomorph.symm
-      source' := p.hom₀
-      target' := p.hom₁ }
-  invFun p :=
-    { hom := ofHom (p.toContinuousMap.comp (toContinuousMap TopCat.I.homeomorph))
-      hom₀ := p.source'
-      hom₁ := p.target' }
-
-Depends on / 依赖: TopCat, TopCat.I.homeomorph, TopCat.I.homeomorph.symm, homeomorph, invFun, p.hom, p.hom.hom.comp, p.source, p.target, p.toContinuousMap.comp, source, target, toContinuousMap
+--- 原说明 ---
+The bijection between `TopCat.Path X x y` and `_root_.Path x y`.
 -/
 def pathEquiv {x y : X} : X.Path x y ≃ _root_.Path x y where
   toFun p :=
@@ -97,3 +74,4 @@ def pathEquiv {x y : X} : X.Path x y ≃ _root_.Path x y where
       hom₁ := p.target' }
 
 end TopCat
+

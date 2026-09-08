@@ -52,257 +52,222 @@ variable [Semiring K]
   [AddCommMonoid V₂] [Module K V₂]
   [AddCommMonoid V₃] [Module K V₃]
 
-/--
-Definition of `HasNoetherianRange` / `HasNoetherianRange` 的定义
+/-- A linear map **has Noetherian range** if its range is a Noetherian module. -/
+/-
+**LinearMap.HasNoetherianRange** 是 Mathlib 中的一个定义，位于命名空间 `LinearMap`。
+形式化陈述：HasNoetherianRange (f : V ->ₗ[K] V₂) : Prop
+参数：f : V ->ₗ[K] V₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HasNoetherianRange
-  signature: (f : V ->ₗ[K] V₂)
-  body: IsNoetherian K f.range
-
-中文:
-定义 HasNoetherianRange
-  签名: (f : V ->ₗ[K] V₂)
-  定义体: IsNoetherian K f.range
-
-Depends on / 依赖: IsNoetherian, f.range
+--- 原说明 ---
+A linear map **has Noetherian range** if its range is a Noetherian module.
 -/
-def HasNoetherianRange (f : V ->ₗ[K] V₂) : Prop :=
+def HasNoetherianRange (f : V →ₗ[K] V₂) : Prop :=
   IsNoetherian K f.range
 
-/--
-Definition of `HasFiniteRange` / `HasFiniteRange` 的定义
+/-- A linear map **has finite range** if its range is finitely generated. -/
+/-
+**LinearMap.HasFiniteRange** 是 Mathlib 中的一个定义，位于命名空间 `LinearMap`。
+形式化陈述：HasFiniteRange (f : V ->ₗ[K] V₂) : Prop
+参数：f : V ->ₗ[K] V₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HasFiniteRange
-  signature: (f : V ->ₗ[K] V₂)
-  body: f.range.FG
-
-中文:
-定义 HasFiniteRange
-  签名: (f : V ->ₗ[K] V₂)
-  定义体: f.range.FG
-
-Depends on / 依赖: f.range.FG
+--- 原说明 ---
+A linear map **has finite range** if its range is finitely generated.
 -/
-def HasFiniteRange (f : V ->ₗ[K] V₂) : Prop :=
+def HasFiniteRange (f : V →ₗ[K] V₂) : Prop :=
   f.range.FG
-
-/--
-lemma `hasNoetherianRange_iff_range` / 引理 `hasNoetherianRange_iff_range`
-
-English:
-lemma hasNoetherianRange_iff_range
-  given: {f : V ->ₗ[K] V₂}
-  proof: Iff.rfl
-
-中文:
-引理 hasNoetherianRange_iff_range
-  条件: {f : V ->ₗ[K] V₂}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**LinearMap.hasNoetherianRange_iff_range** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap`。
+形式化陈述：hasNoetherianRange_iff_range {f : V ->ₗ[K] V₂} : f.HasNoetherianRange ↔ Is
+Noetherian K f.range
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma hasNoetherianRange_iff_range {f : V ->ₗ[K] V₂} :
+lemma hasNoetherianRange_iff_range {f : V →ₗ[K] V₂} :
     f.HasNoetherianRange ↔ IsNoetherian K f.range :=
   Iff.rfl
-
-/--
-lemma `hasFiniteRange_iff_range` / 引理 `hasFiniteRange_iff_range`
-
-English:
-lemma hasFiniteRange_iff_range
-  given: {f : V ->ₗ[K] V₂}
-  proof: Iff.rfl
-
-alias ⟨HasNoetherianRange.isNoetherian_range, _⟩ := hasNoetherianRange_iff_range
-alias ⟨HasFiniteRange.fg_range, _⟩ := hasFiniteRange_iff_range
-
-中文:
-引理 hasFiniteRange_iff_range
-  条件: {f : V ->ₗ[K] V₂}
-  证明: Iff.rfl
-
-alias ⟨HasNoetherianRange.isNoetherian_range, _⟩ := hasNoetherianRange_iff_range
-alias ⟨HasFiniteRange.fg_range, _⟩ := hasFiniteRange_iff_range
-
-Depends on / 依赖: Iff.rfl
+/-
+**LinearMap.hasFiniteRange_iff_range** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap`。
+形式化陈述：hasFiniteRange_iff_range {f : V ->ₗ[K] V₂} : f.HasFiniteRange ↔ f.range.FG
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma hasFiniteRange_iff_range {f : V ->ₗ[K] V₂} :
+lemma hasFiniteRange_iff_range {f : V →ₗ[K] V₂} :
     f.HasFiniteRange ↔ f.range.FG :=
   Iff.rfl
 
 alias ⟨HasNoetherianRange.isNoetherian_range, _⟩ := hasNoetherianRange_iff_range
 alias ⟨HasFiniteRange.fg_range, _⟩ := hasFiniteRange_iff_range
-
-/--
-lemma `HasNoetherianRange.hasFiniteRange` / 引理 `HasNoetherianRange.hasFiniteRange`
-
-English:
-lemma HasNoetherianRange.hasFiniteRange
-  given: {u : V ->ₗ[K] V₂} (h : u.HasNoetherianRange)
-  proof: have := h.isNoetherian_range; FG.of_finite
-
-中文:
-引理 HasNoetherianRange.hasFiniteRange
-  条件: {u : V ->ₗ[K] V₂} (h : u.HasNoetherianRange)
-  证明: have := h.isNoetherian_range; FG.of_finite
-
-Depends on / 依赖: FG.of_finite, h.isNoetherian_range, isNoetherian_range, of_finite
+/-
+**LinearMap.HasNoetherianRange.hasFiniteRange** 是 Mathlib 中的一个定理，位于命名空间 `LinearM
+ap.HasNoetherianRange`。
+形式化陈述：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u_4} [inst : Semiring K] [inst_
+1 : AddCommMonoid V]   [inst_2 : _root_.Module K V] [inst_3 : AddCommMonoid V₂] 
+[inst_4 : _root_.Module K V₂] {u : V →ₗ[K] V₂},   u.HasNoetherianRange → u.HasFi
+niteRange
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.HasNoetherianRange.isNoetherian_range`：∀ {K : Type u_1} {V : T
+ype u_2} {V₂ : Type u_4} [inst : Semiring K] [inst_1 : AddCommMonoid V]   [inst_
+2 : _root_.Module K V] [inst_3 : AddC…
+· 使用定理 `Submodule.FG.of_finite`：∀ {R : Type u_1} {M : Type u_4} [inst : Semiring
+ R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   {N : Submodule R M
+} [Module.Fi…
+· 使用定理 `Module.IsNoetherian.finite`：∀ (R : Type u_1) (M : Type u_3) [inst : Semi
+ring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   [IsNoetherian 
+R M], Module.Fin…
 -/
-lemma HasNoetherianRange.hasFiniteRange {u : V ->ₗ[K] V₂} (h : u.HasNoetherianRange) :
+lemma HasNoetherianRange.hasFiniteRange {u : V →ₗ[K] V₂} (h : u.HasNoetherianRange) :
     u.HasFiniteRange :=
   have := h.isNoetherian_range; FG.of_finite
-
-/--
-lemma `HasNoetherianRange.zero` / 引理 `HasNoetherianRange.zero`
-
-English:
-lemma HasNoetherianRange.zero
-  statement: (0 : V ->ₗ[K] V₂).HasNoetherianRange
-  proof: by
-  simp [HasNoetherianRange, isNoetherian_submodule, Submodule.fg_bot]
-
-中文:
-引理 HasNoetherianRange.zero
-  结论: (0 : V ->ₗ[K] V₂).HasNoetherianRange
-  证明: by
-  simp [HasNoetherianRange, isNoetherian_submodule, Submodule.fg_bot]
+/-
+**LinearMap.HasNoetherianRange.zero** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.HasNoet
+herianRange`。
+形式化陈述：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u_4} [inst : Semiring K] [inst_
+1 : AddCommMonoid V]   [inst_2 : _root_.Module K V] [inst_3 : AddCommMonoid V₂] 
+[inst_4 : _root_.Module K V₂], LinearMap.HasNoetherianRange 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.range_zero`：range_zero [RingHomSurjective τ₁₂] : range (0 : M 
+->ₛₗ[τ₁₂] M₂) = ⊥
 -/
-@[simp] lemma HasNoetherianRange.zero : (0 : V ->ₗ[K] V₂).HasNoetherianRange := by
+@[simp] lemma HasNoetherianRange.zero : (0 : V →ₗ[K] V₂).HasNoetherianRange := by
   simp [HasNoetherianRange, isNoetherian_submodule, Submodule.fg_bot]
-
-/--
-lemma `HasFiniteRange.zero` / 引理 `HasFiniteRange.zero`
-
-English:
-lemma HasFiniteRange.zero
-  statement: (0 : V ->ₗ[K] V₂).HasFiniteRange
-  proof: HasNoetherianRange.zero.hasFiniteRange
-
-中文:
-引理 HasFiniteRange.zero
-  结论: (0 : V ->ₗ[K] V₂).HasFiniteRange
-  证明: HasNoetherianRange.zero.hasFiniteRange
+/-
+**LinearMap.HasFiniteRange.zero** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.HasFiniteRa
+nge`。
+形式化陈述：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u_4} [inst : Semiring K] [inst_
+1 : AddCommMonoid V]   [inst_2 : _root_.Module K V] [inst_3 : AddCommMonoid V₂] 
+[inst_4 : _root_.Module K V₂], LinearMap.HasFiniteRange 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.HasNoetherianRange.hasFiniteRange`：∀ {K : Type u_1} {V : Type 
+u_2} {V₂ : Type u_4} [inst : Semiring K] [inst_1 : AddCommMonoid V]   [inst_2 : 
+_root_.Module K V] [inst_3 : AddC…
+· 使用定理 `LinearMap.HasNoetherianRange.zero`：∀ {K : Type u_1} {V : Type u_2} {V₂ :
+ Type u_4} [inst : Semiring K] [inst_1 : AddCommMonoid V]   [inst_2 : _root_.Mod
+ule K V] [inst_3 : AddC…
 -/
-@[simp] lemma HasFiniteRange.zero : (0 : V ->ₗ[K] V₂).HasFiniteRange :=
+@[simp] lemma HasFiniteRange.zero : (0 : V →ₗ[K] V₂).HasFiniteRange :=
   HasNoetherianRange.zero.hasFiniteRange
-
-/--
-lemma `HasNoetherianRange.comp_left` / 引理 `HasNoetherianRange.comp_left`
-
-English:
-lemma HasNoetherianRange.comp_left
-  statement: {u : V ->ₗ[K] V₂} (h : u.HasNoetherianRange)
-  proof: by
-  rw [LinearMap.HasNoetherianRange]; rw [LinearMap.range_comp] at *
-  infer_instance
-
-中文:
-引理 HasNoetherianRange.comp_left
-  结论: {u : V ->ₗ[K] V₂} (h : u.HasNoetherianRange)
-  证明: by
-  rw [LinearMap.HasNoetherianRange]; rw [LinearMap.range_comp] at *
-  infer_instance
-
-Depends on / 依赖: HasNoetherianRange, LinearMap, LinearMap.HasNoetherianRange, LinearMap.range_comp, infer_instance, range_comp
+/-
+**LinearMap.HasNoetherianRange.comp_left** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.Ha
+sNoetherianRange`。
+形式化陈述：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u_4} {V₃ : Type u_6} [inst : Se
+miring K] [inst_1 : AddCommMonoid V]   [inst_2 : _root_.Module K V] [inst_3 : Ad
+dCommMonoid V₂] [inst_4 : _root_.Module K V₂] [inst_5 : AddCommMonoid V₃]   [ins
+t_6 : _root_.Module K V₃] {u : V →ₗ[K] V₂},   u.HasNoetherianRange → ∀ (v : V₂ →
+ₗ[K] V₃), (v ∘ₗ u).HasNoetherianRange
+参数：v : V₂ →ₗ[K] V₃；v ∘ₗ u。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.HasNoetherianRange.eq_1`：∀ {K : Type u_1} {V : Type u_2} {V₂ :
+ Type u_4} [inst : Semiring K] [inst_1 : AddCommMonoid V]   [inst_2 : _root_.Mod
+ule K V] [inst_3 : AddC…
+· 使用定理 `LinearMap.range_comp`：range_comp [RingHomSurjective τ₁₂] [RingHomSurject
+ive τ₂₃] [RingHomSurjective τ₁₃] (f : M ->ₛₗ[τ₁₂] M₂) (g : M₂ ->ₛₗ[τ₂₃] M₃) : ra
+nge (g.com…
 -/
-lemma HasNoetherianRange.comp_left {u : V ->ₗ[K] V₂} (h : u.HasNoetherianRange)
-    (v : V₂ ->ₗ[K] V₃) : (v ∘ₗ u).HasNoetherianRange := by
-  rw [LinearMap.HasNoetherianRange]; rw [LinearMap.range_comp] at *
+lemma HasNoetherianRange.comp_left {u : V →ₗ[K] V₂} (h : u.HasNoetherianRange)
+    (v : V₂ →ₗ[K] V₃) : (v ∘ₗ u).HasNoetherianRange := by
+  rw [LinearMap.HasNoetherianRange, LinearMap.range_comp] at *
   infer_instance
-
-/--
-lemma `HasFiniteRange.comp_left` / 引理 `HasFiniteRange.comp_left`
-
-English:
-lemma HasFiniteRange.comp_left
-  statement: {u : V ->ₗ[K] V₂} (h : u.HasFiniteRange)
-  proof: by
-  rw [LinearMap.HasFiniteRange]; rw [LinearMap.range_comp] at *
-  exact Submodule.FG.map v h
-
-中文:
-引理 HasFiniteRange.comp_left
-  结论: {u : V ->ₗ[K] V₂} (h : u.HasFiniteRange)
-  证明: by
-  rw [LinearMap.HasFiniteRange]; rw [LinearMap.range_comp] at *
-  exact Submodule.FG.map v h
-
-Depends on / 依赖: HasFiniteRange, LinearMap, LinearMap.HasFiniteRange, LinearMap.range_comp, Submodule, Submodule.FG.map, range_comp
+/-
+**LinearMap.HasFiniteRange.comp_left** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.HasFin
+iteRange`。
+形式化陈述：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u_4} {V₃ : Type u_6} [inst : Se
+miring K] [inst_1 : AddCommMonoid V]   [inst_2 : _root_.Module K V] [inst_3 : Ad
+dCommMonoid V₂] [inst_4 : _root_.Module K V₂] [inst_5 : AddCommMonoid V₃]   [ins
+t_6 : _root_.Module K V₃] {u : V →ₗ[K] V₂}, u.HasFiniteRange → ∀ (v : V₂ →ₗ[K] V
+₃), (v ∘ₗ u).HasFiniteRange
+参数：v : V₂ →ₗ[K] V₃；v ∘ₗ u。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.HasFiniteRange.eq_1`：∀ {K : Type u_1} {V : Type u_2} {V₂ : Typ
+e u_4} [inst : Semiring K] [inst_1 : AddCommMonoid V]   [inst_2 : _root_.Module 
+K V] [inst_3 : AddC…
+· 使用定理 `LinearMap.range_comp`：range_comp [RingHomSurjective τ₁₂] [RingHomSurject
+ive τ₂₃] [RingHomSurjective τ₁₃] (f : M ->ₛₗ[τ₁₂] M₂) (g : M₂ ->ₛₗ[τ₂₃] M₃) : ra
+nge (g.com…
+· 使用定理 `Submodule.FG.map`：∀ {R : Type u_1} {M : Type u_2} [inst : Semiring R] [i
+nst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   {S : Type u_3} {P : Type
+ u_4} …
 -/
-lemma HasFiniteRange.comp_left {u : V ->ₗ[K] V₂} (h : u.HasFiniteRange)
-    (v : V₂ ->ₗ[K] V₃) : (v ∘ₗ u).HasFiniteRange := by
-  rw [LinearMap.HasFiniteRange]; rw [LinearMap.range_comp] at *
+lemma HasFiniteRange.comp_left {u : V →ₗ[K] V₂} (h : u.HasFiniteRange)
+    (v : V₂ →ₗ[K] V₃) : (v ∘ₗ u).HasFiniteRange := by
+  rw [LinearMap.HasFiniteRange, LinearMap.range_comp] at *
   exact Submodule.FG.map v h
-
-/--
-lemma `HasNoetherianRange.of_isNoetherian_dom` / 引理 `HasNoetherianRange.of_isNoetherian_dom`
-
-English:
-lemma HasNoetherianRange.of_isNoetherian_dom
-  given: [IsNoetherian K V] {f : V ->ₗ[K] V₂}
-  proof: hasNoetherianRange_iff_range.mpr inferInstance
-
-中文:
-引理 HasNoetherianRange.of_isNoetherian_dom
-  条件: [是Noether K V] {f : V ->ₗ[K] V₂}
-  证明: hasNoetherianRange_iff_range.mpr inferInstance
+/-
+**LinearMap.HasNoetherianRange.of_isNoetherian_dom** 是 Mathlib 中的一个定理，位于命名空间 `Li
+nearMap.HasNoetherianRange`。
+形式化陈述：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u_4} [inst : Semiring K] [inst_
+1 : AddCommMonoid V]   [inst_2 : _root_.Module K V] [inst_3 : AddCommMonoid V₂] 
+[inst_4 : _root_.Module K V₂] [IsNoetherian K V]   {f : V →ₗ[K] V₂}, f.HasNoethe
+rianRange
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `LinearMap.hasNoetherianRange_iff_range`：hasNoetherianRange_iff_range {f 
+: V ->ₗ[K] V₂} : f.HasNoetherianRange ↔ IsNoetherian K f.range
 -/
-@[simp] lemma HasNoetherianRange.of_isNoetherian_dom [IsNoetherian K V] {f : V ->ₗ[K] V₂} :
+@[simp] lemma HasNoetherianRange.of_isNoetherian_dom [IsNoetherian K V] {f : V →ₗ[K] V₂} :
     f.HasNoetherianRange :=
   hasNoetherianRange_iff_range.mpr inferInstance
-
-/--
-lemma `HasFiniteRange.of_finite_dom` / 引理 `HasFiniteRange.of_finite_dom`
-
-English:
-lemma HasFiniteRange.of_finite_dom
-  given: [Module.Finite K V] {f : V ->ₗ[K] V₂}
-  proof: by
-  simp [HasFiniteRange]
-
-中文:
-引理 HasFiniteRange.of_finite_dom
-  条件: [模.有限 K V] {f : V ->ₗ[K] V₂}
-  证明: by
-  simp [HasFiniteRange]
+/-
+**LinearMap.HasFiniteRange.of_finite_dom** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.Ha
+sFiniteRange`。
+形式化陈述：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u_4} [inst : Semiring K] [inst_
+1 : AddCommMonoid V]   [inst_2 : _root_.Module K V] [inst_3 : AddCommMonoid V₂] 
+[inst_4 : _root_.Module K V₂] [Module.Finite K V]   {f : V →ₗ[K] V₂}, f.HasFinit
+eRange
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 -/
-@[simp] lemma HasFiniteRange.of_finite_dom [Module.Finite K V] {f : V ->ₗ[K] V₂} :
+@[simp] lemma HasFiniteRange.of_finite_dom [Module.Finite K V] {f : V →ₗ[K] V₂} :
     f.HasFiniteRange := by
   simp [HasFiniteRange]
-
-/--
-lemma `HasNoetherianRange.of_isNoetherian_rng` / 引理 `HasNoetherianRange.of_isNoetherian_rng`
-
-English:
-lemma HasNoetherianRange.of_isNoetherian_rng
-  given: [IsNoetherian K V₂] {f : V ->ₗ[K] V₂}
-  proof: hasNoetherianRange_iff_range.mpr inferInstance
-
-中文:
-引理 HasNoetherianRange.of_isNoetherian_rng
-  条件: [是Noether K V₂] {f : V ->ₗ[K] V₂}
-  证明: hasNoetherianRange_iff_range.mpr inferInstance
+/-
+**LinearMap.HasNoetherianRange.of_isNoetherian_rng** 是 Mathlib 中的一个定理，位于命名空间 `Li
+nearMap.HasNoetherianRange`。
+形式化陈述：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u_4} [inst : Semiring K] [inst_
+1 : AddCommMonoid V]   [inst_2 : _root_.Module K V] [inst_3 : AddCommMonoid V₂] 
+[inst_4 : _root_.Module K V₂] [IsNoetherian K V₂]   {f : V →ₗ[K] V₂}, f.HasNoeth
+erianRange
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `LinearMap.hasNoetherianRange_iff_range`：hasNoetherianRange_iff_range {f 
+: V ->ₗ[K] V₂} : f.HasNoetherianRange ↔ IsNoetherian K f.range
 -/
-@[simp] lemma HasNoetherianRange.of_isNoetherian_rng [IsNoetherian K V₂] {f : V ->ₗ[K] V₂} :
+@[simp] lemma HasNoetherianRange.of_isNoetherian_rng [IsNoetherian K V₂] {f : V →ₗ[K] V₂} :
     f.HasNoetherianRange :=
   hasNoetherianRange_iff_range.mpr inferInstance
-
-/--
-lemma `HasFiniteRange.of_isNoetherian_rng` / 引理 `HasFiniteRange.of_isNoetherian_rng`
-
-English:
-lemma HasFiniteRange.of_isNoetherian_rng
-  given: [IsNoetherian K V₂] {f : V ->ₗ[K] V₂}
-  proof: HasNoetherianRange.of_isNoetherian_rng.hasFiniteRange
-
-中文:
-引理 HasFiniteRange.of_isNoetherian_rng
-  条件: [是Noether K V₂] {f : V ->ₗ[K] V₂}
-  证明: HasNoetherianRange.of_isNoetherian_rng.hasFiniteRange
+/-
+**LinearMap.HasFiniteRange.of_isNoetherian_rng** 是 Mathlib 中的一个定理，位于命名空间 `Linear
+Map.HasFiniteRange`。
+形式化陈述：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u_4} [inst : Semiring K] [inst_
+1 : AddCommMonoid V]   [inst_2 : _root_.Module K V] [inst_3 : AddCommMonoid V₂] 
+[inst_4 : _root_.Module K V₂] [IsNoetherian K V₂]   {f : V →ₗ[K] V₂}, f.HasFinit
+eRange
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.HasNoetherianRange.hasFiniteRange`：∀ {K : Type u_1} {V : Type 
+u_2} {V₂ : Type u_4} [inst : Semiring K] [inst_1 : AddCommMonoid V]   [inst_2 : 
+_root_.Module K V] [inst_3 : AddC…
+· 使用定理 `LinearMap.HasNoetherianRange.of_isNoetherian_rng`：∀ {K : Type u_1} {V : 
+Type u_2} {V₂ : Type u_4} [inst : Semiring K] [inst_1 : AddCommMonoid V]   [inst
+_2 : _root_.Module K V] [inst_3 : AddC…
 -/
-@[simp] lemma HasFiniteRange.of_isNoetherian_rng [IsNoetherian K V₂] {f : V ->ₗ[K] V₂} :
+@[simp] lemma HasFiniteRange.of_isNoetherian_rng [IsNoetherian K V₂] {f : V →ₗ[K] V₂} :
     f.HasFiniteRange :=
   HasNoetherianRange.of_isNoetherian_rng.hasFiniteRange
 
@@ -315,252 +280,256 @@ variable [Ring K]
   [AddCommGroup V₂] [Module K V₂]
   [AddCommGroup V₃] [Module K V₃]
 
-/--
-lemma `HasFiniteRange.hasNoetherianRange` / 引理 `HasFiniteRange.hasNoetherianRange`
-
-English:
-lemma HasFiniteRange.hasNoetherianRange
-  statement: [IsNoetherianRing K] {u : V ->ₗ[K] V₂}
-  proof: by
-  rw [HasNoetherianRange]
-  have := Finite.of_fg h.fg_range
-  infer_instance
-
-中文:
-引理 HasFiniteRange.hasNoetherianRange
-  结论: [是Noether环 K] {u : V ->ₗ[K] V₂}
-  证明: by
-  rw [HasNoetherianRange]
-  have := Finite.of_fg h.fg_range
-  infer_instance
-
-Depends on / 依赖: Finite, Finite.of_fg, HasNoetherianRange, fg_range, h.fg_range, infer_instance, of_fg
+/-
+**LinearMap.HasFiniteRange.hasNoetherianRange** 是 Mathlib 中的一个定理，位于命名空间 `LinearM
+ap.HasFiniteRange`。
+形式化陈述：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u_4} [inst : Ring K] [inst_1 : 
+AddCommGroup V] [inst_2 : _root_.Module K V]   [inst_3 : AddCommGroup V₂] [inst_
+4 : _root_.Module K V₂] [IsNoetherianRing K] {u : V →ₗ[K] V₂},   u.HasFiniteRang
+e → u.HasNoetherianRange
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.HasNoetherianRange.eq_1`：∀ {K : Type u_1} {V : Type u_2} {V₂ :
+ Type u_4} [inst : Semiring K] [inst_1 : AddCommMonoid V]   [inst_2 : _root_.Mod
+ule K V] [inst_3 : AddC…
+· 使用定理 `Module.Finite.of_fg`：∀ {R : Type u_1} {M : Type u_4} [inst : Semiring R]
+ [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   {N : Submodule R M}, 
+N.FG → Mo…
+· 使用定理 `LinearMap.HasFiniteRange.fg_range`：∀ {K : Type u_1} {V : Type u_2} {V₂ :
+ Type u_4} [inst : Semiring K] [inst_1 : AddCommMonoid V]   [inst_2 : _root_.Mod
+ule K V] [inst_3 : AddC…
 -/
-lemma HasFiniteRange.hasNoetherianRange [IsNoetherianRing K] {u : V ->ₗ[K] V₂}
+lemma HasFiniteRange.hasNoetherianRange [IsNoetherianRing K] {u : V →ₗ[K] V₂}
     (h : u.HasFiniteRange) : u.HasNoetherianRange := by
   rw [HasNoetherianRange]
   have := Finite.of_fg h.fg_range
   infer_instance
-
-/--
-lemma `hasNoetherianRange_iff_hasFiniteRange` / 引理 `hasNoetherianRange_iff_hasFiniteRange`
-
-English:
-lemma hasNoetherianRange_iff_hasFiniteRange
-  given: [IsNoetherianRing K] {u : V ->ₗ[K] V₂}
-  proof: ⟨HasNoetherianRange.hasFiniteRange, HasFiniteRange.hasNoetherianRange⟩
-
-中文:
-引理 hasNoetherianRange_iff_hasFiniteRange
-  条件: [是Noether环 K] {u : V ->ₗ[K] V₂}
-  证明: ⟨HasNoetherianRange.hasFiniteRange, HasFiniteRange.hasNoetherianRange⟩
-
-Depends on / 依赖: HasFiniteRange, HasFiniteRange.hasNoetherianRange, HasNoetherianRange, HasNoetherianRange.hasFiniteRange, hasFiniteRange, hasNoetherianRange
+/-
+**LinearMap.hasNoetherianRange_iff_hasFiniteRange** 是 Mathlib 中的一个引理，位于命名空间 `Lin
+earMap`。
+形式化陈述：hasNoetherianRange_iff_hasFiniteRange [IsNoetherianRing K] {u : V ->ₗ[K] V
+₂} : u.HasNoetherianRange ↔ u.HasFiniteRange
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.HasNoetherianRange.hasFiniteRange`：∀ {K : Type u_1} {V : Type 
+u_2} {V₂ : Type u_4} [inst : Semiring K] [inst_1 : AddCommMonoid V]   [inst_2 : 
+_root_.Module K V] [inst_3 : AddC…
+· 使用定理 `LinearMap.HasFiniteRange.hasNoetherianRange`：∀ {K : Type u_1} {V : Type 
+u_2} {V₂ : Type u_4} [inst : Ring K] [inst_1 : AddCommGroup V] [inst_2 : _root_.
+Module K V]   [inst_3 : AddCommGr…
 -/
-lemma hasNoetherianRange_iff_hasFiniteRange [IsNoetherianRing K] {u : V ->ₗ[K] V₂} :
+lemma hasNoetherianRange_iff_hasFiniteRange [IsNoetherianRing K] {u : V →ₗ[K] V₂} :
     u.HasNoetherianRange ↔ u.HasFiniteRange :=
   ⟨HasNoetherianRange.hasFiniteRange, HasFiniteRange.hasNoetherianRange⟩
-
-/--
-lemma `HasNoetherianRange.comp_right` / 引理 `HasNoetherianRange.comp_right`
-
-English:
-lemma HasNoetherianRange.comp_right
-  statement: {v : V₂ ->ₗ[K] V₃} (h : v.HasNoetherianRange)
-  proof: by
-  rw [HasNoetherianRange]; rw [LinearMap.range_comp] at *
-  exact isNoetherian_of_le map_le_range
-
-中文:
-引理 HasNoetherianRange.comp_right
-  结论: {v : V₂ ->ₗ[K] V₃} (h : v.HasNoetherianRange)
-  证明: by
-  rw [HasNoetherianRange]; rw [LinearMap.range_comp] at *
-  exact isNoetherian_of_le map_le_range
-
-Depends on / 依赖: HasNoetherianRange, LinearMap, LinearMap.range_comp, isNoetherian_of_le, map_le_range, range_comp
+/-
+**LinearMap.HasNoetherianRange.comp_right** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.H
+asNoetherianRange`。
+形式化陈述：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u_4} {V₃ : Type u_6} [inst : Ri
+ng K] [inst_1 : AddCommGroup V]   [inst_2 : _root_.Module K V] [inst_3 : AddComm
+Group V₂] [inst_4 : _root_.Module K V₂] [inst_5 : AddCommGroup V₃]   [inst_6 : _
+root_.Module K V₃] {v : V₂ →ₗ[K] V₃},   v.HasNoetherianRange → ∀ (u : V →ₗ[K] V₂
+), (v ∘ₗ u).HasNoetherianRange
+参数：u : V →ₗ[K] V₂；v ∘ₗ u。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.HasNoetherianRange.eq_1`：∀ {K : Type u_1} {V : Type u_2} {V₂ :
+ Type u_4} [inst : Semiring K] [inst_1 : AddCommMonoid V]   [inst_2 : _root_.Mod
+ule K V] [inst_3 : AddC…
+· 使用定理 `LinearMap.range_comp`：range_comp [RingHomSurjective τ₁₂] [RingHomSurject
+ive τ₂₃] [RingHomSurjective τ₁₃] (f : M ->ₛₗ[τ₁₂] M₂) (g : M₂ ->ₛₗ[τ₂₃] M₃) : ra
+nge (g.com…
+· 使用定理 `isNoetherian_of_le`：isNoetherian_of_le {s t : Submodule R M} [ht : IsNoe
+therian R t] (h : s <= t) : IsNoetherian R s
+· 使用定理 `LinearMap.map_le_range`：map_le_range [RingHomSurjective τ₁₂] {f : M ->ₛₗ
+[τ₁₂] M₂} {p : Submodule R M} : map f p <= range f
 -/
-lemma HasNoetherianRange.comp_right {v : V₂ ->ₗ[K] V₃} (h : v.HasNoetherianRange)
-    (u : V ->ₗ[K] V₂) : (v ∘ₗ u).HasNoetherianRange := by
-  rw [HasNoetherianRange]; rw [LinearMap.range_comp] at *
+lemma HasNoetherianRange.comp_right {v : V₂ →ₗ[K] V₃} (h : v.HasNoetherianRange)
+    (u : V →ₗ[K] V₂) : (v ∘ₗ u).HasNoetherianRange := by
+  rw [HasNoetherianRange, LinearMap.range_comp] at *
   exact isNoetherian_of_le map_le_range
-
-/--
-lemma `HasFiniteRange.comp_right` / 引理 `HasFiniteRange.comp_right`
-
-English:
-lemma HasFiniteRange.comp_right
-  statement: [IsNoetherianRing K] {v : V₂ ->ₗ[K] V₃} (h : v.HasFiniteRange)
-  proof: .hasFiniteRange h.hasNoetherianRange.comp_right _
-
-中文:
-引理 HasFiniteRange.comp_right
-  结论: [是Noether环 K] {v : V₂ ->ₗ[K] V₃} (h : v.HasFiniteRange)
-  证明: .hasFiniteRange h.hasNoetherianRange.comp_right _
-
-Depends on / 依赖: comp_right, h.hasNoetherianRange.comp_right, hasFiniteRange, hasNoetherianRange
+/-
+**LinearMap.HasFiniteRange.comp_right** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.HasFi
+niteRange`。
+形式化陈述：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u_4} {V₃ : Type u_6} [inst : Ri
+ng K] [inst_1 : AddCommGroup V]   [inst_2 : _root_.Module K V] [inst_3 : AddComm
+Group V₂] [inst_4 : _root_.Module K V₂] [inst_5 : AddCommGroup V₃]   [inst_6 : _
+root_.Module K V₃] [IsNoetherianRing K] {v : V₂ →ₗ[K] V₃},   v.HasFiniteRange → 
+∀ (u : V →ₗ[K] V₂), (v ∘ₗ u).HasFiniteRange
+参数：u : V →ₗ[K] V₂；v ∘ₗ u。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.HasNoetherianRange.hasFiniteRange`：∀ {K : Type u_1} {V : Type 
+u_2} {V₂ : Type u_4} [inst : Semiring K] [inst_1 : AddCommMonoid V]   [inst_2 : 
+_root_.Module K V] [inst_3 : AddC…
+· 使用定理 `LinearMap.HasNoetherianRange.comp_right`：∀ {K : Type u_1} {V : Type u_2}
+ {V₂ : Type u_4} {V₃ : Type u_6} [inst : Ring K] [inst_1 : AddCommGroup V]   [in
+st_2 : _root_.Module K V] [in…
+· 使用定理 `LinearMap.HasFiniteRange.hasNoetherianRange`：∀ {K : Type u_1} {V : Type 
+u_2} {V₂ : Type u_4} [inst : Ring K] [inst_1 : AddCommGroup V] [inst_2 : _root_.
+Module K V]   [inst_3 : AddCommGr…
 -/
-lemma HasFiniteRange.comp_right [IsNoetherianRing K] {v : V₂ ->ₗ[K] V₃} (h : v.HasFiniteRange)
-    (u : V ->ₗ[K] V₂) : (v ∘ₗ u).HasFiniteRange :=
-.hasFiniteRange h.hasNoetherianRange.comp_right _
-
-/--
-lemma `HasNoetherianRange.neg` / 引理 `HasNoetherianRange.neg`
-
-English:
-lemma HasNoetherianRange.neg
-  statement: {f : V ->ₗ[K] V₂}
-  proof: by
-  rwa [HasNoetherianRange, LinearMap.range_neg]
-
-中文:
-引理 HasNoetherianRange.neg
-  结论: {f : V ->ₗ[K] V₂}
-  证明: by
-  rwa [HasNoetherianRange, LinearMap.range_neg]
+lemma HasFiniteRange.comp_right [IsNoetherianRing K] {v : V₂ →ₗ[K] V₃} (h : v.HasFiniteRange)
+    (u : V →ₗ[K] V₂) : (v ∘ₗ u).HasFiniteRange :=
+  h.hasNoetherianRange.comp_right _ |>.hasFiniteRange
+/-
+**LinearMap.HasNoetherianRange.neg** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.HasNoeth
+erianRange`。
+形式化陈述：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u_4} [inst : Ring K] [inst_1 : 
+AddCommGroup V] [inst_2 : _root_.Module K V]   [inst_3 : AddCommGroup V₂] [inst_
+4 : _root_.Module K V₂] {f : V →ₗ[K] V₂},   f.HasNoetherianRange → (-f).HasNoeth
+erianRange
+参数：-f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.HasNoetherianRange.eq_1`：∀ {K : Type u_1} {V : Type u_2} {V₂ :
+ Type u_4} [inst : Semiring K] [inst_1 : AddCommMonoid V]   [inst_2 : _root_.Mod
+ule K V] [inst_3 : AddC…
+· 使用定理 `LinearMap.range_neg`：range_neg {R : Type*} {R₂ : Type*} {M : Type*} {M₂ 
+: Type*} [Semiring R] [Ring R₂] [AddCommMonoid M] [AddCommGroup M₂] [Module R M]
+ [Module …
 -/
-@[simp] lemma HasNoetherianRange.neg {f : V ->ₗ[K] V₂}
+@[simp] lemma HasNoetherianRange.neg {f : V →ₗ[K] V₂}
     (hf : f.HasNoetherianRange) : (-f).HasNoetherianRange := by
   rwa [HasNoetherianRange, LinearMap.range_neg]
-
-/--
-lemma `HasFiniteRange.neg` / 引理 `HasFiniteRange.neg`
-
-English:
-lemma HasFiniteRange.neg
-  statement: {f : V ->ₗ[K] V₂}
-  proof: by
-  rwa [HasFiniteRange, LinearMap.range_neg]
-
-中文:
-引理 HasFiniteRange.neg
-  结论: {f : V ->ₗ[K] V₂}
-  证明: by
-  rwa [HasFiniteRange, LinearMap.range_neg]
+/-
+**LinearMap.HasFiniteRange.neg** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.HasFiniteRan
+ge`。
+形式化陈述：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u_4} [inst : Ring K] [inst_1 : 
+AddCommGroup V] [inst_2 : _root_.Module K V]   [inst_3 : AddCommGroup V₂] [inst_
+4 : _root_.Module K V₂] {f : V →ₗ[K] V₂}, f.HasFiniteRange → (-f).HasFiniteRange
+参数：-f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.HasFiniteRange.eq_1`：∀ {K : Type u_1} {V : Type u_2} {V₂ : Typ
+e u_4} [inst : Semiring K] [inst_1 : AddCommMonoid V]   [inst_2 : _root_.Module 
+K V] [inst_3 : AddC…
+· 使用定理 `LinearMap.range_neg`：range_neg {R : Type*} {R₂ : Type*} {M : Type*} {M₂ 
+: Type*} [Semiring R] [Ring R₂] [AddCommMonoid M] [AddCommGroup M₂] [Module R M]
+ [Module …
 -/
-@[simp] lemma HasFiniteRange.neg {f : V ->ₗ[K] V₂}
+@[simp] lemma HasFiniteRange.neg {f : V →ₗ[K] V₂}
     (hf : f.HasFiniteRange) : (-f).HasFiniteRange := by
   rwa [HasFiniteRange, LinearMap.range_neg]
-
-/--
-lemma `HasNoetherianRange.add` / 引理 `HasNoetherianRange.add`
-
-English:
-lemma HasNoetherianRange.add
-  statement: {f g : V ->ₗ[K] V₂}
-  proof: by
-  rw [HasNoetherianRange] at *
-  exact isNoetherian_of_le (range_add_le f g)
-
-中文:
-引理 HasNoetherianRange.add
-  结论: {f g : V ->ₗ[K] V₂}
-  证明: by
-  rw [HasNoetherianRange] at *
-  exact isNoetherian_of_le (range_add_le f g)
+/-
+**LinearMap.HasNoetherianRange.add** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.HasNoeth
+erianRange`。
+形式化陈述：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u_4} [inst : Ring K] [inst_1 : 
+AddCommGroup V] [inst_2 : _root_.Module K V]   [inst_3 : AddCommGroup V₂] [inst_
+4 : _root_.Module K V₂] {f g : V →ₗ[K] V₂},   f.HasNoetherianRange → g.HasNoethe
+rianRange → (f + g).HasNoetherianRange
+参数：f + g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.HasNoetherianRange.eq_1`：∀ {K : Type u_1} {V : Type u_2} {V₂ :
+ Type u_4} [inst : Semiring K] [inst_1 : AddCommMonoid V]   [inst_2 : _root_.Mod
+ule K V] [inst_3 : AddC…
+· 使用定理 `isNoetherian_of_le`：isNoetherian_of_le {s t : Submodule R M} [ht : IsNoe
+therian R t] (h : s <= t) : IsNoetherian R s
+· 使用定理 `LinearMap.range_add_le`：range_add_le [RingHomSurjective τ₁₂] (f g : M ->
+ₛₗ[τ₁₂] M₂) : range (f + g) <= range f ⊔ range g
 -/
-@[simp] lemma HasNoetherianRange.add {f g : V ->ₗ[K] V₂}
+@[simp] lemma HasNoetherianRange.add {f g : V →ₗ[K] V₂}
     (hf : f.HasNoetherianRange) (hg : g.HasNoetherianRange) : (f + g).HasNoetherianRange := by
   rw [HasNoetherianRange] at *
   exact isNoetherian_of_le (range_add_le f g)
-
-/--
-lemma `HasFiniteRange.add` / 引理 `HasFiniteRange.add`
-
-English:
-lemma HasFiniteRange.add
-  statement: [IsNoetherianRing K] {f g : V ->ₗ[K] V₂}
-  proof: .hasFiniteRange hf.hasNoetherianRange.add hg.hasNoetherianRange
-
-中文:
-引理 HasFiniteRange.add
-  结论: [是Noether环 K] {f g : V ->ₗ[K] V₂}
-  证明: .hasFiniteRange hf.hasNoetherianRange.add hg.hasNoetherianRange
+/-
+**LinearMap.HasFiniteRange.add** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.HasFiniteRan
+ge`。
+形式化陈述：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u_4} [inst : Ring K] [inst_1 : 
+AddCommGroup V] [inst_2 : _root_.Module K V]   [inst_3 : AddCommGroup V₂] [inst_
+4 : _root_.Module K V₂] [IsNoetherianRing K] {f g : V →ₗ[K] V₂},   f.HasFiniteRa
+nge → g.HasFiniteRange → (f + g).HasFiniteRange
+参数：f + g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.HasNoetherianRange.hasFiniteRange`：∀ {K : Type u_1} {V : Type 
+u_2} {V₂ : Type u_4} [inst : Semiring K] [inst_1 : AddCommMonoid V]   [inst_2 : 
+_root_.Module K V] [inst_3 : AddC…
+· 使用定理 `LinearMap.HasNoetherianRange.add`：∀ {K : Type u_1} {V : Type u_2} {V₂ : 
+Type u_4} [inst : Ring K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V]
+   [inst_3 : AddCommGr…
+· 使用定理 `LinearMap.HasFiniteRange.hasNoetherianRange`：∀ {K : Type u_1} {V : Type 
+u_2} {V₂ : Type u_4} [inst : Ring K] [inst_1 : AddCommGroup V] [inst_2 : _root_.
+Module K V]   [inst_3 : AddCommGr…
 -/
-@[simp] lemma HasFiniteRange.add [IsNoetherianRing K] {f g : V ->ₗ[K] V₂}
+@[simp] lemma HasFiniteRange.add [IsNoetherianRing K] {f g : V →ₗ[K] V₂}
     (hf : f.HasFiniteRange) (hg : g.HasFiniteRange) : (f + g).HasFiniteRange :=
-.hasFiniteRange hf.hasNoetherianRange.add hg.hasNoetherianRange
-
-/--
-lemma `HasNoetherianRange.sub` / 引理 `HasNoetherianRange.sub`
-
-English:
-lemma HasNoetherianRange.sub
-  statement: {f g : V ->ₗ[K] V₂}
-  proof: sub_eq_add_neg f g ▸ hf.add hg.neg
-
-中文:
-引理 HasNoetherianRange.sub
-  结论: {f g : V ->ₗ[K] V₂}
-  证明: sub_eq_add_neg f g ▸ hf.add hg.neg
+  hf.hasNoetherianRange.add hg.hasNoetherianRange |>.hasFiniteRange
+/-
+**LinearMap.HasNoetherianRange.sub** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.HasNoeth
+erianRange`。
+形式化陈述：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u_4} [inst : Ring K] [inst_1 : 
+AddCommGroup V] [inst_2 : _root_.Module K V]   [inst_3 : AddCommGroup V₂] [inst_
+4 : _root_.Module K V₂] {f g : V →ₗ[K] V₂},   f.HasNoetherianRange → g.HasNoethe
+rianRange → (f - g).HasNoetherianRange
+参数：f - g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.HasNoetherianRange.add`：∀ {K : Type u_1} {V : Type u_2} {V₂ : 
+Type u_4} [inst : Ring K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V]
+   [inst_3 : AddCommGr…
+· 使用定理 `LinearMap.HasNoetherianRange.neg`：∀ {K : Type u_1} {V : Type u_2} {V₂ : 
+Type u_4} [inst : Ring K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V]
+   [inst_3 : AddCommGr…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
 -/
-@[simp] lemma HasNoetherianRange.sub {f g : V ->ₗ[K] V₂}
+@[simp] lemma HasNoetherianRange.sub {f g : V →ₗ[K] V₂}
     (hf : f.HasNoetherianRange) (hg : g.HasNoetherianRange) : (f - g).HasNoetherianRange :=
   sub_eq_add_neg f g ▸ hf.add hg.neg
-
-/--
-lemma `HasFiniteRange.sub` / 引理 `HasFiniteRange.sub`
-
-English:
-lemma HasFiniteRange.sub
-  statement: [IsNoetherianRing K] {f g : V ->ₗ[K] V₂}
-  proof: sub_eq_add_neg f g ▸ hf.add hg.neg
-
-中文:
-引理 HasFiniteRange.sub
-  结论: [是Noether环 K] {f g : V ->ₗ[K] V₂}
-  证明: sub_eq_add_neg f g ▸ hf.add hg.neg
+/-
+**LinearMap.HasFiniteRange.sub** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.HasFiniteRan
+ge`。
+形式化陈述：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u_4} [inst : Ring K] [inst_1 : 
+AddCommGroup V] [inst_2 : _root_.Module K V]   [inst_3 : AddCommGroup V₂] [inst_
+4 : _root_.Module K V₂] [IsNoetherianRing K] {f g : V →ₗ[K] V₂},   f.HasFiniteRa
+nge → g.HasFiniteRange → (f - g).HasFiniteRange
+参数：f - g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.HasFiniteRange.add`：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type
+ u_4} [inst : Ring K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V]   [
+inst_3 : AddCommGr…
+· 使用定理 `LinearMap.HasFiniteRange.neg`：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type
+ u_4} [inst : Ring K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V]   [
+inst_3 : AddCommGr…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
 -/
-@[simp] lemma HasFiniteRange.sub [IsNoetherianRing K] {f g : V ->ₗ[K] V₂}
+@[simp] lemma HasFiniteRange.sub [IsNoetherianRing K] {f g : V →ₗ[K] V₂}
     (hf : f.HasFiniteRange) (hg : g.HasFiniteRange) : (f - g).HasFiniteRange :=
   sub_eq_add_neg f g ▸ hf.add hg.neg
-
-/--
-theorem `hasNoetherianRange_iff_quotient_ker` / 定理 `hasNoetherianRange_iff_quotient_ker`
-
-English:
-theorem hasNoetherianRange_iff_quotient_ker
-  given: {f : V ->ₗ[K] V₂}
-  proof: f.quotKerEquivRange.isNoetherian_iff.symm
-
-@[simp]
-
-中文:
-定理 hasNoetherianRange_iff_quotient_ker
-  条件: {f : V ->ₗ[K] V₂}
-  证明: f.quotKerEquivRange.isNoetherian_iff.symm
-
-@[simp]
-
-Depends on / 依赖: f.quotKerEquivRange.isNoetherian_iff.symm, isNoetherian_iff, quotKerEquivRange
+/-
+**LinearMap.hasNoetherianRange_iff_quotient_ker** 是 Mathlib 中的一个定理，位于命名空间 `Linea
+rMap`。
+形式化陈述：hasNoetherianRange_iff_quotient_ker {f : V ->ₗ[K] V₂} : f.HasNoetherianRan
+ge ↔ IsNoetherian K (V ⧸ f.ker)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `LinearEquiv.isNoetherian_iff`：LinearEquiv.isNoetherian_iff {σ : R ->+* S
+} {σ' : S ->+* R} [RingHomInvPair σ σ'] [RingHomInvPair σ' σ] (f : M ≃ₛₗ[σ] P) :
+ IsNoetherian R M …
 -/
-theorem hasNoetherianRange_iff_quotient_ker {f : V ->ₗ[K] V₂} :
+theorem hasNoetherianRange_iff_quotient_ker {f : V →ₗ[K] V₂} :
     f.HasNoetherianRange ↔ IsNoetherian K (V ⧸ f.ker) :=
   f.quotKerEquivRange.isNoetherian_iff.symm
 
 @[simp]
-/--
-theorem `ker_coFG_iff_hasFiniteRange` / 定理 `ker_coFG_iff_hasFiniteRange`
-
-English:
-theorem ker_coFG_iff_hasFiniteRange
-  given: {f : V ->ₗ[K] V₂}
-  proof: range_fg_iff_ker_cofg.symm
-
-alias ⟨HasNoetherianRange.quotient_ker, _⟩ := hasNoetherianRange_iff_quotient_ker
-alias ⟨_, HasFiniteRange.cofg_ker⟩ := ker_coFG_iff_hasFiniteRange
-
-中文:
-定理 ker_coFG_iff_hasFiniteRange
-  条件: {f : V ->ₗ[K] V₂}
-  证明: range_fg_iff_ker_cofg.symm
-
-alias ⟨HasNoetherianRange.quotient_ker, _⟩ := hasNoetherianRange_iff_quotient_ker
-alias ⟨_, HasFiniteRange.cofg_ker⟩ := ker_coFG_iff_hasFiniteRange
-
-Depends on / 依赖: range_fg_iff_ker_cofg, range_fg_iff_ker_cofg.symm
+/-
+**LinearMap.ker_coFG_iff_hasFiniteRange** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap`。
+形式化陈述：ker_coFG_iff_hasFiniteRange {f : V ->ₗ[K] V₂} : f.ker.CoFG ↔ f.HasFiniteRa
+nge
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Submodule.range_fg_iff_ker_cofg`：range_fg_iff_ker_cofg {f : M ->ₗ[R] N} 
+: (range f).FG ↔ (ker f).CoFG
 -/
-theorem ker_coFG_iff_hasFiniteRange {f : V ->ₗ[K] V₂} :
+theorem ker_coFG_iff_hasFiniteRange {f : V →ₗ[K] V₂} :
     f.ker.CoFG ↔ f.HasFiniteRange :=
   range_fg_iff_ker_cofg.symm
 
@@ -576,107 +545,96 @@ variable [CommRing K]
   [AddCommGroup V₂] [Module K V₂]
   [AddCommGroup V₃] [Module K V₃]
 
-/--
-lemma `HasNoetherianRange.smul` / 引理 `HasNoetherianRange.smul`
-
-English:
-lemma HasNoetherianRange.smul
-  statement: {f : V ->ₗ[K] V₂}
-  proof: hf.comp_left (lsmul K V₂ c)
-
-中文:
-引理 HasNoetherianRange.smul
-  结论: {f : V ->ₗ[K] V₂}
-  证明: hf.comp_left (lsmul K V₂ c)
+/-
+**LinearMap.HasNoetherianRange.smul** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.HasNoet
+herianRange`。
+形式化陈述：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u_4} [inst : CommRing K] [inst_
+1 : AddCommGroup V]   [inst_2 : _root_.Module K V] [inst_3 : AddCommGroup V₂] [i
+nst_4 : _root_.Module K V₂] {f : V →ₗ[K] V₂},   f.HasNoetherianRange → ∀ (c : K)
+, (c • f).HasNoetherianRange
+参数：c : K；c • f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.HasNoetherianRange.comp_left`：∀ {K : Type u_1} {V : Type u_2} 
+{V₂ : Type u_4} {V₃ : Type u_6} [inst : Semiring K] [inst_1 : AddCommMonoid V]  
+ [inst_2 : _root_.Module K V…
 -/
-@[simp] lemma HasNoetherianRange.smul {f : V ->ₗ[K] V₂}
+@[simp] lemma HasNoetherianRange.smul {f : V →ₗ[K] V₂}
     (hf : f.HasNoetherianRange) (c : K) : (c • f).HasNoetherianRange :=
   hf.comp_left (lsmul K V₂ c)
-
-/--
-lemma `HasFiniteRange.smul` / 引理 `HasFiniteRange.smul`
-
-English:
-lemma HasFiniteRange.smul
-  statement: {f : V ->ₗ[K] V₂}
-  proof: hf.comp_left (lsmul K V₂ c)
-
-中文:
-引理 HasFiniteRange.smul
-  结论: {f : V ->ₗ[K] V₂}
-  证明: hf.comp_left (lsmul K V₂ c)
+/-
+**LinearMap.HasFiniteRange.smul** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.HasFiniteRa
+nge`。
+形式化陈述：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u_4} [inst : CommRing K] [inst_
+1 : AddCommGroup V]   [inst_2 : _root_.Module K V] [inst_3 : AddCommGroup V₂] [i
+nst_4 : _root_.Module K V₂] {f : V →ₗ[K] V₂},   f.HasFiniteRange → ∀ (c : K), (c
+ • f).HasFiniteRange
+参数：c : K；c • f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.HasFiniteRange.comp_left`：∀ {K : Type u_1} {V : Type u_2} {V₂ 
+: Type u_4} {V₃ : Type u_6} [inst : Semiring K] [inst_1 : AddCommMonoid V]   [in
+st_2 : _root_.Module K V…
 -/
-@[simp] lemma HasFiniteRange.smul {f : V ->ₗ[K] V₂}
+@[simp] lemma HasFiniteRange.smul {f : V →ₗ[K] V₂}
     (hf : f.HasFiniteRange) (c : K) : (c • f).HasFiniteRange :=
   hf.comp_left (lsmul K V₂ c)
 
 variable (K V V₂) in
-/--
-Definition of `finiteRange` / `finiteRange` 的定义
+/-- `LinearMap.finiteRange` is the submodule of `V →ₗ[K] W` consisting of linear maps satisfying
+`LinearMap.HasNoetherianRange`. We allow ourself this slightly abusive name because the set of
+linear maps satisfying `LinearMap.HasFiniteRange` is only a submodule over a noetherian ring,
+in which case the two notions agree. -/
+/-
+**LinearMap.finiteRange** 是 Mathlib 中的一个定义，位于命名空间 `LinearMap`。
+形式化陈述：finiteRange : Submodule K (V ->ₗ[K] V₂) where carrier
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finiteRange
-  signature: : Submodule K (V ->ₗ[K] V₂) where
-  body: {u | u.HasNoetherianRange}
-  add_mem' hu hv := by simp_all
-  zero_mem' := by simp
-  smul_mem' c hu := by simp_all
-
-中文:
-定义 finiteRange
-  签名: : 子模 K (V ->ₗ[K] V₂) where
-  定义体: {u | u.HasNoetherianRange}
-  add_mem' hu hv := by simp_all
-  zero_mem' := by simp
-  smul_mem' c hu := by simp_all
-
-Depends on / 依赖: HasNoetherianRange, u.HasNoetherianRange
+--- 原说明 ---
+`LinearMap.finiteRange` is the submodule of `V →ₗ[K] W` consisting of linear map
+s satisfying
+`LinearMap.HasNoetherianRange`. We allow ourself this slightly abusive name beca
+use the set of
+linear maps satisfying `LinearMap.HasFiniteRange` is only a submodule over a noe
+therian ring,
+in which case the two notions agree.
 -/
-def finiteRange : Submodule K (V ->ₗ[K] V₂) where
+def finiteRange : Submodule K (V →ₗ[K] V₂) where
   carrier := {u | u.HasNoetherianRange}
   add_mem' hu hv := by simp_all
   zero_mem' := by simp
   smul_mem' c hu := by simp_all
-
-/--
-lemma `mem_finiteRange_iff_hasNoetherianRange` / 引理 `mem_finiteRange_iff_hasNoetherianRange`
-
-English:
-lemma mem_finiteRange_iff_hasNoetherianRange
-  given: {f : V ->ₗ[K] V₂}
-  proof: Iff.rfl
-
-中文:
-引理 mem_finiteRange_iff_hasNoetherianRange
-  条件: {f : V ->ₗ[K] V₂}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**LinearMap.mem_finiteRange_iff_hasNoetherianRange** 是 Mathlib 中的一个引理，位于命名空间 `Li
+nearMap`。
+形式化陈述：mem_finiteRange_iff_hasNoetherianRange {f : V ->ₗ[K] V₂} : f in finiteRang
+e K V V₂ ↔ f.HasNoetherianRange
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma mem_finiteRange_iff_hasNoetherianRange {f : V ->ₗ[K] V₂} :
-    f in finiteRange K V V₂ ↔ f.HasNoetherianRange :=
+lemma mem_finiteRange_iff_hasNoetherianRange {f : V →ₗ[K] V₂} :
+    f ∈ finiteRange K V V₂ ↔ f.HasNoetherianRange :=
   Iff.rfl
-
-/--
-lemma `mem_finiteRange_iff_hasFiniteRange` / 引理 `mem_finiteRange_iff_hasFiniteRange`
-
-English:
-lemma mem_finiteRange_iff_hasFiniteRange
-  given: [IsNoetherianRing K] {f : V ->ₗ[K] V₂}
-  proof: by
-  rw [mem_finiteRange_iff_hasNoetherianRange]; rw [hasNoetherianRange_iff_hasFiniteRange]
-
-中文:
-引理 mem_finiteRange_iff_hasFiniteRange
-  条件: [是Noether环 K] {f : V ->ₗ[K] V₂}
-  证明: by
-  rw [mem_finiteRange_iff_hasNoetherianRange]; rw [hasNoetherianRange_iff_hasFiniteRange]
-
-Depends on / 依赖: hasNoetherianRange_iff_hasFiniteRange, mem_finiteRange_iff_hasNoetherianRange
+/-
+**LinearMap.mem_finiteRange_iff_hasFiniteRange** 是 Mathlib 中的一个引理，位于命名空间 `Linear
+Map`。
+形式化陈述：mem_finiteRange_iff_hasFiniteRange [IsNoetherianRing K] {f : V ->ₗ[K] V₂} 
+: f in finiteRange K V V₂ ↔ f.HasFiniteRange
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `LinearMap.mem_finiteRange_iff_hasNoetherianRange`：mem_finiteRange_iff_ha
+sNoetherianRange {f : V ->ₗ[K] V₂} : f in finiteRange K V V₂ ↔ f.HasNoetherianRa
+nge
+· 使用引理 `LinearMap.hasNoetherianRange_iff_hasFiniteRange`：hasNoetherianRange_iff_
+hasFiniteRange [IsNoetherianRing K] {u : V ->ₗ[K] V₂} : u.HasNoetherianRange ↔ u
+.HasFiniteRange
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma mem_finiteRange_iff_hasFiniteRange [IsNoetherianRing K] {f : V ->ₗ[K] V₂} :
-    f in finiteRange K V V₂ ↔ f.HasFiniteRange := by
-  rw [mem_finiteRange_iff_hasNoetherianRange]; rw [hasNoetherianRange_iff_hasFiniteRange]
+lemma mem_finiteRange_iff_hasFiniteRange [IsNoetherianRing K] {f : V →ₗ[K] V₂} :
+    f ∈ finiteRange K V V₂ ↔ f.HasFiniteRange := by
+  rw [mem_finiteRange_iff_hasNoetherianRange, hasNoetherianRange_iff_hasFiniteRange]
 
 end CommRing
 
@@ -696,338 +654,350 @@ well-behaved relation (more precisely, an additive congruence relation compatibl
 on both sides) over a noetherian ring, in which case the two notions agree.
 
 This setoid is declared as an instance in scope `LinearMap.FiniteRangeSetoid`. -/
-scoped instance setoid : Setoid (V ->ₗ[K] V₂) := (LinearMap.finiteRange K V V₂).quotientRel
+/-
+**LinearMap.FiniteRangeSetoid.setoid** 是 Mathlib 中的一个定义，位于命名空间 `LinearMap.Finite
+RangeSetoid`。
+形式化陈述：{K : Type u_1} →   {V : Type u_2} →     {V₂ : Type u_4} →       [inst : Co
+mmRing K] →         [inst_1 : AddCommGroup V] →           [inst_2 : _root_.Modul
+e K V] →             [inst_3 : AddCommGroup V₂] → [inst_4 : _root_.Module K V₂] 
+→ Setoid (V →ₗ[K] V₂)
+参数：V →ₗ[K] V₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-lemma `equiv_iff_hasNoetherianRange` / 引理 `equiv_iff_hasNoetherianRange`
+--- 原说明 ---
+This is the equivalence relation on linear maps such that `u ≈ v` precisely
+when `u - v` is a linear map with noetherian range. We allow ourself this slight
+ly abusive name
+because the more natural definition (`u - v` has finitely generated range) only 
+yields a
+well-behaved relation (more precisely, an additive congruence relation compatibl
+e with composition
+on both sides) over a noetherian ring, in which case the two notions agree.
 
-English:
-lemma equiv_iff_hasNoetherianRange
-  given: {u v : V ->ₗ[K] V₂}
-  statement: u ≈ v ↔ (u - v).HasNoetherianRange
-  proof: Submodule.quotientRel_def _
-
-中文:
-引理 equiv_iff_hasNoetherianRange
-  条件: {u v : V ->ₗ[K] V₂}
-  结论: u ≈ v ↔ (u - v).HasNoetherianRange
-  证明: Submodule.quotientRel_def _
-
-Depends on / 依赖: Submodule, Submodule.quotientRel_def, quotientRel_def
+This setoid is declared as an instance in scope `LinearMap.FiniteRangeSetoid`.
 -/
-lemma equiv_iff_hasNoetherianRange {u v : V ->ₗ[K] V₂} : u ≈ v ↔ (u - v).HasNoetherianRange :=
+scoped instance setoid : Setoid (V →ₗ[K] V₂) := (LinearMap.finiteRange K V V₂).quotientRel
+/-
+**LinearMap.FiniteRangeSetoid.equiv_iff_hasNoetherianRange** 是 Mathlib 中的一个引理，位于
+命名空间 `LinearMap.FiniteRangeSetoid`。
+形式化陈述：equiv_iff_hasNoetherianRange {u v : V ->ₗ[K] V₂} : u ≈ v ↔ (u - v).HasNoet
+herianRange
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.quotientRel_def`：quotientRel_def {x y : M} : p.quotientRel x y
+ ↔ x - y in p
+-/
+lemma equiv_iff_hasNoetherianRange {u v : V →ₗ[K] V₂} : u ≈ v ↔ (u - v).HasNoetherianRange :=
   Submodule.quotientRel_def _
-
-/--
-lemma `equiv_iff_hasFiniteRange` / 引理 `equiv_iff_hasFiniteRange`
-
-English:
-lemma equiv_iff_hasFiniteRange
-  given: [IsNoetherianRing K] {u v : V ->ₗ[K] V₂}
-  proof: by
-  rw [equiv_iff_hasNoetherianRange]; rw [hasNoetherianRange_iff_hasFiniteRange]
-
-中文:
-引理 equiv_iff_hasFiniteRange
-  条件: [是Noether环 K] {u v : V ->ₗ[K] V₂}
-  证明: by
-  rw [equiv_iff_hasNoetherianRange]; rw [hasNoetherianRange_iff_hasFiniteRange]
-
-Depends on / 依赖: equiv_iff_hasNoetherianRange, hasNoetherianRange_iff_hasFiniteRange
+/-
+**LinearMap.FiniteRangeSetoid.equiv_iff_hasFiniteRange** 是 Mathlib 中的一个引理，位于命名空间
+ `LinearMap.FiniteRangeSetoid`。
+形式化陈述：equiv_iff_hasFiniteRange [IsNoetherianRing K] {u v : V ->ₗ[K] V₂} : u ≈ v 
+↔ (u - v).HasFiniteRange
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `LinearMap.FiniteRangeSetoid.equiv_iff_hasNoetherianRange`：equiv_iff_hasN
+oetherianRange {u v : V ->ₗ[K] V₂} : u ≈ v ↔ (u - v).HasNoetherianRange
+· 使用引理 `LinearMap.hasNoetherianRange_iff_hasFiniteRange`：hasNoetherianRange_iff_
+hasFiniteRange [IsNoetherianRing K] {u : V ->ₗ[K] V₂} : u.HasNoetherianRange ↔ u
+.HasFiniteRange
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma equiv_iff_hasFiniteRange [IsNoetherianRing K] {u v : V ->ₗ[K] V₂} :
+lemma equiv_iff_hasFiniteRange [IsNoetherianRing K] {u v : V →ₗ[K] V₂} :
     u ≈ v ↔ (u - v).HasFiniteRange := by
-  rw [equiv_iff_hasNoetherianRange]; rw [hasNoetherianRange_iff_hasFiniteRange]
-
-/--
-lemma `equiv_zero_iff_hasNoetherianRange` / 引理 `equiv_zero_iff_hasNoetherianRange`
-
-English:
-lemma equiv_zero_iff_hasNoetherianRange
-  given: {u : V ->ₗ[K] V₂}
-  statement: u ≈ 0 ↔ u.HasNoetherianRange
-  proof: by
-  simp [equiv_iff_hasNoetherianRange]
-
-中文:
-引理 equiv_zero_iff_hasNoetherianRange
-  条件: {u : V ->ₗ[K] V₂}
-  结论: u ≈ 0 ↔ u.HasNoetherianRange
-  证明: by
-  simp [equiv_iff_hasNoetherianRange]
-
-Depends on / 依赖: equiv_iff_hasNoetherianRange
+  rw [equiv_iff_hasNoetherianRange, hasNoetherianRange_iff_hasFiniteRange]
+/-
+**LinearMap.FiniteRangeSetoid.equiv_zero_iff_hasNoetherianRange** 是 Mathlib 中的一个
+引理，位于命名空间 `LinearMap.FiniteRangeSetoid`。
+形式化陈述：equiv_zero_iff_hasNoetherianRange {u : V ->ₗ[K] V₂} : u ≈ 0 ↔ u.HasNoether
+ianRange
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma equiv_zero_iff_hasNoetherianRange {u : V ->ₗ[K] V₂} : u ≈ 0 ↔ u.HasNoetherianRange := by
+lemma equiv_zero_iff_hasNoetherianRange {u : V →ₗ[K] V₂} : u ≈ 0 ↔ u.HasNoetherianRange := by
   simp [equiv_iff_hasNoetherianRange]
-
-/--
-lemma `equiv_zero_iff_hasFiniteRange` / 引理 `equiv_zero_iff_hasFiniteRange`
-
-English:
-lemma equiv_zero_iff_hasFiniteRange
-  given: [IsNoetherianRing K] {u : V ->ₗ[K] V₂}
-  proof: by
-  simp [equiv_iff_hasFiniteRange]
-
-中文:
-引理 equiv_zero_iff_hasFiniteRange
-  条件: [是Noether环 K] {u : V ->ₗ[K] V₂}
-  证明: by
-  simp [equiv_iff_hasFiniteRange]
-
-Depends on / 依赖: equiv_iff_hasFiniteRange
+/-
+**LinearMap.FiniteRangeSetoid.equiv_zero_iff_hasFiniteRange** 是 Mathlib 中的一个引理，位
+于命名空间 `LinearMap.FiniteRangeSetoid`。
+形式化陈述：equiv_zero_iff_hasFiniteRange [IsNoetherianRing K] {u : V ->ₗ[K] V₂} : u ≈
+ 0 ↔ u.HasFiniteRange
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma equiv_zero_iff_hasFiniteRange [IsNoetherianRing K] {u : V ->ₗ[K] V₂} :
+lemma equiv_zero_iff_hasFiniteRange [IsNoetherianRing K] {u : V →ₗ[K] V₂} :
     u ≈ 0 ↔ u.HasFiniteRange := by
   simp [equiv_iff_hasFiniteRange]
-
-/--
-lemma `equiv_iff_isNoetherian_quotient_eqLocus` / 引理 `equiv_iff_isNoetherian_quotient_eqLocus`
-
-English:
-lemma equiv_iff_isNoetherian_quotient_eqLocus
-  given: {u v : V ->ₗ[K] V₂}
-  proof: by
-  rw [equiv_iff_hasNoetherianRange]; rw [hasNoetherianRange_iff_quotient_ker]; rw [eqLocus_eq_ker_sub]
-
-中文:
-引理 equiv_iff_isNoetherian_quotient_eqLocus
-  条件: {u v : V ->ₗ[K] V₂}
-  证明: by
-  rw [equiv_iff_hasNoetherianRange]; rw [hasNoetherianRange_iff_quotient_ker]; rw [eqLocus_eq_ker_sub]
-
-Depends on / 依赖: eqLocus_eq_ker_sub, equiv_iff_hasNoetherianRange, hasNoetherianRange_iff_quotient_ker
+/-
+**LinearMap.FiniteRangeSetoid.equiv_iff_isNoetherian_quotient_eqLocus** 是 Mathli
+b 中的一个引理，位于命名空间 `LinearMap.FiniteRangeSetoid`。
+形式化陈述：equiv_iff_isNoetherian_quotient_eqLocus {u v : V ->ₗ[K] V₂} : u ≈ v ↔ IsNo
+etherian K (V ⧸ eqLocus u v)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `LinearMap.FiniteRangeSetoid.equiv_iff_hasNoetherianRange`：equiv_iff_hasN
+oetherianRange {u v : V ->ₗ[K] V₂} : u ≈ v ↔ (u - v).HasNoetherianRange
+· 使用定理 `LinearMap.hasNoetherianRange_iff_quotient_ker`：hasNoetherianRange_iff_qu
+otient_ker {f : V ->ₗ[K] V₂} : f.HasNoetherianRange ↔ IsNoetherian K (V ⧸ f.ker)
+· 使用定理 `LinearMap.eqLocus_eq_ker_sub`：eqLocus_eq_ker_sub (f g : M ->ₛₗ[τ₁₂] M₂) 
+: eqLocus f g = ker (f - g)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma equiv_iff_isNoetherian_quotient_eqLocus {u v : V ->ₗ[K] V₂} :
+lemma equiv_iff_isNoetherian_quotient_eqLocus {u v : V →ₗ[K] V₂} :
     u ≈ v ↔ IsNoetherian K (V ⧸ eqLocus u v) := by
-  rw [equiv_iff_hasNoetherianRange]; rw [hasNoetherianRange_iff_quotient_ker]; rw [eqLocus_eq_ker_sub]
-
-/--
-lemma `equiv_iff_eqLocus_coFG` / 引理 `equiv_iff_eqLocus_coFG`
-
-English:
-lemma equiv_iff_eqLocus_coFG
-  given: [IsNoetherianRing K] {u v : V ->ₗ[K] V₂}
-  proof: by
-  rw [eqLocus_eq_ker_sub]; rw [ker_coFG_iff_hasFiniteRange]; rw [equiv_iff_hasFiniteRange]
-
-中文:
-引理 equiv_iff_eqLocus_coFG
-  条件: [是Noether环 K] {u v : V ->ₗ[K] V₂}
-  证明: by
-  rw [eqLocus_eq_ker_sub]; rw [ker_coFG_iff_hasFiniteRange]; rw [equiv_iff_hasFiniteRange]
-
-Depends on / 依赖: eqLocus_eq_ker_sub, equiv_iff_hasFiniteRange, ker_coFG_iff_hasFiniteRange
+  rw [equiv_iff_hasNoetherianRange, hasNoetherianRange_iff_quotient_ker, eqLocus_eq_ker_sub]
+/-
+**LinearMap.FiniteRangeSetoid.equiv_iff_eqLocus_coFG** 是 Mathlib 中的一个引理，位于命名空间 `
+LinearMap.FiniteRangeSetoid`。
+形式化陈述：equiv_iff_eqLocus_coFG [IsNoetherianRing K] {u v : V ->ₗ[K] V₂} : u ≈ v ↔ 
+(eqLocus u v).CoFG
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.eqLocus_eq_ker_sub`：eqLocus_eq_ker_sub (f g : M ->ₛₗ[τ₁₂] M₂) 
+: eqLocus f g = ker (f - g)
+· 使用定理 `LinearMap.ker_coFG_iff_hasFiniteRange`：ker_coFG_iff_hasFiniteRange {f : 
+V ->ₗ[K] V₂} : f.ker.CoFG ↔ f.HasFiniteRange
+· 使用引理 `LinearMap.FiniteRangeSetoid.equiv_iff_hasFiniteRange`：equiv_iff_hasFinit
+eRange [IsNoetherianRing K] {u v : V ->ₗ[K] V₂} : u ≈ v ↔ (u - v).HasFiniteRange
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma equiv_iff_eqLocus_coFG [IsNoetherianRing K] {u v : V ->ₗ[K] V₂} :
+lemma equiv_iff_eqLocus_coFG [IsNoetherianRing K] {u v : V →ₗ[K] V₂} :
     u ≈ v ↔ (eqLocus u v).CoFG := by
-  rw [eqLocus_eq_ker_sub]; rw [ker_coFG_iff_hasFiniteRange]; rw [equiv_iff_hasFiniteRange]
-
-/--
-lemma `equiv_of_eqOn_of_isNoetherian` / 引理 `equiv_of_eqOn_of_isNoetherian`
-
-English:
-lemma equiv_of_eqOn_of_isNoetherian
-  statement: {u v : V ->ₗ[K] V₂} (A : Submodule K V)
-  proof: by
-  have A_le : A <= eqLocus u v := le_eqLocus.mpr eqOn_A
-  rw [equiv_iff_isNoetherian_quotient_eqLocus]
-  refine isNoetherian_of_surjective (A.mapQ (eqLocus u v) id A_le) (by simp [range_mapQ])
-
-中文:
-引理 equiv_of_eqOn_of_isNoetherian
-  结论: {u v : V ->ₗ[K] V₂} (A : 子模 K V)
-  证明: by
-  have A_le : A <= eqLocus u v := le_eqLocus.mpr eqOn_A
-  rw [equiv_iff_isNoetherian_quotient_eqLocus]
-  refine isNoetherian_of_surjective (A.mapQ (eqLocus u v) id A_le) (by simp [range_mapQ])
-
-Depends on / 依赖: A.mapQ, A_le, eqLocus, eqOn_A, equiv_iff_isNoetherian_quotient_eqLocus, isNoetherian_of_surjective, le_eqLocus, le_eqLocus.mpr, range_mapQ
+  rw [eqLocus_eq_ker_sub, ker_coFG_iff_hasFiniteRange, equiv_iff_hasFiniteRange]
+/-
+**LinearMap.FiniteRangeSetoid.equiv_of_eqOn_of_isNoetherian** 是 Mathlib 中的一个引理，位
+于命名空间 `LinearMap.FiniteRangeSetoid`。
+形式化陈述：equiv_of_eqOn_of_isNoetherian {u v : V ->ₗ[K] V₂} (A : Submodule K V) [quo
+t_A_noeth : IsNoetherian K (V ⧸ A)] (eqOn_A : Set.EqOn u v A) : u ≈ v
+参数：A : Submodule K V；V ⧸ A；eqOn_A : Set.EqOn u v A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LinearMap.le_eqLocus`：le_eqLocus {f g : M ->ₛₗ[τ₁₂] M₂} {S : Submodule R
+ M} : S <= eqLocus f g ↔ Set.EqOn f g S
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `LinearMap.FiniteRangeSetoid.equiv_iff_isNoetherian_quotient_eqLocus`：equ
+iv_iff_isNoetherian_quotient_eqLocus {u v : V ->ₗ[K] V₂} : u ≈ v ↔ IsNoetherian 
+K (V ⧸ eqLocus u v)
+· 使用定理 `isNoetherian_of_surjective`：isNoetherian_of_surjective {σ : R ->+* S} [R
+ingHomSurjective σ] (f : M ->ₛₗ[σ] P) (hf : LinearMap.range f = ⊤) [IsNoetherian
+ R M] : IsNoethe…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Submodule.range_mapQ`：range_mapQ [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂
+] M₂) (h : p <= comap f q) : (p.mapQ q f h).range = f.range.map q.mkQ
+· 使用定理 `Submodule.map.congr_simp`：∀ {R : Type u_1} {R₂ : Type u_3} {M : Type u_5
+} {M₂ : Type u_7} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddComm
+Monoid M] [ins…
+· 使用定理 `LinearMap.range_id`：range_id : range (LinearMap.id : M ->ₗ[R] M) = ⊤
+· 使用定理 `Submodule.map_top`：map_top [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) 
+: map f ⊤ = range f
+· 使用定理 `Submodule.range_mkQ`：range_mkQ : range p.mkQ = ⊤
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma equiv_of_eqOn_of_isNoetherian {u v : V ->ₗ[K] V₂} (A : Submodule K V)
+lemma equiv_of_eqOn_of_isNoetherian {u v : V →ₗ[K] V₂} (A : Submodule K V)
     [quot_A_noeth : IsNoetherian K (V ⧸ A)] (eqOn_A : Set.EqOn u v A) : u ≈ v := by
-  have A_le : A <= eqLocus u v := le_eqLocus.mpr eqOn_A
+  have A_le : A ≤ eqLocus u v := le_eqLocus.mpr eqOn_A
   rw [equiv_iff_isNoetherian_quotient_eqLocus]
   refine isNoetherian_of_surjective (A.mapQ (eqLocus u v) id A_le) (by simp [range_mapQ])
-
-/--
-lemma `equiv_of_eqOn_coFG` / 引理 `equiv_of_eqOn_coFG`
-
-English:
-lemma equiv_of_eqOn_coFG
-  statement: [IsNoetherianRing K] {u v : V ->ₗ[K] V₂} {A : Submodule K V}
-  proof: equiv_iff_eqLocus_coFG.mpr A_coFG.of_le le_eqLocus.mpr eqOn_A
-
-@[gcongr]
-
-中文:
-引理 equiv_of_eqOn_coFG
-  结论: [是Noether环 K] {u v : V ->ₗ[K] V₂} {A : 子模 K V}
-  证明: equiv_iff_eqLocus_coFG.mpr A_coFG.of_le le_eqLocus.mpr eqOn_A
-
-@[gcongr]
-
-Depends on / 依赖: A_coFG, A_coFG.of_le, Finsupp, Finsupp.erase_add_single, eqOn_A, equiv_iff_eqLocus_coFG, equiv_iff_eqLocus_coFG.mpr, erase_add_single, le_eqLocus, le_eqLocus.mpr, of_le
+/-
+**LinearMap.FiniteRangeSetoid.equiv_of_eqOn_coFG** 是 Mathlib 中的一个引理，位于命名空间 `Line
+arMap.FiniteRangeSetoid`。
+形式化陈述：equiv_of_eqOn_coFG [IsNoetherianRing K] {u v : V ->ₗ[K] V₂} {A : Submodule
+ K V} (A_coFG : A.CoFG) (eqOn_A : Set.EqOn u v A) : u ≈ v
+参数：A_coFG : A.CoFG；eqOn_A : Set.EqOn u v A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `LinearMap.FiniteRangeSetoid.equiv_iff_eqLocus_coFG`：equiv_iff_eqLocus_co
+FG [IsNoetherianRing K] {u v : V ->ₗ[K] V₂} : u ≈ v ↔ (eqLocus u v).CoFG
+· 使用定理 `Submodule.CoFG.of_le`：∀ {R : Type u_1} [inst : Ring R] {M : Type u_2} [i
+nst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   {S T : Submodule R M}, S 
+≤ T → S.Co…
+· 使用定理 `LinearMap.le_eqLocus`：le_eqLocus {f g : M ->ₛₗ[τ₁₂] M₂} {S : Submodule R
+ M} : S <= eqLocus f g ↔ Set.EqOn f g S
 -/
-lemma equiv_of_eqOn_coFG [IsNoetherianRing K] {u v : V ->ₗ[K] V₂} {A : Submodule K V}
+lemma equiv_of_eqOn_coFG [IsNoetherianRing K] {u v : V →ₗ[K] V₂} {A : Submodule K V}
     (A_coFG : A.CoFG) (eqOn_A : Set.EqOn u v A) : u ≈ v :=
-equiv_iff_eqLocus_coFG.mpr A_coFG.of_le le_eqLocus.mpr eqOn_A
+  equiv_iff_eqLocus_coFG.mpr <| A_coFG.of_le <| le_eqLocus.mpr eqOn_A
 
 @[gcongr]
-/--
-lemma `equiv_comp_right` / 引理 `equiv_comp_right`
-
-English:
-lemma equiv_comp_right
-  given: {u : V ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃} (h' : v ≈ v')
-  proof: by
-  rw [equiv_iff_hasNoetherianRange] at *
-  exact h'.comp_right u
-
-@[gcongr]
-
-中文:
-引理 equiv_comp_right
-  条件: {u : V ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃} (h' : v ≈ v')
-  证明: by
-  rw [equiv_iff_hasNoetherianRange] at *
-  exact h'.comp_right u
-
-@[gcongr]
-
-Depends on / 依赖: comp_right, equiv_iff_hasNoetherianRange
+/-
+**LinearMap.FiniteRangeSetoid.equiv_comp_right** 是 Mathlib 中的一个引理，位于命名空间 `Linear
+Map.FiniteRangeSetoid`。
+形式化陈述：equiv_comp_right {u : V ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃} (h' : v ≈ v') : v
+ ∘ₗ u ≈ v' ∘ₗ u
+参数：h' : v ≈ v'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `LinearMap.FiniteRangeSetoid.equiv_iff_hasNoetherianRange`：equiv_iff_hasN
+oetherianRange {u v : V ->ₗ[K] V₂} : u ≈ v ↔ (u - v).HasNoetherianRange
+· 使用定理 `LinearMap.HasNoetherianRange.comp_right`：∀ {K : Type u_1} {V : Type u_2}
+ {V₂ : Type u_4} {V₃ : Type u_6} [inst : Ring K] [inst_1 : AddCommGroup V]   [in
+st_2 : _root_.Module K V] [in…
 -/
-lemma equiv_comp_right {u : V ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃} (h' : v ≈ v') :
+lemma equiv_comp_right {u : V →ₗ[K] V₂} {v v' : V₂ →ₗ[K] V₃} (h' : v ≈ v') :
     v ∘ₗ u ≈ v' ∘ₗ u := by
   rw [equiv_iff_hasNoetherianRange] at *
   exact h'.comp_right u
 
 @[gcongr]
-/--
-lemma `equiv_comp_left` / 引理 `equiv_comp_left`
-
-English:
-lemma equiv_comp_left
-  given: {u v : V ->ₗ[K] V₂} {u' : V₂ ->ₗ[K] V₃} (h : u ≈ v)
-  proof: by
-  rw [equiv_iff_hasNoetherianRange] at *
-  simpa only [LinearMap.comp_sub] using h.comp_left u'
-
-中文:
-引理 equiv_comp_left
-  条件: {u v : V ->ₗ[K] V₂} {u' : V₂ ->ₗ[K] V₃} (h : u ≈ v)
-  证明: by
-  rw [equiv_iff_hasNoetherianRange] at *
-  simpa only [LinearMap.comp_sub] using h.comp_left u'
-
-Depends on / 依赖: LinearMap, LinearMap.comp_sub, comp_left, comp_sub, equiv_iff_hasNoetherianRange, h.comp_left
+/-
+**LinearMap.FiniteRangeSetoid.equiv_comp_left** 是 Mathlib 中的一个引理，位于命名空间 `LinearM
+ap.FiniteRangeSetoid`。
+形式化陈述：equiv_comp_left {u v : V ->ₗ[K] V₂} {u' : V₂ ->ₗ[K] V₃} (h : u ≈ v) : u' ∘
+ₗ u ≈ u' ∘ₗ v
+参数：h : u ≈ v。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `LinearMap.FiniteRangeSetoid.equiv_iff_hasNoetherianRange`：equiv_iff_hasN
+oetherianRange {u v : V ->ₗ[K] V₂} : u ≈ v ↔ (u - v).HasNoetherianRange
+· 使用定理 `LinearMap.comp_sub`：comp_sub (f g : M ->ₛₗ[σ₁₂] N₂) (h : N₂ ->ₛₗ[σ₂₃] N₃
+) : h.comp (g - f) = h.comp g - h.comp f
+· 使用定理 `LinearMap.HasNoetherianRange.comp_left`：∀ {K : Type u_1} {V : Type u_2} 
+{V₂ : Type u_4} {V₃ : Type u_6} [inst : Semiring K] [inst_1 : AddCommMonoid V]  
+ [inst_2 : _root_.Module K V…
 -/
-lemma equiv_comp_left {u v : V ->ₗ[K] V₂} {u' : V₂ ->ₗ[K] V₃} (h : u ≈ v) :
+lemma equiv_comp_left {u v : V →ₗ[K] V₂} {u' : V₂ →ₗ[K] V₃} (h : u ≈ v) :
     u' ∘ₗ u ≈ u' ∘ₗ v := by
   rw [equiv_iff_hasNoetherianRange] at *
   simpa only [LinearMap.comp_sub] using h.comp_left u'
-
-/--
-lemma `equiv_comp` / 引理 `equiv_comp`
-
-English:
-lemma equiv_comp
-  given: {u v : V ->ₗ[K] V₂} {u' v' : V₂ ->ₗ[K] V₃} (h : u ≈ v) (h' : u' ≈ v')
-  proof: by
-  grw [equiv_comp_right h', equiv_comp_left h]
-
-中文:
-引理 equiv_comp
-  条件: {u v : V ->ₗ[K] V₂} {u' v' : V₂ ->ₗ[K] V₃} (h : u ≈ v) (h' : u' ≈ v')
-  证明: by
-  grw [equiv_comp_right h', equiv_comp_left h]
-
-Depends on / 依赖: equiv_comp_left, equiv_comp_right
+/-
+**LinearMap.FiniteRangeSetoid.equiv_comp** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap.Fi
+niteRangeSetoid`。
+形式化陈述：equiv_comp {u v : V ->ₗ[K] V₂} {u' v' : V₂ ->ₗ[K] V₃} (h : u ≈ v) (h' : u'
+ ≈ v') : u' ∘ₗ u ≈ v' ∘ₗ v
+参数：h : u ≈ v；h' : u' ≈ v'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.GCongr.rel_imp_rel`：rel_imp_rel (h₁ : r c a) (h₂ : r b d)
+ : r a b -> r c d
+· 使用定理 `IsPreorder.toIsTrans`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsPreo
+rder α r], IsTrans α r
+· 使用定理 `IsEquiv.toIsPreorder`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsEqui
+v α r], IsPreorder α r
+· 使用定理 `Quotient.instIsEquivEquiv`：∀ {α : Type u_4} [inst : Setoid α], IsEquiv α
+ fun x1 x2 => x1 ≈ x2
+· 使用引理 `LinearMap.FiniteRangeSetoid.equiv_comp_right`：equiv_comp_right {u : V ->
+ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃} (h' : v ≈ v') : v ∘ₗ u ≈ v' ∘ₗ u
+· 使用定理 `Setoid.refl`：∀ {α : Sort u} [inst : Setoid α] (a : α), a ≈ a
+· 使用引理 `LinearMap.FiniteRangeSetoid.equiv_comp_left`：equiv_comp_left {u v : V ->
+ₗ[K] V₂} {u' : V₂ ->ₗ[K] V₃} (h : u ≈ v) : u' ∘ₗ u ≈ u' ∘ₗ v
 -/
-lemma equiv_comp {u v : V ->ₗ[K] V₂} {u' v' : V₂ ->ₗ[K] V₃} (h : u ≈ v) (h' : u' ≈ v') :
+lemma equiv_comp {u v : V →ₗ[K] V₂} {u' v' : V₂ →ₗ[K] V₃} (h : u ≈ v) (h' : u' ≈ v') :
     u' ∘ₗ u ≈ v' ∘ₗ v := by
   grw [equiv_comp_right h', equiv_comp_left h]
-
-/--
-lemma `projection_equiv_zero_iff_isNoetherian` / 引理 `projection_equiv_zero_iff_isNoetherian`
-
-English:
-lemma projection_equiv_zero_iff_isNoetherian
-  given: {S T : Submodule K V} (hST : IsCompl S T)
-  proof: by
-  rw [equiv_zero_iff_hasNoetherianRange]; rw [hasNoetherianRange_iff_range]; rw [range_projection]
-
-中文:
-引理 projection_equiv_zero_iff_isNoetherian
-  条件: {S T : 子模 K V} (hST : 是补集 S T)
-  证明: by
-  rw [equiv_zero_iff_hasNoetherianRange]; rw [hasNoetherianRange_iff_range]; rw [range_projection]
-
-Depends on / 依赖: equiv_zero_iff_hasNoetherianRange, hasNoetherianRange_iff_range, range_projection
+/-
+**LinearMap.FiniteRangeSetoid.projection_equiv_zero_iff_isNoetherian** 是 Mathlib
+ 中的一个引理，位于命名空间 `LinearMap.FiniteRangeSetoid`。
+形式化陈述：projection_equiv_zero_iff_isNoetherian {S T : Submodule K V} (hST : IsComp
+l S T) : S.projection T hST ≈ 0 ↔ IsNoetherian K S
+参数：hST : IsCompl S T。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `LinearMap.FiniteRangeSetoid.equiv_zero_iff_hasNoetherianRange`：equiv_zer
+o_iff_hasNoetherianRange {u : V ->ₗ[K] V₂} : u ≈ 0 ↔ u.HasNoetherianRange
+· 使用引理 `LinearMap.hasNoetherianRange_iff_range`：hasNoetherianRange_iff_range {f 
+: V ->ₗ[K] V₂} : f.HasNoetherianRange ↔ IsNoetherian K f.range
+· 使用定理 `Submodule.range_projection`：range_projection (hpq : IsCompl p q) : range
+ (p.projection q hpq) = p
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma projection_equiv_zero_iff_isNoetherian {S T : Submodule K V} (hST : IsCompl S T) :
     S.projection T hST ≈ 0 ↔ IsNoetherian K S := by
-  rw [equiv_zero_iff_hasNoetherianRange]; rw [hasNoetherianRange_iff_range]; rw [range_projection]
-
-/--
-lemma `projection_equiv_zero` / 引理 `projection_equiv_zero`
-
-English:
-lemma projection_equiv_zero
-  given: {S T : Submodule K V} [IsNoetherian K S] (hST : IsCompl S T)
-  proof: .mpr inferInstance projection_equiv_zero_iff_isNoetherian hST
-
-中文:
-引理 projection_equiv_zero
-  条件: {S T : 子模 K V} [是Noether K S] (hST : 是补集 S T)
-  证明: .mpr inferInstance projection_equiv_zero_iff_isNoetherian hST
-
-Depends on / 依赖: projection_equiv_zero_iff_isNoetherian
+  rw [equiv_zero_iff_hasNoetherianRange, hasNoetherianRange_iff_range, range_projection]
+/-
+**LinearMap.FiniteRangeSetoid.projection_equiv_zero** 是 Mathlib 中的一个引理，位于命名空间 `L
+inearMap.FiniteRangeSetoid`。
+形式化陈述：projection_equiv_zero {S T : Submodule K V} [IsNoetherian K S] (hST : IsCo
+mpl S T) : S.projection T hST ≈ 0
+参数：hST : IsCompl S T。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `LinearMap.FiniteRangeSetoid.projection_equiv_zero_iff_isNoetherian`：proj
+ection_equiv_zero_iff_isNoetherian {S T : Submodule K V} (hST : IsCompl S T) : S
+.projection T hST ≈ 0 ↔ IsNoetherian K S
 -/
 lemma projection_equiv_zero {S T : Submodule K V} [IsNoetherian K S] (hST : IsCompl S T) :
     S.projection T hST ≈ 0 :=
-.mpr inferInstance projection_equiv_zero_iff_isNoetherian hST
-
-/--
-lemma `projection_equiv_id_iff_isNoetherian` / 引理 `projection_equiv_id_iff_isNoetherian`
-
-English:
-lemma projection_equiv_id_iff_isNoetherian
-  given: {S T : Submodule K V} (hST : IsCompl S T)
-  proof: by
-  rw [Setoid.comm]; rw [equiv_iff_hasNoetherianRange]; rw [← projection_eq_id_sub_projection]; rw [hasNoetherianRange_iff_range]; rw [range_projection]
-
-中文:
-引理 projection_equiv_id_iff_isNoetherian
-  条件: {S T : 子模 K V} (hST : 是补集 S T)
-  证明: by
-  rw [Setoid.comm]; rw [equiv_iff_hasNoetherianRange]; rw [← projection_eq_id_sub_projection]; rw [hasNoetherianRange_iff_range]; rw [range_projection]
-
-Depends on / 依赖: Setoid, Setoid.comm, equiv_iff_hasNoetherianRange, hasNoetherianRange_iff_range, projection_eq_id_sub_projection, range_projection
+  projection_equiv_zero_iff_isNoetherian hST |>.mpr inferInstance
+/-
+**LinearMap.FiniteRangeSetoid.projection_equiv_id_iff_isNoetherian** 是 Mathlib 中
+的一个引理，位于命名空间 `LinearMap.FiniteRangeSetoid`。
+形式化陈述：projection_equiv_id_iff_isNoetherian {S T : Submodule K V} (hST : IsCompl 
+S T) : S.projection T hST ≈ id ↔ IsNoetherian K T
+参数：hST : IsCompl S T。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Setoid.comm`：comm [Setoid α] {x y : α} : x ≈ y ↔ y ≈ x
+· 使用引理 `LinearMap.FiniteRangeSetoid.equiv_iff_hasNoetherianRange`：equiv_iff_hasN
+oetherianRange {u v : V ->ₗ[K] V₂} : u ≈ v ↔ (u - v).HasNoetherianRange
+· 使用定理 `IsCompl.symm`：∀ {α : Type u_1} [inst : PartialOrder α] [inst_1 : Bounded
+Order α] {x y : α}, IsCompl x y → IsCompl y x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Submodule.projection_eq_id_sub_projection`：projection_eq_id_sub_projecti
+on (hpq : IsCompl p q) : q.projection p hpq.symm = .id - p.projection q hpq
+· 使用引理 `LinearMap.hasNoetherianRange_iff_range`：hasNoetherianRange_iff_range {f 
+: V ->ₗ[K] V₂} : f.HasNoetherianRange ↔ IsNoetherian K f.range
+· 使用定理 `Submodule.range_projection`：range_projection (hpq : IsCompl p q) : range
+ (p.projection q hpq) = p
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma projection_equiv_id_iff_isNoetherian {S T : Submodule K V} (hST : IsCompl S T) :
     S.projection T hST ≈ id ↔ IsNoetherian K T := by
-  rw [Setoid.comm]; rw [equiv_iff_hasNoetherianRange]; rw [← projection_eq_id_sub_projection]; rw [hasNoetherianRange_iff_range]; rw [range_projection]
-
-/--
-lemma `projection_equiv_id` / 引理 `projection_equiv_id`
-
-English:
-lemma projection_equiv_id
-  given: {S T : Submodule K V} [IsNoetherian K T] (hST : IsCompl S T)
-  proof: .mpr inferInstance projection_equiv_id_iff_isNoetherian hST
-
-中文:
-引理 projection_equiv_id
-  条件: {S T : 子模 K V} [是Noether K T] (hST : 是补集 S T)
-  证明: .mpr inferInstance projection_equiv_id_iff_isNoetherian hST
-
-Depends on / 依赖: projection_equiv_id_iff_isNoetherian
+  rw [Setoid.comm, equiv_iff_hasNoetherianRange, ← projection_eq_id_sub_projection,
+    hasNoetherianRange_iff_range, range_projection]
+/-
+**LinearMap.FiniteRangeSetoid.projection_equiv_id** 是 Mathlib 中的一个引理，位于命名空间 `Lin
+earMap.FiniteRangeSetoid`。
+形式化陈述：projection_equiv_id {S T : Submodule K V} [IsNoetherian K T] (hST : IsComp
+l S T) : S.projection T hST ≈ id
+参数：hST : IsCompl S T。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `LinearMap.FiniteRangeSetoid.projection_equiv_id_iff_isNoetherian`：projec
+tion_equiv_id_iff_isNoetherian {S T : Submodule K V} (hST : IsCompl S T) : S.pro
+jection T hST ≈ id ↔ IsNoetherian K T
 -/
 lemma projection_equiv_id {S T : Submodule K V} [IsNoetherian K T] (hST : IsCompl S T) :
     S.projection T hST ≈ id :=
-.mpr inferInstance projection_equiv_id_iff_isNoetherian hST
+  projection_equiv_id_iff_isNoetherian hST |>.mpr inferInstance
 
 end FiniteRangeSetoid
 
@@ -1042,191 +1012,146 @@ variable [CommRing K]
 
 open scoped LinearMap.FiniteRangeSetoid
 
-/--
-Definition of `IsLeftQuasiInverse` / `IsLeftQuasiInverse` 的定义
+/-- `u` is a **left quasi-inverse** to `v` if `u ∘ₗ v ≈ id` modulo
+linear maps with noetherian ranges. Recall that if the scalar ring is noetherian
+(e.g a field), then "noetherian range" can be replaced by "finitely generated range". -/
+/-
+**LinearMap.IsLeftQuasiInverse** 是 Mathlib 中的一个定义，位于命名空间 `LinearMap`。
+形式化陈述：IsLeftQuasiInverse (u : V ->ₗ[K] V₂) (v : V₂ ->ₗ[K] V) : Prop
+参数：u : V ->ₗ[K] V₂；v : V₂ ->ₗ[K] V。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsLeftQuasiInverse
-  signature: (u : V ->ₗ[K] V₂) (v : V₂ ->ₗ[K] V)
-  body: u ∘ₗ v ≈ .id
-
-中文:
-定义 IsLeftQuasiInverse
-  签名: (u : V ->ₗ[K] V₂) (v : V₂ ->ₗ[K] V)
-  定义体: u ∘ₗ v ≈ .id
+--- 原说明 ---
+`u` is a **left quasi-inverse** to `v` if `u ∘ₗ v ≈ id` modulo
+linear maps with noetherian ranges. Recall that if the scalar ring is noetherian
+(e.g a field), then "noetherian range" can be replaced by "finitely generated ra
+nge".
 -/
-def IsLeftQuasiInverse (u : V ->ₗ[K] V₂) (v : V₂ ->ₗ[K] V) : Prop :=
+def IsLeftQuasiInverse (u : V →ₗ[K] V₂) (v : V₂ →ₗ[K] V) : Prop :=
   u ∘ₗ v ≈ .id
 
-/--
-Definition of `IsRightQuasiInverse` / `IsRightQuasiInverse` 的定义
+/-- `u` is a **right quasi-inverse** to `v` if `v ∘ₗ u ≈ id` modulo
+linear maps with noetherian ranges. Recall that if the scalar ring is noetherian
+(e.g a field), then "noetherian range" can be replaced by "finitely generated range". -/
+/-
+**LinearMap.IsRightQuasiInverse** 是 Mathlib 中的一个定义，位于命名空间 `LinearMap`。
+形式化陈述：IsRightQuasiInverse (u : V₃ ->ₗ[K] V₂) (v : V₂ ->ₗ[K] V₃) : Prop
+参数：u : V₃ ->ₗ[K] V₂；v : V₂ ->ₗ[K] V₃。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsRightQuasiInverse
-  signature: (u : V₃ ->ₗ[K] V₂) (v : V₂ ->ₗ[K] V₃)
-  body: v ∘ₗ u ≈ .id
-
-中文:
-定义 IsRightQuasiInverse
-  签名: (u : V₃ ->ₗ[K] V₂) (v : V₂ ->ₗ[K] V₃)
-  定义体: v ∘ₗ u ≈ .id
+--- 原说明 ---
+`u` is a **right quasi-inverse** to `v` if `v ∘ₗ u ≈ id` modulo
+linear maps with noetherian ranges. Recall that if the scalar ring is noetherian
+(e.g a field), then "noetherian range" can be replaced by "finitely generated ra
+nge".
 -/
-def IsRightQuasiInverse (u : V₃ ->ₗ[K] V₂) (v : V₂ ->ₗ[K] V₃) : Prop :=
+def IsRightQuasiInverse (u : V₃ →ₗ[K] V₂) (v : V₂ →ₗ[K] V₃) : Prop :=
   v ∘ₗ u ≈ .id
 
-/--
-Definition of `IsQuasiInverse` / `IsQuasiInverse` 的定义
+/-- `u` is a **quasi-inverse** to `v` if `u ∘ₗ v ≈ id` and `v ∘ₗ u ≈ id` modulo
+linear maps with noetherian ranges. Recall that if the scalar ring is noetherian
+(e.g a field), then "noetherian range" can be replaced by "finitely generated range". -/
+/-
+**LinearMap.IsQuasiInverse** 是 Mathlib 中的一个定义，位于命名空间 `LinearMap`。
+形式化陈述：IsQuasiInverse (u : V₃ ->ₗ[K] V₂) (v : V₂ ->ₗ[K] V₃) : Prop
+参数：u : V₃ ->ₗ[K] V₂；v : V₂ ->ₗ[K] V₃。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsQuasiInverse
-  signature: (u : V₃ ->ₗ[K] V₂) (v : V₂ ->ₗ[K] V₃)
-  body: u.IsLeftQuasiInverse v ∧ u.IsRightQuasiInverse v
-
-中文:
-定义 IsQuasiInverse
-  签名: (u : V₃ ->ₗ[K] V₂) (v : V₂ ->ₗ[K] V₃)
-  定义体: u.IsLeftQuasiInverse v ∧ u.IsRightQuasiInverse v
-
-Depends on / 依赖: IsLeftQuasiInverse, IsRightQuasiInverse, u.IsLeftQuasiInverse, u.IsRightQuasiInverse
+--- 原说明 ---
+`u` is a **quasi-inverse** to `v` if `u ∘ₗ v ≈ id` and `v ∘ₗ u ≈ id` modulo
+linear maps with noetherian ranges. Recall that if the scalar ring is noetherian
+(e.g a field), then "noetherian range" can be replaced by "finitely generated ra
+nge".
 -/
-def IsQuasiInverse (u : V₃ ->ₗ[K] V₂) (v : V₂ ->ₗ[K] V₃) : Prop :=
+def IsQuasiInverse (u : V₃ →ₗ[K] V₂) (v : V₂ →ₗ[K] V₃) : Prop :=
   u.IsLeftQuasiInverse v ∧ u.IsRightQuasiInverse v
-
-/--
-lemma `isLeftQuasiInverse_iff_isRightQuasiInverse_swap` / 引理 `isLeftQuasiInverse_iff_isRightQuasiInverse_swap`
-
-English:
-lemma isLeftQuasiInverse_iff_isRightQuasiInverse_swap
-  given: {u : V₃ ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃}
-  proof: Iff.rfl
-
-alias ⟨IsLeftQuasiInverse.isRightQuasiInverse, IsRightQuasiInverse.isLeftQuasiInverse⟩ :=
-  isLeftQuasiInverse_iff_isRightQuasiInverse_swap
-
-中文:
-引理 isLeftQuasiInverse_iff_isRightQuasiInverse_swap
-  条件: {u : V₃ ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃}
-  证明: Iff.rfl
-
-alias ⟨IsLeftQuasiInverse.isRightQuasiInverse, IsRightQuasiInverse.isLeftQuasiInverse⟩ :=
-  isLeftQuasiInverse_iff_isRightQuasiInverse_swap
-
-Depends on / 依赖: Iff.rfl
+/-
+**LinearMap.isLeftQuasiInverse_iff_isRightQuasiInverse_swap** 是 Mathlib 中的一个引理，位
+于命名空间 `LinearMap`。
+形式化陈述：isLeftQuasiInverse_iff_isRightQuasiInverse_swap {u : V₃ ->ₗ[K] V₂} {v : V₂
+ ->ₗ[K] V₃} : u.IsLeftQuasiInverse v ↔ v.IsRightQuasiInverse u
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma isLeftQuasiInverse_iff_isRightQuasiInverse_swap {u : V₃ ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃} :
+lemma isLeftQuasiInverse_iff_isRightQuasiInverse_swap {u : V₃ →ₗ[K] V₂} {v : V₂ →ₗ[K] V₃} :
     u.IsLeftQuasiInverse v ↔ v.IsRightQuasiInverse u := Iff.rfl
 
 alias ⟨IsLeftQuasiInverse.isRightQuasiInverse, IsRightQuasiInverse.isLeftQuasiInverse⟩ :=
   isLeftQuasiInverse_iff_isRightQuasiInverse_swap
-
-/--
-lemma `IsLeftQuasiInverse.equiv` / 引理 `IsLeftQuasiInverse.equiv`
-
-English:
-lemma IsLeftQuasiInverse.equiv
-  statement: {u : V₃ ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃}
-  proof: h
-
-中文:
-引理 IsLeftQuasiInverse.equiv
-  结论: {u : V₃ ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃}
-  证明: h
+/-
+**LinearMap.IsLeftQuasiInverse.equiv** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsLeft
+QuasiInverse`。
+形式化陈述：∀ {K : Type u_1} {V₂ : Type u_4} {V₃ : Type u_6} [inst : CommRing K] [inst
+_1 : AddCommGroup V₂]   [inst_2 : _root_.Module K V₂] [inst_3 : AddCommGroup V₃]
+ [inst_4 : _root_.Module K V₃] {u : V₃ →ₗ[K] V₂}   {v : V₂ →ₗ[K] V₃}, u.IsLeftQu
+asiInverse v → u ∘ₗ v ≈ LinearMap.id
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma IsLeftQuasiInverse.equiv {u : V₃ ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃}
+lemma IsLeftQuasiInverse.equiv {u : V₃ →ₗ[K] V₂} {v : V₂ →ₗ[K] V₃}
     (h : u.IsLeftQuasiInverse v) : u ∘ₗ v ≈ .id := h
-
-/--
-lemma `IsRightQuasiInverse.equiv` / 引理 `IsRightQuasiInverse.equiv`
-
-English:
-lemma IsRightQuasiInverse.equiv
-  statement: {u : V₃ ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃}
-  proof: h
-
-中文:
-引理 IsRightQuasiInverse.equiv
-  结论: {u : V₃ ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃}
-  证明: h
+/-
+**LinearMap.IsRightQuasiInverse.equiv** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsRig
+htQuasiInverse`。
+形式化陈述：∀ {K : Type u_1} {V₂ : Type u_4} {V₃ : Type u_6} [inst : CommRing K] [inst
+_1 : AddCommGroup V₂]   [inst_2 : _root_.Module K V₂] [inst_3 : AddCommGroup V₃]
+ [inst_4 : _root_.Module K V₃] {u : V₃ →ₗ[K] V₂}   {v : V₂ →ₗ[K] V₃}, u.IsRightQ
+uasiInverse v → v ∘ₗ u ≈ LinearMap.id
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma IsRightQuasiInverse.equiv {u : V₃ ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃}
+lemma IsRightQuasiInverse.equiv {u : V₃ →ₗ[K] V₂} {v : V₂ →ₗ[K] V₃}
     (h : u.IsRightQuasiInverse v) : v ∘ₗ u ≈ .id := h
-
-/--
-lemma `_root_.LinearEquiv.isQuasiInverse` / 引理 `_root_.LinearEquiv.isQuasiInverse`
-
-English:
-lemma _root_.LinearEquiv.isQuasiInverse
-  given: (e : V ≃ₗ[K] V₂)
-  proof: by
-  simp [IsQuasiInverse, IsLeftQuasiInverse, IsRightQuasiInverse]
-
-@[symm]
-
-中文:
-引理 _root_.线性等价.isQuasiInverse
-  条件: (e : V ≃ₗ[K] V₂)
-  证明: by
-  simp [IsQuasiInverse, IsLeftQuasiInverse, IsRightQuasiInverse]
-
-@[symm]
-
-Depends on / 依赖: IsLeftQuasiInverse, IsQuasiInverse, IsRightQuasiInverse
+/-
+**LinearMap._root_.LinearEquiv.isQuasiInverse** 是 Mathlib 中的一个引理，位于命名空间 `LinearM
+ap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.LinearEquiv.isQuasiInverse (e : V ≃ₗ[K] V₂) :
     e.symm.IsQuasiInverse e := by
   simp [IsQuasiInverse, IsLeftQuasiInverse, IsRightQuasiInverse]
 
 @[symm]
-/--
-lemma `IsQuasiInverse.symm` / 引理 `IsQuasiInverse.symm`
-
-English:
-lemma IsQuasiInverse.symm
-  statement: {u : V₃ ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃}
-  proof: And.symm h
-
-@[gcongr]
-
-中文:
-引理 IsQuasiInverse.symm
-  结论: {u : V₃ ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃}
-  证明: And.symm h
-
-@[gcongr]
-
-Depends on / 依赖: And.symm
+/-
+**LinearMap.IsQuasiInverse.symm** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsQuasiInve
+rse`。
+形式化陈述：∀ {K : Type u_1} {V₂ : Type u_4} {V₃ : Type u_6} [inst : CommRing K] [inst
+_1 : AddCommGroup V₂]   [inst_2 : _root_.Module K V₂] [inst_3 : AddCommGroup V₃]
+ [inst_4 : _root_.Module K V₃] {u : V₃ →ₗ[K] V₂}   {v : V₂ →ₗ[K] V₃}, u.IsQuasiI
+nverse v → v.IsQuasiInverse u
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.symm`：∀ {a b : Prop}, a ∧ b → b ∧ a
 -/
-lemma IsQuasiInverse.symm {u : V₃ ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃}
+lemma IsQuasiInverse.symm {u : V₃ →ₗ[K] V₂} {v : V₂ →ₗ[K] V₃}
     (h : u.IsQuasiInverse v) : v.IsQuasiInverse u :=
   And.symm h
 
 @[gcongr]
-/--
-lemma `IsLeftQuasiInverse.congr` / 引理 `IsLeftQuasiInverse.congr`
-
-English:
-lemma IsLeftQuasiInverse.congr
-  statement: {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃}
-  proof: by
-  unfold IsLeftQuasiInverse at *
-  grw [hu, hv]
-  assumption
-
-@[gcongr]
-
-中文:
-引理 IsLeftQuasiInverse.congr
-  结论: {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃}
-  证明: by
-  unfold IsLeftQuasiInverse at *
-  grw [hu, hv]
-  assumption
-
-@[gcongr]
-
-Depends on / 依赖: IsLeftQuasiInverse
+/-
+**LinearMap.IsLeftQuasiInverse.congr** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsLeft
+QuasiInverse`。
+形式化陈述：∀ {K : Type u_1} {V₂ : Type u_4} {V₃ : Type u_6} [inst : CommRing K] [inst
+_1 : AddCommGroup V₂]   [inst_2 : _root_.Module K V₂] [inst_3 : AddCommGroup V₃]
+ [inst_4 : _root_.Module K V₃] {u u' : V₃ →ₗ[K] V₂}   {v v' : V₂ →ₗ[K] V₃}, u.Is
+LeftQuasiInverse v → u' ≈ u → v' ≈ v → u'.IsLeftQuasiInverse v'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.GCongr.rel_imp_rel`：rel_imp_rel (h₁ : r c a) (h₂ : r b d)
+ : r a b -> r c d
+· 使用定理 `IsPreorder.toIsTrans`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsPreo
+rder α r], IsTrans α r
+· 使用定理 `IsEquiv.toIsPreorder`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsEqui
+v α r], IsPreorder α r
+· 使用定理 `Quotient.instIsEquivEquiv`：∀ {α : Type u_4} [inst : Setoid α], IsEquiv α
+ fun x1 x2 => x1 ≈ x2
+· 使用引理 `LinearMap.FiniteRangeSetoid.equiv_comp_right`：equiv_comp_right {u : V ->
+ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃} (h' : v ≈ v') : v ∘ₗ u ≈ v' ∘ₗ u
+· 使用定理 `Setoid.refl`：∀ {α : Sort u} [inst : Setoid α] (a : α), a ≈ a
+· 使用引理 `LinearMap.FiniteRangeSetoid.equiv_comp_left`：equiv_comp_left {u v : V ->
+ₗ[K] V₂} {u' : V₂ ->ₗ[K] V₃} (h : u ≈ v) : u' ∘ₗ u ≈ u' ∘ₗ v
 -/
-lemma IsLeftQuasiInverse.congr {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃}
+lemma IsLeftQuasiInverse.congr {u u' : V₃ →ₗ[K] V₂} {v v' : V₂ →ₗ[K] V₃}
     (h : u.IsLeftQuasiInverse v) (hu : u' ≈ u) (hv : v' ≈ v) :
     u'.IsLeftQuasiInverse v' := by
   unfold IsLeftQuasiInverse at *
@@ -1234,146 +1159,151 @@ lemma IsLeftQuasiInverse.congr {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K]
   assumption
 
 @[gcongr]
-/--
-lemma `isLeftQuasiInverse_congr` / 引理 `isLeftQuasiInverse_congr`
-
-English:
-lemma isLeftQuasiInverse_congr
-  statement: {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃}
-  proof: ⟨fun H => H.congr hu hv, fun H => H.congr (Setoid.symm hu) (Setoid.symm hv)⟩
-
-@[gcongr]
-
-中文:
-引理 isLeftQuasiInverse_congr
-  结论: {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃}
-  证明: ⟨fun H => H.congr hu hv, fun H => H.congr (Setoid.symm hu) (Setoid.symm hv)⟩
-
-@[gcongr]
-
-Depends on / 依赖: H.congr, Setoid, Setoid.symm
+/-
+**LinearMap.isLeftQuasiInverse_congr** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap`。
+形式化陈述：isLeftQuasiInverse_congr {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃} (hu :
+ u' ≈ u) (hv : v' ≈ v) : u.IsLeftQuasiInverse v ↔ u'.IsLeftQuasiInverse v'
+参数：hu : u' ≈ u；hv : v' ≈ v。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.IsLeftQuasiInverse.congr`：∀ {K : Type u_1} {V₂ : Type u_4} {V₃
+ : Type u_6} [inst : CommRing K] [inst_1 : AddCommGroup V₂]   [inst_2 : _root_.M
+odule K V₂] [inst_3 : Ad…
+· 使用定理 `Setoid.symm`：∀ {α : Sort u} [inst : Setoid α] {a b : α}, a ≈ b → b ≈ a
 -/
-lemma isLeftQuasiInverse_congr {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃}
+lemma isLeftQuasiInverse_congr {u u' : V₃ →ₗ[K] V₂} {v v' : V₂ →ₗ[K] V₃}
     (hu : u' ≈ u) (hv : v' ≈ v) :
     u.IsLeftQuasiInverse v ↔ u'.IsLeftQuasiInverse v' :=
-  ⟨fun H => H.congr hu hv, fun H => H.congr (Setoid.symm hu) (Setoid.symm hv)⟩
+  ⟨fun H ↦ H.congr hu hv, fun H ↦ H.congr (Setoid.symm hu) (Setoid.symm hv)⟩
 
 @[gcongr]
-/--
-lemma `IsRightQuasiInverse.congr` / 引理 `IsRightQuasiInverse.congr`
-
-English:
-lemma IsRightQuasiInverse.congr
-  statement: {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃}
-  proof: .isRightQuasiInverse h.isLeftQuasiInverse.congr hv hu
-
-中文:
-引理 IsRightQuasiInverse.congr
-  结论: {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃}
-  证明: .isRightQuasiInverse h.isLeftQuasiInverse.congr hv hu
-
-Depends on / 依赖: h.isLeftQuasiInverse.congr, isLeftQuasiInverse, isRightQuasiInverse
+/-
+**LinearMap.IsRightQuasiInverse.congr** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsRig
+htQuasiInverse`。
+形式化陈述：∀ {K : Type u_1} {V₂ : Type u_4} {V₃ : Type u_6} [inst : CommRing K] [inst
+_1 : AddCommGroup V₂]   [inst_2 : _root_.Module K V₂] [inst_3 : AddCommGroup V₃]
+ [inst_4 : _root_.Module K V₃] {u u' : V₃ →ₗ[K] V₂}   {v v' : V₂ →ₗ[K] V₃}, u.Is
+RightQuasiInverse v → u' ≈ u → v' ≈ v → u'.IsRightQuasiInverse v'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.IsLeftQuasiInverse.isRightQuasiInverse`：∀ {K : Type u_1} {V₂ :
+ Type u_4} {V₃ : Type u_6} [inst : CommRing K] [inst_1 : AddCommGroup V₂]   [ins
+t_2 : _root_.Module K V₂] [inst_3 : Ad…
+· 使用定理 `LinearMap.IsLeftQuasiInverse.congr`：∀ {K : Type u_1} {V₂ : Type u_4} {V₃
+ : Type u_6} [inst : CommRing K] [inst_1 : AddCommGroup V₂]   [inst_2 : _root_.M
+odule K V₂] [inst_3 : Ad…
+· 使用定理 `LinearMap.IsRightQuasiInverse.isLeftQuasiInverse`：∀ {K : Type u_1} {V₂ :
+ Type u_4} {V₃ : Type u_6} [inst : CommRing K] [inst_1 : AddCommGroup V₂]   [ins
+t_2 : _root_.Module K V₂] [inst_3 : Ad…
 -/
-lemma IsRightQuasiInverse.congr {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃}
+lemma IsRightQuasiInverse.congr {u u' : V₃ →ₗ[K] V₂} {v v' : V₂ →ₗ[K] V₃}
     (h : u.IsRightQuasiInverse v) (hu : u' ≈ u) (hv : v' ≈ v) :
     u'.IsRightQuasiInverse v' :=
-.isRightQuasiInverse h.isLeftQuasiInverse.congr hv hu
-
-/--
-lemma `isRightQuasiInverse_congr` / 引理 `isRightQuasiInverse_congr`
-
-English:
-lemma isRightQuasiInverse_congr
-  statement: {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃}
-  proof: ⟨fun H => H.congr hu hv, fun H => H.congr (Setoid.symm hu) (Setoid.symm hv)⟩
-
-@[gcongr]
-
-中文:
-引理 isRightQuasiInverse_congr
-  结论: {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃}
-  证明: ⟨fun H => H.congr hu hv, fun H => H.congr (Setoid.symm hu) (Setoid.symm hv)⟩
-
-@[gcongr]
-
-Depends on / 依赖: H.congr, Setoid, Setoid.symm
+  h.isLeftQuasiInverse.congr hv hu |>.isRightQuasiInverse
+/-
+**LinearMap.isRightQuasiInverse_congr** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap`。
+形式化陈述：isRightQuasiInverse_congr {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃} (hu 
+: u' ≈ u) (hv : v' ≈ v) : u.IsRightQuasiInverse v ↔ u'.IsRightQuasiInverse v'
+参数：hu : u' ≈ u；hv : v' ≈ v。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.IsRightQuasiInverse.congr`：∀ {K : Type u_1} {V₂ : Type u_4} {V
+₃ : Type u_6} [inst : CommRing K] [inst_1 : AddCommGroup V₂]   [inst_2 : _root_.
+Module K V₂] [inst_3 : Ad…
+· 使用定理 `Setoid.symm`：∀ {α : Sort u} [inst : Setoid α] {a b : α}, a ≈ b → b ≈ a
 -/
-lemma isRightQuasiInverse_congr {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃}
+lemma isRightQuasiInverse_congr {u u' : V₃ →ₗ[K] V₂} {v v' : V₂ →ₗ[K] V₃}
     (hu : u' ≈ u) (hv : v' ≈ v) :
     u.IsRightQuasiInverse v ↔ u'.IsRightQuasiInverse v' :=
-  ⟨fun H => H.congr hu hv, fun H => H.congr (Setoid.symm hu) (Setoid.symm hv)⟩
+  ⟨fun H ↦ H.congr hu hv, fun H ↦ H.congr (Setoid.symm hu) (Setoid.symm hv)⟩
 
 @[gcongr]
-/--
-lemma `IsQuasiInverse.congr` / 引理 `IsQuasiInverse.congr`
-
-English:
-lemma IsQuasiInverse.congr
-  statement: {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃}
-  proof: ⟨h.1.congr hu hv, h.2.congr hu hv⟩
-
-中文:
-引理 IsQuasiInverse.congr
-  结论: {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃}
-  证明: ⟨h.1.congr hu hv, h.2.congr hu hv⟩
+/-
+**LinearMap.IsQuasiInverse.congr** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsQuasiInv
+erse`。
+形式化陈述：∀ {K : Type u_1} {V₂ : Type u_4} {V₃ : Type u_6} [inst : CommRing K] [inst
+_1 : AddCommGroup V₂]   [inst_2 : _root_.Module K V₂] [inst_3 : AddCommGroup V₃]
+ [inst_4 : _root_.Module K V₃] {u u' : V₃ →ₗ[K] V₂}   {v v' : V₂ →ₗ[K] V₃}, u.Is
+QuasiInverse v → u' ≈ u → v' ≈ v → u'.IsQuasiInverse v'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.IsLeftQuasiInverse.congr`：∀ {K : Type u_1} {V₂ : Type u_4} {V₃
+ : Type u_6} [inst : CommRing K] [inst_1 : AddCommGroup V₂]   [inst_2 : _root_.M
+odule K V₂] [inst_3 : Ad…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `LinearMap.IsRightQuasiInverse.congr`：∀ {K : Type u_1} {V₂ : Type u_4} {V
+₃ : Type u_6} [inst : CommRing K] [inst_1 : AddCommGroup V₂]   [inst_2 : _root_.
+Module K V₂] [inst_3 : Ad…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-lemma IsQuasiInverse.congr {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃}
+lemma IsQuasiInverse.congr {u u' : V₃ →ₗ[K] V₂} {v v' : V₂ →ₗ[K] V₃}
     (h : u.IsQuasiInverse v) (hu : u' ≈ u) (hv : v' ≈ v) :
     u'.IsQuasiInverse v' :=
   ⟨h.1.congr hu hv, h.2.congr hu hv⟩
-
-/--
-lemma `isQuasiInverse_congr` / 引理 `isQuasiInverse_congr`
-
-English:
-lemma isQuasiInverse_congr
-  statement: {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃}
-  proof: by
-  simp [IsQuasiInverse, isLeftQuasiInverse_congr hu hv, isRightQuasiInverse_congr hu hv]
-
-中文:
-引理 isQuasiInverse_congr
-  结论: {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃}
-  证明: by
-  simp [IsQuasiInverse, isLeftQuasiInverse_congr hu hv, isRightQuasiInverse_congr hu hv]
-
-Depends on / 依赖: IsQuasiInverse, isLeftQuasiInverse_congr, isRightQuasiInverse_congr
+/-
+**LinearMap.isQuasiInverse_congr** 是 Mathlib 中的一个引理，位于命名空间 `LinearMap`。
+形式化陈述：isQuasiInverse_congr {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃} (hu : u' 
+≈ u) (hv : v' ≈ v) : u.IsQuasiInverse v ↔ u'.IsQuasiInverse v'
+参数：hu : u' ≈ u；hv : v' ≈ v。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `LinearMap.isLeftQuasiInverse_congr`：isLeftQuasiInverse_congr {u u' : V₃ 
+->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃} (hu : u' ≈ u) (hv : v' ≈ v) : u.IsLeftQuasiInve
+rse v ↔ u'.IsLeftQuasiIn…
+· 使用引理 `LinearMap.isRightQuasiInverse_congr`：isRightQuasiInverse_congr {u u' : V
+₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃} (hu : u' ≈ u) (hv : v' ≈ v) : u.IsRightQuasiI
+nverse v ↔ u'.IsRightQuas…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma isQuasiInverse_congr {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃}
+lemma isQuasiInverse_congr {u u' : V₃ →ₗ[K] V₂} {v v' : V₂ →ₗ[K] V₃}
     (hu : u' ≈ u) (hv : v' ≈ v) :
     u.IsQuasiInverse v ↔ u'.IsQuasiInverse v' := by
   simp [IsQuasiInverse, isLeftQuasiInverse_congr hu hv, isRightQuasiInverse_congr hu hv]
-
-/--
-lemma `IsQuasiInverse.equiv_of_left` / 引理 `IsQuasiInverse.equiv_of_left`
-
-English:
-lemma IsQuasiInverse.equiv_of_left
-  statement: {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃}
-  proof: by
-  calc
-    v = v ∘ₗ .id := by simp
-    _ ≈ v ∘ₗ (u' ∘ₗ v') := by grw [h'.1.equiv]
-    _ ≈ v ∘ₗ (u ∘ₗ v') := by grw [hu]
-    _ = (v ∘ₗ u) ∘ₗ v' := by rw [comp_assoc]
-    _ ≈ .id ∘ₗ v' := by grw [h.2.equiv]
-    _ = v' := by simp
-
-中文:
-引理 IsQuasiInverse.equiv_of_left
-  结论: {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃}
-  证明: by
-  calc
-    v = v ∘ₗ .id := by simp
-    _ ≈ v ∘ₗ (u' ∘ₗ v') := by grw [h'.1.equiv]
-    _ ≈ v ∘ₗ (u ∘ₗ v') := by grw [hu]
-    _ = (v ∘ₗ u) ∘ₗ v' := by rw [comp_assoc]
-    _ ≈ .id ∘ₗ v' := by grw [h.2.equiv]
-    _ = v' := by simp
-
-Depends on / 依赖: comp_assoc
+/-
+**LinearMap.IsQuasiInverse.equiv_of_left** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.Is
+QuasiInverse`。
+形式化陈述：∀ {K : Type u_1} {V₂ : Type u_4} {V₃ : Type u_6} [inst : CommRing K] [inst
+_1 : AddCommGroup V₂]   [inst_2 : _root_.Module K V₂] [inst_3 : AddCommGroup V₃]
+ [inst_4 : _root_.Module K V₃] {u u' : V₃ →ₗ[K] V₂}   {v v' : V₂ →ₗ[K] V₃}, u.Is
+QuasiInverse v → u'.IsQuasiInverse v' → u ≈ u' → v ≈ v'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreorder.toIsTrans`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsPreo
+rder α r], IsTrans α r
+· 使用定理 `IsEquiv.toIsPreorder`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsEqui
+v α r], IsPreorder α r
+· 使用定理 `Quotient.instIsEquivEquiv`：∀ {α : Type u_4} [inst : Setoid α], IsEquiv α
+ fun x1 x2 => x1 ≈ x2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `Mathlib.Tactic.GCongr.rel_imp_rel`：rel_imp_rel (h₁ : r c a) (h₂ : r b d)
+ : r a b -> r c d
+· 使用定理 `Setoid.refl`：∀ {α : Sort u} [inst : Setoid α] (a : α), a ≈ a
+· 使用引理 `LinearMap.FiniteRangeSetoid.equiv_comp_left`：equiv_comp_left {u v : V ->
+ₗ[K] V₂} {u' : V₂ ->ₗ[K] V₃} (h : u ≈ v) : u' ∘ₗ u ≈ u' ∘ₗ v
+· 使用定理 `Setoid.symm`：∀ {α : Sort u} [inst : Setoid α] {a b : α}, a ≈ b → b ≈ a
+· 使用定理 `LinearMap.IsLeftQuasiInverse.equiv`：∀ {K : Type u_1} {V₂ : Type u_4} {V₃
+ : Type u_6} [inst : CommRing K] [inst_1 : AddCommGroup V₂]   [inst_2 : _root_.M
+odule K V₂] [inst_3 : Ad…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `LinearMap.FiniteRangeSetoid.equiv_comp_right`：equiv_comp_right {u : V ->
+ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃} (h' : v ≈ v') : v ∘ₗ u ≈ v' ∘ₗ u
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.comp_assoc`：comp_assoc {R₄ M₄ : Type*} [Semiring R₄] [AddCommM
+onoid M₄] [Module R₄ M₄] {σ₃₄ : R₃ ->+* R₄} {σ₂₄ : R₂ ->+* R₄} {σ₁₄ : R₁ ->+* R₄
+} [RingHom…
+· 使用定理 `LinearMap.IsRightQuasiInverse.equiv`：∀ {K : Type u_1} {V₂ : Type u_4} {V
+₃ : Type u_6} [inst : CommRing K] [inst_1 : AddCommGroup V₂]   [inst_2 : _root_.
+Module K V₂] [inst_3 : Ad…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-lemma IsQuasiInverse.equiv_of_left {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃}
+lemma IsQuasiInverse.equiv_of_left {u u' : V₃ →ₗ[K] V₂} {v v' : V₂ →ₗ[K] V₃}
     (h : u.IsQuasiInverse v) (h' : u'.IsQuasiInverse v') (hu : u ≈ u') :
     v ≈ v' := by
   calc
@@ -1383,123 +1313,166 @@ lemma IsQuasiInverse.equiv_of_left {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->�
     _ = (v ∘ₗ u) ∘ₗ v' := by rw [comp_assoc]
     _ ≈ .id ∘ₗ v' := by grw [h.2.equiv]
     _ = v' := by simp
-
-/--
-lemma `IsQuasiInverse.equiv_of_right` / 引理 `IsQuasiInverse.equiv_of_right`
-
-English:
-lemma IsQuasiInverse.equiv_of_right
-  statement: {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃}
-  proof: h.symm.equiv_of_left h'.symm hv
-
-中文:
-引理 IsQuasiInverse.equiv_of_right
-  结论: {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃}
-  证明: h.symm.equiv_of_left h'.symm hv
-
-Depends on / 依赖: equiv_of_left, h.symm.equiv_of_left
+/-
+**LinearMap.IsQuasiInverse.equiv_of_right** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.I
+sQuasiInverse`。
+形式化陈述：∀ {K : Type u_1} {V₂ : Type u_4} {V₃ : Type u_6} [inst : CommRing K] [inst
+_1 : AddCommGroup V₂]   [inst_2 : _root_.Module K V₂] [inst_3 : AddCommGroup V₃]
+ [inst_4 : _root_.Module K V₃] {u u' : V₃ →ₗ[K] V₂}   {v v' : V₂ →ₗ[K] V₃}, u.Is
+QuasiInverse v → u'.IsQuasiInverse v' → v ≈ v' → u ≈ u'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.IsQuasiInverse.equiv_of_left`：∀ {K : Type u_1} {V₂ : Type u_4}
+ {V₃ : Type u_6} [inst : CommRing K] [inst_1 : AddCommGroup V₂]   [inst_2 : _roo
+t_.Module K V₂] [inst_3 : Ad…
+· 使用定理 `LinearMap.IsQuasiInverse.symm`：∀ {K : Type u_1} {V₂ : Type u_4} {V₃ : Ty
+pe u_6} [inst : CommRing K] [inst_1 : AddCommGroup V₂]   [inst_2 : _root_.Module
+ K V₂] [inst_3 : Ad…
 -/
-lemma IsQuasiInverse.equiv_of_right {u u' : V₃ ->ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃}
+lemma IsQuasiInverse.equiv_of_right {u u' : V₃ →ₗ[K] V₂} {v v' : V₂ →ₗ[K] V₃}
     (h : u.IsQuasiInverse v) (h' : u'.IsQuasiInverse v') (hv : v ≈ v') :
     u ≈ u' :=
   h.symm.equiv_of_left h'.symm hv
 
-/--
-lemma `IsLeftQuasiInverse.comp` / 引理 `IsLeftQuasiInverse.comp`
+/-- Left quasi-inverses compose in the opposite order. -/
+/-
+**LinearMap.IsLeftQuasiInverse.comp** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsLeftQ
+uasiInverse`。
+形式化陈述：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u_4} {V₃ : Type u_6} [inst : Co
+mmRing K] [inst_1 : AddCommGroup V]   [inst_2 : _root_.Module K V] [inst_3 : Add
+CommGroup V₂] [inst_4 : _root_.Module K V₂] [inst_5 : AddCommGroup V₃]   [inst_6
+ : _root_.Module K V₃] {u : V →ₗ[K] V₂} {v : V₂ →ₗ[K] V₃} {u' : V₂ →ₗ[K] V} {v' 
+: V₃ →ₗ[K] V₂},   u'.IsLeftQuasiInverse u → v'.IsLeftQuasiInverse v → (u' ∘ₗ v')
+.IsLeftQuasiInverse (v ∘ₗ u)
+参数：u' ∘ₗ v'；v ∘ₗ u。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreorder.toIsTrans`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsPreo
+rder α r], IsTrans α r
+· 使用定理 `IsEquiv.toIsPreorder`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsEqui
+v α r], IsPreorder α r
+· 使用定理 `Quotient.instIsEquivEquiv`：∀ {α : Type u_4} [inst : Setoid α], IsEquiv α
+ fun x1 x2 => x1 ≈ x2
+· 使用引理 `Mathlib.Tactic.GCongr.rel_imp_rel`：rel_imp_rel (h₁ : r c a) (h₂ : r b d)
+ : r a b -> r c d
+· 使用引理 `LinearMap.FiniteRangeSetoid.equiv_comp_left`：equiv_comp_left {u v : V ->
+ₗ[K] V₂} {u' : V₂ ->ₗ[K] V₃} (h : u ≈ v) : u' ∘ₗ u ≈ u' ∘ₗ v
+· 使用引理 `LinearMap.FiniteRangeSetoid.equiv_comp_right`：equiv_comp_right {u : V ->
+ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃} (h' : v ≈ v') : v ∘ₗ u ≈ v' ∘ₗ u
+· 使用定理 `LinearMap.IsLeftQuasiInverse.equiv`：∀ {K : Type u_1} {V₂ : Type u_4} {V₃
+ : Type u_6} [inst : CommRing K] [inst_1 : AddCommGroup V₂]   [inst_2 : _root_.M
+odule K V₂] [inst_3 : Ad…
+· 使用定理 `Setoid.refl`：∀ {α : Sort u} [inst : Setoid α] (a : α), a ≈ a
 
-English:
-lemma IsLeftQuasiInverse.comp
-  statement: {u : V ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃} {u' : V₂ ->ₗ[K] V}
-  proof: calc
-    _ = u' ∘ₗ (v' ∘ₗ v) ∘ₗ u := rfl
-    _ ≈ u' ∘ₗ .id ∘ₗ u := by grw [hv.equiv]
-    _ ≈ .id := hu.equiv
-
-中文:
-引理 IsLeftQuasiInverse.comp
-  结论: {u : V ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃} {u' : V₂ ->ₗ[K] V}
-  证明: calc
-    _ = u' ∘ₗ (v' ∘ₗ v) ∘ₗ u := rfl
-    _ ≈ u' ∘ₗ .id ∘ₗ u := by grw [hv.equiv]
-    _ ≈ .id := hu.equiv
-
-Depends on / 依赖: hu.equiv, hv.equiv
+--- 原说明 ---
+Left quasi-inverses compose in the opposite order.
 -/
-lemma IsLeftQuasiInverse.comp {u : V ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃} {u' : V₂ ->ₗ[K] V}
-    {v' : V₃ ->ₗ[K] V₂} (hu : u'.IsLeftQuasiInverse u) (hv : v'.IsLeftQuasiInverse v) :
+lemma IsLeftQuasiInverse.comp {u : V →ₗ[K] V₂} {v : V₂ →ₗ[K] V₃} {u' : V₂ →ₗ[K] V}
+    {v' : V₃ →ₗ[K] V₂} (hu : u'.IsLeftQuasiInverse u) (hv : v'.IsLeftQuasiInverse v) :
     (u' ∘ₗ v').IsLeftQuasiInverse (v ∘ₗ u) :=
   calc
     _ = u' ∘ₗ (v' ∘ₗ v) ∘ₗ u := rfl
     _ ≈ u' ∘ₗ .id ∘ₗ u := by grw [hv.equiv]
     _ ≈ .id := hu.equiv
 
-/--
-lemma `IsRightQuasiInverse.comp` / 引理 `IsRightQuasiInverse.comp`
+/-- Right quasi-inverses compose in the opposite order. -/
+/-
+**LinearMap.IsRightQuasiInverse.comp** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsRigh
+tQuasiInverse`。
+形式化陈述：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u_4} {V₃ : Type u_6} [inst : Co
+mmRing K] [inst_1 : AddCommGroup V]   [inst_2 : _root_.Module K V] [inst_3 : Add
+CommGroup V₂] [inst_4 : _root_.Module K V₂] [inst_5 : AddCommGroup V₃]   [inst_6
+ : _root_.Module K V₃] {u : V →ₗ[K] V₂} {v : V₂ →ₗ[K] V₃} {u' : V₂ →ₗ[K] V} {v' 
+: V₃ →ₗ[K] V₂},   u'.IsRightQuasiInverse u → v'.IsRightQuasiInverse v → (u' ∘ₗ v
+').IsRightQuasiInverse (v ∘ₗ u)
+参数：u' ∘ₗ v'；v ∘ₗ u。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.IsLeftQuasiInverse.isRightQuasiInverse`：∀ {K : Type u_1} {V₂ :
+ Type u_4} {V₃ : Type u_6} [inst : CommRing K] [inst_1 : AddCommGroup V₂]   [ins
+t_2 : _root_.Module K V₂] [inst_3 : Ad…
+· 使用定理 `LinearMap.IsLeftQuasiInverse.comp`：∀ {K : Type u_1} {V : Type u_2} {V₂ :
+ Type u_4} {V₃ : Type u_6} [inst : CommRing K] [inst_1 : AddCommGroup V]   [inst
+_2 : _root_.Module K V]…
+· 使用定理 `LinearMap.IsRightQuasiInverse.isLeftQuasiInverse`：∀ {K : Type u_1} {V₂ :
+ Type u_4} {V₃ : Type u_6} [inst : CommRing K] [inst_1 : AddCommGroup V₂]   [ins
+t_2 : _root_.Module K V₂] [inst_3 : Ad…
 
-English:
-lemma IsRightQuasiInverse.comp
-  statement: {u : V ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃} {u' : V₂ ->ₗ[K] V}
-  proof: .isRightQuasiInverse hv.isLeftQuasiInverse.comp hu.isLeftQuasiInverse
-
-中文:
-引理 IsRightQuasiInverse.comp
-  结论: {u : V ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃} {u' : V₂ ->ₗ[K] V}
-  证明: .isRightQuasiInverse hv.isLeftQuasiInverse.comp hu.isLeftQuasiInverse
-
-Depends on / 依赖: hu.isLeftQuasiInverse, hv.isLeftQuasiInverse.comp, isLeftQuasiInverse, isRightQuasiInverse
+--- 原说明 ---
+Right quasi-inverses compose in the opposite order.
 -/
-lemma IsRightQuasiInverse.comp {u : V ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃} {u' : V₂ ->ₗ[K] V}
-    {v' : V₃ ->ₗ[K] V₂} (hu : u'.IsRightQuasiInverse u) (hv : v'.IsRightQuasiInverse v) :
+lemma IsRightQuasiInverse.comp {u : V →ₗ[K] V₂} {v : V₂ →ₗ[K] V₃} {u' : V₂ →ₗ[K] V}
+    {v' : V₃ →ₗ[K] V₂} (hu : u'.IsRightQuasiInverse u) (hv : v'.IsRightQuasiInverse v) :
     (u' ∘ₗ v').IsRightQuasiInverse (v ∘ₗ u) :=
-.isRightQuasiInverse hv.isLeftQuasiInverse.comp hu.isLeftQuasiInverse
+  hv.isLeftQuasiInverse.comp hu.isLeftQuasiInverse |>.isRightQuasiInverse
 
-/--
-lemma `IsQuasiInverse.comp` / 引理 `IsQuasiInverse.comp`
+/-- Quasi-inverses compose in the opposite order. -/
+/-
+**LinearMap.IsQuasiInverse.comp** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsQuasiInve
+rse`。
+形式化陈述：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u_4} {V₃ : Type u_6} [inst : Co
+mmRing K] [inst_1 : AddCommGroup V]   [inst_2 : _root_.Module K V] [inst_3 : Add
+CommGroup V₂] [inst_4 : _root_.Module K V₂] [inst_5 : AddCommGroup V₃]   [inst_6
+ : _root_.Module K V₃] {u : V →ₗ[K] V₂} {v : V₂ →ₗ[K] V₃} {u' : V₂ →ₗ[K] V} {v' 
+: V₃ →ₗ[K] V₂},   u'.IsQuasiInverse u → v'.IsQuasiInverse v → (u' ∘ₗ v').IsQuasi
+Inverse (v ∘ₗ u)
+参数：u' ∘ₗ v'；v ∘ₗ u。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.IsLeftQuasiInverse.comp`：∀ {K : Type u_1} {V : Type u_2} {V₂ :
+ Type u_4} {V₃ : Type u_6} [inst : CommRing K] [inst_1 : AddCommGroup V]   [inst
+_2 : _root_.Module K V]…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `LinearMap.IsRightQuasiInverse.comp`：∀ {K : Type u_1} {V : Type u_2} {V₂ 
+: Type u_4} {V₃ : Type u_6} [inst : CommRing K] [inst_1 : AddCommGroup V]   [ins
+t_2 : _root_.Module K V]…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-lemma IsQuasiInverse.comp
-  statement: {u : V ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃} {u' : V₂ ->ₗ[K] V}
-  proof: ⟨hu.1.comp hv.1, hu.2.comp hv.2⟩
-
-中文:
-引理 IsQuasiInverse.comp
-  结论: {u : V ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃} {u' : V₂ ->ₗ[K] V}
-  证明: ⟨hu.1.comp hv.1, hu.2.comp hv.2⟩
+--- 原说明 ---
+Quasi-inverses compose in the opposite order.
 -/
-lemma IsQuasiInverse.comp {u : V ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃} {u' : V₂ ->ₗ[K] V}
-    {v' : V₃ ->ₗ[K] V₂} (hu : u'.IsQuasiInverse u) (hv : v'.IsQuasiInverse v) :
+lemma IsQuasiInverse.comp {u : V →ₗ[K] V₂} {v : V₂ →ₗ[K] V₃} {u' : V₂ →ₗ[K] V}
+    {v' : V₃ →ₗ[K] V₂} (hu : u'.IsQuasiInverse u) (hv : v'.IsQuasiInverse v) :
     (u' ∘ₗ v').IsQuasiInverse (v ∘ₗ u) :=
   ⟨hu.1.comp hv.1, hu.2.comp hv.2⟩
 
-/--
-lemma `IsLeftQuasiInverse.of_comp_left` / 引理 `IsLeftQuasiInverse.of_comp_left`
+/-- If `u'` is a right quasi-inverse of `u` and `w` is a left quasi-inverse of `v ∘ₗ u`,
+then `u ∘ₗ w` is a left quasi-inverse of `v`. -/
+/-
+**LinearMap.IsLeftQuasiInverse.of_comp_left** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap
+.IsLeftQuasiInverse`。
+形式化陈述：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u_4} {V₃ : Type u_6} [inst : Co
+mmRing K] [inst_1 : AddCommGroup V]   [inst_2 : _root_.Module K V] [inst_3 : Add
+CommGroup V₂] [inst_4 : _root_.Module K V₂] [inst_5 : AddCommGroup V₃]   [inst_6
+ : _root_.Module K V₃] {u : V →ₗ[K] V₂} {v : V₂ →ₗ[K] V₃} {u' : V₂ →ₗ[K] V} {w :
+ V₃ →ₗ[K] V},   u'.IsRightQuasiInverse u → w.IsLeftQuasiInverse (v ∘ₗ u) → (u ∘ₗ
+ w).IsLeftQuasiInverse v
+参数：v ∘ₗ u；u ∘ₗ w。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreorder.toIsTrans`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsPreo
+rder α r], IsTrans α r
+· 使用定理 `IsEquiv.toIsPreorder`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsEqui
+v α r], IsPreorder α r
+· 使用定理 `Quotient.instIsEquivEquiv`：∀ {α : Type u_4} [inst : Setoid α], IsEquiv α
+ fun x1 x2 => x1 ≈ x2
+· 使用引理 `Mathlib.Tactic.GCongr.rel_imp_rel`：rel_imp_rel (h₁ : r c a) (h₂ : r b d)
+ : r a b -> r c d
+· 使用定理 `Setoid.refl`：∀ {α : Sort u} [inst : Setoid α] (a : α), a ≈ a
+· 使用引理 `LinearMap.FiniteRangeSetoid.equiv_comp_left`：equiv_comp_left {u v : V ->
+ₗ[K] V₂} {u' : V₂ ->ₗ[K] V₃} (h : u ≈ v) : u' ∘ₗ u ≈ u' ∘ₗ v
+· 使用定理 `Setoid.symm`：∀ {α : Sort u} [inst : Setoid α] {a b : α}, a ≈ b → b ≈ a
+· 使用定理 `LinearMap.IsRightQuasiInverse.equiv`：∀ {K : Type u_1} {V₂ : Type u_4} {V
+₃ : Type u_6} [inst : CommRing K] [inst_1 : AddCommGroup V₂]   [inst_2 : _root_.
+Module K V₂] [inst_3 : Ad…
+· 使用引理 `LinearMap.FiniteRangeSetoid.equiv_comp_right`：equiv_comp_right {u : V ->
+ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃} (h' : v ≈ v') : v ∘ₗ u ≈ v' ∘ₗ u
+· 使用定理 `LinearMap.IsLeftQuasiInverse.equiv`：∀ {K : Type u_1} {V₂ : Type u_4} {V₃
+ : Type u_6} [inst : CommRing K] [inst_1 : AddCommGroup V₂]   [inst_2 : _root_.M
+odule K V₂] [inst_3 : Ad…
 
-English:
-lemma IsLeftQuasiInverse.of_comp_left
-  statement: {u : V ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃}
-  proof: by
-  calc
-    _ = ((u ∘ₗ w) ∘ₗ v) ∘ₗ .id := rfl
-    _ ≈ ((u ∘ₗ w) ∘ₗ v) ∘ₗ (u ∘ₗ u') := by grw [hu.equiv]
-    _ = u ∘ₗ (w ∘ₗ (v ∘ₗ u)) ∘ₗ u' := rfl
-    _ ≈ u ∘ₗ .id ∘ₗ u' := by grw [hw.equiv]
-    _ ≈ .id := hu.equiv
-
-中文:
-引理 IsLeftQuasiInverse.of_comp_left
-  结论: {u : V ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃}
-  证明: by
-  calc
-    _ = ((u ∘ₗ w) ∘ₗ v) ∘ₗ .id := rfl
-    _ ≈ ((u ∘ₗ w) ∘ₗ v) ∘ₗ (u ∘ₗ u') := by grw [hu.equiv]
-    _ = u ∘ₗ (w ∘ₗ (v ∘ₗ u)) ∘ₗ u' := rfl
-    _ ≈ u ∘ₗ .id ∘ₗ u' := by grw [hw.equiv]
-    _ ≈ .id := hu.equiv
-
-Depends on / 依赖: hu.equiv, hw.equiv
+--- 原说明 ---
+If `u'` is a right quasi-inverse of `u` and `w` is a left quasi-inverse of `v ∘ₗ
+ u`,
+then `u ∘ₗ w` is a left quasi-inverse of `v`.
 -/
-lemma IsLeftQuasiInverse.of_comp_left {u : V ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃}
-    {u' : V₂ ->ₗ[K] V} {w : V₃ ->ₗ[K] V} (hu : u'.IsRightQuasiInverse u)
+lemma IsLeftQuasiInverse.of_comp_left {u : V →ₗ[K] V₂} {v : V₂ →ₗ[K] V₃}
+    {u' : V₂ →ₗ[K] V} {w : V₃ →ₗ[K] V} (hu : u'.IsRightQuasiInverse u)
     (hw : w.IsLeftQuasiInverse (v ∘ₗ u)) :
     (u ∘ₗ w).IsLeftQuasiInverse v := by
   calc
@@ -1509,56 +1482,76 @@ lemma IsLeftQuasiInverse.of_comp_left {u : V ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V
     _ ≈ u ∘ₗ .id ∘ₗ u' := by grw [hw.equiv]
     _ ≈ .id := hu.equiv
 
-/--
-lemma `IsQuasiInverse.of_comp_left` / 引理 `IsQuasiInverse.of_comp_left`
+/-- If `u'` is a quasi-inverse of `u` and `w` is a quasi-inverse of `v ∘ₗ u`, then
+`u ∘ₗ w` is a quasi-inverse of `v`. -/
+/-
+**LinearMap.IsQuasiInverse.of_comp_left** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.IsQ
+uasiInverse`。
+形式化陈述：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u_4} {V₃ : Type u_6} [inst : Co
+mmRing K] [inst_1 : AddCommGroup V]   [inst_2 : _root_.Module K V] [inst_3 : Add
+CommGroup V₂] [inst_4 : _root_.Module K V₂] [inst_5 : AddCommGroup V₃]   [inst_6
+ : _root_.Module K V₃] {u : V →ₗ[K] V₂} {v : V₂ →ₗ[K] V₃} {u' : V₂ →ₗ[K] V} {w :
+ V₃ →ₗ[K] V},   u'.IsQuasiInverse u → w.IsQuasiInverse (v ∘ₗ u) → (u ∘ₗ w).IsQua
+siInverse v
+参数：v ∘ₗ u；u ∘ₗ w。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.IsLeftQuasiInverse.of_comp_left`：∀ {K : Type u_1} {V : Type u_
+2} {V₂ : Type u_4} {V₃ : Type u_6} [inst : CommRing K] [inst_1 : AddCommGroup V]
+   [inst_2 : _root_.Module K V]…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 
-English:
-lemma IsQuasiInverse.of_comp_left
-  statement: {u : V ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃}
-  proof: ⟨.of_comp_left hu.2 hw.1, hw.2⟩
-
-中文:
-引理 IsQuasiInverse.of_comp_left
-  结论: {u : V ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃}
-  证明: ⟨.of_comp_left hu.2 hw.1, hw.2⟩
-
-Depends on / 依赖: of_comp_left
+--- 原说明 ---
+If `u'` is a quasi-inverse of `u` and `w` is a quasi-inverse of `v ∘ₗ u`, then
+`u ∘ₗ w` is a quasi-inverse of `v`.
 -/
-lemma IsQuasiInverse.of_comp_left {u : V ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃}
-    {u' : V₂ ->ₗ[K] V} {w : V₃ ->ₗ[K] V} (hu : u'.IsQuasiInverse u)
+lemma IsQuasiInverse.of_comp_left {u : V →ₗ[K] V₂} {v : V₂ →ₗ[K] V₃}
+    {u' : V₂ →ₗ[K] V} {w : V₃ →ₗ[K] V} (hu : u'.IsQuasiInverse u)
     (hw : w.IsQuasiInverse (v ∘ₗ u)) :
     (u ∘ₗ w).IsQuasiInverse v :=
   ⟨.of_comp_left hu.2 hw.1, hw.2⟩
 
-/--
-lemma `IsRightQuasiInverse.of_comp_right` / 引理 `IsRightQuasiInverse.of_comp_right`
+/-- If `v'` is a left quasi-inverse of `v` and `w` is a right quasi-inverse of `v ∘ₗ u`,
+then `w ∘ₗ v` is a right quasi-inverse of `u`. -/
+/-
+**LinearMap.IsRightQuasiInverse.of_comp_right** 是 Mathlib 中的一个定理，位于命名空间 `LinearM
+ap.IsRightQuasiInverse`。
+形式化陈述：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u_4} {V₃ : Type u_6} [inst : Co
+mmRing K] [inst_1 : AddCommGroup V]   [inst_2 : _root_.Module K V] [inst_3 : Add
+CommGroup V₂] [inst_4 : _root_.Module K V₂] [inst_5 : AddCommGroup V₃]   [inst_6
+ : _root_.Module K V₃] {u : V →ₗ[K] V₂} {v : V₂ →ₗ[K] V₃} {v' : V₃ →ₗ[K] V₂} {w 
+: V₃ →ₗ[K] V},   v'.IsLeftQuasiInverse v → w.IsRightQuasiInverse (v ∘ₗ u) → (w ∘
+ₗ v).IsRightQuasiInverse u
+参数：v ∘ₗ u；w ∘ₗ v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreorder.toIsTrans`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsPreo
+rder α r], IsTrans α r
+· 使用定理 `IsEquiv.toIsPreorder`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsEqui
+v α r], IsPreorder α r
+· 使用定理 `Quotient.instIsEquivEquiv`：∀ {α : Type u_4} [inst : Setoid α], IsEquiv α
+ fun x1 x2 => x1 ≈ x2
+· 使用引理 `Mathlib.Tactic.GCongr.rel_imp_rel`：rel_imp_rel (h₁ : r c a) (h₂ : r b d)
+ : r a b -> r c d
+· 使用定理 `Setoid.refl`：∀ {α : Sort u} [inst : Setoid α] (a : α), a ≈ a
+· 使用引理 `LinearMap.FiniteRangeSetoid.equiv_comp_right`：equiv_comp_right {u : V ->
+ₗ[K] V₂} {v v' : V₂ ->ₗ[K] V₃} (h' : v ≈ v') : v ∘ₗ u ≈ v' ∘ₗ u
+· 使用定理 `Setoid.symm`：∀ {α : Sort u} [inst : Setoid α] {a b : α}, a ≈ b → b ≈ a
+· 使用定理 `LinearMap.IsLeftQuasiInverse.equiv`：∀ {K : Type u_1} {V₂ : Type u_4} {V₃
+ : Type u_6} [inst : CommRing K] [inst_1 : AddCommGroup V₂]   [inst_2 : _root_.M
+odule K V₂] [inst_3 : Ad…
+· 使用引理 `LinearMap.FiniteRangeSetoid.equiv_comp_left`：equiv_comp_left {u v : V ->
+ₗ[K] V₂} {u' : V₂ ->ₗ[K] V₃} (h : u ≈ v) : u' ∘ₗ u ≈ u' ∘ₗ v
+· 使用定理 `LinearMap.IsRightQuasiInverse.equiv`：∀ {K : Type u_1} {V₂ : Type u_4} {V
+₃ : Type u_6} [inst : CommRing K] [inst_1 : AddCommGroup V₂]   [inst_2 : _root_.
+Module K V₂] [inst_3 : Ad…
 
-English:
-lemma IsRightQuasiInverse.of_comp_right
-  statement: {u : V ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃}
-  proof: by
-  calc
-    _ = .id ∘ₗ (u ∘ₗ (w ∘ₗ v)) := rfl
-    _ ≈ (v' ∘ₗ v) ∘ₗ (u ∘ₗ (w ∘ₗ v)) := by grw [hv.equiv]
-    _ = v' ∘ₗ ((v ∘ₗ u) ∘ₗ w) ∘ₗ v := rfl
-    _ ≈ v' ∘ₗ .id ∘ₗ v := by grw [hw.equiv]
-    _ ≈ .id := hv.equiv
-
-中文:
-引理 IsRightQuasiInverse.of_comp_right
-  结论: {u : V ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃}
-  证明: by
-  calc
-    _ = .id ∘ₗ (u ∘ₗ (w ∘ₗ v)) := rfl
-    _ ≈ (v' ∘ₗ v) ∘ₗ (u ∘ₗ (w ∘ₗ v)) := by grw [hv.equiv]
-    _ = v' ∘ₗ ((v ∘ₗ u) ∘ₗ w) ∘ₗ v := rfl
-    _ ≈ v' ∘ₗ .id ∘ₗ v := by grw [hw.equiv]
-    _ ≈ .id := hv.equiv
-
-Depends on / 依赖: hv.equiv, hw.equiv
+--- 原说明 ---
+If `v'` is a left quasi-inverse of `v` and `w` is a right quasi-inverse of `v ∘ₗ
+ u`,
+then `w ∘ₗ v` is a right quasi-inverse of `u`.
 -/
-lemma IsRightQuasiInverse.of_comp_right {u : V ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃}
-    {v' : V₃ ->ₗ[K] V₂} {w : V₃ ->ₗ[K] V} (hv : v'.IsLeftQuasiInverse v)
+lemma IsRightQuasiInverse.of_comp_right {u : V →ₗ[K] V₂} {v : V₂ →ₗ[K] V₃}
+    {v' : V₃ →ₗ[K] V₂} {w : V₃ →ₗ[K] V} (hv : v'.IsLeftQuasiInverse v)
     (hw : w.IsRightQuasiInverse (v ∘ₗ u)) :
     (w ∘ₗ v).IsRightQuasiInverse u := by
   calc
@@ -1568,74 +1561,90 @@ lemma IsRightQuasiInverse.of_comp_right {u : V ->ₗ[K] V₂} {v : V₂ ->ₗ[K]
     _ ≈ v' ∘ₗ .id ∘ₗ v := by grw [hw.equiv]
     _ ≈ .id := hv.equiv
 
-/--
-lemma `IsQuasiInverse.of_comp_right` / 引理 `IsQuasiInverse.of_comp_right`
+/-- If `v'` is a quasi-inverse of `v` and `w` is a quasi-inverse of `v ∘ₗ u`, then
+`w ∘ₗ v` is a quasi-inverse of `u`. -/
+/-
+**LinearMap.IsQuasiInverse.of_comp_right** 是 Mathlib 中的一个定理，位于命名空间 `LinearMap.Is
+QuasiInverse`。
+形式化陈述：∀ {K : Type u_1} {V : Type u_2} {V₂ : Type u_4} {V₃ : Type u_6} [inst : Co
+mmRing K] [inst_1 : AddCommGroup V]   [inst_2 : _root_.Module K V] [inst_3 : Add
+CommGroup V₂] [inst_4 : _root_.Module K V₂] [inst_5 : AddCommGroup V₃]   [inst_6
+ : _root_.Module K V₃] {u : V →ₗ[K] V₂} {v : V₂ →ₗ[K] V₃} {v' : V₃ →ₗ[K] V₂} {w 
+: V₃ →ₗ[K] V},   v'.IsQuasiInverse v → w.IsQuasiInverse (v ∘ₗ u) → (w ∘ₗ v).IsQu
+asiInverse u
+参数：v ∘ₗ u；w ∘ₗ v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `LinearMap.IsRightQuasiInverse.of_comp_right`：∀ {K : Type u_1} {V : Type 
+u_2} {V₂ : Type u_4} {V₃ : Type u_6} [inst : CommRing K] [inst_1 : AddCommGroup 
+V]   [inst_2 : _root_.Module K V]…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-lemma IsQuasiInverse.of_comp_right
-  statement: {u : V ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃}
-  proof: ⟨hw.1, IsRightQuasiInverse.of_comp_right hv.1 hw.2⟩
-
-中文:
-引理 IsQuasiInverse.of_comp_right
-  结论: {u : V ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃}
-  证明: ⟨hw.1, IsRightQuasiInverse.of_comp_right hv.1 hw.2⟩
-
-Depends on / 依赖: IsRightQuasiInverse, IsRightQuasiInverse.of_comp_right, of_comp_right
+--- 原说明 ---
+If `v'` is a quasi-inverse of `v` and `w` is a quasi-inverse of `v ∘ₗ u`, then
+`w ∘ₗ v` is a quasi-inverse of `u`.
 -/
-lemma IsQuasiInverse.of_comp_right {u : V ->ₗ[K] V₂} {v : V₂ ->ₗ[K] V₃}
-    {v' : V₃ ->ₗ[K] V₂} {w : V₃ ->ₗ[K] V} (hv : v'.IsQuasiInverse v)
+lemma IsQuasiInverse.of_comp_right {u : V →ₗ[K] V₂} {v : V₂ →ₗ[K] V₃}
+    {v' : V₃ →ₗ[K] V₂} {w : V₃ →ₗ[K] V} (hv : v'.IsQuasiInverse v)
     (hw : w.IsQuasiInverse (v ∘ₗ u)) :
     (w ∘ₗ v).IsQuasiInverse u :=
   ⟨hw.1, IsRightQuasiInverse.of_comp_right hv.1 hw.2⟩
-
-/--
-lemma `isQuasiInverse_subtype_projectionOnto_iff` / 引理 `isQuasiInverse_subtype_projectionOnto_iff`
-
-English:
-lemma isQuasiInverse_subtype_projectionOnto_iff
-  given: {S T : Submodule K V} (hST : IsCompl S T)
-  proof: by
-  rw [IsQuasiInverse]; rw [and_iff_left (by simp [IsRightQuasiInverse]; rw [projectionOnto_comp_subtype]),
-    IsLeftQuasiInverse, ← projection,
-    FiniteRangeSetoid.projection_equiv_id_iff_isNoetherian hST]
-
-中文:
-引理 isQuasiInverse_subtype_projectionOnto_iff
-  条件: {S T : 子模 K V} (hST : 是补集 S T)
-  证明: by
-  rw [IsQuasiInverse]; rw [and_iff_left (by simp [IsRightQuasiInverse]; rw [projectionOnto_comp_subtype]),
-    IsLeftQuasiInverse, ← projection,
-    FiniteRangeSetoid.projection_equiv_id_iff_isNoetherian hST]
-
-Depends on / 依赖: FiniteRangeSetoid, FiniteRangeSetoid.projection_equiv_id_iff_isNoetherian, IsLeftQuasiInverse, IsQuasiInverse, IsRightQuasiInverse, and_iff_left, projection, projectionOnto_comp_subtype, projection_equiv_id_iff_isNoetherian
+/-
+**LinearMap.isQuasiInverse_subtype_projectionOnto_iff** 是 Mathlib 中的一个引理，位于命名空间 
+`LinearMap`。
+形式化陈述：isQuasiInverse_subtype_projectionOnto_iff {S T : Submodule K V} (hST : IsC
+ompl S T) : IsQuasiInverse S.subtype (S.projectionOnto T hST) ↔ IsNoetherian K T
+参数：hST : IsCompl S T。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.IsQuasiInverse.eq_1`：∀ {K : Type u_1} {V₂ : Type u_4} {V₃ : Ty
+pe u_6} [inst : CommRing K] [inst_1 : AddCommGroup V₂]   [inst_2 : _root_.Module
+ K V₂] [inst_3 : Ad…
+· 使用定理 `and_iff_left`：∀ {b a : Prop}, b → (a ∧ b ↔ a)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Submodule.projectionOnto_comp_subtype`：projectionOnto_comp_subtype (h : 
+IsCompl p q) : (projectionOnto p q h).comp p.subtype = LinearMap.id
+· 使用定理 `LinearMap.IsLeftQuasiInverse.eq_1`：∀ {K : Type u_1} {V : Type u_2} {V₂ :
+ Type u_4} [inst : CommRing K] [inst_1 : AddCommGroup V]   [inst_2 : _root_.Modu
+le K V] [inst_3 : AddCo…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.projection.eq_1`：∀ {R : Type u_1} [inst : Ring R] {E : Type u_
+2} [inst_1 : AddCommGroup E] [inst_2 : _root_.Module R E]   (p q : Submodule R E
+) (hpq : IsComp…
+· 使用引理 `LinearMap.FiniteRangeSetoid.projection_equiv_id_iff_isNoetherian`：projec
+tion_equiv_id_iff_isNoetherian {S T : Submodule K V} (hST : IsCompl S T) : S.pro
+jection T hST ≈ id ↔ IsNoetherian K T
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isQuasiInverse_subtype_projectionOnto_iff {S T : Submodule K V} (hST : IsCompl S T) :
     IsQuasiInverse S.subtype (S.projectionOnto T hST) ↔ IsNoetherian K T := by
-  rw [IsQuasiInverse]; rw [and_iff_left (by simp [IsRightQuasiInverse]; rw [projectionOnto_comp_subtype]),
+  rw [IsQuasiInverse, and_iff_left (by simp [IsRightQuasiInverse, projectionOnto_comp_subtype]),
     IsLeftQuasiInverse, ← projection,
     FiniteRangeSetoid.projection_equiv_id_iff_isNoetherian hST]
-
-/--
-lemma `isQuasiInverse_subtype_projectionOnto` / 引理 `isQuasiInverse_subtype_projectionOnto`
-
-English:
-lemma isQuasiInverse_subtype_projectionOnto
-  statement: {S T : Submodule K V} [IsNoetherian K T]
-  proof: .mpr inferInstance isQuasiInverse_subtype_projectionOnto_iff hST
-
-中文:
-引理 isQuasiInverse_subtype_projectionOnto
-  结论: {S T : 子模 K V} [是Noether K T]
-  证明: .mpr inferInstance isQuasiInverse_subtype_projectionOnto_iff hST
-
-Depends on / 依赖: isQuasiInverse_subtype_projectionOnto_iff
+/-
+**LinearMap.isQuasiInverse_subtype_projectionOnto** 是 Mathlib 中的一个引理，位于命名空间 `Lin
+earMap`。
+形式化陈述：isQuasiInverse_subtype_projectionOnto {S T : Submodule K V} [IsNoetherian 
+K T] (hST : IsCompl S T) : IsQuasiInverse S.subtype (S.projectionOnto T hST)
+参数：hST : IsCompl S T。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `LinearMap.isQuasiInverse_subtype_projectionOnto_iff`：isQuasiInverse_subt
+ype_projectionOnto_iff {S T : Submodule K V} (hST : IsCompl S T) : IsQuasiInvers
+e S.subtype (S.projectionOnto T hST) ↔ Is…
 -/
 lemma isQuasiInverse_subtype_projectionOnto {S T : Submodule K V} [IsNoetherian K T]
     (hST : IsCompl S T) :
     IsQuasiInverse S.subtype (S.projectionOnto T hST) :=
-.mpr inferInstance isQuasiInverse_subtype_projectionOnto_iff hST
+  isQuasiInverse_subtype_projectionOnto_iff hST |>.mpr inferInstance
 
 end QuasiInverse
 
 end LinearMap
+

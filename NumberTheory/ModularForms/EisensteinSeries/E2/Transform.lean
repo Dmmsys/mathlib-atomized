@@ -74,211 +74,92 @@ noncomputable section
 
 namespace EisensteinSeries
 
-/--
-Definition of `δ` / `δ` 的定义
+/-- This is an auxiliary correction term for proving how E2 transforms. It allows us to work with
+nicer indexing sets for our infinite sums. The key is the `aux_identity` below. -/
+/-
+**EisensteinSeries.** 是 Mathlib 中的一个定义，位于命名空间 `EisensteinSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition δ
-  signature: (x : Fin 2 -> Int)
-  body: if x = ![0, 0] then 1 else if x = ![0, -1] then 2 else 0
-
-@[simp]
-
-中文:
-定义 δ
-  签名: (x : 有限集 2 -> 整数)
-  定义体: if x = ![0, 0] then 1 else if x = ![0, -1] then 2 else 0
-
-@[simp]
+--- 原说明 ---
+This is an auxiliary correction term for proving how E2 transforms. It allows us
+ to work with
+nicer indexing sets for our infinite sums. The key is the `aux_identity` below.
 -/
-def δ (x : Fin 2 -> Int) : Complex := if x = ![0, 0] then 1 else if x = ![0, -1] then 2 else 0
+def δ (x : Fin 2 → ℤ) : ℂ := if x = ![0, 0] then 1 else if x = ![0, -1] then 2 else 0
 
 @[simp]
-/--
-lemma `δ_eq` / 引理 `δ_eq`
-
-English:
-lemma δ_eq
-  statement: δ ![0, 0] = 1
-  proof: by simp [δ]
-
-@[simp]
-
-中文:
-引理 δ_eq
-  结论: δ ![0, 0] = 1
-  证明: by simp [δ]
-
-@[simp]
+/-
+**EisensteinSeries.** 是 Mathlib 中的一个引理，位于命名空间 `EisensteinSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma δ_eq : δ ![0, 0] = 1 := by simp [δ]
 
 @[simp]
-/--
-lemma `δ_eq_two` / 引理 `δ_eq_two`
-
-English:
-lemma δ_eq_two
-  statement: δ ![0, -1] = 2
-  proof: by simp [δ]
-
-中文:
-引理 δ_eq_two
-  结论: δ ![0, -1] = 2
-  证明: by simp [δ]
+/-
+**EisensteinSeries.** 是 Mathlib 中的一个引理，位于命名空间 `EisensteinSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma δ_eq_two : δ ![0, -1] = 2 := by simp [δ]
-
-/--
-lemma `δ_eventually_cofinite` / 引理 `δ_eventually_cofinite`
-
-English:
-lemma δ_eventually_cofinite
-  statement: δ =ᶠ[cofinite] 0
-  proof: by
-  filter_upwards [eventually_cofinite_ne ![0, 0], eventually_cofinite_ne ![0, -1]] with x hx hx'
-  simp_all [δ]
-
-中文:
-引理 δ_eventually_cofinite
-  结论: δ =ᶠ[cofinite] 0
-  证明: by
-  filter_upwards [eventually_cofinite_ne ![0, 0], eventually_cofinite_ne ![0, -1]] with x hx hx'
-  simp_all [δ]
-
-Depends on / 依赖: eventually_cofinite_ne, filter_upwards
+/-
+**EisensteinSeries.** 是 Mathlib 中的一个引理，位于命名空间 `EisensteinSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma δ_eventually_cofinite : δ =ᶠ[cofinite] 0 := by
   filter_upwards [eventually_cofinite_ne ![0, 0], eventually_cofinite_ne ![0, -1]] with x hx hx'
   simp_all [δ]
 
-/--
-Definition of `G2Term` / `G2Term` 的定义
+/-- This term gives an alternative infinite sum for G2 which is absolutely convergent. -/
+/-
+**EisensteinSeries.G2Term** 是 Mathlib 中的一个缩写定义，位于命名空间 `EisensteinSeries`。
+形式化陈述：G2Term (z : ℍ) (m : Fin 2 -> Int) : Complex
+参数：z : ℍ；m : Fin 2 -> Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation G2Term
-  signature: (z : ℍ) (m : Fin 2 -> Int)
-  body: (((m 0 : Complex) * z + m 1) ^ 2 * (m 0 * z + m 1 + 1))⁻¹ + δ m
-
-中文:
-缩写 G2Term
-  签名: (z : ℍ) (m : 有限集 2 -> 整数)
-  定义体: (((m 0 : Complex) * z + m 1) ^ 2 * (m 0 * z + m 1 + 1))⁻¹ + δ m
+--- 原说明 ---
+This term gives an alternative infinite sum for G2 which is absolutely convergen
+t.
 -/
-abbrev G2Term (z : ℍ) (m : Fin 2 -> Int) : Complex :=
-    (((m 0 : Complex) * z + m 1) ^ 2 * (m 0 * z + m 1 + 1))⁻¹ + δ m
-
-/--
-lemma `G2Term_summable` / 引理 `G2Term_summable`
-
-English:
-lemma G2Term_summable
-  given: (z : ℍ)
-  statement: Summable (G2Term z)
-  proof: by
-  have H : Summable fun m => G2Term z m - δ m := by
-    simp_rw [G2Term, add_sub_cancel_right]
-    apply summable_of_isBigO_rpow_norm (a := 3) (by linarith)
-    simpa [pow_three, pow_two, ← mul_assoc] using ((isBigO_linear_add_const_vec z 0 1).mul
-      (isBigO_linear_add_const_vec z 0 0)).mul (isBigO_linear_add_const_vec z 0 0)
-exact H.congr_cofinite δ_eventually_cofinite.mp .of_forall by simp +contextual
-
-中文:
-引理 G2Term_summable
-  条件: (z : ℍ)
-  结论: Summable (G2Term z)
-  证明: by
-  have H : Summable fun m => G2Term z m - δ m := by
-    simp_rw [G2Term, add_sub_cancel_right]
-    apply summable_of_isBigO_rpow_norm (a := 3) (by linarith)
-    simpa [pow_three, pow_two, ← mul_assoc] using ((isBigO_linear_add_const_vec z 0 1).mul
-      (isBigO_linear_add_const_vec z 0 0)).mul (isBigO_linear_add_const_vec z 0 0)
-exact H.congr_cofinite δ_eventually_cofinite.mp .of_forall by simp +contextual
-
-Depends on / 依赖: G2Term, H.congr_cofinite, Summable, _eventually_cofinite.mp, add_sub_cancel_right, congr_cofinite, contextual, isBigO_linear_add_const_vec, mul_assoc, of_forall, pow_three, pow_two, simp_rw, summable_of_isBigO_rpow_norm
+abbrev G2Term (z : ℍ) (m : Fin 2 → ℤ) : ℂ :=
+    (((m 0 : ℂ) * z + m 1) ^ 2 * (m 0 * z + m 1 + 1))⁻¹ + δ m
+/-
+**EisensteinSeries.G2Term_summable** 是 Mathlib 中的一个引理，位于命名空间 `EisensteinSeries`。
+形式化陈述：G2Term_summable (z : ℍ) : Summable (G2Term z)
+参数：z : ℍ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma G2Term_summable (z : ℍ) : Summable (G2Term z) := by
-  have H : Summable fun m => G2Term z m - δ m := by
+  have H : Summable fun m ↦ G2Term z m - δ m := by
     simp_rw [G2Term, add_sub_cancel_right]
     apply summable_of_isBigO_rpow_norm (a := 3) (by linarith)
     simpa [pow_three, pow_two, ← mul_assoc] using ((isBigO_linear_add_const_vec z 0 1).mul
       (isBigO_linear_add_const_vec z 0 0)).mul (isBigO_linear_add_const_vec z 0 0)
-exact H.congr_cofinite δ_eventually_cofinite.mp .of_forall by simp +contextual
+  exact H.congr_cofinite <| δ_eventually_cofinite.mp <| .of_forall <| by simp +contextual
 
 --This is the version we use the most.
-/--
-lemma `G2Term_prod_summable` / 引理 `G2Term_prod_summable`
-
-English:
-lemma G2Term_prod_summable
-  given: (z : ℍ)
-  statement: Summable (fun p : Int × Int => G2Term z ![p.1, p.2])
-  proof: by
-  apply (finTwoArrowEquiv _).symm.summable_iff.mpr (G2Term_summable z)
-
-中文:
-引理 G2Term_prod_summable
-  条件: (z : ℍ)
-  结论: Summable (fun p : 整数 × 整数 => G2Term z ![p.1, p.2])
-  证明: by
-  apply (finTwoArrowEquiv _).symm.summable_iff.mpr (G2Term_summable z)
-
-Depends on / 依赖: G2Term_summable, finTwoArrowEquiv, summable_iff, symm.summable_iff.mpr
+/-
+**EisensteinSeries.G2Term_prod_summable** 是 Mathlib 中的一个引理，位于命名空间 `EisensteinSer
+ies`。
+形式化陈述：G2Term_prod_summable (z : ℍ) : Summable (fun p : Int × Int => G2Term z ![p
+.1, p.2])
+参数：z : ℍ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma G2Term_prod_summable (z : ℍ) : Summable (fun p : Int × Int => G2Term z ![p.1, p.2]) := by
+lemma G2Term_prod_summable (z : ℍ) : Summable (fun p : ℤ × ℤ ↦ G2Term z ![p.1, p.2]) := by
   apply (finTwoArrowEquiv _).symm.summable_iff.mpr (G2Term_summable z)
-
-/--
-lemma `aux_identity` / 引理 `aux_identity`
-
-English:
-lemma aux_identity
-  given: (z : ℍ) (b n : Int)
-  statement: ((b : Complex) * z + n + 1)⁻¹ * (((b : Complex) * z + n) ^ 2)⁻¹ +
-  proof: by
-  by_cases h : b = 0 ∧ n = 0
-  · simp [h.1, h.2]
-  · simp only [not_and] at h
-    by_cases hb : b = 0
-    · by_cases hn : n = -1
-      · simp [hb, hn, δ_eq_two]
-        ring
-      · have hn0 : (n : Complex) != 0 := by aesop
-        have hn1 : (n : Complex) + 1 != 0 := by norm_cast; grind
-        simp [δ, h, hb, hn]
-        grind
-    · have h0 : (b : Complex) * z + n + 1 != 0 := by
-        simpa [add_assoc] using linear_ne_zero (cd := ![b, n + 1]) z (by aesop)
-      have h1 : (b : Complex) * z + n != 0 := linear_ne_zero (cd := ![b, n]) z (by aesop)
-      simp [δ]
-      grind
-
-中文:
-引理 aux_identity
-  条件: (z : ℍ) (b n : 整数)
-  结论: ((b : 复形) * z + n + 1)⁻¹ * (((b : 复形) * z + n) ^ 2)⁻¹ +
-  证明: by
-  by_cases h : b = 0 ∧ n = 0
-  · simp [h.1, h.2]
-  · simp only [not_and] at h
-    by_cases hb : b = 0
-    · by_cases hn : n = -1
-      · simp [hb, hn, δ_eq_two]
-        ring
-      · have hn0 : (n : Complex) != 0 := by aesop
-        have hn1 : (n : Complex) + 1 != 0 := by norm_cast; grind
-        simp [δ, h, hb, hn]
-        grind
-    · have h0 : (b : Complex) * z + n + 1 != 0 := by
-        simpa [add_assoc] using linear_ne_zero (cd := ![b, n + 1]) z (by aesop)
-      have h1 : (b : Complex) * z + n != 0 := linear_ne_zero (cd := ![b, n]) z (by aesop)
-      simp [δ]
-      grind
-
-Depends on / 依赖: add_assoc, linear_ne_zero, not_and
+/-
+**EisensteinSeries.aux_identity** 是 Mathlib 中的一个引理，位于命名空间 `EisensteinSeries`。
+形式化陈述：aux_identity (z : ℍ) (b n : Int) : ((b : Complex) * z + n + 1)⁻¹ * (((b : 
+Complex) * z + n) ^ 2)⁻¹ + (δ ![b, n]) + (((b : Complex) * z + n)⁻¹ - ((b : Comp
+lex) * z + n + 1)⁻¹) = (((b : Complex) * z + n) ^ 2)⁻¹
+参数：z : ℍ；b n : Int。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma aux_identity (z : ℍ) (b n : Int) : ((b : Complex) * z + n + 1)⁻¹ * (((b : Complex) * z + n) ^ 2)⁻¹ +
-    (δ ![b, n]) + (((b : Complex) * z + n)⁻¹ - ((b : Complex) * z + n + 1)⁻¹) = (((b : Complex) * z + n) ^ 2)⁻¹ := by
+lemma aux_identity (z : ℍ) (b n : ℤ) : ((b : ℂ) * z + n + 1)⁻¹ * (((b : ℂ) * z + n) ^ 2)⁻¹ +
+    (δ ![b, n]) + (((b : ℂ) * z + n)⁻¹ - ((b : ℂ) * z + n + 1)⁻¹) = (((b : ℂ) * z + n) ^ 2)⁻¹ := by
   by_cases h : b = 0 ∧ n = 0
   · simp [h.1, h.2]
   · simp only [not_and] at h
@@ -286,89 +167,59 @@ lemma aux_identity (z : ℍ) (b n : Int) : ((b : Complex) * z + n + 1)⁻¹ * ((
     · by_cases hn : n = -1
       · simp [hb, hn, δ_eq_two]
         ring
-      · have hn0 : (n : Complex) != 0 := by aesop
-        have hn1 : (n : Complex) + 1 != 0 := by norm_cast; grind
+      · have hn0 : (n : ℂ) ≠ 0 := by aesop
+        have hn1 : (n : ℂ) + 1 ≠ 0 := by norm_cast; grind
         simp [δ, h, hb, hn]
         grind
-    · have h0 : (b : Complex) * z + n + 1 != 0 := by
+    · have h0 : (b : ℂ) * z + n + 1 ≠ 0 := by
         simpa [add_assoc] using linear_ne_zero (cd := ![b, n + 1]) z (by aesop)
-      have h1 : (b : Complex) * z + n != 0 := linear_ne_zero (cd := ![b, n]) z (by aesop)
+      have h1 : (b : ℂ) * z + n ≠ 0 := linear_ne_zero (cd := ![b, n]) z (by aesop)
       simp [δ]
       grind
 
-/--
-lemma `G2_eq_tsum_G2Term` / 引理 `G2_eq_tsum_G2Term`
+/-- This shows `G2` can be defined as a certain absolutely convergent double sum. -/
+/-
+**EisensteinSeries.G2_eq_tsum_G2Term** 是 Mathlib 中的一个引理，位于命名空间 `EisensteinSeries
+`。
+形式化陈述：G2_eq_tsum_G2Term (z : ℍ) : G2 z = ∑' m, ∑' n, G2Term z ![m, n]
+参数：z : ℍ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma G2_eq_tsum_G2Term
-  given: (z : ℍ)
-  statement: G2 z = ∑' m, ∑' n, G2Term z ![m, n]
-  proof: by
-  set t := ∑' m, ∑' n, (G2Term z ![m, n])
-  rw [G2]; rw [show t = t + 0 by ring]; rw [← tsum_tsum_symmetricIco_sub_eq z]; rw [← Summable.tsum_add]
-  · rw [← tsum_eq_of_summable_unconditional (L := symmetricIcc Int)]
-    · congr with a
-      rw [e2Summand]; rw [tsum_eq_of_summable_unconditional
-        (summable_right_one_div_linear_sub_one_div_linear_succ z a)]; rw [← Summable.tsum_add
-        ((G2Term_prod_summable z).prod_factor _)
-        (summable_right_one_div_linear_sub_one_div_linear_succ z a)]
-      exact tsum_congr (fun b => by simp [eisSummand, G2Term, aux_identity z a b, zpow_ofNat])
-    · simpa only [tsum_symmetricIco_linear_sub_linear_add_one_eq_zero z, add_zero]
-        using (G2Term_prod_summable z).prod
-  · exact (G2Term_prod_summable z).prod
-  · exact summable_zero.congr
-      fun b => by simp [← tsum_symmetricIco_linear_sub_linear_add_one_eq_zero z b]
-
-中文:
-引理 G2_eq_tsum_G2Term
-  条件: (z : ℍ)
-  结论: G2 z = ∑' m, ∑' n, G2Term z ![m, n]
-  证明: by
-  set t := ∑' m, ∑' n, (G2Term z ![m, n])
-  rw [G2]; rw [show t = t + 0 by ring]; rw [← tsum_tsum_symmetricIco_sub_eq z]; rw [← Summable.tsum_add]
-  · rw [← tsum_eq_of_summable_unconditional (L := symmetricIcc Int)]
-    · congr with a
-      rw [e2Summand]; rw [tsum_eq_of_summable_unconditional
-        (summable_right_one_div_linear_sub_one_div_linear_succ z a)]; rw [← Summable.tsum_add
-        ((G2Term_prod_summable z).prod_factor _)
-        (summable_right_one_div_linear_sub_one_div_linear_succ z a)]
-      exact tsum_congr (fun b => by simp [eisSummand, G2Term, aux_identity z a b, zpow_ofNat])
-    · simpa only [tsum_symmetricIco_linear_sub_linear_add_one_eq_zero z, add_zero]
-        using (G2Term_prod_summable z).prod
-  · exact (G2Term_prod_summable z).prod
-  · exact summable_zero.congr
-      fun b => by simp [← tsum_symmetricIco_linear_sub_linear_add_one_eq_zero z b]
-
-Depends on / 依赖: G2Term, G2Term_prod_summable, Summable, Summable.tsum_add, e2Summand, prod_factor, summable_right_one_div_linear_sub_one_div_linear_succ, symmetricIcc, tsum_add, tsum_congr, tsum_eq_of_summable_unconditional, tsum_tsum_symmetricIco_sub_eq
+--- 原说明 ---
+This shows `G2` can be defined as a certain absolutely convergent double sum.
 -/
 lemma G2_eq_tsum_G2Term (z : ℍ) : G2 z = ∑' m, ∑' n, G2Term z ![m, n] := by
   set t := ∑' m, ∑' n, (G2Term z ![m, n])
-  rw [G2]; rw [show t = t + 0 by ring]; rw [← tsum_tsum_symmetricIco_sub_eq z]; rw [← Summable.tsum_add]
-  · rw [← tsum_eq_of_summable_unconditional (L := symmetricIcc Int)]
+  rw [G2, show t = t + 0 by ring, ← tsum_tsum_symmetricIco_sub_eq z, ← Summable.tsum_add]
+  · rw [← tsum_eq_of_summable_unconditional (L := symmetricIcc ℤ)]
     · congr with a
-      rw [e2Summand]; rw [tsum_eq_of_summable_unconditional
-        (summable_right_one_div_linear_sub_one_div_linear_succ z a)]; rw [← Summable.tsum_add
+      rw [e2Summand, tsum_eq_of_summable_unconditional
+        (summable_right_one_div_linear_sub_one_div_linear_succ z a), ← Summable.tsum_add
         ((G2Term_prod_summable z).prod_factor _)
         (summable_right_one_div_linear_sub_one_div_linear_succ z a)]
-      exact tsum_congr (fun b => by simp [eisSummand, G2Term, aux_identity z a b, zpow_ofNat])
+      exact tsum_congr (fun b ↦ by simp [eisSummand, G2Term, aux_identity z a b, zpow_ofNat])
     · simpa only [tsum_symmetricIco_linear_sub_linear_add_one_eq_zero z, add_zero]
         using (G2Term_prod_summable z).prod
   · exact (G2Term_prod_summable z).prod
   · exact summable_zero.congr
-      fun b => by simp [← tsum_symmetricIco_linear_sub_linear_add_one_eq_zero z b]
-
-/--
-lemma `G2_S_action_eq_tsum_G2Term` / 引理 `G2_S_action_eq_tsum_G2Term`
-
-English:
-lemma G2_S_action_eq_tsum_G2Term
-  given: (z : ℍ)
-  statement: ((z : Complex) ^ 2)⁻¹ * G2 (S • z) - -2 * π * I / z =
-  proof: by
-  rw [← tsum_symmetricIco_tsum_sub_eq z]; rw [← tsum_symmetricIco_tsum_eq_S_act z]; rw [← tsum_eq_of_summable_unconditional (L := symmetricIco Int)]; rw [← Summable.tsum_sub]
-  · apply tsum_congr (fun N => ?_)
+      fun b ↦ by simp [← tsum_symmetricIco_linear_sub_linear_add_one_eq_zero z b]
+/-
+**EisensteinSeries.G2_S_action_eq_tsum_G2Term** 是 Mathlib 中的一个引理，位于命名空间 `Eisenst
+einSeries`。
+形式化陈述：G2_S_action_eq_tsum_G2Term (z : ℍ) : ((z : Complex) ^ 2)⁻¹ * G2 (S • z) - 
+-2 * π * I / z = ∑' n : Int, ∑' m : Int, G2Term z ![m, n]
+参数：z : ℍ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+lemma G2_S_action_eq_tsum_G2Term (z : ℍ) : ((z : ℂ) ^ 2)⁻¹ * G2 (S • z) - -2 * π * I / z =
+    ∑' n : ℤ, ∑' m : ℤ, G2Term z ![m, n] := by
+  rw [← tsum_symmetricIco_tsum_sub_eq z, ← tsum_symmetricIco_tsum_eq_S_act z,
+    ← tsum_eq_of_summable_unconditional (L := symmetricIco ℤ), ← Summable.tsum_sub]
+  · apply tsum_congr (fun N ↦ ?_)
     rw [← Summable.tsum_sub]
-    · apply tsum_congr (fun M => ?_)
+    · apply tsum_congr (fun M ↦ ?_)
       simp only [one_div, G2Term, Fin.isValue, Matrix.cons_val_zero, Matrix.cons_val_one,
         Matrix.cons_val_fin_one, mul_inv_rev]
       nth_rw 1 [← aux_identity z M N]
@@ -377,133 +228,40 @@ lemma G2_S_action_eq_tsum_G2Term
     · simpa [add_assoc] using! summable_left_one_div_linear_sub_one_div_linear z N (N + 1)
   · apply HasSum.summable (a := (z.1 ^ 2)⁻¹ * G2 (S • z))
     rw [hasSum_symmetricIco_int_iff]
-    apply (tendsto_double_sum_S_act z).congr (fun x => ?_)
-    rw [Summable.tsum_finsetSum (fun i hi => ?_)]
+    apply (tendsto_double_sum_S_act z).congr (fun x ↦ ?_)
+    rw [Summable.tsum_finsetSum (fun i hi ↦ ?_)]
     simpa using! linear_left_summable (ne_zero z) i (k := 2) (by norm_num)
   · apply HasSum.summable (a := -2 * π * I / z)
-    rw [hasSum_symmetricIco_int_iff]; rw [← tendsto_comp_val_Ioi_atTop]
+    rw [hasSum_symmetricIco_int_iff, ← tendsto_comp_val_Ioi_atTop]
     exact tendsto_tsum_one_div_linear_sub_succ_eq z
   · have := G2Term_summable z
     rw [← ((finTwoArrowEquiv _).trans (.prodComm ..)).symm.summable_iff] at this
     exact this.prod
-
-中文:
-引理 G2_S_action_eq_tsum_G2Term
-  条件: (z : ℍ)
-  结论: ((z : 复形) ^ 2)⁻¹ * G2 (S • z) - -2 * π * I / z =
-  证明: by
-  rw [← tsum_symmetricIco_tsum_sub_eq z]; rw [← tsum_symmetricIco_tsum_eq_S_act z]; rw [← tsum_eq_of_summable_unconditional (L := symmetricIco Int)]; rw [← Summable.tsum_sub]
-  · apply tsum_congr (fun N => ?_)
-    rw [← Summable.tsum_sub]
-    · apply tsum_congr (fun M => ?_)
-      simp only [one_div, G2Term, Fin.isValue, Matrix.cons_val_zero, Matrix.cons_val_one,
-        Matrix.cons_val_fin_one, mul_inv_rev]
-      nth_rw 1 [← aux_identity z M N]
-      ring
-    · simpa using! linear_left_summable (ne_zero z) N le_rfl
-    · simpa [add_assoc] using! summable_left_one_div_linear_sub_one_div_linear z N (N + 1)
-  · apply HasSum.summable (a := (z.1 ^ 2)⁻¹ * G2 (S • z))
-    rw [hasSum_symmetricIco_int_iff]
-    apply (tendsto_double_sum_S_act z).congr (fun x => ?_)
-    rw [Summable.tsum_finsetSum (fun i hi => ?_)]
-    simpa using! linear_left_summable (ne_zero z) i (k := 2) (by norm_num)
-  · apply HasSum.summable (a := -2 * π * I / z)
-    rw [hasSum_symmetricIco_int_iff]; rw [← tendsto_comp_val_Ioi_atTop]
-    exact tendsto_tsum_one_div_linear_sub_succ_eq z
-  · have := G2Term_summable z
-    rw [← ((finTwoArrowEquiv _).trans (.prodComm ..)).symm.summable_iff] at this
-    exact this.prod
-
-Depends on / 依赖: Fin.isValue, G2Term, Matrix, Matrix.cons_val_fin_one, Matrix.cons_val_one, Matrix.cons_val_zero, Summable, Summable.tsum_sub, add_asso, aux_identity, cons_val_fin_one, cons_val_one, cons_val_zero, isValue, le_rfl, linear_left_summable, mul_inv_rev, ne_zero, nth_rw, one_div
+/-
+**EisensteinSeries.tsum_G2Term_eq_tsum** 是 Mathlib 中的一个引理，位于命名空间 `EisensteinSeri
+es`。
+形式化陈述：tsum_G2Term_eq_tsum (z : ℍ) : ∑' (m : Fin 2 -> Int), G2Term z m = ∑' m : I
+nt, ∑' n : Int, G2Term z ![m, n]
+参数：z : ℍ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma G2_S_action_eq_tsum_G2Term (z : ℍ) : ((z : Complex) ^ 2)⁻¹ * G2 (S • z) - -2 * π * I / z =
-    ∑' n : Int, ∑' m : Int, G2Term z ![m, n] := by
-  rw [← tsum_symmetricIco_tsum_sub_eq z]; rw [← tsum_symmetricIco_tsum_eq_S_act z]; rw [← tsum_eq_of_summable_unconditional (L := symmetricIco Int)]; rw [← Summable.tsum_sub]
-  · apply tsum_congr (fun N => ?_)
-    rw [← Summable.tsum_sub]
-    · apply tsum_congr (fun M => ?_)
-      simp only [one_div, G2Term, Fin.isValue, Matrix.cons_val_zero, Matrix.cons_val_one,
-        Matrix.cons_val_fin_one, mul_inv_rev]
-      nth_rw 1 [← aux_identity z M N]
-      ring
-    · simpa using! linear_left_summable (ne_zero z) N le_rfl
-    · simpa [add_assoc] using! summable_left_one_div_linear_sub_one_div_linear z N (N + 1)
-  · apply HasSum.summable (a := (z.1 ^ 2)⁻¹ * G2 (S • z))
-    rw [hasSum_symmetricIco_int_iff]
-    apply (tendsto_double_sum_S_act z).congr (fun x => ?_)
-    rw [Summable.tsum_finsetSum (fun i hi => ?_)]
-    simpa using! linear_left_summable (ne_zero z) i (k := 2) (by norm_num)
-  · apply HasSum.summable (a := -2 * π * I / z)
-    rw [hasSum_symmetricIco_int_iff]; rw [← tendsto_comp_val_Ioi_atTop]
-    exact tendsto_tsum_one_div_linear_sub_succ_eq z
-  · have := G2Term_summable z
-    rw [← ((finTwoArrowEquiv _).trans (.prodComm ..)).symm.summable_iff] at this
-    exact this.prod
-
-/--
-lemma `tsum_G2Term_eq_tsum` / 引理 `tsum_G2Term_eq_tsum`
-
-English:
-lemma tsum_G2Term_eq_tsum
-  given: (z : ℍ)
-  statement: ∑' (m : Fin 2 -> Int), G2Term z m =
-  proof: by
+lemma tsum_G2Term_eq_tsum (z : ℍ) : ∑' (m : Fin 2 → ℤ), G2Term z m =
+    ∑' m : ℤ, ∑' n : ℤ, G2Term z ![m, n] := by
   rw [← (finTwoArrowEquiv _).symm.tsum_eq]
   exact Summable.tsum_prod' (G2Term_prod_summable z) ((G2Term_prod_summable z).prod_factor)
-
-中文:
-引理 tsum_G2Term_eq_tsum
-  条件: (z : ℍ)
-  结论: ∑' (m : 有限集 2 -> 整数), G2Term z m =
-  证明: by
-  rw [← (finTwoArrowEquiv _).symm.tsum_eq]
-  exact Summable.tsum_prod' (G2Term_prod_summable z) ((G2Term_prod_summable z).prod_factor)
-
-Depends on / 依赖: G2Term_prod_summable, Summable, Summable.tsum_prod, finTwoArrowEquiv, prod_factor, symm.tsum_eq, tsum_eq, tsum_prod
+/-
+**EisensteinSeries.tsum_G2Term_eq_tsum'** 是 Mathlib 中的一个引理，位于命名空间 `EisensteinSer
+ies`。
+形式化陈述：tsum_G2Term_eq_tsum' (z : ℍ) : ∑' (m : Fin 2 -> Int), G2Term z m = ∑' n : 
+Int, ∑' m : Int, G2Term z ![m, n]
+参数：z : ℍ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma tsum_G2Term_eq_tsum (z : ℍ) : ∑' (m : Fin 2 -> Int), G2Term z m =
-    ∑' m : Int, ∑' n : Int, G2Term z ![m, n] := by
-  rw [← (finTwoArrowEquiv _).symm.tsum_eq]
-  exact Summable.tsum_prod' (G2Term_prod_summable z) ((G2Term_prod_summable z).prod_factor)
-
-/--
-lemma `tsum_G2Term_eq_tsum'` / 引理 `tsum_G2Term_eq_tsum'`
-
-English:
-lemma tsum_G2Term_eq_tsum'
-  given: (z : ℍ)
-  statement: ∑' (m : Fin 2 -> Int), G2Term z m =
-  proof: by
-  rw [Summable.tsum_comm']; rw [tsum_G2Term_eq_tsum]
-  · exact G2Term_prod_summable z
-  · exact (G2Term_prod_summable z).prod_factor
-  · have H := G2Term_summable z
-    rw [← ((finTwoArrowEquiv _).trans (.prodComm ..)).symm.summable_iff] at H
-    exact H.prod_factor
-
-
-@[expose] public section
-
-中文:
-引理 tsum_G2Term_eq_tsum'
-  条件: (z : ℍ)
-  结论: ∑' (m : 有限集 2 -> 整数), G2Term z m =
-  证明: by
-  rw [Summable.tsum_comm']; rw [tsum_G2Term_eq_tsum]
-  · exact G2Term_prod_summable z
-  · exact (G2Term_prod_summable z).prod_factor
-  · have H := G2Term_summable z
-    rw [← ((finTwoArrowEquiv _).trans (.prodComm ..)).symm.summable_iff] at H
-    exact H.prod_factor
-
-
-@[expose] public section
-
-Depends on / 依赖: G2Term_prod_summable, G2Term_summable, H.prod_factor, Summable, Summable.tsum_comm, finTwoArrowEquiv, prodComm, prod_factor, summable_iff, symm.summable_iff, tsum_G2Term_eq_tsum, tsum_comm
--/
-lemma tsum_G2Term_eq_tsum' (z : ℍ) : ∑' (m : Fin 2 -> Int), G2Term z m =
-    ∑' n : Int, ∑' m : Int, G2Term z ![m, n] := by
-  rw [Summable.tsum_comm']; rw [tsum_G2Term_eq_tsum]
+lemma tsum_G2Term_eq_tsum' (z : ℍ) : ∑' (m : Fin 2 → ℤ), G2Term z m =
+    ∑' n : ℤ, ∑' m : ℤ, G2Term z ![m, n] := by
+  rw [Summable.tsum_comm', tsum_G2Term_eq_tsum]
   · exact G2Term_prod_summable z
   · exact (G2Term_prod_summable z).prod_factor
   · have H := G2Term_summable z
@@ -515,67 +273,172 @@ lemma tsum_G2Term_eq_tsum' (z : ℍ) : ∑' (m : Fin 2 -> Int), G2Term z m =
 
 section transform
 
-/--
-lemma `G2_S_transform` / 引理 `G2_S_transform`
+/-- This is the key identity for how `G2` transforms under the slash action by `S`. -/
+/-
+**EisensteinSeries.G2_S_transform** 是 Mathlib 中的一个引理，位于命名空间 `EisensteinSeries`。
+形式化陈述：G2_S_transform (z : ℍ) : G2 z = ((z : Complex) ^ 2)⁻¹ * G2 (S • z) - -2 * 
+π * I / z
+参数：z : ℍ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `_private.Mathlib.NumberTheory.ModularForms.EisensteinSeries.E2.Transform
+.0.EisensteinSeries.G2_S_action_eq_tsum_G2Term`：∀ (z : UpperHalfPlane),   (↑z ^ 
+2)⁻¹ * EisensteinSeries.G2 (ModularGroup.S • z) - -2 * ↑Real.pi * Complex.I / ↑z
+ =     ∑' (n : ℤ) (m : ℤ), E…
+· 使用定理 `_private.Mathlib.NumberTheory.ModularForms.EisensteinSeries.E2.Transform
+.0.EisensteinSeries.G2_eq_tsum_G2Term`：∀ (z : UpperHalfPlane), EisensteinSeries.
+G2 z = ∑' (m : ℤ) (n : ℤ), EisensteinSeries.G2Term✝ z ![m, n]
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `_private.Mathlib.NumberTheory.ModularForms.EisensteinSeries.E2.Transform
+.0.EisensteinSeries.tsum_G2Term_eq_tsum'`：∀ (z : UpperHalfPlane),   ∑' (m : Fin 
+2 → ℤ), EisensteinSeries.G2Term✝ z m = ∑' (n : ℤ) (m : ℤ), EisensteinSeries.G2Te
+rm✝ z ![m, n]
+· 使用定理 `_private.Mathlib.NumberTheory.ModularForms.EisensteinSeries.E2.Transform
+.0.EisensteinSeries.tsum_G2Term_eq_tsum`：∀ (z : UpperHalfPlane),   ∑' (m : Fin 2
+ → ℤ), EisensteinSeries.G2Term✝ z m = ∑' (m : ℤ) (n : ℤ), EisensteinSeries.G2Ter
+m✝ z ![m, n]
 
-English:
-lemma G2_S_transform
-  given: (z : ℍ)
-  statement: G2 z = ((z : Complex) ^ 2)⁻¹ * G2 (S • z) - -2 * π * I / z
-  proof: by
-  rw [G2_S_action_eq_tsum_G2Term]; rw [G2_eq_tsum_G2Term z]; rw [← tsum_G2Term_eq_tsum']; rw [tsum_G2Term_eq_tsum]
-
-中文:
-引理 G2_S_transform
-  条件: (z : ℍ)
-  结论: G2 z = ((z : 复形) ^ 2)⁻¹ * G2 (S • z) - -2 * π * I / z
-  证明: by
-  rw [G2_S_action_eq_tsum_G2Term]; rw [G2_eq_tsum_G2Term z]; rw [← tsum_G2Term_eq_tsum']; rw [tsum_G2Term_eq_tsum]
-
-Depends on / 依赖: G2_S_action_eq_tsum_G2Term, G2_eq_tsum_G2Term, tsum_G2Term_eq_tsum
+--- 原说明 ---
+This is the key identity for how `G2` transforms under the slash action by `S`.
 -/
-lemma G2_S_transform (z : ℍ) : G2 z = ((z : Complex) ^ 2)⁻¹ * G2 (S • z) - -2 * π * I / z := by
-  rw [G2_S_action_eq_tsum_G2Term]; rw [G2_eq_tsum_G2Term z]; rw [← tsum_G2Term_eq_tsum']; rw [tsum_G2Term_eq_tsum]
+lemma G2_S_transform (z : ℍ) : G2 z = ((z : ℂ) ^ 2)⁻¹ * G2 (S • z) - -2 * π * I / z := by
+  rw [G2_S_action_eq_tsum_G2Term, G2_eq_tsum_G2Term z, ← tsum_G2Term_eq_tsum',
+  tsum_G2Term_eq_tsum]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `G2_T_transform` / 引理 `G2_T_transform`
-
-English:
-lemma G2_T_transform
-  statement: G2 ∣[(2 : Int)] T = G2
-  proof: by
-  ext z
-  simp_rw [SL_slash_def, modular_T_smul z]
-  simp [G2_eq_tsum_cexp, T, denom_apply, ← exp_periodic.nat_mul 1 (2 * π * I * z)]
-  grind
-
-中文:
-引理 G2_T_transform
-  结论: G2 ∣[(2 : 整数)] T = G2
-  证明: by
-  ext z
-  simp_rw [SL_slash_def, modular_T_smul z]
-  simp [G2_eq_tsum_cexp, T, denom_apply, ← exp_periodic.nat_mul 1 (2 * π * I * z)]
-  grind
-
-Depends on / 依赖: G2_eq_tsum_cexp, SL_slash_def, denom_apply, exp_periodic, exp_periodic.nat_mul, modular_T_smul, nat_mul, simp_rw
+/-
+**EisensteinSeries.G2_T_transform** 是 Mathlib 中的一个引理，位于命名空间 `EisensteinSeries`。
+形式化陈述：G2_T_transform : G2 ∣[(2 : Int)] T = G2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `ModularForm.SL_slash_def`：SL_slash_def (γ : SL(2, Int)) : f ∣[k] γ = fun
+ τ => f (γ • τ) * denom γ τ ^ (-k)
+· 使用定理 `UpperHalfPlane.modular_T_smul`：modular_T_smul (z : ℍ) : ModularGroup.T •
+ z = (1 : Real) +ᵥ z
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `EisensteinSeries.G2_eq_tsum_cexp`：G2_eq_tsum_cexp : G2 z = 2 * riemannZe
+ta 2 - 8 * π ^ 2 * ∑' n : Nat+, σ 1 n * 𝕢 z ^ (n : Nat)
+· 使用定理 `Matrix.cons_val'`：cons_val' (v : n' -> α) (B : Fin m -> n' -> α) (i j) :
+ vecCons v B i j = vecCons (v j) (fun i => B i j) i
+· 使用定理 `Matrix.cons_val_fin_one`：cons_val_fin_one (x : α) (u : Fin 0 -> α) : for
+all (i : Fin 1), vecCons x u i = x
+· 使用定理 `Int.cast_zero`：cast_zero : ((0 : Int) : R) = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `Int.cast_one`：cast_one : ((1 : Int) : R) = 1
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `zpow_neg`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a 
+^ (-n) = (a ^ n)⁻¹
+· 使用引理 `zpow_ofNat`：zpow_ofNat (a : G) (n : Nat) : a ^ (ofNat(n) : Int) = a ^ Of
+Nat.ofNat n
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Periodic.nat_mul`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {
+c : α} [inst : NonAssocSemiring α],   Function.Periodic f c → ∀ (n : ℕ), Functio
+n.Periodic f (↑…
+· 使用定理 `Complex.exp_periodic`：exp_periodic : Function.Periodic exp (2 * π * I)
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+（共 36 条，此处仅展示前 30 条）
 -/
-lemma G2_T_transform : G2 ∣[(2 : Int)] T = G2 := by
+lemma G2_T_transform : G2 ∣[(2 : ℤ)] T = G2 := by
   ext z
   simp_rw [SL_slash_def, modular_T_smul z]
   simp [G2_eq_tsum_cexp, T, denom_apply, ← exp_periodic.nat_mul 1 (2 * π * I * z)]
   grind
-
-/--
-lemma `G2_slash_action` / 引理 `G2_slash_action`
-
-English:
-lemma G2_slash_action
-  given: (γ : SL(2, Int))
-  statement: G2 ∣[(2 : Int)] γ = G2 - D2 γ
-  proof: by
-  have : γ in Subgroup.closure {S, T} := by simp [SpecialLinearGroup.SL2Z_generators]
+/-
+**EisensteinSeries.G2_slash_action** 是 Mathlib 中的一个引理，位于命名空间 `EisensteinSeries`。
+形式化陈述：G2_slash_action (γ : SL(2, Int)) : G2 ∣[(2 : Int)] γ = G2 - D2 γ
+参数：γ : SL(2, Int)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `SpecialLinearGroup.SL2Z_generators`：SpecialLinearGroup.SL2Z_generators :
+ closure {S, T} = ⊤
+· 使用定理 `Subgroup.closure_induction`：closure_induction {p : (g : G) -> g in closu
+re k -> Prop} (mem : forall x (hx : x in k), p x (subset_closure hx)) (one : p 1
+ (one_mem _)) (m…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `UpperHalfPlane.im_inv_neg_coe_pos`：im_inv_neg_coe_pos (z : ℍ) : 0 < (-z 
+: Complex)⁻¹.im
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `SlashInvariantForm.slash_S_apply`：slash_S_apply (f : ℍ -> Complex) (k : 
+Int) (z : ℍ) : (f ∣[k] ModularGroup.S) z = f (.mk _ z.im_inv_neg_coe_pos) * z ^ 
+(-k)
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用引理 `EisensteinSeries.G2_S_transform`：G2_S_transform (z : ℍ) : G2 z = ((z : C
+omplex) ^ 2)⁻¹ * G2 (S • z) - -2 * π * I / z
+· 使用定理 `UpperHalfPlane.modular_S_smul`：modular_S_smul (z : ℍ) : ModularGroup.S •
+ z = mk (-z : Complex)⁻¹ z.im_inv_neg_coe_pos
+· 使用引理 `EisensteinSeries.D2_S`：D2_S (z : ℍ) : D2 ModularGroup.S z = 2 * π * I / 
+z
+· 使用定理 `Mathlib.Tactic.Ring.Common.inv_congr`：∀ {R : Type u_2} [inst : Semifield
+ R] {a a' b : R}, a = a' → a'⁻¹ = b → a⁻¹ = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b : R}, a = a' → -a' = b → -a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_mul`：∀ {R : Type u_2} [inst : CommRing R]
+ (a₁ : R) (a₂ : ℕ) {a₃ b : R}, -a₃ = b → -(a₁ ^ a₂ * a₃) = a₁ ^ a₂ * b
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.inv_single`：∀ {R : Type u_2} [inst : Semifiel
+d R] {a b : R}, a⁻¹ = b → (a + 0)⁻¹ = b + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.inv_mul`：∀ {R : Type u_2} [inst : Semifield R
+] {a₁ : R} {a₂ : ℕ} {a₃ b₁ b₃ c : R},   a₁⁻¹ = b₁ → a₃⁻¹ = b₃ → b₃ * (b₁ ^ a₂ * 
+Nat.rawCast 1) = c → (a₁…
+· 使用定理 `Mathlib.Meta.NormNum.IsRat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℤ}, Mathlib.Meta.NormNum.IsRat a n 1 → Mathlib.Meta.NormNum.IsInt a n
+（共 93 条，此处仅展示前 30 条）
+-/
+lemma G2_slash_action (γ : SL(2, ℤ)) : G2 ∣[(2 : ℤ)] γ = G2 - D2 γ := by
+  have : γ ∈ Subgroup.closure {S, T} := by simp [SpecialLinearGroup.SL2Z_generators]
   induction this using Subgroup.closure_induction with
   | one => simp only [SlashAction.slash_one, D2_one, sub_zero]
   | mem g hg =>
@@ -588,98 +451,52 @@ lemma G2_slash_action
         aesop
       · simpa only [h2, D2_T, sub_zero] using G2_T_transform
   | mul g h _ _ ig ih =>
-      rw [D2_mul]; rw [SlashAction.slash_mul]; rw [ig]; rw [sub_eq_add_neg]; rw [SlashAction.add_slash]; rw [ih]
+      rw [D2_mul, SlashAction.slash_mul, ig, sub_eq_add_neg, SlashAction.add_slash, ih]
       grind [SlashAction.neg_slash, SL_slash]
   | inv g _ ig =>
-      have H1 : (G2 ∣[(2 : Int)] g) ∣[(2 : Int)] g⁻¹ = (G2 - D2 g) ∣[(2 : Int)] g⁻¹ := by
+      have H1 : (G2 ∣[(2 : ℤ)] g) ∣[(2 : ℤ)] g⁻¹ = (G2 - D2 g) ∣[(2 : ℤ)] g⁻¹ := by
         rw [ig]
       simp_rw [← SlashAction.slash_mul, sub_eq_add_neg, SlashAction.add_slash, mul_inv_cancel,
         SlashAction.slash_one, SL_slash, SlashAction.neg_slash] at H1
       nth_rw 2 [H1]
       have := D2_inv g
       simp only [SL_slash] at this
-      rw [← sub_eq_add_neg]; rw [this]; rw [SL_slash]; rw [sub_neg_eq_add]; rw [add_sub_cancel_right]
-
-中文:
-引理 G2_slash_action
-  条件: (γ : SL(2, 整数))
-  结论: G2 ∣[(2 : 整数)] γ = G2 - D2 γ
-  证明: by
-  have : γ in Subgroup.closure {S, T} := by simp [SpecialLinearGroup.SL2Z_generators]
-  induction this using Subgroup.closure_induction with
-  | one => simp only [SlashAction.slash_one, D2_one, sub_zero]
-  | mem g hg =>
-      simp only [mem_insert_iff, mem_singleton_iff] at hg
-      rcases hg with (h1 | h2)
-      · ext z
-        simp only [Pi.sub_apply, h1, D2_S z, SlashInvariantForm.slash_S_apply G2 2 z, mul_comm,
-          G2_S_transform z, modular_S_smul]
-        ring_nf
-        aesop
-      · simpa only [h2, D2_T, sub_zero] using G2_T_transform
-  | mul g h _ _ ig ih =>
-      rw [D2_mul]; rw [SlashAction.slash_mul]; rw [ig]; rw [sub_eq_add_neg]; rw [SlashAction.add_slash]; rw [ih]
-      grind [SlashAction.neg_slash, SL_slash]
-  | inv g _ ig =>
-      have H1 : (G2 ∣[(2 : Int)] g) ∣[(2 : Int)] g⁻¹ = (G2 - D2 g) ∣[(2 : Int)] g⁻¹ := by
-        rw [ig]
-      simp_rw [← SlashAction.slash_mul, sub_eq_add_neg, SlashAction.add_slash, mul_inv_cancel,
-        SlashAction.slash_one, SL_slash, SlashAction.neg_slash] at H1
-      nth_rw 2 [H1]
-      have := D2_inv g
-      simp only [SL_slash] at this
-      rw [← sub_eq_add_neg]; rw [this]; rw [SL_slash]; rw [sub_neg_eq_add]; rw [add_sub_cancel_right]
-
-Depends on / 依赖: D2_S, D2_T, D2_one, G2_S_transform, G2_T_transform, Pi.sub_apply, SL2Z_generators, SlashAction, SlashAction.slash_one, SlashInvariantForm, SlashInvariantForm.slash_S_apply, SpecialLinearGroup, SpecialLinearGroup.SL2Z_generators, Subgroup, Subgroup.closure, Subgroup.closure_induction, closure, closure_induction, mem_insert_iff, mem_singleton_iff
+      rw [← sub_eq_add_neg, this, SL_slash, sub_neg_eq_add, add_sub_cancel_right]
+/-
+**EisensteinSeries.E2_slash_action** 是 Mathlib 中的一个引理，位于命名空间 `EisensteinSeries`。
+形式化陈述：E2_slash_action (γ : SL(2, Int)) : E2 ∣[(2 : Int)] γ = E2 - (1 / (2 * riem
+annZeta 2)) • D2 γ
+参数：γ : SL(2, Int)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `one_div`：one_div (a : G) : 1 / a = a⁻¹
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `ModularForm.SL_smul_slash`：SL_smul_slash {α : Type*} [SMul α Complex] [I
+sScalarTower α Complex Complex] (k : Int) (A : SL(2, Int)) (f : ℍ -> Complex) (c
+ : α) : (c • f)…
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用引理 `EisensteinSeries.G2_slash_action`：G2_slash_action (γ : SL(2, Int)) : G2 
+∣[(2 : Int)] γ = G2 - D2 γ
+· 使用定理 `mul_sub`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), a 
+* (b - c) = a * b - a * c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma G2_slash_action (γ : SL(2, Int)) : G2 ∣[(2 : Int)] γ = G2 - D2 γ := by
-  have : γ in Subgroup.closure {S, T} := by simp [SpecialLinearGroup.SL2Z_generators]
-  induction this using Subgroup.closure_induction with
-  | one => simp only [SlashAction.slash_one, D2_one, sub_zero]
-  | mem g hg =>
-      simp only [mem_insert_iff, mem_singleton_iff] at hg
-      rcases hg with (h1 | h2)
-      · ext z
-        simp only [Pi.sub_apply, h1, D2_S z, SlashInvariantForm.slash_S_apply G2 2 z, mul_comm,
-          G2_S_transform z, modular_S_smul]
-        ring_nf
-        aesop
-      · simpa only [h2, D2_T, sub_zero] using G2_T_transform
-  | mul g h _ _ ig ih =>
-      rw [D2_mul]; rw [SlashAction.slash_mul]; rw [ig]; rw [sub_eq_add_neg]; rw [SlashAction.add_slash]; rw [ih]
-      grind [SlashAction.neg_slash, SL_slash]
-  | inv g _ ig =>
-      have H1 : (G2 ∣[(2 : Int)] g) ∣[(2 : Int)] g⁻¹ = (G2 - D2 g) ∣[(2 : Int)] g⁻¹ := by
-        rw [ig]
-      simp_rw [← SlashAction.slash_mul, sub_eq_add_neg, SlashAction.add_slash, mul_inv_cancel,
-        SlashAction.slash_one, SL_slash, SlashAction.neg_slash] at H1
-      nth_rw 2 [H1]
-      have := D2_inv g
-      simp only [SL_slash] at this
-      rw [← sub_eq_add_neg]; rw [this]; rw [SL_slash]; rw [sub_neg_eq_add]; rw [add_sub_cancel_right]
-
-/--
-lemma `E2_slash_action` / 引理 `E2_slash_action`
-
-English:
-lemma E2_slash_action
-  given: (γ : SL(2, Int))
-  statement: E2 ∣[(2 : Int)] γ = E2 - (1 / (2 * riemannZeta 2)) • D2 γ
-  proof: by
-  ext z
-  simp [E2, SL_smul_slash, G2_slash_action γ, mul_sub]
-
-中文:
-引理 E2_slash_action
-  条件: (γ : SL(2, 整数))
-  结论: E2 ∣[(2 : 整数)] γ = E2 - (1 / (2 * riemannZeta 2)) • D2 γ
-  证明: by
-  ext z
-  simp [E2, SL_smul_slash, G2_slash_action γ, mul_sub]
-
-Depends on / 依赖: G2_slash_action, SL_smul_slash, mul_sub
--/
-lemma E2_slash_action (γ : SL(2, Int)) : E2 ∣[(2 : Int)] γ = E2 - (1 / (2 * riemannZeta 2)) • D2 γ := by
+lemma E2_slash_action (γ : SL(2, ℤ)) : E2 ∣[(2 : ℤ)] γ = E2 - (1 / (2 * riemannZeta 2)) • D2 γ := by
   ext z
   simp [E2, SL_smul_slash, G2_slash_action γ, mul_sub]
 
@@ -688,3 +505,4 @@ end transform
 end
 
 end EisensteinSeries
+

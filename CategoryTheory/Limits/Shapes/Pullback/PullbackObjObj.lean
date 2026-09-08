@@ -66,34 +66,24 @@ section
 
 variable {X₁ Y₁ : C₁} (f₁ : X₁ ⟶ Y₁) {X₂ Y₂ : C₂} (f₂ : X₂ ⟶ Y₂)
 
-/--
-Definition of `PushoutObjObj` / `PushoutObjObj` 的定义
+/-- Given a bifunctor `F : C₁ ⥤ C₂ ⥤ C₃`, and morphisms `f₁ : X₁ ⟶ Y₁` in `C₁`
+and `f₂ : X₂ ⟶ Y₂` in `C₂`, this structure contains the data of
+a pushout of `(F.obj Y₁).obj X₂` and `(F.obj X₁).obj Y₂`
+along `(F.obj X₁).obj X₂`. -/
+/-
+**CategoryTheory.Functor.PushoutObjObj** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory
+.Functor`。
+形式化陈述：PushoutObjObj where /-- the pushout -/ pt : C₃ /-- the first inclusion -/ 
+inl : (F.obj Y₁).obj X₂ ⟶ pt /-- the second inclusion -/ inr : (F.obj X₁).obj Y₂
+ ⟶ pt isPushout : IsPushout ((F.map f₁).app X₂) ((F.obj X₁).map f₂) inl inr /-- 
+the Leibniz pushout -/ ι : pt ⟶ (F.obj Y₁).obj Y₂
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure PushoutObjObj
-  parameters: where
-  axioms and operations (7):
-    - pt : C₃
-    - inl : (F.obj Y₁).obj X₂ ⟶ pt
-    - inr : (F.obj X₁).obj Y₂ ⟶ pt
-    - isPushout : IsPushout ((F.map f₁).app X₂) ((F.obj X₁).map f₂) inl inr
-    - ι : pt ⟶ (F.obj Y₁).obj Y₂  [default: isPushout.desc ((F.obj Y₁).map f₂) ((F.map f₁).app Y₂) (by s]
-    - inl_ι : inl ≫ ι = (F.obj Y₁).map f₂  [default: by cat_disch]
-    - inr_ι : inr ≫ ι = (F.map f₁).app Y₂  [default: by cat_disch]
-
-中文:
-结构 PushoutObjObj
-  参数: where
-  公理与运算 (7 个):
-    - pt : C₃
-    - inl : (F.obj Y₁).obj X₂ ⟶ pt
-    - inr : (F.obj X₁).obj Y₂ ⟶ pt
-    - isPushout : 是推出 ((F.map f₁).app X₂) ((F.obj X₁).map f₂) inl inr
-    - ι : pt ⟶ (F.obj Y₁).obj Y₂  [默认: isPushout.desc ((F.obj Y₁).map f₂) ((F.map f₁).app Y₂) (by s]
-    - inl_ι : inl ≫ ι = (F.obj Y₁).map f₂  [默认: by cat_disch]
-    - inr_ι : inr ≫ ι = (F.map f₁).app Y₂  [默认: by cat_disch]
-
-Depends on / 依赖: F.map, F.obj, isPushout, isPushout.desc
+--- 原说明 ---
+Given a bifunctor `F : C₁ ⥤ C₂ ⥤ C₃`, and morphisms `f₁ : X₁ ⟶ Y₁` in `C₁`
+and `f₂ : X₂ ⟶ Y₂` in `C₂`, this structure contains the data of
+a pushout of `(F.obj Y₁).obj X₂` and `(F.obj X₁).obj Y₂`
+along `(F.obj X₁).obj X₂`.
 -/
 structure PushoutObjObj where
   /-- the pushout -/
@@ -114,30 +104,17 @@ attribute [reassoc (attr := simp)] inl_ι inr_ι
 
 /-- The `PushoutObjObj` structure given by the pushout of the colimits API. -/
 @[simps]
-/--
-Definition of `ofHasPushout` / `ofHasPushout` 的定义
+/-
+**CategoryTheory.Functor.PushoutObjObj.ofHasPushout** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Functor.PushoutObjObj`。
+形式化陈述：ofHasPushout [HasPushout ((F.map f₁).app X₂) ((F.obj X₁).map f₂)] : F.Push
+outObjObj f₁ f₂ where pt
+参数：(F.map f₁).app X₂；(F.obj X₁).map f₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofHasPushout
-  body: pushout ((F.map f₁).app X₂) ((F.obj X₁).map f₂)
-  inl := pushout.inl _ _
-  inr := pushout.inr _ _
-  isPushout := IsPushout.of_hasPushout _ _
-  ι := pushout.desc ((F.obj Y₁).map f₂) ((F.map f₁).app Y₂) (by simp)
-  inl_ι := pushout.inl_desc ..
-  inr_ι := pushout.inr_desc ..
-
-中文:
-定义 ofHasPushout
-  定义体: pushout ((F.map f₁).app X₂) ((F.obj X₁).map f₂)
-  inl := pushout.inl _ _
-  inr := pushout.inr _ _
-  isPushout := IsPushout.of_hasPushout _ _
-  ι := pushout.desc ((F.obj Y₁).map f₂) ((F.map f₁).app Y₂) (by simp)
-  inl_ι := pushout.inl_desc ..
-  inr_ι := pushout.inr_desc ..
-
-Depends on / 依赖: F.map, F.obj, pushout
+--- 原说明 ---
+The `PushoutObjObj` structure given by the pushout of the colimits API.
 -/
 noncomputable def ofHasPushout
     [HasPushout ((F.map f₁).app X₂) ((F.obj X₁).map f₂)] :
@@ -153,20 +130,19 @@ noncomputable def ofHasPushout
 variable {F f₁ f₂} (sq : F.PushoutObjObj f₁ f₂)
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  statement: {X₃ : C₃} {f g : sq.pt ⟶ X₃} (hₗ : sq.inl ≫ f = sq.inl ≫ g)
-  proof: sq.isPushout.hom_ext hₗ hᵣ
-
-中文:
-引理 hom_ext
-  结论: {X₃ : C₃} {f g : sq.pt ⟶ X₃} (hₗ : sq.inl ≫ f = sq.inl ≫ g)
-  证明: sq.isPushout.hom_ext hₗ hᵣ
-
-Depends on / 依赖: hom_ext, isPushout, sq.isPushout.hom_ext
+/-
+**CategoryTheory.Functor.PushoutObjObj.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.Functor.PushoutObjObj`。
+形式化陈述：hom_ext {X₃ : C₃} {f g : sq.pt ⟶ X₃} (hₗ : sq.inl ≫ f = sq.inl ≫ g) (hᵣ : 
+sq.inr ≫ f = sq.inr ≫ g) : f = g
+参数：hₗ : sq.inl ≫ f = sq.inl ≫ g；hᵣ : sq.inr ≫ f = sq.inr ≫ g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsPushout.hom_ext`：hom_ext (hP : IsPushout f g inl inr) {
+W : C} {k l : P ⟶ W} (h₀ : inl ≫ k = inl ≫ l) (h₁ : inr ≫ k = inr ≫ l) : k = l
+· 使用定理 `CategoryTheory.Functor.PushoutObjObj.isPushout`：∀ {C₁ : Type u₁} {C₂ : T
+ype u₂} {C₃ : Type u₃} [inst : CategoryTheory.Category.{v₁, u₁} C₁]   [inst_1 : 
+CategoryTheory.Category.{v₂, u₂} C₂]…
 -/
 lemma hom_ext {X₃ : C₃} {f g : sq.pt ⟶ X₃} (hₗ : sq.inl ≫ f = sq.inl ≫ g)
     (hᵣ : sq.inr ≫ f = sq.inr ≫ g) : f = g :=
@@ -176,32 +152,16 @@ set_option backward.defeqAttrib.useBackward true in
 /-- Given `sq : F.PushoutObjObj f₁ f₂`, flipping the pushout square gives
 `sq.flip : F.flip.PushoutObjObj f₂ f₁`. -/
 @[simps]
-/--
-Definition of `flip` / `flip` 的定义
+/-
+**CategoryTheory.Functor.PushoutObjObj.flip** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Functor.PushoutObjObj`。
+形式化陈述：flip : F.flip.PushoutObjObj f₂ f₁ where pt
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition flip
-  signature: : F.flip.PushoutObjObj f₂ f₁ where
-  body: sq.pt
-  inl := sq.inr
-  inr := sq.inl
-  isPushout := sq.isPushout.flip
-  ι := sq.ι
-
-@[deprecated (since := "2026-06-19")] alias ι_flip := flip_ι
-
-中文:
-定义 flip
-  签名: : F.flip.PushoutObjObj f₂ f₁ where
-  定义体: sq.pt
-  inl := sq.inr
-  inr := sq.inl
-  isPushout := sq.isPushout.flip
-  ι := sq.ι
-
-@[deprecated (since := "2026-06-19")] alias ι_flip := flip_ι
-
-Depends on / 依赖: sq.pt
+--- 原说明 ---
+Given `sq : F.PushoutObjObj f₁ f₂`, flipping the pushout square gives
+`sq.flip : F.flip.PushoutObjObj f₂ f₁`.
 -/
 def flip : F.flip.PushoutObjObj f₂ f₁ where
   pt := sq.pt
@@ -218,32 +178,16 @@ variable {F' : C₁ ⥤ C₂ ⥤ C₃} (e : F ≅ F')
 
 /-- Transport a `Functor.PushoutObjObj` structure via a natural isomorphism of functors. -/
 @[simps]
-/--
-Definition of `ofNatIso` / `ofNatIso` 的定义
+/-
+**CategoryTheory.Functor.PushoutObjObj.ofNatIso** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Functor.PushoutObjObj`。
+形式化陈述：ofNatIso : F'.PushoutObjObj f₁ f₂ where pt
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofNatIso
-  signature: : F'.PushoutObjObj f₁ f₂ where
-  body: sq.pt
-  inl := (e.inv.app Y₁).app X₂ ≫ sq.inl
-  inr := (e.inv.app X₁).app Y₂ ≫ sq.inr
-  isPushout :=
-    sq.isPushout.of_iso ((e.app _).app _) ((e.app _).app _) ((e.app _).app _) (Iso.refl _)
-      (by simp) (by simp) (by simp) (by simp)
-  ι := sq.ι ≫ (e.hom.app _).app _
-
-中文:
-定义 of自然数Iso
-  签名: : F'.PushoutObjObj f₁ f₂ where
-  定义体: sq.pt
-  inl := (e.inv.app Y₁).app X₂ ≫ sq.inl
-  inr := (e.inv.app X₁).app Y₂ ≫ sq.inr
-  isPushout :=
-    sq.isPushout.of_iso ((e.app _).app _) ((e.app _).app _) ((e.app _).app _) (Iso.refl _)
-      (by simp) (by simp) (by simp) (by simp)
-  ι := sq.ι ≫ (e.hom.app _).app _
-
-Depends on / 依赖: sq.pt
+--- 原说明 ---
+Transport a `Functor.PushoutObjObj` structure via a natural isomorphism of funct
+ors.
 -/
 def ofNatIso : F'.PushoutObjObj f₁ f₂ where
   pt := sq.pt
@@ -268,40 +212,17 @@ set_option backward.defeqAttrib.useBackward true in
 morphisms `f₁ : X₁ ⟶ Y₁` and `f₂ : X₂ ⟶ Y₂` when `X₁` is initial and both
 `F.flip.obj X₂` and `F.flip.obj Y₂` preserve the initial object. -/
 @[simps]
-/--
-Definition of `ofIsInitialLeft` / `ofIsInitialLeft` 的定义
+/-
+**CategoryTheory.Functor.PushoutObjObj.ofIsInitialLeft** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Functor.PushoutObjObj`。
+形式化陈述：ofIsInitialLeft : F.PushoutObjObj f₁ f₂ where pt
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIsInitialLeft
-  signature: : F.PushoutObjObj f₁ f₂ where
-  body: (F.obj Y₁).obj X₂
-  inl := 𝟙 _
-  inr := (IsInitial.isInitialObj (F.flip.obj _) _ h).to _
-  isPushout := by
-    let hX₂ := IsInitial.isInitialObj (F.flip.obj X₂) _ h
-    let hY₂ := IsInitial.isInitialObj (F.flip.obj Y₂) _ h
-    apply +allowSynthFailures IsPushout.of_vert_isIso
-    · exact isIso_of_isInitial hX₂ hY₂ _
-    · exact ⟨hX₂.hom_ext _ _⟩
-  ι := (F.obj Y₁).map f₂
-  inr_ι := (IsInitial.isInitialObj (F.flip.obj Y₂) _ h).hom_ext ..
-
-中文:
-定义 ofIsInitialLeft
-  签名: : F.PushoutObjObj f₁ f₂ where
-  定义体: (F.obj Y₁).obj X₂
-  inl := 𝟙 _
-  inr := (IsInitial.isInitialObj (F.flip.obj _) _ h).to _
-  isPushout := by
-    let hX₂ := IsInitial.isInitialObj (F.flip.obj X₂) _ h
-    let hY₂ := IsInitial.isInitialObj (F.flip.obj Y₂) _ h
-    apply +allowSynthFailures IsPushout.of_vert_isIso
-    · exact isIso_of_isInitial hX₂ hY₂ _
-    · exact ⟨hX₂.hom_ext _ _⟩
-  ι := (F.obj Y₁).map f₂
-  inr_ι := (IsInitial.isInitialObj (F.flip.obj Y₂) _ h).hom_ext ..
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+A `Functor.PushoutObjObj` structure for a functor `F : C₁ ⥤ C₂ ⥤ C₃` and
+morphisms `f₁ : X₁ ⟶ Y₁` and `f₂ : X₂ ⟶ Y₂` when `X₁` is initial and both
+`F.flip.obj X₂` and `F.flip.obj Y₂` preserve the initial object.
 -/
 noncomputable def ofIsInitialLeft : F.PushoutObjObj f₁ f₂ where
   pt := (F.obj Y₁).obj X₂
@@ -329,40 +250,17 @@ variable (F f₁ f₂)
 morphisms `f₁ : X₁ ⟶ Y₁` and `f₂ : X₂ ⟶ Y₂` when `X₂` is initial and both
 `F.obj X₁` and `F.obj Y₁` preserve the initial object. -/
 @[simps]
-/--
-Definition of `ofIsInitialRight` / `ofIsInitialRight` 的定义
+/-
+**CategoryTheory.Functor.PushoutObjObj.ofIsInitialRight** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.Functor.PushoutObjObj`。
+形式化陈述：ofIsInitialRight : F.PushoutObjObj f₁ f₂ where pt
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIsInitialRight
-  signature: : F.PushoutObjObj f₁ f₂ where
-  body: (F.obj X₁).obj Y₂
-  inl := (IsInitial.isInitialObj (F.obj _) _ h).to _
-  inr := 𝟙 _
-  isPushout := by
-    let hX₁ := IsInitial.isInitialObj (F.obj X₁) _ h
-    let hY₁ := IsInitial.isInitialObj (F.obj Y₁) _ h
-    apply +allowSynthFailures IsPushout.of_horiz_isIso
-    · exact isIso_of_isInitial hX₁ hY₁ _
-    · exact ⟨hX₁.hom_ext _ _⟩
-  ι := (F.map f₁).app Y₂
-  inl_ι := (IsInitial.isInitialObj (F.obj Y₁) _ h).hom_ext ..
-
-中文:
-定义 ofIsInitialRight
-  签名: : F.PushoutObjObj f₁ f₂ where
-  定义体: (F.obj X₁).obj Y₂
-  inl := (IsInitial.isInitialObj (F.obj _) _ h).to _
-  inr := 𝟙 _
-  isPushout := by
-    let hX₁ := IsInitial.isInitialObj (F.obj X₁) _ h
-    let hY₁ := IsInitial.isInitialObj (F.obj Y₁) _ h
-    apply +allowSynthFailures IsPushout.of_horiz_isIso
-    · exact isIso_of_isInitial hX₁ hY₁ _
-    · exact ⟨hX₁.hom_ext _ _⟩
-  ι := (F.map f₁).app Y₂
-  inl_ι := (IsInitial.isInitialObj (F.obj Y₁) _ h).hom_ext ..
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+A `Functor.PushoutObjObj` structure for a functor `F : C₁ ⥤ C₂ ⥤ C₃` and
+morphisms `f₁ : X₁ ⟶ Y₁` and `f₂ : X₂ ⟶ Y₂` when `X₂` is initial and both
+`F.obj X₁` and `F.obj Y₁` preserve the initial object.
 -/
 noncomputable def ofIsInitialRight : F.PushoutObjObj f₁ f₂ where
   pt := (F.obj X₁).obj Y₂
@@ -390,46 +288,21 @@ set_option backward.defeqAttrib.useBackward true in
   `f₂ : Arrow C₂`, and a morphism `f₁ ⟶ f₁'`, this defines a morphism between the induced
   pushout maps. -/
 @[simps]
-/--
-Definition of `mapArrowLeft` / `mapArrowLeft` 的定义
+/-
+**CategoryTheory.Functor.PushoutObjObj.mapArrowLeft** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Functor.PushoutObjObj`。
+形式化陈述：mapArrowLeft (sq : f₁ ⟶ f₁') : Arrow.mk sq₁₂.ι ⟶ Arrow.mk sq₁₂'.ι where le
+ft
+参数：sq : f₁ ⟶ f₁'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapArrowLeft
-  signature: (sq : f₁ ⟶ f₁')
-  body: sq₁₂.isPushout.desc
-    ((F.map sq.right).app f₂.left ≫ sq₁₂'.inl)
-    ((F.map sq.left).app f₂.right ≫ sq₁₂'.inr)
-    (by
-      #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-      (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this
-      goal without the `simp only`. It is not yet clear whether this is due to defeq abuse in
-      Mathlib or a problem in the new canonicalizer; a minimization would help. The original
-      proof was: `by grind [sq.w, sq₁₂'.isPushout.w]` -/
-      simp only [Arrow.mk_left]; grind [sq.w, sq₁₂'.isPushout.w])
-  right := (F.map sq.right).app f₂.right
-  w := by
-    apply PushoutObjObj.hom_ext
-    all_goals simp [← NatTrans.comp_app, ← Functor.map_comp]
-
-中文:
-定义 mapArrowLeft
-  签名: (sq : f₁ ⟶ f₁')
-  定义体: sq₁₂.isPushout.desc
-    ((F.map sq.right).app f₂.left ≫ sq₁₂'.inl)
-    ((F.map sq.left).app f₂.right ≫ sq₁₂'.inr)
-    (by
-      #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-      (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this
-      goal without the `simp only`. It is not yet clear whether this is due to defeq abuse in
-      Mathlib or a problem in the new canonicalizer; a minimization would help. The original
-      proof was: `by grind [sq.w, sq₁₂'.isPushout.w]` -/
-      simp only [Arrow.mk_left]; grind [sq.w, sq₁₂'.isPushout.w])
-  right := (F.map sq.right).app f₂.right
-  w := by
-    apply PushoutObjObj.hom_ext
-    all_goals simp [← NatTrans.comp_app, ← Functor.map_comp]
-
-Depends on / 依赖: isPushout, isPushout.desc
+--- 原说明 ---
+Given a `PushoutObjObj` of `f₁ : Arrow C₁` and `f₂ : Arrow C₂`, a `PushoutObjObj
+` of `f₁'` and
+  `f₂ : Arrow C₂`, and a morphism `f₁ ⟶ f₁'`, this defines a morphism between th
+e induced
+  pushout maps.
 -/
 def mapArrowLeft (sq : f₁ ⟶ f₁') :
     Arrow.mk sq₁₂.ι ⟶ Arrow.mk sq₁₂'.ι where
@@ -450,38 +323,92 @@ def mapArrowLeft (sq : f₁ ⟶ f₁') :
 
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `mapArrowLeft_id` / 引理 `mapArrowLeft_id`
-
-English:
-lemma mapArrowLeft_id
-  proof: by cat_disch
-
-中文:
-引理 mapArrowLeft_id
-  证明: by cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Functor.PushoutObjObj.mapArrowLeft_id** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.Functor.PushoutObjObj`。
+形式化陈述：mapArrowLeft_id : mapArrowLeft sq₁₂ sq₁₂ (𝟙 _) = 𝟙 _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Arrow.hom_ext`：hom_ext {X Y : Arrow T} (f g : X ⟶ Y) (h₁ 
+: f.left = g.left) (h₂ : f.right = g.right) : f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.IsPushout.desc.congr_simp`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {Z X Y P : C} {f f_1 : Z ⟶ X} (e_f : f = f_1)   {g
+ g_1 : Z ⟶ Y} (e_g : g = g_1) …
+· 使用引理 `CategoryTheory.Functor.PushoutObjObj.hom_ext`：hom_ext {X₃ : C₃} {f g : s
+q.pt ⟶ X₃} (hₗ : sq.inl ≫ f = sq.inl ≫ g) (hᵣ : sq.inr ≫ f = sq.inr ≫ g) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `CategoryTheory.IsPushout.inl_desc`：inl_desc (hP : IsPushout f g inl inr)
+ {W : C} (h : X ⟶ W) (k : Y ⟶ W) (w : f ≫ h = g ≫ k) : inl ≫ hP.desc h k w = h
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.IsPushout.inr_desc`：inr_desc (hP : IsPushout f g inl inr)
+ {W : C} (h : X ⟶ W) (k : Y ⟶ W) (w : f ≫ h = g ≫ k) : inr ≫ hP.desc h k w = k
 -/
 lemma mapArrowLeft_id :
     mapArrowLeft sq₁₂ sq₁₂ (𝟙 _) = 𝟙 _ := by cat_disch
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `mapArrowLeft_comp` / 引理 `mapArrowLeft_comp`
-
-English:
-lemma mapArrowLeft_comp
-  statement: {f₁'' : Arrow C₁} (sq₁₂'' : F.PushoutObjObj f₁''.hom f₂.hom)
-  proof: by cat_disch
-
-中文:
-引理 mapArrowLeft_comp
-  结论: {f₁'' : 箭头 C₁} (sq₁₂'' : F.PushoutObjObj f₁''.hom f₂.hom)
-  证明: by cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Functor.PushoutObjObj.mapArrowLeft_comp** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Functor.PushoutObjObj`。
+形式化陈述：mapArrowLeft_comp {f₁'' : Arrow C₁} (sq₁₂'' : F.PushoutObjObj f₁''.hom f₂.
+hom) (sq : f₁ ⟶ f₁') (sq' : f₁' ⟶ f₁'') : mapArrowLeft sq₁₂ sq₁₂' sq ≫ mapArrowL
+eft sq₁₂' sq₁₂'' sq' = mapArrowLeft sq₁₂ sq₁₂'' (sq ≫ sq')
+参数：sq₁₂'' : F.PushoutObjObj f₁''.hom f₂.hom；sq : f₁ ⟶ f₁'；sq' : f₁' ⟶ f₁''。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Arrow.hom_ext`：hom_ext {X Y : Arrow T} (f g : X ⟶ Y) (h₁ 
+: f.left = g.left) (h₂ : f.right = g.right) : f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.IsPushout.desc.congr_simp`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {Z X Y P : C} {f f_1 : Z ⟶ X} (e_f : f = f_1)   {g
+ g_1 : Z ⟶ Y} (e_g : g = g_1) …
+· 使用引理 `CategoryTheory.Functor.PushoutObjObj.hom_ext`：hom_ext {X₃ : C₃} {f g : s
+q.pt ⟶ X₃} (hₗ : sq.inl ≫ f = sq.inl ≫ g) (hᵣ : sq.inr ≫ f = sq.inr ≫ g) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.IsPushout.inl_desc_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {Z X Y P : C} {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ P}
+   {inr : Y ⟶ P} (hP : Catego…
+· 使用引理 `CategoryTheory.IsPushout.inl_desc`：inl_desc (hP : IsPushout f g inl inr)
+ {W : C} (h : X ⟶ W) (k : Y ⟶ W) (w : f ≫ h = g ≫ k) : inl ≫ hP.desc h k w = h
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.IsPushout.inr_desc_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {Z X Y P : C} {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ P}
+   {inr : Y ⟶ P} (hP : Catego…
+· 使用引理 `CategoryTheory.IsPushout.inr_desc`：inr_desc (hP : IsPushout f g inl inr)
+ {W : C} (h : X ⟶ W) (k : Y ⟶ W) (w : f ≫ h = g ≫ k) : inr ≫ hP.desc h k w = k
 -/
 lemma mapArrowLeft_comp {f₁'' : Arrow C₁} (sq₁₂'' : F.PushoutObjObj f₁''.hom f₂.hom)
     (sq : f₁ ⟶ f₁') (sq' : f₁' ⟶ f₁'') :
@@ -492,22 +419,17 @@ lemma mapArrowLeft_comp {f₁'' : Arrow C₁} (sq₁₂'' : F.PushoutObjObj f₁
   `f₂ : Arrow C₂`, and an isomorphism `f₁ ≅ f₁'`, this defines an isomorphism of the induced
   pushout maps. -/
 @[simps]
-/--
-Definition of `ι_iso_of_iso_left` / `ι_iso_of_iso_left` 的定义
+/-
+**CategoryTheory.Functor.PushoutObjObj.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Functor.PushoutObjObj`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ι_iso_of_iso_left
-  signature: (iso : f₁ ≅ f₁')
-  body: mapArrowLeft sq₁₂ sq₁₂' iso.hom
-  inv := mapArrowLeft sq₁₂' sq₁₂ iso.inv
-
-中文:
-定义 ι_iso_of_iso_left
-  签名: (iso : f₁ ≅ f₁')
-  定义体: mapArrowLeft sq₁₂ sq₁₂' iso.hom
-  inv := mapArrowLeft sq₁₂' sq₁₂ iso.inv
-
-Depends on / 依赖: iso.hom, mapArrowLeft
+--- 原说明 ---
+Given a `PushoutObjObj` of `f₁ : Arrow C₁` and `f₂ : Arrow C₂`, a `PushoutObjObj
+` of `f₁'` and
+  `f₂ : Arrow C₂`, and an isomorphism `f₁ ≅ f₁'`, this defines an isomorphism of
+ the induced
+  pushout maps.
 -/
 def ι_iso_of_iso_left (iso : f₁ ≅ f₁') :
     Arrow.mk sq₁₂.ι ≅ Arrow.mk sq₁₂'.ι where
@@ -523,48 +445,21 @@ set_option backward.defeqAttrib.useBackward true in
   `f₂' : Arrow C₂`, and a morphism `f₂ ⟶ f₂'`, this defines a morphism between the induced
   pushout maps. -/
 @[simps]
-/--
-Definition of `mapArrowRight` / `mapArrowRight` 的定义
+/-
+**CategoryTheory.Functor.PushoutObjObj.mapArrowRight** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Functor.PushoutObjObj`。
+形式化陈述：mapArrowRight (sq : f₂ ⟶ f₂') : Arrow.mk sq₁₂.ι ⟶ Arrow.mk sq₁₂'.ι where l
+eft
+参数：sq : f₂ ⟶ f₂'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapArrowRight
-  signature: (sq : f₂ ⟶ f₂')
-  body: sq₁₂.isPushout.desc
-    (((F.obj f₁.right).map sq.left) ≫ sq₁₂'.inl)
-    (((F.obj f₁.left).map sq.right) ≫ sq₁₂'.inr)
-    (by
-      #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-      (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this
-      goal without the `simp only`. It is not yet clear whether this is due to defeq abuse in
-      Mathlib or a problem in the new canonicalizer; a minimization would help. The original
-      proof was: `by grind [sq.w, sq₁₂'.isPushout.w]` -/
-      simp only [Arrow.mk_left]; grind [sq.w, sq₁₂'.isPushout.w])
-  right := (F.obj f₁.right).map sq.right
-  w := by
-    apply PushoutObjObj.hom_ext
-    · simp [← map_comp]
-    · cat_disch
-
-中文:
-定义 mapArrowRight
-  签名: (sq : f₂ ⟶ f₂')
-  定义体: sq₁₂.isPushout.desc
-    (((F.obj f₁.right).map sq.left) ≫ sq₁₂'.inl)
-    (((F.obj f₁.left).map sq.right) ≫ sq₁₂'.inr)
-    (by
-      #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-      (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this
-      goal without the `simp only`. It is not yet clear whether this is due to defeq abuse in
-      Mathlib or a problem in the new canonicalizer; a minimization would help. The original
-      proof was: `by grind [sq.w, sq₁₂'.isPushout.w]` -/
-      simp only [Arrow.mk_left]; grind [sq.w, sq₁₂'.isPushout.w])
-  right := (F.obj f₁.right).map sq.right
-  w := by
-    apply PushoutObjObj.hom_ext
-    · simp [← map_comp]
-    · cat_disch
-
-Depends on / 依赖: isPushout, isPushout.desc
+--- 原说明 ---
+Given a `PushoutObjObj` of `f₁ : Arrow C₁` and `f₂ : Arrow C₂`, a `PushoutObjObj
+` of `f₁` and
+  `f₂' : Arrow C₂`, and a morphism `f₂ ⟶ f₂'`, this defines a morphism between t
+he induced
+  pushout maps.
 -/
 def mapArrowRight (sq : f₂ ⟶ f₂') :
     Arrow.mk sq₁₂.ι ⟶ Arrow.mk sq₁₂'.ι where
@@ -586,38 +481,88 @@ def mapArrowRight (sq : f₂ ⟶ f₂') :
 
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `mapArrowRight_id` / 引理 `mapArrowRight_id`
-
-English:
-lemma mapArrowRight_id
-  proof: by cat_disch
-
-中文:
-引理 mapArrowRight_id
-  证明: by cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Functor.PushoutObjObj.mapArrowRight_id** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.Functor.PushoutObjObj`。
+形式化陈述：mapArrowRight_id : mapArrowRight sq₁₂ sq₁₂ (𝟙 _) = 𝟙 _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Arrow.hom_ext`：hom_ext {X Y : Arrow T} (f g : X ⟶ Y) (h₁ 
+: f.left = g.left) (h₂ : f.right = g.right) : f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.IsPushout.desc.congr_simp`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {Z X Y P : C} {f f_1 : Z ⟶ X} (e_f : f = f_1)   {g
+ g_1 : Z ⟶ Y} (e_g : g = g_1) …
+· 使用引理 `CategoryTheory.Functor.PushoutObjObj.hom_ext`：hom_ext {X₃ : C₃} {f g : s
+q.pt ⟶ X₃} (hₗ : sq.inl ≫ f = sq.inl ≫ g) (hᵣ : sq.inr ≫ f = sq.inr ≫ g) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `CategoryTheory.IsPushout.inl_desc`：inl_desc (hP : IsPushout f g inl inr)
+ {W : C} (h : X ⟶ W) (k : Y ⟶ W) (w : f ≫ h = g ≫ k) : inl ≫ hP.desc h k w = h
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.IsPushout.inr_desc`：inr_desc (hP : IsPushout f g inl inr)
+ {W : C} (h : X ⟶ W) (k : Y ⟶ W) (w : f ≫ h = g ≫ k) : inr ≫ hP.desc h k w = k
 -/
 lemma mapArrowRight_id :
     mapArrowRight sq₁₂ sq₁₂ (𝟙 _) = 𝟙 _ := by cat_disch
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `mapArrowRight_comp` / 引理 `mapArrowRight_comp`
-
-English:
-lemma mapArrowRight_comp
-  statement: {f₂'' : Arrow C₂} (sq₁₂'' : F.PushoutObjObj f₁.hom f₂''.hom)
-  proof: by cat_disch
-
-中文:
-引理 mapArrowRight_comp
-  结论: {f₂'' : 箭头 C₂} (sq₁₂'' : F.PushoutObjObj f₁.hom f₂''.hom)
-  证明: by cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Functor.PushoutObjObj.mapArrowRight_comp** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.Functor.PushoutObjObj`。
+形式化陈述：mapArrowRight_comp {f₂'' : Arrow C₂} (sq₁₂'' : F.PushoutObjObj f₁.hom f₂''
+.hom) (sq : f₂ ⟶ f₂') (sq' : f₂' ⟶ f₂'') : mapArrowRight sq₁₂ sq₁₂' sq ≫ mapArro
+wRight sq₁₂' sq₁₂'' sq' = mapArrowRight sq₁₂ sq₁₂'' (sq ≫ sq')
+参数：sq₁₂'' : F.PushoutObjObj f₁.hom f₂''.hom；sq : f₂ ⟶ f₂'；sq' : f₂' ⟶ f₂''。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Arrow.hom_ext`：hom_ext {X Y : Arrow T} (f g : X ⟶ Y) (h₁ 
+: f.left = g.left) (h₂ : f.right = g.right) : f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.IsPushout.desc.congr_simp`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {Z X Y P : C} {f f_1 : Z ⟶ X} (e_f : f = f_1)   {g
+ g_1 : Z ⟶ Y} (e_g : g = g_1) …
+· 使用引理 `CategoryTheory.Functor.PushoutObjObj.hom_ext`：hom_ext {X₃ : C₃} {f g : s
+q.pt ⟶ X₃} (hₗ : sq.inl ≫ f = sq.inl ≫ g) (hᵣ : sq.inr ≫ f = sq.inr ≫ g) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.IsPushout.inl_desc_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {Z X Y P : C} {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ P}
+   {inr : Y ⟶ P} (hP : Catego…
+· 使用引理 `CategoryTheory.IsPushout.inl_desc`：inl_desc (hP : IsPushout f g inl inr)
+ {W : C} (h : X ⟶ W) (k : Y ⟶ W) (w : f ≫ h = g ≫ k) : inl ≫ hP.desc h k w = h
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.IsPushout.inr_desc_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {Z X Y P : C} {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ P}
+   {inr : Y ⟶ P} (hP : Catego…
+· 使用引理 `CategoryTheory.IsPushout.inr_desc`：inr_desc (hP : IsPushout f g inl inr)
+ {W : C} (h : X ⟶ W) (k : Y ⟶ W) (w : f ≫ h = g ≫ k) : inr ≫ hP.desc h k w = k
 -/
 lemma mapArrowRight_comp {f₂'' : Arrow C₂} (sq₁₂'' : F.PushoutObjObj f₁.hom f₂''.hom)
     (sq : f₂ ⟶ f₂') (sq' : f₂' ⟶ f₂'') :
@@ -628,22 +573,17 @@ lemma mapArrowRight_comp {f₂'' : Arrow C₂} (sq₁₂'' : F.PushoutObjObj f�
   `f₂' : Arrow C₂`, and an isomorphism `f₂ ≅ f₂'`, this defines an isomorphism of the induced
   pushout maps. -/
 @[simps]
-/--
-Definition of `ι_iso_of_iso_right` / `ι_iso_of_iso_right` 的定义
+/-
+**CategoryTheory.Functor.PushoutObjObj.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Functor.PushoutObjObj`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ι_iso_of_iso_right
-  signature: (iso : f₂ ≅ f₂')
-  body: mapArrowRight sq₁₂ sq₁₂' iso.hom
-  inv := mapArrowRight sq₁₂' sq₁₂ iso.inv
-
-中文:
-定义 ι_iso_of_iso_right
-  签名: (iso : f₂ ≅ f₂')
-  定义体: mapArrowRight sq₁₂ sq₁₂' iso.hom
-  inv := mapArrowRight sq₁₂' sq₁₂ iso.inv
-
-Depends on / 依赖: iso.hom, mapArrowRight
+--- 原说明 ---
+Given a `PushoutObjObj` of `f₁ : Arrow C₁` and `f₂ : Arrow C₂`, a `PushoutObjObj
+` of `f₁` and
+  `f₂' : Arrow C₂`, and an isomorphism `f₂ ≅ f₂'`, this defines an isomorphism o
+f the induced
+  pushout maps.
 -/
 def ι_iso_of_iso_right (iso : f₂ ≅ f₂') :
     Arrow.mk sq₁₂.ι ≅ Arrow.mk sq₁₂'.ι where
@@ -663,46 +603,21 @@ set_option backward.defeqAttrib.useBackward true in
   `pushout ((F.map f₁).app X₂) ((F.obj X₁).map f₂) ⟶ (F.obj Y₁).obj Y₂` induced by the diagram
 ```
   `(F.obj X₁).obj X₂` ----> `(F.obj Y₁).obj X₂`
-          | |
-          | |
-          v v
+          |                            |
+          |                            |
+          v                            v
   `(F.obj X₁).obj Y₂` ----> `(F.obj Y₁).obj Y₂`
 ```
 -/
 @[simps]
 noncomputable
-/--
-Definition of `leibnizPushout` / `leibnizPushout` 的定义
-
-English:
-definition leibnizPushout
-  signature: [HasPushouts C₃]
-  body: { obj f₂ := Arrow.mk (PushoutObjObj.ofHasPushout F f₁.hom f₂.hom).ι
-      map sq :=
-        PushoutObjObj.mapArrowRight
-          (PushoutObjObj.ofHasPushout F ..)
-          (PushoutObjObj.ofHasPushout F ..) sq }
-  map sq :=
-    { app f₂ :=
-        PushoutObjObj.mapArrowLeft
-          (PushoutObjObj.ofHasPushout F ..)
-          (PushoutObjObj.ofHasPushout F ..) sq }
-
-中文:
-定义 leibnizPushout
-  签名: [有Pushouts C₃]
-  定义体: { obj f₂ := Arrow.mk (PushoutObjObj.ofHasPushout F f₁.hom f₂.hom).ι
-      map sq :=
-        PushoutObjObj.mapArrowRight
-          (PushoutObjObj.ofHasPushout F ..)
-          (PushoutObjObj.ofHasPushout F ..) sq }
-  map sq :=
-    { app f₂ :=
-        PushoutObjObj.mapArrowLeft
-          (PushoutObjObj.ofHasPushout F ..)
-          (PushoutObjObj.ofHasPushout F ..) sq }
-
-Depends on / 依赖: Arrow.mk, PushoutObjObj, PushoutObjObj.mapArrowLeft, PushoutObjObj.mapArrowRight, PushoutObjObj.ofHasPushout, mapArrowLeft, mapArrowRight, ofHasPushout
+/-
+**CategoryTheory.Functor.leibnizPushout** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Functor`。
+形式化陈述：leibnizPushout [HasPushouts C₃] : Arrow C₁ ⥤ Arrow C₂ ⥤ Arrow C₃ where obj
+ f₁
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def leibnizPushout [HasPushouts C₃] : Arrow C₁ ⥤ Arrow C₂ ⥤ Arrow C₃ where
   obj f₁ :=
@@ -721,34 +636,24 @@ section
 
 variable {X₁ Y₁ : C₁} (f₁ : X₁ ⟶ Y₁) {X₃ Y₃ : C₃} (f₃ : X₃ ⟶ Y₃)
 
-/--
-Definition of `PullbackObjObj` / `PullbackObjObj` 的定义
+/-- Given a bifunctor `G : C₁ᵒᵖ ⥤ C₃ ⥤ C₂`, and morphisms `f₁ : X₁ ⟶ Y₁` in `C₁`
+and `f₃ : X₃ ⟶ Y₃` in `C₃`, this structure contains the data of
+a pullback of `(G.obj (op X₁)).obj X₃`
+and `(G.obj (op Y₁)).obj Y₃` over `(G.obj (op X₁)).obj Y₃`. -/
+/-
+**CategoryTheory.Functor.PullbackObjObj** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheor
+y.Functor`。
+形式化陈述：PullbackObjObj where /-- the pullback -/ pt : C₂ /-- the first projection 
+-/ fst : pt ⟶ (G.obj (op X₁)).obj X₃ /-- the second projection -/ snd : pt ⟶ (G.
+obj (op Y₁)).obj Y₃ isPullback : IsPullback fst snd ((G.obj (op X₁)).map f₃) ((G
+.map f₁.op).app Y₃) /-- the Leibniz pullback -/ π : (G.obj (op Y₁)).obj X₃ ⟶ pt
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure PullbackObjObj
-  parameters: where
-  axioms and operations (7):
-    - pt : C₂
-    - fst : pt ⟶ (G.obj (op X₁)).obj X₃
-    - snd : pt ⟶ (G.obj (op Y₁)).obj Y₃
-    - isPullback : IsPullback fst snd ((G.obj (op X₁)).map f₃) ((G.map f₁.op).app Y₃)
-    - π : (G.obj (op Y₁)).obj X₃ ⟶ pt  [default: isPullback.lift ((G.map f₁.op).app X₃) ((G.obj (op Y₁)).map ]
-    - π_fst : π ≫ fst = (G.map f₁.op).app X₃  [default: by cat_disch]
-    - π_snd : π ≫ snd = (G.obj (op Y₁)).map f₃  [default: by cat_disch]
-
-中文:
-结构 PullbackObjObj
-  参数: where
-  公理与运算 (7 个):
-    - pt : C₂
-    - fst : pt ⟶ (G.obj (op X₁)).obj X₃
-    - snd : pt ⟶ (G.obj (op Y₁)).obj Y₃
-    - isPullback : 是拉回 fst snd ((G.obj (op X₁)).map f₃) ((G.map f₁.op).app Y₃)
-    - π : (G.obj (op Y₁)).obj X₃ ⟶ pt  [默认: isPullback.lift ((G.map f₁.op).app X₃) ((G.obj (op Y₁)).map ]
-    - π_fst : π ≫ fst = (G.map f₁.op).app X₃  [默认: by cat_disch]
-    - π_snd : π ≫ snd = (G.obj (op Y₁)).map f₃  [默认: by cat_disch]
-
-Depends on / 依赖: G.map, G.obj, cat_disch, isPullback, isPullback.lift
+--- 原说明 ---
+Given a bifunctor `G : C₁ᵒᵖ ⥤ C₃ ⥤ C₂`, and morphisms `f₁ : X₁ ⟶ Y₁` in `C₁`
+and `f₃ : X₃ ⟶ Y₃` in `C₃`, this structure contains the data of
+a pullback of `(G.obj (op X₁)).obj X₃`
+and `(G.obj (op Y₁)).obj Y₃` over `(G.obj (op X₁)).obj Y₃`.
 -/
 structure PullbackObjObj where
   /-- the pullback -/
@@ -772,26 +677,17 @@ attribute [reassoc (attr := simp)] π_fst π_snd
 set_option backward.isDefEq.respectTransparency false in
 /-- The `PullbackObjObj` structure given by the pullback of the limits API. -/
 @[simps]
-/--
-Definition of `ofHasPullback` / `ofHasPullback` 的定义
+/-
+**CategoryTheory.Functor.PullbackObjObj.ofHasPullback** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Functor.PullbackObjObj`。
+形式化陈述：ofHasPullback [HasPullback ((G.obj (op X₁)).map f₃) ((G.map f₁.op).app Y₃)
+] : G.PullbackObjObj f₁ f₃ where pt
+参数：(G.obj (op X₁)).map f₃；(G.map f₁.op).app Y₃。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofHasPullback
-  body: pullback ((G.obj (op X₁)).map f₃) ((G.map f₁.op).app Y₃)
-  fst := pullback.fst _ _
-  snd := pullback.snd _ _
-  isPullback := IsPullback.of_hasPullback _ _
-  π := pullback.lift ((G.map f₁.op).app X₃) ((G.obj (op Y₁)).map f₃) (by simp)
-
-中文:
-定义 ofHasPullback
-  定义体: pullback ((G.obj (op X₁)).map f₃) ((G.map f₁.op).app Y₃)
-  fst := pullback.fst _ _
-  snd := pullback.snd _ _
-  isPullback := IsPullback.of_hasPullback _ _
-  π := pullback.lift ((G.map f₁.op).app X₃) ((G.obj (op Y₁)).map f₃) (by simp)
-
-Depends on / 依赖: G.map, G.obj, pullback
+--- 原说明 ---
+The `PullbackObjObj` structure given by the pullback of the limits API.
 -/
 noncomputable def ofHasPullback
     [HasPullback ((G.obj (op X₁)).map f₃) ((G.map f₁.op).app Y₃)] :
@@ -805,20 +701,19 @@ noncomputable def ofHasPullback
 variable {G f₁ f₃} (sq : G.PullbackObjObj f₁ f₃)
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  statement: {X₂ : C₂} {f g : X₂ ⟶ sq.pt} (h₁ : f ≫ sq.fst = g ≫ sq.fst)
-  proof: sq.isPullback.hom_ext h₁ h₂
-
-中文:
-引理 hom_ext
-  结论: {X₂ : C₂} {f g : X₂ ⟶ sq.pt} (h₁ : f ≫ sq.fst = g ≫ sq.fst)
-  证明: sq.isPullback.hom_ext h₁ h₂
-
-Depends on / 依赖: hom_ext, isPullback, sq.isPullback.hom_ext
+/-
+**CategoryTheory.Functor.PullbackObjObj.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.Functor.PullbackObjObj`。
+形式化陈述：hom_ext {X₂ : C₂} {f g : X₂ ⟶ sq.pt} (h₁ : f ≫ sq.fst = g ≫ sq.fst) (h₂ : 
+f ≫ sq.snd = g ≫ sq.snd) : f = g
+参数：h₁ : f ≫ sq.fst = g ≫ sq.fst；h₂ : f ≫ sq.snd = g ≫ sq.snd。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsPullback.hom_ext`：hom_ext (hP : IsPullback fst snd f g)
+ {W : C} {k l : W ⟶ P} (h₀ : k ≫ fst = l ≫ fst) (h₁ : k ≫ snd = l ≫ snd) : k = l
+· 使用定理 `CategoryTheory.Functor.PullbackObjObj.isPullback`：∀ {C₁ : Type u₁} {C₂ :
+ Type u₂} {C₃ : Type u₃} [inst : CategoryTheory.Category.{v₁, u₁} C₁]   [inst_1 
+: CategoryTheory.Category.{v₂, u₂} C₂]…
 -/
 lemma hom_ext {X₂ : C₂} {f g : X₂ ⟶ sq.pt} (h₁ : f ≫ sq.fst = g ≫ sq.fst)
     (h₂ : f ≫ sq.snd = g ≫ sq.snd) : f = g :=
@@ -835,40 +730,17 @@ variable (G f₁ f₃)
 morphisms `f₁ : X₁ ⟶ Y₁` and `f₃ : X₃ ⟶ Y₃` when `X₁` is initial and both
 `G.flip.obj X₃` and `G.flip.obj Y₃` preserve the terminal object. -/
 @[simps]
-/--
-Definition of `ofIsInitial` / `ofIsInitial` 的定义
+/-
+**CategoryTheory.Functor.PullbackObjObj.ofIsInitial** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Functor.PullbackObjObj`。
+形式化陈述：ofIsInitial : G.PullbackObjObj f₁ f₃ where pt
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIsInitial
-  signature: : G.PullbackObjObj f₁ f₃ where
-  body: (G.obj (op Y₁)).obj Y₃
-  fst := (IsTerminal.isTerminalObj (G.flip.obj X₃) _ h.op).from _
-  snd := 𝟙 _
-  isPullback := by
-    let hX₃ := IsTerminal.isTerminalObj (G.flip.obj X₃) _ h.op
-    let hY₃ := IsTerminal.isTerminalObj (G.flip.obj Y₃) _ h.op
-    apply +allowSynthFailures IsPullback.of_vert_isIso
-    · exact isIso_of_isTerminal hX₃ hY₃ _
-    · exact ⟨hY₃.hom_ext _ _⟩
-  π := (G.obj (op Y₁)).map f₃
-  π_fst := (IsTerminal.isTerminalObj (G.flip.obj X₃) _ h.op).hom_ext _ _
-
-中文:
-定义 ofIsInitial
-  签名: : G.PullbackObjObj f₁ f₃ where
-  定义体: (G.obj (op Y₁)).obj Y₃
-  fst := (IsTerminal.isTerminalObj (G.flip.obj X₃) _ h.op).from _
-  snd := 𝟙 _
-  isPullback := by
-    let hX₃ := IsTerminal.isTerminalObj (G.flip.obj X₃) _ h.op
-    let hY₃ := IsTerminal.isTerminalObj (G.flip.obj Y₃) _ h.op
-    apply +allowSynthFailures IsPullback.of_vert_isIso
-    · exact isIso_of_isTerminal hX₃ hY₃ _
-    · exact ⟨hY₃.hom_ext _ _⟩
-  π := (G.obj (op Y₁)).map f₃
-  π_fst := (IsTerminal.isTerminalObj (G.flip.obj X₃) _ h.op).hom_ext _ _
-
-Depends on / 依赖: G.obj
+--- 原说明 ---
+A `Functor.PullbackObjObj` structure for a functor `G : C₁ᵒᵖ ⥤ C₃ ⥤ C₂` and
+morphisms `f₁ : X₁ ⟶ Y₁` and `f₃ : X₃ ⟶ Y₃` when `X₁` is initial and both
+`G.flip.obj X₃` and `G.flip.obj Y₃` preserve the terminal object.
 -/
 noncomputable def ofIsInitial : G.PullbackObjObj f₁ f₃ where
   pt := (G.obj (op Y₁)).obj Y₃
@@ -896,40 +768,17 @@ variable (G f₁ f₃)
 morphisms `f₁ : X₁ ⟶ Y₁` and `f₃ : X₃ ⟶ Y₃` when `Y₃` is terminal and both
 `G.obj X₁` and `G.obj Y₁` preserve the terminal object. -/
 @[simps]
-/--
-Definition of `ofIsTerminal` / `ofIsTerminal` 的定义
+/-
+**CategoryTheory.Functor.PullbackObjObj.ofIsTerminal** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Functor.PullbackObjObj`。
+形式化陈述：ofIsTerminal : G.PullbackObjObj f₁ f₃ where pt
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIsTerminal
-  signature: : G.PullbackObjObj f₁ f₃ where
-  body: (G.obj (op X₁)).obj X₃
-  fst := 𝟙 _
-  snd := (IsTerminal.isTerminalObj (G.obj _) _ h).from _
-  isPullback := by
-    let hX₁ := IsTerminal.isTerminalObj (G.obj (op X₁)) _ h
-    let hY₁ := IsTerminal.isTerminalObj (G.obj (op Y₁)) _ h
-    apply +allowSynthFailures IsPullback.of_horiz_isIso
-    · exact isIso_of_isTerminal hY₁ hX₁ _
-    · exact ⟨hX₁.hom_ext _ _⟩
-  π := (G.map f₁.op).app X₃
-  π_snd := (IsTerminal.isTerminalObj (G.obj (op Y₁)) _ h).hom_ext _ _
-
-中文:
-定义 ofIsTerminal
-  签名: : G.PullbackObjObj f₁ f₃ where
-  定义体: (G.obj (op X₁)).obj X₃
-  fst := 𝟙 _
-  snd := (IsTerminal.isTerminalObj (G.obj _) _ h).from _
-  isPullback := by
-    let hX₁ := IsTerminal.isTerminalObj (G.obj (op X₁)) _ h
-    let hY₁ := IsTerminal.isTerminalObj (G.obj (op Y₁)) _ h
-    apply +allowSynthFailures IsPullback.of_horiz_isIso
-    · exact isIso_of_isTerminal hY₁ hX₁ _
-    · exact ⟨hX₁.hom_ext _ _⟩
-  π := (G.map f₁.op).app X₃
-  π_snd := (IsTerminal.isTerminalObj (G.obj (op Y₁)) _ h).hom_ext _ _
-
-Depends on / 依赖: G.obj
+--- 原说明 ---
+A `Functor.PullbackObjObj` structure for a functor `G : C₁ᵒᵖ ⥤ C₃ ⥤ C₂` and
+morphisms `f₁ : X₁ ⟶ Y₁` and `f₃ : X₃ ⟶ Y₃` when `Y₃` is terminal and both
+`G.obj X₁` and `G.obj Y₁` preserve the terminal object.
 -/
 noncomputable def ofIsTerminal : G.PullbackObjObj f₁ f₃ where
   pt := (G.obj (op X₁)).obj X₃
@@ -957,48 +806,21 @@ set_option backward.defeqAttrib.useBackward true in
   `f₃ : Arrow C₃`, and a morphism `f₁' ⟶ f₁`, this defines a morphism between the induced
   pullback maps. -/
 @[simps]
-/--
-Definition of `mapArrowLeft` / `mapArrowLeft` 的定义
+/-
+**CategoryTheory.Functor.PullbackObjObj.mapArrowLeft** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Functor.PullbackObjObj`。
+形式化陈述：mapArrowLeft (sq : f₁' ⟶ f₁) : Arrow.mk sq₁₃.π ⟶ Arrow.mk sq₁₃'.π where le
+ft
+参数：sq : f₁' ⟶ f₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapArrowLeft
-  signature: (sq : f₁' ⟶ f₁)
-  body: (G.map sq.right.op).app f₃.left
-  right := sq₁₃'.isPullback.lift
-    (sq₁₃.fst ≫ (G.map sq.left.op).app f₃.left)
-    (sq₁₃.snd ≫ (G.map sq.right.op).app f₃.right)
-    (by
-      #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-      (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this
-      goal without the `simp`. It is not yet clear whether this is due to defeq abuse in
-      Mathlib or a problem in the new canonicalizer; a minimization would help. The original
-      proof was: `by simp only [id_obj, Category.assoc]; grind [sq.w, sq₁₃.isPullback.w]` -/
-      simp [Arrow.mk_right]; grind [sq.w, sq₁₃.isPullback.w])
-  w := by
-    apply PullbackObjObj.hom_ext
-    · simp [← NatTrans.comp_app, ← map_comp, ← op_comp]
-    · cat_disch
-
-中文:
-定义 mapArrowLeft
-  签名: (sq : f₁' ⟶ f₁)
-  定义体: (G.map sq.right.op).app f₃.left
-  right := sq₁₃'.isPullback.lift
-    (sq₁₃.fst ≫ (G.map sq.left.op).app f₃.left)
-    (sq₁₃.snd ≫ (G.map sq.right.op).app f₃.right)
-    (by
-      #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-      (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this
-      goal without the `simp`. It is not yet clear whether this is due to defeq abuse in
-      Mathlib or a problem in the new canonicalizer; a minimization would help. The original
-      proof was: `by simp only [id_obj, Category.assoc]; grind [sq.w, sq₁₃.isPullback.w]` -/
-      simp [Arrow.mk_right]; grind [sq.w, sq₁₃.isPullback.w])
-  w := by
-    apply PullbackObjObj.hom_ext
-    · simp [← NatTrans.comp_app, ← map_comp, ← op_comp]
-    · cat_disch
-
-Depends on / 依赖: G.map, sq.right.op
+--- 原说明 ---
+Given a `PullbackObjObj` of `f₁ : Arrow C₁` and `f₃ : Arrow C₃`, a `PullbackObjO
+bj` of `f₁'` and
+  `f₃ : Arrow C₃`, and a morphism `f₁' ⟶ f₁`, this defines a morphism between th
+e induced
+  pullback maps.
 -/
 def mapArrowLeft (sq : f₁' ⟶ f₁) :
     Arrow.mk sq₁₃.π ⟶ Arrow.mk sq₁₃'.π where
@@ -1020,38 +842,92 @@ def mapArrowLeft (sq : f₁' ⟶ f₁) :
 
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `mapArrowLeft_id` / 引理 `mapArrowLeft_id`
-
-English:
-lemma mapArrowLeft_id
-  proof: by cat_disch
-
-中文:
-引理 mapArrowLeft_id
-  证明: by cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Functor.PullbackObjObj.mapArrowLeft_id** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.Functor.PullbackObjObj`。
+形式化陈述：mapArrowLeft_id : mapArrowLeft sq₁₃ sq₁₃ (𝟙 _) = 𝟙 _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Arrow.hom_ext`：hom_ext {X Y : Arrow T} (f g : X ⟶ Y) (h₁ 
+: f.left = g.left) (h₂ : f.right = g.right) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.IsPullback.lift.congr_simp`：∀ {C : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} C] {P X Y Z : C} {fst fst_1 : P ⟶ X} (e_fst : fst = 
+fst_1)   {snd snd_1 : P ⟶ Y} (e…
+· 使用引理 `CategoryTheory.Functor.PullbackObjObj.hom_ext`：hom_ext {X₂ : C₂} {f g : 
+X₂ ⟶ sq.pt} (h₁ : f ≫ sq.fst = g ≫ sq.fst) (h₂ : f ≫ sq.snd = g ≫ sq.snd) : f = 
+g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `CategoryTheory.IsPullback.lift_fst`：lift_fst (hP : IsPullback fst snd f 
+g) {W : C} (h : W ⟶ X) (k : W ⟶ Y) (w : h ≫ f = k ≫ g) : hP.lift h k w ≫ fst = h
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用引理 `CategoryTheory.IsPullback.lift_snd`：lift_snd (hP : IsPullback fst snd f 
+g) {W : C} (h : W ⟶ X) (k : W ⟶ Y) (w : h ≫ f = k ≫ g) : hP.lift h k w ≫ snd = k
 -/
 lemma mapArrowLeft_id :
     mapArrowLeft sq₁₃ sq₁₃ (𝟙 _) = 𝟙 _ := by cat_disch
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `mapArrowLeft_comp` / 引理 `mapArrowLeft_comp`
-
-English:
-lemma mapArrowLeft_comp
-  statement: {f₁'' : Arrow C₁} (sq₁₃'' : G.PullbackObjObj f₁''.hom f₃.hom)
-  proof: by cat_disch
-
-中文:
-引理 mapArrowLeft_comp
-  结论: {f₁'' : 箭头 C₁} (sq₁₃'' : G.PullbackObjObj f₁''.hom f₃.hom)
-  证明: by cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Functor.PullbackObjObj.mapArrowLeft_comp** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.Functor.PullbackObjObj`。
+形式化陈述：mapArrowLeft_comp {f₁'' : Arrow C₁} (sq₁₃'' : G.PullbackObjObj f₁''.hom f₃
+.hom) (sq' : f₁'' ⟶ f₁') (sq : f₁' ⟶ f₁) : mapArrowLeft sq₁₃ sq₁₃' sq ≫ mapArrow
+Left sq₁₃' sq₁₃'' sq' = mapArrowLeft sq₁₃ sq₁₃'' (sq' ≫ sq)
+参数：sq₁₃'' : G.PullbackObjObj f₁''.hom f₃.hom；sq' : f₁'' ⟶ f₁'；sq : f₁' ⟶ f₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Arrow.hom_ext`：hom_ext {X Y : Arrow T} (f g : X ⟶ Y) (h₁ 
+: f.left = g.left) (h₂ : f.right = g.right) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.IsPullback.lift.congr_simp`：∀ {C : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} C] {P X Y Z : C} {fst fst_1 : P ⟶ X} (e_fst : fst = 
+fst_1)   {snd snd_1 : P ⟶ Y} (e…
+· 使用引理 `CategoryTheory.Functor.PullbackObjObj.hom_ext`：hom_ext {X₂ : C₂} {f g : 
+X₂ ⟶ sq.pt} (h₁ : f ≫ sq.fst = g ≫ sq.fst) (h₂ : f ≫ sq.snd = g ≫ sq.snd) : f = 
+g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.IsPullback.lift_fst`：lift_fst (hP : IsPullback fst snd f 
+g) {W : C} (h : W ⟶ X) (k : W ⟶ Y) (w : h ≫ f = k ≫ g) : hP.lift h k w ≫ fst = h
+· 使用定理 `CategoryTheory.IsPullback.lift_fst_assoc`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {P X Y Z : C} {fst : P ⟶ X} {snd : P ⟶ Y} {f : X ⟶
+ Z}   {g : Y ⟶ Z} (hP : Catego…
+· 使用引理 `CategoryTheory.IsPullback.lift_snd`：lift_snd (hP : IsPullback fst snd f 
+g) {W : C} (h : W ⟶ X) (k : W ⟶ Y) (w : h ≫ f = k ≫ g) : hP.lift h k w ≫ snd = k
+· 使用定理 `CategoryTheory.IsPullback.lift_snd_assoc`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {P X Y Z : C} {fst : P ⟶ X} {snd : P ⟶ Y} {f : X ⟶
+ Z}   {g : Y ⟶ Z} (hP : Catego…
 -/
 lemma mapArrowLeft_comp {f₁'' : Arrow C₁} (sq₁₃'' : G.PullbackObjObj f₁''.hom f₃.hom)
     (sq' : f₁'' ⟶ f₁') (sq : f₁' ⟶ f₁) :
@@ -1062,22 +938,17 @@ lemma mapArrowLeft_comp {f₁'' : Arrow C₁} (sq₁₃'' : G.PullbackObjObj f�
   `f₃ : Arrow C₃`, and an isomorphism `f₁ ≅ f₁'`, this defines an isomorphism of the induced
   pullback maps. -/
 @[simps]
-/--
-Definition of `π_iso_of_iso_left` / `π_iso_of_iso_left` 的定义
+/-
+**CategoryTheory.Functor.PullbackObjObj.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Functor.PullbackObjObj`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition π_iso_of_iso_left
-  signature: (iso : f₁ ≅ f₁')
-  body: mapArrowLeft sq₁₃ sq₁₃' iso.inv
-  inv := mapArrowLeft sq₁₃' sq₁₃ iso.hom
-
-中文:
-定义 π_iso_of_iso_left
-  签名: (iso : f₁ ≅ f₁')
-  定义体: mapArrowLeft sq₁₃ sq₁₃' iso.inv
-  inv := mapArrowLeft sq₁₃' sq₁₃ iso.hom
-
-Depends on / 依赖: iso.inv, mapArrowLeft
+--- 原说明 ---
+Given a `PullbackObjObj` of `f₁ : Arrow C₁` and `f₃ : Arrow C₃`, a `PullbackObjO
+bj` of `f₁'` and
+  `f₃ : Arrow C₃`, and an isomorphism `f₁ ≅ f₁'`, this defines an isomorphism of
+ the induced
+  pullback maps.
 -/
 def π_iso_of_iso_left (iso : f₁ ≅ f₁') :
     Arrow.mk sq₁₃.π ≅ Arrow.mk sq₁₃'.π where
@@ -1093,46 +964,21 @@ set_option backward.defeqAttrib.useBackward true in
   `f₃' : Arrow C₃`, and a morphism `f₃ ⟶ f₃'`, this defines a morphism between the induced
   pullback maps. -/
 @[simps]
-/--
-Definition of `mapArrowRight` / `mapArrowRight` 的定义
+/-
+**CategoryTheory.Functor.PullbackObjObj.mapArrowRight** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Functor.PullbackObjObj`。
+形式化陈述：mapArrowRight (sq : f₃ ⟶ f₃') : Arrow.mk sq₁₃.π ⟶ Arrow.mk sq₁₃'.π where l
+eft
+参数：sq : f₃ ⟶ f₃'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapArrowRight
-  signature: (sq : f₃ ⟶ f₃')
-  body: (G.obj (.op f₁.right)).map sq.left
-  right := sq₁₃'.isPullback.lift
-    (sq₁₃.fst ≫ (G.obj (.op f₁.left)).map sq.left)
-    (sq₁₃.snd ≫ (G.obj (.op f₁.right)).map sq.right)
-    (by
-      #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-      (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this
-      goal without the `simp`. It is not yet clear whether this is due to defeq abuse in
-      Mathlib or a problem in the new canonicalizer; a minimization would help. The original
-      proof was: `by grind [sq.w, sq₁₃.isPullback.w]` -/
-      simp [Arrow.mk_right]; grind [sq.w, sq₁₃.isPullback.w])
-  w := by
-    apply PullbackObjObj.hom_ext
-    all_goals simp [← Functor.map_comp]
-
-中文:
-定义 mapArrowRight
-  签名: (sq : f₃ ⟶ f₃')
-  定义体: (G.obj (.op f₁.right)).map sq.left
-  right := sq₁₃'.isPullback.lift
-    (sq₁₃.fst ≫ (G.obj (.op f₁.left)).map sq.left)
-    (sq₁₃.snd ≫ (G.obj (.op f₁.right)).map sq.right)
-    (by
-      #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
-      (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this
-      goal without the `simp`. It is not yet clear whether this is due to defeq abuse in
-      Mathlib or a problem in the new canonicalizer; a minimization would help. The original
-      proof was: `by grind [sq.w, sq₁₃.isPullback.w]` -/
-      simp [Arrow.mk_right]; grind [sq.w, sq₁₃.isPullback.w])
-  w := by
-    apply PullbackObjObj.hom_ext
-    all_goals simp [← Functor.map_comp]
-
-Depends on / 依赖: G.obj, sq.left
+--- 原说明 ---
+Given a `PullbackObjObj` of `f₁ : Arrow C₁` and `f₃ : Arrow C₃`, a `PullbackObjO
+bj` of `f₁` and
+  `f₃' : Arrow C₃`, and a morphism `f₃ ⟶ f₃'`, this defines a morphism between t
+he induced
+  pullback maps.
 -/
 def mapArrowRight (sq : f₃ ⟶ f₃') :
     Arrow.mk sq₁₃.π ⟶ Arrow.mk sq₁₃'.π where
@@ -1153,38 +999,88 @@ def mapArrowRight (sq : f₃ ⟶ f₃') :
 
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `mapArrowRight_id` / 引理 `mapArrowRight_id`
-
-English:
-lemma mapArrowRight_id
-  proof: by cat_disch
-
-中文:
-引理 mapArrowRight_id
-  证明: by cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Functor.PullbackObjObj.mapArrowRight_id** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Functor.PullbackObjObj`。
+形式化陈述：mapArrowRight_id : mapArrowRight sq₁₃ sq₁₃ (𝟙 _) = 𝟙 _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Arrow.hom_ext`：hom_ext {X Y : Arrow T} (f g : X ⟶ Y) (h₁ 
+: f.left = g.left) (h₂ : f.right = g.right) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.IsPullback.lift.congr_simp`：∀ {C : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} C] {P X Y Z : C} {fst fst_1 : P ⟶ X} (e_fst : fst = 
+fst_1)   {snd snd_1 : P ⟶ Y} (e…
+· 使用引理 `CategoryTheory.Functor.PullbackObjObj.hom_ext`：hom_ext {X₂ : C₂} {f g : 
+X₂ ⟶ sq.pt} (h₁ : f ≫ sq.fst = g ≫ sq.fst) (h₂ : f ≫ sq.snd = g ≫ sq.snd) : f = 
+g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `CategoryTheory.IsPullback.lift_fst`：lift_fst (hP : IsPullback fst snd f 
+g) {W : C} (h : W ⟶ X) (k : W ⟶ Y) (w : h ≫ f = k ≫ g) : hP.lift h k w ≫ fst = h
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用引理 `CategoryTheory.IsPullback.lift_snd`：lift_snd (hP : IsPullback fst snd f 
+g) {W : C} (h : W ⟶ X) (k : W ⟶ Y) (w : h ≫ f = k ≫ g) : hP.lift h k w ≫ snd = k
 -/
 lemma mapArrowRight_id :
     mapArrowRight sq₁₃ sq₁₃ (𝟙 _) = 𝟙 _ := by cat_disch
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `mapArrowRight_comp` / 引理 `mapArrowRight_comp`
-
-English:
-lemma mapArrowRight_comp
-  statement: {f₃'' : Arrow C₃} (sq₁₃'' : G.PullbackObjObj f₁.hom f₃''.hom)
-  proof: by cat_disch
-
-中文:
-引理 mapArrowRight_comp
-  结论: {f₃'' : 箭头 C₃} (sq₁₃'' : G.PullbackObjObj f₁.hom f₃''.hom)
-  证明: by cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Functor.PullbackObjObj.mapArrowRight_comp** 是 Mathlib 中的一个引理，位于
+命名空间 `CategoryTheory.Functor.PullbackObjObj`。
+形式化陈述：mapArrowRight_comp {f₃'' : Arrow C₃} (sq₁₃'' : G.PullbackObjObj f₁.hom f₃'
+'.hom) (sq : f₃ ⟶ f₃') (sq' : f₃' ⟶ f₃'') : mapArrowRight sq₁₃ sq₁₃' sq ≫ mapArr
+owRight sq₁₃' sq₁₃'' sq' = mapArrowRight sq₁₃ sq₁₃'' (sq ≫ sq')
+参数：sq₁₃'' : G.PullbackObjObj f₁.hom f₃''.hom；sq : f₃ ⟶ f₃'；sq' : f₃' ⟶ f₃''。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Arrow.hom_ext`：hom_ext {X Y : Arrow T} (f g : X ⟶ Y) (h₁ 
+: f.left = g.left) (h₂ : f.right = g.right) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.IsPullback.lift.congr_simp`：∀ {C : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} C] {P X Y Z : C} {fst fst_1 : P ⟶ X} (e_fst : fst = 
+fst_1)   {snd snd_1 : P ⟶ Y} (e…
+· 使用引理 `CategoryTheory.Functor.PullbackObjObj.hom_ext`：hom_ext {X₂ : C₂} {f g : 
+X₂ ⟶ sq.pt} (h₁ : f ≫ sq.fst = g ≫ sq.fst) (h₂ : f ≫ sq.snd = g ≫ sq.snd) : f = 
+g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.IsPullback.lift_fst`：lift_fst (hP : IsPullback fst snd f 
+g) {W : C} (h : W ⟶ X) (k : W ⟶ Y) (w : h ≫ f = k ≫ g) : hP.lift h k w ≫ fst = h
+· 使用定理 `CategoryTheory.IsPullback.lift_fst_assoc`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {P X Y Z : C} {fst : P ⟶ X} {snd : P ⟶ Y} {f : X ⟶
+ Z}   {g : Y ⟶ Z} (hP : Catego…
+· 使用引理 `CategoryTheory.IsPullback.lift_snd`：lift_snd (hP : IsPullback fst snd f 
+g) {W : C} (h : W ⟶ X) (k : W ⟶ Y) (w : h ≫ f = k ≫ g) : hP.lift h k w ≫ snd = k
+· 使用定理 `CategoryTheory.IsPullback.lift_snd_assoc`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {P X Y Z : C} {fst : P ⟶ X} {snd : P ⟶ Y} {f : X ⟶
+ Z}   {g : Y ⟶ Z} (hP : Catego…
 -/
 lemma mapArrowRight_comp {f₃'' : Arrow C₃} (sq₁₃'' : G.PullbackObjObj f₁.hom f₃''.hom)
     (sq : f₃ ⟶ f₃') (sq' : f₃' ⟶ f₃'') :
@@ -1195,22 +1091,17 @@ lemma mapArrowRight_comp {f₃'' : Arrow C₃} (sq₁₃'' : G.PullbackObjObj f�
   `f₃' : Arrow C₃`, and an isomorphism `f₃ ≅ f₃'`, this defines an isomorphism of the induced
   pullback maps. -/
 @[simps]
-/--
-Definition of `π_iso_of_iso_right` / `π_iso_of_iso_right` 的定义
+/-
+**CategoryTheory.Functor.PullbackObjObj.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Functor.PullbackObjObj`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition π_iso_of_iso_right
-  signature: (iso : f₃ ≅ f₃')
-  body: mapArrowRight sq₁₃ sq₁₃' iso.hom
-  inv := mapArrowRight sq₁₃' sq₁₃ iso.inv
-
-中文:
-定义 π_iso_of_iso_right
-  签名: (iso : f₃ ≅ f₃')
-  定义体: mapArrowRight sq₁₃ sq₁₃' iso.hom
-  inv := mapArrowRight sq₁₃' sq₁₃ iso.inv
-
-Depends on / 依赖: iso.hom, mapArrowRight
+--- 原说明 ---
+Given a `PullbackObjObj` of `f₁ : Arrow C₁` and `f₃ : Arrow C₃`, a `PullbackObjO
+bj` of `f₁` and
+  `f₃' : Arrow C₃`, and an isomorphism `f₃ ≅ f₃'`, this defines an isomorphism o
+f the induced
+  pullback maps.
 -/
 def π_iso_of_iso_right (iso : f₃ ≅ f₃') :
     Arrow.mk sq₁₃.π ≅ Arrow.mk sq₁₃'.π where
@@ -1231,50 +1122,21 @@ set_option backward.defeqAttrib.useBackward true in
   the diagram
 ```
   `(G.obj (op Y₁)).obj X₃` ----> `(G.obj (op X₁)).obj X₃`
-              | |
-              | |
-              v v
+              |                              |
+              |                              |
+              v                              v
   `(G.obj (op Y₁)).obj Y₃` ----> `(G.obj (op X₁)).obj Y₃`
 ```
 -/
 @[simps]
 noncomputable
-/--
-Definition of `leibnizPullback` / `leibnizPullback` 的定义
-
-English:
-definition leibnizPullback
-  signature: [HasPullbacks C₂]
-  body: { obj f₃ := Arrow.mk (PullbackObjObj.ofHasPullback G f₁.unop.hom f₃.hom).π
-      map sq :=
-        PullbackObjObj.mapArrowRight
-          (PullbackObjObj.ofHasPullback G ..)
-          (PullbackObjObj.ofHasPullback G ..) sq }
-  map sq :=
-    { app f₃ :=
-        PullbackObjObj.mapArrowLeft
-          (PullbackObjObj.ofHasPullback G ..)
-          (PullbackObjObj.ofHasPullback G ..) sq.unop }
-
-noncomputable section
-
-中文:
-定义 leibnizPullback
-  签名: [有Pullbacks C₂]
-  定义体: { obj f₃ := Arrow.mk (PullbackObjObj.ofHasPullback G f₁.unop.hom f₃.hom).π
-      map sq :=
-        PullbackObjObj.mapArrowRight
-          (PullbackObjObj.ofHasPullback G ..)
-          (PullbackObjObj.ofHasPullback G ..) sq }
-  map sq :=
-    { app f₃ :=
-        PullbackObjObj.mapArrowLeft
-          (PullbackObjObj.ofHasPullback G ..)
-          (PullbackObjObj.ofHasPullback G ..) sq.unop }
-
-noncomputable section
-
-Depends on / 依赖: Arrow.mk, PullbackObjObj, PullbackObjObj.mapArrowLeft, PullbackObjObj.mapArrowRight, PullbackObjObj.ofHasPullback, mapArrowLeft, mapArrowRight, ofHasPullback, sq.unop, unop.hom
+/-
+**CategoryTheory.Functor.leibnizPullback** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Functor`。
+形式化陈述：leibnizPullback [HasPullbacks C₂] : (Arrow C₁)ᵒᵖ ⥤ Arrow C₃ ⥤ Arrow C₂ whe
+re obj f₁
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def leibnizPullback [HasPullbacks C₂] : (Arrow C₁)ᵒᵖ ⥤ Arrow C₃ ⥤ Arrow C₂ where
   obj f₁ :=
@@ -1303,80 +1165,20 @@ set_option backward.isDefEq.respectTransparency false in
 /-- Given a parametrized adjunction `F ⊣₂ G` and an arrow `X₁ : Arrow C₁`, this is the induced
   adjunction `F.leibnizPushout.obj X₁ ⊣ G.leibnizPullback.obj (op X₁)`. -/
 @[simps!]
-/--
-Definition of `adj` / `adj` 的定义
+/-
+**CategoryTheory.Functor.LeibnizAdjunction.adj** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Functor.LeibnizAdjunction`。
+形式化陈述：adj (adj₂ : F ⊣₂ G) (X₁ : Arrow C₁) [HasPullbacks C₂] [HasPushouts C₃] : F
+.leibnizPushout.obj X₁ ⊣ G.leibnizPullback.obj (op X₁) where unit.app X₂
+参数：adj₂ : F ⊣₂ G；X₁ : Arrow C₁。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition adj
-  signature: (adj₂ : F ⊣₂ G) (X₁ : Arrow C₁) [HasPullbacks C₂] [HasPushouts C₃]
-  body: Arrow.homMk (adj₂.homEquiv (pushout.inl ..))
-    (pullback.lift (adj₂.homEquiv (pushout.inr ..)) (adj₂.homEquiv (𝟙 _))
-      (by simp [← homEquiv_naturality_one, ← homEquiv_naturality_three])) (by
-      apply pullback.hom_ext
-      · simp [← homEquiv_naturality_one, ← homEquiv_naturality_two, pushout.condition]
-      · simp [← homEquiv_naturality_two, ← homEquiv_naturality_three])
-  unit.naturality _ _ _ := by
-    ext
-    · simp [← homEquiv_naturality_two, ← homEquiv_naturality_three]
-    · apply pullback.hom_ext <;> simp [← homEquiv_naturality_two, ← homEquiv_naturality_three]
-  counit.app X₃ := Arrow.homMk
-    (pushout.desc (adj₂.homEquiv.symm (𝟙 _)) (adj₂.homEquiv.symm (pullback.fst ..))
-        (by simp [← homEquiv_symm_naturality_one, ← homEquiv_symm_naturality_two]))
-    (adj₂.homEquiv.symm (pullback.snd ..)) (by
-    apply pushout.hom_ext
-    · simp [← homEquiv_symm_naturality_two, ← homEquiv_symm_naturality_three]
-    · simp [← homEquiv_symm_naturality_one, ← homEquiv_symm_naturality_three,
-      pullback.condition])
-  counit.naturality _ _ _ := by
-    ext
-    · apply pushout.hom_ext <;> simp [← homEquiv_symm_naturality_two,
-        ← homEquiv_symm_naturality_three]
-    · simp [← homEquiv_symm_naturality_two, ← homEquiv_symm_naturality_three]
-  left_triangle_components _ := by
-    ext
-    · apply pushout.hom_ext <;> simp [← homEquiv_symm_naturality_two, ofHasPushout_pt]
-    · simp [← homEquiv_symm_naturality_two]
-  right_triangle_components _ := by
-    ext
-    · simp [← homEquiv_naturality_three]
-    · apply pullback.hom_ext <;> simp [← homEquiv_naturality_three]
-
-中文:
-定义 adj
-  签名: (adj₂ : F ⊣₂ G) (X₁ : 箭头 C₁) [有Pullbacks C₂] [有Pushouts C₃]
-  定义体: Arrow.homMk (adj₂.homEquiv (pushout.inl ..))
-    (pullback.lift (adj₂.homEquiv (pushout.inr ..)) (adj₂.homEquiv (𝟙 _))
-      (by simp [← homEquiv_naturality_one, ← homEquiv_naturality_three])) (by
-      apply pullback.hom_ext
-      · simp [← homEquiv_naturality_one, ← homEquiv_naturality_two, pushout.condition]
-      · simp [← homEquiv_naturality_two, ← homEquiv_naturality_three])
-  unit.naturality _ _ _ := by
-    ext
-    · simp [← homEquiv_naturality_two, ← homEquiv_naturality_three]
-    · apply pullback.hom_ext <;> simp [← homEquiv_naturality_two, ← homEquiv_naturality_three]
-  counit.app X₃ := Arrow.homMk
-    (pushout.desc (adj₂.homEquiv.symm (𝟙 _)) (adj₂.homEquiv.symm (pullback.fst ..))
-        (by simp [← homEquiv_symm_naturality_one, ← homEquiv_symm_naturality_two]))
-    (adj₂.homEquiv.symm (pullback.snd ..)) (by
-    apply pushout.hom_ext
-    · simp [← homEquiv_symm_naturality_two, ← homEquiv_symm_naturality_three]
-    · simp [← homEquiv_symm_naturality_one, ← homEquiv_symm_naturality_three,
-      pullback.condition])
-  counit.naturality _ _ _ := by
-    ext
-    · apply pushout.hom_ext <;> simp [← homEquiv_symm_naturality_two,
-        ← homEquiv_symm_naturality_three]
-    · simp [← homEquiv_symm_naturality_two, ← homEquiv_symm_naturality_three]
-  left_triangle_components _ := by
-    ext
-    · apply pushout.hom_ext <;> simp [← homEquiv_symm_naturality_two, ofHasPushout_pt]
-    · simp [← homEquiv_symm_naturality_two]
-  right_triangle_components _ := by
-    ext
-    · simp [← homEquiv_naturality_three]
-    · apply pullback.hom_ext <;> simp [← homEquiv_naturality_three]
-
-Depends on / 依赖: Arrow.homMk, homEquiv, pushout, pushout.inl
+--- 原说明 ---
+Given a parametrized adjunction `F ⊣₂ G` and an arrow `X₁ : Arrow C₁`, this is t
+he induced
+  adjunction `F.leibnizPushout.obj X₁ ⊣ G.leibnizPullback.obj (op X₁)`.
 -/
 def adj (adj₂ : F ⊣₂ G) (X₁ : Arrow C₁) [HasPullbacks C₂] [HasPushouts C₃] :
     F.leibnizPushout.obj X₁ ⊣ G.leibnizPullback.obj (op X₁) where
@@ -1419,28 +1221,19 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The Leibniz (parametrized) adjunction `F.leibnizPushout ⊣₂ G.leibnizPullback` induced by a
   parameterized adjunction `F ⊣₂ G`. -/
 @[simps]
-/--
-Definition of `leibnizAdjunction` / `leibnizAdjunction` 的定义
+/-
+**CategoryTheory.Functor.leibnizAdjunction** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Functor`。
+形式化陈述：leibnizAdjunction (adj₂ : F ⊣₂ G) [HasPullbacks C₂] [HasPushouts C₃] : F.l
+eibnizPushout ⊣₂ G.leibnizPullback where adj X₁
+参数：adj₂ : F ⊣₂ G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leibnizAdjunction
-  signature: (adj₂ : F ⊣₂ G) [HasPullbacks C₂] [HasPushouts C₃]
-  body: LeibnizAdjunction.adj F G adj₂ X₁
-  unit_whiskerRight_map _ := by
-    ext
-    · simp [← homEquiv_naturality_one, ← homEquiv_naturality_three]
-    · apply pullback.hom_ext <;> simp [← homEquiv_naturality_one, ← homEquiv_naturality_three]
-
-中文:
-定义 leibnizAdjunction
-  签名: (adj₂ : F ⊣₂ G) [有Pullbacks C₂] [有Pushouts C₃]
-  定义体: LeibnizAdjunction.adj F G adj₂ X₁
-  unit_whiskerRight_map _ := by
-    ext
-    · simp [← homEquiv_naturality_one, ← homEquiv_naturality_three]
-    · apply pullback.hom_ext <;> simp [← homEquiv_naturality_one, ← homEquiv_naturality_three]
-
-Depends on / 依赖: LeibnizAdjunction, LeibnizAdjunction.adj
+--- 原说明 ---
+The Leibniz (parametrized) adjunction `F.leibnizPushout ⊣₂ G.leibnizPullback` in
+duced by a
+  parameterized adjunction `F ⊣₂ G`.
 -/
 def leibnizAdjunction (adj₂ : F ⊣₂ G) [HasPullbacks C₂] [HasPushouts C₃] :
     F.leibnizPushout ⊣₂ G.leibnizPullback where
@@ -1455,3 +1248,4 @@ end
 end Functor
 
 end CategoryTheory
+

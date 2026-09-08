@@ -68,253 +68,370 @@ variable {K : Type*} [DivisionRing K]
 
 variable (e f : V ≃ₗ[K] V)
 
-/--
-theorem `finrank_fixedSubmodule_add_le` / 定理 `finrank_fixedSubmodule_add_le`
-
-English:
-theorem finrank_fixedSubmodule_add_le
-  proof: by
-  have := finrank_mono (fixedSubmodule_inf_fixedSubmodule_le_comp e.toLinearMap f.toLinearMap)
-  rwa [← Nat.add_le_add_iff_left, finrank_sup_add_finrank_inf_eq] at this
-
-中文:
-定理 finrank_fixedSubmodule_add_le
-  证明: by
-  have := finrank_mono (fixedSubmodule_inf_fixedSubmodule_le_comp e.toLinearMap f.toLinearMap)
-  rwa [← Nat.add_le_add_iff_left, finrank_sup_add_finrank_inf_eq] at this
-
-Depends on / 依赖: Nat.add_le_add_iff_left, add_le_add_iff_left, e.toLinearMap, f.toLinearMap, finrank_mono, finrank_sup_add_finrank_inf_eq, fixedSubmodule_inf_fixedSubmodule_le_comp, toLinearMap
+/-
+**LinearEquiv.finrank_fixedSubmodule_add_le** 是 Mathlib 中的一个定理，位于命名空间 `LinearEqu
+iv`。
+形式化陈述：finrank_fixedSubmodule_add_le : finrank K e.fixedSubmodule + finrank K f.f
+ixedSubmodule <= finrank K ↥(e.fixedSubmodule ⊔ f.fixedSubmodule) + finrank K (e
+ * f).fixedSubmodule
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.finrank_mono`：Submodule.finrank_mono {s t : Submodule R M} [Mo
+dule.Finite R t] (hst : s <= t) : finrank R s <= finrank R t
+· 使用定理 `IsNoetherianRing.strongRankCondition`：∀ (R : Type u) [inst : Ring R] [No
+ntrivial R] [IsNoetherianRing R], StrongRankCondition R
+· 使用定理 `DivisionRing.toNontrivial`：∀ {K : Type u_2} [self : DivisionRing K], Non
+trivial K
+· 使用定理 `PrincipalIdealRing.isNoetherianRing`：∀ {R : Type u} [inst : Semiring R] 
+[IsPrincipalIdealRing R], IsNoetherianRing R
+· 使用定理 `DivisionSemiring.isPrincipalIdealRing`：∀ (K : Type u) [inst : DivisionSe
+miring K], IsPrincipalIdealRing K
+· 使用定理 `LinearMap.fixedSubmodule_inf_fixedSubmodule_le_comp`：fixedSubmodule_inf_
+fixedSubmodule_le_comp (f g : V ->ₗ[R] V) : f.fixedSubmodule ⊓ g.fixedSubmodule 
+<= (f ∘ₗ g).fixedSubmodule
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.finrank_sup_add_finrank_inf_eq`：finrank_sup_add_finrank_inf_eq
+ (s t : Submodule K V) [FiniteDimensional K s] [FiniteDimensional K t] : finrank
+ K ↑(s ⊔ t) + finrank K ↑(s ⊓ …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.add_le_add_iff_left`：∀ {m k n : ℕ}, n + m ≤ n + k ↔ m ≤ k
 -/
 theorem finrank_fixedSubmodule_add_le :
-    finrank K e.fixedSubmodule + finrank K f.fixedSubmodule <=
+    finrank K e.fixedSubmodule + finrank K f.fixedSubmodule ≤
       finrank K ↥(e.fixedSubmodule ⊔ f.fixedSubmodule) +
         finrank K (e * f).fixedSubmodule := by
   have := finrank_mono (fixedSubmodule_inf_fixedSubmodule_le_comp e.toLinearMap f.toLinearMap)
   rwa [← Nat.add_le_add_iff_left, finrank_sup_add_finrank_inf_eq] at this
-
-/--
-theorem `finrank_le_one_add_finrank_fixedSubmodule_dilatransvection` / 定理 `finrank_le_one_add_finrank_fixedSubmodule_dilatransvection`
-
-English:
-theorem finrank_le_one_add_finrank_fixedSubmodule_dilatransvection
-  proof: by
-  rw [fixedSubmodule_eq_ker]; rw [add_comm]; rw [← Nat.add_le_add_iff_left]; rw [← add_assoc]; rw [finrank_range_add_finrank_ker]; rw [add_comm]
-  simpa [← mem_dilatransvections_iff_finrank]
-
-中文:
-定理 finrank_le_one_add_finrank_fixedSubmodule_dilatransvection
-  证明: by
-  rw [fixedSubmodule_eq_ker]; rw [add_comm]; rw [← Nat.add_le_add_iff_left]; rw [← add_assoc]; rw [finrank_range_add_finrank_ker]; rw [add_comm]
-  simpa [← mem_dilatransvections_iff_finrank]
-
-Depends on / 依赖: Nat.add_le_add_iff_left, add_assoc, add_comm, add_le_add_iff_left, finrank_range_add_finrank_ker, fixedSubmodule_eq_ker, mem_dilatransvections_iff_finrank
+/-
+**LinearEquiv.finrank_le_one_add_finrank_fixedSubmodule_dilatransvection** 是 Mat
+hlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：finrank_le_one_add_finrank_fixedSubmodule_dilatransvection (he : e in dila
+transvections K V) : finrank K V <= 1 + finrank K e.fixedSubmodule
+参数：he : e in dilatransvections K V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.fixedSubmodule_eq_ker`：fixedSubmodule_eq_ker {R : Type*} [Ring
+ R] {V : Type*} [AddCommGroup V] [Module R V] (f : V ->ₗ[R] V) : f.fixedSubmodul
+e = LinearMap.ker (f …
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.add_le_add_iff_left`：∀ {m k n : ℕ}, n + m ≤ n + k ↔ m ≤ k
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `LinearMap.finrank_range_add_finrank_ker`：finrank_range_add_finrank_ker [
+FiniteDimensional K V] (f : V ->ₗ[K] V₂) : finrank K (LinearMap.range f) + finra
+nk K (LinearMap.ker f) = finr…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
 -/
 theorem finrank_le_one_add_finrank_fixedSubmodule_dilatransvection
-    (he : e in dilatransvections K V) :
-    finrank K V <= 1 + finrank K e.fixedSubmodule := by
-  rw [fixedSubmodule_eq_ker]; rw [add_comm]; rw [← Nat.add_le_add_iff_left]; rw [← add_assoc]; rw [finrank_range_add_finrank_ker]; rw [add_comm]
+    (he : e ∈ dilatransvections K V) :
+    finrank K V ≤ 1 + finrank K e.fixedSubmodule := by
+  rw [fixedSubmodule_eq_ker, add_comm, ← Nat.add_le_add_iff_left,
+    ← add_assoc, finrank_range_add_finrank_ker, add_comm]
   simpa [← mem_dilatransvections_iff_finrank]
-
-/--
-theorem `le_one_add_finrank_fixedSubmodule_dilatransvection_mul` / 定理 `le_one_add_finrank_fixedSubmodule_dilatransvection_mul`
-
-English:
-theorem le_one_add_finrank_fixedSubmodule_dilatransvection_mul
-  given: (hf : f in dilatransvections K V)
-  proof: by
-  have := finrank_fixedSubmodule_add_le f e
-  have := finrank_le_one_add_finrank_fixedSubmodule_dilatransvection f hf
-  have : finrank K ↥(f.fixedSubmodule ⊔ e.fixedSubmodule) <= finrank K V :=
-    finrank_le _
-  linarith
-
-中文:
-定理 le_one_add_finrank_fixedSubmodule_dilatransvection_mul
-  条件: (hf : f in dilatransvections K V)
-  证明: by
-  have := finrank_fixedSubmodule_add_le f e
-  have := finrank_le_one_add_finrank_fixedSubmodule_dilatransvection f hf
-  have : finrank K ↥(f.fixedSubmodule ⊔ e.fixedSubmodule) <= finrank K V :=
-    finrank_le _
-  linarith
-
-Depends on / 依赖: e.fixedSubmodule, f.fixedSubmodule, finrank, finrank_fixedSubmodule_add_le, finrank_le, finrank_le_one_add_finrank_fixedSubmodule_dilatransvection, fixedSubmodule
+/-
+**LinearEquiv.le_one_add_finrank_fixedSubmodule_dilatransvection_mul** 是 Mathlib
+ 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：le_one_add_finrank_fixedSubmodule_dilatransvection_mul (hf : f in dilatran
+svections K V) : finrank K e.fixedSubmodule <= 1 + finrank K (f * e).fixedSubmod
+ule
+参数：hf : f in dilatransvections K V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.finrank_fixedSubmodule_add_le`：finrank_fixedSubmodule_add_le
+ : finrank K e.fixedSubmodule + finrank K f.fixedSubmodule <= finrank K ↥(e.fixe
+dSubmodule ⊔ f.fixedSubmodule) …
+· 使用定理 `LinearEquiv.finrank_le_one_add_finrank_fixedSubmodule_dilatransvection`：
+finrank_le_one_add_finrank_fixedSubmodule_dilatransvection (he : e in dilatransv
+ections K V) : finrank K V <= 1 + finrank K e.fixedSubmodule
+· 使用定理 `Submodule.finrank_le`：Submodule.finrank_le [Module.Finite R M] (s : Subm
+odule R M) : finrank R s <= finrank R M
+· 使用定理 `IsNoetherianRing.strongRankCondition`：∀ (R : Type u) [inst : Ring R] [No
+ntrivial R] [IsNoetherianRing R], StrongRankCondition R
+· 使用定理 `DivisionRing.toNontrivial`：∀ {K : Type u_2} [self : DivisionRing K], Non
+trivial K
+· 使用定理 `PrincipalIdealRing.isNoetherianRing`：∀ {R : Type u} [inst : Semiring R] 
+[IsPrincipalIdealRing R], IsNoetherianRing R
+· 使用定理 `DivisionSemiring.isPrincipalIdealRing`：∀ (K : Type u) [inst : DivisionSe
+miring K], IsPrincipalIdealRing K
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b : R}, a = a' → -a' = b → -a = b
+· 使用定理 `Mathlib.Tactic.Ring.cast_pos`：∀ {R : Type u_1} [inst : CommSemiring R] {
+a : R} {n : ℕ}, Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast + 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_lt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a₂ b c : R} (a₁ : R), a₂ + b = c → a₁ + a₂ + b = a₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_pf`：∀ {R : Type u_2} [inst : CommRing R] 
+{a b c d : R}, -b = c → a + c = d → a - b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_mul`：∀ {R : Type u_2} [inst : CommRing R]
+ (a₁ : R) (a₂ : ℕ) {a₃ b : R}, -a₃ = b → -(a₁ ^ a₂ * a₃) = a₁ ^ a₂ * b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_gt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a b₂ c : R} (b₁ : R), a + b₂ = c → a + (b₁ + b₂) = b₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+（共 51 条，此处仅展示前 30 条）
 -/
-theorem le_one_add_finrank_fixedSubmodule_dilatransvection_mul (hf : f in dilatransvections K V) :
-    finrank K e.fixedSubmodule <= 1 + finrank K (f * e).fixedSubmodule := by
+theorem le_one_add_finrank_fixedSubmodule_dilatransvection_mul (hf : f ∈ dilatransvections K V) :
+    finrank K e.fixedSubmodule ≤ 1 + finrank K (f * e).fixedSubmodule := by
   have := finrank_fixedSubmodule_add_le f e
   have := finrank_le_one_add_finrank_fixedSubmodule_dilatransvection f hf
-  have : finrank K ↥(f.fixedSubmodule ⊔ e.fixedSubmodule) <= finrank K V :=
+  have : finrank K ↥(f.fixedSubmodule ⊔ e.fixedSubmodule) ≤ finrank K V :=
     finrank_le _
   linarith
-
-/--
-theorem `finrank_fixedSubmodule_dilatransvection_mul_le` / 定理 `finrank_fixedSubmodule_dilatransvection_mul_le`
-
-English:
-theorem finrank_fixedSubmodule_dilatransvection_mul_le
-  given: (hf : f in dilatransvections K V)
-  proof: by
+/-
+**LinearEquiv.finrank_fixedSubmodule_dilatransvection_mul_le** 是 Mathlib 中的一个定理，
+位于命名空间 `LinearEquiv`。
+形式化陈述：finrank_fixedSubmodule_dilatransvection_mul_le (hf : f in dilatransvection
+s K V) : finrank K (f * e).fixedSubmodule <= 1 + finrank K e.fixedSubmodule
+参数：hf : f in dilatransvections K V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `inv_mul_cancel_left`：inv_mul_cancel_left (a b : G) : a⁻¹ * (a * b) = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `LinearEquiv.le_one_add_finrank_fixedSubmodule_dilatransvection_mul`：le_o
+ne_add_finrank_fixedSubmodule_dilatransvection_mul (hf : f in dilatransvections 
+K V) : finrank K e.fixedSubmodule <= 1 + finrank K (f * …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearEquiv.inv_mem_dilatransvections_iff`：∀ {R : Type u_1} {V : Type u_
+2} [inst : Ring R] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module R V] {e : V
+ ≃ₗ[R] V},   e⁻¹ ∈ LinearEquiv.…
+-/
+theorem finrank_fixedSubmodule_dilatransvection_mul_le (hf : f ∈ dilatransvections K V) :
+    finrank K (f * e).fixedSubmodule ≤ 1 + finrank K e.fixedSubmodule := by
   conv_rhs => rw [show e = f⁻¹ * (f * e) by simp]
   rw [← inv_mem_dilatransvections_iff] at hf
   exact le_one_add_finrank_fixedSubmodule_dilatransvection_mul (f * e) f⁻¹ hf
-
-中文:
-定理 finrank_fixedSubmodule_dilatransvection_mul_le
-  条件: (hf : f in dilatransvections K V)
-  证明: by
-  conv_rhs => rw [show e = f⁻¹ * (f * e) by simp]
-  rw [← inv_mem_dilatransvections_iff] at hf
-  exact le_one_add_finrank_fixedSubmodule_dilatransvection_mul (f * e) f⁻¹ hf
-
-Depends on / 依赖: conv_rhs, inv_mem_dilatransvections_iff, le_one_add_finrank_fixedSubmodule_dilatransvection_mul
+/-
+**LinearEquiv.le_one_add_finrank_fixedSubmodule_mul_dilatransvection** 是 Mathlib
+ 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：le_one_add_finrank_fixedSubmodule_mul_dilatransvection (hf : f in dilatran
+svections K V) : finrank K e.fixedSubmodule <= 1 + finrank K (e * f).fixedSubmod
+ule
+参数：hf : f in dilatransvections K V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.finrank_fixedSubmodule_add_le`：finrank_fixedSubmodule_add_le
+ : finrank K e.fixedSubmodule + finrank K f.fixedSubmodule <= finrank K ↥(e.fixe
+dSubmodule ⊔ f.fixedSubmodule) …
+· 使用定理 `LinearEquiv.finrank_le_one_add_finrank_fixedSubmodule_dilatransvection`：
+finrank_le_one_add_finrank_fixedSubmodule_dilatransvection (he : e in dilatransv
+ections K V) : finrank K V <= 1 + finrank K e.fixedSubmodule
+· 使用定理 `Submodule.finrank_le`：Submodule.finrank_le [Module.Finite R M] (s : Subm
+odule R M) : finrank R s <= finrank R M
+· 使用定理 `IsNoetherianRing.strongRankCondition`：∀ (R : Type u) [inst : Ring R] [No
+ntrivial R] [IsNoetherianRing R], StrongRankCondition R
+· 使用定理 `DivisionRing.toNontrivial`：∀ {K : Type u_2} [self : DivisionRing K], Non
+trivial K
+· 使用定理 `PrincipalIdealRing.isNoetherianRing`：∀ {R : Type u} [inst : Semiring R] 
+[IsPrincipalIdealRing R], IsNoetherianRing R
+· 使用定理 `DivisionSemiring.isPrincipalIdealRing`：∀ (K : Type u) [inst : DivisionSe
+miring K], IsPrincipalIdealRing K
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b : R}, a = a' → -a' = b → -a = b
+· 使用定理 `Mathlib.Tactic.Ring.cast_pos`：∀ {R : Type u_1} [inst : CommSemiring R] {
+a : R} {n : ℕ}, Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast + 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_lt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a₂ b c : R} (a₁ : R), a₂ + b = c → a₁ + a₂ + b = a₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_pf`：∀ {R : Type u_2} [inst : CommRing R] 
+{a b c d : R}, -b = c → a + c = d → a - b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_mul`：∀ {R : Type u_2} [inst : CommRing R]
+ (a₁ : R) (a₂ : ℕ) {a₃ b : R}, -a₃ = b → -(a₁ ^ a₂ * a₃) = a₁ ^ a₂ * b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_gt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a b₂ c : R} (b₁ : R), a + b₂ = c → a + (b₁ + b₂) = b₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+（共 51 条，此处仅展示前 30 条）
 -/
-theorem finrank_fixedSubmodule_dilatransvection_mul_le (hf : f in dilatransvections K V) :
-    finrank K (f * e).fixedSubmodule <= 1 + finrank K e.fixedSubmodule := by
-  conv_rhs => rw [show e = f⁻¹ * (f * e) by simp]
-  rw [← inv_mem_dilatransvections_iff] at hf
-  exact le_one_add_finrank_fixedSubmodule_dilatransvection_mul (f * e) f⁻¹ hf
-
-/--
-theorem `le_one_add_finrank_fixedSubmodule_mul_dilatransvection` / 定理 `le_one_add_finrank_fixedSubmodule_mul_dilatransvection`
-
-English:
-theorem le_one_add_finrank_fixedSubmodule_mul_dilatransvection
-  given: (hf : f in dilatransvections K V)
-  proof: by
+theorem le_one_add_finrank_fixedSubmodule_mul_dilatransvection (hf : f ∈ dilatransvections K V) :
+    finrank K e.fixedSubmodule ≤ 1 + finrank K (e * f).fixedSubmodule := by
   have := finrank_fixedSubmodule_add_le e f
   have := finrank_le_one_add_finrank_fixedSubmodule_dilatransvection f hf
-  have : finrank K ↥(e.fixedSubmodule ⊔ f.fixedSubmodule) <= finrank K V :=
+  have : finrank K ↥(e.fixedSubmodule ⊔ f.fixedSubmodule) ≤ finrank K V :=
     finrank_le _
   linarith
-
-中文:
-定理 le_one_add_finrank_fixedSubmodule_mul_dilatransvection
-  条件: (hf : f in dilatransvections K V)
-  证明: by
-  have := finrank_fixedSubmodule_add_le e f
-  have := finrank_le_one_add_finrank_fixedSubmodule_dilatransvection f hf
-  have : finrank K ↥(e.fixedSubmodule ⊔ f.fixedSubmodule) <= finrank K V :=
-    finrank_le _
-  linarith
-
-Depends on / 依赖: e.fixedSubmodule, f.fixedSubmodule, finrank, finrank_fixedSubmodule_add_le, finrank_le, finrank_le_one_add_finrank_fixedSubmodule_dilatransvection, fixedSubmodule
+/-
+**LinearEquiv.finrank_fixedSubmodule_mul_dilatransvection_le** 是 Mathlib 中的一个定理，
+位于命名空间 `LinearEquiv`。
+形式化陈述：finrank_fixedSubmodule_mul_dilatransvection_le (hf : f in dilatransvection
+s K V) : finrank K (e * f).fixedSubmodule <= 1 + finrank K e.fixedSubmodule
+参数：hf : f in dilatransvections K V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `mul_inv_cancel_right`：mul_inv_cancel_right (a b : G) : a * b * b⁻¹ = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `LinearEquiv.le_one_add_finrank_fixedSubmodule_mul_dilatransvection`：le_o
+ne_add_finrank_fixedSubmodule_mul_dilatransvection (hf : f in dilatransvections 
+K V) : finrank K e.fixedSubmodule <= 1 + finrank K (e * …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearEquiv.inv_mem_dilatransvections_iff`：∀ {R : Type u_1} {V : Type u_
+2} [inst : Ring R] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module R V] {e : V
+ ≃ₗ[R] V},   e⁻¹ ∈ LinearEquiv.…
 -/
-theorem le_one_add_finrank_fixedSubmodule_mul_dilatransvection (hf : f in dilatransvections K V) :
-    finrank K e.fixedSubmodule <= 1 + finrank K (e * f).fixedSubmodule := by
-  have := finrank_fixedSubmodule_add_le e f
-  have := finrank_le_one_add_finrank_fixedSubmodule_dilatransvection f hf
-  have : finrank K ↥(e.fixedSubmodule ⊔ f.fixedSubmodule) <= finrank K V :=
-    finrank_le _
-  linarith
-
-/--
-theorem `finrank_fixedSubmodule_mul_dilatransvection_le` / 定理 `finrank_fixedSubmodule_mul_dilatransvection_le`
-
-English:
-theorem finrank_fixedSubmodule_mul_dilatransvection_le
-  given: (hf : f in dilatransvections K V)
-  proof: by
+theorem finrank_fixedSubmodule_mul_dilatransvection_le (hf : f ∈ dilatransvections K V) :
+    finrank K (e * f).fixedSubmodule ≤ 1 + finrank K e.fixedSubmodule := by
   conv_rhs => rw [show e = (e * f) * f⁻¹ by simp]
   rw [← inv_mem_dilatransvections_iff] at hf
   exact le_one_add_finrank_fixedSubmodule_mul_dilatransvection (e * f) f⁻¹ hf
-
-中文:
-定理 finrank_fixedSubmodule_mul_dilatransvection_le
-  条件: (hf : f in dilatransvections K V)
-  证明: by
-  conv_rhs => rw [show e = (e * f) * f⁻¹ by simp]
-  rw [← inv_mem_dilatransvections_iff] at hf
-  exact le_one_add_finrank_fixedSubmodule_mul_dilatransvection (e * f) f⁻¹ hf
-
-Depends on / 依赖: conv_rhs, inv_mem_dilatransvections_iff, le_one_add_finrank_fixedSubmodule_mul_dilatransvection
--/
-theorem finrank_fixedSubmodule_mul_dilatransvection_le (hf : f in dilatransvections K V) :
-    finrank K (e * f).fixedSubmodule <= 1 + finrank K e.fixedSubmodule := by
-  conv_rhs => rw [show e = (e * f) * f⁻¹ by simp]
-  rw [← inv_mem_dilatransvections_iff] at hf
-  exact le_one_add_finrank_fixedSubmodule_mul_dilatransvection (e * f) f⁻¹ hf
-
-/--
-theorem `fixedSubmodule_transvection_mul` / 定理 `fixedSubmodule_transvection_mul`
-
-English:
-theorem fixedSubmodule_transvection_mul
-  statement: {f : Dual K V} {v : V}
-  proof: by
-  symm
-  suffices e.fixedSubmodule ⊔ K ∙ v <= (transvection hfv * e).fixedSubmodule by
-    apply Submodule.eq_of_le_of_finrank_le this
-    rw [finrank_sup_span_singleton hv]; rw [add_comm]
-    apply finrank_fixedSubmodule_dilatransvection_mul_le
-    exact transvection_mem_dilatransvections hfv
-  simp only [sup_le_iff, Submodule.span_singleton_le_iff_mem]
-  have ht : e.fixedSubmodule <= (transvection hfv).fixedSubmodule := fun x hx => by
-    rw [mem_fixedSubmodule_transvection_iff]; rw [smul_eq_zero]
-    left
-    rw [← Submodule.mem_bot K]; rw [← hf]
-    exact mem_map_of_mem hx
-  constructor
-  · -- e.fixedSubmodule ≤ e'.fixedSubmodule
-    intro x hx
-    simp only [mem_fixedSubmodule_iff, LinearEquiv.coe_toLinearMap, LinearEquiv.mul_apply]
-    suffices transvection hfv x = x by
-      simp only [mem_fixedSubmodule_iff, LinearEquiv.coe_toLinearMap] at hx
-      simp only [hx, this]
-    rw [← LinearEquiv.coe_toLinearMap]; rw [← mem_fixedSubmodule_iff]
-    exact ht hx
-  · -- u ∈ e.fixedSubmodule
-    simp only [mem_fixedSubmodule_iff, LinearEquiv.coe_toLinearMap,
-      LinearEquiv.mul_apply, transvection.apply]
-    simp [hfv']
-
-中文:
-定理 fixedSubmodule_transvection_mul
-  结论: {f : 对偶 K V} {v : V}
-  证明: by
-  symm
-  suffices e.fixedSubmodule ⊔ K ∙ v <= (transvection hfv * e).fixedSubmodule by
-    apply Submodule.eq_of_le_of_finrank_le this
-    rw [finrank_sup_span_singleton hv]; rw [add_comm]
-    apply finrank_fixedSubmodule_dilatransvection_mul_le
-    exact transvection_mem_dilatransvections hfv
-  simp only [sup_le_iff, Submodule.span_singleton_le_iff_mem]
-  have ht : e.fixedSubmodule <= (transvection hfv).fixedSubmodule := fun x hx => by
-    rw [mem_fixedSubmodule_transvection_iff]; rw [smul_eq_zero]
-    left
-    rw [← Submodule.mem_bot K]; rw [← hf]
-    exact mem_map_of_mem hx
-  constructor
-  · -- e.fixedSubmodule ≤ e'.fixedSubmodule
-    intro x hx
-    simp only [mem_fixedSubmodule_iff, LinearEquiv.coe_toLinearMap, LinearEquiv.mul_apply]
-    suffices transvection hfv x = x by
-      simp only [mem_fixedSubmodule_iff, LinearEquiv.coe_toLinearMap] at hx
-      simp only [hx, this]
-    rw [← LinearEquiv.coe_toLinearMap]; rw [← mem_fixedSubmodule_iff]
-    exact ht hx
-  · -- u ∈ e.fixedSubmodule
-    simp only [mem_fixedSubmodule_iff, LinearEquiv.coe_toLinearMap,
-      LinearEquiv.mul_apply, transvection.apply]
-    simp [hfv']
-
-Depends on / 依赖: Submodule, Submodule.eq_of_le_of_finrank_le, Submodule.span_singleton_le_iff_mem, add_comm, e.fixedSubmodule, eq_of_le_of_finrank_le, finrank_fixedSubmodule_dilatransvection_mul_le, finrank_sup_span_singleton, fixedSubmodule, mem_fixedSubmodule_transvection_iff, smul_eq_zero, span_singleton_le_iff_mem, sup_le_iff, transvection, transvection_mem_dilatransvections
+/-
+**LinearEquiv.fixedSubmodule_transvection_mul** 是 Mathlib 中的一个定理，位于命名空间 `LinearE
+quiv`。
+形式化陈述：fixedSubmodule_transvection_mul {f : Dual K V} {v : V} (hv : v ∉ e.fixedSu
+bmodule) (hf : e.fixedSubmodule.map f = ⊥) (hfv : f (v - e v) = 0) (hfv' : f (e 
+v) = 1) : (transvection hfv * e).fixedSubmodule = e.fixedSubmodule ⊔ K ∙ v
+参数：hv : v ∉ e.fixedSubmodule；hf : e.fixedSubmodule.map f = ⊥；hfv : f (v - e v) =
+ 0；hfv' : f (e v) = 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearEquiv.mem_fixedSubmodule_transvection_iff`：∀ {R : Type u_1} {V : T
+ype u_2} [inst : Ring R] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module R V] 
+  {f : Module.Dual R V} {v : V} {hfv …
+· 使用定理 `smul_eq_zero`：∀ {R : Type u_1} {M : Type u_3} [inst : Semiring R] [inst_
+1 : AddCommMonoid M] [inst_2 : _root_.Module R M] {r : R}   {m : M} [Module.IsTo
+rs…
+· 使用定理 `instIsTorsionFreeOfIsDomainOfNoZeroSMulDivisors`：∀ {R : Type u_1} {M : T
+ype u_2} [inst : Semiring R] [IsDomain R] [inst_2 : AddCommGroup M] [inst_3 : _r
+oot_.Module R M]   [NoZeroSMulDivisor…
+· 使用定理 `DivisionRing.isDomain`：∀ {K : Type u_1} [inst : DivisionRing K], IsDomai
+n K
+· 使用定理 `GroupWithZero.toNoZeroSMulDivisors`：∀ {R : Type u_1} {M : Type u_2} [ins
+t : GroupWithZero R] [inst_1 : AddMonoid M] [inst_2 : DistribMulAction R M],   N
+oZeroSMulDivisors R M
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `Submodule.mem_bot`：mem_bot {x : M} : x in (⊥ : Submodule R M) ↔ x = 0
+· 使用定理 `Submodule.mem_map_of_mem`：mem_map_of_mem {f : M ->ₛₗ[σ₁₂] M₂} {p : Submo
+dule R M} {r} (h : r in p) : f r in map f p
+· 使用定理 `LinearEquiv.coe_toLinearMap`：coe_toLinearMap : ⇑e.toLinearMap = e
+· 使用定理 `LinearMap.mem_fixedSubmodule_iff`：mem_fixedSubmodule_iff {f : V ->ₗ[R] V
+} {v : V} : v in f.fixedSubmodule ↔ f v = v
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `add_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G), a + 
+(b - a) = b
+· 使用定理 `Submodule.eq_of_le_of_finrank_le`：eq_of_le_of_finrank_le {S₁ S₂ : Submod
+ule K V} [FiniteDimensional K S₂] (hle : S₁ <= S₂) (hd : finrank K S₂ <= finrank
+ K S₁) : S₁ = S₂
+· 使用定理 `Submodule.finrank_sup_span_singleton`：finrank_sup_span_singleton [Module
+.Finite K V] {p : Submodule K V} {v : V} (hv : v ∉ p) : finrank K (p ⊔ Submodule
+.span K {v} : Submodule K …
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `LinearEquiv.finrank_fixedSubmodule_dilatransvection_mul_le`：finrank_fixe
+dSubmodule_dilatransvection_mul_le (hf : f in dilatransvections K V) : finrank K
+ (f * e).fixedSubmodule <= 1 + finrank K e.fixed…
+· 使用定理 `LinearEquiv.transvection_mem_dilatransvections`：∀ {R : Type u_1} {V : Ty
+pe u_2} [inst : Ring R] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module R V]  
+ {f : Module.Dual R V} {v : V} (hfv …
 -/
 theorem fixedSubmodule_transvection_mul {f : Dual K V} {v : V}
     (hv : v ∉ e.fixedSubmodule) (hf : e.fixedSubmodule.map f = ⊥)
     (hfv : f (v - e v) = 0) (hfv' : f (e v) = 1) :
     (transvection hfv * e).fixedSubmodule = e.fixedSubmodule ⊔ K ∙ v := by
   symm
-  suffices e.fixedSubmodule ⊔ K ∙ v <= (transvection hfv * e).fixedSubmodule by
+  suffices e.fixedSubmodule ⊔ K ∙ v ≤ (transvection hfv * e).fixedSubmodule by
     apply Submodule.eq_of_le_of_finrank_le this
-    rw [finrank_sup_span_singleton hv]; rw [add_comm]
+    rw [finrank_sup_span_singleton hv, add_comm]
     apply finrank_fixedSubmodule_dilatransvection_mul_le
     exact transvection_mem_dilatransvections hfv
   simp only [sup_le_iff, Submodule.span_singleton_le_iff_mem]
-  have ht : e.fixedSubmodule <= (transvection hfv).fixedSubmodule := fun x hx => by
-    rw [mem_fixedSubmodule_transvection_iff]; rw [smul_eq_zero]
+  have ht : e.fixedSubmodule ≤ (transvection hfv).fixedSubmodule := fun x hx ↦ by
+    rw [mem_fixedSubmodule_transvection_iff, smul_eq_zero]
     left
-    rw [← Submodule.mem_bot K]; rw [← hf]
+    rw [← Submodule.mem_bot K, ← hf]
     exact mem_map_of_mem hx
   constructor
   · -- e.fixedSubmodule ≤ e'.fixedSubmodule
@@ -323,66 +440,39 @@ theorem fixedSubmodule_transvection_mul {f : Dual K V} {v : V}
     suffices transvection hfv x = x by
       simp only [mem_fixedSubmodule_iff, LinearEquiv.coe_toLinearMap] at hx
       simp only [hx, this]
-    rw [← LinearEquiv.coe_toLinearMap]; rw [← mem_fixedSubmodule_iff]
+    rw [← LinearEquiv.coe_toLinearMap, ← mem_fixedSubmodule_iff]
     exact ht hx
   · -- u ∈ e.fixedSubmodule
     simp only [mem_fixedSubmodule_iff, LinearEquiv.coe_toLinearMap,
       LinearEquiv.mul_apply, transvection.apply]
     simp [hfv']
 
-/--
-Definition of `IsExceptional` / `IsExceptional` 的定义
+/-- A linear equivalence `u : V ≃ₗ[K] V` is exceptional if
+it is a nontrivial homothety modulo `u.fixedSubmodule`. -/
+/-
+**LinearEquiv.IsExceptional** 是 Mathlib 中的一个缩写定义，位于命名空间 `LinearEquiv`。
+形式化陈述：IsExceptional (e : V ≃ₗ[K] V) : Prop
+参数：e : V ≃ₗ[K] V。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsExceptional
-  signature: (e : V ≃ₗ[K] V)
-  body: 1 < finrank K (V ⧸ e.fixedSubmodule) ∧
-    e.fixedReduce != 1 ∧ exists a : K, forall x, fixedReduce e x = a • x
-
-中文:
-缩写 IsExceptional
-  签名: (e : V ≃ₗ[K] V)
-  定义体: 1 < finrank K (V ⧸ e.fixedSubmodule) ∧
-    e.fixedReduce != 1 ∧ exists a : K, forall x, fixedReduce e x = a • x
-
-Depends on / 依赖: e.fixedReduce, e.fixedSubmodule, finrank, fixedReduce, fixedSubmodule
+--- 原说明 ---
+A linear equivalence `u : V ≃ₗ[K] V` is exceptional if
+it is a nontrivial homothety modulo `u.fixedSubmodule`.
 -/
 abbrev IsExceptional (e : V ≃ₗ[K] V) : Prop :=
   1 < finrank K (V ⧸ e.fixedSubmodule) ∧
-    e.fixedReduce != 1 ∧ exists a : K, forall x, fixedReduce e x = a • x
+    e.fixedReduce ≠ 1 ∧ ∃ a : K, ∀ x, fixedReduce e x = a • x
 
 /- Private auxiliary construction and lemmas to handle the non-exceptional cases. -/
 
 variable {e} in
-/--
-Definition of `auxTransvection` / `auxTransvection` 的定义
-
-English:
-definition auxTransvection
-  signature: {f : Dual K V} {u : V}
-  body: transvection (f := f) (v := u - e u) (by
-    simp only [← LinearMap.mem_ker]
-    apply hf
-    apply Submodule.mem_sup_right
-    rw [mem_span_singleton]
-    exact ⟨-1, by simp⟩)
-
-omit [Module.Finite K V] in
-
-中文:
-定义 auxTransvection
-  签名: {f : 对偶 K V} {u : V}
-  定义体: transvection (f := f) (v := u - e u) (by
-    simp only [← LinearMap.mem_ker]
-    apply hf
-    apply Submodule.mem_sup_right
-    rw [mem_span_singleton]
-    exact ⟨-1, by simp⟩)
-
-omit [Module.Finite K V] in
+/-
+**LinearEquiv.auxTransvection** 是 Mathlib 中的一个定义，位于命名空间 `LinearEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private def auxTransvection {f : Dual K V} {u : V}
-    (hf : e.fixedSubmodule ⊔ K ∙ (e u - u) <= LinearMap.ker f) :
+    (hf : e.fixedSubmodule ⊔ K ∙ (e u - u) ≤ LinearMap.ker f) :
     V ≃ₗ[K] V :=
   transvection (f := f) (v := u - e u) (by
     simp only [← LinearMap.mem_ker]
@@ -393,64 +483,22 @@ private def auxTransvection {f : Dual K V} {u : V}
 
 omit [Module.Finite K V] in
 variable {e} in
-/--
-theorem `auxTransvection_fixed` / 定理 `auxTransvection_fixed`
-
-English:
-theorem auxTransvection_fixed
-  statement: {f : Dual K V} {u : V}
-  proof: fun x hx => by
-  simp [auxTransvection, LinearMap.transvection.apply, ← LinearMap.mem_ker, hf (mem_sup_left hx)]
-
-中文:
-定理 auxTransvection_fixed
-  结论: {f : 对偶 K V} {u : V}
-  证明: fun x hx => by
-  simp [auxTransvection, LinearMap.transvection.apply, ← LinearMap.mem_ker, hf (mem_sup_left hx)]
+/-
+**LinearEquiv.auxTransvection_fixed** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem auxTransvection_fixed {f : Dual K V} {u : V}
-    (hf : e.fixedSubmodule ⊔ K ∙ (e u - u) <= LinearMap.ker f) :
-    e.fixedSubmodule <= (auxTransvection hf).fixedSubmodule := fun x hx => by
+    (hf : e.fixedSubmodule ⊔ K ∙ (e u - u) ≤ LinearMap.ker f) :
+    e.fixedSubmodule ≤ (auxTransvection hf).fixedSubmodule := fun x hx ↦ by
   simp [auxTransvection, LinearMap.transvection.apply, ← LinearMap.mem_ker, hf (mem_sup_left hx)]
 
 variable {e} in
-/--
-theorem `auxTransvection_mul_fixed` / 定理 `auxTransvection_mul_fixed`
-
-English:
-theorem auxTransvection_mul_fixed
-  statement: {f : Dual K V} {u : V}
-  proof: by
-  apply fixedSubmodule_transvection_mul
-  · intro hu'
-    replace hu' := hf (mem_sup_left hu')
-    rw [mem_ker] at hu'
-    simp [hu'] at hfu
-  · rw [eq_bot_iff]
-    rw [gc_map_comap]; rw [Submodule.comap_bot]
-    exact le_trans le_sup_left hf
-  · rw [← hfu, ← sub_eq_zero, ← map_sub, ← mem_ker]
-    refine hf (mem_sup_right ?_)
-    simp
-
-中文:
-定理 auxTransvection_mul_fixed
-  结论: {f : 对偶 K V} {u : V}
-  证明: by
-  apply fixedSubmodule_transvection_mul
-  · intro hu'
-    replace hu' := hf (mem_sup_left hu')
-    rw [mem_ker] at hu'
-    simp [hu'] at hfu
-  · rw [eq_bot_iff]
-    rw [gc_map_comap]; rw [Submodule.comap_bot]
-    exact le_trans le_sup_left hf
-  · rw [← hfu, ← sub_eq_zero, ← map_sub, ← mem_ker]
-    refine hf (mem_sup_right ?_)
-    simp
+/-
+**LinearEquiv.auxTransvection_mul_fixed** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem auxTransvection_mul_fixed {f : Dual K V} {u : V}
-    {hf : e.fixedSubmodule ⊔ K ∙ (e u - u) <= LinearMap.ker f} (hfu : f u = 1) :
+    {hf : e.fixedSubmodule ⊔ K ∙ (e u - u) ≤ LinearMap.ker f} (hfu : f u = 1) :
     (auxTransvection hf * e).fixedSubmodule = e.fixedSubmodule ⊔ K ∙ u := by
   apply fixedSubmodule_transvection_mul
   · intro hu'
@@ -458,34 +506,37 @@ private theorem auxTransvection_mul_fixed {f : Dual K V} {u : V}
     rw [mem_ker] at hu'
     simp [hu'] at hfu
   · rw [eq_bot_iff]
-    rw [gc_map_comap]; rw [Submodule.comap_bot]
+    rw [gc_map_comap, Submodule.comap_bot]
     exact le_trans le_sup_left hf
   · rw [← hfu, ← sub_eq_zero, ← map_sub, ← mem_ker]
     refine hf (mem_sup_right ?_)
     simp
-
-/--
-theorem `finrank_quotient_sup_span_singleton` / 定理 `finrank_quotient_sup_span_singleton`
-
-English:
-theorem finrank_quotient_sup_span_singleton
-  given: {W : Submodule K V} {v : V} (hv : v ∉ W)
-  proof: by
-  have h1 := finrank_quotient_add_finrank (W ⊔ K ∙ v)
-  have h2 := finrank_quotient_add_finrank W
-  rw [finrank_sup_span_singleton hv] at h1
-  omega
-
-中文:
-定理 finrank_quotient_sup_span_singleton
-  条件: {W : 子模 K V} {v : V} (hv : v ∉ W)
-  证明: by
-  have h1 := finrank_quotient_add_finrank (W ⊔ K ∙ v)
-  have h2 := finrank_quotient_add_finrank W
-  rw [finrank_sup_span_singleton hv] at h1
-  omega
-
-Depends on / 依赖: finrank_quotient_add_finrank, finrank_sup_span_singleton
+/-
+**LinearEquiv.finrank_quotient_sup_span_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Lin
+earEquiv`。
+形式化陈述：finrank_quotient_sup_span_singleton {W : Submodule K V} {v : V} (hv : v ∉ 
+W) : finrank K (V ⧸ (W ⊔ K ∙ v)) + 1 = finrank K (V ⧸ W)
+参数：hv : v ∉ W。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Submodule.finrank_quotient_add_finrank`：Submodule.finrank_quotient_add_f
+inrank [Module.Finite R M] (N : Submodule R M) : finrank R (M ⧸ N) + finrank R N
+ = finrank R M
+· 使用定理 `IsNoetherianRing.strongRankCondition`：∀ (R : Type u) [inst : Ring R] [No
+ntrivial R] [IsNoetherianRing R], StrongRankCondition R
+· 使用定理 `DivisionRing.toNontrivial`：∀ {K : Type u_2} [self : DivisionRing K], Non
+trivial K
+· 使用定理 `PrincipalIdealRing.isNoetherianRing`：∀ {R : Type u} [inst : Semiring R] 
+[IsPrincipalIdealRing R], IsNoetherianRing R
+· 使用定理 `DivisionSemiring.isPrincipalIdealRing`：∀ (K : Type u) [inst : DivisionSe
+miring K], IsPrincipalIdealRing K
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.finrank_sup_span_singleton`：finrank_sup_span_singleton [Module
+.Finite K V] {p : Submodule K V} {v : V} (hv : v ∉ p) : finrank K (p ⊔ Submodule
+.span K {v} : Submodule K …
 -/
 theorem finrank_quotient_sup_span_singleton {W : Submodule K V} {v : V} (hv : v ∉ W) :
     finrank K (V ⧸ (W ⊔ K ∙ v)) + 1 = finrank K (V ⧸ W) := by
@@ -493,204 +544,149 @@ theorem finrank_quotient_sup_span_singleton {W : Submodule K V} {v : V} (hv : v 
   have h2 := finrank_quotient_add_finrank W
   rw [finrank_sup_span_singleton hv] at h1
   omega
-
-/--
-theorem `sup_span_singleton_lt_top` / 定理 `sup_span_singleton_lt_top`
-
-English:
-theorem sup_span_singleton_lt_top
-  statement: {W : Submodule K V} (v : V)
-  proof: by
-  rw [lt_top_iff_ne_top]
-  intro htop
-  have h1 := finrank_quotient_add_finrank W
-  have h2 : finrank K ↥(W ⊔ K ∙ v) <= finrank K W + 1 := by
-    refine le_trans (Submodule.finrank_add_le_finrank_add_finrank _ _) ?_
-    simp only [add_le_add_iff_left]
-    exact le_trans (finrank_span_le_card {v}) (by simp)
-  rw [htop]; rw [finrank_top] at h2
-  omega
-
-中文:
-定理 sup_span_singleton_lt_top
-  结论: {W : 子模 K V} (v : V)
-  证明: by
-  rw [lt_top_iff_ne_top]
-  intro htop
-  have h1 := finrank_quotient_add_finrank W
-  have h2 : finrank K ↥(W ⊔ K ∙ v) <= finrank K W + 1 := by
-    refine le_trans (Submodule.finrank_add_le_finrank_add_finrank _ _) ?_
-    simp only [add_le_add_iff_left]
-    exact le_trans (finrank_span_le_card {v}) (by simp)
-  rw [htop]; rw [finrank_top] at h2
-  omega
-
-Depends on / 依赖: Submodule, Submodule.finrank_add_le_finrank_add_finrank, add_le_add_iff_left, finrank, finrank_add_le_finrank_add_finrank, finrank_quotient_add_finrank, finrank_span_le_card, finrank_top, le_trans, lt_top_iff_ne_top
+/-
+**LinearEquiv.sup_span_singleton_lt_top** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：sup_span_singleton_lt_top {W : Submodule K V} (v : V) (hW : 1 < finrank K 
+(V ⧸ W)) : W ⊔ K ∙ v < ⊤
+参数：v : V；hW : 1 < finrank K (V ⧸ W)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `lt_top_iff_ne_top`：lt_top_iff_ne_top : a < ⊤ ↔ a != ⊤
+· 使用引理 `Submodule.finrank_quotient_add_finrank`：Submodule.finrank_quotient_add_f
+inrank [Module.Finite R M] (N : Submodule R M) : finrank R (M ⧸ N) + finrank R N
+ = finrank R M
+· 使用定理 `IsNoetherianRing.strongRankCondition`：∀ (R : Type u) [inst : Ring R] [No
+ntrivial R] [IsNoetherianRing R], StrongRankCondition R
+· 使用定理 `DivisionRing.toNontrivial`：∀ {K : Type u_2} [self : DivisionRing K], Non
+trivial K
+· 使用定理 `PrincipalIdealRing.isNoetherianRing`：∀ {R : Type u} [inst : Semiring R] 
+[IsPrincipalIdealRing R], IsNoetherianRing R
+· 使用定理 `DivisionSemiring.isPrincipalIdealRing`：∀ (K : Type u) [inst : DivisionSe
+miring K], IsPrincipalIdealRing K
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Submodule.finrank_add_le_finrank_add_finrank`：finrank_add_le_finrank_add
+_finrank (s t : Submodule K V) [FiniteDimensional K s] [FiniteDimensional K t] :
+ finrank K (s ⊔ t : Submodule K V)…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `finrank_span_le_card`：finrank_span_le_card (s : Set M) [Fintype s] : fin
+rank R (span R s) <= s.toFinset.card
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.toFinset_singleton`：toFinset_singleton (a : α) [Fintype ({a} : Set α
+)] : ({a} : Set α).toFinset = {a}
+· 使用定理 `Finset.card_singleton`：card_singleton (a : α) : #{a} = 1
+· 使用定理 `finrank_top`：finrank_top : finrank R (⊤ : Submodule R M) = finrank R M
 -/
 theorem sup_span_singleton_lt_top {W : Submodule K V} (v : V)
     (hW : 1 < finrank K (V ⧸ W)) : W ⊔ K ∙ v < ⊤ := by
   rw [lt_top_iff_ne_top]
   intro htop
   have h1 := finrank_quotient_add_finrank W
-  have h2 : finrank K ↥(W ⊔ K ∙ v) <= finrank K W + 1 := by
+  have h2 : finrank K ↥(W ⊔ K ∙ v) ≤ finrank K W + 1 := by
     refine le_trans (Submodule.finrank_add_le_finrank_add_finrank _ _) ?_
     simp only [add_le_add_iff_left]
     exact le_trans (finrank_span_le_card {v}) (by simp)
-  rw [htop]; rw [finrank_top] at h2
+  rw [htop, finrank_top] at h2
   omega
 
 variable {e} in
-/--
-theorem `finrank_mod_auxTransvection_mul_fixed` / 定理 `finrank_mod_auxTransvection_mul_fixed`
-
-English:
-theorem finrank_mod_auxTransvection_mul_fixed
-  statement: {f : Dual K V} {u : V}
-  proof: by
-  rw [auxTransvection_mul_fixed hfu]
-  exact finrank_quotient_sup_span_singleton hu
-
-中文:
-定理 finrank_mod_auxTransvection_mul_fixed
-  结论: {f : 对偶 K V} {u : V}
-  证明: by
-  rw [auxTransvection_mul_fixed hfu]
-  exact finrank_quotient_sup_span_singleton hu
+/-
+**LinearEquiv.finrank_mod_auxTransvection_mul_fixed** 是 Mathlib 中的一个定理，位于命名空间 `L
+inearEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem finrank_mod_auxTransvection_mul_fixed {f : Dual K V} {u : V}
-    {hf : e.fixedSubmodule ⊔ K ∙ (e u - u) <= LinearMap.ker f}
+    {hf : e.fixedSubmodule ⊔ K ∙ (e u - u) ≤ LinearMap.ker f}
     (hfu : f u = 1) (hu : u ∉ e.fixedSubmodule) :
     finrank K (V ⧸ (auxTransvection hf * e).fixedSubmodule) + 1 = finrank K (V ⧸ e.fixedSubmodule)
     := by
   rw [auxTransvection_mul_fixed hfu]
   exact finrank_quotient_sup_span_singleton hu
 
-/--
-theorem `mem_transvections_pow_mul_dilatransvections_of_fixedReduce_eq_one` / 定理 `mem_transvections_pow_mul_dilatransvections_of_fixedReduce_eq_one`
+/-- If `e : V ≃ₗ[K] V` is such that `e.fixedReduce = 1`, then `e` is the product of
+at most `finrank K (V ⧸ e.fixedSubmodule) - 1` transvections and one dilatransvection.
 
-English:
-theorem mem_transvections_pow_mul_dilatransvections_of_fixedReduce_eq_one
-  proof: by
-  induction h : finrank K (V ⧸ e.fixedSubmodule) generalizing e he with
-  | zero => simp [mem_dilatransvections_iff_finrank_quotient, h]
-  | succ n hind =>
-    match n with
-    | 0 => simp [mem_dilatransvections_iff_finrank_quotient, h]
-    | n + 1 =>
-      simp only [add_assoc, Nat.reduceAdd] at h
-      simp only [add_tsub_cancel_right] at hind
-      simp only [add_tsub_cancel_right, pow_succ', mul_assoc, Set.mem_mul]
-      /- We construct a linear form `f` which vanishes on `e.fixedSubmodule`,
-        and a vector `v` such that `f v = 1`.
-        Consider the transvection `t = transvection f v`.
-        Then `t * e` satisfies the induction hypothesis and
-        the relation `e = t⁻¹ * (t * e)` implies that `e` satisfies the theorem.
-        This transvection is given by `auxTransvection`. -/
-      have : exists f : Dual K V, exists v : V, e.fixedSubmodule <= ker f ∧ f v = 1 := by
-        have : exists u : V, u ∉ e.fixedSubmodule := by
-          by_contra! he
-          rw [← Submodule.eq_top_iff'] at he
-          rw [he]; rw [← Nat.add_left_inj]; rw [Submodule.finrank_quotient_add_finrank]; rw [finrank_top] at h
-          simp at h
-        obtain ⟨u, hu⟩ := this
-        obtain ⟨f, hfu, hf⟩ := Submodule.exists_dual_map_eq_bot_of_notMem hu inferInstance
-        let v := (f u)⁻¹ • u
-        have hv : f v = 1 := by simp [v, inv_mul_cancel₀ hfu]
-        exact ⟨f, v, by rwa [LinearMap.le_ker_iff_map], hv⟩
-      obtain ⟨f, v, hf, hv⟩ := this
-      -- We have chosen `f` and `v`.
-      -- Since `f v = 1`, one has `v ∉ e.fixedSubmodule`.
-      have hv_notMem : v ∉ e.fixedSubmodule := fun hv' => by
-        apply one_ne_zero' K
-        rw [← hv]; rw [← LinearMap.mem_ker]
-        exact hf hv'
-      -- Using that `e.fixedReduce = 1`, we have `v - e v ∈ e.fixedSubmodule`.
-      have hv' : v - e v in e.fixedSubmodule := by
-        rw [← e.fixedSubmodule.ker_mkQ]; rw [LinearMap.mem_ker]; rw [map_sub]; rw [sub_eq_zero]
-        simp [← fixedReduce_mk, he]
-      set t := auxTransvection (e := e) (f := f) (u := v) (by
-        simpa [hf] using hf (sub_mem_comm_iff.mp hv')) with ht
-      refine ⟨t⁻¹, ?_, t * e, ?_, by simp⟩
-      · -- We prove that `t⁻¹` is a transvection
-        rw [inv_mem_transvections_iff]; rw [ht]
-        apply mem_transvections
-      -- It remains to prove that `t * e` satisfies the induction hypothesis
-      apply hind
-      · -- We prove that `(t * e).fixedReduce = 1`.
-        simp only [ht, one_eq_refl, fixedReduce_eq_one, auxTransvection_mul_fixed hv] at he ⊢
-        intro w
-        simp only [auxTransvection, LinearEquiv.mul_apply, transvection.apply,
-          add_sub_right_comm]
-        apply mem_sup_left
-        apply Submodule.add_mem _ (he w)
-        exact smul_mem _ _ hv'
-      · -- `finrank` condition
-        rw [← Nat.add_left_inj]; rw [finrank_mod_auxTransvection_mul_fixed hv hv_notMem]; rw [h]
+This is the first non-exceptional case in Dieudonné's theorem. -/
+/-
+**LinearEquiv.mem_transvections_pow_mul_dilatransvections_of_fixedReduce_eq_one*
+* 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：mem_transvections_pow_mul_dilatransvections_of_fixedReduce_eq_one {e : V ≃
+ₗ[K] V} (he : e.fixedReduce = 1) : e in transvections K V ^ (finrank K (V ⧸ e.fi
+xedSubmodule) - 1) * dilatransvections K V
+参数：he : e.fixedReduce = 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_tsub`：zero_tsub (a : α) : 0 - a = 0
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `tsub_self`：tsub_self (a : α) : a - a = 0
+· 使用定理 `add_tsub_cancel_right`：add_tsub_cancel_right (a b : α) : a + b - b = a
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `pow_succ'`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (n : ℕ), a ^ (n + 
+1) = a * a ^ n
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `finrank_top`：finrank_top : finrank R (⊤ : Submodule R M) = finrank R M
+· 使用引理 `Submodule.finrank_quotient_add_finrank`：Submodule.finrank_quotient_add_f
+inrank [Module.Finite R M] (N : Submodule R M) : finrank R (M ⧸ N) + finrank R N
+ = finrank R M
+· 使用定理 `IsNoetherianRing.strongRankCondition`：∀ (R : Type u) [inst : Ring R] [No
+ntrivial R] [IsNoetherianRing R], StrongRankCondition R
+· 使用定理 `DivisionRing.toNontrivial`：∀ {K : Type u_2} [self : DivisionRing K], Non
+trivial K
+· 使用定理 `PrincipalIdealRing.isNoetherianRing`：∀ {R : Type u} [inst : Semiring R] 
+[IsPrincipalIdealRing R], IsNoetherianRing R
+· 使用定理 `DivisionSemiring.isPrincipalIdealRing`：∀ (K : Type u) [inst : DivisionSe
+miring K], IsPrincipalIdealRing K
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.add_left_inj`：∀ {m k n : ℕ}, m + n = k + n ↔ m = k
+· 使用定理 `Submodule.eq_top_iff'`：eq_top_iff' {p : Submodule R M} : p = ⊤ ↔ forall 
+x, x in p
+（共 62 条，此处仅展示前 30 条）
 
-中文:
-定理 mem_transvections_pow_mul_dilatransvections_of_fixedReduce_eq_one
-  证明: by
-  induction h : finrank K (V ⧸ e.fixedSubmodule) generalizing e he with
-  | zero => simp [mem_dilatransvections_iff_finrank_quotient, h]
-  | succ n hind =>
-    match n with
-    | 0 => simp [mem_dilatransvections_iff_finrank_quotient, h]
-    | n + 1 =>
-      simp only [add_assoc, Nat.reduceAdd] at h
-      simp only [add_tsub_cancel_right] at hind
-      simp only [add_tsub_cancel_right, pow_succ', mul_assoc, Set.mem_mul]
-      /- We construct a linear form `f` which vanishes on `e.fixedSubmodule`,
-        and a vector `v` such that `f v = 1`.
-        Consider the transvection `t = transvection f v`.
-        Then `t * e` satisfies the induction hypothesis and
-        the relation `e = t⁻¹ * (t * e)` implies that `e` satisfies the theorem.
-        This transvection is given by `auxTransvection`. -/
-      have : exists f : Dual K V, exists v : V, e.fixedSubmodule <= ker f ∧ f v = 1 := by
-        have : exists u : V, u ∉ e.fixedSubmodule := by
-          by_contra! he
-          rw [← Submodule.eq_top_iff'] at he
-          rw [he]; rw [← Nat.add_left_inj]; rw [Submodule.finrank_quotient_add_finrank]; rw [finrank_top] at h
-          simp at h
-        obtain ⟨u, hu⟩ := this
-        obtain ⟨f, hfu, hf⟩ := Submodule.exists_dual_map_eq_bot_of_notMem hu inferInstance
-        let v := (f u)⁻¹ • u
-        have hv : f v = 1 := by simp [v, inv_mul_cancel₀ hfu]
-        exact ⟨f, v, by rwa [LinearMap.le_ker_iff_map], hv⟩
-      obtain ⟨f, v, hf, hv⟩ := this
-      -- We have chosen `f` and `v`.
-      -- Since `f v = 1`, one has `v ∉ e.fixedSubmodule`.
-      have hv_notMem : v ∉ e.fixedSubmodule := fun hv' => by
-        apply one_ne_zero' K
-        rw [← hv]; rw [← LinearMap.mem_ker]
-        exact hf hv'
-      -- Using that `e.fixedReduce = 1`, we have `v - e v ∈ e.fixedSubmodule`.
-      have hv' : v - e v in e.fixedSubmodule := by
-        rw [← e.fixedSubmodule.ker_mkQ]; rw [LinearMap.mem_ker]; rw [map_sub]; rw [sub_eq_zero]
-        simp [← fixedReduce_mk, he]
-      set t := auxTransvection (e := e) (f := f) (u := v) (by
-        simpa [hf] using hf (sub_mem_comm_iff.mp hv')) with ht
-      refine ⟨t⁻¹, ?_, t * e, ?_, by simp⟩
-      · -- We prove that `t⁻¹` is a transvection
-        rw [inv_mem_transvections_iff]; rw [ht]
-        apply mem_transvections
-      -- It remains to prove that `t * e` satisfies the induction hypothesis
-      apply hind
-      · -- We prove that `(t * e).fixedReduce = 1`.
-        simp only [ht, one_eq_refl, fixedReduce_eq_one, auxTransvection_mul_fixed hv] at he ⊢
-        intro w
-        simp only [auxTransvection, LinearEquiv.mul_apply, transvection.apply,
-          add_sub_right_comm]
-        apply mem_sup_left
-        apply Submodule.add_mem _ (he w)
-        exact smul_mem _ _ hv'
-      · -- `finrank` condition
-        rw [← Nat.add_left_inj]; rw [finrank_mod_auxTransvection_mul_fixed hv hv_notMem]; rw [h]
+--- 原说明 ---
+If `e : V ≃ₗ[K] V` is such that `e.fixedReduce = 1`, then `e` is the product of
+at most `finrank K (V ⧸ e.fixedSubmodule) - 1` transvections and one dilatransve
+ction.
 
-Depends on / 依赖: Nat.reduceAdd, Set.mem_mul, add_assoc, add_tsub_cancel_right, e.fixedSubmodule, finrank, fixedSubmodule, generalizing, mem_dilatransvections_iff_finrank_quotient, mem_mul, mul_assoc, pow_succ, reduceAdd
+This is the first non-exceptional case in Dieudonné's theorem.
 -/
 theorem mem_transvections_pow_mul_dilatransvections_of_fixedReduce_eq_one
     {e : V ≃ₗ[K] V} (he : e.fixedReduce = 1) :
-    e in transvections K V ^ (finrank K (V ⧸ e.fixedSubmodule) - 1) * dilatransvections K V := by
+    e ∈ transvections K V ^ (finrank K (V ⧸ e.fixedSubmodule) - 1) * dilatransvections K V := by
   induction h : finrank K (V ⧸ e.fixedSubmodule) generalizing e he with
   | zero => simp [mem_dilatransvections_iff_finrank_quotient, h]
   | succ n hind =>
@@ -706,11 +702,11 @@ theorem mem_transvections_pow_mul_dilatransvections_of_fixedReduce_eq_one
         Then `t * e` satisfies the induction hypothesis and
         the relation `e = t⁻¹ * (t * e)` implies that `e` satisfies the theorem.
         This transvection is given by `auxTransvection`. -/
-      have : exists f : Dual K V, exists v : V, e.fixedSubmodule <= ker f ∧ f v = 1 := by
-        have : exists u : V, u ∉ e.fixedSubmodule := by
+      have : ∃ f : Dual K V, ∃ v : V, e.fixedSubmodule ≤ ker f ∧ f v = 1 := by
+        have : ∃ u : V, u ∉ e.fixedSubmodule := by
           by_contra! he
           rw [← Submodule.eq_top_iff'] at he
-          rw [he]; rw [← Nat.add_left_inj]; rw [Submodule.finrank_quotient_add_finrank]; rw [finrank_top] at h
+          rw [he, ← Nat.add_left_inj, Submodule.finrank_quotient_add_finrank, finrank_top] at h
           simp at h
         obtain ⟨u, hu⟩ := this
         obtain ⟨f, hfu, hf⟩ := Submodule.exists_dual_map_eq_bot_of_notMem hu inferInstance
@@ -720,19 +716,20 @@ theorem mem_transvections_pow_mul_dilatransvections_of_fixedReduce_eq_one
       obtain ⟨f, v, hf, hv⟩ := this
       -- We have chosen `f` and `v`.
       -- Since `f v = 1`, one has `v ∉ e.fixedSubmodule`.
-      have hv_notMem : v ∉ e.fixedSubmodule := fun hv' => by
+      have hv_notMem : v ∉ e.fixedSubmodule := fun hv' ↦ by
         apply one_ne_zero' K
-        rw [← hv]; rw [← LinearMap.mem_ker]
+        rw [← hv, ← LinearMap.mem_ker]
         exact hf hv'
       -- Using that `e.fixedReduce = 1`, we have `v - e v ∈ e.fixedSubmodule`.
-      have hv' : v - e v in e.fixedSubmodule := by
-        rw [← e.fixedSubmodule.ker_mkQ]; rw [LinearMap.mem_ker]; rw [map_sub]; rw [sub_eq_zero]
+      have hv' : v - e v ∈ e.fixedSubmodule := by
+        rw [← e.fixedSubmodule.ker_mkQ, LinearMap.mem_ker,
+          map_sub, sub_eq_zero]
         simp [← fixedReduce_mk, he]
       set t := auxTransvection (e := e) (f := f) (u := v) (by
         simpa [hf] using hf (sub_mem_comm_iff.mp hv')) with ht
       refine ⟨t⁻¹, ?_, t * e, ?_, by simp⟩
       · -- We prove that `t⁻¹` is a transvection
-        rw [inv_mem_transvections_iff]; rw [ht]
+        rw [inv_mem_transvections_iff, ht]
         apply mem_transvections
       -- It remains to prove that `t * e` satisfies the induction hypothesis
       apply hind
@@ -745,59 +742,28 @@ theorem mem_transvections_pow_mul_dilatransvections_of_fixedReduce_eq_one
         apply Submodule.add_mem _ (he w)
         exact smul_mem _ _ hv'
       · -- `finrank` condition
-        rw [← Nat.add_left_inj]; rw [finrank_mod_auxTransvection_mul_fixed hv hv_notMem]; rw [h]
+        rw [← Nat.add_left_inj, finrank_mod_auxTransvection_mul_fixed hv hv_notMem, h]
 
 /- Private lemmas for the second non-exceptional case. -/
 
 omit [Module.Finite K V] in
 variable {e} in
-/--
-theorem `apply_notMem_sup_of_linearIndependent` / 定理 `apply_notMem_sup_of_linearIndependent`
+/-- If the images of `u` and `e u` in `V ⧸ e.fixedSubmodule` are linearly independent,
+then `e u` does not belong to `e.fixedSubmodule ⊔ K ∙ (e u - u)`. -/
+/-
+**LinearEquiv.apply_notMem_sup_of_linearIndependent** 是 Mathlib 中的一个定理，位于命名空间 `L
+inearEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem apply_notMem_sup_of_linearIndependent
-  statement: {u : V}
-  proof: fun hu' => by
-  rw [Submodule.mem_sup] at hu'
-  obtain ⟨y, hy, z, hz, hu'⟩ := hu'
-  rw [Submodule.mem_span_singleton] at hz
-  obtain ⟨a, rfl⟩ := hz
-  simp only [LinearIndependent.pair_iff] at hu
-  specialize hu a (1 - a) ?_
-  · simp only [← LinearMap.map_smul, ← LinearEquiv.map_smul]
-    simp only [Submodule.mkQ_apply, fixedReduce_mk]
-    simp only [← Submodule.mkQ_apply, ← map_add, ← mem_ker,
-      Submodule.ker_mkQ]
-    convert hy
-    grind [smul_sub, sub_smul, one_smul, map_smul]
-  aesop
-
-omit [Module.Finite K V] in
-
-中文:
-定理 apply_notMem_sup_of_linearIndependent
-  结论: {u : V}
-  证明: fun hu' => by
-  rw [Submodule.mem_sup] at hu'
-  obtain ⟨y, hy, z, hz, hu'⟩ := hu'
-  rw [Submodule.mem_span_singleton] at hz
-  obtain ⟨a, rfl⟩ := hz
-  simp only [LinearIndependent.pair_iff] at hu
-  specialize hu a (1 - a) ?_
-  · simp only [← LinearMap.map_smul, ← LinearEquiv.map_smul]
-    simp only [Submodule.mkQ_apply, fixedReduce_mk]
-    simp only [← Submodule.mkQ_apply, ← map_add, ← mem_ker,
-      Submodule.ker_mkQ]
-    convert hy
-    grind [smul_sub, sub_smul, one_smul, map_smul]
-  aesop
-
-omit [Module.Finite K V] in
+--- 原说明 ---
+If the images of `u` and `e u` in `V ⧸ e.fixedSubmodule` are linearly independen
+t,
+then `e u` does not belong to `e.fixedSubmodule ⊔ K ∙ (e u - u)`.
 -/
 private theorem apply_notMem_sup_of_linearIndependent {u : V}
     (hu : LinearIndependent K
       ![e.fixedSubmodule.mkQ u, e.fixedReduce (e.fixedSubmodule.mkQ u)]) :
-    e u ∉ e.fixedSubmodule ⊔ K ∙ (e u - u) := fun hu' => by
+    e u ∉ e.fixedSubmodule ⊔ K ∙ (e u - u) := fun hu' ↦ by
   rw [Submodule.mem_sup] at hu'
   obtain ⟨y, hy, z, hz, hu'⟩ := hu'
   rw [Submodule.mem_span_singleton] at hz
@@ -814,90 +780,34 @@ private theorem apply_notMem_sup_of_linearIndependent {u : V}
 
 omit [Module.Finite K V] in
 variable {e} in
-/--
-theorem `exists_dual_of_fixedReduce_ne_smul` / 定理 `exists_dual_of_fixedReduce_ne_smul`
+/-- If `e.fixedReduce` is not a homothety, then there are a linear form `f` and
+a vector `v` such that `f` vanishes on `e.fixedSubmodule ⊔ K ∙ (e v - v)`, `f v = 1`,
+and the images of `v` and `e v` in `V ⧸ e.fixedSubmodule` are linearly independent. -/
+/-
+**LinearEquiv.exists_dual_of_fixedReduce_ne_smul** 是 Mathlib 中的一个定理，位于命名空间 `Line
+arEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem exists_dual_of_fixedReduce_ne_smul
-  proof: by
-  -- Since `e.fixedReduce` is not a homothety, there is `v : V ⧸ e.fixedSubmodule` such
-  -- that `v` and `e.fixedReduce v` are linearly independent.
-  have : exists v, LinearIndependent K ![v, e.fixedReduce v] := by
-    contrapose! he
-    obtain ⟨a, ha⟩ :=
-      LinearMap.exists_mem_center_apply_eq_smul_of_forall_notLinearIndependent h.ne' he
-    refine ⟨a, fun x => by
-      simp only [← coe_toLinearMap, ha, LinearMap.smul_apply, one_apply, Subring.smul_def]⟩
-  obtain ⟨v, hu⟩ := this
-  -- We lift `v` to `u : V`.
-  obtain ⟨u, rfl⟩ := e.fixedSubmodule.mkQ_surjective v
-  -- We can take `f : Dual K V` which vanishes on `e.fixedSubmodule ⊔ K ∙ (e u - u)`
-  -- and satisfies `f u ≠ 0`, and we rescale `u` to `v` so that `f v = 1`.
-  obtain ⟨f, hfu, hf⟩ :=
-    exists_dual_map_eq_bot_of_notMem (apply_notMem_sup_of_linearIndependent hu) inferInstance
-  replace hfu : f u != 0 := by
-    contrapose hfu
-    rw [← hfu]; rw [← sub_eq_zero]; rw [← map_sub]; rw [← Submodule.mem_bot K]; rw [← hf]
-    exact mem_map_of_mem (mem_sup_right (mem_span_singleton_self _))
-  set v := (f u)⁻¹ • u with v_def
-  have hspan : K ∙ (e v - v) = K ∙ (e u - u) := by
-    simp only [Submodule.span_singleton_eq_span_singleton]
-    use (Ne.isUnit hfu).unit
-    simp [v_def, _root_.map_smul, Units.smul_isUnit, smul_sub,
-      ← mul_smul, mul_inv_cancel₀ hfu]
-  rw [← hspan]; rw [← le_ker_iff_map] at hf
-  refine ⟨f, v, ?_, hf,
-    by simp only [_root_.map_smul, smul_eq_mul, v_def, inv_mul_cancel₀ hfu]⟩
-  rw [← LinearIndependent.pair_smul_smul_iff (Ne.isUnit hfu).inv (Ne.isUnit hfu).inv] at hu
-  simpa only [← LinearMap.map_smul, ← LinearEquiv.map_smul, ← v_def] using hu
-
-中文:
-定理 存在_dual_of_fixedReduce_ne_smul
-  证明: by
-  -- Since `e.fixedReduce` is not a homothety, there is `v : V ⧸ e.fixedSubmodule` such
-  -- that `v` and `e.fixedReduce v` are linearly independent.
-  have : exists v, LinearIndependent K ![v, e.fixedReduce v] := by
-    contrapose! he
-    obtain ⟨a, ha⟩ :=
-      LinearMap.exists_mem_center_apply_eq_smul_of_forall_notLinearIndependent h.ne' he
-    refine ⟨a, fun x => by
-      simp only [← coe_toLinearMap, ha, LinearMap.smul_apply, one_apply, Subring.smul_def]⟩
-  obtain ⟨v, hu⟩ := this
-  -- We lift `v` to `u : V`.
-  obtain ⟨u, rfl⟩ := e.fixedSubmodule.mkQ_surjective v
-  -- We can take `f : Dual K V` which vanishes on `e.fixedSubmodule ⊔ K ∙ (e u - u)`
-  -- and satisfies `f u ≠ 0`, and we rescale `u` to `v` so that `f v = 1`.
-  obtain ⟨f, hfu, hf⟩ :=
-    exists_dual_map_eq_bot_of_notMem (apply_notMem_sup_of_linearIndependent hu) inferInstance
-  replace hfu : f u != 0 := by
-    contrapose hfu
-    rw [← hfu]; rw [← sub_eq_zero]; rw [← map_sub]; rw [← Submodule.mem_bot K]; rw [← hf]
-    exact mem_map_of_mem (mem_sup_right (mem_span_singleton_self _))
-  set v := (f u)⁻¹ • u with v_def
-  have hspan : K ∙ (e v - v) = K ∙ (e u - u) := by
-    simp only [Submodule.span_singleton_eq_span_singleton]
-    use (Ne.isUnit hfu).unit
-    simp [v_def, _root_.map_smul, Units.smul_isUnit, smul_sub,
-      ← mul_smul, mul_inv_cancel₀ hfu]
-  rw [← hspan]; rw [← le_ker_iff_map] at hf
-  refine ⟨f, v, ?_, hf,
-    by simp only [_root_.map_smul, smul_eq_mul, v_def, inv_mul_cancel₀ hfu]⟩
-  rw [← LinearIndependent.pair_smul_smul_iff (Ne.isUnit hfu).inv (Ne.isUnit hfu).inv] at hu
-  simpa only [← LinearMap.map_smul, ← LinearEquiv.map_smul, ← v_def] using hu
+--- 原说明 ---
+If `e.fixedReduce` is not a homothety, then there are a linear form `f` and
+a vector `v` such that `f` vanishes on `e.fixedSubmodule ⊔ K ∙ (e v - v)`, `f v 
+= 1`,
+and the images of `v` and `e v` in `V ⧸ e.fixedSubmodule` are linearly independe
+nt.
 -/
 private theorem exists_dual_of_fixedReduce_ne_smul
-    (he : forall a : K, exists x, e.fixedReduce x != a • x)
+    (he : ∀ a : K, ∃ x, e.fixedReduce x ≠ a • x)
     (h : 1 < finrank K (V ⧸ e.fixedSubmodule)) :
-    exists (f : Dual K V) (v : V),
+    ∃ (f : Dual K V) (v : V),
       LinearIndependent K ![e.fixedSubmodule.mkQ v, e.fixedReduce (e.fixedSubmodule.mkQ v)] ∧
-        e.fixedSubmodule ⊔ K ∙ (e v - v) <= LinearMap.ker f ∧ f v = 1 := by
+        e.fixedSubmodule ⊔ K ∙ (e v - v) ≤ LinearMap.ker f ∧ f v = 1 := by
   -- Since `e.fixedReduce` is not a homothety, there is `v : V ⧸ e.fixedSubmodule` such
   -- that `v` and `e.fixedReduce v` are linearly independent.
-  have : exists v, LinearIndependent K ![v, e.fixedReduce v] := by
+  have : ∃ v, LinearIndependent K ![v, e.fixedReduce v] := by
     contrapose! he
     obtain ⟨a, ha⟩ :=
       LinearMap.exists_mem_center_apply_eq_smul_of_forall_notLinearIndependent h.ne' he
-    refine ⟨a, fun x => by
+    refine ⟨a, fun x ↦ by
       simp only [← coe_toLinearMap, ha, LinearMap.smul_apply, one_apply, Subring.smul_def]⟩
   obtain ⟨v, hu⟩ := this
   -- We lift `v` to `u : V`.
@@ -906,9 +816,9 @@ private theorem exists_dual_of_fixedReduce_ne_smul
   -- and satisfies `f u ≠ 0`, and we rescale `u` to `v` so that `f v = 1`.
   obtain ⟨f, hfu, hf⟩ :=
     exists_dual_map_eq_bot_of_notMem (apply_notMem_sup_of_linearIndependent hu) inferInstance
-  replace hfu : f u != 0 := by
+  replace hfu : f u ≠ 0 := by
     contrapose hfu
-    rw [← hfu]; rw [← sub_eq_zero]; rw [← map_sub]; rw [← Submodule.mem_bot K]; rw [← hf]
+    rw [← hfu, ← sub_eq_zero, ← map_sub, ← Submodule.mem_bot K, ← hf]
     exact mem_map_of_mem (mem_sup_right (mem_span_singleton_self _))
   set v := (f u)⁻¹ • u with v_def
   have hspan : K ∙ (e v - v) = K ∙ (e u - u) := by
@@ -916,138 +826,38 @@ private theorem exists_dual_of_fixedReduce_ne_smul
     use (Ne.isUnit hfu).unit
     simp [v_def, _root_.map_smul, Units.smul_isUnit, smul_sub,
       ← mul_smul, mul_inv_cancel₀ hfu]
-  rw [← hspan]; rw [← le_ker_iff_map] at hf
+  rw [← hspan, ← le_ker_iff_map] at hf
   refine ⟨f, v, ?_, hf,
     by simp only [_root_.map_smul, smul_eq_mul, v_def, inv_mul_cancel₀ hfu]⟩
   rw [← LinearIndependent.pair_smul_smul_iff (Ne.isUnit hfu).inv (Ne.isUnit hfu).inv] at hu
   simpa only [← LinearMap.map_smul, ← LinearEquiv.map_smul, ← v_def] using hu
 
 variable {e} in
-/--
-theorem `not_forall_fixedReduce_eq_smul` / 定理 `not_forall_fixedReduce_eq_smul`
+/-- Auxiliary lemma for the second non-exceptional case in Dieudonné's theorem:
+with the notation of the proof of
+`mem_transvections_pow_mul_dilatransvections_of_fixedReduce_ne_smul_id`,
+the reductions of `auxTransvection hf * e` and `auxTransvection hg * e`
+cannot both be homotheties. -/
+/-
+**LinearEquiv.not_forall_fixedReduce_eq_smul** 是 Mathlib 中的一个定理，位于命名空间 `LinearEq
+uiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem not_forall_fixedReduce_eq_smul
-  statement: {f g : Dual K V} {v : V} {a b : K}
-  proof: by
-  simp only [fixedReduce_eq_smul_iff, auxTransvection_mul_fixed hfv] at ha
-  simp only [fixedReduce_eq_smul_iff, auxTransvection_mul_fixed hfgv] at hb
-  /- Since `auxTransvection hf = transvection f (v - e v)` and
-    `auxTransvection hg = transvection (f + g) (v - e v)`,
-    subtracting the relations `ha` and `hb` gives the following: -/
-  set c := b - a with hc
-  have key (x : V) : g (e x) • (v - e v) - c • x in e.fixedSubmodule ⊔ K ∙ v := by
-    have ha := ha x
-    have hb := hb x
-    simp only [LinearEquiv.mul_apply, transvection.apply, auxTransvection] at ha hb
-    rw [LinearMap.add_apply]; rw [add_smul]; rw [← add_assoc] at hb
-    convert Submodule.sub_mem _ hb ha using 1
-    -- should be taken care by a `module` tactic that handles noncommutative rings
-    simp only [add_comm _ (g (e x) • _), ← add_assoc]
-    rw [sub_eq_add_neg]
-    simp only [add_sub_assoc, add_assoc, add_right_inj, sub_smul, smul_sub, hc]
-    abel
-  -- To get the contradiction, we distinguish whether `a = b` or not.
-  rcases eq_or_ne c 0 with hc0 | hc0
-  · -- When `c = 0`, we contradict the linear independence given by `hv`
-    apply one_ne_zero (α := K)
-    rw [LinearIndependent.pair_iff] at hv
-    have hmem : v - e v in e.fixedSubmodule ⊔ K ∙ v := by
-      simp only [hc0, zero_smul, sub_zero] at key
-      obtain ⟨w, hw⟩ : exists w, g w != 0 := by
-        contrapose! hg0
-        exact LinearMap.ext hg0
-      simpa [hw] using key ((g w)⁻¹ • e⁻¹ w)
-    simp only [mem_sup, mem_span_singleton, exists_exists_eq_and] at hmem
-    obtain ⟨y, hy, k, hk⟩ := hmem
-    refine (hv (k - 1) 1 ?_).right
-    simp only [Submodule.mkQ_apply, fixedReduce_mk]
-    simp only [← e.fixedSubmodule.mkQ_apply, ← LinearMap.map_smul, ← map_add,
-      ← LinearMap.mem_ker, Submodule.ker_mkQ]
-    rw [← Submodule.neg_mem_iff] at hy
-    convert hy using 1
-    rw [eq_comm]; rw [← sub_eq_iff_eq_add] at hk
-    rw [← hk]
-    simp only [sub_smul, one_smul]
-    abel
-  · -- When `c ≠ 0`, we contradict `hne_top`
-    refine hne_top.ne ?_
-    rw [eq_top_iff]
-    intro x _
-    have h1 : g (e x) • (v - e v) in K ∙ (e v - v) :=
-      mem_span_singleton.mpr ⟨-g (e x), by rw [neg_smul, smul_sub, smul_sub, neg_sub]⟩
-    have hle : e.fixedSubmodule ⊔ K ∙ v <= e.fixedSubmodule ⊔ K ∙ (e v - v) ⊔ K ∙ v :=
-      sup_le_sup_right le_sup_left _
-    have h2 : c • x in e.fixedSubmodule ⊔ K ∙ (e v - v) ⊔ K ∙ v := by
-      rw [show c • x = g (e x) • (v - e v) - (g (e x) • (v - e v) - c • x) by abel]
-      exact Submodule.sub_mem _ (mem_sup_left (mem_sup_right h1)) (hle (key x))
-    simpa [smul_smul, inv_mul_cancel₀ hc0] using Submodule.smul_mem _ c⁻¹ h2
-
-中文:
-定理 not_对任意_fixedReduce_eq_smul
-  结论: {f g : 对偶 K V} {v : V} {a b : K}
-  证明: by
-  simp only [fixedReduce_eq_smul_iff, auxTransvection_mul_fixed hfv] at ha
-  simp only [fixedReduce_eq_smul_iff, auxTransvection_mul_fixed hfgv] at hb
-  /- Since `auxTransvection hf = transvection f (v - e v)` and
-    `auxTransvection hg = transvection (f + g) (v - e v)`,
-    subtracting the relations `ha` and `hb` gives the following: -/
-  set c := b - a with hc
-  have key (x : V) : g (e x) • (v - e v) - c • x in e.fixedSubmodule ⊔ K ∙ v := by
-    have ha := ha x
-    have hb := hb x
-    simp only [LinearEquiv.mul_apply, transvection.apply, auxTransvection] at ha hb
-    rw [LinearMap.add_apply]; rw [add_smul]; rw [← add_assoc] at hb
-    convert Submodule.sub_mem _ hb ha using 1
-    -- should be taken care by a `module` tactic that handles noncommutative rings
-    simp only [add_comm _ (g (e x) • _), ← add_assoc]
-    rw [sub_eq_add_neg]
-    simp only [add_sub_assoc, add_assoc, add_right_inj, sub_smul, smul_sub, hc]
-    abel
-  -- To get the contradiction, we distinguish whether `a = b` or not.
-  rcases eq_or_ne c 0 with hc0 | hc0
-  · -- When `c = 0`, we contradict the linear independence given by `hv`
-    apply one_ne_zero (α := K)
-    rw [LinearIndependent.pair_iff] at hv
-    have hmem : v - e v in e.fixedSubmodule ⊔ K ∙ v := by
-      simp only [hc0, zero_smul, sub_zero] at key
-      obtain ⟨w, hw⟩ : exists w, g w != 0 := by
-        contrapose! hg0
-        exact LinearMap.ext hg0
-      simpa [hw] using key ((g w)⁻¹ • e⁻¹ w)
-    simp only [mem_sup, mem_span_singleton, exists_exists_eq_and] at hmem
-    obtain ⟨y, hy, k, hk⟩ := hmem
-    refine (hv (k - 1) 1 ?_).right
-    simp only [Submodule.mkQ_apply, fixedReduce_mk]
-    simp only [← e.fixedSubmodule.mkQ_apply, ← LinearMap.map_smul, ← map_add,
-      ← LinearMap.mem_ker, Submodule.ker_mkQ]
-    rw [← Submodule.neg_mem_iff] at hy
-    convert hy using 1
-    rw [eq_comm]; rw [← sub_eq_iff_eq_add] at hk
-    rw [← hk]
-    simp only [sub_smul, one_smul]
-    abel
-  · -- When `c ≠ 0`, we contradict `hne_top`
-    refine hne_top.ne ?_
-    rw [eq_top_iff]
-    intro x _
-    have h1 : g (e x) • (v - e v) in K ∙ (e v - v) :=
-      mem_span_singleton.mpr ⟨-g (e x), by rw [neg_smul, smul_sub, smul_sub, neg_sub]⟩
-    have hle : e.fixedSubmodule ⊔ K ∙ v <= e.fixedSubmodule ⊔ K ∙ (e v - v) ⊔ K ∙ v :=
-      sup_le_sup_right le_sup_left _
-    have h2 : c • x in e.fixedSubmodule ⊔ K ∙ (e v - v) ⊔ K ∙ v := by
-      rw [show c • x = g (e x) • (v - e v) - (g (e x) • (v - e v) - c • x) by abel]
-      exact Submodule.sub_mem _ (mem_sup_left (mem_sup_right h1)) (hle (key x))
-    simpa [smul_smul, inv_mul_cancel₀ hc0] using Submodule.smul_mem _ c⁻¹ h2
+--- 原说明 ---
+Auxiliary lemma for the second non-exceptional case in Dieudonné's theorem:
+with the notation of the proof of
+`mem_transvections_pow_mul_dilatransvections_of_fixedReduce_ne_smul_id`,
+the reductions of `auxTransvection hf * e` and `auxTransvection hg * e`
+cannot both be homotheties.
 -/
 private theorem not_forall_fixedReduce_eq_smul {f g : Dual K V} {v : V} {a b : K}
     (hv : LinearIndependent K
       ![e.fixedSubmodule.mkQ v, e.fixedReduce (e.fixedSubmodule.mkQ v)])
-    {hf : e.fixedSubmodule ⊔ K ∙ (e v - v) <= LinearMap.ker f} (hfv : f v = 1)
-    {hg : e.fixedSubmodule ⊔ K ∙ (e v - v) <= LinearMap.ker (f + g)} (hfgv : (f + g) v = 1)
-    (hg0 : g != 0) (hne_top : e.fixedSubmodule ⊔ K ∙ (e v - v) ⊔ K ∙ v < ⊤)
-    (ha : forall x, (auxTransvection hf * e).fixedReduce x = a • x)
-    (hb : forall x, (auxTransvection hg * e).fixedReduce x = b • x) :
+    {hf : e.fixedSubmodule ⊔ K ∙ (e v - v) ≤ LinearMap.ker f} (hfv : f v = 1)
+    {hg : e.fixedSubmodule ⊔ K ∙ (e v - v) ≤ LinearMap.ker (f + g)} (hfgv : (f + g) v = 1)
+    (hg0 : g ≠ 0) (hne_top : e.fixedSubmodule ⊔ K ∙ (e v - v) ⊔ K ∙ v < ⊤)
+    (ha : ∀ x, (auxTransvection hf * e).fixedReduce x = a • x)
+    (hb : ∀ x, (auxTransvection hg * e).fixedReduce x = b • x) :
     False := by
   simp only [fixedReduce_eq_smul_iff, auxTransvection_mul_fixed hfv] at ha
   simp only [fixedReduce_eq_smul_iff, auxTransvection_mul_fixed hfgv] at hb
@@ -1055,11 +865,11 @@ private theorem not_forall_fixedReduce_eq_smul {f g : Dual K V} {v : V} {a b : K
     `auxTransvection hg = transvection (f + g) (v - e v)`,
     subtracting the relations `ha` and `hb` gives the following: -/
   set c := b - a with hc
-  have key (x : V) : g (e x) • (v - e v) - c • x in e.fixedSubmodule ⊔ K ∙ v := by
+  have key (x : V) : g (e x) • (v - e v) - c • x ∈ e.fixedSubmodule ⊔ K ∙ v := by
     have ha := ha x
     have hb := hb x
     simp only [LinearEquiv.mul_apply, transvection.apply, auxTransvection] at ha hb
-    rw [LinearMap.add_apply]; rw [add_smul]; rw [← add_assoc] at hb
+    rw [LinearMap.add_apply, add_smul, ← add_assoc] at hb
     convert Submodule.sub_mem _ hb ha using 1
     -- should be taken care by a `module` tactic that handles noncommutative rings
     simp only [add_comm _ (g (e x) • _), ← add_assoc]
@@ -1071,9 +881,9 @@ private theorem not_forall_fixedReduce_eq_smul {f g : Dual K V} {v : V} {a b : K
   · -- When `c = 0`, we contradict the linear independence given by `hv`
     apply one_ne_zero (α := K)
     rw [LinearIndependent.pair_iff] at hv
-    have hmem : v - e v in e.fixedSubmodule ⊔ K ∙ v := by
+    have hmem : v - e v ∈ e.fixedSubmodule ⊔ K ∙ v := by
       simp only [hc0, zero_smul, sub_zero] at key
-      obtain ⟨w, hw⟩ : exists w, g w != 0 := by
+      obtain ⟨w, hw⟩ : ∃ w, g w ≠ 0 := by
         contrapose! hg0
         exact LinearMap.ext hg0
       simpa [hw] using key ((g w)⁻¹ • e⁻¹ w)
@@ -1085,7 +895,7 @@ private theorem not_forall_fixedReduce_eq_smul {f g : Dual K V} {v : V} {a b : K
       ← LinearMap.mem_ker, Submodule.ker_mkQ]
     rw [← Submodule.neg_mem_iff] at hy
     convert hy using 1
-    rw [eq_comm]; rw [← sub_eq_iff_eq_add] at hk
+    rw [eq_comm, ← sub_eq_iff_eq_add] at hk
     rw [← hk]
     simp only [sub_smul, one_smul]
     abel
@@ -1093,150 +903,102 @@ private theorem not_forall_fixedReduce_eq_smul {f g : Dual K V} {v : V} {a b : K
     refine hne_top.ne ?_
     rw [eq_top_iff]
     intro x _
-    have h1 : g (e x) • (v - e v) in K ∙ (e v - v) :=
+    have h1 : g (e x) • (v - e v) ∈ K ∙ (e v - v) :=
       mem_span_singleton.mpr ⟨-g (e x), by rw [neg_smul, smul_sub, smul_sub, neg_sub]⟩
-    have hle : e.fixedSubmodule ⊔ K ∙ v <= e.fixedSubmodule ⊔ K ∙ (e v - v) ⊔ K ∙ v :=
+    have hle : e.fixedSubmodule ⊔ K ∙ v ≤ e.fixedSubmodule ⊔ K ∙ (e v - v) ⊔ K ∙ v :=
       sup_le_sup_right le_sup_left _
-    have h2 : c • x in e.fixedSubmodule ⊔ K ∙ (e v - v) ⊔ K ∙ v := by
+    have h2 : c • x ∈ e.fixedSubmodule ⊔ K ∙ (e v - v) ⊔ K ∙ v := by
       rw [show c • x = g (e x) • (v - e v) - (g (e x) • (v - e v) - c • x) by abel]
       exact Submodule.sub_mem _ (mem_sup_left (mem_sup_right h1)) (hle (key x))
     simpa [smul_smul, inv_mul_cancel₀ hc0] using Submodule.smul_mem _ c⁻¹ h2
 
-/--
-theorem `mem_transvections_pow_mul_dilatransvections_of_fixedReduce_ne_smul_id` / 定理 `mem_transvections_pow_mul_dilatransvections_of_fixedReduce_ne_smul_id`
+/-- If an element `e : V ≃ₗ[K] V` is such that `e.fixedReduce`
+is not a homothety, then `e` is the product of at
+most `finrank K (V ⧸ e.fixedSubmodule) - 1` transvections
+and one dilatransvection.
 
-English:
-theorem mem_transvections_pow_mul_dilatransvections_of_fixedReduce_ne_smul_id
-  proof: by
-  induction h : finrank K (V ⧸ e.fixedSubmodule) generalizing e he with
-  | zero => simp [mem_dilatransvections_iff_finrank_quotient, h]
-  | succ n hind =>
-    match n with
-    | 0 => simp [mem_dilatransvections_iff_finrank_quotient, h]
-    | n + 1 =>
-      simp only [ne_eq, add_tsub_cancel_right] at hind ⊢
-      simp only [add_assoc, Nat.reduceAdd] at h
-      rw [pow_succ']; rw [mul_assoc]; rw [Set.mem_mul]
-      /- The strategy is similar to the first non-exceptional case:
-        we construct `f : Dual K V` and `v : V` such that,
-        setting `t = auxTransvection hf`, we have `e = t⁻¹ * (t * e)`
-        and `t * e` satisfies the induction hypothesis,
-        after possibly replacing `f` by `f + g` for a suitable `g`. -/
-      obtain ⟨f, v, hv, hf, hfv⟩ := exists_dual_of_fixedReduce_ne_smul he (by omega)
-      have hv_notMem : v ∉ e.fixedSubmodule := by
-        simpa [Submodule.Quotient.mk_eq_zero] using hv.ne_zero 0
-      have hrank : finrank K (V ⧸ (e.fixedSubmodule ⊔ K ∙ v)) = n + 1 := by
-        have := finrank_quotient_sup_span_singleton hv_notMem
-        omega
-      -- The case `n = 0` is easy
-      rcases Nat.eq_zero_or_pos n with hn0 | hn_pos
-      · simp only [hn0, pow_zero, one_mul]
-        refine ⟨(auxTransvection hf)⁻¹, ?_, auxTransvection hf * e, ?_, by simp⟩
-        · rw [inv_mem_transvections_iff]
-          apply mem_transvections
-        · rw [mem_dilatransvections_iff_finrank_quotient,
-            auxTransvection_mul_fixed hfv, hrank, hn0, zero_add]
-      by_cases he' : auxTransvection hf * e in transvections K V ^ n * dilatransvections K V
-      · -- This is the easy case where one knows that `auxTransvection hf * e` is
-        -- the product of at most `n + 1` transvections
-        refine ⟨(auxTransvection hf)⁻¹, ?_, auxTransvection hf * e, he', by simp⟩
-        rw [inv_mem_transvections_iff]
-        apply mem_transvections
-      -- Otherwise, we will need to modify `auxTransvection hf` by changing `f`.
-      have hne_top : e.fixedSubmodule ⊔ K ∙ (e v - v) ⊔ K ∙ v < ⊤ := by
-        rw [sup_right_comm]
-        exact sup_span_singleton_lt_top _ (by rw [hrank]; omega)
-      obtain ⟨g : Dual K V, hg0 : g != 0, hg2⟩ :=
-        Submodule.exists_dual_map_eq_bot_of_lt_top hne_top inferInstance
-      rw [← le_ker_iff_map] at hg2
-      have hg : e.fixedSubmodule ⊔ K ∙ (e v - v) <= ker (f + g) := fun x hx => by
-        rw [mem_ker]; rw [LinearMap.add_apply]; rw [mem_ker.mp (hf hx)]; rw [mem_ker.mp (hg2 (mem_sup_left hx))]; rw [add_zero]
-      have hfgv : (f + g) v = 1 := by
-        rw [LinearMap.add_apply]; rw [hfv]; rw [mem_ker.mp (hg2 (mem_sup_right (mem_span_singleton_self v)))]; rw [add_zero]
-      refine ⟨(auxTransvection hg)⁻¹, ?_, auxTransvection hg * e, ?_, by simp⟩
-      · rw [inv_mem_transvections_iff]
-        apply mem_transvections
-      -- It remains to prove that `auxTransvection hg * e` satisfies the induction hypothesis
-      apply hind ?_ (by rw [auxTransvection_mul_fixed hfgv, hrank])
-      -- The induction hypothesis implies that `(auxTransvection hf * e).fixedReduce`
-      -- is a homothety, for otherwise the previous case would apply.
-      obtain ⟨a, ha⟩ : exists a : K, forall x, (auxTransvection hf * e).fixedReduce x = a • x := by
-        contrapose! he'
-        exact hind he' (by rw [auxTransvection_mul_fixed hfv, hrank])
-      -- Then `(auxTransvection hg * e).fixedReduce` cannot also be a homothety.
-      intro b
-      by_contra! hb
-      exact not_forall_fixedReduce_eq_smul hv hfv hfgv hg0 hne_top ha hb
+This is the second non-exceptional case in Dieudonné's theorem. -/
+/-
+**LinearEquiv.mem_transvections_pow_mul_dilatransvections_of_fixedReduce_ne_smul
+_id** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：mem_transvections_pow_mul_dilatransvections_of_fixedReduce_ne_smul_id {e :
+ V ≃ₗ[K] V} (he : forall a : K, exists x, e.fixedReduce x != a • x) : e in trans
+vections K V ^ (finrank K (V ⧸ e.fixedSubmodule) - 1) * dilatransvections K V
+参数：he : forall a : K, exists x, e.fixedReduce x != a • x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_tsub`：zero_tsub (a : α) : 0 - a = 0
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `tsub_self`：tsub_self (a : α) : a - a = 0
+· 使用定理 `add_tsub_cancel_right`：add_tsub_cancel_right (a b : α) : a + b - b = a
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `pow_succ'`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (n : ℕ), a ^ (n + 
+1) = a * a ^ n
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Set.mem_mul`：mem_mul : a in s * t ↔ exists x in s, exists y in t, x * y 
+= a
+· 使用定理 `_private.Mathlib.LinearAlgebra.Transvection.Generation.0.LinearEquiv.exi
+sts_dual_of_fixedReduce_ne_smul`：∀ {K : Type u_1} [inst : DivisionRing K] {V : T
+ype u_2} [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V]   {e : V ≃ₗ[K] V
+},   (∀ (a : …
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `LinearIndependent.ne_zero`：LinearIndependent.ne_zero [Nontrivial R] (i :
+ ι) (hv : LinearIndependent R v) : v i != 0
+· 使用定理 `DivisionRing.toNontrivial`：∀ {K : Type u_2} [self : DivisionRing K], Non
+trivial K
+· 使用定理 `LinearEquiv.finrank_quotient_sup_span_singleton`：finrank_quotient_sup_sp
+an_singleton {W : Submodule K V} {v : V} (hv : v ∉ W) : finrank K (V ⧸ (W ⊔ K ∙ 
+v)) + 1 = finrank K (V ⧸ W)
+· 使用定理 `Nat.eq_zero_or_pos`：∀ (n : ℕ), n = 0 ∨ n > 0
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `LinearEquiv.inv_mem_transvections_iff`：∀ {R : Type u_1} {V : Type u_2} [
+inst : Ring R] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module R V] {e : V ≃ₗ[
+R] V},   e⁻¹ ∈ LinearEquiv.…
+· 使用定理 `LinearEquiv.mem_transvections`：∀ {R : Type u_1} {V : Type u_2} [inst : R
+ing R] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module R V]   {f : Module.Dual
+ R V} {v : V} (hfv …
+· 使用定理 `LinearEquiv.mem_dilatransvections_iff_finrank_quotient`：∀ {V : Type u_2}
+ [inst : AddCommGroup V] {K : Type u_3} [inst_1 : DivisionRing K] [inst_2 : _roo
+t_.Module K V]   [Module.Finite K V] {e : V …
+· 使用定理 `_private.Mathlib.LinearAlgebra.Transvection.Generation.0.LinearEquiv.aux
+Transvection_mul_fixed`：∀ {K : Type u_1} [inst : DivisionRing K] {V : Type u_2} 
+[inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V]   [Module.Finite K V] {e 
+: V …
+（共 53 条，此处仅展示前 30 条）
 
-中文:
-定理 mem_transvections_pow_mul_dilatransvections_of_fixedReduce_ne_smul_id
-  证明: by
-  induction h : finrank K (V ⧸ e.fixedSubmodule) generalizing e he with
-  | zero => simp [mem_dilatransvections_iff_finrank_quotient, h]
-  | succ n hind =>
-    match n with
-    | 0 => simp [mem_dilatransvections_iff_finrank_quotient, h]
-    | n + 1 =>
-      simp only [ne_eq, add_tsub_cancel_right] at hind ⊢
-      simp only [add_assoc, Nat.reduceAdd] at h
-      rw [pow_succ']; rw [mul_assoc]; rw [Set.mem_mul]
-      /- The strategy is similar to the first non-exceptional case:
-        we construct `f : Dual K V` and `v : V` such that,
-        setting `t = auxTransvection hf`, we have `e = t⁻¹ * (t * e)`
-        and `t * e` satisfies the induction hypothesis,
-        after possibly replacing `f` by `f + g` for a suitable `g`. -/
-      obtain ⟨f, v, hv, hf, hfv⟩ := exists_dual_of_fixedReduce_ne_smul he (by omega)
-      have hv_notMem : v ∉ e.fixedSubmodule := by
-        simpa [Submodule.Quotient.mk_eq_zero] using hv.ne_zero 0
-      have hrank : finrank K (V ⧸ (e.fixedSubmodule ⊔ K ∙ v)) = n + 1 := by
-        have := finrank_quotient_sup_span_singleton hv_notMem
-        omega
-      -- The case `n = 0` is easy
-      rcases Nat.eq_zero_or_pos n with hn0 | hn_pos
-      · simp only [hn0, pow_zero, one_mul]
-        refine ⟨(auxTransvection hf)⁻¹, ?_, auxTransvection hf * e, ?_, by simp⟩
-        · rw [inv_mem_transvections_iff]
-          apply mem_transvections
-        · rw [mem_dilatransvections_iff_finrank_quotient,
-            auxTransvection_mul_fixed hfv, hrank, hn0, zero_add]
-      by_cases he' : auxTransvection hf * e in transvections K V ^ n * dilatransvections K V
-      · -- This is the easy case where one knows that `auxTransvection hf * e` is
-        -- the product of at most `n + 1` transvections
-        refine ⟨(auxTransvection hf)⁻¹, ?_, auxTransvection hf * e, he', by simp⟩
-        rw [inv_mem_transvections_iff]
-        apply mem_transvections
-      -- Otherwise, we will need to modify `auxTransvection hf` by changing `f`.
-      have hne_top : e.fixedSubmodule ⊔ K ∙ (e v - v) ⊔ K ∙ v < ⊤ := by
-        rw [sup_right_comm]
-        exact sup_span_singleton_lt_top _ (by rw [hrank]; omega)
-      obtain ⟨g : Dual K V, hg0 : g != 0, hg2⟩ :=
-        Submodule.exists_dual_map_eq_bot_of_lt_top hne_top inferInstance
-      rw [← le_ker_iff_map] at hg2
-      have hg : e.fixedSubmodule ⊔ K ∙ (e v - v) <= ker (f + g) := fun x hx => by
-        rw [mem_ker]; rw [LinearMap.add_apply]; rw [mem_ker.mp (hf hx)]; rw [mem_ker.mp (hg2 (mem_sup_left hx))]; rw [add_zero]
-      have hfgv : (f + g) v = 1 := by
-        rw [LinearMap.add_apply]; rw [hfv]; rw [mem_ker.mp (hg2 (mem_sup_right (mem_span_singleton_self v)))]; rw [add_zero]
-      refine ⟨(auxTransvection hg)⁻¹, ?_, auxTransvection hg * e, ?_, by simp⟩
-      · rw [inv_mem_transvections_iff]
-        apply mem_transvections
-      -- It remains to prove that `auxTransvection hg * e` satisfies the induction hypothesis
-      apply hind ?_ (by rw [auxTransvection_mul_fixed hfgv, hrank])
-      -- The induction hypothesis implies that `(auxTransvection hf * e).fixedReduce`
-      -- is a homothety, for otherwise the previous case would apply.
-      obtain ⟨a, ha⟩ : exists a : K, forall x, (auxTransvection hf * e).fixedReduce x = a • x := by
-        contrapose! he'
-        exact hind he' (by rw [auxTransvection_mul_fixed hfv, hrank])
-      -- Then `(auxTransvection hg * e).fixedReduce` cannot also be a homothety.
-      intro b
-      by_contra! hb
-      exact not_forall_fixedReduce_eq_smul hv hfv hfgv hg0 hne_top ha hb
+--- 原说明 ---
+If an element `e : V ≃ₗ[K] V` is such that `e.fixedReduce`
+is not a homothety, then `e` is the product of at
+most `finrank K (V ⧸ e.fixedSubmodule) - 1` transvections
+and one dilatransvection.
 
-Depends on / 依赖: Nat.reduceAdd, Set.mem_mul, add_assoc, add_tsub_cancel_right, e.fixedSubmodule, finrank, fixedSubmodule, generalizing, mem_dilatransvections_iff_finrank_quotient, mem_mul, mul_assoc, ne_eq, pow_succ, reduceAdd
+This is the second non-exceptional case in Dieudonné's theorem.
 -/
 theorem mem_transvections_pow_mul_dilatransvections_of_fixedReduce_ne_smul_id
     {e : V ≃ₗ[K] V}
-    (he : forall a : K, exists x, e.fixedReduce x != a • x) :
-    e in transvections K V ^ (finrank K (V ⧸ e.fixedSubmodule) - 1) * dilatransvections K V := by
+    (he : ∀ a : K, ∃ x, e.fixedReduce x ≠ a • x) :
+    e ∈ transvections K V ^ (finrank K (V ⧸ e.fixedSubmodule) - 1) * dilatransvections K V := by
   induction h : finrank K (V ⧸ e.fixedSubmodule) generalizing e he with
   | zero => simp [mem_dilatransvections_iff_finrank_quotient, h]
   | succ n hind =>
@@ -1245,7 +1007,7 @@ theorem mem_transvections_pow_mul_dilatransvections_of_fixedReduce_ne_smul_id
     | n + 1 =>
       simp only [ne_eq, add_tsub_cancel_right] at hind ⊢
       simp only [add_assoc, Nat.reduceAdd] at h
-      rw [pow_succ']; rw [mul_assoc]; rw [Set.mem_mul]
+      rw [pow_succ', mul_assoc, Set.mem_mul]
       /- The strategy is similar to the first non-exceptional case:
         we construct `f : Dual K V` and `v : V` such that,
         setting `t = auxTransvection hf`, we have `e = t⁻¹ * (t * e)`
@@ -1265,7 +1027,7 @@ theorem mem_transvections_pow_mul_dilatransvections_of_fixedReduce_ne_smul_id
           apply mem_transvections
         · rw [mem_dilatransvections_iff_finrank_quotient,
             auxTransvection_mul_fixed hfv, hrank, hn0, zero_add]
-      by_cases he' : auxTransvection hf * e in transvections K V ^ n * dilatransvections K V
+      by_cases he' : auxTransvection hf * e ∈ transvections K V ^ n * dilatransvections K V
       · -- This is the easy case where one knows that `auxTransvection hf * e` is
         -- the product of at most `n + 1` transvections
         refine ⟨(auxTransvection hf)⁻¹, ?_, auxTransvection hf * e, he', by simp⟩
@@ -1275,13 +1037,15 @@ theorem mem_transvections_pow_mul_dilatransvections_of_fixedReduce_ne_smul_id
       have hne_top : e.fixedSubmodule ⊔ K ∙ (e v - v) ⊔ K ∙ v < ⊤ := by
         rw [sup_right_comm]
         exact sup_span_singleton_lt_top _ (by rw [hrank]; omega)
-      obtain ⟨g : Dual K V, hg0 : g != 0, hg2⟩ :=
+      obtain ⟨g : Dual K V, hg0 : g ≠ 0, hg2⟩ :=
         Submodule.exists_dual_map_eq_bot_of_lt_top hne_top inferInstance
       rw [← le_ker_iff_map] at hg2
-      have hg : e.fixedSubmodule ⊔ K ∙ (e v - v) <= ker (f + g) := fun x hx => by
-        rw [mem_ker]; rw [LinearMap.add_apply]; rw [mem_ker.mp (hf hx)]; rw [mem_ker.mp (hg2 (mem_sup_left hx))]; rw [add_zero]
+      have hg : e.fixedSubmodule ⊔ K ∙ (e v - v) ≤ ker (f + g) := fun x hx ↦ by
+        rw [mem_ker, LinearMap.add_apply, mem_ker.mp (hf hx),
+          mem_ker.mp (hg2 (mem_sup_left hx)), add_zero]
       have hfgv : (f + g) v = 1 := by
-        rw [LinearMap.add_apply]; rw [hfv]; rw [mem_ker.mp (hg2 (mem_sup_right (mem_span_singleton_self v)))]; rw [add_zero]
+        rw [LinearMap.add_apply, hfv,
+          mem_ker.mp (hg2 (mem_sup_right (mem_span_singleton_self v))), add_zero]
       refine ⟨(auxTransvection hg)⁻¹, ?_, auxTransvection hg * e, ?_, by simp⟩
       · rw [inv_mem_transvections_iff]
         apply mem_transvections
@@ -1289,7 +1053,7 @@ theorem mem_transvections_pow_mul_dilatransvections_of_fixedReduce_ne_smul_id
       apply hind ?_ (by rw [auxTransvection_mul_fixed hfgv, hrank])
       -- The induction hypothesis implies that `(auxTransvection hf * e).fixedReduce`
       -- is a homothety, for otherwise the previous case would apply.
-      obtain ⟨a, ha⟩ : exists a : K, forall x, (auxTransvection hf * e).fixedReduce x = a • x := by
+      obtain ⟨a, ha⟩ : ∃ a : K, ∀ x, (auxTransvection hf * e).fixedReduce x = a • x := by
         contrapose! he'
         exact hind he' (by rw [auxTransvection_mul_fixed hfv, hrank])
       -- Then `(auxTransvection hg * e).fixedReduce` cannot also be a homothety.
@@ -1297,34 +1061,50 @@ theorem mem_transvections_pow_mul_dilatransvections_of_fixedReduce_ne_smul_id
       by_contra! hb
       exact not_forall_fixedReduce_eq_smul hv hfv hfgv hg0 hne_top ha hb
 
-/--
-theorem `mem_transvections_pow_mul_dilatransvections_of_not_isExceptional` / 定理 `mem_transvections_pow_mul_dilatransvections_of_not_isExceptional`
+/-- If an element `e : V ≃ₗ[K] V` is not exceptional,
+then it is the product of at most `finrank K (V ⧸ e.fixedSubmodule)` dilatransvections.
 
-English:
-theorem mem_transvections_pow_mul_dilatransvections_of_not_isExceptional
-  proof: by
-  simp only [not_and_or] at he
-  push Not at he
-  rcases he with he | he | he
-  · simpa [Nat.sub_eq_zero_of_le he, mem_dilatransvections_iff_finrank_quotient] using he
-  · exact mem_transvections_pow_mul_dilatransvections_of_fixedReduce_eq_one he
-  · exact mem_transvections_pow_mul_dilatransvections_of_fixedReduce_ne_smul_id he
+This is the non-exceptional case in Dieudonné's theorem. -/
+/-
+**LinearEquiv.mem_transvections_pow_mul_dilatransvections_of_not_isExceptional**
+ 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：mem_transvections_pow_mul_dilatransvections_of_not_isExceptional {e : V ≃ₗ
+[K] V} (he : ¬ IsExceptional e) : e in transvections K V ^ (finrank K (V ⧸ e.fix
+edSubmodule) - 1) * dilatransvections K V
+参数：he : ¬ IsExceptional e。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.sub_eq_zero_of_le`：∀ {n m : ℕ}, n ≤ m → n - m = 0
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `LinearEquiv.mem_transvections_pow_mul_dilatransvections_of_fixedReduce_e
+q_one`：mem_transvections_pow_mul_dilatransvections_of_fixedReduce_eq_one {e : V 
+≃ₗ[K] V} (he : e.fixedReduce = 1) : e in transvections K V ^ (finra…
+· 使用定理 `LinearEquiv.mem_transvections_pow_mul_dilatransvections_of_fixedReduce_n
+e_smul_id`：mem_transvections_pow_mul_dilatransvections_of_fixedReduce_ne_smul_id
+ {e : V ≃ₗ[K] V} (he : forall a : K, exists x, e.fixedReduce x != a • x…
 
-中文:
-定理 mem_transvections_pow_mul_dilatransvections_of_not_isExceptional
-  证明: by
-  simp only [not_and_or] at he
-  push Not at he
-  rcases he with he | he | he
-  · simpa [Nat.sub_eq_zero_of_le he, mem_dilatransvections_iff_finrank_quotient] using he
-  · exact mem_transvections_pow_mul_dilatransvections_of_fixedReduce_eq_one he
-  · exact mem_transvections_pow_mul_dilatransvections_of_fixedReduce_ne_smul_id he
+--- 原说明 ---
+If an element `e : V ≃ₗ[K] V` is not exceptional,
+then it is the product of at most `finrank K (V ⧸ e.fixedSubmodule)` dilatransve
+ctions.
 
-Depends on / 依赖: Nat.sub_eq_zero_of_le, mem_dilatransvections_iff_finrank_quotient, mem_transvections_pow_mul_dilatransvections_of_fixedReduce_eq_one, mem_transvections_pow_mul_dilatransvections_of_fixedReduce_ne_smul_id, not_and_or, sub_eq_zero_of_le
+This is the non-exceptional case in Dieudonné's theorem.
 -/
 theorem mem_transvections_pow_mul_dilatransvections_of_not_isExceptional
     {e : V ≃ₗ[K] V} (he : ¬ IsExceptional e) :
-    e in transvections K V ^ (finrank K (V ⧸ e.fixedSubmodule) - 1) * dilatransvections K V := by
+    e ∈ transvections K V ^ (finrank K (V ⧸ e.fixedSubmodule) - 1) * dilatransvections K V := by
   simp only [not_and_or] at he
   push Not at he
   rcases he with he | he | he
@@ -1335,3 +1115,4 @@ theorem mem_transvections_pow_mul_dilatransvections_of_not_isExceptional
 end LinearEquiv
 
 end
+

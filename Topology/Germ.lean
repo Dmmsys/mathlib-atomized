@@ -40,468 +40,361 @@ open scoped Topology
 
 open Filter Set
 
-variable {X Y Z : Type*} [TopologicalSpace X] {f g : X -> Y} {A : Set X} {x : X}
+variable {X Y Z : Type*} [TopologicalSpace X] {f g : X → Y} {A : Set X} {x : X}
 
 namespace Filter.Germ
 
-/--
-Definition of `value` / `value` 的定义
+/-- The value associated to a germ at a point. This is the common value
+shared by all representatives at the given point. -/
+/-
+**Filter.Germ.value** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Germ`。
+形式化陈述：value {X α : Type*} [TopologicalSpace X] {x : X} (φ : Germ (𝓝 x) α) : α
+参数：φ : Germ (𝓝 x) α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition value
-  signature: {X α : Type*} [TopologicalSpace X] {x : X} (φ : Germ (𝓝 x) α)
-  body: Quotient.liftOn' φ (fun f => f x) fun f g h => by rw [Eventually.self_of_nhds h]
-
-@[simp]
-
-中文:
-定义 value
-  签名: {X α : 类型} [拓扑空间 X] {x : X} (φ : Germ (𝓝 x) α)
-  定义体: Quotient.liftOn' φ (fun f => f x) fun f g h => by rw [Eventually.self_of_nhds h]
-
-@[simp]
-
-Depends on / 依赖: Eventually, Eventually.self_of_nhds, Quotient, Quotient.liftOn, liftOn, self_of_nhds
+--- 原说明 ---
+The value associated to a germ at a point. This is the common value
+shared by all representatives at the given point.
 -/
 def value {X α : Type*} [TopologicalSpace X] {x : X} (φ : Germ (𝓝 x) α) : α :=
-  Quotient.liftOn' φ (fun f => f x) fun f g h => by rw [Eventually.self_of_nhds h]
+  Quotient.liftOn' φ (fun f ↦ f x) fun f g h ↦ by rw [Eventually.self_of_nhds h]
 
 @[simp]
-/--
-theorem `value_ofFun` / 定理 `value_ofFun`
-
-English:
-theorem value_ofFun
-  given: (f : X -> Y) (x : X)
-  statement: value (f : Germ (𝓝 x) Y) = f x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 value_ofFun
-  条件: (f : X -> Y) (x : X)
-  结论: value (f : Germ (𝓝 x) Y) = f x
-  证明: rfl
-
-@[simp]
+/-
+**Filter.Germ.value_ofFun** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：value_ofFun (f : X -> Y) (x : X) : value (f : Germ (𝓝 x) Y) = f x
+参数：f : X -> Y；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem value_ofFun (f : X -> Y) (x : X) : value (f : Germ (𝓝 x) Y) = f x := rfl
+theorem value_ofFun (f : X → Y) (x : X) : value (f : Germ (𝓝 x) Y) = f x := rfl
 
 @[simp]
-/--
-theorem `value_const` / 定理 `value_const`
-
-English:
-theorem value_const
-  given: (c : Y) (x : X)
-  statement: value (c : Germ (𝓝 x) Y) = c
-  proof: rfl
-
-中文:
-定理 value_const
-  条件: (c : Y) (x : X)
-  结论: value (c : Germ (𝓝 x) Y) = c
-  证明: rfl
+/-
+**Filter.Germ.value_const** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：value_const (c : Y) (x : X) : value (c : Germ (𝓝 x) Y) = c
+参数：c : Y；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem value_const (c : Y) (x : X) : value (c : Germ (𝓝 x) Y) = c := rfl
-
-/--
-theorem `value_smul` / 定理 `value_smul`
-
-English:
-theorem value_smul
-  statement: {α β : Type*} [SMul α β] (φ : Germ (𝓝 x) α)
-  proof: Germ.inductionOn φ fun _ => Germ.inductionOn ψ fun _ => rfl
-
-中文:
-定理 value_smul
-  结论: {α β : 类型} [标量乘法 α β] (φ : Germ (𝓝 x) α)
-  证明: Germ.inductionOn φ fun _ => Germ.inductionOn ψ fun _ => rfl
-
-Depends on / 依赖: Germ.inductionOn, inductionOn
+/-
+**Filter.Germ.value_smul** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：value_smul {α β : Type*} [SMul α β] (φ : Germ (𝓝 x) α) (ψ : Germ (𝓝 x) β) 
+: (φ • ψ).value = φ.value • ψ.value
+参数：φ : Germ (𝓝 x) α；ψ : Germ (𝓝 x) β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Germ.inductionOn`：inductionOn (f : Germ l β) {p : Germ l β -> Pro
+p} (h : forall f : α -> β, p f) : p f
 -/
 theorem value_smul {α β : Type*} [SMul α β] (φ : Germ (𝓝 x) α)
     (ψ : Germ (𝓝 x) β) : (φ • ψ).value = φ.value • ψ.value :=
-  Germ.inductionOn φ fun _ => Germ.inductionOn ψ fun _ => rfl
+  Germ.inductionOn φ fun _ ↦ Germ.inductionOn ψ fun _ ↦ rfl
 
 /-- The map `Germ (𝓝 x) E → E` into a monoid `E` as a monoid homomorphism -/
 @[to_additive /-- The map `Germ (𝓝 x) E → E` as an additive monoid homomorphism -/]
-/--
-Definition of `valueMulHom` / `valueMulHom` 的定义
+/-
+**Filter.Germ.valueMulHom** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Germ`。
+形式化陈述：valueMulHom {X E : Type*} [Monoid E] [TopologicalSpace X] {x : X} : Germ (
+𝓝 x) E ->* E where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition valueMulHom
-  signature: {X E : Type*} [Monoid E] [TopologicalSpace X] {x : X}
-  body: Filter.Germ.value
-  map_one' := rfl
-  map_mul' φ ψ := Germ.inductionOn φ fun _ => Germ.inductionOn ψ fun _ => rfl
-
-中文:
-定义 valueMulHom
-  签名: {X E : 类型} [幺半群 E] [拓扑空间 X] {x : X}
-  定义体: Filter.Germ.value
-  map_one' := rfl
-  map_mul' φ ψ := Germ.inductionOn φ fun _ => Germ.inductionOn ψ fun _ => rfl
-
-Depends on / 依赖: Filter, Filter.Germ.value
+--- 原说明 ---
+The map `Germ (𝓝 x) E → E` into a monoid `E` as a monoid homomorphism
 -/
-def valueMulHom {X E : Type*} [Monoid E] [TopologicalSpace X] {x : X} : Germ (𝓝 x) E ->* E where
+def valueMulHom {X E : Type*} [Monoid E] [TopologicalSpace X] {x : X} : Germ (𝓝 x) E →* E where
   toFun := Filter.Germ.value
   map_one' := rfl
-  map_mul' φ ψ := Germ.inductionOn φ fun _ => Germ.inductionOn ψ fun _ => rfl
+  map_mul' φ ψ := Germ.inductionOn φ fun _ ↦ Germ.inductionOn ψ fun _ ↦ rfl
 
-/--
-Definition of `valueₗ` / `valueₗ` 的定义
+/-- The map `Germ (𝓝 x) E → E` into a `𝕜`-module `E` as a `𝕜`-linear map -/
+/-
+**Filter.Germ.value** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Germ`。
+形式化陈述：value {X α : Type*} [TopologicalSpace X] {x : X} (φ : Germ (𝓝 x) α) : α
+参数：φ : Germ (𝓝 x) α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition valueₗ
-  signature: {X 𝕜 E : Type*} [Semiring 𝕜] [AddCommMonoid E] [Module 𝕜 E] [TopologicalSpace X]
-  body: Filter.Germ.valueAddHom
-  map_smul' := fun _ φ => Germ.inductionOn φ fun _ => rfl
-
-中文:
-定义 valueₗ
-  签名: {X 𝕜 E : 类型} [半环 𝕜] [加法交换幺半群 E] [模 𝕜 E] [拓扑空间 X]
-  定义体: Filter.Germ.valueAddHom
-  map_smul' := fun _ φ => Germ.inductionOn φ fun _ => rfl
-
-Depends on / 依赖: Filter, Filter.Germ.valueAddHom, valueAddHom
+--- 原说明 ---
+The map `Germ (𝓝 x) E → E` into a `𝕜`-module `E` as a `𝕜`-linear map
 -/
 def valueₗ {X 𝕜 E : Type*} [Semiring 𝕜] [AddCommMonoid E] [Module 𝕜 E] [TopologicalSpace X]
-    {x : X} : Germ (𝓝 x) E ->ₗ[𝕜] E where
+    {x : X} : Germ (𝓝 x) E →ₗ[𝕜] E where
   __ := Filter.Germ.valueAddHom
-  map_smul' := fun _ φ => Germ.inductionOn φ fun _ => rfl
+  map_smul' := fun _ φ ↦ Germ.inductionOn φ fun _ ↦ rfl
 
-/--
-Definition of `valueRingHom` / `valueRingHom` 的定义
+/-- The map `Germ (𝓝 x) E → E` as a ring homomorphism -/
+/-
+**Filter.Germ.valueRingHom** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Germ`。
+形式化陈述：valueRingHom {X E : Type*} [Semiring E] [TopologicalSpace X] {x : X} : Ger
+m (𝓝 x) E ->+* E
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition valueRingHom
-  signature: {X E : Type*} [Semiring E] [TopologicalSpace X] {x : X}
-  body: { Filter.Germ.valueMulHom, Filter.Germ.valueAddHom with }
-
-中文:
-定义 valueRingHom
-  签名: {X E : 类型} [半环 E] [拓扑空间 X] {x : X}
-  定义体: { Filter.Germ.valueMulHom, Filter.Germ.valueAddHom with }
-
-Depends on / 依赖: Filter, Filter.Germ.valueAddHom, Filter.Germ.valueMulHom, valueAddHom, valueMulHom
+--- 原说明 ---
+The map `Germ (𝓝 x) E → E` as a ring homomorphism
 -/
-def valueRingHom {X E : Type*} [Semiring E] [TopologicalSpace X] {x : X} : Germ (𝓝 x) E ->+* E :=
+def valueRingHom {X E : Type*} [Semiring E] [TopologicalSpace X] {x : X} : Germ (𝓝 x) E →+* E :=
   { Filter.Germ.valueMulHom, Filter.Germ.valueAddHom with }
 
-/--
-Definition of `valueOrderRingHom` / `valueOrderRingHom` 的定义
+/-- The map `Germ (𝓝 x) E → E` as a monotone ring homomorphism -/
+/-
+**Filter.Germ.valueOrderRingHom** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Germ`。
+形式化陈述：valueOrderRingHom {X E : Type*} [Semiring E] [PartialOrder E] [Topological
+Space X] {x : X} : Germ (𝓝 x) E ->+*o E where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition valueOrderRingHom
-  signature: {X E : Type*} [Semiring E] [PartialOrder E] [TopologicalSpace X] {x : X}
-  body: Filter.Germ.valueRingHom
-  monotone' := fun φ ψ =>
-  Germ.inductionOn φ fun _ => Germ.inductionOn ψ fun _ h => h.self_of_nhds
-
-中文:
-定义 valueOrderRingHom
-  签名: {X E : 类型} [半环 E] [偏序 E] [拓扑空间 X] {x : X}
-  定义体: Filter.Germ.valueRingHom
-  monotone' := fun φ ψ =>
-  Germ.inductionOn φ fun _ => Germ.inductionOn ψ fun _ h => h.self_of_nhds
-
-Depends on / 依赖: Filter, Filter.Germ.valueRingHom, valueRingHom
+--- 原说明 ---
+The map `Germ (𝓝 x) E → E` as a monotone ring homomorphism
 -/
 def valueOrderRingHom {X E : Type*} [Semiring E] [PartialOrder E] [TopologicalSpace X] {x : X} :
-    Germ (𝓝 x) E ->+*o E where
+    Germ (𝓝 x) E →+*o E where
   __ := Filter.Germ.valueRingHom
-  monotone' := fun φ ψ =>
-  Germ.inductionOn φ fun _ => Germ.inductionOn ψ fun _ h => h.self_of_nhds
+  monotone' := fun φ ψ ↦
+  Germ.inductionOn φ fun _ ↦ Germ.inductionOn ψ fun _ h ↦ h.self_of_nhds
 
 end Filter.Germ
 
 section RestrictGermPredicate
-/--
-Definition of `RestrictGermPredicate` / `RestrictGermPredicate` 的定义
+/-- Given a predicate on germs `P : Π x : X, germ (𝓝 x) Y → Prop` and `A : set X`,
+build a new predicate on germs `RestrictGermPredicate P A` such that
+`(∀ x, RestrictGermPredicate P A x f) ↔ ∀ᶠ x near A, P x f`, see
+`forall_restrictGermPredicate_iff` for this equivalence. -/
+/-
+**RestrictGermPredicate** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：RestrictGermPredicate (P : forall x : X, Germ (𝓝 x) Y -> Prop) (A : Set X)
+ : forall x : X, Germ (𝓝 x) Y -> Prop
+参数：P : forall x : X, Germ (𝓝 x) Y -> Prop；A : Set X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition RestrictGermPredicate
-  signature: (P : forall x : X, Germ (𝓝 x) Y -> Prop)
-  body: fun x φ =>
-  Germ.liftOn φ (fun f => x in A -> forallᶠ y in 𝓝 x, P y f)
-    haveI : forall f f' : X -> Y, f =ᶠ[𝓝 x] f' -> (forallᶠ y in 𝓝 x, P y f) -> forallᶠ y in 𝓝 x, P y f' := by
-      intro f f' hff' hf
-      apply (hf.and <| Eventually.eventually_nhds hff').mono
-      rintro y ⟨hy, hy'⟩
-      rwa [Germ.coe_eq.mpr (EventuallyEq.symm hy')]
-fun f f' hff' => propext forall_congr' fun _ => ⟨this f f' hff', this f' f hff'.symm⟩
-
-中文:
-定义 RestrictGermPredicate
-  签名: (P : 对任意 x : X, Germ (𝓝 x) Y -> 命题)
-  定义体: fun x φ =>
-  Germ.liftOn φ (fun f => x in A -> forallᶠ y in 𝓝 x, P y f)
-    haveI : forall f f' : X -> Y, f =ᶠ[𝓝 x] f' -> (forallᶠ y in 𝓝 x, P y f) -> forallᶠ y in 𝓝 x, P y f' := by
-      intro f f' hff' hf
-      apply (hf.and <| Eventually.eventually_nhds hff').mono
-      rintro y ⟨hy, hy'⟩
-      rwa [Germ.coe_eq.mpr (EventuallyEq.symm hy')]
-fun f f' hff' => propext forall_congr' fun _ => ⟨this f f' hff', this f' f hff'.symm⟩
+--- 原说明 ---
+Given a predicate on germs `P : Π x : X, germ (𝓝 x) Y → Prop` and `A : set X`,
+build a new predicate on germs `RestrictGermPredicate P A` such that
+`(∀ x, RestrictGermPredicate P A x f) ↔ ∀ᶠ x near A, P x f`, see
+`forall_restrictGermPredicate_iff` for this equivalence.
 -/
-def RestrictGermPredicate (P : forall x : X, Germ (𝓝 x) Y -> Prop)
-    (A : Set X) : forall x : X, Germ (𝓝 x) Y -> Prop := fun x φ =>
-  Germ.liftOn φ (fun f => x in A -> forallᶠ y in 𝓝 x, P y f)
-    haveI : forall f f' : X -> Y, f =ᶠ[𝓝 x] f' -> (forallᶠ y in 𝓝 x, P y f) -> forallᶠ y in 𝓝 x, P y f' := by
+def RestrictGermPredicate (P : ∀ x : X, Germ (𝓝 x) Y → Prop)
+    (A : Set X) : ∀ x : X, Germ (𝓝 x) Y → Prop := fun x φ ↦
+  Germ.liftOn φ (fun f ↦ x ∈ A → ∀ᶠ y in 𝓝 x, P y f)
+    haveI : ∀ f f' : X → Y, f =ᶠ[𝓝 x] f' → (∀ᶠ y in 𝓝 x, P y f) → ∀ᶠ y in 𝓝 x, P y f' := by
       intro f f' hff' hf
       apply (hf.and <| Eventually.eventually_nhds hff').mono
       rintro y ⟨hy, hy'⟩
       rwa [Germ.coe_eq.mpr (EventuallyEq.symm hy')]
-fun f f' hff' => propext forall_congr' fun _ => ⟨this f f' hff', this f' f hff'.symm⟩
-
-/--
-theorem `Filter.Eventually.germ_congr_set` / 定理 `Filter.Eventually.germ_congr_set`
-
-English:
-theorem Filter.Eventually.germ_congr_set
-  proof: by
-  rw [eventually_nhdsSet_iff_forall] at *
-  intro x hx
-  apply ((hf x hx).and (h x hx).eventually_nhds).mono
-  intro y hy
-  convert! hy.1 using 1
-  exact Germ.coe_eq.mpr hy.2
-
-中文:
-定理 滤子.Eventually.germ_congr_set
-  证明: by
-  rw [eventually_nhdsSet_iff_forall] at *
-  intro x hx
-  apply ((hf x hx).and (h x hx).eventually_nhds).mono
-  intro y hy
-  convert! hy.1 using 1
-  exact Germ.coe_eq.mpr hy.2
-
-Depends on / 依赖: Germ.coe_eq.mpr, coe_eq, convert, eventually_nhds, eventually_nhdsSet_iff_forall
+    fun f f' hff' ↦ propext <| forall_congr' fun _ ↦ ⟨this f f' hff', this f' f hff'.symm⟩
+/-
+**Filter.Eventually.germ_congr_set** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Filter.Eventually.germ_congr_set {P : forall x : X, Germ (𝓝 x) Y -> Prop} 
+(hf : forallᶠ x in 𝓝ˢ A, P x f) (h : forallᶠ z in 𝓝ˢ A, g z = f z) : forallᶠ x i
+n 𝓝ˢ A, P x g
+参数：𝓝 x；hf : forallᶠ x in 𝓝ˢ A, P x f；h : forallᶠ z in 𝓝ˢ A, g z = f z。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eventually_nhdsSet_iff_forall`：eventually_nhdsSet_iff_forall {p : X -> P
+rop} : (forallᶠ x in 𝓝ˢ s, p x) ↔ forall x, x in s -> forallᶠ y in 𝓝 x, p y
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `Filter.Eventually.and`：∀ {α : Type u} {p q : α → Prop} {f : Filter α},  
+ Filter.Eventually p f → Filter.Eventually q f → ∀ᶠ (x : α) in f, p x ∧ q x
+· 使用定理 `Filter.Eventually.eventually_nhds`：Filter.Eventually.eventually_nhds {p 
+: X -> Prop} (h : forallᶠ y in 𝓝 x, p y) : forallᶠ y in 𝓝 x, forallᶠ x in 𝓝 y, p
+ x
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.Germ.coe_eq`：coe_eq : (f : Germ l β) = g ↔ f =ᶠ[l] g
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
 theorem Filter.Eventually.germ_congr_set
-    {P : forall x : X, Germ (𝓝 x) Y -> Prop} (hf : forallᶠ x in 𝓝ˢ A, P x f)
-    (h : forallᶠ z in 𝓝ˢ A, g z = f z) : forallᶠ x in 𝓝ˢ A, P x g := by
+    {P : ∀ x : X, Germ (𝓝 x) Y → Prop} (hf : ∀ᶠ x in 𝓝ˢ A, P x f)
+    (h : ∀ᶠ z in 𝓝ˢ A, g z = f z) : ∀ᶠ x in 𝓝ˢ A, P x g := by
   rw [eventually_nhdsSet_iff_forall] at *
   intro x hx
   apply ((hf x hx).and (h x hx).eventually_nhds).mono
   intro y hy
   convert! hy.1 using 1
   exact Germ.coe_eq.mpr hy.2
-
-/--
-theorem `restrictGermPredicate_congr` / 定理 `restrictGermPredicate_congr`
-
-English:
-theorem restrictGermPredicate_congr
-  statement: {P : forall x : X, Germ (𝓝 x) Y -> Prop}
-  proof: by
-  intro hx
-  apply ((hf hx).and <| (eventually_nhdsSet_iff_forall.mp h x hx).eventually_nhds).mono
-  rintro y ⟨hy, h'y⟩
-  rwa [Germ.coe_eq.mpr h'y]
-
-中文:
-定理 restrictGermPredicate_congr
-  结论: {P : 对任意 x : X, Germ (𝓝 x) Y -> 命题}
-  证明: by
-  intro hx
-  apply ((hf hx).and <| (eventually_nhdsSet_iff_forall.mp h x hx).eventually_nhds).mono
-  rintro y ⟨hy, h'y⟩
-  rwa [Germ.coe_eq.mpr h'y]
-
-Depends on / 依赖: Germ.coe_eq.mpr, coe_eq, eventually_nhds, eventually_nhdsSet_iff_forall, eventually_nhdsSet_iff_forall.mp
+/-
+**restrictGermPredicate_congr** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：restrictGermPredicate_congr {P : forall x : X, Germ (𝓝 x) Y -> Prop} (hf :
+ RestrictGermPredicate P A x f) (h : forallᶠ z in 𝓝ˢ A, g z = f z) : RestrictGer
+mPredicate P A x g
+参数：𝓝 x；hf : RestrictGermPredicate P A x f；h : forallᶠ z in 𝓝ˢ A, g z = f z。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `Filter.Eventually.and`：∀ {α : Type u} {p q : α → Prop} {f : Filter α},  
+ Filter.Eventually p f → Filter.Eventually q f → ∀ᶠ (x : α) in f, p x ∧ q x
+· 使用定理 `Filter.Eventually.eventually_nhds`：Filter.Eventually.eventually_nhds {p 
+: X -> Prop} (h : forallᶠ y in 𝓝 x, p y) : forallᶠ y in 𝓝 x, forallᶠ x in 𝓝 y, p
+ x
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `eventually_nhdsSet_iff_forall`：eventually_nhdsSet_iff_forall {p : X -> P
+rop} : (forallᶠ x in 𝓝ˢ s, p x) ↔ forall x, x in s -> forallᶠ y in 𝓝 x, p y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.Germ.coe_eq`：coe_eq : (f : Germ l β) = g ↔ f =ᶠ[l] g
 -/
-theorem restrictGermPredicate_congr {P : forall x : X, Germ (𝓝 x) Y -> Prop}
-    (hf : RestrictGermPredicate P A x f) (h : forallᶠ z in 𝓝ˢ A, g z = f z) :
+theorem restrictGermPredicate_congr {P : ∀ x : X, Germ (𝓝 x) Y → Prop}
+    (hf : RestrictGermPredicate P A x f) (h : ∀ᶠ z in 𝓝ˢ A, g z = f z) :
     RestrictGermPredicate P A x g := by
   intro hx
   apply ((hf hx).and <| (eventually_nhdsSet_iff_forall.mp h x hx).eventually_nhds).mono
   rintro y ⟨hy, h'y⟩
   rwa [Germ.coe_eq.mpr h'y]
-
-/--
-theorem `forall_restrictGermPredicate_iff` / 定理 `forall_restrictGermPredicate_iff`
-
-English:
-theorem forall_restrictGermPredicate_iff
-  given: {P : forall x : X, Germ (𝓝 x) Y -> Prop}
-  proof: by
-  rw [eventually_nhdsSet_iff_forall]
-  rfl
-
-中文:
-定理 对任意_restrictGermPredicate_iff
-  条件: {P : 对任意 x : X, Germ (𝓝 x) Y -> 命题}
-  证明: by
-  rw [eventually_nhdsSet_iff_forall]
-  rfl
-
-Depends on / 依赖: eventually_nhdsSet_iff_forall
+/-
+**forall_restrictGermPredicate_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：forall_restrictGermPredicate_iff {P : forall x : X, Germ (𝓝 x) Y -> Prop} 
+: (forall x, RestrictGermPredicate P A x f) ↔ forallᶠ x in 𝓝ˢ A, P x f
+参数：𝓝 x。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eventually_nhdsSet_iff_forall`：eventually_nhdsSet_iff_forall {p : X -> P
+rop} : (forallᶠ x in 𝓝ˢ s, p x) ↔ forall x, x in s -> forallᶠ y in 𝓝 x, p y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem forall_restrictGermPredicate_iff {P : forall x : X, Germ (𝓝 x) Y -> Prop} :
-    (forall x, RestrictGermPredicate P A x f) ↔ forallᶠ x in 𝓝ˢ A, P x f := by
+theorem forall_restrictGermPredicate_iff {P : ∀ x : X, Germ (𝓝 x) Y → Prop} :
+    (∀ x, RestrictGermPredicate P A x f) ↔ ∀ᶠ x in 𝓝ˢ A, P x f := by
   rw [eventually_nhdsSet_iff_forall]
   rfl
-
-/--
-theorem `forall_restrictGermPredicate_of_forall` / 定理 `forall_restrictGermPredicate_of_forall`
-
-English:
-theorem forall_restrictGermPredicate_of_forall
-  proof: forall_restrictGermPredicate_iff.mpr (Eventually.of_forall h)
-
-中文:
-定理 对任意_restrictGermPredicate_of_对任意
-  证明: forall_restrictGermPredicate_iff.mpr (Eventually.of_forall h)
-
-Depends on / 依赖: Eventually, Eventually.of_forall, forall_restrictGermPredicate_iff, forall_restrictGermPredicate_iff.mpr, of_forall
+/-
+**forall_restrictGermPredicate_of_forall** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：forall_restrictGermPredicate_of_forall {P : forall x : X, Germ (𝓝 x) Y -> 
+Prop} (h : forall x, P x f) : forall x, RestrictGermPredicate P A x f
+参数：𝓝 x；h : forall x, P x f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `forall_restrictGermPredicate_iff`：forall_restrictGermPredicate_iff {P : 
+forall x : X, Germ (𝓝 x) Y -> Prop} : (forall x, RestrictGermPredicate P A x f) 
+↔ forallᶠ x in 𝓝ˢ A, P…
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
 -/
 theorem forall_restrictGermPredicate_of_forall
-    {P : forall x : X, Germ (𝓝 x) Y -> Prop} (h : forall x, P x f) :
-    forall x, RestrictGermPredicate P A x f :=
+    {P : ∀ x : X, Germ (𝓝 x) Y → Prop} (h : ∀ x, P x f) :
+    ∀ x, RestrictGermPredicate P A x f :=
   forall_restrictGermPredicate_iff.mpr (Eventually.of_forall h)
 end RestrictGermPredicate
 
 namespace Filter.Germ
-/--
-Definition of `sliceLeft` / `sliceLeft` 的定义
+/-- Map the germ of functions `X × Y → Z` at `p = (x,y) ∈ X × Y` to the corresponding germ
+  of functions `X → Z` at `x ∈ X` -/
+/-
+**Filter.Germ.sliceLeft** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Germ`。
+形式化陈述：sliceLeft [TopologicalSpace Y] {p : X × Y} (P : Germ (𝓝 p) Z) : Germ (𝓝 p.
+1) Z
+参数：P : Germ (𝓝 p) Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sliceLeft
-  signature: [TopologicalSpace Y] {p : X × Y} (P : Germ (𝓝 p) Z)
-  body: P.compTendsto (Prod.mk · p.2) (Continuous.prodMk_left p.2).continuousAt
-
-@[simp]
-
-中文:
-定义 sliceLeft
-  签名: [拓扑空间 Y] {p : X × Y} (P : Germ (𝓝 p) Z)
-  定义体: P.compTendsto (Prod.mk · p.2) (Continuous.prodMk_left p.2).continuousAt
-
-@[simp]
-
-Depends on / 依赖: Continuous, Continuous.prodMk_left, P.compTendsto, Prod.mk, compTendsto, continuousAt, prodMk_left
+--- 原说明 ---
+Map the germ of functions `X × Y → Z` at `p = (x,y) ∈ X × Y` to the correspondin
+g germ
+  of functions `X → Z` at `x ∈ X`
 -/
 def sliceLeft [TopologicalSpace Y] {p : X × Y} (P : Germ (𝓝 p) Z) : Germ (𝓝 p.1) Z :=
   P.compTendsto (Prod.mk · p.2) (Continuous.prodMk_left p.2).continuousAt
 
 @[simp]
-/--
-theorem `sliceLeft_coe` / 定理 `sliceLeft_coe`
-
-English:
-theorem sliceLeft_coe
-  given: [TopologicalSpace Y] {y : Y} (f : X × Y -> Z)
-  proof: rfl
-
-中文:
-定理 sliceLeft_coe
-  条件: [拓扑空间 Y] {y : Y} (f : X × Y -> Z)
-  证明: rfl
+/-
+**Filter.Germ.sliceLeft_coe** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：sliceLeft_coe [TopologicalSpace Y] {y : Y} (f : X × Y -> Z) : (↑f : Germ (
+𝓝 (x, y)) Z).sliceLeft = fun x' => f (x', y)
+参数：f : X × Y -> Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem sliceLeft_coe [TopologicalSpace Y] {y : Y} (f : X × Y -> Z) :
-    (↑f : Germ (𝓝 (x, y)) Z).sliceLeft = fun x' => f (x', y) :=
+theorem sliceLeft_coe [TopologicalSpace Y] {y : Y} (f : X × Y → Z) :
+    (↑f : Germ (𝓝 (x, y)) Z).sliceLeft = fun x' ↦ f (x', y) :=
   rfl
 
-/--
-Definition of `sliceRight` / `sliceRight` 的定义
+/-- Map the germ of functions `X × Y → Z` at `p = (x,y) ∈ X × Y` to the corresponding germ
+  of functions `Y → Z` at `y ∈ Y` -/
+/-
+**Filter.Germ.sliceRight** 是 Mathlib 中的一个定义，位于命名空间 `Filter.Germ`。
+形式化陈述：sliceRight [TopologicalSpace Y] {p : X × Y} (P : Germ (𝓝 p) Z) : Germ (𝓝 p
+.2) Z
+参数：P : Germ (𝓝 p) Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sliceRight
-  signature: [TopologicalSpace Y] {p : X × Y} (P : Germ (𝓝 p) Z)
-  body: P.compTendsto (Prod.mk p.1) (Continuous.prodMk_right p.1).continuousAt
-
-@[simp]
-
-中文:
-定义 sliceRight
-  签名: [拓扑空间 Y] {p : X × Y} (P : Germ (𝓝 p) Z)
-  定义体: P.compTendsto (Prod.mk p.1) (Continuous.prodMk_right p.1).continuousAt
-
-@[simp]
-
-Depends on / 依赖: Continuous, Continuous.prodMk_right, P.compTendsto, Prod.mk, compTendsto, continuousAt, prodMk_right
+--- 原说明 ---
+Map the germ of functions `X × Y → Z` at `p = (x,y) ∈ X × Y` to the correspondin
+g germ
+  of functions `Y → Z` at `y ∈ Y`
 -/
 def sliceRight [TopologicalSpace Y] {p : X × Y} (P : Germ (𝓝 p) Z) : Germ (𝓝 p.2) Z :=
   P.compTendsto (Prod.mk p.1) (Continuous.prodMk_right p.1).continuousAt
 
 @[simp]
-/--
-theorem `sliceRight_coe` / 定理 `sliceRight_coe`
-
-English:
-theorem sliceRight_coe
-  given: [TopologicalSpace Y] {y : Y} (f : X × Y -> Z)
-  proof: rfl
-
-中文:
-定理 sliceRight_coe
-  条件: [拓扑空间 Y] {y : Y} (f : X × Y -> Z)
-  证明: rfl
+/-
+**Filter.Germ.sliceRight_coe** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Germ`。
+形式化陈述：sliceRight_coe [TopologicalSpace Y] {y : Y} (f : X × Y -> Z) : (↑f : Germ 
+(𝓝 (x, y)) Z).sliceRight = fun y' => f (x, y')
+参数：f : X × Y -> Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem sliceRight_coe [TopologicalSpace Y] {y : Y} (f : X × Y -> Z) :
-    (↑f : Germ (𝓝 (x, y)) Z).sliceRight = fun y' => f (x, y') :=
+theorem sliceRight_coe [TopologicalSpace Y] {y : Y} (f : X × Y → Z) :
+    (↑f : Germ (𝓝 (x, y)) Z).sliceRight = fun y' ↦ f (x, y') :=
   rfl
-
-/--
-lemma `isConstant_comp_subtype` / 引理 `isConstant_comp_subtype`
-
-English:
-lemma isConstant_comp_subtype
-  statement: {s : Set X} {f : X -> Y} {x : s}
-  proof: isConstant_comp_tendsto hf continuousAt_subtype_val
-
-中文:
-引理 isConstant_comp_subtype
-  结论: {s : 集合 X} {f : X -> Y} {x : s}
-  证明: isConstant_comp_tendsto hf continuousAt_subtype_val
-
-Depends on / 依赖: continuousAt_subtype_val, isConstant_comp_tendsto
+/-
+**Filter.Germ.isConstant_comp_subtype** 是 Mathlib 中的一个引理，位于命名空间 `Filter.Germ`。
+形式化陈述：isConstant_comp_subtype {s : Set X} {f : X -> Y} {x : s} (hf : (f : Germ (
+𝓝 (x : X)) Y).IsConstant) : ((f ∘ Subtype.val : s -> Y) : Germ (𝓝 x) Y).IsConsta
+nt
+参数：hf : (f : Germ (𝓝 (x : X)) Y).IsConstant。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Filter.Germ.isConstant_comp_tendsto`：isConstant_comp_tendsto {lc : Filte
+r γ} {g : γ -> α} (hf : (f : Germ l β).IsConstant) (hg : Tendsto g lc l) : IsCon
+stant (f ∘ g : Germ lc β)
+· 使用定理 `continuousAt_subtype_val`：continuousAt_subtype_val {p : X -> Prop} {x : 
+Subtype p} : ContinuousAt ((↑) : Subtype p -> X) x
 -/
-lemma isConstant_comp_subtype {s : Set X} {f : X -> Y} {x : s}
+lemma isConstant_comp_subtype {s : Set X} {f : X → Y} {x : s}
     (hf : (f : Germ (𝓝 (x : X)) Y).IsConstant) :
-    ((f ∘ Subtype.val : s -> Y) : Germ (𝓝 x) Y).IsConstant :=
+    ((f ∘ Subtype.val : s → Y) : Germ (𝓝 x) Y).IsConstant :=
   isConstant_comp_tendsto hf continuousAt_subtype_val
 
 end Filter.Germ
 
-/--
-lemma `IsLocallyConstant.of_germ_isConstant` / 引理 `IsLocallyConstant.of_germ_isConstant`
+/-- If the germ of `f` w.r.t. each `𝓝 x` is constant, `f` is locally constant. -/
+/-
+**IsLocallyConstant.of_germ_isConstant** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsLocallyConstant.of_germ_isConstant (h : forall x : X, (f : Germ (𝓝 x) Y)
+.IsConstant) : IsLocallyConstant f
+参数：h : forall x : X, (f : Germ (𝓝 x) Y).IsConstant。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isOpen_iff_mem_nhds`：isOpen_iff_mem_nhds : IsOpen s ↔ forall x in s, s i
+n 𝓝 x
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mem_of_mem_nhds`：mem_of_mem_nhds : s in 𝓝 x -> x in s
+· 使用定理 `Set.mem_preimage`：mem_preimage {f : α -> β} {s : Set β} {a : α} : a in f
+ ⁻¹' s ↔ f a in s
 
-English:
-lemma IsLocallyConstant.of_germ_isConstant
-  given: (h : forall x : X, (f : Germ (𝓝 x) Y).IsConstant)
-  proof: by
-  intro s
-  rw [isOpen_iff_mem_nhds]
-  intro a ha
-  obtain ⟨b, hb⟩ := h a
-  apply mem_of_superset hb
-  intro x hx
-  have : f x = f a := (mem_of_mem_nhds hb) ▸ hx
-  rw [mem_preimage]; rw [this]
-  exact ha
-
-中文:
-引理 IsLocallyConstant.of_germ_isConstant
-  条件: (h : 对任意 x : X, (f : Germ (𝓝 x) Y).是常数)
-  证明: by
-  intro s
-  rw [isOpen_iff_mem_nhds]
-  intro a ha
-  obtain ⟨b, hb⟩ := h a
-  apply mem_of_superset hb
-  intro x hx
-  have : f x = f a := (mem_of_mem_nhds hb) ▸ hx
-  rw [mem_preimage]; rw [this]
-  exact ha
-
-Depends on / 依赖: isOpen_iff_mem_nhds, mem_of_mem_nhds, mem_of_superset, mem_preimage
+--- 原说明 ---
+If the germ of `f` w.r.t. each `𝓝 x` is constant, `f` is locally constant.
 -/
-lemma IsLocallyConstant.of_germ_isConstant (h : forall x : X, (f : Germ (𝓝 x) Y).IsConstant) :
+lemma IsLocallyConstant.of_germ_isConstant (h : ∀ x : X, (f : Germ (𝓝 x) Y).IsConstant) :
     IsLocallyConstant f := by
   intro s
   rw [isOpen_iff_mem_nhds]
@@ -510,81 +403,66 @@ lemma IsLocallyConstant.of_germ_isConstant (h : forall x : X, (f : Germ (𝓝 x)
   apply mem_of_superset hb
   intro x hx
   have : f x = f a := (mem_of_mem_nhds hb) ▸ hx
-  rw [mem_preimage]; rw [this]
+  rw [mem_preimage, this]
   exact ha
-
-/--
-theorem `eq_of_germ_isConstant` / 定理 `eq_of_germ_isConstant`
-
-English:
-theorem eq_of_germ_isConstant
-  statement: [i : PreconnectedSpace X]
-  proof: (IsLocallyConstant.of_germ_isConstant h).apply_eq_of_isPreconnected
-    (preconnectedSpace_iff_univ.mp i) (by trivial) (by trivial)
-
-中文:
-定理 eq_of_germ_isConstant
-  结论: [i : 预连通空间 X]
-  证明: (IsLocallyConstant.of_germ_isConstant h).apply_eq_of_isPreconnected
-    (preconnectedSpace_iff_univ.mp i) (by trivial) (by trivial)
-
-Depends on / 依赖: IsLocallyConstant, IsLocallyConstant.of_germ_isConstant, apply_eq_of_isPreconnected, of_germ_isConstant, preconnectedSpace_iff_univ, preconnectedSpace_iff_univ.mp
+/-
+**eq_of_germ_isConstant** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：eq_of_germ_isConstant [i : PreconnectedSpace X] (h : forall x : X, (f : Ge
+rm (𝓝 x) Y).IsConstant) (x x' : X) : f x = f x'
+参数：h : forall x : X, (f : Germ (𝓝 x) Y).IsConstant；x x' : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocallyConstant.apply_eq_of_isPreconnected`：apply_eq_of_isPreconnected
+ {f : X -> Y} (hf : IsLocallyConstant f) {s : Set X} (hs : IsPreconnected s) {x 
+y : X} (hx : x in s) (hy : y in s)…
+· 使用引理 `IsLocallyConstant.of_germ_isConstant`：IsLocallyConstant.of_germ_isConsta
+nt (h : forall x : X, (f : Germ (𝓝 x) Y).IsConstant) : IsLocallyConstant f
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `preconnectedSpace_iff_univ`：preconnectedSpace_iff_univ : PreconnectedSpa
+ce α ↔ IsPreconnected (univ : Set α)
 -/
 theorem eq_of_germ_isConstant [i : PreconnectedSpace X]
-    (h : forall x : X, (f : Germ (𝓝 x) Y).IsConstant) (x x' : X) : f x = f x' :=
+    (h : ∀ x : X, (f : Germ (𝓝 x) Y).IsConstant) (x x' : X) : f x = f x' :=
   (IsLocallyConstant.of_germ_isConstant h).apply_eq_of_isPreconnected
     (preconnectedSpace_iff_univ.mp i) (by trivial) (by trivial)
-
-/--
-lemma `eq_of_germ_isConstant_on` / 引理 `eq_of_germ_isConstant_on`
-
-English:
-lemma eq_of_germ_isConstant_on
-  statement: {s : Set X} (h : forall x in s, (f : Germ (𝓝 x) Y).IsConstant)
-  proof: by
-  let i : s -> X := fun x => x
-  change (f ∘ i) (⟨x, x_in⟩ : s) = (f ∘ i) (⟨x', x'_in⟩ : s)
-  have : PreconnectedSpace s := Subtype.preconnectedSpace hs
-  exact eq_of_germ_isConstant (fun y => Germ.isConstant_comp_subtype (h y y.2)) _ _
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 eq_of_germ_isConstant_on
-  结论: {s : 集合 X} (h : 对任意 x in s, (f : Germ (𝓝 x) Y).是常数)
-  证明: by
-  let i : s -> X := fun x => x
-  change (f ∘ i) (⟨x, x_in⟩ : s) = (f ∘ i) (⟨x', x'_in⟩ : s)
-  have : PreconnectedSpace s := Subtype.preconnectedSpace hs
-  exact eq_of_germ_isConstant (fun y => Germ.isConstant_comp_subtype (h y y.2)) _ _
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Germ.isConstant_comp_subtype, PreconnectedSpace, Subtype, Subtype.preconnectedSpace, eq_of_germ_isConstant, isConstant_comp_subtype, preconnectedSpace, x_in
+/-
+**eq_of_germ_isConstant_on** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：eq_of_germ_isConstant_on {s : Set X} (h : forall x in s, (f : Germ (𝓝 x) Y
+).IsConstant) (hs : IsPreconnected s) {x' : X} (x_in : x in s) (x'_in : x' in s)
+ : f x = f x'
+参数：h : forall x in s, (f : Germ (𝓝 x) Y).IsConstant；hs : IsPreconnected s；x_in :
+ x in s；x'_in : x' in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.preconnectedSpace`：Subtype.preconnectedSpace {s : Set α} (h : Is
+Preconnected s) : PreconnectedSpace s where isPreconnected_univ
+· 使用定理 `eq_of_germ_isConstant`：eq_of_germ_isConstant [i : PreconnectedSpace X] (
+h : forall x : X, (f : Germ (𝓝 x) Y).IsConstant) (x x' : X) : f x = f x'
+· 使用引理 `Filter.Germ.isConstant_comp_subtype`：isConstant_comp_subtype {s : Set X}
+ {f : X -> Y} {x : s} (hf : (f : Germ (𝓝 (x : X)) Y).IsConstant) : ((f ∘ Subtype
+.val : s -> Y) : Germ (𝓝 …
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-lemma eq_of_germ_isConstant_on {s : Set X} (h : forall x in s, (f : Germ (𝓝 x) Y).IsConstant)
-    (hs : IsPreconnected s) {x' : X} (x_in : x in s) (x'_in : x' in s) : f x = f x' := by
-  let i : s -> X := fun x => x
+lemma eq_of_germ_isConstant_on {s : Set X} (h : ∀ x ∈ s, (f : Germ (𝓝 x) Y).IsConstant)
+    (hs : IsPreconnected s) {x' : X} (x_in : x ∈ s) (x'_in : x' ∈ s) : f x = f x' := by
+  let i : s → X := fun x ↦ x
   change (f ∘ i) (⟨x, x_in⟩ : s) = (f ∘ i) (⟨x', x'_in⟩ : s)
   have : PreconnectedSpace s := Subtype.preconnectedSpace hs
-  exact eq_of_germ_isConstant (fun y => Germ.isConstant_comp_subtype (h y y.2)) _ _
+  exact eq_of_germ_isConstant (fun y ↦ Germ.isConstant_comp_subtype (h y y.2)) _ _
 
 @[to_additive (attr := simp)]
-/--
-theorem `Germ.coe_prod` / 定理 `Germ.coe_prod`
-
-English:
-theorem Germ.coe_prod
-  statement: {α : Type*} (l : Filter α) (R : Type*) [CommMonoid R] {ι} (f : ι -> α -> R)
-  proof: map_prod (Germ.coeMulHom l : (α -> R) ->* Germ l R) f s
-
-中文:
-定理 Germ.coe_prod
-  结论: {α : 类型} (l : 滤子 α) (R : 类型) [交换幺半群 R] {ι} (f : ι -> α -> R)
-  证明: map_prod (Germ.coeMulHom l : (α -> R) ->* Germ l R) f s
-
-Depends on / 依赖: Germ.coeMulHom, coeMulHom, map_prod
+/-
+**Germ.coe_prod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Germ.coe_prod {α : Type*} (l : Filter α) (R : Type*) [CommMonoid R] {ι} (f
+ : ι -> α -> R) (s : Finset ι) : ((∏ i in s, f i : α -> R) : Germ l R) = ∏ i in 
+s, (f i : Germ l R)
+参数：l : Filter α；R : Type*；f : ι -> α -> R；s : Finset ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_prod`：map_prod [CommMonoid M] [CommMonoid N] {G : Type*} [FunLike G 
+M N] [MonoidHomClass G M N] (g : G) (f : ι -> M) (s : Finset ι) : g (∏ x in s,…
 -/
-theorem Germ.coe_prod {α : Type*} (l : Filter α) (R : Type*) [CommMonoid R] {ι} (f : ι -> α -> R)
-    (s : Finset ι) : ((∏ i in s, f i : α -> R) : Germ l R) = ∏ i in s, (f i : Germ l R) :=
-  map_prod (Germ.coeMulHom l : (α -> R) ->* Germ l R) f s
+theorem Germ.coe_prod {α : Type*} (l : Filter α) (R : Type*) [CommMonoid R] {ι} (f : ι → α → R)
+    (s : Finset ι) : ((∏ i ∈ s, f i : α → R) : Germ l R) = ∏ i ∈ s, (f i : Germ l R) :=
+  map_prod (Germ.coeMulHom l : (α → R) →* Germ l R) f s

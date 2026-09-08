@@ -29,38 +29,32 @@ universe u v w x
 
 variable {G : Type w} {H : Type x} {α : Type u} {β : Type v}
 
-/--
-Definition of `GroupTopology` / `GroupTopology` 的定义
+/-- A group topology on a group `α` is a topology for which multiplication and inversion
+are continuous. -/
+/-
+**GroupTopology** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u) → [Group α] → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure GroupTopology
-  parameters: (α : Type u) [Group α]
-  extends: TopologicalSpace α, IsTopologicalGroup α
-  (no additional axioms)
-
-中文:
-结构 群拓扑
-  参数: (α : 类型u) [群 α]
-  继承: 拓扑空间 α, 是拓扑群 α
-  (无附加公理)
+--- 原说明 ---
+A group topology on a group `α` is a topology for which multiplication and inver
+sion
+are continuous.
 -/
 structure GroupTopology (α : Type u) [Group α] : Type u
   extends TopologicalSpace α, IsTopologicalGroup α
 
-/--
-Definition of `AddGroupTopology` / `AddGroupTopology` 的定义
+/-- An additive group topology on an additive group `α` is a topology for which addition and
+negation are continuous. -/
+/-
+**AddGroupTopology** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u) → [AddGroup α] → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure AddGroupTopology
-  parameters: (α : Type u) [AddGroup α]
-  extends: TopologicalSpace α, IsTopologicalAddGroup α
-  (no additional axioms)
-
-中文:
-结构 加法群拓扑
-  参数: (α : 类型u) [加法群 α]
-  继承: 拓扑空间 α, 是拓扑加群 α
-  (无附加公理)
+--- 原说明 ---
+An additive group topology on an additive group `α` is a topology for which addi
+tion and
+negation are continuous.
 -/
 structure AddGroupTopology (α : Type u) [AddGroup α] : Type u
   extends TopologicalSpace α, IsTopologicalAddGroup α
@@ -73,28 +67,20 @@ variable [Group α]
 
 /-- A version of the global `continuous_mul` suitable for dot notation. -/
 @[to_additive /-- A version of the global `continuous_add` suitable for dot notation. -/]
-/--
-theorem `continuous_mul'` / 定理 `continuous_mul'`
+/-
+**GroupTopology.continuous_mul'** 是 Mathlib 中的一个定理，位于命名空间 `GroupTopology`。
+形式化陈述：continuous_mul' (g : GroupTopology α) : haveI
+参数：g : GroupTopology α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GroupTopology.toIsTopologicalGroup`：∀ {α : Type u} [inst : Group α] (sel
+f : GroupTopology α), IsTopologicalGroup α
+· 使用定理 `continuous_mul`：continuous_mul : Continuous fun p : M × M => p.1 * p.2
+· 使用定理 `IsTopologicalGroup.toContinuousMul`：∀ {G : Type u_4} {inst : Topological
+Space G} {inst_1 : Group G} [self : IsTopologicalGroup G], ContinuousMul G
 
-English:
-theorem continuous_mul'
-  given: (g : GroupTopology α)
-  proof: g.toTopologicalSpace
-    Continuous fun p : α × α => p.1 * p.2 := by
-  let := g.toTopologicalSpace
-  have := g.toIsTopologicalGroup
-  exact continuous_mul
-
-中文:
-定理 continuous_mul'
-  条件: (g : 群拓扑 α)
-  证明: g.toTopologicalSpace
-    Continuous fun p : α × α => p.1 * p.2 := by
-  let := g.toTopologicalSpace
-  have := g.toIsTopologicalGroup
-  exact continuous_mul
-
-Depends on / 依赖: g.toTopologicalSpace, toTopologicalSpace
+--- 原说明 ---
+A version of the global `continuous_mul` suitable for dot notation.
 -/
 theorem continuous_mul' (g : GroupTopology α) :
     haveI := g.toTopologicalSpace
@@ -105,420 +91,219 @@ theorem continuous_mul' (g : GroupTopology α) :
 
 /-- A version of the global `continuous_inv` suitable for dot notation. -/
 @[to_additive /-- A version of the global `continuous_neg` suitable for dot notation. -/]
-/--
-theorem `continuous_inv'` / 定理 `continuous_inv'`
+/-
+**GroupTopology.continuous_inv'** 是 Mathlib 中的一个定理，位于命名空间 `GroupTopology`。
+形式化陈述：continuous_inv' (g : GroupTopology α) : haveI
+参数：g : GroupTopology α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GroupTopology.toIsTopologicalGroup`：∀ {α : Type u} [inst : Group α] (sel
+f : GroupTopology α), IsTopologicalGroup α
+· 使用定理 `ContinuousInv.continuous_inv`：∀ {G : Type u} {inst : TopologicalSpace G}
+ {inst_1 : Inv G} [self : ContinuousInv G], Continuous fun a => a⁻¹
+· 使用定理 `IsTopologicalGroup.toContinuousInv`：∀ {G : Type u_4} {inst : Topological
+Space G} {inst_1 : Group G} [self : IsTopologicalGroup G], ContinuousInv G
 
-English:
-theorem continuous_inv'
-  given: (g : GroupTopology α)
-  proof: g.toTopologicalSpace
-    Continuous (Inv.inv : α -> α) := by
-  let := g.toTopologicalSpace
-  have := g.toIsTopologicalGroup
-  exact continuous_inv
-
-@[to_additive]
-
-中文:
-定理 continuous_inv'
-  条件: (g : 群拓扑 α)
-  证明: g.toTopologicalSpace
-    Continuous (Inv.inv : α -> α) := by
-  let := g.toTopologicalSpace
-  have := g.toIsTopologicalGroup
-  exact continuous_inv
-
-@[to_additive]
-
-Depends on / 依赖: g.toTopologicalSpace, toTopologicalSpace
+--- 原说明 ---
+A version of the global `continuous_inv` suitable for dot notation.
 -/
 theorem continuous_inv' (g : GroupTopology α) :
     haveI := g.toTopologicalSpace
-    Continuous (Inv.inv : α -> α) := by
+    Continuous (Inv.inv : α → α) := by
   let := g.toTopologicalSpace
   have := g.toIsTopologicalGroup
   exact continuous_inv
 
 @[to_additive]
-/--
-theorem `toTopologicalSpace_injective` / 定理 `toTopologicalSpace_injective`
-
-English:
-theorem toTopologicalSpace_injective
-  proof: fun f g h => by
-    cases f
-    cases g
-    congr
-
-@[to_additive (attr := ext)]
-
-中文:
-定理 toTopologicalSpace_injective
-  证明: fun f g h => by
-    cases f
-    cases g
-    congr
-
-@[to_additive (attr := ext)]
+/-
+**GroupTopology.toTopologicalSpace_injective** 是 Mathlib 中的一个定理，位于命名空间 `GroupTop
+ology`。
+形式化陈述：toTopologicalSpace_injective : Function.Injective (toTopologicalSpace : Gr
+oupTopology α -> TopologicalSpace α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem toTopologicalSpace_injective :
-    Function.Injective (toTopologicalSpace : GroupTopology α -> TopologicalSpace α) :=
+    Function.Injective (toTopologicalSpace : GroupTopology α → TopologicalSpace α) :=
   fun f g h => by
     cases f
     cases g
     congr
 
 @[to_additive (attr := ext)]
-/--
-theorem `ext'` / 定理 `ext'`
-
-English:
-theorem ext'
-  given: {f g : GroupTopology α} (h : f.IsOpen = g.IsOpen)
-  statement: f = g
-  proof: toTopologicalSpace_injective TopologicalSpace.ext h
-
-中文:
-定理 ext'
-  条件: {f g : 群拓扑 α} (h : f.是开集 = g.是开集)
-  结论: f = g
-  证明: toTopologicalSpace_injective TopologicalSpace.ext h
-
-Depends on / 依赖: TopologicalSpace, TopologicalSpace.ext, toTopologicalSpace_injective
+/-
+**GroupTopology.ext'** 是 Mathlib 中的一个定理，位于命名空间 `GroupTopology`。
+形式化陈述：ext' {f g : GroupTopology α} (h : f.IsOpen = g.IsOpen) : f = g
+参数：h : f.IsOpen = g.IsOpen。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GroupTopology.toTopologicalSpace_injective`：toTopologicalSpace_injective
+ : Function.Injective (toTopologicalSpace : GroupTopology α -> TopologicalSpace 
+α)
+· 使用定理 `TopologicalSpace.ext`：∀ {X : Type u} {f g : TopologicalSpace X}, IsOpen 
+= IsOpen → f = g
 -/
 theorem ext' {f g : GroupTopology α} (h : f.IsOpen = g.IsOpen) : f = g :=
-toTopologicalSpace_injective TopologicalSpace.ext h
+  toTopologicalSpace_injective <| TopologicalSpace.ext h
 
 /-- The ordering on group topologies on the group `γ`. `t ≤ s` if every set open in `s` is also open
 in `t` (`t` is finer than `s`). -/
 @[to_additive
   /-- The ordering on group topologies on the group `γ`. `t ≤ s` if every set open in `s`
   is also open in `t` (`t` is finer than `s`). -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (GroupTopology α)
-  body: PartialOrder.lift toTopologicalSpace toTopologicalSpace_injective
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 :
-  签名: 偏序 (群拓扑 α)
-  定义体: PartialOrder.lift toTopologicalSpace toTopologicalSpace_injective
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: PartialOrder, PartialOrder.lift, toTopologicalSpace, toTopologicalSpace_injective
+/-
+**GroupTopology.** 是 Mathlib 中的一个实例，位于命名空间 `GroupTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (GroupTopology α) :=
   PartialOrder.lift toTopologicalSpace toTopologicalSpace_injective
 
 @[to_additive (attr := simp)]
-/--
-theorem `toTopologicalSpace_le` / 定理 `toTopologicalSpace_le`
-
-English:
-theorem toTopologicalSpace_le
-  given: {x y : GroupTopology α}
-  proof: Iff.rfl
-
-@[to_additive]
-
-中文:
-定理 toTopologicalSpace_le
-  条件: {x y : 群拓扑 α}
-  证明: Iff.rfl
-
-@[to_additive]
-
-Depends on / 依赖: Iff.rfl
+/-
+**GroupTopology.toTopologicalSpace_le** 是 Mathlib 中的一个定理，位于命名空间 `GroupTopology`。
+形式化陈述：toTopologicalSpace_le {x y : GroupTopology α} : x.toTopologicalSpace <= y.
+toTopologicalSpace ↔ x <= y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem toTopologicalSpace_le {x y : GroupTopology α} :
-    x.toTopologicalSpace <= y.toTopologicalSpace ↔ x <= y :=
+    x.toTopologicalSpace ≤ y.toTopologicalSpace ↔ x ≤ y :=
   Iff.rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Top (GroupTopology α)
-  body: let _t : TopologicalSpace α := ⊤
-  ⟨{ continuous_mul := continuous_top
-      continuous_inv := continuous_top }⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 :
-  签名: 顶元素 (群拓扑 α)
-  定义体: let _t : TopologicalSpace α := ⊤
-  ⟨{ continuous_mul := continuous_top
-      continuous_inv := continuous_top }⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: TopologicalSpace, continuous_inv, continuous_mul, continuous_top
+/-
+**GroupTopology.** 是 Mathlib 中的一个实例，位于命名空间 `GroupTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Top (GroupTopology α) :=
   let _t : TopologicalSpace α := ⊤
-  ⟨{ continuous_mul := continuous_top
+  ⟨{  continuous_mul := continuous_top
       continuous_inv := continuous_top }⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `toTopologicalSpace_top` / 定理 `toTopologicalSpace_top`
-
-English:
-theorem toTopologicalSpace_top
-  statement: (⊤ : GroupTopology α).toTopologicalSpace = ⊤
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 toTopologicalSpace_top
-  结论: (⊤ : 群拓扑 α).toTopologicalSpace = ⊤
-  证明: rfl
-
-@[to_additive]
+/-
+**GroupTopology.toTopologicalSpace_top** 是 Mathlib 中的一个定理，位于命名空间 `GroupTopology`
+。
+形式化陈述：toTopologicalSpace_top : (⊤ : GroupTopology α).toTopologicalSpace = ⊤
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toTopologicalSpace_top : (⊤ : GroupTopology α).toTopologicalSpace = ⊤ :=
   rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Bot (GroupTopology α)
-  body: let _t : TopologicalSpace α := ⊥
-  ⟨{ continuous_mul := by
-        have := discreteTopology_bot α
-        fun_prop
-      continuous_inv := continuous_bot }⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 :
-  签名: 底元素 (群拓扑 α)
-  定义体: let _t : TopologicalSpace α := ⊥
-  ⟨{ continuous_mul := by
-        have := discreteTopology_bot α
-        fun_prop
-      continuous_inv := continuous_bot }⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: TopologicalSpace, continuous_bot, continuous_inv, continuous_mul, discreteTopology_bot, fun_prop
+/-
+**GroupTopology.** 是 Mathlib 中的一个实例，位于命名空间 `GroupTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Bot (GroupTopology α) :=
   let _t : TopologicalSpace α := ⊥
-  ⟨{ continuous_mul := by
+  ⟨{  continuous_mul := by
         have := discreteTopology_bot α
         fun_prop
       continuous_inv := continuous_bot }⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `toTopologicalSpace_bot` / 定理 `toTopologicalSpace_bot`
-
-English:
-theorem toTopologicalSpace_bot
-  statement: (⊥ : GroupTopology α).toTopologicalSpace = ⊥
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 toTopologicalSpace_bot
-  结论: (⊥ : 群拓扑 α).toTopologicalSpace = ⊥
-  证明: rfl
-
-@[to_additive]
+/-
+**GroupTopology.toTopologicalSpace_bot** 是 Mathlib 中的一个定理，位于命名空间 `GroupTopology`
+。
+形式化陈述：toTopologicalSpace_bot : (⊥ : GroupTopology α).toTopologicalSpace = ⊥
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toTopologicalSpace_bot : (⊥ : GroupTopology α).toTopologicalSpace = ⊥ :=
   rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: BoundedOrder (GroupTopology α)
-  body: show x.toTopologicalSpace <= ⊤ from le_top
-  bot_le x := show ⊥ <= x.toTopologicalSpace from bot_le
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 有界序 (群拓扑 α)
-  定义体: show x.toTopologicalSpace <= ⊤ from le_top
-  bot_le x := show ⊥ <= x.toTopologicalSpace from bot_le
-
-@[to_additive]
-
-Depends on / 依赖: le_top, toTopologicalSpace, x.toTopologicalSpace
+/-
+**GroupTopology.** 是 Mathlib 中的一个实例，位于命名空间 `GroupTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : BoundedOrder (GroupTopology α) where
-  le_top x := show x.toTopologicalSpace <= ⊤ from le_top
-  bot_le x := show ⊥ <= x.toTopologicalSpace from bot_le
+  le_top x := show x.toTopologicalSpace ≤ ⊤ from le_top
+  bot_le x := show ⊥ ≤ x.toTopologicalSpace from bot_le
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Min (GroupTopology α)
-  body: ⟨x.1 ⊓ y.1, topologicalGroup_inf x.2 y.2⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 :
-  签名: 最小值 (群拓扑 α)
-  定义体: ⟨x.1 ⊓ y.1, topologicalGroup_inf x.2 y.2⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: topologicalGroup_inf
+/-
+**GroupTopology.** 是 Mathlib 中的一个实例，位于命名空间 `GroupTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Min (GroupTopology α) where min x y := ⟨x.1 ⊓ y.1, topologicalGroup_inf x.2 y.2⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `toTopologicalSpace_inf` / 定理 `toTopologicalSpace_inf`
-
-English:
-theorem toTopologicalSpace_inf
-  given: (x y : GroupTopology α)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 toTopologicalSpace_inf
-  条件: (x y : 群拓扑 α)
-  证明: rfl
-
-@[to_additive]
+/-
+**GroupTopology.toTopologicalSpace_inf** 是 Mathlib 中的一个定理，位于命名空间 `GroupTopology`
+。
+形式化陈述：toTopologicalSpace_inf (x y : GroupTopology α) : (x ⊓ y).toTopologicalSpac
+e = x.toTopologicalSpace ⊓ y.toTopologicalSpace
+参数：x y : GroupTopology α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toTopologicalSpace_inf (x y : GroupTopology α) :
     (x ⊓ y).toTopologicalSpace = x.toTopologicalSpace ⊓ y.toTopologicalSpace :=
   rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SemilatticeInf (GroupTopology α)
-  body: toTopologicalSpace_injective.semilatticeInf _ .rfl .rfl toTopologicalSpace_inf
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: SemilatticeInf (群拓扑 α)
-  定义体: toTopologicalSpace_injective.semilatticeInf _ .rfl .rfl toTopologicalSpace_inf
-
-@[to_additive]
-
-Depends on / 依赖: semilatticeInf, toTopologicalSpace_inf, toTopologicalSpace_injective, toTopologicalSpace_injective.semilatticeInf
+/-
+**GroupTopology.** 是 Mathlib 中的一个实例，位于命名空间 `GroupTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SemilatticeInf (GroupTopology α) :=
   toTopologicalSpace_injective.semilatticeInf _ .rfl .rfl toTopologicalSpace_inf
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (GroupTopology α)
-  body: ⟨⊤⟩
-
-中文:
-实例 :
-  签名: 可居 (群拓扑 α)
-  定义体: ⟨⊤⟩
+/-
+**GroupTopology.** 是 Mathlib 中的一个实例，位于命名空间 `GroupTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (GroupTopology α) :=
   ⟨⊤⟩
 
 /-- Infimum of a collection of group topologies. -/
 @[to_additive /-- Infimum of a collection of additive group topologies -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-
+**GroupTopology.** 是 Mathlib 中的一个实例，位于命名空间 `GroupTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: InfSet (GroupTopology α)
-  body: ⟨sInf (toTopologicalSpace '' S), topologicalGroup_sInf forall_mem_image.2 fun t _ => t.2⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 :
-  签名: 下确界集 (群拓扑 α)
-  定义体: ⟨sInf (toTopologicalSpace '' S), topologicalGroup_sInf forall_mem_image.2 fun t _ => t.2⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: forall_mem_image, toTopologicalSpace, topologicalGroup_sInf
+--- 原说明 ---
+Infimum of a collection of group topologies.
 -/
 instance : InfSet (GroupTopology α) where
   sInf S :=
-⟨sInf (toTopologicalSpace '' S), topologicalGroup_sInf forall_mem_image.2 fun t _ => t.2⟩
+    ⟨sInf (toTopologicalSpace '' S), topologicalGroup_sInf <| forall_mem_image.2 fun t _ => t.2⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `toTopologicalSpace_sInf` / 定理 `toTopologicalSpace_sInf`
-
-English:
-theorem toTopologicalSpace_sInf
-  given: (s : Set (GroupTopology α))
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 toTopologicalSpace_sInf
-  条件: (s : 集合 (群拓扑 α))
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**GroupTopology.toTopologicalSpace_sInf** 是 Mathlib 中的一个定理，位于命名空间 `GroupTopology
+`。
+形式化陈述：toTopologicalSpace_sInf (s : Set (GroupTopology α)) : (sInf s).toTopologic
+alSpace = sInf (toTopologicalSpace '' s)
+参数：s : Set (GroupTopology α)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toTopologicalSpace_sInf (s : Set (GroupTopology α)) :
     (sInf s).toTopologicalSpace = sInf (toTopologicalSpace '' s) := rfl
 
 @[to_additive (attr := simp)]
-/--
-theorem `toTopologicalSpace_iInf` / 定理 `toTopologicalSpace_iInf`
-
-English:
-theorem toTopologicalSpace_iInf
-  given: {ι} (s : ι -> GroupTopology α)
-  proof: congr_arg sInf (range_comp _ _).symm
-
-中文:
-定理 toTopologicalSpace_iInf
-  条件: {ι} (s : ι -> 群拓扑 α)
-  证明: congr_arg sInf (range_comp _ _).symm
-
-Depends on / 依赖: congr_arg, range_comp
+/-
+**GroupTopology.toTopologicalSpace_iInf** 是 Mathlib 中的一个定理，位于命名空间 `GroupTopology
+`。
+形式化陈述：toTopologicalSpace_iInf {ι} (s : ι -> GroupTopology α) : (⨅ i, s i).toTopo
+logicalSpace = ⨅ i, (s i).toTopologicalSpace
+参数：s : ι -> GroupTopology α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.range_comp`：range_comp (g : α -> β) (f : ι -> α) : range (g ∘ f) = g
+ '' range f
 -/
-theorem toTopologicalSpace_iInf {ι} (s : ι -> GroupTopology α) :
+theorem toTopologicalSpace_iInf {ι} (s : ι → GroupTopology α) :
     (⨅ i, s i).toTopologicalSpace = ⨅ i, (s i).toTopologicalSpace :=
   congr_arg sInf (range_comp _ _).symm
 
@@ -539,28 +324,9 @@ topologies contained in the intersection of `s` and `t`. -/
 
   The supremum of two group topologies `s` and `t` is the infimum of the family of all group
   topologies contained in the intersection of `s` and `t`. -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CompleteSemilatticeInf (GroupTopology α)
-  body: { (inferInstance : InfSet (GroupTopology α)),
-    (inferInstance : PartialOrder (GroupTopology α)) with
-    isGLB_sInf _ := .of_image toTopologicalSpace_le (isGLB_sInf _) }
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 余mpleteSemilatticeInf (群拓扑 α)
-  定义体: { (inferInstance : InfSet (GroupTopology α)),
-    (inferInstance : PartialOrder (GroupTopology α)) with
-    isGLB_sInf _ := .of_image toTopologicalSpace_le (isGLB_sInf _) }
-
-@[to_additive]
-
-Depends on / 依赖: GroupTopology, InfSet, PartialOrder, isGLB_sInf, of_image, toTopologicalSpace_le
+/-
+**GroupTopology.** 是 Mathlib 中的一个实例，位于命名空间 `GroupTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CompleteSemilatticeInf (GroupTopology α) :=
   { (inferInstance : InfSet (GroupTopology α)),
@@ -568,26 +334,9 @@ instance : CompleteSemilatticeInf (GroupTopology α) :=
     isGLB_sInf _ := .of_image toTopologicalSpace_le (isGLB_sInf _) }
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CompleteLattice (GroupTopology α)
-  body: { (inferInstance : BoundedOrder (GroupTopology α)),
-    (inferInstance : SemilatticeInf (GroupTopology α)),
-    completeLatticeOfCompleteSemilatticeInf _ with
-    inf := (· ⊓ ·) }
-
-中文:
-实例 :
-  签名: 完备格 (群拓扑 α)
-  定义体: { (inferInstance : BoundedOrder (GroupTopology α)),
-    (inferInstance : SemilatticeInf (GroupTopology α)),
-    completeLatticeOfCompleteSemilatticeInf _ with
-    inf := (· ⊓ ·) }
-
-Depends on / 依赖: BoundedOrder, GroupTopology, SemilatticeInf, completeLatticeOfCompleteSemilatticeInf
+/-
+**GroupTopology.** 是 Mathlib 中的一个实例，位于命名空间 `GroupTopology`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CompleteLattice (GroupTopology α) :=
   { (inferInstance : BoundedOrder (GroupTopology α)),
@@ -600,51 +349,41 @@ topology such that `f` is continuous and `β` is a topological group. -/
 @[to_additive
   /-- Given `f : α → β` and a topology on `α`, the coinduced additive group topology on `β`
   is the finest topology such that `f` is continuous and `β` is a topological additive group. -/]
-/--
-Definition of `coinduced` / `coinduced` 的定义
-
-English:
-definition coinduced
-  signature: {α β : Type*} [t : TopologicalSpace α] [Group β] (f : α -> β)
-  body: sInf { b : GroupTopology β | TopologicalSpace.coinduced f t <= b.toTopologicalSpace }
-
-中文:
-定义 coinduced
-  签名: {α β : 类型} [t : 拓扑空间 α] [群 β] (f : α -> β)
-  定义体: sInf { b : GroupTopology β | TopologicalSpace.coinduced f t <= b.toTopologicalSpace }
-
-Depends on / 依赖: GroupTopology, TopologicalSpace, TopologicalSpace.coinduced, b.toTopologicalSpace, coinduced, toTopologicalSpace
+/-
+**GroupTopology.coinduced** 是 Mathlib 中的一个定义，位于命名空间 `GroupTopology`。
+形式化陈述：coinduced {α β : Type*} [t : TopologicalSpace α] [Group β] (f : α -> β) : 
+GroupTopology β
+参数：f : α -> β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def coinduced {α β : Type*} [t : TopologicalSpace α] [Group β] (f : α -> β) : GroupTopology β :=
-  sInf { b : GroupTopology β | TopologicalSpace.coinduced f t <= b.toTopologicalSpace }
+def coinduced {α β : Type*} [t : TopologicalSpace α] [Group β] (f : α → β) : GroupTopology β :=
+  sInf { b : GroupTopology β | TopologicalSpace.coinduced f t ≤ b.toTopologicalSpace }
 
 set_option backward.isDefEq.respectTransparency false in
 @[to_additive]
-/--
-theorem `coinduced_continuous` / 定理 `coinduced_continuous`
-
-English:
-theorem coinduced_continuous
-  given: {α β : Type*} [t : TopologicalSpace α] [Group β] (f : α -> β)
-  proof: by
-  rw [continuous_sInf_rng]
-  rintro _ ⟨t', ht', rfl⟩
-  exact continuous_iff_coinduced_le.2 ht'
-
-中文:
-定理 coinduced_continuous
-  条件: {α β : 类型} [t : 拓扑空间 α] [群 β] (f : α -> β)
-  证明: by
-  rw [continuous_sInf_rng]
-  rintro _ ⟨t', ht', rfl⟩
-  exact continuous_iff_coinduced_le.2 ht'
-
-Depends on / 依赖: continuous_iff_coinduced_le, continuous_sInf_rng
+/-
+**GroupTopology.coinduced_continuous** 是 Mathlib 中的一个定理，位于命名空间 `GroupTopology`。
+形式化陈述：coinduced_continuous {α β : Type*} [t : TopologicalSpace α] [Group β] (f :
+ α -> β) : Continuous[t, (coinduced f).toTopologicalSpace] f
+参数：f : α -> β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `continuous_sInf_rng`：continuous_sInf_rng {t₁ : TopologicalSpace α} {T : 
+Set (TopologicalSpace β)} : Continuous[t₁, sInf T] f ↔ forall t in T, Continuous
+[t₁, t] f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `continuous_iff_coinduced_le`：continuous_iff_coinduced_le {t₁ : Topologic
+alSpace α} {t₂ : TopologicalSpace β} : Continuous[t₁, t₂] f ↔ coinduced f t₁ <= 
+t₂
 -/
-theorem coinduced_continuous {α β : Type*} [t : TopologicalSpace α] [Group β] (f : α -> β) :
+theorem coinduced_continuous {α β : Type*} [t : TopologicalSpace α] [Group β] (f : α → β) :
     Continuous[t, (coinduced f).toTopologicalSpace] f := by
   rw [continuous_sInf_rng]
   rintro _ ⟨t', ht', rfl⟩
   exact continuous_iff_coinduced_le.2 ht'
 
 end GroupTopology
+

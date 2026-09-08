@@ -23,61 +23,37 @@ section Multiplicative
 
 open Multiplicative
 
-/--
-lemma `toAdd_pow` / 引理 `toAdd_pow`
-
-English:
-lemma toAdd_pow
-  given: (a : Multiplicative Int) (b : Nat)
-  statement: (a ^ b).toAdd = a.toAdd * b
-  proof: mul_comm _ _
-
-中文:
-引理 toAdd_pow
-  条件: (a : Multiplicative 整数) (b : 自然数)
-  结论: (a ^ b).toAdd = a.toAdd * b
-  证明: mul_comm _ _
-
-Depends on / 依赖: mul_comm
+/-
+**Int.toAdd_pow** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：toAdd_pow (a : Multiplicative Int) (b : Nat) : (a ^ b).toAdd = a.toAdd * b
+参数：a : Multiplicative Int；b : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
-lemma toAdd_pow (a : Multiplicative Int) (b : Nat) : (a ^ b).toAdd = a.toAdd * b := mul_comm _ _
-
-/--
-lemma `toAdd_zpow` / 引理 `toAdd_zpow`
-
-English:
-lemma toAdd_zpow
-  given: (a : Multiplicative Int) (b : Int)
-  statement: (a ^ b).toAdd = a.toAdd * b
-  proof: mul_comm _ _
-
-中文:
-引理 toAdd_zpow
-  条件: (a : Multiplicative 整数) (b : 整数)
-  结论: (a ^ b).toAdd = a.toAdd * b
-  证明: mul_comm _ _
-
-Depends on / 依赖: _image, mul_comm
+lemma toAdd_pow (a : Multiplicative ℤ) (b : ℕ) : (a ^ b).toAdd = a.toAdd * b := mul_comm _ _
+/-
+**Int.toAdd_zpow** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：toAdd_zpow (a : Multiplicative Int) (b : Int) : (a ^ b).toAdd = a.toAdd * 
+b
+参数：a : Multiplicative Int；b : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
-lemma toAdd_zpow (a : Multiplicative Int) (b : Int) : (a ^ b).toAdd = a.toAdd * b := mul_comm _ _
-
-/--
-lemma `ofAdd_mul` / 引理 `ofAdd_mul`
-
-English:
-lemma ofAdd_mul
-  given: (a b : Int)
-  statement: ofAdd (a * b) = ofAdd a ^ b
-  proof: (toAdd_zpow ..).symm
-
-中文:
-引理 ofAdd_mul
-  条件: (a b : 整数)
-  结论: ofAdd (a * b) = ofAdd a ^ b
-  证明: (toAdd_zpow ..).symm
+lemma toAdd_zpow (a : Multiplicative ℤ) (b : ℤ) : (a ^ b).toAdd = a.toAdd * b := mul_comm _ _
+/-
+**Int.ofAdd_mul** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：∀ (a b : ℤ), Multiplicative.ofAdd (a * b) = Multiplicative.ofAdd a ^ b
+参数：a b : ℤ；a * b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Int.toAdd_zpow`：toAdd_zpow (a : Multiplicative Int) (b : Int) : (a ^ b).
+toAdd = a.toAdd * b
 -/
-@[simp] lemma ofAdd_mul (a b : Int) : ofAdd (a * b) = ofAdd a ^ b := (toAdd_zpow ..).symm
+@[simp] lemma ofAdd_mul (a b : ℤ) : ofAdd (a * b) = ofAdd a ^ b := (toAdd_zpow ..).symm
 
 end Multiplicative
 
 end Int
+

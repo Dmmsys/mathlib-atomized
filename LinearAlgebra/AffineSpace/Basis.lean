@@ -55,137 +55,115 @@ section Coordinates
 variable {ι k V P : Type*} [Ring k] [AddCommGroup V] [Module k V] [AffineSpace V P]
 
 variable (ι k) in
-/--
-Definition of `fintypeAffineCoords` / `fintypeAffineCoords` 的定义
+/-- The space of coordinates for affine combinations indexed by a `Fintype`. -/
+/-
+**fintypeAffineCoords** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：fintypeAffineCoords [Fintype ι] : AffineSubspace k (ι -> k)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fintypeAffineCoords
-  signature: [Fintype ι]
-  body: (affineSpan k {(1 : k)}).comap (Fintype.linearCombination k (1 : ι -> k)).toAffineMap
-
-中文:
-定义 fintypeAffineCoords
-  签名: [有限类型 ι]
-  定义体: (affineSpan k {(1 : k)}).comap (Fintype.linearCombination k (1 : ι -> k)).toAffineMap
-
-Depends on / 依赖: Fintype, Fintype.linearCombination, affineSpan, linearCombination, toAffineMap
+--- 原说明 ---
+The space of coordinates for affine combinations indexed by a `Fintype`.
 -/
-def fintypeAffineCoords [Fintype ι] : AffineSubspace k (ι -> k) :=
-  (affineSpan k {(1 : k)}).comap (Fintype.linearCombination k (1 : ι -> k)).toAffineMap
-
-/--
-lemma `mem_fintypeAffineCoords_iff_sum` / 引理 `mem_fintypeAffineCoords_iff_sum`
-
-English:
-lemma mem_fintypeAffineCoords_iff_sum
-  given: [Fintype ι] {w : ι -> k}
-  proof: by
-  simp [fintypeAffineCoords, Fintype.linearCombination_apply]
-
-中文:
-引理 mem_fintypeAffineCoords_iff_sum
-  条件: [有限类型 ι] {w : ι -> k}
-  证明: by
-  simp [fintypeAffineCoords, Fintype.linearCombination_apply]
-
-Depends on / 依赖: Fintype, Fintype.linearCombination_apply, fintypeAffineCoords, linearCombination_apply
+def fintypeAffineCoords [Fintype ι] : AffineSubspace k (ι → k) :=
+  (affineSpan k {(1 : k)}).comap (Fintype.linearCombination k (1 : ι → k)).toAffineMap
+/-
+**mem_fintypeAffineCoords_iff_sum** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：mem_fintypeAffineCoords_iff_sum [Fintype ι] {w : ι -> k} : w in fintypeAff
+ineCoords ι k ↔ ∑ i, w i = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma mem_fintypeAffineCoords_iff_sum [Fintype ι] {w : ι -> k} :
-    w in fintypeAffineCoords ι k ↔ ∑ i, w i = 1 := by
+lemma mem_fintypeAffineCoords_iff_sum [Fintype ι] {w : ι → k} :
+    w ∈ fintypeAffineCoords ι k ↔ ∑ i, w i = 1 := by
   simp [fintypeAffineCoords, Fintype.linearCombination_apply]
-
-/--
-lemma `AffineIndependent.injOn_affineCombination_fintypeAffineCoords` / 引理 `AffineIndependent.injOn_affineCombination_fintypeAffineCoords`
-
-English:
-lemma AffineIndependent.injOn_affineCombination_fintypeAffineCoords
-  statement: [Fintype ι] {p : ι -> P}
-  proof: fun w₁ hw₁ w₂ hw₂ he => (affineIndependent_iff_eq_of_fintype_affineCombination_eq k p).1
-    h w₁ w₂ (mem_fintypeAffineCoords_iff_sum.1 hw₁) (mem_fintypeAffineCoords_iff_sum.1 hw₂) he
-
-中文:
-引理 AffineIndependent.injOn_affineCombination_fintypeAffineCoords
-  结论: [有限类型 ι] {p : ι -> P}
-  证明: fun w₁ hw₁ w₂ hw₂ he => (affineIndependent_iff_eq_of_fintype_affineCombination_eq k p).1
-    h w₁ w₂ (mem_fintypeAffineCoords_iff_sum.1 hw₁) (mem_fintypeAffineCoords_iff_sum.1 hw₂) he
-
-Depends on / 依赖: affineIndependent_iff_eq_of_fintype_affineCombination_eq, mem_fintypeAffineCoords_iff_sum
+/-
+**AffineIndependent.injOn_affineCombination_fintypeAffineCoords** 是 Mathlib 中的一个
+引理，位于命名空间 ``。
+形式化陈述：AffineIndependent.injOn_affineCombination_fintypeAffineCoords [Fintype ι] 
+{p : ι -> P} (h : AffineIndependent k p) : InjOn (Finset.univ.affineCombination 
+k p) (fintypeAffineCoords ι k)
+参数：h : AffineIndependent k p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `affineIndependent_iff_eq_of_fintype_affineCombination_eq`：affineIndepend
+ent_iff_eq_of_fintype_affineCombination_eq [Fintype ι] (p : ι -> P) : AffineInde
+pendent k p ↔ forall w1 w2 : ι -> k, ∑ i, w1 i…
+· 使用引理 `mem_fintypeAffineCoords_iff_sum`：mem_fintypeAffineCoords_iff_sum [Fintyp
+e ι] {w : ι -> k} : w in fintypeAffineCoords ι k ↔ ∑ i, w i = 1
 -/
-lemma AffineIndependent.injOn_affineCombination_fintypeAffineCoords [Fintype ι] {p : ι -> P}
+lemma AffineIndependent.injOn_affineCombination_fintypeAffineCoords [Fintype ι] {p : ι → P}
     (h : AffineIndependent k p) :
     InjOn (Finset.univ.affineCombination k p) (fintypeAffineCoords ι k) :=
-  fun w₁ hw₁ w₂ hw₂ he => (affineIndependent_iff_eq_of_fintype_affineCombination_eq k p).1
+  fun w₁ hw₁ w₂ hw₂ he ↦ (affineIndependent_iff_eq_of_fintype_affineCombination_eq k p).1
     h w₁ w₂ (mem_fintypeAffineCoords_iff_sum.1 hw₁) (mem_fintypeAffineCoords_iff_sum.1 hw₂) he
 
 variable (ι k) in
-/--
-Definition of `finsuppAffineCoords` / `finsuppAffineCoords` 的定义
+/-- The space of coordinates for affine combinations indexed by a general type. -/
+/-
+**finsuppAffineCoords** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：finsuppAffineCoords : AffineSubspace k (ι ->₀ k)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finsuppAffineCoords
-  signature: : AffineSubspace k (ι ->₀ k)
-  body: (affineSpan k {(1 : k)}).comap (Finsupp.linearCombination k (1 : ι -> k)).toAffineMap
-
-中文:
-定义 finsuppAffineCoords
-  签名: : 仿射子空间 k (ι ->₀ k)
-  定义体: (affineSpan k {(1 : k)}).comap (Finsupp.linearCombination k (1 : ι -> k)).toAffineMap
-
-Depends on / 依赖: Finsupp, Finsupp.linearCombination, affineSpan, linearCombination, toAffineMap
+--- 原说明 ---
+The space of coordinates for affine combinations indexed by a general type.
 -/
-noncomputable def finsuppAffineCoords : AffineSubspace k (ι ->₀ k) :=
-  (affineSpan k {(1 : k)}).comap (Finsupp.linearCombination k (1 : ι -> k)).toAffineMap
-
-/--
-lemma `mem_finsuppAffineCoords_iff_linearCombination` / 引理 `mem_finsuppAffineCoords_iff_linearCombination`
-
-English:
-lemma mem_finsuppAffineCoords_iff_linearCombination
-  given: {w : ι ->₀ k}
-  proof: by
-  simp [finsuppAffineCoords]
-
-中文:
-引理 mem_finsuppAffineCoords_iff_linearCombination
-  条件: {w : ι ->₀ k}
-  证明: by
-  simp [finsuppAffineCoords]
-
-Depends on / 依赖: finsuppAffineCoords
+noncomputable def finsuppAffineCoords : AffineSubspace k (ι →₀ k) :=
+  (affineSpan k {(1 : k)}).comap (Finsupp.linearCombination k (1 : ι → k)).toAffineMap
+/-
+**mem_finsuppAffineCoords_iff_linearCombination** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：mem_finsuppAffineCoords_iff_linearCombination {w : ι ->₀ k} : w in finsupp
+AffineCoords ι k ↔ Finsupp.linearCombination k (1 : ι -> k) w = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma mem_finsuppAffineCoords_iff_linearCombination {w : ι ->₀ k} :
-    w in finsuppAffineCoords ι k ↔ Finsupp.linearCombination k (1 : ι -> k) w = 1 := by
+lemma mem_finsuppAffineCoords_iff_linearCombination {w : ι →₀ k} :
+    w ∈ finsuppAffineCoords ι k ↔ Finsupp.linearCombination k (1 : ι → k) w = 1 := by
   simp [finsuppAffineCoords]
 
 end Coordinates
 
 universe u₁ u₂ u₃ u₄
 
-/--
-Definition of `AffineBasis` / `AffineBasis` 的定义
+/-- An affine basis is a family of affine-independent points whose span is the top subspace. -/
+/-
+**AffineBasis** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u₁ →   (k : Type u₂) →     {V : Type u₃} →       (P : Type u₄) →     
+    [inst : AddCommGroup V] → [AddTorsor V P] → [inst_2 : Ring k] → [_root_.Modu
+le k V] → Type (max u₁ u₄)
+参数：k : Type u₂；P : Type u₄；max u₁ u₄。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure AffineBasis
-  parameters: (ι : Type u₁) (k : Type u₂) {V : Type u₃} (P : Type u₄) [AddCommGroup V]
-  axioms and operations (3):
-    - toFun : ι -> P
-    - ind' : AffineIndependent k toFun
-    - tot' : affineSpan k (range toFun) = ⊤
-
-中文:
-结构 仿射基
-  参数: (ι : 类型u₁) (k : 类型u₂) {V : 类型u₃} (P : 类型u₄) [加法交换群 V]
-  公理与运算 (3 个):
-    - toFun : ι -> P
-    - ind' : AffineIndependent k toFun
-    - tot' : affineSpan k (range toFun) = ⊤
+--- 原说明 ---
+An affine basis is a family of affine-independent points whose span is the top s
+ubspace.
 -/
 structure AffineBasis (ι : Type u₁) (k : Type u₂) {V : Type u₃} (P : Type u₄) [AddCommGroup V]
   [AffineSpace V P] [Ring k] [Module k V] where
   /-- The underlying family of points.
 
   Do NOT use directly. Use the coercion instead. -/
-  protected toFun : ι -> P
+  protected toFun : ι → P
   protected ind' : AffineIndependent k toFun
   protected tot' : affineSpan k (range toFun) = ⊤
 
@@ -197,152 +175,101 @@ section Ring
 
 variable [Ring k] [Module k V] (b : AffineBasis ι k P) {s : Finset ι} {i j : ι} (e : ι ≃ ι')
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The unique point in a single-point space is the simplest example of an affine basis. -/
+/-
+**AffineBasis.** 是 Mathlib 中的一个实例，位于命名空间 `AffineBasis`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Inhabited (AffineBasis PUnit k PUnit)
-  body: ⟨⟨id, affineIndependent_of_subsingleton k id, by simp⟩⟩
-
-中文:
-实例 :
-  签名: 可居 (仿射基 命题单元 k 命题单元)
-  定义体: ⟨⟨id, affineIndependent_of_subsingleton k id, by simp⟩⟩
-
-Depends on / 依赖: affineIndependent_of_subsingleton
+--- 原说明 ---
+The unique point in a single-point space is the simplest example of an affine ba
+sis.
 -/
 instance : Inhabited (AffineBasis PUnit k PUnit) :=
   ⟨⟨id, affineIndependent_of_subsingleton k id, by simp⟩⟩
-
-/--
-Instance `instFunLike` / 实例 `instFunLike`
-
-English:
-instance instFunLike
-  signature: : FunLike (AffineBasis ι k P) ι P where
-  body: AffineBasis.toFun
-  coe_injective f g h := by cases f; cases g; congr
-
-@[ext]
-
-中文:
-实例 instFunLike
-  签名: : 函数状 (仿射基 ι k P) ι P where
-  定义体: AffineBasis.toFun
-  coe_injective f g h := by cases f; cases g; congr
-
-@[ext]
-
-Depends on / 依赖: AffineBasis, AffineBasis.toFun
+/-
+**AffineBasis.instFunLike** 是 Mathlib 中的一个实例，位于命名空间 `AffineBasis`。
+形式化陈述：instFunLike : FunLike (AffineBasis ι k P) ι P where coe
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instFunLike : FunLike (AffineBasis ι k P) ι P where
   coe := AffineBasis.toFun
   coe_injective f g h := by cases f; cases g; congr
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {b₁ b₂ : AffineBasis ι k P} (h : (b₁ : ι -> P) = b₂)
-  statement: b₁ = b₂
-  proof: DFunLike.coe_injective h
-
-中文:
-定理 ext
-  条件: {b₁ b₂ : 仿射基 ι k P} (h : (b₁ : ι -> P) = b₂)
-  结论: b₁ = b₂
-  证明: DFunLike.coe_injective h
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
+/-
+**AffineBasis.ext** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：ext {b₁ b₂ : AffineBasis ι k P} (h : (b₁ : ι -> P) = b₂) : b₁ = b₂
+参数：h : (b₁ : ι -> P) = b₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
-theorem ext {b₁ b₂ : AffineBasis ι k P} (h : (b₁ : ι -> P) = b₂) : b₁ = b₂ :=
+theorem ext {b₁ b₂ : AffineBasis ι k P} (h : (b₁ : ι → P) = b₂) : b₁ = b₂ :=
   DFunLike.coe_injective h
-
-/--
-theorem `ind` / 定理 `ind`
-
-English:
-theorem ind
-  statement: AffineIndependent k b
-  proof: b.ind'
-
-中文:
-定理 ind
-  结论: AffineIndependent k b
-  证明: b.ind'
-
-Depends on / 依赖: b.ind
+/-
+**AffineBasis.ind** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：ind : AffineIndependent k b
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineBasis.ind'`：∀ {ι : Type u₁} {k : Type u₂} {V : Type u₃} {P : Type 
+u₄} [inst : AddCommGroup V] [inst_1 : AddTorsor V P]   [inst_2 : Ring k] [inst_3
+ : _ro…
 -/
 theorem ind : AffineIndependent k b :=
   b.ind'
-
-/--
-theorem `tot` / 定理 `tot`
-
-English:
-theorem tot
-  statement: affineSpan k (range b) = ⊤
-  proof: b.tot'
-
-include b in
-
-中文:
-定理 tot
-  结论: affineSpan k (range b) = ⊤
-  证明: b.tot'
-
-include b in
-
-Depends on / 依赖: b.tot
+/-
+**AffineBasis.tot** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：tot : affineSpan k (range b) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineBasis.tot'`：∀ {ι : Type u₁} {k : Type u₂} {V : Type u₃} {P : Type 
+u₄} [inst : AddCommGroup V] [inst_1 : AddTorsor V P]   [inst_2 : Ring k] [inst_3
+ : _ro…
 -/
 theorem tot : affineSpan k (range b) = ⊤ :=
   b.tot'
 
 include b in
-/--
-theorem `nonempty` / 定理 `nonempty`
-
-English:
-theorem nonempty
-  statement: Nonempty ι
-  proof: not_isEmpty_iff.mp fun hι => by
-    simpa only [@range_eq_empty _ _ hι, AffineSubspace.span_empty, bot_ne_top] using b.tot
-
-中文:
-定理 nonempty
-  结论: 非空 ι
-  证明: not_isEmpty_iff.mp fun hι => by
-    simpa only [@range_eq_empty _ _ hι, AffineSubspace.span_empty, bot_ne_top] using b.tot
+/-
+**AffineBasis.nonempty** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：∀ {ι : Type u_1} {k : Type u_5} {V : Type u_6} {P : Type u_7} [inst : AddC
+ommGroup V] [inst_1 : AddTorsor V P]   [inst_2 : Ring k] [inst_3 : _root_.Module
+ k V] (b : AffineBasis ι k P), Nonempty ι
+参数：b : AffineBasis ι k P。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_isEmpty_iff`：not_isEmpty_iff : ¬IsEmpty α ↔ Nonempty α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.range_eq_empty`：range_eq_empty [IsEmpty ι] (f : ι -> α) : range f = 
+∅
+· 使用定理 `AffineSubspace.span_empty`：span_empty : affineSpan k (∅ : Set P) = ⊥
+· 使用定理 `AffineSubspace.instNontrivial`：∀ (k : Type u_1) (V : Type u_2) (P : Type
+ u_3) [inst : Ring k] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module k V]   [
+S : AddTorsor V P],…
+· 使用定理 `AffineBasis.tot`：tot : affineSpan k (range b) = ⊤
 -/
 protected theorem nonempty : Nonempty ι :=
   not_isEmpty_iff.mp fun hι => by
     simpa only [@range_eq_empty _ _ hι, AffineSubspace.span_empty, bot_ne_top] using b.tot
 
-/--
-Definition of `reindex` / `reindex` 的定义
+/-- Composition of an affine basis and an equivalence of index types. -/
+/-
+**AffineBasis.reindex** 是 Mathlib 中的一个定义，位于命名空间 `AffineBasis`。
+形式化陈述：reindex (e : ι ≃ ι') : AffineBasis ι' k P
+参数：e : ι ≃ ι'。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition reindex
-  signature: (e : ι ≃ ι')
-  body: ⟨b ∘ e.symm, b.ind.comp_embedding e.symm.toEmbedding, by
-    rw [e.symm.surjective.range_comp]
-    exact b.3⟩
-
-@[simp, norm_cast]
-
-中文:
-定义 reindex
-  签名: (e : ι ≃ ι')
-  定义体: ⟨b ∘ e.symm, b.ind.comp_embedding e.symm.toEmbedding, by
-    rw [e.symm.surjective.range_comp]
-    exact b.3⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: b.ind.comp_embedding, comp_embedding, e.symm, e.symm.surjective.range_comp, e.symm.toEmbedding, range_comp, surjective, toEmbedding
+--- 原说明 ---
+Composition of an affine basis and an equivalence of index types.
 -/
 def reindex (e : ι ≃ ι') : AffineBasis ι' k P :=
   ⟨b ∘ e.symm, b.ind.comp_embedding e.symm.toEmbedding, by
@@ -350,109 +277,66 @@ def reindex (e : ι ≃ ι') : AffineBasis ι' k P :=
     exact b.3⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_reindex` / 定理 `coe_reindex`
-
-English:
-theorem coe_reindex
-  statement: ⇑(b.reindex e) = b ∘ e.symm
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_reindex
-  结论: ⇑(b.reindex e) = b ∘ e.symm
-  证明: rfl
-
-@[simp]
+/-
+**AffineBasis.coe_reindex** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：coe_reindex : ⇑(b.reindex e) = b ∘ e.symm
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_reindex : ⇑(b.reindex e) = b ∘ e.symm :=
   rfl
 
 @[simp]
-/--
-theorem `reindex_apply` / 定理 `reindex_apply`
-
-English:
-theorem reindex_apply
-  given: (i' : ι')
-  statement: b.reindex e i' = b (e.symm i')
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 reindex_apply
-  条件: (i' : ι')
-  结论: b.reindex e i' = b (e.symm i')
-  证明: rfl
-
-@[simp]
+/-
+**AffineBasis.reindex_apply** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：reindex_apply (i' : ι') : b.reindex e i' = b (e.symm i')
+参数：i' : ι'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem reindex_apply (i' : ι') : b.reindex e i' = b (e.symm i') :=
   rfl
 
 @[simp]
-/--
-theorem `reindex_refl` / 定理 `reindex_refl`
-
-English:
-theorem reindex_refl
-  statement: b.reindex (Equiv.refl _) = b
-  proof: ext rfl
-
-中文:
-定理 reindex_refl
-  结论: b.reindex (等价.refl _) = b
-  证明: ext rfl
+/-
+**AffineBasis.reindex_refl** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：reindex_refl : b.reindex (Equiv.refl _) = b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineBasis.ext`：ext {b₁ b₂ : AffineBasis ι k P} (h : (b₁ : ι -> P) = b₂
+) : b₁ = b₂
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
 theorem reindex_refl : b.reindex (Equiv.refl _) = b :=
   ext rfl
 
-/--
-Definition of `basisOf` / `basisOf` 的定义
+/-- Given an affine basis for an affine space `P`, if we single out one member of the family, we
+obtain a linear basis for the model space `V`.
 
-English:
-definition basisOf
-  signature: (i : ι)
-  body: Basis.mk ((affineIndependent_iff_linearIndependent_vsub k b i).mp b.ind)
-    (by
-      suffices
-        Submodule.span k (range fun j : { x // x != i } => b ↑j -ᵥ b i) = vectorSpan k (range b) by
-        rw [this]; rw [← direction_affineSpan]; rw [b.tot]; rw [AffineSubspace.direction_top]
-      conv_rhs => rw [← image_univ]
-      rw [vectorSpan_image_eq_span_vsub_set_right_ne k b (mem_univ i)]
-      congr
-      ext v
-      simp)
+The linear basis corresponding to the singled-out member `i : ι` is indexed by `{j : ι // j ≠ i}`
+and its `j`th element is `b j -ᵥ b i`. (See `basisOf_apply`.) -/
+/-
+**AffineBasis.basisOf** 是 Mathlib 中的一个定义，位于命名空间 `AffineBasis`。
+形式化陈述：basisOf (i : ι) : Basis { j : ι // j != i } k V
+参数：i : ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+Given an affine basis for an affine space `P`, if we single out one member of th
+e family, we
+obtain a linear basis for the model space `V`.
 
-中文:
-定义 basisOf
-  签名: (i : ι)
-  定义体: Basis.mk ((affineIndependent_iff_linearIndependent_vsub k b i).mp b.ind)
-    (by
-      suffices
-        Submodule.span k (range fun j : { x // x != i } => b ↑j -ᵥ b i) = vectorSpan k (range b) by
-        rw [this]; rw [← direction_affineSpan]; rw [b.tot]; rw [AffineSubspace.direction_top]
-      conv_rhs => rw [← image_univ]
-      rw [vectorSpan_image_eq_span_vsub_set_right_ne k b (mem_univ i)]
-      congr
-      ext v
-      simp)
-
-@[simp]
-
-Depends on / 依赖: AffineSubspace, AffineSubspace.direction_top, Basis.mk, Submodule, Submodule.span, affineIndependent_iff_linearIndependent_vsub, b.ind, b.tot, conv_rhs, direction_affineSpan, direction_top, image_univ, mem_univ, vectorSpan, vectorSpan_image_eq_span_vsub_set_right_ne
+The linear basis corresponding to the singled-out member `i : ι` is indexed by `
+{j : ι // j ≠ i}`
+and its `j`th element is `b j -ᵥ b i`. (See `basisOf_apply`.)
 -/
-noncomputable def basisOf (i : ι) : Basis { j : ι // j != i } k V :=
+noncomputable def basisOf (i : ι) : Basis { j : ι // j ≠ i } k V :=
   Basis.mk ((affineIndependent_iff_linearIndependent_vsub k b i).mp b.ind)
     (by
       suffices
-        Submodule.span k (range fun j : { x // x != i } => b ↑j -ᵥ b i) = vectorSpan k (range b) by
-        rw [this]; rw [← direction_affineSpan]; rw [b.tot]; rw [AffineSubspace.direction_top]
+        Submodule.span k (range fun j : { x // x ≠ i } => b ↑j -ᵥ b i) = vectorSpan k (range b) by
+        rw [this, ← direction_affineSpan, b.tot, AffineSubspace.direction_top]
       conv_rhs => rw [← image_univ]
       rw [vectorSpan_image_eq_span_vsub_set_right_ne k b (mem_univ i)]
       congr
@@ -460,49 +344,57 @@ noncomputable def basisOf (i : ι) : Basis { j : ι // j != i } k V :=
       simp)
 
 @[simp]
-/--
-theorem `basisOf_apply` / 定理 `basisOf_apply`
-
-English:
-theorem basisOf_apply
-  given: (i : ι) (j : { j : ι // j != i })
-  statement: b.basisOf i j = b ↑j -ᵥ b i
-  proof: by
-  simp [basisOf]
-
-@[simp]
-
-中文:
-定理 basisOf_apply
-  条件: (i : ι) (j : { j : ι // j != i })
-  结论: b.basisOf i j = b ↑j -ᵥ b i
-  证明: by
-  simp [basisOf]
-
-@[simp]
-
-Depends on / 依赖: basisOf
+/-
+**AffineBasis.basisOf_apply** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：basisOf_apply (i : ι) (j : { j : ι // j != i }) : b.basisOf i j = b ↑j -ᵥ 
+b i
+参数：i : ι；j : { j : ι // j != i }。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Module.Basis.coe_mk`：coe_mk : ⇑(Basis.mk hli hsp) = v
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem basisOf_apply (i : ι) (j : { j : ι // j != i }) : b.basisOf i j = b ↑j -ᵥ b i := by
+theorem basisOf_apply (i : ι) (j : { j : ι // j ≠ i }) : b.basisOf i j = b ↑j -ᵥ b i := by
   simp [basisOf]
 
 @[simp]
-/--
-theorem `basisOf_reindex` / 定理 `basisOf_reindex`
-
-English:
-theorem basisOf_reindex
-  given: (i : ι')
-  proof: by
-  ext j
-  simp
-
-中文:
-定理 basisOf_reindex
-  条件: (i : ι')
-  证明: by
-  ext j
-  simp
+/-
+**AffineBasis.basisOf_reindex** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：basisOf_reindex (i : ι') : (b.reindex e).basisOf i = (b.basisOf <| e.symm 
+i).reindex (e.subtypeEquiv fun _ => e.eq_symm_apply.not)
+参数：i : ι'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Basis.eq_of_apply_eq`：eq_of_apply_eq {b₁ b₂ : Basis ι R M} : (for
+all i, b₁ i = b₂ i) -> b₁ = b₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Equiv.eq_symm_apply`：eq_symm_apply {α β} (e : α ≃ β) {x y} : y = e.symm 
+x ↔ e y = x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AffineBasis.basisOf_apply`：basisOf_apply (i : ι) (j : { j : ι // j != i 
+}) : b.basisOf i j = b ↑j -ᵥ b i
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Module.Basis.coe_reindex`：coe_reindex : (b.reindex e : ι' -> M) = b ∘ e.
+symm
+· 使用定理 `Equiv.subtypeEquiv_apply`：∀ {α : Sort u_1} {β : Sort u_4} {p : α → Prop}
+ {q : β → Prop} (e : α ≃ β) (h : ∀ (a : α), p a ↔ q (e a))   (a : { a // p a }),
+ (e.subtypeEqu…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem basisOf_reindex (i : ι') :
     (b.reindex e).basisOf i =
@@ -510,269 +402,281 @@ theorem basisOf_reindex (i : ι') :
   ext j
   simp
 
-/--
-Definition of `coord` / `coord` 的定义
+/-- The `i`th barycentric coordinate of a point. -/
+/-
+**AffineBasis.coord** 是 Mathlib 中的一个定义，位于命名空间 `AffineBasis`。
+形式化陈述：coord (i : ι) : P ->ᵃ[k] k where toFun q
+参数：i : ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coord
-  signature: (i : ι)
-  body: 1 - (b.basisOf i).sumCoords (q -ᵥ b i)
-  linear := -(b.basisOf i).sumCoords
-  map_vadd' q v := by
-    rw [vadd_vsub_assoc]; rw [map_add]; rw [vadd_eq_add]; rw [LinearMap.neg_apply]; rw [sub_add_eq_sub_sub_swap]; rw [add_comm]; rw [sub_eq_add_neg]
-
-@[simp]
-
-中文:
-定义 coord
-  签名: (i : ι)
-  定义体: 1 - (b.basisOf i).sumCoords (q -ᵥ b i)
-  linear := -(b.basisOf i).sumCoords
-  map_vadd' q v := by
-    rw [vadd_vsub_assoc]; rw [map_add]; rw [vadd_eq_add]; rw [LinearMap.neg_apply]; rw [sub_add_eq_sub_sub_swap]; rw [add_comm]; rw [sub_eq_add_neg]
-
-@[simp]
-
-Depends on / 依赖: b.basisOf, basisOf, sumCoords
+--- 原说明 ---
+The `i`th barycentric coordinate of a point.
 -/
-noncomputable def coord (i : ι) : P ->ᵃ[k] k where
+noncomputable def coord (i : ι) : P →ᵃ[k] k where
   toFun q := 1 - (b.basisOf i).sumCoords (q -ᵥ b i)
   linear := -(b.basisOf i).sumCoords
   map_vadd' q v := by
-    rw [vadd_vsub_assoc]; rw [map_add]; rw [vadd_eq_add]; rw [LinearMap.neg_apply]; rw [sub_add_eq_sub_sub_swap]; rw [add_comm]; rw [sub_eq_add_neg]
+    rw [vadd_vsub_assoc, map_add, vadd_eq_add, LinearMap.neg_apply, sub_add_eq_sub_sub_swap,
+      add_comm, sub_eq_add_neg]
 
 @[simp]
-/--
-theorem `linear_eq_sumCoords` / 定理 `linear_eq_sumCoords`
-
-English:
-theorem linear_eq_sumCoords
-  given: (i : ι)
-  statement: (b.coord i).linear = -(b.basisOf i).sumCoords
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 linear_eq_sumCoords
-  条件: (i : ι)
-  结论: (b.coord i).linear = -(b.basisOf i).sumCoords
-  证明: rfl
-
-@[simp]
+/-
+**AffineBasis.linear_eq_sumCoords** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：linear_eq_sumCoords (i : ι) : (b.coord i).linear = -(b.basisOf i).sumCoord
+s
+参数：i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem linear_eq_sumCoords (i : ι) : (b.coord i).linear = -(b.basisOf i).sumCoords :=
   rfl
 
 @[simp]
-/--
-theorem `coord_reindex` / 定理 `coord_reindex`
-
-English:
-theorem coord_reindex
-  given: (i : ι')
-  statement: (b.reindex e).coord i = b.coord (e.symm i)
-  proof: by
-  ext
-  simp [AffineBasis.coord]
-
-@[simp]
-
-中文:
-定理 coord_reindex
-  条件: (i : ι')
-  结论: (b.reindex e).coord i = b.coord (e.symm i)
-  证明: by
-  ext
-  simp [AffineBasis.coord]
-
-@[simp]
-
-Depends on / 依赖: AffineBasis, AffineBasis.coord
+/-
+**AffineBasis.coord_reindex** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：coord_reindex (i : ι') : (b.reindex e).coord i = b.coord (e.symm i)
+参数：i : ι'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineMap.ext`：ext {f g : P1 ->ᵃ[k] P2} (h : forall p, f p = g p) : f = 
+g
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Equiv.eq_symm_apply`：eq_symm_apply {α β} (e : α ≃ β) {x y} : y = e.symm 
+x ↔ e y = x
+· 使用定理 `AffineBasis.basisOf_reindex`：basisOf_reindex (i : ι') : (b.reindex e).ba
+sisOf i = (b.basisOf <| e.symm i).reindex (e.subtypeEquiv fun _ => e.eq_symm_app
+ly.not)
+· 使用定理 `Module.Basis.sumCoords_reindex`：sumCoords_reindex : (b.reindex e).sumCoo
+rds = b.sumCoords
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `AffineMap.mk.congr_simp`：∀ {k : Type u_1} {V1 : Type u_2} {P1 : Type u_3
+} {V2 : Type u_4} {P2 : Type u_5} [inst : Ring k]   [inst_1 : AddCommGroup V1] [
+inst_2 : _roo…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem coord_reindex (i : ι') : (b.reindex e).coord i = b.coord (e.symm i) := by
   ext
   simp [AffineBasis.coord]
 
 @[simp]
-/--
-theorem `coord_apply_eq` / 定理 `coord_apply_eq`
-
-English:
-theorem coord_apply_eq
-  given: (i : ι)
-  statement: b.coord i (b i) = 1
-  proof: by
-  simp only [coord, Basis.coe_sumCoords, map_zero, sub_zero,
-    AffineMap.coe_mk, Finsupp.sum_zero_index, vsub_self]
-
-@[simp]
-
-中文:
-定理 coord_apply_eq
-  条件: (i : ι)
-  结论: b.coord i (b i) = 1
-  证明: by
-  simp only [coord, Basis.coe_sumCoords, map_zero, sub_zero,
-    AffineMap.coe_mk, Finsupp.sum_zero_index, vsub_self]
-
-@[simp]
-
-Depends on / 依赖: AffineMap, AffineMap.coe_mk, Basis.coe_sumCoords, Finsupp, Finsupp.sum_zero_index, coe_mk, coe_sumCoords, map_zero, sub_zero, sum_zero_index, vsub_self
+/-
+**AffineBasis.coord_apply_eq** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：coord_apply_eq (i : ι) : b.coord i (b i) = 1
+参数：i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `vsub_self`：∀ {G : Type u_1} {P : Type u_2} [inst : AddGroup G] [T : AddT
+orsor G P] (p : P), p -ᵥ p = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `SemilinearEquivClass.instSemilinearMapClass`：∀ {R : Type u_1} {S : Type 
+u_6} {M : Type u_7} {M₂ : Type u_9} (F : Type u_14) [inst : Semiring R] [inst_1 
+: Semiring S]   [inst_2 : AddComm…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem coord_apply_eq (i : ι) : b.coord i (b i) = 1 := by
   simp only [coord, Basis.coe_sumCoords, map_zero, sub_zero,
     AffineMap.coe_mk, Finsupp.sum_zero_index, vsub_self]
 
 @[simp]
-/--
-theorem `coord_apply_ne` / 定理 `coord_apply_ne`
-
-English:
-theorem coord_apply_ne
-  given: (h : i != j)
-  statement: b.coord i (b j) = 0
-  proof: by
-  rw [coord]; rw [AffineMap.coe_mk]; rw [← Subtype.coe_mk (p := (· != i)) j h.symm]; rw [← b.basisOf_apply]; rw [Basis.sumCoords_self_apply]; rw [sub_self]
-
-中文:
-定理 coord_apply_ne
-  条件: (h : i != j)
-  结论: b.coord i (b j) = 0
-  证明: by
-  rw [coord]; rw [AffineMap.coe_mk]; rw [← Subtype.coe_mk (p := (· != i)) j h.symm]; rw [← b.basisOf_apply]; rw [Basis.sumCoords_self_apply]; rw [sub_self]
-
-Depends on / 依赖: AffineMap, AffineMap.coe_mk, Basis.sumCoords_self_apply, Subtype, Subtype.coe_mk, b.basisOf_apply, basisOf_apply, coe_mk, h.symm, sub_self, sumCoords_self_apply
+/-
+**AffineBasis.coord_apply_ne** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：coord_apply_ne (h : i != j) : b.coord i (b j) = 0
+参数：h : i != j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AffineBasis.coord.eq_1`：∀ {ι : Type u_1} {k : Type u_5} {V : Type u_6} {
+P : Type u_7} [inst : AddCommGroup V] [inst_1 : AddTorsor V P]   [inst_2 : Ring 
+k] [inst_3 :…
+· 使用定理 `AffineMap.coe_mk`：coe_mk (f : P1 -> P2) (linear add) : ((mk f linear add
+ : P1 ->ᵃ[k] P2) : P1 -> P2) = f
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subtype.coe_mk`：coe_mk (a h) : (@mk α p a h : α) = a
+· 使用定理 `AffineBasis.basisOf_apply`：basisOf_apply (i : ι) (j : { j : ι // j != i 
+}) : b.basisOf i j = b ↑j -ᵥ b i
+· 使用定理 `Module.Basis.sumCoords_self_apply`：sumCoords_self_apply : b.sumCoords (b
+ i) = 1
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
 -/
-theorem coord_apply_ne (h : i != j) : b.coord i (b j) = 0 := by
-  rw [coord]; rw [AffineMap.coe_mk]; rw [← Subtype.coe_mk (p := (· != i)) j h.symm]; rw [← b.basisOf_apply]; rw [Basis.sumCoords_self_apply]; rw [sub_self]
-
-/--
-theorem `coord_apply` / 定理 `coord_apply`
-
-English:
-theorem coord_apply
-  given: [DecidableEq ι] (i j : ι)
-  statement: b.coord i (b j) = if i = j then 1 else 0
-  proof: by
-  rcases eq_or_ne i j with h | h <;> simp [h]
-
-@[simp]
-
-中文:
-定理 coord_apply
-  条件: [DecidableEq ι] (i j : ι)
-  结论: b.coord i (b j) = if i = j then 1 else 0
-  证明: by
-  rcases eq_or_ne i j with h | h <;> simp [h]
-
-@[simp]
-
-Depends on / 依赖: eq_or_ne
+theorem coord_apply_ne (h : i ≠ j) : b.coord i (b j) = 0 := by
+  rw [coord, AffineMap.coe_mk, ← Subtype.coe_mk (p := (· ≠ i)) j h.symm, ← b.basisOf_apply,
+    Basis.sumCoords_self_apply, sub_self]
+/-
+**AffineBasis.coord_apply** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：coord_apply [DecidableEq ι] (i j : ι) : b.coord i (b j) = if i = j then 1 
+else 0
+参数：i j : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `AffineBasis.coord_apply_eq`：coord_apply_eq (i : ι) : b.coord i (b i) = 1
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `AffineBasis.coord_apply_ne`：coord_apply_ne (h : i != j) : b.coord i (b j
+) = 0
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
 -/
 theorem coord_apply [DecidableEq ι] (i j : ι) : b.coord i (b j) = if i = j then 1 else 0 := by
   rcases eq_or_ne i j with h | h <;> simp [h]
 
 @[simp]
-/--
-theorem `coord_apply_combination_of_mem` / 定理 `coord_apply_combination_of_mem`
-
-English:
-theorem coord_apply_combination_of_mem
-  given: (hi : i in s) {w : ι -> k} (hw : s.sum w = 1)
-  proof: by
-  classical simp only [coord_apply, hi, Finset.affineCombination_eq_linear_combination, if_true,
-      mul_boole, hw, Function.comp_apply, smul_eq_mul, s.sum_ite_eq,
-      s.map_affineCombination b w hw]
-
-@[simp]
-
-中文:
-定理 coord_apply_combination_of_mem
-  条件: (hi : i in s) {w : ι -> k} (hw : s.求和 w = 1)
-  证明: by
-  classical simp only [coord_apply, hi, Finset.affineCombination_eq_linear_combination, if_true,
-      mul_boole, hw, Function.comp_apply, smul_eq_mul, s.sum_ite_eq,
-      s.map_affineCombination b w hw]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.affineCombination_eq_linear_combination, Function, Function.comp_apply, affineCombination_eq_linear_combination, classical, comp_apply, coord_apply, if_true, map_affineCombination, mul_boole, s.map_affineCombination, s.sum_ite_eq, smul_eq_mul, sum_ite_eq
+/-
+**AffineBasis.coord_apply_combination_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `AffineBa
+sis`。
+形式化陈述：coord_apply_combination_of_mem (hi : i in s) {w : ι -> k} (hw : s.sum w = 
+1) : b.coord i (s.affineCombination k b w) = w i
+参数：hi : i in s；hw : s.sum w = 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.map_affineCombination`：map_affineCombination {V₂ P₂ : Type*} [Add
+CommGroup V₂] [Module k V₂] [AffineSpace V₂ P₂] (p : ι -> P) (w : ι -> k) (hw : 
+s.sum w = 1) (f : …
+· 使用定理 `Finset.affineCombination_eq_linear_combination`：affineCombination_eq_lin
+ear_combination (s : Finset ι) (p : ι -> V) (w : ι -> k) (hw : ∑ i in s, w i = 1
+) : s.affineCombination k p w = ∑ i …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `AffineBasis.coord_apply`：coord_apply [DecidableEq ι] (i j : ι) : b.coord
+ i (b j) = if i = j then 1 else 0
+· 使用定理 `mul_boole`：mul_boole {α} [MulZeroOneClass α] (P : Prop) [Decidable P] (a
+ : α) : (a * if P then 1 else 0) = if P then a else 0
+· 使用定理 `Finset.sum_ite_eq`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid
+ M] [inst_1 : DecidableEq ι] (s : Finset ι) (a : ι) (b : ι → M),   (∑ x ∈ s, if 
+a = x t…
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `if_true`：∀ {α : Sort u_1} {x : Decidable True} (t e : α), (if True then 
+t else e) = t
 -/
-theorem coord_apply_combination_of_mem (hi : i in s) {w : ι -> k} (hw : s.sum w = 1) :
+theorem coord_apply_combination_of_mem (hi : i ∈ s) {w : ι → k} (hw : s.sum w = 1) :
     b.coord i (s.affineCombination k b w) = w i := by
   classical simp only [coord_apply, hi, Finset.affineCombination_eq_linear_combination, if_true,
       mul_boole, hw, Function.comp_apply, smul_eq_mul, s.sum_ite_eq,
       s.map_affineCombination b w hw]
 
 @[simp]
-/--
-theorem `coord_apply_combination_of_notMem` / 定理 `coord_apply_combination_of_notMem`
-
-English:
-theorem coord_apply_combination_of_notMem
-  given: (hi : i ∉ s) {w : ι -> k} (hw : s.sum w = 1)
-  proof: by
-  classical simp only [coord_apply, hi, Finset.affineCombination_eq_linear_combination, if_false,
-      mul_boole, hw, Function.comp_apply, smul_eq_mul, s.sum_ite_eq,
-      s.map_affineCombination b w hw]
-
-@[simp]
-
-中文:
-定理 coord_apply_combination_of_notMem
-  条件: (hi : i ∉ s) {w : ι -> k} (hw : s.求和 w = 1)
-  证明: by
-  classical simp only [coord_apply, hi, Finset.affineCombination_eq_linear_combination, if_false,
-      mul_boole, hw, Function.comp_apply, smul_eq_mul, s.sum_ite_eq,
-      s.map_affineCombination b w hw]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.affineCombination_eq_linear_combination, Function, Function.comp_apply, affineCombination_eq_linear_combination, classical, comp_apply, coord_apply, if_false, map_affineCombination, mul_boole, s.map_affineCombination, s.sum_ite_eq, smul_eq_mul, sum_ite_eq
+/-
+**AffineBasis.coord_apply_combination_of_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Affin
+eBasis`。
+形式化陈述：coord_apply_combination_of_notMem (hi : i ∉ s) {w : ι -> k} (hw : s.sum w 
+= 1) : b.coord i (s.affineCombination k b w) = 0
+参数：hi : i ∉ s；hw : s.sum w = 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.map_affineCombination`：map_affineCombination {V₂ P₂ : Type*} [Add
+CommGroup V₂] [Module k V₂] [AffineSpace V₂ P₂] (p : ι -> P) (w : ι -> k) (hw : 
+s.sum w = 1) (f : …
+· 使用定理 `Finset.affineCombination_eq_linear_combination`：affineCombination_eq_lin
+ear_combination (s : Finset ι) (p : ι -> V) (w : ι -> k) (hw : ∑ i in s, w i = 1
+) : s.affineCombination k p w = ∑ i …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `AffineBasis.coord_apply`：coord_apply [DecidableEq ι] (i j : ι) : b.coord
+ i (b j) = if i = j then 1 else 0
+· 使用定理 `mul_boole`：mul_boole {α} [MulZeroOneClass α] (P : Prop) [Decidable P] (a
+ : α) : (a * if P then 1 else 0) = if P then a else 0
+· 使用定理 `Finset.sum_ite_eq`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid
+ M] [inst_1 : DecidableEq ι] (s : Finset ι) (a : ι) (b : ι → M),   (∑ x ∈ s, if 
+a = x t…
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `if_false`：∀ {α : Sort u_1} {x : Decidable False} (t e : α), (if False th
+en t else e) = e
 -/
-theorem coord_apply_combination_of_notMem (hi : i ∉ s) {w : ι -> k} (hw : s.sum w = 1) :
+theorem coord_apply_combination_of_notMem (hi : i ∉ s) {w : ι → k} (hw : s.sum w = 1) :
     b.coord i (s.affineCombination k b w) = 0 := by
   classical simp only [coord_apply, hi, Finset.affineCombination_eq_linear_combination, if_false,
       mul_boole, hw, Function.comp_apply, smul_eq_mul, s.sum_ite_eq,
       s.map_affineCombination b w hw]
 
 @[simp]
-/--
-theorem `sum_coord_apply_eq_one` / 定理 `sum_coord_apply_eq_one`
-
-English:
-theorem sum_coord_apply_eq_one
-  given: [Fintype ι] (q : P)
-  statement: ∑ i, b.coord i q = 1
-  proof: by
-  have hq : q in affineSpan k (range b) := by
-    rw [b.tot]
-    exact AffineSubspace.mem_top k V q
-  obtain ⟨w, hw, rfl⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype hq
-  convert! hw
-  exact b.coord_apply_combination_of_mem (Finset.mem_univ _) hw
-
-@[simp]
-
-中文:
-定理 sum_coord_apply_eq_one
-  条件: [有限类型 ι] (q : P)
-  结论: ∑ i, b.coord i q = 1
-  证明: by
-  have hq : q in affineSpan k (range b) := by
-    rw [b.tot]
-    exact AffineSubspace.mem_top k V q
-  obtain ⟨w, hw, rfl⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype hq
-  convert! hw
-  exact b.coord_apply_combination_of_mem (Finset.mem_univ _) hw
-
-@[simp]
-
-Depends on / 依赖: AffineSubspace, AffineSubspace.mem_top, Finset, Finset.mem_univ, affineSpan, b.coord_apply_combination_of_mem, b.tot, convert, coord_apply_combination_of_mem, eq_affineCombination_of_mem_affineSpan_of_fintype, mem_top, mem_univ
+/-
+**AffineBasis.sum_coord_apply_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：sum_coord_apply_eq_one [Fintype ι] (q : P) : ∑ i, b.coord i q = 1
+参数：q : P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AffineBasis.tot`：tot : affineSpan k (range b) = ⊤
+· 使用定理 `AffineSubspace.mem_top`：mem_top (p : P) : p in (⊤ : AffineSubspace k P)
+· 使用定理 `eq_affineCombination_of_mem_affineSpan_of_fintype`：eq_affineCombination_
+of_mem_affineSpan_of_fintype [Fintype ι] {p1 : P} {p : ι -> P} (h : p1 in affine
+Span k (Set.range p)) : exists w : ι ->…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `AffineBasis.coord_apply_combination_of_mem`：coord_apply_combination_of_m
+em (hi : i in s) {w : ι -> k} (hw : s.sum w = 1) : b.coord i (s.affineCombinatio
+n k b w) = w i
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
 -/
 theorem sum_coord_apply_eq_one [Fintype ι] (q : P) : ∑ i, b.coord i q = 1 := by
-  have hq : q in affineSpan k (range b) := by
+  have hq : q ∈ affineSpan k (range b) := by
     rw [b.tot]
     exact AffineSubspace.mem_top k V q
   obtain ⟨w, hw, rfl⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype hq
@@ -780,38 +684,34 @@ theorem sum_coord_apply_eq_one [Fintype ι] (q : P) : ∑ i, b.coord i q = 1 := 
   exact b.coord_apply_combination_of_mem (Finset.mem_univ _) hw
 
 @[simp]
-/--
-theorem `affineCombination_coord_eq_self` / 定理 `affineCombination_coord_eq_self`
-
-English:
-theorem affineCombination_coord_eq_self
-  given: [Fintype ι] (q : P)
-  proof: by
-  have hq : q in affineSpan k (range b) := by
-    rw [b.tot]
-    exact AffineSubspace.mem_top k V q
-  obtain ⟨w, hw, rfl⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype hq
-  congr
-  ext i
-  exact b.coord_apply_combination_of_mem (Finset.mem_univ i) hw
-
-中文:
-定理 affineCombination_coord_eq_self
-  条件: [有限类型 ι] (q : P)
-  证明: by
-  have hq : q in affineSpan k (range b) := by
-    rw [b.tot]
-    exact AffineSubspace.mem_top k V q
-  obtain ⟨w, hw, rfl⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype hq
-  congr
-  ext i
-  exact b.coord_apply_combination_of_mem (Finset.mem_univ i) hw
-
-Depends on / 依赖: AffineSubspace, AffineSubspace.mem_top, Finset, Finset.mem_univ, affineSpan, b.coord_apply_combination_of_mem, b.tot, coord_apply_combination_of_mem, eq_affineCombination_of_mem_affineSpan_of_fintype, mem_top, mem_univ
+/-
+**AffineBasis.affineCombination_coord_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `AffineB
+asis`。
+形式化陈述：affineCombination_coord_eq_self [Fintype ι] (q : P) : (Finset.univ.affineC
+ombination k b fun i => b.coord i q) = q
+参数：q : P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AffineBasis.tot`：tot : affineSpan k (range b) = ⊤
+· 使用定理 `AffineSubspace.mem_top`：mem_top (p : P) : p in (⊤ : AffineSubspace k P)
+· 使用定理 `eq_affineCombination_of_mem_affineSpan_of_fintype`：eq_affineCombination_
+of_mem_affineSpan_of_fintype [Fintype ι] {p1 : P} {p : ι -> P} (h : p1 in affine
+Span k (Set.range p)) : exists w : ι ->…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `AffineBasis.coord_apply_combination_of_mem`：coord_apply_combination_of_m
+em (hi : i in s) {w : ι -> k} (hw : s.sum w = 1) : b.coord i (s.affineCombinatio
+n k b w) = w i
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem affineCombination_coord_eq_self [Fintype ι] (q : P) :
     (Finset.univ.affineCombination k b fun i => b.coord i q) = q := by
-  have hq : q in affineSpan k (range b) := by
+  have hq : q ∈ affineSpan k (range b) := by
     rw [b.tot]
     exact AffineSubspace.mem_top k V q
   obtain ⟨w, hw, rfl⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype hq
@@ -822,71 +722,100 @@ theorem affineCombination_coord_eq_self [Fintype ι] (q : P) :
 /-- A variant of `AffineBasis.affineCombination_coord_eq_self` for the special case when the
 affine space is a module so we can talk about linear combinations. -/
 @[simp]
-/--
-theorem `linear_combination_coord_eq_self` / 定理 `linear_combination_coord_eq_self`
+/-
+**AffineBasis.linear_combination_coord_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `Affine
+Basis`。
+形式化陈述：linear_combination_coord_eq_self [Fintype ι] (b : AffineBasis ι k V) (v : 
+V) : ∑ i, b.coord i v • b i = v
+参数：b : AffineBasis ι k V；v : V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineBasis.affineCombination_coord_eq_self`：affineCombination_coord_eq_
+self [Fintype ι] (q : P) : (Finset.univ.affineCombination k b fun i => b.coord i
+ q) = q
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.affineCombination_eq_linear_combination`：affineCombination_eq_lin
+ear_combination (s : Finset ι) (p : ι -> V) (w : ι -> k) (hw : ∑ i in s, w i = 1
+) : s.affineCombination k p w = ∑ i …
+· 使用定理 `AffineBasis.sum_coord_apply_eq_one`：sum_coord_apply_eq_one [Fintype ι] (
+q : P) : ∑ i, b.coord i q = 1
 
-English:
-theorem linear_combination_coord_eq_self
-  given: [Fintype ι] (b : AffineBasis ι k V) (v : V)
-  proof: by
-  have hb := b.affineCombination_coord_eq_self v
-  rwa [Finset.univ.affineCombination_eq_linear_combination _ _ (b.sum_coord_apply_eq_one v)] at hb
-
-中文:
-定理 linear_combination_coord_eq_self
-  条件: [有限类型 ι] (b : 仿射基 ι k V) (v : V)
-  证明: by
-  have hb := b.affineCombination_coord_eq_self v
-  rwa [Finset.univ.affineCombination_eq_linear_combination _ _ (b.sum_coord_apply_eq_one v)] at hb
-
-Depends on / 依赖: Finset, Finset.univ.affineCombination_eq_linear_combination, affineCombination_coord_eq_self, affineCombination_eq_linear_combination, b.affineCombination_coord_eq_self, b.sum_coord_apply_eq_one, sum_coord_apply_eq_one
+--- 原说明 ---
+A variant of `AffineBasis.affineCombination_coord_eq_self` for the special case 
+when the
+affine space is a module so we can talk about linear combinations.
 -/
 theorem linear_combination_coord_eq_self [Fintype ι] (b : AffineBasis ι k V) (v : V) :
     ∑ i, b.coord i v • b i = v := by
   have hb := b.affineCombination_coord_eq_self v
   rwa [Finset.univ.affineCombination_eq_linear_combination _ _ (b.sum_coord_apply_eq_one v)] at hb
-
-/--
-theorem `ext_elem` / 定理 `ext_elem`
-
-English:
-theorem ext_elem
-  given: [Finite ι] {q₁ q₂ : P} (h : forall i, b.coord i q₁ = b.coord i q₂)
-  statement: q₁ = q₂
-  proof: by
-  cases nonempty_fintype ι
-  rw [← b.affineCombination_coord_eq_self q₁]; rw [← b.affineCombination_coord_eq_self q₂]
-  simp only [h]
-
-@[simp]
-
-中文:
-定理 ext_elem
-  条件: [有限 ι] {q₁ q₂ : P} (h : 对任意 i, b.coord i q₁ = b.coord i q₂)
-  结论: q₁ = q₂
-  证明: by
-  cases nonempty_fintype ι
-  rw [← b.affineCombination_coord_eq_self q₁]; rw [← b.affineCombination_coord_eq_self q₂]
-  simp only [h]
-
-@[simp]
-
-Depends on / 依赖: affineCombination_coord_eq_self, b.affineCombination_coord_eq_self, nonempty_fintype
+/-
+**AffineBasis.ext_elem** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：ext_elem [Finite ι] {q₁ q₂ : P} (h : forall i, b.coord i q₁ = b.coord i q₂
+) : q₁ = q₂
+参数：h : forall i, b.coord i q₁ = b.coord i q₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_fintype`：nonempty_fintype (α : Type*) [Finite α] : Nonempty (Fi
+ntype α)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AffineBasis.affineCombination_coord_eq_self`：affineCombination_coord_eq_
+self [Fintype ι] (q : P) : (Finset.univ.affineCombination k b fun i => b.coord i
+ q) = q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ext_elem [Finite ι] {q₁ q₂ : P} (h : forall i, b.coord i q₁ = b.coord i q₂) : q₁ = q₂ := by
+theorem ext_elem [Finite ι] {q₁ q₂ : P} (h : ∀ i, b.coord i q₁ = b.coord i q₂) : q₁ = q₂ := by
   cases nonempty_fintype ι
-  rw [← b.affineCombination_coord_eq_self q₁]; rw [← b.affineCombination_coord_eq_self q₂]
+  rw [← b.affineCombination_coord_eq_self q₁, ← b.affineCombination_coord_eq_self q₂]
   simp only [h]
 
 @[simp]
-/--
-theorem `coe_coord_of_subsingleton_eq_one` / 定理 `coe_coord_of_subsingleton_eq_one`
-
-English:
-theorem coe_coord_of_subsingleton_eq_one
-  given: [Subsingleton ι] (i : ι)
-  statement: (b.coord i : P -> k) = 1
-  proof: by
+/-
+**AffineBasis.coe_coord_of_subsingleton_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `Affine
+Basis`。
+形式化陈述：coe_coord_of_subsingleton_eq_one [Subsingleton ι] (i : ι) : (b.coord i : P
+ -> k) = 1
+参数：i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `Set.Subsingleton.image`：∀ {α : Type u_1} {β : Type u_2} {s : Set α}, s.S
+ubsingleton → ∀ (f : α → β), (f '' s).Subsingleton
+· 使用定理 `Set.subsingleton_of_subsingleton`：subsingleton_of_subsingleton [Subsingl
+eton α] {s : Set α} : s.Subsingleton
+· 使用定理 `AffineSubspace.subsingleton_of_subsingleton_span_eq_top`：subsingleton_of
+_subsingleton_span_eq_top {s : Set P} (h₁ : s.Subsingleton) (h₂ : affineSpan k s
+ = ⊤) : Subsingleton P
+· 使用定理 `AffineBasis.tot`：tot : affineSpan k (range b) = ⊤
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.sum_singleton`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] (f : ι → M) (a : ι), ∑ x ∈ {a}, f x = f a
+· 使用引理 `Pi.one_apply`：one_apply (i : ι) : (1 : forall i, M i) i = 1
+· 使用定理 `AffineBasis.coord_apply_combination_of_mem`：coord_apply_combination_of_m
+em (hi : i in s) {w : ι -> k} (hw : s.sum w = 1) : b.coord i (s.affineCombinatio
+n k b w) = w i
+· 使用定理 `Function.const_apply`：∀ {β : Sort u_1} {α : Sort u_2} {y : β} {x : α}, F
+unction.const α y x = y
+-/
+theorem coe_coord_of_subsingleton_eq_one [Subsingleton ι] (i : ι) : (b.coord i : P → k) = 1 := by
   ext q
   have hp : (range b).Subsingleton := by
     rw [← image_univ]
@@ -894,125 +823,92 @@ theorem coe_coord_of_subsingleton_eq_one
     apply subsingleton_of_subsingleton
   have := AffineSubspace.subsingleton_of_subsingleton_span_eq_top hp b.tot
   let s : Finset ι := {i}
-  have hi : i in s := by simp [s]
+  have hi : i ∈ s := by simp [s]
   have hw : s.sum (Function.const ι (1 : k)) = 1 := by simp [s]
   have hq : q = s.affineCombination k b (Function.const ι (1 : k)) := by
     simp [eq_iff_true_of_subsingleton]
-  rw [Pi.one_apply]; rw [hq]; rw [b.coord_apply_combination_of_mem hi hw]; rw [Function.const_apply]
-
-中文:
-定理 coe_coord_of_subsingleton_eq_one
-  条件: [子单例 ι] (i : ι)
-  结论: (b.coord i : P -> k) = 1
-  证明: by
-  ext q
-  have hp : (range b).Subsingleton := by
-    rw [← image_univ]
-    apply Subsingleton.image
-    apply subsingleton_of_subsingleton
-  have := AffineSubspace.subsingleton_of_subsingleton_span_eq_top hp b.tot
-  let s : Finset ι := {i}
-  have hi : i in s := by simp [s]
-  have hw : s.sum (Function.const ι (1 : k)) = 1 := by simp [s]
-  have hq : q = s.affineCombination k b (Function.const ι (1 : k)) := by
-    simp [eq_iff_true_of_subsingleton]
-  rw [Pi.one_apply]; rw [hq]; rw [b.coord_apply_combination_of_mem hi hw]; rw [Function.const_apply]
-
-Depends on / 依赖: AffineSubspace, AffineSubspace.subsingleton_of_subsingleton_span_eq_top, Finset, Function, Function.const, Pi.one_apply, Subsingleton, Subsingleton.image, affineCombination, b.coord_apply_combination_of_mem, b.tot, coord_apply_combination_of_mem, eq_iff_true_of_subsingleton, image_univ, one_apply, s.affineCombination, s.sum, subsingleton_of_subsingleton, subsingleton_of_subsingleton_span_eq_top
+  rw [Pi.one_apply, hq, b.coord_apply_combination_of_mem hi hw, Function.const_apply]
+/-
+**AffineBasis.surjective_coord** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：surjective_coord [Nontrivial ι] (i : ι) : Function.Surjective b.coord i
+参数：i : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_ne`：exists_ne [Nontrivial α] (x : α) : exists y, y != x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.sum_ite`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid M]
+ {s : Finset ι} {p : ι → Prop} [inst_1 : DecidablePred p]   (f g : ι → M), (∑ x 
+∈ s,…
+· 使用定理 `Finset.filter_insert`：filter_insert (a : α) (s : Finset α) : (insert a s
+).filter p = if p a then insert a (s.filter p) else s.filter p
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `Finset.filter_false_of_mem`：∀ {α : Type u_1} {p : α → Prop} [inst : Deci
+dablePred p] {s : Finset α}, (∀ x ∈ s, ¬p x) → Finset.filter p s = ∅
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `LawfulSingleton.insert_empty_eq`：∀ {α : Type u} {β : Type v} {inst : Emp
+tyCollection β} {inst_1 : Insert α β} {inst_2 : Singleton α β}   [self : LawfulS
+ingleton α β] (x : α)…
+· 使用定理 `Finset.instLawfulSingleton`：∀ {α : Type u_1} [inst : DecidableEq α], Law
+fulSingleton α (Finset α)
+· 使用定理 `Finset.sum_const`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst :
+ AddCommMonoid M] (b : M), ∑ _x ∈ s, b = s.card • b
+· 使用定理 `Finset.card_singleton`：card_singleton (a : α) : #{a} = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `Finset.filter_true_of_mem`：∀ {α : Type u_1} {p : α → Prop} [inst : Decid
+ablePred p] {s : Finset α}, (∀ x ∈ s, p x) → Finset.filter p s = s
+· 使用定理 `Finset.sum_sub_distrib`：∀ {ι : Type u_1} {G : Type u_5} {s : Finset ι} [
+inst : SubtractionCommMonoid G] (f g : ι → G),   ∑ x ∈ s, (f x - g x) = ∑ x ∈ s,
+ f x - ∑ x ∈…
+· 使用定理 `add_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G), a + 
+(b - a) = b
+· 使用定理 `AffineBasis.coord_apply_combination_of_mem`：coord_apply_combination_of_m
+em (hi : i in s) {w : ι -> k} (hw : s.sum w = 1) : b.coord i (s.affineCombinatio
+n k b w) = w i
 -/
-theorem coe_coord_of_subsingleton_eq_one [Subsingleton ι] (i : ι) : (b.coord i : P -> k) = 1 := by
-  ext q
-  have hp : (range b).Subsingleton := by
-    rw [← image_univ]
-    apply Subsingleton.image
-    apply subsingleton_of_subsingleton
-  have := AffineSubspace.subsingleton_of_subsingleton_span_eq_top hp b.tot
-  let s : Finset ι := {i}
-  have hi : i in s := by simp [s]
-  have hw : s.sum (Function.const ι (1 : k)) = 1 := by simp [s]
-  have hq : q = s.affineCombination k b (Function.const ι (1 : k)) := by
-    simp [eq_iff_true_of_subsingleton]
-  rw [Pi.one_apply]; rw [hq]; rw [b.coord_apply_combination_of_mem hi hw]; rw [Function.const_apply]
-
-/--
-theorem `surjective_coord` / 定理 `surjective_coord`
-
-English:
-theorem surjective_coord
-  given: [Nontrivial ι] (i : ι)
-  statement: Function.Surjective b.coord i
-  proof: by
+theorem surjective_coord [Nontrivial ι] (i : ι) : Function.Surjective <| b.coord i := by
   classical
     intro x
     obtain ⟨j, hij⟩ := exists_ne i
     let s : Finset ι := {i, j}
-    have hi : i in s := by simp [s]
-    let w : ι -> k := fun j' => if j' = i then x else 1 - x
+    have hi : i ∈ s := by simp [s]
+    let w : ι → k := fun j' => if j' = i then x else 1 - x
     have hw : s.sum w = 1 := by simp [s, w, Finset.sum_ite, Finset.filter_insert, hij,
       Finset.filter_true_of_mem, Finset.filter_false_of_mem]
     use s.affineCombination k b w
     simp [w, b.coord_apply_combination_of_mem hi hw]
 
-中文:
-定理 surjective_coord
-  条件: [非平凡 ι] (i : ι)
-  结论: 函数.满射 b.coord i
-  证明: by
-  classical
-    intro x
-    obtain ⟨j, hij⟩ := exists_ne i
-    let s : Finset ι := {i, j}
-    have hi : i in s := by simp [s]
-    let w : ι -> k := fun j' => if j' = i then x else 1 - x
-    have hw : s.sum w = 1 := by simp [s, w, Finset.sum_ite, Finset.filter_insert, hij,
-      Finset.filter_true_of_mem, Finset.filter_false_of_mem]
-    use s.affineCombination k b w
-    simp [w, b.coord_apply_combination_of_mem hi hw]
+/-- Barycentric coordinates as an affine map. -/
+/-
+**AffineBasis.coords** 是 Mathlib 中的一个定义，位于命名空间 `AffineBasis`。
+形式化陈述：coords : P ->ᵃ[k] ι -> k where toFun q i
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: Finset, Finset.filter_false_of_mem, Finset.filter_insert, Finset.filter_true_of_mem, Finset.sum_ite, affineCombination, b.coord_apply_combination_of_mem, classical, coord_apply_combination_of_mem, exists_ne, filter_false_of_mem, filter_insert, filter_true_of_mem, s.affineCombination, s.sum, sum_ite
+--- 原说明 ---
+Barycentric coordinates as an affine map.
 -/
-theorem surjective_coord [Nontrivial ι] (i : ι) : Function.Surjective b.coord i := by
-  classical
-    intro x
-    obtain ⟨j, hij⟩ := exists_ne i
-    let s : Finset ι := {i, j}
-    have hi : i in s := by simp [s]
-    let w : ι -> k := fun j' => if j' = i then x else 1 - x
-    have hw : s.sum w = 1 := by simp [s, w, Finset.sum_ite, Finset.filter_insert, hij,
-      Finset.filter_true_of_mem, Finset.filter_false_of_mem]
-    use s.affineCombination k b w
-    simp [w, b.coord_apply_combination_of_mem hi hw]
-
-/--
-Definition of `coords` / `coords` 的定义
-
-English:
-definition coords
-  signature: : P ->ᵃ[k] ι -> k where
-  body: b.coord i q
-  linear :=
-    { toFun := fun v i => -(b.basisOf i).sumCoords v
-      map_add' := fun v w => by ext; simp only [map_add, Pi.add_apply, neg_add]
-      map_smul' := fun t v => by ext; simp }
-  map_vadd' p v := by ext; simp
-
-@[simp]
-
-中文:
-定义 coords
-  签名: : P ->ᵃ[k] ι -> k where
-  定义体: b.coord i q
-  linear :=
-    { toFun := fun v i => -(b.basisOf i).sumCoords v
-      map_add' := fun v w => by ext; simp only [map_add, Pi.add_apply, neg_add]
-      map_smul' := fun t v => by ext; simp }
-  map_vadd' p v := by ext; simp
-
-@[simp]
-
-Depends on / 依赖: b.coord
--/
-noncomputable def coords : P ->ᵃ[k] ι -> k where
+noncomputable def coords : P →ᵃ[k] ι → k where
   toFun q i := b.coord i q
   linear :=
     { toFun := fun v i => -(b.basisOf i).sumCoords v
@@ -1021,44 +917,20 @@ noncomputable def coords : P ->ᵃ[k] ι -> k where
   map_vadd' p v := by ext; simp
 
 @[simp]
-/--
-theorem `coords_apply` / 定理 `coords_apply`
-
-English:
-theorem coords_apply
-  given: (q : P) (i : ι)
-  statement: b.coords q i = b.coord i q
-  proof: rfl
-
-中文:
-定理 coords_apply
-  条件: (q : P) (i : ι)
-  结论: b.coords q i = b.coord i q
-  证明: rfl
+/-
+**AffineBasis.coords_apply** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：coords_apply (q : P) (i : ι) : b.coords q i = b.coord i q
+参数：q : P；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coords_apply (q : P) (i : ι) : b.coords q i = b.coord i q :=
   rfl
-
-/--
-Instance `instVAdd` / 实例 `instVAdd`
-
-English:
-instance instVAdd
-  signature: : VAdd V (AffineBasis ι k P) where
-  body: { toFun := x +ᵥ ⇑b,
-      ind' := b.ind'.vadd,
-      tot' := by rw [Pi.vadd_def, ← vadd_set_range, ← AffineSubspace.pointwise_vadd_span, b.tot,
-        AffineSubspace.pointwise_vadd_top] }
-
-中文:
-实例 instVAdd
-  签名: : 向量加法 V (仿射基 ι k P) where
-  定义体: { toFun := x +ᵥ ⇑b,
-      ind' := b.ind'.vadd,
-      tot' := by rw [Pi.vadd_def, ← vadd_set_range, ← AffineSubspace.pointwise_vadd_span, b.tot,
-        AffineSubspace.pointwise_vadd_top] }
-
-Depends on / 依赖: AffineSubspace, AffineSubspace.pointwise_vadd_span, AffineSubspace.pointwise_vadd_top, Pi.vadd_def, b.ind, b.tot, pointwise_vadd_span, pointwise_vadd_top, vadd_def, vadd_set_range
+/-
+**AffineBasis.instVAdd** 是 Mathlib 中的一个实例，位于命名空间 `AffineBasis`。
+形式化陈述：instVAdd : VAdd V (AffineBasis ι k P) where vadd x b
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instVAdd : VAdd V (AffineBasis ι k P) where
   vadd x b :=
@@ -1066,89 +938,93 @@ instance instVAdd : VAdd V (AffineBasis ι k P) where
       ind' := b.ind'.vadd,
       tot' := by rw [Pi.vadd_def, ← vadd_set_range, ← AffineSubspace.pointwise_vadd_span, b.tot,
         AffineSubspace.pointwise_vadd_top] }
-
-/--
-lemma `coe_vadd` / 引理 `coe_vadd`
-
-English:
-lemma coe_vadd
-  given: (v : V) (b : AffineBasis ι k P)
-  statement: ⇑(v +ᵥ b) = v +ᵥ ⇑b
-  proof: rfl
-
-中文:
-引理 coe_vadd
-  条件: (v : V) (b : 仿射基 ι k P)
-  结论: ⇑(v +ᵥ b) = v +ᵥ ⇑b
-  证明: rfl
+/-
+**AffineBasis.coe_vadd** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：∀ {ι : Type u_1} {k : Type u_5} {V : Type u_6} {P : Type u_7} [inst : AddC
+ommGroup V] [inst_1 : AddTorsor V P]   [inst_2 : Ring k] [inst_3 : _root_.Module
+ k V] (v : V) (b : AffineBasis ι k P), ⇑(v +ᵥ b) = v +ᵥ ⇑b
+参数：v : V；b : AffineBasis ι k P；v +ᵥ b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_vadd (v : V) (b : AffineBasis ι k P) : ⇑(v +ᵥ b) = v +ᵥ ⇑b := rfl
-
-/--
-lemma `basisOf_vadd` / 引理 `basisOf_vadd`
-
-English:
-lemma basisOf_vadd
-  given: (v : V) (b : AffineBasis ι k P)
-  statement: (v +ᵥ b).basisOf = b.basisOf
-  proof: by
-  ext
-  simp
-
-中文:
-引理 basisOf_vadd
-  条件: (v : V) (b : 仿射基 ι k P)
-  结论: (v +ᵥ b).basisOf = b.basisOf
-  证明: by
-  ext
-  simp
+/-
+**AffineBasis.basisOf_vadd** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：∀ {ι : Type u_1} {k : Type u_5} {V : Type u_6} {P : Type u_7} [inst : AddC
+ommGroup V] [inst_1 : AddTorsor V P]   [inst_2 : Ring k] [inst_3 : _root_.Module
+ k V] (v : V) (b : AffineBasis ι k P), (v +ᵥ b).basisOf = b.basisOf
+参数：v : V；b : AffineBasis ι k P；v +ᵥ b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Module.Basis.eq_of_apply_eq`：eq_of_apply_eq {b₁ b₂ : Basis ι R M} : (for
+all i, b₁ i = b₂ i) -> b₁ = b₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AffineBasis.basisOf_apply`：basisOf_apply (i : ι) (j : { j : ι // j != i 
+}) : b.basisOf i j = b ↑j -ᵥ b i
+· 使用定理 `vadd_vsub_vadd_cancel_left`：∀ {G : Type u_1} {P : Type u_2} [inst : AddC
+ommGroup G] [inst_1 : AddTorsor G P] (v : G) (p₁ p₂ : P),   (v +ᵥ p₁) -ᵥ (v +ᵥ p
+₂) = p₁ -ᵥ p₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma basisOf_vadd (v : V) (b : AffineBasis ι k P) : (v +ᵥ b).basisOf = b.basisOf := by
   ext
   simp
-
-/--
-Instance `instAddAction` / 实例 `instAddAction`
-
-English:
-instance instAddAction
-  signature: : AddAction V (AffineBasis ι k P)
-  body: DFunLike.coe_injective.addAction _ coe_vadd
-
-中文:
-实例 instAddAction
-  签名: : 加法作用 V (仿射基 ι k P)
-  定义体: DFunLike.coe_injective.addAction _ coe_vadd
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.addAction, addAction, coe_injective, coe_vadd
+/-
+**AffineBasis.instAddAction** 是 Mathlib 中的一个实例，位于命名空间 `AffineBasis`。
+形式化陈述：instAddAction : AddAction V (AffineBasis ι k P)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineBasis.coe_vadd`：∀ {ι : Type u_1} {k : Type u_5} {V : Type u_6} {P 
+: Type u_7} [inst : AddCommGroup V] [inst_1 : AddTorsor V P]   [inst_2 : Ring k]
+ [inst_3 :…
 -/
 instance instAddAction : AddAction V (AffineBasis ι k P) :=
   DFunLike.coe_injective.addAction _ coe_vadd
-
-/--
-lemma `coord_vadd` / 引理 `coord_vadd`
-
-English:
-lemma coord_vadd
-  given: (v : V) (b : AffineBasis ι k P)
-  proof: by
-  ext p
-  simp only [coord, ne_eq, basisOf_vadd, coe_vadd, Pi.vadd_apply, Basis.coe_sumCoords,
-    AffineMap.coe_mk, AffineEquiv.constVAdd_symm, AffineMap.coe_comp, AffineEquiv.coe_toAffineMap,
-    Function.comp_apply, AffineEquiv.constVAdd_apply, sub_right_inj]
-  congr! 1
-  rw [vadd_vsub_assoc]; rw [neg_add_eq_sub]; rw [vsub_vadd_eq_vsub_sub]
-
-中文:
-引理 coord_vadd
-  条件: (v : V) (b : 仿射基 ι k P)
-  证明: by
-  ext p
-  simp only [coord, ne_eq, basisOf_vadd, coe_vadd, Pi.vadd_apply, Basis.coe_sumCoords,
-    AffineMap.coe_mk, AffineEquiv.constVAdd_symm, AffineMap.coe_comp, AffineEquiv.coe_toAffineMap,
-    Function.comp_apply, AffineEquiv.constVAdd_apply, sub_right_inj]
-  congr! 1
-  rw [vadd_vsub_assoc]; rw [neg_add_eq_sub]; rw [vsub_vadd_eq_vsub_sub]
+/-
+**AffineBasis.coord_vadd** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：∀ {ι : Type u_1} {k : Type u_5} {V : Type u_6} {P : Type u_7} [inst : AddC
+ommGroup V] [inst_1 : AddTorsor V P]   [inst_2 : Ring k] [inst_3 : _root_.Module
+ k V] {i : ι} (v : V) (b : AffineBasis ι k P),   (v +ᵥ b).coord i = (b.coord i).
+comp ↑(AffineEquiv.constVAdd k P v).symm
+参数：v : V；b : AffineBasis ι k P；v +ᵥ b；b.coord i；AffineEquiv.constVAdd k P v。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineMap.ext`：ext {f g : P1 ->ᵃ[k] P2} (h : forall p, f p = g p) : f = 
+g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `AffineBasis.basisOf_vadd`：∀ {ι : Type u_1} {k : Type u_5} {V : Type u_6}
+ {P : Type u_7} [inst : AddCommGroup V] [inst_1 : AddTorsor V P]   [inst_2 : Rin
+g k] [inst_3 :…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `AffineMap.mk.congr_simp`：∀ {k : Type u_1} {V1 : Type u_2} {P1 : Type u_3
+} {V2 : Type u_4} {P2 : Type u_5} [inst : Ring k]   [inst_1 : AddCommGroup V1] [
+inst_2 : _roo…
+· 使用定理 `AffineEquiv.constVAdd_symm`：constVAdd_symm (v : V₁) : (constVAdd k P₁ v)
+.symm = constVAdd k P₁ (-v)
+· 使用定理 `AffineEquiv.constVAdd_apply`：∀ (k : Type u_1) (P₁ : Type u_2) {V₁ : Type
+ u_6} [inst : Ring k] [inst_1 : AddCommGroup V₁]   [inst_2 : _root_.Module k V₁]
+ [inst_3 : AddTor…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `vadd_vsub_assoc`：∀ {G : Type u_1} {P : Type u_2} [inst : AddGroup G] [T 
+: AddTorsor G P] (g : G) (p₁ p₂ : P),   (g +ᵥ p₁) -ᵥ p₂ = g + (p₁ -ᵥ p₂)
+· 使用定理 `neg_add_eq_sub`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b :
+ α), -a + b = b - a
+· 使用定理 `vsub_vadd_eq_vsub_sub`：∀ {G : Type u_1} {P : Type u_2} [inst : AddGroup 
+G] [T : AddTorsor G P] (p₁ p₂ : P) (g : G),   p₁ -ᵥ (g +ᵥ p₂) = p₁ -ᵥ p₂ - g
 -/
 @[simp] lemma coord_vadd (v : V) (b : AffineBasis ι k P) :
     (v +ᵥ b).coord i = (b.coord i).comp (AffineEquiv.constVAdd k P v).symm := by
@@ -1157,160 +1033,172 @@ lemma coord_vadd
     AffineMap.coe_mk, AffineEquiv.constVAdd_symm, AffineMap.coe_comp, AffineEquiv.coe_toAffineMap,
     Function.comp_apply, AffineEquiv.constVAdd_apply, sub_right_inj]
   congr! 1
-  rw [vadd_vsub_assoc]; rw [neg_add_eq_sub]; rw [vsub_vadd_eq_vsub_sub]
+  rw [vadd_vsub_assoc, neg_add_eq_sub, vsub_vadd_eq_vsub_sub]
 
 section SMul
 variable [Group G] [Group G']
 variable [DistribMulAction G V] [DistribMulAction G' V]
 variable [SMulCommClass G k V] [SMulCommClass G' k V]
 
-/--
-Instance `instSMul` / 实例 `instSMul`
+/-- In an affine space that is also a vector space, an `AffineBasis` can be scaled.
 
-English:
-instance instSMul
-  signature: : SMul G (AffineBasis ι k V) where
-  body: { toFun := a • ⇑b,
-      ind' := b.ind'.smul,
-      tot' := by
-        rw [Pi.smul_def]; rw [← smul_set_range]; rw [← AffineSubspace.smul_span]; rw [b.tot]; rw [AffineSubspace.smul_top (Group.isUnit a)] }
+TODO: generalize to include `SMul (P ≃ᵃ[k] P) (AffineBasis ι k P)`, which acts on `P` with a `VAdd`
+version of a `DistribMulAction`. -/
+/-
+**AffineBasis.instSMul** 是 Mathlib 中的一个实例，位于命名空间 `AffineBasis`。
+形式化陈述：instSMul : SMul G (AffineBasis ι k V) where smul a b
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-实例 instSMul
-  签名: : 标量乘法 G (仿射基 ι k V) where
-  定义体: { toFun := a • ⇑b,
-      ind' := b.ind'.smul,
-      tot' := by
-        rw [Pi.smul_def]; rw [← smul_set_range]; rw [← AffineSubspace.smul_span]; rw [b.tot]; rw [AffineSubspace.smul_top (Group.isUnit a)] }
+--- 原说明 ---
+In an affine space that is also a vector space, an `AffineBasis` can be scaled.
 
-Depends on / 依赖: AffineSubspace, AffineSubspace.smul_span, AffineSubspace.smul_top, Group.isUnit, Pi.smul_def, b.ind, b.tot, isUnit, smul_def, smul_set_range, smul_span, smul_top
+TODO: generalize to include `SMul (P ≃ᵃ[k] P) (AffineBasis ι k P)`, which acts o
+n `P` with a `VAdd`
+version of a `DistribMulAction`.
 -/
 instance instSMul : SMul G (AffineBasis ι k V) where
   smul a b :=
     { toFun := a • ⇑b,
       ind' := b.ind'.smul,
       tot' := by
-        rw [Pi.smul_def]; rw [← smul_set_range]; rw [← AffineSubspace.smul_span]; rw [b.tot]; rw [AffineSubspace.smul_top (Group.isUnit a)] }
-
-/--
-lemma `coe_smul` / 引理 `coe_smul`
-
-English:
-lemma coe_smul
-  given: (a : G) (b : AffineBasis ι k V)
-  statement: ⇑(a • b) = a • ⇑b
-  proof: rfl
-
-中文:
-引理 coe_smul
-  条件: (a : G) (b : 仿射基 ι k V)
-  结论: ⇑(a • b) = a • ⇑b
-  证明: rfl
+        rw [Pi.smul_def, ← smul_set_range, ← AffineSubspace.smul_span, b.tot,
+          AffineSubspace.smul_top (Group.isUnit a)] }
+/-
+**AffineBasis.coe_smul** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：∀ {ι : Type u_1} {G : Type u_3} {k : Type u_5} {V : Type u_6} [inst : AddC
+ommGroup V] [inst_1 : Ring k]   [inst_2 : _root_.Module k V] [inst_3 : Group G] 
+[inst_4 : DistribMulAction G V] [inst_5 : SMulCommClass G k V] (a : G)   (b : Af
+fineBasis ι k V), ⇑(a • b) = a • ⇑b
+参数：a : G；b : AffineBasis ι k V；a • b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma coe_smul (a : G) (b : AffineBasis ι k V) : ⇑(a • b) = a • ⇑b := rfl
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- TODO: generalize to include `SMul (P ≃ᵃ[k] P) (AffineBasis ι k P)`, which acts on `P` with a
+`VAdd` version of a `DistribMulAction`. -/
+/-
+**AffineBasis.** 是 Mathlib 中的一个实例，位于命名空间 `AffineBasis`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [SMulCommClass
-  signature: G G' V] : SMulCommClass G G' (AffineBasis ι k V) where
-  body: DFunLike.ext _ _ fun _ => smul_comm _ _ _
-
-中文:
-实例 [标量交换类
-  签名: G G' V] : 标量交换类 G G' (仿射基 ι k V) where
-  定义体: DFunLike.ext _ _ fun _ => smul_comm _ _ _
-
-Depends on / 依赖: DFunLike, DFunLike.ext, smul_comm
+--- 原说明 ---
+TODO: generalize to include `SMul (P ≃ᵃ[k] P) (AffineBasis ι k P)`, which acts o
+n `P` with a
+`VAdd` version of a `DistribMulAction`.
 -/
 instance [SMulCommClass G G' V] : SMulCommClass G G' (AffineBasis ι k V) where
   smul_comm _g _g' _b := DFunLike.ext _ _ fun _ => smul_comm _ _ _
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- TODO: generalize to include `SMul (P ≃ᵃ[k] P) (AffineBasis ι k P)`, which acts on `P` with a
+`VAdd` version of a `DistribMulAction`. -/
+/-
+**AffineBasis.** 是 Mathlib 中的一个实例，位于命名空间 `AffineBasis`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [SMul
-  signature: G G'] [IsScalarTower G G' V] : IsScalarTower G G' (AffineBasis ι k V) where
-  body: DFunLike.ext _ _ fun _ => smul_assoc _ _ _
-
-中文:
-实例 [标量乘法
-  签名: G G'] [标量塔 G G' V] : 标量塔 G G' (仿射基 ι k V) where
-  定义体: DFunLike.ext _ _ fun _ => smul_assoc _ _ _
-
-Depends on / 依赖: DFunLike, DFunLike.ext, smul_assoc
+--- 原说明 ---
+TODO: generalize to include `SMul (P ≃ᵃ[k] P) (AffineBasis ι k P)`, which acts o
+n `P` with a
+`VAdd` version of a `DistribMulAction`.
 -/
 instance [SMul G G'] [IsScalarTower G G' V] : IsScalarTower G G' (AffineBasis ι k V) where
   smul_assoc _g _g' _b := DFunLike.ext _ _ fun _ => smul_assoc _ _ _
-
-/--
-lemma `basisOf_smul` / 引理 `basisOf_smul`
-
-English:
-lemma basisOf_smul
-  given: (a : G) (b : AffineBasis ι k V) (i : ι)
-  proof: by ext j; simp [smul_sub]
-
-中文:
-引理 basisOf_smul
-  条件: (a : G) (b : 仿射基 ι k V) (i : ι)
-  证明: by ext j; simp [smul_sub]
+/-
+**AffineBasis.basisOf_smul** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：∀ {ι : Type u_1} {G : Type u_3} {k : Type u_5} {V : Type u_6} [inst : AddC
+ommGroup V] [inst_1 : Ring k]   [inst_2 : _root_.Module k V] [inst_3 : Group G] 
+[inst_4 : DistribMulAction G V] [inst_5 : SMulCommClass G k V] (a : G)   (b : Af
+fineBasis ι k V) (i : ι), (a • b).basisOf i = a • b.basisOf i
+参数：a : G；b : AffineBasis ι k V；i : ι；a • b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Basis.eq_of_apply_eq`：eq_of_apply_eq {b₁ b₂ : Basis ι R M} : (for
+all i, b₁ i = b₂ i) -> b₁ = b₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AffineBasis.basisOf_apply`：basisOf_apply (i : ι) (j : { j : ι // j != i 
+}) : b.basisOf i j = b ↑j -ᵥ b i
+· 使用定理 `smul_sub`：smul_sub (r : M) (x y : A) : r • (x - y) = r • x - r • y
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma basisOf_smul (a : G) (b : AffineBasis ι k V) (i : ι) :
     (a • b).basisOf i = a • b.basisOf i := by ext j; simp [smul_sub]
-
-/--
-lemma `reindex_smul` / 引理 `reindex_smul`
-
-English:
-lemma reindex_smul
-  given: (a : G) (b : AffineBasis ι k V) (e : ι ≃ ι')
-  proof: rfl
-
-中文:
-引理 reindex_smul
-  条件: (a : G) (b : 仿射基 ι k V) (e : ι ≃ ι')
-  证明: rfl
+/-
+**AffineBasis.reindex_smul** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：∀ {ι : Type u_1} {ι' : Type u_2} {G : Type u_3} {k : Type u_5} {V : Type u
+_6} [inst : AddCommGroup V] [inst_1 : Ring k]   [inst_2 : _root_.Module k V] [in
+st_3 : Group G] [inst_4 : DistribMulAction G V] [inst_5 : SMulCommClass G k V] (
+a : G)   (b : AffineBasis ι k V) (e : ι ≃ ι'), (a • b).reindex e = a • b.reindex
+ e
+参数：a : G；b : AffineBasis ι k V；e : ι ≃ ι'；a • b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma reindex_smul (a : G) (b : AffineBasis ι k V) (e : ι ≃ ι') :
     (a • b).reindex e = a • b.reindex e :=
   rfl
-
-/--
-lemma `coord_smul` / 引理 `coord_smul`
-
-English:
-lemma coord_smul
-  given: (a : G) (b : AffineBasis ι k V) (i : ι)
-  proof: by
-  ext v; simp [map_sub, coord]
-
-中文:
-引理 coord_smul
-  条件: (a : G) (b : 仿射基 ι k V) (i : ι)
-  证明: by
-  ext v; simp [map_sub, coord]
+/-
+**AffineBasis.coord_smul** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：∀ {ι : Type u_1} {G : Type u_3} {k : Type u_5} {V : Type u_6} [inst : AddC
+ommGroup V] [inst_1 : Ring k]   [inst_2 : _root_.Module k V] [inst_3 : Group G] 
+[inst_4 : DistribMulAction G V] [inst_5 : SMulCommClass G k V] (a : G)   (b : Af
+fineBasis ι k V) (i : ι),   (a • b).coord i = (b.coord i).comp (↑(DistribMulActi
+on.toLinearEquiv k V a).symm).toAffineMap
+参数：a : G；b : AffineBasis ι k V；i : ι；a • b；b.coord i；↑(DistribMulAction.toLinear
+Equiv k V a).symm。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineMap.ext`：ext {f g : P1 ->ᵃ[k] P2} (h : forall p, f p = g p) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `AffineBasis.basisOf_smul`：∀ {ι : Type u_1} {G : Type u_3} {k : Type u_5}
+ {V : Type u_6} [inst : AddCommGroup V] [inst_1 : Ring k]   [inst_2 : _root_.Mod
+ule k V] [inst…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `DistribMulAction.toLinearEquiv_symm_apply`：∀ (R : Type u_1) {S : Type u_
+4} (M : Type u_5) [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _ro
+ot_.Module R M] [inst_3 : Group…
+· 使用引理 `inv_smul_smul`：inv_smul_smul (g : G) (a : α) : g⁻¹ • g • a = a
+· 使用定理 `AffineMap.mk.congr_simp`：∀ {k : Type u_1} {V1 : Type u_2} {P1 : Type u_3
+} {V2 : Type u_4} {P2 : Type u_5} [inst : Ring k]   [inst_1 : AddCommGroup V1] [
+inst_2 : _roo…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma coord_smul (a : G) (b : AffineBasis ι k V) (i : ι) :
     (a • b).coord i = (b.coord i).comp (DistribMulAction.toLinearEquiv _ _ a).symm.toAffineMap := by
   ext v; simp [map_sub, coord]
 
-/--
-Instance `instMulAction` / 实例 `instMulAction`
+/-- TODO: generalize to include `SMul (P ≃ᵃ[k] P) (AffineBasis ι k P)`, which acts on `P` with a
+`VAdd` version of a `DistribMulAction`. -/
+/-
+**AffineBasis.instMulAction** 是 Mathlib 中的一个实例，位于命名空间 `AffineBasis`。
+形式化陈述：instMulAction : MulAction G (AffineBasis ι k V)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineBasis.coe_smul`：∀ {ι : Type u_1} {G : Type u_3} {k : Type u_5} {V 
+: Type u_6} [inst : AddCommGroup V] [inst_1 : Ring k]   [inst_2 : _root_.Module 
+k V] [inst…
 
-English:
-instance instMulAction
-  signature: : MulAction G (AffineBasis ι k V)
-  body: DFunLike.coe_injective.mulAction _ coe_smul
-
-中文:
-实例 instMulAction
-  签名: : 乘法作用 G (仿射基 ι k V)
-  定义体: DFunLike.coe_injective.mulAction _ coe_smul
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.mulAction, coe_injective, coe_smul, mulAction
+--- 原说明 ---
+TODO: generalize to include `SMul (P ≃ᵃ[k] P) (AffineBasis ι k P)`, which acts o
+n `P` with a
+`VAdd` version of a `DistribMulAction`.
 -/
 instance instMulAction : MulAction G (AffineBasis ι k V) :=
   DFunLike.coe_injective.mulAction _ coe_smul
@@ -1323,77 +1211,73 @@ section DivisionRing
 variable [DivisionRing k] [Module k V]
 
 @[simp]
-/--
-theorem `coord_apply_centroid` / 定理 `coord_apply_centroid`
-
-English:
-theorem coord_apply_centroid
-  statement: [CharZero k] (b : AffineBasis ι k P) {s : Finset ι} {i : ι}
-  proof: by
-  rw [Finset.centroid]; rw [b.coord_apply_combination_of_mem hi (s.sum_centroidWeights_eq_one_of_nonempty _ ⟨i]; rw [hi⟩)]; rw [Finset.centroidWeights]; rw [Function.const_apply]
-
-中文:
-定理 coord_apply_centroid
-  结论: [特征零 k] (b : 仿射基 ι k P) {s : 有限集 ι} {i : ι}
-  证明: by
-  rw [Finset.centroid]; rw [b.coord_apply_combination_of_mem hi (s.sum_centroidWeights_eq_one_of_nonempty _ ⟨i]; rw [hi⟩)]; rw [Finset.centroidWeights]; rw [Function.const_apply]
-
-Depends on / 依赖: Finset, Finset.centroid, Finset.centroidWeights, Function, Function.const_apply, b.coord_apply_combination_of_mem, centroid, centroidWeights, const_apply, coord_apply_combination_of_mem, s.sum_centroidWeights_eq_one_of_nonempty, sum_centroidWeights_eq_one_of_nonempty
+/-
+**AffineBasis.coord_apply_centroid** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：coord_apply_centroid [CharZero k] (b : AffineBasis ι k P) {s : Finset ι} {
+i : ι} (hi : i in s) : b.coord i (s.centroid k b) = (s.card : k)⁻¹
+参数：b : AffineBasis ι k P；hi : i in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.centroid.eq_1`：∀ (k : Type u_1) {V : Type u_2} {P : Type u_3} [in
+st : DivisionRing k] [inst_1 : AddCommGroup V]   [inst_2 : _root_.Module k V] [i
+nst_3 : Ad…
+· 使用定理 `AffineBasis.coord_apply_combination_of_mem`：coord_apply_combination_of_m
+em (hi : i in s) {w : ι -> k} (hw : s.sum w = 1) : b.coord i (s.affineCombinatio
+n k b w) = w i
+· 使用定理 `Finset.sum_centroidWeights_eq_one_of_nonempty`：sum_centroidWeights_eq_on
+e_of_nonempty [CharZero k] (h : s.Nonempty) : ∑ i in s, s.centroidWeights k i = 
+1
+· 使用定理 `Finset.centroidWeights.eq_1`：∀ (k : Type u_1) [inst : DivisionRing k] {ι
+ : Type u_4} (s : Finset ι),   Finset.centroidWeights k s = Function.const ι (↑s
+.card)⁻¹
+· 使用定理 `Function.const_apply`：∀ {β : Sort u_1} {α : Sort u_2} {y : β} {x : α}, F
+unction.const α y x = y
 -/
 theorem coord_apply_centroid [CharZero k] (b : AffineBasis ι k P) {s : Finset ι} {i : ι}
-    (hi : i in s) : b.coord i (s.centroid k b) = (s.card : k)⁻¹ := by
-  rw [Finset.centroid]; rw [b.coord_apply_combination_of_mem hi (s.sum_centroidWeights_eq_one_of_nonempty _ ⟨i]; rw [hi⟩)]; rw [Finset.centroidWeights]; rw [Function.const_apply]
-
-/--
-theorem `exists_affine_subbasis` / 定理 `exists_affine_subbasis`
-
-English:
-theorem exists_affine_subbasis
-  given: {t : Set P} (ht : affineSpan k t = ⊤)
-  proof: by
-  obtain ⟨s, hst, h_tot, h_ind⟩ := exists_affineIndependent k V t
-  refine ⟨s, hst, ⟨(↑), h_ind, ?_⟩, rfl⟩
-  rw [Subtype.range_coe]; rw [h_tot]; rw [ht]
-
-中文:
-定理 存在_affine_subbasis
-  条件: {t : 集合 P} (ht : affineSpan k t = ⊤)
-  证明: by
-  obtain ⟨s, hst, h_tot, h_ind⟩ := exists_affineIndependent k V t
-  refine ⟨s, hst, ⟨(↑), h_ind, ?_⟩, rfl⟩
-  rw [Subtype.range_coe]; rw [h_tot]; rw [ht]
-
-Depends on / 依赖: Subtype, Subtype.range_coe, exists_affineIndependent, h_ind, h_tot, range_coe
+    (hi : i ∈ s) : b.coord i (s.centroid k b) = (s.card : k)⁻¹ := by
+  rw [Finset.centroid,
+    b.coord_apply_combination_of_mem hi (s.sum_centroidWeights_eq_one_of_nonempty _ ⟨i, hi⟩),
+    Finset.centroidWeights, Function.const_apply]
+/-
+**AffineBasis.exists_affine_subbasis** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：exists_affine_subbasis {t : Set P} (ht : affineSpan k t = ⊤) : exists s su
+bseteq t, exists b : AffineBasis s k P, ⇑b = ((↑) : s -> P)
+参数：ht : affineSpan k t = ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_affineIndependent`：exists_affineIndependent (s : Set P) : exists 
+t subseteq s, affineSpan k t = affineSpan k s ∧ AffineIndependent k ((↑) : t -> 
+P)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.range_coe`：range_coe {s : Set α} : range ((↑) : s -> α) = s
 -/
 theorem exists_affine_subbasis {t : Set P} (ht : affineSpan k t = ⊤) :
-    exists s subseteq t, exists b : AffineBasis s k P, ⇑b = ((↑) : s -> P) := by
+    ∃ s ⊆ t, ∃ b : AffineBasis s k P, ⇑b = ((↑) : s → P) := by
   obtain ⟨s, hst, h_tot, h_ind⟩ := exists_affineIndependent k V t
   refine ⟨s, hst, ⟨(↑), h_ind, ?_⟩, rfl⟩
-  rw [Subtype.range_coe]; rw [h_tot]; rw [ht]
+  rw [Subtype.range_coe, h_tot, ht]
 
 variable (k V P)
-
-/--
-theorem `exists_affineBasis` / 定理 `exists_affineBasis`
-
-English:
-theorem exists_affineBasis
-  statement: exists (s : Set P) (b : AffineBasis (↥s) k P), ⇑b = ((↑) : s -> P)
-  proof: let ⟨s, _, hs⟩ := exists_affine_subbasis (AffineSubspace.span_univ k V P)
-  ⟨s, hs⟩
-
-中文:
-定理 存在_affineBasis
-  结论: 存在 (s : 集合 P) (b : 仿射基 (↥s) k P), ⇑b = ((↑) : s -> P)
-  证明: let ⟨s, _, hs⟩ := exists_affine_subbasis (AffineSubspace.span_univ k V P)
-  ⟨s, hs⟩
-
-Depends on / 依赖: AffineSubspace, AffineSubspace.span_univ, exists_affine_subbasis, span_univ
+/-
+**AffineBasis.exists_affineBasis** 是 Mathlib 中的一个定理，位于命名空间 `AffineBasis`。
+形式化陈述：exists_affineBasis : exists (s : Set P) (b : AffineBasis (↥s) k P), ⇑b = (
+(↑) : s -> P)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AffineBasis.exists_affine_subbasis`：exists_affine_subbasis {t : Set P} (
+ht : affineSpan k t = ⊤) : exists s subseteq t, exists b : AffineBasis s k P, ⇑b
+ = ((↑) : s -> P)
+· 使用定理 `AffineSubspace.span_univ`：span_univ : affineSpan k (Set.univ : Set P) = 
+⊤
 -/
-theorem exists_affineBasis : exists (s : Set P) (b : AffineBasis (↥s) k P), ⇑b = ((↑) : s -> P) :=
+theorem exists_affineBasis : ∃ (s : Set P) (b : AffineBasis (↥s) k P), ⇑b = ((↑) : s → P) :=
   let ⟨s, _, hs⟩ := exists_affine_subbasis (AffineSubspace.span_univ k V P)
   ⟨s, hs⟩
 
 end DivisionRing
 
 end AffineBasis
+

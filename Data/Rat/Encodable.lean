@@ -20,31 +20,15 @@ public section
 
 namespace Rat
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Encodable Rat
-  body: Encodable.ofEquiv (Σ n : Int, { d : Nat // 0 < d ∧ n.natAbs.Coprime d })
-    ⟨fun ⟨a, b, c, d⟩ => ⟨a, b, Nat.pos_of_ne_zero c, d⟩,
-      fun ⟨a, b, c, d⟩ => ⟨a, b, Nat.pos_iff_ne_zero.mp c, d⟩,
-      fun _ => rfl, fun ⟨_, _, _, _⟩ => rfl⟩
-
-中文:
-实例 :
-  签名: 可编码 有理数
-  定义体: Encodable.ofEquiv (Σ n : Int, { d : Nat // 0 < d ∧ n.natAbs.Coprime d })
-    ⟨fun ⟨a, b, c, d⟩ => ⟨a, b, Nat.pos_of_ne_zero c, d⟩,
-      fun ⟨a, b, c, d⟩ => ⟨a, b, Nat.pos_iff_ne_zero.mp c, d⟩,
-      fun _ => rfl, fun ⟨_, _, _, _⟩ => rfl⟩
-
-Depends on / 依赖: Coprime, Encodable, Encodable.ofEquiv, Nat.pos_iff_ne_zero.mp, Nat.pos_of_ne_zero, n.natAbs.Coprime, natAbs, ofEquiv, pos_iff_ne_zero, pos_of_ne_zero
+/-
+**Rat.** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Encodable Rat :=
-  Encodable.ofEquiv (Σ n : Int, { d : Nat // 0 < d ∧ n.natAbs.Coprime d })
+instance : Encodable ℚ :=
+  Encodable.ofEquiv (Σ n : ℤ, { d : ℕ // 0 < d ∧ n.natAbs.Coprime d })
     ⟨fun ⟨a, b, c, d⟩ => ⟨a, b, Nat.pos_of_ne_zero c, d⟩,
       fun ⟨a, b, c, d⟩ => ⟨a, b, Nat.pos_iff_ne_zero.mp c, d⟩,
       fun _ => rfl, fun ⟨_, _, _, _⟩ => rfl⟩
 
 end Rat
+

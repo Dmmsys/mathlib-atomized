@@ -21,163 +21,84 @@ variable {α β γ δ : Sort*}
 
 namespace PProd
 
-/--
-Definition of `mk.injArrow` / `mk.injArrow` 的定义
-
-English:
-definition mk.injArrow
-  signature: {α : Type*} {β : Type*} {x₁ : α} {y₁ : β} {x₂ : α} {y₂ : β}
-  body: by
-  intros h P w
-  cases h
-  exact w rfl rfl
-
-@[simp]
-
-中文:
-定义 mk.injArrow
-  签名: {α : 类型} {β : 类型} {x₁ : α} {y₁ : β} {x₂ : α} {y₂ : β}
-  定义体: by
-  intros h P w
-  cases h
-  exact w rfl rfl
-
-@[simp]
+/-
+**PProd.mk.injArrow** 是 Mathlib 中的一个定义，位于命名空间 `PProd.mk`。
+形式化陈述：{α : Type u_5} →   {β : Type u_6} →     {x₁ : α} → {y₁ : β} → {x₂ : α} → {
+y₂ : β} → (x₁, y₁) = (x₂, y₂) → ⦃P : Sort u_7⦄ → (x₁ = x₂ → y₁ = y₂ → P) → P
+参数：x₁, y₁；x₂, y₂。
+该定义给出了一个带前提的构造。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def mk.injArrow {α : Type*} {β : Type*} {x₁ : α} {y₁ : β} {x₂ : α} {y₂ : β} :
-    (x₁, y₁) = (x₂, y₂) -> forall ⦃P : Sort*⦄, (x₁ = x₂ -> y₁ = y₂ -> P) -> P := by
+    (x₁, y₁) = (x₂, y₂) → ∀ ⦃P : Sort*⦄, (x₁ = x₂ → y₁ = y₂ → P) → P := by
   intros h P w
   cases h
   exact w rfl rfl
 
 @[simp]
-/--
-theorem `mk.eta` / 定理 `mk.eta`
-
-English:
-theorem mk.eta
-  given: {p : PProd α β}
-  statement: PProd.mk p.1 p.2 = p
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk.eta
-  条件: {p : 命题积类型 α β}
-  结论: 命题积类型.mk p.1 p.2 = p
-  证明: rfl
-
-@[simp]
+/-
+**PProd.mk.eta** 是 Mathlib 中的一个定理，位于命名空间 `PProd.mk`。
+形式化陈述：∀ {α : Sort u_1} {β : Sort u_2} {p : α ×' β}, ⟨p.fst, p.snd⟩ = p
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk.eta {p : PProd α β} : PProd.mk p.1 p.2 = p :=
   rfl
 
 @[simp]
-/--
-theorem `«forall»` / 定理 `«forall»`
-
-English:
-theorem «forall»
-  given: {p : PProd α β -> Prop}
-  statement: (forall x, p x) ↔ forall a b, p ⟨a, b⟩
-  proof: ⟨fun h a b => h ⟨a, b⟩, fun h ⟨a, b⟩ => h a b⟩
+/-
+**PProd.** 是 Mathlib 中的一个定理，位于命名空间 `PProd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem «forall» {p : PProd α β → Prop} : (∀ x, p x) ↔ ∀ a b, p ⟨a, b⟩ :=
+  ⟨fun h a b ↦ h ⟨a, b⟩, fun h ⟨a, b⟩ ↦ h a b⟩
 
 @[simp]
-
-中文:
-定理 «对任意»
-  条件: {p : 命题积类型 α β -> 命题}
-  结论: (对任意 x, p x) ↔ 对任意 a b, p ⟨a, b⟩
-  证明: ⟨fun h a b => h ⟨a, b⟩, fun h ⟨a, b⟩ => h a b⟩
-
-@[simp]
+/-
+**PProd.** 是 Mathlib 中的一个定理，位于命名空间 `PProd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem «forall» {p : PProd α β -> Prop} : (forall x, p x) ↔ forall a b, p ⟨a, b⟩ :=
-  ⟨fun h a b => h ⟨a, b⟩, fun h ⟨a, b⟩ => h a b⟩
-
-@[simp]
-/--
-theorem `«exists»` / 定理 `«exists»`
-
-English:
-theorem «exists»
-  given: {p : PProd α β -> Prop}
-  statement: (exists x, p x) ↔ exists a b, p ⟨a, b⟩
-  proof: ⟨fun ⟨⟨a, b⟩, h⟩ => ⟨a, b, h⟩, fun ⟨a, b, h⟩ => ⟨⟨a, b⟩, h⟩⟩
-
-中文:
-定理 «存在»
-  条件: {p : 命题积类型 α β -> 命题}
-  结论: (存在 x, p x) ↔ 存在 a b, p ⟨a, b⟩
-  证明: ⟨fun ⟨⟨a, b⟩, h⟩ => ⟨a, b, h⟩, fun ⟨a, b, h⟩ => ⟨⟨a, b⟩, h⟩⟩
+theorem «exists» {p : PProd α β → Prop} : (∃ x, p x) ↔ ∃ a b, p ⟨a, b⟩ :=
+  ⟨fun ⟨⟨a, b⟩, h⟩ ↦ ⟨a, b, h⟩, fun ⟨a, b, h⟩ ↦ ⟨⟨a, b⟩, h⟩⟩
+/-
+**PProd.forall'** 是 Mathlib 中的一个定理，位于命名空间 `PProd`。
+形式化陈述：forall' {p : α -> β -> Prop} : (forall x : PProd α β, p x.1 x.2) ↔ forall 
+a b, p a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PProd.forall`：∀ {α : Sort u_1} {β : Sort u_2} {p : α ×' β → Prop}, (∀ (x
+ : α ×' β), p x) ↔ ∀ (a : α) (b : β), p ⟨a, b⟩
 -/
-theorem «exists» {p : PProd α β -> Prop} : (exists x, p x) ↔ exists a b, p ⟨a, b⟩ :=
-  ⟨fun ⟨⟨a, b⟩, h⟩ => ⟨a, b, h⟩, fun ⟨a, b, h⟩ => ⟨⟨a, b⟩, h⟩⟩
-
-/--
-theorem `forall'` / 定理 `forall'`
-
-English:
-theorem forall'
-  given: {p : α -> β -> Prop}
-  statement: (forall x : PProd α β, p x.1 x.2) ↔ forall a b, p a b
-  proof: PProd.forall
-
-中文:
-定理 对任意'
-  条件: {p : α -> β -> 命题}
-  结论: (对任意 x : 命题积类型 α β, p x.1 x.2) ↔ 对任意 a b, p a b
-  证明: PProd.forall
-
-Depends on / 依赖: PProd.forall
--/
-theorem forall' {p : α -> β -> Prop} : (forall x : PProd α β, p x.1 x.2) ↔ forall a b, p a b :=
+theorem forall' {p : α → β → Prop} : (∀ x : PProd α β, p x.1 x.2) ↔ ∀ a b, p a b :=
   PProd.forall
-
-/--
-theorem `exists'` / 定理 `exists'`
-
-English:
-theorem exists'
-  given: {p : α -> β -> Prop}
-  statement: (exists x : PProd α β, p x.1 x.2) ↔ exists a b, p a b
-  proof: PProd.exists
-
-中文:
-定理 存在'
-  条件: {p : α -> β -> 命题}
-  结论: (存在 x : 命题积类型 α β, p x.1 x.2) ↔ 存在 a b, p a b
-  证明: PProd.exists
-
-Depends on / 依赖: PProd.exists
+/-
+**PProd.exists'** 是 Mathlib 中的一个定理，位于命名空间 `PProd`。
+形式化陈述：exists' {p : α -> β -> Prop} : (exists x : PProd α β, p x.1 x.2) ↔ exists 
+a b, p a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PProd.exists`：∀ {α : Sort u_1} {β : Sort u_2} {p : α ×' β → Prop}, (∃ x,
+ p x) ↔ ∃ a b, p ⟨a, b⟩
 -/
-theorem exists' {p : α -> β -> Prop} : (exists x : PProd α β, p x.1 x.2) ↔ exists a b, p a b :=
+theorem exists' {p : α → β → Prop} : (∃ x : PProd α β, p x.1 x.2) ↔ ∃ a b, p a b :=
   PProd.exists
 
 end PProd
 
-/--
-theorem `Function.Injective.pprod_map` / 定理 `Function.Injective.pprod_map`
-
-English:
-theorem Function.Injective.pprod_map
-  given: {f : α -> β} {g : γ -> δ} (hf : Injective f) (hg : Injective g)
-  proof: fun _ _ h =>
-  have A := congr_arg PProd.fst h
-  have B := congr_arg PProd.snd h
-  congr_arg₂ PProd.mk (hf A) (hg B)
-
-中文:
-定理 函数.单射.pprod_map
-  条件: {f : α -> β} {g : γ -> δ} (hf : 单射 f) (hg : 单射 g)
-  证明: fun _ _ h =>
-  have A := congr_arg PProd.fst h
-  have B := congr_arg PProd.snd h
-  congr_arg₂ PProd.mk (hf A) (hg B)
+/-
+**Function.Injective.pprod_map** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Function.Injective.pprod_map {f : α -> β} {g : γ -> δ} (hf : Injective f) 
+(hg : Injective g) : Injective (fun x => ⟨f x.1, g x.2⟩ : PProd α γ -> PProd β δ
+)
+参数：hf : Injective f；hg : Injective g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `congr_arg₂`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} (f : α → β → 
+γ) {x x' : α} {y y' : β}, x = x' → y = y' → f x y = f x' y'
 -/
-theorem Function.Injective.pprod_map {f : α -> β} {g : γ -> δ} (hf : Injective f) (hg : Injective g) :
-    Injective (fun x => ⟨f x.1, g x.2⟩ : PProd α γ -> PProd β δ) := fun _ _ h =>
+theorem Function.Injective.pprod_map {f : α → β} {g : γ → δ} (hf : Injective f) (hg : Injective g) :
+    Injective (fun x ↦ ⟨f x.1, g x.2⟩ : PProd α γ → PProd β δ) := fun _ _ h ↦
   have A := congr_arg PProd.fst h
   have B := congr_arg PProd.snd h
   congr_arg₂ PProd.mk (hf A) (hg B)

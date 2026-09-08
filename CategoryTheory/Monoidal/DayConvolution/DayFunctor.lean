@@ -35,18 +35,21 @@ open scoped ExternalProduct
 
 noncomputable section
 
-/--
-Definition of `DayFunctor` / `DayFunctor` 的定义
+/-- `DayFunctor C V` is a type synonym for `C ⥤ V`, implemented as a one-field
+structure. -/
+/-
+**CategoryTheory.MonoidalCategory.DayFunctor** 是 Mathlib 中的一个归纳类型，位于命名空间 `Catego
+ryTheory.MonoidalCategory`。
+形式化陈述：(C : Type u₁) →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     (V : T
+ype u₂) →       [inst_1 : CategoryTheory.Category.{v₂, u₂} V] →         [Categor
+yTheory.MonoidalCategory C] → [CategoryTheory.MonoidalCategory V] → Type (max (m
+ax (max u₁ u₂) v₁) v₂)
+参数：max (max u₁ u₂) v₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure DayFunctor
-  axioms and operations (1):
-    - functor : C ⥤ V
-
-中文:
-结构 Day函子
-  公理与运算 (1 个):
-    - functor : C ⥤ V
+--- 原说明 ---
+`DayFunctor C V` is a type synonym for `C ⥤ V`, implemented as a one-field
+structure.
 -/
 structure DayFunctor
     (C : Type u₁) [Category.{v₁} C] (V : Type u₂) [Category.{v₂} V]
@@ -62,110 +65,68 @@ scoped infixr:26 " ⊛⥤ " => DayFunctor
 variable {C : Type u₁} [Category.{v₁} C] {V : Type u₂} [Category.{v₂} V]
     [MonoidalCategory C] [MonoidalCategory V]
 
-/--
-lemma `mk_functor` / 引理 `mk_functor`
-
-English:
-lemma mk_functor
-  given: (F : C ⥤ V)
-  statement: (mk F).functor = F
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 mk_functor
-  条件: (F : C ⥤ V)
-  结论: (mk F).functor = F
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.MonoidalCategory.DayFunctor.mk_functor** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.MonoidalCategory.DayFunctor`。
+形式化陈述：mk_functor (F : C ⥤ V) : (mk F).functor = F
+参数：F : C ⥤ V。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mk_functor (F : C ⥤ V) : (mk F).functor = F := rfl
 
 @[simp]
-/--
-lemma `functor_mk` / 引理 `functor_mk`
-
-English:
-lemma functor_mk
-  given: (F : C ⊛⥤ V)
-  statement: mk F.functor = F
-  proof: rfl
-
-中文:
-引理 functor_mk
-  条件: (F : C ⊛⥤ V)
-  结论: mk F.functor = F
-  证明: rfl
+/-
+**CategoryTheory.MonoidalCategory.DayFunctor.functor_mk** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.MonoidalCategory.DayFunctor`。
+形式化陈述：functor_mk (F : C ⊛⥤ V) : mk F.functor = F
+参数：F : C ⊛⥤ V。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma functor_mk (F : C ⊛⥤ V) : mk F.functor = F := rfl
 
-/--
-Definition of `Hom` / `Hom` 的定义
+/-- Morphisms of Day functors are natural transformations of the underlying
+functors. -/
+/-
+**CategoryTheory.MonoidalCategory.DayFunctor.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `Ca
+tegoryTheory.MonoidalCategory.DayFunctor`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {V : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} V] →         [inst_2 
+: CategoryTheory.MonoidalCategory C] →           [inst_3 : CategoryTheory.Monoid
+alCategory V] →             CategoryTheory.MonoidalCategory.DayFunctor C V →    
+           CategoryTheory.MonoidalCategory.DayFunctor C V → Type (max u₁ v₂)
+参数：max u₁ v₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (F G : C ⊛⥤ V)
-  axioms and operations (1):
-    - natTrans : F.functor ⟶ G.functor
-
-中文:
-结构 态射
-  参数: (F G : C ⊛⥤ V)
-  公理与运算 (1 个):
-    - natTrans : F.functor ⟶ G.functor
+--- 原说明 ---
+Morphisms of Day functors are natural transformations of the underlying
+functors.
 -/
 structure Hom (F G : C ⊛⥤ V) where
   /-- the underlying natural transformation -/
   natTrans : F.functor ⟶ G.functor
 
 @[simps id_natTrans comp_natTrans]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (C ⊛⥤ V)
-  body: Hom
-id x := .mk 𝟙 x.functor
-comp α β := .mk α.natTrans ≫ β.natTrans
-
-@[ext]
-
-中文:
-实例 :
-  签名: 范畴 (C ⊛⥤ V)
-  定义体: Hom
-id x := .mk 𝟙 x.functor
-comp α β := .mk α.natTrans ≫ β.natTrans
-
-@[ext]
+/-
+**CategoryTheory.MonoidalCategory.DayFunctor.** 是 Mathlib 中的一个实例，位于命名空间 `Categor
+yTheory.MonoidalCategory.DayFunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (C ⊛⥤ V) where
   Hom := Hom
-id x := .mk 𝟙 x.functor
-comp α β := .mk α.natTrans ≫ β.natTrans
+  id x := .mk <| 𝟙 x.functor
+  comp α β := .mk <| α.natTrans ≫ β.natTrans
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {F G : C ⊛⥤ V} {α β : F ⟶ G} (h : α.natTrans = β.natTrans)
-  proof: by
-  cases α
-  cases β
-  grind
-
-中文:
-引理 hom_ext
-  条件: {F G : C ⊛⥤ V} {α β : F ⟶ G} (h : α.natTrans = β.natTrans)
-  证明: by
-  cases α
-  cases β
-  grind
+/-
+**CategoryTheory.MonoidalCategory.DayFunctor.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.MonoidalCategory.DayFunctor`。
+形式化陈述：hom_ext {F G : C ⊛⥤ V} {α β : F ⟶ G} (h : α.natTrans = β.natTrans) : α = β
+参数：h : α.natTrans = β.natTrans。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma hom_ext {F G : C ⊛⥤ V} {α β : F ⟶ G} (h : α.natTrans = β.natTrans) :
     α = β := by
@@ -177,32 +138,12 @@ variable (C V) in
 /-- The tautological equivalence of categories between `C ⥤ V` and `C ⊛⥤ V`. -/
 @[simps! functor_obj functor_map inverse_obj_functor inverse_map_natTrans
   unitIso_hom_app unitIso_inv_app counitIso_hom_app counitIso_inv_app]
-/--
-Definition of `equiv` / `equiv` 的定义
-
-English:
-definition equiv
-  signature: : (C ⊛⥤ V) ≌ (C ⥤ V) where
-  body: { obj F := F.functor
-      map α := α.natTrans }
-  inverse :=
-    { obj F := .mk F
-      map α := .mk α }
-  unitIso := .refl _
-  counitIso := .refl _
-
-中文:
-定义 equiv
-  签名: : (C ⊛⥤ V) ≌ (C ⥤ V) where
-  定义体: { obj F := F.functor
-      map α := α.natTrans }
-  inverse :=
-    { obj F := .mk F
-      map α := .mk α }
-  unitIso := .refl _
-  counitIso := .refl _
-
-Depends on / 依赖: F.functor, counitIso, functor, inverse, natTrans, unitIso
+/-
+**CategoryTheory.MonoidalCategory.DayFunctor.equiv** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.MonoidalCategory.DayFunctor`。
+形式化陈述：equiv : (C ⊛⥤ V) ≌ (C ⥤ V) where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def equiv : (C ⊛⥤ V) ≌ (C ⥤ V) where
   functor :=
@@ -215,193 +156,137 @@ def equiv : (C ⊛⥤ V) ≌ (C ⥤ V) where
   counitIso := .refl _
 
 variable
-    [hasDayConvolution : forall (F G : C ⥤ V),
+    [hasDayConvolution : ∀ (F G : C ⥤ V),
       (tensor C).HasPointwiseLeftKanExtension (F ⊠ G)]
     [hasDayConvolutionUnit :
       (Functor.fromPUnit.{0} <| 𝟙_ C).HasPointwiseLeftKanExtension
         (Functor.fromPUnit.{0} <| 𝟙_ V)]
-    [forall (v : V) (d : C), Limits.PreservesColimitsOfShape
+    [∀ (v : V) (d : C), Limits.PreservesColimitsOfShape
       (CostructuredArrow (tensor C) d) (tensorLeft v)]
-    [forall (v : V) (d : C), Limits.PreservesColimitsOfShape
+    [∀ (v : V) (d : C), Limits.PreservesColimitsOfShape
       (CostructuredArrow (tensor C) d) (tensorRight v)]
-    [forall (v : V) (d : C), Limits.PreservesColimitsOfShape
+    [∀ (v : V) (d : C), Limits.PreservesColimitsOfShape
       (CostructuredArrow (Functor.fromPUnit.{0} <| 𝟙_ C) d) (tensorLeft v)]
-    [forall (v : V) (d : C), Limits.PreservesColimitsOfShape
+    [∀ (v : V) (d : C), Limits.PreservesColimitsOfShape
       (CostructuredArrow (Functor.fromPUnit.{0} <| 𝟙_ C) d) (tensorRight v)]
-    [forall (v : V) (d : C × C),
+    [∀ (v : V) (d : C × C),
       Limits.PreservesColimitsOfShape
         (CostructuredArrow ((𝟭 C).prod <| Functor.fromPUnit.{0} <| 𝟙_ C) d)
         (tensorRight v)]
-    [forall (v : V) (d : C × C),
+    [∀ (v : V) (d : C × C),
       Limits.PreservesColimitsOfShape
         (CostructuredArrow ((tensor C).prod (𝟭 C)) d) (tensorRight v)]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MonoidalCategory (C ⊛⥤ V)
-  body: monoidalOfHasDayConvolutions
-    (equiv C V).functor
-    (equiv C V).fullyFaithfulFunctor
-    (fun _ _ => ⟨_, ⟨equiv C V|>.counitIso.app _⟩⟩)
-.counitIso.app _⟩⟩ ⟨_, ⟨equiv C V
-
-@[simps! ι_obj ι_map]
-
-中文:
-实例 :
-  签名: 幺半群范畴 (C ⊛⥤ V)
-  定义体: monoidalOfHasDayConvolutions
-    (equiv C V).functor
-    (equiv C V).fullyFaithfulFunctor
-    (fun _ _ => ⟨_, ⟨equiv C V|>.counitIso.app _⟩⟩)
-.counitIso.app _⟩⟩ ⟨_, ⟨equiv C V
-
-@[simps! ι_obj ι_map]
-
-Depends on / 依赖: counitIso, counitIso.app, fullyFaithfulFunctor, functor, monoidalOfHasDayConvolutions
+/-
+**CategoryTheory.MonoidalCategory.DayFunctor.** 是 Mathlib 中的一个实例，位于命名空间 `Categor
+yTheory.MonoidalCategory.DayFunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MonoidalCategory (C ⊛⥤ V) :=
   monoidalOfHasDayConvolutions
     (equiv C V).functor
     (equiv C V).fullyFaithfulFunctor
     (fun _ _ => ⟨_, ⟨equiv C V|>.counitIso.app _⟩⟩)
-.counitIso.app _⟩⟩ ⟨_, ⟨equiv C V
+    ⟨_, ⟨equiv C V|>.counitIso.app _⟩⟩
 
 @[simps! ι_obj ι_map]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LawfulDayConvolutionMonoidalCategoryStruct C V (C ⊛⥤ V)
-  body: lawfulDayConvolutionMonoidalCategoryStructOfHasDayConvolutions
-    (equiv C V).functor
-    (equiv C V).fullyFaithfulFunctor
-    (fun _ _ => ⟨_, ⟨equiv C V|>.counitIso.app _⟩⟩)
-.counitIso.app _⟩⟩ ⟨_, ⟨equiv C V
-
-中文:
-实例 :
-  签名: LawfulDayConvolutionMonoidalCategoryStruct C V (C ⊛⥤ V)
-  定义体: lawfulDayConvolutionMonoidalCategoryStructOfHasDayConvolutions
-    (equiv C V).functor
-    (equiv C V).fullyFaithfulFunctor
-    (fun _ _ => ⟨_, ⟨equiv C V|>.counitIso.app _⟩⟩)
-.counitIso.app _⟩⟩ ⟨_, ⟨equiv C V
-
-Depends on / 依赖: counitIso, counitIso.app, fullyFaithfulFunctor, functor, lawfulDayConvolutionMonoidalCategoryStructOfHasDayConvolutions
+/-
+**CategoryTheory.MonoidalCategory.DayFunctor.** 是 Mathlib 中的一个实例，位于命名空间 `Categor
+yTheory.MonoidalCategory.DayFunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LawfulDayConvolutionMonoidalCategoryStruct C V (C ⊛⥤ V) :=
   lawfulDayConvolutionMonoidalCategoryStructOfHasDayConvolutions
     (equiv C V).functor
     (equiv C V).fullyFaithfulFunctor
     (fun _ _ => ⟨_, ⟨equiv C V|>.counitIso.app _⟩⟩)
-.counitIso.app _⟩⟩ ⟨_, ⟨equiv C V
+    ⟨_, ⟨equiv C V|>.counitIso.app _⟩⟩
 
-/--
-Definition of `η` / `η` 的定义
+/-- The unit transformation exhibiting `(F ⊗ G).functor` as a left Kan extension of
+`F.functor ⊠ G.functor` along `tensor C`. -/
+/-
+**CategoryTheory.MonoidalCategory.DayFunctor.** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.MonoidalCategory.DayFunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition η
-  signature: (F G : C ⊛⥤ V)
-  body: LawfulDayConvolutionMonoidalCategoryStruct.convolutionExtensionUnit
-    C V F G
-
-中文:
-定义 η
-  签名: (F G : C ⊛⥤ V)
-  定义体: LawfulDayConvolutionMonoidalCategoryStruct.convolutionExtensionUnit
-    C V F G
-
-Depends on / 依赖: LawfulDayConvolutionMonoidalCategoryStruct, LawfulDayConvolutionMonoidalCategoryStruct.convolutionExtensionUnit, convolutionExtensionUnit
+--- 原说明 ---
+The unit transformation exhibiting `(F ⊗ G).functor` as a left Kan extension of
+`F.functor ⊠ G.functor` along `tensor C`.
 -/
 def η (F G : C ⊛⥤ V) :
-    F.functor ⊠ G.functor ⟶ tensor C ⋙ (F otimes G).functor :=
+    F.functor ⊠ G.functor ⟶ tensor C ⋙ (F ⊗ G).functor :=
   LawfulDayConvolutionMonoidalCategoryStruct.convolutionExtensionUnit
     C V F G
 
 open LawfulDayConvolutionMonoidalCategoryStruct in
-instance (F G : C ⊛⥤ V) : (F otimes G).functor.IsLeftKanExtension (η F G) :=
+/-
+**CategoryTheory.MonoidalCategory.DayFunctor.** 是 Mathlib 中的一个实例，位于命名空间 `Categor
+yTheory.MonoidalCategory.DayFunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (F G : C ⊛⥤ V) : (F ⊗ G).functor.IsLeftKanExtension (η F G) :=
   (isPointwiseLeftKanExtensionConvolutionExtensionUnit F G).isLeftKanExtension
 
 open LawfulDayConvolutionMonoidalCategoryStruct in
-/--
-theorem `tensor_hom_ext` / 定理 `tensor_hom_ext`
-
-English:
-theorem tensor_hom_ext
-  statement: {F G H : C ⊛⥤ V} {α β : F otimes G ⟶ H}
-  proof: by
-  ext : 1
-  apply Functor.hom_ext_of_isLeftKanExtension
-    (F otimes G).functor (η F G) _
-  ext ⟨x, y⟩
-  exact h x y
-
-中文:
-定理 tensor_hom_ext
-  结论: {F G H : C ⊛⥤ V} {α β : F otimes G ⟶ H}
-  证明: by
-  ext : 1
-  apply Functor.hom_ext_of_isLeftKanExtension
-    (F otimes G).functor (η F G) _
-  ext ⟨x, y⟩
-  exact h x y
-
-Depends on / 依赖: Functor, Functor.hom_ext_of_isLeftKanExtension, functor, hom_ext_of_isLeftKanExtension, otimes
+/-
+**CategoryTheory.MonoidalCategory.DayFunctor.tensor_hom_ext** 是 Mathlib 中的一个定理，位
+于命名空间 `CategoryTheory.MonoidalCategory.DayFunctor`。
+形式化陈述：tensor_hom_ext {F G H : C ⊛⥤ V} {α β : F otimes G ⟶ H} (h : forall (x y : 
+C), (η F G).app (x, y) ≫ α.natTrans.app (x otimes y) = (η F G).app (x, y) ≫ β.na
+tTrans.app (x otimes y)) : α = β
+参数：h : forall (x y : C), (η F G).app (x, y) ≫ α.natTrans.app (x otimes y) = (η F
+ G).app (x, y) ≫ β.natTrans.app (x otimes y)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.MonoidalCategory.DayFunctor.hom_ext`：hom_ext {F G : C ⊛⥤ 
+V} {α β : F ⟶ G} (h : α.natTrans = β.natTrans) : α = β
+· 使用引理 `CategoryTheory.Functor.hom_ext_of_isLeftKanExtension`：hom_ext_of_isLeftK
+anExtension {G : D ⥤ H} (γ₁ γ₂ : F' ⟶ G) (hγ : α ≫ whiskerLeft L γ₁ = α ≫ whiske
+rLeft L γ₂) : γ₁ = γ₂
+· 使用定理 `CategoryTheory.MonoidalCategory.DayFunctor.instIsLeftKanExtensionProdFun
+ctorTensorObjη`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {V :
+ Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} V]   [inst_2 : Category…
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-theorem tensor_hom_ext {F G H : C ⊛⥤ V} {α β : F otimes G ⟶ H}
-    (h : forall (x y : C),
-      (η F G).app (x, y) ≫ α.natTrans.app (x otimes y) =
-      (η F G).app (x, y) ≫ β.natTrans.app (x otimes y)) :
+theorem tensor_hom_ext {F G H : C ⊛⥤ V} {α β : F ⊗ G ⟶ H}
+    (h : ∀ (x y : C),
+      (η F G).app (x, y) ≫ α.natTrans.app (x ⊗ y) =
+      (η F G).app (x, y) ≫ β.natTrans.app (x ⊗ y)) :
     α = β := by
   ext : 1
   apply Functor.hom_ext_of_isLeftKanExtension
-    (F otimes G).functor (η F G) _
+    (F ⊗ G).functor (η F G) _
   ext ⟨x, y⟩
   exact h x y
 
-/--
-Definition of `tensorDesc` / `tensorDesc` 的定义
+/-- A natural transformation `F.functor ⊠ G.functor ⟶ tensor C ⋙ H.functor`
+defines a morphism `F ⨂ G ⟶ H`. -/
+/-
+**CategoryTheory.MonoidalCategory.DayFunctor.tensorDesc** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.MonoidalCategory.DayFunctor`。
+形式化陈述：tensorDesc {F G H : C ⊛⥤ V} (α : F.functor ⊠ G.functor ⟶ tensor C ⋙ H.func
+tor) : F otimes G ⟶ H
+参数：α : F.functor ⊠ G.functor ⟶ tensor C ⋙ H.functor。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MonoidalCategory.DayFunctor.instIsLeftKanExtensionProdFun
+ctorTensorObjη`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {V :
+ Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} V]   [inst_2 : Category…
 
-English:
-definition tensorDesc
-  signature: {F G H : C ⊛⥤ V}
-  body: .mk (F otimes G).functor.descOfIsLeftKanExtension (η F G) H.functor α
-
-中文:
-定义 tensorDesc
-  签名: {F G H : C ⊛⥤ V}
-  定义体: .mk (F otimes G).functor.descOfIsLeftKanExtension (η F G) H.functor α
-
-Depends on / 依赖: H.functor, descOfIsLeftKanExtension, functor, functor.descOfIsLeftKanExtension, otimes
+--- 原说明 ---
+A natural transformation `F.functor ⊠ G.functor ⟶ tensor C ⋙ H.functor`
+defines a morphism `F ⨂ G ⟶ H`.
 -/
 def tensorDesc {F G H : C ⊛⥤ V}
     (α : F.functor ⊠ G.functor ⟶ tensor C ⋙ H.functor) :
-    F otimes G ⟶ H :=
-.mk (F otimes G).functor.descOfIsLeftKanExtension (η F G) H.functor α
-
-/--
-lemma `η_comp_tensorDec` / 引理 `η_comp_tensorDec`
-
-English:
-lemma η_comp_tensorDec
-  statement: {F G H : C ⊛⥤ V}
-  proof: Functor.descOfIsLeftKanExtension_fac _ _ _ _
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 η_comp_tensorDec
-  结论: {F G H : C ⊛⥤ V}
-  证明: Functor.descOfIsLeftKanExtension_fac _ _ _ _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Functor, Functor.descOfIsLeftKanExtension_fac, descOfIsLeftKanExtension_fac
+    F ⊗ G ⟶ H :=
+  .mk <| (F ⊗ G).functor.descOfIsLeftKanExtension (η F G) H.functor α
+/-
+**CategoryTheory.MonoidalCategory.DayFunctor.** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.MonoidalCategory.DayFunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma η_comp_tensorDec {F G H : C ⊛⥤ V}
     (α : F.functor ⊠ G.functor ⟶ tensor C ⋙ H.functor) :
@@ -409,131 +294,86 @@ lemma η_comp_tensorDec {F G H : C ⊛⥤ V}
   Functor.descOfIsLeftKanExtension_fac _ _ _ _
 
 @[reassoc (attr := simp)]
-/--
-lemma `η_comp_tensorDesc_app` / 引理 `η_comp_tensorDesc_app`
-
-English:
-lemma η_comp_tensorDesc_app
-  statement: {F G H : C ⊛⥤ V}
-  proof: Functor.descOfIsLeftKanExtension_fac_app _ _ _ _ _
-
-中文:
-引理 η_comp_tensorDesc_app
-  结论: {F G H : C ⊛⥤ V}
-  证明: Functor.descOfIsLeftKanExtension_fac_app _ _ _ _ _
-
-Depends on / 依赖: Functor, Functor.descOfIsLeftKanExtension_fac_app, descOfIsLeftKanExtension_fac_app
+/-
+**CategoryTheory.MonoidalCategory.DayFunctor.** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.MonoidalCategory.DayFunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma η_comp_tensorDesc_app {F G H : C ⊛⥤ V}
     (α : F.functor ⊠ G.functor ⟶ tensor C ⋙ H.functor) (x y : C) :
-    (η F G).app (x, y) ≫ (tensorDesc α).natTrans.app (x otimes y) = α.app (x, y) :=
+    (η F G).app (x, y) ≫ (tensorDesc α).natTrans.app (x ⊗ y) = α.app (x, y) :=
   Functor.descOfIsLeftKanExtension_fac_app _ _ _ _ _
 
 open LawfulDayConvolutionMonoidalCategoryStruct
-/--
-Definition of `isoPointwiseLeftKanExtension` / `isoPointwiseLeftKanExtension` 的定义
+/-- An abstract isomorphism between `(F ⊗ G).functor` and the generic pointwise
+left Kan extension of `F.functor ⊠ G.functor` along the -/
+/-
+**CategoryTheory.MonoidalCategory.DayFunctor.isoPointwiseLeftKanExtension** 是 Ma
+thlib 中的一个定义，位于命名空间 `CategoryTheory.MonoidalCategory.DayFunctor`。
+形式化陈述：isoPointwiseLeftKanExtension (F G : C ⊛⥤ V) : (F otimes G).functor ≅ (tens
+or C).pointwiseLeftKanExtension (F.functor ⊠ G.functor)
+参数：F G : C ⊛⥤ V。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MonoidalCategory.DayFunctor.instIsLeftKanExtensionProdFun
+ctorTensorObjη`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {V :
+ Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} V]   [inst_2 : Category…
 
-English:
-definition isoPointwiseLeftKanExtension
-  signature: (F G : C ⊛⥤ V)
-  body: Functor.leftKanExtensionUnique
-    (F otimes G).functor (η F G) _
-    ((tensor C).pointwiseLeftKanExtensionUnit (F.functor ⊠ G.functor))
-
-中文:
-定义 isoPointwiseLeftKanExtension
-  签名: (F G : C ⊛⥤ V)
-  定义体: Functor.leftKanExtensionUnique
-    (F otimes G).functor (η F G) _
-    ((tensor C).pointwiseLeftKanExtensionUnit (F.functor ⊠ G.functor))
-
-Depends on / 依赖: F.functor, Functor, Functor.leftKanExtensionUnique, G.functor, functor, leftKanExtensionUnique, otimes, pointwiseLeftKanExtensionUnit, tensor
+--- 原说明 ---
+An abstract isomorphism between `(F ⊗ G).functor` and the generic pointwise
+left Kan extension of `F.functor ⊠ G.functor` along the
 -/
 def isoPointwiseLeftKanExtension (F G : C ⊛⥤ V) :
-    (F otimes G).functor ≅
+    (F ⊗ G).functor ≅
     (tensor C).pointwiseLeftKanExtension (F.functor ⊠ G.functor) :=
   Functor.leftKanExtensionUnique
-    (F otimes G).functor (η F G) _
+    (F ⊗ G).functor (η F G) _
     ((tensor C).pointwiseLeftKanExtensionUnit (F.functor ⊠ G.functor))
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `η_comp_isoPointwiseLeftKanExtension_hom` / 引理 `η_comp_isoPointwiseLeftKanExtension_hom`
-
-English:
-lemma η_comp_isoPointwiseLeftKanExtension_hom
-  given: (F G : C ⊛⥤ V) (x y : C)
-  proof: by
-  simpa [η, isoPointwiseLeftKanExtension] using!
-    Functor.descOfIsLeftKanExtension_fac_app
-      (F otimes G).functor (η F G) _
-      ((tensor C).pointwiseLeftKanExtensionUnit (F.functor ⊠ G.functor)) (x, y)
-
-中文:
-引理 η_comp_isoPointwiseLeftKanExtension_hom
-  条件: (F G : C ⊛⥤ V) (x y : C)
-  证明: by
-  simpa [η, isoPointwiseLeftKanExtension] using!
-    Functor.descOfIsLeftKanExtension_fac_app
-      (F otimes G).functor (η F G) _
-      ((tensor C).pointwiseLeftKanExtensionUnit (F.functor ⊠ G.functor)) (x, y)
-
-Depends on / 依赖: F.functor, Functor, Functor.descOfIsLeftKanExtension_fac_app, G.functor, descOfIsLeftKanExtension_fac_app, functor, isoPointwiseLeftKanExtension, otimes, pointwiseLeftKanExtensionUnit, tensor
+/-
+**CategoryTheory.MonoidalCategory.DayFunctor.** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.MonoidalCategory.DayFunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma η_comp_isoPointwiseLeftKanExtension_hom (F G : C ⊛⥤ V) (x y : C) :
-    (η F G).app (x, y) ≫ (isoPointwiseLeftKanExtension F G).hom.app (x otimes y) =
+    (η F G).app (x, y) ≫ (isoPointwiseLeftKanExtension F G).hom.app (x ⊗ y) =
     Limits.colimit.ι
-      (CostructuredArrow.proj (tensor C) (x otimes y) ⋙ F.functor ⊠ G.functor)
-      (.mk (Y := (x, y)) <| 𝟙 (x otimes y)) := by
+      (CostructuredArrow.proj (tensor C) (x ⊗ y) ⋙ F.functor ⊠ G.functor)
+      (.mk (Y := (x, y)) <| 𝟙 (x ⊗ y)) := by
   simpa [η, isoPointwiseLeftKanExtension] using!
     Functor.descOfIsLeftKanExtension_fac_app
-      (F otimes G).functor (η F G) _
+      (F ⊗ G).functor (η F G) _
       ((tensor C).pointwiseLeftKanExtensionUnit (F.functor ⊠ G.functor)) (x, y)
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `ι_comp_isoPointwiseLeftKanExtension_inv` / 引理 `ι_comp_isoPointwiseLeftKanExtension_inv`
-
-English:
-lemma ι_comp_isoPointwiseLeftKanExtension_inv
-  given: (F G : C ⊛⥤ V) (x y : C)
-  proof: by
-  simp [η, isoPointwiseLeftKanExtension]
-
-中文:
-引理 ι_comp_isoPointwiseLeftKanExtension_inv
-  条件: (F G : C ⊛⥤ V) (x y : C)
-  证明: by
-  simp [η, isoPointwiseLeftKanExtension]
-
-Depends on / 依赖: otimes
+/-
+**CategoryTheory.MonoidalCategory.DayFunctor.** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.MonoidalCategory.DayFunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι_comp_isoPointwiseLeftKanExtension_inv (F G : C ⊛⥤ V) (x y : C) :
     Limits.colimit.ι
-      (CostructuredArrow.proj (tensor C) (x otimes y) ⋙ F.functor ⊠ G.functor)
-        (.mk (Y := (x, y)) <| 𝟙 (x otimes y)) ≫
-      (isoPointwiseLeftKanExtension F G).inv.app (x otimes y) =
+      (CostructuredArrow.proj (tensor C) (x ⊗ y) ⋙ F.functor ⊠ G.functor)
+        (.mk (Y := (x, y)) <| 𝟙 (x ⊗ y)) ≫
+      (isoPointwiseLeftKanExtension F G).inv.app (x ⊗ y) =
     (η F G).app (x, y) := by
   simp [η, isoPointwiseLeftKanExtension]
 
 variable (C V) in
-/--
-Definition of `ν` / `ν` 的定义
+/-- The canonical map `𝟙_ V ⟶ (𝟙_ (C ⊛⥤ V)).functor.obj (𝟙_ C)`
+that exhibits `(𝟙_ (C ⊛⥤ V)).functor` as a Day convolution unit. -/
+/-
+**CategoryTheory.MonoidalCategory.DayFunctor.** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.MonoidalCategory.DayFunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ν
-  signature: : 𝟙_ V ⟶ (𝟙_ (C ⊛⥤ V)).functor.obj (𝟙_ C)
-  body: LawfulDayConvolutionMonoidalCategoryStruct.unitUnit C V (C ⊛⥤ V)
-
-中文:
-定义 ν
-  签名: : 𝟙_ V ⟶ (𝟙_ (C ⊛⥤ V)).functor.obj (𝟙_ C)
-  定义体: LawfulDayConvolutionMonoidalCategoryStruct.unitUnit C V (C ⊛⥤ V)
-
-Depends on / 依赖: LawfulDayConvolutionMonoidalCategoryStruct, LawfulDayConvolutionMonoidalCategoryStruct.unitUnit, unitUnit
+--- 原说明 ---
+The canonical map `𝟙_ V ⟶ (𝟙_ (C ⊛⥤ V)).functor.obj (𝟙_ C)`
+that exhibits `(𝟙_ (C ⊛⥤ V)).functor` as a Day convolution unit.
 -/
 def ν : 𝟙_ V ⟶ (𝟙_ (C ⊛⥤ V)).functor.obj (𝟙_ C) :=
   LawfulDayConvolutionMonoidalCategoryStruct.unitUnit C V (C ⊛⥤ V)
@@ -542,18 +382,13 @@ set_option backward.defeqAttrib.useBackward true in
 variable (C V) in
 /-- The reinterpretation of `ν` as a natural transformation. -/
 @[simps]
-/--
-Definition of `νNatTrans` / `νNatTrans` 的定义
+/-
+**CategoryTheory.MonoidalCategory.DayFunctor.** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.MonoidalCategory.DayFunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition νNatTrans
-  signature: :
-  body: ν C V
-
-中文:
-定义 ν自然数Trans
-  签名: :
-  定义体: ν C V
+--- 原说明 ---
+The reinterpretation of `ν` as a natural transformation.
 -/
 def νNatTrans :
     Functor.fromPUnit.{0} (𝟙_ V) ⟶
@@ -561,48 +396,34 @@ def νNatTrans :
   app _ := ν C V
 
 open LawfulDayConvolutionMonoidalCategoryStruct in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (𝟙_ (C ⊛⥤ V)).functor.IsLeftKanExtension (νNatTrans C V)
-  body: .isLeftKanExtension isPointwiseLeftKanExtensionUnitUnit C V (C ⊛⥤ V)
-
-中文:
-实例 :
-  签名: (𝟙_ (C ⊛⥤ V)).functor.是LeftKanExtension (ν自然数Trans C V)
-  定义体: .isLeftKanExtension isPointwiseLeftKanExtensionUnitUnit C V (C ⊛⥤ V)
-
-Depends on / 依赖: isLeftKanExtension, isPointwiseLeftKanExtensionUnitUnit
+/-
+**CategoryTheory.MonoidalCategory.DayFunctor.** 是 Mathlib 中的一个实例，位于命名空间 `Categor
+yTheory.MonoidalCategory.DayFunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (𝟙_ (C ⊛⥤ V)).functor.IsLeftKanExtension (νNatTrans C V) :=
-.isLeftKanExtension isPointwiseLeftKanExtensionUnitUnit C V (C ⊛⥤ V)
-
-/--
-lemma `unit_hom_ext` / 引理 `unit_hom_ext`
-
-English:
-lemma unit_hom_ext
-  statement: {F : C ⊛⥤ V} {α β : 𝟙_ (C ⊛⥤ V) ⟶ F}
-  proof: by
-  ext1
-  apply Functor.hom_ext_of_isLeftKanExtension
-    (𝟙_ (C ⊛⥤ V)).functor (νNatTrans C V)
-  ext
-  exact h
-
-中文:
-引理 unit_hom_ext
-  结论: {F : C ⊛⥤ V} {α β : 𝟙_ (C ⊛⥤ V) ⟶ F}
-  证明: by
-  ext1
-  apply Functor.hom_ext_of_isLeftKanExtension
-    (𝟙_ (C ⊛⥤ V)).functor (νNatTrans C V)
-  ext
-  exact h
-
-Depends on / 依赖: Functor, Functor.hom_ext_of_isLeftKanExtension, functor, hom_ext_of_isLeftKanExtension
+  isPointwiseLeftKanExtensionUnitUnit C V (C ⊛⥤ V) |>.isLeftKanExtension
+/-
+**CategoryTheory.MonoidalCategory.DayFunctor.unit_hom_ext** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.MonoidalCategory.DayFunctor`。
+形式化陈述：unit_hom_ext {F : C ⊛⥤ V} {α β : 𝟙_ (C ⊛⥤ V) ⟶ F} (h : ν C V ≫ α.natTrans.
+app (𝟙_ C) = ν C V ≫ β.natTrans.app (𝟙_ C)) : α = β
+参数：C ⊛⥤ V；h : ν C V ≫ α.natTrans.app (𝟙_ C) = ν C V ≫ β.natTrans.app (𝟙_ C)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.MonoidalCategory.DayFunctor.hom_ext`：hom_ext {F G : C ⊛⥤ 
+V} {α β : F ⟶ G} (h : α.natTrans = β.natTrans) : α = β
+· 使用引理 `CategoryTheory.Functor.hom_ext_of_isLeftKanExtension`：hom_ext_of_isLeftK
+anExtension {G : D ⥤ H} (γ₁ γ₂ : F' ⟶ G) (hγ : α ≫ whiskerLeft L γ₁ = α ≫ whiske
+rLeft L γ₂) : γ₁ = γ₂
+· 使用定理 `CategoryTheory.MonoidalCategory.DayFunctor.instIsLeftKanExtensionDiscret
+ePUnitFunctorTensorUnitνNatTrans`：∀ {C : Type u₁} [inst : CategoryTheory.Categor
+y.{v₁, u₁} C] {V : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} V]   [ins
+t_2 : Category…
+· 使用定理 `CategoryTheory.NatTrans.ext'`：ext' {α β : F ⟶ G} (w : α.app = β.app) : α
+ = β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 lemma unit_hom_ext {F : C ⊛⥤ V} {α β : 𝟙_ (C ⊛⥤ V) ⟶ F}
     (h : ν C V ≫ α.natTrans.app (𝟙_ C) = ν C V ≫ β.natTrans.app (𝟙_ C)) :
@@ -614,46 +435,35 @@ lemma unit_hom_ext {F : C ⊛⥤ V} {α β : 𝟙_ (C ⊛⥤ V) ⟶ F}
   exact h
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `unitDesc` / `unitDesc` 的定义
+/-- Given `F : C ⊛⥤ V`, a morphism `𝟙_ V ⟶ F.functor.obj (𝟙_ C)` induces a
+(unique) morphism `𝟙_ (C ⊛⥤ V) ⟶ F`. -/
+/-
+**CategoryTheory.MonoidalCategory.DayFunctor.unitDesc** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.MonoidalCategory.DayFunctor`。
+形式化陈述：unitDesc {F : C ⊛⥤ V} (φ : 𝟙_ V ⟶ F.functor.obj (𝟙_ C)) : 𝟙_ (C ⊛⥤ V) ⟶ F
+参数：φ : 𝟙_ V ⟶ F.functor.obj (𝟙_ C)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MonoidalCategory.DayFunctor.instIsLeftKanExtensionDiscret
+ePUnitFunctorTensorUnitνNatTrans`：∀ {C : Type u₁} [inst : CategoryTheory.Categor
+y.{v₁, u₁} C] {V : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} V]   [ins
+t_2 : Category…
 
-English:
-definition unitDesc
-  signature: {F : C ⊛⥤ V} (φ : 𝟙_ V ⟶ F.functor.obj (𝟙_ C))
-  body: .mk Functor.descOfIsLeftKanExtension (𝟙_ (C ⊛⥤ V)).functor (νNatTrans C V)
-    F.functor { app _ := φ }
-
-中文:
-定义 unitDesc
-  签名: {F : C ⊛⥤ V} (φ : 𝟙_ V ⟶ F.functor.obj (𝟙_ C))
-  定义体: .mk Functor.descOfIsLeftKanExtension (𝟙_ (C ⊛⥤ V)).functor (νNatTrans C V)
-    F.functor { app _ := φ }
-
-Depends on / 依赖: F.functor, Functor, Functor.descOfIsLeftKanExtension, descOfIsLeftKanExtension, functor
+--- 原说明 ---
+Given `F : C ⊛⥤ V`, a morphism `𝟙_ V ⟶ F.functor.obj (𝟙_ C)` induces a
+(unique) morphism `𝟙_ (C ⊛⥤ V) ⟶ F`.
 -/
 def unitDesc {F : C ⊛⥤ V} (φ : 𝟙_ V ⟶ F.functor.obj (𝟙_ C)) :
     𝟙_ (C ⊛⥤ V) ⟶ F :=
-.mk Functor.descOfIsLeftKanExtension (𝟙_ (C ⊛⥤ V)).functor (νNatTrans C V)
+  .mk <| Functor.descOfIsLeftKanExtension (𝟙_ (C ⊛⥤ V)).functor (νNatTrans C V)
     F.functor { app _ := φ }
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `ν_comp_unitDesc` / 引理 `ν_comp_unitDesc`
-
-English:
-lemma ν_comp_unitDesc
-  given: {F : C ⊛⥤ V} (φ : 𝟙_ V ⟶ F.functor.obj (𝟙_ C))
-  proof: Functor.descOfIsLeftKanExtension_fac_app (𝟙_ (C ⊛⥤ V)).functor (νNatTrans C V)
-    F.functor { app _ := φ } default
-
-中文:
-引理 ν_comp_unitDesc
-  条件: {F : C ⊛⥤ V} (φ : 𝟙_ V ⟶ F.functor.obj (𝟙_ C))
-  证明: Functor.descOfIsLeftKanExtension_fac_app (𝟙_ (C ⊛⥤ V)).functor (νNatTrans C V)
-    F.functor { app _ := φ } default
-
-Depends on / 依赖: F.functor, Functor, Functor.descOfIsLeftKanExtension_fac_app, descOfIsLeftKanExtension_fac_app, functor
+/-
+**CategoryTheory.MonoidalCategory.DayFunctor.** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.MonoidalCategory.DayFunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ν_comp_unitDesc {F : C ⊛⥤ V} (φ : 𝟙_ V ⟶ F.functor.obj (𝟙_ C)) :
     ν C V ≫ (unitDesc φ).natTrans.app (𝟙_ C) = φ :=
@@ -665,3 +475,4 @@ end DayFunctor
 end
 
 end CategoryTheory.MonoidalCategory
+

@@ -29,8 +29,8 @@ universe w v v' u u'
 
 namespace CategoryTheory
 
-variable {C : Type u} [Category.{v} C] {FC : C -> C -> Type*} {CC : C -> Type w}
-variable [forall X Y, FunLike (FC X Y) (CC X) (CC Y)] [ConcreteCategory.{w} C FC]
+variable {C : Type u} [Category.{v} C] {FC : C → C → Type*} {CC : C → Type w}
+variable [∀ X Y, FunLike (FC X Y) (CC X) (CC Y)] [ConcreteCategory.{w} C FC]
 
 open Limits MorphismProperty
 
@@ -38,89 +38,61 @@ namespace ConcreteCategory
 
 section
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [(forget
-  signature: C).PreservesMonomorphisms] {X Y : C} (f : X ⟶ Y) [Mono f] :
-  body: Functor.map_mono (forget C) f
-
-中文:
-实例 [(forget
-  签名: C).保持Monomorphisms] {X Y : C} (f : X ⟶ Y) [单态射 f] :
-  定义体: Functor.map_mono (forget C) f
-
-Depends on / 依赖: Functor, Functor.map_mono, forget, map_mono
+/-
+**CategoryTheory.ConcreteCategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Con
+creteCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [(forget C).PreservesMonomorphisms] {X Y : C} (f : X ⟶ Y) [Mono f] :
     Mono (↾f) := Functor.map_mono (forget C) f
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [(forget
-  signature: C).PreservesEpimorphisms] {X Y : C} (f : X ⟶ Y) [Epi f] :
-  body: Functor.map_epi (forget C) f
-
-中文:
-实例 [(forget
-  签名: C).保持Epimorphisms] {X Y : C} (f : X ⟶ Y) [满态射 f] :
-  定义体: Functor.map_epi (forget C) f
-
-Depends on / 依赖: Functor, Functor.map_epi, forget, map_epi
+/-
+**CategoryTheory.ConcreteCategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Con
+creteCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [(forget C).PreservesEpimorphisms] {X Y : C} (f : X ⟶ Y) [Epi f] :
     Epi (↾f) := Functor.map_epi (forget C) f
 
-/--
-theorem `mono_of_injective` / 定理 `mono_of_injective`
+/-- In any concrete category, injective morphisms are monomorphisms. -/
+/-
+**CategoryTheory.ConcreteCategory.mono_of_injective** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.ConcreteCategory`。
+形式化陈述：mono_of_injective {X Y : C} (f : X ⟶ Y) (i : Function.Injective f) : Mono 
+f
+参数：f : X ⟶ Y；i : Function.Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.mono_of_mono_map`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.reflectsMonomorphisms_of_faithful`：∀ {C : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTh
+eory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.instFaithfulForget`：∀ (C : Type u_1) [inst : CategoryTheo
+ry.Category.{v_1, u_1} C] {FC : outParam (C → C → Type u_2)}   {CC : outParam (C
+ → Type w)} [inst_1 : o…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `CategoryTheory.mono_iff_injective`：mono_iff_injective {X Y : Type u} (f 
+: X ⟶ Y) : Mono f ↔ Function.Injective f
 
-English:
-theorem mono_of_injective
-  given: {X Y : C} (f : X ⟶ Y) (i : Function.Injective f)
-  proof: (forget C).mono_of_mono_map ((mono_iff_injective ((forget C).map f)).2 i)
-
-中文:
-定理 mono_of_injective
-  条件: {X Y : C} (f : X ⟶ Y) (i : 函数.单射 f)
-  证明: (forget C).mono_of_mono_map ((mono_iff_injective ((forget C).map f)).2 i)
-
-Depends on / 依赖: forget, mono_iff_injective, mono_of_mono_map
+--- 原说明 ---
+In any concrete category, injective morphisms are monomorphisms.
 -/
 theorem mono_of_injective {X Y : C} (f : X ⟶ Y) (i : Function.Injective f) :
     Mono f :=
   (forget C).mono_of_mono_map ((mono_iff_injective ((forget C).map f)).2 i)
-
-/--
-Instance `forget₂_preservesMonomorphisms` / 实例 `forget₂_preservesMonomorphisms`
-
-English:
-instance forget₂_preservesMonomorphisms
-  signature: (C : Type u) (D : Type u')
-  body: have : (forget₂ C D ⋙ forget D).PreservesMonomorphisms := by
-    simp only [HasForget₂.forget_comp]
-    infer_instance
-  Functor.preservesMonomorphisms_of_preserves_of_reflects _ (forget D)
-
-中文:
-实例 forget₂_preservesMonomorphisms
-  签名: (C : 类型u) (D : 类型u')
-  定义体: have : (forget₂ C D ⋙ forget D).PreservesMonomorphisms := by
-    simp only [HasForget₂.forget_comp]
-    infer_instance
-  Functor.preservesMonomorphisms_of_preserves_of_reflects _ (forget D)
-
-Depends on / 依赖: Functor, Functor.preservesMonomorphisms_of_preserves_of_reflects, PreservesMonomorphisms, ReflectsColimitsOfSize, forget, forget_comp, infer_instance, preservesMonomorphisms_of_preserves_of_reflects
+/-
+**CategoryTheory.ConcreteCategory.forget** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.ConcreteCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance forget₂_preservesMonomorphisms (C : Type u) (D : Type u')
     [Category.{v} C] [Category.{v'} D]
-    {FC : C -> C -> Type*} {CC : C -> Type w}
-    [forall X Y, FunLike (FC X Y) (CC X) (CC Y)]
+    {FC : C → C → Type*} {CC : C → Type w}
+    [∀ X Y, FunLike (FC X Y) (CC X) (CC Y)]
     [ConcreteCategory C FC]
-    {FD : D -> D -> Type*} {CD : D -> Type w}
-    [forall X Y, FunLike (FD X Y) (CD X) (CD Y)]
+    {FD : D → D → Type*} {CD : D → Type w}
+    [∀ X Y, FunLike (FD X Y) (CD X) (CD Y)]
     [ConcreteCategory D FD]
     [HasForget₂ C D] [(forget C).PreservesMonomorphisms] :
     (forget₂ C D).PreservesMonomorphisms :=
@@ -128,35 +100,18 @@ instance forget₂_preservesMonomorphisms (C : Type u) (D : Type u')
     simp only [HasForget₂.forget_comp]
     infer_instance
   Functor.preservesMonomorphisms_of_preserves_of_reflects _ (forget D)
-
-/--
-Instance `forget₂_preservesEpimorphisms` / 实例 `forget₂_preservesEpimorphisms`
-
-English:
-instance forget₂_preservesEpimorphisms
-  signature: (C : Type u) (D : Type u')
-  body: have : (forget₂ C D ⋙ forget D).PreservesEpimorphisms := by
-    simp only [HasForget₂.forget_comp]
-    infer_instance
-  Functor.preservesEpimorphisms_of_preserves_of_reflects _ (forget D)
-
-中文:
-实例 forget₂_preservesEpimorphisms
-  签名: (C : 类型u) (D : 类型u')
-  定义体: have : (forget₂ C D ⋙ forget D).PreservesEpimorphisms := by
-    simp only [HasForget₂.forget_comp]
-    infer_instance
-  Functor.preservesEpimorphisms_of_preserves_of_reflects _ (forget D)
-
-Depends on / 依赖: Functor, Functor.preservesEpimorphisms_of_preserves_of_reflects, PreservesEpimorphisms, forget, forget_comp, infer_instance, preservesEpimorphisms_of_preserves_of_reflects
+/-
+**CategoryTheory.ConcreteCategory.forget** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.ConcreteCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance forget₂_preservesEpimorphisms (C : Type u) (D : Type u')
     [Category.{v} C] [Category.{v'} D]
-    {FC : C -> C -> Type*} {CC : C -> Type w}
-    [forall X Y, FunLike (FC X Y) (CC X) (CC Y)]
+    {FC : C → C → Type*} {CC : C → Type w}
+    [∀ X Y, FunLike (FC X Y) (CC X) (CC Y)]
     [ConcreteCategory C FC]
-    {FD : D -> D -> Type*} {CD : D -> Type w}
-    [forall X Y, FunLike (FD X Y) (CD X) (CD Y)]
+    {FD : D → D → Type*} {CD : D → Type w}
+    [∀ X Y, FunLike (FD X Y) (CD X) (CD Y)]
     [ConcreteCategory D FD]
     [HasForget₂ C D] [(forget C).PreservesEpimorphisms] :
     (forget₂ C D).PreservesEpimorphisms :=
@@ -166,81 +121,69 @@ instance forget₂_preservesEpimorphisms (C : Type u) (D : Type u')
   Functor.preservesEpimorphisms_of_preserves_of_reflects _ (forget D)
 
 variable (C)
-
-/--
-lemma `surjective_le_epimorphisms` / 引理 `surjective_le_epimorphisms`
-
-English:
-lemma surjective_le_epimorphisms
-  proof: fun _ _ _ hf => (forget C).epi_of_epi_map ((epi_iff_surjective _).2 hf)
-
-中文:
-引理 surjective_le_epimorphisms
-  证明: fun _ _ _ hf => (forget C).epi_of_epi_map ((epi_iff_surjective _).2 hf)
-
-Depends on / 依赖: Finite, ReflectsFiniteCoproducts, epi_iff_surjective, epi_of_epi_map, forget
+/-
+**CategoryTheory.ConcreteCategory.surjective_le_epimorphisms** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.ConcreteCategory`。
+形式化陈述：surjective_le_epimorphisms : MorphismProperty.surjective C <= epimorphisms
+ C
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.epi_of_epi_map`：epi_of_epi_map (F : C ⥤ D) [Refle
+ctsEpimorphisms F] {X Y : C} {f : X ⟶ Y} (h : Epi (F.map f)) : Epi f
+· 使用定理 `CategoryTheory.Functor.reflectsEpimorphisms_of_faithful`：∀ {C : Type u₁}
+ [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryThe
+ory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.instFaithfulForget`：∀ (C : Type u_1) [inst : CategoryTheo
+ry.Category.{v_1, u_1} C] {FC : outParam (C → C → Type u_2)}   {CC : outParam (C
+ → Type w)} [inst_1 : o…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `CategoryTheory.epi_iff_surjective`：epi_iff_surjective {X Y : Type u} (f 
+: X ⟶ Y) : Epi f ↔ Function.Surjective f
 -/
 lemma surjective_le_epimorphisms :
-    MorphismProperty.surjective C <= epimorphisms C :=
+    MorphismProperty.surjective C ≤ epimorphisms C :=
   fun _ _ _ hf => (forget C).epi_of_epi_map ((epi_iff_surjective _).2 hf)
-
-/--
-lemma `injective_le_monomorphisms` / 引理 `injective_le_monomorphisms`
-
-English:
-lemma injective_le_monomorphisms
-  proof: fun _ _ _ hf => (forget C).mono_of_mono_map ((mono_iff_injective _).2 hf)
-
-中文:
-引理 injective_le_monomorphisms
-  证明: fun _ _ _ hf => (forget C).mono_of_mono_map ((mono_iff_injective _).2 hf)
-
-Depends on / 依赖: forget, mono_iff_injective, mono_of_mono_map
+/-
+**CategoryTheory.ConcreteCategory.injective_le_monomorphisms** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.ConcreteCategory`。
+形式化陈述：injective_le_monomorphisms : MorphismProperty.injective C <= monomorphisms
+ C
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.mono_of_mono_map`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.reflectsMonomorphisms_of_faithful`：∀ {C : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTh
+eory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.instFaithfulForget`：∀ (C : Type u_1) [inst : CategoryTheo
+ry.Category.{v_1, u_1} C] {FC : outParam (C → C → Type u_2)}   {CC : outParam (C
+ → Type w)} [inst_1 : o…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `CategoryTheory.mono_iff_injective`：mono_iff_injective {X Y : Type u} (f 
+: X ⟶ Y) : Mono f ↔ Function.Injective f
 -/
 lemma injective_le_monomorphisms :
-    MorphismProperty.injective C <= monomorphisms C :=
+    MorphismProperty.injective C ≤ monomorphisms C :=
   fun _ _ _ hf => (forget C).mono_of_mono_map ((mono_iff_injective _).2 hf)
-
-/--
-lemma `surjective_eq_epimorphisms_iff` / 引理 `surjective_eq_epimorphisms_iff`
-
-English:
-lemma surjective_eq_epimorphisms_iff
-  proof: by
-  constructor
-  · intro h
-    constructor
-    rintro _ _ f (hf : epimorphisms C f)
-    rw [epi_iff_surjective]
-    rw [← h] at hf
-    exact hf
-  · intro
-    apply le_antisymm (surjective_le_epimorphisms C)
-    intro _ _ f hf
-    have : Epi f := hf
-    change Function.Surjective ((forget C).map f)
-    rw [← epi_iff_surjective]
-    infer_instance
-
-中文:
-引理 surjective_eq_epimorphisms_iff
-  证明: by
-  constructor
-  · intro h
-    constructor
-    rintro _ _ f (hf : epimorphisms C f)
-    rw [epi_iff_surjective]
-    rw [← h] at hf
-    exact hf
-  · intro
-    apply le_antisymm (surjective_le_epimorphisms C)
-    intro _ _ f hf
-    have : Epi f := hf
-    change Function.Surjective ((forget C).map f)
-    rw [← epi_iff_surjective]
-    infer_instance
-
-Depends on / 依赖: Function, Function.Surjective, Surjective, epi_iff_surjective, epimorphisms, forget, infer_instance, le_antisymm, surjective_le_epimorphisms
+/-
+**CategoryTheory.ConcreteCategory.surjective_eq_epimorphisms_iff** 是 Mathlib 中的一
+个引理，位于命名空间 `CategoryTheory.ConcreteCategory`。
+形式化陈述：surjective_eq_epimorphisms_iff : MorphismProperty.surjective C = epimorphi
+sms C ↔ (forget C).PreservesEpimorphisms
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.epi_iff_surjective`：epi_iff_surjective {X Y : Type u} (f 
+: X ⟶ Y) : Epi f ↔ Function.Surjective f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `CategoryTheory.ConcreteCategory.surjective_le_epimorphisms`：surjective_l
+e_epimorphisms : MorphismProperty.surjective C <= epimorphisms C
+· 使用定理 `CategoryTheory.ConcreteCategory.instEpiOfHomCoeHomOfPreservesEpimorphism
+sForget`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {FC : C → C → 
+Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → FunLike (FC X Y) …
 -/
 lemma surjective_eq_epimorphisms_iff :
     MorphismProperty.surjective C = epimorphisms C ↔ (forget C).PreservesEpimorphisms := by
@@ -258,47 +201,24 @@ lemma surjective_eq_epimorphisms_iff :
     change Function.Surjective ((forget C).map f)
     rw [← epi_iff_surjective]
     infer_instance
-
-/--
-lemma `injective_eq_monomorphisms_iff` / 引理 `injective_eq_monomorphisms_iff`
-
-English:
-lemma injective_eq_monomorphisms_iff
-  proof: by
-  constructor
-  · intro h
-    constructor
-    rintro _ _ f (hf : monomorphisms C f)
-    rw [mono_iff_injective]
-    rw [← h] at hf
-    exact hf
-  · intro
-    apply le_antisymm (injective_le_monomorphisms C)
-    intro _ _ f hf
-    have : Mono f := hf
-    change Function.Injective ((forget C).map f)
-    rw [← mono_iff_injective]
-    infer_instance
-
-中文:
-引理 injective_eq_monomorphisms_iff
-  证明: by
-  constructor
-  · intro h
-    constructor
-    rintro _ _ f (hf : monomorphisms C f)
-    rw [mono_iff_injective]
-    rw [← h] at hf
-    exact hf
-  · intro
-    apply le_antisymm (injective_le_monomorphisms C)
-    intro _ _ f hf
-    have : Mono f := hf
-    change Function.Injective ((forget C).map f)
-    rw [← mono_iff_injective]
-    infer_instance
-
-Depends on / 依赖: Function, Function.Injective, Injective, forget, infer_instance, injective_le_monomorphisms, le_antisymm, mono_iff_injective, monomorphisms
+/-
+**CategoryTheory.ConcreteCategory.injective_eq_monomorphisms_iff** 是 Mathlib 中的一
+个引理，位于命名空间 `CategoryTheory.ConcreteCategory`。
+形式化陈述：injective_eq_monomorphisms_iff : MorphismProperty.injective C = monomorphi
+sms C ↔ (forget C).PreservesMonomorphisms
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.mono_iff_injective`：mono_iff_injective {X Y : Type u} (f 
+: X ⟶ Y) : Mono f ↔ Function.Injective f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `CategoryTheory.ConcreteCategory.injective_le_monomorphisms`：injective_le
+_monomorphisms : MorphismProperty.injective C <= monomorphisms C
+· 使用定理 `CategoryTheory.ConcreteCategory.instMonoOfHomCoeHomOfPreservesMonomorphi
+smsForget`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {FC : C → C 
+→ Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → FunLike (FC X Y) …
 -/
 lemma injective_eq_monomorphisms_iff :
     MorphismProperty.injective C = monomorphisms C ↔ (forget C).PreservesMonomorphisms := by
@@ -316,49 +236,37 @@ lemma injective_eq_monomorphisms_iff :
     change Function.Injective ((forget C).map f)
     rw [← mono_iff_injective]
     infer_instance
-
-/--
-lemma `injective_eq_monomorphisms` / 引理 `injective_eq_monomorphisms`
-
-English:
-lemma injective_eq_monomorphisms
-  given: [(forget C).PreservesMonomorphisms]
-  proof: by
-  rw [injective_eq_monomorphisms_iff]
-  infer_instance
-
-中文:
-引理 injective_eq_monomorphisms
-  条件: [(forget C).保持Monomorphisms]
-  证明: by
-  rw [injective_eq_monomorphisms_iff]
-  infer_instance
-
-Depends on / 依赖: infer_instance, injective_eq_monomorphisms_iff
+/-
+**CategoryTheory.ConcreteCategory.injective_eq_monomorphisms** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.ConcreteCategory`。
+形式化陈述：injective_eq_monomorphisms [(forget C).PreservesMonomorphisms] : MorphismP
+roperty.injective C = monomorphisms C
+参数：forget C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.ConcreteCategory.injective_eq_monomorphisms_iff`：injectiv
+e_eq_monomorphisms_iff : MorphismProperty.injective C = monomorphisms C ↔ (forge
+t C).PreservesMonomorphisms
 -/
 lemma injective_eq_monomorphisms [(forget C).PreservesMonomorphisms] :
     MorphismProperty.injective C = monomorphisms C := by
   rw [injective_eq_monomorphisms_iff]
   infer_instance
-
-/--
-lemma `surjective_eq_epimorphisms` / 引理 `surjective_eq_epimorphisms`
-
-English:
-lemma surjective_eq_epimorphisms
-  given: [(forget C).PreservesEpimorphisms]
-  proof: by
-  rw [surjective_eq_epimorphisms_iff]
-  infer_instance
-
-中文:
-引理 surjective_eq_epimorphisms
-  条件: [(forget C).保持Epimorphisms]
-  证明: by
-  rw [surjective_eq_epimorphisms_iff]
-  infer_instance
-
-Depends on / 依赖: infer_instance, surjective_eq_epimorphisms_iff
+/-
+**CategoryTheory.ConcreteCategory.surjective_eq_epimorphisms** 是 Mathlib 中的一个引理，
+位于命名空间 `CategoryTheory.ConcreteCategory`。
+形式化陈述：surjective_eq_epimorphisms [(forget C).PreservesEpimorphisms] : MorphismPr
+operty.surjective C = epimorphisms C
+参数：forget C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.ConcreteCategory.surjective_eq_epimorphisms_iff`：surjecti
+ve_eq_epimorphisms_iff : MorphismProperty.surjective C = epimorphisms C ↔ (forge
+t C).PreservesEpimorphisms
 -/
 lemma surjective_eq_epimorphisms [(forget C).PreservesEpimorphisms] :
     MorphismProperty.surjective C = epimorphisms C := by
@@ -368,31 +276,32 @@ lemma surjective_eq_epimorphisms [(forget C).PreservesEpimorphisms] :
 variable [HasStrongEpiMonoFactorisations C] [(forget C).PreservesMonomorphisms]
   [(forget C).PreservesEpimorphisms]
 
-/--
-Definition of `functorialSurjectiveInjectiveFactorizationData` / `functorialSurjectiveInjectiveFactorizationData` 的定义
+/-- A concrete category with strong epi mono factorizations and such that
+the forget functor preserves mono and epi admits functorial surjective/injective
+factorizations. -/
+/-
+**CategoryTheory.ConcreteCategory.functorialSurjectiveInjectiveFactorizationData
+** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.ConcreteCategory`。
+形式化陈述：functorialSurjectiveInjectiveFactorizationData : FunctorialSurjectiveInjec
+tiveFactorizationData C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorialSurjectiveInjectiveFactorizationData
-  signature: :
-  body: (functorialEpiMonoFactorizationData C).ofLE
-    (by rw [surjective_eq_epimorphisms])
-    (by rw [injective_eq_monomorphisms])
-
-中文:
-定义 functorialSurjectiveInjectiveFactorizationData
-  签名: :
-  定义体: (functorialEpiMonoFactorizationData C).ofLE
-    (by rw [surjective_eq_epimorphisms])
-    (by rw [injective_eq_monomorphisms])
-
-Depends on / 依赖: functorialEpiMonoFactorizationData, injective_eq_monomorphisms, surjective_eq_epimorphisms
+--- 原说明 ---
+A concrete category with strong epi mono factorizations and such that
+the forget functor preserves mono and epi admits functorial surjective/injective
+factorizations.
 -/
 noncomputable def functorialSurjectiveInjectiveFactorizationData :
     FunctorialSurjectiveInjectiveFactorizationData C :=
   (functorialEpiMonoFactorizationData C).ofLE
     (by rw [surjective_eq_epimorphisms])
     (by rw [injective_eq_monomorphisms])
-
+/-
+**CategoryTheory.ConcreteCategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Con
+creteCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) : HasFunctorialSurjectiveInjectiveFactorization C where
   nonempty_functorialFactorizationData :=
     ⟨functorialSurjectiveInjectiveFactorizationData C⟩
@@ -403,152 +312,174 @@ section
 
 open CategoryTheory.Limits
 
-/--
-theorem `injective_of_mono_of_preservesPullback` / 定理 `injective_of_mono_of_preservesPullback`
-
-English:
-theorem injective_of_mono_of_preservesPullback
-  statement: {X Y : C} (f : X ⟶ Y) [Mono f]
-  proof: (mono_iff_injective ((forget C).map f)).mp inferInstance
-
-中文:
-定理 injective_of_mono_of_preservesPullback
-  结论: {X Y : C} (f : X ⟶ Y) [单态射 f]
-  证明: (mono_iff_injective ((forget C).map f)).mp inferInstance
-
-Depends on / 依赖: forget, mono_iff_injective
+/-
+**CategoryTheory.ConcreteCategory.injective_of_mono_of_preservesPullback** 是 Mat
+hlib 中的一个定理，位于命名空间 `CategoryTheory.ConcreteCategory`。
+形式化陈述：injective_of_mono_of_preservesPullback {X Y : C} (f : X ⟶ Y) [Mono f] [Pre
+servesLimitsOfShape WalkingCospan (forget C)] : Function.Injective f
+参数：f : X ⟶ Y；forget C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.mono_iff_injective`：mono_iff_injective {X Y : Type u} (f 
+: X ⟶ Y) : Mono f ↔ Function.Injective f
+· 使用定理 `CategoryTheory.ConcreteCategory.instMonoOfHomCoeHomOfPreservesMonomorphi
+smsForget`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {FC : C → C 
+→ Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → FunLike (FC X Y) …
+· 使用定理 `CategoryTheory.preservesMonomorphisms_of_preservesLimitsOfShape`：∀ {C : 
+Type u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
 -/
 theorem injective_of_mono_of_preservesPullback {X Y : C} (f : X ⟶ Y) [Mono f]
     [PreservesLimitsOfShape WalkingCospan (forget C)] : Function.Injective f :=
   (mono_iff_injective ((forget C).map f)).mp inferInstance
-
-/--
-theorem `mono_iff_injective_of_preservesPullback` / 定理 `mono_iff_injective_of_preservesPullback`
-
-English:
-theorem mono_iff_injective_of_preservesPullback
-  statement: {X Y : C} (f : X ⟶ Y)
-  proof: ((forget C).mono_map_iff_mono _).symm.trans (mono_iff_injective _)
-
-中文:
-定理 mono_iff_injective_of_preservesPullback
-  结论: {X Y : C} (f : X ⟶ Y)
-  证明: ((forget C).mono_map_iff_mono _).symm.trans (mono_iff_injective _)
-
-Depends on / 依赖: forget, mono_iff_injective, mono_map_iff_mono, symm.trans
+/-
+**CategoryTheory.ConcreteCategory.mono_iff_injective_of_preservesPullback** 是 Ma
+thlib 中的一个定理，位于命名空间 `CategoryTheory.ConcreteCategory`。
+形式化陈述：mono_iff_injective_of_preservesPullback {X Y : C} (f : X ⟶ Y) [PreservesLi
+mitsOfShape WalkingCospan (forget C)] : Mono f ↔ Function.Injective f
+参数：f : X ⟶ Y；forget C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `CategoryTheory.Functor.mono_map_iff_mono`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v
+₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.preservesMonomorphisms_of_preservesLimitsOfShape`：∀ {C : 
+Type u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.reflectsMonomorphisms_of_faithful`：∀ {C : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTh
+eory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.instFaithfulForget`：∀ (C : Type u_1) [inst : CategoryTheo
+ry.Category.{v_1, u_1} C] {FC : outParam (C → C → Type u_2)}   {CC : outParam (C
+ → Type w)} [inst_1 : o…
+· 使用定理 `CategoryTheory.mono_iff_injective`：mono_iff_injective {X Y : Type u} (f 
+: X ⟶ Y) : Mono f ↔ Function.Injective f
 -/
 theorem mono_iff_injective_of_preservesPullback {X Y : C} (f : X ⟶ Y)
     [PreservesLimitsOfShape WalkingCospan (forget C)] : Mono f ↔ Function.Injective f :=
   ((forget C).mono_map_iff_mono _).symm.trans (mono_iff_injective _)
 
-/--
-theorem `epi_of_surjective` / 定理 `epi_of_surjective`
+/-- In any concrete category, surjective morphisms are epimorphisms. -/
+/-
+**CategoryTheory.ConcreteCategory.epi_of_surjective** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.ConcreteCategory`。
+形式化陈述：epi_of_surjective {X Y : C} (f : X ⟶ Y) (s : Function.Surjective f) : Epi 
+f
+参数：f : X ⟶ Y；s : Function.Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.epi_of_epi_map`：epi_of_epi_map (F : C ⥤ D) [Refle
+ctsEpimorphisms F] {X Y : C} {f : X ⟶ Y} (h : Epi (F.map f)) : Epi f
+· 使用定理 `CategoryTheory.Functor.reflectsEpimorphisms_of_faithful`：∀ {C : Type u₁}
+ [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryThe
+ory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.instFaithfulForget`：∀ (C : Type u_1) [inst : CategoryTheo
+ry.Category.{v_1, u_1} C] {FC : outParam (C → C → Type u_2)}   {CC : outParam (C
+ → Type w)} [inst_1 : o…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `CategoryTheory.epi_iff_surjective`：epi_iff_surjective {X Y : Type u} (f 
+: X ⟶ Y) : Epi f ↔ Function.Surjective f
 
-English:
-theorem epi_of_surjective
-  given: {X Y : C} (f : X ⟶ Y) (s : Function.Surjective f)
-  proof: (forget C).epi_of_epi_map ((epi_iff_surjective ((forget C).map f)).2 s)
-
-中文:
-定理 epi_of_surjective
-  条件: {X Y : C} (f : X ⟶ Y) (s : 函数.满射 f)
-  证明: (forget C).epi_of_epi_map ((epi_iff_surjective ((forget C).map f)).2 s)
-
-Depends on / 依赖: epi_iff_surjective, epi_of_epi_map, forget
+--- 原说明 ---
+In any concrete category, surjective morphisms are epimorphisms.
 -/
 theorem epi_of_surjective {X Y : C} (f : X ⟶ Y) (s : Function.Surjective f) :
     Epi f :=
   (forget C).epi_of_epi_map ((epi_iff_surjective ((forget C).map f)).2 s)
-
-/--
-theorem `surjective_of_epi_of_preservesPushout` / 定理 `surjective_of_epi_of_preservesPushout`
-
-English:
-theorem surjective_of_epi_of_preservesPushout
-  statement: {X Y : C} (f : X ⟶ Y) [Epi f]
-  proof: (epi_iff_surjective ((forget C).map f)).mp inferInstance
-
-中文:
-定理 surjective_of_epi_of_preservesPushout
-  结论: {X Y : C} (f : X ⟶ Y) [满态射 f]
-  证明: (epi_iff_surjective ((forget C).map f)).mp inferInstance
-
-Depends on / 依赖: epi_iff_surjective, forget
+/-
+**CategoryTheory.ConcreteCategory.surjective_of_epi_of_preservesPushout** 是 Math
+lib 中的一个定理，位于命名空间 `CategoryTheory.ConcreteCategory`。
+形式化陈述：surjective_of_epi_of_preservesPushout {X Y : C} (f : X ⟶ Y) [Epi f] [Prese
+rvesColimitsOfShape WalkingSpan (forget C)] : Function.Surjective f
+参数：f : X ⟶ Y；forget C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.epi_iff_surjective`：epi_iff_surjective {X Y : Type u} (f 
+: X ⟶ Y) : Epi f ↔ Function.Surjective f
+· 使用定理 `CategoryTheory.ConcreteCategory.instEpiOfHomCoeHomOfPreservesEpimorphism
+sForget`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {FC : C → C → 
+Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → FunLike (FC X Y) …
+· 使用定理 `CategoryTheory.preservesEpimorphisms_of_preservesColimitsOfShape`：∀ {C :
+ Type u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Ca
+tegoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
 -/
 theorem surjective_of_epi_of_preservesPushout {X Y : C} (f : X ⟶ Y) [Epi f]
     [PreservesColimitsOfShape WalkingSpan (forget C)] : Function.Surjective f :=
   (epi_iff_surjective ((forget C).map f)).mp inferInstance
-
-/--
-theorem `epi_iff_surjective_of_preservesPushout` / 定理 `epi_iff_surjective_of_preservesPushout`
-
-English:
-theorem epi_iff_surjective_of_preservesPushout
-  statement: {X Y : C} (f : X ⟶ Y)
-  proof: ((forget C).epi_map_iff_epi _).symm.trans (epi_iff_surjective _)
-
-中文:
-定理 epi_iff_surjective_of_preservesPushout
-  结论: {X Y : C} (f : X ⟶ Y)
-  证明: ((forget C).epi_map_iff_epi _).symm.trans (epi_iff_surjective _)
-
-Depends on / 依赖: epi_iff_surjective, epi_map_iff_epi, forget, symm.trans
+/-
+**CategoryTheory.ConcreteCategory.epi_iff_surjective_of_preservesPushout** 是 Mat
+hlib 中的一个定理，位于命名空间 `CategoryTheory.ConcreteCategory`。
+形式化陈述：epi_iff_surjective_of_preservesPushout {X Y : C} (f : X ⟶ Y) [PreservesCol
+imitsOfShape WalkingSpan (forget C)] : Epi f ↔ Function.Surjective f
+参数：f : X ⟶ Y；forget C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `CategoryTheory.Functor.epi_map_iff_epi`：epi_map_iff_epi [hF₁ : Preserves
+Epimorphisms F] [hF₂ : ReflectsEpimorphisms F] : Epi (F.map f) ↔ Epi f
+· 使用定理 `CategoryTheory.preservesEpimorphisms_of_preservesColimitsOfShape`：∀ {C :
+ Type u₁} {D : Type u₂} [inst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : Ca
+tegoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.reflectsEpimorphisms_of_faithful`：∀ {C : Type u₁}
+ [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryThe
+ory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.instFaithfulForget`：∀ (C : Type u_1) [inst : CategoryTheo
+ry.Category.{v_1, u_1} C] {FC : outParam (C → C → Type u_2)}   {CC : outParam (C
+ → Type w)} [inst_1 : o…
+· 使用定理 `CategoryTheory.epi_iff_surjective`：epi_iff_surjective {X Y : Type u} (f 
+: X ⟶ Y) : Epi f ↔ Function.Surjective f
 -/
 theorem epi_iff_surjective_of_preservesPushout {X Y : C} (f : X ⟶ Y)
     [PreservesColimitsOfShape WalkingSpan (forget C)] : Epi f ↔ Function.Surjective f :=
   ((forget C).epi_map_iff_epi _).symm.trans (epi_iff_surjective _)
-
-/--
-theorem `bijective_of_isIso` / 定理 `bijective_of_isIso`
-
-English:
-theorem bijective_of_isIso
-  given: {X Y : C} (f : X ⟶ Y) [IsIso f]
-  proof: by
-  rw [bijective_iff_isIso_ofHom]
-  infer_instance
-
-中文:
-定理 bijective_of_isIso
-  条件: {X Y : C} (f : X ⟶ Y) [是同构 f]
-  证明: by
-  rw [bijective_iff_isIso_ofHom]
-  infer_instance
-
-Depends on / 依赖: bijective_iff_isIso_ofHom, infer_instance
+/-
+**CategoryTheory.ConcreteCategory.bijective_of_isIso** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.ConcreteCategory`。
+形式化陈述：bijective_of_isIso {X Y : C} (f : X ⟶ Y) [IsIso f] : Function.Bijective f
+参数：f : X ⟶ Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.bijective_iff_isIso_ofHom`：bijective_iff_isIso_ofHom {X Y
+ : Type u} (f : X -> Y) : Function.Bijective f ↔ IsIso (ofHom f)
 -/
 theorem bijective_of_isIso {X Y : C} (f : X ⟶ Y) [IsIso f] :
     Function.Bijective f := by
   rw [bijective_iff_isIso_ofHom]
   infer_instance
 
-/--
-theorem `isIso_iff_bijective` / 定理 `isIso_iff_bijective`
+/-- If the forgetful functor of a concrete category reflects isomorphisms, being an isomorphism
+is equivalent to being bijective. -/
+/-
+**CategoryTheory.ConcreteCategory.isIso_iff_bijective** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.ConcreteCategory`。
+形式化陈述：isIso_iff_bijective [(forget C).ReflectsIsomorphisms] {X Y : C} (f : X ⟶ Y
+) : IsIso f ↔ Function.Bijective f
+参数：forget C；f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.bijective_iff_isIso_ofHom`：bijective_iff_isIso_ofHom {X Y
+ : Type u} (f : X -> Y) : Function.Bijective f ↔ IsIso (ofHom f)
+· 使用定理 `CategoryTheory.isIso_of_reflects_iso`：isIso_of_reflects_iso {A B : C} (f
+ : A ⟶ B) (F : C ⥤ D) [IsIso (F.map f)] [F.ReflectsIsomorphisms] : IsIso f
 
-English:
-theorem isIso_iff_bijective
-  statement: [(forget C).ReflectsIsomorphisms]
-  proof: by
-  rw [bijective_iff_isIso_ofHom]
-  refine ⟨fun _ => inferInstance, fun h => ?_⟩
-  have : IsIso ((forget C).map f) := h
-  exact isIso_of_reflects_iso f (forget C)
-
-中文:
-定理 isIso_iff_bijective
-  结论: [(forget C).反映同构]
-  证明: by
-  rw [bijective_iff_isIso_ofHom]
-  refine ⟨fun _ => inferInstance, fun h => ?_⟩
-  have : IsIso ((forget C).map f) := h
-  exact isIso_of_reflects_iso f (forget C)
-
-Depends on / 依赖: bijective_iff_isIso_ofHom, forget, isIso_of_reflects_iso
+--- 原说明 ---
+If the forgetful functor of a concrete category reflects isomorphisms, being an 
+isomorphism
+is equivalent to being bijective.
 -/
 theorem isIso_iff_bijective [(forget C).ReflectsIsomorphisms]
     {X Y : C} (f : X ⟶ Y) : IsIso f ↔ Function.Bijective f := by
   rw [bijective_iff_isIso_ofHom]
-  refine ⟨fun _ => inferInstance, fun h => ?_⟩
+  refine ⟨fun _ ↦ inferInstance, fun h ↦ ?_⟩
   have : IsIso ((forget C).map f) := h
   exact isIso_of_reflects_iso f (forget C)
 
@@ -557,3 +488,4 @@ end
 end ConcreteCategory
 
 end CategoryTheory
+

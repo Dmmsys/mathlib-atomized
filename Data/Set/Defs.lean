@@ -48,20 +48,22 @@ relied on. Instead, `Set.ofPred` (also written `{x | p x}`) and membership of a 
 used to convert between sets and predicates.
 -/
 @[use_set_notation_for_order]
-/--
-Definition of `Set` / `Set` 的定义
+/-
+**Set** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Set (α : Type u)
+参数：α : Type u。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Set
-  signature: (α : Type u)
-  body: α -> Prop
+--- 原说明 ---
+A set is a collection of elements of some type `α`.
 
-中文:
-定义 集合
-  签名: (α : 类型u)
-  定义体: α -> Prop
+Although `Set` is defined as `α → Prop`, this is an implementation detail which 
+should not be
+relied on. Instead, `Set.ofPred` (also written `{x | p x}`) and membership of a 
+set (`∈`) should be
+used to convert between sets and predicates.
 -/
-def Set (α : Type u) := α -> Prop
+def Set (α : Type u) := α → Prop
 
 /-
 We don't translate the order on sets (i.e. turning `s ⊆ t` into `t ⊆ s`).
@@ -77,24 +79,17 @@ attribute [to_dual_dont_translate] Set
 
 /-- Turn a predicate `p : α → Prop` into a set, also written as `{x | p x}` -/
 @[implicit_reducible]
-/--
-Definition of `Set.ofPred` / `Set.ofPred` 的定义
+/-
+**Set.ofPred** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Set.ofPred {α : Type u} (p : α -> Prop) : Set α
+参数：p : α -> Prop。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Set.ofPred
-  signature: {α : Type u} (p : α -> Prop)
-  body: p
-
-@[deprecated (since := "2026-07-09")] alias setOf := Set.ofPred
-
-中文:
-定义 集合.ofPred
-  签名: {α : 类型u} (p : α -> 命题)
-  定义体: p
-
-@[deprecated (since := "2026-07-09")] alias setOf := Set.ofPred
+--- 原说明 ---
+Turn a predicate `p : α → Prop` into a set, also written as `{x | p x}`
 -/
-def Set.ofPred {α : Type u} (p : α -> Prop) : Set α :=
+def Set.ofPred {α : Type u} (p : α → Prop) : Set α :=
   p
 
 @[deprecated (since := "2026-07-09")] alias setOf := Set.ofPred
@@ -103,114 +98,72 @@ namespace Set
 
 /-- Membership in a set -/
 @[implicit_reducible]
-/--
-Definition of `Mem` / `Mem` 的定义
+/-
+**Set.Mem** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：{α : Type u} → Set α → α → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Mem
-  signature: (s : Set α) (a : α)
-  body: s a
-
-中文:
-定义 Mem
-  签名: (s : 集合 α) (a : α)
-  定义体: s a
+--- 原说明 ---
+Membership in a set
 -/
 protected def Mem (s : Set α) (a : α) : Prop :=
   s a
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Membership α (Set α)
-  body: ⟨Set.Mem⟩
-
-@[ext, grind ext]
-
-中文:
-实例 :
-  签名: Membership α (集合 α)
-  定义体: ⟨Set.Mem⟩
-
-@[ext, grind ext]
-
-Depends on / 依赖: Set.Mem
+/-
+**Set.** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Membership α (Set α) :=
   ⟨Set.Mem⟩
 
 @[ext, grind ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {a b : Set α} (h : forall (x : α), x in a ↔ x in b)
-  statement: a = b
-  proof: funext (fun x => propext (h x))
-
-中文:
-定理 ext
-  条件: {a b : 集合 α} (h : 对任意 (x : α), x in a ↔ x in b)
-  结论: a = b
-  证明: funext (fun x => propext (h x))
-
-Depends on / 依赖: infer_instance, propext
+/-
+**Set.ext** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+参数：h : forall (x : α), x in a ↔ x in b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-theorem ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b :=
-  funext (fun x => propext (h x))
+theorem ext {a b : Set α} (h : ∀ (x : α), x ∈ a ↔ x ∈ b) : a = b :=
+  funext (fun x ↦ propext (h x))
 
-/--
-Definition of `Subset` / `Subset` 的定义
+/-- The subset relation on sets. `s ⊆ t` means that all elements of `s` are elements of `t`.
 
-English:
-definition Subset
-  signature: (s₁ s₂ : Set α)
-  body: forall ⦃a⦄, a in s₁ -> a in s₂
+Note that you should **not** use this definition directly, but instead write `s ⊆ t`. -/
+/-
+**Set.Subset** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：{α : Type u} → Set α → Set α → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 子集
-  签名: (s₁ s₂ : 集合 α)
-  定义体: forall ⦃a⦄, a in s₁ -> a in s₂
+--- 原说明 ---
+The subset relation on sets. `s ⊆ t` means that all elements of `s` are elements
+ of `t`.
+
+Note that you should **not** use this definition directly, but instead write `s 
+⊆ t`.
 -/
 protected def Subset (s₁ s₂ : Set α) :=
-  forall ⦃a⦄, a in s₁ -> a in s₂
+  ∀ ⦃a⦄, a ∈ s₁ → a ∈ s₂
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- We introduce `≤` before `⊆` to help the unifier when applying lattice theorems
+to subset hypotheses. -/
+/-
+**Set.** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: LE (Set α)
-  body: ⟨Set.Subset⟩
-
-中文:
-实例 :
-  签名: LE (集合 α)
-  定义体: ⟨Set.Subset⟩
-
-Depends on / 依赖: Set.Subset, Subset
+--- 原说明 ---
+We introduce `≤` before `⊆` to help the unifier when applying lattice theorems
+to subset hypotheses.
 -/
 instance : LE (Set α) :=
   ⟨Set.Subset⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: EmptyCollection (Set α)
-  body: ⟨fun _ => False⟩
-
-中文:
-实例 :
-  签名: EmptyCollection (集合 α)
-  定义体: ⟨fun _ => False⟩
+/-
+**Set.** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : EmptyCollection (Set α) :=
-  ⟨fun _ => False⟩
+  ⟨fun _ ↦ False⟩
 
 end Set
 
@@ -255,18 +208,18 @@ See also
 @[term_elab setBuilder]
 meta def elabSetBuilder : TermElab
   | `({ $x:ident | $p }), expectedType? => do
-    elabTerm (← `(Set.ofPred fun $x:ident => $p)) expectedType?
+    elabTerm (← `(Set.ofPred fun $x:ident ↦ $p)) expectedType?
   | `({ $x:ident : $t | $p }), expectedType? => do
-    elabTerm (← `(Set.ofPred fun $x:ident : $t => $p)) expectedType?
+    elabTerm (← `(Set.ofPred fun $x:ident : $t ↦ $p)) expectedType?
   | `({ $x:ident $b:binderPred | $p }), expectedType? => do
-    elabTerm (← `(Set.ofPred fun $x:ident => satisfies_binder_pred% $x $b ∧ $p)) expectedType?
+    elabTerm (← `(Set.ofPred fun $x:ident ↦ satisfies_binder_pred% $x $b ∧ $p)) expectedType?
   | _, _ => throwUnsupportedSyntax
 
 /-- Unexpander for set builder notation. -/
 @[app_unexpander Set.ofPred]
 meta def ofPred.unexpander : Lean.PrettyPrinter.Unexpander
-  | `($_ fun $x:ident => $p) => `({ $x:ident | $p })
-  | `($_ fun ($x:ident : $ty:term) => $p) => `({ $x:ident : $ty:term | $p })
+  | `($_ fun $x:ident ↦ $p) => `({ $x:ident | $p })
+  | `($_ fun ($x:ident : $ty:term) ↦ $p) => `({ $x:ident : $ty:term | $p })
   | _ => throw ()
 
 open Batteries.ExtendedBinder in
@@ -278,7 +231,7 @@ If `f x y` is a single identifier, it must be parenthesized to avoid ambiguity w
 for instance, `{(x) | (x : Nat) (y : Nat) (_hxy : x = y^2)}`.
 -/
 macro (priority := low) "{" t:term " | " bs:extBinders "}" : term =>
-  `({x | existsᵉ $bs:extBinders, $t = x})
+  `({x | ∃ᵉ $bs:extBinders, $t = x})
 
 /--
 * `{ pat : X | p }` is notation for pattern matching in set-builder notation,
@@ -292,7 +245,7 @@ For example, `{ (m, n) : ℕ × ℕ | m * n = 12 }` denotes the set of all order
 natural numbers whose product is 12.
 
 Note that if the type ascription is left out and `p` can be interpreted as an extended binder,
-then the extended binder interpretation will be used. For example, `{ n + 1 | n < 3 }` will
+then the extended binder interpretation will be used.  For example, `{ n + 1 | n < 3 }` will
 be interpreted as `{ x : Nat | ∃ n < 3, n + 1 = x }` rather than using pattern matching.
 -/
 macro (name := macroPattSetBuilder) (priority := low - 1)
@@ -306,12 +259,12 @@ macro (priority := low - 1) "{" pat:term " | " p:term "}" : term =>
 /-- Pretty printing for set-builder notation with pattern matching. -/
 @[app_unexpander Set.ofPred]
 meta def ofPredPatternMatchUnexpander : Lean.PrettyPrinter.Unexpander
-  | `($_ fun $x:ident => match $y:ident with | $pat => $p) =>
+  | `($_ fun $x:ident ↦ match $y:ident with | $pat => $p) =>
       if x == y then
         `({ $pat:term | $p:term })
       else
         throw ()
-  | `($_ fun ($x:ident : $ty:term) => match $y:ident with | $pat => $p) =>
+  | `($_ fun ($x:ident : $ty:term) ↦ match $y:ident with | $pat => $p) =>
       if x == y then
         `({ $pat:term : $ty:term | $p:term })
       else
@@ -322,300 +275,223 @@ end Mathlib.Meta
 
 namespace Set
 
-/--
-Definition of `univ` / `univ` 的定义
+/-- The universal set on a type `α` is the set containing all elements of `α`.
 
-English:
-definition univ
-  signature: : Set α
-  body: {_a | True}
+This is conceptually the "same as" `α` (in set theory, it is actually the same), but type theory
+makes the distinction that `α` is a type while `Set.univ` is a term of type `Set α`. `Set.univ` can
+itself be coerced to a type `↥Set.univ` which is in bijection with (but distinct from) `α`. -/
+/-
+**Set.univ** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：univ : Set α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 univ
-  签名: : 集合 α
-  定义体: {_a | True}
+--- 原说明 ---
+The universal set on a type `α` is the set containing all elements of `α`.
+
+This is conceptually the "same as" `α` (in set theory, it is actually the same),
+ but type theory
+makes the distinction that `α` is a type while `Set.univ` is a term of type `Set
+ α`. `Set.univ` can
+itself be coerced to a type `↥Set.univ` which is in bijection with (but distinct
+ from) `α`.
 -/
 def univ : Set α := {_a | True}
 
-/--
-Definition of `insert` / `insert` 的定义
+/-- `Set.insert a s` is the set `{a} ∪ s`.
 
-English:
-definition insert
-  signature: (a : α) (s : Set α)
-  body: {b | b = a ∨ b in s}
+Note that you should **not** use this definition directly, but instead write `insert a s` (which is
+mediated by the `Insert` typeclass). -/
+/-
+**Set.insert** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：{α : Type u} → α → Set α → Set α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 insert
-  签名: (a : α) (s : 集合 α)
-  定义体: {b | b = a ∨ b in s}
+--- 原说明 ---
+`Set.insert a s` is the set `{a} ∪ s`.
+
+Note that you should **not** use this definition directly, but instead write `in
+sert a s` (which is
+mediated by the `Insert` typeclass).
 -/
-protected def insert (a : α) (s : Set α) : Set α := {b | b = a ∨ b in s}
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Insert α (Set α)
-  body: ⟨Set.insert⟩
-
-中文:
-实例 :
-  签名: Insert α (集合 α)
-  定义体: ⟨Set.insert⟩
-
-Depends on / 依赖: Set.insert, insert
+protected def insert (a : α) (s : Set α) : Set α := {b | b = a ∨ b ∈ s}
+/-
+**Set.** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Insert α (Set α) := ⟨Set.insert⟩
 
-/--
-Definition of `singleton` / `singleton` 的定义
+/-- The singleton of an element `a` is the set with `a` as a single element.
 
-English:
-definition singleton
-  signature: (a : α)
-  body: {b | b = a}
+Note that you should **not** use this definition directly, but instead write `{a}`. -/
+/-
+**Set.singleton** 是 Mathlib 中的一个定义，位于命名空间 `MeasurableEquiv`。
+形式化陈述：Set.singleton (a : α) : ({a} : Set α) ≃ᵐ Unit where toEquiv
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 singleton
-  签名: (a : α)
-  定义体: {b | b = a}
+--- 原说明 ---
+The singleton of an element `a` is the set with `a` as a single element.
+
+Note that you should **not** use this definition directly, but instead write `{a
+}`.
 -/
 protected def singleton (a : α) : Set α := {b | b = a}
-
-/--
-Instance `instSingletonSet` / 实例 `instSingletonSet`
-
-English:
-instance instSingletonSet
-  signature: : Singleton α (Set α)
-  body: ⟨Set.singleton⟩
-
-中文:
-实例 instSingletonSet
-  签名: : 单例 α (集合 α)
-  定义体: ⟨Set.singleton⟩
-
-Depends on / 依赖: Set.singleton, singleton
+/-
+**Set.instSingletonSet** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+形式化陈述：instSingletonSet : Singleton α (Set α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSingletonSet : Singleton α (Set α) := ⟨Set.singleton⟩
 
-/--
-Definition of `union` / `union` 的定义
+/-- The union of two sets `s` and `t` is the set of elements contained in either `s` or `t`.
 
-English:
-definition union
-  signature: (s₁ s₂ : Set α)
-  body: {a | a in s₁ ∨ a in s₂}
+Note that you should **not** use this definition directly, but instead write `s ∪ t`. -/
+/-
+**Set.union** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：{α : Type u} → Set α → Set α → Set α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 union
-  签名: (s₁ s₂ : 集合 α)
-  定义体: {a | a in s₁ ∨ a in s₂}
+--- 原说明 ---
+The union of two sets `s` and `t` is the set of elements contained in either `s`
+ or `t`.
+
+Note that you should **not** use this definition directly, but instead write `s 
+∪ t`.
 -/
-protected def union (s₁ s₂ : Set α) : Set α := {a | a in s₁ ∨ a in s₂}
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Union (Set α)
-  body: ⟨Set.union⟩
-
-中文:
-实例 :
-  签名: 并集 (集合 α)
-  定义体: ⟨Set.union⟩
-
-Depends on / 依赖: Set.union
+protected def union (s₁ s₂ : Set α) : Set α := {a | a ∈ s₁ ∨ a ∈ s₂}
+/-
+**Set.** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Union (Set α) := ⟨Set.union⟩
 
-/--
-Definition of `inter` / `inter` 的定义
+/-- The intersection of two sets `s` and `t` is the set of elements contained in both `s` and `t`.
 
-English:
-definition inter
-  signature: (s₁ s₂ : Set α)
-  body: {a | a in s₁ ∧ a in s₂}
+Note that you should **not** use this definition directly, but instead write `s ∩ t`. -/
+/-
+**Set.inter** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：{α : Type u} → Set α → Set α → Set α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 inter
-  签名: (s₁ s₂ : 集合 α)
-  定义体: {a | a in s₁ ∧ a in s₂}
+--- 原说明 ---
+The intersection of two sets `s` and `t` is the set of elements contained in bot
+h `s` and `t`.
+
+Note that you should **not** use this definition directly, but instead write `s 
+∩ t`.
 -/
-protected def inter (s₁ s₂ : Set α) : Set α := {a | a in s₁ ∧ a in s₂}
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inter (Set α)
-  body: ⟨Set.inter⟩
-
-中文:
-实例 :
-  签名: 交集 (集合 α)
-  定义体: ⟨Set.inter⟩
-
-Depends on / 依赖: Set.inter
+protected def inter (s₁ s₂ : Set α) : Set α := {a | a ∈ s₁ ∧ a ∈ s₂}
+/-
+**Set.** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inter (Set α) := ⟨Set.inter⟩
 
-/--
-Definition of `compl` / `compl` 的定义
+/-- The complement of a set `s` is the set of elements not contained in `s`.
 
-English:
-definition compl
-  signature: (s : Set α)
-  body: {a | a ∉ s}
+Note that you should **not** use this definition directly, but instead write `sᶜ`. -/
+/-
+**Set.compl** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：{α : Type u} → Set α → Set α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 compl
-  签名: (s : 集合 α)
-  定义体: {a | a ∉ s}
+--- 原说明 ---
+The complement of a set `s` is the set of elements not contained in `s`.
+
+Note that you should **not** use this definition directly, but instead write `sᶜ
+`.
 -/
 protected def compl (s : Set α) : Set α := {a | a ∉ s}
 
-/--
-Definition of `diff` / `diff` 的定义
+/-- The difference of two sets `s` and `t` is the set of elements contained in `s` but not in `t`.
 
-English:
-definition diff
-  signature: (s t : Set α)
-  body: {a in s | a ∉ t}
+Note that you should **not** use this definition directly, but instead write `s \ t`. -/
+/-
+**Set.diff** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：{α : Type u} → Set α → Set α → Set α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 diff
-  签名: (s t : 集合 α)
-  定义体: {a in s | a ∉ t}
+--- 原说明 ---
+The difference of two sets `s` and `t` is the set of elements contained in `s` b
+ut not in `t`.
+
+Note that you should **not** use this definition directly, but instead write `s 
+\ t`.
 -/
-protected def diff (s t : Set α) : Set α := {a in s | a ∉ t}
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SDiff (Set α)
-  body: ⟨Set.diff⟩
-
-中文:
-实例 :
-  签名: 对称差 (集合 α)
-  定义体: ⟨Set.diff⟩
-
-Depends on / 依赖: Set.diff
+protected def diff (s t : Set α) : Set α := {a ∈ s | a ∉ t}
+/-
+**Set.** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SDiff (Set α) := ⟨Set.diff⟩
 
-/--
-Definition of `powerset` / `powerset` 的定义
+/-- `𝒫 s` is the set of all subsets of `s`. -/
+/-
+**Set.powerset** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：powerset (s : Set α) : Set (Set α)
+参数：s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition powerset
-  signature: (s : Set α)
-  body: {t | t subseteq s}
-
-@[inherit_doc] prefix:100 "𝒫 " => powerset
-
-universe v in
-
-中文:
-定义 powerset
-  签名: (s : 集合 α)
-  定义体: {t | t subseteq s}
-
-@[inherit_doc] prefix:100 "𝒫 " => powerset
-
-universe v in
-
-Depends on / 依赖: subseteq
+--- 原说明 ---
+`𝒫 s` is the set of all subsets of `s`.
 -/
-def powerset (s : Set α) : Set (Set α) := {t | t subseteq s}
+def powerset (s : Set α) : Set (Set α) := {t | t ⊆ s}
 
 @[inherit_doc] prefix:100 "𝒫 " => powerset
 
 universe v in
-/--
-Definition of `image` / `image` 的定义
+/-- The image of `s : Set α` by `f : α → β`, written `f '' s`, is the set of `b : β` such that
+`f a = b` for some `a ∈ s`. -/
+/-
+**Set.image** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：image {β : Type v} (f : α -> β) (s : Set α) : Set β
+参数：f : α -> β；s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition image
-  signature: {β : Type v} (f : α -> β) (s : Set α)
-  body: {f a | a in s}
-
-中文:
-定义 像
-  签名: {β : 类型v} (f : α -> β) (s : 集合 α)
-  定义体: {f a | a in s}
+--- 原说明 ---
+The image of `s : Set α` by `f : α → β`, written `f '' s`, is the set of `b : β`
+ such that
+`f a = b` for some `a ∈ s`.
 -/
-def image {β : Type v} (f : α -> β) (s : Set α) : Set β := {f a | a in s}
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Functor Set
-  body: @Set.image
-
-中文:
-实例 :
-  签名: 函子 集合
-  定义体: @Set.image
-
-Depends on / 依赖: Set.image
+def image {β : Type v} (f : α → β) (s : Set α) : Set β := {f a | a ∈ s}
+/-
+**Set.** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Functor Set where map := @Set.image
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LawfulFunctor Set
-  body: funext fun _ => propext ⟨fun ⟨_, sb, rfl⟩ => sb, fun sb => ⟨_, sb, rfl⟩⟩
-comp_map g h _ := funext fun c => propext
-    ⟨fun ⟨a, ⟨h₁, h₂⟩⟩ => ⟨g a, ⟨⟨a, ⟨h₁, rfl⟩⟩, h₂⟩⟩,
-     fun ⟨_, ⟨⟨a, ⟨h₁, h₂⟩⟩, h₃⟩⟩ => ⟨a, ⟨h₁, show h (g a) = c from h₂ ▸ h₃⟩⟩⟩
-  map_const := rfl
-
-中文:
-实例 :
-  签名: Lawful函子 集合
-  定义体: funext fun _ => propext ⟨fun ⟨_, sb, rfl⟩ => sb, fun sb => ⟨_, sb, rfl⟩⟩
-comp_map g h _ := funext fun c => propext
-    ⟨fun ⟨a, ⟨h₁, h₂⟩⟩ => ⟨g a, ⟨⟨a, ⟨h₁, rfl⟩⟩, h₂⟩⟩,
-     fun ⟨_, ⟨⟨a, ⟨h₁, h₂⟩⟩, h₃⟩⟩ => ⟨a, ⟨h₁, show h (g a) = c from h₂ ▸ h₃⟩⟩⟩
-  map_const := rfl
-
-Depends on / 依赖: propext
+/-
+**Set.** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LawfulFunctor Set where
-  id_map _ := funext fun _ => propext ⟨fun ⟨_, sb, rfl⟩ => sb, fun sb => ⟨_, sb, rfl⟩⟩
-comp_map g h _ := funext fun c => propext
-    ⟨fun ⟨a, ⟨h₁, h₂⟩⟩ => ⟨g a, ⟨⟨a, ⟨h₁, rfl⟩⟩, h₂⟩⟩,
-     fun ⟨_, ⟨⟨a, ⟨h₁, h₂⟩⟩, h₃⟩⟩ => ⟨a, ⟨h₁, show h (g a) = c from h₂ ▸ h₃⟩⟩⟩
+  id_map _ := funext fun _ ↦ propext ⟨fun ⟨_, sb, rfl⟩ ↦ sb, fun sb ↦ ⟨_, sb, rfl⟩⟩
+  comp_map g h _ := funext <| fun c ↦ propext
+    ⟨fun ⟨a, ⟨h₁, h₂⟩⟩ ↦ ⟨g a, ⟨⟨a, ⟨h₁, rfl⟩⟩, h₂⟩⟩,
+     fun ⟨_, ⟨⟨a, ⟨h₁, h₂⟩⟩, h₃⟩⟩ ↦ ⟨a, ⟨h₁, show h (g a) = c from h₂ ▸ h₃⟩⟩⟩
   map_const := rfl
 
-/--
-Definition of `Nonempty` / `Nonempty` 的定义
+/-- The property `s.Nonempty` expresses the fact that the set `s` is not empty. It should be used
+in theorem assumptions instead of `∃ x, x ∈ s` or `s ≠ ∅` as it gives access to a nice API thanks
+to the dot notation. -/
+/-
+**Set.Nonempty** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：{α : Type u} → Set α → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Nonempty
-  signature: (s : Set α)
-  body: exists x, x in s
-
-中文:
-定义 非空
-  签名: (s : 集合 α)
-  定义体: exists x, x in s
+--- 原说明 ---
+The property `s.Nonempty` expresses the fact that the set `s` is not empty. It s
+hould be used
+in theorem assumptions instead of `∃ x, x ∈ s` or `s ≠ ∅` as it gives access to 
+a nice API thanks
+to the dot notation.
 -/
 protected def Nonempty (s : Set α) : Prop :=
-  exists x, x in s
+  ∃ x, x ∈ s
 
 end Set
+

@@ -27,34 +27,11 @@ variable [Fintype n] [DecidableEq n] [Semiring R]
 
 section mulVec
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Module (Matrix n n R) (n -> R)
-  body: mulVec
-  one_smul := one_mulVec
-  mul_smul _ _ _ := (mulVec_mulVec _ _ _).symm
-  zero_smul := zero_mulVec
-  add_smul := add_mulVec
-  smul_zero := mulVec_zero
-  smul_add := mulVec_add
-
-中文:
-实例 :
-  签名: 模 (矩阵 n n R) (n -> R)
-  定义体: mulVec
-  one_smul := one_mulVec
-  mul_smul _ _ _ := (mulVec_mulVec _ _ _).symm
-  zero_smul := zero_mulVec
-  add_smul := add_mulVec
-  smul_zero := mulVec_zero
-  smul_add := mulVec_add
-
-Depends on / 依赖: mulVec
+/-
+**Matrix.** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Module (Matrix n n R) (n -> R) where
+instance : Module (Matrix n n R) (n → R) where
   smul := mulVec
   one_smul := one_mulVec
   mul_smul _ _ _ := (mulVec_mulVec _ _ _).symm
@@ -62,95 +39,43 @@ instance : Module (Matrix n n R) (n -> R) where
   add_smul := add_mulVec
   smul_zero := mulVec_zero
   smul_add := mulVec_add
-
-/--
-lemma `smul_eq_mulVec` / 引理 `smul_eq_mulVec`
-
-English:
-lemma smul_eq_mulVec
-  given: (A : Matrix n n R) (v : n -> R)
-  statement: A • v = A *ᵥ v
-  proof: rfl
-
-中文:
-引理 smul_eq_mulVec
-  条件: (A : 矩阵 n n R) (v : n -> R)
-  结论: A • v = A *ᵥ v
-  证明: rfl
+/-
+**Matrix.smul_eq_mulVec** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {n : Type u_1} {R : Type u_2} [inst : Fintype n] [inst_1 : DecidableEq n
+] [inst_2 : Semiring R] (A : Matrix n n R)   (v : n → R), A • v = A.mulVec v
+参数：A : Matrix n n R；v : n → R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma smul_eq_mulVec (A : Matrix n n R) (v : n -> R) : A • v = A *ᵥ v := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DistribSMul
-  signature: S R] [SMulCommClass R S R] : SMulCommClass (Matrix n n R) S (n -> R) where
-  body: letI := SMulCommClass.symm; mulVec_smul
-
-中文:
-实例 [分配标量乘法
-  签名: S R] [标量交换类 R S R] : 标量交换类 (矩阵 n n R) S (n -> R) where
-  定义体: letI := SMulCommClass.symm; mulVec_smul
-
-Depends on / 依赖: SMulCommClass, SMulCommClass.symm, mulVec_smul
+@[simp] lemma smul_eq_mulVec (A : Matrix n n R) (v : n → R) : A • v = A *ᵥ v := rfl
+/-
+**Matrix.** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [DistribSMul S R] [SMulCommClass R S R] : SMulCommClass (Matrix n n R) S (n -> R) where
+instance [DistribSMul S R] [SMulCommClass R S R] : SMulCommClass (Matrix n n R) S (n → R) where
   smul_comm := letI := SMulCommClass.symm; mulVec_smul
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DistribSMul
-  signature: S R] [SMulCommClass S R R] : SMulCommClass S (Matrix n n R) (n -> R) where
-  body: (mulVec_smul A s v).symm
-
-中文:
-实例 [分配标量乘法
-  签名: S R] [标量交换类 S R R] : 标量交换类 S (矩阵 n n R) (n -> R) where
-  定义体: (mulVec_smul A s v).symm
-
-Depends on / 依赖: mulVec_smul
+/-
+**Matrix.** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [DistribSMul S R] [SMulCommClass S R R] : SMulCommClass S (Matrix n n R) (n -> R) where
+instance [DistribSMul S R] [SMulCommClass S R R] : SMulCommClass S (Matrix n n R) (n → R) where
   smul_comm s A v := (mulVec_smul A s v).symm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DistribSMul
-  signature: S R] [IsScalarTower S R R] : IsScalarTower S (Matrix n n R) (n -> R) where
-  body: smul_mulVec
-
-中文:
-实例 [分配标量乘法
-  签名: S R] [标量塔 S R R] : 标量塔 S (矩阵 n n R) (n -> R) where
-  定义体: smul_mulVec
-
-Depends on / 依赖: smul_mulVec
+/-
+**Matrix.** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [DistribSMul S R] [IsScalarTower S R R] : IsScalarTower S (Matrix n n R) (n -> R) where
+instance [DistribSMul S R] [IsScalarTower S R R] : IsScalarTower S (Matrix n n R) (n → R) where
   smul_assoc := smul_mulVec
-
-/--
-lemma `ext_iff_smul` / 引理 `ext_iff_smul`
-
-English:
-lemma ext_iff_smul
-  given: {A B : Matrix n n R}
-  proof: Matrix.ext_iff_mulVec
-
-中文:
-引理 ext_iff_smul
-  条件: {A B : 矩阵 n n R}
-  证明: Matrix.ext_iff_mulVec
-
-Depends on / 依赖: Matrix, Matrix.ext_iff_mulVec, ext_iff_mulVec
+/-
+**Matrix.ext_iff_smul** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：ext_iff_smul {A B : Matrix n n R} : A = B ↔ forall v : n -> R, A • v = B •
+ v
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext_iff_mulVec`：ext_iff_mulVec [Fintype n] {A B : Matrix m n α} :
+ A = B ↔ forall v, A *ᵥ v = B *ᵥ v
 -/
 lemma ext_iff_smul {A B : Matrix n n R} :
-    A = B ↔ forall v : n -> R, A • v = B • v := Matrix.ext_iff_mulVec
+    A = B ↔ ∀ v : n → R, A • v = B • v := Matrix.ext_iff_mulVec
 
 end mulVec
 
@@ -158,34 +83,11 @@ end mulVec
 
 section vecMul
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Module (Matrix n n R)ᵐᵒᵖ (n -> R)
-  body: v ᵥ* A.unop
-  one_smul := Matrix.vecMul_one
-  mul_smul _ _ _ := (vecMul_vecMul _ _ _).symm
-  zero_smul := vecMul_zero
-  add_smul _ _ := vecMul_add _ _
-  smul_zero _ := zero_vecMul _
-  smul_add _ := add_vecMul _
-
-中文:
-实例 :
-  签名: 模 (矩阵 n n R)ᵐᵒᵖ (n -> R)
-  定义体: v ᵥ* A.unop
-  one_smul := Matrix.vecMul_one
-  mul_smul _ _ _ := (vecMul_vecMul _ _ _).symm
-  zero_smul := vecMul_zero
-  add_smul _ _ := vecMul_add _ _
-  smul_zero _ := zero_vecMul _
-  smul_add _ := add_vecMul _
-
-Depends on / 依赖: A.unop
+/-
+**Matrix.** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Module (Matrix n n R)ᵐᵒᵖ (n -> R) where
+instance : Module (Matrix n n R)ᵐᵒᵖ (n → R) where
   smul A v := v ᵥ* A.unop
   one_smul := Matrix.vecMul_one
   mul_smul _ _ _ := (vecMul_vecMul _ _ _).symm
@@ -193,78 +95,35 @@ instance : Module (Matrix n n R)ᵐᵒᵖ (n -> R) where
   add_smul _ _ := vecMul_add _ _
   smul_zero _ := zero_vecMul _
   smul_add _ := add_vecMul _
-
-/--
-lemma `op_smul_eq_vecMul` / 引理 `op_smul_eq_vecMul`
-
-English:
-lemma op_smul_eq_vecMul
-  given: (A : (Matrix n n R)ᵐᵒᵖ) (v : n -> R)
-  statement: A • v = v ᵥ* A.unop
-  proof: rfl
-
-中文:
-引理 op_smul_eq_vecMul
-  条件: (A : (矩阵 n n R)ᵐᵒᵖ) (v : n -> R)
-  结论: A • v = v ᵥ* A.unop
-  证明: rfl
+/-
+**Matrix.op_smul_eq_vecMul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {n : Type u_1} {R : Type u_2} [inst : Fintype n] [inst_1 : DecidableEq n
+] [inst_2 : Semiring R]   (A : (Matrix n n R)ᵐᵒᵖ) (v : n → R), A • v = Matrix.ve
+cMul v (MulOpposite.unop A)
+参数：A : (Matrix n n R)ᵐᵒᵖ；v : n → R；MulOpposite.unop A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma op_smul_eq_vecMul (A : (Matrix n n R)ᵐᵒᵖ) (v : n -> R) : A • v = v ᵥ* A.unop := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DistribSMul
-  signature: S R] [IsScalarTower S R R] : SMulCommClass (Matrix n n R)ᵐᵒᵖ S (n -> R) where
-  body: smul_vecMul s v A.unop
-
-中文:
-实例 [分配标量乘法
-  签名: S R] [标量塔 S R R] : 标量交换类 (矩阵 n n R)ᵐᵒᵖ S (n -> R) where
-  定义体: smul_vecMul s v A.unop
-
-Depends on / 依赖: A.unop, smul_vecMul
+@[simp] lemma op_smul_eq_vecMul (A : (Matrix n n R)ᵐᵒᵖ) (v : n → R) : A • v = v ᵥ* A.unop := rfl
+/-
+**Matrix.** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [DistribSMul S R] [IsScalarTower S R R] : SMulCommClass (Matrix n n R)ᵐᵒᵖ S (n -> R) where
+instance [DistribSMul S R] [IsScalarTower S R R] : SMulCommClass (Matrix n n R)ᵐᵒᵖ S (n → R) where
   smul_comm A s v := smul_vecMul s v A.unop
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DistribSMul
-  signature: S R] [IsScalarTower S R R] : SMulCommClass S (Matrix n n R)ᵐᵒᵖ (n -> R) where
-  body: (smul_vecMul s v A.unop).symm
-
-中文:
-实例 [分配标量乘法
-  签名: S R] [标量塔 S R R] : 标量交换类 S (矩阵 n n R)ᵐᵒᵖ (n -> R) where
-  定义体: (smul_vecMul s v A.unop).symm
-
-Depends on / 依赖: A.unop, smul_vecMul
+/-
+**Matrix.** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [DistribSMul S R] [IsScalarTower S R R] : SMulCommClass S (Matrix n n R)ᵐᵒᵖ (n -> R) where
+instance [DistribSMul S R] [IsScalarTower S R R] : SMulCommClass S (Matrix n n R)ᵐᵒᵖ (n → R) where
   smul_comm s A v := (smul_vecMul s v A.unop).symm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [DistribSMul
-  signature: S R] [SMulCommClass S R R] : IsScalarTower S (Matrix n n R)ᵐᵒᵖ (n -> R) where
-  body: vecMul_smul v s A.unop
-
-中文:
-实例 [分配标量乘法
-  签名: S R] [标量交换类 S R R] : 标量塔 S (矩阵 n n R)ᵐᵒᵖ (n -> R) where
-  定义体: vecMul_smul v s A.unop
-
-Depends on / 依赖: A.unop, vecMul_smul
+/-
+**Matrix.** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [DistribSMul S R] [SMulCommClass S R R] : IsScalarTower S (Matrix n n R)ᵐᵒᵖ (n -> R) where
+instance [DistribSMul S R] [SMulCommClass S R R] : IsScalarTower S (Matrix n n R)ᵐᵒᵖ (n → R) where
   smul_assoc s A v := vecMul_smul v s A.unop
 
 end vecMul
 
 end Matrix
+

@@ -24,38 +24,27 @@ rat, rationals, field, ℚ, numerator, denominator, num, denom
 
 namespace Rat
 
-/--
-Instance `instField` / 实例 `instField`
-
-English:
-instance instField
-  signature: : Field Rat where
-  body: commRing
-  __ := commGroupWithZero
-  nnqsmul := _
-  nnqsmul_def := fun _ _ => rfl
-  qsmul := _
-  qsmul_def := fun _ _ => rfl
-  nnratCast_def q := by
-    rw [← NNRat.den_coe]; rw [← Int.cast_natCast q.num]; rw [← NNRat.num_coe]; exact (num_div_den _).symm
-  ratCast_def _ := (num_div_den _).symm
-
-中文:
-实例 instField
-  签名: : 域 有理数 where
-  定义体: commRing
-  __ := commGroupWithZero
-  nnqsmul := _
-  nnqsmul_def := fun _ _ => rfl
-  qsmul := _
-  qsmul_def := fun _ _ => rfl
-  nnratCast_def q := by
-    rw [← NNRat.den_coe]; rw [← Int.cast_natCast q.num]; rw [← NNRat.num_coe]; exact (num_div_den _).symm
-  ratCast_def _ := (num_div_den _).symm
-
-Depends on / 依赖: commRing
+/-
+**Rat.instField** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+形式化陈述：instField : Field Rat where __
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CommGroupWithZero.div_eq_mul_inv`：∀ {G₀ : Type u_2} [self : CommGroupWit
+hZero G₀] (a b : G₀), a / b = a * b⁻¹
+· 使用定理 `CommGroupWithZero.zpow_zero'`：∀ {G₀ : Type u_2} [self : CommGroupWithZer
+o G₀] (a : G₀), a ^ 0 = 1
+· 使用定理 `CommGroupWithZero.zpow_succ'`：∀ {G₀ : Type u_2} [self : CommGroupWithZer
+o G₀] (n : ℕ) (a : G₀), a ^ ↑n.succ = a ^ ↑n * a
+· 使用定理 `CommGroupWithZero.zpow_neg'`：∀ {G₀ : Type u_2} [self : CommGroupWithZero
+ G₀] (n : ℕ) (a : G₀), a ^ Int.negSucc n = (a ^ ↑n.succ)⁻¹
+· 使用定理 `CommGroupWithZero.toNontrivial`：∀ {G₀ : Type u_2} [self : CommGroupWithZ
+ero G₀], Nontrivial G₀
+· 使用定理 `CommGroupWithZero.mul_inv_cancel`：∀ {G₀ : Type u_2} [self : CommGroupWit
+hZero G₀] (a : G₀), a ≠ 0 → a * a⁻¹ = 1
+· 使用定理 `CommGroupWithZero.inv_zero`：∀ {G₀ : Type u_2} [self : CommGroupWithZero 
+G₀], 0⁻¹ = 0
 -/
-instance instField : Field Rat where
+instance instField : Field ℚ where
   __ := commRing
   __ := commGroupWithZero
   nnqsmul := _
@@ -63,355 +52,260 @@ instance instField : Field Rat where
   qsmul := _
   qsmul_def := fun _ _ => rfl
   nnratCast_def q := by
-    rw [← NNRat.den_coe]; rw [← Int.cast_natCast q.num]; rw [← NNRat.num_coe]; exact (num_div_den _).symm
+    rw [← NNRat.den_coe, ← Int.cast_natCast q.num, ← NNRat.num_coe]; exact (num_div_den _).symm
   ratCast_def _ := (num_div_den _).symm
 
+/-!
+### Extra instances to short-circuit type class resolution
 
-/--
-Instance `instDivisionRing` / 实例 `instDivisionRing`
-
-English:
-instance instDivisionRing
-  signature: : DivisionRing Rat
-  body: inferInstance
-
-中文:
-实例 instDivisionRing
-  签名: : 除环 有理数
-  定义体: inferInstance
+These also prevent non-computable instances being used to construct these instances non-computably.
 -/
-instance instDivisionRing : DivisionRing Rat := inferInstance
 
-/--
-lemma `inv_nonneg` / 引理 `inv_nonneg`
+/-
+**Rat.instDivisionRing** 是 Mathlib 中的一个实例，位于命名空间 `Rat`。
+形式化陈述：instDivisionRing : DivisionRing Rat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma inv_nonneg
-  given: {a : Rat} (ha : 0 <= a)
-  statement: 0 <= a⁻¹
-  proof: by
+--- 原说明 ---
+### Extra instances to short-circuit type class resolution
+
+These also prevent non-computable instances being used to construct these instan
+ces non-computably.
+-/
+instance instDivisionRing : DivisionRing ℚ := inferInstance
+/-
+**Rat.inv_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：∀ {a : ℚ}, 0 ≤ a → 0 ≤ a⁻¹
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Rat.inv_def`：∀ (a : ℚ), a⁻¹ = Rat.divInt (↑a.den) a.num
+· 使用定理 `Rat.divInt_nonneg`：∀ {a b : ℤ}, 0 ≤ a → 0 ≤ b → 0 ≤ Rat.divInt a b
+· 使用定理 `Int.natCast_nonneg`：∀ (n : ℕ), 0 ≤ ↑n
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Rat.num_nonneg`：∀ {q : ℚ}, 0 ≤ q.num ↔ 0 ≤ q
+-/
+protected lemma inv_nonneg {a : ℚ} (ha : 0 ≤ a) : 0 ≤ a⁻¹ := by
   rw [inv_def]
   exact divInt_nonneg (Int.natCast_nonneg a.den) (num_nonneg.mpr ha)
-
-中文:
-引理 inv_nonneg
-  条件: {a : 有理数} (ha : 0 <= a)
-  结论: 0 <= a⁻¹
-  证明: by
-  rw [inv_def]
-  exact divInt_nonneg (Int.natCast_nonneg a.den) (num_nonneg.mpr ha)
+/-
+**Rat.div_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Rat`。
+形式化陈述：∀ {a b : ℚ}, 0 ≤ a → 0 ≤ b → 0 ≤ a / b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_nonneg`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 :
+ Preorder α] [PosMulMono α], 0 ≤ a → 0 ≤ b → 0 ≤ a * b
+· 使用定理 `Rat.inv_nonneg`：∀ {a : ℚ}, 0 ≤ a → 0 ≤ a⁻¹
 -/
-protected lemma inv_nonneg {a : Rat} (ha : 0 <= a) : 0 <= a⁻¹ := by
-  rw [inv_def]
-  exact divInt_nonneg (Int.natCast_nonneg a.den) (num_nonneg.mpr ha)
-
-/--
-lemma `div_nonneg` / 引理 `div_nonneg`
-
-English:
-lemma div_nonneg
-  given: {a b : Rat} (ha : 0 <= a) (hb : 0 <= b)
-  statement: 0 <= a / b
-  proof: mul_nonneg ha (Rat.inv_nonneg hb)
-
-中文:
-引理 div_nonneg
-  条件: {a b : 有理数} (ha : 0 <= a) (hb : 0 <= b)
-  结论: 0 <= a / b
-  证明: mul_nonneg ha (Rat.inv_nonneg hb)
--/
-protected lemma div_nonneg {a b : Rat} (ha : 0 <= a) (hb : 0 <= b) : 0 <= a / b :=
+protected lemma div_nonneg {a b : ℚ} (ha : 0 ≤ a) (hb : 0 ≤ b) : 0 ≤ a / b :=
   mul_nonneg ha (Rat.inv_nonneg hb)
 
 end Rat
 
 namespace NNRat
 
-/--
-Instance `instInv` / 实例 `instInv`
-
-English:
-instance instInv
-  signature: : Inv Rat>=0 where
-  body: ⟨x⁻¹, Rat.inv_nonneg x.2⟩
-
-中文:
-实例 instInv
-  签名: : 取逆 有理数>=0 where
-  定义体: ⟨x⁻¹, Rat.inv_nonneg x.2⟩
-
-Depends on / 依赖: Rat.inv_nonneg, inv_nonneg
+/-
+**NNRat.instInv** 是 Mathlib 中的一个实例，位于命名空间 `NNRat`。
+形式化陈述：instInv : Inv Rat>=0 where inv x
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instInv : Inv Rat>=0 where
+instance instInv : Inv ℚ≥0 where
   inv x := ⟨x⁻¹, Rat.inv_nonneg x.2⟩
-
-/--
-Instance `instDiv` / 实例 `instDiv`
-
-English:
-instance instDiv
-  signature: : Div Rat>=0 where
-  body: ⟨x / y, Rat.div_nonneg x.2 y.2⟩
-
-中文:
-实例 instDiv
-  签名: : 除法 有理数>=0 where
-  定义体: ⟨x / y, Rat.div_nonneg x.2 y.2⟩
-
-Depends on / 依赖: Rat.div_nonneg, div_nonneg
+/-
+**NNRat.instDiv** 是 Mathlib 中的一个实例，位于命名空间 `NNRat`。
+形式化陈述：instDiv : Div Rat>=0 where div x y
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instDiv : Div Rat>=0 where
+instance instDiv : Div ℚ≥0 where
   div x y := ⟨x / y, Rat.div_nonneg x.2 y.2⟩
-
-/--
-Instance `instZPow` / 实例 `instZPow`
-
-English:
-instance instZPow
-  signature: : Pow Rat>=0 Int where
-  body: ⟨x ^ n, Rat.zpow_nonneg x.2⟩
-
-中文:
-实例 instZPow
-  签名: : 幂 有理数>=0 整数 where
-  定义体: ⟨x ^ n, Rat.zpow_nonneg x.2⟩
-
-Depends on / 依赖: Rat.zpow_nonneg, zpow_nonneg
+/-
+**NNRat.instZPow** 是 Mathlib 中的一个实例，位于命名空间 `NNRat`。
+形式化陈述：instZPow : Pow Rat>=0 Int where pow x n
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instZPow : Pow Rat>=0 Int where
+instance instZPow : Pow ℚ≥0 ℤ where
   pow x n := ⟨x ^ n, Rat.zpow_nonneg x.2⟩
-
-/--
-lemma `coe_inv` / 引理 `coe_inv`
-
-English:
-lemma coe_inv
-  given: (q : Rat>=0)
-  statement: ((q⁻¹ : Rat>=0) : Rat) = (q : Rat)⁻¹
-  proof: rfl
-
-中文:
-引理 coe_inv
-  条件: (q : 有理数>=0)
-  结论: ((q⁻¹ : 有理数>=0) : 有理数) = (q : 有理数)⁻¹
-  证明: rfl
+/-
+**NNRat.coe_inv** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ (q : ℚ≥0), ↑q⁻¹ = (↑q)⁻¹
+参数：q : ℚ≥0；↑q。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_inv (q : Rat>=0) : ((q⁻¹ : Rat>=0) : Rat) = (q : Rat)⁻¹ := rfl
-/--
-lemma `coe_div` / 引理 `coe_div`
-
-English:
-lemma coe_div
-  given: (p q : Rat>=0)
-  statement: ((p / q : Rat>=0) : Rat) = p / q
-  proof: rfl
-
-中文:
-引理 coe_div
-  条件: (p q : 有理数>=0)
-  结论: ((p / q : 有理数>=0) : 有理数) = p / q
-  证明: rfl
+@[simp, norm_cast] lemma coe_inv (q : ℚ≥0) : ((q⁻¹ : ℚ≥0) : ℚ) = (q : ℚ)⁻¹ := rfl
+/-
+**NNRat.coe_div** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ (p q : ℚ≥0), ↑(p / q) = ↑p / ↑q
+参数：p q : ℚ≥0；p / q。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_div (p q : Rat>=0) : ((p / q : Rat>=0) : Rat) = p / q := rfl
-/--
-lemma `coe_zpow` / 引理 `coe_zpow`
-
-English:
-lemma coe_zpow
-  given: (p : Rat>=0) (n : Int)
-  statement: ((p ^ n : Rat>=0) : Rat) = p ^ n
-  proof: rfl
-
-中文:
-引理 coe_zpow
-  条件: (p : 有理数>=0) (n : 整数)
-  结论: ((p ^ n : 有理数>=0) : 有理数) = p ^ n
-  证明: rfl
+@[simp, norm_cast] lemma coe_div (p q : ℚ≥0) : ((p / q : ℚ≥0) : ℚ) = p / q := rfl
+/-
+**NNRat.coe_zpow** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：∀ (p : ℚ≥0) (n : ℤ), ↑(p ^ n) = ↑p ^ n
+参数：p : ℚ≥0；n : ℤ；p ^ n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma coe_zpow (p : Rat>=0) (n : Int) : ((p ^ n : Rat>=0) : Rat) = p ^ n := rfl
-
-/--
-lemma `inv_def` / 引理 `inv_def`
-
-English:
-lemma inv_def
-  given: (q : Rat>=0)
-  statement: q⁻¹ = divNat q.den q.num
-  proof: by ext; simp [Rat.inv_def, num_coe, den_coe]
-
-中文:
-引理 inv_def
-  条件: (q : 有理数>=0)
-  结论: q⁻¹ = div自然数 q.den q.num
-  证明: by ext; simp [Rat.inv_def, num_coe, den_coe]
-
-Depends on / 依赖: Rat.inv_def, den_coe, inv_def, num_coe
+@[simp, norm_cast] lemma coe_zpow (p : ℚ≥0) (n : ℤ) : ((p ^ n : ℚ≥0) : ℚ) = p ^ n := rfl
+/-
+**NNRat.inv_def** 是 Mathlib 中的一个引理，位于命名空间 `NNRat`。
+形式化陈述：inv_def (q : Rat>=0) : q⁻¹ = divNat q.den q.num
+参数：q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNRat.ext`：ext : (p : Rat) = (q : Rat) -> p = q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Rat.inv_def`：∀ (a : ℚ), a⁻¹ = Rat.divInt (↑a.den) a.num
+· 使用定理 `NNRat.num_coe`：∀ (q : ℚ≥0), (↑q).num = ↑q.num
+· 使用定理 `Rat.divInt_ofNat`：∀ (num : ℤ) (den : ℕ), Rat.divInt num ↑den = mkRat num
+ den
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma inv_def (q : Rat>=0) : q⁻¹ = divNat q.den q.num := by ext; simp [Rat.inv_def, num_coe, den_coe]
-/--
-lemma `div_def` / 引理 `div_def`
-
-English:
-lemma div_def
-  given: (p q : Rat>=0)
-  statement: p / q = divNat (p.num * q.den) (p.den * q.num)
-  proof: by
+lemma inv_def (q : ℚ≥0) : q⁻¹ = divNat q.den q.num := by ext; simp [Rat.inv_def, num_coe, den_coe]
+/-
+**NNRat.div_def** 是 Mathlib 中的一个引理，位于命名空间 `NNRat`。
+形式化陈述：div_def (p q : Rat>=0) : p / q = divNat (p.num * q.den) (p.den * q.num)
+参数：p q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNRat.ext`：ext : (p : Rat) = (q : Rat) -> p = q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Rat.div_def'`：div_def' (q r : Rat) : q / r = (q.num * r.den) /. (q.den *
+ r.num)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `NNRat.num_coe`：∀ (q : ℚ≥0), (↑q).num = ↑q.num
+· 使用定理 `Nat.cast_mul`：∀ {α : Type u_1} [inst : NonAssocSemiring α] (m n : ℕ), ↑(
+m * n) = ↑m * ↑n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+lemma div_def (p q : ℚ≥0) : p / q = divNat (p.num * q.den) (p.den * q.num) := by
   ext; simp [Rat.div_def', num_coe, den_coe]
-
-中文:
-引理 div_def
-  条件: (p q : 有理数>=0)
-  结论: p / q = div自然数 (p.num * q.den) (p.den * q.num)
-  证明: by
-  ext; simp [Rat.div_def', num_coe, den_coe]
-
-Depends on / 依赖: Rat.div_def, den_coe, div_def, num_coe
+/-
+**NNRat.divNat_eq_div** 是 Mathlib 中的一个定理，位于命名空间 `NNRat`。
+形式化陈述：divNat_eq_div (a b : Nat) : divNat a b = a / b
+参数：a b : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNRat.ext`：ext : (p : Rat) = (q : Rat) -> p = q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Rat.divInt_ofNat`：∀ (num : ℤ) (den : ℕ), Rat.divInt num ↑den = mkRat num
+ den
+· 使用定理 `Rat.mkRat_eq_div`：∀ (a : ℤ) (b : ℕ), mkRat a b = ↑a / ↑b
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma div_def (p q : Rat>=0) : p / q = divNat (p.num * q.den) (p.den * q.num) := by
-  ext; simp [Rat.div_def', num_coe, den_coe]
-
-/--
-theorem `divNat_eq_div` / 定理 `divNat_eq_div`
-
-English:
-theorem divNat_eq_div
-  given: (a b : Nat)
-  statement: divNat a b = a / b
-  proof: by
-  ext
-  simp [Rat.mkRat_eq_div]
-
-中文:
-定理 div自然数_eq_div
-  条件: (a b : 自然数)
-  结论: div自然数 a b = a / b
-  证明: by
-  ext
-  simp [Rat.mkRat_eq_div]
-
-Depends on / 依赖: Rat.mkRat_eq_div, mkRat_eq_div
--/
-theorem divNat_eq_div (a b : Nat) : divNat a b = a / b := by
+theorem divNat_eq_div (a b : ℕ) : divNat a b = a / b := by
   ext
   simp [Rat.mkRat_eq_div]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `num_inv_of_ne_zero` / 引理 `num_inv_of_ne_zero`
-
-English:
-lemma num_inv_of_ne_zero
-  given: {q : Rat>=0} (hq : q != 0)
-  statement: q⁻¹.num = q.den
-  proof: by
-  rw [inv_def]; rw [divNat]; rw [num]; rw [coe_mk]; rw [Rat.divInt_ofNat]; rw [← Rat.mk_eq_mkRat _ _ (num_ne_zero.mpr hq)]; rw [Int.natAbs_natCast]
-  simpa using q.coprime_num_den.symm
-
-中文:
-引理 num_inv_of_ne_zero
-  条件: {q : 有理数>=0} (hq : q != 0)
-  结论: q⁻¹.num = q.den
-  证明: by
-  rw [inv_def]; rw [divNat]; rw [num]; rw [coe_mk]; rw [Rat.divInt_ofNat]; rw [← Rat.mk_eq_mkRat _ _ (num_ne_zero.mpr hq)]; rw [Int.natAbs_natCast]
-  simpa using q.coprime_num_den.symm
-
-Depends on / 依赖: Int.natAbs_natCast, Rat.divInt_ofNat, Rat.mk_eq_mkRat, coe_mk, coprime_num_den, divInt_ofNat, divNat, inv_def, mk_eq_mkRat, natAbs_natCast, num_ne_zero, num_ne_zero.mpr, q.coprime_num_den.symm
+/-
+**NNRat.num_inv_of_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `NNRat`。
+形式化陈述：num_inv_of_ne_zero {q : Rat>=0} (hq : q != 0) : q⁻¹.num = q.den
+参数：hq : q != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `NNRat.inv_def`：inv_def (q : Rat>=0) : q⁻¹ = divNat q.den q.num
+· 使用定理 `NNRat.divNat.eq_1`：∀ (n d : ℕ), NNRat.divNat n d = ⟨Rat.divInt ↑n ↑d, ⋯⟩
+· 使用定理 `NNRat.num.eq_1`：∀ (q : ℚ≥0), q.num = (↑q).num.natAbs
+· 使用定理 `NNRat.coe_mk`：∀ (q : ℚ) (hq : 0 ≤ q), ↑⟨q, hq⟩ = q
+· 使用定理 `Rat.divInt_ofNat`：∀ (num : ℤ) (den : ℕ), Rat.divInt num ↑den = mkRat num
+ den
+· 使用引理 `Rat.mk'`：mk'_num_den (q : Rat) : mk' q.num q.den q.den_nz q.reduced = q
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `NNRat.num_ne_zero`：∀ {q : ℚ≥0}, q.num ≠ 0 ↔ q ≠ 0
+· 使用定理 `Nat.Coprime.symm`：∀ {n m : ℕ}, n.Coprime m → m.Coprime n
+· 使用引理 `NNRat.coprime_num_den`：coprime_num_den (q : Rat>=0) : q.num.Coprime q.de
+n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Rat.mk_eq_mkRat`：∀ (num : ℤ) (den : ℕ) (nz : den ≠ 0) (c : num.natAbs.Co
+prime den),   { num := num, den := den, den_nz := nz, reduced := c } = mkRat num
+ den
+· 使用定理 `Int.natAbs_natCast`：∀ (n : ℕ), (↑n).natAbs = n
 -/
-lemma num_inv_of_ne_zero {q : Rat>=0} (hq : q != 0) : q⁻¹.num = q.den := by
-  rw [inv_def]; rw [divNat]; rw [num]; rw [coe_mk]; rw [Rat.divInt_ofNat]; rw [← Rat.mk_eq_mkRat _ _ (num_ne_zero.mpr hq)]; rw [Int.natAbs_natCast]
+lemma num_inv_of_ne_zero {q : ℚ≥0} (hq : q ≠ 0) : q⁻¹.num = q.den := by
+  rw [inv_def, divNat, num, coe_mk, Rat.divInt_ofNat, ← Rat.mk_eq_mkRat _ _ (num_ne_zero.mpr hq),
+    Int.natAbs_natCast]
   simpa using q.coprime_num_den.symm
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `den_inv_of_ne_zero` / 引理 `den_inv_of_ne_zero`
-
-English:
-lemma den_inv_of_ne_zero
-  given: {q : Rat>=0} (hq : q != 0)
-  statement: q⁻¹.den = q.num
-  proof: by
-  rw [inv_def]; rw [divNat]; rw [den]; rw [coe_mk]; rw [Rat.divInt_ofNat]; rw [← Rat.mk_eq_mkRat _ _ (num_ne_zero.mpr hq)]
+/-
+**NNRat.den_inv_of_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `NNRat`。
+形式化陈述：den_inv_of_ne_zero {q : Rat>=0} (hq : q != 0) : q⁻¹.den = q.num
+参数：hq : q != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `NNRat.inv_def`：inv_def (q : Rat>=0) : q⁻¹ = divNat q.den q.num
+· 使用定理 `NNRat.divNat.eq_1`：∀ (n d : ℕ), NNRat.divNat n d = ⟨Rat.divInt ↑n ↑d, ⋯⟩
+· 使用定理 `NNRat.den.eq_1`：∀ (q : ℚ≥0), q.den = (↑q).den
+· 使用定理 `NNRat.coe_mk`：∀ (q : ℚ) (hq : 0 ≤ q), ↑⟨q, hq⟩ = q
+· 使用定理 `Rat.divInt_ofNat`：∀ (num : ℤ) (den : ℕ), Rat.divInt num ↑den = mkRat num
+ den
+· 使用引理 `Rat.mk'`：mk'_num_den (q : Rat) : mk' q.num q.den q.den_nz q.reduced = q
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `NNRat.num_ne_zero`：∀ {q : ℚ≥0}, q.num ≠ 0 ↔ q ≠ 0
+· 使用定理 `Nat.Coprime.symm`：∀ {n m : ℕ}, n.Coprime m → m.Coprime n
+· 使用引理 `NNRat.coprime_num_den`：coprime_num_den (q : Rat>=0) : q.num.Coprime q.de
+n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Rat.mk_eq_mkRat`：∀ (num : ℤ) (den : ℕ) (nz : den ≠ 0) (c : num.natAbs.Co
+prime den),   { num := num, den := den, den_nz := nz, reduced := c } = mkRat num
+ den
+-/
+lemma den_inv_of_ne_zero {q : ℚ≥0} (hq : q ≠ 0) : q⁻¹.den = q.num := by
+  rw [inv_def, divNat, den, coe_mk, Rat.divInt_ofNat, ← Rat.mk_eq_mkRat _ _ (num_ne_zero.mpr hq)]
   simpa using q.coprime_num_den.symm
 
 @[simp]
-
-中文:
-引理 den_inv_of_ne_zero
-  条件: {q : 有理数>=0} (hq : q != 0)
-  结论: q⁻¹.den = q.num
-  证明: by
-  rw [inv_def]; rw [divNat]; rw [den]; rw [coe_mk]; rw [Rat.divInt_ofNat]; rw [← Rat.mk_eq_mkRat _ _ (num_ne_zero.mpr hq)]
-  simpa using q.coprime_num_den.symm
-
-@[simp]
-
-Depends on / 依赖: Rat.divInt_ofNat, Rat.mk_eq_mkRat, coe_mk, coprime_num_den, divInt_ofNat, divNat, inv_def, mk_eq_mkRat, num_ne_zero, num_ne_zero.mpr, q.coprime_num_den.symm
+/-
+**NNRat.num_div_den** 是 Mathlib 中的一个引理，位于命名空间 `NNRat`。
+形式化陈述：num_div_den (q : Rat>=0) : (q.num : Rat>=0) / q.den = q
+参数：q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNRat.ext`：ext : (p : Rat) = (q : Rat) -> p = q
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NNRat.coe_div`：∀ (p q : ℚ≥0), ↑(p / q) = ↑p / ↑q
+· 使用定理 `NNRat.coe_natCast`：∀ (n : ℕ), ↑↑n = ↑n
+· 使用定理 `NNRat.num.eq_1`：∀ (q : ℚ≥0), q.num = (↑q).num.natAbs
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用引理 `NNRat.cast_def`：cast_def (q : Rat>=0) : (q : K) = q.num / q.den
 -/
-lemma den_inv_of_ne_zero {q : Rat>=0} (hq : q != 0) : q⁻¹.den = q.num := by
-  rw [inv_def]; rw [divNat]; rw [den]; rw [coe_mk]; rw [Rat.divInt_ofNat]; rw [← Rat.mk_eq_mkRat _ _ (num_ne_zero.mpr hq)]
-  simpa using q.coprime_num_den.symm
-
-@[simp]
-/--
-lemma `num_div_den` / 引理 `num_div_den`
-
-English:
-lemma num_div_den
-  given: (q : Rat>=0)
-  statement: (q.num : Rat>=0) / q.den = q
-  proof: by
+lemma num_div_den (q : ℚ≥0) : (q.num : ℚ≥0) / q.den = q := by
   ext1
-  rw [coe_div]; rw [coe_natCast]; rw [coe_natCast]; rw [num]; rw [← Int.cast_natCast]
+  rw [coe_div, coe_natCast, coe_natCast, num, ← Int.cast_natCast]
   exact (cast_def _).symm
-
-中文:
-引理 num_div_den
-  条件: (q : 有理数>=0)
-  结论: (q.num : 有理数>=0) / q.den = q
-  证明: by
-  ext1
-  rw [coe_div]; rw [coe_natCast]; rw [coe_natCast]; rw [num]; rw [← Int.cast_natCast]
-  exact (cast_def _).symm
-
-Depends on / 依赖: Int.cast_natCast, cast_def, cast_natCast, coe_div, coe_natCast
+/-
+**NNRat.instSemifield** 是 Mathlib 中的一个实例，位于命名空间 `NNRat`。
+形式化陈述：instSemifield : Semifield Rat>=0 where inv_zero
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma num_div_den (q : Rat>=0) : (q.num : Rat>=0) / q.den = q := by
-  ext1
-  rw [coe_div]; rw [coe_natCast]; rw [coe_natCast]; rw [num]; rw [← Int.cast_natCast]
-  exact (cast_def _).symm
-
-/--
-Instance `instSemifield` / 实例 `instSemifield`
-
-English:
-instance instSemifield
-  signature: : Semifield Rat>=0 where
-  body: by ext; simp
-  mul_inv_cancel q h := by ext; simp [h]
-  nnratCast_def q := q.num_div_den.symm
-  nnqsmul q a := q * a
-  nnqsmul_def q a := rfl
-  zpow n a := a ^ n
-  zpow_zero' a := by ext; apply Field.zpow_zero'
-  zpow_succ' n a := by ext; apply Field.zpow_succ'
-  zpow_neg' n a := by ext; apply Field.zpow_neg'
-
-中文:
-实例 instSemifield
-  签名: : 半域 有理数>=0 where
-  定义体: by ext; simp
-  mul_inv_cancel q h := by ext; simp [h]
-  nnratCast_def q := q.num_div_den.symm
-  nnqsmul q a := q * a
-  nnqsmul_def q a := rfl
-  zpow n a := a ^ n
-  zpow_zero' a := by ext; apply Field.zpow_zero'
-  zpow_succ' n a := by ext; apply Field.zpow_succ'
-  zpow_neg' n a := by ext; apply Field.zpow_neg'
-
-Depends on / 依赖: Field.zpow_neg, Field.zpow_succ, Field.zpow_zero, mul_inv_cancel, nnqsmul, nnqsmul_def, nnratCast_def, num_div_den, q.num_div_den.symm, zpow_neg, zpow_succ, zpow_zero
--/
-instance instSemifield : Semifield Rat>=0 where
+instance instSemifield : Semifield ℚ≥0 where
   inv_zero := by ext; simp
   mul_inv_cancel q h := by ext; simp [h]
   nnratCast_def q := q.num_div_den.symm
@@ -424,45 +318,40 @@ instance instSemifield : Semifield Rat>=0 where
 
 end NNRat
 
-/--
-theorem `NNRatCast.ofScientific_eq_ite` / 定理 `NNRatCast.ofScientific_eq_ite`
-
-English:
-theorem NNRatCast.ofScientific_eq_ite
-  given: {K} [NNRatCast K] (m : Nat) (b : Bool) (d : Nat)
-  proof: by
-  rw [NNRatCast.toOfScientific_def]
-  split_ifs
-  · congr 2
-    rw [← Rat.ofScientific_eq_ofScientific]; rw [Rat.ofScientific_def]; rw [if_pos ‹_›]
-    congr
-  · congr 2
-    rw [← Rat.ofScientific_eq_ofScientific]; rw [Rat.ofScientific_def]; rw [if_neg ‹_›]
-    congr
-
-中文:
-定理 非负有理数嵌入.ofScientific_eq_ite
-  条件: {K} [非负有理数嵌入 K] (m : 自然数) (b : 布尔值) (d : 自然数)
-  证明: by
-  rw [NNRatCast.toOfScientific_def]
-  split_ifs
-  · congr 2
-    rw [← Rat.ofScientific_eq_ofScientific]; rw [Rat.ofScientific_def]; rw [if_pos ‹_›]
-    congr
-  · congr 2
-    rw [← Rat.ofScientific_eq_ofScientific]; rw [Rat.ofScientific_def]; rw [if_neg ‹_›]
-    congr
-
-Depends on / 依赖: NNRatCast, NNRatCast.toOfScientific_def, Rat.ofScientific_def, Rat.ofScientific_eq_ofScientific, if_neg, if_pos, ofScientific_def, ofScientific_eq_ofScientific, split_ifs, toOfScientific_def
+/-
+**NNRatCast.ofScientific_eq_ite** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：NNRatCast.ofScientific_eq_ite {K} [NNRatCast K] (m : Nat) (b : Bool) (d : 
+Nat) : (OfScientific.ofScientific m b d : K) = if b = true then NNRat.divNat m (
+10 ^ d) else ↑(m * 10 ^ d)
+参数：m : Nat；b : Bool；d : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Rat.ofScientific_nonneg`：ofScientific_nonneg (m : Nat) (s : Bool) (e : N
+at) : 0 <= Rat.ofScientific m s e
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NNRatCast.toOfScientific_def`：∀ {K : Type u_1} [inst : NNRatCast K] (m :
+ ℕ) (b : Bool) (d : ℕ),   OfScientific.ofScientific m b d = ↑⟨OfScientific.ofSci
+entific m b d, ⋯⟩
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Rat.ofScientific_eq_ofScientific`：Rat.ofScientific_eq_ofScientific (m : 
+Nat) (s : Bool) (e : Nat) : Rat.ofScientific (OfNat.ofNat m) s (OfNat.ofNat e) =
+ OfScientific.ofScient…
+· 使用定理 `Rat.ofScientific_def`：∀ {m : ℕ} {s : Bool} {e : ℕ}, Rat.ofScientific m s
+ e = if s = true then mkRat (↑m) (10 ^ e) else ↑(m * 10 ^ e)
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
 -/
-theorem NNRatCast.ofScientific_eq_ite {K} [NNRatCast K] (m : Nat) (b : Bool) (d : Nat) :
+theorem NNRatCast.ofScientific_eq_ite {K} [NNRatCast K] (m : ℕ) (b : Bool) (d : ℕ) :
     (OfScientific.ofScientific m b d : K) =
       if b = true then NNRat.divNat m (10 ^ d) else ↑(m * 10 ^ d) := by
   rw [NNRatCast.toOfScientific_def]
   split_ifs
   · congr 2
-    rw [← Rat.ofScientific_eq_ofScientific]; rw [Rat.ofScientific_def]; rw [if_pos ‹_›]
+    rw [← Rat.ofScientific_eq_ofScientific, Rat.ofScientific_def, if_pos ‹_›]
     congr
   · congr 2
-    rw [← Rat.ofScientific_eq_ofScientific]; rw [Rat.ofScientific_def]; rw [if_neg ‹_›]
+    rw [← Rat.ofScientific_eq_ofScientific, Rat.ofScientific_def, if_neg ‹_›]
     congr

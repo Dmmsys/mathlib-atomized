@@ -24,73 +24,49 @@ namespace Cat
 open Limits
 
 attribute [local instance] uliftCategory in
-/--
-Definition of `chosenTerminal` / `chosenTerminal` 的定义
+/-- The chosen terminal object in `Cat`. -/
+/-
+**CategoryTheory.Cat.chosenTerminal** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.
+Cat`。
+形式化陈述：chosenTerminal : Cat.{v, u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation chosenTerminal
-  signature: : Cat.{v, u}
-  body: Cat.of (ULift (ULiftHom (Discrete Unit)))
-
-中文:
-缩写 chosenTerminal
-  签名: : Cat.{v, u}
-  定义体: Cat.of (ULift (ULiftHom (Discrete Unit)))
-
-Depends on / 依赖: Cat.of, Discrete, ULiftHom
+--- 原说明 ---
+The chosen terminal object in `Cat`.
 -/
 abbrev chosenTerminal : Cat.{v, u} := Cat.of (ULift (ULiftHom (Discrete Unit)))
 
 attribute [local instance] uliftCategory in
-/--
-Definition of `chosenTerminalIsTerminal` / `chosenTerminalIsTerminal` 的定义
+/-- The chosen terminal object in `Cat` is terminal. -/
+/-
+**CategoryTheory.Cat.chosenTerminalIsTerminal** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Cat`。
+形式化陈述：chosenTerminalIsTerminal : IsTerminal chosenTerminal.{v, u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition chosenTerminalIsTerminal
-  signature: : IsTerminal chosenTerminal.{v, u}
-  body: IsTerminal.ofUniqueHom (fun C => ((Functor.const C).obj ⟨⟨⟨⟩⟩⟩).toCatHom) fun _ _ => rfl
-
-中文:
-定义 chosenTerminalIsTerminal
-  签名: : 是终止 chosenTerminal.{v, u}
-  定义体: IsTerminal.ofUniqueHom (fun C => ((Functor.const C).obj ⟨⟨⟨⟩⟩⟩).toCatHom) fun _ _ => rfl
-
-Depends on / 依赖: Functor, Functor.const, IsTerminal, IsTerminal.ofUniqueHom, ofUniqueHom, toCatHom
+--- 原说明 ---
+The chosen terminal object in `Cat` is terminal.
 -/
 def chosenTerminalIsTerminal : IsTerminal chosenTerminal.{v, u} :=
-  IsTerminal.ofUniqueHom (fun C => ((Functor.const C).obj ⟨⟨⟨⟩⟩⟩).toCatHom) fun _ _ => rfl
+  IsTerminal.ofUniqueHom (fun C ↦ ((Functor.const C).obj ⟨⟨⟨⟩⟩⟩).toCatHom) fun _ _ ↦ rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `fromChosenTerminalEquiv` / `fromChosenTerminalEquiv` 的定义
+/-- The type of functors out of the chosen terminal category is equivalent to the type of objects
+in the target category. TODO: upgrade to an equivalence of categories. -/
+/-
+**CategoryTheory.Cat.fromChosenTerminalEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Cat`。
+形式化陈述：fromChosenTerminalEquiv {C : Type u} [Category.{v} C] : Cat.chosenTerminal
+ ⥤ C ≃ C where toFun F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fromChosenTerminalEquiv
-  signature: {C : Type u} [Category.{v} C]
-  body: F.obj ⟨⟨()⟩⟩
-  invFun := (Functor.const _).obj
-  left_inv _ := by
-    apply Functor.ext
-    · rintro ⟨⟨⟨⟩⟩⟩ ⟨⟨⟨⟩⟩⟩ ⟨⟨⟨⟨⟩⟩⟩⟩
-      simp only [eqToHom_refl, Category.comp_id, Category.id_comp]
-      exact (Functor.map_id _ _).symm
-    · intro; rfl
-  right_inv _ := rfl
-
-中文:
-定义 fromChosenTerminalEquiv
-  签名: {C : 类型u} [范畴.{v} C]
-  定义体: F.obj ⟨⟨()⟩⟩
-  invFun := (Functor.const _).obj
-  left_inv _ := by
-    apply Functor.ext
-    · rintro ⟨⟨⟨⟩⟩⟩ ⟨⟨⟨⟩⟩⟩ ⟨⟨⟨⟨⟩⟩⟩⟩
-      simp only [eqToHom_refl, Category.comp_id, Category.id_comp]
-      exact (Functor.map_id _ _).symm
-    · intro; rfl
-  right_inv _ := rfl
-
-Depends on / 依赖: F.obj
+--- 原说明 ---
+The type of functors out of the chosen terminal category is equivalent to the ty
+pe of objects
+in the target category. TODO: upgrade to an equivalence of categories.
 -/
 def fromChosenTerminalEquiv {C : Type u} [Category.{v} C] : Cat.chosenTerminal ⥤ C ≃ C where
   toFun F := F.obj ⟨⟨()⟩⟩
@@ -103,97 +79,72 @@ def fromChosenTerminalEquiv {C : Type u} [Category.{v} C] : Cat.chosenTerminal �
     · intro; rfl
   right_inv _ := rfl
 
-/--
-Definition of `prodCone` / `prodCone` 的定义
+/-- The chosen product of categories `C × D` yields a product cone in `Cat`. -/
+/-
+**CategoryTheory.Cat.prodCone** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Cat`。
+形式化陈述：prodCone (C D : Cat.{v, u}) : BinaryFan C D
+参数：C D : Cat.{v, u}。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodCone
-  signature: (C D : Cat.{v, u})
-  body: .mk (P := .of (C × D)) (Prod.fst _ _).toCatHom (Prod.snd _ _).toCatHom
-
-中文:
-定义 prodCone
-  签名: (C D : Cat.{v, u})
-  定义体: .mk (P := .of (C × D)) (Prod.fst _ _).toCatHom (Prod.snd _ _).toCatHom
-
-Depends on / 依赖: Prod.fst, Prod.snd, toCatHom
+--- 原说明 ---
+The chosen product of categories `C × D` yields a product cone in `Cat`.
 -/
 def prodCone (C D : Cat.{v, u}) : BinaryFan C D :=
   .mk (P := .of (C × D)) (Prod.fst _ _).toCatHom (Prod.snd _ _).toCatHom
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `isLimitProdCone` / `isLimitProdCone` 的定义
+/-- The product cone in `Cat` is indeed a product. -/
+/-
+**CategoryTheory.Cat.isLimitProdCone** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.C
+at`。
+形式化陈述：isLimitProdCone (X Y : Cat) : IsLimit (prodCone X Y)
+参数：X Y : Cat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isLimitProdCone
-  signature: (X Y : Cat)
-  body: BinaryFan.isLimitMk
-  (fun S => (S.fst.toFunctor.prod' S.snd.toFunctor).toCatHom) (fun _ => rfl)
-    (fun _ => rfl) (fun _ _ h1 h2 => Cat.Hom.ext <| Functor.hext
-      (fun _ => Prod.ext (by simp [← h1]) (by simp [← h2]))
-      (fun _ _ _ => by dsimp; rw [← h1, ← h2]; rfl))
-
-中文:
-定义 isLimitProdCone
-  签名: (X Y : Cat)
-  定义体: BinaryFan.isLimitMk
-  (fun S => (S.fst.toFunctor.prod' S.snd.toFunctor).toCatHom) (fun _ => rfl)
-    (fun _ => rfl) (fun _ _ h1 h2 => Cat.Hom.ext <| Functor.hext
-      (fun _ => Prod.ext (by simp [← h1]) (by simp [← h2]))
-      (fun _ _ _ => by dsimp; rw [← h1, ← h2]; rfl))
-
-Depends on / 依赖: BinaryFan, BinaryFan.isLimitMk, isLimitMk
+--- 原说明 ---
+The product cone in `Cat` is indeed a product.
 -/
 def isLimitProdCone (X Y : Cat) : IsLimit (prodCone X Y) := BinaryFan.isLimitMk
   (fun S => (S.fst.toFunctor.prod' S.snd.toFunctor).toCatHom) (fun _ => rfl)
     (fun _ => rfl) (fun _ _ h1 h2 => Cat.Hom.ext <| Functor.hext
-      (fun _ => Prod.ext (by simp [← h1]) (by simp [← h2]))
-      (fun _ _ _ => by dsimp; rw [← h1, ← h2]; rfl))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CartesianMonoidalCategory Cat
-  body: .ofChosenFiniteProducts ⟨_, chosenTerminalIsTerminal⟩ fun X Y =>
-    { cone := X.prodCone Y, isLimit := isLimitProdCone X Y }
-
-中文:
-实例 :
-  签名: CartesianMonoidal范畴 Cat
-  定义体: .ofChosenFiniteProducts ⟨_, chosenTerminalIsTerminal⟩ fun X Y =>
-    { cone := X.prodCone Y, isLimit := isLimitProdCone X Y }
-
-Depends on / 依赖: X.prodCone, chosenTerminalIsTerminal, isLimit, isLimitProdCone, ofChosenFiniteProducts, prodCone
+      (fun _ ↦ Prod.ext (by simp [← h1]) (by simp [← h2]))
+      (fun _ _ _ ↦ by dsimp; rw [← h1, ← h2]; rfl))
+/-
+**CategoryTheory.Cat.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Cat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CartesianMonoidalCategory Cat :=
-  .ofChosenFiniteProducts ⟨_, chosenTerminalIsTerminal⟩ fun X Y =>
+  .ofChosenFiniteProducts ⟨_, chosenTerminalIsTerminal⟩ fun X Y ↦
     { cone := X.prodCone Y, isLimit := isLimitProdCone X Y }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: BraidedCategory Cat
-  body: .ofCartesianMonoidalCategory
-
-中文:
-实例 :
-  签名: 辫范畴 Cat
-  定义体: .ofCartesianMonoidalCategory
-
-Depends on / 依赖: ofCartesianMonoidalCategory
+/-
+**CategoryTheory.Cat.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Cat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : BraidedCategory Cat := .ofCartesianMonoidalCategory
 
 /-- A monoidal instance for `Cat` is provided from the `CartesianMonoidalCategory` instance. -/
+/-
+**CategoryTheory.Cat.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Cat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A monoidal instance for `Cat` is provided from the `CartesianMonoidalCategory` i
+nstance.
+-/
 example : MonoidalCategory Cat := by infer_instance
 
 /-- A symmetric monoidal instance for `Cat` is provided through
 `CartesianMonoidalCategory.toSymmetricCategory`. -/
+/-
+**CategoryTheory.Cat.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Cat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A symmetric monoidal instance for `Cat` is provided through
+`CartesianMonoidalCategory.toSymmetricCategory`.
+-/
 example : SymmetricCategory Cat := by infer_instance
 
 end Cat
@@ -202,253 +153,165 @@ namespace Monoidal
 
 open MonoidalCategory
 
-/--
-lemma `tensorObj` / 引理 `tensorObj`
-
-English:
-lemma tensorObj
-  given: (C : Cat) (D : Cat)
-  statement: C otimes D = Cat.of (C × D)
-  proof: rfl
-
-中文:
-引理 tensorObj
-  条件: (C : Cat) (D : Cat)
-  结论: C otimes D = Cat.of (C × D)
-  证明: rfl
+/-
+**CategoryTheory.Monoidal.tensorObj** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Mo
+noidal`。
+形式化陈述：tensorObj (C : Cat) (D : Cat) : C otimes D = Cat.of (C × D)
+参数：C : Cat；D : Cat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma tensorObj (C : Cat) (D : Cat) : C otimes D = Cat.of (C × D) := rfl
-
-/--
-lemma `whiskerLeft` / 引理 `whiskerLeft`
-
-English:
-lemma whiskerLeft
-  given: (X : Cat) {A : Cat} {B : Cat} (F : A ⟶ B)
-  proof: rfl
-
-中文:
-引理 whiskerLeft
-  条件: (X : Cat) {A : Cat} {B : Cat} (F : A ⟶ B)
-  证明: rfl
+lemma tensorObj (C : Cat) (D : Cat) : C ⊗ D = Cat.of (C × D) := rfl
+/-
+**CategoryTheory.Monoidal.whiskerLeft** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.
+Monoidal`。
+形式化陈述：whiskerLeft (X : Cat) {A : Cat} {B : Cat} (F : A ⟶ B) : X ◁ F = ((𝟭 X).pro
+d F.toFunctor).toCatHom
+参数：X : Cat；F : A ⟶ B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma whiskerLeft (X : Cat) {A : Cat} {B : Cat} (F : A ⟶ B) :
     X ◁ F = ((𝟭 X).prod F.toFunctor).toCatHom := rfl
-
-/--
-lemma `whiskerLeft_fst` / 引理 `whiskerLeft_fst`
-
-English:
-lemma whiskerLeft_fst
-  given: (X : Cat) {A : Cat} {B : Cat} (f : A ⟶ B)
-  proof: rfl
-
-中文:
-引理 whiskerLeft_fst
-  条件: (X : Cat) {A : Cat} {B : Cat} (f : A ⟶ B)
-  证明: rfl
+/-
+**CategoryTheory.Monoidal.whiskerLeft_fst** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Monoidal`。
+形式化陈述：whiskerLeft_fst (X : Cat) {A : Cat} {B : Cat} (f : A ⟶ B) : (X ◁ f).toFunc
+tor ⋙ Prod.fst _ _ = Prod.fst _ _
+参数：X : Cat；f : A ⟶ B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma whiskerLeft_fst (X : Cat) {A : Cat} {B : Cat} (f : A ⟶ B) :
     (X ◁ f).toFunctor ⋙ Prod.fst _ _ = Prod.fst _ _ := rfl
-
-/--
-lemma `whiskerLeft_snd` / 引理 `whiskerLeft_snd`
-
-English:
-lemma whiskerLeft_snd
-  given: (X : Cat) {A : Cat} {B : Cat} (f : A ⟶ B)
-  proof: rfl
-
-中文:
-引理 whiskerLeft_snd
-  条件: (X : Cat) {A : Cat} {B : Cat} (f : A ⟶ B)
-  证明: rfl
+/-
+**CategoryTheory.Monoidal.whiskerLeft_snd** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Monoidal`。
+形式化陈述：whiskerLeft_snd (X : Cat) {A : Cat} {B : Cat} (f : A ⟶ B) : (X ◁ f).toFunc
+tor ⋙ Prod.snd _ _ = Prod.snd _ _ ⋙ f.toFunctor
+参数：X : Cat；f : A ⟶ B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma whiskerLeft_snd (X : Cat) {A : Cat} {B : Cat} (f : A ⟶ B) :
     (X ◁ f).toFunctor ⋙ Prod.snd _ _ = Prod.snd _ _ ⋙ f.toFunctor := rfl
-
-/--
-lemma `whiskerRight` / 引理 `whiskerRight`
-
-English:
-lemma whiskerRight
-  given: {A : Cat} {B : Cat} (f : A ⟶ B) (X : Cat)
-  proof: rfl
-
-中文:
-引理 whiskerRight
-  条件: {A : Cat} {B : Cat} (f : A ⟶ B) (X : Cat)
-  证明: rfl
+/-
+**CategoryTheory.Monoidal.whiskerRight** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.Monoidal`。
+形式化陈述：whiskerRight {A : Cat} {B : Cat} (f : A ⟶ B) (X : Cat) : f ▷ X = (f.toFunc
+tor.prod (𝟭 X)).toCatHom
+参数：f : A ⟶ B；X : Cat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma whiskerRight {A : Cat} {B : Cat} (f : A ⟶ B) (X : Cat) :
     f ▷ X = (f.toFunctor.prod (𝟭 X)).toCatHom := rfl
-
-/--
-lemma `whiskerRight_fst` / 引理 `whiskerRight_fst`
-
-English:
-lemma whiskerRight_fst
-  given: {A : Cat} {B : Cat} (f : A ⟶ B) (X : Cat)
-  proof: rfl
-
-中文:
-引理 whiskerRight_fst
-  条件: {A : Cat} {B : Cat} (f : A ⟶ B) (X : Cat)
-  证明: rfl
+/-
+**CategoryTheory.Monoidal.whiskerRight_fst** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.Monoidal`。
+形式化陈述：whiskerRight_fst {A : Cat} {B : Cat} (f : A ⟶ B) (X : Cat) : (f ▷ X).toFun
+ctor ⋙ Prod.fst _ _ = Prod.fst _ _ ⋙ f.toFunctor
+参数：f : A ⟶ B；X : Cat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma whiskerRight_fst {A : Cat} {B : Cat} (f : A ⟶ B) (X : Cat) :
     (f ▷ X).toFunctor ⋙ Prod.fst _ _ = Prod.fst _ _ ⋙ f.toFunctor := rfl
-
-/--
-lemma `whiskerRight_snd` / 引理 `whiskerRight_snd`
-
-English:
-lemma whiskerRight_snd
-  given: {A : Cat} {B : Cat} (f : A ⟶ B) (X : Cat)
-  proof: rfl
-
-中文:
-引理 whiskerRight_snd
-  条件: {A : Cat} {B : Cat} (f : A ⟶ B) (X : Cat)
-  证明: rfl
+/-
+**CategoryTheory.Monoidal.whiskerRight_snd** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.Monoidal`。
+形式化陈述：whiskerRight_snd {A : Cat} {B : Cat} (f : A ⟶ B) (X : Cat) : (f ▷ X).toFun
+ctor ⋙ Prod.snd _ _ = Prod.snd _ _
+参数：f : A ⟶ B；X : Cat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma whiskerRight_snd {A : Cat} {B : Cat} (f : A ⟶ B) (X : Cat) :
     (f ▷ X).toFunctor ⋙ Prod.snd _ _ = Prod.snd _ _ := rfl
-
-/--
-lemma `tensorHom` / 引理 `tensorHom`
-
-English:
-lemma tensorHom
-  given: {A : Cat} {B : Cat} (f : A ⟶ B) {X : Cat} {Y : Cat} (g : X ⟶ Y)
-  proof: rfl
-
-中文:
-引理 tensorHom
-  条件: {A : Cat} {B : Cat} (f : A ⟶ B) {X : Cat} {Y : Cat} (g : X ⟶ Y)
-  证明: rfl
+/-
+**CategoryTheory.Monoidal.tensorHom** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Mo
+noidal`。
+形式化陈述：tensorHom {A : Cat} {B : Cat} (f : A ⟶ B) {X : Cat} {Y : Cat} (g : X ⟶ Y) 
+: f otimesₘ g = (f.toFunctor.prod g.toFunctor).toCatHom
+参数：f : A ⟶ B；g : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma tensorHom {A : Cat} {B : Cat} (f : A ⟶ B) {X : Cat} {Y : Cat} (g : X ⟶ Y) :
-    f otimesₘ g = (f.toFunctor.prod g.toFunctor).toCatHom := rfl
-
-/--
-lemma `tensorUnit` / 引理 `tensorUnit`
-
-English:
-lemma tensorUnit
-  statement: 𝟙_ Cat = Cat.chosenTerminal
-  proof: rfl
-
-中文:
-引理 tensorUnit
-  结论: 𝟙_ Cat = Cat.chosenTerminal
-  证明: rfl
+    f ⊗ₘ g = (f.toFunctor.prod g.toFunctor).toCatHom := rfl
+/-
+**CategoryTheory.Monoidal.tensorUnit** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.M
+onoidal`。
+形式化陈述：tensorUnit : 𝟙_ Cat = Cat.chosenTerminal
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma tensorUnit : 𝟙_ Cat = Cat.chosenTerminal := rfl
-
-/--
-lemma `associator_hom` / 引理 `associator_hom`
-
-English:
-lemma associator_hom
-  given: (X : Cat) (Y : Cat) (Z : Cat)
-  proof: rfl
-
-中文:
-引理 associator_hom
-  条件: (X : Cat) (Y : Cat) (Z : Cat)
-  证明: rfl
+/-
+**CategoryTheory.Monoidal.associator_hom** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Monoidal`。
+形式化陈述：associator_hom (X : Cat) (Y : Cat) (Z : Cat) : (associator X Y Z).hom = (F
+unctor.prod' (Prod.fst (X × Y) Z ⋙ Prod.fst X Y) ((Functor.prod' ((Prod.fst (X ×
+ Y) Z ⋙ Prod.snd X Y)) (Prod.snd (X × Y) Z : (X × Y) × Z ⥤ Z)))).toCatHom
+参数：X : Cat；Y : Cat；Z : Cat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma associator_hom (X : Cat) (Y : Cat) (Z : Cat) :
     (associator X Y Z).hom = (Functor.prod' (Prod.fst (X × Y) Z ⋙ Prod.fst X Y)
       ((Functor.prod' ((Prod.fst (X × Y) Z ⋙ Prod.snd X Y))
       (Prod.snd (X × Y) Z : (X × Y) × Z ⥤ Z)))).toCatHom := rfl
-
-/--
-lemma `associator_inv` / 引理 `associator_inv`
-
-English:
-lemma associator_inv
-  given: (X : Cat) (Y : Cat) (Z : Cat)
-  proof: rfl
-
-中文:
-引理 associator_inv
-  条件: (X : Cat) (Y : Cat) (Z : Cat)
-  证明: rfl
+/-
+**CategoryTheory.Monoidal.associator_inv** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Monoidal`。
+形式化陈述：associator_inv (X : Cat) (Y : Cat) (Z : Cat) : (associator X Y Z).inv = (F
+unctor.prod' (Functor.prod' (Prod.fst X (Y × Z) : X × (Y × Z) ⥤ X) (Prod.snd X (
+Y × Z) ⋙ Prod.fst Y Z)) (Prod.snd X (Y × Z) ⋙ Prod.snd Y Z)).toCatHom
+参数：X : Cat；Y : Cat；Z : Cat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma associator_inv (X : Cat) (Y : Cat) (Z : Cat) :
     (associator X Y Z).inv = (Functor.prod' (Functor.prod' (Prod.fst X (Y × Z) : X × (Y × Z) ⥤ X)
       (Prod.snd X (Y × Z) ⋙ Prod.fst Y Z)) (Prod.snd X (Y × Z) ⋙ Prod.snd Y Z)).toCatHom := rfl
-
-/--
-lemma `leftUnitor_hom` / 引理 `leftUnitor_hom`
-
-English:
-lemma leftUnitor_hom
-  given: (C : Cat.{v, u})
-  statement: (fun_ C).hom = (Prod.snd _ _).toCatHom
-  proof: rfl
-
-中文:
-引理 leftUnitor_hom
-  条件: (C : Cat.{v, u})
-  结论: (fun_ C).hom = (积类型.snd _ _).toCatHom
-  证明: rfl
+/-
+**CategoryTheory.Monoidal.leftUnitor_hom** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Monoidal`。
+形式化陈述：leftUnitor_hom (C : Cat.{v, u}) : (fun_ C).hom = (Prod.snd _ _).toCatHom
+参数：C : Cat.{v, u}。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma leftUnitor_hom (C : Cat.{v, u}) : (fun_ C).hom = (Prod.snd _ _).toCatHom := rfl
-
-/--
-lemma `leftUnitor_inv` / 引理 `leftUnitor_inv`
-
-English:
-lemma leftUnitor_inv
-  given: (C : Cat.{v, u})
-  statement: (fun_ C).inv = (Prod.sectR ⟨⟨⟨⟩⟩⟩ _).toCatHom
-  proof: rfl
-
-中文:
-引理 leftUnitor_inv
-  条件: (C : Cat.{v, u})
-  结论: (fun_ C).inv = (积类型.sectR ⟨⟨⟨⟩⟩⟩ _).toCatHom
-  证明: rfl
+lemma leftUnitor_hom (C : Cat.{v, u}) : (λ_ C).hom = (Prod.snd _ _).toCatHom := rfl
+/-
+**CategoryTheory.Monoidal.leftUnitor_inv** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Monoidal`。
+形式化陈述：leftUnitor_inv (C : Cat.{v, u}) : (fun_ C).inv = (Prod.sectR ⟨⟨⟨⟩⟩⟩ _).toC
+atHom
+参数：C : Cat.{v, u}。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma leftUnitor_inv (C : Cat.{v, u}) : (fun_ C).inv = (Prod.sectR ⟨⟨⟨⟩⟩⟩ _).toCatHom := rfl
-
-/--
-lemma `rightUnitor_hom` / 引理 `rightUnitor_hom`
-
-English:
-lemma rightUnitor_hom
-  given: (C : Cat.{v, u})
-  statement: (ρ_ C).hom = (Prod.fst _ _).toCatHom
-  proof: rfl
-
-中文:
-引理 rightUnitor_hom
-  条件: (C : Cat.{v, u})
-  结论: (ρ_ C).hom = (积类型.fst _ _).toCatHom
-  证明: rfl
-
-Depends on / 依赖: infer_instance, isIso_iff_of_reflects_iso, sheafToPresheaf, sheafToPresheaf_map_sheafComposeNatTrans_eq_sheafifyCompIso_inv
+lemma leftUnitor_inv (C : Cat.{v, u}) : (λ_ C).inv = (Prod.sectR ⟨⟨⟨⟩⟩⟩ _).toCatHom := rfl
+/-
+**CategoryTheory.Monoidal.rightUnitor_hom** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Monoidal`。
+形式化陈述：rightUnitor_hom (C : Cat.{v, u}) : (ρ_ C).hom = (Prod.fst _ _).toCatHom
+参数：C : Cat.{v, u}。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma rightUnitor_hom (C : Cat.{v, u}) : (ρ_ C).hom = (Prod.fst _ _).toCatHom := rfl
-
-/--
-lemma `rightUnitor_inv` / 引理 `rightUnitor_inv`
-
-English:
-lemma rightUnitor_inv
-  given: (C : Cat.{v, u})
-  statement: (ρ_ C).inv = (Prod.sectL _ ⟨⟨⟨⟩⟩⟩).toCatHom
-  proof: rfl
-
-中文:
-引理 rightUnitor_inv
-  条件: (C : Cat.{v, u})
-  结论: (ρ_ C).inv = (积类型.sectL _ ⟨⟨⟨⟩⟩⟩).toCatHom
-  证明: rfl
+/-
+**CategoryTheory.Monoidal.rightUnitor_inv** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Monoidal`。
+形式化陈述：rightUnitor_inv (C : Cat.{v, u}) : (ρ_ C).inv = (Prod.sectL _ ⟨⟨⟨⟩⟩⟩).toCa
+tHom
+参数：C : Cat.{v, u}。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma rightUnitor_inv (C : Cat.{v, u}) : (ρ_ C).inv = (Prod.sectL _ ⟨⟨⟨⟩⟩⟩).toCatHom := rfl
 
 end CategoryTheory.Monoidal
+

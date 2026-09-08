@@ -31,43 +31,43 @@ section Class
 
 variable (F : Type*) (X Y : outParam Type*) [PseudoEMetricSpace X] [PseudoEMetricSpace Y]
 
-/--
-Definition of `DilationEquivClass` / `DilationEquivClass` 的定义
+/-- Typeclass saying that `F` is a type of bundled equivalences such that all `e : F` are
+dilations. -/
+/-
+**DilationEquivClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_1) →   (X : outParam (Type u_2)) →     (Y : outParam (Type u_3
+)) → [PseudoEMetricSpace X] → [PseudoEMetricSpace Y] → [EquivLike F X Y] → Prop
+参数：Type u_2；Type u_3。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class DilationEquivClass
-  parameters: [EquivLike F X Y]
-  axioms and operations (1):
-    - edist_eq' : forall f : F, exists r : Real>=0, r != 0 ∧ forall x y : X, edist (f x) (f y) = r * edist x y
-
-中文:
-类 Dilation等价类
-  参数: [等价状 F X Y]
-  公理与运算 (1 个):
-    - edist_eq' : 对任意 f : F, 存在 r : 实数>=0, r != 0 ∧ 对任意 x y : X, edist (f x) (f y) = r * edist x y
+--- 原说明 ---
+Typeclass saying that `F` is a type of bundled equivalences such that all `e : F
+` are
+dilations.
 -/
 class DilationEquivClass [EquivLike F X Y] : Prop where
-  edist_eq' : forall f : F, exists r : Real>=0, r != 0 ∧ forall x y : X, edist (f x) (f y) = r * edist x y
-
+  edist_eq' : ∀ f : F, ∃ r : ℝ≥0, r ≠ 0 ∧ ∀ x y : X, edist (f x) (f y) = r * edist x y
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) [EquivLike F X Y] [DilationEquivClass F X Y] : DilationClass F X Y :=
   { (inferInstance : FunLike F X Y), ‹DilationEquivClass F X Y› with }
 
 end Class
 
-/--
-Definition of `DilationEquiv` / `DilationEquiv` 的定义
+/-- Type of equivalences `X ≃ Y` such that `∀ x y, edist (f x) (f y) = r * edist x y` for some
+`r : ℝ≥0`, `r ≠ 0`. -/
+/-
+**DilationEquiv** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(X : Type u_1) → (Y : Type u_2) → [PseudoEMetricSpace X] → [PseudoEMetricS
+pace Y] → Type (max u_1 u_2)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure DilationEquiv
-  parameters: (X Y : Type*) [PseudoEMetricSpace X] [PseudoEMetricSpace Y]
-  extends: X ≃ Y, Dilation X Y
-  (no additional axioms)
-
-中文:
-结构 Dilation等价
-  参数: (X Y : 类型) [PseudoEMetric空间 X] [PseudoEMetric空间 Y]
-  继承: X ≃ Y, Dilation X Y
-  (无附加公理)
+--- 原说明 ---
+Type of equivalences `X ≃ Y` such that `∀ x y, edist (f x) (f y) = r * edist x y
+` for some
+`r : ℝ≥0`, `r ≠ 0`.
 -/
 structure DilationEquiv (X Y : Type*) [PseudoEMetricSpace X] [PseudoEMetricSpace Y]
     extends X ≃ Y, Dilation X Y
@@ -80,26 +80,9 @@ section PseudoEMetricSpace
 
 variable {X Y Z : Type*} [PseudoEMetricSpace X] [PseudoEMetricSpace Y] [PseudoEMetricSpace Z]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: EquivLike (X ≃ᵈ Y) X Y
-  body: f.1
-  inv f := f.1.symm
-  left_inv f := f.left_inv'
-  right_inv f := f.right_inv'
-  coe_injective' := by rintro ⟨⟩ ⟨⟩ h -; congr; exact DFunLike.ext' h
-
-中文:
-实例 :
-  签名: 等价状 (X ≃ᵈ Y) X Y
-  定义体: f.1
-  inv f := f.1.symm
-  left_inv f := f.left_inv'
-  right_inv f := f.right_inv'
-  coe_injective' := by rintro ⟨⟩ ⟨⟩ h -; congr; exact DFunLike.ext' h
+/-
+**DilationEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `DilationEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : EquivLike (X ≃ᵈ Y) X Y where
   coe f := f.1
@@ -107,517 +90,363 @@ instance : EquivLike (X ≃ᵈ Y) X Y where
   left_inv f := f.left_inv'
   right_inv f := f.right_inv'
   coe_injective' := by rintro ⟨⟩ ⟨⟩ h -; congr; exact DFunLike.ext' h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: DilationEquivClass (X ≃ᵈ Y) X Y
-  body: f.edist_eq'
-
-中文:
-实例 :
-  签名: Dilation等价类 (X ≃ᵈ Y) X Y
-  定义体: f.edist_eq'
-
-Depends on / 依赖: edist_eq, f.edist_eq
+/-
+**DilationEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `DilationEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : DilationEquivClass (X ≃ᵈ Y) X Y where
   edist_eq' f := f.edist_eq'
-
-/--
-theorem `coe_toEquiv` / 定理 `coe_toEquiv`
-
-English:
-theorem coe_toEquiv
-  given: (e : X ≃ᵈ Y)
-  statement: ⇑e.toEquiv = e
-  proof: rfl
-
-@[ext]
-
-中文:
-定理 coe_toEquiv
-  条件: (e : X ≃ᵈ Y)
-  结论: ⇑e.toEquiv = e
-  证明: rfl
-
-@[ext]
+/-
+**DilationEquiv.coe_toEquiv** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : PseudoEMetricSpace X] [inst_1 : Ps
+eudoEMetricSpace Y] (e : X ≃ᵈ Y),   ⇑e.toEquiv = ⇑e
+参数：e : X ≃ᵈ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem coe_toEquiv (e : X ≃ᵈ Y) : ⇑e.toEquiv = e := rfl
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {e e' : X ≃ᵈ Y} (h : forall x, e x = e' x)
-  statement: e = e'
-  proof: DFunLike.ext _ _ h
-
-中文:
-定理 ext
-  条件: {e e' : X ≃ᵈ Y} (h : 对任意 x, e x = e' x)
-  结论: e = e'
-  证明: DFunLike.ext _ _ h
+/-
+**DilationEquiv.ext** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : PseudoEMetricSpace X] [inst_1 : Ps
+eudoEMetricSpace Y] {e e' : X ≃ᵈ Y},   (∀ (x : X), e x = e' x) → e = e'
+参数：∀ (x : X), e x = e' x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-protected theorem ext {e e' : X ≃ᵈ Y} (h : forall x, e x = e' x) : e = e' :=
+protected theorem ext {e e' : X ≃ᵈ Y} (h : ∀ x, e x = e' x) : e = e' :=
   DFunLike.ext _ _ h
 
-/--
-Definition of `symm` / `symm` 的定义
+/-- Inverse `DilationEquiv`. -/
+/-
+**DilationEquiv.symm** 是 Mathlib 中的一个定义，位于命名空间 `DilationEquiv`。
+形式化陈述：symm (e : X ≃ᵈ Y) : Y ≃ᵈ X where toEquiv
+参数：e : X ≃ᵈ Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition symm
-  signature: (e : X ≃ᵈ Y)
-  body: e.1.symm
-  edist_eq' := by
-refine ⟨(ratio e)⁻¹, inv_ne_zero ratio_ne_zero e, e.surjective.forall₂.2 fun x y => ?_⟩
-    simp_rw [Equiv.toFun_as_coe, Equiv.symm_apply_apply, coe_toEquiv, edist_eq]
-    rw [← mul_assoc]; rw [← ENNReal.coe_mul]; rw [inv_mul_cancel₀ (ratio_ne_zero e)]; rw [ENNReal.coe_one]; rw [one_mul]
-
-中文:
-定义 symm
-  签名: (e : X ≃ᵈ Y)
-  定义体: e.1.symm
-  edist_eq' := by
-refine ⟨(ratio e)⁻¹, inv_ne_zero ratio_ne_zero e, e.surjective.forall₂.2 fun x y => ?_⟩
-    simp_rw [Equiv.toFun_as_coe, Equiv.symm_apply_apply, coe_toEquiv, edist_eq]
-    rw [← mul_assoc]; rw [← ENNReal.coe_mul]; rw [inv_mul_cancel₀ (ratio_ne_zero e)]; rw [ENNReal.coe_one]; rw [one_mul]
+--- 原说明 ---
+Inverse `DilationEquiv`.
 -/
 def symm (e : X ≃ᵈ Y) : Y ≃ᵈ X where
   toEquiv := e.1.symm
   edist_eq' := by
-refine ⟨(ratio e)⁻¹, inv_ne_zero ratio_ne_zero e, e.surjective.forall₂.2 fun x y => ?_⟩
+    refine ⟨(ratio e)⁻¹, inv_ne_zero <| ratio_ne_zero e, e.surjective.forall₂.2 fun x y ↦ ?_⟩
     simp_rw [Equiv.toFun_as_coe, Equiv.symm_apply_apply, coe_toEquiv, edist_eq]
-    rw [← mul_assoc]; rw [← ENNReal.coe_mul]; rw [inv_mul_cancel₀ (ratio_ne_zero e)]; rw [ENNReal.coe_one]; rw [one_mul]
-
-/--
-theorem `symm_symm` / 定理 `symm_symm`
-
-English:
-theorem symm_symm
-  given: (e : X ≃ᵈ Y)
-  statement: e.symm.symm = e
-  proof: rfl
-
-中文:
-定理 symm_symm
-  条件: (e : X ≃ᵈ Y)
-  结论: e.symm.symm = e
-  证明: rfl
+    rw [← mul_assoc, ← ENNReal.coe_mul, inv_mul_cancel₀ (ratio_ne_zero e),
+      ENNReal.coe_one, one_mul]
+/-
+**DilationEquiv.symm_symm** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : PseudoEMetricSpace X] [inst_1 : Ps
+eudoEMetricSpace Y] (e : X ≃ᵈ Y),   e.symm.symm = e
+参数：e : X ≃ᵈ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem symm_symm (e : X ≃ᵈ Y) : e.symm.symm = e := rfl
-
-/--
-theorem `symm_bijective` / 定理 `symm_bijective`
-
-English:
-theorem symm_bijective
-  statement: Function.Bijective (DilationEquiv.symm : (X ≃ᵈ Y) -> Y ≃ᵈ X)
-  proof: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
-
-中文:
-定理 symm_bijective
-  结论: 函数.双射 (Dilation等价.symm : (X ≃ᵈ Y) -> Y ≃ᵈ X)
-  证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
-
-Depends on / 依赖: Function, Function.bijective_iff_has_inverse.mpr, bijective_iff_has_inverse, symm_symm
+/-
+**DilationEquiv.symm_bijective** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：symm_bijective : Function.Bijective (DilationEquiv.symm : (X ≃ᵈ Y) -> Y ≃ᵈ
+ X)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.bijective_iff_has_inverse`：bijective_iff_has_inverse : Bijectiv
+e f ↔ exists g, LeftInverse g f ∧ RightInverse g f
+· 使用定理 `DilationEquiv.symm_symm`：∀ {X : Type u_1} {Y : Type u_2} [inst : PseudoE
+MetricSpace X] [inst_1 : PseudoEMetricSpace Y] (e : X ≃ᵈ Y),   e.symm.symm = e
 -/
-theorem symm_bijective : Function.Bijective (DilationEquiv.symm : (X ≃ᵈ Y) -> Y ≃ᵈ X) :=
+theorem symm_bijective : Function.Bijective (DilationEquiv.symm : (X ≃ᵈ Y) → Y ≃ᵈ X) :=
   Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
-
-/--
-theorem `apply_symm_apply` / 定理 `apply_symm_apply`
-
-English:
-theorem apply_symm_apply
-  given: (e : X ≃ᵈ Y) (x : Y)
-  statement: e (e.symm x) = x
-  proof: e.right_inv x
-
-中文:
-定理 apply_symm_apply
-  条件: (e : X ≃ᵈ Y) (x : Y)
-  结论: e (e.symm x) = x
-  证明: e.right_inv x
+/-
+**DilationEquiv.apply_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : PseudoEMetricSpace X] [inst_1 : Ps
+eudoEMetricSpace Y] (e : X ≃ᵈ Y) (x : Y),   e (e.symm x) = x
+参数：e : X ≃ᵈ Y；x : Y；e.symm x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
 -/
 @[simp] theorem apply_symm_apply (e : X ≃ᵈ Y) (x : Y) : e (e.symm x) = x := e.right_inv x
-/--
-theorem `symm_apply_apply` / 定理 `symm_apply_apply`
-
-English:
-theorem symm_apply_apply
-  given: (e : X ≃ᵈ Y) (x : X)
-  statement: e.symm (e x) = x
-  proof: e.left_inv x
-
-中文:
-定理 symm_apply_apply
-  条件: (e : X ≃ᵈ Y) (x : X)
-  结论: e.symm (e x) = x
-  证明: e.left_inv x
+/-
+**DilationEquiv.symm_apply_apply** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : PseudoEMetricSpace X] [inst_1 : Ps
+eudoEMetricSpace Y] (e : X ≃ᵈ Y) (x : X),   e.symm (e x) = x
+参数：e : X ≃ᵈ Y；x : X；e x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
 -/
 @[simp] theorem symm_apply_apply (e : X ≃ᵈ Y) (x : X) : e.symm (e x) = x := e.left_inv x
-
-/--
-theorem `symm_apply_eq` / 定理 `symm_apply_eq`
-
-English:
-theorem symm_apply_eq
-  given: (e : X ≃ᵈ Y) {x : X} {y : Y}
-  statement: e.symm y = x ↔ y = e x
-  proof: Equiv.symm_apply_eq _
-
-中文:
-定理 symm_apply_eq
-  条件: (e : X ≃ᵈ Y) {x : X} {y : Y}
-  结论: e.symm y = x ↔ y = e x
-  证明: Equiv.symm_apply_eq _
-
-Depends on / 依赖: Equiv.symm_apply_eq, symm_apply_eq
+/-
+**DilationEquiv.symm_apply_eq** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：symm_apply_eq (e : X ≃ᵈ Y) {x : X} {y : Y} : e.symm y = x ↔ y = e x
+参数：e : X ≃ᵈ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm_apply_eq`：symm_apply_eq {α β} (e : α ≃ β) {x y} : e.symm x = 
+y ↔ x = e y
 -/
 theorem symm_apply_eq (e : X ≃ᵈ Y) {x : X} {y : Y} : e.symm y = x ↔ y = e x :=
   Equiv.symm_apply_eq _
-
-/--
-theorem `eq_symm_apply` / 定理 `eq_symm_apply`
-
-English:
-theorem eq_symm_apply
-  given: (e : X ≃ᵈ Y) {x : X} {y : Y}
-  statement: x = e.symm y ↔ e x = y
-  proof: Equiv.eq_symm_apply _
-
-中文:
-定理 eq_symm_apply
-  条件: (e : X ≃ᵈ Y) {x : X} {y : Y}
-  结论: x = e.symm y ↔ e x = y
-  证明: Equiv.eq_symm_apply _
-
-Depends on / 依赖: Equiv.eq_symm_apply, eq_symm_apply
+/-
+**DilationEquiv.eq_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：eq_symm_apply (e : X ≃ᵈ Y) {x : X} {y : Y} : x = e.symm y ↔ e x = y
+参数：e : X ≃ᵈ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.eq_symm_apply`：eq_symm_apply {α β} (e : α ≃ β) {x y} : y = e.symm 
+x ↔ e y = x
 -/
 theorem eq_symm_apply (e : X ≃ᵈ Y) {x : X} {y : Y} : x = e.symm y ↔ e x = y :=
   Equiv.eq_symm_apply _
 
-/--
-Definition of `Simps.symm_apply` / `Simps.symm_apply` 的定义
+/-- See Note [custom simps projection]. -/
+/-
+**DilationEquiv.Simps.symm_apply** 是 Mathlib 中的一个定义，位于命名空间 `DilationEquiv.Simps`
+。
+形式化陈述：{X : Type u_1} → {Y : Type u_2} → [inst : PseudoEMetricSpace X] → [inst_1 
+: PseudoEMetricSpace Y] → X ≃ᵈ Y → Y → X
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.symm_apply
-  signature: (e : X ≃ᵈ Y)
-  body: e.symm
-
-initialize_simps_projections DilationEquiv (toFun -> apply, invFun -> symm_apply)
-
-中文:
-定义 Simps.symm_apply
-  签名: (e : X ≃ᵈ Y)
-  定义体: e.symm
-
-initialize_simps_projections DilationEquiv (toFun -> apply, invFun -> symm_apply)
+--- 原说明 ---
+See Note [custom simps projection].
 -/
-def Simps.symm_apply (e : X ≃ᵈ Y) : Y -> X := e.symm
+def Simps.symm_apply (e : X ≃ᵈ Y) : Y → X := e.symm
 
-initialize_simps_projections DilationEquiv (toFun -> apply, invFun -> symm_apply)
-
-/--
-lemma `ratio_toDilation` / 引理 `ratio_toDilation`
-
-English:
-lemma ratio_toDilation
-  given: (e : X ≃ᵈ Y)
-  statement: ratio e.toDilation = ratio e
-  proof: rfl
-
-中文:
-引理 ratio_toDilation
-  条件: (e : X ≃ᵈ Y)
-  结论: ratio e.toDilation = ratio e
-  证明: rfl
+initialize_simps_projections DilationEquiv (toFun → apply, invFun → symm_apply)
+/-
+**DilationEquiv.ratio_toDilation** 是 Mathlib 中的一个引理，位于命名空间 `DilationEquiv`。
+形式化陈述：ratio_toDilation (e : X ≃ᵈ Y) : ratio e.toDilation = ratio e
+参数：e : X ≃ᵈ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ratio_toDilation (e : X ≃ᵈ Y) : ratio e.toDilation = ratio e := rfl
 
 /-- Identity map as a `DilationEquiv`. -/
 @[simps! -fullyApplied apply]
-/--
-Definition of `refl` / `refl` 的定义
+/-
+**DilationEquiv.refl** 是 Mathlib 中的一个定义，位于命名空间 `DilationEquiv`。
+形式化陈述：refl (X : Type*) [PseudoEMetricSpace X] : X ≃ᵈ X where toEquiv
+参数：X : Type*。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition refl
-  signature: (X : Type*) [PseudoEMetricSpace X]
-  body: .refl X
-  edist_eq' := ⟨1, one_ne_zero, fun _ _ => by simp⟩
-
-中文:
-定义 refl
-  签名: (X : 类型) [PseudoEMetric空间 X]
-  定义体: .refl X
-  edist_eq' := ⟨1, one_ne_zero, fun _ _ => by simp⟩
+--- 原说明 ---
+Identity map as a `DilationEquiv`.
 -/
 def refl (X : Type*) [PseudoEMetricSpace X] : X ≃ᵈ X where
   toEquiv := .refl X
-  edist_eq' := ⟨1, one_ne_zero, fun _ _ => by simp⟩
-
-/--
-theorem `refl_symm` / 定理 `refl_symm`
-
-English:
-theorem refl_symm
-  statement: (refl X).symm = refl X
-  proof: rfl
-
-中文:
-定理 refl_symm
-  结论: (refl X).symm = refl X
-  证明: rfl
+  edist_eq' := ⟨1, one_ne_zero, fun _ _ ↦ by simp⟩
+/-
+**DilationEquiv.refl_symm** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：∀ {X : Type u_1} [inst : PseudoEMetricSpace X], (DilationEquiv.refl X).sym
+m = DilationEquiv.refl X
+参数：DilationEquiv.refl X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem refl_symm : (refl X).symm = refl X := rfl
-/--
-theorem `ratio_refl` / 定理 `ratio_refl`
-
-English:
-theorem ratio_refl
-  statement: ratio (refl X) = 1
-  proof: Dilation.ratio_id
-
-中文:
-定理 ratio_refl
-  结论: ratio (refl X) = 1
-  证明: Dilation.ratio_id
+/-
+**DilationEquiv.ratio_refl** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：∀ {X : Type u_1} [inst : PseudoEMetricSpace X], Dilation.ratio (DilationEq
+uiv.refl X) = 1
+参数：DilationEquiv.refl X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dilation.ratio_id`：ratio_id : ratio (Dilation.id α) = 1
 -/
 @[simp] theorem ratio_refl : ratio (refl X) = 1 := Dilation.ratio_id
 
 /-- Composition of `DilationEquiv`s. -/
 @[simps! -fullyApplied apply]
-/--
-Definition of `trans` / `trans` 的定义
+/-
+**DilationEquiv.trans** 是 Mathlib 中的一个定义，位于命名空间 `DilationEquiv`。
+形式化陈述：trans (e₁ : X ≃ᵈ Y) (e₂ : Y ≃ᵈ Z) : X ≃ᵈ Z where toEquiv
+参数：e₁ : X ≃ᵈ Y；e₂ : Y ≃ᵈ Z。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Dilation.edist_eq'`：∀ {α : Type u_1} {β : Type u_2} [inst : PseudoEMetri
+cSpace α] [inst_1 : PseudoEMetricSpace β] (self : α →ᵈ β),   ∃ r, r ≠ 0 ∧ ∀ (x y
+ : α), e…
 
-English:
-definition trans
-  signature: (e₁ : X ≃ᵈ Y) (e₂ : Y ≃ᵈ Z)
-  body: e₁.1.trans e₂.1
-  __ := e₂.toDilation.comp e₁.toDilation
-
-中文:
-定义 trans
-  签名: (e₁ : X ≃ᵈ Y) (e₂ : Y ≃ᵈ Z)
-  定义体: e₁.1.trans e₂.1
-  __ := e₂.toDilation.comp e₁.toDilation
+--- 原说明 ---
+Composition of `DilationEquiv`s.
 -/
 def trans (e₁ : X ≃ᵈ Y) (e₂ : Y ≃ᵈ Z) : X ≃ᵈ Z where
   toEquiv := e₁.1.trans e₂.1
   __ := e₂.toDilation.comp e₁.toDilation
-
-/--
-theorem `refl_trans` / 定理 `refl_trans`
-
-English:
-theorem refl_trans
-  given: (e : X ≃ᵈ Y)
-  statement: (refl X).trans e = e
-  proof: rfl
-
-中文:
-定理 refl_trans
-  条件: (e : X ≃ᵈ Y)
-  结论: (refl X).trans e = e
-  证明: rfl
+/-
+**DilationEquiv.refl_trans** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : PseudoEMetricSpace X] [inst_1 : Ps
+eudoEMetricSpace Y] (e : X ≃ᵈ Y),   (DilationEquiv.refl X).trans e = e
+参数：e : X ≃ᵈ Y；DilationEquiv.refl X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem refl_trans (e : X ≃ᵈ Y) : (refl X).trans e = e := rfl
-/--
-theorem `trans_refl` / 定理 `trans_refl`
-
-English:
-theorem trans_refl
-  given: (e : X ≃ᵈ Y)
-  statement: e.trans (refl Y) = e
-  proof: rfl
-
-中文:
-定理 trans_refl
-  条件: (e : X ≃ᵈ Y)
-  结论: e.trans (refl Y) = e
-  证明: rfl
+/-
+**DilationEquiv.trans_refl** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : PseudoEMetricSpace X] [inst_1 : Ps
+eudoEMetricSpace Y] (e : X ≃ᵈ Y),   e.trans (DilationEquiv.refl Y) = e
+参数：e : X ≃ᵈ Y；DilationEquiv.refl Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem trans_refl (e : X ≃ᵈ Y) : e.trans (refl Y) = e := rfl
-
-/--
-theorem `symm_trans_self` / 定理 `symm_trans_self`
-
-English:
-theorem symm_trans_self
-  given: (e : X ≃ᵈ Y)
-  statement: e.symm.trans e = refl Y
-  proof: DilationEquiv.ext e.apply_symm_apply
-
-中文:
-定理 symm_trans_self
-  条件: (e : X ≃ᵈ Y)
-  结论: e.symm.trans e = refl Y
-  证明: DilationEquiv.ext e.apply_symm_apply
+/-
+**DilationEquiv.symm_trans_self** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : PseudoEMetricSpace X] [inst_1 : Ps
+eudoEMetricSpace Y] (e : X ≃ᵈ Y),   e.symm.trans e = DilationEquiv.refl Y
+参数：e : X ≃ᵈ Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DilationEquiv.ext`：∀ {X : Type u_1} {Y : Type u_2} [inst : PseudoEMetric
+Space X] [inst_1 : PseudoEMetricSpace Y] {e e' : X ≃ᵈ Y},   (∀ (x : X), e x = e'
+ x) → e…
+· 使用定理 `DilationEquiv.apply_symm_apply`：∀ {X : Type u_1} {Y : Type u_2} [inst : 
+PseudoEMetricSpace X] [inst_1 : PseudoEMetricSpace Y] (e : X ≃ᵈ Y) (x : Y),   e 
+(e.symm x) = x
 -/
 @[simp] theorem symm_trans_self (e : X ≃ᵈ Y) : e.symm.trans e = refl Y :=
   DilationEquiv.ext e.apply_symm_apply
-
-/--
-theorem `self_trans_symm` / 定理 `self_trans_symm`
-
-English:
-theorem self_trans_symm
-  given: (e : X ≃ᵈ Y)
-  statement: e.trans e.symm = refl X
-  proof: DilationEquiv.ext e.symm_apply_apply
-
-中文:
-定理 self_trans_symm
-  条件: (e : X ≃ᵈ Y)
-  结论: e.trans e.symm = refl X
-  证明: DilationEquiv.ext e.symm_apply_apply
+/-
+**DilationEquiv.self_trans_symm** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : PseudoEMetricSpace X] [inst_1 : Ps
+eudoEMetricSpace Y] (e : X ≃ᵈ Y),   e.trans e.symm = DilationEquiv.refl X
+参数：e : X ≃ᵈ Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DilationEquiv.ext`：∀ {X : Type u_1} {Y : Type u_2} [inst : PseudoEMetric
+Space X] [inst_1 : PseudoEMetricSpace Y] {e e' : X ≃ᵈ Y},   (∀ (x : X), e x = e'
+ x) → e…
+· 使用定理 `DilationEquiv.symm_apply_apply`：∀ {X : Type u_1} {Y : Type u_2} [inst : 
+PseudoEMetricSpace X] [inst_1 : PseudoEMetricSpace Y] (e : X ≃ᵈ Y) (x : X),   e.
+symm (e x) = x
 -/
 @[simp] theorem self_trans_symm (e : X ≃ᵈ Y) : e.trans e.symm = refl X :=
   DilationEquiv.ext e.symm_apply_apply
-
-/--
-theorem `surjective` / 定理 `surjective`
-
-English:
-theorem surjective
-  given: (e : X ≃ᵈ Y)
-  statement: Surjective e
-  proof: e.1.surjective
-
-中文:
-定理 surjective
-  条件: (e : X ≃ᵈ Y)
-  结论: 满射 e
-  证明: e.1.surjective
+/-
+**DilationEquiv.surjective** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : PseudoEMetricSpace X] [inst_1 : Ps
+eudoEMetricSpace Y] (e : X ≃ᵈ Y),   Function.Surjective ⇑e
+参数：e : X ≃ᵈ Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
 -/
 protected theorem surjective (e : X ≃ᵈ Y) : Surjective e := e.1.surjective
-/--
-theorem `bijective` / 定理 `bijective`
-
-English:
-theorem bijective
-  given: (e : X ≃ᵈ Y)
-  statement: Bijective e
-  proof: e.1.bijective
-
-中文:
-定理 bijective
-  条件: (e : X ≃ᵈ Y)
-  结论: 双射 e
-  证明: e.1.bijective
+/-
+**DilationEquiv.bijective** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : PseudoEMetricSpace X] [inst_1 : Ps
+eudoEMetricSpace Y] (e : X ≃ᵈ Y),   Function.Bijective ⇑e
+参数：e : X ≃ᵈ Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
 -/
 protected theorem bijective (e : X ≃ᵈ Y) : Bijective e := e.1.bijective
-/--
-theorem `injective` / 定理 `injective`
-
-English:
-theorem injective
-  given: (e : X ≃ᵈ Y)
-  statement: Injective e
-  proof: e.1.injective
-
-@[simp]
-
-中文:
-定理 injective
-  条件: (e : X ≃ᵈ Y)
-  结论: 单射 e
-  证明: e.1.injective
-
-@[simp]
+/-
+**DilationEquiv.injective** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : PseudoEMetricSpace X] [inst_1 : Ps
+eudoEMetricSpace Y] (e : X ≃ᵈ Y),   Function.Injective ⇑e
+参数：e : X ≃ᵈ Y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
 protected theorem injective (e : X ≃ᵈ Y) : Injective e := e.1.injective
 
 @[simp]
-/--
-theorem `ratio_trans` / 定理 `ratio_trans`
-
-English:
-theorem ratio_trans
-  given: (e : X ≃ᵈ Y) (e' : Y ≃ᵈ Z)
-  statement: ratio (e.trans e') = ratio e * ratio e'
-  proof: by
-  -- If `X` is trivial, then so is `Y`, otherwise we apply `Dilation.ratio_comp'`
-  by_cases! hX : forall x y : X, edist x y = 0 ∨ edist x y = ∞
-  · have hY : forall x y : Y, edist x y = 0 ∨ edist x y = ∞ := e.surjective.forall₂.2 fun x y => by
-      refine (hX x y).imp (fun h => ?_) fun h => ?_ <;> simp [*, Dilation.ratio_ne_zero]
-    simp [Dilation.ratio_of_trivial, *]
-  exact (Dilation.ratio_comp' (g := e'.toDilation) (f := e.toDilation) hX).trans (mul_comm _ _)
-
-@[simp]
-
-中文:
-定理 ratio_trans
-  条件: (e : X ≃ᵈ Y) (e' : Y ≃ᵈ Z)
-  结论: ratio (e.trans e') = ratio e * ratio e'
-  证明: by
-  -- If `X` is trivial, then so is `Y`, otherwise we apply `Dilation.ratio_comp'`
-  by_cases! hX : forall x y : X, edist x y = 0 ∨ edist x y = ∞
-  · have hY : forall x y : Y, edist x y = 0 ∨ edist x y = ∞ := e.surjective.forall₂.2 fun x y => by
-      refine (hX x y).imp (fun h => ?_) fun h => ?_ <;> simp [*, Dilation.ratio_ne_zero]
-    simp [Dilation.ratio_of_trivial, *]
-  exact (Dilation.ratio_comp' (g := e'.toDilation) (f := e.toDilation) hX).trans (mul_comm _ _)
-
-@[simp]
+/-
+**DilationEquiv.ratio_trans** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：ratio_trans (e : X ≃ᵈ Y) (e' : Y ≃ᵈ Z) : ratio (e.trans e') = ratio e * ra
+tio e'
+参数：e : X ≃ᵈ Y；e' : Y ≃ᵈ Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instDilationClassOfDilationEquivClass`：∀ (F : Type u_1) (X : outParam (T
+ype u_2)) (Y : outParam (Type u_3)) [inst : PseudoEMetricSpace X]   [inst_1 : Ps
+eudoEMetricSpace Y] [inst_2…
+· 使用定理 `DilationEquiv.instDilationEquivClass`：∀ {X : Type u_1} {Y : Type u_2} [i
+nst : PseudoEMetricSpace X] [inst_1 : PseudoEMetricSpace Y],   DilationEquivClas
+s (X ≃ᵈ Y) X Y
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall₂`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}
+,   Function.Surjective f → ∀ {p : β → β → Prop}, (∀ (y₁ y₂ : β), p y₁ y₂) ↔ ∀ (
+x₁ x₂ : α), p (f …
+· 使用定理 `DilationEquiv.surjective`：∀ {X : Type u_1} {Y : Type u_2} [inst : Pseudo
+EMetricSpace X] [inst_1 : PseudoEMetricSpace Y] (e : X ≃ᵈ Y),   Function.Surject
+ive ⇑e
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Dilation.edist_eq`：edist_eq [DilationClass F α β] (f : F) (x y : α) : ed
+ist (f x) (f y) = ratio f * edist x y
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `ENNReal.mul_top`：∀ {a : ENNReal}, a ≠ 0 → a * ⊤ = ⊤
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Dilation.ratio_of_trivial`：ratio_of_trivial [DilationClass F α β] (f : F
+) (h : forall x y : α, edist x y = 0 ∨ edist x y = ∞) : ratio f = 1
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Dilation.ratio_comp'`：ratio_comp' {g : β ->ᵈ γ} {f : α ->ᵈ β} (hne : exi
+sts x y : α, edist x y != 0 ∧ edist x y != ⊤) : ratio (g.comp f) = ratio g * rat
+io f
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
 theorem ratio_trans (e : X ≃ᵈ Y) (e' : Y ≃ᵈ Z) : ratio (e.trans e') = ratio e * ratio e' := by
   -- If `X` is trivial, then so is `Y`, otherwise we apply `Dilation.ratio_comp'`
-  by_cases! hX : forall x y : X, edist x y = 0 ∨ edist x y = ∞
-  · have hY : forall x y : Y, edist x y = 0 ∨ edist x y = ∞ := e.surjective.forall₂.2 fun x y => by
-      refine (hX x y).imp (fun h => ?_) fun h => ?_ <;> simp [*, Dilation.ratio_ne_zero]
+  by_cases! hX : ∀ x y : X, edist x y = 0 ∨ edist x y = ∞
+  · have hY : ∀ x y : Y, edist x y = 0 ∨ edist x y = ∞ := e.surjective.forall₂.2 fun x y ↦ by
+      refine (hX x y).imp (fun h ↦ ?_) fun h ↦ ?_ <;> simp [*, Dilation.ratio_ne_zero]
     simp [Dilation.ratio_of_trivial, *]
   exact (Dilation.ratio_comp' (g := e'.toDilation) (f := e.toDilation) hX).trans (mul_comm _ _)
 
 @[simp]
-/--
-theorem `ratio_symm` / 定理 `ratio_symm`
-
-English:
-theorem ratio_symm
-  given: (e : X ≃ᵈ Y)
-  statement: ratio e.symm = (ratio e)⁻¹
-  proof: eq_inv_of_mul_eq_one_left by rw [← ratio_trans, symm_trans_self, ratio_refl]
-
-中文:
-定理 ratio_symm
-  条件: (e : X ≃ᵈ Y)
-  结论: ratio e.symm = (ratio e)⁻¹
-  证明: eq_inv_of_mul_eq_one_left by rw [← ratio_trans, symm_trans_self, ratio_refl]
-
-Depends on / 依赖: eq_inv_of_mul_eq_one_left, ratio_refl, ratio_trans, symm_trans_self
+/-
+**DilationEquiv.ratio_symm** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：ratio_symm (e : X ≃ᵈ Y) : ratio e.symm = (ratio e)⁻¹
+参数：e : X ≃ᵈ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_inv_of_mul_eq_one_left`：eq_inv_of_mul_eq_one_left (h : a * b = 1) : a
+ = b⁻¹
+· 使用定理 `instDilationClassOfDilationEquivClass`：∀ (F : Type u_1) (X : outParam (T
+ype u_2)) (Y : outParam (Type u_3)) [inst : PseudoEMetricSpace X]   [inst_1 : Ps
+eudoEMetricSpace Y] [inst_2…
+· 使用定理 `DilationEquiv.instDilationEquivClass`：∀ {X : Type u_1} {Y : Type u_2} [i
+nst : PseudoEMetricSpace X] [inst_1 : PseudoEMetricSpace Y],   DilationEquivClas
+s (X ≃ᵈ Y) X Y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `DilationEquiv.ratio_trans`：ratio_trans (e : X ≃ᵈ Y) (e' : Y ≃ᵈ Z) : rati
+o (e.trans e') = ratio e * ratio e'
+· 使用定理 `DilationEquiv.symm_trans_self`：∀ {X : Type u_1} {Y : Type u_2} [inst : P
+seudoEMetricSpace X] [inst_1 : PseudoEMetricSpace Y] (e : X ≃ᵈ Y),   e.symm.tran
+s e = DilationEquiv…
+· 使用定理 `DilationEquiv.ratio_refl`：∀ {X : Type u_1} [inst : PseudoEMetricSpace X]
+, Dilation.ratio (DilationEquiv.refl X) = 1
 -/
 theorem ratio_symm (e : X ≃ᵈ Y) : ratio e.symm = (ratio e)⁻¹ :=
-eq_inv_of_mul_eq_one_left by rw [← ratio_trans, symm_trans_self, ratio_refl]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Group (X ≃ᵈ X)
-  body: e'.trans e
-  mul_assoc _ _ _ := rfl
-  one := refl _
-  one_mul _ := rfl
-  mul_one _ := rfl
-  inv := symm
-  inv_mul_cancel := self_trans_symm
-
-中文:
-实例 :
-  签名: 群 (X ≃ᵈ X)
-  定义体: e'.trans e
-  mul_assoc _ _ _ := rfl
-  one := refl _
-  one_mul _ := rfl
-  mul_one _ := rfl
-  inv := symm
-  inv_mul_cancel := self_trans_symm
+  eq_inv_of_mul_eq_one_left <| by rw [← ratio_trans, symm_trans_self, ratio_refl]
+/-
+**DilationEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `DilationEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Group (X ≃ᵈ X) where
   mul e e' := e'.trans e
@@ -627,433 +456,228 @@ instance : Group (X ≃ᵈ X) where
   mul_one _ := rfl
   inv := symm
   inv_mul_cancel := self_trans_symm
-
-/--
-theorem `mul_def` / 定理 `mul_def`
-
-English:
-theorem mul_def
-  given: (e e' : X ≃ᵈ X)
-  statement: e * e' = e'.trans e
-  proof: rfl
-
-中文:
-定理 mul_def
-  条件: (e e' : X ≃ᵈ X)
-  结论: e * e' = e'.trans e
-  证明: rfl
+/-
+**DilationEquiv.mul_def** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：mul_def (e e' : X ≃ᵈ X) : e * e' = e'.trans e
+参数：e e' : X ≃ᵈ X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mul_def (e e' : X ≃ᵈ X) : e * e' = e'.trans e := rfl
-/--
-theorem `one_def` / 定理 `one_def`
-
-English:
-theorem one_def
-  statement: (1 : X ≃ᵈ X) = refl X
-  proof: rfl
-
-中文:
-定理 one_def
-  结论: (1 : X ≃ᵈ X) = refl X
-  证明: rfl
+/-
+**DilationEquiv.one_def** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：one_def : (1 : X ≃ᵈ X) = refl X
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem one_def : (1 : X ≃ᵈ X) = refl X := rfl
-/--
-theorem `inv_def` / 定理 `inv_def`
-
-English:
-theorem inv_def
-  given: (e : X ≃ᵈ X)
-  statement: e⁻¹ = e.symm
-  proof: rfl
-
-中文:
-定理 inv_def
-  条件: (e : X ≃ᵈ X)
-  结论: e⁻¹ = e.symm
-  证明: rfl
+/-
+**DilationEquiv.inv_def** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：inv_def (e : X ≃ᵈ X) : e⁻¹ = e.symm
+参数：e : X ≃ᵈ X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem inv_def (e : X ≃ᵈ X) : e⁻¹ = e.symm := rfl
-
-/--
-theorem `coe_mul` / 定理 `coe_mul`
-
-English:
-theorem coe_mul
-  given: (e e' : X ≃ᵈ X)
-  statement: ⇑(e * e') = e ∘ e'
-  proof: rfl
-
-中文:
-定理 coe_mul
-  条件: (e e' : X ≃ᵈ X)
-  结论: ⇑(e * e') = e ∘ e'
-  证明: rfl
+/-
+**DilationEquiv.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：∀ {X : Type u_1} [inst : PseudoEMetricSpace X] (e e' : X ≃ᵈ X), ⇑(e * e') 
+= ⇑e ∘ ⇑e'
+参数：e e' : X ≃ᵈ X；e * e'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem coe_mul (e e' : X ≃ᵈ X) : ⇑(e * e') = e ∘ e' := rfl
-/--
-theorem `coe_one` / 定理 `coe_one`
-
-English:
-theorem coe_one
-  statement: ⇑(1 : X ≃ᵈ X) = id
-  proof: rfl
-
-中文:
-定理 coe_one
-  结论: ⇑(1 : X ≃ᵈ X) = id
-  证明: rfl
+/-
+**DilationEquiv.coe_one** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：∀ {X : Type u_1} [inst : PseudoEMetricSpace X], ⇑1 = id
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem coe_one : ⇑(1 : X ≃ᵈ X) = id := rfl
-/--
-theorem `coe_inv` / 定理 `coe_inv`
-
-English:
-theorem coe_inv
-  given: (e : X ≃ᵈ X)
-  statement: ⇑(e⁻¹) = e.symm
-  proof: rfl
-
-中文:
-定理 coe_inv
-  条件: (e : X ≃ᵈ X)
-  结论: ⇑(e⁻¹) = e.symm
-  证明: rfl
+/-
+**DilationEquiv.coe_inv** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：coe_inv (e : X ≃ᵈ X) : ⇑(e⁻¹) = e.symm
+参数：e : X ≃ᵈ X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_inv (e : X ≃ᵈ X) : ⇑(e⁻¹) = e.symm := rfl
 
-/--
-Definition of `ratioHom` / `ratioHom` 的定义
+/-- `Dilation.ratio` as a monoid homomorphism. -/
+/-
+**DilationEquiv.ratioHom** 是 Mathlib 中的一个定义，位于命名空间 `DilationEquiv`。
+形式化陈述：ratioHom : (X ≃ᵈ X) ->* Real>=0 where toFun
+该定义给出了一等式。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `DilationEquiv.ratio_refl`：∀ {X : Type u_1} [inst : PseudoEMetricSpace X]
+, Dilation.ratio (DilationEquiv.refl X) = 1
 
-English:
-definition ratioHom
-  signature: : (X ≃ᵈ X) ->* Real>=0 where
-  body: Dilation.ratio
-  map_one' := ratio_refl
-  map_mul' _ _ := (ratio_trans _ _).trans (mul_comm _ _)
-
-@[simp]
-
-中文:
-定义 ratioHom
-  签名: : (X ≃ᵈ X) ->* 实数>=0 where
-  定义体: Dilation.ratio
-  map_one' := ratio_refl
-  map_mul' _ _ := (ratio_trans _ _).trans (mul_comm _ _)
-
-@[simp]
-
-Depends on / 依赖: Dilation, Dilation.ratio
+--- 原说明 ---
+`Dilation.ratio` as a monoid homomorphism.
 -/
-noncomputable def ratioHom : (X ≃ᵈ X) ->* Real>=0 where
+noncomputable def ratioHom : (X ≃ᵈ X) →* ℝ≥0 where
   toFun := Dilation.ratio
   map_one' := ratio_refl
   map_mul' _ _ := (ratio_trans _ _).trans (mul_comm _ _)
 
 @[simp]
-/--
-theorem `ratio_inv` / 定理 `ratio_inv`
-
-English:
-theorem ratio_inv
-  given: (e : X ≃ᵈ X)
-  statement: ratio (e⁻¹) = (ratio e)⁻¹
-  proof: ratio_symm e
-
-@[simp]
-
-中文:
-定理 ratio_inv
-  条件: (e : X ≃ᵈ X)
-  结论: ratio (e⁻¹) = (ratio e)⁻¹
-  证明: ratio_symm e
-
-@[simp]
-
-Depends on / 依赖: ratio_symm
+/-
+**DilationEquiv.ratio_inv** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：ratio_inv (e : X ≃ᵈ X) : ratio (e⁻¹) = (ratio e)⁻¹
+参数：e : X ≃ᵈ X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DilationEquiv.ratio_symm`：ratio_symm (e : X ≃ᵈ Y) : ratio e.symm = (rati
+o e)⁻¹
 -/
 theorem ratio_inv (e : X ≃ᵈ X) : ratio (e⁻¹) = (ratio e)⁻¹ := ratio_symm e
 
 @[simp]
-/--
-theorem `ratio_pow` / 定理 `ratio_pow`
-
-English:
-theorem ratio_pow
-  given: (e : X ≃ᵈ X) (n : Nat)
-  statement: ratio (e ^ n) = ratio e ^ n
-  proof: ratioHom.map_pow _ _
-
-@[simp]
-
-中文:
-定理 ratio_pow
-  条件: (e : X ≃ᵈ X) (n : 自然数)
-  结论: ratio (e ^ n) = ratio e ^ n
-  证明: ratioHom.map_pow _ _
-
-@[simp]
-
-Depends on / 依赖: map_pow, ratioHom, ratioHom.map_pow
+/-
+**DilationEquiv.ratio_pow** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：ratio_pow (e : X ≃ᵈ X) (n : Nat) : ratio (e ^ n) = ratio e ^ n
+参数：e : X ≃ᵈ X；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.map_pow`：∀ {M : Type u_4} {N : Type u_5} [inst : Monoid M] [in
+st_1 : Monoid N] (f : M →* N) (a : M) (n : ℕ), f (a ^ n) = f a ^ n
 -/
-theorem ratio_pow (e : X ≃ᵈ X) (n : Nat) : ratio (e ^ n) = ratio e ^ n :=
+theorem ratio_pow (e : X ≃ᵈ X) (n : ℕ) : ratio (e ^ n) = ratio e ^ n :=
   ratioHom.map_pow _ _
 
 @[simp]
-/--
-theorem `ratio_zpow` / 定理 `ratio_zpow`
-
-English:
-theorem ratio_zpow
-  given: (e : X ≃ᵈ X) (n : Int)
-  statement: ratio (e ^ n) = ratio e ^ n
-  proof: ratioHom.map_zpow _ _
-
-中文:
-定理 ratio_zpow
-  条件: (e : X ≃ᵈ X) (n : 整数)
-  结论: ratio (e ^ n) = ratio e ^ n
-  证明: ratioHom.map_zpow _ _
-
-Depends on / 依赖: map_zpow, ratioHom, ratioHom.map_zpow
+/-
+**DilationEquiv.ratio_zpow** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：ratio_zpow (e : X ≃ᵈ X) (n : Int) : ratio (e ^ n) = ratio e ^ n
+参数：e : X ≃ᵈ X；n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.map_zpow`：∀ {α : Type u_2} {β : Type u_3} [inst : Group α] [in
+st_1 : DivisionMonoid β] (f : α →* β) (g : α) (n : ℤ),   f (g ^ n) = f g ^ n
 -/
-theorem ratio_zpow (e : X ≃ᵈ X) (n : Int) : ratio (e ^ n) = ratio e ^ n :=
+theorem ratio_zpow (e : X ≃ᵈ X) (n : ℤ) : ratio (e ^ n) = ratio e ^ n :=
   ratioHom.map_zpow _ _
 
 /-- `DilationEquiv.toEquiv` as a monoid homomorphism. -/
 @[simps]
-/--
-Definition of `toPerm` / `toPerm` 的定义
+/-
+**DilationEquiv.toPerm** 是 Mathlib 中的一个定义，位于命名空间 `DilationEquiv`。
+形式化陈述：toPerm : (X ≃ᵈ X) ->* Equiv.Perm X where toFun e
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toPerm
-  signature: : (X ≃ᵈ X) ->* Equiv.Perm X where
-  body: e.1
-  map_mul' _ _ := rfl
-  map_one' := rfl
-
-@[norm_cast]
-
-中文:
-定义 toPerm
-  签名: : (X ≃ᵈ X) ->* 等价.置换 X where
-  定义体: e.1
-  map_mul' _ _ := rfl
-  map_one' := rfl
-
-@[norm_cast]
+--- 原说明 ---
+`DilationEquiv.toEquiv` as a monoid homomorphism.
 -/
-def toPerm : (X ≃ᵈ X) ->* Equiv.Perm X where
+def toPerm : (X ≃ᵈ X) →* Equiv.Perm X where
   toFun e := e.1
   map_mul' _ _ := rfl
   map_one' := rfl
 
 @[norm_cast]
-/--
-theorem `coe_pow` / 定理 `coe_pow`
-
-English:
-theorem coe_pow
-  given: (e : X ≃ᵈ X) (n : Nat)
-  statement: ⇑(e ^ n) = e^[n]
-  proof: by
-  rw [← coe_toEquiv]; rw [← toPerm_apply]; rw [map_pow]; rw [Equiv.Perm.coe_pow]; rfl
-
-中文:
-定理 coe_pow
-  条件: (e : X ≃ᵈ X) (n : 自然数)
-  结论: ⇑(e ^ n) = e^[n]
-  证明: by
-  rw [← coe_toEquiv]; rw [← toPerm_apply]; rw [map_pow]; rw [Equiv.Perm.coe_pow]; rfl
-
-Depends on / 依赖: Equiv.Perm.coe_pow, coe_pow, coe_toEquiv, map_pow, toPerm_apply
+/-
+**DilationEquiv.coe_pow** 是 Mathlib 中的一个定理，位于命名空间 `DilationEquiv`。
+形式化陈述：coe_pow (e : X ≃ᵈ X) (n : Nat) : ⇑(e ^ n) = e^[n]
+参数：e : X ≃ᵈ X；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `DilationEquiv.coe_toEquiv`：∀ {X : Type u_1} {Y : Type u_2} [inst : Pseud
+oEMetricSpace X] [inst_1 : PseudoEMetricSpace Y] (e : X ≃ᵈ Y),   ⇑e.toEquiv = ⇑e
+· 使用定理 `DilationEquiv.toPerm_apply`：∀ {X : Type u_1} [inst : PseudoEMetricSpace 
+X] (e : X ≃ᵈ X), DilationEquiv.toPerm e = e.toEquiv
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `Equiv.Perm.coe_pow`：∀ {α : Type u_4} (f : Equiv.Perm α) (n : ℕ), ⇑(f ^ n
+) = (⇑f)^[n]
 -/
-theorem coe_pow (e : X ≃ᵈ X) (n : Nat) : ⇑(e ^ n) = e^[n] := by
-  rw [← coe_toEquiv]; rw [← toPerm_apply]; rw [map_pow]; rw [Equiv.Perm.coe_pow]; rfl
+theorem coe_pow (e : X ≃ᵈ X) (n : ℕ) : ⇑(e ^ n) = e^[n] := by
+  rw [← coe_toEquiv, ← toPerm_apply, map_pow, Equiv.Perm.coe_pow]; rfl
 
 -- TODO: Once `IsometryEquiv` follows the `*EquivClass` pattern, replace this with an instance
 -- of `DilationEquivClass` assuming `IsometryEquivClass`.
-/--
-Definition of `_root_.IsometryEquiv.toDilationEquiv` / `_root_.IsometryEquiv.toDilationEquiv` 的定义
+/-- Every isometry equivalence is a dilation equivalence of ratio `1`. -/
+/-
+**DilationEquiv._root_.IsometryEquiv.toDilationEquiv** 是 Mathlib 中的一个定义，位于命名空间 `
+DilationEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.IsometryEquiv.toDilationEquiv
-  signature: (e : X ≃ᵢ Y)
-  body: ⟨1, one_ne_zero, by simpa using! e.isometry⟩
-  __ := e.toEquiv
-
-@[simp]
-
-中文:
-定义 _root_.等距等价.toDilationEquiv
-  签名: (e : X ≃ᵢ Y)
-  定义体: ⟨1, one_ne_zero, by simpa using! e.isometry⟩
-  __ := e.toEquiv
-
-@[simp]
-
-Depends on / 依赖: e.isometry, isometry, one_ne_zero
+--- 原说明 ---
+Every isometry equivalence is a dilation equivalence of ratio `1`.
 -/
 def _root_.IsometryEquiv.toDilationEquiv (e : X ≃ᵢ Y) : X ≃ᵈ Y where
   edist_eq' := ⟨1, one_ne_zero, by simpa using! e.isometry⟩
   __ := e.toEquiv
 
 @[simp]
-/--
-lemma `_root_.IsometryEquiv.toDilationEquiv_apply` / 引理 `_root_.IsometryEquiv.toDilationEquiv_apply`
-
-English:
-lemma _root_.IsometryEquiv.toDilationEquiv_apply
-  given: (e : X ≃ᵢ Y) (x : X)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 _root_.等距等价.toDilationEquiv_apply
-  条件: (e : X ≃ᵢ Y) (x : X)
-  证明: rfl
-
-@[simp]
+/-
+**DilationEquiv._root_.IsometryEquiv.toDilationEquiv_apply** 是 Mathlib 中的一个引理，位于
+命名空间 `DilationEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.IsometryEquiv.toDilationEquiv_apply (e : X ≃ᵢ Y) (x : X) :
     e.toDilationEquiv x = e x :=
   rfl
 
 @[simp]
-/--
-lemma `_root_.IsometryEquiv.toDilationEquiv_symm` / 引理 `_root_.IsometryEquiv.toDilationEquiv_symm`
-
-English:
-lemma _root_.IsometryEquiv.toDilationEquiv_symm
-  given: (e : X ≃ᵢ Y)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 _root_.等距等价.toDilationEquiv_symm
-  条件: (e : X ≃ᵢ Y)
-  证明: rfl
-
-@[simp]
+/-
+**DilationEquiv._root_.IsometryEquiv.toDilationEquiv_symm** 是 Mathlib 中的一个引理，位于命
+名空间 `DilationEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.IsometryEquiv.toDilationEquiv_symm (e : X ≃ᵢ Y) :
     e.symm.toDilationEquiv = e.toDilationEquiv.symm :=
   rfl
 
 @[simp]
-/--
-lemma `_root_.IsometryEquiv.coe_toDilationEquiv` / 引理 `_root_.IsometryEquiv.coe_toDilationEquiv`
-
-English:
-lemma _root_.IsometryEquiv.coe_toDilationEquiv
-  given: (e : X ≃ᵢ Y)
-  statement: ⇑e.toDilationEquiv = e
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 _root_.等距等价.coe_toDilationEquiv
-  条件: (e : X ≃ᵢ Y)
-  结论: ⇑e.toDilationEquiv = e
-  证明: rfl
-
-@[simp]
+/-
+**DilationEquiv._root_.IsometryEquiv.coe_toDilationEquiv** 是 Mathlib 中的一个引理，位于命名
+空间 `DilationEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.IsometryEquiv.coe_toDilationEquiv (e : X ≃ᵢ Y) : ⇑e.toDilationEquiv = e :=
   rfl
 
 @[simp]
-/--
-lemma `_root_.IsometryEquiv.coe_symm_toDilationEquiv` / 引理 `_root_.IsometryEquiv.coe_symm_toDilationEquiv`
-
-English:
-lemma _root_.IsometryEquiv.coe_symm_toDilationEquiv
-  given: (e : X ≃ᵢ Y)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 _root_.等距等价.coe_symm_toDilationEquiv
-  条件: (e : X ≃ᵢ Y)
-  证明: rfl
-
-@[simp]
+/-
+**DilationEquiv._root_.IsometryEquiv.coe_symm_toDilationEquiv** 是 Mathlib 中的一个引理
+，位于命名空间 `DilationEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.IsometryEquiv.coe_symm_toDilationEquiv (e : X ≃ᵢ Y) :
     ⇑e.toDilationEquiv.symm = e.symm :=
   rfl
 
 @[simp]
-/--
-lemma `_root_.IsometryEquiv.toDilationEquiv_toDilation` / 引理 `_root_.IsometryEquiv.toDilationEquiv_toDilation`
-
-English:
-lemma _root_.IsometryEquiv.toDilationEquiv_toDilation
-  given: (e : X ≃ᵢ Y)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 _root_.等距等价.toDilationEquiv_toDilation
-  条件: (e : X ≃ᵢ Y)
-  证明: rfl
-
-@[simp]
+/-
+**DilationEquiv._root_.IsometryEquiv.toDilationEquiv_toDilation** 是 Mathlib 中的一个
+引理，位于命名空间 `DilationEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.IsometryEquiv.toDilationEquiv_toDilation (e : X ≃ᵢ Y) :
-    (e.toDilationEquiv.toDilation : X ->ᵈ Y) = e.isometry.toDilation :=
+    (e.toDilationEquiv.toDilation : X →ᵈ Y) = e.isometry.toDilation :=
   rfl
 
 @[simp]
-/--
-lemma `_root_.IsometryEquiv.toDilationEquiv_ratio` / 引理 `_root_.IsometryEquiv.toDilationEquiv_ratio`
-
-English:
-lemma _root_.IsometryEquiv.toDilationEquiv_ratio
-  given: (e : X ≃ᵢ Y)
-  statement: ratio e.toDilationEquiv = 1
-  proof: by
-  rw [← ratio_toDilation]; rw [IsometryEquiv.toDilationEquiv_toDilation]; rw [Isometry.toDilation_ratio]
-
-中文:
-引理 _root_.等距等价.toDilationEquiv_ratio
-  条件: (e : X ≃ᵢ Y)
-  结论: ratio e.toDilationEquiv = 1
-  证明: by
-  rw [← ratio_toDilation]; rw [IsometryEquiv.toDilationEquiv_toDilation]; rw [Isometry.toDilation_ratio]
-
-Depends on / 依赖: Isometry, Isometry.toDilation_ratio, IsometryEquiv, IsometryEquiv.toDilationEquiv_toDilation, ratio_toDilation, toDilationEquiv_toDilation, toDilation_ratio
+/-
+**DilationEquiv._root_.IsometryEquiv.toDilationEquiv_ratio** 是 Mathlib 中的一个引理，位于
+命名空间 `DilationEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.IsometryEquiv.toDilationEquiv_ratio (e : X ≃ᵢ Y) : ratio e.toDilationEquiv = 1 := by
-  rw [← ratio_toDilation]; rw [IsometryEquiv.toDilationEquiv_toDilation]; rw [Isometry.toDilation_ratio]
+  rw [← ratio_toDilation, IsometryEquiv.toDilationEquiv_toDilation, Isometry.toDilation_ratio]
 
-/--
-Definition of `toHomeomorph` / `toHomeomorph` 的定义
+/-- Reinterpret a `DilationEquiv` as a homeomorphism. -/
+/-
+**DilationEquiv.toHomeomorph** 是 Mathlib 中的一个定义，位于命名空间 `DilationEquiv`。
+形式化陈述：toHomeomorph (e : X ≃ᵈ Y) : X ≃ₜ Y where continuous_toFun
+参数：e : X ≃ᵈ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toHomeomorph
-  signature: (e : X ≃ᵈ Y)
-  body: Dilation.toContinuous e
-  continuous_invFun := Dilation.toContinuous e.symm
-  __ := e.toEquiv
-
-@[simp]
-
-中文:
-定义 toHomeomorph
-  签名: (e : X ≃ᵈ Y)
-  定义体: Dilation.toContinuous e
-  continuous_invFun := Dilation.toContinuous e.symm
-  __ := e.toEquiv
-
-@[simp]
-
-Depends on / 依赖: Dilation, Dilation.toContinuous, toContinuous
+--- 原说明 ---
+Reinterpret a `DilationEquiv` as a homeomorphism.
 -/
 def toHomeomorph (e : X ≃ᵈ Y) : X ≃ₜ Y where
   continuous_toFun := Dilation.toContinuous e
@@ -1061,66 +685,34 @@ def toHomeomorph (e : X ≃ᵈ Y) : X ≃ₜ Y where
   __ := e.toEquiv
 
 @[simp]
-/--
-lemma `toHomeomorph_symm` / 引理 `toHomeomorph_symm`
-
-English:
-lemma toHomeomorph_symm
-  given: (e : X ≃ᵈ Y)
-  statement: e.symm.toHomeomorph = e.toHomeomorph.symm
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toHomeomorph_symm
-  条件: (e : X ≃ᵈ Y)
-  结论: e.symm.toHomeomorph = e.toHomeomorph.symm
-  证明: rfl
-
-@[simp]
+/-
+**DilationEquiv.toHomeomorph_symm** 是 Mathlib 中的一个引理，位于命名空间 `DilationEquiv`。
+形式化陈述：toHomeomorph_symm (e : X ≃ᵈ Y) : e.symm.toHomeomorph = e.toHomeomorph.symm
+参数：e : X ≃ᵈ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toHomeomorph_symm (e : X ≃ᵈ Y) : e.symm.toHomeomorph = e.toHomeomorph.symm :=
   rfl
 
 @[simp]
-/--
-lemma `coe_toHomeomorph` / 引理 `coe_toHomeomorph`
-
-English:
-lemma coe_toHomeomorph
-  given: (e : X ≃ᵈ Y)
-  statement: ⇑e.toHomeomorph = e
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_toHomeomorph
-  条件: (e : X ≃ᵈ Y)
-  结论: ⇑e.toHomeomorph = e
-  证明: rfl
-
-@[simp]
+/-
+**DilationEquiv.coe_toHomeomorph** 是 Mathlib 中的一个引理，位于命名空间 `DilationEquiv`。
+形式化陈述：coe_toHomeomorph (e : X ≃ᵈ Y) : ⇑e.toHomeomorph = e
+参数：e : X ≃ᵈ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_toHomeomorph (e : X ≃ᵈ Y) : ⇑e.toHomeomorph = e :=
   rfl
 
 @[simp]
-/--
-lemma `coe_symm_toHomeomorph` / 引理 `coe_symm_toHomeomorph`
-
-English:
-lemma coe_symm_toHomeomorph
-  given: (e : X ≃ᵈ Y)
-  statement: ⇑e.toHomeomorph.symm = e.symm
-  proof: rfl
-
-中文:
-引理 coe_symm_toHomeomorph
-  条件: (e : X ≃ᵈ Y)
-  结论: ⇑e.toHomeomorph.symm = e.symm
-  证明: rfl
+/-
+**DilationEquiv.coe_symm_toHomeomorph** 是 Mathlib 中的一个引理，位于命名空间 `DilationEquiv`。
+形式化陈述：coe_symm_toHomeomorph (e : X ≃ᵈ Y) : ⇑e.toHomeomorph.symm = e.symm
+参数：e : X ≃ᵈ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_symm_toHomeomorph (e : X ≃ᵈ Y) : ⇑e.toHomeomorph.symm = e.symm :=
   rfl
@@ -1133,28 +725,29 @@ variable {X Y F : Type*} [PseudoMetricSpace X] [PseudoMetricSpace Y]
 variable [EquivLike F X Y] [DilationEquivClass F X Y]
 
 @[simp]
-/--
-lemma `map_cobounded` / 引理 `map_cobounded`
-
-English:
-lemma map_cobounded
-  given: (e : F)
-  statement: map e (cobounded X) = cobounded Y
-  proof: by
-  rw [← Dilation.comap_cobounded e]; rw [map_comap_of_surjective (EquivLike.surjective e)]
-
-中文:
-引理 map_cobounded
-  条件: (e : F)
-  结论: map e (cobounded X) = cobounded Y
-  证明: by
-  rw [← Dilation.comap_cobounded e]; rw [map_comap_of_surjective (EquivLike.surjective e)]
-
-Depends on / 依赖: Dilation, Dilation.comap_cobounded, EquivLike, EquivLike.surjective, comap_cobounded, map_comap_of_surjective, surjective
+/-
+**DilationEquiv.map_cobounded** 是 Mathlib 中的一个引理，位于命名空间 `DilationEquiv`。
+形式化陈述：map_cobounded (e : F) : map e (cobounded X) = cobounded Y
+参数：e : F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Dilation.comap_cobounded`：comap_cobounded : Filter.comap f (cobounded β)
+ = cobounded α
+· 使用定理 `instDilationClassOfDilationEquivClass`：∀ (F : Type u_1) (X : outParam (T
+ype u_2)) (Y : outParam (Type u_3)) [inst : PseudoEMetricSpace X]   [inst_1 : Ps
+eudoEMetricSpace Y] [inst_2…
+· 使用定理 `Filter.map_comap_of_surjective`：map_comap_of_surjective {f : α -> β} (hf
+ : Surjective f) (l : Filter β) : map f (comap f l) = l
+· 使用定理 `EquivLike.surjective`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4} [in
+st : EquivLike E α β] (e : E), Function.Surjective ⇑e
 -/
 lemma map_cobounded (e : F) : map e (cobounded X) = cobounded Y := by
-  rw [← Dilation.comap_cobounded e]; rw [map_comap_of_surjective (EquivLike.surjective e)]
+  rw [← Dilation.comap_cobounded e, map_comap_of_surjective (EquivLike.surjective e)]
 
 end PseudoMetricSpace
 
 end DilationEquiv
+

@@ -42,20 +42,19 @@ open MonoidalCategory ComonObj
 
 variable {C : Type u} [Category.{v} C] [MonoidalCategory.{v} C] [CopyDiscardCategory.{v} C]
 
-/--
-Definition of `Deterministic` / `Deterministic` 的定义
+/-- A morphism is deterministic if it preserves the comonoid structure.
 
-English:
-abbreviation Deterministic
-  signature: {X Y : C} (f : X ⟶ Y)
-  body: IsComonHom f
+In probabilistic contexts, these are morphisms without randomness. -/
+/-
+**CategoryTheory.Deterministic** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory`。
+形式化陈述：Deterministic {X Y : C} (f : X ⟶ Y)
+参数：f : X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-缩写 确定性
-  签名: {X Y : C} (f : X ⟶ Y)
-  定义体: IsComonHom f
+--- 原说明 ---
+A morphism is deterministic if it preserves the comonoid structure.
 
-Depends on / 依赖: IsComonHom
+In probabilistic contexts, these are morphisms without randomness.
 -/
 abbrev Deterministic {X Y : C} (f : X ⟶ Y) := IsComonHom f
 
@@ -63,42 +62,39 @@ namespace Deterministic
 
 variable {X Y Z : C}
 
-/--
-lemma `copy_natural` / 引理 `copy_natural`
+/-- Deterministic morphisms commute with copying. -/
+/-
+**CategoryTheory.Deterministic.copy_natural** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.Deterministic`。
+形式化陈述：copy_natural (f : X ⟶ Y) [Deterministic f] : f ≫ Δ[Y] = Δ[X] ≫ (f otimesₘ 
+f)
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsComonHom.hom_comul`：∀ {C : Type u₁} {inst : CategoryThe
+ory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C} {M N : C} 
+  {inst_2 : CategoryTheor…
 
-English:
-lemma copy_natural
-  given: (f : X ⟶ Y) [Deterministic f]
-  statement: f ≫ Δ[Y] = Δ[X] ≫ (f otimesₘ f)
-  proof: IsComonHom.hom_comul f
-
-中文:
-引理 copy_natural
-  条件: (f : X ⟶ Y) [确定性 f]
-  结论: f ≫ Δ[Y] = Δ[X] ≫ (f otimesₘ f)
-  证明: IsComonHom.hom_comul f
-
-Depends on / 依赖: IsComonHom, IsComonHom.hom_comul, hom_comul
+--- 原说明 ---
+Deterministic morphisms commute with copying.
 -/
-lemma copy_natural (f : X ⟶ Y) [Deterministic f] : f ≫ Δ[Y] = Δ[X] ≫ (f otimesₘ f) :=
+lemma copy_natural (f : X ⟶ Y) [Deterministic f] : f ≫ Δ[Y] = Δ[X] ≫ (f ⊗ₘ f) :=
   IsComonHom.hom_comul f
 
-/--
-lemma `discard_natural` / 引理 `discard_natural`
+/-- Deterministic morphisms commute with discarding. -/
+/-
+**CategoryTheory.Deterministic.discard_natural** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.Deterministic`。
+形式化陈述：discard_natural (f : X ⟶ Y) [Deterministic f] : f ≫ ε[Y] = ε[X]
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsComonHom.hom_counit`：∀ {C : Type u₁} {inst : CategoryTh
+eory.Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C} {M N : C}
+   {inst_2 : CategoryTheor…
 
-English:
-lemma discard_natural
-  given: (f : X ⟶ Y) [Deterministic f]
-  statement: f ≫ ε[Y] = ε[X]
-  proof: IsComonHom.hom_counit f
-
-中文:
-引理 discard_natural
-  条件: (f : X ⟶ Y) [确定性 f]
-  结论: f ≫ ε[Y] = ε[X]
-  证明: IsComonHom.hom_counit f
-
-Depends on / 依赖: IsComonHom, IsComonHom.hom_counit, hom_counit
+--- 原说明 ---
+Deterministic morphisms commute with discarding.
 -/
 lemma discard_natural (f : X ⟶ Y) [Deterministic f] : f ≫ ε[Y] = ε[X] :=
   IsComonHom.hom_counit f
@@ -106,3 +102,4 @@ lemma discard_natural (f : X ⟶ Y) [Deterministic f] : f ≫ ε[Y] = ε[X] :=
 end Deterministic
 
 end CategoryTheory
+

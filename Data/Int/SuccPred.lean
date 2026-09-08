@@ -21,160 +21,72 @@ open Function Order
 
 namespace Int
 
-/--
-Instance `instSuccOrder` / 实例 `instSuccOrder`
-
-English:
-instance instSuccOrder
-  signature: : SuccOrder Int
-  body: { SuccOrder.ofSuccLeIff succ fun {_ _} => Iff.rfl with succ := succ }
-
-中文:
-实例 instSuccOrder
-  签名: : Succ序 整数
-  定义体: { SuccOrder.ofSuccLeIff succ fun {_ _} => Iff.rfl with succ := succ }
-
-Depends on / 依赖: Iff.rfl, SuccOrder, SuccOrder.ofSuccLeIff, ofSuccLeIff
+/-
+**Int.instSuccOrder** 是 Mathlib 中的一个实例，位于命名空间 `Int`。
+形式化陈述：instSuccOrder : SuccOrder Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instSuccOrder : SuccOrder Int :=
+instance instSuccOrder : SuccOrder ℤ :=
   { SuccOrder.ofSuccLeIff succ fun {_ _} => Iff.rfl with succ := succ }
-
-/--
-Instance `instSuccAddOrder` / 实例 `instSuccAddOrder`
-
-English:
-instance instSuccAddOrder
-  signature: : SuccAddOrder Int
-  body: ⟨fun _ => rfl⟩
-
-中文:
-实例 instSuccAddOrder
-  签名: : SuccAdd序 整数
-  定义体: ⟨fun _ => rfl⟩
+/-
+**Int.instSuccAddOrder** 是 Mathlib 中的一个实例，位于命名空间 `Int`。
+形式化陈述：instSuccAddOrder : SuccAddOrder Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instSuccAddOrder : SuccAddOrder Int := ⟨fun _ => rfl⟩
-
-/--
-Instance `instPredOrder` / 实例 `instPredOrder`
-
-English:
-instance instPredOrder
-  signature: : PredOrder Int where
-  body: pred
-  pred_le _ := (sub_one_lt_of_le le_rfl).le
-  min_of_le_pred ha := ((sub_one_lt_of_le le_rfl).not_ge ha).elim
-  le_pred_of_lt {_ _} := le_sub_one_of_lt
-
-中文:
-实例 instPredOrder
-  签名: : Pred序 整数 where
-  定义体: pred
-  pred_le _ := (sub_one_lt_of_le le_rfl).le
-  min_of_le_pred ha := ((sub_one_lt_of_le le_rfl).not_ge ha).elim
-  le_pred_of_lt {_ _} := le_sub_one_of_lt
+instance instSuccAddOrder : SuccAddOrder ℤ := ⟨fun _ => rfl⟩
+/-
+**Int.instPredOrder** 是 Mathlib 中的一个实例，位于命名空间 `Int`。
+形式化陈述：instPredOrder : PredOrder Int where pred
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.le_sub_one_of_lt`：∀ {a b : ℤ}, a < b → a ≤ b - 1
 -/
-instance instPredOrder : PredOrder Int where
+instance instPredOrder : PredOrder ℤ where
   pred := pred
   pred_le _ := (sub_one_lt_of_le le_rfl).le
   min_of_le_pred ha := ((sub_one_lt_of_le le_rfl).not_ge ha).elim
   le_pred_of_lt {_ _} := le_sub_one_of_lt
-
-/--
-Instance `instPredSubOrder` / 实例 `instPredSubOrder`
-
-English:
-instance instPredSubOrder
-  signature: : PredSubOrder Int
-  body: ⟨fun _ => rfl⟩
-
-@[simp]
-
-中文:
-实例 instPredSubOrder
-  签名: : PredSub序 整数
-  定义体: ⟨fun _ => rfl⟩
-
-@[simp]
+/-
+**Int.instPredSubOrder** 是 Mathlib 中的一个实例，位于命名空间 `Int`。
+形式化陈述：instPredSubOrder : PredSubOrder Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instPredSubOrder : PredSubOrder Int := ⟨fun _ => rfl⟩
+instance instPredSubOrder : PredSubOrder ℤ := ⟨fun _ => rfl⟩
 
 @[simp]
-/--
-theorem `succ_eq_succ` / 定理 `succ_eq_succ`
-
-English:
-theorem succ_eq_succ
-  statement: Order.succ = succ
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 succ_eq_succ
-  结论: Order.succ = succ
-  证明: rfl
-
-@[simp]
+/-
+**Int.succ_eq_succ** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：succ_eq_succ : Order.succ = succ
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem succ_eq_succ : Order.succ = succ :=
   rfl
 
 @[simp]
-/--
-theorem `pred_eq_pred` / 定理 `pred_eq_pred`
-
-English:
-theorem pred_eq_pred
-  statement: Order.pred = pred
-  proof: rfl
-
-中文:
-定理 pred_eq_pred
-  结论: Order.pred = pred
-  证明: rfl
+/-
+**Int.pred_eq_pred** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：pred_eq_pred : Order.pred = pred
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem pred_eq_pred : Order.pred = pred :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsSuccArchimedean Int
-  body: ⟨fun {a b} h =>
-    ⟨(b - a).toNat, by rw [succ_iterate, toNat_sub_of_le h, ← add_sub_assoc, add_sub_cancel_left]⟩⟩
-
-中文:
-实例 :
-  签名: 是SuccArchimedean 整数
-  定义体: ⟨fun {a b} h =>
-    ⟨(b - a).toNat, by rw [succ_iterate, toNat_sub_of_le h, ← add_sub_assoc, add_sub_cancel_left]⟩⟩
-
-Depends on / 依赖: add_sub_assoc, add_sub_cancel_left, succ_iterate, toNat_sub_of_le
+/-
+**Int.** 是 Mathlib 中的一个实例，位于命名空间 `Int`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsSuccArchimedean Int :=
+instance : IsSuccArchimedean ℤ :=
   ⟨fun {a b} h =>
     ⟨(b - a).toNat, by rw [succ_iterate, toNat_sub_of_le h, ← add_sub_assoc, add_sub_cancel_left]⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsPredArchimedean Int
-  body: ⟨fun {a b} h =>
-    ⟨(b - a).toNat, by rw [pred_iterate, toNat_sub_of_le h, sub_sub_cancel]⟩⟩
-
-中文:
-实例 :
-  签名: 是PredArchimedean 整数
-  定义体: ⟨fun {a b} h =>
-    ⟨(b - a).toNat, by rw [pred_iterate, toNat_sub_of_le h, sub_sub_cancel]⟩⟩
-
-Depends on / 依赖: pred_iterate, sub_sub_cancel, toNat_sub_of_le
+/-
+**Int.** 是 Mathlib 中的一个实例，位于命名空间 `Int`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsPredArchimedean Int :=
+instance : IsPredArchimedean ℤ :=
   ⟨fun {a b} h =>
     ⟨(b - a).toNat, by rw [pred_iterate, toNat_sub_of_le h, sub_sub_cancel]⟩⟩
 
@@ -182,31 +94,29 @@ instance : IsPredArchimedean Int :=
 
 
 @[simp, norm_cast]
-/--
-theorem `natCast_covBy` / 定理 `natCast_covBy`
+/-
+**Int.natCast_covBy** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：natCast_covBy {a b : Nat} : (a : Int) ⋖ b ↔ a ⋖ b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Order.covBy_iff_add_one_eq`：covBy_iff_add_one_eq [Add α] [One α] [SuccAd
+dOrder α] [NoMaxOrder α] : x ⋖ y ↔ x + 1 = y
+· 使用定理 `instNoMaxOrderOfNontrivial`：∀ {R : Type u} [inst : Ring R] [inst_1 : Par
+tialOrder R] [IsOrderedRing R] [Nontrivial R], NoMaxOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `Int.natCast_inj`：∀ {m n : ℕ}, ↑m = ↑n ↔ m = n
 
-English:
-theorem natCast_covBy
-  given: {a b : Nat}
-  statement: (a : Int) ⋖ b ↔ a ⋖ b
-  proof: by
-  rw [Order.covBy_iff_add_one_eq]; rw [Order.covBy_iff_add_one_eq]
-  exact Int.natCast_inj
-
-中文:
-定理 natCast_covBy
-  条件: {a b : 自然数}
-  结论: (a : 整数) ⋖ b ↔ a ⋖ b
-  证明: by
-  rw [Order.covBy_iff_add_one_eq]; rw [Order.covBy_iff_add_one_eq]
-  exact Int.natCast_inj
-
-Depends on / 依赖: Int.natCast_inj, Order.covBy_iff_add_one_eq, covBy_iff_add_one_eq, natCast_inj
+--- 原说明 ---
+### Covering relation
 -/
-theorem natCast_covBy {a b : Nat} : (a : Int) ⋖ b ↔ a ⋖ b := by
-  rw [Order.covBy_iff_add_one_eq]; rw [Order.covBy_iff_add_one_eq]
+theorem natCast_covBy {a b : ℕ} : (a : ℤ) ⋖ b ↔ a ⋖ b := by
+  rw [Order.covBy_iff_add_one_eq, Order.covBy_iff_add_one_eq]
   exact Int.natCast_inj
 
 end Int
 
 alias ⟨_, CovBy.intCast⟩ := Int.natCast_covBy
+

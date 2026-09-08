@@ -37,386 +37,369 @@ namespace Set
 
 open ENat
 
-variable {α β : Type*} (s : Set α) (r : α -> α -> Prop)
+variable {α β : Type*} (s : Set α) (r : α → α → Prop)
 
-/--
-Definition of `chainHeight` / `chainHeight` 的定义
+/-- The maximal length of a chain in a set `s` with relation `r`. -/
+/-
+**Set.chainHeight** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：chainHeight : Nat∞
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition chainHeight
-  signature: : Nat∞
-  body: ⨆ t : {t : Set α // t subseteq s ∧ IsChain r t}, t.val.encard
-
-中文:
-定义 chainHeight
-  签名: : 自然数∞
-  定义体: ⨆ t : {t : Set α // t subseteq s ∧ IsChain r t}, t.val.encard
-
-Depends on / 依赖: IsChain, encard, subseteq, t.val.encard
+--- 原说明 ---
+The maximal length of a chain in a set `s` with relation `r`.
 -/
-noncomputable def chainHeight : Nat∞ := ⨆ t : {t : Set α // t subseteq s ∧ IsChain r t}, t.val.encard
-
-/--
-theorem `chainHeight_eq_iSup` / 定理 `chainHeight_eq_iSup`
-
-English:
-theorem chainHeight_eq_iSup
-  proof: rfl
-
-中文:
-定理 chainHeight_eq_iSup
-  证明: rfl
+noncomputable def chainHeight : ℕ∞ := ⨆ t : {t : Set α // t ⊆ s ∧ IsChain r t}, t.val.encard
+/-
+**Set.chainHeight_eq_iSup** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：chainHeight_eq_iSup : s.chainHeight r = ⨆ t : {t : Set α // t subseteq s ∧
+ IsChain r t}, t.val.encard
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem chainHeight_eq_iSup :
-    s.chainHeight r = ⨆ t : {t : Set α // t subseteq s ∧ IsChain r t}, t.val.encard := rfl
-
-/--
-theorem `chainHeight_le_encard` / 定理 `chainHeight_le_encard`
-
-English:
-theorem chainHeight_le_encard
-  statement: s.chainHeight r <= s.encard
-  proof: by
-  simp_all [chainHeight, encard_le_encard]
-
-中文:
-定理 chainHeight_le_encard
-  结论: s.chainHeight r <= s.encard
-  证明: by
-  simp_all [chainHeight, encard_le_encard]
-
-Depends on / 依赖: IsPrincipalIdealRing, IsPrincipalIdealRing.isDedekindDomain, chainHeight, encard_le_encard, isDedekindDomain
+    s.chainHeight r = ⨆ t : {t : Set α // t ⊆ s ∧ IsChain r t}, t.val.encard := rfl
+/-
+**Set.chainHeight_le_encard** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：chainHeight_le_encard : s.chainHeight r <= s.encard
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem chainHeight_le_encard : s.chainHeight r <= s.encard := by
+theorem chainHeight_le_encard : s.chainHeight r ≤ s.encard := by
   simp_all [chainHeight, encard_le_encard]
-
-/--
-theorem `chainHeight_ne_top_of_finite` / 定理 `chainHeight_ne_top_of_finite`
-
-English:
-theorem chainHeight_ne_top_of_finite
-  given: (h : s.Finite)
-  statement: s.chainHeight r != ⊤
-  proof: LT.lt.ne_top lt_of_le_of_lt (chainHeight_le_encard s r) lt_top_iff_ne_top.mpr
-    encard_ne_top_iff.mpr h
-
-中文:
-定理 chainHeight_ne_top_of_finite
-  条件: (h : s.有限)
-  结论: s.chainHeight r != ⊤
-  证明: LT.lt.ne_top lt_of_le_of_lt (chainHeight_le_encard s r) lt_top_iff_ne_top.mpr
-    encard_ne_top_iff.mpr h
-
-Depends on / 依赖: LT.lt.ne_top, chainHeight_le_encard, encard_ne_top_iff, encard_ne_top_iff.mpr, lt_of_le_of_lt, lt_top_iff_ne_top, lt_top_iff_ne_top.mpr, ne_top
+/-
+**Set.chainHeight_ne_top_of_finite** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：chainHeight_ne_top_of_finite (h : s.Finite) : s.chainHeight r != ⊤
+参数：h : s.Finite。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne_top`：∀ {α : Type u} [inst : Preorder α] [inst_1 : OrderTop α] {
+a b : α}, a < b → a ≠ ⊤
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `Set.chainHeight_le_encard`：chainHeight_le_encard : s.chainHeight r <= s.
+encard
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `lt_top_iff_ne_top`：lt_top_iff_ne_top : a < ⊤ ↔ a != ⊤
+· 使用定理 `Set.encard_ne_top_iff`：encard_ne_top_iff : s.encard != ⊤ ↔ s.Finite
 -/
-theorem chainHeight_ne_top_of_finite (h : s.Finite) : s.chainHeight r != ⊤ :=
-LT.lt.ne_top lt_of_le_of_lt (chainHeight_le_encard s r) lt_top_iff_ne_top.mpr
+theorem chainHeight_ne_top_of_finite (h : s.Finite) : s.chainHeight r ≠ ⊤ :=
+  LT.lt.ne_top <| lt_of_le_of_lt (chainHeight_le_encard s r) <| lt_top_iff_ne_top.mpr <|
     encard_ne_top_iff.mpr h
-
-/--
-theorem `exists_isChain_of_le_chainHeight` / 定理 `exists_isChain_of_le_chainHeight`
-
-English:
-theorem exists_isChain_of_le_chainHeight
-  given: {r} {s : Set α} (n : Nat) (h : n <= s.chainHeight r)
-  proof: by
+/-
+**Set.exists_isChain_of_le_chainHeight** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：exists_isChain_of_le_chainHeight {r} {s : Set α} (n : Nat) (h : n <= s.cha
+inHeight r) : exists t subseteq s, t.encard = n ∧ IsChain r t
+参数：n : Nat；h : n <= s.chainHeight r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.encard_empty`：∀ {α : Type u_1}, ∅.encard = 0
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Push.not_and_eq`：not_and_eq : (¬ (p ∧ q)) = (p -> ¬ q)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `iSup_lt_iff`：iSup_lt_iff : iSup f < l ↔ exists b < l, forall i, f i <= b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `instIsOrderedRingENat`：IsOrderedRing ℕ∞
+· 使用定理 `instZeroLEOneClassENat`：ZeroLEOneClass ℕ∞
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用定理 `Nat.sub_one_lt`：∀ {n : ℕ}, n ≠ 0 → n - 1 < n
+· 使用定理 `ENat.le_sub_one_of_lt`：∀ {a b : ℕ∞}, a < b → a ≤ b - 1
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Set.exists_subset_encard_eq`：exists_subset_encard_eq {k : Nat∞} (hk : k 
+<= s.encard) : exists t, t subseteq s ∧ t.encard = k
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `IsChain.mono`：IsChain.mono : s subseteq t -> IsChain r t -> IsChain r s
+-/
+theorem exists_isChain_of_le_chainHeight {r} {s : Set α} (n : ℕ) (h : n ≤ s.chainHeight r) :
+    ∃ t ⊆ s, t.encard = n ∧ IsChain r t := by
   by_cases h' : n = 0
   · exact ⟨∅, by simp [h']⟩
-  · obtain ⟨t, ht₁, ht₂, ht₃⟩ : exists t subseteq s, IsChain r t ∧ n <= t.encard := by
+  · obtain ⟨t, ht₁, ht₂, ht₃⟩ : ∃ t ⊆ s, IsChain r t ∧ n ≤ t.encard := by
       contrapose! h
-refine iSup_lt_iff.mpr ⟨n - 1, ?_, fun m => ENat.le_sub_one_of_lt h m.1 m.2.1 m.2.2⟩
+      refine iSup_lt_iff.mpr ⟨n - 1, ?_, fun m ↦ ENat.le_sub_one_of_lt <| h m.1 m.2.1 m.2.2⟩
       exact_mod_cast Nat.sub_one_lt h'
     obtain ⟨u, hu₁, hu₂⟩ := exists_subset_encard_eq ht₃
     exact ⟨u, hu₁.trans ht₁, hu₂, ht₂.mono hu₁⟩
-
-中文:
-定理 存在_isChain_of_le_chainHeight
-  条件: {r} {s : 集合 α} (n : 自然数) (h : n <= s.chainHeight r)
-  证明: by
-  by_cases h' : n = 0
-  · exact ⟨∅, by simp [h']⟩
-  · obtain ⟨t, ht₁, ht₂, ht₃⟩ : exists t subseteq s, IsChain r t ∧ n <= t.encard := by
-      contrapose! h
-refine iSup_lt_iff.mpr ⟨n - 1, ?_, fun m => ENat.le_sub_one_of_lt h m.1 m.2.1 m.2.2⟩
-      exact_mod_cast Nat.sub_one_lt h'
-    obtain ⟨u, hu₁, hu₂⟩ := exists_subset_encard_eq ht₃
-    exact ⟨u, hu₁.trans ht₁, hu₂, ht₂.mono hu₁⟩
-
-Depends on / 依赖: ENat.le_sub_one_of_lt, IsChain, Nat.sub_one_lt, contrapose, encard, exists_subset_encard_eq, iSup_lt_iff, iSup_lt_iff.mpr, le_sub_one_of_lt, sub_one_lt, subseteq, t.encard
+/-
+**Set.exists_eq_chainHeight_of_chainHeight_ne_top** 是 Mathlib 中的一个定理，位于命名空间 `Set
+`。
+形式化陈述：exists_eq_chainHeight_of_chainHeight_ne_top (h : s.chainHeight r != ⊤) : e
+xists t subseteq s, t.encard = s.chainHeight r ∧ IsChain r t
+参数：h : s.chainHeight r != ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用引理 `ENat.exists_eq_iSup_of_lt_top`：exists_eq_iSup_of_lt_top [Nonempty ι] (h 
+: ⨆ i, f i < ⊤) : exists i, f i = ⨆ i, f i
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.chainHeight_eq_iSup`：chainHeight_eq_iSup : s.chainHeight r = ⨆ t : {
+t : Set α // t subseteq s ∧ IsChain r t}, t.val.encard
+· 使用定理 `lt_top_iff_ne_top`：lt_top_iff_ne_top : a < ⊤ ↔ a != ⊤
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem exists_isChain_of_le_chainHeight {r} {s : Set α} (n : Nat) (h : n <= s.chainHeight r) :
-    exists t subseteq s, t.encard = n ∧ IsChain r t := by
-  by_cases h' : n = 0
-  · exact ⟨∅, by simp [h']⟩
-  · obtain ⟨t, ht₁, ht₂, ht₃⟩ : exists t subseteq s, IsChain r t ∧ n <= t.encard := by
-      contrapose! h
-refine iSup_lt_iff.mpr ⟨n - 1, ?_, fun m => ENat.le_sub_one_of_lt h m.1 m.2.1 m.2.2⟩
-      exact_mod_cast Nat.sub_one_lt h'
-    obtain ⟨u, hu₁, hu₂⟩ := exists_subset_encard_eq ht₃
-    exact ⟨u, hu₁.trans ht₁, hu₂, ht₂.mono hu₁⟩
-
-/--
-theorem `exists_eq_chainHeight_of_chainHeight_ne_top` / 定理 `exists_eq_chainHeight_of_chainHeight_ne_top`
-
-English:
-theorem exists_eq_chainHeight_of_chainHeight_ne_top
-  given: (h : s.chainHeight r != ⊤)
-  proof: by
-  have : Nonempty { t // t subseteq s ∧ IsChain r t } := ⟨∅, by simp⟩
+theorem exists_eq_chainHeight_of_chainHeight_ne_top (h : s.chainHeight r ≠ ⊤) :
+    ∃ t ⊆ s, t.encard = s.chainHeight r ∧ IsChain r t := by
+  have : Nonempty { t // t ⊆ s ∧ IsChain r t } := ⟨∅, by simp⟩
   obtain ⟨t, ht⟩ := exists_eq_iSup_of_lt_top (by rwa [← chainHeight_eq_iSup, lt_top_iff_ne_top])
   exact ⟨t.1, t.2.1, ht, t.2.2⟩
-
-中文:
-定理 存在_eq_chainHeight_of_chainHeight_ne_top
-  条件: (h : s.chainHeight r != ⊤)
-  证明: by
-  have : Nonempty { t // t subseteq s ∧ IsChain r t } := ⟨∅, by simp⟩
-  obtain ⟨t, ht⟩ := exists_eq_iSup_of_lt_top (by rwa [← chainHeight_eq_iSup, lt_top_iff_ne_top])
-  exact ⟨t.1, t.2.1, ht, t.2.2⟩
-
-Depends on / 依赖: IsChain, Nonempty, chainHeight_eq_iSup, exists_eq_iSup_of_lt_top, lt_top_iff_ne_top, subseteq
--/
-theorem exists_eq_chainHeight_of_chainHeight_ne_top (h : s.chainHeight r != ⊤) :
-    exists t subseteq s, t.encard = s.chainHeight r ∧ IsChain r t := by
-  have : Nonempty { t // t subseteq s ∧ IsChain r t } := ⟨∅, by simp⟩
-  obtain ⟨t, ht⟩ := exists_eq_iSup_of_lt_top (by rwa [← chainHeight_eq_iSup, lt_top_iff_ne_top])
-  exact ⟨t.1, t.2.1, ht, t.2.2⟩
-
-/--
-theorem `exists_eq_chainHeight_of_finite` / 定理 `exists_eq_chainHeight_of_finite`
-
-English:
-theorem exists_eq_chainHeight_of_finite
-  given: (h : s.Finite)
-  proof: exists_eq_chainHeight_of_chainHeight_ne_top s r (chainHeight_ne_top_of_finite s r h)
-
-中文:
-定理 存在_eq_chainHeight_of_finite
-  条件: (h : s.有限)
-  证明: exists_eq_chainHeight_of_chainHeight_ne_top s r (chainHeight_ne_top_of_finite s r h)
-
-Depends on / 依赖: chainHeight_ne_top_of_finite, exists_eq_chainHeight_of_chainHeight_ne_top
+/-
+**Set.exists_eq_chainHeight_of_finite** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：exists_eq_chainHeight_of_finite (h : s.Finite) : exists t subseteq s, t.en
+card = s.chainHeight r ∧ IsChain r t
+参数：h : s.Finite。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.exists_eq_chainHeight_of_chainHeight_ne_top`：exists_eq_chainHeight_o
+f_chainHeight_ne_top (h : s.chainHeight r != ⊤) : exists t subseteq s, t.encard 
+= s.chainHeight r ∧ IsChain r t
+· 使用定理 `Set.chainHeight_ne_top_of_finite`：chainHeight_ne_top_of_finite (h : s.Fi
+nite) : s.chainHeight r != ⊤
 -/
 theorem exists_eq_chainHeight_of_finite (h : s.Finite) :
-     exists t subseteq s, t.encard = s.chainHeight r ∧ IsChain r t :=
+     ∃ t ⊆ s, t.encard = s.chainHeight r ∧ IsChain r t :=
   exists_eq_chainHeight_of_chainHeight_ne_top s r (chainHeight_ne_top_of_finite s r h)
-
-/--
-theorem `encard_le_chainHeight_of_isChain` / 定理 `encard_le_chainHeight_of_isChain`
-
-English:
-theorem encard_le_chainHeight_of_isChain
-  given: {r} (s t : Set α) (hs : t subseteq s) (hc : IsChain r t)
-  proof: le_iSup_iff.mpr fun _ hb => hb ⟨t, hs, hc⟩
-
-中文:
-定理 encard_le_chainHeight_of_isChain
-  条件: {r} (s t : 集合 α) (hs : t subseteq s) (hc : IsChain r t)
-  证明: le_iSup_iff.mpr fun _ hb => hb ⟨t, hs, hc⟩
-
-Depends on / 依赖: le_iSup_iff, le_iSup_iff.mpr
+/-
+**Set.encard_le_chainHeight_of_isChain** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：encard_le_chainHeight_of_isChain {r} (s t : Set α) (hs : t subseteq s) (hc
+ : IsChain r t) : t.encard <= s.chainHeight r
+参数：s t : Set α；hs : t subseteq s；hc : IsChain r t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `le_iSup_iff`：le_iSup_iff {s : ι -> α} : a <= iSup s ↔ forall b, (forall 
+i, s i <= b) -> a <= b
 -/
-theorem encard_le_chainHeight_of_isChain {r} (s t : Set α) (hs : t subseteq s) (hc : IsChain r t) :
-    t.encard <= s.chainHeight r :=
-  le_iSup_iff.mpr fun _ hb => hb ⟨t, hs, hc⟩
-
-/--
-theorem `encard_eq_chainHeight_of_isChain` / 定理 `encard_eq_chainHeight_of_isChain`
-
-English:
-theorem encard_eq_chainHeight_of_isChain
-  given: {r} (s : Set α) (hc : IsChain r s)
-  proof: le_antisymm (encard_le_chainHeight_of_isChain _ _ Set.Subset.rfl hc) (chainHeight_le_encard _ _)
-
-中文:
-定理 encard_eq_chainHeight_of_isChain
-  条件: {r} (s : 集合 α) (hc : IsChain r s)
-  证明: le_antisymm (encard_le_chainHeight_of_isChain _ _ Set.Subset.rfl hc) (chainHeight_le_encard _ _)
-
-Depends on / 依赖: Set.Subset.rfl, Subset, chainHeight_le_encard, encard_le_chainHeight_of_isChain, le_antisymm
+theorem encard_le_chainHeight_of_isChain {r} (s t : Set α) (hs : t ⊆ s) (hc : IsChain r t) :
+    t.encard ≤ s.chainHeight r :=
+  le_iSup_iff.mpr fun _ hb ↦ hb ⟨t, hs, hc⟩
+/-
+**Set.encard_eq_chainHeight_of_isChain** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：encard_eq_chainHeight_of_isChain {r} (s : Set α) (hc : IsChain r s) : s.en
+card = s.chainHeight r
+参数：s : Set α；hc : IsChain r s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Set.encard_le_chainHeight_of_isChain`：encard_le_chainHeight_of_isChain {
+r} (s t : Set α) (hs : t subseteq s) (hc : IsChain r t) : t.encard <= s.chainHei
+ght r
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
+· 使用定理 `Set.chainHeight_le_encard`：chainHeight_le_encard : s.chainHeight r <= s.
+encard
 -/
 theorem encard_eq_chainHeight_of_isChain {r} (s : Set α) (hc : IsChain r s) :
     s.encard = s.chainHeight r :=
   le_antisymm (encard_le_chainHeight_of_isChain _ _ Set.Subset.rfl hc) (chainHeight_le_encard _ _)
-
-/--
-theorem `finite_of_chainHeight_ne_top` / 定理 `finite_of_chainHeight_ne_top`
-
-English:
-theorem finite_of_chainHeight_ne_top
-  given: {r} {s : Set α} (hc : IsChain r s) (h : s.chainHeight r != ⊤)
-  proof: Set.encard_ne_top_iff.mp ne_top_of_le_ne_top h
-    encard_le_chainHeight_of_isChain _ _ (subset_refl _) hc
-
-中文:
-定理 finite_of_chainHeight_ne_top
-  条件: {r} {s : 集合 α} (hc : IsChain r s) (h : s.chainHeight r != ⊤)
-  证明: Set.encard_ne_top_iff.mp ne_top_of_le_ne_top h
-    encard_le_chainHeight_of_isChain _ _ (subset_refl _) hc
-
-Depends on / 依赖: Set.encard_ne_top_iff.mp, encard_le_chainHeight_of_isChain, encard_ne_top_iff, ne_top_of_le_ne_top, subset_refl
+/-
+**Set.finite_of_chainHeight_ne_top** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：finite_of_chainHeight_ne_top {r} {s : Set α} (hc : IsChain r s) (h : s.cha
+inHeight r != ⊤) : s.Finite
+参数：hc : IsChain r s；h : s.chainHeight r != ⊤。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.encard_ne_top_iff`：encard_ne_top_iff : s.encard != ⊤ ↔ s.Finite
+· 使用定理 `ne_top_of_le_ne_top`：ne_top_of_le_ne_top (hb : b != ⊤) (hab : a <= b) : 
+a != ⊤
+· 使用定理 `Set.encard_le_chainHeight_of_isChain`：encard_le_chainHeight_of_isChain {
+r} (s t : Set α) (hs : t subseteq s) (hc : IsChain r t) : t.encard <= s.chainHei
+ght r
+· 使用定理 `subset_refl`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preord
+er α] (a : α), a ⊆ a
 -/
-theorem finite_of_chainHeight_ne_top {r} {s : Set α} (hc : IsChain r s) (h : s.chainHeight r != ⊤) :
+theorem finite_of_chainHeight_ne_top {r} {s : Set α} (hc : IsChain r s) (h : s.chainHeight r ≠ ⊤) :
     s.Finite :=
-Set.encard_ne_top_iff.mp ne_top_of_le_ne_top h
+  Set.encard_ne_top_iff.mp <| ne_top_of_le_ne_top h <|
     encard_le_chainHeight_of_isChain _ _ (subset_refl _) hc
-
-/--
-theorem `not_isChain_of_chainHeight_lt_encard` / 定理 `not_isChain_of_chainHeight_lt_encard`
-
-English:
-theorem not_isChain_of_chainHeight_lt_encard
-  statement: (s t : Set α) (ht : t subseteq s)
-  proof: by
-  by_contra! hh
-  grw [encard_le_chainHeight_of_isChain _ _ ht hh] at he
-  exact (lt_self_iff_false _).mp he
-
-中文:
-定理 not_isChain_of_chainHeight_lt_encard
-  结论: (s t : 集合 α) (ht : t subseteq s)
-  证明: by
-  by_contra! hh
-  grw [encard_le_chainHeight_of_isChain _ _ ht hh] at he
-  exact (lt_self_iff_false _).mp he
-
-Depends on / 依赖: encard_le_chainHeight_of_isChain, lt_self_iff_false
+/-
+**Set.not_isChain_of_chainHeight_lt_encard** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：not_isChain_of_chainHeight_lt_encard (s t : Set α) (ht : t subseteq s) (he
+ : s.chainHeight r < t.encard) : ¬ IsChain r t
+参数：s t : Set α；ht : t subseteq s；he : s.chainHeight r < t.encard。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `lt_self_iff_false`：lt_self_iff_false (x : α) : x < x ↔ False
+· 使用定理 `lt_imp_lt_of_le_of_le`：lt_imp_lt_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a < b -> c < d
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `Set.encard_le_chainHeight_of_isChain`：encard_le_chainHeight_of_isChain {
+r} (s t : Set α) (hs : t subseteq s) (hc : IsChain r t) : t.encard <= s.chainHei
+ght r
 -/
-theorem not_isChain_of_chainHeight_lt_encard (s t : Set α) (ht : t subseteq s)
+theorem not_isChain_of_chainHeight_lt_encard (s t : Set α) (ht : t ⊆ s)
     (he : s.chainHeight r < t.encard) : ¬ IsChain r t := by
   by_contra! hh
   grw [encard_le_chainHeight_of_isChain _ _ ht hh] at he
   exact (lt_self_iff_false _).mp he
-
-/--
-theorem `chainHeight_eq_top_iff` / 定理 `chainHeight_eq_top_iff`
-
-English:
-theorem chainHeight_eq_top_iff
-  proof: by
-  refine ⟨fun h _ => exists_isChain_of_le_chainHeight _ (le_top.trans_eq h.symm), fun h => ?_⟩
-  contrapose! h
-  obtain ⟨n, hn⟩ := ENat.ne_top_iff_exists.mp h
-  refine ⟨n + 1, fun l hl he => not_isChain_of_chainHeight_lt_encard r s l hl ?_⟩
-  rw [← hn]; rw [he]
-  exact_mod_cast lt_add_one _
-
-@[simp]
-
-中文:
-定理 chainHeight_eq_top_iff
-  证明: by
-  refine ⟨fun h _ => exists_isChain_of_le_chainHeight _ (le_top.trans_eq h.symm), fun h => ?_⟩
-  contrapose! h
-  obtain ⟨n, hn⟩ := ENat.ne_top_iff_exists.mp h
-  refine ⟨n + 1, fun l hl he => not_isChain_of_chainHeight_lt_encard r s l hl ?_⟩
-  rw [← hn]; rw [he]
-  exact_mod_cast lt_add_one _
-
-@[simp]
-
-Depends on / 依赖: ENat.ne_top_iff_exists.mp, contrapose, exists_isChain_of_le_chainHeight, h.symm, le_top, le_top.trans_eq, lt_add_one, ne_top_iff_exists, not_isChain_of_chainHeight_lt_encard, trans_eq
+/-
+**Set.chainHeight_eq_top_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：chainHeight_eq_top_iff : s.chainHeight r = ⊤ ↔ forall n : Nat, exists t su
+bseteq s, t.encard = n ∧ IsChain r t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.exists_isChain_of_le_chainHeight`：exists_isChain_of_le_chainHeight {
+r} {s : Set α} (n : Nat) (h : n <= s.chainHeight r) : exists t subseteq s, t.enc
+ard = n ∧ IsChain r t
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用定理 `le_top`：le_top : a <= ⊤
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Mathlib.Tactic.Push.not_forall_eq`：not_forall_eq : (¬ forall x, s x) = (
+exists x, ¬ s x)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Push.not_and_eq`：not_and_eq : (¬ (p ∧ q)) = (p -> ¬ q)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `ENat.ne_top_iff_exists`：ne_top_iff_exists : n != ⊤ ↔ exists m : Nat, ↑m 
+= n
+· 使用定理 `Set.not_isChain_of_chainHeight_lt_encard`：not_isChain_of_chainHeight_lt_
+encard (s t : Set α) (ht : t subseteq s) (he : s.chainHeight r < t.encard) : ¬ I
+sChain r t
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `instIsOrderedRingENat`：IsOrderedRing ℕ∞
+· 使用定理 `instZeroLEOneClassENat`：ZeroLEOneClass ℕ∞
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用引理 `lt_add_one`：lt_add_one [One α] [AddZeroClass α] [PartialOrder α] [ZeroLE
+OneClass α] [NeZero (1 : α)] [AddLeftStrictMono α] (a : α) : a < a + 1
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
 -/
 theorem chainHeight_eq_top_iff :
-    s.chainHeight r = ⊤ ↔ forall n : Nat, exists t subseteq s, t.encard = n ∧ IsChain r t := by
-  refine ⟨fun h _ => exists_isChain_of_le_chainHeight _ (le_top.trans_eq h.symm), fun h => ?_⟩
+    s.chainHeight r = ⊤ ↔ ∀ n : ℕ, ∃ t ⊆ s, t.encard = n ∧ IsChain r t := by
+  refine ⟨fun h _ ↦ exists_isChain_of_le_chainHeight _ (le_top.trans_eq h.symm), fun h ↦ ?_⟩
   contrapose! h
   obtain ⟨n, hn⟩ := ENat.ne_top_iff_exists.mp h
-  refine ⟨n + 1, fun l hl he => not_isChain_of_chainHeight_lt_encard r s l hl ?_⟩
-  rw [← hn]; rw [he]
+  refine ⟨n + 1, fun l hl he ↦ not_isChain_of_chainHeight_lt_encard r s l hl ?_⟩
+  rw [← hn, he]
   exact_mod_cast lt_add_one _
 
 @[simp]
-/--
-theorem `chainHeight_eq_zero_iff` / 定理 `chainHeight_eq_zero_iff`
-
-English:
-theorem chainHeight_eq_zero_iff
-  statement: s.chainHeight r = 0 ↔ s = ∅
-  proof: by
-  refine ⟨fun h => ?_, ?_⟩
-  · simp only [chainHeight, iSup_eq_zero, encard_eq_zero, Subtype.forall, and_imp] at h
-    ext x
-    simpa using h {x}
-  · simp_all [chainHeight]
-
-@[simp]
-
-中文:
-定理 chainHeight_eq_zero_iff
-  结论: s.chainHeight r = 0 ↔ s = ∅
-  证明: by
-  refine ⟨fun h => ?_, ?_⟩
-  · simp only [chainHeight, iSup_eq_zero, encard_eq_zero, Subtype.forall, and_imp] at h
-    ext x
-    simpa using h {x}
-  · simp_all [chainHeight]
-
-@[simp]
-
-Depends on / 依赖: Subtype, Subtype.forall, and_imp, chainHeight, encard_eq_zero, iSup_eq_zero
+/-
+**Set.chainHeight_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：chainHeight_eq_zero_iff : s.chainHeight r = 0 ↔ s = ∅
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_false`：∀ (p : Prop), (p ↔ False) = ¬p
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_prop_domain_congr`：∀ {p₁ p₂ : Prop} {q₁ : p₁ → Prop} {q₂ : p₂ → P
+rop} (h₁ : p₁ = p₂),   (∀ (a : p₂), q₁ ⋯ = q₂ a) → (∀ (a : p₁), q₁ a) = ∀ (a : p
+₂), q₂ a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.substr`：∀ {α : Sort u} {p : α → Prop} {a b : α}, b = a → p a → p b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem chainHeight_eq_zero_iff : s.chainHeight r = 0 ↔ s = ∅ := by
-  refine ⟨fun h => ?_, ?_⟩
+  refine ⟨fun h ↦ ?_, ?_⟩
   · simp only [chainHeight, iSup_eq_zero, encard_eq_zero, Subtype.forall, and_imp] at h
     ext x
     simpa using h {x}
   · simp_all [chainHeight]
 
 @[simp]
-/--
-theorem `chainHeight_empty` / 定理 `chainHeight_empty`
-
-English:
-theorem chainHeight_empty
-  statement: (∅ : Set α).chainHeight r = 0
-  proof: .mpr rfl chainHeight_eq_zero_iff _ _
-
-@[simp]
-
-中文:
-定理 chainHeight_empty
-  结论: (∅ : 集合 α).chainHeight r = 0
-  证明: .mpr rfl chainHeight_eq_zero_iff _ _
-
-@[simp]
-
-Depends on / 依赖: chainHeight_eq_zero_iff
+/-
+**Set.chainHeight_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：chainHeight_empty : (∅ : Set α).chainHeight r = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.chainHeight_eq_zero_iff`：chainHeight_eq_zero_iff : s.chainHeight r =
+ 0 ↔ s = ∅
 -/
 theorem chainHeight_empty : (∅ : Set α).chainHeight r = 0 :=
-.mpr rfl chainHeight_eq_zero_iff _ _
+  chainHeight_eq_zero_iff _ _ |>.mpr rfl
 
 @[simp]
-/--
-theorem `one_le_chainHeight_iff` / 定理 `one_le_chainHeight_iff`
-
-English:
-theorem one_le_chainHeight_iff
-  statement: 1 <= s.chainHeight r ↔ s.Nonempty
-  proof: by
-  constructor
-  all_goals
-  · intros
-    by_contra! hh
-    simp_all
-
-@[simp]
-
-中文:
-定理 one_le_chainHeight_iff
-  结论: 1 <= s.chainHeight r ↔ s.非空
-  证明: by
-  constructor
-  all_goals
-  · intros
-    by_contra! hh
-    simp_all
-
-@[simp]
-
-Depends on / 依赖: all_goals, intros
+/-
+**Set.one_le_chainHeight_iff** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：one_le_chainHeight_iff : 1 <= s.chainHeight r ↔ s.Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.chainHeight_empty`：chainHeight_empty : (∅ : Set α).chainHeight r = 0
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `instCanonicallyOrderedAddENat`：CanonicallyOrderedAdd ℕ∞
+· 使用定理 `instNontrivialENat`：Nontrivial ℕ∞
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
 -/
-theorem one_le_chainHeight_iff : 1 <= s.chainHeight r ↔ s.Nonempty := by
+theorem one_le_chainHeight_iff : 1 ≤ s.chainHeight r ↔ s.Nonempty := by
   constructor
   all_goals
   · intros
@@ -424,158 +407,125 @@ theorem one_le_chainHeight_iff : 1 <= s.chainHeight r ↔ s.Nonempty := by
     simp_all
 
 @[simp]
-/--
-theorem `chainHeight_of_isEmpty` / 定理 `chainHeight_of_isEmpty`
-
-English:
-theorem chainHeight_of_isEmpty
-  given: [IsEmpty α]
-  statement: s.chainHeight r = 0
-  proof: .mpr (Subsingleton.elim _ _) chainHeight_eq_zero_iff s r
-
-@[gcongr, mono]
-
-中文:
-定理 chainHeight_of_isEmpty
-  条件: [是空 α]
-  结论: s.chainHeight r = 0
-  证明: .mpr (Subsingleton.elim _ _) chainHeight_eq_zero_iff s r
-
-@[gcongr, mono]
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim, chainHeight_eq_zero_iff
+/-
+**Set.chainHeight_of_isEmpty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：chainHeight_of_isEmpty [IsEmpty α] : s.chainHeight r = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.chainHeight_eq_zero_iff`：chainHeight_eq_zero_iff : s.chainHeight r =
+ 0 ↔ s = ∅
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
 theorem chainHeight_of_isEmpty [IsEmpty α] : s.chainHeight r = 0 :=
-.mpr (Subsingleton.elim _ _) chainHeight_eq_zero_iff s r
+  chainHeight_eq_zero_iff s r |>.mpr (Subsingleton.elim _ _)
 
 @[gcongr, mono]
-/--
-theorem `chainHeight_mono` / 定理 `chainHeight_mono`
-
-English:
-theorem chainHeight_mono
-  given: (s t : Set α) (h : s subseteq t)
-  statement: s.chainHeight r <= t.chainHeight r
-  proof: by
-  refine forall_natCast_le_iff_le.mp fun n hn => ?_
-  obtain ⟨a, ha₁, ha₂, ha₃⟩ := exists_isChain_of_le_chainHeight n hn
-  exact ha₂ ▸ encard_le_chainHeight_of_isChain _ _ (ha₁.trans h) ha₃
-
-@[simp]
-
-中文:
-定理 chainHeight_mono
-  条件: (s t : 集合 α) (h : s subseteq t)
-  结论: s.chainHeight r <= t.chainHeight r
-  证明: by
-  refine forall_natCast_le_iff_le.mp fun n hn => ?_
-  obtain ⟨a, ha₁, ha₂, ha₃⟩ := exists_isChain_of_le_chainHeight n hn
-  exact ha₂ ▸ encard_le_chainHeight_of_isChain _ _ (ha₁.trans h) ha₃
-
-@[simp]
-
-Depends on / 依赖: encard_le_chainHeight_of_isChain, exists_isChain_of_le_chainHeight, forall_natCast_le_iff_le, forall_natCast_le_iff_le.mp
+/-
+**Set.chainHeight_mono** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：chainHeight_mono (s t : Set α) (h : s subseteq t) : s.chainHeight r <= t.c
+hainHeight r
+参数：s t : Set α；h : s subseteq t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `ENat.forall_natCast_le_iff_le`：forall_natCast_le_iff_le : (forall a : Na
+t, a <= m -> a <= n) ↔ m <= n
+· 使用定理 `Set.exists_isChain_of_le_chainHeight`：exists_isChain_of_le_chainHeight {
+r} {s : Set α} (n : Nat) (h : n <= s.chainHeight r) : exists t subseteq s, t.enc
+ard = n ∧ IsChain r t
+· 使用定理 `Set.encard_le_chainHeight_of_isChain`：encard_le_chainHeight_of_isChain {
+r} (s t : Set α) (hs : t subseteq s) (hc : IsChain r t) : t.encard <= s.chainHei
+ght r
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
 -/
-theorem chainHeight_mono (s t : Set α) (h : s subseteq t) : s.chainHeight r <= t.chainHeight r := by
-  refine forall_natCast_le_iff_le.mp fun n hn => ?_
+theorem chainHeight_mono (s t : Set α) (h : s ⊆ t) : s.chainHeight r ≤ t.chainHeight r := by
+  refine forall_natCast_le_iff_le.mp fun n hn ↦ ?_
   obtain ⟨a, ha₁, ha₂, ha₃⟩ := exists_isChain_of_le_chainHeight n hn
   exact ha₂ ▸ encard_le_chainHeight_of_isChain _ _ (ha₁.trans h) ha₃
 
 @[simp]
-/--
-theorem `chainHeight_flip` / 定理 `chainHeight_flip`
-
-English:
-theorem chainHeight_flip
-  statement: s.chainHeight (flip r) = s.chainHeight r
-  proof: by
-  refine eq_of_forall_natCast_le_iff fun n => ⟨fun hn => ?_, fun hn => ?_⟩
-  all_goals
-  · obtain ⟨a, ha₁, ha₂, ha₃⟩ := exists_isChain_of_le_chainHeight n hn
-exact ha₂ ▸ encard_le_chainHeight_of_isChain _ _ ha₁
-      fun _ hx _ hy hne => by simpa [flip, Or.comm] using ha₃ hx hy hne
-
-中文:
-定理 chainHeight_flip
-  结论: s.chainHeight (flip r) = s.chainHeight r
-  证明: by
-  refine eq_of_forall_natCast_le_iff fun n => ⟨fun hn => ?_, fun hn => ?_⟩
-  all_goals
-  · obtain ⟨a, ha₁, ha₂, ha₃⟩ := exists_isChain_of_le_chainHeight n hn
-exact ha₂ ▸ encard_le_chainHeight_of_isChain _ _ ha₁
-      fun _ hx _ hy hne => by simpa [flip, Or.comm] using ha₃ hx hy hne
-
-Depends on / 依赖: Or.comm, all_goals, encard_le_chainHeight_of_isChain, eq_of_forall_natCast_le_iff, exists_isChain_of_le_chainHeight
+/-
+**Set.chainHeight_flip** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：chainHeight_flip : s.chainHeight (flip r) = s.chainHeight r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ENat.eq_of_forall_natCast_le_iff`：eq_of_forall_natCast_le_iff (hm : fora
+ll a : Nat, a <= m ↔ a <= n) : m = n
+· 使用定理 `Set.exists_isChain_of_le_chainHeight`：exists_isChain_of_le_chainHeight {
+r} {s : Set α} (n : Nat) (h : n <= s.chainHeight r) : exists t subseteq s, t.enc
+ard = n ∧ IsChain r t
+· 使用定理 `Set.encard_le_chainHeight_of_isChain`：encard_le_chainHeight_of_isChain {
+r} (s t : Set α) (hs : t subseteq s) (hc : IsChain r t) : t.encard <= s.chainHei
+ght r
 -/
 theorem chainHeight_flip : s.chainHeight (flip r) = s.chainHeight r := by
-  refine eq_of_forall_natCast_le_iff fun n => ⟨fun hn => ?_, fun hn => ?_⟩
+  refine eq_of_forall_natCast_le_iff fun n ↦ ⟨fun hn ↦ ?_, fun hn ↦ ?_⟩
   all_goals
   · obtain ⟨a, ha₁, ha₂, ha₃⟩ := exists_isChain_of_le_chainHeight n hn
-exact ha₂ ▸ encard_le_chainHeight_of_isChain _ _ ha₁
-      fun _ hx _ hy hne => by simpa [flip, Or.comm] using ha₃ hx hy hne
+    exact ha₂ ▸ encard_le_chainHeight_of_isChain _ _ ha₁ <|
+      fun _ hx _ hy hne ↦ by simpa [flip, Or.comm] using ha₃ hx hy hne
 
 section Rel
 
-variable {r : α -> α -> Prop} {r' : β -> β -> Prop} (s : Set α)
+variable {r : α → α → Prop} {r' : β → β → Prop} (s : Set α)
 
-/--
-theorem `chainHeight_eq_of_relEmbedding` / 定理 `chainHeight_eq_of_relEmbedding`
-
-English:
-theorem chainHeight_eq_of_relEmbedding
-  given: (e : r ↪r r')
-  proof: by
-  refine eq_of_forall_natCast_le_iff fun n => ⟨fun hn => ?_, fun hn => ?_⟩
-  · obtain ⟨a, ha₁, ha₂, ha₃⟩ := exists_isChain_of_le_chainHeight n hn
-    rw [← ha₂]; rw [← Set.encard_preimage_of_injective_subset_range e.injective (by grind)]
-exact encard_le_chainHeight_of_isChain _ _ (preimage_subset ha₁ e.injective.injOn)
-      ha₃.preimage_relEmbedding e
-  · obtain ⟨a, ha₁, ha₂, ha₃⟩ := exists_isChain_of_le_chainHeight n hn
-    rw [← ha₂]; rw [← e.injective.encard_image]
-exact encard_le_chainHeight_of_isChain _ _ (by grind) ha₃.image e
-
-中文:
-定理 chainHeight_eq_of_relEmbedding
-  条件: (e : r ↪r r')
-  证明: by
-  refine eq_of_forall_natCast_le_iff fun n => ⟨fun hn => ?_, fun hn => ?_⟩
-  · obtain ⟨a, ha₁, ha₂, ha₃⟩ := exists_isChain_of_le_chainHeight n hn
-    rw [← ha₂]; rw [← Set.encard_preimage_of_injective_subset_range e.injective (by grind)]
-exact encard_le_chainHeight_of_isChain _ _ (preimage_subset ha₁ e.injective.injOn)
-      ha₃.preimage_relEmbedding e
-  · obtain ⟨a, ha₁, ha₂, ha₃⟩ := exists_isChain_of_le_chainHeight n hn
-    rw [← ha₂]; rw [← e.injective.encard_image]
-exact encard_le_chainHeight_of_isChain _ _ (by grind) ha₃.image e
-
-Depends on / 依赖: Set.encard_preimage_of_injective_subset_range, e.injective, e.injective.encard_image, e.injective.injOn, encard_image, encard_le_chainHeight_of_isChain, encard_preimage_of_injective_subset_range, eq_of_forall_natCast_le_iff, exists_isChain_of_le_chainHeight, injective, preimage_relEmbedding, preimage_subset
+/-
+**Set.chainHeight_eq_of_relEmbedding** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：chainHeight_eq_of_relEmbedding (e : r ↪r r') : (e '' s).chainHeight r' = s
+.chainHeight r
+参数：e : r ↪r r'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ENat.eq_of_forall_natCast_le_iff`：eq_of_forall_natCast_le_iff (hm : fora
+ll a : Nat, a <= m ↔ a <= n) : m = n
+· 使用定理 `Set.exists_isChain_of_le_chainHeight`：exists_isChain_of_le_chainHeight {
+r} {s : Set α} (n : Nat) (h : n <= s.chainHeight r) : exists t subseteq s, t.enc
+ard = n ∧ IsChain r t
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.encard_preimage_of_injective_subset_range`：encard_preimage_of_inject
+ive_subset_range (hf : f.Injective) (ht : t subseteq range f) : (f ⁻¹' t).encard
+ = t.encard
+· 使用定理 `RelEmbedding.injective`：injective (f : r ↪r s) : Injective f
+· 使用定理 `Set.encard_le_chainHeight_of_isChain`：encard_le_chainHeight_of_isChain {
+r} (s t : Set α) (hs : t subseteq s) (hc : IsChain r t) : t.encard <= s.chainHei
+ght r
+· 使用引理 `Set.preimage_subset`：preimage_subset {s t} (hs : s subseteq f '' t) (hf 
+: Set.InjOn f (f ⁻¹' s)) : f ⁻¹' s subseteq t
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `IsChain.preimage_relEmbedding`：IsChain.preimage_relEmbedding {t : Set β}
+ (ht : IsChain r' t) (φ : r ↪r r') : IsChain r (φ ⁻¹' t)
+· 使用定理 `Function.Injective.encard_image`：∀ {α : Type u_1} {β : Type u_2} {f : α 
+→ β}, Function.Injective f → ∀ (s : Set α), (f '' s).encard = s.encard
+· 使用定理 `IsChain.image`：IsChain.image [FunLike F α β] [RelHomClass F r r'] (hs : 
+IsChain r s) (φ : F) : IsChain r' (φ '' s)
+· 使用定理 `RelEmbedding.instRelHomClass`：∀ {α : Type u_1} {β : Type u_2} {r : α → α
+ → Prop} {s : β → β → Prop}, RelHomClass (r ↪r s) r s
 -/
 theorem chainHeight_eq_of_relEmbedding (e : r ↪r r') :
     (e '' s).chainHeight r' = s.chainHeight r := by
-  refine eq_of_forall_natCast_le_iff fun n => ⟨fun hn => ?_, fun hn => ?_⟩
+  refine eq_of_forall_natCast_le_iff fun n ↦ ⟨fun hn ↦ ?_, fun hn ↦ ?_⟩
   · obtain ⟨a, ha₁, ha₂, ha₃⟩ := exists_isChain_of_le_chainHeight n hn
-    rw [← ha₂]; rw [← Set.encard_preimage_of_injective_subset_range e.injective (by grind)]
-exact encard_le_chainHeight_of_isChain _ _ (preimage_subset ha₁ e.injective.injOn)
+    rw [← ha₂, ← Set.encard_preimage_of_injective_subset_range e.injective (by grind)]
+    exact encard_le_chainHeight_of_isChain _ _ (preimage_subset ha₁ e.injective.injOn) <|
       ha₃.preimage_relEmbedding e
   · obtain ⟨a, ha₁, ha₂, ha₃⟩ := exists_isChain_of_le_chainHeight n hn
-    rw [← ha₂]; rw [← e.injective.encard_image]
-exact encard_le_chainHeight_of_isChain _ _ (by grind) ha₃.image e
-
-/--
-theorem `chainHeight_eq_of_relIso` / 定理 `chainHeight_eq_of_relIso`
-
-English:
-theorem chainHeight_eq_of_relIso
-  given: (e : r ≃r r')
-  statement: (e '' s).chainHeight r' = s.chainHeight r
-  proof: chainHeight_eq_of_relEmbedding s e.toRelEmbedding
-
-中文:
-定理 chainHeight_eq_of_relIso
-  条件: (e : r ≃r r')
-  结论: (e '' s).chainHeight r' = s.chainHeight r
-  证明: chainHeight_eq_of_relEmbedding s e.toRelEmbedding
-
-Depends on / 依赖: chainHeight_eq_of_relEmbedding, e.toRelEmbedding, toRelEmbedding
+    rw [← ha₂, ← e.injective.encard_image]
+    exact encard_le_chainHeight_of_isChain _ _ (by grind) <| ha₃.image e
+/-
+**Set.chainHeight_eq_of_relIso** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：chainHeight_eq_of_relIso (e : r ≃r r') : (e '' s).chainHeight r' = s.chain
+Height r
+参数：e : r ≃r r'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.chainHeight_eq_of_relEmbedding`：chainHeight_eq_of_relEmbedding (e : 
+r ↪r r') : (e '' s).chainHeight r' = s.chainHeight r
 -/
 theorem chainHeight_eq_of_relIso (e : r ≃r r') : (e '' s).chainHeight r' = s.chainHeight r :=
   chainHeight_eq_of_relEmbedding s e.toRelEmbedding
@@ -584,82 +534,78 @@ end Rel
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `chainHeight_coe_univ` / 定理 `chainHeight_coe_univ`
-
-English:
-theorem chainHeight_coe_univ
-  statement: (@Set.univ ↑s).chainHeight (r ↑· ↑·) = s.chainHeight r
-  proof: by
-have hc := Set.chainHeight_eq_of_relEmbedding univ Subtype.relEmbedding (r · ·) (· in s)
-  have hs : Subtype.val ⁻¹'o (r · ·) = (fun x y : s => r x y) := by funext; simp
-  simpa [hs] using hc.symm
-
-@[simp]
-
-中文:
-定理 chainHeight_coe_univ
-  结论: (@集合.univ ↑s).chainHeight (r ↑· ↑·) = s.chainHeight r
-  证明: by
-have hc := Set.chainHeight_eq_of_relEmbedding univ Subtype.relEmbedding (r · ·) (· in s)
-  have hs : Subtype.val ⁻¹'o (r · ·) = (fun x y : s => r x y) := by funext; simp
-  simpa [hs] using hc.symm
-
-@[simp]
-
-Depends on / 依赖: Set.chainHeight_eq_of_relEmbedding, Subtype, Subtype.relEmbedding, Subtype.val, chainHeight_eq_of_relEmbedding, hc.symm, relEmbedding
+/-
+**Set.chainHeight_coe_univ** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：chainHeight_coe_univ : (@Set.univ ↑s).chainHeight (r ↑· ↑·) = s.chainHeigh
+t r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.chainHeight_eq_of_relEmbedding`：chainHeight_eq_of_relEmbedding (e : 
+r ↪r r') : (e '' s).chainHeight r' = s.chainHeight r
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `Subtype.relEmbedding_apply`：∀ {X : Type u_5} (r : X → X → Prop) (p : X →
+ Prop) (self : Subtype p), (Subtype.relEmbedding r p) self = ↑self
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `Subtype.range_coe_subtype`：range_coe_subtype {p : α -> Prop} : range ((↑
+) : Subtype p -> α) = { x | p x }
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem chainHeight_coe_univ : (@Set.univ ↑s).chainHeight (r ↑· ↑·) = s.chainHeight r := by
-have hc := Set.chainHeight_eq_of_relEmbedding univ Subtype.relEmbedding (r · ·) (· in s)
-  have hs : Subtype.val ⁻¹'o (r · ·) = (fun x y : s => r x y) := by funext; simp
+  have hc := Set.chainHeight_eq_of_relEmbedding univ <| Subtype.relEmbedding (r · ·) (· ∈ s)
+  have hs : Subtype.val ⁻¹'o (r · ·) = (fun x y : s ↦ r x y) := by funext; simp
   simpa [hs] using hc.symm
 
 @[simp]
-/--
-theorem `chainHeight_coe_univ_le` / 定理 `chainHeight_coe_univ_le`
-
-English:
-theorem chainHeight_coe_univ_le
-  given: [LE α]
-  proof: by
-  simpa using chainHeight_coe_univ s (· <= ·)
-
-@[simp]
-
-中文:
-定理 chainHeight_coe_univ_le
-  条件: [LE α]
-  证明: by
-  simpa using chainHeight_coe_univ s (· <= ·)
-
-@[simp]
-
-Depends on / 依赖: chainHeight_coe_univ
+/-
+**Set.chainHeight_coe_univ_le** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：chainHeight_coe_univ_le [LE α] : (@Set.univ ↑s).chainHeight (· <= ·) = s.c
+hainHeight (· <= ·)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.chainHeight_coe_univ`：chainHeight_coe_univ : (@Set.univ ↑s).chainHei
+ght (r ↑· ↑·) = s.chainHeight r
 -/
 theorem chainHeight_coe_univ_le [LE α] :
-    (@Set.univ ↑s).chainHeight (· <= ·) = s.chainHeight (· <= ·) := by
-  simpa using chainHeight_coe_univ s (· <= ·)
+    (@Set.univ ↑s).chainHeight (· ≤ ·) = s.chainHeight (· ≤ ·) := by
+  simpa using chainHeight_coe_univ s (· ≤ ·)
 
 @[simp]
-/--
-theorem `chainHeight_coe_univ_lt` / 定理 `chainHeight_coe_univ_lt`
-
-English:
-theorem chainHeight_coe_univ_lt
-  given: [LT α]
-  proof: by
-  simpa using chainHeight_coe_univ s (· < ·)
-
-中文:
-定理 chainHeight_coe_univ_lt
-  条件: [LT α]
-  证明: by
-  simpa using chainHeight_coe_univ s (· < ·)
-
-Depends on / 依赖: chainHeight_coe_univ
+/-
+**Set.chainHeight_coe_univ_lt** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：chainHeight_coe_univ_lt [LT α] : (@Set.univ ↑s).chainHeight (· < ·) = s.ch
+ainHeight (· < ·)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.chainHeight_coe_univ`：chainHeight_coe_univ : (@Set.univ ↑s).chainHei
+ght (r ↑· ↑·) = s.chainHeight r
 -/
 theorem chainHeight_coe_univ_lt [LT α] :
     (@Set.univ ↑s).chainHeight (· < ·) = s.chainHeight (· < ·) := by
   simpa using chainHeight_coe_univ s (· < ·)
 
 end Set
+

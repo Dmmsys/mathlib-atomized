@@ -39,41 +39,24 @@ variable [Monoid M] [Monoid N] [Semiring R] [MulSemiringAction M R] [MulSemiring
 
 This is available as an instance in the `Pointwise` locale. -/
 @[instance_reducible]
-/--
-Definition of `pointwiseDistribMulAction` / `pointwiseDistribMulAction` 的定义
+/-
+**Ideal.pointwiseDistribMulAction** 是 Mathlib 中的一个定义，位于命名空间 `Ideal`。
+形式化陈述：{M : Type u_1} →   {R : Type u_3} → [inst : Monoid M] → [inst_1 : Semiring
+ R] → [MulSemiringAction M R] → DistribMulAction M (Ideal R)
+参数：Ideal R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pointwiseDistribMulAction
-  signature: : DistribMulAction M (Ideal R) where
-  body: Ideal.map (MulSemiringAction.toRingHom _ _ a)
-  one_smul I :=
-.trans I.map_id congr_arg (I.map ·) (RingHom.ext <| one_smul M)
-  mul_smul _ _ I :=
-.trans (I.map_map _ _).symm congr_arg (I.map ·) (RingHom.ext <| mul_smul _ _)
-  smul_zero _ := Ideal.map_bot
-  smul_add _ I J := Ideal.map_sup _ I J
+--- 原说明 ---
+The action on an ideal corresponding to applying the action to every element.
 
-scoped[Pointwise] attribute [instance] Ideal.pointwiseDistribMulAction
-
-中文:
-定义 pointwiseDistribMulAction
-  签名: : 分配乘法作用 M (理想 R) where
-  定义体: Ideal.map (MulSemiringAction.toRingHom _ _ a)
-  one_smul I :=
-.trans I.map_id congr_arg (I.map ·) (RingHom.ext <| one_smul M)
-  mul_smul _ _ I :=
-.trans (I.map_map _ _).symm congr_arg (I.map ·) (RingHom.ext <| mul_smul _ _)
-  smul_zero _ := Ideal.map_bot
-  smul_add _ I J := Ideal.map_sup _ I J
-
-scoped[Pointwise] attribute [instance] Ideal.pointwiseDistribMulAction
+This is available as an instance in the `Pointwise` locale.
 -/
 protected def pointwiseDistribMulAction : DistribMulAction M (Ideal R) where
   smul a := Ideal.map (MulSemiringAction.toRingHom _ _ a)
   one_smul I :=
-.trans I.map_id congr_arg (I.map ·) (RingHom.ext <| one_smul M)
+    congr_arg (I.map ·) (RingHom.ext <| one_smul M) |>.trans I.map_id
   mul_smul _ _ I :=
-.trans (I.map_map _ _).symm congr_arg (I.map ·) (RingHom.ext <| mul_smul _ _)
+    congr_arg (I.map ·) (RingHom.ext <| mul_smul _ _) |>.trans (I.map_map _ _).symm
   smul_zero _ := Ideal.map_bot
   smul_add _ I J := Ideal.map_sup _ I J
 
@@ -85,24 +68,17 @@ open scoped Pointwise
 
 This is available as an instance in the `Pointwise` locale. -/
 @[instance_reducible]
-/--
-Definition of `pointwiseMulSemiringAction` / `pointwiseMulSemiringAction` 的定义
+/-
+**Ideal.pointwiseMulSemiringAction** 是 Mathlib 中的一个定义，位于命名空间 `Ideal`。
+形式化陈述：{M : Type u_1} →   [inst : Monoid M] → {R : Type u_4} → [inst_1 : CommRing
+ R] → [MulSemiringAction M R] → MulSemiringAction M (Ideal R)
+参数：Ideal R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pointwiseMulSemiringAction
-  signature: {R : Type*} [CommRing R] [MulSemiringAction M R]
-  body: by simp only [Ideal.one_eq_top]; exact Ideal.map_top _
-  smul_mul a I J := Ideal.map_mul (MulSemiringAction.toRingHom _ _ a) I J
+--- 原说明 ---
+The action on an ideal corresponding to applying the action to every element.
 
-scoped[Pointwise] attribute [instance] Ideal.pointwiseMulSemiringAction
-
-中文:
-定义 pointwiseMulSemiringAction
-  签名: {R : 类型} [交换环 R] [MulSemiring作用 M R]
-  定义体: by simp only [Ideal.one_eq_top]; exact Ideal.map_top _
-  smul_mul a I J := Ideal.map_mul (MulSemiringAction.toRingHom _ _ a) I J
-
-scoped[Pointwise] attribute [instance] Ideal.pointwiseMulSemiringAction
+This is available as an instance in the `Pointwise` locale.
 -/
 protected def pointwiseMulSemiringAction {R : Type*} [CommRing R] [MulSemiringAction M R] :
     MulSemiringAction M (Ideal R) where
@@ -110,46 +86,20 @@ protected def pointwiseMulSemiringAction {R : Type*} [CommRing R] [MulSemiringAc
   smul_mul a I J := Ideal.map_mul (MulSemiringAction.toRingHom _ _ a) I J
 
 scoped[Pointwise] attribute [instance] Ideal.pointwiseMulSemiringAction
-
-/--
-theorem `pointwise_smul_def` / 定理 `pointwise_smul_def`
-
-English:
-theorem pointwise_smul_def
-  given: {a : M} (S : Ideal R)
-  proof: rfl
-
-中文:
-定理 pointwise_smul_def
-  条件: {a : M} (S : 理想 R)
-  证明: rfl
+/-
+**Ideal.pointwise_smul_def** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：pointwise_smul_def {a : M} (S : Ideal R) : a • S = S.map (MulSemiringActio
+n.toRingHom _ _ a)
+参数：S : Ideal R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem pointwise_smul_def {a : M} (S : Ideal R) :
     a • S = S.map (MulSemiringAction.toRingHom _ _ a) :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: M N] [IsScalarTower M N R] : IsScalarTower M N (Ideal R) where
-  body: by
-    simp_rw [pointwise_smul_def, map_map]
-    congr
-    ext
-    simp
-
-中文:
-实例 [标量乘法
-  签名: M N] [标量塔 M N R] : 标量塔 M N (理想 R) where
-  定义体: by
-    simp_rw [pointwise_smul_def, map_map]
-    congr
-    ext
-    simp
-
-Depends on / 依赖: map_map, pointwise_smul_def, simp_rw
+/-
+**Ideal.** 是 Mathlib 中的一个实例，位于命名空间 `Ideal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul M N] [IsScalarTower M N R] : IsScalarTower M N (Ideal R) where
   smul_assoc x y z := by
@@ -159,41 +109,22 @@ instance [SMul M N] [IsScalarTower M N R] : IsScalarTower M N (Ideal R) where
     simp
 
 -- note: unlike with `Subring`, `pointwise_smul_toAddSubgroup` wouldn't be true
-
-/--
-theorem `smul_mem_pointwise_smul` / 定理 `smul_mem_pointwise_smul`
-
-English:
-theorem smul_mem_pointwise_smul
-  given: (m : M) (r : R) (S : Ideal R)
-  statement: r in S -> m • r in m • S
-  proof: fun h => subset_span Set.smul_mem_smul_set h
-
-中文:
-定理 smul_mem_pointwise_smul
-  条件: (m : M) (r : R) (S : 理想 R)
-  结论: r in S -> m • r in m • S
-  证明: fun h => subset_span Set.smul_mem_smul_set h
-
-Depends on / 依赖: Set.smul_mem_smul_set, smul_mem_smul_set, subset_span
+/-
+**Ideal.smul_mem_pointwise_smul** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：smul_mem_pointwise_smul (m : M) (r : R) (S : Ideal R) : r in S -> m • r in
+ m • S
+参数：m : M；r : R；S : Ideal R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.subset_span`：subset_span {s : Set α} : s subseteq span s
+· 使用定理 `Set.smul_mem_smul_set`：∀ {α : Type u_2} {β : Type u_3} [inst : SMul α β]
+ {s : Set β} {a : α} {b : β}, b ∈ s → a • b ∈ a • s
 -/
-theorem smul_mem_pointwise_smul (m : M) (r : R) (S : Ideal R) : r in S -> m • r in m • S :=
-fun h => subset_span Set.smul_mem_smul_set h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CovariantClass M (Ideal R) HSMul.hSMul LE.le
-  body: ⟨fun _ _ => map_mono⟩
-
-中文:
-实例 :
-  签名: 协变类 M (理想 R) 异质标量乘法.hSMul LE.le
-  定义体: ⟨fun _ _ => map_mono⟩
-
-Depends on / 依赖: map_mono
+theorem smul_mem_pointwise_smul (m : M) (r : R) (S : Ideal R) : r ∈ S → m • r ∈ m • S :=
+  fun h => subset_span <| Set.smul_mem_smul_set h
+/-
+**Ideal.** 是 Mathlib 中的一个实例，位于命名空间 `Ideal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CovariantClass M (Ideal R) HSMul.hSMul LE.le :=
   ⟨fun _ _ => map_mono⟩
@@ -201,144 +132,91 @@ instance : CovariantClass M (Ideal R) HSMul.hSMul LE.le :=
 -- note: unlike with `Subring`, `mem_smul_pointwise_iff_exists` wouldn't be true
 
 @[simp]
-/--
-theorem `smul_bot` / 定理 `smul_bot`
-
-English:
-theorem smul_bot
-  given: (a : M)
-  statement: a • (⊥ : Ideal R) = ⊥
-  proof: map_bot
-
-中文:
-定理 smul_bot
-  条件: (a : M)
-  结论: a • (⊥ : 理想 R) = ⊥
-  证明: map_bot
-
-Depends on / 依赖: map_bot
+/-
+**Ideal.smul_bot** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：smul_bot (a : M) : a • (⊥ : Ideal R) = ⊥
+参数：a : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.map_bot`：map_bot : (⊥ : Ideal R).map f = ⊥
 -/
 theorem smul_bot (a : M) : a • (⊥ : Ideal R) = ⊥ :=
   map_bot
-
-/--
-theorem `smul_sup` / 定理 `smul_sup`
-
-English:
-theorem smul_sup
-  given: (a : M) (S T : Ideal R)
-  statement: a • (S ⊔ T) = a • S ⊔ a • T
-  proof: map_sup _ _ _
-
-中文:
-定理 smul_sup
-  条件: (a : M) (S T : 理想 R)
-  结论: a • (S ⊔ T) = a • S ⊔ a • T
-  证明: map_sup _ _ _
-
-Depends on / 依赖: map_sup
+/-
+**Ideal.smul_sup** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：smul_sup (a : M) (S T : Ideal R) : a • (S ⊔ T) = a • S ⊔ a • T
+参数：a : M；S T : Ideal R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.map_sup`：map_sup : (I ⊔ J).map f = I.map f ⊔ J.map f
 -/
 theorem smul_sup (a : M) (S T : Ideal R) : a • (S ⊔ T) = a • S ⊔ a • T :=
   map_sup _ _ _
-
-/--
-theorem `smul_closure` / 定理 `smul_closure`
-
-English:
-theorem smul_closure
-  given: (a : M) (s : Set R)
-  statement: a • span s = span (a • s)
-  proof: Ideal.map_span _ _
-
-中文:
-定理 smul_closure
-  条件: (a : M) (s : 集合 R)
-  结论: a • span s = span (a • s)
-  证明: Ideal.map_span _ _
-
-Depends on / 依赖: Ideal.map_span, map_span
+/-
+**Ideal.smul_closure** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：smul_closure (a : M) (s : Set R) : a • span s = span (a • s)
+参数：a : M；s : Set R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.map_span`：map_span (s : Set R) : map f (span s) = span (f '' s)
 -/
 theorem smul_closure (a : M) (s : Set R) : a • span s = span (a • s) :=
   Ideal.map_span _ _
-
-/--
-Instance `pointwise_central_scalar` / 实例 `pointwise_central_scalar`
-
-English:
-instance pointwise_central_scalar
-  signature: [MulSemiringAction Mᵐᵒᵖ R] [IsCentralScalar M R]
-  body: ⟨fun _ S => (congr_arg fun f => S.map f) RingHom.ext op_smul_eq_smul _⟩
-
-@[simp]
-
-中文:
-实例 pointwise_central_scalar
-  签名: [MulSemiring作用 Mᵐᵒᵖ R] [中心标量 M R]
-  定义体: ⟨fun _ S => (congr_arg fun f => S.map f) RingHom.ext op_smul_eq_smul _⟩
-
-@[simp]
-
-Depends on / 依赖: RingHom, RingHom.ext, S.map, congr_arg, op_smul_eq_smul
+/-
+**Ideal.pointwise_central_scalar** 是 Mathlib 中的一个实例，位于命名空间 `Ideal`。
+形式化陈述：pointwise_central_scalar [MulSemiringAction Mᵐᵒᵖ R] [IsCentralScalar M R] 
+: IsCentralScalar M (Ideal R)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `IsCentralScalar.op_smul_eq_smul`：∀ {M : Type u_9} {α : Type u_10} {inst 
+: SMul M α} {inst_1 : SMul Mᵐᵒᵖ α} [self : IsCentralScalar M α] (m : M) (a : α),
+   MulOpposite.op m •…
 -/
 instance pointwise_central_scalar [MulSemiringAction Mᵐᵒᵖ R] [IsCentralScalar M R] :
     IsCentralScalar M (Ideal R) :=
-⟨fun _ S => (congr_arg fun f => S.map f) RingHom.ext op_smul_eq_smul _⟩
+  ⟨fun _ S => (congr_arg fun f => S.map f) <| RingHom.ext <| op_smul_eq_smul _⟩
 
 @[simp]
-/--
-theorem `pointwise_smul_toAddSubmonoid` / 定理 `pointwise_smul_toAddSubmonoid`
-
-English:
-theorem pointwise_smul_toAddSubmonoid
-  statement: (a : M) (S : Ideal R)
-  proof: by
-  ext
-exact Ideal.mem_map_iff_of_surjective _ by exact ha
-
-@[simp]
-
-中文:
-定理 pointwise_smul_toAddSubmonoid
-  结论: (a : M) (S : 理想 R)
-  证明: by
-  ext
-exact Ideal.mem_map_iff_of_surjective _ by exact ha
-
-@[simp]
-
-Depends on / 依赖: Ideal.mem_map_iff_of_surjective, mem_map_iff_of_surjective
+/-
+**Ideal.pointwise_smul_toAddSubmonoid** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：pointwise_smul_toAddSubmonoid (a : M) (S : Ideal R) (ha : Function.Surject
+ive fun r : R => a • r) : (a • S).toAddSubmonoid = a • S.toAddSubmonoid
+参数：a : M；S : Ideal R；ha : Function.Surjective fun r : R => a • r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubmonoid.ext`：∀ {M : Type u_1} [inst : AddZeroClass M] {S T : AddSub
+monoid M}, (∀ (x : M), x ∈ S ↔ x ∈ T) → S = T
+· 使用定理 `Ideal.mem_map_iff_of_surjective`：mem_map_iff_of_surjective {I : Ideal R}
+ {y} : y in map f I ↔ exists x, x in I ∧ f x = y
 -/
 theorem pointwise_smul_toAddSubmonoid (a : M) (S : Ideal R)
     (ha : Function.Surjective fun r : R => a • r) :
     (a • S).toAddSubmonoid = a • S.toAddSubmonoid := by
   ext
-exact Ideal.mem_map_iff_of_surjective _ by exact ha
+  exact Ideal.mem_map_iff_of_surjective _ <| by exact ha
 
 @[simp]
-/--
-theorem `pointwise_smul_toAddSubgroup` / 定理 `pointwise_smul_toAddSubgroup`
-
-English:
-theorem pointwise_smul_toAddSubgroup
-  statement: {R : Type*} [Ring R] [MulSemiringAction M R]
-  proof: by
-  ext
-exact Ideal.mem_map_iff_of_surjective _ by exact ha
-
-中文:
-定理 pointwise_smul_toAddSubgroup
-  结论: {R : 类型} [环 R] [MulSemiring作用 M R]
-  证明: by
-  ext
-exact Ideal.mem_map_iff_of_surjective _ by exact ha
-
-Depends on / 依赖: Ideal.mem_map_iff_of_surjective, mem_map_iff_of_surjective
+/-
+**Ideal.pointwise_smul_toAddSubgroup** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：pointwise_smul_toAddSubgroup {R : Type*} [Ring R] [MulSemiringAction M R] 
+(a : M) (S : Ideal R) (ha : Function.Surjective fun r : R => a • r) : (a • S).to
+AddSubgroup = a • S.toAddSubgroup
+参数：a : M；S : Ideal R；ha : Function.Surjective fun r : R => a • r。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubgroup.ext`：∀ {G : Type u_1} [inst : AddGroup G] {H K : AddSubgroup
+ G}, (∀ (x : G), x ∈ H ↔ x ∈ K) → H = K
+· 使用定理 `Ideal.mem_map_iff_of_surjective`：mem_map_iff_of_surjective {I : Ideal R}
+ {y} : y in map f I ↔ exists x, x in I ∧ f x = y
 -/
 theorem pointwise_smul_toAddSubgroup {R : Type*} [Ring R] [MulSemiringAction M R]
     (a : M) (S : Ideal R) (ha : Function.Surjective fun r : R => a • r) :
     (a • S).toAddSubgroup = a • S.toAddSubgroup := by
   ext
-exact Ideal.mem_map_iff_of_surjective _ by exact ha
+  exact Ideal.mem_map_iff_of_surjective _ <| by exact ha
 
 end Monoid
 
@@ -348,30 +226,34 @@ variable [Group M] [Semiring R] [MulSemiringAction M R]
 
 open scoped Pointwise
 
-/--
-theorem `pointwise_smul_eq_comap` / 定理 `pointwise_smul_eq_comap`
-
-English:
-theorem pointwise_smul_eq_comap
-  given: {a : M} (S : Ideal R)
-  proof: by
-  ext
-  simp [pointwise_smul_def]
-  rfl
-
-@[simp]
-
-中文:
-定理 pointwise_smul_eq_comap
-  条件: {a : M} (S : 理想 R)
-  证明: by
-  ext
-  simp [pointwise_smul_def]
-  rfl
-
-@[simp]
-
-Depends on / 依赖: pointwise_smul_def
+/-
+**Ideal.pointwise_smul_eq_comap** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：pointwise_smul_eq_comap {a : M} (S : Ideal R) : a • S = S.comap (MulSemiri
+ngAction.toRingAut _ _ a).symm
+参数：S : Ideal R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.ext`：ext {I J : Ideal α} (h : forall x, x in I ↔ x in J) : I = J
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Ideal.comap.congr_simp`：∀ {R : Type u} {S : Type v} {F : Type u_1} [inst
+ : Semiring R] [inst_1 : Semiring S] [inst_2 : FunLike F R S]   (f f_1 : F),   f
+ = f_1 → ∀ […
+· 使用定理 `MulSemiringAction.toRingAut_apply`：∀ (G : Type u_1) (R : Type u_2) [inst
+ : Group G] [inst_1 : Semiring R] [inst_2 : MulSemiringAction G R] (a : G),   (M
+ulSemiringAction.toRing…
+· 使用定理 `Ideal.comap_symm`：comap_symm {I : Ideal R} (f : R ≃+* S) : I.comap f.sym
+m = I.map f
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem pointwise_smul_eq_comap {a : M} (S : Ideal R) :
     a • S = S.comap (MulSemiringAction.toRingAut _ _ a).symm := by
@@ -380,379 +262,360 @@ theorem pointwise_smul_eq_comap {a : M} (S : Ideal R) :
   rfl
 
 @[simp]
-/--
-theorem `smul_mem_pointwise_smul_iff` / 定理 `smul_mem_pointwise_smul_iff`
-
-English:
-theorem smul_mem_pointwise_smul_iff
-  given: {a : M} {S : Ideal R} {x : R}
-  statement: a • x in a • S ↔ x in S
-  proof: ⟨fun h => by simpa using smul_mem_pointwise_smul a⁻¹ _ _ h, smul_mem_pointwise_smul _ _ _⟩
-
-中文:
-定理 smul_mem_pointwise_smul_iff
-  条件: {a : M} {S : 理想 R} {x : R}
-  结论: a • x in a • S ↔ x in S
-  证明: ⟨fun h => by simpa using smul_mem_pointwise_smul a⁻¹ _ _ h, smul_mem_pointwise_smul _ _ _⟩
-
-Depends on / 依赖: smul_mem_pointwise_smul
+/-
+**Ideal.smul_mem_pointwise_smul_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：smul_mem_pointwise_smul_iff {a : M} {S : Ideal R} {x : R} : a • x in a • S
+ ↔ x in S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `inv_smul_smul`：inv_smul_smul (g : G) (a : α) : g⁻¹ • g • a = a
+· 使用定理 `Ideal.smul_mem_pointwise_smul`：smul_mem_pointwise_smul (m : M) (r : R) (
+S : Ideal R) : r in S -> m • r in m • S
 -/
-theorem smul_mem_pointwise_smul_iff {a : M} {S : Ideal R} {x : R} : a • x in a • S ↔ x in S :=
+theorem smul_mem_pointwise_smul_iff {a : M} {S : Ideal R} {x : R} : a • x ∈ a • S ↔ x ∈ S :=
   ⟨fun h => by simpa using smul_mem_pointwise_smul a⁻¹ _ _ h, smul_mem_pointwise_smul _ _ _⟩
-
-/--
-theorem `mem_pointwise_smul_iff_inv_smul_mem` / 定理 `mem_pointwise_smul_iff_inv_smul_mem`
-
-English:
-theorem mem_pointwise_smul_iff_inv_smul_mem
-  given: {a : M} {S : Ideal R} {x : R}
-  proof: ⟨fun h => by simpa using smul_mem_pointwise_smul a⁻¹ _ _ h,
-    fun h => by simpa using smul_mem_pointwise_smul a _ _ h⟩
-
-中文:
-定理 mem_pointwise_smul_iff_inv_smul_mem
-  条件: {a : M} {S : 理想 R} {x : R}
-  证明: ⟨fun h => by simpa using smul_mem_pointwise_smul a⁻¹ _ _ h,
-    fun h => by simpa using smul_mem_pointwise_smul a _ _ h⟩
-
-Depends on / 依赖: smul_mem_pointwise_smul
+/-
+**Ideal.mem_pointwise_smul_iff_inv_smul_mem** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：mem_pointwise_smul_iff_inv_smul_mem {a : M} {S : Ideal R} {x : R} : x in a
+ • S ↔ a⁻¹ • x in S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `inv_smul_smul`：inv_smul_smul (g : G) (a : α) : g⁻¹ • g • a = a
+· 使用定理 `Ideal.smul_mem_pointwise_smul`：smul_mem_pointwise_smul (m : M) (r : R) (
+S : Ideal R) : r in S -> m • r in m • S
+· 使用引理 `smul_inv_smul`：smul_inv_smul (g : G) (a : α) : g • g⁻¹ • a = a
 -/
 theorem mem_pointwise_smul_iff_inv_smul_mem {a : M} {S : Ideal R} {x : R} :
-    x in a • S ↔ a⁻¹ • x in S :=
+    x ∈ a • S ↔ a⁻¹ • x ∈ S :=
   ⟨fun h => by simpa using smul_mem_pointwise_smul a⁻¹ _ _ h,
     fun h => by simpa using smul_mem_pointwise_smul a _ _ h⟩
-
-/--
-theorem `mem_inv_pointwise_smul_iff` / 定理 `mem_inv_pointwise_smul_iff`
-
-English:
-theorem mem_inv_pointwise_smul_iff
-  given: {a : M} {S : Ideal R} {x : R}
-  statement: x in a⁻¹ • S ↔ a • x in S
-  proof: by
-  rw [mem_pointwise_smul_iff_inv_smul_mem]; rw [inv_inv]
-
-@[simp]
-
-中文:
-定理 mem_inv_pointwise_smul_iff
-  条件: {a : M} {S : 理想 R} {x : R}
-  结论: x in a⁻¹ • S ↔ a • x in S
-  证明: by
-  rw [mem_pointwise_smul_iff_inv_smul_mem]; rw [inv_inv]
-
-@[simp]
-
-Depends on / 依赖: inv_inv, mem_pointwise_smul_iff_inv_smul_mem
+/-
+**Ideal.mem_inv_pointwise_smul_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：mem_inv_pointwise_smul_iff {a : M} {S : Ideal R} {x : R} : x in a⁻¹ • S ↔ 
+a • x in S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.mem_pointwise_smul_iff_inv_smul_mem`：mem_pointwise_smul_iff_inv_sm
+ul_mem {a : M} {S : Ideal R} {x : R} : x in a • S ↔ a⁻¹ • x in S
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_inv_pointwise_smul_iff {a : M} {S : Ideal R} {x : R} : x in a⁻¹ • S ↔ a • x in S := by
-  rw [mem_pointwise_smul_iff_inv_smul_mem]; rw [inv_inv]
+theorem mem_inv_pointwise_smul_iff {a : M} {S : Ideal R} {x : R} : x ∈ a⁻¹ • S ↔ a • x ∈ S := by
+  rw [mem_pointwise_smul_iff_inv_smul_mem, inv_inv]
 
 @[simp]
-/--
-theorem `pointwise_smul_le_pointwise_smul_iff` / 定理 `pointwise_smul_le_pointwise_smul_iff`
-
-English:
-theorem pointwise_smul_le_pointwise_smul_iff
-  given: {a : M} {S T : Ideal R}
-  statement: a • S <= a • T ↔ S <= T
-  proof: ⟨fun h => by simpa using smul_mono_right a⁻¹ h, fun h => smul_mono_right a h⟩
-
-中文:
-定理 pointwise_smul_le_pointwise_smul_iff
-  条件: {a : M} {S T : 理想 R}
-  结论: a • S <= a • T ↔ S <= T
-  证明: ⟨fun h => by simpa using smul_mono_right a⁻¹ h, fun h => smul_mono_right a h⟩
-
-Depends on / 依赖: smul_mono_right
+/-
+**Ideal.pointwise_smul_le_pointwise_smul_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：pointwise_smul_le_pointwise_smul_iff {a : M} {S T : Ideal R} : a • S <= a 
+• T ↔ S <= T
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `inv_smul_smul`：inv_smul_smul (g : G) (a : α) : g⁻¹ • g • a = a
+· 使用定理 `smul_mono_right`：smul_mono_right [SMul M α] [Preorder α] [CovariantClass
+ M α HSMul.hSMul LE.le] (m : M) : Monotone (HSMul.hSMul m : α -> α)
+· 使用定理 `Ideal.instCovariantClassHSMulLe`：∀ {M : Type u_1} {R : Type u_3} [inst :
+ Monoid M] [inst_1 : Semiring R] [inst_2 : MulSemiringAction M R],   CovariantCl
+ass M (Ideal R) HSMul…
 -/
-theorem pointwise_smul_le_pointwise_smul_iff {a : M} {S T : Ideal R} : a • S <= a • T ↔ S <= T :=
+theorem pointwise_smul_le_pointwise_smul_iff {a : M} {S T : Ideal R} : a • S ≤ a • T ↔ S ≤ T :=
   ⟨fun h => by simpa using smul_mono_right a⁻¹ h, fun h => smul_mono_right a h⟩
-
-/--
-theorem `pointwise_smul_subset_iff` / 定理 `pointwise_smul_subset_iff`
-
-English:
-theorem pointwise_smul_subset_iff
-  given: {a : M} {S T : Ideal R}
-  statement: a • S <= T ↔ S <= a⁻¹ • T
-  proof: by
-  rw [← pointwise_smul_le_pointwise_smul_iff (a := a⁻¹)]; rw [inv_smul_smul]
-
-中文:
-定理 pointwise_smul_subset_iff
-  条件: {a : M} {S T : 理想 R}
-  结论: a • S <= T ↔ S <= a⁻¹ • T
-  证明: by
-  rw [← pointwise_smul_le_pointwise_smul_iff (a := a⁻¹)]; rw [inv_smul_smul]
-
-Depends on / 依赖: inv_smul_smul, pointwise_smul_le_pointwise_smul_iff
+/-
+**Ideal.pointwise_smul_subset_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：pointwise_smul_subset_iff {a : M} {S T : Ideal R} : a • S <= T ↔ S <= a⁻¹ 
+• T
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.pointwise_smul_le_pointwise_smul_iff`：pointwise_smul_le_pointwise_
+smul_iff {a : M} {S T : Ideal R} : a • S <= a • T ↔ S <= T
+· 使用引理 `inv_smul_smul`：inv_smul_smul (g : G) (a : α) : g⁻¹ • g • a = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem pointwise_smul_subset_iff {a : M} {S T : Ideal R} : a • S <= T ↔ S <= a⁻¹ • T := by
-  rw [← pointwise_smul_le_pointwise_smul_iff (a := a⁻¹)]; rw [inv_smul_smul]
-
-/--
-theorem `subset_pointwise_smul_iff` / 定理 `subset_pointwise_smul_iff`
-
-English:
-theorem subset_pointwise_smul_iff
-  given: {a : M} {S T : Ideal R}
-  statement: S <= a • T ↔ a⁻¹ • S <= T
-  proof: by
-  rw [← pointwise_smul_le_pointwise_smul_iff (a := a⁻¹)]; rw [inv_smul_smul]
-
-中文:
-定理 subset_pointwise_smul_iff
-  条件: {a : M} {S T : 理想 R}
-  结论: S <= a • T ↔ a⁻¹ • S <= T
-  证明: by
-  rw [← pointwise_smul_le_pointwise_smul_iff (a := a⁻¹)]; rw [inv_smul_smul]
-
-Depends on / 依赖: inv_smul_smul, pointwise_smul_le_pointwise_smul_iff
+theorem pointwise_smul_subset_iff {a : M} {S T : Ideal R} : a • S ≤ T ↔ S ≤ a⁻¹ • T := by
+  rw [← pointwise_smul_le_pointwise_smul_iff (a := a⁻¹), inv_smul_smul]
+/-
+**Ideal.subset_pointwise_smul_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：subset_pointwise_smul_iff {a : M} {S T : Ideal R} : S <= a • T ↔ a⁻¹ • S <
+= T
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.pointwise_smul_le_pointwise_smul_iff`：pointwise_smul_le_pointwise_
+smul_iff {a : M} {S T : Ideal R} : a • S <= a • T ↔ S <= T
+· 使用引理 `inv_smul_smul`：inv_smul_smul (g : G) (a : α) : g⁻¹ • g • a = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem subset_pointwise_smul_iff {a : M} {S T : Ideal R} : S <= a • T ↔ a⁻¹ • S <= T := by
-  rw [← pointwise_smul_le_pointwise_smul_iff (a := a⁻¹)]; rw [inv_smul_smul]
-
-/--
-Instance `IsPrime.smul` / 实例 `IsPrime.smul`
-
-English:
-instance IsPrime.smul
-  signature: {I : Ideal R} [H : I.IsPrime] (g : M)
-  body: by
-  rw [I.pointwise_smul_eq_comap]
-  apply H.comap
-
-@[simp]
-
-中文:
-实例 是素.smul
-  签名: {I : 理想 R} [H : I.是素] (g : M)
-  定义体: by
-  rw [I.pointwise_smul_eq_comap]
-  apply H.comap
-
-@[simp]
-
-Depends on / 依赖: H.comap, I.pointwise_smul_eq_comap, pointwise_smul_eq_comap
+theorem subset_pointwise_smul_iff {a : M} {S T : Ideal R} : S ≤ a • T ↔ a⁻¹ • S ≤ T := by
+  rw [← pointwise_smul_le_pointwise_smul_iff (a := a⁻¹), inv_smul_smul]
+/-
+**Ideal.IsPrime.smul** 是 Mathlib 中的一个定理，位于命名空间 `Ideal.IsPrime`。
+形式化陈述：∀ {M : Type u_1} {R : Type u_3} [inst : Group M] [inst_1 : Semiring R] [in
+st_2 : MulSemiringAction M R] {I : Ideal R}   [H : I.IsPrime] (g : M), (g • I).I
+sPrime
+参数：g : M；g • I。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.pointwise_smul_eq_comap`：pointwise_smul_eq_comap {a : M} (S : Idea
+l R) : a • S = S.comap (MulSemiringAction.toRingAut _ _ a).symm
+· 使用定理 `Ideal.IsPrime.comap`：∀ {R : Type u} {S : Type v} {F : Type u_1} [inst : 
+Semiring R] [inst_1 : Semiring S] [inst_2 : FunLike F R S] (f : F)   {K : Ideal 
+S} [inst_…
 -/
 instance IsPrime.smul {I : Ideal R} [H : I.IsPrime] (g : M) : (g • I).IsPrime := by
   rw [I.pointwise_smul_eq_comap]
   apply H.comap
 
 @[simp]
-/--
-theorem `IsPrime.smul_iff` / 定理 `IsPrime.smul_iff`
-
-English:
-theorem IsPrime.smul_iff
-  given: {I : Ideal R} (g : M)
-  statement: (g • I).IsPrime ↔ I.IsPrime
-  proof: ⟨fun H => inv_smul_smul g I ▸ H.smul g⁻¹, fun H => H.smul g⟩
-
-中文:
-定理 是素.smul_iff
-  条件: {I : 理想 R} (g : M)
-  结论: (g • I).是素 ↔ I.是素
-  证明: ⟨fun H => inv_smul_smul g I ▸ H.smul g⁻¹, fun H => H.smul g⟩
-
-Depends on / 依赖: H.smul, inv_smul_smul
+/-
+**Ideal.IsPrime.smul_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ideal.IsPrime`。
+形式化陈述：∀ {M : Type u_1} {R : Type u_3} [inst : Group M] [inst_1 : Semiring R] [in
+st_2 : MulSemiringAction M R] {I : Ideal R}   (g : M), (g • I).IsPrime ↔ I.IsPri
+me
+参数：g : M；g • I。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.IsPrime.smul`：∀ {M : Type u_1} {R : Type u_3} [inst : Group M] [in
+st_1 : Semiring R] [inst_2 : MulSemiringAction M R] {I : Ideal R}   [H : I.IsPri
+me] (g :…
+· 使用引理 `inv_smul_smul`：inv_smul_smul (g : G) (a : α) : g⁻¹ • g • a = a
 -/
 theorem IsPrime.smul_iff {I : Ideal R} (g : M) : (g • I).IsPrime ↔ I.IsPrime :=
-  ⟨fun H => inv_smul_smul g I ▸ H.smul g⁻¹, fun H => H.smul g⟩
-
-/--
-theorem `inertia_le_stabilizer` / 定理 `inertia_le_stabilizer`
-
-English:
-theorem inertia_le_stabilizer
-  given: {R : Type*} [Ring R] (P : Ideal R) [MulSemiringAction M R]
-  proof: by
-  refine fun σ hσ => SetLike.ext fun x => ?_
-  rw [Ideal.mem_pointwise_smul_iff_inv_smul_mem]; rw [← P.add_mem_iff_left (a := x) ((inv_mem hσ) x)]; rw [add_sub_cancel]
-
-中文:
-定理 inertia_le_stabilizer
-  条件: {R : 类型} [环 R] (P : 理想 R) [MulSemiring作用 M R]
-  证明: by
-  refine fun σ hσ => SetLike.ext fun x => ?_
-  rw [Ideal.mem_pointwise_smul_iff_inv_smul_mem]; rw [← P.add_mem_iff_left (a := x) ((inv_mem hσ) x)]; rw [add_sub_cancel]
-
-Depends on / 依赖: Ideal.mem_pointwise_smul_iff_inv_smul_mem, P.add_mem_iff_left, SetLike, SetLike.ext, add_mem_iff_left, add_sub_cancel, inv_mem, mem_pointwise_smul_iff_inv_smul_mem
+  ⟨fun H ↦ inv_smul_smul g I ▸ H.smul g⁻¹, fun H ↦ H.smul g⟩
+/-
+**Ideal.inertia_le_stabilizer** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：inertia_le_stabilizer {R : Type*} [Ring R] (P : Ideal R) [MulSemiringActio
+n M R] : inertia M P <= MulAction.stabilizer M P
+参数：P : Ideal R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.mem_pointwise_smul_iff_inv_smul_mem`：mem_pointwise_smul_iff_inv_sm
+ul_mem {a : M} {S : Ideal R} {x : R} : x in a • S ↔ a⁻¹ • x in S
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.add_mem_iff_left`：∀ {α : Type u} [inst : Ring α] (I : Ideal α) {a 
+b : α}, b ∈ I → (a + b ∈ I ↔ a ∈ I)
+· 使用定理 `InvMemClass.inv_mem`：∀ {S : Type u_3} {G : outParam (Type u_4)} {inst : 
+Inv G} {inst_1 : SetLike S G} [self : InvMemClass S G] {s : S}   {x : G}, x ∈ s 
+→ x⁻¹ ∈ s
+· 使用定理 `SubgroupClass.toInvMemClass`：∀ {S : Type u_3} {G : outParam (Type u_4)} 
+{inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   Inv
+MemClass S G
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
+· 使用定理 `add_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G), a + 
+(b - a) = b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem inertia_le_stabilizer {R : Type*} [Ring R] (P : Ideal R) [MulSemiringAction M R] :
-    inertia M P <= MulAction.stabilizer M P := by
-  refine fun σ hσ => SetLike.ext fun x => ?_
-  rw [Ideal.mem_pointwise_smul_iff_inv_smul_mem]; rw [← P.add_mem_iff_left (a := x) ((inv_mem hσ) x)]; rw [add_sub_cancel]
-
+    inertia M P ≤ MulAction.stabilizer M P := by
+  refine fun σ hσ ↦ SetLike.ext fun x ↦ ?_
+  rw [Ideal.mem_pointwise_smul_iff_inv_smul_mem,
+    ← P.add_mem_iff_left (a := x) ((inv_mem hσ) x), add_sub_cancel]
+/-
+**Ideal.** 是 Mathlib 中的一个实例，位于命名空间 `Ideal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {R : Type*} [Ring R] (P : Ideal R) [MulSemiringAction M R] :
   (P.inertia (MulAction.stabilizer M P)).Normal := by
-  refine (Subgroup.normal_subgroupOf_iff (inertia_le_stabilizer P)).mpr fun g s hg hs x => ?_
-  rw [Submodule.mem_toAddSubgroup]; rw [← Ideal.smul_mem_pointwise_smul_iff (a := s⁻¹)]; rw [smul_sub]; rw [smul_smul]; rw [← mul_assoc]; rw [inv_mul_cancel_left]; rw [mul_smul]; rw [Subgroup.inv_mem _ hs]
+  refine (Subgroup.normal_subgroupOf_iff (inertia_le_stabilizer P)).mpr fun g s hg hs x ↦ ?_
+  rw [Submodule.mem_toAddSubgroup, ← Ideal.smul_mem_pointwise_smul_iff (a := s⁻¹), smul_sub,
+    smul_smul, ← mul_assoc, inv_mul_cancel_left, mul_smul, Subgroup.inv_mem _ hs]
   exact hg (s⁻¹ • x)
 
 variable {N : Type*} [Group N] [MulSemiringAction N R]
 
 /--
-Definition of `stabilizerEquiv` / `stabilizerEquiv` 的定义
-
-English:
-definition stabilizerEquiv
-  signature: (I : Ideal R) (e : M ≃* N) (he : forall (m : M) (x : R), (e m) • x = m • x)
-  body: Equiv.subtypeEquiv e fun _ => by
-    simp [Ideal.ext_iff, Ideal.mem_pointwise_smul_iff_inv_smul_mem, ← map_inv, he]
-  map_mul' _ _ := by simp
-
-@[simp]
-
-中文:
-定义 stabilizerEquiv
-  签名: (I : 理想 R) (e : M ≃* N) (he : 对任意 (m : M) (x : R), (e m) • x = m • x)
-  定义体: Equiv.subtypeEquiv e fun _ => by
-    simp [Ideal.ext_iff, Ideal.mem_pointwise_smul_iff_inv_smul_mem, ← map_inv, he]
-  map_mul' _ _ := by simp
-
-@[simp]
-
-Depends on / 依赖: Equiv.subtypeEquiv, Ideal.ext_iff, Ideal.mem_pointwise_smul_iff_inv_smul_mem, ext_iff, map_inv, map_mul, mem_pointwise_smul_iff_inv_smul_mem, subtypeEquiv
+Assume that `M` and `N` are isomorphic and act in a compatible way on `R`, then for any
+ideal `I` of `R`, the stabilizer of `I` in `M` is isomorphic to the stabilizer of `I` in `N`.
 -/
-def stabilizerEquiv (I : Ideal R) (e : M ≃* N) (he : forall (m : M) (x : R), (e m) • x = m • x) :
+/-
+**Ideal.stabilizerEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Ideal`。
+形式化陈述：stabilizerEquiv (I : Ideal R) (e : M ≃* N) (he : forall (m : M) (x : R), (
+e m) • x = m • x) : MulAction.stabilizer M I ≃* MulAction.stabilizer N I where t
+oEquiv
+参数：I : Ideal R；e : M ≃* N；he : forall (m : M) (x : R), (e m) • x = m • x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Assume that `M` and `N` are isomorphic and act in a compatible way on `R`, then 
+for any
+ideal `I` of `R`, the stabilizer of `I` in `M` is isomorphic to the stabilizer o
+f `I` in `N`.
+-/
+def stabilizerEquiv (I : Ideal R) (e : M ≃* N) (he : ∀ (m : M) (x : R), (e m) • x = m • x) :
     MulAction.stabilizer M I ≃* MulAction.stabilizer N I where
-  toEquiv := Equiv.subtypeEquiv e fun _ => by
+  toEquiv := Equiv.subtypeEquiv e fun _ ↦ by
     simp [Ideal.ext_iff, Ideal.mem_pointwise_smul_iff_inv_smul_mem, ← map_inv, he]
   map_mul' _ _ := by simp
 
 @[simp]
-/--
-theorem `stabilizerEquiv_apply_smul` / 定理 `stabilizerEquiv_apply_smul`
-
-English:
-theorem stabilizerEquiv_apply_smul
-  statement: (I : Ideal R) (e : M ≃* N)
-  proof: by
-  simp [stabilizerEquiv, MulAction.subgroup_smul_def, ← he m x]
-
-@[simp]
-
-中文:
-定理 stabilizerEquiv_apply_smul
-  结论: (I : 理想 R) (e : M ≃* N)
-  证明: by
-  simp [stabilizerEquiv, MulAction.subgroup_smul_def, ← he m x]
-
-@[simp]
-
-Depends on / 依赖: MulAction, MulAction.subgroup_smul_def, stabilizerEquiv, subgroup_smul_def
+/-
+**Ideal.stabilizerEquiv_apply_smul** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：stabilizerEquiv_apply_smul (I : Ideal R) (e : M ≃* N) (he : forall (m : M)
+ (x : R), (e m) • x = m • x) (m : MulAction.stabilizer M I) (x : R) : stabilizer
+Equiv I e he m • x = m • x
+参数：I : Ideal R；e : M ≃* N；he : forall (m : M) (x : R), (e m) • x = m • x；m : Mul
+Action.stabilizer M I；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.subtypeEquiv_apply`：∀ {α : Sort u_1} {β : Sort u_4} {p : α → Prop}
+ {q : β → Prop} (e : α ≃ β) (h : ∀ (a : α), p a ↔ q (e a))   (a : { a // p a }),
+ (e.subtypeEqu…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem stabilizerEquiv_apply_smul (I : Ideal R) (e : M ≃* N)
-    (he : forall (m : M) (x : R), (e m) • x = m • x) (m : MulAction.stabilizer M I) (x : R) :
+    (he : ∀ (m : M) (x : R), (e m) • x = m • x) (m : MulAction.stabilizer M I) (x : R) :
     stabilizerEquiv I e he m • x = m • x := by
   simp [stabilizerEquiv, MulAction.subgroup_smul_def, ← he m x]
 
 @[simp]
-/--
-theorem `stabilizerEquiv_symm_apply_smul` / 定理 `stabilizerEquiv_symm_apply_smul`
-
-English:
-theorem stabilizerEquiv_symm_apply_smul
-  statement: (I : Ideal R) (e : M ≃* N)
-  proof: by
-  rw [← (stabilizerEquiv I e he).apply_symm_apply n]; rw [stabilizerEquiv_apply_smul]; rw [(stabilizerEquiv I e he).apply_symm_apply]
-
-中文:
-定理 stabilizerEquiv_symm_apply_smul
-  结论: (I : 理想 R) (e : M ≃* N)
-  证明: by
-  rw [← (stabilizerEquiv I e he).apply_symm_apply n]; rw [stabilizerEquiv_apply_smul]; rw [(stabilizerEquiv I e he).apply_symm_apply]
-
-Depends on / 依赖: apply_symm_apply, stabilizerEquiv, stabilizerEquiv_apply_smul
+/-
+**Ideal.stabilizerEquiv_symm_apply_smul** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：stabilizerEquiv_symm_apply_smul (I : Ideal R) (e : M ≃* N) (he : forall (m
+ : M) (x : R), (e m) • x = m • x) (n : MulAction.stabilizer N I) (x : R) : (stab
+ilizerEquiv I e he).symm n • x = n • x
+参数：I : Ideal R；e : M ≃* N；he : forall (m : M) (x : R), (e m) • x = m • x；n : Mul
+Action.stabilizer N I；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MulEquiv.apply_symm_apply`：apply_symm_apply (e : M ≃* N) (y : N) : e (e.
+symm y) = y
+· 使用定理 `Ideal.stabilizerEquiv_apply_smul`：stabilizerEquiv_apply_smul (I : Ideal 
+R) (e : M ≃* N) (he : forall (m : M) (x : R), (e m) • x = m • x) (m : MulAction.
+stabilizer M I) (x : R…
 -/
 theorem stabilizerEquiv_symm_apply_smul (I : Ideal R) (e : M ≃* N)
-    (he : forall (m : M) (x : R), (e m) • x = m • x) (n : MulAction.stabilizer N I) (x : R) :
+    (he : ∀ (m : M) (x : R), (e m) • x = m • x) (n : MulAction.stabilizer N I) (x : R) :
     (stabilizerEquiv I e he).symm n • x = n • x := by
-  rw [← (stabilizerEquiv I e he).apply_symm_apply n]; rw [stabilizerEquiv_apply_smul]; rw [(stabilizerEquiv I e he).apply_symm_apply]
+  rw [← (stabilizerEquiv I e he).apply_symm_apply n, stabilizerEquiv_apply_smul,
+    (stabilizerEquiv I e he).apply_symm_apply]
 
 /--
-Definition of `inertiaEquiv` / `inertiaEquiv` 的定义
+Assume that `M` and `N` are isomorphic and act in a compatible way on `R`, then for any
+ideal `I` of `R`, the inertia subgroup of `I` in `M` is isomorphic to the inertia subgroup
+of `I` in `N`.
+-/
+/-
+**Ideal.inertiaEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Ideal`。
+形式化陈述：inertiaEquiv {R : Type*} [Ring R] [MulSemiringAction M R] [MulSemiringActi
+on N R] (I : Ideal R) (e : M ≃* N) (he : forall (m : M) (x : R), (e m) • x = m •
+ x) : inertia M I ≃* inertia N I where toEquiv
+参数：I : Ideal R；e : M ≃* N；he : forall (m : M) (x : R), (e m) • x = m • x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inertiaEquiv
-  signature: {R : Type*} [Ring R] [MulSemiringAction M R] [MulSemiringAction N R] (I : Ideal R)
-  body: Equiv.subtypeEquiv e fun _ => by simp [he]
-  map_mul' := by simp
-
-@[simp]
-
-中文:
-定义 inertiaEquiv
-  签名: {R : 类型} [环 R] [MulSemiring作用 M R] [MulSemiring作用 N R] (I : 理想 R)
-  定义体: Equiv.subtypeEquiv e fun _ => by simp [he]
-  map_mul' := by simp
-
-@[simp]
-
-Depends on / 依赖: Equiv.subtypeEquiv, subtypeEquiv
+--- 原说明 ---
+Assume that `M` and `N` are isomorphic and act in a compatible way on `R`, then 
+for any
+ideal `I` of `R`, the inertia subgroup of `I` in `M` is isomorphic to the inerti
+a subgroup
+of `I` in `N`.
 -/
 def inertiaEquiv {R : Type*} [Ring R] [MulSemiringAction M R] [MulSemiringAction N R] (I : Ideal R)
-    (e : M ≃* N) (he : forall (m : M) (x : R), (e m) • x = m • x) :
+    (e : M ≃* N) (he : ∀ (m : M) (x : R), (e m) • x = m • x) :
     inertia M I ≃* inertia N I where
-  toEquiv := Equiv.subtypeEquiv e fun _ => by simp [he]
+  toEquiv := Equiv.subtypeEquiv e fun _ ↦ by simp [he]
   map_mul' := by simp
 
 @[simp]
-/--
-theorem `inertiaEquiv_apply_smul` / 定理 `inertiaEquiv_apply_smul`
-
-English:
-theorem inertiaEquiv_apply_smul
-  statement: {R : Type*} [Ring R] [MulSemiringAction M R] [MulSemiringAction N R]
-  proof: by
-  simp [inertiaEquiv, MulAction.subgroup_smul_def, ← he m x]
-
-@[simp]
-
-中文:
-定理 inertiaEquiv_apply_smul
-  结论: {R : 类型} [环 R] [MulSemiring作用 M R] [MulSemiring作用 N R]
-  证明: by
-  simp [inertiaEquiv, MulAction.subgroup_smul_def, ← he m x]
-
-@[simp]
-
-Depends on / 依赖: MulAction, MulAction.subgroup_smul_def, inertiaEquiv, subgroup_smul_def
+/-
+**Ideal.inertiaEquiv_apply_smul** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：inertiaEquiv_apply_smul {R : Type*} [Ring R] [MulSemiringAction M R] [MulS
+emiringAction N R] (I : Ideal R) (e : M ≃* N) (he : forall (m : M) (x : R), (e m
+) • x = m • x) (m : inertia M I) (x : R) : inertiaEquiv I e he m • x = m • x
+参数：I : Ideal R；e : M ≃* N；he : forall (m : M) (x : R), (e m) • x = m • x；m : ine
+rtia M I；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.subtypeEquiv_apply`：∀ {α : Sort u_1} {β : Sort u_4} {p : α → Prop}
+ {q : β → Prop} (e : α ≃ β) (h : ∀ (a : α), p a ↔ q (e a))   (a : { a // p a }),
+ (e.subtypeEqu…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem inertiaEquiv_apply_smul {R : Type*} [Ring R] [MulSemiringAction M R] [MulSemiringAction N R]
-    (I : Ideal R) (e : M ≃* N) (he : forall (m : M) (x : R), (e m) • x = m • x) (m : inertia M I)
+    (I : Ideal R) (e : M ≃* N) (he : ∀ (m : M) (x : R), (e m) • x = m • x) (m : inertia M I)
     (x : R) :
     inertiaEquiv I e he m • x = m • x := by
   simp [inertiaEquiv, MulAction.subgroup_smul_def, ← he m x]
 
 @[simp]
-/--
-theorem `inertiaEquiv_symm_apply_smul` / 定理 `inertiaEquiv_symm_apply_smul`
-
-English:
-theorem inertiaEquiv_symm_apply_smul
-  statement: {R : Type*} [Ring R] [MulSemiringAction M R]
-  proof: by
-  rw [← (inertiaEquiv I e he).apply_symm_apply n]; rw [inertiaEquiv_apply_smul]; rw [(inertiaEquiv I e he).apply_symm_apply]
-
-中文:
-定理 inertiaEquiv_symm_apply_smul
-  结论: {R : 类型} [环 R] [MulSemiring作用 M R]
-  证明: by
-  rw [← (inertiaEquiv I e he).apply_symm_apply n]; rw [inertiaEquiv_apply_smul]; rw [(inertiaEquiv I e he).apply_symm_apply]
-
-Depends on / 依赖: apply_symm_apply, inertiaEquiv, inertiaEquiv_apply_smul
+/-
+**Ideal.inertiaEquiv_symm_apply_smul** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：inertiaEquiv_symm_apply_smul {R : Type*} [Ring R] [MulSemiringAction M R] 
+[MulSemiringAction N R] (I : Ideal R) (e : M ≃* N) (he : forall (m : M) (x : R),
+ (e m) • x = m • x) (n : inertia N I) (x : R) : (inertiaEquiv I e he).symm n • x
+ = n • x
+参数：I : Ideal R；e : M ≃* N；he : forall (m : M) (x : R), (e m) • x = m • x；n : ine
+rtia N I；x : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MulEquiv.apply_symm_apply`：apply_symm_apply (e : M ≃* N) (y : N) : e (e.
+symm y) = y
+· 使用定理 `Ideal.inertiaEquiv_apply_smul`：inertiaEquiv_apply_smul {R : Type*} [Ring
+ R] [MulSemiringAction M R] [MulSemiringAction N R] (I : Ideal R) (e : M ≃* N) (
+he : forall (m : M)…
 -/
 theorem inertiaEquiv_symm_apply_smul {R : Type*} [Ring R] [MulSemiringAction M R]
-    [MulSemiringAction N R] (I : Ideal R) (e : M ≃* N) (he : forall (m : M) (x : R), (e m) • x = m • x)
+    [MulSemiringAction N R] (I : Ideal R) (e : M ≃* N) (he : ∀ (m : M) (x : R), (e m) • x = m • x)
     (n : inertia N I) (x : R) :
     (inertiaEquiv I e he).symm n • x = n • x := by
-  rw [← (inertiaEquiv I e he).apply_symm_apply n]; rw [inertiaEquiv_apply_smul]; rw [(inertiaEquiv I e he).apply_symm_apply]
+  rw [← (inertiaEquiv I e he).apply_symm_apply n, inertiaEquiv_apply_smul,
+    (inertiaEquiv I e he).apply_symm_apply]
 
 /-! TODO: add `equivSMul` like we have for subgroup. -/
 
 end Group
 
 end Ideal
+

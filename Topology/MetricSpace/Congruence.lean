@@ -32,77 +32,76 @@ For more details see the [Zulip discussion](https://leanprover.zulipchat.com/#na
 
 @[expose] public section
 
-variable {ι ι' : Type*} {P₁ P₂ P₃ P₄ : Type*} {v₁ : ι -> P₁} {v₂ : ι -> P₂} {v₃ : ι -> P₃}
+variable {ι ι' : Type*} {P₁ P₂ P₃ P₄ : Type*} {v₁ : ι → P₁} {v₂ : ι → P₂} {v₃ : ι → P₃}
 
 section PseudoEMetricSpace
 
 variable [PseudoEMetricSpace P₁] [PseudoEMetricSpace P₂]
 variable [PseudoEMetricSpace P₃] [PseudoEMetricSpace P₄]
 
-/--
-Definition of `Congruent` / `Congruent` 的定义
+/-- A congruence between indexed sets of vertices v₁ and v₂.
+Use `open scoped Congruent` to access the `v₁ ≅ v₂` notation. -/
+/-
+**Congruent** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Congruent (v₁ : ι -> P₁) (v₂ : ι -> P₂) : Prop
+参数：v₁ : ι -> P₁；v₂ : ι -> P₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Congruent
-  signature: (v₁ : ι -> P₁) (v₂ : ι -> P₂)
-  body: forall i₁ i₂, edist (v₁ i₁) (v₁ i₂) = edist (v₂ i₁) (v₂ i₂)
-
-@[inherit_doc]
-scoped[Congruent] infixl:25 " ≅ " => Congruent
-
-中文:
-定义 Congruent
-  签名: (v₁ : ι -> P₁) (v₂ : ι -> P₂)
-  定义体: forall i₁ i₂, edist (v₁ i₁) (v₁ i₂) = edist (v₂ i₁) (v₂ i₂)
-
-@[inherit_doc]
-scoped[Congruent] infixl:25 " ≅ " => Congruent
+--- 原说明 ---
+A congruence between indexed sets of vertices v₁ and v₂.
+Use `open scoped Congruent` to access the `v₁ ≅ v₂` notation.
 -/
-def Congruent (v₁ : ι -> P₁) (v₂ : ι -> P₂) : Prop :=
-  forall i₁ i₂, edist (v₁ i₁) (v₁ i₂) = edist (v₂ i₁) (v₂ i₂)
+def Congruent (v₁ : ι → P₁) (v₂ : ι → P₂) : Prop :=
+  ∀ i₁ i₂, edist (v₁ i₁) (v₁ i₂) = edist (v₂ i₁) (v₂ i₂)
 
 @[inherit_doc]
 scoped[Congruent] infixl:25 " ≅ " => Congruent
 
-/--
-lemma `congruent_iff_edist_eq` / 引理 `congruent_iff_edist_eq`
+/-- Congruence holds if and only if all extended distances are the same. -/
+/-
+**congruent_iff_edist_eq** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：congruent_iff_edist_eq : Congruent v₁ v₂ ↔ forall i₁ i₂, edist (v₁ i₁) (v₁
+ i₂) = edist (v₂ i₁) (v₂ i₂)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-lemma congruent_iff_edist_eq
-  proof: Iff.rfl
-
-中文:
-引理 congruent_iff_edist_eq
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+--- 原说明 ---
+Congruence holds if and only if all extended distances are the same.
 -/
 lemma congruent_iff_edist_eq :
-    Congruent v₁ v₂ ↔ forall i₁ i₂, edist (v₁ i₁) (v₁ i₂) = edist (v₂ i₁) (v₂ i₂) :=
+    Congruent v₁ v₂ ↔ ∀ i₁ i₂, edist (v₁ i₁) (v₁ i₂) = edist (v₂ i₁) (v₂ i₂) :=
   Iff.rfl
 
-/--
-lemma `congruent_iff_pairwise_edist_eq` / 引理 `congruent_iff_pairwise_edist_eq`
+/-- Congruence holds if and only if all extended distances between points with different
+indices are the same. -/
+/-
+**congruent_iff_pairwise_edist_eq** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：congruent_iff_pairwise_edist_eq : Congruent v₁ v₂ ↔ Pairwise fun i₁ i₂ => 
+edist (v₁ i₁) (v₁ i₂) = edist (v₂ i₁) (v₂ i₂)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `PseudoEMetricSpace.edist_self`：∀ {α : Type u} [self : PseudoEMetricSpace
+ α] (x : α), edist x x = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma congruent_iff_pairwise_edist_eq
-  proof: by
-  refine ⟨fun h => fun _ _ _ => h _ _, fun h => fun i₁ i₂ => ?_⟩
-  by_cases hi : i₁ = i₂
-  · simp [hi]
-  · exact h hi
-
-中文:
-引理 congruent_iff_pairwise_edist_eq
-  证明: by
-  refine ⟨fun h => fun _ _ _ => h _ _, fun h => fun i₁ i₂ => ?_⟩
-  by_cases hi : i₁ = i₂
-  · simp [hi]
-  · exact h hi
+--- 原说明 ---
+Congruence holds if and only if all extended distances between points with diffe
+rent
+indices are the same.
 -/
 lemma congruent_iff_pairwise_edist_eq :
-    Congruent v₁ v₂ ↔ Pairwise fun i₁ i₂ => edist (v₁ i₁) (v₁ i₂) = edist (v₂ i₁) (v₂ i₂) := by
-  refine ⟨fun h => fun _ _ _ => h _ _, fun h => fun i₁ i₂ => ?_⟩
+    Congruent v₁ v₂ ↔ Pairwise fun i₁ i₂ ↦ edist (v₁ i₁) (v₁ i₂) = edist (v₂ i₁) (v₂ i₂) := by
+  refine ⟨fun h ↦ fun _ _ _ ↦ h _ _, fun h ↦ fun i₁ i₂ ↦ ?_⟩
   by_cases hi : i₁ = i₂
   · simp [hi]
   · exact h hi
@@ -124,243 +123,203 @@ alias ⟨pairwise_edist_eq, _⟩ := congruent_iff_pairwise_edist_eq
 `congruent_iff_pairwise_edist_eq`. -/
 alias ⟨_, of_pairwise_edist_eq⟩ := congruent_iff_pairwise_edist_eq
 
-/--
-lemma `refl` / 引理 `refl`
-
-English:
-lemma refl
-  given: (v₁ : ι -> P₁)
-  statement: v₁ ≅ v₁
-  proof: fun _ _ => rfl
-
-中文:
-引理 refl
-  条件: (v₁ : ι -> P₁)
-  结论: v₁ ≅ v₁
-  证明: fun _ _ => rfl
+/-
+**Congruent.refl** 是 Mathlib 中的一个定理，位于命名空间 `Congruent`。
+形式化陈述：∀ {ι : Type u_1} {P₁ : Type u_3} [inst : PseudoEMetricSpace P₁] (v₁ : ι → 
+P₁), Congruent v₁ v₁
+参数：v₁ : ι → P₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[refl] protected lemma refl (v₁ : ι -> P₁) : v₁ ≅ v₁ := fun _ _ => rfl
-
-/--
-lemma `symm` / 引理 `symm`
-
-English:
-lemma symm
-  given: (h : v₁ ≅ v₂)
-  statement: v₂ ≅ v₁
-  proof: fun i₁ i₂ => (h i₁ i₂).symm
-
-中文:
-引理 symm
-  条件: (h : v₁ ≅ v₂)
-  结论: v₂ ≅ v₁
-  证明: fun i₁ i₂ => (h i₁ i₂).symm
+@[refl] protected lemma refl (v₁ : ι → P₁) : v₁ ≅ v₁ := fun _ _ ↦ rfl
+/-
+**Congruent.symm** 是 Mathlib 中的一个定理，位于命名空间 `Congruent`。
+形式化陈述：∀ {ι : Type u_1} {P₁ : Type u_3} {P₂ : Type u_4} {v₁ : ι → P₁} {v₂ : ι → P
+₂} [inst : PseudoEMetricSpace P₁]   [inst_1 : PseudoEMetricSpace P₂], Congruent 
+v₁ v₂ → Congruent v₂ v₁
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-@[symm] protected lemma symm (h : v₁ ≅ v₂) : v₂ ≅ v₁ := fun i₁ i₂ => (h i₁ i₂).symm
-
-/--
-lemma `_root_.congruent_comm` / 引理 `_root_.congruent_comm`
-
-English:
-lemma _root_.congruent_comm
-  statement: v₁ ≅ v₂ ↔ v₂ ≅ v₁
-  proof: ⟨Congruent.symm, Congruent.symm⟩
-
-中文:
-引理 _root_.congruent_comm
-  结论: v₁ ≅ v₂ ↔ v₂ ≅ v₁
-  证明: ⟨Congruent.symm, Congruent.symm⟩
-
-Depends on / 依赖: Congruent, Congruent.symm
+@[symm] protected lemma symm (h : v₁ ≅ v₂) : v₂ ≅ v₁ := fun i₁ i₂ ↦ (h i₁ i₂).symm
+/-
+**Congruent._root_.congruent_comm** 是 Mathlib 中的一个引理，位于命名空间 `Congruent`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.congruent_comm : v₁ ≅ v₂ ↔ v₂ ≅ v₁ :=
   ⟨Congruent.symm, Congruent.symm⟩
-
-/--
-lemma `trans` / 引理 `trans`
-
-English:
-lemma trans
-  given: (h₁₂ : v₁ ≅ v₂) (h₂₃ : v₂ ≅ v₃)
-  statement: v₁ ≅ v₃
-  proof: fun i₁ i₂ => (h₁₂ i₁ i₂).trans (h₂₃ i₁ i₂)
-
-中文:
-引理 trans
-  条件: (h₁₂ : v₁ ≅ v₂) (h₂₃ : v₂ ≅ v₃)
-  结论: v₁ ≅ v₃
-  证明: fun i₁ i₂ => (h₁₂ i₁ i₂).trans (h₂₃ i₁ i₂)
+/-
+**Congruent.trans** 是 Mathlib 中的一个定理，位于命名空间 `Congruent`。
+形式化陈述：∀ {ι : Type u_1} {P₁ : Type u_3} {P₂ : Type u_4} {P₃ : Type u_5} {v₁ : ι →
+ P₁} {v₂ : ι → P₂} {v₃ : ι → P₃}   [inst : PseudoEMetricSpace P₁] [inst_1 : Pseu
+doEMetricSpace P₂] [inst_2 : PseudoEMetricSpace P₃],   Congruent v₁ v₂ → Congrue
+nt v₂ v₃ → Congruent v₁ v₃
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
 @[trans] protected lemma trans (h₁₂ : v₁ ≅ v₂) (h₂₃ : v₂ ≅ v₃) : v₁ ≅ v₃ :=
-  fun i₁ i₂ => (h₁₂ i₁ i₂).trans (h₂₃ i₁ i₂)
+  fun i₁ i₂ ↦ (h₁₂ i₁ i₂).trans (h₂₃ i₁ i₂)
 
-/--
-lemma `index_map` / 引理 `index_map`
+/-- Change the index set ι to an index ι' that maps to ι. -/
+/-
+**Congruent.index_map** 是 Mathlib 中的一个引理，位于命名空间 `Congruent`。
+形式化陈述：index_map (h : v₁ ≅ v₂) (f : ι' -> ι) : (v₁ ∘ f) ≅ (v₂ ∘ f)
+参数：h : v₁ ≅ v₂；f : ι' -> ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Congruent.edist_eq`：∀ {ι : Type u_1} {P₁ : Type u_3} {P₂ : Type u_4} {v₁
+ : ι → P₁} {v₂ : ι → P₂} [inst : PseudoEMetricSpace P₁]   [inst_1 : PseudoEMetri
+cSpace P…
 
-English:
-lemma index_map
-  given: (h : v₁ ≅ v₂) (f : ι' -> ι)
-  statement: (v₁ ∘ f) ≅ (v₂ ∘ f)
-  proof: fun i₁ i₂ => edist_eq h (f i₁) (f i₂)
-
-中文:
-引理 index_map
-  条件: (h : v₁ ≅ v₂) (f : ι' -> ι)
-  结论: (v₁ ∘ f) ≅ (v₂ ∘ f)
-  证明: fun i₁ i₂ => edist_eq h (f i₁) (f i₂)
-
-Depends on / 依赖: edist_eq
+--- 原说明 ---
+Change the index set ι to an index ι' that maps to ι.
 -/
-lemma index_map (h : v₁ ≅ v₂) (f : ι' -> ι) : (v₁ ∘ f) ≅ (v₂ ∘ f) :=
-  fun i₁ i₂ => edist_eq h (f i₁) (f i₂)
+lemma index_map (h : v₁ ≅ v₂) (f : ι' → ι) : (v₁ ∘ f) ≅ (v₂ ∘ f) :=
+  fun i₁ i₂ ↦ edist_eq h (f i₁) (f i₂)
 
-/--
-lemma `index_equiv` / 引理 `index_equiv`
+/-- Change between equivalent index sets ι and ι'. -/
+/-
+**Congruent.index_equiv** 是 Mathlib 中的一个定理，位于命名空间 `Congruent`。
+形式化陈述：∀ {ι : Type u_1} {ι' : Type u_2} {P₁ : Type u_3} {P₂ : Type u_4} [inst : P
+seudoEMetricSpace P₁]   [inst_1 : PseudoEMetricSpace P₂] {E : Type u_7} [inst_2 
+: EquivLike E ι' ι] (f : E) (v₁ : ι → P₁) (v₂ : ι → P₂),   Congruent (v₁ ∘ ⇑f) (
+v₂ ∘ ⇑f) ↔ Congruent v₁ v₂
+参数：f : E；v₁ : ι → P₁；v₂ : ι → P₂；v₁ ∘ ⇑f；v₂ ∘ ⇑f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `EquivLike.apply_coe_symm_apply`：∀ {α : Sort u} {β : Sort v} {F : Sort u_
+1} [inst : EquivLike F α β] (e : F) (x : β), e ((↑e).symm x) = x
+· 使用定理 `Congruent.edist_eq`：∀ {ι : Type u_1} {P₁ : Type u_3} {P₂ : Type u_4} {v₁
+ : ι → P₁} {v₂ : ι → P₂} [inst : PseudoEMetricSpace P₁]   [inst_1 : PseudoEMetri
+cSpace P…
+· 使用引理 `Congruent.index_map`：index_map (h : v₁ ≅ v₂) (f : ι' -> ι) : (v₁ ∘ f) ≅ 
+(v₂ ∘ f)
 
-English:
-lemma index_equiv
-  given: {E : Type*} [EquivLike E ι' ι] (f : E) (v₁ : ι -> P₁) (v₂ : ι -> P₂)
-  proof: by
-  refine ⟨fun h i₁ i₂ => ?_, fun h => index_map h f⟩
-  simpa [(EquivLike.toEquiv f).right_inv i₁, (EquivLike.toEquiv f).right_inv i₂]
-    using edist_eq h ((EquivLike.toEquiv f).symm i₁) ((EquivLike.toEquiv f).symm i₂)
-
-中文:
-引理 index_equiv
-  条件: {E : 类型} [等价状 E ι' ι] (f : E) (v₁ : ι -> P₁) (v₂ : ι -> P₂)
-  证明: by
-  refine ⟨fun h i₁ i₂ => ?_, fun h => index_map h f⟩
-  simpa [(EquivLike.toEquiv f).right_inv i₁, (EquivLike.toEquiv f).right_inv i₂]
-    using edist_eq h ((EquivLike.toEquiv f).symm i₁) ((EquivLike.toEquiv f).symm i₂)
+--- 原说明 ---
+Change between equivalent index sets ι and ι'.
 -/
-@[simp] lemma index_equiv {E : Type*} [EquivLike E ι' ι] (f : E) (v₁ : ι -> P₁) (v₂ : ι -> P₂) :
+@[simp] lemma index_equiv {E : Type*} [EquivLike E ι' ι] (f : E) (v₁ : ι → P₁) (v₂ : ι → P₂) :
     v₁ ∘ f ≅ v₂ ∘ f ↔ v₁ ≅ v₂ := by
-  refine ⟨fun h i₁ i₂ => ?_, fun h => index_map h f⟩
+  refine ⟨fun h i₁ i₂ ↦ ?_, fun h ↦ index_map h f⟩
   simpa [(EquivLike.toEquiv f).right_inv i₁, (EquivLike.toEquiv f).right_inv i₂]
     using edist_eq h ((EquivLike.toEquiv f).symm i₁) ((EquivLike.toEquiv f).symm i₂)
 
 /-- Families with at most a single point are always congruent. -/
 @[nontriviality, simp]
-/--
-lemma `of_subsingleton_index` / 引理 `of_subsingleton_index`
+/-
+**Congruent.of_subsingleton_index** 是 Mathlib 中的一个引理，位于命名空间 `Congruent`。
+形式化陈述：of_subsingleton_index [Subsingleton ι] : v₁ ≅ v₂
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `PseudoEMetricSpace.edist_self`：∀ {α : Type u} [self : PseudoEMetricSpace
+ α] (x : α), edist x x = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma of_subsingleton_index
-  given: [Subsingleton ι]
-  statement: v₁ ≅ v₂
-  proof: fun i j => by simp [Subsingleton.elim i j]
-
-中文:
-引理 of_subsingleton_index
-  条件: [子单例 ι]
-  结论: v₁ ≅ v₂
-  证明: fun i j => by simp [Subsingleton.elim i j]
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim
+--- 原说明 ---
+Families with at most a single point are always congruent.
 -/
 lemma of_subsingleton_index [Subsingleton ι] : v₁ ≅ v₂ :=
   fun i j => by simp [Subsingleton.elim i j]
-
-/--
-lemma `comp_left` / 引理 `comp_left`
-
-English:
-lemma comp_left
-  given: {f : P₁ -> P₃} (hf : Isometry f) (h : v₁ ≅ v₂)
-  statement: f ∘ v₁ ≅ v₂
-  proof: .trans (fun _ _ => hf _ _) h
-
-中文:
-引理 comp_left
-  条件: {f : P₁ -> P₃} (hf : 等距 f) (h : v₁ ≅ v₂)
-  结论: f ∘ v₁ ≅ v₂
-  证明: .trans (fun _ _ => hf _ _) h
+/-
+**Congruent.comp_left** 是 Mathlib 中的一个引理，位于命名空间 `Congruent`。
+形式化陈述：comp_left {f : P₁ -> P₃} (hf : Isometry f) (h : v₁ ≅ v₂) : f ∘ v₁ ≅ v₂
+参数：hf : Isometry f；h : v₁ ≅ v₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Congruent.trans`：∀ {ι : Type u_1} {P₁ : Type u_3} {P₂ : Type u_4} {P₃ : 
+Type u_5} {v₁ : ι → P₁} {v₂ : ι → P₂} {v₃ : ι → P₃}   [inst : PseudoEMetricSpace
+ P₁] …
 -/
-lemma comp_left {f : P₁ -> P₃} (hf : Isometry f) (h : v₁ ≅ v₂) : f ∘ v₁ ≅ v₂ :=
-  .trans (fun _ _ => hf _ _) h
-
-/--
-lemma `comp_right` / 引理 `comp_right`
-
-English:
-lemma comp_right
-  given: {f : P₂ -> P₃} (hf : Isometry f) (h : v₁ ≅ v₂)
-  statement: v₁ ≅ f ∘ v₂
-  proof: .trans h (.symm <| fun _ _ => hf _ _)
-
-@[simp]
-
-中文:
-引理 comp_right
-  条件: {f : P₂ -> P₃} (hf : 等距 f) (h : v₁ ≅ v₂)
-  结论: v₁ ≅ f ∘ v₂
-  证明: .trans h (.symm <| fun _ _ => hf _ _)
-
-@[simp]
+lemma comp_left {f : P₁ → P₃} (hf : Isometry f) (h : v₁ ≅ v₂) : f ∘ v₁ ≅ v₂ :=
+  .trans (fun _ _ ↦ hf _ _) h
+/-
+**Congruent.comp_right** 是 Mathlib 中的一个引理，位于命名空间 `Congruent`。
+形式化陈述：comp_right {f : P₂ -> P₃} (hf : Isometry f) (h : v₁ ≅ v₂) : v₁ ≅ f ∘ v₂
+参数：hf : Isometry f；h : v₁ ≅ v₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Congruent.trans`：∀ {ι : Type u_1} {P₁ : Type u_3} {P₂ : Type u_4} {P₃ : 
+Type u_5} {v₁ : ι → P₁} {v₂ : ι → P₂} {v₃ : ι → P₃}   [inst : PseudoEMetricSpace
+ P₁] …
+· 使用定理 `Congruent.symm`：∀ {ι : Type u_1} {P₁ : Type u_3} {P₂ : Type u_4} {v₁ : ι
+ → P₁} {v₂ : ι → P₂} [inst : PseudoEMetricSpace P₁]   [inst_1 : PseudoEMetricSpa
+ce P…
 -/
-lemma comp_right {f : P₂ -> P₃} (hf : Isometry f) (h : v₁ ≅ v₂) : v₁ ≅ f ∘ v₂ :=
-  .trans h (.symm <| fun _ _ => hf _ _)
+lemma comp_right {f : P₂ → P₃} (hf : Isometry f) (h : v₁ ≅ v₂) : v₁ ≅ f ∘ v₂ :=
+  .trans h (.symm <| fun _ _ ↦ hf _ _)
 
 @[simp]
-/--
-lemma `comp_left_iff` / 引理 `comp_left_iff`
-
-English:
-lemma comp_left_iff
-  given: {f : P₁ -> P₃} (hf : Isometry f)
-  statement: f ∘ v₁ ≅ v₂ ↔ v₁ ≅ v₂
-  proof: ⟨.trans .comp_right hf (.refl _), .comp_left hf⟩
-
-@[simp]
-
-中文:
-引理 comp_left_iff
-  条件: {f : P₁ -> P₃} (hf : 等距 f)
-  结论: f ∘ v₁ ≅ v₂ ↔ v₁ ≅ v₂
-  证明: ⟨.trans .comp_right hf (.refl _), .comp_left hf⟩
-
-@[simp]
-
-Depends on / 依赖: comp_left, comp_right
+/-
+**Congruent.comp_left_iff** 是 Mathlib 中的一个引理，位于命名空间 `Congruent`。
+形式化陈述：comp_left_iff {f : P₁ -> P₃} (hf : Isometry f) : f ∘ v₁ ≅ v₂ ↔ v₁ ≅ v₂
+参数：hf : Isometry f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Congruent.trans`：∀ {ι : Type u_1} {P₁ : Type u_3} {P₂ : Type u_4} {P₃ : 
+Type u_5} {v₁ : ι → P₁} {v₂ : ι → P₂} {v₃ : ι → P₃}   [inst : PseudoEMetricSpace
+ P₁] …
+· 使用引理 `Congruent.comp_right`：comp_right {f : P₂ -> P₃} (hf : Isometry f) (h : v
+₁ ≅ v₂) : v₁ ≅ f ∘ v₂
+· 使用定理 `Congruent.refl`：∀ {ι : Type u_1} {P₁ : Type u_3} [inst : PseudoEMetricSp
+ace P₁] (v₁ : ι → P₁), Congruent v₁ v₁
+· 使用引理 `Congruent.comp_left`：comp_left {f : P₁ -> P₃} (hf : Isometry f) (h : v₁ 
+≅ v₂) : f ∘ v₁ ≅ v₂
 -/
-lemma comp_left_iff {f : P₁ -> P₃} (hf : Isometry f) : f ∘ v₁ ≅ v₂ ↔ v₁ ≅ v₂ :=
-⟨.trans .comp_right hf (.refl _), .comp_left hf⟩
+lemma comp_left_iff {f : P₁ → P₃} (hf : Isometry f) : f ∘ v₁ ≅ v₂ ↔ v₁ ≅ v₂ :=
+  ⟨.trans <| .comp_right hf (.refl _), .comp_left hf⟩
 
 @[simp]
-/--
-lemma `comp_right_iff` / 引理 `comp_right_iff`
-
-English:
-lemma comp_right_iff
-  given: {f : P₂ -> P₃} (hf : Isometry f)
-  statement: v₁ ≅ f ∘ v₂ ↔ v₁ ≅ v₂
-  proof: by
-  rw [congruent_comm]; rw [comp_left_iff hf]; rw [congruent_comm]
-
-中文:
-引理 comp_right_iff
-  条件: {f : P₂ -> P₃} (hf : 等距 f)
-  结论: v₁ ≅ f ∘ v₂ ↔ v₁ ≅ v₂
-  证明: by
-  rw [congruent_comm]; rw [comp_left_iff hf]; rw [congruent_comm]
-
-Depends on / 依赖: comp_left_iff, congruent_comm
+/-
+**Congruent.comp_right_iff** 是 Mathlib 中的一个引理，位于命名空间 `Congruent`。
+形式化陈述：comp_right_iff {f : P₂ -> P₃} (hf : Isometry f) : v₁ ≅ f ∘ v₂ ↔ v₁ ≅ v₂
+参数：hf : Isometry f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congruent_comm`：∀ {ι : Type u_1} {P₁ : Type u_3} {P₂ : Type u_4} {v₁ : ι
+ → P₁} {v₂ : ι → P₂} [inst : PseudoEMetricSpace P₁]   [inst_1 : PseudoEMetricSpa
+ce P…
+· 使用引理 `Congruent.comp_left_iff`：comp_left_iff {f : P₁ -> P₃} (hf : Isometry f) 
+: f ∘ v₁ ≅ v₂ ↔ v₁ ≅ v₂
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma comp_right_iff {f : P₂ -> P₃} (hf : Isometry f) : v₁ ≅ f ∘ v₂ ↔ v₁ ≅ v₂ := by
-  rw [congruent_comm]; rw [comp_left_iff hf]; rw [congruent_comm]
+lemma comp_right_iff {f : P₂ → P₃} (hf : Isometry f) : v₁ ≅ f ∘ v₂ ↔ v₁ ≅ v₂ := by
+  rw [congruent_comm, comp_left_iff hf, congruent_comm]
 
-/--
-lemma `comp_dilation` / 引理 `comp_dilation`
+/-- Two sets of vertices remain congruent under a dilation if the dilations have equal ratios. -/
+/-
+**Congruent.comp_dilation** 是 Mathlib 中的一个引理，位于命名空间 `Congruent`。
+形式化陈述：comp_dilation {F₁ F₂} [FunLike F₁ P₁ P₃] [DilationClass F₁ P₁ P₃] [FunLike
+ F₂ P₂ P₄] [DilationClass F₂ P₂ P₄] {f₁ : F₁} {f₂ : F₂} (h : v₁ ≅ v₂) (hf : Dila
+tion.ratio f₁ = Dilation.ratio f₂) : f₁ ∘ v₁ ≅ f₂ ∘ v₂
+参数：h : v₁ ≅ v₂；hf : Dilation.ratio f₁ = Dilation.ratio f₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Dilation.edist_eq`：edist_eq [DilationClass F α β] (f : F) (x y : α) : ed
+ist (f x) (f y) = ratio f * edist x y
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma comp_dilation
-  statement: {F₁ F₂}
-  proof: fun i j => by simp [hf, h i j]
-
-中文:
-引理 comp_dilation
-  结论: {F₁ F₂}
-  证明: fun i j => by simp [hf, h i j]
+--- 原说明 ---
+Two sets of vertices remain congruent under a dilation if the dilations have equ
+al ratios.
 -/
 lemma comp_dilation {F₁ F₂}
     [FunLike F₁ P₁ P₃] [DilationClass F₁ P₁ P₃] [FunLike F₂ P₂ P₄] [DilationClass F₂ P₂ P₄]
@@ -376,84 +335,110 @@ section PseudoMetricSpace
 
 variable [PseudoMetricSpace P₁] [PseudoMetricSpace P₂]
 
-/--
-lemma `congruent_iff_nndist_eq` / 引理 `congruent_iff_nndist_eq`
+/-- Congruence holds if and only if all non-negative distances are the same. -/
+/-
+**congruent_iff_nndist_eq** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：congruent_iff_nndist_eq : Congruent v₁ v₂ ↔ forall i₁ i₂, nndist (v₁ i₁) (
+v₁ i₂) = nndist (v₂ i₁) (v₂ i₂)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall₂_congr`：∀ {α : Sort u_1} {β : α → Sort u_2} {p q : (a : α) → β a 
+→ Prop},   (∀ (a : α) (b : β a), p a b ↔ q a b) → ((∀ (a : α) (b : β a), p a b) 
+↔ ∀…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `edist_nndist`：edist_nndist (x y : α) : edist x y = nndist x y
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-lemma congruent_iff_nndist_eq
-  proof: forall₂_congr (fun _ _ => by rw [edist_nndist, edist_nndist]; norm_cast)
-
-中文:
-引理 congruent_iff_nndist_eq
-  证明: forall₂_congr (fun _ _ => by rw [edist_nndist, edist_nndist]; norm_cast)
-
-Depends on / 依赖: edist_nndist
+--- 原说明 ---
+Congruence holds if and only if all non-negative distances are the same.
 -/
 lemma congruent_iff_nndist_eq :
-    Congruent v₁ v₂ ↔ forall i₁ i₂, nndist (v₁ i₁) (v₁ i₂) = nndist (v₂ i₁) (v₂ i₂) :=
-  forall₂_congr (fun _ _ => by rw [edist_nndist, edist_nndist]; norm_cast)
+    Congruent v₁ v₂ ↔ ∀ i₁ i₂, nndist (v₁ i₁) (v₁ i₂) = nndist (v₂ i₁) (v₂ i₂) :=
+  forall₂_congr (fun _ _ ↦ by rw [edist_nndist, edist_nndist]; norm_cast)
 
-/--
-lemma `congruent_iff_pairwise_nndist_eq` / 引理 `congruent_iff_pairwise_nndist_eq`
+/-- Congruence holds if and only if all non-negative distances between points with different
+indices are the same. -/
+/-
+**congruent_iff_pairwise_nndist_eq** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：congruent_iff_pairwise_nndist_eq : Congruent v₁ v₂ ↔ Pairwise fun i₁ i₂ =>
+ nndist (v₁ i₁) (v₁ i₂) = nndist (v₂ i₁) (v₂ i₂)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `edist_nndist`：edist_nndist (x y : α) : edist x y = nndist x y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-lemma congruent_iff_pairwise_nndist_eq
-  proof: by
-  simp_rw [congruent_iff_pairwise_edist_eq, edist_nndist]
-  exact_mod_cast Iff.rfl
-
-中文:
-引理 congruent_iff_pairwise_nndist_eq
-  证明: by
-  simp_rw [congruent_iff_pairwise_edist_eq, edist_nndist]
-  exact_mod_cast Iff.rfl
-
-Depends on / 依赖: Iff.rfl, congruent_iff_pairwise_edist_eq, edist_nndist, simp_rw
+--- 原说明 ---
+Congruence holds if and only if all non-negative distances between points with d
+ifferent
+indices are the same.
 -/
 lemma congruent_iff_pairwise_nndist_eq :
-    Congruent v₁ v₂ ↔ Pairwise fun i₁ i₂ => nndist (v₁ i₁) (v₁ i₂) = nndist (v₂ i₁) (v₂ i₂) := by
+    Congruent v₁ v₂ ↔ Pairwise fun i₁ i₂ ↦ nndist (v₁ i₁) (v₁ i₂) = nndist (v₂ i₁) (v₂ i₂) := by
   simp_rw [congruent_iff_pairwise_edist_eq, edist_nndist]
   exact_mod_cast Iff.rfl
 
-/--
-lemma `congruent_iff_dist_eq` / 引理 `congruent_iff_dist_eq`
+/-- Congruence holds if and only if all distances are the same. -/
+/-
+**congruent_iff_dist_eq** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：congruent_iff_dist_eq : Congruent v₁ v₂ ↔ forall i₁ i₂, dist (v₁ i₁) (v₁ i
+₂) = dist (v₂ i₁) (v₂ i₂)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用引理 `congruent_iff_nndist_eq`：congruent_iff_nndist_eq : Congruent v₁ v₂ ↔ for
+all i₁ i₂, nndist (v₁ i₁) (v₁ i₂) = nndist (v₂ i₁) (v₂ i₂)
+· 使用定理 `forall₂_congr`：∀ {α : Sort u_1} {β : α → Sort u_2} {p q : (a : α) → β a 
+→ Prop},   (∀ (a : α) (b : β a), p a b ↔ q a b) → ((∀ (a : α) (b : β a), p a b) 
+↔ ∀…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dist_nndist`：dist_nndist (x y : α) : dist x y = nndist x y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-lemma congruent_iff_dist_eq
-  proof: congruent_iff_nndist_eq.trans
-    (forall₂_congr (fun _ _ => by rw [dist_nndist, dist_nndist]; norm_cast))
-
-中文:
-引理 congruent_iff_dist_eq
-  证明: congruent_iff_nndist_eq.trans
-    (forall₂_congr (fun _ _ => by rw [dist_nndist, dist_nndist]; norm_cast))
-
-Depends on / 依赖: congruent_iff_nndist_eq, congruent_iff_nndist_eq.trans, dist_nndist
+--- 原说明 ---
+Congruence holds if and only if all distances are the same.
 -/
 lemma congruent_iff_dist_eq :
-    Congruent v₁ v₂ ↔ forall i₁ i₂, dist (v₁ i₁) (v₁ i₂) = dist (v₂ i₁) (v₂ i₂) :=
+    Congruent v₁ v₂ ↔ ∀ i₁ i₂, dist (v₁ i₁) (v₁ i₂) = dist (v₂ i₁) (v₂ i₂) :=
   congruent_iff_nndist_eq.trans
-    (forall₂_congr (fun _ _ => by rw [dist_nndist, dist_nndist]; norm_cast))
+    (forall₂_congr (fun _ _ ↦ by rw [dist_nndist, dist_nndist]; norm_cast))
 
-/--
-lemma `congruent_iff_pairwise_dist_eq` / 引理 `congruent_iff_pairwise_dist_eq`
+/-- Congruence holds if and only if all non-negative distances between points with different
+indices are the same. -/
+/-
+**congruent_iff_pairwise_dist_eq** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：congruent_iff_pairwise_dist_eq : Congruent v₁ v₂ ↔ Pairwise fun i₁ i₂ => d
+ist (v₁ i₁) (v₁ i₂) = dist (v₂ i₁) (v₂ i₂)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-lemma congruent_iff_pairwise_dist_eq
-  proof: by
-  simp_rw [congruent_iff_pairwise_nndist_eq, dist_nndist]
-  exact_mod_cast Iff.rfl
-
-中文:
-引理 congruent_iff_pairwise_dist_eq
-  证明: by
-  simp_rw [congruent_iff_pairwise_nndist_eq, dist_nndist]
-  exact_mod_cast Iff.rfl
-
-Depends on / 依赖: Iff.rfl, congruent_iff_pairwise_nndist_eq, dist_nndist, simp_rw
+--- 原说明 ---
+Congruence holds if and only if all non-negative distances between points with d
+ifferent
+indices are the same.
 -/
 lemma congruent_iff_pairwise_dist_eq :
-    Congruent v₁ v₂ ↔ Pairwise fun i₁ i₂ => dist (v₁ i₁) (v₁ i₂) = dist (v₂ i₁) (v₂ i₂) := by
+    Congruent v₁ v₂ ↔ Pairwise fun i₁ i₂ ↦ dist (v₁ i₁) (v₁ i₂) = dist (v₂ i₁) (v₂ i₂) := by
   simp_rw [congruent_iff_pairwise_nndist_eq, dist_nndist]
   exact_mod_cast Iff.rfl
 
@@ -491,3 +476,4 @@ alias ⟨_, of_pairwise_dist_eq⟩ := congruent_iff_pairwise_dist_eq
 end Congruent
 
 end PseudoMetricSpace
+

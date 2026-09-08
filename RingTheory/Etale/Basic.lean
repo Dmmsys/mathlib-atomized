@@ -44,22 +44,17 @@ variable (R A) in
 /-- An `R`-algebra `A` is formally etale if both `Ω[A⁄R]` and `H¹(L_{A/R})` are zero.
 For the infinitesimal lifting definition, see `FormallyEtale.iff_comp_bijective`. -/
 @[mk_iff, stacks 00UQ]
-/--
-Definition of `FormallyEtale` / `FormallyEtale` 的定义
+/-
+**Algebra.FormallyEtale** 是 Mathlib 中的一个归纳类型，位于命名空间 `Algebra`。
+形式化陈述：(R : Type u) → (A : Type v) → [inst : CommRing R] → [inst_1 : CommRing A] 
+→ [Algebra R A] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class FormallyEtale
-  parameters: : Prop where
-  axioms and operations (2):
-    - subsingleton_kaehlerDifferential : Subsingleton Ω[A⁄R]
-    - subsingleton_h1Cotangent : Subsingleton (H1Cotangent R A)
-
-中文:
-类 形式平展
-  参数: : 命题 where
-  公理与运算 (2 个):
-    - subsingleton_kaehlerDifferential : 子单例 Ω[A⁄R]
-    - subsingleton_h1Cotangent : 子单例 (H1Cotangent R A)
+--- 原说明 ---
+An `R`-algebra `A` is formally etale if both `Ω[A⁄R]` and `H¹(L_{A/R})` are zero
+.
+For the infinitesimal lifting definition, see `FormallyEtale.iff_comp_bijective`
+.
 -/
 class FormallyEtale : Prop where
   subsingleton_kaehlerDifferential : Subsingleton Ω[A⁄R]
@@ -74,110 +69,141 @@ namespace FormallyEtale
 
 section
 
+/-
+**Algebra.FormallyEtale.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.FormallyEtale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) [FormallyEtale R A] :
     FormallyUnramified R A := ⟨inferInstance⟩
-
+/-
+**Algebra.FormallyEtale.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.FormallyEtale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) [FormallyEtale R A] : FormallySmooth R A :=
   ⟨inferInstance, inferInstance⟩
-
-/--
-theorem `iff_formallyUnramified_and_formallySmooth` / 定理 `iff_formallyUnramified_and_formallySmooth`
-
-English:
-theorem iff_formallyUnramified_and_formallySmooth
-  proof: ⟨fun _ => ⟨inferInstance, inferInstance⟩, fun ⟨_, _⟩ => ⟨inferInstance, inferInstance⟩⟩
-
-中文:
-定理 iff_formallyUnramified_and_formallySmooth
-  证明: ⟨fun _ => ⟨inferInstance, inferInstance⟩, fun ⟨_, _⟩ => ⟨inferInstance, inferInstance⟩⟩
+/-
+**Algebra.FormallyEtale.iff_formallyUnramified_and_formallySmooth** 是 Mathlib 中的
+一个定理，位于命名空间 `Algebra.FormallyEtale`。
+形式化陈述：iff_formallyUnramified_and_formallySmooth : FormallyEtale R A ↔ FormallyUn
+ramified R A ∧ FormallySmooth R A
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.FormallyEtale.instFormallyUnramified`：∀ {R : Type u} {A : Type v
+} [inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A]   [Algebra.Fo
+rmallyEtale R A], Algebra.Formally…
+· 使用定理 `Algebra.FormallyEtale.instFormallySmooth`：∀ {R : Type u} {A : Type v} [i
+nst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A]   [Algebra.Formal
+lyEtale R A], Algebra.Formally…
+· 使用定理 `Algebra.FormallyUnramified.subsingleton_kaehlerDifferential`：∀ {R : Type
+ v} {A : Type u} {inst : CommRing R} {inst_1 : CommRing A} {inst_2 : Algebra R A
+}   [self : Algebra.FormallyUnramified R A], Subs…
+· 使用定理 `Algebra.FormallySmooth.subsingleton_h1Cotangent`：∀ {R : Type u} {A : Typ
+e v} {inst : CommRing R} {inst_1 : CommRing A} {inst_2 : Algebra R A}   [self : 
+Algebra.FormallySmooth R A], Subsingl…
 -/
 theorem iff_formallyUnramified_and_formallySmooth :
     FormallyEtale R A ↔ FormallyUnramified R A ∧ FormallySmooth R A :=
-  ⟨fun _ => ⟨inferInstance, inferInstance⟩, fun ⟨_, _⟩ => ⟨inferInstance, inferInstance⟩⟩
-
-/--
-theorem `of_formallyUnramified_and_formallySmooth` / 定理 `of_formallyUnramified_and_formallySmooth`
-
-English:
-theorem of_formallyUnramified_and_formallySmooth
-  statement: [FormallyUnramified R A]
-  proof: FormallyEtale.iff_formallyUnramified_and_formallySmooth.mpr ⟨‹_›, ‹_›⟩
-
-中文:
-定理 of_formallyUnramified_and_formallySmooth
-  结论: [形式非分歧 R A]
-  证明: FormallyEtale.iff_formallyUnramified_and_formallySmooth.mpr ⟨‹_›, ‹_›⟩
-
-Depends on / 依赖: FormallyEtale, FormallyEtale.iff_formallyUnramified_and_formallySmooth.mpr, iff_formallyUnramified_and_formallySmooth
+  ⟨fun _ ↦ ⟨inferInstance, inferInstance⟩, fun ⟨_, _⟩ ↦ ⟨inferInstance, inferInstance⟩⟩
+/-
+**Algebra.FormallyEtale.of_formallyUnramified_and_formallySmooth** 是 Mathlib 中的一
+个定理，位于命名空间 `Algebra.FormallyEtale`。
+形式化陈述：of_formallyUnramified_and_formallySmooth [FormallyUnramified R A] [Formall
+ySmooth R A] : FormallyEtale R A
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Algebra.FormallyEtale.iff_formallyUnramified_and_formallySmooth`：iff_for
+mallyUnramified_and_formallySmooth : FormallyEtale R A ↔ FormallyUnramified R A 
+∧ FormallySmooth R A
 -/
 theorem of_formallyUnramified_and_formallySmooth [FormallyUnramified R A]
     [FormallySmooth R A] : FormallyEtale R A :=
   FormallyEtale.iff_formallyUnramified_and_formallySmooth.mpr ⟨‹_›, ‹_›⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FormallyEtale R R
-  body: of_formallyUnramified_and_formallySmooth
-
-中文:
-实例 :
-  签名: 形式平展 R R
-  定义体: of_formallyUnramified_and_formallySmooth
-
-Depends on / 依赖: of_formallyUnramified_and_formallySmooth, transpose, without
+/-
+**Algebra.FormallyEtale.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.FormallyEtale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : FormallyEtale R R := of_formallyUnramified_and_formallySmooth
 
 variable (R A) in
-/--
-lemma `comp_bijective` / 引理 `comp_bijective`
-
-English:
-lemma comp_bijective
-  given: [FormallyEtale R A] (I : Ideal B) (hI : I ^ 2 = ⊥)
-  proof: ⟨FormallyUnramified.comp_injective I hI, FormallySmooth.comp_surjective R A I hI⟩
-
-中文:
-引理 comp_bijective
-  条件: [形式平展 R A] (I : 理想 B) (hI : I ^ 2 = ⊥)
-  证明: ⟨FormallyUnramified.comp_injective I hI, FormallySmooth.comp_surjective R A I hI⟩
-
-Depends on / 依赖: FormallySmooth, FormallySmooth.comp_surjective, FormallyUnramified, FormallyUnramified.comp_injective, comp_injective, comp_surjective
+/-
+**Algebra.FormallyEtale.comp_bijective** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Formal
+lyEtale`。
+形式化陈述：comp_bijective [FormallyEtale R A] (I : Ideal B) (hI : I ^ 2 = ⊥) : Functi
+on.Bijective ((Ideal.Quotient.mkₐ R I).comp : (A ->ₐ[R] B) -> A ->ₐ[R] B ⧸ I)
+参数：I : Ideal B；hI : I ^ 2 = ⊥。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Algebra.FormallyUnramified.comp_injective`：comp_injective [FormallyUnram
+ified R A] (hI : I ^ 2 = ⊥) : Function.Injective ((Ideal.Quotient.mkₐ R I).comp 
+: (A ->ₐ[R] B) -> A ->ₐ[R] B ⧸ …
+· 使用定理 `Algebra.FormallyEtale.instFormallyUnramified`：∀ {R : Type u} {A : Type v
+} [inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A]   [Algebra.Fo
+rmallyEtale R A], Algebra.Formally…
+· 使用定理 `Algebra.FormallySmooth.comp_surjective`：∀ (R : Type u) (A : Type v) [ins
+t : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A] {B : Type u_1}   [i
+nst_3 : CommRing B] [inst_4 …
+· 使用定理 `Algebra.FormallyEtale.instFormallySmooth`：∀ {R : Type u} {A : Type v} [i
+nst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A]   [Algebra.Formal
+lyEtale R A], Algebra.Formally…
 -/
 lemma comp_bijective [FormallyEtale R A] (I : Ideal B) (hI : I ^ 2 = ⊥) :
-    Function.Bijective ((Ideal.Quotient.mkₐ R I).comp : (A ->ₐ[R] B) -> A ->ₐ[R] B ⧸ I) :=
+    Function.Bijective ((Ideal.Quotient.mkₐ R I).comp : (A →ₐ[R] B) → A →ₐ[R] B ⧸ I) :=
   ⟨FormallyUnramified.comp_injective I hI, FormallySmooth.comp_surjective R A I hI⟩
 
 /--
-theorem `iff_comp_bijective` / 定理 `iff_comp_bijective`
+An `R`-algebra `A` is formally etale iff "for every `R`-algebra `B`,
+every square-zero ideal `I : Ideal B` and `f : A →ₐ[R] B ⧸ I`, there exists
+a unique lift `A →ₐ[R] B`".
+-/
+/-
+**Algebra.FormallyEtale.iff_comp_bijective** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.Fo
+rmallyEtale`。
+形式化陈述：iff_comp_bijective : FormallyEtale R A ↔ forall ⦃B : Type max u v⦄ [CommRi
+ng B] [Algebra R B] (I : Ideal B), I ^ 2 = ⊥ -> Function.Bijective ((Ideal.Quoti
+ent.mkₐ R I).comp : (A ->ₐ[R] B) -> A ->ₐ[R] B ⧸ I)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用引理 `Algebra.FormallyEtale.comp_bijective`：comp_bijective [FormallyEtale R A]
+ (I : Ideal B) (hI : I ^ 2 = ⊥) : Function.Bijective ((Ideal.Quotient.mkₐ R I).c
+omp : (A ->ₐ[R] B) -> A ->…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Algebra.FormallyUnramified.iff_comp_injective_of_small`：iff_comp_injecti
+ve_of_small [Small.{w} A] : FormallyUnramified R A ↔ forall ⦃B : Type w⦄ [CommRi
+ng B], forall [Algebra R B] (I : Ideal B) (_…
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `Function.Bijective.injective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β
+}, Function.Bijective f → Function.Injective f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Algebra.FormallySmooth.of_comp_surjective`：∀ {R : Type u} {A : Type v} [
+inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A],   (∀ ⦃B : Type 
+(max u v)⦄ [inst_3 : CommRing B…
+· 使用定理 `Function.Bijective.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → 
+β}, Function.Bijective f → Function.Surjective f
+· 使用定理 `Algebra.FormallyEtale.of_formallyUnramified_and_formallySmooth`：of_forma
+llyUnramified_and_formallySmooth [FormallyUnramified R A] [FormallySmooth R A] :
+ FormallyEtale R A
 
-English:
-theorem iff_comp_bijective
-  proof: ⟨fun _ _ => comp_bijective R A, fun H =>
-    have : FormallyUnramified R A := FormallyUnramified.iff_comp_injective_of_small.{max u v}.mpr
-      (by aesop (add safe Function.Bijective.injective))
-    have : FormallySmooth R A := FormallySmooth.of_comp_surjective
-      (by aesop (add safe Function.Bijective.surjective))
-   .of_formallyUnramified_and_formallySmooth⟩
-
-中文:
-定理 iff_comp_bijective
-  证明: ⟨fun _ _ => comp_bijective R A, fun H =>
-    have : FormallyUnramified R A := FormallyUnramified.iff_comp_injective_of_small.{max u v}.mpr
-      (by aesop (add safe Function.Bijective.injective))
-    have : FormallySmooth R A := FormallySmooth.of_comp_surjective
-      (by aesop (add safe Function.Bijective.surjective))
-   .of_formallyUnramified_and_formallySmooth⟩
-
-Depends on / 依赖: Bijective, FormallySmooth, FormallySmooth.of_comp_surjective, FormallyUnramified, FormallyUnramified.iff_comp_injective_of_small, Function, Function.Bijective.injective, Function.Bijective.surjective, comp_bijective, iff_comp_injective_of_small, injective, of_comp_surjective, of_formallyUnramified_and_formallySmooth, surjective
+--- 原说明 ---
+An `R`-algebra `A` is formally etale iff "for every `R`-algebra `B`,
+every square-zero ideal `I : Ideal B` and `f : A →ₐ[R] B ⧸ I`, there exists
+a unique lift `A →ₐ[R] B`".
 -/
 theorem iff_comp_bijective :
-   FormallyEtale R A ↔ forall ⦃B : Type max u v⦄ [CommRing B] [Algebra R B] (I : Ideal B), I ^ 2 = ⊥ ->
-      Function.Bijective ((Ideal.Quotient.mkₐ R I).comp : (A ->ₐ[R] B) -> A ->ₐ[R] B ⧸ I) :=
-  ⟨fun _ _ => comp_bijective R A, fun H =>
+   FormallyEtale R A ↔ ∀ ⦃B : Type max u v⦄ [CommRing B] [Algebra R B] (I : Ideal B), I ^ 2 = ⊥ →
+      Function.Bijective ((Ideal.Quotient.mkₐ R I).comp : (A →ₐ[R] B) → A →ₐ[R] B ⧸ I) :=
+  ⟨fun _ _ ↦ comp_bijective R A, fun H ↦
     have : FormallyUnramified R A := FormallyUnramified.iff_comp_injective_of_small.{max u v}.mpr
       (by aesop (add safe Function.Bijective.injective))
     have : FormallySmooth R A := FormallySmooth.of_comp_surjective
@@ -188,48 +214,44 @@ end
 
 section OfEquiv
 
-/--
-theorem `of_equiv` / 定理 `of_equiv`
-
-English:
-theorem of_equiv
-  given: [FormallyEtale R A] (e : A ≃ₐ[R] B)
-  statement: FormallyEtale R B
-  proof: FormallyEtale.iff_formallyUnramified_and_formallySmooth.mpr
-    ⟨FormallyUnramified.of_equiv e, FormallySmooth.of_equiv e⟩
-
-中文:
-定理 of_equiv
-  条件: [形式平展 R A] (e : A ≃ₐ[R] B)
-  结论: 形式平展 R B
-  证明: FormallyEtale.iff_formallyUnramified_and_formallySmooth.mpr
-    ⟨FormallyUnramified.of_equiv e, FormallySmooth.of_equiv e⟩
-
-Depends on / 依赖: FormallyEtale, FormallyEtale.iff_formallyUnramified_and_formallySmooth.mpr, FormallySmooth, FormallySmooth.of_equiv, FormallyUnramified, FormallyUnramified.of_equiv, iff_formallyUnramified_and_formallySmooth, of_equiv
+/-
+**Algebra.FormallyEtale.of_equiv** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.FormallyEtal
+e`。
+形式化陈述：of_equiv [FormallyEtale R A] (e : A ≃ₐ[R] B) : FormallyEtale R B
+参数：e : A ≃ₐ[R] B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Algebra.FormallyEtale.iff_formallyUnramified_and_formallySmooth`：iff_for
+mallyUnramified_and_formallySmooth : FormallyEtale R A ↔ FormallyUnramified R A 
+∧ FormallySmooth R A
+· 使用定理 `Algebra.FormallyUnramified.of_equiv`：of_equiv [FormallyUnramified R A] (
+e : A ≃ₐ[R] B) : FormallyUnramified R B
+· 使用定理 `Algebra.FormallyEtale.instFormallyUnramified`：∀ {R : Type u} {A : Type v
+} [inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A]   [Algebra.Fo
+rmallyEtale R A], Algebra.Formally…
+· 使用定理 `Algebra.FormallySmooth.of_equiv`：∀ {R : Type u_4} [inst : CommRing R] {A
+ : Type u_5} {B : Type u_6} [inst_1 : CommRing A] [inst_2 : Algebra R A]   [inst
+_3 : CommRing B] [ins…
+· 使用定理 `Algebra.FormallyEtale.instFormallySmooth`：∀ {R : Type u} {A : Type v} [i
+nst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A]   [Algebra.Formal
+lyEtale R A], Algebra.Formally…
 -/
 theorem of_equiv [FormallyEtale R A] (e : A ≃ₐ[R] B) : FormallyEtale R B :=
   FormallyEtale.iff_formallyUnramified_and_formallySmooth.mpr
     ⟨FormallyUnramified.of_equiv e, FormallySmooth.of_equiv e⟩
-
-/--
-theorem `iff_of_equiv` / 定理 `iff_of_equiv`
-
-English:
-theorem iff_of_equiv
-  given: (e : A ≃ₐ[R] B)
-  statement: FormallyEtale R A ↔ FormallyEtale R B
-  proof: ⟨fun _ => of_equiv e, fun _ => of_equiv e.symm⟩
-
-中文:
-定理 iff_of_equiv
-  条件: (e : A ≃ₐ[R] B)
-  结论: 形式平展 R A ↔ 形式平展 R B
-  证明: ⟨fun _ => of_equiv e, fun _ => of_equiv e.symm⟩
-
-Depends on / 依赖: e.symm, of_equiv
+/-
+**Algebra.FormallyEtale.iff_of_equiv** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.Formally
+Etale`。
+形式化陈述：iff_of_equiv (e : A ≃ₐ[R] B) : FormallyEtale R A ↔ FormallyEtale R B
+参数：e : A ≃ₐ[R] B。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.FormallyEtale.of_equiv`：of_equiv [FormallyEtale R A] (e : A ≃ₐ[R
+] B) : FormallyEtale R B
 -/
 theorem iff_of_equiv (e : A ≃ₐ[R] B) : FormallyEtale R A ↔ FormallyEtale R B :=
-  ⟨fun _ => of_equiv e, fun _ => of_equiv e.symm⟩
+  ⟨fun _ ↦ of_equiv e, fun _ ↦ of_equiv e.symm⟩
 
 end OfEquiv
 
@@ -238,133 +260,129 @@ section Comp
 variable [Algebra A B] [IsScalarTower R A B]
 
 variable (R A B) in
-/--
-theorem `comp` / 定理 `comp`
-
-English:
-theorem comp
-  given: [FormallyEtale R A] [FormallyEtale A B]
-  proof: FormallyEtale.iff_formallyUnramified_and_formallySmooth.mpr
-    ⟨FormallyUnramified.comp R A B, FormallySmooth.comp R A B⟩
-
-中文:
-定理 comp
-  条件: [形式平展 R A] [形式平展 A B]
-  证明: FormallyEtale.iff_formallyUnramified_and_formallySmooth.mpr
-    ⟨FormallyUnramified.comp R A B, FormallySmooth.comp R A B⟩
-
-Depends on / 依赖: FormallyEtale, FormallyEtale.iff_formallyUnramified_and_formallySmooth.mpr, FormallySmooth, FormallySmooth.comp, FormallyUnramified, FormallyUnramified.comp, iff_formallyUnramified_and_formallySmooth
+/-
+**Algebra.FormallyEtale.comp** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.FormallyEtale`。
+形式化陈述：comp [FormallyEtale R A] [FormallyEtale A B] : FormallyEtale R B
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Algebra.FormallyEtale.iff_formallyUnramified_and_formallySmooth`：iff_for
+mallyUnramified_and_formallySmooth : FormallyEtale R A ↔ FormallyUnramified R A 
+∧ FormallySmooth R A
+· 使用定理 `Algebra.FormallyUnramified.comp`：comp [FormallyUnramified R A] [Formally
+Unramified A B] : FormallyUnramified R B
+· 使用定理 `Algebra.FormallyEtale.instFormallyUnramified`：∀ {R : Type u} {A : Type v
+} [inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A]   [Algebra.Fo
+rmallyEtale R A], Algebra.Formally…
+· 使用定理 `Algebra.FormallySmooth.comp`：∀ (R : Type u_4) [inst : CommRing R] (A : T
+ype u_5) [inst_1 : CommRing A] [inst_2 : Algebra R A] (B : Type u_6)   [inst_3 :
+ CommRing B] [ins…
+· 使用定理 `Algebra.FormallyEtale.instFormallySmooth`：∀ {R : Type u} {A : Type v} [i
+nst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A]   [Algebra.Formal
+lyEtale R A], Algebra.Formally…
 -/
 theorem comp [FormallyEtale R A] [FormallyEtale A B] :
     FormallyEtale R B :=
   FormallyEtale.iff_formallyUnramified_and_formallySmooth.mpr
     ⟨FormallyUnramified.comp R A B, FormallySmooth.comp R A B⟩
-
-/--
-lemma `of_restrictScalars` / 引理 `of_restrictScalars`
-
-English:
-lemma of_restrictScalars
-  given: [FormallyUnramified R A] [FormallyEtale R B]
-  proof: have := FormallyUnramified.of_restrictScalars R A B
-  have := FormallySmooth.of_restrictScalars R A B
-  .of_formallyUnramified_and_formallySmooth
-
-中文:
-引理 of_restrictScalars
-  条件: [形式非分歧 R A] [形式平展 R B]
-  证明: have := FormallyUnramified.of_restrictScalars R A B
-  have := FormallySmooth.of_restrictScalars R A B
-  .of_formallyUnramified_and_formallySmooth
-
-Depends on / 依赖: FormallySmooth, FormallySmooth.of_restrictScalars, FormallyUnramified, FormallyUnramified.of_restrictScalars, of_formallyUnramified_and_formallySmooth, of_restrictScalars
+/-
+**Algebra.FormallyEtale.of_restrictScalars** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Fo
+rmallyEtale`。
+形式化陈述：of_restrictScalars [FormallyUnramified R A] [FormallyEtale R B] : Formally
+Etale A B
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.FormallyUnramified.of_restrictScalars`：of_restrictScalars [Forma
+llyUnramified R B] : FormallyUnramified A B
+· 使用定理 `Algebra.FormallyEtale.instFormallyUnramified`：∀ {R : Type u} {A : Type v
+} [inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A]   [Algebra.Fo
+rmallyEtale R A], Algebra.Formally…
+· 使用定理 `Algebra.FormallySmooth.of_restrictScalars`：∀ (R : Type u_4) [inst : Comm
+Ring R] (A : Type u_5) [inst_1 : CommRing A] [inst_2 : Algebra R A] (B : Type u_
+6)   [inst_3 : CommRing B] [ins…
+· 使用定理 `Algebra.FormallyEtale.instFormallySmooth`：∀ {R : Type u} {A : Type v} [i
+nst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A]   [Algebra.Formal
+lyEtale R A], Algebra.Formally…
+· 使用定理 `Algebra.FormallyEtale.of_formallyUnramified_and_formallySmooth`：of_forma
+llyUnramified_and_formallySmooth [FormallyUnramified R A] [FormallySmooth R A] :
+ FormallyEtale R A
 -/
 lemma of_restrictScalars [FormallyUnramified R A] [FormallyEtale R B] :
     FormallyEtale A B :=
   have := FormallyUnramified.of_restrictScalars R A B
   have := FormallySmooth.of_restrictScalars R A B
   .of_formallyUnramified_and_formallySmooth
-
-/--
-lemma `iff_restrictScalars` / 引理 `iff_restrictScalars`
-
-English:
-lemma iff_restrictScalars
-  given: [FormallyEtale R A]
-  proof: ⟨fun _ => .of_restrictScalars (R := R), fun _ => .comp _ A _⟩
-
-中文:
-引理 iff_restrictScalars
-  条件: [形式平展 R A]
-  证明: ⟨fun _ => .of_restrictScalars (R := R), fun _ => .comp _ A _⟩
-
-Depends on / 依赖: of_restrictScalars
+/-
+**Algebra.FormallyEtale.iff_restrictScalars** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.F
+ormallyEtale`。
+形式化陈述：iff_restrictScalars [FormallyEtale R A] : Algebra.FormallyEtale R B ↔ Alge
+bra.FormallyEtale A B
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Algebra.FormallyEtale.of_restrictScalars`：of_restrictScalars [FormallyUn
+ramified R A] [FormallyEtale R B] : FormallyEtale A B
+· 使用定理 `Algebra.FormallyEtale.instFormallyUnramified`：∀ {R : Type u} {A : Type v
+} [inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A]   [Algebra.Fo
+rmallyEtale R A], Algebra.Formally…
+· 使用定理 `Algebra.FormallyEtale.comp`：comp [FormallyEtale R A] [FormallyEtale A B]
+ : FormallyEtale R B
 -/
 lemma iff_restrictScalars [FormallyEtale R A] :
     Algebra.FormallyEtale R B ↔ Algebra.FormallyEtale A B :=
-  ⟨fun _ => .of_restrictScalars (R := R), fun _ => .comp _ A _⟩
-
-/--
-lemma `_root_.Algebra.FormallySmooth.iff_restrictScalars` / 引理 `_root_.Algebra.FormallySmooth.iff_restrictScalars`
-
-English:
-lemma _root_.Algebra.FormallySmooth.iff_restrictScalars
-  given: [FormallyEtale R A]
-  proof: ⟨fun _ => .of_restrictScalars R _ _, fun _ => .comp _ A _⟩
-
-中文:
-引理 _root_.代数.形式光滑.iff_restrictScalars
-  条件: [形式平展 R A]
-  证明: ⟨fun _ => .of_restrictScalars R _ _, fun _ => .comp _ A _⟩
-
-Depends on / 依赖: of_restrictScalars
+  ⟨fun _ ↦ .of_restrictScalars (R := R), fun _ ↦ .comp _ A _⟩
+/-
+**Algebra.FormallyEtale._root_.Algebra.FormallySmooth.iff_restrictScalars** 是 Ma
+thlib 中的一个引理，位于命名空间 `Algebra.FormallyEtale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.Algebra.FormallySmooth.iff_restrictScalars [FormallyEtale R A] :
     Algebra.FormallySmooth R B ↔ Algebra.FormallySmooth A B :=
-  ⟨fun _ => .of_restrictScalars R _ _, fun _ => .comp _ A _⟩
+  ⟨fun _ ↦ .of_restrictScalars R _ _, fun _ ↦ .comp _ A _⟩
 
 end Comp
 
-/--
-lemma `iff_of_surjective` / 引理 `iff_of_surjective`
-
-English:
-lemma iff_of_surjective
-  proof: by
-  rw [FormallyEtale.iff_formallyUnramified_and_formallySmooth]; rw [← FormallySmooth.iff_of_surjective h]; rw [and_iff_right (FormallyUnramified.of_surjective (Algebra.ofId R S) h)]
-
-中文:
-引理 iff_of_surjective
-  证明: by
-  rw [FormallyEtale.iff_formallyUnramified_and_formallySmooth]; rw [← FormallySmooth.iff_of_surjective h]; rw [and_iff_right (FormallyUnramified.of_surjective (Algebra.ofId R S) h)]
-
-Depends on / 依赖: Algebra, Algebra.ofId, FormallyEtale, FormallyEtale.iff_formallyUnramified_and_formallySmooth, FormallySmooth, FormallySmooth.iff_of_surjective, FormallyUnramified, FormallyUnramified.of_surjective, and_iff_right, iff_formallyUnramified_and_formallySmooth, iff_of_surjective, of_surjective
+/-
+**Algebra.FormallyEtale.iff_of_surjective** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.For
+mallyEtale`。
+形式化陈述：iff_of_surjective {R S : Type*} [CommRing R] [CommRing S] [Algebra R S] (h
+ : Function.Surjective (algebraMap R S)) : Algebra.FormallyEtale R S ↔ IsIdempot
+entElem (RingHom.ker (algebraMap R S))
+参数：h : Function.Surjective (algebraMap R S)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.FormallyEtale.iff_formallyUnramified_and_formallySmooth`：iff_for
+mallyUnramified_and_formallySmooth : FormallyEtale R A ↔ FormallyUnramified R A 
+∧ FormallySmooth R A
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Algebra.FormallySmooth.iff_of_surjective`：∀ {R : Type u_4} [inst : CommR
+ing R] {A : Type u_6} [inst_1 : CommRing A] [inst_2 : Algebra R A],   Function.S
+urjective ⇑(algebraMap R A) → …
+· 使用定理 `and_iff_right`：∀ {a b : Prop}, a → (a ∧ b ↔ b)
+· 使用定理 `Algebra.FormallyUnramified.of_surjective`：of_surjective [FormallyUnramif
+ied R A] (f : A ->ₐ[R] B) (H : Function.Surjective f) : FormallyUnramified R B
+· 使用定理 `Algebra.FormallyUnramified.inst`：∀ {R : Type u} [inst : CommRing R], Alg
+ebra.FormallyUnramified R R
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma iff_of_surjective
     {R S : Type*} [CommRing R] [CommRing S]
     [Algebra R S] (h : Function.Surjective (algebraMap R S)) :
     Algebra.FormallyEtale R S ↔ IsIdempotentElem (RingHom.ker (algebraMap R S)) := by
-  rw [FormallyEtale.iff_formallyUnramified_and_formallySmooth]; rw [← FormallySmooth.iff_of_surjective h]; rw [and_iff_right (FormallyUnramified.of_surjective (Algebra.ofId R S) h)]
+  rw [FormallyEtale.iff_formallyUnramified_and_formallySmooth, ← FormallySmooth.iff_of_surjective h,
+    and_iff_right (FormallyUnramified.of_surjective (Algebra.ofId R S) h)]
 
 section BaseChange
 
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [FormallyEtale
-  signature: R A] : FormallyEtale B (B otimes[R] A)
-  body: .of_formallyUnramified_and_formallySmooth
-
-中文:
-实例 [形式平展
-  签名: R A] : 形式平展 B (B otimes[R] A)
-  定义体: .of_formallyUnramified_and_formallySmooth
-
-Depends on / 依赖: of_formallyUnramified_and_formallySmooth
+/-
+**Algebra.FormallyEtale.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.FormallyEtale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [FormallyEtale R A] : FormallyEtale B (B otimes[R] A) :=
+instance [FormallyEtale R A] : FormallyEtale B (B ⊗[R] A) :=
   .of_formallyUnramified_and_formallySmooth
 
 end BaseChange
@@ -377,9 +395,9 @@ We now consider a commutative square of commutative rings
 
 ```
 R -----> S
-| |
-| |
-v v
+|        |
+|        |
+v        v
 Rₘ ----> Sₘ
 ```
 
@@ -398,90 +416,79 @@ variable [IsScalarTower R Rₘ Sₘ] [IsScalarTower R S Sₘ]
 variable [IsLocalization M Rₘ] [IsLocalization (M.map (algebraMap R S)) Sₘ]
 include M
 
-/--
-theorem `of_isLocalization` / 定理 `of_isLocalization`
-
-English:
-theorem of_isLocalization
-  statement: FormallyEtale R Rₘ
-  proof: FormallyEtale.iff_formallyUnramified_and_formallySmooth.mpr
-    ⟨FormallyUnramified.of_isLocalization M, FormallySmooth.of_isLocalization M⟩
-
-中文:
-定理 of_isLocalization
-  结论: 形式平展 R Rₘ
-  证明: FormallyEtale.iff_formallyUnramified_and_formallySmooth.mpr
-    ⟨FormallyUnramified.of_isLocalization M, FormallySmooth.of_isLocalization M⟩
-
-Depends on / 依赖: FormallyEtale, FormallyEtale.iff_formallyUnramified_and_formallySmooth.mpr, FormallySmooth, FormallySmooth.of_isLocalization, FormallyUnramified, FormallyUnramified.of_isLocalization, iff_formallyUnramified_and_formallySmooth, of_isLocalization
+/-
+**Algebra.FormallyEtale.of_isLocalization** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.For
+mallyEtale`。
+形式化陈述：of_isLocalization : FormallyEtale R Rₘ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Algebra.FormallyEtale.iff_formallyUnramified_and_formallySmooth`：iff_for
+mallyUnramified_and_formallySmooth : FormallyEtale R A ↔ FormallyUnramified R A 
+∧ FormallySmooth R A
+· 使用定理 `Algebra.FormallyUnramified.of_isLocalization`：of_isLocalization [IsLocal
+ization M Rₘ] : FormallyUnramified R Rₘ
+· 使用定理 `Algebra.FormallySmooth.of_isLocalization`：∀ {R : Type u_4} {Rₘ : Type u_
+6} [inst : CommRing R] [inst_1 : CommRing Rₘ] (M : Submonoid R) [inst_2 : Algebr
+a R Rₘ]   [IsLocalization M Rₘ…
 -/
 theorem of_isLocalization : FormallyEtale R Rₘ :=
   FormallyEtale.iff_formallyUnramified_and_formallySmooth.mpr
     ⟨FormallyUnramified.of_isLocalization M, FormallySmooth.of_isLocalization M⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [FormallyEtale
-  signature: R S] (M
-  body: .of_formallyUnramified_and_formallySmooth
-
-中文:
-实例 [形式平展
-  签名: R S] (M
-  定义体: .of_formallyUnramified_and_formallySmooth
-
-Depends on / 依赖: of_formallyUnramified_and_formallySmooth
+/-
+**Algebra.FormallyEtale.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.FormallyEtale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [FormallyEtale R S] (M : Submonoid S) : FormallyEtale R (Localization M) :=
   .of_formallyUnramified_and_formallySmooth
-
-/--
-theorem `localization_base` / 定理 `localization_base`
-
-English:
-theorem localization_base
-  given: [FormallyEtale R Sₘ]
-  statement: FormallyEtale Rₘ Sₘ
-  proof: FormallyEtale.iff_formallyUnramified_and_formallySmooth.mpr
-    ⟨FormallyUnramified.localization_base M, FormallySmooth.localization_base M⟩
-
-中文:
-定理 localization_base
-  条件: [形式平展 R Sₘ]
-  结论: 形式平展 Rₘ Sₘ
-  证明: FormallyEtale.iff_formallyUnramified_and_formallySmooth.mpr
-    ⟨FormallyUnramified.localization_base M, FormallySmooth.localization_base M⟩
-
-Depends on / 依赖: FormallyEtale, FormallyEtale.iff_formallyUnramified_and_formallySmooth.mpr, FormallySmooth, FormallySmooth.localization_base, FormallyUnramified, FormallyUnramified.localization_base, iff_formallyUnramified_and_formallySmooth, localization_base
+/-
+**Algebra.FormallyEtale.localization_base** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.For
+mallyEtale`。
+形式化陈述：localization_base [FormallyEtale R Sₘ] : FormallyEtale Rₘ Sₘ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Algebra.FormallyEtale.iff_formallyUnramified_and_formallySmooth`：iff_for
+mallyUnramified_and_formallySmooth : FormallyEtale R A ↔ FormallyUnramified R A 
+∧ FormallySmooth R A
+· 使用定理 `Algebra.FormallyUnramified.localization_base`：localization_base [Formall
+yUnramified R Sₘ] : FormallyUnramified Rₘ Sₘ
+· 使用定理 `Algebra.FormallyEtale.instFormallyUnramified`：∀ {R : Type u} {A : Type v
+} [inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A]   [Algebra.Fo
+rmallyEtale R A], Algebra.Formally…
+· 使用定理 `Algebra.FormallySmooth.localization_base`：∀ {R : Type u_4} {Rₘ : Type u_
+6} {Sₘ : Type u_7} [inst : CommRing R] [inst_1 : CommRing Rₘ] [inst_2 : CommRing
+ Sₘ]   (M : Submonoid R) [inst…
+· 使用定理 `Algebra.FormallyEtale.instFormallySmooth`：∀ {R : Type u} {A : Type v} [i
+nst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A]   [Algebra.Formal
+lyEtale R A], Algebra.Formally…
 -/
 theorem localization_base [FormallyEtale R Sₘ] : FormallyEtale Rₘ Sₘ :=
   FormallyEtale.iff_formallyUnramified_and_formallySmooth.mpr
     ⟨FormallyUnramified.localization_base M, FormallySmooth.localization_base M⟩
 
-/--
-theorem `localization_map` / 定理 `localization_map`
+/-- The localization of a formally étale map is formally étale. -/
+/-
+**Algebra.FormallyEtale.localization_map** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.Form
+allyEtale`。
+形式化陈述：localization_map [FormallyEtale R S] : FormallyEtale Rₘ Sₘ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `Algebra.FormallyEtale.of_isLocalization`：of_isLocalization : FormallyEta
+le R Rₘ
+· 使用定理 `Algebra.FormallyEtale.comp`：comp [FormallyEtale R A] [FormallyEtale A B]
+ : FormallyEtale R B
+· 使用定理 `Algebra.FormallyEtale.localization_base`：localization_base [FormallyEtal
+e R Sₘ] : FormallyEtale Rₘ Sₘ
 
-English:
-theorem localization_map
-  given: [FormallyEtale R S]
-  statement: FormallyEtale Rₘ Sₘ
-  proof: by
-  have : FormallyEtale S Sₘ := FormallyEtale.of_isLocalization (M.map (algebraMap R S))
-  have : FormallyEtale R Sₘ := FormallyEtale.comp R S Sₘ
-  exact FormallyEtale.localization_base M
-
-中文:
-定理 localization_map
-  条件: [形式平展 R S]
-  结论: 形式平展 Rₘ Sₘ
-  证明: by
-  have : FormallyEtale S Sₘ := FormallyEtale.of_isLocalization (M.map (algebraMap R S))
-  have : FormallyEtale R Sₘ := FormallyEtale.comp R S Sₘ
-  exact FormallyEtale.localization_base M
-
-Depends on / 依赖: FormallyEtale, FormallyEtale.comp, FormallyEtale.localization_base, FormallyEtale.of_isLocalization, M.map, algebraMap, localization_base, of_isLocalization
+--- 原说明 ---
+The localization of a formally étale map is formally étale.
 -/
 theorem localization_map [FormallyEtale R S] : FormallyEtale Rₘ Sₘ := by
   have : FormallyEtale S Sₘ := FormallyEtale.of_isLocalization (M.map (algebraMap R S))
@@ -498,49 +505,36 @@ variable (R A) in
 /-- An `R`-algebra `A` is étale if it is formally étale and of finite presentation. -/
 @[mk_iff, stacks 00U1 "Note that this is a different definition from this Stacks entry, but
 <https://stacks.math.columbia.edu/tag/00UR> shows that it is equivalent to the definition here."]
-/--
-Definition of `Etale` / `Etale` 的定义
-
-English:
-class Etale
-  parameters: : Prop where
-  axioms and operations (2):
-    - formallyEtale : FormallyEtale R A  [default: by infer_instance]
-    - finitePresentation : FinitePresentation R A  [default: by infer_instance]
-
-中文:
-类 平展
-  参数: : 命题 where
-  公理与运算 (2 个):
-    - formallyEtale : 形式平展 R A  [默认: by infer_instance]
-    - finitePresentation : 有限呈现 R A  [默认: by infer_instance]
-
-Depends on / 依赖: FinitePresentation, finitePresentation, infer_instance
+/-
+**Algebra.Etale** 是 Mathlib 中的一个类，位于命名空间 `Algebra`。
+形式化陈述：Etale : Prop where formallyEtale : FormallyEtale R A
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 class Etale : Prop where
   formallyEtale : FormallyEtale R A := by infer_instance
   finitePresentation : FinitePresentation R A := by infer_instance
-
-/--
-lemma `Etale.iff_formallyUnramified_and_smooth` / 引理 `Etale.iff_formallyUnramified_and_smooth`
-
-English:
-lemma Etale.iff_formallyUnramified_and_smooth
-  proof: by
-  rw [etale_iff]; rw [FormallyEtale.iff_formallyUnramified_and_formallySmooth]; rw [smooth_iff]
-  tauto
-
-中文:
-引理 平展.iff_formallyUnramified_and_smooth
-  证明: by
-  rw [etale_iff]; rw [FormallyEtale.iff_formallyUnramified_and_formallySmooth]; rw [smooth_iff]
-  tauto
-
-Depends on / 依赖: FormallyEtale, FormallyEtale.iff_formallyUnramified_and_formallySmooth, Function, Function.Injective.ring, Injective, etale_iff, fast_instance, iff_formallyUnramified_and_formallySmooth, smooth_iff
+/-
+**Algebra.Etale.iff_formallyUnramified_and_smooth** 是 Mathlib 中的一个定理，位于命名空间 `Alg
+ebra.Etale`。
+形式化陈述：∀ {R : Type u} {A : Type v} [inst : CommRing R] [inst_1 : CommRing A] [ins
+t_2 : Algebra R A],   Algebra.Etale R A ↔ Algebra.FormallyUnramified R A ∧ Algeb
+ra.Smooth R A
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.etale_iff`：∀ (R : Type u) (A : Type v) [inst : CommRing R] [inst
+_1 : CommRing A] [inst_2 : Algebra R A],   Algebra.Etale R A ↔     autoParam (Al
+gebra.F…
+· 使用定理 `Algebra.FormallyEtale.iff_formallyUnramified_and_formallySmooth`：iff_for
+mallyUnramified_and_formallySmooth : FormallyEtale R A ↔ FormallyUnramified R A 
+∧ FormallySmooth R A
+· 使用定理 `Algebra.smooth_iff`：∀ (R : Type u_4) [inst : CommRing R] (A : Type u) [i
+nst_1 : CommRing A] [inst_2 : Algebra R A],   Algebra.Smooth R A ↔     autoParam
+ (Algebr…
 -/
 lemma Etale.iff_formallyUnramified_and_smooth :
     Etale R A ↔ FormallyUnramified R A ∧ Smooth R A := by
-  rw [etale_iff]; rw [FormallyEtale.iff_formallyUnramified_and_formallySmooth]; rw [smooth_iff]
+  rw [etale_iff, FormallyEtale.iff_formallyUnramified_and_formallySmooth, smooth_iff]
   tauto
 
 end
@@ -549,52 +543,42 @@ namespace Etale
 
 attribute [instance] formallyEtale finitePresentation
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Etale R R
-
-中文:
-实例 :
-  签名: 平展 R R
+/-
+**Algebra.Etale.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.Etale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Etale R R where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Etale
-  signature: R A] : Smooth R A where
-
-中文:
-实例 [平展
-  签名: R A] : 光滑 R A where
+/-
+**Algebra.Etale.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.Etale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Etale R A] : Smooth R A where
-
+/-
+**Algebra.Etale.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.Etale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := low) [Etale R A] : Unramified R A where
 
-/--
-theorem `of_equiv` / 定理 `of_equiv`
+/-- Being étale is transported via algebra isomorphisms. -/
+/-
+**Algebra.Etale.of_equiv** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.Etale`。
+形式化陈述：of_equiv [Etale R A] (e : A ≃ₐ[R] B) : Etale R B where formallyEtale
+参数：e : A ≃ₐ[R] B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.FormallyEtale.of_equiv`：of_equiv [FormallyEtale R A] (e : A ≃ₐ[R
+] B) : FormallyEtale R B
+· 使用定理 `Algebra.Etale.formallyEtale`：∀ {R : Type u} {A : Type v} {inst : CommRin
+g R} {inst_1 : CommRing A} {inst_2 : Algebra R A} [self : Algebra.Etale R A],   
+Algebra.FormallyE…
+· 使用定理 `Algebra.FinitePresentation.equiv`：equiv [FinitePresentation R A] (e : A 
+≃ₐ[R] B) : FinitePresentation R B
+· 使用定理 `Algebra.Etale.finitePresentation`：∀ {R : Type u} {A : Type v} {inst : Co
+mmRing R} {inst_1 : CommRing A} {inst_2 : Algebra R A} [self : Algebra.Etale R A
+],   Algebra.FinitePre…
 
-English:
-theorem of_equiv
-  given: [Etale R A] (e : A ≃ₐ[R] B)
-  statement: Etale R B where
-  proof: FormallyEtale.of_equiv e
-  finitePresentation := FinitePresentation.equiv e
-
-中文:
-定理 of_equiv
-  条件: [平展 R A] (e : A ≃ₐ[R] B)
-  结论: 平展 R B where
-  证明: FormallyEtale.of_equiv e
-  finitePresentation := FinitePresentation.equiv e
-
-Depends on / 依赖: FormallyEtale, FormallyEtale.of_equiv, of_equiv
+--- 原说明 ---
+Being étale is transported via algebra isomorphisms.
 -/
 theorem of_equiv [Etale R A] (e : A ≃ₐ[R] B) : Etale R B where
   formallyEtale := FormallyEtale.of_equiv e
@@ -604,58 +588,81 @@ section Comp
 
 variable (R A B)
 
-/--
-theorem `comp` / 定理 `comp`
+/-- Étale is stable under composition. -/
+/-
+**Algebra.Etale.comp** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.Etale`。
+形式化陈述：comp [Algebra A B] [IsScalarTower R A B] [Etale R A] [Etale A B] : Etale R
+ B where formallyEtale
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.FormallyEtale.comp`：comp [FormallyEtale R A] [FormallyEtale A B]
+ : FormallyEtale R B
+· 使用定理 `Algebra.Etale.formallyEtale`：∀ {R : Type u} {A : Type v} {inst : CommRin
+g R} {inst_1 : CommRing A} {inst_2 : Algebra R A} [self : Algebra.Etale R A],   
+Algebra.FormallyE…
+· 使用定理 `Algebra.FinitePresentation.trans`：trans [Algebra A B] [IsScalarTower R A
+ B] [FinitePresentation R A] [FinitePresentation A B] : FinitePresentation R B
+· 使用定理 `Algebra.Etale.finitePresentation`：∀ {R : Type u} {A : Type v} {inst : Co
+mmRing R} {inst_1 : CommRing A} {inst_2 : Algebra R A} [self : Algebra.Etale R A
+],   Algebra.FinitePre…
 
-English:
-theorem comp
-  given: [Algebra A B] [IsScalarTower R A B] [Etale R A] [Etale A B]
-  statement: Etale R B where
-  proof: FormallyEtale.comp R A B
-  finitePresentation := FinitePresentation.trans R A B
-
-中文:
-定理 comp
-  条件: [代数 A B] [标量塔 R A B] [平展 R A] [平展 A B]
-  结论: 平展 R B where
-  证明: FormallyEtale.comp R A B
-  finitePresentation := FinitePresentation.trans R A B
-
-Depends on / 依赖: FormallyEtale, FormallyEtale.comp
+--- 原说明 ---
+Étale is stable under composition.
 -/
 theorem comp [Algebra A B] [IsScalarTower R A B] [Etale R A] [Etale A B] : Etale R B where
   formallyEtale := FormallyEtale.comp R A B
   finitePresentation := FinitePresentation.trans R A B
 
-/--
-Instance `baseChange` / 实例 `baseChange`
+/-- Étale is stable under base change. -/
+/-
+**Algebra.Etale.baseChange** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.Etale`。
+形式化陈述：∀ (R : Type u) (A : Type v) (B : Type u_1) [inst : CommRing R] [inst_1 : C
+ommRing A] [inst_2 : Algebra R A]   [inst_3 : CommRing B] [inst_4 : Algebra R B]
+ [Algebra.Etale R A], Algebra.Etale B (TensorProduct R B A)
+参数：R : Type u；A : Type v；B : Type u_1；TensorProduct R B A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `Algebra.FormallyEtale.instTensorProduct`：∀ {R : Type u} {A : Type v} {B 
+: Type u_1} [inst : CommRing R] [inst_1 : CommRing A] [inst_2 : Algebra R A]   [
+inst_3 : CommRing B] [inst_4 …
+· 使用定理 `Algebra.Etale.formallyEtale`：∀ {R : Type u} {A : Type v} {inst : CommRin
+g R} {inst_1 : CommRing A} {inst_2 : Algebra R A} [self : Algebra.Etale R A],   
+Algebra.FormallyE…
+· 使用定理 `Algebra.Etale.finitePresentation`：∀ {R : Type u} {A : Type v} {inst : Co
+mmRing R} {inst_1 : CommRing A} {inst_2 : Algebra R A} [self : Algebra.Etale R A
+],   Algebra.FinitePre…
 
-English:
-instance baseChange
-  signature: [Etale R A]
-
-中文:
-实例 baseChange
-  签名: [平展 R A]
+--- 原说明 ---
+Étale is stable under base change.
 -/
-instance baseChange [Etale R A] : Etale B (B otimes[R] A) where
-
-/--
-lemma `of_restrictScalars` / 引理 `of_restrictScalars`
-
-English:
-lemma of_restrictScalars
-  given: [Algebra A B] [IsScalarTower R A B] [Etale R A] [Etale R B]
-  proof: .of_restrict_scalars_finitePresentation R A B
-  formallyEtale := .of_restrictScalars (R := R)
-
-中文:
-引理 of_restrictScalars
-  条件: [代数 A B] [标量塔 R A B] [平展 R A] [平展 R B]
-  证明: .of_restrict_scalars_finitePresentation R A B
-  formallyEtale := .of_restrictScalars (R := R)
-
-Depends on / 依赖: of_restrict_scalars_finitePresentation
+instance baseChange [Etale R A] : Etale B (B ⊗[R] A) where
+/-
+**Algebra.Etale.of_restrictScalars** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Etale`。
+形式化陈述：of_restrictScalars [Algebra A B] [IsScalarTower R A B] [Etale R A] [Etale 
+R B] : Etale A B where finitePresentation
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Algebra.FormallyEtale.of_restrictScalars`：of_restrictScalars [FormallyUn
+ramified R A] [FormallyEtale R B] : FormallyEtale A B
+· 使用定理 `Algebra.Unramified.formallyUnramified`：∀ {R : Type u_1} {inst : CommRing
+ R} {A : Type u_2} {inst_1 : CommRing A} {inst_2 : Algebra R A}   [self : Algebr
+a.Unramified R A], Algebra.…
+· 使用定理 `Algebra.Etale.instUnramified`：∀ {R : Type u} {A : Type v} [inst : CommRi
+ng R] [inst_1 : CommRing A] [inst_2 : Algebra R A] [Algebra.Etale R A],   Algebr
+a.Unramified R A
+· 使用定理 `Algebra.Etale.formallyEtale`：∀ {R : Type u} {A : Type v} {inst : CommRin
+g R} {inst_1 : CommRing A} {inst_2 : Algebra R A} [self : Algebra.Etale R A],   
+Algebra.FormallyE…
+· 使用定理 `Algebra.FinitePresentation.of_restrict_scalars_finitePresentation`：of_re
+strict_scalars_finitePresentation [Algebra A B] [IsScalarTower R A B] [FinitePre
+sentation.{w₁, w₃} R B] [FiniteType R A] : FinitePresen…
+· 使用定理 `Algebra.Etale.finitePresentation`：∀ {R : Type u} {A : Type v} {inst : Co
+mmRing R} {inst_1 : CommRing A} {inst_2 : Algebra R A} [self : Algebra.Etale R A
+],   Algebra.FinitePre…
+· 使用定理 `Algebra.Unramified.finiteType`：∀ {R : Type u_1} {inst : CommRing R} {A :
+ Type u_2} {inst_1 : CommRing A} {inst_2 : Algebra R A}   [self : Algebra.Unrami
+fied R A], Algebra.…
 -/
 lemma of_restrictScalars [Algebra A B] [IsScalarTower R A B] [Etale R A] [Etale R B] :
     Etale A B where
@@ -664,43 +671,53 @@ lemma of_restrictScalars [Algebra A B] [IsScalarTower R A B] [Etale R A] [Etale 
 
 end Comp
 
-/--
-theorem `of_isLocalizationAway` / 定理 `of_isLocalizationAway`
+/-- Localization at an element is étale. -/
+/-
+**Algebra.Etale.of_isLocalizationAway** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.Etale`。
+形式化陈述：of_isLocalizationAway (r : R) [IsLocalization.Away r A] : Etale R A where 
+formallyEtale
+参数：r : R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.FormallyEtale.of_isLocalization`：of_isLocalization : FormallyEta
+le R Rₘ
+· 使用定理 `IsLocalization.Away.finitePresentation`：IsLocalization.Away.finitePresen
+tation (r : R) {S} [CommRing S] [Algebra R S] [IsLocalization.Away r S] : Algebr
+a.FinitePresentation R S
 
-English:
-theorem of_isLocalizationAway
-  given: (r : R) [IsLocalization.Away r A]
-  statement: Etale R A where
-  proof: Algebra.FormallyEtale.of_isLocalization (Submonoid.powers r)
-  finitePresentation := IsLocalization.Away.finitePresentation r
-
-中文:
-定理 of_isLocalizationAway
-  条件: (r : R) [是Localization.Away r A]
-  结论: 平展 R A where
-  证明: Algebra.FormallyEtale.of_isLocalization (Submonoid.powers r)
-  finitePresentation := IsLocalization.Away.finitePresentation r
-
-Depends on / 依赖: Algebra, Algebra.FormallyEtale.of_isLocalization, FormallyEtale, Submonoid, Submonoid.powers, of_isLocalization, powers
+--- 原说明 ---
+Localization at an element is étale.
 -/
 theorem of_isLocalizationAway (r : R) [IsLocalization.Away r A] : Etale R A where
   formallyEtale := Algebra.FormallyEtale.of_isLocalization (Submonoid.powers r)
   finitePresentation := IsLocalization.Away.finitePresentation r
-
+/-
+**Algebra.Etale.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.Etale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (s : A) [Algebra.Etale R A] : Algebra.Etale R (Localization.Away s) where
-
+/-
+**Algebra.Etale.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.Etale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (R S : Type u) [CommRing R] [CommRing S] :
     letI : Algebra (R × S) S := (RingHom.snd R S).toAlgebra
     Algebra.Etale (R × S) S := by
   algebraize [RingHom.snd R S]
   exact Algebra.Etale.of_isLocalizationAway (0, 1)
-
+/-
+**Algebra.Etale.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.Etale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (S : Type*) [CommRing S] :
     letI : Algebra (R × S) R := (RingHom.fst R S).toAlgebra
     Algebra.Etale (R × S) R := by
   algebraize [RingHom.fst R S]
   exact Algebra.Etale.of_isLocalizationAway (1, 0)
-
+/-
+**Algebra.Etale.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.Etale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (S : Type*) [CommRing S] :
     letI : Algebra (R × S) S := (RingHom.snd R S).toAlgebra
     Algebra.Etale (R × S) S := by
@@ -720,71 +737,57 @@ A ring homomorphism `R →+* A` is formally étale if it is formally unramified 
 See `Algebra.FormallyEtale`.
 -/
 @[algebraize Algebra.FormallyEtale]
-/--
-Definition of `FormallyEtale` / `FormallyEtale` 的定义
+/-
+**RingHom.FormallyEtale** 是 Mathlib 中的一个定义，位于命名空间 `RingHom`。
+形式化陈述：FormallyEtale (f : R ->+* S) : Prop
+参数：f : R ->+* S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FormallyEtale
-  signature: (f : R ->+* S)
-  body: letI := f.toAlgebra
-  Algebra.FormallyEtale R S
-
-中文:
-定义 形式平展
-  签名: (f : R ->+* S)
-  定义体: letI := f.toAlgebra
-  Algebra.FormallyEtale R S
-
-Depends on / 依赖: Algebra, Algebra.FormallyEtale, FormallyEtale, f.toAlgebra, toAlgebra
+--- 原说明 ---
+A ring homomorphism `R →+* A` is formally étale if it is formally unramified and
+ formally smooth.
+See `Algebra.FormallyEtale`.
 -/
-def FormallyEtale (f : R ->+* S) : Prop :=
+def FormallyEtale (f : R →+* S) : Prop :=
   letI := f.toAlgebra
   Algebra.FormallyEtale R S
-
-/--
-lemma `formallyEtale_algebraMap` / 引理 `formallyEtale_algebraMap`
-
-English:
-lemma formallyEtale_algebraMap
-  given: [Algebra R S]
-  proof: by
-  rw [FormallyEtale]; rw [toAlgebra_algebraMap]
-
-中文:
-引理 formallyEtale_algebraMap
-  条件: [代数 R S]
-  证明: by
-  rw [FormallyEtale]; rw [toAlgebra_algebraMap]
-
-Depends on / 依赖: FormallyEtale, toAlgebra_algebraMap
+/-
+**RingHom.formallyEtale_algebraMap** 是 Mathlib 中的一个引理，位于命名空间 `RingHom`。
+形式化陈述：formallyEtale_algebraMap [Algebra R S] : (algebraMap R S).FormallyEtale ↔ 
+Algebra.FormallyEtale R S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RingHom.FormallyEtale.eq_1`：∀ {R : Type u_1} {S : Type u_2} [inst : Comm
+Ring R] [inst_1 : CommRing S] (f : R →+* S),   f.FormallyEtale = Algebra.Formall
+yEtale R S
+· 使用定理 `toAlgebra_algebraMap`：∀ {R : Type u} {S : Type v} [inst : CommSemiring R
+] [inst_1 : CommSemiring S] [inst_2 : Algebra R S],   (algebraMap R S).toAlgebra
+ = inst_2
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma formallyEtale_algebraMap [Algebra R S] :
     (algebraMap R S).FormallyEtale ↔ Algebra.FormallyEtale R S := by
-  rw [FormallyEtale]; rw [toAlgebra_algebraMap]
-
-/--
-lemma `FormallyEtale.comp` / 引理 `FormallyEtale.comp`
-
-English:
-lemma FormallyEtale.comp
-  statement: {T : Type*} [CommRing T] {f : R ->+* S} {g : S ->+* T} (hf : f.FormallyEtale)
-  proof: by
-  algebraize [f, g, g.comp f]
-  exact Algebra.FormallyEtale.comp R S T
-
-中文:
-引理 形式平展.comp
-  结论: {T : 类型} [交换环 T] {f : R ->+* S} {g : S ->+* T} (hf : f.形式平展)
-  证明: by
-  algebraize [f, g, g.comp f]
-  exact Algebra.FormallyEtale.comp R S T
-
-Depends on / 依赖: Algebra, Algebra.FormallyEtale.comp, FormallyEtale, algebraize, g.comp
+  rw [FormallyEtale, toAlgebra_algebraMap]
+/-
+**RingHom.FormallyEtale.comp** 是 Mathlib 中的一个定理，位于命名空间 `RingHom.FormallyEtale`。
+形式化陈述：∀ {R : Type u_1} {S : Type u_2} [inst : CommRing R] [inst_1 : CommRing S] 
+{T : Type u_3} [inst_2 : CommRing T]   {f : R →+* S} {g : S →+* T}, f.FormallyEt
+ale → g.FormallyEtale → (g.comp f).FormallyEtale
+参数：g.comp f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.of_algebraMap_eq'`：of_algebraMap_eq' [Algebra R A] (h : al
+gebraMap R A = (algebraMap S A).comp (algebraMap R S)) : IsScalarTower R S A
+· 使用定理 `Algebra.FormallyEtale.comp`：comp [FormallyEtale R A] [FormallyEtale A B]
+ : FormallyEtale R B
 -/
-lemma FormallyEtale.comp {T : Type*} [CommRing T] {f : R ->+* S} {g : S ->+* T} (hf : f.FormallyEtale)
+lemma FormallyEtale.comp {T : Type*} [CommRing T] {f : R →+* S} {g : S →+* T} (hf : f.FormallyEtale)
     (hg : g.FormallyEtale) :
     (g.comp f).FormallyEtale := by
   algebraize [f, g, g.comp f]
   exact Algebra.FormallyEtale.comp R S T
 
 end RingHom
+

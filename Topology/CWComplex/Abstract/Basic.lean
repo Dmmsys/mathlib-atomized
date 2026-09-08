@@ -60,58 +60,54 @@ namespace RelativeCWComplex
 /-- For each `n : ℕ`, this is the family of morphisms which sends the unique
 element of `Unit` to `diskBoundaryInclusion n : ∂𝔻 n ⟶ 𝔻 n`. -/
 @[nolint unusedArguments]
-/--
-Definition of `basicCell` / `basicCell` 的定义
+/-
+**TopCat.RelativeCWComplex.basicCell** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopCat.Relativ
+eCWComplex`。
+形式化陈述：basicCell (n : Nat) (_ : Unit) : ∂𝔻 n ⟶ 𝔻 n
+参数：n : Nat；_ : Unit。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation basicCell
-  signature: (n : Nat) (_ : Unit)
-  body: diskBoundaryInclusion n
-
-中文:
-缩写 basicCell
-  签名: (n : 自然数) (_ : 单元)
-  定义体: diskBoundaryInclusion n
-
-Depends on / 依赖: diskBoundaryInclusion
+--- 原说明 ---
+For each `n : ℕ`, this is the family of morphisms which sends the unique
+element of `Unit` to `diskBoundaryInclusion n : ∂𝔻 n ⟶ 𝔻 n`.
 -/
-abbrev basicCell (n : Nat) (_ : Unit) : ∂𝔻 n ⟶ 𝔻 n := diskBoundaryInclusion n
+abbrev basicCell (n : ℕ) (_ : Unit) : ∂𝔻 n ⟶ 𝔻 n := diskBoundaryInclusion n
 
 end RelativeCWComplex
 
 open RelativeCWComplex in
-/--
-Definition of `RelativeCWComplex` / `RelativeCWComplex` 的定义
+/-- A relative CW-complex is a morphism `f : X ⟶ Y` equipped with data expressing
+that `Y` identifies to the colimit of a functor `F : ℕ ⥤ TopCat` with that
+`F.obj 0 ≅ X` and for any `n : ℕ`, `F.obj (n + 1)` is obtained from `F.obj n`
+by attaching `n`-disks. -/
+/-
+**TopCat.RelativeCWComplex** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopCat`。
+形式化陈述：RelativeCWComplex {X Y : TopCat.{u}} (f : X ⟶ Y)
+参数：f : X ⟶ Y。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `instWellFoundedLTNat`：WellFoundedLT ℕ
 
-English:
-abbreviation RelativeCWComplex
-  signature: {X Y : TopCat.{u}} (f : X ⟶ Y)
-  body: RelativeCellComplex.{u} basicCell f
-
-中文:
-缩写 RelativeCWComplex
-  签名: {X Y : 顶元素范畴.{u}} (f : X ⟶ Y)
-  定义体: RelativeCellComplex.{u} basicCell f
-
-Depends on / 依赖: RelativeCellComplex, basicCell
+--- 原说明 ---
+A relative CW-complex is a morphism `f : X ⟶ Y` equipped with data expressing
+that `Y` identifies to the colimit of a functor `F : ℕ ⥤ TopCat` with that
+`F.obj 0 ≅ X` and for any `n : ℕ`, `F.obj (n + 1)` is obtained from `F.obj n`
+by attaching `n`-disks.
 -/
 abbrev RelativeCWComplex {X Y : TopCat.{u}} (f : X ⟶ Y) := RelativeCellComplex.{u} basicCell f
 
-/--
-Definition of `CWComplex` / `CWComplex` 的定义
+/-- A CW-complex is a topological space such that `⊥_ _ ⟶ X` is a relative CW-complex. -/
+/-
+**TopCat.CWComplex** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopCat`。
+形式化陈述：CWComplex (X : TopCat.{u})
+参数：X : TopCat.{u}。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation CWComplex
-  signature: (X : TopCat.{u})
-  body: RelativeCWComplex (initial.to X)
-
-中文:
-缩写 CWComplex
-  签名: (X : 顶元素范畴.{u})
-  定义体: RelativeCWComplex (initial.to X)
-
-Depends on / 依赖: RelativeCWComplex, initial, initial.to
+--- 原说明 ---
+A CW-complex is a topological space such that `⊥_ _ ⟶ X` is a relative CW-comple
+x.
 -/
 abbrev CWComplex (X : TopCat.{u}) := RelativeCWComplex (initial.to X)
 
 end TopCat
+

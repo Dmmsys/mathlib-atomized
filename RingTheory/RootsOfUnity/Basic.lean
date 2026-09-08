@@ -50,406 +50,318 @@ variable [CommMonoid M] [CommMonoid N] [DivisionCommMonoid G]
 
 section rootsOfUnity
 
-variable {k l : Nat}
+variable {k l : ℕ}
 
-/--
-Definition of `rootsOfUnity` / `rootsOfUnity` 的定义
+/-- `rootsOfUnity k M` is the subgroup of elements `m : Mˣ` that satisfy `m ^ k = 1`. -/
+/-
+**rootsOfUnity** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：rootsOfUnity (k : Nat) (M : Type*) [CommMonoid M] : Subgroup Mˣ where carr
+ier
+参数：k : Nat；M : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rootsOfUnity
-  signature: (k : Nat) (M : Type*) [CommMonoid M]
-  body: {ζ | ζ ^ k = 1}
-  one_mem' := one_pow _
-  mul_mem' _ _ := by simp_all only [Set.mem_ofPred_eq, mul_pow, one_mul]
-  inv_mem' _ := by simp_all only [Set.mem_ofPred_eq, inv_pow, inv_one]
-
-@[simp]
-
-中文:
-定义 rootsOfUnity
-  签名: (k : 自然数) (M : 类型) [交换幺半群 M]
-  定义体: {ζ | ζ ^ k = 1}
-  one_mem' := one_pow _
-  mul_mem' _ _ := by simp_all only [Set.mem_ofPred_eq, mul_pow, one_mul]
-  inv_mem' _ := by simp_all only [Set.mem_ofPred_eq, inv_pow, inv_one]
-
-@[simp]
+--- 原说明 ---
+`rootsOfUnity k M` is the subgroup of elements `m : Mˣ` that satisfy `m ^ k = 1`
+.
 -/
-def rootsOfUnity (k : Nat) (M : Type*) [CommMonoid M] : Subgroup Mˣ where
+def rootsOfUnity (k : ℕ) (M : Type*) [CommMonoid M] : Subgroup Mˣ where
   carrier := {ζ | ζ ^ k = 1}
   one_mem' := one_pow _
   mul_mem' _ _ := by simp_all only [Set.mem_ofPred_eq, mul_pow, one_mul]
   inv_mem' _ := by simp_all only [Set.mem_ofPred_eq, inv_pow, inv_one]
 
 @[simp]
-/--
-theorem `mem_rootsOfUnity` / 定理 `mem_rootsOfUnity`
-
-English:
-theorem mem_rootsOfUnity
-  given: (k : Nat) (ζ : Mˣ)
-  statement: ζ in rootsOfUnity k M ↔ ζ ^ k = 1
-  proof: Iff.rfl
-
-中文:
-定理 mem_rootsOfUnity
-  条件: (k : 自然数) (ζ : Mˣ)
-  结论: ζ in rootsOfUnity k M ↔ ζ ^ k = 1
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**mem_rootsOfUnity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_rootsOfUnity (k : Nat) (ζ : Mˣ) : ζ in rootsOfUnity k M ↔ ζ ^ k = 1
+参数：k : Nat；ζ : Mˣ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_rootsOfUnity (k : Nat) (ζ : Mˣ) : ζ in rootsOfUnity k M ↔ ζ ^ k = 1 :=
+theorem mem_rootsOfUnity (k : ℕ) (ζ : Mˣ) : ζ ∈ rootsOfUnity k M ↔ ζ ^ k = 1 :=
   Iff.rfl
-
-/--
-theorem `rootsOfUnity_eq_ker` / 定理 `rootsOfUnity_eq_ker`
-
-English:
-theorem rootsOfUnity_eq_ker
-  statement: rootsOfUnity k M = (powMonoidHom k).ker
-  proof: by
-  rfl
-
-中文:
-定理 rootsOfUnity_eq_ker
-  结论: rootsOfUnity k M = (powMonoidHom k).ker
-  证明: by
-  rfl
+/-
+**rootsOfUnity_eq_ker** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：rootsOfUnity_eq_ker : rootsOfUnity k M = (powMonoidHom k).ker
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem rootsOfUnity_eq_ker : rootsOfUnity k M = (powMonoidHom k).ker := by
   rfl
-
-/--
-theorem `ker_zpowGroupHom_eq_rootsOfUnity` / 定理 `ker_zpowGroupHom_eq_rootsOfUnity`
-
-English:
-theorem ker_zpowGroupHom_eq_rootsOfUnity
-  given: {k : Int}
-  proof: by
-  ext; simp
-
-中文:
-定理 ker_zpowGroupHom_eq_rootsOfUnity
-  条件: {k : 整数}
-  证明: by
-  ext; simp
+/-
+**ker_zpowGroupHom_eq_rootsOfUnity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ker_zpowGroupHom_eq_rootsOfUnity {k : Int} : (zpowGroupHom k).ker = rootsO
+fUnity k.natAbs M
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.ext`：ext {H K : Subgroup G} (h : forall x, x in H ↔ x in K) : H
+ = K
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zpowGroupHom_apply`：∀ {α : Type u_1} [inst : DivisionCommMonoid α] (n : 
+ℤ) (x : α), (zpowGroupHom n) x = x ^ n
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem ker_zpowGroupHom_eq_rootsOfUnity {k : Int} :
+theorem ker_zpowGroupHom_eq_rootsOfUnity {k : ℤ} :
     (zpowGroupHom k).ker = rootsOfUnity k.natAbs M := by
   ext; simp
 
-/--
-theorem `mem_rootsOfUnity'` / 定理 `mem_rootsOfUnity'`
+/-- A variant of `mem_rootsOfUnity` using `ζ : Mˣ`. -/
+/-
+**mem_rootsOfUnity'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_rootsOfUnity' (k : Nat) (ζ : Mˣ) : ζ in rootsOfUnity k M ↔ (ζ : M) ^ k
+ = 1
+参数：k : Nat；ζ : Mˣ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mem_rootsOfUnity`：mem_rootsOfUnity (k : Nat) (ζ : Mˣ) : ζ in rootsOfUnit
+y k M ↔ ζ ^ k = 1
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem mem_rootsOfUnity'
-  given: (k : Nat) (ζ : Mˣ)
-  statement: ζ in rootsOfUnity k M ↔ (ζ : M) ^ k = 1
-  proof: by
-  rw [mem_rootsOfUnity]; norm_cast
-
-@[simp]
-
-中文:
-定理 mem_rootsOfUnity'
-  条件: (k : 自然数) (ζ : Mˣ)
-  结论: ζ in rootsOfUnity k M ↔ (ζ : M) ^ k = 1
-  证明: by
-  rw [mem_rootsOfUnity]; norm_cast
-
-@[simp]
-
-Depends on / 依赖: mem_rootsOfUnity
+--- 原说明 ---
+A variant of `mem_rootsOfUnity` using `ζ : Mˣ`.
 -/
-theorem mem_rootsOfUnity' (k : Nat) (ζ : Mˣ) : ζ in rootsOfUnity k M ↔ (ζ : M) ^ k = 1 := by
+theorem mem_rootsOfUnity' (k : ℕ) (ζ : Mˣ) : ζ ∈ rootsOfUnity k M ↔ (ζ : M) ^ k = 1 := by
   rw [mem_rootsOfUnity]; norm_cast
 
 @[simp]
-/--
-theorem `rootsOfUnity_one` / 定理 `rootsOfUnity_one`
-
-English:
-theorem rootsOfUnity_one
-  given: (M : Type*) [CommMonoid M]
-  statement: rootsOfUnity 1 M = ⊥
-  proof: by
-  ext1
-  simp only [mem_rootsOfUnity, pow_one, Subgroup.mem_bot]
-
-@[simp]
-
-中文:
-定理 rootsOfUnity_one
-  条件: (M : 类型) [交换幺半群 M]
-  结论: rootsOfUnity 1 M = ⊥
-  证明: by
-  ext1
-  simp only [mem_rootsOfUnity, pow_one, Subgroup.mem_bot]
-
-@[simp]
-
-Depends on / 依赖: Subgroup, Subgroup.mem_bot, mem_bot, mem_rootsOfUnity, pow_one
+/-
+**rootsOfUnity_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：rootsOfUnity_one (M : Type*) [CommMonoid M] : rootsOfUnity 1 M = ⊥
+参数：M : Type*。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.ext`：ext {H K : Subgroup G} (h : forall x, x in H ↔ x in K) : H
+ = K
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem rootsOfUnity_one (M : Type*) [CommMonoid M] : rootsOfUnity 1 M = ⊥ := by
   ext1
   simp only [mem_rootsOfUnity, pow_one, Subgroup.mem_bot]
 
 @[simp]
-/--
-lemma `rootsOfUnity_zero` / 引理 `rootsOfUnity_zero`
-
-English:
-lemma rootsOfUnity_zero
-  given: (M : Type*) [CommMonoid M]
-  statement: rootsOfUnity 0 M = ⊤
-  proof: by
-  ext1
-  simp only [mem_rootsOfUnity, pow_zero, Subgroup.mem_top]
-
-中文:
-引理 rootsOfUnity_zero
-  条件: (M : 类型) [交换幺半群 M]
-  结论: rootsOfUnity 0 M = ⊤
-  证明: by
-  ext1
-  simp only [mem_rootsOfUnity, pow_zero, Subgroup.mem_top]
-
-Depends on / 依赖: Subgroup, Subgroup.mem_top, mem_rootsOfUnity, mem_top, pow_zero
+/-
+**rootsOfUnity_zero** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：rootsOfUnity_zero (M : Type*) [CommMonoid M] : rootsOfUnity 0 M = ⊤
+参数：M : Type*。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.ext`：ext {H K : Subgroup G} (h : forall x, x in H ↔ x in K) : H
+ = K
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma rootsOfUnity_zero (M : Type*) [CommMonoid M] : rootsOfUnity 0 M = ⊤ := by
   ext1
   simp only [mem_rootsOfUnity, pow_zero, Subgroup.mem_top]
-
-/--
-theorem `rootsOfUnity.coe_injective` / 定理 `rootsOfUnity.coe_injective`
-
-English:
-theorem rootsOfUnity.coe_injective
-  given: {n : Nat}
-  proof: Units.val_injective.comp Subtype.val_injective
-
-中文:
-定理 rootsOfUnity.coe_injective
-  条件: {n : 自然数}
-  证明: Units.val_injective.comp Subtype.val_injective
-
-Depends on / 依赖: Subtype, Subtype.val_injective, Units.val_injective.comp, val_injective
+/-
+**rootsOfUnity.coe_injective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：rootsOfUnity.coe_injective {n : Nat} : Function.Injective (fun x : rootsOf
+Unity n M => x.val.val)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} 
+{g : β → γ} {f : α → β},   Function.Injective g → Function.Injective f → Functio
+n.Injective (…
+· 使用定理 `Units.val_injective`：∀ {α : Type u} [inst : Monoid α], Function.Injectiv
+e Units.val
+· 使用定理 `Subtype.val_injective`：∀ {α : Sort u_1} {p : α → Prop}, Function.Injecti
+ve Subtype.val
 -/
-theorem rootsOfUnity.coe_injective {n : Nat} :
-    Function.Injective (fun x : rootsOfUnity n M => x.val.val) :=
+theorem rootsOfUnity.coe_injective {n : ℕ} :
+    Function.Injective (fun x : rootsOfUnity n M ↦ x.val.val) :=
   Units.val_injective.comp Subtype.val_injective
 
 /-- Make an element of `rootsOfUnity` from a member of the base ring, and a proof that it has
 a positive power equal to one. -/
 @[simps! coe_val]
-/--
-Definition of `rootsOfUnity.mkOfPowEq` / `rootsOfUnity.mkOfPowEq` 的定义
+/-
+**rootsOfUnity.mkOfPowEq** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：rootsOfUnity.mkOfPowEq (ζ : M) {n : Nat} [NeZero n] (h : ζ ^ n = 1) : root
+sOfUnity n M
+参数：ζ : M；h : ζ ^ n = 1。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rootsOfUnity.mkOfPowEq
-  signature: (ζ : M) {n : Nat} [NeZero n] (h : ζ ^ n = 1)
-  body: ⟨Units.ofPowEqOne ζ n h NeZero.ne n, Units.pow_ofPowEqOne _ _⟩
-
-@[simp]
-
-中文:
-定义 rootsOfUnity.mkOfPowEq
-  签名: (ζ : M) {n : 自然数} [NeZero n] (h : ζ ^ n = 1)
-  定义体: ⟨Units.ofPowEqOne ζ n h NeZero.ne n, Units.pow_ofPowEqOne _ _⟩
-
-@[simp]
-
-Depends on / 依赖: NeZero, NeZero.ne, Units.ofPowEqOne, Units.pow_ofPowEqOne, ofPowEqOne, pow_ofPowEqOne
+--- 原说明 ---
+Make an element of `rootsOfUnity` from a member of the base ring, and a proof th
+at it has
+a positive power equal to one.
 -/
-def rootsOfUnity.mkOfPowEq (ζ : M) {n : Nat} [NeZero n] (h : ζ ^ n = 1) : rootsOfUnity n M :=
-⟨Units.ofPowEqOne ζ n h NeZero.ne n, Units.pow_ofPowEqOne _ _⟩
+def rootsOfUnity.mkOfPowEq (ζ : M) {n : ℕ} [NeZero n] (h : ζ ^ n = 1) : rootsOfUnity n M :=
+  ⟨Units.ofPowEqOne ζ n h <| NeZero.ne n, Units.pow_ofPowEqOne _ _⟩
 
 @[simp]
-/--
-theorem `rootsOfUnity.coe_mkOfPowEq` / 定理 `rootsOfUnity.coe_mkOfPowEq`
-
-English:
-theorem rootsOfUnity.coe_mkOfPowEq
-  given: {ζ : M} {n : Nat} [NeZero n] (h : ζ ^ n = 1)
-  proof: rfl
-
-中文:
-定理 rootsOfUnity.coe_mkOfPowEq
-  条件: {ζ : M} {n : 自然数} [NeZero n] (h : ζ ^ n = 1)
-  证明: rfl
+/-
+**rootsOfUnity.coe_mkOfPowEq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：rootsOfUnity.coe_mkOfPowEq {ζ : M} {n : Nat} [NeZero n] (h : ζ ^ n = 1) : 
+((rootsOfUnity.mkOfPowEq _ h : Mˣ) : M) = ζ
+参数：h : ζ ^ n = 1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem rootsOfUnity.coe_mkOfPowEq {ζ : M} {n : Nat} [NeZero n] (h : ζ ^ n = 1) :
+theorem rootsOfUnity.coe_mkOfPowEq {ζ : M} {n : ℕ} [NeZero n] (h : ζ ^ n = 1) :
     ((rootsOfUnity.mkOfPowEq _ h : Mˣ) : M) = ζ :=
   rfl
-
-/--
-theorem `rootsOfUnity_le_of_dvd` / 定理 `rootsOfUnity_le_of_dvd`
-
-English:
-theorem rootsOfUnity_le_of_dvd
-  given: (h : k ∣ l)
-  statement: rootsOfUnity k M <= rootsOfUnity l M
-  proof: by
-  obtain ⟨d, rfl⟩ := h
-  intro ζ h
-  simp_all only [mem_rootsOfUnity, pow_mul, one_pow]
-
-中文:
-定理 rootsOfUnity_le_of_dvd
-  条件: (h : k ∣ l)
-  结论: rootsOfUnity k M <= rootsOfUnity l M
-  证明: by
-  obtain ⟨d, rfl⟩ := h
-  intro ζ h
-  simp_all only [mem_rootsOfUnity, pow_mul, one_pow]
-
-Depends on / 依赖: mem_rootsOfUnity, one_pow, pow_mul
+/-
+**rootsOfUnity_le_of_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：rootsOfUnity_le_of_dvd (h : k ∣ l) : rootsOfUnity k M <= rootsOfUnity l M
+参数：h : k ∣ l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_mul`：∀ {M : Type u_2} [inst : Monoid M] (a : M) (m n : ℕ), a ^ (m * 
+n) = (a ^ m) ^ n
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem rootsOfUnity_le_of_dvd (h : k ∣ l) : rootsOfUnity k M <= rootsOfUnity l M := by
+theorem rootsOfUnity_le_of_dvd (h : k ∣ l) : rootsOfUnity k M ≤ rootsOfUnity l M := by
   obtain ⟨d, rfl⟩ := h
   intro ζ h
   simp_all only [mem_rootsOfUnity, pow_mul, one_pow]
-
-/--
-theorem `map_rootsOfUnity` / 定理 `map_rootsOfUnity`
-
-English:
-theorem map_rootsOfUnity
-  given: (f : Mˣ ->* Nˣ) (k : Nat)
-  statement: (rootsOfUnity k M).map f <= rootsOfUnity k N
-  proof: by
-  rintro _ ⟨ζ, h, rfl⟩
-  simp_all only [← map_pow, mem_rootsOfUnity, SetLike.mem_coe, map_one]
-
-中文:
-定理 map_rootsOfUnity
-  条件: (f : Mˣ ->* Nˣ) (k : 自然数)
-  结论: (rootsOfUnity k M).map f <= rootsOfUnity k N
-  证明: by
-  rintro _ ⟨ζ, h, rfl⟩
-  simp_all only [← map_pow, mem_rootsOfUnity, SetLike.mem_coe, map_one]
-
-Depends on / 依赖: SetLike, SetLike.mem_coe, map_one, map_pow, mem_coe, mem_rootsOfUnity
+/-
+**map_rootsOfUnity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_rootsOfUnity (f : Mˣ ->* Nˣ) (k : Nat) : (rootsOfUnity k M).map f <= r
+ootsOfUnity k N
+参数：f : Mˣ ->* Nˣ；k : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem map_rootsOfUnity (f : Mˣ ->* Nˣ) (k : Nat) : (rootsOfUnity k M).map f <= rootsOfUnity k N := by
+theorem map_rootsOfUnity (f : Mˣ →* Nˣ) (k : ℕ) : (rootsOfUnity k M).map f ≤ rootsOfUnity k N := by
   rintro _ ⟨ζ, h, rfl⟩
   simp_all only [← map_pow, mem_rootsOfUnity, SetLike.mem_coe, map_one]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Subsingleton (rootsOfUnity 1 M)
-  body: by simp [subsingleton_iff]
-
-中文:
-实例 :
-  签名: 子单例 (rootsOfUnity 1 M)
-  定义体: by simp [subsingleton_iff]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Subsingleton (rootsOfUnity 1 M) := by simp [subsingleton_iff]
-
-/--
-lemma `rootsOfUnity_inf_rootsOfUnity` / 引理 `rootsOfUnity_inf_rootsOfUnity`
-
-English:
-lemma rootsOfUnity_inf_rootsOfUnity
-  given: {m n : Nat}
-  proof: by
-  ext
-  simp
-
-中文:
-引理 rootsOfUnity_inf_rootsOfUnity
-  条件: {m n : 自然数}
-  证明: by
-  ext
-  simp
+/-
+**rootsOfUnity_inf_rootsOfUnity** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：rootsOfUnity_inf_rootsOfUnity {m n : Nat} : (rootsOfUnity m M ⊓ rootsOfUni
+ty n M) = rootsOfUnity (m.gcd n) M
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.ext`：ext {H K : Subgroup G} (h : forall x, x in H ↔ x in K) : H
+ = K
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma rootsOfUnity_inf_rootsOfUnity {m n : Nat} :
+lemma rootsOfUnity_inf_rootsOfUnity {m n : ℕ} :
     (rootsOfUnity m M ⊓ rootsOfUnity n M) = rootsOfUnity (m.gcd n) M := by
   ext
   simp
-
-/--
-lemma `disjoint_rootsOfUnity_of_coprime` / 引理 `disjoint_rootsOfUnity_of_coprime`
-
-English:
-lemma disjoint_rootsOfUnity_of_coprime
-  given: {m n : Nat} (h : m.Coprime n)
-  proof: by
-  simp [disjoint_iff_inf_le, rootsOfUnity_inf_rootsOfUnity, Nat.coprime_iff_gcd_eq_one.mp h]
-
-@[norm_cast]
-
-中文:
-引理 disjoint_rootsOfUnity_of_coprime
-  条件: {m n : 自然数} (h : m.Coprime n)
-  证明: by
-  simp [disjoint_iff_inf_le, rootsOfUnity_inf_rootsOfUnity, Nat.coprime_iff_gcd_eq_one.mp h]
-
-@[norm_cast]
-
-Depends on / 依赖: Nat.coprime_iff_gcd_eq_one.mp, coprime_iff_gcd_eq_one, disjoint_iff_inf_le, rootsOfUnity_inf_rootsOfUnity
+/-
+**disjoint_rootsOfUnity_of_coprime** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：disjoint_rootsOfUnity_of_coprime {m n : Nat} (h : m.Coprime n) : Disjoint 
+(rootsOfUnity m M) (rootsOfUnity n M)
+参数：h : m.Coprime n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `rootsOfUnity_inf_rootsOfUnity`：rootsOfUnity_inf_rootsOfUnity {m n : Nat}
+ : (rootsOfUnity m M ⊓ rootsOfUnity n M) = rootsOfUnity (m.gcd n) M
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.coprime_iff_gcd_eq_one`：∀ {m n : ℕ}, m.Coprime n ↔ m.gcd n = 1
+· 使用定理 `rootsOfUnity_one`：rootsOfUnity_one (M : Type*) [CommMonoid M] : rootsOfU
+nity 1 M = ⊥
 -/
-lemma disjoint_rootsOfUnity_of_coprime {m n : Nat} (h : m.Coprime n) :
+lemma disjoint_rootsOfUnity_of_coprime {m n : ℕ} (h : m.Coprime n) :
     Disjoint (rootsOfUnity m M) (rootsOfUnity n M) := by
   simp [disjoint_iff_inf_le, rootsOfUnity_inf_rootsOfUnity, Nat.coprime_iff_gcd_eq_one.mp h]
 
 @[norm_cast]
-/--
-theorem `rootsOfUnity.coe_pow` / 定理 `rootsOfUnity.coe_pow`
-
-English:
-theorem rootsOfUnity.coe_pow
-  given: [CommMonoid R] (ζ : rootsOfUnity k R) (m : Nat)
-  proof: by
-  rw [Subgroup.coe_pow]; rw [Units.val_pow_eq_pow_val]
-
-中文:
-定理 rootsOfUnity.coe_pow
-  条件: [交换幺半群 R] (ζ : rootsOfUnity k R) (m : 自然数)
-  证明: by
-  rw [Subgroup.coe_pow]; rw [Units.val_pow_eq_pow_val]
-
-Depends on / 依赖: Subgroup, Subgroup.coe_pow, Units.val_pow_eq_pow_val, coe_pow, val_pow_eq_pow_val
+/-
+**rootsOfUnity.coe_pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：rootsOfUnity.coe_pow [CommMonoid R] (ζ : rootsOfUnity k R) (m : Nat) : (((
+ζ ^ m :) : Rˣ) : R) = ((ζ : Rˣ) : R) ^ m
+参数：ζ : rootsOfUnity k R；m : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.coe_pow`：coe_pow (x : H) (n : Nat) : ((x ^ n : H) : G) = (x : G
+) ^ n
+· 使用引理 `Units.val_pow_eq_pow_val`：val_pow_eq_pow_val (n : Nat) : ↑(a ^ n) = (a ^
+ n : α)
 -/
-theorem rootsOfUnity.coe_pow [CommMonoid R] (ζ : rootsOfUnity k R) (m : Nat) :
+theorem rootsOfUnity.coe_pow [CommMonoid R] (ζ : rootsOfUnity k R) (m : ℕ) :
     (((ζ ^ m :) : Rˣ) : R) = ((ζ : Rˣ) : R) ^ m := by
-  rw [Subgroup.coe_pow]; rw [Units.val_pow_eq_pow_val]
+  rw [Subgroup.coe_pow, Units.val_pow_eq_pow_val]
 
-/--
-Definition of `rootsOfUnityUnitsMulEquiv` / `rootsOfUnityUnitsMulEquiv` 的定义
+/-- The canonical isomorphism from the `n`th roots of unity in `Mˣ`
+to the `n`th roots of unity in `M`. -/
+/-
+**rootsOfUnityUnitsMulEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：rootsOfUnityUnitsMulEquiv (M : Type*) [CommMonoid M] (n : Nat) : rootsOfUn
+ity n Mˣ ≃* rootsOfUnity n M where toFun ζ
+参数：M : Type*；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rootsOfUnityUnitsMulEquiv
-  signature: (M : Type*) [CommMonoid M] (n : Nat)
-  body: ⟨ζ.val, (mem_rootsOfUnity ..).mpr (mem_rootsOfUnity' ..).mp ζ.prop⟩
-  invFun ζ := ⟨toUnits ζ.val, by
-    simp only [mem_rootsOfUnity, ← map_pow, EmbeddingLike.map_eq_one_iff]
-    exact (mem_rootsOfUnity ..).mp ζ.prop⟩
-  left_inv ζ := by simp only [toUnits_val_apply, Subtype.coe_eta]
-  right_inv ζ := by simp only [val_toUnits_apply, Subtype.coe_eta]
-  map_mul' ζ ζ' := by simp only [Subgroup.coe_mul, Units.val_mul, MulMemClass.mk_mul_mk]
-
-中文:
-定义 rootsOfUnityUnitsMulEquiv
-  签名: (M : 类型) [交换幺半群 M] (n : 自然数)
-  定义体: ⟨ζ.val, (mem_rootsOfUnity ..).mpr (mem_rootsOfUnity' ..).mp ζ.prop⟩
-  invFun ζ := ⟨toUnits ζ.val, by
-    simp only [mem_rootsOfUnity, ← map_pow, EmbeddingLike.map_eq_one_iff]
-    exact (mem_rootsOfUnity ..).mp ζ.prop⟩
-  left_inv ζ := by simp only [toUnits_val_apply, Subtype.coe_eta]
-  right_inv ζ := by simp only [val_toUnits_apply, Subtype.coe_eta]
-  map_mul' ζ ζ' := by simp only [Subgroup.coe_mul, Units.val_mul, MulMemClass.mk_mul_mk]
-
-Depends on / 依赖: mem_rootsOfUnity
+--- 原说明 ---
+The canonical isomorphism from the `n`th roots of unity in `Mˣ`
+to the `n`th roots of unity in `M`.
 -/
-def rootsOfUnityUnitsMulEquiv (M : Type*) [CommMonoid M] (n : Nat) :
+def rootsOfUnityUnitsMulEquiv (M : Type*) [CommMonoid M] (n : ℕ) :
     rootsOfUnity n Mˣ ≃* rootsOfUnity n M where
-toFun ζ := ⟨ζ.val, (mem_rootsOfUnity ..).mpr (mem_rootsOfUnity' ..).mp ζ.prop⟩
+  toFun ζ := ⟨ζ.val, (mem_rootsOfUnity ..).mpr <| (mem_rootsOfUnity' ..).mp ζ.prop⟩
   invFun ζ := ⟨toUnits ζ.val, by
     simp only [mem_rootsOfUnity, ← map_pow, EmbeddingLike.map_eq_one_iff]
     exact (mem_rootsOfUnity ..).mp ζ.prop⟩
@@ -461,64 +373,42 @@ section CommMonoid
 
 variable [CommMonoid R] [CommMonoid S] [FunLike F R S]
 
-/--
-Definition of `restrictRootsOfUnity` / `restrictRootsOfUnity` 的定义
+/-- Restrict a ring homomorphism to the nth roots of unity. -/
+/-
+**restrictRootsOfUnity** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：restrictRootsOfUnity [MonoidHomClass F R S] (σ : F) (n : Nat) : rootsOfUni
+ty n R ->* rootsOfUnity n S
+参数：σ : F；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictRootsOfUnity
-  signature: [MonoidHomClass F R S] (σ : F) (n : Nat)
-  body: { toFun := fun ξ => ⟨Units.map σ (ξ : Rˣ), by
-      rw [mem_rootsOfUnity]; rw [← map_pow]; rw [Units.ext_iff]; rw [Units.coe_map]; rw [ξ.prop]
-      exact map_one σ⟩
-    map_one' := by ext1; simp only [OneMemClass.coe_one, map_one]
-    map_mul' := fun ξ₁ ξ₂ => by
-      ext1; simp only [Subgroup.coe_mul, map_mul, MulMemClass.mk_mul_mk] }
-
-@[simp]
-
-中文:
-定义 restrictRootsOfUnity
-  签名: [幺半群态射类 F R S] (σ : F) (n : 自然数)
-  定义体: { toFun := fun ξ => ⟨Units.map σ (ξ : Rˣ), by
-      rw [mem_rootsOfUnity]; rw [← map_pow]; rw [Units.ext_iff]; rw [Units.coe_map]; rw [ξ.prop]
-      exact map_one σ⟩
-    map_one' := by ext1; simp only [OneMemClass.coe_one, map_one]
-    map_mul' := fun ξ₁ ξ₂ => by
-      ext1; simp only [Subgroup.coe_mul, map_mul, MulMemClass.mk_mul_mk] }
-
-@[simp]
-
-Depends on / 依赖: MulMemClass, MulMemClass.mk_mul_mk, OneMemClass, OneMemClass.coe_one, Subgroup, Subgroup.coe_mul, Units.coe_map, Units.ext_iff, Units.map, coe_map, coe_mul, coe_one, ext_iff, map_mul, map_one, map_pow, mem_rootsOfUnity, mk_mul_mk
+--- 原说明 ---
+Restrict a ring homomorphism to the nth roots of unity.
 -/
-def restrictRootsOfUnity [MonoidHomClass F R S] (σ : F) (n : Nat) :
-    rootsOfUnity n R ->* rootsOfUnity n S :=
-  { toFun := fun ξ => ⟨Units.map σ (ξ : Rˣ), by
-      rw [mem_rootsOfUnity]; rw [← map_pow]; rw [Units.ext_iff]; rw [Units.coe_map]; rw [ξ.prop]
+def restrictRootsOfUnity [MonoidHomClass F R S] (σ : F) (n : ℕ) :
+    rootsOfUnity n R →* rootsOfUnity n S :=
+  { toFun := fun ξ ↦ ⟨Units.map σ (ξ : Rˣ), by
+      rw [mem_rootsOfUnity, ← map_pow, Units.ext_iff, Units.coe_map, ξ.prop]
       exact map_one σ⟩
     map_one' := by ext1; simp only [OneMemClass.coe_one, map_one]
-    map_mul' := fun ξ₁ ξ₂ => by
+    map_mul' := fun ξ₁ ξ₂ ↦ by
       ext1; simp only [Subgroup.coe_mul, map_mul, MulMemClass.mk_mul_mk] }
 
 @[simp]
-/--
-theorem `restrictRootsOfUnity_coe_apply` / 定理 `restrictRootsOfUnity_coe_apply`
-
-English:
-theorem restrictRootsOfUnity_coe_apply
-  given: [MonoidHomClass F R S] (σ : F) (ζ : rootsOfUnity k R)
-  proof: rfl
-
-中文:
-定理 restrictRootsOfUnity_coe_apply
-  条件: [幺半群态射类 F R S] (σ : F) (ζ : rootsOfUnity k R)
-  证明: rfl
+/-
+**restrictRootsOfUnity_coe_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：restrictRootsOfUnity_coe_apply [MonoidHomClass F R S] (σ : F) (ζ : rootsOf
+Unity k R) : (restrictRootsOfUnity σ k ζ : Sˣ) = σ (ζ : Rˣ)
+参数：σ : F；ζ : rootsOfUnity k R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem restrictRootsOfUnity_coe_apply [MonoidHomClass F R S] (σ : F) (ζ : rootsOfUnity k R) :
     (restrictRootsOfUnity σ k ζ : Sˣ) = σ (ζ : Rˣ) :=
   rfl
 
 /-- Restrict a monoid isomorphism to the nth roots of unity. -/
-nonrec def MulEquiv.restrictRootsOfUnity (σ : R ≃* S) (n : Nat) :
+nonrec def MulEquiv.restrictRootsOfUnity (σ : R ≃* S) (n : ℕ) :
     rootsOfUnity n R ≃* rootsOfUnity n S where
   toFun := restrictRootsOfUnity σ n
   invFun := restrictRootsOfUnity σ.symm n
@@ -527,93 +417,71 @@ nonrec def MulEquiv.restrictRootsOfUnity (σ : R ≃* S) (n : Nat) :
   map_mul' := (restrictRootsOfUnity _ n).map_mul
 
 @[simp]
-/--
-theorem `MulEquiv.restrictRootsOfUnity_coe_apply` / 定理 `MulEquiv.restrictRootsOfUnity_coe_apply`
-
-English:
-theorem MulEquiv.restrictRootsOfUnity_coe_apply
-  given: (σ : R ≃* S) (ζ : rootsOfUnity k R)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 乘法等价.restrictRootsOfUnity_coe_apply
-  条件: (σ : R ≃* S) (ζ : rootsOfUnity k R)
-  证明: rfl
-
-@[simp]
+/-
+**MulEquiv.restrictRootsOfUnity_coe_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MulEquiv.restrictRootsOfUnity_coe_apply (σ : R ≃* S) (ζ : rootsOfUnity k R
+) : (σ.restrictRootsOfUnity k ζ : Sˣ) = σ (ζ : Rˣ)
+参数：σ : R ≃* S；ζ : rootsOfUnity k R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem MulEquiv.restrictRootsOfUnity_coe_apply (σ : R ≃* S) (ζ : rootsOfUnity k R) :
     (σ.restrictRootsOfUnity k ζ : Sˣ) = σ (ζ : Rˣ) :=
   rfl
 
 @[simp]
-/--
-theorem `MulEquiv.restrictRootsOfUnity_symm` / 定理 `MulEquiv.restrictRootsOfUnity_symm`
-
-English:
-theorem MulEquiv.restrictRootsOfUnity_symm
-  given: (σ : R ≃* S)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 乘法等价.restrictRootsOfUnity_symm
-  条件: (σ : R ≃* S)
-  证明: rfl
-
-@[simp]
+/-
+**MulEquiv.restrictRootsOfUnity_symm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MulEquiv.restrictRootsOfUnity_symm (σ : R ≃* S) : (σ.restrictRootsOfUnity 
+k).symm = σ.symm.restrictRootsOfUnity k
+参数：σ : R ≃* S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem MulEquiv.restrictRootsOfUnity_symm (σ : R ≃* S) :
     (σ.restrictRootsOfUnity k).symm = σ.symm.restrictRootsOfUnity k :=
   rfl
 
 @[simp]
-/--
-theorem `Units.val_set_image_rootsOfUnity` / 定理 `Units.val_set_image_rootsOfUnity`
-
-English:
-theorem Units.val_set_image_rootsOfUnity
-  given: [NeZero k]
-  proof: by
-  ext x
-  exact ⟨fun ⟨y,hy1,hy2⟩ => by rw [← hy2]; exact (mem_rootsOfUnity' k y).mp hy1,
-    fun h => ⟨(rootsOfUnity.mkOfPowEq x h), ⟨Subtype.coe_prop (rootsOfUnity.mkOfPowEq x h), rfl⟩⟩⟩
-
-中文:
-定理 单位群.val_set_image_rootsOfUnity
-  条件: [NeZero k]
-  证明: by
-  ext x
-  exact ⟨fun ⟨y,hy1,hy2⟩ => by rw [← hy2]; exact (mem_rootsOfUnity' k y).mp hy1,
-    fun h => ⟨(rootsOfUnity.mkOfPowEq x h), ⟨Subtype.coe_prop (rootsOfUnity.mkOfPowEq x h), rfl⟩⟩⟩
-
-Depends on / 依赖: Subtype, Subtype.coe_prop, coe_prop, mem_rootsOfUnity, mkOfPowEq, rootsOfUnity, rootsOfUnity.mkOfPowEq
+/-
+**Units.val_set_image_rootsOfUnity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Units.val_set_image_rootsOfUnity [NeZero k] : ((↑) : Rˣ -> _) '' (rootsOfU
+nity k R) = {z : R | z^k = 1}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mem_rootsOfUnity'`：mem_rootsOfUnity' (k : Nat) (ζ : Mˣ) : ζ in rootsOfUn
+ity k M ↔ (ζ : M) ^ k = 1
+· 使用定理 `Subtype.coe_prop`：coe_prop {S : Set α} (a : { a // a in S }) : ↑a in S
 -/
 theorem Units.val_set_image_rootsOfUnity [NeZero k] :
-    ((↑) : Rˣ -> _) '' (rootsOfUnity k R) = {z : R | z^k = 1} := by
+    ((↑) : Rˣ → _) '' (rootsOfUnity k R) = {z : R | z^k = 1} := by
   ext x
   exact ⟨fun ⟨y,hy1,hy2⟩ => by rw [← hy2]; exact (mem_rootsOfUnity' k y).mp hy1,
-    fun h => ⟨(rootsOfUnity.mkOfPowEq x h), ⟨Subtype.coe_prop (rootsOfUnity.mkOfPowEq x h), rfl⟩⟩⟩
-
-/--
-theorem `Units.val_set_image_rootsOfUnity_one` / 定理 `Units.val_set_image_rootsOfUnity_one`
-
-English:
-theorem Units.val_set_image_rootsOfUnity_one
-  statement: ((↑) : Rˣ -> R) '' (rootsOfUnity 1 R) = {1}
-  proof: by
-  simp
-
-中文:
-定理 单位群.val_set_image_rootsOfUnity_one
-  结论: ((↑) : Rˣ -> R) '' (rootsOfUnity 1 R) = {1}
-  证明: by
-  simp
+    fun h ↦ ⟨(rootsOfUnity.mkOfPowEq x h), ⟨Subtype.coe_prop (rootsOfUnity.mkOfPowEq x h), rfl⟩⟩⟩
+/-
+**Units.val_set_image_rootsOfUnity_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Units.val_set_image_rootsOfUnity_one : ((↑) : Rˣ -> R) '' (rootsOfUnity 1 
+R) = {1}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `rootsOfUnity_one`：rootsOfUnity_one (M : Type*) [CommMonoid M] : rootsOfU
+nity 1 M = ⊥
+· 使用定理 `Set.image_singleton`：image_singleton {f : α -> β} {a : α} : f '' {a} = {
+f a}
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem Units.val_set_image_rootsOfUnity_one : ((↑) : Rˣ -> R) '' (rootsOfUnity 1 R) = {1} := by
+theorem Units.val_set_image_rootsOfUnity_one : ((↑) : Rˣ → R) '' (rootsOfUnity 1 R) = {1} := by
   simp
 
 end CommMonoid
@@ -623,47 +491,56 @@ section CommRing
 variable [CommRing R]
 
 open Set in
-/--
-theorem `Units.val_set_image_rootsOfUnity_two` / 定理 `Units.val_set_image_rootsOfUnity_two`
-
-English:
-theorem Units.val_set_image_rootsOfUnity_two
-  given: [NoZeroDivisors R]
-  proof: by
-  ext x
-  simp
-
-中文:
-定理 单位群.val_set_image_rootsOfUnity_two
-  条件: [无零因子 R]
-  证明: by
-  ext x
-  simp
+/-
+**Units.val_set_image_rootsOfUnity_two** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Units.val_set_image_rootsOfUnity_two [NoZeroDivisors R] : ((↑) : Rˣ -> R) 
+'' (rootsOfUnity 2 R) = {1, -1}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Units.val_set_image_rootsOfUnity`：Units.val_set_image_rootsOfUnity [NeZe
+ro k] : ((↑) : Rˣ -> _) '' (rootsOfUnity k R) = {z : R | z^k = 1}
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem Units.val_set_image_rootsOfUnity_two [NoZeroDivisors R] :
-    ((↑) : Rˣ -> R) '' (rootsOfUnity 2 R) = {1, -1} := by
+    ((↑) : Rˣ → R) '' (rootsOfUnity 2 R) = {1, -1} := by
   ext x
   simp
-
-/--
-theorem `mem_rootsOfUnity_iff_isRoot` / 定理 `mem_rootsOfUnity_iff_isRoot`
-
-English:
-theorem mem_rootsOfUnity_iff_isRoot
-  given: (k : Nat) (ζ : Rˣ)
-  proof: by
-  simp [-mem_rootsOfUnity, mem_rootsOfUnity', sub_eq_zero]
-
-中文:
-定理 mem_rootsOfUnity_iff_isRoot
-  条件: (k : 自然数) (ζ : Rˣ)
-  证明: by
-  simp [-mem_rootsOfUnity, mem_rootsOfUnity', sub_eq_zero]
-
-Depends on / 依赖: mem_rootsOfUnity, sub_eq_zero
+/-
+**mem_rootsOfUnity_iff_isRoot** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_rootsOfUnity_iff_isRoot (k : Nat) (ζ : Rˣ) : ζ in rootsOfUnity k R ↔ (
+X ^ k - 1 : R[X]).IsRoot ζ
+参数：k : Nat；ζ : Rˣ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Polynomial.eval_sub`：eval_sub (p q : R[X]) (x : R) : (p - q).eval x = p.
+eval x - q.eval x
+· 使用定理 `Polynomial.eval_pow`：eval_pow (n : Nat) : (p ^ n).eval x = p.eval x ^ n
+· 使用定理 `Polynomial.eval_X`：eval_X : X.eval x = x
+· 使用定理 `Polynomial.eval_one`：eval_one : (1 : R[X]).eval x = 1
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_rootsOfUnity_iff_isRoot (k : Nat) (ζ : Rˣ) :
-    ζ in rootsOfUnity k R ↔ (X ^ k - 1 : R[X]).IsRoot ζ := by
+theorem mem_rootsOfUnity_iff_isRoot (k : ℕ) (ζ : Rˣ) :
+    ζ ∈ rootsOfUnity k R ↔ (X ^ k - 1 : R[X]).IsRoot ζ := by
   simp [-mem_rootsOfUnity, mem_rootsOfUnity', sub_eq_zero]
 
 end CommRing
@@ -673,63 +550,57 @@ section IsDomain
 -- The following results need `k` to be nonzero.
 variable [NeZero k] [CommRing R] [IsDomain R]
 
-/--
-theorem `mem_rootsOfUnity_iff_mem_nthRoots` / 定理 `mem_rootsOfUnity_iff_mem_nthRoots`
-
-English:
-theorem mem_rootsOfUnity_iff_mem_nthRoots
-  given: {ζ : Rˣ}
-  proof: by
-  simp only [mem_rootsOfUnity, mem_nthRoots (NeZero.pos k), Units.ext_iff, Units.val_one,
-    Units.val_pow_eq_pow_val]
-
-中文:
-定理 mem_rootsOfUnity_iff_mem_nthRoots
-  条件: {ζ : Rˣ}
-  证明: by
-  simp only [mem_rootsOfUnity, mem_nthRoots (NeZero.pos k), Units.ext_iff, Units.val_one,
-    Units.val_pow_eq_pow_val]
-
-Depends on / 依赖: NeZero, NeZero.pos, Units.ext_iff, Units.val_one, Units.val_pow_eq_pow_val, ext_iff, mem_nthRoots, mem_rootsOfUnity, val_one, val_pow_eq_pow_val
+/-
+**mem_rootsOfUnity_iff_mem_nthRoots** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_rootsOfUnity_iff_mem_nthRoots {ζ : Rˣ} : ζ in rootsOfUnity k R ↔ (ζ : 
+R) in nthRoots k (1 : R)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.mem_nthRoots`：mem_nthRoots {n : Nat} (hn : 0 < n) {a x : R} :
+ x in nthRoots n a ↔ x ^ n = a
+· 使用定理 `NeZero.pos`：pos [PartialOrder α] [IsBotZeroClass α] (a : α) [NeZero a] :
+ 0 < a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem mem_rootsOfUnity_iff_mem_nthRoots {ζ : Rˣ} :
-    ζ in rootsOfUnity k R ↔ (ζ : R) in nthRoots k (1 : R) := by
+    ζ ∈ rootsOfUnity k R ↔ (ζ : R) ∈ nthRoots k (1 : R) := by
   simp only [mem_rootsOfUnity, mem_nthRoots (NeZero.pos k), Units.ext_iff, Units.val_one,
     Units.val_pow_eq_pow_val]
 
 variable (k R)
 
-/--
-Definition of `rootsOfUnityEquivNthRoots` / `rootsOfUnityEquivNthRoots` 的定义
+/-- Equivalence between the `k`-th roots of unity in `R` and the `k`-th roots of `1`.
 
-English:
-definition rootsOfUnityEquivNthRoots
-  signature: : rootsOfUnity k R ≃ { x // x in nthRoots k (1 : R) } where
-  body: ⟨(x : Rˣ), mem_rootsOfUnity_iff_mem_nthRoots.mp x.2⟩
-  invFun x := by
-    refine ⟨⟨x, ↑x ^ (k - 1 : Nat), ?_, ?_⟩, ?_⟩
-    all_goals
-      rcases x with ⟨x, hx⟩; rw [mem_nthRoots <| NeZero.pos k] at hx
-      simp only [← pow_succ, ← pow_succ', hx, tsub_add_cancel_of_le NeZero.one_le]
-    simp only [mem_rootsOfUnity, Units.ext_iff, Units.val_pow_eq_pow_val, hx, Units.val_one]
+This is implemented as equivalence of subtypes,
+because `rootsOfUnity` is a subgroup of the group of units,
+whereas `nthRoots` is a multiset. -/
+/-
+**rootsOfUnityEquivNthRoots** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：rootsOfUnityEquivNthRoots : rootsOfUnity k R ≃ { x // x in nthRoots k (1 :
+ R) } where toFun x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 rootsOfUnityEquivNthRoots
-  签名: : rootsOfUnity k R ≃ { x // x in nthRoots k (1 : R) } where
-  定义体: ⟨(x : Rˣ), mem_rootsOfUnity_iff_mem_nthRoots.mp x.2⟩
-  invFun x := by
-    refine ⟨⟨x, ↑x ^ (k - 1 : Nat), ?_, ?_⟩, ?_⟩
-    all_goals
-      rcases x with ⟨x, hx⟩; rw [mem_nthRoots <| NeZero.pos k] at hx
-      simp only [← pow_succ, ← pow_succ', hx, tsub_add_cancel_of_le NeZero.one_le]
-    simp only [mem_rootsOfUnity, Units.ext_iff, Units.val_pow_eq_pow_val, hx, Units.val_one]
+--- 原说明 ---
+Equivalence between the `k`-th roots of unity in `R` and the `k`-th roots of `1`
+.
 
-Depends on / 依赖: mem_rootsOfUnity_iff_mem_nthRoots, mem_rootsOfUnity_iff_mem_nthRoots.mp
+This is implemented as equivalence of subtypes,
+because `rootsOfUnity` is a subgroup of the group of units,
+whereas `nthRoots` is a multiset.
 -/
-def rootsOfUnityEquivNthRoots : rootsOfUnity k R ≃ { x // x in nthRoots k (1 : R) } where
+def rootsOfUnityEquivNthRoots : rootsOfUnity k R ≃ { x // x ∈ nthRoots k (1 : R) } where
   toFun x := ⟨(x : Rˣ), mem_rootsOfUnity_iff_mem_nthRoots.mp x.2⟩
   invFun x := by
-    refine ⟨⟨x, ↑x ^ (k - 1 : Nat), ?_, ?_⟩, ?_⟩
+    refine ⟨⟨x, ↑x ^ (k - 1 : ℕ), ?_, ?_⟩, ?_⟩
     all_goals
       rcases x with ⟨x, hx⟩; rw [mem_nthRoots <| NeZero.pos k] at hx
       simp only [← pow_succ, ← pow_succ', hx, tsub_add_cancel_of_le NeZero.one_le]
@@ -738,168 +609,136 @@ def rootsOfUnityEquivNthRoots : rootsOfUnity k R ≃ { x // x in nthRoots k (1 :
 variable {k R}
 
 @[simp]
-/--
-theorem `rootsOfUnityEquivNthRoots_apply` / 定理 `rootsOfUnityEquivNthRoots_apply`
-
-English:
-theorem rootsOfUnityEquivNthRoots_apply
-  given: (x : rootsOfUnity k R)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 rootsOfUnityEquivNthRoots_apply
-  条件: (x : rootsOfUnity k R)
-  证明: rfl
-
-@[simp]
+/-
+**rootsOfUnityEquivNthRoots_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：rootsOfUnityEquivNthRoots_apply (x : rootsOfUnity k R) : (rootsOfUnityEqui
+vNthRoots R k x : R) = ((x : Rˣ) : R)
+参数：x : rootsOfUnity k R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem rootsOfUnityEquivNthRoots_apply (x : rootsOfUnity k R) :
     (rootsOfUnityEquivNthRoots R k x : R) = ((x : Rˣ) : R) :=
   rfl
 
 @[simp]
-/--
-theorem `rootsOfUnityEquivNthRoots_symm_apply` / 定理 `rootsOfUnityEquivNthRoots_symm_apply`
-
-English:
-theorem rootsOfUnityEquivNthRoots_symm_apply
-  given: (x : { x // x in nthRoots k (1 : R) })
-  proof: rfl
-
-中文:
-定理 rootsOfUnityEquivNthRoots_symm_apply
-  条件: (x : { x // x in nthRoots k (1 : R) })
-  证明: rfl
+/-
+**rootsOfUnityEquivNthRoots_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：rootsOfUnityEquivNthRoots_symm_apply (x : { x // x in nthRoots k (1 : R) }
+) : (((rootsOfUnityEquivNthRoots R k).symm x : Rˣ) : R) = (x : R)
+参数：x : { x // x in nthRoots k (1 : R) }。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-theorem rootsOfUnityEquivNthRoots_symm_apply (x : { x // x in nthRoots k (1 : R) }) :
+theorem rootsOfUnityEquivNthRoots_symm_apply (x : { x // x ∈ nthRoots k (1 : R) }) :
     (((rootsOfUnityEquivNthRoots R k).symm x : Rˣ) : R) = (x : R) :=
   rfl
 
 variable (k R)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Finite (rootsOfUnity k R)
-  body: by
-  classical
-  exact .of_equiv { x // x in nthRoots k (1 : R) } (rootsOfUnityEquivNthRoots R k).symm
-
-中文:
-实例 :
-  签名: 有限 (rootsOfUnity k R)
-  定义体: by
-  classical
-  exact .of_equiv { x // x in nthRoots k (1 : R) } (rootsOfUnityEquivNthRoots R k).symm
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Finite (rootsOfUnity k R) := by
   classical
-  exact .of_equiv { x // x in nthRoots k (1 : R) } (rootsOfUnityEquivNthRoots R k).symm
-
-/--
-Instance `rootsOfUnity.isCyclic` / 实例 `rootsOfUnity.isCyclic`
-
-English:
-instance rootsOfUnity.isCyclic
-  signature: : IsCyclic (rootsOfUnity k R)
-  body: isCyclic_of_injective_ringHom ((Units.coeHom R).comp (rootsOfUnity k R).subtype) coe_injective
-
-中文:
-实例 rootsOfUnity.isCyclic
-  签名: : 是循环 (rootsOfUnity k R)
-  定义体: isCyclic_of_injective_ringHom ((Units.coeHom R).comp (rootsOfUnity k R).subtype) coe_injective
-
-Depends on / 依赖: Units.coeHom, coeHom, coe_injective, isCyclic_of_injective_ringHom, rootsOfUnity, subtype
+  exact .of_equiv { x // x ∈ nthRoots k (1 : R) } (rootsOfUnityEquivNthRoots R k).symm
+/-
+**rootsOfUnity.isCyclic** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：rootsOfUnity.isCyclic : IsCyclic (rootsOfUnity k R)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `isCyclic_of_injective_ringHom`：isCyclic_of_injective_ringHom [Finite G] 
+(f : G ->* R) (hf : Injective f) : IsCyclic G
+· 使用定理 `instFiniteSubtypeUnitsMemSubgroupRootsOfUnity`：∀ (R : Type u_4) (k : ℕ) 
+[NeZero k] [inst : CommRing R] [IsDomain R], Finite ↥(rootsOfUnity k R)
+· 使用定理 `rootsOfUnity.coe_injective`：rootsOfUnity.coe_injective {n : Nat} : Funct
+ion.Injective (fun x : rootsOfUnity n M => x.val.val)
 -/
 instance rootsOfUnity.isCyclic : IsCyclic (rootsOfUnity k R) :=
   isCyclic_of_injective_ringHom ((Units.coeHom R).comp (rootsOfUnity k R).subtype) coe_injective
-
-/--
-theorem `card_rootsOfUnity` / 定理 `card_rootsOfUnity`
-
-English:
-theorem card_rootsOfUnity
-  statement: Nat.card (rootsOfUnity k R) <= k
-  proof: by
-  classical
-  calc
-    Nat.card (rootsOfUnity k R) = Nat.card { x // x in nthRoots k (1 : R) } :=
-      Nat.card_congr (rootsOfUnityEquivNthRoots R k)
-    _ = Fintype.card { x // x in nthRoots k (1 : R) } := Nat.card_eq_fintype_card
-    _ <= Multiset.card (nthRoots k (1 : R)).attach := Multiset.card_le_card (Multiset.dedup_le _)
-    _ = Multiset.card (nthRoots k (1 : R)) := Multiset.card_attach
-    _ <= k := card_nthRoots k 1
-
-中文:
-定理 card_rootsOfUnity
-  结论: 自然数.card (rootsOfUnity k R) <= k
-  证明: by
-  classical
-  calc
-    Nat.card (rootsOfUnity k R) = Nat.card { x // x in nthRoots k (1 : R) } :=
-      Nat.card_congr (rootsOfUnityEquivNthRoots R k)
-    _ = Fintype.card { x // x in nthRoots k (1 : R) } := Nat.card_eq_fintype_card
-    _ <= Multiset.card (nthRoots k (1 : R)).attach := Multiset.card_le_card (Multiset.dedup_le _)
-    _ = Multiset.card (nthRoots k (1 : R)) := Multiset.card_attach
-    _ <= k := card_nthRoots k 1
-
-Depends on / 依赖: Fintype, Fintype.card, Multiset, Multiset.card, Multiset.card_attach, Multiset.card_le_card, Multiset.dedup_le, Nat.card, Nat.card_congr, Nat.card_eq_fintype_card, attach, card_attach, card_congr, card_eq_fintype_card, card_le_card, card_nthRoots, classical, dedup_le, nthRoots, rootsOfUnity
+/-
+**card_rootsOfUnity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：card_rootsOfUnity : Nat.card (rootsOfUnity k R) <= k
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.card_congr`：card_congr (f : α ≃ β) : Nat.card α = Nat.card β
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
+· 使用定理 `Multiset.card_le_card`：card_le_card {s t : Multiset α} (h : s <= t) : ca
+rd s <= card t
+· 使用定理 `Multiset.dedup_le`：dedup_le (s : Multiset α) : dedup s <= s
+· 使用定理 `Multiset.card_attach`：card_attach {m : Multiset α} : card (attach m) = c
+ard m
+· 使用定理 `Polynomial.card_nthRoots`：card_nthRoots (n : Nat) (a : R) : Multiset.car
+d (nthRoots n a) <= n
 -/
-theorem card_rootsOfUnity : Nat.card (rootsOfUnity k R) <= k := by
+theorem card_rootsOfUnity : Nat.card (rootsOfUnity k R) ≤ k := by
   classical
   calc
-    Nat.card (rootsOfUnity k R) = Nat.card { x // x in nthRoots k (1 : R) } :=
+    Nat.card (rootsOfUnity k R) = Nat.card { x // x ∈ nthRoots k (1 : R) } :=
       Nat.card_congr (rootsOfUnityEquivNthRoots R k)
-    _ = Fintype.card { x // x in nthRoots k (1 : R) } := Nat.card_eq_fintype_card
-    _ <= Multiset.card (nthRoots k (1 : R)).attach := Multiset.card_le_card (Multiset.dedup_le _)
+    _ = Fintype.card { x // x ∈ nthRoots k (1 : R) } := Nat.card_eq_fintype_card
+    _ ≤ Multiset.card (nthRoots k (1 : R)).attach := Multiset.card_le_card (Multiset.dedup_le _)
     _ = Multiset.card (nthRoots k (1 : R)) := Multiset.card_attach
-    _ <= k := card_nthRoots k 1
+    _ ≤ k := card_nthRoots k 1
 
 variable {k R}
-
-/--
-theorem `map_rootsOfUnity_eq_pow_self` / 定理 `map_rootsOfUnity_eq_pow_self`
-
-English:
-theorem map_rootsOfUnity_eq_pow_self
-  statement: [FunLike F R R] [MonoidHomClass F R R] (σ : F)
-  proof: by
-  obtain ⟨m, hm⟩ := MonoidHom.map_cyclic (restrictRootsOfUnity σ k)
-  rw [← restrictRootsOfUnity_coe_apply]; rw [hm]; rw [← zpow_mod_orderOf]; rw [← Int.toNat_of_nonneg
-      (m.emod_nonneg (Int.natCast_ne_zero.mpr (pos_iff_ne_zero.mp (orderOf_pos ζ))))]; rw [zpow_natCast]; rw [rootsOfUnity.coe_pow]
-  exact ⟨(m % orderOf ζ).toNat, rfl⟩
-
-中文:
-定理 map_rootsOfUnity_eq_pow_self
-  结论: [函数状 F R R] [幺半群态射类 F R R] (σ : F)
-  证明: by
-  obtain ⟨m, hm⟩ := MonoidHom.map_cyclic (restrictRootsOfUnity σ k)
-  rw [← restrictRootsOfUnity_coe_apply]; rw [hm]; rw [← zpow_mod_orderOf]; rw [← Int.toNat_of_nonneg
-      (m.emod_nonneg (Int.natCast_ne_zero.mpr (pos_iff_ne_zero.mp (orderOf_pos ζ))))]; rw [zpow_natCast]; rw [rootsOfUnity.coe_pow]
-  exact ⟨(m % orderOf ζ).toNat, rfl⟩
-
-Depends on / 依赖: Int.natCast_ne_zero.mpr, Int.toNat_of_nonneg, MonoidHom, MonoidHom.map_cyclic, coe_pow, emod_nonneg, m.emod_nonneg, map_cyclic, natCast_ne_zero, orderOf, orderOf_pos, pos_iff_ne_zero, pos_iff_ne_zero.mp, restrictRootsOfUnity, restrictRootsOfUnity_coe_apply, rootsOfUnity, rootsOfUnity.coe_pow, toNat_of_nonneg, zpow_mod_orderOf, zpow_natCast
+/-
+**map_rootsOfUnity_eq_pow_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_rootsOfUnity_eq_pow_self [FunLike F R R] [MonoidHomClass F R R] (σ : F
+) (ζ : rootsOfUnity k R) : exists m : Nat, σ (ζ : Rˣ) = ((ζ : Rˣ) : R) ^ m
+参数：σ : F；ζ : rootsOfUnity k R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.map_cyclic`：MonoidHom.map_cyclic [h : IsCyclic G] (σ : G ->* G
+) : exists m : Int, forall g : G, σ g = g ^ m
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `restrictRootsOfUnity_coe_apply`：restrictRootsOfUnity_coe_apply [MonoidHo
+mClass F R S] (σ : F) (ζ : rootsOfUnity k R) : (restrictRootsOfUnity σ k ζ : Sˣ)
+ = σ (ζ : Rˣ)
+· 使用引理 `zpow_mod_orderOf`：zpow_mod_orderOf (x : G) (z : Int) : x ^ (z % (orderOf
+ x : Int)) = x ^ z
+· 使用定理 `Int.toNat_of_nonneg`：∀ {a : ℤ}, 0 ≤ a → ↑a.toNat = a
+· 使用定理 `Int.emod_nonneg`：∀ (a : ℤ) {b : ℤ}, b ≠ 0 → 0 ≤ a % b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Int.natCast_ne_zero`：∀ {n : ℕ}, ↑n ≠ 0 ↔ n ≠ 0
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `pos_iff_ne_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [inst_
+1 : Zero α] [IsBotZeroClass α], 0 < a ↔ a ≠ 0
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用引理 `orderOf_pos`：orderOf_pos (x : G) : 0 < orderOf x
+· 使用定理 `instFiniteSubtypeUnitsMemSubgroupRootsOfUnity`：∀ (R : Type u_4) (k : ℕ) 
+[NeZero k] [inst : CommRing R] [IsDomain R], Finite ↥(rootsOfUnity k R)
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `rootsOfUnity.coe_pow`：rootsOfUnity.coe_pow [CommMonoid R] (ζ : rootsOfUn
+ity k R) (m : Nat) : (((ζ ^ m :) : Rˣ) : R) = ((ζ : Rˣ) : R) ^ m
 -/
 theorem map_rootsOfUnity_eq_pow_self [FunLike F R R] [MonoidHomClass F R R] (σ : F)
     (ζ : rootsOfUnity k R) :
-    exists m : Nat, σ (ζ : Rˣ) = ((ζ : Rˣ) : R) ^ m := by
+    ∃ m : ℕ, σ (ζ : Rˣ) = ((ζ : Rˣ) : R) ^ m := by
   obtain ⟨m, hm⟩ := MonoidHom.map_cyclic (restrictRootsOfUnity σ k)
-  rw [← restrictRootsOfUnity_coe_apply]; rw [hm]; rw [← zpow_mod_orderOf]; rw [← Int.toNat_of_nonneg
-      (m.emod_nonneg (Int.natCast_ne_zero.mpr (pos_iff_ne_zero.mp (orderOf_pos ζ))))]; rw [zpow_natCast]; rw [rootsOfUnity.coe_pow]
+  rw [← restrictRootsOfUnity_coe_apply, hm, ← zpow_mod_orderOf, ← Int.toNat_of_nonneg
+      (m.emod_nonneg (Int.natCast_ne_zero.mpr (pos_iff_ne_zero.mp (orderOf_pos ζ)))),
+    zpow_natCast, rootsOfUnity.coe_pow]
   exact ⟨(m % orderOf ζ).toNat, rfl⟩
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {L : Type*} [LeftCancelMonoid L] [Finite L] :
-    Finite (L ->* Rˣ) := by
+    Finite (L →* Rˣ) := by
   let S := rootsOfUnity (Monoid.exponent L) R
-  have : Finite (L ->* S) := .of_injective _ DFunLike.coe_injective
-  refine .of_surjective (fun f : L ->* S => (Subgroup.subtype _).comp f) fun f => ?_
-  have H a : f a in S := by
-    rw [mem_rootsOfUnity]; rw [← map_pow]; rw [Monoid.pow_exponent_eq_one]; rw [map_one]
-  exact ⟨.codRestrict f S H, MonoidHom.ext fun _ => by simp⟩
+  have : Finite (L →* S) := .of_injective _ DFunLike.coe_injective
+  refine .of_surjective (fun f : L →* S ↦ (Subgroup.subtype _).comp f) fun f ↦ ?_
+  have H a : f a ∈ S := by
+    rw [mem_rootsOfUnity, ← map_pow, Monoid.pow_exponent_eq_one, map_one]
+  exact ⟨.codRestrict f S H, MonoidHom.ext fun _ ↦ by simp⟩
 
 end IsDomain
 
@@ -908,49 +747,50 @@ section Reduced
 variable (R) [CommRing R] [IsReduced R]
 
 -- simp normal form is `mem_rootsOfUnity_prime_pow_mul_iff'`
-/--
-theorem `mem_rootsOfUnity_prime_pow_mul_iff` / 定理 `mem_rootsOfUnity_prime_pow_mul_iff`
-
-English:
-theorem mem_rootsOfUnity_prime_pow_mul_iff
-  given: (p k : Nat) (m : Nat) [ExpChar R p] {ζ : Rˣ}
-  proof: by
-  simp only [mem_rootsOfUnity', ExpChar.pow_prime_pow_mul_eq_one_iff]
-
-中文:
-定理 mem_rootsOfUnity_prime_pow_mul_iff
-  条件: (p k : 自然数) (m : 自然数) [ExpChar R p] {ζ : Rˣ}
-  证明: by
-  simp only [mem_rootsOfUnity', ExpChar.pow_prime_pow_mul_eq_one_iff]
-
-Depends on / 依赖: ExpChar, ExpChar.pow_prime_pow_mul_eq_one_iff, mem_rootsOfUnity, pow_prime_pow_mul_eq_one_iff
+/-
+**mem_rootsOfUnity_prime_pow_mul_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_rootsOfUnity_prime_pow_mul_iff (p k : Nat) (m : Nat) [ExpChar R p] {ζ 
+: Rˣ} : ζ in rootsOfUnity (p ^ k * m) R ↔ ζ in rootsOfUnity m R
+参数：p k : Nat；m : Nat。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_rootsOfUnity_prime_pow_mul_iff (p k : Nat) (m : Nat) [ExpChar R p] {ζ : Rˣ} :
-    ζ in rootsOfUnity (p ^ k * m) R ↔ ζ in rootsOfUnity m R := by
+theorem mem_rootsOfUnity_prime_pow_mul_iff (p k : ℕ) (m : ℕ) [ExpChar R p] {ζ : Rˣ} :
+    ζ ∈ rootsOfUnity (p ^ k * m) R ↔ ζ ∈ rootsOfUnity m R := by
   simp only [mem_rootsOfUnity', ExpChar.pow_prime_pow_mul_eq_one_iff]
 
 /-- A variant of `mem_rootsOfUnity_prime_pow_mul_iff` in terms of `ζ ^ _` -/
 @[simp]
-/--
-theorem `mem_rootsOfUnity_prime_pow_mul_iff'` / 定理 `mem_rootsOfUnity_prime_pow_mul_iff'`
+/-
+**mem_rootsOfUnity_prime_pow_mul_iff'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_rootsOfUnity_prime_pow_mul_iff' (p k : Nat) (m : Nat) [ExpChar R p] {ζ
+ : Rˣ} : ζ ^ (p ^ k * m) = 1 ↔ ζ in rootsOfUnity m R
+参数：p k : Nat；m : Nat。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mem_rootsOfUnity`：mem_rootsOfUnity (k : Nat) (ζ : Mˣ) : ζ in rootsOfUnit
+y k M ↔ ζ ^ k = 1
+· 使用定理 `mem_rootsOfUnity_prime_pow_mul_iff`：mem_rootsOfUnity_prime_pow_mul_iff (
+p k : Nat) (m : Nat) [ExpChar R p] {ζ : Rˣ} : ζ in rootsOfUnity (p ^ k * m) R ↔ 
+ζ in rootsOfUnity m R
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem mem_rootsOfUnity_prime_pow_mul_iff'
-  given: (p k : Nat) (m : Nat) [ExpChar R p] {ζ : Rˣ}
-  proof: by
-  rw [← mem_rootsOfUnity]; rw [mem_rootsOfUnity_prime_pow_mul_iff]
-
-中文:
-定理 mem_rootsOfUnity_prime_pow_mul_iff'
-  条件: (p k : 自然数) (m : 自然数) [ExpChar R p] {ζ : Rˣ}
-  证明: by
-  rw [← mem_rootsOfUnity]; rw [mem_rootsOfUnity_prime_pow_mul_iff]
-
-Depends on / 依赖: mem_rootsOfUnity, mem_rootsOfUnity_prime_pow_mul_iff
+--- 原说明 ---
+A variant of `mem_rootsOfUnity_prime_pow_mul_iff` in terms of `ζ ^ _`
 -/
-theorem mem_rootsOfUnity_prime_pow_mul_iff' (p k : Nat) (m : Nat) [ExpChar R p] {ζ : Rˣ} :
-    ζ ^ (p ^ k * m) = 1 ↔ ζ in rootsOfUnity m R := by
-  rw [← mem_rootsOfUnity]; rw [mem_rootsOfUnity_prime_pow_mul_iff]
+theorem mem_rootsOfUnity_prime_pow_mul_iff' (p k : ℕ) (m : ℕ) [ExpChar R p] {ζ : Rˣ} :
+    ζ ^ (p ^ k * m) = 1 ↔ ζ ∈ rootsOfUnity m R := by
+  rw [← mem_rootsOfUnity, mem_rootsOfUnity_prime_pow_mul_iff]
 
 end Reduced
 
@@ -964,87 +804,58 @@ namespace IsCyclic
 `n` into another group `G'` to the group of `n`th roots of unity in `G'` determined by a generator
 `g` of `G`. It sends `φ : G →* G'` to `φ g`. -/
 noncomputable
-/--
-Definition of `monoidHomMulEquivRootsOfUnityOfGenerator` / `monoidHomMulEquivRootsOfUnityOfGenerator` 的定义
-
-English:
-definition monoidHomMulEquivRootsOfUnityOfGenerator
-  signature: {G : Type*} [CommGroup G] {g : G}
-  body: ⟨(IsUnit.map φ <| Group.isUnit g).unit, by
-    simp only [mem_rootsOfUnity, Units.ext_iff, Units.val_pow_eq_pow_val, IsUnit.unit_spec,
-      ← map_pow, pow_card_eq_one', map_one, Units.val_one]⟩
-invFun ζ := monoidHomOfForallMemZpowers hg (g' := (ζ.val : G')) by
-    simpa only [orderOf_eq_card_of_forall_mem_zpowers hg, orderOf_dvd_iff_pow_eq_one,
-      ← Units.val_pow_eq_pow_val, Units.val_eq_one] using! ζ.prop
-left_inv φ := (MonoidHom.eq_iff_eq_on_generator hg _ φ).mpr by
-    simp only [IsUnit.unit_spec, monoidHomOfForallMemZpowers_apply_gen]
-right_inv φ := Subtype.ext by
-    simp only [monoidHomOfForallMemZpowers_apply_gen, IsUnit.unit_of_val_units]
-  map_mul' x y := by
-    simp only [MonoidHom.mul_apply, MulMemClass.mk_mul_mk, Subtype.mk.injEq, Units.ext_iff,
-      IsUnit.unit_spec, Units.val_mul]
-
-中文:
-定义 monoidHomMulEquivRootsOfUnityOfGenerator
-  签名: {G : 类型} [交换群 G] {g : G}
-  定义体: ⟨(IsUnit.map φ <| Group.isUnit g).unit, by
-    simp only [mem_rootsOfUnity, Units.ext_iff, Units.val_pow_eq_pow_val, IsUnit.unit_spec,
-      ← map_pow, pow_card_eq_one', map_one, Units.val_one]⟩
-invFun ζ := monoidHomOfForallMemZpowers hg (g' := (ζ.val : G')) by
-    simpa only [orderOf_eq_card_of_forall_mem_zpowers hg, orderOf_dvd_iff_pow_eq_one,
-      ← Units.val_pow_eq_pow_val, Units.val_eq_one] using! ζ.prop
-left_inv φ := (MonoidHom.eq_iff_eq_on_generator hg _ φ).mpr by
-    simp only [IsUnit.unit_spec, monoidHomOfForallMemZpowers_apply_gen]
-right_inv φ := Subtype.ext by
-    simp only [monoidHomOfForallMemZpowers_apply_gen, IsUnit.unit_of_val_units]
-  map_mul' x y := by
-    simp only [MonoidHom.mul_apply, MulMemClass.mk_mul_mk, Subtype.mk.injEq, Units.ext_iff,
-      IsUnit.unit_spec, Units.val_mul]
-
-Depends on / 依赖: Group.isUnit, IsUnit, IsUnit.map, IsUnit.unit_spec, MonoidHom, MonoidHom.eq_iff_eq_on_generator, Units.ext_iff, Units.val_eq_one, Units.val_one, Units.val_pow_eq_pow_val, eq_iff_eq_on_generator, ext_iff, invFun, isUnit, left_inv, map_one, map_pow, mem_rootsOfUnity, monoidHomOfFor, monoidHomOfForallMemZpowers
+/-
+**IsCyclic.monoidHomMulEquivRootsOfUnityOfGenerator** 是 Mathlib 中的一个定义，位于命名空间 `I
+sCyclic`。
+形式化陈述：monoidHomMulEquivRootsOfUnityOfGenerator {G : Type*} [CommGroup G] {g : G}
+ (hg : forall (x : G), x in Subgroup.zpowers g) (G' : Type*) [CommGroup G'] : (G
+ ->* G') ≃* rootsOfUnity (Nat.card G) G' where toFun φ
+参数：hg : forall (x : G), x in Subgroup.zpowers g；G' : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def monoidHomMulEquivRootsOfUnityOfGenerator {G : Type*} [CommGroup G] {g : G}
-    (hg : forall (x : G), x in Subgroup.zpowers g) (G' : Type*) [CommGroup G'] :
-    (G ->* G') ≃* rootsOfUnity (Nat.card G) G' where
+    (hg : ∀ (x : G), x ∈ Subgroup.zpowers g) (G' : Type*) [CommGroup G'] :
+    (G →* G') ≃* rootsOfUnity (Nat.card G) G' where
   toFun φ := ⟨(IsUnit.map φ <| Group.isUnit g).unit, by
     simp only [mem_rootsOfUnity, Units.ext_iff, Units.val_pow_eq_pow_val, IsUnit.unit_spec,
       ← map_pow, pow_card_eq_one', map_one, Units.val_one]⟩
-invFun ζ := monoidHomOfForallMemZpowers hg (g' := (ζ.val : G')) by
+  invFun ζ := monoidHomOfForallMemZpowers hg (g' := (ζ.val : G')) <| by
     simpa only [orderOf_eq_card_of_forall_mem_zpowers hg, orderOf_dvd_iff_pow_eq_one,
       ← Units.val_pow_eq_pow_val, Units.val_eq_one] using! ζ.prop
-left_inv φ := (MonoidHom.eq_iff_eq_on_generator hg _ φ).mpr by
+  left_inv φ := (MonoidHom.eq_iff_eq_on_generator hg _ φ).mpr <| by
     simp only [IsUnit.unit_spec, monoidHomOfForallMemZpowers_apply_gen]
-right_inv φ := Subtype.ext by
+  right_inv φ := Subtype.ext <| by
     simp only [monoidHomOfForallMemZpowers_apply_gen, IsUnit.unit_of_val_units]
   map_mul' x y := by
     simp only [MonoidHom.mul_apply, MulMemClass.mk_mul_mk, Subtype.mk.injEq, Units.ext_iff,
       IsUnit.unit_spec, Units.val_mul]
 
-/--
-lemma `monoidHom_mulEquiv_rootsOfUnity` / 引理 `monoidHom_mulEquiv_rootsOfUnity`
+/-- The group of group homomorphisms from a finite cyclic group `G` of order `n` into another
+group `G'` is (noncanonically) isomorphic to the group of `n`th roots of unity in `G'`. -/
+/-
+**IsCyclic.monoidHom_mulEquiv_rootsOfUnity** 是 Mathlib 中的一个引理，位于命名空间 `IsCyclic`。
+形式化陈述：monoidHom_mulEquiv_rootsOfUnity (G : Type*) [CommGroup G] [IsCyclic G] (G'
+ : Type*) [CommGroup G'] : Nonempty (G ->* G') ≃* rootsOfUnity (Nat.card G) G'
+参数：G : Type*；G' : Type*。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCyclic.exists_generator`：IsCyclic.exists_generator [Group α] [IsCyclic
+ α] : exists g : α, forall x, x in zpowers g
 
-English:
-lemma monoidHom_mulEquiv_rootsOfUnity
-  statement: (G : Type*) [CommGroup G] [IsCyclic G]
-  proof: by
-  obtain ⟨g, hg⟩ := IsCyclic.exists_generator (α := G)
-  exact ⟨monoidHomMulEquivRootsOfUnityOfGenerator hg G'⟩
-
-中文:
-引理 monoidHom_mulEquiv_rootsOfUnity
-  结论: (G : 类型) [交换群 G] [是循环 G]
-  证明: by
-  obtain ⟨g, hg⟩ := IsCyclic.exists_generator (α := G)
-  exact ⟨monoidHomMulEquivRootsOfUnityOfGenerator hg G'⟩
-
-Depends on / 依赖: IsCyclic, IsCyclic.exists_generator, exists_generator, monoidHomMulEquivRootsOfUnityOfGenerator
+--- 原说明 ---
+The group of group homomorphisms from a finite cyclic group `G` of order `n` int
+o another
+group `G'` is (noncanonically) isomorphic to the group of `n`th roots of unity i
+n `G'`.
 -/
 lemma monoidHom_mulEquiv_rootsOfUnity (G : Type*) [CommGroup G] [IsCyclic G]
     (G' : Type*) [CommGroup G'] :
-Nonempty (G ->* G') ≃* rootsOfUnity (Nat.card G) G' := by
+    Nonempty <| (G →* G') ≃* rootsOfUnity (Nat.card G) G' := by
   obtain ⟨g, hg⟩ := IsCyclic.exists_generator (α := G)
   exact ⟨monoidHomMulEquivRootsOfUnityOfGenerator hg G'⟩
 
 end IsCyclic
 
 end cyclic
+

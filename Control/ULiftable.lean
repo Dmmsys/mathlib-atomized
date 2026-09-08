@@ -43,247 +43,223 @@ universe v u₀ u₁ v₀ v₁ v₂ w w₀ w₁
 
 variable {s : Type u₀} {s' : Type u₁} {r r' w w' : Type*}
 
-/--
-Definition of `ULiftable` / `ULiftable` 的定义
+/-- Given a universe polymorphic type family `M.{u} : Type u₁ → Type
+u₂`, this class convert between instantiations, from
+`M.{u} : Type u₁ → Type u₂` to `M.{v} : Type v₁ → Type v₂` and back.
 
-English:
-class ULiftable
-  parameters: (f : outParam (Type u₀ -> Type u₁)) (g : Type v₀ -> Type v₁)
-  axioms and operations (1):
-    - congr({α β}) : α ≃ β -> f α ≃ g β
+`f` is an outParam, because `g` can almost always be inferred from the current monad.
+At any rate, the lift should be unique, as the intent is to only lift the same constants with
+different universe parameters. -/
+/-
+**ULiftable** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：outParam (Type u₀ → Type u₁) → (Type v₀ → Type v₁) → Type (max (max (max (
+u₀ + 1) u₁) (v₀ + 1)) v₁)
+参数：Type u₀ → Type u₁；Type v₀ → Type v₁；max (max (max (u₀ + 1) u₁) (v₀ + 1)) v₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 可类型层提升
-  参数: (f : outParam (类型u₀ -> 类型u₁)) (g : 类型v₀ -> 类型v₁)
-  公理与运算 (1 个):
-    - congr({α β}) : α ≃ β -> f α ≃ g β
+--- 原说明 ---
+Given a universe polymorphic type family `M.{u} : Type u₁ → Type
+u₂`, this class convert between instantiations, from
+`M.{u} : Type u₁ → Type u₂` to `M.{v} : Type v₁ → Type v₂` and back.
+
+`f` is an outParam, because `g` can almost always be inferred from the current m
+onad.
+At any rate, the lift should be unique, as the intent is to only lift the same c
+onstants with
+different universe parameters.
 -/
-class ULiftable (f : outParam (Type u₀ -> Type u₁)) (g : Type v₀ -> Type v₁) where
-  congr {α β} : α ≃ β -> f α ≃ g β
+class ULiftable (f : outParam (Type u₀ → Type u₁)) (g : Type v₀ → Type v₁) where
+  congr {α β} : α ≃ β → f α ≃ g β
 
 namespace ULiftable
 
-/--
-Definition of `symm` / `symm` 的定义
+/-- Not an instance as it is incompatible with `outParam`. In practice it seems not to be needed
+anyway. -/
+/-
+**ULiftable.symm** 是 Mathlib 中的一个缩写定义，位于命名空间 `ULiftable`。
+形式化陈述：symm (f : Type u₀ -> Type u₁) (g : Type v₀ -> Type v₁) [ULiftable f g] : U
+Liftable g f where congr e
+参数：f : Type u₀ -> Type u₁；g : Type v₀ -> Type v₁。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-abbreviation symm
-  signature: (f : Type u₀ -> Type u₁) (g : Type v₀ -> Type v₁) [ULiftable f g]
-  body: (ULiftable.congr e.symm).symm
-
-中文:
-缩写 symm
-  签名: (f : 类型u₀ -> 类型u₁) (g : 类型v₀ -> 类型v₁) [可类型层提升 f g]
-  定义体: (ULiftable.congr e.symm).symm
-
-Depends on / 依赖: ULiftable, ULiftable.congr, e.symm
+--- 原说明 ---
+Not an instance as it is incompatible with `outParam`. In practice it seems not 
+to be needed
+anyway.
 -/
-abbrev symm (f : Type u₀ -> Type u₁) (g : Type v₀ -> Type v₁) [ULiftable f g] : ULiftable g f where
+abbrev symm (f : Type u₀ → Type u₁) (g : Type v₀ → Type v₁) [ULiftable f g] : ULiftable g f where
   congr e := (ULiftable.congr e.symm).symm
-
-/--
-Instance `refl` / 实例 `refl`
-
-English:
-instance refl
-  signature: (f : Type u₀ -> Type u₁) [Functor f] [LawfulFunctor f]
-  body: Functor.mapEquiv _ e
-
-中文:
-实例 refl
-  签名: (f : 类型u₀ -> 类型u₁) [函子 f] [Lawful函子 f]
-  定义体: Functor.mapEquiv _ e
-
-Depends on / 依赖: Functor, Functor.mapEquiv, mapEquiv
+/-
+**ULiftable.refl** 是 Mathlib 中的一个实例，位于命名空间 `ULiftable`。
+形式化陈述：refl (f : Type u₀ -> Type u₁) [Functor f] [LawfulFunctor f] : ULiftable f 
+f where congr e
+参数：f : Type u₀ -> Type u₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance refl (f : Type u₀ -> Type u₁) [Functor f] [LawfulFunctor f] : ULiftable f f where
+instance refl (f : Type u₀ → Type u₁) [Functor f] [LawfulFunctor f] : ULiftable f f where
   congr e := Functor.mapEquiv _ e
 
-/--
-Definition of `up` / `up` 的定义
+/-- The most common practical use `ULiftable` (together with `down`), the function `up.{v}` takes
+`x : M.{u} α` and lifts it to `M.{max u v} (ULift.{v} α)` -/
+/-
+**ULiftable.up** 是 Mathlib 中的一个缩写定义，位于命名空间 `ULiftable`。
+形式化陈述：up {f : Type u₀ -> Type u₁} {g : Type max u₀ v -> Type v₁} [ULiftable f g]
+ {α} : f α -> g (ULift.{v} α)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-abbreviation up
-  signature: {f : Type u₀ -> Type u₁} {g : Type max u₀ v -> Type v₁} [ULiftable f g] {α}
-  body: (ULiftable.congr Equiv.ulift.symm).toFun
-
-中文:
-缩写 up
-  签名: {f : 类型u₀ -> 类型u₁} {g : 类型 最大值 u₀ v -> 类型v₁} [可类型层提升 f g] {α}
-  定义体: (ULiftable.congr Equiv.ulift.symm).toFun
-
-Depends on / 依赖: Equiv.ulift.symm, ULiftable, ULiftable.congr
+--- 原说明 ---
+The most common practical use `ULiftable` (together with `down`), the function `
+up.{v}` takes
+`x : M.{u} α` and lifts it to `M.{max u v} (ULift.{v} α)`
 -/
-abbrev up {f : Type u₀ -> Type u₁} {g : Type max u₀ v -> Type v₁} [ULiftable f g] {α} :
-    f α -> g (ULift.{v} α) :=
+abbrev up {f : Type u₀ → Type u₁} {g : Type max u₀ v → Type v₁} [ULiftable f g] {α} :
+    f α → g (ULift.{v} α) :=
   (ULiftable.congr Equiv.ulift.symm).toFun
 
-/--
-Definition of `down` / `down` 的定义
+/-- The most common practical use of `ULiftable` (together with `up`), the function `down.{v}` takes
+`x : M.{max u v} (ULift.{v} α)` and lowers it to `M.{u} α` -/
+/-
+**ULiftable.down** 是 Mathlib 中的一个缩写定义，位于命名空间 `ULiftable`。
+形式化陈述：down {f : Type u₀ -> Type u₁} {g : Type max u₀ v -> Type v₁} [ULiftable f 
+g] {α} : g (ULift.{v} α) -> f α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-abbreviation down
-  signature: {f : Type u₀ -> Type u₁} {g : Type max u₀ v -> Type v₁} [ULiftable f g] {α}
-  body: (ULiftable.congr Equiv.ulift.symm).invFun
-
-中文:
-缩写 down
-  签名: {f : 类型u₀ -> 类型u₁} {g : 类型 最大值 u₀ v -> 类型v₁} [可类型层提升 f g] {α}
-  定义体: (ULiftable.congr Equiv.ulift.symm).invFun
-
-Depends on / 依赖: Equiv.ulift.symm, ULiftable, ULiftable.congr, invFun, mem_dropLast_of_mem_of_ne_getLast
+--- 原说明 ---
+The most common practical use of `ULiftable` (together with `up`), the function 
+`down.{v}` takes
+`x : M.{max u v} (ULift.{v} α)` and lowers it to `M.{u} α`
 -/
-abbrev down {f : Type u₀ -> Type u₁} {g : Type max u₀ v -> Type v₁} [ULiftable f g] {α} :
-    g (ULift.{v} α) -> f α :=
+abbrev down {f : Type u₀ → Type u₁} {g : Type max u₀ v → Type v₁} [ULiftable f g] {α} :
+    g (ULift.{v} α) → f α :=
   (ULiftable.congr Equiv.ulift.symm).invFun
 
-/--
-Definition of `adaptUp` / `adaptUp` 的定义
+/-- convenient shortcut to avoid manipulating `ULift` -/
+/-
+**ULiftable.adaptUp** 是 Mathlib 中的一个定义，位于命名空间 `ULiftable`。
+形式化陈述：adaptUp (F : Type v₀ -> Type v₁) (G : Type max v₀ u₀ -> Type u₁) [ULiftabl
+e F G] [Monad G] {α β} (x : F α) (f : α -> G β) : G β
+参数：F : Type v₀ -> Type v₁；G : Type max v₀ u₀ -> Type u₁；x : F α；f : α -> G β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition adaptUp
-  signature: (F : Type v₀ -> Type v₁) (G : Type max v₀ u₀ -> Type u₁) [ULiftable F G] [Monad G] {α β}
-  body: up x >>= f ∘ ULift.down.{u₀}
-
-中文:
-定义 adaptUp
-  签名: (F : 类型v₀ -> 类型v₁) (G : 类型 最大值 v₀ u₀ -> 类型u₁) [可类型层提升 F G] [单子 G] {α β}
-  定义体: up x >>= f ∘ ULift.down.{u₀}
-
-Depends on / 依赖: ULift.down
+--- 原说明 ---
+convenient shortcut to avoid manipulating `ULift`
 -/
-def adaptUp (F : Type v₀ -> Type v₁) (G : Type max v₀ u₀ -> Type u₁) [ULiftable F G] [Monad G] {α β}
-    (x : F α) (f : α -> G β) : G β :=
+def adaptUp (F : Type v₀ → Type v₁) (G : Type max v₀ u₀ → Type u₁) [ULiftable F G] [Monad G] {α β}
+    (x : F α) (f : α → G β) : G β :=
   up x >>= f ∘ ULift.down.{u₀}
 
-/--
-Definition of `adaptDown` / `adaptDown` 的定义
+/-- convenient shortcut to avoid manipulating `ULift` -/
+/-
+**ULiftable.adaptDown** 是 Mathlib 中的一个定义，位于命名空间 `ULiftable`。
+形式化陈述：adaptDown {F : Type max u₀ v₀ -> Type u₁} {G : Type v₀ -> Type v₁} [L : UL
+iftable G F] [Monad F] {α β} (x : F α) (f : α -> G β) : G β
+参数：x : F α；f : α -> G β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition adaptDown
-  signature: {F : Type max u₀ v₀ -> Type u₁} {G : Type v₀ -> Type v₁} [L : ULiftable G F] [Monad F]
-  body: @down.{max u₀ v₀} G F L β x >>= @up.{max u₀ v₀} G F L β ∘ f
-
-中文:
-定义 adaptDown
-  签名: {F : 类型 最大值 u₀ v₀ -> 类型u₁} {G : 类型v₀ -> 类型v₁} [L : 可类型层提升 G F] [单子 F]
-  定义体: @down.{max u₀ v₀} G F L β x >>= @up.{max u₀ v₀} G F L β ∘ f
+--- 原说明 ---
+convenient shortcut to avoid manipulating `ULift`
 -/
-def adaptDown {F : Type max u₀ v₀ -> Type u₁} {G : Type v₀ -> Type v₁} [L : ULiftable G F] [Monad F]
-    {α β} (x : F α) (f : α -> G β) : G β :=
-@down.{max u₀ v₀} G F L β x >>= @up.{max u₀ v₀} G F L β ∘ f
+def adaptDown {F : Type max u₀ v₀ → Type u₁} {G : Type v₀ → Type v₁} [L : ULiftable G F] [Monad F]
+    {α β} (x : F α) (f : α → G β) : G β :=
+  @down.{max u₀ v₀} G F L β <| x >>= @up.{max u₀ v₀} G F L β ∘ f
 
-/--
-Definition of `upMap` / `upMap` 的定义
+/-- map function that moves up universes -/
+/-
+**ULiftable.upMap** 是 Mathlib 中的一个定义，位于命名空间 `ULiftable`。
+形式化陈述：upMap {F : Type u₀ -> Type u₁} {G : Type max u₀ v₀ -> Type v₁} [ULiftable 
+F G] [Functor G] {α β} (f : α -> β) (x : F α) : G β
+参数：f : α -> β；x : F α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition upMap
-  signature: {F : Type u₀ -> Type u₁} {G : Type max u₀ v₀ -> Type v₁} [ULiftable F G] [Functor G]
-  body: Functor.map (f ∘ ULift.down.{v₀}) (up x)
-
-中文:
-定义 upMap
-  签名: {F : 类型u₀ -> 类型u₁} {G : 类型 最大值 u₀ v₀ -> 类型v₁} [可类型层提升 F G] [函子 G]
-  定义体: Functor.map (f ∘ ULift.down.{v₀}) (up x)
-
-Depends on / 依赖: Functor, Functor.map, ULift.down
+--- 原说明 ---
+map function that moves up universes
 -/
-def upMap {F : Type u₀ -> Type u₁} {G : Type max u₀ v₀ -> Type v₁} [ULiftable F G] [Functor G]
-    {α β} (f : α -> β) (x : F α) : G β :=
+def upMap {F : Type u₀ → Type u₁} {G : Type max u₀ v₀ → Type v₁} [ULiftable F G] [Functor G]
+    {α β} (f : α → β) (x : F α) : G β :=
   Functor.map (f ∘ ULift.down.{v₀}) (up x)
 
-/--
-Definition of `downMap` / `downMap` 的定义
+/-- map function that moves down universes -/
+/-
+**ULiftable.downMap** 是 Mathlib 中的一个定义，位于命名空间 `ULiftable`。
+形式化陈述：downMap {F : Type max u₀ v₀ -> Type u₁} {G : Type u₀ -> Type v₁} [ULiftabl
+e G F] [Functor F] {α β} (f : α -> β) (x : F α) : G β
+参数：f : α -> β；x : F α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition downMap
-  signature: {F : Type max u₀ v₀ -> Type u₁} {G : Type u₀ -> Type v₁} [ULiftable G F]
-  body: down (Functor.map (ULift.up.{v₀} ∘ f) x : F (ULift β))
-
-中文:
-定义 downMap
-  签名: {F : 类型 最大值 u₀ v₀ -> 类型u₁} {G : 类型u₀ -> 类型v₁} [可类型层提升 G F]
-  定义体: down (Functor.map (ULift.up.{v₀} ∘ f) x : F (ULift β))
-
-Depends on / 依赖: Functor, Functor.map, ULift.up, _eq_head, _getD
+--- 原说明 ---
+map function that moves down universes
 -/
-def downMap {F : Type max u₀ v₀ -> Type u₁} {G : Type u₀ -> Type v₁} [ULiftable G F]
-    [Functor F] {α β} (f : α -> β) (x : F α) : G β :=
+def downMap {F : Type max u₀ v₀ → Type u₁} {G : Type u₀ → Type v₁} [ULiftable G F]
+    [Functor F] {α β} (f : α → β) (x : F α) : G β :=
   down (Functor.map (ULift.up.{v₀} ∘ f) x : F (ULift β))
 
-/--
-Definition of `up'` / `up'` 的定义
+/-- A version of `up` for a `PUnit` return type. -/
+/-
+**ULiftable.up'** 是 Mathlib 中的一个缩写定义，位于命名空间 `ULiftable`。
+形式化陈述：up' {f : Type u₀ -> Type u₁} {g : Type v₀ -> Type v₁} [ULiftable f g] : f 
+PUnit -> g PUnit
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation up'
-  signature: {f : Type u₀ -> Type u₁} {g : Type v₀ -> Type v₁} [ULiftable f g]
-  body: ULiftable.congr Equiv.punitEquivPUnit
-
-中文:
-缩写 up'
-  签名: {f : 类型u₀ -> 类型u₁} {g : 类型v₀ -> 类型v₁} [可类型层提升 f g]
-  定义体: ULiftable.congr Equiv.punitEquivPUnit
-
-Depends on / 依赖: Equiv.punitEquivPUnit, ULiftable, ULiftable.congr, punitEquivPUnit
+--- 原说明 ---
+A version of `up` for a `PUnit` return type.
 -/
-abbrev up' {f : Type u₀ -> Type u₁} {g : Type v₀ -> Type v₁} [ULiftable f g] :
-    f PUnit -> g PUnit :=
+abbrev up' {f : Type u₀ → Type u₁} {g : Type v₀ → Type v₁} [ULiftable f g] :
+    f PUnit → g PUnit :=
   ULiftable.congr Equiv.punitEquivPUnit
 
-/--
-Definition of `down'` / `down'` 的定义
+/-- A version of `down` for a `PUnit` return type. -/
+/-
+**ULiftable.down'** 是 Mathlib 中的一个缩写定义，位于命名空间 `ULiftable`。
+形式化陈述：down' {f : Type u₀ -> Type u₁} {g : Type v₀ -> Type v₁} [ULiftable f g] : 
+g PUnit -> f PUnit
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-abbreviation down'
-  signature: {f : Type u₀ -> Type u₁} {g : Type v₀ -> Type v₁} [ULiftable f g]
-  body: (ULiftable.congr Equiv.punitEquivPUnit).symm
-
-中文:
-缩写 down'
-  签名: {f : 类型u₀ -> 类型u₁} {g : 类型v₀ -> 类型v₁} [可类型层提升 f g]
-  定义体: (ULiftable.congr Equiv.punitEquivPUnit).symm
-
-Depends on / 依赖: Equiv.punitEquivPUnit, Option.forall, ULiftable, ULiftable.congr, punitEquivPUnit
+--- 原说明 ---
+A version of `down` for a `PUnit` return type.
 -/
-abbrev down' {f : Type u₀ -> Type u₁} {g : Type v₀ -> Type v₁} [ULiftable f g] :
-    g PUnit -> f PUnit :=
+abbrev down' {f : Type u₀ → Type u₁} {g : Type v₀ → Type v₁} [ULiftable f g] :
+    g PUnit → f PUnit :=
   (ULiftable.congr Equiv.punitEquivPUnit).symm
-
-/--
-theorem `up_down` / 定理 `up_down`
-
-English:
-theorem up_down
-  statement: {f : Type u₀ -> Type u₁} {g : Type max u₀ v₀ -> Type v₁} [ULiftable f g] {α}
-  proof: (ULiftable.congr Equiv.ulift.symm).right_inv _
-
-中文:
-定理 up_down
-  结论: {f : 类型u₀ -> 类型u₁} {g : 类型 最大值 u₀ v₀ -> 类型v₁} [可类型层提升 f g] {α}
-  证明: (ULiftable.congr Equiv.ulift.symm).right_inv _
-
-Depends on / 依赖: Equiv.ulift.symm, ULiftable, ULiftable.congr, right_inv
+/-
+**ULiftable.up_down** 是 Mathlib 中的一个定理，位于命名空间 `ULiftable`。
+形式化陈述：up_down {f : Type u₀ -> Type u₁} {g : Type max u₀ v₀ -> Type v₁} [ULiftabl
+e f g] {α} (x : g (ULift.{v₀} α)) : up (down x : f α) = x
+参数：x : g (ULift.{v₀} α)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-theorem up_down {f : Type u₀ -> Type u₁} {g : Type max u₀ v₀ -> Type v₁} [ULiftable f g] {α}
+theorem up_down {f : Type u₀ → Type u₁} {g : Type max u₀ v₀ → Type v₁} [ULiftable f g] {α}
     (x : g (ULift.{v₀} α)) : up (down x : f α) = x :=
   (ULiftable.congr Equiv.ulift.symm).right_inv _
-
-/--
-theorem `down_up` / 定理 `down_up`
-
-English:
-theorem down_up
-  statement: {f : Type u₀ -> Type u₁} {g : Type max u₀ v₀ -> Type v₁} [ULiftable f g] {α}
-  proof: (ULiftable.congr Equiv.ulift.symm).left_inv _
-
-中文:
-定理 down_up
-  结论: {f : 类型u₀ -> 类型u₁} {g : 类型 最大值 u₀ v₀ -> 类型v₁} [可类型层提升 f g] {α}
-  证明: (ULiftable.congr Equiv.ulift.symm).left_inv _
-
-Depends on / 依赖: Equiv.ulift.symm, ULiftable, ULiftable.congr, left_inv
+/-
+**ULiftable.down_up** 是 Mathlib 中的一个定理，位于命名空间 `ULiftable`。
+形式化陈述：down_up {f : Type u₀ -> Type u₁} {g : Type max u₀ v₀ -> Type v₁} [ULiftabl
+e f g] {α} (x : f α) : down (up x : g (ULift.{v₀} α)) = x
+参数：x : f α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-theorem down_up {f : Type u₀ -> Type u₁} {g : Type max u₀ v₀ -> Type v₁} [ULiftable f g] {α}
+theorem down_up {f : Type u₀ → Type u₁} {g : Type max u₀ v₀ → Type v₁} [ULiftable f g] {α}
     (x : f α) : down (up x : g (ULift.{v₀} α)) = x :=
   (ULiftable.congr Equiv.ulift.symm).left_inv _
 
@@ -291,215 +267,167 @@ end ULiftable
 
 open ULift
 
-/--
-Instance `instULiftableId` / 实例 `instULiftableId`
-
-English:
-instance instULiftableId
-  signature: : ULiftable Id Id where
-  body: F
-
-中文:
-实例 instULiftableId
-  签名: : 可类型层提升 Id Id where
-  定义体: F
+/-
+**instULiftableId** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：instULiftableId : ULiftable Id Id where congr F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instULiftableId : ULiftable Id Id where
   congr F := F
 
 /-- for specific state types, this function helps to create a uliftable instance -/
 @[instance_reducible]
-/--
-Definition of `StateT.uliftable'` / `StateT.uliftable'` 的定义
+/-
+**StateT.uliftable'** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：StateT.uliftable' {m : Type u₀ -> Type v₀} {m' : Type u₁ -> Type v₁} [ULif
+table m m'] (F : s ≃ s') : ULiftable (StateT s m) (StateT s' m') where congr G
+参数：F : s ≃ s'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition StateT.uliftable'
-  signature: {m : Type u₀ -> Type v₀} {m' : Type u₁ -> Type v₁} [ULiftable m m']
-  body: StateT.equiv Equiv.piCongr F fun _ => ULiftable.congr Equiv.prodCongr G F
-
-中文:
-定义 StateT.uliftable'
-  签名: {m : 类型u₀ -> 类型v₀} {m' : 类型u₁ -> 类型v₁} [可类型层提升 m m']
-  定义体: StateT.equiv Equiv.piCongr F fun _ => ULiftable.congr Equiv.prodCongr G F
-
-Depends on / 依赖: Equiv.piCongr, Equiv.prodCongr, StateT, StateT.equiv, ULiftable, ULiftable.congr, piCongr, prodCongr
+--- 原说明 ---
+for specific state types, this function helps to create a uliftable instance
 -/
-def StateT.uliftable' {m : Type u₀ -> Type v₀} {m' : Type u₁ -> Type v₁} [ULiftable m m']
+def StateT.uliftable' {m : Type u₀ → Type v₀} {m' : Type u₁ → Type v₁} [ULiftable m m']
     (F : s ≃ s') : ULiftable (StateT s m) (StateT s' m') where
   congr G :=
-StateT.equiv Equiv.piCongr F fun _ => ULiftable.congr Equiv.prodCongr G F
-
+    StateT.equiv <| Equiv.piCongr F fun _ => ULiftable.congr <| Equiv.prodCongr G F
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {m m'} [ULiftable m m'] : ULiftable (StateT s m) (StateT (ULift s) m') :=
   StateT.uliftable' Equiv.ulift.symm
-
-/--
-Instance `StateT.instULiftableULiftULift` / 实例 `StateT.instULiftableULiftULift`
-
-English:
-instance StateT.instULiftableULiftULift
-  signature: {m m'} [ULiftable m m']
-  body: StateT.uliftable' Equiv.ulift.trans Equiv.ulift.symm
-
-中文:
-实例 StateT.instULiftableULiftULift
-  签名: {m m'} [可类型层提升 m m']
-  定义体: StateT.uliftable' Equiv.ulift.trans Equiv.ulift.symm
-
-Depends on / 依赖: Equiv.ulift.symm, Equiv.ulift.trans, StateT, StateT.uliftable, _mem_head, _tail, cons_head, uliftable
+/-
+**StateT.instULiftableULiftULift** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：StateT.instULiftableULiftULift {m m'} [ULiftable m m'] : ULiftable (StateT
+ (ULift.{max v₀ u₀} s) m) (StateT (ULift.{max v₁ u₀} s) m')
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 instance StateT.instULiftableULiftULift {m m'} [ULiftable m m'] :
     ULiftable (StateT (ULift.{max v₀ u₀} s) m) (StateT (ULift.{max v₁ u₀} s) m') :=
-StateT.uliftable' Equiv.ulift.trans Equiv.ulift.symm
+  StateT.uliftable' <| Equiv.ulift.trans Equiv.ulift.symm
 
 /-- for specific reader monads, this function helps to create a uliftable instance -/
 @[instance_reducible]
-/--
-Definition of `ReaderT.uliftable'` / `ReaderT.uliftable'` 的定义
+/-
+**ReaderT.uliftable'** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ReaderT.uliftable' {m m'} [ULiftable m m'] (F : s ≃ s') : ULiftable (Reade
+rT s m) (ReaderT s' m') where congr G
+参数：F : s ≃ s'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ReaderT.uliftable'
-  signature: {m m'} [ULiftable m m'] (F : s ≃ s')
-  body: ReaderT.equiv Equiv.piCongr F fun _ => ULiftable.congr G
-
-中文:
-定义 ReaderT.uliftable'
-  签名: {m m'} [可类型层提升 m m'] (F : s ≃ s')
-  定义体: ReaderT.equiv Equiv.piCongr F fun _ => ULiftable.congr G
-
-Depends on / 依赖: Equiv.piCongr, ReaderT, ReaderT.equiv, ULiftable, ULiftable.congr, _tail, cons_head, l.head, l.tail, mem_cons_self, piCongr
+--- 原说明 ---
+for specific reader monads, this function helps to create a uliftable instance
 -/
 def ReaderT.uliftable' {m m'} [ULiftable m m'] (F : s ≃ s') :
     ULiftable (ReaderT s m) (ReaderT s' m') where
-congr G := ReaderT.equiv Equiv.piCongr F fun _ => ULiftable.congr G
-
+  congr G := ReaderT.equiv <| Equiv.piCongr F fun _ => ULiftable.congr G
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {m m'} [ULiftable m m'] : ULiftable (ReaderT s m) (ReaderT (ULift s) m') :=
   ReaderT.uliftable' Equiv.ulift.symm
-
-/--
-Instance `ReaderT.instULiftableULiftULift` / 实例 `ReaderT.instULiftableULiftULift`
-
-English:
-instance ReaderT.instULiftableULiftULift
-  signature: {m m'} [ULiftable m m']
-  body: ReaderT.uliftable' Equiv.ulift.trans Equiv.ulift.symm
-
-中文:
-实例 ReaderT.instULiftableULiftULift
-  签名: {m m'} [可类型层提升 m m']
-  定义体: ReaderT.uliftable' Equiv.ulift.trans Equiv.ulift.symm
-
-Depends on / 依赖: Equiv.ulift.symm, Equiv.ulift.trans, ReaderT, ReaderT.uliftable, uliftable
+/-
+**ReaderT.instULiftableULiftULift** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：ReaderT.instULiftableULiftULift {m m'} [ULiftable m m'] : ULiftable (Reade
+rT (ULift.{max v₀ u₀} s) m) (ReaderT (ULift.{max v₁ u₀} s) m')
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 instance ReaderT.instULiftableULiftULift {m m'} [ULiftable m m'] :
     ULiftable (ReaderT (ULift.{max v₀ u₀} s) m) (ReaderT (ULift.{max v₁ u₀} s) m') :=
-ReaderT.uliftable' Equiv.ulift.trans Equiv.ulift.symm
+  ReaderT.uliftable' <| Equiv.ulift.trans Equiv.ulift.symm
 
 /-- for specific continuation passing monads, this function helps to create a uliftable instance -/
 @[instance_reducible]
-/--
-Definition of `ContT.uliftable'` / `ContT.uliftable'` 的定义
+/-
+**ContT.uliftable'** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ContT.uliftable' {m m'} [ULiftable m m'] (F : r ≃ r') : ULiftable (ContT r
+ m) (ContT r' m') where congr
+参数：F : r ≃ r'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ContT.uliftable'
-  signature: {m m'} [ULiftable m m'] (F : r ≃ r')
-  body: ContT.equiv (ULiftable.congr F)
-
-中文:
-定义 ContT.uliftable'
-  签名: {m m'} [可类型层提升 m m'] (F : r ≃ r')
-  定义体: ContT.equiv (ULiftable.congr F)
-
-Depends on / 依赖: ContT.equiv, ULiftable, ULiftable.congr
+--- 原说明 ---
+for specific continuation passing monads, this function helps to create a ulifta
+ble instance
 -/
 def ContT.uliftable' {m m'} [ULiftable m m'] (F : r ≃ r') :
     ULiftable (ContT r m) (ContT r' m') where
   congr := ContT.equiv (ULiftable.congr F)
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {s m m'} [ULiftable m m'] : ULiftable (ContT s m) (ContT (ULift s) m') :=
   ContT.uliftable' Equiv.ulift.symm
-
-/--
-Instance `ContT.instULiftableULiftULift` / 实例 `ContT.instULiftableULiftULift`
-
-English:
-instance ContT.instULiftableULiftULift
-  signature: {m m'} [ULiftable m m']
-  body: ContT.uliftable' Equiv.ulift.trans Equiv.ulift.symm
-
-中文:
-实例 ContT.instULiftableULiftULift
-  签名: {m m'} [可类型层提升 m m']
-  定义体: ContT.uliftable' Equiv.ulift.trans Equiv.ulift.symm
-
-Depends on / 依赖: ContT.uliftable, Equiv.ulift.symm, Equiv.ulift.trans, uliftable
+/-
+**ContT.instULiftableULiftULift** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：ContT.instULiftableULiftULift {m m'} [ULiftable m m'] : ULiftable (ContT (
+ULift.{max v₀ u₀} s) m) (ContT (ULift.{max v₁ u₀} s) m')
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 instance ContT.instULiftableULiftULift {m m'} [ULiftable m m'] :
     ULiftable (ContT (ULift.{max v₀ u₀} s) m) (ContT (ULift.{max v₁ u₀} s) m') :=
-ContT.uliftable' Equiv.ulift.trans Equiv.ulift.symm
+  ContT.uliftable' <| Equiv.ulift.trans Equiv.ulift.symm
 
 /-- for specific writer monads, this function helps to create a uliftable instance -/
 @[instance_reducible]
-/--
-Definition of `WriterT.uliftable'` / `WriterT.uliftable'` 的定义
+/-
+**WriterT.uliftable'** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：WriterT.uliftable' {m m'} [ULiftable m m'] (F : w ≃ w') : ULiftable (Write
+rT w m) (WriterT w' m') where congr G
+参数：F : w ≃ w'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WriterT.uliftable'
-  signature: {m m'} [ULiftable m m'] (F : w ≃ w')
-  body: WriterT.equiv ULiftable.congr Equiv.prodCongr G F
-
-中文:
-定义 WriterT.uliftable'
-  签名: {m m'} [可类型层提升 m m'] (F : w ≃ w')
-  定义体: WriterT.equiv ULiftable.congr Equiv.prodCongr G F
-
-Depends on / 依赖: Equiv.prodCongr, ULiftable, ULiftable.congr, WriterT, WriterT.equiv, prodCongr
+--- 原说明 ---
+for specific writer monads, this function helps to create a uliftable instance
 -/
 def WriterT.uliftable' {m m'} [ULiftable m m'] (F : w ≃ w') :
     ULiftable (WriterT w m) (WriterT w' m') where
-congr G := WriterT.equiv ULiftable.congr Equiv.prodCongr G F
-
+  congr G := WriterT.equiv <| ULiftable.congr <| Equiv.prodCongr G F
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {m m'} [ULiftable m m'] : ULiftable (WriterT s m) (WriterT (ULift s) m') :=
   WriterT.uliftable' Equiv.ulift.symm
-
-/--
-Instance `WriterT.instULiftableULiftULift` / 实例 `WriterT.instULiftableULiftULift`
-
-English:
-instance WriterT.instULiftableULiftULift
-  signature: {m m'} [ULiftable m m']
-  body: WriterT.uliftable' Equiv.ulift.trans Equiv.ulift.symm
-
-中文:
-实例 WriterT.instULiftableULiftULift
-  签名: {m m'} [可类型层提升 m m']
-  定义体: WriterT.uliftable' Equiv.ulift.trans Equiv.ulift.symm
-
-Depends on / 依赖: Equiv.ulift.symm, Equiv.ulift.trans, WriterT, WriterT.uliftable, uliftable
+/-
+**WriterT.instULiftableULiftULift** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：WriterT.instULiftableULiftULift {m m'} [ULiftable m m'] : ULiftable (Write
+rT (ULift.{max v₀ u₀} s) m) (WriterT (ULift.{max v₁ u₀} s) m')
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 instance WriterT.instULiftableULiftULift {m m'} [ULiftable m m'] :
     ULiftable (WriterT (ULift.{max v₀ u₀} s) m) (WriterT (ULift.{max v₁ u₀} s) m') :=
-WriterT.uliftable' Equiv.ulift.trans Equiv.ulift.symm
-
-/--
-Instance `Except.instULiftable` / 实例 `Except.instULiftable`
-
-English:
-instance Except.instULiftable
-  signature: {ε : Type u₀}
-  body: { toFun := Except.map e
-      invFun := Except.map e.symm
-      left_inv := fun f => by cases f <;> simp [Except.map]
-      right_inv := fun f => by cases f <;> simp [Except.map] }
-
-中文:
-实例 Except.instULiftable
-  签名: {ε : 类型u₀}
-  定义体: { toFun := Except.map e
-      invFun := Except.map e.symm
-      left_inv := fun f => by cases f <;> simp [Except.map]
-      right_inv := fun f => by cases f <;> simp [Except.map] }
-
-Depends on / 依赖: Except, Except.map, e.symm, invFun, left_inv, right_inv
+  WriterT.uliftable' <| Equiv.ulift.trans Equiv.ulift.symm
+/-
+**Except.instULiftable** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Except.instULiftable {ε : Type u₀} : ULiftable (Except.{u₀, v₁} ε) (Except
+.{u₀, v₂} ε) where congr e
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 instance Except.instULiftable {ε : Type u₀} :
     ULiftable (Except.{u₀, v₁} ε) (Except.{u₀, v₂} ε) where
@@ -508,27 +436,12 @@ instance Except.instULiftable {ε : Type u₀} :
       invFun := Except.map e.symm
       left_inv := fun f => by cases f <;> simp [Except.map]
       right_inv := fun f => by cases f <;> simp [Except.map] }
-
-/--
-Instance `Option.instULiftable` / 实例 `Option.instULiftable`
-
-English:
-instance Option.instULiftable
-  signature: : ULiftable Option.{u₀} Option.{u₁} where
-  body: { toFun := Option.map e
-      invFun := Option.map e.symm
-      left_inv := fun f => by cases f <;> simp
-      right_inv := fun f => by cases f <;> simp }
-
-中文:
-实例 选项类型.instULiftable
-  签名: : 可类型层提升 选项类型.{u₀} 选项类型.{u₁} where
-  定义体: { toFun := Option.map e
-      invFun := Option.map e.symm
-      left_inv := fun f => by cases f <;> simp
-      right_inv := fun f => by cases f <;> simp }
-
-Depends on / 依赖: Option.map, e.symm, invFun, left_inv, right_inv
+/-
+**Option.instULiftable** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Option.instULiftable : ULiftable Option.{u₀} Option.{u₁} where congr e
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 instance Option.instULiftable : ULiftable Option.{u₀} Option.{u₁} where
   congr e :=

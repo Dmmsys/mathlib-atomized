@@ -30,71 +30,72 @@ section OrderedSemiring
 
 variable (𝕜) (ι : Type*) [Semiring 𝕜] [PartialOrder 𝕜] [Fintype ι]
 
-/--
-Definition of `stdSimplex` / `stdSimplex` 的定义
+/-- The standard simplex in the space of functions `ι → 𝕜` is the set of vectors with non-negative
+coordinates with total sum `1`. This is the free object in the category of convex spaces. -/
+/-
+**stdSimplex** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：stdSimplex : Set (ι -> 𝕜)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition stdSimplex
-  signature: : Set (ι -> 𝕜)
-  body: { f | (forall x, 0 <= f x) ∧ ∑ x, f x = 1 }
-
-中文:
-定义 stdSimplex
-  签名: : 集合 (ι -> 𝕜)
-  定义体: { f | (forall x, 0 <= f x) ∧ ∑ x, f x = 1 }
+--- 原说明 ---
+The standard simplex in the space of functions `ι → 𝕜` is the set of vectors wit
+h non-negative
+coordinates with total sum `1`. This is the free object in the category of conve
+x spaces.
 -/
-def stdSimplex : Set (ι -> 𝕜) :=
-  { f | (forall x, 0 <= f x) ∧ ∑ x, f x = 1 }
-
-/--
-theorem `stdSimplex_eq_inter` / 定理 `stdSimplex_eq_inter`
-
-English:
-theorem stdSimplex_eq_inter
-  statement: stdSimplex 𝕜 ι = (⋂ x, { f | 0 <= f x }) inter { f | ∑ x, f x = 1 }
-  proof: by
-  ext f
-  simp only [stdSimplex, Set.mem_inter_iff, Set.mem_iInter, Set.mem_ofPred_eq]
-
-中文:
-定理 stdSimplex_eq_inter
-  结论: stdSimplex 𝕜 ι = (⋂ x, { f | 0 <= f x }) inter { f | ∑ x, f x = 1 }
-  证明: by
-  ext f
-  simp only [stdSimplex, Set.mem_inter_iff, Set.mem_iInter, Set.mem_ofPred_eq]
-
-Depends on / 依赖: Set.mem_iInter, Set.mem_inter_iff, Set.mem_ofPred_eq, mem_iInter, mem_inter_iff, mem_ofPred_eq, stdSimplex
+def stdSimplex : Set (ι → 𝕜) :=
+  { f | (∀ x, 0 ≤ f x) ∧ ∑ x, f x = 1 }
+/-
+**stdSimplex_eq_inter** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：stdSimplex_eq_inter : stdSimplex 𝕜 ι = (⋂ x, { f | 0 <= f x }) inter { f |
+ ∑ x, f x = 1 }
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem stdSimplex_eq_inter : stdSimplex 𝕜 ι = (⋂ x, { f | 0 <= f x }) inter { f | ∑ x, f x = 1 } := by
+theorem stdSimplex_eq_inter : stdSimplex 𝕜 ι = (⋂ x, { f | 0 ≤ f x }) ∩ { f | ∑ x, f x = 1 } := by
   ext f
   simp only [stdSimplex, Set.mem_inter_iff, Set.mem_iInter, Set.mem_ofPred_eq]
-
-/--
-theorem `convex_stdSimplex` / 定理 `convex_stdSimplex`
-
-English:
-theorem convex_stdSimplex
-  given: [IsOrderedRing 𝕜]
-  statement: Convex 𝕜 (stdSimplex 𝕜 ι)
-  proof: by
-  refine fun f hf g hg a b ha hb hab => ⟨fun x => ?_, ?_⟩
-  · apply_rules [add_nonneg, mul_nonneg, hf.1, hg.1]
-  · simp_rw [Pi.add_apply, Pi.smul_apply]
-    rwa [Finset.sum_add_distrib, ← Finset.smul_sum, ← Finset.smul_sum, hf.2, hg.2, smul_eq_mul,
-      smul_eq_mul, mul_one, mul_one]
-
-中文:
-定理 convex_stdSimplex
-  条件: [是Ordered环 𝕜]
-  结论: 凸 𝕜 (stdSimplex 𝕜 ι)
-  证明: by
-  refine fun f hf g hg a b ha hb hab => ⟨fun x => ?_, ?_⟩
-  · apply_rules [add_nonneg, mul_nonneg, hf.1, hg.1]
-  · simp_rw [Pi.add_apply, Pi.smul_apply]
-    rwa [Finset.sum_add_distrib, ← Finset.smul_sum, ← Finset.smul_sum, hf.2, hg.2, smul_eq_mul,
-      smul_eq_mul, mul_one, mul_one]
-
-Depends on / 依赖: Finset, Finset.smul_sum, Finset.sum_add_distrib, Pi.add_apply, Pi.smul_apply, add_apply, add_nonneg, apply_rules, mul_nonneg, mul_one, simp_rw, smul_apply, smul_eq_mul, smul_sum, sum_add_distrib
+/-
+**convex_stdSimplex** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：convex_stdSimplex [IsOrderedRing 𝕜] : Convex 𝕜 (stdSimplex 𝕜 ι)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_nonneg`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1 : Preorder 
+α] [AddLeftMono α] {a b : α}, 0 ≤ a → 0 ≤ b → 0 ≤ a + b
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `mul_nonneg`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 :
+ Preorder α] [PosMulMono α], 0 ≤ a → 0 ≤ b → 0 ≤ a * b
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.sum_add_distrib`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [
+inst : AddCommMonoid M] {f g : ι → M},   ∑ x ∈ s, (f x + g x) = ∑ x ∈ s, f x + ∑
+ x ∈ s, g x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.smul_sum`：Finset.smul_sum {f : γ -> N} {s : Finset γ} : (r • ∑ x 
+in s, f x) = ∑ x in s, r • f x
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
 theorem convex_stdSimplex [IsOrderedRing 𝕜] : Convex 𝕜 (stdSimplex 𝕜 ι) := by
   refine fun f hf g hg a b ha hb hab => ⟨fun x => ?_, ?_⟩
@@ -102,74 +103,71 @@ theorem convex_stdSimplex [IsOrderedRing 𝕜] : Convex 𝕜 (stdSimplex 𝕜 ι
   · simp_rw [Pi.add_apply, Pi.smul_apply]
     rwa [Finset.sum_add_distrib, ← Finset.smul_sum, ← Finset.smul_sum, hf.2, hg.2, smul_eq_mul,
       smul_eq_mul, mul_one, mul_one]
-
-/--
-lemma `stdSimplex_of_subsingleton` / 引理 `stdSimplex_of_subsingleton`
-
-English:
-lemma stdSimplex_of_subsingleton
-  given: [Subsingleton 𝕜]
-  statement: stdSimplex 𝕜 ι = univ
-  proof: eq_univ_of_forall fun _ => ⟨fun _ => (Subsingleton.elim _ _).le, Subsingleton.elim _ _⟩
-
-中文:
-引理 stdSimplex_of_subsingleton
-  条件: [子单例 𝕜]
-  结论: stdSimplex 𝕜 ι = univ
-  证明: eq_univ_of_forall fun _ => ⟨fun _ => (Subsingleton.elim _ _).le, Subsingleton.elim _ _⟩
+/-
+**stdSimplex_of_subsingleton** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ (𝕜 : Type u_2) (ι : Type u_1) [inst : Semiring 𝕜] [inst_1 : PartialOrder
+ 𝕜] [inst_2 : Fintype ι] [Subsingleton 𝕜],   stdSimplex 𝕜 ι = Set.univ
+参数：𝕜 : Type u_2；ι : Type u_1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_univ_of_forall`：eq_univ_of_forall {s : Set α} : (forall x, x in s
+) -> s = univ
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
 @[nontriviality] lemma stdSimplex_of_subsingleton [Subsingleton 𝕜] : stdSimplex 𝕜 ι = univ :=
-  eq_univ_of_forall fun _ => ⟨fun _ => (Subsingleton.elim _ _).le, Subsingleton.elim _ _⟩
+  eq_univ_of_forall fun _ ↦ ⟨fun _ ↦ (Subsingleton.elim _ _).le, Subsingleton.elim _ _⟩
 
-/--
-lemma `stdSimplex_of_isEmpty_index` / 引理 `stdSimplex_of_isEmpty_index`
+/-- The standard simplex in the zero-dimensional space is empty. -/
+/-
+**stdSimplex_of_isEmpty_index** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：stdSimplex_of_isEmpty_index [IsEmpty ι] [Nontrivial 𝕜] : stdSimplex 𝕜 ι = 
+∅
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.eq_empty_of_forall_notMem`：eq_empty_of_forall_notMem (h : forall x, 
+x ∉ s) : s = ∅
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.univ_eq_empty`：univ_eq_empty [IsEmpty α] : (univ : Finset α) = ∅
 
-English:
-lemma stdSimplex_of_isEmpty_index
-  given: [IsEmpty ι] [Nontrivial 𝕜]
-  statement: stdSimplex 𝕜 ι = ∅
-  proof: eq_empty_of_forall_notMem by rintro f ⟨-, hf⟩; simp at hf
-
-中文:
-引理 stdSimplex_of_isEmpty_index
-  条件: [是空 ι] [非平凡 𝕜]
-  结论: stdSimplex 𝕜 ι = ∅
-  证明: eq_empty_of_forall_notMem by rintro f ⟨-, hf⟩; simp at hf
-
-Depends on / 依赖: eq_empty_of_forall_notMem
+--- 原说明 ---
+The standard simplex in the zero-dimensional space is empty.
 -/
 lemma stdSimplex_of_isEmpty_index [IsEmpty ι] [Nontrivial 𝕜] : stdSimplex 𝕜 ι = ∅ :=
-eq_empty_of_forall_notMem by rintro f ⟨-, hf⟩; simp at hf
-
-/--
-lemma `stdSimplex_unique` / 引理 `stdSimplex_unique`
-
-English:
-lemma stdSimplex_unique
-  given: [ZeroLEOneClass 𝕜] [Nonempty ι] [Subsingleton ι]
-  proof: by
-  cases nonempty_unique ι
-  refine eq_singleton_iff_unique_mem.2 ⟨⟨fun _ => zero_le_one, Fintype.sum_unique _⟩, ?_⟩
-  rintro f ⟨-, hf⟩
-  rw [Fintype.sum_unique] at hf
-  exact funext (Unique.forall_iff.2 hf)
-
-中文:
-引理 stdSimplex_unique
-  条件: [ZeroLEOne类 𝕜] [非空 ι] [子单例 ι]
-  证明: by
-  cases nonempty_unique ι
-  refine eq_singleton_iff_unique_mem.2 ⟨⟨fun _ => zero_le_one, Fintype.sum_unique _⟩, ?_⟩
-  rintro f ⟨-, hf⟩
-  rw [Fintype.sum_unique] at hf
-  exact funext (Unique.forall_iff.2 hf)
-
-Depends on / 依赖: Fintype, Fintype.sum_unique, Unique, Unique.forall_iff, eq_singleton_iff_unique_mem, forall_iff, nonempty_unique, sum_unique, zero_le_one
+  eq_empty_of_forall_notMem <| by rintro f ⟨-, hf⟩; simp at hf
+/-
+**stdSimplex_unique** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：stdSimplex_unique [ZeroLEOneClass 𝕜] [Nonempty ι] [Subsingleton ι] : stdSi
+mplex 𝕜 ι = {fun _ => 1}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_unique`：nonempty_unique (α : Sort u) [Subsingleton α] [Nonempty
+ α] : Nonempty (Unique α)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.eq_singleton_iff_unique_mem`：eq_singleton_iff_unique_mem : s = {a} ↔
+ a in s ∧ forall x in s, x = a
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
+· 使用定理 `Fintype.sum_unique`：∀ {M : Type u_4} {ι : Type u_7} [inst : Fintype ι] [
+inst_1 : AddCommMonoid M] [inst_2 : Unique ι] (f : ι → M),   ∑ x, f x = f defaul
+t
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Unique.forall_iff`：forall_iff {p : α -> Prop} : (forall a, p a) ↔ p defa
+ult
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 lemma stdSimplex_unique [ZeroLEOneClass 𝕜] [Nonempty ι] [Subsingleton ι] :
-    stdSimplex 𝕜 ι = {fun _ => 1} := by
+    stdSimplex 𝕜 ι = {fun _ ↦ 1} := by
   cases nonempty_unique ι
-  refine eq_singleton_iff_unique_mem.2 ⟨⟨fun _ => zero_le_one, Fintype.sum_unique _⟩, ?_⟩
+  refine eq_singleton_iff_unique_mem.2 ⟨⟨fun _ ↦ zero_le_one, Fintype.sum_unique _⟩, ?_⟩
   rintro f ⟨-, hf⟩
   rw [Fintype.sum_unique] at hf
   exact funext (Unique.forall_iff.2 hf)
@@ -177,149 +175,180 @@ lemma stdSimplex_unique [ZeroLEOneClass 𝕜] [Nonempty ι] [Subsingleton ι] :
 variable {ι}
 
 variable {𝕜} in
-/--
-theorem `mem_Icc_of_mem_stdSimplex` / 定理 `mem_Icc_of_mem_stdSimplex`
+/-- All values of a function `f ∈ stdSimplex 𝕜 ι` belong to `[0, 1]`. -/
+/-
+**mem_Icc_of_mem_stdSimplex** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_Icc_of_mem_stdSimplex [IsOrderedAddMonoid 𝕜] {f : ι -> 𝕜} (hf : f in s
+tdSimplex 𝕜 ι) (x) : f x in Icc (0 : 𝕜) 1
+参数：hf : f in stdSimplex 𝕜 ι；x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Finset.single_le_sum`：∀ {ι : Type u_1} {N : Type u_5} [inst : AddCommMon
+oid N] [inst_1 : Preorder N] {f : ι → N} {s : Finset ι}   [AddLeftMono N], (∀ i 
+∈ s, 0 ≤ f…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-theorem mem_Icc_of_mem_stdSimplex
-  statement: [IsOrderedAddMonoid 𝕜]
-  proof: ⟨hf.1 x, hf.2 ▸ Finset.single_le_sum (fun y _ => hf.1 y) (Finset.mem_univ x)⟩
-
-中文:
-定理 mem_Icc_of_mem_stdSimplex
-  结论: [是OrderedAdd幺半群 𝕜]
-  证明: ⟨hf.1 x, hf.2 ▸ Finset.single_le_sum (fun y _ => hf.1 y) (Finset.mem_univ x)⟩
-
-Depends on / 依赖: Finset, Finset.mem_univ, Finset.single_le_sum, mem_univ, single_le_sum
+--- 原说明 ---
+All values of a function `f ∈ stdSimplex 𝕜 ι` belong to `[0, 1]`.
 -/
 theorem mem_Icc_of_mem_stdSimplex [IsOrderedAddMonoid 𝕜]
-    {f : ι -> 𝕜} (hf : f in stdSimplex 𝕜 ι) (x) :
-    f x in Icc (0 : 𝕜) 1 :=
+    {f : ι → 𝕜} (hf : f ∈ stdSimplex 𝕜 ι) (x) :
+    f x ∈ Icc (0 : 𝕜) 1 :=
   ⟨hf.1 x, hf.2 ▸ Finset.single_le_sum (fun y _ => hf.1 y) (Finset.mem_univ x)⟩
 
-/--
-theorem `stdSimplex_subset_Icc` / 定理 `stdSimplex_subset_Icc`
+/-- `stdSimplex 𝕜 ι` is a subset of the unit cube -/
+/-
+**stdSimplex_subset_Icc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：stdSimplex_subset_Icc [IsOrderedAddMonoid 𝕜] : stdSimplex 𝕜 ι subseteq Icc
+ 0 1
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.pi_univ_Icc`：pi_univ_Icc : (pi univ fun i => Icc (x i) (y i)) = Icc 
+x y
+· 使用定理 `Set.univ_pi_eq_iInter`：univ_pi_eq_iInter (t : forall i, Set (π i)) : pi 
+univ t = ⋂ i, eval i ⁻¹' t i
+· 使用定理 `Set.mem_iInter`：mem_iInter {x : α} {s : ι -> Set α} : (x in ⋂ i, s i) ↔ 
+forall i, x in s i
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `mem_Icc_of_mem_stdSimplex`：mem_Icc_of_mem_stdSimplex [IsOrderedAddMonoid
+ 𝕜] {f : ι -> 𝕜} (hf : f in stdSimplex 𝕜 ι) (x) : f x in Icc (0 : 𝕜) 1
 
-English:
-theorem stdSimplex_subset_Icc
-  given: [IsOrderedAddMonoid 𝕜]
-  statement: stdSimplex 𝕜 ι subseteq Icc 0 1
-  proof: by
-  intro f h
-  rw [← pi_univ_Icc]; rw [univ_pi_eq_iInter]; rw [mem_iInter]
-  simpa using fun i => mem_Icc_of_mem_stdSimplex h i
-
-中文:
-定理 stdSimplex_subset_Icc
-  条件: [是OrderedAdd幺半群 𝕜]
-  结论: stdSimplex 𝕜 ι subseteq 闭区间 0 1
-  证明: by
-  intro f h
-  rw [← pi_univ_Icc]; rw [univ_pi_eq_iInter]; rw [mem_iInter]
-  simpa using fun i => mem_Icc_of_mem_stdSimplex h i
-
-Depends on / 依赖: mem_Icc_of_mem_stdSimplex, mem_iInter, pi_univ_Icc, univ_pi_eq_iInter
+--- 原说明 ---
+`stdSimplex 𝕜 ι` is a subset of the unit cube
 -/
-theorem stdSimplex_subset_Icc [IsOrderedAddMonoid 𝕜] : stdSimplex 𝕜 ι subseteq Icc 0 1 := by
+theorem stdSimplex_subset_Icc [IsOrderedAddMonoid 𝕜] : stdSimplex 𝕜 ι ⊆ Icc 0 1 := by
   intro f h
-  rw [← pi_univ_Icc]; rw [univ_pi_eq_iInter]; rw [mem_iInter]
-  simpa using fun i => mem_Icc_of_mem_stdSimplex h i
+  rw [← pi_univ_Icc, univ_pi_eq_iInter, mem_iInter]
+  simpa using fun i ↦ mem_Icc_of_mem_stdSimplex h i
 
 variable [DecidableEq ι] [ZeroLEOneClass 𝕜]
-
-/--
-theorem `single_mem_stdSimplex` / 定理 `single_mem_stdSimplex`
-
-English:
-theorem single_mem_stdSimplex
-  given: (i : ι)
-  statement: Pi.single i 1 in stdSimplex 𝕜 ι
-  proof: ⟨le_update_iff.2 ⟨zero_le_one, fun _ _ => le_rfl⟩, by simp⟩
-
-中文:
-定理 single_mem_stdSimplex
-  条件: (i : ι)
-  结论: 依赖函数类型.single i 1 in stdSimplex 𝕜 ι
-  证明: ⟨le_update_iff.2 ⟨zero_le_one, fun _ _ => le_rfl⟩, by simp⟩
-
-Depends on / 依赖: le_rfl, le_update_iff, zero_le_one
+/-
+**single_mem_stdSimplex** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：single_mem_stdSimplex (i : ι) : Pi.single i 1 in stdSimplex 𝕜 ι
+参数：i : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `le_update_iff`：le_update_iff : x <= Function.update y i a ↔ x i <= a ∧ f
+orall (j) (_ : j != i), x j <= y j
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_pi_single'`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMo
+noid M] [inst_1 : DecidableEq ι] (a : ι) (x : M) (s : Finset ι),   ∑ a' ∈ s, Pi.
+single a x …
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem single_mem_stdSimplex (i : ι) : Pi.single i 1 in stdSimplex 𝕜 ι :=
-  ⟨le_update_iff.2 ⟨zero_le_one, fun _ _ => le_rfl⟩, by simp⟩
-
-/--
-theorem `ite_eq_mem_stdSimplex` / 定理 `ite_eq_mem_stdSimplex`
-
-English:
-theorem ite_eq_mem_stdSimplex
-  given: (i : ι)
-  statement: (if i = · then (1 : 𝕜) else 0) in stdSimplex 𝕜 ι
-  proof: by
-  simpa only [@eq_comm _ i, ← Pi.single_apply] using single_mem_stdSimplex 𝕜 i
-
-中文:
-定理 ite_eq_mem_stdSimplex
-  条件: (i : ι)
-  结论: (if i = · then (1 : 𝕜) else 0) in stdSimplex 𝕜 ι
-  证明: by
-  simpa only [@eq_comm _ i, ← Pi.single_apply] using single_mem_stdSimplex 𝕜 i
-
-Depends on / 依赖: Pi.single_apply, eq_comm, single_apply, single_mem_stdSimplex
+theorem single_mem_stdSimplex (i : ι) : Pi.single i 1 ∈ stdSimplex 𝕜 ι :=
+  ⟨le_update_iff.2 ⟨zero_le_one, fun _ _ ↦ le_rfl⟩, by simp⟩
+/-
+**ite_eq_mem_stdSimplex** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ite_eq_mem_stdSimplex (i : ι) : (if i = · then (1 : 𝕜) else 0) in stdSimpl
+ex 𝕜 ι
+参数：i : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `single_mem_stdSimplex`：single_mem_stdSimplex (i : ι) : Pi.single i 1 in 
+stdSimplex 𝕜 ι
 -/
-theorem ite_eq_mem_stdSimplex (i : ι) : (if i = · then (1 : 𝕜) else 0) in stdSimplex 𝕜 ι := by
+theorem ite_eq_mem_stdSimplex (i : ι) : (if i = · then (1 : 𝕜) else 0) ∈ stdSimplex 𝕜 ι := by
   simpa only [@eq_comm _ i, ← Pi.single_apply] using single_mem_stdSimplex 𝕜 i
 
 variable [IsOrderedRing 𝕜]
 
 set_option linter.overlappingInstances false
-/--
-lemma `segment_single_subset_stdSimplex` / 引理 `segment_single_subset_stdSimplex`
+/-- The edges are contained in the simplex. -/
+/-
+**segment_single_subset_stdSimplex** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：segment_single_subset_stdSimplex (i j : ι) : [Pi.single i 1 -[𝕜] Pi.single
+ j 1] subseteq stdSimplex 𝕜 ι
+参数：i j : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Convex.segment_subset`：Convex.segment_subset (h : Convex 𝕜 s) {x y : E} 
+(hx : x in s) (hy : y in s) : [x -[𝕜] y] subseteq s
+· 使用定理 `convex_stdSimplex`：convex_stdSimplex [IsOrderedRing 𝕜] : Convex 𝕜 (stdSi
+mplex 𝕜 ι)
+· 使用定理 `single_mem_stdSimplex`：single_mem_stdSimplex (i : ι) : Pi.single i 1 in 
+stdSimplex 𝕜 ι
 
-English:
-lemma segment_single_subset_stdSimplex
-  given: (i j : ι)
-  proof: (convex_stdSimplex 𝕜 ι).segment_subset (single_mem_stdSimplex _ _) (single_mem_stdSimplex _ _)
-
-中文:
-引理 segment_single_subset_stdSimplex
-  条件: (i j : ι)
-  证明: (convex_stdSimplex 𝕜 ι).segment_subset (single_mem_stdSimplex _ _) (single_mem_stdSimplex _ _)
-
-Depends on / 依赖: convex_stdSimplex, segment_subset, single_mem_stdSimplex
+--- 原说明 ---
+The edges are contained in the simplex.
 -/
 lemma segment_single_subset_stdSimplex (i j : ι) :
-    [Pi.single i 1 -[𝕜] Pi.single j 1] subseteq stdSimplex 𝕜 ι :=
+    [Pi.single i 1 -[𝕜] Pi.single j 1] ⊆ stdSimplex 𝕜 ι :=
   (convex_stdSimplex 𝕜 ι).segment_subset (single_mem_stdSimplex _ _) (single_mem_stdSimplex _ _)
-
-/--
-lemma `stdSimplex_fin_two` / 引理 `stdSimplex_fin_two`
-
-English:
-lemma stdSimplex_fin_two
-  proof: by
-  refine Subset.antisymm ?_ (segment_single_subset_stdSimplex 𝕜 (0 : Fin 2) 1)
-  rintro f ⟨hf₀, hf₁⟩
-  rw [Fin.sum_univ_two] at hf₁
-refine ⟨f 0, f 1, hf₀ 0, hf₀ 1, hf₁, funext Fin.forall_fin_two.2 ?_⟩
-  simp
-
-中文:
-引理 stdSimplex_fin_two
-  证明: by
-  refine Subset.antisymm ?_ (segment_single_subset_stdSimplex 𝕜 (0 : Fin 2) 1)
-  rintro f ⟨hf₀, hf₁⟩
-  rw [Fin.sum_univ_two] at hf₁
-refine ⟨f 0, f 1, hf₀ 0, hf₀ 1, hf₁, funext Fin.forall_fin_two.2 ?_⟩
-  simp
-
-Depends on / 依赖: Fin.forall_fin_two, Fin.sum_univ_two, Subset, Subset.antisymm, antisymm, forall_fin_two, segment_single_subset_stdSimplex, sum_univ_two
+/-
+**stdSimplex_fin_two** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：stdSimplex_fin_two : stdSimplex 𝕜 (Fin 2) = [Pi.single 0 1 -[𝕜] Pi.single 
+1 1]
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fin.sum_univ_two`：∀ {M : Type u_2} [inst : AddCommMonoid M] (f : Fin 2 →
+ M), ∑ i, f i = f 0 + f 1
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Fin.forall_fin_two`：∀ {p : Fin 2 → Prop}, (∀ (i : Fin 2), p i) ↔ p 0 ∧ p
+ 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Pi.single_eq_same`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) →
+ Zero (M i)] [inst_1 : DecidableEq ι] (i : ι) (x : M i),   Pi.single i x i = x
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Pi.single_eq_of_ne`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) 
+→ Zero (M i)] [inst_1 : DecidableEq ι] {i i' : ι},   i' ≠ i → ∀ (x : M i), Pi.si
+ngle i x…
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用引理 `segment_single_subset_stdSimplex`：segment_single_subset_stdSimplex (i j 
+: ι) : [Pi.single i 1 -[𝕜] Pi.single j 1] subseteq stdSimplex 𝕜 ι
 -/
 lemma stdSimplex_fin_two :
     stdSimplex 𝕜 (Fin 2) = [Pi.single 0 1 -[𝕜] Pi.single 1 1] := by
   refine Subset.antisymm ?_ (segment_single_subset_stdSimplex 𝕜 (0 : Fin 2) 1)
   rintro f ⟨hf₀, hf₁⟩
   rw [Fin.sum_univ_two] at hf₁
-refine ⟨f 0, f 1, hf₀ 0, hf₀ 1, hf₁, funext Fin.forall_fin_two.2 ?_⟩
+  refine ⟨f 0, f 1, hf₀ 0, hf₀ 1, hf₁, funext <| Fin.forall_fin_two.2 ?_⟩
   simp
 
 end OrderedSemiring
@@ -332,68 +361,53 @@ variable (𝕜) [Ring 𝕜] [PartialOrder 𝕜] [IsOrderedRing 𝕜]
 This bijection sends the zeroth vertex `Pi.single 0 1` to `0` and
 the first vertex `Pi.single 1 1` to `1`. -/
 @[simps -fullyApplied]
-/--
-Definition of `stdSimplexEquivIcc` / `stdSimplexEquivIcc` 的定义
+/-
+**stdSimplexEquivIcc** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：stdSimplexEquivIcc : stdSimplex 𝕜 (Fin 2) ≃ Icc (0 : 𝕜) 1 where toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition stdSimplexEquivIcc
-  signature: : stdSimplex 𝕜 (Fin 2) ≃ Icc (0 : 𝕜) 1 where
-  body: ⟨f.1 1, f.2.1 _, f.2.2 ▸
-    Finset.single_le_sum (fun i _ => f.2.1 i) (Finset.mem_univ _)⟩
-  invFun x := ⟨![1 - x, x], Fin.forall_fin_two.2 ⟨sub_nonneg.2 x.2.2, x.2.1⟩, by simp⟩
-left_inv f := Subtype.ext funext Fin.forall_fin_two.2 by
-    simp [← (show f.1 0 + f.1 1 = 1 by simpa using f.2.2)]
-
-@[simp]
-
-中文:
-定义 stdSimplexEquivIcc
-  签名: : stdSimplex 𝕜 (有限集 2) ≃ 闭区间 (0 : 𝕜) 1 where
-  定义体: ⟨f.1 1, f.2.1 _, f.2.2 ▸
-    Finset.single_le_sum (fun i _ => f.2.1 i) (Finset.mem_univ _)⟩
-  invFun x := ⟨![1 - x, x], Fin.forall_fin_two.2 ⟨sub_nonneg.2 x.2.2, x.2.1⟩, by simp⟩
-left_inv f := Subtype.ext funext Fin.forall_fin_two.2 by
-    simp [← (show f.1 0 + f.1 1 = 1 by simpa using f.2.2)]
-
-@[simp]
+--- 原说明 ---
+The standard one-dimensional simplex in `Fin 2 → 𝕜` is equivalent to the unit in
+terval.
+This bijection sends the zeroth vertex `Pi.single 0 1` to `0` and
+the first vertex `Pi.single 1 1` to `1`.
 -/
 def stdSimplexEquivIcc : stdSimplex 𝕜 (Fin 2) ≃ Icc (0 : 𝕜) 1 where
   toFun f := ⟨f.1 1, f.2.1 _, f.2.2 ▸
-    Finset.single_le_sum (fun i _ => f.2.1 i) (Finset.mem_univ _)⟩
+    Finset.single_le_sum (fun i _ ↦ f.2.1 i) (Finset.mem_univ _)⟩
   invFun x := ⟨![1 - x, x], Fin.forall_fin_two.2 ⟨sub_nonneg.2 x.2.2, x.2.1⟩, by simp⟩
-left_inv f := Subtype.ext funext Fin.forall_fin_two.2 by
+  left_inv f := Subtype.ext <| funext <| Fin.forall_fin_two.2 <| by
     simp [← (show f.1 0 + f.1 1 = 1 by simpa using f.2.2)]
 
 @[simp]
-/--
-lemma `stdSimplexEquivIcc_zero` / 引理 `stdSimplexEquivIcc_zero`
-
-English:
-lemma stdSimplexEquivIcc_zero
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 stdSimplexEquivIcc_zero
-  证明: rfl
-
-@[simp]
+/-
+**stdSimplexEquivIcc_zero** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：stdSimplexEquivIcc_zero : stdSimplexEquivIcc 𝕜 ⟨_, single_mem_stdSimplex 𝕜
+ 0⟩ = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `single_mem_stdSimplex`：single_mem_stdSimplex (i : ι) : Pi.single i 1 in 
+stdSimplex 𝕜 ι
+· 使用定理 `IsOrderedRing.toZeroLEOneClass`：∀ {R : Type u_1} {inst : Semiring R} {in
+st_1 : PartialOrder R} [self : IsOrderedRing R], ZeroLEOneClass R
 -/
 lemma stdSimplexEquivIcc_zero :
     stdSimplexEquivIcc 𝕜 ⟨_, single_mem_stdSimplex 𝕜 0⟩ = 0 := rfl
 
 @[simp]
-/--
-lemma `stdSimplexEquivIcc_one` / 引理 `stdSimplexEquivIcc_one`
-
-English:
-lemma stdSimplexEquivIcc_one
-  proof: rfl
-
-中文:
-引理 stdSimplexEquivIcc_one
-  证明: rfl
+/-
+**stdSimplexEquivIcc_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：stdSimplexEquivIcc_one : stdSimplexEquivIcc 𝕜 ⟨_, single_mem_stdSimplex 𝕜 
+1⟩ = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `single_mem_stdSimplex`：single_mem_stdSimplex (i : ι) : Pi.single i 1 in 
+stdSimplex 𝕜 ι
+· 使用定理 `IsOrderedRing.toZeroLEOneClass`：∀ {R : Type u_1} {inst : Semiring R} {in
+st_1 : PartialOrder R} [self : IsOrderedRing R], ZeroLEOneClass R
 -/
 lemma stdSimplexEquivIcc_one :
     stdSimplexEquivIcc 𝕜 ⟨_, single_mem_stdSimplex 𝕜 1⟩ = 1 := rfl
@@ -404,36 +418,44 @@ section Field
 
 variable (R : Type*) (ι : Type*) [Field R] [LinearOrder R] [IsStrictOrderedRing R] [Fintype ι]
 
-/--
-theorem `convexHull_basis_eq_stdSimplex` / 定理 `convexHull_basis_eq_stdSimplex`
+/-- `stdSimplex 𝕜 ι` is the convex hull of the canonical basis in `ι → 𝕜`. -/
+/-
+**convexHull_basis_eq_stdSimplex** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：convexHull_basis_eq_stdSimplex [DecidableEq ι] : convexHull R (range fun i
+ j : ι => if i = j then (1 : R) else 0) = stdSimplex R ι
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `convexHull_min`：convexHull_min : s subseteq t -> Convex 𝕜 t -> convexHul
+l 𝕜 s subseteq t
+· 使用定理 `ite_eq_mem_stdSimplex`：ite_eq_mem_stdSimplex (i : ι) : (if i = · then (1
+ : 𝕜) else 0) in stdSimplex 𝕜 ι
+· 使用定理 `IsStrictOrderedRing.toZeroLEOneClass`：∀ {R : Type u_1} {inst : Semiring 
+R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], ZeroLEOneClass R
+· 使用定理 `convex_stdSimplex`：convex_stdSimplex [IsOrderedRing 𝕜] : Convex 𝕜 (stdSi
+mplex 𝕜 ι)
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pi_eq_sum_univ`：pi_eq_sum_univ {ι : Type*} [Fintype ι] [DecidableEq ι] {
+R : Type*} [NonAssocSemiring R] (x : ι -> R) : x = ∑ i, (x i) • fun j => if i = 
+j th…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.centerMass_eq_of_sum_1`：Finset.centerMass_eq_of_sum_1 (hw : ∑ i i
+n t, w i = 1) : t.centerMass w z = ∑ i in t, w i • z i
+· 使用定理 `Finset.centerMass_mem_convexHull`：Finset.centerMass_mem_convexHull (t : 
+Finset ι) {w : ι -> R} (hw₀ : forall i in t, 0 <= w i) (hws : 0 < ∑ i in t, w i)
+ {z : ι -> E} (hz : fo…
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
 
-English:
-theorem convexHull_basis_eq_stdSimplex
-  given: [DecidableEq ι]
-  proof: by
-  refine Subset.antisymm (convexHull_min ?_ (convex_stdSimplex R ι)) ?_
-  · rintro _ ⟨i, rfl⟩
-    exact ite_eq_mem_stdSimplex R i
-  · rintro w ⟨hw₀, hw₁⟩
-    rw [pi_eq_sum_univ w]
-    rw [← Finset.univ.centerMass_eq_of_sum_1 _ hw₁]
-    exact Finset.univ.centerMass_mem_convexHull (fun i _ => hw₀ i) (hw₁.symm ▸ zero_lt_one)
-      fun i _ => mem_range_self i
-
-中文:
-定理 convexHull_basis_eq_stdSimplex
-  条件: [DecidableEq ι]
-  证明: by
-  refine Subset.antisymm (convexHull_min ?_ (convex_stdSimplex R ι)) ?_
-  · rintro _ ⟨i, rfl⟩
-    exact ite_eq_mem_stdSimplex R i
-  · rintro w ⟨hw₀, hw₁⟩
-    rw [pi_eq_sum_univ w]
-    rw [← Finset.univ.centerMass_eq_of_sum_1 _ hw₁]
-    exact Finset.univ.centerMass_mem_convexHull (fun i _ => hw₀ i) (hw₁.symm ▸ zero_lt_one)
-      fun i _ => mem_range_self i
-
-Depends on / 依赖: Finset, Finset.univ.centerMass_eq_of_sum_1, Finset.univ.centerMass_mem_convexHull, Subset, Subset.antisymm, antisymm, centerMass_eq_of_sum_1, centerMass_mem_convexHull, convexHull_min, convex_stdSimplex, ite_eq_mem_stdSimplex, mem_range_self, pi_eq_sum_univ, zero_lt_one
+--- 原说明 ---
+`stdSimplex 𝕜 ι` is the convex hull of the canonical basis in `ι → 𝕜`.
 -/
 theorem convexHull_basis_eq_stdSimplex [DecidableEq ι] :
     convexHull R (range fun i j : ι => if i = j then (1 : R) else 0) = stdSimplex R ι := by
@@ -446,58 +468,114 @@ theorem convexHull_basis_eq_stdSimplex [DecidableEq ι] :
     exact Finset.univ.centerMass_mem_convexHull (fun i _ => hw₀ i) (hw₁.symm ▸ zero_lt_one)
       fun i _ => mem_range_self i
 
-/--
-theorem `convexHull_rangle_single_eq_stdSimplex` / 定理 `convexHull_rangle_single_eq_stdSimplex`
+/-- `stdSimplex 𝕜 ι` is the convex hull of the points `Pi.single i 1` for `i : ι`. -/
+/-
+**convexHull_rangle_single_eq_stdSimplex** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：convexHull_rangle_single_eq_stdSimplex [DecidableEq ι] : convexHull R (ran
+ge fun i : ι => Pi.single i 1) = stdSimplex R ι
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Pi.single_eq_of_ne'`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι)
+ → Zero (M i)] [inst_1 : DecidableEq ι] {i i' : ι},   i ≠ i' → ∀ (x : M i), Pi.s
+ingle i x…
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `Pi.single_eq_same`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) →
+ Zero (M i)] [inst_1 : DecidableEq ι] (i : ι) (x : M i),   Pi.single i x i = x
+· 使用定理 `convexHull_basis_eq_stdSimplex`：convexHull_basis_eq_stdSimplex [Decidabl
+eEq ι] : convexHull R (range fun i j : ι => if i = j then (1 : R) else 0) = stdS
+implex R ι
 
-English:
-theorem convexHull_rangle_single_eq_stdSimplex
-  given: [DecidableEq ι]
-  proof: by
-  convert! convexHull_basis_eq_stdSimplex R ι
-  aesop
-
-中文:
-定理 convexHull_rangle_single_eq_stdSimplex
-  条件: [DecidableEq ι]
-  证明: by
-  convert! convexHull_basis_eq_stdSimplex R ι
-  aesop
-
-Depends on / 依赖: convert, convexHull_basis_eq_stdSimplex
+--- 原说明 ---
+`stdSimplex 𝕜 ι` is the convex hull of the points `Pi.single i 1` for `i : ι`.
 -/
 theorem convexHull_rangle_single_eq_stdSimplex [DecidableEq ι] :
-    convexHull R (range fun i : ι => Pi.single i 1) = stdSimplex R ι := by
+    convexHull R (range fun i : ι ↦ Pi.single i 1) = stdSimplex R ι := by
   convert! convexHull_basis_eq_stdSimplex R ι
   aesop
 
 variable {ι R}
 
-/--
-theorem `Set.Finite.convexHull_eq_image` / 定理 `Set.Finite.convexHull_eq_image`
+/-- The convex hull of a finite set is the image of the standard simplex in `s → ℝ`
+under the linear map sending each function `w` to `∑ x ∈ s, w x • x`.
 
-English:
-theorem Set.Finite.convexHull_eq_image
-  statement: {E : Type*} [AddCommGroup E] [Module R E]
-  proof: hs.fintype
-    (⇑(∑ x : s, (LinearMap.proj (R := R) x).smulRight x.1)) '' stdSimplex R s := by
-  classical
-  let := hs.fintype
-  rw [← convexHull_basis_eq_stdSimplex]; rw [LinearMap.image_convexHull]; rw [← Set.range_comp]
-  apply congr_arg
-  aesop
+Since we have no sums over finite sets, we use sum over `@Finset.univ _ hs.fintype`.
+The map is defined in terms of operations on `(s → ℝ) →ₗ[ℝ] ℝ` so that later we will not need
+to prove that this map is linear. -/
+/-
+**Set.Finite.convexHull_eq_image** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Set.Finite.convexHull_eq_image {E : Type*} [AddCommGroup E] [Module R E] {
+s : Set E} (hs : s.Finite) : convexHull R s = haveI
+参数：hs : s.Finite。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `convexHull_basis_eq_stdSimplex`：convexHull_basis_eq_stdSimplex [Decidabl
+eEq ι] : convexHull R (range fun i j : ι => if i = j then (1 : R) else 0) = stdS
+implex R ι
+· 使用定理 `LinearMap.image_convexHull`：LinearMap.image_convexHull (f : E ->ₗ[𝕜] F) 
+(s : Set E) : f '' convexHull 𝕜 s = convexHull 𝕜 (f '' s)
+· 使用定理 `Set.range_comp`：range_comp (g : α -> β) (f : ι -> α) : range (g ∘ f) = g
+ '' range f
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LinearMap.coe_sum`：coe_sum {ι : Type*} (t : Finset ι) (f : ι -> M ->ₛₗ[σ
+₁₂] M₂) : ⇑(∑ i in t, f i) = ∑ i in t, (f i : M -> M₂)
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Finset.sum_apply`：∀ {ι : Type u_1} {α : Type u_7} {M : α → Type u_8} [in
+st : (a : α) → AddCommMonoid (M a)] (a : α) (s : Finset ι)   (g : ι → (a : α) → 
+M a), …
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `ite_smul`：∀ {α : Type u_1} {β : Type u_2} [inst : SMul β α] (p : Prop) [
+inst_1 : Decidable p] (a : α) (b c : β),   (if p then b else c) • a = if p the…
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `Finset.sum_ite_eq`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid
+ M] [inst_1 : DecidableEq ι] (s : Finset ι) (a : ι) (b : ι → M),   (∑ x ∈ s, if 
+a = x t…
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-中文:
-定理 集合.有限.convexHull_eq_image
-  结论: {E : 类型} [加法交换群 E] [模 R E]
-  证明: hs.fintype
-    (⇑(∑ x : s, (LinearMap.proj (R := R) x).smulRight x.1)) '' stdSimplex R s := by
-  classical
-  let := hs.fintype
-  rw [← convexHull_basis_eq_stdSimplex]; rw [LinearMap.image_convexHull]; rw [← Set.range_comp]
-  apply congr_arg
-  aesop
+--- 原说明 ---
+The convex hull of a finite set is the image of the standard simplex in `s → ℝ`
+under the linear map sending each function `w` to `∑ x ∈ s, w x • x`.
 
-Depends on / 依赖: fintype, hs.fintype
+Since we have no sums over finite sets, we use sum over `@Finset.univ _ hs.finty
+pe`.
+The map is defined in terms of operations on `(s → ℝ) →ₗ[ℝ] ℝ` so that later we 
+will not need
+to prove that this map is linear.
 -/
 theorem Set.Finite.convexHull_eq_image {E : Type*} [AddCommGroup E] [Module R E]
     {s : Set E} (hs : s.Finite) : convexHull R s =
@@ -505,7 +583,7 @@ theorem Set.Finite.convexHull_eq_image {E : Type*} [AddCommGroup E] [Module R E]
     (⇑(∑ x : s, (LinearMap.proj (R := R) x).smulRight x.1)) '' stdSimplex R s := by
   classical
   let := hs.fintype
-  rw [← convexHull_basis_eq_stdSimplex]; rw [LinearMap.image_convexHull]; rw [← Set.range_comp]
+  rw [← convexHull_basis_eq_stdSimplex, LinearMap.image_convexHull, ← Set.range_comp]
   apply congr_arg
   aesop
 
@@ -515,75 +593,80 @@ section GeneralTopology
 variable (𝕜 ι : Type*) [Fintype ι]
   [TopologicalSpace 𝕜] [Semiring 𝕜] [PartialOrder 𝕜] [OrderClosedTopology 𝕜] [ContinuousAdd 𝕜]
 
-/--
-theorem `isClosed_stdSimplex` / 定理 `isClosed_stdSimplex`
+/-- `stdSimplex 𝕜 ι` is closed. -/
+/-
+**isClosed_stdSimplex** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isClosed_stdSimplex : IsClosed (stdSimplex 𝕜 ι)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `stdSimplex_eq_inter`：stdSimplex_eq_inter : stdSimplex 𝕜 ι = (⋂ x, { f | 
+0 <= f x }) inter { f | ∑ x, f x = 1 }
+· 使用定理 `IsClosed.inter`：IsClosed.inter (h₁ : IsClosed s₁) (h₂ : IsClosed s₂) : I
+sClosed (s₁ inter s₂)
+· 使用定理 `isClosed_iInter`：isClosed_iInter {f : ι -> Set X} (h : forall i, IsClose
+d (f i)) : IsClosed (⋂ i, f i)
+· 使用定理 `isClosed_le`：isClosed_le [TopologicalSpace β] {f g : β -> α} (hf : Conti
+nuous f) (hg : Continuous g) : IsClosed { b | f b <= g b }
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
+· 使用定理 `continuous_apply`：continuous_apply (a : α) : Continuous (fun f : (α → X)
+ ↦ f a)
+· 使用定理 `isClosed_eq`：isClosed_eq [T2Space X] {f g : Y -> X} (hf : Continuous f) 
+(hg : Continuous g) : IsClosed { y : Y | f y = g y }
+· 使用定理 `OrderClosedTopology.to_t2Space`：∀ {α : Type u} [inst : TopologicalSpace 
+α] [inst_1 : PartialOrder α] [t : OrderClosedTopology α], T2Space α
+· 使用定理 `continuous_finsetSum`：∀ {ι : Type u_1} {M : Type u_3} {X : Type u_5} [in
+st : TopologicalSpace X] [inst_1 : TopologicalSpace M]   [inst_2 : AddCommMonoid
+ M] [Conti…
 
-English:
-theorem isClosed_stdSimplex
-  statement: IsClosed (stdSimplex 𝕜 ι)
-  proof: by
-  rw [stdSimplex_eq_inter]
-  apply IsClosed.inter
-  · apply isClosed_iInter
-    exact fun i => isClosed_le continuous_const (continuous_apply i)
-  · exact isClosed_eq (by fun_prop) continuous_const
-
-中文:
-定理 isClosed_stdSimplex
-  结论: 是闭集 (stdSimplex 𝕜 ι)
-  证明: by
-  rw [stdSimplex_eq_inter]
-  apply IsClosed.inter
-  · apply isClosed_iInter
-    exact fun i => isClosed_le continuous_const (continuous_apply i)
-  · exact isClosed_eq (by fun_prop) continuous_const
-
-Depends on / 依赖: IsClosed, IsClosed.inter, continuous_apply, continuous_const, fun_prop, isClosed_eq, isClosed_iInter, isClosed_le, stdSimplex_eq_inter
+--- 原说明 ---
+`stdSimplex 𝕜 ι` is closed.
 -/
 theorem isClosed_stdSimplex : IsClosed (stdSimplex 𝕜 ι) := by
   rw [stdSimplex_eq_inter]
   apply IsClosed.inter
   · apply isClosed_iInter
-    exact fun i => isClosed_le continuous_const (continuous_apply i)
+    exact fun i ↦ isClosed_le continuous_const (continuous_apply i)
   · exact isClosed_eq (by fun_prop) continuous_const
 
-/--
-theorem `isCompact_stdSimplex` / 定理 `isCompact_stdSimplex`
+/-- `stdSimplex 𝕜 ι` is compact. -/
+/-
+**isCompact_stdSimplex** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isCompact_stdSimplex [CompactIccSpace 𝕜] [IsOrderedAddMonoid 𝕜] : IsCompac
+t (stdSimplex 𝕜 ι)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCompact.of_isClosed_subset`：IsCompact.of_isClosed_subset (hs : IsCompa
+ct s) (ht : IsClosed t) (h : t subseteq s) : IsCompact t
+· 使用定理 `CompactIccSpace.isCompact_Icc`：∀ {α : Type u_1} {inst : TopologicalSpace
+ α} {inst_1 : Preorder α} [self : CompactIccSpace α] {a b : α},   IsCompact (Set
+.Icc a b)
+· 使用定理 `isClosed_stdSimplex`：isClosed_stdSimplex : IsClosed (stdSimplex 𝕜 ι)
+· 使用定理 `stdSimplex_subset_Icc`：stdSimplex_subset_Icc [IsOrderedAddMonoid 𝕜] : st
+dSimplex 𝕜 ι subseteq Icc 0 1
 
-English:
-theorem isCompact_stdSimplex
-  given: [CompactIccSpace 𝕜] [IsOrderedAddMonoid 𝕜]
-  proof: IsCompact.of_isClosed_subset isCompact_Icc (isClosed_stdSimplex 𝕜 ι) (stdSimplex_subset_Icc 𝕜)
-
-中文:
-定理 isCompact_stdSimplex
-  条件: [余mpactIcc空间 𝕜] [是OrderedAdd幺半群 𝕜]
-  证明: IsCompact.of_isClosed_subset isCompact_Icc (isClosed_stdSimplex 𝕜 ι) (stdSimplex_subset_Icc 𝕜)
-
-Depends on / 依赖: IsCompact, IsCompact.of_isClosed_subset, isClosed_stdSimplex, isCompact_Icc, of_isClosed_subset, stdSimplex_subset_Icc
+--- 原说明 ---
+`stdSimplex 𝕜 ι` is compact.
 -/
 theorem isCompact_stdSimplex [CompactIccSpace 𝕜] [IsOrderedAddMonoid 𝕜] :
     IsCompact (stdSimplex 𝕜 ι) :=
   IsCompact.of_isClosed_subset isCompact_Icc (isClosed_stdSimplex 𝕜 ι) (stdSimplex_subset_Icc 𝕜)
-
-/--
-Instance `stdSimplex.instCompactSpace_coe` / 实例 `stdSimplex.instCompactSpace_coe`
-
-English:
-instance stdSimplex.instCompactSpace_coe
-  signature: [CompactIccSpace 𝕜] [IsOrderedAddMonoid 𝕜]
-  body: isCompact_iff_compactSpace.mp isCompact_stdSimplex 𝕜 _
-
-中文:
-实例 stdSimplex.instCompactSpace_coe
-  签名: [余mpactIcc空间 𝕜] [是OrderedAdd幺半群 𝕜]
-  定义体: isCompact_iff_compactSpace.mp isCompact_stdSimplex 𝕜 _
-
-Depends on / 依赖: geometric_hahn_banach_point_point, hf.ne, hx.symm, isCompact_iff_compactSpace, isCompact_iff_compactSpace.mp, isCompact_stdSimplex, map_zero
+/-
+**stdSimplex.instCompactSpace_coe** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：stdSimplex.instCompactSpace_coe [CompactIccSpace 𝕜] [IsOrderedAddMonoid 𝕜]
+ : CompactSpace (stdSimplex 𝕜 ι)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isCompact_iff_compactSpace`：isCompact_iff_compactSpace : IsCompact s ↔ C
+ompactSpace s
+· 使用定理 `isCompact_stdSimplex`：isCompact_stdSimplex [CompactIccSpace 𝕜] [IsOrdere
+dAddMonoid 𝕜] : IsCompact (stdSimplex 𝕜 ι)
 -/
 instance stdSimplex.instCompactSpace_coe [CompactIccSpace 𝕜] [IsOrderedAddMonoid 𝕜] :
     CompactSpace (stdSimplex 𝕜 ι) :=
-isCompact_iff_compactSpace.mp isCompact_stdSimplex 𝕜 _
+  isCompact_iff_compactSpace.mp <| isCompact_stdSimplex 𝕜 _
 
 end GeneralTopology
 
@@ -591,132 +674,129 @@ section Topology
 
 variable {ι : Type*} [Fintype ι]
 
-/--
-theorem `stdSimplex_subset_closedBall` / 定理 `stdSimplex_subset_closedBall`
+/-- Every vector in `stdSimplex 𝕜 ι` has `max`-norm at most `1`. -/
+/-
+**stdSimplex_subset_closedBall** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：stdSimplex_subset_closedBall : stdSimplex Real ι subseteq Metric.closedBal
+l 0 1
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Metric.mem_closedBall`：∀ {α : Type u} [inst : PseudoMetricSpace α] {x y 
+: α} {ε : ℝ}, y ∈ Metric.closedBall x ε ↔ dist y x ≤ ε
+· 使用引理 `dist_pi_le_iff`：dist_pi_le_iff {f g : forall b, X b} {r : Real} (hr : 0 
+<= r) : dist f g <= r ↔ forall b, dist (f b) (g b) <= r
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
+· 使用定理 `Pi.zero_apply`：∀ {ι : Type u_1} {M : ι → Type u_5} [inst : (i : ι) → Zer
+o (M i)] (i : ι), 0 i = 0
+· 使用定理 `Real.dist_0_eq_abs`：Real.dist_0_eq_abs (x : Real) : dist x 0 = |x|
+· 使用定理 `abs_of_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α]
+ {a : α} [AddLeftMono α], 0 ≤ a → |a| = a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `mem_Icc_of_mem_stdSimplex`：mem_Icc_of_mem_stdSimplex [IsOrderedAddMonoid
+ 𝕜] {f : ι -> 𝕜} (hf : f in stdSimplex 𝕜 ι) (x) : f x in Icc (0 : 𝕜) 1
 
-English:
-theorem stdSimplex_subset_closedBall
-  statement: stdSimplex Real ι subseteq Metric.closedBall 0 1
-  proof: fun f hf => by
-  rw [Metric.mem_closedBall]; rw [dist_pi_le_iff zero_le_one]
-  intro x
-  rw [Pi.zero_apply]; rw [Real.dist_0_eq_abs]; rw [abs_of_nonneg <| hf.1 x]
-  exact (mem_Icc_of_mem_stdSimplex hf x).2
-
-中文:
-定理 stdSimplex_subset_closedBall
-  结论: stdSimplex 实数 ι subseteq Metric.closedBall 0 1
-  证明: fun f hf => by
-  rw [Metric.mem_closedBall]; rw [dist_pi_le_iff zero_le_one]
-  intro x
-  rw [Pi.zero_apply]; rw [Real.dist_0_eq_abs]; rw [abs_of_nonneg <| hf.1 x]
-  exact (mem_Icc_of_mem_stdSimplex hf x).2
-
-Depends on / 依赖: IsScalarTower, LocallyConvexSpace, Metric, Metric.mem_closedBall, Module, NormedSpace, NormedSpace.toLocallyConvexSpace, Pi.zero_apply, RCLike, RCLike.geometric_hahn_banach_point_point, Real.dist_0_eq_abs, abs_of_nonneg, dist_0_eq_abs, dist_pi_le_iff, geometric_hahn_banach_point_point, mem_Icc_of_mem_stdSimplex, mem_closedBall, restrictScalars, toLocallyConvexSpace, zero_apply
+--- 原说明 ---
+Every vector in `stdSimplex 𝕜 ι` has `max`-norm at most `1`.
 -/
-theorem stdSimplex_subset_closedBall : stdSimplex Real ι subseteq Metric.closedBall 0 1 := fun f hf => by
-  rw [Metric.mem_closedBall]; rw [dist_pi_le_iff zero_le_one]
+theorem stdSimplex_subset_closedBall : stdSimplex ℝ ι ⊆ Metric.closedBall 0 1 := fun f hf ↦ by
+  rw [Metric.mem_closedBall, dist_pi_le_iff zero_le_one]
   intro x
-  rw [Pi.zero_apply]; rw [Real.dist_0_eq_abs]; rw [abs_of_nonneg <| hf.1 x]
+  rw [Pi.zero_apply, Real.dist_0_eq_abs, abs_of_nonneg <| hf.1 x]
   exact (mem_Icc_of_mem_stdSimplex hf x).2
 
 variable (ι)
 
-/--
-theorem `bounded_stdSimplex` / 定理 `bounded_stdSimplex`
+/-- `stdSimplex ℝ ι` is bounded. -/
+/-
+**bounded_stdSimplex** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：bounded_stdSimplex : IsBounded (stdSimplex Real ι)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Metric.isBounded_iff_subset_closedBall`：isBounded_iff_subset_closedBall 
+(c : α) : IsBounded s ↔ exists r, s subseteq closedBall c r
+· 使用定理 `stdSimplex_subset_closedBall`：stdSimplex_subset_closedBall : stdSimplex 
+Real ι subseteq Metric.closedBall 0 1
 
-English:
-theorem bounded_stdSimplex
-  statement: IsBounded (stdSimplex Real ι)
-  proof: (Metric.isBounded_iff_subset_closedBall 0).2 ⟨1, stdSimplex_subset_closedBall⟩
-
-中文:
-定理 bounded_stdSimplex
-  结论: IsBounded (stdSimplex 实数 ι)
-  证明: (Metric.isBounded_iff_subset_closedBall 0).2 ⟨1, stdSimplex_subset_closedBall⟩
-
-Depends on / 依赖: Metric, Metric.isBounded_iff_subset_closedBall, isBounded_iff_subset_closedBall, stdSimplex_subset_closedBall
+--- 原说明 ---
+`stdSimplex ℝ ι` is bounded.
 -/
-theorem bounded_stdSimplex : IsBounded (stdSimplex Real ι) :=
+theorem bounded_stdSimplex : IsBounded (stdSimplex ℝ ι) :=
   (Metric.isBounded_iff_subset_closedBall 0).2 ⟨1, stdSimplex_subset_closedBall⟩
 
-/--
-theorem `isPathConnected_stdSimplex` / 定理 `isPathConnected_stdSimplex`
+/-- `stdSimplex ℝ ι` is path connected. -/
+/-
+**isPathConnected_stdSimplex** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isPathConnected_stdSimplex [Nonempty ι] : IsPathConnected (stdSimplex Real
+ ι)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Convex.isPathConnected`：∀ {E : Type u_1} [inst : AddCommGroup E] [inst_1
+ : _root_.Module ℝ E] [inst_2 : TopologicalSpace E] [ContinuousAdd E]   [Continu
+ousSMul ℝ E]…
+· 使用定理 `Pi.continuousAdd'`：∀ {ι : Type u_1} {M : Type u_3} [inst : TopologicalSp
+ace M] [inst_1 : Add M] [ContinuousAdd M], ContinuousAdd (ι → M)
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `instContinuousSMulForall`：∀ {M : Type u_1} [inst : TopologicalSpace M] {
+ι : Type u_5} {γ : ι → Type u_6}   [inst_1 : (i : ι) → TopologicalSpace (γ i)] [
+inst_2 : (i : …
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `convex_stdSimplex`：convex_stdSimplex [IsOrderedRing 𝕜] : Convex 𝕜 (stdSi
+mplex 𝕜 ι)
+· 使用定理 `single_mem_stdSimplex`：single_mem_stdSimplex (i : ι) : Pi.single i 1 in 
+stdSimplex 𝕜 ι
 
-English:
-theorem isPathConnected_stdSimplex
-  given: [Nonempty ι]
-  proof: (convex_stdSimplex Real ι).isPathConnected (by
-    classical
-    exact ⟨_, single_mem_stdSimplex Real (Classical.arbitrary ι)⟩)
-
-中文:
-定理 isPathConnected_stdSimplex
-  条件: [非空 ι]
-  证明: (convex_stdSimplex Real ι).isPathConnected (by
-    classical
-    exact ⟨_, single_mem_stdSimplex Real (Classical.arbitrary ι)⟩)
-
-Depends on / 依赖: Classical, Classical.arbitrary, arbitrary, classical, convex_stdSimplex, isPathConnected, single_mem_stdSimplex
+--- 原说明 ---
+`stdSimplex ℝ ι` is path connected.
 -/
 theorem isPathConnected_stdSimplex [Nonempty ι] :
-    IsPathConnected (stdSimplex Real ι) :=
-  (convex_stdSimplex Real ι).isPathConnected (by
+    IsPathConnected (stdSimplex ℝ ι) :=
+  (convex_stdSimplex ℝ ι).isPathConnected (by
     classical
-    exact ⟨_, single_mem_stdSimplex Real (Classical.arbitrary ι)⟩)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nonempty
-  signature: ι] : PathConnectedSpace (stdSimplex Real ι)
-  body: isPathConnected_iff_pathConnectedSpace.1 (isPathConnected_stdSimplex _)
-
-中文:
-实例 [非空
-  签名: ι] : 道路连通空间 (stdSimplex 实数 ι)
-  定义体: isPathConnected_iff_pathConnectedSpace.1 (isPathConnected_stdSimplex _)
-
-Depends on / 依赖: isPathConnected_iff_pathConnectedSpace, isPathConnected_stdSimplex
+    exact ⟨_, single_mem_stdSimplex ℝ (Classical.arbitrary ι)⟩)
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Nonempty ι] : PathConnectedSpace (stdSimplex Real ι) :=
+instance [Nonempty ι] : PathConnectedSpace (stdSimplex ℝ ι) :=
   isPathConnected_iff_pathConnectedSpace.1 (isPathConnected_stdSimplex _)
 
 /-- The standard one-dimensional simplex in `ℝ² = Fin 2 → ℝ`
 is homeomorphic to the unit interval. -/
 @[simps! -fullyApplied]
-/--
-Definition of `stdSimplexHomeomorphUnitInterval` / `stdSimplexHomeomorphUnitInterval` 的定义
+/-
+**stdSimplexHomeomorphUnitInterval** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：stdSimplexHomeomorphUnitInterval : stdSimplex Real (Fin 2) ≃ₜ unitInterval
+ where toEquiv
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition stdSimplexHomeomorphUnitInterval
-  signature: : stdSimplex Real (Fin 2) ≃ₜ unitInterval where
-  body: stdSimplexEquivIcc Real
-  continuous_toFun := .subtype_mk ((continuous_apply 1).comp continuous_subtype_val) _
-  continuous_invFun := by
-    apply Continuous.subtype_mk
-    exact (continuous_pi <| Fin.forall_fin_two.2
-      ⟨continuous_const.sub continuous_subtype_val, continuous_subtype_val⟩)
-
-@[simp]
-
-中文:
-定义 stdSimplexHomeomorphUnit整数erval
-  签名: : stdSimplex 实数 (有限集 2) ≃ₜ unit整数erval where
-  定义体: stdSimplexEquivIcc Real
-  continuous_toFun := .subtype_mk ((continuous_apply 1).comp continuous_subtype_val) _
-  continuous_invFun := by
-    apply Continuous.subtype_mk
-    exact (continuous_pi <| Fin.forall_fin_two.2
-      ⟨continuous_const.sub continuous_subtype_val, continuous_subtype_val⟩)
-
-@[simp]
-
-Depends on / 依赖: stdSimplexEquivIcc
+--- 原说明 ---
+The standard one-dimensional simplex in `ℝ² = Fin 2 → ℝ`
+is homeomorphic to the unit interval.
 -/
-def stdSimplexHomeomorphUnitInterval : stdSimplex Real (Fin 2) ≃ₜ unitInterval where
-  toEquiv := stdSimplexEquivIcc Real
+def stdSimplexHomeomorphUnitInterval : stdSimplex ℝ (Fin 2) ≃ₜ unitInterval where
+  toEquiv := stdSimplexEquivIcc ℝ
   continuous_toFun := .subtype_mk ((continuous_apply 1).comp continuous_subtype_val) _
   continuous_invFun := by
     apply Continuous.subtype_mk
@@ -724,35 +804,29 @@ def stdSimplexHomeomorphUnitInterval : stdSimplex Real (Fin 2) ≃ₜ unitInterv
       ⟨continuous_const.sub continuous_subtype_val, continuous_subtype_val⟩)
 
 @[simp]
-/--
-lemma `stdSimplexHomeomorphUnitInterval_zero` / 引理 `stdSimplexHomeomorphUnitInterval_zero`
-
-English:
-lemma stdSimplexHomeomorphUnitInterval_zero
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 stdSimplexHomeomorphUnit整数erval_zero
-  证明: rfl
-
-@[simp]
+/-
+**stdSimplexHomeomorphUnitInterval_zero** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：stdSimplexHomeomorphUnitInterval_zero : stdSimplexHomeomorphUnitInterval ⟨
+_, single_mem_stdSimplex _ 0⟩ = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `single_mem_stdSimplex`：single_mem_stdSimplex (i : ι) : Pi.single i 1 in 
+stdSimplex 𝕜 ι
 -/
 lemma stdSimplexHomeomorphUnitInterval_zero :
     stdSimplexHomeomorphUnitInterval ⟨_, single_mem_stdSimplex _ 0⟩ = 0 := rfl
 
 @[simp]
-/--
-lemma `stdSimplexHomeomorphUnitInterval_one` / 引理 `stdSimplexHomeomorphUnitInterval_one`
-
-English:
-lemma stdSimplexHomeomorphUnitInterval_one
-  proof: rfl
-
-中文:
-引理 stdSimplexHomeomorphUnit整数erval_one
-  证明: rfl
+/-
+**stdSimplexHomeomorphUnitInterval_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：stdSimplexHomeomorphUnitInterval_one : stdSimplexHomeomorphUnitInterval ⟨_
+, single_mem_stdSimplex _ 1⟩ = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `single_mem_stdSimplex`：single_mem_stdSimplex (i : ι) : Pi.single i 1 in 
+stdSimplex 𝕜 ι
 -/
 lemma stdSimplexHomeomorphUnitInterval_one :
     stdSimplexHomeomorphUnitInterval ⟨_, single_mem_stdSimplex _ 1⟩ = 1 := rfl
@@ -761,105 +835,101 @@ lemma stdSimplexHomeomorphUnitInterval_one :
 
 variable {ι}
 
-/--
-theorem `diam_stdSimplex_le` / 定理 `diam_stdSimplex_le`
+/-- The (sup metric) diameter of a standard simplex is less than or equal to 1. -/
+/-
+**diam_stdSimplex_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：diam_stdSimplex_le : Metric.diam (stdSimplex Real ι) <= 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.diam_le_of_forall_dist_le`：diam_le_of_forall_dist_le {C : Real} (
+h₀ : 0 <= C) (h : forall x in s, forall y in s, dist x y <= C) : diam s <= C
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `dist_pi_le_iff`：dist_pi_le_iff {f g : forall b, X b} {r : Real} (hr : 0 
+<= r) : dist f g <= r ↔ forall b, dist (f b) (g b) <= r
+· 使用定理 `mem_Icc_of_mem_stdSimplex`：mem_Icc_of_mem_stdSimplex [IsOrderedAddMonoid
+ 𝕜] {f : ι -> 𝕜} (hf : f in stdSimplex 𝕜 ι) (x) : f x in Icc (0 : 𝕜) 1
 
-English:
-theorem diam_stdSimplex_le
-  statement: Metric.diam (stdSimplex Real ι) <= 1
-  proof: Metric.diam_le_of_forall_dist_le zero_le_one fun x hx y hy =>
-    (dist_pi_le_iff zero_le_one).2 fun i => by
-      have hx := mem_Icc_of_mem_stdSimplex hx i
-      have hy := mem_Icc_of_mem_stdSimplex hy i
-      grind [Real.dist_eq]
-
-中文:
-定理 diam_stdSimplex_le
-  结论: Metric.diam (stdSimplex 实数 ι) <= 1
-  证明: Metric.diam_le_of_forall_dist_le zero_le_one fun x hx y hy =>
-    (dist_pi_le_iff zero_le_one).2 fun i => by
-      have hx := mem_Icc_of_mem_stdSimplex hx i
-      have hy := mem_Icc_of_mem_stdSimplex hy i
-      grind [Real.dist_eq]
-
-Depends on / 依赖: Metric, Metric.diam_le_of_forall_dist_le, Real.dist_eq, diam_le_of_forall_dist_le, dist_eq, dist_pi_le_iff, mem_Icc_of_mem_stdSimplex, zero_le_one
+--- 原说明 ---
+The (sup metric) diameter of a standard simplex is less than or equal to 1.
 -/
-theorem diam_stdSimplex_le : Metric.diam (stdSimplex Real ι) <= 1 :=
-  Metric.diam_le_of_forall_dist_le zero_le_one fun x hx y hy =>
-    (dist_pi_le_iff zero_le_one).2 fun i => by
+theorem diam_stdSimplex_le : Metric.diam (stdSimplex ℝ ι) ≤ 1 :=
+  Metric.diam_le_of_forall_dist_le zero_le_one fun x hx y hy ↦
+    (dist_pi_le_iff zero_le_one).2 fun i ↦ by
       have hx := mem_Icc_of_mem_stdSimplex hx i
       have hy := mem_Icc_of_mem_stdSimplex hy i
       grind [Real.dist_eq]
 
 /-- The (sup metric) diameter of a standard simplex indexed by a subsingleton is 0. -/
 @[simp]
-/--
-theorem `diam_stdSimplex_of_subsingleton` / 定理 `diam_stdSimplex_of_subsingleton`
+/-
+**diam_stdSimplex_of_subsingleton** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：diam_stdSimplex_of_subsingleton [Subsingleton ι] : Metric.diam (stdSimplex
+ Real ι) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `stdSimplex_of_isEmpty_index`：stdSimplex_of_isEmpty_index [IsEmpty ι] [No
+ntrivial 𝕜] : stdSimplex 𝕜 ι = ∅
+· 使用定理 `Metric.diam_empty`：diam_empty : diam (∅ : Set α) = 0
+· 使用引理 `stdSimplex_unique`：stdSimplex_unique [ZeroLEOneClass 𝕜] [Nonempty ι] [Su
+bsingleton ι] : stdSimplex 𝕜 ι = {fun _ => 1}
+· 使用定理 `Metric.diam_singleton`：diam_singleton : diam ({x} : Set α) = 0
 
-English:
-theorem diam_stdSimplex_of_subsingleton
-  given: [Subsingleton ι]
-  statement: Metric.diam (stdSimplex Real ι) = 0
-  proof: by
-  cases isEmpty_or_nonempty ι with
-  | inl h => rw [stdSimplex_of_isEmpty_index, Metric.diam_empty]
-  | inr h => rw [stdSimplex_unique, Metric.diam_singleton]
-
-中文:
-定理 diam_stdSimplex_of_subsingleton
-  条件: [子单例 ι]
-  结论: Metric.diam (stdSimplex 实数 ι) = 0
-  证明: by
-  cases isEmpty_or_nonempty ι with
-  | inl h => rw [stdSimplex_of_isEmpty_index, Metric.diam_empty]
-  | inr h => rw [stdSimplex_unique, Metric.diam_singleton]
-
-Depends on / 依赖: DFunLike, DFunLike.ne_iff.mpr, Metric, Metric.diam_empty, Metric.diam_singleton, diam_empty, diam_singleton, exists_ne, exists_ne_zero, isEmpty_or_nonempty, ne_iff, smulRight, stdSimplex_of_isEmpty_index, stdSimplex_unique
+--- 原说明 ---
+The (sup metric) diameter of a standard simplex indexed by a subsingleton is 0.
 -/
-theorem diam_stdSimplex_of_subsingleton [Subsingleton ι] : Metric.diam (stdSimplex Real ι) = 0 := by
+theorem diam_stdSimplex_of_subsingleton [Subsingleton ι] : Metric.diam (stdSimplex ℝ ι) = 0 := by
   cases isEmpty_or_nonempty ι with
   | inl h => rw [stdSimplex_of_isEmpty_index, Metric.diam_empty]
   | inr h => rw [stdSimplex_unique, Metric.diam_singleton]
 
 /-- The (sup metric) diameter of a standard simplex indexed by a nontrivial index is 1. -/
 @[simp]
-/--
-theorem `diam_stdSimplex` / 定理 `diam_stdSimplex`
+/-
+**diam_stdSimplex** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：diam_stdSimplex [Nontrivial ι] : Metric.diam (stdSimplex Real ι) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `diam_stdSimplex_le`：diam_stdSimplex_le : Metric.diam (stdSimplex Real ι)
+ <= 1
+· 使用定理 `exists_pair_ne`：exists_pair_ne (α : Type*) [Nontrivial α] : exists x y :
+ α, x != y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `dist_single_single`：dist_single_single {Y : Type*} [PseudoMetricSpace Y]
+ [Zero Y] [DecidableEq β] (i j : β) (a b : Y) (h : i != j) : dist (Pi.single i a
+ : β -> …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `abs_one`：∀ {α : Type u_1} [inst : Ring α] [inst_1 : LinearOrder α] [IsOr
+deredRing α], |1| = 1
+· 使用定理 `max_self`：∀ {α : Type u_1} [inst : LinearOrder α] (a : α), max a a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Metric.dist_le_diam_of_mem`：dist_le_diam_of_mem (h : IsBounded s) (hx : 
+x in s) (hy : y in s) : dist x y <= diam s
+· 使用定理 `bounded_stdSimplex`：bounded_stdSimplex : IsBounded (stdSimplex Real ι)
+· 使用定理 `single_mem_stdSimplex`：single_mem_stdSimplex (i : ι) : Pi.single i 1 in 
+stdSimplex 𝕜 ι
 
-English:
-theorem diam_stdSimplex
-  given: [Nontrivial ι]
-  statement: Metric.diam (stdSimplex Real ι) = 1
-  proof: by
-  refine le_antisymm diam_stdSimplex_le ?_
-  obtain ⟨i, j, hij⟩ := exists_pair_ne ι
-  classical
-  rw [show (1 : Real) = dist (Pi.single i 1 : ι -> Real) (Pi.single j 1) by
-    simp [dist_single_single i j (1 : Real) 1 hij]; rw [Real.dist_eq]]
-  exact Metric.dist_le_diam_of_mem (bounded_stdSimplex _)
-    (single_mem_stdSimplex _ _) (single_mem_stdSimplex _ _)
-
-中文:
-定理 diam_stdSimplex
-  条件: [非平凡 ι]
-  结论: Metric.diam (stdSimplex 实数 ι) = 1
-  证明: by
-  refine le_antisymm diam_stdSimplex_le ?_
-  obtain ⟨i, j, hij⟩ := exists_pair_ne ι
-  classical
-  rw [show (1 : Real) = dist (Pi.single i 1 : ι -> Real) (Pi.single j 1) by
-    simp [dist_single_single i j (1 : Real) 1 hij]; rw [Real.dist_eq]]
-  exact Metric.dist_le_diam_of_mem (bounded_stdSimplex _)
-    (single_mem_stdSimplex _ _) (single_mem_stdSimplex _ _)
-
-Depends on / 依赖: Metric, Metric.dist_le_diam_of_mem, Pi.single, Real.dist_eq, bounded_stdSimplex, classical, diam_stdSimplex_le, dist_eq, dist_le_diam_of_mem, dist_single_single, exists_pair_ne, le_antisymm, single, single_mem_stdSimplex
+--- 原说明 ---
+The (sup metric) diameter of a standard simplex indexed by a nontrivial index is
+ 1.
 -/
-theorem diam_stdSimplex [Nontrivial ι] : Metric.diam (stdSimplex Real ι) = 1 := by
+theorem diam_stdSimplex [Nontrivial ι] : Metric.diam (stdSimplex ℝ ι) = 1 := by
   refine le_antisymm diam_stdSimplex_le ?_
   obtain ⟨i, j, hij⟩ := exists_pair_ne ι
   classical
-  rw [show (1 : Real) = dist (Pi.single i 1 : ι -> Real) (Pi.single j 1) by
-    simp [dist_single_single i j (1 : Real) 1 hij]; rw [Real.dist_eq]]
+  rw [show (1 : ℝ) = dist (Pi.single i 1 : ι → ℝ) (Pi.single j 1) by
+    simp [dist_single_single i j (1 : ℝ) 1 hij, Real.dist_eq]]
   exact Metric.dist_le_diam_of_mem (bounded_stdSimplex _)
     (single_mem_stdSimplex _ _) (single_mem_stdSimplex _ _)
 
@@ -870,115 +940,67 @@ namespace stdSimplex
 variable {S : Type*} [Semiring S] [PartialOrder S]
   {X Y Z : Type*} [Fintype X] [Fintype Y] [Fintype Z]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (stdSimplex S X) X S
-  body: s.val
-  coe_injective := by aesop
-
-@[ext high]
-
-中文:
-实例 :
-  签名: 函数状 (stdSimplex S X) X S
-  定义体: s.val
-  coe_injective := by aesop
-
-@[ext high]
-
-Depends on / 依赖: s.val
+/-
+**stdSimplex.** 是 Mathlib 中的一个实例，位于命名空间 `stdSimplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : FunLike (stdSimplex S X) X S where
   coe s := s.val
   coe_injective := by aesop
 
 @[ext high]
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: {s t : stdSimplex S X} (h : (s : X -> S) = t)
-  statement: s = t
-  proof: by
-  ext : 1
-  assumption
-
-@[simp]
-
-中文:
-引理 ext
-  条件: {s t : stdSimplex S X} (h : (s : X -> S) = t)
-  结论: s = t
-  证明: by
-  ext : 1
-  assumption
-
-@[simp]
+/-
+**stdSimplex.ext** 是 Mathlib 中的一个引理，位于命名空间 `stdSimplex`。
+形式化陈述：ext {s t : stdSimplex S X} (h : (s : X -> S) = t) : s = t
+参数：h : (s : X -> S) = t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
 -/
-lemma ext {s t : stdSimplex S X} (h : (s : X -> S) = t) : s = t := by
+lemma ext {s t : stdSimplex S X} (h : (s : X → S) = t) : s = t := by
   ext : 1
   assumption
 
 @[simp]
-/--
-lemma `zero_le` / 引理 `zero_le`
-
-English:
-lemma zero_le
-  given: (s : stdSimplex S X) (x : X)
-  statement: 0 <= s x
-  proof: s.2.1 x
-
-@[simp]
-
-中文:
-引理 zero_le
-  条件: (s : stdSimplex S X) (x : X)
-  结论: 0 <= s x
-  证明: s.2.1 x
-
-@[simp]
+/-
+**stdSimplex.zero_le** 是 Mathlib 中的一个引理，位于命名空间 `stdSimplex`。
+形式化陈述：zero_le (s : stdSimplex S X) (x : X) : 0 <= s x
+参数：s : stdSimplex S X；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-lemma zero_le (s : stdSimplex S X) (x : X) : 0 <= s x := s.2.1 x
+lemma zero_le (s : stdSimplex S X) (x : X) : 0 ≤ s x := s.2.1 x
 
 @[simp]
-/--
-lemma `sum_eq_one` / 引理 `sum_eq_one`
-
-English:
-lemma sum_eq_one
-  given: (s : stdSimplex S X)
-  statement: ∑ x, s x = 1
-  proof: s.2.2
-
-中文:
-引理 sum_eq_one
-  条件: (s : stdSimplex S X)
-  结论: ∑ x, s x = 1
-  证明: s.2.2
+/-
+**stdSimplex.sum_eq_one** 是 Mathlib 中的一个引理，位于命名空间 `stdSimplex`。
+形式化陈述：sum_eq_one (s : stdSimplex S X) : ∑ x, s x = 1
+参数：s : stdSimplex S X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
 lemma sum_eq_one (s : stdSimplex S X) : ∑ x, s x = 1 := s.2.2
-
-/--
-lemma `add_eq_one` / 引理 `add_eq_one`
-
-English:
-lemma add_eq_one
-  given: (s : stdSimplex S (Fin 2))
-  proof: by
-  simpa only [Fin.sum_univ_two] using sum_eq_one s
-
-中文:
-引理 add_eq_one
-  条件: (s : stdSimplex S (有限集 2))
-  证明: by
-  simpa only [Fin.sum_univ_two] using sum_eq_one s
-
-Depends on / 依赖: Fin.sum_univ_two, sum_eq_one, sum_univ_two
+/-
+**stdSimplex.add_eq_one** 是 Mathlib 中的一个引理，位于命名空间 `stdSimplex`。
+形式化陈述：add_eq_one (s : stdSimplex S (Fin 2)) : s 0 + s 1 = 1
+参数：s : stdSimplex S (Fin 2)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fin.sum_univ_two`：∀ {M : Type u_2} [inst : AddCommMonoid M] (f : Fin 2 →
+ M), ∑ i, f i = f 0 + f 1
+· 使用引理 `stdSimplex.sum_eq_one`：sum_eq_one (s : stdSimplex S X) : ∑ x, s x = 1
 -/
 lemma add_eq_one (s : stdSimplex S (Fin 2)) :
     s 0 + s 1 = 1 := by
@@ -989,269 +1011,257 @@ section
 variable [IsOrderedRing S]
 
 @[simp]
-/--
-lemma `le_one` / 引理 `le_one`
-
-English:
-lemma le_one
-  given: (s : stdSimplex S X) (x : X)
-  statement: s x <= 1
-  proof: by
-  rw [← sum_eq_one s]
-  exact Finset.single_le_sum (by simp) (by simp)
-
-中文:
-引理 le_one
-  条件: (s : stdSimplex S X) (x : X)
-  结论: s x <= 1
-  证明: by
-  rw [← sum_eq_one s]
-  exact Finset.single_le_sum (by simp) (by simp)
-
-Depends on / 依赖: Finset, Finset.single_le_sum, single_le_sum, sum_eq_one
+/-
+**stdSimplex.le_one** 是 Mathlib 中的一个引理，位于命名空间 `stdSimplex`。
+形式化陈述：le_one (s : stdSimplex S X) (x : X) : s x <= 1
+参数：s : stdSimplex S X；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `stdSimplex.sum_eq_one`：sum_eq_one (s : stdSimplex S X) : ∑ x, s x = 1
+· 使用定理 `Finset.single_le_sum`：∀ {ι : Type u_1} {N : Type u_5} [inst : AddCommMon
+oid N] [inst_1 : Preorder N] {f : ι → N} {s : Finset ι}   [AddLeftMono N], (∀ i 
+∈ s, 0 ≤ f…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-lemma le_one (s : stdSimplex S X) (x : X) : s x <= 1 := by
+lemma le_one (s : stdSimplex S X) (x : X) : s x ≤ 1 := by
   rw [← sum_eq_one s]
   exact Finset.single_le_sum (by simp) (by simp)
-
-/--
-lemma `image_linearMap` / 引理 `image_linearMap`
-
-English:
-lemma image_linearMap
-  given: (f : X -> Y)
-  proof: by
+/-
+**stdSimplex.image_linearMap** 是 Mathlib 中的一个引理，位于命名空间 `stdSimplex`。
+形式化陈述：image_linearMap (f : X -> Y) : Set.image (FunOnFinite.linearMap S S f) (st
+dSimplex S X) subseteq stdSimplex S Y
+参数：f : X -> Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `FunOnFinite.linearMap_apply_apply`：linearMap_apply_apply [Fintype X] [Fi
+nite Y] [DecidableEq Y] (f : X -> Y) (s : X -> M) (y : Y) : linearMap R M f s y 
+= (Finset.univ.filter (…
+· 使用定理 `Finset.sum_nonneg`：∀ {ι : Type u_1} {N : Type u_5} [inst : AddCommMonoid
+ N] [inst_1 : Preorder N] {f : ι → N} {s : Finset ι}   [AddLeftMono N], (∀ i ∈ s
+, 0 ≤ f…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sum_fiberwise`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_4} [in
+st : AddCommMonoid M] [inst_1 : DecidableEq κ] [inst_2 : Fintype κ]   (s : Finse
+t ι) (g : …
+-/
+lemma image_linearMap (f : X → Y) :
+    Set.image (FunOnFinite.linearMap S S f) (stdSimplex S X) ⊆ stdSimplex S Y := by
   classical
   rintro _ ⟨s, ⟨hs₀, hs₁⟩, rfl⟩
-  refine ⟨fun y => ?_, ?_⟩
+  refine ⟨fun y ↦ ?_, ?_⟩
   · rw [FunOnFinite.linearMap_apply_apply]
     exact Finset.sum_nonneg (by aesop)
   · simp only [FunOnFinite.linearMap_apply_apply, ← hs₁]
     exact Finset.sum_fiberwise Finset.univ f s
 
-中文:
-引理 image_linearMap
-  条件: (f : X -> Y)
-  证明: by
-  classical
-  rintro _ ⟨s, ⟨hs₀, hs₁⟩, rfl⟩
-  refine ⟨fun y => ?_, ?_⟩
-  · rw [FunOnFinite.linearMap_apply_apply]
-    exact Finset.sum_nonneg (by aesop)
-  · simp only [FunOnFinite.linearMap_apply_apply, ← hs₁]
-    exact Finset.sum_fiberwise Finset.univ f s
+/-- The map `stdSimplex S X → stdSimplex S Y` that is induced by a map `f : X → Y`. -/
+/-
+**stdSimplex.map** 是 Mathlib 中的一个定义，位于命名空间 `stdSimplex`。
+形式化陈述：map (f : X -> Y) (s : stdSimplex S X) : stdSimplex S Y
+参数：f : X -> Y；s : stdSimplex S X。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
 
-Depends on / 依赖: Finset, Finset.sum_fiberwise, Finset.sum_nonneg, Finset.univ, FunOnFinite, FunOnFinite.linearMap_apply_apply, classical, linearMap_apply_apply, sum_fiberwise, sum_nonneg
+--- 原说明 ---
+The map `stdSimplex S X → stdSimplex S Y` that is induced by a map `f : X → Y`.
 -/
-lemma image_linearMap (f : X -> Y) :
-    Set.image (FunOnFinite.linearMap S S f) (stdSimplex S X) subseteq stdSimplex S Y := by
-  classical
-  rintro _ ⟨s, ⟨hs₀, hs₁⟩, rfl⟩
-  refine ⟨fun y => ?_, ?_⟩
-  · rw [FunOnFinite.linearMap_apply_apply]
-    exact Finset.sum_nonneg (by aesop)
-  · simp only [FunOnFinite.linearMap_apply_apply, ← hs₁]
-    exact Finset.sum_fiberwise Finset.univ f s
-
-/--
-Definition of `map` / `map` 的定义
-
-English:
-definition map
-  signature: (f : X -> Y) (s : stdSimplex S X)
-  body: ⟨FunOnFinite.linearMap S S f s, image_linearMap f (by aesop)⟩
-
-@[simp]
-
-中文:
-定义 map
-  签名: (f : X -> Y) (s : stdSimplex S X)
-  定义体: ⟨FunOnFinite.linearMap S S f s, image_linearMap f (by aesop)⟩
-
-@[simp]
-
-Depends on / 依赖: FunOnFinite, FunOnFinite.linearMap, image_linearMap, linearMap
--/
-noncomputable def map (f : X -> Y) (s : stdSimplex S X) : stdSimplex S Y :=
+noncomputable def map (f : X → Y) (s : stdSimplex S X) : stdSimplex S Y :=
   ⟨FunOnFinite.linearMap S S f s, image_linearMap f (by aesop)⟩
 
 @[simp]
-/--
-lemma `map_coe` / 引理 `map_coe`
-
-English:
-lemma map_coe
-  given: (f : X -> Y) (s : stdSimplex S X)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 map_coe
-  条件: (f : X -> Y) (s : stdSimplex S X)
-  证明: rfl
-
-@[simp]
+/-
+**stdSimplex.map_coe** 是 Mathlib 中的一个引理，位于命名空间 `stdSimplex`。
+形式化陈述：map_coe (f : X -> Y) (s : stdSimplex S X) : ⇑(map f s) = FunOnFinite.linea
+rMap S S f s
+参数：f : X -> Y；s : stdSimplex S X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma map_coe (f : X -> Y) (s : stdSimplex S X) :
+lemma map_coe (f : X → Y) (s : stdSimplex S X) :
     ⇑(map f s) = FunOnFinite.linearMap S S f s := rfl
 
 @[simp]
-/--
-lemma `map_id_apply` / 引理 `map_id_apply`
-
-English:
-lemma map_id_apply
-  given: (x : stdSimplex S X)
-  statement: map id x = x
-  proof: by
-  aesop
-
-中文:
-引理 map_id_apply
-  条件: (x : stdSimplex S X)
-  结论: map id x = x
-  证明: by
-  aesop
+/-
+**stdSimplex.map_id_apply** 是 Mathlib 中的一个引理，位于命名空间 `stdSimplex`。
+形式化陈述：map_id_apply (x : stdSimplex S X) : map id x = x
+参数：x : stdSimplex S X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `stdSimplex.ext`：ext {s t : stdSimplex S X} (h : (s : X -> S) = t) : s = 
+t
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用引理 `FunOnFinite.linearMap_id`：linearMap_id [Finite X] : linearMap R M (_root
+_.id : X -> X) = .id
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma map_id_apply (x : stdSimplex S X) : map id x = x := by
   aesop
-
-/--
-lemma `map_comp_apply` / 引理 `map_comp_apply`
-
-English:
-lemma map_comp_apply
-  given: (f : X -> Y) (g : Y -> Z) (x : stdSimplex S X)
-  proof: by
-  ext
-  simp [FunOnFinite.linearMap_comp]
-
-中文:
-引理 map_comp_apply
-  条件: (f : X -> Y) (g : Y -> Z) (x : stdSimplex S X)
-  证明: by
-  ext
-  simp [FunOnFinite.linearMap_comp]
-
-Depends on / 依赖: FunOnFinite, FunOnFinite.linearMap_comp, linearMap_comp
+/-
+**stdSimplex.map_comp_apply** 是 Mathlib 中的一个引理，位于命名空间 `stdSimplex`。
+形式化陈述：map_comp_apply (f : X -> Y) (g : Y -> Z) (x : stdSimplex S X) : map g (map
+ f x) = map (g.comp f) x
+参数：f : X -> Y；g : Y -> Z；x : stdSimplex S X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `stdSimplex.ext`：ext {s t : stdSimplex S X} (h : (s : X -> S) = t) : s = 
+t
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `FunOnFinite.linearMap_comp`：linearMap_comp [Finite X] [Finite Y] [Finite
+ Z] (f : X -> Y) (g : Y -> Z) : linearMap R M (g.comp f) = (linearMap R M g).com
+p (linearMap R M…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma map_comp_apply (f : X -> Y) (g : Y -> Z) (x : stdSimplex S X) :
+lemma map_comp_apply (f : X → Y) (g : Y → Z) (x : stdSimplex S X) :
     map g (map f x) = map (g.comp f) x := by
   ext
   simp [FunOnFinite.linearMap_comp]
 
-/--
-Definition of `vertex` / `vertex` 的定义
+/-- The vertex corresponding to `x : X` in `stdSimplex S X`. -/
+/-
+**stdSimplex.vertex** 是 Mathlib 中的一个缩写定义，位于命名空间 `stdSimplex`。
+形式化陈述：vertex [DecidableEq X] (x : X) : stdSimplex S X
+参数：x : X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation vertex
-  signature: [DecidableEq X] (x : X)
-  body: ⟨Pi.single x 1, single_mem_stdSimplex S x⟩
-
-@[simp]
-
-中文:
-缩写 vertex
-  签名: [DecidableEq X] (x : X)
-  定义体: ⟨Pi.single x 1, single_mem_stdSimplex S x⟩
-
-@[simp]
-
-Depends on / 依赖: Pi.single, single, single_mem_stdSimplex
+--- 原说明 ---
+The vertex corresponding to `x : X` in `stdSimplex S X`.
 -/
 abbrev vertex [DecidableEq X] (x : X) : stdSimplex S X :=
   ⟨Pi.single x 1, single_mem_stdSimplex S x⟩
 
 @[simp]
-/--
-lemma `vertex_coe` / 引理 `vertex_coe`
-
-English:
-lemma vertex_coe
-  given: [DecidableEq X] (x : X)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 vertex_coe
-  条件: [DecidableEq X] (x : X)
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: Pi.single, single
+/-
+**stdSimplex.vertex_coe** 是 Mathlib 中的一个引理，位于命名空间 `stdSimplex`。
+形式化陈述：vertex_coe [DecidableEq X] (x : X) : ⇑(vertex (S
+参数：x : X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma vertex_coe [DecidableEq X] (x : X) :
     ⇑(vertex (S := S) x) = Pi.single x 1 := rfl
 
 @[simp]
-/--
-lemma `map_vertex` / 引理 `map_vertex`
-
-English:
-lemma map_vertex
-  given: [DecidableEq X] [DecidableEq Y] (f : X -> Y) (x : X)
-  proof: by
-  aesop
-
-@[continuity]
-
-中文:
-引理 map_vertex
-  条件: [DecidableEq X] [DecidableEq Y] (f : X -> Y) (x : X)
-  证明: by
-  aesop
-
-@[continuity]
-
-Depends on / 依赖: vertex
+/-
+**stdSimplex.map_vertex** 是 Mathlib 中的一个引理，位于命名空间 `stdSimplex`。
+形式化陈述：map_vertex [DecidableEq X] [DecidableEq Y] (f : X -> Y) (x : X) : map (S
+参数：f : X -> Y；x : X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `stdSimplex.ext`：ext {s t : stdSimplex S X} (h : (s : X -> S) = t) : s = 
+t
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用引理 `FunOnFinite.linearMap_piSingle`：linearMap_piSingle [Finite X] [Finite Y]
+ [DecidableEq X] [DecidableEq Y] (f : X -> Y) (x : X) (m : M) : linearMap R M f 
+(Pi.single x m) = Pi…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma map_vertex [DecidableEq X] [DecidableEq Y] (f : X -> Y) (x : X) :
+lemma map_vertex [DecidableEq X] [DecidableEq Y] (f : X → Y) (x : X) :
     map (S := S) f (vertex x) = vertex (f x) := by
   aesop
 
 @[continuity]
-/--
-lemma `continuous_map` / 引理 `continuous_map`
-
-English:
-lemma continuous_map
-  given: [TopologicalSpace S] [IsTopologicalSemiring S] (f : X -> Y)
-  proof: Continuous.subtype_mk ((FunOnFinite.continuous_linearMap S S f).comp continuous_induced_dom) _
-
-中文:
-引理 continuous_map
-  条件: [拓扑空间 S] [是TopologicalSemiring S] (f : X -> Y)
-  证明: Continuous.subtype_mk ((FunOnFinite.continuous_linearMap S S f).comp continuous_induced_dom) _
+/-
+**stdSimplex.continuous_map** 是 Mathlib 中的一个引理，位于命名空间 `stdSimplex`。
+形式化陈述：continuous_map [TopologicalSpace S] [IsTopologicalSemiring S] (f : X -> Y)
+ : Continuous (map (S
+参数：f : X -> Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.subtype_mk`：Continuous.subtype_mk {f : Y -> X} (h : Continuou
+s f) (hp : forall x, p (f x)) : Continuous fun x => (⟨f x, hp x⟩ : Subtype p)
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用引理 `FunOnFinite.continuous_linearMap`：continuous_linearMap (R M : Type*) [Se
+miring R] [AddCommMonoid M] [Module R M] [TopologicalSpace M] [ContinuousAdd M] 
+{X Y : Type*} [Finite …
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsTopologicalSemiring.toIsSemitopologicalSemiring`：∀ (R : Type u_2) [ins
+t : TopologicalSpace R] [inst_1 : NonUnitalNonAssocSemiring R] [IsTopologicalSem
+iring R],   IsSemitopologicalSemiring R
+· 使用定理 `continuous_induced_dom`：continuous_induced_dom {t : TopologicalSpace β} 
+: Continuous[induced f t, t] f
 -/
-lemma continuous_map [TopologicalSpace S] [IsTopologicalSemiring S] (f : X -> Y) :
+lemma continuous_map [TopologicalSpace S] [IsTopologicalSemiring S] (f : X → Y) :
     Continuous (map (S := S) f) :=
   Continuous.subtype_mk ((FunOnFinite.continuous_linearMap S S f).comp continuous_induced_dom) _
-
-/--
-lemma `vertex_injective` / 引理 `vertex_injective`
-
-English:
-lemma vertex_injective
-  given: [Nontrivial S] [DecidableEq X]
-  proof: by
-  intro x y h
-  replace h := DFunLike.congr_fun h x
-  by_contra!
-  simp [Pi.single_eq_of_ne this] at h
-
-中文:
-引理 vertex_injective
-  条件: [非平凡 S] [DecidableEq X]
-  证明: by
-  intro x y h
-  replace h := DFunLike.congr_fun h x
-  by_contra!
-  simp [Pi.single_eq_of_ne this] at h
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, Pi.single_eq_of_ne, congr_fun, replace, single_eq_of_ne
+/-
+**stdSimplex.vertex_injective** 是 Mathlib 中的一个引理，位于命名空间 `stdSimplex`。
+形式化陈述：vertex_injective [Nontrivial S] [DecidableEq X] : Function.Injective (vert
+ex (S
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Pi.single_eq_same`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) →
+ Zero (M i)] [inst_1 : DecidableEq ι] (i : ι) (x : M i),   Pi.single i x i = x
+· 使用定理 `Pi.single_eq_of_ne`：∀ {ι : Type u_1} {M : ι → Type u_6} [inst : (i : ι) 
+→ Zero (M i)] [inst_1 : DecidableEq ι] {i i' : ι},   i' ≠ i → ∀ (x : M i), Pi.si
+ngle i x…
 -/
 lemma vertex_injective [Nontrivial S] [DecidableEq X] :
     Function.Injective (vertex (S := S) (X := X)) := by
@@ -1259,135 +1269,55 @@ lemma vertex_injective [Nontrivial S] [DecidableEq X] :
   replace h := DFunLike.congr_fun h x
   by_contra!
   simp [Pi.single_eq_of_ne this] at h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nonempty
-  signature: X] : Nonempty (stdSimplex S X)
-  body: by
-  classical
-  exact ⟨vertex (Classical.arbitrary _)⟩
-
-中文:
-实例 [非空
-  签名: X] : 非空 (stdSimplex S X)
-  定义体: by
-  classical
-  exact ⟨vertex (Classical.arbitrary _)⟩
-
-Depends on / 依赖: Classical, Classical.arbitrary, arbitrary, classical, vertex
+/-
+**stdSimplex.** 是 Mathlib 中的一个实例，位于命名空间 `stdSimplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Nonempty X] : Nonempty (stdSimplex S X) := by
   classical
   exact ⟨vertex (Classical.arbitrary _)⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nontrivial
-  signature: S] [Nontrivial X] : Nontrivial (stdSimplex S X) where
-  body: by
-    classical
-    obtain ⟨x, y, hxy⟩ := exists_pair_ne X
-    exact ⟨vertex x, vertex y, fun h => hxy (vertex_injective h)⟩
-
-中文:
-实例 [非平凡
-  签名: S] [非平凡 X] : 非平凡 (stdSimplex S X) where
-  定义体: by
-    classical
-    obtain ⟨x, y, hxy⟩ := exists_pair_ne X
-    exact ⟨vertex x, vertex y, fun h => hxy (vertex_injective h)⟩
-
-Depends on / 依赖: classical, exists_pair_ne, vertex, vertex_injective
+/-
+**stdSimplex.** 是 Mathlib 中的一个实例，位于命名空间 `stdSimplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Nontrivial S] [Nontrivial X] : Nontrivial (stdSimplex S X) where
   exists_pair_ne := by
     classical
     obtain ⟨x, y, hxy⟩ := exists_pair_ne X
-    exact ⟨vertex x, vertex y, fun h => hxy (vertex_injective h)⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Subsingleton
-  signature: X] : Subsingleton (stdSimplex S X) where
-  body: by
-    ext i
-    have (u : stdSimplex S X) : u i = 1 := by
-      rw [← sum_eq_one u]; rw [Finset.sum_eq_single i _ (by simp)]
-      intro j _ hj
-      exact (hj (Subsingleton.elim j i)).elim
-    simp [this]
-
-中文:
-实例 [子单例
-  签名: X] : 子单例 (stdSimplex S X) where
-  定义体: by
-    ext i
-    have (u : stdSimplex S X) : u i = 1 := by
-      rw [← sum_eq_one u]; rw [Finset.sum_eq_single i _ (by simp)]
-      intro j _ hj
-      exact (hj (Subsingleton.elim j i)).elim
-    simp [this]
-
-Depends on / 依赖: Finset, Finset.sum_eq_single, Subsingleton, Subsingleton.elim, stdSimplex, sum_eq_one, sum_eq_single
+    exact ⟨vertex x, vertex y, fun h ↦ hxy (vertex_injective h)⟩
+/-
+**stdSimplex.** 是 Mathlib 中的一个实例，位于命名空间 `stdSimplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Subsingleton X] : Subsingleton (stdSimplex S X) where
   allEq s t := by
     ext i
     have (u : stdSimplex S X) : u i = 1 := by
-      rw [← sum_eq_one u]; rw [Finset.sum_eq_single i _ (by simp)]
+      rw [← sum_eq_one u, Finset.sum_eq_single i _ (by simp)]
       intro j _ hj
       exact (hj (Subsingleton.elim j i)).elim
     simp [this]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Unique
-  signature: X] : Unique (stdSimplex S X) where
-  body: ⟨1, by simp, by simp⟩
-  uniq := by subsingleton
-
-@[simp]
-
-中文:
-实例 [唯一
-  签名: X] : 唯一 (stdSimplex S X) where
-  定义体: ⟨1, by simp, by simp⟩
-  uniq := by subsingleton
-
-@[simp]
+/-
+**stdSimplex.** 是 Mathlib 中的一个实例，位于命名空间 `stdSimplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Unique X] : Unique (stdSimplex S X) where
   default := ⟨1, by simp, by simp⟩
   uniq := by subsingleton
 
 @[simp]
-/--
-lemma `eq_one_of_unique` / 引理 `eq_one_of_unique`
-
-English:
-lemma eq_one_of_unique
-  given: [Unique X] (s : stdSimplex S X) (x : X)
-  proof: by
-  obtain rfl : s = default := by subsingleton
-  rfl
-
-中文:
-引理 eq_one_of_unique
-  条件: [唯一 X] (s : stdSimplex S X) (x : X)
-  证明: by
-  obtain rfl : s = default := by subsingleton
-  rfl
-
-Depends on / 依赖: subsingleton
+/-
+**stdSimplex.eq_one_of_unique** 是 Mathlib 中的一个引理，位于命名空间 `stdSimplex`。
+形式化陈述：eq_one_of_unique [Unique X] (s : stdSimplex S X) (x : X) : s x = 1
+参数：s : stdSimplex S X；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `stdSimplex.instSubsingletonElemForall`：∀ {S : Type u_1} [inst : Semiring
+ S] [inst_1 : PartialOrder S] {X : Type u_2} [inst_2 : Fintype X] [Subsingleton 
+X],   Subsingleton ↑(stdSim…
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
 lemma eq_one_of_unique [Unique X] (s : stdSimplex S X) (x : X) :
     s x = 1 := by
@@ -1402,62 +1332,80 @@ section Barycenter
 
 variable {𝕜 : Type*} [Field 𝕜] [LinearOrder 𝕜] [IsStrictOrderedRing 𝕜] [Nonempty X]
 
-/--
-Definition of `barycenter` / `barycenter` 的定义
+/-- The barycenter of a standard simplex is the center of mass of
+the set of vertices (equally weighted). -/
+/-
+**stdSimplex.barycenter** 是 Mathlib 中的一个定义，位于命名空间 `stdSimplex`。
+形式化陈述：barycenter : stdSimplex 𝕜 X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition barycenter
-  signature: : stdSimplex 𝕜 X
-  body: ⟨fun i => (Fintype.card X : 𝕜)⁻¹, by simp [stdSimplex]⟩
-
-中文:
-定义 barycenter
-  签名: : stdSimplex 𝕜 X
-  定义体: ⟨fun i => (Fintype.card X : 𝕜)⁻¹, by simp [stdSimplex]⟩
-
-Depends on / 依赖: Fintype, Fintype.card, stdSimplex
+--- 原说明 ---
+The barycenter of a standard simplex is the center of mass of
+the set of vertices (equally weighted).
 -/
 def barycenter : stdSimplex 𝕜 X :=
   ⟨fun i => (Fintype.card X : 𝕜)⁻¹, by simp [stdSimplex]⟩
 
 /-- The barycenter of a standard simplex has coordinates `(Fintype.card X)⁻¹` at each index. -/
 @[simp]
-/--
-theorem `barycenter_apply` / 定理 `barycenter_apply`
+/-
+**stdSimplex.barycenter_apply** 是 Mathlib 中的一个定理，位于命名空间 `stdSimplex`。
+形式化陈述：barycenter_apply (x : X) : (barycenter : stdSimplex 𝕜 X).val x = (Fintype.
+card X : 𝕜)⁻¹
+参数：x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem barycenter_apply
-  given: (x : X)
-  proof: rfl
-
-中文:
-定理 barycenter_apply
-  条件: (x : X)
-  证明: rfl
+--- 原说明 ---
+The barycenter of a standard simplex has coordinates `(Fintype.card X)⁻¹` at eac
+h index.
 -/
 theorem barycenter_apply (x : X) :
     (barycenter : stdSimplex 𝕜 X).val x = (Fintype.card X : 𝕜)⁻¹ := rfl
 
-/--
-theorem `barycenter_eq_centerMass` / 定理 `barycenter_eq_centerMass`
+/-- The barycenter equals the (equal weight) center of mass of vertices (`Finset.centerMass`). -/
+/-
+**stdSimplex.barycenter_eq_centerMass** 是 Mathlib 中的一个定理，位于命名空间 `stdSimplex`。
+形式化陈述：barycenter_eq_centerMass [DecidableEq X] : (barycenter : stdSimplex 𝕜 X).v
+al = Finset.centerMass Finset.univ (fun _ => (1 : 𝕜)) (fun i => Pi.single i 1)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.sum_const`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst :
+ AddCommMonoid M] (b : M), ∑ _x ∈ s, b = s.card • b
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `nsmul_eq_mul`：∀ {α : Type u} [inst : NonAssocSemiring α] (n : ℕ) (a : α)
+, n • a = ↑n * a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `Finset.sum_apply`：∀ {ι : Type u_1} {α : Type u_7} {M : α → Type u_8} [in
+st : (a : α) → AddCommMonoid (M a)] (a : α) (s : Finset ι)   (g : ι → (a : α) → 
+M a), …
+· 使用定理 `Pi.single_apply`：∀ {ι : Type u_1} [inst : DecidableEq ι] {M : Type u_9} 
+[inst_1 : Zero M] (i : ι) (x : M) (i' : ι),   Pi.single i x i' = if i' = i then 
+x els…
+· 使用定理 `Finset.sum_ite_eq`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid
+ M] [inst_1 : DecidableEq ι] (s : Finset ι) (a : ι) (b : ι → M),   (∑ x ∈ s, if 
+a = x t…
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem barycenter_eq_centerMass
-  given: [DecidableEq X]
-  proof: by
-  simp only [Finset.centerMass, Finset.sum_const, Finset.card_univ]
-  ext x
-  simp [barycenter, Pi.smul_apply, Finset.sum_apply, Pi.single_apply]
-
-中文:
-定理 barycenter_eq_centerMass
-  条件: [DecidableEq X]
-  证明: by
-  simp only [Finset.centerMass, Finset.sum_const, Finset.card_univ]
-  ext x
-  simp [barycenter, Pi.smul_apply, Finset.sum_apply, Pi.single_apply]
-
-Depends on / 依赖: Finset, Finset.card_univ, Finset.centerMass, Finset.sum_apply, Finset.sum_const, Pi.single_apply, Pi.smul_apply, barycenter, card_univ, centerMass, single_apply, smul_apply, sum_apply, sum_const
+--- 原说明 ---
+The barycenter equals the (equal weight) center of mass of vertices (`Finset.cen
+terMass`).
 -/
 theorem barycenter_eq_centerMass [DecidableEq X] :
     (barycenter : stdSimplex 𝕜 X).val =
@@ -1469,3 +1417,4 @@ theorem barycenter_eq_centerMass [DecidableEq X] :
 end Barycenter
 
 end stdSimplex
+

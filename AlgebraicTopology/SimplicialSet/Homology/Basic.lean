@@ -38,53 +38,24 @@ in `R`. One can recover the ordinary simplicial chain complex when `C := Ab`
 and `X := ℤ`.
 -/
 @[implicit_reducible]
-/--
-Definition of `chainComplexFunctor` / `chainComplexFunctor` 的定义
+/-
+**SSet.chainComplexFunctor** 是 Mathlib 中的一个定义，位于命名空间 `SSet`。
+形式化陈述：chainComplexFunctor : C ⥤ SSet.{w} ⥤ ChainComplex C Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition chainComplexFunctor
-  signature: : C ⥤ SSet.{w} ⥤ ChainComplex C Nat
-  body: (Functor.postcompose₂.obj (AlgebraicTopology.alternatingFaceMapComplex _)).obj
-    (sigmaConst ⋙ SimplicialObject.whiskering _ _)
-
-中文:
-定义 chainComplexFunctor
-  签名: : C ⥤ SSet.{w} ⥤ 链复形 C 自然数
-  定义体: (Functor.postcompose₂.obj (AlgebraicTopology.alternatingFaceMapComplex _)).obj
-    (sigmaConst ⋙ SimplicialObject.whiskering _ _)
-
-Depends on / 依赖: AlgebraicTopology, AlgebraicTopology.alternatingFaceMapComplex, Functor, Functor.postcompose, SimplicialObject, SimplicialObject.whiskering, alternatingFaceMapComplex, sigmaConst, whiskering
+--- 原说明 ---
+The chain complex associated to a simplicial set, with coefficients in `R : C`.
+It computes the simplicial homology of a simplicial sets with coefficients
+in `R`. One can recover the ordinary simplicial chain complex when `C := Ab`
+and `X := ℤ`.
 -/
-noncomputable def chainComplexFunctor : C ⥤ SSet.{w} ⥤ ChainComplex C Nat :=
+noncomputable def chainComplexFunctor : C ⥤ SSet.{w} ⥤ ChainComplex C ℕ :=
   (Functor.postcompose₂.obj (AlgebraicTopology.alternatingFaceMapComplex _)).obj
     (sigmaConst ⋙ SimplicialObject.whiskering _ _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (chainComplexFunctor C).Additive
-  body: by
-  dsimp [chainComplexFunctor, SimplicialObject.whiskering]
-  infer_instance
-
-@[deprecated (since := "2026-04-05")]
-alias _root_.AlgebraicTopology.SSet.singularChainComplexFunctor :=
-  chainComplexFunctor
-
-中文:
-实例 :
-  签名: (chainComplexFunctor C).加性
-  定义体: by
-  dsimp [chainComplexFunctor, SimplicialObject.whiskering]
-  infer_instance
-
-@[deprecated (since := "2026-04-05")]
-alias _root_.AlgebraicTopology.SSet.singularChainComplexFunctor :=
-  chainComplexFunctor
-
-Depends on / 依赖: SimplicialObject, SimplicialObject.whiskering, chainComplexFunctor, infer_instance, whiskering
+/-
+**SSet.** 是 Mathlib 中的一个实例，位于命名空间 `SSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (chainComplexFunctor C).Additive := by
   dsimp [chainComplexFunctor, SimplicialObject.whiskering]
@@ -98,38 +69,26 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 attribute [local simp] SSet.chainComplexFunctor in
 attribute [local simp←] _root_.SSet.yonedaEquiv_symm_comp in
-/--
-Definition of `chainComplexFunctorAdjunction` / `chainComplexFunctorAdjunction` 的定义
+/-- The adjunction `Hom(Cⁿ(-, X), F) ≃ Hom(X, F(Δ[n]))` for `R : C` and `F : SSet ⥤ C`. -/
+/-
+**SSet.chainComplexFunctorAdjunction** 是 Mathlib 中的一个定义，位于命名空间 `SSet`。
+形式化陈述：chainComplexFunctorAdjunction (n : Nat) : (Functor.postcompose₂.obj (Homol
+ogicalComplex.eval _ _ n)).obj (SSet.chainComplexFunctor C) ⊣ (evaluation _ _).o
+bj Δ[n] where unit.app R
+参数：n : Nat。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition chainComplexFunctorAdjunction
-  signature: (n : Nat)
-  body: Sigma.ι (fun _ : Δ[n] _⦋n⦌ => R) (SSet.stdSimplex.objEquiv (n := ⦋n⦌).symm (𝟙 ⦋n⦌))
-  counit.app F := { app S := Sigma.desc fun α => F.map (SSet.yonedaEquiv.symm α) }
-  right_triangle_components F := by dsimp; simp
-
-@[deprecated (since := "2026-04-05")]
-alias _root_.SSet.singularChainComplexFunctorAdjunction :=
-  SSet.chainComplexFunctorAdjunction
-
-中文:
-定义 chainComplexFunctorAdjunction
-  签名: (n : 自然数)
-  定义体: Sigma.ι (fun _ : Δ[n] _⦋n⦌ => R) (SSet.stdSimplex.objEquiv (n := ⦋n⦌).symm (𝟙 ⦋n⦌))
-  counit.app F := { app S := Sigma.desc fun α => F.map (SSet.yonedaEquiv.symm α) }
-  right_triangle_components F := by dsimp; simp
-
-@[deprecated (since := "2026-04-05")]
-alias _root_.SSet.singularChainComplexFunctorAdjunction :=
-  SSet.chainComplexFunctorAdjunction
-
-Depends on / 依赖: SSet.stdSimplex.objEquiv, objEquiv, stdSimplex
+--- 原说明 ---
+The adjunction `Hom(Cⁿ(-, X), F) ≃ Hom(X, F(Δ[n]))` for `R : C` and `F : SSet ⥤ 
+C`.
 -/
-noncomputable def chainComplexFunctorAdjunction (n : Nat) :
+noncomputable def chainComplexFunctorAdjunction (n : ℕ) :
     (Functor.postcompose₂.obj (HomologicalComplex.eval _ _ n)).obj
       (SSet.chainComplexFunctor C) ⊣ (evaluation _ _).obj Δ[n] where
-  unit.app R := Sigma.ι (fun _ : Δ[n] _⦋n⦌ => R) (SSet.stdSimplex.objEquiv (n := ⦋n⦌).symm (𝟙 ⦋n⦌))
-  counit.app F := { app S := Sigma.desc fun α => F.map (SSet.yonedaEquiv.symm α) }
+  unit.app R := Sigma.ι (fun _ : Δ[n] _⦋n⦌ ↦ R) (SSet.stdSimplex.objEquiv (n := ⦋n⦌).symm (𝟙 ⦋n⦌))
+  counit.app F := { app S := Sigma.desc fun α ↦ F.map (SSet.yonedaEquiv.symm α) }
   right_triangle_components F := by dsimp; simp
 
 @[deprecated (since := "2026-04-05")]
@@ -138,282 +97,246 @@ alias _root_.SSet.singularChainComplexFunctorAdjunction :=
 
 variable {C} (X Y Z : SSet.{w}) (f : X ⟶ Y) (g : Y ⟶ Z) (R : C)
 
-/--
-Definition of `chainComplex` / `chainComplex` 的定义
+/-- The (simplicial) chain complex of a simplicial set `X` with
+coefficients in `R : C`. Its homology is the simplicial homology
+of `X`. -/
+/-
+**SSet.chainComplex** 是 Mathlib 中的一个缩写定义，位于命名空间 `SSet`。
+形式化陈述：chainComplex : ChainComplex C Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation chainComplex
-  signature: : ChainComplex C Nat
-  body: ((SSet.chainComplexFunctor C).obj R).obj X
-
-中文:
-缩写 chainComplex
-  签名: : 链复形 C 自然数
-  定义体: ((SSet.chainComplexFunctor C).obj R).obj X
-
-Depends on / 依赖: SSet.chainComplexFunctor, chainComplexFunctor
+--- 原说明 ---
+The (simplicial) chain complex of a simplicial set `X` with
+coefficients in `R : C`. Its homology is the simplicial homology
+of `X`.
 -/
-noncomputable abbrev chainComplex : ChainComplex C Nat :=
+noncomputable abbrev chainComplex : ChainComplex C ℕ :=
   ((SSet.chainComplexFunctor C).obj R).obj X
 
 variable {X Y} in
-/--
-Definition of `chainComplexMap` / `chainComplexMap` 的定义
+/-- The morphism of simplicial chain complexes induces by a morphism
+of simplicial sets. -/
+/-
+**SSet.chainComplexMap** 是 Mathlib 中的一个缩写定义，位于命名空间 `SSet`。
+形式化陈述：chainComplexMap : X.chainComplex R ⟶ Y.chainComplex R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation chainComplexMap
-  signature: : X.chainComplex R ⟶ Y.chainComplex R
-  body: ((SSet.chainComplexFunctor C).obj R).map f
-
-中文:
-缩写 chainComplexMap
-  签名: : X.chainComplex R ⟶ Y.chainComplex R
-  定义体: ((SSet.chainComplexFunctor C).obj R).map f
-
-Depends on / 依赖: SSet.chainComplexFunctor, chainComplexFunctor
+--- 原说明 ---
+The morphism of simplicial chain complexes induces by a morphism
+of simplicial sets.
 -/
 noncomputable abbrev chainComplexMap : X.chainComplex R ⟶ Y.chainComplex R :=
   ((SSet.chainComplexFunctor C).obj R).map f
 
 variable {R} in
-/--
-Definition of `ιChainComplex` / `ιChainComplex` 的定义
+/-- The inclusion `R ⟶ (X.chainComplex R).X n` of the summand
+corresponding to a `n`-simplex `x : X _⦋n⦌`. -/
+/-
+**SSet.** 是 Mathlib 中的一个定义，位于命名空间 `SSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ιChainComplex
-  signature: {n : Nat} (x : X _⦋n⦌)
-  body: Sigma.ι (fun (_ : X _⦋n⦌) => R) x
-
-中文:
-定义 ιChainComplex
-  签名: {n : 自然数} (x : X _⦋n⦌)
-  定义体: Sigma.ι (fun (_ : X _⦋n⦌) => R) x
+--- 原说明 ---
+The inclusion `R ⟶ (X.chainComplex R).X n` of the summand
+corresponding to a `n`-simplex `x : X _⦋n⦌`.
 -/
-noncomputable def ιChainComplex {n : Nat} (x : X _⦋n⦌) : R ⟶ (X.chainComplex R).X n :=
-  Sigma.ι (fun (_ : X _⦋n⦌) => R) x
+noncomputable def ιChainComplex {n : ℕ} (x : X _⦋n⦌) : R ⟶ (X.chainComplex R).X n :=
+  Sigma.ι (fun (_ : X _⦋n⦌) ↦ R) x
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `ιChainComplex_d` / 引理 `ιChainComplex_d`
-
-English:
-lemma ιChainComplex_d
-  given: {n : Nat} (x : X _⦋n + 1⦌)
-  proof: by
-  simp [ιChainComplex, chainComplex, chainComplexFunctor, Preadditive.comp_sum]
-
-中文:
-引理 ιChainComplex_d
-  条件: {n : 自然数} (x : X _⦋n + 1⦌)
-  证明: by
-  simp [ιChainComplex, chainComplex, chainComplexFunctor, Preadditive.comp_sum]
-
-Depends on / 依赖: Preadditive, Preadditive.comp_sum, chainComplex, chainComplexFunctor, comp_sum
+/-
+**SSet.** 是 Mathlib 中的一个引理，位于命名空间 `SSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma ιChainComplex_d {n : Nat} (x : X _⦋n + 1⦌) :
+lemma ιChainComplex_d {n : ℕ} (x : X _⦋n + 1⦌) :
     X.ιChainComplex x ≫ (X.chainComplex R).d (n + 1) n =
       ∑ (i : Fin (n + 2)), (-1) ^ i.val • X.ιChainComplex (X.δ i x) := by
   simp [ιChainComplex, chainComplex, chainComplexFunctor, Preadditive.comp_sum]
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc (attr := simp)]
-/--
-lemma `ι_chainComplexMap_f` / 引理 `ι_chainComplexMap_f`
-
-English:
-lemma ι_chainComplexMap_f
-  given: {n : Nat} (x : X _⦋n⦌)
-  proof: by
-  dsimp [chainComplexMap, chainComplexFunctor, ιChainComplex, Sigma.map',
-    chainComplex, chainComplexFunctor]
-  simp
-
-中文:
-引理 ι_chainComplexMap_f
-  条件: {n : 自然数} (x : X _⦋n⦌)
-  证明: by
-  dsimp [chainComplexMap, chainComplexFunctor, ιChainComplex, Sigma.map',
-    chainComplex, chainComplexFunctor]
-  simp
-
-Depends on / 依赖: Sigma.map, chainComplex, chainComplexFunctor, chainComplexMap
+/-
+**SSet.** 是 Mathlib 中的一个引理，位于命名空间 `SSet`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma ι_chainComplexMap_f {n : Nat} (x : X _⦋n⦌) :
+lemma ι_chainComplexMap_f {n : ℕ} (x : X _⦋n⦌) :
     X.ιChainComplex x ≫ (chainComplexMap f R).f n =
       Y.ιChainComplex (f.app _ x) := by
   dsimp [chainComplexMap, chainComplexFunctor, ιChainComplex, Sigma.map',
     chainComplex, chainComplexFunctor]
   simp
 
-/--
-Definition of `chainComplexXCofan` / `chainComplexXCofan` 的定义
+/-- The colimit cofan which defines the simplicial `n`-chains
+`(X.chainComplex R).X n`. -/
+/-
+**SSet.chainComplexXCofan** 是 Mathlib 中的一个定义，位于命名空间 `SSet`。
+形式化陈述：chainComplexXCofan (n : Nat) : Cofan (fun (_ : X _⦋n⦌) => R)
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition chainComplexXCofan
-  signature: (n : Nat)
-  body: Cofan.mk _ X.ιChainComplex
-
-中文:
-定义 chainComplexXCofan
-  签名: (n : 自然数)
-  定义体: Cofan.mk _ X.ιChainComplex
-
-Depends on / 依赖: Cofan.mk
+--- 原说明 ---
+The colimit cofan which defines the simplicial `n`-chains
+`(X.chainComplex R).X n`.
 -/
-noncomputable def chainComplexXCofan (n : Nat) : Cofan (fun (_ : X _⦋n⦌) => R) :=
+noncomputable def chainComplexXCofan (n : ℕ) : Cofan (fun (_ : X _⦋n⦌) ↦ R) :=
   Cofan.mk _ X.ιChainComplex
 
-/--
-Definition of `isColimitChainComplexXCofan` / `isColimitChainComplexXCofan` 的定义
+/-- Simplicial `n`-chains `(X.chainComplex R).X n` of a simplicial set `X`
+with coefficients in `R` identify to a coproduct of copies of `R`
+indexed by `X _⦋n⦌`. -/
+/-
+**SSet.isColimitChainComplexXCofan** 是 Mathlib 中的一个定义，位于命名空间 `SSet`。
+形式化陈述：isColimitChainComplexXCofan (n : Nat) : IsColimit (X.chainComplexXCofan R 
+n)
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isColimitChainComplexXCofan
-  signature: (n : Nat)
-  body: coproductIsCoproduct _
-
-中文:
-定义 isColimitChainComplexXCofan
-  签名: (n : 自然数)
-  定义体: coproductIsCoproduct _
-
-Depends on / 依赖: coproductIsCoproduct
+--- 原说明 ---
+Simplicial `n`-chains `(X.chainComplex R).X n` of a simplicial set `X`
+with coefficients in `R` identify to a coproduct of copies of `R`
+indexed by `X _⦋n⦌`.
 -/
-noncomputable def isColimitChainComplexXCofan (n : Nat) : IsColimit (X.chainComplexXCofan R n) :=
+noncomputable def isColimitChainComplexXCofan (n : ℕ) : IsColimit (X.chainComplexXCofan R n) :=
   coproductIsCoproduct _
 
 variable {X R} in
 @[ext]
-/--
-lemma `chainComplex_hom_ext` / 引理 `chainComplex_hom_ext`
-
-English:
-lemma chainComplex_hom_ext
-  statement: {n : Nat} {T : C} {f g : (X.chainComplex R).X n ⟶ T}
-  proof: (X.isColimitChainComplexXCofan R n).hom_ext (fun _ => h _)
-
-中文:
-引理 chainComplex_hom_ext
-  结论: {n : 自然数} {T : C} {f g : (X.chainComplex R).X n ⟶ T}
-  证明: (X.isColimitChainComplexXCofan R n).hom_ext (fun _ => h _)
-
-Depends on / 依赖: X.isColimitChainComplexXCofan, hom_ext, isColimitChainComplexXCofan
+/-
+**SSet.chainComplex_hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `SSet`。
+形式化陈述：chainComplex_hom_ext {n : Nat} {T : C} {f g : (X.chainComplex R).X n ⟶ T} 
+(h : forall (x : X _⦋n⦌), X.ιChainComplex x ≫ f = X.ιChainComplex x ≫ g) : f = g
+参数：X.chainComplex R；h : forall (x : X _⦋n⦌), X.ιChainComplex x ≫ f = X.ιChainCom
+plex x ≫ g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `CategoryTheory.Limits.IsColimit.hom_ext`：∀ {J : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃
+, u₃} C]   {F : CategoryTheor…
 -/
-lemma chainComplex_hom_ext {n : Nat} {T : C} {f g : (X.chainComplex R).X n ⟶ T}
-    (h : forall (x : X _⦋n⦌), X.ιChainComplex x ≫ f = X.ιChainComplex x ≫ g) :
+lemma chainComplex_hom_ext {n : ℕ} {T : C} {f g : (X.chainComplex R).X n ⟶ T}
+    (h : ∀ (x : X _⦋n⦌), X.ιChainComplex x ≫ f = X.ιChainComplex x ≫ g) :
     f = g :=
-  (X.isColimitChainComplexXCofan R n).hom_ext (fun _ => h _)
+  (X.isColimitChainComplexXCofan R n).hom_ext (fun _ ↦ h _)
 
 variable [CategoryWithHomology C]
 
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- The simplicial homology with coefficients in `R : C` in degree `n`
+of a simplicial set `X`. -/
+/-
+**SSet.homology** 是 Mathlib 中的一个定义，位于命名空间 `SSet`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [Category
+Theory.Limits.HasCoproducts C] →       [inst_2 : CategoryTheory.Preadditive C] →
+ _root_.SSet → C → [CategoryTheory.CategoryWithHomology C] → ℕ → C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation noncomputable
-  signature: abbrev homology (n : Nat)
-  body: (X.chainComplex R).homology n
-
-中文:
-缩写 noncomputable
-  签名: abbrev homology (n : 自然数)
-  定义体: (X.chainComplex R).homology n
+--- 原说明 ---
+The simplicial homology with coefficients in `R : C` in degree `n`
+of a simplicial set `X`.
 -/
-protected noncomputable abbrev homology (n : Nat) : C := (X.chainComplex R).homology n
+protected noncomputable abbrev homology (n : ℕ) : C := (X.chainComplex R).homology n
 
 variable {X Y} in
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- The morphism in simplicial homology that is induced by a morphism
+of simplicial sets. -/
+/-
+**SSet.homologyMap** 是 Mathlib 中的一个定义，位于命名空间 `SSet`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.Limits.HasCoproducts C] →       [inst_2 : CategoryTheory.Preaddi
+tive C] →         {X Y : _root_.SSet} →           (X ⟶ Y) →             (R : C) 
+→ [inst_3 : CategoryTheory.CategoryWithHomology C] → (n : ℕ) → X.homology R n ⟶ 
+Y.homology R n
+参数：X ⟶ Y；R : C；n : ℕ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation noncomputable
-  signature: abbrev homologyMap (n : Nat)
-  body: HomologicalComplex.homologyMap (chainComplexMap f R) n
-
-@[simp]
-
-中文:
-缩写 noncomputable
-  签名: abbrev homologyMap (n : 自然数)
-  定义体: HomologicalComplex.homologyMap (chainComplexMap f R) n
-
-@[simp]
+--- 原说明 ---
+The morphism in simplicial homology that is induced by a morphism
+of simplicial sets.
 -/
-protected noncomputable abbrev homologyMap (n : Nat) : X.homology R n ⟶ Y.homology R n :=
+protected noncomputable abbrev homologyMap (n : ℕ) : X.homology R n ⟶ Y.homology R n :=
   HomologicalComplex.homologyMap (chainComplexMap f R) n
 
 @[simp]
-/--
-lemma `homologyMap_id` / 引理 `homologyMap_id`
-
-English:
-lemma homologyMap_id
-  given: (n : Nat)
-  statement: SSet.homologyMap (𝟙 X) R n = 𝟙 _
-  proof: by
-  simp [SSet.homologyMap]
-
-@[reassoc]
-
-中文:
-引理 homologyMap_id
-  条件: (n : 自然数)
-  结论: SSet.homologyMap (𝟙 X) R n = 𝟙 _
-  证明: by
-  simp [SSet.homologyMap]
-
-@[reassoc]
-
-Depends on / 依赖: SSet.homologyMap, homologyMap
+/-
+**SSet.homologyMap_id** 是 Mathlib 中的一个引理，位于命名空间 `SSet`。
+形式化陈述：homologyMap_id (n : Nat) : SSet.homologyMap (𝟙 X) R n = 𝟙 _
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用引理 `HomologicalComplex.homologyMap_id`：homologyMap_id : homologyMap (𝟙 K) i 
+= 𝟙 _
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma homologyMap_id (n : Nat) : SSet.homologyMap (𝟙 X) R n = 𝟙 _ := by
+lemma homologyMap_id (n : ℕ) : SSet.homologyMap (𝟙 X) R n = 𝟙 _ := by
   simp [SSet.homologyMap]
 
 @[reassoc]
-/--
-lemma `homologyMap_comp` / 引理 `homologyMap_comp`
-
-English:
-lemma homologyMap_comp
-  given: (n : Nat)
-  proof: by
-  simp [SSet.homologyMap, HomologicalComplex.homologyMap_comp]
-
-中文:
-引理 homologyMap_comp
-  条件: (n : 自然数)
-  证明: by
-  simp [SSet.homologyMap, HomologicalComplex.homologyMap_comp]
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.homologyMap_comp, SSet.homologyMap, homologyMap, homologyMap_comp
+/-
+**SSet.homologyMap_comp** 是 Mathlib 中的一个引理，位于命名空间 `SSet`。
+形式化陈述：homologyMap_comp (n : Nat) : SSet.homologyMap (f ≫ g) R n = SSet.homologyM
+ap f R n ≫ SSet.homologyMap g R n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.CategoryWithHomology.hasHomology`：∀ {C : Type u} {inst : 
+CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZeroMorphis
+ms C}   [self : CategoryTheory.Catego…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用引理 `HomologicalComplex.homologyMap_comp`：homologyMap_comp : homologyMap (φ ≫
+ ψ) i = homologyMap φ i ≫ homologyMap ψ i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma homologyMap_comp (n : Nat) :
+lemma homologyMap_comp (n : ℕ) :
     SSet.homologyMap (f ≫ g) R n = SSet.homologyMap f R n ≫ SSet.homologyMap g R n := by
   simp [SSet.homologyMap, HomologicalComplex.homologyMap_comp]
 
 attribute [local simp] homologyMap_comp in
 /-- The simplicial homology functor in degree `n` with coefficients in `R : C`. -/
 @[simps]
-/--
-Definition of `homologyFunctor` / `homologyFunctor` 的定义
+/-
+**SSet.homologyFunctor** 是 Mathlib 中的一个定义，位于命名空间 `SSet`。
+形式化陈述：homologyFunctor (n : Nat) : SSet.{w} ⥤ C where obj X
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homologyFunctor
-  signature: (n : Nat)
-  body: X.homology R n
-  map f := SSet.homologyMap f R n
-
-中文:
-定义 homologyFunctor
-  签名: (n : 自然数)
-  定义体: X.homology R n
-  map f := SSet.homologyMap f R n
-
-Depends on / 依赖: X.homology, homology
+--- 原说明 ---
+The simplicial homology functor in degree `n` with coefficients in `R : C`.
 -/
-noncomputable def homologyFunctor (n : Nat) : SSet.{w} ⥤ C where
+noncomputable def homologyFunctor (n : ℕ) : SSet.{w} ⥤ C where
   obj X := X.homology R n
   map f := SSet.homologyMap f R n
 
 end SSet
+

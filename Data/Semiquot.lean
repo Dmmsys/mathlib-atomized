@@ -20,18 +20,24 @@ predicate `S`) but are not completely determined.
 @[expose] public section
 
 
-/--
-Definition of `Semiquot` / `Semiquot` 的定义
+/-- A member of `Semiquot α` is classically a nonempty `Set α`,
+  and in the VM is represented by an element of `α`; the relation
+  between these is that the VM element is required to be a member
+  of the set `s`. The specific element of `s` that the VM computes
+  is hidden by a quotient construction, allowing for the representation
+  of nondeterministic functions. -/
+/-
+**Semiquot** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Semiquot
-  parameters: (α : Type*)
-  (no additional axioms)
-
-中文:
-结构 半商
-  参数: (α : 类型)
-  (无附加公理)
+--- 原说明 ---
+A member of `Semiquot α` is classically a nonempty `Set α`,
+  and in the VM is represented by an element of `α`; the relation
+  between these is that the VM element is required to be a member
+  of the set `s`. The specific element of `s` that the VM computes
+  is hidden by a quotient construction, allowing for the representation
+  of nondeterministic functions.
 -/
 structure Semiquot (α : Type*) where mk' ::
   /-- Set containing some element of `α` -/
@@ -43,456 +49,291 @@ namespace Semiquot
 
 variable {α : Type*} {β : Type*}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Membership α (Semiquot α)
-  body: ⟨fun q a => a in q.s⟩
-
-中文:
-实例 :
-  签名: Membership α (半商 α)
-  定义体: ⟨fun q a => a in q.s⟩
+/-
+**Semiquot.** 是 Mathlib 中的一个实例，位于命名空间 `Semiquot`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Membership α (Semiquot α) :=
-  ⟨fun q a => a in q.s⟩
+  ⟨fun q a => a ∈ q.s⟩
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- Construct a `Semiquot α` from `h : a ∈ s` where `s : Set α`. -/
+/-
+**Semiquot.mk** 是 Mathlib 中的一个定义，位于命名空间 `Semiquot`。
+形式化陈述：mk {a : α} {s : Set α} (h : a in s) : Semiquot α
+参数：h : a in s。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk
-  signature: {a : α} {s : Set α} (h : a in s)
-  body: ⟨s, Trunc.mk ⟨a, h⟩⟩
-
-中文:
-定义 mk
-  签名: {a : α} {s : 集合 α} (h : a in s)
-  定义体: ⟨s, Trunc.mk ⟨a, h⟩⟩
-
-Depends on / 依赖: Trunc.mk
+--- 原说明 ---
+Construct a `Semiquot α` from `h : a ∈ s` where `s : Set α`.
 -/
-def mk {a : α} {s : Set α} (h : a in s) : Semiquot α :=
+def mk {a : α} {s : Set α} (h : a ∈ s) : Semiquot α :=
   ⟨s, Trunc.mk ⟨a, h⟩⟩
-
-/--
-theorem `ext_s` / 定理 `ext_s`
-
-English:
-theorem ext_s
-  given: {q₁ q₂ : Semiquot α}
-  statement: q₁ = q₂ ↔ q₁.s = q₂.s
-  proof: by
-  refine ⟨congr_arg _, fun h => ?_⟩
-  obtain ⟨_, v₁⟩ := q₁; obtain ⟨_, v₂⟩ := q₂; congr
-  exact Subsingleton.helim (congrArg Trunc (congrArg Set.Elem h)) v₁ v₂
-
-中文:
-定理 ext_s
-  条件: {q₁ q₂ : 半商 α}
-  结论: q₁ = q₂ ↔ q₁.s = q₂.s
-  证明: by
-  refine ⟨congr_arg _, fun h => ?_⟩
-  obtain ⟨_, v₁⟩ := q₁; obtain ⟨_, v₂⟩ := q₂; congr
-  exact Subsingleton.helim (congrArg Trunc (congrArg Set.Elem h)) v₁ v₂
-
-Depends on / 依赖: Set.Elem, Subsingleton, Subsingleton.helim, congr_arg
+/-
+**Semiquot.ext_s** 是 Mathlib 中的一个定理，位于命名空间 `Semiquot`。
+形式化陈述：ext_s {q₁ q₂ : Semiquot α} : q₁ = q₂ ↔ q₁.s = q₂.s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `Subsingleton.helim`：∀ {α β : Sort u} [h₁ : Subsingleton α], α = β → ∀ (a
+ : α) (b : β), a ≍ b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem ext_s {q₁ q₂ : Semiquot α} : q₁ = q₂ ↔ q₁.s = q₂.s := by
   refine ⟨congr_arg _, fun h => ?_⟩
   obtain ⟨_, v₁⟩ := q₁; obtain ⟨_, v₂⟩ := q₂; congr
   exact Subsingleton.helim (congrArg Trunc (congrArg Set.Elem h)) v₁ v₂
-
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {q₁ q₂ : Semiquot α}
-  statement: q₁ = q₂ ↔ forall a, a in q₁ ↔ a in q₂
-  proof: ext_s.trans Set.ext_iff
-
-中文:
-定理 ext
-  条件: {q₁ q₂ : 半商 α}
-  结论: q₁ = q₂ ↔ 对任意 a, a in q₁ ↔ a in q₂
-  证明: ext_s.trans Set.ext_iff
-
-Depends on / 依赖: Set.ext_iff, ext_iff, ext_s, ext_s.trans
+/-
+**Semiquot.ext** 是 Mathlib 中的一个定理，位于命名空间 `Semiquot`。
+形式化陈述：ext {q₁ q₂ : Semiquot α} : q₁ = q₂ ↔ forall a, a in q₁ ↔ a in q₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Semiquot.ext_s`：ext_s {q₁ q₂ : Semiquot α} : q₁ = q₂ ↔ q₁.s = q₂.s
+· 使用定理 `Set.ext_iff`：∀ {α : Type u} {a b : Set α}, a = b ↔ ∀ (x : α), x ∈ a ↔ x 
+∈ b
 -/
-theorem ext {q₁ q₂ : Semiquot α} : q₁ = q₂ ↔ forall a, a in q₁ ↔ a in q₂ :=
+theorem ext {q₁ q₂ : Semiquot α} : q₁ = q₂ ↔ ∀ a, a ∈ q₁ ↔ a ∈ q₂ :=
   ext_s.trans Set.ext_iff
-
-/--
-theorem `exists_mem` / 定理 `exists_mem`
-
-English:
-theorem exists_mem
-  given: (q : Semiquot α)
-  statement: exists a, a in q
-  proof: let ⟨⟨a, h⟩, _⟩ := q.2.exists_rep
-  ⟨a, h⟩
-
-中文:
-定理 存在_mem
-  条件: (q : 半商 α)
-  结论: 存在 a, a in q
-  证明: let ⟨⟨a, h⟩, _⟩ := q.2.exists_rep
-  ⟨a, h⟩
-
-Depends on / 依赖: exists_rep
+/-
+**Semiquot.exists_mem** 是 Mathlib 中的一个定理，位于命名空间 `Semiquot`。
+形式化陈述：exists_mem (q : Semiquot α) : exists a, a in q
+参数：q : Semiquot α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Trunc.exists_rep`：exists_rep (q : Trunc α) : exists a : α, mk a = q
 -/
-theorem exists_mem (q : Semiquot α) : exists a, a in q :=
+theorem exists_mem (q : Semiquot α) : ∃ a, a ∈ q :=
   let ⟨⟨a, h⟩, _⟩ := q.2.exists_rep
   ⟨a, h⟩
-
-/--
-theorem `eq_mk_of_mem` / 定理 `eq_mk_of_mem`
-
-English:
-theorem eq_mk_of_mem
-  given: {q : Semiquot α} {a : α} (h : a in q)
-  statement: q = @mk _ a q.1 h
-  proof: ext_s.2 rfl
-
-中文:
-定理 eq_mk_of_mem
-  条件: {q : 半商 α} {a : α} (h : a in q)
-  结论: q = @mk _ a q.1 h
-  证明: ext_s.2 rfl
-
-Depends on / 依赖: ext_s
+/-
+**Semiquot.eq_mk_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Semiquot`。
+形式化陈述：eq_mk_of_mem {q : Semiquot α} {a : α} (h : a in q) : q = @mk _ a q.1 h
+参数：h : a in q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Semiquot.ext_s`：ext_s {q₁ q₂ : Semiquot α} : q₁ = q₂ ↔ q₁.s = q₂.s
 -/
-theorem eq_mk_of_mem {q : Semiquot α} {a : α} (h : a in q) : q = @mk _ a q.1 h :=
+theorem eq_mk_of_mem {q : Semiquot α} {a : α} (h : a ∈ q) : q = @mk _ a q.1 h :=
   ext_s.2 rfl
-
-/--
-theorem `nonempty` / 定理 `nonempty`
-
-English:
-theorem nonempty
-  given: (q : Semiquot α)
-  statement: q.s.Nonempty
-  proof: q.exists_mem
-
-中文:
-定理 nonempty
-  条件: (q : 半商 α)
-  结论: q.s.非空
-  证明: q.exists_mem
-
-Depends on / 依赖: exists_mem, q.exists_mem
+/-
+**Semiquot.nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Semiquot`。
+形式化陈述：nonempty (q : Semiquot α) : q.s.Nonempty
+参数：q : Semiquot α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Semiquot.exists_mem`：exists_mem (q : Semiquot α) : exists a, a in q
 -/
 theorem nonempty (q : Semiquot α) : q.s.Nonempty :=
   q.exists_mem
 
-/--
-Definition of `pure` / `pure` 的定义
+/-- `pure a` is `a` reinterpreted as an unspecified element of `{a}`. -/
+/-
+**Semiquot.pure** 是 Mathlib 中的一个定义，位于命名空间 `Semiquot`。
+形式化陈述：{α : Type u_1} → α → Semiquot α
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_singleton`：mem_singleton (a : α) : a in ({a} : Set α)
 
-English:
-definition pure
-  signature: (a : α)
-  body: mk (Set.mem_singleton a)
-
-@[simp]
-
-中文:
-定义 pure
-  签名: (a : α)
-  定义体: mk (Set.mem_singleton a)
-
-@[simp]
+--- 原说明 ---
+`pure a` is `a` reinterpreted as an unspecified element of `{a}`.
 -/
 protected def pure (a : α) : Semiquot α :=
   mk (Set.mem_singleton a)
 
 @[simp]
-/--
-theorem `mem_pure'` / 定理 `mem_pure'`
-
-English:
-theorem mem_pure'
-  given: {a b : α}
-  statement: a in Semiquot.pure b ↔ a = b
-  proof: Set.mem_singleton_iff
-
-中文:
-定理 mem_pure'
-  条件: {a b : α}
-  结论: a in 半商.pure b ↔ a = b
-  证明: Set.mem_singleton_iff
-
-Depends on / 依赖: Set.mem_singleton_iff, mem_singleton_iff
+/-
+**Semiquot.mem_pure'** 是 Mathlib 中的一个定理，位于命名空间 `Semiquot`。
+形式化陈述：mem_pure' {a b : α} : a in Semiquot.pure b ↔ a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_singleton_iff`：mem_singleton_iff {a b : α} : a in ({b} : Set α) 
+↔ a = b
 -/
-theorem mem_pure' {a b : α} : a in Semiquot.pure b ↔ a = b :=
+theorem mem_pure' {a b : α} : a ∈ Semiquot.pure b ↔ a = b :=
   Set.mem_singleton_iff
 
-/--
-Definition of `blur'` / `blur'` 的定义
+/-- Replace `s` in a `Semiquot` with a superset. -/
+/-
+**Semiquot.blur'** 是 Mathlib 中的一个定义，位于命名空间 `Semiquot`。
+形式化陈述：blur' (q : Semiquot α) {s : Set α} (h : q.s subseteq s) : Semiquot α
+参数：q : Semiquot α；h : q.s subseteq s。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition blur'
-  signature: (q : Semiquot α) {s : Set α} (h : q.s subseteq s)
-  body: ⟨s, Trunc.lift (fun a : q.s => Trunc.mk ⟨a.1, h a.2⟩) (fun _ _ => Trunc.eq _ _) q.2⟩
-
-中文:
-定义 blur'
-  签名: (q : 半商 α) {s : 集合 α} (h : q.s subseteq s)
-  定义体: ⟨s, Trunc.lift (fun a : q.s => Trunc.mk ⟨a.1, h a.2⟩) (fun _ _ => Trunc.eq _ _) q.2⟩
-
-Depends on / 依赖: Trunc.eq, Trunc.lift, Trunc.mk
+--- 原说明 ---
+Replace `s` in a `Semiquot` with a superset.
 -/
-def blur' (q : Semiquot α) {s : Set α} (h : q.s subseteq s) : Semiquot α :=
+def blur' (q : Semiquot α) {s : Set α} (h : q.s ⊆ s) : Semiquot α :=
   ⟨s, Trunc.lift (fun a : q.s => Trunc.mk ⟨a.1, h a.2⟩) (fun _ _ => Trunc.eq _ _) q.2⟩
 
-/--
-Definition of `blur` / `blur` 的定义
+/-- Replace `s` in a `q : Semiquot α` with a union `s ∪ q.s` -/
+/-
+**Semiquot.blur** 是 Mathlib 中的一个定义，位于命名空间 `Semiquot`。
+形式化陈述：blur (s : Set α) (q : Semiquot α) : Semiquot α
+参数：s : Set α；q : Semiquot α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition blur
-  signature: (s : Set α) (q : Semiquot α)
-  body: blur' q (s.subset_union_right (t := q.s))
-
-中文:
-定义 blur
-  签名: (s : 集合 α) (q : 半商 α)
-  定义体: blur' q (s.subset_union_right (t := q.s))
-
-Depends on / 依赖: s.subset_union_right, subset_union_right
+--- 原说明 ---
+Replace `s` in a `q : Semiquot α` with a union `s ∪ q.s`
 -/
 def blur (s : Set α) (q : Semiquot α) : Semiquot α :=
   blur' q (s.subset_union_right (t := q.s))
-
-/--
-theorem `blur_eq_blur'` / 定理 `blur_eq_blur'`
-
-English:
-theorem blur_eq_blur'
-  given: (q : Semiquot α) (s : Set α) (h : q.s subseteq s)
-  statement: blur s q = blur' q h
-  proof: by
-  unfold blur; congr; exact Set.union_eq_self_of_subset_right h
-
-@[simp]
-
-中文:
-定理 blur_eq_blur'
-  条件: (q : 半商 α) (s : 集合 α) (h : q.s subseteq s)
-  结论: blur s q = blur' q h
-  证明: by
-  unfold blur; congr; exact Set.union_eq_self_of_subset_right h
-
-@[simp]
-
-Depends on / 依赖: Set.union_eq_self_of_subset_right, union_eq_self_of_subset_right
+/-
+**Semiquot.blur_eq_blur'** 是 Mathlib 中的一个定理，位于命名空间 `Semiquot`。
+形式化陈述：blur_eq_blur' (q : Semiquot α) (s : Set α) (h : q.s subseteq s) : blur s q
+ = blur' q h
+参数：q : Semiquot α；s : Set α；h : q.s subseteq s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.union_eq_self_of_subset_right`：union_eq_self_of_subset_right {s t : 
+Set α} (h : t subseteq s) : s union t = s
 -/
-theorem blur_eq_blur' (q : Semiquot α) (s : Set α) (h : q.s subseteq s) : blur s q = blur' q h := by
+theorem blur_eq_blur' (q : Semiquot α) (s : Set α) (h : q.s ⊆ s) : blur s q = blur' q h := by
   unfold blur; congr; exact Set.union_eq_self_of_subset_right h
 
 @[simp]
-/--
-theorem `mem_blur'` / 定理 `mem_blur'`
-
-English:
-theorem mem_blur'
-  given: (q : Semiquot α) {s : Set α} (h : q.s subseteq s) {a : α}
-  statement: a in blur' q h ↔ a in s
-  proof: Iff.rfl
-
-中文:
-定理 mem_blur'
-  条件: (q : 半商 α) {s : 集合 α} (h : q.s subseteq s) {a : α}
-  结论: a in blur' q h ↔ a in s
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Semiquot.mem_blur'** 是 Mathlib 中的一个定理，位于命名空间 `Semiquot`。
+形式化陈述：mem_blur' (q : Semiquot α) {s : Set α} (h : q.s subseteq s) {a : α} : a in
+ blur' q h ↔ a in s
+参数：q : Semiquot α；h : q.s subseteq s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_blur' (q : Semiquot α) {s : Set α} (h : q.s subseteq s) {a : α} : a in blur' q h ↔ a in s :=
+theorem mem_blur' (q : Semiquot α) {s : Set α} (h : q.s ⊆ s) {a : α} : a ∈ blur' q h ↔ a ∈ s :=
   Iff.rfl
 
-/--
-Definition of `ofTrunc` / `ofTrunc` 的定义
+/-- Convert a `Trunc α` to a `Semiquot α`. -/
+/-
+**Semiquot.ofTrunc** 是 Mathlib 中的一个定义，位于命名空间 `Semiquot`。
+形式化陈述：ofTrunc (q : Trunc α) : Semiquot α
+参数：q : Trunc α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 
-English:
-definition ofTrunc
-  signature: (q : Trunc α)
-  body: ⟨Set.univ, q.map fun a => ⟨a, trivial⟩⟩
-
-中文:
-定义 ofTrunc
-  签名: (q : Trunc α)
-  定义体: ⟨Set.univ, q.map fun a => ⟨a, trivial⟩⟩
-
-Depends on / 依赖: Set.univ, q.map
+--- 原说明 ---
+Convert a `Trunc α` to a `Semiquot α`.
 -/
 def ofTrunc (q : Trunc α) : Semiquot α :=
   ⟨Set.univ, q.map fun a => ⟨a, trivial⟩⟩
 
-/--
-Definition of `toTrunc` / `toTrunc` 的定义
+/-- Convert a `Semiquot α` to a `Trunc α`. -/
+/-
+**Semiquot.toTrunc** 是 Mathlib 中的一个定义，位于命名空间 `Semiquot`。
+形式化陈述：toTrunc (q : Semiquot α) : Trunc α
+参数：q : Semiquot α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toTrunc
-  signature: (q : Semiquot α)
-  body: q.2.map Subtype.val
-
-中文:
-定义 toTrunc
-  签名: (q : 半商 α)
-  定义体: q.2.map Subtype.val
-
-Depends on / 依赖: Subtype, Subtype.val
+--- 原说明 ---
+Convert a `Semiquot α` to a `Trunc α`.
 -/
 def toTrunc (q : Semiquot α) : Trunc α :=
   q.2.map Subtype.val
 
-/--
-Definition of `liftOn` / `liftOn` 的定义
+/-- If `f` is a constant on `q.s`, then `q.liftOn f` is the value of `f`
+at any point of `q`. -/
+/-
+**Semiquot.liftOn** 是 Mathlib 中的一个定义，位于命名空间 `Semiquot`。
+形式化陈述：liftOn (q : Semiquot α) (f : α -> β) (h : forall a in q, forall b in q, f 
+a = f b) : β
+参数：q : Semiquot α；f : α -> β；h : forall a in q, forall b in q, f a = f b。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftOn
-  signature: (q : Semiquot α) (f : α -> β) (h : forall a in q, forall b in q, f a = f b)
-  body: Trunc.liftOn q.2 (fun x => f x.1) fun x y => h _ x.2 _ y.2
-
-中文:
-定义 liftOn
-  签名: (q : 半商 α) (f : α -> β) (h : 对任意 a in q, 对任意 b in q, f a = f b)
-  定义体: Trunc.liftOn q.2 (fun x => f x.1) fun x y => h _ x.2 _ y.2
-
-Depends on / 依赖: Trunc.liftOn, liftOn
+--- 原说明 ---
+If `f` is a constant on `q.s`, then `q.liftOn f` is the value of `f`
+at any point of `q`.
 -/
-def liftOn (q : Semiquot α) (f : α -> β) (h : forall a in q, forall b in q, f a = f b) : β :=
+def liftOn (q : Semiquot α) (f : α → β) (h : ∀ a ∈ q, ∀ b ∈ q, f a = f b) : β :=
   Trunc.liftOn q.2 (fun x => f x.1) fun x y => h _ x.2 _ y.2
-
-/--
-theorem `liftOn_ofMem` / 定理 `liftOn_ofMem`
-
-English:
-theorem liftOn_ofMem
-  statement: (q : Semiquot α) (f : α -> β)
-  proof: by
-  revert h; rw [eq_mk_of_mem aq]; intro; rfl
-
-中文:
-定理 liftOn_ofMem
-  结论: (q : 半商 α) (f : α -> β)
-  证明: by
-  revert h; rw [eq_mk_of_mem aq]; intro; rfl
-
-Depends on / 依赖: eq_mk_of_mem, revert
+/-
+**Semiquot.liftOn_ofMem** 是 Mathlib 中的一个定理，位于命名空间 `Semiquot`。
+形式化陈述：liftOn_ofMem (q : Semiquot α) (f : α -> β) (h : forall a in q, forall b in
+ q, f a = f b) (a : α) (aq : a in q) : liftOn q f h = f a
+参数：q : Semiquot α；f : α -> β；h : forall a in q, forall b in q, f a = f b；a : α；a
+q : a in q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Semiquot.eq_mk_of_mem`：eq_mk_of_mem {q : Semiquot α} {a : α} (h : a in q
+) : q = @mk _ a q.1 h
 -/
-theorem liftOn_ofMem (q : Semiquot α) (f : α -> β)
-    (h : forall a in q, forall b in q, f a = f b) (a : α) (aq : a in q) : liftOn q f h = f a := by
+theorem liftOn_ofMem (q : Semiquot α) (f : α → β)
+    (h : ∀ a ∈ q, ∀ b ∈ q, f a = f b) (a : α) (aq : a ∈ q) : liftOn q f h = f a := by
   revert h; rw [eq_mk_of_mem aq]; intro; rfl
 
-/--
-Definition of `map` / `map` 的定义
+/-- Apply a function to the unknown value stored in a `Semiquot α`. -/
+/-
+**Semiquot.map** 是 Mathlib 中的一个定义，位于命名空间 `Semiquot`。
+形式化陈述：map (f : α -> β) (q : Semiquot α) : Semiquot β
+参数：f : α -> β；q : Semiquot α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (f : α -> β) (q : Semiquot α)
-  body: ⟨f '' q.1, q.2.map fun x => ⟨f x.1, Set.mem_image_of_mem _ x.2⟩⟩
-
-@[simp]
-
-中文:
-定义 map
-  签名: (f : α -> β) (q : 半商 α)
-  定义体: ⟨f '' q.1, q.2.map fun x => ⟨f x.1, Set.mem_image_of_mem _ x.2⟩⟩
-
-@[simp]
-
-Depends on / 依赖: Set.mem_image_of_mem, mem_image_of_mem
+--- 原说明 ---
+Apply a function to the unknown value stored in a `Semiquot α`.
 -/
-def map (f : α -> β) (q : Semiquot α) : Semiquot β :=
+def map (f : α → β) (q : Semiquot α) : Semiquot β :=
   ⟨f '' q.1, q.2.map fun x => ⟨f x.1, Set.mem_image_of_mem _ x.2⟩⟩
 
 @[simp]
-/--
-theorem `mem_map` / 定理 `mem_map`
-
-English:
-theorem mem_map
-  given: (f : α -> β) (q : Semiquot α) (b : β)
-  statement: b in map f q ↔ exists a, a in q ∧ f a = b
-  proof: Set.mem_image _ _ _
-
-中文:
-定理 mem_map
-  条件: (f : α -> β) (q : 半商 α) (b : β)
-  结论: b in map f q ↔ 存在 a, a in q ∧ f a = b
-  证明: Set.mem_image _ _ _
-
-Depends on / 依赖: Set.mem_image, mem_image
+/-
+**Semiquot.mem_map** 是 Mathlib 中的一个定理，位于命名空间 `Semiquot`。
+形式化陈述：mem_map (f : α -> β) (q : Semiquot α) (b : β) : b in map f q ↔ exists a, a
+ in q ∧ f a = b
+参数：f : α -> β；q : Semiquot α；b : β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_image`：mem_image (f : α -> β) (s : Set α) (y : β) : y in f '' s 
+↔ exists x in s, f x = y
 -/
-theorem mem_map (f : α -> β) (q : Semiquot α) (b : β) : b in map f q ↔ exists a, a in q ∧ f a = b :=
+theorem mem_map (f : α → β) (q : Semiquot α) (b : β) : b ∈ map f q ↔ ∃ a, a ∈ q ∧ f a = b :=
   Set.mem_image _ _ _
 
-/--
-Definition of `bind` / `bind` 的定义
+/-- Apply a function returning a `Semiquot` to a `Semiquot`. -/
+/-
+**Semiquot.bind** 是 Mathlib 中的一个定义，位于命名空间 `Semiquot`。
+形式化陈述：bind (q : Semiquot α) (f : α -> Semiquot β) : Semiquot β
+参数：q : Semiquot α；f : α -> Semiquot β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bind
-  signature: (q : Semiquot α) (f : α -> Semiquot β)
-  body: ⟨⋃ a in q.1, (f a).1, q.2.bind fun a => (f a.1).2.map fun b => ⟨b.1, Set.mem_biUnion a.2 b.2⟩⟩
-
-@[simp]
-
-中文:
-定义 bind
-  签名: (q : 半商 α) (f : α -> 半商 β)
-  定义体: ⟨⋃ a in q.1, (f a).1, q.2.bind fun a => (f a.1).2.map fun b => ⟨b.1, Set.mem_biUnion a.2 b.2⟩⟩
-
-@[simp]
-
-Depends on / 依赖: Set.mem_biUnion, mem_biUnion
+--- 原说明 ---
+Apply a function returning a `Semiquot` to a `Semiquot`.
 -/
-def bind (q : Semiquot α) (f : α -> Semiquot β) : Semiquot β :=
-  ⟨⋃ a in q.1, (f a).1, q.2.bind fun a => (f a.1).2.map fun b => ⟨b.1, Set.mem_biUnion a.2 b.2⟩⟩
+def bind (q : Semiquot α) (f : α → Semiquot β) : Semiquot β :=
+  ⟨⋃ a ∈ q.1, (f a).1, q.2.bind fun a => (f a.1).2.map fun b => ⟨b.1, Set.mem_biUnion a.2 b.2⟩⟩
 
 @[simp]
-/--
-theorem `mem_bind` / 定理 `mem_bind`
-
-English:
-theorem mem_bind
-  given: (q : Semiquot α) (f : α -> Semiquot β) (b : β)
-  proof: by simp_rw [← exists_prop]; exact Set.mem_iUnion₂
-
-中文:
-定理 mem_bind
-  条件: (q : 半商 α) (f : α -> 半商 β) (b : β)
-  证明: by simp_rw [← exists_prop]; exact Set.mem_iUnion₂
-
-Depends on / 依赖: Set.mem_iUnion, exists_prop, simp_rw
+/-
+**Semiquot.mem_bind** 是 Mathlib 中的一个定理，位于命名空间 `Semiquot`。
+形式化陈述：mem_bind (q : Semiquot α) (f : α -> Semiquot β) (b : β) : b in bind q f ↔ 
+exists a in q, b in f a
+参数：q : Semiquot α；f : α -> Semiquot β；b : β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.mem_iUnion₂`：mem_iUnion₂ {x : γ} {s : forall i, κ i -> Set γ} : (x i
+n ⋃ (i) (j), s i j) ↔ exists i j, x in s i j
 -/
-theorem mem_bind (q : Semiquot α) (f : α -> Semiquot β) (b : β) :
-    b in bind q f ↔ exists a in q, b in f a := by simp_rw [← exists_prop]; exact Set.mem_iUnion₂
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Monad Semiquot
-  body: @Semiquot.pure
-  map := @Semiquot.map
-  bind := @Semiquot.bind
-
-@[simp]
-
-中文:
-实例 :
-  签名: 单子 半商
-  定义体: @Semiquot.pure
-  map := @Semiquot.map
-  bind := @Semiquot.bind
-
-@[simp]
-
-Depends on / 依赖: Semiquot, Semiquot.pure
+theorem mem_bind (q : Semiquot α) (f : α → Semiquot β) (b : β) :
+    b ∈ bind q f ↔ ∃ a ∈ q, b ∈ f a := by simp_rw [← exists_prop]; exact Set.mem_iUnion₂
+/-
+**Semiquot.** 是 Mathlib 中的一个实例，位于命名空间 `Semiquot`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Monad Semiquot where
   pure := @Semiquot.pure
@@ -500,224 +341,93 @@ instance : Monad Semiquot where
   bind := @Semiquot.bind
 
 @[simp]
-/--
-theorem `map_def` / 定理 `map_def`
-
-English:
-theorem map_def
-  given: {β}
-  statement: ((· <$> ·) : (α -> β) -> Semiquot α -> Semiquot β) = map
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 map_def
-  条件: {β}
-  结论: ((· <$> ·) : (α -> β) -> 半商 α -> 半商 β) = map
-  证明: rfl
-
-@[simp]
+/-
+**Semiquot.map_def** 是 Mathlib 中的一个定理，位于命名空间 `Semiquot`。
+形式化陈述：map_def {β} : ((· <$> ·) : (α -> β) -> Semiquot α -> Semiquot β) = map
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_def {β} : ((· <$> ·) : (α -> β) -> Semiquot α -> Semiquot β) = map :=
+theorem map_def {β} : ((· <$> ·) : (α → β) → Semiquot α → Semiquot β) = map :=
   rfl
 
 @[simp]
-/--
-theorem `bind_def` / 定理 `bind_def`
-
-English:
-theorem bind_def
-  given: {β}
-  statement: ((· >>= ·) : Semiquot α -> (α -> Semiquot β) -> Semiquot β) = bind
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 bind_def
-  条件: {β}
-  结论: ((· >>= ·) : 半商 α -> (α -> 半商 β) -> 半商 β) = bind
-  证明: rfl
-
-@[simp]
+/-
+**Semiquot.bind_def** 是 Mathlib 中的一个定理，位于命名空间 `Semiquot`。
+形式化陈述：bind_def {β} : ((· >>= ·) : Semiquot α -> (α -> Semiquot β) -> Semiquot β)
+ = bind
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem bind_def {β} : ((· >>= ·) : Semiquot α -> (α -> Semiquot β) -> Semiquot β) = bind :=
+theorem bind_def {β} : ((· >>= ·) : Semiquot α → (α → Semiquot β) → Semiquot β) = bind :=
   rfl
 
 @[simp]
-/--
-theorem `mem_pure` / 定理 `mem_pure`
-
-English:
-theorem mem_pure
-  given: {a b : α}
-  statement: a in (pure b : Semiquot α) ↔ a = b
-  proof: Set.mem_singleton_iff
-
-中文:
-定理 mem_pure
-  条件: {a b : α}
-  结论: a in (pure b : 半商 α) ↔ a = b
-  证明: Set.mem_singleton_iff
-
-Depends on / 依赖: Set.mem_singleton_iff, mem_singleton_iff
+/-
+**Semiquot.mem_pure** 是 Mathlib 中的一个定理，位于命名空间 `Semiquot`。
+形式化陈述：mem_pure {a b : α} : a in (pure b : Semiquot α) ↔ a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_singleton_iff`：mem_singleton_iff {a b : α} : a in ({b} : Set α) 
+↔ a = b
 -/
-theorem mem_pure {a b : α} : a in (pure b : Semiquot α) ↔ a = b :=
+theorem mem_pure {a b : α} : a ∈ (pure b : Semiquot α) ↔ a = b :=
   Set.mem_singleton_iff
-
-/--
-theorem `mem_pure_self` / 定理 `mem_pure_self`
-
-English:
-theorem mem_pure_self
-  given: (a : α)
-  statement: a in (pure a : Semiquot α)
-  proof: Set.mem_singleton a
-
-@[simp]
-
-中文:
-定理 mem_pure_self
-  条件: (a : α)
-  结论: a in (pure a : 半商 α)
-  证明: Set.mem_singleton a
-
-@[simp]
-
-Depends on / 依赖: Set.mem_singleton, mem_singleton
+/-
+**Semiquot.mem_pure_self** 是 Mathlib 中的一个定理，位于命名空间 `Semiquot`。
+形式化陈述：mem_pure_self (a : α) : a in (pure a : Semiquot α)
+参数：a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_singleton`：mem_singleton (a : α) : a in ({a} : Set α)
 -/
-theorem mem_pure_self (a : α) : a in (pure a : Semiquot α) :=
+theorem mem_pure_self (a : α) : a ∈ (pure a : Semiquot α) :=
   Set.mem_singleton a
 
 @[simp]
-/--
-theorem `pure_inj` / 定理 `pure_inj`
-
-English:
-theorem pure_inj
-  given: {a b : α}
-  statement: (pure a : Semiquot α) = pure b ↔ a = b
-  proof: ext_s.trans Set.singleton_eq_singleton_iff
-
-中文:
-定理 pure_inj
-  条件: {a b : α}
-  结论: (pure a : 半商 α) = pure b ↔ a = b
-  证明: ext_s.trans Set.singleton_eq_singleton_iff
-
-Depends on / 依赖: Set.singleton_eq_singleton_iff, ext_s, ext_s.trans, singleton_eq_singleton_iff
+/-
+**Semiquot.pure_inj** 是 Mathlib 中的一个定理，位于命名空间 `Semiquot`。
+形式化陈述：pure_inj {a b : α} : (pure a : Semiquot α) = pure b ↔ a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Semiquot.ext_s`：ext_s {q₁ q₂ : Semiquot α} : q₁ = q₂ ↔ q₁.s = q₂.s
+· 使用定理 `Set.singleton_eq_singleton_iff`：singleton_eq_singleton_iff {x y : α} : {
+x} = ({y} : Set α) ↔ x = y
 -/
 theorem pure_inj {a b : α} : (pure a : Semiquot α) = pure b ↔ a = b :=
   ext_s.trans Set.singleton_eq_singleton_iff
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LawfulMonad Semiquot
-  body: LawfulMonad.mk'
-  (pure_bind := fun {α β} x f => ext.2 <| by simp)
-  (bind_assoc := fun {α β} γ s f g =>
-ext.2 by
-    simp only [bind_def, mem_bind]
-    exact fun c => ⟨fun ⟨b, ⟨a, as, bf⟩, cg⟩ => ⟨a, as, b, bf, cg⟩,
-      fun ⟨a, as, b, bf, cg⟩ => ⟨b, ⟨a, as, bf⟩, cg⟩⟩)
-  (id_map := fun {α} q => ext.2 <| by simp)
-  (bind_pure_comp := fun {α β} f s => ext.2 <| by simp [eq_comm])
-
-中文:
-实例 :
-  签名: 合法单子 半商
-  定义体: LawfulMonad.mk'
-  (pure_bind := fun {α β} x f => ext.2 <| by simp)
-  (bind_assoc := fun {α β} γ s f g =>
-ext.2 by
-    simp only [bind_def, mem_bind]
-    exact fun c => ⟨fun ⟨b, ⟨a, as, bf⟩, cg⟩ => ⟨a, as, b, bf, cg⟩,
-      fun ⟨a, as, b, bf, cg⟩ => ⟨b, ⟨a, as, bf⟩, cg⟩⟩)
-  (id_map := fun {α} q => ext.2 <| by simp)
-  (bind_pure_comp := fun {α β} f s => ext.2 <| by simp [eq_comm])
-
-Depends on / 依赖: LawfulMonad, LawfulMonad.mk
+/-
+**Semiquot.** 是 Mathlib 中的一个实例，位于命名空间 `Semiquot`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LawfulMonad Semiquot := LawfulMonad.mk'
   (pure_bind := fun {α β} x f => ext.2 <| by simp)
   (bind_assoc := fun {α β} γ s f g =>
-ext.2 by
+    ext.2 <| by
     simp only [bind_def, mem_bind]
     exact fun c => ⟨fun ⟨b, ⟨a, as, bf⟩, cg⟩ => ⟨a, as, b, bf, cg⟩,
       fun ⟨a, as, b, bf, cg⟩ => ⟨b, ⟨a, as, bf⟩, cg⟩⟩)
   (id_map := fun {α} q => ext.2 <| by simp)
   (bind_pure_comp := fun {α β} f s => ext.2 <| by simp [eq_comm])
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LE (Semiquot α)
-  body: ⟨fun s t => forall ⦃x⦄, x in s -> x in t⟩
-
-中文:
-实例 :
-  签名: LE (半商 α)
-  定义体: ⟨fun s t => forall ⦃x⦄, x in s -> x in t⟩
+/-
+**Semiquot.** 是 Mathlib 中的一个实例，位于命名空间 `Semiquot`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LE (Semiquot α) :=
-  ⟨fun s t => forall ⦃x⦄, x in s -> x in t⟩
-
-/--
-Instance `partialOrder` / 实例 `partialOrder`
-
-English:
-instance partialOrder
-  signature: : PartialOrder (Semiquot α) where
-  body: Set.Subset.refl _
-  le_trans _ _ _ := Set.Subset.trans
-  le_antisymm _ _ h₁ h₂ := ext_s.2 (Set.Subset.antisymm h₁ h₂)
-
-中文:
-实例 partialOrder
-  签名: : 偏序 (半商 α) where
-  定义体: Set.Subset.refl _
-  le_trans _ _ _ := Set.Subset.trans
-  le_antisymm _ _ h₁ h₂ := ext_s.2 (Set.Subset.antisymm h₁ h₂)
-
-Depends on / 依赖: Set.Subset.refl, Subset
+  ⟨fun s t => ∀ ⦃x⦄, x ∈ s → x ∈ t⟩
+/-
+**Semiquot.partialOrder** 是 Mathlib 中的一个实例，位于命名空间 `Semiquot`。
+形式化陈述：partialOrder : PartialOrder (Semiquot α) where le_refl _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance partialOrder : PartialOrder (Semiquot α) where
   le_refl _ := Set.Subset.refl _
   le_trans _ _ _ := Set.Subset.trans
   le_antisymm _ _ h₁ h₂ := ext_s.2 (Set.Subset.antisymm h₁ h₂)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SemilatticeSup (Semiquot α)
-  body: { Semiquot.partialOrder with
-    sup := fun s => blur s.s
-    le_sup_left := fun _ _ => Set.subset_union_left
-    le_sup_right := fun _ _ => Set.subset_union_right
-    sup_le := fun _ _ _ => Set.union_subset }
-
-@[simp]
-
-中文:
-实例 :
-  签名: SemilatticeSup (半商 α)
-  定义体: { Semiquot.partialOrder with
-    sup := fun s => blur s.s
-    le_sup_left := fun _ _ => Set.subset_union_left
-    le_sup_right := fun _ _ => Set.subset_union_right
-    sup_le := fun _ _ _ => Set.union_subset }
-
-@[simp]
-
-Depends on / 依赖: Semiquot, Semiquot.partialOrder, Set.subset_union_left, Set.subset_union_right, Set.union_subset, le_sup_left, le_sup_right, partialOrder, subset_union_left, subset_union_right, sup_le, union_subset
+/-
+**Semiquot.** 是 Mathlib 中的一个实例，位于命名空间 `Semiquot`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SemilatticeSup (Semiquot α) :=
   { Semiquot.partialOrder with
@@ -727,332 +437,209 @@ instance : SemilatticeSup (Semiquot α) :=
     sup_le := fun _ _ _ => Set.union_subset }
 
 @[simp]
-/--
-theorem `pure_le` / 定理 `pure_le`
-
-English:
-theorem pure_le
-  given: {a : α} {s : Semiquot α}
-  statement: pure a <= s ↔ a in s
-  proof: Set.singleton_subset_iff
-
-中文:
-定理 pure_le
-  条件: {a : α} {s : 半商 α}
-  结论: pure a <= s ↔ a in s
-  证明: Set.singleton_subset_iff
-
-Depends on / 依赖: Set.singleton_subset_iff, singleton_subset_iff
+/-
+**Semiquot.pure_le** 是 Mathlib 中的一个定理，位于命名空间 `Semiquot`。
+形式化陈述：pure_le {a : α} {s : Semiquot α} : pure a <= s ↔ a in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.singleton_subset_iff`：singleton_subset_iff {a : α} {s : Set α} : {a}
+ subseteq s ↔ a in s
 -/
-theorem pure_le {a : α} {s : Semiquot α} : pure a <= s ↔ a in s :=
+theorem pure_le {a : α} {s : Semiquot α} : pure a ≤ s ↔ a ∈ s :=
   Set.singleton_subset_iff
 
-/--
-Definition of `IsPure` / `IsPure` 的定义
+/-- Assert that a `Semiquot` contains only one possible value. -/
+/-
+**Semiquot.IsPure** 是 Mathlib 中的一个定义，位于命名空间 `Semiquot`。
+形式化陈述：IsPure (q : Semiquot α) : Prop
+参数：q : Semiquot α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsPure
-  signature: (q : Semiquot α)
-  body: forall a in q, forall b in q, a = b
-
-中文:
-定义 IsPure
-  签名: (q : 半商 α)
-  定义体: forall a in q, forall b in q, a = b
+--- 原说明 ---
+Assert that a `Semiquot` contains only one possible value.
 -/
 def IsPure (q : Semiquot α) : Prop :=
-  forall a in q, forall b in q, a = b
+  ∀ a ∈ q, ∀ b ∈ q, a = b
 
-/--
-Definition of `get` / `get` 的定义
+/-- Extract the value from an `IsPure` semiquotient. -/
+/-
+**Semiquot.get** 是 Mathlib 中的一个定义，位于命名空间 `Semiquot`。
+形式化陈述：get (q : Semiquot α) (h : q.IsPure) : α
+参数：q : Semiquot α；h : q.IsPure。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition get
-  signature: (q : Semiquot α) (h : q.IsPure)
-  body: liftOn q id h
-
-中文:
-定义 get
-  签名: (q : 半商 α) (h : q.IsPure)
-  定义体: liftOn q id h
-
-Depends on / 依赖: liftOn
+--- 原说明 ---
+Extract the value from an `IsPure` semiquotient.
 -/
 def get (q : Semiquot α) (h : q.IsPure) : α :=
   liftOn q id h
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `get_mem` / 定理 `get_mem`
-
-English:
-theorem get_mem
-  given: {q : Semiquot α} (p)
-  statement: get q p in q
-  proof: by
-  let ⟨a, h⟩ := exists_mem q
-  unfold get; rw [liftOn_ofMem q _ _ a h]; exact h
-
-中文:
-定理 get_mem
-  条件: {q : 半商 α} (p)
-  结论: get q p in q
-  证明: by
-  let ⟨a, h⟩ := exists_mem q
-  unfold get; rw [liftOn_ofMem q _ _ a h]; exact h
-
-Depends on / 依赖: exists_mem, liftOn_ofMem
+/-
+**Semiquot.get_mem** 是 Mathlib 中的一个定理，位于命名空间 `Semiquot`。
+形式化陈述：get_mem {q : Semiquot α} (p) : get q p in q
+参数：p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Semiquot.exists_mem`：exists_mem (q : Semiquot α) : exists a, a in q
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Semiquot.liftOn_ofMem`：liftOn_ofMem (q : Semiquot α) (f : α -> β) (h : f
+orall a in q, forall b in q, f a = f b) (a : α) (aq : a in q) : liftOn q f h = f
+ a
 -/
-theorem get_mem {q : Semiquot α} (p) : get q p in q := by
+theorem get_mem {q : Semiquot α} (p) : get q p ∈ q := by
   let ⟨a, h⟩ := exists_mem q
   unfold get; rw [liftOn_ofMem q _ _ a h]; exact h
-
-/--
-theorem `eq_pure` / 定理 `eq_pure`
-
-English:
-theorem eq_pure
-  given: {q : Semiquot α} (p)
-  statement: q = pure (get q p)
-  proof: ext.2 fun a => by simpa using ⟨fun h => p _ h _ (get_mem _), fun e => e.symm ▸ get_mem _⟩
-
-@[simp]
-
-中文:
-定理 eq_pure
-  条件: {q : 半商 α} (p)
-  结论: q = pure (get q p)
-  证明: ext.2 fun a => by simpa using ⟨fun h => p _ h _ (get_mem _), fun e => e.symm ▸ get_mem _⟩
-
-@[simp]
-
-Depends on / 依赖: e.symm, get_mem
+/-
+**Semiquot.eq_pure** 是 Mathlib 中的一个定理，位于命名空间 `Semiquot`。
+形式化陈述：eq_pure {q : Semiquot α} (p) : q = pure (get q p)
+参数：p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Semiquot.ext`：ext {q₁ q₂ : Semiquot α} : q₁ = q₂ ↔ forall a, a in q₁ ↔ a
+ in q₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Semiquot.get_mem`：get_mem {q : Semiquot α} (p) : get q p in q
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem eq_pure {q : Semiquot α} (p) : q = pure (get q p) :=
   ext.2 fun a => by simpa using ⟨fun h => p _ h _ (get_mem _), fun e => e.symm ▸ get_mem _⟩
 
 @[simp]
-/--
-theorem `pure_isPure` / 定理 `pure_isPure`
-
-English:
-theorem pure_isPure
-  given: (a : α)
-  statement: IsPure (pure a)
-
-中文:
-定理 pure_isPure
-  条件: (a : α)
-  结论: IsPure (pure a)
+/-
+**Semiquot.pure_isPure** 是 Mathlib 中的一个定理，位于命名空间 `Semiquot`。
+形式化陈述：∀ {α : Type u_1} (a : α), (pure a).IsPure
+参数：a : α；pure a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Semiquot.mem_pure`：mem_pure {a b : α} : a in (pure b : Semiquot α) ↔ a =
+ b
 -/
 theorem pure_isPure (a : α) : IsPure (pure a)
   | b, ab, c, ac => by
     rw [mem_pure] at ab ac
     rwa [← ac] at ab
-
-/--
-theorem `isPure_iff` / 定理 `isPure_iff`
-
-English:
-theorem isPure_iff
-  given: {s : Semiquot α}
-  statement: IsPure s ↔ exists a, s = pure a
-  proof: ⟨fun h => ⟨_, eq_pure h⟩, fun ⟨_, e⟩ => e.symm ▸ pure_isPure _⟩
-
-中文:
-定理 isPure_iff
-  条件: {s : 半商 α}
-  结论: IsPure s ↔ 存在 a, s = pure a
-  证明: ⟨fun h => ⟨_, eq_pure h⟩, fun ⟨_, e⟩ => e.symm ▸ pure_isPure _⟩
-
-Depends on / 依赖: e.symm, eq_pure, pure_isPure
+/-
+**Semiquot.isPure_iff** 是 Mathlib 中的一个定理，位于命名空间 `Semiquot`。
+形式化陈述：isPure_iff {s : Semiquot α} : IsPure s ↔ exists a, s = pure a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Semiquot.eq_pure`：eq_pure {q : Semiquot α} (p) : q = pure (get q p)
+· 使用定理 `Semiquot.pure_isPure`：∀ {α : Type u_1} (a : α), (pure a).IsPure
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem isPure_iff {s : Semiquot α} : IsPure s ↔ exists a, s = pure a :=
+theorem isPure_iff {s : Semiquot α} : IsPure s ↔ ∃ a, s = pure a :=
   ⟨fun h => ⟨_, eq_pure h⟩, fun ⟨_, e⟩ => e.symm ▸ pure_isPure _⟩
-
-/--
-theorem `IsPure.mono` / 定理 `IsPure.mono`
-
-English:
-theorem IsPure.mono
-  given: {s t : Semiquot α} (st : s <= t) (h : IsPure t)
-  statement: IsPure s
-
-中文:
-定理 IsPure.mono
-  条件: {s t : 半商 α} (st : s <= t) (h : IsPure t)
-  结论: IsPure s
+/-
+**Semiquot.IsPure.mono** 是 Mathlib 中的一个定理，位于命名空间 `Semiquot.IsPure`。
+形式化陈述：∀ {α : Type u_1} {s t : Semiquot α}, s ≤ t → t.IsPure → s.IsPure
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem IsPure.mono {s t : Semiquot α} (st : s <= t) (h : IsPure t) : IsPure s
+theorem IsPure.mono {s t : Semiquot α} (st : s ≤ t) (h : IsPure t) : IsPure s
   | _, as, _, bs => h _ (st as) _ (st bs)
-
-/--
-theorem `IsPure.min` / 定理 `IsPure.min`
-
-English:
-theorem IsPure.min
-  given: {s t : Semiquot α} (h : IsPure t)
-  statement: s <= t ↔ s = t
-  proof: ⟨fun st =>
-le_antisymm st by
-      rw [eq_pure h]; rw [eq_pure (h.mono st)]; simpa using h _ (get_mem _) _ (st <| get_mem _),
-    le_of_eq⟩
-
-中文:
-定理 IsPure.最小值
-  条件: {s t : 半商 α} (h : IsPure t)
-  结论: s <= t ↔ s = t
-  证明: ⟨fun st =>
-le_antisymm st by
-      rw [eq_pure h]; rw [eq_pure (h.mono st)]; simpa using h _ (get_mem _) _ (st <| get_mem _),
-    le_of_eq⟩
-
-Depends on / 依赖: eq_pure, get_mem, h.mono, le_antisymm, le_of_eq
+/-
+**Semiquot.IsPure.min** 是 Mathlib 中的一个定理，位于命名空间 `Semiquot.IsPure`。
+形式化陈述：∀ {α : Type u_1} {s t : Semiquot α}, t.IsPure → (s ≤ t ↔ s = t)
+参数：s ≤ t ↔ s = t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Semiquot.eq_pure`：eq_pure {q : Semiquot α} (p) : q = pure (get q p)
+· 使用定理 `Semiquot.IsPure.mono`：∀ {α : Type u_1} {s t : Semiquot α}, s ≤ t → t.IsP
+ure → s.IsPure
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Semiquot.get_mem`：get_mem {q : Semiquot α} (p) : get q p in q
+· 使用定理 `le_of_eq`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
 -/
-theorem IsPure.min {s t : Semiquot α} (h : IsPure t) : s <= t ↔ s = t :=
+theorem IsPure.min {s t : Semiquot α} (h : IsPure t) : s ≤ t ↔ s = t :=
   ⟨fun st =>
-le_antisymm st by
-      rw [eq_pure h]; rw [eq_pure (h.mono st)]; simpa using h _ (get_mem _) _ (st <| get_mem _),
+    le_antisymm st <| by
+      rw [eq_pure h, eq_pure (h.mono st)]; simpa using h _ (get_mem _) _ (st <| get_mem _),
     le_of_eq⟩
-
-/--
-theorem `isPure_of_subsingleton` / 定理 `isPure_of_subsingleton`
-
-English:
-theorem isPure_of_subsingleton
-  given: [Subsingleton α] (q : Semiquot α)
-  statement: IsPure q
-
-中文:
-定理 isPure_of_subsingleton
-  条件: [子单例 α] (q : 半商 α)
-  结论: IsPure q
+/-
+**Semiquot.isPure_of_subsingleton** 是 Mathlib 中的一个定理，位于命名空间 `Semiquot`。
+形式化陈述：∀ {α : Type u_1} [Subsingleton α] (q : Semiquot α), q.IsPure
+参数：q : Semiquot α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
 theorem isPure_of_subsingleton [Subsingleton α] (q : Semiquot α) : IsPure q
   | _, _, _, _ => Subsingleton.elim _ _
 
-/--
-Definition of `univ` / `univ` 的定义
+/-- `univ : Semiquot α` represents an unspecified element of `univ : Set α`. -/
+/-
+**Semiquot.univ** 是 Mathlib 中的一个定义，位于命名空间 `Semiquot`。
+形式化陈述：univ [Inhabited α] : Semiquot α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition univ
-  signature: [Inhabited α]
-  body: mk Set.mem_univ default
-
-中文:
-定义 univ
-  签名: [可居 α]
-  定义体: mk Set.mem_univ default
-
-Depends on / 依赖: Set.mem_univ, mem_univ
+--- 原说明 ---
+`univ : Semiquot α` represents an unspecified element of `univ : Set α`.
 -/
 def univ [Inhabited α] : Semiquot α :=
-mk Set.mem_univ default
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: α] : Inhabited (Semiquot α)
-  body: ⟨univ⟩
-
-@[simp]
-
-中文:
-实例 [可居
-  签名: α] : 可居 (半商 α)
-  定义体: ⟨univ⟩
-
-@[simp]
+  mk <| Set.mem_univ default
+/-
+**Semiquot.** 是 Mathlib 中的一个实例，位于命名空间 `Semiquot`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited α] : Inhabited (Semiquot α) :=
   ⟨univ⟩
 
 @[simp]
-/--
-theorem `mem_univ` / 定理 `mem_univ`
-
-English:
-theorem mem_univ
-  given: [Inhabited α]
-  statement: forall a, a in @univ α _
-  proof: @Set.mem_univ α
-
-@[congr]
-
-中文:
-定理 mem_univ
-  条件: [可居 α]
-  结论: 对任意 a, a in @univ α _
-  证明: @Set.mem_univ α
-
-@[congr]
-
-Depends on / 依赖: Set.mem_univ, mem_univ
+/-
+**Semiquot.mem_univ** 是 Mathlib 中的一个定理，位于命名空间 `Semiquot`。
+形式化陈述：mem_univ [Inhabited α] : forall a, a in @univ α _
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
 -/
-theorem mem_univ [Inhabited α] : forall a, a in @univ α _ :=
+theorem mem_univ [Inhabited α] : ∀ a, a ∈ @univ α _ :=
   @Set.mem_univ α
 
 @[congr]
-/--
-theorem `univ_unique` / 定理 `univ_unique`
-
-English:
-theorem univ_unique
-  given: (I J : Inhabited α)
-  statement: @univ _ I = @univ _ J
-  proof: ext.2 fun a => refl (a in univ)
-
-@[simp]
-
-中文:
-定理 univ_unique
-  条件: (I J : 可居 α)
-  结论: @univ _ I = @univ _ J
-  证明: ext.2 fun a => refl (a in univ)
-
-@[simp]
+/-
+**Semiquot.univ_unique** 是 Mathlib 中的一个定理，位于命名空间 `Semiquot`。
+形式化陈述：univ_unique (I J : Inhabited α) : @univ _ I = @univ _ J
+参数：I J : Inhabited α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Semiquot.ext`：ext {q₁ q₂ : Semiquot α} : q₁ = q₂ ↔ forall a, a in q₁ ↔ a
+ in q₂
+· 使用引理 `refl`：refl [Std.Refl r] (a : α) : a ≺ a
+· 使用定理 `IsPreorder.toRefl`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsPreorde
+r α r], Std.Refl r
+· 使用定理 `IsEquiv.toIsPreorder`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsEqui
+v α r], IsPreorder α r
 -/
 theorem univ_unique (I J : Inhabited α) : @univ _ I = @univ _ J :=
-  ext.2 fun a => refl (a in univ)
+  ext.2 fun a => refl (a ∈ univ)
 
 @[simp]
-/--
-theorem `isPure_univ` / 定理 `isPure_univ`
-
-English:
-theorem isPure_univ
-  given: [Inhabited α]
-  statement: @IsPure α univ ↔ Subsingleton α
-  proof: ⟨fun h => ⟨fun a b => h a trivial b trivial⟩, fun ⟨h⟩ a _ b _ => h a b⟩
-
-中文:
-定理 isPure_univ
-  条件: [可居 α]
-  结论: @IsPure α univ ↔ 子单例 α
-  证明: ⟨fun h => ⟨fun a b => h a trivial b trivial⟩, fun ⟨h⟩ a _ b _ => h a b⟩
+/-
+**Semiquot.isPure_univ** 是 Mathlib 中的一个定理，位于命名空间 `Semiquot`。
+形式化陈述：isPure_univ [Inhabited α] : @IsPure α univ ↔ Subsingleton α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 -/
 theorem isPure_univ [Inhabited α] : @IsPure α univ ↔ Subsingleton α :=
   ⟨fun h => ⟨fun a b => h a trivial b trivial⟩, fun ⟨h⟩ a _ b _ => h a b⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: α] : OrderTop (Semiquot α) where
-  body: univ
-  le_top _ := Set.subset_univ _
-
-中文:
-实例 [可居
-  签名: α] : 有顶序 (半商 α) where
-  定义体: univ
-  le_top _ := Set.subset_univ _
+/-
+**Semiquot.** 是 Mathlib 中的一个实例，位于命名空间 `Semiquot`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited α] : OrderTop (Semiquot α) where
   top := univ
   le_top _ := Set.subset_univ _
 
 end Semiquot
+

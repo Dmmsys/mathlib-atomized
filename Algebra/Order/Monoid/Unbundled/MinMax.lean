@@ -25,94 +25,52 @@ section CommSemigroup
 variable [LinearOrder α] [CommSemigroup β]
 
 @[to_additive]
-/--
-lemma `fn_min_mul_fn_max` / 引理 `fn_min_mul_fn_max`
-
-English:
-lemma fn_min_mul_fn_max
-  given: (f : α -> β) (a b : α)
-  statement: f (min a b) * f (max a b) = f a * f b
-  proof: by
-  grind
-
-@[to_additive]
-
-中文:
-引理 fn_min_mul_fn_max
-  条件: (f : α -> β) (a b : α)
-  结论: f (最小值 a b) * f (最大值 a b) = f a * f b
-  证明: by
-  grind
-
-@[to_additive]
+/-
+**fn_min_mul_fn_max** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：fn_min_mul_fn_max (f : α -> β) (a b : α) : f (min a b) * f (max a b) = f a
+ * f b
+参数：f : α -> β；a b : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma fn_min_mul_fn_max (f : α -> β) (a b : α) : f (min a b) * f (max a b) = f a * f b := by
+lemma fn_min_mul_fn_max (f : α → β) (a b : α) : f (min a b) * f (max a b) = f a * f b := by
   grind
 
 @[to_additive]
-/--
-lemma `fn_max_mul_fn_min` / 引理 `fn_max_mul_fn_min`
-
-English:
-lemma fn_max_mul_fn_min
-  given: (f : α -> β) (a b : α)
-  statement: f (max a b) * f (min a b) = f a * f b
-  proof: by
-  grind
-
-中文:
-引理 fn_max_mul_fn_min
-  条件: (f : α -> β) (a b : α)
-  结论: f (最大值 a b) * f (最小值 a b) = f a * f b
-  证明: by
-  grind
+/-
+**fn_max_mul_fn_min** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：fn_max_mul_fn_min (f : α -> β) (a b : α) : f (max a b) * f (min a b) = f a
+ * f b
+参数：f : α -> β；a b : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma fn_max_mul_fn_min (f : α -> β) (a b : α) : f (max a b) * f (min a b) = f a * f b := by
+lemma fn_max_mul_fn_min (f : α → β) (a b : α) : f (max a b) * f (min a b) = f a * f b := by
   grind
 
 variable [CommSemigroup α]
 
 @[to_additive (attr := simp)]
-/--
-lemma `min_mul_max` / 引理 `min_mul_max`
-
-English:
-lemma min_mul_max
-  given: (a b : α)
-  statement: min a b * max a b = a * b
-  proof: fn_min_mul_fn_max id _ _
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 min_mul_max
-  条件: (a b : α)
-  结论: 最小值 a b * 最大值 a b = a * b
-  证明: fn_min_mul_fn_max id _ _
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: fn_min_mul_fn_max
+/-
+**min_mul_max** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：min_mul_max (a b : α) : min a b * max a b = a * b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `fn_min_mul_fn_max`：fn_min_mul_fn_max (f : α -> β) (a b : α) : f (min a b
+) * f (max a b) = f a * f b
 -/
 lemma min_mul_max (a b : α) : min a b * max a b = a * b := fn_min_mul_fn_max id _ _
 
 @[to_additive (attr := simp)]
-/--
-lemma `max_mul_min` / 引理 `max_mul_min`
-
-English:
-lemma max_mul_min
-  given: (a b : α)
-  statement: max a b * min a b = a * b
-  proof: fn_max_mul_fn_min id _ _
-
-中文:
-引理 max_mul_min
-  条件: (a b : α)
-  结论: 最大值 a b * 最小值 a b = a * b
-  证明: fn_max_mul_fn_min id _ _
-
-Depends on / 依赖: fn_max_mul_fn_min
+/-
+**max_mul_min** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：max_mul_min (a b : α) : max a b * min a b = a * b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `fn_max_mul_fn_min`：fn_max_mul_fn_min (f : α -> β) (a b : α) : f (max a b
+) * f (min a b) = f a * f b
 -/
 lemma max_mul_min (a b : α) : max a b * min a b = a * b := fn_max_mul_fn_min id _ _
 
@@ -131,47 +89,36 @@ section Left
 variable [MulLeftMono α]
 
 @[to_additive]
-/--
-theorem `min_mul_mul_left` / 定理 `min_mul_mul_left`
-
-English:
-theorem min_mul_mul_left
-  given: (a b c : α)
-  statement: min (a * b) (a * c) = a * min b c
-  proof: (monotone_id.const_mul' a).map_min.symm
-
-@[to_additive]
-
-中文:
-定理 min_mul_mul_left
-  条件: (a b c : α)
-  结论: 最小值 (a * b) (a * c) = a * 最小值 b c
-  证明: (monotone_id.const_mul' a).map_min.symm
-
-@[to_additive]
-
-Depends on / 依赖: const_mul, map_min, map_min.symm, monotone_id, monotone_id.const_mul
+/-
+**min_mul_mul_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：min_mul_mul_left (a b c : α) : min (a * b) (a * c) = a * min b c
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Monotone.map_min`：∀ {α : Type u} {β : Type v} [inst : LinearOrder α] [in
+st_1 : LinearOrder β] {f : α → β} {a b : α},   Monotone f → f (min a b) = min (f
+ a) (f…
+· 使用定理 `Monotone.const_mul'`：Monotone.const_mul' [MulLeftMono α] (hf : Monotone 
+f) (a : α) : Monotone fun x => a * f x
+· 使用定理 `monotone_id`：monotone_id [Preorder α] : Monotone (id : α -> α)
 -/
 theorem min_mul_mul_left (a b c : α) : min (a * b) (a * c) = a * min b c :=
   (monotone_id.const_mul' a).map_min.symm
 
 @[to_additive]
-/--
-theorem `max_mul_mul_left` / 定理 `max_mul_mul_left`
-
-English:
-theorem max_mul_mul_left
-  given: (a b c : α)
-  statement: max (a * b) (a * c) = a * max b c
-  proof: (monotone_id.const_mul' a).map_max.symm
-
-中文:
-定理 max_mul_mul_left
-  条件: (a b c : α)
-  结论: 最大值 (a * b) (a * c) = a * 最大值 b c
-  证明: (monotone_id.const_mul' a).map_max.symm
-
-Depends on / 依赖: const_mul, map_max, map_max.symm, monotone_id, monotone_id.const_mul
+/-
+**max_mul_mul_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：max_mul_mul_left (a b c : α) : max (a * b) (a * c) = a * max b c
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Monotone.map_max`：Monotone.map_max (hf : Monotone f) : f (max a b) = max
+ (f a) (f b)
+· 使用定理 `Monotone.const_mul'`：Monotone.const_mul' [MulLeftMono α] (hf : Monotone 
+f) (a : α) : Monotone fun x => a * f x
+· 使用定理 `monotone_id`：monotone_id [Preorder α] : Monotone (id : α -> α)
 -/
 theorem max_mul_mul_left (a b c : α) : max (a * b) (a * c) = a * max b c :=
   (monotone_id.const_mul' a).map_max.symm
@@ -183,47 +130,36 @@ section Right
 variable [MulRightMono α]
 
 @[to_additive]
-/--
-theorem `min_mul_mul_right` / 定理 `min_mul_mul_right`
-
-English:
-theorem min_mul_mul_right
-  given: (a b c : α)
-  statement: min (a * c) (b * c) = min a b * c
-  proof: (monotone_id.mul_const' c).map_min.symm
-
-@[to_additive]
-
-中文:
-定理 min_mul_mul_right
-  条件: (a b c : α)
-  结论: 最小值 (a * c) (b * c) = 最小值 a b * c
-  证明: (monotone_id.mul_const' c).map_min.symm
-
-@[to_additive]
-
-Depends on / 依赖: map_min, map_min.symm, monotone_id, monotone_id.mul_const, mul_const
+/-
+**min_mul_mul_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：min_mul_mul_right (a b c : α) : min (a * c) (b * c) = min a b * c
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Monotone.map_min`：∀ {α : Type u} {β : Type v} [inst : LinearOrder α] [in
+st_1 : LinearOrder β] {f : α → β} {a b : α},   Monotone f → f (min a b) = min (f
+ a) (f…
+· 使用定理 `Monotone.mul_const'`：Monotone.mul_const' [MulRightMono α] (hf : Monotone
+ f) (a : α) : Monotone fun x => f x * a
+· 使用定理 `monotone_id`：monotone_id [Preorder α] : Monotone (id : α -> α)
 -/
 theorem min_mul_mul_right (a b c : α) : min (a * c) (b * c) = min a b * c :=
   (monotone_id.mul_const' c).map_min.symm
 
 @[to_additive]
-/--
-theorem `max_mul_mul_right` / 定理 `max_mul_mul_right`
-
-English:
-theorem max_mul_mul_right
-  given: (a b c : α)
-  statement: max (a * c) (b * c) = max a b * c
-  proof: (monotone_id.mul_const' c).map_max.symm
-
-中文:
-定理 max_mul_mul_right
-  条件: (a b c : α)
-  结论: 最大值 (a * c) (b * c) = 最大值 a b * c
-  证明: (monotone_id.mul_const' c).map_max.symm
-
-Depends on / 依赖: map_max, map_max.symm, monotone_id, monotone_id.mul_const, mul_const
+/-
+**max_mul_mul_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：max_mul_mul_right (a b c : α) : max (a * c) (b * c) = max a b * c
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Monotone.map_max`：Monotone.map_max (hf : Monotone f) : f (max a b) = max
+ (f a) (f b)
+· 使用定理 `Monotone.mul_const'`：Monotone.mul_const' [MulRightMono α] (hf : Monotone
+ f) (a : α) : Monotone fun x => f x * a
+· 使用定理 `monotone_id`：monotone_id [Preorder α] : Monotone (id : α -> α)
 -/
 theorem max_mul_mul_right (a b c : α) : max (a * c) (b * c) = max a b * c :=
   (monotone_id.mul_const' c).map_max.symm
@@ -231,149 +167,129 @@ theorem max_mul_mul_right (a b c : α) : max (a * c) (b * c) = max a b * c :=
 end Right
 
 @[to_additive]
-/--
-theorem `lt_or_lt_of_mul_lt_mul` / 定理 `lt_or_lt_of_mul_lt_mul`
-
-English:
-theorem lt_or_lt_of_mul_lt_mul
-  given: [MulLeftMono α] [MulRightMono α] {a₁ a₂ b₁ b₂ : α}
-  proof: by
-  contrapose!
-  exact fun h => mul_le_mul' h.1 h.2
-
-@[to_additive]
-
-中文:
-定理 lt_or_lt_of_mul_lt_mul
-  条件: [MulLeftMono α] [MulRightMono α] {a₁ a₂ b₁ b₂ : α}
-  证明: by
-  contrapose!
-  exact fun h => mul_le_mul' h.1 h.2
-
-@[to_additive]
-
-Depends on / 依赖: contrapose, mul_le_mul
+/-
+**lt_or_lt_of_mul_lt_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lt_or_lt_of_mul_lt_mul [MulLeftMono α] [MulRightMono α] {a₁ a₂ b₁ b₂ : α} 
+: a₁ * b₁ < a₂ * b₂ -> a₁ < a₂ ∨ b₁ < b₂
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_le_mul'`：mul_le_mul' [MulLeftMono α] [MulRightMono α] {a b c d : α} 
+(h₁ : a <= b) (h₂ : c <= d) : a * c <= b * d
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem lt_or_lt_of_mul_lt_mul [MulLeftMono α] [MulRightMono α] {a₁ a₂ b₁ b₂ : α} :
-    a₁ * b₁ < a₂ * b₂ -> a₁ < a₂ ∨ b₁ < b₂ := by
+    a₁ * b₁ < a₂ * b₂ → a₁ < a₂ ∨ b₁ < b₂ := by
   contrapose!
   exact fun h => mul_le_mul' h.1 h.2
 
 @[to_additive]
-/--
-theorem `le_or_lt_of_mul_le_mul` / 定理 `le_or_lt_of_mul_le_mul`
-
-English:
-theorem le_or_lt_of_mul_le_mul
-  given: [MulLeftMono α] [MulRightStrictMono α] {a₁ a₂ b₁ b₂ : α}
-  proof: by
-  contrapose!
-  exact fun h => mul_lt_mul_of_lt_of_le h.1 h.2
-
-@[to_additive]
-
-中文:
-定理 le_or_lt_of_mul_le_mul
-  条件: [MulLeftMono α] [MulRightStrictMono α] {a₁ a₂ b₁ b₂ : α}
-  证明: by
-  contrapose!
-  exact fun h => mul_lt_mul_of_lt_of_le h.1 h.2
-
-@[to_additive]
-
-Depends on / 依赖: contrapose, mul_lt_mul_of_lt_of_le
+/-
+**le_or_lt_of_mul_le_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_or_lt_of_mul_le_mul [MulLeftMono α] [MulRightStrictMono α] {a₁ a₂ b₁ b₂
+ : α} : a₁ * b₁ <= a₂ * b₂ -> a₁ <= a₂ ∨ b₁ < b₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_lt_mul_of_lt_of_le`：mul_lt_mul_of_lt_of_le [MulLeftMono α] [MulRight
+StrictMono α] {a b c d : α} (h₁ : a < b) (h₂ : c <= d) : a * c < b * d
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem le_or_lt_of_mul_le_mul [MulLeftMono α] [MulRightStrictMono α] {a₁ a₂ b₁ b₂ : α} :
-    a₁ * b₁ <= a₂ * b₂ -> a₁ <= a₂ ∨ b₁ < b₂ := by
+    a₁ * b₁ ≤ a₂ * b₂ → a₁ ≤ a₂ ∨ b₁ < b₂ := by
   contrapose!
   exact fun h => mul_lt_mul_of_lt_of_le h.1 h.2
 
 @[to_additive]
-/--
-theorem `lt_or_le_of_mul_le_mul` / 定理 `lt_or_le_of_mul_le_mul`
-
-English:
-theorem lt_or_le_of_mul_le_mul
-  given: [MulLeftStrictMono α] [MulRightMono α] {a₁ a₂ b₁ b₂ : α}
-  proof: by
-  contrapose!
-  exact fun h => mul_lt_mul_of_le_of_lt h.1 h.2
-
-@[to_additive]
-
-中文:
-定理 lt_or_le_of_mul_le_mul
-  条件: [MulLeftStrictMono α] [MulRightMono α] {a₁ a₂ b₁ b₂ : α}
-  证明: by
-  contrapose!
-  exact fun h => mul_lt_mul_of_le_of_lt h.1 h.2
-
-@[to_additive]
-
-Depends on / 依赖: contrapose, mul_lt_mul_of_le_of_lt
+/-
+**lt_or_le_of_mul_le_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lt_or_le_of_mul_le_mul [MulLeftStrictMono α] [MulRightMono α] {a₁ a₂ b₁ b₂
+ : α} : a₁ * b₁ <= a₂ * b₂ -> a₁ < a₂ ∨ b₁ <= b₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_lt_mul_of_le_of_lt`：mul_lt_mul_of_le_of_lt [MulLeftStrictMono α] [Mu
+lRightMono α] {a b c d : α} (h₁ : a <= b) (h₂ : c < d) : a * c < b * d
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem lt_or_le_of_mul_le_mul [MulLeftStrictMono α] [MulRightMono α] {a₁ a₂ b₁ b₂ : α} :
-    a₁ * b₁ <= a₂ * b₂ -> a₁ < a₂ ∨ b₁ <= b₂ := by
+    a₁ * b₁ ≤ a₂ * b₂ → a₁ < a₂ ∨ b₁ ≤ b₂ := by
   contrapose!
   exact fun h => mul_lt_mul_of_le_of_lt h.1 h.2
 
 @[to_additive]
-/--
-theorem `le_or_le_of_mul_le_mul` / 定理 `le_or_le_of_mul_le_mul`
-
-English:
-theorem le_or_le_of_mul_le_mul
-  given: [MulLeftStrictMono α] [MulRightStrictMono α] {a₁ a₂ b₁ b₂ : α}
-  proof: by
-  contrapose!
-  exact fun h => mul_lt_mul_of_lt_of_lt h.1 h.2
-
-@[to_additive]
-
-中文:
-定理 le_or_le_of_mul_le_mul
-  条件: [MulLeftStrictMono α] [MulRightStrictMono α] {a₁ a₂ b₁ b₂ : α}
-  证明: by
-  contrapose!
-  exact fun h => mul_lt_mul_of_lt_of_lt h.1 h.2
-
-@[to_additive]
-
-Depends on / 依赖: contrapose, mul_lt_mul_of_lt_of_lt
+/-
+**le_or_le_of_mul_le_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_or_le_of_mul_le_mul [MulLeftStrictMono α] [MulRightStrictMono α] {a₁ a₂
+ b₁ b₂ : α} : a₁ * b₁ <= a₂ * b₂ -> a₁ <= a₂ ∨ b₁ <= b₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_lt_mul_of_lt_of_lt`：mul_lt_mul_of_lt_of_lt [MulLeftStrictMono α] [Mu
+lRightStrictMono α] {a b c d : α} (h₁ : a < b) (h₂ : c < d) : a * c < b * d
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem le_or_le_of_mul_le_mul [MulLeftStrictMono α] [MulRightStrictMono α] {a₁ a₂ b₁ b₂ : α} :
-    a₁ * b₁ <= a₂ * b₂ -> a₁ <= a₂ ∨ b₁ <= b₂ := by
+    a₁ * b₁ ≤ a₂ * b₂ → a₁ ≤ a₂ ∨ b₁ ≤ b₂ := by
   contrapose!
   exact fun h => mul_lt_mul_of_lt_of_lt h.1 h.2
 
 @[to_additive]
-/--
-theorem `mul_lt_mul_iff_of_le_of_le` / 定理 `mul_lt_mul_iff_of_le_of_le`
-
-English:
-theorem mul_lt_mul_iff_of_le_of_le
-  statement: [MulLeftMono α]
-  proof: by
-  refine ⟨lt_or_lt_of_mul_lt_mul, fun h => ?_⟩
-  rcases h with ha' | hb'
-  · exact mul_lt_mul_of_lt_of_le ha' hb
-  · exact mul_lt_mul_of_le_of_lt ha hb'
-
-中文:
-定理 mul_lt_mul_iff_of_le_of_le
-  结论: [MulLeftMono α]
-  证明: by
-  refine ⟨lt_or_lt_of_mul_lt_mul, fun h => ?_⟩
-  rcases h with ha' | hb'
-  · exact mul_lt_mul_of_lt_of_le ha' hb
-  · exact mul_lt_mul_of_le_of_lt ha hb'
-
-Depends on / 依赖: lt_or_lt_of_mul_lt_mul, mul_lt_mul_of_le_of_lt, mul_lt_mul_of_lt_of_le
+/-
+**mul_lt_mul_iff_of_le_of_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mul_lt_mul_iff_of_le_of_le [MulLeftMono α] [MulRightMono α] [MulLeftStrict
+Mono α] [MulRightStrictMono α] {a₁ a₂ b₁ b₂ : α} (ha : a₁ <= a₂) (hb : b₁ <= b₂)
+ : a₁ * b₁ < a₂ * b₂ ↔ a₁ < a₂ ∨ b₁ < b₂
+参数：ha : a₁ <= a₂；hb : b₁ <= b₂。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lt_or_lt_of_mul_lt_mul`：lt_or_lt_of_mul_lt_mul [MulLeftMono α] [MulRight
+Mono α] {a₁ a₂ b₁ b₂ : α} : a₁ * b₁ < a₂ * b₂ -> a₁ < a₂ ∨ b₁ < b₂
+· 使用定理 `mul_lt_mul_of_lt_of_le`：mul_lt_mul_of_lt_of_le [MulLeftMono α] [MulRight
+StrictMono α] {a b c d : α} (h₁ : a < b) (h₂ : c <= d) : a * c < b * d
+· 使用定理 `mul_lt_mul_of_le_of_lt`：mul_lt_mul_of_le_of_lt [MulLeftStrictMono α] [Mu
+lRightMono α] {a b c d : α} (h₁ : a <= b) (h₂ : c < d) : a * c < b * d
 -/
 theorem mul_lt_mul_iff_of_le_of_le [MulLeftMono α]
     [MulRightMono α] [MulLeftStrictMono α]
-    [MulRightStrictMono α] {a₁ a₂ b₁ b₂ : α} (ha : a₁ <= a₂)
-    (hb : b₁ <= b₂) : a₁ * b₁ < a₂ * b₂ ↔ a₁ < a₂ ∨ b₁ < b₂ := by
+    [MulRightStrictMono α] {a₁ a₂ b₁ b₂ : α} (ha : a₁ ≤ a₂)
+    (hb : b₁ ≤ b₂) : a₁ * b₁ < a₂ * b₂ ↔ a₁ < a₂ ∨ b₁ < b₂ := by
   refine ⟨lt_or_lt_of_mul_lt_mul, fun h => ?_⟩
   rcases h with ha' | hb'
   · exact mul_lt_mul_of_lt_of_le ha' hb
@@ -384,71 +300,60 @@ end Mul
 variable [MulOneClass α]
 
 @[to_additive]
-/--
-theorem `min_le_mul_of_one_le_right` / 定理 `min_le_mul_of_one_le_right`
-
-English:
-theorem min_le_mul_of_one_le_right
-  given: [MulLeftMono α] {a b : α} (hb : 1 <= b)
-  proof: min_le_iff.2 Or.inl le_mul_of_one_le_right' hb
-
-@[to_additive]
-
-中文:
-定理 min_le_mul_of_one_le_right
-  条件: [MulLeftMono α] {a b : α} (hb : 1 <= b)
-  证明: min_le_iff.2 Or.inl le_mul_of_one_le_right' hb
-
-@[to_additive]
-
-Depends on / 依赖: Or.inl, le_mul_of_one_le_right, min_le_iff
+/-
+**min_le_mul_of_one_le_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：min_le_mul_of_one_le_right [MulLeftMono α] {a b : α} (hb : 1 <= b) : min a
+ b <= a * b
+参数：hb : 1 <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `min_le_iff`：∀ {α : Type u} [inst : LinearOrder α] {a b c : α}, min b c ≤
+ a ↔ b ≤ a ∨ c ≤ a
+· 使用定理 `le_mul_of_one_le_right'`：le_mul_of_one_le_right' [MulLeftMono α] {a b : 
+α} (h : 1 <= b) : a <= a * b
 -/
-theorem min_le_mul_of_one_le_right [MulLeftMono α] {a b : α} (hb : 1 <= b) :
-    min a b <= a * b :=
-min_le_iff.2 Or.inl le_mul_of_one_le_right' hb
+theorem min_le_mul_of_one_le_right [MulLeftMono α] {a b : α} (hb : 1 ≤ b) :
+    min a b ≤ a * b :=
+  min_le_iff.2 <| Or.inl <| le_mul_of_one_le_right' hb
 
 @[to_additive]
-/--
-theorem `min_le_mul_of_one_le_left` / 定理 `min_le_mul_of_one_le_left`
-
-English:
-theorem min_le_mul_of_one_le_left
-  given: [MulRightMono α] {a b : α} (ha : 1 <= a)
-  proof: min_le_iff.2 Or.inr le_mul_of_one_le_left' ha
-
-@[to_additive]
-
-中文:
-定理 min_le_mul_of_one_le_left
-  条件: [MulRightMono α] {a b : α} (ha : 1 <= a)
-  证明: min_le_iff.2 Or.inr le_mul_of_one_le_left' ha
-
-@[to_additive]
-
-Depends on / 依赖: Or.inr, le_mul_of_one_le_left, min_le_iff
+/-
+**min_le_mul_of_one_le_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：min_le_mul_of_one_le_left [MulRightMono α] {a b : α} (ha : 1 <= a) : min a
+ b <= a * b
+参数：ha : 1 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `min_le_iff`：∀ {α : Type u} [inst : LinearOrder α] {a b c : α}, min b c ≤
+ a ↔ b ≤ a ∨ c ≤ a
+· 使用定理 `le_mul_of_one_le_left'`：le_mul_of_one_le_left' [MulRightMono α] {a b : α
+} (h : 1 <= b) : a <= b * a
 -/
-theorem min_le_mul_of_one_le_left [MulRightMono α] {a b : α} (ha : 1 <= a) :
-    min a b <= a * b :=
-min_le_iff.2 Or.inr le_mul_of_one_le_left' ha
+theorem min_le_mul_of_one_le_left [MulRightMono α] {a b : α} (ha : 1 ≤ a) :
+    min a b ≤ a * b :=
+  min_le_iff.2 <| Or.inr <| le_mul_of_one_le_left' ha
 
 @[to_additive]
-/--
-theorem `max_le_mul_of_one_le` / 定理 `max_le_mul_of_one_le`
-
-English:
-theorem max_le_mul_of_one_le
-  given: [MulLeftMono α] [MulRightMono α] {a b : α} (ha : 1 <= a) (hb : 1 <= b)
-  proof: max_le_iff.2 ⟨le_mul_of_one_le_right' hb, le_mul_of_one_le_left' ha⟩
-
-中文:
-定理 max_le_mul_of_one_le
-  条件: [MulLeftMono α] [MulRightMono α] {a b : α} (ha : 1 <= a) (hb : 1 <= b)
-  证明: max_le_iff.2 ⟨le_mul_of_one_le_right' hb, le_mul_of_one_le_left' ha⟩
-
-Depends on / 依赖: le_mul_of_one_le_left, le_mul_of_one_le_right, max_le_iff
+/-
+**max_le_mul_of_one_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：max_le_mul_of_one_le [MulLeftMono α] [MulRightMono α] {a b : α} (ha : 1 <=
+ a) (hb : 1 <= b) : max a b <= a * b
+参数：ha : 1 <= a；hb : 1 <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `max_le_iff`：∀ {α : Type u} [inst : LinearOrder α] {a b c : α}, max a b ≤
+ c ↔ a ≤ c ∧ b ≤ c
+· 使用定理 `le_mul_of_one_le_right'`：le_mul_of_one_le_right' [MulLeftMono α] {a b : 
+α} (h : 1 <= b) : a <= a * b
+· 使用定理 `le_mul_of_one_le_left'`：le_mul_of_one_le_left' [MulRightMono α] {a b : α
+} (h : 1 <= b) : a <= b * a
 -/
-theorem max_le_mul_of_one_le [MulLeftMono α] [MulRightMono α] {a b : α} (ha : 1 <= a) (hb : 1 <= b) :
-    max a b <= a * b :=
+theorem max_le_mul_of_one_le [MulLeftMono α] [MulRightMono α] {a b : α} (ha : 1 ≤ a) (hb : 1 ≤ b) :
+    max a b ≤ a * b :=
   max_le_iff.2 ⟨le_mul_of_one_le_right' hb, le_mul_of_one_le_left' ha⟩
 
 end CovariantClassMulLe
+

@@ -25,54 +25,25 @@ public def Lean.Name.isLocal (env : Environment) (decl : Name) : Bool :=
 
 open Mathlib.Command.MinImports
 
-/--
-Definition of `Lean.Environment.localDefinitionDependencies` / `Lean.Environment.localDefinitionDependencies` 的定义
+/-- Does the declaration with this name depend on definitions in the current file?
 
-English:
-definition Lean.Environment.localDefinitionDependencies
-  signature: (env : Environment) (stx id : Syntax)
-  body: do
-  let declName ← getDeclName stx
-  let immediateDeps ← getAllDependencies stx id
+Here, "definition" means everything that is not a theorem, and so includes `def`,
+`structure`, `inductive`, etc.
+-/
+/-
+**Lean.Environment.localDefinitionDependencies** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Lean.Environment.localDefinitionDependencies (env : Environment) (stx id :
+ Syntax) : CommandElabM Bool
+参数：env : Environment；stx id : Syntax。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-  -- Drop all the unresolvable constants, otherwise `transitivelyUsedConstants` fails.
-  let immediateDeps : NameSet := immediateDeps.foldl (init := ∅) fun s n =>
-    if (env.find? n).isSome then s.insert n else s
+--- 原说明 ---
+Does the declaration with this name depend on definitions in the current file?
 
-let deps ← liftCoreM immediateDeps.transitivelyUsedConstants
-  let constInfos := deps.toList.filterMap env.find?
-  -- We allow depending on theorems and constructors.
-  -- We explicitly allow constructors since `inductive` declarations are reported to depend on their
-  -- own constructors, and we want inductives to behave the same as definitions, so place one
-  -- warning on the inductive itself but nothing on its downstream uses.
-  -- (There does not seem to be an easy way to determine, given `Syntax` and `ConstInfo`,
-  -- whether the `ConstInfo` is a constructor declared in this piece of `Syntax`.)
-  let defs := constInfos.filter (fun constInfo => !(constInfo matches .thmInfo _ | .ctorInfo _))
-
-  return defs.any fun constInfo => declName != constInfo.name && constInfo.name.isLocal env
-
-中文:
-定义 Lean.Environment.localDefinitionDependencies
-  签名: (env : Environment) (stx id : Syntax)
-  定义体: do
-  let declName ← getDeclName stx
-  let immediateDeps ← getAllDependencies stx id
-
-  -- Drop all the unresolvable constants, otherwise `transitivelyUsedConstants` fails.
-  let immediateDeps : NameSet := immediateDeps.foldl (init := ∅) fun s n =>
-    if (env.find? n).isSome then s.insert n else s
-
-let deps ← liftCoreM immediateDeps.transitivelyUsedConstants
-  let constInfos := deps.toList.filterMap env.find?
-  -- We allow depending on theorems and constructors.
-  -- We explicitly allow constructors since `inductive` declarations are reported to depend on their
-  -- own constructors, and we want inductives to behave the same as definitions, so place one
-  -- warning on the inductive itself but nothing on its downstream uses.
-  -- (There does not seem to be an easy way to determine, given `Syntax` and `ConstInfo`,
-  -- whether the `ConstInfo` is a constructor declared in this piece of `Syntax`.)
-  let defs := constInfos.filter (fun constInfo => !(constInfo matches .thmInfo _ | .ctorInfo _))
-
-  return defs.any fun constInfo => declName != constInfo.name && constInfo.name.isLocal env
+Here, "definition" means everything that is not a theorem, and so includes `def`
+,
+`structure`, `inductive`, etc.
 -/
 def Lean.Environment.localDefinitionDependencies (env : Environment) (stx id : Syntax) :
     CommandElabM Bool := do
@@ -83,7 +54,7 @@ def Lean.Environment.localDefinitionDependencies (env : Environment) (stx id : S
   let immediateDeps : NameSet := immediateDeps.foldl (init := ∅) fun s n =>
     if (env.find? n).isSome then s.insert n else s
 
-let deps ← liftCoreM immediateDeps.transitivelyUsedConstants
+  let deps ← liftCoreM <| immediateDeps.transitivelyUsedConstants
   let constInfos := deps.toList.filterMap env.find?
   -- We allow depending on theorems and constructors.
   -- We explicitly allow constructors since `inductive` declarations are reported to depend on their
@@ -134,84 +105,14 @@ public register_option linter.upstreamableDecl.private : Bool := {
 namespace DoubleImports
 
 @[inherit_doc Mathlib.Linter.linter.upstreamableDecl]
-/--
-Definition of `upstreamableDeclLinter` / `upstreamableDeclLinter` 的定义
-
-English:
-definition upstreamableDeclLinter
-  signature: : Linter where run
-  body: withSetOptionIn fun stx => do
-    unless getLinterValue linter.upstreamableDecl (← getLinterOptions) do
-      return
-    if (← get).messages.hasErrors then
-      return
-    let skipDef := !getLinterValue linter.upstreamableDecl.defs (← getLinterOptions)
-    let skipPrivate := !getLinterValue linter.upstreamableDecl.private (← getLinterOptions)
-    if stx == (← `(command| set_option $(mkIdent `linter.upstreamableDecl) true)) then return
-    let env ← getEnv
-    let id ← getId stx
-    if id != .missing then
-      -- Skip defs and private decls by default.
-      let name ← getDeclName stx
-      if (skipDef && if let some constInfo := env.find? name
-         then !(constInfo matches .thmInfo _ | .ctorInfo _)
-         else true) ||
-       (skipPrivate && isPrivateName name) then
-        return
-
-      let minImports := getIrredundantImports env (← getAllImports stx id)
-      match minImports.size, minImports.min? with
-      | 1, some upstream => do
-        if !(← env.localDefinitionDependencies stx id) then
-          let p : GoToModuleLinkProps := { modName := upstream }
-          let widget : MessageData := .ofWidget
-            (← liftCoreM <| Widget.WidgetInstance.ofHash
-GoToModuleLink.javascriptHash
-              Server.RpcEncodable.rpcEncode p)
-            (toString upstream)
-          Linter.logLint linter.upstreamableDecl id
-            m!"Consider moving this declaration to the module {widget}."
-      | _, _ => pure ()
-
-中文:
-定义 upstreamableDeclLinter
-  签名: : Linter where run
-  定义体: withSetOptionIn fun stx => do
-    unless getLinterValue linter.upstreamableDecl (← getLinterOptions) do
-      return
-    if (← get).messages.hasErrors then
-      return
-    let skipDef := !getLinterValue linter.upstreamableDecl.defs (← getLinterOptions)
-    let skipPrivate := !getLinterValue linter.upstreamableDecl.private (← getLinterOptions)
-    if stx == (← `(command| set_option $(mkIdent `linter.upstreamableDecl) true)) then return
-    let env ← getEnv
-    let id ← getId stx
-    if id != .missing then
-      -- Skip defs and private decls by default.
-      let name ← getDeclName stx
-      if (skipDef && if let some constInfo := env.find? name
-         then !(constInfo matches .thmInfo _ | .ctorInfo _)
-         else true) ||
-       (skipPrivate && isPrivateName name) then
-        return
-
-      let minImports := getIrredundantImports env (← getAllImports stx id)
-      match minImports.size, minImports.min? with
-      | 1, some upstream => do
-        if !(← env.localDefinitionDependencies stx id) then
-          let p : GoToModuleLinkProps := { modName := upstream }
-          let widget : MessageData := .ofWidget
-            (← liftCoreM <| Widget.WidgetInstance.ofHash
-GoToModuleLink.javascriptHash
-              Server.RpcEncodable.rpcEncode p)
-            (toString upstream)
-          Linter.logLint linter.upstreamableDecl id
-            m!"Consider moving this declaration to the module {widget}."
-      | _, _ => pure ()
-
-Depends on / 依赖: withSetOptionIn
+/-
+**Mathlib.Linter.DoubleImports.upstreamableDeclLinter** 是 Mathlib 中的一个定义，位于命名空间 
+`Mathlib.Linter.DoubleImports`。
+形式化陈述：upstreamableDeclLinter : Linter where run
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def upstreamableDeclLinter : Linter where run := withSetOptionIn fun stx => do
+def upstreamableDeclLinter : Linter where run := withSetOptionIn fun stx ↦ do
     unless getLinterValue linter.upstreamableDecl (← getLinterOptions) do
       return
     if (← get).messages.hasErrors then
@@ -237,7 +138,7 @@ def upstreamableDeclLinter : Linter where run := withSetOptionIn fun stx => do
           let p : GoToModuleLinkProps := { modName := upstream }
           let widget : MessageData := .ofWidget
             (← liftCoreM <| Widget.WidgetInstance.ofHash
-GoToModuleLink.javascriptHash
+              GoToModuleLink.javascriptHash <|
               Server.RpcEncodable.rpcEncode p)
             (toString upstream)
           Linter.logLint linter.upstreamableDecl id
@@ -249,3 +150,4 @@ initialize addLinter upstreamableDeclLinter
 end DoubleImports
 
 end Mathlib.Linter
+

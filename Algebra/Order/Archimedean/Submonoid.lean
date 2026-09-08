@@ -28,28 +28,19 @@ public section
 assert_not_exists Finset
 
 @[to_additive]
-/--
-Instance `SubmonoidClass.instMulArchimedean` / 实例 `SubmonoidClass.instMulArchimedean`
-
-English:
-instance SubmonoidClass.instMulArchimedean
-  signature: {M S : Type*} [SetLike S M]
-  body: by
-  constructor
-  rintro x _
-  simp only [← Subtype.coe_lt_coe, OneMemClass.coe_one]
-  exact MulArchimedean.arch x.val
-
-中文:
-实例 子幺半群类.instMulArchimedean
-  签名: {M S : 类型} [集合状 S M]
-  定义体: by
-  constructor
-  rintro x _
-  simp only [← Subtype.coe_lt_coe, OneMemClass.coe_one]
-  exact MulArchimedean.arch x.val
-
-Depends on / 依赖: MulArchimedean, MulArchimedean.arch, OneMemClass, OneMemClass.coe_one, Subtype, Subtype.coe_lt_coe, coe_lt_coe, coe_one, x.val
+/-
+**SubmonoidClass.instMulArchimedean** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：SubmonoidClass.instMulArchimedean {M S : Type*} [SetLike S M] [CommMonoid 
+M] [PartialOrder M] [SubmonoidClass S M] [MulArchimedean M] (H : S) : MulArchime
+dean H
+参数：H : S。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `MulArchimedean.arch`：∀ {R : Type u_2} {inst : CommMonoid R} {inst_1 : Pa
+rtialOrder R} [self : MulArchimedean R] (x : R) {y : R},   1 < y → ∃ n, x ≤ y ^ 
+n
 -/
 instance SubmonoidClass.instMulArchimedean {M S : Type*} [SetLike S M]
     [CommMonoid M] [PartialOrder M]

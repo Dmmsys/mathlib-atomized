@@ -34,52 +34,41 @@ open FirstOrder
 
 open Structure
 
-/--
-Definition of `Prestructure` / `Prestructure` 的定义
+/-- A prestructure is a first-order structure with a `Setoid` equivalence relation on it,
+  such that quotienting by that equivalence relation is still a structure. -/
+/-
+**FirstOrder.Language.Prestructure** 是 Mathlib 中的一个归纳类型，位于命名空间 `FirstOrder.Langu
+age`。
+形式化陈述：FirstOrder.Language → {M : Type u_1} → Setoid M → Type (max (max u_1 u_2) 
+u_3)
+参数：max (max u_1 u_2) u_3。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Prestructure
-  parameters: (s : Setoid M)
-  axioms and operations (3):
-    - toStructure : L.Structure M
-    - fun_equiv : forall {n} {f : L.Functions n} (x y : Fin n -> M), x ≈ y -> funMap f x ≈ funMap f y
-    - rel_equiv : forall {n} {r : L.Relations n} (x y : Fin n -> M) (_ : x ≈ y), RelMap r x = RelMap r y
-
-中文:
-类 Prestructure
-  参数: (s : 集合等价关系 M)
-  公理与运算 (3 个):
-    - toStructure : L.结构 M
-    - fun_equiv : 对任意 {n} {f : L.函数 n} (x y : 有限集 n -> M), x ≈ y -> funMap f x ≈ funMap f y
-    - rel_equiv : 对任意 {n} {r : L.关系 n} (x y : 有限集 n -> M) (_ : x ≈ y), RelMap r x = RelMap r y
+--- 原说明 ---
+A prestructure is a first-order structure with a `Setoid` equivalence relation o
+n it,
+  such that quotienting by that equivalence relation is still a structure.
 -/
 class Prestructure (s : Setoid M) where
   /-- The underlying first-order structure -/
   toStructure : L.Structure M
-  fun_equiv : forall {n} {f : L.Functions n} (x y : Fin n -> M), x ≈ y -> funMap f x ≈ funMap f y
-  rel_equiv : forall {n} {r : L.Relations n} (x y : Fin n -> M) (_ : x ≈ y), RelMap r x = RelMap r y
+  fun_equiv : ∀ {n} {f : L.Functions n} (x y : Fin n → M), x ≈ y → funMap f x ≈ funMap f y
+  rel_equiv : ∀ {n} {r : L.Relations n} (x y : Fin n → M) (_ : x ≈ y), RelMap r x = RelMap r y
 
 variable {L} {s : Setoid M}
 variable [ps : L.Prestructure s]
-
-/--
-Instance `quotientStructure` / 实例 `quotientStructure`
-
-English:
-instance quotientStructure
-  signature: : L.Structure (Quotient s) where
-  body: Quotient.map (@funMap L M ps.toStructure n f) Prestructure.fun_equiv (Quotient.finChoice x)
-  RelMap {n} r x :=
-    Quotient.lift (@RelMap L M ps.toStructure n r) Prestructure.rel_equiv (Quotient.finChoice x)
-
-中文:
-实例 quotientStructure
-  签名: : L.结构 (商 s) where
-  定义体: Quotient.map (@funMap L M ps.toStructure n f) Prestructure.fun_equiv (Quotient.finChoice x)
-  RelMap {n} r x :=
-    Quotient.lift (@RelMap L M ps.toStructure n r) Prestructure.rel_equiv (Quotient.finChoice x)
-
-Depends on / 依赖: Prestructure, Prestructure.fun_equiv, Prestructure.rel_equiv, Quotient, Quotient.finChoice, Quotient.lift, Quotient.map, RelMap, finChoice, funMap, fun_equiv, ps.toStructure, rel_equiv, toStructure
+/-
+**FirstOrder.Language.quotientStructure** 是 Mathlib 中的一个实例，位于命名空间 `FirstOrder.La
+nguage`。
+形式化陈述：quotientStructure : L.Structure (Quotient s) where funMap {n} f x
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Prestructure.fun_equiv`：∀ {L : FirstOrder.Language} 
+{M : Type u_1} {s : Setoid M} [self : L.Prestructure s] {n : ℕ} {f : L.Functions
+ n}   (x y : Fin n → M), x ≈ y →…
+· 使用定理 `FirstOrder.Language.Prestructure.rel_equiv`：∀ {L : FirstOrder.Language} 
+{M : Type u_1} {s : Setoid M} [self : L.Prestructure s] {n : ℕ} {r : L.Relations
+ n}   (x y : Fin n → M), x ≈ y →…
 -/
 instance quotientStructure : L.Structure (Quotient s) where
   funMap {n} f x :=
@@ -88,89 +77,76 @@ instance quotientStructure : L.Structure (Quotient s) where
     Quotient.lift (@RelMap L M ps.toStructure n r) Prestructure.rel_equiv (Quotient.finChoice x)
 
 variable (s)
-
-/--
-theorem `funMap_quotient_mk'` / 定理 `funMap_quotient_mk'`
-
-English:
-theorem funMap_quotient_mk'
-  given: {n : Nat} (f : L.Functions n) (x : Fin n -> M)
-  proof: by
-  change
-    Quotient.map (@funMap L M ps.toStructure n f) Prestructure.fun_equiv (Quotient.finChoice _) =
-      _
-  rw [Quotient.finChoice_eq]; rw [Quotient.map_mk]
-
-中文:
-定理 funMap_quotient_mk'
-  条件: {n : 自然数} (f : L.函数 n) (x : 有限集 n -> M)
-  证明: by
-  change
-    Quotient.map (@funMap L M ps.toStructure n f) Prestructure.fun_equiv (Quotient.finChoice _) =
-      _
-  rw [Quotient.finChoice_eq]; rw [Quotient.map_mk]
-
-Depends on / 依赖: Prestructure, Prestructure.fun_equiv, Quotient, Quotient.finChoice, Quotient.finChoice_eq, Quotient.map, Quotient.map_mk, finChoice, finChoice_eq, funMap, fun_equiv, map_mk, ps.toStructure, toStructure
+/-
+**FirstOrder.Language.funMap_quotient_mk'** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.
+Language`。
+形式化陈述：funMap_quotient_mk' {n : Nat} (f : L.Functions n) (x : Fin n -> M) : (funM
+ap f fun i => (⟦x i⟧ : Quotient s)) = ⟦@funMap _ _ ps.toStructure _ f x⟧
+参数：f : L.Functions n；x : Fin n -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Prestructure.fun_equiv`：∀ {L : FirstOrder.Language} 
+{M : Type u_1} {s : Setoid M} [self : L.Prestructure s] {n : ℕ} {f : L.Functions
+ n}   (x y : Fin n → M), x ≈ y →…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Quotient.finChoice_eq`：finChoice_eq (a : forall i, α i) : finChoice (S
+· 使用定理 `Quotient.map_mk`：map_mk (f : α -> β) (h) (x : α) : Quotient.map f h (⟦x⟧
+ : Quotient sa) = (⟦f x⟧ : Quotient sb)
 -/
-theorem funMap_quotient_mk' {n : Nat} (f : L.Functions n) (x : Fin n -> M) :
+theorem funMap_quotient_mk' {n : ℕ} (f : L.Functions n) (x : Fin n → M) :
     (funMap f fun i => (⟦x i⟧ : Quotient s)) = ⟦@funMap _ _ ps.toStructure _ f x⟧ := by
   change
     Quotient.map (@funMap L M ps.toStructure n f) Prestructure.fun_equiv (Quotient.finChoice _) =
       _
-  rw [Quotient.finChoice_eq]; rw [Quotient.map_mk]
-
-/--
-theorem `relMap_quotient_mk'` / 定理 `relMap_quotient_mk'`
-
-English:
-theorem relMap_quotient_mk'
-  given: {n : Nat} (r : L.Relations n) (x : Fin n -> M)
-  proof: by
-  change
-    Quotient.lift (@RelMap L M ps.toStructure n r) Prestructure.rel_equiv (Quotient.finChoice _) ↔
-      _
-  rw [Quotient.finChoice_eq]; rw [Quotient.lift_mk]
-
-中文:
-定理 relMap_quotient_mk'
-  条件: {n : 自然数} (r : L.关系 n) (x : 有限集 n -> M)
-  证明: by
-  change
-    Quotient.lift (@RelMap L M ps.toStructure n r) Prestructure.rel_equiv (Quotient.finChoice _) ↔
-      _
-  rw [Quotient.finChoice_eq]; rw [Quotient.lift_mk]
-
-Depends on / 依赖: Prestructure, Prestructure.rel_equiv, Quotient, Quotient.finChoice, Quotient.finChoice_eq, Quotient.lift, Quotient.lift_mk, RelMap, finChoice, finChoice_eq, lift_mk, ps.toStructure, rel_equiv, toStructure
+  rw [Quotient.finChoice_eq, Quotient.map_mk]
+/-
+**FirstOrder.Language.relMap_quotient_mk'** 是 Mathlib 中的一个定理，位于命名空间 `FirstOrder.
+Language`。
+形式化陈述：relMap_quotient_mk' {n : Nat} (r : L.Relations n) (x : Fin n -> M) : (RelM
+ap r fun i => (⟦x i⟧ : Quotient s)) ↔ @RelMap _ _ ps.toStructure _ r x
+参数：r : L.Relations n；x : Fin n -> M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FirstOrder.Language.Prestructure.rel_equiv`：∀ {L : FirstOrder.Language} 
+{M : Type u_1} {s : Setoid M} [self : L.Prestructure s] {n : ℕ} {r : L.Relations
+ n}   (x y : Fin n → M), x ≈ y →…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Quotient.finChoice_eq`：finChoice_eq (a : forall i, α i) : finChoice (S
+· 使用定理 `Quotient.lift_mk`：Quotient.lift_mk {s : Setoid α} (f : α -> β) (h : fora
+ll a b : α, a ≈ b -> f a = f b) (x : α) : Quotient.lift f h (Quotient.mk s x) = 
+f x
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem relMap_quotient_mk' {n : Nat} (r : L.Relations n) (x : Fin n -> M) :
+theorem relMap_quotient_mk' {n : ℕ} (r : L.Relations n) (x : Fin n → M) :
     (RelMap r fun i => (⟦x i⟧ : Quotient s)) ↔ @RelMap _ _ ps.toStructure _ r x := by
   change
     Quotient.lift (@RelMap L M ps.toStructure n r) Prestructure.rel_equiv (Quotient.finChoice _) ↔
       _
-  rw [Quotient.finChoice_eq]; rw [Quotient.lift_mk]
-
-/--
-theorem `Term.realize_quotient_mk'` / 定理 `Term.realize_quotient_mk'`
-
-English:
-theorem Term.realize_quotient_mk'
-  given: {β : Type*} (t : L.Term β) (x : β -> M)
-  proof: by
-  induction t with
-  | var => rfl
-  | func _ _ ih => simp only [ih, funMap_quotient_mk', Term.realize]
-
-中文:
-定理 项.realize_quotient_mk'
-  条件: {β : 类型} (t : L.项 β) (x : β -> M)
-  证明: by
-  induction t with
-  | var => rfl
-  | func _ _ ih => simp only [ih, funMap_quotient_mk', Term.realize]
-
-Depends on / 依赖: Term.realize, funMap_quotient_mk, realize
+  rw [Quotient.finChoice_eq, Quotient.lift_mk]
+/-
+**FirstOrder.Language.Term.realize_quotient_mk'** 是 Mathlib 中的一个定理，位于命名空间 `First
+Order.Language.Term`。
+形式化陈述：∀ {L : FirstOrder.Language} {M : Type u_1} (s : Setoid M) [ps : L.Prestruc
+ture s] {β : Type u_2} (t : L.Term β)   (x : β → M), FirstOrder.Language.Term.re
+alize (fun i => ⟦x i⟧) t = ⟦FirstOrder.Language.Term.realize x t⟧
+参数：s : Setoid M；t : L.Term β；x : β → M；fun i => ⟦x i⟧。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `FirstOrder.Language.funMap_quotient_mk'`：funMap_quotient_mk' {n : Nat} (
+f : L.Functions n) (x : Fin n -> M) : (funMap f fun i => (⟦x i⟧ : Quotient s)) =
+ ⟦@funMap _ _ ps.toStructure …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem Term.realize_quotient_mk' {β : Type*} (t : L.Term β) (x : β -> M) :
+theorem Term.realize_quotient_mk' {β : Type*} (t : L.Term β) (x : β → M) :
     (t.realize fun i => (⟦x i⟧ : Quotient s)) = ⟦@Term.realize _ _ ps.toStructure _ x t⟧ := by
   induction t with
   | var => rfl
@@ -179,3 +155,4 @@ theorem Term.realize_quotient_mk' {β : Type*} (t : L.Term β) (x : β -> M) :
 end Language
 
 end FirstOrder
+

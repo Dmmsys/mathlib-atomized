@@ -21,49 +21,55 @@ universe u v
 variable (R : Type u) (M : Type v) [Ring R] [AddCommGroup M] [Module R M]
 namespace Module
 
-/--
-theorem `injective_object_of_injective_module` / 定理 `injective_object_of_injective_module`
-
-English:
-theorem injective_object_of_injective_module
-  given: [inj : Injective R M]
-  proof: have ⟨l, h⟩ := inj.out f.hom ((ModuleCat.mono_iff_injective f).mp m) g.hom
-    ⟨ModuleCat.ofHom l, by ext x; simpa using h x⟩
-
-中文:
-定理 injective_object_of_injective_module
-  条件: [inj : 单射 R M]
-  证明: have ⟨l, h⟩ := inj.out f.hom ((ModuleCat.mono_iff_injective f).mp m) g.hom
-    ⟨ModuleCat.ofHom l, by ext x; simpa using h x⟩
-
-Depends on / 依赖: ModuleCat, ModuleCat.mono_iff_injective, ModuleCat.ofHom, f.hom, g.hom, inj.out, mono_iff_injective
+/-
+**Module.injective_object_of_injective_module** 是 Mathlib 中的一个定理，位于命名空间 `Module`
+。
+形式化陈述：injective_object_of_injective_module [inj : Injective R M] : CategoryTheor
+y.Injective (ModuleCat.of R M) where factors g f m
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Injective.out`：∀ {R : Type u} {inst : Ring R} {Q : Type v} {inst_
+1 : AddCommGroup Q} {inst_2 : _root_.Module R Q}   [self : Module.Injective R Q]
+ ⦃X Y : Ty…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `ModuleCat.mono_iff_injective`：mono_iff_injective : Mono f ↔ Function.Inj
+ective f
+· 使用引理 `ModuleCat.hom_ext`：hom_ext {M N : ModuleCat.{v} R} {f g : M ⟶ N} (hf : f
+.hom = g.hom) : f = g
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.comp.congr_simp`：∀ {R₁ : Type u_2} {R₂ : Type u_3} {R₃ : Type 
+u_4} {M₁ : Type u_9} {M₂ : Type u_10} {M₃ : Type u_11} [inst : Semiring R₁]   [i
+nst_1 : Semirin…
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ofHom`：∀ {C : Type u} {inst : Catego
+ryTheory.Category.{v, u} C} {FC : outParam (C → C → Type u_1)} {CC : outParam (C
+ → Type w)}   {inst_1 : outPara…
 -/
 theorem injective_object_of_injective_module [inj : Injective R M] :
     CategoryTheory.Injective (ModuleCat.of R M) where
   factors g f m :=
     have ⟨l, h⟩ := inj.out f.hom ((ModuleCat.mono_iff_injective f).mp m) g.hom
     ⟨ModuleCat.ofHom l, by ext x; simpa using h x⟩
-
-/--
-theorem `injective_module_of_injective_object` / 定理 `injective_module_of_injective_object`
-
-English:
-theorem injective_module_of_injective_object
-  proof: by
-    have : CategoryTheory.Mono (ModuleCat.ofHom f) := (ModuleCat.mono_iff_injective _).mpr hf
-    obtain ⟨l, h⟩ := inj.factors (ModuleCat.ofHom g) (ModuleCat.ofHom f)
-    obtain rfl := ModuleCat.hom_ext_iff.mp h
-    exact ⟨l.hom, fun _ => rfl⟩
-
-中文:
-定理 injective_module_of_injective_object
-  证明: by
-    have : CategoryTheory.Mono (ModuleCat.ofHom f) := (ModuleCat.mono_iff_injective _).mpr hf
-    obtain ⟨l, h⟩ := inj.factors (ModuleCat.ofHom g) (ModuleCat.ofHom f)
-    obtain rfl := ModuleCat.hom_ext_iff.mp h
-    exact ⟨l.hom, fun _ => rfl⟩
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Mono, ModuleCat, ModuleCat.hom_ext_iff.mp, ModuleCat.mono_iff_injective, ModuleCat.ofHom, factors, hom_ext_iff, inj.factors, l.hom, mono_iff_injective
+/-
+**Module.injective_module_of_injective_object** 是 Mathlib 中的一个定理，位于命名空间 `Module`
+。
+形式化陈述：injective_module_of_injective_object [inj : CategoryTheory.Injective <| Mo
+duleCat.of R M] : Module.Injective R M where out X Y _ _ _ _ f hf g
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `ModuleCat.mono_iff_injective`：mono_iff_injective : Mono f ↔ Function.Inj
+ective f
+· 使用定理 `CategoryTheory.Injective.factors`：∀ {C : Type u₁} {inst : CategoryTheory
+.Category.{v₁, u₁} C} {J : C} [self : CategoryTheory.Injective J] {X Y : C}   (g
+ : X ⟶ J) (f : X ⟶ Y) …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `ModuleCat.hom_ext_iff`：∀ {R : Type u} [inst : Ring R] {M N : ModuleCat R
+} {f g : M ⟶ N}, f = g ↔ ModuleCat.Hom.hom f = ModuleCat.Hom.hom g
 -/
 theorem injective_module_of_injective_object
     [inj : CategoryTheory.Injective <| ModuleCat.of R M] :
@@ -73,21 +79,18 @@ theorem injective_module_of_injective_object
     obtain ⟨l, h⟩ := inj.factors (ModuleCat.ofHom g) (ModuleCat.ofHom f)
     obtain rfl := ModuleCat.hom_ext_iff.mp h
     exact ⟨l.hom, fun _ => rfl⟩
-
-/--
-theorem `injective_iff_injective_object` / 定理 `injective_iff_injective_object`
-
-English:
-theorem injective_iff_injective_object
-  proof: ⟨fun _ => injective_object_of_injective_module R M,
-   fun _ => injective_module_of_injective_object R M⟩
-
-中文:
-定理 injective_iff_injective_object
-  证明: ⟨fun _ => injective_object_of_injective_module R M,
-   fun _ => injective_module_of_injective_object R M⟩
-
-Depends on / 依赖: injective_module_of_injective_object, injective_object_of_injective_module
+/-
+**Module.injective_iff_injective_object** 是 Mathlib 中的一个定理，位于命名空间 `Module`。
+形式化陈述：injective_iff_injective_object : Module.Injective R M ↔ CategoryTheory.Inj
+ective (ModuleCat.of R M)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.injective_object_of_injective_module`：injective_object_of_injecti
+ve_module [inj : Injective R M] : CategoryTheory.Injective (ModuleCat.of R M) wh
+ere factors g f m
+· 使用定理 `Module.injective_module_of_injective_object`：injective_module_of_injecti
+ve_object [inj : CategoryTheory.Injective <| ModuleCat.of R M] : Module.Injectiv
+e R M where out X Y _ _ _ _ f hf …
 -/
 theorem injective_iff_injective_object :
     Module.Injective R M ↔
@@ -97,28 +100,13 @@ theorem injective_iff_injective_object :
 
 end Module
 
-/--
-Instance `ModuleCat.ulift_injective_of_injective.` / 实例 `ModuleCat.ulift_injective_of_injective.`
-
-English:
-instance ModuleCat.ulift_injective_of_injective.{v'}
-  signature: [Small.{v} R]
-  body: Module.injective_object_of_injective_module
-    (inj := Module.ulift_injective_of_injective
-      (inj := Module.injective_module_of_injective_object _ _))
-
-中文:
-实例 模范畴.ulift_injective_of_injective.{v'}
-  签名: [Small.{v} R]
-  定义体: Module.injective_object_of_injective_module
-    (inj := Module.ulift_injective_of_injective
-      (inj := Module.injective_module_of_injective_object _ _))
-
-Depends on / 依赖: Module, Module.injective_module_of_injective_object, Module.injective_object_of_injective_module, Module.ulift_injective_of_injective, injective_module_of_injective_object, injective_object_of_injective_module, ulift_injective_of_injective
+/-
+**ModuleCat.ulift_injective_of_injective.** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance ModuleCat.ulift_injective_of_injective.{v'} [Small.{v} R]
     [CategoryTheory.Injective <| ModuleCat.of R M] :
-CategoryTheory.Injective ModuleCat.of R (ULift.{v'} M) :=
+    CategoryTheory.Injective <| ModuleCat.of R (ULift.{v'} M) :=
   Module.injective_object_of_injective_module
     (inj := Module.ulift_injective_of_injective
       (inj := Module.injective_module_of_injective_object _ _))

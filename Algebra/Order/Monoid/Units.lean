@@ -19,266 +19,123 @@ namespace Units
 variable {α : Type*}
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: α] [Preorder α] : Preorder αˣ
-  body: Preorder.lift val
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-实例 [幺半群
-  签名: α] [预序 α] : 预序 αˣ
-  定义体: Preorder.lift val
-
-@[to_additive (attr := simp, norm_cast)]
-
-Depends on / 依赖: Preorder, Preorder.lift
+/-
+**Units.** 是 Mathlib 中的一个实例，位于命名空间 `Units`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid α] [Preorder α] : Preorder αˣ :=
   Preorder.lift val
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `val_le_val` / 定理 `val_le_val`
-
-English:
-theorem val_le_val
-  given: [Monoid α] [Preorder α] {a b : αˣ}
-  statement: (a : α) <= b ↔ a <= b
-  proof: Iff.rfl
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-定理 val_le_val
-  条件: [幺半群 α] [预序 α] {a b : αˣ}
-  结论: (a : α) <= b ↔ a <= b
-  证明: Iff.rfl
-
-@[to_additive (attr := simp, norm_cast)]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Units.val_le_val** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：val_le_val [Monoid α] [Preorder α] {a b : αˣ} : (a : α) <= b ↔ a <= b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem val_le_val [Monoid α] [Preorder α] {a b : αˣ} : (a : α) <= b ↔ a <= b :=
+theorem val_le_val [Monoid α] [Preorder α] {a b : αˣ} : (a : α) ≤ b ↔ a ≤ b :=
   Iff.rfl
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `val_lt_val` / 定理 `val_lt_val`
-
-English:
-theorem val_lt_val
-  given: [Monoid α] [Preorder α] {a b : αˣ}
-  statement: (a : α) < b ↔ a < b
-  proof: Iff.rfl
-
-@[to_additive]
-
-中文:
-定理 val_lt_val
-  条件: [幺半群 α] [预序 α] {a b : αˣ}
-  结论: (a : α) < b ↔ a < b
-  证明: Iff.rfl
-
-@[to_additive]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Units.val_lt_val** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：val_lt_val [Monoid α] [Preorder α] {a b : αˣ} : (a : α) < b ↔ a < b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem val_lt_val [Monoid α] [Preorder α] {a b : αˣ} : (a : α) < b ↔ a < b :=
   Iff.rfl
 
 @[to_additive]
-/--
-Instance `instPartialOrderUnits` / 实例 `instPartialOrderUnits`
-
-English:
-instance instPartialOrderUnits
-  signature: [Monoid α] [PartialOrder α]
-  body: PartialOrder.lift val val_injective
-
-@[to_additive]
-
-中文:
-实例 instPartialOrderUnits
-  签名: [幺半群 α] [偏序 α]
-  定义体: PartialOrder.lift val val_injective
-
-@[to_additive]
-
-Depends on / 依赖: PartialOrder, PartialOrder.lift, val_injective
+/-
+**Units.instPartialOrderUnits** 是 Mathlib 中的一个实例，位于命名空间 `Units`。
+形式化陈述：instPartialOrderUnits [Monoid α] [PartialOrder α] : PartialOrder αˣ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Units.val_injective`：∀ {α : Type u} [inst : Monoid α], Function.Injectiv
+e Units.val
 -/
 instance instPartialOrderUnits [Monoid α] [PartialOrder α] : PartialOrder αˣ :=
   PartialOrder.lift val val_injective
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: α] [LinearOrder α] : Max αˣ where
-  body: if a <= b then b else a
-
-@[to_additive]
-
-中文:
-实例 [幺半群
-  签名: α] [线性序 α] : 最大值 αˣ where
-  定义体: if a <= b then b else a
-
-@[to_additive]
+/-
+**Units.** 是 Mathlib 中的一个实例，位于命名空间 `Units`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid α] [LinearOrder α] : Max αˣ where
-  max a b := if a <= b then b else a
+  max a b := if a ≤ b then b else a
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: α] [LinearOrder α] : Min αˣ where
-  body: if a <= b then a else b
-
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-实例 [幺半群
-  签名: α] [线性序 α] : 最小值 αˣ where
-  定义体: if a <= b then a else b
-
-
-@[to_additive (attr := simp, norm_cast)]
+/-
+**Units.** 是 Mathlib 中的一个实例，位于命名空间 `Units`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid α] [LinearOrder α] : Min αˣ where
-  min a b := if a <= b then a else b
+  min a b := if a ≤ b then a else b
 
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `max_val` / 定理 `max_val`
-
-English:
-theorem max_val
-  given: [Monoid α] [LinearOrder α] (a b : αˣ)
-  statement: (max a b).val = max a.val b.val
-  proof: by
-  simp_rw [max_def, val_le_val, ← apply_ite]
-  rfl
-
-@[to_additive (attr := simp, norm_cast)]
-
-中文:
-定理 max_val
-  条件: [幺半群 α] [线性序 α] (a b : αˣ)
-  结论: (最大值 a b).val = 最大值 a.val b.val
-  证明: by
-  simp_rw [max_def, val_le_val, ← apply_ite]
-  rfl
-
-@[to_additive (attr := simp, norm_cast)]
-
-Depends on / 依赖: apply_ite, max_def, simp_rw, val_le_val
+/-
+**Units.max_val** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：max_val [Monoid α] [LinearOrder α] (a b : αˣ) : (max a b).val = max a.val 
+b.val
+参数：a b : αˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `max_def`：max_def (a b : α) : max a b = if a <= b then b else a
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
 -/
 theorem max_val [Monoid α] [LinearOrder α] (a b : αˣ) : (max a b).val = max a.val b.val := by
   simp_rw [max_def, val_le_val, ← apply_ite]
   rfl
 
 @[to_additive (attr := simp, norm_cast)]
-/--
-theorem `min_val` / 定理 `min_val`
-
-English:
-theorem min_val
-  given: [Monoid α] [LinearOrder α] (a b : αˣ)
-  statement: (min a b).val = min a.val b.val
-  proof: by
-  simp_rw [min_def, val_le_val, ← apply_ite]
-  rfl
-
-@[to_additive]
-
-中文:
-定理 min_val
-  条件: [幺半群 α] [线性序 α] (a b : αˣ)
-  结论: (最小值 a b).val = 最小值 a.val b.val
-  证明: by
-  simp_rw [min_def, val_le_val, ← apply_ite]
-  rfl
-
-@[to_additive]
-
-Depends on / 依赖: apply_ite, min_def, simp_rw, val_le_val
+/-
+**Units.min_val** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：min_val [Monoid α] [LinearOrder α] (a b : αˣ) : (min a b).val = min a.val 
+b.val
+参数：a b : αˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `min_def`：min_def (a b : α) : min a b = if a <= b then a else b
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
 -/
 theorem min_val [Monoid α] [LinearOrder α] (a b : αˣ) : (min a b).val = min a.val b.val := by
   simp_rw [min_def, val_le_val, ← apply_ite]
   rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: α] [Ord α] : Ord αˣ where
-  body: compare a.val b.val
-
-@[to_additive]
-
-中文:
-实例 [幺半群
-  签名: α] [序 α] : 序 αˣ where
-  定义体: compare a.val b.val
-
-@[to_additive]
-
-Depends on / 依赖: a.val, b.val, compare
+/-
+**Units.** 是 Mathlib 中的一个实例，位于命名空间 `Units`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid α] [Ord α] : Ord αˣ where
   compare a b := compare a.val b.val
 
 @[to_additive]
-/--
-theorem `compare_val` / 定理 `compare_val`
-
-English:
-theorem compare_val
-  given: [Monoid α] [Ord α] (a b : αˣ)
-  statement: compare a.val b.val = compare a b
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 compare_val
-  条件: [幺半群 α] [序 α] (a b : αˣ)
-  结论: compare a.val b.val = compare a b
-  证明: rfl
-
-@[to_additive]
+/-
+**Units.compare_val** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：compare_val [Monoid α] [Ord α] (a b : αˣ) : compare a.val b.val = compare 
+a b
+参数：a b : αˣ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem compare_val [Monoid α] [Ord α] (a b : αˣ) : compare a.val b.val = compare a b := rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: α] [LinearOrder α] : LinearOrder αˣ
-  body: val_injective.linearOrder _ val_le_val val_lt_val min_val max_val compare_val
-
-中文:
-实例 [幺半群
-  签名: α] [线性序 α] : 线性序 αˣ
-  定义体: val_injective.linearOrder _ val_le_val val_lt_val min_val max_val compare_val
-
-Depends on / 依赖: compare_val, linearOrder, max_val, min_val, val_injective, val_injective.linearOrder, val_le_val, val_lt_val
+/-
+**Units.** 是 Mathlib 中的一个实例，位于命名空间 `Units`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid α] [LinearOrder α] : LinearOrder αˣ :=
   val_injective.linearOrder _ val_le_val val_lt_val min_val max_val compare_val
@@ -286,22 +143,16 @@ instance [Monoid α] [LinearOrder α] : LinearOrder αˣ :=
 /-- `val : αˣ → α` as an order embedding. -/
 @[to_additive (attr := simps -fullyApplied)
   /-- `val : add_units α → α` as an order embedding. -/]
-/--
-Definition of `orderEmbeddingVal` / `orderEmbeddingVal` 的定义
-
-English:
-definition orderEmbeddingVal
-  signature: [Monoid α] [LinearOrder α]
-  body: ⟨⟨val, val_injective⟩, .rfl⟩
-
-中文:
-定义 orderEmbeddingVal
-  签名: [幺半群 α] [线性序 α]
-  定义体: ⟨⟨val, val_injective⟩, .rfl⟩
-
-Depends on / 依赖: val_injective
+/-
+**Units.orderEmbeddingVal** 是 Mathlib 中的一个定义，位于命名空间 `Units`。
+形式化陈述：orderEmbeddingVal [Monoid α] [LinearOrder α] : αˣ ↪o α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Units.val_injective`：∀ {α : Type u} [inst : Monoid α], Function.Injectiv
+e Units.val
 -/
 def orderEmbeddingVal [Monoid α] [LinearOrder α] : αˣ ↪o α :=
   ⟨⟨val, val_injective⟩, .rfl⟩
 
 end Units
+

@@ -28,87 +28,67 @@ variable (M : C) [MonObj M]
 set_option backward.defeqAttrib.useBackward true in
 /-- If `M : C` is a monoid object, then `mop M : Cᴹᵒᵖ` too. -/
 @[simps!]
-/--
-Instance `mopMonObj` / 实例 `mopMonObj`
+/-
+**MonObj.mopMonObj** 是 Mathlib 中的一个实例，位于命名空间 `MonObj`。
+形式化陈述：mopMonObj : MonObj (mop M) where mul
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance mopMonObj
-  signature: : MonObj (mop M) where
-  body: MonObj.mul.mop
-  one := MonObj.one.mop
-  mul_one := by
-.fullyFaithfulInverse.map_injective apply mopEquiv C
-    simp
-  one_mul := by
-.fullyFaithfulInverse.map_injective apply mopEquiv C
-    simp
-  mul_assoc := by
-.fullyFaithfulInverse.map_injective apply mopEquiv C
-    simp
-
-中文:
-实例 mopMonObj
-  签名: : MonObj (mop M) where
-  定义体: MonObj.mul.mop
-  one := MonObj.one.mop
-  mul_one := by
-.fullyFaithfulInverse.map_injective apply mopEquiv C
-    simp
-  one_mul := by
-.fullyFaithfulInverse.map_injective apply mopEquiv C
-    simp
-  mul_assoc := by
-.fullyFaithfulInverse.map_injective apply mopEquiv C
-    simp
-
-Depends on / 依赖: MonObj, MonObj.mul.mop, range_le_equalizer_iff
+--- 原说明 ---
+If `M : C` is a monoid object, then `mop M : Cᴹᵒᵖ` too.
 -/
 instance mopMonObj : MonObj (mop M) where
   mul := MonObj.mul.mop
   one := MonObj.one.mop
   mul_one := by
-.fullyFaithfulInverse.map_injective apply mopEquiv C
+    apply mopEquiv C |>.fullyFaithfulInverse.map_injective
     simp
   one_mul := by
-.fullyFaithfulInverse.map_injective apply mopEquiv C
+    apply mopEquiv C |>.fullyFaithfulInverse.map_injective
     simp
   mul_assoc := by
-.fullyFaithfulInverse.map_injective apply mopEquiv C
+    apply mopEquiv C |>.fullyFaithfulInverse.map_injective
     simp
 
 variable {M} in
-/--
-Instance `mop_isMonHom` / 实例 `mop_isMonHom`
+/-- If `f` is a morphism of monoid objects internal to `C`,
+then `f.mop` is a morphism of monoid objects internal to `Cᴹᵒᵖ`. -/
+/-
+**MonObj.mop_isMonHom** 是 Mathlib 中的一个实例，位于命名空间 `MonObj`。
+形式化陈述：mop_isMonHom {N : C} [MonObj N] (f : M ⟶ N) [IsMonHom f] : IsMonHom f.mop 
+where mul_hom
+参数：f : M ⟶ N。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.map_injective`：map_injective {X Y :
+ C} {f g : X ⟶ Y} (h : F.map f = F.map g) : f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.IsMonHom.one_hom`：∀ {C : Type u₁} {inst : CategoryTheory.
+Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C} {M N : C}   {i
+nst_2 : CategoryTheor…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.IsMonHom.mul_hom`：∀ {C : Type u₁} {inst : CategoryTheory.
+Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C} {M N : C}   {i
+nst_2 : CategoryTheor…
 
-English:
-instance mop_isMonHom
-  signature: {N : C} [MonObj N]
-  body: by
-.fullyFaithfulInverse.map_injective apply mopEquiv C
-    simpa [-IsMonHom.mul_hom] using! IsMonHom.mul_hom f
-  one_hom := by
-.fullyFaithfulInverse.map_injective apply mopEquiv C
-    simpa [-IsMonHom.one_hom] using! IsMonHom.one_hom f
-
-中文:
-实例 mop_isMonHom
-  签名: {N : C} [MonObj N]
-  定义体: by
-.fullyFaithfulInverse.map_injective apply mopEquiv C
-    simpa [-IsMonHom.mul_hom] using! IsMonHom.mul_hom f
-  one_hom := by
-.fullyFaithfulInverse.map_injective apply mopEquiv C
-    simpa [-IsMonHom.one_hom] using! IsMonHom.one_hom f
-
-Depends on / 依赖: IsMonHom, IsMonHom.mul_hom, IsMonHom.one_hom, Subfunctor, Subfunctor.lift, fullyFaithfulInverse, fullyFaithfulInverse.map_injective, map_injective, mopEquiv, mul_hom, one_hom, range_le_equalizer_iff
+--- 原说明 ---
+If `f` is a morphism of monoid objects internal to `C`,
+then `f.mop` is a morphism of monoid objects internal to `Cᴹᵒᵖ`.
 -/
 instance mop_isMonHom {N : C} [MonObj N]
     (f : M ⟶ N) [IsMonHom f] : IsMonHom f.mop where
   mul_hom := by
-.fullyFaithfulInverse.map_injective apply mopEquiv C
+    apply mopEquiv C |>.fullyFaithfulInverse.map_injective
     simpa [-IsMonHom.mul_hom] using! IsMonHom.mul_hom f
   one_hom := by
-.fullyFaithfulInverse.map_injective apply mopEquiv C
+    apply mopEquiv C |>.fullyFaithfulInverse.map_injective
     simpa [-IsMonHom.one_hom] using! IsMonHom.one_hom f
 
 end mop
@@ -120,87 +100,67 @@ variable (M : Cᴹᵒᵖ) [MonObj M]
 set_option backward.defeqAttrib.useBackward true in
 /-- If `M : Cᴹᵒᵖ` is a monoid object, then `unmop M : C` too. -/
 @[simps -isSimp] -- not making them simp because it causes a loop.
-/--
-Instance `unmopMonObj` / 实例 `unmopMonObj`
+/-
+**MonObj.unmopMonObj** 是 Mathlib 中的一个实例，位于命名空间 `MonObj`。
+形式化陈述：unmopMonObj : MonObj (unmop M) where mul
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance unmopMonObj
-  signature: : MonObj (unmop M) where
-  body: MonObj.mul.unmop
-  one := MonObj.one.unmop
-  mul_one := by
-.fullyFaithfulFunctor.map_injective apply mopEquiv C
-    simp
-  one_mul := by
-.fullyFaithfulFunctor.map_injective apply mopEquiv C
-    simp
-  mul_assoc := by
-.fullyFaithfulFunctor.map_injective apply mopEquiv C
-    simp
-
-中文:
-实例 unmopMonObj
-  签名: : MonObj (unmop M) where
-  定义体: MonObj.mul.unmop
-  one := MonObj.one.unmop
-  mul_one := by
-.fullyFaithfulFunctor.map_injective apply mopEquiv C
-    simp
-  one_mul := by
-.fullyFaithfulFunctor.map_injective apply mopEquiv C
-    simp
-  mul_assoc := by
-.fullyFaithfulFunctor.map_injective apply mopEquiv C
-    simp
-
-Depends on / 依赖: MonObj, MonObj.mul.unmop
+--- 原说明 ---
+If `M : Cᴹᵒᵖ` is a monoid object, then `unmop M : C` too.
 -/
 instance unmopMonObj : MonObj (unmop M) where
   mul := MonObj.mul.unmop
   one := MonObj.one.unmop
   mul_one := by
-.fullyFaithfulFunctor.map_injective apply mopEquiv C
+    apply mopEquiv C |>.fullyFaithfulFunctor.map_injective
     simp
   one_mul := by
-.fullyFaithfulFunctor.map_injective apply mopEquiv C
+    apply mopEquiv C |>.fullyFaithfulFunctor.map_injective
     simp
   mul_assoc := by
-.fullyFaithfulFunctor.map_injective apply mopEquiv C
+    apply mopEquiv C |>.fullyFaithfulFunctor.map_injective
     simp
 
 variable {M} in
-/--
-Instance `unmop_isMonHom` / 实例 `unmop_isMonHom`
+/-- If `f` is a morphism of monoid objects internal to `Cᴹᵒᵖ`,
+so is `f.unmop`. -/
+/-
+**MonObj.unmop_isMonHom** 是 Mathlib 中的一个实例，位于命名空间 `MonObj`。
+形式化陈述：unmop_isMonHom {N : Cᴹᵒᵖ} [MonObj N] (f : M ⟶ N) [IsMonHom f] : IsMonHom f
+.unmop where mul_hom
+参数：f : M ⟶ N。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Functor.FullyFaithful.map_injective`：map_injective {X Y :
+ C} {f g : X ⟶ Y} (h : F.map f = F.map g) : f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.IsMonHom.one_hom`：∀ {C : Type u₁} {inst : CategoryTheory.
+Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C} {M N : C}   {i
+nst_2 : CategoryTheor…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.IsMonHom.mul_hom`：∀ {C : Type u₁} {inst : CategoryTheory.
+Category.{v₁, u₁} C} {inst_1 : CategoryTheory.MonoidalCategory C} {M N : C}   {i
+nst_2 : CategoryTheor…
 
-English:
-instance unmop_isMonHom
-  signature: {N : Cᴹᵒᵖ} [MonObj N]
-  body: by
-.fullyFaithfulFunctor.map_injective apply mopEquiv C
-    simpa [-IsMonHom.mul_hom] using! IsMonHom.mul_hom f
-  one_hom := by
-.fullyFaithfulFunctor.map_injective apply mopEquiv C
-    simpa [-IsMonHom.one_hom] using! IsMonHom.one_hom f
-
-中文:
-实例 unmop_isMonHom
-  签名: {N : Cᴹᵒᵖ} [MonObj N]
-  定义体: by
-.fullyFaithfulFunctor.map_injective apply mopEquiv C
-    simpa [-IsMonHom.mul_hom] using! IsMonHom.mul_hom f
-  one_hom := by
-.fullyFaithfulFunctor.map_injective apply mopEquiv C
-    simpa [-IsMonHom.one_hom] using! IsMonHom.one_hom f
-
-Depends on / 依赖: IsMonHom, IsMonHom.mul_hom, IsMonHom.one_hom, fullyFaithfulFunctor, fullyFaithfulFunctor.map_injective, map_injective, mopEquiv, mul_hom, one_hom
+--- 原说明 ---
+If `f` is a morphism of monoid objects internal to `Cᴹᵒᵖ`,
+so is `f.unmop`.
 -/
 instance unmop_isMonHom {N : Cᴹᵒᵖ} [MonObj N]
     (f : M ⟶ N) [IsMonHom f] : IsMonHom f.unmop where
   mul_hom := by
-.fullyFaithfulFunctor.map_injective apply mopEquiv C
+    apply mopEquiv C |>.fullyFaithfulFunctor.map_injective
     simpa [-IsMonHom.mul_hom] using! IsMonHom.mul_hom f
   one_hom := by
-.fullyFaithfulFunctor.map_injective apply mopEquiv C
+    apply mopEquiv C |>.fullyFaithfulFunctor.map_injective
     simpa [-IsMonHom.one_hom] using! IsMonHom.one_hom f
 
 end unmop
@@ -210,32 +170,15 @@ variable (C) in
 /-- The equivalence of categories between monoids internal to `C`
 and monoids internal to the monoidal opposite of `C`. -/
 @[simps!]
-/--
-Definition of `mopEquiv` / `mopEquiv` 的定义
+/-
+**MonObj.mopEquiv** 是 Mathlib 中的一个定义，位于命名空间 `MonObj`。
+形式化陈述：mopEquiv : Mon C ≌ Mon Cᴹᵒᵖ where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mopEquiv
-  signature: : Mon C ≌ Mon Cᴹᵒᵖ where
-  body: { obj M := ⟨mop M.X⟩
-      map f := ⟨f.hom.mop⟩ }
-  inverse :=
-    { obj M := ⟨unmop M.X⟩
-      map f := ⟨f.hom.unmop⟩ }
-  unitIso := .refl _
-  counitIso := .refl _
-
-中文:
-定义 mopEquiv
-  签名: : 幺半群 C ≌ 幺半群 Cᴹᵒᵖ where
-  定义体: { obj M := ⟨mop M.X⟩
-      map f := ⟨f.hom.mop⟩ }
-  inverse :=
-    { obj M := ⟨unmop M.X⟩
-      map f := ⟨f.hom.unmop⟩ }
-  unitIso := .refl _
-  counitIso := .refl _
-
-Depends on / 依赖: Limits, Limits.Fork.of, condition, counitIso, equalizer, equalizer.condition, f.hom.mop, f.hom.unmop, inverse, unitIso
+--- 原说明 ---
+The equivalence of categories between monoids internal to `C`
+and monoids internal to the monoidal opposite of `C`.
 -/
 def mopEquiv : Mon C ≌ Mon Cᴹᵒᵖ where
   functor :=
@@ -252,18 +195,17 @@ set_option backward.isDefEq.respectTransparency.types false in
 and monoids internal to the monoidal opposite of `C` lies over
 the equivalence `C ≌ Cᴹᵒᵖ` via the forgetful functors. -/
 @[simps!]
-/--
-Definition of `mopEquivCompForgetIso` / `mopEquivCompForgetIso` 的定义
+/-
+**MonObj.mopEquivCompForgetIso** 是 Mathlib 中的一个定义，位于命名空间 `MonObj`。
+形式化陈述：mopEquivCompForgetIso : (mopEquiv C).functor ⋙ Mon.forget Cᴹᵒᵖ ≅ Mon.forge
+t C ⋙ (MonoidalOpposite.mopEquiv C).functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mopEquivCompForgetIso
-  signature: :
-  body: .refl _
-
-中文:
-定义 mopEquivCompForgetIso
-  签名: :
-  定义体: .refl _
+--- 原说明 ---
+The equivalence of categories between monoids internal to `C`
+and monoids internal to the monoidal opposite of `C` lies over
+the equivalence `C ≌ Cᴹᵒᵖ` via the forgetful functors.
 -/
 def mopEquivCompForgetIso :
     (mopEquiv C).functor ⋙ Mon.forget Cᴹᵒᵖ ≅
@@ -271,3 +213,4 @@ def mopEquivCompForgetIso :
   .refl _
 
 end MonObj
+

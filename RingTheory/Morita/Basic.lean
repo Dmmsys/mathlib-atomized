@@ -53,21 +53,21 @@ variable (R : Type u₀) [CommSemiring R]
 open scoped ModuleCat.Algebra
 
 /--
-Definition of `MoritaEquivalence` / `MoritaEquivalence` 的定义
+Let `A` and `B` be `R`-algebras. A Morita equivalence between `A` and `B` is an `R`-linear
+equivalence between the categories of `A`-modules and `B`-modules.
+-/
+/-
+**MoritaEquivalence** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：MoritaEquivalence (A : Type u₁) [Ring A] [Algebra R A] (B : Type u₂) [Ring
+ B] [Algebra R B] where /-- The underlying equivalence of categories -/ eqv : Mo
+duleCat.{max u₁ u₂} A ≌ ModuleCat.{max u₁ u₂} B linear : eqv.functor.Linear R
+参数：A : Type u₁；B : Type u₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure MoritaEquivalence
-  axioms and operations (2):
-    - eqv : ModuleCat.{max u₁ u₂} A ≌ ModuleCat.{max u₁ u₂} B
-    - linear : eqv.functor.Linear R  [default: by infer_instance]
-
-中文:
-结构 MoritaEquivalence
-  公理与运算 (2 个):
-    - eqv : 模范畴.{最大值 u₁ u₂} A ≌ 模范畴.{最大值 u₁ u₂} B
-    - linear : eqv.functor.线性 R  [默认: by infer_instance]
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+Let `A` and `B` be `R`-algebras. A Morita equivalence between `A` and `B` is an 
+`R`-linear
+equivalence between the categories of `A`-modules and `B`-modules.
 -/
 structure MoritaEquivalence
     (A : Type u₁) [Ring A] [Algebra R A]
@@ -80,47 +80,48 @@ namespace MoritaEquivalence
 
 attribute [instance] MoritaEquivalence.linear
 
+/-
+**MoritaEquivalence.** 是 Mathlib 中的一个实例，位于命名空间 `MoritaEquivalence`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {A : Type u₁} [Ring A] [Algebra R A] {B : Type u₂} [Ring B] [Algebra R B]
     (e : MoritaEquivalence R A B) : e.eqv.functor.Additive :=
   e.eqv.functor.additive_of_preserves_binary_products
 
 /--
-Definition of `refl` / `refl` 的定义
+For any `R`-algebra `A`, `A` is Morita equivalent to itself.
+-/
+/-
+**MoritaEquivalence.refl** 是 Mathlib 中的一个定义，位于命名空间 `MoritaEquivalence`。
+形式化陈述：refl (A : Type u₁) [Ring A] [Algebra R A] : MoritaEquivalence R A A where 
+eqv
+参数：A : Type u₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition refl
-  signature: (A : Type u₁) [Ring A] [Algebra R A]
-  body: CategoryTheory.Equivalence.refl
-  linear := Functor.instLinearId
-
-中文:
-定义 refl
-  签名: (A : 类型u₁) [环 A] [代数 R A]
-  定义体: CategoryTheory.Equivalence.refl
-  linear := Functor.instLinearId
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Equivalence.refl, Equivalence
+--- 原说明 ---
+For any `R`-algebra `A`, `A` is Morita equivalent to itself.
 -/
 def refl (A : Type u₁) [Ring A] [Algebra R A] : MoritaEquivalence R A A where
   eqv := CategoryTheory.Equivalence.refl
   linear := Functor.instLinearId
 
 /--
-Definition of `symm` / `symm` 的定义
+For any `R`-algebras `A` and `B`, if `A` is Morita equivalent to `B`, then `B` is Morita equivalent
+to `A`.
+-/
+/-
+**MoritaEquivalence.symm** 是 Mathlib 中的一个定义，位于命名空间 `MoritaEquivalence`。
+形式化陈述：symm {A : Type u₁} [Ring A] [Algebra R A] {B : Type u₂} [Ring B] [Algebra 
+R B] (e : MoritaEquivalence R A B) : MoritaEquivalence R B A where eqv
+参数：e : MoritaEquivalence R A B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition symm
-  signature: {A : Type u₁} [Ring A] [Algebra R A] {B : Type u₂} [Ring B] [Algebra R B]
-  body: e.eqv.symm
-  linear := e.eqv.inverseLinear R
-
-中文:
-定义 symm
-  签名: {A : 类型u₁} [环 A] [代数 R A] {B : 类型u₂} [环 B] [代数 R B]
-  定义体: e.eqv.symm
-  linear := e.eqv.inverseLinear R
-
-Depends on / 依赖: e.eqv.symm
+--- 原说明 ---
+For any `R`-algebras `A` and `B`, if `A` is Morita equivalent to `B`, then `B` i
+s Morita equivalent
+to `A`.
 -/
 def symm {A : Type u₁} [Ring A] [Algebra R A] {B : Type u₂} [Ring B] [Algebra R B]
     (e : MoritaEquivalence R A B) : MoritaEquivalence R B A where
@@ -135,21 +136,22 @@ def symm {A : Type u₁} [Ring A] [Algebra R A] {B : Type u₂} [Ring B] [Algebr
 -- removed via a categorical argument,
 -- see [here](https://github.com/leanprover-community/mathlib4/pull/20640#discussion_r1912189931)
 /--
-Definition of `trans` / `trans` 的定义
+For any `R`-algebras `A`, `B`, and `C`, if `A` is Morita equivalent to `B` and `B` is Morita
+equivalent to `C`, then `A` is Morita equivalent to `C`.
+-/
+/-
+**MoritaEquivalence.trans** 是 Mathlib 中的一个定义，位于命名空间 `MoritaEquivalence`。
+形式化陈述：trans {A B C : Type u₁} [Ring A] [Algebra R A] [Ring B] [Algebra R B] [Rin
+g C] [Algebra R C] (e : MoritaEquivalence R A B) (e' : MoritaEquivalence R B C) 
+: MoritaEquivalence R A C where eqv
+参数：e : MoritaEquivalence R A B；e' : MoritaEquivalence R B C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trans
-  signature: {A B C : Type u₁}
-  body: e.eqv.trans e'.eqv
-  linear := e.eqv.functor.instLinearComp e'.eqv.functor
-
-中文:
-定义 trans
-  签名: {A B C : 类型u₁}
-  定义体: e.eqv.trans e'.eqv
-  linear := e.eqv.functor.instLinearComp e'.eqv.functor
-
-Depends on / 依赖: e.eqv.trans
+--- 原说明 ---
+For any `R`-algebras `A`, `B`, and `C`, if `A` is Morita equivalent to `B` and `
+B` is Morita
+equivalent to `C`, then `A` is Morita equivalent to `C`.
 -/
 def trans {A B C : Type u₁}
     [Ring A] [Algebra R A] [Ring B] [Algebra R B] [Ring C] [Algebra R C]
@@ -160,21 +162,18 @@ def trans {A B C : Type u₁}
 
 variable {R} in
 /--
-Definition of `ofAlgEquiv` / `ofAlgEquiv` 的定义
+Isomorphic `R`-algebras are Morita equivalent.
+-/
+/-
+**MoritaEquivalence.ofAlgEquiv** 是 Mathlib 中的一个定义，位于命名空间 `MoritaEquivalence`。
+形式化陈述：ofAlgEquiv {A : Type u₁} {B : Type u₂} [Ring A] [Algebra R A] [Ring B] [Al
+gebra R B] (f : A ≃ₐ[R] B) : MoritaEquivalence R A B where eqv
+参数：f : A ≃ₐ[R] B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofAlgEquiv
-  signature: {A : Type u₁} {B : Type u₂}
-  body: ModuleCat.restrictScalarsEquivalenceOfRingEquiv f.symm.toRingEquiv
-  linear := ModuleCat.Algebra.restrictScalarsEquivalenceOfRingEquiv_linear f.symm
-
-中文:
-定义 ofAlgEquiv
-  签名: {A : 类型u₁} {B : 类型u₂}
-  定义体: ModuleCat.restrictScalarsEquivalenceOfRingEquiv f.symm.toRingEquiv
-  linear := ModuleCat.Algebra.restrictScalarsEquivalenceOfRingEquiv_linear f.symm
-
-Depends on / 依赖: ModuleCat, ModuleCat.restrictScalarsEquivalenceOfRingEquiv, f.symm.toRingEquiv, restrictScalarsEquivalenceOfRingEquiv, toRingEquiv
+--- 原说明 ---
+Isomorphic `R`-algebras are Morita equivalent.
 -/
 noncomputable def ofAlgEquiv {A : Type u₁} {B : Type u₂}
     [Ring A] [Algebra R A] [Ring B] [Algebra R B] (f : A ≃ₐ[R] B) :
@@ -185,99 +184,84 @@ noncomputable def ofAlgEquiv {A : Type u₁} {B : Type u₂}
 end MoritaEquivalence
 
 /--
-Definition of `IsMoritaEquivalent` / `IsMoritaEquivalent` 的定义
+Let `A` and `B` be `R`-algebras. We say that `A` and `B` are Morita equivalent if the categories of
+`A`-modules and `B`-modules are equivalent as `R`-linear categories.
+-/
+/-
+**IsMoritaEquivalent** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u₀) →   [inst : CommSemiring R] →     (A : Type u₁) → [inst_1 : 
+Ring A] → [Algebra R A] → (B : Type u₂) → [inst_3 : Ring B] → [Algebra R B] → Pr
+op
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsMoritaEquivalent
-  axioms and operations (1):
-    - cond : Nonempty MoritaEquivalence R A B
-
-中文:
-结构 是MoritaEquivalent
-  公理与运算 (1 个):
-    - cond : 非空 MoritaEquivalence R A B
+--- 原说明 ---
+Let `A` and `B` be `R`-algebras. We say that `A` and `B` are Morita equivalent i
+f the categories of
+`A`-modules and `B`-modules are equivalent as `R`-linear categories.
 -/
 structure IsMoritaEquivalent
     (A : Type u₁) [Ring A] [Algebra R A]
     (B : Type u₂) [Ring B] [Algebra R B] : Prop where
-cond : Nonempty MoritaEquivalence R A B
+  cond : Nonempty <| MoritaEquivalence R A B
 
 namespace IsMoritaEquivalent
 
-/--
-lemma `refl` / 引理 `refl`
-
-English:
-lemma refl
-  given: (A : Type u₁) [Ring A] [Algebra R A]
-  statement: IsMoritaEquivalent R A A where
-  proof: ⟨.refl R A⟩
-
-中文:
-引理 refl
-  条件: (A : 类型u₁) [环 A] [代数 R A]
-  结论: 是MoritaEquivalent R A A where
-  证明: ⟨.refl R A⟩
+/-
+**IsMoritaEquivalent.refl** 是 Mathlib 中的一个引理，位于命名空间 `IsMoritaEquivalent`。
+形式化陈述：refl (A : Type u₁) [Ring A] [Algebra R A] : IsMoritaEquivalent R A A where
+ cond
+参数：A : Type u₁。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma refl (A : Type u₁) [Ring A] [Algebra R A] : IsMoritaEquivalent R A A where
   cond := ⟨.refl R A⟩
-
-/--
-lemma `symm` / 引理 `symm`
-
-English:
-lemma symm
-  statement: {A : Type u₁} [Ring A] [Algebra R A] {B : Type u₂} [Ring B] [Algebra R B]
-  proof: h.cond.map .symm R
-
-中文:
-引理 symm
-  结论: {A : 类型u₁} [环 A] [代数 R A] {B : 类型u₂} [环 B] [代数 R B]
-  证明: h.cond.map .symm R
-
-Depends on / 依赖: h.cond.map
+/-
+**IsMoritaEquivalent.symm** 是 Mathlib 中的一个引理，位于命名空间 `IsMoritaEquivalent`。
+形式化陈述：symm {A : Type u₁} [Ring A] [Algebra R A] {B : Type u₂} [Ring B] [Algebra 
+R B] (h : IsMoritaEquivalent R A B) : IsMoritaEquivalent R B A where cond
+参数：h : IsMoritaEquivalent R A B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonempty.map`：Nonempty.map {α β} (f : α -> β) : Nonempty α -> Nonempty β
+ | ⟨h⟩ => ⟨f h⟩  protected theorem Nonempty.map2 {α β γ : Sort*} (f : α -> β -> 
+γ)…
+· 使用定理 `IsMoritaEquivalent.cond`：∀ {R : Type u₀} [inst : CommSemiring R] {A : Ty
+pe u₁} [inst_1 : Ring A] [inst_2 : Algebra R A] {B : Type u₂}   [inst_3 : Ring B
+] [inst_4 : A…
 -/
 lemma symm {A : Type u₁} [Ring A] [Algebra R A] {B : Type u₂} [Ring B] [Algebra R B]
     (h : IsMoritaEquivalent R A B) : IsMoritaEquivalent R B A where
-cond := h.cond.map .symm R
-
-/--
-lemma `trans` / 引理 `trans`
-
-English:
-lemma trans
-  statement: {A B C : Type u₁} [Ring A] [Ring B] [Ring C] [Algebra R A] [Algebra R B] [Algebra R C]
-  proof: Nonempty.map2 (.trans R) h.cond h'.cond
-
-中文:
-引理 trans
-  结论: {A B C : 类型u₁} [环 A] [环 B] [环 C] [代数 R A] [代数 R B] [代数 R C]
-  证明: Nonempty.map2 (.trans R) h.cond h'.cond
-
-Depends on / 依赖: Nonempty, Nonempty.map2, h.cond
+  cond := h.cond.map <| .symm R
+/-
+**IsMoritaEquivalent.trans** 是 Mathlib 中的一个引理，位于命名空间 `IsMoritaEquivalent`。
+形式化陈述：trans {A B C : Type u₁} [Ring A] [Ring B] [Ring C] [Algebra R A] [Algebra 
+R B] [Algebra R C] (h : IsMoritaEquivalent R A B) (h' : IsMoritaEquivalent R B C
+) : IsMoritaEquivalent R A C where cond
+参数：h : IsMoritaEquivalent R A B；h' : IsMoritaEquivalent R B C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonempty.map2`：∀ {α : Sort u_3} {β : Sort u_4} {γ : Sort u_5} (f : α → β
+ → γ), Nonempty α → Nonempty β → Nonempty γ
+· 使用定理 `IsMoritaEquivalent.cond`：∀ {R : Type u₀} [inst : CommSemiring R] {A : Ty
+pe u₁} [inst_1 : Ring A] [inst_2 : Algebra R A] {B : Type u₂}   [inst_3 : Ring B
+] [inst_4 : A…
 -/
 lemma trans {A B C : Type u₁} [Ring A] [Ring B] [Ring C] [Algebra R A] [Algebra R B] [Algebra R C]
     (h : IsMoritaEquivalent R A B) (h' : IsMoritaEquivalent R B C) :
     IsMoritaEquivalent R A C where
   cond := Nonempty.map2 (.trans R) h.cond h'.cond
-
-/--
-lemma `of_algEquiv` / 引理 `of_algEquiv`
-
-English:
-lemma of_algEquiv
-  statement: {A : Type u₁} [Ring A] [Algebra R A] {B : Type u₂} [Ring B] [Algebra R B]
-  proof: ⟨.ofAlgEquiv f⟩
-
-中文:
-引理 of_algEquiv
-  结论: {A : 类型u₁} [环 A] [代数 R A] {B : 类型u₂} [环 B] [代数 R B]
-  证明: ⟨.ofAlgEquiv f⟩
-
-Depends on / 依赖: ofAlgEquiv
+/-
+**IsMoritaEquivalent.of_algEquiv** 是 Mathlib 中的一个引理，位于命名空间 `IsMoritaEquivalent`。
+形式化陈述：of_algEquiv {A : Type u₁} [Ring A] [Algebra R A] {B : Type u₂} [Ring B] [A
+lgebra R B] (f : A ≃ₐ[R] B) : IsMoritaEquivalent R A B where cond
+参数：f : A ≃ₐ[R] B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma of_algEquiv {A : Type u₁} [Ring A] [Algebra R A] {B : Type u₂} [Ring B] [Algebra R B]
     (f : A ≃ₐ[R] B) : IsMoritaEquivalent R A B where
   cond := ⟨.ofAlgEquiv f⟩
 
 end IsMoritaEquivalent
+

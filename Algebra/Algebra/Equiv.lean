@@ -26,27 +26,23 @@ This file defines bundled isomorphisms of `R`-algebras.
 
 universe u v w u₁ v₁ u₂ u₃
 
-/--
-Definition of `AlgEquiv` / `AlgEquiv` 的定义
+/-- An equivalence of algebras (denoted as `A ≃ₐ[R] B`)
+is an equivalence of rings commuting with the actions of scalars. -/
+/-
+**AlgEquiv** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u) →   (A : Type v) →     (B : Type w) →       [inst : CommSemir
+ing R] →         [inst_1 : Semiring A] → [inst_2 : Semiring B] → [Algebra R A] →
+ [Algebra R B] → Type (max v w)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure AlgEquiv
-  parameters: (R : Type u) (A : Type v) (B : Type w) [CommSemiring R] [Semiring A] [Semiring B]
-  extends: A ≃ B, A ≃* B, A ≃+ B, A ≃+* B
-  axioms and operations (1):
-    - commutes' : forall r : R, toFun (algebraMap R A r) = algebraMap R B r
-
-中文:
-结构 代数等价
-  参数: (R : 类型u) (A : 类型v) (B : 类型 w) [交换半环 R] [半环 A] [半环 B]
-  继承: A ≃ B, A ≃* B, A ≃+ B, A ≃+* B
-  公理与运算 (1 个):
-    - commutes' : 对任意 r : R, toFun (algebraMap R A r) = algebraMap R B r
+--- 原说明 ---
+An equivalence of algebras (denoted as `A ≃ₐ[R] B`)
+is an equivalence of rings commuting with the actions of scalars.
 -/
 structure AlgEquiv (R : Type u) (A : Type v) (B : Type w) [CommSemiring R] [Semiring A] [Semiring B]
   [Algebra R A] [Algebra R B] extends A ≃ B, A ≃* B, A ≃+ B, A ≃+* B where
   /-- An equivalence of algebras commutes with the action of scalars. -/
-  protected commutes' : forall r : R, toFun (algebraMap R A r) = algebraMap R B r
+  protected commutes' : ∀ r : R, toFun (algebraMap R A r) = algebraMap R B r
 
 attribute [nolint docBlame] AlgEquiv.toRingEquiv
 attribute [nolint docBlame] AlgEquiv.toEquiv
@@ -56,37 +52,43 @@ attribute [nolint docBlame] AlgEquiv.toMulEquiv
 @[inherit_doc]
 notation:50 A " ≃ₐ[" R "] " A' => AlgEquiv R A A'
 
-/--
-Definition of `AlgEquivClass` / `AlgEquivClass` 的定义
+/-- `AlgEquivClass F R A B` states that `F` is a type of algebra structure preserving
+  equivalences. You should extend this class when you extend `AlgEquiv`. -/
+/-
+**AlgEquivClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_1) →   (R : outParam (Type u_2)) →     (A : outParam (Type u_3
+)) →       (B : outParam (Type u_4)) →         [inst : CommSemiring R] →        
+   [inst_1 : Semiring A] → [inst_2 : Semiring B] → [Algebra R A] → [Algebra R B]
+ → [EquivLike F A B] → Prop
+参数：Type u_2；Type u_3；Type u_4。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class AlgEquivClass
-  parameters: (F : Type*) (R A B : outParam Type*) [CommSemiring R] [Semiring A]
-  extends: RingEquivClass F A B
-  axioms and operations (1):
-    - commutes : forall (f : F) (r : R), f (algebraMap R A r) = algebraMap R B r
-
-中文:
-类 代数等价类
-  参数: (F : 类型) (R A B : outParam 类型) [交换半环 R] [半环 A]
-  继承: 环等价类 F A B
-  公理与运算 (1 个):
-    - commutes : 对任意 (f : F) (r : R), f (algebraMap R A r) = algebraMap R B r
+--- 原说明 ---
+`AlgEquivClass F R A B` states that `F` is a type of algebra structure preservin
+g
+  equivalences. You should extend this class when you extend `AlgEquiv`.
 -/
 class AlgEquivClass (F : Type*) (R A B : outParam Type*) [CommSemiring R] [Semiring A]
     [Semiring B] [Algebra R A] [Algebra R B] [EquivLike F A B] : Prop
     extends RingEquivClass F A B where
   /-- An equivalence of algebras commutes with the action of scalars. -/
-  commutes : forall (f : F) (r : R), f (algebraMap R A r) = algebraMap R B r
+  commutes : ∀ (f : F) (r : R), f (algebraMap R A r) = algebraMap R B r
 
 namespace AlgEquivClass
 
 -- See note [lower instance priority]
+/-
+**AlgEquivClass.** 是 Mathlib 中的一个实例，位于命名空间 `AlgEquivClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) toAlgHomClass (F R A B : Type*) [CommSemiring R] [Semiring A]
     [Semiring B] [Algebra R A] [Algebra R B] [EquivLike F A B] [h : AlgEquivClass F R A B] :
     AlgHomClass F R A B :=
   { h with }
-
+/-
+**AlgEquivClass.** 是 Mathlib 中的一个实例，位于命名空间 `AlgEquivClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) toLinearEquivClass (F R A B : Type*) [CommSemiring R]
     [Semiring A] [Semiring B] [Algebra R A] [Algebra R B]
     [EquivLike F A B] [h : AlgEquivClass F R A B] : LinearEquivClass F R A B :=
@@ -95,20 +97,25 @@ instance (priority := 100) toLinearEquivClass (F R A B : Type*) [CommSemiring R]
 /-- Turn an element of a type `F` satisfying `AlgEquivClass F R A B` into an actual `AlgEquiv`.
 This is declared as the default coercion from `F` to `A ≃ₐ[R] B`. -/
 @[coe]
-/--
-Definition of `toAlgEquiv` / `toAlgEquiv` 的定义
+/-
+**AlgEquivClass.toAlgEquiv** 是 Mathlib 中的一个定义，位于命名空间 `AlgEquivClass`。
+形式化陈述：toAlgEquiv {F R A B : Type*} [CommSemiring R] [Semiring A] [Semiring B] [A
+lgebra R A] [Algebra R B] [EquivLike F A B] [AlgEquivClass F R A B] (f : F) : A 
+≃ₐ[R] B
+参数：f : F。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquivClass.toRingEquivClass`：∀ {F : Type u_1} {R : outParam (Type u_2
+)} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}  
+ {inst_1 : Semiring …
+· 使用定理 `AlgEquivClass.commutes`：∀ {F : Type u_1} {R : outParam (Type u_2)} {A : 
+outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {inst_1
+ : Semiring …
 
-English:
-definition toAlgEquiv
-  signature: {F R A B : Type*} [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A]
-  body: { (f : A ≃ B), (RingEquivClass.toRingEquiv f : A ≃+* B) with commutes' := commutes f }
-
-中文:
-定义 toAlgEquiv
-  签名: {F R A B : 类型} [交换半环 R] [半环 A] [半环 B] [代数 R A]
-  定义体: { (f : A ≃ B), (RingEquivClass.toRingEquiv f : A ≃+* B) with commutes' := commutes f }
-
-Depends on / 依赖: RingEquivClass, RingEquivClass.toRingEquiv, commutes, toRingEquiv
+--- 原说明 ---
+Turn an element of a type `F` satisfying `AlgEquivClass F R A B` into an actual 
+`AlgEquiv`.
+This is declared as the default coercion from `F` to `A ≃ₐ[R] B`.
 -/
 def toAlgEquiv {F R A B : Type*} [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A]
     [Algebra R B] [EquivLike F A B] [AlgEquivClass F R A B] (f : F) : A ≃ₐ[R] B :=
@@ -133,34 +140,9 @@ variable (e : A₁ ≃ₐ[R] A₂)
 
 section coe
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: EquivLike (A₁ ≃ₐ[R] A₂) A₁ A₂
-  body: f.toFun
-  inv f := f.invFun
-  left_inv f := f.left_inv
-  right_inv f := f.right_inv
-  coe_injective' f g h₁ h₂ := by
-    obtain ⟨⟨f, _⟩, _⟩ := f
-    obtain ⟨⟨g, _⟩, _⟩ := g
-    congr
-
-中文:
-实例 :
-  签名: 等价状 (A₁ ≃ₐ[R] A₂) A₁ A₂
-  定义体: f.toFun
-  inv f := f.invFun
-  left_inv f := f.left_inv
-  right_inv f := f.right_inv
-  coe_injective' f g h₁ h₂ := by
-    obtain ⟨⟨f, _⟩, _⟩ := f
-    obtain ⟨⟨g, _⟩, _⟩ := g
-    congr
-
-Depends on / 依赖: f.toFun
+/-
+**AlgEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `AlgEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : EquivLike (A₁ ≃ₐ[R] A₂) A₁ A₂ where
   coe f := f.toFun
@@ -172,49 +154,20 @@ instance : EquivLike (A₁ ≃ₐ[R] A₂) A₁ A₂ where
     obtain ⟨⟨g, _⟩, _⟩ := g
     congr
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Helper instance since the coercion is not always found. -/
+/-
+**AlgEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `AlgEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: FunLike (A₁ ≃ₐ[R] A₂) A₁ A₂
-  body: DFunLike.coe
-  coe_injective := DFunLike.coe_injective
-
-中文:
-实例 :
-  签名: 函数状 (A₁ ≃ₐ[R] A₂) A₁ A₂
-  定义体: DFunLike.coe
-  coe_injective := DFunLike.coe_injective
-
-Depends on / 依赖: DFunLike, DFunLike.coe
+--- 原说明 ---
+Helper instance since the coercion is not always found.
 -/
 instance : FunLike (A₁ ≃ₐ[R] A₂) A₁ A₂ where
   coe := DFunLike.coe
   coe_injective := DFunLike.coe_injective
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AlgEquivClass (A₁ ≃ₐ[R] A₂) R A₁ A₂
-  body: f.map_add'
-  map_mul f := f.map_mul'
-  commutes f := f.commutes'
-
-@[ext]
-
-中文:
-实例 :
-  签名: 代数等价类 (A₁ ≃ₐ[R] A₂) R A₁ A₂
-  定义体: f.map_add'
-  map_mul f := f.map_mul'
-  commutes f := f.commutes'
-
-@[ext]
-
-Depends on / 依赖: f.map_add, map_add
+/-
+**AlgEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `AlgEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : AlgEquivClass (A₁ ≃ₐ[R] A₂) R A₁ A₂ where
   map_add f := f.map_add'
@@ -222,561 +175,349 @@ instance : AlgEquivClass (A₁ ≃ₐ[R] A₂) R A₁ A₂ where
   commutes f := f.commutes'
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {f g : A₁ ≃ₐ[R] A₂} (h : forall a, f a = g a)
-  statement: f = g
-  proof: DFunLike.ext f g h
-
-中文:
-定理 ext
-  条件: {f g : A₁ ≃ₐ[R] A₂} (h : 对任意 a, f a = g a)
-  结论: f = g
-  证明: DFunLike.ext f g h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**AlgEquiv.ext** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：ext {f g : A₁ ≃ₐ[R] A₂} (h : forall a, f a = g a) : f = g
+参数：h : forall a, f a = g a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext {f g : A₁ ≃ₐ[R] A₂} (h : forall a, f a = g a) : f = g :=
+theorem ext {f g : A₁ ≃ₐ[R] A₂} (h : ∀ a, f a = g a) : f = g :=
   DFunLike.ext f g h
-
-/--
-theorem `congr_arg` / 定理 `congr_arg`
-
-English:
-theorem congr_arg
-  given: {f : A₁ ≃ₐ[R] A₂} {x x' : A₁}
-  statement: x = x' -> f x = f x'
-  proof: DFunLike.congr_arg f
-
-中文:
-定理 congr_arg
-  条件: {f : A₁ ≃ₐ[R] A₂} {x x' : A₁}
-  结论: x = x' -> f x = f x'
-  证明: DFunLike.congr_arg f
+/-
+**AlgEquiv.congr_arg** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA₂} [inst : CommSemiring R] [i
+nst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [inst_3 : Algebra R A₁] [inst_4 : 
+Algebra R A₂] {f : A₁ ≃ₐ[R] A₂} {x x' : A₁}, x = x' → f x = f x'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.congr_arg`：∀ {F : Sort u_1} {α : Sort u_2} {β : Sort u_3} [i : 
+FunLike F α β] (f : F) {x y : α}, x = y → f x = f y
 -/
-protected theorem congr_arg {f : A₁ ≃ₐ[R] A₂} {x x' : A₁} : x = x' -> f x = f x' :=
+protected theorem congr_arg {f : A₁ ≃ₐ[R] A₂} {x x' : A₁} : x = x' → f x = f x' :=
   DFunLike.congr_arg f
-
-/--
-theorem `congr_fun` / 定理 `congr_fun`
-
-English:
-theorem congr_fun
-  given: {f g : A₁ ≃ₐ[R] A₂} (h : f = g) (x : A₁)
-  statement: f x = g x
-  proof: DFunLike.congr_fun h x
-
-@[simp]
-
-中文:
-定理 congr_fun
-  条件: {f g : A₁ ≃ₐ[R] A₂} (h : f = g) (x : A₁)
-  结论: f x = g x
-  证明: DFunLike.congr_fun h x
-
-@[simp]
+/-
+**AlgEquiv.congr_fun** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA₂} [inst : CommSemiring R] [i
+nst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [inst_3 : Algebra R A₁] [inst_4 : 
+Algebra R A₂] {f g : A₁ ≃ₐ[R] A₂}, f = g → ∀ (x : A₁), f x = g x
+参数：x : A₁。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 -/
 protected theorem congr_fun {f g : A₁ ≃ₐ[R] A₂} (h : f = g) (x : A₁) : f x = g x :=
   DFunLike.congr_fun h x
 
 @[simp]
-/--
-theorem `coe_mk` / 定理 `coe_mk`
-
-English:
-theorem coe_mk
-  given: {toEquiv map_mul map_add commutes}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_mk
-  条件: {toEquiv map_mul map_add commutes}
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：coe_mk {toEquiv map_mul map_add commutes} : ⇑(⟨toEquiv, map_mul, map_add, 
+commutes⟩ : A₁ ≃ₐ[R] A₂) = toEquiv
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mk {toEquiv map_mul map_add commutes} :
     ⇑(⟨toEquiv, map_mul, map_add, commutes⟩ : A₁ ≃ₐ[R] A₂) = toEquiv :=
   rfl
 
 @[simp]
-/--
-theorem `mk_coe` / 定理 `mk_coe`
-
-English:
-theorem mk_coe
-  given: (e : A₁ ≃ₐ[R] A₂) (e' h₁ h₂ h₃ h₄ h₅)
-  proof: ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 mk_coe
-  条件: (e : A₁ ≃ₐ[R] A₂) (e' h₁ h₂ h₃ h₄ h₅)
-  证明: ext fun _ => rfl
-
-@[simp]
+/-
+**AlgEquiv.mk_coe** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：mk_coe (e : A₁ ≃ₐ[R] A₂) (e' h₁ h₂ h₃ h₄ h₅) : (⟨⟨e, e', h₁, h₂⟩, h₃, h₄, 
+h₅⟩ : A₁ ≃ₐ[R] A₂) = e
+参数：e : A₁ ≃ₐ[R] A₂；e' h₁ h₂ h₃ h₄ h₅。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.ext`：ext {f g : A₁ ≃ₐ[R] A₂} (h : forall a, f a = g a) : f = g
 -/
 theorem mk_coe (e : A₁ ≃ₐ[R] A₂) (e' h₁ h₂ h₃ h₄ h₅) :
     (⟨⟨e, e', h₁, h₂⟩, h₃, h₄, h₅⟩ : A₁ ≃ₐ[R] A₂) = e :=
   ext fun _ => rfl
 
 @[simp]
-/--
-theorem `toEquiv_eq_coe` / 定理 `toEquiv_eq_coe`
-
-English:
-theorem toEquiv_eq_coe
-  statement: e.toEquiv = e
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toEquiv_eq_coe
-  结论: e.toEquiv = e
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.toEquiv_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：toEquiv_eq_coe : e.toEquiv = e
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toEquiv_eq_coe : e.toEquiv = e :=
   rfl
 
 @[simp]
-/--
-theorem `coe_coe` / 定理 `coe_coe`
-
-English:
-theorem coe_coe
-  given: {F : Type*} [EquivLike F A₁ A₂] [AlgEquivClass F R A₁ A₂] (f : F)
-  proof: rfl
-
-中文:
-定理 coe_coe
-  条件: {F : 类型} [等价状 F A₁ A₂] [代数等价类 F R A₁ A₂] (f : F)
-  证明: rfl
+/-
+**AlgEquiv.coe_coe** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA₂} [inst : CommSemiring R] [i
+nst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [inst_3 : Algebra R A₁] [inst_4 : 
+Algebra R A₂] {F : Type u_1} [inst_5 : EquivLike F A₁ A₂]   [inst_6 : AlgEquivCl
+ass F R A₁ A₂] (f : F), ⇑↑f = ⇑f
+参数：f : F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem coe_coe {F : Type*} [EquivLike F A₁ A₂] [AlgEquivClass F R A₁ A₂] (f : F) :
     ⇑(AlgEquivClass.toAlgEquiv f) = f :=
   rfl
-
-/--
-theorem `coe_fun_injective` / 定理 `coe_fun_injective`
-
-English:
-theorem coe_fun_injective
-  statement: @Function.Injective (A₁ ≃ₐ[R] A₂) (A₁ -> A₂) fun e => (e : A₁ -> A₂)
-  proof: DFunLike.coe_injective
-
-中文:
-定理 coe_fun_injective
-  结论: @函数.单射 (A₁ ≃ₐ[R] A₂) (A₁ -> A₂) fun e => (e : A₁ -> A₂)
-  证明: DFunLike.coe_injective
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
+/-
+**AlgEquiv.coe_fun_injective** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：coe_fun_injective : @Function.Injective (A₁ ≃ₐ[R] A₂) (A₁ -> A₂) fun e => 
+(e : A₁ -> A₂)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
-theorem coe_fun_injective : @Function.Injective (A₁ ≃ₐ[R] A₂) (A₁ -> A₂) fun e => (e : A₁ -> A₂) :=
+theorem coe_fun_injective : @Function.Injective (A₁ ≃ₐ[R] A₂) (A₁ → A₂) fun e => (e : A₁ → A₂) :=
   DFunLike.coe_injective
 
-/--
-Definition of `toLinearEquiv` / `toLinearEquiv` 的定义
+/-- Forgetting the multiplicative structures, an equivalence of algebras is a linear equivalence. -/
+/-
+**AlgEquiv.toLinearEquiv** 是 Mathlib 中的一个定义，位于命名空间 `AlgEquiv`。
+形式化陈述：{R : Type uR} →   {A₁ : Type uA₁} →     {A₂ : Type uA₂} →       [inst : Co
+mmSemiring R] →         [inst_1 : Semiring A₁] →           [inst_2 : Semiring A₂
+] → [inst_3 : Algebra R A₁] → [inst_4 : Algebra R A₂] → (A₁ ≃ₐ[R] A₂) → A₁ ≃ₗ[R]
+ A₂
+参数：A₁ ≃ₐ[R] A₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toLinearEquiv
-  signature: (e : A₁ ≃ₐ[R] A₂)
-  body: e.toAddEquiv
-  map_smul' := map_smulₛₗ e
-
-中文:
-定义 toLinearEquiv
-  签名: (e : A₁ ≃ₐ[R] A₂)
-  定义体: e.toAddEquiv
-  map_smul' := map_smulₛₗ e
+--- 原说明 ---
+Forgetting the multiplicative structures, an equivalence of algebras is a linear
+ equivalence.
 -/
 @[coe, simps! apply] def toLinearEquiv (e : A₁ ≃ₐ[R] A₂) : A₁ ≃ₗ[R] A₂ where
   toAddEquiv := e.toAddEquiv
   map_smul' := map_smulₛₗ e
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeOut (A₁ ≃ₐ[R] A₂) (A₁ ≃ₗ[R] A₂)
-  body: toLinearEquiv
-
-中文:
-实例 :
-  签名: CoeOut (A₁ ≃ₐ[R] A₂) (A₁ ≃ₗ[R] A₂)
-  定义体: toLinearEquiv
-
-Depends on / 依赖: toLinearEquiv
+/-
+**AlgEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `AlgEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeOut (A₁ ≃ₐ[R] A₂) (A₁ ≃ₗ[R] A₂) where coe := toLinearEquiv
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeOut (A₁ ≃ₐ[R] A₂) (A₁ ≃+* A₂)
-  body: toRingEquiv
-
-@[simp]
-
-中文:
-实例 :
-  签名: CoeOut (A₁ ≃ₐ[R] A₂) (A₁ ≃+* A₂)
-  定义体: toRingEquiv
-
-@[simp]
-
-Depends on / 依赖: toRingEquiv
+/-
+**AlgEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `AlgEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeOut (A₁ ≃ₐ[R] A₂) (A₁ ≃+* A₂) where coe := toRingEquiv
 
 @[simp]
-/--
-theorem `coe_toEquiv` / 定理 `coe_toEquiv`
-
-English:
-theorem coe_toEquiv
-  statement: ((e : A₁ ≃ A₂) : A₁ -> A₂) = e
-  proof: rfl
-
-@[deprecated "Now a syntactic equality" (since := "2026-04-09"), nolint synTaut]
-
-中文:
-定理 coe_toEquiv
-  结论: ((e : A₁ ≃ A₂) : A₁ -> A₂) = e
-  证明: rfl
-
-@[deprecated "Now a syntactic equality" (since := "2026-04-09"), nolint synTaut]
+/-
+**AlgEquiv.coe_toEquiv** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：coe_toEquiv : ((e : A₁ ≃ A₂) : A₁ -> A₂) = e
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_toEquiv : ((e : A₁ ≃ A₂) : A₁ -> A₂) = e :=
+theorem coe_toEquiv : ((e : A₁ ≃ A₂) : A₁ → A₂) = e :=
   rfl
 
 @[deprecated "Now a syntactic equality" (since := "2026-04-09"), nolint synTaut]
-/--
-theorem `toRingEquiv_eq_coe` / 定理 `toRingEquiv_eq_coe`
-
-English:
-theorem toRingEquiv_eq_coe
-  statement: e.toRingEquiv = e
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toRingEquiv_eq_coe
-  结论: e.toRingEquiv = e
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.toRingEquiv_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：toRingEquiv_eq_coe : e.toRingEquiv = e
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toRingEquiv_eq_coe : e.toRingEquiv = e :=
   rfl
 
 @[simp]
-/--
-lemma `toRingEquiv_toRingHom` / 引理 `toRingEquiv_toRingHom`
-
-English:
-lemma toRingEquiv_toRingHom
-  statement: ((e : A₁ ≃+* A₂) : A₁ ->+* A₂) = e
-  proof: rfl
-
-中文:
-引理 toRingEquiv_toRingHom
-  结论: ((e : A₁ ≃+* A₂) : A₁ ->+* A₂) = e
-  证明: rfl
+/-
+**AlgEquiv.toRingEquiv_toRingHom** 是 Mathlib 中的一个引理，位于命名空间 `AlgEquiv`。
+形式化陈述：toRingEquiv_toRingHom : ((e : A₁ ≃+* A₂) : A₁ ->+* A₂) = e
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
 -/
-lemma toRingEquiv_toRingHom : ((e : A₁ ≃+* A₂) : A₁ ->+* A₂) = e :=
+lemma toRingEquiv_toRingHom : ((e : A₁ ≃+* A₂) : A₁ →+* A₂) = e :=
   rfl
-
-/--
-theorem `coe_ringEquiv` / 定理 `coe_ringEquiv`
-
-English:
-theorem coe_ringEquiv
-  statement: ((e : A₁ ≃+* A₂) : A₁ -> A₂) = e
-  proof: rfl
-
-@[deprecated (since := "2026-06-21")] alias coe_ringEquiv' := coe_ringEquiv
-
-中文:
-定理 coe_ringEquiv
-  结论: ((e : A₁ ≃+* A₂) : A₁ -> A₂) = e
-  证明: rfl
-
-@[deprecated (since := "2026-06-21")] alias coe_ringEquiv' := coe_ringEquiv
+/-
+**AlgEquiv.coe_ringEquiv** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：coe_ringEquiv : ((e : A₁ ≃+* A₂) : A₁ -> A₂) = e
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_ringEquiv : ((e : A₁ ≃+* A₂) : A₁ -> A₂) = e := rfl
+theorem coe_ringEquiv : ((e : A₁ ≃+* A₂) : A₁ → A₂) = e := rfl
 
 @[deprecated (since := "2026-06-21")] alias coe_ringEquiv' := coe_ringEquiv
-
-/--
-theorem `coe_ringEquiv_injective` / 定理 `coe_ringEquiv_injective`
-
-English:
-theorem coe_ringEquiv_injective
-  statement: Function.Injective ((↑) : (A₁ ≃ₐ[R] A₂) -> A₁ ≃+* A₂)
-  proof: fun _ _ h => ext RingEquiv.congr_fun h
-
-中文:
-定理 coe_ringEquiv_injective
-  结论: 函数.单射 ((↑) : (A₁ ≃ₐ[R] A₂) -> A₁ ≃+* A₂)
-  证明: fun _ _ h => ext RingEquiv.congr_fun h
-
-Depends on / 依赖: RingEquiv, RingEquiv.congr_fun, congr_fun
+/-
+**AlgEquiv.coe_ringEquiv_injective** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：coe_ringEquiv_injective : Function.Injective ((↑) : (A₁ ≃ₐ[R] A₂) -> A₁ ≃+
+* A₂)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.ext`：ext {f g : A₁ ≃ₐ[R] A₂} (h : forall a, f a = g a) : f = g
+· 使用定理 `RingEquiv.congr_fun`：∀ {R : Type u_4} {S : Type u_5} [inst : Mul R] [ins
+t_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S] {f g : R ≃+* S},   f = g → ∀ (x :
+ R), f x …
 -/
-theorem coe_ringEquiv_injective : Function.Injective ((↑) : (A₁ ≃ₐ[R] A₂) -> A₁ ≃+* A₂) :=
-fun _ _ h => ext RingEquiv.congr_fun h
+theorem coe_ringEquiv_injective : Function.Injective ((↑) : (A₁ ≃ₐ[R] A₂) → A₁ ≃+* A₂) :=
+  fun _ _ h => ext <| RingEquiv.congr_fun h
 
 /-- Interpret an algebra equivalence as an algebra homomorphism.
 
 This definition is included for symmetry with the other `to*Hom` projections.
 The `simp` normal form is to use the coercion of the `AlgHomClass.coeTC` instance. -/
 @[coe]
-/--
-Definition of `toAlgHom` / `toAlgHom` 的定义
+/-
+**AlgEquiv.toAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `AlgEquiv`。
+形式化陈述：toAlgHom : A₁ ->ₐ[R] A₂
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.map_mul'`：∀ {R : Type u} {A : Type v} {B : Type w} [inst : Comm
+Semiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A]
+ [inst_…
+· 使用定理 `AlgEquiv.map_add'`：∀ {R : Type u} {A : Type v} {B : Type w} [inst : Comm
+Semiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A]
+ [inst_…
+· 使用定理 `AlgEquiv.commutes'`：∀ {R : Type u} {A : Type v} {B : Type w} [inst : Com
+mSemiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A
+] [inst_…
 
-English:
-definition toAlgHom
-  signature: : A₁ ->ₐ[R] A₂
-  body: { e with
-    map_one' := map_one e
-    map_zero' := map_zero e }
+--- 原说明 ---
+Interpret an algebra equivalence as an algebra homomorphism.
 
-中文:
-定义 toAlgHom
-  签名: : A₁ ->ₐ[R] A₂
-  定义体: { e with
-    map_one' := map_one e
-    map_zero' := map_zero e }
-
-Depends on / 依赖: map_one, map_zero
+This definition is included for symmetry with the other `to*Hom` projections.
+The `simp` normal form is to use the coercion of the `AlgHomClass.coeTC` instanc
+e.
 -/
-def toAlgHom : A₁ ->ₐ[R] A₂ :=
+def toAlgHom : A₁ →ₐ[R] A₂ :=
   { e with
     map_one' := map_one e
     map_zero' := map_zero e }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeOut (A₁ ≃ₐ[R] A₂) (A₁ ->ₐ[R] A₂)
-  body: AlgEquiv.toAlgHom
-
-@[deprecated "Now a syntactic equality" (since := "2026-04-29"), nolint synTaut]
-
-中文:
-实例 :
-  签名: CoeOut (A₁ ≃ₐ[R] A₂) (A₁ ->ₐ[R] A₂)
-  定义体: AlgEquiv.toAlgHom
-
-@[deprecated "Now a syntactic equality" (since := "2026-04-29"), nolint synTaut]
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.toAlgHom, toAlgHom
+/-
+**AlgEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `AlgEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CoeOut (A₁ ≃ₐ[R] A₂) (A₁ ->ₐ[R] A₂) where coe := AlgEquiv.toAlgHom
+instance : CoeOut (A₁ ≃ₐ[R] A₂) (A₁ →ₐ[R] A₂) where coe := AlgEquiv.toAlgHom
 
 @[deprecated "Now a syntactic equality" (since := "2026-04-29"), nolint synTaut]
-/--
-theorem `toAlgHom_eq_coe` / 定理 `toAlgHom_eq_coe`
-
-English:
-theorem toAlgHom_eq_coe
-  statement: e.toAlgHom = e
-  proof: rfl
-
-中文:
-定理 toAlgHom_eq_coe
-  结论: e.toAlgHom = e
-  证明: rfl
+/-
+**AlgEquiv.toAlgHom_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：toAlgHom_eq_coe : e.toAlgHom = e
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toAlgHom_eq_coe : e.toAlgHom = e :=
   rfl
-
-/--
-theorem `toAlgHom_apply` / 定理 `toAlgHom_apply`
-
-English:
-theorem toAlgHom_apply
-  given: (x : A₁)
-  statement: e.toAlgHom x = e x
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 toAlgHom_apply
-  条件: (x : A₁)
-  结论: e.toAlgHom x = e x
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**AlgEquiv.toAlgHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：toAlgHom_apply (x : A₁) : e.toAlgHom x = e x
+参数：x : A₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toAlgHom_apply (x : A₁) : e.toAlgHom x = e x :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coe_toAlgHom` / 定理 `coe_toAlgHom`
-
-English:
-theorem coe_toAlgHom
-  statement: DFunLike.coe e.toAlgHom = e
-  proof: rfl
-
-中文:
-定理 coe_toAlgHom
-  结论: 依赖函数状.coe e.toAlgHom = e
-  证明: rfl
+/-
+**AlgEquiv.coe_toAlgHom** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：coe_toAlgHom : DFunLike.coe e.toAlgHom = e
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_toAlgHom : DFunLike.coe e.toAlgHom = e := rfl
-
-/--
-theorem `coe_toAlgHom_injective` / 定理 `coe_toAlgHom_injective`
-
-English:
-theorem coe_toAlgHom_injective
-  statement: Function.Injective ((↑) : (A₁ ≃ₐ[R] A₂) -> A₁ ->ₐ[R] A₂)
-  proof: fun _ _ h => ext AlgHom.congr_fun h
+theorem coe_toAlgHom :  DFunLike.coe e.toAlgHom = e := rfl
+/-
+**AlgEquiv.coe_toAlgHom_injective** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：coe_toAlgHom_injective : Function.Injective ((↑) : (A₁ ≃ₐ[R] A₂) -> A₁ ->ₐ
+[R] A₂)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.ext`：ext {f g : A₁ ≃ₐ[R] A₂} (h : forall a, f a = g a) : f = g
+· 使用定理 `AlgHom.congr_fun`：∀ {R : Type u} {A : Type v} {B : Type w} [inst : CommS
+emiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A] 
+[inst_…
+-/
+theorem coe_toAlgHom_injective : Function.Injective ((↑) : (A₁ ≃ₐ[R] A₂) → A₁ →ₐ[R] A₂) :=
+  fun _ _ h => ext <| AlgHom.congr_fun h
 
 @[deprecated (since := "2026-05-05")] alias coe_algHom := coe_toAlgHom
 @[deprecated (since := "2026-05-05")] alias coe_algHom_injective := coe_toAlgHom_injective
 
 @[simp, norm_cast]
-
-中文:
-定理 coe_toAlgHom_injective
-  结论: 函数.单射 ((↑) : (A₁ ≃ₐ[R] A₂) -> A₁ ->ₐ[R] A₂)
-  证明: fun _ _ h => ext AlgHom.congr_fun h
-
-@[deprecated (since := "2026-05-05")] alias coe_algHom := coe_toAlgHom
-@[deprecated (since := "2026-05-05")] alias coe_algHom_injective := coe_toAlgHom_injective
-
-@[simp, norm_cast]
-
-Depends on / 依赖: AlgHom, AlgHom.congr_fun, congr_fun
+/-
+**AlgEquiv.toAlgHom_toRingHom** 是 Mathlib 中的一个引理，位于命名空间 `AlgEquiv`。
+形式化陈述：toAlgHom_toRingHom : ((e : A₁ ->ₐ[R] A₂) : A₁ ->+* A₂) = e
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
 -/
-theorem coe_toAlgHom_injective : Function.Injective ((↑) : (A₁ ≃ₐ[R] A₂) -> A₁ ->ₐ[R] A₂) :=
-fun _ _ h => ext AlgHom.congr_fun h
-
-@[deprecated (since := "2026-05-05")] alias coe_algHom := coe_toAlgHom
-@[deprecated (since := "2026-05-05")] alias coe_algHom_injective := coe_toAlgHom_injective
-
-@[simp, norm_cast]
-/--
-lemma `toAlgHom_toRingHom` / 引理 `toAlgHom_toRingHom`
-
-English:
-lemma toAlgHom_toRingHom
-  statement: ((e : A₁ ->ₐ[R] A₂) : A₁ ->+* A₂) = e
-  proof: rfl
-
-中文:
-引理 toAlgHom_toRingHom
-  结论: ((e : A₁ ->ₐ[R] A₂) : A₁ ->+* A₂) = e
-  证明: rfl
--/
-lemma toAlgHom_toRingHom : ((e : A₁ ->ₐ[R] A₂) : A₁ ->+* A₂) = e :=
+lemma toAlgHom_toRingHom : ((e : A₁ →ₐ[R] A₂) : A₁ →+* A₂) = e :=
   rfl
 
-/--
-theorem `coe_ringHom_commutes` / 定理 `coe_ringHom_commutes`
+/-- The two paths coercion can take to a `RingHom` are equivalent -/
+/-
+**AlgEquiv.coe_ringHom_commutes** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：coe_ringHom_commutes : ((e : A₁ ->ₐ[R] A₂) : A₁ ->+* A₂) = ((e : A₁ ≃+* A₂
+) : A₁ ->+* A₂)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
 
-English:
-theorem coe_ringHom_commutes
-  statement: ((e : A₁ ->ₐ[R] A₂) : A₁ ->+* A₂) = ((e : A₁ ≃+* A₂) : A₁ ->+* A₂)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_ringHom_commutes
-  结论: ((e : A₁ ->ₐ[R] A₂) : A₁ ->+* A₂) = ((e : A₁ ≃+* A₂) : A₁ ->+* A₂)
-  证明: rfl
-
-@[simp]
+--- 原说明 ---
+The two paths coercion can take to a `RingHom` are equivalent
 -/
-theorem coe_ringHom_commutes : ((e : A₁ ->ₐ[R] A₂) : A₁ ->+* A₂) = ((e : A₁ ≃+* A₂) : A₁ ->+* A₂) :=
+theorem coe_ringHom_commutes : ((e : A₁ →ₐ[R] A₂) : A₁ →+* A₂) = ((e : A₁ ≃+* A₂) : A₁ →+* A₂) :=
   rfl
 
 @[simp]
-/--
-theorem `commutes` / 定理 `commutes`
-
-English:
-theorem commutes
-  statement: forall r : R, e (algebraMap R A₁ r) = algebraMap R A₂ r
-  proof: e.commutes'
-
-中文:
-定理 commutes
-  结论: 对任意 r : R, e (algebraMap R A₁ r) = algebraMap R A₂ r
-  证明: e.commutes'
-
-Depends on / 依赖: commutes, e.commutes
+/-
+**AlgEquiv.commutes** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：commutes : forall r : R, e (algebraMap R A₁ r) = algebraMap R A₂ r
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.commutes'`：∀ {R : Type u} {A : Type v} {B : Type w} [inst : Com
+mSemiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A
+] [inst_…
 -/
-theorem commutes : forall r : R, e (algebraMap R A₁ r) = algebraMap R A₂ r :=
+theorem commutes : ∀ r : R, e (algebraMap R A₁ r) = algebraMap R A₂ r :=
   e.commutes'
 
 end coe
 
 section bijective
 
-/--
-theorem `bijective` / 定理 `bijective`
-
-English:
-theorem bijective
-  statement: Function.Bijective e
-  proof: EquivLike.bijective e
-
-中文:
-定理 bijective
-  结论: 函数.双射 e
-  证明: EquivLike.bijective e
+/-
+**AlgEquiv.bijective** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA₂} [inst : CommSemiring R] [i
+nst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [inst_3 : Algebra R A₁] [inst_4 : 
+Algebra R A₂] (e : A₁ ≃ₐ[R] A₂), Function.Bijective ⇑e
+参数：e : A₁ ≃ₐ[R] A₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EquivLike.bijective`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4} [ins
+t : EquivLike E α β] (e : E), Function.Bijective ⇑e
 -/
 protected theorem bijective : Function.Bijective e :=
   EquivLike.bijective e
-
-/--
-theorem `injective` / 定理 `injective`
-
-English:
-theorem injective
-  statement: Function.Injective e
-  proof: EquivLike.injective e
-
-中文:
-定理 injective
-  结论: 函数.单射 e
-  证明: EquivLike.injective e
+/-
+**AlgEquiv.injective** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA₂} [inst : CommSemiring R] [i
+nst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [inst_3 : Algebra R A₁] [inst_4 : 
+Algebra R A₂] (e : A₁ ≃ₐ[R] A₂), Function.Injective ⇑e
+参数：e : A₁ ≃ₐ[R] A₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EquivLike.injective`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4} [ins
+t : EquivLike E α β] (e : E), Function.Injective ⇑e
 -/
 protected theorem injective : Function.Injective e :=
   EquivLike.injective e
-
-/--
-theorem `surjective` / 定理 `surjective`
-
-English:
-theorem surjective
-  statement: Function.Surjective e
-  proof: EquivLike.surjective e
-
-中文:
-定理 surjective
-  结论: 函数.满射 e
-  证明: EquivLike.surjective e
+/-
+**AlgEquiv.surjective** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA₂} [inst : CommSemiring R] [i
+nst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [inst_3 : Algebra R A₁] [inst_4 : 
+Algebra R A₂] (e : A₁ ≃ₐ[R] A₂), Function.Surjective ⇑e
+参数：e : A₁ ≃ₐ[R] A₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EquivLike.surjective`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4} [in
+st : EquivLike E α β] (e : E), Function.Surjective ⇑e
 -/
 protected theorem surjective : Function.Surjective e :=
   EquivLike.surjective e
@@ -787,88 +528,53 @@ section refl
 
 /-- Algebra equivalences are reflexive. -/
 @[refl]
-/--
-Definition of `refl` / `refl` 的定义
+/-
+**AlgEquiv.refl** 是 Mathlib 中的一个定义，位于命名空间 `AlgEquiv`。
+形式化陈述：refl : A₁ ≃ₐ[R] A₁
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition refl
-  signature: : A₁ ≃ₐ[R] A₁
-  body: { (.refl _ : A₁ ≃+* A₁) with commutes' := fun _ => rfl }
-
-中文:
-定义 refl
-  签名: : A₁ ≃ₐ[R] A₁
-  定义体: { (.refl _ : A₁ ≃+* A₁) with commutes' := fun _ => rfl }
-
-Depends on / 依赖: commutes
+--- 原说明 ---
+Algebra equivalences are reflexive.
 -/
 def refl : A₁ ≃ₐ[R] A₁ :=
   { (.refl _ : A₁ ≃+* A₁) with commutes' := fun _ => rfl }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (A₁ ≃ₐ[R] A₁)
-  body: ⟨refl⟩
-
-中文:
-实例 :
-  签名: 可居 (A₁ ≃ₐ[R] A₁)
-  定义体: ⟨refl⟩
+/-
+**AlgEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `AlgEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (A₁ ≃ₐ[R] A₁) :=
   ⟨refl⟩
-
-/--
-lemma `refl_toAlgHom` / 引理 `refl_toAlgHom`
-
-English:
-lemma refl_toAlgHom
-  statement: (refl : A₁ ≃ₐ[R] A₁) = AlgHom.id R A₁
-  proof: rfl
-
-中文:
-引理 refl_toAlgHom
-  结论: (refl : A₁ ≃ₐ[R] A₁) = 代数态射.id R A₁
-  证明: rfl
+/-
+**AlgEquiv.refl_toAlgHom** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：∀ {R : Type uR} {A₁ : Type uA₁} [inst : CommSemiring R] [inst_1 : Semiring
+ A₁] [inst_2 : Algebra R A₁],   ↑AlgEquiv.refl = AlgHom.id R A₁
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp, norm_cast] lemma refl_toAlgHom : (refl : A₁ ≃ₐ[R] A₁) = AlgHom.id R A₁ := rfl
-/--
-lemma `refl_toRingHom` / 引理 `refl_toRingHom`
-
-English:
-lemma refl_toRingHom
-  statement: (refl : A₁ ≃ₐ[R] A₁) = RingHom.id A₁
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 refl_toRingHom
-  结论: (refl : A₁ ≃ₐ[R] A₁) = 环态射.id A₁
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: Inhabited
+/-
+**AlgEquiv.refl_toRingHom** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：∀ {R : Type uR} {A₁ : Type uA₁} [inst : CommSemiring R] [inst_1 : Semiring
+ A₁] [inst_2 : Algebra R A₁],   ↑AlgEquiv.refl = RingHom.id A₁
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `AlgEquivClass.toAlgHomClass`：∀ (F : Type u_1) (R : Type u_2) (A : Type u
+_3) (B : Type u_4) [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Sem
+iring B] [inst_3 …
+· 使用定理 `AlgEquiv.instAlgEquivClass`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type u
+A₂} [inst : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [ins
+t_3 : Algebra R …
 -/
 @[simp, norm_cast] lemma refl_toRingHom : (refl : A₁ ≃ₐ[R] A₁) = RingHom.id A₁ := rfl
 
 @[simp]
-/--
-theorem `coe_refl` / 定理 `coe_refl`
-
-English:
-theorem coe_refl
-  statement: ⇑(refl : A₁ ≃ₐ[R] A₁) = id
-  proof: rfl
-
-中文:
-定理 coe_refl
-  结论: ⇑(refl : A₁ ≃ₐ[R] A₁) = id
-  证明: rfl
+/-
+**AlgEquiv.coe_refl** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：coe_refl : ⇑(refl : A₁ ≃ₐ[R] A₁) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_refl : ⇑(refl : A₁ ≃ₐ[R] A₁) = id :=
   rfl
@@ -879,28 +585,15 @@ section symm
 
 /-- Algebra equivalences are symmetric. -/
 @[symm]
-/--
-Definition of `symm` / `symm` 的定义
+/-
+**AlgEquiv.symm** 是 Mathlib 中的一个定义，位于命名空间 `AlgEquiv`。
+形式化陈述：symm (e : A₁ ≃ₐ[R] A₂) : A₂ ≃ₐ[R] A₁
+参数：e : A₁ ≃ₐ[R] A₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition symm
-  signature: (e : A₁ ≃ₐ[R] A₂)
-  body: { e.toRingEquiv.symm with
-    commutes' := fun r => by
-      rw [← e.toRingEquiv.symm_apply_apply (algebraMap R A₁ r)]
-      congr
-      simp }
-
-中文:
-定义 symm
-  签名: (e : A₁ ≃ₐ[R] A₂)
-  定义体: { e.toRingEquiv.symm with
-    commutes' := fun r => by
-      rw [← e.toRingEquiv.symm_apply_apply (algebraMap R A₁ r)]
-      congr
-      simp }
-
-Depends on / 依赖: algebraMap, commutes, e.toRingEquiv.symm, e.toRingEquiv.symm_apply_apply, symm_apply_apply, toRingEquiv
+--- 原说明 ---
+Algebra equivalences are symmetric.
 -/
 def symm (e : A₁ ≃ₐ[R] A₂) : A₂ ≃ₐ[R] A₁ :=
   { e.toRingEquiv.symm with
@@ -908,48 +601,26 @@ def symm (e : A₁ ≃ₐ[R] A₂) : A₂ ≃ₐ[R] A₁ :=
       rw [← e.toRingEquiv.symm_apply_apply (algebraMap R A₁ r)]
       congr
       simp }
-
-/--
-theorem `invFun_eq_symm` / 定理 `invFun_eq_symm`
-
-English:
-theorem invFun_eq_symm
-  given: {e : A₁ ≃ₐ[R] A₂}
-  statement: e.invFun = e.symm
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 invFun_eq_symm
-  条件: {e : A₁ ≃ₐ[R] A₂}
-  结论: e.invFun = e.symm
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.invFun_eq_symm** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：invFun_eq_symm {e : A₁ ≃ₐ[R] A₂} : e.invFun = e.symm
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem invFun_eq_symm {e : A₁ ≃ₐ[R] A₂} : e.invFun = e.symm :=
   rfl
 
 @[simp]
-/--
-theorem `coe_apply_coe_coe_symm_apply` / 定理 `coe_apply_coe_coe_symm_apply`
-
-English:
-theorem coe_apply_coe_coe_symm_apply
-  statement: {F : Type*} [EquivLike F A₁ A₂] [AlgEquivClass F R A₁ A₂]
-  proof: EquivLike.right_inv f x
-
-@[simp]
-
-中文:
-定理 coe_apply_coe_coe_symm_apply
-  结论: {F : 类型} [等价状 F A₁ A₂] [代数等价类 F R A₁ A₂]
-  证明: EquivLike.right_inv f x
-
-@[simp]
-
-Depends on / 依赖: EquivLike, EquivLike.right_inv, right_inv
+/-
+**AlgEquiv.coe_apply_coe_coe_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：coe_apply_coe_coe_symm_apply {F : Type*} [EquivLike F A₁ A₂] [AlgEquivClas
+s F R A₁ A₂] (f : F) (x : A₂) : f ((AlgEquivClass.toAlgEquiv f).symm x) = x
+参数：f : F；x : A₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EquivLike.right_inv`：∀ {E : Sort u_1} {α : outParam (Sort u_2)} {β : out
+Param (Sort u_3)} [self : EquivLike E α β] (e : E),   Function.RightInverse (Equ
+ivLike.in…
 -/
 theorem coe_apply_coe_coe_symm_apply {F : Type*} [EquivLike F A₁ A₂] [AlgEquivClass F R A₁ A₂]
     (f : F) (x : A₂) :
@@ -957,20 +628,16 @@ theorem coe_apply_coe_coe_symm_apply {F : Type*} [EquivLike F A₁ A₂] [AlgEqu
   EquivLike.right_inv f x
 
 @[simp]
-/--
-theorem `coe_coe_symm_apply_coe_apply` / 定理 `coe_coe_symm_apply_coe_apply`
-
-English:
-theorem coe_coe_symm_apply_coe_apply
-  statement: {F : Type*} [EquivLike F A₁ A₂] [AlgEquivClass F R A₁ A₂]
-  proof: EquivLike.left_inv f x
-
-中文:
-定理 coe_coe_symm_apply_coe_apply
-  结论: {F : 类型} [等价状 F A₁ A₂] [代数等价类 F R A₁ A₂]
-  证明: EquivLike.left_inv f x
-
-Depends on / 依赖: EquivLike, EquivLike.left_inv, left_inv
+/-
+**AlgEquiv.coe_coe_symm_apply_coe_apply** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：coe_coe_symm_apply_coe_apply {F : Type*} [EquivLike F A₁ A₂] [AlgEquivClas
+s F R A₁ A₂] (f : F) (x : A₁) : (AlgEquivClass.toAlgEquiv f).symm (f x) = x
+参数：f : F；x : A₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EquivLike.left_inv`：∀ {E : Sort u_1} {α : outParam (Sort u_2)} {β : outP
+aram (Sort u_3)} [self : EquivLike E α β] (e : E),   Function.LeftInverse (Equiv
+Like.inv…
 -/
 theorem coe_coe_symm_apply_coe_apply {F : Type*} [EquivLike F A₁ A₂] [AlgEquivClass F R A₁ A₂]
     (f : F) (x : A₁) :
@@ -979,113 +646,67 @@ theorem coe_coe_symm_apply_coe_apply {F : Type*} [EquivLike F A₁ A₂] [AlgEqu
 
 /-- `simp` normal form of `invFun_eq_symm` -/
 @[simp]
-/--
-theorem `symm_toEquiv_eq_symm` / 定理 `symm_toEquiv_eq_symm`
+/-
+**AlgEquiv.symm_toEquiv_eq_symm** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：symm_toEquiv_eq_symm {e : A₁ ≃ₐ[R] A₂} : (e : A₁ ≃ A₂).symm = e.symm
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-theorem symm_toEquiv_eq_symm
-  given: {e : A₁ ≃ₐ[R] A₂}
-  statement: (e : A₁ ≃ A₂).symm = e.symm
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 symm_toEquiv_eq_symm
-  条件: {e : A₁ ≃ₐ[R] A₂}
-  结论: (e : A₁ ≃ A₂).symm = e.symm
-  证明: rfl
-
-@[simp]
+--- 原说明 ---
+`simp` normal form of `invFun_eq_symm`
 -/
 theorem symm_toEquiv_eq_symm {e : A₁ ≃ₐ[R] A₂} : (e : A₁ ≃ A₂).symm = e.symm :=
   rfl
 
 @[simp]
-/--
-theorem `symm_symm` / 定理 `symm_symm`
-
-English:
-theorem symm_symm
-  given: (e : A₁ ≃ₐ[R] A₂)
-  statement: e.symm.symm = e
-  proof: rfl
-
-中文:
-定理 symm_symm
-  条件: (e : A₁ ≃ₐ[R] A₂)
-  结论: e.symm.symm = e
-  证明: rfl
+/-
+**AlgEquiv.symm_symm** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：symm_symm (e : A₁ ≃ₐ[R] A₂) : e.symm.symm = e
+参数：e : A₁ ≃ₐ[R] A₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_symm (e : A₁ ≃ₐ[R] A₂) : e.symm.symm = e := rfl
-
-/--
-theorem `symm_bijective` / 定理 `symm_bijective`
-
-English:
-theorem symm_bijective
-  statement: Function.Bijective (symm : (A₁ ≃ₐ[R] A₂) -> A₂ ≃ₐ[R] A₁)
-  proof: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
-
-@[simp]
-
-中文:
-定理 symm_bijective
-  结论: 函数.双射 (symm : (A₁ ≃ₐ[R] A₂) -> A₂ ≃ₐ[R] A₁)
-  证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
-
-@[simp]
-
-Depends on / 依赖: Function, Function.bijective_iff_has_inverse.mpr, bijective_iff_has_inverse, symm_symm
+/-
+**AlgEquiv.symm_bijective** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：symm_bijective : Function.Bijective (symm : (A₁ ≃ₐ[R] A₂) -> A₂ ≃ₐ[R] A₁)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.bijective_iff_has_inverse`：bijective_iff_has_inverse : Bijectiv
+e f ↔ exists g, LeftInverse g f ∧ RightInverse g f
+· 使用定理 `AlgEquiv.symm_symm`：symm_symm (e : A₁ ≃ₐ[R] A₂) : e.symm.symm = e
 -/
-theorem symm_bijective : Function.Bijective (symm : (A₁ ≃ₐ[R] A₂) -> A₂ ≃ₐ[R] A₁) :=
+theorem symm_bijective : Function.Bijective (symm : (A₁ ≃ₐ[R] A₂) → A₂ ≃ₐ[R] A₁) :=
   Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 @[simp]
-/--
-theorem `mk_coe'` / 定理 `mk_coe'`
-
-English:
-theorem mk_coe'
-  given: (e : A₁ ≃ₐ[R] A₂) (f h₁ h₂ h₃ h₄ h₅)
-  proof: symm_bijective.injective ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 mk_coe'
-  条件: (e : A₁ ≃ₐ[R] A₂) (f h₁ h₂ h₃ h₄ h₅)
-  证明: symm_bijective.injective ext fun _ => rfl
-
-@[simp]
-
-Depends on / 依赖: injective, symm_bijective, symm_bijective.injective
+/-
+**AlgEquiv.mk_coe'** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：mk_coe' (e : A₁ ≃ₐ[R] A₂) (f h₁ h₂ h₃ h₄ h₅) : (⟨⟨f, e, h₁, h₂⟩, h₃, h₄, h
+₅⟩ : A₂ ≃ₐ[R] A₁) = e.symm
+参数：e : A₁ ≃ₐ[R] A₂；f h₁ h₂ h₃ h₄ h₅。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Bijective.injective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β
+}, Function.Bijective f → Function.Injective f
+· 使用定理 `AlgEquiv.symm_bijective`：symm_bijective : Function.Bijective (symm : (A₁
+ ≃ₐ[R] A₂) -> A₂ ≃ₐ[R] A₁)
+· 使用定理 `AlgEquiv.ext`：ext {f g : A₁ ≃ₐ[R] A₂} (h : forall a, f a = g a) : f = g
 -/
 theorem mk_coe' (e : A₁ ≃ₐ[R] A₂) (f h₁ h₂ h₃ h₄ h₅) :
     (⟨⟨f, e, h₁, h₂⟩, h₃, h₄, h₅⟩ : A₂ ≃ₐ[R] A₁) = e.symm :=
-symm_bijective.injective ext fun _ => rfl
+  symm_bijective.injective <| ext fun _ => rfl
 
 @[simp]
-/--
-theorem `symm_mk` / 定理 `symm_mk`
-
-English:
-theorem symm_mk
-  given: (e : A₁ ≃ A₂) (h₁ h₂ h₃)
-  statement: dsimp%
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 symm_mk
-  条件: (e : A₁ ≃ A₂) (h₁ h₂ h₃)
-  结论: dsimp%
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: e.symm
+/-
+**AlgEquiv.symm_mk** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：symm_mk (e : A₁ ≃ A₂) (h₁ h₂ h₃) : dsimp% (mk e h₁ h₂ h₃ : A₁ ≃ₐ[R] A₂).sy
+mm = { (mk e h₁ h₂ h₃ : A₁ ≃ₐ[R] A₂).symm with toEquiv
+参数：e : A₁ ≃ A₂；h₁ h₂ h₃。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_mk (e : A₁ ≃ A₂) (h₁ h₂ h₃) : dsimp%
     (mk e h₁ h₂ h₃ : A₁ ≃ₐ[R] A₂).symm =
@@ -1094,303 +715,198 @@ theorem symm_mk (e : A₁ ≃ A₂) (h₁ h₂ h₃) : dsimp%
   rfl
 
 @[simp]
-/--
-theorem `refl_symm` / 定理 `refl_symm`
-
-English:
-theorem refl_symm
-  statement: (AlgEquiv.refl : A₁ ≃ₐ[R] A₁).symm = AlgEquiv.refl
-  proof: rfl
-
-中文:
-定理 refl_symm
-  结论: (代数等价.refl : A₁ ≃ₐ[R] A₁).symm = 代数等价.refl
-  证明: rfl
+/-
+**AlgEquiv.refl_symm** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：refl_symm : (AlgEquiv.refl : A₁ ≃ₐ[R] A₁).symm = AlgEquiv.refl
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem refl_symm : (AlgEquiv.refl : A₁ ≃ₐ[R] A₁).symm = AlgEquiv.refl :=
   rfl
-
-/--
-theorem `toRingEquiv_symm` / 定理 `toRingEquiv_symm`
-
-English:
-theorem toRingEquiv_symm
-  statement: (e : A₁ ≃+* A₂).symm = e.symm
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toRingEquiv_symm
-  结论: (e : A₁ ≃+* A₂).symm = e.symm
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.toRingEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：toRingEquiv_symm : (e : A₁ ≃+* A₂).symm = e.symm
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toRingEquiv_symm : (e : A₁ ≃+* A₂).symm = e.symm :=
   rfl
 
 @[simp]
-/--
-theorem `symm_toRingEquiv` / 定理 `symm_toRingEquiv`
-
-English:
-theorem symm_toRingEquiv
-  statement: (e.symm : A₂ ≃+* A₁) = (e : A₁ ≃+* A₂).symm
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 symm_toRingEquiv
-  结论: (e.symm : A₂ ≃+* A₁) = (e : A₁ ≃+* A₂).symm
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.symm_toRingEquiv** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：symm_toRingEquiv : (e.symm : A₂ ≃+* A₁) = (e : A₁ ≃+* A₂).symm
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_toRingEquiv : (e.symm : A₂ ≃+* A₁) = (e : A₁ ≃+* A₂).symm :=
   rfl
 
 @[simp]
-/--
-theorem `symm_toAddEquiv` / 定理 `symm_toAddEquiv`
-
-English:
-theorem symm_toAddEquiv
-  statement: (e.symm : A₂ ≃+ A₁) = (e : A₁ ≃+ A₂).symm
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 symm_toAddEquiv
-  结论: (e.symm : A₂ ≃+ A₁) = (e : A₁ ≃+ A₂).symm
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.symm_toAddEquiv** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：symm_toAddEquiv : (e.symm : A₂ ≃+ A₁) = (e : A₁ ≃+ A₂).symm
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SemilinearEquivClass.toAddEquivClass`：∀ {F : Type u_14} {R : outParam (T
+ype u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S} 
+  {σ : outParam (R →+* S)}…
+· 使用定理 `AlgEquivClass.toLinearEquivClass`：∀ (F : Type u_1) (R : Type u_2) (A : T
+ype u_3) (B : Type u_4) [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 
+: Semiring B] [inst_3 …
+· 使用定理 `AlgEquiv.instAlgEquivClass`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type u
+A₂} [inst : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [ins
+t_3 : Algebra R …
 -/
 theorem symm_toAddEquiv : (e.symm : A₂ ≃+ A₁) = (e : A₁ ≃+ A₂).symm :=
   rfl
 
 @[simp]
-/--
-theorem `symm_toMulEquiv` / 定理 `symm_toMulEquiv`
-
-English:
-theorem symm_toMulEquiv
-  statement: (e.symm : A₂ ≃* A₁) = (e : A₁ ≃* A₂).symm
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 symm_toMulEquiv
-  结论: (e.symm : A₂ ≃* A₁) = (e : A₁ ≃* A₂).symm
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.symm_toMulEquiv** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：symm_toMulEquiv : (e.symm : A₂ ≃* A₁) = (e : A₁ ≃* A₂).symm
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingEquivClass.toMulEquivClass`：∀ {F : Type u_7} {R : Type u_8} {S : Typ
+e u_9} {inst : Mul R} {inst_1 : Add R} {inst_2 : Mul S} {inst_3 : Add S}   {inst
+_4 : EquivLike F R S…
+· 使用定理 `AlgEquivClass.toRingEquivClass`：∀ {F : Type u_1} {R : outParam (Type u_2
+)} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}  
+ {inst_1 : Semiring …
+· 使用定理 `AlgEquiv.instAlgEquivClass`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type u
+A₂} [inst : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [ins
+t_3 : Algebra R …
 -/
 theorem symm_toMulEquiv : (e.symm : A₂ ≃* A₁) = (e : A₁ ≃* A₂).symm :=
   rfl
 
 @[simp]
-/--
-theorem `apply_symm_apply` / 定理 `apply_symm_apply`
-
-English:
-theorem apply_symm_apply
-  given: (e : A₁ ≃ₐ[R] A₂)
-  statement: forall x, e (e.symm x) = x
-  proof: e.toEquiv.apply_symm_apply
-
-@[simp]
-
-中文:
-定理 apply_symm_apply
-  条件: (e : A₁ ≃ₐ[R] A₂)
-  结论: 对任意 x, e (e.symm x) = x
-  证明: e.toEquiv.apply_symm_apply
-
-@[simp]
-
-Depends on / 依赖: GradeZero, GradeZero.one, apply_symm_apply, e.toEquiv.apply_symm_apply, toEquiv
+/-
+**AlgEquiv.apply_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：apply_symm_apply (e : A₁ ≃ₐ[R] A₂) : forall x, e (e.symm x) = x
+参数：e : A₁ ≃ₐ[R] A₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
 -/
-theorem apply_symm_apply (e : A₁ ≃ₐ[R] A₂) : forall x, e (e.symm x) = x :=
+theorem apply_symm_apply (e : A₁ ≃ₐ[R] A₂) : ∀ x, e (e.symm x) = x :=
   e.toEquiv.apply_symm_apply
 
 @[simp]
-/--
-theorem `symm_apply_apply` / 定理 `symm_apply_apply`
-
-English:
-theorem symm_apply_apply
-  given: (e : A₁ ≃ₐ[R] A₂)
-  statement: forall x, e.symm (e x) = x
-  proof: e.toEquiv.symm_apply_apply
-
-中文:
-定理 symm_apply_apply
-  条件: (e : A₁ ≃ₐ[R] A₂)
-  结论: 对任意 x, e.symm (e x) = x
-  证明: e.toEquiv.symm_apply_apply
-
-Depends on / 依赖: e.toEquiv.symm_apply_apply, symm_apply_apply, toEquiv
+/-
+**AlgEquiv.symm_apply_apply** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：symm_apply_apply (e : A₁ ≃ₐ[R] A₂) : forall x, e.symm (e x) = x
+参数：e : A₁ ≃ₐ[R] A₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
 -/
-theorem symm_apply_apply (e : A₁ ≃ₐ[R] A₂) : forall x, e.symm (e x) = x :=
+theorem symm_apply_apply (e : A₁ ≃ₐ[R] A₂) : ∀ x, e.symm (e x) = x :=
   e.toEquiv.symm_apply_apply
-
-/--
-theorem `symm_apply_eq` / 定理 `symm_apply_eq`
-
-English:
-theorem symm_apply_eq
-  given: (e : A₁ ≃ₐ[R] A₂) {x y}
-  statement: e.symm x = y ↔ x = e y
-  proof: e.toEquiv.symm_apply_eq
-
-中文:
-定理 symm_apply_eq
-  条件: (e : A₁ ≃ₐ[R] A₂) {x y}
-  结论: e.symm x = y ↔ x = e y
-  证明: e.toEquiv.symm_apply_eq
-
-Depends on / 依赖: GradeZero, GradeZero.mul, e.toEquiv.symm_apply_eq, symm_apply_eq, toEquiv
+/-
+**AlgEquiv.symm_apply_eq** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：symm_apply_eq (e : A₁ ≃ₐ[R] A₂) {x y} : e.symm x = y ↔ x = e y
+参数：e : A₁ ≃ₐ[R] A₂。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm_apply_eq`：symm_apply_eq {α β} (e : α ≃ β) {x y} : e.symm x = 
+y ↔ x = e y
 -/
 theorem symm_apply_eq (e : A₁ ≃ₐ[R] A₂) {x y} : e.symm x = y ↔ x = e y :=
   e.toEquiv.symm_apply_eq
-
-/--
-theorem `eq_symm_apply` / 定理 `eq_symm_apply`
-
-English:
-theorem eq_symm_apply
-  given: (e : A₁ ≃ₐ[R] A₂) {x y}
-  statement: y = e.symm x ↔ e y = x
-  proof: e.toEquiv.eq_symm_apply
-
-@[simp]
-
-中文:
-定理 eq_symm_apply
-  条件: (e : A₁ ≃ₐ[R] A₂) {x y}
-  结论: y = e.symm x ↔ e y = x
-  证明: e.toEquiv.eq_symm_apply
-
-@[simp]
-
-Depends on / 依赖: e.toEquiv.eq_symm_apply, eq_symm_apply, toEquiv
+/-
+**AlgEquiv.eq_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：eq_symm_apply (e : A₁ ≃ₐ[R] A₂) {x y} : y = e.symm x ↔ e y = x
+参数：e : A₁ ≃ₐ[R] A₂。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.eq_symm_apply`：eq_symm_apply {α β} (e : α ≃ β) {x y} : y = e.symm 
+x ↔ e y = x
 -/
 theorem eq_symm_apply (e : A₁ ≃ₐ[R] A₂) {x y} : y = e.symm x ↔ e y = x :=
   e.toEquiv.eq_symm_apply
 
 @[simp]
-/--
-theorem `comp_symm` / 定理 `comp_symm`
-
-English:
-theorem comp_symm
-  given: (e : A₁ ≃ₐ[R] A₂)
-  statement: AlgHom.comp (e : A₁ ->ₐ[R] A₂) ↑e.symm = AlgHom.id R A₂
-  proof: by
-  ext
-  simp
-
-@[simp]
-
-中文:
-定理 comp_symm
-  条件: (e : A₁ ≃ₐ[R] A₂)
-  结论: 代数态射.comp (e : A₁ ->ₐ[R] A₂) ↑e.symm = 代数态射.id R A₂
-  证明: by
-  ext
-  simp
-
-@[simp]
+/-
+**AlgEquiv.comp_symm** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：comp_symm (e : A₁ ≃ₐ[R] A₂) : AlgHom.comp (e : A₁ ->ₐ[R] A₂) ↑e.symm = Alg
+Hom.id R A₂
+参数：e : A₁ ≃ₐ[R] A₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.ext`：ext {φ₁ φ₂ : A ->ₐ[R] B} (H : forall x, φ₁ x = φ₂ x) : φ₁ = 
+φ₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgEquiv.apply_symm_apply`：apply_symm_apply (e : A₁ ≃ₐ[R] A₂) : forall x
+, e (e.symm x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem comp_symm (e : A₁ ≃ₐ[R] A₂) : AlgHom.comp (e : A₁ ->ₐ[R] A₂) ↑e.symm = AlgHom.id R A₂ := by
+theorem comp_symm (e : A₁ ≃ₐ[R] A₂) : AlgHom.comp (e : A₁ →ₐ[R] A₂) ↑e.symm = AlgHom.id R A₂ := by
   ext
   simp
 
 @[simp]
-/--
-theorem `symm_comp` / 定理 `symm_comp`
-
-English:
-theorem symm_comp
-  given: (e : A₁ ≃ₐ[R] A₂)
-  statement: AlgHom.comp ↑e.symm (e : A₁ ->ₐ[R] A₂) = AlgHom.id R A₁
-  proof: by
-  ext
-  simp
-
-中文:
-定理 symm_comp
-  条件: (e : A₁ ≃ₐ[R] A₂)
-  结论: 代数态射.comp ↑e.symm (e : A₁ ->ₐ[R] A₂) = 代数态射.id R A₁
-  证明: by
-  ext
-  simp
+/-
+**AlgEquiv.symm_comp** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：symm_comp (e : A₁ ≃ₐ[R] A₂) : AlgHom.comp ↑e.symm (e : A₁ ->ₐ[R] A₂) = Alg
+Hom.id R A₁
+参数：e : A₁ ≃ₐ[R] A₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.ext`：ext {φ₁ φ₂ : A ->ₐ[R] B} (H : forall x, φ₁ x = φ₂ x) : φ₁ = 
+φ₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgEquiv.symm_apply_apply`：symm_apply_apply (e : A₁ ≃ₐ[R] A₂) : forall x
+, e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem symm_comp (e : A₁ ≃ₐ[R] A₂) : AlgHom.comp ↑e.symm (e : A₁ ->ₐ[R] A₂) = AlgHom.id R A₁ := by
+theorem symm_comp (e : A₁ ≃ₐ[R] A₂) : AlgHom.comp ↑e.symm (e : A₁ →ₐ[R] A₂) = AlgHom.id R A₁ := by
   ext
   simp
-
-/--
-theorem `leftInverse_symm` / 定理 `leftInverse_symm`
-
-English:
-theorem leftInverse_symm
-  given: (e : A₁ ≃ₐ[R] A₂)
-  statement: Function.LeftInverse e.symm e
-  proof: e.left_inv
-
-中文:
-定理 leftInverse_symm
-  条件: (e : A₁ ≃ₐ[R] A₂)
-  结论: 函数.左逆 e.symm e
-  证明: e.left_inv
-
-Depends on / 依赖: e.left_inv, left_inv
+/-
+**AlgEquiv.leftInverse_symm** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：leftInverse_symm (e : A₁ ≃ₐ[R] A₂) : Function.LeftInverse e.symm e
+参数：e : A₁ ≃ₐ[R] A₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
 -/
 theorem leftInverse_symm (e : A₁ ≃ₐ[R] A₂) : Function.LeftInverse e.symm e :=
   e.left_inv
-
-/--
-theorem `rightInverse_symm` / 定理 `rightInverse_symm`
-
-English:
-theorem rightInverse_symm
-  given: (e : A₁ ≃ₐ[R] A₂)
-  statement: Function.RightInverse e.symm e
-  proof: e.right_inv
-
-中文:
-定理 rightInverse_symm
-  条件: (e : A₁ ≃ₐ[R] A₂)
-  结论: 函数.右逆 e.symm e
-  证明: e.right_inv
-
-Depends on / 依赖: GradeZero, GradeZero.monoid, Monoid, e.right_inv, monoid, right_inv
+/-
+**AlgEquiv.rightInverse_symm** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：rightInverse_symm (e : A₁ ≃ₐ[R] A₂) : Function.RightInverse e.symm e
+参数：e : A₁ ≃ₐ[R] A₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
 -/
 theorem rightInverse_symm (e : A₁ ≃ₐ[R] A₂) : Function.RightInverse e.symm e :=
   e.right_inv
-
-/--
-lemma `image_symm_eq_preimage` / 引理 `image_symm_eq_preimage`
-
-English:
-lemma image_symm_eq_preimage
-  given: (e : A₁ ≃ₐ[R] A₂) (s : Set A₂)
-  statement: e.symm '' s = e ⁻¹' s
-  proof: e.toLinearEquiv.image_symm_eq_preimage _
-
-中文:
-引理 image_symm_eq_preimage
-  条件: (e : A₁ ≃ₐ[R] A₂) (s : 集合 A₂)
-  结论: e.symm '' s = e ⁻¹' s
-  证明: e.toLinearEquiv.image_symm_eq_preimage _
-
-Depends on / 依赖: CommMonoid, GradeZero, GradeZero.commMonoid, commMonoid, e.toLinearEquiv.image_symm_eq_preimage, image_symm_eq_preimage, toLinearEquiv
+/-
+**AlgEquiv.image_symm_eq_preimage** 是 Mathlib 中的一个引理，位于命名空间 `AlgEquiv`。
+形式化陈述：image_symm_eq_preimage (e : A₁ ≃ₐ[R] A₂) (s : Set A₂) : e.symm '' s = e ⁻¹
+' s
+参数：e : A₁ ≃ₐ[R] A₂；s : Set A₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.image_symm_eq_preimage`：∀ {R : Type u_1} {S : Type u_6} {M :
+ Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 :
+ AddCommMonoid M] [inst_…
 -/
 lemma image_symm_eq_preimage (e : A₁ ≃ₐ[R] A₂) (s : Set A₂) : e.symm '' s = e ⁻¹' s :=
   e.toLinearEquiv.image_symm_eq_preimage _
@@ -1399,59 +915,52 @@ end symm
 
 section simps
 
-/--
-Definition of `Simps.apply` / `Simps.apply` 的定义
+/-- See Note [custom simps projection] -/
+/-
+**AlgEquiv.Simps.apply** 是 Mathlib 中的一个定义，位于命名空间 `AlgEquiv.Simps`。
+形式化陈述：{R : Type uR} →   {A₁ : Type uA₁} →     {A₂ : Type uA₂} →       [inst : Co
+mmSemiring R] →         [inst_1 : Semiring A₁] →           [inst_2 : Semiring A₂
+] → [inst_3 : Algebra R A₁] → [inst_4 : Algebra R A₂] → (A₁ ≃ₐ[R] A₂) → A₁ → A₂
+参数：A₁ ≃ₐ[R] A₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.apply
-  signature: (e : A₁ ≃ₐ[R] A₂)
-  body: e
-
-中文:
-定义 Simps.apply
-  签名: (e : A₁ ≃ₐ[R] A₂)
-  定义体: e
+--- 原说明 ---
+See Note [custom simps projection]
 -/
-def Simps.apply (e : A₁ ≃ₐ[R] A₂) : A₁ -> A₂ :=
+def Simps.apply (e : A₁ ≃ₐ[R] A₂) : A₁ → A₂ :=
   e
 
-/--
-Definition of `Simps.toEquiv` / `Simps.toEquiv` 的定义
+/-- See Note [custom simps projection] -/
+/-
+**AlgEquiv.Simps.toEquiv** 是 Mathlib 中的一个定义，位于命名空间 `AlgEquiv.Simps`。
+形式化陈述：{R : Type uR} →   {A₁ : Type uA₁} →     {A₂ : Type uA₂} →       [inst : Co
+mmSemiring R] →         [inst_1 : Semiring A₁] →           [inst_2 : Semiring A₂
+] → [inst_3 : Algebra R A₁] → [inst_4 : Algebra R A₂] → (A₁ ≃ₐ[R] A₂) → A₁ ≃ A₂
+参数：A₁ ≃ₐ[R] A₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.toEquiv
-  signature: (e : A₁ ≃ₐ[R] A₂)
-  body: e
-
-中文:
-定义 Simps.toEquiv
-  签名: (e : A₁ ≃ₐ[R] A₂)
-  定义体: e
+--- 原说明 ---
+See Note [custom simps projection]
 -/
 def Simps.toEquiv (e : A₁ ≃ₐ[R] A₂) : A₁ ≃ A₂ :=
   e
 
-/--
-Definition of `Simps.symm_apply` / `Simps.symm_apply` 的定义
+/-- See Note [custom simps projection] -/
+/-
+**AlgEquiv.Simps.symm_apply** 是 Mathlib 中的一个定义，位于命名空间 `AlgEquiv.Simps`。
+形式化陈述：{R : Type uR} →   {A₁ : Type uA₁} →     {A₂ : Type uA₂} →       [inst : Co
+mmSemiring R] →         [inst_1 : Semiring A₁] →           [inst_2 : Semiring A₂
+] → [inst_3 : Algebra R A₁] → [inst_4 : Algebra R A₂] → (A₁ ≃ₐ[R] A₂) → A₂ → A₁
+参数：A₁ ≃ₐ[R] A₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.symm_apply
-  signature: (e : A₁ ≃ₐ[R] A₂)
-  body: e.symm
-
-initialize_simps_projections AlgEquiv (toFun -> apply, invFun -> symm_apply)
-
-中文:
-定义 Simps.symm_apply
-  签名: (e : A₁ ≃ₐ[R] A₂)
-  定义体: e.symm
-
-initialize_simps_projections AlgEquiv (toFun -> apply, invFun -> symm_apply)
+--- 原说明 ---
+See Note [custom simps projection]
 -/
-def Simps.symm_apply (e : A₁ ≃ₐ[R] A₂) : A₂ -> A₁ :=
+def Simps.symm_apply (e : A₁ ≃ₐ[R] A₂) : A₂ → A₁ :=
   e.symm
 
-initialize_simps_projections AlgEquiv (toFun -> apply, invFun -> symm_apply)
+initialize_simps_projections AlgEquiv (toFun → apply, invFun → symm_apply)
 
 end simps
 
@@ -1459,148 +968,114 @@ section trans
 
 /-- Algebra equivalences are transitive. -/
 @[trans]
-/--
-Definition of `trans` / `trans` 的定义
+/-
+**AlgEquiv.trans** 是 Mathlib 中的一个定义，位于命名空间 `AlgEquiv`。
+形式化陈述：trans (e₁ : A₁ ≃ₐ[R] A₂) (e₂ : A₂ ≃ₐ[R] A₃) : A₁ ≃ₐ[R] A₃
+参数：e₁ : A₁ ≃ₐ[R] A₂；e₂ : A₂ ≃ₐ[R] A₃。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trans
-  signature: (e₁ : A₁ ≃ₐ[R] A₂) (e₂ : A₂ ≃ₐ[R] A₃)
-  body: { e₁.toRingEquiv.trans e₂.toRingEquiv with
-    commutes' := fun r => show e₂.toFun (e₁.toFun _) = _ by rw [e₁.commutes', e₂.commutes'] }
-
-@[simp]
-
-中文:
-定义 trans
-  签名: (e₁ : A₁ ≃ₐ[R] A₂) (e₂ : A₂ ≃ₐ[R] A₃)
-  定义体: { e₁.toRingEquiv.trans e₂.toRingEquiv with
-    commutes' := fun r => show e₂.toFun (e₁.toFun _) = _ by rw [e₁.commutes', e₂.commutes'] }
-
-@[simp]
-
-Depends on / 依赖: commutes, toRingEquiv, toRingEquiv.trans
+--- 原说明 ---
+Algebra equivalences are transitive.
 -/
 def trans (e₁ : A₁ ≃ₐ[R] A₂) (e₂ : A₂ ≃ₐ[R] A₃) : A₁ ≃ₐ[R] A₃ :=
   { e₁.toRingEquiv.trans e₂.toRingEquiv with
     commutes' := fun r => show e₂.toFun (e₁.toFun _) = _ by rw [e₁.commutes', e₂.commutes'] }
 
 @[simp]
-/--
-theorem `coe_trans` / 定理 `coe_trans`
-
-English:
-theorem coe_trans
-  given: (e₁ : A₁ ≃ₐ[R] A₂) (e₂ : A₂ ≃ₐ[R] A₃)
-  statement: ⇑(e₁.trans e₂) = e₂ ∘ e₁
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_trans
-  条件: (e₁ : A₁ ≃ₐ[R] A₂) (e₂ : A₂ ≃ₐ[R] A₃)
-  结论: ⇑(e₁.trans e₂) = e₂ ∘ e₁
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.coe_trans** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：coe_trans (e₁ : A₁ ≃ₐ[R] A₂) (e₂ : A₂ ≃ₐ[R] A₃) : ⇑(e₁.trans e₂) = e₂ ∘ e₁
+参数：e₁ : A₁ ≃ₐ[R] A₂；e₂ : A₂ ≃ₐ[R] A₃。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_trans (e₁ : A₁ ≃ₐ[R] A₂) (e₂ : A₂ ≃ₐ[R] A₃) : ⇑(e₁.trans e₂) = e₂ ∘ e₁ :=
   rfl
 
 @[simp]
-/--
-theorem `trans_apply` / 定理 `trans_apply`
-
-English:
-theorem trans_apply
-  given: (e₁ : A₁ ≃ₐ[R] A₂) (e₂ : A₂ ≃ₐ[R] A₃) (x : A₁)
-  statement: (e₁.trans e₂) x = e₂ (e₁ x)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 trans_apply
-  条件: (e₁ : A₁ ≃ₐ[R] A₂) (e₂ : A₂ ≃ₐ[R] A₃) (x : A₁)
-  结论: (e₁.trans e₂) x = e₂ (e₁ x)
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.trans_apply** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：trans_apply (e₁ : A₁ ≃ₐ[R] A₂) (e₂ : A₂ ≃ₐ[R] A₃) (x : A₁) : (e₁.trans e₂)
+ x = e₂ (e₁ x)
+参数：e₁ : A₁ ≃ₐ[R] A₂；e₂ : A₂ ≃ₐ[R] A₃；x : A₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem trans_apply (e₁ : A₁ ≃ₐ[R] A₂) (e₂ : A₂ ≃ₐ[R] A₃) (x : A₁) : (e₁.trans e₂) x = e₂ (e₁ x) :=
   rfl
 
 @[simp]
-/--
-theorem `symm_trans_apply` / 定理 `symm_trans_apply`
-
-English:
-theorem symm_trans_apply
-  given: (e₁ : A₁ ≃ₐ[R] A₂) (e₂ : A₂ ≃ₐ[R] A₃) (x : A₃)
-  proof: rfl
-
-中文:
-定理 symm_trans_apply
-  条件: (e₁ : A₁ ≃ₐ[R] A₂) (e₂ : A₂ ≃ₐ[R] A₃) (x : A₃)
-  证明: rfl
+/-
+**AlgEquiv.symm_trans_apply** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：symm_trans_apply (e₁ : A₁ ≃ₐ[R] A₂) (e₂ : A₂ ≃ₐ[R] A₃) (x : A₃) : (e₁.tran
+s e₂).symm x = e₁.symm (e₂.symm x)
+参数：e₁ : A₁ ≃ₐ[R] A₂；e₂ : A₂ ≃ₐ[R] A₃；x : A₃。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_trans_apply (e₁ : A₁ ≃ₐ[R] A₂) (e₂ : A₂ ≃ₐ[R] A₃) (x : A₃) :
     (e₁.trans e₂).symm x = e₁.symm (e₂.symm x) :=
   rfl
-
-/--
-lemma `self_trans_symm` / 引理 `self_trans_symm`
-
-English:
-lemma self_trans_symm
-  given: (e : A₁ ≃ₐ[R] A₂)
-  statement: e.trans e.symm = refl
-  proof: by ext; simp
-
-中文:
-引理 self_trans_symm
-  条件: (e : A₁ ≃ₐ[R] A₂)
-  结论: e.trans e.symm = refl
-  证明: by ext; simp
+/-
+**AlgEquiv.self_trans_symm** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA₂} [inst : CommSemiring R] [i
+nst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [inst_3 : Algebra R A₁] [inst_4 : 
+Algebra R A₂] (e : A₁ ≃ₐ[R] A₂), e.trans e.symm = AlgEquiv.refl
+参数：e : A₁ ≃ₐ[R] A₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.ext`：ext {f g : A₁ ≃ₐ[R] A₂} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgEquiv.symm_apply_apply`：symm_apply_apply (e : A₁ ≃ₐ[R] A₂) : forall x
+, e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma self_trans_symm (e : A₁ ≃ₐ[R] A₂) : e.trans e.symm = refl := by ext; simp
-/--
-lemma `symm_trans_self` / 引理 `symm_trans_self`
-
-English:
-lemma symm_trans_self
-  given: (e : A₁ ≃ₐ[R] A₂)
-  statement: e.symm.trans e = refl
-  proof: by ext; simp
-
-@[simp, norm_cast]
-
-中文:
-引理 symm_trans_self
-  条件: (e : A₁ ≃ₐ[R] A₂)
-  结论: e.symm.trans e = refl
-  证明: by ext; simp
-
-@[simp, norm_cast]
+/-
+**AlgEquiv.symm_trans_self** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA₂} [inst : CommSemiring R] [i
+nst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [inst_3 : Algebra R A₁] [inst_4 : 
+Algebra R A₂] (e : A₁ ≃ₐ[R] A₂), e.symm.trans e = AlgEquiv.refl
+参数：e : A₁ ≃ₐ[R] A₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.ext`：ext {f g : A₁ ≃ₐ[R] A₂} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgEquiv.apply_symm_apply`：apply_symm_apply (e : A₁ ≃ₐ[R] A₂) : forall x
+, e (e.symm x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma symm_trans_self (e : A₁ ≃ₐ[R] A₂) : e.symm.trans e = refl := by ext; simp
 
 @[simp, norm_cast]
-/--
-lemma `toRingHom_trans` / 引理 `toRingHom_trans`
-
-English:
-lemma toRingHom_trans
-  given: (e₁ : A₁ ≃ₐ[R] A₂) (e₂ : A₂ ≃ₐ[R] A₃)
-  proof: rfl
-
-中文:
-引理 toRingHom_trans
-  条件: (e₁ : A₁ ≃ₐ[R] A₂) (e₂ : A₂ ≃ₐ[R] A₃)
-  证明: rfl
+/-
+**AlgEquiv.toRingHom_trans** 是 Mathlib 中的一个引理，位于命名空间 `AlgEquiv`。
+形式化陈述：toRingHom_trans (e₁ : A₁ ≃ₐ[R] A₂) (e₂ : A₂ ≃ₐ[R] A₃) : (e₁.trans e₂ : A₁ 
+->+* A₃) = .comp e₂ (e₁ : A₁ ->+* A₂)
+参数：e₁ : A₁ ≃ₐ[R] A₂；e₂ : A₂ ≃ₐ[R] A₃。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `AlgEquivClass.toAlgHomClass`：∀ (F : Type u_1) (R : Type u_2) (A : Type u
+_3) (B : Type u_4) [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Sem
+iring B] [inst_3 …
+· 使用定理 `AlgEquiv.instAlgEquivClass`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type u
+A₂} [inst : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [ins
+t_3 : Algebra R …
 -/
 lemma toRingHom_trans (e₁ : A₁ ≃ₐ[R] A₂) (e₂ : A₂ ≃ₐ[R] A₃) :
-    (e₁.trans e₂ : A₁ ->+* A₃) = .comp e₂ (e₁ : A₁ ->+* A₂) := rfl
+    (e₁.trans e₂ : A₁ →+* A₃) = .comp e₂ (e₁ : A₁ →+* A₂) := rfl
 
 end trans
 
@@ -1609,21 +1084,23 @@ end trans
 Note that unlike `Equiv.cast`, this takes an equality of indices rather than an equality of types,
 to avoid having to deal with an equality of the algebraic structure itself. -/
 @[simps!]
-/--
-Definition of `cast` / `cast` 的定义
+/-
+**AlgEquiv.cast** 是 Mathlib 中的一个定义，位于命名空间 `AlgEquiv`。
+形式化陈述：{R : Type uR} →   [inst : CommSemiring R] →     {ι : Type u_1} →       {A 
+: ι → Type u_2} →         [inst_1 : (i : ι) → Semiring (A i)] → [inst_2 : (i : ι
+) → Algebra R (A i)] → {i j : ι} → i = j → A i ≃ₐ[R] A j
+参数：i : ι；A i；i : ι；A i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cast
-  body: RingEquiv.cast h
-  commutes' _ := by cases h; rfl
+--- 原说明 ---
+`Equiv.cast (congrArg _ h)` as an algebra equiv.
 
-中文:
-定义 cast
-  定义体: RingEquiv.cast h
-  commutes' _ := by cases h; rfl
+Note that unlike `Equiv.cast`, this takes an equality of indices rather than an 
+equality of types,
+to avoid having to deal with an equality of the algebraic structure itself.
 -/
 protected def cast
-    {ι : Type*} {A : ι -> Type*} [forall i, Semiring (A i)] [forall i, Algebra R (A i)] {i j : ι} (h : i = j) :
+    {ι : Type*} {A : ι → Type*} [∀ i, Semiring (A i)] [∀ i, Algebra R (A i)] {i j : ι} (h : i = j) :
     A i ≃ₐ[R] A j where
   __ := RingEquiv.cast h
   commutes' _ := by cases h; rfl
@@ -1631,36 +1108,20 @@ protected def cast
 /-- If `A₁` is equivalent to `A₁'` and `A₂` is equivalent to `A₂'`, then the type of maps
 `A₁ →ₐ[R] A₂` is equivalent to the type of maps `A₁' →ₐ[R] A₂'`. -/
 @[simps apply]
-/--
-Definition of `arrowCongr` / `arrowCongr` 的定义
+/-
+**AlgEquiv.arrowCongr** 是 Mathlib 中的一个定义，位于命名空间 `AlgEquiv`。
+形式化陈述：arrowCongr (e₁ : A₁ ≃ₐ[R] A₁') (e₂ : A₂ ≃ₐ[R] A₂') : (A₁ ->ₐ[R] A₂) ≃ (A₁'
+ ->ₐ[R] A₂') where toFun f
+参数：e₁ : A₁ ≃ₐ[R] A₁'；e₂ : A₂ ≃ₐ[R] A₂'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition arrowCongr
-  signature: (e₁ : A₁ ≃ₐ[R] A₁') (e₂ : A₂ ≃ₐ[R] A₂')
-  body: (e₂.toAlgHom.comp f).comp e₁.symm.toAlgHom
-  invFun f := (e₂.symm.toAlgHom.comp f).comp e₁.toAlgHom
-  left_inv f := by
-    simp only [AlgHom.comp_assoc, symm_comp]
-    simp only [← AlgHom.comp_assoc, symm_comp, AlgHom.id_comp, AlgHom.comp_id]
-  right_inv f := by
-    simp only [AlgHom.comp_assoc, comp_symm]
-    simp only [← AlgHom.comp_assoc, comp_symm, AlgHom.id_comp, AlgHom.comp_id]
-
-中文:
-定义 arrowCongr
-  签名: (e₁ : A₁ ≃ₐ[R] A₁') (e₂ : A₂ ≃ₐ[R] A₂')
-  定义体: (e₂.toAlgHom.comp f).comp e₁.symm.toAlgHom
-  invFun f := (e₂.symm.toAlgHom.comp f).comp e₁.toAlgHom
-  left_inv f := by
-    simp only [AlgHom.comp_assoc, symm_comp]
-    simp only [← AlgHom.comp_assoc, symm_comp, AlgHom.id_comp, AlgHom.comp_id]
-  right_inv f := by
-    simp only [AlgHom.comp_assoc, comp_symm]
-    simp only [← AlgHom.comp_assoc, comp_symm, AlgHom.id_comp, AlgHom.comp_id]
-
-Depends on / 依赖: symm.toAlgHom, toAlgHom, toAlgHom.comp
+--- 原说明 ---
+If `A₁` is equivalent to `A₁'` and `A₂` is equivalent to `A₂'`, then the type of
+ maps
+`A₁ →ₐ[R] A₂` is equivalent to the type of maps `A₁' →ₐ[R] A₂'`.
 -/
-def arrowCongr (e₁ : A₁ ≃ₐ[R] A₁') (e₂ : A₂ ≃ₐ[R] A₂') : (A₁ ->ₐ[R] A₂) ≃ (A₁' ->ₐ[R] A₂') where
+def arrowCongr (e₁ : A₁ ≃ₐ[R] A₁') (e₂ : A₂ ≃ₐ[R] A₂') : (A₁ →ₐ[R] A₂) ≃ (A₁' →ₐ[R] A₂') where
   toFun f := (e₂.toAlgHom.comp f).comp e₁.symm.toAlgHom
   invFun f := (e₂.symm.toAlgHom.comp f).comp e₁.toAlgHom
   left_inv f := by
@@ -1669,72 +1130,58 @@ def arrowCongr (e₁ : A₁ ≃ₐ[R] A₁') (e₂ : A₂ ≃ₐ[R] A₂') : (A�
   right_inv f := by
     simp only [AlgHom.comp_assoc, comp_symm]
     simp only [← AlgHom.comp_assoc, comp_symm, AlgHom.id_comp, AlgHom.comp_id]
-
-/--
-theorem `arrowCongr_comp` / 定理 `arrowCongr_comp`
-
-English:
-theorem arrowCongr_comp
-  statement: (e₁ : A₁ ≃ₐ[R] A₁') (e₂ : A₂ ≃ₐ[R] A₂')
-  proof: by
-  ext
-  simp
-
-@[simp]
-
-中文:
-定理 arrowCongr_comp
-  结论: (e₁ : A₁ ≃ₐ[R] A₁') (e₂ : A₂ ≃ₐ[R] A₂')
-  证明: by
-  ext
-  simp
-
-@[simp]
+/-
+**AlgEquiv.arrowCongr_comp** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：arrowCongr_comp (e₁ : A₁ ≃ₐ[R] A₁') (e₂ : A₂ ≃ₐ[R] A₂') (e₃ : A₃ ≃ₐ[R] A₃'
+) (f : A₁ ->ₐ[R] A₂) (g : A₂ ->ₐ[R] A₃) : arrowCongr e₁ e₃ (g.comp f) = (arrowCo
+ngr e₂ e₃ g).comp (arrowCongr e₁ e₂ f)
+参数：e₁ : A₁ ≃ₐ[R] A₁'；e₂ : A₂ ≃ₐ[R] A₂'；e₃ : A₃ ≃ₐ[R] A₃'；f : A₁ ->ₐ[R] A₂；g : A₂
+ ->ₐ[R] A₃。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.ext`：ext {φ₁ φ₂ : A ->ₐ[R] B} (H : forall x, φ₁ x = φ₂ x) : φ₁ = 
+φ₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `AlgEquiv.arrowCongr_apply`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA
+₂} {A₁' : Type uA₁'} {A₂' : Type uA₂'} [inst : CommSemiring R]   [inst_1 : Semir
+ing A₁] [inst_2…
+· 使用定理 `AlgEquiv.symm_apply_apply`：symm_apply_apply (e : A₁ ≃ₐ[R] A₂) : forall x
+, e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem arrowCongr_comp (e₁ : A₁ ≃ₐ[R] A₁') (e₂ : A₂ ≃ₐ[R] A₂')
-    (e₃ : A₃ ≃ₐ[R] A₃') (f : A₁ ->ₐ[R] A₂) (g : A₂ ->ₐ[R] A₃) :
+    (e₃ : A₃ ≃ₐ[R] A₃') (f : A₁ →ₐ[R] A₂) (g : A₂ →ₐ[R] A₃) :
     arrowCongr e₁ e₃ (g.comp f) = (arrowCongr e₂ e₃ g).comp (arrowCongr e₁ e₂ f) := by
   ext
   simp
 
 @[simp]
-/--
-theorem `arrowCongr_refl` / 定理 `arrowCongr_refl`
-
-English:
-theorem arrowCongr_refl
-  statement: arrowCongr AlgEquiv.refl AlgEquiv.refl = Equiv.refl (A₁ ->ₐ[R] A₂)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 arrowCongr_refl
-  结论: arrowCongr 代数等价.refl 代数等价.refl = 等价.refl (A₁ ->ₐ[R] A₂)
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.arrowCongr_refl** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：arrowCongr_refl : arrowCongr AlgEquiv.refl AlgEquiv.refl = Equiv.refl (A₁ 
+->ₐ[R] A₂)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem arrowCongr_refl : arrowCongr AlgEquiv.refl AlgEquiv.refl = Equiv.refl (A₁ ->ₐ[R] A₂) :=
+theorem arrowCongr_refl : arrowCongr AlgEquiv.refl AlgEquiv.refl = Equiv.refl (A₁ →ₐ[R] A₂) :=
   rfl
 
 @[simp]
-/--
-theorem `arrowCongr_trans` / 定理 `arrowCongr_trans`
-
-English:
-theorem arrowCongr_trans
-  statement: (e₁ : A₁ ≃ₐ[R] A₂) (e₁' : A₁' ≃ₐ[R] A₂')
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 arrowCongr_trans
-  结论: (e₁ : A₁ ≃ₐ[R] A₂) (e₁' : A₁' ≃ₐ[R] A₂')
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.arrowCongr_trans** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：arrowCongr_trans (e₁ : A₁ ≃ₐ[R] A₂) (e₁' : A₁' ≃ₐ[R] A₂') (e₂ : A₂ ≃ₐ[R] A
+₃) (e₂' : A₂' ≃ₐ[R] A₃') : arrowCongr (e₁.trans e₂) (e₁'.trans e₂') = (arrowCong
+r e₁ e₁').trans (arrowCongr e₂ e₂')
+参数：e₁ : A₁ ≃ₐ[R] A₂；e₁' : A₁' ≃ₐ[R] A₂'；e₂ : A₂ ≃ₐ[R] A₃；e₂' : A₂' ≃ₐ[R] A₃'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem arrowCongr_trans (e₁ : A₁ ≃ₐ[R] A₂) (e₁' : A₁' ≃ₐ[R] A₂')
     (e₂ : A₂ ≃ₐ[R] A₃) (e₂' : A₂' ≃ₐ[R] A₃') :
@@ -1742,18 +1189,14 @@ theorem arrowCongr_trans (e₁ : A₁ ≃ₐ[R] A₂) (e₁' : A₁' ≃ₐ[R] A
   rfl
 
 @[simp]
-/--
-theorem `arrowCongr_symm` / 定理 `arrowCongr_symm`
-
-English:
-theorem arrowCongr_symm
-  given: (e₁ : A₁ ≃ₐ[R] A₁') (e₂ : A₂ ≃ₐ[R] A₂')
-  proof: rfl
-
-中文:
-定理 arrowCongr_symm
-  条件: (e₁ : A₁ ≃ₐ[R] A₁') (e₂ : A₂ ≃ₐ[R] A₂')
-  证明: rfl
+/-
+**AlgEquiv.arrowCongr_symm** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：arrowCongr_symm (e₁ : A₁ ≃ₐ[R] A₁') (e₂ : A₂ ≃ₐ[R] A₂') : (arrowCongr e₁ e
+₂).symm = arrowCongr e₁.symm e₂.symm
+参数：e₁ : A₁ ≃ₐ[R] A₁'；e₂ : A₂ ≃ₐ[R] A₂'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem arrowCongr_symm (e₁ : A₁ ≃ₐ[R] A₁') (e₂ : A₂ ≃ₐ[R] A₂') :
     (arrowCongr e₁ e₂).symm = arrowCongr e₁.symm e₂.symm :=
@@ -1764,38 +1207,20 @@ theorem arrowCongr_symm (e₁ : A₁ ≃ₐ[R] A₁') (e₂ : A₂ ≃ₐ[R] A�
 
 This is the `AlgEquiv` version of `AlgEquiv.arrowCongr`. -/
 @[simps apply]
-/--
-Definition of `equivCongr` / `equivCongr` 的定义
+/-
+**AlgEquiv.equivCongr** 是 Mathlib 中的一个定义，位于命名空间 `AlgEquiv`。
+形式化陈述：equivCongr (e : A₁ ≃ₐ[R] A₂) (e' : A₁' ≃ₐ[R] A₂') : (A₁ ≃ₐ[R] A₁') ≃ A₂ ≃ₐ
+[R] A₂' where toFun ψ
+参数：e : A₁ ≃ₐ[R] A₂；e' : A₁' ≃ₐ[R] A₂'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivCongr
-  signature: (e : A₁ ≃ₐ[R] A₂) (e' : A₁' ≃ₐ[R] A₂')
-  body: e.symm.trans (ψ.trans e')
-  invFun ψ := e.trans (ψ.trans e'.symm)
-  left_inv ψ := by
-    ext
-    simp_rw [trans_apply, symm_apply_apply]
-  right_inv ψ := by
-    ext
-    simp_rw [trans_apply, apply_symm_apply]
+--- 原说明 ---
+If `A₁` is equivalent to `A₂` and `A₁'` is equivalent to `A₂'`, then the type of
+ maps
+`A₁ ≃ₐ[R] A₁'` is equivalent to the type of maps `A₂ ≃ₐ[R] A₂'`.
 
-@[simp]
-
-中文:
-定义 equivCongr
-  签名: (e : A₁ ≃ₐ[R] A₂) (e' : A₁' ≃ₐ[R] A₂')
-  定义体: e.symm.trans (ψ.trans e')
-  invFun ψ := e.trans (ψ.trans e'.symm)
-  left_inv ψ := by
-    ext
-    simp_rw [trans_apply, symm_apply_apply]
-  right_inv ψ := by
-    ext
-    simp_rw [trans_apply, apply_symm_apply]
-
-@[simp]
-
-Depends on / 依赖: e.symm.trans
+This is the `AlgEquiv` version of `AlgEquiv.arrowCongr`.
 -/
 def equivCongr (e : A₁ ≃ₐ[R] A₂) (e' : A₁' ≃ₐ[R] A₂') : (A₁ ≃ₐ[R] A₁') ≃ A₂ ≃ₐ[R] A₂' where
   toFun ψ := e.symm.trans (ψ.trans e')
@@ -1808,61 +1233,42 @@ def equivCongr (e : A₁ ≃ₐ[R] A₂) (e' : A₁' ≃ₐ[R] A₂') : (A₁ �
     simp_rw [trans_apply, apply_symm_apply]
 
 @[simp]
-/--
-theorem `equivCongr_refl` / 定理 `equivCongr_refl`
-
-English:
-theorem equivCongr_refl
-  statement: equivCongr AlgEquiv.refl AlgEquiv.refl = Equiv.refl (A₁ ≃ₐ[R] A₁')
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 equivCongr_refl
-  结论: equivCongr 代数等价.refl 代数等价.refl = 等价.refl (A₁ ≃ₐ[R] A₁')
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.equivCongr_refl** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：equivCongr_refl : equivCongr AlgEquiv.refl AlgEquiv.refl = Equiv.refl (A₁ 
+≃ₐ[R] A₁')
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem equivCongr_refl : equivCongr AlgEquiv.refl AlgEquiv.refl = Equiv.refl (A₁ ≃ₐ[R] A₁') :=
   rfl
 
 @[simp]
-/--
-theorem `equivCongr_symm` / 定理 `equivCongr_symm`
-
-English:
-theorem equivCongr_symm
-  given: (e : A₁ ≃ₐ[R] A₂) (e' : A₁' ≃ₐ[R] A₂')
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 equivCongr_symm
-  条件: (e : A₁ ≃ₐ[R] A₂) (e' : A₁' ≃ₐ[R] A₂')
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.equivCongr_symm** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：equivCongr_symm (e : A₁ ≃ₐ[R] A₂) (e' : A₁' ≃ₐ[R] A₂') : (equivCongr e e')
+.symm = equivCongr e.symm e'.symm
+参数：e : A₁ ≃ₐ[R] A₂；e' : A₁' ≃ₐ[R] A₂'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem equivCongr_symm (e : A₁ ≃ₐ[R] A₂) (e' : A₁' ≃ₐ[R] A₂') :
     (equivCongr e e').symm = equivCongr e.symm e'.symm :=
   rfl
 
 @[simp]
-/--
-theorem `equivCongr_trans` / 定理 `equivCongr_trans`
-
-English:
-theorem equivCongr_trans
-  statement: (e₁₂ : A₁ ≃ₐ[R] A₂) (e₁₂' : A₁' ≃ₐ[R] A₂')
-  proof: rfl
-
-中文:
-定理 equivCongr_trans
-  结论: (e₁₂ : A₁ ≃ₐ[R] A₂) (e₁₂' : A₁' ≃ₐ[R] A₂')
-  证明: rfl
+/-
+**AlgEquiv.equivCongr_trans** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：equivCongr_trans (e₁₂ : A₁ ≃ₐ[R] A₂) (e₁₂' : A₁' ≃ₐ[R] A₂') (e₂₃ : A₂ ≃ₐ[R
+] A₃) (e₂₃' : A₂' ≃ₐ[R] A₃') : (equivCongr e₁₂ e₁₂').trans (equivCongr e₂₃ e₂₃')
+ = equivCongr (e₁₂.trans e₂₃) (e₁₂'.trans e₂₃')
+参数：e₁₂ : A₁ ≃ₐ[R] A₂；e₁₂' : A₁' ≃ₐ[R] A₂'；e₂₃ : A₂ ≃ₐ[R] A₃；e₂₃' : A₂' ≃ₐ[R] A₃'
+。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 -/
 theorem equivCongr_trans (e₁₂ : A₁ ≃ₐ[R] A₂) (e₁₂' : A₁' ≃ₐ[R] A₂')
     (e₂₃ : A₂ ≃ₐ[R] A₃) (e₂₃' : A₂' ≃ₐ[R] A₃') :
@@ -1872,634 +1278,491 @@ theorem equivCongr_trans (e₁₂ : A₁ ≃ₐ[R] A₂) (e₁₂' : A₁' ≃�
 
 /-- If an algebra morphism has an inverse, it is an algebra isomorphism. -/
 @[simps]
-/--
-Definition of `ofAlgHom` / `ofAlgHom` 的定义
+/-
+**AlgEquiv.ofAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `AlgEquiv`。
+形式化陈述：ofAlgHom (f : A₁ ->ₐ[R] A₂) (g : A₂ ->ₐ[R] A₁) (h₁ : f.comp g = AlgHom.id 
+R A₂) (h₂ : g.comp f = AlgHom.id R A₁) : A₁ ≃ₐ[R] A₂
+参数：f : A₁ ->ₐ[R] A₂；g : A₂ ->ₐ[R] A₁；h₁ : f.comp g = AlgHom.id R A₂；h₂ : g.comp 
+f = AlgHom.id R A₁。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.commutes'`：∀ {R : Type u} {A : Type v} {B : Type w} [inst : CommS
+emiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A] 
+[inst_…
 
-English:
-definition ofAlgHom
-  signature: (f : A₁ ->ₐ[R] A₂) (g : A₂ ->ₐ[R] A₁) (h₁ : f.comp g = AlgHom.id R A₂)
-  body: { f with
-    toFun := f
-    invFun := g
-    left_inv := AlgHom.ext_iff.1 h₂
-    right_inv := AlgHom.ext_iff.1 h₁ }
-
-中文:
-定义 ofAlgHom
-  签名: (f : A₁ ->ₐ[R] A₂) (g : A₂ ->ₐ[R] A₁) (h₁ : f.comp g = 代数态射.id R A₂)
-  定义体: { f with
-    toFun := f
-    invFun := g
-    left_inv := AlgHom.ext_iff.1 h₂
-    right_inv := AlgHom.ext_iff.1 h₁ }
-
-Depends on / 依赖: AlgHom, AlgHom.ext_iff, ext_iff, invFun, left_inv, right_inv
+--- 原说明 ---
+If an algebra morphism has an inverse, it is an algebra isomorphism.
 -/
-def ofAlgHom (f : A₁ ->ₐ[R] A₂) (g : A₂ ->ₐ[R] A₁) (h₁ : f.comp g = AlgHom.id R A₂)
+def ofAlgHom (f : A₁ →ₐ[R] A₂) (g : A₂ →ₐ[R] A₁) (h₁ : f.comp g = AlgHom.id R A₂)
     (h₂ : g.comp f = AlgHom.id R A₁) : A₁ ≃ₐ[R] A₂ :=
   { f with
     toFun := f
     invFun := g
     left_inv := AlgHom.ext_iff.1 h₂
     right_inv := AlgHom.ext_iff.1 h₁ }
-
-/--
-theorem `toAlgHom_ofAlgHom` / 定理 `toAlgHom_ofAlgHom`
-
-English:
-theorem toAlgHom_ofAlgHom
-  given: (f : A₁ ->ₐ[R] A₂) (g : A₂ ->ₐ[R] A₁) (h₁ h₂)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toAlgHom_ofAlgHom
-  条件: (f : A₁ ->ₐ[R] A₂) (g : A₂ ->ₐ[R] A₁) (h₁ h₂)
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.toAlgHom_ofAlgHom** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：toAlgHom_ofAlgHom (f : A₁ ->ₐ[R] A₂) (g : A₂ ->ₐ[R] A₁) (h₁ h₂) : ↑(ofAlgH
+om f g h₁ h₂) = f
+参数：f : A₁ ->ₐ[R] A₂；g : A₂ ->ₐ[R] A₁；h₁ h₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toAlgHom_ofAlgHom (f : A₁ ->ₐ[R] A₂) (g : A₂ ->ₐ[R] A₁) (h₁ h₂) :
+theorem toAlgHom_ofAlgHom (f : A₁ →ₐ[R] A₂) (g : A₂ →ₐ[R] A₁) (h₁ h₂) :
     ↑(ofAlgHom f g h₁ h₂) = f :=
   rfl
 
 @[simp]
-/--
-theorem `ofAlgHom_toAlgHom` / 定理 `ofAlgHom_toAlgHom`
-
-English:
-theorem ofAlgHom_toAlgHom
-  given: (f : A₁ ≃ₐ[R] A₂) (g : A₂ ->ₐ[R] A₁) (h₁ h₂)
-  proof: ext fun _ => rfl
-
-@[deprecated (since := "2026-05-05")] alias coe_algHom_ofAlgHom := toAlgHom_ofAlgHom
-@[deprecated (since := "2026-05-05")] alias ofAlgHom_coe_algHom := ofAlgHom_toAlgHom
-
-中文:
-定理 ofAlgHom_toAlgHom
-  条件: (f : A₁ ≃ₐ[R] A₂) (g : A₂ ->ₐ[R] A₁) (h₁ h₂)
-  证明: ext fun _ => rfl
-
-@[deprecated (since := "2026-05-05")] alias coe_algHom_ofAlgHom := toAlgHom_ofAlgHom
-@[deprecated (since := "2026-05-05")] alias ofAlgHom_coe_algHom := ofAlgHom_toAlgHom
+/-
+**AlgEquiv.ofAlgHom_toAlgHom** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：ofAlgHom_toAlgHom (f : A₁ ≃ₐ[R] A₂) (g : A₂ ->ₐ[R] A₁) (h₁ h₂) : ofAlgHom 
+(↑f) g h₁ h₂ = f
+参数：f : A₁ ≃ₐ[R] A₂；g : A₂ ->ₐ[R] A₁；h₁ h₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.ext`：ext {f g : A₁ ≃ₐ[R] A₂} (h : forall a, f a = g a) : f = g
 -/
-theorem ofAlgHom_toAlgHom (f : A₁ ≃ₐ[R] A₂) (g : A₂ ->ₐ[R] A₁) (h₁ h₂) :
+theorem ofAlgHom_toAlgHom (f : A₁ ≃ₐ[R] A₂) (g : A₂ →ₐ[R] A₁) (h₁ h₂) :
     ofAlgHom (↑f) g h₁ h₂ = f :=
   ext fun _ => rfl
 
 @[deprecated (since := "2026-05-05")] alias coe_algHom_ofAlgHom := toAlgHom_ofAlgHom
 @[deprecated (since := "2026-05-05")] alias ofAlgHom_coe_algHom := ofAlgHom_toAlgHom
-
-/--
-theorem `ofAlgHom_symm` / 定理 `ofAlgHom_symm`
-
-English:
-theorem ofAlgHom_symm
-  given: (f : A₁ ->ₐ[R] A₂) (g : A₂ ->ₐ[R] A₁) (h₁ h₂)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofAlgHom_symm
-  条件: (f : A₁ ->ₐ[R] A₂) (g : A₂ ->ₐ[R] A₁) (h₁ h₂)
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.ofAlgHom_symm** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：ofAlgHom_symm (f : A₁ ->ₐ[R] A₂) (g : A₂ ->ₐ[R] A₁) (h₁ h₂) : (ofAlgHom f 
+g h₁ h₂).symm = ofAlgHom g f h₂ h₁
+参数：f : A₁ ->ₐ[R] A₂；g : A₂ ->ₐ[R] A₁；h₁ h₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofAlgHom_symm (f : A₁ ->ₐ[R] A₂) (g : A₂ ->ₐ[R] A₁) (h₁ h₂) :
+theorem ofAlgHom_symm (f : A₁ →ₐ[R] A₂) (g : A₂ →ₐ[R] A₁) (h₁ h₂) :
     (ofAlgHom f g h₁ h₂).symm = ofAlgHom g f h₂ h₁ :=
   rfl
 
 @[simp]
-/--
-theorem `toLinearEquiv_refl` / 定理 `toLinearEquiv_refl`
-
-English:
-theorem toLinearEquiv_refl
-  statement: (AlgEquiv.refl : A₁ ≃ₐ[R] A₁).toLinearEquiv = LinearEquiv.refl R A₁
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toLinearEquiv_refl
-  结论: (代数等价.refl : A₁ ≃ₐ[R] A₁).toLinearEquiv = 线性等价.refl R A₁
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.toLinearEquiv_refl** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：toLinearEquiv_refl : (AlgEquiv.refl : A₁ ≃ₐ[R] A₁).toLinearEquiv = LinearE
+quiv.refl R A₁
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toLinearEquiv_refl : (AlgEquiv.refl : A₁ ≃ₐ[R] A₁).toLinearEquiv = LinearEquiv.refl R A₁ :=
   rfl
 
 @[simp]
-/--
-theorem `toLinearEquiv_symm` / 定理 `toLinearEquiv_symm`
-
-English:
-theorem toLinearEquiv_symm
-  given: (e : A₁ ≃ₐ[R] A₂)
-  statement: e.symm.toLinearEquiv = e.toLinearEquiv.symm
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toLinearEquiv_symm
-  条件: (e : A₁ ≃ₐ[R] A₂)
-  结论: e.symm.toLinearEquiv = e.toLinearEquiv.symm
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.toLinearEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：toLinearEquiv_symm (e : A₁ ≃ₐ[R] A₂) : e.symm.toLinearEquiv = e.toLinearEq
+uiv.symm
+参数：e : A₁ ≃ₐ[R] A₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toLinearEquiv_symm (e : A₁ ≃ₐ[R] A₂) : e.symm.toLinearEquiv = e.toLinearEquiv.symm :=
   rfl
 
 @[simp]
-/--
-theorem `coe_toLinearEquiv` / 定理 `coe_toLinearEquiv`
-
-English:
-theorem coe_toLinearEquiv
-  given: (e : A₁ ≃ₐ[R] A₂)
-  statement: ⇑e.toLinearEquiv = e
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_toLinearEquiv
-  条件: (e : A₁ ≃ₐ[R] A₂)
-  结论: ⇑e.toLinearEquiv = e
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.coe_toLinearEquiv** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：coe_toLinearEquiv (e : A₁ ≃ₐ[R] A₂) : ⇑e.toLinearEquiv = e
+参数：e : A₁ ≃ₐ[R] A₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toLinearEquiv (e : A₁ ≃ₐ[R] A₂) : ⇑e.toLinearEquiv = e := rfl
 
 @[simp]
-/--
-theorem `coe_symm_toLinearEquiv` / 定理 `coe_symm_toLinearEquiv`
-
-English:
-theorem coe_symm_toLinearEquiv
-  given: (e : A₁ ≃ₐ[R] A₂)
-  statement: ⇑e.toLinearEquiv.symm = e.symm
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_symm_toLinearEquiv
-  条件: (e : A₁ ≃ₐ[R] A₂)
-  结论: ⇑e.toLinearEquiv.symm = e.symm
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.coe_symm_toLinearEquiv** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：coe_symm_toLinearEquiv (e : A₁ ≃ₐ[R] A₂) : ⇑e.toLinearEquiv.symm = e.symm
+参数：e : A₁ ≃ₐ[R] A₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_symm_toLinearEquiv (e : A₁ ≃ₐ[R] A₂) : ⇑e.toLinearEquiv.symm = e.symm := rfl
 
 @[simp]
-/--
-theorem `toLinearEquiv_trans` / 定理 `toLinearEquiv_trans`
-
-English:
-theorem toLinearEquiv_trans
-  given: (e₁ : A₁ ≃ₐ[R] A₂) (e₂ : A₂ ≃ₐ[R] A₃)
-  proof: rfl
-
-中文:
-定理 toLinearEquiv_trans
-  条件: (e₁ : A₁ ≃ₐ[R] A₂) (e₂ : A₂ ≃ₐ[R] A₃)
-  证明: rfl
+/-
+**AlgEquiv.toLinearEquiv_trans** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：toLinearEquiv_trans (e₁ : A₁ ≃ₐ[R] A₂) (e₂ : A₂ ≃ₐ[R] A₃) : (e₁.trans e₂).
+toLinearEquiv = e₁.toLinearEquiv.trans e₂.toLinearEquiv
+参数：e₁ : A₁ ≃ₐ[R] A₂；e₂ : A₂ ≃ₐ[R] A₃。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toLinearEquiv_trans (e₁ : A₁ ≃ₐ[R] A₂) (e₂ : A₂ ≃ₐ[R] A₃) :
     (e₁.trans e₂).toLinearEquiv = e₁.toLinearEquiv.trans e₂.toLinearEquiv :=
   rfl
-
-/--
-theorem `toLinearEquiv_injective` / 定理 `toLinearEquiv_injective`
-
-English:
-theorem toLinearEquiv_injective
-  statement: Function.Injective (toLinearEquiv : _ -> A₁ ≃ₗ[R] A₂)
-  proof: fun _ _ h => ext LinearEquiv.congr_fun h
-
-中文:
-定理 toLinearEquiv_injective
-  结论: 函数.单射 (toLinearEquiv : _ -> A₁ ≃ₗ[R] A₂)
-  证明: fun _ _ h => ext LinearEquiv.congr_fun h
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.congr_fun, congr_fun
+/-
+**AlgEquiv.toLinearEquiv_injective** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：toLinearEquiv_injective : Function.Injective (toLinearEquiv : _ -> A₁ ≃ₗ[R
+] A₂)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.ext`：ext {f g : A₁ ≃ₐ[R] A₂} (h : forall a, f a = g a) : f = g
+· 使用定理 `LinearEquiv.congr_fun`：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {M
+₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoi
+d M] [inst_…
 -/
-theorem toLinearEquiv_injective : Function.Injective (toLinearEquiv : _ -> A₁ ≃ₗ[R] A₂) :=
-fun _ _ h => ext LinearEquiv.congr_fun h
+theorem toLinearEquiv_injective : Function.Injective (toLinearEquiv : _ → A₁ ≃ₗ[R] A₂) :=
+  fun _ _ h => ext <| LinearEquiv.congr_fun h
 
-/--
-Definition of `toLinearMap` / `toLinearMap` 的定义
+/-- Interpret an algebra equivalence as a linear map. -/
+/-
+**AlgEquiv.toLinearMap** 是 Mathlib 中的一个缩写定义，位于命名空间 `AlgEquiv`。
+形式化陈述：toLinearMap : A₁ ->ₗ[R] A₂
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toLinearMap
-  signature: : A₁ ->ₗ[R] A₂
-  body: e.toLinearEquiv
-
-@[simp]
-
-中文:
-缩写 toLinearMap
-  签名: : A₁ ->ₗ[R] A₂
-  定义体: e.toLinearEquiv
-
-@[simp]
-
-Depends on / 依赖: e.toLinearEquiv, toLinearEquiv
+--- 原说明 ---
+Interpret an algebra equivalence as a linear map.
 -/
-abbrev toLinearMap : A₁ ->ₗ[R] A₂ :=
+abbrev toLinearMap : A₁ →ₗ[R] A₂ :=
   e.toLinearEquiv
 
 @[simp]
-/--
-lemma `toAlgHom_toLinearMap` / 引理 `toAlgHom_toLinearMap`
-
-English:
-lemma toAlgHom_toLinearMap
-  statement: e.toAlgHom.toLinearMap = e.toLinearEquiv.toLinearMap
-  proof: rfl
-
-中文:
-引理 toAlgHom_toLinearMap
-  结论: e.toAlgHom.toLinearMap = e.toLinearEquiv.toLinearMap
-  证明: rfl
+/-
+**AlgEquiv.toAlgHom_toLinearMap** 是 Mathlib 中的一个引理，位于命名空间 `AlgEquiv`。
+形式化陈述：toAlgHom_toLinearMap : e.toAlgHom.toLinearMap = e.toLinearEquiv.toLinearMa
+p
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toAlgHom_toLinearMap : e.toAlgHom.toLinearMap = e.toLinearEquiv.toLinearMap := rfl
-
-/--
-theorem `toLinearMap_ofAlgHom` / 定理 `toLinearMap_ofAlgHom`
-
-English:
-theorem toLinearMap_ofAlgHom
-  given: (f : A₁ ->ₐ[R] A₂) (g : A₂ ->ₐ[R] A₁) (h₁ h₂)
-  proof: LinearMap.ext fun _ => rfl
-
-中文:
-定理 toLinearMap_ofAlgHom
-  条件: (f : A₁ ->ₐ[R] A₂) (g : A₂ ->ₐ[R] A₁) (h₁ h₂)
-  证明: LinearMap.ext fun _ => rfl
-
-Depends on / 依赖: LinearMap, LinearMap.ext
+/-
+**AlgEquiv.toLinearMap_ofAlgHom** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：toLinearMap_ofAlgHom (f : A₁ ->ₐ[R] A₂) (g : A₂ ->ₐ[R] A₁) (h₁ h₂) : (ofAl
+gHom f g h₁ h₂).toLinearMap = f.toLinearMap
+参数：f : A₁ ->ₐ[R] A₂；g : A₂ ->ₐ[R] A₁；h₁ h₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
 -/
-theorem toLinearMap_ofAlgHom (f : A₁ ->ₐ[R] A₂) (g : A₂ ->ₐ[R] A₁) (h₁ h₂) :
+theorem toLinearMap_ofAlgHom (f : A₁ →ₐ[R] A₂) (g : A₂ →ₐ[R] A₁) (h₁ h₂) :
     (ofAlgHom f g h₁ h₂).toLinearMap = f.toLinearMap :=
   LinearMap.ext fun _ => rfl
-
-/--
-theorem `toLinearEquiv_toLinearMap` / 定理 `toLinearEquiv_toLinearMap`
-
-English:
-theorem toLinearEquiv_toLinearMap
-  statement: e.toLinearEquiv.toLinearMap = e.toLinearMap
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toLinearEquiv_toLinearMap
-  结论: e.toLinearEquiv.toLinearMap = e.toLinearMap
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.toLinearEquiv_toLinearMap** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：toLinearEquiv_toLinearMap : e.toLinearEquiv.toLinearMap = e.toLinearMap
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toLinearEquiv_toLinearMap : e.toLinearEquiv.toLinearMap = e.toLinearMap :=
   rfl
 
 @[simp]
-/--
-theorem `toLinearMap_apply` / 定理 `toLinearMap_apply`
-
-English:
-theorem toLinearMap_apply
-  given: (x : A₁)
-  statement: e.toLinearMap x = e x
-  proof: rfl
-
-中文:
-定理 toLinearMap_apply
-  条件: (x : A₁)
-  结论: e.toLinearMap x = e x
-  证明: rfl
+/-
+**AlgEquiv.toLinearMap_apply** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：toLinearMap_apply (x : A₁) : e.toLinearMap x = e x
+参数：x : A₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toLinearMap_apply (x : A₁) : e.toLinearMap x = e x :=
   rfl
-
-/--
-theorem `toLinearMap_injective` / 定理 `toLinearMap_injective`
-
-English:
-theorem toLinearMap_injective
-  statement: Function.Injective (toLinearMap : _ -> A₁ ->ₗ[R] A₂)
-  proof: fun _ _ h =>
-ext LinearMap.congr_fun h
-
-@[simp]
-
-中文:
-定理 toLinearMap_injective
-  结论: 函数.单射 (toLinearMap : _ -> A₁ ->ₗ[R] A₂)
-  证明: fun _ _ h =>
-ext LinearMap.congr_fun h
-
-@[simp]
+/-
+**AlgEquiv.toLinearMap_injective** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：toLinearMap_injective : Function.Injective (toLinearMap : _ -> A₁ ->ₗ[R] A
+₂)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.ext`：ext {f g : A₁ ≃ₐ[R] A₂} (h : forall a, f a = g a) : f = g
+· 使用定理 `LinearMap.congr_fun`：∀ {R : Type u_1} {S : Type u_5} {M : Type u_8} {M₃ 
+: Type u_11} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid
+ M] [inst…
 -/
-theorem toLinearMap_injective : Function.Injective (toLinearMap : _ -> A₁ ->ₗ[R] A₂) := fun _ _ h =>
-ext LinearMap.congr_fun h
+theorem toLinearMap_injective : Function.Injective (toLinearMap : _ → A₁ →ₗ[R] A₂) := fun _ _ h =>
+  ext <| LinearMap.congr_fun h
 
 @[simp]
-/--
-theorem `trans_toLinearMap` / 定理 `trans_toLinearMap`
-
-English:
-theorem trans_toLinearMap
-  given: (f : A₁ ≃ₐ[R] A₂) (g : A₂ ≃ₐ[R] A₃)
-  proof: rfl
-
-中文:
-定理 trans_toLinearMap
-  条件: (f : A₁ ≃ₐ[R] A₂) (g : A₂ ≃ₐ[R] A₃)
-  证明: rfl
+/-
+**AlgEquiv.trans_toLinearMap** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：trans_toLinearMap (f : A₁ ≃ₐ[R] A₂) (g : A₂ ≃ₐ[R] A₃) : (f.trans g).toLine
+arMap = g.toLinearMap.comp f.toLinearMap
+参数：f : A₁ ≃ₐ[R] A₂；g : A₂ ≃ₐ[R] A₃。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem trans_toLinearMap (f : A₁ ≃ₐ[R] A₂) (g : A₂ ≃ₐ[R] A₃) :
     (f.trans g).toLinearMap = g.toLinearMap.comp f.toLinearMap :=
   rfl
-
-/--
-theorem `linearEquivConj_mulLeft` / 定理 `linearEquivConj_mulLeft`
-
-English:
-theorem linearEquivConj_mulLeft
-  given: (f : A₁ ≃ₐ[R] A₂) (x : A₁)
-  proof: by
-  ext; simp
-
-中文:
-定理 linearEquivConj_mulLeft
-  条件: (f : A₁ ≃ₐ[R] A₂) (x : A₁)
-  证明: by
-  ext; simp
+/-
+**AlgEquiv.linearEquivConj_mulLeft** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA₂} [inst : CommSemiring R] [i
+nst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [inst_3 : Algebra R A₁] [inst_4 : 
+Algebra R A₂] (f : A₁ ≃ₐ[R] A₂) (x : A₁),   (↑f).conj (LinearMap.mulLeft R x) = 
+LinearMap.mulLeft R (f x)
+参数：f : A₁ ≃ₐ[R] A₂；x : A₁；↑f；LinearMap.mulLeft R x；f x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgEquiv.toLinearEquiv_apply`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type
+ uA₂} [inst : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [i
+nst_3 : Algebra R …
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingEquivClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {R : Type u_4} 
+{S : Type u_5} [inst : EquivLike F R S] [inst_1 : NonUnitalNonAssocSemiring R]  
+ [inst_2 : NonUnitalNonAssoc…
+· 使用定理 `AlgEquivClass.toRingEquivClass`：∀ {F : Type u_1} {R : outParam (Type u_2
+)} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}  
+ {inst_1 : Semiring …
+· 使用定理 `AlgEquiv.instAlgEquivClass`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type u
+A₂} [inst : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [ins
+t_3 : Algebra R …
+· 使用定理 `AlgEquiv.apply_symm_apply`：apply_symm_apply (e : A₁ ≃ₐ[R] A₂) : forall x
+, e (e.symm x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] theorem linearEquivConj_mulLeft (f : A₁ ≃ₐ[R] A₂) (x : A₁) :
     f.toLinearEquiv.conj (.mulLeft R x) = .mulLeft R (f x) := by
   ext; simp
-
-/--
-theorem `linearEquivConj_mulRight` / 定理 `linearEquivConj_mulRight`
-
-English:
-theorem linearEquivConj_mulRight
-  given: (f : A₁ ≃ₐ[R] A₂) (x : A₁)
-  proof: by
-  ext; simp
-
-中文:
-定理 linearEquivConj_mulRight
-  条件: (f : A₁ ≃ₐ[R] A₂) (x : A₁)
-  证明: by
-  ext; simp
+/-
+**AlgEquiv.linearEquivConj_mulRight** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA₂} [inst : CommSemiring R] [i
+nst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [inst_3 : Algebra R A₁] [inst_4 : 
+Algebra R A₂] (f : A₁ ≃ₐ[R] A₂) (x : A₁),   (↑f).conj (LinearMap.mulRight R x) =
+ LinearMap.mulRight R (f x)
+参数：f : A₁ ≃ₐ[R] A₂；x : A₁；↑f；LinearMap.mulRight R x；f x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgEquiv.toLinearEquiv_apply`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type
+ uA₂} [inst : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [i
+nst_3 : Algebra R …
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingEquivClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {R : Type u_4} 
+{S : Type u_5} [inst : EquivLike F R S] [inst_1 : NonUnitalNonAssocSemiring R]  
+ [inst_2 : NonUnitalNonAssoc…
+· 使用定理 `AlgEquivClass.toRingEquivClass`：∀ {F : Type u_1} {R : outParam (Type u_2
+)} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}  
+ {inst_1 : Semiring …
+· 使用定理 `AlgEquiv.instAlgEquivClass`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type u
+A₂} [inst : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [ins
+t_3 : Algebra R …
+· 使用定理 `AlgEquiv.apply_symm_apply`：apply_symm_apply (e : A₁ ≃ₐ[R] A₂) : forall x
+, e (e.symm x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] theorem linearEquivConj_mulRight (f : A₁ ≃ₐ[R] A₂) (x : A₁) :
     f.toLinearEquiv.conj (.mulRight R x) = .mulRight R (f x) := by
   ext; simp
-
-/--
-theorem `linearEquivConj_mulLeftRight` / 定理 `linearEquivConj_mulLeftRight`
-
-English:
-theorem linearEquivConj_mulLeftRight
-  given: (f : A₁ ≃ₐ[R] A₂) (x : A₁ × A₁)
-  proof: by
-  cases x; ext; simp
-
-中文:
-定理 linearEquivConj_mulLeftRight
-  条件: (f : A₁ ≃ₐ[R] A₂) (x : A₁ × A₁)
-  证明: by
-  cases x; ext; simp
+/-
+**AlgEquiv.linearEquivConj_mulLeftRight** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA₂} [inst : CommSemiring R] [i
+nst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [inst_3 : Algebra R A₁] [inst_4 : 
+Algebra R A₂] (f : A₁ ≃ₐ[R] A₂) (x : A₁ × A₁),   (↑f).conj (LinearMap.mulLeftRig
+ht R x) = LinearMap.mulLeftRight R (Prod.map (⇑f) (⇑f) x)
+参数：f : A₁ ≃ₐ[R] A₂；x : A₁ × A₁；↑f；LinearMap.mulLeftRight R x；Prod.map (⇑f) (⇑f) 
+x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgEquiv.toLinearEquiv_apply`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type
+ uA₂} [inst : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [i
+nst_3 : Algebra R …
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingEquivClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {R : Type u_4} 
+{S : Type u_5} [inst : EquivLike F R S] [inst_1 : NonUnitalNonAssocSemiring R]  
+ [inst_2 : NonUnitalNonAssoc…
+· 使用定理 `AlgEquivClass.toRingEquivClass`：∀ {F : Type u_1} {R : outParam (Type u_2
+)} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}  
+ {inst_1 : Semiring …
+· 使用定理 `AlgEquiv.instAlgEquivClass`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type u
+A₂} [inst : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [ins
+t_3 : Algebra R …
+· 使用定理 `AlgEquiv.apply_symm_apply`：apply_symm_apply (e : A₁ ≃ₐ[R] A₂) : forall x
+, e (e.symm x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 @[simp] theorem linearEquivConj_mulLeftRight (f : A₁ ≃ₐ[R] A₂) (x : A₁ × A₁) :
     f.toLinearEquiv.conj (.mulLeftRight R x) = .mulLeftRight R (Prod.map f f x) := by
   cases x; ext; simp
 
-/--
-Definition of `ofBijective` / `ofBijective` 的定义
+/-- Promotes a bijective algebra homomorphism to an algebra equivalence. -/
+/-
+**AlgEquiv.ofBijective** 是 Mathlib 中的一个定义，位于命名空间 `AlgEquiv`。
+形式化陈述：ofBijective (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f) : A₁ ≃ₐ[R] A₂
+参数：f : A₁ ->ₐ[R] A₂；hf : Function.Bijective f。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.commutes'`：∀ {R : Type u} {A : Type v} {B : Type w} [inst : CommS
+emiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A] 
+[inst_…
 
-English:
-definition ofBijective
-  signature: (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f)
-  body: { RingEquiv.ofBijective (f : A₁ ->+* A₂) hf, f with }
-
-@[simp]
-
-中文:
-定义 ofBijective
-  签名: (f : A₁ ->ₐ[R] A₂) (hf : 函数.双射 f)
-  定义体: { RingEquiv.ofBijective (f : A₁ ->+* A₂) hf, f with }
-
-@[simp]
-
-Depends on / 依赖: RingEquiv, RingEquiv.ofBijective, ofBijective
+--- 原说明 ---
+Promotes a bijective algebra homomorphism to an algebra equivalence.
 -/
-noncomputable def ofBijective (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f) : A₁ ≃ₐ[R] A₂ :=
-  { RingEquiv.ofBijective (f : A₁ ->+* A₂) hf, f with }
+noncomputable def ofBijective (f : A₁ →ₐ[R] A₂) (hf : Function.Bijective f) : A₁ ≃ₐ[R] A₂ :=
+  { RingEquiv.ofBijective (f : A₁ →+* A₂) hf, f with }
 
 @[simp]
-/--
-lemma `coe_ofBijective` / 引理 `coe_ofBijective`
-
-English:
-lemma coe_ofBijective
-  given: (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f)
-  proof: rfl
-
-中文:
-引理 coe_ofBijective
-  条件: (f : A₁ ->ₐ[R] A₂) (hf : 函数.双射 f)
-  证明: rfl
+/-
+**AlgEquiv.coe_ofBijective** 是 Mathlib 中的一个引理，位于命名空间 `AlgEquiv`。
+形式化陈述：coe_ofBijective (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f) : (ofBiject
+ive f hf : A₁ -> A₂) = f
+参数：f : A₁ ->ₐ[R] A₂；hf : Function.Bijective f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_ofBijective (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f) :
-    (ofBijective f hf : A₁ -> A₂) = f := rfl
-
-/--
-lemma `ofBijective_apply` / 引理 `ofBijective_apply`
-
-English:
-lemma ofBijective_apply
-  given: (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f) (a : A₁)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 ofBijective_apply
-  条件: (f : A₁ ->ₐ[R] A₂) (hf : 函数.双射 f) (a : A₁)
-  证明: rfl
-
-@[simp]
+lemma coe_ofBijective (f : A₁ →ₐ[R] A₂) (hf : Function.Bijective f) :
+    (ofBijective f hf : A₁ → A₂) = f := rfl
+/-
+**AlgEquiv.ofBijective_apply** 是 Mathlib 中的一个引理，位于命名空间 `AlgEquiv`。
+形式化陈述：ofBijective_apply (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f) (a : A₁) 
+: (ofBijective f hf) a = f a
+参数：f : A₁ ->ₐ[R] A₂；hf : Function.Bijective f；a : A₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma ofBijective_apply (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f) (a : A₁) :
+lemma ofBijective_apply (f : A₁ →ₐ[R] A₂) (hf : Function.Bijective f) (a : A₁) :
     (ofBijective f hf) a = f a := rfl
 
 @[simp]
-/--
-lemma `toLinearMap_ofBijective` / 引理 `toLinearMap_ofBijective`
-
-English:
-lemma toLinearMap_ofBijective
-  given: (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toLinearMap_ofBijective
-  条件: (f : A₁ ->ₐ[R] A₂) (hf : 函数.双射 f)
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.toLinearMap_ofBijective** 是 Mathlib 中的一个引理，位于命名空间 `AlgEquiv`。
+形式化陈述：toLinearMap_ofBijective (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f) : (
+ofBijective f hf).toLinearMap = f
+参数：f : A₁ ->ₐ[R] A₂；hf : Function.Bijective f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma toLinearMap_ofBijective (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f) :
+lemma toLinearMap_ofBijective (f : A₁ →ₐ[R] A₂) (hf : Function.Bijective f) :
     (ofBijective f hf).toLinearMap = f := rfl
 
 @[simp]
-/--
-lemma `toAlgHom_ofBijective` / 引理 `toAlgHom_ofBijective`
-
-English:
-lemma toAlgHom_ofBijective
-  given: (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f)
-  proof: rfl
-
-中文:
-引理 toAlgHom_ofBijective
-  条件: (f : A₁ ->ₐ[R] A₂) (hf : 函数.双射 f)
-  证明: rfl
+/-
+**AlgEquiv.toAlgHom_ofBijective** 是 Mathlib 中的一个引理，位于命名空间 `AlgEquiv`。
+形式化陈述：toAlgHom_ofBijective (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f) : (ofB
+ijective f hf).toAlgHom = f
+参数：f : A₁ ->ₐ[R] A₂；hf : Function.Bijective f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma toAlgHom_ofBijective (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f) :
+lemma toAlgHom_ofBijective (f : A₁ →ₐ[R] A₂) (hf : Function.Bijective f) :
     (ofBijective f hf).toAlgHom = f := rfl
-
-/--
-lemma `ofBijective_apply_symm_apply` / 引理 `ofBijective_apply_symm_apply`
-
-English:
-lemma ofBijective_apply_symm_apply
-  given: (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f) (x : A₂)
-  proof: (ofBijective f hf).apply_symm_apply x
-
-@[simp]
-
-中文:
-引理 ofBijective_apply_symm_apply
-  条件: (f : A₁ ->ₐ[R] A₂) (hf : 函数.双射 f) (x : A₂)
-  证明: (ofBijective f hf).apply_symm_apply x
-
-@[simp]
-
-Depends on / 依赖: apply_symm_apply, ofBijective
+/-
+**AlgEquiv.ofBijective_apply_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 `AlgEquiv`。
+形式化陈述：ofBijective_apply_symm_apply (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f
+) (x : A₂) : f ((ofBijective f hf).symm x) = x
+参数：f : A₁ ->ₐ[R] A₂；hf : Function.Bijective f；x : A₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.apply_symm_apply`：apply_symm_apply (e : A₁ ≃ₐ[R] A₂) : forall x
+, e (e.symm x) = x
 -/
-lemma ofBijective_apply_symm_apply (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f) (x : A₂) :
+lemma ofBijective_apply_symm_apply (f : A₁ →ₐ[R] A₂) (hf : Function.Bijective f) (x : A₂) :
     f ((ofBijective f hf).symm x) = x :=
   (ofBijective f hf).apply_symm_apply x
 
 @[simp]
-/--
-lemma `ofBijective_symm_apply_apply` / 引理 `ofBijective_symm_apply_apply`
-
-English:
-lemma ofBijective_symm_apply_apply
-  given: (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f) (x : A₁)
-  proof: (ofBijective f hf).symm_apply_apply x
-
-中文:
-引理 ofBijective_symm_apply_apply
-  条件: (f : A₁ ->ₐ[R] A₂) (hf : 函数.双射 f) (x : A₁)
-  证明: (ofBijective f hf).symm_apply_apply x
-
-Depends on / 依赖: ofBijective, symm_apply_apply
+/-
+**AlgEquiv.ofBijective_symm_apply_apply** 是 Mathlib 中的一个引理，位于命名空间 `AlgEquiv`。
+形式化陈述：ofBijective_symm_apply_apply (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f
+) (x : A₁) : (ofBijective f hf).symm (f x) = x
+参数：f : A₁ ->ₐ[R] A₂；hf : Function.Bijective f；x : A₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.symm_apply_apply`：symm_apply_apply (e : A₁ ≃ₐ[R] A₂) : forall x
+, e.symm (e x) = x
 -/
-lemma ofBijective_symm_apply_apply (f : A₁ ->ₐ[R] A₂) (hf : Function.Bijective f) (x : A₁) :
+lemma ofBijective_symm_apply_apply (f : A₁ →ₐ[R] A₂) (hf : Function.Bijective f) (x : A₁) :
     (ofBijective f hf).symm (f x) = x :=
   (ofBijective f hf).symm_apply_apply x
 
 section OfLinearEquiv
 
-variable (l : A₁ ≃ₗ[R] A₂) (map_one : l 1 = 1) (map_mul : forall x y : A₁, l (x * y) = l x * l y)
+variable (l : A₁ ≃ₗ[R] A₂) (map_one : l 1 = 1) (map_mul : ∀ x y : A₁, l (x * y) = l x * l y)
 
 /--
 Upgrade a linear equivalence to an algebra equivalence,
 given that it distributes over multiplication and the identity
 -/
 @[simps apply]
-/--
-Definition of `ofLinearEquiv` / `ofLinearEquiv` 的定义
+/-
+**AlgEquiv.ofLinearEquiv** 是 Mathlib 中的一个定义，位于命名空间 `AlgEquiv`。
+形式化陈述：ofLinearEquiv : A₁ ≃ₐ[R] A₂
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofLinearEquiv
-  signature: : A₁ ≃ₐ[R] A₂
-  body: { l with
-    toFun := l
-    invFun := l.symm
-    map_mul' := map_mul
-    commutes' := (AlgHom.ofLinearMap l map_one map_mul : A₁ ->ₐ[R] A₂).commutes }
-
-中文:
-定义 ofLinearEquiv
-  签名: : A₁ ≃ₐ[R] A₂
-  定义体: { l with
-    toFun := l
-    invFun := l.symm
-    map_mul' := map_mul
-    commutes' := (AlgHom.ofLinearMap l map_one map_mul : A₁ ->ₐ[R] A₂).commutes }
-
-Depends on / 依赖: AlgHom, AlgHom.ofLinearMap, commutes, invFun, l.symm, map_mul, map_one, ofLinearMap
+--- 原说明 ---
+Upgrade a linear equivalence to an algebra equivalence,
+given that it distributes over multiplication and the identity
 -/
 def ofLinearEquiv : A₁ ≃ₐ[R] A₂ :=
   { l with
     toFun := l
     invFun := l.symm
     map_mul' := map_mul
-    commutes' := (AlgHom.ofLinearMap l map_one map_mul : A₁ ->ₐ[R] A₂).commutes }
+    commutes' := (AlgHom.ofLinearMap l map_one map_mul : A₁ →ₐ[R] A₂).commutes }
 
-/--
-Definition of `ofLinearEquiv_symm.aux` / `ofLinearEquiv_symm.aux` 的定义
+/-- Auxiliary definition to avoid looping in `dsimp` with `AlgEquiv.ofLinearEquiv_symm`. -/
+/-
+**AlgEquiv.ofLinearEquiv_symm.aux** 是 Mathlib 中的一个定义，位于命名空间 `AlgEquiv.ofLinearEq
+uiv_symm`。
+形式化陈述：{R : Type uR} →   {A₁ : Type uA₁} →     {A₂ : Type uA₂} →       [inst : Co
+mmSemiring R] →         [inst_1 : Semiring A₁] →           [inst_2 : Semiring A₂
+] →             [inst_3 : Algebra R A₁] →               [inst_4 : Algebra R A₂] 
+→                 (l : A₁ ≃ₗ[R] A₂) → l 1 = 1 → (∀ (x y : A₁), l (x * y) = l x *
+ l y) → A₂ ≃ₐ[R] A₁
+参数：l : A₁ ≃ₗ[R] A₂；∀ (x y : A₁), l (x * y) = l x * l y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofLinearEquiv_symm.aux
-  body: (ofLinearEquiv l map_one map_mul).symm
-
-@[simp]
-
-中文:
-定义 ofLinearEquiv_symm.aux
-  定义体: (ofLinearEquiv l map_one map_mul).symm
-
-@[simp]
+--- 原说明 ---
+Auxiliary definition to avoid looping in `dsimp` with `AlgEquiv.ofLinearEquiv_sy
+mm`.
 -/
 protected def ofLinearEquiv_symm.aux := (ofLinearEquiv l map_one map_mul).symm
 
 @[simp]
-/--
-theorem `ofLinearEquiv_symm` / 定理 `ofLinearEquiv_symm`
-
-English:
-theorem ofLinearEquiv_symm
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofLinearEquiv_symm
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.ofLinearEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：ofLinearEquiv_symm : (ofLinearEquiv l map_one map_mul).symm = ofLinearEqui
+v l.symm (_root_.map_one <| ofLinearEquiv_symm.aux l map_one map_mul) (_root_.ma
+p_mul <| ofLinearEquiv_symm.aux l map_one map_mul)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofLinearEquiv_symm :
     (ofLinearEquiv l map_one map_mul).symm =
@@ -2509,40 +1772,25 @@ theorem ofLinearEquiv_symm :
   rfl
 
 @[simp]
-/--
-theorem `ofLinearEquiv_toLinearEquiv` / 定理 `ofLinearEquiv_toLinearEquiv`
-
-English:
-theorem ofLinearEquiv_toLinearEquiv
-  given: (map_mul) (map_one)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofLinearEquiv_toLinearEquiv
-  条件: (map_mul) (map_one)
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.ofLinearEquiv_toLinearEquiv** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：ofLinearEquiv_toLinearEquiv (map_mul) (map_one) : ofLinearEquiv e.toLinear
+Equiv map_mul map_one = e
+参数：map_mul；map_one。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ofLinearEquiv_toLinearEquiv (map_mul) (map_one) :
     ofLinearEquiv e.toLinearEquiv map_mul map_one = e :=
   rfl
 
 @[simp]
-/--
-theorem `toLinearEquiv_ofLinearEquiv` / 定理 `toLinearEquiv_ofLinearEquiv`
-
-English:
-theorem toLinearEquiv_ofLinearEquiv
-  statement: toLinearEquiv (ofLinearEquiv l map_one map_mul) = l
-  proof: rfl
-
-中文:
-定理 toLinearEquiv_ofLinearEquiv
-  结论: toLinearEquiv (ofLinearEquiv l map_one map_mul) = l
-  证明: rfl
+/-
+**AlgEquiv.toLinearEquiv_ofLinearEquiv** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：toLinearEquiv_ofLinearEquiv : toLinearEquiv (ofLinearEquiv l map_one map_m
+ul) = l
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toLinearEquiv_ofLinearEquiv : toLinearEquiv (ofLinearEquiv l map_one map_mul) = l :=
   rfl
@@ -2553,28 +1801,18 @@ section OfRingEquiv
 
 /-- Promotes a linear `RingEquiv` to an `AlgEquiv`. -/
 @[simps apply symm_apply toEquiv]
-/--
-Definition of `ofRingEquiv` / `ofRingEquiv` 的定义
+/-
+**AlgEquiv.ofRingEquiv** 是 Mathlib 中的一个定义，位于命名空间 `AlgEquiv`。
+形式化陈述：ofRingEquiv {f : A₁ ≃+* A₂} (hf : forall x, f (algebraMap R A₁ x) = algebr
+aMap R A₂ x) : A₁ ≃ₐ[R] A₂
+参数：hf : forall x, f (algebraMap R A₁ x) = algebraMap R A₂ x。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofRingEquiv
-  signature: {f : A₁ ≃+* A₂} (hf : forall x, f (algebraMap R A₁ x) = algebraMap R A₂ x)
-  body: { f with
-    toFun := f
-    invFun := f.symm
-    commutes' := hf }
-
-中文:
-定义 ofRingEquiv
-  签名: {f : A₁ ≃+* A₂} (hf : 对任意 x, f (algebraMap R A₁ x) = algebraMap R A₂ x)
-  定义体: { f with
-    toFun := f
-    invFun := f.symm
-    commutes' := hf }
-
-Depends on / 依赖: commutes, f.symm, invFun
+--- 原说明 ---
+Promotes a linear `RingEquiv` to an `AlgEquiv`.
 -/
-def ofRingEquiv {f : A₁ ≃+* A₂} (hf : forall x, f (algebraMap R A₁ x) = algebraMap R A₂ x) :
+def ofRingEquiv {f : A₁ ≃+* A₂} (hf : ∀ x, f (algebraMap R A₁ x) = algebraMap R A₂ x) :
     A₁ ≃ₐ[R] A₂ :=
   { f with
     toFun := f
@@ -2584,34 +1822,11 @@ def ofRingEquiv {f : A₁ ≃+* A₂} (hf : forall x, f (algebraMap R A₁ x) = 
 end OfRingEquiv
 
 @[simps -isSimp one mul, stacks 09HR]
-/--
-Instance `aut` / 实例 `aut`
-
-English:
-instance aut
-  signature: : Group (A₁ ≃ₐ[R] A₁) where
-  body: ψ.trans ϕ
-  mul_assoc _ _ _ := rfl
-  one := refl
-  one_mul _ := ext fun _ => rfl
-  mul_one _ := ext fun _ => rfl
-  inv := symm
-inv_mul_cancel ϕ := ext symm_apply_apply ϕ
-
-@[simp]
-
-中文:
-实例 aut
-  签名: : 群 (A₁ ≃ₐ[R] A₁) where
-  定义体: ψ.trans ϕ
-  mul_assoc _ _ _ := rfl
-  one := refl
-  one_mul _ := ext fun _ => rfl
-  mul_one _ := ext fun _ => rfl
-  inv := symm
-inv_mul_cancel ϕ := ext symm_apply_apply ϕ
-
-@[simp]
+/-
+**AlgEquiv.aut** 是 Mathlib 中的一个实例，位于命名空间 `AlgEquiv`。
+形式化陈述：aut : Group (A₁ ≃ₐ[R] A₁) where mul ϕ ψ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance aut : Group (A₁ ≃ₐ[R] A₁) where
   mul ϕ ψ := ψ.trans ϕ
@@ -2620,134 +1835,83 @@ instance aut : Group (A₁ ≃ₐ[R] A₁) where
   one_mul _ := ext fun _ => rfl
   mul_one _ := ext fun _ => rfl
   inv := symm
-inv_mul_cancel ϕ := ext symm_apply_apply ϕ
+  inv_mul_cancel ϕ := ext <| symm_apply_apply ϕ
 
 @[simp]
-/--
-theorem `one_apply` / 定理 `one_apply`
-
-English:
-theorem one_apply
-  given: (x : A₁)
-  statement: (1 : A₁ ≃ₐ[R] A₁) x = x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 one_apply
-  条件: (x : A₁)
-  结论: (1 : A₁ ≃ₐ[R] A₁) x = x
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.one_apply** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：one_apply (x : A₁) : (1 : A₁ ≃ₐ[R] A₁) x = x
+参数：x : A₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem one_apply (x : A₁) : (1 : A₁ ≃ₐ[R] A₁) x = x :=
   rfl
 
 @[simp]
-/--
-theorem `mul_apply` / 定理 `mul_apply`
-
-English:
-theorem mul_apply
-  given: (e₁ e₂ : A₁ ≃ₐ[R] A₁) (x : A₁)
-  statement: (e₁ * e₂) x = e₁ (e₂ x)
-  proof: rfl
-
-中文:
-定理 mul_apply
-  条件: (e₁ e₂ : A₁ ≃ₐ[R] A₁) (x : A₁)
-  结论: (e₁ * e₂) x = e₁ (e₂ x)
-  证明: rfl
+/-
+**AlgEquiv.mul_apply** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：mul_apply (e₁ e₂ : A₁ ≃ₐ[R] A₁) (x : A₁) : (e₁ * e₂) x = e₁ (e₂ x)
+参数：e₁ e₂ : A₁ ≃ₐ[R] A₁；x : A₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mul_apply (e₁ e₂ : A₁ ≃ₐ[R] A₁) (x : A₁) : (e₁ * e₂) x = e₁ (e₂ x) :=
   rfl
-
-/--
-lemma `aut_inv` / 引理 `aut_inv`
-
-English:
-lemma aut_inv
-  given: (ϕ : A₁ ≃ₐ[R] A₁)
-  statement: ϕ⁻¹ = ϕ.symm
-  proof: rfl
-
-中文:
-引理 aut_inv
-  条件: (ϕ : A₁ ≃ₐ[R] A₁)
-  结论: ϕ⁻¹ = ϕ.symm
-  证明: rfl
+/-
+**AlgEquiv.aut_inv** 是 Mathlib 中的一个引理，位于命名空间 `AlgEquiv`。
+形式化陈述：aut_inv (ϕ : A₁ ≃ₐ[R] A₁) : ϕ⁻¹ = ϕ.symm
+参数：ϕ : A₁ ≃ₐ[R] A₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma aut_inv (ϕ : A₁ ≃ₐ[R] A₁) : ϕ⁻¹ = ϕ.symm := rfl
-
-/--
-lemma `coe_inv` / 引理 `coe_inv`
-
-English:
-lemma coe_inv
-  given: (ϕ : A₁ ≃ₐ[R] A₁)
-  statement: ⇑ϕ⁻¹ = ⇑ϕ.symm
-  proof: rfl
-
-中文:
-引理 coe_inv
-  条件: (ϕ : A₁ ≃ₐ[R] A₁)
-  结论: ⇑ϕ⁻¹ = ⇑ϕ.symm
-  证明: rfl
+/-
+**AlgEquiv.coe_inv** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：∀ {R : Type uR} {A₁ : Type uA₁} [inst : CommSemiring R] [inst_1 : Semiring
+ A₁] [inst_2 : Algebra R A₁]   (ϕ : A₁ ≃ₐ[R] A₁), ⇑ϕ⁻¹ = ⇑ϕ.symm
+参数：ϕ : A₁ ≃ₐ[R] A₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_inv (ϕ : A₁ ≃ₐ[R] A₁) : ⇑ϕ⁻¹ = ⇑ϕ.symm := rfl
-
-/--
-theorem `coe_pow` / 定理 `coe_pow`
-
-English:
-theorem coe_pow
-  given: (e : A₁ ≃ₐ[R] A₁) (n : Nat)
-  statement: ⇑(e ^ n) = e^[n]
-  proof: n.rec (by ext; simp) fun _ ih => by ext; simp [pow_succ, ih]
-
-中文:
-定理 coe_pow
-  条件: (e : A₁ ≃ₐ[R] A₁) (n : 自然数)
-  结论: ⇑(e ^ n) = e^[n]
-  证明: n.rec (by ext; simp) fun _ ih => by ext; simp [pow_succ, ih]
+/-
+**AlgEquiv.coe_pow** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：∀ {R : Type uR} {A₁ : Type uA₁} [inst : CommSemiring R] [inst_1 : Semiring
+ A₁] [inst_2 : Algebra R A₁] (e : A₁ ≃ₐ[R] A₁)   (n : ℕ), ⇑(e ^ n) = (⇑e)^[n]
+参数：e : A₁ ≃ₐ[R] A₁；n : ℕ；e ^ n；⇑e。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
 -/
-@[simp] theorem coe_pow (e : A₁ ≃ₐ[R] A₁) (n : Nat) : ⇑(e ^ n) = e^[n] :=
-  n.rec (by ext; simp) fun _ ih => by ext; simp [pow_succ, ih]
+@[simp] theorem coe_pow (e : A₁ ≃ₐ[R] A₁) (n : ℕ) : ⇑(e ^ n) = e^[n] :=
+  n.rec (by ext; simp) fun _ ih ↦ by ext; simp [pow_succ, ih]
 
 /-- An algebra isomorphism induces a group isomorphism between automorphism groups.
 
 This is a more bundled version of `AlgEquiv.equivCongr`. -/
 @[simps apply]
-/--
-Definition of `autCongr` / `autCongr` 的定义
+/-
+**AlgEquiv.autCongr** 是 Mathlib 中的一个定义，位于命名空间 `AlgEquiv`。
+形式化陈述：autCongr (ϕ : A₁ ≃ₐ[R] A₂) : (A₁ ≃ₐ[R] A₁) ≃* A₂ ≃ₐ[R] A₂ where __
+参数：ϕ : A₁ ≃ₐ[R] A₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition autCongr
-  signature: (ϕ : A₁ ≃ₐ[R] A₂)
-  body: equivCongr ϕ ϕ
-  toFun ψ := ϕ.symm.trans (ψ.trans ϕ)
-  invFun ψ := ϕ.trans (ψ.trans ϕ.symm)
-  map_mul' ψ χ := by
-    ext
-    simp only [mul_apply, trans_apply, symm_apply_apply]
+--- 原说明 ---
+An algebra isomorphism induces a group isomorphism between automorphism groups.
 
-@[simp]
-
-中文:
-定义 autCongr
-  签名: (ϕ : A₁ ≃ₐ[R] A₂)
-  定义体: equivCongr ϕ ϕ
-  toFun ψ := ϕ.symm.trans (ψ.trans ϕ)
-  invFun ψ := ϕ.trans (ψ.trans ϕ.symm)
-  map_mul' ψ χ := by
-    ext
-    simp only [mul_apply, trans_apply, symm_apply_apply]
-
-@[simp]
-
-Depends on / 依赖: equivCongr
+This is a more bundled version of `AlgEquiv.equivCongr`.
 -/
 def autCongr (ϕ : A₁ ≃ₐ[R] A₂) : (A₁ ≃ₐ[R] A₁) ≃* A₂ ≃ₐ[R] A₂ where
   __ := equivCongr ϕ ϕ
@@ -2758,94 +1922,51 @@ def autCongr (ϕ : A₁ ≃ₐ[R] A₂) : (A₁ ≃ₐ[R] A₁) ≃* A₂ ≃ₐ
     simp only [mul_apply, trans_apply, symm_apply_apply]
 
 @[simp]
-/--
-theorem `autCongr_refl` / 定理 `autCongr_refl`
-
-English:
-theorem autCongr_refl
-  statement: autCongr AlgEquiv.refl = MulEquiv.refl (A₁ ≃ₐ[R] A₁)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 autCongr_refl
-  结论: autCongr 代数等价.refl = 乘法等价.refl (A₁ ≃ₐ[R] A₁)
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.autCongr_refl** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：autCongr_refl : autCongr AlgEquiv.refl = MulEquiv.refl (A₁ ≃ₐ[R] A₁)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem autCongr_refl : autCongr AlgEquiv.refl = MulEquiv.refl (A₁ ≃ₐ[R] A₁) := rfl
 
 @[simp]
-/--
-theorem `autCongr_symm` / 定理 `autCongr_symm`
-
-English:
-theorem autCongr_symm
-  given: (ϕ : A₁ ≃ₐ[R] A₂)
-  statement: (autCongr ϕ).symm = autCongr ϕ.symm
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 autCongr_symm
-  条件: (ϕ : A₁ ≃ₐ[R] A₂)
-  结论: (autCongr ϕ).symm = autCongr ϕ.symm
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.autCongr_symm** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：autCongr_symm (ϕ : A₁ ≃ₐ[R] A₂) : (autCongr ϕ).symm = autCongr ϕ.symm
+参数：ϕ : A₁ ≃ₐ[R] A₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem autCongr_symm (ϕ : A₁ ≃ₐ[R] A₂) : (autCongr ϕ).symm = autCongr ϕ.symm :=
   rfl
 
 @[simp]
-/--
-theorem `autCongr_trans` / 定理 `autCongr_trans`
-
-English:
-theorem autCongr_trans
-  given: (ϕ : A₁ ≃ₐ[R] A₂) (ψ : A₂ ≃ₐ[R] A₃)
-  proof: rfl
-
-中文:
-定理 autCongr_trans
-  条件: (ϕ : A₁ ≃ₐ[R] A₂) (ψ : A₂ ≃ₐ[R] A₃)
-  证明: rfl
+/-
+**AlgEquiv.autCongr_trans** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：autCongr_trans (ϕ : A₁ ≃ₐ[R] A₂) (ψ : A₂ ≃ₐ[R] A₃) : (autCongr ϕ).trans (a
+utCongr ψ) = autCongr (ϕ.trans ψ)
+参数：ϕ : A₁ ≃ₐ[R] A₂；ψ : A₂ ≃ₐ[R] A₃。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem autCongr_trans (ϕ : A₁ ≃ₐ[R] A₂) (ψ : A₂ ≃ₐ[R] A₃) :
     (autCongr ϕ).trans (autCongr ψ) = autCongr (ϕ.trans ψ) :=
   rfl
 
-/--
-Instance `applyMulSemiringAction` / 实例 `applyMulSemiringAction`
+/-- The tautological action by `A₁ ≃ₐ[R] A₁` on `A₁`.
 
-English:
-instance applyMulSemiringAction
-  signature: : MulSemiringAction (A₁ ≃ₐ[R] A₁) A₁ where
-  body: (· <| ·)
-  smul_zero := map_zero
-  smul_add := map_add
-  smul_one := map_one
-  smul_mul := map_mul
-  one_smul _ := rfl
-  mul_smul _ _ _ := rfl
+This generalizes `Function.End.applyMulAction`. -/
+/-
+**AlgEquiv.applyMulSemiringAction** 是 Mathlib 中的一个实例，位于命名空间 `AlgEquiv`。
+形式化陈述：applyMulSemiringAction : MulSemiringAction (A₁ ≃ₐ[R] A₁) A₁ where smul
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+The tautological action by `A₁ ≃ₐ[R] A₁` on `A₁`.
 
-中文:
-实例 applyMulSemiringAction
-  签名: : MulSemiring作用 (A₁ ≃ₐ[R] A₁) A₁ where
-  定义体: (· <| ·)
-  smul_zero := map_zero
-  smul_add := map_add
-  smul_one := map_one
-  smul_mul := map_mul
-  one_smul _ := rfl
-  mul_smul _ _ _ := rfl
-
-@[simp]
+This generalizes `Function.End.applyMulAction`.
 -/
 instance applyMulSemiringAction : MulSemiringAction (A₁ ≃ₐ[R] A₁) A₁ where
   smul := (· <| ·)
@@ -2857,106 +1978,55 @@ instance applyMulSemiringAction : MulSemiringAction (A₁ ≃ₐ[R] A₁) A₁ w
   mul_smul _ _ _ := rfl
 
 @[simp]
-/--
-theorem `smul_def` / 定理 `smul_def`
-
-English:
-theorem smul_def
-  given: (f : A₁ ≃ₐ[R] A₁) (a : A₁)
-  statement: f • a = f a
-  proof: rfl
-
-中文:
-定理 smul_def
-  条件: (f : A₁ ≃ₐ[R] A₁) (a : A₁)
-  结论: f • a = f a
-  证明: rfl
+/-
+**AlgEquiv.smul_def** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：∀ {R : Type uR} {A₁ : Type uA₁} [inst : CommSemiring R] [inst_1 : Semiring
+ A₁] [inst_2 : Algebra R A₁] (f : A₁ ≃ₐ[R] A₁)   (a : A₁), f • a = f a
+参数：f : A₁ ≃ₐ[R] A₁；a : A₁。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem smul_def (f : A₁ ≃ₐ[R] A₁) (a : A₁) : f • a = f a :=
   rfl
-
-/--
-Instance `apply_faithfulSMul` / 实例 `apply_faithfulSMul`
-
-English:
-instance apply_faithfulSMul
-  signature: : FaithfulSMul (A₁ ≃ₐ[R] A₁) A₁
-  body: ⟨AlgEquiv.ext⟩
-
-中文:
-实例 apply_faithfulSMul
-  签名: : 忠实标量乘法 (A₁ ≃ₐ[R] A₁) A₁
-  定义体: ⟨AlgEquiv.ext⟩
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.ext
+/-
+**AlgEquiv.apply_faithfulSMul** 是 Mathlib 中的一个实例，位于命名空间 `AlgEquiv`。
+形式化陈述：apply_faithfulSMul : FaithfulSMul (A₁ ≃ₐ[R] A₁) A₁
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.ext`：ext {f g : A₁ ≃ₐ[R] A₂} (h : forall a, f a = g a) : f = g
 -/
 instance apply_faithfulSMul : FaithfulSMul (A₁ ≃ₐ[R] A₁) A₁ :=
   ⟨AlgEquiv.ext⟩
-
-/--
-Instance `apply_smulCommClass` / 实例 `apply_smulCommClass`
-
-English:
-instance apply_smulCommClass
-  signature: {S} [SMul S R] [SMul S A₁] [IsScalarTower S R A₁]
-  body: (e.toLinearEquiv.map_smul_of_tower r a).symm
-
-中文:
-实例 apply_smulCommClass
-  签名: {S} [标量乘法 S R] [标量乘法 S A₁] [标量塔 S R A₁]
-  定义体: (e.toLinearEquiv.map_smul_of_tower r a).symm
-
-Depends on / 依赖: e.toLinearEquiv.map_smul_of_tower, map_smul_of_tower, toLinearEquiv
+/-
+**AlgEquiv.apply_smulCommClass** 是 Mathlib 中的一个实例，位于命名空间 `AlgEquiv`。
+形式化陈述：apply_smulCommClass {S} [SMul S R] [SMul S A₁] [IsScalarTower S R A₁] : SM
+ulCommClass S (A₁ ≃ₐ[R] A₁) A₁ where smul_comm r e a
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.map_smul_of_tower`：map_smul_of_tower [CompatibleSMul M M₂ R S]
+ (fₗ : M ->ₗ[S] M₂) (c : R) (x : M) : fₗ (c • x) = c • fₗ x
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
 -/
 instance apply_smulCommClass {S} [SMul S R] [SMul S A₁] [IsScalarTower S R A₁] :
     SMulCommClass S (A₁ ≃ₐ[R] A₁) A₁ where
   smul_comm r e a := (e.toLinearEquiv.map_smul_of_tower r a).symm
-
-/--
-Instance `apply_smulCommClass'` / 实例 `apply_smulCommClass'`
-
-English:
-instance apply_smulCommClass'
-  signature: {S} [SMul S R] [SMul S A₁] [IsScalarTower S R A₁]
-  body: SMulCommClass.symm _ _ _
-
-中文:
-实例 apply_smulCommClass'
-  签名: {S} [标量乘法 S R] [标量乘法 S A₁] [标量塔 S R A₁]
-  定义体: SMulCommClass.symm _ _ _
-
-Depends on / 依赖: SMulCommClass, SMulCommClass.symm
+/-
+**AlgEquiv.apply_smulCommClass'** 是 Mathlib 中的一个实例，位于命名空间 `AlgEquiv`。
+形式化陈述：apply_smulCommClass' {S} [SMul S R] [SMul S A₁] [IsScalarTower S R A₁] : S
+MulCommClass (A₁ ≃ₐ[R] A₁) S A₁
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `SMulCommClass.symm`：SMulCommClass.symm (M N α : Type*) [SMul M α] [SMul 
+N α] [SMulCommClass M N α] : SMulCommClass N M α where smul_comm a' a b
 -/
 instance apply_smulCommClass' {S} [SMul S R] [SMul S A₁] [IsScalarTower S R A₁] :
     SMulCommClass (A₁ ≃ₐ[R] A₁) S A₁ :=
   SMulCommClass.symm _ _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MulDistribMulAction (A₁ ≃ₐ[R] A₁) A₁ˣ
-  body: fun f => Units.map f
-  one_smul := fun x => by ext; rfl
-  mul_smul := fun x y z => by ext; rfl
-  smul_mul := fun x y z => by ext; exact map_mul x _ _
-  smul_one := fun x => by ext; exact map_one x
-
-@[simp]
-
-中文:
-实例 :
-  签名: MulDistribMul作用 (A₁ ≃ₐ[R] A₁) A₁ˣ
-  定义体: fun f => Units.map f
-  one_smul := fun x => by ext; rfl
-  mul_smul := fun x y z => by ext; rfl
-  smul_mul := fun x y z => by ext; exact map_mul x _ _
-  smul_one := fun x => by ext; exact map_one x
-
-@[simp]
-
-Depends on / 依赖: Units.map
+/-
+**AlgEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `AlgEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MulDistribMulAction (A₁ ≃ₐ[R] A₁) A₁ˣ where
   smul := fun f => Units.map f
@@ -2966,150 +2036,97 @@ instance : MulDistribMulAction (A₁ ≃ₐ[R] A₁) A₁ˣ where
   smul_one := fun x => by ext; exact map_one x
 
 @[simp]
-/--
-theorem `smul_units_def` / 定理 `smul_units_def`
-
-English:
-theorem smul_units_def
-  given: (f : A₁ ≃ₐ[R] A₁) (x : A₁ˣ)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 smul_units_def
-  条件: (f : A₁ ≃ₐ[R] A₁) (x : A₁ˣ)
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.smul_units_def** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：smul_units_def (f : A₁ ≃ₐ[R] A₁) (x : A₁ˣ) : f • x = Units.map f x
+参数：f : A₁ ≃ₐ[R] A₁；x : A₁ˣ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_units_def (f : A₁ ≃ₐ[R] A₁) (x : A₁ˣ) :
     f • x = Units.map f x := rfl
 
 @[simp]
-/--
-lemma `_root_.MulSemiringAction.toRingEquiv_algEquiv` / 引理 `_root_.MulSemiringAction.toRingEquiv_algEquiv`
-
-English:
-lemma _root_.MulSemiringAction.toRingEquiv_algEquiv
-  given: (σ : A₁ ≃ₐ[R] A₁)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 _root_.MulSemiring作用.toRingEquiv_algEquiv
-  条件: (σ : A₁ ≃ₐ[R] A₁)
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv._root_.MulSemiringAction.toRingEquiv_algEquiv** 是 Mathlib 中的一个引理，位于命名
+空间 `AlgEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.MulSemiringAction.toRingEquiv_algEquiv (σ : A₁ ≃ₐ[R] A₁) :
     MulSemiringAction.toRingEquiv _ A₁ σ = σ := rfl
 
 @[simp]
-/--
-theorem `algebraMap_eq_apply` / 定理 `algebraMap_eq_apply`
-
-English:
-theorem algebraMap_eq_apply
-  given: (e : A₁ ≃ₐ[R] A₂) {y : R} {x : A₁}
-  proof: ⟨fun h => by simpa using e.symm.toAlgHom.algebraMap_eq_apply h, fun h =>
-    e.toAlgHom.algebraMap_eq_apply h⟩
-
-中文:
-定理 algebraMap_eq_apply
-  条件: (e : A₁ ≃ₐ[R] A₂) {y : R} {x : A₁}
-  证明: ⟨fun h => by simpa using e.symm.toAlgHom.algebraMap_eq_apply h, fun h =>
-    e.toAlgHom.algebraMap_eq_apply h⟩
-
-Depends on / 依赖: algebraMap_eq_apply, e.symm.toAlgHom.algebraMap_eq_apply, e.toAlgHom.algebraMap_eq_apply, toAlgHom
+/-
+**AlgEquiv.algebraMap_eq_apply** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：algebraMap_eq_apply (e : A₁ ≃ₐ[R] A₂) {y : R} {x : A₁} : algebraMap R A₂ y
+ = e x ↔ algebraMap R A₁ y = x
+参数：e : A₁ ≃ₐ[R] A₂。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgEquiv.symm_apply_apply`：symm_apply_apply (e : A₁ ≃ₐ[R] A₂) : forall x
+, e.symm (e x) = x
+· 使用定理 `AlgHom.algebraMap_eq_apply`：algebraMap_eq_apply (f : A ->ₐ[R] B) {y : R}
+ {x : A} (h : algebraMap R A y = x) : algebraMap R B y = f x
 -/
 theorem algebraMap_eq_apply (e : A₁ ≃ₐ[R] A₂) {y : R} {x : A₁} :
     algebraMap R A₂ y = e x ↔ algebraMap R A₁ y = x :=
   ⟨fun h => by simpa using e.symm.toAlgHom.algebraMap_eq_apply h, fun h =>
     e.toAlgHom.algebraMap_eq_apply h⟩
 
-/--
-Definition of `toAlgHomHom` / `toAlgHomHom` 的定义
+/-- `AlgEquiv.toAlgHom` as a `MonoidHom`. -/
+/-
+**AlgEquiv.toAlgHomHom** 是 Mathlib 中的一个定义，位于命名空间 `AlgEquiv`。
+形式化陈述：(R : Type u_1) →   (A : Type u_2) → [inst : CommSemiring R] → [inst_1 : Se
+miring A] → [inst_2 : Algebra R A] → (A ≃ₐ[R] A) →* A →ₐ[R] A
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toAlgHomHom
-  signature: (R A) [CommSemiring R] [Semiring A] [Algebra R A]
-  body: AlgEquiv.toAlgHom
-  map_one' := rfl
-  map_mul' _ _ := rfl
-
-中文:
-定义 toAlgHomHom
-  签名: (R A) [交换半环 R] [半环 A] [代数 R A]
-  定义体: AlgEquiv.toAlgHom
-  map_one' := rfl
-  map_mul' _ _ := rfl
+--- 原说明 ---
+`AlgEquiv.toAlgHom` as a `MonoidHom`.
 -/
 @[simps] def toAlgHomHom (R A) [CommSemiring R] [Semiring A] [Algebra R A] :
-    (A ≃ₐ[R] A) ->* A ->ₐ[R] A where
+    (A ≃ₐ[R] A) →* A →ₐ[R] A where
   toFun := AlgEquiv.toAlgHom
   map_one' := rfl
   map_mul' _ _ := rfl
 
 /-- `AlgEquiv.toLinearMap` as a `MonoidHom`. -/
 @[simps!]
-/--
-Definition of `toLinearMapHom` / `toLinearMapHom` 的定义
+/-
+**AlgEquiv.toLinearMapHom** 是 Mathlib 中的一个定义，位于命名空间 `AlgEquiv`。
+形式化陈述：toLinearMapHom (R A) [CommSemiring R] [Semiring A] [Algebra R A] : (A ≃ₐ[R
+] A) ->* Module.End R A
+参数：R A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toLinearMapHom
-  signature: (R A) [CommSemiring R] [Semiring A] [Algebra R A]
-  body: AlgHom.toEnd.comp (toAlgHomHom R A)
-
-中文:
-定义 toLinearMapHom
-  签名: (R A) [交换半环 R] [半环 A] [代数 R A]
-  定义体: AlgHom.toEnd.comp (toAlgHomHom R A)
-
-Depends on / 依赖: AlgHom, AlgHom.toEnd.comp, toAlgHomHom
+--- 原说明 ---
+`AlgEquiv.toLinearMap` as a `MonoidHom`.
 -/
 def toLinearMapHom (R A) [CommSemiring R] [Semiring A] [Algebra R A] :
-    (A ≃ₐ[R] A) ->* Module.End R A :=
+    (A ≃ₐ[R] A) →* Module.End R A :=
   AlgHom.toEnd.comp (toAlgHomHom R A)
-
-/--
-lemma `pow_toLinearMap` / 引理 `pow_toLinearMap`
-
-English:
-lemma pow_toLinearMap
-  given: (σ : A₁ ≃ₐ[R] A₁) (n : Nat)
-  proof: (AlgEquiv.toLinearMapHom R A₁).map_pow σ n
-
-@[simp]
-
-中文:
-引理 pow_toLinearMap
-  条件: (σ : A₁ ≃ₐ[R] A₁) (n : 自然数)
-  证明: (AlgEquiv.toLinearMapHom R A₁).map_pow σ n
-
-@[simp]
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.toLinearMapHom, map_pow, toLinearMapHom
+/-
+**AlgEquiv.pow_toLinearMap** 是 Mathlib 中的一个引理，位于命名空间 `AlgEquiv`。
+形式化陈述：pow_toLinearMap (σ : A₁ ≃ₐ[R] A₁) (n : Nat) : (σ ^ n).toLinearMap = σ.toLi
+nearMap ^ n
+参数：σ : A₁ ≃ₐ[R] A₁；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidHom.map_pow`：∀ {M : Type u_4} {N : Type u_5} [inst : Monoid M] [in
+st_1 : Monoid N] (f : M →* N) (a : M) (n : ℕ), f (a ^ n) = f a ^ n
 -/
-lemma pow_toLinearMap (σ : A₁ ≃ₐ[R] A₁) (n : Nat) :
+lemma pow_toLinearMap (σ : A₁ ≃ₐ[R] A₁) (n : ℕ) :
     (σ ^ n).toLinearMap = σ.toLinearMap ^ n :=
   (AlgEquiv.toLinearMapHom R A₁).map_pow σ n
 
 @[simp]
-/--
-lemma `one_toLinearMap` / 引理 `one_toLinearMap`
-
-English:
-lemma one_toLinearMap
-  proof: rfl
-
-中文:
-引理 one_toLinearMap
-  证明: rfl
-
-Depends on / 依赖: decidable_of_iff, isPrimePow_nat_iff_bounded_log_minFac
+/-
+**AlgEquiv.one_toLinearMap** 是 Mathlib 中的一个引理，位于命名空间 `AlgEquiv`。
+形式化陈述：one_toLinearMap : (1 : A₁ ≃ₐ[R] A₁).toLinearMap = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma one_toLinearMap :
     (1 : A₁ ≃ₐ[R] A₁).toLinearMap = 1 := rfl
@@ -3117,78 +2134,51 @@ lemma one_toLinearMap :
 /-- The units group of `S →ₐ[R] S` is `S ≃ₐ[R] S`.
 See `LinearMap.GeneralLinearGroup.generalLinearEquiv` for the linear map version. -/
 @[simps]
-/--
-Definition of `algHomUnitsEquiv` / `algHomUnitsEquiv` 的定义
+/-
+**AlgEquiv.algHomUnitsEquiv** 是 Mathlib 中的一个定义，位于命名空间 `AlgEquiv`。
+形式化陈述：algHomUnitsEquiv (R S : Type*) [CommSemiring R] [Semiring S] [Algebra R S]
+ : (S ->ₐ[R] S)ˣ ≃* (S ≃ₐ[R] S) where toFun
+参数：R S : Type*。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.commutes'`：∀ {R : Type u} {A : Type v} {B : Type w} [inst : CommS
+emiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A] 
+[inst_…
+· 使用定理 `AlgEquiv.comp_symm`：comp_symm (e : A₁ ≃ₐ[R] A₂) : AlgHom.comp (e : A₁ ->
+ₐ[R] A₂) ↑e.symm = AlgHom.id R A₂
+· 使用定理 `AlgEquiv.symm_comp`：symm_comp (e : A₁ ≃ₐ[R] A₂) : AlgHom.comp ↑e.symm (e
+ : A₁ ->ₐ[R] A₂) = AlgHom.id R A₁
 
-English:
-definition algHomUnitsEquiv
-  signature: (R S : Type*) [CommSemiring R] [Semiring S] [Algebra R S]
-  body: fun f =>
-    { (f : S ->ₐ[R] S) with
-      invFun := ↑(f⁻¹)
-      left_inv := (fun x => show (↑(f⁻¹ * f) : S ->ₐ[R] S) x = x by rw [inv_mul_cancel]; rfl)
-      right_inv := (fun x => show (↑(f * f⁻¹) : S ->ₐ[R] S) x = x by rw [mul_inv_cancel]; rfl) }
-  invFun := fun f => ⟨f, f.symm, f.comp_symm, f.symm_comp⟩
-  map_mul' := fun _ _ => rfl
-
-中文:
-定义 algHomUnitsEquiv
-  签名: (R S : 类型) [交换半环 R] [半环 S] [代数 R S]
-  定义体: fun f =>
-    { (f : S ->ₐ[R] S) with
-      invFun := ↑(f⁻¹)
-      left_inv := (fun x => show (↑(f⁻¹ * f) : S ->ₐ[R] S) x = x by rw [inv_mul_cancel]; rfl)
-      right_inv := (fun x => show (↑(f * f⁻¹) : S ->ₐ[R] S) x = x by rw [mul_inv_cancel]; rfl) }
-  invFun := fun f => ⟨f, f.symm, f.comp_symm, f.symm_comp⟩
-  map_mul' := fun _ _ => rfl
+--- 原说明 ---
+The units group of `S →ₐ[R] S` is `S ≃ₐ[R] S`.
+See `LinearMap.GeneralLinearGroup.generalLinearEquiv` for the linear map version
+.
 -/
 def algHomUnitsEquiv (R S : Type*) [CommSemiring R] [Semiring S] [Algebra R S] :
-    (S ->ₐ[R] S)ˣ ≃* (S ≃ₐ[R] S) where
-  toFun := fun f =>
-    { (f : S ->ₐ[R] S) with
+    (S →ₐ[R] S)ˣ ≃* (S ≃ₐ[R] S) where
+  toFun := fun f ↦
+    { (f : S →ₐ[R] S) with
       invFun := ↑(f⁻¹)
-      left_inv := (fun x => show (↑(f⁻¹ * f) : S ->ₐ[R] S) x = x by rw [inv_mul_cancel]; rfl)
-      right_inv := (fun x => show (↑(f * f⁻¹) : S ->ₐ[R] S) x = x by rw [mul_inv_cancel]; rfl) }
-  invFun := fun f => ⟨f, f.symm, f.comp_symm, f.symm_comp⟩
-  map_mul' := fun _ _ => rfl
+      left_inv := (fun x ↦ show (↑(f⁻¹ * f) : S →ₐ[R] S) x = x by rw [inv_mul_cancel]; rfl)
+      right_inv := (fun x ↦ show (↑(f * f⁻¹) : S →ₐ[R] S) x = x by rw [mul_inv_cancel]; rfl) }
+  invFun := fun f ↦ ⟨f, f.symm, f.comp_symm, f.symm_comp⟩
+  map_mul' := fun _ _ ↦ rfl
 
-/--
-Instance `_root_.Finite.algEquiv` / 实例 `_root_.Finite.algEquiv`
+/-- See also `Finite.algHom` -/
+/-
+**AlgEquiv._root_.Finite.algEquiv** 是 Mathlib 中的一个实例，位于命名空间 `AlgEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance _root_.Finite.algEquiv
-  signature: [Finite (A₁ ->ₐ[R] A₂)]
-  body: Finite.of_injective _ AlgEquiv.coe_toAlgHom_injective
-
-中文:
-实例 _root_.有限.algEquiv
-  签名: [有限 (A₁ ->ₐ[R] A₂)]
-  定义体: Finite.of_injective _ AlgEquiv.coe_toAlgHom_injective
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.coe_toAlgHom_injective, Finite, Finite.of_injective, coe_toAlgHom_injective, of_injective
+--- 原说明 ---
+See also `Finite.algHom`
 -/
-instance _root_.Finite.algEquiv [Finite (A₁ ->ₐ[R] A₂)] : Finite (A₁ ≃ₐ[R] A₂) :=
+instance _root_.Finite.algEquiv [Finite (A₁ →ₐ[R] A₂)] : Finite (A₁ ≃ₐ[R] A₂) :=
   Finite.of_injective _ AlgEquiv.coe_toAlgHom_injective
 
 -- TODO Morally this is just `isLocalHom_equiv`: can we obviate the need for this instance?
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsLocalHom e.toAlgHom
-  body: by
-  have : IsLocalHom e.toRingEquiv := inferInstance
-  exact ⟨this.map_nonunit⟩
-
-中文:
-实例 :
-  签名: 是Local态射 e.toAlgHom
-  定义体: by
-  have : IsLocalHom e.toRingEquiv := inferInstance
-  exact ⟨this.map_nonunit⟩
-
-Depends on / 依赖: IsLocalHom, e.toRingEquiv, map_nonunit, this.map_nonunit, toRingEquiv
+/-
+**AlgEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `AlgEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsLocalHom e.toAlgHom := by
   have : IsLocalHom e.toRingEquiv := inferInstance
@@ -3204,79 +2194,51 @@ variable {R S : Type*}
 
 /-- Reinterpret a `RingEquiv` as an `ℕ`-algebra isomorphism. -/
 @[simps! -isSimp apply]
-/--
-Definition of `toNatAlgEquiv` / `toNatAlgEquiv` 的定义
+/-
+**RingEquiv.toNatAlgEquiv** 是 Mathlib 中的一个定义，位于命名空间 `RingEquiv`。
+形式化陈述：toNatAlgEquiv [Semiring R] [Semiring S] (f : R ≃+* S) : R ≃ₐ[Nat] S where 
+toEquiv
+参数：f : R ≃+* S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toNatAlgEquiv
-  signature: [Semiring R] [Semiring S] (f : R ≃+* S)
-  body: f
-  __ := f.toRingHom.toNatAlgHom
-
-@[simp]
-
-中文:
-定义 to自然数AlgEquiv
-  签名: [半环 R] [半环 S] (f : R ≃+* S)
-  定义体: f
-  __ := f.toRingHom.toNatAlgHom
-
-@[simp]
+--- 原说明 ---
+Reinterpret a `RingEquiv` as an `ℕ`-algebra isomorphism.
 -/
-def toNatAlgEquiv [Semiring R] [Semiring S] (f : R ≃+* S) : R ≃ₐ[Nat] S where
+def toNatAlgEquiv [Semiring R] [Semiring S] (f : R ≃+* S) : R ≃ₐ[ℕ] S where
   toEquiv := f
   __ := f.toRingHom.toNatAlgHom
 
 @[simp]
-/--
-lemma `coe_toNatAlgEquiv` / 引理 `coe_toNatAlgEquiv`
-
-English:
-lemma coe_toNatAlgEquiv
-  given: [Semiring R] [Semiring S] (f : R ≃+* S)
-  proof: rfl
-
-中文:
-引理 coe_to自然数AlgEquiv
-  条件: [半环 R] [半环 S] (f : R ≃+* S)
-  证明: rfl
+/-
+**RingEquiv.coe_toNatAlgEquiv** 是 Mathlib 中的一个引理，位于命名空间 `RingEquiv`。
+形式化陈述：coe_toNatAlgEquiv [Semiring R] [Semiring S] (f : R ≃+* S) : ⇑f.toNatAlgEqu
+iv = ⇑f
+参数：f : R ≃+* S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_toNatAlgEquiv [Semiring R] [Semiring S] (f : R ≃+* S) :
     ⇑f.toNatAlgEquiv = ⇑f := rfl
-
-/--
-lemma `toAlgHom_toNatAlgEquiv` / 引理 `toAlgHom_toNatAlgEquiv`
-
-English:
-lemma toAlgHom_toNatAlgEquiv
-  given: [Semiring R] [Semiring S] (f : R ≃+* S)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toAlgHom_to自然数AlgEquiv
-  条件: [半环 R] [半环 S] (f : R ≃+* S)
-  证明: rfl
-
-@[simp]
+/-
+**RingEquiv.toAlgHom_toNatAlgEquiv** 是 Mathlib 中的一个引理，位于命名空间 `RingEquiv`。
+形式化陈述：toAlgHom_toNatAlgEquiv [Semiring R] [Semiring S] (f : R ≃+* S) : f.toNatAl
+gEquiv.toAlgHom = (f : R ->+* S).toNatAlgHom
+参数：f : R ≃+* S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toAlgHom_toNatAlgEquiv [Semiring R] [Semiring S] (f : R ≃+* S) :
-    f.toNatAlgEquiv.toAlgHom = (f : R ->+* S).toNatAlgHom := rfl
+    f.toNatAlgEquiv.toAlgHom = (f : R →+* S).toNatAlgHom := rfl
 
 @[simp]
-/--
-lemma `symm_toNatAlgEquiv` / 引理 `symm_toNatAlgEquiv`
-
-English:
-lemma symm_toNatAlgEquiv
-  given: [Semiring R] [Semiring S] (f : R ≃+* S)
-  proof: rfl
-
-中文:
-引理 symm_to自然数AlgEquiv
-  条件: [半环 R] [半环 S] (f : R ≃+* S)
-  证明: rfl
+/-
+**RingEquiv.symm_toNatAlgEquiv** 是 Mathlib 中的一个引理，位于命名空间 `RingEquiv`。
+形式化陈述：symm_toNatAlgEquiv [Semiring R] [Semiring S] (f : R ≃+* S) : f.toNatAlgEqu
+iv.symm = f.symm.toNatAlgEquiv
+参数：f : R ≃+* S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma symm_toNatAlgEquiv [Semiring R] [Semiring S] (f : R ≃+* S) :
     f.toNatAlgEquiv.symm = f.symm.toNatAlgEquiv := rfl
@@ -3284,121 +2246,77 @@ lemma symm_toNatAlgEquiv [Semiring R] [Semiring S] (f : R ≃+* S) :
 variable (R) (S) in
 /-- The equivalence between `RingEquiv` and `ℕ`-algebra isomorphisms. -/
 @[simps apply symm_apply]
-/--
-Definition of `equivNatAlgEquiv` / `equivNatAlgEquiv` 的定义
+/-
+**RingEquiv.equivNatAlgEquiv** 是 Mathlib 中的一个定义，位于命名空间 `RingEquiv`。
+形式化陈述：equivNatAlgEquiv [Semiring R] [Semiring S] : (R ≃+* S) ≃ (R ≃ₐ[Nat] S) whe
+re toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivNatAlgEquiv
-  signature: [Semiring R] [Semiring S]
-  body: toNatAlgEquiv
-  invFun := AlgEquiv.toRingEquiv
-
-中文:
-定义 equiv自然数AlgEquiv
-  签名: [半环 R] [半环 S]
-  定义体: toNatAlgEquiv
-  invFun := AlgEquiv.toRingEquiv
-
-Depends on / 依赖: toNatAlgEquiv
+--- 原说明 ---
+The equivalence between `RingEquiv` and `ℕ`-algebra isomorphisms.
 -/
-def equivNatAlgEquiv [Semiring R] [Semiring S] : (R ≃+* S) ≃ (R ≃ₐ[Nat] S) where
+def equivNatAlgEquiv [Semiring R] [Semiring S] : (R ≃+* S) ≃ (R ≃ₐ[ℕ] S) where
   toFun := toNatAlgEquiv
   invFun := AlgEquiv.toRingEquiv
-
-/--
-lemma `toNatAlgEquiv_injective` / 引理 `toNatAlgEquiv_injective`
-
-English:
-lemma toNatAlgEquiv_injective
-  given: [Semiring R] [Semiring S]
-  proof: (equivNatAlgEquiv R S).injective
-
-中文:
-引理 to自然数AlgEquiv_injective
-  条件: [半环 R] [半环 S]
-  证明: (equivNatAlgEquiv R S).injective
-
-Depends on / 依赖: equivNatAlgEquiv, injective
+/-
+**RingEquiv.toNatAlgEquiv_injective** 是 Mathlib 中的一个引理，位于命名空间 `RingEquiv`。
+形式化陈述：toNatAlgEquiv_injective [Semiring R] [Semiring S] : Function.Injective (Ri
+ngEquiv.toNatAlgEquiv : (R ≃+* S) -> _)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
 lemma toNatAlgEquiv_injective [Semiring R] [Semiring S] :
-    Function.Injective (RingEquiv.toNatAlgEquiv : (R ≃+* S) -> _) :=
+    Function.Injective (RingEquiv.toNatAlgEquiv : (R ≃+* S) → _) :=
   (equivNatAlgEquiv R S).injective
 
 /-- Reinterpret a `RingEquiv` as a `ℤ`-algebra isomorphism. -/
 @[simps! -isSimp apply]
-/--
-Definition of `toIntAlgEquiv` / `toIntAlgEquiv` 的定义
+/-
+**RingEquiv.toIntAlgEquiv** 是 Mathlib 中的一个定义，位于命名空间 `RingEquiv`。
+形式化陈述：toIntAlgEquiv [Ring R] [Ring S] (f : R ≃+* S) : R ≃ₐ[Int] S where toEquiv
+参数：f : R ≃+* S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toIntAlgEquiv
-  signature: [Ring R] [Ring S] (f : R ≃+* S)
-  body: f
-  __ := f.toRingHom.toIntAlgHom
-
-@[simp]
-
-中文:
-定义 to整数AlgEquiv
-  签名: [环 R] [环 S] (f : R ≃+* S)
-  定义体: f
-  __ := f.toRingHom.toIntAlgHom
-
-@[simp]
+--- 原说明 ---
+Reinterpret a `RingEquiv` as a `ℤ`-algebra isomorphism.
 -/
-def toIntAlgEquiv [Ring R] [Ring S] (f : R ≃+* S) : R ≃ₐ[Int] S where
+def toIntAlgEquiv [Ring R] [Ring S] (f : R ≃+* S) : R ≃ₐ[ℤ] S where
   toEquiv := f
   __ := f.toRingHom.toIntAlgHom
 
 @[simp]
-/--
-lemma `coe_toIntAlgEquiv` / 引理 `coe_toIntAlgEquiv`
-
-English:
-lemma coe_toIntAlgEquiv
-  given: [Ring R] [Ring S] (f : R ≃+* S)
-  proof: rfl
-
-中文:
-引理 coe_to整数AlgEquiv
-  条件: [环 R] [环 S] (f : R ≃+* S)
-  证明: rfl
+/-
+**RingEquiv.coe_toIntAlgEquiv** 是 Mathlib 中的一个引理，位于命名空间 `RingEquiv`。
+形式化陈述：coe_toIntAlgEquiv [Ring R] [Ring S] (f : R ≃+* S) : ⇑f.toIntAlgEquiv = ⇑f
+参数：f : R ≃+* S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_toIntAlgEquiv [Ring R] [Ring S] (f : R ≃+* S) :
     ⇑f.toIntAlgEquiv = ⇑f := rfl
-
-/--
-lemma `toAlgHom_toIntAlgEquiv` / 引理 `toAlgHom_toIntAlgEquiv`
-
-English:
-lemma toAlgHom_toIntAlgEquiv
-  given: [Ring R] [Ring S] (f : R ≃+* S)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toAlgHom_to整数AlgEquiv
-  条件: [环 R] [环 S] (f : R ≃+* S)
-  证明: rfl
-
-@[simp]
+/-
+**RingEquiv.toAlgHom_toIntAlgEquiv** 是 Mathlib 中的一个引理，位于命名空间 `RingEquiv`。
+形式化陈述：toAlgHom_toIntAlgEquiv [Ring R] [Ring S] (f : R ≃+* S) : f.toIntAlgEquiv.t
+oAlgHom = (f : R ->+* S).toIntAlgHom
+参数：f : R ≃+* S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toAlgHom_toIntAlgEquiv [Ring R] [Ring S] (f : R ≃+* S) :
-    f.toIntAlgEquiv.toAlgHom = (f : R ->+* S).toIntAlgHom := rfl
+    f.toIntAlgEquiv.toAlgHom = (f : R →+* S).toIntAlgHom := rfl
 
 @[simp]
-/--
-lemma `symm_toIntAlgEquiv` / 引理 `symm_toIntAlgEquiv`
-
-English:
-lemma symm_toIntAlgEquiv
-  given: [Ring R] [Ring S] (f : R ≃+* S)
-  proof: rfl
-
-中文:
-引理 symm_to整数AlgEquiv
-  条件: [环 R] [环 S] (f : R ≃+* S)
-  证明: rfl
+/-
+**RingEquiv.symm_toIntAlgEquiv** 是 Mathlib 中的一个引理，位于命名空间 `RingEquiv`。
+形式化陈述：symm_toIntAlgEquiv [Ring R] [Ring S] (f : R ≃+* S) : f.toIntAlgEquiv.symm 
+= f.symm.toIntAlgEquiv
+参数：f : R ≃+* S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma symm_toIntAlgEquiv [Ring R] [Ring S] (f : R ≃+* S) :
     f.toIntAlgEquiv.symm = f.symm.toIntAlgEquiv := rfl
@@ -3406,44 +2324,29 @@ lemma symm_toIntAlgEquiv [Ring R] [Ring S] (f : R ≃+* S) :
 variable (R) (S) in
 /-- The equivalence between `RingEquiv` and `ℤ`-algebra isomorphisms. -/
 @[simps apply symm_apply]
-/--
-Definition of `equivIntAlgEquiv` / `equivIntAlgEquiv` 的定义
+/-
+**RingEquiv.equivIntAlgEquiv** 是 Mathlib 中的一个定义，位于命名空间 `RingEquiv`。
+形式化陈述：equivIntAlgEquiv [Ring R] [Ring S] : (R ≃+* S) ≃ (R ≃ₐ[Int] S) where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivIntAlgEquiv
-  signature: [Ring R] [Ring S]
-  body: toIntAlgEquiv
-  invFun := AlgEquiv.toRingEquiv
-
-中文:
-定义 equiv整数AlgEquiv
-  签名: [环 R] [环 S]
-  定义体: toIntAlgEquiv
-  invFun := AlgEquiv.toRingEquiv
-
-Depends on / 依赖: toIntAlgEquiv
+--- 原说明 ---
+The equivalence between `RingEquiv` and `ℤ`-algebra isomorphisms.
 -/
-def equivIntAlgEquiv [Ring R] [Ring S] : (R ≃+* S) ≃ (R ≃ₐ[Int] S) where
+def equivIntAlgEquiv [Ring R] [Ring S] : (R ≃+* S) ≃ (R ≃ₐ[ℤ] S) where
   toFun := toIntAlgEquiv
   invFun := AlgEquiv.toRingEquiv
-
-/--
-lemma `toIntAlgEquiv_injective` / 引理 `toIntAlgEquiv_injective`
-
-English:
-lemma toIntAlgEquiv_injective
-  given: [Ring R] [Ring S]
-  proof: (equivIntAlgEquiv R S).injective
-
-中文:
-引理 to整数AlgEquiv_injective
-  条件: [环 R] [环 S]
-  证明: (equivIntAlgEquiv R S).injective
-
-Depends on / 依赖: equivIntAlgEquiv, injective
+/-
+**RingEquiv.toIntAlgEquiv_injective** 是 Mathlib 中的一个引理，位于命名空间 `RingEquiv`。
+形式化陈述：toIntAlgEquiv_injective [Ring R] [Ring S] : Function.Injective (RingEquiv.
+toIntAlgEquiv : (R ≃+* S) -> _)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 -/
 lemma toIntAlgEquiv_injective [Ring R] [Ring S] :
-    Function.Injective (RingEquiv.toIntAlgEquiv : (R ≃+* S) -> _) :=
+    Function.Injective (RingEquiv.toIntAlgEquiv : (R ≃+* S) → _) :=
   (equivIntAlgEquiv R S).injective
 
 end RingEquiv
@@ -3461,41 +2364,41 @@ variable [Group G] [MulSemiringAction G A] [SMulCommClass G R A]
 This is a stronger version of `MulSemiringAction.toRingEquiv` and
 `DistribMulAction.toLinearEquiv`. -/
 @[simps! apply symm_apply toEquiv]
-/--
-Definition of `toAlgEquiv` / `toAlgEquiv` 的定义
+/-
+**MulSemiringAction.toAlgEquiv** 是 Mathlib 中的一个定义，位于命名空间 `MulSemiringAction`。
+形式化陈述：toAlgEquiv (g : G) : A ≃ₐ[R] A
+参数：g : G。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.commutes'`：∀ {R : Type u} {A : Type v} {B : Type w} [inst : CommS
+emiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A] 
+[inst_…
 
-English:
-definition toAlgEquiv
-  signature: (g : G)
-  body: { MulSemiringAction.toRingEquiv _ _ g, MulSemiringAction.toAlgHom R A g with }
+--- 原说明 ---
+Each element of the group defines an algebra equivalence.
 
-中文:
-定义 toAlgEquiv
-  签名: (g : G)
-  定义体: { MulSemiringAction.toRingEquiv _ _ g, MulSemiringAction.toAlgHom R A g with }
-
-Depends on / 依赖: MulSemiringAction, MulSemiringAction.toAlgHom, MulSemiringAction.toRingEquiv, toAlgHom, toRingEquiv
+This is a stronger version of `MulSemiringAction.toRingEquiv` and
+`DistribMulAction.toLinearEquiv`.
 -/
 def toAlgEquiv (g : G) : A ≃ₐ[R] A :=
   { MulSemiringAction.toRingEquiv _ _ g, MulSemiringAction.toAlgHom R A g with }
-
-/--
-theorem `toAlgEquiv_injective` / 定理 `toAlgEquiv_injective`
-
-English:
-theorem toAlgEquiv_injective
-  given: [FaithfulSMul G A]
-  proof: fun _ _ h =>
-  eq_of_smul_eq_smul fun r => AlgEquiv.ext_iff.1 h r
-
-中文:
-定理 toAlgEquiv_injective
-  条件: [忠实标量乘法 G A]
-  证明: fun _ _ h =>
-  eq_of_smul_eq_smul fun r => AlgEquiv.ext_iff.1 h r
+/-
+**MulSemiringAction.toAlgEquiv_injective** 是 Mathlib 中的一个定理，位于命名空间 `MulSemiringA
+ction`。
+形式化陈述：toAlgEquiv_injective [FaithfulSMul G A] : Function.Injective (MulSemiringA
+ction.toAlgEquiv R A : G -> A ≃ₐ[R] A)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FaithfulSMul.eq_of_smul_eq_smul`：∀ {M : Type u_4} {α : Type u_5} {inst :
+ SMul M α} [self : FaithfulSMul M α] {m₁ m₂ : M},   (∀ (a : α), m₁ • a = m₂ • a)
+ → m₁ = m₂
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `AlgEquiv.ext_iff`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA₂} [inst 
+: CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [inst_3 : Alge
+bra R …
 -/
 theorem toAlgEquiv_injective [FaithfulSMul G A] :
-    Function.Injective (MulSemiringAction.toAlgEquiv R A : G -> A ≃ₐ[R] A) := fun _ _ h =>
+    Function.Injective (MulSemiringAction.toAlgEquiv R A : G → A ≃ₐ[R] A) := fun _ _ h =>
   eq_of_smul_eq_smul fun r => AlgEquiv.ext_iff.1 h r
 
 variable (G)
@@ -3505,29 +2408,22 @@ variable (G)
 This is a stronger version of `MulSemiringAction.toRingAut` and
 `DistribMulAction.toModuleEnd`. -/
 @[simps]
-/--
-Definition of `toAlgAut` / `toAlgAut` 的定义
+/-
+**MulSemiringAction.toAlgAut** 是 Mathlib 中的一个定义，位于命名空间 `MulSemiringAction`。
+形式化陈述：toAlgAut : G ->* A ≃ₐ[R] A where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toAlgAut
-  signature: : G ->* A ≃ₐ[R] A where
-  body: toAlgEquiv R A
-map_one' := AlgEquiv.ext one_smul _
-map_mul' g h := AlgEquiv.ext mul_smul g h
+--- 原说明 ---
+Each element of the group defines an algebra equivalence.
 
-中文:
-定义 toAlgAut
-  签名: : G ->* A ≃ₐ[R] A where
-  定义体: toAlgEquiv R A
-map_one' := AlgEquiv.ext one_smul _
-map_mul' g h := AlgEquiv.ext mul_smul g h
-
-Depends on / 依赖: toAlgEquiv
+This is a stronger version of `MulSemiringAction.toRingAut` and
+`DistribMulAction.toModuleEnd`.
 -/
-def toAlgAut : G ->* A ≃ₐ[R] A where
+def toAlgAut : G →* A ≃ₐ[R] A where
   toFun := toAlgEquiv R A
-map_one' := AlgEquiv.ext one_smul _
-map_mul' g h := AlgEquiv.ext mul_smul g h
+  map_one' := AlgEquiv.ext <| one_smul _
+  map_mul' g h := AlgEquiv.ext <| mul_smul g h
 
 end
 
@@ -3537,50 +2433,24 @@ section
 
 variable {R S T : Type*} [CommSemiring R] [Semiring S] [Semiring T] [Algebra R S] [Algebra R T]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Subsingleton
-  signature: S] [Subsingleton T] : Unique (S ≃ₐ[R] T) where
-  body: AlgEquiv.ofAlgHom default default
-    (AlgHom.ext fun _ => Subsingleton.elim _ _)
-    (AlgHom.ext fun _ => Subsingleton.elim _ _)
-  uniq _ := AlgEquiv.ext fun _ => Subsingleton.elim _ _
-
-@[simp]
-
-中文:
-实例 [子单例
-  签名: S] [子单例 T] : 唯一 (S ≃ₐ[R] T) where
-  定义体: AlgEquiv.ofAlgHom default default
-    (AlgHom.ext fun _ => Subsingleton.elim _ _)
-    (AlgHom.ext fun _ => Subsingleton.elim _ _)
-  uniq _ := AlgEquiv.ext fun _ => Subsingleton.elim _ _
-
-@[simp]
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.ofAlgHom, ofAlgHom
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Subsingleton S] [Subsingleton T] : Unique (S ≃ₐ[R] T) where
   default := AlgEquiv.ofAlgHom default default
-    (AlgHom.ext fun _ => Subsingleton.elim _ _)
-    (AlgHom.ext fun _ => Subsingleton.elim _ _)
-  uniq _ := AlgEquiv.ext fun _ => Subsingleton.elim _ _
+    (AlgHom.ext fun _ ↦ Subsingleton.elim _ _)
+    (AlgHom.ext fun _ ↦ Subsingleton.elim _ _)
+  uniq _ := AlgEquiv.ext fun _ ↦ Subsingleton.elim _ _
 
 @[simp]
-/--
-lemma `AlgEquiv.default_apply` / 引理 `AlgEquiv.default_apply`
-
-English:
-lemma AlgEquiv.default_apply
-  given: [Subsingleton S] [Subsingleton T] (x : S)
-  proof: rfl
-
-中文:
-引理 代数等价.default_apply
-  条件: [子单例 S] [子单例 T] (x : S)
-  证明: rfl
+/-
+**AlgEquiv.default_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：AlgEquiv.default_apply [Subsingleton S] [Subsingleton T] (x : S) : (defaul
+t : S ≃ₐ[R] T) x = 0
+参数：x : S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma AlgEquiv.default_apply [Subsingleton S] [Subsingleton T] (x : S) :
     (default : S ≃ₐ[R] T) x = 0 :=
@@ -3590,26 +2460,15 @@ end
 
 /-- The algebra equivalence between `ULift A` and `A`. -/
 @[simps! apply, simps! -isSimp symm_apply, pp_with_univ]
-/--
-Definition of `ULift.algEquiv` / `ULift.algEquiv` 的定义
+/-
+**ULift.algEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ULift.algEquiv {R : Type u} {A : Type v} [CommSemiring R] [Semiring A] [Al
+gebra R A] : ULift.{w} A ≃ₐ[R] A where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ULift.algEquiv
-  signature: {R : Type u} {A : Type v} [CommSemiring R] [Semiring A] [Algebra R A]
-  body: ULift.ringEquiv
-  commutes' _ := rfl
-
-@[simp]
-
-中文:
-定义 类型层提升.algEquiv
-  签名: {R : 类型u} {A : 类型v} [交换半环 R] [半环 A] [代数 R A]
-  定义体: ULift.ringEquiv
-  commutes' _ := rfl
-
-@[simp]
-
-Depends on / 依赖: ULift.ringEquiv, ringEquiv
+--- 原说明 ---
+The algebra equivalence between `ULift A` and `A`.
 -/
 def ULift.algEquiv {R : Type u} {A : Type v} [CommSemiring R] [Semiring A] [Algebra R A] :
     ULift.{w} A ≃ₐ[R] A where
@@ -3617,18 +2476,13 @@ def ULift.algEquiv {R : Type u} {A : Type v} [CommSemiring R] [Semiring A] [Alge
   commutes' _ := rfl
 
 @[simp]
-/--
-lemma `ULift.down_algEquiv_symm_apply` / 引理 `ULift.down_algEquiv_symm_apply`
-
-English:
-lemma ULift.down_algEquiv_symm_apply
-  statement: {R A : Type*} [CommSemiring R] [Semiring A] [Algebra R A]
-  proof: rfl
-
-中文:
-引理 类型层提升.down_algEquiv_symm_apply
-  结论: {R A : 类型} [交换半环 R] [半环 A] [代数 R A]
-  证明: rfl
+/-
+**ULift.down_algEquiv_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：ULift.down_algEquiv_symm_apply {R A : Type*} [CommSemiring R] [Semiring A]
+ [Algebra R A] (a : A) : (ULift.algEquiv (R
+参数：a : A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ULift.down_algEquiv_symm_apply {R A : Type*} [CommSemiring R] [Semiring A] [Algebra R A]
     (a : A) :
@@ -3643,103 +2497,67 @@ variable {R S T : Type*} [CommSemiring R] [Semiring S]
 attribute [local instance] ULift.algebra' in
 /-- `ULift` is functorial for algebra homomorphisms. -/
 @[pp_with_univ]
-/--
-Definition of `AlgHom.ulift` / `AlgHom.ulift` 的定义
+/-
+**AlgHom.ulift** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：AlgHom.ulift (f : S ->ₐ[R] T) : ULift.{u₁} S ->ₐ[ULift.{u₂} R] ULift.{u₃} 
+T where __
+参数：f : S ->ₐ[R] T。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AlgHom.ulift
-  signature: (f : S ->ₐ[R] T)
-  body: AlgHom.comp ULift.algEquiv.symm.toAlgHom (f.comp ULift.algEquiv.toAlgHom)
-  commutes' _ := by simp
-
-@[simp]
-
-中文:
-定义 代数态射.ulift
-  签名: (f : S ->ₐ[R] T)
-  定义体: AlgHom.comp ULift.algEquiv.symm.toAlgHom (f.comp ULift.algEquiv.toAlgHom)
-  commutes' _ := by simp
-
-@[simp]
-
-Depends on / 依赖: AlgHom, AlgHom.comp, ULift.algEquiv.symm.toAlgHom, ULift.algEquiv.toAlgHom, algEquiv, f.comp, toAlgHom
+--- 原说明 ---
+`ULift` is functorial for algebra homomorphisms.
 -/
-def AlgHom.ulift (f : S ->ₐ[R] T) :
-    ULift.{u₁} S ->ₐ[ULift.{u₂} R] ULift.{u₃} T where
+def AlgHom.ulift (f : S →ₐ[R] T) :
+    ULift.{u₁} S →ₐ[ULift.{u₂} R] ULift.{u₃} T where
   __ := AlgHom.comp ULift.algEquiv.symm.toAlgHom (f.comp ULift.algEquiv.toAlgHom)
   commutes' _ := by simp
 
 @[simp]
-/--
-lemma `AlgHom.down_ulift_apply` / 引理 `AlgHom.down_ulift_apply`
-
-English:
-lemma AlgHom.down_ulift_apply
-  given: (f : S ->ₐ[R] T) (x : ULift S)
-  proof: rfl
-
-中文:
-引理 代数态射.down_ulift_apply
-  条件: (f : S ->ₐ[R] T) (x : 类型层提升 S)
-  证明: rfl
+/-
+**AlgHom.down_ulift_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：AlgHom.down_ulift_apply (f : S ->ₐ[R] T) (x : ULift S) : (f.ulift x).down 
+= f x.down
+参数：f : S ->ₐ[R] T；x : ULift S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma AlgHom.down_ulift_apply (f : S ->ₐ[R] T) (x : ULift S) :
+lemma AlgHom.down_ulift_apply (f : S →ₐ[R] T) (x : ULift S) :
     (f.ulift x).down = f x.down :=
   rfl
-
-/--
-lemma `AlgHom.ulift_apply` / 引理 `AlgHom.ulift_apply`
-
-English:
-lemma AlgHom.ulift_apply
-  given: (f : S ->ₐ[R] T) (x : ULift S)
-  proof: rfl
-
-中文:
-引理 代数态射.ulift_apply
-  条件: (f : S ->ₐ[R] T) (x : 类型层提升 S)
-  证明: rfl
+/-
+**AlgHom.ulift_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：AlgHom.ulift_apply (f : S ->ₐ[R] T) (x : ULift S) : f.ulift x = ⟨f x.down⟩
+参数：f : S ->ₐ[R] T；x : ULift S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma AlgHom.ulift_apply (f : S ->ₐ[R] T) (x : ULift S) :
+lemma AlgHom.ulift_apply (f : S →ₐ[R] T) (x : ULift S) :
     f.ulift x = ⟨f x.down⟩ :=
   rfl
 
 end
 
-/--
-Definition of `LinearEquiv.algEquivOfRing` / `LinearEquiv.algEquivOfRing` 的定义
+/-- If an `R`-algebra `A` is isomorphic to `R` as `R`-module, then the canonical map `R → A` is an
+equivalence of `R`-algebras.
 
-English:
-definition LinearEquiv.algEquivOfRing
-  body: Algebra.ofId R A
-  invFun x := e.symm (e 1 * x)
-  left_inv x := calc
-    e.symm (e 1 * (algebraMap R A) x)
-      = e.symm (x • e 1) := by rw [Algebra.smul_def, mul_comm]
-    _ = x := by rw [map_smul, e.symm_apply_apply, smul_eq_mul, mul_one]
-  right_inv x := calc
-    (algebraMap R A) (e.symm (e 1 * x))
-      = (algebraMap R A) (e.symm (e 1 * x)) * e (e.symm 1 • 1) := by
-          rw [smul_eq_mul]; rw [mul_one]; rw [e.apply_symm_apply]; rw [mul_one]
-    _ = x := by rw [map_smul, Algebra.smul_def, mul_left_comm, ← Algebra.smul_def _ (e 1),
-          ← map_smul, smul_eq_mul, mul_one, e.apply_symm_apply, ← mul_assoc, ← Algebra.smul_def,
-          ← map_smul, smul_eq_mul, mul_one, e.apply_symm_apply, one_mul]
+Note that if `e : R ≃ₗ[R] A` is the linear equivalence, then this is not the same as the equivalence
+of algebras provided here unless `e 1 = 1`. -/
+/-
+**LinearEquiv.algEquivOfRing** 是 Mathlib 中的一个定义，位于命名空间 `LinearEquiv`。
+形式化陈述：{R : Type u_1} →   {A : Type u_2} →     [inst : CommSemiring R] → [inst_1 
+: CommSemiring A] → [inst_2 : Algebra R A] → (R ≃ₗ[R] A) → R ≃ₐ[R] A
+参数：R ≃ₗ[R] A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 线性等价.algEquivOfRing
-  定义体: Algebra.ofId R A
-  invFun x := e.symm (e 1 * x)
-  left_inv x := calc
-    e.symm (e 1 * (algebraMap R A) x)
-      = e.symm (x • e 1) := by rw [Algebra.smul_def, mul_comm]
-    _ = x := by rw [map_smul, e.symm_apply_apply, smul_eq_mul, mul_one]
-  right_inv x := calc
-    (algebraMap R A) (e.symm (e 1 * x))
-      = (algebraMap R A) (e.symm (e 1 * x)) * e (e.symm 1 • 1) := by
-          rw [smul_eq_mul]; rw [mul_one]; rw [e.apply_symm_apply]; rw [mul_one]
-    _ = x := by rw [map_smul, Algebra.smul_def, mul_left_comm, ← Algebra.smul_def _ (e 1),
-          ← map_smul, smul_eq_mul, mul_one, e.apply_symm_apply, ← mul_assoc, ← Algebra.smul_def,
-          ← map_smul, smul_eq_mul, mul_one, e.apply_symm_apply, one_mul]
+--- 原说明 ---
+If an `R`-algebra `A` is isomorphic to `R` as `R`-module, then the canonical map
+ `R → A` is an
+equivalence of `R`-algebras.
+
+Note that if `e : R ≃ₗ[R] A` is the linear equivalence, then this is not the sam
+e as the equivalence
+of algebras provided here unless `e 1 = 1`.
 -/
 @[simps] def LinearEquiv.algEquivOfRing
     {R A : Type*} [CommSemiring R] [CommSemiring A] [Algebra R A]
@@ -3753,7 +2571,7 @@ definition LinearEquiv.algEquivOfRing
   right_inv x := calc
     (algebraMap R A) (e.symm (e 1 * x))
       = (algebraMap R A) (e.symm (e 1 * x)) * e (e.symm 1 • 1) := by
-          rw [smul_eq_mul]; rw [mul_one]; rw [e.apply_symm_apply]; rw [mul_one]
+          rw [smul_eq_mul, mul_one, e.apply_symm_apply, mul_one]
     _ = x := by rw [map_smul, Algebra.smul_def, mul_left_comm, ← Algebra.smul_def _ (e 1),
           ← map_smul, smul_eq_mul, mul_one, e.apply_symm_apply, ← mul_assoc, ← Algebra.smul_def,
           ← map_smul, smul_eq_mul, mul_one, e.apply_symm_apply, one_mul]
@@ -3766,56 +2584,48 @@ variable {R S M₁ M₂ : Type*} [CommSemiring R] [AddCommMonoid M₁] [Module R
 
 set_option backward.isDefEq.respectTransparency false in
 variable (R) in
-/--
-Definition of `conjAlgEquiv` / `conjAlgEquiv` 的定义
+/-- A linear equivalence of two modules induces an equivalence of algebras of their
+endomorphisms. -/
+/-
+**LinearEquiv.conjAlgEquiv** 是 Mathlib 中的一个定义，位于命名空间 `LinearEquiv`。
+形式化陈述：(R : Type u_1) →   {S : Type u_2} →     {M₁ : Type u_3} →       {M₂ : Type
+ u_4} →         [inst : CommSemiring R] →           [inst_1 : AddCommMonoid M₁] 
+→             [inst_2 : _root_.Module R M₁] →               [inst_3 : AddCommMon
+oid M₂] →                 [inst_4 : _root_.Module R M₂] →                   [ins
+t_5 : Semiring S] →                     [inst_6 : _root_.Module S M₁] →         
+              [inst_7 : _root_.Module S M₂] →                         [inst_8 : 
+SMulCommClass S R M₁] →                           [inst_9 : SMulCommClass S R M₂
+] →                             [inst_10 : SMul R S] →                          
+     [inst_11 : IsScalarTower R S M₁] →                                 [inst_12
+ : IsScalarTower R S M₂] → (M₁ ≃ₗ[S] M₂) → Module.End S M₁ ≃ₐ[R] Module.End S M₂
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition conjAlgEquiv
-  signature: (e : M₁ ≃ₗ[S] M₂)
-  body: e.conjRingEquiv
-  commutes' _ := by ext; change e.restrictScalars R _ = _; simp
-
-中文:
-定义 conjAlgEquiv
-  签名: (e : M₁ ≃ₗ[S] M₂)
-  定义体: e.conjRingEquiv
-  commutes' _ := by ext; change e.restrictScalars R _ = _; simp
+--- 原说明 ---
+A linear equivalence of two modules induces an equivalence of algebras of their
+endomorphisms.
 -/
 @[simps!] def conjAlgEquiv (e : M₁ ≃ₗ[S] M₂) : Module.End S M₁ ≃ₐ[R] Module.End S M₂ where
   __ := e.conjRingEquiv
   commutes' _ := by ext; change e.restrictScalars R _ = _; simp
-
-/--
-theorem `conjAlgEquiv_apply` / 定理 `conjAlgEquiv_apply`
-
-English:
-theorem conjAlgEquiv_apply
-  given: (e : M₁ ≃ₗ[S] M₂) (f : Module.End S M₁)
-  proof: rfl
-
-中文:
-定理 conjAlgEquiv_apply
-  条件: (e : M₁ ≃ₗ[S] M₂) (f : 模.End S M₁)
-  证明: rfl
+/-
+**LinearEquiv.conjAlgEquiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：conjAlgEquiv_apply (e : M₁ ≃ₗ[S] M₂) (f : Module.End S M₁) : e.conjAlgEqui
+v R f = e.toLinearMap ∘ₗ f ∘ₗ e.symm.toLinearMap
+参数：e : M₁ ≃ₗ[S] M₂；f : Module.End S M₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem conjAlgEquiv_apply (e : M₁ ≃ₗ[S] M₂) (f : Module.End S M₁) :
     e.conjAlgEquiv R f = e.toLinearMap ∘ₗ f ∘ₗ e.symm.toLinearMap := rfl
-
-/--
-theorem `symm_conjAlgEquiv` / 定理 `symm_conjAlgEquiv`
-
-English:
-theorem symm_conjAlgEquiv
-  given: (e : M₁ ≃ₗ[S] M₂)
-  statement: (e.conjAlgEquiv R).symm = e.symm.conjAlgEquiv R
-  proof: rfl
-
-中文:
-定理 symm_conjAlgEquiv
-  条件: (e : M₁ ≃ₗ[S] M₂)
-  结论: (e.conjAlgEquiv R).symm = e.symm.conjAlgEquiv R
-  证明: rfl
+/-
+**LinearEquiv.symm_conjAlgEquiv** 是 Mathlib 中的一个定理，位于命名空间 `LinearEquiv`。
+形式化陈述：symm_conjAlgEquiv (e : M₁ ≃ₗ[S] M₂) : (e.conjAlgEquiv R).symm = e.symm.con
+jAlgEquiv R
+参数：e : M₁ ≃ₗ[S] M₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_conjAlgEquiv (e : M₁ ≃ₗ[S] M₂) : (e.conjAlgEquiv R).symm = e.symm.conjAlgEquiv R := rfl
 
 end LinearEquiv
+

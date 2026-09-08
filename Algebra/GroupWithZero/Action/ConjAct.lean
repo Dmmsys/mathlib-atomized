@@ -21,108 +21,62 @@ variable {α G₀ : Type*}
 namespace ConjAct
 variable [GroupWithZero G₀]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: GroupWithZero (ConjAct G₀)
-  body: inferInstanceAs GroupWithZero G₀
-
-中文:
-实例 :
-  签名: 带零群 (ConjAct G₀)
-  定义体: inferInstanceAs GroupWithZero G₀
-
-Depends on / 依赖: GroupWithZero
+/-
+**ConjAct.** 是 Mathlib 中的一个实例，位于命名空间 `ConjAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : GroupWithZero (ConjAct G₀) := inferInstanceAs GroupWithZero G₀
-
-/--
-lemma `ofConjAct_zero` / 引理 `ofConjAct_zero`
-
-English:
-lemma ofConjAct_zero
-  statement: ofConjAct 0 = (0 : G₀)
-  proof: rfl
-
-中文:
-引理 ofConjAct_zero
-  结论: ofConjAct 0 = (0 : G₀)
-  证明: rfl
+instance : GroupWithZero (ConjAct G₀) := inferInstanceAs <| GroupWithZero G₀
+/-
+**ConjAct.ofConjAct_zero** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+形式化陈述：∀ {G₀ : Type u_2} [inst : GroupWithZero G₀], ConjAct.ofConjAct 0 = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma ofConjAct_zero : ofConjAct 0 = (0 : G₀) := rfl
-/--
-lemma `toConjAct_zero` / 引理 `toConjAct_zero`
-
-English:
-lemma toConjAct_zero
-  statement: toConjAct (0 : G₀) = 0
-  proof: rfl
-
-中文:
-引理 toConjAct_zero
-  结论: toConjAct (0 : G₀) = 0
-  证明: rfl
+/-
+**ConjAct.toConjAct_zero** 是 Mathlib 中的一个定理，位于命名空间 `ConjAct`。
+形式化陈述：∀ {G₀ : Type u_2} [inst : GroupWithZero G₀], ConjAct.toConjAct 0 = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toConjAct_zero : toConjAct (0 : G₀) = 0 := rfl
-
-/--
-Instance `mulAction₀` / 实例 `mulAction₀`
-
-English:
-instance mulAction₀
-  signature: : MulAction (ConjAct G₀) G₀ where
-  body: by simp [smul_def]
-  mul_smul := by simp [smul_def, mul_assoc]
-
-中文:
-实例 mulAction₀
-  签名: : 乘法作用 (ConjAct G₀) G₀ where
-  定义体: by simp [smul_def]
-  mul_smul := by simp [smul_def, mul_assoc]
-
-Depends on / 依赖: mul_assoc, mul_smul, smul_def
+/-
+**ConjAct.mulAction** 是 Mathlib 中的一个实例，位于命名空间 `ConjAct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance mulAction₀ : MulAction (ConjAct G₀) G₀ where
   one_smul := by simp [smul_def]
   mul_smul := by simp [smul_def, mul_assoc]
-
-/--
-Instance `smulCommClass₀` / 实例 `smulCommClass₀`
-
-English:
-instance smulCommClass₀
-  signature: [SMul α G₀] [SMulCommClass α G₀ G₀] [IsScalarTower α G₀ G₀]
-  body: by rw [smul_def, smul_def, mul_smul_comm, smul_mul_assoc]
-
-中文:
-实例 smulCommClass₀
-  签名: [标量乘法 α G₀] [标量交换类 α G₀ G₀] [标量塔 α G₀ G₀]
-  定义体: by rw [smul_def, smul_def, mul_smul_comm, smul_mul_assoc]
-
-Depends on / 依赖: mul_smul_comm, smul_def, smul_mul_assoc
+/-
+**ConjAct.smulCommClass** 是 Mathlib 中的一个实例，位于命名空间 `ConjAct`。
+形式化陈述：smulCommClass [SMul α G] [SMulCommClass α G G] [IsScalarTower α G G] : SMu
+lCommClass α (ConjAct G) G where smul_comm a ug g
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ConjAct.smul_def`：smul_def (g : ConjAct G) (h : G) : g • h = ofConjAct g
+ * h * (ofConjAct g)⁻¹
+· 使用引理 `mul_smul_comm`：mul_smul_comm [Mul β] [SMul α β] [SMulCommClass α β β] (s
+ : α) (x y : β) : x * s • y = s • (x * y)
+· 使用引理 `smul_mul_assoc`：smul_mul_assoc [Mul β] [SMul α β] [IsScalarTower α β β] 
+(r : α) (x y : β) : r • x * y = r • (x * y)
 -/
 instance smulCommClass₀ [SMul α G₀] [SMulCommClass α G₀ G₀] [IsScalarTower α G₀ G₀] :
     SMulCommClass α (ConjAct G₀) G₀ where
   smul_comm a ug g := by rw [smul_def, smul_def, mul_smul_comm, smul_mul_assoc]
-
-/--
-Instance `smulCommClass₀'` / 实例 `smulCommClass₀'`
-
-English:
-instance smulCommClass₀'
-  signature: [SMul α G₀] [SMulCommClass G₀ α G₀] [IsScalarTower α G₀ G₀]
-  body: haveI := SMulCommClass.symm G₀ α G₀
-  .symm ..
-
-中文:
-实例 smulCommClass₀'
-  签名: [标量乘法 α G₀] [标量交换类 G₀ α G₀] [标量塔 α G₀ G₀]
-  定义体: haveI := SMulCommClass.symm G₀ α G₀
-  .symm ..
-
-Depends on / 依赖: SMulCommClass, SMulCommClass.symm
+/-
+**ConjAct.smulCommClass** 是 Mathlib 中的一个实例，位于命名空间 `ConjAct`。
+形式化陈述：smulCommClass [SMul α G] [SMulCommClass α G G] [IsScalarTower α G G] : SMu
+lCommClass α (ConjAct G) G where smul_comm a ug g
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ConjAct.smul_def`：smul_def (g : ConjAct G) (h : G) : g • h = ofConjAct g
+ * h * (ofConjAct g)⁻¹
+· 使用引理 `mul_smul_comm`：mul_smul_comm [Mul β] [SMul α β] [SMulCommClass α β β] (s
+ : α) (x y : β) : x * s • y = s • (x * y)
+· 使用引理 `smul_mul_assoc`：smul_mul_assoc [Mul β] [SMul α β] [IsScalarTower α β β] 
+(r : α) (x y : β) : r • x * y = r • (x * y)
 -/
 instance smulCommClass₀' [SMul α G₀] [SMulCommClass G₀ α G₀] [IsScalarTower α G₀ G₀] :
     SMulCommClass (ConjAct G₀) α G₀ :=
@@ -130,3 +84,4 @@ instance smulCommClass₀' [SMul α G₀] [SMulCommClass G₀ α G₀] [IsScalar
   .symm ..
 
 end ConjAct
+

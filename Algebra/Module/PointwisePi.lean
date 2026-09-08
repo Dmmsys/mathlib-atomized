@@ -26,91 +26,69 @@ open scoped Pointwise
 
 open Set
 
-variable {K ι : Type*} {R : ι -> Type*}
+variable {K ι : Type*} {R : ι → Type*}
 
 @[to_additive]
-/--
-theorem `smul_pi_subset` / 定理 `smul_pi_subset`
-
-English:
-theorem smul_pi_subset
-  given: [forall i, SMul K (R i)] (r : K) (s : Set ι) (t : forall i, Set (R i))
-  proof: piMap_image_pi_subset _
-
-@[to_additive]
-
-中文:
-定理 smul_pi_subset
-  条件: [对任意 i, 标量乘法 K (R i)] (r : K) (s : 集合 ι) (t : 对任意 i, 集合 (R i))
-  证明: piMap_image_pi_subset _
-
-@[to_additive]
-
-Depends on / 依赖: piMap_image_pi_subset
+/-
+**smul_pi_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：smul_pi_subset [forall i, SMul K (R i)] (r : K) (s : Set ι) (t : forall i,
+ Set (R i)) : r • pi s t subseteq pi s (r • t)
+参数：R i；r : K；s : Set ι；t : forall i, Set (R i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.piMap_image_pi_subset`：piMap_image_pi_subset {f : forall i, α i -> β
+ i} (t : forall i, Set (α i)) : Pi.map f '' s.pi t subseteq s.pi fun i => f i ''
+ t i
 -/
-theorem smul_pi_subset [forall i, SMul K (R i)] (r : K) (s : Set ι) (t : forall i, Set (R i)) :
-    r • pi s t subseteq pi s (r • t) :=
+theorem smul_pi_subset [∀ i, SMul K (R i)] (r : K) (s : Set ι) (t : ∀ i, Set (R i)) :
+    r • pi s t ⊆ pi s (r • t) :=
   piMap_image_pi_subset _
 
 @[to_additive]
-/--
-theorem `smul_univ_pi` / 定理 `smul_univ_pi`
-
-English:
-theorem smul_univ_pi
-  given: [forall i, SMul K (R i)] (r : K) (t : forall i, Set (R i))
-  proof: piMap_image_univ_pi _ _
-
-@[to_additive]
-
-中文:
-定理 smul_univ_pi
-  条件: [对任意 i, 标量乘法 K (R i)] (r : K) (t : 对任意 i, 集合 (R i))
-  证明: piMap_image_univ_pi _ _
-
-@[to_additive]
-
-Depends on / 依赖: piMap_image_univ_pi
+/-
+**smul_univ_pi** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：smul_univ_pi [forall i, SMul K (R i)] (r : K) (t : forall i, Set (R i)) : 
+r • pi (univ : Set ι) t = pi (univ : Set ι) (r • t)
+参数：R i；r : K；t : forall i, Set (R i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.piMap_image_univ_pi`：piMap_image_univ_pi (f : forall i, α i -> β i) 
+(t : forall i, Set (α i)) : Pi.map f '' univ.pi t = univ.pi fun i => f i '' t i
 -/
-theorem smul_univ_pi [forall i, SMul K (R i)] (r : K) (t : forall i, Set (R i)) :
+theorem smul_univ_pi [∀ i, SMul K (R i)] (r : K) (t : ∀ i, Set (R i)) :
     r • pi (univ : Set ι) t = pi (univ : Set ι) (r • t) :=
   piMap_image_univ_pi _ _
 
 @[to_additive]
-/--
-theorem `smul_pi` / 定理 `smul_pi`
-
-English:
-theorem smul_pi
-  given: [Group K] [forall i, MulAction K (R i)] (r : K) (S : Set ι) (t : forall i, Set (R i))
-  proof: piMap_image_pi (fun _ _ => MulAction.surjective _) _
-
-中文:
-定理 smul_pi
-  条件: [群 K] [对任意 i, 乘法作用 K (R i)] (r : K) (S : 集合 ι) (t : 对任意 i, 集合 (R i))
-  证明: piMap_image_pi (fun _ _ => MulAction.surjective _) _
-
-Depends on / 依赖: MulAction, MulAction.surjective, piMap_image_pi, surjective
+/-
+**smul_pi** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：smul_pi [Group K] [forall i, MulAction K (R i)] (r : K) (S : Set ι) (t : f
+orall i, Set (R i)) : r • S.pi t = S.pi (r • t)
+参数：R i；r : K；S : Set ι；t : forall i, Set (R i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.piMap_image_pi`：piMap_image_pi {f : forall i, α i -> β i} (hf : fora
+ll i ∉ s, Surjective (f i)) (t : forall i, Set (α i)) : Pi.map f '' s.pi t = s.p
+i fun i …
+· 使用定理 `MulAction.surjective`：∀ {α : Type u_5} {β : Type u_6} [inst : Group α] [
+inst_1 : MulAction α β] (g : α), Function.Surjective fun x => g • x
 -/
-theorem smul_pi [Group K] [forall i, MulAction K (R i)] (r : K) (S : Set ι) (t : forall i, Set (R i)) :
+theorem smul_pi [Group K] [∀ i, MulAction K (R i)] (r : K) (S : Set ι) (t : ∀ i, Set (R i)) :
     r • S.pi t = S.pi (r • t) :=
   piMap_image_pi (fun _ _ => MulAction.surjective _) _
-
-/--
-theorem `smul_pi₀` / 定理 `smul_pi₀`
-
-English:
-theorem smul_pi₀
-  statement: [GroupWithZero K] [forall i, MulAction K (R i)] {r : K} (S : Set ι) (t : forall i, Set (R i))
-  proof: smul_pi (Units.mk0 r hr) S t
-
-中文:
-定理 smul_pi₀
-  结论: [带零群 K] [对任意 i, 乘法作用 K (R i)] {r : K} (S : 集合 ι) (t : 对任意 i, 集合 (R i))
-  证明: smul_pi (Units.mk0 r hr) S t
-
-Depends on / 依赖: Units.mk0, smul_pi
+/-
+**smul_pi** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：smul_pi [Group K] [forall i, MulAction K (R i)] (r : K) (S : Set ι) (t : f
+orall i, Set (R i)) : r • S.pi t = S.pi (r • t)
+参数：R i；r : K；S : Set ι；t : forall i, Set (R i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.piMap_image_pi`：piMap_image_pi {f : forall i, α i -> β i} (hf : fora
+ll i ∉ s, Surjective (f i)) (t : forall i, Set (α i)) : Pi.map f '' s.pi t = s.p
+i fun i …
+· 使用定理 `MulAction.surjective`：∀ {α : Type u_5} {β : Type u_6} [inst : Group α] [
+inst_1 : MulAction α β] (g : α), Function.Surjective fun x => g • x
 -/
-theorem smul_pi₀ [GroupWithZero K] [forall i, MulAction K (R i)] {r : K} (S : Set ι) (t : forall i, Set (R i))
-    (hr : r != 0) : r • S.pi t = S.pi (r • t) :=
+theorem smul_pi₀ [GroupWithZero K] [∀ i, MulAction K (R i)] {r : K} (S : Set ι) (t : ∀ i, Set (R i))
+    (hr : r ≠ 0) : r • S.pi t = S.pi (r • t) :=
   smul_pi (Units.mk0 r hr) S t

@@ -16,113 +16,85 @@ public import Mathlib.Data.Rat.Cast.Defs
 
 public section
 
-/--
-Instance `Rat.instStarRing` / 实例 `Rat.instStarRing`
-
-English:
-instance Rat.instStarRing
-  signature: : StarRing Rat
-  body: starRingOfComm
-
-中文:
-实例 有理数.instStarRing
-  签名: : 对合环 有理数
-  定义体: starRingOfComm
-
-Depends on / 依赖: starRingOfComm
+/-
+**Rat.instStarRing** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Rat.instStarRing : StarRing Rat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Rat.instStarRing : StarRing Rat := starRingOfComm
-/--
-Instance `NNRat.instStarRing` / 实例 `NNRat.instStarRing`
-
-English:
-instance NNRat.instStarRing
-  signature: : StarRing Rat>=0
-  body: starRingOfComm
-
-中文:
-实例 NNRat.instStarRing
-  签名: : 对合环 有理数>=0
-  定义体: starRingOfComm
-
-Depends on / 依赖: starRingOfComm
+instance Rat.instStarRing : StarRing ℚ := starRingOfComm
+/-
+**NNRat.instStarRing** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：NNRat.instStarRing : StarRing Rat>=0
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance NNRat.instStarRing : StarRing Rat>=0 := starRingOfComm
-/--
-Instance `Rat.instTrivialStar` / 实例 `Rat.instTrivialStar`
-
-English:
-instance Rat.instTrivialStar
-  signature: : TrivialStar Rat
-  body: ⟨fun _ => rfl⟩
-
-中文:
-实例 有理数.instTrivialStar
-  签名: : TrivialStar 有理数
-  定义体: ⟨fun _ => rfl⟩
+instance NNRat.instStarRing : StarRing ℚ≥0 := starRingOfComm
+/-
+**Rat.instTrivialStar** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Rat.instTrivialStar : TrivialStar Rat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Rat.instTrivialStar : TrivialStar Rat := ⟨fun _ => rfl⟩
-/--
-Instance `NNRat.instTrivialStar` / 实例 `NNRat.instTrivialStar`
-
-English:
-instance NNRat.instTrivialStar
-  signature: : TrivialStar Rat>=0
-  body: ⟨fun _ => rfl⟩
-
-中文:
-实例 NNRat.instTrivialStar
-  签名: : TrivialStar 有理数>=0
-  定义体: ⟨fun _ => rfl⟩
+instance Rat.instTrivialStar : TrivialStar ℚ := ⟨fun _ ↦ rfl⟩
+/-
+**NNRat.instTrivialStar** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：NNRat.instTrivialStar : TrivialStar Rat>=0
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance NNRat.instTrivialStar : TrivialStar Rat>=0 := ⟨fun _ => rfl⟩
+instance NNRat.instTrivialStar : TrivialStar ℚ≥0 := ⟨fun _ ↦ rfl⟩
 
 variable {R : Type*}
 
 open MulOpposite
 
 @[simp, norm_cast]
-/--
-lemma `star_nnratCast` / 引理 `star_nnratCast`
-
-English:
-lemma star_nnratCast
-  given: [DivisionSemiring R] [StarRing R] (q : Rat>=0)
-  statement: star (q : R) = q
-  proof: (congr_arg unop <| map_nnratCast (starRingEquiv : R ≃+* Rᵐᵒᵖ) q).trans (unop_nnratCast _)
-
-@[simp, norm_cast]
-
-中文:
-引理 star_nnratCast
-  条件: [除半环 R] [对合环 R] (q : 有理数>=0)
-  结论: star (q : R) = q
-  证明: (congr_arg unop <| map_nnratCast (starRingEquiv : R ≃+* Rᵐᵒᵖ) q).trans (unop_nnratCast _)
-
-@[simp, norm_cast]
-
-Depends on / 依赖: congr_arg, map_nnratCast, starRingEquiv, unop_nnratCast
+/-
+**star_nnratCast** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：star_nnratCast [DivisionSemiring R] [StarRing R] (q : Rat>=0) : star (q : 
+R) = q
+参数：q : Rat>=0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `map_nnratCast`：∀ {F : Type u_1} {α : Type u_3} {β : Type u_4} [inst : Fu
+nLike F α β] [inst_1 : DivisionSemiring α]   [inst_2 : DivisionSemiring β] [Ring
+Hom…
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
+· 使用引理 `MulOpposite.unop_nnratCast`：unop_nnratCast [NNRatCast α] (q : Rat>=0) : 
+unop (q : αᵐᵒᵖ) = q
 -/
-lemma star_nnratCast [DivisionSemiring R] [StarRing R] (q : Rat>=0) : star (q : R) = q :=
+lemma star_nnratCast [DivisionSemiring R] [StarRing R] (q : ℚ≥0) : star (q : R) = q :=
   (congr_arg unop <| map_nnratCast (starRingEquiv : R ≃+* Rᵐᵒᵖ) q).trans (unop_nnratCast _)
 
 @[simp, norm_cast]
-/--
-theorem `star_ratCast` / 定理 `star_ratCast`
-
-English:
-theorem star_ratCast
-  given: [DivisionRing R] [StarRing R] (r : Rat)
-  statement: star (r : R) = r
-  proof: (congr_arg unop <| map_ratCast (starRingEquiv : R ≃+* Rᵐᵒᵖ) r).trans (unop_ratCast _)
-
-中文:
-定理 star_ratCast
-  条件: [除环 R] [对合环 R] (r : 有理数)
-  结论: star (r : R) = r
-  证明: (congr_arg unop <| map_ratCast (starRingEquiv : R ≃+* Rᵐᵒᵖ) r).trans (unop_ratCast _)
-
-Depends on / 依赖: congr_arg, map_ratCast, starRingEquiv, unop_ratCast
+/-
+**star_ratCast** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：star_ratCast [DivisionRing R] [StarRing R] (r : Rat) : star (r : R) = r
+参数：r : Rat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `map_ratCast`：map_ratCast [DivisionRing α] [DivisionRing β] [RingHomClass
+ F α β] (f : F) (q : Rat) : f q = q
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
+· 使用引理 `MulOpposite.unop_ratCast`：unop_ratCast [RatCast α] (q : Rat) : unop (q :
+ αᵐᵒᵖ) = q
 -/
-theorem star_ratCast [DivisionRing R] [StarRing R] (r : Rat) : star (r : R) = r :=
+theorem star_ratCast [DivisionRing R] [StarRing R] (r : ℚ) : star (r : R) = r :=
   (congr_arg unop <| map_ratCast (starRingEquiv : R ≃+* Rᵐᵒᵖ) r).trans (unop_ratCast _)

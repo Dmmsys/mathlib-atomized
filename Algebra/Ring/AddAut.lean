@@ -29,86 +29,53 @@ variable {R : Type*} [Semiring R]
 
 /-- Left multiplication by a unit of a semiring as an additive automorphism. -/
 @[simps! +simpRhs]
-/--
-Definition of `mulLeft` / `mulLeft` 的定义
+/-
+**AddAut.mulLeft** 是 Mathlib 中的一个定义，位于命名空间 `AddAut`。
+形式化陈述：mulLeft : Rˣ ->* Multiplicative (AddAut R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulLeft
-  signature: : Rˣ ->* Multiplicative (AddAut R)
-  body: DistribMulAction.toAddAut _ _
-
-中文:
-定义 mulLeft
-  签名: : Rˣ ->* Multiplicative (AddAut R)
-  定义体: DistribMulAction.toAddAut _ _
-
-Depends on / 依赖: DistribMulAction, DistribMulAction.toAddAut, toAddAut
+--- 原说明 ---
+Left multiplication by a unit of a semiring as an additive automorphism.
 -/
-def mulLeft : Rˣ ->* Multiplicative (AddAut R) :=
+def mulLeft : Rˣ →* Multiplicative (AddAut R) :=
   DistribMulAction.toAddAut _ _
 
-/--
-Definition of `mulRight` / `mulRight` 的定义
+/-- Right multiplication by a unit of a semiring as an additive automorphism. -/
+/-
+**AddAut.mulRight** 是 Mathlib 中的一个定义，位于命名空间 `AddAut`。
+形式化陈述：mulRight (u : Rˣ) : AddAut R
+参数：u : Rˣ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulRight
-  signature: (u : Rˣ)
-  body: DistribMulAction.toAddAut Rᵐᵒᵖˣ R (Units.opEquiv.symm <| MulOpposite.op u)
-
-@[simp]
-
-中文:
-定义 mulRight
-  签名: (u : Rˣ)
-  定义体: DistribMulAction.toAddAut Rᵐᵒᵖˣ R (Units.opEquiv.symm <| MulOpposite.op u)
-
-@[simp]
-
-Depends on / 依赖: DistribMulAction, DistribMulAction.toAddAut, MulOpposite, MulOpposite.op, Units.opEquiv.symm, opEquiv, toAddAut
+--- 原说明 ---
+Right multiplication by a unit of a semiring as an additive automorphism.
 -/
 def mulRight (u : Rˣ) : AddAut R :=
   DistribMulAction.toAddAut Rᵐᵒᵖˣ R (Units.opEquiv.symm <| MulOpposite.op u)
 
 @[simp]
-/--
-theorem `mulRight_apply` / 定理 `mulRight_apply`
-
-English:
-theorem mulRight_apply
-  given: (u : Rˣ) (x : R)
-  statement: mulRight u x = x * u
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mulRight_apply
-  条件: (u : Rˣ) (x : R)
-  结论: mulRight u x = x * u
-  证明: rfl
-
-@[simp]
+/-
+**AddAut.mulRight_apply** 是 Mathlib 中的一个定理，位于命名空间 `AddAut`。
+形式化陈述：mulRight_apply (u : Rˣ) (x : R) : mulRight u x = x * u
+参数：u : Rˣ；x : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mulRight_apply (u : Rˣ) (x : R) : mulRight u x = x * u :=
   rfl
 
 @[simp]
-/--
-theorem `mulRight_symm_apply` / 定理 `mulRight_symm_apply`
-
-English:
-theorem mulRight_symm_apply
-  given: (u : Rˣ) (x : R)
-  statement: (mulRight u).symm x = x * u⁻¹
-  proof: rfl
-
-中文:
-定理 mulRight_symm_apply
-  条件: (u : Rˣ) (x : R)
-  结论: (mulRight u).symm x = x * u⁻¹
-  证明: rfl
+/-
+**AddAut.mulRight_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `AddAut`。
+形式化陈述：mulRight_symm_apply (u : Rˣ) (x : R) : (mulRight u).symm x = x * u⁻¹
+参数：u : Rˣ；x : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mulRight_symm_apply (u : Rˣ) (x : R) : (mulRight u).symm x = x * u⁻¹ :=
   rfl
 
 end AddAut
+

@@ -42,39 +42,36 @@ namespace CategoryTheory
 
 namespace Functor
 
-/--
-Definition of `ShiftSequence` / `ShiftSequence` 的定义
+/-- A shift sequence for a functor `F : C ⥤ A` when `C` is equipped with a shift
+by a monoid `M` involves a sequence of functor `sequence n : C ⥤ A` for all `n : M`
+which behave like `shiftFunctor C n ⋙ F`. -/
+/-
+**CategoryTheory.Functor.ShiftSequence** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheo
+ry.Functor`。
+形式化陈述：{C : Type u_1} →   {A : Type u_3} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_3, u_3} A] →         Ca
+tegoryTheory.Functor C A →           (M : Type u_4) →             [inst_2 : AddM
+onoid M] → [CategoryTheory.HasShift C M] → Type (max (max (max (max u_1 u_3) u_4
+) v_1) v_3)
+参数：M : Type u_4；max (max (max (max u_1 u_3) u_4) v_1) v_3。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class ShiftSequence
-  parameters: where
-  axioms and operations (5):
-    - sequence : M -> C ⥤ A
-    - isoZero : sequence 0 ≅ F
-    - shiftIso((n a a' : M) (ha' : n + a = a')) : shiftFunctor C n ⋙ sequence a ≅ sequence a'
-    - shiftIso_zero((a : M)) : shiftIso 0 a a (zero_add a) = isoWhiskerRight (shiftFunctorZero C M) _ ≪≫ leftUnitor _
-    - shiftIso_add : forall (n m a a' a'' : M) (ha' : n + a = a') (ha'' : m + a' = a''), shiftIso (m + n) a a'' (by rw [add_assoc, ha', ha'']) = isoWhiskerRight (shiftFunctorAdd C m n) _ ≪≫ Functor.associator _ _ _ ≪≫ isoWhiskerLeft _ (shiftIso n a a' ha') ≪≫ shiftIso m a' a'' ha''
-
-中文:
-类 ShiftSequence
-  参数: where
-  公理与运算 (5 个):
-    - sequence : M -> C ⥤ A
-    - isoZero : sequence 0 ≅ F
-    - shiftIso((n a a' : M) (ha' : n + a = a')) : shiftFunctor C n ⋙ sequence a ≅ sequence a'
-    - shiftIso_zero((a : M)) : shiftIso 0 a a (zero_add a) = isoWhiskerRight (shiftFunctorZero C M) _ ≪≫ leftUnitor _
-    - shiftIso_add : 对任意 (n m a a' a'' : M) (ha' : n + a = a') (ha'' : m + a' = a''), shiftIso (m + n) a a'' (by rw [add_assoc, ha', ha'']) = isoWhiskerRight (shiftFunctorAdd C m n) _ ≪≫ 函子.associator _ _ _ ≪≫ isoWhiskerLeft _ (shiftIso n a a' ha') ≪≫ shiftIso m a' a'' ha''
+--- 原说明 ---
+A shift sequence for a functor `F : C ⥤ A` when `C` is equipped with a shift
+by a monoid `M` involves a sequence of functor `sequence n : C ⥤ A` for all `n :
+ M`
+which behave like `shiftFunctor C n ⋙ F`.
 -/
 class ShiftSequence where
   /-- a sequence of functors -/
-  sequence : M -> C ⥤ A
+  sequence : M → C ⥤ A
   /-- `sequence 0` identifies to the given functor -/
   isoZero : sequence 0 ≅ F
   /-- compatibility isomorphism with the shift -/
   shiftIso (n a a' : M) (ha' : n + a = a') : shiftFunctor C n ⋙ sequence a ≅ sequence a'
   shiftIso_zero (a : M) : shiftIso 0 a a (zero_add a) =
     isoWhiskerRight (shiftFunctorZero C M) _ ≪≫ leftUnitor _
-  shiftIso_add : forall (n m a a' a'' : M) (ha' : n + a = a') (ha'' : m + a' = a''),
+  shiftIso_add : ∀ (n m a a' a'' : M) (ha' : n + a = a') (ha'' : m + a' = a''),
     shiftIso (m + n) a a'' (by rw [add_assoc, ha', ha'']) =
       isoWhiskerRight (shiftFunctorAdd C m n) _ ≪≫ Functor.associator _ _ _ ≪≫
         isoWhiskerLeft _ (shiftIso n a a' ha') ≪≫ shiftIso m a' a'' ha''
@@ -82,50 +79,18 @@ class ShiftSequence where
 set_option backward.defeqAttrib.useBackward true in
 /-- The tautological shift sequence on a functor. -/
 @[instance_reducible]
-/--
-Definition of `ShiftSequence.tautological` / `ShiftSequence.tautological` 的定义
+/-
+**CategoryTheory.Functor.ShiftSequence.tautological** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Functor.ShiftSequence`。
+形式化陈述：{C : Type u_1} →   {A : Type u_3} →     [inst : CategoryTheory.Category.{v
+_1, u_1} C] →       [inst_1 : CategoryTheory.Category.{v_3, u_3} A] →         (F
+ : CategoryTheory.Functor C A) →           (M : Type u_4) → [inst_2 : AddMonoid 
+M] → [inst_3 : CategoryTheory.HasShift C M] → F.ShiftSequence M
+参数：F : CategoryTheory.Functor C A；M : Type u_4。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ShiftSequence.tautological
-  signature: : ShiftSequence F M where
-  body: shiftFunctor C n ⋙ F
-  isoZero := isoWhiskerRight (shiftFunctorZero C M) F ≪≫ F.leftUnitor
-  shiftIso n a a' ha' := (Functor.associator _ _ _).symm ≪≫
-    isoWhiskerRight (shiftFunctorAdd' C n a a' ha').symm _
-  shiftIso_zero a := by
-    rw [shiftFunctorAdd'_zero_add]
-    cat_disch
-  shiftIso_add n m a a' a'' ha' ha'' := by
-    ext X
-    dsimp
-    simp only [id_comp, ← Functor.map_comp]
-    congr
-    simpa only [← cancel_epi ((shiftFunctor C a).map ((shiftFunctorAdd C m n).hom.app X)),
-      shiftFunctorAdd'_eq_shiftFunctorAdd, ← Functor.map_comp_assoc, Iso.hom_inv_id_app,
-      Functor.map_id, id_comp] using! shiftFunctorAdd'_assoc_inv_app m n a (m + n) a' a'' rfl ha'
-        (by rw [← ha'', ← ha', add_assoc]) X
-
-中文:
-定义 ShiftSequence.tautological
-  签名: : ShiftSequence F M where
-  定义体: shiftFunctor C n ⋙ F
-  isoZero := isoWhiskerRight (shiftFunctorZero C M) F ≪≫ F.leftUnitor
-  shiftIso n a a' ha' := (Functor.associator _ _ _).symm ≪≫
-    isoWhiskerRight (shiftFunctorAdd' C n a a' ha').symm _
-  shiftIso_zero a := by
-    rw [shiftFunctorAdd'_zero_add]
-    cat_disch
-  shiftIso_add n m a a' a'' ha' ha'' := by
-    ext X
-    dsimp
-    simp only [id_comp, ← Functor.map_comp]
-    congr
-    simpa only [← cancel_epi ((shiftFunctor C a).map ((shiftFunctorAdd C m n).hom.app X)),
-      shiftFunctorAdd'_eq_shiftFunctorAdd, ← Functor.map_comp_assoc, Iso.hom_inv_id_app,
-      Functor.map_id, id_comp] using! shiftFunctorAdd'_assoc_inv_app m n a (m + n) a' a'' rfl ha'
-        (by rw [← ha'', ← ha', add_assoc]) X
-
-Depends on / 依赖: shiftFunctor
+--- 原说明 ---
+The tautological shift sequence on a functor.
 -/
 noncomputable def ShiftSequence.tautological : ShiftSequence F M where
   sequence n := shiftFunctor C n ⋙ F
@@ -150,65 +115,51 @@ section
 variable {M}
 variable [F.ShiftSequence M]
 
-/--
-Definition of `shift` / `shift` 的定义
+/-- The shifted functors given by the shift sequence. -/
+/-
+**CategoryTheory.Functor.shift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Functor
+`。
+形式化陈述：shift (n : M) : C ⥤ A
+参数：n : M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition shift
-  signature: (n : M)
-  body: ShiftSequence.sequence F n
-
-中文:
-定义 shift
-  签名: (n : M)
-  定义体: ShiftSequence.sequence F n
-
-Depends on / 依赖: ShiftSequence, ShiftSequence.sequence, sequence
+--- 原说明 ---
+The shifted functors given by the shift sequence.
 -/
 def shift (n : M) : C ⥤ A := ShiftSequence.sequence F n
 
-/--
-Definition of `shiftIso` / `shiftIso` 的定义
+/-- Compatibility isomorphism `shiftFunctor C n ⋙ F.shift a ≅ F.shift a'` when `n + a = a'`. -/
+/-
+**CategoryTheory.Functor.shiftIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Func
+tor`。
+形式化陈述：shiftIso (n a a' : M) (ha' : n + a = a') : shiftFunctor C n ⋙ F.shift a ≅ 
+F.shift a'
+参数：n a a' : M；ha' : n + a = a'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition shiftIso
-  signature: (n a a' : M) (ha' : n + a = a')
-  body: ShiftSequence.shiftIso n a a' ha'
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 shiftIso
-  签名: (n a a' : M) (ha' : n + a = a')
-  定义体: ShiftSequence.shiftIso n a a' ha'
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: ShiftSequence, ShiftSequence.shiftIso, shiftIso
+--- 原说明 ---
+Compatibility isomorphism `shiftFunctor C n ⋙ F.shift a ≅ F.shift a'` when `n + 
+a = a'`.
 -/
 def shiftIso (n a a' : M) (ha' : n + a = a') :
     shiftFunctor C n ⋙ F.shift a ≅ F.shift a' :=
   ShiftSequence.shiftIso n a a' ha'
 
 @[reassoc (attr := simp)]
-/--
-lemma `shiftIso_hom_naturality` / 引理 `shiftIso_hom_naturality`
-
-English:
-lemma shiftIso_hom_naturality
-  given: {X Y : C} (n a a' : M) (ha' : n + a = a') (f : X ⟶ Y)
-  proof: (F.shiftIso n a a' ha').hom.naturality f
-
-@[reassoc]
-
-中文:
-引理 shiftIso_hom_naturality
-  条件: {X Y : C} (n a a' : M) (ha' : n + a = a') (f : X ⟶ Y)
-  证明: (F.shiftIso n a a' ha').hom.naturality f
-
-@[reassoc]
-
-Depends on / 依赖: F.shiftIso, hom.naturality, naturality, shiftIso
+/-
+**CategoryTheory.Functor.shiftIso_hom_naturality** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Functor`。
+形式化陈述：shiftIso_hom_naturality {X Y : C} (n a a' : M) (ha' : n + a = a') (f : X ⟶
+ Y) : (shift F a).map (f⟦n⟧') ≫ (shiftIso F n a a' ha').hom.app Y = (shiftIso F 
+n a a' ha').hom.app X ≫ (shift F a').map f
+参数：n a a' : M；ha' : n + a = a'；f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
 -/
 lemma shiftIso_hom_naturality {X Y : C} (n a a' : M) (ha' : n + a = a') (f : X ⟶ Y) :
     (shift F a).map (f⟦n⟧') ≫ (shiftIso F n a a' ha').hom.app Y =
@@ -216,20 +167,25 @@ lemma shiftIso_hom_naturality {X Y : C} (n a a' : M) (ha' : n + a = a') (f : X �
   (F.shiftIso n a a' ha').hom.naturality f
 
 @[reassoc]
-/--
-lemma `shiftIso_inv_naturality` / 引理 `shiftIso_inv_naturality`
-
-English:
-lemma shiftIso_inv_naturality
-  given: {X Y : C} (n a a' : M) (ha' : n + a = a') (f : X ⟶ Y)
-  proof: by
-  simp
-
-中文:
-引理 shiftIso_inv_naturality
-  条件: {X Y : C} (n a a' : M) (ha' : n + a = a') (f : X ⟶ Y)
-  证明: by
-  simp
+/-
+**CategoryTheory.Functor.shiftIso_inv_naturality** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Functor`。
+形式化陈述：shiftIso_inv_naturality {X Y : C} (n a a' : M) (ha' : n + a = a') (f : X ⟶
+ Y) : (shift F a').map f ≫ (shiftIso F n a a' ha').inv.app Y = (shiftIso F n a a
+' ha').inv.app X ≫ (shift F a).map (f⟦n⟧')
+参数：n a a' : M；ha' : n + a = a'；f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shiftIso_inv_naturality {X Y : C} (n a a' : M) (ha' : n + a = a') (f : X ⟶ Y) :
     (shift F a').map f ≫ (shiftIso F n a a' ha').inv.app Y =
@@ -237,60 +193,46 @@ lemma shiftIso_inv_naturality {X Y : C} (n a a' : M) (ha' : n + a = a') (f : X �
   simp
 
 variable (M) in
-/--
-Definition of `isoShiftZero` / `isoShiftZero` 的定义
+/-- The canonical isomorphism `F.shift 0 ≅ F`. -/
+/-
+**CategoryTheory.Functor.isoShiftZero** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Functor`。
+形式化陈述：isoShiftZero : F.shift (0 : M) ≅ F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoShiftZero
-  signature: : F.shift (0 : M) ≅ F
-  body: ShiftSequence.isoZero
-
-中文:
-定义 isoShiftZero
-  签名: : F.shift (0 : M) ≅ F
-  定义体: ShiftSequence.isoZero
-
-Depends on / 依赖: ShiftSequence, ShiftSequence.isoZero, isoZero
+--- 原说明 ---
+The canonical isomorphism `F.shift 0 ≅ F`.
 -/
 def isoShiftZero : F.shift (0 : M) ≅ F := ShiftSequence.isoZero
 
-/--
-Definition of `isoShift` / `isoShift` 的定义
+/-- The canonical isomorphism `shiftFunctor C n ⋙ F ≅ F.shift n`. -/
+/-
+**CategoryTheory.Functor.isoShift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Func
+tor`。
+形式化陈述：isoShift (n : M) : shiftFunctor C n ⋙ F ≅ F.shift n
+参数：n : M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoShift
-  signature: (n : M)
-  body: isoWhiskerLeft _ (F.isoShiftZero M).symm ≪≫ F.shiftIso _ _ _ (add_zero n)
-
-@[reassoc]
-
-中文:
-定义 isoShift
-  签名: (n : M)
-  定义体: isoWhiskerLeft _ (F.isoShiftZero M).symm ≪≫ F.shiftIso _ _ _ (add_zero n)
-
-@[reassoc]
-
-Depends on / 依赖: F.isoShiftZero, F.shiftIso, add_zero, isoShiftZero, isoWhiskerLeft, shiftIso
+--- 原说明 ---
+The canonical isomorphism `shiftFunctor C n ⋙ F ≅ F.shift n`.
 -/
 def isoShift (n : M) : shiftFunctor C n ⋙ F ≅ F.shift n :=
   isoWhiskerLeft _ (F.isoShiftZero M).symm ≪≫ F.shiftIso _ _ _ (add_zero n)
 
 @[reassoc]
-/--
-lemma `isoShift_hom_naturality` / 引理 `isoShift_hom_naturality`
-
-English:
-lemma isoShift_hom_naturality
-  given: (n : M) {X Y : C} (f : X ⟶ Y)
-  proof: (F.isoShift n).hom.naturality f
-
-中文:
-引理 isoShift_hom_naturality
-  条件: (n : M) {X Y : C} (f : X ⟶ Y)
-  证明: (F.isoShift n).hom.naturality f
-
-Depends on / 依赖: F.isoShift, hom.naturality, isoShift, naturality
+/-
+**CategoryTheory.Functor.isoShift_hom_naturality** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Functor`。
+形式化陈述：isoShift_hom_naturality (n : M) {X Y : C} (f : X ⟶ Y) : F.map (f⟦n⟧') ≫ (F
+.isoShift n).hom.app Y = (F.isoShift n).hom.app X ≫ (F.shift n).map f
+参数：n : M；f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
 -/
 lemma isoShift_hom_naturality (n : M) {X Y : C} (f : X ⟶ Y) :
     F.map (f⟦n⟧') ≫ (F.isoShift n).hom.app Y =
@@ -300,40 +242,33 @@ lemma isoShift_hom_naturality (n : M) {X Y : C} (f : X ⟶ Y) :
 attribute [simp] isoShift_hom_naturality
 
 @[reassoc]
-/--
-lemma `isoShift_inv_naturality` / 引理 `isoShift_inv_naturality`
-
-English:
-lemma isoShift_inv_naturality
-  given: (n : M) {X Y : C} (f : X ⟶ Y)
-  proof: (F.isoShift n).inv.naturality f
-
-中文:
-引理 isoShift_inv_naturality
-  条件: (n : M) {X Y : C} (f : X ⟶ Y)
-  证明: (F.isoShift n).inv.naturality f
-
-Depends on / 依赖: F.isoShift, inv.naturality, isoShift, naturality
+/-
+**CategoryTheory.Functor.isoShift_inv_naturality** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Functor`。
+形式化陈述：isoShift_inv_naturality (n : M) {X Y : C} (f : X ⟶ Y) : (F.shift n).map f 
+≫ (F.isoShift n).inv.app Y = (F.isoShift n).inv.app X ≫ F.map (f⟦n⟧')
+参数：n : M；f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
 -/
 lemma isoShift_inv_naturality (n : M) {X Y : C} (f : X ⟶ Y) :
     (F.shift n).map f ≫ (F.isoShift n).inv.app Y =
       (F.isoShift n).inv.app X ≫ F.map (f⟦n⟧') :=
   (F.isoShift n).inv.naturality f
-
-/--
-lemma `shiftIso_zero` / 引理 `shiftIso_zero`
-
-English:
-lemma shiftIso_zero
-  given: (a : M)
-  proof: ShiftSequence.shiftIso_zero a
-
-中文:
-引理 shiftIso_zero
-  条件: (a : M)
-  证明: ShiftSequence.shiftIso_zero a
-
-Depends on / 依赖: ShiftSequence, ShiftSequence.shiftIso_zero, shiftIso_zero
+/-
+**CategoryTheory.Functor.shiftIso_zero** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.Functor`。
+形式化陈述：shiftIso_zero (a : M) : F.shiftIso 0 a a (zero_add a) = isoWhiskerRight (s
+hiftFunctorZero C M) _ ≪≫ leftUnitor _
+参数：a : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.ShiftSequence.shiftIso_zero`：∀ {C : Type u_1} {A 
+: Type u_3} {inst : CategoryTheory.Category.{v_1, u_1} C}   {inst_1 : CategoryTh
+eory.Category.{v_3, u_3} A} {F : Categor…
 -/
 lemma shiftIso_zero (a : M) :
     F.shiftIso 0 a a (zero_add a) =
@@ -342,22 +277,29 @@ lemma shiftIso_zero (a : M) :
 
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `shiftIso_zero_hom_app` / 引理 `shiftIso_zero_hom_app`
-
-English:
-lemma shiftIso_zero_hom_app
-  given: (a : M) (X : C)
-  proof: by
-  simp [F.shiftIso_zero a]
-
-中文:
-引理 shiftIso_zero_hom_app
-  条件: (a : M) (X : C)
-  证明: by
-  simp [F.shiftIso_zero a]
-
-Depends on / 依赖: F.shiftIso_zero, shiftIso_zero
+/-
+**CategoryTheory.Functor.shiftIso_zero_hom_app** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.Functor`。
+形式化陈述：shiftIso_zero_hom_app (a : M) (X : C) : (F.shiftIso 0 a a (zero_add a)).ho
+m.app X = (shift F a).map ((shiftFunctorZero C M).hom.app X)
+参数：a : M；X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `CategoryTheory.Functor.shiftIso_zero`：shiftIso_zero (a : M) : F.shiftIso
+ 0 a a (zero_add a) = isoWhiskerRight (shiftFunctorZero C M) _ ≪≫ leftUnitor _
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shiftIso_zero_hom_app (a : M) (X : C) :
     (F.shiftIso 0 a a (zero_add a)).hom.app X =
@@ -366,42 +308,47 @@ lemma shiftIso_zero_hom_app (a : M) (X : C) :
 
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `shiftIso_zero_inv_app` / 引理 `shiftIso_zero_inv_app`
-
-English:
-lemma shiftIso_zero_inv_app
-  given: (a : M) (X : C)
-  proof: by
-  simp [F.shiftIso_zero a]
-
-中文:
-引理 shiftIso_zero_inv_app
-  条件: (a : M) (X : C)
-  证明: by
-  simp [F.shiftIso_zero a]
-
-Depends on / 依赖: F.shiftIso_zero, shiftIso_zero
+/-
+**CategoryTheory.Functor.shiftIso_zero_inv_app** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.Functor`。
+形式化陈述：shiftIso_zero_inv_app (a : M) (X : C) : (F.shiftIso 0 a a (zero_add a)).in
+v.app X = (shift F a).map ((shiftFunctorZero C M).inv.app X)
+参数：a : M；X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `CategoryTheory.Functor.shiftIso_zero`：shiftIso_zero (a : M) : F.shiftIso
+ 0 a a (zero_add a) = isoWhiskerRight (shiftFunctorZero C M) _ ≪≫ leftUnitor _
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shiftIso_zero_inv_app (a : M) (X : C) :
     (F.shiftIso 0 a a (zero_add a)).inv.app X =
       (shift F a).map ((shiftFunctorZero C M).inv.app X) := by
   simp [F.shiftIso_zero a]
-
-/--
-lemma `shiftIso_add` / 引理 `shiftIso_add`
-
-English:
-lemma shiftIso_add
-  given: (n m a a' a'' : M) (ha' : n + a = a') (ha'' : m + a' = a'')
-  proof: ShiftSequence.shiftIso_add _ _ _ _ _ _ _
-
-中文:
-引理 shiftIso_add
-  条件: (n m a a' a'' : M) (ha' : n + a = a') (ha'' : m + a' = a'')
-  证明: ShiftSequence.shiftIso_add _ _ _ _ _ _ _
-
-Depends on / 依赖: ShiftSequence, ShiftSequence.shiftIso_add, shiftIso_add
+/-
+**CategoryTheory.Functor.shiftIso_add** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.
+Functor`。
+形式化陈述：shiftIso_add (n m a a' a'' : M) (ha' : n + a = a') (ha'' : m + a' = a'') :
+ F.shiftIso (m + n) a a'' (by rw [add_assoc, ha', ha'']) = isoWhiskerRight (shif
+tFunctorAdd C m n) _ ≪≫ Functor.associator _ _ _ ≪≫ isoWhiskerLeft _ (F.shiftIso
+ n a a' ha') ≪≫ F.shiftIso m a' a'' ha''
+参数：n m a a' a'' : M；ha' : n + a = a'；ha'' : m + a' = a''。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.ShiftSequence.shiftIso_add`：∀ {C : Type u_1} {A :
+ Type u_3} {inst : CategoryTheory.Category.{v_1, u_1} C}   {inst_1 : CategoryThe
+ory.Category.{v_3, u_3} A} {F : Categor…
 -/
 lemma shiftIso_add (n m a a' a'' : M) (ha' : n + a = a') (ha'' : m + a' = a'') :
     F.shiftIso (m + n) a a'' (by rw [add_assoc, ha', ha'']) =
@@ -410,22 +357,31 @@ lemma shiftIso_add (n m a a' a'' : M) (ha' : n + a = a') (ha'' : m + a' = a'') :
   ShiftSequence.shiftIso_add _ _ _ _ _ _ _
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `shiftIso_add_hom_app` / 引理 `shiftIso_add_hom_app`
-
-English:
-lemma shiftIso_add_hom_app
-  given: (n m a a' a'' : M) (ha' : n + a = a') (ha'' : m + a' = a'') (X : C)
-  proof: by
-  simp [F.shiftIso_add n m a a' a'' ha' ha'']
-
-中文:
-引理 shiftIso_add_hom_app
-  条件: (n m a a' a'' : M) (ha' : n + a = a') (ha'' : m + a' = a'') (X : C)
-  证明: by
-  simp [F.shiftIso_add n m a a' a'' ha' ha'']
-
-Depends on / 依赖: F.shiftIso_add, shiftIso_add
+/-
+**CategoryTheory.Functor.shiftIso_add_hom_app** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Functor`。
+形式化陈述：shiftIso_add_hom_app (n m a a' a'' : M) (ha' : n + a = a') (ha'' : m + a' 
+= a'') (X : C) : (F.shiftIso (m + n) a a'' (by rw [add_assoc, ha', ha''])).hom.a
+pp X = (shift F a).map ((shiftFunctorAdd C m n).hom.app X) ≫ (shiftIso F n a a' 
+ha').hom.app ((shiftFunctor C m).obj X) ≫ (shiftIso F m a' a'' ha'').hom.app X
+参数：n m a a' a'' : M；ha' : n + a = a'；ha'' : m + a' = a''；X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `CategoryTheory.Functor.shiftIso_add`：shiftIso_add (n m a a' a'' : M) (ha
+' : n + a = a') (ha'' : m + a' = a'') : F.shiftIso (m + n) a a'' (by rw [add_ass
+oc, ha', ha'']) = isoWhis…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shiftIso_add_hom_app (n m a a' a'' : M) (ha' : n + a = a') (ha'' : m + a' = a'') (X : C) :
     (F.shiftIso (m + n) a a'' (by rw [add_assoc, ha', ha''])).hom.app X =
@@ -435,22 +391,34 @@ lemma shiftIso_add_hom_app (n m a a' a'' : M) (ha' : n + a = a') (ha'' : m + a' 
   simp [F.shiftIso_add n m a a' a'' ha' ha'']
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `shiftIso_add_inv_app` / 引理 `shiftIso_add_inv_app`
-
-English:
-lemma shiftIso_add_inv_app
-  given: (n m a a' a'' : M) (ha' : n + a = a') (ha'' : m + a' = a'') (X : C)
-  proof: by
-  simp [F.shiftIso_add n m a a' a'' ha' ha'']
-
-中文:
-引理 shiftIso_add_inv_app
-  条件: (n m a a' a'' : M) (ha' : n + a = a') (ha'' : m + a' = a'') (X : C)
-  证明: by
-  simp [F.shiftIso_add n m a a' a'' ha' ha'']
-
-Depends on / 依赖: F.shiftIso_add, shiftIso_add
+/-
+**CategoryTheory.Functor.shiftIso_add_inv_app** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Functor`。
+形式化陈述：shiftIso_add_inv_app (n m a a' a'' : M) (ha' : n + a = a') (ha'' : m + a' 
+= a'') (X : C) : (F.shiftIso (m + n) a a'' (by rw [add_assoc, ha', ha''])).inv.a
+pp X = (shiftIso F m a' a'' ha'').inv.app X ≫ (shiftIso F n a a' ha').inv.app ((
+shiftFunctor C m).obj X) ≫ (shift F a).map ((shiftFunctorAdd C m n).inv.app X)
+参数：n m a a' a'' : M；ha' : n + a = a'；ha'' : m + a' = a''；X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `CategoryTheory.Functor.shiftIso_add`：shiftIso_add (n m a a' a'' : M) (ha
+' : n + a = a') (ha'' : m + a' = a'') : F.shiftIso (m + n) a a'' (by rw [add_ass
+oc, ha', ha'']) = isoWhis…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shiftIso_add_inv_app (n m a a' a'' : M) (ha' : n + a = a') (ha'' : m + a' = a'') (X : C) :
     (F.shiftIso (m + n) a a'' (by rw [add_assoc, ha', ha''])).inv.app X =
@@ -458,25 +426,26 @@ lemma shiftIso_add_inv_app (n m a a' a'' : M) (ha' : n + a = a') (ha'' : m + a' 
         (shiftIso F n a a' ha').inv.app ((shiftFunctor C m).obj X) ≫
           (shift F a).map ((shiftFunctorAdd C m n).inv.app X) := by
   simp [F.shiftIso_add n m a a' a'' ha' ha'']
-
-/--
-lemma `shiftIso_add'` / 引理 `shiftIso_add'`
-
-English:
-lemma shiftIso_add'
-  statement: (n m mn : M) (hnm : m + n = mn) (a a' a'' : M)
-  proof: by
-  subst hnm
-  rw [shiftFunctorAdd'_eq_shiftFunctorAdd]; rw [shiftIso_add]
-
-中文:
-引理 shiftIso_add'
-  结论: (n m mn : M) (hnm : m + n = mn) (a a' a'' : M)
-  证明: by
-  subst hnm
-  rw [shiftFunctorAdd'_eq_shiftFunctorAdd]; rw [shiftIso_add]
-
-Depends on / 依赖: _eq_shiftFunctorAdd, shiftFunctorAdd, shiftIso_add
+/-
+**CategoryTheory.Functor.shiftIso_add'** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.Functor`。
+形式化陈述：shiftIso_add' (n m mn : M) (hnm : m + n = mn) (a a' a'' : M) (ha' : n + a 
+= a') (ha'' : m + a' = a'') : F.shiftIso mn a a'' (by rw [← hnm, ← ha'', ← ha', 
+add_assoc]) = isoWhiskerRight (shiftFunctorAdd' C m n _ hnm) _ ≪≫ Functor.associ
+ator _ _ _ ≪≫ isoWhiskerLeft _ (F.shiftIso n a a' ha') ≪≫ F.shiftIso m a' a'' ha
+''
+参数：n m mn : M；hnm : m + n = mn；a a' a'' : M；ha' : n + a = a'；ha'' : m + a' = a''
+。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.shiftFunctorAdd'_eq_shiftFunctorAdd`：∀ (C : Type u) {A : 
+Type u_1} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : AddMonoid A]   [in
+st_2 : CategoryTheory.HasShift C A] (i j…
+· 使用引理 `CategoryTheory.Functor.shiftIso_add`：shiftIso_add (n m a a' a'' : M) (ha
+' : n + a = a') (ha'' : m + a' = a'') : F.shiftIso (m + n) a a'' (by rw [add_ass
+oc, ha', ha'']) = isoWhis…
 -/
 lemma shiftIso_add' (n m mn : M) (hnm : m + n = mn) (a a' a'' : M)
     (ha' : n + a = a') (ha'' : m + a' = a'') :
@@ -484,23 +453,42 @@ lemma shiftIso_add' (n m mn : M) (hnm : m + n = mn) (a a' a'' : M)
       isoWhiskerRight (shiftFunctorAdd' C m n _ hnm) _ ≪≫ Functor.associator _ _ _ ≪≫
         isoWhiskerLeft _ (F.shiftIso n a a' ha') ≪≫ F.shiftIso m a' a'' ha'' := by
   subst hnm
-  rw [shiftFunctorAdd'_eq_shiftFunctorAdd]; rw [shiftIso_add]
+  rw [shiftFunctorAdd'_eq_shiftFunctorAdd, shiftIso_add]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `shiftIso_add'_hom_app` / 引理 `shiftIso_add'_hom_app`
-
-English:
-lemma shiftIso_add'_hom_app
-  statement: (n m mn : M) (hnm : m + n = mn) (a a' a'' : M)
-  proof: by
-  simp [F.shiftIso_add' n m mn hnm a a' a'' ha' ha'']
-
-中文:
-引理 shiftIso_add'_hom_app
-  结论: (n m mn : M) (hnm : m + n = mn) (a a' a'' : M)
-  证明: by
-  simp [F.shiftIso_add' n m mn hnm a a' a'' ha' ha'']
+/-
+**CategoryTheory.Functor.shiftIso_add'_hom_app** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Functor`。
+形式化陈述：∀ {C : Type u_1} {A : Type u_3} [inst : CategoryTheory.Category.{v_1, u_1}
+ C]   [inst_1 : CategoryTheory.Category.{v_3, u_3} A] (F : CategoryTheory.Functo
+r C A) {M : Type u_4} [inst_2 : AddMonoid M]   [inst_3 : CategoryTheory.HasShift
+ C M] [inst_4 : F.ShiftSequence M] (n m mn : M) (hnm : m + n = mn) (a a' a'' : M
+)   (ha' : n + a = a') (ha'' : m + a' = a'') (X : C),   (F.shiftIso mn a a'' ⋯).
+hom.app X =     CategoryTheory.CategoryStruct.comp ((F.shift a).map ((CategoryTh
+eory.shiftFunctorAdd' C m n mn hnm).hom.app X))       (CategoryTheory.CategorySt
+ruct.comp ((F.shiftIso n a a' ha').hom.app ((CategoryTheory.shiftFunctor C m).ob
+j X))         ((F.shiftIso m a' a'' ha'').hom.app X))
+参数：F : CategoryTheory.Functor C A；n m mn : M；hnm : m + n = mn；a a' a'' : M；ha' :
+ n + a = a'；ha'' : m + a' = a''；X : C；F.shiftIso mn a a'' ⋯；(F.shift a).map ((Ca
+tegoryTheory.shiftFunctorAdd' C m n mn hnm).hom.app X)；CategoryTheory.CategorySt
+ruct.comp ((F.shiftIso n a a' ha').hom.app ((CategoryTheory.shiftFunctor C m).ob
+j X))         ((F.shiftIso m a' a'' ha'').hom.app X)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `CategoryTheory.Functor.shiftIso_add'`：shiftIso_add' (n m mn : M) (hnm : 
+m + n = mn) (a a' a'' : M) (ha' : n + a = a') (ha'' : m + a' = a'') : F.shiftIso
+ mn a a'' (by rw [← hnm, ←…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shiftIso_add'_hom_app (n m mn : M) (hnm : m + n = mn) (a a' a'' : M)
     (ha' : n + a = a') (ha'' : m + a' = a'') (X : C) :
@@ -511,24 +499,42 @@ lemma shiftIso_add'_hom_app (n m mn : M) (hnm : m + n = mn) (a a' a'' : M)
   simp [F.shiftIso_add' n m mn hnm a a' a'' ha' ha'']
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `shiftIso_add'_inv_app` / 引理 `shiftIso_add'_inv_app`
-
-English:
-lemma shiftIso_add'_inv_app
-  statement: (n m mn : M) (hnm : m + n = mn) (a a' a'' : M)
-  proof: by
-  simp [F.shiftIso_add' n m mn hnm a a' a'' ha' ha'']
-
-@[reassoc]
-
-中文:
-引理 shiftIso_add'_inv_app
-  结论: (n m mn : M) (hnm : m + n = mn) (a a' a'' : M)
-  证明: by
-  simp [F.shiftIso_add' n m mn hnm a a' a'' ha' ha'']
-
-@[reassoc]
+/-
+**CategoryTheory.Functor.shiftIso_add'_inv_app** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Functor`。
+形式化陈述：∀ {C : Type u_1} {A : Type u_3} [inst : CategoryTheory.Category.{v_1, u_1}
+ C]   [inst_1 : CategoryTheory.Category.{v_3, u_3} A] (F : CategoryTheory.Functo
+r C A) {M : Type u_4} [inst_2 : AddMonoid M]   [inst_3 : CategoryTheory.HasShift
+ C M] [inst_4 : F.ShiftSequence M] (n m mn : M) (hnm : m + n = mn) (a a' a'' : M
+)   (ha' : n + a = a') (ha'' : m + a' = a'') (X : C),   (F.shiftIso mn a a'' ⋯).
+inv.app X =     CategoryTheory.CategoryStruct.comp ((F.shiftIso m a' a'' ha'').i
+nv.app X)       (CategoryTheory.CategoryStruct.comp ((F.shiftIso n a a' ha').inv
+.app ((CategoryTheory.shiftFunctor C m).obj X))         ((F.shift a).map ((Categ
+oryTheory.shiftFunctorAdd' C m n mn hnm).inv.app X)))
+参数：F : CategoryTheory.Functor C A；n m mn : M；hnm : m + n = mn；a a' a'' : M；ha' :
+ n + a = a'；ha'' : m + a' = a''；X : C；F.shiftIso mn a a'' ⋯；(F.shiftIso m a' a''
+ ha'').inv.app X；CategoryTheory.CategoryStruct.comp ((F.shiftIso n a a' ha').inv
+.app ((CategoryTheory.shiftFunctor C m).obj X))         ((F.shift a).map ((Categ
+oryTheory.shiftFunctorAdd' C m n mn hnm).inv.app X))。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `CategoryTheory.Functor.shiftIso_add'`：shiftIso_add' (n m mn : M) (hnm : 
+m + n = mn) (a a' a'' : M) (ha' : n + a = a') (ha'' : m + a' = a'') : F.shiftIso
+ mn a a'' (by rw [← hnm, ←…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shiftIso_add'_inv_app (n m mn : M) (hnm : m + n = mn) (a a' a'' : M)
     (ha' : n + a = a') (ha'' : m + a' = a'') (X : C) :
@@ -539,22 +545,36 @@ lemma shiftIso_add'_inv_app (n m mn : M) (hnm : m + n = mn) (a a' a'' : M)
   simp [F.shiftIso_add' n m mn hnm a a' a'' ha' ha'']
 
 @[reassoc]
-/--
-lemma `shiftIso_hom_app_comp` / 引理 `shiftIso_hom_app_comp`
-
-English:
-lemma shiftIso_hom_app_comp
-  statement: (n m mn : M) (hnm : m + n = mn)
-  proof: by
-  rw [F.shiftIso_add'_hom_app n m mn hnm a a' a'' ha' ha'']; rw [← Functor.map_comp_assoc]; rw [Iso.inv_hom_id_app]; rw [Functor.map_id]; rw [id_comp]
-
-中文:
-引理 shiftIso_hom_app_comp
-  结论: (n m mn : M) (hnm : m + n = mn)
-  证明: by
-  rw [F.shiftIso_add'_hom_app n m mn hnm a a' a'' ha' ha'']; rw [← Functor.map_comp_assoc]; rw [Iso.inv_hom_id_app]; rw [Functor.map_id]; rw [id_comp]
-
-Depends on / 依赖: F.shiftIso_add, Functor, Functor.map_comp_assoc, Functor.map_id, Iso.inv_hom_id_app, _hom_app, id_comp, inv_hom_id_app, map_comp_assoc, map_id, shiftIso_add
+/-
+**CategoryTheory.Functor.shiftIso_hom_app_comp** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.Functor`。
+形式化陈述：shiftIso_hom_app_comp (n m mn : M) (hnm : m + n = mn) (a a' a'' : M) (ha' 
+: n + a = a') (ha'' : m + a' = a'') (X : C) : (shiftIso F n a a' ha').hom.app ((
+shiftFunctor C m).obj X) ≫ (shiftIso F m a' a'' ha'').hom.app X = (shift F a).ma
+p ((shiftFunctorAdd' C m n mn hnm).inv.app X) ≫ (F.shiftIso mn a a'' (by rw [← h
+nm, ← ha'', ← ha', add_assoc])).hom.app X
+参数：n m mn : M；hnm : m + n = mn；a a' a'' : M；ha' : n + a = a'；ha'' : m + a' = a''
+；X : C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.shiftIso_add'_hom_app`：∀ {C : Type u_1} {A : Type
+ u_3} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.C
+ategory.{v_3, u_3} A] (F : Categor…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp_assoc`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v_1, u₁} C] {D : Type u₂}   [inst_1 : CategoryTheory.Category.{v
+_2, u₂} D] (F : CategoryThe…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 lemma shiftIso_hom_app_comp (n m mn : M) (hnm : m + n = mn)
     (a a' a'' : M) (ha' : n + a = a') (ha'' : m + a' = a'') (X : C) :
@@ -562,22 +582,23 @@ lemma shiftIso_hom_app_comp (n m mn : M) (hnm : m + n = mn)
       (shiftIso F m a' a'' ha'').hom.app X =
         (shift F a).map ((shiftFunctorAdd' C m n mn hnm).inv.app X) ≫
           (F.shiftIso mn a a'' (by rw [← hnm, ← ha'', ← ha', add_assoc])).hom.app X := by
-  rw [F.shiftIso_add'_hom_app n m mn hnm a a' a'' ha' ha'']; rw [← Functor.map_comp_assoc]; rw [Iso.inv_hom_id_app]; rw [Functor.map_id]; rw [id_comp]
+  rw [F.shiftIso_add'_hom_app n m mn hnm a a' a'' ha' ha'', ← Functor.map_comp_assoc,
+    Iso.inv_hom_id_app, Functor.map_id, id_comp]
 
-/--
-Definition of `shiftMap` / `shiftMap` 的定义
+/-- The morphism `(F.shift a).obj X ⟶ (F.shift a').obj Y` induced by a morphism
+`f : X ⟶ Y⟦n⟧` when `n + a = a'`. -/
+/-
+**CategoryTheory.Functor.shiftMap** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Func
+tor`。
+形式化陈述：shiftMap {X Y : C} {n : M} (f : X ⟶ Y⟦n⟧) (a a' : M) (ha' : n + a = a') : 
+(F.shift a).obj X ⟶ (F.shift a').obj Y
+参数：f : X ⟶ Y⟦n⟧；a a' : M；ha' : n + a = a'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition shiftMap
-  signature: {X Y : C} {n : M} (f : X ⟶ Y⟦n⟧) (a a' : M) (ha' : n + a = a')
-  body: (F.shift a).map f ≫ (F.shiftIso _ _ _ ha').hom.app Y
-
-中文:
-定义 shiftMap
-  签名: {X Y : C} {n : M} (f : X ⟶ Y⟦n⟧) (a a' : M) (ha' : n + a = a')
-  定义体: (F.shift a).map f ≫ (F.shiftIso _ _ _ ha').hom.app Y
-
-Depends on / 依赖: F.shift, F.shiftIso, hom.app, shiftIso
+--- 原说明 ---
+The morphism `(F.shift a).obj X ⟶ (F.shift a').obj Y` induced by a morphism
+`f : X ⟶ Y⟦n⟧` when `n + a = a'`.
 -/
 def shiftMap {X Y : C} {n : M} (f : X ⟶ Y⟦n⟧) (a a' : M) (ha' : n + a = a') :
     (F.shift a).obj X ⟶ (F.shift a').obj Y :=
@@ -585,73 +606,114 @@ def shiftMap {X Y : C} {n : M} (f : X ⟶ Y⟦n⟧) (a a' : M) (ha' : n + a = a'
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc]
-/--
-lemma `shiftMap_comp` / 引理 `shiftMap_comp`
-
-English:
-lemma shiftMap_comp
-  given: {X Y Z : C} {n : M} (f : X ⟶ Y⟦n⟧) (g : Y ⟶ Z) (a a' : M) (ha' : n + a = a')
-  proof: by
-  simp [shiftMap]
-
-@[reassoc]
-
-中文:
-引理 shiftMap_comp
-  条件: {X Y Z : C} {n : M} (f : X ⟶ Y⟦n⟧) (g : Y ⟶ Z) (a a' : M) (ha' : n + a = a')
-  证明: by
-  simp [shiftMap]
-
-@[reassoc]
-
-Depends on / 依赖: shiftMap
+/-
+**CategoryTheory.Functor.shiftMap_comp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.Functor`。
+形式化陈述：shiftMap_comp {X Y Z : C} {n : M} (f : X ⟶ Y⟦n⟧) (g : Y ⟶ Z) (a a' : M) (h
+a' : n + a = a') : F.shiftMap (f ≫ g⟦n⟧') a a' ha' = F.shiftMap f a a' ha' ≫ (F.
+shift a').map g
+参数：f : X ⟶ Y⟦n⟧；g : Y ⟶ Z；a a' : M；ha' : n + a = a'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.Functor.shiftIso_hom_naturality`：shiftIso_hom_naturality 
+{X Y : C} (n a a' : M) (ha' : n + a = a') (f : X ⟶ Y) : (shift F a).map (f⟦n⟧') 
+≫ (shiftIso F n a a' ha').hom.app Y …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shiftMap_comp {X Y Z : C} {n : M} (f : X ⟶ Y⟦n⟧) (g : Y ⟶ Z) (a a' : M) (ha' : n + a = a') :
     F.shiftMap (f ≫ g⟦n⟧') a a' ha' = F.shiftMap f a a' ha' ≫ (F.shift a').map g := by
   simp [shiftMap]
 
 @[reassoc]
-/--
-lemma `shiftMap_comp'` / 引理 `shiftMap_comp'`
-
-English:
-lemma shiftMap_comp'
-  given: {X Y Z : C} {n : M} (f : X ⟶ Y) (g : Y ⟶ Z⟦n⟧) (a a' : M) (ha' : n + a = a')
-  proof: by
-  simp [shiftMap]
-
-中文:
-引理 shiftMap_comp'
-  条件: {X Y Z : C} {n : M} (f : X ⟶ Y) (g : Y ⟶ Z⟦n⟧) (a a' : M) (ha' : n + a = a')
-  证明: by
-  simp [shiftMap]
-
-Depends on / 依赖: shiftMap
+/-
+**CategoryTheory.Functor.shiftMap_comp'** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.Functor`。
+形式化陈述：shiftMap_comp' {X Y Z : C} {n : M} (f : X ⟶ Y) (g : Y ⟶ Z⟦n⟧) (a a' : M) (
+ha' : n + a = a') : F.shiftMap (f ≫ g) a a' ha' = (F.shift a).map f ≫ F.shiftMap
+ g a a' ha'
+参数：f : X ⟶ Y；g : Y ⟶ Z⟦n⟧；a a' : M；ha' : n + a = a'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shiftMap_comp' {X Y Z : C} {n : M} (f : X ⟶ Y) (g : Y ⟶ Z⟦n⟧) (a a' : M) (ha' : n + a = a') :
     F.shiftMap (f ≫ g) a a' ha' = (F.shift a).map f ≫ F.shiftMap g a a' ha' := by
   simp [shiftMap]
 
 /--
-lemma `shiftIso_hom_app_comp_shiftMap` / 引理 `shiftIso_hom_app_comp_shiftMap`
+When `f : X ⟶ Y⟦m⟧`, `m + n = mn`, `n + a = a'` and `ha'' : m + a' = a''`, this lemma
+relates the two morphisms `F.shiftMap f a' a'' ha''` and `(F.shift a).map (f⟦n⟧')`. Indeed,
+via canonical isomorphisms, they both identify to morphisms
+`(F.shift a').obj X ⟶ (F.shift a'').obj Y`.
+-/
+/-
+**CategoryTheory.Functor.shiftIso_hom_app_comp_shiftMap** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.Functor`。
+形式化陈述：shiftIso_hom_app_comp_shiftMap {X Y : C} {m : M} (f : X ⟶ Y⟦m⟧) (n mn : M)
+ (hnm : m + n = mn) (a a' a'' : M) (ha' : n + a = a') (ha'' : m + a' = a'') : (F
+.shiftIso n a a' ha').hom.app X ≫ F.shiftMap f a' a'' ha'' = (F.shift a).map (f⟦
+n⟧') ≫ (F.shift a).map ((shiftFunctorAdd' C m n mn hnm).inv.app Y) ≫ (F.shiftIso
+ mn a a'' (by rw [← ha'', ← ha', ← hnm, add_assoc])).hom.app Y
+参数：f : X ⟶ Y⟦m⟧；n mn : M；hnm : m + n = mn；a a' a'' : M；ha' : n + a = a'；ha'' : m
+ + a' = a''。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.shiftIso_add'_hom_app`：∀ {C : Type u_1} {A : Type
+ u_3} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheory.C
+ategory.{v_3, u_3} A] (F : Categor…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Functor.shiftIso_hom_naturality_assoc`：∀ {C : Type u_1} {
+A : Type u_3} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : Category
+Theory.Category.{v_3, u_3} A] (F : Categor…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma shiftIso_hom_app_comp_shiftMap
-  statement: {X Y : C} {m : M} (f : X ⟶ Y⟦m⟧) (n mn : M) (hnm : m + n = mn)
-  proof: by
-  simp only [F.shiftIso_add'_hom_app n m mn hnm a a' a'' ha' ha'' Y,
-    ← Functor.map_comp_assoc, Iso.inv_hom_id_app, Functor.map_id,
-    id_comp, comp_obj, shiftIso_hom_naturality_assoc, shiftMap]
-
-中文:
-引理 shiftIso_hom_app_comp_shiftMap
-  结论: {X Y : C} {m : M} (f : X ⟶ Y⟦m⟧) (n mn : M) (hnm : m + n = mn)
-  证明: by
-  simp only [F.shiftIso_add'_hom_app n m mn hnm a a' a'' ha' ha'' Y,
-    ← Functor.map_comp_assoc, Iso.inv_hom_id_app, Functor.map_id,
-    id_comp, comp_obj, shiftIso_hom_naturality_assoc, shiftMap]
-
-Depends on / 依赖: F.shiftIso_add, Functor, Functor.map_comp_assoc, Functor.map_id, Iso.inv_hom_id_app, _hom_app, comp_obj, id_comp, inv_hom_id_app, map_comp_assoc, map_id, shiftIso_add, shiftIso_hom_naturality_assoc, shiftMap
+--- 原说明 ---
+When `f : X ⟶ Y⟦m⟧`, `m + n = mn`, `n + a = a'` and `ha'' : m + a' = a''`, this 
+lemma
+relates the two morphisms `F.shiftMap f a' a'' ha''` and `(F.shift a).map (f⟦n⟧'
+)`. Indeed,
+via canonical isomorphisms, they both identify to morphisms
+`(F.shift a').obj X ⟶ (F.shift a'').obj Y`.
 -/
 lemma shiftIso_hom_app_comp_shiftMap {X Y : C} {m : M} (f : X ⟶ Y⟦m⟧) (n mn : M) (hnm : m + n = mn)
     (a a' a'' : M) (ha' : n + a = a') (ha'' : m + a' = a'') :
@@ -663,27 +725,54 @@ lemma shiftIso_hom_app_comp_shiftMap {X Y : C} {m : M} (f : X ⟶ Y⟦m⟧) (n m
     id_comp, comp_obj, shiftIso_hom_naturality_assoc, shiftMap]
 
 /--
-lemma `shiftIso_hom_app_comp_shiftMap_of_add_eq_zero` / 引理 `shiftIso_hom_app_comp_shiftMap_of_add_eq_zero`
+If `f : X ⟶ Y⟦m⟧`, `n + m = 0` and `ha' : m + a = a'`, this lemma relates the two
+morphisms `F.shiftMap f a a' ha'` and `(F.shift a').map (f⟦n⟧')`. Indeed,
+via canonical isomorphisms, they both identify to morphisms
+`(F.shift a).obj X ⟶ (F.shift a').obj Y`.
+-/
+/-
+**CategoryTheory.Functor.shiftIso_hom_app_comp_shiftMap_of_add_eq_zero** 是 Mathl
+ib 中的一个引理，位于命名空间 `CategoryTheory.Functor`。
+形式化陈述：shiftIso_hom_app_comp_shiftMap_of_add_eq_zero [F.ShiftSequence G] {X Y : C
+} {m : G} (f : X ⟶ Y⟦m⟧) (n : G) (hnm : n + m = 0) (a a' : G) (ha' : m + a = a')
+ : (F.shiftIso n a' a (by rw [← ha', ← add_assoc, hnm, zero_add])).hom.app X ≫ F
+.shiftMap f a a' ha' = (F.shift a').map (f⟦n⟧' ≫ (shiftFunctorCompIsoId C m n (b
+y rw [← add_left_inj m, add_assoc, hnm, zero_add, add_zero])).hom.app Y)
+参数：f : X ⟶ Y⟦m⟧；n : G；hnm : n + m = 0；a a' : G；ha' : m + a = a'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_left_inj`：∀ {G : Type u_1} [inst : Add G] [IsRightCancelAdd G] (a : 
+G) {b c : G}, b + a = c + a ↔ b = c
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `CategoryTheory.Functor.shiftIso_hom_app_comp_shiftMap`：shiftIso_hom_app_
+comp_shiftMap {X Y : C} {m : M} (f : X ⟶ Y⟦m⟧) (n mn : M) (hnm : m + n = mn) (a 
+a' a'' : M) (ha' : n + a = a') (ha'' : m + …
+· 使用引理 `CategoryTheory.Functor.shiftIso_zero_hom_app`：shiftIso_zero_hom_app (a :
+ M) (X : C) : (F.shiftIso 0 a a (zero_add a)).hom.app X = (shift F a).map ((shif
+tFunctorZero C M).hom.app X)
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma shiftIso_hom_app_comp_shiftMap_of_add_eq_zero
-  statement: [F.ShiftSequence G]
-  proof: by
-  have hnm' : m + n = 0 := by
-    rw [← add_left_inj m]; rw [add_assoc]; rw [hnm]; rw [zero_add]; rw [add_zero]
-  simp [F.shiftIso_hom_app_comp_shiftMap f n 0 hnm' a' a, shiftIso_zero_hom_app,
-    shiftFunctorCompIsoId]
-
-中文:
-引理 shiftIso_hom_app_comp_shiftMap_of_add_eq_zero
-  结论: [F.ShiftSequence G]
-  证明: by
-  have hnm' : m + n = 0 := by
-    rw [← add_left_inj m]; rw [add_assoc]; rw [hnm]; rw [zero_add]; rw [add_zero]
-  simp [F.shiftIso_hom_app_comp_shiftMap f n 0 hnm' a' a, shiftIso_zero_hom_app,
-    shiftFunctorCompIsoId]
-
-Depends on / 依赖: F.shiftIso_hom_app_comp_shiftMap, add_assoc, add_left_inj, add_zero, shiftFunctorCompIsoId, shiftIso_hom_app_comp_shiftMap, shiftIso_zero_hom_app, zero_add
+--- 原说明 ---
+If `f : X ⟶ Y⟦m⟧`, `n + m = 0` and `ha' : m + a = a'`, this lemma relates the tw
+o
+morphisms `F.shiftMap f a a' ha'` and `(F.shift a').map (f⟦n⟧')`. Indeed,
+via canonical isomorphisms, they both identify to morphisms
+`(F.shift a).obj X ⟶ (F.shift a').obj Y`.
 -/
 lemma shiftIso_hom_app_comp_shiftMap_of_add_eq_zero [F.ShiftSequence G]
     {X Y : C} {m : G} (f : X ⟶ Y⟦m⟧)
@@ -693,35 +782,46 @@ lemma shiftIso_hom_app_comp_shiftMap_of_add_eq_zero [F.ShiftSequence G]
     (F.shift a').map (f⟦n⟧' ≫ (shiftFunctorCompIsoId C m n
       (by rw [← add_left_inj m, add_assoc, hnm, zero_add, add_zero])).hom.app Y) := by
   have hnm' : m + n = 0 := by
-    rw [← add_left_inj m]; rw [add_assoc]; rw [hnm]; rw [zero_add]; rw [add_zero]
+    rw [← add_left_inj m, add_assoc, hnm, zero_add, add_zero]
   simp [F.shiftIso_hom_app_comp_shiftMap f n 0 hnm' a' a, shiftIso_zero_hom_app,
     shiftFunctorCompIsoId]
 
 section
 
 variable [HasZeroMorphisms C] [HasZeroMorphisms A] [F.PreservesZeroMorphisms]
-  [forall (n : M), (shiftFunctor C n).PreservesZeroMorphisms]
+  [∀ (n : M), (shiftFunctor C n).PreservesZeroMorphisms]
 
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (n : M) : (F.shift n).PreservesZeroMorphisms :=
   preservesZeroMorphisms_of_iso (F.isoShift n)
 
 @[simp]
-/--
-lemma `shiftMap_zero` / 引理 `shiftMap_zero`
-
-English:
-lemma shiftMap_zero
-  given: (X Y : C) (n a a' : M) (ha' : n + a = a')
-  proof: by
-  simp [shiftMap]
-
-中文:
-引理 shiftMap_zero
-  条件: (X Y : C) (n a a' : M) (ha' : n + a = a')
-  证明: by
-  simp [shiftMap]
-
-Depends on / 依赖: shiftMap
+/-
+**CategoryTheory.Functor.shiftMap_zero** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.Functor`。
+形式化陈述：shiftMap_zero (X Y : C) (n a a' : M) (ha' : n + a = a') : F.shiftMap (0 : 
+X ⟶ Y⟦n⟧) a a' ha' = 0
+参数：X Y : C；n a a' : M；ha' : n + a = a'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_zero`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   [inst_2 : Category…
+· 使用定理 `CategoryTheory.Functor.instPreservesZeroMorphismsShift`：∀ {C : Type u_1}
+ {A : Type u_3} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : Catego
+ryTheory.Category.{v_3, u_3} A] (F : Categor…
+· 使用定理 `CategoryTheory.Limits.zero_comp`：zero_comp [HasZeroMorphisms C] {X : C} 
+{Y Z : C} {f : Y ⟶ Z} : (0 : X ⟶ Y) ≫ f = (0 : X ⟶ Z)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shiftMap_zero (X Y : C) (n a a' : M) (ha' : n + a = a') :
     F.shiftMap (0 : X ⟶ Y⟦n⟧) a a' ha' = 0 := by
@@ -732,8 +832,12 @@ end
 section
 
 variable [Preadditive C] [Preadditive A] [F.Additive]
-  [forall (n : M), (shiftFunctor C n).Additive]
+  [∀ (n : M), (shiftFunctor C n).Additive]
 
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (n : M) : (F.shift n).Additive := additive_of_iso (F.isoShift n)
 
 end
@@ -748,50 +852,18 @@ set_option backward.isDefEq.respectTransparency false in
 with the shift by `M` and `H` is equipped with a shift sequence,
 then this is the shift sequence for `F` induced by composition. -/
 @[implicit_reducible, simps]
-/--
-Definition of `leftComp` / `leftComp` 的定义
+/-
+**CategoryTheory.Functor.ShiftSequence.leftComp** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Functor.ShiftSequence`。
+形式化陈述：leftComp [π.CommShift M] [H.ShiftSequence M] : F.ShiftSequence M where seq
+uence n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftComp
-  signature: [π.CommShift M] [H.ShiftSequence M]
-  body: π ⋙ H.shift n
-  isoZero := isoWhiskerLeft π (H.isoShiftZero M) ≪≫ e
-  shiftIso n a a' ha' :=
-    (Functor.associator _ _ _).symm ≪≫
-      isoWhiskerRight (π.commShiftIso n) _ ≪≫ Functor.associator _ _ _ ≪≫
-      isoWhiskerLeft π (H.shiftIso n a a' ha')
-  shiftIso_zero a := by
-    ext K
-    simp [← Functor.map_comp, commShiftIso_zero]
-  shiftIso_add n m a a' a'' ha' ha'':= by
-    ext K
-    dsimp
-    simp only [H.shiftIso_add_hom_app n m a a' a'' ha' ha'', assoc,
-      commShiftIso_add, CommShift.isoAdd_hom_app, ← Functor.map_comp_assoc,
-      id_comp, Iso.inv_hom_id_app, comp_obj, comp_id]
-    simp
-
-中文:
-定义 leftComp
-  签名: [π.交换Shift M] [H.ShiftSequence M]
-  定义体: π ⋙ H.shift n
-  isoZero := isoWhiskerLeft π (H.isoShiftZero M) ≪≫ e
-  shiftIso n a a' ha' :=
-    (Functor.associator _ _ _).symm ≪≫
-      isoWhiskerRight (π.commShiftIso n) _ ≪≫ Functor.associator _ _ _ ≪≫
-      isoWhiskerLeft π (H.shiftIso n a a' ha')
-  shiftIso_zero a := by
-    ext K
-    simp [← Functor.map_comp, commShiftIso_zero]
-  shiftIso_add n m a a' a'' ha' ha'':= by
-    ext K
-    dsimp
-    simp only [H.shiftIso_add_hom_app n m a a' a'' ha' ha'', assoc,
-      commShiftIso_add, CommShift.isoAdd_hom_app, ← Functor.map_comp_assoc,
-      id_comp, Iso.inv_hom_id_app, comp_obj, comp_id]
-    simp
-
-Depends on / 依赖: H.shift
+--- 原说明 ---
+Given an isomorphism `π ⋙ H ≅ F`, where `π` is a functor which commutes
+with the shift by `M` and `H` is equipped with a shift sequence,
+then this is the shift sequence for `F` induced by composition.
 -/
 def leftComp [π.CommShift M] [H.ShiftSequence M] : F.ShiftSequence M where
   sequence n := π ⋙ H.shift n
@@ -810,21 +882,10 @@ def leftComp [π.CommShift M] [H.ShiftSequence M] : F.ShiftSequence M where
       commShiftIso_add, CommShift.isoAdd_hom_app, ← Functor.map_comp_assoc,
       id_comp, Iso.inv_hom_id_app, comp_obj, comp_id]
     simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [π.CommShift
-  signature: M] [H.ShiftSequence M] : (π ⋙ H).ShiftSequence M
-  body: leftComp (Iso.refl _) _
-
-中文:
-实例 [π.交换Shift
-  签名: M] [H.ShiftSequence M] : (π ⋙ H).ShiftSequence M
-  定义体: leftComp (Iso.refl _) _
-
-Depends on / 依赖: Iso.refl, leftComp
+/-
+**CategoryTheory.Functor.ShiftSequence.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y.Functor.ShiftSequence`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [π.CommShift M] [H.ShiftSequence M] : (π ⋙ H).ShiftSequence M :=
   leftComp (Iso.refl _) _
@@ -834,3 +895,4 @@ end ShiftSequence
 end Functor
 
 end CategoryTheory
+

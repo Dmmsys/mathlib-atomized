@@ -60,45 +60,32 @@ in fact implies the universe polymorphic versions
 `OrzechProperty.injective_of_surjective_of_injective`
 and `OrzechProperty.injective_of_surjective_of_submodule`. -/
 @[mk_iff]
-/--
-Definition of `OrzechProperty` / `OrzechProperty` 的定义
+/-
+**OrzechProperty** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u) → [Semiring R] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class OrzechProperty
-  parameters: : Prop where
-  axioms and operations (1):
-    - injective_of_surjective_of_submodule' : forall {M : Type u} [AddCommMonoid M] [Module R M] [Module.Finite R M] {N : Submodule R M} (f : N ->ₗ[R] M), Surjective f -> Injective f
+--- 原说明 ---
+A ring `R` satisfies the Orzech property, if for any finitely generated `R`-modu
+le `M`,
+any surjective homomorphism `f : N → M` from a submodule `N` of `M` to `M` is in
+jective.
 
-中文:
-类 OrzechProperty
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - injective_of_surjective_of_submodule' : 对任意 {M : 类型u} [加法交换幺半群 M] [模 R M] [模.有限 R M] {N : 子模 R M} (f : N ->ₗ[R] M), 满射 f -> 单射 f
+NOTE: In the definition we need to assume that `M` has the same universe level a
+s `R`, but it
+in fact implies the universe polymorphic versions
+`OrzechProperty.injective_of_surjective_of_injective`
+and `OrzechProperty.injective_of_surjective_of_submodule`.
 -/
 class OrzechProperty : Prop where
-  injective_of_surjective_of_submodule' : forall {M : Type u} [AddCommMonoid M] [Module R M]
-    [Module.Finite R M] {N : Submodule R M} (f : N ->ₗ[R] M), Surjective f -> Injective f
+  injective_of_surjective_of_submodule' : ∀ {M : Type u} [AddCommMonoid M] [Module R M]
+    [Module.Finite R M] {N : Submodule R M} (f : N →ₗ[R] M), Surjective f → Injective f
 
 namespace OrzechProperty
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Finite
-  signature: R] : OrzechProperty R where
-  body: have : Finite M := Module.finite_of_finite R
-    have ⟨_g, hg⟩ := N.subtype_injective.hasLeftInverse
-    .of_comp (hg.surjective.comp hf).bijective_of_finite.1
-
-中文:
-实例 [有限
-  签名: R] : OrzechProperty R where
-  定义体: have : Finite M := Module.finite_of_finite R
-    have ⟨_g, hg⟩ := N.subtype_injective.hasLeftInverse
-    .of_comp (hg.surjective.comp hf).bijective_of_finite.1
-
-Depends on / 依赖: Finite, Module, Module.finite_of_finite, N.subtype_injective.hasLeftInverse, bijective_of_finite, finite_of_finite, hasLeftInverse, hg.surjective.comp, of_comp, subtype_injective, surjective
+/-
+**OrzechProperty.** 是 Mathlib 中的一个实例，位于命名空间 `OrzechProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Finite R] : OrzechProperty R where
   injective_of_surjective_of_submodule' {M} _ _ _ {N} _f hf :=
@@ -109,45 +96,35 @@ instance [Finite R] : OrzechProperty R where
 variable {R}
 
 variable [OrzechProperty R] {M : Type v} [AddCommMonoid M] [Module R M] [Module.Finite R M]
-
-/--
-theorem `injective_of_surjective_of_injective` / 定理 `injective_of_surjective_of_injective`
-
-English:
-theorem injective_of_surjective_of_injective
-  proof: by
-  obtain ⟨n, g, hg⟩ := Module.Finite.exists_fin' R M
-  have := small_of_surjective hg
-  let := Equiv.addCommMonoid (equivShrink M).symm
-  let := Equiv.module R (equivShrink M).symm
-  let j : Shrink.{u} M ≃ₗ[R] M := Equiv.linearEquiv R (equivShrink M).symm
-  have := Module.Finite.equiv j.symm
-  let i' := j.symm.toLinearMap ∘ₗ i
-  replace hi : Injective i' := by simpa [i'] using hi
-  let f' := j.symm.toLinearMap ∘ₗ f ∘ₗ (LinearEquiv.ofInjective i' hi).symm.toLinearMap
-  replace hf : Surjective f' := by simpa [f'] using hf
-  simpa [f'] using injective_of_surjective_of_submodule' f' hf
-
-中文:
-定理 injective_of_surjective_of_injective
-  证明: by
-  obtain ⟨n, g, hg⟩ := Module.Finite.exists_fin' R M
-  have := small_of_surjective hg
-  let := Equiv.addCommMonoid (equivShrink M).symm
-  let := Equiv.module R (equivShrink M).symm
-  let j : Shrink.{u} M ≃ₗ[R] M := Equiv.linearEquiv R (equivShrink M).symm
-  have := Module.Finite.equiv j.symm
-  let i' := j.symm.toLinearMap ∘ₗ i
-  replace hi : Injective i' := by simpa [i'] using hi
-  let f' := j.symm.toLinearMap ∘ₗ f ∘ₗ (LinearEquiv.ofInjective i' hi).symm.toLinearMap
-  replace hf : Surjective f' := by simpa [f'] using hf
-  simpa [f'] using injective_of_surjective_of_submodule' f' hf
-
-Depends on / 依赖: Equiv.addCommMonoid, Equiv.linearEquiv, Equiv.module, Finite, Injective, LinearEquiv, LinearEquiv.ofInjective, Module, Module.Finite.equiv, Module.Finite.exists_fin, Shrink, Surjective, addCommMonoid, equivShrink, exists_fin, j.symm, j.symm.toLinearMap, linearEquiv, module, ofInjective
+/-
+**OrzechProperty.injective_of_surjective_of_injective** 是 Mathlib 中的一个定理，位于命名空间 
+`OrzechProperty`。
+形式化陈述：injective_of_surjective_of_injective {N : Type w} [AddCommMonoid N] [Modul
+e R N] (i f : N ->ₗ[R] M) (hi : Injective i) (hf : Surjective f) : Injective f
+参数：i f : N ->ₗ[R] M；hi : Injective i；hf : Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Module.Finite.exists_fin'`：exists_fin' [Module.Finite R M] : exists (n :
+ Nat) (f : (Fin n -> R) ->ₗ[R] M), Surjective f
+· 使用定理 `small_of_surjective`：small_of_surjective {α : Type v} {β : Type w} [Smal
+l.{u} α] {f : α -> β} (hf : Function.Surjective f) : Small.{u} β
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Module.Finite.equiv`：equiv [Module.Finite R M] (e : M ≃ₗ[R] N) : Module.
+Finite R N
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `RingHomSurjective.invPair`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst : Sem
+iring R₁] [inst_1 : Semiring R₂] {σ₁ : R₁ →+* R₂} {σ₂ : R₂ →+* R₁}   [RingHomInv
+Pair σ₁ σ₂], Ri…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `OrzechProperty.injective_of_surjective_of_submodule'`：∀ {R : Type u} {in
+st : Semiring R} [self : OrzechProperty R] {M : Type u} [inst_1 : AddCommMonoid 
+M]   [inst_2 : _root_.Module R M] [Module.…
 -/
 theorem injective_of_surjective_of_injective
     {N : Type w} [AddCommMonoid N] [Module R N]
-    (i f : N ->ₗ[R] M) (hi : Injective i) (hf : Surjective f) : Injective f := by
+    (i f : N →ₗ[R] M) (hi : Injective i) (hf : Surjective f) : Injective f := by
   obtain ⟨n, g, hg⟩ := Module.Finite.exists_fin' R M
   have := small_of_surjective hg
   let := Equiv.addCommMonoid (equivShrink M).symm
@@ -159,75 +136,72 @@ theorem injective_of_surjective_of_injective
   let f' := j.symm.toLinearMap ∘ₗ f ∘ₗ (LinearEquiv.ofInjective i' hi).symm.toLinearMap
   replace hf : Surjective f' := by simpa [f'] using hf
   simpa [f'] using injective_of_surjective_of_submodule' f' hf
-
-/--
-theorem `bijective_of_surjective_of_injective` / 定理 `bijective_of_surjective_of_injective`
-
-English:
-theorem bijective_of_surjective_of_injective
-  proof: ⟨OrzechProperty.injective_of_surjective_of_injective _ _ hi hf, hf⟩
-
-中文:
-定理 bijective_of_surjective_of_injective
-  证明: ⟨OrzechProperty.injective_of_surjective_of_injective _ _ hi hf, hf⟩
-
-Depends on / 依赖: OrzechProperty, OrzechProperty.injective_of_surjective_of_injective, injective_of_surjective_of_injective
+/-
+**OrzechProperty.bijective_of_surjective_of_injective** 是 Mathlib 中的一个定理，位于命名空间 
+`OrzechProperty`。
+形式化陈述：bijective_of_surjective_of_injective {N : Type w} [AddCommMonoid N] [Modul
+e R N] (i f : N ->ₗ[R] M) (hi : Function.Injective i) (hf : Function.Surjective 
+f) : Function.Bijective f
+参数：i f : N ->ₗ[R] M；hi : Function.Injective i；hf : Function.Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrzechProperty.injective_of_surjective_of_injective`：injective_of_surjec
+tive_of_injective {N : Type w} [AddCommMonoid N] [Module R N] (i f : N ->ₗ[R] M)
+ (hi : Injective i) (hf : Surjective f) :…
 -/
 theorem bijective_of_surjective_of_injective
     {N : Type w} [AddCommMonoid N] [Module R N]
-    (i f : N ->ₗ[R] M) (hi : Function.Injective i)
+    (i f : N →ₗ[R] M) (hi : Function.Injective i)
     (hf : Function.Surjective f) : Function.Bijective f :=
   ⟨OrzechProperty.injective_of_surjective_of_injective _ _ hi hf, hf⟩
-
-/--
-theorem `injective_of_surjective_of_submodule` / 定理 `injective_of_surjective_of_submodule`
-
-English:
-theorem injective_of_surjective_of_submodule
-  proof: injective_of_surjective_of_injective N.subtype f N.injective_subtype hf
-
-中文:
-定理 injective_of_surjective_of_submodule
-  证明: injective_of_surjective_of_injective N.subtype f N.injective_subtype hf
-
-Depends on / 依赖: N.injective_subtype, N.subtype, injective_of_surjective_of_injective, injective_subtype, subtype
+/-
+**OrzechProperty.injective_of_surjective_of_submodule** 是 Mathlib 中的一个定理，位于命名空间 
+`OrzechProperty`。
+形式化陈述：injective_of_surjective_of_submodule {N : Submodule R M} (f : N ->ₗ[R] M) 
+(hf : Surjective f) : Injective f
+参数：f : N ->ₗ[R] M；hf : Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrzechProperty.injective_of_surjective_of_injective`：injective_of_surjec
+tive_of_injective {N : Type w} [AddCommMonoid N] [Module R N] (i f : N ->ₗ[R] M)
+ (hi : Injective i) (hf : Surjective f) :…
+· 使用定理 `Submodule.injective_subtype`：injective_subtype : Injective p.subtype
 -/
 theorem injective_of_surjective_of_submodule
-    {N : Submodule R M} (f : N ->ₗ[R] M) (hf : Surjective f) : Injective f :=
+    {N : Submodule R M} (f : N →ₗ[R] M) (hf : Surjective f) : Injective f :=
   injective_of_surjective_of_injective N.subtype f N.injective_subtype hf
-
-/--
-theorem `injective_of_surjective_endomorphism` / 定理 `injective_of_surjective_endomorphism`
-
-English:
-theorem injective_of_surjective_endomorphism
-  proof: injective_of_surjective_of_injective _ f (LinearEquiv.refl _ _).injective hf
-
-中文:
-定理 injective_of_surjective_endomorphism
-  证明: injective_of_surjective_of_injective _ f (LinearEquiv.refl _ _).injective hf
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.refl, injective, injective_of_surjective_of_injective
+/-
+**OrzechProperty.injective_of_surjective_endomorphism** 是 Mathlib 中的一个定理，位于命名空间 
+`OrzechProperty`。
+形式化陈述：injective_of_surjective_endomorphism (f : M ->ₗ[R] M) (hf : Surjective f) 
+: Injective f
+参数：f : M ->ₗ[R] M；hf : Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrzechProperty.injective_of_surjective_of_injective`：injective_of_surjec
+tive_of_injective {N : Type w} [AddCommMonoid N] [Module R N] (i f : N ->ₗ[R] M)
+ (hi : Injective i) (hf : Surjective f) :…
+· 使用定理 `LinearEquiv.injective`：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {M
+₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoi
+d M] [inst_…
 -/
 theorem injective_of_surjective_endomorphism
-    (f : M ->ₗ[R] M) (hf : Surjective f) : Injective f :=
+    (f : M →ₗ[R] M) (hf : Surjective f) : Injective f :=
   injective_of_surjective_of_injective _ f (LinearEquiv.refl _ _).injective hf
-
-/--
-theorem `bijective_of_surjective_endomorphism` / 定理 `bijective_of_surjective_endomorphism`
-
-English:
-theorem bijective_of_surjective_endomorphism
-  proof: ⟨injective_of_surjective_endomorphism f hf, hf⟩
-
-中文:
-定理 bijective_of_surjective_endomorphism
-  证明: ⟨injective_of_surjective_endomorphism f hf, hf⟩
-
-Depends on / 依赖: injective_of_surjective_endomorphism
+/-
+**OrzechProperty.bijective_of_surjective_endomorphism** 是 Mathlib 中的一个定理，位于命名空间 
+`OrzechProperty`。
+形式化陈述：bijective_of_surjective_endomorphism (f : M ->ₗ[R] M) (hf : Surjective f) 
+: Bijective f
+参数：f : M ->ₗ[R] M；hf : Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrzechProperty.injective_of_surjective_endomorphism`：injective_of_surjec
+tive_endomorphism (f : M ->ₗ[R] M) (hf : Surjective f) : Injective f
 -/
 theorem bijective_of_surjective_endomorphism
-    (f : M ->ₗ[R] M) (hf : Surjective f) : Bijective f :=
+    (f : M →ₗ[R] M) (hf : Surjective f) : Bijective f :=
   ⟨injective_of_surjective_endomorphism f hf, hf⟩
 
 end OrzechProperty
+

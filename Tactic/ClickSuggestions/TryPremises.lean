@@ -17,28 +17,21 @@ namespace Mathlib.Tactic.ClickSuggestions
 
 open Lean ProofWidgets Jsx
 
-/--
-Inductive type `Candidates` / 归纳类型 `Candidates`
+/-- An array of candidate lemmas, corresponding to a single section. -/
+/-
+**Mathlib.Tactic.ClickSuggestions.Candidates** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathli
+b.Tactic.ClickSuggestions`。
+形式化陈述：Candidates where /-- A `rw` suggestion section. -/ | rw (i : RwInfo) (arr 
+: Array RwLemma) /-- A `grw` suggestion section. -/ | grw (i : GrwInfo) (arr : A
+rray GrwLemma) /-- An `apply` suggestion section. -/ | app (arr : Array ApplyLem
+ma) /-- An `apply at` suggestion section. -/ | appAt (arr : Array ApplyAtLemma) 
+ local instance {α β cmp} [Append β] : Append (Std.TreeMap α β cmp)
+参数：i : RwInfo；arr : Array RwLemma；i : GrwInfo；arr : Array GrwLemma；arr : Array A
+pplyLemma；arr : Array ApplyAtLemma。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Candidates
-  parameters: where
-  constructors (4):
-    - rw: (i : RwInfo) (arr : Array RwLemma)
-    - grw: (i : GrwInfo) (arr : Array GrwLemma)
-    - app: (arr : Array ApplyLemma)
-    - appAt: (arr : Array ApplyAtLemma)
-
-中文:
-归纳类型 Candidates
-  参数: where
-  构造子 (4 个):
-    - rw: (i : RwInfo) (arr : 数组 RwLemma)
-    - grw: (i : GrwInfo) (arr : 数组 GrwLemma)
-    - app: (arr : 数组 ApplyLemma)
-    - appAt: (arr : 数组 ApplyAtLemma)
-
-Depends on / 依赖: mergeWith
+--- 原说明 ---
+An array of candidate lemmas, corresponding to a single section.
 -/
 inductive Candidates where
   /-- A `rw` suggestion section. -/
@@ -51,90 +44,38 @@ inductive Candidates where
   | appAt (arr : Array ApplyAtLemma)
 
 local instance {α β cmp} [Append β] : Append (Std.TreeMap α β cmp) :=
-  ⟨.mergeWith fun _ => (· ++ ·)⟩
+  ⟨.mergeWith fun _ ↦ (· ++ ·)⟩
 
 open Meta.RefinedDiscrTree in
 /-- Combine the results of looking up in various discrimination trees into an Array
 of sections of candidates, where each section corresponds to one kind of match with the
 discrimination tree. -/
 @[specialize]
-/--
-Definition of `getCandidatesAux` / `getCandidatesAux` 的定义
+/-
+**Mathlib.Tactic.ClickSuggestions.getCandidatesAux** 是 Mathlib 中的一个定义，位于命名空间 `Ma
+thlib.Tactic.ClickSuggestions`。
+形式化陈述：getCandidatesAux (rootExpr subExpr : Expr) (gpos : Array GrwPos) (rwKind :
+ RwKind) (rflTarget? : Option Expr) (reportProgress : String -> BaseIO Unit) (rw
+ : Expr -> MetaM (MatchResult RwLemma)) (grw : Expr -> MetaM (MatchResult GrwLem
+ma)) (app : Expr -> MetaM (MatchResult ApplyLemma)) (appAt : Expr -> MetaM (Matc
+hResult ApplyAtLemma)) : ClickSuggestionsM (Array Candidates)
+参数：rootExpr subExpr : Expr；gpos : Array GrwPos；rwKind : RwKind；rflTarget? : Opti
+on Expr；reportProgress : String -> BaseIO Unit；rw : Expr -> MetaM (MatchResult R
+wLemma)；grw : Expr -> MetaM (MatchResult GrwLemma)；app : Expr -> MetaM (MatchRes
+ult ApplyLemma)；appAt : Expr -> MetaM (MatchResult ApplyAtLemma)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getCandidatesAux
-  signature: (rootExpr subExpr : Expr) (gpos : Array GrwPos) (rwKind : RwKind)
-  body: do
-  let mut cands : Std.TreeMap Nat (Array Candidates) := {}
-  /- The order in which we show the suggestions for the same pattern for different tactics
-  depends on the following insertion order.
-  We choose the order `grw` => `rw` => `apply(at)`. -/
-  if !gpos.isEmpty then
-    reportProgress "grw"
-    cands := cands ++ (← grw subExpr).elts.map fun _ => (·.map <|
-      .grw { rootExpr, subExpr, rwKind, gpos, rflTarget? })
-  reportProgress "rw"
-  let mut rwExpr := subExpr
-  let mut rwPos := (← read).pos
-  repeat
-    /- TODO: we are passing the same `rwKind` to each of these nested applications, but it is
-    certainly possible that the correct `rwKind` is not the same for all of these.
-    Though this edge case is probably very rare. -/
-    cands := cands ++ (← rw rwExpr).elts.map fun _ => (·.map (.rw <|
-      { rootExpr, subExpr := rwExpr, pos := rwPos, rwKind, rflTarget? }))
-    match rwExpr with
-    | .app f _ =>
-      rwExpr := f
-      rwPos := rwPos.pushAppFn
-    | _ => break
-  if (← read).pos == .root then
-    if (← read).hyp?.isSome then
-      reportProgress "apply at"
-      cands := cands ++ (← appAt rootExpr).elts.map fun _ => (·.map .appAt)
-    else
-      reportProgress "apply"
-      cands := cands ++ (← app rootExpr).elts.map fun _ => (·.map .app)
-  return cands.foldr (init := #[]) fun _ val acc => acc ++ val
-
-中文:
-定义 getCandidatesAux
-  签名: (rootExpr subExpr : Expr) (gpos : 数组 GrwPos) (rwKind : RwKind)
-  定义体: do
-  let mut cands : Std.TreeMap Nat (Array Candidates) := {}
-  /- The order in which we show the suggestions for the same pattern for different tactics
-  depends on the following insertion order.
-  We choose the order `grw` => `rw` => `apply(at)`. -/
-  if !gpos.isEmpty then
-    reportProgress "grw"
-    cands := cands ++ (← grw subExpr).elts.map fun _ => (·.map <|
-      .grw { rootExpr, subExpr, rwKind, gpos, rflTarget? })
-  reportProgress "rw"
-  let mut rwExpr := subExpr
-  let mut rwPos := (← read).pos
-  repeat
-    /- TODO: we are passing the same `rwKind` to each of these nested applications, but it is
-    certainly possible that the correct `rwKind` is not the same for all of these.
-    Though this edge case is probably very rare. -/
-    cands := cands ++ (← rw rwExpr).elts.map fun _ => (·.map (.rw <|
-      { rootExpr, subExpr := rwExpr, pos := rwPos, rwKind, rflTarget? }))
-    match rwExpr with
-    | .app f _ =>
-      rwExpr := f
-      rwPos := rwPos.pushAppFn
-    | _ => break
-  if (← read).pos == .root then
-    if (← read).hyp?.isSome then
-      reportProgress "apply at"
-      cands := cands ++ (← appAt rootExpr).elts.map fun _ => (·.map .appAt)
-    else
-      reportProgress "apply"
-      cands := cands ++ (← app rootExpr).elts.map fun _ => (·.map .app)
-  return cands.foldr (init := #[]) fun _ val acc => acc ++ val
+--- 原说明 ---
+Combine the results of looking up in various discrimination trees into an Array
+of sections of candidates, where each section corresponds to one kind of match w
+ith the
+discrimination tree.
 -/
 def getCandidatesAux (rootExpr subExpr : Expr) (gpos : Array GrwPos) (rwKind : RwKind)
-    (rflTarget? : Option Expr) (reportProgress : String -> BaseIO Unit)
-    (rw : Expr -> MetaM (MatchResult RwLemma)) (grw : Expr -> MetaM (MatchResult GrwLemma))
-    (app : Expr -> MetaM (MatchResult ApplyLemma)) (appAt : Expr -> MetaM (MatchResult ApplyAtLemma))
+    (rflTarget? : Option Expr) (reportProgress : String → BaseIO Unit)
+    (rw : Expr → MetaM (MatchResult RwLemma)) (grw : Expr → MetaM (MatchResult GrwLemma))
+    (app : Expr → MetaM (MatchResult ApplyLemma)) (appAt : Expr → MetaM (MatchResult ApplyAtLemma))
     : ClickSuggestionsM (Array Candidates) := do
   let mut cands : Std.TreeMap Nat (Array Candidates) := {}
   /- The order in which we show the suggestions for the same pattern for different tactics
@@ -142,7 +83,7 @@ def getCandidatesAux (rootExpr subExpr : Expr) (gpos : Array GrwPos) (rwKind : R
   We choose the order `grw` => `rw` => `apply(at)`. -/
   if !gpos.isEmpty then
     reportProgress "grw"
-    cands := cands ++ (← grw subExpr).elts.map fun _ => (·.map <|
+    cands := cands ++ (← grw subExpr).elts.map fun _ ↦ (·.map <|
       .grw { rootExpr, subExpr, rwKind, gpos, rflTarget? })
   reportProgress "rw"
   let mut rwExpr := subExpr
@@ -151,7 +92,7 @@ def getCandidatesAux (rootExpr subExpr : Expr) (gpos : Array GrwPos) (rwKind : R
     /- TODO: we are passing the same `rwKind` to each of these nested applications, but it is
     certainly possible that the correct `rwKind` is not the same for all of these.
     Though this edge case is probably very rare. -/
-    cands := cands ++ (← rw rwExpr).elts.map fun _ => (·.map (.rw <|
+    cands := cands ++ (← rw rwExpr).elts.map fun _ ↦ (·.map (.rw <|
       { rootExpr, subExpr := rwExpr, pos := rwPos, rwKind, rflTarget? }))
     match rwExpr with
     | .app f _ =>
@@ -161,63 +102,56 @@ def getCandidatesAux (rootExpr subExpr : Expr) (gpos : Array GrwPos) (rwKind : R
   if (← read).pos == .root then
     if (← read).hyp?.isSome then
       reportProgress "apply at"
-      cands := cands ++ (← appAt rootExpr).elts.map fun _ => (·.map .appAt)
+      cands := cands ++ (← appAt rootExpr).elts.map fun _ ↦ (·.map .appAt)
     else
       reportProgress "apply"
-      cands := cands ++ (← app rootExpr).elts.map fun _ => (·.map .app)
-  return cands.foldr (init := #[]) fun _ val acc => acc ++ val
+      cands := cands ++ (← app rootExpr).elts.map fun _ ↦ (·.map .app)
+  return cands.foldr (init := #[]) fun _ val acc ↦ acc ++ val
 
 /-- Get the candidate theorems from imported files. -/
 @[specialize]
-/--
-Definition of `getImportCandidates` / `getImportCandidates` 的定义
+/-
+**Mathlib.Tactic.ClickSuggestions.getImportCandidates** 是 Mathlib 中的一个定义，位于命名空间 
+`Mathlib.Tactic.ClickSuggestions`。
+形式化陈述：getImportCandidates (rootExpr subExpr : Expr) (gpos : Array GrwPos) (rwKin
+d : RwKind) (rflTarget? : Option Expr) (reportProgress : String -> BaseIO Unit) 
+: ClickSuggestionsM (Array Candidates)
+参数：rootExpr subExpr : Expr；gpos : Array GrwPos；rwKind : RwKind；rflTarget? : Opti
+on Expr；reportProgress : String -> BaseIO Unit。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getImportCandidates
-  signature: (rootExpr subExpr : Expr) (gpos : Array GrwPos) (rwKind : RwKind)
-  body: getCandidatesAux rootExpr subExpr gpos rwKind rflTarget? reportProgress
-    (getImportMatches rwRef) (getImportMatches grwRef)
-    (getImportMatches appRef) (getImportMatches appAtRef)
-
-中文:
-定义 getImportCandidates
-  签名: (rootExpr subExpr : Expr) (gpos : 数组 GrwPos) (rwKind : RwKind)
-  定义体: getCandidatesAux rootExpr subExpr gpos rwKind rflTarget? reportProgress
-    (getImportMatches rwRef) (getImportMatches grwRef)
-    (getImportMatches appRef) (getImportMatches appAtRef)
-
-Depends on / 依赖: appAtRef, appRef, getCandidatesAux, getImportMatches, grwRef, reportProgress, rflTarget, rootExpr, rwKind, subExpr
+--- 原说明 ---
+Get the candidate theorems from imported files.
 -/
 def getImportCandidates (rootExpr subExpr : Expr) (gpos : Array GrwPos) (rwKind : RwKind)
-    (rflTarget? : Option Expr) (reportProgress : String -> BaseIO Unit) :
+    (rflTarget? : Option Expr) (reportProgress : String → BaseIO Unit) :
     ClickSuggestionsM (Array Candidates) :=
   getCandidatesAux rootExpr subExpr gpos rwKind rflTarget? reportProgress
     (getImportMatches rwRef) (getImportMatches grwRef)
     (getImportMatches appRef) (getImportMatches appAtRef)
 
-/--
-Definition of `getCandidates` / `getCandidates` 的定义
+/-- Get the candidate theorems from `pres`.
+Used for current file declarations and local hypotheses -/
+/-
+**Mathlib.Tactic.ClickSuggestions.getCandidates** 是 Mathlib 中的一个定义，位于命名空间 `Mathl
+ib.Tactic.ClickSuggestions`。
+形式化陈述：getCandidates (rootExpr subExpr : Expr) (gpos : Array GrwPos) (rwKind : Rw
+Kind) (rflTarget? : Option Expr) (pres : PreDiscrTrees) : ClickSuggestionsM (Arr
+ay Candidates)
+参数：rootExpr subExpr : Expr；gpos : Array GrwPos；rwKind : RwKind；rflTarget? : Opti
+on Expr；pres : PreDiscrTrees。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getCandidates
-  signature: (rootExpr subExpr : Expr) (gpos : Array GrwPos)
-  body: getCandidatesAux rootExpr subExpr gpos rwKind rflTarget? (fun _ => pure ())
-    (getMatches pres.rw.toRefinedDiscrTree) (getMatches pres.grw.toRefinedDiscrTree)
-    (getMatches pres.app.toRefinedDiscrTree) (getMatches pres.appAt.toRefinedDiscrTree)
-
-中文:
-定义 getCandidates
-  签名: (rootExpr subExpr : Expr) (gpos : 数组 GrwPos)
-  定义体: getCandidatesAux rootExpr subExpr gpos rwKind rflTarget? (fun _ => pure ())
-    (getMatches pres.rw.toRefinedDiscrTree) (getMatches pres.grw.toRefinedDiscrTree)
-    (getMatches pres.app.toRefinedDiscrTree) (getMatches pres.appAt.toRefinedDiscrTree)
-
-Depends on / 依赖: getCandidatesAux, getMatches, pres.app.toRefinedDiscrTree, pres.appAt.toRefinedDiscrTree, pres.grw.toRefinedDiscrTree, pres.rw.toRefinedDiscrTree, rflTarget, rootExpr, rwKind, subExpr, toRefinedDiscrTree
+--- 原说明 ---
+Get the candidate theorems from `pres`.
+Used for current file declarations and local hypotheses
 -/
 def getCandidates (rootExpr subExpr : Expr) (gpos : Array GrwPos)
     (rwKind : RwKind) (rflTarget? : Option Expr) (pres : PreDiscrTrees) :
     ClickSuggestionsM (Array Candidates) :=
-  getCandidatesAux rootExpr subExpr gpos rwKind rflTarget? (fun _ => pure ())
+  getCandidatesAux rootExpr subExpr gpos rwKind rflTarget? (fun _ ↦ pure ())
     (getMatches pres.rw.toRefinedDiscrTree) (getMatches pres.grw.toRefinedDiscrTree)
     (getMatches pres.app.toRefinedDiscrTree) (getMatches pres.appAt.toRefinedDiscrTree)
 
@@ -225,49 +159,23 @@ def getCandidates (rootExpr subExpr : Expr) (gpos : Array GrwPos)
 
 TODO?: use Lean's `Mutex` to avoid the polling loop? -/
 @[specialize]
-/--
-Definition of `foldTasksM` / `foldTasksM` 的定义
+/-
+**Mathlib.Tactic.ClickSuggestions.foldTasksM** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.ClickSuggestions`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition foldTasksM
-  signature: {α β} (tasks : Array (Task β)) (init : α) (f : α -> β -> MetaM α)
-  body: do
-  if tasks.isEmpty then return init
-  Core.checkInterrupted
-  if ← (tasks.anyM IO.hasFinished : BaseIO _) then
-    let (a, tasks) ← tasks.foldlM (init := (init, #[])) fun (a, tasks) task => do
-      if ← IO.hasFinished task then
-        return (← f a task.get, tasks)
-      else
-        return (a, tasks.push task)
-    foldTasksM tasks a f
-  else
-    IO.sleep 10
-    foldTasksM tasks init f
+--- 原说明 ---
+Run `f` on the results of all tasks in the array of tasks, in an arbitrary order
+.
 
-中文:
-定义 foldTasksM
-  签名: {α β} (tasks : 数组 (Task β)) (init : α) (f : α -> β -> MetaM α)
-  定义体: do
-  if tasks.isEmpty then return init
-  Core.checkInterrupted
-  if ← (tasks.anyM IO.hasFinished : BaseIO _) then
-    let (a, tasks) ← tasks.foldlM (init := (init, #[])) fun (a, tasks) task => do
-      if ← IO.hasFinished task then
-        return (← f a task.get, tasks)
-      else
-        return (a, tasks.push task)
-    foldTasksM tasks a f
-  else
-    IO.sleep 10
-    foldTasksM tasks init f
+TODO?: use Lean's `Mutex` to avoid the polling loop?
 -/
-private partial def foldTasksM {α β} (tasks : Array (Task β)) (init : α) (f : α -> β -> MetaM α) :
+private partial def foldTasksM {α β} (tasks : Array (Task β)) (init : α) (f : α → β → MetaM α) :
     MetaM α := do
   if tasks.isEmpty then return init
   Core.checkInterrupted
   if ← (tasks.anyM IO.hasFinished : BaseIO _) then
-    let (a, tasks) ← tasks.foldlM (init := (init, #[])) fun (a, tasks) task => do
+    let (a, tasks) ← tasks.foldlM (init := (init, #[])) fun (a, tasks) task ↦ do
       if ← IO.hasFinished task then
         return (← f a task.get, tasks)
       else
@@ -277,31 +185,31 @@ private partial def foldTasksM {α β} (tasks : Array (Task β)) (init : α) (f 
     IO.sleep 10
     foldTasksM tasks init f
 
-/--
-Definition of `runSuggestions` / `runSuggestions` 的定义
+/-- Spawn tasks for the given candidate premises and
+return an HTML that shows the incoming results -/
+/-
+**Mathlib.Tactic.ClickSuggestions.runSuggestions** 是 Mathlib 中的一个定义，位于命名空间 `Math
+lib.Tactic.ClickSuggestions`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition runSuggestions
-  signature: (kind : SectionKind)
-
-中文:
-定义 runSuggestions
-  签名: (kind : SectionKind)
+--- 原说明 ---
+Spawn tasks for the given candidate premises and
+return an HTML that shows the incoming results
 -/
-def runSuggestions (kind : SectionKind) : Candidates -> ClickSuggestionsM Html
+def runSuggestions (kind : SectionKind) : Candidates → ClickSuggestionsM Html
   | .rw info arr => go "rw" (·.isDuplicate ·) arr (·.name) (·.try info)
   | .grw info arr => go "grw" (·.isDuplicate ·) arr (·.name) (·.try info)
   | .app arr => go "apply" (·.isDuplicate ·) arr (·.name) (·.try)
   | .appAt arr => go "apply at" (·.isDuplicate ·) arr (·.name) (·.try)
 where
   @[specialize]
-  go {α β} [Ord α] [Inhabited α] (tactic : String) (isDup : α -> α -> MetaM Bool)
-      (candidates : Array β) (premise : β -> Premise)
-      (mkSuggestion : β -> ClickSuggestionsM (Result α)) : ClickSuggestionsM Html := do
+  go {α β} [Ord α] [Inhabited α] (tactic : String) (isDup : α → α → MetaM Bool)
+      (candidates : Array β) (premise : β → Premise)
+      (mkSuggestion : β → ClickSuggestionsM (Result α)) : ClickSuggestionsM Html := do
     let (html, token) ← mkRefreshComponent
-    let tasks ← candidates.mapM fun lem => spawnTask (premise lem) (mkSuggestion lem)
-discard BaseIO.asTask (prio := .dedicated) (← saveCtxM <| trackingComputation tactic do
-discard foldTasksM tasks ({} : SectionState α) fun s => fun
+    let tasks ← candidates.mapM fun lem ↦ spawnTask (premise lem) (mkSuggestion lem)
+    discard <| BaseIO.asTask (prio := .dedicated) <| (← saveCtxM <| trackingComputation tactic do
+      discard <| foldTasksM tasks ({} : SectionState α) fun s ↦ fun
         | .ok (some res) => do
           let s ← s.insertResult res isDup
           token.updateLazy (renderSection tactic kind s)
@@ -311,7 +219,7 @@ discard foldTasksM tasks ({} : SectionState α) fun s => fun
           let s := { s with errors := s.errors.push e }
           token.updateLazy (renderSection tactic kind s)
           return s
-      ).catchExceptions fun ex => do
+      ).catchExceptions fun ex ↦ do
         if let .internal ex := ex then
           if ex == interruptExceptionId then
             return
@@ -319,42 +227,19 @@ discard foldTasksM tasks ({} : SectionState α) fun s => fun
     return html
 
 open Meta in
-/--
-Definition of `findRflTarget?` / `findRflTarget?` 的定义
+/-- Return the expression that we need to rewrite into to solving the goal with `rfl`. -/
+/-
+**Mathlib.Tactic.ClickSuggestions.findRflTarget** 是 Mathlib 中的一个定义，位于命名空间 `Mathl
+ib.Tactic.ClickSuggestions`。
+形式化陈述：findRflTarget? (root subExpr : Expr) (rwKind : RwKind) : ClickSuggestionsM
+ (Option Expr)
+参数：root subExpr : Expr；rwKind : RwKind。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition findRflTarget?
-  signature: (root subExpr : Expr) (rwKind : RwKind)
-  body: do
-  if (← read).hyp?.isSome then return none
-  -- If the expression has bound variables, we suggest `simp_rw` instead of `rw`,
-  -- which does not attempt to close the goal with `rfl`.
-  if rwKind matches .hasBVars then return none
-  let pos := (← read).pos
-  let subExpr' ← mkFreshExprMVar (← inferType subExpr)
-  let root' ← replaceSubexpr (fun _ => pure subExpr') pos root
-  try
-    (← mkFreshExprMVar root').mvarId!.applyRfl
-    return some (← instantiateMVars subExpr')
-  catch _ =>
-    return none
-
-中文:
-定义 findRflTarget?
-  签名: (root subExpr : Expr) (rwKind : RwKind)
-  定义体: do
-  if (← read).hyp?.isSome then return none
-  -- If the expression has bound variables, we suggest `simp_rw` instead of `rw`,
-  -- which does not attempt to close the goal with `rfl`.
-  if rwKind matches .hasBVars then return none
-  let pos := (← read).pos
-  let subExpr' ← mkFreshExprMVar (← inferType subExpr)
-  let root' ← replaceSubexpr (fun _ => pure subExpr') pos root
-  try
-    (← mkFreshExprMVar root').mvarId!.applyRfl
-    return some (← instantiateMVars subExpr')
-  catch _ =>
-    return none
+--- 原说明 ---
+Return the expression that we need to rewrite into to solving the goal with `rfl
+`.
 -/
 def findRflTarget? (root subExpr : Expr) (rwKind : RwKind) : ClickSuggestionsM (Option Expr) := do
   if (← read).hyp?.isSome then return none
@@ -363,7 +248,7 @@ def findRflTarget? (root subExpr : Expr) (rwKind : RwKind) : ClickSuggestionsM (
   if rwKind matches .hasBVars then return none
   let pos := (← read).pos
   let subExpr' ← mkFreshExprMVar (← inferType subExpr)
-  let root' ← replaceSubexpr (fun _ => pure subExpr') pos root
+  let root' ← replaceSubexpr (fun _ ↦ pure subExpr') pos root
   try
     (← mkFreshExprMVar root').mvarId!.applyRfl
     return some (← instantiateMVars subExpr')
@@ -380,7 +265,7 @@ public def librarySearchSuggestions (rootExpr subExpr : Expr) (lctx : LocalConte
   let pos := (← read).pos
   let fvarId? := (← read).hyp?
   let gpos ← getGrwPos? rootExpr subExpr pos fvarId?.isSome
-let rflTarget? ← Meta.withLCtx lctx {} findRflTarget? rootExpr subExpr rwKind
+  let rflTarget? ← Meta.withLCtx lctx {} <| findRflTarget? rootExpr subExpr rwKind
   let choice : Choice := {
     rw := true
     grw := !gpos.isEmpty
@@ -420,8 +305,9 @@ let rflTarget? ← Meta.withLCtx lctx {} findRflTarget? rootExpr subExpr rwKind
   for cand in ← getImportCandidates rootExpr subExpr gpos rwKind rflTarget? reportProgress do
     sections := sections.push (← runSuggestions .imported cand)
 
-token.update .element "div" #[] sections
+  token.update <| .element "div" #[] sections
   unless sections.isEmpty do
     markProgress
 
 end Mathlib.Tactic.ClickSuggestions
+

@@ -42,112 +42,74 @@ section CoalgebraStruct
 variable [CoalgebraStruct R B] [CoalgebraStruct S A]
 
 noncomputable
-/--
-Instance `instCoalgebraStruct` / 实例 `instCoalgebraStruct`
-
-English:
-instance instCoalgebraStruct
-  signature: : CoalgebraStruct S (A otimes[R] B) where
-  body: AlgebraTensorModule.tensorTensorTensorComm R S R S A A B B ∘ₗ
-      AlgebraTensorModule.map comul comul
-  counit := AlgebraTensorModule.rid R S S ∘ₗ AlgebraTensorModule.map counit counit
-
-中文:
-实例 instCoalgebraStruct
-  签名: : 余algebraStruct S (A otimes[R] B) where
-  定义体: AlgebraTensorModule.tensorTensorTensorComm R S R S A A B B ∘ₗ
-      AlgebraTensorModule.map comul comul
-  counit := AlgebraTensorModule.rid R S S ∘ₗ AlgebraTensorModule.map counit counit
-
-Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.map, AlgebraTensorModule.rid, AlgebraTensorModule.tensorTensorTensorComm, counit, tensorTensorTensorComm
+/-
+**TensorProduct.instCoalgebraStruct** 是 Mathlib 中的一个实例，位于命名空间 `TensorProduct`。
+形式化陈述：instCoalgebraStruct : CoalgebraStruct S (A otimes[R] B) where comul
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instCoalgebraStruct : CoalgebraStruct S (A otimes[R] B) where
+instance instCoalgebraStruct : CoalgebraStruct S (A ⊗[R] B) where
   comul :=
     AlgebraTensorModule.tensorTensorTensorComm R S R S A A B B ∘ₗ
       AlgebraTensorModule.map comul comul
   counit := AlgebraTensorModule.rid R S S ∘ₗ AlgebraTensorModule.map counit counit
-
-/--
-lemma `comul_def` / 引理 `comul_def`
-
-English:
-lemma comul_def
-  proof: rfl
-
-中文:
-引理 comul_def
-  证明: rfl
-
-Depends on / 依赖: otimes
+/-
+**TensorProduct.comul_def** 是 Mathlib 中的一个引理，位于命名空间 `TensorProduct`。
+形式化陈述：comul_def : Coalgebra.comul (R
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 lemma comul_def :
-    Coalgebra.comul (R := S) (A := A otimes[R] B) =
+    Coalgebra.comul (R := S) (A := A ⊗[R] B) =
       AlgebraTensorModule.tensorTensorTensorComm R S R S A A B B ∘ₗ
         AlgebraTensorModule.map Coalgebra.comul Coalgebra.comul :=
   rfl
-
-/--
-lemma `counit_def` / 引理 `counit_def`
-
-English:
-lemma counit_def
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 counit_def
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: otimes
+/-
+**TensorProduct.counit_def** 是 Mathlib 中的一个引理，位于命名空间 `TensorProduct`。
+形式化陈述：counit_def : Coalgebra.counit (R
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 lemma counit_def :
-    Coalgebra.counit (R := S) (A := A otimes[R] B) =
+    Coalgebra.counit (R := S) (A := A ⊗[R] B) =
       AlgebraTensorModule.rid R S S ∘ₗ AlgebraTensorModule.map counit counit :=
   rfl
 
 @[simp]
-/--
-lemma `comul_tmul` / 引理 `comul_tmul`
-
-English:
-lemma comul_tmul
-  given: (x : A) (y : B)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 comul_tmul
-  条件: (x : A) (y : B)
-  证明: rfl
-
-@[simp]
+/-
+**TensorProduct.comul_tmul** 是 Mathlib 中的一个引理，位于命名空间 `TensorProduct`。
+形式化陈述：comul_tmul (x : A) (y : B) : comul (x otimesₜ y) = AlgebraTensorModule.ten
+sorTensorTensorComm R S R S A A B B (comul x otimesₜ comul y)
+参数：x : A；y : B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 lemma comul_tmul (x : A) (y : B) :
-    comul (x otimesₜ y) =
-      AlgebraTensorModule.tensorTensorTensorComm R S R S A A B B (comul x otimesₜ comul y) := rfl
+    comul (x ⊗ₜ y) =
+      AlgebraTensorModule.tensorTensorTensorComm R S R S A A B B (comul x ⊗ₜ comul y) := rfl
 
 @[simp]
-/--
-lemma `counit_tmul` / 引理 `counit_tmul`
-
-English:
-lemma counit_tmul
-  given: (x : A) (y : B)
-  proof: rfl
-
-中文:
-引理 counit_tmul
-  条件: (x : A) (y : B)
-  证明: rfl
-
-Depends on / 依赖: counit
+/-
+**TensorProduct.counit_tmul** 是 Mathlib 中的一个引理，位于命名空间 `TensorProduct`。
+形式化陈述：counit_tmul (x : A) (y : B) : counit (R
+参数：x : A；y : B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 lemma counit_tmul (x : A) (y : B) :
-    counit (R := S) (x otimesₜ[R] y) = counit (R := R) y • counit (R := S) x := rfl
+    counit (R := S) (x ⊗ₜ[R] y) = counit (R := R) y • counit (R := S) x := rfl
 
 end CoalgebraStruct
 
@@ -168,88 +130,31 @@ scoped macro "hopf_tensor_induction " var:elimTarget "with " var₁:ident var₂
         -- avoid the more general `map_add` for performance reasons
         simp only [LinearEquiv.map_add, LinearMap.map_add,
           tmul_add, add_tmul, add_mul, mul_add, h₁, h₂]
-| tmul var₁ var₂ => ?_))
+      | tmul $var₁ $var₂ => ?_))
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.privateInPublic true in
-/--
-lemma `coassoc` / 引理 `coassoc`
-
-English:
-lemma coassoc
-  proof: by
-  ext x y
-  let F : A otimes[S] (A otimes[S] A) otimes[R] (B otimes[R] (B otimes[R] B)) ≃ₗ[S]
-    A otimes[R] B otimes[S] (A otimes[R] B otimes[S] (A otimes[R] B)) :=
-    AlgebraTensorModule.tensorTensorTensorComm _ _ _ _ _ _ _ _ ≪≫ₗ
-      AlgebraTensorModule.congr (.refl _ _)
-        (AlgebraTensorModule.tensorTensorTensorComm _ _ _ _ _ _ _ _)
-  let F' : A otimes[S] (A otimes[S] A) otimes[R] (B otimes[R] (B otimes[R] B)) ->ₗ[S]
-      A otimes[R] B otimes[S] (A otimes[R] B otimes[S] (A otimes[R] B)) :=
-    TensorProduct.mapOfCompatibleSMul .. ∘ₗ
-        TensorProduct.map .id (TensorProduct.mapOfCompatibleSMul ..) ∘ₗ F.toLinearMap
-  convert! congr(F ($(Coalgebra.coassoc_apply x) otimesₜ[R] $(Coalgebra.coassoc_apply y))) using 1
-  · dsimp
-    hopf_tensor_induction comul (R := S) x with x₁ x₂
-    hopf_tensor_induction comul (R := R) y with y₁ y₂
-    dsimp
-    hopf_tensor_induction comul (R := S) x₁ with x₁₁ x₁₂
-    hopf_tensor_induction comul (R := R) y₁ with y₁₁ y₁₂
-    rfl
-  · dsimp
-    hopf_tensor_induction comul (R := S) x with x₁ x₂
-    hopf_tensor_induction comul (R := R) y with y₁ y₂
-    dsimp
-    hopf_tensor_induction comul (R := S) x₂ with x₂₁ x₂₂
-    hopf_tensor_induction comul (R := R) y₂ with y₂₁ y₂₂
-    rfl
-
-中文:
-引理 coassoc
-  证明: by
-  ext x y
-  let F : A otimes[S] (A otimes[S] A) otimes[R] (B otimes[R] (B otimes[R] B)) ≃ₗ[S]
-    A otimes[R] B otimes[S] (A otimes[R] B otimes[S] (A otimes[R] B)) :=
-    AlgebraTensorModule.tensorTensorTensorComm _ _ _ _ _ _ _ _ ≪≫ₗ
-      AlgebraTensorModule.congr (.refl _ _)
-        (AlgebraTensorModule.tensorTensorTensorComm _ _ _ _ _ _ _ _)
-  let F' : A otimes[S] (A otimes[S] A) otimes[R] (B otimes[R] (B otimes[R] B)) ->ₗ[S]
-      A otimes[R] B otimes[S] (A otimes[R] B otimes[S] (A otimes[R] B)) :=
-    TensorProduct.mapOfCompatibleSMul .. ∘ₗ
-        TensorProduct.map .id (TensorProduct.mapOfCompatibleSMul ..) ∘ₗ F.toLinearMap
-  convert! congr(F ($(Coalgebra.coassoc_apply x) otimesₜ[R] $(Coalgebra.coassoc_apply y))) using 1
-  · dsimp
-    hopf_tensor_induction comul (R := S) x with x₁ x₂
-    hopf_tensor_induction comul (R := R) y with y₁ y₂
-    dsimp
-    hopf_tensor_induction comul (R := S) x₁ with x₁₁ x₁₂
-    hopf_tensor_induction comul (R := R) y₁ with y₁₁ y₁₂
-    rfl
-  · dsimp
-    hopf_tensor_induction comul (R := S) x with x₁ x₂
-    hopf_tensor_induction comul (R := R) y with y₁ y₂
-    dsimp
-    hopf_tensor_induction comul (R := S) x₂ with x₂₁ x₂₂
-    hopf_tensor_induction comul (R := R) y₂ with y₂₁ y₂₂
-    rfl
+/-
+**TensorProduct.coassoc** 是 Mathlib 中的一个引理，位于命名空间 `TensorProduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma coassoc :
-    TensorProduct.assoc S (A otimes[R] B) (A otimes[R] B) (A otimes[R] B) ∘ₗ
-      (comul (R := S) (A := (A otimes[R] B))).rTensor (A otimes[R] B) ∘ₗ
-        (comul (R := S) (A := (A otimes[R] B))) =
-    (comul (R := S) (A := (A otimes[R] B))).lTensor (A otimes[R] B) ∘ₗ
-      (comul (R := S) (A := (A otimes[R] B))) := by
+    TensorProduct.assoc S (A ⊗[R] B) (A ⊗[R] B) (A ⊗[R] B) ∘ₗ
+      (comul (R := S) (A := (A ⊗[R] B))).rTensor (A ⊗[R] B) ∘ₗ
+        (comul (R := S) (A := (A ⊗[R] B))) =
+    (comul (R := S) (A := (A ⊗[R] B))).lTensor (A ⊗[R] B) ∘ₗ
+      (comul (R := S) (A := (A ⊗[R] B))) := by
   ext x y
-  let F : A otimes[S] (A otimes[S] A) otimes[R] (B otimes[R] (B otimes[R] B)) ≃ₗ[S]
-    A otimes[R] B otimes[S] (A otimes[R] B otimes[S] (A otimes[R] B)) :=
+  let F : A ⊗[S] (A ⊗[S] A) ⊗[R] (B ⊗[R] (B ⊗[R] B)) ≃ₗ[S]
+    A ⊗[R] B ⊗[S] (A ⊗[R] B ⊗[S] (A ⊗[R] B)) :=
     AlgebraTensorModule.tensorTensorTensorComm _ _ _ _ _ _ _ _ ≪≫ₗ
       AlgebraTensorModule.congr (.refl _ _)
         (AlgebraTensorModule.tensorTensorTensorComm _ _ _ _ _ _ _ _)
-  let F' : A otimes[S] (A otimes[S] A) otimes[R] (B otimes[R] (B otimes[R] B)) ->ₗ[S]
-      A otimes[R] B otimes[S] (A otimes[R] B otimes[S] (A otimes[R] B)) :=
+  let F' : A ⊗[S] (A ⊗[S] A) ⊗[R] (B ⊗[R] (B ⊗[R] B)) →ₗ[S]
+      A ⊗[R] B ⊗[S] (A ⊗[R] B ⊗[S] (A ⊗[R] B)) :=
     TensorProduct.mapOfCompatibleSMul .. ∘ₗ
         TensorProduct.map .id (TensorProduct.mapOfCompatibleSMul ..) ∘ₗ F.toLinearMap
-  convert! congr(F ($(Coalgebra.coassoc_apply x) otimesₜ[R] $(Coalgebra.coassoc_apply y))) using 1
+  convert! congr(F ($(Coalgebra.coassoc_apply x) ⊗ₜ[R] $(Coalgebra.coassoc_apply y))) using 1
   · dsimp
     hopf_tensor_induction comul (R := S) x with x₁ x₂
     hopf_tensor_induction comul (R := R) y with y₁ y₂
@@ -269,137 +174,52 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
 noncomputable
-/--
-Instance `instCoalgebra` / 实例 `instCoalgebra`
-
-English:
-instance instCoalgebra
-  signature: : Coalgebra S (A otimes[R] B) where
-  body: coassoc (R := R)
-  rTensor_counit_comp_comul := by
-    ext x y
-    convert!
-      congr((TensorProduct.lid S _).symm
-        (TensorProduct.lid _ _ $(rTensor_counit_comul (R := S) x) otimesₜ[R]
-TensorProduct.lid _ _ (rTensor_counit_comul (R := R) y)))
-    · dsimp
-      hopf_tensor_induction comul (R := S) x with x₁ x₂
-      hopf_tensor_induction comul (R := R) y with y₁ y₂
-      apply (TensorProduct.lid S _).injective
-      dsimp
-      rw [tmul_smul]; rw [smul_assoc]; rw [one_smul]; rw [smul_tmul']
-    · dsimp
-      simp only [one_smul]
-  lTensor_counit_comp_comul := by
-    ext x y
-    convert!
-      congr((TensorProduct.rid S _).symm
-        (TensorProduct.rid _ _ $(lTensor_counit_comul (R := S) x) otimesₜ[R]
-TensorProduct.rid _ _ (lTensor_counit_comul (R := R) y)))
-    · dsimp
-      hopf_tensor_induction comul (R := S) x with x₁ x₂
-      hopf_tensor_induction comul (R := R) y with y₁ y₂
-      apply (TensorProduct.rid S _).injective
-      dsimp
-      rw [tmul_smul]; rw [smul_assoc]; rw [one_smul]; rw [smul_tmul']
-    · dsimp
-      simp only [one_smul]
-
-中文:
-实例 instCoalgebra
-  签名: : 余algebra S (A otimes[R] B) where
-  定义体: coassoc (R := R)
-  rTensor_counit_comp_comul := by
-    ext x y
-    convert!
-      congr((TensorProduct.lid S _).symm
-        (TensorProduct.lid _ _ $(rTensor_counit_comul (R := S) x) otimesₜ[R]
-TensorProduct.lid _ _ (rTensor_counit_comul (R := R) y)))
-    · dsimp
-      hopf_tensor_induction comul (R := S) x with x₁ x₂
-      hopf_tensor_induction comul (R := R) y with y₁ y₂
-      apply (TensorProduct.lid S _).injective
-      dsimp
-      rw [tmul_smul]; rw [smul_assoc]; rw [one_smul]; rw [smul_tmul']
-    · dsimp
-      simp only [one_smul]
-  lTensor_counit_comp_comul := by
-    ext x y
-    convert!
-      congr((TensorProduct.rid S _).symm
-        (TensorProduct.rid _ _ $(lTensor_counit_comul (R := S) x) otimesₜ[R]
-TensorProduct.rid _ _ (lTensor_counit_comul (R := R) y)))
-    · dsimp
-      hopf_tensor_induction comul (R := S) x with x₁ x₂
-      hopf_tensor_induction comul (R := R) y with y₁ y₂
-      apply (TensorProduct.rid S _).injective
-      dsimp
-      rw [tmul_smul]; rw [smul_assoc]; rw [one_smul]; rw [smul_tmul']
-    · dsimp
-      simp only [one_smul]
-
-Depends on / 依赖: coassoc
+/-
+**TensorProduct.instCoalgebra** 是 Mathlib 中的一个实例，位于命名空间 `TensorProduct`。
+形式化陈述：instCoalgebra : Coalgebra S (A otimes[R] B) where coassoc
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `_private.Mathlib.RingTheory.Coalgebra.TensorProduct.0.TensorProduct.coas
+soc`：∀ {R : Type u_1} {S : Type u_2} {A : Type u_3} {B : Type u_4} [inst : CommS
+emiring R] [inst_1 : CommSemiring S]   [inst_2 : AddCommMonoid A]…
 -/
-instance instCoalgebra : Coalgebra S (A otimes[R] B) where
+instance instCoalgebra : Coalgebra S (A ⊗[R] B) where
   coassoc := coassoc (R := R)
   rTensor_counit_comp_comul := by
     ext x y
     convert!
       congr((TensorProduct.lid S _).symm
-        (TensorProduct.lid _ _ $(rTensor_counit_comul (R := S) x) otimesₜ[R]
-TensorProduct.lid _ _ (rTensor_counit_comul (R := R) y)))
+        (TensorProduct.lid _ _ $(rTensor_counit_comul (R := S) x) ⊗ₜ[R]
+          TensorProduct.lid _ _ $(rTensor_counit_comul (R := R) y)))
     · dsimp
       hopf_tensor_induction comul (R := S) x with x₁ x₂
       hopf_tensor_induction comul (R := R) y with y₁ y₂
       apply (TensorProduct.lid S _).injective
       dsimp
-      rw [tmul_smul]; rw [smul_assoc]; rw [one_smul]; rw [smul_tmul']
+      rw [tmul_smul, smul_assoc, one_smul, smul_tmul']
     · dsimp
       simp only [one_smul]
   lTensor_counit_comp_comul := by
     ext x y
     convert!
       congr((TensorProduct.rid S _).symm
-        (TensorProduct.rid _ _ $(lTensor_counit_comul (R := S) x) otimesₜ[R]
-TensorProduct.rid _ _ (lTensor_counit_comul (R := R) y)))
+        (TensorProduct.rid _ _ $(lTensor_counit_comul (R := S) x) ⊗ₜ[R]
+          TensorProduct.rid _ _ $(lTensor_counit_comul (R := R) y)))
     · dsimp
       hopf_tensor_induction comul (R := S) x with x₁ x₂
       hopf_tensor_induction comul (R := R) y with y₁ y₂
       apply (TensorProduct.rid S _).injective
       dsimp
-      rw [tmul_smul]; rw [smul_assoc]; rw [one_smul]; rw [smul_tmul']
+      rw [tmul_smul, smul_assoc, one_smul, smul_tmul']
     · dsimp
       simp only [one_smul]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsCocomm
-  signature: S A] [IsCocomm R B] : IsCocomm S (A otimes[R] B) where
-  body: by
-    ext x y
-    dsimp
-    conv_rhs => rw [← comm_comul _ x, ← comm_comul _ y]
-    hopf_tensor_induction comul (R := S) x with x₁ x₂
-    hopf_tensor_induction comul (R := R) y with y₁ y₂
-    simp
-
-中文:
-实例 [是余comm
-  签名: S A] [是余comm R B] : 是余comm S (A otimes[R] B) where
-  定义体: by
-    ext x y
-    dsimp
-    conv_rhs => rw [← comm_comul _ x, ← comm_comul _ y]
-    hopf_tensor_induction comul (R := S) x with x₁ x₂
-    hopf_tensor_induction comul (R := R) y with y₁ y₂
-    simp
-
-Depends on / 依赖: comm_comul, conv_rhs, hopf_tensor_induction
+/-
+**TensorProduct.** 是 Mathlib 中的一个实例，位于命名空间 `TensorProduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [IsCocomm S A] [IsCocomm R B] : IsCocomm S (A otimes[R] B) where
+instance [IsCocomm S A] [IsCocomm R B] : IsCocomm S (A ⊗[R] B) where
   comm_comp_comul := by
     ext x y
     dsimp
@@ -421,43 +241,21 @@ variable {R S M N P Q : Type*} [CommSemiring R] [CommSemiring S] [Algebra R S]
 section
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `map` / `map` 的定义
+/-- The tensor product of two coalgebra morphisms as a coalgebra morphism. -/
+/-
+**Coalgebra.TensorProduct.map** 是 Mathlib 中的一个定义，位于命名空间 `Coalgebra.TensorProduct
+`。
+形式化陈述：map (f : M ->ₗc[S] N) (g : P ->ₗc[R] Q) : M otimes[R] P ->ₗc[S] N otimes[R
+] Q where toLinearMap
+参数：f : M ->ₗc[S] N；g : P ->ₗc[R] Q。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (f : M ->ₗc[S] N) (g : P ->ₗc[R] Q)
-  body: AlgebraTensorModule.map f.toLinearMap g.toLinearMap
-  counit_comp := by ext; simp
-  map_comp_comul := by
-    ext x y
-    dsimp
-    simp only [← CoalgHomClass.map_comp_comul_apply]
-    hopf_tensor_induction comul (R := S) x with x₁ x₂
-    hopf_tensor_induction comul (R := R) y with y₁ y₂
-    simp
-
-@[simp]
-
-中文:
-定义 map
-  签名: (f : M ->ₗc[S] N) (g : P ->ₗc[R] Q)
-  定义体: AlgebraTensorModule.map f.toLinearMap g.toLinearMap
-  counit_comp := by ext; simp
-  map_comp_comul := by
-    ext x y
-    dsimp
-    simp only [← CoalgHomClass.map_comp_comul_apply]
-    hopf_tensor_induction comul (R := S) x with x₁ x₂
-    hopf_tensor_induction comul (R := R) y with y₁ y₂
-    simp
-
-@[simp]
-
-Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.map, f.toLinearMap, g.toLinearMap, toLinearMap
+--- 原说明 ---
+The tensor product of two coalgebra morphisms as a coalgebra morphism.
 -/
-noncomputable def map (f : M ->ₗc[S] N) (g : P ->ₗc[R] Q) :
-    M otimes[R] P ->ₗc[S] N otimes[R] Q where
+noncomputable def map (f : M →ₗc[S] N) (g : P →ₗc[R] Q) :
+    M ⊗[R] P →ₗc[S] N ⊗[R] Q where
   toLinearMap := AlgebraTensorModule.map f.toLinearMap g.toLinearMap
   counit_comp := by ext; simp
   map_comp_comul := by
@@ -469,78 +267,70 @@ noncomputable def map (f : M ->ₗc[S] N) (g : P ->ₗc[R] Q) :
     simp
 
 @[simp]
-/--
-theorem `map_tmul` / 定理 `map_tmul`
-
-English:
-theorem map_tmul
-  given: (f : M ->ₗc[S] N) (g : P ->ₗc[R] Q) (x : M) (y : P)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 map_tmul
-  条件: (f : M ->ₗc[S] N) (g : P ->ₗc[R] Q) (x : M) (y : P)
-  证明: rfl
-
-@[simp]
+/-
+**Coalgebra.TensorProduct.map_tmul** 是 Mathlib 中的一个定理，位于命名空间 `Coalgebra.TensorPr
+oduct`。
+形式化陈述：map_tmul (f : M ->ₗc[S] N) (g : P ->ₗc[R] Q) (x : M) (y : P) : map f g (x 
+otimesₜ y) = f x otimesₜ g y
+参数：f : M ->ₗc[S] N；g : P ->ₗc[R] Q；x : M；y : P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
-theorem map_tmul (f : M ->ₗc[S] N) (g : P ->ₗc[R] Q) (x : M) (y : P) :
-    map f g (x otimesₜ y) = f x otimesₜ g y :=
+theorem map_tmul (f : M →ₗc[S] N) (g : P →ₗc[R] Q) (x : M) (y : P) :
+    map f g (x ⊗ₜ y) = f x ⊗ₜ g y :=
   rfl
 
 @[simp]
-/--
-theorem `map_toLinearMap` / 定理 `map_toLinearMap`
-
-English:
-theorem map_toLinearMap
-  given: (f : M ->ₗc[S] N) (g : P ->ₗc[R] Q)
-  proof: rfl
-
-中文:
-定理 map_toLinearMap
-  条件: (f : M ->ₗc[S] N) (g : P ->ₗc[R] Q)
-  证明: rfl
+/-
+**Coalgebra.TensorProduct.map_toLinearMap** 是 Mathlib 中的一个定理，位于命名空间 `Coalgebra.T
+ensorProduct`。
+形式化陈述：map_toLinearMap (f : M ->ₗc[S] N) (g : P ->ₗc[R] Q) : map f g = AlgebraTen
+sorModule.map (f : M ->ₗ[S] N) (g : P ->ₗ[R] Q)
+参数：f : M ->ₗc[S] N；g : P ->ₗc[R] Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `CoalgHomClass.toSemilinearMapClass`：∀ {F : Type u_1} {R : outParam (Type
+ u_2)} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring 
+R}   {inst_1 : AddCommMo…
 -/
-theorem map_toLinearMap (f : M ->ₗc[S] N) (g : P ->ₗc[R] Q) :
-    map f g = AlgebraTensorModule.map (f : M ->ₗ[S] N) (g : P ->ₗ[R] Q) := rfl
+theorem map_toLinearMap (f : M →ₗc[S] N) (g : P →ₗc[R] Q) :
+    map f g = AlgebraTensorModule.map (f : M →ₗ[S] N) (g : P →ₗ[R] Q) := rfl
 
 variable (R S M N P)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- The associator for tensor products of R-coalgebras, as a coalgebra equivalence. -/
+/-
+**Coalgebra.TensorProduct.assoc** 是 Mathlib 中的一个定义，位于命名空间 `Coalgebra.TensorProdu
+ct`。
+形式化陈述：(R : Type u_5) →   (S : Type u_6) →     (M : Type u_7) →       (N : Type u
+_8) →         (P : Type u_9) →           [inst : CommSemiring R] →             [
+inst_1 : CommSemiring S] →               [inst_2 : Algebra R S] →               
+  [inst_3 : AddCommMonoid M] →                   [inst_4 : AddCommMonoid N] →   
+                  [inst_5 : AddCommMonoid P] →                       [inst_6 : _
+root_.Module R M] →                         [inst_7 : _root_.Module R N] →      
+                     [inst_8 : _root_.Module R P] →                             
+[inst_9 : _root_.Module S M] →                               [inst_10 : IsScalar
+Tower R S M] →                                 [inst_11 : Coalgebra S M] →      
+                             [inst_12 : _root_.Module S N] →                    
+                 [inst_13 : IsScalarTower R S N] →                              
+         [inst_14 : Coalgebra S N] →                                         [in
+st_15 : Coalgebra R P] →                                           TensorProduct
+ R (TensorProduct S M N) P ≃ₗc[S]                                             Te
+nsorProduct S M (TensorProduct R N P)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncomputable
-  signature: def assoc
-  body: { AlgebraTensorModule.assoc R S S M N P with
-    counit_comp := by ext; simp
-    map_comp_comul := by
-      ext x y z
-      dsimp
-      hopf_tensor_induction comul (R := S) x with x₁ x₂
-      hopf_tensor_induction comul (R := S) y with y₁ y₂
-      hopf_tensor_induction comul (R := R) z with z₁ z₂
-      simp }
-
-中文:
-定义 noncomputable
-  签名: def assoc
-  定义体: { AlgebraTensorModule.assoc R S S M N P with
-    counit_comp := by ext; simp
-    map_comp_comul := by
-      ext x y z
-      dsimp
-      hopf_tensor_induction comul (R := S) x with x₁ x₂
-      hopf_tensor_induction comul (R := S) y with y₁ y₂
-      hopf_tensor_induction comul (R := R) z with z₁ z₂
-      simp }
+--- 原说明 ---
+The associator for tensor products of R-coalgebras, as a coalgebra equivalence.
 -/
 protected noncomputable def assoc :
-    (M otimes[S] N) otimes[R] P ≃ₗc[S] M otimes[S] (N otimes[R] P) :=
+    (M ⊗[S] N) ⊗[R] P ≃ₗc[S] M ⊗[S] (N ⊗[R] P) :=
   { AlgebraTensorModule.assoc R S S M N P with
     counit_comp := by ext; simp
     map_comp_comul := by
@@ -554,60 +344,59 @@ protected noncomputable def assoc :
 variable {R S M N P}
 
 @[simp]
-/--
-theorem `assoc_tmul` / 定理 `assoc_tmul`
-
-English:
-theorem assoc_tmul
-  given: (x : M) (y : N) (z : P)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 assoc_tmul
-  条件: (x : M) (y : N) (z : P)
-  证明: rfl
-
-@[simp]
+/-
+**Coalgebra.TensorProduct.assoc_tmul** 是 Mathlib 中的一个定理，位于命名空间 `Coalgebra.Tensor
+Product`。
+形式化陈述：assoc_tmul (x : M) (y : N) (z : P) : Coalgebra.TensorProduct.assoc R S M N
+ P ((x otimesₜ y) otimesₜ z) = x otimesₜ (y otimesₜ z)
+参数：x : M；y : N；z : P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
 -/
 theorem assoc_tmul (x : M) (y : N) (z : P) :
-    Coalgebra.TensorProduct.assoc R S M N P ((x otimesₜ y) otimesₜ z) = x otimesₜ (y otimesₜ z) :=
+    Coalgebra.TensorProduct.assoc R S M N P ((x ⊗ₜ y) ⊗ₜ z) = x ⊗ₜ (y ⊗ₜ z) :=
   rfl
 
 @[simp]
-/--
-theorem `assoc_symm_tmul` / 定理 `assoc_symm_tmul`
-
-English:
-theorem assoc_symm_tmul
-  given: (x : M) (y : N) (z : P)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 assoc_symm_tmul
-  条件: (x : M) (y : N) (z : P)
-  证明: rfl
-
-@[simp]
+/-
+**Coalgebra.TensorProduct.assoc_symm_tmul** 是 Mathlib 中的一个定理，位于命名空间 `Coalgebra.T
+ensorProduct`。
+形式化陈述：assoc_symm_tmul (x : M) (y : N) (z : P) : (Coalgebra.TensorProduct.assoc R
+ S M N P).symm (x otimesₜ (y otimesₜ z)) = (x otimesₜ y) otimesₜ z
+参数：x : M；y : N；z : P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 theorem assoc_symm_tmul (x : M) (y : N) (z : P) :
-    (Coalgebra.TensorProduct.assoc R S M N P).symm (x otimesₜ (y otimesₜ z)) = (x otimesₜ y) otimesₜ z :=
+    (Coalgebra.TensorProduct.assoc R S M N P).symm (x ⊗ₜ (y ⊗ₜ z)) = (x ⊗ₜ y) ⊗ₜ z :=
   rfl
 
 @[simp]
-/--
-theorem `assoc_toLinearEquiv` / 定理 `assoc_toLinearEquiv`
-
-English:
-theorem assoc_toLinearEquiv
-  proof: rfl
-
-中文:
-定理 assoc_toLinearEquiv
-  证明: rfl
+/-
+**Coalgebra.TensorProduct.assoc_toLinearEquiv** 是 Mathlib 中的一个定理，位于命名空间 `Coalgeb
+ra.TensorProduct`。
+形式化陈述：assoc_toLinearEquiv : Coalgebra.TensorProduct.assoc R S M N P = AlgebraTen
+sorModule.assoc R S S M N P
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass'`：∀ {R : Type u_1} [inst : CommSemiring R
+] {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [
+inst_3 : AddCommMonoi…
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 theorem assoc_toLinearEquiv :
     Coalgebra.TensorProduct.assoc R S M N P = AlgebraTensorModule.assoc R S S M N P := rfl
@@ -615,34 +404,21 @@ theorem assoc_toLinearEquiv :
 variable (R P)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- The base ring is a left identity for the tensor product of coalgebras, up to
+coalgebra equivalence. -/
+/-
+**Coalgebra.TensorProduct.lid** 是 Mathlib 中的一个定义，位于命名空间 `Coalgebra.TensorProduct
+`。
+形式化陈述：(R : Type u_5) →   (P : Type u_9) →     [inst : CommSemiring R] →       [i
+nst_1 : AddCommMonoid P] →         [inst_2 : _root_.Module R P] → [inst_3 : Coal
+gebra R P] → TensorProduct R R P ≃ₗc[R] P
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncomputable
-  signature: def lid
-  body: { _root_.TensorProduct.lid R P with
-    counit_comp := by ext; simp
-    map_comp_comul := by
-      ext x
-      dsimp
-      simp only [one_smul]
-      hopf_tensor_induction comul (R := R) x with x₁ x₂
-      simp }
-
-中文:
-定义 noncomputable
-  签名: def lid
-  定义体: { _root_.TensorProduct.lid R P with
-    counit_comp := by ext; simp
-    map_comp_comul := by
-      ext x
-      dsimp
-      simp only [one_smul]
-      hopf_tensor_induction comul (R := R) x with x₁ x₂
-      simp }
+--- 原说明 ---
+The base ring is a left identity for the tensor product of coalgebras, up to
+coalgebra equivalence.
 -/
-protected noncomputable def lid : R otimes[R] P ≃ₗc[R] P :=
+protected noncomputable def lid : R ⊗[R] P ≃ₗc[R] P :=
   { _root_.TensorProduct.lid R P with
     counit_comp := by ext; simp
     map_comp_comul := by
@@ -655,98 +431,67 @@ protected noncomputable def lid : R otimes[R] P ≃ₗc[R] P :=
 variable {R P}
 
 @[simp]
-/--
-theorem `lid_toLinearEquiv` / 定理 `lid_toLinearEquiv`
-
-English:
-theorem lid_toLinearEquiv
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 lid_toLinearEquiv
-  证明: rfl
-
-@[simp]
+/-
+**Coalgebra.TensorProduct.lid_toLinearEquiv** 是 Mathlib 中的一个定理，位于命名空间 `Coalgebra
+.TensorProduct`。
+形式化陈述：lid_toLinearEquiv : (Coalgebra.TensorProduct.lid R P) = _root_.TensorProdu
+ct.lid R P
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
 -/
 theorem lid_toLinearEquiv :
     (Coalgebra.TensorProduct.lid R P) = _root_.TensorProduct.lid R P := rfl
 
 @[simp]
-/--
-theorem `lid_tmul` / 定理 `lid_tmul`
-
-English:
-theorem lid_tmul
-  given: (r : R) (a : P)
-  statement: Coalgebra.TensorProduct.lid R P (r otimesₜ a) = r • a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 lid_tmul
-  条件: (r : R) (a : P)
-  结论: 余algebra.张量积.lid R P (r otimesₜ a) = r • a
-  证明: rfl
-
-@[simp]
+/-
+**Coalgebra.TensorProduct.lid_tmul** 是 Mathlib 中的一个定理，位于命名空间 `Coalgebra.TensorPr
+oduct`。
+形式化陈述：lid_tmul (r : R) (a : P) : Coalgebra.TensorProduct.lid R P (r otimesₜ a) =
+ r • a
+参数：r : R；a : P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
 -/
-theorem lid_tmul (r : R) (a : P) : Coalgebra.TensorProduct.lid R P (r otimesₜ a) = r • a := rfl
+theorem lid_tmul (r : R) (a : P) : Coalgebra.TensorProduct.lid R P (r ⊗ₜ a) = r • a := rfl
 
 @[simp]
-/--
-theorem `lid_symm_apply` / 定理 `lid_symm_apply`
-
-English:
-theorem lid_symm_apply
-  given: (a : P)
-  statement: (Coalgebra.TensorProduct.lid R P).symm a = 1 otimesₜ a
-  proof: rfl
-
-中文:
-定理 lid_symm_apply
-  条件: (a : P)
-  结论: (余algebra.张量积.lid R P).symm a = 1 otimesₜ a
-  证明: rfl
+/-
+**Coalgebra.TensorProduct.lid_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Coalgebra.Te
+nsorProduct`。
+形式化陈述：lid_symm_apply (a : P) : (Coalgebra.TensorProduct.lid R P).symm a = 1 otim
+esₜ a
+参数：a : P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
 -/
-theorem lid_symm_apply (a : P) : (Coalgebra.TensorProduct.lid R P).symm a = 1 otimesₜ a := rfl
+theorem lid_symm_apply (a : P) : (Coalgebra.TensorProduct.lid R P).symm a = 1 ⊗ₜ a := rfl
 
 set_option backward.defeqAttrib.useBackward true in
 variable (R S M) in
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- The base ring is a right identity for the tensor product of coalgebras, up to
+coalgebra equivalence. -/
+/-
+**Coalgebra.TensorProduct.rid** 是 Mathlib 中的一个定义，位于命名空间 `Coalgebra.TensorProduct
+`。
+形式化陈述：(R : Type u_5) →   (S : Type u_6) →     (M : Type u_7) →       [inst : Com
+mSemiring R] →         [inst_1 : CommSemiring S] →           [inst_2 : Algebra R
+ S] →             [inst_3 : AddCommMonoid M] →               [inst_4 : _root_.Mo
+dule R M] →                 [inst_5 : _root_.Module S M] →                   [in
+st_6 : IsScalarTower R S M] → [inst_7 : Coalgebra S M] → TensorProduct R M R ≃ₗc
+[S] M
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncomputable
-  signature: def rid
-  body: { AlgebraTensorModule.rid R S M with
-    counit_comp := by ext; simp
-    map_comp_comul := by
-      ext x
-      dsimp
-      simp only [one_smul]
-      hopf_tensor_induction comul (R := S) x with x₁ x₂
-      simp }
-
-@[simp]
-
-中文:
-定义 noncomputable
-  签名: def rid
-  定义体: { AlgebraTensorModule.rid R S M with
-    counit_comp := by ext; simp
-    map_comp_comul := by
-      ext x
-      dsimp
-      simp only [one_smul]
-      hopf_tensor_induction comul (R := S) x with x₁ x₂
-      simp }
-
-@[simp]
+--- 原说明 ---
+The base ring is a right identity for the tensor product of coalgebras, up to
+coalgebra equivalence.
 -/
-protected noncomputable def rid : M otimes[R] R ≃ₗc[S] M :=
+protected noncomputable def rid : M ⊗[R] R ≃ₗc[S] M :=
   { AlgebraTensorModule.rid R S M with
     counit_comp := by ext; simp
     map_comp_comul := by
@@ -757,63 +502,49 @@ protected noncomputable def rid : M otimes[R] R ≃ₗc[S] M :=
       simp }
 
 @[simp]
-/--
-theorem `rid_toLinearEquiv` / 定理 `rid_toLinearEquiv`
-
-English:
-theorem rid_toLinearEquiv
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 rid_toLinearEquiv
-  证明: rfl
-
-@[simp]
+/-
+**Coalgebra.TensorProduct.rid_toLinearEquiv** 是 Mathlib 中的一个定理，位于命名空间 `Coalgebra
+.TensorProduct`。
+形式化陈述：rid_toLinearEquiv : (Coalgebra.TensorProduct.rid R S M) = AlgebraTensorMod
+ule.rid R S M
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 theorem rid_toLinearEquiv :
     (Coalgebra.TensorProduct.rid R S M) = AlgebraTensorModule.rid R S M := rfl
 
 @[simp]
-/--
-theorem `rid_tmul` / 定理 `rid_tmul`
-
-English:
-theorem rid_tmul
-  given: (r : R) (a : M)
-  statement: Coalgebra.TensorProduct.rid R S M (a otimesₜ r) = r • a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 rid_tmul
-  条件: (r : R) (a : M)
-  结论: 余algebra.张量积.rid R S M (a otimesₜ r) = r • a
-  证明: rfl
-
-@[simp]
+/-
+**Coalgebra.TensorProduct.rid_tmul** 是 Mathlib 中的一个定理，位于命名空间 `Coalgebra.TensorPr
+oduct`。
+形式化陈述：rid_tmul (r : R) (a : M) : Coalgebra.TensorProduct.rid R S M (a otimesₜ r)
+ = r • a
+参数：r : R；a : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
-theorem rid_tmul (r : R) (a : M) : Coalgebra.TensorProduct.rid R S M (a otimesₜ r) = r • a := rfl
+theorem rid_tmul (r : R) (a : M) : Coalgebra.TensorProduct.rid R S M (a ⊗ₜ r) = r • a := rfl
 
 @[simp]
-/--
-theorem `rid_symm_apply` / 定理 `rid_symm_apply`
-
-English:
-theorem rid_symm_apply
-  given: (a : M)
-  statement: (Coalgebra.TensorProduct.rid R S M).symm a = a otimesₜ 1
-  proof: rfl
-
-中文:
-定理 rid_symm_apply
-  条件: (a : M)
-  结论: (余algebra.张量积.rid R S M).symm a = a otimesₜ 1
-  证明: rfl
+/-
+**Coalgebra.TensorProduct.rid_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Coalgebra.Te
+nsorProduct`。
+形式化陈述：rid_symm_apply (a : M) : (Coalgebra.TensorProduct.rid R S M).symm a = a ot
+imesₜ 1
+参数：a : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
-theorem rid_symm_apply (a : M) : (Coalgebra.TensorProduct.rid R S M).symm a = a otimesₜ 1 := rfl
+theorem rid_symm_apply (a : M) : (Coalgebra.TensorProduct.rid R S M).symm a = a ⊗ₜ 1 := rfl
 
 end
 
@@ -827,40 +558,34 @@ variable {R M N P : Type*} [CommRing R]
 
 variable (M)
 
-/--
-Definition of `lTensor` / `lTensor` 的定义
+/-- `lTensor M f : M ⊗ N →ₗc M ⊗ P` is the natural coalgebra morphism induced by `f : N →ₗc P`. -/
+/-
+**CoalgHom.lTensor** 是 Mathlib 中的一个缩写定义，位于命名空间 `CoalgHom`。
+形式化陈述：lTensor (f : N ->ₗc[R] P) : M otimes[R] N ->ₗc[R] M otimes[R] P
+参数：f : N ->ₗc[R] P。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation lTensor
-  signature: (f : N ->ₗc[R] P)
-  body: Coalgebra.TensorProduct.map (CoalgHom.id R M) f
-
-中文:
-缩写 lTensor
-  签名: (f : N ->ₗc[R] P)
-  定义体: Coalgebra.TensorProduct.map (CoalgHom.id R M) f
-
-Depends on / 依赖: CoalgHom, CoalgHom.id, Coalgebra, Coalgebra.TensorProduct.map, TensorProduct
+--- 原说明 ---
+`lTensor M f : M ⊗ N →ₗc M ⊗ P` is the natural coalgebra morphism induced by `f 
+: N →ₗc P`.
 -/
-noncomputable abbrev lTensor (f : N ->ₗc[R] P) : M otimes[R] N ->ₗc[R] M otimes[R] P :=
+noncomputable abbrev lTensor (f : N →ₗc[R] P) : M ⊗[R] N →ₗc[R] M ⊗[R] P :=
   Coalgebra.TensorProduct.map (CoalgHom.id R M) f
 
-/--
-Definition of `rTensor` / `rTensor` 的定义
+/-- `rTensor M f : N ⊗ M →ₗc P ⊗ M` is the natural coalgebra morphism induced by `f : N →ₗc P`. -/
+/-
+**CoalgHom.rTensor** 是 Mathlib 中的一个缩写定义，位于命名空间 `CoalgHom`。
+形式化陈述：rTensor (f : N ->ₗc[R] P) : N otimes[R] M ->ₗc[R] P otimes[R] M
+参数：f : N ->ₗc[R] P。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation rTensor
-  signature: (f : N ->ₗc[R] P)
-  body: Coalgebra.TensorProduct.map f (CoalgHom.id R M)
-
-中文:
-缩写 rTensor
-  签名: (f : N ->ₗc[R] P)
-  定义体: Coalgebra.TensorProduct.map f (CoalgHom.id R M)
-
-Depends on / 依赖: CoalgHom, CoalgHom.id, Coalgebra, Coalgebra.TensorProduct.map, TensorProduct
+--- 原说明 ---
+`rTensor M f : N ⊗ M →ₗc P ⊗ M` is the natural coalgebra morphism induced by `f 
+: N →ₗc P`.
 -/
-noncomputable abbrev rTensor (f : N ->ₗc[R] P) : N otimes[R] M ->ₗc[R] P otimes[R] M :=
+noncomputable abbrev rTensor (f : N →ₗc[R] P) : N ⊗[R] M →ₗc[R] P ⊗[R] M :=
   Coalgebra.TensorProduct.map f (CoalgHom.id R M)
 
 end CoalgHom
@@ -874,44 +599,28 @@ local notation3 "μ" => LinearMap.mul' R R
 local notation3 "δ" => comul (R := R)
 local infix:90 " ◁ " => LinearMap.lTensor
 local notation3:90 f:90 " ▷ " X:90 => LinearMap.rTensor X f
-local infix:70 " otimesₘ " => _root_.TensorProduct.map
+local infix:70 " ⊗ₘ " => _root_.TensorProduct.map
 
 variable (R C) in
-/--
-Definition of `comulCoalgHom` / `comulCoalgHom` 的定义
+/-- Comultiplication as a coalgebra hom. -/
+/-
+**Coalgebra.comulCoalgHom** 是 Mathlib 中的一个定义，位于命名空间 `Coalgebra`。
+形式化陈述：comulCoalgHom : C ->ₗc[R] C otimes[R] C where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comulCoalgHom
-  signature: : C ->ₗc[R] C otimes[R] C where
-  body: δ
-  counit_comp := by
-    simp only [counit_def, AlgebraTensorModule.rid_eq_rid, ← lid_eq_rid]
-    calc
-        (μ ∘ₗ (ε otimesₘ ε)) ∘ₗ δ
-    _ = (μ ∘ₗ ε ▷ R) ∘ₗ (C ◁ ε ∘ₗ δ) := by simp [coassoc_simps]
-    _ = ε := by ext; simp
-  map_comp_comul := by simp [comul_def, coassoc_simps]
-
-中文:
-定义 comulCoalgHom
-  签名: : C ->ₗc[R] C otimes[R] C where
-  定义体: δ
-  counit_comp := by
-    simp only [counit_def, AlgebraTensorModule.rid_eq_rid, ← lid_eq_rid]
-    calc
-        (μ ∘ₗ (ε otimesₘ ε)) ∘ₗ δ
-    _ = (μ ∘ₗ ε ▷ R) ∘ₗ (C ◁ ε ∘ₗ δ) := by simp [coassoc_simps]
-    _ = ε := by ext; simp
-  map_comp_comul := by simp [comul_def, coassoc_simps]
+--- 原说明 ---
+Comultiplication as a coalgebra hom.
 -/
-noncomputable def comulCoalgHom : C ->ₗc[R] C otimes[R] C where
+noncomputable def comulCoalgHom : C →ₗc[R] C ⊗[R] C where
   __ := δ
   counit_comp := by
     simp only [counit_def, AlgebraTensorModule.rid_eq_rid, ← lid_eq_rid]
     calc
-        (μ ∘ₗ (ε otimesₘ ε)) ∘ₗ δ
+        (μ ∘ₗ (ε ⊗ₘ ε)) ∘ₗ δ
     _ = (μ ∘ₗ ε ▷ R) ∘ₗ (C ◁ ε ∘ₗ δ) := by simp [coassoc_simps]
     _ = ε := by ext; simp
   map_comp_comul := by simp [comul_def, coassoc_simps]
 
 end Coalgebra
+

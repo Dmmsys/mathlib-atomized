@@ -35,196 +35,124 @@ section Loopless
 
 /-- A loopless graph is one where the ends of every edge are distinct. -/
 @[mk_iff]
-/--
-Definition of `Loopless` / `Loopless` 的定义
+/-
+**Graph.Loopless** 是 Mathlib 中的一个归纳类型，位于命名空间 `Graph`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → Graph α β → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Loopless
-  parameters: (G : Graph α β)
-  axioms and operations (1):
-    - not_isLoopAt : forall e x, ¬ G.IsLoopAt e x
-
-中文:
-类 无环
-  参数: (G : 图 α β)
-  公理与运算 (1 个):
-    - not_isLoopAt : 对任意 e x, ¬ G.IsLoopAt e x
-
-Depends on / 依赖: Bitraversable, Bitraversable.isLawfulTraversable, LawfulBitraversable, isLawfulTraversable
+--- 原说明 ---
+A loopless graph is one where the ends of every edge are distinct.
 -/
 protected class Loopless (G : Graph α β) : Prop where
-  not_isLoopAt : forall e x, ¬ G.IsLoopAt e x
+  not_isLoopAt : ∀ e x, ¬ G.IsLoopAt e x
 
 @[simp]
-/--
-lemma `not_isLoopAt` / 引理 `not_isLoopAt`
-
-English:
-lemma not_isLoopAt
-  given: (G : Graph α β) [G.Loopless] (e : β) (x : α)
-  statement: ¬ G.IsLoopAt e x
-  proof: Loopless.not_isLoopAt e x
-
-中文:
-引理 not_isLoopAt
-  条件: (G : 图 α β) [G.无环] (e : β) (x : α)
-  结论: ¬ G.IsLoopAt e x
-  证明: Loopless.not_isLoopAt e x
-
-Depends on / 依赖: Loopless, Loopless.not_isLoopAt, not_isLoopAt
+/-
+**Graph.not_isLoopAt** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：not_isLoopAt (G : Graph α β) [G.Loopless] (e : β) (x : α) : ¬ G.IsLoopAt e
+ x
+参数：G : Graph α β；e : β；x : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.Loopless.not_isLoopAt`：∀ {α : Type u_1} {β : Type u_2} {G : Graph 
+α β} [self : G.Loopless] (e : β) (x : α), ¬G.IsLoopAt e x
 -/
 lemma not_isLoopAt (G : Graph α β) [G.Loopless] (e : β) (x : α) : ¬ G.IsLoopAt e x :=
   Loopless.not_isLoopAt e x
-
-/--
-lemma `not_adj_self` / 引理 `not_adj_self`
-
-English:
-lemma not_adj_self
-  given: (G : Graph α β) [G.Loopless] (x : α)
-  statement: ¬ G.Adj x x
-  proof: fun ⟨e, he⟩ => Loopless.not_isLoopAt e x he
-
-中文:
-引理 not_adj_self
-  条件: (G : 图 α β) [G.无环] (x : α)
-  结论: ¬ G.伴随 x x
-  证明: fun ⟨e, he⟩ => Loopless.not_isLoopAt e x he
-
-Depends on / 依赖: Loopless, Loopless.not_isLoopAt, not_isLoopAt
+/-
+**Graph.not_adj_self** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：not_adj_self (G : Graph α β) [G.Loopless] (x : α) : ¬ G.Adj x x
+参数：G : Graph α β；x : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.Loopless.not_isLoopAt`：∀ {α : Type u_1} {β : Type u_2} {G : Graph 
+α β} [self : G.Loopless] (e : β) (x : α), ¬G.IsLoopAt e x
 -/
 lemma not_adj_self (G : Graph α β) [G.Loopless] (x : α) : ¬ G.Adj x x :=
-  fun ⟨e, he⟩ => Loopless.not_isLoopAt e x he
-
-/--
-lemma `Adj.ne` / 引理 `Adj.ne`
-
-English:
-lemma Adj.ne
-  given: [G.Loopless] (hxy : G.Adj u v)
-  statement: u != v
-  proof: fun h => G.not_adj_self u h ▸ hxy
-
-中文:
-引理 伴随.ne
-  条件: [G.无环] (hxy : G.伴随 u v)
-  结论: u != v
-  证明: fun h => G.not_adj_self u h ▸ hxy
-
-Depends on / 依赖: G.not_adj_self, not_adj_self
+  fun ⟨e, he⟩ ↦ Loopless.not_isLoopAt e x he
+/-
+**Graph.Adj.ne** 是 Mathlib 中的一个定理，位于命名空间 `Graph.Adj`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G : Graph α β} {u v : α} [G.Loopless], G.
+Adj u v → u ≠ v
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Graph.not_adj_self`：not_adj_self (G : Graph α β) [G.Loopless] (x : α) : 
+¬ G.Adj x x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma Adj.ne [G.Loopless] (hxy : G.Adj u v) : u != v := fun h => G.not_adj_self u h ▸ hxy
-
-/--
-lemma `IsLink.ne` / 引理 `IsLink.ne`
-
-English:
-lemma IsLink.ne
-  given: [G.Loopless] (he : G.IsLink e u v)
-  statement: u != v
-  proof: Adj.ne ⟨e, he⟩
-
-中文:
-引理 IsLink.ne
-  条件: [G.无环] (he : G.IsLink e u v)
-  结论: u != v
-  证明: Adj.ne ⟨e, he⟩
-
-Depends on / 依赖: Adj.ne
+lemma Adj.ne [G.Loopless] (hxy : G.Adj u v) : u ≠ v := fun h ↦ G.not_adj_self u <| h ▸ hxy
+/-
+**Graph.IsLink.ne** 是 Mathlib 中的一个定理，位于命名空间 `Graph.IsLink`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G : Graph α β} {u v : α} {e : β} [G.Loopl
+ess], G.IsLink e u v → u ≠ v
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.Adj.ne`：∀ {α : Type u_1} {β : Type u_2} {G : Graph α β} {u v : α} 
+[G.Loopless], G.Adj u v → u ≠ v
 -/
-lemma IsLink.ne [G.Loopless] (he : G.IsLink e u v) : u != v := Adj.ne ⟨e, he⟩
-
-/--
-lemma `loopless_iff_forall_ne_of_adj` / 引理 `loopless_iff_forall_ne_of_adj`
-
-English:
-lemma loopless_iff_forall_ne_of_adj
-  statement: G.Loopless ↔ forall u v, G.Adj u v -> u != v
-  proof: ⟨fun _ _ _ h => h.ne, fun h => ⟨fun _ x hex => h x x hex.adj rfl⟩⟩
-
-中文:
-引理 loopless_iff_对任意_ne_of_adj
-  结论: G.无环 ↔ 对任意 u v, G.伴随 u v -> u != v
-  证明: ⟨fun _ _ _ h => h.ne, fun h => ⟨fun _ x hex => h x x hex.adj rfl⟩⟩
-
-Depends on / 依赖: h.ne, hex.adj
+lemma IsLink.ne [G.Loopless] (he : G.IsLink e u v) : u ≠ v := Adj.ne ⟨e, he⟩
+/-
+**Graph.loopless_iff_forall_ne_of_adj** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：loopless_iff_forall_ne_of_adj : G.Loopless ↔ forall u v, G.Adj u v -> u !=
+ v
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.Adj.ne`：∀ {α : Type u_1} {β : Type u_2} {G : Graph α β} {u v : α} 
+[G.Loopless], G.Adj u v → u ≠ v
+· 使用定理 `Graph.IsLink.adj`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β} {G :
+ Graph α β}, G.IsLink e x y → G.Adj x y
 -/
-lemma loopless_iff_forall_ne_of_adj : G.Loopless ↔ forall u v, G.Adj u v -> u != v :=
-  ⟨fun _ _ _ h => h.ne, fun h => ⟨fun _ x hex => h x x hex.adj rfl⟩⟩
-
-/--
-lemma `vertexSet_nontrivial_of_edgeSet_nonempty_of_loopless` / 引理 `vertexSet_nontrivial_of_edgeSet_nonempty_of_loopless`
-
-English:
-lemma vertexSet_nontrivial_of_edgeSet_nonempty_of_loopless
-  given: [G.Loopless] (hE : E(G).Nonempty)
-  proof: by
-  obtain ⟨e, he⟩ := hE
-  obtain ⟨x, y, hxy⟩ := exists_isLink_of_mem_edgeSet he
-  exact ⟨x, hxy.left_mem, y, hxy.right_mem, hxy.adj.ne⟩
-
-中文:
-引理 vertexSet_nontrivial_of_edgeSet_nonempty_of_loopless
-  条件: [G.无环] (hE : E(G).非空)
-  证明: by
-  obtain ⟨e, he⟩ := hE
-  obtain ⟨x, y, hxy⟩ := exists_isLink_of_mem_edgeSet he
-  exact ⟨x, hxy.left_mem, y, hxy.right_mem, hxy.adj.ne⟩
-
-Depends on / 依赖: exists_isLink_of_mem_edgeSet, hxy.adj.ne, hxy.left_mem, hxy.right_mem, left_mem, right_mem
+lemma loopless_iff_forall_ne_of_adj : G.Loopless ↔ ∀ u v, G.Adj u v → u ≠ v :=
+  ⟨fun _ _ _ h ↦ h.ne, fun h ↦ ⟨fun _ x hex ↦ h x x hex.adj rfl⟩⟩
+/-
+**Graph.vertexSet_nontrivial_of_edgeSet_nonempty_of_loopless** 是 Mathlib 中的一个引理，
+位于命名空间 `Graph`。
+形式化陈述：vertexSet_nontrivial_of_edgeSet_nonempty_of_loopless [G.Loopless] (hE : E(
+G).Nonempty) : V(G).Nontrivial
+参数：hE : E(G).Nonempty。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Graph.exists_isLink_of_mem_edgeSet`：exists_isLink_of_mem_edgeSet (h : e 
+in E(G)) : exists x y, G.IsLink e x y
+· 使用定理 `Graph.IsLink.left_mem`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β}
+ {G : Graph α β}, G.IsLink e x y → x ∈ G.vertexSet
+· 使用定理 `Graph.IsLink.right_mem`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β
+} {G : Graph α β}, G.IsLink e x y → y ∈ G.vertexSet
+· 使用定理 `Graph.Adj.ne`：∀ {α : Type u_1} {β : Type u_2} {G : Graph α β} {u v : α} 
+[G.Loopless], G.Adj u v → u ≠ v
+· 使用定理 `Graph.IsLink.adj`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β} {G :
+ Graph α β}, G.IsLink e x y → G.Adj x y
 -/
 lemma vertexSet_nontrivial_of_edgeSet_nonempty_of_loopless [G.Loopless] (hE : E(G).Nonempty) :
     V(G).Nontrivial := by
   obtain ⟨e, he⟩ := hE
   obtain ⟨x, y, hxy⟩ := exists_isLink_of_mem_edgeSet he
   exact ⟨x, hxy.left_mem, y, hxy.right_mem, hxy.adj.ne⟩
-
-/--
-lemma `Loopless.anti` / 引理 `Loopless.anti`
-
-English:
-lemma Loopless.anti
-  given: [hG : G.Loopless] (hle : H <= G)
-  statement: H.Loopless
-  proof: by
-  rw [loopless_iff_forall_ne_of_adj] at hG ⊢
-exact fun x y hxy => hG x y hxy.mono hle
-
-@[simp]
-
-中文:
-引理 无环.anti
-  条件: [hG : G.无环] (hle : H <= G)
-  结论: H.无环
-  证明: by
-  rw [loopless_iff_forall_ne_of_adj] at hG ⊢
-exact fun x y hxy => hG x y hxy.mono hle
-
-@[simp]
-
-Depends on / 依赖: hxy.mono, loopless_iff_forall_ne_of_adj
+/-
+**Graph.Loopless.anti** 是 Mathlib 中的一个定理，位于命名空间 `Graph.Loopless`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G H : Graph α β} [hG : G.Loopless], H ≤ G
+ → H.Loopless
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Graph.loopless_iff_forall_ne_of_adj`：loopless_iff_forall_ne_of_adj : G.L
+oopless ↔ forall u v, G.Adj u v -> u != v
+· 使用定理 `Graph.Adj.mono`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {G H : Graph α
+ β}, H ≤ G → H.Adj x y → G.Adj x y
 -/
-lemma Loopless.anti [hG : G.Loopless] (hle : H <= G) : H.Loopless := by
+lemma Loopless.anti [hG : G.Loopless] (hle : H ≤ G) : H.Loopless := by
   rw [loopless_iff_forall_ne_of_adj] at hG ⊢
-exact fun x y hxy => hG x y hxy.mono hle
+  exact fun x y hxy ↦ hG x y <| hxy.mono hle
 
 @[simp]
-/--
-lemma `Inc.isNonloopAt` / 引理 `Inc.isNonloopAt`
-
-English:
-lemma Inc.isNonloopAt
-  given: [G.Loopless] (h : G.Inc e u)
-  statement: G.IsNonloopAt e u
-  proof: h.isLoopAt_or_isNonloopAt.resolve_left (Loopless.not_isLoopAt _ _)
-
-中文:
-引理 Inc.isNonloopAt
-  条件: [G.无环] (h : G.Inc e u)
-  结论: G.IsNonloopAt e u
-  证明: h.isLoopAt_or_isNonloopAt.resolve_left (Loopless.not_isLoopAt _ _)
-
-Depends on / 依赖: Loopless, Loopless.not_isLoopAt, h.isLoopAt_or_isNonloopAt.resolve_left, isLoopAt_or_isNonloopAt, not_isLoopAt, resolve_left
+/-
+**Graph.Inc.isNonloopAt** 是 Mathlib 中的一个定理，位于命名空间 `Graph.Inc`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G : Graph α β} {u : α} {e : β} [G.Looples
+s], G.Inc e u → G.IsNonloopAt e u
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.resolve_left`：∀ {a b : Prop}, a ∨ b → ¬a → b
+· 使用定理 `Graph.Inc.isLoopAt_or_isNonloopAt`：∀ {α : Type u_1} {β : Type u_2} {x : 
+α} {e : β} {G : Graph α β}, G.Inc e x → G.IsLoopAt e x ∨ G.IsNonloopAt e x
+· 使用定理 `Graph.Loopless.not_isLoopAt`：∀ {α : Type u_1} {β : Type u_2} {G : Graph 
+α β} [self : G.Loopless] (e : β) (x : α), ¬G.IsLoopAt e x
 -/
 lemma Inc.isNonloopAt [G.Loopless] (h : G.Inc e u) : G.IsNonloopAt e u :=
   h.isLoopAt_or_isNonloopAt.resolve_left (Loopless.not_isLoopAt _ _)
@@ -236,89 +164,63 @@ section Simple
 /-- A `Simple` graph is a `Loopless` graph where no pair of vertices are the ends of more than one
 edge. -/
 @[mk_iff]
-/--
-Definition of `Simple` / `Simple` 的定义
+/-
+**Graph.Simple** 是 Mathlib 中的一个归纳类型，位于命名空间 `Graph`。
+形式化陈述：{α : Type u_1} → {β : Type u_2} → Graph α β → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Simple
-  parameters: (G : Graph α β)
-  extends: G.Loopless
-  axioms and operations (1):
-    - eq_of_isLink : forall ⦃e f x y⦄, G.IsLink e x y -> G.IsLink f x y -> e = f
-
-中文:
-类 单
-  参数: (G : 图 α β)
-  继承: G.无环
-  公理与运算 (1 个):
-    - eq_of_isLink : 对任意 ⦃e f x y⦄, G.IsLink e x y -> G.IsLink f x y -> e = f
+--- 原说明 ---
+A `Simple` graph is a `Loopless` graph where no pair of vertices are the ends of
+ more than one
+edge.
 -/
 class Simple (G : Graph α β) : Prop extends G.Loopless where
-  eq_of_isLink : forall ⦃e f x y⦄, G.IsLink e x y -> G.IsLink f x y -> e = f
+  eq_of_isLink : ∀ ⦃e f x y⦄, G.IsLink e x y → G.IsLink f x y → e = f
 
 variable [G.Simple]
-
-/--
-lemma `IsLink.eq` / 引理 `IsLink.eq`
-
-English:
-lemma IsLink.eq
-  given: (h : G.IsLink e u v) (h' : G.IsLink f u v)
-  statement: e = f
-  proof: Simple.eq_of_isLink h h'
-
-中文:
-引理 IsLink.eq
-  条件: (h : G.IsLink e u v) (h' : G.IsLink f u v)
-  结论: e = f
-  证明: Simple.eq_of_isLink h h'
-
-Depends on / 依赖: Simple, Simple.eq_of_isLink, eq_of_isLink
+/-
+**Graph.IsLink.eq** 是 Mathlib 中的一个定理，位于命名空间 `Graph.IsLink`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G : Graph α β} {u v : α} {e f : β} [G.Sim
+ple], G.IsLink e u v → G.IsLink f u v → e = f
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Graph.Simple.eq_of_isLink`：∀ {α : Type u_1} {β : Type u_2} {G : Graph α 
+β} [self : G.Simple] ⦃e f : β⦄ ⦃x y : α⦄,   G.IsLink e x y → G.IsLink f x y → e 
+= f
 -/
 lemma IsLink.eq (h : G.IsLink e u v) (h' : G.IsLink f u v) : e = f :=
   Simple.eq_of_isLink h h'
-
-/--
-lemma `Simple.anti` / 引理 `Simple.anti`
-
-English:
-lemma Simple.anti
-  given: (hle : H <= G)
-  statement: H.Simple where
-  proof: by simp [toLoopless.anti hle]
-  eq_of_isLink e f x y he hf := (he.mono hle).eq (hf.mono hle)
-
-中文:
-引理 单.anti
-  条件: (hle : H <= G)
-  结论: H.单 where
-  证明: by simp [toLoopless.anti hle]
-  eq_of_isLink e f x y he hf := (he.mono hle).eq (hf.mono hle)
-
-Depends on / 依赖: eq_of_isLink, he.mono, hf.mono, toLoopless, toLoopless.anti
+/-
+**Graph.Simple.anti** 是 Mathlib 中的一个定理，位于命名空间 `Graph.Simple`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {G H : Graph α β} [G.Simple], H ≤ G → H.Si
+mple
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Graph.Loopless.anti`：∀ {α : Type u_1} {β : Type u_2} {G H : Graph α β} [
+hG : G.Loopless], H ≤ G → H.Loopless
+· 使用定理 `Graph.Simple.toLoopless`：∀ {α : Type u_1} {β : Type u_2} {G : Graph α β}
+ [self : G.Simple], G.Loopless
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Graph.IsLink.eq`：∀ {α : Type u_1} {β : Type u_2} {G : Graph α β} {u v : 
+α} {e f : β} [G.Simple], G.IsLink e u v → G.IsLink f u v → e = f
+· 使用定理 `Graph.IsLink.mono`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {e : β} {G 
+H : Graph α β}, H ≤ G → H.IsLink e x y → G.IsLink e x y
 -/
-lemma Simple.anti (hle : H <= G) : H.Simple where
+lemma Simple.anti (hle : H ≤ G) : H.Simple where
   not_isLoopAt e x := by simp [toLoopless.anti hle]
   eq_of_isLink e f x y he hf := (he.mono hle).eq (hf.mono hle)
-
+/-
+**Graph.** 是 Mathlib 中的一个实例，位于命名空间 `Graph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (V : Set α) : (Graph.noEdge V β).Simple where
   not_isLoopAt := by simp [IsLoopAt]
   eq_of_isLink := by simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (⊥ : Graph α β).Simple
-  body: inferInstanceAs (Graph.noEdge _ β).Simple
-
-中文:
-实例 :
-  签名: (⊥ : 图 α β).单
-  定义体: inferInstanceAs (Graph.noEdge _ β).Simple
-
-Depends on / 依赖: Graph.noEdge, Simple, noEdge
+/-
+**Graph.** 是 Mathlib 中的一个实例，位于命名空间 `Graph`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (⊥ : Graph α β).Simple := inferInstanceAs (Graph.noEdge _ β).Simple
 
@@ -328,83 +230,55 @@ section toSimpleGraph
 
 /-- Construct a simple graph from a graph. -/
 @[expose, simps (attr := grind =)]
-/--
-Definition of `toSimpleGraph` / `toSimpleGraph` 的定义
+/-
+**Graph.toSimpleGraph** 是 Mathlib 中的一个定义，位于命名空间 `Graph`。
+形式化陈述：toSimpleGraph (G : Graph α β) : SimpleGraph V(G) where Adj u v
+参数：G : Graph α β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toSimpleGraph
-  signature: (G : Graph α β)
-  body: u != v ∧ G.Adj u v
-  symm := ⟨fun u v => by grind [adj_comm]⟩
-
-中文:
-定义 toSimpleGraph
-  签名: (G : 图 α β)
-  定义体: u != v ∧ G.Adj u v
-  symm := ⟨fun u v => by grind [adj_comm]⟩
-
-Depends on / 依赖: G.Adj
+--- 原说明 ---
+Construct a simple graph from a graph.
 -/
 def toSimpleGraph (G : Graph α β) : SimpleGraph V(G) where
-  Adj u v := u != v ∧ G.Adj u v
-  symm := ⟨fun u v => by grind [adj_comm]⟩
-
-/--
-lemma `toSimpleGraph_adj_iff` / 引理 `toSimpleGraph_adj_iff`
-
-English:
-lemma toSimpleGraph_adj_iff
-  given: [G.Loopless] (u v : V(G))
-  statement: G.toSimpleGraph.Adj u v ↔ G.Adj u v
-  proof: by
-  grind [Adj.ne]
-
-中文:
-引理 toSimpleGraph_adj_iff
-  条件: [G.无环] (u v : V(G))
-  结论: G.toSimpleGraph.伴随 u v ↔ G.伴随 u v
-  证明: by
-  grind [Adj.ne]
-
-Depends on / 依赖: Adj.ne
+  Adj u v := u ≠ v ∧ G.Adj u v
+  symm := ⟨fun u v ↦ by grind [adj_comm]⟩
+/-
+**Graph.toSimpleGraph_adj_iff** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：toSimpleGraph_adj_iff [G.Loopless] (u v : V(G)) : G.toSimpleGraph.Adj u v 
+↔ G.Adj u v
+参数：u v : V(G)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toSimpleGraph_adj_iff [G.Loopless] (u v : V(G)) : G.toSimpleGraph.Adj u v ↔ G.Adj u v := by
   grind [Adj.ne]
-
-/--
-lemma `toSimpleGraph_mono` / 引理 `toSimpleGraph_mono`
-
-English:
-lemma toSimpleGraph_mono
-  given: (h : G <=s H)
-  statement: G.toSimpleGraph <= h.vertexSet_eq ▸ H.toSimpleGraph
-  proof: by
-  rintro u v hadj
-  match G, H with
-  | ⟨GV, GL, GE, _, _, _, _⟩, ⟨HV, HL, HE, _, _, _, _⟩ =>
-    obtain ⟨hne, hadj⟩ := toSimpleGraph_adj .. ▸ hadj
-    obtain ⟨hle, h⟩ := h
-    simp only at h
-    subst GV
-    simp [toSimpleGraph_adj, hne, hadj.mono hle]
-
-中文:
-引理 toSimpleGraph_mono
-  条件: (h : G <=s H)
-  结论: G.toSimpleGraph <= h.vertexSet_eq ▸ H.toSimpleGraph
-  证明: by
-  rintro u v hadj
-  match G, H with
-  | ⟨GV, GL, GE, _, _, _, _⟩, ⟨HV, HL, HE, _, _, _, _⟩ =>
-    obtain ⟨hne, hadj⟩ := toSimpleGraph_adj .. ▸ hadj
-    obtain ⟨hle, h⟩ := h
-    simp only at h
-    subst GV
-    simp [toSimpleGraph_adj, hne, hadj.mono hle]
-
-Depends on / 依赖: hadj.mono, toSimpleGraph_adj
+/-
+**Graph.toSimpleGraph_mono** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：toSimpleGraph_mono (h : G <=s H) : G.toSimpleGraph <= h.vertexSet_eq ▸ H.t
+oSimpleGraph
+参数：h : G <=s H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Graph.IsSpanningSubgraph.vertexSet_eq`：∀ {α : Type u_1} {β : Type u_2} {
+H G : Graph α β}, H ≤s G → H.vertexSet = G.vertexSet
+· 使用定理 `Graph.toSimpleGraph_adj`：∀ {α : Type u_1} {β : Type u_2} (G : Graph α β)
+ (u v : ↑G.vertexSet), G.toSimpleGraph.Adj u v = (u ≠ v ∧ G.Adj ↑u ↑v)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Graph.Adj.mono`：∀ {α : Type u_1} {β : Type u_2} {x y : α} {G H : Graph α
+ β}, H ≤ G → H.Adj x y → G.Adj x y
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
-lemma toSimpleGraph_mono (h : G <=s H) : G.toSimpleGraph <= h.vertexSet_eq ▸ H.toSimpleGraph := by
+lemma toSimpleGraph_mono (h : G ≤s H) : G.toSimpleGraph ≤ h.vertexSet_eq ▸ H.toSimpleGraph := by
   rintro u v hadj
   match G, H with
   | ⟨GV, GL, GE, _, _, _, _⟩, ⟨HV, HL, HE, _, _, _, _⟩ =>
@@ -416,87 +290,68 @@ lemma toSimpleGraph_mono (h : G <=s H) : G.toSimpleGraph <= h.vertexSet_eq ▸ H
 
 /-- Construct a graph from a simple graph. It has every element of the vertex type as a vertex. -/
 @[expose, simps (attr := grind =)]
-/--
-Definition of `ofSimpleGraph` / `ofSimpleGraph` 的定义
+/-
+**Graph.ofSimpleGraph** 是 Mathlib 中的一个定义，位于命名空间 `Graph`。
+形式化陈述：ofSimpleGraph (G : SimpleGraph α) : Graph α (Sym2 α) where vertexSet
+参数：G : SimpleGraph α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofSimpleGraph
-  signature: (G : SimpleGraph α)
-  body: Set.univ
-  edgeSet := G.edgeSet
-  IsLink e x y := e = s(x, y) ∧ e in G.edgeSet
-  isLink_symm e he := ⟨fun u v => by simp [Sym2.eq_swap]⟩
-  eq_or_eq_of_isLink_of_isLink e u v x y he hf := by grind
-  edge_mem_iff_exists_isLink e := by induction e with | h u v => grind
-
-@[simp]
-
-中文:
-定义 ofSimpleGraph
-  签名: (G : 简单图 α)
-  定义体: Set.univ
-  edgeSet := G.edgeSet
-  IsLink e x y := e = s(x, y) ∧ e in G.edgeSet
-  isLink_symm e he := ⟨fun u v => by simp [Sym2.eq_swap]⟩
-  eq_or_eq_of_isLink_of_isLink e u v x y he hf := by grind
-  edge_mem_iff_exists_isLink e := by induction e with | h u v => grind
-
-@[simp]
-
-Depends on / 依赖: Set.univ
+--- 原说明 ---
+Construct a graph from a simple graph. It has every element of the vertex type a
+s a vertex.
 -/
 def ofSimpleGraph (G : SimpleGraph α) : Graph α (Sym2 α) where
   vertexSet := Set.univ
   edgeSet := G.edgeSet
-  IsLink e x y := e = s(x, y) ∧ e in G.edgeSet
-  isLink_symm e he := ⟨fun u v => by simp [Sym2.eq_swap]⟩
+  IsLink e x y := e = s(x, y) ∧ e ∈ G.edgeSet
+  isLink_symm e he := ⟨fun u v ↦ by simp [Sym2.eq_swap]⟩
   eq_or_eq_of_isLink_of_isLink e u v x y he hf := by grind
   edge_mem_iff_exists_isLink e := by induction e with | h u v => grind
 
 @[simp]
-/--
-lemma `ofSimpleGraph_adj_iff` / 引理 `ofSimpleGraph_adj_iff`
-
-English:
-lemma ofSimpleGraph_adj_iff
-  given: {G : SimpleGraph α} (u v : α)
-  proof: by simp [Adj]
-
-中文:
-引理 ofSimpleGraph_adj_iff
-  条件: {G : 简单图 α} (u v : α)
-  证明: by simp [Adj]
+/-
+**Graph.ofSimpleGraph_adj_iff** 是 Mathlib 中的一个引理，位于命名空间 `Graph`。
+形式化陈述：ofSimpleGraph_adj_iff {G : SimpleGraph α} (u v : α) : (ofSimpleGraph G).Ad
+j u v ↔ G.Adj u v
+参数：u v : α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Graph.ofSimpleGraph_isLink`：∀ {α : Type u_1} (G : SimpleGraph α) (e : Sy
+m2 α) (x y : α),   (Graph.ofSimpleGraph G).IsLink e x y = (e = s(x, y) ∧ e ∈ G.e
+dgeSet)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma ofSimpleGraph_adj_iff {G : SimpleGraph α} (u v : α) :
     (ofSimpleGraph G).Adj u v ↔ G.Adj u v := by simp [Adj]
 
-/--
-Definition of `toSimpleGraphOfSimpleGraphIso` / `toSimpleGraphOfSimpleGraphIso` 的定义
+/-- The isomorphism between `toSimpleGraph (ofSimpleGraph G)` and `G`. -/
+/-
+**Graph.toSimpleGraphOfSimpleGraphIso** 是 Mathlib 中的一个定义，位于命名空间 `Graph`。
+形式化陈述：toSimpleGraphOfSimpleGraphIso (G : SimpleGraph α) : (toSimpleGraph (ofSimp
+leGraph G)) ≃g G
+参数：G : SimpleGraph α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toSimpleGraphOfSimpleGraphIso
-  signature: (G : SimpleGraph α)
-  body: by
-  use Equiv.Set.univ α
-  refine ⟨fun h => ⟨fun h' => h.ne (congrArg Subtype.val h'), ?_⟩, fun ⟨_, h⟩ => ?_⟩ <;>
-    revert h <;> rw [ofSimpleGraph_adj_iff] <;> exact id
-
-中文:
-定义 toSimpleGraphOfSimpleGraphIso
-  签名: (G : 简单图 α)
-  定义体: by
-  use Equiv.Set.univ α
-  refine ⟨fun h => ⟨fun h' => h.ne (congrArg Subtype.val h'), ?_⟩, fun ⟨_, h⟩ => ?_⟩ <;>
-    revert h <;> rw [ofSimpleGraph_adj_iff] <;> exact id
-
-Depends on / 依赖: Equiv.Set.univ, Subtype, Subtype.val, h.ne, ofSimpleGraph_adj_iff, revert
+--- 原说明 ---
+The isomorphism between `toSimpleGraph (ofSimpleGraph G)` and `G`.
 -/
 def toSimpleGraphOfSimpleGraphIso (G : SimpleGraph α) :
     (toSimpleGraph (ofSimpleGraph G)) ≃g G := by
   use Equiv.Set.univ α
-  refine ⟨fun h => ⟨fun h' => h.ne (congrArg Subtype.val h'), ?_⟩, fun ⟨_, h⟩ => ?_⟩ <;>
+  refine ⟨fun h ↦ ⟨fun h' ↦ h.ne (congrArg Subtype.val h'), ?_⟩, fun ⟨_, h⟩ ↦ ?_⟩ <;>
     revert h <;> rw [ofSimpleGraph_adj_iff] <;> exact id
 
 end toSimpleGraph
 
 end Graph
+

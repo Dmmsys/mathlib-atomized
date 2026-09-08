@@ -22,132 +22,65 @@ variable {M N α β : Type*}
 
 /-- Reinterpret `α →+ β` as `Multiplicative α →* Multiplicative β`. -/
 @[simps]
-/--
-Definition of `AddMonoidHom.toMultiplicative` / `AddMonoidHom.toMultiplicative` 的定义
+/-
+**AddMonoidHom.toMultiplicative** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：AddMonoidHom.toMultiplicative [AddZeroClass α] [AddZeroClass β] : (α ->+ β
+) ≃ (Multiplicative α ->* Multiplicative β) where toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AddMonoidHom.toMultiplicative
-  signature: [AddZeroClass α] [AddZeroClass β]
-  body: {
-    toFun := fun a => ofAdd (f a.toAdd)
-    map_mul' := f.map_add
-    map_one' := f.map_zero
-  }
-  invFun f := {
-.toAdd toFun := fun a => f (ofAdd a)
-    map_add' := f.map_mul
-    map_zero' := f.map_one
-  }
-
-@[simp, norm_cast]
-
-中文:
-定义 加法幺半群态射.toMultiplicative
-  签名: [加法零类 α] [加法零类 β]
-  定义体: {
-    toFun := fun a => ofAdd (f a.toAdd)
-    map_mul' := f.map_add
-    map_one' := f.map_zero
-  }
-  invFun f := {
-.toAdd toFun := fun a => f (ofAdd a)
-    map_add' := f.map_mul
-    map_zero' := f.map_one
-  }
-
-@[simp, norm_cast]
+--- 原说明 ---
+Reinterpret `α →+ β` as `Multiplicative α →* Multiplicative β`.
 -/
 def AddMonoidHom.toMultiplicative [AddZeroClass α] [AddZeroClass β] :
-    (α ->+ β) ≃ (Multiplicative α ->* Multiplicative β) where
+    (α →+ β) ≃ (Multiplicative α →* Multiplicative β) where
   toFun f := {
     toFun := fun a => ofAdd (f a.toAdd)
     map_mul' := f.map_add
     map_one' := f.map_zero
   }
   invFun f := {
-.toAdd toFun := fun a => f (ofAdd a)
+    toFun := fun a => f (ofAdd a) |>.toAdd
     map_add' := f.map_mul
     map_zero' := f.map_one
   }
 
 @[simp, norm_cast]
-/--
-lemma `AddMonoidHom.coe_toMultiplicative` / 引理 `AddMonoidHom.coe_toMultiplicative`
-
-English:
-lemma AddMonoidHom.coe_toMultiplicative
-  given: [AddZeroClass α] [AddZeroClass β] (f : α ->+ β)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 加法幺半群态射.coe_toMultiplicative
-  条件: [加法零类 α] [加法零类 β] (f : α ->+ β)
-  证明: rfl
-
-@[simp]
+/-
+**AddMonoidHom.coe_toMultiplicative** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：AddMonoidHom.coe_toMultiplicative [AddZeroClass α] [AddZeroClass β] (f : α
+ ->+ β) : ⇑(toMultiplicative f) = ofAdd ∘ f ∘ toAdd
+参数：f : α ->+ β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma AddMonoidHom.coe_toMultiplicative [AddZeroClass α] [AddZeroClass β] (f : α ->+ β) :
+lemma AddMonoidHom.coe_toMultiplicative [AddZeroClass α] [AddZeroClass β] (f : α →+ β) :
     ⇑(toMultiplicative f) = ofAdd ∘ f ∘ toAdd := rfl
 
 @[simp]
-/--
-lemma `AddMonoidHom.toMultiplicative_id` / 引理 `AddMonoidHom.toMultiplicative_id`
-
-English:
-lemma AddMonoidHom.toMultiplicative_id
-  given: [AddZeroClass α]
-  statement: (id α).toMultiplicative = .id _
-  proof: rfl
-
-中文:
-引理 加法幺半群态射.toMultiplicative_id
-  条件: [加法零类 α]
-  结论: (id α).toMultiplicative = .id _
-  证明: rfl
+/-
+**AddMonoidHom.toMultiplicative_id** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：AddMonoidHom.toMultiplicative_id [AddZeroClass α] : (id α).toMultiplicativ
+e = .id _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma AddMonoidHom.toMultiplicative_id [AddZeroClass α] : (id α).toMultiplicative = .id _ := rfl
 
 /-- Reinterpret `α →* β` as `Additive α →+ Additive β`. -/
 @[simps]
-/--
-Definition of `MonoidHom.toAdditive` / `MonoidHom.toAdditive` 的定义
+/-
+**MonoidHom.toAdditive** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：MonoidHom.toAdditive [MulOneClass α] [MulOneClass β] : (α ->* β) ≃ (Additi
+ve α ->+ Additive β) where toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MonoidHom.toAdditive
-  signature: [MulOneClass α] [MulOneClass β]
-  body: {
-    toFun := fun a => ofMul (f a.toMul)
-    map_add' := f.map_mul
-    map_zero' := f.map_one
-  }
-  invFun f := {
-    toFun := fun a => (f (ofMul a)).toMul
-    map_mul' := f.map_add
-    map_one' := f.map_zero
-  }
-
-@[simp, norm_cast]
-
-中文:
-定义 幺半群态射.toAdditive
-  签名: [MulOne类 α] [MulOne类 β]
-  定义体: {
-    toFun := fun a => ofMul (f a.toMul)
-    map_add' := f.map_mul
-    map_zero' := f.map_one
-  }
-  invFun f := {
-    toFun := fun a => (f (ofMul a)).toMul
-    map_mul' := f.map_add
-    map_one' := f.map_zero
-  }
-
-@[simp, norm_cast]
+--- 原说明 ---
+Reinterpret `α →* β` as `Additive α →+ Additive β`.
 -/
 def MonoidHom.toAdditive [MulOneClass α] [MulOneClass β] :
-    (α ->* β) ≃ (Additive α ->+ Additive β) where
+    (α →* β) ≃ (Additive α →+ Additive β) where
   toFun f := {
     toFun := fun a => ofMul (f a.toMul)
     map_add' := f.map_mul
@@ -160,80 +93,39 @@ def MonoidHom.toAdditive [MulOneClass α] [MulOneClass β] :
   }
 
 @[simp, norm_cast]
-/--
-lemma `MonoidHom.coe_toAdditive` / 引理 `MonoidHom.coe_toAdditive`
-
-English:
-lemma MonoidHom.coe_toAdditive
-  given: [MulOneClass α] [MulOneClass β] (f : α ->* β)
-  proof: rfl
-
-中文:
-引理 幺半群态射.coe_toAdditive
-  条件: [MulOne类 α] [MulOne类 β] (f : α ->* β)
-  证明: rfl
+/-
+**MonoidHom.coe_toAdditive** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：MonoidHom.coe_toAdditive [MulOneClass α] [MulOneClass β] (f : α ->* β) : ⇑
+(toAdditive f) = ofMul ∘ f ∘ toMul
+参数：f : α ->* β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma MonoidHom.coe_toAdditive [MulOneClass α] [MulOneClass β] (f : α ->* β) :
+lemma MonoidHom.coe_toAdditive [MulOneClass α] [MulOneClass β] (f : α →* β) :
     ⇑(toAdditive f) = ofMul ∘ f ∘ toMul := rfl
-
-/--
-lemma `MonoidHom.toAdditive_id` / 引理 `MonoidHom.toAdditive_id`
-
-English:
-lemma MonoidHom.toAdditive_id
-  given: [MulOneClass α]
-  statement: (id α).toAdditive = .id _
-  proof: rfl
-
-中文:
-引理 幺半群态射.toAdditive_id
-  条件: [MulOne类 α]
-  结论: (id α).toAdditive = .id _
-  证明: rfl
-
-Depends on / 依赖: equivShrink, mulZeroOneClass, symm.mulZeroOneClass
+/-
+**MonoidHom.toAdditive_id** 是 Mathlib 中的一个定理，位于命名空间 `MonoidHom`。
+形式化陈述：∀ {α : Type u_3} [inst : MulOneClass α], MonoidHom.toAdditive (MonoidHom.i
+d α) = AddMonoidHom.id (Additive α)
+参数：MonoidHom.id α；Additive α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma MonoidHom.toAdditive_id [MulOneClass α] : (id α).toAdditive = .id _ := rfl
 
 /-- Reinterpret `Additive α →+ β` as `α →* Multiplicative β`. -/
 @[simps]
-/--
-Definition of `AddMonoidHom.toMultiplicativeRight` / `AddMonoidHom.toMultiplicativeRight` 的定义
+/-
+**AddMonoidHom.toMultiplicativeRight** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：AddMonoidHom.toMultiplicativeRight [MulOneClass α] [AddZeroClass β] : (Add
+itive α ->+ β) ≃ (α ->* Multiplicative β) where toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AddMonoidHom.toMultiplicativeRight
-  signature: [MulOneClass α] [AddZeroClass β]
-  body: {
-    toFun := fun a => ofAdd (f (ofMul a))
-    map_mul' := f.map_add
-    map_one' := f.map_zero
-  }
-  invFun f := {
-    toFun := fun a => (f a.toMul).toAdd
-    map_add' := f.map_mul
-    map_zero' := f.map_one
-  }
-
-@[simp, norm_cast]
-
-中文:
-定义 加法幺半群态射.toMultiplicativeRight
-  签名: [MulOne类 α] [加法零类 β]
-  定义体: {
-    toFun := fun a => ofAdd (f (ofMul a))
-    map_mul' := f.map_add
-    map_one' := f.map_zero
-  }
-  invFun f := {
-    toFun := fun a => (f a.toMul).toAdd
-    map_add' := f.map_mul
-    map_zero' := f.map_one
-  }
-
-@[simp, norm_cast]
+--- 原说明 ---
+Reinterpret `Additive α →+ β` as `α →* Multiplicative β`.
 -/
 def AddMonoidHom.toMultiplicativeRight [MulOneClass α] [AddZeroClass β] :
-    (Additive α ->+ β) ≃ (α ->* Multiplicative β) where
+    (Additive α →+ β) ≃ (α →* Multiplicative β) where
   toFun f := {
     toFun := fun a => ofAdd (f (ofMul a))
     map_mul' := f.map_add
@@ -246,103 +138,60 @@ def AddMonoidHom.toMultiplicativeRight [MulOneClass α] [AddZeroClass β] :
   }
 
 @[simp, norm_cast]
-/--
-lemma `AddMonoidHom.coe_toMultiplicativeRight` / 引理 `AddMonoidHom.coe_toMultiplicativeRight`
-
-English:
-lemma AddMonoidHom.coe_toMultiplicativeRight
-  statement: [MulOneClass α] [AddZeroClass β]
-  proof: rfl
-
-中文:
-引理 加法幺半群态射.coe_toMultiplicativeRight
-  结论: [MulOne类 α] [加法零类 β]
-  证明: rfl
+/-
+**AddMonoidHom.coe_toMultiplicativeRight** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：AddMonoidHom.coe_toMultiplicativeRight [MulOneClass α] [AddZeroClass β] (f
+ : Additive α ->+ β) : ⇑(toMultiplicativeRight f) = ofAdd ∘ f ∘ ofMul
+参数：f : Additive α ->+ β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma AddMonoidHom.coe_toMultiplicativeRight [MulOneClass α] [AddZeroClass β]
-    (f : Additive α ->+ β) : ⇑(toMultiplicativeRight f) = ofAdd ∘ f ∘ ofMul := rfl
+    (f : Additive α →+ β) : ⇑(toMultiplicativeRight f) = ofAdd ∘ f ∘ ofMul := rfl
 
 /-- Reinterpret `α →* Multiplicative β` as `Additive α →+ β`. -/
 @[simps!]
-/--
-Definition of `MonoidHom.toAdditiveLeft` / `MonoidHom.toAdditiveLeft` 的定义
+/-
+**MonoidHom.toAdditiveLeft** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：MonoidHom.toAdditiveLeft [MulOneClass α] [AddZeroClass β] : (α ->* Multipl
+icative β) ≃ (Additive α ->+ β)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition MonoidHom.toAdditiveLeft
-  signature: [MulOneClass α] [AddZeroClass β]
-  body: AddMonoidHom.toMultiplicativeRight.symm
-
-@[simp, norm_cast]
-
-中文:
-定义 幺半群态射.toAdditiveLeft
-  签名: [MulOne类 α] [加法零类 β]
-  定义体: AddMonoidHom.toMultiplicativeRight.symm
-
-@[simp, norm_cast]
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.toMultiplicativeRight.symm, toMultiplicativeRight
+--- 原说明 ---
+Reinterpret `α →* Multiplicative β` as `Additive α →+ β`.
 -/
 def MonoidHom.toAdditiveLeft [MulOneClass α] [AddZeroClass β] :
-    (α ->* Multiplicative β) ≃ (Additive α ->+ β) :=
+    (α →* Multiplicative β) ≃ (Additive α →+ β) :=
   AddMonoidHom.toMultiplicativeRight.symm
 
 @[simp, norm_cast]
-/--
-lemma `MonoidHom.coe_toAdditiveLeft` / 引理 `MonoidHom.coe_toAdditiveLeft`
-
-English:
-lemma MonoidHom.coe_toAdditiveLeft
-  given: [MulOneClass α] [AddZeroClass β] (f : α ->* Multiplicative β)
-  proof: rfl
-
-中文:
-引理 幺半群态射.coe_toAdditiveLeft
-  条件: [MulOne类 α] [加法零类 β] (f : α ->* Multiplicative β)
-  证明: rfl
+/-
+**MonoidHom.coe_toAdditiveLeft** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：MonoidHom.coe_toAdditiveLeft [MulOneClass α] [AddZeroClass β] (f : α ->* M
+ultiplicative β) : ⇑(toAdditiveLeft f) = toAdd ∘ f ∘ toMul
+参数：f : α ->* Multiplicative β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma MonoidHom.coe_toAdditiveLeft [MulOneClass α] [AddZeroClass β] (f : α ->* Multiplicative β) :
+lemma MonoidHom.coe_toAdditiveLeft [MulOneClass α] [AddZeroClass β] (f : α →* Multiplicative β) :
     ⇑(toAdditiveLeft f) = toAdd ∘ f ∘ toMul := rfl
 
 /-- Reinterpret `α →+ Additive β` as `Multiplicative α →* β`. -/
 @[simps]
-/--
-Definition of `AddMonoidHom.toMultiplicativeLeft` / `AddMonoidHom.toMultiplicativeLeft` 的定义
+/-
+**AddMonoidHom.toMultiplicativeLeft** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：AddMonoidHom.toMultiplicativeLeft [AddZeroClass α] [MulOneClass β] : (α ->
++ Additive β) ≃ (Multiplicative α ->* β) where toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AddMonoidHom.toMultiplicativeLeft
-  signature: [AddZeroClass α] [MulOneClass β]
-  body: {
-    toFun := fun a => (f a.toAdd).toMul
-    map_mul' := f.map_add
-    map_one' := f.map_zero
-  }
-  invFun f := {
-    toFun := fun a => ofMul (f (ofAdd a))
-    map_add' := f.map_mul
-    map_zero' := f.map_one
-  }
-
-@[simp, norm_cast]
-
-中文:
-定义 加法幺半群态射.toMultiplicativeLeft
-  签名: [加法零类 α] [MulOne类 β]
-  定义体: {
-    toFun := fun a => (f a.toAdd).toMul
-    map_mul' := f.map_add
-    map_one' := f.map_zero
-  }
-  invFun f := {
-    toFun := fun a => ofMul (f (ofAdd a))
-    map_add' := f.map_mul
-    map_zero' := f.map_one
-  }
-
-@[simp, norm_cast]
+--- 原说明 ---
+Reinterpret `α →+ Additive β` as `Multiplicative α →* β`.
 -/
 def AddMonoidHom.toMultiplicativeLeft [AddZeroClass α] [MulOneClass β] :
-    (α ->+ Additive β) ≃ (Multiplicative α ->* β) where
+    (α →+ Additive β) ≃ (Multiplicative α →* β) where
   toFun f := {
     toFun := fun a => (f a.toAdd).toMul
     map_mul' := f.map_add
@@ -355,218 +204,195 @@ def AddMonoidHom.toMultiplicativeLeft [AddZeroClass α] [MulOneClass β] :
   }
 
 @[simp, norm_cast]
-/--
-lemma `AddMonoidHom.coe_toMultiplicativeLeft` / 引理 `AddMonoidHom.coe_toMultiplicativeLeft`
-
-English:
-lemma AddMonoidHom.coe_toMultiplicativeLeft
-  given: [AddZeroClass α] [MulOneClass β] (f : α ->+ Additive β)
-  proof: rfl
-
-中文:
-引理 加法幺半群态射.coe_toMultiplicativeLeft
-  条件: [加法零类 α] [MulOne类 β] (f : α ->+ 加性 β)
-  证明: rfl
+/-
+**AddMonoidHom.coe_toMultiplicativeLeft** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：AddMonoidHom.coe_toMultiplicativeLeft [AddZeroClass α] [MulOneClass β] (f 
+: α ->+ Additive β) : ⇑(toMultiplicativeLeft f) = toMul ∘ f ∘ toAdd
+参数：f : α ->+ Additive β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma AddMonoidHom.coe_toMultiplicativeLeft [AddZeroClass α] [MulOneClass β] (f : α ->+ Additive β) :
+lemma AddMonoidHom.coe_toMultiplicativeLeft [AddZeroClass α] [MulOneClass β] (f : α →+ Additive β) :
     ⇑(toMultiplicativeLeft f) = toMul ∘ f ∘ toAdd := rfl
 
 /-- Reinterpret `Multiplicative α →* β` as `α →+ Additive β`. -/
 @[simps!]
-/--
-Definition of `MonoidHom.toAdditiveRight` / `MonoidHom.toAdditiveRight` 的定义
+/-
+**MonoidHom.toAdditiveRight** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：MonoidHom.toAdditiveRight [AddZeroClass α] [MulOneClass β] : (Multiplicati
+ve α ->* β) ≃ (α ->+ Additive β)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition MonoidHom.toAdditiveRight
-  signature: [AddZeroClass α] [MulOneClass β]
-  body: AddMonoidHom.toMultiplicativeLeft.symm
-
-@[simp, norm_cast]
-
-中文:
-定义 幺半群态射.toAdditiveRight
-  签名: [加法零类 α] [MulOne类 β]
-  定义体: AddMonoidHom.toMultiplicativeLeft.symm
-
-@[simp, norm_cast]
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.toMultiplicativeLeft.symm, toMultiplicativeLeft
+--- 原说明 ---
+Reinterpret `Multiplicative α →* β` as `α →+ Additive β`.
 -/
 def MonoidHom.toAdditiveRight [AddZeroClass α] [MulOneClass β] :
-    (Multiplicative α ->* β) ≃ (α ->+ Additive β) :=
+    (Multiplicative α →* β) ≃ (α →+ Additive β) :=
   AddMonoidHom.toMultiplicativeLeft.symm
 
 @[simp, norm_cast]
-/--
-lemma `MonoidHom.coe_toAdditiveRight` / 引理 `MonoidHom.coe_toAdditiveRight`
-
-English:
-lemma MonoidHom.coe_toAdditiveRight
-  given: [AddZeroClass α] [MulOneClass β] (f : Multiplicative α ->* β)
-  proof: rfl
-
-中文:
-引理 幺半群态射.coe_toAdditiveRight
-  条件: [加法零类 α] [MulOne类 β] (f : Multiplicative α ->* β)
-  证明: rfl
+/-
+**MonoidHom.coe_toAdditiveRight** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：MonoidHom.coe_toAdditiveRight [AddZeroClass α] [MulOneClass β] (f : Multip
+licative α ->* β) : ⇑(toAdditiveRight f) = ofMul ∘ f ∘ ofAdd
+参数：f : Multiplicative α ->* β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma MonoidHom.coe_toAdditiveRight [AddZeroClass α] [MulOneClass β] (f : Multiplicative α ->* β) :
+lemma MonoidHom.coe_toAdditiveRight [AddZeroClass α] [MulOneClass β] (f : Multiplicative α →* β) :
     ⇑(toAdditiveRight f) = ofMul ∘ f ∘ ofAdd := rfl
 
 /-- This ext lemma moves the type tag to the codomain, since most ext lemmas act on the domain.
 
 WARNING: This has the potential to send `ext` into a loop if someone locally adds the inverse ext
+/-
+**proving** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 lemma proving equality in `α →+ Additive β` from equality in `Multiplicative α →* β`. -/
 @[ext]
-/--
-lemma `Multiplicative.monoidHom_ext` / 引理 `Multiplicative.monoidHom_ext`
+/-
+**Multiplicative.monoidHom_ext** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Multiplicative.monoidHom_ext [AddZeroClass α] [MulOneClass β] (f g : Multi
+plicative α ->* β) (h : f.toAdditiveRight = g.toAdditiveRight) : f = g
+参数：f g : Multiplicative α ->* β；h : f.toAdditiveRight = g.toAdditiveRight。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 
-English:
-lemma Multiplicative.monoidHom_ext
-  statement: [AddZeroClass α] [MulOneClass β]
-  proof: MonoidHom.toAdditiveRight.injective h
+--- 原说明 ---
+This ext lemma moves the type tag to the codomain, since most ext lemmas act on 
+the domain.
 
-中文:
-引理 Multiplicative.monoidHom_ext
-  结论: [加法零类 α] [MulOne类 β]
-  证明: MonoidHom.toAdditiveRight.injective h
-
-Depends on / 依赖: MonoidHom, MonoidHom.toAdditiveRight.injective, injective, toAdditiveRight
+WARNING: This has the potential to send `ext` into a loop if someone locally add
+s the inverse ext
+lemma proving equality in `α →+ Additive β` from equality in `Multiplicative α →
+* β`.
 -/
 lemma Multiplicative.monoidHom_ext [AddZeroClass α] [MulOneClass β]
-    (f g : Multiplicative α ->* β) (h : f.toAdditiveRight = g.toAdditiveRight) : f = g :=
+    (f g : Multiplicative α →* β) (h : f.toAdditiveRight = g.toAdditiveRight) : f = g :=
   MonoidHom.toAdditiveRight.injective h
 
 /-- This ext lemma moves the type tag to the codomain, since most ext lemmas act on the domain.
 
 WARNING: This has the potential to send `ext` into a loop if someone locally adds the inverse ext
+/-
+**proving** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 lemma proving equality in `α →* Multiplicative β` from equality in `Additive α →+ β`. -/
 @[ext]
-/--
-lemma `Additive.addMonoidHom_ext` / 引理 `Additive.addMonoidHom_ext`
+/-
+**Additive.addMonoidHom_ext** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Additive.addMonoidHom_ext [MulOneClass α] [AddZeroClass β] (f g : Additive
+ α ->+ β) (h : f.toMultiplicativeRight = g.toMultiplicativeRight) : f = g
+参数：f g : Additive α ->+ β；h : f.toMultiplicativeRight = g.toMultiplicativeRight。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
 
-English:
-lemma Additive.addMonoidHom_ext
-  statement: [MulOneClass α] [AddZeroClass β]
-  proof: AddMonoidHom.toMultiplicativeRight.injective h
+--- 原说明 ---
+This ext lemma moves the type tag to the codomain, since most ext lemmas act on 
+the domain.
 
-中文:
-引理 加性.addMonoidHom_ext
-  结论: [MulOne类 α] [加法零类 β]
-  证明: AddMonoidHom.toMultiplicativeRight.injective h
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.toMultiplicativeRight.injective, injective, toMultiplicativeRight
+WARNING: This has the potential to send `ext` into a loop if someone locally add
+s the inverse ext
+lemma proving equality in `α →* Multiplicative β` from equality in `Additive α →
++ β`.
 -/
 lemma Additive.addMonoidHom_ext [MulOneClass α] [AddZeroClass β]
-    (f g : Additive α ->+ β) (h : f.toMultiplicativeRight = g.toMultiplicativeRight) : f = g :=
+    (f g : Additive α →+ β) (h : f.toMultiplicativeRight = g.toMultiplicativeRight) : f = g :=
   AddMonoidHom.toMultiplicativeRight.injective h
 
 section AddCommMonoid
 variable [AddMonoid M] [AddCommMonoid N]
 
 @[simp]
-/--
-lemma `AddMonoidHom.toMultiplicative_add` / 引理 `AddMonoidHom.toMultiplicative_add`
-
-English:
-lemma AddMonoidHom.toMultiplicative_add
-  given: (f g : M ->+ N)
-  proof: rfl
-
-中文:
-引理 加法幺半群态射.toMultiplicative_add
-  条件: (f g : M ->+ N)
-  证明: rfl
+/-
+**AddMonoidHom.toMultiplicative_add** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：AddMonoidHom.toMultiplicative_add (f g : M ->+ N) : (f + g).toMultiplicati
+ve = f.toMultiplicative * g.toMultiplicative
+参数：f g : M ->+ N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma AddMonoidHom.toMultiplicative_add (f g : M ->+ N) :
+lemma AddMonoidHom.toMultiplicative_add (f g : M →+ N) :
     (f + g).toMultiplicative = f.toMultiplicative * g.toMultiplicative := rfl
 
 end AddCommMonoid
 
-/--
-Definition of `AddMonoidHom.toMultiplicativeLeftAddEquiv` / `AddMonoidHom.toMultiplicativeLeftAddEquiv` 的定义
+/-- `AddMonoidHom.toMultiplicativeLeft` as an `AddEquiv`. -/
+/-
+**AddMonoidHom.toMultiplicativeLeftAddEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：AddMonoidHom.toMultiplicativeLeftAddEquiv [AddMonoid M] [CommMonoid N] : (
+M ->+ Additive N) ≃+ Additive (Multiplicative M ->* N) where toEquiv
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition AddMonoidHom.toMultiplicativeLeftAddEquiv
-  signature: [AddMonoid M] [CommMonoid N]
-  body: AddMonoidHom.toMultiplicativeLeft.trans Additive.ofMul
-  map_add' _ _ := rfl
-
-中文:
-定义 加法幺半群态射.toMultiplicativeLeftAddEquiv
-  签名: [加法幺半群 M] [交换幺半群 N]
-  定义体: AddMonoidHom.toMultiplicativeLeft.trans Additive.ofMul
-  map_add' _ _ := rfl
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.toMultiplicativeLeft.trans, Additive, Additive.ofMul, toMultiplicativeLeft
+--- 原说明 ---
+`AddMonoidHom.toMultiplicativeLeft` as an `AddEquiv`.
 -/
 def AddMonoidHom.toMultiplicativeLeftAddEquiv [AddMonoid M] [CommMonoid N] :
-    (M ->+ Additive N) ≃+ Additive (Multiplicative M ->* N) where
+    (M →+ Additive N) ≃+ Additive (Multiplicative M →* N) where
   toEquiv := AddMonoidHom.toMultiplicativeLeft.trans Additive.ofMul
   map_add' _ _ := rfl
 
-/--
-Definition of `AddMonoidHom.toMultiplicativeRightAddEquiv` / `AddMonoidHom.toMultiplicativeRightAddEquiv` 的定义
+/-- `AddMonoidHom.toMultiplicativeRight` as an `AddEquiv`. -/
+/-
+**AddMonoidHom.toMultiplicativeRightAddEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：AddMonoidHom.toMultiplicativeRightAddEquiv [Monoid M] [AddCommMonoid N] : 
+(Additive M ->+ N) ≃+ Additive (M ->* Multiplicative N) where toEquiv
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition AddMonoidHom.toMultiplicativeRightAddEquiv
-  signature: [Monoid M] [AddCommMonoid N]
-  body: AddMonoidHom.toMultiplicativeRight.trans Additive.ofMul
-  map_add' _ _ := rfl
-
-中文:
-定义 加法幺半群态射.toMultiplicativeRightAddEquiv
-  签名: [幺半群 M] [加法交换幺半群 N]
-  定义体: AddMonoidHom.toMultiplicativeRight.trans Additive.ofMul
-  map_add' _ _ := rfl
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.toMultiplicativeRight.trans, Additive, Additive.ofMul, toMultiplicativeRight
+--- 原说明 ---
+`AddMonoidHom.toMultiplicativeRight` as an `AddEquiv`.
 -/
 def AddMonoidHom.toMultiplicativeRightAddEquiv [Monoid M] [AddCommMonoid N] :
-    (Additive M ->+ N) ≃+ Additive (M ->* Multiplicative N) where
+    (Additive M →+ N) ≃+ Additive (M →* Multiplicative N) where
   toEquiv := AddMonoidHom.toMultiplicativeRight.trans Additive.ofMul
   map_add' _ _ := rfl
 
-/--
-Definition of `MonoidHom.toAdditiveLeftMulEquiv` / `MonoidHom.toAdditiveLeftMulEquiv` 的定义
+/-- `MonoidHom.toAdditiveLeft` as a `MulEquiv`. -/
+/-
+**MonoidHom.toAdditiveLeftMulEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：MonoidHom.toAdditiveLeftMulEquiv [Monoid M] [AddCommMonoid N] : (M ->* Mul
+tiplicative N) ≃* Multiplicative (Additive M ->+ N) where toEquiv
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition MonoidHom.toAdditiveLeftMulEquiv
-  signature: [Monoid M] [AddCommMonoid N]
-  body: MonoidHom.toAdditiveLeft.trans Multiplicative.ofAdd
-  map_mul' _ _ := rfl
-
-中文:
-定义 幺半群态射.toAdditiveLeftMulEquiv
-  签名: [幺半群 M] [加法交换幺半群 N]
-  定义体: MonoidHom.toAdditiveLeft.trans Multiplicative.ofAdd
-  map_mul' _ _ := rfl
-
-Depends on / 依赖: MonoidHom, MonoidHom.toAdditiveLeft.trans, Multiplicative, Multiplicative.ofAdd, toAdditiveLeft
+--- 原说明 ---
+`MonoidHom.toAdditiveLeft` as a `MulEquiv`.
 -/
 def MonoidHom.toAdditiveLeftMulEquiv [Monoid M] [AddCommMonoid N] :
-    (M ->* Multiplicative N) ≃* Multiplicative (Additive M ->+ N) where
+    (M →* Multiplicative N) ≃* Multiplicative (Additive M →+ N) where
   toEquiv := MonoidHom.toAdditiveLeft.trans Multiplicative.ofAdd
   map_mul' _ _ := rfl
 
-/--
-Definition of `MonoidHom.toAdditiveRightMulEquiv` / `MonoidHom.toAdditiveRightMulEquiv` 的定义
+/-- `MonoidHom.toAdditiveRight` as a `MulEquiv`. -/
+/-
+**MonoidHom.toAdditiveRightMulEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：MonoidHom.toAdditiveRightMulEquiv [AddMonoid M] [CommMonoid N] : (Multipli
+cative M ->* N) ≃* Multiplicative (M ->+ Additive N) where toEquiv
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition MonoidHom.toAdditiveRightMulEquiv
-  signature: [AddMonoid M] [CommMonoid N]
-  body: MonoidHom.toAdditiveRight.trans Multiplicative.ofAdd
-  map_mul' _ _ := rfl
-
-中文:
-定义 幺半群态射.toAdditiveRightMulEquiv
-  签名: [加法幺半群 M] [交换幺半群 N]
-  定义体: MonoidHom.toAdditiveRight.trans Multiplicative.ofAdd
-  map_mul' _ _ := rfl
-
-Depends on / 依赖: MonoidHom, MonoidHom.toAdditiveRight.trans, Multiplicative, Multiplicative.ofAdd, toAdditiveRight
+--- 原说明 ---
+`MonoidHom.toAdditiveRight` as a `MulEquiv`.
 -/
 def MonoidHom.toAdditiveRightMulEquiv [AddMonoid M] [CommMonoid N] :
-    (Multiplicative M ->* N) ≃* Multiplicative (M ->+ Additive N) where
+    (Multiplicative M →* N) ≃* Multiplicative (M →+ Additive N) where
   toEquiv := MonoidHom.toAdditiveRight.trans Multiplicative.ofAdd
   map_mul' _ _ := rfl

@@ -47,22 +47,17 @@ namespace Lattice
 
 variable {T : Type u} (x₁ x₂ x₃ x₄ : T) [Lattice T]
 
-/--
-Definition of `BicartSq` / `BicartSq` 的定义
+/-- A bi-Cartesian square in a lattice consists of elements `x₁`, `x₂`, `x₃` and `x₄`
+such that `x₂ ⊔ x₃ = x₄` and `x₂ ⊓ x₃ = x₁`. -/
+/-
+**Lattice.BicartSq** 是 Mathlib 中的一个归纳类型，位于命名空间 `Lattice`。
+形式化陈述：{T : Type u} → T → T → T → T → [Lattice T] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure BicartSq
-  parameters: : Prop where
-  axioms and operations (2):
-    - sup_eq : x₂ ⊔ x₃ = x₄
-    - inf_eq : x₂ ⊓ x₃ = x₁
-
-中文:
-结构 BicartSq
-  参数: : 命题 where
-  公理与运算 (2 个):
-    - sup_eq : x₂ ⊔ x₃ = x₄
-    - inf_eq : x₂ ⊓ x₃ = x₁
+--- 原说明 ---
+A bi-Cartesian square in a lattice consists of elements `x₁`, `x₂`, `x₃` and `x₄
+`
+such that `x₂ ⊔ x₃ = x₄` and `x₂ ⊓ x₃ = x₁`.
 -/
 structure BicartSq : Prop where
   sup_eq : x₂ ⊔ x₃ = x₄
@@ -76,75 +71,41 @@ variable {x₁ x₂ x₃ x₄} (sq : BicartSq x₁ x₂ x₃ x₄)
 
 include sq
 
-/--
-lemma `le₁₂` / 引理 `le₁₂`
-
-English:
-lemma le₁₂
-  statement: x₁ <= x₂
-  proof: by grind
-
-中文:
-引理 le₁₂
-  结论: x₁ <= x₂
-  证明: by grind
+/-
+**Lattice.BicartSq.le** 是 Mathlib 中的一个引理，位于命名空间 `Lattice.BicartSq`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma le₁₂ : x₁ <= x₂ := by grind
-/--
-lemma `le₁₃` / 引理 `le₁₃`
-
-English:
-lemma le₁₃
-  statement: x₁ <= x₃
-  proof: by grind
-
-中文:
-引理 le₁₃
-  结论: x₁ <= x₃
-  证明: by grind
+lemma le₁₂ : x₁ ≤ x₂ := by grind
+/-
+**Lattice.BicartSq.le** 是 Mathlib 中的一个引理，位于命名空间 `Lattice.BicartSq`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma le₁₃ : x₁ <= x₃ := by grind
-/--
-lemma `le₂₄` / 引理 `le₂₄`
-
-English:
-lemma le₂₄
-  statement: x₂ <= x₄
-  proof: by grind
-
-中文:
-引理 le₂₄
-  结论: x₂ <= x₄
-  证明: by grind
+lemma le₁₃ : x₁ ≤ x₃ := by grind
+/-
+**Lattice.BicartSq.le** 是 Mathlib 中的一个引理，位于命名空间 `Lattice.BicartSq`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma le₂₄ : x₂ <= x₄ := by grind
-/--
-lemma `le₃₄` / 引理 `le₃₄`
-
-English:
-lemma le₃₄
-  statement: x₃ <= x₄
-  proof: by grind
-
-中文:
-引理 le₃₄
-  结论: x₃ <= x₄
-  证明: by grind
+lemma le₂₄ : x₂ ≤ x₄ := by grind
+/-
+**Lattice.BicartSq.le** 是 Mathlib 中的一个引理，位于命名空间 `Lattice.BicartSq`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma le₃₄ : x₃ <= x₄ := by grind
+lemma le₃₄ : x₃ ≤ x₄ := by grind
 
-/--
-lemma `commSq` / 引理 `commSq`
+/-- The commutative square associated to a bi-Cartesian square in a lattice. -/
+/-
+**Lattice.BicartSq.commSq** 是 Mathlib 中的一个引理，位于命名空间 `Lattice.BicartSq`。
+形式化陈述：commSq : CommSq (homOfLE sq.le₁₂) (homOfLE sq.le₁₃) (homOfLE sq.le₂₄) (hom
+OfLE sq.le₃₄)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Lattice.BicartSq.le₁₂`：le₁₂ : x₁ <= x₂
+· 使用引理 `Lattice.BicartSq.le₁₃`：le₁₃ : x₁ <= x₃
+· 使用引理 `Lattice.BicartSq.le₂₄`：le₂₄ : x₂ <= x₄
+· 使用引理 `Lattice.BicartSq.le₃₄`：le₃₄ : x₃ <= x₄
 
-English:
-lemma commSq
-  statement: CommSq (homOfLE sq.le₁₂) (homOfLE sq.le₁₃)
-  proof: ⟨rfl⟩
-
-中文:
-引理 commSq
-  结论: 交换Sq (homOfLE sq.le₁₂) (homOfLE sq.le₁₃)
-  证明: ⟨rfl⟩
+--- 原说明 ---
+The commutative square associated to a bi-Cartesian square in a lattice.
 -/
 lemma commSq : CommSq (homOfLE sq.le₁₂) (homOfLE sq.le₁₃)
     (homOfLE sq.le₂₄) (homOfLE sq.le₃₄) := ⟨rfl⟩
@@ -155,24 +116,25 @@ end Lattice
 
 namespace CompleteLattice
 
-variable {T : Type u} [CompleteLattice T] {ι : Type*} (x : T) (u : ι -> T) (v : ι -> ι -> T)
+variable {T : Type u} [CompleteLattice T] {ι : Type*} (x : T) (u : ι → T) (v : ι → ι → T)
 
-/--
-Definition of `MulticoequalizerDiagram` / `MulticoequalizerDiagram` 的定义
+/-- A multicoequalizer diagram in a complete lattice `T` consists of families of elements
+`u : ι → T`, `v : ι → ι → T`, and an element `x : T` such that `x` is the supremum of `u`,
+and for any `i` and `j`, `v i j` is the minimum of `u i` and `u j`. -/
+/-
+**CompleteLattice.MulticoequalizerDiagram** 是 Mathlib 中的一个归纳类型，位于命名空间 `CompleteL
+attice`。
+形式化陈述：{T : Type u} → [CompleteLattice T] → {ι : Type u_1} → T → (ι → T) → (ι → ι
+ → T) → Prop
+参数：ι → T；ι → ι → T。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure MulticoequalizerDiagram
-  parameters: : Prop where
-  axioms and operations (2):
-    - iSup_eq : ⨆ (i : ι), u i = x
-    - eq_inf((i j : ι)) : v i j = u i ⊓ u j
-
-中文:
-结构 MulticoequalizerDiagram
-  参数: : 命题 where
-  公理与运算 (2 个):
-    - iSup_eq : ⨆ (i : ι), u i = x
-    - eq_inf((i j : ι)) : v i j = u i ⊓ u j
+--- 原说明 ---
+A multicoequalizer diagram in a complete lattice `T` consists of families of ele
+ments
+`u : ι → T`, `v : ι → ι → T`, and an element `x : T` such that `x` is the suprem
+um of `u`,
+and for any `i` and `j`, `v i j` is the minimum of `u i` and `u j`.
 -/
 structure MulticoequalizerDiagram : Prop where
   iSup_eq : ⨆ (i : ι), u i = x
@@ -189,27 +151,20 @@ variable {x u v} (d : MulticoequalizerDiagram x u v)
 given by the objects `u i` and the minima `v i j = u i ⊓ u j`,
 when `d : MulticoequalizerDiagram x u v`. -/
 @[simps]
-/--
-Definition of `multispanIndex` / `multispanIndex` 的定义
+/-
+**CompleteLattice.MulticoequalizerDiagram.multispanIndex** 是 Mathlib 中的一个定义，位于命名
+空间 `CompleteLattice.MulticoequalizerDiagram`。
+形式化陈述：multispanIndex : MultispanIndex (.prod ι) T where left
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition multispanIndex
-  signature: : MultispanIndex (.prod ι) T where
-  body: fun ⟨i, j⟩ => v i j
-  right := u
-  fst _ := homOfLE (by grind)
-  snd _ := homOfLE (by grind)
-
-中文:
-定义 multispanIndex
-  签名: : MultispanIndex (.乘积 ι) T where
-  定义体: fun ⟨i, j⟩ => v i j
-  right := u
-  fst _ := homOfLE (by grind)
-  snd _ := homOfLE (by grind)
+--- 原说明 ---
+The multispan index in the category associated to the complete lattice `T`
+given by the objects `u i` and the minima `v i j = u i ⊓ u j`,
+when `d : MulticoequalizerDiagram x u v`.
 -/
 def multispanIndex : MultispanIndex (.prod ι) T where
-  left := fun ⟨i, j⟩ => v i j
+  left := fun ⟨i, j⟩ ↦ v i j
   right := u
   fst _ := homOfLE (by grind)
   snd _ := homOfLE (by grind)
@@ -219,51 +174,49 @@ associated to `d : MulticoequalizerDiagram x u v` with `x : T`.
 (In the case `T := Set X`, this multicofork becomes colimit after the application
 of the obvious functor `Set X ⥤ Type _`.) -/
 @[simps! pt]
-/--
-Definition of `multicofork` / `multicofork` 的定义
+/-
+**CompleteLattice.MulticoequalizerDiagram.multicofork** 是 Mathlib 中的一个定义，位于命名空间 
+`CompleteLattice.MulticoequalizerDiagram`。
+形式化陈述：multicofork : Multicofork d.multispanIndex
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition multicofork
-  signature: : Multicofork d.multispanIndex
-  body: Multicofork.ofπ _ x (fun i => homOfLE (by grind [multispanIndex_right, le_iSup_iff]))
-    (fun _ => rfl)
-
-中文:
-定义 multicofork
-  签名: : Multicofork d.multispanIndex
-  定义体: Multicofork.ofπ _ x (fun i => homOfLE (by grind [multispanIndex_right, le_iSup_iff]))
-    (fun _ => rfl)
-
-Depends on / 依赖: Multicofork, Multicofork.of, homOfLE, le_iSup_iff, multispanIndex_right
+--- 原说明 ---
+The multicofork in the category associated to the complete lattice `T`
+associated to `d : MulticoequalizerDiagram x u v` with `x : T`.
+(In the case `T := Set X`, this multicofork becomes colimit after the applicatio
+n
+of the obvious functor `Set X ⥤ Type _`.)
 -/
 def multicofork : Multicofork d.multispanIndex :=
-  Multicofork.ofπ _ x (fun i => homOfLE (by grind [multispanIndex_right, le_iSup_iff]))
-    (fun _ => rfl)
+  Multicofork.ofπ _ x (fun i ↦ homOfLE (by grind [multispanIndex_right, le_iSup_iff]))
+    (fun _ ↦ rfl)
 
 end MulticoequalizerDiagram
 
 end CompleteLattice
 
-/--
-lemma `Lattice.BicartSq.multicoequalizerDiagram` / 引理 `Lattice.BicartSq.multicoequalizerDiagram`
-
-English:
-lemma Lattice.BicartSq.multicoequalizerDiagram
-  statement: {T : Type u} [CompleteLattice T]
-  proof: by rw [← sq.sup_eq, sup_comm, sup_eq_iSup]
-  eq_inf i j := by grind
-
-中文:
-引理 格.BicartSq.multicoequalizerDiagram
-  结论: {T : 类型u} [完备格 T]
-  证明: by rw [← sq.sup_eq, sup_comm, sup_eq_iSup]
-  eq_inf i j := by grind
+/-
+**Lattice.BicartSq.multicoequalizerDiagram** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Lattice.BicartSq.multicoequalizerDiagram {T : Type u} [CompleteLattice T] 
+{x₁ x₂ x₃ x₄} (sq : BicartSq x₁ x₂ x₃ x₄) : CompleteLattice.MulticoequalizerDiag
+ram (T
+参数：sq : BicartSq x₁ x₂ x₃ x₄。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Lattice.BicartSq.sup_eq`：∀ {T : Type u} {x₁ x₂ x₃ x₄ : T} [inst : Lattic
+e T], Lattice.BicartSq x₁ x₂ x₃ x₄ → x₂ ⊔ x₃ = x₄
+· 使用定理 `sup_comm`：sup_comm (a b : α) : a ⊔ b = b ⊔ a
+· 使用定理 `sup_eq_iSup`：sup_eq_iSup (x y : α) : x ⊔ y = ⨆ b : Bool, cond b x y
 -/
 lemma Lattice.BicartSq.multicoequalizerDiagram {T : Type u} [CompleteLattice T]
     {x₁ x₂ x₃ x₄} (sq : BicartSq x₁ x₂ x₃ x₄) :
     CompleteLattice.MulticoequalizerDiagram (T := T) x₄
-      (fun i => bif i then x₃ else x₂)
-      (fun i j => bif i then bif j then x₃ else x₁
+      (fun i ↦ bif i then x₃ else x₂)
+      (fun i j ↦ bif i then bif j then x₃ else x₁
         else bif j then x₁ else x₂) where
   iSup_eq := by rw [← sq.sup_eq, sup_comm, sup_eq_iSup]
   eq_inf i j := by grind

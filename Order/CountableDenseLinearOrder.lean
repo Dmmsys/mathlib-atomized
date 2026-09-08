@@ -38,161 +38,130 @@ noncomputable section
 namespace Order
 
 variable {α β : Type*} [LinearOrder α] [LinearOrder β]
-/--
-theorem `exists_between_finsets` / 定理 `exists_between_finsets`
+/-- Suppose `α` is a nonempty dense linear order without endpoints, and
+suppose `lo`, `hi`, are finite subsets with all of `lo` strictly before `hi`.
+Then there is an element of `α` strictly between `lo` and `hi`. -/
+/-
+**Order.exists_between_finsets** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：exists_between_finsets [DenselyOrdered α] [NoMinOrder α] [NoMaxOrder α] [n
+onem : Nonempty α] (lo hi : Finset α) (lo_lt_hi : forall x in lo, forall y in hi
+, x < y) : exists m : α, (forall x in lo, x < m) ∧ forall y in hi, m < y
+参数：lo hi : Finset α；lo_lt_hi : forall x in lo, forall y in hi, x < y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.elim`：∀ {α : Sort u} {p : α → Prop} {b : Prop}, (∃ x, p x) → (∀ (
+a : α), p a → b) → b
+· 使用引理 `Finset.max'`：max'_one [LinearOrder α] : (1 : Finset α).max' one_nonempty
+ = 1
+· 使用引理 `Finset.min'`：min'_one [LinearOrder α] : (1 : Finset α).min' one_nonempty
+ = 1
+· 使用定理 `exists_between`：exists_between [LT α] [DenselyOrdered α] {a₁ a₂ : α} : a
+₁ < a₂ -> exists a, a₁ < a ∧ a < a₂
+· 使用定理 `Finset.max'_mem`：∀ {α : Type u_2} [inst : LinearOrder α] (s : Finset α) 
+(H : s.Nonempty), s.max' H ∈ s
+· 使用定理 `Finset.min'_mem`：∀ {α : Type u_2} [inst : LinearOrder α] (s : Finset α) 
+(H : s.Nonempty), s.min' H ∈ s
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `Finset.le_max'`：le_max' (x) (H2 : x in s) : x <= s.max' ⟨x, H2⟩
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `lt_of_lt_of_le`：lt_of_lt_of_le (hab : a < b) (hbc : b <= c) : a < c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Finset.min'_le`：∀ {α : Type u_2} [inst : LinearOrder α] (s : Finset α) (
+x : α) (H2 : x ∈ s), s.min' ⋯ ≤ x
+· 使用定理 `NoMaxOrder.exists_gt`：∀ {α : Type u_3} {inst : LT α} [self : NoMaxOrder 
+α] (a : α), ∃ b, a < b
+· 使用定理 `NoMinOrder.exists_lt`：∀ {α : Type u_3} {inst : LT α} [self : NoMinOrder 
+α] (a : α), ∃ b, b < a
+· 使用定理 `Nonempty.elim`：∀ {α : Sort u} {p : Prop}, Nonempty α → (∀ (a : α), p) → 
+p
 
-English:
-theorem exists_between_finsets
-  statement: [DenselyOrdered α] [NoMinOrder α]
-  proof: if nlo : lo.Nonempty then
-    if nhi : hi.Nonempty then
-      -- both sets are nonempty, use `DenselyOrdered`
-        Exists.elim
-        (exists_between (lo_lt_hi _ (Finset.max'_mem _ nlo) _ (Finset.min'_mem _ nhi))) fun m hm =>
-        ⟨m, fun x hx => lt_of_le_of_lt (Finset.le_max' lo x hx) hm.1, fun y hy =>
-          lt_of_lt_of_le hm.2 (Finset.min'_le hi y hy)⟩
-    else -- upper set is empty, use `NoMaxOrder`
-        Exists.elim
-        (exists_gt (Finset.max' lo nlo)) fun m hm =>
-        ⟨m, fun x hx => lt_of_le_of_lt (Finset.le_max' lo x hx) hm, fun y hy => (nhi ⟨y, hy⟩).elim⟩
-  else
-    if nhi : hi.Nonempty then
-      -- lower set is empty, use `NoMinOrder`
-        Exists.elim
-        (exists_lt (Finset.min' hi nhi)) fun m hm =>
-        ⟨m, fun x hx => (nlo ⟨x, hx⟩).elim, fun y hy => lt_of_lt_of_le hm (Finset.min'_le hi y hy)⟩
-    else -- both sets are empty, use `Nonempty`
-          nonem.elim
-        fun m => ⟨m, fun x hx => (nlo ⟨x, hx⟩).elim, fun y hy => (nhi ⟨y, hy⟩).elim⟩
-
-中文:
-定理 存在_between_finsets
-  结论: [稠密序 α] [NoMin序 α]
-  证明: if nlo : lo.Nonempty then
-    if nhi : hi.Nonempty then
-      -- both sets are nonempty, use `DenselyOrdered`
-        Exists.elim
-        (exists_between (lo_lt_hi _ (Finset.max'_mem _ nlo) _ (Finset.min'_mem _ nhi))) fun m hm =>
-        ⟨m, fun x hx => lt_of_le_of_lt (Finset.le_max' lo x hx) hm.1, fun y hy =>
-          lt_of_lt_of_le hm.2 (Finset.min'_le hi y hy)⟩
-    else -- upper set is empty, use `NoMaxOrder`
-        Exists.elim
-        (exists_gt (Finset.max' lo nlo)) fun m hm =>
-        ⟨m, fun x hx => lt_of_le_of_lt (Finset.le_max' lo x hx) hm, fun y hy => (nhi ⟨y, hy⟩).elim⟩
-  else
-    if nhi : hi.Nonempty then
-      -- lower set is empty, use `NoMinOrder`
-        Exists.elim
-        (exists_lt (Finset.min' hi nhi)) fun m hm =>
-        ⟨m, fun x hx => (nlo ⟨x, hx⟩).elim, fun y hy => lt_of_lt_of_le hm (Finset.min'_le hi y hy)⟩
-    else -- both sets are empty, use `Nonempty`
-          nonem.elim
-        fun m => ⟨m, fun x hx => (nlo ⟨x, hx⟩).elim, fun y hy => (nhi ⟨y, hy⟩).elim⟩
-
-Depends on / 依赖: Nonempty, hi.Nonempty, lo.Nonempty
+--- 原说明 ---
+Suppose `α` is a nonempty dense linear order without endpoints, and
+suppose `lo`, `hi`, are finite subsets with all of `lo` strictly before `hi`.
+Then there is an element of `α` strictly between `lo` and `hi`.
 -/
 theorem exists_between_finsets [DenselyOrdered α] [NoMinOrder α]
-    [NoMaxOrder α] [nonem : Nonempty α] (lo hi : Finset α) (lo_lt_hi : forall x in lo, forall y in hi, x < y) :
-    exists m : α, (forall x in lo, x < m) ∧ forall y in hi, m < y :=
+    [NoMaxOrder α] [nonem : Nonempty α] (lo hi : Finset α) (lo_lt_hi : ∀ x ∈ lo, ∀ y ∈ hi, x < y) :
+    ∃ m : α, (∀ x ∈ lo, x < m) ∧ ∀ y ∈ hi, m < y :=
   if nlo : lo.Nonempty then
     if nhi : hi.Nonempty then
       -- both sets are nonempty, use `DenselyOrdered`
         Exists.elim
-        (exists_between (lo_lt_hi _ (Finset.max'_mem _ nlo) _ (Finset.min'_mem _ nhi))) fun m hm =>
-        ⟨m, fun x hx => lt_of_le_of_lt (Finset.le_max' lo x hx) hm.1, fun y hy =>
+        (exists_between (lo_lt_hi _ (Finset.max'_mem _ nlo) _ (Finset.min'_mem _ nhi))) fun m hm ↦
+        ⟨m, fun x hx ↦ lt_of_le_of_lt (Finset.le_max' lo x hx) hm.1, fun y hy ↦
           lt_of_lt_of_le hm.2 (Finset.min'_le hi y hy)⟩
     else -- upper set is empty, use `NoMaxOrder`
         Exists.elim
-        (exists_gt (Finset.max' lo nlo)) fun m hm =>
-        ⟨m, fun x hx => lt_of_le_of_lt (Finset.le_max' lo x hx) hm, fun y hy => (nhi ⟨y, hy⟩).elim⟩
+        (exists_gt (Finset.max' lo nlo)) fun m hm ↦
+        ⟨m, fun x hx ↦ lt_of_le_of_lt (Finset.le_max' lo x hx) hm, fun y hy ↦ (nhi ⟨y, hy⟩).elim⟩
   else
     if nhi : hi.Nonempty then
       -- lower set is empty, use `NoMinOrder`
         Exists.elim
-        (exists_lt (Finset.min' hi nhi)) fun m hm =>
-        ⟨m, fun x hx => (nlo ⟨x, hx⟩).elim, fun y hy => lt_of_lt_of_le hm (Finset.min'_le hi y hy)⟩
+        (exists_lt (Finset.min' hi nhi)) fun m hm ↦
+        ⟨m, fun x hx ↦ (nlo ⟨x, hx⟩).elim, fun y hy ↦ lt_of_lt_of_le hm (Finset.min'_le hi y hy)⟩
     else -- both sets are empty, use `Nonempty`
           nonem.elim
-        fun m => ⟨m, fun x hx => (nlo ⟨x, hx⟩).elim, fun y hy => (nhi ⟨y, hy⟩).elim⟩
+        fun m ↦ ⟨m, fun x hx ↦ (nlo ⟨x, hx⟩).elim, fun y hy ↦ (nhi ⟨y, hy⟩).elim⟩
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `exists_orderEmbedding_insert` / 引理 `exists_orderEmbedding_insert`
-
-English:
-lemma exists_orderEmbedding_insert
-  statement: [DenselyOrdered β] [NoMinOrder β] [NoMaxOrder β]
-  proof: by
-  let Slt := {x in S.attach | x.val < a}.image f
-  let Sgt := {x in S.attach | a < x.val}.image f
-  obtain ⟨b, hb, hb'⟩ := Order.exists_between_finsets Slt Sgt (fun x hx y hy => by
-    simp only [Finset.mem_image, Finset.mem_filter, Finset.mem_attach, true_and, Subtype.exists,
-      exists_and_left, Slt, Sgt] at hx hy
-    obtain ⟨_, hx, _, rfl⟩ := hx
-    obtain ⟨_, hy, _, rfl⟩ := hy
-    exact f.strictMono (hx.trans hy))
-  refine ⟨OrderEmbedding.ofStrictMono
-    (fun (x : (insert a S : Finset α)) => if hx : x.1 in S then f ⟨x.1, hx⟩ else b) ?_, ?_⟩
-  · rintro ⟨x, hx⟩ ⟨y, hy⟩ hxy
-    if hxS : x in S
-    then if hyS : y in S
-      then simpa only [hxS, hyS, ↓reduceDIte, OrderEmbedding.lt_iff_lt, Subtype.mk_lt_mk]
-      else
-        obtain rfl := Finset.eq_of_mem_insert_of_notMem hy hyS
-        simp only [hxS, hyS, ↓reduceDIte]
-        exact hb _ (Finset.mem_image_of_mem _ (Finset.mem_filter.2 ⟨Finset.mem_attach _ _, hxy⟩))
-    else
-      obtain rfl := Finset.eq_of_mem_insert_of_notMem hx hxS
-      if hyS : y in S
-      then
-        simp only [hxS, hyS, ↓reduceDIte]
-        exact hb' _ (Finset.mem_image_of_mem _ (Finset.mem_filter.2 ⟨Finset.mem_attach _ _, hxy⟩))
-      else simp only [Finset.eq_of_mem_insert_of_notMem hy hyS, lt_self_iff_false] at hxy
-  · ext x
-    simp only [OrderEmbedding.coe_ofStrictMono,
-      Function.comp_apply, Finset.coe_mem, ↓reduceDIte, Subtype.coe_eta]
-
-中文:
-引理 存在_orderEmbedding_insert
-  结论: [稠密序 β] [NoMin序 β] [NoMax序 β]
-  证明: by
-  let Slt := {x in S.attach | x.val < a}.image f
-  let Sgt := {x in S.attach | a < x.val}.image f
-  obtain ⟨b, hb, hb'⟩ := Order.exists_between_finsets Slt Sgt (fun x hx y hy => by
-    simp only [Finset.mem_image, Finset.mem_filter, Finset.mem_attach, true_and, Subtype.exists,
-      exists_and_left, Slt, Sgt] at hx hy
-    obtain ⟨_, hx, _, rfl⟩ := hx
-    obtain ⟨_, hy, _, rfl⟩ := hy
-    exact f.strictMono (hx.trans hy))
-  refine ⟨OrderEmbedding.ofStrictMono
-    (fun (x : (insert a S : Finset α)) => if hx : x.1 in S then f ⟨x.1, hx⟩ else b) ?_, ?_⟩
-  · rintro ⟨x, hx⟩ ⟨y, hy⟩ hxy
-    if hxS : x in S
-    then if hyS : y in S
-      then simpa only [hxS, hyS, ↓reduceDIte, OrderEmbedding.lt_iff_lt, Subtype.mk_lt_mk]
-      else
-        obtain rfl := Finset.eq_of_mem_insert_of_notMem hy hyS
-        simp only [hxS, hyS, ↓reduceDIte]
-        exact hb _ (Finset.mem_image_of_mem _ (Finset.mem_filter.2 ⟨Finset.mem_attach _ _, hxy⟩))
-    else
-      obtain rfl := Finset.eq_of_mem_insert_of_notMem hx hxS
-      if hyS : y in S
-      then
-        simp only [hxS, hyS, ↓reduceDIte]
-        exact hb' _ (Finset.mem_image_of_mem _ (Finset.mem_filter.2 ⟨Finset.mem_attach _ _, hxy⟩))
-      else simp only [Finset.eq_of_mem_insert_of_notMem hy hyS, lt_self_iff_false] at hxy
-  · ext x
-    simp only [OrderEmbedding.coe_ofStrictMono,
-      Function.comp_apply, Finset.coe_mem, ↓reduceDIte, Subtype.coe_eta]
-
-Depends on / 依赖: Finset, Finset.mem_attach, Finset.mem_filter, Finset.mem_image, Order.exists_between_finsets, OrderEmbedding, OrderEmbedding.ofStrictMono, S.attach, Subtype, Subtype.exists, attach, exists_and_left, exists_between_finsets, f.strictMono, hx.trans, insert, mem_attach, mem_filter, mem_image, ofStrictMono
+/-
+**Order.exists_orderEmbedding_insert** 是 Mathlib 中的一个引理，位于命名空间 `Order`。
+形式化陈述：exists_orderEmbedding_insert [DenselyOrdered β] [NoMinOrder β] [NoMaxOrder
+ β] [nonem : Nonempty β] (S : Finset α) (f : S ↪o β) (a : α) : exists (g : (inse
+rt a S : Finset α) ↪o β), g ∘ (Set.inclusion ((S.subset_insert a) : ↑S subseteq 
+↑(insert a S))) = f
+参数：S : Finset α；f : S ↪o β；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.subset_insert`：∀ {α : Type u_1} [inst : DecidableEq α] (a : α) (s
+ : Finset α), s ⊆ insert a s
+· 使用定理 `Order.exists_between_finsets`：exists_between_finsets [DenselyOrdered α] 
+[NoMinOrder α] [NoMaxOrder α] [nonem : Nonempty α] (lo hi : Finset α) (lo_lt_hi 
+: forall x in lo, …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `OrderEmbedding.strictMono`：∀ {α : Type u_2} {β : Type u_3} [inst : Preor
+der α] [inst_1 : Preorder β] (f : α ↪o β), StrictMono ⇑f
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Finset.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {a} (h : a in s) 
+: f a in s.image f
+· 使用定理 `Finset.mem_filter`：∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred
+ p] {s : Finset α} {a : α}, a ∈ Finset.filter p s ↔ a ∈ s ∧ p a
+· 使用定理 `Finset.mem_attach`：mem_attach (s : Finset α) : forall x, x in s.attach
+· 使用定理 `Finset.eq_of_mem_insert_of_notMem`：eq_of_mem_insert_of_notMem (ha : b in
+ insert a s) (hb : b ∉ s) : b = a
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `Subtype.coe_eta`：coe_eta (a : { a // p a }) (h : p a) : mk (↑a) h = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma exists_orderEmbedding_insert [DenselyOrdered β] [NoMinOrder β] [NoMaxOrder β]
     [nonem : Nonempty β] (S : Finset α) (f : S ↪o β) (a : α) :
-    exists (g : (insert a S : Finset α) ↪o β),
-      g ∘ (Set.inclusion ((S.subset_insert a) : ↑S subseteq ↑(insert a S))) = f := by
-  let Slt := {x in S.attach | x.val < a}.image f
-  let Sgt := {x in S.attach | a < x.val}.image f
+    ∃ (g : (insert a S : Finset α) ↪o β),
+      g ∘ (Set.inclusion ((S.subset_insert a) : ↑S ⊆ ↑(insert a S))) = f := by
+  let Slt := {x ∈ S.attach | x.val < a}.image f
+  let Sgt := {x ∈ S.attach | a < x.val}.image f
   obtain ⟨b, hb, hb'⟩ := Order.exists_between_finsets Slt Sgt (fun x hx y hy => by
     simp only [Finset.mem_image, Finset.mem_filter, Finset.mem_attach, true_and, Subtype.exists,
       exists_and_left, Slt, Sgt] at hx hy
@@ -200,10 +169,10 @@ lemma exists_orderEmbedding_insert [DenselyOrdered β] [NoMinOrder β] [NoMaxOrd
     obtain ⟨_, hy, _, rfl⟩ := hy
     exact f.strictMono (hx.trans hy))
   refine ⟨OrderEmbedding.ofStrictMono
-    (fun (x : (insert a S : Finset α)) => if hx : x.1 in S then f ⟨x.1, hx⟩ else b) ?_, ?_⟩
+    (fun (x : (insert a S : Finset α)) => if hx : x.1 ∈ S then f ⟨x.1, hx⟩ else b) ?_, ?_⟩
   · rintro ⟨x, hx⟩ ⟨y, hy⟩ hxy
-    if hxS : x in S
-    then if hyS : y in S
+    if hxS : x ∈ S
+    then if hyS : y ∈ S
       then simpa only [hxS, hyS, ↓reduceDIte, OrderEmbedding.lt_iff_lt, Subtype.mk_lt_mk]
       else
         obtain rfl := Finset.eq_of_mem_insert_of_notMem hy hyS
@@ -211,7 +180,7 @@ lemma exists_orderEmbedding_insert [DenselyOrdered β] [NoMinOrder β] [NoMaxOrd
         exact hb _ (Finset.mem_image_of_mem _ (Finset.mem_filter.2 ⟨Finset.mem_attach _ _, hxy⟩))
     else
       obtain rfl := Finset.eq_of_mem_insert_of_notMem hx hxS
-      if hyS : y in S
+      if hyS : y ∈ S
       then
         simp only [hxS, hyS, ↓reduceDIte]
         exact hb' _ (Finset.mem_image_of_mem _ (Finset.mem_filter.2 ⟨Finset.mem_attach _ _, hxy⟩))
@@ -222,130 +191,87 @@ lemma exists_orderEmbedding_insert [DenselyOrdered β] [NoMinOrder β] [NoMaxOrd
 
 variable (α β)
 
-/--
-Definition of `PartialIso` / `PartialIso` 的定义
+/-- The type of partial order isomorphisms between `α` and `β` defined on finite subsets.
+A partial order isomorphism is encoded as a finite subset of `α × β`, consisting
+of pairs which should be identified. -/
+/-
+**Order.PartialIso** 是 Mathlib 中的一个定义，位于命名空间 `Order`。
+形式化陈述：PartialIso : Type _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PartialIso
-  signature: : Type _
-  body: { f : Finset (α × β) //
-    forall p in f, forall q in f,
-      cmp (Prod.fst p) (Prod.fst q) = cmp (Prod.snd p) (Prod.snd q) }
-deriving Preorder
-
-中文:
-定义 PartialIso
-  签名: : 类型 _
-  定义体: { f : Finset (α × β) //
-    forall p in f, forall q in f,
-      cmp (Prod.fst p) (Prod.fst q) = cmp (Prod.snd p) (Prod.snd q) }
-deriving Preorder
-
-Depends on / 依赖: Finset, Prod.fst, Prod.snd
+--- 原说明 ---
+The type of partial order isomorphisms between `α` and `β` defined on finite sub
+sets.
+A partial order isomorphism is encoded as a finite subset of `α × β`, consisting
+of pairs which should be identified.
 -/
 def PartialIso : Type _ :=
   { f : Finset (α × β) //
-    forall p in f, forall q in f,
+    ∀ p ∈ f, ∀ q ∈ f,
       cmp (Prod.fst p) (Prod.fst q) = cmp (Prod.snd p) (Prod.snd q) }
 deriving Preorder
 
 namespace PartialIso
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (PartialIso α β)
-  body: ⟨⟨∅, fun _p h _q => (Finset.notMem_empty _ h).elim⟩⟩
-
-中文:
-实例 :
-  签名: 可居 (PartialIso α β)
-  定义体: ⟨⟨∅, fun _p h _q => (Finset.notMem_empty _ h).elim⟩⟩
-
-Depends on / 依赖: Finset, Finset.notMem_empty, notMem_empty
+/-
+**Order.PartialIso.** 是 Mathlib 中的一个实例，位于命名空间 `Order.PartialIso`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Inhabited (PartialIso α β) := ⟨⟨∅, fun _p h _q => (Finset.notMem_empty _ h).elim⟩⟩
+instance : Inhabited (PartialIso α β) := ⟨⟨∅, fun _p h _q ↦ (Finset.notMem_empty _ h).elim⟩⟩
 
 variable {α β}
 
-/--
-theorem `exists_across` / 定理 `exists_across`
+/-- For each `a`, we can find a `b` in the codomain, such that `a`'s relation to
+the domain of `f` is `b`'s relation to the image of `f`.
 
-English:
-theorem exists_across
-  statement: [DenselyOrdered β] [NoMinOrder β] [NoMaxOrder β] [Nonempty β]
-  proof: by
-  by_cases h : exists b, (a, b) in f.val
-  · obtain ⟨b, hb⟩ := h
-    exact ⟨b, fun p hp => f.prop _ hp _ hb⟩
-  have :
-    forall x in {p in f.val | p.fst < a}.image Prod.snd,
-      forall y in {p in f.val | a < p.fst}.image Prod.snd, x < y := by
-    intro x hx y hy
-    rw [Finset.mem_image] at hx hy
-    rcases hx with ⟨p, hp1, rfl⟩
-    rcases hy with ⟨q, hq1, rfl⟩
-    rw [Finset.mem_filter] at hp1 hq1
-    rw [← lt_iff_lt_of_cmp_eq_cmp (f.prop _ hp1.1 _ hq1.1)]
-    exact lt_trans hp1.right hq1.right
-  obtain ⟨b, hb⟩ := exists_between_finsets _ _ this
-  use b
-  rintro ⟨p1, p2⟩ hp
-  have : p1 != a := fun he => h ⟨p2, he ▸ hp⟩
-  rcases lt_or_gt_of_ne this with hl | hr
-  · have : p1 < a ∧ p2 < b :=
-      ⟨hl, hb.1 _ (Finset.mem_image.mpr ⟨(p1, p2), Finset.mem_filter.mpr ⟨hp, hl⟩, rfl⟩)⟩
-    rw [← cmp_eq_lt_iff]; rw [← cmp_eq_lt_iff] at this
-    exact this.1.trans this.2.symm
-  · have : a < p1 ∧ b < p2 :=
-      ⟨hr, hb.2 _ (Finset.mem_image.mpr ⟨(p1, p2), Finset.mem_filter.mpr ⟨hp, hr⟩, rfl⟩)⟩
-    rw [← cmp_eq_gt_iff]; rw [← cmp_eq_gt_iff] at this
-    exact this.1.trans this.2.symm
+Thus, if `a` is not already in `f`, then we can extend `f` by sending `a` to `b`.
+-/
+/-
+**Order.PartialIso.exists_across** 是 Mathlib 中的一个定理，位于命名空间 `Order.PartialIso`。
+形式化陈述：exists_across [DenselyOrdered β] [NoMinOrder β] [NoMaxOrder β] [Nonempty β
+] (f : PartialIso α β) (a : α) : exists b : β, forall p in f.val, cmp (Prod.fst 
+p) a = cmp (Prod.snd p) b
+参数：f : PartialIso α β；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.mem_image`：mem_image : b in s.image f ↔ exists a in s, f a = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `lt_iff_lt_of_cmp_eq_cmp`：lt_iff_lt_of_cmp_eq_cmp (h : cmp x y = cmp x' y
+') : x < y ↔ x' < y'
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Finset.mem_filter`：∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred
+ p] {s : Finset α} {a : α}, a ∈ Finset.filter p s ↔ a ∈ s ∧ p a
+· 使用引理 `lt_trans`：lt_trans : a < b -> b < c -> a < c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Order.exists_between_finsets`：exists_between_finsets [DenselyOrdered α] 
+[NoMinOrder α] [NoMaxOrder α] [nonem : Nonempty α] (lo hi : Finset α) (lo_lt_hi 
+: forall x in lo, …
+· 使用引理 `lt_or_gt_of_ne`：lt_or_gt_of_ne (h : a != b) : a < b ∨ b < a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `cmp_eq_lt_iff`：cmp_eq_lt_iff : cmp x y = Ordering.lt ↔ x < y
+· 使用定理 `cmp_eq_gt_iff`：cmp_eq_gt_iff : cmp x y = Ordering.gt ↔ y < x
 
-中文:
-定理 存在_across
-  结论: [稠密序 β] [NoMin序 β] [NoMax序 β] [非空 β]
-  证明: by
-  by_cases h : exists b, (a, b) in f.val
-  · obtain ⟨b, hb⟩ := h
-    exact ⟨b, fun p hp => f.prop _ hp _ hb⟩
-  have :
-    forall x in {p in f.val | p.fst < a}.image Prod.snd,
-      forall y in {p in f.val | a < p.fst}.image Prod.snd, x < y := by
-    intro x hx y hy
-    rw [Finset.mem_image] at hx hy
-    rcases hx with ⟨p, hp1, rfl⟩
-    rcases hy with ⟨q, hq1, rfl⟩
-    rw [Finset.mem_filter] at hp1 hq1
-    rw [← lt_iff_lt_of_cmp_eq_cmp (f.prop _ hp1.1 _ hq1.1)]
-    exact lt_trans hp1.right hq1.right
-  obtain ⟨b, hb⟩ := exists_between_finsets _ _ this
-  use b
-  rintro ⟨p1, p2⟩ hp
-  have : p1 != a := fun he => h ⟨p2, he ▸ hp⟩
-  rcases lt_or_gt_of_ne this with hl | hr
-  · have : p1 < a ∧ p2 < b :=
-      ⟨hl, hb.1 _ (Finset.mem_image.mpr ⟨(p1, p2), Finset.mem_filter.mpr ⟨hp, hl⟩, rfl⟩)⟩
-    rw [← cmp_eq_lt_iff]; rw [← cmp_eq_lt_iff] at this
-    exact this.1.trans this.2.symm
-  · have : a < p1 ∧ b < p2 :=
-      ⟨hr, hb.2 _ (Finset.mem_image.mpr ⟨(p1, p2), Finset.mem_filter.mpr ⟨hp, hr⟩, rfl⟩)⟩
-    rw [← cmp_eq_gt_iff]; rw [← cmp_eq_gt_iff] at this
-    exact this.1.trans this.2.symm
+--- 原说明 ---
+For each `a`, we can find a `b` in the codomain, such that `a`'s relation to
+the domain of `f` is `b`'s relation to the image of `f`.
 
-Depends on / 依赖: Finset, Finset.mem_filter, Finset.mem_image, Prod.snd, exists_between_finsets, f.prop, f.val, hp1.right, hq1.right, lt_iff_lt_of_cmp_eq_cmp, lt_trans, mem_filter, mem_image, p.fst
+Thus, if `a` is not already in `f`, then we can extend `f` by sending `a` to `b`
+.
 -/
 theorem exists_across [DenselyOrdered β] [NoMinOrder β] [NoMaxOrder β] [Nonempty β]
     (f : PartialIso α β) (a : α) :
-    exists b : β, forall p in f.val, cmp (Prod.fst p) a = cmp (Prod.snd p) b := by
-  by_cases h : exists b, (a, b) in f.val
+    ∃ b : β, ∀ p ∈ f.val, cmp (Prod.fst p) a = cmp (Prod.snd p) b := by
+  by_cases h : ∃ b, (a, b) ∈ f.val
   · obtain ⟨b, hb⟩ := h
-    exact ⟨b, fun p hp => f.prop _ hp _ hb⟩
+    exact ⟨b, fun p hp ↦ f.prop _ hp _ hb⟩
   have :
-    forall x in {p in f.val | p.fst < a}.image Prod.snd,
-      forall y in {p in f.val | a < p.fst}.image Prod.snd, x < y := by
+    ∀ x ∈ {p ∈ f.val | p.fst < a}.image Prod.snd,
+      ∀ y ∈ {p ∈ f.val | a < p.fst}.image Prod.snd, x < y := by
     intro x hx y hy
     rw [Finset.mem_image] at hx hy
     rcases hx with ⟨p, hp1, rfl⟩
@@ -356,108 +282,64 @@ theorem exists_across [DenselyOrdered β] [NoMinOrder β] [NoMaxOrder β] [Nonem
   obtain ⟨b, hb⟩ := exists_between_finsets _ _ this
   use b
   rintro ⟨p1, p2⟩ hp
-  have : p1 != a := fun he => h ⟨p2, he ▸ hp⟩
+  have : p1 ≠ a := fun he ↦ h ⟨p2, he ▸ hp⟩
   rcases lt_or_gt_of_ne this with hl | hr
   · have : p1 < a ∧ p2 < b :=
       ⟨hl, hb.1 _ (Finset.mem_image.mpr ⟨(p1, p2), Finset.mem_filter.mpr ⟨hp, hl⟩, rfl⟩)⟩
-    rw [← cmp_eq_lt_iff]; rw [← cmp_eq_lt_iff] at this
+    rw [← cmp_eq_lt_iff, ← cmp_eq_lt_iff] at this
     exact this.1.trans this.2.symm
   · have : a < p1 ∧ b < p2 :=
       ⟨hr, hb.2 _ (Finset.mem_image.mpr ⟨(p1, p2), Finset.mem_filter.mpr ⟨hp, hr⟩, rfl⟩)⟩
-    rw [← cmp_eq_gt_iff]; rw [← cmp_eq_gt_iff] at this
+    rw [← cmp_eq_gt_iff, ← cmp_eq_gt_iff] at this
     exact this.1.trans this.2.symm
 
-/--
-Definition of `comm` / `comm` 的定义
+/-- A partial isomorphism between `α` and `β` is also a partial isomorphism between `β` and `α`. -/
+/-
+**Order.PartialIso.comm** 是 Mathlib 中的一个定义，位于命名空间 `Order.PartialIso`。
+形式化陈述：{α : Type u_1} →   {β : Type u_2} → [inst : LinearOrder α] → [inst_1 : Lin
+earOrder β] → Order.PartialIso α β → Order.PartialIso β α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comm
-  signature: : PartialIso α β -> PartialIso β α
-  body: Subtype.map (Finset.image (Equiv.prodComm _ _)) fun f hf p hp q hq =>
-Eq.symm
-      hf ((Equiv.prodComm α β).symm p)
-        (by
-          rw [← Finset.mem_coe]; rw [Finset.coe_image]; rw [Equiv.image_eq_preimage_symm] at hp
-          rwa [← Finset.mem_coe])
-        ((Equiv.prodComm α β).symm q)
-        (by
-          rw [← Finset.mem_coe]; rw [Finset.coe_image]; rw [Equiv.image_eq_preimage_symm] at hq
-          rwa [← Finset.mem_coe])
-
-中文:
-定义 comm
-  签名: : PartialIso α β -> PartialIso β α
-  定义体: Subtype.map (Finset.image (Equiv.prodComm _ _)) fun f hf p hp q hq =>
-Eq.symm
-      hf ((Equiv.prodComm α β).symm p)
-        (by
-          rw [← Finset.mem_coe]; rw [Finset.coe_image]; rw [Equiv.image_eq_preimage_symm] at hp
-          rwa [← Finset.mem_coe])
-        ((Equiv.prodComm α β).symm q)
-        (by
-          rw [← Finset.mem_coe]; rw [Finset.coe_image]; rw [Equiv.image_eq_preimage_symm] at hq
-          rwa [← Finset.mem_coe])
+--- 原说明 ---
+A partial isomorphism between `α` and `β` is also a partial isomorphism between 
+`β` and `α`.
 -/
-protected def comm : PartialIso α β -> PartialIso β α :=
-  Subtype.map (Finset.image (Equiv.prodComm _ _)) fun f hf p hp q hq =>
-Eq.symm
+protected def comm : PartialIso α β → PartialIso β α :=
+  Subtype.map (Finset.image (Equiv.prodComm _ _)) fun f hf p hp q hq ↦
+    Eq.symm <|
       hf ((Equiv.prodComm α β).symm p)
         (by
-          rw [← Finset.mem_coe]; rw [Finset.coe_image]; rw [Equiv.image_eq_preimage_symm] at hp
+          rw [← Finset.mem_coe, Finset.coe_image, Equiv.image_eq_preimage_symm] at hp
           rwa [← Finset.mem_coe])
         ((Equiv.prodComm α β).symm q)
         (by
-          rw [← Finset.mem_coe]; rw [Finset.coe_image]; rw [Equiv.image_eq_preimage_symm] at hq
+          rw [← Finset.mem_coe, Finset.coe_image, Equiv.image_eq_preimage_symm] at hq
           rwa [← Finset.mem_coe])
 
 variable (β)
 
-/--
-Definition of `definedAtLeft` / `definedAtLeft` 的定义
+/-- The set of partial isomorphisms defined at `a : α`, together with a proof that any
+partial isomorphism can be extended to one defined at `a`. -/
+/-
+**Order.PartialIso.definedAtLeft** 是 Mathlib 中的一个定义，位于命名空间 `Order.PartialIso`。
+形式化陈述：definedAtLeft [DenselyOrdered β] [NoMinOrder β] [NoMaxOrder β] [Nonempty β
+] (a : α) : Cofinal (PartialIso α β) where carrier
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition definedAtLeft
-  signature: [DenselyOrdered β] [NoMinOrder β] [NoMaxOrder β] [Nonempty β] (a : α)
-  body: {f | exists b : β, (a, b) in f.val}
-  isCofinal f := by
-    obtain ⟨b, a_b⟩ := exists_across f a
-    refine
-      ⟨⟨insert (a, b) f.val, fun p hp q hq => ?_⟩, ⟨b, Finset.mem_insert_self _ _⟩,
-        Finset.subset_insert _ _⟩
-    rw [Finset.mem_insert] at hp hq
-    rcases hp with (rfl | pf) <;> rcases hq with (rfl | qf)
-    · simp only [cmp_self_eq_eq]
-    · rw [cmp_eq_cmp_symm]
-      exact a_b _ qf
-    · exact a_b _ pf
-    · exact f.prop _ pf _ qf
-
-中文:
-定义 definedAtLeft
-  签名: [稠密序 β] [NoMin序 β] [NoMax序 β] [非空 β] (a : α)
-  定义体: {f | exists b : β, (a, b) in f.val}
-  isCofinal f := by
-    obtain ⟨b, a_b⟩ := exists_across f a
-    refine
-      ⟨⟨insert (a, b) f.val, fun p hp q hq => ?_⟩, ⟨b, Finset.mem_insert_self _ _⟩,
-        Finset.subset_insert _ _⟩
-    rw [Finset.mem_insert] at hp hq
-    rcases hp with (rfl | pf) <;> rcases hq with (rfl | qf)
-    · simp only [cmp_self_eq_eq]
-    · rw [cmp_eq_cmp_symm]
-      exact a_b _ qf
-    · exact a_b _ pf
-    · exact f.prop _ pf _ qf
-
-Depends on / 依赖: f.val
+--- 原说明 ---
+The set of partial isomorphisms defined at `a : α`, together with a proof that a
+ny
+partial isomorphism can be extended to one defined at `a`.
 -/
 def definedAtLeft [DenselyOrdered β] [NoMinOrder β] [NoMaxOrder β] [Nonempty β] (a : α) :
     Cofinal (PartialIso α β) where
-  carrier := {f | exists b : β, (a, b) in f.val}
+  carrier := {f | ∃ b : β, (a, b) ∈ f.val}
   isCofinal f := by
     obtain ⟨b, a_b⟩ := exists_across f a
     refine
-      ⟨⟨insert (a, b) f.val, fun p hp q hq => ?_⟩, ⟨b, Finset.mem_insert_self _ _⟩,
+      ⟨⟨insert (a, b) f.val, fun p hp q hq ↦ ?_⟩, ⟨b, Finset.mem_insert_self _ _⟩,
         Finset.subset_insert _ _⟩
     rw [Finset.mem_insert] at hp hq
     rcases hp with (rfl | pf) <;> rcases hq with (rfl | qf)
@@ -469,90 +351,74 @@ def definedAtLeft [DenselyOrdered β] [NoMinOrder β] [NoMaxOrder β] [Nonempty 
 
 variable (α) {β}
 
-/--
-Definition of `definedAtRight` / `definedAtRight` 的定义
+/-- The set of partial isomorphisms defined at `b : β`, together with a proof that any
+partial isomorphism can be extended to include `b`. We prove this by symmetry. -/
+/-
+**Order.PartialIso.definedAtRight** 是 Mathlib 中的一个定义，位于命名空间 `Order.PartialIso`。
+形式化陈述：definedAtRight [DenselyOrdered α] [NoMinOrder α] [NoMaxOrder α] [Nonempty 
+α] (b : β) : Cofinal (PartialIso α β) where carrier
+参数：b : β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition definedAtRight
-  signature: [DenselyOrdered α] [NoMinOrder α] [NoMaxOrder α] [Nonempty α] (b : β)
-  body: {f | exists a, (a, b) in f.val}
-  isCofinal f := by
-    rcases (definedAtLeft α b).isCofinal f.comm with ⟨f', ⟨a, ha⟩, hl⟩
-    refine ⟨f'.comm, ⟨a, ?_⟩, ?_⟩
-    · change (a, b) in f'.val.image _
-      rwa [← Finset.mem_coe, Finset.coe_image, Equiv.image_eq_preimage_symm]
-    · change _ subseteq f'.val.image _
-      rwa [← Finset.coe_subset, Finset.coe_image, ← Equiv.symm_image_subset, ← Finset.coe_image,
-        Finset.coe_subset]
-
-中文:
-定义 definedAtRight
-  签名: [稠密序 α] [NoMin序 α] [NoMax序 α] [非空 α] (b : β)
-  定义体: {f | exists a, (a, b) in f.val}
-  isCofinal f := by
-    rcases (definedAtLeft α b).isCofinal f.comm with ⟨f', ⟨a, ha⟩, hl⟩
-    refine ⟨f'.comm, ⟨a, ?_⟩, ?_⟩
-    · change (a, b) in f'.val.image _
-      rwa [← Finset.mem_coe, Finset.coe_image, Equiv.image_eq_preimage_symm]
-    · change _ subseteq f'.val.image _
-      rwa [← Finset.coe_subset, Finset.coe_image, ← Equiv.symm_image_subset, ← Finset.coe_image,
-        Finset.coe_subset]
-
-Depends on / 依赖: f.val
+--- 原说明 ---
+The set of partial isomorphisms defined at `b : β`, together with a proof that a
+ny
+partial isomorphism can be extended to include `b`. We prove this by symmetry.
 -/
 def definedAtRight [DenselyOrdered α] [NoMinOrder α] [NoMaxOrder α] [Nonempty α] (b : β) :
     Cofinal (PartialIso α β) where
-  carrier := {f | exists a, (a, b) in f.val}
+  carrier := {f | ∃ a, (a, b) ∈ f.val}
   isCofinal f := by
     rcases (definedAtLeft α b).isCofinal f.comm with ⟨f', ⟨a, ha⟩, hl⟩
     refine ⟨f'.comm, ⟨a, ?_⟩, ?_⟩
-    · change (a, b) in f'.val.image _
+    · change (a, b) ∈ f'.val.image _
       rwa [← Finset.mem_coe, Finset.coe_image, Equiv.image_eq_preimage_symm]
-    · change _ subseteq f'.val.image _
+    · change _ ⊆ f'.val.image _
       rwa [← Finset.coe_subset, Finset.coe_image, ← Equiv.symm_image_subset, ← Finset.coe_image,
         Finset.coe_subset]
 
 variable {α}
 
-/--
-Definition of `funOfIdeal` / `funOfIdeal` 的定义
+/-- Given an ideal which intersects `definedAtLeft β a`, pick `b : β` such that
+some partial function in the ideal maps `a` to `b`. -/
+/-
+**Order.PartialIso.funOfIdeal** 是 Mathlib 中的一个定义，位于命名空间 `Order.PartialIso`。
+形式化陈述：funOfIdeal [DenselyOrdered β] [NoMinOrder β] [NoMaxOrder β] [Nonempty β] (
+a : α) (I : Ideal (PartialIso α β)) : (exists f, f in definedAtLeft β a ∧ f in I
+) -> { b // exists f in I, (a, b) in Subtype.val f }
+参数：a : α；I : Ideal (PartialIso α β)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition funOfIdeal
-  signature: [DenselyOrdered β] [NoMinOrder β] [NoMaxOrder β] [Nonempty β] (a : α)
-  body: Classical.indefiniteDescription _ ∘ fun ⟨f, ⟨b, hb⟩, hf⟩ => ⟨b, f, hf, hb⟩
-
-中文:
-定义 funOfIdeal
-  签名: [稠密序 β] [NoMin序 β] [NoMax序 β] [非空 β] (a : α)
-  定义体: Classical.indefiniteDescription _ ∘ fun ⟨f, ⟨b, hb⟩, hf⟩ => ⟨b, f, hf, hb⟩
-
-Depends on / 依赖: Classical, Classical.indefiniteDescription, indefiniteDescription
+--- 原说明 ---
+Given an ideal which intersects `definedAtLeft β a`, pick `b : β` such that
+some partial function in the ideal maps `a` to `b`.
 -/
 def funOfIdeal [DenselyOrdered β] [NoMinOrder β] [NoMaxOrder β] [Nonempty β] (a : α)
     (I : Ideal (PartialIso α β)) :
-    (exists f, f in definedAtLeft β a ∧ f in I) -> { b // exists f in I, (a, b) in Subtype.val f } :=
-  Classical.indefiniteDescription _ ∘ fun ⟨f, ⟨b, hb⟩, hf⟩ => ⟨b, f, hf, hb⟩
+    (∃ f, f ∈ definedAtLeft β a ∧ f ∈ I) → { b // ∃ f ∈ I, (a, b) ∈ Subtype.val f } :=
+  Classical.indefiniteDescription _ ∘ fun ⟨f, ⟨b, hb⟩, hf⟩ ↦ ⟨b, f, hf, hb⟩
 
-/--
-Definition of `invOfIdeal` / `invOfIdeal` 的定义
+/-- Given an ideal which intersects `definedAtRight α b`, pick `a : α` such that
+some partial function in the ideal maps `a` to `b`. -/
+/-
+**Order.PartialIso.invOfIdeal** 是 Mathlib 中的一个定义，位于命名空间 `Order.PartialIso`。
+形式化陈述：invOfIdeal [DenselyOrdered α] [NoMinOrder α] [NoMaxOrder α] [Nonempty α] (
+b : β) (I : Ideal (PartialIso α β)) : (exists f, f in definedAtRight α b ∧ f in 
+I) -> { a // exists f in I, (a, b) in Subtype.val f }
+参数：b : β；I : Ideal (PartialIso α β)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition invOfIdeal
-  signature: [DenselyOrdered α] [NoMinOrder α] [NoMaxOrder α] [Nonempty α] (b : β)
-  body: Classical.indefiniteDescription _ ∘ fun ⟨f, ⟨a, ha⟩, hf⟩ => ⟨a, f, hf, ha⟩
-
-中文:
-定义 invOfIdeal
-  签名: [稠密序 α] [NoMin序 α] [NoMax序 α] [非空 α] (b : β)
-  定义体: Classical.indefiniteDescription _ ∘ fun ⟨f, ⟨a, ha⟩, hf⟩ => ⟨a, f, hf, ha⟩
-
-Depends on / 依赖: Classical, Classical.indefiniteDescription, indefiniteDescription
+--- 原说明 ---
+Given an ideal which intersects `definedAtRight α b`, pick `a : α` such that
+some partial function in the ideal maps `a` to `b`.
 -/
 def invOfIdeal [DenselyOrdered α] [NoMinOrder α] [NoMaxOrder α] [Nonempty α] (b : β)
     (I : Ideal (PartialIso α β)) :
-    (exists f, f in definedAtRight α b ∧ f in I) -> { a // exists f in I, (a, b) in Subtype.val f } :=
-  Classical.indefiniteDescription _ ∘ fun ⟨f, ⟨a, ha⟩, hf⟩ => ⟨a, f, hf, ha⟩
+    (∃ f, f ∈ definedAtRight α b ∧ f ∈ I) → { a // ∃ f ∈ I, (a, b) ∈ Subtype.val f } :=
+  Classical.indefiniteDescription _ ∘ fun ⟨f, ⟨a, ha⟩, hf⟩ ↦ ⟨a, f, hf, ha⟩
 
 end PartialIso
 
@@ -560,48 +426,34 @@ open PartialIso
 
 -- variable (α β)
 
-/--
-theorem `embedding_from_countable_to_dense` / 定理 `embedding_from_countable_to_dense`
+/-- Any countable linear order embeds in any nontrivial dense linear order. -/
+/-
+**Order.embedding_from_countable_to_dense** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：embedding_from_countable_to_dense [Countable α] [DenselyOrdered β] [Nontri
+vial β] : Nonempty (α ↪o β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_encodable`：nonempty_encodable (α : Type*) [Countable α] : Nonem
+pty (Encodable α)
+· 使用定理 `exists_pair_lt`：exists_pair_lt (α : Type*) [Nontrivial α] [LinearOrder α
+] : exists x y : α, x < y
+· 使用定理 `exists_between`：exists_between [LT α] [DenselyOrdered α] {a₁ a₂ : α} : a
+₁ < a₂ -> exists a, a₁ < a ∧ a < a₂
+· 使用定理 `Set.instNoMinOrderElemIoo`：∀ (α : Type u_1) [inst : Preorder α] [Densely
+Ordered α] {x y : α}, NoMinOrder ↑(Set.Ioo x y)
+· 使用定理 `Set.instNoMaxOrderElemIoo`：∀ (α : Type u_1) [inst : Preorder α] [Densely
+Ordered α] {x y : α}, NoMaxOrder ↑(Set.Ioo y x)
+· 使用定理 `Order.cofinal_meets_idealOfCofinals`：cofinal_meets_idealOfCofinals (i : 
+ι) : exists x : P, x in 𝒟 i ∧ x in idealOfCofinals p 𝒟
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
+· 使用定理 `Order.Ideal.directed`：∀ {P : Type u_1} [inst : LE P] (s : Order.Ideal P)
+, DirectedOn (fun x1 x2 => x1 ≤ x2) ↑s
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `lt_iff_lt_of_cmp_eq_cmp`：lt_iff_lt_of_cmp_eq_cmp (h : cmp x y = cmp x' y
+') : x < y ↔ x' < y'
 
-English:
-theorem embedding_from_countable_to_dense
-  given: [Countable α] [DenselyOrdered β] [Nontrivial β]
-  proof: by
-  cases nonempty_encodable α
-  rcases exists_pair_lt β with ⟨x, y, hxy⟩
-  obtain ⟨a, ha⟩ := exists_between hxy
-  have : Nonempty (Set.Ioo x y) := ⟨⟨a, ha⟩⟩
-  let our_ideal : Ideal (PartialIso α _) :=
-    idealOfCofinals default (definedAtLeft (Set.Ioo x y))
-  let F a := funOfIdeal a our_ideal (cofinal_meets_idealOfCofinals _ _ a)
-  refine
-    ⟨RelEmbedding.trans (OrderEmbedding.ofStrictMono (fun a => (F a).val) fun a₁ a₂ => ?_)
-        (OrderEmbedding.subtype _)⟩
-  rcases (F a₁).prop with ⟨f, hf, ha₁⟩
-  rcases (F a₂).prop with ⟨g, hg, ha₂⟩
-  rcases our_ideal.directed _ hf _ hg with ⟨m, _hm, fm, gm⟩
-  exact (lt_iff_lt_of_cmp_eq_cmp <| m.prop (a₁, _) (fm ha₁) (a₂, _) (gm ha₂)).mp
-
-中文:
-定理 embedding_from_countable_to_dense
-  条件: [可数 α] [稠密序 β] [非平凡 β]
-  证明: by
-  cases nonempty_encodable α
-  rcases exists_pair_lt β with ⟨x, y, hxy⟩
-  obtain ⟨a, ha⟩ := exists_between hxy
-  have : Nonempty (Set.Ioo x y) := ⟨⟨a, ha⟩⟩
-  let our_ideal : Ideal (PartialIso α _) :=
-    idealOfCofinals default (definedAtLeft (Set.Ioo x y))
-  let F a := funOfIdeal a our_ideal (cofinal_meets_idealOfCofinals _ _ a)
-  refine
-    ⟨RelEmbedding.trans (OrderEmbedding.ofStrictMono (fun a => (F a).val) fun a₁ a₂ => ?_)
-        (OrderEmbedding.subtype _)⟩
-  rcases (F a₁).prop with ⟨f, hf, ha₁⟩
-  rcases (F a₂).prop with ⟨g, hg, ha₂⟩
-  rcases our_ideal.directed _ hf _ hg with ⟨m, _hm, fm, gm⟩
-  exact (lt_iff_lt_of_cmp_eq_cmp <| m.prop (a₁, _) (fm ha₁) (a₂, _) (gm ha₂)).mp
-
-Depends on / 依赖: Nonempty, OrderEmbedding, OrderEmbedding.ofStrictMono, OrderEmbedding.subtype, PartialIso, RelEmbedding, RelEmbedding.trans, Set.Ioo, cofinal_meets_idealOfCofinals, definedAtLeft, exists_between, exists_pair_lt, funOfIdeal, idealOfCofinals, nonempty_encodable, ofStrictMono, our_ideal, subtype
+--- 原说明 ---
+Any countable linear order embeds in any nontrivial dense linear order.
 -/
 theorem embedding_from_countable_to_dense [Countable α] [DenselyOrdered β] [Nontrivial β] :
     Nonempty (α ↪o β) := by
@@ -613,66 +465,50 @@ theorem embedding_from_countable_to_dense [Countable α] [DenselyOrdered β] [No
     idealOfCofinals default (definedAtLeft (Set.Ioo x y))
   let F a := funOfIdeal a our_ideal (cofinal_meets_idealOfCofinals _ _ a)
   refine
-    ⟨RelEmbedding.trans (OrderEmbedding.ofStrictMono (fun a => (F a).val) fun a₁ a₂ => ?_)
+    ⟨RelEmbedding.trans (OrderEmbedding.ofStrictMono (fun a ↦ (F a).val) fun a₁ a₂ ↦ ?_)
         (OrderEmbedding.subtype _)⟩
   rcases (F a₁).prop with ⟨f, hf, ha₁⟩
   rcases (F a₂).prop with ⟨g, hg, ha₂⟩
   rcases our_ideal.directed _ hf _ hg with ⟨m, _hm, fm, gm⟩
   exact (lt_iff_lt_of_cmp_eq_cmp <| m.prop (a₁, _) (fm ha₁) (a₂, _) (gm ha₂)).mp
 
-/--
-theorem `iso_of_countable_dense` / 定理 `iso_of_countable_dense`
+/-- Any two countable dense, nonempty linear orders without endpoints are order isomorphic. This is
+also known as **Cantor's isomorphism theorem**. -/
+/-
+**Order.iso_of_countable_dense** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：iso_of_countable_dense [Countable α] [DenselyOrdered α] [NoMinOrder α] [No
+MaxOrder α] [Nonempty α] [Countable β] [DenselyOrdered β] [NoMinOrder β] [NoMaxO
+rder β] [Nonempty β] : Nonempty (α ≃o β)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_encodable`：nonempty_encodable (α : Type*) [Countable α] : Nonem
+pty (Encodable α)
+· 使用定理 `Order.cofinal_meets_idealOfCofinals`：cofinal_meets_idealOfCofinals (i : 
+ι) : exists x : P, x in 𝒟 i ∧ x in idealOfCofinals p 𝒟
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
+· 使用定理 `Order.Ideal.directed`：∀ {P : Type u_1} [inst : LE P] (s : Order.Ideal P)
+, DirectedOn (fun x1 x2 => x1 ≤ x2) ↑s
 
-English:
-theorem iso_of_countable_dense
-  statement: [Countable α] [DenselyOrdered α] [NoMinOrder α] [NoMaxOrder α]
-  proof: by
-  cases nonempty_encodable α
-  cases nonempty_encodable β
-  let to_cofinal : α oplus β -> Cofinal (PartialIso α β) := fun p =>
-    Sum.recOn p (definedAtLeft β) (definedAtRight α)
-  let our_ideal : Ideal (PartialIso α β) := idealOfCofinals default to_cofinal
-  let F a := funOfIdeal a our_ideal (cofinal_meets_idealOfCofinals _ to_cofinal (Sum.inl a))
-  let G b := invOfIdeal b our_ideal (cofinal_meets_idealOfCofinals _ to_cofinal (Sum.inr b))
-  exact ⟨OrderIso.ofCmpEqCmp (fun a => (F a).val) (fun b => (G b).val) fun a b => by
-      rcases (F a).prop with ⟨f, hf, ha⟩
-      rcases (G b).prop with ⟨g, hg, hb⟩
-      rcases our_ideal.directed _ hf _ hg with ⟨m, _, fm, gm⟩
-      exact m.prop (a, _) (fm ha) (_, b) (gm hb)⟩
-
-中文:
-定理 iso_of_countable_dense
-  结论: [可数 α] [稠密序 α] [NoMin序 α] [NoMax序 α]
-  证明: by
-  cases nonempty_encodable α
-  cases nonempty_encodable β
-  let to_cofinal : α oplus β -> Cofinal (PartialIso α β) := fun p =>
-    Sum.recOn p (definedAtLeft β) (definedAtRight α)
-  let our_ideal : Ideal (PartialIso α β) := idealOfCofinals default to_cofinal
-  let F a := funOfIdeal a our_ideal (cofinal_meets_idealOfCofinals _ to_cofinal (Sum.inl a))
-  let G b := invOfIdeal b our_ideal (cofinal_meets_idealOfCofinals _ to_cofinal (Sum.inr b))
-  exact ⟨OrderIso.ofCmpEqCmp (fun a => (F a).val) (fun b => (G b).val) fun a b => by
-      rcases (F a).prop with ⟨f, hf, ha⟩
-      rcases (G b).prop with ⟨g, hg, hb⟩
-      rcases our_ideal.directed _ hf _ hg with ⟨m, _, fm, gm⟩
-      exact m.prop (a, _) (fm ha) (_, b) (gm hb)⟩
-
-Depends on / 依赖: Cofinal, OrderIso, OrderIso.ofCmpEqCmp, PartialIso, Sum.inl, Sum.inr, Sum.recOn, cofinal_meets_idealOfCofinals, definedAtLeft, definedAtRight, funOfIdeal, idealOfCofinals, invOfIdeal, nonempty_encodable, ofCmpEqCmp, our_ideal, to_cofinal
+--- 原说明 ---
+Any two countable dense, nonempty linear orders without endpoints are order isom
+orphic. This is
+also known as **Cantor's isomorphism theorem**.
 -/
 theorem iso_of_countable_dense [Countable α] [DenselyOrdered α] [NoMinOrder α] [NoMaxOrder α]
     [Nonempty α] [Countable β] [DenselyOrdered β] [NoMinOrder β] [NoMaxOrder β] [Nonempty β] :
     Nonempty (α ≃o β) := by
   cases nonempty_encodable α
   cases nonempty_encodable β
-  let to_cofinal : α oplus β -> Cofinal (PartialIso α β) := fun p =>
+  let to_cofinal : α ⊕ β → Cofinal (PartialIso α β) := fun p ↦
     Sum.recOn p (definedAtLeft β) (definedAtRight α)
   let our_ideal : Ideal (PartialIso α β) := idealOfCofinals default to_cofinal
   let F a := funOfIdeal a our_ideal (cofinal_meets_idealOfCofinals _ to_cofinal (Sum.inl a))
   let G b := invOfIdeal b our_ideal (cofinal_meets_idealOfCofinals _ to_cofinal (Sum.inr b))
-  exact ⟨OrderIso.ofCmpEqCmp (fun a => (F a).val) (fun b => (G b).val) fun a b => by
+  exact ⟨OrderIso.ofCmpEqCmp (fun a ↦ (F a).val) (fun b ↦ (G b).val) fun a b ↦ by
       rcases (F a).prop with ⟨f, hf, ha⟩
       rcases (G b).prop with ⟨g, hg, hb⟩
       rcases our_ideal.directed _ hf _ hg with ⟨m, _, fm, gm⟩
       exact m.prop (a, _) (fm ha) (_, b) (gm hb)⟩
 
 end Order
+

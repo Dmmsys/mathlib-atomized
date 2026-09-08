@@ -27,74 +27,63 @@ open Lean.Meta
 
 namespace Lean.Elab.Tactic
 
-/--
-Definition of `getMemType` / `getMemType` 的定义
+/-- If `e` is of the form `x ∈ (A : List α)`, `x ∈ (A : Finset α)`, or `x ∈ (A : Multiset α)`,
+return `some α`, otherwise `none`. -/
+/-
+**Lean.Elab.Tactic.getMemType** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Elab.Tactic`。
+形式化陈述：getMemType {m : Type -> Type} [Monad m] [MonadError m] (e : Expr) : m (Opt
+ion Expr)
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getMemType
-  signature: {m : Type -> Type} [Monad m] [MonadError m] (e : Expr)
-  body: do
-  match e.getAppFnArgs with
-  | (``Membership.mem, #[_, type, _, _, _]) =>
-    match type.getAppFnArgs with
-    | (``List, #[α]) => return α
-    | (``Multiset, #[α]) => return α
-    | (``Finset, #[α]) => return α
-    | _ => throwError "Hypothesis must be of type `x in (A : List α)`, `x in (A : Finset α)`, \
-                       or `x in (A : Multiset α)`"
-  | _ => return none
-
-中文:
-定义 getMemType
-  签名: {m : 类型 -> 类型} [单子 m] [MonadError m] (e : Expr)
-  定义体: do
-  match e.getAppFnArgs with
-  | (``Membership.mem, #[_, type, _, _, _]) =>
-    match type.getAppFnArgs with
-    | (``List, #[α]) => return α
-    | (``Multiset, #[α]) => return α
-    | (``Finset, #[α]) => return α
-    | _ => throwError "Hypothesis must be of type `x in (A : List α)`, `x in (A : Finset α)`, \
-                       or `x in (A : Multiset α)`"
-  | _ => return none
+--- 原说明 ---
+If `e` is of the form `x ∈ (A : List α)`, `x ∈ (A : Finset α)`, or `x ∈ (A : Mul
+tiset α)`,
+return `some α`, otherwise `none`.
 -/
-def getMemType {m : Type -> Type} [Monad m] [MonadError m] (e : Expr) : m (Option Expr) := do
+def getMemType {m : Type → Type} [Monad m] [MonadError m] (e : Expr) : m (Option Expr) := do
   match e.getAppFnArgs with
   | (``Membership.mem, #[_, type, _, _, _]) =>
     match type.getAppFnArgs with
-    | (``List, #[α]) => return α
+    | (``List, #[α])     => return α
     | (``Multiset, #[α]) => return α
-    | (``Finset, #[α]) => return α
-    | _ => throwError "Hypothesis must be of type `x in (A : List α)`, `x in (A : Finset α)`, \
-                       or `x in (A : Multiset α)`"
+    | (``Finset, #[α])   => return α
+    | _ => throwError "Hypothesis must be of type `x ∈ (A : List α)`, `x ∈ (A : Finset α)`, \
+                       or `x ∈ (A : Multiset α)`"
   | _ => return none
 
 /--
-Definition of `unfoldCases` / `unfoldCases` 的定义
+Recursively runs the `cases` tactic on a hypothesis `h`.
+As long as two goals are produced, `cases` is called recursively on the second goal,
+and we return a list of the first goals which appeared.
 
-English:
-definition unfoldCases
-  signature: (g : MVarId) (h : FVarId)
-  body: do
-  let gs ← g.cases h
-  try
-    let #[g₁, g₂] := gs | throwError "unexpected number of cases"
-    g₁.mvarId.setUserName (.str userNamePre s!"{counter}")
-    let gs ← unfoldCases g₂.mvarId g₂.fields[2]!.fvarId! userNamePre (counter+1)
-    return g₁.mvarId :: gs
-  catch _ => return []
+This is useful for hypotheses of the form `h : a ∈ [l₁, l₂, ...]`,
+which will be transformed into a sequence of goals with hypotheses `h : a = l₁`, `h : a = l₂`,
+and so on.
+Cases are named according to the order in which they are generated as tracked by `counter`
+and prefixed with `userNamePre`.
+-/
+/-
+**Lean.Elab.Tactic.unfoldCases** 是 Mathlib 中的一个不透明定义，位于命名空间 `Lean.Elab.Tactic`。
+形式化陈述：MVarId → FVarId → optParam Name Name.anonymous → optParam ℕ 0 → MetaM (Lis
+t MVarId)
+参数：List MVarId。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 unfoldCases
-  签名: (g : MVarId) (h : FVarId)
-  定义体: do
-  let gs ← g.cases h
-  try
-    let #[g₁, g₂] := gs | throwError "unexpected number of cases"
-    g₁.mvarId.setUserName (.str userNamePre s!"{counter}")
-    let gs ← unfoldCases g₂.mvarId g₂.fields[2]!.fvarId! userNamePre (counter+1)
-    return g₁.mvarId :: gs
-  catch _ => return []
+--- 原说明 ---
+Recursively runs the `cases` tactic on a hypothesis `h`.
+As long as two goals are produced, `cases` is called recursively on the second g
+oal,
+and we return a list of the first goals which appeared.
+
+This is useful for hypotheses of the form `h : a ∈ [l₁, l₂, ...]`,
+which will be transformed into a sequence of goals with hypotheses `h : a = l₁`,
+ `h : a = l₂`,
+and so on.
+Cases are named according to the order in which they are generated as tracked by
+ `counter`
+and prefixed with `userNamePre`.
 -/
 partial def unfoldCases (g : MVarId) (h : FVarId)
     (userNamePre : Name := .anonymous) (counter := 0) : MetaM (List MVarId) := do
@@ -106,40 +95,15 @@ partial def unfoldCases (g : MVarId) (h : FVarId)
     return g₁.mvarId :: gs
   catch _ => return []
 
-/--
-Definition of `finCasesAt` / `finCasesAt` 的定义
+/-- Implementation of the `fin_cases` tactic. -/
+/-
+**Lean.Elab.Tactic.finCasesAt** 是 Mathlib 中的一个不透明定义，位于命名空间 `Lean.Elab.Tactic`。
+形式化陈述：MVarId → FVarId → MetaM (List MVarId)
+参数：List MVarId。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finCasesAt
-  signature: (g : MVarId) (hyp : FVarId)
-  body: g.withContext do
-  let type ← hyp.getType >>= instantiateMVars
-  match ← getMemType type with
-  | some _ => unfoldCases g hyp (userNamePre := ← g.getTag)
-  | none =>
-    -- Deal with `x : A`, where `[Fintype A]` is available:
-    let inst ← synthInstance (← mkAppM ``Fintype #[type])
-    let elems ← mkAppOptM ``Fintype.elems #[type, inst]
-    let t ← mkAppM ``Membership.mem #[elems, .fvar hyp]
-    let v ← mkAppOptM ``Fintype.complete #[type, inst, Expr.fvar hyp]
-    let (fvar, g) ← (← g.assert `this t v).intro1P
-    finCasesAt g fvar
-
-中文:
-定义 finCasesAt
-  签名: (g : MVarId) (hyp : FVarId)
-  定义体: g.withContext do
-  let type ← hyp.getType >>= instantiateMVars
-  match ← getMemType type with
-  | some _ => unfoldCases g hyp (userNamePre := ← g.getTag)
-  | none =>
-    -- Deal with `x : A`, where `[Fintype A]` is available:
-    let inst ← synthInstance (← mkAppM ``Fintype #[type])
-    let elems ← mkAppOptM ``Fintype.elems #[type, inst]
-    let t ← mkAppM ``Membership.mem #[elems, .fvar hyp]
-    let v ← mkAppOptM ``Fintype.complete #[type, inst, Expr.fvar hyp]
-    let (fvar, g) ← (← g.assert `this t v).intro1P
-    finCasesAt g fvar
+--- 原说明 ---
+Implementation of the `fin_cases` tactic.
 -/
 partial def finCasesAt (g : MVarId) (hyp : FVarId) : MetaM (List MVarId) := g.withContext do
   let type ← hyp.getType >>= instantiateMVars
@@ -207,12 +171,13 @@ produces three goals with hypotheses
 /- TODO: In mathlib3 we ran `norm_num` when there is no `with` clause. Is this still useful? -/
 
 @[tactic finCases] elab_rules : tactic
-| `(tactic| fin_cases $[$hyps:ident],*) => withMainContext focus do
+  | `(tactic| fin_cases $[$hyps:ident],*) => withMainContext <| focus do
     for h in hyps do
-allGoals liftMetaTactic (finCasesAt · (← getFVarId h))
+      allGoals <| liftMetaTactic (finCasesAt · (← getFVarId h))
 
 end Tactic
 
 end Elab
 
 end Lean
+

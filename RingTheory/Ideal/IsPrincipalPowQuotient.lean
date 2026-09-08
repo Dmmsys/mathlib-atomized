@@ -41,93 +41,22 @@ variable {R : Type*} [CommRing R] [IsDomain R] {I : Ideal R}
 that uses the ideal of `R ⧸ I ^ (n + 1)`, compose with
 `Ideal.powQuotPowSuccLinearEquivMapMkPowSuccPow`. -/
 noncomputable
-/--
-Definition of `quotEquivPowQuotPowSucc` / `quotEquivPowQuotPowSucc` 的定义
-
-English:
-definition quotEquivPowQuotPowSucc
-  signature: (h : I.IsPrincipal) (h' : I != ⊥) (n : Nat)
-  body: by
-  let f : (I ^ n : Ideal R) ->ₗ[R] (I ^ n : Ideal R) ⧸ (I • ⊤ : Submodule R (I ^ n : Ideal R)) :=
-    Submodule.mkQ _
-  let ϖ := h.principal.choose
-  have hI : I = Ideal.span {ϖ} := h.principal.choose_spec
-  have hϖ : ϖ ^ n in I ^ n := hI ▸ (Ideal.pow_mem_pow (Ideal.mem_span_singleton_self _) n)
-  let g : R ->ₗ[R] (I ^ n : Ideal R) := (LinearMap.mulRight R ϖ ^ n).codRestrict _ fun x => by
-    simp only [LinearMap.pow_mulRight, LinearMap.mulRight_apply]
-    -- TODO: change argument of Ideal.pow_mem_of_mem
-    exact Ideal.mul_mem_left _ _ hϖ
-  have : I = LinearMap.ker (f.comp g) := by
-    ext x
-    simp only [LinearMap.codRestrict, LinearMap.pow_mulRight, LinearMap.mulRight_apply,
-      LinearMap.mem_ker, LinearMap.coe_comp, LinearMap.coe_mk, AddHom.coe_mk, Function.comp_apply,
-      Submodule.mkQ_apply, Submodule.Quotient.mk_eq_zero, Submodule.mem_smul_top_iff, smul_eq_mul,
-      f, g]
-    constructor <;> intro hx
-    · exact Submodule.mul_mem_mul hx hϖ
-    · rw [← pow_succ', hI, Ideal.span_singleton_pow, Ideal.mem_span_singleton] at hx
-      obtain ⟨y, hy⟩ := hx
-      rw [mul_comm]; rw [pow_succ]; rw [mul_assoc]; rw [mul_right_inj' (pow_ne_zero _ _)] at hy
-      · rw [hI, Ideal.mem_span_singleton]
-        exact ⟨y, hy⟩
-      · contrapose h'
-        rw [hI]; rw [h']; rw [Ideal.span_singleton_eq_bot]
-  let e : (R ⧸ I) ≃ₗ[R] R ⧸ (LinearMap.ker (f.comp g)) :=
-    Submodule.quotEquivOfEq I (LinearMap.ker (f ∘ₗ g)) this
-  refine e.trans ((f.comp g).quotKerEquivOfSurjective ?_)
-  refine (Submodule.mkQ_surjective _).comp ?_
-  rintro ⟨x, hx⟩
-  rw [hI]; rw [Ideal.span_singleton_pow]; rw [Ideal.mem_span_singleton] at hx
-  refine hx.imp ?_
-  simp [g, LinearMap.codRestrict, eq_comm, mul_comm]
-
-中文:
-定义 quotEquivPowQuotPowSucc
-  签名: (h : I.是Principal) (h' : I != ⊥) (n : 自然数)
-  定义体: by
-  let f : (I ^ n : Ideal R) ->ₗ[R] (I ^ n : Ideal R) ⧸ (I • ⊤ : Submodule R (I ^ n : Ideal R)) :=
-    Submodule.mkQ _
-  let ϖ := h.principal.choose
-  have hI : I = Ideal.span {ϖ} := h.principal.choose_spec
-  have hϖ : ϖ ^ n in I ^ n := hI ▸ (Ideal.pow_mem_pow (Ideal.mem_span_singleton_self _) n)
-  let g : R ->ₗ[R] (I ^ n : Ideal R) := (LinearMap.mulRight R ϖ ^ n).codRestrict _ fun x => by
-    simp only [LinearMap.pow_mulRight, LinearMap.mulRight_apply]
-    -- TODO: change argument of Ideal.pow_mem_of_mem
-    exact Ideal.mul_mem_left _ _ hϖ
-  have : I = LinearMap.ker (f.comp g) := by
-    ext x
-    simp only [LinearMap.codRestrict, LinearMap.pow_mulRight, LinearMap.mulRight_apply,
-      LinearMap.mem_ker, LinearMap.coe_comp, LinearMap.coe_mk, AddHom.coe_mk, Function.comp_apply,
-      Submodule.mkQ_apply, Submodule.Quotient.mk_eq_zero, Submodule.mem_smul_top_iff, smul_eq_mul,
-      f, g]
-    constructor <;> intro hx
-    · exact Submodule.mul_mem_mul hx hϖ
-    · rw [← pow_succ', hI, Ideal.span_singleton_pow, Ideal.mem_span_singleton] at hx
-      obtain ⟨y, hy⟩ := hx
-      rw [mul_comm]; rw [pow_succ]; rw [mul_assoc]; rw [mul_right_inj' (pow_ne_zero _ _)] at hy
-      · rw [hI, Ideal.mem_span_singleton]
-        exact ⟨y, hy⟩
-      · contrapose h'
-        rw [hI]; rw [h']; rw [Ideal.span_singleton_eq_bot]
-  let e : (R ⧸ I) ≃ₗ[R] R ⧸ (LinearMap.ker (f.comp g)) :=
-    Submodule.quotEquivOfEq I (LinearMap.ker (f ∘ₗ g)) this
-  refine e.trans ((f.comp g).quotKerEquivOfSurjective ?_)
-  refine (Submodule.mkQ_surjective _).comp ?_
-  rintro ⟨x, hx⟩
-  rw [hI]; rw [Ideal.span_singleton_pow]; rw [Ideal.mem_span_singleton] at hx
-  refine hx.imp ?_
-  simp [g, LinearMap.codRestrict, eq_comm, mul_comm]
-
-Depends on / 依赖: Ideal.mem_span_singleton_self, Ideal.pow_mem_pow, Ideal.span, LinearMap, LinearMap.mulRight, LinearMap.mulRight_apply, LinearMap.pow_mulRight, Submodule, Submodule.mkQ, choose_spec, codRestrict, h.principal.choose, h.principal.choose_spec, mem_span_singleton_self, mulRight, mulRight_apply, pow_mem_pow, pow_mulRight, principal
+/-
+**Ideal.quotEquivPowQuotPowSucc** 是 Mathlib 中的一个定义，位于命名空间 `Ideal`。
+形式化陈述：quotEquivPowQuotPowSucc (h : I.IsPrincipal) (h' : I != ⊥) (n : Nat) : (R ⧸
+ I) ≃ₗ[R] (I ^ n : Ideal R) ⧸ (I • ⊤ : Submodule R (I ^ n : Ideal R))
+参数：h : I.IsPrincipal；h' : I != ⊥；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def quotEquivPowQuotPowSucc (h : I.IsPrincipal) (h' : I != ⊥) (n : Nat) :
+def quotEquivPowQuotPowSucc (h : I.IsPrincipal) (h' : I ≠ ⊥) (n : ℕ) :
     (R ⧸ I) ≃ₗ[R] (I ^ n : Ideal R) ⧸ (I • ⊤ : Submodule R (I ^ n : Ideal R)) := by
-  let f : (I ^ n : Ideal R) ->ₗ[R] (I ^ n : Ideal R) ⧸ (I • ⊤ : Submodule R (I ^ n : Ideal R)) :=
+  let f : (I ^ n : Ideal R) →ₗ[R] (I ^ n : Ideal R) ⧸ (I • ⊤ : Submodule R (I ^ n : Ideal R)) :=
     Submodule.mkQ _
   let ϖ := h.principal.choose
   have hI : I = Ideal.span {ϖ} := h.principal.choose_spec
-  have hϖ : ϖ ^ n in I ^ n := hI ▸ (Ideal.pow_mem_pow (Ideal.mem_span_singleton_self _) n)
-  let g : R ->ₗ[R] (I ^ n : Ideal R) := (LinearMap.mulRight R ϖ ^ n).codRestrict _ fun x => by
+  have hϖ : ϖ ^ n ∈ I ^ n := hI ▸ (Ideal.pow_mem_pow (Ideal.mem_span_singleton_self _) n)
+  let g : R →ₗ[R] (I ^ n : Ideal R) := (LinearMap.mulRight R ϖ ^ n).codRestrict _ fun x ↦ by
     simp only [LinearMap.pow_mulRight, LinearMap.mulRight_apply]
     -- TODO: change argument of Ideal.pow_mem_of_mem
     exact Ideal.mul_mem_left _ _ hϖ
@@ -141,44 +70,38 @@ def quotEquivPowQuotPowSucc (h : I.IsPrincipal) (h' : I != ⊥) (n : Nat) :
     · exact Submodule.mul_mem_mul hx hϖ
     · rw [← pow_succ', hI, Ideal.span_singleton_pow, Ideal.mem_span_singleton] at hx
       obtain ⟨y, hy⟩ := hx
-      rw [mul_comm]; rw [pow_succ]; rw [mul_assoc]; rw [mul_right_inj' (pow_ne_zero _ _)] at hy
+      rw [mul_comm, pow_succ, mul_assoc, mul_right_inj' (pow_ne_zero _ _)] at hy
       · rw [hI, Ideal.mem_span_singleton]
         exact ⟨y, hy⟩
       · contrapose h'
-        rw [hI]; rw [h']; rw [Ideal.span_singleton_eq_bot]
+        rw [hI, h', Ideal.span_singleton_eq_bot]
   let e : (R ⧸ I) ≃ₗ[R] R ⧸ (LinearMap.ker (f.comp g)) :=
     Submodule.quotEquivOfEq I (LinearMap.ker (f ∘ₗ g)) this
   refine e.trans ((f.comp g).quotKerEquivOfSurjective ?_)
   refine (Submodule.mkQ_surjective _).comp ?_
   rintro ⟨x, hx⟩
-  rw [hI]; rw [Ideal.span_singleton_pow]; rw [Ideal.mem_span_singleton] at hx
+  rw [hI, Ideal.span_singleton_pow, Ideal.mem_span_singleton] at hx
   refine hx.imp ?_
   simp [g, LinearMap.codRestrict, eq_comm, mul_comm]
 
 /-- For a principal ideal `I`, `R ⧸ I ≃ I ^ n ⧸ I ^ (n + 1)`. Supplied as a plain equiv to bypass
-typeclass synthesis issues on complex `Module` goals. To convert into a form
+typeclass synthesis issues on complex `Module` goals.  To convert into a form
 that uses the ideal of `R ⧸ I ^ (n + 1)`, compose with
 `Ideal.powQuotPowSuccEquivMapMkPowSuccPow`. -/
 noncomputable
-/--
-Definition of `quotEquivPowQuotPowSuccEquiv` / `quotEquivPowQuotPowSuccEquiv` 的定义
-
-English:
-definition quotEquivPowQuotPowSuccEquiv
-  signature: (h : I.IsPrincipal) (h' : I != ⊥) (n : Nat)
-  body: quotEquivPowQuotPowSucc h h' n
-
-中文:
-定义 quotEquivPowQuotPowSuccEquiv
-  签名: (h : I.是Principal) (h' : I != ⊥) (n : 自然数)
-  定义体: quotEquivPowQuotPowSucc h h' n
-
-Depends on / 依赖: quotEquivPowQuotPowSucc
+/-
+**Ideal.quotEquivPowQuotPowSuccEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Ideal`。
+形式化陈述：quotEquivPowQuotPowSuccEquiv (h : I.IsPrincipal) (h' : I != ⊥) (n : Nat) :
+ (R ⧸ I) ≃ (I ^ n : Ideal R) ⧸ (I • ⊤ : Submodule R (I ^ n : Ideal R))
+参数：h : I.IsPrincipal；h' : I != ⊥；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def quotEquivPowQuotPowSuccEquiv (h : I.IsPrincipal) (h' : I != ⊥) (n : Nat) :
+def quotEquivPowQuotPowSuccEquiv (h : I.IsPrincipal) (h' : I ≠ ⊥) (n : ℕ) :
     (R ⧸ I) ≃ (I ^ n : Ideal R) ⧸ (I • ⊤ : Submodule R (I ^ n : Ideal R)) :=
   quotEquivPowQuotPowSucc h h' n
 
 end IsPrincipal
 
 end Ideal
+

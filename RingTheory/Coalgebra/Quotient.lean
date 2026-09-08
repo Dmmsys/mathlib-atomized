@@ -36,49 +36,58 @@ variable [CoalgebraStruct R C]
 /-- An `R`-submodule `I` of an `R`-coalgebra `C` is a *coideal* if the counit vanishes on
 `I` and the comultiplication descends through the module quotient `C ⧸ I`. -/
 @[mk_iff]
-/--
-Definition of `Submodule.IsCoideal` / `Submodule.IsCoideal` 的定义
+/-
+**Submodule.IsCoideal** 是 Mathlib 中的一个类，位于命名空间 ``。
+形式化陈述：Submodule.IsCoideal (I : Submodule R C) : Prop where counit_eq_zero : fora
+ll ⦃x : C⦄, x in I -> counit (R
+参数：I : Submodule R C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Submodule.IsCoideal
-  parameters: (I : Submodule R C)
-  axioms and operations (2):
-    - counit_eq_zero : forall ⦃x : C⦄, x in I -> counit (R := R) x = 0
-    - map_mkQ_comul_eq_zero : forall ⦃x : C⦄, x in I -> TensorProduct.map I.mkQ I.mkQ (comul x) = 0
-
-中文:
-类 子模.是余ideal
-  参数: (I : 子模 R C)
-  公理与运算 (2 个):
-    - counit_eq_zero : 对任意 ⦃x : C⦄, x in I -> counit (R := R) x = 0
-    - map_mkQ_comul_eq_zero : 对任意 ⦃x : C⦄, x in I -> 张量积.map I.mkQ I.mkQ (comul x) = 0
+--- 原说明 ---
+An `R`-submodule `I` of an `R`-coalgebra `C` is a *coideal* if the counit vanish
+es on
+`I` and the comultiplication descends through the module quotient `C ⧸ I`.
 -/
 class Submodule.IsCoideal (I : Submodule R C) : Prop where
-  counit_eq_zero : forall ⦃x : C⦄, x in I -> counit (R := R) x = 0
-  map_mkQ_comul_eq_zero : forall ⦃x : C⦄, x in I -> TensorProduct.map I.mkQ I.mkQ (comul x) = 0
+  counit_eq_zero : ∀ ⦃x : C⦄, x ∈ I → counit (R := R) x = 0
+  map_mkQ_comul_eq_zero : ∀ ⦃x : C⦄, x ∈ I → TensorProduct.map I.mkQ I.mkQ (comul x) = 0
 
-/--
-lemma `Submodule.isCoideal_iff_comul_mem` / 引理 `Submodule.isCoideal_iff_comul_mem`
+/-- A submodule is a coideal iff the counit vanishes on it and its comultiplication image lies
+in `I ⊗ C + C ⊗ I`, the textbook form of the coideal condition. -/
+/-
+**Submodule.isCoideal_iff_comul_mem** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Submodule.isCoideal_iff_comul_mem (I : Submodule R C) : I.IsCoideal ↔ (for
+all x in I, counit (R
+参数：I : Submodule R C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `TensorProduct.map_ker`：TensorProduct.map_ker : ker (TensorProduct.map g 
+g') = range (lTensor N f') ⊔ range (rTensor N' f)
+· 使用引理 `LinearMap.exact_subtype_mkQ`：exact_subtype_mkQ (Q : Submodule R N) : Exa
+ct (Submodule.subtype Q) (Submodule.mkQ Q)
+· 使用定理 `Submodule.mkQ_surjective`：mkQ_surjective : Function.Surjective p.mkQ
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-lemma Submodule.isCoideal_iff_comul_mem
-  given: (I : Submodule R C)
-  proof: by
-  simp_rw [isCoideal_iff, ← LinearMap.mem_ker,
-    TensorProduct.map_ker (LinearMap.exact_subtype_mkQ I) I.mkQ_surjective
-      (LinearMap.exact_subtype_mkQ I) I.mkQ_surjective]
-
-中文:
-引理 子模.isCoideal_iff_comul_mem
-  条件: (I : 子模 R C)
-  证明: by
-  simp_rw [isCoideal_iff, ← LinearMap.mem_ker,
-    TensorProduct.map_ker (LinearMap.exact_subtype_mkQ I) I.mkQ_surjective
-      (LinearMap.exact_subtype_mkQ I) I.mkQ_surjective]
+--- 原说明 ---
+A submodule is a coideal iff the counit vanishes on it and its comultiplication 
+image lies
+in `I ⊗ C + C ⊗ I`, the textbook form of the coideal condition.
 -/
 lemma Submodule.isCoideal_iff_comul_mem (I : Submodule R C) :
-    I.IsCoideal ↔ (forall x in I, counit (R := R) x = 0) ∧
-      forall x in I, comul x in
+    I.IsCoideal ↔ (∀ x ∈ I, counit (R := R) x = 0) ∧
+      ∀ x ∈ I, comul x ∈
         LinearMap.range (lTensor C I.subtype) ⊔ LinearMap.range (rTensor C I.subtype) := by
   simp_rw [isCoideal_iff, ← LinearMap.mem_ker,
     TensorProduct.map_ker (LinearMap.exact_subtype_mkQ I) I.mkQ_surjective
@@ -92,131 +101,77 @@ section CoalgebraStruct
 
 variable [CoalgebraStruct R C] (I : Submodule R C) [I.IsCoideal]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoalgebraStruct R (C ⧸ I)
-  body: I.liftQ (map I.mkQ I.mkQ ∘ₗ comul) Submodule.IsCoideal.map_mkQ_comul_eq_zero
-  counit := I.liftQ counit Submodule.IsCoideal.counit_eq_zero
-
-中文:
-实例 :
-  签名: 余algebraStruct R (C ⧸ I)
-  定义体: I.liftQ (map I.mkQ I.mkQ ∘ₗ comul) Submodule.IsCoideal.map_mkQ_comul_eq_zero
-  counit := I.liftQ counit Submodule.IsCoideal.counit_eq_zero
-
-Depends on / 依赖: I.liftQ, I.mkQ, IsCoideal, Submodule, Submodule.IsCoideal.map_mkQ_comul_eq_zero, map_mkQ_comul_eq_zero
+/-
+**Coalgebra.Quotient.** 是 Mathlib 中的一个实例，位于命名空间 `Coalgebra.Quotient`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoalgebraStruct R (C ⧸ I) where
   comul := I.liftQ (map I.mkQ I.mkQ ∘ₗ comul) Submodule.IsCoideal.map_mkQ_comul_eq_zero
   counit := I.liftQ counit Submodule.IsCoideal.counit_eq_zero
-
-/--
-lemma `comul_comp_mkQ` / 引理 `comul_comp_mkQ`
-
-English:
-lemma comul_comp_mkQ
-  statement: comul ∘ₗ I.mkQ = map I.mkQ I.mkQ ∘ₗ (comul : C ->ₗ[R] _)
-  proof: rfl
-
-中文:
-引理 comul_comp_mkQ
-  结论: comul ∘ₗ I.mkQ = map I.mkQ I.mkQ ∘ₗ (comul : C ->ₗ[R] _)
-  证明: rfl
+/-
+**Coalgebra.Quotient.comul_comp_mkQ** 是 Mathlib 中的一个引理，位于命名空间 `Coalgebra.Quotien
+t`。
+形式化陈述：comul_comp_mkQ : comul ∘ₗ I.mkQ = map I.mkQ I.mkQ ∘ₗ (comul : C ->ₗ[R] _)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma comul_comp_mkQ : comul ∘ₗ I.mkQ = map I.mkQ I.mkQ ∘ₗ (comul : C ->ₗ[R] _) := rfl
-
-/--
-lemma `counit_comp_mkQ` / 引理 `counit_comp_mkQ`
-
-English:
-lemma counit_comp_mkQ
-  statement: counit ∘ₗ I.mkQ = (counit : C ->ₗ[R] R)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 counit_comp_mkQ
-  结论: counit ∘ₗ I.mkQ = (counit : C ->ₗ[R] R)
-  证明: rfl
-
-@[simp]
+lemma comul_comp_mkQ : comul ∘ₗ I.mkQ = map I.mkQ I.mkQ ∘ₗ (comul : C →ₗ[R] _) := rfl
+/-
+**Coalgebra.Quotient.counit_comp_mkQ** 是 Mathlib 中的一个引理，位于命名空间 `Coalgebra.Quotie
+nt`。
+形式化陈述：counit_comp_mkQ : counit ∘ₗ I.mkQ = (counit : C ->ₗ[R] R)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma counit_comp_mkQ : counit ∘ₗ I.mkQ = (counit : C ->ₗ[R] R) := rfl
+lemma counit_comp_mkQ : counit ∘ₗ I.mkQ = (counit : C →ₗ[R] R) := rfl
 
 @[simp]
-/--
-lemma `counit_mk` / 引理 `counit_mk`
-
-English:
-lemma counit_mk
-  given: (x : C)
-  statement: counit (R := R) (Submodule.Quotient.mk (p := I) x) = counit x
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 counit_mk
-  条件: (x : C)
-  结论: counit (R := R) (子模.商.mk (p := I) x) = counit x
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: Quotient, Submodule, Submodule.Quotient.mk, counit
+/-
+**Coalgebra.Quotient.counit_mk** 是 Mathlib 中的一个引理，位于命名空间 `Coalgebra.Quotient`。
+形式化陈述：counit_mk (x : C) : counit (R
+参数：x : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma counit_mk (x : C) : counit (R := R) (Submodule.Quotient.mk (p := I) x) = counit x := rfl
 
 @[simp]
-/--
-lemma `comul_mk` / 引理 `comul_mk`
-
-English:
-lemma comul_mk
-  given: (x : C)
-  proof: rfl
-
-中文:
-引理 comul_mk
-  条件: (x : C)
-  证明: rfl
-
-Depends on / 依赖: I.mkQ, Quotient, Submodule, Submodule.Quotient.mk
+/-
+**Coalgebra.Quotient.comul_mk** 是 Mathlib 中的一个引理，位于命名空间 `Coalgebra.Quotient`。
+形式化陈述：comul_mk (x : C) : comul (R
+参数：x : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comul_mk (x : C) :
     comul (R := R) (Submodule.Quotient.mk (p := I) x) = map I.mkQ I.mkQ (comul x) := rfl
 
-/--
-Definition of `mkQCoalgHom` / `mkQCoalgHom` 的定义
+/-- `Submodule.mkQ` as a coalgebra homomorphism. -/
+/-
+**Coalgebra.Quotient.mkQCoalgHom** 是 Mathlib 中的一个定义，位于命名空间 `Coalgebra.Quotient`。
+形式化陈述：{R : Type u_1} →   {C : Type u_2} →     [inst : CommRing R] →       [inst_
+1 : AddCommGroup C] →         [inst_2 : _root_.Module R C] →           [inst_3 :
+ CoalgebraStruct R C] → (I : Submodule R C) → [inst_4 : I.IsCoideal] → C →ₗc[R] 
+C ⧸ I
+参数：I : Submodule R C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkQCoalgHom
-  signature: : C ->ₗc[R] C ⧸ I
-  body: ⟨I.mkQ, rfl, rfl⟩
-
-中文:
-定义 mkQCoalgHom
-  签名: : C ->ₗc[R] C ⧸ I
-  定义体: ⟨I.mkQ, rfl, rfl⟩
+--- 原说明 ---
+`Submodule.mkQ` as a coalgebra homomorphism.
 -/
-@[expose] def mkQCoalgHom : C ->ₗc[R] C ⧸ I := ⟨I.mkQ, rfl, rfl⟩
+@[expose] def mkQCoalgHom : C →ₗc[R] C ⧸ I := ⟨I.mkQ, rfl, rfl⟩
+/-
+**Coalgebra.Quotient.mkQCoalgHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `Coalgebra.Quot
+ient`。
+形式化陈述：∀ {R : Type u_1} {C : Type u_2} [inst : CommRing R] [inst_1 : AddCommGroup
+ C] [inst_2 : _root_.Module R C]   [inst_3 : CoalgebraStruct R C] (I : Submodule
+ R C) [inst_4 : I.IsCoideal] (x : C),   (Coalgebra.Quotient.mkQCoalgHom I) x = S
+ubmodule.Quotient.mk x
+参数：I : Submodule R C；x : C；Coalgebra.Quotient.mkQCoalgHom I。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-lemma `mkQCoalgHom_apply` / 引理 `mkQCoalgHom_apply`
-
-English:
-lemma mkQCoalgHom_apply
-  given: (x : C)
-  proof: rfl
-
-中文:
-引理 mkQCoalgHom_apply
-  条件: (x : C)
-  证明: rfl
+--- 原说明 ---
+`Submodule.mkQ` as a coalgebra homomorphism.
 -/
 @[simp] lemma mkQCoalgHom_apply (x : C) :
     mkQCoalgHom (R := R) I x = Submodule.Quotient.mk x := rfl
@@ -225,28 +180,9 @@ end CoalgebraStruct
 
 variable [Coalgebra R C] (I : Submodule R C) [I.IsCoideal]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Coalgebra R (C ⧸ I)
-  body: by
-  constructor <;> ext : 1 <;>
-    simp only [coassoc_simps, comul_comp_mkQ, counit_comp_mkQ]
-  · rw [CoassocSimps.map_counit_comp_comul_left]; rfl
-  · rw [CoassocSimps.map_counit_comp_comul_right]; rfl
-
-中文:
-实例 :
-  签名: 余algebra R (C ⧸ I)
-  定义体: by
-  constructor <;> ext : 1 <;>
-    simp only [coassoc_simps, comul_comp_mkQ, counit_comp_mkQ]
-  · rw [CoassocSimps.map_counit_comp_comul_left]; rfl
-  · rw [CoassocSimps.map_counit_comp_comul_right]; rfl
-
-Depends on / 依赖: CoassocSimps, CoassocSimps.map_counit_comp_comul_left, CoassocSimps.map_counit_comp_comul_right, coassoc_simps, comul_comp_mkQ, counit_comp_mkQ, map_counit_comp_comul_left, map_counit_comp_comul_right
+/-
+**Coalgebra.Quotient.** 是 Mathlib 中的一个实例，位于命名空间 `Coalgebra.Quotient`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Coalgebra R (C ⧸ I) := by
   constructor <;> ext : 1 <;>
@@ -255,3 +191,4 @@ instance : Coalgebra R (C ⧸ I) := by
   · rw [CoassocSimps.map_counit_comp_comul_right]; rfl
 
 end Coalgebra.Quotient
+

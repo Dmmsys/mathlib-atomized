@@ -45,290 +45,243 @@ section Domain
 
 variable [CommRing K] [IsDomain K]
 
-/--
-Definition of `C` / `C` 的定义
+/-- `RatFunc.C a` is the constant rational function `a`. -/
+/-
+**RatFunc.C** 是 Mathlib 中的一个定义，位于命名空间 `RatFunc`。
+形式化陈述：C : K ->+* K⟮X⟯
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition C
-  signature: : K ->+* K⟮X⟯
-  body: algebraMap _ _
-
-@[simp]
-
-中文:
-定义 C
-  签名: : K ->+* K⟮X⟯
-  定义体: algebraMap _ _
-
-@[simp]
-
-Depends on / 依赖: algebraMap
+--- 原说明 ---
+`RatFunc.C a` is the constant rational function `a`.
 -/
-def C : K ->+* K⟮X⟯ := algebraMap _ _
+def C : K →+* K⟮X⟯ := algebraMap _ _
 
 @[simp]
-/--
-theorem `algebraMap_eq_C` / 定理 `algebraMap_eq_C`
-
-English:
-theorem algebraMap_eq_C
-  statement: algebraMap K K⟮X⟯ = C
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 algebraMap_eq_C
-  结论: algebraMap K K⟮X⟯ = C
-  证明: rfl
-
-@[simp]
+/-
+**RatFunc.algebraMap_eq_C** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc`。
+形式化陈述：algebraMap_eq_C : algebraMap K K⟮X⟯ = C
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algebraMap_eq_C : algebraMap K K⟮X⟯ = C :=
   rfl
 
 @[simp]
-/--
-theorem `algebraMap_C` / 定理 `algebraMap_C`
-
-English:
-theorem algebraMap_C
-  given: (a : K)
-  statement: algebraMap K[X] K⟮X⟯ (Polynomial.C a) = C a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 algebraMap_C
-  条件: (a : K)
-  结论: algebraMap K[X] K⟮X⟯ (多项式.C a) = C a
-  证明: rfl
-
-@[simp]
+/-
+**RatFunc.algebraMap_C** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc`。
+形式化陈述：algebraMap_C (a : K) : algebraMap K[X] K⟮X⟯ (Polynomial.C a) = C a
+参数：a : K。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algebraMap_C (a : K) : algebraMap K[X] K⟮X⟯ (Polynomial.C a) = C a :=
   rfl
 
 @[simp]
-/--
-theorem `algebraMap_comp_C` / 定理 `algebraMap_comp_C`
-
-English:
-theorem algebraMap_comp_C
-  statement: (algebraMap K[X] K⟮X⟯).comp Polynomial.C = C
-  proof: rfl
-
-中文:
-定理 algebraMap_comp_C
-  结论: (algebraMap K[X] K⟮X⟯).comp 多项式.C = C
-  证明: rfl
+/-
+**RatFunc.algebraMap_comp_C** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc`。
+形式化陈述：algebraMap_comp_C : (algebraMap K[X] K⟮X⟯).comp Polynomial.C = C
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algebraMap_comp_C : (algebraMap K[X] K⟮X⟯).comp Polynomial.C = C :=
   rfl
-
-/--
-theorem `smul_eq_C_mul` / 定理 `smul_eq_C_mul`
-
-English:
-theorem smul_eq_C_mul
-  given: (r : K) (x : K⟮X⟯)
-  statement: r • x = C r * x
-  proof: by
-  rw [Algebra.smul_def]; rw [algebraMap_eq_C]
-
-中文:
-定理 smul_eq_C_mul
-  条件: (r : K) (x : K⟮X⟯)
-  结论: r • x = C r * x
-  证明: by
-  rw [Algebra.smul_def]; rw [algebraMap_eq_C]
-
-Depends on / 依赖: Algebra, Algebra.smul_def, algebraMap_eq_C, smul_def
+/-
+**RatFunc.smul_eq_C_mul** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc`。
+形式化陈述：smul_eq_C_mul (r : K) (x : K⟮X⟯) : r • x = C r * x
+参数：r : K；x : K⟮X⟯。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
+· 使用定理 `RatFunc.algebraMap_eq_C`：algebraMap_eq_C : algebraMap K K⟮X⟯ = C
 -/
 theorem smul_eq_C_mul (r : K) (x : K⟮X⟯) : r • x = C r * x := by
-  rw [Algebra.smul_def]; rw [algebraMap_eq_C]
-
-/--
-theorem `C_injective` / 定理 `C_injective`
-
-English:
-theorem C_injective
-  statement: Function.Injective (RatFunc.C (K := K))
-  proof: by
-  rw [← algebraMap_comp_C]; rw [RingHom.coe_comp]
-  exact Function.Injective.comp (algebraMap_injective K) (Polynomial.C_injective)
-
-中文:
-定理 C_injective
-  结论: 函数.单射 (有理函数.C (K := K))
-  证明: by
-  rw [← algebraMap_comp_C]; rw [RingHom.coe_comp]
-  exact Function.Injective.comp (algebraMap_injective K) (Polynomial.C_injective)
-
-Depends on / 依赖: C_injective, Function, Function.Injective.comp, Injective, Polynomial, Polynomial.C_injective, RingHom, RingHom.coe_comp, algebraMap_comp_C, algebraMap_injective, coe_comp
+  rw [Algebra.smul_def, algebraMap_eq_C]
+/-
+**RatFunc.C_injective** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc`。
+形式化陈述：C_injective : Function.Injective (RatFunc.C (K
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RatFunc.algebraMap_comp_C`：algebraMap_comp_C : (algebraMap K[X] K⟮X⟯).co
+mp Polynomial.C = C
+· 使用定理 `RingHom.coe_comp`：coe_comp (hnp : β ->+* γ) (hmn : α ->+* β) : (hnp.comp
+ hmn : α -> γ) = hnp ∘ hmn
+· 使用定理 `Function.Injective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} 
+{g : β → γ} {f : α → β},   Function.Injective g → Function.Injective f → Functio
+n.Injective (…
+· 使用定理 `RatFunc.algebraMap_injective`：algebraMap_injective : Function.Injective 
+(algebraMap K[X] K⟮X⟯)
+· 使用定理 `Polynomial.C_injective`：C_injective : Injective (C : R -> R[X])
 -/
 theorem C_injective : Function.Injective (RatFunc.C (K := K)) := by
-  rw [← algebraMap_comp_C]; rw [RingHom.coe_comp]
+  rw [← algebraMap_comp_C, RingHom.coe_comp]
   exact Function.Injective.comp (algebraMap_injective K) (Polynomial.C_injective)
 
-/--
-Definition of `X` / `X` 的定义
+/-- `RatFunc.X` is the polynomial variable (aka indeterminate). -/
+/-
+**RatFunc.X** 是 Mathlib 中的一个定义，位于命名空间 `RatFunc`。
+形式化陈述：X : K⟮X⟯
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition X
-  signature: : K⟮X⟯
-  body: algebraMap K[X] K⟮X⟯ Polynomial.X
-
-@[simp]
-
-中文:
-定义 X
-  签名: : K⟮X⟯
-  定义体: algebraMap K[X] K⟮X⟯ Polynomial.X
-
-@[simp]
-
-Depends on / 依赖: Polynomial, Polynomial.X, algebraMap
+--- 原说明 ---
+`RatFunc.X` is the polynomial variable (aka indeterminate).
 -/
 def X : K⟮X⟯ :=
   algebraMap K[X] K⟮X⟯ Polynomial.X
 
 @[simp]
-/--
-theorem `algebraMap_X` / 定理 `algebraMap_X`
-
-English:
-theorem algebraMap_X
-  statement: algebraMap K[X] K⟮X⟯ Polynomial.X = X
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 algebraMap_X
-  结论: algebraMap K[X] K⟮X⟯ 多项式.X = X
-  证明: rfl
-
-@[simp]
+/-
+**RatFunc.algebraMap_X** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc`。
+形式化陈述：algebraMap_X : algebraMap K[X] K⟮X⟯ Polynomial.X = X
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algebraMap_X : algebraMap K[X] K⟮X⟯ Polynomial.X = X :=
   rfl
 
 @[simp]
-/--
-theorem `algebraMap_monomial` / 定理 `algebraMap_monomial`
-
-English:
-theorem algebraMap_monomial
-  given: (n : Nat) (a : K)
-  proof: by
-  simp [← Polynomial.C_mul_X_pow_eq_monomial]
-
-@[simp]
-
-中文:
-定理 algebraMap_monomial
-  条件: (n : 自然数) (a : K)
-  证明: by
-  simp [← Polynomial.C_mul_X_pow_eq_monomial]
-
-@[simp]
-
-Depends on / 依赖: C_mul_X_pow_eq_monomial, Polynomial, Polynomial.C_mul_X_pow_eq_monomial
+/-
+**RatFunc.algebraMap_monomial** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc`。
+形式化陈述：algebraMap_monomial (n : Nat) (a : K) : algebraMap K[X] K⟮X⟯ (Polynomial.m
+onomial n a) = C a * X ^ n
+参数：n : Nat；a : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem algebraMap_monomial (n : Nat) (a : K) :
+theorem algebraMap_monomial (n : ℕ) (a : K) :
     algebraMap K[X] K⟮X⟯ (Polynomial.monomial n a) = C a * X ^ n := by
   simp [← Polynomial.C_mul_X_pow_eq_monomial]
 
 @[simp]
-/--
-theorem `aeval_X_left_eq_algebraMap` / 定理 `aeval_X_left_eq_algebraMap`
-
-English:
-theorem aeval_X_left_eq_algebraMap
-  given: (p : K[X])
-  proof: by
-  induction p using Polynomial.induction_on' <;> simp_all
-
-@[simp]
-
-中文:
-定理 aeval_X_left_eq_algebraMap
-  条件: (p : K[X])
-  证明: by
-  induction p using Polynomial.induction_on' <;> simp_all
-
-@[simp]
-
-Depends on / 依赖: Polynomial, Polynomial.induction_on, induction_on
+/-
+**RatFunc.aeval_X_left_eq_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc`。
+形式化陈述：aeval_X_left_eq_algebraMap (p : K[X]) : p.aeval (X : K⟮X⟯) = algebraMap K[
+X] K⟮X⟯ p
+参数：p : K[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.induction_on'`：∀ {R : Type u} [inst : Semiring R] {motive : P
+olynomial R → Prop} (p : Polynomial R),   (∀ (p q : Polynomial R), motive p → mo
+tive q → motiv…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Polynomial.aeval_monomial`：aeval_monomial {n : Nat} {r : R} : aeval x (m
+onomial n r) = algebraMap _ _ r * x ^ n
+· 使用定理 `RatFunc.algebraMap_monomial`：algebraMap_monomial (n : Nat) (a : K) : alg
+ebraMap K[X] K⟮X⟯ (Polynomial.monomial n a) = C a * X ^ n
 -/
 theorem aeval_X_left_eq_algebraMap (p : K[X]) :
     p.aeval (X : K⟮X⟯) = algebraMap K[X] K⟮X⟯ p := by
   induction p using Polynomial.induction_on' <;> simp_all
 
 @[simp]
-/--
-theorem `coePolynomial_eq_algebraMap` / 定理 `coePolynomial_eq_algebraMap`
-
-English:
-theorem coePolynomial_eq_algebraMap
-  given: (p : K[X])
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coePolynomial_eq_algebraMap
-  条件: (p : K[X])
-  证明: rfl
-
-@[simp]
+/-
+**RatFunc.coePolynomial_eq_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc`。
+形式化陈述：coePolynomial_eq_algebraMap (p : K[X]) : (p : RatFunc K) = algebraMap (Pol
+ynomial K) (RatFunc K) p
+参数：p : K[X]。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coePolynomial_eq_algebraMap (p : K[X]) :
     (p : RatFunc K) = algebraMap (Polynomial K) (RatFunc K) p := rfl
 
 @[simp]
-/--
-lemma `liftRingHom_C` / 引理 `liftRingHom_C`
-
-English:
-lemma liftRingHom_C
-  given: {L : Type*} [Field L] (φ : K[X] ->+* L) (hφ : K[X]⁰ <= L⁰.comap φ) (x : K)
-  proof: RatFunc.liftRingHom_algebraMap _ _ _
-
-@[simp]
-
-中文:
-引理 liftRingHom_C
-  条件: {L : 类型} [域 L] (φ : K[X] ->+* L) (hφ : K[X]⁰ <= L⁰.comap φ) (x : K)
-  证明: RatFunc.liftRingHom_algebraMap _ _ _
-
-@[simp]
-
-Depends on / 依赖: RatFunc, RatFunc.liftRingHom_algebraMap, liftRingHom_algebraMap
+/-
+**RatFunc.liftRingHom_C** 是 Mathlib 中的一个引理，位于命名空间 `RatFunc`。
+形式化陈述：liftRingHom_C {L : Type*} [Field L] (φ : K[X] ->+* L) (hφ : K[X]⁰ <= L⁰.co
+map φ) (x : K) : liftRingHom φ hφ (C x) = φ (.C x)
+参数：φ : K[X] ->+* L；hφ : K[X]⁰ <= L⁰.comap φ；x : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用引理 `RatFunc.liftRingHom_algebraMap`：liftRingHom_algebraMap {L : Type*} [Fiel
+d L] (φ : K[X] ->+* L) (hφ : K[X]⁰ <= L⁰.comap φ) (x : K[X]) : liftRingHom φ hφ 
+(algebraMap K[X] _ x…
 -/
-lemma liftRingHom_C {L : Type*} [Field L] (φ : K[X] ->+* L) (hφ : K[X]⁰ <= L⁰.comap φ) (x : K) :
+lemma liftRingHom_C {L : Type*} [Field L] (φ : K[X] →+* L) (hφ : K[X]⁰ ≤ L⁰.comap φ) (x : K) :
     liftRingHom φ hφ (C x) = φ (.C x) :=
   RatFunc.liftRingHom_algebraMap _ _ _
 
 @[simp]
-/--
-lemma `liftRingHom_X` / 引理 `liftRingHom_X`
-
-English:
-lemma liftRingHom_X
-  given: {L : Type*} [Field L] (φ : K[X] ->+* L) (hφ : K[X]⁰ <= L⁰.comap φ)
-  proof: RatFunc.liftRingHom_algebraMap _ _ _
-
-中文:
-引理 liftRingHom_X
-  条件: {L : 类型} [域 L] (φ : K[X] ->+* L) (hφ : K[X]⁰ <= L⁰.comap φ)
-  证明: RatFunc.liftRingHom_algebraMap _ _ _
-
-Depends on / 依赖: RatFunc, RatFunc.liftRingHom_algebraMap, liftRingHom_algebraMap
+/-
+**RatFunc.liftRingHom_X** 是 Mathlib 中的一个引理，位于命名空间 `RatFunc`。
+形式化陈述：liftRingHom_X {L : Type*} [Field L] (φ : K[X] ->+* L) (hφ : K[X]⁰ <= L⁰.co
+map φ) : RatFunc.liftRingHom φ hφ X = φ (.X)
+参数：φ : K[X] ->+* L；hφ : K[X]⁰ <= L⁰.comap φ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用引理 `RatFunc.liftRingHom_algebraMap`：liftRingHom_algebraMap {L : Type*} [Fiel
+d L] (φ : K[X] ->+* L) (hφ : K[X]⁰ <= L⁰.comap φ) (x : K[X]) : liftRingHom φ hφ 
+(algebraMap K[X] _ x…
 -/
-lemma liftRingHom_X {L : Type*} [Field L] (φ : K[X] ->+* L) (hφ : K[X]⁰ <= L⁰.comap φ) :
+lemma liftRingHom_X {L : Type*} [Field L] (φ : K[X] →+* L) (hφ : K[X]⁰ ≤ L⁰.comap φ) :
     RatFunc.liftRingHom φ hφ X = φ (.X) :=
   RatFunc.liftRingHom_algebraMap _ _ _
 
@@ -339,401 +292,410 @@ section Field
 variable [Field K]
 
 @[simp]
-/--
-theorem `num_C` / 定理 `num_C`
-
-English:
-theorem num_C
-  given: (c : K)
-  statement: num (C c) = Polynomial.C c
-  proof: num_algebraMap _
-
-@[simp]
-
-中文:
-定理 num_C
-  条件: (c : K)
-  结论: num (C c) = 多项式.C c
-  证明: num_algebraMap _
-
-@[simp]
-
-Depends on / 依赖: num_algebraMap
+/-
+**RatFunc.num_C** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc`。
+形式化陈述：num_C (c : K) : num (C c) = Polynomial.C c
+参数：c : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RatFunc.num_algebraMap`：num_algebraMap (p : K[X]) : num (algebraMap _ _ 
+p) = p
 -/
 theorem num_C (c : K) : num (C c) = Polynomial.C c :=
   num_algebraMap _
 
 @[simp]
-/--
-theorem `denom_C` / 定理 `denom_C`
-
-English:
-theorem denom_C
-  given: (c : K)
-  statement: denom (C c) = 1
-  proof: denom_algebraMap _
-
-@[simp]
-
-中文:
-定理 denom_C
-  条件: (c : K)
-  结论: denom (C c) = 1
-  证明: denom_algebraMap _
-
-@[simp]
-
-Depends on / 依赖: denom_algebraMap
+/-
+**RatFunc.denom_C** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc`。
+形式化陈述：denom_C (c : K) : denom (C c) = 1
+参数：c : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RatFunc.denom_algebraMap`：denom_algebraMap (p : K[X]) : denom (algebraMa
+p _ K⟮X⟯ p) = 1
 -/
 theorem denom_C (c : K) : denom (C c) = 1 :=
   denom_algebraMap _
 
 @[simp]
-/--
-theorem `num_X` / 定理 `num_X`
-
-English:
-theorem num_X
-  statement: num (X : K⟮X⟯) = Polynomial.X
-  proof: num_algebraMap _
-
-@[simp]
-
-中文:
-定理 num_X
-  结论: num (X : K⟮X⟯) = 多项式.X
-  证明: num_algebraMap _
-
-@[simp]
-
-Depends on / 依赖: num_algebraMap
+/-
+**RatFunc.num_X** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc`。
+形式化陈述：num_X : num (X : K⟮X⟯) = Polynomial.X
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RatFunc.num_algebraMap`：num_algebraMap (p : K[X]) : num (algebraMap _ _ 
+p) = p
 -/
 theorem num_X : num (X : K⟮X⟯) = Polynomial.X :=
   num_algebraMap _
 
 @[simp]
-/--
-theorem `denom_X` / 定理 `denom_X`
-
-English:
-theorem denom_X
-  statement: denom (X : K⟮X⟯) = 1
-  proof: denom_algebraMap _
-
-中文:
-定理 denom_X
-  结论: denom (X : K⟮X⟯) = 1
-  证明: denom_algebraMap _
-
-Depends on / 依赖: denom_algebraMap
+/-
+**RatFunc.denom_X** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc`。
+形式化陈述：denom_X : denom (X : K⟮X⟯) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RatFunc.denom_algebraMap`：denom_algebraMap (p : K[X]) : denom (algebraMa
+p _ K⟮X⟯ p) = 1
 -/
 theorem denom_X : denom (X : K⟮X⟯) = 1 :=
   denom_algebraMap _
-
-/--
-theorem `X_ne_zero` / 定理 `X_ne_zero`
-
-English:
-theorem X_ne_zero
-  statement: (X : K⟮X⟯) != 0
-  proof: RatFunc.algebraMap_ne_zero Polynomial.X_ne_zero
-
-中文:
-定理 X_ne_zero
-  结论: (X : K⟮X⟯) != 0
-  证明: RatFunc.algebraMap_ne_zero Polynomial.X_ne_zero
-
-Depends on / 依赖: Polynomial, Polynomial.X_ne_zero, RatFunc, RatFunc.algebraMap_ne_zero, X_ne_zero, algebraMap_ne_zero
+/-
+**RatFunc.X_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc`。
+形式化陈述：X_ne_zero : (X : K⟮X⟯) != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RatFunc.algebraMap_ne_zero`：algebraMap_ne_zero {x : K[X]} (hx : x != 0) 
+: algebraMap K[X] K⟮X⟯ x != 0
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Polynomial.X_ne_zero`：X_ne_zero [Nontrivial R] : (X : R[X]) != 0
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
 -/
-theorem X_ne_zero : (X : K⟮X⟯) != 0 :=
+theorem X_ne_zero : (X : K⟮X⟯) ≠ 0 :=
   RatFunc.algebraMap_ne_zero Polynomial.X_ne_zero
-
-/--
-theorem `eq_C_iff` / 定理 `eq_C_iff`
-
-English:
-theorem eq_C_iff
-  given: (f : K⟮X⟯)
-  proof: by
-  refine ⟨by rintro ⟨c, rfl⟩; simp, ?_⟩
-  rw [Polynomial.natDegree_eq_zero]; rw [Polynomial.natDegree_eq_zero]
-  rintro ⟨⟨a, ha⟩, ⟨b, hb⟩⟩
-  use a / b
-  rw [← num_div_denom f]; rw [← ha]; rw [← hb]; rw [algebraMap_C]; rw [algebraMap_C]; rw [map_div₀]
-
-中文:
-定理 eq_C_iff
-  条件: (f : K⟮X⟯)
-  证明: by
-  refine ⟨by rintro ⟨c, rfl⟩; simp, ?_⟩
-  rw [Polynomial.natDegree_eq_zero]; rw [Polynomial.natDegree_eq_zero]
-  rintro ⟨⟨a, ha⟩, ⟨b, hb⟩⟩
-  use a / b
-  rw [← num_div_denom f]; rw [← ha]; rw [← hb]; rw [algebraMap_C]; rw [algebraMap_C]; rw [map_div₀]
-
-Depends on / 依赖: Polynomial, Polynomial.natDegree_eq_zero, algebraMap_C, natDegree_eq_zero, num_div_denom
+/-
+**RatFunc.eq_C_iff** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc`。
+形式化陈述：eq_C_iff (f : K⟮X⟯) : (exists c, f = C c) ↔ f.num.natDegree = 0 ∧ f.denom.
+natDegree = 0
+参数：f : K⟮X⟯。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `RatFunc.num_C`：num_C (c : K) : num (C c) = Polynomial.C c
+· 使用定理 `Polynomial.natDegree_C`：natDegree_C (a : R) : natDegree (C a) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `RatFunc.denom_C`：denom_C (c : K) : denom (C c) = 1
+· 使用定理 `Polynomial.natDegree_one`：natDegree_one : natDegree (1 : R[X]) = 0
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Polynomial.natDegree_eq_zero`：natDegree_eq_zero {p : R[X]} : p.natDegree
+ = 0 ↔ exists x, C x = p
+· 使用定理 `RatFunc.num_div_denom`：num_div_denom (x : K⟮X⟯) : algebraMap _ _ (num x)
+ / algebraMap _ _ (denom x) = x
+· 使用定理 `RatFunc.algebraMap_C`：algebraMap_C (a : K) : algebraMap K[X] K⟮X⟯ (Polyn
+omial.C a) = C a
+· 使用定理 `map_div₀`：map_div₀ : f (a / b) = f a / f b
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 -/
 theorem eq_C_iff (f : K⟮X⟯) :
-    (exists c, f = C c) ↔ f.num.natDegree = 0 ∧ f.denom.natDegree = 0 := by
+    (∃ c, f = C c) ↔ f.num.natDegree = 0 ∧ f.denom.natDegree = 0 := by
   refine ⟨by rintro ⟨c, rfl⟩; simp, ?_⟩
-  rw [Polynomial.natDegree_eq_zero]; rw [Polynomial.natDegree_eq_zero]
+  rw [Polynomial.natDegree_eq_zero, Polynomial.natDegree_eq_zero]
   rintro ⟨⟨a, ha⟩, ⟨b, hb⟩⟩
   use a / b
-  rw [← num_div_denom f]; rw [← ha]; rw [← hb]; rw [algebraMap_C]; rw [algebraMap_C]; rw [map_div₀]
+  rw [← num_div_denom f, ← ha, ← hb, algebraMap_C, algebraMap_C, map_div₀]
 
 variable {L : Type u} [Field L]
 
-/--
-Definition of `eval` / `eval` 的定义
+/-- Evaluate a rational function `p` given a ring hom `f` from the scalar field
+to the target and a value `x` for the variable in the target.
 
-English:
-definition eval
-  signature: (f : K ->+* L) (a : L) (p : K⟮X⟯)
-  body: (num p).eval₂ f a / (denom p).eval₂ f a
-
-中文:
-定义 eval
-  签名: (f : K ->+* L) (a : L) (p : K⟮X⟯)
-  定义体: (num p).eval₂ f a / (denom p).eval₂ f a
+Fractions are reduced by clearing common denominators before evaluating:
+`eval id 1 ((X^2 - 1) / (X - 1)) = eval id 1 (X + 1) = 2`, not `0 / 0 = 0`.
 -/
-def eval (f : K ->+* L) (a : L) (p : K⟮X⟯) : L :=
+/-
+**RatFunc.eval** 是 Mathlib 中的一个定义，位于命名空间 `RatFunc`。
+形式化陈述：eval (f : K ->+* L) (a : L) (p : K⟮X⟯) : L
+参数：f : K ->+* L；a : L；p : K⟮X⟯。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Evaluate a rational function `p` given a ring hom `f` from the scalar field
+to the target and a value `x` for the variable in the target.
+
+Fractions are reduced by clearing common denominators before evaluating:
+`eval id 1 ((X^2 - 1) / (X - 1)) = eval id 1 (X + 1) = 2`, not `0 / 0 = 0`.
+-/
+def eval (f : K →+* L) (a : L) (p : K⟮X⟯) : L :=
   (num p).eval₂ f a / (denom p).eval₂ f a
 
-variable {f : K ->+* L} {a : L}
-
-/--
-theorem `eval_eq_zero_of_eval₂_denom_eq_zero` / 定理 `eval_eq_zero_of_eval₂_denom_eq_zero`
-
-English:
-theorem eval_eq_zero_of_eval₂_denom_eq_zero
-  statement: {x : K⟮X⟯}
-  proof: by rw [eval, h, div_zero]
-
-中文:
-定理 eval_eq_zero_of_eval₂_denom_eq_zero
-  结论: {x : K⟮X⟯}
-  证明: by rw [eval, h, div_zero]
-
-Depends on / 依赖: div_zero
+variable {f : K →+* L} {a : L}
+/-
+**RatFunc.eval_eq_zero_of_eval** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval_eq_zero_of_eval₂_denom_eq_zero {x : K⟮X⟯}
     (h : Polynomial.eval₂ f a (denom x) = 0) : eval f a x = 0 := by rw [eval, h, div_zero]
-
-/--
-theorem `eval₂_denom_ne_zero` / 定理 `eval₂_denom_ne_zero`
-
-English:
-theorem eval₂_denom_ne_zero
-  given: {x : K⟮X⟯} (h : eval f a x != 0)
-  proof: mt eval_eq_zero_of_eval₂_denom_eq_zero h
-
-中文:
-定理 eval₂_denom_ne_zero
-  条件: {x : K⟮X⟯} (h : eval f a x != 0)
-  证明: mt eval_eq_zero_of_eval₂_denom_eq_zero h
+/-
+**RatFunc.eval** 是 Mathlib 中的一个定义，位于命名空间 `RatFunc`。
+形式化陈述：eval (f : K ->+* L) (a : L) (p : K⟮X⟯) : L
+参数：f : K ->+* L；a : L；p : K⟮X⟯。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eval₂_denom_ne_zero {x : K⟮X⟯} (h : eval f a x != 0) :
-    Polynomial.eval₂ f a (denom x) != 0 :=
+theorem eval₂_denom_ne_zero {x : K⟮X⟯} (h : eval f a x ≠ 0) :
+    Polynomial.eval₂ f a (denom x) ≠ 0 :=
   mt eval_eq_zero_of_eval₂_denom_eq_zero h
 
 variable (f a)
 
 @[simp]
-/--
-theorem `eval_C` / 定理 `eval_C`
-
-English:
-theorem eval_C
-  given: {c : K}
-  statement: eval f a (C c) = f c
-  proof: by simp [eval]
-
-@[simp]
-
-中文:
-定理 eval_C
-  条件: {c : K}
-  结论: eval f a (C c) = f c
-  证明: by simp [eval]
-
-@[simp]
+/-
+**RatFunc.eval_C** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc`。
+形式化陈述：eval_C {c : K} : eval f a (C c) = f c
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `RatFunc.num_C`：num_C (c : K) : num (C c) = Polynomial.C c
+· 使用定理 `Polynomial.eval₂_C`：eval₂_C : (C a).eval₂ f x = f a
+· 使用定理 `RatFunc.denom_C`：denom_C (c : K) : denom (C c) = 1
+· 使用定理 `Polynomial.eval₂_one`：eval₂_one : (1 : R[X]).eval₂ f x = 1
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem eval_C {c : K} : eval f a (C c) = f c := by simp [eval]
 
 @[simp]
-/--
-theorem `eval_X` / 定理 `eval_X`
-
-English:
-theorem eval_X
-  statement: eval f a X = a
-  proof: by simp [eval]
-
-@[simp]
-
-中文:
-定理 eval_X
-  结论: eval f a X = a
-  证明: by simp [eval]
-
-@[simp]
+/-
+**RatFunc.eval_X** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc`。
+形式化陈述：eval_X : eval f a X = a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `RatFunc.num_X`：num_X : num (X : K⟮X⟯) = Polynomial.X
+· 使用定理 `Polynomial.eval₂_X`：eval₂_X : X.eval₂ f x = x
+· 使用定理 `RatFunc.denom_X`：denom_X : denom (X : K⟮X⟯) = 1
+· 使用定理 `Polynomial.eval₂_one`：eval₂_one : (1 : R[X]).eval₂ f x = 1
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem eval_X : eval f a X = a := by simp [eval]
 
 @[simp]
-/--
-theorem `eval_zero` / 定理 `eval_zero`
-
-English:
-theorem eval_zero
-  statement: eval f a 0 = 0
-  proof: by simp [eval]
-
-@[simp]
-
-中文:
-定理 eval_zero
-  结论: eval f a 0 = 0
-  证明: by simp [eval]
-
-@[simp]
+/-
+**RatFunc.eval_zero** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc`。
+形式化陈述：eval_zero : eval f a 0 = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `RatFunc.num_zero`：num_zero : num (0 : K⟮X⟯) = 0
+· 使用定理 `Polynomial.eval₂_zero`：eval₂_zero : (0 : R[X]).eval₂ f x = 0
+· 使用定理 `RatFunc.denom_zero`：denom_zero : denom (0 : K⟮X⟯) = 1
+· 使用定理 `Polynomial.eval₂_one`：eval₂_one : (1 : R[X]).eval₂ f x = 1
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem eval_zero : eval f a 0 = 0 := by simp [eval]
 
 @[simp]
-/--
-theorem `eval_one` / 定理 `eval_one`
-
-English:
-theorem eval_one
-  statement: eval f a 1 = 1
-  proof: by simp [eval]
-
-@[simp]
-
-中文:
-定理 eval_one
-  结论: eval f a 1 = 1
-  证明: by simp [eval]
-
-@[simp]
+/-
+**RatFunc.eval_one** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc`。
+形式化陈述：eval_one : eval f a 1 = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `RatFunc.num_one`：num_one : num (1 : K⟮X⟯) = 1
+· 使用定理 `Polynomial.eval₂_one`：eval₂_one : (1 : R[X]).eval₂ f x = 1
+· 使用定理 `RatFunc.denom_one`：denom_one : denom (1 : K⟮X⟯) = 1
+· 使用定理 `div_self`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] {a : G₀}, a ≠ 0 → 
+a / a = 1
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem eval_one : eval f a 1 = 1 := by simp [eval]
 
 @[simp]
-/--
-theorem `eval_algebraMap` / 定理 `eval_algebraMap`
-
-English:
-theorem eval_algebraMap
-  given: {S : Type*} [CommSemiring S] [Algebra S K[X]] (p : S)
-  proof: by
-  simp [eval, IsScalarTower.algebraMap_apply S K[X] K⟮X⟯]
-
-中文:
-定理 eval_algebraMap
-  条件: {S : 类型} [交换半环 S] [代数 S K[X]] (p : S)
-  证明: by
-  simp [eval, IsScalarTower.algebraMap_apply S K[X] K⟮X⟯]
-
-Depends on / 依赖: IsScalarTower, IsScalarTower.algebraMap_apply, algebraMap_apply
+/-
+**RatFunc.eval_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc`。
+形式化陈述：eval_algebraMap {S : Type*} [CommSemiring S] [Algebra S K[X]] (p : S) : ev
+al f a (algebraMap _ _ p) = (algebraMap _ K[X] p).eval₂ f a
+参数：p : S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `IsScalarTower.algebraMap_apply`：algebraMap_apply (x : R) : algebraMap R 
+A x = algebraMap S A (algebraMap R S x)
+· 使用定理 `RatFunc.instIsScalarTowerPolynomial`：∀ {K : Type u} [inst : CommRing K] 
+{R : Type u_1} [IsDomain K] [inst_2 : Monoid R]   [inst_3 : DistribMulAction R (
+Polynomial K)] [inst_4 : …
+· 使用定理 `RatFunc.num_algebraMap`：num_algebraMap (p : K[X]) : num (algebraMap _ _ 
+p) = p
+· 使用定理 `RatFunc.denom_algebraMap`：denom_algebraMap (p : K[X]) : denom (algebraMa
+p _ K⟮X⟯ p) = 1
+· 使用定理 `Polynomial.eval₂_one`：eval₂_one : (1 : R[X]).eval₂ f x = 1
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem eval_algebraMap {S : Type*} [CommSemiring S] [Algebra S K[X]] (p : S) :
     eval f a (algebraMap _ _ p) = (algebraMap _ K[X] p).eval₂ f a := by
   simp [eval, IsScalarTower.algebraMap_apply S K[X] K⟮X⟯]
 
-/--
-theorem `eval_add` / 定理 `eval_add`
+/-- `eval` is an additive homomorphism except when a denominator evaluates to `0`.
 
-English:
-theorem eval_add
-  statement: {x y : K⟮X⟯} (hx : Polynomial.eval₂ f a (denom x) != 0)
-  proof: by
-  unfold eval
-  by_cases hxy : Polynomial.eval₂ f a (denom (x + y)) = 0
-  · have := Polynomial.eval₂_eq_zero_of_dvd_of_eval₂_eq_zero f a (denom_add_dvd x y) hxy
-    rw [Polynomial.eval₂_mul] at this
-    cases mul_eq_zero.mp this <;> contradiction
-  rw [div_add_div _ _ hx hy]; rw [eq_div_iff (mul_ne_zero hx hy)]; rw [div_eq_mul_inv]; rw [mul_right_comm]; rw [←
-    div_eq_mul_inv]; rw [div_eq_iff hxy]
-  simp only [← Polynomial.eval₂_mul, ← Polynomial.eval₂_add]
-  congr 1
-  apply num_denom_add
+Counterexample: `eval _ 1 (X / (X-1)) + eval _ 1 (-1 / (X-1)) = 0`
+`... ≠ 1 = eval _ 1 ((X-1) / (X-1))`.
 
-中文:
-定理 eval_add
-  结论: {x y : K⟮X⟯} (hx : 多项式.eval₂ f a (denom x) != 0)
-  证明: by
-  unfold eval
-  by_cases hxy : Polynomial.eval₂ f a (denom (x + y)) = 0
-  · have := Polynomial.eval₂_eq_zero_of_dvd_of_eval₂_eq_zero f a (denom_add_dvd x y) hxy
-    rw [Polynomial.eval₂_mul] at this
-    cases mul_eq_zero.mp this <;> contradiction
-  rw [div_add_div _ _ hx hy]; rw [eq_div_iff (mul_ne_zero hx hy)]; rw [div_eq_mul_inv]; rw [mul_right_comm]; rw [←
-    div_eq_mul_inv]; rw [div_eq_iff hxy]
-  simp only [← Polynomial.eval₂_mul, ← Polynomial.eval₂_add]
-  congr 1
-  apply num_denom_add
-
-Depends on / 依赖: Polynomial, Polynomial.eval, denom_add_dvd, div_add_div, div_eq_iff, div_eq_mul_inv, eq_div_iff, mul_eq_zero, mul_eq_zero.mp, mul_ne_zero, mul_right_comm, num_denom_add
+See also `RatFunc.eval₂_denom_ne_zero` to make the hypotheses simpler but less general.
 -/
-theorem eval_add {x y : K⟮X⟯} (hx : Polynomial.eval₂ f a (denom x) != 0)
-    (hy : Polynomial.eval₂ f a (denom y) != 0) : eval f a (x + y) = eval f a x + eval f a y := by
+/-
+**RatFunc.eval_add** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc`。
+形式化陈述：eval_add {x y : K⟮X⟯} (hx : Polynomial.eval₂ f a (denom x) != 0) (hy : Pol
+ynomial.eval₂ f a (denom y) != 0) : eval f a (x + y) = eval f a x + eval f a y
+参数：hx : Polynomial.eval₂ f a (denom x) != 0；hy : Polynomial.eval₂ f a (denom y) 
+!= 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_eq_zero_of_dvd_of_eval₂_eq_zero`：eval₂_eq_zero_of_dvd_o
+f_eval₂_eq_zero (h : p ∣ q) (h0 : eval₂ f x p = 0) : eval₂ f x q = 0
+· 使用定理 `RatFunc.denom_add_dvd`：denom_add_dvd (x y : K⟮X⟯) : denom (x + y) ∣ deno
+m x * denom y
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mul_eq_zero`：mul_eq_zero : a * b = 0 ↔ a = 0 ∨ b = 0
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.eval₂_mul`：eval₂_mul : (p * q).eval₂ f x = p.eval₂ f x * q.ev
+al₂ f x
+· 使用定理 `div_add_div`：div_add_div (a : K) (c : K) (hb : b != 0) (hd : d != 0) : a
+ / b + c / d = (a * d + b * c) / (b * d)
+· 使用引理 `eq_div_iff`：eq_div_iff (hb : b != 0) : c = a / b ↔ c * b = a
+· 使用定理 `mul_ne_zero`：mul_ne_zero (ha : a != 0) (hb : b != 0) : a * b != 0
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `mul_right_comm`：mul_right_comm (a b c : G) : a * b * c = a * c * b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `div_eq_iff`：div_eq_iff (hb : b != 0) : a / b = c ↔ a = c * b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `RatFunc.num_denom_add`：num_denom_add (x y : K⟮X⟯) : (x + y).num * (x.den
+om * y.denom) = (x.num * y.denom + x.denom * y.num) * (x + y).denom
+
+--- 原说明 ---
+`eval` is an additive homomorphism except when a denominator evaluates to `0`.
+
+Counterexample: `eval _ 1 (X / (X-1)) + eval _ 1 (-1 / (X-1)) = 0`
+`... ≠ 1 = eval _ 1 ((X-1) / (X-1))`.
+
+See also `RatFunc.eval₂_denom_ne_zero` to make the hypotheses simpler but less g
+eneral.
+-/
+theorem eval_add {x y : K⟮X⟯} (hx : Polynomial.eval₂ f a (denom x) ≠ 0)
+    (hy : Polynomial.eval₂ f a (denom y) ≠ 0) : eval f a (x + y) = eval f a x + eval f a y := by
   unfold eval
   by_cases hxy : Polynomial.eval₂ f a (denom (x + y)) = 0
   · have := Polynomial.eval₂_eq_zero_of_dvd_of_eval₂_eq_zero f a (denom_add_dvd x y) hxy
     rw [Polynomial.eval₂_mul] at this
     cases mul_eq_zero.mp this <;> contradiction
-  rw [div_add_div _ _ hx hy]; rw [eq_div_iff (mul_ne_zero hx hy)]; rw [div_eq_mul_inv]; rw [mul_right_comm]; rw [←
-    div_eq_mul_inv]; rw [div_eq_iff hxy]
+  rw [div_add_div _ _ hx hy, eq_div_iff (mul_ne_zero hx hy), div_eq_mul_inv, mul_right_comm, ←
+    div_eq_mul_inv, div_eq_iff hxy]
   simp only [← Polynomial.eval₂_mul, ← Polynomial.eval₂_add]
   congr 1
   apply num_denom_add
 
-/--
-theorem `eval_mul` / 定理 `eval_mul`
+/-- `eval` is a multiplicative homomorphism except when a denominator evaluates to `0`.
 
-English:
-theorem eval_mul
-  statement: {x y : K⟮X⟯} (hx : Polynomial.eval₂ f a (denom x) != 0)
-  proof: by
-  unfold eval
-  by_cases hxy : Polynomial.eval₂ f a (denom (x * y)) = 0
-  · have := Polynomial.eval₂_eq_zero_of_dvd_of_eval₂_eq_zero f a (denom_mul_dvd x y) hxy
-    rw [Polynomial.eval₂_mul] at this
-    cases mul_eq_zero.mp this <;> contradiction
-  rw [div_mul_div_comm]; rw [eq_div_iff (mul_ne_zero hx hy)]; rw [div_eq_mul_inv]; rw [mul_right_comm]; rw [←
-    div_eq_mul_inv]; rw [div_eq_iff hxy]
-  repeat' rw [← Polynomial.eval₂_mul]
-  congr 1
-  apply num_denom_mul
+Counterexample: `eval _ 0 X * eval _ 0 (1/X) = 0 ≠ 1 = eval _ 0 1 = eval _ 0 (X * 1/X)`.
 
-中文:
-定理 eval_mul
-  结论: {x y : K⟮X⟯} (hx : 多项式.eval₂ f a (denom x) != 0)
-  证明: by
-  unfold eval
-  by_cases hxy : Polynomial.eval₂ f a (denom (x * y)) = 0
-  · have := Polynomial.eval₂_eq_zero_of_dvd_of_eval₂_eq_zero f a (denom_mul_dvd x y) hxy
-    rw [Polynomial.eval₂_mul] at this
-    cases mul_eq_zero.mp this <;> contradiction
-  rw [div_mul_div_comm]; rw [eq_div_iff (mul_ne_zero hx hy)]; rw [div_eq_mul_inv]; rw [mul_right_comm]; rw [←
-    div_eq_mul_inv]; rw [div_eq_iff hxy]
-  repeat' rw [← Polynomial.eval₂_mul]
-  congr 1
-  apply num_denom_mul
-
-Depends on / 依赖: Polynomial, Polynomial.eval, denom_mul_dvd, div_eq_iff, div_eq_mul_inv, div_mul_div_comm, eq_div_iff, mul_eq_zero, mul_eq_zero.mp, mul_ne_zero, mul_right_comm, num_denom_mul, repeat
+See also `RatFunc.eval₂_denom_ne_zero` to make the hypotheses simpler but less general.
 -/
-theorem eval_mul {x y : K⟮X⟯} (hx : Polynomial.eval₂ f a (denom x) != 0)
-    (hy : Polynomial.eval₂ f a (denom y) != 0) : eval f a (x * y) = eval f a x * eval f a y := by
+/-
+**RatFunc.eval_mul** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc`。
+形式化陈述：eval_mul {x y : K⟮X⟯} (hx : Polynomial.eval₂ f a (denom x) != 0) (hy : Pol
+ynomial.eval₂ f a (denom y) != 0) : eval f a (x * y) = eval f a x * eval f a y
+参数：hx : Polynomial.eval₂ f a (denom x) != 0；hy : Polynomial.eval₂ f a (denom y) 
+!= 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.eval₂_eq_zero_of_dvd_of_eval₂_eq_zero`：eval₂_eq_zero_of_dvd_o
+f_eval₂_eq_zero (h : p ∣ q) (h0 : eval₂ f x p = 0) : eval₂ f x q = 0
+· 使用定理 `RatFunc.denom_mul_dvd`：denom_mul_dvd (x y : K⟮X⟯) : denom (x * y) ∣ deno
+m x * denom y
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mul_eq_zero`：mul_eq_zero : a * b = 0 ↔ a = 0 ∨ b = 0
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.eval₂_mul`：eval₂_mul : (p * q).eval₂ f x = p.eval₂ f x * q.ev
+al₂ f x
+· 使用定理 `div_mul_div_comm`：div_mul_div_comm : a / b * (c / d) = a * c / (b * d)
+· 使用引理 `eq_div_iff`：eq_div_iff (hb : b != 0) : c = a / b ↔ c * b = a
+· 使用定理 `mul_ne_zero`：mul_ne_zero (ha : a != 0) (hb : b != 0) : a * b != 0
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `mul_right_comm`：mul_right_comm (a b c : G) : a * b * c = a * c * b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `div_eq_iff`：div_eq_iff (hb : b != 0) : a / b = c ↔ a = c * b
+· 使用定理 `RatFunc.num_denom_mul`：num_denom_mul (x y : K⟮X⟯) : (x * y).num * (x.den
+om * y.denom) = x.num * y.num * (x * y).denom
+
+--- 原说明 ---
+`eval` is a multiplicative homomorphism except when a denominator evaluates to `
+0`.
+
+Counterexample: `eval _ 0 X * eval _ 0 (1/X) = 0 ≠ 1 = eval _ 0 1 = eval _ 0 (X 
+* 1/X)`.
+
+See also `RatFunc.eval₂_denom_ne_zero` to make the hypotheses simpler but less g
+eneral.
+-/
+theorem eval_mul {x y : K⟮X⟯} (hx : Polynomial.eval₂ f a (denom x) ≠ 0)
+    (hy : Polynomial.eval₂ f a (denom y) ≠ 0) : eval f a (x * y) = eval f a x * eval f a y := by
   unfold eval
   by_cases hxy : Polynomial.eval₂ f a (denom (x * y)) = 0
   · have := Polynomial.eval₂_eq_zero_of_dvd_of_eval₂_eq_zero f a (denom_mul_dvd x y) hxy
     rw [Polynomial.eval₂_mul] at this
     cases mul_eq_zero.mp this <;> contradiction
-  rw [div_mul_div_comm]; rw [eq_div_iff (mul_ne_zero hx hy)]; rw [div_eq_mul_inv]; rw [mul_right_comm]; rw [←
-    div_eq_mul_inv]; rw [div_eq_iff hxy]
+  rw [div_mul_div_comm, eq_div_iff (mul_ne_zero hx hy), div_eq_mul_inv, mul_right_comm, ←
+    div_eq_mul_inv, div_eq_iff hxy]
   repeat' rw [← Polynomial.eval₂_mul]
   congr 1
   apply num_denom_mul
@@ -748,51 +710,50 @@ open Polynomial IntermediateField algebraAdjoinAdjoin
 
 variable {K L : Type*} [Field K] [Field L] [Algebra K L] (f : L) (h : Transcendental K f)
 
-/--
-Definition of `algEquivOfTranscendental` / `algEquivOfTranscendental` 的定义
+/-- Given a transcendental `f : L`, the `K`-algebra isomorphism between `RatFunc K` and `L` given
+by sending `X` to `f`. -/
+/-
+**RatFunc.algEquivOfTranscendental** 是 Mathlib 中的一个定义，位于命名空间 `RatFunc`。
+形式化陈述：algEquivOfTranscendental : RatFunc K ≃ₐ[K] K⟮f⟯
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition algEquivOfTranscendental
-  signature: : RatFunc K ≃ₐ[K] K⟮f⟯
-  body: IsFractionRing.algEquivOfAlgEquiv (Polynomial.algEquivOfTranscendental K f h)
-
-@[simp]
-
-中文:
-定义 algEquivOfTranscendental
-  签名: : 有理函数 K ≃ₐ[K] K⟮f⟯
-  定义体: IsFractionRing.algEquivOfAlgEquiv (Polynomial.algEquivOfTranscendental K f h)
-
-@[simp]
-
-Depends on / 依赖: IsFractionRing, IsFractionRing.algEquivOfAlgEquiv, Polynomial, Polynomial.algEquivOfTranscendental, algEquivOfAlgEquiv, algEquivOfTranscendental
+--- 原说明 ---
+Given a transcendental `f : L`, the `K`-algebra isomorphism between `RatFunc K` 
+and `L` given
+by sending `X` to `f`.
 -/
 noncomputable def algEquivOfTranscendental : RatFunc K ≃ₐ[K] K⟮f⟯ :=
   IsFractionRing.algEquivOfAlgEquiv (Polynomial.algEquivOfTranscendental K f h)
 
 @[simp]
-/--
-theorem `algEquivOfTranscendental_algebraMap` / 定理 `algEquivOfTranscendental_algebraMap`
-
-English:
-theorem algEquivOfTranscendental_algebraMap
-  given: (g : K[X])
-  proof: by
-  ext
-  simp [algEquivOfTranscendental]
-
-@[simp]
-
-中文:
-定理 algEquivOfTranscendental_algebraMap
-  条件: (g : K[X])
-  证明: by
-  ext
-  simp [algEquivOfTranscendental]
-
-@[simp]
-
-Depends on / 依赖: algEquivOfTranscendental
+/-
+**RatFunc.algEquivOfTranscendental_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc
+`。
+形式化陈述：algEquivOfTranscendental_algebraMap (g : K[X]) : algEquivOfTranscendental 
+f h (algebraMap K[X] (RatFunc K) g) = aeval (AdjoinSimple.gen K f) g
+参数：g : K[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.self_mem_adjoin_singleton`：self_mem_adjoin_singleton (x : A) : x
+ in R[x]
+· 使用引理 `IsFractionRing.algEquivOfAlgEquiv_algebraMap`：algEquivOfAlgEquiv_algebra
+Map (a : A) : algEquivOfAlgEquiv h (algebraMap A K a) = algebraMap B L (h a)
+· 使用引理 `Polynomial.coe_aeval_mk_apply`：coe_aeval_mk_apply {S : Subalgebra R A} (
+h : x in S) : (aeval (⟨x, h⟩ : S) p : A) = aeval x p
+· 使用定理 `IntermediateField.AdjoinSimple.coe_aeval_gen_apply`：∀ (F : Type u_1) [in
+st : Field F] {E : Type u_2} [inst_1 : Field E] [inst_2 : Algebra F E] (α : E) (
+f : Polynomial F),   ↑((Polynomial.aeval…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem algEquivOfTranscendental_algebraMap (g : K[X]) :
     algEquivOfTranscendental f h (algebraMap K[X] (RatFunc K) g) =
@@ -801,47 +762,67 @@ theorem algEquivOfTranscendental_algebraMap (g : K[X]) :
   simp [algEquivOfTranscendental]
 
 @[simp]
-/--
-theorem `algEquivOfTranscendental_X` / 定理 `algEquivOfTranscendental_X`
-
-English:
-theorem algEquivOfTranscendental_X
-  proof: by
-  simp [← algebraMap_X]
-
-中文:
-定理 algEquivOfTranscendental_X
-  证明: by
-  simp [← algebraMap_X]
-
-Depends on / 依赖: algebraMap_X
+/-
+**RatFunc.algEquivOfTranscendental_X** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc`。
+形式化陈述：algEquivOfTranscendental_X : algEquivOfTranscendental f h (X : RatFunc K) 
+= f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RatFunc.algEquivOfTranscendental_algebraMap`：algEquivOfTranscendental_al
+gebraMap (g : K[X]) : algEquivOfTranscendental f h (algebraMap K[X] (RatFunc K) 
+g) = aeval (AdjoinSimple.gen K f)…
+· 使用定理 `Polynomial.aeval_X`：aeval_X : aeval x (X : R[X]) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem algEquivOfTranscendental_X :
     algEquivOfTranscendental f h (X : RatFunc K) = f := by
   simp [← algebraMap_X]
-
-/--
-theorem `algEquivOfTranscendental_apply` / 定理 `algEquivOfTranscendental_apply`
-
-English:
-theorem algEquivOfTranscendental_apply
-  given: (u : RatFunc K)
-  proof: by
-  conv_lhs => rw [← num_div_denom u]
-  simp [-num_div_denom]
-
-@[simp]
-
-中文:
-定理 algEquivOfTranscendental_apply
-  条件: (u : 有理函数 K)
-  证明: by
-  conv_lhs => rw [← num_div_denom u]
-  simp [-num_div_denom]
-
-@[simp]
-
-Depends on / 依赖: conv_lhs, num_div_denom
+/-
+**RatFunc.algEquivOfTranscendental_apply** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc`。
+形式化陈述：algEquivOfTranscendental_apply (u : RatFunc K) : algEquivOfTranscendental 
+f h u = aeval f u.num / aeval f u.denom
+参数：u : RatFunc K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RatFunc.num_div_denom`：num_div_denom (x : K⟮X⟯) : algebraMap _ _ (num x)
+ / algebraMap _ _ (denom x) = x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_div₀`：map_div₀ : f (a / b) = f a / f b
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `AlgEquivClass.toAlgHomClass`：∀ (F : Type u_1) (R : Type u_2) (A : Type u
+_3) (B : Type u_4) [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Sem
+iring B] [inst_3 …
+· 使用定理 `AlgEquiv.instAlgEquivClass`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type u
+A₂} [inst : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [ins
+t_3 : Algebra R …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `RatFunc.algEquivOfTranscendental_algebraMap`：algEquivOfTranscendental_al
+gebraMap (g : K[X]) : algEquivOfTranscendental f h (algebraMap K[X] (RatFunc K) 
+g) = aeval (AdjoinSimple.gen K f)…
+· 使用定理 `IntermediateField.AdjoinSimple.coe_aeval_gen_apply`：∀ (F : Type u_1) [in
+st : Field F] {E : Type u_2} [inst_1 : Field E] [inst_2 : Algebra F E] (α : E) (
+f : Polynomial F),   ↑((Polynomial.aeval…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem algEquivOfTranscendental_apply (u : RatFunc K) :
     algEquivOfTranscendental f h u = aeval f u.num / aeval f u.denom := by
@@ -849,46 +830,61 @@ theorem algEquivOfTranscendental_apply (u : RatFunc K) :
   simp [-num_div_denom]
 
 @[simp]
-/--
-theorem `algEquivOfTranscendental_symm_aeval` / 定理 `algEquivOfTranscendental_symm_aeval`
-
-English:
-theorem algEquivOfTranscendental_symm_aeval
-  given: (g : K[X])
-  proof: by
-  simp [algEquivOfTranscendental, ← algebraMap_eq_gen_self, aeval_algebraMap_apply]
-
-@[simp]
-
-中文:
-定理 algEquivOfTranscendental_symm_aeval
-  条件: (g : K[X])
-  证明: by
-  simp [algEquivOfTranscendental, ← algebraMap_eq_gen_self, aeval_algebraMap_apply]
-
-@[simp]
-
-Depends on / 依赖: aeval_algebraMap_apply, algEquivOfTranscendental, algebraMap_eq_gen_self
+/-
+**RatFunc.algEquivOfTranscendental_symm_aeval** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc
+`。
+形式化陈述：algEquivOfTranscendental_symm_aeval (g : K[X]) : (algEquivOfTranscendental
+ f h).symm (aeval (AdjoinSimple.gen _ f) g) = algebraMap _ _ g
+参数：g : K[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.self_mem_adjoin_singleton`：self_mem_adjoin_singleton (x : A) : x
+ in R[x]
+· 使用定理 `Polynomial.aeval_algebraMap_apply`：aeval_algebraMap_apply (x : A) (p : R
+[X]) : aeval (algebraMap A B x) p = algebraMap A B (aeval x p)
+· 使用定理 `IntermediateField.algebraAdjoinAdjoin.instIsScalarTowerSubtypeMemSubalge
+braAdjoinAdjoin`：∀ (F : Type u_1) [inst : Field F] {E : Type u_2} [inst_1 : Fiel
+d E] [inst_2 : Algebra F E] (S : Set E) (X : Type u_3)   [inst_3 : SMul X F] …
+· 使用引理 `IsFractionRing.algEquivOfAlgEquiv_algebraMap`：algEquivOfAlgEquiv_algebra
+Map (a : A) : algEquivOfAlgEquiv h (algebraMap A K a) = algebraMap B L (h a)
+· 使用定理 `Polynomial.algEquivOfTranscendental_symm_aeval`：algEquivOfTranscendental
+_symm_aeval (s : S) (h : Transcendental R s) (f : R[X]) : (algEquivOfTranscenden
+tal R s h).symm (aeval (⟨s, self_mem…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem algEquivOfTranscendental_symm_aeval (g : K[X]) :
     (algEquivOfTranscendental f h).symm (aeval (AdjoinSimple.gen _ f) g) = algebraMap _ _ g := by
   simp [algEquivOfTranscendental, ← algebraMap_eq_gen_self, aeval_algebraMap_apply]
 
 @[simp]
-/--
-theorem `algEquivOfTranscendental_symm_gen` / 定理 `algEquivOfTranscendental_symm_gen`
-
-English:
-theorem algEquivOfTranscendental_symm_gen
-  proof: by
-  simp [algEquivOfTranscendental, ← algebraMap_eq_gen_self]
-
-中文:
-定理 algEquivOfTranscendental_symm_gen
-  证明: by
-  simp [algEquivOfTranscendental, ← algebraMap_eq_gen_self]
-
-Depends on / 依赖: algEquivOfTranscendental, algebraMap_eq_gen_self
+/-
+**RatFunc.algEquivOfTranscendental_symm_gen** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc`。
+形式化陈述：algEquivOfTranscendental_symm_gen : (algEquivOfTranscendental f h).symm (A
+djoinSimple.gen _ f) = (X : RatFunc K)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.self_mem_adjoin_singleton`：self_mem_adjoin_singleton (x : A) : x
+ in R[x]
+· 使用引理 `IsFractionRing.algEquivOfAlgEquiv_algebraMap`：algEquivOfAlgEquiv_algebra
+Map (a : A) : algEquivOfAlgEquiv h (algebraMap A K a) = algebraMap B L (h a)
+· 使用定理 `Polynomial.algEquivOfTranscendental_symm_gen`：algEquivOfTranscendental_s
+ymm_gen (s : S) (h : Transcendental R s) : (algEquivOfTranscendental R s h).symm
+ ⟨s, self_mem_adjoin_singleton R s…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem algEquivOfTranscendental_symm_gen :
     (algEquivOfTranscendental f h).symm (AdjoinSimple.gen _ f) = (X : RatFunc K) := by
@@ -900,43 +896,36 @@ section Algebra
 
 variable [CommRing K] [IsDomain K]
 
-/--
-lemma `transcendental_X` / 引理 `transcendental_X`
-
-English:
-lemma transcendental_X
-  statement: Transcendental K (X : K⟮X⟯)
-  proof: by
-  rw [← RatFunc.algebraMap_X]; rw [transcendental_algebraMap_iff (algebraMap_injective K)]
-  exact Polynomial.transcendental_X K
-
-中文:
-引理 transcendental_X
-  结论: 超越 K (X : K⟮X⟯)
-  证明: by
-  rw [← RatFunc.algebraMap_X]; rw [transcendental_algebraMap_iff (algebraMap_injective K)]
-  exact Polynomial.transcendental_X K
-
-Depends on / 依赖: Polynomial, Polynomial.transcendental_X, RatFunc, RatFunc.algebraMap_X, algebraMap_X, algebraMap_injective, transcendental_X, transcendental_algebraMap_iff
+/-
+**RatFunc.transcendental_X** 是 Mathlib 中的一个引理，位于命名空间 `RatFunc`。
+形式化陈述：transcendental_X : Transcendental K (X : K⟮X⟯)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RatFunc.algebraMap_X`：algebraMap_X : algebraMap K[X] K⟮X⟯ Polynomial.X =
+ X
+· 使用定理 `transcendental_algebraMap_iff`：transcendental_algebraMap_iff {a : S} (h 
+: Function.Injective (algebraMap S A)) : Transcendental R (algebraMap S A a) ↔ T
+ranscendental R a
+· 使用定理 `RatFunc.instIsScalarTowerPolynomial`：∀ {K : Type u} [inst : CommRing K] 
+{R : Type u_1} [IsDomain K] [inst_2 : Monoid R]   [inst_3 : DistribMulAction R (
+Polynomial K)] [inst_4 : …
+· 使用定理 `RatFunc.algebraMap_injective`：algebraMap_injective : Function.Injective 
+(algebraMap K[X] K⟮X⟯)
+· 使用定理 `Polynomial.transcendental_X`：Polynomial.transcendental_X : Transcendenta
+l R (X (R
 -/
 lemma transcendental_X : Transcendental K (X : K⟮X⟯) := by
-  rw [← RatFunc.algebraMap_X]; rw [transcendental_algebraMap_iff (algebraMap_injective K)]
+  rw [← RatFunc.algebraMap_X, transcendental_algebraMap_iff (algebraMap_injective K)]
   exact Polynomial.transcendental_X K
-
-/--
-Instance `transcendental` / 实例 `transcendental`
-
-English:
-instance transcendental
-  signature: : Algebra.Transcendental K K⟮X⟯
-  body: ⟨X, transcendental_X⟩
-
-中文:
-实例 transcendental
-  签名: : 代数.超越 K K⟮X⟯
-  定义体: ⟨X, transcendental_X⟩
-
-Depends on / 依赖: transcendental_X
+/-
+**RatFunc.transcendental** 是 Mathlib 中的一个实例，位于命名空间 `RatFunc`。
+形式化陈述：transcendental : Algebra.Transcendental K K⟮X⟯
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `RatFunc.transcendental_X`：transcendental_X : Transcendental K (X : K⟮X⟯)
 -/
 instance transcendental : Algebra.Transcendental K K⟮X⟯ := ⟨X, transcendental_X⟩
 
@@ -957,95 +946,125 @@ section HeightOneSpectrum
 open IsDedekindDomain.HeightOneSpectrum WithZero
 
 set_option linter.style.whitespace false in -- manual alignment is not recognised
-/--
-Definition of `idealX` / `idealX` 的定义
+/-- This is the principal ideal generated by `X` in the ring of polynomials over a field K,
+  regarded as an element of the height-one-spectrum. -/
+/-
+**Polynomial.idealX** 是 Mathlib 中的一个定义，位于命名空间 `Polynomial`。
+形式化陈述：idealX : IsDedekindDomain.HeightOneSpectrum K[X] where asIdeal
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition idealX
-  signature: : IsDedekindDomain.HeightOneSpectrum K[X] where
-  body: Ideal.span {X}
-  isPrime := by rw [Ideal.span_singleton_prime]; exacts [Polynomial.prime_X, Polynomial.X_ne_zero]
-  ne_bot := by rw [ne_eq, Ideal.span_singleton_eq_bot]; exact Polynomial.X_ne_zero
-
-@[simp]
-
-中文:
-定义 idealX
-  签名: : 是Dedekind整环.高一谱 K[X] where
-  定义体: Ideal.span {X}
-  isPrime := by rw [Ideal.span_singleton_prime]; exacts [Polynomial.prime_X, Polynomial.X_ne_zero]
-  ne_bot := by rw [ne_eq, Ideal.span_singleton_eq_bot]; exact Polynomial.X_ne_zero
-
-@[simp]
-
-Depends on / 依赖: Ideal.span
+--- 原说明 ---
+This is the principal ideal generated by `X` in the ring of polynomials over a f
+ield K,
+  regarded as an element of the height-one-spectrum.
 -/
 def idealX : IsDedekindDomain.HeightOneSpectrum K[X] where
   asIdeal := Ideal.span {X}
   isPrime := by rw [Ideal.span_singleton_prime]; exacts [Polynomial.prime_X, Polynomial.X_ne_zero]
-  ne_bot := by rw [ne_eq, Ideal.span_singleton_eq_bot]; exact Polynomial.X_ne_zero
+  ne_bot  := by rw [ne_eq, Ideal.span_singleton_eq_bot]; exact Polynomial.X_ne_zero
 
 @[simp]
-/--
-theorem `idealX_span` / 定理 `idealX_span`
-
-English:
-theorem idealX_span
-  statement: (idealX K).asIdeal = Ideal.span {X}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 idealX_span
-  结论: (idealX K).asIdeal = 理想.span {X}
-  证明: rfl
-
-@[simp]
+/-
+**Polynomial.idealX_span** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：idealX_span : (idealX K).asIdeal = Ideal.span {X}
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem idealX_span : (idealX K).asIdeal = Ideal.span {X} := rfl
 
 @[simp]
-/--
-theorem `valuation_X_eq_neg_one` / 定理 `valuation_X_eq_neg_one`
-
-English:
-theorem valuation_X_eq_neg_one
-  proof: by
-  rw [← RatFunc.algebraMap_X]; rw [valuation_of_algebraMap]; rw [intValuation_singleton
-      _ (Polynomial.X_ne_zero) (idealX_span K)]
-
-中文:
-定理 valuation_X_eq_neg_one
-  证明: by
-  rw [← RatFunc.algebraMap_X]; rw [valuation_of_algebraMap]; rw [intValuation_singleton
-      _ (Polynomial.X_ne_zero) (idealX_span K)]
-
-Depends on / 依赖: Polynomial, Polynomial.X_ne_zero, RatFunc, RatFunc.algebraMap_X, X_ne_zero, algebraMap_X, idealX_span, intValuation_singleton, valuation_of_algebraMap
+/-
+**Polynomial.valuation_X_eq_neg_one** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：valuation_X_eq_neg_one : (idealX K).valuation K⟮X⟯ RatFunc.X = exp (-1 : I
+nt)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `IsPrincipalIdealRing.isDedekindDomain`：∀ (A : Type u_2) [inst : CommRing
+ A] [IsDomain A] [IsPrincipalIdealRing A], IsDedekindDomain A
+· 使用定理 `Polynomial.instIsDomainOfIsCancelAdd`：∀ {R : Type u} [inst : Semiring R]
+ [IsCancelAdd R] [IsDomain R], IsDomain (Polynomial R)
+· 使用定理 `AddCancelMonoid.toIsCancelAdd`：∀ (M : Type u) [inst : AddCancelMonoid M]
+, IsCancelAdd M
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `RatFunc.instIsFractionRingPolynomial`：∀ (K : Type u) [inst : CommRing K]
+ [inst_1 : IsDomain K], IsFractionRing (Polynomial K) (RatFunc K)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RatFunc.algebraMap_X`：algebraMap_X : algebraMap K[X] K⟮X⟯ Polynomial.X =
+ X
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.valuation_of_algebraMap`：valuation_of
+_algebraMap (r : R) : v.valuation K r = v.intValuation r
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.intValuation_singleton`：intValuation_
+singleton {r : R} (hr : r != 0) (hv : v.asIdeal = Ideal.span {r}) : v.intValuati
+on r = exp (-1 : Int)
+· 使用定理 `Polynomial.X_ne_zero`：X_ne_zero [Nontrivial R] : (X : R[X]) != 0
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `Polynomial.idealX_span`：idealX_span : (idealX K).asIdeal = Ideal.span {X
+}
 -/
 theorem valuation_X_eq_neg_one :
-    (idealX K).valuation K⟮X⟯ RatFunc.X = exp (-1 : Int) := by
-  rw [← RatFunc.algebraMap_X]; rw [valuation_of_algebraMap]; rw [intValuation_singleton
+    (idealX K).valuation K⟮X⟯ RatFunc.X = exp (-1 : ℤ) := by
+  rw [← RatFunc.algebraMap_X, valuation_of_algebraMap, intValuation_singleton
       _ (Polynomial.X_ne_zero) (idealX_span K)]
-
-/--
-theorem `valuation_of_mk` / 定理 `valuation_of_mk`
-
-English:
-theorem valuation_of_mk
-  given: (f : Polynomial K) {g : Polynomial K} (hg : g != 0)
-  proof: by
-  simp only [RatFunc.mk_eq_mk' _ hg, valuation_of_mk']
-
-中文:
-定理 valuation_of_mk
-  条件: (f : 多项式 K) {g : 多项式 K} (hg : g != 0)
-  证明: by
-  simp only [RatFunc.mk_eq_mk' _ hg, valuation_of_mk']
-
-Depends on / 依赖: RatFunc, RatFunc.mk_eq_mk, mk_eq_mk, valuation_of_mk
+/-
+**Polynomial.valuation_of_mk** 是 Mathlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：valuation_of_mk (f : Polynomial K) {g : Polynomial K} (hg : g != 0) : (Pol
+ynomial.idealX K).valuation _ (RatFunc.mk f g) = (Polynomial.idealX K).intValuat
+ion f / (Polynomial.idealX K).intValuation g
+参数：f : Polynomial K；hg : g != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `IsPrincipalIdealRing.isDedekindDomain`：∀ (A : Type u_2) [inst : CommRing
+ A] [IsDomain A] [IsPrincipalIdealRing A], IsDedekindDomain A
+· 使用定理 `Polynomial.instIsDomainOfIsCancelAdd`：∀ {R : Type u} [inst : Semiring R]
+ [IsCancelAdd R] [IsDomain R], IsDomain (Polynomial R)
+· 使用定理 `AddCancelMonoid.toIsCancelAdd`：∀ (M : Type u) [inst : AddCancelMonoid M]
+, IsCancelAdd M
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `RatFunc.instIsFractionRingPolynomial`：∀ (K : Type u) [inst : CommRing K]
+ [inst_1 : IsDomain K], IsFractionRing (Polynomial K) (RatFunc K)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `IsLocalization.mk'`：IsLocalization.mk'_algebraMap_eq_mk' [IsLocalization
+ (Algebra.algebraMapSubmonoid A S) Aₛ] {x : A} {s : S} : IsLocalization.mk' Aₛ x
+ ⟨_, Alg…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `mem_nonZeroDivisors_iff_ne_zero`：∀ {M₀ : Type u_2} [inst : MonoidWithZer
+o M₀] {x : M₀} [NoZeroDivisors M₀] [Nontrivial M₀],   x ∈ nonZeroDivisors M₀ ↔ x
+ ≠ 0
+· 使用定理 `Polynomial.instNoZeroDivisors`：∀ {R : Type u} [inst : Semiring R] [NoZer
+oDivisors R], NoZeroDivisors (Polynomial R)
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `IsDomain.toNontrivial`：∀ {α : Type u} {inst : Semiring α} [self : IsDoma
+in α], Nontrivial α
+· 使用定理 `RatFunc.mk_eq_mk'`：mk_eq_mk' (f : Polynomial K) {g : Polynomial K} (hg :
+ g != 0) : RatFunc.mk f g = IsLocalization.mk' K⟮X⟯ f ⟨g, mem_nonZeroDivisors_if
+f_ne_ze…
+· 使用定理 `IsDedekindDomain.HeightOneSpectrum.valuation_of_mk'`：valuation_of_mk' {r
+ : R} {s : nonZeroDivisors R} : v.valuation K (IsLocalization.mk' K r s) = v.int
+Valuation r / v.intValuation s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem valuation_of_mk (f : Polynomial K) {g : Polynomial K} (hg : g != 0) :
+theorem valuation_of_mk (f : Polynomial K) {g : Polynomial K} (hg : g ≠ 0) :
     (Polynomial.idealX K).valuation _ (RatFunc.mk f g) =
       (Polynomial.idealX K).intValuation f / (Polynomial.idealX K).intValuation g := by
   simp only [RatFunc.mk_eq_mk' _ hg, valuation_of_mk']
@@ -1060,89 +1079,189 @@ variable {v : Valuation K⟮X⟯ Γ} [hv : v.IsTrivialOn K]
 
 open Valuation
 
-/--
-lemma `valuation_monomial_eq_valuation_X_pow` / 引理 `valuation_monomial_eq_valuation_X_pow`
+/-- If a valuation `v` is trivial on constants then for every `n : ℕ` the valuation of
+`(monomial n a)` is equal to `(v RatFunc.X) ^ n`. -/
+/-
+**Polynomial.valuation_monomial_eq_valuation_X_pow** 是 Mathlib 中的一个引理，位于命名空间 `Po
+lynomial`。
+形式化陈述：valuation_monomial_eq_valuation_X_pow (n : Nat) {a : K} (ha : a != 0) : v 
+(monomial n a) = v RatFunc.X ^ n
+参数：n : Nat；ha : a != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RatFunc.algebraMap_monomial`：algebraMap_monomial (n : Nat) (a : K) : alg
+ebraMap K[X] K⟮X⟯ (Polynomial.monomial n a) = C a * X ^ n
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `ValuationClass.toMonoidWithZeroHomClass`：∀ {F : Type u_7} {R : outParam 
+(Type u_5)} {Γ₀ : outParam (Type u_6)} {inst : LinearOrderedCommMonoidWithZero Γ
+₀}   {inst_1 : Ring R} {inst_…
+· 使用定理 `Valuation.instValuationClass`：∀ {R : Type u_3} {Γ₀ : Type u_4} [inst : R
+ing R] [inst_1 : LinearOrderedCommMonoidWithZero Γ₀],   ValuationClass (Valuatio
+n R Γ₀) R Γ₀
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Valuation.IsTrivialOn.eq_one`：∀ {Γ₀ : Type u_4} {inst : LinearOrderedCom
+mMonoidWithZero Γ₀} {B : Type u_7} {A : Type u_8} {inst_1 : CommSemiring A}   {i
+nst_2 : Ring B} {i…
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma valuation_monomial_eq_valuation_X_pow
-  given: (n : Nat) {a : K} (ha : a != 0)
-  proof: by
-  simp_all [← RatFunc.algebraMap_eq_C, hv.eq_one]
-
-中文:
-引理 valuation_monomial_eq_valuation_X_pow
-  条件: (n : 自然数) {a : K} (ha : a != 0)
-  证明: by
-  simp_all [← RatFunc.algebraMap_eq_C, hv.eq_one]
-
-Depends on / 依赖: RatFunc, RatFunc.algebraMap_eq_C, algebraMap_eq_C, eq_one, hv.eq_one
+--- 原说明 ---
+If a valuation `v` is trivial on constants then for every `n : ℕ` the valuation 
+of
+`(monomial n a)` is equal to `(v RatFunc.X) ^ n`.
 -/
-lemma valuation_monomial_eq_valuation_X_pow (n : Nat) {a : K} (ha : a != 0) :
+lemma valuation_monomial_eq_valuation_X_pow (n : ℕ) {a : K} (ha : a ≠ 0) :
     v (monomial n a) = v RatFunc.X ^ n := by
   simp_all [← RatFunc.algebraMap_eq_C, hv.eq_one]
 
-/--
-theorem `valuation_eq_valuation_X_pow_natDegree_of_one_lt_valuation_X` / 定理 `valuation_eq_valuation_X_pow_natDegree_of_one_lt_valuation_X`
+/-- If a valuation `v` is trivial on constants and `1 < v RatFunc.X` then for every polynomial `p`,
+`v p = v RatFunc.X ^ p.natDegree`.
 
-English:
-theorem valuation_eq_valuation_X_pow_natDegree_of_one_lt_valuation_X
-  proof: by
-  convert! valuation_aeval_eq_valuation_X_pow_natDegree_of_one_lt_valuation_X .X hlt hp
-  ext p
-  nth_rw 1 [RatFunc.X, ← aeval_X_left_apply p (R := K)]
-  exact (aeval_algebraMap_apply K⟮X⟯ X p).symm
+Note: The condition `1 < v RatFunc.X` is typically satisfied by the valuation at infinity. -/
+/-
+**Polynomial.valuation_eq_valuation_X_pow_natDegree_of_one_lt_valuation_X** 是 Ma
+thlib 中的一个定理，位于命名空间 `Polynomial`。
+形式化陈述：valuation_eq_valuation_X_pow_natDegree_of_one_lt_valuation_X (hlt : 1 < v 
+RatFunc.X) {p : K[X]} (hp : p != 0) : v p = v RatFunc.X ^ p.natDegree
+参数：hlt : 1 < v RatFunc.X；hp : p != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RatFunc.X.eq_1`：∀ {K : Type u} [inst : CommRing K] [inst_1 : IsDomain K]
+,   RatFunc.X = (algebraMap (Polynomial K) (RatFunc K)) Polynomial.X
+· 使用定理 `Polynomial.aeval_X_left_apply`：aeval_X_left_apply (p : R[X]) : aeval X p
+ = p
+· 使用定理 `Polynomial.aeval_algebraMap_apply`：aeval_algebraMap_apply (x : A) (p : R
+[X]) : aeval (algebraMap A B x) p = algebraMap A B (aeval x p)
+· 使用定理 `RatFunc.instIsScalarTowerPolynomial`：∀ {K : Type u} [inst : CommRing K] 
+{R : Type u_1} [IsDomain K] [inst_2 : Monoid R]   [inst_3 : DistribMulAction R (
+Polynomial K)] [inst_4 : …
+· 使用定理 `Polynomial.valuation_aeval_eq_valuation_X_pow_natDegree_of_one_lt_valuat
+ion_X`：valuation_aeval_eq_valuation_X_pow_natDegree_of_one_lt_valuation_X (w : B
+) (hpos : 1 < v w) {p : Polynomial A} (hp : p != 0) : v (p.aeval w)…
 
-中文:
-定理 valuation_eq_valuation_X_pow_natDegree_of_one_lt_valuation_X
-  证明: by
-  convert! valuation_aeval_eq_valuation_X_pow_natDegree_of_one_lt_valuation_X .X hlt hp
-  ext p
-  nth_rw 1 [RatFunc.X, ← aeval_X_left_apply p (R := K)]
-  exact (aeval_algebraMap_apply K⟮X⟯ X p).symm
+--- 原说明 ---
+If a valuation `v` is trivial on constants and `1 < v RatFunc.X` then for every 
+polynomial `p`,
+`v p = v RatFunc.X ^ p.natDegree`.
 
-Depends on / 依赖: RatFunc, RatFunc.X, aeval_X_left_apply, aeval_algebraMap_apply, convert, nth_rw, valuation_aeval_eq_valuation_X_pow_natDegree_of_one_lt_valuation_X
+Note: The condition `1 < v RatFunc.X` is typically satisfied by the valuation at
+ infinity.
 -/
 theorem valuation_eq_valuation_X_pow_natDegree_of_one_lt_valuation_X
-     (hlt : 1 < v RatFunc.X) {p : K[X]} (hp : p != 0) : v p = v RatFunc.X ^ p.natDegree := by
+     (hlt : 1 < v RatFunc.X) {p : K[X]} (hp : p ≠ 0) : v p = v RatFunc.X ^ p.natDegree := by
   convert! valuation_aeval_eq_valuation_X_pow_natDegree_of_one_lt_valuation_X .X hlt hp
   ext p
   nth_rw 1 [RatFunc.X, ← aeval_X_left_apply p (R := K)]
   exact (aeval_algebraMap_apply K⟮X⟯ X p).symm
 
 
-/--
-theorem `valuation_le_one_of_valuation_X_le_one` / 定理 `valuation_le_one_of_valuation_X_le_one`
+/-- If a valuation `v` is trivial on constants and `v RatFunc.X ≤ 1` then for every polynomial `p`,
+`v p ≤ 1`. -/
+/-
+**Polynomial.valuation_le_one_of_valuation_X_le_one** 是 Mathlib 中的一个定理，位于命名空间 `P
+olynomial`。
+形式化陈述：valuation_le_one_of_valuation_X_le_one (hle : v RatFunc.X <= 1) (p : K[X])
+ : v p <= 1
+参数：hle : v RatFunc.X <= 1；p : K[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.as_sum_range`：as_sum_range (p : R[X]) : p = ∑ i in range (p.n
+atDegree + 1), monomial i (coeff p i)
+· 使用定理 `RatFunc.coePolynomial.eq_1`：∀ {K : Type u} [inst : CommRing K] [inst_1 :
+ IsDomain K] (P : Polynomial K),   ↑P = (algebraMap (Polynomial K) (RatFunc K)) 
+P
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `Valuation.map_sum_le`：map_sum_le {ι : Type*} {s : Finset ι} {f : ι -> R}
+ {g : Γ₀} (hf : forall i in s, v (f i) <= g) : v (∑ i in s, f i) <= g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Polynomial.monomial_zero_right`：monomial_zero_right (n : Nat) : monomial
+ n (0 : R) = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `ValuationClass.toMonoidWithZeroHomClass`：∀ {F : Type u_7} {R : outParam 
+(Type u_5)} {Γ₀ : outParam (Type u_6)} {inst : LinearOrderedCommMonoidWithZero Γ
+₀}   {inst_1 : Ring R} {inst_…
+· 使用定理 `Valuation.instValuationClass`：∀ {R : Type u_3} {Γ₀ : Type u_4} [inst : R
+ing R] [inst_1 : LinearOrderedCommMonoidWithZero Γ₀],   ValuationClass (Valuatio
+n R Γ₀) R Γ₀
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RatFunc.algebraMap_monomial`：algebraMap_monomial (n : Nat) (a : K) : alg
+ebraMap K[X] K⟮X⟯ (Polynomial.monomial n a) = C a * X ^ n
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Valuation.IsTrivialOn.eq_one`：∀ {Γ₀ : Type u_4} {inst : LinearOrderedCom
+mMonoidWithZero Γ₀} {B : Type u_7} {A : Type u_8} {inst_1 : CommSemiring A}   {i
+nst_2 : Ring B} {i…
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `IsOrderedMonoid.toMulLeftMono`：∀ {α : Type u_1} [inst : CommMonoid α] [i
+nst_1 : Preorder α] [IsOrderedMonoid α], MulLeftMono α
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsOrderedMonoid`：∀ {α : Type u_1} [ins
+t : LinearOrderedCommMonoidWithZero α], IsOrderedMonoid α
 
-English:
-theorem valuation_le_one_of_valuation_X_le_one
-  given: (hle : v RatFunc.X <= 1) (p : K[X])
-  statement: v p <= 1
-  proof: by
-  rw [as_sum_range p]; rw [RatFunc.coePolynomial]; rw [map_sum]
-  apply map_sum_le v
-  intro i
-  by_cases h0 : p.coeff i = 0
-  · simp_all
-  · rw [← RatFunc.coePolynomial]
-    simp_all [pow_le_one', ← RatFunc.algebraMap_eq_C, hv.eq_one _ h0]
-
-中文:
-定理 valuation_le_one_of_valuation_X_le_one
-  条件: (hle : v 有理函数.X <= 1) (p : K[X])
-  结论: v p <= 1
-  证明: by
-  rw [as_sum_range p]; rw [RatFunc.coePolynomial]; rw [map_sum]
-  apply map_sum_le v
-  intro i
-  by_cases h0 : p.coeff i = 0
-  · simp_all
-  · rw [← RatFunc.coePolynomial]
-    simp_all [pow_le_one', ← RatFunc.algebraMap_eq_C, hv.eq_one _ h0]
-
-Depends on / 依赖: RatFunc, RatFunc.algebraMap_eq_C, RatFunc.coePolynomial, algebraMap_eq_C, as_sum_range, coePolynomial, eq_one, hv.eq_one, map_sum, map_sum_le, p.coeff, pow_le_one
+--- 原说明 ---
+If a valuation `v` is trivial on constants and `v RatFunc.X ≤ 1` then for every 
+polynomial `p`,
+`v p ≤ 1`.
 -/
-theorem valuation_le_one_of_valuation_X_le_one (hle : v RatFunc.X <= 1) (p : K[X]) : v p <= 1 := by
-  rw [as_sum_range p]; rw [RatFunc.coePolynomial]; rw [map_sum]
+theorem valuation_le_one_of_valuation_X_le_one (hle : v RatFunc.X ≤ 1) (p : K[X]) : v p ≤ 1 := by
+  rw [as_sum_range p, RatFunc.coePolynomial, map_sum]
   apply map_sum_le v
   intro i
   by_cases h0 : p.coeff i = 0
@@ -1150,25 +1269,65 @@ theorem valuation_le_one_of_valuation_X_le_one (hle : v RatFunc.X <= 1) (p : K[X
   · rw [← RatFunc.coePolynomial]
     simp_all [pow_le_one', ← RatFunc.algebraMap_eq_C, hv.eq_one _ h0]
 
-/--
-lemma `valuation_inv_monomial_eq_valuation_X_zpow` / 引理 `valuation_inv_monomial_eq_valuation_X_zpow`
+/-- If a valuation `v` is trivial on constants then for every `n : ℕ` the valuation of
+`1 / (monomial n a)` (as an element of the field of rational functions) is equal
+to `(v RatFunc.X) ^ (- n)`. -/
+/-
+**Polynomial.valuation_inv_monomial_eq_valuation_X_zpow** 是 Mathlib 中的一个引理，位于命名空
+间 `Polynomial`。
+形式化陈述：valuation_inv_monomial_eq_valuation_X_zpow (n : Nat) {a : K} (ha : a != 0)
+ : v (1 / monomial n a) = v RatFunc.X ^ (-(n : Int))
+参数：n : Nat；ha : a != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RatFunc.algebraMap_monomial`：algebraMap_monomial (n : Nat) (a : K) : alg
+ebraMap K[X] K⟮X⟯ (Polynomial.monomial n a) = C a * X ^ n
+· 使用定理 `one_div`：one_div (a : G) : 1 / a = a⁻¹
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `ValuationClass.toMonoidWithZeroHomClass`：∀ {F : Type u_7} {R : outParam 
+(Type u_5)} {Γ₀ : outParam (Type u_6)} {inst : LinearOrderedCommMonoidWithZero Γ
+₀}   {inst_1 : Ring R} {inst_…
+· 使用定理 `Valuation.instValuationClass`：∀ {R : Type u_3} {Γ₀ : Type u_4} [inst : R
+ing R] [inst_1 : LinearOrderedCommMonoidWithZero Γ₀],   ValuationClass (Valuatio
+n R Γ₀) R Γ₀
+· 使用定理 `map_inv₀`：map_inv₀ : f a⁻¹ = (f a)⁻¹
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `Valuation.IsTrivialOn.eq_one`：∀ {Γ₀ : Type u_4} {inst : LinearOrderedCom
+mMonoidWithZero Γ₀} {B : Type u_7} {A : Type u_8} {inst_1 : CommSemiring A}   {i
+nst_2 : Ring B} {i…
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `zpow_neg`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a 
+^ (-n) = (a ^ n)⁻¹
+· 使用定理 `zpow_natCast`：zpow_natCast (a : G) : forall n : Nat, a ^ (n : Int) = a ^
+ n | 0 => (zpow_zero _).trans (pow_zero _).symm | n + 1 => calc a ^ (↑(n + 1) : 
+In…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma valuation_inv_monomial_eq_valuation_X_zpow
-  given: (n : Nat) {a : K} (ha : a != 0)
-  proof: by
-  simp [← RatFunc.algebraMap_eq_C, hv.eq_one _ ha]
-
-中文:
-引理 valuation_inv_monomial_eq_valuation_X_zpow
-  条件: (n : 自然数) {a : K} (ha : a != 0)
-  证明: by
-  simp [← RatFunc.algebraMap_eq_C, hv.eq_one _ ha]
-
-Depends on / 依赖: RatFunc, RatFunc.algebraMap_eq_C, algebraMap_eq_C, eq_one, hv.eq_one
+--- 原说明 ---
+If a valuation `v` is trivial on constants then for every `n : ℕ` the valuation 
+of
+`1 / (monomial n a)` (as an element of the field of rational functions) is equal
+to `(v RatFunc.X) ^ (- n)`.
 -/
-lemma valuation_inv_monomial_eq_valuation_X_zpow (n : Nat) {a : K} (ha : a != 0) :
-    v (1 / monomial n a) = v RatFunc.X ^ (-(n : Int)) := by
+lemma valuation_inv_monomial_eq_valuation_X_zpow (n : ℕ) {a : K} (ha : a ≠ 0) :
+    v (1 / monomial n a) = v RatFunc.X ^ (-(n : ℤ)) := by
   simp [← RatFunc.algebraMap_eq_C, hv.eq_one _ ha]
 
 end TrivialOnConstants
@@ -1181,68 +1340,83 @@ open scoped WithZero
 
 open Polynomial
 
-/--
-Instance `valuedRatFunc` / 实例 `valuedRatFunc`
+/-- We give this instance a name so that it can be locally disabled when defining `FqtInfty`.
+Something similar might be needed after the refactor from `Valued` to `ValuativeRel`. -/
+/-
+**RatFunc.valuedRatFunc** 是 Mathlib 中的一个实例，位于命名空间 `RatFunc`。
+形式化陈述：valuedRatFunc : Valued K⟮X⟯ Intᵐ⁰
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance valuedRatFunc
-  signature: : Valued K⟮X⟯ Intᵐ⁰
-  body: Valued.mk' ((idealX K).valuation _)
-
-@[simp]
-
-中文:
-实例 valuedRatFunc
-  签名: : 赋值 K⟮X⟯ 整数ᵐ⁰
-  定义体: Valued.mk' ((idealX K).valuation _)
-
-@[simp]
-
-Depends on / 依赖: Valued, Valued.mk, idealX, valuation
+--- 原说明 ---
+We give this instance a name so that it can be locally disabled when defining `F
+qtInfty`.
+Something similar might be needed after the refactor from `Valued` to `Valuative
+Rel`.
 -/
-instance valuedRatFunc : Valued K⟮X⟯ Intᵐ⁰ := Valued.mk' ((idealX K).valuation _)
+instance valuedRatFunc : Valued K⟮X⟯ ℤᵐ⁰ := Valued.mk' ((idealX K).valuation _)
 
 @[simp]
-/--
-theorem `v_def` / 定理 `v_def`
-
-English:
-theorem v_def
-  given: {x : K⟮X⟯}
-  proof: rfl
-
-中文:
-定理 v_def
-  条件: {x : K⟮X⟯}
-  证明: rfl
+/-
+**RatFunc.v_def** 是 Mathlib 中的一个定理，位于命名空间 `RatFunc`。
+形式化陈述：v_def {x : K⟮X⟯} : Valued.v x = (idealX K).valuation _ x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
 -/
 theorem v_def {x : K⟮X⟯} :
     Valued.v x = (idealX K).valuation _ x := rfl
-
-/--
-lemma `valuation_surjective` / 引理 `valuation_surjective`
-
-English:
-lemma valuation_surjective
-  statement: Function.Surjective (Valued.v (R := RatFunc K))
-  proof: by
-  intro n
-  by_cases hn0 : n = 0
-  · use 0; simp [hn0]
-  · use (RatFunc.X ^ (-WithZero.log n))
-    simp [WithZero.exp_log hn0]
-
-中文:
-引理 valuation_surjective
-  结论: 函数.满射 (赋值.v (R := 有理函数 K))
-  证明: by
-  intro n
-  by_cases hn0 : n = 0
-  · use 0; simp [hn0]
-  · use (RatFunc.X ^ (-WithZero.log n))
-    simp [WithZero.exp_log hn0]
-
-Depends on / 依赖: RatFunc, RatFunc.X, WithZero, WithZero.exp_log, WithZero.log, exp_log
+/-
+**RatFunc.valuation_surjective** 是 Mathlib 中的一个引理，位于命名空间 `RatFunc`。
+形式化陈述：valuation_surjective : Function.Surjective (Valued.v (R
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `ValuationClass.toMonoidWithZeroHomClass`：∀ {F : Type u_7} {R : outParam 
+(Type u_5)} {Γ₀ : outParam (Type u_6)} {inst : LinearOrderedCommMonoidWithZero Γ
+₀}   {inst_1 : Ring R} {inst_…
+· 使用定理 `Valuation.instValuationClass`：∀ {R : Type u_3} {Γ₀ : Type u_4} [inst : R
+ing R] [inst_1 : LinearOrderedCommMonoidWithZero Γ₀],   ValuationClass (Valuatio
+n R Γ₀) R Γ₀
+· 使用定理 `IsPrincipalIdealRing.isDedekindDomain`：∀ (A : Type u_2) [inst : CommRing
+ A] [IsDomain A] [IsPrincipalIdealRing A], IsDedekindDomain A
+· 使用定理 `Polynomial.instIsDomainOfIsCancelAdd`：∀ {R : Type u} [inst : Semiring R]
+ [IsCancelAdd R] [IsDomain R], IsDomain (Polynomial R)
+· 使用定理 `AddCancelMonoid.toIsCancelAdd`：∀ (M : Type u) [inst : AddCancelMonoid M]
+, IsCancelAdd M
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `RatFunc.instIsFractionRingPolynomial`：∀ (K : Type u) [inst : CommRing K]
+ [inst_1 : IsDomain K], IsFractionRing (Polynomial K) (RatFunc K)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zpow_neg`：∀ {α : Type u_1} [inst : DivisionMonoid α] (a : α) (n : ℤ), a 
+^ (-n) = (a ^ n)⁻¹
+· 使用定理 `map_inv₀`：map_inv₀ : f a⁻¹ = (f a)⁻¹
+· 使用定理 `map_zpow₀`：map_zpow₀ {F G₀ G₀' : Type*} [GroupWithZero G₀] [GroupWithZer
+o G₀'] [FunLike F G₀ G₀'] [MonoidWithZeroHomClass F G₀ G₀'] (f : F) (x : G₀) (n…
+· 使用定理 `Polynomial.valuation_X_eq_neg_one`：valuation_X_eq_neg_one : (idealX K).v
+aluation K⟮X⟯ RatFunc.X = exp (-1 : Int)
+· 使用引理 `inv_zpow'`：inv_zpow' (a : α) (n : Int) : a⁻¹ ^ n = a ^ (-n)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `WithZero.exp_log`：∀ {M : Type u_4} [inst : AddMonoid M] {x : WithZero (M
+ultiplicative M)}, x ≠ 0 → WithZero.exp x.log = x
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
 -/
 lemma valuation_surjective : Function.Surjective (Valued.v (R := RatFunc K)) := by
   intro n
@@ -1254,3 +1428,4 @@ lemma valuation_surjective : Function.Surjective (Valued.v (R := RatFunc K)) := 
 end RatFunc
 
 end AdicValuation
+

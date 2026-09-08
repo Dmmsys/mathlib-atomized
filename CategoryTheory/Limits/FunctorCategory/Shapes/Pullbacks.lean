@@ -31,42 +31,34 @@ with a collection of limiting pullback cones for each cospan `F X ⟶ H X, G X �
 them together to give a pullback cone for the cospan formed by `f` and `g`.
 `combinePullbackConesIsLimit` shows that this pullback cone is limiting. -/
 @[simps!]
-/--
-Definition of `PullbackCone.combine` / `PullbackCone.combine` 的定义
+/-
+**CategoryTheory.Limits.PullbackCone.combine** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Limits.PullbackCone`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         {F G H :
+ CategoryTheory.Functor D C} →           (f : F ⟶ H) →             (g : G ⟶ H) →
+               (c : (X : D) → CategoryTheory.Limits.PullbackCone (f.app X) (g.ap
+p X)) →                 ((X : D) → CategoryTheory.Limits.IsLimit (c X)) → Catego
+ryTheory.Limits.PullbackCone f g
+参数：f : F ⟶ H；g : G ⟶ H；c : (X : D) → CategoryTheory.Limits.PullbackCone (f.app X
+) (g.app X)；(X : D) → CategoryTheory.Limits.IsLimit (c X)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PullbackCone.combine
-  signature: (f : F ⟶ H) (g : G ⟶ H) (c : forall X, PullbackCone (f.app X) (g.app X))
-  body: PullbackCone.mk (W := {
-    obj X := (c X).pt
-    map {X Y} h := (hc Y).lift ⟨_, (c X).π ≫ cospanHomMk (H.map h) (F.map h) (G.map h)⟩
-map_id _ := (hc _).hom_ext by rintro (_ | _ | _); all_goals simp
-map_comp _ _ := (hc _).hom_ext by rintro (_ | _ | _); all_goals simp })
-    { app X := (c X).fst }
-    { app X := (c X).snd }
-    (by ext; simp [(c _).condition])
-
-中文:
-定义 PullbackCone.combine
-  签名: (f : F ⟶ H) (g : G ⟶ H) (c : 对任意 X, PullbackCone (f.app X) (g.app X))
-  定义体: PullbackCone.mk (W := {
-    obj X := (c X).pt
-    map {X Y} h := (hc Y).lift ⟨_, (c X).π ≫ cospanHomMk (H.map h) (F.map h) (G.map h)⟩
-map_id _ := (hc _).hom_ext by rintro (_ | _ | _); all_goals simp
-map_comp _ _ := (hc _).hom_ext by rintro (_ | _ | _); all_goals simp })
-    { app X := (c X).fst }
-    { app X := (c X).snd }
-    (by ext; simp [(c _).condition])
-
-Depends on / 依赖: F.map, G.map, H.map, PullbackCone, PullbackCone.mk, all_goals, condition, cospanHomMk, hom_ext, map_comp, map_id
+--- 原说明 ---
+Given functors `F G H` and natural transformations `f : F ⟶ H` and `g : g : G ⟶ 
+H`, together
+with a collection of limiting pullback cones for each cospan `F X ⟶ H X, G X ⟶ H
+ X`, we can stitch
+them together to give a pullback cone for the cospan formed by `f` and `g`.
+`combinePullbackConesIsLimit` shows that this pullback cone is limiting.
 -/
-def PullbackCone.combine (f : F ⟶ H) (g : G ⟶ H) (c : forall X, PullbackCone (f.app X) (g.app X))
-    (hc : forall X, IsLimit (c X)) : PullbackCone f g :=
+def PullbackCone.combine (f : F ⟶ H) (g : G ⟶ H) (c : ∀ X, PullbackCone (f.app X) (g.app X))
+    (hc : ∀ X, IsLimit (c X)) : PullbackCone f g :=
   PullbackCone.mk (W := {
     obj X := (c X).pt
     map {X Y} h := (hc Y).lift ⟨_, (c X).π ≫ cospanHomMk (H.map h) (F.map h) (G.map h)⟩
-map_id _ := (hc _).hom_ext by rintro (_ | _ | _); all_goals simp
-map_comp _ _ := (hc _).hom_ext by rintro (_ | _ | _); all_goals simp })
+    map_id _ := (hc _).hom_ext <| by rintro (_ | _ | _); all_goals simp
+    map_comp _ _ := (hc _).hom_ext <| by rintro (_ | _ | _); all_goals simp })
     { app X := (c X).fst }
     { app X := (c X).snd }
     (by ext; simp [(c _).condition])
@@ -74,34 +66,30 @@ map_comp _ _ := (hc _).hom_ext by rintro (_ | _ | _); all_goals simp })
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /--
-Definition of `PullbackCone.combineIsLimit` / `PullbackCone.combineIsLimit` 的定义
+The pullback cone `combinePullbackCones` is limiting.
+-/
+/-
+**CategoryTheory.Limits.PullbackCone.combineIsLimit** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Limits.PullbackCone`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {D : T
+ype u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         {F G H :
+ CategoryTheory.Functor D C} →           (f : F ⟶ H) →             (g : G ⟶ H) →
+               (c : (X : D) → CategoryTheory.Limits.PullbackCone (f.app X) (g.ap
+p X)) →                 (hc : (X : D) → CategoryTheory.Limits.IsLimit (c X)) →  
+                 CategoryTheory.Limits.IsLimit (CategoryTheory.Limits.PullbackCo
+ne.combine f g c hc)
+参数：f : F ⟶ H；g : G ⟶ H；c : (X : D) → CategoryTheory.Limits.PullbackCone (f.app X
+) (g.app X)；hc : (X : D) → CategoryTheory.Limits.IsLimit (c X)；CategoryTheory.Li
+mits.PullbackCone.combine f g c hc。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PullbackCone.combineIsLimit
-  signature: (f : F ⟶ H) (g : G ⟶ H)
-  body: evaluationJointlyReflectsLimits _ fun k => by
-    refine IsLimit.equivOfNatIsoOfIso ?_ _ _ ?_ (hc k)
-    · exact cospanIsoMk (Iso.refl _) (Iso.refl _) (Iso.refl _)
-    · refine Cone.ext (Iso.refl _) ?_
-      rintro (_ | _ | _)
-      all_goals cat_disch
-
-中文:
-定义 PullbackCone.combineIsLimit
-  签名: (f : F ⟶ H) (g : G ⟶ H)
-  定义体: evaluationJointlyReflectsLimits _ fun k => by
-    refine IsLimit.equivOfNatIsoOfIso ?_ _ _ ?_ (hc k)
-    · exact cospanIsoMk (Iso.refl _) (Iso.refl _) (Iso.refl _)
-    · refine Cone.ext (Iso.refl _) ?_
-      rintro (_ | _ | _)
-      all_goals cat_disch
-
-Depends on / 依赖: Cone.ext, IsLimit, IsLimit.equivOfNatIsoOfIso, Iso.refl, all_goals, cat_disch, cospanIsoMk, equivOfNatIsoOfIso, evaluationJointlyReflectsLimits
+--- 原说明 ---
+The pullback cone `combinePullbackCones` is limiting.
 -/
 def PullbackCone.combineIsLimit (f : F ⟶ H) (g : G ⟶ H)
-    (c : forall X, PullbackCone (f.app X) (g.app X)) (hc : forall X, IsLimit (c X)) :
+    (c : ∀ X, PullbackCone (f.app X) (g.app X)) (hc : ∀ X, IsLimit (c X)) :
     IsLimit (combine f g c hc) :=
-  evaluationJointlyReflectsLimits _ fun k => by
+  evaluationJointlyReflectsLimits _ fun k ↦ by
     refine IsLimit.equivOfNatIsoOfIso ?_ _ _ ?_ (hc k)
     · exact cospanIsoMk (Iso.refl _) (Iso.refl _) (Iso.refl _)
     · refine Cone.ext (Iso.refl _) ?_
@@ -110,20 +98,18 @@ def PullbackCone.combineIsLimit (f : F ⟶ H) (g : G ⟶ H)
 
 variable [HasPullbacks C]
 
-/--
-Definition of `pullbackObjIso` / `pullbackObjIso` 的定义
+/-- Evaluating a pullback amounts to taking the pullback of the evaluations. -/
+/-
+**CategoryTheory.Limits.pullbackObjIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Limits`。
+形式化陈述：pullbackObjIso (f : F ⟶ H) (g : G ⟶ H) (d : D) : (pullback f g).obj d ≅ pu
+llback (f.app d) (g.app d)
+参数：f : F ⟶ H；g : G ⟶ H；d : D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pullbackObjIso
-  signature: (f : F ⟶ H) (g : G ⟶ H) (d : D)
-  body: limitObjIsoLimitCompEvaluation (cospan f g) d ≪≫ HasLimit.isoOfNatIso (diagramIsoCospan _)
-
-中文:
-定义 pullbackObjIso
-  签名: (f : F ⟶ H) (g : G ⟶ H) (d : D)
-  定义体: limitObjIsoLimitCompEvaluation (cospan f g) d ≪≫ HasLimit.isoOfNatIso (diagramIsoCospan _)
-
-Depends on / 依赖: HasLimit, HasLimit.isoOfNatIso, cospan, diagramIsoCospan, isoOfNatIso, limitObjIsoLimitCompEvaluation
+--- 原说明 ---
+Evaluating a pullback amounts to taking the pullback of the evaluations.
 -/
 noncomputable def pullbackObjIso (f : F ⟶ H) (g : G ⟶ H) (d : D) :
     (pullback f g).obj d ≅ pullback (f.app d) (g.app d) :=
@@ -131,22 +117,39 @@ noncomputable def pullbackObjIso (f : F ⟶ H) (g : G ⟶ H) (d : D) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-theorem `pullbackObjIso_hom_comp_fst` / 定理 `pullbackObjIso_hom_comp_fst`
-
-English:
-theorem pullbackObjIso_hom_comp_fst
-  given: (f : F ⟶ H) (g : G ⟶ H) (d : D)
-  proof: by
-  simp [pullbackObjIso]
-
-中文:
-定理 pullbackObjIso_hom_comp_fst
-  条件: (f : F ⟶ H) (g : G ⟶ H) (d : D)
-  证明: by
-  simp [pullbackObjIso]
-
-Depends on / 依赖: pullbackObjIso
+/-
+**CategoryTheory.Limits.pullbackObjIso_hom_comp_fst** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.Limits`。
+形式化陈述：pullbackObjIso_hom_comp_fst (f : F ⟶ H) (g : G ⟶ H) (d : D) : (pullbackObj
+Iso f g d).hom ≫ pullback.fst (f.app d) (g.app d) = (pullback.fst f g).app d
+参数：f : F ⟶ H；g : G ⟶ H；d : D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.HasLimit.isoOfNatIso_hom_π`：∀ {J : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Cate
+gory.{v, u} C]   {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.diagramIsoCospan_hom_app`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C]   (F : CategoryTheory.Functor CategoryTheory.Li
+mits.WalkingCospan C) (X : CategoryT…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.limitObjIsoLimitCompEvaluation_hom_π`：limitObjIsoL
+imitCompEvaluation_hom_π [HasLimitsOfShape J C] (F : J ⥤ K ⥤ C) (j : J) (k : K) 
+: (limitObjIsoLimitCompEvaluation F k).hom ≫ lim…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pullbackObjIso_hom_comp_fst (f : F ⟶ H) (g : G ⟶ H) (d : D) :
     (pullbackObjIso f g d).hom ≫ pullback.fst (f.app d) (g.app d) = (pullback.fst f g).app d := by
@@ -154,22 +157,39 @@ theorem pullbackObjIso_hom_comp_fst (f : F ⟶ H) (g : G ⟶ H) (d : D) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-theorem `pullbackObjIso_hom_comp_snd` / 定理 `pullbackObjIso_hom_comp_snd`
-
-English:
-theorem pullbackObjIso_hom_comp_snd
-  given: (f : F ⟶ H) (g : G ⟶ H) (d : D)
-  proof: by
-  simp [pullbackObjIso]
-
-中文:
-定理 pullbackObjIso_hom_comp_snd
-  条件: (f : F ⟶ H) (g : G ⟶ H) (d : D)
-  证明: by
-  simp [pullbackObjIso]
-
-Depends on / 依赖: pullbackObjIso
+/-
+**CategoryTheory.Limits.pullbackObjIso_hom_comp_snd** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.Limits`。
+形式化陈述：pullbackObjIso_hom_comp_snd (f : F ⟶ H) (g : G ⟶ H) (d : D) : (pullbackObj
+Iso f g d).hom ≫ pullback.snd (f.app d) (g.app d) = (pullback.snd f g).app d
+参数：f : F ⟶ H；g : G ⟶ H；d : D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.HasLimit.isoOfNatIso_hom_π`：∀ {J : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Cate
+gory.{v, u} C]   {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.diagramIsoCospan_hom_app`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C]   (F : CategoryTheory.Functor CategoryTheory.Li
+mits.WalkingCospan C) (X : CategoryT…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.limitObjIsoLimitCompEvaluation_hom_π`：limitObjIsoL
+imitCompEvaluation_hom_π [HasLimitsOfShape J C] (F : J ⥤ K ⥤ C) (j : J) (k : K) 
+: (limitObjIsoLimitCompEvaluation F k).hom ≫ lim…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pullbackObjIso_hom_comp_snd (f : F ⟶ H) (g : G ⟶ H) (d : D) :
     (pullbackObjIso f g d).hom ≫ pullback.snd (f.app d) (g.app d) = (pullback.snd f g).app d := by
@@ -178,22 +198,39 @@ theorem pullbackObjIso_hom_comp_snd (f : F ⟶ H) (g : G ⟶ H) (d : D) :
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-theorem `pullbackObjIso_inv_comp_fst` / 定理 `pullbackObjIso_inv_comp_fst`
-
-English:
-theorem pullbackObjIso_inv_comp_fst
-  given: (f : F ⟶ H) (g : G ⟶ H) (d : D)
-  proof: by
-  simp [pullbackObjIso]
-
-中文:
-定理 pullbackObjIso_inv_comp_fst
-  条件: (f : F ⟶ H) (g : G ⟶ H) (d : D)
-  证明: by
-  simp [pullbackObjIso]
-
-Depends on / 依赖: pullbackObjIso
+/-
+**CategoryTheory.Limits.pullbackObjIso_inv_comp_fst** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.Limits`。
+形式化陈述：pullbackObjIso_inv_comp_fst (f : F ⟶ H) (g : G ⟶ H) (d : D) : (pullbackObj
+Iso f g d).inv ≫ (pullback.fst f g).app d = pullback.fst (f.app d) (g.app d)
+参数：f : F ⟶ H；g : G ⟶ H；d : D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.instHasLimitCompOfPreservesLimit`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.Limits.limitObjIsoLimitCompEvaluation_inv_π_app`：limitObj
+IsoLimitCompEvaluation_inv_π_app [HasLimitsOfShape J C] (F : J ⥤ K ⥤ C) (j : J) 
+(k : K) : (limitObjIsoLimitCompEvaluation F k).inv ≫…
+· 使用定理 `CategoryTheory.Limits.HasLimit.isoOfNatIso_inv_π`：∀ {J : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Cate
+gory.{v, u} C]   {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pullbackObjIso_inv_comp_fst (f : F ⟶ H) (g : G ⟶ H) (d : D) :
     (pullbackObjIso f g d).inv ≫ (pullback.fst f g).app d = pullback.fst (f.app d) (g.app d) := by
@@ -202,22 +239,39 @@ theorem pullbackObjIso_inv_comp_fst (f : F ⟶ H) (g : G ⟶ H) (d : D) :
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-theorem `pullbackObjIso_inv_comp_snd` / 定理 `pullbackObjIso_inv_comp_snd`
-
-English:
-theorem pullbackObjIso_inv_comp_snd
-  given: (f : F ⟶ H) (g : G ⟶ H) (d : D)
-  proof: by
-  simp [pullbackObjIso]
-
-中文:
-定理 pullbackObjIso_inv_comp_snd
-  条件: (f : F ⟶ H) (g : G ⟶ H) (d : D)
-  证明: by
-  simp [pullbackObjIso]
-
-Depends on / 依赖: pullbackObjIso
+/-
+**CategoryTheory.Limits.pullbackObjIso_inv_comp_snd** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.Limits`。
+形式化陈述：pullbackObjIso_inv_comp_snd (f : F ⟶ H) (g : G ⟶ H) (d : D) : (pullbackObj
+Iso f g d).inv ≫ (pullback.snd f g).app d = pullback.snd (f.app d) (g.app d)
+参数：f : F ⟶ H；g : G ⟶ H；d : D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.instHasLimitCompOfPreservesLimit`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.Limits.limitObjIsoLimitCompEvaluation_inv_π_app`：limitObj
+IsoLimitCompEvaluation_inv_π_app [HasLimitsOfShape J C] (F : J ⥤ K ⥤ C) (j : J) 
+(k : K) : (limitObjIsoLimitCompEvaluation F k).inv ≫…
+· 使用定理 `CategoryTheory.Limits.HasLimit.isoOfNatIso_inv_π`：∀ {J : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Cate
+gory.{v, u} C]   {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pullbackObjIso_inv_comp_snd (f : F ⟶ H) (g : G ⟶ H) (d : D) :
     (pullbackObjIso f g d).inv ≫ (pullback.snd f g).app d = pullback.snd (f.app d) (g.app d) := by
@@ -229,20 +283,18 @@ section Pushout
 
 variable [HasPushouts C]
 
-/--
-Definition of `pushoutObjIso` / `pushoutObjIso` 的定义
+/-- Evaluating a pushout amounts to taking the pushout of the evaluations. -/
+/-
+**CategoryTheory.Limits.pushoutObjIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Limits`。
+形式化陈述：pushoutObjIso (f : F ⟶ G) (g : F ⟶ H) (d : D) : (pushout f g).obj d ≅ push
+out (f.app d) (g.app d)
+参数：f : F ⟶ G；g : F ⟶ H；d : D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pushoutObjIso
-  signature: (f : F ⟶ G) (g : F ⟶ H) (d : D)
-  body: colimitObjIsoColimitCompEvaluation (span f g) d ≪≫ HasColimit.isoOfNatIso (diagramIsoSpan _)
-
-中文:
-定义 pushoutObjIso
-  签名: (f : F ⟶ G) (g : F ⟶ H) (d : D)
-  定义体: colimitObjIsoColimitCompEvaluation (span f g) d ≪≫ HasColimit.isoOfNatIso (diagramIsoSpan _)
-
-Depends on / 依赖: HasColimit, HasColimit.isoOfNatIso, colimitObjIsoColimitCompEvaluation, diagramIsoSpan, isoOfNatIso
+--- 原说明 ---
+Evaluating a pushout amounts to taking the pushout of the evaluations.
 -/
 noncomputable def pushoutObjIso (f : F ⟶ G) (g : F ⟶ H) (d : D) :
     (pushout f g).obj d ≅ pushout (f.app d) (g.app d) :=
@@ -250,22 +302,36 @@ noncomputable def pushoutObjIso (f : F ⟶ G) (g : F ⟶ H) (d : D) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-theorem `inl_comp_pushoutObjIso_hom` / 定理 `inl_comp_pushoutObjIso_hom`
-
-English:
-theorem inl_comp_pushoutObjIso_hom
-  given: (f : F ⟶ G) (g : F ⟶ H) (d : D)
-  proof: by
-  simp [pushoutObjIso]
-
-中文:
-定理 inl_comp_pushoutObjIso_hom
-  条件: (f : F ⟶ G) (g : F ⟶ H) (d : D)
-  证明: by
-  simp [pushoutObjIso]
-
-Depends on / 依赖: pushoutObjIso
+/-
+**CategoryTheory.Limits.inl_comp_pushoutObjIso_hom** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Limits`。
+形式化陈述：inl_comp_pushoutObjIso_hom (f : F ⟶ G) (g : F ⟶ H) (d : D) : (pushout.inl 
+f g).app d ≫ (pushoutObjIso f g d).hom = pushout.inl (f.app d) (g.app d)
+参数：f : F ⟶ G；g : F ⟶ H；d : D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.colimitObjIsoColimitCompEvaluation_ι_app_hom_assoc
+`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1
+ : CategoryTheory.Category.{v₁, u₁} J]   {K : Type u₂} [inst_2…
+· 使用定理 `CategoryTheory.Limits.HasColimit.isoOfNatIso_ι_hom`：∀ {J : Type u₁} [ins
+t : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Ca
+tegory.{v, u} C]   {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.diagramIsoSpan_hom_app`：∀ {C : Type u} [inst : Cat
+egoryTheory.Category.{v, u} C]   (F : CategoryTheory.Functor CategoryTheory.Limi
+ts.WalkingSpan C) (X : CategoryThe…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem inl_comp_pushoutObjIso_hom (f : F ⟶ G) (g : F ⟶ H) (d : D) :
     (pushout.inl f g).app d ≫ (pushoutObjIso f g d).hom = pushout.inl (f.app d) (g.app d) := by
@@ -273,22 +339,36 @@ theorem inl_comp_pushoutObjIso_hom (f : F ⟶ G) (g : F ⟶ H) (d : D) :
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-theorem `inr_comp_pushoutObjIso_hom` / 定理 `inr_comp_pushoutObjIso_hom`
-
-English:
-theorem inr_comp_pushoutObjIso_hom
-  given: (f : F ⟶ G) (g : F ⟶ H) (d : D)
-  proof: by
-  simp [pushoutObjIso]
-
-中文:
-定理 inr_comp_pushoutObjIso_hom
-  条件: (f : F ⟶ G) (g : F ⟶ H) (d : D)
-  证明: by
-  simp [pushoutObjIso]
-
-Depends on / 依赖: pushoutObjIso
+/-
+**CategoryTheory.Limits.inr_comp_pushoutObjIso_hom** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Limits`。
+形式化陈述：inr_comp_pushoutObjIso_hom (f : F ⟶ G) (g : F ⟶ H) (d : D) : (pushout.inr 
+f g).app d ≫ (pushoutObjIso f g d).hom = pushout.inr (f.app d) (g.app d)
+参数：f : F ⟶ G；g : F ⟶ H；d : D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.colimitObjIsoColimitCompEvaluation_ι_app_hom_assoc
+`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1
+ : CategoryTheory.Category.{v₁, u₁} J]   {K : Type u₂} [inst_2…
+· 使用定理 `CategoryTheory.Limits.HasColimit.isoOfNatIso_ι_hom`：∀ {J : Type u₁} [ins
+t : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Ca
+tegory.{v, u} C]   {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.diagramIsoSpan_hom_app`：∀ {C : Type u} [inst : Cat
+egoryTheory.Category.{v, u} C]   (F : CategoryTheory.Functor CategoryTheory.Limi
+ts.WalkingSpan C) (X : CategoryThe…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem inr_comp_pushoutObjIso_hom (f : F ⟶ G) (g : F ⟶ H) (d : D) :
     (pushout.inr f g).app d ≫ (pushoutObjIso f g d).hom = pushout.inr (f.app d) (g.app d) := by
@@ -297,22 +377,33 @@ theorem inr_comp_pushoutObjIso_hom (f : F ⟶ G) (g : F ⟶ H) (d : D) :
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-theorem `inl_comp_pushoutObjIso_inv` / 定理 `inl_comp_pushoutObjIso_inv`
-
-English:
-theorem inl_comp_pushoutObjIso_inv
-  given: (f : F ⟶ G) (g : F ⟶ H) (d : D)
-  proof: by
-  simp [pushoutObjIso]
-
-中文:
-定理 inl_comp_pushoutObjIso_inv
-  条件: (f : F ⟶ G) (g : F ⟶ H) (d : D)
-  证明: by
-  simp [pushoutObjIso]
-
-Depends on / 依赖: pushoutObjIso
+/-
+**CategoryTheory.Limits.inl_comp_pushoutObjIso_inv** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Limits`。
+形式化陈述：inl_comp_pushoutObjIso_inv (f : F ⟶ G) (g : F ⟶ H) (d : D) : pushout.inl (
+f.app d) (g.app d) ≫ (pushoutObjIso f g d).inv = (pushout.inl f g).app d
+参数：f : F ⟶ G；g : F ⟶ H；d : D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.HasColimit.isoOfNatIso_ι_inv_assoc`：∀ {J : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryThe
+ory.Category.{v, u} C]   {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.colimitObjIsoColimitCompEvaluation_ι_inv`：colimitO
+bjIsoColimitCompEvaluation_ι_inv [HasColimitsOfShape J C] (F : J ⥤ K ⥤ C) (j : J
+) (k : K) : colimit.ι (F ⋙ (evaluation K C).obj k) j…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem inl_comp_pushoutObjIso_inv (f : F ⟶ G) (g : F ⟶ H) (d : D) :
     pushout.inl (f.app d) (g.app d) ≫ (pushoutObjIso f g d).inv = (pushout.inl f g).app d := by
@@ -321,22 +412,33 @@ theorem inl_comp_pushoutObjIso_inv (f : F ⟶ G) (g : F ⟶ H) (d : D) :
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-theorem `inr_comp_pushoutObjIso_inv` / 定理 `inr_comp_pushoutObjIso_inv`
-
-English:
-theorem inr_comp_pushoutObjIso_inv
-  given: (f : F ⟶ G) (g : F ⟶ H) (d : D)
-  proof: by
-  simp [pushoutObjIso]
-
-中文:
-定理 inr_comp_pushoutObjIso_inv
-  条件: (f : F ⟶ G) (g : F ⟶ H) (d : D)
-  证明: by
-  simp [pushoutObjIso]
-
-Depends on / 依赖: pushoutObjIso
+/-
+**CategoryTheory.Limits.inr_comp_pushoutObjIso_inv** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Limits`。
+形式化陈述：inr_comp_pushoutObjIso_inv (f : F ⟶ G) (g : F ⟶ H) (d : D) : pushout.inr (
+f.app d) (g.app d) ≫ (pushoutObjIso f g d).inv = (pushout.inr f g).app d
+参数：f : F ⟶ G；g : F ⟶ H；d : D。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.HasColimit.isoOfNatIso_ι_inv_assoc`：∀ {J : Type u₁
+} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryThe
+ory.Category.{v, u} C]   {F G : CategoryTheory…
+· 使用定理 `CategoryTheory.Limits.colimitObjIsoColimitCompEvaluation_ι_inv`：colimitO
+bjIsoColimitCompEvaluation_ι_inv [HasColimitsOfShape J C] (F : J ⥤ K ⥤ C) (j : J
+) (k : K) : colimit.ι (F ⋙ (evaluation K C).obj k) j…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem inr_comp_pushoutObjIso_inv (f : F ⟶ G) (g : F ⟶ H) (d : D) :
     pushout.inr (f.app d) (g.app d) ≫ (pushoutObjIso f g d).inv = (pushout.inr f g).app d := by
@@ -345,3 +447,4 @@ theorem inr_comp_pushoutObjIso_inv (f : F ⟶ G) (g : F ⟶ H) (d : D) :
 end Pushout
 
 end CategoryTheory.Limits
+

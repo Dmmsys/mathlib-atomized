@@ -33,44 +33,47 @@ local instance : ToString Lean.Syntax.Range where
   toString | ⟨s, e⟩ => s!"({s}, {e})"
 
 /--
-Definition of `repos` / `repos` 的定义
+These are the names of the directories containing all the files that should be inspected.
+For reporting, the script assumes there is no sub-dir of the `repo` dir that contains
+`repo` as a substring.
+However, the script should still remove old deprecations correctly even if that happens.
+-/
+/-
+**Mathlib.Tactic.repos** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：repos : NameSet
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition repos
-  signature: : NameSet
-  body: .ofArray #[`Mathlib, `Archive, `Counterexamples]
-
-中文:
-定义 repos
-  签名: : NameSet
-  定义体: .ofArray #[`Mathlib, `Archive, `Counterexamples]
-
-Depends on / 依赖: Archive, Counterexamples, Mathlib, ofArray
+--- 原说明 ---
+These are the names of the directories containing all the files that should be i
+nspected.
+For reporting, the script assumes there is no sub-dir of the `repo` dir that con
+tains
+`repo` as a substring.
+However, the script should still remove old deprecations correctly even if that 
+happens.
 -/
 def repos : NameSet := .ofArray #[`Mathlib, `Archive, `Counterexamples]
 
 /--
-Definition of `DeprecationInfo` / `DeprecationInfo` 的定义
+The main structure containing the information a deprecated declaration.
+* `module` is the name of the module containing the deprecated declaration;
+* `decl` is the name of the deprecated declaration;
+* `rgStart` is the `Position` where the deprecated declaration starts;
+* `rgStop` is the `Position` where the deprecated declaration ends;
+* `since` is the date when the declaration was deprecated.
+-/
+/-
+**Mathlib.Tactic.DeprecationInfo** 是 Mathlib 中的一个结构，位于命名空间 `Mathlib.Tactic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure DeprecationInfo
-  parameters: where
-  axioms and operations (5):
-    - module : Name
-    - decl : Name
-    - rgStart : Position
-    - rgStop : Position
-    - since : String
-
-中文:
-结构 DeprecationInfo
-  参数: where
-  公理与运算 (5 个):
-    - module : Name
-    - decl : Name
-    - rgStart : Position
-    - rgStop : Position
-    - since : String
+--- 原说明 ---
+The main structure containing the information a deprecated declaration.
+* `module` is the name of the module containing the deprecated declaration;
+* `decl` is the name of the deprecated declaration;
+* `rgStart` is the `Position` where the deprecated declaration starts;
+* `rgStop` is the `Position` where the deprecated declaration ends;
+* `since` is the date when the declaration was deprecated.
 -/
 structure DeprecationInfo where
   /-- `module` is the name of the module containing the deprecated declaration. -/
@@ -85,25 +88,23 @@ structure DeprecationInfo where
   since : String
 
 /--
-Definition of `getPosAfterImports` / `getPosAfterImports` 的定义
+`getPosAfterImports fname` parses the imports of `fname` and returns the position just after them.
 
-English:
-definition getPosAfterImports
-  signature: (fname : String)
-  body: do
-  let file ← IO.FS.readFile fname
-  let fm := file.toFileMap
-  let (_, fileStartPos, _) ← parseImports fm.source (← getFileName)
-  return fm.ofPosition fileStartPos
+This position is after all trailing whitespace and comments that may follow the imports of `fname`.
+-/
+/-
+**Mathlib.Tactic.getPosAfterImports** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：getPosAfterImports (fname : String) : CommandElabM String.Pos.Raw
+参数：fname : String。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 getPosAfterImports
-  签名: (fname : String)
-  定义体: do
-  let file ← IO.FS.readFile fname
-  let fm := file.toFileMap
-  let (_, fileStartPos, _) ← parseImports fm.source (← getFileName)
-  return fm.ofPosition fileStartPos
+--- 原说明 ---
+`getPosAfterImports fname` parses the imports of `fname` and returns the positio
+n just after them.
+
+This position is after all trailing whitespace and comments that may follow the 
+imports of `fname`.
 -/
 def getPosAfterImports (fname : String) : CommandElabM String.Pos.Raw := do
   let file ← IO.FS.readFile fname
@@ -112,27 +113,20 @@ def getPosAfterImports (fname : String) : CommandElabM String.Pos.Raw := do
   return fm.ofPosition fileStartPos
 
 /--
-Definition of `addAfterImports` / `addAfterImports` 的定义
+`addAfterImports fname s` returns the content of the file `fname`, with the string `s` added
+after the imports of `fname`.
+-/
+/-
+**Mathlib.Tactic.addAfterImports** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：addAfterImports (fname s : String) : CommandElabM String
+参数：fname s : String。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition addAfterImports
-  signature: (fname s : String)
-  body: do
-  let pos ← getPosAfterImports fname
-  let file ← IO.FS.readFile fname
-  let fileSubstring := file.toRawSubstring
-  return {fileSubstring with stopPos := pos}.toString ++ s ++
-    {fileSubstring with startPos := pos}.toString
-
-中文:
-定义 addAfterImports
-  签名: (fname s : String)
-  定义体: do
-  let pos ← getPosAfterImports fname
-  let file ← IO.FS.readFile fname
-  let fileSubstring := file.toRawSubstring
-  return {fileSubstring with stopPos := pos}.toString ++ s ++
-    {fileSubstring with startPos := pos}.toString
+--- 原说明 ---
+`addAfterImports fname s` returns the content of the file `fname`, with the stri
+ng `s` added
+after the imports of `fname`.
 -/
 def addAfterImports (fname s : String) : CommandElabM String := do
   let pos ← getPosAfterImports fname
@@ -142,63 +136,27 @@ def addAfterImports (fname s : String) : CommandElabM String := do
     {fileSubstring with startPos := pos}.toString
 
 /--
-Definition of `getDeprecatedInfo` / `getDeprecatedInfo` 的定义
+If `nm` is the name of a declaration, then `getDeprecatedInfo nm` returns the
+`DeprecationInfo` data for `nm`.
+Otherwise, it returns `none`.
 
-English:
-definition getDeprecatedInfo
-  signature: (nm : Name) (verbose? : Bool)
-  body: do
-  let env ← getEnv
-  -- if there is a `since` in the deprecation
-  if let some {since? := some since, ..} := Linter.deprecatedAttr.getParam? env nm
-  then
-    -- retrieve the `range` for the declaration
-    if let some {range := rg, ..} ← findDeclarationRanges? nm
-    then
-      -- retrieve the module where the declaration is located
-      if let some mod ← findModuleOf? nm
-      then
-        -- We filter here based on the top dir of the declaration.
-        unless repos.contains mod.getRoot do
-          return none
-        if verbose? then
-          logInfo
-            s!"In the module '{mod}', the declaration {nm} at {rg.pos}--{rg.endPos} \
-              is deprecated since {since}"
-        return some { module := mod
-                      decl := nm
-                      rgStart := rg.pos
-                      rgStop := rg.endPos
-                      since := since }
-  return none
+If the `verbose?` input is `true`, then the command also summarizes what the data is.
+-/
+/-
+**Mathlib.Tactic.getDeprecatedInfo** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：getDeprecatedInfo (nm : Name) (verbose? : Bool) : CommandElabM (Option Dep
+recationInfo)
+参数：nm : Name；verbose? : Bool。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 getDeprecatedInfo
-  签名: (nm : Name) (verbose? : 布尔值)
-  定义体: do
-  let env ← getEnv
-  -- if there is a `since` in the deprecation
-  if let some {since? := some since, ..} := Linter.deprecatedAttr.getParam? env nm
-  then
-    -- retrieve the `range` for the declaration
-    if let some {range := rg, ..} ← findDeclarationRanges? nm
-    then
-      -- retrieve the module where the declaration is located
-      if let some mod ← findModuleOf? nm
-      then
-        -- We filter here based on the top dir of the declaration.
-        unless repos.contains mod.getRoot do
-          return none
-        if verbose? then
-          logInfo
-            s!"In the module '{mod}', the declaration {nm} at {rg.pos}--{rg.endPos} \
-              is deprecated since {since}"
-        return some { module := mod
-                      decl := nm
-                      rgStart := rg.pos
-                      rgStop := rg.endPos
-                      since := since }
-  return none
+--- 原说明 ---
+If `nm` is the name of a declaration, then `getDeprecatedInfo nm` returns the
+`DeprecationInfo` data for `nm`.
+Otherwise, it returns `none`.
+
+If the `verbose?` input is `true`, then the command also summarizes what the dat
+a is.
 -/
 def getDeprecatedInfo (nm : Name) (verbose? : Bool) :
     CommandElabM (Option DeprecationInfo) := do
@@ -227,57 +185,28 @@ def getDeprecatedInfo (nm : Name) (verbose? : Bool) :
   return none
 
 /--
-Definition of `deprecatedHashMap` / `deprecatedHashMap` 的定义
+The output is the `HashMap` whose keys are the names of the files containing
+deprecated declarations, and whose values are the arrays of ranges
+corresponding to the deprecated declarations in that file.
+The input `oldDate` and `newDate` are strings of the form "YYYY-MM-DD".
+The output contains all the declarations that were deprecated after `oldDate`
+and before `newDate`.
+-/
+/-
+**Mathlib.Tactic.deprecatedHashMap** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：deprecatedHashMap (oldDate newDate : String) : CommandElabM (Std.HashMap (
+Name × String) (Array (Name × Lean.Syntax.Range)))
+参数：oldDate newDate : String。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition deprecatedHashMap
-  signature: (oldDate newDate : String)
-  body: do
-  let mut fin := ∅
-  --let searchPath ← getSrcSearchPath
-  for (nm, _) in (← getEnv).constants.map₁ do
-    if let some ⟨modName, decl, rgStart, rgStop, since⟩ ← getDeprecatedInfo nm false
-    then
-      unless repos.contains modName.getRoot do continue
-      if !(oldDate <= since && since <= newDate) then
-        continue
-      -- Ideally, `lean` would be computed by `← findLean (← getSrcSearchPath) modName`
-      -- However, while this works locally, CI throws the error ` unknown module prefix 'Mathlib'`
-      let lean := (modName.components.foldl (init := "")
-        fun a b => (a.push System.FilePath.pathSeparator) ++ b.toString) ++ ".lean" |>.drop 1
-.copy
-      --let lean ← findLean searchPath modName
-      let file ← IO.FS.readFile lean
-      let fm := FileMap.ofString file
-      let rg : Lean.Syntax.Range := ⟨fm.ofPosition rgStart, fm.ofPosition rgStop⟩
-      fin := fin.alter (modName, lean) fun a =>
-        (a.getD #[]).binInsert (·.2.1 < ·.2.1) (decl, rg)
-  return fin
-
-中文:
-定义 deprecatedHashMap
-  签名: (oldDate newDate : String)
-  定义体: do
-  let mut fin := ∅
-  --let searchPath ← getSrcSearchPath
-  for (nm, _) in (← getEnv).constants.map₁ do
-    if let some ⟨modName, decl, rgStart, rgStop, since⟩ ← getDeprecatedInfo nm false
-    then
-      unless repos.contains modName.getRoot do continue
-      if !(oldDate <= since && since <= newDate) then
-        continue
-      -- Ideally, `lean` would be computed by `← findLean (← getSrcSearchPath) modName`
-      -- However, while this works locally, CI throws the error ` unknown module prefix 'Mathlib'`
-      let lean := (modName.components.foldl (init := "")
-        fun a b => (a.push System.FilePath.pathSeparator) ++ b.toString) ++ ".lean" |>.drop 1
-.copy
-      --let lean ← findLean searchPath modName
-      let file ← IO.FS.readFile lean
-      let fm := FileMap.ofString file
-      let rg : Lean.Syntax.Range := ⟨fm.ofPosition rgStart, fm.ofPosition rgStop⟩
-      fin := fin.alter (modName, lean) fun a =>
-        (a.getD #[]).binInsert (·.2.1 < ·.2.1) (decl, rg)
-  return fin
+--- 原说明 ---
+The output is the `HashMap` whose keys are the names of the files containing
+deprecated declarations, and whose values are the arrays of ranges
+corresponding to the deprecated declarations in that file.
+The input `oldDate` and `newDate` are strings of the form "YYYY-MM-DD".
+The output contains all the declarations that were deprecated after `oldDate`
+and before `newDate`.
 -/
 def deprecatedHashMap (oldDate newDate : String) :
     CommandElabM (Std.HashMap (Name × String) (Array (Name × Lean.Syntax.Range))) := do
@@ -287,13 +216,13 @@ def deprecatedHashMap (oldDate newDate : String) :
     if let some ⟨modName, decl, rgStart, rgStop, since⟩ ← getDeprecatedInfo nm false
     then
       unless repos.contains modName.getRoot do continue
-      if !(oldDate <= since && since <= newDate) then
+      if !(oldDate ≤ since && since ≤ newDate) then
         continue
       -- Ideally, `lean` would be computed by `← findLean (← getSrcSearchPath) modName`
       -- However, while this works locally, CI throws the error ` unknown module prefix 'Mathlib'`
       let lean := (modName.components.foldl (init := "")
         fun a b => (a.push System.FilePath.pathSeparator) ++ b.toString) ++ ".lean" |>.drop 1
-.copy
+          |>.copy
       --let lean ← findLean searchPath modName
       let file ← IO.FS.readFile lean
       let fm := FileMap.ofString file
@@ -311,42 +240,12 @@ def deprecatedHashMap (oldDate newDate : String) :
 * The command removes all consecutive whitespace following the end of each range.
 -/
 public -- for use in unit tests, but perhaps useful more broadly
-/--
-Definition of `removeRanges` / `removeRanges` 的定义
-
-English:
-definition removeRanges
-  signature: (file : String) (rgs : Array Lean.Syntax.Range)
-  body: Id.run do
-  let mut curr : String.Pos.Raw := 0
-  let mut fileSubstring := file.toRawSubstring
-  let mut tot := ""
-  let last := fileSubstring.stopPos
-  for next in rgs.push ⟨last, last⟩ do
-    if next.start < curr then continue
-    let part := {fileSubstring with stopPos := next.start}.toString
-    tot := tot ++ part
-    curr := next.start
-    fileSubstring := {fileSubstring with startPos := next.stop}.trimLeft
-  return tot
-
-中文:
-定义 removeRanges
-  签名: (file : String) (rgs : 数组 Lean.Syntax.值域)
-  定义体: Id.run do
-  let mut curr : String.Pos.Raw := 0
-  let mut fileSubstring := file.toRawSubstring
-  let mut tot := ""
-  let last := fileSubstring.stopPos
-  for next in rgs.push ⟨last, last⟩ do
-    if next.start < curr then continue
-    let part := {fileSubstring with stopPos := next.start}.toString
-    tot := tot ++ part
-    curr := next.start
-    fileSubstring := {fileSubstring with startPos := next.stop}.trimLeft
-  return tot
-
-Depends on / 依赖: Id.run
+/-
+**Mathlib.Tactic.removeRanges** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：removeRanges (file : String) (rgs : Array Lean.Syntax.Range) : String
+参数：file : String；rgs : Array Lean.Syntax.Range。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def removeRanges (file : String) (rgs : Array Lean.Syntax.Range) : String := Id.run do
   let mut curr : String.Pos.Raw := 0
@@ -362,19 +261,25 @@ def removeRanges (file : String) (rgs : Array Lean.Syntax.Range) : String := Id.
   return tot
 
 /--
-Definition of `removeDeprecations` / `removeDeprecations` 的定义
+`removeDeprecations fname rgs` reads the content of `fname` and removes from it the substrings
+whose ranges are in the array `rgs`.
 
-English:
-definition removeDeprecations
-  signature: (fname : String) (rgs : Array Lean.Syntax.Range)
-  body: return removeRanges (← IO.FS.readFile fname) rgs
+The command makes the assumption that `rgs` is *sorted*.
+-/
+/-
+**Mathlib.Tactic.removeDeprecations** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：removeDeprecations (fname : String) (rgs : Array Lean.Syntax.Range) : IO S
+tring
+参数：fname : String；rgs : Array Lean.Syntax.Range。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 removeDeprecations
-  签名: (fname : String) (rgs : 数组 Lean.Syntax.值域)
-  定义体: return removeRanges (← IO.FS.readFile fname) rgs
+--- 原说明 ---
+`removeDeprecations fname rgs` reads the content of `fname` and removes from it 
+the substrings
+whose ranges are in the array `rgs`.
 
-Depends on / 依赖: IO.FS.readFile, readFile, removeRanges, return
+The command makes the assumption that `rgs` is *sorted*.
 -/
 def removeDeprecations (fname : String) (rgs : Array Lean.Syntax.Range) : IO String :=
   return removeRanges (← IO.FS.readFile fname) rgs
@@ -391,157 +296,59 @@ Note that this is the output of `Mathlib.Linter.CommandRanges.commandRangesLinte
 that the script here is parsing.
 -/
 public -- for use in unit tests, but perhaps useful more broadly
-/--
-Definition of `parseLine` / `parseLine` 的定义
-
-English:
-definition parseLine
-  signature: (line : String)
-  body: match (line.dropEnd 1).copy.splitOn ": [" with
-  | [_, rest] =>
-    let nums := rest.splitOn ", "
-    if nums == [""] then some [] else
-some nums.map fun s => ⟨s.toNat?.getD 0⟩
-  | _ => none
-
-中文:
-定义 parseLine
-  签名: (line : String)
-  定义体: match (line.dropEnd 1).copy.splitOn ": [" with
-  | [_, rest] =>
-    let nums := rest.splitOn ", "
-    if nums == [""] then some [] else
-some nums.map fun s => ⟨s.toNat?.getD 0⟩
-  | _ => none
-
-Depends on / 依赖: copy.splitOn, dropEnd, line.dropEnd, nums.map, rest.splitOn, s.toNat, splitOn
+/-
+**Mathlib.Tactic.parseLine** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：parseLine (line : String) : Option (List String.Pos.Raw)
+参数：line : String。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def parseLine (line : String) : Option (List String.Pos.Raw) :=
   match (line.dropEnd 1).copy.splitOn ": [" with
   | [_, rest] =>
     let nums := rest.splitOn ", "
     if nums == [""] then some [] else
-some nums.map fun s => ⟨s.toNat?.getD 0⟩
+    some <| nums.map fun s => ⟨s.toNat?.getD 0⟩
   | _ => none
 
 /--
-Definition of `rewriteOneFile` / `rewriteOneFile` 的定义
+Takes as input a file path `fname` and an array of pairs `(declName, range of declaration)`.
+The `declName` is mostly for printing information, but is not used essentially by the function.
 
-English:
-definition rewriteOneFile
-  signature: (fname : String) (rgs : Array (Name × Lean.Syntax.Range))
-  body: do
-  -- `option` is the extra text that we add to the files that contain deprecations.
-  -- We save these modified files with a different name then their originals, so that all their
-  -- dependencies still have valid `olean`s and we build them to collect the ranges of the commands
-  -- in each one of them.
-  let option :=
-    s!"\nimport Mathlib.Tactic.Linter.CommandRanges\n\
-      set_option linter.commandRanges true\n"
-  -- `offset` represents the difference between a position in the modified file and the
-  -- corresponding position in the original file.
-  -- Since we added the modification right after the imports, the command positions of the old file
-  -- are always smaller than the command positions of the new file.
-  let offset := option.toRawSubstring.stopPos
-  let fileWithOptionAdded ← addAfterImports fname option
-  let fname_with_option := (fname.dropEnd ".lean".length).copy ++ "_with_option.lean"
-  let file ← IO.FS.readFile fname
-  let fm := file.toFileMap
-  let rgsPos := rgs.map fun (decl, ⟨s, e⟩) =>
-    m!"* {.ofConstName decl} {(fm.toPosition s, fm.toPosition e)}"
-  let rgsStringPos := rgs.map (m!"{·.2}")
-.toList let combinedRanges := rgsPos.zipWith (· ++ m!" " ++ ·) rgsStringPos
-  logInfo m!"Adding '{option}' to '{fname}'\nWriting to {indentD fname_with_option}\n\
-          Removing the following declarations\n{m!"\n".joinSep combinedRanges}"
-  IO.FS.writeFile fname_with_option fileWithOptionAdded
-  let ranges := rgs.map (·.2)
+It returns the pair `(temp file name, file without the commands that generated the declarations)`.
 
-  logInfo m!"Retrieving command positions from '{fname_with_option}'"
-  let commandPositions ←
-    IO.Process.output {cmd := "lake", args := #["build", fname_with_option]}
-  -- `stringPositions` consists of lists of the form `[p₁, p₂, p₃]`, where
-  -- * `p₁` is the start of a command;
-  -- * `p₂` is the end of the command, excluding trailing whitespace and comments;
-  -- * `p₁` is the end of the command, including trailing whitespace and comments.
-.reduceOption let stringPositions := (commandPositions.stdout.splitOn "\n").map parseLine
-  let mut removals : Std.HashSet (List String.Pos.Raw) := ∅
-  -- For each range `rg` in `ranges`, we isolate the unique entry of `stringPositions` that
-  -- entirely contains `rg`. This helps catching the full range of `open Nat in @[deprecated] ...`,
-  -- rather than just the `@[deprecated] ...` range.
-  let : Sub String.Pos.Raw := ⟨fun | ⟨a⟩, ⟨b⟩ => ⟨a - b⟩⟩
-  for rg in ranges do
-    let candidate := stringPositions.filterMap (fun arr =>
-      let a := arr.head! - offset
-      let b := arr[arr.length - 1]! - offset
-      if a <= rg.start ∧ rg.stop <= b then some (arr.map (· - offset)) else none)
-    match candidate with
-    | [d@([_, _, _])] => removals := removals.insert d
-    | _ => logInfo "Something went wrong!"
-  -- We only remember the `start` and `end` of each command, ignoring trailing whitespace and
-  -- comments. This means that we may err on the side of preserving comments that may have to be
-  -- manually removed, instead of having to manually add them back later on.
-  let rems : Std.HashSet _ := removals.fold (init := ∅) fun tot => fun
-    | [a, b, _c] => tot.insert (⟨a, b⟩ : Lean.Syntax.Range)
-    | _ => tot
-  return (fname_with_option, ← removeDeprecations fname (rems.toArray.qsort (·.1 < ·.1)))
+In the course of doing so, the function creates a temporary file from `fname`, by
+* adding the import `Mathlib.Tactic.Linter.CommandRanges` and
+* setting the `linter.commandRanges` option to `true`.
 
-中文:
-定义 rewriteOneFile
-  签名: (fname : String) (rgs : 数组 (Name × Lean.Syntax.值域))
-  定义体: do
-  -- `option` is the extra text that we add to the files that contain deprecations.
-  -- We save these modified files with a different name then their originals, so that all their
-  -- dependencies still have valid `olean`s and we build them to collect the ranges of the commands
-  -- in each one of them.
-  let option :=
-    s!"\nimport Mathlib.Tactic.Linter.CommandRanges\n\
-      set_option linter.commandRanges true\n"
-  -- `offset` represents the difference between a position in the modified file and the
-  -- corresponding position in the original file.
-  -- Since we added the modification right after the imports, the command positions of the old file
-  -- are always smaller than the command positions of the new file.
-  let offset := option.toRawSubstring.stopPos
-  let fileWithOptionAdded ← addAfterImports fname option
-  let fname_with_option := (fname.dropEnd ".lean".length).copy ++ "_with_option.lean"
-  let file ← IO.FS.readFile fname
-  let fm := file.toFileMap
-  let rgsPos := rgs.map fun (decl, ⟨s, e⟩) =>
-    m!"* {.ofConstName decl} {(fm.toPosition s, fm.toPosition e)}"
-  let rgsStringPos := rgs.map (m!"{·.2}")
-.toList let combinedRanges := rgsPos.zipWith (· ++ m!" " ++ ·) rgsStringPos
-  logInfo m!"Adding '{option}' to '{fname}'\nWriting to {indentD fname_with_option}\n\
-          Removing the following declarations\n{m!"\n".joinSep combinedRanges}"
-  IO.FS.writeFile fname_with_option fileWithOptionAdded
-  let ranges := rgs.map (·.2)
+It parses the temporary file, capturing the output and uses the command ranges to remove the
+ranges of the *commands* that generated the passed declaration ranges.
+-/
+/-
+**Mathlib.Tactic.rewriteOneFile** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：rewriteOneFile (fname : String) (rgs : Array (Name × Lean.Syntax.Range)) :
+ CommandElabM (String × String)
+参数：fname : String；rgs : Array (Name × Lean.Syntax.Range)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-  logInfo m!"Retrieving command positions from '{fname_with_option}'"
-  let commandPositions ←
-    IO.Process.output {cmd := "lake", args := #["build", fname_with_option]}
-  -- `stringPositions` consists of lists of the form `[p₁, p₂, p₃]`, where
-  -- * `p₁` is the start of a command;
-  -- * `p₂` is the end of the command, excluding trailing whitespace and comments;
-  -- * `p₁` is the end of the command, including trailing whitespace and comments.
-.reduceOption let stringPositions := (commandPositions.stdout.splitOn "\n").map parseLine
-  let mut removals : Std.HashSet (List String.Pos.Raw) := ∅
-  -- For each range `rg` in `ranges`, we isolate the unique entry of `stringPositions` that
-  -- entirely contains `rg`. This helps catching the full range of `open Nat in @[deprecated] ...`,
-  -- rather than just the `@[deprecated] ...` range.
-  let : Sub String.Pos.Raw := ⟨fun | ⟨a⟩, ⟨b⟩ => ⟨a - b⟩⟩
-  for rg in ranges do
-    let candidate := stringPositions.filterMap (fun arr =>
-      let a := arr.head! - offset
-      let b := arr[arr.length - 1]! - offset
-      if a <= rg.start ∧ rg.stop <= b then some (arr.map (· - offset)) else none)
-    match candidate with
-    | [d@([_, _, _])] => removals := removals.insert d
-    | _ => logInfo "Something went wrong!"
-  -- We only remember the `start` and `end` of each command, ignoring trailing whitespace and
-  -- comments. This means that we may err on the side of preserving comments that may have to be
-  -- manually removed, instead of having to manually add them back later on.
-  let rems : Std.HashSet _ := removals.fold (init := ∅) fun tot => fun
-    | [a, b, _c] => tot.insert (⟨a, b⟩ : Lean.Syntax.Range)
-    | _ => tot
-  return (fname_with_option, ← removeDeprecations fname (rems.toArray.qsort (·.1 < ·.1)))
+--- 原说明 ---
+Takes as input a file path `fname` and an array of pairs `(declName, range of de
+claration)`.
+The `declName` is mostly for printing information, but is not used essentially b
+y the function.
+
+It returns the pair `(temp file name, file without the commands that generated t
+he declarations)`.
+
+In the course of doing so, the function creates a temporary file from `fname`, b
+y
+* adding the import `Mathlib.Tactic.Linter.CommandRanges` and
+* setting the `linter.commandRanges` option to `true`.
+
+It parses the temporary file, capturing the output and uses the command ranges t
+o remove the
+ranges of the *commands* that generated the passed declaration ranges.
 -/
 def rewriteOneFile (fname : String) (rgs : Array (Name × Lean.Syntax.Range)) :
     CommandElabM (String × String) := do
@@ -564,7 +371,7 @@ def rewriteOneFile (fname : String) (rgs : Array (Name × Lean.Syntax.Range)) :
   let rgsPos := rgs.map fun (decl, ⟨s, e⟩) =>
     m!"* {.ofConstName decl} {(fm.toPosition s, fm.toPosition e)}"
   let rgsStringPos := rgs.map (m!"{·.2}")
-.toList let combinedRanges := rgsPos.zipWith (· ++ m!" " ++ ·) rgsStringPos
+  let combinedRanges := rgsPos.zipWith (· ++ m!" " ++ ·) rgsStringPos |>.toList
   logInfo m!"Adding '{option}' to '{fname}'\nWriting to {indentD fname_with_option}\n\
           Removing the following declarations\n{m!"\n".joinSep combinedRanges}"
   IO.FS.writeFile fname_with_option fileWithOptionAdded
@@ -577,42 +384,39 @@ def rewriteOneFile (fname : String) (rgs : Array (Name × Lean.Syntax.Range)) :
   -- * `p₁` is the start of a command;
   -- * `p₂` is the end of the command, excluding trailing whitespace and comments;
   -- * `p₁` is the end of the command, including trailing whitespace and comments.
-.reduceOption let stringPositions := (commandPositions.stdout.splitOn "\n").map parseLine
+  let stringPositions := (commandPositions.stdout.splitOn "\n").map parseLine |>.reduceOption
   let mut removals : Std.HashSet (List String.Pos.Raw) := ∅
   -- For each range `rg` in `ranges`, we isolate the unique entry of `stringPositions` that
-  -- entirely contains `rg`. This helps catching the full range of `open Nat in @[deprecated] ...`,
+  -- entirely contains `rg`.  This helps catching the full range of `open Nat in @[deprecated] ...`,
   -- rather than just the `@[deprecated] ...` range.
-  let : Sub String.Pos.Raw := ⟨fun | ⟨a⟩, ⟨b⟩ => ⟨a - b⟩⟩
+  let : Sub String.Pos.Raw := ⟨fun | ⟨a⟩, ⟨b⟩ =>  ⟨a - b⟩⟩
   for rg in ranges do
-    let candidate := stringPositions.filterMap (fun arr =>
+    let candidate := stringPositions.filterMap (fun arr ↦
       let a := arr.head! - offset
       let b := arr[arr.length - 1]! - offset
-      if a <= rg.start ∧ rg.stop <= b then some (arr.map (· - offset)) else none)
+      if a ≤ rg.start ∧ rg.stop ≤ b then some (arr.map (· - offset)) else none)
     match candidate with
     | [d@([_, _, _])] => removals := removals.insert d
     | _ => logInfo "Something went wrong!"
   -- We only remember the `start` and `end` of each command, ignoring trailing whitespace and
-  -- comments. This means that we may err on the side of preserving comments that may have to be
+  -- comments.  This means that we may err on the side of preserving comments that may have to be
   -- manually removed, instead of having to manually add them back later on.
-  let rems : Std.HashSet _ := removals.fold (init := ∅) fun tot => fun
+  let rems : Std.HashSet _ := removals.fold (init := ∅) fun tot ↦ fun
     | [a, b, _c] => tot.insert (⟨a, b⟩ : Lean.Syntax.Range)
     | _ => tot
   return (fname_with_option, ← removeDeprecations fname (rems.toArray.qsort (·.1 < ·.1)))
 
-/--
-Definition of `importLT` / `importLT` 的定义
+/-- The `<` partial order on modules: `importLT env mod₁ mod₂` means that `mod₂` imports `mod₁`. -/
+/-
+**Mathlib.Tactic.importLT** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：importLT (env : Environment) (f1 f2 : Name) : Bool
+参数：env : Environment；f1 f2 : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition importLT
-  signature: (env : Environment) (f1 f2 : Name)
-  body: (env.findRedundantImports #[f1, f2]).contains f1
-
-中文:
-定义 importLT
-  签名: (env : Environment) (f1 f2 : Name)
-  定义体: (env.findRedundantImports #[f1, f2]).contains f1
-
-Depends on / 依赖: contains, env.findRedundantImports, findRedundantImports
+--- 原说明 ---
+The `<` partial order on modules: `importLT env mod₁ mod₂` means that `mod₂` imp
+orts `mod₁`.
 -/
 def importLT (env : Environment) (f1 f2 : Name) : Bool :=
   (env.findRedundantImports #[f1, f2]).contains f1
@@ -655,3 +459,4 @@ elab "#clear_deprecations " oldDate:str ppSpace newDate:str really?:(&" really")
     IO.FS.removeFile tmp
 
 end Mathlib.Tactic
+

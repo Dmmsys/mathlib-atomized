@@ -35,26 +35,19 @@ Brauer group, Central simple algebra, Galois Cohomology
 
 universe u v
 
-/--
-Definition of `CSA` / `CSA` 的定义
+/-- `CSA` is the set of all finite-dimensional central simple algebras over a field `K`. For the
+generalization to a `CommRing`, see `IsAzumaya` in `Mathlib/Algebra/Azumaya/Defs.lean`. -/
+/-
+**CSA** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(K : Type u) → [Field K] → Type (max u (v + 1))
+参数：v + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CSA
-  parameters: (K : Type u) [Field K]
-  extends: AlgCat.{v} K
-  axioms and operations (3):
-    - [isCentral : Algebra.IsCentral K carrier]
-    - [isSimple : IsSimpleRing carrier]
-    - [fin_dim : FiniteDimensional K carrier]
-
-中文:
-结构 CSA
-  参数: (K : 类型u) [域 K]
-  继承: Alg范畴.{v} K
-  公理与运算 (3 个):
-    - [isCentral : 代数.是中心 K carrier]
-    - [isSimple : 是单环 carrier]
-    - [fin_dim : 有限维 K carrier]
+--- 原说明 ---
+`CSA` is the set of all finite-dimensional central simple algebras over a field 
+`K`. For the
+generalization to a `CommRing`, see `IsAzumaya` in `Mathlib/Algebra/Azumaya/Defs
+.lean`.
 -/
 structure CSA (K : Type u) [Field K] extends AlgCat.{v} K where
   /-- Any member of `CSA` is central. -/
@@ -65,90 +58,53 @@ structure CSA (K : Type u) [Field K] extends AlgCat.{v} K where
   [fin_dim : FiniteDimensional K carrier]
 
 variable {K : Type u} [Field K]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort (CSA.{u, v} K) (Type v)
-  body: ⟨(·.carrier)⟩
-
-中文:
-实例 :
-  签名: CoeSort (CSA.{u, v} K) (类型v)
-  定义体: ⟨(·.carrier)⟩
-
-Depends on / 依赖: carrier
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort (CSA.{u, v} K) (Type v) := ⟨(·.carrier)⟩
 
 attribute [instance] CSA.isCentral CSA.isSimple CSA.fin_dim
 
-/--
-Definition of `IsBrauerEquivalent` / `IsBrauerEquivalent` 的定义
+/-- Two finite-dimensional central simple algebras `A` and `B` are Brauer equivalent
+  if there exist `n, m ∈ ℕ+` such that `Mₙ(A) ≃ₐ[K] Mₘ(B)`. -/
+/-
+**IsBrauerEquivalent** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：IsBrauerEquivalent (A B : CSA K) : Prop
+参数：A B : CSA K。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsBrauerEquivalent
-  signature: (A B : CSA K)
-  body: exists n m : Nat, n != 0 ∧ m != 0 ∧ (Nonempty <| Matrix (Fin n) (Fin n) A ≃ₐ[K] Matrix (Fin m) (Fin m) B)
-
-中文:
-缩写 IsBrauerEquivalent
-  签名: (A B : CSA K)
-  定义体: exists n m : Nat, n != 0 ∧ m != 0 ∧ (Nonempty <| Matrix (Fin n) (Fin n) A ≃ₐ[K] Matrix (Fin m) (Fin m) B)
-
-Depends on / 依赖: Matrix, Nonempty
+--- 原说明 ---
+Two finite-dimensional central simple algebras `A` and `B` are Brauer equivalent
+  if there exist `n, m ∈ ℕ+` such that `Mₙ(A) ≃ₐ[K] Mₘ(B)`.
 -/
 abbrev IsBrauerEquivalent (A B : CSA K) : Prop :=
-  exists n m : Nat, n != 0 ∧ m != 0 ∧ (Nonempty <| Matrix (Fin n) (Fin n) A ≃ₐ[K] Matrix (Fin m) (Fin m) B)
+  ∃ n m : ℕ, n ≠ 0 ∧ m ≠ 0 ∧ (Nonempty <| Matrix (Fin n) (Fin n) A ≃ₐ[K] Matrix (Fin m) (Fin m) B)
 
 namespace IsBrauerEquivalent
 
 @[refl]
-/--
-lemma `refl` / 引理 `refl`
-
-English:
-lemma refl
-  given: (A : CSA K)
-  statement: IsBrauerEquivalent A A
-  proof: ⟨1, 1, one_ne_zero, one_ne_zero, ⟨AlgEquiv.refl⟩⟩
-
-@[symm]
-
-中文:
-引理 refl
-  条件: (A : CSA K)
-  结论: IsBrauerEquivalent A A
-  证明: ⟨1, 1, one_ne_zero, one_ne_zero, ⟨AlgEquiv.refl⟩⟩
-
-@[symm]
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.refl, one_ne_zero
+/-
+**IsBrauerEquivalent.refl** 是 Mathlib 中的一个引理，位于命名空间 `IsBrauerEquivalent`。
+形式化陈述：refl (A : CSA K) : IsBrauerEquivalent A A
+参数：A : CSA K。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 lemma refl (A : CSA K) : IsBrauerEquivalent A A :=
   ⟨1, 1, one_ne_zero, one_ne_zero, ⟨AlgEquiv.refl⟩⟩
 
 @[symm]
-/--
-lemma `symm` / 引理 `symm`
-
-English:
-lemma symm
-  given: {A B : CSA K} (h : IsBrauerEquivalent A B)
-  statement: IsBrauerEquivalent B A
-  proof: let ⟨n, m, hn, hm, ⟨iso⟩⟩ := h
-  ⟨m, n, hm, hn, ⟨iso.symm⟩⟩
-
-中文:
-引理 symm
-  条件: {A B : CSA K} (h : IsBrauerEquivalent A B)
-  结论: IsBrauerEquivalent B A
-  证明: let ⟨n, m, hn, hm, ⟨iso⟩⟩ := h
-  ⟨m, n, hm, hn, ⟨iso.symm⟩⟩
-
-Depends on / 依赖: iso.symm
+/-
+**IsBrauerEquivalent.symm** 是 Mathlib 中的一个引理，位于命名空间 `IsBrauerEquivalent`。
+形式化陈述：symm {A B : CSA K} (h : IsBrauerEquivalent A B) : IsBrauerEquivalent B A
+参数：h : IsBrauerEquivalent A B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma symm {A B : CSA K} (h : IsBrauerEquivalent A B) : IsBrauerEquivalent B A :=
   let ⟨n, m, hn, hm, ⟨iso⟩⟩ := h
@@ -156,61 +112,47 @@ lemma symm {A B : CSA K} (h : IsBrauerEquivalent A B) : IsBrauerEquivalent B A :
 
 open Matrix in
 @[trans]
-/--
-lemma `trans` / 引理 `trans`
-
-English:
-lemma trans
-  given: {A B C : CSA K} (hAB : IsBrauerEquivalent A B) (hBC : IsBrauerEquivalent B C)
-  proof: by
-  obtain ⟨n, m, hn, hm, ⟨iso1⟩⟩ := hAB
-  obtain ⟨p, q, hp, hq, ⟨iso2⟩⟩ := hBC
-  exact ⟨p * n, m * q, by simp_all, by simp_all,
-.symm.trans .symm.trans compAlgEquiv _ _ _ _ ⟨reindexAlgEquiv _ _ finProdFinEquiv
-.trans .trans compAlgEquiv _ _ _ _ iso1.mapMatrix (m := Fin p)
-.trans .symm.trans compAlgEquiv _ _ _ _ reindexAlgEquiv K B (.prodComm (Fin p) (Fin m))
-iso2.mapMatrix.trans .trans reindexAlgEquiv _ _ finProdFinEquiv⟩⟩ compAlgEquiv _ _ _ _
-
-中文:
-引理 trans
-  条件: {A B C : CSA K} (hAB : IsBrauerEquivalent A B) (hBC : IsBrauerEquivalent B C)
-  证明: by
-  obtain ⟨n, m, hn, hm, ⟨iso1⟩⟩ := hAB
-  obtain ⟨p, q, hp, hq, ⟨iso2⟩⟩ := hBC
-  exact ⟨p * n, m * q, by simp_all, by simp_all,
-.symm.trans .symm.trans compAlgEquiv _ _ _ _ ⟨reindexAlgEquiv _ _ finProdFinEquiv
-.trans .trans compAlgEquiv _ _ _ _ iso1.mapMatrix (m := Fin p)
-.trans .symm.trans compAlgEquiv _ _ _ _ reindexAlgEquiv K B (.prodComm (Fin p) (Fin m))
-iso2.mapMatrix.trans .trans reindexAlgEquiv _ _ finProdFinEquiv⟩⟩ compAlgEquiv _ _ _ _
-
-Depends on / 依赖: compAlgEquiv, finProdFinEquiv, iso1.mapMatrix, iso2.mapMatrix.trans, mapMatrix, prodComm, reindexAlgEquiv, symm.trans
+/-
+**IsBrauerEquivalent.trans** 是 Mathlib 中的一个引理，位于命名空间 `IsBrauerEquivalent`。
+形式化陈述：trans {A B C : CSA K} (hAB : IsBrauerEquivalent A B) (hBC : IsBrauerEquiva
+lent B C) : IsBrauerEquivalent A C
+参数：hAB : IsBrauerEquivalent A B；hBC : IsBrauerEquivalent B C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsStrictOrderedRing.noZeroDivisors`：∀ {R : Type u} [inst : Semiring R] [
+inst_1 : LinearOrder R] [IsStrictOrderedRing R] [ExistsAddOfLE R], NoZeroDivisor
+s R
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `or_self`：∀ (p : Prop), (p ∨ p) = p
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 lemma trans {A B C : CSA K} (hAB : IsBrauerEquivalent A B) (hBC : IsBrauerEquivalent B C) :
     IsBrauerEquivalent A C := by
   obtain ⟨n, m, hn, hm, ⟨iso1⟩⟩ := hAB
   obtain ⟨p, q, hp, hq, ⟨iso2⟩⟩ := hBC
   exact ⟨p * n, m * q, by simp_all, by simp_all,
-.symm.trans .symm.trans compAlgEquiv _ _ _ _ ⟨reindexAlgEquiv _ _ finProdFinEquiv
-.trans .trans compAlgEquiv _ _ _ _ iso1.mapMatrix (m := Fin p)
-.trans .symm.trans compAlgEquiv _ _ _ _ reindexAlgEquiv K B (.prodComm (Fin p) (Fin m))
-iso2.mapMatrix.trans .trans reindexAlgEquiv _ _ finProdFinEquiv⟩⟩ compAlgEquiv _ _ _ _
-
-/--
-lemma `is_eqv` / 引理 `is_eqv`
-
-English:
-lemma is_eqv
-  statement: Equivalence (IsBrauerEquivalent (K := K)) where
-  proof: refl
-  symm := symm
-  trans := trans
-
-中文:
-引理 is_eqv
-  结论: 等价 (IsBrauerEquivalent (K := K)) where
-  证明: refl
-  symm := symm
-  trans := trans
+    ⟨reindexAlgEquiv _ _ finProdFinEquiv |>.symm.trans <| compAlgEquiv _ _ _ _|>.symm.trans <|
+    iso1.mapMatrix (m := Fin p)|>.trans <| compAlgEquiv _ _ _ _|>.trans <|
+    reindexAlgEquiv K B (.prodComm (Fin p) (Fin m))|>.trans <| compAlgEquiv _ _ _ _|>.symm.trans <|
+    iso2.mapMatrix.trans <| compAlgEquiv _ _ _ _|>.trans <| reindexAlgEquiv _ _ finProdFinEquiv⟩⟩
+/-
+**IsBrauerEquivalent.is_eqv** 是 Mathlib 中的一个引理，位于命名空间 `IsBrauerEquivalent`。
+形式化陈述：is_eqv : Equivalence (IsBrauerEquivalent (K
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsBrauerEquivalent.refl`：refl (A : CSA K) : IsBrauerEquivalent A A
+· 使用引理 `IsBrauerEquivalent.symm`：symm {A B : CSA K} (h : IsBrauerEquivalent A B)
+ : IsBrauerEquivalent B A
+· 使用引理 `IsBrauerEquivalent.trans`：trans {A B C : CSA K} (hAB : IsBrauerEquivalen
+t A B) (hBC : IsBrauerEquivalent B C) : IsBrauerEquivalent A C
 -/
 lemma is_eqv : Equivalence (IsBrauerEquivalent (K := K)) where
   refl := refl
@@ -223,38 +165,30 @@ variable (K)
 
 /-- `CSA` equipped with Brauer Equivalence is indeed a setoid. -/
 @[instance_reducible]
-/--
-Definition of `Brauer.CSA_Setoid` / `Brauer.CSA_Setoid` 的定义
+/-
+**Brauer.CSA_Setoid** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Brauer.CSA_Setoid : Setoid (CSA K) where r
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `IsBrauerEquivalent.is_eqv`：is_eqv : Equivalence (IsBrauerEquivalent (K
 
-English:
-definition Brauer.CSA_Setoid
-  signature: : Setoid (CSA K) where
-  body: IsBrauerEquivalent
-  iseqv := IsBrauerEquivalent.is_eqv
-
-中文:
-定义 Brauer.CSA_Setoid
-  签名: : 集合等价关系 (CSA K) where
-  定义体: IsBrauerEquivalent
-  iseqv := IsBrauerEquivalent.is_eqv
-
-Depends on / 依赖: IsBrauerEquivalent
+--- 原说明 ---
+`CSA` equipped with Brauer Equivalence is indeed a setoid.
 -/
 def Brauer.CSA_Setoid : Setoid (CSA K) where
   r := IsBrauerEquivalent
   iseqv := IsBrauerEquivalent.is_eqv
 
-/--
-Definition of `BrauerGroup` / `BrauerGroup` 的定义
+/-- `BrauerGroup` is the set of all finite-dimensional central simple algebras quotient
+  by Brauer Equivalence. -/
+/-
+**BrauerGroup** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：BrauerGroup
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation BrauerGroup
-  body: Quotient (Brauer.CSA_Setoid K)
-
-中文:
-缩写 BrauerGroup
-  定义体: Quotient (Brauer.CSA_Setoid K)
-
-Depends on / 依赖: Brauer, Brauer.CSA_Setoid, CSA_Setoid, Quotient
+--- 原说明 ---
+`BrauerGroup` is the set of all finite-dimensional central simple algebras quoti
+ent
+  by Brauer Equivalence.
 -/
 abbrev BrauerGroup := Quotient (Brauer.CSA_Setoid K)

@@ -17,55 +17,37 @@ public section
 universe u v
 variable {α : Type u} [Fintype α]
 
-/--
-Instance `Shrink.instFintype` / 实例 `Shrink.instFintype`
-
-English:
-instance Shrink.instFintype
-  signature: : Fintype (Shrink.{v} α)
-  body: .ofEquiv _ (equivShrink _)
-
-中文:
-实例 Shrink.instFintype
-  签名: : 有限类型 (Shrink.{v} α)
-  定义体: .ofEquiv _ (equivShrink _)
-
-Depends on / 依赖: equivShrink, ofEquiv
+/-
+**Shrink.instFintype** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Shrink.instFintype : Fintype (Shrink.{v} α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance Shrink.instFintype : Fintype (Shrink.{v} α) := .ofEquiv _ (equivShrink _)
-
-/--
-Instance `Shrink.instFinite` / 实例 `Shrink.instFinite`
-
-English:
-instance Shrink.instFinite
-  signature: {α : Type u} [Finite α]
-  body: .of_equiv _ (equivShrink _)
-
-中文:
-实例 Shrink.instFinite
-  签名: {α : 类型u} [有限 α]
-  定义体: .of_equiv _ (equivShrink _)
-
-Depends on / 依赖: equivShrink, of_equiv
+/-
+**Shrink.instFinite** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Shrink.instFinite {α : Type u} [Finite α] : Finite (Shrink.{v} α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_equiv`：Finite.of_equiv (α : Sort*) [h : Finite α] (f : α ≃ β) 
+: Finite β
+· 使用定理 `Countable.toSmall`：∀ (α : Type v) [Countable α], Small.{w, v} α
+· 使用定理 `Finite.to_countable`：∀ {α : Sort u} [Finite α], Countable α
 -/
 instance Shrink.instFinite {α : Type u} [Finite α] : Finite (Shrink.{v} α) :=
   .of_equiv _ (equivShrink _)
-
-/--
-lemma `Fintype.card_shrink` / 引理 `Fintype.card_shrink`
-
-English:
-lemma Fintype.card_shrink
-  given: [Fintype (Shrink.{v} α)]
-  statement: card (Shrink.{v} α) = card α
-  proof: card_congr (equivShrink _).symm
-
-中文:
-引理 有限类型.card_shrink
-  条件: [有限类型 (Shrink.{v} α)]
-  结论: card (Shrink.{v} α) = card α
-  证明: card_congr (equivShrink _).symm
+/-
+**Fintype.card_shrink** 是 Mathlib 中的一个定理，位于命名空间 `Fintype`。
+形式化陈述：∀ {α : Type u} [inst : Fintype α] [inst_1 : Fintype (Shrink.{v, u} α)], Fi
+ntype.card (Shrink.{v, u} α) = Fintype.card α
+参数：Shrink.{v, u} α；Shrink.{v, u} α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Countable.toSmall`：∀ (α : Type v) [Countable α], Small.{w, v} α
+· 使用定理 `Finite.to_countable`：∀ {α : Sort u} [Finite α], Countable α
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Fintype.card_congr`：card_congr {α β} [Fintype α] [Fintype β] (f : α ≃ β)
+ : card α = card β
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 @[simp] lemma Fintype.card_shrink [Fintype (Shrink.{v} α)] : card (Shrink.{v} α) = card α :=
   card_congr (equivShrink _).symm

@@ -29,20 +29,16 @@ open scoped MatrixGroups
 
 variable (n : Type u) [DecidableEq n] [Fintype n] (R : Type v) [CommRing R]
 
-/--
-Definition of `ProjectiveSpecialLinearGroup` / `ProjectiveSpecialLinearGroup` 的定义
+/-- A projective special linear group is the quotient of a special linear group by its center. -/
+/-
+**Matrix.ProjectiveSpecialLinearGroup** 是 Mathlib 中的一个缩写定义，位于命名空间 `Matrix`。
+形式化陈述：ProjectiveSpecialLinearGroup : Type _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ProjectiveSpecialLinearGroup
-  signature: : Type _
-  body: SpecialLinearGroup n R ⧸ Subgroup.center (SpecialLinearGroup n R)
-
-中文:
-缩写 ProjectiveSpecialLinearGroup
-  签名: : 类型 _
-  定义体: SpecialLinearGroup n R ⧸ Subgroup.center (SpecialLinearGroup n R)
-
-Depends on / 依赖: SpecialLinearGroup, Subgroup, Subgroup.center, center
+--- 原说明 ---
+A projective special linear group is the quotient of a special linear group by i
+ts center.
 -/
 abbrev ProjectiveSpecialLinearGroup : Type _ :=
     SpecialLinearGroup n R ⧸ Subgroup.center (SpecialLinearGroup n R)
@@ -51,3 +47,4 @@ abbrev ProjectiveSpecialLinearGroup : Type _ :=
 scoped[MatrixGroups] notation "PSL(" n ", " R ")" => Matrix.ProjectiveSpecialLinearGroup (Fin n) R
 
 end Matrix
+

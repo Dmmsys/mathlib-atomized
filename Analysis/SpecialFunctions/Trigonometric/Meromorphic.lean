@@ -18,26 +18,24 @@ public section
 
 namespace Complex
 
-/--
-theorem `meromorphicNFOn_tan` / 定理 `meromorphicNFOn_tan`
+/-- The function `tan` is meromorphic in normal form on `Set.univ`. -/
+/-
+**Complex.meromorphicNFOn_tan** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：meromorphicNFOn_tan : MeromorphicNFOn tan Set.univ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeromorphicNFOn.div`：MeromorphicNFOn.div {f : 𝕜 -> 𝕜} {g : 𝕜 -> 𝕜} {x : 
+𝕜} (hf : AnalyticAt 𝕜 f x) (hg : MeromorphicNFAt g x) (hor : g x != 0 ∨ f x != 0
+) : Merom…
+· 使用引理 `Complex.analyticAt_sin`：analyticAt_sin {x : Complex} : AnalyticAt Comple
+x sin x
+· 使用定理 `AnalyticAt.meromorphicNFAt`：AnalyticAt.meromorphicNFAt (hf : AnalyticAt 
+𝕜 f x) : MeromorphicNFAt f x
+· 使用引理 `Complex.analyticAt_cos`：analyticAt_cos {x : Complex} : AnalyticAt Comple
+x cos x
 
-English:
-theorem meromorphicNFOn_tan
-  statement: MeromorphicNFOn tan Set.univ
-  proof: by
-  intro x _
-  refine MeromorphicNFOn.div analyticAt_sin analyticAt_cos.meromorphicNFAt ?_
-  grind [sin_sq_add_cos_sq]
-
-中文:
-定理 meromorphicNFOn_tan
-  结论: MeromorphicNFOn tan 集合.univ
-  证明: by
-  intro x _
-  refine MeromorphicNFOn.div analyticAt_sin analyticAt_cos.meromorphicNFAt ?_
-  grind [sin_sq_add_cos_sq]
-
-Depends on / 依赖: MeromorphicNFOn, MeromorphicNFOn.div, analyticAt_cos, analyticAt_cos.meromorphicNFAt, analyticAt_sin, meromorphicNFAt, sin_sq_add_cos_sq
+--- 原说明 ---
+The function `tan` is meromorphic in normal form on `Set.univ`.
 -/
 theorem meromorphicNFOn_tan : MeromorphicNFOn tan Set.univ := by
   intro x _
@@ -46,65 +44,57 @@ theorem meromorphicNFOn_tan : MeromorphicNFOn tan Set.univ := by
 
 /-- The function `tan` is meromorphic at any `z`. -/
 @[fun_prop]
-/--
-theorem `meromorphicAt_tan` / 定理 `meromorphicAt_tan`
+/-
+**Complex.meromorphicAt_tan** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：meromorphicAt_tan (z : Complex) : MeromorphicAt tan z
+参数：z : Complex。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeromorphicNFAt.meromorphicAt`：MeromorphicNFAt.meromorphicAt (hf : Merom
+orphicNFAt f x) : MeromorphicAt f x
+· 使用定理 `Complex.meromorphicNFOn_tan`：meromorphicNFOn_tan : MeromorphicNFOn tan S
+et.univ
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
 
-English:
-theorem meromorphicAt_tan
-  given: (z : Complex)
-  statement: MeromorphicAt tan z
-  proof: (meromorphicNFOn_tan (Set.mem_univ z)).meromorphicAt
-
-中文:
-定理 meromorphicAt_tan
-  条件: (z : 复形)
-  结论: MeromorphicAt tan z
-  证明: (meromorphicNFOn_tan (Set.mem_univ z)).meromorphicAt
-
-Depends on / 依赖: Set.mem_univ, mem_univ, meromorphicAt, meromorphicNFOn_tan
+--- 原说明 ---
+The function `tan` is meromorphic at any `z`.
 -/
-theorem meromorphicAt_tan (z : Complex) : MeromorphicAt tan z :=
+theorem meromorphicAt_tan (z : ℂ) : MeromorphicAt tan z :=
   (meromorphicNFOn_tan (Set.mem_univ z)).meromorphicAt
 
 /-- The function `tan` is meromorphic. -/
 @[fun_prop]
-/--
-theorem `meromorphic_tan` / 定理 `meromorphic_tan`
+/-
+**Complex.meromorphic_tan** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：meromorphic_tan : Meromorphic tan
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Complex.meromorphicAt_tan`：meromorphicAt_tan (z : Complex) : Meromorphic
+At tan z
 
-English:
-theorem meromorphic_tan
-  statement: Meromorphic tan
-  proof: meromorphicAt_tan
-
-中文:
-定理 meromorphic_tan
-  结论: 亚纯 tan
-  证明: meromorphicAt_tan
-
-Depends on / 依赖: meromorphicAt_tan
+--- 原说明 ---
+The function `tan` is meromorphic.
 -/
 theorem meromorphic_tan : Meromorphic tan := meromorphicAt_tan
 
-/--
-theorem `meromorphicNFOn_tanh` / 定理 `meromorphicNFOn_tanh`
+/-- The function `tanh` is meromorphic in normal form on `Set.univ`. -/
+/-
+**Complex.meromorphicNFOn_tanh** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：meromorphicNFOn_tanh : MeromorphicNFOn tanh Set.univ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeromorphicNFOn.div`：MeromorphicNFOn.div {f : 𝕜 -> 𝕜} {g : 𝕜 -> 𝕜} {x : 
+𝕜} (hf : AnalyticAt 𝕜 f x) (hg : MeromorphicNFAt g x) (hor : g x != 0 ∨ f x != 0
+) : Merom…
+· 使用引理 `Complex.analyticAt_sinh`：analyticAt_sinh {x : Complex} : AnalyticAt Comp
+lex sinh x
+· 使用定理 `AnalyticAt.meromorphicNFAt`：AnalyticAt.meromorphicNFAt (hf : AnalyticAt 
+𝕜 f x) : MeromorphicNFAt f x
+· 使用引理 `Complex.analyticAt_cosh`：analyticAt_cosh {x : Complex} : AnalyticAt Comp
+lex cosh x
 
-English:
-theorem meromorphicNFOn_tanh
-  statement: MeromorphicNFOn tanh Set.univ
-  proof: by
-  intro x _
-  refine MeromorphicNFOn.div analyticAt_sinh analyticAt_cosh.meromorphicNFAt ?_
-  grind [cosh_sq_sub_sinh_sq]
-
-中文:
-定理 meromorphicNFOn_tanh
-  结论: MeromorphicNFOn tanh 集合.univ
-  证明: by
-  intro x _
-  refine MeromorphicNFOn.div analyticAt_sinh analyticAt_cosh.meromorphicNFAt ?_
-  grind [cosh_sq_sub_sinh_sq]
-
-Depends on / 依赖: MeromorphicNFOn, MeromorphicNFOn.div, analyticAt_cosh, analyticAt_cosh.meromorphicNFAt, analyticAt_sinh, cosh_sq_sub_sinh_sq, meromorphicNFAt
+--- 原说明 ---
+The function `tanh` is meromorphic in normal form on `Set.univ`.
 -/
 theorem meromorphicNFOn_tanh : MeromorphicNFOn tanh Set.univ := by
   intro x _
@@ -113,43 +103,38 @@ theorem meromorphicNFOn_tanh : MeromorphicNFOn tanh Set.univ := by
 
 /-- The function `tanh` is meromorphic at any `z`. -/
 @[fun_prop]
-/--
-theorem `meromorphicAt_tanh` / 定理 `meromorphicAt_tanh`
+/-
+**Complex.meromorphicAt_tanh** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：meromorphicAt_tanh (z : Complex) : MeromorphicAt tanh z
+参数：z : Complex。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeromorphicNFAt.meromorphicAt`：MeromorphicNFAt.meromorphicAt (hf : Merom
+orphicNFAt f x) : MeromorphicAt f x
+· 使用定理 `Complex.meromorphicNFOn_tanh`：meromorphicNFOn_tanh : MeromorphicNFOn tan
+h Set.univ
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
 
-English:
-theorem meromorphicAt_tanh
-  given: (z : Complex)
-  statement: MeromorphicAt tanh z
-  proof: (meromorphicNFOn_tanh (Set.mem_univ z)).meromorphicAt
-
-中文:
-定理 meromorphicAt_tanh
-  条件: (z : 复形)
-  结论: MeromorphicAt tanh z
-  证明: (meromorphicNFOn_tanh (Set.mem_univ z)).meromorphicAt
-
-Depends on / 依赖: Set.mem_univ, mem_univ, meromorphicAt, meromorphicNFOn_tanh
+--- 原说明 ---
+The function `tanh` is meromorphic at any `z`.
 -/
-theorem meromorphicAt_tanh (z : Complex) : MeromorphicAt tanh z :=
+theorem meromorphicAt_tanh (z : ℂ) : MeromorphicAt tanh z :=
   (meromorphicNFOn_tanh (Set.mem_univ z)).meromorphicAt
 
 /-- The function `tanh` is meromorphic. -/
 @[fun_prop]
-/--
-theorem `meromorphic_tanh` / 定理 `meromorphic_tanh`
+/-
+**Complex.meromorphic_tanh** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：meromorphic_tanh : Meromorphic tanh
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Complex.meromorphicAt_tanh`：meromorphicAt_tanh (z : Complex) : Meromorph
+icAt tanh z
 
-English:
-theorem meromorphic_tanh
-  statement: Meromorphic tanh
-  proof: meromorphicAt_tanh
-
-中文:
-定理 meromorphic_tanh
-  结论: 亚纯 tanh
-  证明: meromorphicAt_tanh
-
-Depends on / 依赖: meromorphicAt_tanh
+--- 原说明 ---
+The function `tanh` is meromorphic.
 -/
 theorem meromorphic_tanh : Meromorphic tanh := meromorphicAt_tanh
 
 end Complex
+

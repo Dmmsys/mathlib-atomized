@@ -44,46 +44,36 @@ initialize polynomialPostExt : SimpExtension ←
 the base ring of polynomial-like types. -/
 syntax (name := PolyInferBaseAttr) "polynomial_infer_base" : attr
 
-/--
-Definition of `PolynomialExt` / `PolynomialExt` 的定义
+/-- An extension for `polynomial`. -/
+/-
+**Mathlib.Tactic.Polynomial.PolynomialExt** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.T
+actic.Polynomial`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure PolynomialExt
-  parameters: where
-  axioms and operations (1):
-    - infer : Expr -> MetaM Expr
-
-中文:
-结构 PolynomialExt
-  参数: where
-  公理与运算 (1 个):
-    - infer : Expr -> MetaM Expr
+--- 原说明 ---
+An extension for `polynomial`.
 -/
 structure PolynomialExt where
   /-- Attempts to infer the base `R` of an `Algebra R A` based only on `A`. e.g. returns `R` given
   `Polynomial R`. -/
-  infer : Expr -> MetaM Expr
+  infer : Expr → MetaM Expr
 
-/--
-Definition of `mkPolynomialExt` / `mkPolynomialExt` 的定义
+/-- Read a `polynomial` extension from a declaration of the right type. -/
+/-
+**Mathlib.Tactic.Polynomial.mkPolynomialExt** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.T
+actic.Polynomial`。
+形式化陈述：mkPolynomialExt (n : Name) : ImportM PolynomialExt
+参数：n : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkPolynomialExt
-  signature: (n : Name)
-  body: do
-  let { env, opts, .. } ← read
-IO.ofExcept unsafe env.evalConstCheck PolynomialExt opts ``PolynomialExt n
-
-中文:
-定义 mkPolynomialExt
-  签名: (n : Name)
-  定义体: do
-  let { env, opts, .. } ← read
-IO.ofExcept unsafe env.evalConstCheck PolynomialExt opts ``PolynomialExt n
+--- 原说明 ---
+Read a `polynomial` extension from a declaration of the right type.
 -/
 def mkPolynomialExt (n : Name) : ImportM PolynomialExt := do
   let { env, opts, .. } ← read
-IO.ofExcept unsafe env.evalConstCheck PolynomialExt opts ``PolynomialExt n
+  IO.ofExcept <| unsafe env.evalConstCheck PolynomialExt opts ``PolynomialExt n
 
 /-- Environment extensions for `polynomial` declarations -/
 initialize polynomialExt : PersistentEnvExtension Name (Name × PolynomialExt)
@@ -111,34 +101,24 @@ initialize registerBuiltinAttribute {
         throwError "invalid attribute 'polynomial_infer_base', declaration is in an imported module"
       if (IR.getSorryDep env declName).isSome then return -- ignore in progress definitions
       let ext ← mkPolynomialExt declName
-setEnv polynomialExt.addEntry env (declName, ext)
+      setEnv <| polynomialExt.addEntry env (declName, ext)
     | _ => throwUnsupportedSyntax
 }
 
-/--
-Definition of `inferBase` / `inferBase` 的定义
+/-- Infer the base ring of `Polynomial`-like types that are registered using the `polynomial`
+environment extensions. Includes e.g. `Polynomial` and `MvPolynomial`. -/
+/-
+**Mathlib.Tactic.Polynomial.inferBase** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.
+Polynomial`。
+形式化陈述：inferBase (e : Expr) : MetaM Expr
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inferBase
-  signature: (e : Expr)
-  body: do
-  for ⟨_, ext⟩ in (polynomialExt.getState (← getEnv)).2 do
-    try
-      return ← ext.infer e
-    catch _ =>
-      continue
-  failure
-
-中文:
-定义 inferBase
-  签名: (e : Expr)
-  定义体: do
-  for ⟨_, ext⟩ in (polynomialExt.getState (← getEnv)).2 do
-    try
-      return ← ext.infer e
-    catch _ =>
-      continue
-  failure
+--- 原说明 ---
+Infer the base ring of `Polynomial`-like types that are registered using the `po
+lynomial`
+environment extensions. Includes e.g. `Polynomial` and `MvPolynomial`.
 -/
 def inferBase (e : Expr) : MetaM Expr := do
   for ⟨_, ext⟩ in (polynomialExt.getState (← getEnv)).2 do
@@ -151,3 +131,4 @@ def inferBase (e : Expr) : MetaM Expr := do
 end
 
 end Mathlib.Tactic.Polynomial
+

@@ -34,26 +34,23 @@ namespace Lean.MessageData
 The `TraceResult` will be recorded in trace messages directly in [lean4#12698](https://github.com/leanprover/lean4/pull/12698).
 Once that PR is available, callers should prefer `td.result?` over calling this function. -/
 @[deprecated Lean.TraceData.result? (since := "2026-03-23")]
-/--
-Definition of `traceResultOf` / `traceResultOf` 的定义
+/-
+**Lean.MessageData.traceResultOf** 是 Mathlib 中的一个定义，位于命名空间 `Lean.MessageData`。
+形式化陈述：traceResultOf (headerStr : String) : Option TraceResult
+参数：headerStr : String。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition traceResultOf
-  signature: (headerStr : String)
-  body: if headerStr.startsWith "✅️" then some .success
-  else if headerStr.startsWith "❌️" then some .failure
-  else if headerStr.startsWith "💥️" then some .error
-  else none
+--- 原说明 ---
+Determine the status of a trace node from its rendered header string.
 
-中文:
-定义 traceResultOf
-  签名: (headerStr : String)
-  定义体: if headerStr.startsWith "✅️" then some .success
-  else if headerStr.startsWith "❌️" then some .failure
-  else if headerStr.startsWith "💥️" then some .error
-  else none
+`withTraceNode` prepends `checkEmoji`/`crossEmoji`/`bombEmoji`
+(defined in `Lean.Util.Trace`) to trace headers to indicate outcomes.
 
-Depends on / 依赖: failure, headerStr, headerStr.startsWith, startsWith, success
+The `TraceResult` will be recorded in trace messages directly in [lean4#12698](h
+ttps://github.com/leanprover/lean4/pull/12698).
+Once that PR is available, callers should prefer `td.result?` over calling this 
+function.
 -/
 def traceResultOf (headerStr : String) : Option TraceResult :=
   if headerStr.startsWith "✅️" then some .success
@@ -68,49 +65,53 @@ Trace headers from `withTraceNode` have the form `"{emoji}[{VS16}] {content}"`.
 This strips everything through the first space. Returns the string unchanged if
 no recognized status prefix is present. -/
 @[deprecated Lean.TraceData (since := "2026-03-23")]
-/--
-Definition of `stripTraceResultPrefix` / `stripTraceResultPrefix` 的定义
+/-
+**Lean.MessageData.stripTraceResultPrefix** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Messag
+eData`。
+形式化陈述：stripTraceResultPrefix (s : String) : String
+参数：s : String。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition stripTraceResultPrefix
-  signature: (s : String)
-  body: if (traceResultOf s).isNone then s else
-.copy .dropPrefix ' ' s.toSlice.dropPrefix (!·.isWhitespace)
+--- 原说明 ---
+Strip the leading status emoji and space from a trace header string,
+leaving just the semantic content for comparison across trace runs.
 
-中文:
-定义 stripTraceResultPrefix
-  签名: (s : String)
-  定义体: if (traceResultOf s).isNone then s else
-.copy .dropPrefix ' ' s.toSlice.dropPrefix (!·.isWhitespace)
-
-Depends on / 依赖: dropPrefix, isNone, isWhitespace, s.toSlice.dropPrefix, toSlice, traceResultOf
+Trace headers from `withTraceNode` have the form `"{emoji}[{VS16}] {content}"`.
+This strips everything through the first space. Returns the string unchanged if
+no recognized status prefix is present.
 -/
 def stripTraceResultPrefix (s : String) : String :=
   if (traceResultOf s).isNone then s else
-.copy .dropPrefix ' ' s.toSlice.dropPrefix (!·.isWhitespace)
+    s.toSlice.dropPrefix (!·.isWhitespace) |>.dropPrefix ' ' |>.copy
 
-/--
-Definition of `extractInstName` / `extractInstName` 的定义
+/-- Extract the instance name from a rendered `apply @Foo to Goal` trace header.
+Returns the string between `"apply "` and `" to "`.
 
-English:
-definition extractInstName
-  signature: (s : String)
-  body: match s.splitOn "apply " with
-  | [_, rest] => match rest.splitOn " to " with
-    | name :: _ => name.trimAscii.toString
-    | _ => s
-  | _ => s
+Note: this is fragile string matching against Lean's `Meta.synthInstance` trace format.
+If the trace format changes, this function will silently return the original string.
+Once [lean4#12699](https://github.com/leanprover/lean4/pull/12699) is available,
+these nodes will have trace class `Meta.synthInstance.apply` and can be identified
+structurally via `td.cls` instead of string-matching on the header. -/
+/-
+**Lean.MessageData.extractInstName** 是 Mathlib 中的一个定义，位于命名空间 `Lean.MessageData`。
+形式化陈述：extractInstName (s : String) : String
+参数：s : String。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 extractInstName
-  签名: (s : String)
-  定义体: match s.splitOn "apply " with
-  | [_, rest] => match rest.splitOn " to " with
-    | name :: _ => name.trimAscii.toString
-    | _ => s
-  | _ => s
+--- 原说明 ---
+Extract the instance name from a rendered `apply @Foo to Goal` trace header.
+Returns the string between `"apply "` and `" to "`.
 
-Depends on / 依赖: name.trimAscii.toString, rest.splitOn, s.splitOn, splitOn, toString, trimAscii
+Note: this is fragile string matching against Lean's `Meta.synthInstance` trace 
+format.
+If the trace format changes, this function will silently return the original str
+ing.
+Once [lean4#12699](https://github.com/leanprover/lean4/pull/12699) is available,
+these nodes will have trace class `Meta.synthInstance.apply` and can be identifi
+ed
+structurally via `td.cls` instead of string-matching on the header.
 -/
 def extractInstName (s : String) : String :=
   match s.splitOn "apply " with
@@ -119,34 +120,16 @@ def extractInstName (s : String) : String :=
     | _ => s
   | _ => s
 
-/--
-Definition of `dedupByString` / `dedupByString` 的定义
+/-- Deduplicate an array of `MessageData` by their rendered string representations. -/
+/-
+**Lean.MessageData.dedupByString** 是 Mathlib 中的一个定义，位于命名空间 `Lean.MessageData`。
+形式化陈述：dedupByString (msgs : Array MessageData) : BaseIO (Array MessageData)
+参数：msgs : Array MessageData。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dedupByString
-  signature: (msgs : Array MessageData)
-  body: do
-  let mut seen : Std.HashSet String := {}
-  let mut unique : Array MessageData := #[]
-  for msg in msgs do
-    let s ← msg.toString
-    unless seen.contains s do
-      seen := seen.insert s
-      unique := unique.push msg
-  return unique
-
-中文:
-定义 dedupByString
-  签名: (msgs : 数组 MessageData)
-  定义体: do
-  let mut seen : Std.HashSet String := {}
-  let mut unique : Array MessageData := #[]
-  for msg in msgs do
-    let s ← msg.toString
-    unless seen.contains s do
-      seen := seen.insert s
-      unique := unique.push msg
-  return unique
+--- 原说明 ---
+Deduplicate an array of `MessageData` by their rendered string representations.
 -/
 def dedupByString (msgs : Array MessageData) : BaseIO (Array MessageData) := do
   let mut seen : Std.HashSet String := {}
@@ -161,3 +144,4 @@ def dedupByString (msgs : Array MessageData) : BaseIO (Array MessageData) := do
 end Lean.MessageData
 
 end
+

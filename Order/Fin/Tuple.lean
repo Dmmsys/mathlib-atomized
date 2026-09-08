@@ -22,100 +22,121 @@ assert_not_exists Monoid
 open Function Set
 
 namespace Fin
-variable {m n : Nat} {α : Fin (n + 1) -> Type*} (x : α 0) (q : forall i, α i) (p : forall i : Fin n, α i.succ)
+variable {m n : ℕ} {α : Fin (n + 1) → Type*} (x : α 0) (q : ∀ i, α i) (p : ∀ i : Fin n, α i.succ)
   (i : Fin n) (y : α i.succ) (z : α 0)
 
-/--
-lemma `pi_lex_lt_cons_cons` / 引理 `pi_lex_lt_cons_cons`
-
-English:
-lemma pi_lex_lt_cons_cons
-  statement: {x₀ y₀ : α 0} {x y : forall i : Fin n, α i.succ}
-  proof: by
-  simp_rw [Pi.Lex, Fin.exists_fin_succ, Fin.cons_succ, Fin.cons_zero, Fin.forall_iff_succ]
-  simp [and_assoc, exists_and_left]
-
-中文:
-引理 pi_lex_lt_cons_cons
-  结论: {x₀ y₀ : α 0} {x y : 对任意 i : 有限集 n, α i.succ}
-  证明: by
-  simp_rw [Pi.Lex, Fin.exists_fin_succ, Fin.cons_succ, Fin.cons_zero, Fin.forall_iff_succ]
-  simp [and_assoc, exists_and_left]
-
-Depends on / 依赖: Fin.cons_succ, Fin.cons_zero, Fin.exists_fin_succ, Fin.forall_iff_succ, Pi.Lex, and_assoc, cons_succ, cons_zero, exists_and_left, exists_fin_succ, forall_iff_succ, simp_rw
+/-
+**Fin.pi_lex_lt_cons_cons** 是 Mathlib 中的一个引理，位于命名空间 `Fin`。
+形式化陈述：pi_lex_lt_cons_cons {x₀ y₀ : α 0} {x y : forall i : Fin n, α i.succ} (s : 
+forall {i : Fin n.succ}, α i -> α i -> Prop) : Pi.Lex (· < ·) (@s) (Fin.cons x₀ 
+x) (Fin.cons y₀ y) ↔ s x₀ y₀ ∨ x₀ = y₀ ∧ Pi.Lex (· < ·) (@fun i : Fin n => @s i.
+succ) x y
+参数：s : forall {i : Fin n.succ}, α i -> α i -> Prop。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Fin.cons_succ`：cons_succ : cons x p i.succ = p i
+· 使用定理 `Fin.cons_zero`：cons_zero : cons x p 0 = x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Fin.instIsBotZeroClass`：∀ {n : ℕ} [inst : NeZero n], IsBotZeroClass (Fin
+ n)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma pi_lex_lt_cons_cons {x₀ y₀ : α 0} {x y : forall i : Fin n, α i.succ}
-    (s : forall {i : Fin n.succ}, α i -> α i -> Prop) :
+lemma pi_lex_lt_cons_cons {x₀ y₀ : α 0} {x y : ∀ i : Fin n, α i.succ}
+    (s : ∀ {i : Fin n.succ}, α i → α i → Prop) :
     Pi.Lex (· < ·) (@s) (Fin.cons x₀ x) (Fin.cons y₀ y) ↔
-      s x₀ y₀ ∨ x₀ = y₀ ∧ Pi.Lex (· < ·) (@fun i : Fin n => @s i.succ) x y := by
+      s x₀ y₀ ∨ x₀ = y₀ ∧ Pi.Lex (· < ·) (@fun i : Fin n ↦ @s i.succ) x y := by
   simp_rw [Pi.Lex, Fin.exists_fin_succ, Fin.cons_succ, Fin.cons_zero, Fin.forall_iff_succ]
   simp [and_assoc, exists_and_left]
 
-variable [forall i, Preorder (α i)]
-
-/--
-lemma `insertNth_mem_Icc` / 引理 `insertNth_mem_Icc`
-
-English:
-lemma insertNth_mem_Icc
-  statement: {i : Fin (n + 1)} {x : α i} {p : forall j, α (i.succAbove j)}
-  proof: by
-  simp only [mem_Icc, insertNth_le_iff, le_insertNth_iff, and_assoc, @and_left_comm (x <= q₂ i)]
-
-中文:
-引理 insertNth_mem_Icc
-  结论: {i : 有限集 (n + 1)} {x : α i} {p : 对任意 j, α (i.succAbove j)}
-  证明: by
-  simp only [mem_Icc, insertNth_le_iff, le_insertNth_iff, and_assoc, @and_left_comm (x <= q₂ i)]
-
-Depends on / 依赖: and_assoc, and_left_comm, insertNth_le_iff, le_insertNth_iff, mem_Icc
+variable [∀ i, Preorder (α i)]
+/-
+**Fin.insertNth_mem_Icc** 是 Mathlib 中的一个引理，位于命名空间 `Fin`。
+形式化陈述：insertNth_mem_Icc {i : Fin (n + 1)} {x : α i} {p : forall j, α (i.succAbov
+e j)} {q₁ q₂ : forall j, α j} : i.insertNth x p in Icc q₁ q₂ ↔ x in Icc (q₁ i) (
+q₂ i) ∧ p in Icc (fun j => q₁ (i.succAbove j)) fun j => q₂ (i.succAbove j)
+参数：n + 1；i.succAbove j。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `and_left_comm`：∀ {a b c : Prop}, a ∧ b ∧ c ↔ b ∧ a ∧ c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma insertNth_mem_Icc {i : Fin (n + 1)} {x : α i} {p : forall j, α (i.succAbove j)}
-    {q₁ q₂ : forall j, α j} :
-    i.insertNth x p in Icc q₁ q₂ ↔
-      x in Icc (q₁ i) (q₂ i) ∧ p in Icc (fun j => q₁ (i.succAbove j)) fun j => q₂ (i.succAbove j) := by
-  simp only [mem_Icc, insertNth_le_iff, le_insertNth_iff, and_assoc, @and_left_comm (x <= q₂ i)]
-
-/--
-lemma `preimage_insertNth_Icc_of_mem` / 引理 `preimage_insertNth_Icc_of_mem`
-
-English:
-lemma preimage_insertNth_Icc_of_mem
-  statement: {i : Fin (n + 1)} {x : α i} {q₁ q₂ : forall j, α j}
-  proof: Set.ext fun p => by simp only [mem_preimage, insertNth_mem_Icc, hx, true_and]
-
-中文:
-引理 preimage_insertNth_Icc_of_mem
-  结论: {i : 有限集 (n + 1)} {x : α i} {q₁ q₂ : 对任意 j, α j}
-  证明: Set.ext fun p => by simp only [mem_preimage, insertNth_mem_Icc, hx, true_and]
-
-Depends on / 依赖: Set.ext, insertNth_mem_Icc, mem_preimage, true_and
+lemma insertNth_mem_Icc {i : Fin (n + 1)} {x : α i} {p : ∀ j, α (i.succAbove j)}
+    {q₁ q₂ : ∀ j, α j} :
+    i.insertNth x p ∈ Icc q₁ q₂ ↔
+      x ∈ Icc (q₁ i) (q₂ i) ∧ p ∈ Icc (fun j ↦ q₁ (i.succAbove j)) fun j ↦ q₂ (i.succAbove j) := by
+  simp only [mem_Icc, insertNth_le_iff, le_insertNth_iff, and_assoc, @and_left_comm (x ≤ q₂ i)]
+/-
+**Fin.preimage_insertNth_Icc_of_mem** 是 Mathlib 中的一个引理，位于命名空间 `Fin`。
+形式化陈述：preimage_insertNth_Icc_of_mem {i : Fin (n + 1)} {x : α i} {q₁ q₂ : forall 
+j, α j} (hx : x in Icc (q₁ i) (q₂ i)) : i.insertNth x ⁻¹' Icc q₁ q₂ = Icc (fun j
+ => q₁ (i.succAbove j)) fun j => q₂ (i.succAbove j)
+参数：n + 1；hx : x in Icc (q₁ i) (q₂ i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma preimage_insertNth_Icc_of_mem {i : Fin (n + 1)} {x : α i} {q₁ q₂ : forall j, α j}
-    (hx : x in Icc (q₁ i) (q₂ i)) :
-    i.insertNth x ⁻¹' Icc q₁ q₂ = Icc (fun j => q₁ (i.succAbove j)) fun j => q₂ (i.succAbove j) :=
-  Set.ext fun p => by simp only [mem_preimage, insertNth_mem_Icc, hx, true_and]
-
-/--
-lemma `preimage_insertNth_Icc_of_notMem` / 引理 `preimage_insertNth_Icc_of_notMem`
-
-English:
-lemma preimage_insertNth_Icc_of_notMem
-  statement: {i : Fin (n + 1)} {x : α i} {q₁ q₂ : forall j, α j}
-  proof: Set.ext fun p => by
-    simp only [mem_preimage, insertNth_mem_Icc, hx, false_and, mem_empty_iff_false]
-
-中文:
-引理 preimage_insertNth_Icc_of_notMem
-  结论: {i : 有限集 (n + 1)} {x : α i} {q₁ q₂ : 对任意 j, α j}
-  证明: Set.ext fun p => by
-    simp only [mem_preimage, insertNth_mem_Icc, hx, false_and, mem_empty_iff_false]
-
-Depends on / 依赖: Set.ext, false_and, insertNth_mem_Icc, mem_empty_iff_false, mem_preimage
+lemma preimage_insertNth_Icc_of_mem {i : Fin (n + 1)} {x : α i} {q₁ q₂ : ∀ j, α j}
+    (hx : x ∈ Icc (q₁ i) (q₂ i)) :
+    i.insertNth x ⁻¹' Icc q₁ q₂ = Icc (fun j ↦ q₁ (i.succAbove j)) fun j ↦ q₂ (i.succAbove j) :=
+  Set.ext fun p ↦ by simp only [mem_preimage, insertNth_mem_Icc, hx, true_and]
+/-
+**Fin.preimage_insertNth_Icc_of_notMem** 是 Mathlib 中的一个引理，位于命名空间 `Fin`。
+形式化陈述：preimage_insertNth_Icc_of_notMem {i : Fin (n + 1)} {x : α i} {q₁ q₂ : fora
+ll j, α j} (hx : x ∉ Icc (q₁ i) (q₂ i)) : i.insertNth x ⁻¹' Icc q₁ q₂ = ∅
+参数：n + 1；hx : x ∉ Icc (q₁ i) (q₂ i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `false_and`：∀ (p : Prop), (False ∧ p) = False
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma preimage_insertNth_Icc_of_notMem {i : Fin (n + 1)} {x : α i} {q₁ q₂ : forall j, α j}
+lemma preimage_insertNth_Icc_of_notMem {i : Fin (n + 1)} {x : α i} {q₁ q₂ : ∀ j, α j}
     (hx : x ∉ Icc (q₁ i) (q₂ i)) : i.insertNth x ⁻¹' Icc q₁ q₂ = ∅ :=
-  Set.ext fun p => by
+  Set.ext fun p ↦ by
     simp only [mem_preimage, insertNth_mem_Icc, hx, false_and, mem_empty_iff_false]
 
 end Fin
@@ -125,62 +146,74 @@ open Fin Matrix
 variable {α : Type*}
 
 open scoped Relator in
-/--
-lemma `liftFun_vecCons` / 引理 `liftFun_vecCons`
-
-English:
-lemma liftFun_vecCons
-  given: {n : Nat} (r : α -> α -> Prop) [IsTrans α r] {f : Fin (n + 1) -> α} {a : α}
-  proof: by
-  simp only [liftFun_iff_succ r, forall_iff_succ, cons_val_succ, cons_val_zero, ← succ_castSucc,
-    castSucc_zero]
-
-中文:
-引理 liftFun_vecCons
-  条件: {n : 自然数} (r : α -> α -> 命题) [是Trans α r] {f : 有限集 (n + 1) -> α} {a : α}
-  证明: by
-  simp only [liftFun_iff_succ r, forall_iff_succ, cons_val_succ, cons_val_zero, ← succ_castSucc,
-    castSucc_zero]
-
-Depends on / 依赖: castSucc_zero, cons_val_succ, cons_val_zero, forall_iff_succ, liftFun_iff_succ, succ_castSucc
+/-
+**liftFun_vecCons** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：liftFun_vecCons {n : Nat} (r : α -> α -> Prop) [IsTrans α r] {f : Fin (n +
+ 1) -> α} {a : α} : ((· < ·) ⇒ r) (vecCons a f) (vecCons a f) ↔ r a (f 0) ∧ ((· 
+< ·) ⇒ r) f f
+参数：r : α -> α -> Prop；n + 1。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fin.liftFun_iff_succ`：liftFun_iff_succ {α : Type*} (r : α -> α -> Prop) 
+[IsTrans α r] {f : Fin (n + 1) -> α} : ((· < ·) ⇒ r) f f ↔ forall i : Fin n, r (
+f (castSuc…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Matrix.cons_val_succ`：cons_val_succ (x : α) (u : Fin m -> α) (i : Fin m)
+ : vecCons x u i.succ = u i
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma liftFun_vecCons {n : Nat} (r : α -> α -> Prop) [IsTrans α r] {f : Fin (n + 1) -> α} {a : α} :
+lemma liftFun_vecCons {n : ℕ} (r : α → α → Prop) [IsTrans α r] {f : Fin (n + 1) → α} {a : α} :
     ((· < ·) ⇒ r) (vecCons a f) (vecCons a f) ↔ r a (f 0) ∧ ((· < ·) ⇒ r) f f := by
   simp only [liftFun_iff_succ r, forall_iff_succ, cons_val_succ, cons_val_zero, ← succ_castSucc,
     castSucc_zero]
 
 open scoped Relator in
-/--
-lemma `Fin.liftFun_cons` / 引理 `Fin.liftFun_cons`
-
-English:
-lemma Fin.liftFun_cons
-  given: {n : Nat} (r : α -> α -> Prop) [IsTrans α r] {f : Fin n -> α} {a : α}
-  proof: by
-  match n with
-  | 0 => simp [Relator.LiftFun]
-  | n + 1 =>
-    apply (liftFun_vecCons r).trans
-    simp only [forall_iff_succ, and_congr_left_iff, iff_self_and]
-    intro h r0 i
-    exact _root_.trans r0 (h (by grind))
-
-中文:
-引理 有限集.liftFun_cons
-  条件: {n : 自然数} (r : α -> α -> 命题) [是Trans α r] {f : 有限集 n -> α} {a : α}
-  证明: by
-  match n with
-  | 0 => simp [Relator.LiftFun]
-  | n + 1 =>
-    apply (liftFun_vecCons r).trans
-    simp only [forall_iff_succ, and_congr_left_iff, iff_self_and]
-    intro h r0 i
-    exact _root_.trans r0 (h (by grind))
-
-Depends on / 依赖: LiftFun, Relator, Relator.LiftFun, _root_, _root_.trans, and_congr_left_iff, forall_iff_succ, iff_self_and, liftFun_vecCons
+/-
+**Fin.liftFun_cons** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Fin.liftFun_cons {n : Nat} (r : α -> α -> Prop) [IsTrans α r] {f : Fin n -
+> α} {a : α} : ((· < ·) ⇒ r) (cons a f) (cons a f) ↔ (forall i, r a (f i)) ∧ ((·
+ < ·) ⇒ r) f f
+参数：r : α -> α -> Prop。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Fin.subsingleton_one`：Subsingleton (Fin 1)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Fin.subsingleton_zero`：Subsingleton (Fin 0)
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用引理 `liftFun_vecCons`：liftFun_vecCons {n : Nat} (r : α -> α -> Prop) [IsTrans
+ α r] {f : Fin (n + 1) -> α} {a : α} : ((· < ·) ⇒ r) (vecCons a f) (vecCons a f)
+ ↔ r …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用引理 `trans`：trans [IsTrans α r] : a ≺ b -> b ≺ c -> a ≺ c
 -/
-lemma Fin.liftFun_cons {n : Nat} (r : α -> α -> Prop) [IsTrans α r] {f : Fin n -> α} {a : α} :
-    ((· < ·) ⇒ r) (cons a f) (cons a f) ↔ (forall i, r a (f i)) ∧ ((· < ·) ⇒ r) f f := by
+lemma Fin.liftFun_cons {n : ℕ} (r : α → α → Prop) [IsTrans α r] {f : Fin n → α} {a : α} :
+    ((· < ·) ⇒ r) (cons a f) (cons a f) ↔ (∀ i, r a (f i)) ∧ ((· < ·) ⇒ r) f f := by
   match n with
   | 0 => simp [Relator.LiftFun]
   | n + 1 =>
@@ -189,59 +222,47 @@ lemma Fin.liftFun_cons {n : Nat} (r : α -> α -> Prop) [IsTrans α r] {f : Fin 
     intro h r0 i
     exact _root_.trans r0 (h (by grind))
 
-variable [Preorder α] {n : Nat}
-
-/--
-lemma `Fin.strictMono_insertNth_iff` / 引理 `Fin.strictMono_insertNth_iff`
-
-English:
-lemma Fin.strictMono_insertNth_iff
-  given: (q : Fin (n + 1)) (x : α) (f : Fin n -> α)
-  proof: by
-  refine ⟨fun h => ⟨fun a b hab => ?_, ⟨fun i hlt => ?_, fun i hlt => ?_⟩⟩, ?_⟩
-  · simpa [hab] using h (a := q.succAbove a) (b := q.succAbove b)
-  · have : q.succAbove i < q := by simp [succAbove_of_castSucc_lt, hlt]
-    simpa using h this
-  · have : q < q.succAbove i := by simp [succAbove_of_le_castSucc, hlt, ← le_castSucc_iff]
-    simpa using h this
-  · rintro ⟨h, hlt, hgt⟩ a b hab
-    cases a using succAboveCases q <;> cases b using succAboveCases q
-    · simp at hab
-    · rename_i j
-      have : q <= j.castSucc := by simpa [lt_succAbove_iff_le_castSucc] using hab
-      simpa using hgt _ this
-    · rename_i j
-      have : j.castSucc < q := by simpa [succAbove_lt_iff_castSucc_lt] using hab
-      simpa using hlt _ this
-· simpa using h (strictMono_succAbove _).lt_iff_lt.mp hab
-
-中文:
-引理 有限集.strictMono_insertNth_iff
-  条件: (q : 有限集 (n + 1)) (x : α) (f : 有限集 n -> α)
-  证明: by
-  refine ⟨fun h => ⟨fun a b hab => ?_, ⟨fun i hlt => ?_, fun i hlt => ?_⟩⟩, ?_⟩
-  · simpa [hab] using h (a := q.succAbove a) (b := q.succAbove b)
-  · have : q.succAbove i < q := by simp [succAbove_of_castSucc_lt, hlt]
-    simpa using h this
-  · have : q < q.succAbove i := by simp [succAbove_of_le_castSucc, hlt, ← le_castSucc_iff]
-    simpa using h this
-  · rintro ⟨h, hlt, hgt⟩ a b hab
-    cases a using succAboveCases q <;> cases b using succAboveCases q
-    · simp at hab
-    · rename_i j
-      have : q <= j.castSucc := by simpa [lt_succAbove_iff_le_castSucc] using hab
-      simpa using hgt _ this
-    · rename_i j
-      have : j.castSucc < q := by simpa [succAbove_lt_iff_castSucc_lt] using hab
-      simpa using hlt _ this
-· simpa using h (strictMono_succAbove _).lt_iff_lt.mp hab
-
-Depends on / 依赖: castSucc, j.castSucc, le_castSucc_iff, q.succAbove, rename_i, succAbove, succAboveCases, succAbove_of_castSucc_lt, succAbove_of_le_castSucc
+variable [Preorder α] {n : ℕ}
+/-
+**Fin.strictMono_insertNth_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Fin.strictMono_insertNth_iff (q : Fin (n + 1)) (x : α) (f : Fin n -> α) : 
+StrictMono (q.insertNth x f) ↔ StrictMono f ∧ (forall i, i.castSucc < q -> f i <
+ x) ∧ (forall i, q <= i.castSucc -> x < f i)
+参数：q : Fin (n + 1)；x : α；f : Fin n -> α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fin.insertNth_apply_succAbove`：insertNth_apply_succAbove (i : Fin (n + 1
+)) (x : α i) (p : forall j, α (i.succAbove j)) (j : Fin n) : insertNth i x p (i.
+succAbove j) = p j
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Fin.succAbove_of_castSucc_lt`：succAbove_of_castSucc_lt (p : Fin (n + 1))
+ (i : Fin n) (h : castSucc i < p) : p.succAbove i = castSucc i
+· 使用定理 `Fin.insertNth_apply_same`：insertNth_apply_same (i : Fin (n + 1)) (x : α 
+i) (p : forall j, α (i.succAbove j)) : insertNth i x p i = x
+· 使用引理 `Fin.succAbove_of_le_castSucc`：succAbove_of_le_castSucc (p : Fin (n + 1))
+ (i : Fin n) (h : p <= castSucc i) : p.succAbove i = i.succ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `StrictMono.lt_iff_lt`：StrictMono.lt_iff_lt (hf : StrictMono f) {a b : α}
+ : f a < f b ↔ a < b
+· 使用引理 `Fin.strictMono_succAbove`：strictMono_succAbove (p : Fin (n + 1)) : Stric
+tMono (succAbove p)
 -/
-lemma Fin.strictMono_insertNth_iff (q : Fin (n + 1)) (x : α) (f : Fin n -> α) :
+lemma Fin.strictMono_insertNth_iff (q : Fin (n + 1)) (x : α) (f : Fin n → α) :
     StrictMono (q.insertNth x f) ↔
-      StrictMono f ∧ (forall i, i.castSucc < q -> f i < x) ∧ (forall i, q <= i.castSucc -> x < f i) := by
-  refine ⟨fun h => ⟨fun a b hab => ?_, ⟨fun i hlt => ?_, fun i hlt => ?_⟩⟩, ?_⟩
+      StrictMono f ∧ (∀ i, i.castSucc < q → f i < x) ∧ (∀ i, q ≤ i.castSucc → x < f i) := by
+  refine ⟨fun h ↦ ⟨fun a b hab ↦ ?_, ⟨fun i hlt ↦ ?_, fun i hlt ↦ ?_⟩⟩, ?_⟩
   · simpa [hab] using h (a := q.succAbove a) (b := q.succAbove b)
   · have : q.succAbove i < q := by simp [succAbove_of_castSucc_lt, hlt]
     simpa using h this
@@ -251,343 +272,283 @@ lemma Fin.strictMono_insertNth_iff (q : Fin (n + 1)) (x : α) (f : Fin n -> α) 
     cases a using succAboveCases q <;> cases b using succAboveCases q
     · simp at hab
     · rename_i j
-      have : q <= j.castSucc := by simpa [lt_succAbove_iff_le_castSucc] using hab
+      have : q ≤ j.castSucc := by simpa [lt_succAbove_iff_le_castSucc] using hab
       simpa using hgt _ this
     · rename_i j
       have : j.castSucc < q := by simpa [succAbove_lt_iff_castSucc_lt] using hab
       simpa using hlt _ this
-· simpa using h (strictMono_succAbove _).lt_iff_lt.mp hab
-
-/--
-lemma `Fin.strictMono_cons` / 引理 `Fin.strictMono_cons`
-
-English:
-lemma Fin.strictMono_cons
-  given: {f : Fin n -> α} {a : α}
-  proof: liftFun_cons (· < ·)
-
-中文:
-引理 有限集.strictMono_cons
-  条件: {f : 有限集 n -> α} {a : α}
-  证明: liftFun_cons (· < ·)
-
-Depends on / 依赖: liftFun_cons
+    · simpa using h <| (strictMono_succAbove _).lt_iff_lt.mp hab
+/-
+**Fin.strictMono_cons** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Fin.strictMono_cons {f : Fin n -> α} {a : α} : StrictMono (Fin.cons a f) ↔
+ (forall j, a < f j) ∧ StrictMono f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Fin.liftFun_cons`：Fin.liftFun_cons {n : Nat} (r : α -> α -> Prop) [IsTra
+ns α r] {f : Fin n -> α} {a : α} : ((· < ·) ⇒ r) (cons a f) (cons a f) ↔ (forall
+ i, r …
+· 使用定理 `instIsTransLt`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 < x2
 -/
-lemma Fin.strictMono_cons {f : Fin n -> α} {a : α} :
-    StrictMono (Fin.cons a f) ↔ (forall j, a < f j) ∧ StrictMono f :=
+lemma Fin.strictMono_cons {f : Fin n → α} {a : α} :
+    StrictMono (Fin.cons a f) ↔ (∀ j, a < f j) ∧ StrictMono f :=
   liftFun_cons (· < ·)
-
-/--
-lemma `Fin.strictMono_cons_zero_succ` / 引理 `Fin.strictMono_cons_zero_succ`
-
-English:
-lemma Fin.strictMono_cons_zero_succ
-  given: {f : Fin n -> Fin (n + 1)}
-  proof: by
-  refine ⟨fun h => funext fun i => ?_, fun h => by simp [h, strictMono_id]⟩
-  have key (g : Fin (n + 1) -> Fin (n + 1)) (hg : StrictMono g) : g = id := by
-    -- Import restrictions prevent us using `StrictMono.eq_id`: hence this manual proof.
-    refine funext fun x => le_antisymm ?_ (hg.id_le x)
-    simpa using ((Fin.rev_strictAnti.comp_strictMono hg).comp Fin.rev_strictAnti).id_le (Fin.rev x)
-  simpa using congrFun (key _ h) i.succ
-
-中文:
-引理 有限集.strictMono_cons_zero_succ
-  条件: {f : 有限集 n -> 有限集 (n + 1)}
-  证明: by
-  refine ⟨fun h => funext fun i => ?_, fun h => by simp [h, strictMono_id]⟩
-  have key (g : Fin (n + 1) -> Fin (n + 1)) (hg : StrictMono g) : g = id := by
-    -- Import restrictions prevent us using `StrictMono.eq_id`: hence this manual proof.
-    refine funext fun x => le_antisymm ?_ (hg.id_le x)
-    simpa using ((Fin.rev_strictAnti.comp_strictMono hg).comp Fin.rev_strictAnti).id_le (Fin.rev x)
-  simpa using congrFun (key _ h) i.succ
+/-
+**Fin.strictMono_cons_zero_succ** 是 Mathlib 中的一个定理，位于命名空间 `Fin`。
+形式化陈述：∀ {n : ℕ} {f : Fin n → Fin (n + 1)}, StrictMono (Fin.cons 0 f) ↔ f = Fin.s
+ucc
+参数：n + 1；Fin.cons 0 f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fin.rev_rev`：∀ {n : ℕ} (i : Fin n), i.rev.rev = i
+· 使用定理 `StrictMono.id_le`：StrictMono.id_le [WellFoundedLT β] {f : β -> β} (hf : 
+StrictMono f) : id <= f
+· 使用定理 `IsWellOrder.toIsWellFounded`：∀ {α : Type u} {r : α → α → Prop} [self : I
+sWellOrder α r], IsWellFounded α r
+· 使用定理 `Fin.Lt.isWellOrder`：∀ (n : ℕ), IsWellOrder (Fin n) fun x1 x2 => x1 < x2
+· 使用定理 `StrictAnti.comp`：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preord
+er α] [inst_1 : Preorder β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β}, Str
+ictAn…
+· 使用定理 `StrictAnti.comp_strictMono`：StrictAnti.comp_strictMono (hg : StrictAnti 
+g) (hf : StrictMono f) : StrictAnti (g ∘ f)
+· 使用引理 `Fin.rev_strictAnti`：rev_strictAnti : StrictAnti (@rev n)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Fin.cons_succ`：cons_succ : cons x p i.succ = p i
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Fin.cons_zero_succ`：cons_zero_succ : (cons 0 Fin.succ : Fin (n + 1) -> F
+in (n + 1)) = id
 -/
-@[simp] lemma Fin.strictMono_cons_zero_succ {f : Fin n -> Fin (n + 1)} :
+@[simp] lemma Fin.strictMono_cons_zero_succ {f : Fin n → Fin (n + 1)} :
     StrictMono (Fin.cons 0 f) ↔ f = Fin.succ := by
-  refine ⟨fun h => funext fun i => ?_, fun h => by simp [h, strictMono_id]⟩
-  have key (g : Fin (n + 1) -> Fin (n + 1)) (hg : StrictMono g) : g = id := by
+  refine ⟨fun h ↦ funext fun i ↦ ?_, fun h ↦ by simp [h, strictMono_id]⟩
+  have key (g : Fin (n + 1) → Fin (n + 1)) (hg : StrictMono g) : g = id := by
     -- Import restrictions prevent us using `StrictMono.eq_id`: hence this manual proof.
-    refine funext fun x => le_antisymm ?_ (hg.id_le x)
+    refine funext fun x ↦ le_antisymm ?_ (hg.id_le x)
     simpa using ((Fin.rev_strictAnti.comp_strictMono hg).comp Fin.rev_strictAnti).id_le (Fin.rev x)
   simpa using congrFun (key _ h) i.succ
 
-variable {f : Fin (n + 1) -> α} {a : α}
-
-/--
-lemma `strictMono_vecCons` / 引理 `strictMono_vecCons`
-
-English:
-lemma strictMono_vecCons
-  statement: StrictMono (vecCons a f) ↔ a < f 0 ∧ StrictMono f
-  proof: liftFun_vecCons (· < ·)
-
-@[simp]
-
-中文:
-引理 strictMono_vecCons
-  结论: 严格递增 (vecCons a f) ↔ a < f 0 ∧ 严格递增 f
-  证明: liftFun_vecCons (· < ·)
-
-@[simp]
+variable {f : Fin (n + 1) → α} {a : α}
+/-
+**strictMono_vecCons** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {n : ℕ} {f : Fin (n + 1) → α} {a : α}
+,   StrictMono (Matrix.vecCons a f) ↔ a < f 0 ∧ StrictMono f
+参数：n + 1；Matrix.vecCons a f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `liftFun_vecCons`：liftFun_vecCons {n : Nat} (r : α -> α -> Prop) [IsTrans
+ α r] {f : Fin (n + 1) -> α} {a : α} : ((· < ·) ⇒ r) (vecCons a f) (vecCons a f)
+ ↔ r …
+· 使用定理 `instIsTransLt`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 < x2
 -/
 @[simp] lemma strictMono_vecCons : StrictMono (vecCons a f) ↔ a < f 0 ∧ StrictMono f :=
   liftFun_vecCons (· < ·)
 
 @[simp]
-/--
-lemma `monotone_vecCons` / 引理 `monotone_vecCons`
-
-English:
-lemma monotone_vecCons
-  statement: Monotone (vecCons a f) ↔ a <= f 0 ∧ Monotone f
-  proof: by
-  simpa only [monotone_iff_forall_lt] using! @liftFun_vecCons α n (· <= ·) _ f a
-
-中文:
-引理 monotone_vecCons
-  结论: 递增 (vecCons a f) ↔ a <= f 0 ∧ 递增 f
-  证明: by
-  simpa only [monotone_iff_forall_lt] using! @liftFun_vecCons α n (· <= ·) _ f a
-
-Depends on / 依赖: liftFun_vecCons, monotone_iff_forall_lt
+/-
+**monotone_vecCons** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：monotone_vecCons : Monotone (vecCons a f) ↔ a <= f 0 ∧ Monotone f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `liftFun_vecCons`：liftFun_vecCons {n : Nat} (r : α -> α -> Prop) [IsTrans
+ α r] {f : Fin (n + 1) -> α} {a : α} : ((· < ·) ⇒ r) (vecCons a f) (vecCons a f)
+ ↔ r …
+· 使用定理 `instIsTransLe`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 ≤ x2
 -/
-lemma monotone_vecCons : Monotone (vecCons a f) ↔ a <= f 0 ∧ Monotone f := by
-  simpa only [monotone_iff_forall_lt] using! @liftFun_vecCons α n (· <= ·) _ f a
-
-/--
-lemma `monotone_vecEmpty` / 引理 `monotone_vecEmpty`
-
-English:
-lemma monotone_vecEmpty
-  statement: Monotone ![a]
-
-中文:
-引理 monotone_vecEmpty
-  结论: 递增 ![a]
+lemma monotone_vecCons : Monotone (vecCons a f) ↔ a ≤ f 0 ∧ Monotone f := by
+  simpa only [monotone_iff_forall_lt] using! @liftFun_vecCons α n (· ≤ ·) _ f a
+/-
+**monotone_vecEmpty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {a : α}, Monotone ![a]
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
 @[simp] lemma monotone_vecEmpty : Monotone ![a]
   | ⟨0, _⟩, ⟨0, _⟩, _ => le_refl _
-
-/--
-lemma `strictMono_vecEmpty` / 引理 `strictMono_vecEmpty`
-
-English:
-lemma strictMono_vecEmpty
-  statement: StrictMono ![a]
-
-中文:
-引理 strictMono_vecEmpty
-  结论: 严格递增 ![a]
+/-
+**strictMono_vecEmpty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {a : α}, StrictMono ![a]
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `irrefl`：irrefl [Std.Irrefl r] (a : α) : ¬a ≺ a
 -/
 @[simp] lemma strictMono_vecEmpty : StrictMono ![a]
   | ⟨0, _⟩, ⟨0, _⟩, h => (irrefl _ h).elim
-
-/--
-lemma `strictAnti_vecCons` / 引理 `strictAnti_vecCons`
-
-English:
-lemma strictAnti_vecCons
-  statement: StrictAnti (vecCons a f) ↔ f 0 < a ∧ StrictAnti f
-  proof: liftFun_vecCons (· > ·)
-
-中文:
-引理 strictAnti_vecCons
-  结论: 严格递减 (vecCons a f) ↔ f 0 < a ∧ 严格递减 f
-  证明: liftFun_vecCons (· > ·)
+/-
+**strictAnti_vecCons** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {n : ℕ} {f : Fin (n + 1) → α} {a : α}
+,   StrictAnti (Matrix.vecCons a f) ↔ f 0 < a ∧ StrictAnti f
+参数：n + 1；Matrix.vecCons a f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `liftFun_vecCons`：liftFun_vecCons {n : Nat} (r : α -> α -> Prop) [IsTrans
+ α r] {f : Fin (n + 1) -> α} {a : α} : ((· < ·) ⇒ r) (vecCons a f) (vecCons a f)
+ ↔ r …
+· 使用定理 `instIsTransGt`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x2 < x1
 -/
 @[simp] lemma strictAnti_vecCons : StrictAnti (vecCons a f) ↔ f 0 < a ∧ StrictAnti f :=
   liftFun_vecCons (· > ·)
-
-/--
-lemma `antitone_vecCons` / 引理 `antitone_vecCons`
-
-English:
-lemma antitone_vecCons
-  statement: Antitone (vecCons a f) ↔ f 0 <= a ∧ Antitone f
-  proof: monotone_vecCons (α := αᵒᵈ)
-
-中文:
-引理 antitone_vecCons
-  结论: 递减 (vecCons a f) ↔ f 0 <= a ∧ 递减 f
-  证明: monotone_vecCons (α := αᵒᵈ)
+/-
+**antitone_vecCons** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {n : ℕ} {f : Fin (n + 1) → α} {a : α}
+,   Antitone (Matrix.vecCons a f) ↔ f 0 ≤ a ∧ Antitone f
+参数：n + 1；Matrix.vecCons a f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `monotone_vecCons`：monotone_vecCons : Monotone (vecCons a f) ↔ a <= f 0 ∧
+ Monotone f
 -/
-@[simp] lemma antitone_vecCons : Antitone (vecCons a f) ↔ f 0 <= a ∧ Antitone f :=
+@[simp] lemma antitone_vecCons : Antitone (vecCons a f) ↔ f 0 ≤ a ∧ Antitone f :=
   monotone_vecCons (α := αᵒᵈ)
-
-/--
-lemma `antitone_vecEmpty` / 引理 `antitone_vecEmpty`
-
-English:
-lemma antitone_vecEmpty
-  statement: Antitone (vecCons a vecEmpty)
-
-中文:
-引理 antitone_vecEmpty
-  结论: 递减 (vecCons a vecEmpty)
+/-
+**antitone_vecEmpty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {a : α}, Antitone ![a]
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
 @[simp] lemma antitone_vecEmpty : Antitone (vecCons a vecEmpty)
   | ⟨0, _⟩, ⟨0, _⟩, _ => le_rfl
-
-/--
-lemma `strictAnti_vecEmpty` / 引理 `strictAnti_vecEmpty`
-
-English:
-lemma strictAnti_vecEmpty
-  statement: StrictAnti (vecCons a vecEmpty)
-
-中文:
-引理 strictAnti_vecEmpty
-  结论: 严格递减 (vecCons a vecEmpty)
+/-
+**strictAnti_vecEmpty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {a : α}, StrictAnti ![a]
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `irrefl`：irrefl [Std.Irrefl r] (a : α) : ¬a ≺ a
 -/
 @[simp] lemma strictAnti_vecEmpty : StrictAnti (vecCons a vecEmpty)
   | ⟨0, _⟩, ⟨0, _⟩, h => (irrefl _ h).elim
-
-/--
-lemma `StrictMono.vecCons` / 引理 `StrictMono.vecCons`
-
-English:
-lemma StrictMono.vecCons
-  given: (hf : StrictMono f) (ha : a < f 0)
-  statement: StrictMono (vecCons a f)
-  proof: strictMono_vecCons.2 ⟨ha, hf⟩
-
-中文:
-引理 严格递增.vecCons
-  条件: (hf : 严格递增 f) (ha : a < f 0)
-  结论: 严格递增 (vecCons a f)
-  证明: strictMono_vecCons.2 ⟨ha, hf⟩
-
-Depends on / 依赖: strictMono_vecCons
+/-
+**StrictMono.vecCons** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：StrictMono.vecCons (hf : StrictMono f) (ha : a < f 0) : StrictMono (vecCon
+s a f)
+参数：hf : StrictMono f；ha : a < f 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `strictMono_vecCons`：∀ {α : Type u_1} [inst : Preorder α] {n : ℕ} {f : Fi
+n (n + 1) → α} {a : α},   StrictMono (Matrix.vecCons a f) ↔ a < f 0 ∧ StrictMono
+ f
 -/
 lemma StrictMono.vecCons (hf : StrictMono f) (ha : a < f 0) : StrictMono (vecCons a f) :=
   strictMono_vecCons.2 ⟨ha, hf⟩
-
-/--
-lemma `StrictMono.removeNth` / 引理 `StrictMono.removeNth`
-
-English:
-lemma StrictMono.removeNth
-  given: (hf : StrictMono f) (i : Fin (n + 1))
-  statement: StrictMono (i.removeNth f)
-  proof: hf.comp (Fin.strictMono_succAbove i)
-
-中文:
-引理 严格递增.removeNth
-  条件: (hf : 严格递增 f) (i : 有限集 (n + 1))
-  结论: 严格递增 (i.removeNth f)
-  证明: hf.comp (Fin.strictMono_succAbove i)
-
-Depends on / 依赖: Fin.strictMono_succAbove, hf.comp, strictMono_succAbove
+/-
+**StrictMono.removeNth** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：StrictMono.removeNth (hf : StrictMono f) (i : Fin (n + 1)) : StrictMono (i
+.removeNth f)
+参数：hf : StrictMono f；i : Fin (n + 1)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.comp`：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preord
+er α] [inst_1 : Preorder β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β}, Str
+ictMo…
+· 使用引理 `Fin.strictMono_succAbove`：strictMono_succAbove (p : Fin (n + 1)) : Stric
+tMono (succAbove p)
 -/
 lemma StrictMono.removeNth (hf : StrictMono f) (i : Fin (n + 1)) : StrictMono (i.removeNth f) :=
   hf.comp (Fin.strictMono_succAbove i)
-
-/--
-lemma `StrictAnti.vecCons` / 引理 `StrictAnti.vecCons`
-
-English:
-lemma StrictAnti.vecCons
-  given: (hf : StrictAnti f) (ha : f 0 < a)
-  statement: StrictAnti (vecCons a f)
-  proof: strictAnti_vecCons.2 ⟨ha, hf⟩
-
-中文:
-引理 严格递减.vecCons
-  条件: (hf : 严格递减 f) (ha : f 0 < a)
-  结论: 严格递减 (vecCons a f)
-  证明: strictAnti_vecCons.2 ⟨ha, hf⟩
-
-Depends on / 依赖: strictAnti_vecCons
+/-
+**StrictAnti.vecCons** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：StrictAnti.vecCons (hf : StrictAnti f) (ha : f 0 < a) : StrictAnti (vecCon
+s a f)
+参数：hf : StrictAnti f；ha : f 0 < a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `strictAnti_vecCons`：∀ {α : Type u_1} [inst : Preorder α] {n : ℕ} {f : Fi
+n (n + 1) → α} {a : α},   StrictAnti (Matrix.vecCons a f) ↔ f 0 < a ∧ StrictAnti
+ f
 -/
 lemma StrictAnti.vecCons (hf : StrictAnti f) (ha : f 0 < a) : StrictAnti (vecCons a f) :=
   strictAnti_vecCons.2 ⟨ha, hf⟩
-
-/--
-lemma `Monotone.vecCons` / 引理 `Monotone.vecCons`
-
-English:
-lemma Monotone.vecCons
-  given: (hf : Monotone f) (ha : a <= f 0)
-  statement: Monotone (vecCons a f)
-  proof: monotone_vecCons.2 ⟨ha, hf⟩
-
-中文:
-引理 递增.vecCons
-  条件: (hf : 递增 f) (ha : a <= f 0)
-  结论: 递增 (vecCons a f)
-  证明: monotone_vecCons.2 ⟨ha, hf⟩
-
-Depends on / 依赖: monotone_vecCons
+/-
+**Monotone.vecCons** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Monotone.vecCons (hf : Monotone f) (ha : a <= f 0) : Monotone (vecCons a f
+)
+参数：hf : Monotone f；ha : a <= f 0。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `monotone_vecCons`：monotone_vecCons : Monotone (vecCons a f) ↔ a <= f 0 ∧
+ Monotone f
 -/
-lemma Monotone.vecCons (hf : Monotone f) (ha : a <= f 0) : Monotone (vecCons a f) :=
+lemma Monotone.vecCons (hf : Monotone f) (ha : a ≤ f 0) : Monotone (vecCons a f) :=
   monotone_vecCons.2 ⟨ha, hf⟩
-
-/--
-lemma `Antitone.vecCons` / 引理 `Antitone.vecCons`
-
-English:
-lemma Antitone.vecCons
-  given: (hf : Antitone f) (ha : f 0 <= a)
-  statement: Antitone (vecCons a f)
-  proof: antitone_vecCons.2 ⟨ha, hf⟩
-
-example : Monotone ![1, 2, 2, 3] := by decide
-
-中文:
-引理 递减.vecCons
-  条件: (hf : 递减 f) (ha : f 0 <= a)
-  结论: 递减 (vecCons a f)
-  证明: antitone_vecCons.2 ⟨ha, hf⟩
-
-example : Monotone ![1, 2, 2, 3] := by decide
-
-Depends on / 依赖: antitone_vecCons
+/-
+**Antitone.vecCons** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Antitone.vecCons (hf : Antitone f) (ha : f 0 <= a) : Antitone (vecCons a f
+)
+参数：hf : Antitone f；ha : f 0 <= a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `antitone_vecCons`：∀ {α : Type u_1} [inst : Preorder α] {n : ℕ} {f : Fin 
+(n + 1) → α} {a : α},   Antitone (Matrix.vecCons a f) ↔ f 0 ≤ a ∧ Antitone f
 -/
-lemma Antitone.vecCons (hf : Antitone f) (ha : f 0 <= a) : Antitone (vecCons a f) :=
+lemma Antitone.vecCons (hf : Antitone f) (ha : f 0 ≤ a) : Antitone (vecCons a f) :=
   antitone_vecCons.2 ⟨ha, hf⟩
-
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : Monotone ![1, 2, 2, 3] := by decide
 
 
-variable {n : Nat}
+variable {n : ℕ}
 
-/--
-Definition of `OrderIso.piFinTwoIso` / `OrderIso.piFinTwoIso` 的定义
+/-- `Π i : Fin 2, α i` is order equivalent to `α 0 × α 1`. See also `OrderIso.finTwoArrowEquiv`
+for a non-dependent version. -/
+/-
+**OrderIso.piFinTwoIso** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：OrderIso.piFinTwoIso (α : Fin 2 -> Type*) [forall i, Preorder (α i)] : (fo
+rall i, α i) ≃o α 0 × α 1 where toEquiv
+参数：α : Fin 2 -> Type*；α i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition OrderIso.piFinTwoIso
-  signature: (α : Fin 2 -> Type*) [forall i, Preorder (α i)]
-  body: piFinTwoEquiv α
-  map_rel_iff' := Iff.symm Fin.forall_fin_two
-
-中文:
-定义 OrderIso.piFinTwoIso
-  签名: (α : 有限集 2 -> 类型) [对任意 i, 预序 (α i)]
-  定义体: piFinTwoEquiv α
-  map_rel_iff' := Iff.symm Fin.forall_fin_two
-
-Depends on / 依赖: piFinTwoEquiv
+--- 原说明 ---
+`Π i : Fin 2, α i` is order equivalent to `α 0 × α 1`. See also `OrderIso.finTwo
+ArrowEquiv`
+for a non-dependent version.
 -/
-def OrderIso.piFinTwoIso (α : Fin 2 -> Type*) [forall i, Preorder (α i)] : (forall i, α i) ≃o α 0 × α 1 where
+def OrderIso.piFinTwoIso (α : Fin 2 → Type*) [∀ i, Preorder (α i)] : (∀ i, α i) ≃o α 0 × α 1 where
   toEquiv := piFinTwoEquiv α
   map_rel_iff' := Iff.symm Fin.forall_fin_two
 
-/--
-Definition of `OrderIso.finTwoArrowIso` / `OrderIso.finTwoArrowIso` 的定义
+/-- The space of functions `Fin 2 → α` is order equivalent to `α × α`. See also
+`OrderIso.piFinTwoIso`. -/
+/-
+**OrderIso.finTwoArrowIso** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：OrderIso.finTwoArrowIso (α : Type*) [Preorder α] : (Fin 2 -> α) ≃o α × α
+参数：α : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition OrderIso.finTwoArrowIso
-  signature: (α : Type*) [Preorder α]
-  body: { OrderIso.piFinTwoIso fun _ => α with toEquiv := finTwoArrowEquiv α }
-
-中文:
-定义 OrderIso.finTwoArrowIso
-  签名: (α : 类型) [预序 α]
-  定义体: { OrderIso.piFinTwoIso fun _ => α with toEquiv := finTwoArrowEquiv α }
-
-Depends on / 依赖: OrderIso, OrderIso.piFinTwoIso, finTwoArrowEquiv, piFinTwoIso, toEquiv
+--- 原说明 ---
+The space of functions `Fin 2 → α` is order equivalent to `α × α`. See also
+`OrderIso.piFinTwoIso`.
 -/
-def OrderIso.finTwoArrowIso (α : Type*) [Preorder α] : (Fin 2 -> α) ≃o α × α :=
+def OrderIso.finTwoArrowIso (α : Type*) [Preorder α] : (Fin 2 → α) ≃o α × α :=
   { OrderIso.piFinTwoIso fun _ => α with toEquiv := finTwoArrowEquiv α }
 
 namespace Fin
@@ -597,25 +558,23 @@ namespace Fin
 
 This is `Fin.cons` as an `OrderIso`. -/
 @[simps!, simps toEquiv]
-/--
-Definition of `consOrderIso` / `consOrderIso` 的定义
+/-
+**Fin.consOrderIso** 是 Mathlib 中的一个定义，位于命名空间 `Fin`。
+形式化陈述：consOrderIso (α : Fin (n + 1) -> Type*) [forall i, LE (α i)] : α 0 × (fora
+ll i, α (succ i)) ≃o forall i, α i where toEquiv
+参数：α : Fin (n + 1) -> Type*；α i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition consOrderIso
-  signature: (α : Fin (n + 1) -> Type*) [forall i, LE (α i)]
-  body: consEquiv α
-  map_rel_iff' := forall_iff_succ
+--- 原说明 ---
+Order isomorphism between tuples of length `n + 1` and pairs of an element and a
+ tuple of length
+`n` given by separating out the first element of the tuple.
 
-中文:
-定义 consOrderIso
-  签名: (α : 有限集 (n + 1) -> 类型) [对任意 i, LE (α i)]
-  定义体: consEquiv α
-  map_rel_iff' := forall_iff_succ
-
-Depends on / 依赖: consEquiv
+This is `Fin.cons` as an `OrderIso`.
 -/
-def consOrderIso (α : Fin (n + 1) -> Type*) [forall i, LE (α i)] :
-    α 0 × (forall i, α (succ i)) ≃o forall i, α i where
+def consOrderIso (α : Fin (n + 1) → Type*) [∀ i, LE (α i)] :
+    α 0 × (∀ i, α (succ i)) ≃o ∀ i, α i where
   toEquiv := consEquiv α
   map_rel_iff' := forall_iff_succ
 
@@ -624,25 +583,23 @@ def consOrderIso (α : Fin (n + 1) -> Type*) [forall i, LE (α i)] :
 
 This is `Fin.snoc` as an `OrderIso`. -/
 @[simps!, simps toEquiv]
-/--
-Definition of `snocOrderIso` / `snocOrderIso` 的定义
+/-
+**Fin.snocOrderIso** 是 Mathlib 中的一个定义，位于命名空间 `Fin`。
+形式化陈述：snocOrderIso (α : Fin (n + 1) -> Type*) [forall i, LE (α i)] : α (last n) 
+× (forall i, α (castSucc i)) ≃o forall i, α i where toEquiv
+参数：α : Fin (n + 1) -> Type*；α i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition snocOrderIso
-  signature: (α : Fin (n + 1) -> Type*) [forall i, LE (α i)]
-  body: snocEquiv α
-  map_rel_iff' := by simp [Pi.le_def, Prod.le_def, forall_iff_castSucc]
+--- 原说明 ---
+Order isomorphism between tuples of length `n + 1` and pairs of an element and a
+ tuple of length
+`n` given by separating out the last element of the tuple.
 
-中文:
-定义 snocOrderIso
-  签名: (α : 有限集 (n + 1) -> 类型) [对任意 i, LE (α i)]
-  定义体: snocEquiv α
-  map_rel_iff' := by simp [Pi.le_def, Prod.le_def, forall_iff_castSucc]
-
-Depends on / 依赖: snocEquiv
+This is `Fin.snoc` as an `OrderIso`.
 -/
-def snocOrderIso (α : Fin (n + 1) -> Type*) [forall i, LE (α i)] :
-    α (last n) × (forall i, α (castSucc i)) ≃o forall i, α i where
+def snocOrderIso (α : Fin (n + 1) → Type*) [∀ i, LE (α i)] :
+    α (last n) × (∀ i, α (castSucc i)) ≃o ∀ i, α i where
   toEquiv := snocEquiv α
   map_rel_iff' := by simp [Pi.le_def, Prod.le_def, forall_iff_castSucc]
 
@@ -651,145 +608,188 @@ def snocOrderIso (α : Fin (n + 1) -> Type*) [forall i, LE (α i)] :
 
 This is `Fin.insertNth` as an `OrderIso`. -/
 @[simps!, simps toEquiv]
-/--
-Definition of `insertNthOrderIso` / `insertNthOrderIso` 的定义
+/-
+**Fin.insertNthOrderIso** 是 Mathlib 中的一个定义，位于命名空间 `Fin`。
+形式化陈述：insertNthOrderIso (α : Fin (n + 1) -> Type*) [forall i, LE (α i)] (p : Fin
+ (n + 1)) : α p × (forall i, α (p.succAbove i)) ≃o forall i, α i where toEquiv
+参数：α : Fin (n + 1) -> Type*；α i；p : Fin (n + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition insertNthOrderIso
-  signature: (α : Fin (n + 1) -> Type*) [forall i, LE (α i)] (p : Fin (n + 1))
-  body: insertNthEquiv α p
-  map_rel_iff' := by simp [Pi.le_def, Prod.le_def, p.forall_iff_succAbove]
+--- 原说明 ---
+Order isomorphism between tuples of length `n + 1` and pairs of an element and a
+ tuple of length
+`n` given by separating out the `p`-th element of the tuple.
 
-中文:
-定义 insertNthOrderIso
-  签名: (α : 有限集 (n + 1) -> 类型) [对任意 i, LE (α i)] (p : 有限集 (n + 1))
-  定义体: insertNthEquiv α p
-  map_rel_iff' := by simp [Pi.le_def, Prod.le_def, p.forall_iff_succAbove]
-
-Depends on / 依赖: insertNthEquiv
+This is `Fin.insertNth` as an `OrderIso`.
 -/
-def insertNthOrderIso (α : Fin (n + 1) -> Type*) [forall i, LE (α i)] (p : Fin (n + 1)) :
-    α p × (forall i, α (p.succAbove i)) ≃o forall i, α i where
+def insertNthOrderIso (α : Fin (n + 1) → Type*) [∀ i, LE (α i)] (p : Fin (n + 1)) :
+    α p × (∀ i, α (p.succAbove i)) ≃o ∀ i, α i where
   toEquiv := insertNthEquiv α p
   map_rel_iff' := by simp [Pi.le_def, Prod.le_def, p.forall_iff_succAbove]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `insertNthOrderIso_zero` / 引理 `insertNthOrderIso_zero`
-
-English:
-lemma insertNthOrderIso_zero
-  given: (α : Fin (n + 1) -> Type*) [forall i, LE (α i)]
-  proof: by ext; simp [insertNthOrderIso]
-
-中文:
-引理 insertNthOrderIso_zero
-  条件: (α : 有限集 (n + 1) -> 类型) [对任意 i, LE (α i)]
-  证明: by ext; simp [insertNthOrderIso]
+/-
+**Fin.insertNthOrderIso_zero** 是 Mathlib 中的一个定理，位于命名空间 `Fin`。
+形式化陈述：∀ {n : ℕ} (α : Fin (n + 1) → Type u_2) [inst : (i : Fin (n + 1)) → LE (α i
+)],   Fin.insertNthOrderIso α 0 = Fin.consOrderIso α
+参数：α : Fin (n + 1) → Type u_2；i : Fin (n + 1)；α i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.ext`：ext {f g : α ≃o β} (h : (f : α -> β) = g) : f = g
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fin.insertNthEquiv_zero`：∀ {n : ℕ} (α : Fin (n + 1) → Type u_3), Fin.ins
+ertNthEquiv α 0 = Fin.consEquiv α
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `RelIso.mk.congr_simp`：∀ {α : Type u_5} {β : Type u_6} {r : α → α → Prop}
+ {s : β → β → Prop} (toEquiv toEquiv_1 : α ≃ β)   (e_toEquiv : toEquiv = toEquiv
+_1) (map_r…
+· 使用定理 `Fin.consEquiv_apply`：∀ {n : ℕ} (α : Fin (n + 1) → Type u_1) (f : α 0 × (
+(i : Fin n) → α i.succ)) (i : Fin (n + 1)),   (Fin.consEquiv α) f i = Fin.cons f
+.1 f.2 i
+· 使用定理 `Fin.consOrderIso_apply`：∀ {n : ℕ} (α : Fin (n + 1) → Type u_2) [inst : (
+i : Fin (n + 1)) → LE (α i)] (f : α 0 × ((i : Fin n) → α i.succ))   (i : Fin (n 
++ 1)), (Fin.…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] lemma insertNthOrderIso_zero (α : Fin (n + 1) -> Type*) [forall i, LE (α i)] :
+@[simp] lemma insertNthOrderIso_zero (α : Fin (n + 1) → Type*) [∀ i, LE (α i)] :
     insertNthOrderIso α 0 = consOrderIso α := by ext; simp [insertNthOrderIso]
 
-/--
-lemma `insertNthOrderIso_last` / 引理 `insertNthOrderIso_last`
+/-- Note this lemma can only be written about non-dependent tuples as `insertNth (last n) = snoc` is
+not a definitional equality. -/
+/-
+**Fin.insertNthOrderIso_last** 是 Mathlib 中的一个定理，位于命名空间 `Fin`。
+形式化陈述：∀ (n : ℕ) (α : Type u_2) [inst : LE α], Fin.insertNthOrderIso (fun x => α)
+ (Fin.last n) = Fin.snocOrderIso fun x => α
+参数：n : ℕ；α : Type u_2；fun x => α；Fin.last n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.ext`：ext {f g : α ≃o β} (h : (f : α -> β) = g) : f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fin.insertNthOrderIso_apply`：∀ {n : ℕ} (α : Fin (n + 1) → Type u_2) [ins
+t : (i : Fin (n + 1)) → LE (α i)] (p : Fin (n + 1))   (f : α p × ((i : Fin n) → 
+α (p.succAbove i)…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Fin.insertNth_last'`：insertNth_last' (x : β) (p : Fin n -> β) : @insertN
+th _ (fun _ => β) (last n) x p = snoc p x
+· 使用定理 `Fin.snocOrderIso_apply`：∀ {n : ℕ} (α : Fin (n + 1) → Type u_2) [inst : (
+i : Fin (n + 1)) → LE (α i)]   (f : α (Fin.last n) × ((i : Fin n) → α i.castSucc
+)) (x : Fin …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma insertNthOrderIso_last
-  given: (n : Nat) (α : Type*) [LE α]
-  proof: by ext; simp
-
-中文:
-引理 insertNthOrderIso_last
-  条件: (n : 自然数) (α : 类型) [LE α]
-  证明: by ext; simp
+--- 原说明 ---
+Note this lemma can only be written about non-dependent tuples as `insertNth (la
+st n) = snoc` is
+not a definitional equality.
 -/
-@[simp] lemma insertNthOrderIso_last (n : Nat) (α : Type*) [LE α] :
-    insertNthOrderIso (fun _ => α) (last n) = snocOrderIso (fun _ => α) := by ext; simp
+@[simp] lemma insertNthOrderIso_last (n : ℕ) (α : Type*) [LE α] :
+    insertNthOrderIso (fun _ ↦ α) (last n) = snocOrderIso (fun _ ↦ α) := by ext; simp
 
 end Fin
 
-/--
-Definition of `finSuccAboveOrderIso` / `finSuccAboveOrderIso` 的定义
+/-- `Fin.succAbove` as an order isomorphism between `Fin n` and `{x : Fin (n + 1) // x ≠ p}`. -/
+/-
+**finSuccAboveOrderIso** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：finSuccAboveOrderIso (p : Fin (n + 1)) : Fin n ≃o { x : Fin (n + 1) // x !
+= p } where __
+参数：p : Fin (n + 1)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finSuccAboveOrderIso
-  signature: (p : Fin (n + 1))
-  body: finSuccAboveEquiv p
-  map_rel_iff' := p.succAboveOrderEmb.map_rel_iff'
-
-中文:
-定义 finSuccAboveOrderIso
-  签名: (p : 有限集 (n + 1))
-  定义体: finSuccAboveEquiv p
-  map_rel_iff' := p.succAboveOrderEmb.map_rel_iff'
-
-Depends on / 依赖: finSuccAboveEquiv
+--- 原说明 ---
+`Fin.succAbove` as an order isomorphism between `Fin n` and `{x : Fin (n + 1) //
+ x ≠ p}`.
 -/
-def finSuccAboveOrderIso (p : Fin (n + 1)) : Fin n ≃o { x : Fin (n + 1) // x != p } where
+def finSuccAboveOrderIso (p : Fin (n + 1)) : Fin n ≃o { x : Fin (n + 1) // x ≠ p } where
   __ := finSuccAboveEquiv p
   map_rel_iff' := p.succAboveOrderEmb.map_rel_iff'
-
-/--
-lemma `finSuccAboveOrderIso_apply` / 引理 `finSuccAboveOrderIso_apply`
-
-English:
-lemma finSuccAboveOrderIso_apply
-  given: (p : Fin (n + 1)) (i : Fin n)
-  proof: rfl
-
-中文:
-引理 finSuccAboveOrderIso_apply
-  条件: (p : 有限集 (n + 1)) (i : 有限集 n)
-  证明: rfl
+/-
+**finSuccAboveOrderIso_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：finSuccAboveOrderIso_apply (p : Fin (n + 1)) (i : Fin n) : finSuccAboveOrd
+erIso p i = ⟨p.succAbove i, p.succAbove_ne i⟩
+参数：p : Fin (n + 1)；i : Fin n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma finSuccAboveOrderIso_apply (p : Fin (n + 1)) (i : Fin n) :
     finSuccAboveOrderIso p i = ⟨p.succAbove i, p.succAbove_ne i⟩ := rfl
-
-/--
-lemma `finSuccAboveOrderIso_symm_apply_last` / 引理 `finSuccAboveOrderIso_symm_apply_last`
-
-English:
-lemma finSuccAboveOrderIso_symm_apply_last
-  given: (x : { x : Fin (n + 1) // x != Fin.last n })
-  proof: by
-  rw [← Option.some_inj]
-  simp [finSuccAboveOrderIso, finSuccAboveEquiv, OrderIso.symm]
-
-中文:
-引理 finSuccAboveOrderIso_symm_apply_last
-  条件: (x : { x : 有限集 (n + 1) // x != 有限集.last n })
-  证明: by
-  rw [← Option.some_inj]
-  simp [finSuccAboveOrderIso, finSuccAboveEquiv, OrderIso.symm]
-
-Depends on / 依赖: Option.some_inj, OrderIso, OrderIso.symm, finSuccAboveEquiv, finSuccAboveOrderIso, some_inj
+/-
+**finSuccAboveOrderIso_symm_apply_last** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：finSuccAboveOrderIso_symm_apply_last (x : { x : Fin (n + 1) // x != Fin.la
+st n }) : (finSuccAboveOrderIso (Fin.last n)).symm x = Fin.castLT x.1 (Fin.val_l
+t_last x.2)
+参数：x : { x : Fin (n + 1) // x != Fin.last n }。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fin.val_lt_last`：∀ {n : ℕ} {i : Fin (n + 1)}, i ≠ Fin.last n → ↑i < n
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Option.some_inj`：∀ {α : Type u_1} {a b : α}, some a = some b ↔ a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.optionSubtype_apply_symm_apply`：optionSubtype_apply_symm_apply [De
+cidableEq β] (x : β) (e : { e : Option α ≃ β // e none = x }) (b : { y : β // y 
+!= x }) : ↑((optionSubtype…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Fin.succAbove_last`：∀ {n : ℕ}, (Fin.last n).succAbove = Fin.castSucc
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma finSuccAboveOrderIso_symm_apply_last (x : { x : Fin (n + 1) // x != Fin.last n }) :
+lemma finSuccAboveOrderIso_symm_apply_last (x : { x : Fin (n + 1) // x ≠ Fin.last n }) :
     (finSuccAboveOrderIso (Fin.last n)).symm x = Fin.castLT x.1 (Fin.val_lt_last x.2) := by
   rw [← Option.some_inj]
   simp [finSuccAboveOrderIso, finSuccAboveEquiv, OrderIso.symm]
-
-/--
-lemma `finSuccAboveOrderIso_symm_apply_ne_last` / 引理 `finSuccAboveOrderIso_symm_apply_ne_last`
-
-English:
-lemma finSuccAboveOrderIso_symm_apply_ne_last
-  statement: {p : Fin (n + 1)} (h : p != Fin.last n)
-  proof: by
-  rw [← Option.some_inj]
-  simpa [finSuccAboveEquiv, OrderIso.symm] using finSuccEquiv'_ne_last_apply h x.property
-
-中文:
-引理 finSuccAboveOrderIso_symm_apply_ne_last
-  结论: {p : 有限集 (n + 1)} (h : p != 有限集.last n)
-  证明: by
-  rw [← Option.some_inj]
-  simpa [finSuccAboveEquiv, OrderIso.symm] using finSuccEquiv'_ne_last_apply h x.property
-
-Depends on / 依赖: Option.some_inj, OrderIso, OrderIso.symm, _ne_last_apply, finSuccAboveEquiv, finSuccEquiv, property, some_inj, x.property
+/-
+**finSuccAboveOrderIso_symm_apply_ne_last** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：finSuccAboveOrderIso_symm_apply_ne_last {p : Fin (n + 1)} (h : p != Fin.la
+st n) (x : { x : Fin (n + 1) // x != p }) : (finSuccAboveEquiv p).symm x = (p.ca
+stLT (Fin.val_lt_last h)).predAbove x
+参数：n + 1；h : p != Fin.last n；x : { x : Fin (n + 1) // x != p }。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Fin.val_lt_last`：∀ {n : ℕ} {i : Fin (n + 1)}, i ≠ Fin.last n → ↑i < n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Option.some_inj`：∀ {α : Type u_1} {a b : α}, some a = some b ↔ a = b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.optionSubtype_apply_symm_apply`：optionSubtype_apply_symm_apply [De
+cidableEq β] (x : β) (e : { e : Option α ≃ β // e none = x }) (b : { y : β // y 
+!= x }) : ↑((optionSubtype…
+· 使用定理 `finSuccEquiv'_ne_last_apply`：∀ {n : ℕ} {i j : Fin (n + 1)} (hi : i ≠ Fin
+.last n), j ≠ i → (finSuccEquiv' i) j = some ((i.castLT ⋯).predAbove j)
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-lemma finSuccAboveOrderIso_symm_apply_ne_last {p : Fin (n + 1)} (h : p != Fin.last n)
-    (x : { x : Fin (n + 1) // x != p }) :
+lemma finSuccAboveOrderIso_symm_apply_ne_last {p : Fin (n + 1)} (h : p ≠ Fin.last n)
+    (x : { x : Fin (n + 1) // x ≠ p }) :
     (finSuccAboveEquiv p).symm x = (p.castLT (Fin.val_lt_last h)).predAbove x := by
   rw [← Option.some_inj]
   simpa [finSuccAboveEquiv, OrderIso.symm] using finSuccEquiv'_ne_last_apply h x.property
@@ -798,30 +798,19 @@ set_option backward.isDefEq.respectTransparency false in
 /-- Promote a `Fin n` into a larger `Fin m`, as a subtype where the underlying
 values are retained. This is the `OrderIso` version of `Fin.castLE`. -/
 @[simps apply symm_apply]
-/--
-Definition of `Fin.castLEOrderIso` / `Fin.castLEOrderIso` 的定义
+/-
+**Fin.castLEOrderIso** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Fin.castLEOrderIso {n m : Nat} (h : n <= m) : Fin n ≃o { i : Fin m // (i :
+ Nat) < n } where toFun i
+参数：h : n <= m。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Fin.castLEOrderIso
-  signature: {n m : Nat} (h : n <= m)
-  body: ⟨Fin.castLE h i, by simp⟩
-  invFun i := ⟨i, i.prop⟩
-  left_inv _ := by simp
-  right_inv _ := by simp
-  map_rel_iff' := by simp [(strictMono_castLE h).le_iff_le]
-
-中文:
-定义 有限集.castLEOrderIso
-  签名: {n m : 自然数} (h : n <= m)
-  定义体: ⟨Fin.castLE h i, by simp⟩
-  invFun i := ⟨i, i.prop⟩
-  left_inv _ := by simp
-  right_inv _ := by simp
-  map_rel_iff' := by simp [(strictMono_castLE h).le_iff_le]
-
-Depends on / 依赖: Fin.castLE, castLE
+--- 原说明 ---
+Promote a `Fin n` into a larger `Fin m`, as a subtype where the underlying
+values are retained. This is the `OrderIso` version of `Fin.castLE`.
 -/
-def Fin.castLEOrderIso {n m : Nat} (h : n <= m) : Fin n ≃o { i : Fin m // (i : Nat) < n } where
+def Fin.castLEOrderIso {n m : ℕ} (h : n ≤ m) : Fin n ≃o { i : Fin m // (i : ℕ) < n } where
   toFun i := ⟨Fin.castLE h i, by simp⟩
   invFun i := ⟨i, i.prop⟩
   left_inv _ := by simp

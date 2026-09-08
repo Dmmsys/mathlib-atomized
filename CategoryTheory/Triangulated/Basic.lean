@@ -36,23 +36,22 @@ open CategoryTheory.Category
 /-
 We work in a category `C` equipped with a shift.
 -/
-variable (C : Type u) [Category.{v} C] [HasShift C Int]
+variable (C : Type u) [Category.{v} C] [HasShift C ℤ]
 
 /-- A triangle in `C` is a sextuple `(X,Y,Z,f,g,h)` where `X,Y,Z` are objects of `C`,
 and `f : X ⟶ Y`, `g : Y ⟶ Z`, `h : Z ⟶ X⟦1⟧` are morphisms in `C`. -/
 @[stacks 0144]
-/--
-Definition of `Triangle` / `Triangle` 的定义
+/-
+**CategoryTheory.Pretriangulated.Triangle** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryT
+heory.Pretriangulated`。
+形式化陈述：(C : Type u) → [inst : CategoryTheory.Category.{v, u} C] → [CategoryTheory
+.HasShift C ℤ] → Type (max u v)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Triangle
-  parameters: where mk'
-  (no additional axioms)
-
-中文:
-结构 Triangle
-  参数: where mk'
-  (无附加公理)
+--- 原说明 ---
+A triangle in `C` is a sextuple `(X,Y,Z,f,g,h)` where `X,Y,Z` are objects of `C`
+,
+and `f : X ⟶ Y`, `g : Y ⟶ Z`, `h : Z ⟶ X⟦1⟧` are morphisms in `C`.
 -/
 structure Triangle where mk' ::
   /-- the first object of a triangle -/
@@ -66,7 +65,7 @@ structure Triangle where mk' ::
   /-- the second morphism of a triangle -/
   mor₂ : obj₂ ⟶ obj₃
   /-- the third morphism of a triangle -/
-  mor₃ : obj₃ ⟶ obj₁⟦(1 : Int)⟧
+  mor₃ : obj₃ ⟶ obj₁⟦(1 : ℤ)⟧
 
 variable {C}
 
@@ -74,30 +73,22 @@ variable {C}
 and `h : Z ⟶ X⟦1⟧`.
 -/
 @[simps]
-/--
-Definition of `Triangle.mk` / `Triangle.mk` 的定义
+/-
+**CategoryTheory.Pretriangulated.Triangle.mk** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Pretriangulated.Triangle`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.HasShift C ℤ] →       {X Y Z : C} →         (X ⟶ Y) → (Y ⟶ Z) → 
+(Z ⟶ (CategoryTheory.shiftFunctor C 1).obj X) → CategoryTheory.Pretriangulated.T
+riangle C
+参数：X ⟶ Y；Y ⟶ Z；Z ⟶ (CategoryTheory.shiftFunctor C 1).obj X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Triangle.mk
-  signature: {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) (h : Z ⟶ X⟦(1 : Int)⟧)
-  body: X
-  obj₂ := Y
-  obj₃ := Z
-  mor₁ := f
-  mor₂ := g
-  mor₃ := h
-
-中文:
-定义 Triangle.mk
-  签名: {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) (h : Z ⟶ X⟦(1 : 整数)⟧)
-  定义体: X
-  obj₂ := Y
-  obj₃ := Z
-  mor₁ := f
-  mor₂ := g
-  mor₃ := h
+--- 原说明 ---
+A triangle `(X,Y,Z,f,g,h)` in `C` is defined by the morphisms `f : X ⟶ Y`, `g : 
+Y ⟶ Z`
+and `h : Z ⟶ X⟦1⟧`.
 -/
-def Triangle.mk {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) (h : Z ⟶ X⟦(1 : Int)⟧) : Triangle C where
+def Triangle.mk {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) (h : Z ⟶ X⟦(1 : ℤ)⟧) : Triangle C where
   obj₁ := X
   obj₂ := Y
   obj₃ := Z
@@ -111,18 +102,10 @@ variable [HasZeroObject C] [HasZeroMorphisms C]
 
 open ZeroObject
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Triangle C)
-  body: ⟨⟨0, 0, 0, 0, 0, 0⟩⟩
-
-中文:
-实例 :
-  签名: 可居 (Triangle C)
-  定义体: ⟨⟨0, 0, 0, 0, 0, 0⟩⟩
+/-
+**CategoryTheory.Pretriangulated.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pret
+riangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Triangle C) :=
   ⟨⟨0, 0, 0, 0, 0, 0⟩⟩
@@ -130,20 +113,16 @@ instance : Inhabited (Triangle C) :=
 /-- For each object in `C`, there is a triangle of the form `(X,X,0,𝟙 X,0,0)`
 -/
 @[simps!]
-/--
-Definition of `contractibleTriangle` / `contractibleTriangle` 的定义
+/-
+**CategoryTheory.Pretriangulated.contractibleTriangle** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Pretriangulated`。
+形式化陈述：contractibleTriangle (X : C) : Triangle C
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition contractibleTriangle
-  signature: (X : C)
-  body: Triangle.mk (𝟙 X) (0 : X ⟶ 0) 0
-
-中文:
-定义 contractibleTriangle
-  签名: (X : C)
-  定义体: Triangle.mk (𝟙 X) (0 : X ⟶ 0) 0
-
-Depends on / 依赖: Triangle, Triangle.mk
+--- 原说明 ---
+For each object in `C`, there is a triangle of the form `(X,X,0,𝟙 X,0,0)`
 -/
 def contractibleTriangle (X : C) : Triangle C :=
   Triangle.mk (𝟙 X) (0 : X ⟶ 0) 0
@@ -155,42 +134,42 @@ end
 `a ≫ f' = f ≫ b`, `b ≫ g' = g ≫ c`, and `a⟦1⟧' ≫ h = h' ≫ c`.
 In other words, we have a commutative diagram:
 ```
-     f g h
-  X ───> Y ───> Z ───> X⟦1⟧
-  │ │ │ │
-  │a │b │c │a⟦1⟧'
-  V V V V
+     f      g      h
+  X  ───> Y  ───> Z  ───> X⟦1⟧
+  │       │       │        │
+  │a      │b      │c       │a⟦1⟧'
+  V       V       V        V
   X' ───> Y' ───> Z' ───> X'⟦1⟧
-     f' g' h'
+     f'     g'     h'
 ```
 -/
 @[ext, stacks 0144]
-/--
-Definition of `TriangleMorphism` / `TriangleMorphism` 的定义
+/-
+**CategoryTheory.Pretriangulated.TriangleMorphism** 是 Mathlib 中的一个结构，位于命名空间 `Cat
+egoryTheory.Pretriangulated`。
+形式化陈述：TriangleMorphism (T₁ : Triangle C) (T₂ : Triangle C) where /-- the first m
+orphism in a triangle morphism -/ hom₁ : T₁.obj₁ ⟶ T₂.obj₁ /-- the second morphi
+sm in a triangle morphism -/ hom₂ : T₁.obj₂ ⟶ T₂.obj₂ /-- the third morphism in 
+a triangle morphism -/ hom₃ : T₁.obj₃ ⟶ T₂.obj₃ /-- the first commutative square
+ of a triangle morphism -/ comm₁ : T₁.mor₁ ≫ hom₂ = hom₁ ≫ T₂.mor₁
+参数：T₁ : Triangle C；T₂ : Triangle C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure TriangleMorphism
-  parameters: (T₁ : Triangle C) (T₂ : Triangle C)
-  axioms and operations (6):
-    - hom₁ : T₁.obj₁ ⟶ T₂.obj₁
-    - hom₂ : T₁.obj₂ ⟶ T₂.obj₂
-    - hom₃ : T₁.obj₃ ⟶ T₂.obj₃
-    - comm₁ : T₁.mor₁ ≫ hom₂ = hom₁ ≫ T₂.mor₁  [default: by cat_disch]
-    - comm₂ : T₁.mor₂ ≫ hom₃ = hom₂ ≫ T₂.mor₂  [default: by cat_disch]
-    - comm₃ : T₁.mor₃ ≫ hom₁⟦1⟧' = hom₃ ≫ T₂.mor₃  [default: by cat_disch]
-
-中文:
-结构 Triangle态射
-  参数: (T₁ : Triangle C) (T₂ : Triangle C)
-  公理与运算 (6 个):
-    - hom₁ : T₁.obj₁ ⟶ T₂.obj₁
-    - hom₂ : T₁.obj₂ ⟶ T₂.obj₂
-    - hom₃ : T₁.obj₃ ⟶ T₂.obj₃
-    - comm₁ : T₁.mor₁ ≫ hom₂ = hom₁ ≫ T₂.mor₁  [默认: by cat_disch]
-    - comm₂ : T₁.mor₂ ≫ hom₃ = hom₂ ≫ T₂.mor₂  [默认: by cat_disch]
-    - comm₃ : T₁.mor₃ ≫ hom₁⟦1⟧' = hom₃ ≫ T₂.mor₃  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+A morphism of triangles `(X,Y,Z,f,g,h) ⟶ (X',Y',Z',f',g',h')` in `C` is a triple
+ of morphisms
+`a : X ⟶ X'`, `b : Y ⟶ Y'`, `c : Z ⟶ Z'` such that
+`a ≫ f' = f ≫ b`, `b ≫ g' = g ≫ c`, and `a⟦1⟧' ≫ h = h' ≫ c`.
+In other words, we have a commutative diagram:
+```
+     f      g      h
+  X  ───> Y  ───> Z  ───> X⟦1⟧
+  │       │       │        │
+  │a      │b      │c       │a⟦1⟧'
+  V       V       V        V
+  X' ───> Y' ───> Z' ───> X'⟦1⟧
+     f'     g'     h'
+```
 -/
 structure TriangleMorphism (T₁ : Triangle C) (T₂ : Triangle C) where
   /-- the first morphism in a triangle morphism -/
@@ -212,30 +191,26 @@ attribute [reassoc (attr := simp)] TriangleMorphism.comm₁ TriangleMorphism.com
 /-- The identity triangle morphism.
 -/
 @[simps]
-/--
-Definition of `triangleMorphismId` / `triangleMorphismId` 的定义
+/-
+**CategoryTheory.Pretriangulated.triangleMorphismId** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Pretriangulated`。
+形式化陈述：triangleMorphismId (T : Triangle C) : TriangleMorphism T T where hom₁
+参数：T : Triangle C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition triangleMorphismId
-  signature: (T : Triangle C)
-  body: 𝟙 T.obj₁
-  hom₂ := 𝟙 T.obj₂
-  hom₃ := 𝟙 T.obj₃
-
-中文:
-定义 triangleMorphismId
-  签名: (T : Triangle C)
-  定义体: 𝟙 T.obj₁
-  hom₂ := 𝟙 T.obj₂
-  hom₃ := 𝟙 T.obj₃
-
-Depends on / 依赖: T.obj
+--- 原说明 ---
+The identity triangle morphism.
 -/
 def triangleMorphismId (T : Triangle C) : TriangleMorphism T T where
   hom₁ := 𝟙 T.obj₁
   hom₂ := 𝟙 T.obj₂
   hom₃ := 𝟙 T.obj₃
-
+/-
+**CategoryTheory.Pretriangulated.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pret
+riangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (T : Triangle C) : Inhabited (TriangleMorphism T T) :=
   ⟨triangleMorphismId T⟩
 
@@ -244,24 +219,18 @@ variable {T₁ T₂ T₃ : Triangle C}
 /-- Composition of triangle morphisms gives a triangle morphism.
 -/
 @[simps]
-/--
-Definition of `TriangleMorphism.comp` / `TriangleMorphism.comp` 的定义
+/-
+**CategoryTheory.Pretriangulated.TriangleMorphism.comp** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Pretriangulated.TriangleMorphism`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.HasShift C ℤ] →       {T₁ T₂ T₃ : CategoryTheory.Pretriangulated
+.Triangle C} →         CategoryTheory.Pretriangulated.TriangleMorphism T₁ T₂ →  
+         CategoryTheory.Pretriangulated.TriangleMorphism T₂ T₃ → CategoryTheory.
+Pretriangulated.TriangleMorphism T₁ T₃
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition TriangleMorphism.comp
-  signature: (f : TriangleMorphism T₁ T₂) (g : TriangleMorphism T₂ T₃)
-  body: f.hom₁ ≫ g.hom₁
-  hom₂ := f.hom₂ ≫ g.hom₂
-  hom₃ := f.hom₃ ≫ g.hom₃
-
-中文:
-定义 Triangle态射.comp
-  签名: (f : Triangle态射 T₁ T₂) (g : Triangle态射 T₂ T₃)
-  定义体: f.hom₁ ≫ g.hom₁
-  hom₂ := f.hom₂ ≫ g.hom₂
-  hom₃ := f.hom₃ ≫ g.hom₃
-
-Depends on / 依赖: f.hom, g.hom
+--- 原说明 ---
+Composition of triangle morphisms gives a triangle morphism.
 -/
 def TriangleMorphism.comp (f : TriangleMorphism T₁ T₂) (g : TriangleMorphism T₂ T₃) :
     TriangleMorphism T₁ T₃ where
@@ -272,28 +241,15 @@ def TriangleMorphism.comp (f : TriangleMorphism T₁ T₂) (g : TriangleMorphism
 /-- Triangles with triangle morphisms form a category.
 -/
 @[simps]
-/--
-Instance `triangleCategory` / 实例 `triangleCategory`
+/-
+**CategoryTheory.Pretriangulated.triangleCategory** 是 Mathlib 中的一个实例，位于命名空间 `Cat
+egoryTheory.Pretriangulated`。
+形式化陈述：triangleCategory : Category (Triangle C) where Hom A B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance triangleCategory
-  signature: : Category (Triangle C) where
-  body: TriangleMorphism A B
-  id A := triangleMorphismId A
-  comp f g := f.comp g
-
-@[ext]
-
-中文:
-实例 triangleCategory
-  签名: : 范畴 (Triangle C) where
-  定义体: TriangleMorphism A B
-  id A := triangleMorphismId A
-  comp f g := f.comp g
-
-@[ext]
-
-Depends on / 依赖: TriangleMorphism
+--- 原说明 ---
+Triangles with triangle morphisms form a category.
 -/
 instance triangleCategory : Category (Triangle C) where
   Hom A B := TriangleMorphism A B
@@ -301,157 +257,93 @@ instance triangleCategory : Category (Triangle C) where
   comp f g := f.comp g
 
 @[ext]
-/--
-lemma `Triangle.hom_ext` / 引理 `Triangle.hom_ext`
-
-English:
-lemma Triangle.hom_ext
-  statement: {A B : Triangle C} (f g : A ⟶ B)
-  proof: TriangleMorphism.ext h₁ h₂ h₃
-
-中文:
-引理 Triangle.hom_ext
-  结论: {A B : Triangle C} (f g : A ⟶ B)
-  证明: TriangleMorphism.ext h₁ h₂ h₃
-
-Depends on / 依赖: TriangleMorphism, TriangleMorphism.ext
+/-
+**CategoryTheory.Pretriangulated.Triangle.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Pretriangulated.Triangle`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.HasShift C ℤ]   {A B : CategoryTheory.Pretriangulated.Triangle C} (f g :
+ A ⟶ B),   f.hom₁ = g.hom₁ → f.hom₂ = g.hom₂ → f.hom₃ = g.hom₃ → f = g
+参数：f g : A ⟶ B。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Pretriangulated.TriangleMorphism.ext`：∀ {C : Type u} {ins
+t : CategoryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.HasShift C ℤ}   {
+T₁ T₂ : CategoryTheory.Pretriangulated.Tr…
 -/
 lemma Triangle.hom_ext {A B : Triangle C} (f g : A ⟶ B)
     (h₁ : f.hom₁ = g.hom₁) (h₂ : f.hom₂ = g.hom₂) (h₃ : f.hom₃ = g.hom₃) : f = g :=
   TriangleMorphism.ext h₁ h₂ h₃
-
-/--
-lemma `id_hom₁` / 引理 `id_hom₁`
-
-English:
-lemma id_hom₁
-  given: (A : Triangle C)
-  statement: TriangleMorphism.hom₁ (𝟙 A) = 𝟙 _
-  proof: rfl
-
-中文:
-引理 id_hom₁
-  条件: (A : Triangle C)
-  结论: Triangle态射.hom₁ (𝟙 A) = 𝟙 _
-  证明: rfl
+/-
+**CategoryTheory.Pretriangulated.id_hom** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.Pretriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma id_hom₁ (A : Triangle C) : TriangleMorphism.hom₁ (𝟙 A) = 𝟙 _ := rfl
-/--
-lemma `id_hom₂` / 引理 `id_hom₂`
-
-English:
-lemma id_hom₂
-  given: (A : Triangle C)
-  statement: TriangleMorphism.hom₂ (𝟙 A) = 𝟙 _
-  proof: rfl
-
-中文:
-引理 id_hom₂
-  条件: (A : Triangle C)
-  结论: Triangle态射.hom₂ (𝟙 A) = 𝟙 _
-  证明: rfl
+/-
+**CategoryTheory.Pretriangulated.id_hom** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.Pretriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma id_hom₂ (A : Triangle C) : TriangleMorphism.hom₂ (𝟙 A) = 𝟙 _ := rfl
-/--
-lemma `id_hom₃` / 引理 `id_hom₃`
-
-English:
-lemma id_hom₃
-  given: (A : Triangle C)
-  statement: TriangleMorphism.hom₃ (𝟙 A) = 𝟙 _
-  proof: rfl
-
-@[reassoc]
-
-中文:
-引理 id_hom₃
-  条件: (A : Triangle C)
-  结论: Triangle态射.hom₃ (𝟙 A) = 𝟙 _
-  证明: rfl
-
-@[reassoc]
+/-
+**CategoryTheory.Pretriangulated.id_hom** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y.Pretriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma id_hom₃ (A : Triangle C) : TriangleMorphism.hom₃ (𝟙 A) = 𝟙 _ := rfl
 
 @[reassoc]
-/--
-lemma `comp_hom₁` / 引理 `comp_hom₁`
-
-English:
-lemma comp_hom₁
-  given: {X Y Z : Triangle C} (f : X ⟶ Y) (g : Y ⟶ Z)
-  proof: rfl
-@[reassoc]
-
-中文:
-引理 comp_hom₁
-  条件: {X Y Z : Triangle C} (f : X ⟶ Y) (g : Y ⟶ Z)
-  证明: rfl
-@[reassoc]
+/-
+**CategoryTheory.Pretriangulated.comp_hom** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Pretriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comp_hom₁ {X Y Z : Triangle C} (f : X ⟶ Y) (g : Y ⟶ Z) :
     (f ≫ g).hom₁ = f.hom₁ ≫ g.hom₁ := rfl
 @[reassoc]
-/--
-lemma `comp_hom₂` / 引理 `comp_hom₂`
-
-English:
-lemma comp_hom₂
-  given: {X Y Z : Triangle C} (f : X ⟶ Y) (g : Y ⟶ Z)
-  proof: rfl
-@[reassoc]
-
-中文:
-引理 comp_hom₂
-  条件: {X Y Z : Triangle C} (f : X ⟶ Y) (g : Y ⟶ Z)
-  证明: rfl
-@[reassoc]
+/-
+**CategoryTheory.Pretriangulated.comp_hom** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Pretriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comp_hom₂ {X Y Z : Triangle C} (f : X ⟶ Y) (g : Y ⟶ Z) :
     (f ≫ g).hom₂ = f.hom₂ ≫ g.hom₂ := rfl
 @[reassoc]
-/--
-lemma `comp_hom₃` / 引理 `comp_hom₃`
-
-English:
-lemma comp_hom₃
-  given: {X Y Z : Triangle C} (f : X ⟶ Y) (g : Y ⟶ Z)
-  proof: rfl
-
-中文:
-引理 comp_hom₃
-  条件: {X Y Z : Triangle C} (f : X ⟶ Y) (g : Y ⟶ Z)
-  证明: rfl
+/-
+**CategoryTheory.Pretriangulated.comp_hom** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Pretriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comp_hom₃ {X Y Z : Triangle C} (f : X ⟶ Y) (g : Y ⟶ Z) :
     (f ≫ g).hom₃ = f.hom₃ ≫ g.hom₃ := rfl
 
 /-- Make a morphism between triangles from the required data. -/
 @[simps]
-/--
-Definition of `Triangle.homMk` / `Triangle.homMk` 的定义
+/-
+**CategoryTheory.Pretriangulated.Triangle.homMk** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Pretriangulated.Triangle`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.HasShift C ℤ] →       (A B : CategoryTheory.Pretriangulated.Tria
+ngle C) →         (hom₁ : A.obj₁ ⟶ B.obj₁) →           (hom₂ : A.obj₂ ⟶ B.obj₂) 
+→             (hom₃ : A.obj₃ ⟶ B.obj₃) →               autoParam                
+   (CategoryTheory.CategoryStruct.comp A.mor₁ hom₂ = CategoryTheory.CategoryStru
+ct.comp hom₁ B.mor₁)                   CategoryTheory.Pretriangulated.Triangle.h
+omMk._auto_1 →                 autoParam                     (CategoryTheory.Cat
+egoryStruct.comp A.mor₂ hom₃ = CategoryTheory.CategoryStruct.comp hom₂ B.mor₂)  
+                   CategoryTheory.Pretriangulated.Triangle.homMk._auto_3 →      
+             autoParam                       (CategoryTheory.CategoryStruct.comp
+ A.mor₃ ((CategoryTheory.shiftFunctor C 1).map hom₁) =                         C
+ategoryTheory.CategoryStruct.comp hom₃ B.mor₃)                       CategoryThe
+ory.Pretriangulated.Triangle.homMk._auto_5 →                     (A ⟶ B)
+参数：A B : CategoryTheory.Pretriangulated.Triangle C；hom₁ : A.obj₁ ⟶ B.obj₁；hom₂ :
+ A.obj₂ ⟶ B.obj₂；hom₃ : A.obj₃ ⟶ B.obj₃；CategoryTheory.CategoryStruct.comp A.mor
+₁ hom₂ = CategoryTheory.CategoryStruct.comp hom₁ B.mor₁；CategoryTheory.CategoryS
+truct.comp A.mor₂ hom₃ = CategoryTheory.CategoryStruct.comp hom₂ B.mor₂；Category
+Theory.CategoryStruct.comp A.mor₃ ((CategoryTheory.shiftFunctor C 1).map hom₁) =
+                         CategoryTheory.CategoryStruct.comp hom₃ B.mor₃；A ⟶ B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Triangle.homMk
-  signature: (A B : Triangle C)
-  body: hom₁
-  hom₂ := hom₂
-  hom₃ := hom₃
-  comm₁ := comm₁
-  comm₂ := comm₂
-  comm₃ := comm₃
-
-中文:
-定义 Triangle.homMk
-  签名: (A B : Triangle C)
-  定义体: hom₁
-  hom₂ := hom₂
-  hom₃ := hom₃
-  comm₁ := comm₁
-  comm₂ := comm₂
-  comm₃ := comm₃
-
-Depends on / 依赖: A.mor, B.mor, cat_disch
+--- 原说明 ---
+Make a morphism between triangles from the required data.
 -/
 def Triangle.homMk (A B : Triangle C)
     (hom₁ : A.obj₁ ⟶ B.obj₁) (hom₂ : A.obj₂ ⟶ B.obj₂) (hom₃ : A.obj₃ ⟶ B.obj₃)
@@ -468,36 +360,34 @@ def Triangle.homMk (A B : Triangle C)
 
 /-- Make an isomorphism between triangles from the required data. -/
 @[simps]
-/--
-Definition of `Triangle.isoMk` / `Triangle.isoMk` 的定义
+/-
+**CategoryTheory.Pretriangulated.Triangle.isoMk** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Pretriangulated.Triangle`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.HasShift C ℤ] →       (A B : CategoryTheory.Pretriangulated.Tria
+ngle C) →         (iso₁ : A.obj₁ ≅ B.obj₁) →           (iso₂ : A.obj₂ ≅ B.obj₂) 
+→             (iso₃ : A.obj₃ ≅ B.obj₃) →               autoParam                
+   (CategoryTheory.CategoryStruct.comp A.mor₁ iso₂.hom =                     Cat
+egoryTheory.CategoryStruct.comp iso₁.hom B.mor₁)                   CategoryTheor
+y.Pretriangulated.Triangle.isoMk._auto_1 →                 autoParam            
+         (CategoryTheory.CategoryStruct.comp A.mor₂ iso₃.hom =                  
+     CategoryTheory.CategoryStruct.comp iso₂.hom B.mor₂)                     Cat
+egoryTheory.Pretriangulated.Triangle.isoMk._auto_3 →                   autoParam
+                       (CategoryTheory.CategoryStruct.comp A.mor₃ ((CategoryTheo
+ry.shiftFunctor C 1).map iso₁.hom) =                         CategoryTheory.Cate
+goryStruct.comp iso₃.hom B.mor₃)                       CategoryTheory.Pretriangu
+lated.Triangle.isoMk._auto_5 →                     (A ≅ B)
+参数：A B : CategoryTheory.Pretriangulated.Triangle C；iso₁ : A.obj₁ ≅ B.obj₁；iso₂ :
+ A.obj₂ ≅ B.obj₂；iso₃ : A.obj₃ ≅ B.obj₃；CategoryTheory.CategoryStruct.comp A.mor
+₁ iso₂.hom =                     CategoryTheory.CategoryStruct.comp iso₁.hom B.m
+or₁；CategoryTheory.CategoryStruct.comp A.mor₂ iso₃.hom =                       C
+ategoryTheory.CategoryStruct.comp iso₂.hom B.mor₂；CategoryTheory.CategoryStruct.
+comp A.mor₃ ((CategoryTheory.shiftFunctor C 1).map iso₁.hom) =                  
+       CategoryTheory.CategoryStruct.comp iso₃.hom B.mor₃；A ≅ B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Triangle.isoMk
-  signature: (A B : Triangle C)
-  body: Triangle.homMk _ _ iso₁.hom iso₂.hom iso₃.hom comm₁ comm₂ comm₃
-  inv := Triangle.homMk _ _ iso₁.inv iso₂.inv iso₃.inv
-    (by simp only [← cancel_mono iso₂.hom, assoc, Iso.inv_hom_id, comp_id,
-      comm₁, Iso.inv_hom_id_assoc])
-    (by simp only [← cancel_mono iso₃.hom, assoc, Iso.inv_hom_id, comp_id,
-      comm₂, Iso.inv_hom_id_assoc])
-    (by simp only [← cancel_mono (iso₁.hom⟦(1 : Int)⟧'), Category.assoc, comm₃,
-      Iso.inv_hom_id_assoc, ← Functor.map_comp, Iso.inv_hom_id,
-      Functor.map_id, Category.comp_id])
-
-中文:
-定义 Triangle.isoMk
-  签名: (A B : Triangle C)
-  定义体: Triangle.homMk _ _ iso₁.hom iso₂.hom iso₃.hom comm₁ comm₂ comm₃
-  inv := Triangle.homMk _ _ iso₁.inv iso₂.inv iso₃.inv
-    (by simp only [← cancel_mono iso₂.hom, assoc, Iso.inv_hom_id, comp_id,
-      comm₁, Iso.inv_hom_id_assoc])
-    (by simp only [← cancel_mono iso₃.hom, assoc, Iso.inv_hom_id, comp_id,
-      comm₂, Iso.inv_hom_id_assoc])
-    (by simp only [← cancel_mono (iso₁.hom⟦(1 : Int)⟧'), Category.assoc, comm₃,
-      Iso.inv_hom_id_assoc, ← Functor.map_comp, Iso.inv_hom_id,
-      Functor.map_id, Category.comp_id])
-
-Depends on / 依赖: A.mor, B.mor, Iso.inv_hom_id, Iso.inv_hom_id_assoc, Triangle, Triangle.homMk, cancel_mono, cat_disch, comp_id, inv_hom_id, inv_hom_id_assoc
+--- 原说明 ---
+Make an isomorphism between triangles from the required data.
 -/
 def Triangle.isoMk (A B : Triangle C)
     (iso₁ : A.obj₁ ≅ B.obj₁) (iso₂ : A.obj₂ ≅ B.obj₂) (iso₃ : A.obj₃ ≅ B.obj₃)
@@ -510,34 +400,36 @@ def Triangle.isoMk (A B : Triangle C)
       comm₁, Iso.inv_hom_id_assoc])
     (by simp only [← cancel_mono iso₃.hom, assoc, Iso.inv_hom_id, comp_id,
       comm₂, Iso.inv_hom_id_assoc])
-    (by simp only [← cancel_mono (iso₁.hom⟦(1 : Int)⟧'), Category.assoc, comm₃,
+    (by simp only [← cancel_mono (iso₁.hom⟦(1 : ℤ)⟧'), Category.assoc, comm₃,
       Iso.inv_hom_id_assoc, ← Functor.map_comp, Iso.inv_hom_id,
       Functor.map_id, Category.comp_id])
-
-/--
-lemma `Triangle.isIso_of_isIsos` / 引理 `Triangle.isIso_of_isIsos`
-
-English:
-lemma Triangle.isIso_of_isIsos
-  statement: {A B : Triangle C} (f : A ⟶ B)
-  proof: by
-  let e := Triangle.isoMk A B (asIso f.hom₁) (asIso f.hom₂) (asIso f.hom₃)
-    (by simp) (by simp) (by simp)
-  exact (inferInstance : IsIso e.hom)
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 Triangle.isIso_of_isIsos
-  结论: {A B : Triangle C} (f : A ⟶ B)
-  证明: by
-  let e := Triangle.isoMk A B (asIso f.hom₁) (asIso f.hom₂) (asIso f.hom₃)
-    (by simp) (by simp) (by simp)
-  exact (inferInstance : IsIso e.hom)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Triangle, Triangle.isoMk, e.hom, f.hom
+/-
+**CategoryTheory.Pretriangulated.Triangle.isIso_of_isIsos** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory.Pretriangulated.Triangle`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] [inst_1 : Categor
+yTheory.HasShift C ℤ]   {A B : CategoryTheory.Pretriangulated.Triangle C} (f : A
+ ⟶ B),   CategoryTheory.IsIso f.hom₁ → CategoryTheory.IsIso f.hom₂ → CategoryThe
+ory.IsIso f.hom₃ → CategoryTheory.IsIso f
+参数：f : A ⟶ B。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Pretriangulated.TriangleMorphism.comm₁`：∀ {C : Type u} [i
+nst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.HasShift C ℤ]  
+ {T₁ T₂ : CategoryTheory.Pretriangulated.Tr…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Pretriangulated.TriangleMorphism.comm₂`：∀ {C : Type u} [i
+nst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.HasShift C ℤ]  
+ {T₁ T₂ : CategoryTheory.Pretriangulated.Tr…
+· 使用定理 `CategoryTheory.Pretriangulated.TriangleMorphism.comm₃`：∀ {C : Type u} [i
+nst : CategoryTheory.Category.{v, u} C] [inst_1 : CategoryTheory.HasShift C ℤ]  
+ {T₁ T₂ : CategoryTheory.Pretriangulated.Tr…
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 -/
 lemma Triangle.isIso_of_isIsos {A B : Triangle C} (f : A ⟶ B)
     (h₁ : IsIso f.hom₁) (h₂ : IsIso f.hom₂) (h₃ : IsIso f.hom₃) : IsIso f := by
@@ -546,169 +438,72 @@ lemma Triangle.isIso_of_isIsos {A B : Triangle C} (f : A ⟶ B)
   exact (inferInstance : IsIso e.hom)
 
 @[reassoc (attr := simp)]
-/--
-lemma `_root_.CategoryTheory.Iso.hom_inv_id_triangle_hom₁` / 引理 `_root_.CategoryTheory.Iso.hom_inv_id_triangle_hom₁`
-
-English:
-lemma _root_.CategoryTheory.Iso.hom_inv_id_triangle_hom₁
-  given: {A B : Triangle C} (e : A ≅ B)
-  proof: by rw [← comp_hom₁, e.hom_inv_id, id_hom₁]
-@[reassoc (attr := simp)]
-
-中文:
-引理 _root_.范畴论.同构.hom_inv_id_triangle_hom₁
-  条件: {A B : Triangle C} (e : A ≅ B)
-  证明: by rw [← comp_hom₁, e.hom_inv_id, id_hom₁]
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: e.hom_inv_id, hom_inv_id, reassoc
+/-
+**CategoryTheory.Pretriangulated._root_.CategoryTheory.Iso.hom_inv_id_triangle_h
+om** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Pretriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.CategoryTheory.Iso.hom_inv_id_triangle_hom₁ {A B : Triangle C} (e : A ≅ B) :
     e.hom.hom₁ ≫ e.inv.hom₁ = 𝟙 _ := by rw [← comp_hom₁, e.hom_inv_id, id_hom₁]
 @[reassoc (attr := simp)]
-/--
-lemma `_root_.CategoryTheory.Iso.hom_inv_id_triangle_hom₂` / 引理 `_root_.CategoryTheory.Iso.hom_inv_id_triangle_hom₂`
-
-English:
-lemma _root_.CategoryTheory.Iso.hom_inv_id_triangle_hom₂
-  given: {A B : Triangle C} (e : A ≅ B)
-  proof: by rw [← comp_hom₂, e.hom_inv_id, id_hom₂]
-@[reassoc (attr := simp)]
-
-中文:
-引理 _root_.范畴论.同构.hom_inv_id_triangle_hom₂
-  条件: {A B : Triangle C} (e : A ≅ B)
-  证明: by rw [← comp_hom₂, e.hom_inv_id, id_hom₂]
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: e.hom_inv_id, hom_inv_id, reassoc
+/-
+**CategoryTheory.Pretriangulated._root_.CategoryTheory.Iso.hom_inv_id_triangle_h
+om** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Pretriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.CategoryTheory.Iso.hom_inv_id_triangle_hom₂ {A B : Triangle C} (e : A ≅ B) :
     e.hom.hom₂ ≫ e.inv.hom₂ = 𝟙 _ := by rw [← comp_hom₂, e.hom_inv_id, id_hom₂]
 @[reassoc (attr := simp)]
-/--
-lemma `_root_.CategoryTheory.Iso.hom_inv_id_triangle_hom₃` / 引理 `_root_.CategoryTheory.Iso.hom_inv_id_triangle_hom₃`
-
-English:
-lemma _root_.CategoryTheory.Iso.hom_inv_id_triangle_hom₃
-  given: {A B : Triangle C} (e : A ≅ B)
-  proof: by rw [← comp_hom₃, e.hom_inv_id, id_hom₃]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 _root_.范畴论.同构.hom_inv_id_triangle_hom₃
-  条件: {A B : Triangle C} (e : A ≅ B)
-  证明: by rw [← comp_hom₃, e.hom_inv_id, id_hom₃]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: e.hom_inv_id, hom_inv_id
+/-
+**CategoryTheory.Pretriangulated._root_.CategoryTheory.Iso.hom_inv_id_triangle_h
+om** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Pretriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.CategoryTheory.Iso.hom_inv_id_triangle_hom₃ {A B : Triangle C} (e : A ≅ B) :
     e.hom.hom₃ ≫ e.inv.hom₃ = 𝟙 _ := by rw [← comp_hom₃, e.hom_inv_id, id_hom₃]
 
 @[reassoc (attr := simp)]
-/--
-lemma `_root_.CategoryTheory.Iso.inv_hom_id_triangle_hom₁` / 引理 `_root_.CategoryTheory.Iso.inv_hom_id_triangle_hom₁`
-
-English:
-lemma _root_.CategoryTheory.Iso.inv_hom_id_triangle_hom₁
-  given: {A B : Triangle C} (e : A ≅ B)
-  proof: by rw [← comp_hom₁, e.inv_hom_id, id_hom₁]
-@[reassoc (attr := simp)]
-
-中文:
-引理 _root_.范畴论.同构.inv_hom_id_triangle_hom₁
-  条件: {A B : Triangle C} (e : A ≅ B)
-  证明: by rw [← comp_hom₁, e.inv_hom_id, id_hom₁]
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: e.inv_hom_id, inv_hom_id, reassoc
+/-
+**CategoryTheory.Pretriangulated._root_.CategoryTheory.Iso.inv_hom_id_triangle_h
+om** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Pretriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.CategoryTheory.Iso.inv_hom_id_triangle_hom₁ {A B : Triangle C} (e : A ≅ B) :
     e.inv.hom₁ ≫ e.hom.hom₁ = 𝟙 _ := by rw [← comp_hom₁, e.inv_hom_id, id_hom₁]
 @[reassoc (attr := simp)]
-/--
-lemma `_root_.CategoryTheory.Iso.inv_hom_id_triangle_hom₂` / 引理 `_root_.CategoryTheory.Iso.inv_hom_id_triangle_hom₂`
-
-English:
-lemma _root_.CategoryTheory.Iso.inv_hom_id_triangle_hom₂
-  given: {A B : Triangle C} (e : A ≅ B)
-  proof: by rw [← comp_hom₂, e.inv_hom_id, id_hom₂]
-@[reassoc (attr := simp)]
-
-中文:
-引理 _root_.范畴论.同构.inv_hom_id_triangle_hom₂
-  条件: {A B : Triangle C} (e : A ≅ B)
-  证明: by rw [← comp_hom₂, e.inv_hom_id, id_hom₂]
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: e.inv_hom_id, inv_hom_id, reassoc
+/-
+**CategoryTheory.Pretriangulated._root_.CategoryTheory.Iso.inv_hom_id_triangle_h
+om** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Pretriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.CategoryTheory.Iso.inv_hom_id_triangle_hom₂ {A B : Triangle C} (e : A ≅ B) :
     e.inv.hom₂ ≫ e.hom.hom₂ = 𝟙 _ := by rw [← comp_hom₂, e.inv_hom_id, id_hom₂]
 @[reassoc (attr := simp)]
-/--
-lemma `_root_.CategoryTheory.Iso.inv_hom_id_triangle_hom₃` / 引理 `_root_.CategoryTheory.Iso.inv_hom_id_triangle_hom₃`
-
-English:
-lemma _root_.CategoryTheory.Iso.inv_hom_id_triangle_hom₃
-  given: {A B : Triangle C} (e : A ≅ B)
-  proof: by rw [← comp_hom₃, e.inv_hom_id, id_hom₃]
-
-中文:
-引理 _root_.范畴论.同构.inv_hom_id_triangle_hom₃
-  条件: {A B : Triangle C} (e : A ≅ B)
-  证明: by rw [← comp_hom₃, e.inv_hom_id, id_hom₃]
-
-Depends on / 依赖: e.inv_hom_id, inv_hom_id
+/-
+**CategoryTheory.Pretriangulated._root_.CategoryTheory.Iso.inv_hom_id_triangle_h
+om** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Pretriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma _root_.CategoryTheory.Iso.inv_hom_id_triangle_hom₃ {A B : Triangle C} (e : A ≅ B) :
     e.inv.hom₃ ≫ e.hom.hom₃ = 𝟙 _ := by rw [← comp_hom₃, e.inv_hom_id, id_hom₃]
-
-/--
-lemma `Triangle.eqToHom_hom₁` / 引理 `Triangle.eqToHom_hom₁`
-
-English:
-lemma Triangle.eqToHom_hom₁
-  given: {A B : Triangle C} (h : A = B)
-  proof: by subst h; rfl
-
-中文:
-引理 Triangle.eqToHom_hom₁
-  条件: {A B : Triangle C} (h : A = B)
-  证明: by subst h; rfl
+/-
+**CategoryTheory.Pretriangulated.Triangle.eqToHom_hom** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Pretriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Triangle.eqToHom_hom₁ {A B : Triangle C} (h : A = B) :
     (eqToHom h).hom₁ = eqToHom (by subst h; rfl) := by subst h; rfl
-/--
-lemma `Triangle.eqToHom_hom₂` / 引理 `Triangle.eqToHom_hom₂`
-
-English:
-lemma Triangle.eqToHom_hom₂
-  given: {A B : Triangle C} (h : A = B)
-  proof: by subst h; rfl
-
-中文:
-引理 Triangle.eqToHom_hom₂
-  条件: {A B : Triangle C} (h : A = B)
-  证明: by subst h; rfl
+/-
+**CategoryTheory.Pretriangulated.Triangle.eqToHom_hom** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Pretriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Triangle.eqToHom_hom₂ {A B : Triangle C} (h : A = B) :
     (eqToHom h).hom₂ = eqToHom (by subst h; rfl) := by subst h; rfl
-/--
-lemma `Triangle.eqToHom_hom₃` / 引理 `Triangle.eqToHom_hom₃`
-
-English:
-lemma Triangle.eqToHom_hom₃
-  given: {A B : Triangle C} (h : A = B)
-  proof: by subst h; rfl
-
-中文:
-引理 Triangle.eqToHom_hom₃
-  条件: {A B : Triangle C} (h : A = B)
-  证明: by subst h; rfl
+/-
+**CategoryTheory.Pretriangulated.Triangle.eqToHom_hom** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Pretriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Triangle.eqToHom_hom₃ {A B : Triangle C} (h : A = B) :
     (eqToHom h).hom₃ = eqToHom (by subst h; rfl) := by subst h; rfl
@@ -717,29 +512,13 @@ namespace Triangle
 
 section Preadditive
 
-variable [Preadditive C] [forall (n : Int), (shiftFunctor C n).Additive]
+variable [Preadditive C] [∀ (n : ℤ), (shiftFunctor C n).Additive]
 
 @[simps (attr := grind =)]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Zero (T₁ ⟶ T₂)
-  body: { hom₁ := 0
-      hom₂ := 0
-      hom₃ := 0 }
-
-@[simps (attr := grind =)]
-
-中文:
-实例 :
-  签名: 零 (T₁ ⟶ T₂)
-  定义体: { hom₁ := 0
-      hom₂ := 0
-      hom₃ := 0 }
-
-@[simps (attr := grind =)]
+/-
+**CategoryTheory.Pretriangulated.Triangle.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Zero (T₁ ⟶ T₂) where
   zero :=
@@ -748,28 +527,10 @@ instance : Zero (T₁ ⟶ T₂) where
       hom₃ := 0 }
 
 @[simps (attr := grind =)]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Add (T₁ ⟶ T₂)
-  body: { hom₁ := f.hom₁ + g.hom₁
-      hom₂ := f.hom₂ + g.hom₂
-      hom₃ := f.hom₃ + g.hom₃ }
-
-@[simps (attr := grind =)]
-
-中文:
-实例 :
-  签名: 加法 (T₁ ⟶ T₂)
-  定义体: { hom₁ := f.hom₁ + g.hom₁
-      hom₂ := f.hom₂ + g.hom₂
-      hom₃ := f.hom₃ + g.hom₃ }
-
-@[simps (attr := grind =)]
-
-Depends on / 依赖: f.hom, g.hom
+/-
+**CategoryTheory.Pretriangulated.Triangle.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Add (T₁ ⟶ T₂) where
   add f g :=
@@ -778,28 +539,10 @@ instance : Add (T₁ ⟶ T₂) where
       hom₃ := f.hom₃ + g.hom₃ }
 
 @[simps (attr := grind =)]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Neg (T₁ ⟶ T₂)
-  body: { hom₁ := -f.hom₁
-      hom₂ := -f.hom₂
-      hom₃ := -f.hom₃ }
-
-@[simps (attr := grind =)]
-
-中文:
-实例 :
-  签名: 取负 (T₁ ⟶ T₂)
-  定义体: { hom₁ := -f.hom₁
-      hom₂ := -f.hom₂
-      hom₃ := -f.hom₃ }
-
-@[simps (attr := grind =)]
-
-Depends on / 依赖: f.hom
+/-
+**CategoryTheory.Pretriangulated.Triangle.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Neg (T₁ ⟶ T₂) where
   neg f :=
@@ -808,24 +551,10 @@ instance : Neg (T₁ ⟶ T₂) where
       hom₃ := -f.hom₃ }
 
 @[simps (attr := grind =)]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Sub (T₁ ⟶ T₂)
-  body: { hom₁ := f.hom₁ - g.hom₁
-      hom₂ := f.hom₂ - g.hom₂
-      hom₃ := f.hom₃ - g.hom₃ }
-
-中文:
-实例 :
-  签名: 减法 (T₁ ⟶ T₂)
-  定义体: { hom₁ := f.hom₁ - g.hom₁
-      hom₂ := f.hom₂ - g.hom₂
-      hom₃ := f.hom₃ - g.hom₃ }
-
-Depends on / 依赖: f.hom, g.hom
+/-
+**CategoryTheory.Pretriangulated.Triangle.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Sub (T₁ ⟶ T₂) where
   sub f g :=
@@ -836,31 +565,13 @@ instance : Sub (T₁ ⟶ T₂) where
 section
 
 variable {R : Type*} [Semiring R] [Linear R C]
-  [forall (n : Int), Functor.Linear R (shiftFunctor C n)]
+  [∀ (n : ℤ), Functor.Linear R (shiftFunctor C n)]
 
 @[simps (attr := grind =)]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SMul R (T₁ ⟶ T₂)
-  body: { hom₁ := n • f.hom₁
-      hom₂ := n • f.hom₂
-      hom₃ := n • f.hom₃ }
-
-omit [forall (n : Int), (shiftFunctor C n).Additive]
-
-中文:
-实例 :
-  签名: 标量乘法 R (T₁ ⟶ T₂)
-  定义体: { hom₁ := n • f.hom₁
-      hom₂ := n • f.hom₂
-      hom₃ := n • f.hom₃ }
-
-omit [forall (n : Int), (shiftFunctor C n).Additive]
-
-Depends on / 依赖: f.hom
+/-
+**CategoryTheory.Pretriangulated.Triangle.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SMul R (T₁ ⟶ T₂) where
   smul n f :=
@@ -868,44 +579,14 @@ instance : SMul R (T₁ ⟶ T₂) where
       hom₂ := n • f.hom₂
       hom₃ := n • f.hom₃ }
 
-omit [forall (n : Int), (shiftFunctor C n).Additive]
+omit [∀ (n : ℤ), (shiftFunctor C n).Additive]
 
 end
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddCommGroup (T₁ ⟶ T₂)
-  body: by ext <;> apply zero_add
-  add_assoc f g h := by ext <;> apply add_assoc
-  add_zero f := by ext <;> apply add_zero
-  add_comm f g := by ext <;> apply add_comm
-  neg_add_cancel f := by ext <;> apply neg_add_cancel
-  sub_eq_add_neg f g := by ext <;> apply sub_eq_add_neg
-  nsmul_zero f := by cat_disch
-  nsmul_succ n f := by ext <;> apply AddMonoid.nsmul_succ
-  zsmul_zero' := by cat_disch
-  zsmul_succ' n f := by ext <;> apply SubNegMonoid.zsmul_succ'
-  zsmul_neg' n f := by ext <;> apply SubNegMonoid.zsmul_neg'
-
-中文:
-实例 :
-  签名: 加法交换群 (T₁ ⟶ T₂)
-  定义体: by ext <;> apply zero_add
-  add_assoc f g h := by ext <;> apply add_assoc
-  add_zero f := by ext <;> apply add_zero
-  add_comm f g := by ext <;> apply add_comm
-  neg_add_cancel f := by ext <;> apply neg_add_cancel
-  sub_eq_add_neg f g := by ext <;> apply sub_eq_add_neg
-  nsmul_zero f := by cat_disch
-  nsmul_succ n f := by ext <;> apply AddMonoid.nsmul_succ
-  zsmul_zero' := by cat_disch
-  zsmul_succ' n f := by ext <;> apply SubNegMonoid.zsmul_succ'
-  zsmul_neg' n f := by ext <;> apply SubNegMonoid.zsmul_neg'
-
-Depends on / 依赖: AddMonoid, AddMonoid.nsmul_succ, SubNegMonoid, SubNegMonoid.zsmul_neg, SubNegMonoid.zsmul_succ, add_assoc, add_comm, add_zero, cat_disch, neg_add_cancel, nsmul_succ, nsmul_zero, sub_eq_add_neg, zero_add, zsmul_neg, zsmul_succ, zsmul_zero
+/-
+**CategoryTheory.Pretriangulated.Triangle.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : AddCommGroup (T₁ ⟶ T₂) where
   zero_add f := by ext <;> apply zero_add
@@ -919,17 +600,10 @@ instance : AddCommGroup (T₁ ⟶ T₂) where
   zsmul_zero' := by cat_disch
   zsmul_succ' n f := by ext <;> apply SubNegMonoid.zsmul_succ'
   zsmul_neg' n f := by ext <;> apply SubNegMonoid.zsmul_neg'
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Preadditive (Triangle C)
-
-中文:
-实例 :
-  签名: 预加性 (Triangle C)
+/-
+**CategoryTheory.Pretriangulated.Triangle.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Preadditive (Triangle C) where
 
@@ -938,34 +612,14 @@ end Preadditive
 section Linear
 
 variable [Preadditive C] {R : Type*} [Semiring R] [Linear R C]
-  [forall (n : Int), (shiftFunctor C n).Additive]
-  [forall (n : Int), Functor.Linear R (shiftFunctor C n)]
+  [∀ (n : ℤ), (shiftFunctor C n).Additive]
+  [∀ (n : ℤ), Functor.Linear R (shiftFunctor C n)]
 
 attribute [local simp] mul_smul add_smul in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Module R (T₁ ⟶ T₂)
-  body: by aesop
-  mul_smul := by aesop
-  smul_zero := by aesop
-  smul_add := by aesop
-  add_smul := by aesop
-  zero_smul := by aesop
-
-中文:
-实例 :
-  签名: 模 R (T₁ ⟶ T₂)
-  定义体: by aesop
-  mul_smul := by aesop
-  smul_zero := by aesop
-  smul_add := by aesop
-  add_smul := by aesop
-  zero_smul := by aesop
-
-Depends on / 依赖: add_smul, mul_smul, smul_add, smul_zero, zero_smul
+/-
+**CategoryTheory.Pretriangulated.Triangle.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Module R (T₁ ⟶ T₂) where
   one_smul := by aesop
@@ -974,17 +628,10 @@ instance : Module R (T₁ ⟶ T₂) where
   smul_add := by aesop
   add_smul := by aesop
   zero_smul := by aesop
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Linear R (Triangle C)
-
-中文:
-实例 :
-  签名: 线性 R (Triangle C)
+/-
+**CategoryTheory.Pretriangulated.Triangle.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Linear R (Triangle C) where
 
@@ -994,20 +641,17 @@ end Triangle
 
 /-- The obvious triangle `X₁ ⟶ X₁ ⊞ X₂ ⟶ X₂ ⟶ X₁⟦1⟧`. -/
 @[simps!]
-/--
-Definition of `binaryBiproductTriangle` / `binaryBiproductTriangle` 的定义
+/-
+**CategoryTheory.Pretriangulated.binaryBiproductTriangle** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.Pretriangulated`。
+形式化陈述：binaryBiproductTriangle (X₁ X₂ : C) [HasZeroMorphisms C] [HasBinaryBiprodu
+ct X₁ X₂] : Triangle C
+参数：X₁ X₂ : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition binaryBiproductTriangle
-  signature: (X₁ X₂ : C) [HasZeroMorphisms C] [HasBinaryBiproduct X₁ X₂]
-  body: Triangle.mk biprod.inl (Limits.biprod.snd : X₁ ⊞ X₂ ⟶ _) 0
-
-中文:
-定义 binaryBiproductTriangle
-  签名: (X₁ X₂ : C) [有ZeroMorphisms C] [有BinaryBiproduct X₁ X₂]
-  定义体: Triangle.mk biprod.inl (Limits.biprod.snd : X₁ ⊞ X₂ ⟶ _) 0
-
-Depends on / 依赖: Limits, Limits.biprod.snd, Triangle, Triangle.mk, biprod, biprod.inl
+--- 原说明 ---
+The obvious triangle `X₁ ⟶ X₁ ⊞ X₂ ⟶ X₂ ⟶ X₁⟦1⟧`.
 -/
 def binaryBiproductTriangle (X₁ X₂ : C) [HasZeroMorphisms C] [HasBinaryBiproduct X₁ X₂] :
     Triangle C :=
@@ -1015,20 +659,17 @@ def binaryBiproductTriangle (X₁ X₂ : C) [HasZeroMorphisms C] [HasBinaryBipro
 
 /-- The obvious triangle `X₁ ⟶ X₁ ⨯ X₂ ⟶ X₂ ⟶ X₁⟦1⟧`. -/
 @[simps!]
-/--
-Definition of `binaryProductTriangle` / `binaryProductTriangle` 的定义
+/-
+**CategoryTheory.Pretriangulated.binaryProductTriangle** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Pretriangulated`。
+形式化陈述：binaryProductTriangle (X₁ X₂ : C) [HasZeroMorphisms C] [HasBinaryProduct X
+₁ X₂] : Triangle C
+参数：X₁ X₂ : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition binaryProductTriangle
-  signature: (X₁ X₂ : C) [HasZeroMorphisms C] [HasBinaryProduct X₁ X₂]
-  body: Triangle.mk ((Limits.prod.lift (𝟙 X₁) 0)) (Limits.prod.snd : X₁ ⨯ X₂ ⟶ _) 0
-
-中文:
-定义 binaryProductTriangle
-  签名: (X₁ X₂ : C) [有ZeroMorphisms C] [HasBinaryProduct X₁ X₂]
-  定义体: Triangle.mk ((Limits.prod.lift (𝟙 X₁) 0)) (Limits.prod.snd : X₁ ⨯ X₂ ⟶ _) 0
-
-Depends on / 依赖: Limits, Limits.prod.lift, Limits.prod.snd, Triangle, Triangle.mk
+--- 原说明 ---
+The obvious triangle `X₁ ⟶ X₁ ⨯ X₂ ⟶ X₂ ⟶ X₁⟦1⟧`.
 -/
 def binaryProductTriangle (X₁ X₂ : C) [HasZeroMorphisms C] [HasBinaryProduct X₁ X₂] :
     Triangle C :=
@@ -1039,20 +680,22 @@ set_option backward.isDefEq.respectTransparency false in
 /-- The canonical isomorphism of triangles
 `binaryProductTriangle X₁ X₂ ≅ binaryBiproductTriangle X₁ X₂`. -/
 @[simps!]
-/--
-Definition of `binaryProductTriangleIsoBinaryBiproductTriangle` / `binaryProductTriangleIsoBinaryBiproductTriangle` 的定义
+/-
+**CategoryTheory.Pretriangulated.binaryProductTriangleIsoBinaryBiproductTriangle
+** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Pretriangulated`。
+形式化陈述：binaryProductTriangleIsoBinaryBiproductTriangle (X₁ X₂ : C) [HasZeroMorphi
+sms C] [HasBinaryBiproduct X₁ X₂] : binaryProductTriangle X₁ X₂ ≅ binaryBiproduc
+tTriangle X₁ X₂
+参数：X₁ X₂ : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasBinaryBiproduct.hasLimit_pair`：∀ {C : Type uC} 
+[inst : CategoryTheory.Category.{uC', uC} C] [inst_1 : CategoryTheory.Limits.Has
+ZeroMorphisms C]   {P Q : C} [CategoryTheory…
 
-English:
-definition binaryProductTriangleIsoBinaryBiproductTriangle
-  body: Triangle.isoMk _ _ (Iso.refl _) (biprod.isoProd X₁ X₂).symm (Iso.refl _)
-    (by cat_disch) (by simp) (by simp)
-
-中文:
-定义 binaryProductTriangleIsoBinaryBiproductTriangle
-  定义体: Triangle.isoMk _ _ (Iso.refl _) (biprod.isoProd X₁ X₂).symm (Iso.refl _)
-    (by cat_disch) (by simp) (by simp)
-
-Depends on / 依赖: Iso.refl, Triangle, Triangle.isoMk, biprod, biprod.isoProd, cat_disch, isoProd
+--- 原说明 ---
+The canonical isomorphism of triangles
+`binaryProductTriangle X₁ X₂ ≅ binaryBiproductTriangle X₁ X₂`.
 -/
 def binaryProductTriangleIsoBinaryBiproductTriangle
     (X₁ X₂ : C) [HasZeroMorphisms C] [HasBinaryBiproduct X₁ X₂] :
@@ -1062,30 +705,21 @@ def binaryProductTriangleIsoBinaryBiproductTriangle
 
 section
 
-variable {J : Type*} (T : J -> Triangle C)
+variable {J : Type*} (T : J → Triangle C)
   [HasProduct (fun j => (T j).obj₁)] [HasProduct (fun j => (T j).obj₂)]
-  [HasProduct (fun j => (T j).obj₃)] [HasProduct (fun j => (T j).obj₁⟦(1 : Int)⟧)]
+  [HasProduct (fun j => (T j).obj₃)] [HasProduct (fun j => (T j).obj₁⟦(1 : ℤ)⟧)]
 
 /-- The product of a family of triangles. -/
 @[simps!]
-/--
-Definition of `productTriangle` / `productTriangle` 的定义
+/-
+**CategoryTheory.Pretriangulated.productTriangle** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Pretriangulated`。
+形式化陈述：productTriangle : Triangle C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition productTriangle
-  signature: : Triangle C
-  body: Triangle.mk (Limits.Pi.map (fun j => (T j).mor₁))
-    (Limits.Pi.map (fun j => (T j).mor₂))
-    (Limits.Pi.map (fun j => (T j).mor₃) ≫ inv (piComparison _ _))
-
-中文:
-定义 productTriangle
-  签名: : Triangle C
-  定义体: Triangle.mk (Limits.Pi.map (fun j => (T j).mor₁))
-    (Limits.Pi.map (fun j => (T j).mor₂))
-    (Limits.Pi.map (fun j => (T j).mor₃) ≫ inv (piComparison _ _))
-
-Depends on / 依赖: Limits, Limits.Pi.map, Triangle, Triangle.mk, piComparison
+--- 原说明 ---
+The product of a family of triangles.
 -/
 def productTriangle : Triangle C :=
   Triangle.mk (Limits.Pi.map (fun j => (T j).mor₁))
@@ -1095,22 +729,13 @@ def productTriangle : Triangle C :=
 set_option backward.defeqAttrib.useBackward true in
 /-- A projection from the product of a family of triangles. -/
 @[simps]
-/--
-Definition of `productTriangle.π` / `productTriangle.π` 的定义
+/-
+**CategoryTheory.Pretriangulated.productTriangle.** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Pretriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition productTriangle.π
-  signature: (j : J)
-  body: Pi.π _ j
-  hom₂ := Pi.π _ j
-  hom₃ := Pi.π _ j
-
-中文:
-定义 productTriangle.π
-  签名: (j : J)
-  定义体: Pi.π _ j
-  hom₂ := Pi.π _ j
-  hom₃ := Pi.π _ j
+--- 原说明 ---
+A projection from the product of a family of triangles.
 -/
 def productTriangle.π (j : J) :
     productTriangle T ⟶ T j where
@@ -1120,20 +745,22 @@ def productTriangle.π (j : J) :
 
 /-- The fan given by `productTriangle T`. -/
 @[simp]
-/--
-Definition of `productTriangle.fan` / `productTriangle.fan` 的定义
+/-
+**CategoryTheory.Pretriangulated.productTriangle.fan** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Pretriangulated.productTriangle`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.HasShift C ℤ] →       {J : Type u_1} →         (T : J → Category
+Theory.Pretriangulated.Triangle C) →           [CategoryTheory.Limits.HasProduct
+ fun j => (T j).obj₁] →             [CategoryTheory.Limits.HasProduct fun j => (
+T j).obj₂] →               [CategoryTheory.Limits.HasProduct fun j => (T j).obj₃
+] →                 [CategoryTheory.Limits.HasProduct fun j => (CategoryTheory.s
+hiftFunctor C 1).obj (T j).obj₁] →                   CategoryTheory.Limits.Fan T
+参数：T : J → CategoryTheory.Pretriangulated.Triangle C；T j；T j；T j；CategoryTheory.
+shiftFunctor C 1；T j。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition productTriangle.fan
-  signature: : Fan T
-  body: Fan.mk (productTriangle T) (productTriangle.π T)
-
-中文:
-定义 productTriangle.fan
-  签名: : Fan T
-  定义体: Fan.mk (productTriangle T) (productTriangle.π T)
-
-Depends on / 依赖: Fan.mk, productTriangle
+--- 原说明 ---
+The fan given by `productTriangle T`.
 -/
 def productTriangle.fan : Fan T := Fan.mk (productTriangle T) (productTriangle.π T)
 
@@ -1141,66 +768,59 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 /-- A family of morphisms `T' ⟶ T j` lifts to a morphism `T' ⟶ productTriangle T`. -/
 @[simps]
-/--
-Definition of `productTriangle.lift` / `productTriangle.lift` 的定义
+/-
+**CategoryTheory.Pretriangulated.productTriangle.lift** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Pretriangulated.productTriangle`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.HasShift C ℤ] →       {J : Type u_1} →         (T : J → Category
+Theory.Pretriangulated.Triangle C) →           [inst_2 : CategoryTheory.Limits.H
+asProduct fun j => (T j).obj₁] →             [inst_3 : CategoryTheory.Limits.Has
+Product fun j => (T j).obj₂] →               [inst_4 : CategoryTheory.Limits.Has
+Product fun j => (T j).obj₃] →                 [inst_5 : CategoryTheory.Limits.H
+asProduct fun j => (CategoryTheory.shiftFunctor C 1).obj (T j).obj₁] →          
+         {T' : CategoryTheory.Pretriangulated.Triangle C} →                     
+((j : J) → T' ⟶ T j) → (T' ⟶ CategoryTheory.Pretriangulated.productTriangle T)
+参数：T : J → CategoryTheory.Pretriangulated.Triangle C；T j；T j；T j；CategoryTheory.
+shiftFunctor C 1；T j；(j : J) → T' ⟶ T j；T' ⟶ CategoryTheory.Pretriangulated.prod
+uctTriangle T。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition productTriangle.lift
-  signature: {T' : Triangle C} (φ : forall j, T' ⟶ T j)
-  body: Pi.lift (fun j => (φ j).hom₁)
-  hom₂ := Pi.lift (fun j => (φ j).hom₂)
-  hom₃ := Pi.lift (fun j => (φ j).hom₃)
-  comm₃ := by
-    dsimp
-    rw [← cancel_mono (piComparison _ _)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [IsIso.inv_hom_id]; rw [comp_id]
-    cat_disch
-
-中文:
-定义 productTriangle.lift
-  签名: {T' : Triangle C} (φ : 对任意 j, T' ⟶ T j)
-  定义体: Pi.lift (fun j => (φ j).hom₁)
-  hom₂ := Pi.lift (fun j => (φ j).hom₂)
-  hom₃ := Pi.lift (fun j => (φ j).hom₃)
-  comm₃ := by
-    dsimp
-    rw [← cancel_mono (piComparison _ _)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [IsIso.inv_hom_id]; rw [comp_id]
-    cat_disch
-
-Depends on / 依赖: Pi.lift
+--- 原说明 ---
+A family of morphisms `T' ⟶ T j` lifts to a morphism `T' ⟶ productTriangle T`.
 -/
-def productTriangle.lift {T' : Triangle C} (φ : forall j, T' ⟶ T j) :
+def productTriangle.lift {T' : Triangle C} (φ : ∀ j, T' ⟶ T j) :
     T' ⟶ productTriangle T where
   hom₁ := Pi.lift (fun j => (φ j).hom₁)
   hom₂ := Pi.lift (fun j => (φ j).hom₂)
   hom₃ := Pi.lift (fun j => (φ j).hom₃)
   comm₃ := by
     dsimp
-    rw [← cancel_mono (piComparison _ _)]; rw [assoc]; rw [assoc]; rw [assoc]; rw [IsIso.inv_hom_id]; rw [comp_id]
+    rw [← cancel_mono (piComparison _ _), assoc, assoc, assoc, IsIso.inv_hom_id, comp_id]
     cat_disch
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `productTriangle.isLimitFan` / `productTriangle.isLimitFan` 的定义
+/-- The triangle `productTriangle T` satisfies the universal property of the categorical
+product of the triangles `T`. -/
+/-
+**CategoryTheory.Pretriangulated.productTriangle.isLimitFan** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.Pretriangulated.productTriangle`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     [inst_1 :
+ CategoryTheory.HasShift C ℤ] →       {J : Type u_1} →         (T : J → Category
+Theory.Pretriangulated.Triangle C) →           [inst_2 : CategoryTheory.Limits.H
+asProduct fun j => (T j).obj₁] →             [inst_3 : CategoryTheory.Limits.Has
+Product fun j => (T j).obj₂] →               [inst_4 : CategoryTheory.Limits.Has
+Product fun j => (T j).obj₃] →                 [inst_5 : CategoryTheory.Limits.H
+asProduct fun j => (CategoryTheory.shiftFunctor C 1).obj (T j).obj₁] →          
+         CategoryTheory.Limits.IsLimit (CategoryTheory.Pretriangulated.productTr
+iangle.fan T)
+参数：T : J → CategoryTheory.Pretriangulated.Triangle C；T j；T j；T j；CategoryTheory.
+shiftFunctor C 1；T j；CategoryTheory.Pretriangulated.productTriangle.fan T。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition productTriangle.isLimitFan
-  signature: : IsLimit (productTriangle.fan T)
-  body: Fan.IsLimit.mk _ (fun s => productTriangle.lift T s.proj) (fun s j => by cat_disch) (by
-    intro s m hm
-    ext1
-    all_goals
-      exact Pi.hom_ext _ _ (fun j => (by simp [← hm])))
-
-中文:
-定义 productTriangle.isLimitFan
-  签名: : 是极限 (productTriangle.fan T)
-  定义体: Fan.IsLimit.mk _ (fun s => productTriangle.lift T s.proj) (fun s j => by cat_disch) (by
-    intro s m hm
-    ext1
-    all_goals
-      exact Pi.hom_ext _ _ (fun j => (by simp [← hm])))
-
-Depends on / 依赖: Fan.IsLimit.mk, IsLimit, Pi.hom_ext, all_goals, cat_disch, hom_ext, productTriangle, productTriangle.lift, s.proj
+--- 原说明 ---
+The triangle `productTriangle T` satisfies the universal property of the categor
+ical
+product of the triangles `T`.
 -/
 def productTriangle.isLimitFan : IsLimit (productTriangle.fan T) :=
   Fan.IsLimit.mk _ (fun s => productTriangle.lift T s.proj) (fun s j => by cat_disch) (by
@@ -1211,46 +831,20 @@ def productTriangle.isLimitFan : IsLimit (productTriangle.fan T) :=
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `productTriangle.zero₃₁` / 引理 `productTriangle.zero₃₁`
-
-English:
-lemma productTriangle.zero₃₁
-  statement: [HasZeroMorphisms C]
-  proof: by
-  have : HasProduct (fun j => (T j).obj₂⟦(1 : Int)⟧) :=
-    ⟨_, isLimitFanMkObjOfIsLimit (shiftFunctor C (1 : Int)) _ _
-      (productIsProduct (fun j => (T j).obj₂))⟩
-  dsimp
-  change _ ≫ (Pi.lift (fun j => Pi.π _ j ≫ (T j).mor₁))⟦(1 : Int)⟧' = 0
-  rw [assoc]; rw [← cancel_mono (piComparison _ _)]; rw [zero_comp]; rw [assoc]; rw [assoc]
-  ext j
-  simp [h j]
-
-中文:
-引理 productTriangle.zero₃₁
-  结论: [有ZeroMorphisms C]
-  证明: by
-  have : HasProduct (fun j => (T j).obj₂⟦(1 : Int)⟧) :=
-    ⟨_, isLimitFanMkObjOfIsLimit (shiftFunctor C (1 : Int)) _ _
-      (productIsProduct (fun j => (T j).obj₂))⟩
-  dsimp
-  change _ ≫ (Pi.lift (fun j => Pi.π _ j ≫ (T j).mor₁))⟦(1 : Int)⟧' = 0
-  rw [assoc]; rw [← cancel_mono (piComparison _ _)]; rw [zero_comp]; rw [assoc]; rw [assoc]
-  ext j
-  simp [h j]
-
-Depends on / 依赖: HasProduct, Pi.lift, cancel_mono, isLimitFanMkObjOfIsLimit, piComparison, productIsProduct, shiftFunctor, zero_comp
+/-
+**CategoryTheory.Pretriangulated.productTriangle.zero** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Pretriangulated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma productTriangle.zero₃₁ [HasZeroMorphisms C]
-    (h : forall j, (T j).mor₃ ≫ (T j).mor₁⟦(1 : Int)⟧' = 0) :
+    (h : ∀ j, (T j).mor₃ ≫ (T j).mor₁⟦(1 : ℤ)⟧' = 0) :
     (productTriangle T).mor₃ ≫ (productTriangle T).mor₁⟦1⟧' = 0 := by
-  have : HasProduct (fun j => (T j).obj₂⟦(1 : Int)⟧) :=
-    ⟨_, isLimitFanMkObjOfIsLimit (shiftFunctor C (1 : Int)) _ _
+  have : HasProduct (fun j => (T j).obj₂⟦(1 : ℤ)⟧) :=
+    ⟨_, isLimitFanMkObjOfIsLimit (shiftFunctor C (1 : ℤ)) _ _
       (productIsProduct (fun j => (T j).obj₂))⟩
   dsimp
-  change _ ≫ (Pi.lift (fun j => Pi.π _ j ≫ (T j).mor₁))⟦(1 : Int)⟧' = 0
-  rw [assoc]; rw [← cancel_mono (piComparison _ _)]; rw [zero_comp]; rw [assoc]; rw [assoc]
+  change _ ≫ (Pi.lift (fun j => Pi.π _ j ≫ (T j).mor₁))⟦(1 : ℤ)⟧' = 0
+  rw [assoc, ← cancel_mono (piComparison _ _), zero_comp, assoc, assoc]
   ext j
   simp [h j]
 
@@ -1260,28 +854,16 @@ set_option backward.defeqAttrib.useBackward true in
 variable (C) in
 /-- The functor `C ⥤ Triangle C` which sends `X` to `contractibleTriangle X`. -/
 @[simps]
-/--
-Definition of `contractibleTriangleFunctor` / `contractibleTriangleFunctor` 的定义
+/-
+**CategoryTheory.Pretriangulated.contractibleTriangleFunctor** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.Pretriangulated`。
+形式化陈述：contractibleTriangleFunctor [HasZeroObject C] [HasZeroMorphisms C] : C ⥤ T
+riangle C where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition contractibleTriangleFunctor
-  signature: [HasZeroObject C] [HasZeroMorphisms C]
-  body: contractibleTriangle X
-  map f :=
-    { hom₁ := f
-      hom₂ := f
-      hom₃ := 0 }
-
-中文:
-定义 contractibleTriangleFunctor
-  签名: [有ZeroObject C] [有ZeroMorphisms C]
-  定义体: contractibleTriangle X
-  map f :=
-    { hom₁ := f
-      hom₂ := f
-      hom₃ := 0 }
-
-Depends on / 依赖: contractibleTriangle
+--- 原说明 ---
+The functor `C ⥤ Triangle C` which sends `X` to `contractibleTriangle X`.
 -/
 def contractibleTriangleFunctor [HasZeroObject C] [HasZeroMorphisms C] : C ⥤ Triangle C where
   obj X := contractibleTriangle X
@@ -1294,22 +876,13 @@ namespace Triangle
 
 /-- The first projection `Triangle C ⥤ C`. -/
 @[simps]
-/--
-Definition of `π₁` / `π₁` 的定义
+/-
+**CategoryTheory.Pretriangulated.Triangle.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition π₁
-  signature: : Triangle C ⥤ C where
-  body: T.obj₁
-  map f := f.hom₁
-
-中文:
-定义 π₁
-  签名: : Triangle C ⥤ C where
-  定义体: T.obj₁
-  map f := f.hom₁
-
-Depends on / 依赖: T.obj
+--- 原说明 ---
+The first projection `Triangle C ⥤ C`.
 -/
 def π₁ : Triangle C ⥤ C where
   obj T := T.obj₁
@@ -1317,22 +890,13 @@ def π₁ : Triangle C ⥤ C where
 
 /-- The second projection `Triangle C ⥤ C`. -/
 @[simps]
-/--
-Definition of `π₂` / `π₂` 的定义
+/-
+**CategoryTheory.Pretriangulated.Triangle.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition π₂
-  signature: : Triangle C ⥤ C where
-  body: T.obj₂
-  map f := f.hom₂
-
-中文:
-定义 π₂
-  签名: : Triangle C ⥤ C where
-  定义体: T.obj₂
-  map f := f.hom₂
-
-Depends on / 依赖: T.obj, isFalse, isTrue
+--- 原说明 ---
+The second projection `Triangle C ⥤ C`.
 -/
 def π₂ : Triangle C ⥤ C where
   obj T := T.obj₂
@@ -1340,22 +904,13 @@ def π₂ : Triangle C ⥤ C where
 
 /-- The third projection `Triangle C ⥤ C`. -/
 @[simps]
-/--
-Definition of `π₃` / `π₃` 的定义
+/-
+**CategoryTheory.Pretriangulated.Triangle.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition π₃
-  signature: : Triangle C ⥤ C where
-  body: T.obj₃
-  map f := f.hom₃
-
-中文:
-定义 π₃
-  签名: : Triangle C ⥤ C where
-  定义体: T.obj₃
-  map f := f.hom₃
-
-Depends on / 依赖: T.obj
+--- 原说明 ---
+The third projection `Triangle C ⥤ C`.
 -/
 def π₃ : Triangle C ⥤ C where
   obj T := T.obj₃
@@ -1364,20 +919,13 @@ def π₃ : Triangle C ⥤ C where
 set_option backward.defeqAttrib.useBackward true in
 /-- The first morphism of a triangle, as a natural transformation `π₁ ⟶ π₂`. -/
 @[simps]
-/--
-Definition of `π₁Toπ₂` / `π₁Toπ₂` 的定义
+/-
+**CategoryTheory.Pretriangulated.Triangle.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition π₁Toπ₂
-  signature: : (π₁ : Triangle C ⥤ C) ⟶ Triangle.π₂ where
-  body: T.mor₁
-
-中文:
-定义 π₁Toπ₂
-  签名: : (π₁ : Triangle C ⥤ C) ⟶ Triangle.π₂ where
-  定义体: T.mor₁
-
-Depends on / 依赖: T.mor
+--- 原说明 ---
+The first morphism of a triangle, as a natural transformation `π₁ ⟶ π₂`.
 -/
 def π₁Toπ₂ : (π₁ : Triangle C ⥤ C) ⟶ Triangle.π₂ where
   app T := T.mor₁
@@ -1385,20 +933,13 @@ def π₁Toπ₂ : (π₁ : Triangle C ⥤ C) ⟶ Triangle.π₂ where
 set_option backward.defeqAttrib.useBackward true in
 /-- The second morphism of a triangle, as a natural transformation `π₂ ⟶ π₃`. -/
 @[simps]
-/--
-Definition of `π₂Toπ₃` / `π₂Toπ₃` 的定义
+/-
+**CategoryTheory.Pretriangulated.Triangle.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition π₂Toπ₃
-  signature: : (π₂ : Triangle C ⥤ C) ⟶ Triangle.π₃ where
-  body: T.mor₂
-
-中文:
-定义 π₂Toπ₃
-  签名: : (π₂ : Triangle C ⥤ C) ⟶ Triangle.π₃ where
-  定义体: T.mor₂
-
-Depends on / 依赖: T.mor
+--- 原说明 ---
+The second morphism of a triangle, as a natural transformation `π₂ ⟶ π₃`.
 -/
 def π₂Toπ₃ : (π₂ : Triangle C ⥤ C) ⟶ Triangle.π₃ where
   app T := T.mor₂
@@ -1407,68 +948,38 @@ set_option backward.defeqAttrib.useBackward true in
 /-- The third morphism of a triangle, as a natural
 transformation `π₃ ⟶ π₁ ⋙ shiftFunctor _ (1 : ℤ)`. -/
 @[simps]
-/--
-Definition of `π₃Toπ₁` / `π₃Toπ₁` 的定义
+/-
+**CategoryTheory.Pretriangulated.Triangle.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition π₃Toπ₁
-  signature: : (π₃ : Triangle C ⥤ C) ⟶ π₁ ⋙ shiftFunctor C (1 : Int) where
-  body: T.mor₃
-
-中文:
-定义 π₃Toπ₁
-  签名: : (π₃ : Triangle C ⥤ C) ⟶ π₁ ⋙ shiftFunctor C (1 : 整数) where
-  定义体: T.mor₃
-
-Depends on / 依赖: T.mor
+--- 原说明 ---
+The third morphism of a triangle, as a natural
+transformation `π₃ ⟶ π₁ ⋙ shiftFunctor _ (1 : ℤ)`.
 -/
-def π₃Toπ₁ : (π₃ : Triangle C ⥤ C) ⟶ π₁ ⋙ shiftFunctor C (1 : Int) where
+def π₃Toπ₁ : (π₃ : Triangle C ⥤ C) ⟶ π₁ ⋙ shiftFunctor C (1 : ℤ) where
   app T := T.mor₃
 
 section
 
 variable {A B : Triangle C} (φ : A ⟶ B) [IsIso φ]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsIso φ.hom₁
-  body: (inferInstance : IsIso (π₁.map φ))
-
-中文:
-实例 :
-  签名: 是同构 φ.hom₁
-  定义体: (inferInstance : IsIso (π₁.map φ))
+/-
+**CategoryTheory.Pretriangulated.Triangle.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsIso φ.hom₁ := (inferInstance : IsIso (π₁.map φ))
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsIso φ.hom₂
-  body: (inferInstance : IsIso (π₂.map φ))
-
-中文:
-实例 :
-  签名: 是同构 φ.hom₂
-  定义体: (inferInstance : IsIso (π₂.map φ))
+/-
+**CategoryTheory.Pretriangulated.Triangle.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsIso φ.hom₂ := (inferInstance : IsIso (π₂.map φ))
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsIso φ.hom₃
-  body: (inferInstance : IsIso (π₃.map φ))
-
-中文:
-实例 :
-  签名: 是同构 φ.hom₃
-  定义体: (inferInstance : IsIso (π₃.map φ))
+/-
+**CategoryTheory.Pretriangulated.Triangle.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory.Pretriangulated.Triangle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsIso φ.hom₃ := (inferInstance : IsIso (π₃.map φ))
 
@@ -1483,29 +994,21 @@ variable {J : Type*} [Category* J]
 set_option backward.isDefEq.respectTransparency false in
 /-- Constructor for functors to the category of triangles. -/
 @[simps]
-/--
-Definition of `functorMk` / `functorMk` 的定义
+/-
+**CategoryTheory.Pretriangulated.Triangle.functorMk** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Pretriangulated.Triangle`。
+形式化陈述：functorMk {obj₁ obj₂ obj₃ : J ⥤ C} (mor₁ : obj₁ ⟶ obj₂) (mor₂ : obj₂ ⟶ obj
+₃) (mor₃ : obj₃ ⟶ obj₁ ⋙ shiftFunctor C (1 : Int)) : J ⥤ Triangle C where obj j
+参数：mor₁ : obj₁ ⟶ obj₂；mor₂ : obj₂ ⟶ obj₃；mor₃ : obj₃ ⟶ obj₁ ⋙ shiftFunctor C (1 
+: Int)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorMk
-  signature: {obj₁ obj₂ obj₃ : J ⥤ C}
-  body: mk (mor₁.app j) (mor₂.app j) (mor₃.app j)
-  map φ :=
-    { hom₁ := obj₁.map φ
-      hom₂ := obj₂.map φ
-      hom₃ := obj₃.map φ }
-
-中文:
-定义 functorMk
-  签名: {obj₁ obj₂ obj₃ : J ⥤ C}
-  定义体: mk (mor₁.app j) (mor₂.app j) (mor₃.app j)
-  map φ :=
-    { hom₁ := obj₁.map φ
-      hom₂ := obj₂.map φ
-      hom₃ := obj₃.map φ }
+--- 原说明 ---
+Constructor for functors to the category of triangles.
 -/
 def functorMk {obj₁ obj₂ obj₃ : J ⥤ C}
-    (mor₁ : obj₁ ⟶ obj₂) (mor₂ : obj₂ ⟶ obj₃) (mor₃ : obj₃ ⟶ obj₁ ⋙ shiftFunctor C (1 : Int)) :
+    (mor₁ : obj₁ ⟶ obj₂) (mor₂ : obj₂ ⟶ obj₃) (mor₃ : obj₃ ⟶ obj₁ ⋙ shiftFunctor C (1 : ℤ)) :
     J ⥤ Triangle C where
   obj j := mk (mor₁.app j) (mor₂.app j) (mor₃.app j)
   map φ :=
@@ -1516,46 +1019,25 @@ def functorMk {obj₁ obj₂ obj₃ : J ⥤ C}
 /-- Constructor for natural transformations between functors to the
 category of triangles. -/
 @[simps]
-/--
-Definition of `functorHomMk` / `functorHomMk` 的定义
+/-
+**CategoryTheory.Pretriangulated.Triangle.functorHomMk** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Pretriangulated.Triangle`。
+形式化陈述：functorHomMk (A B : J ⥤ Triangle C) (hom₁ : A ⋙ π₁ ⟶ B ⋙ π₁) (hom₂ : A ⋙ π
+₂ ⟶ B ⋙ π₂) (hom₃ : A ⋙ π₃ ⟶ B ⋙ π₃) (comm₁ : whiskerLeft A π₁Toπ₂ ≫ hom₂ = hom₁
+ ≫ whiskerLeft B π₁Toπ₂
+参数：A B : J ⥤ Triangle C；hom₁ : A ⋙ π₁ ⟶ B ⋙ π₁；hom₂ : A ⋙ π₂ ⟶ B ⋙ π₂；hom₃ : A ⋙
+ π₃ ⟶ B ⋙ π₃。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorHomMk
-  signature: (A B : J ⥤ Triangle C) (hom₁ : A ⋙ π₁ ⟶ B ⋙ π₁)
-  body: { hom₁ := hom₁.app j
-      hom₂ := hom₂.app j
-      hom₃ := hom₃.app j
-      comm₁ := NatTrans.congr_app comm₁ j
-      comm₂ := NatTrans.congr_app comm₂ j
-      comm₃ := NatTrans.congr_app comm₃ j }
-  naturality _ _ φ := by
-    ext
-    · exact hom₁.naturality φ
-    · exact hom₂.naturality φ
-    · exact hom₃.naturality φ
-
-中文:
-定义 functorHomMk
-  签名: (A B : J ⥤ Triangle C) (hom₁ : A ⋙ π₁ ⟶ B ⋙ π₁)
-  定义体: { hom₁ := hom₁.app j
-      hom₂ := hom₂.app j
-      hom₃ := hom₃.app j
-      comm₁ := NatTrans.congr_app comm₁ j
-      comm₂ := NatTrans.congr_app comm₂ j
-      comm₃ := NatTrans.congr_app comm₃ j }
-  naturality _ _ φ := by
-    ext
-    · exact hom₁.naturality φ
-    · exact hom₂.naturality φ
-    · exact hom₃.naturality φ
-
-Depends on / 依赖: NatTrans, NatTrans.congr_app, cat_disch, congr_app, naturality, shiftFunctor, whiskerLeft, whiskerRight
+--- 原说明 ---
+Constructor for natural transformations between functors to the
+category of triangles.
 -/
 def functorHomMk (A B : J ⥤ Triangle C) (hom₁ : A ⋙ π₁ ⟶ B ⋙ π₁)
     (hom₂ : A ⋙ π₂ ⟶ B ⋙ π₂) (hom₃ : A ⋙ π₃ ⟶ B ⋙ π₃)
     (comm₁ : whiskerLeft A π₁Toπ₂ ≫ hom₂ = hom₁ ≫ whiskerLeft B π₁Toπ₂ := by cat_disch)
     (comm₂ : whiskerLeft A π₂Toπ₃ ≫ hom₃ = hom₂ ≫ whiskerLeft B π₂Toπ₃ := by cat_disch)
-    (comm₃ : whiskerLeft A π₃Toπ₁ ≫ whiskerRight hom₁ (shiftFunctor C (1 : Int)) =
+    (comm₃ : whiskerLeft A π₃Toπ₁ ≫ whiskerRight hom₁ (shiftFunctor C (1 : ℤ)) =
       hom₃ ≫ whiskerLeft B π₃Toπ₁ := by cat_disch) : A ⟶ B where
   app j :=
     { hom₁ := hom₁.app j
@@ -1573,29 +1055,36 @@ def functorHomMk (A B : J ⥤ Triangle C) (hom₁ : A ⋙ π₁ ⟶ B ⋙ π₁)
 /-- Constructor for natural transformations between functors constructed
 with `functorMk`. -/
 @[simps!]
-/--
-Definition of `functorHomMk'` / `functorHomMk'` 的定义
+/-
+**CategoryTheory.Pretriangulated.Triangle.functorHomMk'** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.Pretriangulated.Triangle`。
+形式化陈述：functorHomMk' {obj₁ obj₂ obj₃ : J ⥤ C} {mor₁ : obj₁ ⟶ obj₂} {mor₂ : obj₂ ⟶
+ obj₃} {mor₃ : obj₃ ⟶ obj₁ ⋙ shiftFunctor C (1 : Int)} {obj₁' obj₂' obj₃' : J ⥤ 
+C} {mor₁' : obj₁' ⟶ obj₂'} {mor₂' : obj₂' ⟶ obj₃'} {mor₃' : obj₃' ⟶ obj₁' ⋙ shif
+tFunctor C (1 : Int)} (hom₁ : obj₁ ⟶ obj₁') (hom₂ : obj₂ ⟶ obj₂') (hom₃ : obj₃ ⟶
+ obj₃') (comm₁ : mor₁ ≫ hom₂ = hom₁ ≫ mor₁') (comm₂ : mor₂ ≫ hom₃ = hom₂ ≫ mor₂'
+) (comm₃ : mor₃ ≫ whiskerRight hom₁ (shiftFunctor C (1 : Int)) = hom₃ ≫ mor₃') :
+ functorMk mor₁ mor₂ mor₃ 
+参数：1 : Int；1 : Int；hom₁ : obj₁ ⟶ obj₁'；hom₂ : obj₂ ⟶ obj₂'；hom₃ : obj₃ ⟶ obj₃'；c
+omm₁ : mor₁ ≫ hom₂ = hom₁ ≫ mor₁'；comm₂ : mor₂ ≫ hom₃ = hom₂ ≫ mor₂'；comm₃ : mor
+₃ ≫ whiskerRight hom₁ (shiftFunctor C (1 : Int)) = hom₃ ≫ mor₃'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorHomMk'
-  body: functorHomMk _ _ hom₁ hom₂ hom₃ comm₁ comm₂ comm₃
-
-中文:
-定义 functorHomMk'
-  定义体: functorHomMk _ _ hom₁ hom₂ hom₃ comm₁ comm₂ comm₃
-
-Depends on / 依赖: functorHomMk
+--- 原说明 ---
+Constructor for natural transformations between functors constructed
+with `functorMk`.
 -/
 def functorHomMk'
     {obj₁ obj₂ obj₃ : J ⥤ C}
-    {mor₁ : obj₁ ⟶ obj₂} {mor₂ : obj₂ ⟶ obj₃} {mor₃ : obj₃ ⟶ obj₁ ⋙ shiftFunctor C (1 : Int)}
+    {mor₁ : obj₁ ⟶ obj₂} {mor₂ : obj₂ ⟶ obj₃} {mor₃ : obj₃ ⟶ obj₁ ⋙ shiftFunctor C (1 : ℤ)}
     {obj₁' obj₂' obj₃' : J ⥤ C}
     {mor₁' : obj₁' ⟶ obj₂'} {mor₂' : obj₂' ⟶ obj₃'}
-    {mor₃' : obj₃' ⟶ obj₁' ⋙ shiftFunctor C (1 : Int)}
+    {mor₃' : obj₃' ⟶ obj₁' ⋙ shiftFunctor C (1 : ℤ)}
     (hom₁ : obj₁ ⟶ obj₁') (hom₂ : obj₂ ⟶ obj₂') (hom₃ : obj₃ ⟶ obj₃')
     (comm₁ : mor₁ ≫ hom₂ = hom₁ ≫ mor₁')
     (comm₂ : mor₂ ≫ hom₃ = hom₂ ≫ mor₂')
-    (comm₃ : mor₃ ≫ whiskerRight hom₁ (shiftFunctor C (1 : Int)) = hom₃ ≫ mor₃') :
+    (comm₃ : mor₃ ≫ whiskerRight hom₁ (shiftFunctor C (1 : ℤ)) = hom₃ ≫ mor₃') :
     functorMk mor₁ mor₂ mor₃ ⟶ functorMk mor₁' mor₂' mor₃' :=
   functorHomMk _ _ hom₁ hom₂ hom₃ comm₁ comm₂ comm₃
 
@@ -1603,44 +1092,32 @@ set_option backward.isDefEq.respectTransparency false in
 /-- Constructor for natural isomorphisms between functors to the
 category of triangles. -/
 @[simps]
-/--
-Definition of `functorIsoMk` / `functorIsoMk` 的定义
+/-
+**CategoryTheory.Pretriangulated.Triangle.functorIsoMk** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Pretriangulated.Triangle`。
+形式化陈述：functorIsoMk (A B : J ⥤ Triangle C) (iso₁ : A ⋙ π₁ ≅ B ⋙ π₁) (iso₂ : A ⋙ π
+₂ ≅ B ⋙ π₂) (iso₃ : A ⋙ π₃ ≅ B ⋙ π₃) (comm₁ : whiskerLeft A π₁Toπ₂ ≫ iso₂.hom = 
+iso₁.hom ≫ whiskerLeft B π₁Toπ₂) (comm₂ : whiskerLeft A π₂Toπ₃ ≫ iso₃.hom = iso₂
+.hom ≫ whiskerLeft B π₂Toπ₃) (comm₃ : whiskerLeft A π₃Toπ₁ ≫ whiskerRight iso₁.h
+om (shiftFunctor C (1 : Int)) = iso₃.hom ≫ whiskerLeft B π₃Toπ₁) : A ≅ B where h
+om
+参数：A B : J ⥤ Triangle C；iso₁ : A ⋙ π₁ ≅ B ⋙ π₁；iso₂ : A ⋙ π₂ ≅ B ⋙ π₂；iso₃ : A ⋙
+ π₃ ≅ B ⋙ π₃；comm₁ : whiskerLeft A π₁Toπ₂ ≫ iso₂.hom = iso₁.hom ≫ whiskerLeft B 
+π₁Toπ₂；comm₂ : whiskerLeft A π₂Toπ₃ ≫ iso₃.hom = iso₂.hom ≫ whiskerLeft B π₂Toπ₃
+；comm₃ : whiskerLeft A π₃Toπ₁ ≫ whiskerRight iso₁.hom (shiftFunctor C (1 : Int))
+ = iso₃.hom ≫ whiskerLeft B π₃Toπ₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorIsoMk
-  signature: (A B : J ⥤ Triangle C) (iso₁ : A ⋙ π₁ ≅ B ⋙ π₁)
-  body: functorHomMk _ _ iso₁.hom iso₂.hom iso₃.hom comm₁ comm₂ comm₃
-  inv := functorHomMk _ _ iso₁.inv iso₂.inv iso₃.inv
-    (by simp only [← cancel_epi iso₁.hom, ← reassoc_of% comm₁,
-          Iso.hom_inv_id, comp_id, Iso.hom_inv_id_assoc])
-    (by simp only [← cancel_epi iso₂.hom, ← reassoc_of% comm₂,
-          Iso.hom_inv_id, comp_id, Iso.hom_inv_id_assoc])
-    (by
-      simp only [← cancel_epi iso₃.hom, ← reassoc_of% comm₃, Iso.hom_inv_id_assoc,
-        ← whiskerRight_comp, Iso.hom_inv_id, whiskerRight_id']
-      apply comp_id)
-
-中文:
-定义 functorIsoMk
-  签名: (A B : J ⥤ Triangle C) (iso₁ : A ⋙ π₁ ≅ B ⋙ π₁)
-  定义体: functorHomMk _ _ iso₁.hom iso₂.hom iso₃.hom comm₁ comm₂ comm₃
-  inv := functorHomMk _ _ iso₁.inv iso₂.inv iso₃.inv
-    (by simp only [← cancel_epi iso₁.hom, ← reassoc_of% comm₁,
-          Iso.hom_inv_id, comp_id, Iso.hom_inv_id_assoc])
-    (by simp only [← cancel_epi iso₂.hom, ← reassoc_of% comm₂,
-          Iso.hom_inv_id, comp_id, Iso.hom_inv_id_assoc])
-    (by
-      simp only [← cancel_epi iso₃.hom, ← reassoc_of% comm₃, Iso.hom_inv_id_assoc,
-        ← whiskerRight_comp, Iso.hom_inv_id, whiskerRight_id']
-      apply comp_id)
-
-Depends on / 依赖: functorHomMk
+--- 原说明 ---
+Constructor for natural isomorphisms between functors to the
+category of triangles.
 -/
 def functorIsoMk (A B : J ⥤ Triangle C) (iso₁ : A ⋙ π₁ ≅ B ⋙ π₁)
     (iso₂ : A ⋙ π₂ ≅ B ⋙ π₂) (iso₃ : A ⋙ π₃ ≅ B ⋙ π₃)
     (comm₁ : whiskerLeft A π₁Toπ₂ ≫ iso₂.hom = iso₁.hom ≫ whiskerLeft B π₁Toπ₂)
     (comm₂ : whiskerLeft A π₂Toπ₃ ≫ iso₃.hom = iso₂.hom ≫ whiskerLeft B π₂Toπ₃)
-    (comm₃ : whiskerLeft A π₃Toπ₁ ≫ whiskerRight iso₁.hom (shiftFunctor C (1 : Int)) =
+    (comm₃ : whiskerLeft A π₃Toπ₁ ≫ whiskerRight iso₁.hom (shiftFunctor C (1 : ℤ)) =
       iso₃.hom ≫ whiskerLeft B π₃Toπ₁) : A ≅ B where
   hom := functorHomMk _ _ iso₁.hom iso₂.hom iso₃.hom comm₁ comm₂ comm₃
   inv := functorHomMk _ _ iso₁.inv iso₂.inv iso₃.inv
@@ -1656,29 +1133,37 @@ def functorIsoMk (A B : J ⥤ Triangle C) (iso₁ : A ⋙ π₁ ≅ B ⋙ π₁)
 /-- Constructor for natural isomorphisms between functors constructed
 with `functorMk`. -/
 @[simps!]
-/--
-Definition of `functorIsoMk'` / `functorIsoMk'` 的定义
+/-
+**CategoryTheory.Pretriangulated.Triangle.functorIsoMk'** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.Pretriangulated.Triangle`。
+形式化陈述：functorIsoMk' {obj₁ obj₂ obj₃ : J ⥤ C} {mor₁ : obj₁ ⟶ obj₂} {mor₂ : obj₂ ⟶
+ obj₃} {mor₃ : obj₃ ⟶ obj₁ ⋙ shiftFunctor C (1 : Int)} {obj₁' obj₂' obj₃' : J ⥤ 
+C} {mor₁' : obj₁' ⟶ obj₂'} {mor₂' : obj₂' ⟶ obj₃'} {mor₃' : obj₃' ⟶ obj₁' ⋙ shif
+tFunctor C (1 : Int)} (iso₁ : obj₁ ≅ obj₁') (iso₂ : obj₂ ≅ obj₂') (iso₃ : obj₃ ≅
+ obj₃') (comm₁ : mor₁ ≫ iso₂.hom = iso₁.hom ≫ mor₁') (comm₂ : mor₂ ≫ iso₃.hom = 
+iso₂.hom ≫ mor₂') (comm₃ : mor₃ ≫ whiskerRight iso₁.hom (shiftFunctor C (1 : Int
+)) = iso₃.hom ≫ mor₃') : f
+参数：1 : Int；1 : Int；iso₁ : obj₁ ≅ obj₁'；iso₂ : obj₂ ≅ obj₂'；iso₃ : obj₃ ≅ obj₃'；c
+omm₁ : mor₁ ≫ iso₂.hom = iso₁.hom ≫ mor₁'；comm₂ : mor₂ ≫ iso₃.hom = iso₂.hom ≫ m
+or₂'；comm₃ : mor₃ ≫ whiskerRight iso₁.hom (shiftFunctor C (1 : Int)) = iso₃.hom 
+≫ mor₃'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorIsoMk'
-  body: functorIsoMk _ _ iso₁ iso₂ iso₃ comm₁ comm₂ comm₃
-
-中文:
-定义 functorIsoMk'
-  定义体: functorIsoMk _ _ iso₁ iso₂ iso₃ comm₁ comm₂ comm₃
-
-Depends on / 依赖: functorIsoMk
+--- 原说明 ---
+Constructor for natural isomorphisms between functors constructed
+with `functorMk`.
 -/
 def functorIsoMk'
     {obj₁ obj₂ obj₃ : J ⥤ C}
-    {mor₁ : obj₁ ⟶ obj₂} {mor₂ : obj₂ ⟶ obj₃} {mor₃ : obj₃ ⟶ obj₁ ⋙ shiftFunctor C (1 : Int)}
+    {mor₁ : obj₁ ⟶ obj₂} {mor₂ : obj₂ ⟶ obj₃} {mor₃ : obj₃ ⟶ obj₁ ⋙ shiftFunctor C (1 : ℤ)}
     {obj₁' obj₂' obj₃' : J ⥤ C}
     {mor₁' : obj₁' ⟶ obj₂'} {mor₂' : obj₂' ⟶ obj₃'}
-    {mor₃' : obj₃' ⟶ obj₁' ⋙ shiftFunctor C (1 : Int)}
+    {mor₃' : obj₃' ⟶ obj₁' ⋙ shiftFunctor C (1 : ℤ)}
     (iso₁ : obj₁ ≅ obj₁') (iso₂ : obj₂ ≅ obj₂') (iso₃ : obj₃ ≅ obj₃')
     (comm₁ : mor₁ ≫ iso₂.hom = iso₁.hom ≫ mor₁')
     (comm₂ : mor₂ ≫ iso₃.hom = iso₂.hom ≫ mor₂')
-    (comm₃ : mor₃ ≫ whiskerRight iso₁.hom (shiftFunctor C (1 : Int)) = iso₃.hom ≫ mor₃') :
+    (comm₃ : mor₃ ≫ whiskerRight iso₁.hom (shiftFunctor C (1 : ℤ)) = iso₃.hom ≫ mor₃') :
     functorMk mor₁ mor₂ mor₃ ≅ functorMk mor₁' mor₂' mor₃' :=
   functorIsoMk _ _ iso₁ iso₂ iso₃ comm₁ comm₂ comm₃
 
@@ -1687,3 +1172,4 @@ end
 end Triangle
 
 end CategoryTheory.Pretriangulated
+

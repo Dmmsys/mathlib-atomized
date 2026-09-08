@@ -47,41 +47,36 @@ variable (M : Type*) [AddCommMonoid M] [Module R M]
 
 namespace TensorAlgebra
 
-/--
-Inductive type `Rel` / 归纳类型 `Rel`
-
-English:
-inductive Rel
-  parameters: : FreeAlgebra R M -> FreeAlgebra R M -> Prop
-  constructors (2):
-    - add: {a b : M} : Rel (FreeAlgebra.ι R (a + b)) (FreeAlgebra.ι R a + FreeAlgebra.ι R b)
-    - smul: {r : R} {a : M} : Rel (FreeAlgebra.ι R (r • a)) (algebraMap R (FreeAlgebra R M) r * FreeAlgebra.ι R a)
-
-中文:
-归纳类型 关系
-  参数: : FreeAlgebra R M -> FreeAlgebra R M -> 命题
-  构造子 (2 个):
-    - add: {a b : M} : 关系 (FreeAlgebra.ι R (a + b)) (FreeAlgebra.ι R a + FreeAlgebra.ι R b)
-    - smul: {r : R} {a : M} : 关系 (FreeAlgebra.ι R (r • a)) (algebraMap R (FreeAlgebra R M) r * FreeAlgebra.ι R a)
+/-- An inductively defined relation on `Pre R M` used to force the initial algebra structure on
+the associated quotient.
 -/
-inductive Rel : FreeAlgebra R M -> FreeAlgebra R M -> Prop
+/-
+**TensorAlgebra.Rel** 是 Mathlib 中的一个归纳类型，位于命名空间 `TensorAlgebra`。
+形式化陈述：(R : Type u_1) →   [inst : CommSemiring R] →     (M : Type u_2) → [inst_1 
+: AddCommMonoid M] → [_root_.Module R M] → FreeAlgebra R M → FreeAlgebra R M → P
+rop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+An inductively defined relation on `Pre R M` used to force the initial algebra s
+tructure on
+the associated quotient.
+-/
+inductive Rel : FreeAlgebra R M → FreeAlgebra R M → Prop
   -- force `ι` to be linear
   | add {a b : M} : Rel (FreeAlgebra.ι R (a + b)) (FreeAlgebra.ι R a + FreeAlgebra.ι R b)
   | smul {r : R} {a : M} :
     Rel (FreeAlgebra.ι R (r • a)) (algebraMap R (FreeAlgebra R M) r * FreeAlgebra.ι R a)
 
-/--
-Definition of `ringCon` / `ringCon` 的定义
+/-- `Rel` as a ring congruence, used to build the quotient. -/
+/-
+**TensorAlgebra.ringCon** 是 Mathlib 中的一个定义，位于命名空间 `TensorAlgebra`。
+形式化陈述：(R : Type u_1) →   [inst : CommSemiring R] →     (M : Type u_2) → [inst_1 
+: AddCommMonoid M] → [_root_.Module R M] → RingCon (FreeAlgebra R M)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ringCon
-  signature: : RingCon (FreeAlgebra R M)
-  body: ringConGen (Rel R M)
-
-中文:
-定义 ringCon
-  签名: : RingCon (FreeAlgebra R M)
-  定义体: ringConGen (Rel R M)
+--- 原说明 ---
+`Rel` as a ring congruence, used to build the quotient.
 -/
 @[no_expose] def ringCon : RingCon (FreeAlgebra R M) := ringConGen (Rel R M)
 
@@ -89,94 +84,105 @@ end TensorAlgebra
 
 /-- The tensor algebra of the module `M` over the commutative semiring `R`.
 -/
-.Quotient def TensorAlgebra := TensorAlgebra.ringCon R M
+/-
+**TensorAlgebra** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：(R : Type u_1) →   [inst : CommSemiring R] → (M : Type u_2) → [inst_1 : Ad
+dCommMonoid M] → [_root_.Module R M] → Type (max u_1 u_2)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The tensor algebra of the module `M` over the commutative semiring `R`.
+-/
+def TensorAlgebra := TensorAlgebra.ringCon R M |>.Quotient
 deriving Inhabited
 
 namespace TensorAlgebra
 
 -- This instance exists to avoid an nsmul diamond.
+/-
+**TensorAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `TensorAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {R A M} [CommSemiring R] [AddCommMonoid M] [CommSemiring A]
     [Algebra R A] [Module A M] :
     SMul R (TensorAlgebra A M) :=
-inferInstanceAs SMul R (RingCon.Quotient _)
+  inferInstanceAs <| SMul R (RingCon.Quotient _)
 
 deriving instance Semiring for TensorAlgebra
 
 -- `IsScalarTower` is not needed, but the instance isn't really canonical without it.
 @[nolint unusedArguments]
-/--
-Instance `instAlgebra` / 实例 `instAlgebra`
-
-English:
-instance instAlgebra
-  signature: {R A M} [CommSemiring R] [AddCommMonoid M] [CommSemiring A]
-  body: inferInstanceAs Algebra R (RingCon.Quotient _)
-
-中文:
-实例 instAlgebra
-  签名: {R A M} [交换半环 R] [加法交换幺半群 M] [交换半环 A]
-  定义体: inferInstanceAs Algebra R (RingCon.Quotient _)
-
-Depends on / 依赖: Algebra, Quotient, RingCon, RingCon.Quotient
+/-
+**TensorAlgebra.instAlgebra** 是 Mathlib 中的一个实例，位于命名空间 `TensorAlgebra`。
+形式化陈述：instAlgebra {R A M} [CommSemiring R] [AddCommMonoid M] [CommSemiring A] [A
+lgebra R A] [Module R M] [Module A M] [IsScalarTower R A M] : Algebra R (TensorA
+lgebra A M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAlgebra {R A M} [CommSemiring R] [AddCommMonoid M] [CommSemiring A]
     [Algebra R A] [Module R M] [Module A M]
     [IsScalarTower R A M] :
     Algebra R (TensorAlgebra A M) :=
-inferInstanceAs Algebra R (RingCon.Quotient _)
+  inferInstanceAs <| Algebra R (RingCon.Quotient _)
 
 -- verify there is no diamond
 -- but doesn't work at `reducible_and_instances` https://github.com/leanprover-community/mathlib4/issues/10906
-example : (Semiring.toNatAlgebra : Algebra Nat (TensorAlgebra R M)) = instAlgebra := rfl
-
+/-
+**TensorAlgebra.** 是 Mathlib 中的一个示例，位于命名空间 `TensorAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example : (Semiring.toNatAlgebra : Algebra ℕ (TensorAlgebra R M)) = instAlgebra := rfl
+/-
+**TensorAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `TensorAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {R S A M} [CommSemiring R] [CommSemiring S] [AddCommMonoid M] [CommSemiring A]
     [Algebra R A] [Algebra S A] [Module A M] :
     SMulCommClass R S (TensorAlgebra A M) :=
-inferInstanceAs SMulCommClass R S (RingCon.Quotient _)
-
+  inferInstanceAs <| SMulCommClass R S (RingCon.Quotient _)
+/-
+**TensorAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `TensorAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {R S A M} [CommSemiring R] [CommSemiring S] [AddCommMonoid M] [CommSemiring A]
     [SMul R S] [Algebra R A] [Algebra S A] [Module A M] [IsScalarTower R S A] :
     IsScalarTower R S (TensorAlgebra A M) :=
-inferInstanceAs IsScalarTower R S (RingCon.Quotient _)
-
+  inferInstanceAs <| IsScalarTower R S (RingCon.Quotient _)
+/-
+**TensorAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `TensorAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {S : Type*} [CommRing S] [Module S M] : Ring (TensorAlgebra S M) :=
-inferInstanceAs Ring (RingCon.Quotient _)
+  inferInstanceAs <| Ring (RingCon.Quotient _)
 
 -- verify there is no diamond
 -- but doesn't work at `reducible_and_instances` https://github.com/leanprover-community/mathlib4/issues/10906
 variable (S M : Type) [CommRing S] [AddCommGroup M] [Module S M] in
-example : (Ring.toIntAlgebra _ : Algebra Int (TensorAlgebra S M)) = instAlgebra := rfl
+/-
+**TensorAlgebra.** 是 Mathlib 中的一个示例，位于命名空间 `TensorAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example : (Ring.toIntAlgebra _ : Algebra ℤ (TensorAlgebra S M)) = instAlgebra := rfl
 
 variable {M}
 
 set_option backward.isDefEq.respectTransparency false in
 /-- The canonical linear map `M →ₗ[R] TensorAlgebra R M`.
 -/
-irreducible_def ι : M ->ₗ[R] TensorAlgebra R M :=
+irreducible_def ι : M →ₗ[R] TensorAlgebra R M :=
   { toFun := fun m => RingCon.toQuotient (FreeAlgebra.ι R m)
     map_add' := fun x y => by
       rw [← RingCon.coe_add]
-exact Quotient.sound RingConGen.Rel.of _ _ Rel.add
+      exact Quotient.sound <| RingConGen.Rel.of _ _ Rel.add
     map_smul' := fun r x => by
       rw [← RingCon.coe_smul]
-exact Quotient.sound RingConGen.Rel.of _ _ Rel.smul}
+      exact Quotient.sound <| RingConGen.Rel.of _ _ <| Rel.smul}
 
-/--
-theorem `ringQuot_mkAlgHom_freeAlgebra_ι_eq_ι` / 定理 `ringQuot_mkAlgHom_freeAlgebra_ι_eq_ι`
-
-English:
-theorem ringQuot_mkAlgHom_freeAlgebra_ι_eq_ι
-  given: (m : M)
-  proof: by
-  rw [ι]
-  rfl
-
-中文:
-定理 ringQuot_mkAlgHom_freeAlgebra_ι_eq_ι
-  条件: (m : M)
-  证明: by
-  rw [ι]
-  rfl
+/-
+**TensorAlgebra.ringQuot_mkAlgHom_freeAlgebra_** 是 Mathlib 中的一个定理，位于命名空间 `Tensor
+Algebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ringQuot_mkAlgHom_freeAlgebra_ι_eq_ι (m : M) :
     RingCon.mkₐ R (ringCon R M) (FreeAlgebra.ι R m) = ι R m := by
@@ -188,62 +194,21 @@ set_option backward.isDefEq.respectTransparency.types false in
 of `f` to a morphism of `R`-algebras `TensorAlgebra R M → A`.
 -/
 @[simps symm_apply]
-/--
-Definition of `lift` / `lift` 的定义
+/-
+**TensorAlgebra.lift** 是 Mathlib 中的一个定义，位于命名空间 `TensorAlgebra`。
+形式化陈述：lift {A : Type*} [Semiring A] [Algebra R A] : (M ->ₗ[R] A) ≃ (TensorAlgebr
+a R M ->ₐ[R] A)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: {A : Type*} [Semiring A] [Algebra R A]
-  body: { toFun f :=
-RingCon.liftₐ (ringCon R M) (FreeAlgebra.lift R (f)) by
-        grw [ringCon, RingCon.ringConGen_le]
-        intro x y h
-        induction h <;>
-          simp [Algebra.smul_def, FreeAlgebra.lift_ι_apply,
-            map_mul, AlgHom.commutes, map_add, RingCon.ker]
-    invFun := fun F => F.toLinearMap.comp (ι R)
-    left_inv := fun f => by
-      rw [ι]
-      ext1 x
-      dsimp
-      exact (RingCon.liftₐ_mk _ _ _ _).trans (FreeAlgebra.lift_ι_apply f x)
-    right_inv := fun F =>
-RingCon.Quotient.hom_extₐ
-FreeAlgebra.hom_ext
-          funext fun x => by
-            rw [ι]
-            simp
-            rfl }
-
-中文:
-定义 lift
-  签名: {A : 类型} [半环 A] [代数 R A]
-  定义体: { toFun f :=
-RingCon.liftₐ (ringCon R M) (FreeAlgebra.lift R (f)) by
-        grw [ringCon, RingCon.ringConGen_le]
-        intro x y h
-        induction h <;>
-          simp [Algebra.smul_def, FreeAlgebra.lift_ι_apply,
-            map_mul, AlgHom.commutes, map_add, RingCon.ker]
-    invFun := fun F => F.toLinearMap.comp (ι R)
-    left_inv := fun f => by
-      rw [ι]
-      ext1 x
-      dsimp
-      exact (RingCon.liftₐ_mk _ _ _ _).trans (FreeAlgebra.lift_ι_apply f x)
-    right_inv := fun F =>
-RingCon.Quotient.hom_extₐ
-FreeAlgebra.hom_ext
-          funext fun x => by
-            rw [ι]
-            simp
-            rfl }
-
-Depends on / 依赖: AlgHom, AlgHom.commutes, Algebra, Algebra.smul_def, F.toLinearMap.comp, FreeAlgebra, FreeAlgebra.hom_ext, FreeAlgebra.lift, FreeAlgebra.lift_, Quotient, RingCon, RingCon.Quotient.hom_ext, RingCon.ker, RingCon.lift, RingCon.ringConGen_le, commutes, hom_ext, invFun, left_inv, map_add
+--- 原说明 ---
+Given a linear map `f : M → A` where `A` is an `R`-algebra, `lift R f` is the un
+ique lift
+of `f` to a morphism of `R`-algebras `TensorAlgebra R M → A`.
 -/
-def lift {A : Type*} [Semiring A] [Algebra R A] : (M ->ₗ[R] A) ≃ (TensorAlgebra R M ->ₐ[R] A) :=
+def lift {A : Type*} [Semiring A] [Algebra R A] : (M →ₗ[R] A) ≃ (TensorAlgebra R M →ₐ[R] A) :=
   { toFun f :=
-RingCon.liftₐ (ringCon R M) (FreeAlgebra.lift R (f)) by
+      RingCon.liftₐ (ringCon R M) (FreeAlgebra.lift R (f)) <| by
         grw [ringCon, RingCon.ringConGen_le]
         intro x y h
         induction h <;>
@@ -256,8 +221,8 @@ RingCon.liftₐ (ringCon R M) (FreeAlgebra.lift R (f)) by
       dsimp
       exact (RingCon.liftₐ_mk _ _ _ _).trans (FreeAlgebra.lift_ι_apply f x)
     right_inv := fun F =>
-RingCon.Quotient.hom_extₐ
-FreeAlgebra.hom_ext
+      RingCon.Quotient.hom_extₐ <|
+        FreeAlgebra.hom_ext <|
           funext fun x => by
             rw [ι]
             simp
@@ -266,79 +231,44 @@ FreeAlgebra.hom_ext
 variable {R}
 
 @[simp]
-/--
-theorem `ι_comp_lift` / 定理 `ι_comp_lift`
-
-English:
-theorem ι_comp_lift
-  given: {A : Type*} [Semiring A] [Algebra R A] (f : M ->ₗ[R] A)
-  proof: by
-  convert! (lift R).symm_apply_apply f
-
-@[simp]
-
-中文:
-定理 ι_comp_lift
-  条件: {A : 类型} [半环 A] [代数 R A] (f : M ->ₗ[R] A)
-  证明: by
-  convert! (lift R).symm_apply_apply f
-
-@[simp]
-
-Depends on / 依赖: convert, symm_apply_apply
+/-
+**TensorAlgebra.** 是 Mathlib 中的一个定理，位于命名空间 `TensorAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ι_comp_lift {A : Type*} [Semiring A] [Algebra R A] (f : M ->ₗ[R] A) :
+theorem ι_comp_lift {A : Type*} [Semiring A] [Algebra R A] (f : M →ₗ[R] A) :
     (lift R f).toLinearMap.comp (ι R) = f := by
   convert! (lift R).symm_apply_apply f
 
 @[simp]
-/--
-theorem `lift_ι_apply` / 定理 `lift_ι_apply`
-
-English:
-theorem lift_ι_apply
-  given: {A : Type*} [Semiring A] [Algebra R A] (f : M ->ₗ[R] A) (x)
-  proof: by
-  conv_rhs => rw [← ι_comp_lift f]
-  rfl
-
-中文:
-定理 lift_ι_apply
-  条件: {A : 类型} [半环 A] [代数 R A] (f : M ->ₗ[R] A) (x)
-  证明: by
-  conv_rhs => rw [← ι_comp_lift f]
-  rfl
-
-Depends on / 依赖: conv_rhs
+/-
+**TensorAlgebra.lift_** 是 Mathlib 中的一个定理，位于命名空间 `TensorAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lift_ι_apply {A : Type*} [Semiring A] [Algebra R A] (f : M ->ₗ[R] A) (x) :
+theorem lift_ι_apply {A : Type*} [Semiring A] [Algebra R A] (f : M →ₗ[R] A) (x) :
     lift R f (ι R x) = f x := by
   conv_rhs => rw [← ι_comp_lift f]
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `lift_unique` / 定理 `lift_unique`
-
-English:
-theorem lift_unique
-  statement: {A : Type*} [Semiring A] [Algebra R A] (f : M ->ₗ[R] A)
-  proof: by
-  rw [← (lift R).symm_apply_eq]
-  simp only [lift, Equiv.coe_fn_symm_mk]
-
-中文:
-定理 lift_unique
-  结论: {A : 类型} [半环 A] [代数 R A] (f : M ->ₗ[R] A)
-  证明: by
-  rw [← (lift R).symm_apply_eq]
-  simp only [lift, Equiv.coe_fn_symm_mk]
-
-Depends on / 依赖: Equiv.coe_fn_symm_mk, coe_fn_symm_mk, symm_apply_eq
+/-
+**TensorAlgebra.lift_unique** 是 Mathlib 中的一个定理，位于命名空间 `TensorAlgebra`。
+形式化陈述：lift_unique {A : Type*} [Semiring A] [Algebra R A] (f : M ->ₗ[R] A) (g : T
+ensorAlgebra R M ->ₐ[R] A) : g.toLinearMap.comp (ι R) = f ↔ g = lift R f
+参数：f : M ->ₗ[R] A；g : TensorAlgebra R M ->ₐ[R] A。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.symm_apply_eq`：symm_apply_eq {α β} (e : α ≃ β) {x y} : e.symm x = 
+y ↔ x = e y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem lift_unique {A : Type*} [Semiring A] [Algebra R A] (f : M ->ₗ[R] A)
-    (g : TensorAlgebra R M ->ₐ[R] A) : g.toLinearMap.comp (ι R) = f ↔ g = lift R f := by
+theorem lift_unique {A : Type*} [Semiring A] [Algebra R A] (f : M →ₗ[R] A)
+    (g : TensorAlgebra R M →ₐ[R] A) : g.toLinearMap.comp (ι R) = f ↔ g = lift R f := by
   rw [← (lift R).symm_apply_eq]
   simp only [lift, Equiv.coe_fn_symm_mk]
 
@@ -346,54 +276,40 @@ theorem lift_unique {A : Type*} [Semiring A] [Algebra R A] (f : M ->ₗ[R] A)
 -- https://leanprover.zulipchat.com/#narrow/stream/113488-general/topic/algebra.2Esemiring_to_ring.20breaks.20semimodule.20typeclass.20lookup/near/212580241
 -- For now, we avoid this by not marking it irreducible.
 @[simp]
-/--
-theorem `lift_comp_ι` / 定理 `lift_comp_ι`
-
-English:
-theorem lift_comp_ι
-  given: {A : Type*} [Semiring A] [Algebra R A] (g : TensorAlgebra R M ->ₐ[R] A)
-  proof: by
-  rw [← lift_symm_apply]
-  exact (lift R).apply_symm_apply g
-
-中文:
-定理 lift_comp_ι
-  条件: {A : 类型} [半环 A] [代数 R A] (g : TensorAlgebra R M ->ₐ[R] A)
-  证明: by
-  rw [← lift_symm_apply]
-  exact (lift R).apply_symm_apply g
-
-Depends on / 依赖: apply_symm_apply, lift_symm_apply
+/-
+**TensorAlgebra.lift_comp_** 是 Mathlib 中的一个定理，位于命名空间 `TensorAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lift_comp_ι {A : Type*} [Semiring A] [Algebra R A] (g : TensorAlgebra R M ->ₐ[R] A) :
+theorem lift_comp_ι {A : Type*} [Semiring A] [Algebra R A] (g : TensorAlgebra R M →ₐ[R] A) :
     lift R (g.toLinearMap.comp (ι R)) = g := by
   rw [← lift_symm_apply]
   exact (lift R).apply_symm_apply g
 
 /-- See note [partially-applied ext lemmas]. -/
 @[ext]
-/--
-theorem `hom_ext` / 定理 `hom_ext`
+/-
+**TensorAlgebra.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `TensorAlgebra`。
+形式化陈述：hom_ext {A : Type*} [Semiring A] [Algebra R A] {f g : TensorAlgebra R M ->
+ₐ[R] A} (w : f.toLinearMap.comp (ι R) = g.toLinearMap.comp (ι R)) : f = g
+参数：w : f.toLinearMap.comp (ι R) = g.toLinearMap.comp (ι R)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `TensorAlgebra.lift_symm_apply`：∀ (R : Type u_1) [inst : CommSemiring R] 
+{M : Type u_2} [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   {A : Ty
+pe u_3} [inst_3 : S…
 
-English:
-theorem hom_ext
-  statement: {A : Type*} [Semiring A] [Algebra R A] {f g : TensorAlgebra R M ->ₐ[R] A}
-  proof: by
-  rw [← lift_symm_apply]; rw [← lift_symm_apply] at w
-  exact (lift R).symm.injective w
-
-中文:
-定理 hom_ext
-  结论: {A : 类型} [半环 A] [代数 R A] {f g : TensorAlgebra R M ->ₐ[R] A}
-  证明: by
-  rw [← lift_symm_apply]; rw [← lift_symm_apply] at w
-  exact (lift R).symm.injective w
-
-Depends on / 依赖: injective, lift_symm_apply, symm.injective
+--- 原说明 ---
+See note [partially-applied ext lemmas].
 -/
-theorem hom_ext {A : Type*} [Semiring A] [Algebra R A] {f g : TensorAlgebra R M ->ₐ[R] A}
+theorem hom_ext {A : Type*} [Semiring A] [Algebra R A] {f g : TensorAlgebra R M →ₐ[R] A}
     (w : f.toLinearMap.comp (ι R) = g.toLinearMap.comp (ι R)) : f = g := by
-  rw [← lift_symm_apply]; rw [← lift_symm_apply] at w
+  rw [← lift_symm_apply, ← lift_symm_apply] at w
   exact (lift R).symm.injective w
 
 -- This proof closely follows `FreeAlgebra.induction`
@@ -401,56 +317,46 @@ theorem hom_ext {A : Type*} [Semiring A] [Algebra R A] {f g : TensorAlgebra R M 
 and is preserved under addition and multiplication, then it holds for all of `TensorAlgebra R M`.
 -/
 @[elab_as_elim]
-/--
-theorem `induction` / 定理 `induction`
+/-
+**TensorAlgebra.induction** 是 Mathlib 中的一个定理，位于命名空间 `TensorAlgebra`。
+形式化陈述：induction {C : TensorAlgebra R M -> Prop} (algebraMap : forall r, C (algeb
+raMap R (TensorAlgebra R M) r)) (ι : forall x, C (ι R x)) (mul : forall a b, C a
+ -> C b -> C (a * b)) (add : forall a b, C a -> C b -> C (a + b)) (a : TensorAlg
+ebra R M) : C a
+参数：algebraMap : forall r, C (algebraMap R (TensorAlgebra R M) r)；ι : forall x, C
+ (ι R x)；mul : forall a b, C a -> C b -> C (a * b)；add : forall a b, C a -> C b 
+-> C (a + b)；a : TensorAlgebra R M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.map_one`：∀ {α : Type u_2} {β : Type u_3} {x : NonAssocSemiring α
+} {x_1 : NonAssocSemiring β} (f : α →+* β), f 1 = 1
+· 使用定理 `RingHom.map_zero`：∀ {α : Type u_2} {β : Type u_3} {x : NonAssocSemiring 
+α} {x_1 : NonAssocSemiring β} (f : α →+* β), f 0 = 0
+· 使用定理 `TensorAlgebra.hom_ext`：hom_ext {A : Type*} [Semiring A] [Algebra R A] {f
+ g : TensorAlgebra R M ->ₐ[R] A} (w : f.toLinearMap.comp (ι R) = g.toLinearMap.c
+omp (ι R)) …
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `TensorAlgebra.lift_ι_apply`：lift_ι_apply {A : Type*} [Semiring A] [Algeb
+ra R A] (f : M ->ₗ[R] A) (x) : lift R f (ι R x) = f x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AlgHom.id_apply`：id_apply (p : A) : AlgHom.id R A p = p
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
 
-English:
-theorem induction
-  statement: {C : TensorAlgebra R M -> Prop}
-  proof: by
-  -- the arguments are enough to construct a subalgebra, and a mapping into it from M
-  let s : Subalgebra R (TensorAlgebra R M) :=
-    { carrier := {a | C a}
-      mul_mem' := @mul
-      add_mem' := @add
-      algebraMap_mem' := algebraMap }
-  let of : M ->ₗ[R] s := (TensorAlgebra.ι R).codRestrict (Subalgebra.toSubmodule s) ι
-  have of_apply {x : M} : of x = (TensorAlgebra.ι R) x := by rfl
-  -- the mapping through the subalgebra is the identity
-  have of_id : AlgHom.id R (TensorAlgebra R M) = s.val.comp (lift R of) := by
-    ext
-    simp [of_apply]
-  -- finding a proof is finding an element of the subalgebra
-  rw [← AlgHom.id_apply (R := R) a]; rw [of_id]
-  exact Subtype.prop (lift R of a)
-
-@[simp]
-
-中文:
-定理 induction
-  结论: {C : TensorAlgebra R M -> 命题}
-  证明: by
-  -- the arguments are enough to construct a subalgebra, and a mapping into it from M
-  let s : Subalgebra R (TensorAlgebra R M) :=
-    { carrier := {a | C a}
-      mul_mem' := @mul
-      add_mem' := @add
-      algebraMap_mem' := algebraMap }
-  let of : M ->ₗ[R] s := (TensorAlgebra.ι R).codRestrict (Subalgebra.toSubmodule s) ι
-  have of_apply {x : M} : of x = (TensorAlgebra.ι R) x := by rfl
-  -- the mapping through the subalgebra is the identity
-  have of_id : AlgHom.id R (TensorAlgebra R M) = s.val.comp (lift R of) := by
-    ext
-    simp [of_apply]
-  -- finding a proof is finding an element of the subalgebra
-  rw [← AlgHom.id_apply (R := R) a]; rw [of_id]
-  exact Subtype.prop (lift R of a)
-
-@[simp]
+--- 原说明 ---
+If `C` holds for the `algebraMap` of `r : R` into `TensorAlgebra R M`, the `ι` o
+f `x : M`,
+and is preserved under addition and multiplication, then it holds for all of `Te
+nsorAlgebra R M`.
 -/
-theorem induction {C : TensorAlgebra R M -> Prop}
-    (algebraMap : forall r, C (algebraMap R (TensorAlgebra R M) r)) (ι : forall x, C (ι R x))
-    (mul : forall a b, C a -> C b -> C (a * b)) (add : forall a b, C a -> C b -> C (a + b))
+theorem induction {C : TensorAlgebra R M → Prop}
+    (algebraMap : ∀ r, C (algebraMap R (TensorAlgebra R M) r)) (ι : ∀ x, C (ι R x))
+    (mul : ∀ a b, C a → C b → C (a * b)) (add : ∀ a b, C a → C b → C (a + b))
     (a : TensorAlgebra R M) : C a := by
   -- the arguments are enough to construct a subalgebra, and a mapping into it from M
   let s : Subalgebra R (TensorAlgebra R M) :=
@@ -458,47 +364,20 @@ theorem induction {C : TensorAlgebra R M -> Prop}
       mul_mem' := @mul
       add_mem' := @add
       algebraMap_mem' := algebraMap }
-  let of : M ->ₗ[R] s := (TensorAlgebra.ι R).codRestrict (Subalgebra.toSubmodule s) ι
+  let of : M →ₗ[R] s := (TensorAlgebra.ι R).codRestrict (Subalgebra.toSubmodule s) ι
   have of_apply {x : M} : of x = (TensorAlgebra.ι R) x := by rfl
   -- the mapping through the subalgebra is the identity
   have of_id : AlgHom.id R (TensorAlgebra R M) = s.val.comp (lift R of) := by
     ext
     simp [of_apply]
   -- finding a proof is finding an element of the subalgebra
-  rw [← AlgHom.id_apply (R := R) a]; rw [of_id]
+  rw [← AlgHom.id_apply (R := R) a, of_id]
   exact Subtype.prop (lift R of a)
 
 @[simp]
-/--
-theorem `adjoin_range_ι` / 定理 `adjoin_range_ι`
-
-English:
-theorem adjoin_range_ι
-  statement: Algebra.adjoin R (Set.range (ι R (M := M))) = ⊤
-  proof: by
-  refine top_unique fun x hx => ?_; clear hx
-  induction x using induction with
-  | algebraMap => exact algebraMap_mem _ _
-  | add x y hx hy => exact add_mem hx hy
-  | mul x y hx hy => exact mul_mem hx hy
-  | ι x => exact Algebra.subset_adjoin (Set.mem_range_self _)
-
-@[simp]
-
-中文:
-定理 adjoin_range_ι
-  结论: 代数.adjoin R (集合.range (ι R (M := M))) = ⊤
-  证明: by
-  refine top_unique fun x hx => ?_; clear hx
-  induction x using induction with
-  | algebraMap => exact algebraMap_mem _ _
-  | add x y hx hy => exact add_mem hx hy
-  | mul x y hx hy => exact mul_mem hx hy
-  | ι x => exact Algebra.subset_adjoin (Set.mem_range_self _)
-
-@[simp]
-
-Depends on / 依赖: Algebra, Algebra.subset_adjoin, Set.mem_range_self, add_mem, algebraMap, algebraMap_mem, mem_range_self, mul_mem, subset_adjoin, top_unique
+/-
+**TensorAlgebra.adjoin_range_** 是 Mathlib 中的一个定理，位于命名空间 `TensorAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem adjoin_range_ι : Algebra.adjoin R (Set.range (ι R (M := M))) = ⊤ := by
   refine top_unique fun x hx => ?_; clear hx
@@ -509,442 +388,295 @@ theorem adjoin_range_ι : Algebra.adjoin R (Set.range (ι R (M := M))) = ⊤ := 
   | ι x => exact Algebra.subset_adjoin (Set.mem_range_self _)
 
 @[simp]
-/--
-theorem `range_lift` / 定理 `range_lift`
-
-English:
-theorem range_lift
-  given: {A : Type*} [Semiring A] [Algebra R A] (f : M ->ₗ[R] A)
-  proof: by
-  simp_rw [← Algebra.map_top, ← adjoin_range_ι, AlgHom.map_adjoin, ← Set.range_comp,
-    Function.comp_def, lift_ι_apply]
-
-中文:
-定理 range_lift
-  条件: {A : 类型} [半环 A] [代数 R A] (f : M ->ₗ[R] A)
-  证明: by
-  simp_rw [← Algebra.map_top, ← adjoin_range_ι, AlgHom.map_adjoin, ← Set.range_comp,
-    Function.comp_def, lift_ι_apply]
-
-Depends on / 依赖: AlgHom, AlgHom.map_adjoin, Algebra, Algebra.map_top, Function, Function.comp_def, Set.range_comp, comp_def, map_adjoin, map_top, range_comp, simp_rw
+/-
+**TensorAlgebra.range_lift** 是 Mathlib 中的一个定理，位于命名空间 `TensorAlgebra`。
+形式化陈述：range_lift {A : Type*} [Semiring A] [Algebra R A] (f : M ->ₗ[R] A) : (lift
+ R f).range = Algebra.adjoin R (Set.range f)
+参数：f : M ->ₗ[R] A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgHom.map_adjoin`：map_adjoin (φ : A ->ₐ[R] B) (s : Set A) : (adjoin R s
+).map φ = adjoin R (φ '' s)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `TensorAlgebra.lift_ι_apply`：lift_ι_apply {A : Type*} [Semiring A] [Algeb
+ra R A] (f : M ->ₗ[R] A) (x) : lift R f (ι R x) = f x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem range_lift {A : Type*} [Semiring A] [Algebra R A] (f : M ->ₗ[R] A) :
+theorem range_lift {A : Type*} [Semiring A] [Algebra R A] (f : M →ₗ[R] A) :
     (lift R f).range = Algebra.adjoin R (Set.range f) := by
   simp_rw [← Algebra.map_top, ← adjoin_range_ι, AlgHom.map_adjoin, ← Set.range_comp,
     Function.comp_def, lift_ι_apply]
 
-/--
-Definition of `algebraMapInv` / `algebraMapInv` 的定义
+/-- The left-inverse of `algebraMap`. -/
+/-
+**TensorAlgebra.algebraMapInv** 是 Mathlib 中的一个定义，位于命名空间 `TensorAlgebra`。
+形式化陈述：algebraMapInv : TensorAlgebra R M ->ₐ[R] R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition algebraMapInv
-  signature: : TensorAlgebra R M ->ₐ[R] R
-  body: lift R (0 : M ->ₗ[R] R)
-
-中文:
-定义 algebraMapInv
-  签名: : TensorAlgebra R M ->ₐ[R] R
-  定义体: lift R (0 : M ->ₗ[R] R)
+--- 原说明 ---
+The left-inverse of `algebraMap`.
 -/
-def algebraMapInv : TensorAlgebra R M ->ₐ[R] R :=
-  lift R (0 : M ->ₗ[R] R)
+def algebraMapInv : TensorAlgebra R M →ₐ[R] R :=
+  lift R (0 : M →ₗ[R] R)
 
 variable (M)
-
-/--
-theorem `algebraMap_leftInverse` / 定理 `algebraMap_leftInverse`
-
-English:
-theorem algebraMap_leftInverse
-  proof: fun x => by
-  simp [algebraMapInv]
-
-@[simp]
-
-中文:
-定理 algebraMap_leftInverse
-  证明: fun x => by
-  simp [algebraMapInv]
-
-@[simp]
-
-Depends on / 依赖: algebraMapInv
+/-
+**TensorAlgebra.algebraMap_leftInverse** 是 Mathlib 中的一个定理，位于命名空间 `TensorAlgebra`
+。
+形式化陈述：algebraMap_leftInverse : Function.LeftInverse algebraMapInv (algebraMap R 
+<| TensorAlgebra R M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgHom.commutes`：commutes (r : R) : φ (algebraMap R A r) = algebraMap R 
+B r
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem algebraMap_leftInverse :
     Function.LeftInverse algebraMapInv (algebraMap R <| TensorAlgebra R M) := fun x => by
   simp [algebraMapInv]
 
 @[simp]
-/--
-theorem `algebraMap_inj` / 定理 `algebraMap_inj`
-
-English:
-theorem algebraMap_inj
-  given: (x y : R)
-  proof: (algebraMap_leftInverse M).injective.eq_iff
-
-@[simp]
-
-中文:
-定理 algebraMap_inj
-  条件: (x y : R)
-  证明: (algebraMap_leftInverse M).injective.eq_iff
-
-@[simp]
-
-Depends on / 依赖: algebraMap_leftInverse, eq_iff, injective, injective.eq_iff
+/-
+**TensorAlgebra.algebraMap_inj** 是 Mathlib 中的一个定理，位于命名空间 `TensorAlgebra`。
+形式化陈述：algebraMap_inj (x y : R) : algebraMap R (TensorAlgebra R M) x = algebraMap
+ R (TensorAlgebra R M) y ↔ x = y
+参数：x y : R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Function.LeftInverse.injective`：∀ {α : Sort u_1} {β : Sort u_2} {g : β →
+ α} {f : α → β}, Function.LeftInverse g f → Function.Injective f
+· 使用定理 `TensorAlgebra.algebraMap_leftInverse`：algebraMap_leftInverse : Function.
+LeftInverse algebraMapInv (algebraMap R <| TensorAlgebra R M)
 -/
 theorem algebraMap_inj (x y : R) :
     algebraMap R (TensorAlgebra R M) x = algebraMap R (TensorAlgebra R M) y ↔ x = y :=
   (algebraMap_leftInverse M).injective.eq_iff
 
 @[simp]
-/--
-theorem `algebraMap_eq_zero_iff` / 定理 `algebraMap_eq_zero_iff`
-
-English:
-theorem algebraMap_eq_zero_iff
-  given: (x : R)
-  statement: algebraMap R (TensorAlgebra R M) x = 0 ↔ x = 0
-  proof: map_eq_zero_iff (algebraMap _ _) (algebraMap_leftInverse _).injective
-
-@[simp]
-
-中文:
-定理 algebraMap_eq_zero_iff
-  条件: (x : R)
-  结论: algebraMap R (TensorAlgebra R M) x = 0 ↔ x = 0
-  证明: map_eq_zero_iff (algebraMap _ _) (algebraMap_leftInverse _).injective
-
-@[simp]
-
-Depends on / 依赖: algebraMap, algebraMap_leftInverse, injective, map_eq_zero_iff
+/-
+**TensorAlgebra.algebraMap_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `TensorAlgebra`
+。
+形式化陈述：algebraMap_eq_zero_iff (x : R) : algebraMap R (TensorAlgebra R M) x = 0 ↔ 
+x = 0
+参数：x : R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_eq_zero_iff`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : 
+Zero M] [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F
+), Fu…
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `Function.LeftInverse.injective`：∀ {α : Sort u_1} {β : Sort u_2} {g : β →
+ α} {f : α → β}, Function.LeftInverse g f → Function.Injective f
+· 使用定理 `TensorAlgebra.algebraMap_leftInverse`：algebraMap_leftInverse : Function.
+LeftInverse algebraMapInv (algebraMap R <| TensorAlgebra R M)
 -/
 theorem algebraMap_eq_zero_iff (x : R) : algebraMap R (TensorAlgebra R M) x = 0 ↔ x = 0 :=
   map_eq_zero_iff (algebraMap _ _) (algebraMap_leftInverse _).injective
 
 @[simp]
-/--
-theorem `algebraMap_eq_one_iff` / 定理 `algebraMap_eq_one_iff`
-
-English:
-theorem algebraMap_eq_one_iff
-  given: (x : R)
-  statement: algebraMap R (TensorAlgebra R M) x = 1 ↔ x = 1
-  proof: map_eq_one_iff (algebraMap _ _) (algebraMap_leftInverse _).injective
-
-中文:
-定理 algebraMap_eq_one_iff
-  条件: (x : R)
-  结论: algebraMap R (TensorAlgebra R M) x = 1 ↔ x = 1
-  证明: map_eq_one_iff (algebraMap _ _) (algebraMap_leftInverse _).injective
-
-Depends on / 依赖: algebraMap, algebraMap_leftInverse, injective, map_eq_one_iff
+/-
+**TensorAlgebra.algebraMap_eq_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `TensorAlgebra`。
+形式化陈述：algebraMap_eq_one_iff (x : R) : algebraMap R (TensorAlgebra R M) x = 1 ↔ x
+ = 1
+参数：x : R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_eq_one_iff`：map_eq_one_iff [OneHomClass F M N] (f : F) (hf : Functio
+n.Injective f) {x : M} : f x = 1 ↔ x = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `Function.LeftInverse.injective`：∀ {α : Sort u_1} {β : Sort u_2} {g : β →
+ α} {f : α → β}, Function.LeftInverse g f → Function.Injective f
+· 使用定理 `TensorAlgebra.algebraMap_leftInverse`：algebraMap_leftInverse : Function.
+LeftInverse algebraMapInv (algebraMap R <| TensorAlgebra R M)
 -/
 theorem algebraMap_eq_one_iff (x : R) : algebraMap R (TensorAlgebra R M) x = 1 ↔ x = 1 :=
   map_eq_one_iff (algebraMap _ _) (algebraMap_leftInverse _).injective
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- A `TensorAlgebra` over a nontrivial semiring is nontrivial. -/
+/-
+**TensorAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `TensorAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [Nontrivial
-  signature: R] : Nontrivial (TensorAlgebra R M)
-  body: (algebraMap_leftInverse M).injective.nontrivial
-
-中文:
-实例 [非平凡
-  签名: R] : 非平凡 (TensorAlgebra R M)
-  定义体: (algebraMap_leftInverse M).injective.nontrivial
-
-Depends on / 依赖: algebraMap_leftInverse, injective, injective.nontrivial, nontrivial
+--- 原说明 ---
+A `TensorAlgebra` over a nontrivial semiring is nontrivial.
 -/
 instance [Nontrivial R] : Nontrivial (TensorAlgebra R M) :=
   (algebraMap_leftInverse M).injective.nontrivial
 
 variable {M}
 
-/--
-Definition of `toTrivSqZeroExt` / `toTrivSqZeroExt` 的定义
+/-- The canonical map from `TensorAlgebra R M` into `TrivSqZeroExt R M` that sends
+`TensorAlgebra.ι` to `TrivSqZeroExt.inr`. -/
+/-
+**TensorAlgebra.toTrivSqZeroExt** 是 Mathlib 中的一个定义，位于命名空间 `TensorAlgebra`。
+形式化陈述：toTrivSqZeroExt [Module Rᵐᵒᵖ M] [IsCentralScalar R M] : TensorAlgebra R M 
+->ₐ[R] TrivSqZeroExt R M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toTrivSqZeroExt
-  signature: [Module Rᵐᵒᵖ M] [IsCentralScalar R M]
-  body: lift R (TrivSqZeroExt.inrHom R M)
-
-@[simp]
-
-中文:
-定义 toTrivSqZeroExt
-  签名: [模 Rᵐᵒᵖ M] [中心标量 R M]
-  定义体: lift R (TrivSqZeroExt.inrHom R M)
-
-@[simp]
-
-Depends on / 依赖: TrivSqZeroExt, TrivSqZeroExt.inrHom, inrHom
+--- 原说明 ---
+The canonical map from `TensorAlgebra R M` into `TrivSqZeroExt R M` that sends
+`TensorAlgebra.ι` to `TrivSqZeroExt.inr`.
 -/
 def toTrivSqZeroExt [Module Rᵐᵒᵖ M] [IsCentralScalar R M] :
-    TensorAlgebra R M ->ₐ[R] TrivSqZeroExt R M :=
+    TensorAlgebra R M →ₐ[R] TrivSqZeroExt R M :=
   lift R (TrivSqZeroExt.inrHom R M)
 
 @[simp]
-/--
-theorem `toTrivSqZeroExt_ι` / 定理 `toTrivSqZeroExt_ι`
-
-English:
-theorem toTrivSqZeroExt_ι
-  given: (x : M) [Module Rᵐᵒᵖ M] [IsCentralScalar R M]
-  proof: lift_ι_apply _ _
-
-中文:
-定理 toTrivSqZeroExt_ι
-  条件: (x : M) [模 Rᵐᵒᵖ M] [中心标量 R M]
-  证明: lift_ι_apply _ _
+/-
+**TensorAlgebra.toTrivSqZeroExt_** 是 Mathlib 中的一个定理，位于命名空间 `TensorAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toTrivSqZeroExt_ι (x : M) [Module Rᵐᵒᵖ M] [IsCentralScalar R M] :
     toTrivSqZeroExt (ι R x) = TrivSqZeroExt.inr x :=
   lift_ι_apply _ _
 
-/--
-Definition of `ιInv` / `ιInv` 的定义
+/-- The left-inverse of `ι`.
 
-English:
-definition ιInv
-  signature: : TensorAlgebra R M ->ₗ[R] M
-  body: by
-  letI : Module Rᵐᵒᵖ M := Module.compHom _ ((RingHom.id R).fromOpposite mul_comm)
-  haveI : IsCentralScalar R M := ⟨fun r m => rfl⟩
-  exact (TrivSqZeroExt.sndHom R M).comp toTrivSqZeroExt.toLinearMap
+As an implementation detail, we implement this using `TrivSqZeroExt` which has a suitable
+algebra structure. -/
+/-
+**TensorAlgebra.** 是 Mathlib 中的一个定义，位于命名空间 `TensorAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 ιInv
-  签名: : TensorAlgebra R M ->ₗ[R] M
-  定义体: by
-  letI : Module Rᵐᵒᵖ M := Module.compHom _ ((RingHom.id R).fromOpposite mul_comm)
-  haveI : IsCentralScalar R M := ⟨fun r m => rfl⟩
-  exact (TrivSqZeroExt.sndHom R M).comp toTrivSqZeroExt.toLinearMap
+--- 原说明 ---
+The left-inverse of `ι`.
 
-Depends on / 依赖: IsCentralScalar, Module, Module.compHom, RingHom, RingHom.id, TrivSqZeroExt, TrivSqZeroExt.sndHom, compHom, fromOpposite, mul_comm, sndHom, toLinearMap, toTrivSqZeroExt, toTrivSqZeroExt.toLinearMap
+As an implementation detail, we implement this using `TrivSqZeroExt` which has a
+ suitable
+algebra structure.
 -/
-def ιInv : TensorAlgebra R M ->ₗ[R] M := by
+def ιInv : TensorAlgebra R M →ₗ[R] M := by
   letI : Module Rᵐᵒᵖ M := Module.compHom _ ((RingHom.id R).fromOpposite mul_comm)
   haveI : IsCentralScalar R M := ⟨fun r m => rfl⟩
   exact (TrivSqZeroExt.sndHom R M).comp toTrivSqZeroExt.toLinearMap
-
-/--
-theorem `ι_leftInverse` / 定理 `ι_leftInverse`
-
-English:
-theorem ι_leftInverse
-  statement: Function.LeftInverse ιInv (ι R : M -> TensorAlgebra R M)
-  proof: fun x => by
-  simp [ιInv]
-
-中文:
-定理 ι_leftInverse
-  结论: 函数.左逆 ιInv (ι R : M -> TensorAlgebra R M)
-  证明: fun x => by
-  simp [ιInv]
+/-
+**TensorAlgebra.** 是 Mathlib 中的一个定理，位于命名空间 `TensorAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ι_leftInverse : Function.LeftInverse ιInv (ι R : M -> TensorAlgebra R M) := fun x => by
+theorem ι_leftInverse : Function.LeftInverse ιInv (ι R : M → TensorAlgebra R M) := fun x ↦ by
   simp [ιInv]
 
 variable (R)
 
 @[simp]
-/--
-theorem `ι_inj` / 定理 `ι_inj`
-
-English:
-theorem ι_inj
-  given: (x y : M)
-  statement: ι R x = ι R y ↔ x = y
-  proof: ι_leftInverse.injective.eq_iff
-
-@[simp]
-
-中文:
-定理 ι_inj
-  条件: (x y : M)
-  结论: ι R x = ι R y ↔ x = y
-  证明: ι_leftInverse.injective.eq_iff
-
-@[simp]
-
-Depends on / 依赖: _leftInverse.injective.eq_iff, eq_iff, injective
+/-
+**TensorAlgebra.** 是 Mathlib 中的一个定理，位于命名空间 `TensorAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ι_inj (x y : M) : ι R x = ι R y ↔ x = y :=
   ι_leftInverse.injective.eq_iff
 
 @[simp]
-/--
-theorem `ι_eq_zero_iff` / 定理 `ι_eq_zero_iff`
-
-English:
-theorem ι_eq_zero_iff
-  given: (x : M)
-  statement: ι R x = 0 ↔ x = 0
-  proof: by rw [← ι_inj R x 0, map_zero]
-
-中文:
-定理 ι_eq_zero_iff
-  条件: (x : M)
-  结论: ι R x = 0 ↔ x = 0
-  证明: by rw [← ι_inj R x 0, map_zero]
-
-Depends on / 依赖: map_zero
+/-
+**TensorAlgebra.** 是 Mathlib 中的一个定理，位于命名空间 `TensorAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ι_eq_zero_iff (x : M) : ι R x = 0 ↔ x = 0 := by rw [← ι_inj R x 0, map_zero]
 
 variable {R}
 
 @[simp]
-/--
-theorem `ι_eq_algebraMap_iff` / 定理 `ι_eq_algebraMap_iff`
-
-English:
-theorem ι_eq_algebraMap_iff
-  given: (x : M) (r : R)
-  statement: ι R x = algebraMap R _ r ↔ x = 0 ∧ r = 0
-  proof: by
-  refine ⟨fun h => ?_, ?_⟩
-  · let : Module Rᵐᵒᵖ M := Module.compHom _ ((RingHom.id R).fromOpposite mul_comm)
-    have : IsCentralScalar R M := ⟨fun r m => rfl⟩
-    have hf0 : toTrivSqZeroExt (ι R x) = (0, x) := lift_ι_apply _ _
-    rw [h]; rw [AlgHom.commutes] at hf0
-    have : r = 0 ∧ 0 = x := Prod.ext_iff.1 hf0
-    exact this.symm.imp_left Eq.symm
-  · rintro ⟨rfl, rfl⟩
-    rw [map_zero]; rw [map_zero]
-
-@[simp]
-
-中文:
-定理 ι_eq_algebraMap_iff
-  条件: (x : M) (r : R)
-  结论: ι R x = algebraMap R _ r ↔ x = 0 ∧ r = 0
-  证明: by
-  refine ⟨fun h => ?_, ?_⟩
-  · let : Module Rᵐᵒᵖ M := Module.compHom _ ((RingHom.id R).fromOpposite mul_comm)
-    have : IsCentralScalar R M := ⟨fun r m => rfl⟩
-    have hf0 : toTrivSqZeroExt (ι R x) = (0, x) := lift_ι_apply _ _
-    rw [h]; rw [AlgHom.commutes] at hf0
-    have : r = 0 ∧ 0 = x := Prod.ext_iff.1 hf0
-    exact this.symm.imp_left Eq.symm
-  · rintro ⟨rfl, rfl⟩
-    rw [map_zero]; rw [map_zero]
-
-@[simp]
-
-Depends on / 依赖: AlgHom, AlgHom.commutes, Eq.symm, IsCentralScalar, Module, Module.compHom, Prod.ext_iff, RingHom, RingHom.id, commutes, compHom, ext_iff, fromOpposite, imp_left, map_zero, mul_comm, this.symm.imp_left, toTrivSqZeroExt
+/-
+**TensorAlgebra.** 是 Mathlib 中的一个定理，位于命名空间 `TensorAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ι_eq_algebraMap_iff (x : M) (r : R) : ι R x = algebraMap R _ r ↔ x = 0 ∧ r = 0 := by
   refine ⟨fun h => ?_, ?_⟩
   · let : Module Rᵐᵒᵖ M := Module.compHom _ ((RingHom.id R).fromOpposite mul_comm)
     have : IsCentralScalar R M := ⟨fun r m => rfl⟩
     have hf0 : toTrivSqZeroExt (ι R x) = (0, x) := lift_ι_apply _ _
-    rw [h]; rw [AlgHom.commutes] at hf0
+    rw [h, AlgHom.commutes] at hf0
     have : r = 0 ∧ 0 = x := Prod.ext_iff.1 hf0
     exact this.symm.imp_left Eq.symm
   · rintro ⟨rfl, rfl⟩
-    rw [map_zero]; rw [map_zero]
+    rw [map_zero, map_zero]
 
 @[simp]
-/--
-theorem `ι_ne_one` / 定理 `ι_ne_one`
-
-English:
-theorem ι_ne_one
-  given: [Nontrivial R] (x : M)
-  statement: ι R x != 1
-  proof: by
-  rw [← (algebraMap R (TensorAlgebra R M)).map_one]; rw [Ne]; rw [ι_eq_algebraMap_iff]
-  exact one_ne_zero ∘ And.right
-
-中文:
-定理 ι_ne_one
-  条件: [非平凡 R] (x : M)
-  结论: ι R x != 1
-  证明: by
-  rw [← (algebraMap R (TensorAlgebra R M)).map_one]; rw [Ne]; rw [ι_eq_algebraMap_iff]
-  exact one_ne_zero ∘ And.right
-
-Depends on / 依赖: And.right, TensorAlgebra, algebraMap, map_one, one_ne_zero
+/-
+**TensorAlgebra.** 是 Mathlib 中的一个定理，位于命名空间 `TensorAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ι_ne_one [Nontrivial R] (x : M) : ι R x != 1 := by
-  rw [← (algebraMap R (TensorAlgebra R M)).map_one]; rw [Ne]; rw [ι_eq_algebraMap_iff]
+theorem ι_ne_one [Nontrivial R] (x : M) : ι R x ≠ 1 := by
+  rw [← (algebraMap R (TensorAlgebra R M)).map_one, Ne, ι_eq_algebraMap_iff]
   exact one_ne_zero ∘ And.right
 
-/--
-theorem `ι_range_disjoint_one` / 定理 `ι_range_disjoint_one`
+/-- The generators of the tensor algebra are disjoint from its scalars. -/
+/-
+**TensorAlgebra.** 是 Mathlib 中的一个定理，位于命名空间 `TensorAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem ι_range_disjoint_one
-  proof: by
-  rw [Submodule.disjoint_def]; rw [Submodule.one_eq_range]
-  rintro _ ⟨x, hx⟩ ⟨r, rfl⟩
-  rw [Algebra.linearMap_apply]; rw [ι_eq_algebraMap_iff] at hx
-  rw [hx.2]; rw [map_zero]
-
-中文:
-定理 ι_range_disjoint_one
-  证明: by
-  rw [Submodule.disjoint_def]; rw [Submodule.one_eq_range]
-  rintro _ ⟨x, hx⟩ ⟨r, rfl⟩
-  rw [Algebra.linearMap_apply]; rw [ι_eq_algebraMap_iff] at hx
-  rw [hx.2]; rw [map_zero]
-
-Depends on / 依赖: Algebra, Algebra.linearMap_apply, Submodule, Submodule.disjoint_def, Submodule.one_eq_range, disjoint_def, linearMap_apply, map_zero, one_eq_range
+--- 原说明 ---
+The generators of the tensor algebra are disjoint from its scalars.
 -/
 theorem ι_range_disjoint_one :
-    Disjoint (LinearMap.range (ι R : M ->ₗ[R] TensorAlgebra R M))
+    Disjoint (LinearMap.range (ι R : M →ₗ[R] TensorAlgebra R M))
       (1 : Submodule R (TensorAlgebra R M)) := by
-  rw [Submodule.disjoint_def]; rw [Submodule.one_eq_range]
+  rw [Submodule.disjoint_def, Submodule.one_eq_range]
   rintro _ ⟨x, hx⟩ ⟨r, rfl⟩
-  rw [Algebra.linearMap_apply]; rw [ι_eq_algebraMap_iff] at hx
-  rw [hx.2]; rw [map_zero]
+  rw [Algebra.linearMap_apply, ι_eq_algebraMap_iff] at hx
+  rw [hx.2, map_zero]
 
 variable (R M)
 
-/--
-Definition of `tprod` / `tprod` 的定义
+/-- Construct a product of `n` elements of the module within the tensor algebra.
 
-English:
-definition tprod
-  signature: (n : Nat)
-  body: (MultilinearMap.mkPiAlgebraFin R n (TensorAlgebra R M)).compLinearMap fun _ => ι R
+See also `PiTensorProduct.tprod`. -/
+/-
+**TensorAlgebra.tprod** 是 Mathlib 中的一个定义，位于命名空间 `TensorAlgebra`。
+形式化陈述：tprod (n : Nat) : MultilinearMap R (fun _ : Fin n => M) (TensorAlgebra R M
+)
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+Construct a product of `n` elements of the module within the tensor algebra.
 
-中文:
-定义 tprod
-  签名: (n : 自然数)
-  定义体: (MultilinearMap.mkPiAlgebraFin R n (TensorAlgebra R M)).compLinearMap fun _ => ι R
-
-@[simp]
-
-Depends on / 依赖: MultilinearMap, MultilinearMap.mkPiAlgebraFin, TensorAlgebra, compLinearMap, mkPiAlgebraFin
+See also `PiTensorProduct.tprod`.
 -/
-def tprod (n : Nat) : MultilinearMap R (fun _ : Fin n => M) (TensorAlgebra R M) :=
+def tprod (n : ℕ) : MultilinearMap R (fun _ : Fin n => M) (TensorAlgebra R M) :=
   (MultilinearMap.mkPiAlgebraFin R n (TensorAlgebra R M)).compLinearMap fun _ => ι R
 
 @[simp]
-/--
-theorem `tprod_apply` / 定理 `tprod_apply`
-
-English:
-theorem tprod_apply
-  given: {n : Nat} (x : Fin n -> M)
-  statement: tprod R M n x = (List.ofFn fun i => ι R (x i)).prod
-  proof: rfl
-
-中文:
-定理 tprod_apply
-  条件: {n : 自然数} (x : 有限集 n -> M)
-  结论: tprod R M n x = (列表.ofFn fun i => ι R (x i)).乘积
-  证明: rfl
+/-
+**TensorAlgebra.tprod_apply** 是 Mathlib 中的一个定理，位于命名空间 `TensorAlgebra`。
+形式化陈述：tprod_apply {n : Nat} (x : Fin n -> M) : tprod R M n x = (List.ofFn fun i 
+=> ι R (x i)).prod
+参数：x : Fin n -> M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem tprod_apply {n : Nat} (x : Fin n -> M) : tprod R M n x = (List.ofFn fun i => ι R (x i)).prod :=
+theorem tprod_apply {n : ℕ} (x : Fin n → M) : tprod R M n x = (List.ofFn fun i => ι R (x i)).prod :=
   rfl
 
 end TensorAlgebra
@@ -953,49 +685,28 @@ namespace FreeAlgebra
 
 variable {R M}
 
-/--
-Definition of `toTensor` / `toTensor` 的定义
+/-- The canonical image of the `FreeAlgebra` in the `TensorAlgebra`, which maps
+`FreeAlgebra.ι R x` to `TensorAlgebra.ι R x`. -/
+/-
+**FreeAlgebra.toTensor** 是 Mathlib 中的一个定义，位于命名空间 `FreeAlgebra`。
+形式化陈述：toTensor : FreeAlgebra R M ->ₐ[R] TensorAlgebra R M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toTensor
-  signature: : FreeAlgebra R M ->ₐ[R] TensorAlgebra R M
-  body: FreeAlgebra.lift R (TensorAlgebra.ι R)
-
-@[simp]
-
-中文:
-定义 toTensor
-  签名: : FreeAlgebra R M ->ₐ[R] TensorAlgebra R M
-  定义体: FreeAlgebra.lift R (TensorAlgebra.ι R)
-
-@[simp]
-
-Depends on / 依赖: FreeAlgebra, FreeAlgebra.lift, TensorAlgebra
+--- 原说明 ---
+The canonical image of the `FreeAlgebra` in the `TensorAlgebra`, which maps
+`FreeAlgebra.ι R x` to `TensorAlgebra.ι R x`.
 -/
-def toTensor : FreeAlgebra R M ->ₐ[R] TensorAlgebra R M :=
+def toTensor : FreeAlgebra R M →ₐ[R] TensorAlgebra R M :=
   FreeAlgebra.lift R (TensorAlgebra.ι R)
 
 @[simp]
-/--
-theorem `toTensor_ι` / 定理 `toTensor_ι`
-
-English:
-theorem toTensor_ι
-  given: (m : M)
-  statement: FreeAlgebra.toTensor (FreeAlgebra.ι R m) = TensorAlgebra.ι R m
-  proof: by
-  simp [toTensor]
-
-中文:
-定理 toTensor_ι
-  条件: (m : M)
-  结论: FreeAlgebra.toTensor (FreeAlgebra.ι R m) = TensorAlgebra.ι R m
-  证明: by
-  simp [toTensor]
-
-Depends on / 依赖: toTensor
+/-
+**FreeAlgebra.toTensor_** 是 Mathlib 中的一个定理，位于命名空间 `FreeAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toTensor_ι (m : M) : FreeAlgebra.toTensor (FreeAlgebra.ι R m) = TensorAlgebra.ι R m := by
   simp [toTensor]
 
 end FreeAlgebra
+

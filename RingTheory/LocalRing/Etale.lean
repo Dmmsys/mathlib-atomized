@@ -58,78 +58,97 @@ variable {R S : Type*} [CommRing R] [CommRing S] [Algebra R S]
 
 open Polynomial IsLocalRing Algebra
 
-/--
-lemma `adjoin_residue_eq_top_iff_adjoin_eq_top` / 引理 `adjoin_residue_eq_top_iff_adjoin_eq_top`
+/-- When `β` generates `S` over `R`, the residue `β₀ = β mod m_S`
+generates `S/m_S` over `R/m_R`. -/
+/-
+**IsLocalRing.adjoin_residue_eq_top_iff_adjoin_eq_top** 是 Mathlib 中的一个引理，位于命名空间 
+`IsLocalRing`。
+形式化陈述：adjoin_residue_eq_top_iff_adjoin_eq_top [Algebra.FormallyUnramified R S] (
+β : S) : Algebra.adjoin (ResidueField R) {residue S β} = ⊤ ↔ Algebra.adjoin R {β
+} = ⊤
+参数：β : S。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `Submodule.le_of_le_smul_of_le_jacobson_bot`：le_of_le_smul_of_le_jacobson
+_bot {R M} [CommRing R] [AddCommGroup M] [Module R M] {I : Ideal R} {N N' : Subm
+odule R M} (hN' : N'.FG) (hIJ : …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Module.finite_def`：finite_def {R M} [Semiring R] [AddCommMonoid M] [Modu
+le R M] : Module.Finite R M ↔ (⊤ : Submodule R M).FG
+· 使用定理 `IsLocalRing.maximalIdeal_le_jacobson`：maximalIdeal_le_jacobson (I : Idea
+l R) : IsLocalRing.maximalIdeal R <= I.jacobson
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgHom.range_eq_top`：∀ {R : Type u} {A : Type v} {B : Type w} [inst : Co
+mmSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [inst_3 : Semiring 
+B] [inst_…
+· 使用定理 `Algebra.adjoin_singleton_eq_range_aeval`：adjoin_singleton_eq_range_aeval
+ (x : A) : adjoin R {x} = (aeval x).range
+· 使用定理 `Polynomial.map_surjective`：map_surjective (hf : Function.Surjective f) :
+ Function.Surjective (map f)
+· 使用引理 `IsLocalRing.residue_surjective`：residue_surjective : Function.Surjective
+ (IsLocalRing.residue R)
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Ideal.smul_top_eq_map`：smul_top_eq_map {R S : Type*} [CommSemiring R] [C
+ommSemiring S] [Algebra R S] (I : Ideal R) : I • (⊤ : Submodule R S) = (I.map (a
+lgebraMap R…
+· 使用定理 `Submodule.mem_sup`：mem_sup : x in p ⊔ p' ↔ exists y in p, exists z in p'
+, y + z = x
+· 使用定理 `Algebra.FormallyUnramified.map_maximalIdeal`：∀ {R : Type u_1} {S : Type 
+u_2} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   [inst_3 
+: IsLocalRing R] [inst_4 : IsLoca…
+· 使用定理 `Algebra.EssFiniteType.of_finiteType`：∀ (R : Type u_1) (S : Type u_2) [in
+st : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   [Algebra.FiniteT
+ype R S], Algebra.EssFini…
+· 使用定理 `Module.Finite.finiteType`：∀ {R : Type u_1} (A : Type u_2) [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [hRA : Module.Finite R 
+A], Algebra.Fi…
+· 使用定理 `Submodule.restrictScalars_mem`：restrictScalars_mem (V : Submodule R M) (
+m : M) : m in V.restrictScalars S ↔ m in V
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.Quotient.eq`：∀ {R : Type u} [inst : Ring R] {I : Ideal R} {x y : R
+} [inst_1 : I.IsTwoSided],   (Ideal.Quotient.mk I) x = (Ideal.Quotient.mk I) y ↔
+ x - y …
+· 使用定理 `Polynomial.map_aeval_eq_aeval_map`：map_aeval_eq_aeval_map {S T U : Type*
+} [Semiring S] [CommSemiring T] [Semiring U] [Algebra R S] [Algebra T U] {φ : R 
+->+* T} {ψ : S ->+* U} …
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_pf`：∀ {R : Type u_2} [inst : CommRing R] 
+{a b c d : R}, -b = c → a + c = d → a - b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_mul`：∀ {R : Type u_2} [inst : CommRing R]
+ (a₁ : R) (a₂ : ℕ) {a₃ b : R}, -a₃ = b → -(a₁ ^ a₂ * a₃) = a₁ ^ a₂ * b
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+（共 42 条，此处仅展示前 30 条）
 
-English:
-lemma adjoin_residue_eq_top_iff_adjoin_eq_top
-  given: [Algebra.FormallyUnramified R S] (β : S)
-  proof: by
-  constructor
-  · intro hβ
-refine eq_top_iff.mpr Submodule.le_of_le_smul_of_le_jacobson_bot
-      (Module.finite_def.mp inferInstance) (IsLocalRing.maximalIdeal_le_jacobson ⊥)
-      (?_ : ⊤ <= (adjoin R {β}).toSubmodule ⊔ maximalIdeal R • ⊤)
-    intro s _
-    rw [adjoin_singleton_eq_range_aeval]; rw [AlgHom.range_eq_top] at hβ
-    obtain ⟨p, hp⟩ := hβ (residue S s)
-    obtain ⟨q, rfl⟩ := Polynomial.map_surjective _ residue_surjective p
-    rw [Ideal.smul_top_eq_map]
-    refine Submodule.mem_sup.mpr ⟨aeval β q, ?_, s - aeval β q, ?_, by ring⟩
-    · rw [adjoin_singleton_eq_range_aeval]; exact ⟨q, rfl⟩
-    · rw [Algebra.FormallyUnramified.map_maximalIdeal, Submodule.restrictScalars_mem,
-        ← Ideal.Quotient.eq]
-      -- def eq abuse since IsLocalRing.residue needs to be an abbrev
-      rw [← map_aeval_eq_aeval_map (ψ := residue S) (φ := residue R) rfl] at hp
-      exact hp.symm
-  · intro hβ_gen
-    rw [Algebra.adjoin_singleton_eq_range_aeval]; rw [AlgHom.range_eq_top] at *
-    intro x
-    obtain ⟨s, rfl⟩ := residue_surjective (R := S) x
-    obtain ⟨p, rfl⟩ := hβ_gen s
-    exact ⟨p.map (residue R), by
-      rw [← map_aeval_eq_aeval_map (ψ := residue S) (φ := residue R) rfl p β]⟩
-
-中文:
-引理 adjoin_residue_eq_top_iff_adjoin_eq_top
-  条件: [代数.形式非分歧 R S] (β : S)
-  证明: by
-  constructor
-  · intro hβ
-refine eq_top_iff.mpr Submodule.le_of_le_smul_of_le_jacobson_bot
-      (Module.finite_def.mp inferInstance) (IsLocalRing.maximalIdeal_le_jacobson ⊥)
-      (?_ : ⊤ <= (adjoin R {β}).toSubmodule ⊔ maximalIdeal R • ⊤)
-    intro s _
-    rw [adjoin_singleton_eq_range_aeval]; rw [AlgHom.range_eq_top] at hβ
-    obtain ⟨p, hp⟩ := hβ (residue S s)
-    obtain ⟨q, rfl⟩ := Polynomial.map_surjective _ residue_surjective p
-    rw [Ideal.smul_top_eq_map]
-    refine Submodule.mem_sup.mpr ⟨aeval β q, ?_, s - aeval β q, ?_, by ring⟩
-    · rw [adjoin_singleton_eq_range_aeval]; exact ⟨q, rfl⟩
-    · rw [Algebra.FormallyUnramified.map_maximalIdeal, Submodule.restrictScalars_mem,
-        ← Ideal.Quotient.eq]
-      -- def eq abuse since IsLocalRing.residue needs to be an abbrev
-      rw [← map_aeval_eq_aeval_map (ψ := residue S) (φ := residue R) rfl] at hp
-      exact hp.symm
-  · intro hβ_gen
-    rw [Algebra.adjoin_singleton_eq_range_aeval]; rw [AlgHom.range_eq_top] at *
-    intro x
-    obtain ⟨s, rfl⟩ := residue_surjective (R := S) x
-    obtain ⟨p, rfl⟩ := hβ_gen s
-    exact ⟨p.map (residue R), by
-      rw [← map_aeval_eq_aeval_map (ψ := residue S) (φ := residue R) rfl p β]⟩
-
-Depends on / 依赖: AlgHom, AlgHom.range_eq_top, Ideal.smul_top_eq_map, IsLocalRing, IsLocalRing.maximalIdeal_le_jacobson, Module, Module.finite_def.mp, Polynomial, Polynomial.map_surjective, Submodule, Submodule.le_of_le_smul_of_le_jacobson_bot, Submodule.mem_sup.mpr, adjoin, adjoin_singleton_eq_range_aeval, eq_top_iff, eq_top_iff.mpr, finite_def, le_of_le_smul_of_le_jacobson_bot, map_surjective, maximalIdeal
+--- 原说明 ---
+When `β` generates `S` over `R`, the residue `β₀ = β mod m_S`
+generates `S/m_S` over `R/m_R`.
 -/
 lemma adjoin_residue_eq_top_iff_adjoin_eq_top [Algebra.FormallyUnramified R S] (β : S) :
     Algebra.adjoin (ResidueField R) {residue S β} = ⊤ ↔ Algebra.adjoin R {β} = ⊤ := by
   constructor
   · intro hβ
-refine eq_top_iff.mpr Submodule.le_of_le_smul_of_le_jacobson_bot
+    refine eq_top_iff.mpr <| Submodule.le_of_le_smul_of_le_jacobson_bot
       (Module.finite_def.mp inferInstance) (IsLocalRing.maximalIdeal_le_jacobson ⊥)
-      (?_ : ⊤ <= (adjoin R {β}).toSubmodule ⊔ maximalIdeal R • ⊤)
+      (?_ : ⊤ ≤ (adjoin R {β}).toSubmodule ⊔ maximalIdeal R • ⊤)
     intro s _
-    rw [adjoin_singleton_eq_range_aeval]; rw [AlgHom.range_eq_top] at hβ
+    rw [adjoin_singleton_eq_range_aeval, AlgHom.range_eq_top] at hβ
     obtain ⟨p, hp⟩ := hβ (residue S s)
     obtain ⟨q, rfl⟩ := Polynomial.map_surjective _ residue_surjective p
     rw [Ideal.smul_top_eq_map]
@@ -141,77 +160,131 @@ refine eq_top_iff.mpr Submodule.le_of_le_smul_of_le_jacobson_bot
       rw [← map_aeval_eq_aeval_map (ψ := residue S) (φ := residue R) rfl] at hp
       exact hp.symm
   · intro hβ_gen
-    rw [Algebra.adjoin_singleton_eq_range_aeval]; rw [AlgHom.range_eq_top] at *
+    rw [Algebra.adjoin_singleton_eq_range_aeval, AlgHom.range_eq_top] at *
     intro x
     obtain ⟨s, rfl⟩ := residue_surjective (R := S) x
     obtain ⟨p, rfl⟩ := hβ_gen s
     exact ⟨p.map (residue R), by
       rw [← map_aeval_eq_aeval_map (ψ := residue S) (φ := residue R) rfl p β]⟩
 
-/--
-theorem `exists_adjoin_eq_top` / 定理 `exists_adjoin_eq_top`
+/-- A finite étale extension of local rings is generated by a single element.
+This is Lemma 3.2, part 1 of [arXiv:2503.07846](https://arxiv.org/abs/2503.07846).
+The proof lifts a primitive element of the residue field extension via Nakayama's lemma. -/
+/-
+**IsLocalRing.exists_adjoin_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalRing`。
+形式化陈述：exists_adjoin_eq_top [Algebra.FormallyUnramified R S] : exists β : S, Alge
+bra.adjoin R {β} = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Field.exists_primitive_element`：exists_primitive_element : exists α : E,
+ F⟮α⟯ = ⊤
+· 使用定理 `Algebra.instFiniteResidueFieldOfFormallyUnramified`：∀ {R : Type u_1} {S 
+: Type u_2} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   [
+inst_3 : IsLocalRing R] [inst_4 : IsLoca…
+· 使用定理 `Algebra.EssFiniteType.of_finiteType`：∀ (R : Type u_1) (S : Type u_2) [in
+st : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   [Algebra.FiniteT
+ype R S], Algebra.EssFini…
+· 使用定理 `Module.Finite.finiteType`：∀ {R : Type u_1} (A : Type u_2) [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [hRA : Module.Finite R 
+A], Algebra.Fi…
+· 使用定理 `Algebra.instIsSeparableResidueFieldOfFormallyUnramified`：∀ {R : Type u_1
+} {S : Type u_2} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S
+]   [inst_3 : IsLocalRing R] [inst_4 : IsLoca…
+· 使用引理 `IsLocalRing.residue_surjective`：residue_surjective : Function.Surjective
+ (IsLocalRing.residue R)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `IsLocalRing.adjoin_residue_eq_top_iff_adjoin_eq_top`：adjoin_residue_eq_t
+op_iff_adjoin_eq_top [Algebra.FormallyUnramified R S] (β : S) : Algebra.adjoin (
+ResidueField R) {residue S β} = ⊤ ↔ Algeb…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IntermediateField.adjoin_simple_toSubalgebra_of_isAlgebraic`：adjoin_simp
+le_toSubalgebra_of_isAlgebraic (hα : IsAlgebraic F α) : F⟮α⟯.toSubalgebra = F[α]
+· 使用定理 `IsAlgebraic.of_finite`：IsAlgebraic.of_finite (e : A) [Module.Finite R A]
+ : IsAlgebraic R e
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `IntermediateField.top_toSubalgebra`：top_toSubalgebra : (⊤ : Intermediate
+Field F E).toSubalgebra = ⊤
 
-English:
-theorem exists_adjoin_eq_top
-  given: [Algebra.FormallyUnramified R S]
-  proof: by
-  obtain ⟨β₀, hβ₀⟩ := Field.exists_primitive_element (ResidueField R) (ResidueField S)
-  obtain ⟨β, hβ⟩ := residue_surjective (R := S) β₀
-.mp ?_⟩ refine ⟨β, adjoin_residue_eq_top_iff_adjoin_eq_top β
-  rw [hβ]; rw [← IntermediateField.adjoin_simple_toSubalgebra_of_isAlgebraic (IsAlgebraic.of_finite _ _)]; rw [hβ₀]; rw [IntermediateField.top_toSubalgebra]
-
-中文:
-定理 存在_adjoin_eq_top
-  条件: [代数.形式非分歧 R S]
-  证明: by
-  obtain ⟨β₀, hβ₀⟩ := Field.exists_primitive_element (ResidueField R) (ResidueField S)
-  obtain ⟨β, hβ⟩ := residue_surjective (R := S) β₀
-.mp ?_⟩ refine ⟨β, adjoin_residue_eq_top_iff_adjoin_eq_top β
-  rw [hβ]; rw [← IntermediateField.adjoin_simple_toSubalgebra_of_isAlgebraic (IsAlgebraic.of_finite _ _)]; rw [hβ₀]; rw [IntermediateField.top_toSubalgebra]
-
-Depends on / 依赖: Field.exists_primitive_element, IntermediateField, IntermediateField.adjoin_simple_toSubalgebra_of_isAlgebraic, IntermediateField.top_toSubalgebra, IsAlgebraic, IsAlgebraic.of_finite, ResidueField, adjoin_residue_eq_top_iff_adjoin_eq_top, adjoin_simple_toSubalgebra_of_isAlgebraic, exists_primitive_element, of_finite, residue_surjective, top_toSubalgebra
+--- 原说明 ---
+A finite étale extension of local rings is generated by a single element.
+This is Lemma 3.2, part 1 of [arXiv:2503.07846](https://arxiv.org/abs/2503.07846
+).
+The proof lifts a primitive element of the residue field extension via Nakayama'
+s lemma.
 -/
 theorem exists_adjoin_eq_top [Algebra.FormallyUnramified R S] :
-    exists β : S, Algebra.adjoin R {β} = ⊤ := by
+    ∃ β : S, Algebra.adjoin R {β} = ⊤ := by
   obtain ⟨β₀, hβ₀⟩ := Field.exists_primitive_element (ResidueField R) (ResidueField S)
   obtain ⟨β, hβ⟩ := residue_surjective (R := S) β₀
-.mp ?_⟩ refine ⟨β, adjoin_residue_eq_top_iff_adjoin_eq_top β
-  rw [hβ]; rw [← IntermediateField.adjoin_simple_toSubalgebra_of_isAlgebraic (IsAlgebraic.of_finite _ _)]; rw [hβ₀]; rw [IntermediateField.top_toSubalgebra]
+  refine ⟨β, adjoin_residue_eq_top_iff_adjoin_eq_top β |>.mp ?_⟩
+  rw [hβ,
+    ← IntermediateField.adjoin_simple_toSubalgebra_of_isAlgebraic (IsAlgebraic.of_finite _ _),
+    hβ₀, IntermediateField.top_toSubalgebra]
 
-/--
-lemma `finrank_eq_finrank_residueField` / 引理 `finrank_eq_finrank_residueField`
+/-- For finite étale extensions of local rings,
+`finrank R S = finrank (ResidueField R) (ResidueField S)`. -/
+/-
+**IsLocalRing.finrank_eq_finrank_residueField** 是 Mathlib 中的一个引理，位于命名空间 `IsLocal
+Ring`。
+形式化陈述：finrank_eq_finrank_residueField [Algebra.Etale R S] : Module.finrank R S =
+ Module.finrank (ResidueField R) (ResidueField S)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.free_of_flat_of_isLocalRing`：free_of_flat_of_isLocalRing [Module.
+Finite R P] [Flat R P] : Free R P
+· 使用定理 `Algebra.Smooth.flat`：∀ (R : Type u_1) (A : Type u_2) [inst : CommRing R]
+ [inst_1 : CommRing A] [inst_2 : Algebra R A] [Algebra.Smooth R A],   Module.Fla
+t R A
+· 使用定理 `Algebra.Etale.instSmooth`：∀ {R : Type u} {A : Type v} [inst : CommRing R
+] [inst_1 : CommRing A] [inst_2 : Algebra R A] [Algebra.Etale R A],   Algebra.Sm
+ooth R A
+· 使用定理 `IsLocalRing.ResidueField.instLiesOverMaximalIdeal`：∀ {R : Type u_1} {S :
+ Type u_2} [inst : CommRing R] [inst_1 : IsLocalRing R] [inst_2 : CommRing S]   
+[inst_3 : IsLocalRing S] [inst_4 : Alge…
+· 使用定理 `Module.FaithfullyFlat.instOfNontrivialOfFree`：∀ (R : Type u) (M : Type v
+) [inst : CommRing R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M] [No
+ntrivial M]   [Module.Free R M], M…
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Algebra.FormallyUnramified.map_maximalIdeal`：∀ {R : Type u_1} {S : Type 
+u_2} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   [inst_3 
+: IsLocalRing R] [inst_4 : IsLoca…
+· 使用定理 `Algebra.EssFiniteType.of_finiteType`：∀ (R : Type u_1) (S : Type u_2) [in
+st : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   [Algebra.FiniteT
+ype R S], Algebra.EssFini…
+· 使用定理 `Algebra.Unramified.finiteType`：∀ {R : Type u_1} {inst : CommRing R} {A :
+ Type u_2} {inst_1 : CommRing A} {inst_2 : Algebra R A}   [self : Algebra.Unrami
+fied R A], Algebra.…
+· 使用定理 `Algebra.Etale.instUnramified`：∀ {R : Type u} {A : Type v} [inst : CommRi
+ng R] [inst_1 : CommRing A] [inst_2 : Algebra R A] [Algebra.Etale R A],   Algebr
+a.Unramified R A
+· 使用定理 `Algebra.Unramified.formallyUnramified`：∀ {R : Type u_1} {inst : CommRing
+ R} {A : Type u_2} {inst_1 : CommRing A} {inst_2 : Algebra R A}   [self : Algebr
+a.Unramified R A], Algebra.…
+· 使用定理 `Ideal.Quotient.mk_surjective`：mk_surjective : Function.Surjective (mk I)
+· 使用定理 `RingEquivClass.toAddEquivClass`：∀ {F : Type u_1} {R : Type u_4} {S : Typ
+e u_5} [inst : EquivLike F R S] [inst_1 : Mul R] [inst_2 : Add R]   [inst_3 : Mu
+l S] [inst_4 : Add S…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsLocalRing.finrank_quotient_map`：finrank_quotient_map : finrank (R ⧸ p)
+ (S ⧸ pS) = finrank R S
+· 使用定理 `LinearEquiv.finrank_eq`：finrank_eq (f : M ≃ₗ[R] N) : finrank R M = finra
+nk R N
 
-English:
-lemma finrank_eq_finrank_residueField
-  given: [Algebra.Etale R S]
-  proof: by
-  have : Module.Free R S := Module.free_of_flat_of_isLocalRing
-  have e := AddEquiv.toLinearEquiv (R := R ⧸ maximalIdeal R) (Ideal.quotEquivOfEq <|
-      Algebra.FormallyUnramified.map_maximalIdeal (R := R) (S := S)).toAddEquiv
-    ?_
-  · rw [← finrank_quotient_map (R := R) (S := S)]
-    exact e.finrank_eq -- again IsLocalRing.residue should be abbrev
-  · intro r x
-    obtain ⟨r, rfl⟩ := Ideal.Quotient.mk_surjective r
-    obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
-    simp only [RingEquiv.toAddEquiv_eq_coe]; rfl
-
-中文:
-引理 finrank_eq_finrank_residueField
-  条件: [代数.平展 R S]
-  证明: by
-  have : Module.Free R S := Module.free_of_flat_of_isLocalRing
-  have e := AddEquiv.toLinearEquiv (R := R ⧸ maximalIdeal R) (Ideal.quotEquivOfEq <|
-      Algebra.FormallyUnramified.map_maximalIdeal (R := R) (S := S)).toAddEquiv
-    ?_
-  · rw [← finrank_quotient_map (R := R) (S := S)]
-    exact e.finrank_eq -- again IsLocalRing.residue should be abbrev
-  · intro r x
-    obtain ⟨r, rfl⟩ := Ideal.Quotient.mk_surjective r
-    obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
-    simp only [RingEquiv.toAddEquiv_eq_coe]; rfl
-
-Depends on / 依赖: AddEquiv, AddEquiv.toLinearEquiv, Algebra, Algebra.FormallyUnramified.map_maximalIdeal, FormallyUnramified, Ideal.Quotient.mk_surjective, Ideal.quotEquivOfEq, IsLocalRing, IsLocalRing.residue, Module, Module.Free, Module.free_of_flat_of_isLocalRing, Quotient, RingEquiv, RingEquiv.toAddEquiv_eq_coe, abbrev, e.finrank_eq, finrank_eq, finrank_quotient_map, free_of_flat_of_isLocalRing
+--- 原说明 ---
+For finite étale extensions of local rings,
+`finrank R S = finrank (ResidueField R) (ResidueField S)`.
 -/
 lemma finrank_eq_finrank_residueField [Algebra.Etale R S] :
     Module.finrank R S =
@@ -227,45 +300,93 @@ lemma finrank_eq_finrank_residueField [Algebra.Etale R S] :
     obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
     simp only [RingEquiv.toAddEquiv_eq_coe]; rfl
 
-/--
-lemma `minpoly_map_residue` / 引理 `minpoly_map_residue`
+/-- For a monogenic étale extension of local rings, the minimal polynomial of `β`
+maps to the minimal polynomial of `β mod m_S` over the residue field. -/
+/-
+**IsLocalRing.minpoly_map_residue** 是 Mathlib 中的一个引理，位于命名空间 `IsLocalRing`。
+形式化陈述：minpoly_map_residue [Algebra.Etale R S] {β : S} (hadj : Algebra.adjoin R {
+β} = ⊤) : (minpoly R β).map (residue R) = minpoly (ResidueField R) (residue S β)
+参数：hadj : Algebra.adjoin R {β} = ⊤。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `minpoly.monic`：monic (hx : IsIntegral A x) : Monic (minpoly A x)
+· 使用定理 `Algebra.IsIntegral.isIntegral`：∀ {R : Type u_1} {A : Type u_3} {inst : C
+ommRing R} {inst_1 : Ring A} {inst_2 : Algebra R A}   [self : Algebra.IsIntegral
+ R A] (x : A), IsIn…
+· 使用引理 `Polynomial.eq_of_monic_of_dvd_of_natDegree_le`：eq_of_monic_of_dvd_of_nat
+Degree_le {p q : R[X]} (hp : p.Monic) (hq : q.Monic) (hdvd : p ∣ q) (hdeg : q.na
+tDegree <= p.natDegree) : q = p
+· 使用定理 `Algebra.IsAlgebraic.isIntegral`：∀ {K : Type u} {A : Type v} [inst : Fiel
+d K] [inst_1 : Ring A] [inst_2 : Algebra K A] [Algebra.IsAlgebraic K A],   Algeb
+ra.IsIntegral K A
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `Algebra.instIsSeparableResidueFieldOfFormallyUnramified`：∀ {R : Type u_1
+} {S : Type u_2} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S
+]   [inst_3 : IsLocalRing R] [inst_4 : IsLoca…
+· 使用定理 `Algebra.EssFiniteType.of_finiteType`：∀ (R : Type u_1) (S : Type u_2) [in
+st : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   [Algebra.FiniteT
+ype R S], Algebra.EssFini…
+· 使用定理 `Algebra.Unramified.finiteType`：∀ {R : Type u_1} {inst : CommRing R} {A :
+ Type u_2} {inst_1 : CommRing A} {inst_2 : Algebra R A}   [self : Algebra.Unrami
+fied R A], Algebra.…
+· 使用定理 `Algebra.Etale.instUnramified`：∀ {R : Type u} {A : Type v} [inst : CommRi
+ng R] [inst_1 : CommRing A] [inst_2 : Algebra R A] [Algebra.Etale R A],   Algebr
+a.Unramified R A
+· 使用定理 `Algebra.Unramified.formallyUnramified`：∀ {R : Type u_1} {inst : CommRing
+ R} {A : Type u_2} {inst_1 : CommRing A} {inst_2 : Algebra R A}   [self : Algebr
+a.Unramified R A], Algebra.…
+· 使用定理 `Polynomial.Monic.map`：∀ {R : Type u} {S : Type v} [inst : Semiring R] {p
+ : Polynomial R} [inst_1 : Semiring S] (f : R →+* S),   p.Monic → (Polynomial.ma
+p f p).Mon…
+· 使用定理 `minpoly.dvd`：dvd {p : A[X]} (hp : Polynomial.aeval x p = 0) : minpoly A 
+x ∣ p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.map_aeval_eq_aeval_map`：map_aeval_eq_aeval_map {S T U : Type*
+} [Semiring S] [CommSemiring T] [Semiring U] [Algebra R S] [Algebra T U] {φ : R 
+->+* T} {ψ : S ->+* U} …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `minpoly.aeval`：aeval : aeval x (minpoly A x) = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Module.free_of_flat_of_isLocalRing`：free_of_flat_of_isLocalRing [Module.
+Finite R P] [Flat R P] : Free R P
+· 使用定理 `Algebra.Smooth.flat`：∀ (R : Type u_1) (A : Type u_2) [inst : CommRing R]
+ [inst_1 : CommRing A] [inst_2 : Algebra R A] [Algebra.Smooth R A],   Module.Fla
+t R A
+· 使用定理 `Algebra.Etale.instSmooth`：∀ {R : Type u} {A : Type v} [inst : CommRing R
+] [inst_1 : CommRing A] [inst_2 : Algebra R A] [Algebra.Etale R A],   Algebra.Sm
+ooth R A
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `IsLocalRing.adjoin_residue_eq_top_iff_adjoin_eq_top`：adjoin_residue_eq_t
+op_iff_adjoin_eq_top [Algebra.FormallyUnramified R S] (β : S) : Algebra.adjoin (
+ResidueField R) {residue S β} = ⊤ ↔ Algeb…
+· 使用定理 `Polynomial.Monic.natDegree_map`：∀ {R : Type u} {S : Type v} [inst : Semi
+ring R] [inst_1 : Semiring S] [Nontrivial S] {P : Polynomial R},   P.Monic → ∀ (
+f : R →+* S), (Polyn…
+（共 41 条，此处仅展示前 30 条）
 
-English:
-lemma minpoly_map_residue
-  statement: [Algebra.Etale R S]
-  proof: by
-have h := minpoly.monic Algebra.IsIntegral.isIntegral (R := R) β
-  -- Both monic, same degree, divisibility ⟹ equal
-  refine eq_of_monic_of_dvd_of_natDegree_le
-    (minpoly.monic <| Algebra.IsIntegral.isIntegral <| residue S β)
-    (h.map _) (minpoly.dvd (ResidueField R) (residue S β) ?_) ?_
-  · rw [← map_aeval_eq_aeval_map (ψ := residue S) (φ := residue R) rfl]
-    simp
-  · have : Module.Free R S := Module.free_of_flat_of_isLocalRing
-    have hβ₀ := (adjoin_residue_eq_top_iff_adjoin_eq_top β).mpr hadj
-    rw [h.natDegree_map _]; rw [← (IsAdjoinRootMonic.mkOfAdjoinEqTop' hadj).finrank]; rw [finrank_eq_finrank_residueField]; rw [(IsAdjoinRootMonic.mkOfAdjoinEqTop' hβ₀).finrank]
-
-中文:
-引理 minpoly_map_residue
-  结论: [代数.平展 R S]
-  证明: by
-have h := minpoly.monic Algebra.IsIntegral.isIntegral (R := R) β
-  -- Both monic, same degree, divisibility ⟹ equal
-  refine eq_of_monic_of_dvd_of_natDegree_le
-    (minpoly.monic <| Algebra.IsIntegral.isIntegral <| residue S β)
-    (h.map _) (minpoly.dvd (ResidueField R) (residue S β) ?_) ?_
-  · rw [← map_aeval_eq_aeval_map (ψ := residue S) (φ := residue R) rfl]
-    simp
-  · have : Module.Free R S := Module.free_of_flat_of_isLocalRing
-    have hβ₀ := (adjoin_residue_eq_top_iff_adjoin_eq_top β).mpr hadj
-    rw [h.natDegree_map _]; rw [← (IsAdjoinRootMonic.mkOfAdjoinEqTop' hadj).finrank]; rw [finrank_eq_finrank_residueField]; rw [(IsAdjoinRootMonic.mkOfAdjoinEqTop' hβ₀).finrank]
-
-Depends on / 依赖: Algebra, Algebra.IsIntegral.isIntegral, IsIntegral, isIntegral, minpoly, minpoly.monic
+--- 原说明 ---
+For a monogenic étale extension of local rings, the minimal polynomial of `β`
+maps to the minimal polynomial of `β mod m_S` over the residue field.
 -/
 lemma minpoly_map_residue [Algebra.Etale R S]
     {β : S} (hadj : Algebra.adjoin R {β} = ⊤) :
     (minpoly R β).map (residue R) = minpoly (ResidueField R) (residue S β) := by
-have h := minpoly.monic Algebra.IsIntegral.isIntegral (R := R) β
+  have h := minpoly.monic <| Algebra.IsIntegral.isIntegral (R := R) β
   -- Both monic, same degree, divisibility ⟹ equal
   refine eq_of_monic_of_dvd_of_natDegree_le
     (minpoly.monic <| Algebra.IsIntegral.isIntegral <| residue S β)
@@ -274,33 +395,74 @@ have h := minpoly.monic Algebra.IsIntegral.isIntegral (R := R) β
     simp
   · have : Module.Free R S := Module.free_of_flat_of_isLocalRing
     have hβ₀ := (adjoin_residue_eq_top_iff_adjoin_eq_top β).mpr hadj
-    rw [h.natDegree_map _]; rw [← (IsAdjoinRootMonic.mkOfAdjoinEqTop' hadj).finrank]; rw [finrank_eq_finrank_residueField]; rw [(IsAdjoinRootMonic.mkOfAdjoinEqTop' hβ₀).finrank]
+    rw [h.natDegree_map _,
+      ← (IsAdjoinRootMonic.mkOfAdjoinEqTop' hadj).finrank,
+      finrank_eq_finrank_residueField,
+      (IsAdjoinRootMonic.mkOfAdjoinEqTop' hβ₀).finrank]
 
-/--
-lemma `isUnit_aeval_derivative_minpoly_of_adjoin_eq_top` / 引理 `isUnit_aeval_derivative_minpoly_of_adjoin_eq_top`
+/-- If `R → S` is étale and `R[β] = S`, then `f'(β)` is a unit in `S`,
+where `f = minpoly R β`. The proof reduces to separability of the
+residue field extension via `minpoly_map_residue`. -/
+/-
+**IsLocalRing.isUnit_aeval_derivative_minpoly_of_adjoin_eq_top** 是 Mathlib 中的一个引
+理，位于命名空间 `IsLocalRing`。
+形式化陈述：isUnit_aeval_derivative_minpoly_of_adjoin_eq_top [Algebra.Etale R S] {β : 
+S} (hadj : Algebra.adjoin R {β} = ⊤) : IsUnit (aeval β (minpoly R β).derivative)
+参数：hadj : Algebra.adjoin R {β} = ⊤。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `IsLocalRing.residue_ne_zero_iff_isUnit`：residue_ne_zero_iff_isUnit (x : 
+R) : residue R x != 0 ↔ IsUnit x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.map_aeval_eq_aeval_map`：map_aeval_eq_aeval_map {S T U : Type*
+} [Semiring S] [CommSemiring T] [Semiring U] [Algebra R S] [Algebra T U] {φ : R 
+->+* T} {ψ : S ->+* U} …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Polynomial.derivative_map`：derivative_map [Semiring S] (p : R[X]) (f : R
+ ->+* S) : derivative (p.map f) = p.derivative.map f
+· 使用引理 `IsLocalRing.minpoly_map_residue`：minpoly_map_residue [Algebra.Etale R S]
+ {β : S} (hadj : Algebra.adjoin R {β} = ⊤) : (minpoly R β).map (residue R) = min
+poly (ResidueField R)…
+· 使用定理 `Polynomial.Separable.aeval_derivative_ne_zero`：∀ {R : Type u} [inst : Co
+mmSemiring R] {S : Type v} [inst_1 : CommSemiring S] [Nontrivial S] [inst_3 : Al
+gebra R S]   {p : Polynomial R},   …
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `Algebra.IsSeparable.isSeparable`：Algebra.IsSeparable.isSeparable [Algebr
+a.IsSeparable F K] : forall x : K, IsSeparable F x
+· 使用定理 `Algebra.instIsSeparableResidueFieldOfFormallyUnramified`：∀ {R : Type u_1
+} {S : Type u_2} [inst : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S
+]   [inst_3 : IsLocalRing R] [inst_4 : IsLoca…
+· 使用定理 `Algebra.EssFiniteType.of_finiteType`：∀ (R : Type u_1) (S : Type u_2) [in
+st : CommRing R] [inst_1 : CommRing S] [inst_2 : Algebra R S]   [Algebra.FiniteT
+ype R S], Algebra.EssFini…
+· 使用定理 `Algebra.Unramified.finiteType`：∀ {R : Type u_1} {inst : CommRing R} {A :
+ Type u_2} {inst_1 : CommRing A} {inst_2 : Algebra R A}   [self : Algebra.Unrami
+fied R A], Algebra.…
+· 使用定理 `Algebra.Etale.instUnramified`：∀ {R : Type u} {A : Type v} [inst : CommRi
+ng R] [inst_1 : CommRing A] [inst_2 : Algebra R A] [Algebra.Etale R A],   Algebr
+a.Unramified R A
+· 使用定理 `Algebra.Unramified.formallyUnramified`：∀ {R : Type u_1} {inst : CommRing
+ R} {A : Type u_2} {inst_1 : CommRing A} {inst_2 : Algebra R A}   [self : Algebr
+a.Unramified R A], Algebra.…
+· 使用定理 `minpoly.aeval`：aeval : aeval x (minpoly A x) = 0
 
-English:
-lemma isUnit_aeval_derivative_minpoly_of_adjoin_eq_top
-  proof: by
-  apply fun s => (residue_ne_zero_iff_isUnit s).mp
-  rw [map_aeval_eq_aeval_map (ψ := residue S) (φ := residue R) rfl]; rw [← derivative_map]; rw [minpoly_map_residue hadj]
-  exact (Algebra.IsSeparable.isSeparable _ _).aeval_derivative_ne_zero (minpoly.aeval _ _)
-
-中文:
-引理 isUnit_aeval_derivative_minpoly_of_adjoin_eq_top
-  证明: by
-  apply fun s => (residue_ne_zero_iff_isUnit s).mp
-  rw [map_aeval_eq_aeval_map (ψ := residue S) (φ := residue R) rfl]; rw [← derivative_map]; rw [minpoly_map_residue hadj]
-  exact (Algebra.IsSeparable.isSeparable _ _).aeval_derivative_ne_zero (minpoly.aeval _ _)
-
-Depends on / 依赖: Algebra, Algebra.IsSeparable.isSeparable, IsSeparable, aeval_derivative_ne_zero, derivative_map, isSeparable, map_aeval_eq_aeval_map, minpoly, minpoly.aeval, minpoly_map_residue, residue, residue_ne_zero_iff_isUnit
+--- 原说明 ---
+If `R → S` is étale and `R[β] = S`, then `f'(β)` is a unit in `S`,
+where `f = minpoly R β`. The proof reduces to separability of the
+residue field extension via `minpoly_map_residue`.
 -/
 lemma isUnit_aeval_derivative_minpoly_of_adjoin_eq_top
     [Algebra.Etale R S] {β : S}
     (hadj : Algebra.adjoin R {β} = ⊤) :
     IsUnit (aeval β (minpoly R β).derivative) := by
-  apply fun s => (residue_ne_zero_iff_isUnit s).mp
-  rw [map_aeval_eq_aeval_map (ψ := residue S) (φ := residue R) rfl]; rw [← derivative_map]; rw [minpoly_map_residue hadj]
+  apply fun s ↦ (residue_ne_zero_iff_isUnit s).mp
+  rw [map_aeval_eq_aeval_map (ψ := residue S) (φ := residue R) rfl,
+    ← derivative_map, minpoly_map_residue hadj]
   exact (Algebra.IsSeparable.isSeparable _ _).aeval_derivative_ne_zero (minpoly.aeval _ _)
 
 end IsLocalRing
+

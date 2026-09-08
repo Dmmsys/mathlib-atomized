@@ -49,62 +49,40 @@ open Category Iso
 
 -- intended to be used with explicit universe parameters
 set_option linter.checkUnivs false in
-/--
-Definition of `Bicategory` / `Bicategory` 的定义
+/-- In a bicategory, we can compose the 1-morphisms `f : a ⟶ b` and `g : b ⟶ c` to obtain
+a 1-morphism `f ≫ g : a ⟶ c`. This composition does not need to be strictly associative,
+but there is a specified associator, `α_ f g h : (f ≫ g) ≫ h ≅ f ≫ (g ≫ h)`.
+There is an identity 1-morphism `𝟙 a : a ⟶ a`, with specified left and right unitor
+isomorphisms `λ_ f : 𝟙 a ≫ f ≅ f` and `ρ_ f : f ≫ 𝟙 a ≅ f`.
+These associators and unitors satisfy the pentagon and triangle equations.
 
-English:
-class Bicategory
-  parameters: (B : Type u)
-  extends: CategoryStruct.{v} B
-  axioms and operations (18):
-    - homCategory : forall a b : B, Category.{w} (a ⟶ b)  [default: by infer_instance]
-    - whiskerLeft({a b c : B} (f : a ⟶ b) {g h : b ⟶ c} (η : g ⟶ h)) : f ≫ g ⟶ f ≫ h
-    - whiskerRight({a b c : B} {f g : a ⟶ b} (η : f ⟶ g) (h : b ⟶ c)) : f ≫ h ⟶ g ≫ h
-    - associator({a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d)) : (f ≫ g) ≫ h ≅ f ≫ g ≫ h
-    - leftUnitor({a b : B} (f : a ⟶ b)) : 𝟙 a ≫ f ≅ f
-    - rightUnitor({a b : B} (f : a ⟶ b)) : f ≫ 𝟙 b ≅ f
-    - whiskerLeft_id : forall {a b c} (f : a ⟶ b) (g : b ⟶ c), whiskerLeft f (𝟙 g) = 𝟙 (f ≫ g)  [default: by cat_disch]
-    - whiskerLeft_comp : forall {a b c} (f : a ⟶ b) {g h i : b ⟶ c} (η : g ⟶ h) (θ : h ⟶ i), whiskerLeft f (η ≫ θ) = whiskerLeft f η ≫ whiskerLeft f θ  [default: by cat_disch]
-    - id_whiskerLeft : forall {a b} {f g : a ⟶ b} (η : f ⟶ g), whiskerLeft (𝟙 a) η = (leftUnitor f).hom ≫ η ≫ (leftUnitor g).inv  [default: by cat_disch]
-    - comp_whiskerLeft : forall {a b c d} (f : a ⟶ b) (g : b ⟶ c) {h h' : c ⟶ d} (η : h ⟶ h'), whiskerLeft (f ≫ g) η = (associator f g h).hom ≫ whiskerLeft f (whiskerLeft g η) ≫ (associator f g h').inv  [default: by cat_disch]
-    - id_whiskerRight : forall {a b c} (f : a ⟶ b) (g : b ⟶ c), whiskerRight (𝟙 f) g = 𝟙 (f ≫ g)  [default: by cat_disch]
-    - comp_whiskerRight : forall {a b c} {f g h : a ⟶ b} (η : f ⟶ g) (θ : g ⟶ h) (i : b ⟶ c), whiskerRight (η ≫ θ) i = whiskerRight η i ≫ whiskerRight θ i  [default: by cat_disch]
-    - whiskerRight_id : forall {a b} {f g : a ⟶ b} (η : f ⟶ g), whiskerRight η (𝟙 b) = (rightUnitor f).hom ≫ η ≫ (rightUnitor g).inv  [default: by cat_disch]
-    - whiskerRight_comp : forall {a b c d} {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c) (h : c ⟶ d), whiskerRight η (g ≫ h) = (associator f g h).inv ≫ whiskerRight (whiskerRight η g) h ≫ (associator f' g h).hom  [default: by cat_disch]
-    - whisker_assoc : forall {a b c d} (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g') (h : c ⟶ d), whiskerRight (whiskerLeft f η) h = (associator f g h).hom ≫ whiskerLeft f (whiskerRight η h) ≫ (associator f g' h).inv  [default: by cat_disch]
-    - whisker_exchange : forall {a b c} {f g : a ⟶ b} {h i : b ⟶ c} (η : f ⟶ g) (θ : h ⟶ i), whiskerLeft f θ ≫ whiskerRight η i = whiskerRight η h ≫ whiskerLeft g θ  [default: by cat_disch]
-    - pentagon : forall {a b c d e} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e), whiskerRight (associator f g h).hom i ≫ (associator f (g ≫ h) i).hom ≫ whiskerLeft f (associator g h i).hom = (associator (f ≫ g) h i).hom ≫ (associator f g (h ≫ i)).hom  [default: by cat_disch]
-    - triangle : forall {a b c} (f : a ⟶ b) (g : b ⟶ c), (associator f (𝟙 b) g).hom ≫ whiskerLeft f (leftUnitor g).hom = whiskerRight (rightUnitor f).hom g  [default: by cat_disch]
+See https://ncatlab.org/nlab/show/bicategory.
+-/
+/-
+**CategoryTheory.Bicategory** 是 Mathlib 中的一个类，位于命名空间 `CategoryTheory`。
+形式化陈述：Bicategory (B : Type u) extends CategoryStruct.{v} B where /-- The categor
+y structure on the collection of 1-morphisms -/ homCategory : forall a b : B, Ca
+tegory.{w} (a ⟶ b)
+参数：B : Type u。
+继承自：CategoryStruct.{v} B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 双范畴
-  参数: (B : 类型u)
-  继承: CategoryStruct.{v} B
-  公理与运算 (18 个):
-    - homCategory : 对任意 a b : B, 范畴.{w} (a ⟶ b)  [默认: by infer_instance]
-    - whiskerLeft({a b c : B} (f : a ⟶ b) {g h : b ⟶ c} (η : g ⟶ h)) : f ≫ g ⟶ f ≫ h
-    - whiskerRight({a b c : B} {f g : a ⟶ b} (η : f ⟶ g) (h : b ⟶ c)) : f ≫ h ⟶ g ≫ h
-    - associator({a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d)) : (f ≫ g) ≫ h ≅ f ≫ g ≫ h
-    - leftUnitor({a b : B} (f : a ⟶ b)) : 𝟙 a ≫ f ≅ f
-    - rightUnitor({a b : B} (f : a ⟶ b)) : f ≫ 𝟙 b ≅ f
-    - whiskerLeft_id : 对任意 {a b c} (f : a ⟶ b) (g : b ⟶ c), whiskerLeft f (𝟙 g) = 𝟙 (f ≫ g)  [默认: by cat_disch]
-    - whiskerLeft_comp : 对任意 {a b c} (f : a ⟶ b) {g h i : b ⟶ c} (η : g ⟶ h) (θ : h ⟶ i), whiskerLeft f (η ≫ θ) = whiskerLeft f η ≫ whiskerLeft f θ  [默认: by cat_disch]
-    - id_whiskerLeft : 对任意 {a b} {f g : a ⟶ b} (η : f ⟶ g), whiskerLeft (𝟙 a) η = (leftUnitor f).hom ≫ η ≫ (leftUnitor g).inv  [默认: by cat_disch]
-    - comp_whiskerLeft : 对任意 {a b c d} (f : a ⟶ b) (g : b ⟶ c) {h h' : c ⟶ d} (η : h ⟶ h'), whiskerLeft (f ≫ g) η = (associator f g h).hom ≫ whiskerLeft f (whiskerLeft g η) ≫ (associator f g h').inv  [默认: by cat_disch]
-    - id_whiskerRight : 对任意 {a b c} (f : a ⟶ b) (g : b ⟶ c), whiskerRight (𝟙 f) g = 𝟙 (f ≫ g)  [默认: by cat_disch]
-    - comp_whiskerRight : 对任意 {a b c} {f g h : a ⟶ b} (η : f ⟶ g) (θ : g ⟶ h) (i : b ⟶ c), whiskerRight (η ≫ θ) i = whiskerRight η i ≫ whiskerRight θ i  [默认: by cat_disch]
-    - whiskerRight_id : 对任意 {a b} {f g : a ⟶ b} (η : f ⟶ g), whiskerRight η (𝟙 b) = (rightUnitor f).hom ≫ η ≫ (rightUnitor g).inv  [默认: by cat_disch]
-    - whiskerRight_comp : 对任意 {a b c d} {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c) (h : c ⟶ d), whiskerRight η (g ≫ h) = (associator f g h).inv ≫ whiskerRight (whiskerRight η g) h ≫ (associator f' g h).hom  [默认: by cat_disch]
-    - whisker_assoc : 对任意 {a b c d} (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g') (h : c ⟶ d), whiskerRight (whiskerLeft f η) h = (associator f g h).hom ≫ whiskerLeft f (whiskerRight η h) ≫ (associator f g' h).inv  [默认: by cat_disch]
-    - whisker_exchange : 对任意 {a b c} {f g : a ⟶ b} {h i : b ⟶ c} (η : f ⟶ g) (θ : h ⟶ i), whiskerLeft f θ ≫ whiskerRight η i = whiskerRight η h ≫ whiskerLeft g θ  [默认: by cat_disch]
-    - pentagon : 对任意 {a b c d e} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e), whiskerRight (associator f g h).hom i ≫ (associator f (g ≫ h) i).hom ≫ whiskerLeft f (associator g h i).hom = (associator (f ≫ g) h i).hom ≫ (associator f g (h ≫ i)).hom  [默认: by cat_disch]
-    - triangle : 对任意 {a b c} (f : a ⟶ b) (g : b ⟶ c), (associator f (𝟙 b) g).hom ≫ whiskerLeft f (leftUnitor g).hom = whiskerRight (rightUnitor f).hom g  [默认: by cat_disch]
+--- 原说明 ---
+In a bicategory, we can compose the 1-morphisms `f : a ⟶ b` and `g : b ⟶ c` to o
+btain
+a 1-morphism `f ≫ g : a ⟶ c`. This composition does not need to be strictly asso
+ciative,
+but there is a specified associator, `α_ f g h : (f ≫ g) ≫ h ≅ f ≫ (g ≫ h)`.
+There is an identity 1-morphism `𝟙 a : a ⟶ a`, with specified left and right uni
+tor
+isomorphisms `λ_ f : 𝟙 a ≫ f ≅ f` and `ρ_ f : f ≫ 𝟙 a ≅ f`.
+These associators and unitors satisfy the pentagon and triangle equations.
 
-Depends on / 依赖: infer_instance
+See https://ncatlab.org/nlab/show/bicategory.
 -/
 class Bicategory (B : Type u) extends CategoryStruct.{v} B where
   /-- The category structure on the collection of 1-morphisms -/
-  homCategory : forall a b : B, Category.{w} (a ⟶ b) := by infer_instance
+  homCategory : ∀ a b : B, Category.{w} (a ⟶ b) := by infer_instance
   /-- Left whiskering for morphisms -/
   whiskerLeft {a b c : B} (f : a ⟶ b) {g h : b ⟶ c} (η : g ⟶ h) : f ≫ g ⟶ f ≫ h
   /-- Right whiskering for morphisms -/
@@ -116,58 +94,58 @@ class Bicategory (B : Type u) extends CategoryStruct.{v} B where
   /-- The right unitor: `f ≫ 𝟙 b ≅ f` -/
   rightUnitor {a b : B} (f : a ⟶ b) : f ≫ 𝟙 b ≅ f
   -- axioms for left whiskering:
-  whiskerLeft_id : forall {a b c} (f : a ⟶ b) (g : b ⟶ c), whiskerLeft f (𝟙 g) = 𝟙 (f ≫ g) := by
+  whiskerLeft_id : ∀ {a b c} (f : a ⟶ b) (g : b ⟶ c), whiskerLeft f (𝟙 g) = 𝟙 (f ≫ g) := by
     cat_disch
   whiskerLeft_comp :
-    forall {a b c} (f : a ⟶ b) {g h i : b ⟶ c} (η : g ⟶ h) (θ : h ⟶ i),
+    ∀ {a b c} (f : a ⟶ b) {g h i : b ⟶ c} (η : g ⟶ h) (θ : h ⟶ i),
       whiskerLeft f (η ≫ θ) = whiskerLeft f η ≫ whiskerLeft f θ := by
     cat_disch
   id_whiskerLeft :
-    forall {a b} {f g : a ⟶ b} (η : f ⟶ g),
+    ∀ {a b} {f g : a ⟶ b} (η : f ⟶ g),
       whiskerLeft (𝟙 a) η = (leftUnitor f).hom ≫ η ≫ (leftUnitor g).inv := by
     cat_disch
   comp_whiskerLeft :
-    forall {a b c d} (f : a ⟶ b) (g : b ⟶ c) {h h' : c ⟶ d} (η : h ⟶ h'),
+    ∀ {a b c d} (f : a ⟶ b) (g : b ⟶ c) {h h' : c ⟶ d} (η : h ⟶ h'),
       whiskerLeft (f ≫ g) η =
         (associator f g h).hom ≫ whiskerLeft f (whiskerLeft g η) ≫ (associator f g h').inv := by
     cat_disch
   -- axioms for right whiskering:
-  id_whiskerRight : forall {a b c} (f : a ⟶ b) (g : b ⟶ c), whiskerRight (𝟙 f) g = 𝟙 (f ≫ g) := by
+  id_whiskerRight : ∀ {a b c} (f : a ⟶ b) (g : b ⟶ c), whiskerRight (𝟙 f) g = 𝟙 (f ≫ g) := by
     cat_disch
   comp_whiskerRight :
-    forall {a b c} {f g h : a ⟶ b} (η : f ⟶ g) (θ : g ⟶ h) (i : b ⟶ c),
+    ∀ {a b c} {f g h : a ⟶ b} (η : f ⟶ g) (θ : g ⟶ h) (i : b ⟶ c),
       whiskerRight (η ≫ θ) i = whiskerRight η i ≫ whiskerRight θ i := by
     cat_disch
   whiskerRight_id :
-    forall {a b} {f g : a ⟶ b} (η : f ⟶ g),
+    ∀ {a b} {f g : a ⟶ b} (η : f ⟶ g),
       whiskerRight η (𝟙 b) = (rightUnitor f).hom ≫ η ≫ (rightUnitor g).inv := by
     cat_disch
   whiskerRight_comp :
-    forall {a b c d} {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c) (h : c ⟶ d),
+    ∀ {a b c d} {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c) (h : c ⟶ d),
       whiskerRight η (g ≫ h) =
         (associator f g h).inv ≫ whiskerRight (whiskerRight η g) h ≫ (associator f' g h).hom := by
     cat_disch
   -- associativity of whiskerings:
   whisker_assoc :
-    forall {a b c d} (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g') (h : c ⟶ d),
+    ∀ {a b c d} (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g') (h : c ⟶ d),
       whiskerRight (whiskerLeft f η) h =
         (associator f g h).hom ≫ whiskerLeft f (whiskerRight η h) ≫ (associator f g' h).inv := by
     cat_disch
   -- exchange law of left and right whiskerings:
   whisker_exchange :
-    forall {a b c} {f g : a ⟶ b} {h i : b ⟶ c} (η : f ⟶ g) (θ : h ⟶ i),
+    ∀ {a b c} {f g : a ⟶ b} {h i : b ⟶ c} (η : f ⟶ g) (θ : h ⟶ i),
       whiskerLeft f θ ≫ whiskerRight η i = whiskerRight η h ≫ whiskerLeft g θ := by
     cat_disch
   -- pentagon identity:
   pentagon :
-    forall {a b c d e} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e),
+    ∀ {a b c d e} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e),
       whiskerRight (associator f g h).hom i ≫
           (associator f (g ≫ h) i).hom ≫ whiskerLeft f (associator g h i).hom =
         (associator (f ≫ g) h i).hom ≫ (associator f g (h ≫ i)).hom := by
     cat_disch
   -- triangle identity:
   triangle :
-    forall {a b c} (f : a ⟶ b) (g : b ⟶ c),
+    ∀ {a b c} (f : a ⟶ b) (g : b ⟶ c),
       (associator f (𝟙 b) g).hom ≫ whiskerLeft f (leftUnitor g).hom
       = whiskerRight (rightUnitor f).hom g := by
     cat_disch
@@ -177,7 +155,7 @@ namespace Bicategory
 @[inherit_doc] scoped infixr:81 " ◁ " => Bicategory.whiskerLeft
 @[inherit_doc] scoped infixl:81 " ▷ " => Bicategory.whiskerRight
 @[inherit_doc] scoped notation "α_" => Bicategory.associator
-@[inherit_doc] scoped notation "fun_" => Bicategory.leftUnitor
+@[inherit_doc] scoped notation "λ_" => Bicategory.leftUnitor
 @[inherit_doc] scoped notation "ρ_" => Bicategory.rightUnitor
 
 /-!
@@ -221,244 +199,264 @@ attribute [simp]
 variable {B : Type u} [Bicategory.{w, v} B] {a b c d e : B}
 
 @[reassoc (attr := simp)]
-/--
-theorem `whiskerLeft_hom_inv` / 定理 `whiskerLeft_hom_inv`
-
-English:
-theorem whiskerLeft_hom_inv
-  given: (f : a ⟶ b) {g h : b ⟶ c} (η : g ≅ h)
-  proof: by rw [← whiskerLeft_comp, hom_inv_id, whiskerLeft_id]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 whiskerLeft_hom_inv
-  条件: (f : a ⟶ b) {g h : b ⟶ c} (η : g ≅ h)
-  证明: by rw [← whiskerLeft_comp, hom_inv_id, whiskerLeft_id]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: hom_inv_id, whiskerLeft_comp, whiskerLeft_id
+/-
+**CategoryTheory.Bicategory.whiskerLeft_hom_inv** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Bicategory`。
+形式化陈述：whiskerLeft_hom_inv (f : a ⟶ b) {g h : b ⟶ c} (η : g ≅ h) : f ◁ η.hom ≫ f 
+◁ η.inv = 𝟙 (f ≫ g)
+参数：f : a ⟶ b；η : g ≅ h。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Bicategory.whiskerLeft_comp`：∀ {B : Type u} [self : Categ
+oryTheory.Bicategory B] {a b c : B} (f : a ⟶ b) {g h i : b ⟶ c} (η : g ⟶ h) (θ :
+ h ⟶ i),   CategoryTheory.Bicate…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Bicategory.whiskerLeft_id`：∀ {B : Type u} [self : Categor
+yTheory.Bicategory B] {a b c : B} (f : a ⟶ b) (g : b ⟶ c),   CategoryTheory.Bica
+tegory.whiskerLeft f (Category…
 -/
 theorem whiskerLeft_hom_inv (f : a ⟶ b) {g h : b ⟶ c} (η : g ≅ h) :
     f ◁ η.hom ≫ f ◁ η.inv = 𝟙 (f ≫ g) := by rw [← whiskerLeft_comp, hom_inv_id, whiskerLeft_id]
 
 @[reassoc (attr := simp)]
-/--
-theorem `hom_inv_whiskerRight` / 定理 `hom_inv_whiskerRight`
-
-English:
-theorem hom_inv_whiskerRight
-  given: {f g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c)
-  proof: by rw [← comp_whiskerRight, hom_inv_id, id_whiskerRight]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 hom_inv_whiskerRight
-  条件: {f g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c)
-  证明: by rw [← comp_whiskerRight, hom_inv_id, id_whiskerRight]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: comp_whiskerRight, hom_inv_id, id_whiskerRight
+/-
+**CategoryTheory.Bicategory.hom_inv_whiskerRight** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Bicategory`。
+形式化陈述：hom_inv_whiskerRight {f g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c) : η.hom ▷ h ≫ η
+.inv ▷ h = 𝟙 (f ≫ h)
+参数：η : f ≅ g；h : b ⟶ c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Bicategory.comp_whiskerRight`：∀ {B : Type u} [self : Cate
+goryTheory.Bicategory B] {a b c : B} {f g h : a ⟶ b} (η : f ⟶ g) (θ : g ⟶ h) (i 
+: b ⟶ c),   CategoryTheory.Bicate…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Bicategory.id_whiskerRight`：∀ {B : Type u} [self : Catego
+ryTheory.Bicategory B] {a b c : B} (f : a ⟶ b) (g : b ⟶ c),   CategoryTheory.Bic
+ategory.whiskerRight (CategoryT…
 -/
 theorem hom_inv_whiskerRight {f g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c) :
     η.hom ▷ h ≫ η.inv ▷ h = 𝟙 (f ≫ h) := by rw [← comp_whiskerRight, hom_inv_id, id_whiskerRight]
 
 @[reassoc (attr := simp)]
-/--
-theorem `whiskerLeft_inv_hom` / 定理 `whiskerLeft_inv_hom`
-
-English:
-theorem whiskerLeft_inv_hom
-  given: (f : a ⟶ b) {g h : b ⟶ c} (η : g ≅ h)
-  proof: by rw [← whiskerLeft_comp, inv_hom_id, whiskerLeft_id]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 whiskerLeft_inv_hom
-  条件: (f : a ⟶ b) {g h : b ⟶ c} (η : g ≅ h)
-  证明: by rw [← whiskerLeft_comp, inv_hom_id, whiskerLeft_id]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: inv_hom_id, whiskerLeft_comp, whiskerLeft_id
+/-
+**CategoryTheory.Bicategory.whiskerLeft_inv_hom** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Bicategory`。
+形式化陈述：whiskerLeft_inv_hom (f : a ⟶ b) {g h : b ⟶ c} (η : g ≅ h) : f ◁ η.inv ≫ f 
+◁ η.hom = 𝟙 (f ≫ h)
+参数：f : a ⟶ b；η : g ≅ h。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Bicategory.whiskerLeft_comp`：∀ {B : Type u} [self : Categ
+oryTheory.Bicategory B] {a b c : B} (f : a ⟶ b) {g h i : b ⟶ c} (η : g ⟶ h) (θ :
+ h ⟶ i),   CategoryTheory.Bicate…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Bicategory.whiskerLeft_id`：∀ {B : Type u} [self : Categor
+yTheory.Bicategory B] {a b c : B} (f : a ⟶ b) (g : b ⟶ c),   CategoryTheory.Bica
+tegory.whiskerLeft f (Category…
 -/
 theorem whiskerLeft_inv_hom (f : a ⟶ b) {g h : b ⟶ c} (η : g ≅ h) :
     f ◁ η.inv ≫ f ◁ η.hom = 𝟙 (f ≫ h) := by rw [← whiskerLeft_comp, inv_hom_id, whiskerLeft_id]
 
 @[reassoc (attr := simp)]
-/--
-theorem `inv_hom_whiskerRight` / 定理 `inv_hom_whiskerRight`
-
-English:
-theorem inv_hom_whiskerRight
-  given: {f g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c)
-  proof: by rw [← comp_whiskerRight, inv_hom_id, id_whiskerRight]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 inv_hom_whiskerRight
-  条件: {f g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c)
-  证明: by rw [← comp_whiskerRight, inv_hom_id, id_whiskerRight]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: comp_whiskerRight, id_whiskerRight, inv_hom_id
+/-
+**CategoryTheory.Bicategory.inv_hom_whiskerRight** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Bicategory`。
+形式化陈述：inv_hom_whiskerRight {f g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c) : η.inv ▷ h ≫ η
+.hom ▷ h = 𝟙 (g ≫ h)
+参数：η : f ≅ g；h : b ⟶ c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Bicategory.comp_whiskerRight`：∀ {B : Type u} [self : Cate
+goryTheory.Bicategory B] {a b c : B} {f g h : a ⟶ b} (η : f ⟶ g) (θ : g ⟶ h) (i 
+: b ⟶ c),   CategoryTheory.Bicate…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Bicategory.id_whiskerRight`：∀ {B : Type u} [self : Catego
+ryTheory.Bicategory B] {a b c : B} (f : a ⟶ b) (g : b ⟶ c),   CategoryTheory.Bic
+ategory.whiskerRight (CategoryT…
 -/
 theorem inv_hom_whiskerRight {f g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c) :
     η.inv ▷ h ≫ η.hom ▷ h = 𝟙 (g ≫ h) := by rw [← comp_whiskerRight, inv_hom_id, id_whiskerRight]
 
 @[reassoc (attr := simp)]
-/--
-theorem `whiskerLeft_whiskerLeft_hom_inv` / 定理 `whiskerLeft_whiskerLeft_hom_inv`
-
-English:
-theorem whiskerLeft_whiskerLeft_hom_inv
-  given: (f : a ⟶ b) (g : b ⟶ c) {h k : c ⟶ d} (η : h ≅ k)
-  proof: by
-  simp [← whiskerLeft_comp]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 whiskerLeft_whiskerLeft_hom_inv
-  条件: (f : a ⟶ b) (g : b ⟶ c) {h k : c ⟶ d} (η : h ≅ k)
-  证明: by
-  simp [← whiskerLeft_comp]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: whiskerLeft_comp
+/-
+**CategoryTheory.Bicategory.whiskerLeft_whiskerLeft_hom_inv** 是 Mathlib 中的一个定理，位
+于命名空间 `CategoryTheory.Bicategory`。
+形式化陈述：whiskerLeft_whiskerLeft_hom_inv (f : a ⟶ b) (g : b ⟶ c) {h k : c ⟶ d} (η :
+ h ≅ k) : f ◁ g ◁ η.hom ≫ f ◁ g ◁ η.inv = 𝟙 (f ≫ g ≫ h)
+参数：f : a ⟶ b；g : b ⟶ c；η : h ≅ k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Bicategory.whiskerLeft_id`：∀ {B : Type u} [self : Categor
+yTheory.Bicategory B] {a b c : B} (f : a ⟶ b) (g : b ⟶ c),   CategoryTheory.Bica
+tegory.whiskerLeft f (Category…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem whiskerLeft_whiskerLeft_hom_inv (f : a ⟶ b) (g : b ⟶ c) {h k : c ⟶ d} (η : h ≅ k) :
     f ◁ g ◁ η.hom ≫ f ◁ g ◁ η.inv = 𝟙 (f ≫ g ≫ h) := by
   simp [← whiskerLeft_comp]
 
 @[reassoc (attr := simp)]
-/--
-theorem `hom_inv_whiskerRight_whiskerRight` / 定理 `hom_inv_whiskerRight_whiskerRight`
-
-English:
-theorem hom_inv_whiskerRight_whiskerRight
-  given: {f g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c) (k : c ⟶ d)
-  proof: by
-  simp [← comp_whiskerRight]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 hom_inv_whiskerRight_whiskerRight
-  条件: {f g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c) (k : c ⟶ d)
-  证明: by
-  simp [← comp_whiskerRight]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: comp_whiskerRight
+/-
+**CategoryTheory.Bicategory.hom_inv_whiskerRight_whiskerRight** 是 Mathlib 中的一个定理
+，位于命名空间 `CategoryTheory.Bicategory`。
+形式化陈述：hom_inv_whiskerRight_whiskerRight {f g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c) (k
+ : c ⟶ d) : η.hom ▷ h ▷ k ≫ η.inv ▷ h ▷ k = 𝟙 ((f ≫ h) ≫ k)
+参数：η : f ≅ g；h : b ⟶ c；k : c ⟶ d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Bicategory.id_whiskerRight`：∀ {B : Type u} [self : Catego
+ryTheory.Bicategory B] {a b c : B} (f : a ⟶ b) (g : b ⟶ c),   CategoryTheory.Bic
+ategory.whiskerRight (CategoryT…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem hom_inv_whiskerRight_whiskerRight {f g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c) (k : c ⟶ d) :
     η.hom ▷ h ▷ k ≫ η.inv ▷ h ▷ k = 𝟙 ((f ≫ h) ≫ k) := by
   simp [← comp_whiskerRight]
 
 @[reassoc (attr := simp)]
-/--
-theorem `whiskerLeft_whiskerLeft_inv_hom` / 定理 `whiskerLeft_whiskerLeft_inv_hom`
-
-English:
-theorem whiskerLeft_whiskerLeft_inv_hom
-  given: (f : a ⟶ b) (g : b ⟶ c) {h k : c ⟶ d} (η : h ≅ k)
-  proof: by
-  simp [← whiskerLeft_comp]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 whiskerLeft_whiskerLeft_inv_hom
-  条件: (f : a ⟶ b) (g : b ⟶ c) {h k : c ⟶ d} (η : h ≅ k)
-  证明: by
-  simp [← whiskerLeft_comp]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: whiskerLeft_comp
+/-
+**CategoryTheory.Bicategory.whiskerLeft_whiskerLeft_inv_hom** 是 Mathlib 中的一个定理，位
+于命名空间 `CategoryTheory.Bicategory`。
+形式化陈述：whiskerLeft_whiskerLeft_inv_hom (f : a ⟶ b) (g : b ⟶ c) {h k : c ⟶ d} (η :
+ h ≅ k) : f ◁ g ◁ η.inv ≫ f ◁ g ◁ η.hom = 𝟙 (f ≫ g ≫ k)
+参数：f : a ⟶ b；g : b ⟶ c；η : h ≅ k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Bicategory.whiskerLeft_id`：∀ {B : Type u} [self : Categor
+yTheory.Bicategory B] {a b c : B} (f : a ⟶ b) (g : b ⟶ c),   CategoryTheory.Bica
+tegory.whiskerLeft f (Category…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem whiskerLeft_whiskerLeft_inv_hom (f : a ⟶ b) (g : b ⟶ c) {h k : c ⟶ d} (η : h ≅ k) :
     f ◁ g ◁ η.inv ≫ f ◁ g ◁ η.hom = 𝟙 (f ≫ g ≫ k) := by
   simp [← whiskerLeft_comp]
 
 @[reassoc (attr := simp)]
-/--
-theorem `inv_hom_whiskerRight_whiskerRight` / 定理 `inv_hom_whiskerRight_whiskerRight`
-
-English:
-theorem inv_hom_whiskerRight_whiskerRight
-  given: {f g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c) (k : c ⟶ d)
-  proof: by
-  simp [← comp_whiskerRight]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 inv_hom_whiskerRight_whiskerRight
-  条件: {f g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c) (k : c ⟶ d)
-  证明: by
-  simp [← comp_whiskerRight]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: comp_whiskerRight
+/-
+**CategoryTheory.Bicategory.inv_hom_whiskerRight_whiskerRight** 是 Mathlib 中的一个定理
+，位于命名空间 `CategoryTheory.Bicategory`。
+形式化陈述：inv_hom_whiskerRight_whiskerRight {f g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c) (k
+ : c ⟶ d) : η.inv ▷ h ▷ k ≫ η.hom ▷ h ▷ k = 𝟙 ((g ≫ h) ≫ k)
+参数：η : f ≅ g；h : b ⟶ c；k : c ⟶ d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Bicategory.id_whiskerRight`：∀ {B : Type u} [self : Catego
+ryTheory.Bicategory B] {a b c : B} (f : a ⟶ b) (g : b ⟶ c),   CategoryTheory.Bic
+ategory.whiskerRight (CategoryT…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem inv_hom_whiskerRight_whiskerRight {f g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c) (k : c ⟶ d) :
     η.inv ▷ h ▷ k ≫ η.hom ▷ h ▷ k = 𝟙 ((g ≫ h) ≫ k) := by
   simp [← comp_whiskerRight]
 
 @[reassoc (attr := simp)]
-/--
-theorem `whiskerLeft_hom_inv_whiskerRight` / 定理 `whiskerLeft_hom_inv_whiskerRight`
-
-English:
-theorem whiskerLeft_hom_inv_whiskerRight
-  given: (f : a ⟶ b) {g h : b ⟶ c} (η : g ≅ h) (k : c ⟶ d)
-  proof: by
-  simp [← whiskerLeft_comp]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 whiskerLeft_hom_inv_whiskerRight
-  条件: (f : a ⟶ b) {g h : b ⟶ c} (η : g ≅ h) (k : c ⟶ d)
-  证明: by
-  simp [← whiskerLeft_comp]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: whiskerLeft_comp
+/-
+**CategoryTheory.Bicategory.whiskerLeft_hom_inv_whiskerRight** 是 Mathlib 中的一个定理，
+位于命名空间 `CategoryTheory.Bicategory`。
+形式化陈述：whiskerLeft_hom_inv_whiskerRight (f : a ⟶ b) {g h : b ⟶ c} (η : g ≅ h) (k 
+: c ⟶ d) : f ◁ η.hom ▷ k ≫ f ◁ η.inv ▷ k = 𝟙 (f ≫ g ≫ k)
+参数：f : a ⟶ b；η : g ≅ h；k : c ⟶ d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Bicategory.hom_inv_whiskerRight`：hom_inv_whiskerRight {f 
+g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c) : η.hom ▷ h ≫ η.inv ▷ h = 𝟙 (f ≫ h)
+· 使用定理 `CategoryTheory.Bicategory.whiskerLeft_id`：∀ {B : Type u} [self : Categor
+yTheory.Bicategory B] {a b c : B} (f : a ⟶ b) (g : b ⟶ c),   CategoryTheory.Bica
+tegory.whiskerLeft f (Category…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem whiskerLeft_hom_inv_whiskerRight (f : a ⟶ b) {g h : b ⟶ c} (η : g ≅ h) (k : c ⟶ d) :
     f ◁ η.hom ▷ k ≫ f ◁ η.inv ▷ k = 𝟙 (f ≫ g ≫ k) := by
   simp [← whiskerLeft_comp]
 
 @[reassoc (attr := simp)]
-/--
-theorem `whiskerLeft_inv_hom_whiskerRight` / 定理 `whiskerLeft_inv_hom_whiskerRight`
-
-English:
-theorem whiskerLeft_inv_hom_whiskerRight
-  given: (f : a ⟶ b) {g h : b ⟶ c} (η : g ≅ h) (k : c ⟶ d)
-  proof: by
-  simp [← whiskerLeft_comp]
-
-中文:
-定理 whiskerLeft_inv_hom_whiskerRight
-  条件: (f : a ⟶ b) {g h : b ⟶ c} (η : g ≅ h) (k : c ⟶ d)
-  证明: by
-  simp [← whiskerLeft_comp]
-
-Depends on / 依赖: whiskerLeft_comp
+/-
+**CategoryTheory.Bicategory.whiskerLeft_inv_hom_whiskerRight** 是 Mathlib 中的一个定理，
+位于命名空间 `CategoryTheory.Bicategory`。
+形式化陈述：whiskerLeft_inv_hom_whiskerRight (f : a ⟶ b) {g h : b ⟶ c} (η : g ≅ h) (k 
+: c ⟶ d) : f ◁ η.inv ▷ k ≫ f ◁ η.hom ▷ k = 𝟙 (f ≫ h ≫ k)
+参数：f : a ⟶ b；η : g ≅ h；k : c ⟶ d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Bicategory.inv_hom_whiskerRight`：inv_hom_whiskerRight {f 
+g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c) : η.inv ▷ h ≫ η.hom ▷ h = 𝟙 (g ≫ h)
+· 使用定理 `CategoryTheory.Bicategory.whiskerLeft_id`：∀ {B : Type u} [self : Categor
+yTheory.Bicategory B] {a b c : B} (f : a ⟶ b) (g : b ⟶ c),   CategoryTheory.Bica
+tegory.whiskerLeft f (Category…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem whiskerLeft_inv_hom_whiskerRight (f : a ⟶ b) {g h : b ⟶ c} (η : g ≅ h) (k : c ⟶ d) :
     f ◁ η.inv ▷ k ≫ f ◁ η.hom ▷ k = 𝟙 (f ≫ h ≫ k) := by
@@ -466,66 +464,58 @@ theorem whiskerLeft_inv_hom_whiskerRight (f : a ⟶ b) {g h : b ⟶ c} (η : g �
 
 /-- The left whiskering of a 2-isomorphism is a 2-isomorphism. -/
 @[simps]
-/--
-Definition of `whiskerLeftIso` / `whiskerLeftIso` 的定义
+/-
+**CategoryTheory.Bicategory.whiskerLeftIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Bicategory`。
+形式化陈述：whiskerLeftIso (f : a ⟶ b) {g h : b ⟶ c} (η : g ≅ h) : f ≫ g ≅ f ≫ h where
+ hom
+参数：f : a ⟶ b；η : g ≅ h。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerLeftIso
-  signature: (f : a ⟶ b) {g h : b ⟶ c} (η : g ≅ h)
-  body: f ◁ η.hom
-  inv := f ◁ η.inv
-
-中文:
-定义 whiskerLeftIso
-  签名: (f : a ⟶ b) {g h : b ⟶ c} (η : g ≅ h)
-  定义体: f ◁ η.hom
-  inv := f ◁ η.inv
+--- 原说明 ---
+The left whiskering of a 2-isomorphism is a 2-isomorphism.
 -/
 def whiskerLeftIso (f : a ⟶ b) {g h : b ⟶ c} (η : g ≅ h) : f ≫ g ≅ f ≫ h where
   hom := f ◁ η.hom
   inv := f ◁ η.inv
-
-/--
-Instance `whiskerLeft_isIso` / 实例 `whiskerLeft_isIso`
-
-English:
-instance whiskerLeft_isIso
-  signature: (f : a ⟶ b) {g h : b ⟶ c} (η : g ⟶ h) [IsIso η]
-  body: (whiskerLeftIso f (asIso η)).isIso_hom
-
-@[simp, push]
-
-中文:
-实例 whiskerLeft_isIso
-  签名: (f : a ⟶ b) {g h : b ⟶ c} (η : g ⟶ h) [是同构 η]
-  定义体: (whiskerLeftIso f (asIso η)).isIso_hom
-
-@[simp, push]
-
-Depends on / 依赖: isIso_hom, whiskerLeftIso
+/-
+**CategoryTheory.Bicategory.whiskerLeft_isIso** 是 Mathlib 中的一个实例，位于命名空间 `Categor
+yTheory.Bicategory`。
+形式化陈述：whiskerLeft_isIso (f : a ⟶ b) {g h : b ⟶ c} (η : g ⟶ h) [IsIso η] : IsIso 
+(f ◁ η)
+参数：f : a ⟶ b；η : g ⟶ h。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 -/
 instance whiskerLeft_isIso (f : a ⟶ b) {g h : b ⟶ c} (η : g ⟶ h) [IsIso η] : IsIso (f ◁ η) :=
   (whiskerLeftIso f (asIso η)).isIso_hom
 
 @[simp, push]
-/--
-theorem `inv_whiskerLeft` / 定理 `inv_whiskerLeft`
-
-English:
-theorem inv_whiskerLeft
-  given: (f : a ⟶ b) {g h : b ⟶ c} (η : g ⟶ h) [IsIso η]
-  proof: by
-  apply IsIso.inv_eq_of_hom_inv_id
-  simp only [← whiskerLeft_comp, whiskerLeft_id, IsIso.hom_inv_id]
-
-中文:
-定理 inv_whiskerLeft
-  条件: (f : a ⟶ b) {g h : b ⟶ c} (η : g ⟶ h) [是同构 η]
-  证明: by
-  apply IsIso.inv_eq_of_hom_inv_id
-  simp only [← whiskerLeft_comp, whiskerLeft_id, IsIso.hom_inv_id]
-
-Depends on / 依赖: IsIso.hom_inv_id, IsIso.inv_eq_of_hom_inv_id, hom_inv_id, inv_eq_of_hom_inv_id, whiskerLeft_comp, whiskerLeft_id
+/-
+**CategoryTheory.Bicategory.inv_whiskerLeft** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Bicategory`。
+形式化陈述：inv_whiskerLeft (f : a ⟶ b) {g h : b ⟶ c} (η : g ⟶ h) [IsIso η] : inv (f ◁
+ η) = f ◁ inv η
+参数：f : a ⟶ b；η : g ⟶ h。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsIso.inv_eq_of_hom_inv_id`：inv_eq_of_hom_inv_id {f : X ⟶
+ Y} [IsIso f] {g : Y ⟶ X} (hom_inv_id : f ≫ g = 𝟙 X) : inv f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id`：hom_inv_id (f : X ⟶ Y) [I : IsIso f] : 
+f ≫ inv f = 𝟙 X
+· 使用定理 `CategoryTheory.Bicategory.whiskerLeft_id`：∀ {B : Type u} [self : Categor
+yTheory.Bicategory B] {a b c : B} (f : a ⟶ b) (g : b ⟶ c),   CategoryTheory.Bica
+tegory.whiskerLeft f (Category…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem inv_whiskerLeft (f : a ⟶ b) {g h : b ⟶ c} (η : g ⟶ h) [IsIso η] :
     inv (f ◁ η) = f ◁ inv η := by
@@ -534,82 +524,60 @@ theorem inv_whiskerLeft (f : a ⟶ b) {g h : b ⟶ c} (η : g ⟶ h) [IsIso η] 
 
 /-- The right whiskering of a 2-isomorphism is a 2-isomorphism. -/
 @[simps!]
-/--
-Definition of `whiskerRightIso` / `whiskerRightIso` 的定义
+/-
+**CategoryTheory.Bicategory.whiskerRightIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Bicategory`。
+形式化陈述：whiskerRightIso {f g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c) : f ≫ h ≅ g ≫ h wher
+e hom
+参数：η : f ≅ g；h : b ⟶ c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerRightIso
-  signature: {f g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c)
-  body: η.hom ▷ h
-  inv := η.inv ▷ h
-
-中文:
-定义 whiskerRightIso
-  签名: {f g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c)
-  定义体: η.hom ▷ h
-  inv := η.inv ▷ h
+--- 原说明 ---
+The right whiskering of a 2-isomorphism is a 2-isomorphism.
 -/
 def whiskerRightIso {f g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c) : f ≫ h ≅ g ≫ h where
   hom := η.hom ▷ h
   inv := η.inv ▷ h
-
-/--
-Instance `whiskerRight_isIso` / 实例 `whiskerRight_isIso`
-
-English:
-instance whiskerRight_isIso
-  signature: {f g : a ⟶ b} (η : f ⟶ g) (h : b ⟶ c) [IsIso η]
-  body: (whiskerRightIso (asIso η) h).isIso_hom
-
-@[simp, push]
-
-中文:
-实例 whiskerRight_isIso
-  签名: {f g : a ⟶ b} (η : f ⟶ g) (h : b ⟶ c) [是同构 η]
-  定义体: (whiskerRightIso (asIso η) h).isIso_hom
-
-@[simp, push]
-
-Depends on / 依赖: isIso_hom, whiskerRightIso
+/-
+**CategoryTheory.Bicategory.whiskerRight_isIso** 是 Mathlib 中的一个实例，位于命名空间 `Catego
+ryTheory.Bicategory`。
+形式化陈述：whiskerRight_isIso {f g : a ⟶ b} (η : f ⟶ g) (h : b ⟶ c) [IsIso η] : IsIso
+ (η ▷ h)
+参数：η : f ⟶ g；h : b ⟶ c。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 -/
 instance whiskerRight_isIso {f g : a ⟶ b} (η : f ⟶ g) (h : b ⟶ c) [IsIso η] : IsIso (η ▷ h) :=
   (whiskerRightIso (asIso η) h).isIso_hom
 
 @[simp, push]
-/--
-theorem `inv_whiskerRight` / 定理 `inv_whiskerRight`
-
-English:
-theorem inv_whiskerRight
-  given: {f g : a ⟶ b} (η : f ⟶ g) (h : b ⟶ c) [IsIso η]
-  proof: by
-  apply IsIso.inv_eq_of_hom_inv_id
-  simp only [← comp_whiskerRight, id_whiskerRight, IsIso.hom_inv_id]
-
-@[inherit_doc whiskerLeftIso]
-scoped infixr:82 " ◁ᵢ " => whiskerLeftIso
-
-@[inherit_doc whiskerRightIso]
-scoped infixl:82 " ▷ᵢ " => whiskerRightIso
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 inv_whiskerRight
-  条件: {f g : a ⟶ b} (η : f ⟶ g) (h : b ⟶ c) [是同构 η]
-  证明: by
-  apply IsIso.inv_eq_of_hom_inv_id
-  simp only [← comp_whiskerRight, id_whiskerRight, IsIso.hom_inv_id]
-
-@[inherit_doc whiskerLeftIso]
-scoped infixr:82 " ◁ᵢ " => whiskerLeftIso
-
-@[inherit_doc whiskerRightIso]
-scoped infixl:82 " ▷ᵢ " => whiskerRightIso
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsIso.hom_inv_id, IsIso.inv_eq_of_hom_inv_id, comp_whiskerRight, hom_inv_id, id_whiskerRight, inv_eq_of_hom_inv_id
+/-
+**CategoryTheory.Bicategory.inv_whiskerRight** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Bicategory`。
+形式化陈述：inv_whiskerRight {f g : a ⟶ b} (η : f ⟶ g) (h : b ⟶ c) [IsIso η] : inv (η 
+▷ h) = inv η ▷ h
+参数：η : f ⟶ g；h : b ⟶ c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsIso.inv_eq_of_hom_inv_id`：inv_eq_of_hom_inv_id {f : X ⟶
+ Y} [IsIso f] {g : Y ⟶ X} (hom_inv_id : f ≫ g = 𝟙 X) : inv f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id`：hom_inv_id (f : X ⟶ Y) [I : IsIso f] : 
+f ≫ inv f = 𝟙 X
+· 使用定理 `CategoryTheory.Bicategory.id_whiskerRight`：∀ {B : Type u} [self : Catego
+ryTheory.Bicategory B] {a b c : B} (f : a ⟶ b) (g : b ⟶ c),   CategoryTheory.Bic
+ategory.whiskerRight (CategoryT…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem inv_whiskerRight {f g : a ⟶ b} (η : f ⟶ g) (h : b ⟶ c) [IsIso η] :
     inv (η ▷ h) = inv η ▷ h := by
@@ -623,24 +591,42 @@ scoped infixr:82 " ◁ᵢ " => whiskerLeftIso
 scoped infixl:82 " ▷ᵢ " => whiskerRightIso
 
 @[reassoc (attr := simp)]
-/--
-theorem `pentagon_inv` / 定理 `pentagon_inv`
-
-English:
-theorem pentagon_inv
-  given: (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e)
-  proof: eq_of_inv_eq_inv (by simp)
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 pentagon_inv
-  条件: (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e)
-  证明: eq_of_inv_eq_inv (by simp)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: eq_of_inv_eq_inv
+/-
+**CategoryTheory.Bicategory.pentagon_inv** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Bicategory`。
+形式化陈述：pentagon_inv (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e) : f ◁ (α_ g h
+ i).inv ≫ (α_ f (g ≫ h) i).inv ≫ (α_ f g h).inv ▷ i = (α_ f g (h ≫ i)).inv ≫ (α_
+ (f ≫ g) h i).inv
+参数：f : a ⟶ b；g : b ⟶ c；h : c ⟶ d；i : d ⟶ e。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.eq_of_inv_eq_inv`：eq_of_inv_eq_inv {f g : X ⟶ Y} [IsIso f
+] [IsIso g] (p : inv f = inv g) : f = g
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsIso.inv_comp`：inv_comp [IsIso f] [IsIso h] : inv (f ≫ h
+) = inv h ≫ inv f
+· 使用定理 `CategoryTheory.Bicategory.inv_whiskerRight`：inv_whiskerRight {f g : a ⟶ 
+b} (η : f ⟶ g) (h : b ⟶ c) [IsIso η] : inv (η ▷ h) = inv η ▷ h
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.IsIso.Iso.inv_inv`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : X ≅ Y), CategoryTheory.inv f.inv = f.hom
+· 使用定理 `CategoryTheory.Bicategory.inv_whiskerLeft`：inv_whiskerLeft (f : a ⟶ b) {
+g h : b ⟶ c} (η : g ⟶ h) [IsIso η] : inv (f ◁ η) = f ◁ inv η
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Bicategory.pentagon`：∀ {B : Type u} [self : CategoryTheor
+y.Bicategory B] {a b c d e : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e),
+   CategoryTheory.Catego…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pentagon_inv (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e) :
     f ◁ (α_ g h i).inv ≫ (α_ f (g ≫ h) i).inv ≫ (α_ f g h).inv ▷ i =
@@ -648,54 +634,98 @@ theorem pentagon_inv (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e) :
   eq_of_inv_eq_inv (by simp)
 
 @[reassoc (attr := simp)]
-/--
-theorem `pentagon_inv_inv_hom_hom_inv` / 定理 `pentagon_inv_inv_hom_hom_inv`
-
-English:
-theorem pentagon_inv_inv_hom_hom_inv
-  given: (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e)
-  proof: by
-  rw [← cancel_epi (f ◁ (α_ g h i).inv)]; rw [← cancel_mono (α_ (f ≫ g) h i).inv]
-  simp
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 pentagon_inv_inv_hom_hom_inv
-  条件: (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e)
-  证明: by
-  rw [← cancel_epi (f ◁ (α_ g h i).inv)]; rw [← cancel_mono (α_ (f ≫ g) h i).inv]
-  simp
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: cancel_epi, cancel_mono
+/-
+**CategoryTheory.Bicategory.pentagon_inv_inv_hom_hom_inv** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.Bicategory`。
+形式化陈述：pentagon_inv_inv_hom_hom_inv (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ 
+e) : (α_ f (g ≫ h) i).inv ≫ (α_ f g h).inv ▷ i ≫ (α_ (f ≫ g) h i).hom = f ◁ (α_ 
+g h i).hom ≫ (α_ f g (h ≫ i)).inv
+参数：f : a ⟶ b；g : b ⟶ c；h : c ⟶ d；i : d ⟶ e。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.IsIso.epi_of_iso`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsIso f],   CategoryTheo
+ry.Epi f
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.IsIso.mono_of_iso`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   CategoryThe
+ory.Mono f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Bicategory.pentagon_inv_assoc`：∀ {B : Type u} [inst : Cat
+egoryTheory.Bicategory B] {a b c d e : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i
+ : d ⟶ e)   {Z : a ⟶ e}   (h_1 :  …
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Bicategory.whiskerLeft_inv_hom_assoc`：∀ {B : Type u} [ins
+t : CategoryTheory.Bicategory B] {a b c : B} (f : a ⟶ b) {g h : b ⟶ c} (η : g ≅ 
+h) {Z : a ⟶ c}   (h_1 : CategoryTheory.Ca…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pentagon_inv_inv_hom_hom_inv (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e) :
     (α_ f (g ≫ h) i).inv ≫ (α_ f g h).inv ▷ i ≫ (α_ (f ≫ g) h i).hom =
     f ◁ (α_ g h i).hom ≫ (α_ f g (h ≫ i)).inv := by
-  rw [← cancel_epi (f ◁ (α_ g h i).inv)]; rw [← cancel_mono (α_ (f ≫ g) h i).inv]
+  rw [← cancel_epi (f ◁ (α_ g h i).inv), ← cancel_mono (α_ (f ≫ g) h i).inv]
   simp
 
 @[reassoc (attr := simp)]
-/--
-theorem `pentagon_inv_hom_hom_hom_inv` / 定理 `pentagon_inv_hom_hom_hom_inv`
-
-English:
-theorem pentagon_inv_hom_hom_hom_inv
-  given: (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e)
-  proof: eq_of_inv_eq_inv (by simp)
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 pentagon_inv_hom_hom_hom_inv
-  条件: (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e)
-  证明: eq_of_inv_eq_inv (by simp)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: eq_of_inv_eq_inv
+/-
+**CategoryTheory.Bicategory.pentagon_inv_hom_hom_hom_inv** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.Bicategory`。
+形式化陈述：pentagon_inv_hom_hom_hom_inv (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ 
+e) : (α_ (f ≫ g) h i).inv ≫ (α_ f g h).hom ▷ i ≫ (α_ f (g ≫ h) i).hom = (α_ f g 
+(h ≫ i)).hom ≫ f ◁ (α_ g h i).inv
+参数：f : a ⟶ b；g : b ⟶ c；h : c ⟶ d；i : d ⟶ e。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.eq_of_inv_eq_inv`：eq_of_inv_eq_inv {f g : X ⟶ Y} [IsIso f
+] [IsIso g] (p : inv f = inv g) : f = g
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsIso.inv_comp`：inv_comp [IsIso f] [IsIso h] : inv (f ≫ h
+) = inv h ≫ inv f
+· 使用定理 `CategoryTheory.IsIso.Iso.inv_hom`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : X ≅ Y), CategoryTheory.inv f.hom = f.inv
+· 使用定理 `CategoryTheory.Bicategory.inv_whiskerRight`：inv_whiskerRight {f g : a ⟶ 
+b} (η : f ⟶ g) (h : b ⟶ c) [IsIso η] : inv (η ▷ h) = inv η ▷ h
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.IsIso.Iso.inv_inv`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : X ≅ Y), CategoryTheory.inv f.inv = f.hom
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Bicategory.pentagon_inv_inv_hom_hom_inv`：pentagon_inv_inv
+_hom_hom_inv (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e) : (α_ f (g ≫ h) i).
+inv ≫ (α_ f g h).inv ▷ i ≫ (α_ (f ≫ g) h i).…
+· 使用定理 `CategoryTheory.Bicategory.inv_whiskerLeft`：inv_whiskerLeft (f : a ⟶ b) {
+g h : b ⟶ c} (η : g ⟶ h) [IsIso η] : inv (f ◁ η) = f ◁ inv η
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pentagon_inv_hom_hom_hom_inv (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e) :
     (α_ (f ≫ g) h i).inv ≫ (α_ f g h).hom ▷ i ≫ (α_ f (g ≫ h) i).hom =
@@ -703,26 +733,36 @@ theorem pentagon_inv_hom_hom_hom_inv (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (
   eq_of_inv_eq_inv (by simp)
 
 @[reassoc (attr := simp)]
-/--
-theorem `pentagon_hom_inv_inv_inv_inv` / 定理 `pentagon_hom_inv_inv_inv_inv`
-
-English:
-theorem pentagon_hom_inv_inv_inv_inv
-  given: (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e)
-  proof: by
-  simp [← cancel_epi (f ◁ (α_ g h i).inv)]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 pentagon_hom_inv_inv_inv_inv
-  条件: (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e)
-  证明: by
-  simp [← cancel_epi (f ◁ (α_ g h i).inv)]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: cancel_epi
+/-
+**CategoryTheory.Bicategory.pentagon_hom_inv_inv_inv_inv** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.Bicategory`。
+形式化陈述：pentagon_hom_inv_inv_inv_inv (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ 
+e) : f ◁ (α_ g h i).hom ≫ (α_ f g (h ≫ i)).inv ≫ (α_ (f ≫ g) h i).inv = (α_ f (g
+ ≫ h) i).inv ≫ (α_ f g h).inv ▷ i
+参数：f : a ⟶ b；g : b ⟶ c；h : c ⟶ d；i : d ⟶ e。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.IsIso.epi_of_iso`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsIso f],   CategoryTheo
+ry.Epi f
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Bicategory.whiskerLeft_inv_hom_assoc`：∀ {B : Type u} [ins
+t : CategoryTheory.Bicategory B] {a b c : B} (f : a ⟶ b) {g h : b ⟶ c} (η : g ≅ 
+h) {Z : a ⟶ c}   (h_1 : CategoryTheory.Ca…
+· 使用定理 `CategoryTheory.Bicategory.pentagon_inv`：pentagon_inv (f : a ⟶ b) (g : b 
+⟶ c) (h : c ⟶ d) (i : d ⟶ e) : f ◁ (α_ g h i).inv ≫ (α_ f (g ≫ h) i).inv ≫ (α_ f
+ g h).inv ▷ i = (α_ f g (h ≫…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pentagon_hom_inv_inv_inv_inv (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e) :
     f ◁ (α_ g h i).hom ≫ (α_ f g (h ≫ i)).inv ≫ (α_ (f ≫ g) h i).inv =
@@ -730,24 +770,46 @@ theorem pentagon_hom_inv_inv_inv_inv (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (
   simp [← cancel_epi (f ◁ (α_ g h i).inv)]
 
 @[reassoc (attr := simp)]
-/--
-theorem `pentagon_hom_hom_inv_hom_hom` / 定理 `pentagon_hom_hom_inv_hom_hom`
-
-English:
-theorem pentagon_hom_hom_inv_hom_hom
-  given: (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e)
-  proof: eq_of_inv_eq_inv (by simp)
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 pentagon_hom_hom_inv_hom_hom
-  条件: (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e)
-  证明: eq_of_inv_eq_inv (by simp)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: eq_of_inv_eq_inv
+/-
+**CategoryTheory.Bicategory.pentagon_hom_hom_inv_hom_hom** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.Bicategory`。
+形式化陈述：pentagon_hom_hom_inv_hom_hom (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ 
+e) : (α_ (f ≫ g) h i).hom ≫ (α_ f g (h ≫ i)).hom ≫ f ◁ (α_ g h i).inv = (α_ f g 
+h).hom ▷ i ≫ (α_ f (g ≫ h) i).hom
+参数：f : a ⟶ b；g : b ⟶ c；h : c ⟶ d；i : d ⟶ e。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.eq_of_inv_eq_inv`：eq_of_inv_eq_inv {f g : X ⟶ Y} [IsIso f
+] [IsIso g] (p : inv f = inv g) : f = g
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsIso.inv_comp`：inv_comp [IsIso f] [IsIso h] : inv (f ≫ h
+) = inv h ≫ inv f
+· 使用定理 `CategoryTheory.Bicategory.inv_whiskerLeft`：inv_whiskerLeft (f : a ⟶ b) {
+g h : b ⟶ c} (η : g ⟶ h) [IsIso η] : inv (f ◁ η) = f ◁ inv η
+· 使用定理 `CategoryTheory.IsIso.Iso.inv_inv`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : X ≅ Y), CategoryTheory.inv f.inv = f.hom
+· 使用定理 `CategoryTheory.IsIso.Iso.inv_hom`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : X ≅ Y), CategoryTheory.inv f.hom = f.inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Bicategory.pentagon_hom_inv_inv_inv_inv`：pentagon_hom_inv
+_inv_inv_inv (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e) : f ◁ (α_ g h i).ho
+m ≫ (α_ f g (h ≫ i)).inv ≫ (α_ (f ≫ g) h i).…
+· 使用定理 `CategoryTheory.Bicategory.inv_whiskerRight`：inv_whiskerRight {f g : a ⟶ 
+b} (η : f ⟶ g) (h : b ⟶ c) [IsIso η] : inv (η ▷ h) = inv η ▷ h
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pentagon_hom_hom_inv_hom_hom (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e) :
     (α_ (f ≫ g) h i).hom ≫ (α_ f g (h ≫ i)).hom ≫ f ◁ (α_ g h i).inv =
@@ -755,54 +817,100 @@ theorem pentagon_hom_hom_inv_hom_hom (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (
   eq_of_inv_eq_inv (by simp)
 
 @[reassoc (attr := simp)]
-/--
-theorem `pentagon_hom_inv_inv_inv_hom` / 定理 `pentagon_hom_inv_inv_inv_hom`
-
-English:
-theorem pentagon_hom_inv_inv_inv_hom
-  given: (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e)
-  proof: by
-  rw [← cancel_epi (α_ f g (h ≫ i)).inv]; rw [← cancel_mono ((α_ f g h).inv ▷ i)]
-  simp
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 pentagon_hom_inv_inv_inv_hom
-  条件: (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e)
-  证明: by
-  rw [← cancel_epi (α_ f g (h ≫ i)).inv]; rw [← cancel_mono ((α_ f g h).inv ▷ i)]
-  simp
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: cancel_epi, cancel_mono
+/-
+**CategoryTheory.Bicategory.pentagon_hom_inv_inv_inv_hom** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.Bicategory`。
+形式化陈述：pentagon_hom_inv_inv_inv_hom (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ 
+e) : (α_ f g (h ≫ i)).hom ≫ f ◁ (α_ g h i).inv ≫ (α_ f (g ≫ h) i).inv = (α_ (f ≫
+ g) h i).inv ≫ (α_ f g h).hom ▷ i
+参数：f : a ⟶ b；g : b ⟶ c；h : c ⟶ d；i : d ⟶ e。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.IsIso.epi_of_iso`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsIso f],   CategoryTheo
+ry.Epi f
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.IsIso.mono_of_iso`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   CategoryThe
+ory.Mono f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Bicategory.pentagon_inv`：pentagon_inv (f : a ⟶ b) (g : b 
+⟶ c) (h : c ⟶ d) (i : d ⟶ e) : f ◁ (α_ g h i).inv ≫ (α_ f (g ≫ h) i).inv ≫ (α_ f
+ g h).inv ▷ i = (α_ f g (h ≫…
+· 使用定理 `CategoryTheory.Bicategory.hom_inv_whiskerRight`：hom_inv_whiskerRight {f 
+g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c) : η.hom ▷ h ≫ η.inv ▷ h = 𝟙 (f ≫ h)
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pentagon_hom_inv_inv_inv_hom (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e) :
     (α_ f g (h ≫ i)).hom ≫ f ◁ (α_ g h i).inv ≫ (α_ f (g ≫ h) i).inv =
     (α_ (f ≫ g) h i).inv ≫ (α_ f g h).hom ▷ i := by
-  rw [← cancel_epi (α_ f g (h ≫ i)).inv]; rw [← cancel_mono ((α_ f g h).inv ▷ i)]
+  rw [← cancel_epi (α_ f g (h ≫ i)).inv, ← cancel_mono ((α_ f g h).inv ▷ i)]
   simp
 
 @[reassoc (attr := simp)]
-/--
-theorem `pentagon_hom_hom_inv_inv_hom` / 定理 `pentagon_hom_hom_inv_inv_hom`
-
-English:
-theorem pentagon_hom_hom_inv_inv_hom
-  given: (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e)
-  proof: eq_of_inv_eq_inv (by simp)
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 pentagon_hom_hom_inv_inv_hom
-  条件: (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e)
-  证明: eq_of_inv_eq_inv (by simp)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: eq_of_inv_eq_inv
+/-
+**CategoryTheory.Bicategory.pentagon_hom_hom_inv_inv_hom** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.Bicategory`。
+形式化陈述：pentagon_hom_hom_inv_inv_hom (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ 
+e) : (α_ f (g ≫ h) i).hom ≫ f ◁ (α_ g h i).hom ≫ (α_ f g (h ≫ i)).inv = (α_ f g 
+h).inv ▷ i ≫ (α_ (f ≫ g) h i).hom
+参数：f : a ⟶ b；g : b ⟶ c；h : c ⟶ d；i : d ⟶ e。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.eq_of_inv_eq_inv`：eq_of_inv_eq_inv {f g : X ⟶ Y} [IsIso f
+] [IsIso g] (p : inv f = inv g) : f = g
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsIso.inv_comp`：inv_comp [IsIso f] [IsIso h] : inv (f ≫ h
+) = inv h ≫ inv f
+· 使用定理 `CategoryTheory.IsIso.Iso.inv_inv`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : X ≅ Y), CategoryTheory.inv f.inv = f.hom
+· 使用定理 `CategoryTheory.Bicategory.inv_whiskerLeft`：inv_whiskerLeft (f : a ⟶ b) {
+g h : b ⟶ c} (η : g ⟶ h) [IsIso η] : inv (f ◁ η) = f ◁ inv η
+· 使用定理 `CategoryTheory.IsIso.Iso.inv_hom`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : X ≅ Y), CategoryTheory.inv f.hom = f.inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Bicategory.pentagon_hom_inv_inv_inv_hom`：pentagon_hom_inv
+_inv_inv_hom (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e) : (α_ f g (h ≫ i)).
+hom ≫ f ◁ (α_ g h i).inv ≫ (α_ f (g ≫ h) i).…
+· 使用定理 `CategoryTheory.Bicategory.inv_whiskerRight`：inv_whiskerRight {f g : a ⟶ 
+b} (η : f ⟶ g) (h : b ⟶ c) [IsIso η] : inv (η ▷ h) = inv η ▷ h
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pentagon_hom_hom_inv_inv_hom (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e) :
     (α_ f (g ≫ h) i).hom ≫ f ◁ (α_ g h i).hom ≫ (α_ f g (h ≫ i)).inv =
@@ -810,26 +918,36 @@ theorem pentagon_hom_hom_inv_inv_hom (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (
   eq_of_inv_eq_inv (by simp)
 
 @[reassoc (attr := simp)]
-/--
-theorem `pentagon_inv_hom_hom_hom_hom` / 定理 `pentagon_inv_hom_hom_hom_hom`
-
-English:
-theorem pentagon_inv_hom_hom_hom_hom
-  given: (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e)
-  proof: by
-  simp [← cancel_epi ((α_ f g h).hom ▷ i)]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 pentagon_inv_hom_hom_hom_hom
-  条件: (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e)
-  证明: by
-  simp [← cancel_epi ((α_ f g h).hom ▷ i)]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: cancel_epi
+/-
+**CategoryTheory.Bicategory.pentagon_inv_hom_hom_hom_hom** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.Bicategory`。
+形式化陈述：pentagon_inv_hom_hom_hom_hom (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ 
+e) : (α_ f g h).inv ▷ i ≫ (α_ (f ≫ g) h i).hom ≫ (α_ f g (h ≫ i)).hom = (α_ f (g
+ ≫ h) i).hom ≫ f ◁ (α_ g h i).hom
+参数：f : a ⟶ b；g : b ⟶ c；h : c ⟶ d；i : d ⟶ e。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.IsIso.epi_of_iso`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsIso f],   CategoryTheo
+ry.Epi f
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Bicategory.hom_inv_whiskerRight_assoc`：∀ {B : Type u} [in
+st : CategoryTheory.Bicategory B] {a b c : B} {f g : a ⟶ b} (η : f ≅ g) (h : b ⟶
+ c) {Z : a ⟶ c}   (h_1 : CategoryTheory.Ca…
+· 使用定理 `CategoryTheory.Bicategory.pentagon`：∀ {B : Type u} [self : CategoryTheor
+y.Bicategory B] {a b c d e : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e),
+   CategoryTheory.Catego…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pentagon_inv_hom_hom_hom_hom (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e) :
     (α_ f g h).inv ▷ i ≫ (α_ (f ≫ g) h i).hom ≫ (α_ f g (h ≫ i)).hom =
@@ -837,467 +955,660 @@ theorem pentagon_inv_hom_hom_hom_hom (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (
   simp [← cancel_epi ((α_ f g h).hom ▷ i)]
 
 @[reassoc (attr := simp)]
-/--
-theorem `pentagon_inv_inv_hom_inv_inv` / 定理 `pentagon_inv_inv_hom_inv_inv`
-
-English:
-theorem pentagon_inv_inv_hom_inv_inv
-  given: (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e)
-  proof: eq_of_inv_eq_inv (by simp)
-
-中文:
-定理 pentagon_inv_inv_hom_inv_inv
-  条件: (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e)
-  证明: eq_of_inv_eq_inv (by simp)
-
-Depends on / 依赖: eq_of_inv_eq_inv
+/-
+**CategoryTheory.Bicategory.pentagon_inv_inv_hom_inv_inv** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.Bicategory`。
+形式化陈述：pentagon_inv_inv_hom_inv_inv (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ 
+e) : (α_ f g (h ≫ i)).inv ≫ (α_ (f ≫ g) h i).inv ≫ (α_ f g h).hom ▷ i = f ◁ (α_ 
+g h i).inv ≫ (α_ f (g ≫ h) i).inv
+参数：f : a ⟶ b；g : b ⟶ c；h : c ⟶ d；i : d ⟶ e。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.eq_of_inv_eq_inv`：eq_of_inv_eq_inv {f g : X ⟶ Y} [IsIso f
+] [IsIso g] (p : inv f = inv g) : f = g
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.IsIso.inv_comp`：inv_comp [IsIso f] [IsIso h] : inv (f ≫ h
+) = inv h ≫ inv f
+· 使用定理 `CategoryTheory.Bicategory.inv_whiskerRight`：inv_whiskerRight {f g : a ⟶ 
+b} (η : f ⟶ g) (h : b ⟶ c) [IsIso η] : inv (η ▷ h) = inv η ▷ h
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.IsIso.Iso.inv_hom`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : X ≅ Y), CategoryTheory.inv f.hom = f.inv
+· 使用定理 `CategoryTheory.IsIso.Iso.inv_inv`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : X ≅ Y), CategoryTheory.inv f.inv = f.hom
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Bicategory.pentagon_inv_hom_hom_hom_hom`：pentagon_inv_hom
+_hom_hom_hom (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e) : (α_ f g h).inv ▷ 
+i ≫ (α_ (f ≫ g) h i).hom ≫ (α_ f g (h ≫ i)).…
+· 使用定理 `CategoryTheory.Bicategory.inv_whiskerLeft`：inv_whiskerLeft (f : a ⟶ b) {
+g h : b ⟶ c} (η : g ⟶ h) [IsIso η] : inv (f ◁ η) = f ◁ inv η
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem pentagon_inv_inv_hom_inv_inv (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d ⟶ e) :
     (α_ f g (h ≫ i)).inv ≫ (α_ (f ≫ g) h i).inv ≫ (α_ f g h).hom ▷ i =
       f ◁ (α_ g h i).inv ≫ (α_ f (g ≫ h) i).inv :=
   eq_of_inv_eq_inv (by simp)
-
-/--
-theorem `triangle_assoc_comp_left` / 定理 `triangle_assoc_comp_left`
-
-English:
-theorem triangle_assoc_comp_left
-  given: (f : a ⟶ b) (g : b ⟶ c)
-  proof: triangle f g
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 triangle_assoc_comp_left
-  条件: (f : a ⟶ b) (g : b ⟶ c)
-  证明: triangle f g
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: triangle
+/-
+**CategoryTheory.Bicategory.triangle_assoc_comp_left** 是 Mathlib 中的一个定理，位于命名空间 `
+CategoryTheory.Bicategory`。
+形式化陈述：triangle_assoc_comp_left (f : a ⟶ b) (g : b ⟶ c) : (α_ f (𝟙 b) g).hom ≫ f 
+◁ (fun_ g).hom = (ρ_ f).hom ▷ g
+参数：f : a ⟶ b；g : b ⟶ c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Bicategory.triangle`：∀ {B : Type u} [self : CategoryTheor
+y.Bicategory B] {a b c : B} (f : a ⟶ b) (g : b ⟶ c),   CategoryTheory.CategorySt
+ruct.comp (CategoryTheor…
 -/
 theorem triangle_assoc_comp_left (f : a ⟶ b) (g : b ⟶ c) :
-    (α_ f (𝟙 b) g).hom ≫ f ◁ (fun_ g).hom = (ρ_ f).hom ▷ g :=
+    (α_ f (𝟙 b) g).hom ≫ f ◁ (λ_ g).hom = (ρ_ f).hom ▷ g :=
   triangle f g
 
 @[reassoc (attr := simp)]
-/--
-theorem `triangle_assoc_comp_right` / 定理 `triangle_assoc_comp_right`
-
-English:
-theorem triangle_assoc_comp_right
-  given: (f : a ⟶ b) (g : b ⟶ c)
-  proof: by rw [← triangle, inv_hom_id_assoc]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 triangle_assoc_comp_right
-  条件: (f : a ⟶ b) (g : b ⟶ c)
-  证明: by rw [← triangle, inv_hom_id_assoc]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: inv_hom_id_assoc, triangle
+/-
+**CategoryTheory.Bicategory.triangle_assoc_comp_right** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.Bicategory`。
+形式化陈述：triangle_assoc_comp_right (f : a ⟶ b) (g : b ⟶ c) : (α_ f (𝟙 b) g).inv ≫ (
+ρ_ f).hom ▷ g = f ◁ (fun_ g).hom
+参数：f : a ⟶ b；g : b ⟶ c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Bicategory.triangle`：∀ {B : Type u} [self : CategoryTheor
+y.Bicategory B] {a b c : B} (f : a ⟶ b) (g : b ⟶ c),   CategoryTheory.CategorySt
+ruct.comp (CategoryTheor…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
 -/
 theorem triangle_assoc_comp_right (f : a ⟶ b) (g : b ⟶ c) :
-    (α_ f (𝟙 b) g).inv ≫ (ρ_ f).hom ▷ g = f ◁ (fun_ g).hom := by rw [← triangle, inv_hom_id_assoc]
+    (α_ f (𝟙 b) g).inv ≫ (ρ_ f).hom ▷ g = f ◁ (λ_ g).hom := by rw [← triangle, inv_hom_id_assoc]
 
 @[reassoc (attr := simp)]
-/--
-theorem `triangle_assoc_comp_right_inv` / 定理 `triangle_assoc_comp_right_inv`
-
-English:
-theorem triangle_assoc_comp_right_inv
-  given: (f : a ⟶ b) (g : b ⟶ c)
-  proof: by
-  simp [← cancel_mono (f ◁ (fun_ g).hom)]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 triangle_assoc_comp_right_inv
-  条件: (f : a ⟶ b) (g : b ⟶ c)
-  证明: by
-  simp [← cancel_mono (f ◁ (fun_ g).hom)]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: cancel_mono, fun_
+/-
+**CategoryTheory.Bicategory.triangle_assoc_comp_right_inv** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory.Bicategory`。
+形式化陈述：triangle_assoc_comp_right_inv (f : a ⟶ b) (g : b ⟶ c) : (ρ_ f).inv ▷ g ≫ (
+α_ f (𝟙 b) g).hom = f ◁ (fun_ g).inv
+参数：f : a ⟶ b；g : b ⟶ c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.IsIso.mono_of_iso`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   CategoryThe
+ory.Mono f
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Bicategory.triangle`：∀ {B : Type u} [self : CategoryTheor
+y.Bicategory B] {a b c : B} (f : a ⟶ b) (g : b ⟶ c),   CategoryTheory.CategorySt
+ruct.comp (CategoryTheor…
+· 使用定理 `CategoryTheory.Bicategory.inv_hom_whiskerRight`：inv_hom_whiskerRight {f 
+g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c) : η.inv ▷ h ≫ η.hom ▷ h = 𝟙 (g ≫ h)
+· 使用定理 `CategoryTheory.Bicategory.whiskerLeft_inv_hom`：whiskerLeft_inv_hom (f : 
+a ⟶ b) {g h : b ⟶ c} (η : g ≅ h) : f ◁ η.inv ≫ f ◁ η.hom = 𝟙 (f ≫ h)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem triangle_assoc_comp_right_inv (f : a ⟶ b) (g : b ⟶ c) :
-    (ρ_ f).inv ▷ g ≫ (α_ f (𝟙 b) g).hom = f ◁ (fun_ g).inv := by
-  simp [← cancel_mono (f ◁ (fun_ g).hom)]
+    (ρ_ f).inv ▷ g ≫ (α_ f (𝟙 b) g).hom = f ◁ (λ_ g).inv := by
+  simp [← cancel_mono (f ◁ (λ_ g).hom)]
 
 @[reassoc (attr := simp)]
-/--
-theorem `triangle_assoc_comp_left_inv` / 定理 `triangle_assoc_comp_left_inv`
-
-English:
-theorem triangle_assoc_comp_left_inv
-  given: (f : a ⟶ b) (g : b ⟶ c)
-  proof: by
-  simp [← cancel_mono ((ρ_ f).hom ▷ g)]
-
-@[reassoc]
-
-中文:
-定理 triangle_assoc_comp_left_inv
-  条件: (f : a ⟶ b) (g : b ⟶ c)
-  证明: by
-  simp [← cancel_mono ((ρ_ f).hom ▷ g)]
-
-@[reassoc]
-
-Depends on / 依赖: cancel_mono
+/-
+**CategoryTheory.Bicategory.triangle_assoc_comp_left_inv** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.Bicategory`。
+形式化陈述：triangle_assoc_comp_left_inv (f : a ⟶ b) (g : b ⟶ c) : f ◁ (fun_ g).inv ≫ 
+(α_ f (𝟙 b) g).inv = (ρ_ f).inv ▷ g
+参数：f : a ⟶ b；g : b ⟶ c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.IsIso.mono_of_iso`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   CategoryThe
+ory.Mono f
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Bicategory.triangle_assoc_comp_right`：triangle_assoc_comp
+_right (f : a ⟶ b) (g : b ⟶ c) : (α_ f (𝟙 b) g).inv ≫ (ρ_ f).hom ▷ g = f ◁ (fun_
+ g).hom
+· 使用定理 `CategoryTheory.Bicategory.whiskerLeft_inv_hom`：whiskerLeft_inv_hom (f : 
+a ⟶ b) {g h : b ⟶ c} (η : g ≅ h) : f ◁ η.inv ≫ f ◁ η.hom = 𝟙 (f ≫ h)
+· 使用定理 `CategoryTheory.Bicategory.inv_hom_whiskerRight`：inv_hom_whiskerRight {f 
+g : a ⟶ b} (η : f ≅ g) (h : b ⟶ c) : η.inv ▷ h ≫ η.hom ▷ h = 𝟙 (g ≫ h)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem triangle_assoc_comp_left_inv (f : a ⟶ b) (g : b ⟶ c) :
-    f ◁ (fun_ g).inv ≫ (α_ f (𝟙 b) g).inv = (ρ_ f).inv ▷ g := by
+    f ◁ (λ_ g).inv ≫ (α_ f (𝟙 b) g).inv = (ρ_ f).inv ▷ g := by
   simp [← cancel_mono ((ρ_ f).hom ▷ g)]
 
 @[reassoc]
-/--
-theorem `associator_naturality_left` / 定理 `associator_naturality_left`
-
-English:
-theorem associator_naturality_left
-  given: {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c) (h : c ⟶ d)
-  proof: by simp
-
-@[reassoc]
-
-中文:
-定理 associator_naturality_left
-  条件: {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c) (h : c ⟶ d)
-  证明: by simp
-
-@[reassoc]
+/-
+**CategoryTheory.Bicategory.associator_naturality_left** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Bicategory`。
+形式化陈述：associator_naturality_left {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c) (h : c 
+⟶ d) : η ▷ g ▷ h ≫ (α_ f' g h).hom = (α_ f g h).hom ≫ η ▷ (g ≫ h)
+参数：η : f ⟶ f'；g : b ⟶ c；h : c ⟶ d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Bicategory.whiskerRight_comp`：∀ {B : Type u} [self : Cate
+goryTheory.Bicategory B] {a b c d : B} {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c) (
+h : c ⟶ d),   CategoryTheory.Bica…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem associator_naturality_left {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c) (h : c ⟶ d) :
     η ▷ g ▷ h ≫ (α_ f' g h).hom = (α_ f g h).hom ≫ η ▷ (g ≫ h) := by simp
 
 @[reassoc]
-/--
-theorem `associator_inv_naturality_left` / 定理 `associator_inv_naturality_left`
-
-English:
-theorem associator_inv_naturality_left
-  given: {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c) (h : c ⟶ d)
-  proof: by simp
-
-@[reassoc]
-
-中文:
-定理 associator_inv_naturality_left
-  条件: {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c) (h : c ⟶ d)
-  证明: by simp
-
-@[reassoc]
+/-
+**CategoryTheory.Bicategory.associator_inv_naturality_left** 是 Mathlib 中的一个定理，位于
+命名空间 `CategoryTheory.Bicategory`。
+形式化陈述：associator_inv_naturality_left {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c) (h 
+: c ⟶ d) : η ▷ (g ≫ h) ≫ (α_ f' g h).inv = (α_ f g h).inv ≫ η ▷ g ▷ h
+参数：η : f ⟶ f'；g : b ⟶ c；h : c ⟶ d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Bicategory.whiskerRight_comp`：∀ {B : Type u} [self : Cate
+goryTheory.Bicategory B] {a b c d : B} {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c) (
+h : c ⟶ d),   CategoryTheory.Bica…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem associator_inv_naturality_left {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c) (h : c ⟶ d) :
     η ▷ (g ≫ h) ≫ (α_ f' g h).inv = (α_ f g h).inv ≫ η ▷ g ▷ h := by simp
 
 @[reassoc]
-/--
-theorem `whiskerRight_comp_symm` / 定理 `whiskerRight_comp_symm`
-
-English:
-theorem whiskerRight_comp_symm
-  given: {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c) (h : c ⟶ d)
-  proof: by simp
-
-@[reassoc]
-
-中文:
-定理 whiskerRight_comp_symm
-  条件: {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c) (h : c ⟶ d)
-  证明: by simp
-
-@[reassoc]
+/-
+**CategoryTheory.Bicategory.whiskerRight_comp_symm** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Bicategory`。
+形式化陈述：whiskerRight_comp_symm {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c) (h : c ⟶ d)
+ : η ▷ g ▷ h = (α_ f g h).hom ≫ η ▷ (g ≫ h) ≫ (α_ f' g h).inv
+参数：η : f ⟶ f'；g : b ⟶ c；h : c ⟶ d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Bicategory.whiskerRight_comp`：∀ {B : Type u} [self : Cate
+goryTheory.Bicategory B] {a b c d : B} {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c) (
+h : c ⟶ d),   CategoryTheory.Bica…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem whiskerRight_comp_symm {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c) (h : c ⟶ d) :
     η ▷ g ▷ h = (α_ f g h).hom ≫ η ▷ (g ≫ h) ≫ (α_ f' g h).inv := by simp
 
 @[reassoc]
-/--
-theorem `associator_naturality_middle` / 定理 `associator_naturality_middle`
-
-English:
-theorem associator_naturality_middle
-  given: (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g') (h : c ⟶ d)
-  proof: by simp
-
-@[reassoc]
-
-中文:
-定理 associator_naturality_middle
-  条件: (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g') (h : c ⟶ d)
-  证明: by simp
-
-@[reassoc]
+/-
+**CategoryTheory.Bicategory.associator_naturality_middle** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.Bicategory`。
+形式化陈述：associator_naturality_middle (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g') (h : 
+c ⟶ d) : (f ◁ η) ▷ h ≫ (α_ f g' h).hom = (α_ f g h).hom ≫ f ◁ η ▷ h
+参数：f : a ⟶ b；η : g ⟶ g'；h : c ⟶ d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Bicategory.whisker_assoc`：∀ {B : Type u} [self : Category
+Theory.Bicategory B] {a b c d : B} (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g') (h : 
+c ⟶ d),   CategoryTheory.Bica…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem associator_naturality_middle (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g') (h : c ⟶ d) :
     (f ◁ η) ▷ h ≫ (α_ f g' h).hom = (α_ f g h).hom ≫ f ◁ η ▷ h := by simp
 
 @[reassoc]
-/--
-theorem `associator_inv_naturality_middle` / 定理 `associator_inv_naturality_middle`
-
-English:
-theorem associator_inv_naturality_middle
-  given: (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g') (h : c ⟶ d)
-  proof: by simp
-
-@[reassoc]
-
-中文:
-定理 associator_inv_naturality_middle
-  条件: (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g') (h : c ⟶ d)
-  证明: by simp
-
-@[reassoc]
+/-
+**CategoryTheory.Bicategory.associator_inv_naturality_middle** 是 Mathlib 中的一个定理，
+位于命名空间 `CategoryTheory.Bicategory`。
+形式化陈述：associator_inv_naturality_middle (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g') (
+h : c ⟶ d) : f ◁ η ▷ h ≫ (α_ f g' h).inv = (α_ f g h).inv ≫ (f ◁ η) ▷ h
+参数：f : a ⟶ b；η : g ⟶ g'；h : c ⟶ d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Bicategory.whisker_assoc`：∀ {B : Type u} [self : Category
+Theory.Bicategory B] {a b c d : B} (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g') (h : 
+c ⟶ d),   CategoryTheory.Bica…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem associator_inv_naturality_middle (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g') (h : c ⟶ d) :
     f ◁ η ▷ h ≫ (α_ f g' h).inv = (α_ f g h).inv ≫ (f ◁ η) ▷ h := by simp
 
 @[reassoc]
-/--
-theorem `whisker_assoc_symm` / 定理 `whisker_assoc_symm`
-
-English:
-theorem whisker_assoc_symm
-  given: (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g') (h : c ⟶ d)
-  proof: by simp
-
-@[reassoc]
-
-中文:
-定理 whisker_assoc_symm
-  条件: (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g') (h : c ⟶ d)
-  证明: by simp
-
-@[reassoc]
+/-
+**CategoryTheory.Bicategory.whisker_assoc_symm** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Bicategory`。
+形式化陈述：whisker_assoc_symm (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g') (h : c ⟶ d) : f
+ ◁ η ▷ h = (α_ f g h).inv ≫ (f ◁ η) ▷ h ≫ (α_ f g' h).hom
+参数：f : a ⟶ b；η : g ⟶ g'；h : c ⟶ d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Bicategory.whisker_assoc`：∀ {B : Type u} [self : Category
+Theory.Bicategory B] {a b c d : B} (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g') (h : 
+c ⟶ d),   CategoryTheory.Bica…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem whisker_assoc_symm (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g') (h : c ⟶ d) :
     f ◁ η ▷ h = (α_ f g h).inv ≫ (f ◁ η) ▷ h ≫ (α_ f g' h).hom := by simp
 
 @[reassoc]
-/--
-theorem `associator_naturality_right` / 定理 `associator_naturality_right`
-
-English:
-theorem associator_naturality_right
-  given: (f : a ⟶ b) (g : b ⟶ c) {h h' : c ⟶ d} (η : h ⟶ h')
-  proof: by simp
-
-@[reassoc]
-
-中文:
-定理 associator_naturality_right
-  条件: (f : a ⟶ b) (g : b ⟶ c) {h h' : c ⟶ d} (η : h ⟶ h')
-  证明: by simp
-
-@[reassoc]
+/-
+**CategoryTheory.Bicategory.associator_naturality_right** 是 Mathlib 中的一个定理，位于命名空
+间 `CategoryTheory.Bicategory`。
+形式化陈述：associator_naturality_right (f : a ⟶ b) (g : b ⟶ c) {h h' : c ⟶ d} (η : h 
+⟶ h') : (f ≫ g) ◁ η ≫ (α_ f g h').hom = (α_ f g h).hom ≫ f ◁ g ◁ η
+参数：f : a ⟶ b；g : b ⟶ c；η : h ⟶ h'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Bicategory.comp_whiskerLeft`：∀ {B : Type u} [self : Categ
+oryTheory.Bicategory B] {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) {h h' : c ⟶ d} (η 
+: h ⟶ h'),   CategoryTheory.Bica…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem associator_naturality_right (f : a ⟶ b) (g : b ⟶ c) {h h' : c ⟶ d} (η : h ⟶ h') :
     (f ≫ g) ◁ η ≫ (α_ f g h').hom = (α_ f g h).hom ≫ f ◁ g ◁ η := by simp
 
 @[reassoc]
-/--
-theorem `associator_inv_naturality_right` / 定理 `associator_inv_naturality_right`
-
-English:
-theorem associator_inv_naturality_right
-  given: (f : a ⟶ b) (g : b ⟶ c) {h h' : c ⟶ d} (η : h ⟶ h')
-  proof: by simp
-
-@[reassoc]
-
-中文:
-定理 associator_inv_naturality_right
-  条件: (f : a ⟶ b) (g : b ⟶ c) {h h' : c ⟶ d} (η : h ⟶ h')
-  证明: by simp
-
-@[reassoc]
+/-
+**CategoryTheory.Bicategory.associator_inv_naturality_right** 是 Mathlib 中的一个定理，位
+于命名空间 `CategoryTheory.Bicategory`。
+形式化陈述：associator_inv_naturality_right (f : a ⟶ b) (g : b ⟶ c) {h h' : c ⟶ d} (η 
+: h ⟶ h') : f ◁ g ◁ η ≫ (α_ f g h').inv = (α_ f g h).inv ≫ (f ≫ g) ◁ η
+参数：f : a ⟶ b；g : b ⟶ c；η : h ⟶ h'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Bicategory.comp_whiskerLeft`：∀ {B : Type u} [self : Categ
+oryTheory.Bicategory B] {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) {h h' : c ⟶ d} (η 
+: h ⟶ h'),   CategoryTheory.Bica…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem associator_inv_naturality_right (f : a ⟶ b) (g : b ⟶ c) {h h' : c ⟶ d} (η : h ⟶ h') :
     f ◁ g ◁ η ≫ (α_ f g h').inv = (α_ f g h).inv ≫ (f ≫ g) ◁ η := by simp
 
 @[reassoc]
-/--
-theorem `comp_whiskerLeft_symm` / 定理 `comp_whiskerLeft_symm`
-
-English:
-theorem comp_whiskerLeft_symm
-  given: (f : a ⟶ b) (g : b ⟶ c) {h h' : c ⟶ d} (η : h ⟶ h')
-  proof: by simp
-
-@[reassoc]
-
-中文:
-定理 comp_whiskerLeft_symm
-  条件: (f : a ⟶ b) (g : b ⟶ c) {h h' : c ⟶ d} (η : h ⟶ h')
-  证明: by simp
-
-@[reassoc]
+/-
+**CategoryTheory.Bicategory.comp_whiskerLeft_symm** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Bicategory`。
+形式化陈述：comp_whiskerLeft_symm (f : a ⟶ b) (g : b ⟶ c) {h h' : c ⟶ d} (η : h ⟶ h') 
+: f ◁ g ◁ η = (α_ f g h).inv ≫ (f ≫ g) ◁ η ≫ (α_ f g h').hom
+参数：f : a ⟶ b；g : b ⟶ c；η : h ⟶ h'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Bicategory.comp_whiskerLeft`：∀ {B : Type u} [self : Categ
+oryTheory.Bicategory B] {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) {h h' : c ⟶ d} (η 
+: h ⟶ h'),   CategoryTheory.Bica…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem comp_whiskerLeft_symm (f : a ⟶ b) (g : b ⟶ c) {h h' : c ⟶ d} (η : h ⟶ h') :
     f ◁ g ◁ η = (α_ f g h).inv ≫ (f ≫ g) ◁ η ≫ (α_ f g h').hom := by simp
 
 @[reassoc]
-/--
-theorem `leftUnitor_naturality` / 定理 `leftUnitor_naturality`
-
-English:
-theorem leftUnitor_naturality
-  given: {f g : a ⟶ b} (η : f ⟶ g)
-  proof: by
-  simp
-
-@[reassoc]
-
-中文:
-定理 leftUnitor_naturality
-  条件: {f g : a ⟶ b} (η : f ⟶ g)
-  证明: by
-  simp
-
-@[reassoc]
+/-
+**CategoryTheory.Bicategory.leftUnitor_naturality** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Bicategory`。
+形式化陈述：leftUnitor_naturality {f g : a ⟶ b} (η : f ⟶ g) : 𝟙 a ◁ η ≫ (fun_ g).hom =
+ (fun_ f).hom ≫ η
+参数：η : f ⟶ g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Bicategory.id_whiskerLeft`：∀ {B : Type u} [self : Categor
+yTheory.Bicategory B] {a b : B} {f g : a ⟶ b} (η : f ⟶ g),   CategoryTheory.Bica
+tegory.whiskerLeft (CategoryTh…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem leftUnitor_naturality {f g : a ⟶ b} (η : f ⟶ g) :
-    𝟙 a ◁ η ≫ (fun_ g).hom = (fun_ f).hom ≫ η := by
+    𝟙 a ◁ η ≫ (λ_ g).hom = (λ_ f).hom ≫ η := by
   simp
 
 @[reassoc]
-/--
-theorem `leftUnitor_inv_naturality` / 定理 `leftUnitor_inv_naturality`
-
-English:
-theorem leftUnitor_inv_naturality
-  given: {f g : a ⟶ b} (η : f ⟶ g)
-  proof: by simp
-
-中文:
-定理 leftUnitor_inv_naturality
-  条件: {f g : a ⟶ b} (η : f ⟶ g)
-  证明: by simp
+/-
+**CategoryTheory.Bicategory.leftUnitor_inv_naturality** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.Bicategory`。
+形式化陈述：leftUnitor_inv_naturality {f g : a ⟶ b} (η : f ⟶ g) : η ≫ (fun_ g).inv = (
+fun_ f).inv ≫ 𝟙 a ◁ η
+参数：η : f ⟶ g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Bicategory.id_whiskerLeft`：∀ {B : Type u} [self : Categor
+yTheory.Bicategory B] {a b : B} {f g : a ⟶ b} (η : f ⟶ g),   CategoryTheory.Bica
+tegory.whiskerLeft (CategoryTh…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem leftUnitor_inv_naturality {f g : a ⟶ b} (η : f ⟶ g) :
-    η ≫ (fun_ g).inv = (fun_ f).inv ≫ 𝟙 a ◁ η := by simp
-
-/--
-theorem `id_whiskerLeft_symm` / 定理 `id_whiskerLeft_symm`
-
-English:
-theorem id_whiskerLeft_symm
-  given: {f g : a ⟶ b} (η : f ⟶ g)
-  statement: η = (fun_ f).inv ≫ 𝟙 a ◁ η ≫ (fun_ g).hom
-  proof: by
-  simp
-
-@[reassoc]
-
-中文:
-定理 id_whiskerLeft_symm
-  条件: {f g : a ⟶ b} (η : f ⟶ g)
-  结论: η = (fun_ f).inv ≫ 𝟙 a ◁ η ≫ (fun_ g).hom
-  证明: by
-  simp
-
-@[reassoc]
+    η ≫ (λ_ g).inv = (λ_ f).inv ≫ 𝟙 a ◁ η := by simp
+/-
+**CategoryTheory.Bicategory.id_whiskerLeft_symm** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Bicategory`。
+形式化陈述：id_whiskerLeft_symm {f g : a ⟶ b} (η : f ⟶ g) : η = (fun_ f).inv ≫ 𝟙 a ◁ η
+ ≫ (fun_ g).hom
+参数：η : f ⟶ g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Bicategory.id_whiskerLeft`：∀ {B : Type u} [self : Categor
+yTheory.Bicategory B] {a b : B} {f g : a ⟶ b} (η : f ⟶ g),   CategoryTheory.Bica
+tegory.whiskerLeft (CategoryTh…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem id_whiskerLeft_symm {f g : a ⟶ b} (η : f ⟶ g) : η = (fun_ f).inv ≫ 𝟙 a ◁ η ≫ (fun_ g).hom := by
+theorem id_whiskerLeft_symm {f g : a ⟶ b} (η : f ⟶ g) : η = (λ_ f).inv ≫ 𝟙 a ◁ η ≫ (λ_ g).hom := by
   simp
 
 @[reassoc]
-/--
-theorem `rightUnitor_naturality` / 定理 `rightUnitor_naturality`
-
-English:
-theorem rightUnitor_naturality
-  given: {f g : a ⟶ b} (η : f ⟶ g)
-  proof: by simp
-
-@[reassoc]
-
-中文:
-定理 rightUnitor_naturality
-  条件: {f g : a ⟶ b} (η : f ⟶ g)
-  证明: by simp
-
-@[reassoc]
+/-
+**CategoryTheory.Bicategory.rightUnitor_naturality** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Bicategory`。
+形式化陈述：rightUnitor_naturality {f g : a ⟶ b} (η : f ⟶ g) : η ▷ 𝟙 b ≫ (ρ_ g).hom = 
+(ρ_ f).hom ≫ η
+参数：η : f ⟶ g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Bicategory.whiskerRight_id`：∀ {B : Type u} [self : Catego
+ryTheory.Bicategory B] {a b : B} {f g : a ⟶ b} (η : f ⟶ g),   CategoryTheory.Bic
+ategory.whiskerRight η (Categor…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem rightUnitor_naturality {f g : a ⟶ b} (η : f ⟶ g) :
     η ▷ 𝟙 b ≫ (ρ_ g).hom = (ρ_ f).hom ≫ η := by simp
 
 @[reassoc]
-/--
-theorem `rightUnitor_inv_naturality` / 定理 `rightUnitor_inv_naturality`
-
-English:
-theorem rightUnitor_inv_naturality
-  given: {f g : a ⟶ b} (η : f ⟶ g)
-  proof: by simp
-
-中文:
-定理 rightUnitor_inv_naturality
-  条件: {f g : a ⟶ b} (η : f ⟶ g)
-  证明: by simp
+/-
+**CategoryTheory.Bicategory.rightUnitor_inv_naturality** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Bicategory`。
+形式化陈述：rightUnitor_inv_naturality {f g : a ⟶ b} (η : f ⟶ g) : η ≫ (ρ_ g).inv = (ρ
+_ f).inv ≫ η ▷ 𝟙 b
+参数：η : f ⟶ g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Bicategory.whiskerRight_id`：∀ {B : Type u} [self : Catego
+ryTheory.Bicategory B] {a b : B} {f g : a ⟶ b} (η : f ⟶ g),   CategoryTheory.Bic
+ategory.whiskerRight η (Categor…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem rightUnitor_inv_naturality {f g : a ⟶ b} (η : f ⟶ g) :
     η ≫ (ρ_ g).inv = (ρ_ f).inv ≫ η ▷ 𝟙 b := by simp
-
-/--
-theorem `whiskerRight_id_symm` / 定理 `whiskerRight_id_symm`
-
-English:
-theorem whiskerRight_id_symm
-  given: {f g : a ⟶ b} (η : f ⟶ g)
-  statement: η = (ρ_ f).inv ≫ η ▷ 𝟙 b ≫ (ρ_ g).hom
-  proof: by
-  simp
-
-中文:
-定理 whiskerRight_id_symm
-  条件: {f g : a ⟶ b} (η : f ⟶ g)
-  结论: η = (ρ_ f).inv ≫ η ▷ 𝟙 b ≫ (ρ_ g).hom
-  证明: by
-  simp
+/-
+**CategoryTheory.Bicategory.whiskerRight_id_symm** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Bicategory`。
+形式化陈述：whiskerRight_id_symm {f g : a ⟶ b} (η : f ⟶ g) : η = (ρ_ f).inv ≫ η ▷ 𝟙 b 
+≫ (ρ_ g).hom
+参数：η : f ⟶ g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Bicategory.whiskerRight_id`：∀ {B : Type u} [self : Catego
+ryTheory.Bicategory B] {a b : B} {f g : a ⟶ b} (η : f ⟶ g),   CategoryTheory.Bic
+ategory.whiskerRight η (Categor…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem whiskerRight_id_symm {f g : a ⟶ b} (η : f ⟶ g) : η = (ρ_ f).inv ≫ η ▷ 𝟙 b ≫ (ρ_ g).hom := by
   simp
-
-/--
-theorem `whiskerLeft_iff` / 定理 `whiskerLeft_iff`
-
-English:
-theorem whiskerLeft_iff
-  given: {f g : a ⟶ b} (η θ : f ⟶ g)
-  statement: 𝟙 a ◁ η = 𝟙 a ◁ θ ↔ η = θ
-  proof: by simp
-
-中文:
-定理 whiskerLeft_iff
-  条件: {f g : a ⟶ b} (η θ : f ⟶ g)
-  结论: 𝟙 a ◁ η = 𝟙 a ◁ θ ↔ η = θ
-  证明: by simp
+/-
+**CategoryTheory.Bicategory.whiskerLeft_iff** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Bicategory`。
+形式化陈述：whiskerLeft_iff {f g : a ⟶ b} (η θ : f ⟶ g) : 𝟙 a ◁ η = 𝟙 a ◁ θ ↔ η = θ
+参数：η θ : f ⟶ g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Bicategory.id_whiskerLeft`：∀ {B : Type u} [self : Categor
+yTheory.Bicategory B] {a b : B} {f g : a ⟶ b} (η : f ⟶ g),   CategoryTheory.Bica
+tegory.whiskerLeft (CategoryTh…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem whiskerLeft_iff {f g : a ⟶ b} (η θ : f ⟶ g) : 𝟙 a ◁ η = 𝟙 a ◁ θ ↔ η = θ := by simp
-
-/--
-theorem `whiskerRight_iff` / 定理 `whiskerRight_iff`
-
-English:
-theorem whiskerRight_iff
-  given: {f g : a ⟶ b} (η θ : f ⟶ g)
-  statement: η ▷ 𝟙 b = θ ▷ 𝟙 b ↔ η = θ
-  proof: by simp
-
-中文:
-定理 whiskerRight_iff
-  条件: {f g : a ⟶ b} (η θ : f ⟶ g)
-  结论: η ▷ 𝟙 b = θ ▷ 𝟙 b ↔ η = θ
-  证明: by simp
+/-
+**CategoryTheory.Bicategory.whiskerRight_iff** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Bicategory`。
+形式化陈述：whiskerRight_iff {f g : a ⟶ b} (η θ : f ⟶ g) : η ▷ 𝟙 b = θ ▷ 𝟙 b ↔ η = θ
+参数：η θ : f ⟶ g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Bicategory.whiskerRight_id`：∀ {B : Type u} [self : Catego
+ryTheory.Bicategory B] {a b : B} {f g : a ⟶ b} (η : f ⟶ g),   CategoryTheory.Bic
+ategory.whiskerRight η (Categor…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem whiskerRight_iff {f g : a ⟶ b} (η θ : f ⟶ g) : η ▷ 𝟙 b = θ ▷ 𝟙 b ↔ η = θ := by simp
 
@@ -1305,108 +1616,171 @@ theorem whiskerRight_iff {f g : a ⟶ b} (η θ : f ⟶ g) : η ▷ 𝟙 b = θ 
 `id_whiskerRight f g : 𝟙 f ▷ g = 𝟙 (f ≫ g)`.
 -/
 @[reassoc, simp]
-/--
-theorem `leftUnitor_whiskerRight` / 定理 `leftUnitor_whiskerRight`
+/-
+**CategoryTheory.Bicategory.leftUnitor_whiskerRight** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.Bicategory`。
+形式化陈述：leftUnitor_whiskerRight (f : a ⟶ b) (g : b ⟶ c) : (fun_ f).hom ▷ g = (α_ (
+𝟙 a) f g).hom ≫ (fun_ (f ≫ g)).hom
+参数：f : a ⟶ b；g : b ⟶ c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Bicategory.whiskerLeft_iff`：whiskerLeft_iff {f g : a ⟶ b}
+ (η θ : f ⟶ g) : 𝟙 a ◁ η = 𝟙 a ◁ θ ↔ η = θ
+· 使用定理 `CategoryTheory.Bicategory.whiskerLeft_comp`：∀ {B : Type u} [self : Categ
+oryTheory.Bicategory B] {a b c : B} (f : a ⟶ b) {g h i : b ⟶ c} (η : g ⟶ h) (θ :
+ h ⟶ i),   CategoryTheory.Bicate…
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.IsIso.epi_of_iso`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsIso f],   CategoryTheo
+ry.Epi f
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `CategoryTheory.Bicategory.pentagon_assoc`：∀ {B : Type u} [self : Categor
+yTheory.Bicategory B] {a b c d e : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i : d
+ ⟶ e)   {Z : a ⟶ e}   (h_1 :  …
+· 使用定理 `CategoryTheory.Bicategory.triangle`：∀ {B : Type u} [self : CategoryTheor
+y.Bicategory B] {a b c : B} (f : a ⟶ b) (g : b ⟶ c),   CategoryTheory.CategorySt
+ruct.comp (CategoryTheor…
+· 使用定理 `CategoryTheory.Bicategory.associator_naturality_middle`：associator_natur
+ality_middle (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g') (h : c ⟶ d) : (f ◁ η) ▷ h ≫
+ (α_ f g' h).hom = (α_ f g h).hom ≫ f ◁ η ▷ …
+· 使用定理 `CategoryTheory.Bicategory.comp_whiskerRight_assoc`：∀ {B : Type u} [self 
+: CategoryTheory.Bicategory B] {a b c : B} {f g h : a ⟶ b} (η : f ⟶ g) (θ : g ⟶ 
+h) (i : b ⟶ c)   {Z : a ⟶ c} (h_1 : Cat…
+· 使用定理 `CategoryTheory.Bicategory.associator_naturality_left`：associator_natural
+ity_left {f f' : a ⟶ b} (η : f ⟶ f') (g : b ⟶ c) (h : c ⟶ d) : η ▷ g ▷ h ≫ (α_ f
+' g h).hom = (α_ f g h).hom ≫ η ▷ (g ≫ h)
 
-English:
-theorem leftUnitor_whiskerRight
-  given: (f : a ⟶ b) (g : b ⟶ c)
-  proof: by
-  rw [← whiskerLeft_iff]; rw [whiskerLeft_comp]; rw [← cancel_epi (α_ _ _ _).hom]; rw [←
-      cancel_epi ((α_ _ _ _).hom ▷ _)]; rw [pentagon_assoc]; rw [triangle]; rw [← associator_naturality_middle]; rw [←
-      comp_whiskerRight_assoc]; rw [triangle]; rw [associator_naturality_left]
-
-@[reassoc, simp]
-
-中文:
-定理 leftUnitor_whiskerRight
-  条件: (f : a ⟶ b) (g : b ⟶ c)
-  证明: by
-  rw [← whiskerLeft_iff]; rw [whiskerLeft_comp]; rw [← cancel_epi (α_ _ _ _).hom]; rw [←
-      cancel_epi ((α_ _ _ _).hom ▷ _)]; rw [pentagon_assoc]; rw [triangle]; rw [← associator_naturality_middle]; rw [←
-      comp_whiskerRight_assoc]; rw [triangle]; rw [associator_naturality_left]
-
-@[reassoc, simp]
-
-Depends on / 依赖: associator_naturality_left, associator_naturality_middle, cancel_epi, comp_whiskerRight_assoc, pentagon_assoc, triangle, whiskerLeft_comp, whiskerLeft_iff
+--- 原说明 ---
+We state it as a simp lemma, which is regarded as an involved version of
+`id_whiskerRight f g : 𝟙 f ▷ g = 𝟙 (f ≫ g)`.
 -/
 theorem leftUnitor_whiskerRight (f : a ⟶ b) (g : b ⟶ c) :
-    (fun_ f).hom ▷ g = (α_ (𝟙 a) f g).hom ≫ (fun_ (f ≫ g)).hom := by
-  rw [← whiskerLeft_iff]; rw [whiskerLeft_comp]; rw [← cancel_epi (α_ _ _ _).hom]; rw [←
-      cancel_epi ((α_ _ _ _).hom ▷ _)]; rw [pentagon_assoc]; rw [triangle]; rw [← associator_naturality_middle]; rw [←
-      comp_whiskerRight_assoc]; rw [triangle]; rw [associator_naturality_left]
+    (λ_ f).hom ▷ g = (α_ (𝟙 a) f g).hom ≫ (λ_ (f ≫ g)).hom := by
+  rw [← whiskerLeft_iff, whiskerLeft_comp, ← cancel_epi (α_ _ _ _).hom, ←
+      cancel_epi ((α_ _ _ _).hom ▷ _), pentagon_assoc, triangle, ← associator_naturality_middle, ←
+      comp_whiskerRight_assoc, triangle, associator_naturality_left]
 
 @[reassoc, simp]
-/--
-theorem `leftUnitor_inv_whiskerRight` / 定理 `leftUnitor_inv_whiskerRight`
-
-English:
-theorem leftUnitor_inv_whiskerRight
-  given: (f : a ⟶ b) (g : b ⟶ c)
-  proof: eq_of_inv_eq_inv (by simp)
-
-@[reassoc, simp]
-
-中文:
-定理 leftUnitor_inv_whiskerRight
-  条件: (f : a ⟶ b) (g : b ⟶ c)
-  证明: eq_of_inv_eq_inv (by simp)
-
-@[reassoc, simp]
-
-Depends on / 依赖: eq_of_inv_eq_inv
+/-
+**CategoryTheory.Bicategory.leftUnitor_inv_whiskerRight** 是 Mathlib 中的一个定理，位于命名空
+间 `CategoryTheory.Bicategory`。
+形式化陈述：leftUnitor_inv_whiskerRight (f : a ⟶ b) (g : b ⟶ c) : (fun_ f).inv ▷ g = (
+fun_ (f ≫ g)).inv ≫ (α_ (𝟙 a) f g).inv
+参数：f : a ⟶ b；g : b ⟶ c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.eq_of_inv_eq_inv`：eq_of_inv_eq_inv {f g : X ⟶ Y} [IsIso f
+] [IsIso g] (p : inv f = inv g) : f = g
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Bicategory.inv_whiskerRight`：inv_whiskerRight {f g : a ⟶ 
+b} (η : f ⟶ g) (h : b ⟶ c) [IsIso η] : inv (η ▷ h) = inv η ▷ h
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.IsIso.Iso.inv_inv`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : X ≅ Y), CategoryTheory.inv f.inv = f.hom
+· 使用定理 `CategoryTheory.Bicategory.leftUnitor_whiskerRight`：leftUnitor_whiskerRig
+ht (f : a ⟶ b) (g : b ⟶ c) : (fun_ f).hom ▷ g = (α_ (𝟙 a) f g).hom ≫ (fun_ (f ≫ 
+g)).hom
+· 使用定理 `CategoryTheory.IsIso.inv_comp`：inv_comp [IsIso f] [IsIso h] : inv (f ≫ h
+) = inv h ≫ inv f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem leftUnitor_inv_whiskerRight (f : a ⟶ b) (g : b ⟶ c) :
-    (fun_ f).inv ▷ g = (fun_ (f ≫ g)).inv ≫ (α_ (𝟙 a) f g).inv :=
+    (λ_ f).inv ▷ g = (λ_ (f ≫ g)).inv ≫ (α_ (𝟙 a) f g).inv :=
   eq_of_inv_eq_inv (by simp)
 
 @[reassoc, simp]
-/--
-theorem `whiskerLeft_rightUnitor` / 定理 `whiskerLeft_rightUnitor`
-
-English:
-theorem whiskerLeft_rightUnitor
-  given: (f : a ⟶ b) (g : b ⟶ c)
-  proof: by
-  rw [← whiskerRight_iff]; rw [comp_whiskerRight]; rw [← cancel_epi (α_ _ _ _).inv]; rw [←
-      cancel_epi (f ◁ (α_ _ _ _).inv)]; rw [pentagon_inv_assoc]; rw [triangle_assoc_comp_right]; rw [←
-      associator_inv_naturality_middle]; rw [← whiskerLeft_comp_assoc]; rw [triangle_assoc_comp_right]; rw [associator_inv_naturality_right]
-
-@[reassoc, simp]
-
-中文:
-定理 whiskerLeft_rightUnitor
-  条件: (f : a ⟶ b) (g : b ⟶ c)
-  证明: by
-  rw [← whiskerRight_iff]; rw [comp_whiskerRight]; rw [← cancel_epi (α_ _ _ _).inv]; rw [←
-      cancel_epi (f ◁ (α_ _ _ _).inv)]; rw [pentagon_inv_assoc]; rw [triangle_assoc_comp_right]; rw [←
-      associator_inv_naturality_middle]; rw [← whiskerLeft_comp_assoc]; rw [triangle_assoc_comp_right]; rw [associator_inv_naturality_right]
-
-@[reassoc, simp]
-
-Depends on / 依赖: associator_inv_naturality_middle, associator_inv_naturality_right, cancel_epi, comp_whiskerRight, pentagon_inv_assoc, triangle_assoc_comp_right, whiskerLeft_comp_assoc, whiskerRight_iff
+/-
+**CategoryTheory.Bicategory.whiskerLeft_rightUnitor** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.Bicategory`。
+形式化陈述：whiskerLeft_rightUnitor (f : a ⟶ b) (g : b ⟶ c) : f ◁ (ρ_ g).hom = (α_ f g
+ (𝟙 c)).inv ≫ (ρ_ (f ≫ g)).hom
+参数：f : a ⟶ b；g : b ⟶ c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Bicategory.whiskerRight_iff`：whiskerRight_iff {f g : a ⟶ 
+b} (η θ : f ⟶ g) : η ▷ 𝟙 b = θ ▷ 𝟙 b ↔ η = θ
+· 使用定理 `CategoryTheory.Bicategory.comp_whiskerRight`：∀ {B : Type u} [self : Cate
+goryTheory.Bicategory B] {a b c : B} {f g h : a ⟶ b} (η : f ⟶ g) (θ : g ⟶ h) (i 
+: b ⟶ c),   CategoryTheory.Bicate…
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.IsIso.epi_of_iso`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsIso f],   CategoryTheo
+ry.Epi f
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用定理 `CategoryTheory.Bicategory.pentagon_inv_assoc`：∀ {B : Type u} [inst : Cat
+egoryTheory.Bicategory B] {a b c d e : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) (i
+ : d ⟶ e)   {Z : a ⟶ e}   (h_1 :  …
+· 使用定理 `CategoryTheory.Bicategory.triangle_assoc_comp_right`：triangle_assoc_comp
+_right (f : a ⟶ b) (g : b ⟶ c) : (α_ f (𝟙 b) g).inv ≫ (ρ_ f).hom ▷ g = f ◁ (fun_
+ g).hom
+· 使用定理 `CategoryTheory.Bicategory.associator_inv_naturality_middle`：associator_i
+nv_naturality_middle (f : a ⟶ b) {g g' : b ⟶ c} (η : g ⟶ g') (h : c ⟶ d) : f ◁ η
+ ▷ h ≫ (α_ f g' h).inv = (α_ f g h).inv ≫ (f ◁ η…
+· 使用定理 `CategoryTheory.Bicategory.whiskerLeft_comp_assoc`：∀ {B : Type u} [self :
+ CategoryTheory.Bicategory B] {a b c : B} (f : a ⟶ b) {g h i : b ⟶ c} (η : g ⟶ h
+) (θ : h ⟶ i)   {Z : a ⟶ c} (h_1 : Cat…
+· 使用定理 `CategoryTheory.Bicategory.associator_inv_naturality_right`：associator_in
+v_naturality_right (f : a ⟶ b) (g : b ⟶ c) {h h' : c ⟶ d} (η : h ⟶ h') : f ◁ g ◁
+ η ≫ (α_ f g h').inv = (α_ f g h).inv ≫ (f ≫ g)…
 -/
 theorem whiskerLeft_rightUnitor (f : a ⟶ b) (g : b ⟶ c) :
     f ◁ (ρ_ g).hom = (α_ f g (𝟙 c)).inv ≫ (ρ_ (f ≫ g)).hom := by
-  rw [← whiskerRight_iff]; rw [comp_whiskerRight]; rw [← cancel_epi (α_ _ _ _).inv]; rw [←
-      cancel_epi (f ◁ (α_ _ _ _).inv)]; rw [pentagon_inv_assoc]; rw [triangle_assoc_comp_right]; rw [←
-      associator_inv_naturality_middle]; rw [← whiskerLeft_comp_assoc]; rw [triangle_assoc_comp_right]; rw [associator_inv_naturality_right]
+  rw [← whiskerRight_iff, comp_whiskerRight, ← cancel_epi (α_ _ _ _).inv, ←
+      cancel_epi (f ◁ (α_ _ _ _).inv), pentagon_inv_assoc, triangle_assoc_comp_right, ←
+      associator_inv_naturality_middle, ← whiskerLeft_comp_assoc, triangle_assoc_comp_right,
+      associator_inv_naturality_right]
 
 @[reassoc, simp]
-/--
-theorem `whiskerLeft_rightUnitor_inv` / 定理 `whiskerLeft_rightUnitor_inv`
-
-English:
-theorem whiskerLeft_rightUnitor_inv
-  given: (f : a ⟶ b) (g : b ⟶ c)
-  proof: eq_of_inv_eq_inv (by simp)
-
-中文:
-定理 whiskerLeft_rightUnitor_inv
-  条件: (f : a ⟶ b) (g : b ⟶ c)
-  证明: eq_of_inv_eq_inv (by simp)
-
-Depends on / 依赖: eq_of_inv_eq_inv
+/-
+**CategoryTheory.Bicategory.whiskerLeft_rightUnitor_inv** 是 Mathlib 中的一个定理，位于命名空
+间 `CategoryTheory.Bicategory`。
+形式化陈述：whiskerLeft_rightUnitor_inv (f : a ⟶ b) (g : b ⟶ c) : f ◁ (ρ_ g).inv = (ρ_
+ (f ≫ g)).inv ≫ (α_ f g (𝟙 c)).hom
+参数：f : a ⟶ b；g : b ⟶ c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.eq_of_inv_eq_inv`：eq_of_inv_eq_inv {f g : X ⟶ Y} [IsIso f
+] [IsIso g] (p : inv f = inv g) : f = g
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Bicategory.inv_whiskerLeft`：inv_whiskerLeft (f : a ⟶ b) {
+g h : b ⟶ c} (η : g ⟶ h) [IsIso η] : inv (f ◁ η) = f ◁ inv η
+· 使用定理 `CategoryTheory.IsIso.Iso.inv_inv`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : X ≅ Y), CategoryTheory.inv f.inv = f.hom
+· 使用定理 `CategoryTheory.Bicategory.whiskerLeft_rightUnitor`：whiskerLeft_rightUnit
+or (f : a ⟶ b) (g : b ⟶ c) : f ◁ (ρ_ g).hom = (α_ f g (𝟙 c)).inv ≫ (ρ_ (f ≫ g)).
+hom
+· 使用定理 `CategoryTheory.IsIso.inv_comp`：inv_comp [IsIso f] [IsIso h] : inv (f ≫ h
+) = inv h ≫ inv f
+· 使用定理 `CategoryTheory.IsIso.Iso.inv_hom`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : X ≅ Y), CategoryTheory.inv f.hom = f.inv
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem whiskerLeft_rightUnitor_inv (f : a ⟶ b) (g : b ⟶ c) :
     f ◁ (ρ_ g).inv = (ρ_ (f ≫ g)).inv ≫ (α_ f g (𝟙 c)).hom :=
@@ -1415,140 +1789,192 @@ theorem whiskerLeft_rightUnitor_inv (f : a ⟶ b) (g : b ⟶ c) :
 /-
 It is not so obvious whether `leftUnitor_whiskerRight` or `leftUnitor_comp` should be a simp
 lemma. Our choice is the former. One reason is that the latter yields the following loop:
-[id_whiskerLeft] : 𝟙 a ◁ (ρ_ f).hom ==> (λ_ (f ≫ 𝟙 b)).hom ≫ (ρ_ f).hom ≫ (λ_ f).inv
-[leftUnitor_comp] : (λ_ (f ≫ 𝟙 b)).hom ==> (α_ (𝟙 a) f (𝟙 b)).inv ≫ (λ_ f).hom ▷ 𝟙 b
-[whiskerRight_id] : (λ_ f).hom ▷ 𝟙 b ==> (ρ_ (𝟙 a ≫ f)).hom ≫ (λ_ f).hom ≫ (ρ_ f).inv
+[id_whiskerLeft]   : 𝟙 a ◁ (ρ_ f).hom ==> (λ_ (f ≫ 𝟙 b)).hom ≫ (ρ_ f).hom ≫ (λ_ f).inv
+[leftUnitor_comp]  : (λ_ (f ≫ 𝟙 b)).hom ==> (α_ (𝟙 a) f (𝟙 b)).inv ≫ (λ_ f).hom ▷ 𝟙 b
+[whiskerRight_id]  : (λ_ f).hom ▷ 𝟙 b ==> (ρ_ (𝟙 a ≫ f)).hom ≫ (λ_ f).hom ≫ (ρ_ f).inv
 [rightUnitor_comp] : (ρ_ (𝟙 a ≫ f)).hom ==> (α_ (𝟙 a) f (𝟙 b)).hom ≫ 𝟙 a ◁ (ρ_ f).hom
 -/
 @[reassoc]
-/--
-theorem `leftUnitor_comp` / 定理 `leftUnitor_comp`
+/-
+**CategoryTheory.Bicategory.leftUnitor_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Bicategory`。
+形式化陈述：leftUnitor_comp (f : a ⟶ b) (g : b ⟶ c) : (fun_ (f ≫ g)).hom = (α_ (𝟙 a) f
+ g).inv ≫ (fun_ f).hom ▷ g
+参数：f : a ⟶ b；g : b ⟶ c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Bicategory.leftUnitor_whiskerRight`：leftUnitor_whiskerRig
+ht (f : a ⟶ b) (g : b ⟶ c) : (fun_ f).hom ▷ g = (α_ (𝟙 a) f g).hom ≫ (fun_ (f ≫ 
+g)).hom
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem leftUnitor_comp
-  given: (f : a ⟶ b) (g : b ⟶ c)
-  proof: by simp
-
-@[reassoc]
-
-中文:
-定理 leftUnitor_comp
-  条件: (f : a ⟶ b) (g : b ⟶ c)
-  证明: by simp
-
-@[reassoc]
+--- 原说明 ---
+It is not so obvious whether `leftUnitor_whiskerRight` or `leftUnitor_comp` shou
+ld be a simp
+lemma. Our choice is the former. One reason is that the latter yields the follow
+ing loop:
+[id_whiskerLeft]   : 𝟙 a ◁ (ρ_ f).hom ==> (λ_ (f ≫ 𝟙 b)).hom ≫ (ρ_ f).hom ≫ (λ_ 
+f).inv
+[leftUnitor_comp]  : (λ_ (f ≫ 𝟙 b)).hom ==> (α_ (𝟙 a) f (𝟙 b)).inv ≫ (λ_ f).hom 
+▷ 𝟙 b
+[whiskerRight_id]  : (λ_ f).hom ▷ 𝟙 b ==> (ρ_ (𝟙 a ≫ f)).hom ≫ (λ_ f).hom ≫ (ρ_ 
+f).inv
+[rightUnitor_comp] : (ρ_ (𝟙 a ≫ f)).hom ==> (α_ (𝟙 a) f (𝟙 b)).hom ≫ 𝟙 a ◁ (ρ_ f
+).hom
 -/
 theorem leftUnitor_comp (f : a ⟶ b) (g : b ⟶ c) :
-    (fun_ (f ≫ g)).hom = (α_ (𝟙 a) f g).inv ≫ (fun_ f).hom ▷ g := by simp
+    (λ_ (f ≫ g)).hom = (α_ (𝟙 a) f g).inv ≫ (λ_ f).hom ▷ g := by simp
 
 @[reassoc]
-/--
-theorem `leftUnitor_comp_inv` / 定理 `leftUnitor_comp_inv`
-
-English:
-theorem leftUnitor_comp_inv
-  given: (f : a ⟶ b) (g : b ⟶ c)
-  proof: by simp
-
-@[reassoc]
-
-中文:
-定理 leftUnitor_comp_inv
-  条件: (f : a ⟶ b) (g : b ⟶ c)
-  证明: by simp
-
-@[reassoc]
+/-
+**CategoryTheory.Bicategory.leftUnitor_comp_inv** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Bicategory`。
+形式化陈述：leftUnitor_comp_inv (f : a ⟶ b) (g : b ⟶ c) : (fun_ (f ≫ g)).inv = (fun_ f
+).inv ▷ g ≫ (α_ (𝟙 a) f g).hom
+参数：f : a ⟶ b；g : b ⟶ c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Bicategory.leftUnitor_inv_whiskerRight`：leftUnitor_inv_wh
+iskerRight (f : a ⟶ b) (g : b ⟶ c) : (fun_ f).inv ▷ g = (fun_ (f ≫ g)).inv ≫ (α_
+ (𝟙 a) f g).inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem leftUnitor_comp_inv (f : a ⟶ b) (g : b ⟶ c) :
-    (fun_ (f ≫ g)).inv = (fun_ f).inv ▷ g ≫ (α_ (𝟙 a) f g).hom := by simp
+    (λ_ (f ≫ g)).inv = (λ_ f).inv ▷ g ≫ (α_ (𝟙 a) f g).hom := by simp
 
 @[reassoc]
-/--
-theorem `rightUnitor_comp` / 定理 `rightUnitor_comp`
-
-English:
-theorem rightUnitor_comp
-  given: (f : a ⟶ b) (g : b ⟶ c)
-  proof: by simp
-
-@[reassoc]
-
-中文:
-定理 rightUnitor_comp
-  条件: (f : a ⟶ b) (g : b ⟶ c)
-  证明: by simp
-
-@[reassoc]
+/-
+**CategoryTheory.Bicategory.rightUnitor_comp** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Bicategory`。
+形式化陈述：rightUnitor_comp (f : a ⟶ b) (g : b ⟶ c) : (ρ_ (f ≫ g)).hom = (α_ f g (𝟙 c
+)).hom ≫ f ◁ (ρ_ g).hom
+参数：f : a ⟶ b；g : b ⟶ c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Bicategory.whiskerLeft_rightUnitor`：whiskerLeft_rightUnit
+or (f : a ⟶ b) (g : b ⟶ c) : f ◁ (ρ_ g).hom = (α_ f g (𝟙 c)).inv ≫ (ρ_ (f ≫ g)).
+hom
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem rightUnitor_comp (f : a ⟶ b) (g : b ⟶ c) :
     (ρ_ (f ≫ g)).hom = (α_ f g (𝟙 c)).hom ≫ f ◁ (ρ_ g).hom := by simp
 
 @[reassoc]
-/--
-theorem `rightUnitor_comp_inv` / 定理 `rightUnitor_comp_inv`
-
-English:
-theorem rightUnitor_comp_inv
-  given: (f : a ⟶ b) (g : b ⟶ c)
-  proof: by simp
-
-@[simp]
-
-中文:
-定理 rightUnitor_comp_inv
-  条件: (f : a ⟶ b) (g : b ⟶ c)
-  证明: by simp
-
-@[simp]
+/-
+**CategoryTheory.Bicategory.rightUnitor_comp_inv** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Bicategory`。
+形式化陈述：rightUnitor_comp_inv (f : a ⟶ b) (g : b ⟶ c) : (ρ_ (f ≫ g)).inv = f ◁ (ρ_ 
+g).inv ≫ (α_ f g (𝟙 c)).inv
+参数：f : a ⟶ b；g : b ⟶ c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Bicategory.whiskerLeft_rightUnitor_inv`：whiskerLeft_right
+Unitor_inv (f : a ⟶ b) (g : b ⟶ c) : f ◁ (ρ_ g).inv = (ρ_ (f ≫ g)).inv ≫ (α_ f g
+ (𝟙 c)).hom
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.hom self.inv = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem rightUnitor_comp_inv (f : a ⟶ b) (g : b ⟶ c) :
     (ρ_ (f ≫ g)).inv = f ◁ (ρ_ g).inv ≫ (α_ f g (𝟙 c)).inv := by simp
 
 @[simp]
-/--
-theorem `unitors_equal` / 定理 `unitors_equal`
-
-English:
-theorem unitors_equal
-  statement: (fun_ (𝟙 a)).hom = (ρ_ (𝟙 a)).hom
-  proof: by
-  rw [← whiskerLeft_iff]; rw [← cancel_epi (α_ _ _ _).hom]; rw [← cancel_mono (ρ_ _).hom]; rw [triangle]; rw [←
-      rightUnitor_comp]; rw [rightUnitor_naturality]
-
-@[simp]
-
-中文:
-定理 unitors_equal
-  结论: (fun_ (𝟙 a)).hom = (ρ_ (𝟙 a)).hom
-  证明: by
-  rw [← whiskerLeft_iff]; rw [← cancel_epi (α_ _ _ _).hom]; rw [← cancel_mono (ρ_ _).hom]; rw [triangle]; rw [←
-      rightUnitor_comp]; rw [rightUnitor_naturality]
-
-@[simp]
-
-Depends on / 依赖: cancel_epi, cancel_mono, rightUnitor_comp, rightUnitor_naturality, triangle, whiskerLeft_iff
+/-
+**CategoryTheory.Bicategory.unitors_equal** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Bicategory`。
+形式化陈述：unitors_equal : (fun_ (𝟙 a)).hom = (ρ_ (𝟙 a)).hom
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Bicategory.whiskerLeft_iff`：whiskerLeft_iff {f g : a ⟶ b}
+ (η θ : f ⟶ g) : 𝟙 a ◁ η = 𝟙 a ◁ θ ↔ η = θ
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.IsIso.epi_of_iso`：∀ {C : Type u} [inst : CategoryTheory.C
+ategory.{v, u} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsIso f],   CategoryTheo
+ry.Epi f
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.IsIso.mono_of_iso`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : Y ⟶ X) [CategoryTheory.IsIso f],   CategoryThe
+ory.Mono f
+· 使用定理 `CategoryTheory.Bicategory.triangle`：∀ {B : Type u} [self : CategoryTheor
+y.Bicategory B] {a b c : B} (f : a ⟶ b) (g : b ⟶ c),   CategoryTheory.CategorySt
+ruct.comp (CategoryTheor…
+· 使用定理 `CategoryTheory.Bicategory.rightUnitor_comp`：rightUnitor_comp (f : a ⟶ b)
+ (g : b ⟶ c) : (ρ_ (f ≫ g)).hom = (α_ f g (𝟙 c)).hom ≫ f ◁ (ρ_ g).hom
+· 使用定理 `CategoryTheory.Bicategory.rightUnitor_naturality`：rightUnitor_naturality
+ {f g : a ⟶ b} (η : f ⟶ g) : η ▷ 𝟙 b ≫ (ρ_ g).hom = (ρ_ f).hom ≫ η
 -/
-theorem unitors_equal : (fun_ (𝟙 a)).hom = (ρ_ (𝟙 a)).hom := by
-  rw [← whiskerLeft_iff]; rw [← cancel_epi (α_ _ _ _).hom]; rw [← cancel_mono (ρ_ _).hom]; rw [triangle]; rw [←
-      rightUnitor_comp]; rw [rightUnitor_naturality]
+theorem unitors_equal : (λ_ (𝟙 a)).hom = (ρ_ (𝟙 a)).hom := by
+  rw [← whiskerLeft_iff, ← cancel_epi (α_ _ _ _).hom, ← cancel_mono (ρ_ _).hom, triangle, ←
+      rightUnitor_comp, rightUnitor_naturality]
 
 @[simp]
-/--
-theorem `unitors_inv_equal` / 定理 `unitors_inv_equal`
-
-English:
-theorem unitors_inv_equal
-  statement: (fun_ (𝟙 a)).inv = (ρ_ (𝟙 a)).inv
-  proof: by simp [Iso.inv_eq_inv]
-
-中文:
-定理 unitors_inv_equal
-  结论: (fun_ (𝟙 a)).inv = (ρ_ (𝟙 a)).inv
-  证明: by simp [Iso.inv_eq_inv]
-
-Depends on / 依赖: Iso.inv_eq_inv, inv_eq_inv
+/-
+**CategoryTheory.Bicategory.unitors_inv_equal** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Bicategory`。
+形式化陈述：unitors_inv_equal : (fun_ (𝟙 a)).inv = (ρ_ (𝟙 a)).inv
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Bicategory.unitors_equal`：unitors_equal : (fun_ (𝟙 a)).ho
+m = (ρ_ (𝟙 a)).hom
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem unitors_inv_equal : (fun_ (𝟙 a)).inv = (ρ_ (𝟙 a)).inv := by simp [Iso.inv_eq_inv]
+theorem unitors_inv_equal : (λ_ (𝟙 a)).inv = (ρ_ (𝟙 a)).inv := by simp [Iso.inv_eq_inv]
 
 section
 
@@ -1556,20 +1982,16 @@ attribute [local simp] whisker_exchange
 
 /-- Precomposition of a 1-morphism as a functor. -/
 @[simps]
-/--
-Definition of `precomp` / `precomp` 的定义
+/-
+**CategoryTheory.Bicategory.precomp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Bi
+category`。
+形式化陈述：precomp (c : B) (f : a ⟶ b) : (b ⟶ c) ⥤ (a ⟶ c) where obj
+参数：c : B；f : a ⟶ b。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition precomp
-  signature: (c : B) (f : a ⟶ b)
-  body: (f ≫ ·)
-  map := (f ◁ ·)
-
-中文:
-定义 precomp
-  签名: (c : B) (f : a ⟶ b)
-  定义体: (f ≫ ·)
-  map := (f ◁ ·)
+--- 原说明 ---
+Precomposition of a 1-morphism as a functor.
 -/
 def precomp (c : B) (f : a ⟶ b) : (b ⟶ c) ⥤ (a ⟶ c) where
   obj := (f ≫ ·)
@@ -1579,22 +2001,18 @@ set_option backward.defeqAttrib.useBackward true in
 /-- Precomposition of a 1-morphism as a functor from the category of 1-morphisms `a ⟶ b` into the
 category of functors `(b ⟶ c) ⥤ (a ⟶ c)`. -/
 @[simps]
-/--
-Definition of `precomposing` / `precomposing` 的定义
+/-
+**CategoryTheory.Bicategory.precomposing** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Bicategory`。
+形式化陈述：precomposing (a b c : B) : (a ⟶ b) ⥤ (b ⟶ c) ⥤ (a ⟶ c) where obj f
+参数：a b c : B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition precomposing
-  signature: (a b c : B)
-  body: precomp c f
-  map η := { app := (η ▷ ·) }
-
-中文:
-定义 precomposing
-  签名: (a b c : B)
-  定义体: precomp c f
-  map η := { app := (η ▷ ·) }
-
-Depends on / 依赖: precomp
+--- 原说明 ---
+Precomposition of a 1-morphism as a functor from the category of 1-morphisms `a 
+⟶ b` into the
+category of functors `(b ⟶ c) ⥤ (a ⟶ c)`.
 -/
 def precomposing (a b c : B) : (a ⟶ b) ⥤ (b ⟶ c) ⥤ (a ⟶ c) where
   obj f := precomp c f
@@ -1602,20 +2020,16 @@ def precomposing (a b c : B) : (a ⟶ b) ⥤ (b ⟶ c) ⥤ (a ⟶ c) where
 
 /-- Postcomposition of a 1-morphism as a functor. -/
 @[simps]
-/--
-Definition of `postcomp` / `postcomp` 的定义
+/-
+**CategoryTheory.Bicategory.postcomp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.B
+icategory`。
+形式化陈述：postcomp (a : B) (f : b ⟶ c) : (a ⟶ b) ⥤ (a ⟶ c) where obj
+参数：a : B；f : b ⟶ c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition postcomp
-  signature: (a : B) (f : b ⟶ c)
-  body: (· ≫ f)
-  map := (· ▷ f)
-
-中文:
-定义 postcomp
-  签名: (a : B) (f : b ⟶ c)
-  定义体: (· ≫ f)
-  map := (· ▷ f)
+--- 原说明 ---
+Postcomposition of a 1-morphism as a functor.
 -/
 def postcomp (a : B) (f : b ⟶ c) : (a ⟶ b) ⥤ (a ⟶ c) where
   obj := (· ≫ f)
@@ -1625,22 +2039,18 @@ set_option backward.defeqAttrib.useBackward true in
 /-- Postcomposition of a 1-morphism as a functor from the category of 1-morphisms `b ⟶ c` into the
 category of functors `(a ⟶ b) ⥤ (a ⟶ c)`. -/
 @[simps]
-/--
-Definition of `postcomposing` / `postcomposing` 的定义
+/-
+**CategoryTheory.Bicategory.postcomposing** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Bicategory`。
+形式化陈述：postcomposing (a b c : B) : (b ⟶ c) ⥤ (a ⟶ b) ⥤ (a ⟶ c) where obj f
+参数：a b c : B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition postcomposing
-  signature: (a b c : B)
-  body: postcomp a f
-  map η := { app := (· ◁ η) }
-
-中文:
-定义 postcomposing
-  签名: (a b c : B)
-  定义体: postcomp a f
-  map η := { app := (· ◁ η) }
-
-Depends on / 依赖: postcomp
+--- 原说明 ---
+Postcomposition of a 1-morphism as a functor from the category of 1-morphisms `b
+ ⟶ c` into the
+category of functors `(a ⟶ b) ⥤ (a ⟶ c)`.
 -/
 def postcomposing (a b c : B) : (b ⟶ c) ⥤ (a ⟶ b) ⥤ (a ⟶ c) where
   obj f := postcomp a f
@@ -1649,20 +2059,17 @@ def postcomposing (a b c : B) : (b ⟶ c) ⥤ (a ⟶ b) ⥤ (a ⟶ c) where
 set_option backward.defeqAttrib.useBackward true in
 /-- Left component of the associator as a natural isomorphism. -/
 @[simps!]
-/--
-Definition of `associatorNatIsoLeft` / `associatorNatIsoLeft` 的定义
+/-
+**CategoryTheory.Bicategory.associatorNatIsoLeft** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Bicategory`。
+形式化陈述：associatorNatIsoLeft (a : B) (g : b ⟶ c) (h : c ⟶ d) : (postcomposing a ..
+).obj g ⋙ (postcomposing ..).obj h ≅ (postcomposing ..).obj (g ≫ h)
+参数：a : B；g : b ⟶ c；h : c ⟶ d。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition associatorNatIsoLeft
-  signature: (a : B) (g : b ⟶ c) (h : c ⟶ d)
-  body: NatIso.ofComponents (α_ · g h)
-
-中文:
-定义 associator自然数IsoLeft
-  签名: (a : B) (g : b ⟶ c) (h : c ⟶ d)
-  定义体: NatIso.ofComponents (α_ · g h)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+Left component of the associator as a natural isomorphism.
 -/
 def associatorNatIsoLeft (a : B) (g : b ⟶ c) (h : c ⟶ d) :
     (postcomposing a ..).obj g ⋙ (postcomposing ..).obj h ≅ (postcomposing ..).obj (g ≫ h) :=
@@ -1671,20 +2078,17 @@ def associatorNatIsoLeft (a : B) (g : b ⟶ c) (h : c ⟶ d) :
 set_option backward.defeqAttrib.useBackward true in
 /-- Middle component of the associator as a natural isomorphism. -/
 @[simps!]
-/--
-Definition of `associatorNatIsoMiddle` / `associatorNatIsoMiddle` 的定义
+/-
+**CategoryTheory.Bicategory.associatorNatIsoMiddle** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Bicategory`。
+形式化陈述：associatorNatIsoMiddle (f : a ⟶ b) (h : c ⟶ d) : (precomposing ..).obj f ⋙
+ (postcomposing ..).obj h ≅ (postcomposing ..).obj h ⋙ (precomposing ..).obj f
+参数：f : a ⟶ b；h : c ⟶ d。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition associatorNatIsoMiddle
-  signature: (f : a ⟶ b) (h : c ⟶ d)
-  body: NatIso.ofComponents (α_ f · h)
-
-中文:
-定义 associator自然数IsoMiddle
-  签名: (f : a ⟶ b) (h : c ⟶ d)
-  定义体: NatIso.ofComponents (α_ f · h)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+Middle component of the associator as a natural isomorphism.
 -/
 def associatorNatIsoMiddle (f : a ⟶ b) (h : c ⟶ d) :
     (precomposing ..).obj f ⋙ (postcomposing ..).obj h ≅
@@ -1694,20 +2098,17 @@ def associatorNatIsoMiddle (f : a ⟶ b) (h : c ⟶ d) :
 set_option backward.defeqAttrib.useBackward true in
 /-- Right component of the associator as a natural isomorphism. -/
 @[simps!]
-/--
-Definition of `associatorNatIsoRight` / `associatorNatIsoRight` 的定义
+/-
+**CategoryTheory.Bicategory.associatorNatIsoRight** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Bicategory`。
+形式化陈述：associatorNatIsoRight (f : a ⟶ b) (g : b ⟶ c) (d : B) : (precomposing _ _ 
+d).obj (f ≫ g) ≅ (precomposing ..).obj g ⋙ (precomposing ..).obj f
+参数：f : a ⟶ b；g : b ⟶ c；d : B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition associatorNatIsoRight
-  signature: (f : a ⟶ b) (g : b ⟶ c) (d : B)
-  body: NatIso.ofComponents (α_ f g ·)
-
-中文:
-定义 associator自然数IsoRight
-  签名: (f : a ⟶ b) (g : b ⟶ c) (d : B)
-  定义体: NatIso.ofComponents (α_ f g ·)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+Right component of the associator as a natural isomorphism.
 -/
 def associatorNatIsoRight (f : a ⟶ b) (g : b ⟶ c) (d : B) :
     (precomposing _ _ d).obj (f ≫ g) ≅ (precomposing ..).obj g ⋙ (precomposing ..).obj f :=
@@ -1716,41 +2117,33 @@ def associatorNatIsoRight (f : a ⟶ b) (g : b ⟶ c) (d : B) :
 set_option backward.defeqAttrib.useBackward true in
 /-- Left unitor as a natural isomorphism. -/
 @[simps!]
-/--
-Definition of `leftUnitorNatIso` / `leftUnitorNatIso` 的定义
+/-
+**CategoryTheory.Bicategory.leftUnitorNatIso** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Bicategory`。
+形式化陈述：leftUnitorNatIso (a b : B) : (precomposing _ _ b).obj (𝟙 a) ≅ 𝟭 (a ⟶ b)
+参数：a b : B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition leftUnitorNatIso
-  signature: (a b : B)
-  body: NatIso.ofComponents (fun_ ·)
-
-中文:
-定义 leftUnitor自然数Iso
-  签名: (a b : B)
-  定义体: NatIso.ofComponents (fun_ ·)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, fun_, ofComponents
+--- 原说明 ---
+Left unitor as a natural isomorphism.
 -/
 def leftUnitorNatIso (a b : B) : (precomposing _ _ b).obj (𝟙 a) ≅ 𝟭 (a ⟶ b) :=
-  NatIso.ofComponents (fun_ ·)
+  NatIso.ofComponents (λ_ ·)
 
 set_option backward.defeqAttrib.useBackward true in
 /-- Right unitor as a natural isomorphism. -/
 @[simps!]
-/--
-Definition of `rightUnitorNatIso` / `rightUnitorNatIso` 的定义
+/-
+**CategoryTheory.Bicategory.rightUnitorNatIso** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Bicategory`。
+形式化陈述：rightUnitorNatIso (a b : B) : (postcomposing a _ _).obj (𝟙 b) ≅ 𝟭 (a ⟶ b)
+参数：a b : B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rightUnitorNatIso
-  signature: (a b : B)
-  body: NatIso.ofComponents (ρ_ ·)
-
-中文:
-定义 rightUnitor自然数Iso
-  签名: (a b : B)
-  定义体: NatIso.ofComponents (ρ_ ·)
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+Right unitor as a natural isomorphism.
 -/
 def rightUnitorNatIso (a b : B) : (postcomposing a _ _).obj (𝟙 b) ≅ 𝟭 (a ⟶ b) :=
   NatIso.ofComponents (ρ_ ·)
@@ -1760,3 +2153,4 @@ end
 end Bicategory
 
 end CategoryTheory
+

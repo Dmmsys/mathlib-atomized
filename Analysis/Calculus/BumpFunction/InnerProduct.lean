@@ -25,64 +25,20 @@ smooth function, bump function, inner product space
 open Function Real
 open scoped Topology
 
-variable (E : Type*) [NormedAddCommGroup E] [InnerProductSpace Real E]
+variable (E : Type*) [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
-/--
-Definition of `ContDiffBumpBase.ofInnerProductSpace` / `ContDiffBumpBase.ofInnerProductSpace` 的定义
+/-- A base bump function in an inner product space. This construction works in any space with a
+norm smooth away from zero but we do not have a typeclass for this. -/
+/-
+**ContDiffBumpBase.ofInnerProductSpace** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ContDiffBumpBase.ofInnerProductSpace : ContDiffBumpBase E where toFun R x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ContDiffBumpBase.ofInnerProductSpace
-  signature: : ContDiffBumpBase E where
-  body: smoothTransition ((R - ‖x‖) / (R - 1))
-  mem_Icc _ _ := ⟨smoothTransition.nonneg _, smoothTransition.le_one _⟩
-  symmetric _ _ := by simp only [norm_neg]
-  smooth := by
-    rintro ⟨R, x⟩ ⟨hR : 1 < R, -⟩
-    apply ContDiffAt.contDiffWithinAt
-    rw [← sub_pos] at hR
-    rcases eq_or_ne x 0 with rfl | hx
-    · have A : ContinuousAt (fun p : Real × E => (p.1 - ‖p.2‖) / (p.1 - 1)) (R, 0) := by
-        fun_prop (disch := positivity)
-      have B : forallᶠ p in 𝓝 (R, (0 : E)), 1 <= (p.1 - ‖p.2‖) / (p.1 - 1) :=
-A.eventually le_mem_nhds (one_lt_div hR).2 sub_lt_sub_left (by simp) _
-refine (contDiffAt_const (c := 1)).congr_of_eventuallyEq B.mono fun _ =>
-        smoothTransition.one_of_one_le
-    · refine smoothTransition.contDiffAt.comp _ (ContDiffAt.div ?_ (by fun_prop) hR.ne')
-      exact contDiffAt_fst.sub (contDiffAt_snd.norm Real hx)
-eq_one _ hR _ hx := smoothTransition.one_of_one_le (one_le_div <| sub_pos.2 hR).2
-    sub_le_sub_left hx _
-  support R hR := by
-    ext x
-    rw [mem_support]; rw [Ne]; rw [smoothTransition.zero_iff_nonpos]; rw [not_le]; rw [mem_ball_zero_iff]
-    simp [hR]
-
-中文:
-定义 余ntDiffBumpBase.ofInnerProductSpace
-  签名: : 余ntDiffBumpBase E where
-  定义体: smoothTransition ((R - ‖x‖) / (R - 1))
-  mem_Icc _ _ := ⟨smoothTransition.nonneg _, smoothTransition.le_one _⟩
-  symmetric _ _ := by simp only [norm_neg]
-  smooth := by
-    rintro ⟨R, x⟩ ⟨hR : 1 < R, -⟩
-    apply ContDiffAt.contDiffWithinAt
-    rw [← sub_pos] at hR
-    rcases eq_or_ne x 0 with rfl | hx
-    · have A : ContinuousAt (fun p : Real × E => (p.1 - ‖p.2‖) / (p.1 - 1)) (R, 0) := by
-        fun_prop (disch := positivity)
-      have B : forallᶠ p in 𝓝 (R, (0 : E)), 1 <= (p.1 - ‖p.2‖) / (p.1 - 1) :=
-A.eventually le_mem_nhds (one_lt_div hR).2 sub_lt_sub_left (by simp) _
-refine (contDiffAt_const (c := 1)).congr_of_eventuallyEq B.mono fun _ =>
-        smoothTransition.one_of_one_le
-    · refine smoothTransition.contDiffAt.comp _ (ContDiffAt.div ?_ (by fun_prop) hR.ne')
-      exact contDiffAt_fst.sub (contDiffAt_snd.norm Real hx)
-eq_one _ hR _ hx := smoothTransition.one_of_one_le (one_le_div <| sub_pos.2 hR).2
-    sub_le_sub_left hx _
-  support R hR := by
-    ext x
-    rw [mem_support]; rw [Ne]; rw [smoothTransition.zero_iff_nonpos]; rw [not_le]; rw [mem_ball_zero_iff]
-    simp [hR]
-
-Depends on / 依赖: smoothTransition
+--- 原说明 ---
+A base bump function in an inner product space. This construction works in any s
+pace with a
+norm smooth away from zero but we do not have a typeclass for this.
 -/
 noncomputable def ContDiffBumpBase.ofInnerProductSpace : ContDiffBumpBase E where
   toFun R x := smoothTransition ((R - ‖x‖) / (R - 1))
@@ -93,21 +49,28 @@ noncomputable def ContDiffBumpBase.ofInnerProductSpace : ContDiffBumpBase E wher
     apply ContDiffAt.contDiffWithinAt
     rw [← sub_pos] at hR
     rcases eq_or_ne x 0 with rfl | hx
-    · have A : ContinuousAt (fun p : Real × E => (p.1 - ‖p.2‖) / (p.1 - 1)) (R, 0) := by
+    · have A : ContinuousAt (fun p : ℝ × E ↦ (p.1 - ‖p.2‖) / (p.1 - 1)) (R, 0) := by
         fun_prop (disch := positivity)
-      have B : forallᶠ p in 𝓝 (R, (0 : E)), 1 <= (p.1 - ‖p.2‖) / (p.1 - 1) :=
-A.eventually le_mem_nhds (one_lt_div hR).2 sub_lt_sub_left (by simp) _
-refine (contDiffAt_const (c := 1)).congr_of_eventuallyEq B.mono fun _ =>
+      have B : ∀ᶠ p in 𝓝 (R, (0 : E)), 1 ≤ (p.1 - ‖p.2‖) / (p.1 - 1) :=
+        A.eventually <| le_mem_nhds <| (one_lt_div hR).2 <| sub_lt_sub_left (by simp) _
+      refine (contDiffAt_const (c := 1)).congr_of_eventuallyEq <| B.mono fun _ ↦
         smoothTransition.one_of_one_le
     · refine smoothTransition.contDiffAt.comp _ (ContDiffAt.div ?_ (by fun_prop) hR.ne')
-      exact contDiffAt_fst.sub (contDiffAt_snd.norm Real hx)
-eq_one _ hR _ hx := smoothTransition.one_of_one_le (one_le_div <| sub_pos.2 hR).2
+      exact contDiffAt_fst.sub (contDiffAt_snd.norm ℝ hx)
+  eq_one _ hR _ hx := smoothTransition.one_of_one_le <| (one_le_div <| sub_pos.2 hR).2 <|
     sub_le_sub_left hx _
   support R hR := by
     ext x
-    rw [mem_support]; rw [Ne]; rw [smoothTransition.zero_iff_nonpos]; rw [not_le]; rw [mem_ball_zero_iff]
+    rw [mem_support, Ne, smoothTransition.zero_iff_nonpos, not_le, mem_ball_zero_iff]
     simp [hR]
 
 /-- Any inner product space has smooth bump functions. -/
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Any inner product space has smooth bump functions.
+-/
 instance (priority := 100) hasContDiffBump_of_innerProductSpace : HasContDiffBump E :=
   ⟨⟨.ofInnerProductSpace E⟩⟩

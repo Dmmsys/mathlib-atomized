@@ -24,226 +24,293 @@ open Module
 
 namespace Complex
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FiniteDimensional Real Complex
-  body: basisOneI.finiteDimensional_of_finite
-
-中文:
-实例 :
-  签名: 有限维 实数 复形
-  定义体: basisOneI.finiteDimensional_of_finite
-
-Depends on / 依赖: basisOneI, basisOneI.finiteDimensional_of_finite, finiteDimensional_of_finite
+/-
+**Complex.** 是 Mathlib 中的一个实例，位于命名空间 `Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : FiniteDimensional Real Complex := basisOneI.finiteDimensional_of_finite
+instance : FiniteDimensional ℝ ℂ := basisOneI.finiteDimensional_of_finite
 
 /-- `ℂ` is a finite extension of `ℝ` of degree 2, i.e `[ℂ : ℝ] = 2` -/
 @[simp, stacks 09G4]
-/--
-theorem `finrank_real_complex` / 定理 `finrank_real_complex`
+/-
+**Complex.finrank_real_complex** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：finrank_real_complex : finrank Real Complex = 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.finrank_eq_card_basis`：finrank_eq_card_basis {ι : Type w} [Fintyp
+e ι] (h : Basis ι R M) : finrank R M = Fintype.card ι
+· 使用定理 `IsNoetherianRing.strongRankCondition`：∀ (R : Type u) [inst : Ring R] [No
+ntrivial R] [IsNoetherianRing R], StrongRankCondition R
+· 使用定理 `PrincipalIdealRing.isNoetherianRing`：∀ {R : Type u} [inst : Semiring R] 
+[IsPrincipalIdealRing R], IsNoetherianRing R
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `Fintype.card_fin`：Fintype.card_fin (n : Nat) : Fintype.card (Fin n) = n
 
-English:
-theorem finrank_real_complex
-  statement: finrank Real Complex = 2
-  proof: by
-  rw [finrank_eq_card_basis basisOneI]; rw [Fintype.card_fin]
+--- 原说明 ---
+`ℂ` is a finite extension of `ℝ` of degree 2, i.e `[ℂ : ℝ] = 2`
+-/
+theorem finrank_real_complex : finrank ℝ ℂ = 2 := by
+  rw [finrank_eq_card_basis basisOneI, Fintype.card_fin]
 
 @[simp]
-
-中文:
-定理 finrank_real_complex
-  结论: finrank 实数 复形 = 2
-  证明: by
-  rw [finrank_eq_card_basis basisOneI]; rw [Fintype.card_fin]
-
-@[simp]
-
-Depends on / 依赖: Fintype, Fintype.card_fin, basisOneI, card_fin, finrank_eq_card_basis
+/-
+**Complex.rank_real_complex** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：rank_real_complex : Module.rank Real Complex = 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsNoetherianRing.strongRankCondition`：∀ (R : Type u) [inst : Ring R] [No
+ntrivial R] [IsNoetherianRing R], StrongRankCondition R
+· 使用定理 `PrincipalIdealRing.isNoetherianRing`：∀ {R : Type u} [inst : Semiring R] 
+[IsPrincipalIdealRing R], IsNoetherianRing R
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `Complex.instFiniteDimensionalReal`：FiniteDimensional ℝ ℂ
+· 使用定理 `Complex.finrank_real_complex`：finrank_real_complex : finrank Real Comple
+x = 2
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem finrank_real_complex : finrank Real Complex = 2 := by
-  rw [finrank_eq_card_basis basisOneI]; rw [Fintype.card_fin]
-
-@[simp]
-/--
-theorem `rank_real_complex` / 定理 `rank_real_complex`
-
-English:
-theorem rank_real_complex
-  statement: Module.rank Real Complex = 2
-  proof: by simp [← finrank_eq_rank, finrank_real_complex]
-
-中文:
-定理 rank_real_complex
-  结论: 模.rank 实数 复形 = 2
-  证明: by simp [← finrank_eq_rank, finrank_real_complex]
-
-Depends on / 依赖: finrank_eq_rank, finrank_real_complex
+theorem rank_real_complex : Module.rank ℝ ℂ = 2 := by simp [← finrank_eq_rank, finrank_real_complex]
+/-
+**Complex.rank_real_complex'.** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem rank_real_complex : Module.rank Real Complex = 2 := by simp [← finrank_eq_rank, finrank_real_complex]
+theorem rank_real_complex'.{u} : Cardinal.lift.{u} (Module.rank ℝ ℂ) = 2 := by
+  rw [← finrank_eq_rank, finrank_real_complex, Cardinal.lift_natCast, Nat.cast_ofNat]
 
-/--
-theorem `rank_real_complex'.` / 定理 `rank_real_complex'.`
+/-- `Fact` version of the dimension of `ℂ` over `ℝ`, locally useful in the definition of the
+circle. -/
+/-
+**Complex.finrank_real_complex_fact** 是 Mathlib 中的一个定理，位于命名空间 `Complex`。
+形式化陈述：finrank_real_complex_fact : Fact (finrank Real Complex = 2)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Complex.finrank_real_complex`：finrank_real_complex : finrank Real Comple
+x = 2
 
-English:
-theorem rank_real_complex'.{u}
-  statement: Cardinal.lift.{u} (Module.rank Real Complex) = 2
-  proof: by
-  rw [← finrank_eq_rank]; rw [finrank_real_complex]; rw [Cardinal.lift_natCast]; rw [Nat.cast_ofNat]
-
-中文:
-定理 rank_real_complex'.{u}
-  结论: 基数.lift.{u} (模.rank 实数 复形) = 2
-  证明: by
-  rw [← finrank_eq_rank]; rw [finrank_real_complex]; rw [Cardinal.lift_natCast]; rw [Nat.cast_ofNat]
-
-Depends on / 依赖: Cardinal, Cardinal.lift_natCast, Nat.cast_ofNat, cast_ofNat, finrank_eq_rank, finrank_real_complex, lift_natCast
+--- 原说明 ---
+`Fact` version of the dimension of `ℂ` over `ℝ`, locally useful in the definitio
+n of the
+circle.
 -/
-theorem rank_real_complex'.{u} : Cardinal.lift.{u} (Module.rank Real Complex) = 2 := by
-  rw [← finrank_eq_rank]; rw [finrank_real_complex]; rw [Cardinal.lift_natCast]; rw [Nat.cast_ofNat]
-
-/--
-theorem `finrank_real_complex_fact` / 定理 `finrank_real_complex_fact`
-
-English:
-theorem finrank_real_complex_fact
-  statement: Fact (finrank Real Complex = 2)
-  proof: ⟨finrank_real_complex⟩
-
-中文:
-定理 finrank_real_complex_fact
-  结论: Fact (finrank 实数 复形 = 2)
-  证明: ⟨finrank_real_complex⟩
-
-Depends on / 依赖: finrank_real_complex
--/
-theorem finrank_real_complex_fact : Fact (finrank Real Complex = 2) :=
+theorem finrank_real_complex_fact : Fact (finrank ℝ ℂ = 2) :=
   ⟨finrank_real_complex⟩
 
 end Complex
 
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 500) FiniteDimensional.complexToReal (E : Type*) [AddCommGroup E]
-    [Module Complex E] [FiniteDimensional Complex E] : FiniteDimensional Real E :=
-  FiniteDimensional.trans Real Complex E
-
-/--
-theorem `rank_real_of_complex` / 定理 `rank_real_of_complex`
-
-English:
-theorem rank_real_of_complex
-  given: (E : Type*) [AddCommGroup E] [Module Complex E]
-  proof: Cardinal.lift_inj.{_, 0}.1 by
-    rw [← lift_rank_mul_lift_rank Real Complex E]; rw [Complex.rank_real_complex']
-    simp only [Cardinal.lift_id']
-
-中文:
-定理 rank_real_of_complex
-  条件: (E : 类型) [加法交换群 E] [模 复形 E]
-  证明: Cardinal.lift_inj.{_, 0}.1 by
-    rw [← lift_rank_mul_lift_rank Real Complex E]; rw [Complex.rank_real_complex']
-    simp only [Cardinal.lift_id']
-
-Depends on / 依赖: Cardinal, Cardinal.lift_id, Cardinal.lift_inj, Complex.rank_real_complex, lift_id, lift_inj, lift_rank_mul_lift_rank, rank_real_complex
+    [Module ℂ E] [FiniteDimensional ℂ E] : FiniteDimensional ℝ E :=
+  FiniteDimensional.trans ℝ ℂ E
+/-
+**rank_real_of_complex** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：rank_real_of_complex (E : Type*) [AddCommGroup E] [Module Complex E] : Mod
+ule.rank Real E = 2 * Module.rank Complex E
+参数：E : Type*。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Cardinal.lift_inj`：lift_inj {a b : Cardinal.{u}} : lift.{v, u} a = lift.
+{v, u} b ↔ a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `lift_rank_mul_lift_rank`：lift_rank_mul_lift_rank : Cardinal.lift.{w} (Mo
+dule.rank F K) * Cardinal.lift.{v} (Module.rank K A) = Cardinal.lift.{v} (Module
+.rank F A)
+· 使用定理 `IsNoetherianRing.strongRankCondition`：∀ (R : Type u) [inst : Ring R] [No
+ntrivial R] [IsNoetherianRing R], StrongRankCondition R
+· 使用定理 `PrincipalIdealRing.isNoetherianRing`：∀ {R : Type u} [inst : Semiring R] 
+[IsPrincipalIdealRing R], IsNoetherianRing R
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `Complex.instNontrivial`：Nontrivial ℂ
+· 使用定理 `Module.Free.of_divisionRing`：∀ (K : Type u_3) (V : Type u_4) [inst : Div
+isionRing K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V],   Module.Fr
+ee K V
+· 使用定理 `Complex.rank_real_complex'`：rank_real_complex'.{u} : Cardinal.lift.{u} (
+Module.rank Real Complex) = 2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Cardinal.lift_id'`：lift_id' (a : Cardinal.{max u v}) : lift.{u} a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem rank_real_of_complex (E : Type*) [AddCommGroup E] [Module Complex E] :
-    Module.rank Real E = 2 * Module.rank Complex E :=
-Cardinal.lift_inj.{_, 0}.1 by
-    rw [← lift_rank_mul_lift_rank Real Complex E]; rw [Complex.rank_real_complex']
+theorem rank_real_of_complex (E : Type*) [AddCommGroup E] [Module ℂ E] :
+    Module.rank ℝ E = 2 * Module.rank ℂ E :=
+  Cardinal.lift_inj.{_, 0}.1 <| by
+    rw [← lift_rank_mul_lift_rank ℝ ℂ E, Complex.rank_real_complex']
     simp only [Cardinal.lift_id']
-
-/--
-theorem `finrank_real_of_complex` / 定理 `finrank_real_of_complex`
-
-English:
-theorem finrank_real_of_complex
-  given: (E : Type*) [AddCommGroup E] [Module Complex E]
-  proof: by
-  rw [← Module.finrank_mul_finrank Real Complex E]; rw [Complex.finrank_real_complex]
-
-中文:
-定理 finrank_real_of_complex
-  条件: (E : 类型) [加法交换群 E] [模 复形 E]
-  证明: by
-  rw [← Module.finrank_mul_finrank Real Complex E]; rw [Complex.finrank_real_complex]
-
-Depends on / 依赖: Complex.finrank_real_complex, Module, Module.finrank_mul_finrank, finrank_mul_finrank, finrank_real_complex
+/-
+**finrank_real_of_complex** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finrank_real_of_complex (E : Type*) [AddCommGroup E] [Module Complex E] : 
+Module.finrank Real E = 2 * Module.finrank Complex E
+参数：E : Type*。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Module.finrank_mul_finrank`：Module.finrank_mul_finrank : finrank F K * f
+inrank K A = finrank F A
+· 使用定理 `IsNoetherianRing.strongRankCondition`：∀ (R : Type u) [inst : Ring R] [No
+ntrivial R] [IsNoetherianRing R], StrongRankCondition R
+· 使用定理 `PrincipalIdealRing.isNoetherianRing`：∀ {R : Type u} [inst : Semiring R] 
+[IsPrincipalIdealRing R], IsNoetherianRing R
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `Complex.instNontrivial`：Nontrivial ℂ
+· 使用定理 `Module.Free.of_divisionRing`：∀ (K : Type u_3) (V : Type u_4) [inst : Div
+isionRing K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V],   Module.Fr
+ee K V
+· 使用定理 `Complex.finrank_real_complex`：finrank_real_complex : finrank Real Comple
+x = 2
 -/
-theorem finrank_real_of_complex (E : Type*) [AddCommGroup E] [Module Complex E] :
-    Module.finrank Real E = 2 * Module.finrank Complex E := by
-  rw [← Module.finrank_mul_finrank Real Complex E]; rw [Complex.finrank_real_complex]
+theorem finrank_real_of_complex (E : Type*) [AddCommGroup E] [Module ℂ E] :
+    Module.finrank ℝ E = 2 * Module.finrank ℂ E := by
+  rw [← Module.finrank_mul_finrank ℝ ℂ E, Complex.finrank_real_complex]
 
 section Rational
 
 open Cardinal Module
 
 @[simp]
-/--
-lemma `Real.rank_rat_real` / 引理 `Real.rank_rat_real`
-
-English:
-lemma Real.rank_rat_real
-  statement: Module.rank Rat Real = continuum
-  proof: by
-  refine (Free.rank_eq_mk_of_infinite_lt Rat Real ?_).trans mk_real
-  simpa [mk_real] using aleph0_lt_continuum
-
-中文:
-引理 实数.rank_rat_real
-  结论: 模.rank 有理数 实数 = continuum
-  证明: by
-  refine (Free.rank_eq_mk_of_infinite_lt Rat Real ?_).trans mk_real
-  simpa [mk_real] using aleph0_lt_continuum
-
-Depends on / 依赖: Free.rank_eq_mk_of_infinite_lt, aleph0_lt_continuum, mk_real, rank_eq_mk_of_infinite_lt
+/-
+**Real.rank_rat_real** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Real.rank_rat_real : Module.rank Rat Real = continuum
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用引理 `Module.Free.rank_eq_mk_of_infinite_lt`：rank_eq_mk_of_infinite_lt [Infini
+te R] (h_lt : lift.{v} #R < lift.{u} #M) : Module.rank R M = #M
+· 使用定理 `Module.Free.of_divisionRing`：∀ (K : Type u_3) (V : Type u_4) [inst : Div
+isionRing K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V],   Module.Fr
+ee K V
+· 使用定理 `IsNoetherianRing.strongRankCondition`：∀ (R : Type u) [inst : Ring R] [No
+ntrivial R] [IsNoetherianRing R], StrongRankCondition R
+· 使用定理 `PrincipalIdealRing.isNoetherianRing`：∀ {R : Type u} [inst : Semiring R] 
+[IsPrincipalIdealRing R], IsNoetherianRing R
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `instNoMinOrderOfNontrivial`：∀ {R : Type u} [inst : Ring R] [inst_1 : Par
+tialOrder R] [IsOrderedRing R] [Nontrivial R], NoMinOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.mk_eq_aleph0`：mk_eq_aleph0 (α : Type*) [Countable α] [Infinite 
+α] : #α = ℵ₀
+· 使用定理 `Encodable.countable`：∀ {α : Type u_1} [Encodable α], Countable α
+· 使用定理 `Cardinal.lift_id`：lift_id (a : Cardinal) : lift.{u, u} a = a
+· 使用定理 `Cardinal.mk_real`：mk_real : #Real = 𝔠
+· 使用定理 `Cardinal.aleph0_lt_continuum`：aleph0_lt_continuum : ℵ₀ < 𝔠
 -/
-lemma Real.rank_rat_real : Module.rank Rat Real = continuum := by
-  refine (Free.rank_eq_mk_of_infinite_lt Rat Real ?_).trans mk_real
+lemma Real.rank_rat_real : Module.rank ℚ ℝ = continuum := by
+  refine (Free.rank_eq_mk_of_infinite_lt ℚ ℝ ?_).trans mk_real
   simpa [mk_real] using aleph0_lt_continuum
 
 /-- `C` has an uncountable basis over `ℚ`. -/
 @[simp, stacks 09G0]
-/--
-lemma `Complex.rank_rat_complex` / 引理 `Complex.rank_rat_complex`
+/-
+**Complex.rank_rat_complex** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Complex.rank_rat_complex : Module.rank Rat Complex = continuum
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Module.Free.rank_eq_mk_of_infinite_lt`：rank_eq_mk_of_infinite_lt [Infini
+te R] (h_lt : lift.{v} #R < lift.{u} #M) : Module.rank R M = #M
+· 使用定理 `Module.Free.of_divisionRing`：∀ (K : Type u_3) (V : Type u_4) [inst : Div
+isionRing K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V],   Module.Fr
+ee K V
+· 使用定理 `IsNoetherianRing.strongRankCondition`：∀ (R : Type u) [inst : Ring R] [No
+ntrivial R] [IsNoetherianRing R], StrongRankCondition R
+· 使用定理 `PrincipalIdealRing.isNoetherianRing`：∀ {R : Type u} [inst : Semiring R] 
+[IsPrincipalIdealRing R], IsNoetherianRing R
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `instNoMinOrderOfNontrivial`：∀ {R : Type u} [inst : Ring R] [inst_1 : Par
+tialOrder R] [IsOrderedRing R] [Nontrivial R], NoMinOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.mk_eq_aleph0`：mk_eq_aleph0 (α : Type*) [Countable α] [Infinite 
+α] : #α = ℵ₀
+· 使用定理 `Encodable.countable`：∀ {α : Type u_1} [Encodable α], Countable α
+· 使用定理 `Cardinal.lift_id`：lift_id (a : Cardinal) : lift.{u, u} a = a
+· 使用定理 `Cardinal.mk_complex`：Cardinal.mk_complex : #Complex = 𝔠
+· 使用定理 `Cardinal.aleph0_lt_continuum`：aleph0_lt_continuum : ℵ₀ < 𝔠
 
-English:
-lemma Complex.rank_rat_complex
-  statement: Module.rank Rat Complex = continuum
-  proof: by
-  refine (Free.rank_eq_mk_of_infinite_lt Rat Complex ?_).trans Cardinal.mk_complex
-  simpa using aleph0_lt_continuum
-
-中文:
-引理 复形.rank_rat_complex
-  结论: 模.rank 有理数 复形 = continuum
-  证明: by
-  refine (Free.rank_eq_mk_of_infinite_lt Rat Complex ?_).trans Cardinal.mk_complex
-  simpa using aleph0_lt_continuum
-
-Depends on / 依赖: Cardinal, Cardinal.mk_complex, Free.rank_eq_mk_of_infinite_lt, aleph0_lt_continuum, mk_complex, rank_eq_mk_of_infinite_lt
+--- 原说明 ---
+`C` has an uncountable basis over `ℚ`.
 -/
-lemma Complex.rank_rat_complex : Module.rank Rat Complex = continuum := by
-  refine (Free.rank_eq_mk_of_infinite_lt Rat Complex ?_).trans Cardinal.mk_complex
+lemma Complex.rank_rat_complex : Module.rank ℚ ℂ = continuum := by
+  refine (Free.rank_eq_mk_of_infinite_lt ℚ ℂ ?_).trans Cardinal.mk_complex
   simpa using aleph0_lt_continuum
 
-/--
-theorem `Complex.nonempty_linearEquiv_real` / 定理 `Complex.nonempty_linearEquiv_real`
+/-- `ℂ` and `ℝ` are isomorphic as vector spaces over `ℚ`, or equivalently,
+as additive groups. -/
+/-
+**Complex.nonempty_linearEquiv_real** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Complex.nonempty_linearEquiv_real : Nonempty (Complex ≃ₗ[Rat] Real)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Module.nonempty_linearEquiv_iff_rank_eq`：Module.nonempty_linearEquiv_iff
+_rank_eq : Nonempty (M ≃ₗ[R] M₁) ↔ Module.rank R M = Module.rank R M₁
+· 使用定理 `Module.Free.of_divisionRing`：∀ (K : Type u_3) (V : Type u_4) [inst : Div
+isionRing K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V],   Module.Fr
+ee K V
+· 使用定理 `IsNoetherianRing.strongRankCondition`：∀ (R : Type u) [inst : Ring R] [No
+ntrivial R] [IsNoetherianRing R], StrongRankCondition R
+· 使用定理 `PrincipalIdealRing.isNoetherianRing`：∀ {R : Type u} [inst : Semiring R] 
+[IsPrincipalIdealRing R], IsNoetherianRing R
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Complex.rank_rat_complex`：Complex.rank_rat_complex : Module.rank Rat Com
+plex = continuum
+· 使用引理 `Real.rank_rat_real`：Real.rank_rat_real : Module.rank Rat Real = continuu
+m
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem Complex.nonempty_linearEquiv_real
-  statement: Nonempty (Complex ≃ₗ[Rat] Real)
-  proof: Module.nonempty_linearEquiv_iff_rank_eq.mpr by simp
-
-中文:
-定理 复形.nonempty_linearEquiv_real
-  结论: 非空 (复形 ≃ₗ[有理数] 实数)
-  证明: Module.nonempty_linearEquiv_iff_rank_eq.mpr by simp
-
-Depends on / 依赖: Module, Module.nonempty_linearEquiv_iff_rank_eq.mpr, nonempty_linearEquiv_iff_rank_eq
+--- 原说明 ---
+`ℂ` and `ℝ` are isomorphic as vector spaces over `ℚ`, or equivalently,
+as additive groups.
 -/
-theorem Complex.nonempty_linearEquiv_real : Nonempty (Complex ≃ₗ[Rat] Real) :=
-Module.nonempty_linearEquiv_iff_rank_eq.mpr by simp
+theorem Complex.nonempty_linearEquiv_real : Nonempty (ℂ ≃ₗ[ℚ] ℝ) :=
+  Module.nonempty_linearEquiv_iff_rank_eq.mpr <| by simp
 
 end Rational
+

@@ -23,41 +23,38 @@ combination of these.
 
 public meta section
 
-/--
-Definition of `Lean.Elab.Tactic.withNondepPropLocation` / `Lean.Elab.Tactic.withNondepPropLocation` 的定义
+/-- Runs the given `atLocal` and `atTarget` methods on each of the locations selected by the given
+`loc`.
+* If `loc` is a list of locations, runs at each specified hypothesis (and finally the goal if `⊢` is
+  included), and fails if any of the tactic applications fail.
+* If `loc` is `*`, runs at the nondependent `Prop` hypotheses (those produced by
+  `Lean.MVarId.getNondepPropHyps`) and then at the target.
 
-English:
-definition Lean.Elab.Tactic.withNondepPropLocation
-  signature: (loc : Location) (atLocal : FVarId -> TacticM Unit)
-  body: do
-  match loc with
-  | Location.targets hyps target => do
-    (← getFVarIds hyps).forM atLocal
-    if target then atTarget
-  | Location.wildcard => do
-    let mut worked := false
-    for hyp in ← (← getMainGoal).getNondepPropHyps do
-      worked := worked || (← tryTactic <| atLocal hyp)
-    unless worked || (← tryTactic atTarget) do
-      failed (← getMainGoal)
+This is a variant of `Lean.Elab.Tactic.withLocation`. -/
+/-
+**Lean.Elab.Tactic.withNondepPropLocation** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Lean.Elab.Tactic.withNondepPropLocation (loc : Location) (atLocal : FVarId
+ -> TacticM Unit) (atTarget : TacticM Unit) (failed : MVarId -> TacticM Unit) : 
+TacticM Unit
+参数：loc : Location；atLocal : FVarId -> TacticM Unit；atTarget : TacticM Unit；faile
+d : MVarId -> TacticM Unit。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 Lean.Elab.Tactic.withNondepPropLocation
-  签名: (loc : Location) (atLocal : FVarId -> TacticM 单元)
-  定义体: do
-  match loc with
-  | Location.targets hyps target => do
-    (← getFVarIds hyps).forM atLocal
-    if target then atTarget
-  | Location.wildcard => do
-    let mut worked := false
-    for hyp in ← (← getMainGoal).getNondepPropHyps do
-      worked := worked || (← tryTactic <| atLocal hyp)
-    unless worked || (← tryTactic atTarget) do
-      failed (← getMainGoal)
+--- 原说明 ---
+Runs the given `atLocal` and `atTarget` methods on each of the locations selecte
+d by the given
+`loc`.
+* If `loc` is a list of locations, runs at each specified hypothesis (and finall
+y the goal if `⊢` is
+  included), and fails if any of the tactic applications fail.
+* If `loc` is `*`, runs at the nondependent `Prop` hypotheses (those produced by
+  `Lean.MVarId.getNondepPropHyps`) and then at the target.
+
+This is a variant of `Lean.Elab.Tactic.withLocation`.
 -/
-def Lean.Elab.Tactic.withNondepPropLocation (loc : Location) (atLocal : FVarId -> TacticM Unit)
-    (atTarget : TacticM Unit) (failed : MVarId -> TacticM Unit) : TacticM Unit := do
+def Lean.Elab.Tactic.withNondepPropLocation (loc : Location) (atLocal : FVarId → TacticM Unit)
+    (atTarget : TacticM Unit) (failed : MVarId → TacticM Unit) : TacticM Unit := do
   match loc with
   | Location.targets hyps target => do
     (← getFVarIds hyps).forM atLocal
@@ -72,24 +69,17 @@ def Lean.Elab.Tactic.withNondepPropLocation (loc : Location) (atLocal : FVarId -
 namespace Mathlib.Tactic
 open Lean Meta Elab.Tactic
 
-/--
-Inductive type `BehaviorIfUnchanged` / 归纳类型 `BehaviorIfUnchanged`
+/-- Different settings of communicating about a tactic which made no progress:
+do nothing (keep silent), print a warning or throw an error. -/
+/-
+**Mathlib.Tactic.BehaviorIfUnchanged** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic
+`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive BehaviorIfUnchanged
-  parameters: where
-  constructors (3):
-    - silent: 
-    - warning: 
-    - error: 
-
-中文:
-归纳类型 BehaviorIfUnchanged
-  参数: where
-  构造子 (3 个):
-    - silent: 
-    - warning: 
-    - error: 
+--- 原说明 ---
+Different settings of communicating about a tactic which made no progress:
+do nothing (keep silent), print a warning or throw an error.
 -/
 inductive BehaviorIfUnchanged where
   /-- Stay silent if this action has no effect. -/
@@ -100,56 +90,25 @@ inductive BehaviorIfUnchanged where
   | error
 deriving BEq, Inhabited, Repr
 
-/--
-Definition of `transformAtTarget` / `transformAtTarget` 的定义
+/-- Use the procedure `m` to rewrite the provided goal.
 
-English:
-definition transformAtTarget
-  signature: (m : Expr -> ReaderT Simp.Context MetaM Simp.Result) (proc : String)
-  body: do
-  let tgt ← instantiateMVars (← goal.getType)
-  let r ← m tgt
-  -- we use expression equality here (rather than defeq) to be consistent with, e.g.,
-  -- `applySimpResultToTarget`
-  let unchanged := tgt.cleanupAnnotations == r.expr.cleanupAnnotations
-  if unchanged then
-    match ifUnchanged with
-    | .warning => logWarning m!"`{proc}` made no progress on the goal"
-    | .error => throwError "`{proc}` made no progress on the goal"
-    | .silent => pure ()
-  if r.expr.isTrue then
-    goal.assign (← mkOfEqTrue (← r.getProof))
-    pure none
-  else
-    -- this ensures that we really get the same goal as an `MVarId`,
-    -- not a different `MVarId` for which `MVarId.getType` is the same
-    if unchanged then return goal
-    applySimpResultToTarget goal tgt r
+Assumes `proc` is not surrounded by backticks. -/
+/-
+**Mathlib.Tactic.transformAtTarget** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：transformAtTarget (m : Expr -> ReaderT Simp.Context MetaM Simp.Result) (pr
+oc : String) (ifUnchanged : BehaviorIfUnchanged) (goal : MVarId) : ReaderT Simp.
+Context MetaM (Option MVarId)
+参数：m : Expr -> ReaderT Simp.Context MetaM Simp.Result；proc : String；ifUnchanged 
+: BehaviorIfUnchanged；goal : MVarId。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 transformAtTarget
-  签名: (m : Expr -> ReaderT Simp.余ntext MetaM Simp.Result) (proc : String)
-  定义体: do
-  let tgt ← instantiateMVars (← goal.getType)
-  let r ← m tgt
-  -- we use expression equality here (rather than defeq) to be consistent with, e.g.,
-  -- `applySimpResultToTarget`
-  let unchanged := tgt.cleanupAnnotations == r.expr.cleanupAnnotations
-  if unchanged then
-    match ifUnchanged with
-    | .warning => logWarning m!"`{proc}` made no progress on the goal"
-    | .error => throwError "`{proc}` made no progress on the goal"
-    | .silent => pure ()
-  if r.expr.isTrue then
-    goal.assign (← mkOfEqTrue (← r.getProof))
-    pure none
-  else
-    -- this ensures that we really get the same goal as an `MVarId`,
-    -- not a different `MVarId` for which `MVarId.getType` is the same
-    if unchanged then return goal
-    applySimpResultToTarget goal tgt r
+--- 原说明 ---
+Use the procedure `m` to rewrite the provided goal.
+
+Assumes `proc` is not surrounded by backticks.
 -/
-def transformAtTarget (m : Expr -> ReaderT Simp.Context MetaM Simp.Result) (proc : String)
+def transformAtTarget (m : Expr → ReaderT Simp.Context MetaM Simp.Result) (proc : String)
     (ifUnchanged : BehaviorIfUnchanged) (goal : MVarId) :
     ReaderT Simp.Context MetaM (Option MVarId) := do
   let tgt ← instantiateMVars (← goal.getType)
@@ -171,50 +130,36 @@ def transformAtTarget (m : Expr -> ReaderT Simp.Context MetaM Simp.Result) (proc
     if unchanged then return goal
     applySimpResultToTarget goal tgt r
 
-/--
-Definition of `transformAtLocalDecl` / `transformAtLocalDecl` 的定义
+/-- Use the procedure `m` to rewrite hypothesis `fvarId`.
 
-English:
-definition transformAtLocalDecl
-  signature: (m : Expr -> ReaderT Simp.Context MetaM Simp.Result) (proc : String)
-  body: do
-  let ldecl ← fvarId.getDecl
-  if ldecl.isImplementationDetail then
-    throwError "Cannot run `{proc}` at `{Expr.fvar fvarId}`, it is an implementation detail"
-  let tgt ← instantiateMVars (← fvarId.getType)
-  let eraseFVarId (ctx : Simp.Context) :=
-ctx.setSimpTheorems ctx.simpTheorems.eraseTheorem (.fvar fvarId)
-let r ← withReader eraseFVarId m tgt
-  -- we use expression equality here (rather than defeq) to be consistent with, e.g.,
-  -- `applySimpResultToLocalDeclCore`
-  if tgt.cleanupAnnotations == r.expr.cleanupAnnotations then
-    match ifUnchanged with
-    | .warning => logWarning m!"`{proc}` made no progress at `{Expr.fvar fvarId}`"
-    | .error => throwError "`{proc}` made no progress at `{Expr.fvar fvarId}`"
-    | .silent => pure ()
-  return (← applySimpResultToLocalDecl goal fvarId r mayCloseGoal).map Prod.snd
+The `simpTheorems` of the simp-context carried with `m` will be modified to remove `fvarId`;
+this ensures that if the procedure `m` involves rewriting by this `SimpTheoremsArray`, then, e.g.,
+`h : x = y` is not transformed (by rewriting `h`) to `True`.
 
-中文:
-定义 transformAtLocalDecl
-  签名: (m : Expr -> ReaderT Simp.余ntext MetaM Simp.Result) (proc : String)
-  定义体: do
-  let ldecl ← fvarId.getDecl
-  if ldecl.isImplementationDetail then
-    throwError "Cannot run `{proc}` at `{Expr.fvar fvarId}`, it is an implementation detail"
-  let tgt ← instantiateMVars (← fvarId.getType)
-  let eraseFVarId (ctx : Simp.Context) :=
-ctx.setSimpTheorems ctx.simpTheorems.eraseTheorem (.fvar fvarId)
-let r ← withReader eraseFVarId m tgt
-  -- we use expression equality here (rather than defeq) to be consistent with, e.g.,
-  -- `applySimpResultToLocalDeclCore`
-  if tgt.cleanupAnnotations == r.expr.cleanupAnnotations then
-    match ifUnchanged with
-    | .warning => logWarning m!"`{proc}` made no progress at `{Expr.fvar fvarId}`"
-    | .error => throwError "`{proc}` made no progress at `{Expr.fvar fvarId}`"
-    | .silent => pure ()
-  return (← applySimpResultToLocalDecl goal fvarId r mayCloseGoal).map Prod.snd
+Assumes `proc` is not surrounded by backticks. -/
+/-
+**Mathlib.Tactic.transformAtLocalDecl** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`
+。
+形式化陈述：transformAtLocalDecl (m : Expr -> ReaderT Simp.Context MetaM Simp.Result) 
+(proc : String) (ifUnchanged : BehaviorIfUnchanged) (mayCloseGoal : Bool) (fvarI
+d : FVarId) (goal : MVarId) : ReaderT Simp.Context MetaM (Option MVarId)
+参数：m : Expr -> ReaderT Simp.Context MetaM Simp.Result；proc : String；ifUnchanged 
+: BehaviorIfUnchanged；mayCloseGoal : Bool；fvarId : FVarId；goal : MVarId。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Use the procedure `m` to rewrite hypothesis `fvarId`.
+
+The `simpTheorems` of the simp-context carried with `m` will be modified to remo
+ve `fvarId`;
+this ensures that if the procedure `m` involves rewriting by this `SimpTheoremsA
+rray`, then, e.g.,
+`h : x = y` is not transformed (by rewriting `h`) to `True`.
+
+Assumes `proc` is not surrounded by backticks.
 -/
-def transformAtLocalDecl (m : Expr -> ReaderT Simp.Context MetaM Simp.Result) (proc : String)
+def transformAtLocalDecl (m : Expr → ReaderT Simp.Context MetaM Simp.Result) (proc : String)
     (ifUnchanged : BehaviorIfUnchanged) (mayCloseGoal : Bool) (fvarId : FVarId) (goal : MVarId) :
     ReaderT Simp.Context MetaM (Option MVarId) := do
   let ldecl ← fvarId.getDecl
@@ -222,8 +167,8 @@ def transformAtLocalDecl (m : Expr -> ReaderT Simp.Context MetaM Simp.Result) (p
     throwError "Cannot run `{proc}` at `{Expr.fvar fvarId}`, it is an implementation detail"
   let tgt ← instantiateMVars (← fvarId.getType)
   let eraseFVarId (ctx : Simp.Context) :=
-ctx.setSimpTheorems ctx.simpTheorems.eraseTheorem (.fvar fvarId)
-let r ← withReader eraseFVarId m tgt
+    ctx.setSimpTheorems <| ctx.simpTheorems.eraseTheorem (.fvar fvarId)
+  let r ← withReader eraseFVarId <| m tgt
   -- we use expression equality here (rather than defeq) to be consistent with, e.g.,
   -- `applySimpResultToLocalDeclCore`
   if tgt.cleanupAnnotations == r.expr.cleanupAnnotations then
@@ -233,26 +178,24 @@ let r ← withReader eraseFVarId m tgt
     | .silent => pure ()
   return (← applySimpResultToLocalDecl goal fvarId r mayCloseGoal).map Prod.snd
 
-/--
-Definition of `transformAtLocation` / `transformAtLocation` 的定义
+/-- Use the procedure `m` to transform at specified locations (hypotheses and/or goal).
 
-English:
-definition transformAtLocation
-  signature: (m : Expr -> ReaderT Simp.Context MetaM Simp.Result) (proc : String)
-  body: withLocation loc
-    (liftMetaTactic1 ∘ (transformAtLocalDecl m proc ifUnchanged mayCloseGoalFromHyp · · ctx))
-    (liftMetaTactic1 (transformAtTarget m proc ifUnchanged · ctx))
-    fun _ => throwError "`{proc}` made no progress anywhere"
+Assumes `proc` is not surrounded by backticks. -/
+/-
+**Mathlib.Tactic.transformAtLocation** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：transformAtLocation (m : Expr -> ReaderT Simp.Context MetaM Simp.Result) (
+proc : String) (loc : Location) (ifUnchanged : BehaviorIfUnchanged
+参数：m : Expr -> ReaderT Simp.Context MetaM Simp.Result；proc : String；loc : Locati
+on。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 transformAtLocation
-  签名: (m : Expr -> ReaderT Simp.余ntext MetaM Simp.Result) (proc : String)
-  定义体: withLocation loc
-    (liftMetaTactic1 ∘ (transformAtLocalDecl m proc ifUnchanged mayCloseGoalFromHyp · · ctx))
-    (liftMetaTactic1 (transformAtTarget m proc ifUnchanged · ctx))
-    fun _ => throwError "`{proc}` made no progress anywhere"
+--- 原说明 ---
+Use the procedure `m` to transform at specified locations (hypotheses and/or goa
+l).
+
+Assumes `proc` is not surrounded by backticks.
 -/
-def transformAtLocation (m : Expr -> ReaderT Simp.Context MetaM Simp.Result) (proc : String)
+def transformAtLocation (m : Expr → ReaderT Simp.Context MetaM Simp.Result) (proc : String)
     (loc : Location) (ifUnchanged : BehaviorIfUnchanged := .error)
     (mayCloseGoalFromHyp : Bool := false)
     -- streamline the most common use case, in which the procedure `m`'s implementation is not
@@ -262,28 +205,32 @@ def transformAtLocation (m : Expr -> ReaderT Simp.Context MetaM Simp.Result) (pr
   withLocation loc
     (liftMetaTactic1 ∘ (transformAtLocalDecl m proc ifUnchanged mayCloseGoalFromHyp · · ctx))
     (liftMetaTactic1 (transformAtTarget m proc ifUnchanged · ctx))
-    fun _ => throwError "`{proc}` made no progress anywhere"
+    fun _ ↦ throwError "`{proc}` made no progress anywhere"
 
-/--
-Definition of `transformAtNondepPropLocation` / `transformAtNondepPropLocation` 的定义
+/-- Use the procedure `m` to transform at specified locations (hypotheses and/or goal).
 
-English:
-definition transformAtNondepPropLocation
-  signature: (m : Expr -> ReaderT Simp.Context MetaM Simp.Result)
-  body: withNondepPropLocation loc
-    (liftMetaTactic1 ∘ (transformAtLocalDecl m proc ifUnchanged mayCloseGoalFromHyp · · ctx))
-    (liftMetaTactic1 (transformAtTarget m proc ifUnchanged · ctx))
-    fun _ => throwError "`{proc}` made no progress anywhere"
+In the wildcard case (`*`), filter out all dependent and/or non-`Prop` hypotheses.
 
-中文:
-定义 transformAtNondepPropLocation
-  签名: (m : Expr -> ReaderT Simp.余ntext MetaM Simp.Result)
-  定义体: withNondepPropLocation loc
-    (liftMetaTactic1 ∘ (transformAtLocalDecl m proc ifUnchanged mayCloseGoalFromHyp · · ctx))
-    (liftMetaTactic1 (transformAtTarget m proc ifUnchanged · ctx))
-    fun _ => throwError "`{proc}` made no progress anywhere"
+Assumes `proc` is not surrounded by backticks. -/
+/-
+**Mathlib.Tactic.transformAtNondepPropLocation** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Tactic`。
+形式化陈述：transformAtNondepPropLocation (m : Expr -> ReaderT Simp.Context MetaM Simp
+.Result) (proc : String) (loc : Location) (ifUnchanged : BehaviorIfUnchanged
+参数：m : Expr -> ReaderT Simp.Context MetaM Simp.Result；proc : String；loc : Locati
+on。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Use the procedure `m` to transform at specified locations (hypotheses and/or goa
+l).
+
+In the wildcard case (`*`), filter out all dependent and/or non-`Prop` hypothese
+s.
+
+Assumes `proc` is not surrounded by backticks.
 -/
-def transformAtNondepPropLocation (m : Expr -> ReaderT Simp.Context MetaM Simp.Result)
+def transformAtNondepPropLocation (m : Expr → ReaderT Simp.Context MetaM Simp.Result)
     (proc : String) (loc : Location) (ifUnchanged : BehaviorIfUnchanged := .error)
     (mayCloseGoalFromHyp : Bool := false)
     -- streamline the most common use case, in which the procedure `m`'s implementation is not
@@ -293,6 +240,7 @@ def transformAtNondepPropLocation (m : Expr -> ReaderT Simp.Context MetaM Simp.R
   withNondepPropLocation loc
     (liftMetaTactic1 ∘ (transformAtLocalDecl m proc ifUnchanged mayCloseGoalFromHyp · · ctx))
     (liftMetaTactic1 (transformAtTarget m proc ifUnchanged · ctx))
-    fun _ => throwError "`{proc}` made no progress anywhere"
+    fun _ ↦ throwError "`{proc}` made no progress anywhere"
 
 end Mathlib.Tactic
+

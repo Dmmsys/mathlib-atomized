@@ -28,28 +28,17 @@ open Topology Filter Set Int Set.Icc
 /-! ### The unit interval -/
 
 
-/--
-Definition of `unitInterval` / `unitInterval` 的定义
+/-- The unit interval `[0,1]` in ℝ. -/
+/-
+**unitInterval** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：unitInterval : Set Real
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation unitInterval
-  signature: : Set Real
-  body: Set.Icc 0 1
-
-@[inherit_doc]
-scoped[unitInterval] notation "I" => unitInterval
-
-中文:
-缩写 unit整数erval
-  签名: : 集合 实数
-  定义体: Set.Icc 0 1
-
-@[inherit_doc]
-scoped[unitInterval] notation "I" => unitInterval
-
-Depends on / 依赖: Set.Icc
+--- 原说明 ---
+The unit interval `[0,1]` in ℝ.
 -/
-abbrev unitInterval : Set Real :=
+abbrev unitInterval : Set ℝ :=
   Set.Icc 0 1
 
 @[inherit_doc]
@@ -57,461 +46,399 @@ scoped[unitInterval] notation "I" => unitInterval
 
 namespace unitInterval
 
-/--
-theorem `zero_mem` / 定理 `zero_mem`
-
-English:
-theorem zero_mem
-  statement: (0 : Real) in I
-  proof: ⟨le_rfl, zero_le_one⟩
-
-中文:
-定理 zero_mem
-  结论: (0 : 实数) in I
-  证明: ⟨le_rfl, zero_le_one⟩
-
-Depends on / 依赖: le_rfl, zero_le_one
+/-
+**unitInterval.zero_mem** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：zero_mem : (0 : Real) in I
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
 -/
-theorem zero_mem : (0 : Real) in I :=
+theorem zero_mem : (0 : ℝ) ∈ I :=
   ⟨le_rfl, zero_le_one⟩
-
-/--
-theorem `one_mem` / 定理 `one_mem`
-
-English:
-theorem one_mem
-  statement: (1 : Real) in I
-  proof: ⟨zero_le_one, le_rfl⟩
-
-中文:
-定理 one_mem
-  结论: (1 : 实数) in I
-  证明: ⟨zero_le_one, le_rfl⟩
-
-Depends on / 依赖: le_rfl, zero_le_one
+/-
+**unitInterval.one_mem** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：one_mem : (1 : Real) in I
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem one_mem : (1 : Real) in I :=
+theorem one_mem : (1 : ℝ) ∈ I :=
   ⟨zero_le_one, le_rfl⟩
-
-/--
-theorem `mul_mem` / 定理 `mul_mem`
-
-English:
-theorem mul_mem
-  given: {x y : Real} (hx : x in I) (hy : y in I)
-  statement: x * y in I
-  proof: ⟨mul_nonneg hx.1 hy.1, mul_le_one₀ hx.2 hy.1 hy.2⟩
-
-中文:
-定理 mul_mem
-  条件: {x y : 实数} (hx : x in I) (hy : y in I)
-  结论: x * y in I
-  证明: ⟨mul_nonneg hx.1 hy.1, mul_le_one₀ hx.2 hy.1 hy.2⟩
-
-Depends on / 依赖: mul_nonneg
+/-
+**unitInterval.mul_mem** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：mul_mem {x y : Real} (hx : x in I) (hy : y in I) : x * y in I
+参数：hx : x in I；hy : y in I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_nonneg`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 :
+ Preorder α] [PosMulMono α], 0 ≤ a → 0 ≤ b → 0 ≤ a * b
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `mul_le_one₀`：mul_le_one₀ [MulPosMono M₀] (ha : a <= 1) (hb₀ : 0 <= b) (h
+b : b <= 1) : a * b <= 1
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem mul_mem {x y : Real} (hx : x in I) (hy : y in I) : x * y in I :=
+theorem mul_mem {x y : ℝ} (hx : x ∈ I) (hy : y ∈ I) : x * y ∈ I :=
   ⟨mul_nonneg hx.1 hy.1, mul_le_one₀ hx.2 hy.1 hy.2⟩
-
-/--
-theorem `div_mem` / 定理 `div_mem`
-
-English:
-theorem div_mem
-  given: {x y : Real} (hx : 0 <= x) (hy : 0 <= y) (hxy : x <= y)
-  statement: x / y in I
-  proof: ⟨div_nonneg hx hy, div_le_one_of_le₀ hxy hy⟩
-
-中文:
-定理 div_mem
-  条件: {x y : 实数} (hx : 0 <= x) (hy : 0 <= y) (hxy : x <= y)
-  结论: x / y in I
-  证明: ⟨div_nonneg hx hy, div_le_one_of_le₀ hxy hy⟩
-
-Depends on / 依赖: div_nonneg
+/-
+**unitInterval.div_mem** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：div_mem {x y : Real} (hx : 0 <= x) (hy : 0 <= y) (hxy : x <= y) : x / y in
+ I
+参数：hx : 0 <= x；hy : 0 <= y；hxy : x <= y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `div_nonneg`：div_nonneg (ha : 0 <= a) (hb : 0 <= b) : 0 <= a / b
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用引理 `div_le_one_of_le₀`：div_le_one_of_le₀ [ZeroLEOneClass G₀] (h : a <= b) (h
+b : 0 <= b) : a / b <= 1
+· 使用定理 `MulPosReflectLE.toMulPosReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [MulPosReflectLE α], MulPosReflectLT α
+· 使用定理 `MulPosStrictMono.toMulPosReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [MulPosStrictMono α], MulPosReflectLE α
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
 -/
-theorem div_mem {x y : Real} (hx : 0 <= x) (hy : 0 <= y) (hxy : x <= y) : x / y in I :=
+theorem div_mem {x y : ℝ} (hx : 0 ≤ x) (hy : 0 ≤ y) (hxy : x ≤ y) : x / y ∈ I :=
   ⟨div_nonneg hx hy, div_le_one_of_le₀ hxy hy⟩
-
-/--
-theorem `fract_mem` / 定理 `fract_mem`
-
-English:
-theorem fract_mem
-  given: (x : Real)
-  statement: fract x in I
-  proof: ⟨fract_nonneg _, (fract_lt_one _).le⟩
-
-中文:
-定理 fract_mem
-  条件: (x : 实数)
-  结论: fract x in I
-  证明: ⟨fract_nonneg _, (fract_lt_one _).le⟩
-
-Depends on / 依赖: fract_lt_one, fract_nonneg
+/-
+**unitInterval.fract_mem** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：fract_mem (x : Real) : fract x in I
+参数：x : Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.fract_nonneg`：fract_nonneg (a : R) : 0 <= fract a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Int.fract_lt_one`：fract_lt_one (a : R) : fract a < 1
 -/
-theorem fract_mem (x : Real) : fract x in I :=
+theorem fract_mem (x : ℝ) : fract x ∈ I :=
   ⟨fract_nonneg _, (fract_lt_one _).le⟩
-
-/--
-lemma `univ_eq_Icc` / 引理 `univ_eq_Icc`
-
-English:
-lemma univ_eq_Icc
-  statement: (univ : Set I) = Icc (0 : I) (1 : I)
-  proof: Icc_bot_top.symm
-
-中文:
-引理 univ_eq_Icc
-  结论: (univ : 集合 I) = 闭区间 (0 : I) (1 : I)
-  证明: Icc_bot_top.symm
-
-Depends on / 依赖: Icc_bot_top, Icc_bot_top.symm
+/-
+**unitInterval.univ_eq_Icc** 是 Mathlib 中的一个引理，位于命名空间 `unitInterval`。
+形式化陈述：univ_eq_Icc : (univ : Set I) = Icc (0 : I) (1 : I)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.Icc_bot_top`：Icc_bot_top [Preorder α] [BoundedOrder α] : Icc (⊥ : α)
+ ⊤ = univ
 -/
 lemma univ_eq_Icc : (univ : Set I) = Icc (0 : I) (1 : I) := Icc_bot_top.symm
-
-/--
-theorem `coe_ne_zero` / 定理 `coe_ne_zero`
-
-English:
-theorem coe_ne_zero
-  given: {x : I}
-  statement: (x : Real) != 0 ↔ x != 0
-  proof: coe_eq_zero.not
-
-中文:
-定理 coe_ne_zero
-  条件: {x : I}
-  结论: (x : 实数) != 0 ↔ x != 0
-  证明: coe_eq_zero.not
+/-
+**unitInterval.coe_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：∀ {x : ↑unitInterval}, ↑x ≠ 0 ↔ x ≠ 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Set.Icc.coe_eq_zero`：coe_eq_zero {x : Icc (0 : R) 1} : (x : R) = 0 ↔ x =
+ 0
 -/
-@[norm_cast] theorem coe_ne_zero {x : I} : (x : Real) != 0 ↔ x != 0 := coe_eq_zero.not
-
-/--
-theorem `coe_ne_one` / 定理 `coe_ne_one`
-
-English:
-theorem coe_ne_one
-  given: {x : I}
-  statement: (x : Real) != 1 ↔ x != 1
-  proof: coe_eq_one.not
-
-中文:
-定理 coe_ne_one
-  条件: {x : I}
-  结论: (x : 实数) != 1 ↔ x != 1
-  证明: coe_eq_one.not
+@[norm_cast] theorem coe_ne_zero {x : I} : (x : ℝ) ≠ 0 ↔ x ≠ 0 := coe_eq_zero.not
+/-
+**unitInterval.coe_ne_one** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：∀ {x : ↑unitInterval}, ↑x ≠ 1 ↔ x ≠ 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Set.Icc.coe_eq_one`：coe_eq_one {x : Icc (0 : R) 1} : (x : R) = 1 ↔ x = 1
 -/
-@[norm_cast] theorem coe_ne_one {x : I} : (x : Real) != 1 ↔ x != 1 := coe_eq_one.not
-
-/--
-theorem `coe_pos` / 定理 `coe_pos`
-
-English:
-theorem coe_pos
-  given: {x : I}
-  statement: (0 : Real) < x ↔ 0 < x
-  proof: Iff.rfl
-
-中文:
-定理 coe_pos
-  条件: {x : I}
-  结论: (0 : 实数) < x ↔ 0 < x
-  证明: Iff.rfl
+@[norm_cast] theorem coe_ne_one {x : I} : (x : ℝ) ≠ 1 ↔ x ≠ 1 := coe_eq_one.not
+/-
+**unitInterval.coe_pos** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：∀ {x : ↑unitInterval}, 0 < ↑x ↔ 0 < x
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp, norm_cast] theorem coe_pos {x : I} : (0 : Real) < x ↔ 0 < x := Iff.rfl
-
-/--
-theorem `coe_lt_one` / 定理 `coe_lt_one`
-
-English:
-theorem coe_lt_one
-  given: {x : I}
-  statement: (x : Real) < 1 ↔ x < 1
-  proof: Iff.rfl
-
-中文:
-定理 coe_lt_one
-  条件: {x : I}
-  结论: (x : 实数) < 1 ↔ x < 1
-  证明: Iff.rfl
+@[simp, norm_cast] theorem coe_pos {x : I} : (0 : ℝ) < x ↔ 0 < x := Iff.rfl
+/-
+**unitInterval.coe_lt_one** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：∀ {x : ↑unitInterval}, ↑x < 1 ↔ x < 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp, norm_cast] theorem coe_lt_one {x : I} : (x : Real) < 1 ↔ x < 1 := Iff.rfl
-
-/--
-theorem `mul_le_left` / 定理 `mul_le_left`
-
-English:
-theorem mul_le_left
-  given: {x y : I}
-  statement: x * y <= x
-  proof: Subtype.coe_le_coe.mp mul_le_of_le_one_right x.2.1 y.2.2
-
-中文:
-定理 mul_le_left
-  条件: {x y : I}
-  结论: x * y <= x
-  证明: Subtype.coe_le_coe.mp mul_le_of_le_one_right x.2.1 y.2.2
-
-Depends on / 依赖: Subtype, Subtype.coe_le_coe.mp, coe_le_coe, mul_le_of_le_one_right
+@[simp, norm_cast] theorem coe_lt_one {x : I} : (x : ℝ) < 1 ↔ x < 1 := Iff.rfl
+/-
+**unitInterval.mul_le_left** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：mul_le_left {x y : I} : x * y <= x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subtype.coe_le_coe`：coe_le_coe [LE α] {p : α -> Prop} {x y : Subtype p} 
+: (x : α) <= y ↔ x <= y
+· 使用定理 `mul_le_of_le_one_right`：mul_le_of_le_one_right [PosMulMono α] (ha : 0 <=
+ a) (h : b <= 1) : a * b <= a
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem mul_le_left {x y : I} : x * y <= x :=
-Subtype.coe_le_coe.mp mul_le_of_le_one_right x.2.1 y.2.2
-
-/--
-theorem `mul_le_right` / 定理 `mul_le_right`
-
-English:
-theorem mul_le_right
-  given: {x y : I}
-  statement: x * y <= y
-  proof: Subtype.coe_le_coe.mp mul_le_of_le_one_left y.2.1 x.2.2
-
-中文:
-定理 mul_le_right
-  条件: {x y : I}
-  结论: x * y <= y
-  证明: Subtype.coe_le_coe.mp mul_le_of_le_one_left y.2.1 x.2.2
-
-Depends on / 依赖: Subtype, Subtype.coe_le_coe.mp, coe_le_coe, mul_le_of_le_one_left
+theorem mul_le_left {x y : I} : x * y ≤ x :=
+  Subtype.coe_le_coe.mp <| mul_le_of_le_one_right x.2.1 y.2.2
+/-
+**unitInterval.mul_le_right** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：mul_le_right {x y : I} : x * y <= y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subtype.coe_le_coe`：coe_le_coe [LE α] {p : α -> Prop} {x y : Subtype p} 
+: (x : α) <= y ↔ x <= y
+· 使用定理 `mul_le_of_le_one_left`：mul_le_of_le_one_left [MulPosMono α] (hb : 0 <= b
+) (h : a <= 1) : a * b <= b
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem mul_le_right {x y : I} : x * y <= y :=
-Subtype.coe_le_coe.mp mul_le_of_le_one_left y.2.1 x.2.2
-
-/--
-theorem `eq_closedBall` / 定理 `eq_closedBall`
-
-English:
-theorem eq_closedBall
-  statement: I = Metric.closedBall 2⁻¹ 2⁻¹
-  proof: by
-  norm_num [unitInterval, Real.Icc_eq_closedBall]
-
-中文:
-定理 eq_closedBall
-  结论: I = Metric.closedBall 2⁻¹ 2⁻¹
-  证明: by
-  norm_num [unitInterval, Real.Icc_eq_closedBall]
-
-Depends on / 依赖: Icc_eq_closedBall, Real.Icc_eq_closedBall, unitInterval
+theorem mul_le_right {x y : I} : x * y ≤ y :=
+  Subtype.coe_le_coe.mp <| mul_le_of_le_one_left y.2.1 x.2.2
+/-
+**unitInterval.eq_closedBall** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：eq_closedBall : I = Metric.closedBall 2⁻¹ 2⁻¹
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Mathlib.Meta.NormNum.instAtLeastTwo`：instAtLeastTwo (n : Nat) : Nat.AtLe
+astTwo (n + 2)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Icc_eq_closedBall`：Real.Icc_eq_closedBall (x y : Real) : Icc x y = 
+closedBall ((x + y) / 2) ((y - x) / 2)
+· 使用定理 `Mathlib.Meta.NormNum.IsNNRat.to_eq`：∀ {α : Type u_1} [inst : DivisionSem
+iring α] {n d : ℕ} {a n' d' : α},   Mathlib.Meta.NormNum.IsNNRat a n d → ↑n = n'
+ → ↑d = d' → a = n' / d'
+· 使用定理 `Mathlib.Meta.NormNum.isNNRat_div`：∀ {α : Type u} [inst : DivisionSemirin
+g α] {a b : α} {cn cd : ℕ},   Mathlib.Meta.NormNum.IsNNRat (a * b⁻¹) cn cd → Mat
+hlib.Meta.NormNum.IsNN…
+· 使用定理 `Mathlib.Meta.NormNum.isNNRat_mul`：isNNRat_mul {α} [Semiring α] {f : α ->
+ α -> α} {a b : α} {na nb nc : Nat} {da db dc k : Nat} : f = HMul.hMul -> IsNNRa
+t a na da -> IsNNRat b…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isNNRat`：∀ {α : Type u_1} [inst : Semiring
+ α] {a : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsN
+NRat a n 1
+· 使用定理 `Mathlib.Meta.NormNum.isNat_add`：∀ {α : Type u_1} [inst : AddMonoidWithOn
+e α] {f : α → α → α} {a b : α} {a' b' c : ℕ},   f = HAdd.hAdd →     Mathlib.Meta
+.NormNum.IsNat a a' …
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Mathlib.Meta.NormNum.isNNRat_inv_pos`：isNNRat_inv_pos {α} [DivisionSemir
+ing α] [CharZero α] {a : α} {n d : Nat} : IsNNRat a (Nat.succ n) d -> IsNNRat a⁻
+¹ d (Nat.succ n)
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_isNat`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsInt a (Int.ofNat n) → Mathlib.Meta.NormN
+um.IsNat a n
+· 使用定理 `Mathlib.Meta.NormNum.isInt_sub`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α → α} {a b : α} {a' b' c : ℤ},   f = HSub.hSub →     Mathlib.Meta.NormNum.IsI
+nt a a' →       Math…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
 -/
 theorem eq_closedBall : I = Metric.closedBall 2⁻¹ 2⁻¹ := by
   norm_num [unitInterval, Real.Icc_eq_closedBall]
 
-/--
-Definition of `symm` / `symm` 的定义
+/-- Unit interval central symmetry. -/
+/-
+**unitInterval.symm** 是 Mathlib 中的一个定义，位于命名空间 `unitInterval`。
+形式化陈述：symm : I -> I
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition symm
-  signature: : I -> I
-  body: fun t => ⟨1 - t, Icc.mem_iff_one_sub_mem.mp t.prop⟩
-
-@[inherit_doc]
-scoped notation "σ" => unitInterval.symm
-
-@[simp, grind =]
-
-中文:
-定义 symm
-  签名: : I -> I
-  定义体: fun t => ⟨1 - t, Icc.mem_iff_one_sub_mem.mp t.prop⟩
-
-@[inherit_doc]
-scoped notation "σ" => unitInterval.symm
-
-@[simp, grind =]
-
-Depends on / 依赖: Icc.mem_iff_one_sub_mem.mp, mem_iff_one_sub_mem, t.prop
+--- 原说明 ---
+Unit interval central symmetry.
 -/
-def symm : I -> I := fun t => ⟨1 - t, Icc.mem_iff_one_sub_mem.mp t.prop⟩
+def symm : I → I := fun t => ⟨1 - t, Icc.mem_iff_one_sub_mem.mp t.prop⟩
 
 @[inherit_doc]
 scoped notation "σ" => unitInterval.symm
 
 @[simp, grind =]
-/--
-theorem `symm_zero` / 定理 `symm_zero`
-
-English:
-theorem symm_zero
-  statement: σ 0 = 1
-  proof: Subtype.ext by simp [symm]
-
-@[simp, grind =]
-
-中文:
-定理 symm_zero
-  结论: σ 0 = 1
-  证明: Subtype.ext by simp [symm]
-
-@[simp, grind =]
-
-Depends on / 依赖: Subtype, Subtype.ext
+/-
+**unitInterval.symm_zero** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：symm_zero : σ 0 = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem symm_zero : σ 0 = 1 :=
-Subtype.ext by simp [symm]
+  Subtype.ext <| by simp [symm]
 
 @[simp, grind =]
-/--
-theorem `symm_one` / 定理 `symm_one`
-
-English:
-theorem symm_one
-  statement: σ 1 = 0
-  proof: Subtype.ext by simp [symm]
-
-@[simp, grind =]
-
-中文:
-定理 symm_one
-  结论: σ 1 = 0
-  证明: Subtype.ext by simp [symm]
-
-@[simp, grind =]
-
-Depends on / 依赖: Subtype, Subtype.ext
+/-
+**unitInterval.symm_one** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：symm_one : σ 1 = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem symm_one : σ 1 = 0 :=
-Subtype.ext by simp [symm]
+  Subtype.ext <| by simp [symm]
 
 @[simp, grind =]
-/--
-theorem `symm_symm` / 定理 `symm_symm`
-
-English:
-theorem symm_symm
-  given: (x : I)
-  statement: σ (σ x) = x
-  proof: Subtype.ext by simp [symm]
-
-中文:
-定理 symm_symm
-  条件: (x : I)
-  结论: σ (σ x) = x
-  证明: Subtype.ext by simp [symm]
-
-Depends on / 依赖: Subtype, Subtype.ext
+/-
+**unitInterval.symm_symm** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：symm_symm (x : I) : σ (σ x) = x
+参数：x : I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G), a - 
+(a - b) = b
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `Subtype.coe_eta`：coe_eta (a : { a // p a }) (h : p a) : mk (↑a) h = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem symm_symm (x : I) : σ (σ x) = x :=
-Subtype.ext by simp [symm]
-
-/--
-theorem `symm_involutive` / 定理 `symm_involutive`
-
-English:
-theorem symm_involutive
-  statement: Function.Involutive (symm : I -> I)
-  proof: symm_symm
-
-中文:
-定理 symm_involutive
-  结论: 函数.对合 (symm : I -> I)
-  证明: symm_symm
-
-Depends on / 依赖: symm_symm
+  Subtype.ext <| by simp [symm]
+/-
+**unitInterval.symm_involutive** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：symm_involutive : Function.Involutive (symm : I -> I)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `unitInterval.symm_symm`：symm_symm (x : I) : σ (σ x) = x
 -/
-theorem symm_involutive : Function.Involutive (symm : I -> I) := symm_symm
-
-/--
-theorem `symm_bijective` / 定理 `symm_bijective`
-
-English:
-theorem symm_bijective
-  statement: Function.Bijective (symm : I -> I)
-  proof: symm_involutive.bijective
+theorem symm_involutive : Function.Involutive (symm : I → I) := symm_symm
+/-
+**unitInterval.symm_bijective** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：symm_bijective : Function.Bijective (symm : I -> I)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Involutive.bijective`：∀ {α : Sort u} {f : α → α}, Function.Invo
+lutive f → Function.Bijective f
+· 使用定理 `unitInterval.symm_involutive`：symm_involutive : Function.Involutive (sym
+m : I -> I)
+-/
+theorem symm_bijective : Function.Bijective (symm : I → I) := symm_involutive.bijective
 
 @[simp, grind =]
-
-中文:
-定理 symm_bijective
-  结论: 函数.双射 (symm : I -> I)
-  证明: symm_involutive.bijective
-
-@[simp, grind =]
-
-Depends on / 依赖: bijective, symm_involutive, symm_involutive.bijective
+/-
+**unitInterval.coe_symm_eq** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：coe_symm_eq (x : I) : (σ x : Real) = 1 - x
+参数：x : I。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem symm_bijective : Function.Bijective (symm : I -> I) := symm_involutive.bijective
-
-@[simp, grind =]
-/--
-theorem `coe_symm_eq` / 定理 `coe_symm_eq`
-
-English:
-theorem coe_symm_eq
-  given: (x : I)
-  statement: (σ x : Real) = 1 - x
-  proof: rfl
-
-中文:
-定理 coe_symm_eq
-  条件: (x : I)
-  结论: (σ x : 实数) = 1 - x
-  证明: rfl
--/
-theorem coe_symm_eq (x : I) : (σ x : Real) = 1 - x :=
+theorem coe_symm_eq (x : I) : (σ x : ℝ) = 1 - x :=
   rfl
-
-/--
-lemma `image_coe_preimage_symm` / 引理 `image_coe_preimage_symm`
-
-English:
-lemma image_coe_preimage_symm
-  given: {s : Set I}
-  proof: by
-  simp [symm_involutive, ← Function.Involutive.image_eq_preimage_symm, image_image]
-
-@[simp]
-
-中文:
-引理 image_coe_preimage_symm
-  条件: {s : 集合 I}
-  证明: by
-  simp [symm_involutive, ← Function.Involutive.image_eq_preimage_symm, image_image]
-
-@[simp]
-
-Depends on / 依赖: Function, Function.Involutive.image_eq_preimage_symm, Involutive, image_eq_preimage_symm, image_image, symm_involutive
+/-
+**unitInterval.image_coe_preimage_symm** 是 Mathlib 中的一个引理，位于命名空间 `unitInterval`。
+形式化陈述：image_coe_preimage_symm {s : Set I} : Subtype.val '' σ ⁻¹' s = (1 - ·) ⁻¹'
+ Subtype.val '' s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Set.image_image`：image_image (g : β -> γ) (f : α -> β) (s : Set α) : g '
+' f '' s = (fun x => g (f x)) '' s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma image_coe_preimage_symm {s : Set I} :
     Subtype.val '' σ ⁻¹' s = (1 - ·) ⁻¹' Subtype.val '' s := by
   simp [symm_involutive, ← Function.Involutive.image_eq_preimage_symm, image_image]
 
 @[simp]
-/--
-theorem `symm_projIcc` / 定理 `symm_projIcc`
-
-English:
-theorem symm_projIcc
-  given: (x : Real)
-  proof: by
-  ext
-  rcases le_total x 0 with h₀ | h₀
-  · simp [projIcc_of_le_left, projIcc_of_right_le, h₀]
-  · rcases le_total x 1 with h₁ | h₁
-    · lift x to I using ⟨h₀, h₁⟩
-      simp_rw [← coe_symm_eq, projIcc_val]
-    · simp [projIcc_of_le_left, projIcc_of_right_le, h₁]
-
-@[continuity, fun_prop]
-
-中文:
-定理 symm_projIcc
-  条件: (x : 实数)
-  证明: by
-  ext
-  rcases le_total x 0 with h₀ | h₀
-  · simp [projIcc_of_le_left, projIcc_of_right_le, h₀]
-  · rcases le_total x 1 with h₁ | h₁
-    · lift x to I using ⟨h₀, h₁⟩
-      simp_rw [← coe_symm_eq, projIcc_val]
-    · simp [projIcc_of_le_left, projIcc_of_right_le, h₁]
-
-@[continuity, fun_prop]
-
-Depends on / 依赖: coe_symm_eq, le_total, projIcc_of_le_left, projIcc_of_right_le, projIcc_val, simp_rw
+/-
+**unitInterval.symm_projIcc** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：symm_projIcc (x : Real) : symm (projIcc 0 1 zero_le_one x) = projIcc 0 1 z
+ero_le_one (1 - x)
+参数：x : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.projIcc_of_le_left`：projIcc_of_le_left (hx : x <= a) : projIcc a b h
+ x = ⟨a, left_mem_Icc.2 h⟩
+· 使用定理 `unitInterval.symm_zero`：symm_zero : σ 0 = 1
+· 使用定理 `Set.projIcc_of_right_le`：projIcc_of_right_le (hx : b <= x) : projIcc a b
+ h x = ⟨b, right_mem_Icc.2 h⟩
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `Set.projIcc_val`：projIcc_val (x : Icc a b) : projIcc a b h x = x
+· 使用定理 `unitInterval.symm_one`：symm_one : σ 1 = 0
+· 使用定理 `AddGroup.toOrderedSub`：∀ {α : Type u_1} [inst : AddGroup α] [inst_1 : LE
+ α] [AddRightMono α], OrderedSub α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
 -/
-theorem symm_projIcc (x : Real) :
+theorem symm_projIcc (x : ℝ) :
     symm (projIcc 0 1 zero_le_one x) = projIcc 0 1 zero_le_one (1 - x) := by
   ext
   rcases le_total x 0 with h₀ | h₀
@@ -522,786 +449,683 @@ theorem symm_projIcc (x : Real) :
     · simp [projIcc_of_le_left, projIcc_of_right_le, h₁]
 
 @[continuity, fun_prop]
-/--
-theorem `continuous_symm` / 定理 `continuous_symm`
-
-English:
-theorem continuous_symm
-  statement: Continuous σ
-  proof: Continuous.subtype_mk (by fun_prop) _
-
-中文:
-定理 continuous_symm
-  结论: 连续 σ
-  证明: Continuous.subtype_mk (by fun_prop) _
-
-Depends on / 依赖: Continuous, Continuous.subtype_mk, fun_prop, subtype_mk
+/-
+**unitInterval.continuous_symm** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：continuous_symm : Continuous σ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.subtype_mk`：Continuous.subtype_mk {f : Y -> X} (h : Continuou
+s f) (hp : forall x, p (f x)) : Continuous fun x => (⟨f x, hp x⟩ : Subtype p)
+· 使用定理 `Continuous.fun_sub`：∀ {G : Type u_1} {X : Type u_3} [inst : TopologicalS
+pace X] [inst_1 : TopologicalSpace G] [inst_2 : Sub G]   [ContinuousSub G] {f g 
+: X → G}…
+· 使用定理 `IsTopologicalAddGroup.to_continuousSub`：∀ {G : Type u} [inst : Topologic
+alSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G], ContinuousSub G
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
+· 使用定理 `continuous_subtype_val`：continuous_subtype_val : Continuous (@Subtype.va
+l X p)
 -/
 theorem continuous_symm : Continuous σ :=
   Continuous.subtype_mk (by fun_prop) _
 
 /-- `unitInterval.symm` as a `Homeomorph`. -/
 @[simps]
-/--
-Definition of `symmHomeomorph` / `symmHomeomorph` 的定义
+/-
+**unitInterval.symmHomeomorph** 是 Mathlib 中的一个定义，位于命名空间 `unitInterval`。
+形式化陈述：symmHomeomorph : I ≃ₜ I where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `unitInterval.symm_symm`：symm_symm (x : I) : σ (σ x) = x
 
-English:
-definition symmHomeomorph
-  signature: : I ≃ₜ I where
-  body: symm
-  invFun := symm
-  left_inv := symm_symm
-  right_inv := symm_symm
-
-中文:
-定义 symmHomeomorph
-  签名: : I ≃ₜ I where
-  定义体: symm
-  invFun := symm
-  left_inv := symm_symm
-  right_inv := symm_symm
+--- 原说明 ---
+`unitInterval.symm` as a `Homeomorph`.
 -/
 def symmHomeomorph : I ≃ₜ I where
   toFun := symm
   invFun := symm
   left_inv := symm_symm
   right_inv := symm_symm
-
-/--
-theorem `strictAnti_symm` / 定理 `strictAnti_symm`
-
-English:
-theorem strictAnti_symm
-  statement: StrictAnti σ
-  proof: fun _ _ h => sub_lt_sub_left (α := Real) h _
-
-
-@[simp]
-
-中文:
-定理 strictAnti_symm
-  结论: 严格递减 σ
-  证明: fun _ _ h => sub_lt_sub_left (α := Real) h _
-
-
-@[simp]
-
-Depends on / 依赖: sub_lt_sub_left
+/-
+**unitInterval.strictAnti_symm** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：strictAnti_symm : StrictAnti σ
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sub_lt_sub_left`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LT α] [Add
+LeftStrictMono α] [AddRightStrictMono α] {a b : α},   a < b → ∀ (c : α), c - b <
+ c - …
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
 -/
-theorem strictAnti_symm : StrictAnti σ := fun _ _ h => sub_lt_sub_left (α := Real) h _
+theorem strictAnti_symm : StrictAnti σ := fun _ _ h ↦ sub_lt_sub_left (α := ℝ) h _
 
 
 @[simp]
-/--
-theorem `symm_inj` / 定理 `symm_inj`
-
-English:
-theorem symm_inj
-  given: {i j : I}
-  statement: σ i = σ j ↔ i = j
-  proof: symm_bijective.injective.eq_iff
-
-中文:
-定理 symm_inj
-  条件: {i j : I}
-  结论: σ i = σ j ↔ i = j
-  证明: symm_bijective.injective.eq_iff
-
-Depends on / 依赖: eq_iff, injective, symm_bijective, symm_bijective.injective.eq_iff
+/-
+**unitInterval.symm_inj** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：symm_inj {i j : I} : σ i = σ j ↔ i = j
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Function.Bijective.injective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β
+}, Function.Bijective f → Function.Injective f
+· 使用定理 `unitInterval.symm_bijective`：symm_bijective : Function.Bijective (symm :
+ I -> I)
 -/
 theorem symm_inj {i j : I} : σ i = σ j ↔ i = j := symm_bijective.injective.eq_iff
-
-/--
-theorem `half_le_symm_iff` / 定理 `half_le_symm_iff`
-
-English:
-theorem half_le_symm_iff
-  given: (t : I)
-  statement: 1 / 2 <= (σ t : Real) ↔ (t : Real) <= 1 / 2
-  proof: by
-  rw [coe_symm_eq]; rw [le_sub_iff_add_le]; rw [add_comm]; rw [← le_sub_iff_add_le]; rw [sub_half]
-
-@[simp]
-
-中文:
-定理 half_le_symm_iff
-  条件: (t : I)
-  结论: 1 / 2 <= (σ t : 实数) ↔ (t : 实数) <= 1 / 2
-  证明: by
-  rw [coe_symm_eq]; rw [le_sub_iff_add_le]; rw [add_comm]; rw [← le_sub_iff_add_le]; rw [sub_half]
-
-@[simp]
-
-Depends on / 依赖: add_comm, coe_symm_eq, le_sub_iff_add_le, sub_half
+/-
+**unitInterval.half_le_symm_iff** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：half_le_symm_iff (t : I) : 1 / 2 <= (σ t : Real) ↔ (t : Real) <= 1 / 2
+参数：t : I。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `unitInterval.coe_symm_eq`：coe_symm_eq (x : I) : (σ x : Real) = 1 - x
+· 使用定理 `le_sub_iff_add_le`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [A
+ddRightMono α] {a b c : α}, a ≤ c - b ↔ a + b ≤ c
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `sub_half`：sub_half (a : K) : a - a / 2 = a / 2
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem half_le_symm_iff (t : I) : 1 / 2 <= (σ t : Real) ↔ (t : Real) <= 1 / 2 := by
-  rw [coe_symm_eq]; rw [le_sub_iff_add_le]; rw [add_comm]; rw [← le_sub_iff_add_le]; rw [sub_half]
+theorem half_le_symm_iff (t : I) : 1 / 2 ≤ (σ t : ℝ) ↔ (t : ℝ) ≤ 1 / 2 := by
+  rw [coe_symm_eq, le_sub_iff_add_le, add_comm, ← le_sub_iff_add_le, sub_half]
 
 @[simp]
-/--
-lemma `symm_eq_one` / 引理 `symm_eq_one`
-
-English:
-lemma symm_eq_one
-  given: {i : I}
-  statement: σ i = 1 ↔ i = 0
-  proof: by
-  rw [← symm_zero]; rw [symm_inj]
-
-@[simp]
-
-中文:
-引理 symm_eq_one
-  条件: {i : I}
-  结论: σ i = 1 ↔ i = 0
-  证明: by
-  rw [← symm_zero]; rw [symm_inj]
-
-@[simp]
-
-Depends on / 依赖: symm_inj, symm_zero
+/-
+**unitInterval.symm_eq_one** 是 Mathlib 中的一个引理，位于命名空间 `unitInterval`。
+形式化陈述：symm_eq_one {i : I} : σ i = 1 ↔ i = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `unitInterval.symm_zero`：symm_zero : σ 0 = 1
+· 使用定理 `unitInterval.symm_inj`：symm_inj {i j : I} : σ i = σ j ↔ i = j
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma symm_eq_one {i : I} : σ i = 1 ↔ i = 0 := by
-  rw [← symm_zero]; rw [symm_inj]
+  rw [← symm_zero, symm_inj]
 
 @[simp]
-/--
-lemma `symm_eq_zero` / 引理 `symm_eq_zero`
-
-English:
-lemma symm_eq_zero
-  given: {i : I}
-  statement: σ i = 0 ↔ i = 1
-  proof: by
-  rw [← symm_one]; rw [symm_inj]
-
-@[simp]
-
-中文:
-引理 symm_eq_zero
-  条件: {i : I}
-  结论: σ i = 0 ↔ i = 1
-  证明: by
-  rw [← symm_one]; rw [symm_inj]
-
-@[simp]
-
-Depends on / 依赖: symm_inj, symm_one
+/-
+**unitInterval.symm_eq_zero** 是 Mathlib 中的一个引理，位于命名空间 `unitInterval`。
+形式化陈述：symm_eq_zero {i : I} : σ i = 0 ↔ i = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `unitInterval.symm_one`：symm_one : σ 1 = 0
+· 使用定理 `unitInterval.symm_inj`：symm_inj {i j : I} : σ i = σ j ↔ i = j
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma symm_eq_zero {i : I} : σ i = 0 ↔ i = 1 := by
-  rw [← symm_one]; rw [symm_inj]
+  rw [← symm_one, symm_inj]
 
 @[simp]
-/--
-theorem `symm_le_symm` / 定理 `symm_le_symm`
-
-English:
-theorem symm_le_symm
-  given: {i j : I}
-  statement: σ i <= σ j ↔ j <= i
-  proof: by
-  simp only [symm, Subtype.mk_le_mk, sub_le_sub_iff, add_le_add_iff_left, Subtype.coe_le_coe]
-
-中文:
-定理 symm_le_symm
-  条件: {i j : I}
-  结论: σ i <= σ j ↔ j <= i
-  证明: by
-  simp only [symm, Subtype.mk_le_mk, sub_le_sub_iff, add_le_add_iff_left, Subtype.coe_le_coe]
-
-Depends on / 依赖: Subtype, Subtype.coe_le_coe, Subtype.mk_le_mk, add_le_add_iff_left, coe_le_coe, mk_le_mk, sub_le_sub_iff
+/-
+**unitInterval.symm_le_symm** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：symm_le_symm {i j : I} : σ i <= σ j ↔ j <= i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem symm_le_symm {i j : I} : σ i <= σ j ↔ j <= i := by
+theorem symm_le_symm {i j : I} : σ i ≤ σ j ↔ j ≤ i := by
   simp only [symm, Subtype.mk_le_mk, sub_le_sub_iff, add_le_add_iff_left, Subtype.coe_le_coe]
-
-/--
-theorem `le_symm_comm` / 定理 `le_symm_comm`
-
-English:
-theorem le_symm_comm
-  given: {i j : I}
-  statement: i <= σ j ↔ j <= σ i
-  proof: by
-  rw [← symm_le_symm]; rw [symm_symm]
-
-中文:
-定理 le_symm_comm
-  条件: {i j : I}
-  结论: i <= σ j ↔ j <= σ i
-  证明: by
-  rw [← symm_le_symm]; rw [symm_symm]
-
-Depends on / 依赖: symm_le_symm, symm_symm
+/-
+**unitInterval.le_symm_comm** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：le_symm_comm {i j : I} : i <= σ j ↔ j <= σ i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `unitInterval.symm_le_symm`：symm_le_symm {i j : I} : σ i <= σ j ↔ j <= i
+· 使用定理 `unitInterval.symm_symm`：symm_symm (x : I) : σ (σ x) = x
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem le_symm_comm {i j : I} : i <= σ j ↔ j <= σ i := by
-  rw [← symm_le_symm]; rw [symm_symm]
-
-/--
-theorem `symm_le_comm` / 定理 `symm_le_comm`
-
-English:
-theorem symm_le_comm
-  given: {i j : I}
-  statement: σ i <= j ↔ σ j <= i
-  proof: by
-  rw [← symm_le_symm]; rw [symm_symm]
-
-@[simp]
-
-中文:
-定理 symm_le_comm
-  条件: {i j : I}
-  结论: σ i <= j ↔ σ j <= i
-  证明: by
-  rw [← symm_le_symm]; rw [symm_symm]
-
-@[simp]
-
-Depends on / 依赖: symm_le_symm, symm_symm
+theorem le_symm_comm {i j : I} : i ≤ σ j ↔ j ≤ σ i := by
+  rw [← symm_le_symm, symm_symm]
+/-
+**unitInterval.symm_le_comm** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：symm_le_comm {i j : I} : σ i <= j ↔ σ j <= i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `unitInterval.symm_le_symm`：symm_le_symm {i j : I} : σ i <= σ j ↔ j <= i
+· 使用定理 `unitInterval.symm_symm`：symm_symm (x : I) : σ (σ x) = x
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem symm_le_comm {i j : I} : σ i <= j ↔ σ j <= i := by
-  rw [← symm_le_symm]; rw [symm_symm]
+theorem symm_le_comm {i j : I} : σ i ≤ j ↔ σ j ≤ i := by
+  rw [← symm_le_symm, symm_symm]
 
 @[simp]
-/--
-theorem `symm_lt_symm` / 定理 `symm_lt_symm`
-
-English:
-theorem symm_lt_symm
-  given: {i j : I}
-  statement: σ i < σ j ↔ j < i
-  proof: by
-  simp only [symm, Subtype.mk_lt_mk, sub_lt_sub_iff_left, Subtype.coe_lt_coe]
-
-中文:
-定理 symm_lt_symm
-  条件: {i j : I}
-  结论: σ i < σ j ↔ j < i
-  证明: by
-  simp only [symm, Subtype.mk_lt_mk, sub_lt_sub_iff_left, Subtype.coe_lt_coe]
-
-Depends on / 依赖: Subtype, Subtype.coe_lt_coe, Subtype.mk_lt_mk, coe_lt_coe, mk_lt_mk, sub_lt_sub_iff_left
+/-
+**unitInterval.symm_lt_symm** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：symm_lt_symm {i j : I} : σ i < σ j ↔ j < i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem symm_lt_symm {i j : I} : σ i < σ j ↔ j < i := by
   simp only [symm, Subtype.mk_lt_mk, sub_lt_sub_iff_left, Subtype.coe_lt_coe]
-
-/--
-theorem `lt_symm_comm` / 定理 `lt_symm_comm`
-
-English:
-theorem lt_symm_comm
-  given: {i j : I}
-  statement: i < σ j ↔ j < σ i
-  proof: by
-  rw [← symm_lt_symm]; rw [symm_symm]
-
-中文:
-定理 lt_symm_comm
-  条件: {i j : I}
-  结论: i < σ j ↔ j < σ i
-  证明: by
-  rw [← symm_lt_symm]; rw [symm_symm]
-
-Depends on / 依赖: symm_lt_symm, symm_symm
+/-
+**unitInterval.lt_symm_comm** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：lt_symm_comm {i j : I} : i < σ j ↔ j < σ i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `unitInterval.symm_lt_symm`：symm_lt_symm {i j : I} : σ i < σ j ↔ j < i
+· 使用定理 `unitInterval.symm_symm`：symm_symm (x : I) : σ (σ x) = x
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem lt_symm_comm {i j : I} : i < σ j ↔ j < σ i := by
-  rw [← symm_lt_symm]; rw [symm_symm]
-
-/--
-theorem `symm_lt_comm` / 定理 `symm_lt_comm`
-
-English:
-theorem symm_lt_comm
-  given: {i j : I}
-  statement: σ i < j ↔ σ j < i
-  proof: by
-  rw [← symm_lt_symm]; rw [symm_symm]
-
-中文:
-定理 symm_lt_comm
-  条件: {i j : I}
-  结论: σ i < j ↔ σ j < i
-  证明: by
-  rw [← symm_lt_symm]; rw [symm_symm]
-
-Depends on / 依赖: symm_lt_symm, symm_symm
+  rw [← symm_lt_symm, symm_symm]
+/-
+**unitInterval.symm_lt_comm** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：symm_lt_comm {i j : I} : σ i < j ↔ σ j < i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `unitInterval.symm_lt_symm`：symm_lt_symm {i j : I} : σ i < σ j ↔ j < i
+· 使用定理 `unitInterval.symm_symm`：symm_symm (x : I) : σ (σ x) = x
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem symm_lt_comm {i j : I} : σ i < j ↔ σ j < i := by
-  rw [← symm_lt_symm]; rw [symm_symm]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ConnectedSpace I
-  body: Subtype.connectedSpace ⟨nonempty_Icc.mpr zero_le_one, isPreconnected_Icc⟩
-
-中文:
-实例 :
-  签名: 连通空间 I
-  定义体: Subtype.connectedSpace ⟨nonempty_Icc.mpr zero_le_one, isPreconnected_Icc⟩
-
-Depends on / 依赖: Subtype, Subtype.connectedSpace, connectedSpace, isPreconnected_Icc, nonempty_Icc, nonempty_Icc.mpr, zero_le_one
+  rw [← symm_lt_symm, symm_symm]
+/-
+**unitInterval.** 是 Mathlib 中的一个实例，位于命名空间 `unitInterval`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ConnectedSpace I :=
   Subtype.connectedSpace ⟨nonempty_Icc.mpr zero_le_one, isPreconnected_Icc⟩
 
 /-- Verify there is an instance for `CompactSpace I`. -/
+/-
+**unitInterval.** 是 Mathlib 中的一个示例，位于命名空间 `unitInterval`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Verify there is an instance for `CompactSpace I`.
+-/
 example : CompactSpace I := by infer_instance
-
-/--
-theorem `nonneg` / 定理 `nonneg`
-
-English:
-theorem nonneg
-  given: (x : I)
-  statement: 0 <= (x : Real)
-  proof: x.2.1
-
-中文:
-定理 nonneg
-  条件: (x : I)
-  结论: 0 <= (x : 实数)
-  证明: x.2.1
+/-
+**unitInterval.nonneg** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：nonneg (x : I) : 0 <= (x : Real)
+参数：x : I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem nonneg (x : I) : 0 <= (x : Real) :=
+theorem nonneg (x : I) : 0 ≤ (x : ℝ) :=
   x.2.1
-
-/--
-theorem `one_minus_nonneg` / 定理 `one_minus_nonneg`
-
-English:
-theorem one_minus_nonneg
-  given: (x : I)
-  statement: 0 <= 1 - (x : Real)
-  proof: by simpa using x.2.2
-
-中文:
-定理 one_minus_nonneg
-  条件: (x : I)
-  结论: 0 <= 1 - (x : 实数)
-  证明: by simpa using x.2.2
+/-
+**unitInterval.one_minus_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：one_minus_nonneg (x : I) : 0 <= 1 - (x : Real)
+参数：x : I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem one_minus_nonneg (x : I) : 0 <= 1 - (x : Real) := by simpa using x.2.2
-
-/--
-theorem `le_one` / 定理 `le_one`
-
-English:
-theorem le_one
-  given: (x : I)
-  statement: (x : Real) <= 1
-  proof: x.2.2
-
-中文:
-定理 le_one
-  条件: (x : I)
-  结论: (x : 实数) <= 1
-  证明: x.2.2
+theorem one_minus_nonneg (x : I) : 0 ≤ 1 - (x : ℝ) := by simpa using x.2.2
+/-
+**unitInterval.le_one** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：le_one (x : I) : (x : Real) <= 1
+参数：x : I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem le_one (x : I) : (x : Real) <= 1 :=
+theorem le_one (x : I) : (x : ℝ) ≤ 1 :=
   x.2.2
-
-/--
-theorem `one_minus_le_one` / 定理 `one_minus_le_one`
-
-English:
-theorem one_minus_le_one
-  given: (x : I)
-  statement: 1 - (x : Real) <= 1
-  proof: by simpa using x.2.1
-
-中文:
-定理 one_minus_le_one
-  条件: (x : I)
-  结论: 1 - (x : 实数) <= 1
-  证明: by simpa using x.2.1
+/-
+**unitInterval.one_minus_le_one** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：one_minus_le_one (x : I) : 1 - (x : Real) <= 1
+参数：x : I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `AddGroup.toOrderedSub`：∀ {α : Type u_1} [inst : AddGroup α] [inst_1 : LE
+ α] [AddRightMono α], OrderedSub α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 -/
-theorem one_minus_le_one (x : I) : 1 - (x : Real) <= 1 := by simpa using x.2.1
-
-/--
-theorem `add_pos` / 定理 `add_pos`
-
-English:
-theorem add_pos
-  given: {t : I} {x : Real} (hx : 0 < x)
-  statement: 0 < (x + t : Real)
-  proof: add_pos_of_pos_of_nonneg hx nonneg _
-
-中文:
-定理 add_pos
-  条件: {t : I} {x : 实数} (hx : 0 < x)
-  结论: 0 < (x + t : 实数)
-  证明: add_pos_of_pos_of_nonneg hx nonneg _
-
-Depends on / 依赖: add_pos_of_pos_of_nonneg, nonneg
+theorem one_minus_le_one (x : I) : 1 - (x : ℝ) ≤ 1 := by simpa using x.2.1
+/-
+**unitInterval.add_pos** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：add_pos {t : I} {x : Real} (hx : 0 < x) : 0 < (x + t : Real)
+参数：hx : 0 < x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_pos_of_pos_of_nonneg`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst
+_1 : Preorder α] [AddLeftMono α] {a b : α}, 0 < a → 0 ≤ b → 0 < a + b
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `unitInterval.nonneg`：nonneg (x : I) : 0 <= (x : Real)
 -/
-theorem add_pos {t : I} {x : Real} (hx : 0 < x) : 0 < (x + t : Real) :=
-add_pos_of_pos_of_nonneg hx nonneg _
+theorem add_pos {t : I} {x : ℝ} (hx : 0 < x) : 0 < (x + t : ℝ) :=
+  add_pos_of_pos_of_nonneg hx <| nonneg _
 
-/--
-theorem `nonneg'` / 定理 `nonneg'`
+/-- like `unitInterval.nonneg`, but with the inequality in `I`. -/
+/-
+**unitInterval.nonneg'** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：nonneg' {t : I} : 0 <= t
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 
-English:
-theorem nonneg'
-  given: {t : I}
-  statement: 0 <= t
-  proof: t.2.1
-
-中文:
-定理 nonneg'
-  条件: {t : I}
-  结论: 0 <= t
-  证明: t.2.1
+--- 原说明 ---
+like `unitInterval.nonneg`, but with the inequality in `I`.
 -/
-theorem nonneg' {t : I} : 0 <= t :=
+theorem nonneg' {t : I} : 0 ≤ t :=
   t.2.1
 
-/--
-theorem `le_one'` / 定理 `le_one'`
+/-- like `unitInterval.le_one`, but with the inequality in `I`. -/
+/-
+**unitInterval.le_one'** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：le_one' {t : I} : t <= 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
 
-English:
-theorem le_one'
-  given: {t : I}
-  statement: t <= 1
-  proof: t.2.2
-
-中文:
-定理 le_one'
-  条件: {t : I}
-  结论: t <= 1
-  证明: t.2.2
+--- 原说明 ---
+like `unitInterval.le_one`, but with the inequality in `I`.
 -/
-theorem le_one' {t : I} : t <= 1 :=
+theorem le_one' {t : I} : t ≤ 1 :=
   t.2.2
-
-/--
-lemma `pos_iff_ne_zero` / 引理 `pos_iff_ne_zero`
-
-English:
-lemma pos_iff_ne_zero
-  given: {x : I}
-  statement: 0 < x ↔ x != 0
-  proof: bot_lt_iff_ne_bot
-
-中文:
-引理 pos_iff_ne_zero
-  条件: {x : I}
-  结论: 0 < x ↔ x != 0
-  证明: bot_lt_iff_ne_bot
+/-
+**unitInterval.pos_iff_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：∀ {x : ↑unitInterval}, 0 < x ↔ x ≠ 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `bot_lt_iff_ne_bot`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : Orde
+rBot α] {a : α}, ⊥ < a ↔ a ≠ ⊥
 -/
-protected lemma pos_iff_ne_zero {x : I} : 0 < x ↔ x != 0 := bot_lt_iff_ne_bot
-
-/--
-lemma `lt_one_iff_ne_one` / 引理 `lt_one_iff_ne_one`
-
-English:
-lemma lt_one_iff_ne_one
-  given: {x : I}
-  statement: x < 1 ↔ x != 1
-  proof: lt_top_iff_ne_top
-
-中文:
-引理 lt_one_iff_ne_one
-  条件: {x : I}
-  结论: x < 1 ↔ x != 1
-  证明: lt_top_iff_ne_top
+protected lemma pos_iff_ne_zero {x : I} : 0 < x ↔ x ≠ 0 := bot_lt_iff_ne_bot
+/-
+**unitInterval.lt_one_iff_ne_one** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：∀ {x : ↑unitInterval}, x < 1 ↔ x ≠ 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lt_top_iff_ne_top`：lt_top_iff_ne_top : a < ⊤ ↔ a != ⊤
 -/
-protected lemma lt_one_iff_ne_one {x : I} : x < 1 ↔ x != 1 := lt_top_iff_ne_top
-
-/--
-lemma `eq_one_or_eq_zero_of_le_mul` / 引理 `eq_one_or_eq_zero_of_le_mul`
-
-English:
-lemma eq_one_or_eq_zero_of_le_mul
-  given: {i j : I} (h : i <= j * i)
-  statement: i = 0 ∨ j = 1
-  proof: by
-  contrapose! h
-  rw [← unitInterval.lt_one_iff_ne_one]; rw [← coe_lt_one]; rw [← unitInterval.pos_iff_ne_zero]; rw [← coe_pos] at h
-  rw [← Subtype.coe_lt_coe]; rw [coe_mul]
-  simpa using mul_lt_mul_of_pos_right h.right h.left
-
-中文:
-引理 eq_one_or_eq_zero_of_le_mul
-  条件: {i j : I} (h : i <= j * i)
-  结论: i = 0 ∨ j = 1
-  证明: by
-  contrapose! h
-  rw [← unitInterval.lt_one_iff_ne_one]; rw [← coe_lt_one]; rw [← unitInterval.pos_iff_ne_zero]; rw [← coe_pos] at h
-  rw [← Subtype.coe_lt_coe]; rw [coe_mul]
-  simpa using mul_lt_mul_of_pos_right h.right h.left
-
-Depends on / 依赖: Subtype, Subtype.coe_lt_coe, coe_lt_coe, coe_lt_one, coe_mul, coe_pos, contrapose, h.left, h.right, lt_one_iff_ne_one, mul_lt_mul_of_pos_right, pos_iff_ne_zero, unitInterval, unitInterval.lt_one_iff_ne_one, unitInterval.pos_iff_ne_zero
+protected lemma lt_one_iff_ne_one {x : I} : x < 1 ↔ x ≠ 1 := lt_top_iff_ne_top
+/-
+**unitInterval.eq_one_or_eq_zero_of_le_mul** 是 Mathlib 中的一个引理，位于命名空间 `unitInterv
+al`。
+形式化陈述：eq_one_or_eq_zero_of_le_mul {i j : I} (h : i <= j * i) : i = 0 ∨ j = 1
+参数：h : i <= j * i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subtype.coe_lt_coe`：coe_lt_coe [LT α] {p : α -> Prop} {x y : Subtype p} 
+: (x : α) < y ↔ x < y
+· 使用定理 `Set.Icc.coe_mul`：coe_mul (x y : Icc (0 : R) 1) : ↑(x * y) = (x * y : R)
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `mul_lt_mul_of_pos_right`：mul_lt_mul_of_pos_right [MulPosStrictMono α] (h
+bc : b < c) (ha : 0 < a) : b * a < c * a
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `unitInterval.coe_pos`：∀ {x : ↑unitInterval}, 0 < ↑x ↔ 0 < x
+· 使用定理 `unitInterval.pos_iff_ne_zero`：∀ {x : ↑unitInterval}, 0 < x ↔ x ≠ 0
+· 使用定理 `unitInterval.coe_lt_one`：∀ {x : ↑unitInterval}, ↑x < 1 ↔ x < 1
+· 使用定理 `unitInterval.lt_one_iff_ne_one`：∀ {x : ↑unitInterval}, x < 1 ↔ x ≠ 1
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-lemma eq_one_or_eq_zero_of_le_mul {i j : I} (h : i <= j * i) : i = 0 ∨ j = 1 := by
+lemma eq_one_or_eq_zero_of_le_mul {i j : I} (h : i ≤ j * i) : i = 0 ∨ j = 1 := by
   contrapose! h
-  rw [← unitInterval.lt_one_iff_ne_one]; rw [← coe_lt_one]; rw [← unitInterval.pos_iff_ne_zero]; rw [← coe_pos] at h
-  rw [← Subtype.coe_lt_coe]; rw [coe_mul]
+  rw [← unitInterval.lt_one_iff_ne_one, ← coe_lt_one, ← unitInterval.pos_iff_ne_zero,
+    ← coe_pos] at h
+  rw [← Subtype.coe_lt_coe, coe_mul]
   simpa using mul_lt_mul_of_pos_right h.right h.left
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Nontrivial I
-  body: ⟨⟨1, 0, (one_ne_zero <| congrArg Subtype.val ·)⟩⟩
-
-中文:
-实例 :
-  签名: 非平凡 I
-  定义体: ⟨⟨1, 0, (one_ne_zero <| congrArg Subtype.val ·)⟩⟩
-
-Depends on / 依赖: Subtype, Subtype.val, one_ne_zero
+/-
+**unitInterval.** 是 Mathlib 中的一个实例，位于命名空间 `unitInterval`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Nontrivial I := ⟨⟨1, 0, (one_ne_zero <| congrArg Subtype.val ·)⟩⟩
-
-/--
-theorem `mul_pos_mem_iff` / 定理 `mul_pos_mem_iff`
-
-English:
-theorem mul_pos_mem_iff
-  given: {a t : Real} (ha : 0 < a)
-  statement: a * t in I ↔ t in Set.Icc (0 : Real) (1 / a)
-  proof: by
+/-
+**unitInterval.mul_pos_mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：mul_pos_mem_iff {a t : Real} (ha : 0 < a) : a * t in I ↔ t in Set.Icc (0 :
+ Real) (1 / a)
+参数：ha : 0 < a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonneg_of_mul_nonneg_right`：nonneg_of_mul_nonneg_right [PosMulStrictMono
+ R] (h : 0 <= a * b) (ha : 0 < a) : 0 <= b
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `le_div_iff₀`：le_div_iff₀ (hc : 0 < c) : a <= b / c ↔ a * c <= b
+· 使用定理 `MulPosReflectLE.toMulPosReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [MulPosReflectLE α], MulPosReflectLT α
+· 使用定理 `MulPosStrictMono.toMulPosReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [MulPosStrictMono α], MulPosReflectLE α
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `mul_nonneg`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 :
+ Preorder α] [PosMulMono α], 0 ≤ a → 0 ≤ b → 0 ≤ a * b
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+-/
+theorem mul_pos_mem_iff {a t : ℝ} (ha : 0 < a) : a * t ∈ I ↔ t ∈ Set.Icc (0 : ℝ) (1 / a) := by
   constructor <;> rintro ⟨h₁, h₂⟩ <;> constructor
   · exact nonneg_of_mul_nonneg_right h₁ ha
   · rwa [le_div_iff₀ ha, mul_comm]
   · exact mul_nonneg ha.le h₁
   · rwa [le_div_iff₀ ha, mul_comm] at h₂
-
-中文:
-定理 mul_pos_mem_iff
-  条件: {a t : 实数} (ha : 0 < a)
-  结论: a * t in I ↔ t in 集合.闭区间 (0 : 实数) (1 / a)
-  证明: by
-  constructor <;> rintro ⟨h₁, h₂⟩ <;> constructor
-  · exact nonneg_of_mul_nonneg_right h₁ ha
-  · rwa [le_div_iff₀ ha, mul_comm]
-  · exact mul_nonneg ha.le h₁
-  · rwa [le_div_iff₀ ha, mul_comm] at h₂
-
-Depends on / 依赖: ha.le, mul_comm, mul_nonneg, nonneg_of_mul_nonneg_right
+/-
+**unitInterval.two_mul_sub_one_mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：two_mul_sub_one_mem_iff {t : Real} : 2 * t - 1 in I ↔ t in Set.Icc (1 / 2 
+: Real) 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用引理 `Mathlib.Meta.NormNum.instAtLeastTwo`：instAtLeastTwo (n : Nat) : Nat.AtLe
+astTwo (n + 2)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.cast_zero`：∀ {R : Type u_1} [inst : CommSemiring R] 
+{a : R}, Mathlib.Meta.NormNum.IsNat a 0 → a = 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.cast_pos`：∀ {R : Type u_1} [inst : CommSemiring R] {
+a : R} {n : ℕ}, Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_pf`：∀ {R : Type u_2} [inst : CommRing R] 
+{a b c d : R}, -b = c → a + c = d → a - b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+（共 64 条，此处仅展示前 30 条）
 -/
-theorem mul_pos_mem_iff {a t : Real} (ha : 0 < a) : a * t in I ↔ t in Set.Icc (0 : Real) (1 / a) := by
-  constructor <;> rintro ⟨h₁, h₂⟩ <;> constructor
-  · exact nonneg_of_mul_nonneg_right h₁ ha
-  · rwa [le_div_iff₀ ha, mul_comm]
-  · exact mul_nonneg ha.le h₁
-  · rwa [le_div_iff₀ ha, mul_comm] at h₂
-
-/--
-theorem `two_mul_sub_one_mem_iff` / 定理 `two_mul_sub_one_mem_iff`
-
-English:
-theorem two_mul_sub_one_mem_iff
-  given: {t : Real}
-  statement: 2 * t - 1 in I ↔ t in Set.Icc (1 / 2 : Real) 1
-  proof: by
+theorem two_mul_sub_one_mem_iff {t : ℝ} : 2 * t - 1 ∈ I ↔ t ∈ Set.Icc (1 / 2 : ℝ) 1 := by
   constructor <;> rintro ⟨h₁, h₂⟩ <;> constructor <;> linarith
 
-中文:
-定理 two_mul_sub_one_mem_iff
-  条件: {t : 实数}
-  结论: 2 * t - 1 in I ↔ t in 集合.闭区间 (1 / 2 : 实数) 1
-  证明: by
-  constructor <;> rintro ⟨h₁, h₂⟩ <;> constructor <;> linarith
+/-- The unit interval as a submonoid of ℝ. -/
+/-
+**unitInterval.submonoid** 是 Mathlib 中的一个定义，位于命名空间 `unitInterval`。
+形式化陈述：submonoid : Submonoid Real where carrier
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `unitInterval.mul_mem`：mul_mem {x y : Real} (hx : x in I) (hy : y in I) :
+ x * y in I
+· 使用定理 `unitInterval.one_mem`：one_mem : (1 : Real) in I
+
+--- 原说明 ---
+The unit interval as a submonoid of ℝ.
 -/
-theorem two_mul_sub_one_mem_iff {t : Real} : 2 * t - 1 in I ↔ t in Set.Icc (1 / 2 : Real) 1 := by
-  constructor <;> rintro ⟨h₁, h₂⟩ <;> constructor <;> linarith
-
-/--
-Definition of `submonoid` / `submonoid` 的定义
-
-English:
-definition submonoid
-  signature: : Submonoid Real where
-  body: unitInterval
-  one_mem' := unitInterval.one_mem
-  mul_mem' := unitInterval.mul_mem
-
-中文:
-定义 submonoid
-  签名: : 子幺半群 实数 where
-  定义体: unitInterval
-  one_mem' := unitInterval.one_mem
-  mul_mem' := unitInterval.mul_mem
-
-Depends on / 依赖: unitInterval
--/
-def submonoid : Submonoid Real where
+def submonoid : Submonoid ℝ where
   carrier := unitInterval
   one_mem' := unitInterval.one_mem
   mul_mem' := unitInterval.mul_mem
-
-/--
-theorem `coe_unitIntervalSubmonoid` / 定理 `coe_unitIntervalSubmonoid`
-
-English:
-theorem coe_unitIntervalSubmonoid
-  statement: submonoid = unitInterval
-  proof: rfl
-
-中文:
-定理 coe_unit整数ervalSubmonoid
-  结论: submonoid = unit整数erval
-  证明: rfl
+/-
+**unitInterval.coe_unitIntervalSubmonoid** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval
+`。
+形式化陈述：↑unitInterval.submonoid = unitInterval
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem coe_unitIntervalSubmonoid : submonoid = unitInterval := rfl
-/--
-theorem `mem_unitIntervalSubmonoid` / 定理 `mem_unitIntervalSubmonoid`
-
-English:
-theorem mem_unitIntervalSubmonoid
-  given: {x}
-  statement: x in submonoid ↔ x in unitInterval
-  proof: Iff.rfl
-
-中文:
-定理 mem_unit整数ervalSubmonoid
-  条件: {x}
-  结论: x in submonoid ↔ x in unit整数erval
-  证明: Iff.rfl
+/-
+**unitInterval.mem_unitIntervalSubmonoid** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval
+`。
+形式化陈述：∀ {x : ℝ}, x ∈ unitInterval.submonoid ↔ x ∈ unitInterval
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] theorem mem_unitIntervalSubmonoid {x} : x in submonoid ↔ x in unitInterval :=
+@[simp] theorem mem_unitIntervalSubmonoid {x} : x ∈ submonoid ↔ x ∈ unitInterval :=
   Iff.rfl
-
-/--
-theorem `prod_mem` / 定理 `prod_mem`
-
-English:
-theorem prod_mem
-  statement: {ι : Type*} {t : Finset ι} {f : ι -> Real}
-  proof: _root_.prod_mem (S := unitInterval.submonoid) h
-
-中文:
-定理 prod_mem
-  结论: {ι : 类型} {t : 有限集 ι} {f : ι -> 实数}
-  证明: _root_.prod_mem (S := unitInterval.submonoid) h
+/-
+**unitInterval.prod_mem** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：∀ {ι : Type u_1} {t : Finset ι} {f : ι → ℝ}, (∀ c ∈ t, f c ∈ unitInterval)
+ → ∏ c ∈ t, f c ∈ unitInterval
+参数：∀ c ∈ t, f c ∈ unitInterval。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `prod_mem`：prod_mem {M : Type*} [CommMonoid M] [SetLike B M] [SubmonoidCl
+ass B M] {ι : Type*} {t : Finset ι} {f : ι -> M} (h : forall c in t, f c in S)…
+· 使用定理 `Submonoid.instSubmonoidClass`：∀ {M : Type u_1} [inst : MulOneClass M], S
+ubmonoidClass (Submonoid M) M
 -/
-protected theorem prod_mem {ι : Type*} {t : Finset ι} {f : ι -> Real}
-    (h : forall c in t, f c in unitInterval) :
-    ∏ c in t, f c in unitInterval := _root_.prod_mem (S := unitInterval.submonoid) h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LinearOrderedCommMonoidWithZero I
-  body: x.2.1
-  mul_lt_mul_of_pos_left i hi j k hjk := by
-    simp only [← Subtype.coe_lt_coe, coe_mul]; gcongr
-
-中文:
-实例 :
-  签名: 带零LinearOrderedComm幺半群 I
-  定义体: x.2.1
-  mul_lt_mul_of_pos_left i hi j k hjk := by
-    simp only [← Subtype.coe_lt_coe, coe_mul]; gcongr
+protected theorem prod_mem {ι : Type*} {t : Finset ι} {f : ι → ℝ}
+    (h : ∀ c ∈ t, f c ∈ unitInterval) :
+    ∏ c ∈ t, f c ∈ unitInterval := _root_.prod_mem (S := unitInterval.submonoid) h
+/-
+**unitInterval.** 是 Mathlib 中的一个实例，位于命名空间 `unitInterval`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LinearOrderedCommMonoidWithZero I where
   isBot_zero x := x.2.1
   mul_lt_mul_of_pos_left i hi j k hjk := by
     simp only [← Subtype.coe_lt_coe, coe_mul]; gcongr
-
-/--
-lemma `subtype_Iic_eq_Icc` / 引理 `subtype_Iic_eq_Icc`
-
-English:
-lemma subtype_Iic_eq_Icc
-  given: (x : I)
-  statement: Subtype.val ⁻¹' (Iic ↑x) = Icc 0 x
-  proof: by
-  rw [preimage_subtype_val_Iic]
-  exact Icc_bot.symm
-
-中文:
-引理 subtype_Iic_eq_Icc
-  条件: (x : I)
-  结论: 子类型.val ⁻¹' (左无界右闭区间 ↑x) = 闭区间 0 x
-  证明: by
-  rw [preimage_subtype_val_Iic]
-  exact Icc_bot.symm
-
-Depends on / 依赖: Icc_bot, Icc_bot.symm, preimage_subtype_val_Iic
+/-
+**unitInterval.subtype_Iic_eq_Icc** 是 Mathlib 中的一个引理，位于命名空间 `unitInterval`。
+形式化陈述：subtype_Iic_eq_Icc (x : I) : Subtype.val ⁻¹' (Iic ↑x) = Icc 0 x
+参数：x : I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.preimage_subtype_val_Iic`：∀ {α : Type u_1} [inst : Preorder α] {p : 
+α → Prop} (a : { x // p x }), Subtype.val ⁻¹' Set.Iic ↑a = Set.Iic a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.Icc_bot`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : OrderBot α] 
+{a : α}, Set.Icc ⊥ a = Set.Iic a
 -/
 lemma subtype_Iic_eq_Icc (x : I) : Subtype.val ⁻¹' (Iic ↑x) = Icc 0 x := by
   rw [preimage_subtype_val_Iic]
   exact Icc_bot.symm
-
-/--
-lemma `subtype_Iio_eq_Ico` / 引理 `subtype_Iio_eq_Ico`
-
-English:
-lemma subtype_Iio_eq_Ico
-  given: (x : I)
-  statement: Subtype.val ⁻¹' (Iio ↑x) = Ico 0 x
-  proof: by
-  rw [preimage_subtype_val_Iio]
-  exact Ico_bot.symm
-
-中文:
-引理 subtype_Iio_eq_Ico
-  条件: (x : I)
-  结论: 子类型.val ⁻¹' (左无界右开区间 ↑x) = 左闭右开区间 0 x
-  证明: by
-  rw [preimage_subtype_val_Iio]
-  exact Ico_bot.symm
-
-Depends on / 依赖: Ico_bot, Ico_bot.symm, preimage_subtype_val_Iio
+/-
+**unitInterval.subtype_Iio_eq_Ico** 是 Mathlib 中的一个引理，位于命名空间 `unitInterval`。
+形式化陈述：subtype_Iio_eq_Ico (x : I) : Subtype.val ⁻¹' (Iio ↑x) = Ico 0 x
+参数：x : I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.preimage_subtype_val_Iio`：∀ {α : Type u_1} [inst : Preorder α] {p : 
+α → Prop} (a : { x // p x }), Subtype.val ⁻¹' Set.Iio ↑a = Set.Iio a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.Ico_bot`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : OrderBot α] 
+{a : α}, Set.Ico ⊥ a = Set.Iio a
 -/
 lemma subtype_Iio_eq_Ico (x : I) : Subtype.val ⁻¹' (Iio ↑x) = Ico 0 x := by
   rw [preimage_subtype_val_Iio]
   exact Ico_bot.symm
-
-/--
-lemma `subtype_Ici_eq_Icc` / 引理 `subtype_Ici_eq_Icc`
-
-English:
-lemma subtype_Ici_eq_Icc
-  given: (x : I)
-  statement: Subtype.val ⁻¹' (Ici ↑x) = Icc x 1
-  proof: by
-  rw [preimage_subtype_val_Ici]
-  exact Icc_top.symm
-
-中文:
-引理 subtype_Ici_eq_Icc
-  条件: (x : I)
-  结论: 子类型.val ⁻¹' (左闭右无界区间 ↑x) = 闭区间 x 1
-  证明: by
-  rw [preimage_subtype_val_Ici]
-  exact Icc_top.symm
-
-Depends on / 依赖: Icc_top, Icc_top.symm, preimage_subtype_val_Ici
+/-
+**unitInterval.subtype_Ici_eq_Icc** 是 Mathlib 中的一个引理，位于命名空间 `unitInterval`。
+形式化陈述：subtype_Ici_eq_Icc (x : I) : Subtype.val ⁻¹' (Ici ↑x) = Icc x 1
+参数：x : I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.preimage_subtype_val_Ici`：∀ {α : Type u_1} [inst : Preorder α] {p : 
+α → Prop} (a : { x // p x }), Subtype.val ⁻¹' Set.Ici ↑a = Set.Ici a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.Icc_top`：Icc_top : Icc a ⊤ = Ici a
 -/
 lemma subtype_Ici_eq_Icc (x : I) : Subtype.val ⁻¹' (Ici ↑x) = Icc x 1 := by
   rw [preimage_subtype_val_Ici]
   exact Icc_top.symm
-
-/--
-lemma `subtype_Ioi_eq_Ioc` / 引理 `subtype_Ioi_eq_Ioc`
-
-English:
-lemma subtype_Ioi_eq_Ioc
-  given: (x : I)
-  statement: Subtype.val ⁻¹' (Ioi ↑x) = Ioc x 1
-  proof: by
-  rw [preimage_subtype_val_Ioi]
-  exact Ioc_top.symm
-
-中文:
-引理 subtype_Ioi_eq_Ioc
-  条件: (x : I)
-  结论: 子类型.val ⁻¹' (左开右无界区间 ↑x) = 左开右闭区间 x 1
-  证明: by
-  rw [preimage_subtype_val_Ioi]
-  exact Ioc_top.symm
-
-Depends on / 依赖: Ioc_top, Ioc_top.symm, preimage_subtype_val_Ioi
+/-
+**unitInterval.subtype_Ioi_eq_Ioc** 是 Mathlib 中的一个引理，位于命名空间 `unitInterval`。
+形式化陈述：subtype_Ioi_eq_Ioc (x : I) : Subtype.val ⁻¹' (Ioi ↑x) = Ioc x 1
+参数：x : I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.preimage_subtype_val_Ioi`：∀ {α : Type u_1} [inst : Preorder α] {p : 
+α → Prop} (a : { x // p x }), Subtype.val ⁻¹' Set.Ioi ↑a = Set.Ioi a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.Ioc_top`：Ioc_top : Ioc a ⊤ = Ioi a
 -/
 lemma subtype_Ioi_eq_Ioc (x : I) : Subtype.val ⁻¹' (Ioi ↑x) = Ioc x 1 := by
   rw [preimage_subtype_val_Ioi]
@@ -1314,519 +1138,623 @@ section partition
 namespace Set.Icc
 
 variable {α} [AddCommGroup α] [LinearOrder α] [IsOrderedAddMonoid α]
-  {a b c d : α} (h : a <= b) {δ : α}
+  {a b c d : α} (h : a ≤ b) {δ : α}
 
 -- TODO: Set.projIci, Set.projIic
-/--
-lemma `_root_.Set.abs_projIcc_sub_projIcc` / 引理 `_root_.Set.abs_projIcc_sub_projIcc`
+/-- `Set.projIcc` is a contraction. -/
+/-
+**Set.Icc._root_.Set.abs_projIcc_sub_projIcc** 是 Mathlib 中的一个引理，位于命名空间 `Set.Icc`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma _root_.Set.abs_projIcc_sub_projIcc
-  statement: (|projIcc a b h c - projIcc a b h d| : α) <= |c - d|
-  proof: by
-  wlog hdc : d <= c generalizing c d
-  · rw [abs_sub_comm, abs_sub_comm c]; exact this (le_of_not_ge hdc)
-  rw [abs_eq_self.2 (sub_nonneg.2 hdc)]; rw [abs_eq_self.2 (sub_nonneg.2 <| mod_cast monotone_projIcc h hdc)]
-  rw [← sub_nonneg] at hdc
-  refine (max_sub_max_le_max _ _ _ _).trans (max_le (by rwa [sub_self]) ?_)
-  refine ((le_abs_self _).trans <| abs_min_sub_min_le_max _ _ _ _).trans (max_le ?_ ?_)
-  · rwa [sub_self, abs_zero]
-  · exact (abs_eq_self.mpr hdc).le
-
-中文:
-引理 _root_.集合.abs_projIcc_sub_projIcc
-  结论: (|projIcc a b h c - projIcc a b h d| : α) <= |c - d|
-  证明: by
-  wlog hdc : d <= c generalizing c d
-  · rw [abs_sub_comm, abs_sub_comm c]; exact this (le_of_not_ge hdc)
-  rw [abs_eq_self.2 (sub_nonneg.2 hdc)]; rw [abs_eq_self.2 (sub_nonneg.2 <| mod_cast monotone_projIcc h hdc)]
-  rw [← sub_nonneg] at hdc
-  refine (max_sub_max_le_max _ _ _ _).trans (max_le (by rwa [sub_self]) ?_)
-  refine ((le_abs_self _).trans <| abs_min_sub_min_le_max _ _ _ _).trans (max_le ?_ ?_)
-  · rwa [sub_self, abs_zero]
-  · exact (abs_eq_self.mpr hdc).le
-
-Depends on / 依赖: abs_eq_self, abs_eq_self.mpr, abs_min_sub_min_le_max, abs_sub_comm, abs_zero, generalizing, le_abs_self, le_of_not_ge, max_le, max_sub_max_le_max, mod_cast, monotone_projIcc, sub_nonneg, sub_self
+--- 原说明 ---
+`Set.projIcc` is a contraction.
 -/
-lemma _root_.Set.abs_projIcc_sub_projIcc : (|projIcc a b h c - projIcc a b h d| : α) <= |c - d| := by
-  wlog hdc : d <= c generalizing c d
+lemma _root_.Set.abs_projIcc_sub_projIcc : (|projIcc a b h c - projIcc a b h d| : α) ≤ |c - d| := by
+  wlog hdc : d ≤ c generalizing c d
   · rw [abs_sub_comm, abs_sub_comm c]; exact this (le_of_not_ge hdc)
-  rw [abs_eq_self.2 (sub_nonneg.2 hdc)]; rw [abs_eq_self.2 (sub_nonneg.2 <| mod_cast monotone_projIcc h hdc)]
+  rw [abs_eq_self.2 (sub_nonneg.2 hdc),
+    abs_eq_self.2 (sub_nonneg.2 <| mod_cast monotone_projIcc h hdc)]
   rw [← sub_nonneg] at hdc
   refine (max_sub_max_le_max _ _ _ _).trans (max_le (by rwa [sub_self]) ?_)
   refine ((le_abs_self _).trans <| abs_min_sub_min_le_max _ _ _ _).trans (max_le ?_ ?_)
   · rwa [sub_self, abs_zero]
   · exact (abs_eq_self.mpr hdc).le
 
-/--
-Definition of `addNSMul` / `addNSMul` 的定义
+/-- When `h : a ≤ b` and `δ > 0`, `addNSMul h δ` is a sequence of points in the closed interval
+`[a,b]`, which is initially equally spaced but eventually stays at the right endpoint `b`. -/
+/-
+**Set.Icc.addNSMul** 是 Mathlib 中的一个定义，位于命名空间 `Set.Icc`。
+形式化陈述：addNSMul (δ : α) (n : Nat) : Icc a b
+参数：δ : α；n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition addNSMul
-  signature: (δ : α) (n : Nat)
-  body: projIcc a b h (a + n • δ)
-
-omit [IsOrderedAddMonoid α] in
-
-中文:
-定义 addNSMul
-  签名: (δ : α) (n : 自然数)
-  定义体: projIcc a b h (a + n • δ)
-
-omit [IsOrderedAddMonoid α] in
-
-Depends on / 依赖: projIcc
+--- 原说明 ---
+When `h : a ≤ b` and `δ > 0`, `addNSMul h δ` is a sequence of points in the clos
+ed interval
+`[a,b]`, which is initially equally spaced but eventually stays at the right end
+point `b`.
 -/
-def addNSMul (δ : α) (n : Nat) : Icc a b := projIcc a b h (a + n • δ)
+def addNSMul (δ : α) (n : ℕ) : Icc a b := projIcc a b h (a + n • δ)
 
 omit [IsOrderedAddMonoid α] in
-/--
-lemma `addNSMul_zero` / 引理 `addNSMul_zero`
-
-English:
-lemma addNSMul_zero
-  statement: addNSMul h δ 0 = a
-  proof: by
-  rw [addNSMul]; rw [zero_smul]; rw [add_zero]; rw [projIcc_left]
-
-中文:
-引理 addNSMul_zero
-  结论: addNSMul h δ 0 = a
-  证明: by
-  rw [addNSMul]; rw [zero_smul]; rw [add_zero]; rw [projIcc_left]
-
-Depends on / 依赖: addNSMul, add_zero, projIcc_left, zero_smul
+/-
+**Set.Icc.addNSMul_zero** 是 Mathlib 中的一个引理，位于命名空间 `Set.Icc`。
+形式化陈述：addNSMul_zero : addNSMul h δ 0 = a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.Icc.addNSMul.eq_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 
+: LinearOrder α] {a b : α} (h : a ≤ b) (δ : α) (n : ℕ),   Set.Icc.addNSMul h δ n
+ = Set.proj…
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.left_mem_Icc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ Se
+t.Icc a b ↔ a ≤ b
+· 使用定理 `Set.projIcc_left`：projIcc_left : projIcc a b h a = ⟨a, left_mem_Icc.2 h⟩
 -/
 lemma addNSMul_zero : addNSMul h δ 0 = a := by
-  rw [addNSMul]; rw [zero_smul]; rw [add_zero]; rw [projIcc_left]
-
-/--
-lemma `addNSMul_eq_right` / 引理 `addNSMul_eq_right`
-
-English:
-lemma addNSMul_eq_right
-  given: [Archimedean α] (hδ : 0 < δ)
-  proof: by
-  obtain ⟨m, hm⟩ := Archimedean.arch (b - a) hδ
-  refine ⟨m, fun n hn => ?_⟩
-  rw [addNSMul]; rw [coe_projIcc]; rw [add_comm]; rw [min_eq_left_iff.mpr]; rw [max_eq_right h]
-  exact sub_le_iff_le_add.mp (hm.trans <| nsmul_le_nsmul_left hδ.le hn)
-
-中文:
-引理 addNSMul_eq_right
-  条件: [阿基米德 α] (hδ : 0 < δ)
-  证明: by
-  obtain ⟨m, hm⟩ := Archimedean.arch (b - a) hδ
-  refine ⟨m, fun n hn => ?_⟩
-  rw [addNSMul]; rw [coe_projIcc]; rw [add_comm]; rw [min_eq_left_iff.mpr]; rw [max_eq_right h]
-  exact sub_le_iff_le_add.mp (hm.trans <| nsmul_le_nsmul_left hδ.le hn)
-
-Depends on / 依赖: Archimedean, Archimedean.arch, addNSMul, add_comm, coe_projIcc, hm.trans, max_eq_right, min_eq_left_iff, min_eq_left_iff.mpr, nsmul_le_nsmul_left, sub_le_iff_le_add, sub_le_iff_le_add.mp
+  rw [addNSMul, zero_smul, add_zero, projIcc_left]
+/-
+**Set.Icc.addNSMul_eq_right** 是 Mathlib 中的一个引理，位于命名空间 `Set.Icc`。
+形式化陈述：addNSMul_eq_right [Archimedean α] (hδ : 0 < δ) : exists m, forall n >= m, 
+addNSMul h δ n = b
+参数：hδ : 0 < δ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Archimedean.arch`：∀ {R : Type u_2} {inst : AddCommMonoid R} {inst_1 : Pa
+rtialOrder R} [self : Archimedean R] (x : R) {y : R},   0 < y → ∃ n, x ≤ n • y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.Icc.addNSMul.eq_1`：∀ {α : Type u_1} [inst : AddCommGroup α] [inst_1 
+: LinearOrder α] {a b : α} (h : a ≤ b) (δ : α) (n : ℕ),   Set.Icc.addNSMul h δ n
+ = Set.proj…
+· 使用定理 `Set.coe_projIcc`：coe_projIcc (a b : α) (h : a <= b) (x : α) : (projIcc a
+ b h x : α) = max a (min b x)
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `min_eq_left_iff`：min_eq_left_iff : min a b = a ↔ a <= b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `sub_le_iff_le_add`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [A
+ddRightMono α] {a b c : α}, a - c ≤ b ↔ a ≤ b + c
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `nsmul_le_nsmul_left`：∀ {M : Type u_3} [inst : AddMonoid M] [inst_1 : Pre
+order M] [AddLeftMono M] {a : M} {n m : ℕ},   0 ≤ a → n ≤ m → n • a ≤ m • a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `max_eq_right`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, a ≤ b →
+ max a b = b
 -/
 lemma addNSMul_eq_right [Archimedean α] (hδ : 0 < δ) :
-    exists m, forall n >= m, addNSMul h δ n = b := by
+    ∃ m, ∀ n ≥ m, addNSMul h δ n = b := by
   obtain ⟨m, hm⟩ := Archimedean.arch (b - a) hδ
-  refine ⟨m, fun n hn => ?_⟩
-  rw [addNSMul]; rw [coe_projIcc]; rw [add_comm]; rw [min_eq_left_iff.mpr]; rw [max_eq_right h]
+  refine ⟨m, fun n hn ↦ ?_⟩
+  rw [addNSMul, coe_projIcc, add_comm, min_eq_left_iff.mpr, max_eq_right h]
   exact sub_le_iff_le_add.mp (hm.trans <| nsmul_le_nsmul_left hδ.le hn)
-
-/--
-lemma `monotone_addNSMul` / 引理 `monotone_addNSMul`
-
-English:
-lemma monotone_addNSMul
-  given: (hδ : 0 <= δ)
-  statement: Monotone (addNSMul h δ)
-  proof: fun _ _ hnm => monotone_projIcc h (add_le_add_iff_left _).mpr (nsmul_le_nsmul_left hδ hnm)
-
-中文:
-引理 monotone_addNSMul
-  条件: (hδ : 0 <= δ)
-  结论: 递增 (addNSMul h δ)
-  证明: fun _ _ hnm => monotone_projIcc h (add_le_add_iff_left _).mpr (nsmul_le_nsmul_left hδ hnm)
-
-Depends on / 依赖: add_le_add_iff_left, monotone_projIcc, nsmul_le_nsmul_left
+/-
+**Set.Icc.monotone_addNSMul** 是 Mathlib 中的一个引理，位于命名空间 `Set.Icc`。
+形式化陈述：monotone_addNSMul (hδ : 0 <= δ) : Monotone (addNSMul h δ)
+参数：hδ : 0 <= δ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.monotone_projIcc`：monotone_projIcc : Monotone (projIcc a b h)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `add_le_add_iff_left`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] [Ad
+dLeftMono α] [AddLeftReflectLE α] (a : α) {b c : α},   a + b ≤ a + c ↔ b ≤ c
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `nsmul_le_nsmul_left`：∀ {M : Type u_3} [inst : AddMonoid M] [inst_1 : Pre
+order M] [AddLeftMono M] {a : M} {n m : ℕ},   0 ≤ a → n ≤ m → n • a ≤ m • a
 -/
-lemma monotone_addNSMul (hδ : 0 <= δ) : Monotone (addNSMul h δ) :=
-fun _ _ hnm => monotone_projIcc h (add_le_add_iff_left _).mpr (nsmul_le_nsmul_left hδ hnm)
-
-/--
-lemma `abs_sub_addNSMul_le` / 引理 `abs_sub_addNSMul_le`
-
-English:
-lemma abs_sub_addNSMul_le
-  statement: (hδ : 0 <= δ) {t : Icc a b} (n : Nat)
-  proof: calc
-(|t - addNSMul h δ n| : α) = t - addNSMul h δ n := abs_eq_self.2 sub_nonneg.2 ht.1
-    _ <= projIcc a b h (a + (n + 1) • δ) - addNSMul h δ n := by apply sub_le_sub_right; exact ht.2
-    _ <= (|projIcc a b h (a + (n + 1) • δ) - addNSMul h δ n| : α) := le_abs_self _
-    _ <= |a + (n + 1) • δ - (a + n • δ)| := abs_projIcc_sub_projIcc h
-    _ <= δ := by
-          rw [add_sub_add_comm]; rw [sub_self]; rw [zero_add]; rw [succ_nsmul']; rw [add_sub_cancel_right]
-          exact (abs_eq_self.mpr hδ).le
-
-中文:
-引理 abs_sub_addNSMul_le
-  结论: (hδ : 0 <= δ) {t : 闭区间 a b} (n : 自然数)
-  证明: calc
-(|t - addNSMul h δ n| : α) = t - addNSMul h δ n := abs_eq_self.2 sub_nonneg.2 ht.1
-    _ <= projIcc a b h (a + (n + 1) • δ) - addNSMul h δ n := by apply sub_le_sub_right; exact ht.2
-    _ <= (|projIcc a b h (a + (n + 1) • δ) - addNSMul h δ n| : α) := le_abs_self _
-    _ <= |a + (n + 1) • δ - (a + n • δ)| := abs_projIcc_sub_projIcc h
-    _ <= δ := by
-          rw [add_sub_add_comm]; rw [sub_self]; rw [zero_add]; rw [succ_nsmul']; rw [add_sub_cancel_right]
-          exact (abs_eq_self.mpr hδ).le
-
-Depends on / 依赖: abs_eq_self, abs_eq_self.mpr, abs_projIcc_sub_projIcc, addNSMul, add_sub_add_comm, add_sub_cancel_right, le_abs_self, projIcc, sub_le_sub_right, sub_nonneg, sub_self, succ_nsmul, zero_add
+lemma monotone_addNSMul (hδ : 0 ≤ δ) : Monotone (addNSMul h δ) :=
+  fun _ _ hnm ↦ monotone_projIcc h <| (add_le_add_iff_left _).mpr (nsmul_le_nsmul_left hδ hnm)
+/-
+**Set.Icc.abs_sub_addNSMul_le** 是 Mathlib 中的一个引理，位于命名空间 `Set.Icc`。
+形式化陈述：abs_sub_addNSMul_le (hδ : 0 <= δ) {t : Icc a b} (n : Nat) (ht : t in Icc (
+addNSMul h δ n) (addNSMul h δ (n + 1))) : (|t - addNSMul h δ n| : α) <= δ
+参数：hδ : 0 <= δ；n : Nat；ht : t in Icc (addNSMul h δ n) (addNSMul h δ (n + 1))。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `abs_eq_self`：∀ {G : Type u_1} [inst : AddCommGroup G] [inst_1 : LinearOr
+der G] [IsOrderedAddMonoid G] {a : G}, |a| = a ↔ 0 ≤ a
+· 使用定理 `sub_nonneg`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [AddRight
+Mono α] {a b : α}, 0 ≤ a - b ↔ b ≤ a
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `sub_le_sub_right`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [Ad
+dRightMono α] {a b : α}, a ≤ b → ∀ (c : α), a - c ≤ b - c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `le_abs_self`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] (
+a : α), a ≤ |a|
+· 使用定理 `Set.abs_projIcc_sub_projIcc`：∀ {α : Type u_1} [inst : AddCommGroup α] [i
+nst_1 : LinearOrder α] [IsOrderedAddMonoid α] {a b c d : α} (h : a ≤ b),   |↑(Se
+t.projIcc a b h c…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_sub_add_comm`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b
+ c d : α), a + b - (c + d) = a - c + (b - d)
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `succ_nsmul'`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M) (n : ℕ), (n +
+ 1) • a = a + n • a
+· 使用定理 `add_sub_cancel_right`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a 
++ b - b = a
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
 -/
-lemma abs_sub_addNSMul_le (hδ : 0 <= δ) {t : Icc a b} (n : Nat)
-    (ht : t in Icc (addNSMul h δ n) (addNSMul h δ (n + 1))) :
-    (|t - addNSMul h δ n| : α) <= δ :=
+lemma abs_sub_addNSMul_le (hδ : 0 ≤ δ) {t : Icc a b} (n : ℕ)
+    (ht : t ∈ Icc (addNSMul h δ n) (addNSMul h δ (n + 1))) :
+    (|t - addNSMul h δ n| : α) ≤ δ :=
   calc
-(|t - addNSMul h δ n| : α) = t - addNSMul h δ n := abs_eq_self.2 sub_nonneg.2 ht.1
-    _ <= projIcc a b h (a + (n + 1) • δ) - addNSMul h δ n := by apply sub_le_sub_right; exact ht.2
-    _ <= (|projIcc a b h (a + (n + 1) • δ) - addNSMul h δ n| : α) := le_abs_self _
-    _ <= |a + (n + 1) • δ - (a + n • δ)| := abs_projIcc_sub_projIcc h
-    _ <= δ := by
-          rw [add_sub_add_comm]; rw [sub_self]; rw [zero_add]; rw [succ_nsmul']; rw [add_sub_cancel_right]
+    (|t - addNSMul h δ n| : α) = t - addNSMul h δ n := abs_eq_self.2 <| sub_nonneg.2 ht.1
+    _ ≤ projIcc a b h (a + (n + 1) • δ) - addNSMul h δ n := by apply sub_le_sub_right; exact ht.2
+    _ ≤ (|projIcc a b h (a + (n + 1) • δ) - addNSMul h δ n| : α) := le_abs_self _
+    _ ≤ |a + (n + 1) • δ - (a + n • δ)| := abs_projIcc_sub_projIcc h
+    _ ≤ δ := by
+          rw [add_sub_add_comm, sub_self, zero_add, succ_nsmul', add_sub_cancel_right]
           exact (abs_eq_self.mpr hδ).le
 
 /--
-Definition of `convexComb` / `convexComb` 的定义
+Form a convex linear combination of two points in a closed interval.
 
-English:
-definition convexComb
-  signature: {a b : Real} (x y : Icc a b) (t : unitInterval)
-  body: ⟨(1 - t) * x + t * y, by
-    constructor
-    · nlinarith [x.2.1, y.2.1, t.2.1, t.2.2]
-    · nlinarith [x.2.2, y.2.2, t.2.1, t.2.2]⟩
-
-@[simp, grind =]
-
-中文:
-定义 convexComb
-  签名: {a b : 实数} (x y : 闭区间 a b) (t : unit整数erval)
-  定义体: ⟨(1 - t) * x + t * y, by
-    constructor
-    · nlinarith [x.2.1, y.2.1, t.2.1, t.2.2]
-    · nlinarith [x.2.2, y.2.2, t.2.1, t.2.2]⟩
-
-@[simp, grind =]
+This should be removed once a general theory of convex spaces is available in Mathlib.
 -/
-def convexComb {a b : Real} (x y : Icc a b) (t : unitInterval) : Icc a b :=
+/-
+**Set.Icc.convexComb** 是 Mathlib 中的一个定义，位于命名空间 `Set.Icc`。
+形式化陈述：convexComb {a b : Real} (x y : Icc a b) (t : unitInterval) : Icc a b
+参数：x y : Icc a b；t : unitInterval。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Form a convex linear combination of two points in a closed interval.
+
+This should be removed once a general theory of convex spaces is available in Ma
+thlib.
+-/
+def convexComb {a b : ℝ} (x y : Icc a b) (t : unitInterval) : Icc a b :=
   ⟨(1 - t) * x + t * y, by
     constructor
     · nlinarith [x.2.1, y.2.1, t.2.1, t.2.2]
     · nlinarith [x.2.2, y.2.2, t.2.1, t.2.2]⟩
 
 @[simp, grind =]
-/--
-theorem `coe_convexComb` / 定理 `coe_convexComb`
-
-English:
-theorem coe_convexComb
-  given: {a b : Real} (x y : Icc a b) (t : unitInterval)
-  proof: rfl
-
-@[simp, grind =]
-
-中文:
-定理 coe_convexComb
-  条件: {a b : 实数} (x y : 闭区间 a b) (t : unit整数erval)
-  证明: rfl
-
-@[simp, grind =]
+/-
+**Set.Icc.coe_convexComb** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：coe_convexComb {a b : Real} (x y : Icc a b) (t : unitInterval) : (convexCo
+mb x y t : Real) = (1 - t) * x + t * y
+参数：x y : Icc a b；t : unitInterval。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_convexComb {a b : Real} (x y : Icc a b) (t : unitInterval) :
-  (convexComb x y t : Real) = (1 - t) * x + t * y := rfl
+theorem coe_convexComb {a b : ℝ} (x y : Icc a b) (t : unitInterval) :
+  (convexComb x y t : ℝ) = (1 - t) * x + t * y := rfl
 
 @[simp, grind =]
-/--
-theorem `convexComb_zero` / 定理 `convexComb_zero`
-
-English:
-theorem convexComb_zero
-  given: {a b : Real} (x y : Icc a b)
-  statement: convexComb x y 0 = x
-  proof: by
-  simp [convexComb]
-
-@[simp, grind =]
-
-中文:
-定理 convexComb_zero
-  条件: {a b : 实数} (x y : 闭区间 a b)
-  结论: convexComb x y 0 = x
-  证明: by
-  simp [convexComb]
-
-@[simp, grind =]
-
-Depends on / 依赖: convexComb
+/-
+**Set.Icc.convexComb_zero** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：convexComb_zero {a b : Real} (x y : Icc a b) : convexComb x y 0 = x
+参数：x y : Icc a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `Subtype.coe_eta`：coe_eta (a : { a // p a }) (h : p a) : mk (↑a) h = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem convexComb_zero {a b : Real} (x y : Icc a b) : convexComb x y 0 = x := by
+theorem convexComb_zero {a b : ℝ} (x y : Icc a b) : convexComb x y 0 = x := by
   simp [convexComb]
 
 @[simp, grind =]
-/--
-theorem `convexComb_one` / 定理 `convexComb_one`
-
-English:
-theorem convexComb_one
-  given: {a b : Real} (x y : Icc a b)
-  statement: convexComb x y 1 = y
-  proof: by
-  simp [convexComb]
-
-@[simp, grind =]
-
-中文:
-定理 convexComb_one
-  条件: {a b : 实数} (x y : 闭区间 a b)
-  结论: convexComb x y 1 = y
-  证明: by
-  simp [convexComb]
-
-@[simp, grind =]
-
-Depends on / 依赖: convexComb
+/-
+**Set.Icc.convexComb_one** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：convexComb_one {a b : Real} (x y : Icc a b) : convexComb x y 1 = y
+参数：x y : Icc a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `Subtype.coe_eta`：coe_eta (a : { a // p a }) (h : p a) : mk (↑a) h = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem convexComb_one {a b : Real} (x y : Icc a b) : convexComb x y 1 = y := by
+theorem convexComb_one {a b : ℝ} (x y : Icc a b) : convexComb x y 1 = y := by
   simp [convexComb]
 
 @[simp, grind =]
-/--
-theorem `convexComb_zero_one` / 定理 `convexComb_zero_one`
-
-English:
-theorem convexComb_zero_one
-  given: (t : unitInterval)
-  statement: convexComb 0 1 t = t
-  proof: by
-  simp [convexComb]
-
-@[simp, grind =]
-
-中文:
-定理 convexComb_zero_one
-  条件: (t : unit整数erval)
-  结论: convexComb 0 1 t = t
-  证明: by
-  simp [convexComb]
-
-@[simp, grind =]
-
-Depends on / 依赖: convexComb
+/-
+**Set.Icc.convexComb_zero_one** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：convexComb_zero_one (t : unitInterval) : convexComb 0 1 t = t
+参数：t : unitInterval。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `Subtype.coe_eta`：coe_eta (a : { a // p a }) (h : p a) : mk (↑a) h = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem convexComb_zero_one (t : unitInterval) : convexComb 0 1 t = t := by
   simp [convexComb]
 
 @[simp, grind =]
-/--
-theorem `convexComb_eq` / 定理 `convexComb_eq`
-
-English:
-theorem convexComb_eq
-  given: {a b : Real} (x : Icc a b) (t : unitInterval)
-  statement: convexComb x x t = x
-  proof: by
-  simp [convexComb, sub_mul]
-
-@[simp, grind =]
-
-中文:
-定理 convexComb_eq
-  条件: {a b : 实数} (x : 闭区间 a b) (t : unit整数erval)
-  结论: convexComb x x t = x
-  证明: by
-  simp [convexComb, sub_mul]
-
-@[simp, grind =]
-
-Depends on / 依赖: convexComb, sub_mul
+/-
+**Set.Icc.convexComb_eq** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：convexComb_eq {a b : Real} (x : Icc a b) (t : unitInterval) : convexComb x
+ x t = x
+参数：x : Icc a b；t : unitInterval。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_mul`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), (a
+ - b) * c = a * c - b * c
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `Subtype.coe_eta`：coe_eta (a : { a // p a }) (h : p a) : mk (↑a) h = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem convexComb_eq {a b : Real} (x : Icc a b) (t : unitInterval) : convexComb x x t = x := by
+theorem convexComb_eq {a b : ℝ} (x : Icc a b) (t : unitInterval) : convexComb x x t = x := by
   simp [convexComb, sub_mul]
 
 @[simp, grind =]
-/--
-theorem `convexComb_symm` / 定理 `convexComb_symm`
-
-English:
-theorem convexComb_symm
-  given: {a b : Real} (x y : Icc a b) (t : unitInterval)
-  proof: by
-  simp [convexComb]
-  abel
-
-@[grind .]
-
-中文:
-定理 convexComb_symm
-  条件: {a b : 实数} (x y : 闭区间 a b) (t : unit整数erval)
-  证明: by
-  simp [convexComb]
-  abel
-
-@[grind .]
-
-Depends on / 依赖: convexComb
+/-
+**Set.Icc.convexComb_symm** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：convexComb_symm {a b : Real} (x y : Icc a b) (t : unitInterval) : convexCo
+mb x y (unitInterval.symm t) = convexComb y x t
+参数：x y : Icc a b；t : unitInterval。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G), a - 
+(a - b) = b
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `Subtype.mk.injEq`：∀ {α : Sort u} {p : α → Prop} (val : α) (property : p 
+val) (val_1 : α) (property_1 : p val_1),   (⟨val, property⟩ = ⟨val_1, property_1
+⟩) = (…
+· 使用定理 `_private.Mathlib.Topology.UnitInterval.0.Set.Icc.convexComb_symm._abel_1
+_2`：∀ {a b : ℝ} (x y : ↑(Set.Icc a b)) (t : ↑unitInterval), ↑t * ↑x + (1 - ↑t) *
+ ↑y = (1 - ↑t) * ↑y + ↑t * ↑x
 -/
-theorem convexComb_symm {a b : Real} (x y : Icc a b) (t : unitInterval) :
+theorem convexComb_symm {a b : ℝ} (x y : Icc a b) (t : unitInterval) :
     convexComb x y (unitInterval.symm t) = convexComb y x t := by
   simp [convexComb]
   abel
 
 @[grind .]
-/--
-theorem `le_convexComb` / 定理 `le_convexComb`
-
-English:
-theorem le_convexComb
-  given: {a b : Real} {x y : Icc a b} (h : x <= y) (t : unitInterval)
-  proof: by
+/-
+**Set.Icc.le_convexComb** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：le_convexComb {a b : Real} {x y : Icc a b} (h : x <= y) (t : unitInterval)
+ : x <= convexComb x y t
+参数：h : x <= y；t : unitInterval。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subtype.coe_le_coe`：coe_le_coe [LE α] {p : α -> Prop} {x y : Subtype p} 
+: (x : α) <= y ↔ x <= y
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.cast_pos`：∀ {R : Type u_1} [inst : CommSemiring R] {
+a : R} {n : ℕ}, Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast + 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_pf`：∀ {R : Type u_2} [inst : CommRing R] 
+{a b c d : R}, -b = c → a + c = d → a - b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_mul`：∀ {R : Type u_2} [inst : CommRing R]
+ (a₁ : R) (a₂ : ℕ) {a₃ b : R}, -a₃ = b → -(a₁ ^ a₂ * a₃) = a₁ ^ a₂ * b
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_lt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a₂ b c : R} (a₁ : R), a₂ + b = c → a₁ + a₂ + b = a₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+（共 57 条，此处仅展示前 30 条）
+-/
+theorem le_convexComb {a b : ℝ} {x y : Icc a b} (h : x ≤ y) (t : unitInterval) :
+    x ≤ convexComb x y t := by
   rw [← Subtype.coe_le_coe] at h ⊢
   simp
   nlinarith [t.2.1, t.2.2]
 
 @[grind .]
-
-中文:
-定理 le_convexComb
-  条件: {a b : 实数} {x y : 闭区间 a b} (h : x <= y) (t : unit整数erval)
-  证明: by
-  rw [← Subtype.coe_le_coe] at h ⊢
-  simp
-  nlinarith [t.2.1, t.2.2]
-
-@[grind .]
-
-Depends on / 依赖: Subtype, Subtype.coe_le_coe, coe_le_coe
+/-
+**Set.Icc.convexComb_le** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：convexComb_le {a b : Real} {x y : Icc a b} (h : x <= y) (t : unitInterval)
+ : convexComb x y t <= y
+参数：h : x <= y；t : unitInterval。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subtype.coe_le_coe`：coe_le_coe [LE α] {p : α -> Prop} {x y : Subtype p} 
+: (x : α) <= y ↔ x <= y
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.cast_pos`：∀ {R : Type u_1} [inst : CommSemiring R] {
+a : R} {n : ℕ}, Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast + 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_pf`：∀ {R : Type u_2} [inst : CommRing R] 
+{a b c d : R}, -b = c → a + c = d → a - b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_mul`：∀ {R : Type u_2} [inst : CommRing R]
+ (a₁ : R) (a₂ : ℕ) {a₃ b : R}, -a₃ = b → -(a₁ ^ a₂ * a₃) = a₁ ^ a₂ * b
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_lt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a₂ b c : R} (a₁ : R), a₂ + b = c → a₁ + a₂ + b = a₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+（共 57 条，此处仅展示前 30 条）
 -/
-theorem le_convexComb {a b : Real} {x y : Icc a b} (h : x <= y) (t : unitInterval) :
-    x <= convexComb x y t := by
-  rw [← Subtype.coe_le_coe] at h ⊢
-  simp
-  nlinarith [t.2.1, t.2.2]
-
-@[grind .]
-/--
-theorem `convexComb_le` / 定理 `convexComb_le`
-
-English:
-theorem convexComb_le
-  given: {a b : Real} {x y : Icc a b} (h : x <= y) (t : unitInterval)
-  proof: by
+theorem convexComb_le {a b : ℝ} {x y : Icc a b} (h : x ≤ y) (t : unitInterval) :
+    convexComb x y t ≤ y := by
   rw [← Subtype.coe_le_coe] at h ⊢
   simp
   nlinarith [t.2.1, t.2.2]
 
 @[continuity, fun_prop]
-
-中文:
-定理 convexComb_le
-  条件: {a b : 实数} {x y : 闭区间 a b} (h : x <= y) (t : unit整数erval)
-  证明: by
-  rw [← Subtype.coe_le_coe] at h ⊢
-  simp
-  nlinarith [t.2.1, t.2.2]
-
-@[continuity, fun_prop]
-
-Depends on / 依赖: Subtype, Subtype.coe_le_coe, coe_le_coe
+/-
+**Set.Icc.continuous_convexComb** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：continuous_convexComb {a b : Real} (x y : Icc a b) : Continuous (convexCom
+b x y)
+参数：x y : Icc a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.subtype_mk`：Continuous.subtype_mk {f : Y -> X} (h : Continuou
+s f) (hp : forall x, p (f x)) : Continuous fun x => (⟨f x, hp x⟩ : Subtype p)
+· 使用定理 `Continuous.comp'`：Continuous.comp' {g : Y -> Z} (hg : Continuous g) (hf 
+: Continuous f) : Continuous (fun x => g (f x))
+· 使用定理 `continuous_add`：continuous_add : Continuous (fun x : X × X ↦ x.1 + x.2)
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `Continuous.prodMk`：Continuous.prodMk {f : Z -> X} {g : Z -> Y} (hf : Con
+tinuous f) (hg : Continuous g) : Continuous fun x => (f x, g x)
+· 使用定理 `Continuous.mul_const`：Continuous.mul_const (hf : Continuous f) (b : M) :
+ Continuous (f · * b)
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `Continuous.fun_sub`：∀ {G : Type u_1} {X : Type u_3} [inst : TopologicalS
+pace X] [inst_1 : TopologicalSpace G] [inst_2 : Sub G]   [ContinuousSub G] {f g 
+: X → G}…
+· 使用定理 `IsTopologicalAddGroup.to_continuousSub`：∀ {G : Type u} [inst : Topologic
+alSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G], ContinuousSub G
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
+· 使用定理 `continuous_subtype_val`：continuous_subtype_val : Continuous (@Subtype.va
+l X p)
 -/
-theorem convexComb_le {a b : Real} {x y : Icc a b} (h : x <= y) (t : unitInterval) :
-    convexComb x y t <= y := by
-  rw [← Subtype.coe_le_coe] at h ⊢
-  simp
-  nlinarith [t.2.1, t.2.2]
-
-@[continuity, fun_prop]
-/--
-theorem `continuous_convexComb` / 定理 `continuous_convexComb`
-
-English:
-theorem continuous_convexComb
-  given: {a b : Real} (x y : Icc a b)
-  statement: Continuous (convexComb x y)
-  proof: by
+theorem continuous_convexComb {a b : ℝ} (x y : Icc a b) : Continuous (convexComb x y) := by
   unfold Icc.convexComb
   fun_prop
 
 @[continuity, fun_prop]
-
-中文:
-定理 continuous_convexComb
-  条件: {a b : 实数} (x y : 闭区间 a b)
-  结论: 连续 (convexComb x y)
-  证明: by
-  unfold Icc.convexComb
-  fun_prop
-
-@[continuity, fun_prop]
-
-Depends on / 依赖: Icc.convexComb, convexComb, fun_prop
+/-
+**Set.Icc.continuous_convexComb_prod** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：continuous_convexComb_prod {a b : Real} : Continuous fun x : Icc a b × Icc
+ a b × unitInterval => Icc.convexComb x.1 x.2.1 x.2.2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.subtype_mk`：Continuous.subtype_mk {f : Y -> X} (h : Continuou
+s f) (hp : forall x, p (f x)) : Continuous fun x => (⟨f x, hp x⟩ : Subtype p)
+· 使用定理 `Continuous.comp'`：Continuous.comp' {g : Y -> Z} (hg : Continuous g) (hf 
+: Continuous f) : Continuous (fun x => g (f x))
+· 使用定理 `continuous_add`：continuous_add : Continuous (fun x : X × X ↦ x.1 + x.2)
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `Continuous.prodMk`：Continuous.prodMk {f : Z -> X} {g : Z -> Y} (hf : Con
+tinuous f) (hg : Continuous g) : Continuous fun x => (f x, g x)
+· 使用定理 `continuous_mul`：continuous_mul : Continuous fun p : M × M => p.1 * p.2
+· 使用定理 `IsTopologicalSemiring.toContinuousMul`：∀ {R : Type u_1} {inst : Topologi
+calSpace R} {inst_1 : NonUnitalNonAssocSemiring R} [self : IsTopologicalSemiring
+ R],   ContinuousMul R
+· 使用定理 `IsTopologicalRing.toIsTopologicalSemiring`：∀ {R : Type u_1} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsTopologicalRing R],
+   IsTopologicalSemiring R
+· 使用定理 `Continuous.fun_sub`：∀ {G : Type u_1} {X : Type u_3} [inst : TopologicalS
+pace X] [inst_1 : TopologicalSpace G] [inst_2 : Sub G]   [ContinuousSub G] {f g 
+: X → G}…
+· 使用定理 `IsTopologicalAddGroup.to_continuousSub`：∀ {G : Type u} [inst : Topologic
+alSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G], ContinuousSub G
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
+· 使用定理 `continuous_subtype_val`：continuous_subtype_val : Continuous (@Subtype.va
+l X p)
+· 使用定理 `Continuous.snd`：Continuous.snd {f : X -> Y × Z} (hf : Continuous f) : Co
+ntinuous fun x : X => (f x).2
+· 使用定理 `continuous_id'`：continuous_id' : Continuous (fun (x : X) => x)
+· 使用定理 `Continuous.fst`：Continuous.fst {f : X -> Y × Z} (hf : Continuous f) : Co
+ntinuous fun x : X => (f x).1
 -/
-theorem continuous_convexComb {a b : Real} (x y : Icc a b) : Continuous (convexComb x y) := by
+theorem continuous_convexComb_prod {a b : ℝ} :
+    Continuous fun x : Icc a b × Icc a b × unitInterval ↦ Icc.convexComb x.1 x.2.1 x.2.2 := by
   unfold Icc.convexComb
   fun_prop
 
-@[continuity, fun_prop]
 /--
-theorem `continuous_convexComb_prod` / 定理 `continuous_convexComb_prod`
-
-English:
-theorem continuous_convexComb_prod
-  given: {a b : Real}
-  proof: by
-  unfold Icc.convexComb
-  fun_prop
-
-中文:
-定理 continuous_convexComb_prod
-  条件: {a b : 实数}
-  证明: by
-  unfold Icc.convexComb
-  fun_prop
-
-Depends on / 依赖: Icc.convexComb, convexComb, fun_prop
+Helper definition for `convexComb_assoc`, giving one of the coefficients appearing
+when we reassociate a convex combination.
 -/
-theorem continuous_convexComb_prod {a b : Real} :
-    Continuous fun x : Icc a b × Icc a b × unitInterval => Icc.convexComb x.1 x.2.1 x.2.2 := by
-  unfold Icc.convexComb
-  fun_prop
+/-
+**Set.Icc.convexComb_assoc_coeff** 是 Mathlib 中的一个缩写定义，位于命名空间 `Set.Icc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-Definition of `convexComb_assoc_coeff₁` / `convexComb_assoc_coeff₁` 的定义
-
-English:
-abbreviation convexComb_assoc_coeff₁
-  signature: (s t : unitInterval)
-  body: ⟨s * (1 - t) / (1 - s * t),
-    by
-      apply div_nonneg
-      · nlinarith [s.2.1, t.2.2]
-      · nlinarith [s.2.2, t.2.2, t.2.1],
-    by
-      apply div_le_one_of_le₀
-      · nlinarith [s.2.2]
-      · nlinarith [s.2.2, t.2.2, t.2.1]⟩
-
-中文:
-缩写 convexComb_assoc_coeff₁
-  签名: (s t : unit整数erval)
-  定义体: ⟨s * (1 - t) / (1 - s * t),
-    by
-      apply div_nonneg
-      · nlinarith [s.2.1, t.2.2]
-      · nlinarith [s.2.2, t.2.2, t.2.1],
-    by
-      apply div_le_one_of_le₀
-      · nlinarith [s.2.2]
-      · nlinarith [s.2.2, t.2.2, t.2.1]⟩
-
-Depends on / 依赖: div_nonneg
+--- 原说明 ---
+Helper definition for `convexComb_assoc`, giving one of the coefficients appeari
+ng
+when we reassociate a convex combination.
 -/
 abbrev convexComb_assoc_coeff₁ (s t : unitInterval) : unitInterval :=
   ⟨s * (1 - t) / (1 - s * t),
@@ -1840,258 +1768,282 @@ abbrev convexComb_assoc_coeff₁ (s t : unitInterval) : unitInterval :=
       · nlinarith [s.2.2, t.2.2, t.2.1]⟩
 
 /--
-Definition of `convexComb_assoc_coeff₂` / `convexComb_assoc_coeff₂` 的定义
+Helper definition for `convexComb_assoc`, giving one of the coefficients appearing
+when we reassociate a convex combination.
+-/
+/-
+**Set.Icc.convexComb_assoc_coeff** 是 Mathlib 中的一个缩写定义，位于命名空间 `Set.Icc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation convexComb_assoc_coeff₂
-  signature: (s t : unitInterval)
-  body: s * t
-
-中文:
-缩写 convexComb_assoc_coeff₂
-  签名: (s t : unit整数erval)
-  定义体: s * t
+--- 原说明 ---
+Helper definition for `convexComb_assoc`, giving one of the coefficients appeari
+ng
+when we reassociate a convex combination.
 -/
 abbrev convexComb_assoc_coeff₂ (s t : unitInterval) : unitInterval := s * t
-
-/--
-theorem `convexComb_assoc` / 定理 `convexComb_assoc`
-
-English:
-theorem convexComb_assoc
-  given: {a b : Real} (x y z : Icc a b) (s t : unitInterval)
-  proof: by
-  simp only [convexComb, coe_mul, Subtype.mk.injEq]
-  by_cases hs : (s : Real) = 1
-  · simp only [hs]
-    by_cases ht : (t : Real) = 1
-    · simp [ht]
-    · have : (1 - t : Real) != 0 := by grind
-      field_simp
-      simp
-  · by_cases ht : (t : Real) = 1
-    · simp [ht]
-    · have : (1 - s * t : Real) != 0 := by
-        intro h
-        have : 1 <= (t : Real) := by nlinarith [s.2.2, t.2.1]
-        grind
-      field_simp
-      ring_nf
-
-中文:
-定理 convexComb_assoc
-  条件: {a b : 实数} (x y z : 闭区间 a b) (s t : unit整数erval)
-  证明: by
-  simp only [convexComb, coe_mul, Subtype.mk.injEq]
-  by_cases hs : (s : Real) = 1
-  · simp only [hs]
-    by_cases ht : (t : Real) = 1
-    · simp [ht]
-    · have : (1 - t : Real) != 0 := by grind
-      field_simp
-      simp
-  · by_cases ht : (t : Real) = 1
-    · simp [ht]
-    · have : (1 - s * t : Real) != 0 := by
-        intro h
-        have : 1 <= (t : Real) := by nlinarith [s.2.2, t.2.1]
-        grind
-      field_simp
-      ring_nf
-
-Depends on / 依赖: Subtype, Subtype.mk.injEq, coe_mul, convexComb, ring_nf
+/-
+**Set.Icc.convexComb_assoc** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：convexComb_assoc {a b : Real} (x y z : Icc a b) (s t : unitInterval) : con
+vexComb x (convexComb y z t) s = convexComb (convexComb x y (convexComb_assoc_co
+eff₁ s t)) z (convexComb_assoc_coeff₂ s t)
+参数：x y z : Icc a b；s t : unitInterval。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.mk.injEq`：∀ {α : Sort u} {p : α → Prop} (val : α) (property : p 
+val) (val_1 : α) (property_1 : p val_1),   (⟨val, property⟩ = ⟨val_1, property_1
+⟩) = (…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `div_zero`：div_zero (a : G₀) : a / 0 = 0
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_eq_cancel_eq`：eq_eq_cancel_eq {M : Type*} [M
+onoidWithZero M] [IsLeftCancelMulZero M] {e₁ e₂ f₁ f₂ L : M} (H₁ : e₁ = L * f₁) 
+(H₂ : e₂ = L * f₂) (HL : L != …
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `instIsCancelMulZero`：∀ {G₀ : Type u_2} [inst : GroupWithZero G₀], IsCanc
+elMulZero G₀
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_mul_of_eq_eq_eq_mul`：eq_mul_of_eq_eq_eq_mul 
+{M : Type*} [Mul M] {a b c D e f : M} (h₁ : a = b) (h₂ : b = c) (h₃ : c = D * e)
+ (h₄ : e = f) : a = D * f
+· 使用定理 `Mathlib.Tactic.FieldSimp.subst_add`：subst_add {M : Type*} [Semiring M] {
+x₁ x₂ X₁ X₂ Y y a : M} (h₁ : x₁ = a * X₁) (h₂ : x₂ = a * X₂) (H_atom : X₁ + X₂ =
+ Y) (hy : a * Y = y) : x…
+· 使用定理 `congr_arg₂`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} (f : α → β → 
+γ) {x x' : α} {y y' : β}, x = x' → y = y' → f x y = f x' y'
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.mul_eq_eval`：mul_eq_eval [GroupWithZero M] {
+l₁ l₂ l : NF M} {x₁ x₂ : M} (hx₁ : x₁ = l₁.eval) (hx₂ : x₂ = l₂.eval) (h : l₁.ev
+al * l₂.eval = l.eval) : x₁ *…
+· 使用定理 `Mathlib.Tactic.FieldSimp.subst_sub`：subst_sub {M : Type*} [Ring M] {x₁ x
+₂ X₁ X₂ Y y a : M} (h₁ : x₁ = a * X₁) (h₂ : x₂ = a * X₂) (H_atom : X₁ - X₂ = Y) 
+(hy : a * Y = y) : x₁ - …
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.one_eq_eval`：one_eq_eval [GroupWithZero M] :
+ (1:M) = NF.eval (M
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.eq_div_of_eq_one_of_subst`：eq_div_of_eq_one_of_
+subst {M : Type*} [DivInvOneMonoid M] {l l_n n : M} (h : l = l_n / 1) (hn : l_n 
+= n) : l = n
+· 使用定理 `div_one`：div_one (a : G) : a / 1 = a
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.atom_eq_eval`：atom_eq_eval [GroupWithZero M]
+ (x : M) : x = NF.eval [(1, x)]
+· 使用定理 `Mathlib.Tactic.FieldSimp.NF.mul_eq_eval₃`：mul_eq_eval₃ [CommGroupWithZer
+o M] {a₁ : Int × M} (a₂ : Int × M) {l₁ l₂ l : NF M} (h : (a₁ ::ᵣ l₁).eval * l₂.e
+val = l.eval) : (a₁ ::ᵣ l₁).ev…
+（共 112 条，此处仅展示前 30 条）
 -/
-theorem convexComb_assoc {a b : Real} (x y z : Icc a b) (s t : unitInterval) :
+theorem convexComb_assoc {a b : ℝ} (x y z : Icc a b) (s t : unitInterval) :
     convexComb x (convexComb y z t) s =
       convexComb (convexComb x y (convexComb_assoc_coeff₁ s t)) z
         (convexComb_assoc_coeff₂ s t) := by
   simp only [convexComb, coe_mul, Subtype.mk.injEq]
-  by_cases hs : (s : Real) = 1
+  by_cases hs : (s : ℝ) = 1
   · simp only [hs]
-    by_cases ht : (t : Real) = 1
+    by_cases ht : (t : ℝ) = 1
     · simp [ht]
-    · have : (1 - t : Real) != 0 := by grind
+    · have : (1 - t : ℝ) ≠ 0 := by grind
       field_simp
       simp
-  · by_cases ht : (t : Real) = 1
+  · by_cases ht : (t : ℝ) = 1
     · simp [ht]
-    · have : (1 - s * t : Real) != 0 := by
+    · have : (1 - s * t : ℝ) ≠ 0 := by
         intro h
-        have : 1 <= (t : Real) := by nlinarith [s.2.2, t.2.1]
+        have : 1 ≤ (t : ℝ) := by nlinarith [s.2.2, t.2.1]
         grind
       field_simp
       ring_nf
 
 /--
-Definition of `convexComb_assoc_coeff₁'` / `convexComb_assoc_coeff₁'` 的定义
+Helper definition for `convexComb_assoc'`, giving one of the coefficients appearing
+when we reassociate a convex combination in the reverse direction.
+-/
+/-
+**Set.Icc.convexComb_assoc_coeff** 是 Mathlib 中的一个缩写定义，位于命名空间 `Set.Icc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation convexComb_assoc_coeff₁'
-  signature: (s t : unitInterval)
-  body: unitInterval.symm (convexComb_assoc_coeff₂ (unitInterval.symm t) (unitInterval.symm s))
-
-中文:
-缩写 convexComb_assoc_coeff₁'
-  签名: (s t : unit整数erval)
-  定义体: unitInterval.symm (convexComb_assoc_coeff₂ (unitInterval.symm t) (unitInterval.symm s))
-
-Depends on / 依赖: unitInterval, unitInterval.symm
+--- 原说明 ---
+Helper definition for `convexComb_assoc'`, giving one of the coefficients appear
+ing
+when we reassociate a convex combination in the reverse direction.
 -/
 abbrev convexComb_assoc_coeff₁' (s t : unitInterval) : unitInterval :=
   unitInterval.symm (convexComb_assoc_coeff₂ (unitInterval.symm t) (unitInterval.symm s))
 
 /--
-Definition of `convexComb_assoc_coeff₂'` / `convexComb_assoc_coeff₂'` 的定义
+Helper definition for `convexComb_assoc'`, giving one of the coefficients appearing
+when we reassociate a convex combination in the reverse direction.
+-/
+/-
+**Set.Icc.convexComb_assoc_coeff** 是 Mathlib 中的一个缩写定义，位于命名空间 `Set.Icc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation convexComb_assoc_coeff₂'
-  signature: (s t : unitInterval)
-  body: unitInterval.symm (convexComb_assoc_coeff₁ (unitInterval.symm t) (unitInterval.symm s))
-
-中文:
-缩写 convexComb_assoc_coeff₂'
-  签名: (s t : unit整数erval)
-  定义体: unitInterval.symm (convexComb_assoc_coeff₁ (unitInterval.symm t) (unitInterval.symm s))
-
-Depends on / 依赖: unitInterval, unitInterval.symm
+--- 原说明 ---
+Helper definition for `convexComb_assoc'`, giving one of the coefficients appear
+ing
+when we reassociate a convex combination in the reverse direction.
 -/
 abbrev convexComb_assoc_coeff₂' (s t : unitInterval) : unitInterval :=
   unitInterval.symm (convexComb_assoc_coeff₁ (unitInterval.symm t) (unitInterval.symm s))
-
-/--
-theorem `convexComb_assoc'` / 定理 `convexComb_assoc'`
-
-English:
-theorem convexComb_assoc'
-  given: {a b : Real} (x y z : Icc a b) (s t : unitInterval)
-  proof: by
-  rw [← convexComb_symm]; rw [← convexComb_symm y x]; rw [convexComb_assoc]; rw [← convexComb_symm x]; rw [← convexComb_symm z y]
-  rw [convexComb_assoc_coeff₁']; rw [convexComb_assoc_coeff₂']; rw [unitInterval.symm_symm]
-
-中文:
-定理 convexComb_assoc'
-  条件: {a b : 实数} (x y z : 闭区间 a b) (s t : unit整数erval)
-  证明: by
-  rw [← convexComb_symm]; rw [← convexComb_symm y x]; rw [convexComb_assoc]; rw [← convexComb_symm x]; rw [← convexComb_symm z y]
-  rw [convexComb_assoc_coeff₁']; rw [convexComb_assoc_coeff₂']; rw [unitInterval.symm_symm]
-
-Depends on / 依赖: convexComb_assoc, convexComb_symm, symm_symm, unitInterval, unitInterval.symm_symm
+/-
+**Set.Icc.convexComb_assoc'** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：convexComb_assoc' {a b : Real} (x y z : Icc a b) (s t : unitInterval) : co
+nvexComb (convexComb x y s) z t = convexComb x (convexComb y z (convexComb_assoc
+_coeff₂' s t)) (convexComb_assoc_coeff₁' s t)
+参数：x y z : Icc a b；s t : unitInterval。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.Icc.convexComb_symm`：convexComb_symm {a b : Real} (x y : Icc a b) (t
+ : unitInterval) : convexComb x y (unitInterval.symm t) = convexComb y x t
+· 使用定理 `Set.Icc.convexComb_assoc`：convexComb_assoc {a b : Real} (x y z : Icc a b
+) (s t : unitInterval) : convexComb x (convexComb y z t) s = convexComb (convexC
+omb x y (conve…
+· 使用定理 `Set.Icc.convexComb_assoc_coeff₁'.eq_1`：∀ (s t : ↑unitInterval),   Set.Ic
+c.convexComb_assoc_coeff₁' s t =     unitInterval.symm (Set.Icc.convexComb_assoc
+_coeff₂ (unitInterval.symm …
+· 使用定理 `Set.Icc.convexComb_assoc_coeff₂'.eq_1`：∀ (s t : ↑unitInterval),   Set.Ic
+c.convexComb_assoc_coeff₂' s t =     unitInterval.symm (Set.Icc.convexComb_assoc
+_coeff₁ (unitInterval.symm …
+· 使用定理 `unitInterval.symm_symm`：symm_symm (x : I) : σ (σ x) = x
 -/
-theorem convexComb_assoc' {a b : Real} (x y z : Icc a b) (s t : unitInterval) :
+theorem convexComb_assoc' {a b : ℝ} (x y z : Icc a b) (s t : unitInterval) :
     convexComb (convexComb x y s) z t =
       convexComb x (convexComb y z (convexComb_assoc_coeff₂' s t))
         (convexComb_assoc_coeff₁' s t) := by
-  rw [← convexComb_symm]; rw [← convexComb_symm y x]; rw [convexComb_assoc]; rw [← convexComb_symm x]; rw [← convexComb_symm z y]
-  rw [convexComb_assoc_coeff₁']; rw [convexComb_assoc_coeff₂']; rw [unitInterval.symm_symm]
+  rw [← convexComb_symm, ← convexComb_symm y x, convexComb_assoc, ← convexComb_symm x,
+    ← convexComb_symm z y]
+  rw [convexComb_assoc_coeff₁', convexComb_assoc_coeff₂', unitInterval.symm_symm]
 
 set_option backward.privateInPublic true in
-/--
-theorem `eq_convexComb.zero_le` / 定理 `eq_convexComb.zero_le`
-
-English:
-theorem eq_convexComb.zero_le
-  given: {a b : Real} {x y z : Icc a b} (hxy : x <= y) (hyz : y <= z)
-  proof: by
-  by_cases h : (z - x : Real) = 0
-  · simp_all
-  · replace hxy : (x : Real) <= (y : Real) := hxy
-    replace hyz : (y : Real) <= (z : Real) := hyz
-    apply div_nonneg <;> grind
-
-中文:
-定理 eq_convexComb.zero_le
-  条件: {a b : 实数} {x y z : 闭区间 a b} (hxy : x <= y) (hyz : y <= z)
-  证明: by
-  by_cases h : (z - x : Real) = 0
-  · simp_all
-  · replace hxy : (x : Real) <= (y : Real) := hxy
-    replace hyz : (y : Real) <= (z : Real) := hyz
-    apply div_nonneg <;> grind
+/-
+**Set.Icc.eq_convexComb.zero_le** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem eq_convexComb.zero_le {a b : Real} {x y z : Icc a b} (hxy : x <= y) (hyz : y <= z) :
-    0 <= ((y - x) / (z - x) : Real) := by
-  by_cases h : (z - x : Real) = 0
+private theorem eq_convexComb.zero_le {a b : ℝ} {x y z : Icc a b} (hxy : x ≤ y) (hyz : y ≤ z) :
+    0 ≤ ((y - x) / (z - x) : ℝ) := by
+  by_cases h : (z - x : ℝ) = 0
   · simp_all
-  · replace hxy : (x : Real) <= (y : Real) := hxy
-    replace hyz : (y : Real) <= (z : Real) := hyz
+  · replace hxy : (x : ℝ) ≤ (y : ℝ) := hxy
+    replace hyz : (y : ℝ) ≤ (z : ℝ) := hyz
     apply div_nonneg <;> grind
 
 set_option backward.privateInPublic true in
-/--
-theorem `eq_convexComb.le_one` / 定理 `eq_convexComb.le_one`
-
-English:
-theorem eq_convexComb.le_one
-  given: {a b : Real} {x y z : Icc a b} (hxy : x <= y) (hyz : y <= z)
-  proof: by
-  by_cases h : (z - x : Real) = 0
-  · simp_all
-  · replace hxy : (x : Real) <= (y : Real) := hxy
-    replace hyz : (y : Real) <= (z : Real) := hyz
-    apply div_le_one_of_le₀ <;> grind
-
-中文:
-定理 eq_convexComb.le_one
-  条件: {a b : 实数} {x y z : 闭区间 a b} (hxy : x <= y) (hyz : y <= z)
-  证明: by
-  by_cases h : (z - x : Real) = 0
-  · simp_all
-  · replace hxy : (x : Real) <= (y : Real) := hxy
-    replace hyz : (y : Real) <= (z : Real) := hyz
-    apply div_le_one_of_le₀ <;> grind
+/-
+**Set.Icc.eq_convexComb.le_one** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem eq_convexComb.le_one {a b : Real} {x y z : Icc a b} (hxy : x <= y) (hyz : y <= z) :
-    ((y - x) / (z - x) : Real) <= 1 := by
-  by_cases h : (z - x : Real) = 0
+private theorem eq_convexComb.le_one {a b : ℝ} {x y z : Icc a b} (hxy : x ≤ y) (hyz : y ≤ z) :
+    ((y - x) / (z - x) : ℝ) ≤ 1 := by
+  by_cases h : (z - x : ℝ) = 0
   · simp_all
-  · replace hxy : (x : Real) <= (y : Real) := hxy
-    replace hyz : (y : Real) <= (z : Real) := hyz
+  · replace hxy : (x : ℝ) ≤ (y : ℝ) := hxy
+    replace hyz : (y : ℝ) ≤ (z : ℝ) := hyz
     apply div_le_one_of_le₀ <;> grind
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
 /--
-theorem `eq_convexComb` / 定理 `eq_convexComb`
-
-English:
-theorem eq_convexComb
-  given: {a b : Real} {x y z : Icc a b} (hxy : x <= y) (hyz : y <= z)
-  proof: by
-  ext
-  simp only [coe_convexComb]
-  by_cases h : (z - x : Real) = 0
-  · simp_all only [div_zero, sub_zero, one_mul, zero_mul, add_zero]
-    replace hxy : (x : Real) <= (y : Real) := hxy
-    replace hyz : (y : Real) <= (z : Real) := hyz
-    linarith
-  · field_simp
-    ring_nf
-
-中文:
-定理 eq_convexComb
-  条件: {a b : 实数} {x y z : 闭区间 a b} (hxy : x <= y) (hyz : y <= z)
-  证明: by
-  ext
-  simp only [coe_convexComb]
-  by_cases h : (z - x : Real) = 0
-  · simp_all only [div_zero, sub_zero, one_mul, zero_mul, add_zero]
-    replace hxy : (x : Real) <= (y : Real) := hxy
-    replace hyz : (y : Real) <= (z : Real) := hyz
-    linarith
-  · field_simp
-    ring_nf
-
-Depends on / 依赖: add_zero, coe_convexComb, div_zero, one_mul, replace, ring_nf, sub_zero, zero_mul
+A point between two points in a closed interval
+can be expressed as a convex combination of them.
 -/
-theorem eq_convexComb {a b : Real} {x y z : Icc a b} (hxy : x <= y) (hyz : y <= z) :
+/-
+**Set.Icc.eq_convexComb** 是 Mathlib 中的一个定理，位于命名空间 `Set.Icc`。
+形式化陈述：eq_convexComb {a b : Real} {x y z : Icc a b} (hxy : x <= y) (hyz : y <= z)
+ : y = convexComb x z ⟨((y - x) / (z - x)), eq_convexComb.zero_le hxy hyz, eq_co
+nvexComb.le_one hxy hyz⟩
+参数：hxy : x <= y；hyz : y <= z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `_private.Mathlib.Topology.UnitInterval.0.Set.Icc.eq_convexComb.zero_le`：
+∀ {a b : ℝ} {x y z : ↑(Set.Icc a b)}, x ≤ y → y ≤ z → 0 ≤ (↑y - ↑x) / (↑z - ↑x)
+· 使用定理 `_private.Mathlib.Topology.UnitInterval.0.Set.Icc.eq_convexComb.le_one`：∀
+ {a b : ℝ} {x y z : ↑(Set.Icc a b)}, x ≤ y → y ≤ z → (↑y - ↑x) / (↑z - ↑x) ≤ 1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `div_zero`：div_zero (a : G₀) : a / 0 = 0
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用引理 `Mathlib.Tactic.Linarith.eq_of_not_lt_of_not_gt`：eq_of_not_lt_of_not_gt {
+α} [LinearOrder α] (a b : α) (h1 : ¬ a < b) (h2 : ¬ b < a) : a = b
+· 使用定理 `Not.intro`：∀ {a : Prop}, (a → False) → ¬a
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_pf`：∀ {R : Type u_2} [inst : CommRing R] 
+{a b c d : R}, -b = c → a + c = d → a - b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_mul`：∀ {R : Type u_2} [inst : CommRing R]
+ (a₁ : R) (a₂ : ℕ) {a₃ b : R}, -a₃ = b → -(a₁ ^ a₂ * a₃) = a₁ ^ a₂ * b
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_lt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a₂ b c : R} (a₁ : R), a₂ + b = c → a₁ + a₂ + b = a₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
+（共 90 条，此处仅展示前 30 条）
+
+--- 原说明 ---
+A point between two points in a closed interval
+can be expressed as a convex combination of them.
+-/
+theorem eq_convexComb {a b : ℝ} {x y z : Icc a b} (hxy : x ≤ y) (hyz : y ≤ z) :
     y = convexComb x z ⟨((y - x) / (z - x)),
           eq_convexComb.zero_le hxy hyz, eq_convexComb.le_one hxy hyz⟩ := by
   ext
   simp only [coe_convexComb]
-  by_cases h : (z - x : Real) = 0
+  by_cases h : (z - x : ℝ) = 0
   · simp_all only [div_zero, sub_zero, one_mul, zero_mul, add_zero]
-    replace hxy : (x : Real) <= (y : Real) := hxy
-    replace hyz : (y : Real) <= (z : Real) := hyz
+    replace hxy : (x : ℝ) ≤ (y : ℝ) := hxy
+    replace hyz : (y : ℝ) ≤ (z : ℝ) := hyz
     linarith
   · field_simp
     ring_nf
@@ -2100,161 +2052,217 @@ end Set.Icc
 
 open scoped unitInterval
 
-/--
-lemma `exists_monotone_Icc_subset_open_cover_Icc` / 引理 `exists_monotone_Icc_subset_open_cover_Icc`
+/-- Any open cover `c` of a closed interval `[a, b]` in ℝ
+can be refined to a finite partition into subintervals. -/
+/-
+**exists_monotone_Icc_subset_open_cover_Icc** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：exists_monotone_Icc_subset_open_cover_Icc {ι} {a b : Real} (h : a <= b) {c
+ : ι -> Set (Icc a b)} (hc₁ : forall i, IsOpen (c i)) (hc₂ : univ subseteq ⋃ i, 
+c i) : exists t : Nat -> Icc a b, t 0 = a ∧ Monotone t ∧ (exists m, forall n >= 
+m, t n = b) ∧ forall n, exists i, Icc (t n) (t (n + 1)) subseteq c i
+参数：h : a <= b；Icc a b；hc₁ : forall i, IsOpen (c i)；hc₂ : univ subseteq ⋃ i, c i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lebesgue_number_lemma_of_metric`：lebesgue_number_lemma_of_metric {s : Se
+t α} {ι : Sort*} {c : ι -> Set α} (hs : IsCompact s) (hc₁ : forall i, IsOpen (c 
+i)) (hc₂ : s subseteq…
+· 使用定理 `isCompact_univ`：isCompact_univ [h : CompactSpace X] : IsCompact (univ : 
+Set X)
+· 使用定理 `ConditionallyCompleteLinearOrder.toCompactIccSpace`：∀ (α : Type u_2) [in
+st : ConditionallyCompleteLinearOrder α] [inst_1 : TopologicalSpace α] [OrderTop
+ology α],   CompactIccSpace α
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `half_pos`：half_pos (h : 0 < a) : 0 < a / 2
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用引理 `Set.Icc.addNSMul_zero`：addNSMul_zero : addNSMul h δ 0 = a
+· 使用引理 `Set.Icc.monotone_addNSMul`：monotone_addNSMul (hδ : 0 <= δ) : Monotone (a
+ddNSMul h δ)
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用引理 `Set.Icc.addNSMul_eq_right`：addNSMul_eq_right [Archimedean α] (hδ : 0 < δ
+) : exists m, forall n >= m, addNSMul h δ n = b
+· 使用定理 `trivial`：True
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用引理 `Set.Icc.abs_sub_addNSMul_le`：abs_sub_addNSMul_le (hδ : 0 <= δ) {t : Icc 
+a b} (n : Nat) (ht : t in Icc (addNSMul h δ n) (addNSMul h δ (n + 1))) : (|t - a
+ddNSMul h δ n| : …
+· 使用定理 `half_lt_self`：∀ {α : Type u_2} [inst : Semifield α] [inst_1 : PartialOrd
+er α] [PosMulReflectLT α] {a : α} [IsStrictOrderedRing α],   0 < a → a / 2 < a
 
-English:
-lemma exists_monotone_Icc_subset_open_cover_Icc
-  statement: {ι} {a b : Real} (h : a <= b) {c : ι -> Set (Icc a b)}
-  proof: by
-  obtain ⟨δ, δ_pos, ball_subset⟩ := lebesgue_number_lemma_of_metric isCompact_univ hc₁ hc₂
-  have hδ := half_pos δ_pos
-  refine ⟨addNSMul h (δ/2), addNSMul_zero h,
-    monotone_addNSMul h hδ.le, addNSMul_eq_right h hδ, fun n => ?_⟩
-  obtain ⟨i, hsub⟩ := ball_subset (addNSMul h (δ / 2) n) trivial
-  exact ⟨i, fun t ht => hsub ((abs_sub_addNSMul_le h hδ.le n ht).trans_lt <| half_lt_self δ_pos)⟩
-
-中文:
-引理 存在_monotone_Icc_subset_open_cover_Icc
-  结论: {ι} {a b : 实数} (h : a <= b) {c : ι -> 集合 (闭区间 a b)}
-  证明: by
-  obtain ⟨δ, δ_pos, ball_subset⟩ := lebesgue_number_lemma_of_metric isCompact_univ hc₁ hc₂
-  have hδ := half_pos δ_pos
-  refine ⟨addNSMul h (δ/2), addNSMul_zero h,
-    monotone_addNSMul h hδ.le, addNSMul_eq_right h hδ, fun n => ?_⟩
-  obtain ⟨i, hsub⟩ := ball_subset (addNSMul h (δ / 2) n) trivial
-  exact ⟨i, fun t ht => hsub ((abs_sub_addNSMul_le h hδ.le n ht).trans_lt <| half_lt_self δ_pos)⟩
-
-Depends on / 依赖: abs_sub_addNSMul_le, addNSMul, addNSMul_eq_right, addNSMul_zero, ball_subset, half_lt_self, half_pos, isCompact_univ, lebesgue_number_lemma_of_metric, monotone_addNSMul, trans_lt
+--- 原说明 ---
+Any open cover `c` of a closed interval `[a, b]` in ℝ
+can be refined to a finite partition into subintervals.
 -/
-lemma exists_monotone_Icc_subset_open_cover_Icc {ι} {a b : Real} (h : a <= b) {c : ι -> Set (Icc a b)}
-    (hc₁ : forall i, IsOpen (c i)) (hc₂ : univ subseteq ⋃ i, c i) : exists t : Nat -> Icc a b, t 0 = a ∧
-      Monotone t ∧ (exists m, forall n >= m, t n = b) ∧ forall n, exists i, Icc (t n) (t (n + 1)) subseteq c i := by
+lemma exists_monotone_Icc_subset_open_cover_Icc {ι} {a b : ℝ} (h : a ≤ b) {c : ι → Set (Icc a b)}
+    (hc₁ : ∀ i, IsOpen (c i)) (hc₂ : univ ⊆ ⋃ i, c i) : ∃ t : ℕ → Icc a b, t 0 = a ∧
+      Monotone t ∧ (∃ m, ∀ n ≥ m, t n = b) ∧ ∀ n, ∃ i, Icc (t n) (t (n + 1)) ⊆ c i := by
   obtain ⟨δ, δ_pos, ball_subset⟩ := lebesgue_number_lemma_of_metric isCompact_univ hc₁ hc₂
   have hδ := half_pos δ_pos
   refine ⟨addNSMul h (δ/2), addNSMul_zero h,
-    monotone_addNSMul h hδ.le, addNSMul_eq_right h hδ, fun n => ?_⟩
+    monotone_addNSMul h hδ.le, addNSMul_eq_right h hδ, fun n ↦ ?_⟩
   obtain ⟨i, hsub⟩ := ball_subset (addNSMul h (δ / 2) n) trivial
-  exact ⟨i, fun t ht => hsub ((abs_sub_addNSMul_le h hδ.le n ht).trans_lt <| half_lt_self δ_pos)⟩
+  exact ⟨i, fun t ht ↦ hsub ((abs_sub_addNSMul_le h hδ.le n ht).trans_lt <| half_lt_self δ_pos)⟩
 
-/--
-lemma `exists_monotone_Icc_subset_open_cover_unitInterval` / 引理 `exists_monotone_Icc_subset_open_cover_unitInterval`
+/-- Any open cover of the unit interval can be refined to a finite partition into subintervals. -/
+/-
+**exists_monotone_Icc_subset_open_cover_unitInterval** 是 Mathlib 中的一个引理，位于命名空间 `
+`。
+形式化陈述：exists_monotone_Icc_subset_open_cover_unitInterval {ι} {c : ι -> Set I} (h
+c₁ : forall i, IsOpen (c i)) (hc₂ : univ subseteq ⋃ i, c i) : exists t : Nat -> 
+I, t 0 = 0 ∧ Monotone t ∧ (exists n, forall m >= n, t m = 1) ∧ forall n, exists 
+i, Icc (t n) (t (n + 1)) subseteq c i
+参数：hc₁ : forall i, IsOpen (c i)；hc₂ : univ subseteq ⋃ i, c i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用引理 `exists_monotone_Icc_subset_open_cover_Icc`：exists_monotone_Icc_subset_op
+en_cover_Icc {ι} {a b : Real} (h : a <= b) {c : ι -> Set (Icc a b)} (hc₁ : foral
+l i, IsOpen (c i)) (hc₂ : univ …
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
 
-English:
-lemma exists_monotone_Icc_subset_open_cover_unitInterval
-  statement: {ι} {c : ι -> Set I}
-  proof: by
-  simp_rw [← Subtype.coe_inj]
-  exact exists_monotone_Icc_subset_open_cover_Icc zero_le_one hc₁ hc₂
-
-中文:
-引理 存在_monotone_Icc_subset_open_cover_unit整数erval
-  结论: {ι} {c : ι -> 集合 I}
-  证明: by
-  simp_rw [← Subtype.coe_inj]
-  exact exists_monotone_Icc_subset_open_cover_Icc zero_le_one hc₁ hc₂
-
-Depends on / 依赖: Subtype, Subtype.coe_inj, coe_inj, exists_monotone_Icc_subset_open_cover_Icc, simp_rw, zero_le_one
+--- 原说明 ---
+Any open cover of the unit interval can be refined to a finite partition into su
+bintervals.
 -/
-lemma exists_monotone_Icc_subset_open_cover_unitInterval {ι} {c : ι -> Set I}
-    (hc₁ : forall i, IsOpen (c i)) (hc₂ : univ subseteq ⋃ i, c i) : exists t : Nat -> I, t 0 = 0 ∧
-      Monotone t ∧ (exists n, forall m >= n, t m = 1) ∧ forall n, exists i, Icc (t n) (t (n + 1)) subseteq c i := by
+lemma exists_monotone_Icc_subset_open_cover_unitInterval {ι} {c : ι → Set I}
+    (hc₁ : ∀ i, IsOpen (c i)) (hc₂ : univ ⊆ ⋃ i, c i) : ∃ t : ℕ → I, t 0 = 0 ∧
+      Monotone t ∧ (∃ n, ∀ m ≥ n, t m = 1) ∧ ∀ n, ∃ i, Icc (t n) (t (n + 1)) ⊆ c i := by
   simp_rw [← Subtype.coe_inj]
   exact exists_monotone_Icc_subset_open_cover_Icc zero_le_one hc₁ hc₂
-
-/--
-lemma `exists_monotone_Icc_subset_open_cover_unitInterval_prod_self` / 引理 `exists_monotone_Icc_subset_open_cover_unitInterval_prod_self`
-
-English:
-lemma exists_monotone_Icc_subset_open_cover_unitInterval_prod_self
-  statement: {ι} {c : ι -> Set (I × I)}
-  proof: by
+/-
+**exists_monotone_Icc_subset_open_cover_unitInterval_prod_self** 是 Mathlib 中的一个引
+理，位于命名空间 ``。
+形式化陈述：exists_monotone_Icc_subset_open_cover_unitInterval_prod_self {ι} {c : ι ->
+ Set (I × I)} (hc₁ : forall i, IsOpen (c i)) (hc₂ : univ subseteq ⋃ i, c i) : ex
+ists t : Nat -> I, t 0 = 0 ∧ Monotone t ∧ (exists n, forall m >= n, t m = 1) ∧ f
+orall n m, exists i, Icc (t n) (t (n + 1)) ×ˢ Icc (t m) (t (m + 1)) subseteq c i
+参数：I × I；hc₁ : forall i, IsOpen (c i)；hc₂ : univ subseteq ⋃ i, c i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lebesgue_number_lemma_of_metric`：lebesgue_number_lemma_of_metric {s : Se
+t α} {ι : Sort*} {c : ι -> Set α} (hs : IsCompact s) (hc₁ : forall i, IsOpen (c 
+i)) (hc₂ : s subseteq…
+· 使用定理 `isCompact_univ`：isCompact_univ [h : CompactSpace X] : IsCompact (univ : 
+Set X)
+· 使用定理 `instCompactSpaceProd`：∀ {X : Type u} {Y : Type v} [inst : TopologicalSpa
+ce X] [inst_1 : TopologicalSpace Y] [CompactSpace X] [CompactSpace Y],   Compact
+Space (X ×…
+· 使用定理 `ConditionallyCompleteLinearOrder.toCompactIccSpace`：∀ (α : Type u_2) [in
+st : ConditionallyCompleteLinearOrder α] [inst_1 : TopologicalSpace α] [OrderTop
+ology α],   CompactIccSpace α
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `half_pos`：half_pos (h : 0 < a) : 0 < a / 2
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
+· 使用引理 `Set.Icc.addNSMul_zero`：addNSMul_zero : addNSMul h δ 0 = a
+· 使用引理 `Set.Icc.monotone_addNSMul`：monotone_addNSMul (hδ : 0 <= δ) : Monotone (a
+ddNSMul h δ)
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用引理 `Set.Icc.addNSMul_eq_right`：addNSMul_eq_right [Archimedean α] (hδ : 0 < δ
+) : exists m, forall n >= m, addNSMul h δ n = b
+· 使用定理 `trivial`：True
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Metric.mem_ball`：mem_ball : y in ball x ε ↔ dist y x < ε
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `max_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b c : α}, a ≤ c → b ≤
+ c → max a b ≤ c
+· 使用引理 `Set.Icc.abs_sub_addNSMul_le`：abs_sub_addNSMul_le (hδ : 0 <= δ) {t : Icc 
+a b} (n : Nat) (ht : t in Icc (addNSMul h δ n) (addNSMul h δ (n + 1))) : (|t - a
+ddNSMul h δ n| : …
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+（共 31 条，此处仅展示前 30 条）
+-/
+lemma exists_monotone_Icc_subset_open_cover_unitInterval_prod_self {ι} {c : ι → Set (I × I)}
+    (hc₁ : ∀ i, IsOpen (c i)) (hc₂ : univ ⊆ ⋃ i, c i) :
+    ∃ t : ℕ → I, t 0 = 0 ∧ Monotone t ∧ (∃ n, ∀ m ≥ n, t m = 1) ∧
+      ∀ n m, ∃ i, Icc (t n) (t (n + 1)) ×ˢ Icc (t m) (t (m + 1)) ⊆ c i := by
   obtain ⟨δ, δ_pos, ball_subset⟩ := lebesgue_number_lemma_of_metric isCompact_univ hc₁ hc₂
   have hδ := half_pos δ_pos
   simp_rw [Subtype.ext_iff]
-  have h : (0 : Real) <= 1 := zero_le_one
+  have h : (0 : ℝ) ≤ 1 := zero_le_one
   refine ⟨addNSMul h (δ/2), addNSMul_zero h,
-    monotone_addNSMul h hδ.le, addNSMul_eq_right h hδ, fun n m => ?_⟩
+    monotone_addNSMul h hδ.le, addNSMul_eq_right h hδ, fun n m ↦ ?_⟩
   obtain ⟨i, hsub⟩ := ball_subset (addNSMul h (δ / 2) n, addNSMul h (δ / 2) m) trivial
-  exact ⟨i, fun t ht => hsub (Metric.mem_ball.mpr <| (max_le (abs_sub_addNSMul_le h hδ.le n ht.1) <|
-    abs_sub_addNSMul_le h hδ.le m ht.2).trans_lt <| half_lt_self δ_pos)⟩
-
-中文:
-引理 存在_monotone_Icc_subset_open_cover_unit整数erval_prod_self
-  结论: {ι} {c : ι -> 集合 (I × I)}
-  证明: by
-  obtain ⟨δ, δ_pos, ball_subset⟩ := lebesgue_number_lemma_of_metric isCompact_univ hc₁ hc₂
-  have hδ := half_pos δ_pos
-  simp_rw [Subtype.ext_iff]
-  have h : (0 : Real) <= 1 := zero_le_one
-  refine ⟨addNSMul h (δ/2), addNSMul_zero h,
-    monotone_addNSMul h hδ.le, addNSMul_eq_right h hδ, fun n m => ?_⟩
-  obtain ⟨i, hsub⟩ := ball_subset (addNSMul h (δ / 2) n, addNSMul h (δ / 2) m) trivial
-  exact ⟨i, fun t ht => hsub (Metric.mem_ball.mpr <| (max_le (abs_sub_addNSMul_le h hδ.le n ht.1) <|
-    abs_sub_addNSMul_le h hδ.le m ht.2).trans_lt <| half_lt_self δ_pos)⟩
-
-Depends on / 依赖: Metric, Metric.mem_ball.mpr, Subtype, Subtype.ext_iff, abs_sub_addNSMul_le, addNSMul, addNSMul_eq_right, addNSMul_zero, ball_subset, ext_iff, half_pos, isCompact_univ, lebesgue_number_lemma_of_metric, max_le, mem_ball, monotone_addNSMul, simp_rw, zero_le_one
--/
-lemma exists_monotone_Icc_subset_open_cover_unitInterval_prod_self {ι} {c : ι -> Set (I × I)}
-    (hc₁ : forall i, IsOpen (c i)) (hc₂ : univ subseteq ⋃ i, c i) :
-    exists t : Nat -> I, t 0 = 0 ∧ Monotone t ∧ (exists n, forall m >= n, t m = 1) ∧
-      forall n m, exists i, Icc (t n) (t (n + 1)) ×ˢ Icc (t m) (t (m + 1)) subseteq c i := by
-  obtain ⟨δ, δ_pos, ball_subset⟩ := lebesgue_number_lemma_of_metric isCompact_univ hc₁ hc₂
-  have hδ := half_pos δ_pos
-  simp_rw [Subtype.ext_iff]
-  have h : (0 : Real) <= 1 := zero_le_one
-  refine ⟨addNSMul h (δ/2), addNSMul_zero h,
-    monotone_addNSMul h hδ.le, addNSMul_eq_right h hδ, fun n m => ?_⟩
-  obtain ⟨i, hsub⟩ := ball_subset (addNSMul h (δ / 2) n, addNSMul h (δ / 2) m) trivial
-  exact ⟨i, fun t ht => hsub (Metric.mem_ball.mpr <| (max_le (abs_sub_addNSMul_le h hδ.le n ht.1) <|
+  exact ⟨i, fun t ht ↦ hsub (Metric.mem_ball.mpr <| (max_le (abs_sub_addNSMul_le h hδ.le n ht.1) <|
     abs_sub_addNSMul_le h hδ.le m ht.2).trans_lt <| half_lt_self δ_pos)⟩
 
 end partition
 
 @[simp]
-/--
-theorem `projIcc_eq_zero` / 定理 `projIcc_eq_zero`
-
-English:
-theorem projIcc_eq_zero
-  given: {x : Real}
-  statement: projIcc (0 : Real) 1 zero_le_one x = 0 ↔ x <= 0
-  proof: projIcc_eq_left zero_lt_one
-
-@[simp]
-
-中文:
-定理 projIcc_eq_zero
-  条件: {x : 实数}
-  结论: projIcc (0 : 实数) 1 zero_le_one x = 0 ↔ x <= 0
-  证明: projIcc_eq_left zero_lt_one
-
-@[simp]
-
-Depends on / 依赖: projIcc_eq_left, zero_lt_one
+/-
+**projIcc_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：projIcc_eq_zero {x : Real} : projIcc (0 : Real) 1 zero_le_one x = 0 ↔ x <=
+ 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.projIcc_eq_left`：projIcc_eq_left (h : a < b) : projIcc a b h.le x = 
+⟨a, left_mem_Icc.mpr h.le⟩ ↔ x <= a
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
 -/
-theorem projIcc_eq_zero {x : Real} : projIcc (0 : Real) 1 zero_le_one x = 0 ↔ x <= 0 :=
+theorem projIcc_eq_zero {x : ℝ} : projIcc (0 : ℝ) 1 zero_le_one x = 0 ↔ x ≤ 0 :=
   projIcc_eq_left zero_lt_one
 
 @[simp]
-/--
-theorem `projIcc_eq_one` / 定理 `projIcc_eq_one`
-
-English:
-theorem projIcc_eq_one
-  given: {x : Real}
-  statement: projIcc (0 : Real) 1 zero_le_one x = 1 ↔ 1 <= x
-  proof: projIcc_eq_right zero_lt_one
-
-中文:
-定理 projIcc_eq_one
-  条件: {x : 实数}
-  结论: projIcc (0 : 实数) 1 zero_le_one x = 1 ↔ 1 <= x
-  证明: projIcc_eq_right zero_lt_one
-
-Depends on / 依赖: projIcc_eq_right, zero_lt_one
+/-
+**projIcc_eq_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：projIcc_eq_one {x : Real} : projIcc (0 : Real) 1 zero_le_one x = 1 ↔ 1 <= 
+x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.projIcc_eq_right`：projIcc_eq_right (h : a < b) : projIcc a b h.le x 
+= ⟨b, right_mem_Icc.2 h.le⟩ ↔ b <= x
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
 -/
-theorem projIcc_eq_one {x : Real} : projIcc (0 : Real) 1 zero_le_one x = 1 ↔ 1 <= x :=
+theorem projIcc_eq_one {x : ℝ} : projIcc (0 : ℝ) 1 zero_le_one x = 1 ↔ 1 ≤ x :=
   projIcc_eq_right zero_lt_one
 
 namespace Mathlib.Tactic.Interactive
@@ -2270,7 +2278,12 @@ macro "unit_interval" : tactic =>
   | apply unitInterval.le_one
   | apply unitInterval.one_minus_le_one))
 
-example (x : unitInterval) : 0 <= (x : Real) := by unit_interval
+/-
+**Mathlib.Tactic.Interactive.** 是 Mathlib 中的一个示例，位于命名空间 `Mathlib.Tactic.Interact
+ive`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example (x : unitInterval) : 0 ≤ (x : ℝ) := by unit_interval
 
 end Mathlib.Tactic.Interactive
 
@@ -2282,50 +2295,67 @@ variable {𝕜 : Type*} [Field 𝕜] [LinearOrder 𝕜] [IsStrictOrderedRing �
 set_option backward.isDefEq.respectTransparency false in
 -- We only need the ordering on `𝕜` here to avoid talking about flipping the interval over.
 -- At the end of the day I only care about `ℝ`, so I'm hesitant to put work into generalizing.
-/--
-theorem `affineHomeomorph_image_I` / 定理 `affineHomeomorph_image_I`
+/-- The image of `[0,1]` under the homeomorphism `fun x ↦ a * x + b` is `[b, a+b]`.
+-/
+/-
+**affineHomeomorph_image_I** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：affineHomeomorph_image_I (a b : 𝕜) (h : 0 < a) : affineHomeomorph a b h.ne
+.symm '' Set.Icc 0 1 = Set.Icc b (a + b)
+参数：a b : 𝕜；h : 0 < a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `affineHomeomorph_apply`：∀ {𝕜 : Type u_2} [inst : Field 𝕜] [inst_1 : Topo
+logicalSpace 𝕜] [inst_2 : IsTopologicalRing 𝕜] (a b : 𝕜) (h : a ≠ 0)   (x : 𝕜), 
+(affineHomeo…
+· 使用定理 `Set.image_affine_Icc'`：image_affine_Icc' (h : 0 < a) (b c d : K) : (a * 
+· + b) '' Icc c d = Icc (a * c + b) (a * d + b)
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `AddGroup.existsAddOfLE`：∀ (α : Type u) [inst : AddGroup α] [inst_1 : LE 
+α], ExistsAddOfLE α
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem affineHomeomorph_image_I
-  given: (a b : 𝕜) (h : 0 < a)
-  proof: by simp [h]
-
-中文:
-定理 affineHomeomorph_image_I
-  条件: (a b : 𝕜) (h : 0 < a)
-  证明: by simp [h]
+--- 原说明 ---
+The image of `[0,1]` under the homeomorphism `fun x ↦ a * x + b` is `[b, a+b]`.
 -/
 theorem affineHomeomorph_image_I (a b : 𝕜) (h : 0 < a) :
     affineHomeomorph a b h.ne.symm '' Set.Icc 0 1 = Set.Icc b (a + b) := by simp [h]
 
-/--
-Definition of `iccHomeoI` / `iccHomeoI` 的定义
+/-- The affine homeomorphism from a nontrivial interval `[a,b]` to `[0,1]`.
+-/
+/-
+**iccHomeoI** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：iccHomeoI (a b : 𝕜) (h : a < b) : Set.Icc a b ≃ₜ Set.Icc (0 : 𝕜) (1 : 𝕜)
+参数：a b : 𝕜；h : a < b。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition iccHomeoI
-  signature: (a b : 𝕜) (h : a < b)
-  body: by
-  let e := Homeomorph.image (affineHomeomorph (b - a) a (sub_pos.mpr h).ne.symm) (Set.Icc 0 1)
-  refine (e.trans ?_).symm
-  apply Homeomorph.setCongr
-  rw [affineHomeomorph_image_I _ _ (sub_pos.2 h)]
-  simp
-
-@[simp]
-
-中文:
-定义 iccHomeoI
-  签名: (a b : 𝕜) (h : a < b)
-  定义体: by
-  let e := Homeomorph.image (affineHomeomorph (b - a) a (sub_pos.mpr h).ne.symm) (Set.Icc 0 1)
-  refine (e.trans ?_).symm
-  apply Homeomorph.setCongr
-  rw [affineHomeomorph_image_I _ _ (sub_pos.2 h)]
-  simp
-
-@[simp]
-
-Depends on / 依赖: Homeomorph, Homeomorph.image, Homeomorph.setCongr, Set.Icc, affineHomeomorph, affineHomeomorph_image_I, e.trans, ne.symm, setCongr, sub_pos, sub_pos.mpr
+--- 原说明 ---
+The affine homeomorphism from a nontrivial interval `[a,b]` to `[0,1]`.
 -/
 def iccHomeoI (a b : 𝕜) (h : a < b) : Set.Icc a b ≃ₜ Set.Icc (0 : 𝕜) (1 : 𝕜) := by
   let e := Homeomorph.image (affineHomeomorph (b - a) a (sub_pos.mpr h).ne.symm) (Set.Icc 0 1)
@@ -2335,40 +2365,26 @@ def iccHomeoI (a b : 𝕜) (h : a < b) : Set.Icc a b ≃ₜ Set.Icc (0 : 𝕜) (
   simp
 
 @[simp]
-/--
-theorem `iccHomeoI_apply_coe` / 定理 `iccHomeoI_apply_coe`
-
-English:
-theorem iccHomeoI_apply_coe
-  given: (a b : 𝕜) (h : a < b) (x : Set.Icc a b)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 iccHomeoI_apply_coe
-  条件: (a b : 𝕜) (h : a < b) (x : 集合.闭区间 a b)
-  证明: rfl
-
-@[simp]
+/-
+**iccHomeoI_apply_coe** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iccHomeoI_apply_coe (a b : 𝕜) (h : a < b) (x : Set.Icc a b) : ((iccHomeoI 
+a b h) x : 𝕜) = (x - a) / (b - a)
+参数：a b : 𝕜；h : a < b；x : Set.Icc a b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem iccHomeoI_apply_coe (a b : 𝕜) (h : a < b) (x : Set.Icc a b) :
     ((iccHomeoI a b h) x : 𝕜) = (x - a) / (b - a) :=
   rfl
 
 @[simp]
-/--
-theorem `iccHomeoI_symm_apply_coe` / 定理 `iccHomeoI_symm_apply_coe`
-
-English:
-theorem iccHomeoI_symm_apply_coe
-  given: (a b : 𝕜) (h : a < b) (x : Set.Icc (0 : 𝕜) (1 : 𝕜))
-  proof: rfl
-
-中文:
-定理 iccHomeoI_symm_apply_coe
-  条件: (a b : 𝕜) (h : a < b) (x : 集合.闭区间 (0 : 𝕜) (1 : 𝕜))
-  证明: rfl
+/-
+**iccHomeoI_symm_apply_coe** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：iccHomeoI_symm_apply_coe (a b : 𝕜) (h : a < b) (x : Set.Icc (0 : 𝕜) (1 : 𝕜
+)) : ((iccHomeoI a b h).symm x : 𝕜) = (b - a) * x + a
+参数：a b : 𝕜；h : a < b；x : Set.Icc (0 : 𝕜) (1 : 𝕜)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem iccHomeoI_symm_apply_coe (a b : 𝕜) (h : a < b) (x : Set.Icc (0 : 𝕜) (1 : 𝕜)) :
     ((iccHomeoI a b h).symm x : 𝕜) = (b - a) * x + a :=
@@ -2380,114 +2396,84 @@ namespace unitInterval
 
 open NNReal
 
-/--
-Definition of `toNNReal` / `toNNReal` 的定义
+/-- The coercion from `I` to `ℝ≥0`. -/
+/-
+**unitInterval.toNNReal** 是 Mathlib 中的一个定义，位于命名空间 `unitInterval`。
+形式化陈述：toNNReal : I -> Real>=0
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toNNReal
-  signature: : I -> Real>=0
-  body: fun i => ⟨i.1, i.2.1⟩
-
-中文:
-定义 toNN实数
-  签名: : I -> 实数>=0
-  定义体: fun i => ⟨i.1, i.2.1⟩
+--- 原说明 ---
+The coercion from `I` to `ℝ≥0`.
 -/
-def toNNReal : I -> Real>=0 := fun i => ⟨i.1, i.2.1⟩
-
-/--
-lemma `toNNReal_zero` / 引理 `toNNReal_zero`
-
-English:
-lemma toNNReal_zero
-  statement: toNNReal 0 = 0
-  proof: rfl
-
-中文:
-引理 toNN实数_zero
-  结论: toNN实数 0 = 0
-  证明: rfl
+def toNNReal : I → ℝ≥0 := fun i ↦ ⟨i.1, i.2.1⟩
+/-
+**unitInterval.toNNReal_zero** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：unitInterval.toNNReal 0 = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toNNReal_zero : toNNReal 0 = 0 := rfl
-
-/--
-lemma `toNNReal_one` / 引理 `toNNReal_one`
-
-English:
-lemma toNNReal_one
-  statement: toNNReal 1 = 1
-  proof: rfl
-
-中文:
-引理 toNN实数_one
-  结论: toNN实数 1 = 1
-  证明: rfl
+/-
+**unitInterval.toNNReal_one** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：unitInterval.toNNReal 1 = 1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toNNReal_one : toNNReal 1 = 1 := rfl
-
-/--
-lemma `toNNReal_continuous` / 引理 `toNNReal_continuous`
-
-English:
-lemma toNNReal_continuous
-  statement: Continuous toNNReal
-  proof: by delta toNNReal; fun_prop
-
-中文:
-引理 toNN实数_continuous
-  结论: 连续 toNN实数
-  证明: by delta toNNReal; fun_prop
+/-
+**unitInterval.toNNReal_continuous** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：Continuous unitInterval.toNNReal
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.subtype_mk`：Continuous.subtype_mk {f : Y -> X} (h : Continuou
+s f) (hp : forall x, p (f x)) : Continuous fun x => (⟨f x, hp x⟩ : Subtype p)
+· 使用定理 `continuous_subtype_val`：continuous_subtype_val : Continuous (@Subtype.va
+l X p)
 -/
 @[fun_prop] lemma toNNReal_continuous : Continuous toNNReal := by delta toNNReal; fun_prop
-
-/--
-lemma `coe_toNNReal` / 引理 `coe_toNNReal`
-
-English:
-lemma coe_toNNReal
-  given: (x : I)
-  statement: ((toNNReal x) : Real) = x
-  proof: rfl
-
-中文:
-引理 coe_toNN实数
-  条件: (x : I)
-  结论: ((toNN实数 x) : 实数) = x
-  证明: rfl
+/-
+**unitInterval.coe_toNNReal** 是 Mathlib 中的一个定理，位于命名空间 `unitInterval`。
+形式化陈述：∀ (x : ↑unitInterval), ↑(unitInterval.toNNReal x) = ↑x
+参数：x : ↑unitInterval；unitInterval.toNNReal x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma coe_toNNReal (x : I) : ((toNNReal x) : Real) = x := rfl
-
-/--
-lemma `toNNReal_add_toNNReal_symm` / 引理 `toNNReal_add_toNNReal_symm`
-
-English:
-lemma toNNReal_add_toNNReal_symm
-  given: (x : I)
-  statement: toNNReal x + toNNReal (σ x) = 1
-  proof: by ext; simp
-
-中文:
-引理 toNN实数_add_toNN实数_symm
-  条件: (x : I)
-  结论: toNN实数 x + toNN实数 (σ x) = 1
-  证明: by ext; simp
+@[simp] lemma coe_toNNReal (x : I) : ((toNNReal x) : ℝ) = x := rfl
+/-
+**unitInterval.toNNReal_add_toNNReal_symm** 是 Mathlib 中的一个定理，位于命名空间 `unitInterva
+l`。
+形式化陈述：∀ (x : ↑unitInterval), unitInterval.toNNReal x + unitInterval.toNNReal (un
+itInterval.symm x) = 1
+参数：x : ↑unitInterval；unitInterval.symm x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G), a + 
+(b - a) = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma toNNReal_add_toNNReal_symm (x : I) : toNNReal x + toNNReal (σ x) = 1 := by ext; simp
-/--
-lemma `toNNReal_symm_add_toNNReal` / 引理 `toNNReal_symm_add_toNNReal`
-
-English:
-lemma toNNReal_symm_add_toNNReal
-  given: (x : I)
-  statement: toNNReal (σ x) + toNNReal x = 1
-  proof: by ext; simp
-
-中文:
-引理 toNN实数_symm_add_toNN实数
-  条件: (x : I)
-  结论: toNN实数 (σ x) + toNN实数 x = 1
-  证明: by ext; simp
+/-
+**unitInterval.toNNReal_symm_add_toNNReal** 是 Mathlib 中的一个定理，位于命名空间 `unitInterva
+l`。
+形式化陈述：∀ (x : ↑unitInterval), unitInterval.toNNReal (unitInterval.symm x) + unitI
+nterval.toNNReal x = 1
+参数：x : ↑unitInterval；unitInterval.symm x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NNReal.eq`：∀ {n m : NNReal}, ↑n = ↑m → n = m
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma toNNReal_symm_add_toNNReal (x : I) : toNNReal (σ x) + toNNReal x = 1 := by ext; simp
 
 end unitInterval
+

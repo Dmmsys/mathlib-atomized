@@ -35,59 +35,50 @@ variable {α β : Type*}
 
 open Nat
 
-/--
-Definition of `FiniteMultiplicity` / `FiniteMultiplicity` 的定义
+/-- `FiniteMultiplicity a b` indicates that the multiplicity of `a` in `b` is finite. -/
+/-
+**FiniteMultiplicity** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：FiniteMultiplicity [Monoid α] (a b : α) : Prop
+参数：a b : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation FiniteMultiplicity
-  signature: [Monoid α] (a b : α)
-  body: exists n : Nat, ¬a ^ (n + 1) ∣ b
-
-中文:
-缩写 FiniteMultiplicity
-  签名: [幺半群 α] (a b : α)
-  定义体: exists n : Nat, ¬a ^ (n + 1) ∣ b
-
-Depends on / 依赖: MulAction
+--- 原说明 ---
+`FiniteMultiplicity a b` indicates that the multiplicity of `a` in `b` is finite
+.
 -/
 abbrev FiniteMultiplicity [Monoid α] (a b : α) : Prop :=
-  exists n : Nat, ¬a ^ (n + 1) ∣ b
+  ∃ n : ℕ, ¬a ^ (n + 1) ∣ b
 
 open scoped Classical in
-/--
-Definition of `emultiplicity` / `emultiplicity` 的定义
+/-- `emultiplicity a b` returns the largest natural number `n` such that
+  `a ^ n ∣ b`, as an `ℕ∞`. If `∀ n, a ^ n ∣ b` then it returns `⊤`. -/
+/-
+**emultiplicity** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：emultiplicity [Monoid α] (a b : α) : Nat∞
+参数：a b : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition emultiplicity
-  signature: [Monoid α] (a b : α)
-  body: if h : FiniteMultiplicity a b then Nat.find h else ⊤
-
-中文:
-定义 emultiplicity
-  签名: [幺半群 α] (a b : α)
-  定义体: if h : FiniteMultiplicity a b then Nat.find h else ⊤
-
-Depends on / 依赖: DistribMulAction, FiniteMultiplicity, Nat.find
+--- 原说明 ---
+`emultiplicity a b` returns the largest natural number `n` such that
+  `a ^ n ∣ b`, as an `ℕ∞`. If `∀ n, a ^ n ∣ b` then it returns `⊤`.
 -/
-noncomputable def emultiplicity [Monoid α] (a b : α) : Nat∞ :=
+noncomputable def emultiplicity [Monoid α] (a b : α) : ℕ∞ :=
   if h : FiniteMultiplicity a b then Nat.find h else ⊤
 
-/--
-Definition of `multiplicity` / `multiplicity` 的定义
+/-- A `ℕ`-valued version of `emultiplicity`, returning `1` instead of `⊤`. -/
+/-
+**multiplicity** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：multiplicity [Monoid α] (a b : α) : Nat
+参数：a b : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition multiplicity
-  signature: [Monoid α] (a b : α)
-  body: (emultiplicity a b).untopD 1
-
-中文:
-定义 multiplicity
-  签名: [幺半群 α] (a b : α)
-  定义体: (emultiplicity a b).untopD 1
-
-Depends on / 依赖: DistribMulAction, emultiplicity, untopD
+--- 原说明 ---
+A `ℕ`-valued version of `emultiplicity`, returning `1` instead of `⊤`.
 -/
-noncomputable def multiplicity [Monoid α] (a b : α) : Nat :=
+noncomputable def multiplicity [Monoid α] (a b : α) : ℕ :=
   (emultiplicity a b).untopD 1
 
 section Monoid
@@ -95,628 +86,551 @@ section Monoid
 variable [Monoid α] [Monoid β] {a b : α}
 
 @[simp]
-/--
-theorem `emultiplicity_eq_top` / 定理 `emultiplicity_eq_top`
-
-English:
-theorem emultiplicity_eq_top
-  proof: by
-  simp [emultiplicity]
-
-中文:
-定理 emultiplicity_eq_top
-  证明: by
-  simp [emultiplicity]
-
-Depends on / 依赖: emultiplicity
+/-
+**emultiplicity_eq_top** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_eq_top : emultiplicity a b = ⊤ ↔ ¬FiniteMultiplicity a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem emultiplicity_eq_top :
     emultiplicity a b = ⊤ ↔ ¬FiniteMultiplicity a b := by
   simp [emultiplicity]
-
-/--
-theorem `emultiplicity_lt_top` / 定理 `emultiplicity_lt_top`
-
-English:
-theorem emultiplicity_lt_top
-  given: {a b : α}
-  statement: emultiplicity a b < ⊤ ↔ FiniteMultiplicity a b
-  proof: by
-  simp [lt_top_iff_ne_top, emultiplicity_eq_top]
-
-中文:
-定理 emultiplicity_lt_top
-  条件: {a b : α}
-  结论: emultiplicity a b < ⊤ ↔ FiniteMultiplicity a b
-  证明: by
-  simp [lt_top_iff_ne_top, emultiplicity_eq_top]
-
-Depends on / 依赖: emultiplicity_eq_top, lt_top_iff_ne_top
+/-
+**emultiplicity_lt_top** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_lt_top {a b : α} : emultiplicity a b < ⊤ ↔ FiniteMultiplicit
+y a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem emultiplicity_lt_top {a b : α} : emultiplicity a b < ⊤ ↔ FiniteMultiplicity a b := by
   simp [lt_top_iff_ne_top, emultiplicity_eq_top]
-
-/--
-theorem `finiteMultiplicity_iff_emultiplicity_ne_top` / 定理 `finiteMultiplicity_iff_emultiplicity_ne_top`
-
-English:
-theorem finiteMultiplicity_iff_emultiplicity_ne_top
-  proof: by simp
-
-中文:
-定理 finiteMultiplicity_iff_emultiplicity_ne_top
-  证明: by simp
+/-
+**finiteMultiplicity_iff_emultiplicity_ne_top** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finiteMultiplicity_iff_emultiplicity_ne_top : FiniteMultiplicity a b ↔ emu
+ltiplicity a b != ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem finiteMultiplicity_iff_emultiplicity_ne_top :
-    FiniteMultiplicity a b ↔ emultiplicity a b != ⊤ := by simp
-
-/--
-theorem `finiteMultiplicity_of_emultiplicity_eq_natCast` / 定理 `finiteMultiplicity_of_emultiplicity_eq_natCast`
-
-English:
-theorem finiteMultiplicity_of_emultiplicity_eq_natCast
-  given: {n : Nat} (h : emultiplicity a b = n)
-  proof: by
-  by_contra nh
-  rw [← emultiplicity_eq_top]; rw [h] at nh
-  trivial
-
-中文:
-定理 finiteMultiplicity_of_emultiplicity_eq_natCast
-  条件: {n : 自然数} (h : emultiplicity a b = n)
-  证明: by
-  by_contra nh
-  rw [← emultiplicity_eq_top]; rw [h] at nh
-  trivial
-
-Depends on / 依赖: emultiplicity_eq_top
+    FiniteMultiplicity a b ↔ emultiplicity a b ≠ ⊤ := by simp
+/-
+**finiteMultiplicity_of_emultiplicity_eq_natCast** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finiteMultiplicity_of_emultiplicity_eq_natCast {n : Nat} (h : emultiplicit
+y a b = n) : FiniteMultiplicity a b
+参数：h : emultiplicity a b = n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `emultiplicity_eq_top`：emultiplicity_eq_top : emultiplicity a b = ⊤ ↔ ¬Fi
+niteMultiplicity a b
 -/
-theorem finiteMultiplicity_of_emultiplicity_eq_natCast {n : Nat} (h : emultiplicity a b = n) :
+theorem finiteMultiplicity_of_emultiplicity_eq_natCast {n : ℕ} (h : emultiplicity a b = n) :
     FiniteMultiplicity a b := by
   by_contra nh
-  rw [← emultiplicity_eq_top]; rw [h] at nh
+  rw [← emultiplicity_eq_top, h] at nh
   trivial
-
-/--
-theorem `multiplicity_eq_of_emultiplicity_eq_some` / 定理 `multiplicity_eq_of_emultiplicity_eq_some`
-
-English:
-theorem multiplicity_eq_of_emultiplicity_eq_some
-  given: {n : Nat} (h : emultiplicity a b = n)
-  proof: by
-  simp [multiplicity, h]
-  rfl
-
-中文:
-定理 multiplicity_eq_of_emultiplicity_eq_some
-  条件: {n : 自然数} (h : emultiplicity a b = n)
-  证明: by
-  simp [multiplicity, h]
-  rfl
-
-Depends on / 依赖: multiplicity
+/-
+**multiplicity_eq_of_emultiplicity_eq_some** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multiplicity_eq_of_emultiplicity_eq_some {n : Nat} (h : emultiplicity a b 
+= n) : multiplicity a b = n
+参数：h : emultiplicity a b = n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-theorem multiplicity_eq_of_emultiplicity_eq_some {n : Nat} (h : emultiplicity a b = n) :
+theorem multiplicity_eq_of_emultiplicity_eq_some {n : ℕ} (h : emultiplicity a b = n) :
     multiplicity a b = n := by
   simp [multiplicity, h]
   rfl
-
-/--
-theorem `emultiplicity_ne_of_multiplicity_ne` / 定理 `emultiplicity_ne_of_multiplicity_ne`
-
-English:
-theorem emultiplicity_ne_of_multiplicity_ne
-  given: {n : Nat}
-  proof: mt multiplicity_eq_of_emultiplicity_eq_some
-
-中文:
-定理 emultiplicity_ne_of_multiplicity_ne
-  条件: {n : 自然数}
-  证明: mt multiplicity_eq_of_emultiplicity_eq_some
-
-Depends on / 依赖: multiplicity_eq_of_emultiplicity_eq_some
+/-
+**emultiplicity_ne_of_multiplicity_ne** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_ne_of_multiplicity_ne {n : Nat} : multiplicity a b != n -> e
+multiplicity a b != n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `multiplicity_eq_of_emultiplicity_eq_some`：multiplicity_eq_of_emultiplici
+ty_eq_some {n : Nat} (h : emultiplicity a b = n) : multiplicity a b = n
 -/
-theorem emultiplicity_ne_of_multiplicity_ne {n : Nat} :
-    multiplicity a b != n -> emultiplicity a b != n :=
+theorem emultiplicity_ne_of_multiplicity_ne {n : ℕ} :
+    multiplicity a b ≠ n → emultiplicity a b ≠ n :=
   mt multiplicity_eq_of_emultiplicity_eq_some
-
-/--
-theorem `FiniteMultiplicity.emultiplicity_eq_multiplicity` / 定理 `FiniteMultiplicity.emultiplicity_eq_multiplicity`
-
-English:
-theorem FiniteMultiplicity.emultiplicity_eq_multiplicity
-  given: (h : FiniteMultiplicity a b)
-  proof: by
-  cases hm : emultiplicity a b
-  · simp [h] at hm
-  rw [multiplicity_eq_of_emultiplicity_eq_some hm]
-
-中文:
-定理 FiniteMultiplicity.emultiplicity_eq_multiplicity
-  条件: (h : FiniteMultiplicity a b)
-  证明: by
-  cases hm : emultiplicity a b
-  · simp [h] at hm
-  rw [multiplicity_eq_of_emultiplicity_eq_some hm]
-
-Depends on / 依赖: emultiplicity, multiplicity_eq_of_emultiplicity_eq_some
+/-
+**FiniteMultiplicity.emultiplicity_eq_multiplicity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：FiniteMultiplicity.emultiplicity_eq_multiplicity (h : FiniteMultiplicity a
+ b) : emultiplicity a b = multiplicity a b
+参数：h : FiniteMultiplicity a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `multiplicity_eq_of_emultiplicity_eq_some`：multiplicity_eq_of_emultiplici
+ty_eq_some {n : Nat} (h : emultiplicity a b = n) : multiplicity a b = n
 -/
 theorem FiniteMultiplicity.emultiplicity_eq_multiplicity (h : FiniteMultiplicity a b) :
     emultiplicity a b = multiplicity a b := by
   cases hm : emultiplicity a b
   · simp [h] at hm
   rw [multiplicity_eq_of_emultiplicity_eq_some hm]
-
-/--
-theorem `FiniteMultiplicity.emultiplicity_eq_iff_multiplicity_eq` / 定理 `FiniteMultiplicity.emultiplicity_eq_iff_multiplicity_eq`
-
-English:
-theorem FiniteMultiplicity.emultiplicity_eq_iff_multiplicity_eq
-  statement: {n : Nat}
-  proof: by
-  simp [h.emultiplicity_eq_multiplicity]
-
-中文:
-定理 FiniteMultiplicity.emultiplicity_eq_iff_multiplicity_eq
-  结论: {n : 自然数}
-  证明: by
-  simp [h.emultiplicity_eq_multiplicity]
-
-Depends on / 依赖: emultiplicity_eq_multiplicity, h.emultiplicity_eq_multiplicity
+/-
+**FiniteMultiplicity.emultiplicity_eq_iff_multiplicity_eq** 是 Mathlib 中的一个定理，位于命
+名空间 ``。
+形式化陈述：FiniteMultiplicity.emultiplicity_eq_iff_multiplicity_eq {n : Nat} (h : Fin
+iteMultiplicity a b) : emultiplicity a b = n ↔ multiplicity a b = n
+参数：h : FiniteMultiplicity a b。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FiniteMultiplicity.emultiplicity_eq_multiplicity`：FiniteMultiplicity.emu
+ltiplicity_eq_multiplicity (h : FiniteMultiplicity a b) : emultiplicity a b = mu
+ltiplicity a b
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem FiniteMultiplicity.emultiplicity_eq_iff_multiplicity_eq {n : Nat}
+theorem FiniteMultiplicity.emultiplicity_eq_iff_multiplicity_eq {n : ℕ}
     (h : FiniteMultiplicity a b) : emultiplicity a b = n ↔ multiplicity a b = n := by
   simp [h.emultiplicity_eq_multiplicity]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `emultiplicity_eq_iff_multiplicity_eq_of_ne_one` / 定理 `emultiplicity_eq_iff_multiplicity_eq_of_ne_one`
-
-English:
-theorem emultiplicity_eq_iff_multiplicity_eq_of_ne_one
-  given: {n : Nat} (h : n != 1)
-  proof: by
-  constructor
-  · exact multiplicity_eq_of_emultiplicity_eq_some
-  · intro h₂
-    simpa [multiplicity, WithTop.untopD_eq_iff, h] using! h₂
-
-中文:
-定理 emultiplicity_eq_iff_multiplicity_eq_of_ne_one
-  条件: {n : 自然数} (h : n != 1)
-  证明: by
-  constructor
-  · exact multiplicity_eq_of_emultiplicity_eq_some
-  · intro h₂
-    simpa [multiplicity, WithTop.untopD_eq_iff, h] using! h₂
-
-Depends on / 依赖: WithTop, WithTop.untopD_eq_iff, multiplicity, multiplicity_eq_of_emultiplicity_eq_some, untopD_eq_iff
+/-
+**emultiplicity_eq_iff_multiplicity_eq_of_ne_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_eq_iff_multiplicity_eq_of_ne_one {n : Nat} (h : n != 1) : em
+ultiplicity a b = n ↔ multiplicity a b = n
+参数：h : n != 1。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `multiplicity_eq_of_emultiplicity_eq_some`：multiplicity_eq_of_emultiplici
+ty_eq_some {n : Nat} (h : emultiplicity a b = n) : multiplicity a b = n
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
 -/
-theorem emultiplicity_eq_iff_multiplicity_eq_of_ne_one {n : Nat} (h : n != 1) :
+theorem emultiplicity_eq_iff_multiplicity_eq_of_ne_one {n : ℕ} (h : n ≠ 1) :
     emultiplicity a b = n ↔ multiplicity a b = n := by
   constructor
   · exact multiplicity_eq_of_emultiplicity_eq_some
   · intro h₂
     simpa [multiplicity, WithTop.untopD_eq_iff, h] using! h₂
-
-/--
-theorem `emultiplicity_eq_zero_iff_multiplicity_eq_zero` / 定理 `emultiplicity_eq_zero_iff_multiplicity_eq_zero`
-
-English:
-theorem emultiplicity_eq_zero_iff_multiplicity_eq_zero
-  proof: emultiplicity_eq_iff_multiplicity_eq_of_ne_one zero_ne_one
-
-@[simp]
-
-中文:
-定理 emultiplicity_eq_zero_iff_multiplicity_eq_zero
-  证明: emultiplicity_eq_iff_multiplicity_eq_of_ne_one zero_ne_one
-
-@[simp]
-
-Depends on / 依赖: emultiplicity_eq_iff_multiplicity_eq_of_ne_one, zero_ne_one
+/-
+**emultiplicity_eq_zero_iff_multiplicity_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_eq_zero_iff_multiplicity_eq_zero : emultiplicity a b = 0 ↔ m
+ultiplicity a b = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `emultiplicity_eq_iff_multiplicity_eq_of_ne_one`：emultiplicity_eq_iff_mul
+tiplicity_eq_of_ne_one {n : Nat} (h : n != 1) : emultiplicity a b = n ↔ multipli
+city a b = n
+· 使用定理 `zero_ne_one`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 0 ≠ 1
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
 theorem emultiplicity_eq_zero_iff_multiplicity_eq_zero :
     emultiplicity a b = 0 ↔ multiplicity a b = 0 :=
   emultiplicity_eq_iff_multiplicity_eq_of_ne_one zero_ne_one
 
 @[simp]
-/--
-theorem `multiplicity_eq_one_of_not_finiteMultiplicity` / 定理 `multiplicity_eq_one_of_not_finiteMultiplicity`
-
-English:
-theorem multiplicity_eq_one_of_not_finiteMultiplicity
-  given: (h : ¬FiniteMultiplicity a b)
-  proof: by
-  rw [multiplicity]; rw [emultiplicity_eq_top.mpr h]
-  decide
-
-@[simp]
-
-中文:
-定理 multiplicity_eq_one_of_not_finiteMultiplicity
-  条件: (h : ¬FiniteMultiplicity a b)
-  证明: by
-  rw [multiplicity]; rw [emultiplicity_eq_top.mpr h]
-  decide
-
-@[simp]
-
-Depends on / 依赖: Nontrivial, T0Space, emultiplicity_eq_top, emultiplicity_eq_top.mpr, multiplicity
+/-
+**multiplicity_eq_one_of_not_finiteMultiplicity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multiplicity_eq_one_of_not_finiteMultiplicity (h : ¬FiniteMultiplicity a b
+) : multiplicity a b = 1
+参数：h : ¬FiniteMultiplicity a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `multiplicity.eq_1`：∀ {α : Type u_1} [inst : Monoid α] (a b : α), multipl
+icity a b = WithTop.untopD 1 (emultiplicity a b)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `emultiplicity_eq_top`：emultiplicity_eq_top : emultiplicity a b = ⊤ ↔ ¬Fi
+niteMultiplicity a b
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
 -/
 theorem multiplicity_eq_one_of_not_finiteMultiplicity (h : ¬FiniteMultiplicity a b) :
     multiplicity a b = 1 := by
-  rw [multiplicity]; rw [emultiplicity_eq_top.mpr h]
+  rw [multiplicity, emultiplicity_eq_top.mpr h]
   decide
 
 @[simp]
-/--
-theorem `multiplicity_le_emultiplicity` / 定理 `multiplicity_le_emultiplicity`
-
-English:
-theorem multiplicity_le_emultiplicity
-  proof: by
-  by_cases hf : FiniteMultiplicity a b
-  · simp [hf.emultiplicity_eq_multiplicity]
-  · simp [hf, emultiplicity_eq_top.2]
-
-中文:
-定理 multiplicity_le_emultiplicity
-  证明: by
-  by_cases hf : FiniteMultiplicity a b
-  · simp [hf.emultiplicity_eq_multiplicity]
-  · simp [hf, emultiplicity_eq_top.2]
-
-Depends on / 依赖: FiniteMultiplicity, emultiplicity_eq_multiplicity, emultiplicity_eq_top, hf.emultiplicity_eq_multiplicity
+/-
+**multiplicity_le_emultiplicity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multiplicity_le_emultiplicity : multiplicity a b <= emultiplicity a b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FiniteMultiplicity.emultiplicity_eq_multiplicity`：FiniteMultiplicity.emu
+ltiplicity_eq_multiplicity (h : FiniteMultiplicity a b) : emultiplicity a b = mu
+ltiplicity a b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `multiplicity_eq_one_of_not_finiteMultiplicity`：multiplicity_eq_one_of_no
+t_finiteMultiplicity (h : ¬FiniteMultiplicity a b) : multiplicity a b = 1
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `emultiplicity_eq_top`：emultiplicity_eq_top : emultiplicity a b = ⊤ ↔ ¬Fi
+niteMultiplicity a b
 -/
 theorem multiplicity_le_emultiplicity :
-    multiplicity a b <= emultiplicity a b := by
+    multiplicity a b ≤ emultiplicity a b := by
   by_cases hf : FiniteMultiplicity a b
   · simp [hf.emultiplicity_eq_multiplicity]
   · simp [hf, emultiplicity_eq_top.2]
 
 -- Cannot be @[simp] because `β`, `c`, and `d` cannot be inferred by `simp`.
-/--
-theorem `multiplicity_eq_of_emultiplicity_eq` / 定理 `multiplicity_eq_of_emultiplicity_eq`
-
-English:
-theorem multiplicity_eq_of_emultiplicity_eq
-  statement: {c d : β}
-  proof: by
-  unfold multiplicity
-  rw [h]
-
-中文:
-定理 multiplicity_eq_of_emultiplicity_eq
-  结论: {c d : β}
-  证明: by
-  unfold multiplicity
-  rw [h]
-
-Depends on / 依赖: multiplicity
+/-
+**multiplicity_eq_of_emultiplicity_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multiplicity_eq_of_emultiplicity_eq {c d : β} (h : emultiplicity a b = emu
+ltiplicity c d) : multiplicity a b = multiplicity c d
+参数：h : emultiplicity a b = emultiplicity c d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem multiplicity_eq_of_emultiplicity_eq {c d : β}
     (h : emultiplicity a b = emultiplicity c d) : multiplicity a b = multiplicity c d := by
   unfold multiplicity
   rw [h]
-
-/--
-theorem `multiplicity_le_of_emultiplicity_le` / 定理 `multiplicity_le_of_emultiplicity_le`
-
-English:
-theorem multiplicity_le_of_emultiplicity_le
-  given: {n : Nat} (h : emultiplicity a b <= n)
-  proof: by
-  exact_mod_cast multiplicity_le_emultiplicity.trans h
-
-中文:
-定理 multiplicity_le_of_emultiplicity_le
-  条件: {n : 自然数} (h : emultiplicity a b <= n)
-  证明: by
-  exact_mod_cast multiplicity_le_emultiplicity.trans h
-
-Depends on / 依赖: multiplicity_le_emultiplicity, multiplicity_le_emultiplicity.trans
+/-
+**multiplicity_le_of_emultiplicity_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multiplicity_le_of_emultiplicity_le {n : Nat} (h : emultiplicity a b <= n)
+ : multiplicity a b <= n
+参数：h : emultiplicity a b <= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `instIsOrderedRingENat`：IsOrderedRing ℕ∞
+· 使用定理 `instZeroLEOneClassENat`：ZeroLEOneClass ℕ∞
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `multiplicity_le_emultiplicity`：multiplicity_le_emultiplicity : multiplic
+ity a b <= emultiplicity a b
 -/
-theorem multiplicity_le_of_emultiplicity_le {n : Nat} (h : emultiplicity a b <= n) :
-    multiplicity a b <= n := by
+theorem multiplicity_le_of_emultiplicity_le {n : ℕ} (h : emultiplicity a b ≤ n) :
+    multiplicity a b ≤ n := by
   exact_mod_cast multiplicity_le_emultiplicity.trans h
-
-/--
-theorem `FiniteMultiplicity.emultiplicity_le_of_multiplicity_le` / 定理 `FiniteMultiplicity.emultiplicity_le_of_multiplicity_le`
-
-English:
-theorem FiniteMultiplicity.emultiplicity_le_of_multiplicity_le
-  statement: (hfin : FiniteMultiplicity a b)
-  proof: by
-  rw [emultiplicity_eq_multiplicity hfin]
-  assumption_mod_cast
-
-中文:
-定理 FiniteMultiplicity.emultiplicity_le_of_multiplicity_le
-  结论: (hfin : FiniteMultiplicity a b)
-  证明: by
-  rw [emultiplicity_eq_multiplicity hfin]
-  assumption_mod_cast
-
-Depends on / 依赖: assumption_mod_cast, emultiplicity_eq_multiplicity
+/-
+**FiniteMultiplicity.emultiplicity_le_of_multiplicity_le** 是 Mathlib 中的一个定理，位于命名
+空间 ``。
+形式化陈述：FiniteMultiplicity.emultiplicity_le_of_multiplicity_le (hfin : FiniteMulti
+plicity a b) {n : Nat} (h : multiplicity a b <= n) : emultiplicity a b <= n
+参数：hfin : FiniteMultiplicity a b；h : multiplicity a b <= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FiniteMultiplicity.emultiplicity_eq_multiplicity`：FiniteMultiplicity.emu
+ltiplicity_eq_multiplicity (h : FiniteMultiplicity a b) : emultiplicity a b = mu
+ltiplicity a b
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `instIsOrderedRingENat`：IsOrderedRing ℕ∞
+· 使用定理 `instZeroLEOneClassENat`：ZeroLEOneClass ℕ∞
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
 -/
 theorem FiniteMultiplicity.emultiplicity_le_of_multiplicity_le (hfin : FiniteMultiplicity a b)
-    {n : Nat} (h : multiplicity a b <= n) : emultiplicity a b <= n := by
+    {n : ℕ} (h : multiplicity a b ≤ n) : emultiplicity a b ≤ n := by
   rw [emultiplicity_eq_multiplicity hfin]
   assumption_mod_cast
-
-/--
-theorem `le_emultiplicity_of_le_multiplicity` / 定理 `le_emultiplicity_of_le_multiplicity`
-
-English:
-theorem le_emultiplicity_of_le_multiplicity
-  given: {n : Nat} (h : n <= multiplicity a b)
-  proof: by
-  exact_mod_cast (WithTop.coe_mono h).trans multiplicity_le_emultiplicity
-
-中文:
-定理 le_emultiplicity_of_le_multiplicity
-  条件: {n : 自然数} (h : n <= multiplicity a b)
-  证明: by
-  exact_mod_cast (WithTop.coe_mono h).trans multiplicity_le_emultiplicity
-
-Depends on / 依赖: WithTop, WithTop.coe_mono, coe_mono, multiplicity_le_emultiplicity
+/-
+**le_emultiplicity_of_le_multiplicity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_emultiplicity_of_le_multiplicity {n : Nat} (h : n <= multiplicity a b) 
+: n <= emultiplicity a b
+参数：h : n <= multiplicity a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `WithTop.coe_mono`：∀ {α : Type u_1} [inst : Preorder α], Monotone fun a =
+> ↑a
+· 使用定理 `multiplicity_le_emultiplicity`：multiplicity_le_emultiplicity : multiplic
+ity a b <= emultiplicity a b
 -/
-theorem le_emultiplicity_of_le_multiplicity {n : Nat} (h : n <= multiplicity a b) :
-    n <= emultiplicity a b := by
+theorem le_emultiplicity_of_le_multiplicity {n : ℕ} (h : n ≤ multiplicity a b) :
+    n ≤ emultiplicity a b := by
   exact_mod_cast (WithTop.coe_mono h).trans multiplicity_le_emultiplicity
-
-/--
-theorem `FiniteMultiplicity.le_multiplicity_of_le_emultiplicity` / 定理 `FiniteMultiplicity.le_multiplicity_of_le_emultiplicity`
-
-English:
-theorem FiniteMultiplicity.le_multiplicity_of_le_emultiplicity
-  statement: (hfin : FiniteMultiplicity a b)
-  proof: by
-  rw [emultiplicity_eq_multiplicity hfin] at h
-  assumption_mod_cast
-
-中文:
-定理 FiniteMultiplicity.le_multiplicity_of_le_emultiplicity
-  结论: (hfin : FiniteMultiplicity a b)
-  证明: by
-  rw [emultiplicity_eq_multiplicity hfin] at h
-  assumption_mod_cast
-
-Depends on / 依赖: assumption_mod_cast, emultiplicity_eq_multiplicity
+/-
+**FiniteMultiplicity.le_multiplicity_of_le_emultiplicity** 是 Mathlib 中的一个定理，位于命名
+空间 ``。
+形式化陈述：FiniteMultiplicity.le_multiplicity_of_le_emultiplicity (hfin : FiniteMulti
+plicity a b) {n : Nat} (h : n <= emultiplicity a b) : n <= multiplicity a b
+参数：hfin : FiniteMultiplicity a b；h : n <= emultiplicity a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `instIsOrderedRingENat`：IsOrderedRing ℕ∞
+· 使用定理 `instZeroLEOneClassENat`：ZeroLEOneClass ℕ∞
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FiniteMultiplicity.emultiplicity_eq_multiplicity`：FiniteMultiplicity.emu
+ltiplicity_eq_multiplicity (h : FiniteMultiplicity a b) : emultiplicity a b = mu
+ltiplicity a b
 -/
 theorem FiniteMultiplicity.le_multiplicity_of_le_emultiplicity (hfin : FiniteMultiplicity a b)
-    {n : Nat} (h : n <= emultiplicity a b) : n <= multiplicity a b := by
+    {n : ℕ} (h : n ≤ emultiplicity a b) : n ≤ multiplicity a b := by
   rw [emultiplicity_eq_multiplicity hfin] at h
   assumption_mod_cast
-
-/--
-theorem `multiplicity_lt_of_emultiplicity_lt` / 定理 `multiplicity_lt_of_emultiplicity_lt`
-
-English:
-theorem multiplicity_lt_of_emultiplicity_lt
-  given: {n : Nat} (h : emultiplicity a b < n)
-  proof: by
-  exact_mod_cast multiplicity_le_emultiplicity.trans_lt h
-
-中文:
-定理 multiplicity_lt_of_emultiplicity_lt
-  条件: {n : 自然数} (h : emultiplicity a b < n)
-  证明: by
-  exact_mod_cast multiplicity_le_emultiplicity.trans_lt h
-
-Depends on / 依赖: multiplicity_le_emultiplicity, multiplicity_le_emultiplicity.trans_lt, trans_lt
+/-
+**multiplicity_lt_of_emultiplicity_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multiplicity_lt_of_emultiplicity_lt {n : Nat} (h : emultiplicity a b < n) 
+: multiplicity a b < n
+参数：h : emultiplicity a b < n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `instIsOrderedRingENat`：IsOrderedRing ℕ∞
+· 使用定理 `instZeroLEOneClassENat`：ZeroLEOneClass ℕ∞
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `multiplicity_le_emultiplicity`：multiplicity_le_emultiplicity : multiplic
+ity a b <= emultiplicity a b
 -/
-theorem multiplicity_lt_of_emultiplicity_lt {n : Nat} (h : emultiplicity a b < n) :
+theorem multiplicity_lt_of_emultiplicity_lt {n : ℕ} (h : emultiplicity a b < n) :
     multiplicity a b < n := by
   exact_mod_cast multiplicity_le_emultiplicity.trans_lt h
-
-/--
-theorem `FiniteMultiplicity.emultiplicity_lt_of_multiplicity_lt` / 定理 `FiniteMultiplicity.emultiplicity_lt_of_multiplicity_lt`
-
-English:
-theorem FiniteMultiplicity.emultiplicity_lt_of_multiplicity_lt
-  statement: (hfin : FiniteMultiplicity a b)
-  proof: by
-  rw [emultiplicity_eq_multiplicity hfin]
-  assumption_mod_cast
-
-中文:
-定理 FiniteMultiplicity.emultiplicity_lt_of_multiplicity_lt
-  结论: (hfin : FiniteMultiplicity a b)
-  证明: by
-  rw [emultiplicity_eq_multiplicity hfin]
-  assumption_mod_cast
-
-Depends on / 依赖: assumption_mod_cast, emultiplicity_eq_multiplicity
+/-
+**FiniteMultiplicity.emultiplicity_lt_of_multiplicity_lt** 是 Mathlib 中的一个定理，位于命名
+空间 ``。
+形式化陈述：FiniteMultiplicity.emultiplicity_lt_of_multiplicity_lt (hfin : FiniteMulti
+plicity a b) {n : Nat} (h : multiplicity a b < n) : emultiplicity a b < n
+参数：hfin : FiniteMultiplicity a b；h : multiplicity a b < n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FiniteMultiplicity.emultiplicity_eq_multiplicity`：FiniteMultiplicity.emu
+ltiplicity_eq_multiplicity (h : FiniteMultiplicity a b) : emultiplicity a b = mu
+ltiplicity a b
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `instIsOrderedRingENat`：IsOrderedRing ℕ∞
+· 使用定理 `instZeroLEOneClassENat`：ZeroLEOneClass ℕ∞
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
 -/
 theorem FiniteMultiplicity.emultiplicity_lt_of_multiplicity_lt (hfin : FiniteMultiplicity a b)
-    {n : Nat} (h : multiplicity a b < n) : emultiplicity a b < n := by
+    {n : ℕ} (h : multiplicity a b < n) : emultiplicity a b < n := by
   rw [emultiplicity_eq_multiplicity hfin]
   assumption_mod_cast
-
-/--
-theorem `lt_emultiplicity_of_lt_multiplicity` / 定理 `lt_emultiplicity_of_lt_multiplicity`
-
-English:
-theorem lt_emultiplicity_of_lt_multiplicity
-  given: {n : Nat} (h : n < multiplicity a b)
-  proof: by
-  exact_mod_cast (WithTop.coe_strictMono h).trans_le multiplicity_le_emultiplicity
-
-中文:
-定理 lt_emultiplicity_of_lt_multiplicity
-  条件: {n : 自然数} (h : n < multiplicity a b)
-  证明: by
-  exact_mod_cast (WithTop.coe_strictMono h).trans_le multiplicity_le_emultiplicity
-
-Depends on / 依赖: WithTop, WithTop.coe_strictMono, coe_strictMono, multiplicity_le_emultiplicity, trans_le
+/-
+**lt_emultiplicity_of_lt_multiplicity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lt_emultiplicity_of_lt_multiplicity {n : Nat} (h : n < multiplicity a b) :
+ n < emultiplicity a b
+参数：h : n < multiplicity a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `WithTop.coe_strictMono`：∀ {α : Type u_1} [inst : Preorder α], StrictMono
+ fun a => ↑a
+· 使用定理 `multiplicity_le_emultiplicity`：multiplicity_le_emultiplicity : multiplic
+ity a b <= emultiplicity a b
 -/
-theorem lt_emultiplicity_of_lt_multiplicity {n : Nat} (h : n < multiplicity a b) :
+theorem lt_emultiplicity_of_lt_multiplicity {n : ℕ} (h : n < multiplicity a b) :
     n < emultiplicity a b := by
   exact_mod_cast (WithTop.coe_strictMono h).trans_le multiplicity_le_emultiplicity
-
-/--
-theorem `FiniteMultiplicity.lt_multiplicity_of_lt_emultiplicity` / 定理 `FiniteMultiplicity.lt_multiplicity_of_lt_emultiplicity`
-
-English:
-theorem FiniteMultiplicity.lt_multiplicity_of_lt_emultiplicity
-  statement: (hfin : FiniteMultiplicity a b)
-  proof: by
-  rw [emultiplicity_eq_multiplicity hfin] at h
-  assumption_mod_cast
-
-中文:
-定理 FiniteMultiplicity.lt_multiplicity_of_lt_emultiplicity
-  结论: (hfin : FiniteMultiplicity a b)
-  证明: by
-  rw [emultiplicity_eq_multiplicity hfin] at h
-  assumption_mod_cast
-
-Depends on / 依赖: UniformSpace, assumption_mod_cast, completableTopField_of_complete, emultiplicity_eq_multiplicity
+/-
+**FiniteMultiplicity.lt_multiplicity_of_lt_emultiplicity** 是 Mathlib 中的一个定理，位于命名
+空间 ``。
+形式化陈述：FiniteMultiplicity.lt_multiplicity_of_lt_emultiplicity (hfin : FiniteMulti
+plicity a b) {n : Nat} (h : n < emultiplicity a b) : n < multiplicity a b
+参数：hfin : FiniteMultiplicity a b；h : n < emultiplicity a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `instIsOrderedRingENat`：IsOrderedRing ℕ∞
+· 使用定理 `instZeroLEOneClassENat`：ZeroLEOneClass ℕ∞
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FiniteMultiplicity.emultiplicity_eq_multiplicity`：FiniteMultiplicity.emu
+ltiplicity_eq_multiplicity (h : FiniteMultiplicity a b) : emultiplicity a b = mu
+ltiplicity a b
 -/
 theorem FiniteMultiplicity.lt_multiplicity_of_lt_emultiplicity (hfin : FiniteMultiplicity a b)
-    {n : Nat} (h : n < emultiplicity a b) : n < multiplicity a b := by
+    {n : ℕ} (h : n < emultiplicity a b) : n < multiplicity a b := by
   rw [emultiplicity_eq_multiplicity hfin] at h
   assumption_mod_cast
-
-/--
-theorem `emultiplicity_pos_iff` / 定理 `emultiplicity_pos_iff`
-
-English:
-theorem emultiplicity_pos_iff
-  proof: by
-  simp [pos_iff_ne_zero, pos_iff_ne_zero, emultiplicity_eq_zero_iff_multiplicity_eq_zero]
-
-中文:
-定理 emultiplicity_pos_iff
-  证明: by
-  simp [pos_iff_ne_zero, pos_iff_ne_zero, emultiplicity_eq_zero_iff_multiplicity_eq_zero]
-
-Depends on / 依赖: emultiplicity_eq_zero_iff_multiplicity_eq_zero, pos_iff_ne_zero
+/-
+**emultiplicity_pos_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_pos_iff : 0 < emultiplicity a b ↔ 0 < multiplicity a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `instCanonicallyOrderedAddENat`：CanonicallyOrderedAdd ℕ∞
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem emultiplicity_pos_iff :
     0 < emultiplicity a b ↔ 0 < multiplicity a b := by
   simp [pos_iff_ne_zero, pos_iff_ne_zero, emultiplicity_eq_zero_iff_multiplicity_eq_zero]
-
-/--
-theorem `FiniteMultiplicity.def` / 定理 `FiniteMultiplicity.def`
-
-English:
-theorem FiniteMultiplicity.def
-  statement: FiniteMultiplicity a b ↔ exists n : Nat, ¬a ^ (n + 1) ∣ b
-  proof: Iff.rfl
-
-中文:
-定理 FiniteMultiplicity.def
-  结论: FiniteMultiplicity a b ↔ 存在 n : 自然数, ¬a ^ (n + 1) ∣ b
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**FiniteMultiplicity.def** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：FiniteMultiplicity.def : FiniteMultiplicity a b ↔ exists n : Nat, ¬a ^ (n 
++ 1) ∣ b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem FiniteMultiplicity.def : FiniteMultiplicity a b ↔ exists n : Nat, ¬a ^ (n + 1) ∣ b :=
+theorem FiniteMultiplicity.def : FiniteMultiplicity a b ↔ ∃ n : ℕ, ¬a ^ (n + 1) ∣ b :=
   Iff.rfl
-
-/--
-theorem `FiniteMultiplicity.not_dvd_of_one_right` / 定理 `FiniteMultiplicity.not_dvd_of_one_right`
-
-English:
-theorem FiniteMultiplicity.not_dvd_of_one_right
-  statement: FiniteMultiplicity a 1 -> ¬a ∣ 1
-  proof: fun ⟨n, hn⟩ ⟨d, hd⟩ => hn ⟨d ^ (n + 1), (pow_mul_pow_eq_one (n + 1) hd.symm).symm⟩
-
-@[norm_cast]
-
-中文:
-定理 FiniteMultiplicity.not_dvd_of_one_right
-  结论: FiniteMultiplicity a 1 -> ¬a ∣ 1
-  证明: fun ⟨n, hn⟩ ⟨d, hd⟩ => hn ⟨d ^ (n + 1), (pow_mul_pow_eq_one (n + 1) hd.symm).symm⟩
-
-@[norm_cast]
-
-Depends on / 依赖: hd.symm, pow_mul_pow_eq_one
+/-
+**FiniteMultiplicity.not_dvd_of_one_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：FiniteMultiplicity.not_dvd_of_one_right : FiniteMultiplicity a 1 -> ¬a ∣ 1
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `pow_mul_pow_eq_one`：∀ {M : Type u_4} [inst : Monoid M] {a b : M} (n : ℕ)
+, a * b = 1 → a ^ n * b ^ n = 1
 -/
-theorem FiniteMultiplicity.not_dvd_of_one_right : FiniteMultiplicity a 1 -> ¬a ∣ 1 :=
+theorem FiniteMultiplicity.not_dvd_of_one_right : FiniteMultiplicity a 1 → ¬a ∣ 1 :=
   fun ⟨n, hn⟩ ⟨d, hd⟩ => hn ⟨d ^ (n + 1), (pow_mul_pow_eq_one (n + 1) hd.symm).symm⟩
 
 @[norm_cast]
-/--
-theorem `Int.natCast_emultiplicity` / 定理 `Int.natCast_emultiplicity`
-
-English:
-theorem Int.natCast_emultiplicity
-  given: (a b : Nat)
-  proof: by
-  unfold emultiplicity FiniteMultiplicity
-  congr! <;> norm_cast
-
-@[norm_cast]
-
-中文:
-定理 整数.natCast_emultiplicity
-  条件: (a b : 自然数)
-  证明: by
-  unfold emultiplicity FiniteMultiplicity
-  congr! <;> norm_cast
-
-@[norm_cast]
-
-Depends on / 依赖: FiniteMultiplicity, emultiplicity
+/-
+**Int.natCast_emultiplicity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Int.natCast_emultiplicity (a b : Nat) : emultiplicity (a : Int) (b : Int) 
+= emultiplicity a b
+参数：a b : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `Eq.mpr_prop`：∀ {p q : Prop}, p = q → q → p
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `Lean.Meta.FastSubsingleton.elim`：∀ {α : Sort u} [h : Meta.FastSubsinglet
+on α] (a b : α), a = b
+· 使用定理 `Lean.Meta.instFastSubsingletonForall`：∀ {α : Sort u} {β : α → Sort v} [i
+nst : ∀ (x : α), Meta.FastSubsingleton (β x)], Meta.FastSubsingleton ((x : α) → 
+β x)
+· 使用定理 `Lean.Meta.instFastSubsingletonDecidable`：∀ {p : Prop}, Meta.FastSubsingl
+eton (Decidable p)
 -/
-theorem Int.natCast_emultiplicity (a b : Nat) :
-    emultiplicity (a : Int) (b : Int) = emultiplicity a b := by
+theorem Int.natCast_emultiplicity (a b : ℕ) :
+    emultiplicity (a : ℤ) (b : ℤ) = emultiplicity a b := by
   unfold emultiplicity FiniteMultiplicity
   congr! <;> norm_cast
 
 @[norm_cast]
-/--
-theorem `Int.natCast_multiplicity` / 定理 `Int.natCast_multiplicity`
-
-English:
-theorem Int.natCast_multiplicity
-  given: (a b : Nat)
-  statement: multiplicity (a : Int) (b : Int) = multiplicity a b
-  proof: multiplicity_eq_of_emultiplicity_eq (natCast_emultiplicity a b)
-
-中文:
-定理 整数.natCast_multiplicity
-  条件: (a b : 自然数)
-  结论: multiplicity (a : 整数) (b : 整数) = multiplicity a b
-  证明: multiplicity_eq_of_emultiplicity_eq (natCast_emultiplicity a b)
-
-Depends on / 依赖: multiplicity_eq_of_emultiplicity_eq, natCast_emultiplicity
+/-
+**Int.natCast_multiplicity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Int.natCast_multiplicity (a b : Nat) : multiplicity (a : Int) (b : Int) = 
+multiplicity a b
+参数：a b : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `multiplicity_eq_of_emultiplicity_eq`：multiplicity_eq_of_emultiplicity_eq
+ {c d : β} (h : emultiplicity a b = emultiplicity c d) : multiplicity a b = mult
+iplicity c d
+· 使用定理 `Int.natCast_emultiplicity`：Int.natCast_emultiplicity (a b : Nat) : emult
+iplicity (a : Int) (b : Int) = emultiplicity a b
 -/
-theorem Int.natCast_multiplicity (a b : Nat) : multiplicity (a : Int) (b : Int) = multiplicity a b :=
+theorem Int.natCast_multiplicity (a b : ℕ) : multiplicity (a : ℤ) (b : ℤ) = multiplicity a b :=
   multiplicity_eq_of_emultiplicity_eq (natCast_emultiplicity a b)
-
-/--
-theorem `FiniteMultiplicity.not_iff_forall` / 定理 `FiniteMultiplicity.not_iff_forall`
-
-English:
-theorem FiniteMultiplicity.not_iff_forall
-  statement: ¬FiniteMultiplicity a b ↔ forall n : Nat, a ^ n ∣ b
-  proof: ⟨fun h n =>
-    Nat.casesOn n
-      (by
-        rw [_root_.pow_zero]
-        exact one_dvd _)
-      (by simpa [FiniteMultiplicity] using h),
-    by simp [FiniteMultiplicity]; tauto⟩
-
-中文:
-定理 FiniteMultiplicity.not_iff_对任意
-  结论: ¬FiniteMultiplicity a b ↔ 对任意 n : 自然数, a ^ n ∣ b
-  证明: ⟨fun h n =>
-    Nat.casesOn n
-      (by
-        rw [_root_.pow_zero]
-        exact one_dvd _)
-      (by simpa [FiniteMultiplicity] using h),
-    by simp [FiniteMultiplicity]; tauto⟩
-
-Depends on / 依赖: FiniteMultiplicity, Nat.casesOn, _root_, _root_.pow_zero, casesOn, one_dvd, pow_zero
+/-
+**FiniteMultiplicity.not_iff_forall** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：FiniteMultiplicity.not_iff_forall : ¬FiniteMultiplicity a b ↔ forall n : N
+at, a ^ n ∣ b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `one_dvd`：one_dvd (a : α) : 1 ∣ a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
-theorem FiniteMultiplicity.not_iff_forall : ¬FiniteMultiplicity a b ↔ forall n : Nat, a ^ n ∣ b :=
+theorem FiniteMultiplicity.not_iff_forall : ¬FiniteMultiplicity a b ↔ ∀ n : ℕ, a ^ n ∣ b :=
   ⟨fun h n =>
     Nat.casesOn n
       (by
@@ -724,31 +638,15 @@ theorem FiniteMultiplicity.not_iff_forall : ¬FiniteMultiplicity a b ↔ forall 
         exact one_dvd _)
       (by simpa [FiniteMultiplicity] using h),
     by simp [FiniteMultiplicity]; tauto⟩
-
-/--
-theorem `FiniteMultiplicity.not_isUnit` / 定理 `FiniteMultiplicity.not_isUnit`
-
-English:
-theorem FiniteMultiplicity.not_isUnit
-  given: (h : FiniteMultiplicity a b)
-  statement: ¬IsUnit a
-  proof: let ⟨n, hn⟩ := h
-  hn ∘ IsUnit.dvd ∘ IsUnit.pow (n + 1)
-
-@[deprecated (since := "2026-08-02")]
-alias FiniteMultiplicity.not_unit := FiniteMultiplicity.not_isUnit
-
-中文:
-定理 FiniteMultiplicity.not_isUnit
-  条件: (h : FiniteMultiplicity a b)
-  结论: ¬是单位 a
-  证明: let ⟨n, hn⟩ := h
-  hn ∘ IsUnit.dvd ∘ IsUnit.pow (n + 1)
-
-@[deprecated (since := "2026-08-02")]
-alias FiniteMultiplicity.not_unit := FiniteMultiplicity.not_isUnit
-
-Depends on / 依赖: IsUnit, IsUnit.dvd, IsUnit.pow
+/-
+**FiniteMultiplicity.not_isUnit** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：FiniteMultiplicity.not_isUnit (h : FiniteMultiplicity a b) : ¬IsUnit a
+参数：h : FiniteMultiplicity a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUnit.dvd`：dvd (hu : IsUnit u) : u ∣ a
+· 使用定理 `IsUnit.pow`：∀ {M : Type u_1} [inst : Monoid M] {a : M} (n : ℕ), IsUnit a
+ → IsUnit (a ^ n)
 -/
 theorem FiniteMultiplicity.not_isUnit (h : FiniteMultiplicity a b) : ¬IsUnit a :=
   let ⟨n, hn⟩ := h
@@ -756,58 +654,51 @@ theorem FiniteMultiplicity.not_isUnit (h : FiniteMultiplicity a b) : ¬IsUnit a 
 
 @[deprecated (since := "2026-08-02")]
 alias FiniteMultiplicity.not_unit := FiniteMultiplicity.not_isUnit
-
-/--
-theorem `FiniteMultiplicity.mul_left` / 定理 `FiniteMultiplicity.mul_left`
-
-English:
-theorem FiniteMultiplicity.mul_left
-  given: {c : α}
-  proof: fun ⟨n, hn⟩ =>
-  ⟨n, fun h => hn (h.trans (dvd_mul_right _ _))⟩
-
-中文:
-定理 FiniteMultiplicity.mul_left
-  条件: {c : α}
-  证明: fun ⟨n, hn⟩ =>
-  ⟨n, fun h => hn (h.trans (dvd_mul_right _ _))⟩
-
-Depends on / 依赖: UniformContinuousConstSMul, UniformContinuousConstSMul.instContinuousConstSMul, instContinuousConstSMul
+/-
+**FiniteMultiplicity.mul_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：FiniteMultiplicity.mul_left {c : α} : FiniteMultiplicity a (b * c) -> Fini
+teMultiplicity a b
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Dvd.dvd.trans`：∀ {α : Type u_1} [inst : Semigroup α] {a b c : α}, a ∣ b 
+→ b ∣ c → a ∣ c
+· 使用定理 `dvd_mul_right`：dvd_mul_right (a b : α) : a ∣ a * b
 -/
 theorem FiniteMultiplicity.mul_left {c : α} :
-    FiniteMultiplicity a (b * c) -> FiniteMultiplicity a b := fun ⟨n, hn⟩ =>
+    FiniteMultiplicity a (b * c) → FiniteMultiplicity a b := fun ⟨n, hn⟩ =>
   ⟨n, fun h => hn (h.trans (dvd_mul_right _ _))⟩
-
-/--
-theorem `pow_dvd_of_le_emultiplicity` / 定理 `pow_dvd_of_le_emultiplicity`
-
-English:
-theorem pow_dvd_of_le_emultiplicity
-  given: {k : Nat} (hk : k <= emultiplicity a b)
-  proof: by classical
-  cases k
-  · simp
-  unfold emultiplicity at hk
-  split at hk
-  · norm_cast at hk
-    simpa using (Nat.find_min _ (lt_of_succ_le hk))
-  · apply FiniteMultiplicity.not_iff_forall.mp ‹_›
-
-中文:
-定理 pow_dvd_of_le_emultiplicity
-  条件: {k : 自然数} (hk : k <= emultiplicity a b)
-  证明: by classical
-  cases k
-  · simp
-  unfold emultiplicity at hk
-  split at hk
-  · norm_cast at hk
-    simpa using (Nat.find_min _ (lt_of_succ_le hk))
-  · apply FiniteMultiplicity.not_iff_forall.mp ‹_›
-
-Depends on / 依赖: FiniteMultiplicity, FiniteMultiplicity.not_iff_forall.mp, Nat.find_min, classical, emultiplicity, find_min, lt_of_succ_le, not_iff_forall
+/-
+**pow_dvd_of_le_emultiplicity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：pow_dvd_of_le_emultiplicity {k : Nat} (hk : k <= emultiplicity a b) : a ^ 
+k ∣ b
+参数：hk : k <= emultiplicity a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `FiniteMultiplicity.not_iff_forall`：FiniteMultiplicity.not_iff_forall : ¬
+FiniteMultiplicity a b ↔ forall n : Nat, a ^ n ∣ b
+· 使用定理 `Nat.find_min`：∀ {p : ℕ → Prop} [inst : DecidablePred p] (H : ∃ n, p n) {
+m : ℕ}, m < Nat.find H → ¬p m
+· 使用定理 `Nat.lt_of_succ_le`：∀ {n m : ℕ}, n.succ ≤ m → n < m
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `instIsOrderedRingENat`：IsOrderedRing ℕ∞
+· 使用定理 `instZeroLEOneClassENat`：ZeroLEOneClass ℕ∞
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
 -/
-theorem pow_dvd_of_le_emultiplicity {k : Nat} (hk : k <= emultiplicity a b) :
+theorem pow_dvd_of_le_emultiplicity {k : ℕ} (hk : k ≤ emultiplicity a b) :
     a ^ k ∣ b := by classical
   cases k
   · simp
@@ -816,78 +707,62 @@ theorem pow_dvd_of_le_emultiplicity {k : Nat} (hk : k <= emultiplicity a b) :
   · norm_cast at hk
     simpa using (Nat.find_min _ (lt_of_succ_le hk))
   · apply FiniteMultiplicity.not_iff_forall.mp ‹_›
-
-/--
-theorem `pow_dvd_of_le_multiplicity` / 定理 `pow_dvd_of_le_multiplicity`
-
-English:
-theorem pow_dvd_of_le_multiplicity
-  given: {k : Nat} (hk : k <= multiplicity a b)
-  proof: pow_dvd_of_le_emultiplicity (le_emultiplicity_of_le_multiplicity hk)
-
-@[simp]
-
-中文:
-定理 pow_dvd_of_le_multiplicity
-  条件: {k : 自然数} (hk : k <= multiplicity a b)
-  证明: pow_dvd_of_le_emultiplicity (le_emultiplicity_of_le_multiplicity hk)
-
-@[simp]
-
-Depends on / 依赖: le_emultiplicity_of_le_multiplicity, pow_dvd_of_le_emultiplicity
+/-
+**pow_dvd_of_le_multiplicity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：pow_dvd_of_le_multiplicity {k : Nat} (hk : k <= multiplicity a b) : a ^ k 
+∣ b
+参数：hk : k <= multiplicity a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `pow_dvd_of_le_emultiplicity`：pow_dvd_of_le_emultiplicity {k : Nat} (hk :
+ k <= emultiplicity a b) : a ^ k ∣ b
+· 使用定理 `le_emultiplicity_of_le_multiplicity`：le_emultiplicity_of_le_multiplicity
+ {n : Nat} (h : n <= multiplicity a b) : n <= emultiplicity a b
 -/
-theorem pow_dvd_of_le_multiplicity {k : Nat} (hk : k <= multiplicity a b) :
+theorem pow_dvd_of_le_multiplicity {k : ℕ} (hk : k ≤ multiplicity a b) :
     a ^ k ∣ b := pow_dvd_of_le_emultiplicity (le_emultiplicity_of_le_multiplicity hk)
 
 @[simp]
-/--
-theorem `pow_multiplicity_dvd` / 定理 `pow_multiplicity_dvd`
-
-English:
-theorem pow_multiplicity_dvd
-  given: (a b : α)
-  statement: a ^ (multiplicity a b) ∣ b
-  proof: pow_dvd_of_le_multiplicity le_rfl
-
-中文:
-定理 pow_multiplicity_dvd
-  条件: (a b : α)
-  结论: a ^ (multiplicity a b) ∣ b
-  证明: pow_dvd_of_le_multiplicity le_rfl
-
-Depends on / 依赖: IsCentralScalar, UniformContinuousConstSMul, UniformContinuousConstSMul.op, le_rfl, pow_dvd_of_le_multiplicity
+/-
+**pow_multiplicity_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：pow_multiplicity_dvd (a b : α) : a ^ (multiplicity a b) ∣ b
+参数：a b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `pow_dvd_of_le_multiplicity`：pow_dvd_of_le_multiplicity {k : Nat} (hk : k
+ <= multiplicity a b) : a ^ k ∣ b
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
 theorem pow_multiplicity_dvd (a b : α) : a ^ (multiplicity a b) ∣ b :=
   pow_dvd_of_le_multiplicity le_rfl
-
-/--
-theorem `not_pow_dvd_of_emultiplicity_lt` / 定理 `not_pow_dvd_of_emultiplicity_lt`
-
-English:
-theorem not_pow_dvd_of_emultiplicity_lt
-  given: {m : Nat} (hm : emultiplicity a b < m)
-  proof: fun nh => by
-  unfold emultiplicity at hm
-  split at hm
-  · simp only [cast_lt, find_lt_iff] at hm
-    obtain ⟨n, hn1, hn2⟩ := hm
-    exact hn2 ((pow_dvd_pow _ hn1).trans nh)
-  · simp at hm
-
-中文:
-定理 not_pow_dvd_of_emultiplicity_lt
-  条件: {m : 自然数} (hm : emultiplicity a b < m)
-  证明: fun nh => by
-  unfold emultiplicity at hm
-  split at hm
-  · simp only [cast_lt, find_lt_iff] at hm
-    obtain ⟨n, hn1, hn2⟩ := hm
-    exact hn2 ((pow_dvd_pow _ hn1).trans nh)
-  · simp at hm
-
-Depends on / 依赖: cast_lt, emultiplicity, find_lt_iff, pow_dvd_pow
+/-
+**not_pow_dvd_of_emultiplicity_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：not_pow_dvd_of_emultiplicity_lt {m : Nat} (hm : emultiplicity a b < m) : ¬
+a ^ m ∣ b
+参数：hm : emultiplicity a b < m。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `instIsOrderedRingENat`：IsOrderedRing ℕ∞
+· 使用定理 `instZeroLEOneClassENat`：ZeroLEOneClass ℕ∞
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `Dvd.dvd.trans`：∀ {α : Type u_1} [inst : Semigroup α] {a b c : α}, a ∣ b 
+→ b ∣ c → a ∣ c
+· 使用引理 `pow_dvd_pow`：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
 -/
-theorem not_pow_dvd_of_emultiplicity_lt {m : Nat} (hm : emultiplicity a b < m) :
+theorem not_pow_dvd_of_emultiplicity_lt {m : ℕ} (hm : emultiplicity a b < m) :
     ¬a ^ m ∣ b := fun nh => by
   unfold emultiplicity at hm
   split at hm
@@ -895,283 +770,273 @@ theorem not_pow_dvd_of_emultiplicity_lt {m : Nat} (hm : emultiplicity a b < m) :
     obtain ⟨n, hn1, hn2⟩ := hm
     exact hn2 ((pow_dvd_pow _ hn1).trans nh)
   · simp at hm
-
-/--
-theorem `FiniteMultiplicity.not_pow_dvd_of_multiplicity_lt` / 定理 `FiniteMultiplicity.not_pow_dvd_of_multiplicity_lt`
-
-English:
-theorem FiniteMultiplicity.not_pow_dvd_of_multiplicity_lt
-  statement: (hf : FiniteMultiplicity a b) {m : Nat}
-  proof: by
-  apply not_pow_dvd_of_emultiplicity_lt
-  rw [hf.emultiplicity_eq_multiplicity]
-  norm_cast
-
-中文:
-定理 FiniteMultiplicity.not_pow_dvd_of_multiplicity_lt
-  结论: (hf : FiniteMultiplicity a b) {m : 自然数}
-  证明: by
-  apply not_pow_dvd_of_emultiplicity_lt
-  rw [hf.emultiplicity_eq_multiplicity]
-  norm_cast
-
-Depends on / 依赖: emultiplicity_eq_multiplicity, hf.emultiplicity_eq_multiplicity, not_pow_dvd_of_emultiplicity_lt
+/-
+**FiniteMultiplicity.not_pow_dvd_of_multiplicity_lt** 是 Mathlib 中的一个定理，位于命名空间 ``
+。
+形式化陈述：FiniteMultiplicity.not_pow_dvd_of_multiplicity_lt (hf : FiniteMultiplicity
+ a b) {m : Nat} (hm : multiplicity a b < m) : ¬a ^ m ∣ b
+参数：hf : FiniteMultiplicity a b；hm : multiplicity a b < m。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_pow_dvd_of_emultiplicity_lt`：not_pow_dvd_of_emultiplicity_lt {m : Na
+t} (hm : emultiplicity a b < m) : ¬a ^ m ∣ b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FiniteMultiplicity.emultiplicity_eq_multiplicity`：FiniteMultiplicity.emu
+ltiplicity_eq_multiplicity (h : FiniteMultiplicity a b) : emultiplicity a b = mu
+ltiplicity a b
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `instIsOrderedRingENat`：IsOrderedRing ℕ∞
+· 使用定理 `instZeroLEOneClassENat`：ZeroLEOneClass ℕ∞
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
 -/
-theorem FiniteMultiplicity.not_pow_dvd_of_multiplicity_lt (hf : FiniteMultiplicity a b) {m : Nat}
+theorem FiniteMultiplicity.not_pow_dvd_of_multiplicity_lt (hf : FiniteMultiplicity a b) {m : ℕ}
     (hm : multiplicity a b < m) : ¬a ^ m ∣ b := by
   apply not_pow_dvd_of_emultiplicity_lt
   rw [hf.emultiplicity_eq_multiplicity]
   norm_cast
-
-/--
-theorem `multiplicity_pos_of_dvd` / 定理 `multiplicity_pos_of_dvd`
-
-English:
-theorem multiplicity_pos_of_dvd
-  given: (hdiv : a ∣ b)
-  statement: 0 < multiplicity a b
-  proof: by
-  refine Nat.pos_iff_ne_zero.2 fun h => ?_
-  simpa [hdiv] using FiniteMultiplicity.not_pow_dvd_of_multiplicity_lt
-    (by by_contra! nh; simp [nh] at h) (lt_one_iff.mpr h)
-
-中文:
-定理 multiplicity_pos_of_dvd
-  条件: (hdiv : a ∣ b)
-  结论: 0 < multiplicity a b
-  证明: by
-  refine Nat.pos_iff_ne_zero.2 fun h => ?_
-  simpa [hdiv] using FiniteMultiplicity.not_pow_dvd_of_multiplicity_lt
-    (by by_contra! nh; simp [nh] at h) (lt_one_iff.mpr h)
-
-Depends on / 依赖: FiniteMultiplicity, FiniteMultiplicity.not_pow_dvd_of_multiplicity_lt, Nat.pos_iff_ne_zero, lt_one_iff, lt_one_iff.mpr, not_pow_dvd_of_multiplicity_lt, pos_iff_ne_zero
+/-
+**multiplicity_pos_of_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multiplicity_pos_of_dvd (hdiv : a ∣ b) : 0 < multiplicity a b
+参数：hdiv : a ∣ b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.pos_iff_ne_zero`：∀ {n : ℕ}, 0 < n ↔ n ≠ 0
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `FiniteMultiplicity.not_pow_dvd_of_multiplicity_lt`：FiniteMultiplicity.no
+t_pow_dvd_of_multiplicity_lt (hf : FiniteMultiplicity a b) {m : Nat} (hm : multi
+plicity a b < m) : ¬a ^ m ∣ b
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `multiplicity_eq_one_of_not_finiteMultiplicity`：multiplicity_eq_one_of_no
+t_finiteMultiplicity (h : ¬FiniteMultiplicity a b) : multiplicity a b = 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Nat.lt_one_iff`：∀ {n : ℕ}, n < 1 ↔ n = 0
 -/
 theorem multiplicity_pos_of_dvd (hdiv : a ∣ b) : 0 < multiplicity a b := by
   refine Nat.pos_iff_ne_zero.2 fun h => ?_
   simpa [hdiv] using FiniteMultiplicity.not_pow_dvd_of_multiplicity_lt
     (by by_contra! nh; simp [nh] at h) (lt_one_iff.mpr h)
-
-/--
-theorem `emultiplicity_pos_of_dvd` / 定理 `emultiplicity_pos_of_dvd`
-
-English:
-theorem emultiplicity_pos_of_dvd
-  given: (hdiv : a ∣ b)
-  statement: 0 < emultiplicity a b
-  proof: lt_emultiplicity_of_lt_multiplicity (multiplicity_pos_of_dvd hdiv)
-
-中文:
-定理 emultiplicity_pos_of_dvd
-  条件: (hdiv : a ∣ b)
-  结论: 0 < emultiplicity a b
-  证明: lt_emultiplicity_of_lt_multiplicity (multiplicity_pos_of_dvd hdiv)
-
-Depends on / 依赖: lt_emultiplicity_of_lt_multiplicity, multiplicity_pos_of_dvd
+/-
+**emultiplicity_pos_of_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_pos_of_dvd (hdiv : a ∣ b) : 0 < emultiplicity a b
+参数：hdiv : a ∣ b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lt_emultiplicity_of_lt_multiplicity`：lt_emultiplicity_of_lt_multiplicity
+ {n : Nat} (h : n < multiplicity a b) : n < emultiplicity a b
+· 使用定理 `multiplicity_pos_of_dvd`：multiplicity_pos_of_dvd (hdiv : a ∣ b) : 0 < mu
+ltiplicity a b
 -/
 theorem emultiplicity_pos_of_dvd (hdiv : a ∣ b) : 0 < emultiplicity a b :=
   lt_emultiplicity_of_lt_multiplicity (multiplicity_pos_of_dvd hdiv)
-
-/--
-theorem `emultiplicity_eq_of_dvd_of_not_dvd` / 定理 `emultiplicity_eq_of_dvd_of_not_dvd`
-
-English:
-theorem emultiplicity_eq_of_dvd_of_not_dvd
-  given: {k : Nat} (hk : a ^ k ∣ b) (hsucc : ¬a ^ (k + 1) ∣ b)
-  proof: by classical
-  have : FiniteMultiplicity a b := ⟨k, hsucc⟩
-  simp only [emultiplicity, this, ↓reduceDIte, Nat.cast_inj, find_eq_iff, hsucc, not_false_eq_true,
-    Decidable.not_not, true_and]
-  exact fun n hn => (pow_dvd_pow _ hn).trans hk
-
-中文:
-定理 emultiplicity_eq_of_dvd_of_not_dvd
-  条件: {k : 自然数} (hk : a ^ k ∣ b) (hsucc : ¬a ^ (k + 1) ∣ b)
-  证明: by classical
-  have : FiniteMultiplicity a b := ⟨k, hsucc⟩
-  simp only [emultiplicity, this, ↓reduceDIte, Nat.cast_inj, find_eq_iff, hsucc, not_false_eq_true,
-    Decidable.not_not, true_and]
-  exact fun n hn => (pow_dvd_pow _ hn).trans hk
-
-Depends on / 依赖: Decidable, Decidable.not_not, FiniteMultiplicity, Nat.cast_inj, cast_inj, classical, emultiplicity, find_eq_iff, not_false_eq_true, not_not, pow_dvd_pow, reduceDIte, true_and
+/-
+**emultiplicity_eq_of_dvd_of_not_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_eq_of_dvd_of_not_dvd {k : Nat} (hk : a ^ k ∣ b) (hsucc : ¬a 
+^ (k + 1) ∣ b) : emultiplicity a b = k
+参数：hk : a ^ k ∣ b；hsucc : ¬a ^ (k + 1) ∣ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Dvd.dvd.trans`：∀ {α : Type u_1} [inst : Semigroup α] {a b c : α}, a ∣ b 
+→ b ∣ c → a ∣ c
+· 使用引理 `pow_dvd_pow`：pow_dvd_pow (a : α) (h : m <= n) : a ^ m ∣ a ^ n
 -/
-theorem emultiplicity_eq_of_dvd_of_not_dvd {k : Nat} (hk : a ^ k ∣ b) (hsucc : ¬a ^ (k + 1) ∣ b) :
+theorem emultiplicity_eq_of_dvd_of_not_dvd {k : ℕ} (hk : a ^ k ∣ b) (hsucc : ¬a ^ (k + 1) ∣ b) :
     emultiplicity a b = k := by classical
   have : FiniteMultiplicity a b := ⟨k, hsucc⟩
   simp only [emultiplicity, this, ↓reduceDIte, Nat.cast_inj, find_eq_iff, hsucc, not_false_eq_true,
     Decidable.not_not, true_and]
-  exact fun n hn => (pow_dvd_pow _ hn).trans hk
-
-/--
-theorem `multiplicity_eq_of_dvd_of_not_dvd` / 定理 `multiplicity_eq_of_dvd_of_not_dvd`
-
-English:
-theorem multiplicity_eq_of_dvd_of_not_dvd
-  given: {k : Nat} (hk : a ^ k ∣ b) (hsucc : ¬a ^ (k + 1) ∣ b)
-  proof: multiplicity_eq_of_emultiplicity_eq_some (emultiplicity_eq_of_dvd_of_not_dvd hk hsucc)
-
-中文:
-定理 multiplicity_eq_of_dvd_of_not_dvd
-  条件: {k : 自然数} (hk : a ^ k ∣ b) (hsucc : ¬a ^ (k + 1) ∣ b)
-  证明: multiplicity_eq_of_emultiplicity_eq_some (emultiplicity_eq_of_dvd_of_not_dvd hk hsucc)
-
-Depends on / 依赖: emultiplicity_eq_of_dvd_of_not_dvd, multiplicity_eq_of_emultiplicity_eq_some
+  exact fun n hn ↦ (pow_dvd_pow _ hn).trans hk
+/-
+**multiplicity_eq_of_dvd_of_not_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multiplicity_eq_of_dvd_of_not_dvd {k : Nat} (hk : a ^ k ∣ b) (hsucc : ¬a ^
+ (k + 1) ∣ b) : multiplicity a b = k
+参数：hk : a ^ k ∣ b；hsucc : ¬a ^ (k + 1) ∣ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `multiplicity_eq_of_emultiplicity_eq_some`：multiplicity_eq_of_emultiplici
+ty_eq_some {n : Nat} (h : emultiplicity a b = n) : multiplicity a b = n
+· 使用定理 `emultiplicity_eq_of_dvd_of_not_dvd`：emultiplicity_eq_of_dvd_of_not_dvd {
+k : Nat} (hk : a ^ k ∣ b) (hsucc : ¬a ^ (k + 1) ∣ b) : emultiplicity a b = k
 -/
-theorem multiplicity_eq_of_dvd_of_not_dvd {k : Nat} (hk : a ^ k ∣ b) (hsucc : ¬a ^ (k + 1) ∣ b) :
+theorem multiplicity_eq_of_dvd_of_not_dvd {k : ℕ} (hk : a ^ k ∣ b) (hsucc : ¬a ^ (k + 1) ∣ b) :
     multiplicity a b = k :=
   multiplicity_eq_of_emultiplicity_eq_some (emultiplicity_eq_of_dvd_of_not_dvd hk hsucc)
-
-/--
-theorem `le_emultiplicity_of_pow_dvd` / 定理 `le_emultiplicity_of_pow_dvd`
-
-English:
-theorem le_emultiplicity_of_pow_dvd
-  given: {k : Nat} (hk : a ^ k ∣ b)
-  proof: le_of_not_gt fun hk' => not_pow_dvd_of_emultiplicity_lt hk' hk
-
-中文:
-定理 le_emultiplicity_of_pow_dvd
-  条件: {k : 自然数} (hk : a ^ k ∣ b)
-  证明: le_of_not_gt fun hk' => not_pow_dvd_of_emultiplicity_lt hk' hk
-
-Depends on / 依赖: le_of_not_gt, not_pow_dvd_of_emultiplicity_lt
+/-
+**le_emultiplicity_of_pow_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_emultiplicity_of_pow_dvd {k : Nat} (hk : a ^ k ∣ b) : k <= emultiplicit
+y a b
+参数：hk : a ^ k ∣ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
+· 使用定理 `not_pow_dvd_of_emultiplicity_lt`：not_pow_dvd_of_emultiplicity_lt {m : Na
+t} (hm : emultiplicity a b < m) : ¬a ^ m ∣ b
 -/
-theorem le_emultiplicity_of_pow_dvd {k : Nat} (hk : a ^ k ∣ b) :
-    k <= emultiplicity a b :=
+theorem le_emultiplicity_of_pow_dvd {k : ℕ} (hk : a ^ k ∣ b) :
+    k ≤ emultiplicity a b :=
   le_of_not_gt fun hk' => not_pow_dvd_of_emultiplicity_lt hk' hk
-
-/--
-theorem `FiniteMultiplicity.le_multiplicity_of_pow_dvd` / 定理 `FiniteMultiplicity.le_multiplicity_of_pow_dvd`
-
-English:
-theorem FiniteMultiplicity.le_multiplicity_of_pow_dvd
-  statement: (hf : FiniteMultiplicity a b)
-  proof: hf.le_multiplicity_of_le_emultiplicity (le_emultiplicity_of_pow_dvd hk)
-
-中文:
-定理 FiniteMultiplicity.le_multiplicity_of_pow_dvd
-  结论: (hf : FiniteMultiplicity a b)
-  证明: hf.le_multiplicity_of_le_emultiplicity (le_emultiplicity_of_pow_dvd hk)
-
-Depends on / 依赖: hf.le_multiplicity_of_le_emultiplicity, le_emultiplicity_of_pow_dvd, le_multiplicity_of_le_emultiplicity
+/-
+**FiniteMultiplicity.le_multiplicity_of_pow_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：FiniteMultiplicity.le_multiplicity_of_pow_dvd (hf : FiniteMultiplicity a b
+) {k : Nat} (hk : a ^ k ∣ b) : k <= multiplicity a b
+参数：hf : FiniteMultiplicity a b；hk : a ^ k ∣ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FiniteMultiplicity.le_multiplicity_of_le_emultiplicity`：FiniteMultiplici
+ty.le_multiplicity_of_le_emultiplicity (hfin : FiniteMultiplicity a b) {n : Nat}
+ (h : n <= emultiplicity a b) : n <= multipl…
+· 使用定理 `le_emultiplicity_of_pow_dvd`：le_emultiplicity_of_pow_dvd {k : Nat} (hk :
+ a ^ k ∣ b) : k <= emultiplicity a b
 -/
 theorem FiniteMultiplicity.le_multiplicity_of_pow_dvd (hf : FiniteMultiplicity a b)
-    {k : Nat} (hk : a ^ k ∣ b) : k <= multiplicity a b :=
+    {k : ℕ} (hk : a ^ k ∣ b) : k ≤ multiplicity a b :=
   hf.le_multiplicity_of_le_emultiplicity (le_emultiplicity_of_pow_dvd hk)
-
-/--
-theorem `pow_dvd_iff_le_emultiplicity` / 定理 `pow_dvd_iff_le_emultiplicity`
-
-English:
-theorem pow_dvd_iff_le_emultiplicity
-  given: {k : Nat}
-  proof: ⟨le_emultiplicity_of_pow_dvd, pow_dvd_of_le_emultiplicity⟩
-
-中文:
-定理 pow_dvd_iff_le_emultiplicity
-  条件: {k : 自然数}
-  证明: ⟨le_emultiplicity_of_pow_dvd, pow_dvd_of_le_emultiplicity⟩
-
-Depends on / 依赖: le_emultiplicity_of_pow_dvd, pow_dvd_of_le_emultiplicity
+/-
+**pow_dvd_iff_le_emultiplicity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：pow_dvd_iff_le_emultiplicity {k : Nat} : a ^ k ∣ b ↔ k <= emultiplicity a 
+b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_emultiplicity_of_pow_dvd`：le_emultiplicity_of_pow_dvd {k : Nat} (hk :
+ a ^ k ∣ b) : k <= emultiplicity a b
+· 使用定理 `pow_dvd_of_le_emultiplicity`：pow_dvd_of_le_emultiplicity {k : Nat} (hk :
+ k <= emultiplicity a b) : a ^ k ∣ b
 -/
-theorem pow_dvd_iff_le_emultiplicity {k : Nat} :
-    a ^ k ∣ b ↔ k <= emultiplicity a b :=
+theorem pow_dvd_iff_le_emultiplicity {k : ℕ} :
+    a ^ k ∣ b ↔ k ≤ emultiplicity a b :=
   ⟨le_emultiplicity_of_pow_dvd, pow_dvd_of_le_emultiplicity⟩
-
-/--
-theorem `FiniteMultiplicity.pow_dvd_iff_le_multiplicity` / 定理 `FiniteMultiplicity.pow_dvd_iff_le_multiplicity`
-
-English:
-theorem FiniteMultiplicity.pow_dvd_iff_le_multiplicity
-  given: (hf : FiniteMultiplicity a b) {k : Nat}
-  proof: by
-  exact_mod_cast hf.emultiplicity_eq_multiplicity ▸ pow_dvd_iff_le_emultiplicity
-
-中文:
-定理 FiniteMultiplicity.pow_dvd_iff_le_multiplicity
-  条件: (hf : FiniteMultiplicity a b) {k : 自然数}
-  证明: by
-  exact_mod_cast hf.emultiplicity_eq_multiplicity ▸ pow_dvd_iff_le_emultiplicity
-
-Depends on / 依赖: emultiplicity_eq_multiplicity, hf.emultiplicity_eq_multiplicity, pow_dvd_iff_le_emultiplicity
+/-
+**FiniteMultiplicity.pow_dvd_iff_le_multiplicity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：FiniteMultiplicity.pow_dvd_iff_le_multiplicity (hf : FiniteMultiplicity a 
+b) {k : Nat} : a ^ k ∣ b ↔ k <= multiplicity a b
+参数：hf : FiniteMultiplicity a b。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `instIsOrderedRingENat`：IsOrderedRing ℕ∞
+· 使用定理 `instZeroLEOneClassENat`：ZeroLEOneClass ℕ∞
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用定理 `pow_dvd_iff_le_emultiplicity`：pow_dvd_iff_le_emultiplicity {k : Nat} : a
+ ^ k ∣ b ↔ k <= emultiplicity a b
+· 使用定理 `FiniteMultiplicity.emultiplicity_eq_multiplicity`：FiniteMultiplicity.emu
+ltiplicity_eq_multiplicity (h : FiniteMultiplicity a b) : emultiplicity a b = mu
+ltiplicity a b
 -/
-theorem FiniteMultiplicity.pow_dvd_iff_le_multiplicity (hf : FiniteMultiplicity a b) {k : Nat} :
-    a ^ k ∣ b ↔ k <= multiplicity a b := by
+theorem FiniteMultiplicity.pow_dvd_iff_le_multiplicity (hf : FiniteMultiplicity a b) {k : ℕ} :
+    a ^ k ∣ b ↔ k ≤ multiplicity a b := by
   exact_mod_cast hf.emultiplicity_eq_multiplicity ▸ pow_dvd_iff_le_emultiplicity
-
-/--
-theorem `emultiplicity_lt_iff_not_dvd` / 定理 `emultiplicity_lt_iff_not_dvd`
-
-English:
-theorem emultiplicity_lt_iff_not_dvd
-  given: {k : Nat}
-  proof: by rw [pow_dvd_iff_le_emultiplicity, not_le]
-
-中文:
-定理 emultiplicity_lt_iff_not_dvd
-  条件: {k : 自然数}
-  证明: by rw [pow_dvd_iff_le_emultiplicity, not_le]
-
-Depends on / 依赖: not_le, pow_dvd_iff_le_emultiplicity
+/-
+**emultiplicity_lt_iff_not_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_lt_iff_not_dvd {k : Nat} : emultiplicity a b < k ↔ ¬a ^ k ∣ 
+b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_dvd_iff_le_emultiplicity`：pow_dvd_iff_le_emultiplicity {k : Nat} : a
+ ^ k ∣ b ↔ k <= emultiplicity a b
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem emultiplicity_lt_iff_not_dvd {k : Nat} :
+theorem emultiplicity_lt_iff_not_dvd {k : ℕ} :
     emultiplicity a b < k ↔ ¬a ^ k ∣ b := by rw [pow_dvd_iff_le_emultiplicity, not_le]
-
-/--
-theorem `FiniteMultiplicity.multiplicity_lt_iff_not_dvd` / 定理 `FiniteMultiplicity.multiplicity_lt_iff_not_dvd`
-
-English:
-theorem FiniteMultiplicity.multiplicity_lt_iff_not_dvd
-  given: {k : Nat} (hf : FiniteMultiplicity a b)
-  proof: by rw [hf.pow_dvd_iff_le_multiplicity, not_le]
-
-中文:
-定理 FiniteMultiplicity.multiplicity_lt_iff_not_dvd
-  条件: {k : 自然数} (hf : FiniteMultiplicity a b)
-  证明: by rw [hf.pow_dvd_iff_le_multiplicity, not_le]
-
-Depends on / 依赖: hf.pow_dvd_iff_le_multiplicity, not_le, pow_dvd_iff_le_multiplicity
+/-
+**FiniteMultiplicity.multiplicity_lt_iff_not_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：FiniteMultiplicity.multiplicity_lt_iff_not_dvd {k : Nat} (hf : FiniteMulti
+plicity a b) : multiplicity a b < k ↔ ¬a ^ k ∣ b
+参数：hf : FiniteMultiplicity a b。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FiniteMultiplicity.pow_dvd_iff_le_multiplicity`：FiniteMultiplicity.pow_d
+vd_iff_le_multiplicity (hf : FiniteMultiplicity a b) {k : Nat} : a ^ k ∣ b ↔ k <
+= multiplicity a b
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem FiniteMultiplicity.multiplicity_lt_iff_not_dvd {k : Nat} (hf : FiniteMultiplicity a b) :
+theorem FiniteMultiplicity.multiplicity_lt_iff_not_dvd {k : ℕ} (hf : FiniteMultiplicity a b) :
     multiplicity a b < k ↔ ¬a ^ k ∣ b := by rw [hf.pow_dvd_iff_le_multiplicity, not_le]
-
-/--
-theorem `emultiplicity_eq_coe` / 定理 `emultiplicity_eq_coe`
-
-English:
-theorem emultiplicity_eq_coe
-  given: {n : Nat}
-  proof: by
-  constructor
-  · intro h
-    constructor
-    · apply pow_dvd_of_le_emultiplicity
-      simp [h]
-    · apply not_pow_dvd_of_emultiplicity_lt
-      rw [h]
-      norm_cast
-      simp
-  · rw [and_imp]
-    apply emultiplicity_eq_of_dvd_of_not_dvd
-
-中文:
-定理 emultiplicity_eq_coe
-  条件: {n : 自然数}
-  证明: by
-  constructor
-  · intro h
-    constructor
-    · apply pow_dvd_of_le_emultiplicity
-      simp [h]
-    · apply not_pow_dvd_of_emultiplicity_lt
-      rw [h]
-      norm_cast
-      simp
-  · rw [and_imp]
-    apply emultiplicity_eq_of_dvd_of_not_dvd
-
-Depends on / 依赖: and_imp, emultiplicity_eq_of_dvd_of_not_dvd, not_pow_dvd_of_emultiplicity_lt, pow_dvd_of_le_emultiplicity
+/-
+**emultiplicity_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_eq_coe {n : Nat} : emultiplicity a b = n ↔ a ^ n ∣ b ∧ ¬a ^ 
+(n + 1) ∣ b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `pow_dvd_of_le_emultiplicity`：pow_dvd_of_le_emultiplicity {k : Nat} (hk :
+ k <= emultiplicity a b) : a ^ k ∣ b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_pow_dvd_of_emultiplicity_lt`：not_pow_dvd_of_emultiplicity_lt {m : Na
+t} (hm : emultiplicity a b < m) : ¬a ^ m ∣ b
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `instIsOrderedRingENat`：IsOrderedRing ℕ∞
+· 使用定理 `instZeroLEOneClassENat`：ZeroLEOneClass ℕ∞
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_imp`：∀ {a b c : Prop}, a ∧ b → c ↔ a → b → c
+· 使用定理 `emultiplicity_eq_of_dvd_of_not_dvd`：emultiplicity_eq_of_dvd_of_not_dvd {
+k : Nat} (hk : a ^ k ∣ b) (hsucc : ¬a ^ (k + 1) ∣ b) : emultiplicity a b = k
 -/
-theorem emultiplicity_eq_coe {n : Nat} :
+theorem emultiplicity_eq_coe {n : ℕ} :
     emultiplicity a b = n ↔ a ^ n ∣ b ∧ ¬a ^ (n + 1) ∣ b := by
   constructor
   · intro h
@@ -1184,181 +1049,156 @@ theorem emultiplicity_eq_coe {n : Nat} :
       simp
   · rw [and_imp]
     apply emultiplicity_eq_of_dvd_of_not_dvd
-
-/--
-theorem `FiniteMultiplicity.multiplicity_eq_iff` / 定理 `FiniteMultiplicity.multiplicity_eq_iff`
-
-English:
-theorem FiniteMultiplicity.multiplicity_eq_iff
-  given: (hf : FiniteMultiplicity a b) {n : Nat}
-  proof: by
-  simp [← emultiplicity_eq_coe, hf.emultiplicity_eq_multiplicity]
-
-中文:
-定理 FiniteMultiplicity.multiplicity_eq_iff
-  条件: (hf : FiniteMultiplicity a b) {n : 自然数}
-  证明: by
-  simp [← emultiplicity_eq_coe, hf.emultiplicity_eq_multiplicity]
-
-Depends on / 依赖: emultiplicity_eq_coe, emultiplicity_eq_multiplicity, hf.emultiplicity_eq_multiplicity
+/-
+**FiniteMultiplicity.multiplicity_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：FiniteMultiplicity.multiplicity_eq_iff (hf : FiniteMultiplicity a b) {n : 
+Nat} : multiplicity a b = n ↔ a ^ n ∣ b ∧ ¬a ^ (n + 1) ∣ b
+参数：hf : FiniteMultiplicity a b。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `FiniteMultiplicity.emultiplicity_eq_multiplicity`：FiniteMultiplicity.emu
+ltiplicity_eq_multiplicity (h : FiniteMultiplicity a b) : emultiplicity a b = mu
+ltiplicity a b
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem FiniteMultiplicity.multiplicity_eq_iff (hf : FiniteMultiplicity a b) {n : Nat} :
+theorem FiniteMultiplicity.multiplicity_eq_iff (hf : FiniteMultiplicity a b) {n : ℕ} :
     multiplicity a b = n ↔ a ^ n ∣ b ∧ ¬a ^ (n + 1) ∣ b := by
   simp [← emultiplicity_eq_coe, hf.emultiplicity_eq_multiplicity]
-
-/--
-theorem `emultiplicity_eq_ofNat` / 定理 `emultiplicity_eq_ofNat`
-
-English:
-theorem emultiplicity_eq_ofNat
-  given: {a b n : Nat} [n.AtLeastTwo]
-  proof: emultiplicity_eq_coe
-
-@[simp]
-
-中文:
-定理 emultiplicity_eq_of自然数
-  条件: {a b n : 自然数} [n.AtLeastTwo]
-  证明: emultiplicity_eq_coe
-
-@[simp]
-
-Depends on / 依赖: emultiplicity_eq_coe
+/-
+**emultiplicity_eq_ofNat** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_eq_ofNat {a b n : Nat} [n.AtLeastTwo] : emultiplicity a b = 
+(ofNat(n) : Nat∞) ↔ a ^ ofNat(n) ∣ b ∧ ¬a ^ (ofNat(n) + 1) ∣ b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `emultiplicity_eq_coe`：emultiplicity_eq_coe {n : Nat} : emultiplicity a b
+ = n ↔ a ^ n ∣ b ∧ ¬a ^ (n + 1) ∣ b
 -/
-theorem emultiplicity_eq_ofNat {a b n : Nat} [n.AtLeastTwo] :
-    emultiplicity a b = (ofNat(n) : Nat∞) ↔ a ^ ofNat(n) ∣ b ∧ ¬a ^ (ofNat(n) + 1) ∣ b :=
+theorem emultiplicity_eq_ofNat {a b n : ℕ} [n.AtLeastTwo] :
+    emultiplicity a b = (ofNat(n) : ℕ∞) ↔ a ^ ofNat(n) ∣ b ∧ ¬a ^ (ofNat(n) + 1) ∣ b :=
   emultiplicity_eq_coe
 
 @[simp]
-/--
-theorem `FiniteMultiplicity.not_of_isUnit_left` / 定理 `FiniteMultiplicity.not_of_isUnit_left`
-
-English:
-theorem FiniteMultiplicity.not_of_isUnit_left
-  given: (b : α) (ha : IsUnit a)
-  statement: ¬FiniteMultiplicity a b
-  proof: (·.not_isUnit ha)
-
-中文:
-定理 FiniteMultiplicity.not_of_isUnit_left
-  条件: (b : α) (ha : 是单位 a)
-  结论: ¬FiniteMultiplicity a b
-  证明: (·.not_isUnit ha)
-
-Depends on / 依赖: not_isUnit
+/-
+**FiniteMultiplicity.not_of_isUnit_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：FiniteMultiplicity.not_of_isUnit_left (b : α) (ha : IsUnit a) : ¬FiniteMul
+tiplicity a b
+参数：b : α；ha : IsUnit a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FiniteMultiplicity.not_isUnit`：FiniteMultiplicity.not_isUnit (h : Finite
+Multiplicity a b) : ¬IsUnit a
 -/
 theorem FiniteMultiplicity.not_of_isUnit_left (b : α) (ha : IsUnit a) : ¬FiniteMultiplicity a b :=
   (·.not_isUnit ha)
-
-/--
-theorem `FiniteMultiplicity.not_of_one_left` / 定理 `FiniteMultiplicity.not_of_one_left`
-
-English:
-theorem FiniteMultiplicity.not_of_one_left
-  given: (b : α)
-  statement: ¬ FiniteMultiplicity 1 b
-  proof: by simp
-
-@[simp]
-
-中文:
-定理 FiniteMultiplicity.not_of_one_left
-  条件: (b : α)
-  结论: ¬ FiniteMultiplicity 1 b
-  证明: by simp
-
-@[simp]
+/-
+**FiniteMultiplicity.not_of_one_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：FiniteMultiplicity.not_of_one_left (b : α) : ¬ FiniteMultiplicity 1 b
+参数：b : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 theorem FiniteMultiplicity.not_of_one_left (b : α) : ¬ FiniteMultiplicity 1 b := by simp
 
 @[simp]
-/--
-theorem `emultiplicity_one_left` / 定理 `emultiplicity_one_left`
-
-English:
-theorem emultiplicity_one_left
-  given: (b : α)
-  statement: emultiplicity 1 b = ⊤
-  proof: emultiplicity_eq_top.2 (FiniteMultiplicity.not_of_one_left _)
-
-@[simp]
-
-中文:
-定理 emultiplicity_one_left
-  条件: (b : α)
-  结论: emultiplicity 1 b = ⊤
-  证明: emultiplicity_eq_top.2 (FiniteMultiplicity.not_of_one_left _)
-
-@[simp]
-
-Depends on / 依赖: FiniteMultiplicity, FiniteMultiplicity.not_of_one_left, emultiplicity_eq_top, not_of_one_left
+/-
+**emultiplicity_one_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_one_left (b : α) : emultiplicity 1 b = ⊤
+参数：b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `emultiplicity_eq_top`：emultiplicity_eq_top : emultiplicity a b = ⊤ ↔ ¬Fi
+niteMultiplicity a b
+· 使用定理 `FiniteMultiplicity.not_of_one_left`：FiniteMultiplicity.not_of_one_left (
+b : α) : ¬ FiniteMultiplicity 1 b
 -/
 theorem emultiplicity_one_left (b : α) : emultiplicity 1 b = ⊤ :=
   emultiplicity_eq_top.2 (FiniteMultiplicity.not_of_one_left _)
 
 @[simp]
-/--
-theorem `FiniteMultiplicity.one_right` / 定理 `FiniteMultiplicity.one_right`
-
-English:
-theorem FiniteMultiplicity.one_right
-  given: (ha : FiniteMultiplicity a 1)
-  statement: multiplicity a 1 = 0
-  proof: by
-  simp [ha.multiplicity_eq_iff, ha.not_dvd_of_one_right]
-
-中文:
-定理 FiniteMultiplicity.one_right
-  条件: (ha : FiniteMultiplicity a 1)
-  结论: multiplicity a 1 = 0
-  证明: by
-  simp [ha.multiplicity_eq_iff, ha.not_dvd_of_one_right]
-
-Depends on / 依赖: ha.multiplicity_eq_iff, ha.not_dvd_of_one_right, multiplicity_eq_iff, not_dvd_of_one_right
+/-
+**FiniteMultiplicity.one_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：FiniteMultiplicity.one_right (ha : FiniteMultiplicity a 1) : multiplicity 
+a 1 = 0
+参数：ha : FiniteMultiplicity a 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `FiniteMultiplicity.multiplicity_eq_iff`：FiniteMultiplicity.multiplicity_
+eq_iff (hf : FiniteMultiplicity a b) {n : Nat} : multiplicity a b = n ↔ a ^ n ∣ 
+b ∧ ¬a ^ (n + 1) ∣ b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `FiniteMultiplicity.not_dvd_of_one_right`：FiniteMultiplicity.not_dvd_of_o
+ne_right : FiniteMultiplicity a 1 -> ¬a ∣ 1
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 theorem FiniteMultiplicity.one_right (ha : FiniteMultiplicity a 1) : multiplicity a 1 = 0 := by
   simp [ha.multiplicity_eq_iff, ha.not_dvd_of_one_right]
-
-/--
-theorem `FiniteMultiplicity.not_of_unit_left` / 定理 `FiniteMultiplicity.not_of_unit_left`
-
-English:
-theorem FiniteMultiplicity.not_of_unit_left
-  given: (a : α) (u : αˣ)
-  statement: ¬ FiniteMultiplicity (u : α) a
-  proof: FiniteMultiplicity.not_of_isUnit_left a u.isUnit
-
-中文:
-定理 FiniteMultiplicity.not_of_unit_left
-  条件: (a : α) (u : αˣ)
-  结论: ¬ FiniteMultiplicity (u : α) a
-  证明: FiniteMultiplicity.not_of_isUnit_left a u.isUnit
-
-Depends on / 依赖: FiniteMultiplicity, FiniteMultiplicity.not_of_isUnit_left, isUnit, not_of_isUnit_left, u.isUnit
+/-
+**FiniteMultiplicity.not_of_unit_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：FiniteMultiplicity.not_of_unit_left (a : α) (u : αˣ) : ¬ FiniteMultiplicit
+y (u : α) a
+参数：a : α；u : αˣ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FiniteMultiplicity.not_of_isUnit_left`：FiniteMultiplicity.not_of_isUnit_
+left (b : α) (ha : IsUnit a) : ¬FiniteMultiplicity a b
+· 使用定理 `Units.isUnit`：∀ {M : Type u_1} [inst : Monoid M] (u : Mˣ), IsUnit ↑u
 -/
 theorem FiniteMultiplicity.not_of_unit_left (a : α) (u : αˣ) : ¬ FiniteMultiplicity (u : α) a :=
   FiniteMultiplicity.not_of_isUnit_left a u.isUnit
-
-/--
-theorem `emultiplicity_eq_zero` / 定理 `emultiplicity_eq_zero`
-
-English:
-theorem emultiplicity_eq_zero
-  proof: by
-  by_cases hf : FiniteMultiplicity a b
-  · rw [← ENat.natCast_zero, emultiplicity_eq_coe]
-    simp
-  · simpa [emultiplicity_eq_top.2 hf] using FiniteMultiplicity.not_iff_forall.1 hf 1
-
-中文:
-定理 emultiplicity_eq_zero
-  证明: by
-  by_cases hf : FiniteMultiplicity a b
-  · rw [← ENat.natCast_zero, emultiplicity_eq_coe]
-    simp
-  · simpa [emultiplicity_eq_top.2 hf] using FiniteMultiplicity.not_iff_forall.1 hf 1
-
-Depends on / 依赖: ENat.natCast_zero, FiniteMultiplicity, FiniteMultiplicity.not_iff_forall, emultiplicity_eq_coe, emultiplicity_eq_top, natCast_zero, not_iff_forall
+/-
+**emultiplicity_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_eq_zero : emultiplicity a b = 0 ↔ ¬a ∣ b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ENat.natCast_zero`：natCast_zero : ((0 : Nat) : Nat∞) = 0
+· 使用定理 `emultiplicity_eq_coe`：emultiplicity_eq_coe {n : Nat} : emultiplicity a b
+ = n ↔ a ^ n ∣ b ∧ ¬a ^ (n + 1) ∣ b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `emultiplicity_eq_top`：emultiplicity_eq_top : emultiplicity a b = ⊤ ↔ ¬Fi
+niteMultiplicity a b
+· 使用定理 `false_iff`：∀ (p : Prop), (False ↔ p) = ¬p
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `FiniteMultiplicity.not_iff_forall`：FiniteMultiplicity.not_iff_forall : ¬
+FiniteMultiplicity a b ↔ forall n : Nat, a ^ n ∣ b
 -/
 theorem emultiplicity_eq_zero :
     emultiplicity a b = 0 ↔ ¬a ∣ b := by
@@ -1366,172 +1206,166 @@ theorem emultiplicity_eq_zero :
   · rw [← ENat.natCast_zero, emultiplicity_eq_coe]
     simp
   · simpa [emultiplicity_eq_top.2 hf] using FiniteMultiplicity.not_iff_forall.1 hf 1
-
-/--
-theorem `emultiplicity_eq_zero_of_irreducible_ne` / 定理 `emultiplicity_eq_zero_of_irreducible_ne`
-
-English:
-theorem emultiplicity_eq_zero_of_irreducible_ne
-  statement: {R : Type*} [CommMonoidWithZero R]
-  proof: emultiplicity_eq_zero.2 ((ha.dvd_irreducible_iff_associated hb).not.2 fun ⟨u, _⟩ => by
-    simp_all [Subsingleton.elim u 1])
-
-中文:
-定理 emultiplicity_eq_zero_of_irreducible_ne
-  结论: {R : 类型} [带零交换幺半群 R]
-  证明: emultiplicity_eq_zero.2 ((ha.dvd_irreducible_iff_associated hb).not.2 fun ⟨u, _⟩ => by
-    simp_all [Subsingleton.elim u 1])
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim, dvd_irreducible_iff_associated, emultiplicity_eq_zero, ha.dvd_irreducible_iff_associated
+/-
+**emultiplicity_eq_zero_of_irreducible_ne** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_eq_zero_of_irreducible_ne {R : Type*} [CommMonoidWithZero R]
+ [Subsingleton Rˣ] {a b : R} (ha : Irreducible a) (hb : Irreducible b) (h : a !=
+ b) : emultiplicity a b = 0
+参数：ha : Irreducible a；hb : Irreducible b；h : a != b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `emultiplicity_eq_zero`：emultiplicity_eq_zero : emultiplicity a b = 0 ↔ ¬
+a ∣ b
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Irreducible.dvd_irreducible_iff_associated`：Irreducible.dvd_irreducible_
+iff_associated [Monoid M] {p q : M} (pp : Irreducible p) (qp : Irreducible q) : 
+p ∣ q ↔ Associated p q
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
 -/
 theorem emultiplicity_eq_zero_of_irreducible_ne {R : Type*} [CommMonoidWithZero R]
-    [Subsingleton Rˣ] {a b : R} (ha : Irreducible a) (hb : Irreducible b) (h : a != b) :
+    [Subsingleton Rˣ] {a b : R} (ha : Irreducible a) (hb : Irreducible b) (h : a ≠ b) :
     emultiplicity a b = 0 :=
-  emultiplicity_eq_zero.2 ((ha.dvd_irreducible_iff_associated hb).not.2 fun ⟨u, _⟩ => by
+  emultiplicity_eq_zero.2 ((ha.dvd_irreducible_iff_associated hb).not.2 fun ⟨u, _⟩ ↦ by
     simp_all [Subsingleton.elim u 1])
-
-/--
-theorem `multiplicity_eq_zero` / 定理 `multiplicity_eq_zero`
-
-English:
-theorem multiplicity_eq_zero
-  proof: (emultiplicity_eq_iff_multiplicity_eq_of_ne_one zero_ne_one).symm.trans emultiplicity_eq_zero
-
-中文:
-定理 multiplicity_eq_zero
-  证明: (emultiplicity_eq_iff_multiplicity_eq_of_ne_one zero_ne_one).symm.trans emultiplicity_eq_zero
-
-Depends on / 依赖: emultiplicity_eq_iff_multiplicity_eq_of_ne_one, emultiplicity_eq_zero, symm.trans, zero_ne_one
+/-
+**multiplicity_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multiplicity_eq_zero : multiplicity a b = 0 ↔ ¬a ∣ b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `emultiplicity_eq_iff_multiplicity_eq_of_ne_one`：emultiplicity_eq_iff_mul
+tiplicity_eq_of_ne_one {n : Nat} (h : n != 1) : emultiplicity a b = n ↔ multipli
+city a b = n
+· 使用定理 `zero_ne_one`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 0 ≠ 1
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `emultiplicity_eq_zero`：emultiplicity_eq_zero : emultiplicity a b = 0 ↔ ¬
+a ∣ b
 -/
 theorem multiplicity_eq_zero :
     multiplicity a b = 0 ↔ ¬a ∣ b :=
   (emultiplicity_eq_iff_multiplicity_eq_of_ne_one zero_ne_one).symm.trans emultiplicity_eq_zero
-
-/--
-theorem `emultiplicity_ne_zero` / 定理 `emultiplicity_ne_zero`
-
-English:
-theorem emultiplicity_ne_zero
-  proof: by
-  simp [emultiplicity_eq_zero]
-
-中文:
-定理 emultiplicity_ne_zero
-  证明: by
-  simp [emultiplicity_eq_zero]
-
-Depends on / 依赖: emultiplicity_eq_zero
+/-
+**emultiplicity_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_ne_zero : emultiplicity a b != 0 ↔ a ∣ b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem emultiplicity_ne_zero :
-    emultiplicity a b != 0 ↔ a ∣ b := by
+    emultiplicity a b ≠ 0 ↔ a ∣ b := by
   simp [emultiplicity_eq_zero]
-
-/--
-theorem `multiplicity_ne_zero` / 定理 `multiplicity_ne_zero`
-
-English:
-theorem multiplicity_ne_zero
-  proof: by
-  simp [multiplicity_eq_zero]
-
-中文:
-定理 multiplicity_ne_zero
-  证明: by
-  simp [multiplicity_eq_zero]
-
-Depends on / 依赖: multiplicity_eq_zero
+/-
+**multiplicity_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multiplicity_ne_zero : multiplicity a b != 0 ↔ a ∣ b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem multiplicity_ne_zero :
-    multiplicity a b != 0 ↔ a ∣ b := by
+    multiplicity a b ≠ 0 ↔ a ∣ b := by
   simp [multiplicity_eq_zero]
-
-/--
-theorem `FiniteMultiplicity.exists_eq_pow_mul_and_not_dvd` / 定理 `FiniteMultiplicity.exists_eq_pow_mul_and_not_dvd`
-
-English:
-theorem FiniteMultiplicity.exists_eq_pow_mul_and_not_dvd
-  given: (hfin : FiniteMultiplicity a b)
-  proof: by
-  obtain ⟨c, hc⟩ := pow_multiplicity_dvd a b
-  refine ⟨c, hc, ?_⟩
-  rintro ⟨k, hk⟩
-  rw [hk]; rw [← mul_assoc]; rw [← _root_.pow_succ] at hc
-  have h₁ : a ^ (multiplicity a b + 1) ∣ b := ⟨k, hc⟩
-  exact (hfin.multiplicity_eq_iff.1 (by simp)).2 h₁
-
-中文:
-定理 FiniteMultiplicity.存在_eq_pow_mul_and_not_dvd
-  条件: (hfin : FiniteMultiplicity a b)
-  证明: by
-  obtain ⟨c, hc⟩ := pow_multiplicity_dvd a b
-  refine ⟨c, hc, ?_⟩
-  rintro ⟨k, hk⟩
-  rw [hk]; rw [← mul_assoc]; rw [← _root_.pow_succ] at hc
-  have h₁ : a ^ (multiplicity a b + 1) ∣ b := ⟨k, hc⟩
-  exact (hfin.multiplicity_eq_iff.1 (by simp)).2 h₁
-
-Depends on / 依赖: _root_, _root_.pow_succ, hfin.multiplicity_eq_iff, mul_assoc, multiplicity, multiplicity_eq_iff, pow_multiplicity_dvd, pow_succ
+/-
+**FiniteMultiplicity.exists_eq_pow_mul_and_not_dvd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：FiniteMultiplicity.exists_eq_pow_mul_and_not_dvd (hfin : FiniteMultiplicit
+y a b) : exists c : α, b = a ^ multiplicity a b * c ∧ ¬a ∣ c
+参数：hfin : FiniteMultiplicity a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `pow_multiplicity_dvd`：pow_multiplicity_dvd (a b : α) : a ^ (multiplicity
+ a b) ∣ b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `FiniteMultiplicity.multiplicity_eq_iff`：FiniteMultiplicity.multiplicity_
+eq_iff (hf : FiniteMultiplicity a b) {n : Nat} : multiplicity a b = n ↔ a ^ n ∣ 
+b ∧ ¬a ^ (n + 1) ∣ b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem FiniteMultiplicity.exists_eq_pow_mul_and_not_dvd (hfin : FiniteMultiplicity a b) :
-    exists c : α, b = a ^ multiplicity a b * c ∧ ¬a ∣ c := by
+    ∃ c : α, b = a ^ multiplicity a b * c ∧ ¬a ∣ c := by
   obtain ⟨c, hc⟩ := pow_multiplicity_dvd a b
   refine ⟨c, hc, ?_⟩
   rintro ⟨k, hk⟩
-  rw [hk]; rw [← mul_assoc]; rw [← _root_.pow_succ] at hc
+  rw [hk, ← mul_assoc, ← _root_.pow_succ] at hc
   have h₁ : a ^ (multiplicity a b + 1) ∣ b := ⟨k, hc⟩
   exact (hfin.multiplicity_eq_iff.1 (by simp)).2 h₁
-
-/--
-theorem `emultiplicity_le_emultiplicity_iff` / 定理 `emultiplicity_le_emultiplicity_iff`
-
-English:
-theorem emultiplicity_le_emultiplicity_iff
-  given: {c d : β}
-  proof: by classical
-  constructor
-  · exact fun h n hab => pow_dvd_of_le_emultiplicity (le_trans (le_emultiplicity_of_pow_dvd hab) h)
-  · intro h
-    unfold emultiplicity
-    -- aesop? says
-    split
-    next h_1 =>
-      obtain ⟨w, h_1⟩ := h_1
-      split
-      next h_2 =>
-        simp_all only [cast_le, le_find_iff, lt_find_iff, Decidable.not_not, le_refl,
-          not_true_eq_false, not_false_eq_true, implies_true]
-      next h_2 => simp_all only [not_exists, Decidable.not_not, le_top]
-    next h_1 =>
-      simp_all only [not_exists, Decidable.not_not, not_true_eq_false, top_le_iff,
-        dite_eq_right_iff, ENat.natCast_ne_top, imp_false, not_false_eq_true, implies_true]
-
-中文:
-定理 emultiplicity_le_emultiplicity_iff
-  条件: {c d : β}
-  证明: by classical
-  constructor
-  · exact fun h n hab => pow_dvd_of_le_emultiplicity (le_trans (le_emultiplicity_of_pow_dvd hab) h)
-  · intro h
-    unfold emultiplicity
-    -- aesop? says
-    split
-    next h_1 =>
-      obtain ⟨w, h_1⟩ := h_1
-      split
-      next h_2 =>
-        simp_all only [cast_le, le_find_iff, lt_find_iff, Decidable.not_not, le_refl,
-          not_true_eq_false, not_false_eq_true, implies_true]
-      next h_2 => simp_all only [not_exists, Decidable.not_not, le_top]
-    next h_1 =>
-      simp_all only [not_exists, Decidable.not_not, not_true_eq_false, top_le_iff,
-        dite_eq_right_iff, ENat.natCast_ne_top, imp_false, not_false_eq_true, implies_true]
-
-Depends on / 依赖: classical, emultiplicity, le_emultiplicity_of_pow_dvd, le_trans, pow_dvd_of_le_emultiplicity
+/-
+**emultiplicity_le_emultiplicity_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_le_emultiplicity_iff {c d : β} : emultiplicity a b <= emulti
+plicity c d ↔ forall n : Nat, a ^ n ∣ b -> c ^ n ∣ d
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `pow_dvd_of_le_emultiplicity`：pow_dvd_of_le_emultiplicity {k : Nat} (hk :
+ k <= emultiplicity a b) : a ^ k ∣ b
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `le_emultiplicity_of_pow_dvd`：le_emultiplicity_of_pow_dvd {k : Nat} (hk :
+ a ^ k ∣ b) : k <= emultiplicity a b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.mpr_prop`：∀ {p q : Prop}, p = q → q → p
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `Nat.find.congr_simp`：∀ {p p_1 : ℕ → Prop} (e_p : p = p_1) {inst : Decida
+blePred p} [inst_1 : DecidablePred p_1] (H : ∃ n, p n),   Nat.find H = Nat.find 
+⋯
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `instIsOrderedRingENat`：IsOrderedRing ℕ∞
+· 使用定理 `instZeroLEOneClassENat`：ZeroLEOneClass ℕ∞
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
 -/
 theorem emultiplicity_le_emultiplicity_iff {c d : β} :
-    emultiplicity a b <= emultiplicity c d ↔ forall n : Nat, a ^ n ∣ b -> c ^ n ∣ d := by classical
+    emultiplicity a b ≤ emultiplicity c d ↔ ∀ n : ℕ, a ^ n ∣ b → c ^ n ∣ d := by classical
   constructor
-  · exact fun h n hab => pow_dvd_of_le_emultiplicity (le_trans (le_emultiplicity_of_pow_dvd hab) h)
+  · exact fun h n hab ↦ pow_dvd_of_le_emultiplicity (le_trans (le_emultiplicity_of_pow_dvd hab) h)
   · intro h
     unfold emultiplicity
     -- aesop? says
@@ -1546,313 +1380,275 @@ theorem emultiplicity_le_emultiplicity_iff {c d : β} :
     next h_1 =>
       simp_all only [not_exists, Decidable.not_not, not_true_eq_false, top_le_iff,
         dite_eq_right_iff, ENat.natCast_ne_top, imp_false, not_false_eq_true, implies_true]
-
-/--
-theorem `FiniteMultiplicity.multiplicity_le_multiplicity_iff` / 定理 `FiniteMultiplicity.multiplicity_le_multiplicity_iff`
-
-English:
-theorem FiniteMultiplicity.multiplicity_le_multiplicity_iff
-  statement: {c d : β} (hab : FiniteMultiplicity a b)
-  proof: by
-  rw [← ENat.natCast_le_natCast]; rw [← hab.emultiplicity_eq_multiplicity]; rw [← hcd.emultiplicity_eq_multiplicity]; rw [emultiplicity_le_emultiplicity_iff]
-
-中文:
-定理 FiniteMultiplicity.multiplicity_le_multiplicity_iff
-  结论: {c d : β} (hab : FiniteMultiplicity a b)
-  证明: by
-  rw [← ENat.natCast_le_natCast]; rw [← hab.emultiplicity_eq_multiplicity]; rw [← hcd.emultiplicity_eq_multiplicity]; rw [emultiplicity_le_emultiplicity_iff]
-
-Depends on / 依赖: ENat.natCast_le_natCast, emultiplicity_eq_multiplicity, emultiplicity_le_emultiplicity_iff, hab.emultiplicity_eq_multiplicity, hcd.emultiplicity_eq_multiplicity, natCast_le_natCast
+/-
+**FiniteMultiplicity.multiplicity_le_multiplicity_iff** 是 Mathlib 中的一个定理，位于命名空间 
+``。
+形式化陈述：FiniteMultiplicity.multiplicity_le_multiplicity_iff {c d : β} (hab : Finit
+eMultiplicity a b) (hcd : FiniteMultiplicity c d) : multiplicity a b <= multipli
+city c d ↔ forall n : Nat, a ^ n ∣ b -> c ^ n ∣ d
+参数：hab : FiniteMultiplicity a b；hcd : FiniteMultiplicity c d。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `ENat.natCast_le_natCast`：natCast_le_natCast {n m : Nat} : (n : Nat∞) <= 
+(m : Nat∞) ↔ n <= m
+· 使用定理 `FiniteMultiplicity.emultiplicity_eq_multiplicity`：FiniteMultiplicity.emu
+ltiplicity_eq_multiplicity (h : FiniteMultiplicity a b) : emultiplicity a b = mu
+ltiplicity a b
+· 使用定理 `emultiplicity_le_emultiplicity_iff`：emultiplicity_le_emultiplicity_iff {
+c d : β} : emultiplicity a b <= emultiplicity c d ↔ forall n : Nat, a ^ n ∣ b ->
+ c ^ n ∣ d
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem FiniteMultiplicity.multiplicity_le_multiplicity_iff {c d : β} (hab : FiniteMultiplicity a b)
     (hcd : FiniteMultiplicity c d) :
-    multiplicity a b <= multiplicity c d ↔ forall n : Nat, a ^ n ∣ b -> c ^ n ∣ d := by
-  rw [← ENat.natCast_le_natCast]; rw [← hab.emultiplicity_eq_multiplicity]; rw [← hcd.emultiplicity_eq_multiplicity]; rw [emultiplicity_le_emultiplicity_iff]
-
-/--
-theorem `emultiplicity_eq_emultiplicity_iff` / 定理 `emultiplicity_eq_emultiplicity_iff`
-
-English:
-theorem emultiplicity_eq_emultiplicity_iff
-  given: {c d : β}
-  proof: ⟨fun h n =>
-    ⟨emultiplicity_le_emultiplicity_iff.1 h.le n, emultiplicity_le_emultiplicity_iff.1 h.ge n⟩,
-    fun h => le_antisymm (emultiplicity_le_emultiplicity_iff.2 fun n => (h n).mp)
-      (emultiplicity_le_emultiplicity_iff.2 fun n => (h n).mpr)⟩
-
-中文:
-定理 emultiplicity_eq_emultiplicity_iff
-  条件: {c d : β}
-  证明: ⟨fun h n =>
-    ⟨emultiplicity_le_emultiplicity_iff.1 h.le n, emultiplicity_le_emultiplicity_iff.1 h.ge n⟩,
-    fun h => le_antisymm (emultiplicity_le_emultiplicity_iff.2 fun n => (h n).mp)
-      (emultiplicity_le_emultiplicity_iff.2 fun n => (h n).mpr)⟩
-
-Depends on / 依赖: emultiplicity_le_emultiplicity_iff, h.ge, h.le, le_antisymm
+    multiplicity a b ≤ multiplicity c d ↔ ∀ n : ℕ, a ^ n ∣ b → c ^ n ∣ d := by
+  rw [← ENat.natCast_le_natCast, ← hab.emultiplicity_eq_multiplicity,
+    ← hcd.emultiplicity_eq_multiplicity, emultiplicity_le_emultiplicity_iff]
+/-
+**emultiplicity_eq_emultiplicity_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_eq_emultiplicity_iff {c d : β} : emultiplicity a b = emultip
+licity c d ↔ forall n : Nat, a ^ n ∣ b ↔ c ^ n ∣ d
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `emultiplicity_le_emultiplicity_iff`：emultiplicity_le_emultiplicity_iff {
+c d : β} : emultiplicity a b <= emultiplicity c d ↔ forall n : Nat, a ^ n ∣ b ->
+ c ^ n ∣ d
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 -/
 theorem emultiplicity_eq_emultiplicity_iff {c d : β} :
-    emultiplicity a b = emultiplicity c d ↔ forall n : Nat, a ^ n ∣ b ↔ c ^ n ∣ d :=
+    emultiplicity a b = emultiplicity c d ↔ ∀ n : ℕ, a ^ n ∣ b ↔ c ^ n ∣ d :=
   ⟨fun h n =>
     ⟨emultiplicity_le_emultiplicity_iff.1 h.le n, emultiplicity_le_emultiplicity_iff.1 h.ge n⟩,
     fun h => le_antisymm (emultiplicity_le_emultiplicity_iff.2 fun n => (h n).mp)
       (emultiplicity_le_emultiplicity_iff.2 fun n => (h n).mpr)⟩
-
-/--
-theorem `le_emultiplicity_map` / 定理 `le_emultiplicity_map`
-
-English:
-theorem le_emultiplicity_map
-  statement: {F : Type*} [FunLike F α β] [MonoidHomClass F α β]
-  proof: emultiplicity_le_emultiplicity_iff.2 fun n => by rw [← map_pow]; exact map_dvd f
-
-中文:
-定理 le_emultiplicity_map
-  结论: {F : 类型} [函数状 F α β] [幺半群态射类 F α β]
-  证明: emultiplicity_le_emultiplicity_iff.2 fun n => by rw [← map_pow]; exact map_dvd f
-
-Depends on / 依赖: emultiplicity_le_emultiplicity_iff, map_dvd, map_pow
+/-
+**le_emultiplicity_map** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_emultiplicity_map {F : Type*} [FunLike F α β] [MonoidHomClass F α β] (f
+ : F) {a b : α} : emultiplicity a b <= emultiplicity (f a) (f b)
+参数：f : F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `emultiplicity_le_emultiplicity_iff`：emultiplicity_le_emultiplicity_iff {
+c d : β} : emultiplicity a b <= emultiplicity c d ↔ forall n : Nat, a ^ n ∣ b ->
+ c ^ n ∣ d
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `map_dvd`：∀ {M : Type u_1} {N : Type u_2} [inst : Semigroup M] [inst_1 : 
+Semigroup N] {F : Type u_3} [inst_2 : FunLike F M N]   [MulHomClass F M N] (f…
+· 使用定理 `MonoidHomClass.toMulHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
 -/
 theorem le_emultiplicity_map {F : Type*} [FunLike F α β] [MonoidHomClass F α β]
     (f : F) {a b : α} :
-    emultiplicity a b <= emultiplicity (f a) (f b) :=
-  emultiplicity_le_emultiplicity_iff.2 fun n => by rw [← map_pow]; exact map_dvd f
-
-/--
-theorem `emultiplicity_map_eq` / 定理 `emultiplicity_map_eq`
-
-English:
-theorem emultiplicity_map_eq
-  statement: {F : Type*} [EquivLike F α β] [MulEquivClass F α β]
-  proof: by
-  simp [emultiplicity_eq_emultiplicity_iff, ← map_pow, map_dvd_iff]
-
-中文:
-定理 emultiplicity_map_eq
-  结论: {F : 类型} [等价状 F α β] [乘法等价类 F α β]
-  证明: by
-  simp [emultiplicity_eq_emultiplicity_iff, ← map_pow, map_dvd_iff]
-
-Depends on / 依赖: emultiplicity_eq_emultiplicity_iff, map_dvd_iff, map_pow
+    emultiplicity a b ≤ emultiplicity (f a) (f b) :=
+  emultiplicity_le_emultiplicity_iff.2 fun n ↦ by rw [← map_pow]; exact map_dvd f
+/-
+**emultiplicity_map_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_map_eq {F : Type*} [EquivLike F α β] [MulEquivClass F α β] (
+f : F) {a b : α} : emultiplicity (f a) (f b) = emultiplicity a b
+参数：f : F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulEquivClass.instMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N : T
+ype u_5} [inst : EquivLike F M N] [inst_1 : MulOneClass M]   [inst_2 : MulOneCla
+ss N] [MulEquivClass F…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem emultiplicity_map_eq {F : Type*} [EquivLike F α β] [MulEquivClass F α β]
     (f : F) {a b : α} : emultiplicity (f a) (f b) = emultiplicity a b := by
   simp [emultiplicity_eq_emultiplicity_iff, ← map_pow, map_dvd_iff]
-
-/--
-theorem `multiplicity_map_eq` / 定理 `multiplicity_map_eq`
-
-English:
-theorem multiplicity_map_eq
-  statement: {F : Type*} [EquivLike F α β] [MulEquivClass F α β]
-  proof: multiplicity_eq_of_emultiplicity_eq (emultiplicity_map_eq f)
-
-中文:
-定理 multiplicity_map_eq
-  结论: {F : 类型} [等价状 F α β] [乘法等价类 F α β]
-  证明: multiplicity_eq_of_emultiplicity_eq (emultiplicity_map_eq f)
-
-Depends on / 依赖: emultiplicity_map_eq, multiplicity_eq_of_emultiplicity_eq
+/-
+**multiplicity_map_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multiplicity_map_eq {F : Type*} [EquivLike F α β] [MulEquivClass F α β] (f
+ : F) {a b : α} : multiplicity (f a) (f b) = multiplicity a b
+参数：f : F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `multiplicity_eq_of_emultiplicity_eq`：multiplicity_eq_of_emultiplicity_eq
+ {c d : β} (h : emultiplicity a b = emultiplicity c d) : multiplicity a b = mult
+iplicity c d
+· 使用定理 `emultiplicity_map_eq`：emultiplicity_map_eq {F : Type*} [EquivLike F α β]
+ [MulEquivClass F α β] (f : F) {a b : α} : emultiplicity (f a) (f b) = emultipli
+city a b
 -/
 theorem multiplicity_map_eq {F : Type*} [EquivLike F α β] [MulEquivClass F α β]
     (f : F) {a b : α} : multiplicity (f a) (f b) = multiplicity a b :=
   multiplicity_eq_of_emultiplicity_eq (emultiplicity_map_eq f)
-
-/--
-theorem `emultiplicity_le_emultiplicity_of_dvd_right` / 定理 `emultiplicity_le_emultiplicity_of_dvd_right`
-
-English:
-theorem emultiplicity_le_emultiplicity_of_dvd_right
-  given: {a b c : α} (h : b ∣ c)
-  proof: emultiplicity_le_emultiplicity_iff.2 fun _ hb => hb.trans h
-
-中文:
-定理 emultiplicity_le_emultiplicity_of_dvd_right
-  条件: {a b c : α} (h : b ∣ c)
-  证明: emultiplicity_le_emultiplicity_iff.2 fun _ hb => hb.trans h
-
-Depends on / 依赖: emultiplicity_le_emultiplicity_iff, hb.trans
+/-
+**emultiplicity_le_emultiplicity_of_dvd_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_le_emultiplicity_of_dvd_right {a b c : α} (h : b ∣ c) : emul
+tiplicity a b <= emultiplicity a c
+参数：h : b ∣ c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `emultiplicity_le_emultiplicity_iff`：emultiplicity_le_emultiplicity_iff {
+c d : β} : emultiplicity a b <= emultiplicity c d ↔ forall n : Nat, a ^ n ∣ b ->
+ c ^ n ∣ d
+· 使用定理 `Dvd.dvd.trans`：∀ {α : Type u_1} [inst : Semigroup α] {a b c : α}, a ∣ b 
+→ b ∣ c → a ∣ c
 -/
 theorem emultiplicity_le_emultiplicity_of_dvd_right {a b c : α} (h : b ∣ c) :
-    emultiplicity a b <= emultiplicity a c :=
+    emultiplicity a b ≤ emultiplicity a c :=
   emultiplicity_le_emultiplicity_iff.2 fun _ hb => hb.trans h
-
-/--
-theorem `emultiplicity_eq_of_associated_right` / 定理 `emultiplicity_eq_of_associated_right`
-
-English:
-theorem emultiplicity_eq_of_associated_right
-  given: {a b c : α} (h : Associated b c)
-  proof: le_antisymm (emultiplicity_le_emultiplicity_of_dvd_right h.dvd)
-    (emultiplicity_le_emultiplicity_of_dvd_right h.symm.dvd)
-
-中文:
-定理 emultiplicity_eq_of_associated_right
-  条件: {a b c : α} (h : Associated b c)
-  证明: le_antisymm (emultiplicity_le_emultiplicity_of_dvd_right h.dvd)
-    (emultiplicity_le_emultiplicity_of_dvd_right h.symm.dvd)
-
-Depends on / 依赖: emultiplicity_le_emultiplicity_of_dvd_right, h.dvd, h.symm.dvd, le_antisymm
+/-
+**emultiplicity_eq_of_associated_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_eq_of_associated_right {a b c : α} (h : Associated b c) : em
+ultiplicity a b = emultiplicity a c
+参数：h : Associated b c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `emultiplicity_le_emultiplicity_of_dvd_right`：emultiplicity_le_emultiplic
+ity_of_dvd_right {a b c : α} (h : b ∣ c) : emultiplicity a b <= emultiplicity a 
+c
+· 使用定理 `Associated.dvd`：∀ {M : Type u_1} [inst : Monoid M] {a b : M}, Associated
+ a b → a ∣ b
+· 使用定理 `Associated.symm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y → Associated y x
 -/
 theorem emultiplicity_eq_of_associated_right {a b c : α} (h : Associated b c) :
     emultiplicity a b = emultiplicity a c :=
   le_antisymm (emultiplicity_le_emultiplicity_of_dvd_right h.dvd)
     (emultiplicity_le_emultiplicity_of_dvd_right h.symm.dvd)
-
-/--
-theorem `multiplicity_eq_of_associated_right` / 定理 `multiplicity_eq_of_associated_right`
-
-English:
-theorem multiplicity_eq_of_associated_right
-  given: {a b c : α} (h : Associated b c)
-  proof: multiplicity_eq_of_emultiplicity_eq (emultiplicity_eq_of_associated_right h)
-
-中文:
-定理 multiplicity_eq_of_associated_right
-  条件: {a b c : α} (h : Associated b c)
-  证明: multiplicity_eq_of_emultiplicity_eq (emultiplicity_eq_of_associated_right h)
-
-Depends on / 依赖: emultiplicity_eq_of_associated_right, multiplicity_eq_of_emultiplicity_eq
+/-
+**multiplicity_eq_of_associated_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multiplicity_eq_of_associated_right {a b c : α} (h : Associated b c) : mul
+tiplicity a b = multiplicity a c
+参数：h : Associated b c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `multiplicity_eq_of_emultiplicity_eq`：multiplicity_eq_of_emultiplicity_eq
+ {c d : β} (h : emultiplicity a b = emultiplicity c d) : multiplicity a b = mult
+iplicity c d
+· 使用定理 `emultiplicity_eq_of_associated_right`：emultiplicity_eq_of_associated_rig
+ht {a b c : α} (h : Associated b c) : emultiplicity a b = emultiplicity a c
 -/
 theorem multiplicity_eq_of_associated_right {a b c : α} (h : Associated b c) :
     multiplicity a b = multiplicity a c :=
   multiplicity_eq_of_emultiplicity_eq (emultiplicity_eq_of_associated_right h)
-
-/--
-theorem `dvd_of_emultiplicity_pos` / 定理 `dvd_of_emultiplicity_pos`
-
-English:
-theorem dvd_of_emultiplicity_pos
-  given: {a b : α} (h : 0 < emultiplicity a b)
-  statement: a ∣ b
-  proof: pow_one a ▸ pow_dvd_of_le_emultiplicity (Order.add_one_le_of_lt h)
-
-中文:
-定理 dvd_of_emultiplicity_pos
-  条件: {a b : α} (h : 0 < emultiplicity a b)
-  结论: a ∣ b
-  证明: pow_one a ▸ pow_dvd_of_le_emultiplicity (Order.add_one_le_of_lt h)
-
-Depends on / 依赖: Order.add_one_le_of_lt, add_one_le_of_lt, pow_dvd_of_le_emultiplicity, pow_one
+/-
+**dvd_of_emultiplicity_pos** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_of_emultiplicity_pos {a b : α} (h : 0 < emultiplicity a b) : a ∣ b
+参数：h : 0 < emultiplicity a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `pow_dvd_of_le_emultiplicity`：pow_dvd_of_le_emultiplicity {k : Nat} (hk :
+ k <= emultiplicity a b) : a ^ k ∣ b
+· 使用定理 `Order.add_one_le_of_lt`：add_one_le_of_lt (h : x < y) : x + 1 <= y
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
 -/
 theorem dvd_of_emultiplicity_pos {a b : α} (h : 0 < emultiplicity a b) : a ∣ b :=
   pow_one a ▸ pow_dvd_of_le_emultiplicity (Order.add_one_le_of_lt h)
-
-/--
-theorem `dvd_of_multiplicity_pos` / 定理 `dvd_of_multiplicity_pos`
-
-English:
-theorem dvd_of_multiplicity_pos
-  given: {a b : α} (h : 0 < multiplicity a b)
-  statement: a ∣ b
-  proof: dvd_of_emultiplicity_pos (lt_emultiplicity_of_lt_multiplicity h)
-
-中文:
-定理 dvd_of_multiplicity_pos
-  条件: {a b : α} (h : 0 < multiplicity a b)
-  结论: a ∣ b
-  证明: dvd_of_emultiplicity_pos (lt_emultiplicity_of_lt_multiplicity h)
-
-Depends on / 依赖: dvd_of_emultiplicity_pos, lt_emultiplicity_of_lt_multiplicity
+/-
+**dvd_of_multiplicity_pos** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_of_multiplicity_pos {a b : α} (h : 0 < multiplicity a b) : a ∣ b
+参数：h : 0 < multiplicity a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dvd_of_emultiplicity_pos`：dvd_of_emultiplicity_pos {a b : α} (h : 0 < em
+ultiplicity a b) : a ∣ b
+· 使用定理 `lt_emultiplicity_of_lt_multiplicity`：lt_emultiplicity_of_lt_multiplicity
+ {n : Nat} (h : n < multiplicity a b) : n < emultiplicity a b
 -/
 theorem dvd_of_multiplicity_pos {a b : α} (h : 0 < multiplicity a b) : a ∣ b :=
   dvd_of_emultiplicity_pos (lt_emultiplicity_of_lt_multiplicity h)
-
-/--
-theorem `dvd_iff_multiplicity_pos` / 定理 `dvd_iff_multiplicity_pos`
-
-English:
-theorem dvd_iff_multiplicity_pos
-  given: {a b : α}
-  statement: 0 < multiplicity a b ↔ a ∣ b
-  proof: ⟨dvd_of_multiplicity_pos, fun hdvd => Nat.pos_of_ne_zero (by simpa [multiplicity_eq_zero])⟩
-
-中文:
-定理 dvd_iff_multiplicity_pos
-  条件: {a b : α}
-  结论: 0 < multiplicity a b ↔ a ∣ b
-  证明: ⟨dvd_of_multiplicity_pos, fun hdvd => Nat.pos_of_ne_zero (by simpa [multiplicity_eq_zero])⟩
-
-Depends on / 依赖: Nat.pos_of_ne_zero, dvd_of_multiplicity_pos, multiplicity_eq_zero, pos_of_ne_zero
+/-
+**dvd_iff_multiplicity_pos** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_iff_multiplicity_pos {a b : α} : 0 < multiplicity a b ↔ a ∣ b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dvd_of_multiplicity_pos`：dvd_of_multiplicity_pos {a b : α} (h : 0 < mult
+iplicity a b) : a ∣ b
+· 使用定理 `Nat.pos_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → 0 < n
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 theorem dvd_iff_multiplicity_pos {a b : α} : 0 < multiplicity a b ↔ a ∣ b :=
   ⟨dvd_of_multiplicity_pos, fun hdvd => Nat.pos_of_ne_zero (by simpa [multiplicity_eq_zero])⟩
-
-/--
-theorem `dvd_iff_emultiplicity_pos` / 定理 `dvd_iff_emultiplicity_pos`
-
-English:
-theorem dvd_iff_emultiplicity_pos
-  given: {a b : α}
-  statement: 0 < emultiplicity a b ↔ a ∣ b
-  proof: emultiplicity_pos_iff.trans dvd_iff_multiplicity_pos
-
-中文:
-定理 dvd_iff_emultiplicity_pos
-  条件: {a b : α}
-  结论: 0 < emultiplicity a b ↔ a ∣ b
-  证明: emultiplicity_pos_iff.trans dvd_iff_multiplicity_pos
-
-Depends on / 依赖: dvd_iff_multiplicity_pos, emultiplicity_pos_iff, emultiplicity_pos_iff.trans
+/-
+**dvd_iff_emultiplicity_pos** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dvd_iff_emultiplicity_pos {a b : α} : 0 < emultiplicity a b ↔ a ∣ b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `emultiplicity_pos_iff`：emultiplicity_pos_iff : 0 < emultiplicity a b ↔ 0
+ < multiplicity a b
+· 使用定理 `dvd_iff_multiplicity_pos`：dvd_iff_multiplicity_pos {a b : α} : 0 < multi
+plicity a b ↔ a ∣ b
 -/
 theorem dvd_iff_emultiplicity_pos {a b : α} : 0 < emultiplicity a b ↔ a ∣ b :=
   emultiplicity_pos_iff.trans dvd_iff_multiplicity_pos
-
-/--
-theorem `Nat.finiteMultiplicity_iff` / 定理 `Nat.finiteMultiplicity_iff`
-
-English:
-theorem Nat.finiteMultiplicity_iff
-  given: {a b : Nat}
-  statement: FiniteMultiplicity a b ↔ a != 1 ∧ 0 < b
-  proof: by
-  rw [← not_iff_not]; rw [FiniteMultiplicity.not_iff_forall]; rw [not_and_or]; rw [not_ne_iff]; rw [not_lt]; rw [Nat.le_zero]
-  exact
-    ⟨fun h =>
-      or_iff_not_imp_right.2 fun hb =>
-have ha : a != 0 := fun ha => hb zero_dvd_iff.mp by rw [ha] at h; exact h 1
-        Classical.by_contradiction fun ha1 : a != 1 =>
-          have ha_gt_one : 1 < a :=
-            lt_of_not_ge fun _ =>
-              match a with
-              | 0 => ha rfl
-              | 1 => ha1 rfl
-              | b+2 => by lia
-          not_lt_of_ge (le_of_dvd (Nat.pos_of_ne_zero hb) (h b)) (b.lt_pow_self ha_gt_one),
-      fun h => by cases h <;> simp [*]⟩
-
-alias ⟨_, Dvd.multiplicity_pos⟩ := dvd_iff_multiplicity_pos
-
-中文:
-定理 自然数.finiteMultiplicity_iff
-  条件: {a b : 自然数}
-  结论: FiniteMultiplicity a b ↔ a != 1 ∧ 0 < b
-  证明: by
-  rw [← not_iff_not]; rw [FiniteMultiplicity.not_iff_forall]; rw [not_and_or]; rw [not_ne_iff]; rw [not_lt]; rw [Nat.le_zero]
-  exact
-    ⟨fun h =>
-      or_iff_not_imp_right.2 fun hb =>
-have ha : a != 0 := fun ha => hb zero_dvd_iff.mp by rw [ha] at h; exact h 1
-        Classical.by_contradiction fun ha1 : a != 1 =>
-          have ha_gt_one : 1 < a :=
-            lt_of_not_ge fun _ =>
-              match a with
-              | 0 => ha rfl
-              | 1 => ha1 rfl
-              | b+2 => by lia
-          not_lt_of_ge (le_of_dvd (Nat.pos_of_ne_zero hb) (h b)) (b.lt_pow_self ha_gt_one),
-      fun h => by cases h <;> simp [*]⟩
-
-alias ⟨_, Dvd.multiplicity_pos⟩ := dvd_iff_multiplicity_pos
-
-Depends on / 依赖: Classical, Classical.by_contradiction, FiniteMultiplicity, FiniteMultiplicity.not_iff_forall, Nat.le_zero, Nat.pos_of_ne_zero, b.lt_pow_self, by_contradiction, ha_gt_one, le_of_dvd, le_zero, lt_of_not_ge, lt_pow_self, not_and_or, not_iff_forall, not_iff_not, not_lt, not_lt_of_ge, not_ne_iff, or_iff_not_imp_right
+/-
+**Nat.finiteMultiplicity_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Nat.finiteMultiplicity_iff {a b : Nat} : FiniteMultiplicity a b ↔ a != 1 ∧
+ 0 < b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_iff_not`：not_iff_not : (¬a ↔ ¬b) ↔ (a ↔ b)
+· 使用定理 `FiniteMultiplicity.not_iff_forall`：FiniteMultiplicity.not_iff_forall : ¬
+FiniteMultiplicity a b ↔ forall n : Nat, a ^ n ∣ b
+· 使用定理 `not_and_or`：not_and_or : ¬(a ∧ b) ↔ ¬a ∨ ¬b
+· 使用定理 `not_ne_iff`：not_ne_iff {α : Sort*} {a b : α} : ¬a != b ↔ a = b
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `Nat.le_zero`：∀ {i : ℕ}, i ≤ 0 ↔ i = 0
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Classical.or_iff_not_imp_right`：∀ {a b : Prop}, a ∨ b ↔ ¬b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `zero_dvd_iff`：zero_dvd_iff : 0 ∣ a ↔ a = 0
+· 使用定理 `Classical.by_contradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `lt_of_not_ge`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬b ≤ a 
+→ a < b
+· 使用定理 `not_lt_of_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `Nat.le_of_dvd`：∀ {m n : ℕ}, 0 < n → m ∣ n → m ≤ n
+· 使用定理 `Nat.pos_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → 0 < n
+· 使用定理 `Nat.lt_pow_self`：∀ {n a : ℕ}, 1 < a → n < a ^ n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem Nat.finiteMultiplicity_iff {a b : Nat} : FiniteMultiplicity a b ↔ a != 1 ∧ 0 < b := by
-  rw [← not_iff_not]; rw [FiniteMultiplicity.not_iff_forall]; rw [not_and_or]; rw [not_ne_iff]; rw [not_lt]; rw [Nat.le_zero]
+theorem Nat.finiteMultiplicity_iff {a b : ℕ} : FiniteMultiplicity a b ↔ a ≠ 1 ∧ 0 < b := by
+  rw [← not_iff_not, FiniteMultiplicity.not_iff_forall, not_and_or, not_ne_iff, not_lt,
+    Nat.le_zero]
   exact
     ⟨fun h =>
       or_iff_not_imp_right.2 fun hb =>
-have ha : a != 0 := fun ha => hb zero_dvd_iff.mp by rw [ha] at h; exact h 1
-        Classical.by_contradiction fun ha1 : a != 1 =>
+        have ha : a ≠ 0 := fun ha => hb <| zero_dvd_iff.mp <| by rw [ha] at h; exact h 1
+        Classical.by_contradiction fun ha1 : a ≠ 1 =>
           have ha_gt_one : 1 < a :=
             lt_of_not_ge fun _ =>
               match a with
@@ -1870,218 +1666,173 @@ section CommMonoid
 
 variable [CommMonoid α]
 
-/--
-theorem `FiniteMultiplicity.mul_right` / 定理 `FiniteMultiplicity.mul_right`
-
-English:
-theorem FiniteMultiplicity.mul_right
-  given: {a b c : α} (hf : FiniteMultiplicity a (b * c))
-  proof: (mul_comm b c ▸ hf).mul_left
-
-中文:
-定理 FiniteMultiplicity.mul_right
-  条件: {a b c : α} (hf : FiniteMultiplicity a (b * c))
-  证明: (mul_comm b c ▸ hf).mul_left
-
-Depends on / 依赖: mul_comm, mul_left
+/-
+**FiniteMultiplicity.mul_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：FiniteMultiplicity.mul_right {a b c : α} (hf : FiniteMultiplicity a (b * c
+)) : FiniteMultiplicity a c
+参数：hf : FiniteMultiplicity a (b * c)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FiniteMultiplicity.mul_left`：FiniteMultiplicity.mul_left {c : α} : Finit
+eMultiplicity a (b * c) -> FiniteMultiplicity a b
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
 theorem FiniteMultiplicity.mul_right {a b c : α} (hf : FiniteMultiplicity a (b * c)) :
     FiniteMultiplicity a c := (mul_comm b c ▸ hf).mul_left
-
-/--
-theorem `emultiplicity_of_isUnit_right` / 定理 `emultiplicity_of_isUnit_right`
-
-English:
-theorem emultiplicity_of_isUnit_right
-  statement: {a b : α} (ha : ¬IsUnit a)
-  proof: emultiplicity_eq_zero.mpr fun h => ha (isUnit_of_dvd_unit h hb)
-
-中文:
-定理 emultiplicity_of_isUnit_right
-  结论: {a b : α} (ha : ¬是单位 a)
-  证明: emultiplicity_eq_zero.mpr fun h => ha (isUnit_of_dvd_unit h hb)
-
-Depends on / 依赖: emultiplicity_eq_zero, emultiplicity_eq_zero.mpr, isUnit_of_dvd_unit
+/-
+**emultiplicity_of_isUnit_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_of_isUnit_right {a b : α} (ha : ¬IsUnit a) (hb : IsUnit b) :
+ emultiplicity a b = 0
+参数：ha : ¬IsUnit a；hb : IsUnit b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `emultiplicity_eq_zero`：emultiplicity_eq_zero : emultiplicity a b = 0 ↔ ¬
+a ∣ b
+· 使用定理 `isUnit_of_dvd_unit`：isUnit_of_dvd_unit {x y : α} (xy : x ∣ y) (hu : IsUn
+it y) : IsUnit x
 -/
 theorem emultiplicity_of_isUnit_right {a b : α} (ha : ¬IsUnit a)
     (hb : IsUnit b) : emultiplicity a b = 0 :=
-  emultiplicity_eq_zero.mpr fun h => ha (isUnit_of_dvd_unit h hb)
-
-/--
-theorem `multiplicity_of_isUnit_right` / 定理 `multiplicity_of_isUnit_right`
-
-English:
-theorem multiplicity_of_isUnit_right
-  statement: {a b : α} (ha : ¬IsUnit a)
-  proof: multiplicity_eq_zero.mpr fun h => ha (isUnit_of_dvd_unit h hb)
-
-中文:
-定理 multiplicity_of_isUnit_right
-  结论: {a b : α} (ha : ¬是单位 a)
-  证明: multiplicity_eq_zero.mpr fun h => ha (isUnit_of_dvd_unit h hb)
-
-Depends on / 依赖: isUnit_of_dvd_unit, multiplicity_eq_zero, multiplicity_eq_zero.mpr
+  emultiplicity_eq_zero.mpr fun h ↦ ha (isUnit_of_dvd_unit h hb)
+/-
+**multiplicity_of_isUnit_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multiplicity_of_isUnit_right {a b : α} (ha : ¬IsUnit a) (hb : IsUnit b) : 
+multiplicity a b = 0
+参数：ha : ¬IsUnit a；hb : IsUnit b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `multiplicity_eq_zero`：multiplicity_eq_zero : multiplicity a b = 0 ↔ ¬a ∣
+ b
+· 使用定理 `isUnit_of_dvd_unit`：isUnit_of_dvd_unit {x y : α} (xy : x ∣ y) (hu : IsUn
+it y) : IsUnit x
 -/
 theorem multiplicity_of_isUnit_right {a b : α} (ha : ¬IsUnit a)
     (hb : IsUnit b) : multiplicity a b = 0 :=
-  multiplicity_eq_zero.mpr fun h => ha (isUnit_of_dvd_unit h hb)
-
-/--
-theorem `emultiplicity_of_one_right` / 定理 `emultiplicity_of_one_right`
-
-English:
-theorem emultiplicity_of_one_right
-  given: {a : α} (ha : ¬IsUnit a)
-  statement: emultiplicity a 1 = 0
-  proof: emultiplicity_of_isUnit_right ha isUnit_one
-
-中文:
-定理 emultiplicity_of_one_right
-  条件: {a : α} (ha : ¬是单位 a)
-  结论: emultiplicity a 1 = 0
-  证明: emultiplicity_of_isUnit_right ha isUnit_one
-
-Depends on / 依赖: emultiplicity_of_isUnit_right, isUnit_one
+  multiplicity_eq_zero.mpr fun h ↦ ha (isUnit_of_dvd_unit h hb)
+/-
+**emultiplicity_of_one_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_of_one_right {a : α} (ha : ¬IsUnit a) : emultiplicity a 1 = 
+0
+参数：ha : ¬IsUnit a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `emultiplicity_of_isUnit_right`：emultiplicity_of_isUnit_right {a b : α} (
+ha : ¬IsUnit a) (hb : IsUnit b) : emultiplicity a b = 0
+· 使用定理 `isUnit_one`：isUnit_one [Monoid M] : IsUnit (1 : M)
 -/
 theorem emultiplicity_of_one_right {a : α} (ha : ¬IsUnit a) : emultiplicity a 1 = 0 :=
   emultiplicity_of_isUnit_right ha isUnit_one
-
-/--
-theorem `multiplicity_of_one_right` / 定理 `multiplicity_of_one_right`
-
-English:
-theorem multiplicity_of_one_right
-  given: {a : α} (ha : ¬IsUnit a)
-  statement: multiplicity a 1 = 0
-  proof: multiplicity_of_isUnit_right ha isUnit_one
-
-中文:
-定理 multiplicity_of_one_right
-  条件: {a : α} (ha : ¬是单位 a)
-  结论: multiplicity a 1 = 0
-  证明: multiplicity_of_isUnit_right ha isUnit_one
-
-Depends on / 依赖: isUnit_one, multiplicity_of_isUnit_right
+/-
+**multiplicity_of_one_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multiplicity_of_one_right {a : α} (ha : ¬IsUnit a) : multiplicity a 1 = 0
+参数：ha : ¬IsUnit a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `multiplicity_of_isUnit_right`：multiplicity_of_isUnit_right {a b : α} (ha
+ : ¬IsUnit a) (hb : IsUnit b) : multiplicity a b = 0
+· 使用定理 `isUnit_one`：isUnit_one [Monoid M] : IsUnit (1 : M)
 -/
 theorem multiplicity_of_one_right {a : α} (ha : ¬IsUnit a) : multiplicity a 1 = 0 :=
   multiplicity_of_isUnit_right ha isUnit_one
-
-/--
-theorem `emultiplicity_of_unit_right` / 定理 `emultiplicity_of_unit_right`
-
-English:
-theorem emultiplicity_of_unit_right
-  given: {a : α} (ha : ¬IsUnit a) (u : αˣ)
-  statement: emultiplicity a u = 0
-  proof: emultiplicity_of_isUnit_right ha u.isUnit
-
-中文:
-定理 emultiplicity_of_unit_right
-  条件: {a : α} (ha : ¬是单位 a) (u : αˣ)
-  结论: emultiplicity a u = 0
-  证明: emultiplicity_of_isUnit_right ha u.isUnit
-
-Depends on / 依赖: emultiplicity_of_isUnit_right, isUnit, u.isUnit
+/-
+**emultiplicity_of_unit_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_of_unit_right {a : α} (ha : ¬IsUnit a) (u : αˣ) : emultiplic
+ity a u = 0
+参数：ha : ¬IsUnit a；u : αˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `emultiplicity_of_isUnit_right`：emultiplicity_of_isUnit_right {a b : α} (
+ha : ¬IsUnit a) (hb : IsUnit b) : emultiplicity a b = 0
+· 使用定理 `Units.isUnit`：∀ {M : Type u_1} [inst : Monoid M] (u : Mˣ), IsUnit ↑u
 -/
 theorem emultiplicity_of_unit_right {a : α} (ha : ¬IsUnit a) (u : αˣ) : emultiplicity a u = 0 :=
   emultiplicity_of_isUnit_right ha u.isUnit
-
-/--
-theorem `multiplicity_of_unit_right` / 定理 `multiplicity_of_unit_right`
-
-English:
-theorem multiplicity_of_unit_right
-  given: {a : α} (ha : ¬IsUnit a) (u : αˣ)
-  statement: multiplicity a u = 0
-  proof: multiplicity_of_isUnit_right ha u.isUnit
-
-中文:
-定理 multiplicity_of_unit_right
-  条件: {a : α} (ha : ¬是单位 a) (u : αˣ)
-  结论: multiplicity a u = 0
-  证明: multiplicity_of_isUnit_right ha u.isUnit
-
-Depends on / 依赖: isUnit, multiplicity_of_isUnit_right, u.isUnit
+/-
+**multiplicity_of_unit_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multiplicity_of_unit_right {a : α} (ha : ¬IsUnit a) (u : αˣ) : multiplicit
+y a u = 0
+参数：ha : ¬IsUnit a；u : αˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `multiplicity_of_isUnit_right`：multiplicity_of_isUnit_right {a b : α} (ha
+ : ¬IsUnit a) (hb : IsUnit b) : multiplicity a b = 0
+· 使用定理 `Units.isUnit`：∀ {M : Type u_1} [inst : Monoid M] (u : Mˣ), IsUnit ↑u
 -/
 theorem multiplicity_of_unit_right {a : α} (ha : ¬IsUnit a) (u : αˣ) : multiplicity a u = 0 :=
   multiplicity_of_isUnit_right ha u.isUnit
-
-/--
-theorem `emultiplicity_le_emultiplicity_of_dvd_left` / 定理 `emultiplicity_le_emultiplicity_of_dvd_left`
-
-English:
-theorem emultiplicity_le_emultiplicity_of_dvd_left
-  given: {a b c : α} (hdvd : a ∣ b)
-  proof: emultiplicity_le_emultiplicity_iff.2 fun n h => (pow_dvd_pow_of_dvd hdvd n).trans h
-
-中文:
-定理 emultiplicity_le_emultiplicity_of_dvd_left
-  条件: {a b c : α} (hdvd : a ∣ b)
-  证明: emultiplicity_le_emultiplicity_iff.2 fun n h => (pow_dvd_pow_of_dvd hdvd n).trans h
-
-Depends on / 依赖: emultiplicity_le_emultiplicity_iff, pow_dvd_pow_of_dvd
+/-
+**emultiplicity_le_emultiplicity_of_dvd_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_le_emultiplicity_of_dvd_left {a b c : α} (hdvd : a ∣ b) : em
+ultiplicity b c <= emultiplicity a c
+参数：hdvd : a ∣ b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `emultiplicity_le_emultiplicity_iff`：emultiplicity_le_emultiplicity_iff {
+c d : β} : emultiplicity a b <= emultiplicity c d ↔ forall n : Nat, a ^ n ∣ b ->
+ c ^ n ∣ d
+· 使用定理 `Dvd.dvd.trans`：∀ {α : Type u_1} [inst : Semigroup α] {a b c : α}, a ∣ b 
+→ b ∣ c → a ∣ c
+· 使用定理 `pow_dvd_pow_of_dvd`：pow_dvd_pow_of_dvd (h : a ∣ b) (n : Nat) : a ^ n ∣ b
+ ^ n
 -/
 theorem emultiplicity_le_emultiplicity_of_dvd_left {a b c : α} (hdvd : a ∣ b) :
-    emultiplicity b c <= emultiplicity a c :=
+    emultiplicity b c ≤ emultiplicity a c :=
   emultiplicity_le_emultiplicity_iff.2 fun n h => (pow_dvd_pow_of_dvd hdvd n).trans h
-
-/--
-theorem `emultiplicity_eq_of_associated_left` / 定理 `emultiplicity_eq_of_associated_left`
-
-English:
-theorem emultiplicity_eq_of_associated_left
-  given: {a b c : α} (h : Associated a b)
-  proof: le_antisymm (emultiplicity_le_emultiplicity_of_dvd_left h.dvd)
-    (emultiplicity_le_emultiplicity_of_dvd_left h.symm.dvd)
-
-中文:
-定理 emultiplicity_eq_of_associated_left
-  条件: {a b c : α} (h : Associated a b)
-  证明: le_antisymm (emultiplicity_le_emultiplicity_of_dvd_left h.dvd)
-    (emultiplicity_le_emultiplicity_of_dvd_left h.symm.dvd)
-
-Depends on / 依赖: emultiplicity_le_emultiplicity_of_dvd_left, h.dvd, h.symm.dvd, le_antisymm
+/-
+**emultiplicity_eq_of_associated_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_eq_of_associated_left {a b c : α} (h : Associated a b) : emu
+ltiplicity b c = emultiplicity a c
+参数：h : Associated a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `emultiplicity_le_emultiplicity_of_dvd_left`：emultiplicity_le_emultiplici
+ty_of_dvd_left {a b c : α} (hdvd : a ∣ b) : emultiplicity b c <= emultiplicity a
+ c
+· 使用定理 `Associated.dvd`：∀ {M : Type u_1} [inst : Monoid M] {a b : M}, Associated
+ a b → a ∣ b
+· 使用定理 `Associated.symm`：∀ {M : Type u_1} [inst : Monoid M] {x y : M}, Associate
+d x y → Associated y x
 -/
 theorem emultiplicity_eq_of_associated_left {a b c : α} (h : Associated a b) :
     emultiplicity b c = emultiplicity a c :=
   le_antisymm (emultiplicity_le_emultiplicity_of_dvd_left h.dvd)
     (emultiplicity_le_emultiplicity_of_dvd_left h.symm.dvd)
-
-/--
-theorem `multiplicity_eq_of_associated_left` / 定理 `multiplicity_eq_of_associated_left`
-
-English:
-theorem multiplicity_eq_of_associated_left
-  given: {a b c : α} (h : Associated a b)
-  proof: multiplicity_eq_of_emultiplicity_eq (emultiplicity_eq_of_associated_left h)
-
-中文:
-定理 multiplicity_eq_of_associated_left
-  条件: {a b c : α} (h : Associated a b)
-  证明: multiplicity_eq_of_emultiplicity_eq (emultiplicity_eq_of_associated_left h)
-
-Depends on / 依赖: emultiplicity_eq_of_associated_left, multiplicity_eq_of_emultiplicity_eq
+/-
+**multiplicity_eq_of_associated_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multiplicity_eq_of_associated_left {a b c : α} (h : Associated a b) : mult
+iplicity b c = multiplicity a c
+参数：h : Associated a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `multiplicity_eq_of_emultiplicity_eq`：multiplicity_eq_of_emultiplicity_eq
+ {c d : β} (h : emultiplicity a b = emultiplicity c d) : multiplicity a b = mult
+iplicity c d
+· 使用定理 `emultiplicity_eq_of_associated_left`：emultiplicity_eq_of_associated_left
+ {a b c : α} (h : Associated a b) : emultiplicity b c = emultiplicity a c
 -/
 theorem multiplicity_eq_of_associated_left {a b c : α} (h : Associated a b) :
     multiplicity b c = multiplicity a c :=
   multiplicity_eq_of_emultiplicity_eq (emultiplicity_eq_of_associated_left h)
-
-/--
-theorem `emultiplicity_mk_eq_emultiplicity` / 定理 `emultiplicity_mk_eq_emultiplicity`
-
-English:
-theorem emultiplicity_mk_eq_emultiplicity
-  given: {a b : α}
-  proof: by
-  simp [emultiplicity_eq_emultiplicity_iff, ← Associates.mk_pow, Associates.mk_dvd_mk]
-
-中文:
-定理 emultiplicity_mk_eq_emultiplicity
-  条件: {a b : α}
-  证明: by
-  simp [emultiplicity_eq_emultiplicity_iff, ← Associates.mk_pow, Associates.mk_dvd_mk]
-
-Depends on / 依赖: Associates, Associates.mk_dvd_mk, Associates.mk_pow, emultiplicity_eq_emultiplicity_iff, mk_dvd_mk, mk_pow
+/-
+**emultiplicity_mk_eq_emultiplicity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_mk_eq_emultiplicity {a b : α} : emultiplicity (Associates.mk
+ a) (Associates.mk b) = emultiplicity a b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem emultiplicity_mk_eq_emultiplicity {a b : α} :
     emultiplicity (Associates.mk a) (Associates.mk b) = emultiplicity a b := by
@@ -2093,121 +1844,85 @@ section MonoidWithZero
 
 variable [MonoidWithZero α]
 
-/--
-theorem `FiniteMultiplicity.ne_zero` / 定理 `FiniteMultiplicity.ne_zero`
-
-English:
-theorem FiniteMultiplicity.ne_zero
-  given: {a b : α} (h : FiniteMultiplicity a b)
-  statement: b != 0
-  proof: let ⟨n, hn⟩ := h
-  fun hb => by simp [hb] at hn
-
-@[simp]
-
-中文:
-定理 FiniteMultiplicity.ne_zero
-  条件: {a b : α} (h : FiniteMultiplicity a b)
-  结论: b != 0
-  证明: let ⟨n, hn⟩ := h
-  fun hb => by simp [hb] at hn
-
-@[simp]
+/-
+**FiniteMultiplicity.ne_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：FiniteMultiplicity.ne_zero {a b : α} (h : FiniteMultiplicity a b) : b != 0
+参数：h : FiniteMultiplicity a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_true_eq_false`：(¬True) = False
 -/
-theorem FiniteMultiplicity.ne_zero {a b : α} (h : FiniteMultiplicity a b) : b != 0 :=
+theorem FiniteMultiplicity.ne_zero {a b : α} (h : FiniteMultiplicity a b) : b ≠ 0 :=
   let ⟨n, hn⟩ := h
   fun hb => by simp [hb] at hn
 
 @[simp]
-/--
-theorem `emultiplicity_zero` / 定理 `emultiplicity_zero`
-
-English:
-theorem emultiplicity_zero
-  given: (a : α)
-  statement: emultiplicity a 0 = ⊤
-  proof: emultiplicity_eq_top.2 (fun v => v.ne_zero rfl)
-
-中文:
-定理 emultiplicity_zero
-  条件: (a : α)
-  结论: emultiplicity a 0 = ⊤
-  证明: emultiplicity_eq_top.2 (fun v => v.ne_zero rfl)
-
-Depends on / 依赖: emultiplicity_eq_top, ne_zero, v.ne_zero
+/-
+**emultiplicity_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_zero (a : α) : emultiplicity a 0 = ⊤
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `emultiplicity_eq_top`：emultiplicity_eq_top : emultiplicity a b = ⊤ ↔ ¬Fi
+niteMultiplicity a b
+· 使用定理 `FiniteMultiplicity.ne_zero`：FiniteMultiplicity.ne_zero {a b : α} (h : Fi
+niteMultiplicity a b) : b != 0
 -/
 theorem emultiplicity_zero (a : α) : emultiplicity a 0 = ⊤ :=
-  emultiplicity_eq_top.2 (fun v => v.ne_zero rfl)
-
-/--
-theorem `multiplicity_zero` / 定理 `multiplicity_zero`
-
-English:
-theorem multiplicity_zero
-  given: (a : α)
-  statement: multiplicity a 0 = 1
-  proof: multiplicity_eq_one_of_not_finiteMultiplicity fun h => h.ne_zero rfl
-
-@[simp]
-
-中文:
-定理 multiplicity_zero
-  条件: (a : α)
-  结论: multiplicity a 0 = 1
-  证明: multiplicity_eq_one_of_not_finiteMultiplicity fun h => h.ne_zero rfl
-
-@[simp]
-
-Depends on / 依赖: h.ne_zero, multiplicity_eq_one_of_not_finiteMultiplicity, ne_zero
+  emultiplicity_eq_top.2 (fun v ↦ v.ne_zero rfl)
+/-
+**multiplicity_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multiplicity_zero (a : α) : multiplicity a 0 = 1
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `multiplicity_eq_one_of_not_finiteMultiplicity`：multiplicity_eq_one_of_no
+t_finiteMultiplicity (h : ¬FiniteMultiplicity a b) : multiplicity a b = 1
+· 使用定理 `FiniteMultiplicity.ne_zero`：FiniteMultiplicity.ne_zero {a b : α} (h : Fi
+niteMultiplicity a b) : b != 0
 -/
 theorem multiplicity_zero (a : α) : multiplicity a 0 = 1 :=
-  multiplicity_eq_one_of_not_finiteMultiplicity fun h => h.ne_zero rfl
+  multiplicity_eq_one_of_not_finiteMultiplicity fun h ↦ h.ne_zero rfl
 
 @[simp]
-/--
-theorem `emultiplicity_zero_eq_zero_of_ne_zero` / 定理 `emultiplicity_zero_eq_zero_of_ne_zero`
-
-English:
-theorem emultiplicity_zero_eq_zero_of_ne_zero
-  given: (a : α) (ha : a != 0)
-  statement: emultiplicity 0 a = 0
-  proof: emultiplicity_eq_zero.2 mt zero_dvd_iff.1 ha
-
-@[simp]
-
-中文:
-定理 emultiplicity_zero_eq_zero_of_ne_zero
-  条件: (a : α) (ha : a != 0)
-  结论: emultiplicity 0 a = 0
-  证明: emultiplicity_eq_zero.2 mt zero_dvd_iff.1 ha
-
-@[simp]
-
-Depends on / 依赖: emultiplicity_eq_zero, zero_dvd_iff
+/-
+**emultiplicity_zero_eq_zero_of_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_zero_eq_zero_of_ne_zero (a : α) (ha : a != 0) : emultiplicit
+y 0 a = 0
+参数：a : α；ha : a != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `emultiplicity_eq_zero`：emultiplicity_eq_zero : emultiplicity a b = 0 ↔ ¬
+a ∣ b
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `zero_dvd_iff`：zero_dvd_iff : 0 ∣ a ↔ a = 0
 -/
-theorem emultiplicity_zero_eq_zero_of_ne_zero (a : α) (ha : a != 0) : emultiplicity 0 a = 0 :=
-emultiplicity_eq_zero.2 mt zero_dvd_iff.1 ha
+theorem emultiplicity_zero_eq_zero_of_ne_zero (a : α) (ha : a ≠ 0) : emultiplicity 0 a = 0 :=
+  emultiplicity_eq_zero.2 <| mt zero_dvd_iff.1 ha
 
 @[simp]
-/--
-theorem `multiplicity_zero_eq_zero_of_ne_zero` / 定理 `multiplicity_zero_eq_zero_of_ne_zero`
-
-English:
-theorem multiplicity_zero_eq_zero_of_ne_zero
-  given: (a : α) (ha : a != 0)
-  statement: multiplicity 0 a = 0
-  proof: multiplicity_eq_zero.2 mt zero_dvd_iff.1 ha
-
-中文:
-定理 multiplicity_zero_eq_zero_of_ne_zero
-  条件: (a : α) (ha : a != 0)
-  结论: multiplicity 0 a = 0
-  证明: multiplicity_eq_zero.2 mt zero_dvd_iff.1 ha
-
-Depends on / 依赖: multiplicity_eq_zero, zero_dvd_iff
+/-
+**multiplicity_zero_eq_zero_of_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multiplicity_zero_eq_zero_of_ne_zero (a : α) (ha : a != 0) : multiplicity 
+0 a = 0
+参数：a : α；ha : a != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `multiplicity_eq_zero`：multiplicity_eq_zero : multiplicity a b = 0 ↔ ¬a ∣
+ b
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `zero_dvd_iff`：zero_dvd_iff : 0 ∣ a ↔ a = 0
 -/
-theorem multiplicity_zero_eq_zero_of_ne_zero (a : α) (ha : a != 0) : multiplicity 0 a = 0 :=
-multiplicity_eq_zero.2 mt zero_dvd_iff.1 ha
+theorem multiplicity_zero_eq_zero_of_ne_zero (a : α) (ha : a ≠ 0) : multiplicity 0 a = 0 :=
+  multiplicity_eq_zero.2 <| mt zero_dvd_iff.1 ha
 
 end MonoidWithZero
 
@@ -2215,64 +1930,59 @@ section Semiring
 
 variable [Semiring α]
 
-/--
-theorem `FiniteMultiplicity.or_of_add` / 定理 `FiniteMultiplicity.or_of_add`
-
-English:
-theorem FiniteMultiplicity.or_of_add
-  given: {p a b : α} (hf : FiniteMultiplicity p (a + b))
-  proof: by
-  by_contra! nh
-  obtain ⟨c, hc⟩ := hf
-  simp_all [dvd_add]
-
-中文:
-定理 FiniteMultiplicity.or_of_add
-  条件: {p a b : α} (hf : FiniteMultiplicity p (a + b))
-  证明: by
-  by_contra! nh
-  obtain ⟨c, hc⟩ := hf
-  simp_all [dvd_add]
-
-Depends on / 依赖: dvd_add
+/-
+**FiniteMultiplicity.or_of_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：FiniteMultiplicity.or_of_add {p a b : α} (hf : FiniteMultiplicity p (a + b
+)) : FiniteMultiplicity p a ∨ FiniteMultiplicity p b
+参数：hf : FiniteMultiplicity p (a + b)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `not_true_eq_false`：(¬True) = False
 -/
 theorem FiniteMultiplicity.or_of_add {p a b : α} (hf : FiniteMultiplicity p (a + b)) :
     FiniteMultiplicity p a ∨ FiniteMultiplicity p b := by
   by_contra! nh
   obtain ⟨c, hc⟩ := hf
   simp_all [dvd_add]
-
-/--
-theorem `min_le_emultiplicity_add` / 定理 `min_le_emultiplicity_add`
-
-English:
-theorem min_le_emultiplicity_add
-  given: {p a b : α}
-  proof: by
-  cases hm : min (emultiplicity p a) (emultiplicity p b)
-  · simp only [top_le_iff, min_eq_top, emultiplicity_eq_top] at hm ⊢
-    contrapose hm
-    simp only [not_and_or, not_not] at hm ⊢
-    exact hm.or_of_add
-  · apply le_emultiplicity_of_pow_dvd
-    simp [dvd_add, pow_dvd_of_le_emultiplicity, ← hm]
-
-中文:
-定理 min_le_emultiplicity_add
-  条件: {p a b : α}
-  证明: by
-  cases hm : min (emultiplicity p a) (emultiplicity p b)
-  · simp only [top_le_iff, min_eq_top, emultiplicity_eq_top] at hm ⊢
-    contrapose hm
-    simp only [not_and_or, not_not] at hm ⊢
-    exact hm.or_of_add
-  · apply le_emultiplicity_of_pow_dvd
-    simp [dvd_add, pow_dvd_of_le_emultiplicity, ← hm]
-
-Depends on / 依赖: contrapose, dvd_add, emultiplicity, emultiplicity_eq_top, hm.or_of_add, le_emultiplicity_of_pow_dvd, min_eq_top, not_and_or, not_not, or_of_add, pow_dvd_of_le_emultiplicity, top_le_iff
+/-
+**min_le_emultiplicity_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：min_le_emultiplicity_add {p a b : α} : min (emultiplicity p a) (emultiplic
+ity p b) <= emultiplicity p (a + b)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₃`：contrapose₃ {p q : Prop} : (q -> 
+¬ p) -> (p -> ¬ q)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FiniteMultiplicity.or_of_add`：FiniteMultiplicity.or_of_add {p a b : α} (
+hf : FiniteMultiplicity p (a + b)) : FiniteMultiplicity p a ∨ FiniteMultiplicity
+ p b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `le_emultiplicity_of_pow_dvd`：le_emultiplicity_of_pow_dvd {k : Nat} (hk :
+ a ^ k ∣ b) : k <= emultiplicity a b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
 theorem min_le_emultiplicity_add {p a b : α} :
-    min (emultiplicity p a) (emultiplicity p b) <= emultiplicity p (a + b) := by
+    min (emultiplicity p a) (emultiplicity p b) ≤ emultiplicity p (a + b) := by
   cases hm : min (emultiplicity p a) (emultiplicity p b)
   · simp only [top_le_iff, min_eq_top, emultiplicity_eq_top] at hm ⊢
     contrapose hm
@@ -2288,34 +1998,24 @@ section Ring
 variable [Ring α]
 
 @[simp]
-/--
-theorem `FiniteMultiplicity.neg_iff` / 定理 `FiniteMultiplicity.neg_iff`
-
-English:
-theorem FiniteMultiplicity.neg_iff
-  given: {a b : α}
-  proof: by
-  unfold FiniteMultiplicity
-  congr! 3
-  simp only [dvd_neg]
-
-alias ⟨_, FiniteMultiplicity.neg⟩ := FiniteMultiplicity.neg_iff
-
-@[simp]
-
-中文:
-定理 FiniteMultiplicity.neg_iff
-  条件: {a b : α}
-  证明: by
-  unfold FiniteMultiplicity
-  congr! 3
-  simp only [dvd_neg]
-
-alias ⟨_, FiniteMultiplicity.neg⟩ := FiniteMultiplicity.neg_iff
-
-@[simp]
-
-Depends on / 依赖: FiniteMultiplicity, dvd_neg
+/-
+**FiniteMultiplicity.neg_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：FiniteMultiplicity.neg_iff {a b : α} : FiniteMultiplicity a (-b) ↔ FiniteM
+ultiplicity a b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `iff_of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem FiniteMultiplicity.neg_iff {a b : α} :
     FiniteMultiplicity a (-b) ↔ FiniteMultiplicity a b := by
@@ -2326,140 +2026,129 @@ theorem FiniteMultiplicity.neg_iff {a b : α} :
 alias ⟨_, FiniteMultiplicity.neg⟩ := FiniteMultiplicity.neg_iff
 
 @[simp]
-/--
-theorem `emultiplicity_neg` / 定理 `emultiplicity_neg`
-
-English:
-theorem emultiplicity_neg
-  given: (a b : α)
-  statement: emultiplicity a (-b) = emultiplicity a b
-  proof: by
-  rw [emultiplicity_eq_emultiplicity_iff]
-  simp
-
-@[simp]
-
-中文:
-定理 emultiplicity_neg
-  条件: (a b : α)
-  结论: emultiplicity a (-b) = emultiplicity a b
-  证明: by
-  rw [emultiplicity_eq_emultiplicity_iff]
-  simp
-
-@[simp]
-
-Depends on / 依赖: emultiplicity_eq_emultiplicity_iff
+/-
+**emultiplicity_neg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_neg (a b : α) : emultiplicity a (-b) = emultiplicity a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `emultiplicity_eq_emultiplicity_iff`：emultiplicity_eq_emultiplicity_iff {
+c d : β} : emultiplicity a b = emultiplicity c d ↔ forall n : Nat, a ^ n ∣ b ↔ c
+ ^ n ∣ d
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem emultiplicity_neg (a b : α) : emultiplicity a (-b) = emultiplicity a b := by
   rw [emultiplicity_eq_emultiplicity_iff]
   simp
 
 @[simp]
-/--
-theorem `multiplicity_neg` / 定理 `multiplicity_neg`
-
-English:
-theorem multiplicity_neg
-  given: (a b : α)
-  statement: multiplicity a (-b) = multiplicity a b
-  proof: multiplicity_eq_of_emultiplicity_eq (emultiplicity_neg a b)
-
-中文:
-定理 multiplicity_neg
-  条件: (a b : α)
-  结论: multiplicity a (-b) = multiplicity a b
-  证明: multiplicity_eq_of_emultiplicity_eq (emultiplicity_neg a b)
-
-Depends on / 依赖: emultiplicity_neg, multiplicity_eq_of_emultiplicity_eq
+/-
+**multiplicity_neg** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multiplicity_neg (a b : α) : multiplicity a (-b) = multiplicity a b
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `multiplicity_eq_of_emultiplicity_eq`：multiplicity_eq_of_emultiplicity_eq
+ {c d : β} (h : emultiplicity a b = emultiplicity c d) : multiplicity a b = mult
+iplicity c d
+· 使用定理 `emultiplicity_neg`：emultiplicity_neg (a b : α) : emultiplicity a (-b) = 
+emultiplicity a b
 -/
 theorem multiplicity_neg (a b : α) : multiplicity a (-b) = multiplicity a b :=
   multiplicity_eq_of_emultiplicity_eq (emultiplicity_neg a b)
-
-/--
-theorem `Int.emultiplicity_natAbs` / 定理 `Int.emultiplicity_natAbs`
-
-English:
-theorem Int.emultiplicity_natAbs
-  given: (a : Nat) (b : Int)
-  proof: by
-  rcases Int.natAbs_eq b with h | h <;> conv_rhs => rw [h]
-  · rw [Int.natCast_emultiplicity]
-  · rw [emultiplicity_neg, Int.natCast_emultiplicity]
-
-中文:
-定理 整数.emultiplicity_natAbs
-  条件: (a : 自然数) (b : 整数)
-  证明: by
-  rcases Int.natAbs_eq b with h | h <;> conv_rhs => rw [h]
-  · rw [Int.natCast_emultiplicity]
-  · rw [emultiplicity_neg, Int.natCast_emultiplicity]
-
-Depends on / 依赖: Int.natAbs_eq, Int.natCast_emultiplicity, conv_rhs, emultiplicity_neg, natAbs_eq, natCast_emultiplicity
+/-
+**Int.emultiplicity_natAbs** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Int.emultiplicity_natAbs (a : Nat) (b : Int) : emultiplicity a b.natAbs = 
+emultiplicity (a : Int) b
+参数：a : Nat；b : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.natAbs_eq`：∀ (a : ℤ), a = ↑a.natAbs ∨ a = -↑a.natAbs
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.natCast_emultiplicity`：Int.natCast_emultiplicity (a b : Nat) : emult
+iplicity (a : Int) (b : Int) = emultiplicity a b
+· 使用定理 `emultiplicity_neg`：emultiplicity_neg (a b : α) : emultiplicity a (-b) = 
+emultiplicity a b
 -/
-theorem Int.emultiplicity_natAbs (a : Nat) (b : Int) :
-    emultiplicity a b.natAbs = emultiplicity (a : Int) b := by
+theorem Int.emultiplicity_natAbs (a : ℕ) (b : ℤ) :
+    emultiplicity a b.natAbs = emultiplicity (a : ℤ) b := by
   rcases Int.natAbs_eq b with h | h <;> conv_rhs => rw [h]
   · rw [Int.natCast_emultiplicity]
   · rw [emultiplicity_neg, Int.natCast_emultiplicity]
-
-/--
-theorem `Int.multiplicity_natAbs` / 定理 `Int.multiplicity_natAbs`
-
-English:
-theorem Int.multiplicity_natAbs
-  given: (a : Nat) (b : Int)
-  proof: multiplicity_eq_of_emultiplicity_eq (Int.emultiplicity_natAbs a b)
-
-中文:
-定理 整数.multiplicity_natAbs
-  条件: (a : 自然数) (b : 整数)
-  证明: multiplicity_eq_of_emultiplicity_eq (Int.emultiplicity_natAbs a b)
-
-Depends on / 依赖: Int.emultiplicity_natAbs, emultiplicity_natAbs, multiplicity_eq_of_emultiplicity_eq
+/-
+**Int.multiplicity_natAbs** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Int.multiplicity_natAbs (a : Nat) (b : Int) : multiplicity a b.natAbs = mu
+ltiplicity (a : Int) b
+参数：a : Nat；b : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `multiplicity_eq_of_emultiplicity_eq`：multiplicity_eq_of_emultiplicity_eq
+ {c d : β} (h : emultiplicity a b = emultiplicity c d) : multiplicity a b = mult
+iplicity c d
+· 使用定理 `Int.emultiplicity_natAbs`：Int.emultiplicity_natAbs (a : Nat) (b : Int) :
+ emultiplicity a b.natAbs = emultiplicity (a : Int) b
 -/
-theorem Int.multiplicity_natAbs (a : Nat) (b : Int) :
-    multiplicity a b.natAbs = multiplicity (a : Int) b :=
+theorem Int.multiplicity_natAbs (a : ℕ) (b : ℤ) :
+    multiplicity a b.natAbs = multiplicity (a : ℤ) b :=
   multiplicity_eq_of_emultiplicity_eq (Int.emultiplicity_natAbs a b)
-
-/--
-theorem `emultiplicity_add_of_gt` / 定理 `emultiplicity_add_of_gt`
-
-English:
-theorem emultiplicity_add_of_gt
-  given: {p a b : α} (h : emultiplicity p b < emultiplicity p a)
-  proof: by
-  have : FiniteMultiplicity p b := finiteMultiplicity_iff_emultiplicity_ne_top.2 (by simp [·] at h)
-  rw [this.emultiplicity_eq_multiplicity] at *
-  apply emultiplicity_eq_of_dvd_of_not_dvd
-  · apply dvd_add
-    · apply pow_dvd_of_le_emultiplicity
-      exact h.le
-    · simp
-  · rw [dvd_add_right]
-    · apply this.not_pow_dvd_of_multiplicity_lt
-      simp
-    apply pow_dvd_of_le_emultiplicity
-    exact Order.add_one_le_of_lt h
-
-中文:
-定理 emultiplicity_add_of_gt
-  条件: {p a b : α} (h : emultiplicity p b < emultiplicity p a)
-  证明: by
-  have : FiniteMultiplicity p b := finiteMultiplicity_iff_emultiplicity_ne_top.2 (by simp [·] at h)
-  rw [this.emultiplicity_eq_multiplicity] at *
-  apply emultiplicity_eq_of_dvd_of_not_dvd
-  · apply dvd_add
-    · apply pow_dvd_of_le_emultiplicity
-      exact h.le
-    · simp
-  · rw [dvd_add_right]
-    · apply this.not_pow_dvd_of_multiplicity_lt
-      simp
-    apply pow_dvd_of_le_emultiplicity
-    exact Order.add_one_le_of_lt h
-
-Depends on / 依赖: FiniteMultiplicity, Order.add_one_le_of_lt, add_one_le_of_lt, dvd_add, dvd_add_right, emultiplicity_eq_multiplicity, emultiplicity_eq_of_dvd_of_not_dvd, finiteMultiplicity_iff_emultiplicity_ne_top, h.le, not_pow_dvd_of_multiplicity_lt, pow_dvd_of_le_emultiplicity, this.emultiplicity_eq_multiplicity, this.not_pow_dvd_of_multiplicity_lt
+/-
+**emultiplicity_add_of_gt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_add_of_gt {p a b : α} (h : emultiplicity p b < emultiplicity
+ p a) : emultiplicity p (a + b) = emultiplicity p b
+参数：h : emultiplicity p b < emultiplicity p a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `finiteMultiplicity_iff_emultiplicity_ne_top`：finiteMultiplicity_iff_emul
+tiplicity_ne_top : FiniteMultiplicity a b ↔ emultiplicity a b != ⊤
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FiniteMultiplicity.emultiplicity_eq_multiplicity`：FiniteMultiplicity.emu
+ltiplicity_eq_multiplicity (h : FiniteMultiplicity a b) : emultiplicity a b = mu
+ltiplicity a b
+· 使用定理 `emultiplicity_eq_of_dvd_of_not_dvd`：emultiplicity_eq_of_dvd_of_not_dvd {
+k : Nat} (hk : a ^ k ∣ b) (hsucc : ¬a ^ (k + 1) ∣ b) : emultiplicity a b = k
+· 使用定理 `dvd_add`：dvd_add [LeftDistribClass α] {a b c : α} (h₁ : a ∣ b) (h₂ : a ∣
+ c) : a ∣ b + c
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `pow_dvd_of_le_emultiplicity`：pow_dvd_of_le_emultiplicity {k : Nat} (hk :
+ k <= emultiplicity a b) : a ^ k ∣ b
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `dvd_add_right`：dvd_add_right (h : a ∣ b) : a ∣ b + c ↔ a ∣ c
+· 使用定理 `Order.add_one_le_of_lt`：add_one_le_of_lt (h : x < y) : x + 1 <= y
+· 使用定理 `FiniteMultiplicity.not_pow_dvd_of_multiplicity_lt`：FiniteMultiplicity.no
+t_pow_dvd_of_multiplicity_lt (hf : FiniteMultiplicity a b) {m : Nat} (hm : multi
+plicity a b < m) : ¬a ^ m ∣ b
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem emultiplicity_add_of_gt {p a b : α} (h : emultiplicity p b < emultiplicity p a) :
     emultiplicity p (a + b) = emultiplicity p b := by
@@ -2475,101 +2164,96 @@ theorem emultiplicity_add_of_gt {p a b : α} (h : emultiplicity p b < emultiplic
       simp
     apply pow_dvd_of_le_emultiplicity
     exact Order.add_one_le_of_lt h
-
-/--
-theorem `FiniteMultiplicity.multiplicity_add_of_gt` / 定理 `FiniteMultiplicity.multiplicity_add_of_gt`
-
-English:
-theorem FiniteMultiplicity.multiplicity_add_of_gt
-  statement: {p a b : α} (hf : FiniteMultiplicity p b)
-  proof: multiplicity_eq_of_emultiplicity_eq emultiplicity_add_of_gt (hf.emultiplicity_eq_multiplicity ▸
-      (WithTop.coe_strictMono h).trans_le multiplicity_le_emultiplicity)
-
-中文:
-定理 FiniteMultiplicity.multiplicity_add_of_gt
-  结论: {p a b : α} (hf : FiniteMultiplicity p b)
-  证明: multiplicity_eq_of_emultiplicity_eq emultiplicity_add_of_gt (hf.emultiplicity_eq_multiplicity ▸
-      (WithTop.coe_strictMono h).trans_le multiplicity_le_emultiplicity)
-
-Depends on / 依赖: WithTop, WithTop.coe_strictMono, coe_strictMono, emultiplicity_add_of_gt, emultiplicity_eq_multiplicity, hf.emultiplicity_eq_multiplicity, multiplicity_eq_of_emultiplicity_eq, multiplicity_le_emultiplicity, trans_le
+/-
+**FiniteMultiplicity.multiplicity_add_of_gt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：FiniteMultiplicity.multiplicity_add_of_gt {p a b : α} (hf : FiniteMultipli
+city p b) (h : multiplicity p b < multiplicity p a) : multiplicity p (a + b) = m
+ultiplicity p b
+参数：hf : FiniteMultiplicity p b；h : multiplicity p b < multiplicity p a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `multiplicity_eq_of_emultiplicity_eq`：multiplicity_eq_of_emultiplicity_eq
+ {c d : β} (h : emultiplicity a b = emultiplicity c d) : multiplicity a b = mult
+iplicity c d
+· 使用定理 `emultiplicity_add_of_gt`：emultiplicity_add_of_gt {p a b : α} (h : emulti
+plicity p b < emultiplicity p a) : emultiplicity p (a + b) = emultiplicity p b
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `WithTop.coe_strictMono`：∀ {α : Type u_1} [inst : Preorder α], StrictMono
+ fun a => ↑a
+· 使用定理 `multiplicity_le_emultiplicity`：multiplicity_le_emultiplicity : multiplic
+ity a b <= emultiplicity a b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `FiniteMultiplicity.emultiplicity_eq_multiplicity`：FiniteMultiplicity.emu
+ltiplicity_eq_multiplicity (h : FiniteMultiplicity a b) : emultiplicity a b = mu
+ltiplicity a b
 -/
 theorem FiniteMultiplicity.multiplicity_add_of_gt {p a b : α} (hf : FiniteMultiplicity p b)
     (h : multiplicity p b < multiplicity p a) :
     multiplicity p (a + b) = multiplicity p b :=
-multiplicity_eq_of_emultiplicity_eq emultiplicity_add_of_gt (hf.emultiplicity_eq_multiplicity ▸
+  multiplicity_eq_of_emultiplicity_eq <| emultiplicity_add_of_gt (hf.emultiplicity_eq_multiplicity ▸
       (WithTop.coe_strictMono h).trans_le multiplicity_le_emultiplicity)
-
-/--
-theorem `emultiplicity_sub_of_gt` / 定理 `emultiplicity_sub_of_gt`
-
-English:
-theorem emultiplicity_sub_of_gt
-  given: {p a b : α} (h : emultiplicity p b < emultiplicity p a)
-  proof: by
-  rw [sub_eq_add_neg]; rw [emultiplicity_add_of_gt] <;> rw [emultiplicity_neg]; assumption
-
-中文:
-定理 emultiplicity_sub_of_gt
-  条件: {p a b : α} (h : emultiplicity p b < emultiplicity p a)
-  证明: by
-  rw [sub_eq_add_neg]; rw [emultiplicity_add_of_gt] <;> rw [emultiplicity_neg]; assumption
-
-Depends on / 依赖: emultiplicity_add_of_gt, emultiplicity_neg, sub_eq_add_neg
+/-
+**emultiplicity_sub_of_gt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_sub_of_gt {p a b : α} (h : emultiplicity p b < emultiplicity
+ p a) : emultiplicity p (a - b) = emultiplicity p b
+参数：h : emultiplicity p b < emultiplicity p a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `emultiplicity_add_of_gt`：emultiplicity_add_of_gt {p a b : α} (h : emulti
+plicity p b < emultiplicity p a) : emultiplicity p (a + b) = emultiplicity p b
+· 使用定理 `emultiplicity_neg`：emultiplicity_neg (a b : α) : emultiplicity a (-b) = 
+emultiplicity a b
 -/
 theorem emultiplicity_sub_of_gt {p a b : α} (h : emultiplicity p b < emultiplicity p a) :
     emultiplicity p (a - b) = emultiplicity p b := by
-  rw [sub_eq_add_neg]; rw [emultiplicity_add_of_gt] <;> rw [emultiplicity_neg]; assumption
-
-/--
-theorem `multiplicity_sub_of_gt` / 定理 `multiplicity_sub_of_gt`
-
-English:
-theorem multiplicity_sub_of_gt
-  statement: {p a b : α} (h : multiplicity p b < multiplicity p a)
-  proof: by
-  rw [sub_eq_add_neg]; rw [hfin.neg.multiplicity_add_of_gt] <;> rw [multiplicity_neg]; assumption
-
-中文:
-定理 multiplicity_sub_of_gt
-  结论: {p a b : α} (h : multiplicity p b < multiplicity p a)
-  证明: by
-  rw [sub_eq_add_neg]; rw [hfin.neg.multiplicity_add_of_gt] <;> rw [multiplicity_neg]; assumption
-
-Depends on / 依赖: hfin.neg.multiplicity_add_of_gt, multiplicity_add_of_gt, multiplicity_neg, sub_eq_add_neg
+  rw [sub_eq_add_neg, emultiplicity_add_of_gt] <;> rw [emultiplicity_neg]; assumption
+/-
+**multiplicity_sub_of_gt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multiplicity_sub_of_gt {p a b : α} (h : multiplicity p b < multiplicity p 
+a) (hfin : FiniteMultiplicity p b) : multiplicity p (a - b) = multiplicity p b
+参数：h : multiplicity p b < multiplicity p a；hfin : FiniteMultiplicity p b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `FiniteMultiplicity.multiplicity_add_of_gt`：FiniteMultiplicity.multiplici
+ty_add_of_gt {p a b : α} (hf : FiniteMultiplicity p b) (h : multiplicity p b < m
+ultiplicity p a) : multiplicity…
+· 使用定理 `FiniteMultiplicity.neg`：∀ {α : Type u_1} [inst : Ring α] {a b : α}, Fini
+teMultiplicity a b → FiniteMultiplicity a (-b)
+· 使用定理 `multiplicity_neg`：multiplicity_neg (a b : α) : multiplicity a (-b) = mul
+tiplicity a b
 -/
 theorem multiplicity_sub_of_gt {p a b : α} (h : multiplicity p b < multiplicity p a)
     (hfin : FiniteMultiplicity p b) : multiplicity p (a - b) = multiplicity p b := by
-  rw [sub_eq_add_neg]; rw [hfin.neg.multiplicity_add_of_gt] <;> rw [multiplicity_neg]; assumption
-
-/--
-theorem `emultiplicity_add_eq_min` / 定理 `emultiplicity_add_eq_min`
-
-English:
-theorem emultiplicity_add_eq_min
-  statement: {p a b : α}
-  proof: by
-  rcases lt_trichotomy (emultiplicity p a) (emultiplicity p b) with (hab | _ | hab)
-  · rw [add_comm, emultiplicity_add_of_gt hab, min_eq_left]
-    exact le_of_lt hab
-  · contradiction
-  · rw [emultiplicity_add_of_gt hab, min_eq_right]
-    exact le_of_lt hab
-
-中文:
-定理 emultiplicity_add_eq_min
-  结论: {p a b : α}
-  证明: by
-  rcases lt_trichotomy (emultiplicity p a) (emultiplicity p b) with (hab | _ | hab)
-  · rw [add_comm, emultiplicity_add_of_gt hab, min_eq_left]
-    exact le_of_lt hab
-  · contradiction
-  · rw [emultiplicity_add_of_gt hab, min_eq_right]
-    exact le_of_lt hab
-
-Depends on / 依赖: add_comm, emultiplicity, emultiplicity_add_of_gt, le_of_lt, lt_trichotomy, min_eq_left, min_eq_right
+  rw [sub_eq_add_neg, hfin.neg.multiplicity_add_of_gt] <;> rw [multiplicity_neg]; assumption
+/-
+**emultiplicity_add_eq_min** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_add_eq_min {p a b : α} (h : emultiplicity p a != emultiplici
+ty p b) : emultiplicity p (a + b) = min (emultiplicity p a) (emultiplicity p b)
+参数：h : emultiplicity p a != emultiplicity p b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_trichotomy`：lt_trichotomy (a b : α) : a < b ∨ a = b ∨ b < a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `emultiplicity_add_of_gt`：emultiplicity_add_of_gt {p a b : α} (h : emulti
+plicity p b < emultiplicity p a) : emultiplicity p (a + b) = emultiplicity p b
+· 使用引理 `min_eq_left`：min_eq_left (h : a <= b) : min a b = a
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用引理 `min_eq_right`：min_eq_right (h : b <= a) : min a b = b
 -/
 theorem emultiplicity_add_eq_min {p a b : α}
-    (h : emultiplicity p a != emultiplicity p b) :
+    (h : emultiplicity p a ≠ emultiplicity p b) :
     emultiplicity p (a + b) = min (emultiplicity p a) (emultiplicity p b) := by
   rcases lt_trichotomy (emultiplicity p a) (emultiplicity p b) with (hab | _ | hab)
   · rw [add_comm, emultiplicity_add_of_gt hab, min_eq_left]
@@ -2577,36 +2261,29 @@ theorem emultiplicity_add_eq_min {p a b : α}
   · contradiction
   · rw [emultiplicity_add_of_gt hab, min_eq_right]
     exact le_of_lt hab
-
-/--
-theorem `multiplicity_add_eq_min` / 定理 `multiplicity_add_eq_min`
-
-English:
-theorem multiplicity_add_eq_min
-  statement: {p a b : α} (ha : FiniteMultiplicity p a)
-  proof: by
-  rcases lt_trichotomy (multiplicity p a) (multiplicity p b) with (hab | _ | hab)
-  · rw [add_comm, ha.multiplicity_add_of_gt hab, min_eq_left]
-    exact le_of_lt hab
-  · contradiction
-  · rw [hb.multiplicity_add_of_gt hab, min_eq_right]
-    exact le_of_lt hab
-
-中文:
-定理 multiplicity_add_eq_min
-  结论: {p a b : α} (ha : FiniteMultiplicity p a)
-  证明: by
-  rcases lt_trichotomy (multiplicity p a) (multiplicity p b) with (hab | _ | hab)
-  · rw [add_comm, ha.multiplicity_add_of_gt hab, min_eq_left]
-    exact le_of_lt hab
-  · contradiction
-  · rw [hb.multiplicity_add_of_gt hab, min_eq_right]
-    exact le_of_lt hab
-
-Depends on / 依赖: add_comm, ha.multiplicity_add_of_gt, hb.multiplicity_add_of_gt, le_of_lt, lt_trichotomy, min_eq_left, min_eq_right, multiplicity, multiplicity_add_of_gt
+/-
+**multiplicity_add_eq_min** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multiplicity_add_eq_min {p a b : α} (ha : FiniteMultiplicity p a) (hb : Fi
+niteMultiplicity p b) (h : multiplicity p a != multiplicity p b) : multiplicity 
+p (a + b) = min (multiplicity p a) (multiplicity p b)
+参数：ha : FiniteMultiplicity p a；hb : FiniteMultiplicity p b；h : multiplicity p a 
+!= multiplicity p b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_trichotomy`：lt_trichotomy (a b : α) : a < b ∨ a = b ∨ b < a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `FiniteMultiplicity.multiplicity_add_of_gt`：FiniteMultiplicity.multiplici
+ty_add_of_gt {p a b : α} (hf : FiniteMultiplicity p b) (h : multiplicity p b < m
+ultiplicity p a) : multiplicity…
+· 使用引理 `min_eq_left`：min_eq_left (h : a <= b) : min a b = a
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用引理 `min_eq_right`：min_eq_right (h : b <= a) : min a b = b
 -/
 theorem multiplicity_add_eq_min {p a b : α} (ha : FiniteMultiplicity p a)
-    (hb : FiniteMultiplicity p b) (h : multiplicity p a != multiplicity p b) :
+    (hb : FiniteMultiplicity p b) (h : multiplicity p a ≠ multiplicity p b) :
     multiplicity p (a + b) = min (multiplicity p a) (multiplicity p b) := by
   rcases lt_trichotomy (multiplicity p a) (multiplicity p b) with (hab | _ | hab)
   · rw [add_comm, ha.multiplicity_add_of_gt hab, min_eq_left]
@@ -2621,77 +2298,20 @@ section CancelCommMonoidWithZero
 
 variable [CommMonoidWithZero α] [IsCancelMulZero α]
 
-/--
-theorem `finiteMultiplicity_mul_aux` / 定理 `finiteMultiplicity_mul_aux`
-
-English:
-theorem finiteMultiplicity_mul_aux
-  given: {p : α} (hp : Prime p) {a b : α}
-  proof: ⟨p ^ (n + m) * s, by simp [hs, pow_add, mul_comm, mul_left_comm]⟩
-    (hp.2.2 a b this).elim
-      (fun ⟨x, hx⟩ =>
-        have hn0 : 0 < n :=
-          Nat.pos_of_ne_zero fun hn0 => by simp [hx, hn0] at ha
-        have hpx : ¬p ^ (n - 1 + 1) ∣ x := fun ⟨y, hy⟩ =>
-          ha (hx.symm ▸ ⟨y, mul_right_cancel₀ hp.1 <| by
-            rw [tsub_add_cancel_of_le (succ_le_of_lt hn0)] at hy
-            simp [hy, pow_add, mul_comm, mul_left_comm]⟩)
-        have : 1 <= n + m := le_trans hn0 (Nat.le_add_right n m)
-        finiteMultiplicity_mul_aux hp hpx hb
-          ⟨s, mul_right_cancel₀ hp.1 (by
-                rw [tsub_add_eq_add_tsub (succ_le_of_lt hn0)]; rw [tsub_add_cancel_of_le this]
-                simp_all [mul_comm, mul_left_comm, pow_add])⟩)
-      fun ⟨x, hx⟩ =>
-        have hm0 : 0 < m :=
-          Nat.pos_of_ne_zero fun hm0 => by simp [hx, hm0] at hb
-        have hpx : ¬p ^ (m - 1 + 1) ∣ x := fun ⟨y, hy⟩ =>
-          hb
-            (hx.symm ▸
-              ⟨y,
-mul_right_cancel₀ hp.1 by
-                  rw [tsub_add_cancel_of_le (succ_le_of_lt hm0)] at hy
-                  simp [hy, pow_add, mul_comm, mul_left_comm]⟩)
-        finiteMultiplicity_mul_aux hp ha hpx
-        ⟨s, mul_right_cancel₀ hp.1 (by
-              rw [add_assoc]; rw [tsub_add_cancel_of_le (succ_le_of_lt hm0)]
-              simp_all [mul_comm, mul_left_comm, pow_add])⟩
-
-中文:
-定理 finiteMultiplicity_mul_aux
-  条件: {p : α} (hp : 素 p) {a b : α}
-  证明: ⟨p ^ (n + m) * s, by simp [hs, pow_add, mul_comm, mul_left_comm]⟩
-    (hp.2.2 a b this).elim
-      (fun ⟨x, hx⟩ =>
-        have hn0 : 0 < n :=
-          Nat.pos_of_ne_zero fun hn0 => by simp [hx, hn0] at ha
-        have hpx : ¬p ^ (n - 1 + 1) ∣ x := fun ⟨y, hy⟩ =>
-          ha (hx.symm ▸ ⟨y, mul_right_cancel₀ hp.1 <| by
-            rw [tsub_add_cancel_of_le (succ_le_of_lt hn0)] at hy
-            simp [hy, pow_add, mul_comm, mul_left_comm]⟩)
-        have : 1 <= n + m := le_trans hn0 (Nat.le_add_right n m)
-        finiteMultiplicity_mul_aux hp hpx hb
-          ⟨s, mul_right_cancel₀ hp.1 (by
-                rw [tsub_add_eq_add_tsub (succ_le_of_lt hn0)]; rw [tsub_add_cancel_of_le this]
-                simp_all [mul_comm, mul_left_comm, pow_add])⟩)
-      fun ⟨x, hx⟩ =>
-        have hm0 : 0 < m :=
-          Nat.pos_of_ne_zero fun hm0 => by simp [hx, hm0] at hb
-        have hpx : ¬p ^ (m - 1 + 1) ∣ x := fun ⟨y, hy⟩ =>
-          hb
-            (hx.symm ▸
-              ⟨y,
-mul_right_cancel₀ hp.1 by
-                  rw [tsub_add_cancel_of_le (succ_le_of_lt hm0)] at hy
-                  simp [hy, pow_add, mul_comm, mul_left_comm]⟩)
-        finiteMultiplicity_mul_aux hp ha hpx
-        ⟨s, mul_right_cancel₀ hp.1 (by
-              rw [add_assoc]; rw [tsub_add_cancel_of_le (succ_le_of_lt hm0)]
-              simp_all [mul_comm, mul_left_comm, pow_add])⟩
-
-Depends on / 依赖: mul_comm, mul_left_comm, pow_add
+/-
+**finiteMultiplicity_mul_aux** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finiteMultiplicity_mul_aux {p : α} (hp : Prime p) {a b : α} : forall {n m 
+: Nat}, ¬p ^ (n + 1) ∣ a -> ¬p ^ (m + 1) ∣ b -> ¬p ^ (n + m + 1) ∣ a * b | n, m 
+=> fun ha hb ⟨s, hs⟩ => have : p ∣ a * b
+参数：hp : Prime p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `finiteMultiplicity_mul_aux._unary`：∀ {α : Type u_1} [inst : CommMonoidWi
+thZero α] [IsCancelMulZero α] {p : α},   Prime p →     ∀ (_x : (_ : α) ×' (_ : α
+) ×' (_ : ℕ) ×' ℕ),    …
 -/
 theorem finiteMultiplicity_mul_aux {p : α} (hp : Prime p) {a b : α} :
-    forall {n m : Nat}, ¬p ^ (n + 1) ∣ a -> ¬p ^ (m + 1) ∣ b -> ¬p ^ (n + m + 1) ∣ a * b
+    ∀ {n m : ℕ}, ¬p ^ (n + 1) ∣ a → ¬p ^ (m + 1) ∣ b → ¬p ^ (n + m + 1) ∣ a * b
   | n, m => fun ha hb ⟨s, hs⟩ =>
     have : p ∣ a * b := ⟨p ^ (n + m) * s, by simp [hs, pow_add, mul_comm, mul_left_comm]⟩
     (hp.2.2 a b this).elim
@@ -2702,10 +2322,10 @@ theorem finiteMultiplicity_mul_aux {p : α} (hp : Prime p) {a b : α} :
           ha (hx.symm ▸ ⟨y, mul_right_cancel₀ hp.1 <| by
             rw [tsub_add_cancel_of_le (succ_le_of_lt hn0)] at hy
             simp [hy, pow_add, mul_comm, mul_left_comm]⟩)
-        have : 1 <= n + m := le_trans hn0 (Nat.le_add_right n m)
+        have : 1 ≤ n + m := le_trans hn0 (Nat.le_add_right n m)
         finiteMultiplicity_mul_aux hp hpx hb
           ⟨s, mul_right_cancel₀ hp.1 (by
-                rw [tsub_add_eq_add_tsub (succ_le_of_lt hn0)]; rw [tsub_add_cancel_of_le this]
+                rw [tsub_add_eq_add_tsub (succ_le_of_lt hn0), tsub_add_cancel_of_le this]
                 simp_all [mul_comm, mul_left_comm, pow_add])⟩)
       fun ⟨x, hx⟩ =>
         have hm0 : 0 < m :=
@@ -2714,127 +2334,100 @@ theorem finiteMultiplicity_mul_aux {p : α} (hp : Prime p) {a b : α} :
           hb
             (hx.symm ▸
               ⟨y,
-mul_right_cancel₀ hp.1 by
+                mul_right_cancel₀ hp.1 <| by
                   rw [tsub_add_cancel_of_le (succ_le_of_lt hm0)] at hy
                   simp [hy, pow_add, mul_comm, mul_left_comm]⟩)
         finiteMultiplicity_mul_aux hp ha hpx
         ⟨s, mul_right_cancel₀ hp.1 (by
-              rw [add_assoc]; rw [tsub_add_cancel_of_le (succ_le_of_lt hm0)]
+              rw [add_assoc, tsub_add_cancel_of_le (succ_le_of_lt hm0)]
               simp_all [mul_comm, mul_left_comm, pow_add])⟩
-
-/--
-theorem `Prime.finiteMultiplicity_mul` / 定理 `Prime.finiteMultiplicity_mul`
-
-English:
-theorem Prime.finiteMultiplicity_mul
-  given: {p a b : α} (hp : Prime p)
-  proof: fun ⟨n, hn⟩ ⟨m, hm⟩ => ⟨n + m, finiteMultiplicity_mul_aux hp hn hm⟩
-
-中文:
-定理 素.finiteMultiplicity_mul
-  条件: {p a b : α} (hp : 素 p)
-  证明: fun ⟨n, hn⟩ ⟨m, hm⟩ => ⟨n + m, finiteMultiplicity_mul_aux hp hn hm⟩
-
-Depends on / 依赖: finiteMultiplicity_mul_aux
+/-
+**Prime.finiteMultiplicity_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Prime.finiteMultiplicity_mul {p a b : α} (hp : Prime p) : FiniteMultiplici
+ty p a -> FiniteMultiplicity p b -> FiniteMultiplicity p (a * b)
+参数：hp : Prime p。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `finiteMultiplicity_mul_aux`：finiteMultiplicity_mul_aux {p : α} (hp : Pri
+me p) {a b : α} : forall {n m : Nat}, ¬p ^ (n + 1) ∣ a -> ¬p ^ (m + 1) ∣ b -> ¬p
+ ^ (n + m + 1) ∣…
 -/
 theorem Prime.finiteMultiplicity_mul {p a b : α} (hp : Prime p) :
-    FiniteMultiplicity p a -> FiniteMultiplicity p b -> FiniteMultiplicity p (a * b) :=
+    FiniteMultiplicity p a → FiniteMultiplicity p b → FiniteMultiplicity p (a * b) :=
   fun ⟨n, hn⟩ ⟨m, hm⟩ => ⟨n + m, finiteMultiplicity_mul_aux hp hn hm⟩
-
-/--
-theorem `FiniteMultiplicity.mul_iff` / 定理 `FiniteMultiplicity.mul_iff`
-
-English:
-theorem FiniteMultiplicity.mul_iff
-  given: {p a b : α} (hp : Prime p)
-  proof: ⟨fun h => ⟨h.mul_left, h.mul_right⟩, fun h =>
-    hp.finiteMultiplicity_mul h.1 h.2⟩
-
-中文:
-定理 FiniteMultiplicity.mul_iff
-  条件: {p a b : α} (hp : 素 p)
-  证明: ⟨fun h => ⟨h.mul_left, h.mul_right⟩, fun h =>
-    hp.finiteMultiplicity_mul h.1 h.2⟩
-
-Depends on / 依赖: finiteMultiplicity_mul, h.mul_left, h.mul_right, hp.finiteMultiplicity_mul, mul_left, mul_right
+/-
+**FiniteMultiplicity.mul_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：FiniteMultiplicity.mul_iff {p a b : α} (hp : Prime p) : FiniteMultiplicity
+ p (a * b) ↔ FiniteMultiplicity p a ∧ FiniteMultiplicity p b
+参数：hp : Prime p。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FiniteMultiplicity.mul_left`：FiniteMultiplicity.mul_left {c : α} : Finit
+eMultiplicity a (b * c) -> FiniteMultiplicity a b
+· 使用定理 `FiniteMultiplicity.mul_right`：FiniteMultiplicity.mul_right {a b c : α} (
+hf : FiniteMultiplicity a (b * c)) : FiniteMultiplicity a c
+· 使用定理 `Prime.finiteMultiplicity_mul`：Prime.finiteMultiplicity_mul {p a b : α} (
+hp : Prime p) : FiniteMultiplicity p a -> FiniteMultiplicity p b -> FiniteMultip
+licity p (a * b)
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem FiniteMultiplicity.mul_iff {p a b : α} (hp : Prime p) :
     FiniteMultiplicity p (a * b) ↔ FiniteMultiplicity p a ∧ FiniteMultiplicity p b :=
   ⟨fun h => ⟨h.mul_left, h.mul_right⟩, fun h =>
     hp.finiteMultiplicity_mul h.1 h.2⟩
-
-/--
-theorem `FiniteMultiplicity.pow` / 定理 `FiniteMultiplicity.pow`
-
-English:
-theorem FiniteMultiplicity.pow
-  statement: {p a : α} (hp : Prime p)
-  proof: match k, hfin with
-  | 0, _ => ⟨0, by simp [mt isUnit_iff_dvd_one.2 hp.2.1]⟩
-  | k + 1, ha => by rw [_root_.pow_succ']; exact hp.finiteMultiplicity_mul ha (ha.pow hp)
-
-@[simp]
-
-中文:
-定理 FiniteMultiplicity.pow
-  结论: {p a : α} (hp : 素 p)
-  证明: match k, hfin with
-  | 0, _ => ⟨0, by simp [mt isUnit_iff_dvd_one.2 hp.2.1]⟩
-  | k + 1, ha => by rw [_root_.pow_succ']; exact hp.finiteMultiplicity_mul ha (ha.pow hp)
-
-@[simp]
-
-Depends on / 依赖: _root_, _root_.pow_succ, finiteMultiplicity_mul, ha.pow, hp.finiteMultiplicity_mul, isUnit_iff_dvd_one, pow_succ
+/-
+**FiniteMultiplicity.pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：FiniteMultiplicity.pow {p a : α} (hp : Prime p) (hfin : FiniteMultiplicity
+ p a) {k : Nat} : FiniteMultiplicity p (a ^ k)
+参数：hp : Prime p；hfin : FiniteMultiplicity p a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem FiniteMultiplicity.pow {p a : α} (hp : Prime p)
-    (hfin : FiniteMultiplicity p a) {k : Nat} : FiniteMultiplicity p (a ^ k) :=
+    (hfin : FiniteMultiplicity p a) {k : ℕ} : FiniteMultiplicity p (a ^ k) :=
   match k, hfin with
   | 0, _ => ⟨0, by simp [mt isUnit_iff_dvd_one.2 hp.2.1]⟩
   | k + 1, ha => by rw [_root_.pow_succ']; exact hp.finiteMultiplicity_mul ha (ha.pow hp)
 
 @[simp]
-/--
-theorem `multiplicity_self` / 定理 `multiplicity_self`
-
-English:
-theorem multiplicity_self
-  given: {a : α}
-  statement: multiplicity a a = 1
-  proof: by
-  by_cases ha : FiniteMultiplicity a a
-  · rw [ha.multiplicity_eq_iff]
-    simp only [pow_one, dvd_refl, reduceAdd, true_and]
-    rintro ⟨v, hv⟩
-    nth_rw 1 [← mul_one a] at hv
-    simp only [sq, mul_assoc, mul_eq_mul_left_iff] at hv
-    obtain hv | rfl := hv
-    · have : IsUnit a := .of_mul_eq_one v hv.symm
-      simpa [this] using ha.not_isUnit
-    · simpa using ha.ne_zero
-  · simp [ha]
-
-@[simp]
-
-中文:
-定理 multiplicity_self
-  条件: {a : α}
-  结论: multiplicity a a = 1
-  证明: by
-  by_cases ha : FiniteMultiplicity a a
-  · rw [ha.multiplicity_eq_iff]
-    simp only [pow_one, dvd_refl, reduceAdd, true_and]
-    rintro ⟨v, hv⟩
-    nth_rw 1 [← mul_one a] at hv
-    simp only [sq, mul_assoc, mul_eq_mul_left_iff] at hv
-    obtain hv | rfl := hv
-    · have : IsUnit a := .of_mul_eq_one v hv.symm
-      simpa [this] using ha.not_isUnit
-    · simpa using ha.ne_zero
-  · simp [ha]
-
-@[simp]
-
-Depends on / 依赖: FiniteMultiplicity, IsUnit, dvd_refl, ha.multiplicity_eq_iff, ha.ne_zero, ha.not_isUnit, hv.symm, mul_assoc, mul_eq_mul_left_iff, mul_one, multiplicity_eq_iff, ne_zero, not_isUnit, nth_rw, of_mul_eq_one, pow_one, reduceAdd, true_and
+/-
+**multiplicity_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multiplicity_self {a : α} : multiplicity a a = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FiniteMultiplicity.multiplicity_eq_iff`：FiniteMultiplicity.multiplicity_
+eq_iff (hf : FiniteMultiplicity a b) {n : Nat} : multiplicity a b = n ↔ a ^ n ∣ 
+b ∧ ¬a ^ (n + 1) ∣ b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `sq`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `IsUnit.of_mul_eq_one`：IsUnit.of_mul_eq_one [Monoid M] [IsDedekindFiniteM
+onoid M] {a : M} (b : M) (h : a * b = 1) : IsUnit a
+· 使用定理 `instIsDedekindFiniteMonoid`：∀ (M : Type u_2) [inst : CommMonoid M], IsDe
+dekindFiniteMonoid M
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `FiniteMultiplicity.not_isUnit`：FiniteMultiplicity.not_isUnit (h : Finite
+Multiplicity a b) : ¬IsUnit a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `FiniteMultiplicity.ne_zero`：FiniteMultiplicity.ne_zero {a b : α} (h : Fi
+niteMultiplicity a b) : b != 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `multiplicity_eq_one_of_not_finiteMultiplicity`：multiplicity_eq_one_of_no
+t_finiteMultiplicity (h : ¬FiniteMultiplicity a b) : multiplicity a b = 1
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 theorem multiplicity_self {a : α} : multiplicity a a = 1 := by
   by_cases ha : FiniteMultiplicity a a
@@ -2850,63 +2443,59 @@ theorem multiplicity_self {a : α} : multiplicity a a = 1 := by
   · simp [ha]
 
 @[simp]
-/--
-theorem `FiniteMultiplicity.emultiplicity_self` / 定理 `FiniteMultiplicity.emultiplicity_self`
-
-English:
-theorem FiniteMultiplicity.emultiplicity_self
-  given: {a : α} (hfin : FiniteMultiplicity a a)
-  proof: by
-  simp [hfin.emultiplicity_eq_multiplicity]
-
-中文:
-定理 FiniteMultiplicity.emultiplicity_self
-  条件: {a : α} (hfin : FiniteMultiplicity a a)
-  证明: by
-  simp [hfin.emultiplicity_eq_multiplicity]
-
-Depends on / 依赖: emultiplicity_eq_multiplicity, hfin.emultiplicity_eq_multiplicity
+/-
+**FiniteMultiplicity.emultiplicity_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：FiniteMultiplicity.emultiplicity_self {a : α} (hfin : FiniteMultiplicity a
+ a) : emultiplicity a a = 1
+参数：hfin : FiniteMultiplicity a a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FiniteMultiplicity.emultiplicity_eq_multiplicity`：FiniteMultiplicity.emu
+ltiplicity_eq_multiplicity (h : FiniteMultiplicity a b) : emultiplicity a b = mu
+ltiplicity a b
+· 使用定理 `multiplicity_self`：multiplicity_self {a : α} : multiplicity a a = 1
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem FiniteMultiplicity.emultiplicity_self {a : α} (hfin : FiniteMultiplicity a a) :
     emultiplicity a a = 1 := by
   simp [hfin.emultiplicity_eq_multiplicity]
-
-/--
-theorem `multiplicity_mul` / 定理 `multiplicity_mul`
-
-English:
-theorem multiplicity_mul
-  given: {p a b : α} (hp : Prime p) (hfin : FiniteMultiplicity p (a * b))
-  proof: by
-  have hdiva : p ^ multiplicity p a ∣ a := pow_multiplicity_dvd ..
-  have hdivb : p ^ multiplicity p b ∣ b := pow_multiplicity_dvd ..
-  have hdiv : p ^ (multiplicity p a + multiplicity p b) ∣ a * b := by
-    rw [pow_add]; gcongr
-  have hsucc : ¬p ^ (multiplicity p a + multiplicity p b + 1) ∣ a * b :=
-    fun h =>
-    not_or_intro (hfin.mul_left.not_pow_dvd_of_multiplicity_lt (lt_succ_self _))
-      (hfin.mul_right.not_pow_dvd_of_multiplicity_lt (lt_succ_self _))
-      (_root_.succ_dvd_or_succ_dvd_of_succ_sum_dvd_mul hp hdiva hdivb h)
-  rw [hfin.multiplicity_eq_iff]
-  exact ⟨hdiv, hsucc⟩
-
-中文:
-定理 multiplicity_mul
-  条件: {p a b : α} (hp : 素 p) (hfin : FiniteMultiplicity p (a * b))
-  证明: by
-  have hdiva : p ^ multiplicity p a ∣ a := pow_multiplicity_dvd ..
-  have hdivb : p ^ multiplicity p b ∣ b := pow_multiplicity_dvd ..
-  have hdiv : p ^ (multiplicity p a + multiplicity p b) ∣ a * b := by
-    rw [pow_add]; gcongr
-  have hsucc : ¬p ^ (multiplicity p a + multiplicity p b + 1) ∣ a * b :=
-    fun h =>
-    not_or_intro (hfin.mul_left.not_pow_dvd_of_multiplicity_lt (lt_succ_self _))
-      (hfin.mul_right.not_pow_dvd_of_multiplicity_lt (lt_succ_self _))
-      (_root_.succ_dvd_or_succ_dvd_of_succ_sum_dvd_mul hp hdiva hdivb h)
-  rw [hfin.multiplicity_eq_iff]
-  exact ⟨hdiv, hsucc⟩
-
-Depends on / 依赖: _root_, _root_.succ_dvd_or_succ_dvd_of_succ_sum_dvd_mul, hfin.mul_left.not_pow_dvd_of_multiplicity_lt, hfin.mul_right.not_pow_dvd_of_multiplicity_lt, lt_succ_self, mul_left, mul_right, multiplicity, not_or_intro, not_pow_dvd_of_multiplicity_lt, pow_add, pow_multiplicity_dvd, succ_dvd_or_succ_dvd_of_succ_sum_dvd_mul
+/-
+**multiplicity_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multiplicity_mul {p a b : α} (hp : Prime p) (hfin : FiniteMultiplicity p (
+a * b)) : multiplicity p (a * b) = multiplicity p a + multiplicity p b
+参数：hp : Prime p；hfin : FiniteMultiplicity p (a * b)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `pow_multiplicity_dvd`：pow_multiplicity_dvd (a b : α) : a ^ (multiplicity
+ a b) ∣ b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_add`：pow_add {b₁ b₂ : Nat} {d : R} (_ : a ^ b₁ = c₁) (_ : a ^ b₂ = c
+₂) (_ : c₁ * c₂ = d) : (a : R) ^ (b₁ + b₂) = d
+· 使用定理 `mul_dvd_mul`：∀ {α : Type u_1} [inst : CommSemigroup α] {a b c d : α}, a 
+∣ b → c ∣ d → a * c ∣ b * d
+· 使用定理 `not_or_intro`：∀ {a b : Prop}, ¬a → ¬b → ¬(a ∨ b)
+· 使用定理 `FiniteMultiplicity.not_pow_dvd_of_multiplicity_lt`：FiniteMultiplicity.no
+t_pow_dvd_of_multiplicity_lt (hf : FiniteMultiplicity a b) {m : Nat} (hm : multi
+plicity a b < m) : ¬a ^ m ∣ b
+· 使用定理 `FiniteMultiplicity.mul_left`：FiniteMultiplicity.mul_left {c : α} : Finit
+eMultiplicity a (b * c) -> FiniteMultiplicity a b
+· 使用定理 `Nat.lt_succ_self`：∀ (n : ℕ), n < n.succ
+· 使用定理 `FiniteMultiplicity.mul_right`：FiniteMultiplicity.mul_right {a b c : α} (
+hf : FiniteMultiplicity a (b * c)) : FiniteMultiplicity a c
+· 使用定理 `succ_dvd_or_succ_dvd_of_succ_sum_dvd_mul`：succ_dvd_or_succ_dvd_of_succ_s
+um_dvd_mul (hp : Prime p) {a b : M} {k l : Nat} : p ^ k ∣ a -> p ^ l ∣ b -> p ^ 
+(k + l + 1) ∣ a * b -> p ^ (k …
+· 使用定理 `FiniteMultiplicity.multiplicity_eq_iff`：FiniteMultiplicity.multiplicity_
+eq_iff (hf : FiniteMultiplicity a b) {n : Nat} : multiplicity a b = n ↔ a ^ n ∣ 
+b ∧ ¬a ^ (n + 1) ∣ b
 -/
 theorem multiplicity_mul {p a b : α} (hp : Prime p) (hfin : FiniteMultiplicity p (a * b)) :
     multiplicity p (a * b) = multiplicity p a + multiplicity p b := by
@@ -2921,37 +2510,35 @@ theorem multiplicity_mul {p a b : α} (hp : Prime p) (hfin : FiniteMultiplicity 
       (_root_.succ_dvd_or_succ_dvd_of_succ_sum_dvd_mul hp hdiva hdivb h)
   rw [hfin.multiplicity_eq_iff]
   exact ⟨hdiv, hsucc⟩
-
-/--
-theorem `emultiplicity_mul` / 定理 `emultiplicity_mul`
-
-English:
-theorem emultiplicity_mul
-  given: {p a b : α} (hp : Prime p)
-  proof: by
-  by_cases hfin : FiniteMultiplicity p (a * b)
-  · rw [hfin.emultiplicity_eq_multiplicity, hfin.mul_left.emultiplicity_eq_multiplicity,
-      hfin.mul_right.emultiplicity_eq_multiplicity]
-    norm_cast
-    exact multiplicity_mul hp hfin
-  · rw [emultiplicity_eq_top.mpr hfin, eq_comm, ENat.add_eq_top, emultiplicity_eq_top,
-      emultiplicity_eq_top]
-    simpa only [FiniteMultiplicity.mul_iff hp, not_and_or] using hfin
-
-中文:
-定理 emultiplicity_mul
-  条件: {p a b : α} (hp : 素 p)
-  证明: by
-  by_cases hfin : FiniteMultiplicity p (a * b)
-  · rw [hfin.emultiplicity_eq_multiplicity, hfin.mul_left.emultiplicity_eq_multiplicity,
-      hfin.mul_right.emultiplicity_eq_multiplicity]
-    norm_cast
-    exact multiplicity_mul hp hfin
-  · rw [emultiplicity_eq_top.mpr hfin, eq_comm, ENat.add_eq_top, emultiplicity_eq_top,
-      emultiplicity_eq_top]
-    simpa only [FiniteMultiplicity.mul_iff hp, not_and_or] using hfin
-
-Depends on / 依赖: ENat.add_eq_top, FiniteMultiplicity, FiniteMultiplicity.mul_iff, add_eq_top, emultiplicity_eq_multiplicity, emultiplicity_eq_top, emultiplicity_eq_top.mpr, eq_comm, hfin.emultiplicity_eq_multiplicity, hfin.mul_left.emultiplicity_eq_multiplicity, hfin.mul_right.emultiplicity_eq_multiplicity, mul_iff, mul_left, mul_right, multiplicity_mul, not_and_or
+/-
+**emultiplicity_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_mul {p a b : α} (hp : Prime p) : emultiplicity p (a * b) = e
+multiplicity p a + emultiplicity p b
+参数：hp : Prime p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FiniteMultiplicity.emultiplicity_eq_multiplicity`：FiniteMultiplicity.emu
+ltiplicity_eq_multiplicity (h : FiniteMultiplicity a b) : emultiplicity a b = mu
+ltiplicity a b
+· 使用定理 `FiniteMultiplicity.mul_left`：FiniteMultiplicity.mul_left {c : α} : Finit
+eMultiplicity a (b * c) -> FiniteMultiplicity a b
+· 使用定理 `FiniteMultiplicity.mul_right`：FiniteMultiplicity.mul_right {a b c : α} (
+hf : FiniteMultiplicity a (b * c)) : FiniteMultiplicity a c
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用定理 `multiplicity_mul`：multiplicity_mul {p a b : α} (hp : Prime p) (hfin : Fi
+niteMultiplicity p (a * b)) : multiplicity p (a * b) = multiplicity p a + multip
+licity…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `emultiplicity_eq_top`：emultiplicity_eq_top : emultiplicity a b = ⊤ ↔ ¬Fi
+niteMultiplicity a b
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `ENat.add_eq_top`：∀ {a b : ℕ∞}, a + b = ⊤ ↔ a = ⊤ ∨ b = ⊤
+· 使用定理 `FiniteMultiplicity.mul_iff`：FiniteMultiplicity.mul_iff {p a b : α} (hp :
+ Prime p) : FiniteMultiplicity p (a * b) ↔ FiniteMultiplicity p a ∧ FiniteMultip
+licity p b
 -/
 theorem emultiplicity_mul {p a b : α} (hp : Prime p) :
     emultiplicity p (a * b) = emultiplicity p a + emultiplicity p b := by
@@ -2963,173 +2550,172 @@ theorem emultiplicity_mul {p a b : α} (hp : Prime p) :
   · rw [emultiplicity_eq_top.mpr hfin, eq_comm, ENat.add_eq_top, emultiplicity_eq_top,
       emultiplicity_eq_top]
     simpa only [FiniteMultiplicity.mul_iff hp, not_and_or] using hfin
-
-/--
-theorem `Finset.emultiplicity_prod` / 定理 `Finset.emultiplicity_prod`
-
-English:
-theorem Finset.emultiplicity_prod
-  given: {β : Type*} {p : α} (hp : Prime p) (s : Finset β) (f : β -> α)
-  proof: by classical
-  induction s using Finset.induction with
-  | empty =>
-    simp only [Finset.sum_empty, Finset.prod_empty]
-    exact emultiplicity_of_one_right hp.not_isUnit
-  | insert a s has ih => simpa [has, ← ih] using emultiplicity_mul hp
-
-中文:
-定理 有限集.emultiplicity_prod
-  条件: {β : 类型} {p : α} (hp : 素 p) (s : 有限集 β) (f : β -> α)
-  证明: by classical
-  induction s using Finset.induction with
-  | empty =>
-    simp only [Finset.sum_empty, Finset.prod_empty]
-    exact emultiplicity_of_one_right hp.not_isUnit
-  | insert a s has ih => simpa [has, ← ih] using emultiplicity_mul hp
-
-Depends on / 依赖: Finset, Finset.induction, Finset.prod_empty, Finset.sum_empty, classical, emultiplicity_mul, emultiplicity_of_one_right, hp.not_isUnit, insert, not_isUnit, prod_empty, sum_empty
+/-
+**Finset.emultiplicity_prod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Finset.emultiplicity_prod {β : Type*} {p : α} (hp : Prime p) (s : Finset β
+) (f : β -> α) : emultiplicity p (∏ x in s, f x) = ∑ x in s, emultiplicity p (f 
+x)
+参数：hp : Prime p；s : Finset β；f : β -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.induction`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst : De
+cidableEq α],   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → motive s → motive 
+(inser…
+· 使用定理 `emultiplicity_of_one_right`：emultiplicity_of_one_right {a : α} (ha : ¬Is
+Unit a) : emultiplicity a 1 = 0
+· 使用定理 `Prime.not_isUnit`：not_isUnit : ¬IsUnit p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.prod_insert`：prod_insert [DecidableEq ι] : a ∉ s -> ∏ x in insert
+ a s, f x = f a * ∏ x in s, f x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Finset.sum_insert`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι
+} [inst : AddCommMonoid M] {f : ι → M} [inst_1 : DecidableEq ι],   a ∉ s → ∑ x ∈
+ insert…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `emultiplicity_mul`：emultiplicity_mul {p a b : α} (hp : Prime p) : emulti
+plicity p (a * b) = emultiplicity p a + emultiplicity p b
 -/
-theorem Finset.emultiplicity_prod {β : Type*} {p : α} (hp : Prime p) (s : Finset β) (f : β -> α) :
-    emultiplicity p (∏ x in s, f x) = ∑ x in s, emultiplicity p (f x) := by classical
+theorem Finset.emultiplicity_prod {β : Type*} {p : α} (hp : Prime p) (s : Finset β) (f : β → α) :
+    emultiplicity p (∏ x ∈ s, f x) = ∑ x ∈ s, emultiplicity p (f x) := by classical
   induction s using Finset.induction with
   | empty =>
     simp only [Finset.sum_empty, Finset.prod_empty]
     exact emultiplicity_of_one_right hp.not_isUnit
   | insert a s has ih => simpa [has, ← ih] using emultiplicity_mul hp
-
-/--
-theorem `emultiplicity_pow` / 定理 `emultiplicity_pow`
-
-English:
-theorem emultiplicity_pow
-  given: {p a : α} (hp : Prime p) {k : Nat}
-  proof: by
-  induction k with
-  | zero => simp [emultiplicity_of_one_right hp.not_isUnit]
-  | succ k hk => simp [pow_succ, emultiplicity_mul hp, hk, add_mul]
-
-中文:
-定理 emultiplicity_pow
-  条件: {p a : α} (hp : 素 p) {k : 自然数}
-  证明: by
-  induction k with
-  | zero => simp [emultiplicity_of_one_right hp.not_isUnit]
-  | succ k hk => simp [pow_succ, emultiplicity_mul hp, hk, add_mul]
-
-Depends on / 依赖: add_mul, emultiplicity_mul, emultiplicity_of_one_right, hp.not_isUnit, not_isUnit, pow_succ
+/-
+**emultiplicity_pow** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_pow {p a : α} (hp : Prime p) {k : Nat} : emultiplicity p (a 
+^ k) = k * emultiplicity p a
+参数：hp : Prime p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `emultiplicity_of_one_right`：emultiplicity_of_one_right {a : α} (ha : ¬Is
+Unit a) : emultiplicity a 1 = 0
+· 使用定理 `Prime.not_isUnit`：not_isUnit : ¬IsUnit p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `emultiplicity_mul`：emultiplicity_mul {p a b : α} (hp : Prime p) : emulti
+plicity p (a * b) = emultiplicity p a + emultiplicity p b
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
-theorem emultiplicity_pow {p a : α} (hp : Prime p) {k : Nat} :
+theorem emultiplicity_pow {p a : α} (hp : Prime p) {k : ℕ} :
     emultiplicity p (a ^ k) = k * emultiplicity p a := by
   induction k with
   | zero => simp [emultiplicity_of_one_right hp.not_isUnit]
   | succ k hk => simp [pow_succ, emultiplicity_mul hp, hk, add_mul]
-
-/--
-theorem `FiniteMultiplicity.multiplicity_pow` / 定理 `FiniteMultiplicity.multiplicity_pow`
-
-English:
-theorem FiniteMultiplicity.multiplicity_pow
-  statement: {p a : α} (hp : Prime p)
-  proof: by
-  exact_mod_cast (ha.pow hp).emultiplicity_eq_multiplicity ▸
-    ha.emultiplicity_eq_multiplicity ▸ emultiplicity_pow hp
-
-中文:
-定理 FiniteMultiplicity.multiplicity_pow
-  结论: {p a : α} (hp : 素 p)
-  证明: by
-  exact_mod_cast (ha.pow hp).emultiplicity_eq_multiplicity ▸
-    ha.emultiplicity_eq_multiplicity ▸ emultiplicity_pow hp
+/-
+**FiniteMultiplicity.multiplicity_pow** 是 Mathlib 中的一个定理，位于命名空间 `FiniteMultiplic
+ity`。
+形式化陈述：∀ {α : Type u_1} [inst : CommMonoidWithZero α] [IsCancelMulZero α] {p a : 
+α},   Prime p → FiniteMultiplicity p a → ∀ {k : ℕ}, multiplicity p (a ^ k) = k *
+ multiplicity p a
+参数：a ^ k。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `instCharZeroENat`：CharZero ℕ∞
+· 使用定理 `emultiplicity_pow`：emultiplicity_pow {p a : α} (hp : Prime p) {k : Nat} 
+: emultiplicity p (a ^ k) = k * emultiplicity p a
+· 使用定理 `FiniteMultiplicity.emultiplicity_eq_multiplicity`：FiniteMultiplicity.emu
+ltiplicity_eq_multiplicity (h : FiniteMultiplicity a b) : emultiplicity a b = mu
+ltiplicity a b
+· 使用定理 `FiniteMultiplicity.pow`：FiniteMultiplicity.pow {p a : α} (hp : Prime p) 
+(hfin : FiniteMultiplicity p a) {k : Nat} : FiniteMultiplicity p (a ^ k)
 -/
 protected theorem FiniteMultiplicity.multiplicity_pow {p a : α} (hp : Prime p)
-    (ha : FiniteMultiplicity p a) {k : Nat} : multiplicity p (a ^ k) = k * multiplicity p a := by
+    (ha : FiniteMultiplicity p a) {k : ℕ} : multiplicity p (a ^ k) = k * multiplicity p a := by
   exact_mod_cast (ha.pow hp).emultiplicity_eq_multiplicity ▸
     ha.emultiplicity_eq_multiplicity ▸ emultiplicity_pow hp
-
-/--
-theorem `emultiplicity_pow_self` / 定理 `emultiplicity_pow_self`
-
-English:
-theorem emultiplicity_pow_self
-  given: {p : α} (h0 : p != 0) (hu : ¬IsUnit p) (n : Nat)
-  proof: by
-  apply emultiplicity_eq_of_dvd_of_not_dvd
-  · rfl
-  · rw [pow_dvd_pow_iff h0 hu]
-    apply Nat.not_succ_le_self
-
-中文:
-定理 emultiplicity_pow_self
-  条件: {p : α} (h0 : p != 0) (hu : ¬是单位 p) (n : 自然数)
-  证明: by
-  apply emultiplicity_eq_of_dvd_of_not_dvd
-  · rfl
-  · rw [pow_dvd_pow_iff h0 hu]
-    apply Nat.not_succ_le_self
-
-Depends on / 依赖: Nat.not_succ_le_self, emultiplicity_eq_of_dvd_of_not_dvd, not_succ_le_self, pow_dvd_pow_iff
+/-
+**emultiplicity_pow_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_pow_self {p : α} (h0 : p != 0) (hu : ¬IsUnit p) (n : Nat) : 
+emultiplicity p (p ^ n) = n
+参数：h0 : p != 0；hu : ¬IsUnit p；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `emultiplicity_eq_of_dvd_of_not_dvd`：emultiplicity_eq_of_dvd_of_not_dvd {
+k : Nat} (hk : a ^ k ∣ b) (hsucc : ¬a ^ (k + 1) ∣ b) : emultiplicity a b = k
+· 使用定理 `dvd_refl`：dvd_refl (a : α) : a ∣ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `pow_dvd_pow_iff`：pow_dvd_pow_iff (ha₀ : a != 0) (ha : ¬IsUnit a) : a ^ n
+ ∣ a ^ m ↔ n <= m
+· 使用定理 `Nat.not_succ_le_self`：∀ (n : ℕ), ¬n.succ ≤ n
 -/
-theorem emultiplicity_pow_self {p : α} (h0 : p != 0) (hu : ¬IsUnit p) (n : Nat) :
+theorem emultiplicity_pow_self {p : α} (h0 : p ≠ 0) (hu : ¬IsUnit p) (n : ℕ) :
     emultiplicity p (p ^ n) = n := by
   apply emultiplicity_eq_of_dvd_of_not_dvd
   · rfl
   · rw [pow_dvd_pow_iff h0 hu]
     apply Nat.not_succ_le_self
-
-/--
-theorem `multiplicity_pow_self` / 定理 `multiplicity_pow_self`
-
-English:
-theorem multiplicity_pow_self
-  given: {p : α} (h0 : p != 0) (hu : ¬IsUnit p) (n : Nat)
-  proof: multiplicity_eq_of_emultiplicity_eq_some (emultiplicity_pow_self h0 hu n)
-
-中文:
-定理 multiplicity_pow_self
-  条件: {p : α} (h0 : p != 0) (hu : ¬是单位 p) (n : 自然数)
-  证明: multiplicity_eq_of_emultiplicity_eq_some (emultiplicity_pow_self h0 hu n)
-
-Depends on / 依赖: emultiplicity_pow_self, multiplicity_eq_of_emultiplicity_eq_some
+/-
+**multiplicity_pow_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multiplicity_pow_self {p : α} (h0 : p != 0) (hu : ¬IsUnit p) (n : Nat) : m
+ultiplicity p (p ^ n) = n
+参数：h0 : p != 0；hu : ¬IsUnit p；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `multiplicity_eq_of_emultiplicity_eq_some`：multiplicity_eq_of_emultiplici
+ty_eq_some {n : Nat} (h : emultiplicity a b = n) : multiplicity a b = n
+· 使用定理 `emultiplicity_pow_self`：emultiplicity_pow_self {p : α} (h0 : p != 0) (hu
+ : ¬IsUnit p) (n : Nat) : emultiplicity p (p ^ n) = n
 -/
-theorem multiplicity_pow_self {p : α} (h0 : p != 0) (hu : ¬IsUnit p) (n : Nat) :
+theorem multiplicity_pow_self {p : α} (h0 : p ≠ 0) (hu : ¬IsUnit p) (n : ℕ) :
     multiplicity p (p ^ n) = n :=
   multiplicity_eq_of_emultiplicity_eq_some (emultiplicity_pow_self h0 hu n)
-
-/--
-theorem `emultiplicity_pow_self_of_prime` / 定理 `emultiplicity_pow_self_of_prime`
-
-English:
-theorem emultiplicity_pow_self_of_prime
-  given: {p : α} (hp : Prime p) (n : Nat)
-  proof: emultiplicity_pow_self hp.ne_zero hp.not_isUnit n
-
-中文:
-定理 emultiplicity_pow_self_of_prime
-  条件: {p : α} (hp : 素 p) (n : 自然数)
-  证明: emultiplicity_pow_self hp.ne_zero hp.not_isUnit n
-
-Depends on / 依赖: emultiplicity_pow_self, hp.ne_zero, hp.not_isUnit, ne_zero, not_isUnit
+/-
+**emultiplicity_pow_self_of_prime** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：emultiplicity_pow_self_of_prime {p : α} (hp : Prime p) (n : Nat) : emultip
+licity p (p ^ n) = n
+参数：hp : Prime p；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `emultiplicity_pow_self`：emultiplicity_pow_self {p : α} (h0 : p != 0) (hu
+ : ¬IsUnit p) (n : Nat) : emultiplicity p (p ^ n) = n
+· 使用定理 `Prime.ne_zero`：ne_zero : p != 0
+· 使用定理 `Prime.not_isUnit`：not_isUnit : ¬IsUnit p
 -/
-theorem emultiplicity_pow_self_of_prime {p : α} (hp : Prime p) (n : Nat) :
+theorem emultiplicity_pow_self_of_prime {p : α} (hp : Prime p) (n : ℕ) :
     emultiplicity p (p ^ n) = n :=
   emultiplicity_pow_self hp.ne_zero hp.not_isUnit n
-
-/--
-theorem `multiplicity_pow_self_of_prime` / 定理 `multiplicity_pow_self_of_prime`
-
-English:
-theorem multiplicity_pow_self_of_prime
-  given: {p : α} (hp : Prime p) (n : Nat)
-  proof: multiplicity_pow_self hp.ne_zero hp.not_isUnit n
-
-中文:
-定理 multiplicity_pow_self_of_prime
-  条件: {p : α} (hp : 素 p) (n : 自然数)
-  证明: multiplicity_pow_self hp.ne_zero hp.not_isUnit n
-
-Depends on / 依赖: hp.ne_zero, hp.not_isUnit, multiplicity_pow_self, ne_zero, not_isUnit
+/-
+**multiplicity_pow_self_of_prime** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multiplicity_pow_self_of_prime {p : α} (hp : Prime p) (n : Nat) : multipli
+city p (p ^ n) = n
+参数：hp : Prime p；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `multiplicity_pow_self`：multiplicity_pow_self {p : α} (h0 : p != 0) (hu :
+ ¬IsUnit p) (n : Nat) : multiplicity p (p ^ n) = n
+· 使用定理 `Prime.ne_zero`：ne_zero : p != 0
+· 使用定理 `Prime.not_isUnit`：not_isUnit : ¬IsUnit p
 -/
-theorem multiplicity_pow_self_of_prime {p : α} (hp : Prime p) (n : Nat) :
+theorem multiplicity_pow_self_of_prime {p : α} (hp : Prime p) (n : ℕ) :
     multiplicity p (p ^ n) = n :=
   multiplicity_pow_self hp.ne_zero hp.not_isUnit n
 
@@ -3137,122 +2723,102 @@ end CancelCommMonoidWithZero
 
 section Nat
 
-/--
-theorem `multiplicity_eq_zero_of_coprime` / 定理 `multiplicity_eq_zero_of_coprime`
-
-English:
-theorem multiplicity_eq_zero_of_coprime
-  statement: {p a b : Nat} (hp : p != 1)
-  proof: by
-  apply Nat.eq_zero_of_not_pos
-  intro nh
-  have da : p ∣ a := by simpa [multiplicity_eq_zero] using nh.ne.symm
-  have db : p ∣ b := by simpa [multiplicity_eq_zero] using (nh.trans_le hle).ne.symm
-  have := Nat.dvd_gcd da db
-  rw [Coprime.gcd_eq_one hab]; rw [Nat.dvd_one] at this
-  exact hp this
-
-中文:
-定理 multiplicity_eq_zero_of_coprime
-  结论: {p a b : 自然数} (hp : p != 1)
-  证明: by
-  apply Nat.eq_zero_of_not_pos
-  intro nh
-  have da : p ∣ a := by simpa [multiplicity_eq_zero] using nh.ne.symm
-  have db : p ∣ b := by simpa [multiplicity_eq_zero] using (nh.trans_le hle).ne.symm
-  have := Nat.dvd_gcd da db
-  rw [Coprime.gcd_eq_one hab]; rw [Nat.dvd_one] at this
-  exact hp this
-
-Depends on / 依赖: Coprime, Coprime.gcd_eq_one, Nat.dvd_gcd, Nat.dvd_one, Nat.eq_zero_of_not_pos, dvd_gcd, dvd_one, eq_zero_of_not_pos, gcd_eq_one, multiplicity_eq_zero, ne.symm, nh.ne.symm, nh.trans_le, trans_le
+/-
+**multiplicity_eq_zero_of_coprime** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multiplicity_eq_zero_of_coprime {p a b : Nat} (hp : p != 1) (hle : multipl
+icity p a <= multiplicity p b) (hab : Nat.Coprime a b) : multiplicity p a = 0
+参数：hp : p != 1；hle : multiplicity p a <= multiplicity p b；hab : Nat.Coprime a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.eq_zero_of_not_pos`：∀ {n : ℕ}, ¬0 < n → n = 0
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Nat.dvd_gcd`：∀ {k m n : ℕ}, k ∣ m → k ∣ n → k ∣ m.gcd n
+· 使用定理 `Nat.dvd_one`：∀ {n : ℕ}, n ∣ 1 ↔ n = 1
+· 使用定理 `Nat.Coprime.gcd_eq_one`：∀ {m n : ℕ}, m.Coprime n → m.gcd n = 1
 -/
-theorem multiplicity_eq_zero_of_coprime {p a b : Nat} (hp : p != 1)
-    (hle : multiplicity p a <= multiplicity p b) (hab : Nat.Coprime a b) : multiplicity p a = 0 := by
+theorem multiplicity_eq_zero_of_coprime {p a b : ℕ} (hp : p ≠ 1)
+    (hle : multiplicity p a ≤ multiplicity p b) (hab : Nat.Coprime a b) : multiplicity p a = 0 := by
   apply Nat.eq_zero_of_not_pos
   intro nh
   have da : p ∣ a := by simpa [multiplicity_eq_zero] using nh.ne.symm
   have db : p ∣ b := by simpa [multiplicity_eq_zero] using (nh.trans_le hle).ne.symm
   have := Nat.dvd_gcd da db
-  rw [Coprime.gcd_eq_one hab]; rw [Nat.dvd_one] at this
+  rw [Coprime.gcd_eq_one hab, Nat.dvd_one] at this
   exact hp this
 
 end Nat
 
-/--
-theorem `Int.finiteMultiplicity_iff_finiteMultiplicity_natAbs` / 定理 `Int.finiteMultiplicity_iff_finiteMultiplicity_natAbs`
-
-English:
-theorem Int.finiteMultiplicity_iff_finiteMultiplicity_natAbs
-  given: {a b : Int}
-  proof: by
-  simp only [FiniteMultiplicity.def, ← Int.natAbs_dvd_natAbs, Int.natAbs_pow]
-
-中文:
-定理 整数.finiteMultiplicity_iff_finiteMultiplicity_natAbs
-  条件: {a b : 整数}
-  证明: by
-  simp only [FiniteMultiplicity.def, ← Int.natAbs_dvd_natAbs, Int.natAbs_pow]
-
-Depends on / 依赖: FiniteMultiplicity, FiniteMultiplicity.def, Int.natAbs_dvd_natAbs, Int.natAbs_pow, natAbs_dvd_natAbs, natAbs_pow
+/-
+**Int.finiteMultiplicity_iff_finiteMultiplicity_natAbs** 是 Mathlib 中的一个定理，位于命名空间
+ ``。
+形式化陈述：Int.finiteMultiplicity_iff_finiteMultiplicity_natAbs {a b : Int} : FiniteM
+ultiplicity a b ↔ FiniteMultiplicity a.natAbs b.natAbs
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Int.natAbs_pow`：∀ (n : ℤ) (k : ℕ), (n ^ k).natAbs = n.natAbs ^ k
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem Int.finiteMultiplicity_iff_finiteMultiplicity_natAbs {a b : Int} :
+theorem Int.finiteMultiplicity_iff_finiteMultiplicity_natAbs {a b : ℤ} :
     FiniteMultiplicity a b ↔ FiniteMultiplicity a.natAbs b.natAbs := by
   simp only [FiniteMultiplicity.def, ← Int.natAbs_dvd_natAbs, Int.natAbs_pow]
-
-/--
-theorem `Int.finiteMultiplicity_iff` / 定理 `Int.finiteMultiplicity_iff`
-
-English:
-theorem Int.finiteMultiplicity_iff
-  given: {a b : Int}
-  statement: FiniteMultiplicity a b ↔ a.natAbs != 1 ∧ b != 0
-  proof: by
-  rw [finiteMultiplicity_iff_finiteMultiplicity_natAbs]; rw [Nat.finiteMultiplicity_iff]; rw [pos_iff_ne_zero]; rw [Int.natAbs_ne_zero]
-
-中文:
-定理 整数.finiteMultiplicity_iff
-  条件: {a b : 整数}
-  结论: FiniteMultiplicity a b ↔ a.natAbs != 1 ∧ b != 0
-  证明: by
-  rw [finiteMultiplicity_iff_finiteMultiplicity_natAbs]; rw [Nat.finiteMultiplicity_iff]; rw [pos_iff_ne_zero]; rw [Int.natAbs_ne_zero]
-
-Depends on / 依赖: Int.natAbs_ne_zero, Nat.finiteMultiplicity_iff, finiteMultiplicity_iff, finiteMultiplicity_iff_finiteMultiplicity_natAbs, natAbs_ne_zero, pos_iff_ne_zero
+/-
+**Int.finiteMultiplicity_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Int.finiteMultiplicity_iff {a b : Int} : FiniteMultiplicity a b ↔ a.natAbs
+ != 1 ∧ b != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.finiteMultiplicity_iff_finiteMultiplicity_natAbs`：Int.finiteMultipli
+city_iff_finiteMultiplicity_natAbs {a b : Int} : FiniteMultiplicity a b ↔ Finite
+Multiplicity a.natAbs b.natAbs
+· 使用定理 `Nat.finiteMultiplicity_iff`：Nat.finiteMultiplicity_iff {a b : Nat} : Fin
+iteMultiplicity a b ↔ a != 1 ∧ 0 < b
+· 使用定理 `pos_iff_ne_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [inst_
+1 : Zero α] [IsBotZeroClass α], 0 < a ↔ a ≠ 0
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Int.natAbs_ne_zero`：∀ {a : ℤ}, a.natAbs ≠ 0 ↔ a ≠ 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem Int.finiteMultiplicity_iff {a b : Int} : FiniteMultiplicity a b ↔ a.natAbs != 1 ∧ b != 0 := by
-  rw [finiteMultiplicity_iff_finiteMultiplicity_natAbs]; rw [Nat.finiteMultiplicity_iff]; rw [pos_iff_ne_zero]; rw [Int.natAbs_ne_zero]
-
-/--
-Instance `Nat.decidableFiniteMultiplicity` / 实例 `Nat.decidableFiniteMultiplicity`
-
-English:
-instance Nat.decidableFiniteMultiplicity
-  signature: : DecidableRel fun a b : Nat => FiniteMultiplicity a b
-  body: fun _ _ => decidable_of_iff' _ Nat.finiteMultiplicity_iff
-
-中文:
-实例 自然数.decidableFiniteMultiplicity
-  签名: : DecidableRel fun a b : 自然数 => FiniteMultiplicity a b
-  定义体: fun _ _ => decidable_of_iff' _ Nat.finiteMultiplicity_iff
-
-Depends on / 依赖: Nat.finiteMultiplicity_iff, decidable_of_iff, finiteMultiplicity_iff
+theorem Int.finiteMultiplicity_iff {a b : ℤ} : FiniteMultiplicity a b ↔ a.natAbs ≠ 1 ∧ b ≠ 0 := by
+  rw [finiteMultiplicity_iff_finiteMultiplicity_natAbs, Nat.finiteMultiplicity_iff,
+    pos_iff_ne_zero, Int.natAbs_ne_zero]
+/-
+**Nat.decidableFiniteMultiplicity** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Nat.decidableFiniteMultiplicity : DecidableRel fun a b : Nat => FiniteMult
+iplicity a b
+该定义给出了一等式。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.finiteMultiplicity_iff`：Nat.finiteMultiplicity_iff {a b : Nat} : Fin
+iteMultiplicity a b ↔ a != 1 ∧ 0 < b
 -/
-instance Nat.decidableFiniteMultiplicity : DecidableRel fun a b : Nat => FiniteMultiplicity a b :=
-  fun _ _ => decidable_of_iff' _ Nat.finiteMultiplicity_iff
-
-/--
-Instance `Int.decidableMultiplicityFinite` / 实例 `Int.decidableMultiplicityFinite`
-
-English:
-instance Int.decidableMultiplicityFinite
-  signature: : DecidableRel fun a b : Int => FiniteMultiplicity a b
-  body: fun _ _ => decidable_of_iff' _ Int.finiteMultiplicity_iff
-
-中文:
-实例 整数.decidableMultiplicityFinite
-  签名: : DecidableRel fun a b : 整数 => FiniteMultiplicity a b
-  定义体: fun _ _ => decidable_of_iff' _ Int.finiteMultiplicity_iff
-
-Depends on / 依赖: Int.finiteMultiplicity_iff, decidable_of_iff, finiteMultiplicity_iff
+instance Nat.decidableFiniteMultiplicity : DecidableRel fun a b : ℕ => FiniteMultiplicity a b :=
+  fun _ _ ↦ decidable_of_iff' _ Nat.finiteMultiplicity_iff
+/-
+**Int.decidableMultiplicityFinite** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Int.decidableMultiplicityFinite : DecidableRel fun a b : Int => FiniteMult
+iplicity a b
+该定义给出了一等式。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.finiteMultiplicity_iff`：Int.finiteMultiplicity_iff {a b : Int} : Fin
+iteMultiplicity a b ↔ a.natAbs != 1 ∧ b != 0
 -/
-instance Int.decidableMultiplicityFinite : DecidableRel fun a b : Int => FiniteMultiplicity a b :=
-  fun _ _ => decidable_of_iff' _ Int.finiteMultiplicity_iff
+instance Int.decidableMultiplicityFinite : DecidableRel fun a b : ℤ => FiniteMultiplicity a b :=
+  fun _ _ ↦ decidable_of_iff' _ Int.finiteMultiplicity_iff

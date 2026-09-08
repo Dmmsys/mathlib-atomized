@@ -38,20 +38,11 @@ variable [SeminormedGroup E] {s : Subgroup E}
 with the restriction of the norm. -/
 @[to_additive /-- A subgroup of a seminormed group is also a seminormed group, with the restriction
 of the norm. -/]
-/--
-Instance `seminormedGroup` / 实例 `seminormedGroup`
-
-English:
-instance seminormedGroup
-  signature: : SeminormedGroup s
-  body: fast_instance% SeminormedGroup.induced _ _ s.subtype
-
-中文:
-实例 seminormedGroup
-  签名: : 半赋范群 s
-  定义体: fast_instance% SeminormedGroup.induced _ _ s.subtype
-
-Depends on / 依赖: SeminormedGroup, SeminormedGroup.induced, fast_instance, induced, s.subtype, subtype
+/-
+**Subgroup.seminormedGroup** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`。
+形式化陈述：seminormedGroup : SeminormedGroup s
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance seminormedGroup : SeminormedGroup s :=
   fast_instance% SeminormedGroup.induced _ _ s.subtype
@@ -60,20 +51,12 @@ instance seminormedGroup : SeminormedGroup s :=
 its norm in `E`. -/
 @[to_additive (attr := simp) /-- If `x` is an element of a subgroup `s` of a seminormed group `E`,
 its norm in `s` is equal to its norm in `E`. -/]
-/--
-theorem `coe_norm` / 定理 `coe_norm`
-
-English:
-theorem coe_norm
-  given: (x : s)
-  statement: ‖x‖ = ‖(x : E)‖
-  proof: rfl
-
-中文:
-定理 coe_norm
-  条件: (x : s)
-  结论: ‖x‖ = ‖(x : E)‖
-  证明: rfl
+/-
+**Subgroup.coe_norm** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：coe_norm (x : s) : ‖x‖ = ‖(x : E)‖
+参数：x : s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_norm (x : s) : ‖x‖ = ‖(x : E)‖ :=
   rfl
@@ -86,20 +69,12 @@ This is a reversed version of the `simp` lemma `Subgroup.coe_norm` for use by `n
 `E`, its norm in `s` is equal to its norm in `E`.
 
 This is a reversed version of the `simp` lemma `AddSubgroup.coe_norm` for use by `norm_cast`. -/]
-/--
-theorem `norm_coe` / 定理 `norm_coe`
-
-English:
-theorem norm_coe
-  given: {s : Subgroup E} (x : s)
-  statement: ‖(x : E)‖ = ‖x‖
-  proof: rfl
-
-中文:
-定理 norm_coe
-  条件: {s : 子群 E} (x : s)
-  结论: ‖(x : E)‖ = ‖x‖
-  证明: rfl
+/-
+**Subgroup.norm_coe** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：norm_coe {s : Subgroup E} (x : s) : ‖(x : E)‖ = ‖x‖
+参数：x : s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem norm_coe {s : Subgroup E} (x : s) : ‖(x : E)‖ = ‖x‖ :=
   rfl
@@ -107,66 +82,32 @@ theorem norm_coe {s : Subgroup E} (x : s) : ‖(x : E)‖ = ‖x‖ :=
 end SeminormedGroup
 
 @[to_additive]
-/--
-Instance `seminormedCommGroup` / 实例 `seminormedCommGroup`
-
-English:
-instance seminormedCommGroup
-  signature: [SeminormedCommGroup E] {s : Subgroup E}
-  body: fast_instance% SeminormedCommGroup.induced _ _ s.subtype
-
-@[to_additive]
-
-中文:
-实例 seminormedCommGroup
-  签名: [SeminormedComm群 E] {s : 子群 E}
-  定义体: fast_instance% SeminormedCommGroup.induced _ _ s.subtype
-
-@[to_additive]
-
-Depends on / 依赖: SeminormedCommGroup, SeminormedCommGroup.induced, fast_instance, induced, s.subtype, subtype
+/-
+**Subgroup.seminormedCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`。
+形式化陈述：seminormedCommGroup [SeminormedCommGroup E] {s : Subgroup E} : SeminormedC
+ommGroup s
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance seminormedCommGroup [SeminormedCommGroup E] {s : Subgroup E} : SeminormedCommGroup s :=
   fast_instance% SeminormedCommGroup.induced _ _ s.subtype
 
 @[to_additive]
-/--
-Instance `normedGroup` / 实例 `normedGroup`
-
-English:
-instance normedGroup
-  signature: [NormedGroup E] {s : Subgroup E}
-  body: fast_instance% NormedGroup.induced _ _ s.subtype Subtype.coe_injective
-
-@[to_additive]
-
-中文:
-实例 normedGroup
-  签名: [赋范群 E] {s : 子群 E}
-  定义体: fast_instance% NormedGroup.induced _ _ s.subtype Subtype.coe_injective
-
-@[to_additive]
-
-Depends on / 依赖: NormedGroup, NormedGroup.induced, Subtype, Subtype.coe_injective, coe_injective, fast_instance, induced, s.subtype, subtype
+/-
+**Subgroup.normedGroup** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`。
+形式化陈述：normedGroup [NormedGroup E] {s : Subgroup E} : NormedGroup s
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance normedGroup [NormedGroup E] {s : Subgroup E} : NormedGroup s :=
   fast_instance% NormedGroup.induced _ _ s.subtype Subtype.coe_injective
 
 @[to_additive]
-/--
-Instance `normedCommGroup` / 实例 `normedCommGroup`
-
-English:
-instance normedCommGroup
-  signature: [NormedCommGroup E] {s : Subgroup E}
-  body: fast_instance% NormedCommGroup.induced _ _ s.subtype Subtype.coe_injective
-
-中文:
-实例 normedCommGroup
-  签名: [NormedComm群 E] {s : 子群 E}
-  定义体: fast_instance% NormedCommGroup.induced _ _ s.subtype Subtype.coe_injective
-
-Depends on / 依赖: NormedCommGroup, NormedCommGroup.induced, Subtype, Subtype.coe_injective, coe_injective, fast_instance, induced, s.subtype, subtype
+/-
+**Subgroup.normedCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `Subgroup`。
+形式化陈述：normedCommGroup [NormedCommGroup E] {s : Subgroup E} : NormedCommGroup s
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance normedCommGroup [NormedCommGroup E] {s : Subgroup E} : NormedCommGroup s :=
   fast_instance% NormedCommGroup.induced _ _ s.subtype Subtype.coe_injective
@@ -186,6 +127,10 @@ variable [SeminormedGroup E] {S : Type*} [SetLike S E] [SubgroupClass S E] (s : 
 with the restriction of the norm. -/
 @[to_additive /-- A subgroup of a seminormed additive group is also a seminormed additive group,
 with the restriction of the norm. -/]
+/-
+**SubgroupClass.** 是 Mathlib 中的一个实例，位于命名空间 `SubgroupClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 75) seminormedGroup : SeminormedGroup s :=
   fast_instance% SeminormedGroup.induced _ _ (SubgroupClass.subtype s)
 
@@ -193,20 +138,12 @@ instance (priority := 75) seminormedGroup : SeminormedGroup s :=
 its norm in `E`. -/
 @[to_additive (attr := simp) /-- If `x` is an element of an additive subgroup `s` of a seminormed
 additive group `E`, its norm in `s` is equal to its norm in `E`. -/]
-/--
-theorem `coe_norm` / 定理 `coe_norm`
-
-English:
-theorem coe_norm
-  given: (x : s)
-  statement: ‖x‖ = ‖(x : E)‖
-  proof: rfl
-
-中文:
-定理 coe_norm
-  条件: (x : s)
-  结论: ‖x‖ = ‖(x : E)‖
-  证明: rfl
+/-
+**SubgroupClass.coe_norm** 是 Mathlib 中的一个定理，位于命名空间 `SubgroupClass`。
+形式化陈述：coe_norm (x : s) : ‖x‖ = ‖(x : E)‖
+参数：x : s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_norm (x : s) : ‖x‖ = ‖(x : E)‖ :=
   rfl
@@ -214,18 +151,31 @@ theorem coe_norm (x : s) : ‖x‖ = ‖(x : E)‖ :=
 end SeminormedGroup
 
 @[to_additive]
+/-
+**SubgroupClass.** 是 Mathlib 中的一个实例，位于命名空间 `SubgroupClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 75) seminormedCommGroup [SeminormedCommGroup E] {S : Type*} [SetLike S E]
     [SubgroupClass S E] (s : S) : SeminormedCommGroup s :=
   fast_instance% SeminormedCommGroup.induced _ _ (SubgroupClass.subtype s)
 
 @[to_additive]
+/-
+**SubgroupClass.** 是 Mathlib 中的一个实例，位于命名空间 `SubgroupClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 75) normedGroup [NormedGroup E] {S : Type*} [SetLike S E] [SubgroupClass S E]
     (s : S) : NormedGroup s :=
   fast_instance% NormedGroup.induced _ _ (SubgroupClass.subtype s) Subtype.coe_injective
 
 @[to_additive]
+/-
+**SubgroupClass.** 是 Mathlib 中的一个实例，位于命名空间 `SubgroupClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 75) normedCommGroup [NormedCommGroup E] {S : Type*} [SetLike S E]
     [SubgroupClass S E] (s : S) : NormedCommGroup s :=
   fast_instance% NormedCommGroup.induced _ _ (SubgroupClass.subtype s) Subtype.coe_injective
 
 end SubgroupClass
+

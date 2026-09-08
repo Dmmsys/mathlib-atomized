@@ -40,20 +40,17 @@ variable (E : SimplicialObject (FormalCoproduct.{w} C))
 functor `(Cᵒᵖ ⥤ A) ⥤ CosimplicialObject A` which sends `P : Cᵒᵖ ⥤ A` to the
 cosimplicial object which sends `⦋n⦌` to the "evaluation" of `P` on `E _⦋n⦌`. -/
 @[simps!]
-/--
-Definition of `cosimplicialObjectFunctor` / `cosimplicialObjectFunctor` 的定义
+/-
+**CategoryTheory.Limits.FormalCoproduct.cosimplicialObjectFunctor** 是 Mathlib 中的
+一个定义，位于命名空间 `CategoryTheory.Limits.FormalCoproduct`。
+形式化陈述：cosimplicialObjectFunctor : (Cᵒᵖ ⥤ A) ⥤ CosimplicialObject A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cosimplicialObjectFunctor
-  signature: :
-  body: evalOp.{w} C A ⋙ (Functor.whiskeringLeft _ _ _).obj E.rightOp
-
-中文:
-定义 cosimplicialObjectFunctor
-  签名: :
-  定义体: evalOp.{w} C A ⋙ (Functor.whiskeringLeft _ _ _).obj E.rightOp
-
-Depends on / 依赖: E.rightOp, Functor, Functor.whiskeringLeft, evalOp, rightOp, whiskeringLeft
+--- 原说明 ---
+Given a simplicial object `E` in the category `FormalCoproduct C`, this is the
+functor `(Cᵒᵖ ⥤ A) ⥤ CosimplicialObject A` which sends `P : Cᵒᵖ ⥤ A` to the
+cosimplicial object which sends `⦋n⦌` to the "evaluation" of `P` on `E _⦋n⦌`.
 -/
 noncomputable def cosimplicialObjectFunctor :
     (Cᵒᵖ ⥤ A) ⥤ CosimplicialObject A :=
@@ -65,44 +62,46 @@ variable [Preadditive A]
 functor `(Cᵒᵖ ⥤ A) ⥤ CochainComplex A ℕ` which sends `P : Cᵒᵖ ⥤ A` to the
 cochain complex which in degree `n` consists of the "evaluation" of `P` on `E _⦋n⦌`. -/
 @[simps!]
-/--
-Definition of `cochainComplexFunctor` / `cochainComplexFunctor` 的定义
+/-
+**CategoryTheory.Limits.FormalCoproduct.cochainComplexFunctor** 是 Mathlib 中的一个定义
+，位于命名空间 `CategoryTheory.Limits.FormalCoproduct`。
+形式化陈述：cochainComplexFunctor : (Cᵒᵖ ⥤ A) ⥤ CochainComplex A Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cochainComplexFunctor
-  signature: : (Cᵒᵖ ⥤ A) ⥤ CochainComplex A Nat
-  body: cosimplicialObjectFunctor E ⋙ AlgebraicTopology.alternatingCofaceMapComplex A
-
-中文:
-定义 cochainComplexFunctor
-  签名: : (Cᵒᵖ ⥤ A) ⥤ 上链复形 A 自然数
-  定义体: cosimplicialObjectFunctor E ⋙ AlgebraicTopology.alternatingCofaceMapComplex A
-
-Depends on / 依赖: AlgebraicTopology, AlgebraicTopology.alternatingCofaceMapComplex, alternatingCofaceMapComplex, cosimplicialObjectFunctor
+--- 原说明 ---
+Given a simplicial object `E` in the category `FormalCoproduct C`, this is the
+functor `(Cᵒᵖ ⥤ A) ⥤ CochainComplex A ℕ` which sends `P : Cᵒᵖ ⥤ A` to the
+cochain complex which in degree `n` consists of the "evaluation" of `P` on `E _⦋
+n⦌`.
 -/
-noncomputable def cochainComplexFunctor : (Cᵒᵖ ⥤ A) ⥤ CochainComplex A Nat :=
+noncomputable def cochainComplexFunctor : (Cᵒᵖ ⥤ A) ⥤ CochainComplex A ℕ :=
   cosimplicialObjectFunctor E ⋙ AlgebraicTopology.alternatingCofaceMapComplex A
 
 end Limits.FormalCoproduct
 
-variable [HasFiniteProducts C] [Preadditive A] {ι : Type w} (U : ι -> C)
+variable [HasFiniteProducts C] [Preadditive A] {ι : Type w} (U : ι → C)
 
-/--
-Definition of `cechComplexFunctor` / `cechComplexFunctor` 的定义
+/-- Given a family of objects `U : ι → C`, this is the Cech complex functor
+`(Cᵒᵖ ⥤ A) ⥤ CochainComplex A ℕ` which sends a presheaf `P : Cᵒᵖ ⥤ A` to the
+cochain complex which in degree `n` consists of the product,
+indexed by `x : Fin (n + 1) → ι`, of the value of `P` on the product of the
+objects `U (x i)` for `i : Fin (n + 1)`. -/
+/-
+**CategoryTheory.cechComplexFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：cechComplexFunctor : (Cᵒᵖ ⥤ A) ⥤ CochainComplex A Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cechComplexFunctor
-  signature: : (Cᵒᵖ ⥤ A) ⥤ CochainComplex A Nat
-  body: FormalCoproduct.cochainComplexFunctor (FormalCoproduct.mk _ U).cech
-
-中文:
-定义 cechComplexFunctor
-  签名: : (Cᵒᵖ ⥤ A) ⥤ 上链复形 A 自然数
-  定义体: FormalCoproduct.cochainComplexFunctor (FormalCoproduct.mk _ U).cech
-
-Depends on / 依赖: FormalCoproduct, FormalCoproduct.cochainComplexFunctor, FormalCoproduct.mk, cochainComplexFunctor
+--- 原说明 ---
+Given a family of objects `U : ι → C`, this is the Cech complex functor
+`(Cᵒᵖ ⥤ A) ⥤ CochainComplex A ℕ` which sends a presheaf `P : Cᵒᵖ ⥤ A` to the
+cochain complex which in degree `n` consists of the product,
+indexed by `x : Fin (n + 1) → ι`, of the value of `P` on the product of the
+objects `U (x i)` for `i : Fin (n + 1)`.
 -/
-noncomputable def cechComplexFunctor : (Cᵒᵖ ⥤ A) ⥤ CochainComplex A Nat :=
+noncomputable def cechComplexFunctor : (Cᵒᵖ ⥤ A) ⥤ CochainComplex A ℕ :=
   FormalCoproduct.cochainComplexFunctor (FormalCoproduct.mk _ U).cech
 
 end CategoryTheory
+

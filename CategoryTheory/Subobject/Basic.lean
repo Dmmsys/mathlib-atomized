@@ -100,64 +100,51 @@ with morphisms becoming inequalities, and isomorphisms becoming equations.
 /-- The category of subobjects of `X : C`, defined as isomorphism classes of monomorphisms into `X`.
 -/
 @[implicit_reducible]
-/--
-Definition of `Subobject` / `Subobject` 的定义
+/-
+**CategoryTheory.Subobject** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：Subobject (X : C)
+参数：X : C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Subobject
-  signature: (X : C)
-  body: ThinSkeleton (MonoOver X)
-
-中文:
-定义 Subobject
-  签名: (X : C)
-  定义体: ThinSkeleton (MonoOver X)
-
-Depends on / 依赖: MonoOver, ThinSkeleton
+--- 原说明 ---
+The category of subobjects of `X : C`, defined as isomorphism classes of monomor
+phisms into `X`.
 -/
 def Subobject (X : C) :=
   ThinSkeleton (MonoOver X)
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : C) : PartialOrder (Subobject X) :=
-inferInstanceAs PartialOrder (ThinSkeleton (MonoOver X))
+  inferInstanceAs <| PartialOrder (ThinSkeleton (MonoOver X))
 
 namespace Subobject
 
-/--
-lemma `skeletal` / 引理 `skeletal`
-
-English:
-lemma skeletal
-  given: (X : C)
-  statement: Skeletal (Subobject X)
-  proof: ThinSkeleton.skeletal
-
-中文:
-引理 skeletal
-  条件: (X : C)
-  结论: Skeletal (Subobject X)
-  证明: ThinSkeleton.skeletal
-
-Depends on / 依赖: ThinSkeleton, ThinSkeleton.skeletal, skeletal
+/-
+**CategoryTheory.Subobject.skeletal** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Su
+bobject`。
+形式化陈述：skeletal (X : C) : Skeletal (Subobject X)
+参数：X : C。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ThinSkeleton.skeletal`：skeletal : Skeletal (ThinSkeleton 
+C)
 -/
 lemma skeletal (X : C) : Skeletal (Subobject X) := ThinSkeleton.skeletal
 
 /-- Convenience constructor for a subobject. -/
 @[implicit_reducible]
-/--
-Definition of `mk` / `mk` 的定义
+/-
+**CategoryTheory.Subobject.mk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Subobjec
+t`。
+形式化陈述：mk {X A : C} (f : A ⟶ X) [Mono f] : Subobject X
+参数：f : A ⟶ X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk
-  signature: {X A : C} (f : A ⟶ X) [Mono f]
-  body: (toThinSkeleton _).obj (MonoOver.mk f)
-
-中文:
-定义 mk
-  签名: {X A : C} (f : A ⟶ X) [单态射 f]
-  定义体: (toThinSkeleton _).obj (MonoOver.mk f)
-
-Depends on / 依赖: MonoOver, MonoOver.mk, toThinSkeleton
+--- 原说明 ---
+Convenience constructor for a subobject.
 -/
 def mk {X A : C} (f : A ⟶ X) [Mono f] : Subobject X :=
   (toThinSkeleton _).obj (MonoOver.mk f)
@@ -166,47 +153,40 @@ section
 
 attribute [local ext] CategoryTheory.Comma
 
-/--
-theorem `ind` / 定理 `ind`
-
-English:
-theorem ind
-  statement: {X : C} (p : Subobject X -> Prop)
-  proof: by
-  induction P using Quotient.inductionOn' with | _ a
-  exact h a.arrow
-
-中文:
-定理 ind
-  结论: {X : C} (p : Subobject X -> 命题)
-  证明: by
-  induction P using Quotient.inductionOn' with | _ a
-  exact h a.arrow
+/-
+**CategoryTheory.Subobject.ind** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Subobje
+ct`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X : C} (p : C
+ategoryTheory.Subobject X → Prop),   (∀ ⦃A : C⦄ (f : A ⟶ X) [inst_1 : CategoryTh
+eory.Mono f], p (CategoryTheory.Subobject.mk f)) →     ∀ (P : CategoryTheory.Sub
+object X), p P
+参数：p : CategoryTheory.Subobject X → Prop；∀ ⦃A : C⦄ (f : A ⟶ X) [inst_1 : Categor
+yTheory.Mono f], p (CategoryTheory.Subobject.mk f)；P : CategoryTheory.Subobject 
+X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
 -/
-protected theorem ind {X : C} (p : Subobject X -> Prop)
-    (h : forall ⦃A : C⦄ (f : A ⟶ X) [Mono f], p (Subobject.mk f)) (P : Subobject X) : p P := by
+protected theorem ind {X : C} (p : Subobject X → Prop)
+    (h : ∀ ⦃A : C⦄ (f : A ⟶ X) [Mono f], p (Subobject.mk f)) (P : Subobject X) : p P := by
   induction P using Quotient.inductionOn' with | _ a
   exact h a.arrow
-
-/--
-theorem `ind₂` / 定理 `ind₂`
-
-English:
-theorem ind₂
-  statement: {X : C} (p : Subobject X -> Subobject X -> Prop)
-  proof: by
-  induction P, Q using Quotient.inductionOn₂' with | _ a b
-  exact h a.arrow b.arrow
-
-中文:
-定理 ind₂
-  结论: {X : C} (p : Subobject X -> Subobject X -> 命题)
-  证明: by
-  induction P, Q using Quotient.inductionOn₂' with | _ a b
-  exact h a.arrow b.arrow
+/-
+**CategoryTheory.Subobject.ind** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Subobje
+ct`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X : C} (p : C
+ategoryTheory.Subobject X → Prop),   (∀ ⦃A : C⦄ (f : A ⟶ X) [inst_1 : CategoryTh
+eory.Mono f], p (CategoryTheory.Subobject.mk f)) →     ∀ (P : CategoryTheory.Sub
+object X), p P
+参数：p : CategoryTheory.Subobject X → Prop；∀ ⦃A : C⦄ (f : A ⟶ X) [inst_1 : Categor
+yTheory.Mono f], p (CategoryTheory.Subobject.mk f)；P : CategoryTheory.Subobject 
+X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
 -/
-protected theorem ind₂ {X : C} (p : Subobject X -> Subobject X -> Prop)
-    (h : forall ⦃A B : C⦄ (f : A ⟶ X) (g : B ⟶ X) [Mono f] [Mono g],
+protected theorem ind₂ {X : C} (p : Subobject X → Subobject X → Prop)
+    (h : ∀ ⦃A B : C⦄ (f : A ⟶ X) (g : B ⟶ X) [Mono f] [Mono g],
       p (Subobject.mk f) (Subobject.mk g))
     (P Q : Subobject X) : p P Q := by
   induction P, Q using Quotient.inductionOn₂' with | _ a b
@@ -214,264 +194,235 @@ protected theorem ind₂ {X : C} (p : Subobject X -> Subobject X -> Prop)
 
 end
 
-/--
-Definition of `lift` / `lift` 的定义
+/-- Declare a function on subobjects of `X` by specifying a function on monomorphisms with
+codomain `X`. -/
+/-
+**CategoryTheory.Subobject.lift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Subobj
+ect`。
+形式化陈述：{C : Type u₁} →   [inst : CategoryTheory.Category.{v₁, u₁} C] →     {α : S
+ort u_1} →       {X : C} →         (F : ⦃A : C⦄ → (f : A ⟶ X) → [CategoryTheory.
+Mono f] → α) →           (∀ ⦃A B : C⦄ (f : A ⟶ X) (g : B ⟶ X) [inst_1 : Category
+Theory.Mono f] [inst_2 : CategoryTheory.Mono g]               (i : A ≅ B), Categ
+oryTheory.CategoryStruct.comp i.hom g = f → F f = F g) →             CategoryThe
+ory.Subobject X → α
+参数：F : ⦃A : C⦄ → (f : A ⟶ X) → [CategoryTheory.Mono f] → α；∀ ⦃A B : C⦄ (f : A ⟶ 
+X) (g : B ⟶ X) [inst_1 : CategoryTheory.Mono f] [inst_2 : CategoryTheory.Mono g]
+               (i : A ≅ B), CategoryTheory.CategoryStruct.comp i.hom g = f → F f
+ = F g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: {α : Sort*} {X : C} (F : forall ⦃A : C⦄ (f : A ⟶ X) [Mono f], α)
-  body: fun P =>
-  Quotient.liftOn' P (fun m => F m.arrow) fun m n ⟨i⟩ =>
-    h m.arrow n.arrow ((MonoOver.forget X ⋙ Over.forget X).mapIso i) (Over.w i.hom.hom)
-
-@[simp]
-
-中文:
-定义 lift
-  签名: {α : 类型层*} {X : C} (F : 对任意 ⦃A : C⦄ (f : A ⟶ X) [单态射 f], α)
-  定义体: fun P =>
-  Quotient.liftOn' P (fun m => F m.arrow) fun m n ⟨i⟩ =>
-    h m.arrow n.arrow ((MonoOver.forget X ⋙ Over.forget X).mapIso i) (Over.w i.hom.hom)
-
-@[simp]
+--- 原说明 ---
+Declare a function on subobjects of `X` by specifying a function on monomorphism
+s with
+codomain `X`.
 -/
-protected def lift {α : Sort*} {X : C} (F : forall ⦃A : C⦄ (f : A ⟶ X) [Mono f], α)
+protected def lift {α : Sort*} {X : C} (F : ∀ ⦃A : C⦄ (f : A ⟶ X) [Mono f], α)
     (h :
-      forall ⦃A B : C⦄ (f : A ⟶ X) (g : B ⟶ X) [Mono f] [Mono g] (i : A ≅ B),
-        i.hom ≫ g = f -> F f = F g) :
-    Subobject X -> α := fun P =>
+      ∀ ⦃A B : C⦄ (f : A ⟶ X) (g : B ⟶ X) [Mono f] [Mono g] (i : A ≅ B),
+        i.hom ≫ g = f → F f = F g) :
+    Subobject X → α := fun P =>
   Quotient.liftOn' P (fun m => F m.arrow) fun m n ⟨i⟩ =>
     h m.arrow n.arrow ((MonoOver.forget X ⋙ Over.forget X).mapIso i) (Over.w i.hom.hom)
 
 @[simp]
-/--
-theorem `lift_mk` / 定理 `lift_mk`
-
-English:
-theorem lift_mk
-  statement: {α : Sort*} {X : C} (F : forall ⦃A : C⦄ (f : A ⟶ X) [Mono f], α) {h A}
-  proof: rfl
-
-中文:
-定理 lift_mk
-  结论: {α : 类型层*} {X : C} (F : 对任意 ⦃A : C⦄ (f : A ⟶ X) [单态射 f], α) {h A}
-  证明: rfl
+/-
+**CategoryTheory.Subobject.lift_mk** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Sub
+object`。
+形式化陈述：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {α : Sort u_1}
+ {X : C}   (F : ⦃A : C⦄ → (f : A ⟶ X) → [CategoryTheory.Mono f] → α)   {h :     
+∀ ⦃A B : C⦄ (f : A ⟶ X) (g : B ⟶ X) [inst_1 : CategoryTheory.Mono f] [inst_2 : C
+ategoryTheory.Mono g] (i : A ≅ B),       CategoryTheory.CategoryStruct.comp i.ho
+m g = f → F f = F g}   {A : C} (f : A ⟶ X) [inst_1 : CategoryTheory.Mono f],   C
+ategoryTheory.Subobject.lift F h (CategoryTheory.Subobject.mk f) = F f
+参数：F : ⦃A : C⦄ → (f : A ⟶ X) → [CategoryTheory.Mono f] → α；f : A ⟶ X；g : B ⟶ X；i
+ : A ≅ B；f : A ⟶ X；CategoryTheory.Subobject.mk f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem lift_mk {α : Sort*} {X : C} (F : forall ⦃A : C⦄ (f : A ⟶ X) [Mono f], α) {h A}
+protected theorem lift_mk {α : Sort*} {X : C} (F : ∀ ⦃A : C⦄ (f : A ⟶ X) [Mono f], α) {h A}
     (f : A ⟶ X) [Mono f] : Subobject.lift F h (Subobject.mk f) = F f :=
   rfl
 
-/--
-Definition of `equivMonoOver` / `equivMonoOver` 的定义
+/-- The category of subobjects is equivalent to the `MonoOver` category. It is more convenient to
+use the former due to the partial order instance, but oftentimes it is easier to define structures
+on the latter. -/
+/-
+**CategoryTheory.Subobject.equivMonoOver** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Subobject`。
+形式化陈述：equivMonoOver (X : C) : Subobject X ≌ MonoOver X
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivMonoOver
-  signature: (X : C)
-  body: ThinSkeleton.equivalence _
-
-中文:
-定义 equivMonoOver
-  签名: (X : C)
-  定义体: ThinSkeleton.equivalence _
-
-Depends on / 依赖: ThinSkeleton, ThinSkeleton.equivalence, equivalence
+--- 原说明 ---
+The category of subobjects is equivalent to the `MonoOver` category. It is more 
+convenient to
+use the former due to the partial order instance, but oftentimes it is easier to
+ define structures
+on the latter.
 -/
 noncomputable def equivMonoOver (X : C) : Subobject X ≌ MonoOver X :=
   ThinSkeleton.equivalence _
 
-/--
-Definition of `representative` / `representative` 的定义
+/-- Use choice to pick a representative `MonoOver X` for each `Subobject X`.
+-/
+/-
+**CategoryTheory.Subobject.representative** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Subobject`。
+形式化陈述：representative {X : C} : Subobject X ⥤ MonoOver X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition representative
-  signature: {X : C}
-  body: (equivMonoOver X).functor
-
-中文:
-定义 representative
-  签名: {X : C}
-  定义体: (equivMonoOver X).functor
-
-Depends on / 依赖: equivMonoOver, functor
+--- 原说明 ---
+Use choice to pick a representative `MonoOver X` for each `Subobject X`.
 -/
 noncomputable def representative {X : C} : Subobject X ⥤ MonoOver X :=
   (equivMonoOver X).functor
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (representative (X := X)).IsEquivalence
-  body: (equivMonoOver X).isEquivalence_functor
-
-中文:
-实例 :
-  签名: (representative (X := X)).是等价
-  定义体: (equivMonoOver X).isEquivalence_functor
-
-Depends on / 依赖: IsEquivalence
+/-
+**CategoryTheory.Subobject.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Subobject`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (representative (X := X)).IsEquivalence :=
   (equivMonoOver X).isEquivalence_functor
 
-/--
-Definition of `representativeIso` / `representativeIso` 的定义
+/-- Starting with `A : MonoOver X`, we can take its equivalence class in `Subobject X`
+then pick an arbitrary representative using `representative.obj`.
+This is isomorphic (in `MonoOver X`) to the original `A`.
+-/
+/-
+**CategoryTheory.Subobject.representativeIso** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Subobject`。
+形式化陈述：representativeIso {X : C} (A : MonoOver X) : representative.obj ((toThinSk
+eleton _).obj A) ≅ A
+参数：A : MonoOver X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition representativeIso
-  signature: {X : C} (A : MonoOver X)
-  body: (equivMonoOver X).counitIso.app A
-
-@[simp]
-
-中文:
-定义 representativeIso
-  签名: {X : C} (A : MonoOver X)
-  定义体: (equivMonoOver X).counitIso.app A
-
-@[simp]
-
-Depends on / 依赖: counitIso, counitIso.app, equivMonoOver
+--- 原说明 ---
+Starting with `A : MonoOver X`, we can take its equivalence class in `Subobject 
+X`
+then pick an arbitrary representative using `representative.obj`.
+This is isomorphic (in `MonoOver X`) to the original `A`.
 -/
 noncomputable def representativeIso {X : C} (A : MonoOver X) :
     representative.obj ((toThinSkeleton _).obj A) ≅ A :=
   (equivMonoOver X).counitIso.app A
 
 @[simp]
-/--
-lemma `thinSkeleton_mk_representative_eq_self` / 引理 `thinSkeleton_mk_representative_eq_self`
-
-English:
-lemma thinSkeleton_mk_representative_eq_self
-  given: {X : C} (A : Subobject X)
-  proof: Subobject.skeletal _ ⟨((equivMonoOver X).unitIso.app _).symm⟩
-
-中文:
-引理 thinSkeleton_mk_representative_eq_self
-  条件: {X : C} (A : Subobject X)
-  证明: Subobject.skeletal _ ⟨((equivMonoOver X).unitIso.app _).symm⟩
-
-Depends on / 依赖: Subobject, Subobject.skeletal, equivMonoOver, skeletal, unitIso, unitIso.app
+/-
+**CategoryTheory.Subobject.thinSkeleton_mk_representative_eq_self** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.Subobject`。
+形式化陈述：thinSkeleton_mk_representative_eq_self {X : C} (A : Subobject X) : ThinSke
+leton.mk (representative.obj A) = A
+参数：A : Subobject X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Subobject.skeletal`：skeletal (X : C) : Skeletal (Subobjec
+t X)
 -/
 lemma thinSkeleton_mk_representative_eq_self {X : C} (A : Subobject X) :
     ThinSkeleton.mk (representative.obj A) = A :=
   Subobject.skeletal _ ⟨((equivMonoOver X).unitIso.app _).symm⟩
 
-/--
-Definition of `underlying` / `underlying` 的定义
+/-- Use choice to pick a representative underlying object in `C` for any `Subobject X`.
 
-English:
-definition underlying
-  signature: {X : C}
-  body: representative ⋙ MonoOver.forget _ ⋙ Over.forget _
+Prefer to use the coercion `P : C` rather than explicitly writing `underlying.obj P`.
+-/
+/-
+**CategoryTheory.Subobject.underlying** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Subobject`。
+形式化陈述：underlying {X : C} : Subobject X ⥤ C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 underlying
-  签名: {X : C}
-  定义体: representative ⋙ MonoOver.forget _ ⋙ Over.forget _
+--- 原说明 ---
+Use choice to pick a representative underlying object in `C` for any `Subobject 
+X`.
 
-Depends on / 依赖: MonoOver, MonoOver.forget, Over.forget, forget, representative
+Prefer to use the coercion `P : C` rather than explicitly writing `underlying.ob
+j P`.
 -/
 noncomputable def underlying {X : C} : Subobject X ⥤ C :=
   representative ⋙ MonoOver.forget _ ⋙ Over.forget _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeOut (Subobject X) C
-  body: underlying.obj Y
-
-中文:
-实例 :
-  签名: CoeOut (Subobject X) C
-  定义体: underlying.obj Y
-
-Depends on / 依赖: underlying, underlying.obj
+/-
+**CategoryTheory.Subobject.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Subobject`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeOut (Subobject X) C where coe Y := underlying.obj Y
 
-/--
-Definition of `underlyingIso` / `underlyingIso` 的定义
+/-- If we construct a `Subobject Y` from an explicit `f : X ⟶ Y` with `[Mono f]`,
+then pick an arbitrary choice of underlying object `(Subobject.mk f : C)` back in `C`,
+it is isomorphic (in `C`) to the original `X`.
+-/
+/-
+**CategoryTheory.Subobject.underlyingIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Subobject`。
+形式化陈述：underlyingIso {X Y : C} (f : X ⟶ Y) [Mono f] : (Subobject.mk f : C) ≅ X
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition underlyingIso
-  signature: {X Y : C} (f : X ⟶ Y) [Mono f]
-  body: (MonoOver.forget _ ⋙ Over.forget _).mapIso (representativeIso (MonoOver.mk f))
-
-中文:
-定义 underlyingIso
-  签名: {X Y : C} (f : X ⟶ Y) [单态射 f]
-  定义体: (MonoOver.forget _ ⋙ Over.forget _).mapIso (representativeIso (MonoOver.mk f))
-
-Depends on / 依赖: MonoOver, MonoOver.forget, MonoOver.mk, Over.forget, forget, mapIso, representativeIso
+--- 原说明 ---
+If we construct a `Subobject Y` from an explicit `f : X ⟶ Y` with `[Mono f]`,
+then pick an arbitrary choice of underlying object `(Subobject.mk f : C)` back i
+n `C`,
+it is isomorphic (in `C`) to the original `X`.
 -/
 noncomputable def underlyingIso {X Y : C} (f : X ⟶ Y) [Mono f] : (Subobject.mk f : C) ≅ X :=
   (MonoOver.forget _ ⋙ Over.forget _).mapIso (representativeIso (MonoOver.mk f))
 
-/--
-Definition of `arrow` / `arrow` 的定义
+/-- The morphism in `C` from the arbitrarily chosen underlying object to the ambient object.
+-/
+/-
+**CategoryTheory.Subobject.arrow** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Subob
+ject`。
+形式化陈述：arrow {X : C} (Y : Subobject X) : (Y : C) ⟶ X
+参数：Y : Subobject X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition arrow
-  signature: {X : C} (Y : Subobject X)
-  body: (representative.obj Y).obj.hom
-
-中文:
-定义 arrow
-  签名: {X : C} (Y : Subobject X)
-  定义体: (representative.obj Y).obj.hom
-
-Depends on / 依赖: obj.hom, representative, representative.obj
+--- 原说明 ---
+The morphism in `C` from the arbitrarily chosen underlying object to the ambient
+ object.
 -/
 noncomputable def arrow {X : C} (Y : Subobject X) : (Y : C) ⟶ X :=
   (representative.obj Y).obj.hom
-
-/--
-Instance `arrow_mono` / 实例 `arrow_mono`
-
-English:
-instance arrow_mono
-  signature: {X : C} (Y : Subobject X)
-  body: (representative.obj Y).property
-
-@[simp]
-
-中文:
-实例 arrow_mono
-  签名: {X : C} (Y : Subobject X)
-  定义体: (representative.obj Y).property
-
-@[simp]
-
-Depends on / 依赖: property, representative, representative.obj
+/-
+**CategoryTheory.Subobject.arrow_mono** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.
+Subobject`。
+形式化陈述：arrow_mono {X : C} (Y : Subobject X) : Mono Y.arrow
+参数：Y : Subobject X。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.FullSubcategory.property`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] {P : CategoryTheory.ObjectProperty C}  
+ (self : P.FullSubcategory), P self.obj
 -/
 instance arrow_mono {X : C} (Y : Subobject X) : Mono Y.arrow :=
   (representative.obj Y).property
 
 @[simp]
-/--
-theorem `arrow_congr` / 定理 `arrow_congr`
-
-English:
-theorem arrow_congr
-  given: {A : C} (X Y : Subobject A) (h : X = Y)
-  proof: by
-  induction h
-  simp
-
-@[simp]
-
-中文:
-定理 arrow_congr
-  条件: {A : C} (X Y : Subobject A) (h : X = Y)
-  证明: by
-  induction h
-  simp
-
-@[simp]
+/-
+**CategoryTheory.Subobject.arrow_congr** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Subobject`。
+形式化陈述：arrow_congr {A : C} (X Y : Subobject A) (h : X = Y) : eqToHom (congr_arg (
+fun X : Subobject A => (X : C)) h) ≫ Y.arrow = X.arrow
+参数：X Y : Subobject A；h : X = Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem arrow_congr {A : C} (X Y : Subobject A) (h : X = Y) :
     eqToHom (congr_arg (fun X : Subobject A => (X : C)) h) ≫ Y.arrow = X.arrow := by
@@ -479,114 +430,76 @@ theorem arrow_congr {A : C} (X Y : Subobject A) (h : X = Y) :
   simp
 
 @[simp]
-/--
-theorem `representative_coe` / 定理 `representative_coe`
-
-English:
-theorem representative_coe
-  given: (Y : Subobject X)
-  statement: (representative.obj Y : C) = (Y : C)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 representative_coe
-  条件: (Y : Subobject X)
-  结论: (representative.obj Y : C) = (Y : C)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Subobject.representative_coe** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Subobject`。
+形式化陈述：representative_coe (Y : Subobject X) : (representative.obj Y : C) = (Y : C
+)
+参数：Y : Subobject X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem representative_coe (Y : Subobject X) : (representative.obj Y : C) = (Y : C) :=
   rfl
 
 @[simp]
-/--
-theorem `representative_arrow` / 定理 `representative_arrow`
-
-English:
-theorem representative_arrow
-  given: (Y : Subobject X)
-  statement: (representative.obj Y).arrow = Y.arrow
-  proof: rfl
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 representative_arrow
-  条件: (Y : Subobject X)
-  结论: (representative.obj Y).arrow = Y.arrow
-  证明: rfl
-
-@[reassoc (attr := simp)]
+/-
+**CategoryTheory.Subobject.representative_arrow** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Subobject`。
+形式化陈述：representative_arrow (Y : Subobject X) : (representative.obj Y).arrow = Y.
+arrow
+参数：Y : Subobject X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem representative_arrow (Y : Subobject X) : (representative.obj Y).arrow = Y.arrow :=
   rfl
 
 @[reassoc (attr := simp)]
-/--
-theorem `underlying_arrow` / 定理 `underlying_arrow`
-
-English:
-theorem underlying_arrow
-  given: {X : C} {Y Z : Subobject X} (f : Y ⟶ Z)
-  proof: Over.w (representative.map f).hom
-
-@[reassoc (attr := simp), elementwise (attr := simp)]
-
-中文:
-定理 underlying_arrow
-  条件: {X : C} {Y Z : Subobject X} (f : Y ⟶ Z)
-  证明: Over.w (representative.map f).hom
-
-@[reassoc (attr := simp), elementwise (attr := simp)]
-
-Depends on / 依赖: Over.w, representative, representative.map
+/-
+**CategoryTheory.Subobject.underlying_arrow** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Subobject`。
+形式化陈述：underlying_arrow {X : C} {Y Z : Subobject X} (f : Y ⟶ Z) : underlying.map 
+f ≫ arrow Z = arrow Y
+参数：f : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Over.w`：w : φ.left ≫ g.hom = f.hom
 -/
 theorem underlying_arrow {X : C} {Y Z : Subobject X} (f : Y ⟶ Z) :
     underlying.map f ≫ arrow Z = arrow Y :=
   Over.w (representative.map f).hom
 
 @[reassoc (attr := simp), elementwise (attr := simp)]
-/--
-theorem `underlyingIso_arrow` / 定理 `underlyingIso_arrow`
-
-English:
-theorem underlyingIso_arrow
-  given: {X Y : C} (f : X ⟶ Y) [Mono f]
-  proof: Over.w _
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 underlyingIso_arrow
-  条件: {X Y : C} (f : X ⟶ Y) [单态射 f]
-  证明: Over.w _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Over.w
+/-
+**CategoryTheory.Subobject.underlyingIso_arrow** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Subobject`。
+形式化陈述：underlyingIso_arrow {X Y : C} (f : X ⟶ Y) [Mono f] : (underlyingIso f).inv
+ ≫ (Subobject.mk f).arrow = f
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Over.w`：w : φ.left ≫ g.hom = f.hom
 -/
 theorem underlyingIso_arrow {X Y : C} (f : X ⟶ Y) [Mono f] :
     (underlyingIso f).inv ≫ (Subobject.mk f).arrow = f :=
   Over.w _
 
 @[reassoc (attr := simp)]
-/--
-theorem `underlyingIso_hom_comp_eq_mk` / 定理 `underlyingIso_hom_comp_eq_mk`
-
-English:
-theorem underlyingIso_hom_comp_eq_mk
-  given: {X Y : C} (f : X ⟶ Y) [Mono f]
-  proof: (Iso.eq_inv_comp _).1 (underlyingIso_arrow f).symm
-
-中文:
-定理 underlyingIso_hom_comp_eq_mk
-  条件: {X Y : C} (f : X ⟶ Y) [单态射 f]
-  证明: (Iso.eq_inv_comp _).1 (underlyingIso_arrow f).symm
-
-Depends on / 依赖: Iso.eq_inv_comp, eq_inv_comp, underlyingIso_arrow
+/-
+**CategoryTheory.Subobject.underlyingIso_hom_comp_eq_mk** 是 Mathlib 中的一个定理，位于命名空
+间 `CategoryTheory.Subobject`。
+形式化陈述：underlyingIso_hom_comp_eq_mk {X Y : C} (f : X ⟶ Y) [Mono f] : (underlyingI
+so f).hom ≫ f = (mk f).arrow
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.Iso.eq_inv_comp`：eq_inv_comp (α : X ≅ Y) {f : X ⟶ Z} {g :
+ Y ⟶ Z} : g = α.inv ≫ f ↔ α.hom ≫ g = f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Subobject.underlyingIso_arrow`：underlyingIso_arrow {X Y :
+ C} (f : X ⟶ Y) [Mono f] : (underlyingIso f).inv ≫ (Subobject.mk f).arrow = f
 -/
 theorem underlyingIso_hom_comp_eq_mk {X Y : C} (f : X ⟶ Y) [Mono f] :
     (underlyingIso f).hom ≫ f = (mk f).arrow :=
@@ -595,301 +508,369 @@ theorem underlyingIso_hom_comp_eq_mk {X Y : C} (f : X ⟶ Y) [Mono f] :
 /-- Two morphisms into a subobject are equal exactly if
 the morphisms into the ambient object are equal -/
 @[ext]
-/--
-theorem `eq_of_comp_arrow_eq` / 定理 `eq_of_comp_arrow_eq`
+/-
+**CategoryTheory.Subobject.eq_of_comp_arrow_eq** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Subobject`。
+形式化陈述：eq_of_comp_arrow_eq {X Y : C} {P : Subobject Y} {f g : X ⟶ P} (h : f ≫ P.a
+rrow = g ≫ P.arrow) : f = g
+参数：h : f ≫ P.arrow = g ≫ P.arrow。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
 
-English:
-theorem eq_of_comp_arrow_eq
-  statement: {X Y : C} {P : Subobject Y} {f g : X ⟶ P}
-  proof: (cancel_mono P.arrow).mp h
-
-中文:
-定理 eq_of_comp_arrow_eq
-  结论: {X Y : C} {P : Subobject Y} {f g : X ⟶ P}
-  证明: (cancel_mono P.arrow).mp h
-
-Depends on / 依赖: P.arrow, cancel_mono
+--- 原说明 ---
+Two morphisms into a subobject are equal exactly if
+the morphisms into the ambient object are equal
 -/
 theorem eq_of_comp_arrow_eq {X Y : C} {P : Subobject Y} {f g : X ⟶ P}
     (h : f ≫ P.arrow = g ≫ P.arrow) : f = g :=
   (cancel_mono P.arrow).mp h
-
-/--
-theorem `mk_le_mk_of_comm` / 定理 `mk_le_mk_of_comm`
-
-English:
-theorem mk_le_mk_of_comm
-  statement: {B A₁ A₂ : C} {f₁ : A₁ ⟶ B} {f₂ : A₂ ⟶ B} [Mono f₁] [Mono f₂] (g : A₁ ⟶ A₂)
-  proof: ⟨MonoOver.homMk _ w⟩
-
-@[simp]
-
-中文:
-定理 mk_le_mk_of_comm
-  结论: {B A₁ A₂ : C} {f₁ : A₁ ⟶ B} {f₂ : A₂ ⟶ B} [单态射 f₁] [单态射 f₂] (g : A₁ ⟶ A₂)
-  证明: ⟨MonoOver.homMk _ w⟩
-
-@[simp]
-
-Depends on / 依赖: MonoOver, MonoOver.homMk
+/-
+**CategoryTheory.Subobject.mk_le_mk_of_comm** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Subobject`。
+形式化陈述：mk_le_mk_of_comm {B A₁ A₂ : C} {f₁ : A₁ ⟶ B} {f₂ : A₂ ⟶ B} [Mono f₁] [Mono
+ f₂] (g : A₁ ⟶ A₂) (w : g ≫ f₂ = f₁) : mk f₁ <= mk f₂
+参数：g : A₁ ⟶ A₂；w : g ≫ f₂ = f₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_le_mk_of_comm {B A₁ A₂ : C} {f₁ : A₁ ⟶ B} {f₂ : A₂ ⟶ B} [Mono f₁] [Mono f₂] (g : A₁ ⟶ A₂)
-    (w : g ≫ f₂ = f₁) : mk f₁ <= mk f₂ :=
+    (w : g ≫ f₂ = f₁) : mk f₁ ≤ mk f₂ :=
   ⟨MonoOver.homMk _ w⟩
 
 @[simp]
-/--
-theorem `mk_arrow` / 定理 `mk_arrow`
-
-English:
-theorem mk_arrow
-  given: (P : Subobject X)
-  statement: mk P.arrow = P
-  proof: Quotient.inductionOn' P fun Q => by
-    obtain ⟨e⟩ := @Quotient.mk_out' _ (isIsomorphicSetoid _) Q
-    exact Quotient.sound' ⟨MonoOver.isoMk (Iso.refl _) ≪≫ e⟩
-
-中文:
-定理 mk_arrow
-  条件: (P : Subobject X)
-  结论: mk P.arrow = P
-  证明: Quotient.inductionOn' P fun Q => by
-    obtain ⟨e⟩ := @Quotient.mk_out' _ (isIsomorphicSetoid _) Q
-    exact Quotient.sound' ⟨MonoOver.isoMk (Iso.refl _) ≪≫ e⟩
-
-Depends on / 依赖: Iso.refl, MonoOver, MonoOver.isoMk, Quotient, Quotient.inductionOn, Quotient.mk_out, Quotient.sound, inductionOn, isIsomorphicSetoid, mk_out
+/-
+**CategoryTheory.Subobject.mk_arrow** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Su
+bobject`。
+形式化陈述：mk_arrow (P : Subobject X) : mk P.arrow = P
+参数：P : Subobject X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
+· 使用定理 `Quotient.mk_out'`：mk_out' (a : α) : s₁ (Quotient.mk'' a : Quotient s₁).o
+ut a
+· 使用定理 `Quotient.sound'`：sound' {a b : α} : s₁ a b -> @Quotient.mk'' α s₁ a = Qu
+otient.mk'' b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem mk_arrow (P : Subobject X) : mk P.arrow = P :=
   Quotient.inductionOn' P fun Q => by
     obtain ⟨e⟩ := @Quotient.mk_out' _ (isIsomorphicSetoid _) Q
     exact Quotient.sound' ⟨MonoOver.isoMk (Iso.refl _) ≪≫ e⟩
-
-/--
-theorem `le_of_comm` / 定理 `le_of_comm`
-
-English:
-theorem le_of_comm
-  given: {B : C} {X Y : Subobject B} (f : (X : C) ⟶ (Y : C)) (w : f ≫ Y.arrow = X.arrow)
-  proof: by
-  convert! mk_le_mk_of_comm _ w <;> simp
-
-中文:
-定理 le_of_comm
-  条件: {B : C} {X Y : Subobject B} (f : (X : C) ⟶ (Y : C)) (w : f ≫ Y.arrow = X.arrow)
-  证明: by
-  convert! mk_le_mk_of_comm _ w <;> simp
-
-Depends on / 依赖: convert, mk_le_mk_of_comm
+/-
+**CategoryTheory.Subobject.le_of_comm** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Subobject`。
+形式化陈述：le_of_comm {B : C} {X Y : Subobject B} (f : (X : C) ⟶ (Y : C)) (w : f ≫ Y.
+arrow = X.arrow) : X <= Y
+参数：f : (X : C) ⟶ (Y : C)；w : f ≫ Y.arrow = X.arrow。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Subobject.mk_arrow`：mk_arrow (P : Subobject X) : mk P.arr
+ow = P
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Subobject.mk_le_mk_of_comm`：mk_le_mk_of_comm {B A₁ A₂ : C
+} {f₁ : A₁ ⟶ B} {f₂ : A₂ ⟶ B} [Mono f₁] [Mono f₂] (g : A₁ ⟶ A₂) (w : g ≫ f₂ = f₁
+) : mk f₁ <= mk f₂
 -/
 theorem le_of_comm {B : C} {X Y : Subobject B} (f : (X : C) ⟶ (Y : C)) (w : f ≫ Y.arrow = X.arrow) :
-    X <= Y := by
+    X ≤ Y := by
   convert! mk_le_mk_of_comm _ w <;> simp
-
-/--
-theorem `le_mk_of_comm` / 定理 `le_mk_of_comm`
-
-English:
-theorem le_mk_of_comm
-  statement: {B A : C} {X : Subobject B} {f : A ⟶ B} [Mono f] (g : (X : C) ⟶ A)
-  proof: le_of_comm (g ≫ (underlyingIso f).inv) by simp [w]
-
-中文:
-定理 le_mk_of_comm
-  结论: {B A : C} {X : Subobject B} {f : A ⟶ B} [单态射 f] (g : (X : C) ⟶ A)
-  证明: le_of_comm (g ≫ (underlyingIso f).inv) by simp [w]
-
-Depends on / 依赖: le_of_comm, underlyingIso
+/-
+**CategoryTheory.Subobject.le_mk_of_comm** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Subobject`。
+形式化陈述：le_mk_of_comm {B A : C} {X : Subobject B} {f : A ⟶ B} [Mono f] (g : (X : C
+) ⟶ A) (w : g ≫ f = X.arrow) : X <= mk f
+参数：g : (X : C) ⟶ A；w : g ≫ f = X.arrow。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Subobject.le_of_comm`：le_of_comm {B : C} {X Y : Subobject
+ B} (f : (X : C) ⟶ (Y : C)) (w : f ≫ Y.arrow = X.arrow) : X <= Y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Subobject.underlyingIso_arrow`：underlyingIso_arrow {X Y :
+ C} (f : X ⟶ Y) [Mono f] : (underlyingIso f).inv ≫ (Subobject.mk f).arrow = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem le_mk_of_comm {B A : C} {X : Subobject B} {f : A ⟶ B} [Mono f] (g : (X : C) ⟶ A)
-    (w : g ≫ f = X.arrow) : X <= mk f :=
-le_of_comm (g ≫ (underlyingIso f).inv) by simp [w]
-
-/--
-theorem `mk_le_of_comm` / 定理 `mk_le_of_comm`
-
-English:
-theorem mk_le_of_comm
-  statement: {B A : C} {X : Subobject B} {f : A ⟶ B} [Mono f] (g : A ⟶ (X : C))
-  proof: le_of_comm ((underlyingIso f).hom ≫ g) by simp [w]
-
-中文:
-定理 mk_le_of_comm
-  结论: {B A : C} {X : Subobject B} {f : A ⟶ B} [单态射 f] (g : A ⟶ (X : C))
-  证明: le_of_comm ((underlyingIso f).hom ≫ g) by simp [w]
-
-Depends on / 依赖: le_of_comm, underlyingIso
+    (w : g ≫ f = X.arrow) : X ≤ mk f :=
+  le_of_comm (g ≫ (underlyingIso f).inv) <| by simp [w]
+/-
+**CategoryTheory.Subobject.mk_le_of_comm** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Subobject`。
+形式化陈述：mk_le_of_comm {B A : C} {X : Subobject B} {f : A ⟶ B} [Mono f] (g : A ⟶ (X
+ : C)) (w : g ≫ X.arrow = f) : mk f <= X
+参数：g : A ⟶ (X : C)；w : g ≫ X.arrow = f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Subobject.le_of_comm`：le_of_comm {B : C} {X Y : Subobject
+ B} (f : (X : C) ⟶ (Y : C)) (w : f ≫ Y.arrow = X.arrow) : X <= Y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Subobject.underlyingIso_hom_comp_eq_mk`：underlyingIso_hom
+_comp_eq_mk {X Y : C} (f : X ⟶ Y) [Mono f] : (underlyingIso f).hom ≫ f = (mk f).
+arrow
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem mk_le_of_comm {B A : C} {X : Subobject B} {f : A ⟶ B} [Mono f] (g : A ⟶ (X : C))
-    (w : g ≫ X.arrow = f) : mk f <= X :=
-le_of_comm ((underlyingIso f).hom ≫ g) by simp [w]
+    (w : g ≫ X.arrow = f) : mk f ≤ X :=
+  le_of_comm ((underlyingIso f).hom ≫ g) <| by simp [w]
 
 /-- To show that two subobjects are equal, it suffices to exhibit an isomorphism commuting with
 the arrows. -/
 @[ext (iff := false)]
-/--
-theorem `eq_of_comm` / 定理 `eq_of_comm`
+/-
+**CategoryTheory.Subobject.eq_of_comm** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Subobject`。
+形式化陈述：eq_of_comm {B : C} {X Y : Subobject B} (f : (X : C) ≅ (Y : C)) (w : f.hom 
+≫ Y.arrow = X.arrow) : X = Y
+参数：f : (X : C) ≅ (Y : C)；w : f.hom ≫ Y.arrow = X.arrow。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `CategoryTheory.Subobject.le_of_comm`：le_of_comm {B : C} {X Y : Subobject
+ B} (f : (X : C) ⟶ (Y : C)) (w : f ≫ Y.arrow = X.arrow) : X <= Y
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `CategoryTheory.Iso.inv_comp_eq`：inv_comp_eq (α : X ≅ Y) {f : X ⟶ Z} {g :
+ Y ⟶ Z} : α.inv ≫ f = g ↔ f = α.hom ≫ g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem eq_of_comm
-  statement: {B : C} {X Y : Subobject B} (f : (X : C) ≅ (Y : C))
-  proof: le_antisymm (le_of_comm f.hom w) le_of_comm f.inv f.inv_comp_eq.2 w.symm
-
-中文:
-定理 eq_of_comm
-  结论: {B : C} {X Y : Subobject B} (f : (X : C) ≅ (Y : C))
-  证明: le_antisymm (le_of_comm f.hom w) le_of_comm f.inv f.inv_comp_eq.2 w.symm
-
-Depends on / 依赖: f.hom, f.inv, f.inv_comp_eq, inv_comp_eq, le_antisymm, le_of_comm, w.symm
+--- 原说明 ---
+To show that two subobjects are equal, it suffices to exhibit an isomorphism com
+muting with
+the arrows.
 -/
 theorem eq_of_comm {B : C} {X Y : Subobject B} (f : (X : C) ≅ (Y : C))
     (w : f.hom ≫ Y.arrow = X.arrow) : X = Y :=
-le_antisymm (le_of_comm f.hom w) le_of_comm f.inv f.inv_comp_eq.2 w.symm
+  le_antisymm (le_of_comm f.hom w) <| le_of_comm f.inv <| f.inv_comp_eq.2 w.symm
 
-/--
-theorem `eq_mk_of_comm` / 定理 `eq_mk_of_comm`
+/-- To show that two subobjects are equal, it suffices to exhibit an isomorphism commuting with
+the arrows. -/
+/-
+**CategoryTheory.Subobject.eq_mk_of_comm** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Subobject`。
+形式化陈述：eq_mk_of_comm {B A : C} {X : Subobject B} (f : A ⟶ B) [Mono f] (i : (X : C
+) ≅ A) (w : i.hom ≫ f = X.arrow) : X = mk f
+参数：f : A ⟶ B；i : (X : C) ≅ A；w : i.hom ≫ f = X.arrow。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Subobject.eq_of_comm`：eq_of_comm {B : C} {X Y : Subobject
+ B} (f : (X : C) ≅ (Y : C)) (w : f.hom ≫ Y.arrow = X.arrow) : X = Y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Subobject.underlyingIso_arrow`：underlyingIso_arrow {X Y :
+ C} (f : X ⟶ Y) [Mono f] : (underlyingIso f).inv ≫ (Subobject.mk f).arrow = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem eq_mk_of_comm
-  statement: {B A : C} {X : Subobject B} (f : A ⟶ B) [Mono f] (i : (X : C) ≅ A)
-  proof: eq_of_comm (i.trans (underlyingIso f).symm) by simp [w]
-
-中文:
-定理 eq_mk_of_comm
-  结论: {B A : C} {X : Subobject B} (f : A ⟶ B) [单态射 f] (i : (X : C) ≅ A)
-  证明: eq_of_comm (i.trans (underlyingIso f).symm) by simp [w]
-
-Depends on / 依赖: eq_of_comm, i.trans, underlyingIso
+--- 原说明 ---
+To show that two subobjects are equal, it suffices to exhibit an isomorphism com
+muting with
+the arrows.
 -/
 theorem eq_mk_of_comm {B A : C} {X : Subobject B} (f : A ⟶ B) [Mono f] (i : (X : C) ≅ A)
     (w : i.hom ≫ f = X.arrow) : X = mk f :=
-eq_of_comm (i.trans (underlyingIso f).symm) by simp [w]
+  eq_of_comm (i.trans (underlyingIso f).symm) <| by simp [w]
 
-/--
-theorem `mk_eq_of_comm` / 定理 `mk_eq_of_comm`
+/-- To show that two subobjects are equal, it suffices to exhibit an isomorphism commuting with
+the arrows. -/
+/-
+**CategoryTheory.Subobject.mk_eq_of_comm** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Subobject`。
+形式化陈述：mk_eq_of_comm {B A : C} {X : Subobject B} (f : A ⟶ B) [Mono f] (i : A ≅ (X
+ : C)) (w : i.hom ≫ X.arrow = f) : mk f = X
+参数：f : A ⟶ B；i : A ≅ (X : C)；w : i.hom ≫ X.arrow = f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Subobject.eq_mk_of_comm`：eq_mk_of_comm {B A : C} {X : Sub
+object B} (f : A ⟶ B) [Mono f] (i : (X : C) ≅ A) (w : i.hom ≫ f = X.arrow) : X =
+ mk f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.symm_hom`：symm_hom (α : X ≅ Y) : α.symm.hom = α.inv
+· 使用定理 `CategoryTheory.Iso.inv_comp_eq`：inv_comp_eq (α : X ≅ Y) {f : X ⟶ Z} {g :
+ Y ⟶ Z} : α.inv ≫ f = g ↔ f = α.hom ≫ g
 
-English:
-theorem mk_eq_of_comm
-  statement: {B A : C} {X : Subobject B} (f : A ⟶ B) [Mono f] (i : A ≅ (X : C))
-  proof: Eq.symm eq_mk_of_comm _ i.symm by rw [Iso.symm_hom, Iso.inv_comp_eq, w]
-
-中文:
-定理 mk_eq_of_comm
-  结论: {B A : C} {X : Subobject B} (f : A ⟶ B) [单态射 f] (i : A ≅ (X : C))
-  证明: Eq.symm eq_mk_of_comm _ i.symm by rw [Iso.symm_hom, Iso.inv_comp_eq, w]
-
-Depends on / 依赖: Eq.symm, Iso.inv_comp_eq, Iso.symm_hom, eq_mk_of_comm, i.symm, inv_comp_eq, symm_hom
+--- 原说明 ---
+To show that two subobjects are equal, it suffices to exhibit an isomorphism com
+muting with
+the arrows.
 -/
 theorem mk_eq_of_comm {B A : C} {X : Subobject B} (f : A ⟶ B) [Mono f] (i : A ≅ (X : C))
     (w : i.hom ≫ X.arrow = f) : mk f = X :=
-Eq.symm eq_mk_of_comm _ i.symm by rw [Iso.symm_hom, Iso.inv_comp_eq, w]
+  Eq.symm <| eq_mk_of_comm _ i.symm <| by rw [Iso.symm_hom, Iso.inv_comp_eq, w]
 
-/--
-theorem `mk_eq_mk_of_comm` / 定理 `mk_eq_mk_of_comm`
+/-- To show that two subobjects are equal, it suffices to exhibit an isomorphism commuting with
+the arrows. -/
+/-
+**CategoryTheory.Subobject.mk_eq_mk_of_comm** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Subobject`。
+形式化陈述：mk_eq_mk_of_comm {B A₁ A₂ : C} (f : A₁ ⟶ B) (g : A₂ ⟶ B) [Mono f] [Mono g]
+ (i : A₁ ≅ A₂) (w : i.hom ≫ g = f) : mk f = mk g
+参数：f : A₁ ⟶ B；g : A₂ ⟶ B；i : A₁ ≅ A₂；w : i.hom ≫ g = f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Subobject.eq_mk_of_comm`：eq_mk_of_comm {B A : C} {X : Sub
+object B} (f : A ⟶ B) [Mono f] (i : (X : C) ≅ A) (w : i.hom ≫ f = X.arrow) : X =
+ mk f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Subobject.underlyingIso_hom_comp_eq_mk`：underlyingIso_hom
+_comp_eq_mk {X Y : C} (f : X ⟶ Y) [Mono f] : (underlyingIso f).hom ≫ f = (mk f).
+arrow
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem mk_eq_mk_of_comm
-  statement: {B A₁ A₂ : C} (f : A₁ ⟶ B) (g : A₂ ⟶ B) [Mono f] [Mono g] (i : A₁ ≅ A₂)
-  proof: eq_mk_of_comm _ ((underlyingIso f).trans i) by simp [w]
-
-中文:
-定理 mk_eq_mk_of_comm
-  结论: {B A₁ A₂ : C} (f : A₁ ⟶ B) (g : A₂ ⟶ B) [单态射 f] [单态射 g] (i : A₁ ≅ A₂)
-  证明: eq_mk_of_comm _ ((underlyingIso f).trans i) by simp [w]
-
-Depends on / 依赖: eq_mk_of_comm, underlyingIso
+--- 原说明 ---
+To show that two subobjects are equal, it suffices to exhibit an isomorphism com
+muting with
+the arrows.
 -/
 theorem mk_eq_mk_of_comm {B A₁ A₂ : C} (f : A₁ ⟶ B) (g : A₂ ⟶ B) [Mono f] [Mono g] (i : A₁ ≅ A₂)
     (w : i.hom ≫ g = f) : mk f = mk g :=
-eq_mk_of_comm _ ((underlyingIso f).trans i) by simp [w]
-
-/--
-lemma `mk_surjective` / 引理 `mk_surjective`
-
-English:
-lemma mk_surjective
-  given: {X : C} (S : Subobject X)
-  proof: ⟨_, S.arrow, inferInstance, by simp⟩
-
-中文:
-引理 mk_surjective
-  条件: {X : C} (S : Subobject X)
-  证明: ⟨_, S.arrow, inferInstance, by simp⟩
-
-Depends on / 依赖: S.arrow
+  eq_mk_of_comm _ ((underlyingIso f).trans i) <| by simp [w]
+/-
+**CategoryTheory.Subobject.mk_surjective** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Subobject`。
+形式化陈述：mk_surjective {X : C} (S : Subobject X) : exists (A : C) (i : A ⟶ X) (_ : 
+Mono i), S = Subobject.mk i
+参数：S : Subobject X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Subobject.mk_arrow`：mk_arrow (P : Subobject X) : mk P.arr
+ow = P
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mk_surjective {X : C} (S : Subobject X) :
-    exists (A : C) (i : A ⟶ X) (_ : Mono i), S = Subobject.mk i :=
+    ∃ (A : C) (i : A ⟶ X) (_ : Mono i), S = Subobject.mk i :=
   ⟨_, S.arrow, inferInstance, by simp⟩
 
 -- We make `X` and `Y` explicit arguments here so that when `ofLE` appears in goal statements
 -- it is possible to see its source and target
 -- (`h` will just display as `_`, because it is in `Prop`).
-/--
-Definition of `ofLE` / `ofLE` 的定义
+/-- An inequality of subobjects is witnessed by some morphism between the corresponding objects. -/
+/-
+**CategoryTheory.Subobject.ofLE** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Subobj
+ect`。
+形式化陈述：ofLE {B : C} (X Y : Subobject B) (h : X <= Y) : (X : C) ⟶ (Y : C)
+参数：X Y : Subobject B；h : X <= Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofLE
-  signature: {B : C} (X Y : Subobject B) (h : X <= Y)
-  body: underlying.map h.hom
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 ofLE
-  签名: {B : C} (X Y : Subobject B) (h : X <= Y)
-  定义体: underlying.map h.hom
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: h.hom, underlying, underlying.map
+--- 原说明 ---
+An inequality of subobjects is witnessed by some morphism between the correspond
+ing objects.
 -/
-def ofLE {B : C} (X Y : Subobject B) (h : X <= Y) : (X : C) ⟶ (Y : C) :=
-underlying.map h.hom
+def ofLE {B : C} (X Y : Subobject B) (h : X ≤ Y) : (X : C) ⟶ (Y : C) :=
+  underlying.map <| h.hom
 
 @[reassoc (attr := simp)]
-/--
-theorem `ofLE_arrow` / 定理 `ofLE_arrow`
-
-English:
-theorem ofLE_arrow
-  given: {B : C} {X Y : Subobject B} (h : X <= Y)
-  statement: ofLE X Y h ≫ Y.arrow = X.arrow
-  proof: underlying_arrow _
-
-中文:
-定理 ofLE_arrow
-  条件: {B : C} {X Y : Subobject B} (h : X <= Y)
-  结论: ofLE X Y h ≫ Y.arrow = X.arrow
-  证明: underlying_arrow _
-
-Depends on / 依赖: underlying_arrow
+/-
+**CategoryTheory.Subobject.ofLE_arrow** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Subobject`。
+形式化陈述：ofLE_arrow {B : C} {X Y : Subobject B} (h : X <= Y) : ofLE X Y h ≫ Y.arrow
+ = X.arrow
+参数：h : X <= Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Subobject.underlying_arrow`：underlying_arrow {X : C} {Y Z
+ : Subobject X} (f : Y ⟶ Z) : underlying.map f ≫ arrow Z = arrow Y
 -/
-theorem ofLE_arrow {B : C} {X Y : Subobject B} (h : X <= Y) : ofLE X Y h ≫ Y.arrow = X.arrow :=
+theorem ofLE_arrow {B : C} {X Y : Subobject B} (h : X ≤ Y) : ofLE X Y h ≫ Y.arrow = X.arrow :=
   underlying_arrow _
-
-instance {B : C} (X Y : Subobject B) (h : X <= Y) : Mono (ofLE X Y h) := by
+/-
+**CategoryTheory.Subobject.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Subobject`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {B : C} (X Y : Subobject B) (h : X ≤ Y) : Mono (ofLE X Y h) := by
   fconstructor
   intro Z f g w
   replace w := w =≫ Y.arrow
   ext
   simpa using w
-
-/--
-theorem `ofLE_mk_le_mk_of_comm` / 定理 `ofLE_mk_le_mk_of_comm`
-
-English:
-theorem ofLE_mk_le_mk_of_comm
-  statement: {B A₁ A₂ : C} {f₁ : A₁ ⟶ B} {f₂ : A₂ ⟶ B} [Mono f₁] [Mono f₂]
-  proof: by
-  ext
-  simp [w]
-
-中文:
-定理 ofLE_mk_le_mk_of_comm
-  结论: {B A₁ A₂ : C} {f₁ : A₁ ⟶ B} {f₂ : A₂ ⟶ B} [单态射 f₁] [单态射 f₂]
-  证明: by
-  ext
-  simp [w]
+/-
+**CategoryTheory.Subobject.ofLE_mk_le_mk_of_comm** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Subobject`。
+形式化陈述：ofLE_mk_le_mk_of_comm {B A₁ A₂ : C} {f₁ : A₁ ⟶ B} {f₂ : A₂ ⟶ B} [Mono f₁] 
+[Mono f₂] (g : A₁ ⟶ A₂) (w : g ≫ f₂ = f₁) : ofLE _ _ (mk_le_mk_of_comm g w) = (u
+nderlyingIso _).hom ≫ g ≫ (underlyingIso _).inv
+参数：g : A₁ ⟶ A₂；w : g ≫ f₂ = f₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Subobject.eq_of_comp_arrow_eq`：eq_of_comp_arrow_eq {X Y :
+ C} {P : Subobject Y} {f g : X ⟶ P} (h : f ≫ P.arrow = g ≫ P.arrow) : f = g
+· 使用定理 `CategoryTheory.Subobject.mk_le_mk_of_comm`：mk_le_mk_of_comm {B A₁ A₂ : C
+} {f₁ : A₁ ⟶ B} {f₂ : A₂ ⟶ B} [Mono f₁] [Mono f₂] (g : A₁ ⟶ A₂) (w : g ≫ f₂ = f₁
+) : mk f₁ <= mk f₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Subobject.ofLE_arrow`：ofLE_arrow {B : C} {X Y : Subobject
+ B} (h : X <= Y) : ofLE X Y h ≫ Y.arrow = X.arrow
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Subobject.underlyingIso_arrow`：underlyingIso_arrow {X Y :
+ C} (f : X ⟶ Y) [Mono f] : (underlyingIso f).inv ≫ (Subobject.mk f).arrow = f
+· 使用定理 `CategoryTheory.Subobject.underlyingIso_hom_comp_eq_mk`：underlyingIso_hom
+_comp_eq_mk {X Y : C} (f : X ⟶ Y) [Mono f] : (underlyingIso f).hom ≫ f = (mk f).
+arrow
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem ofLE_mk_le_mk_of_comm {B A₁ A₂ : C} {f₁ : A₁ ⟶ B} {f₂ : A₂ ⟶ B} [Mono f₁] [Mono f₂]
     (g : A₁ ⟶ A₂) (w : g ≫ f₂ = f₁) :
@@ -897,436 +878,477 @@ theorem ofLE_mk_le_mk_of_comm {B A₁ A₂ : C} {f₁ : A₁ ⟶ B} {f₂ : A₂
   ext
   simp [w]
 
-/--
-Definition of `ofLEMk` / `ofLEMk` 的定义
+/-- An inequality of subobjects is witnessed by some morphism between the corresponding objects. -/
+/-
+**CategoryTheory.Subobject.ofLEMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Subo
+bject`。
+形式化陈述：ofLEMk {B A : C} (X : Subobject B) (f : A ⟶ B) [Mono f] (h : X <= mk f) : 
+(X : C) ⟶ A
+参数：X : Subobject B；f : A ⟶ B；h : X <= mk f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofLEMk
-  signature: {B A : C} (X : Subobject B) (f : A ⟶ B) [Mono f] (h : X <= mk f)
-  body: ofLE X (mk f) h ≫ (underlyingIso f).hom
-
-中文:
-定义 ofLEMk
-  签名: {B A : C} (X : Subobject B) (f : A ⟶ B) [单态射 f] (h : X <= mk f)
-  定义体: ofLE X (mk f) h ≫ (underlyingIso f).hom
-
-Depends on / 依赖: underlyingIso
+--- 原说明 ---
+An inequality of subobjects is witnessed by some morphism between the correspond
+ing objects.
 -/
-def ofLEMk {B A : C} (X : Subobject B) (f : A ⟶ B) [Mono f] (h : X <= mk f) : (X : C) ⟶ A :=
+def ofLEMk {B A : C} (X : Subobject B) (f : A ⟶ B) [Mono f] (h : X ≤ mk f) : (X : C) ⟶ A :=
   ofLE X (mk f) h ≫ (underlyingIso f).hom
-
-instance {B A : C} (X : Subobject B) (f : A ⟶ B) [Mono f] (h : X <= mk f) :
+/-
+**CategoryTheory.Subobject.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Subobject`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {B A : C} (X : Subobject B) (f : A ⟶ B) [Mono f] (h : X ≤ mk f) :
     Mono (ofLEMk X f h) := by
   dsimp only [ofLEMk]
   infer_instance
 
 @[simp]
-/--
-theorem `ofLEMk_comp` / 定理 `ofLEMk_comp`
-
-English:
-theorem ofLEMk_comp
-  given: {B A : C} {X : Subobject B} {f : A ⟶ B} [Mono f] (h : X <= mk f)
-  proof: by simp [ofLEMk]
-
-中文:
-定理 ofLEMk_comp
-  条件: {B A : C} {X : Subobject B} {f : A ⟶ B} [单态射 f] (h : X <= mk f)
-  证明: by simp [ofLEMk]
-
-Depends on / 依赖: ofLEMk
+/-
+**CategoryTheory.Subobject.ofLEMk_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Subobject`。
+形式化陈述：ofLEMk_comp {B A : C} {X : Subobject B} {f : A ⟶ B} [Mono f] (h : X <= mk 
+f) : ofLEMk X f h ≫ f = X.arrow
+参数：h : X <= mk f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Subobject.underlyingIso_hom_comp_eq_mk`：underlyingIso_hom
+_comp_eq_mk {X Y : C} (f : X ⟶ Y) [Mono f] : (underlyingIso f).hom ≫ f = (mk f).
+arrow
+· 使用定理 `CategoryTheory.Subobject.ofLE_arrow`：ofLE_arrow {B : C} {X Y : Subobject
+ B} (h : X <= Y) : ofLE X Y h ≫ Y.arrow = X.arrow
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ofLEMk_comp {B A : C} {X : Subobject B} {f : A ⟶ B} [Mono f] (h : X <= mk f) :
+theorem ofLEMk_comp {B A : C} {X : Subobject B} {f : A ⟶ B} [Mono f] (h : X ≤ mk f) :
     ofLEMk X f h ≫ f = X.arrow := by simp [ofLEMk]
 
-/--
-Definition of `ofMkLE` / `ofMkLE` 的定义
+/-- An inequality of subobjects is witnessed by some morphism between the corresponding objects. -/
+/-
+**CategoryTheory.Subobject.ofMkLE** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Subo
+bject`。
+形式化陈述：ofMkLE {B A : C} (f : A ⟶ B) [Mono f] (X : Subobject B) (h : mk f <= X) : 
+A ⟶ (X : C)
+参数：f : A ⟶ B；X : Subobject B；h : mk f <= X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofMkLE
-  signature: {B A : C} (f : A ⟶ B) [Mono f] (X : Subobject B) (h : mk f <= X)
-  body: (underlyingIso f).inv ≫ ofLE (mk f) X h
-
-中文:
-定义 ofMkLE
-  签名: {B A : C} (f : A ⟶ B) [单态射 f] (X : Subobject B) (h : mk f <= X)
-  定义体: (underlyingIso f).inv ≫ ofLE (mk f) X h
-
-Depends on / 依赖: underlyingIso
+--- 原说明 ---
+An inequality of subobjects is witnessed by some morphism between the correspond
+ing objects.
 -/
-def ofMkLE {B A : C} (f : A ⟶ B) [Mono f] (X : Subobject B) (h : mk f <= X) : A ⟶ (X : C) :=
+def ofMkLE {B A : C} (f : A ⟶ B) [Mono f] (X : Subobject B) (h : mk f ≤ X) : A ⟶ (X : C) :=
   (underlyingIso f).inv ≫ ofLE (mk f) X h
-
-instance {B A : C} (f : A ⟶ B) [Mono f] (X : Subobject B) (h : mk f <= X) :
+/-
+**CategoryTheory.Subobject.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Subobject`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {B A : C} (f : A ⟶ B) [Mono f] (X : Subobject B) (h : mk f ≤ X) :
     Mono (ofMkLE f X h) := by
   dsimp only [ofMkLE]
   infer_instance
 
 @[simp]
-/--
-theorem `ofMkLE_arrow` / 定理 `ofMkLE_arrow`
-
-English:
-theorem ofMkLE_arrow
-  given: {B A : C} {f : A ⟶ B} [Mono f] {X : Subobject B} (h : mk f <= X)
-  proof: by simp [ofMkLE]
-
-中文:
-定理 ofMkLE_arrow
-  条件: {B A : C} {f : A ⟶ B} [单态射 f] {X : Subobject B} (h : mk f <= X)
-  证明: by simp [ofMkLE]
-
-Depends on / 依赖: ofMkLE
+/-
+**CategoryTheory.Subobject.ofMkLE_arrow** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Subobject`。
+形式化陈述：ofMkLE_arrow {B A : C} {f : A ⟶ B} [Mono f] {X : Subobject B} (h : mk f <=
+ X) : ofMkLE f X h ≫ X.arrow = f
+参数：h : mk f <= X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Subobject.ofLE_arrow`：ofLE_arrow {B : C} {X Y : Subobject
+ B} (h : X <= Y) : ofLE X Y h ≫ Y.arrow = X.arrow
+· 使用定理 `CategoryTheory.Subobject.underlyingIso_arrow`：underlyingIso_arrow {X Y :
+ C} (f : X ⟶ Y) [Mono f] : (underlyingIso f).inv ≫ (Subobject.mk f).arrow = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ofMkLE_arrow {B A : C} {f : A ⟶ B} [Mono f] {X : Subobject B} (h : mk f <= X) :
+theorem ofMkLE_arrow {B A : C} {f : A ⟶ B} [Mono f] {X : Subobject B} (h : mk f ≤ X) :
     ofMkLE f X h ≫ X.arrow = f := by simp [ofMkLE]
 
-/--
-Definition of `ofMkLEMk` / `ofMkLEMk` 的定义
+/-- An inequality of subobjects is witnessed by some morphism between the corresponding objects. -/
+/-
+**CategoryTheory.Subobject.ofMkLEMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Su
+bobject`。
+形式化陈述：ofMkLEMk {B A₁ A₂ : C} (f : A₁ ⟶ B) (g : A₂ ⟶ B) [Mono f] [Mono g] (h : mk
+ f <= mk g) : A₁ ⟶ A₂
+参数：f : A₁ ⟶ B；g : A₂ ⟶ B；h : mk f <= mk g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofMkLEMk
-  signature: {B A₁ A₂ : C} (f : A₁ ⟶ B) (g : A₂ ⟶ B) [Mono f] [Mono g] (h : mk f <= mk g)
-  body: (underlyingIso f).inv ≫ ofLE (mk f) (mk g) h ≫ (underlyingIso g).hom
-
-中文:
-定义 ofMkLEMk
-  签名: {B A₁ A₂ : C} (f : A₁ ⟶ B) (g : A₂ ⟶ B) [单态射 f] [单态射 g] (h : mk f <= mk g)
-  定义体: (underlyingIso f).inv ≫ ofLE (mk f) (mk g) h ≫ (underlyingIso g).hom
-
-Depends on / 依赖: underlyingIso
+--- 原说明 ---
+An inequality of subobjects is witnessed by some morphism between the correspond
+ing objects.
 -/
-def ofMkLEMk {B A₁ A₂ : C} (f : A₁ ⟶ B) (g : A₂ ⟶ B) [Mono f] [Mono g] (h : mk f <= mk g) :
+def ofMkLEMk {B A₁ A₂ : C} (f : A₁ ⟶ B) (g : A₂ ⟶ B) [Mono f] [Mono g] (h : mk f ≤ mk g) :
     A₁ ⟶ A₂ :=
   (underlyingIso f).inv ≫ ofLE (mk f) (mk g) h ≫ (underlyingIso g).hom
-
-instance {B A₁ A₂ : C} (f : A₁ ⟶ B) (g : A₂ ⟶ B) [Mono f] [Mono g] (h : mk f <= mk g) :
+/-
+**CategoryTheory.Subobject.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Subobject`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {B A₁ A₂ : C} (f : A₁ ⟶ B) (g : A₂ ⟶ B) [Mono f] [Mono g] (h : mk f ≤ mk g) :
     Mono (ofMkLEMk f g h) := by
   dsimp only [ofMkLEMk]
   infer_instance
 
 @[simp]
-/--
-theorem `ofMkLEMk_comp` / 定理 `ofMkLEMk_comp`
-
-English:
-theorem ofMkLEMk_comp
-  given: {B A₁ A₂ : C} {f : A₁ ⟶ B} {g : A₂ ⟶ B} [Mono f] [Mono g] (h : mk f <= mk g)
-  proof: by simp [ofMkLEMk]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 ofMkLEMk_comp
-  条件: {B A₁ A₂ : C} {f : A₁ ⟶ B} {g : A₂ ⟶ B} [单态射 f] [单态射 g] (h : mk f <= mk g)
-  证明: by simp [ofMkLEMk]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: ofMkLEMk
+/-
+**CategoryTheory.Subobject.ofMkLEMk_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Subobject`。
+形式化陈述：ofMkLEMk_comp {B A₁ A₂ : C} {f : A₁ ⟶ B} {g : A₂ ⟶ B} [Mono f] [Mono g] (h
+ : mk f <= mk g) : ofMkLEMk f g h ≫ g = f
+参数：h : mk f <= mk g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Subobject.underlyingIso_hom_comp_eq_mk`：underlyingIso_hom
+_comp_eq_mk {X Y : C} (f : X ⟶ Y) [Mono f] : (underlyingIso f).hom ≫ f = (mk f).
+arrow
+· 使用定理 `CategoryTheory.Subobject.ofLE_arrow`：ofLE_arrow {B : C} {X Y : Subobject
+ B} (h : X <= Y) : ofLE X Y h ≫ Y.arrow = X.arrow
+· 使用定理 `CategoryTheory.Subobject.underlyingIso_arrow`：underlyingIso_arrow {X Y :
+ C} (f : X ⟶ Y) [Mono f] : (underlyingIso f).inv ≫ (Subobject.mk f).arrow = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ofMkLEMk_comp {B A₁ A₂ : C} {f : A₁ ⟶ B} {g : A₂ ⟶ B} [Mono f] [Mono g] (h : mk f <= mk g) :
+theorem ofMkLEMk_comp {B A₁ A₂ : C} {f : A₁ ⟶ B} {g : A₂ ⟶ B} [Mono f] [Mono g] (h : mk f ≤ mk g) :
     ofMkLEMk f g h ≫ g = f := by simp [ofMkLEMk]
 
 @[reassoc (attr := simp)]
-/--
-theorem `ofLE_comp_ofLE` / 定理 `ofLE_comp_ofLE`
-
-English:
-theorem ofLE_comp_ofLE
-  given: {B : C} (X Y Z : Subobject B) (h₁ : X <= Y) (h₂ : Y <= Z)
-  proof: by
-  simp only [ofLE, ← Functor.map_comp underlying]
-  congr 1
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 ofLE_comp_ofLE
-  条件: {B : C} (X Y Z : Subobject B) (h₁ : X <= Y) (h₂ : Y <= Z)
-  证明: by
-  simp only [ofLE, ← Functor.map_comp underlying]
-  congr 1
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Functor, Functor.map_comp, map_comp, underlying
+/-
+**CategoryTheory.Subobject.ofLE_comp_ofLE** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Subobject`。
+形式化陈述：ofLE_comp_ofLE {B : C} (X Y Z : Subobject B) (h₁ : X <= Y) (h₂ : Y <= Z) :
+ ofLE X Y h₁ ≫ ofLE Y Z h₂ = ofLE X Z (h₁.trans h₂)
+参数：X Y Z : Subobject B；h₁ : X <= Y；h₂ : Y <= Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
 -/
-theorem ofLE_comp_ofLE {B : C} (X Y Z : Subobject B) (h₁ : X <= Y) (h₂ : Y <= Z) :
+theorem ofLE_comp_ofLE {B : C} (X Y Z : Subobject B) (h₁ : X ≤ Y) (h₂ : Y ≤ Z) :
     ofLE X Y h₁ ≫ ofLE Y Z h₂ = ofLE X Z (h₁.trans h₂) := by
   simp only [ofLE, ← Functor.map_comp underlying]
   congr 1
 
 @[reassoc (attr := simp)]
-/--
-theorem `ofLE_comp_ofLEMk` / 定理 `ofLE_comp_ofLEMk`
-
-English:
-theorem ofLE_comp_ofLEMk
-  statement: {B A : C} (X Y : Subobject B) (f : A ⟶ B) [Mono f] (h₁ : X <= Y)
-  proof: by
-  simp only [ofLEMk, ofLE, ← Functor.map_comp_assoc underlying]
-  congr 1
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 ofLE_comp_ofLEMk
-  结论: {B A : C} (X Y : Subobject B) (f : A ⟶ B) [单态射 f] (h₁ : X <= Y)
-  证明: by
-  simp only [ofLEMk, ofLE, ← Functor.map_comp_assoc underlying]
-  congr 1
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Functor, Functor.map_comp_assoc, map_comp_assoc, ofLEMk, underlying
+/-
+**CategoryTheory.Subobject.ofLE_comp_ofLEMk** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Subobject`。
+形式化陈述：ofLE_comp_ofLEMk {B A : C} (X Y : Subobject B) (f : A ⟶ B) [Mono f] (h₁ : 
+X <= Y) (h₂ : Y <= mk f) : ofLE X Y h₁ ≫ ofLEMk Y f h₂ = ofLEMk X f (h₁.trans h₂
+)
+参数：X Y : Subobject B；f : A ⟶ B；h₁ : X <= Y；h₂ : Y <= mk f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp_assoc`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v_1, u₁} C] {D : Type u₂}   [inst_1 : CategoryTheory.Category.{v
+_2, u₂} D] (F : CategoryThe…
 -/
-theorem ofLE_comp_ofLEMk {B A : C} (X Y : Subobject B) (f : A ⟶ B) [Mono f] (h₁ : X <= Y)
-    (h₂ : Y <= mk f) : ofLE X Y h₁ ≫ ofLEMk Y f h₂ = ofLEMk X f (h₁.trans h₂) := by
+theorem ofLE_comp_ofLEMk {B A : C} (X Y : Subobject B) (f : A ⟶ B) [Mono f] (h₁ : X ≤ Y)
+    (h₂ : Y ≤ mk f) : ofLE X Y h₁ ≫ ofLEMk Y f h₂ = ofLEMk X f (h₁.trans h₂) := by
   simp only [ofLEMk, ofLE, ← Functor.map_comp_assoc underlying]
   congr 1
 
 @[reassoc (attr := simp)]
-/--
-theorem `ofLEMk_comp_ofMkLE` / 定理 `ofLEMk_comp_ofMkLE`
-
-English:
-theorem ofLEMk_comp_ofMkLE
-  statement: {B A : C} (X : Subobject B) (f : A ⟶ B) [Mono f] (Y : Subobject B)
-  proof: by
-  simp only [ofMkLE, ofLEMk, ofLE, ← Functor.map_comp underlying, assoc, Iso.hom_inv_id_assoc]
-  congr 1
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 ofLEMk_comp_ofMkLE
-  结论: {B A : C} (X : Subobject B) (f : A ⟶ B) [单态射 f] (Y : Subobject B)
-  证明: by
-  simp only [ofMkLE, ofLEMk, ofLE, ← Functor.map_comp underlying, assoc, Iso.hom_inv_id_assoc]
-  congr 1
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Functor, Functor.map_comp, Iso.hom_inv_id_assoc, hom_inv_id_assoc, map_comp, ofLEMk, ofMkLE, underlying
+/-
+**CategoryTheory.Subobject.ofLEMk_comp_ofMkLE** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Subobject`。
+形式化陈述：ofLEMk_comp_ofMkLE {B A : C} (X : Subobject B) (f : A ⟶ B) [Mono f] (Y : S
+ubobject B) (h₁ : X <= mk f) (h₂ : mk f <= Y) : ofLEMk X f h₁ ≫ ofMkLE f Y h₂ = 
+ofLE X Y (h₁.trans h₂)
+参数：X : Subobject B；f : A ⟶ B；Y : Subobject B；h₁ : X <= mk f；h₂ : mk f <= Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
 -/
 theorem ofLEMk_comp_ofMkLE {B A : C} (X : Subobject B) (f : A ⟶ B) [Mono f] (Y : Subobject B)
-    (h₁ : X <= mk f) (h₂ : mk f <= Y) : ofLEMk X f h₁ ≫ ofMkLE f Y h₂ = ofLE X Y (h₁.trans h₂) := by
+    (h₁ : X ≤ mk f) (h₂ : mk f ≤ Y) : ofLEMk X f h₁ ≫ ofMkLE f Y h₂ = ofLE X Y (h₁.trans h₂) := by
   simp only [ofMkLE, ofLEMk, ofLE, ← Functor.map_comp underlying, assoc, Iso.hom_inv_id_assoc]
   congr 1
 
 @[reassoc (attr := simp)]
-/--
-theorem `ofLEMk_comp_ofMkLEMk` / 定理 `ofLEMk_comp_ofMkLEMk`
-
-English:
-theorem ofLEMk_comp_ofMkLEMk
-  statement: {B A₁ A₂ : C} (X : Subobject B) (f : A₁ ⟶ B) [Mono f] (g : A₂ ⟶ B)
-  proof: by
-  simp only [ofLEMk, ofLE, ofMkLEMk, ← Functor.map_comp_assoc underlying,
-    assoc, Iso.hom_inv_id_assoc]
-  congr 1
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 ofLEMk_comp_ofMkLEMk
-  结论: {B A₁ A₂ : C} (X : Subobject B) (f : A₁ ⟶ B) [单态射 f] (g : A₂ ⟶ B)
-  证明: by
-  simp only [ofLEMk, ofLE, ofMkLEMk, ← Functor.map_comp_assoc underlying,
-    assoc, Iso.hom_inv_id_assoc]
-  congr 1
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Functor, Functor.map_comp_assoc, Iso.hom_inv_id_assoc, hom_inv_id_assoc, map_comp_assoc, ofLEMk, ofMkLEMk, underlying
+/-
+**CategoryTheory.Subobject.ofLEMk_comp_ofMkLEMk** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Subobject`。
+形式化陈述：ofLEMk_comp_ofMkLEMk {B A₁ A₂ : C} (X : Subobject B) (f : A₁ ⟶ B) [Mono f]
+ (g : A₂ ⟶ B) [Mono g] (h₁ : X <= mk f) (h₂ : mk f <= mk g) : ofLEMk X f h₁ ≫ of
+MkLEMk f g h₂ = ofLEMk X g (h₁.trans h₂)
+参数：X : Subobject B；f : A₁ ⟶ B；g : A₂ ⟶ B；h₁ : X <= mk f；h₂ : mk f <= mk g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp_assoc`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v_1, u₁} C] {D : Type u₂}   [inst_1 : CategoryTheory.Category.{v
+_2, u₂} D] (F : CategoryThe…
 -/
 theorem ofLEMk_comp_ofMkLEMk {B A₁ A₂ : C} (X : Subobject B) (f : A₁ ⟶ B) [Mono f] (g : A₂ ⟶ B)
-    [Mono g] (h₁ : X <= mk f) (h₂ : mk f <= mk g) :
+    [Mono g] (h₁ : X ≤ mk f) (h₂ : mk f ≤ mk g) :
     ofLEMk X f h₁ ≫ ofMkLEMk f g h₂ = ofLEMk X g (h₁.trans h₂) := by
   simp only [ofLEMk, ofLE, ofMkLEMk, ← Functor.map_comp_assoc underlying,
     assoc, Iso.hom_inv_id_assoc]
   congr 1
 
 @[reassoc (attr := simp)]
-/--
-theorem `ofMkLE_comp_ofLE` / 定理 `ofMkLE_comp_ofLE`
-
-English:
-theorem ofMkLE_comp_ofLE
-  statement: {B A₁ : C} (f : A₁ ⟶ B) [Mono f] (X Y : Subobject B) (h₁ : mk f <= X)
-  proof: by
-  simp only [ofMkLE, ofLE, ← Functor.map_comp underlying,
-    assoc]
-  congr 1
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 ofMkLE_comp_ofLE
-  结论: {B A₁ : C} (f : A₁ ⟶ B) [单态射 f] (X Y : Subobject B) (h₁ : mk f <= X)
-  证明: by
-  simp only [ofMkLE, ofLE, ← Functor.map_comp underlying,
-    assoc]
-  congr 1
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Functor, Functor.map_comp, map_comp, ofMkLE, underlying
+/-
+**CategoryTheory.Subobject.ofMkLE_comp_ofLE** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Subobject`。
+形式化陈述：ofMkLE_comp_ofLE {B A₁ : C} (f : A₁ ⟶ B) [Mono f] (X Y : Subobject B) (h₁ 
+: mk f <= X) (h₂ : X <= Y) : ofMkLE f X h₁ ≫ ofLE X Y h₂ = ofMkLE f Y (h₁.trans 
+h₂)
+参数：f : A₁ ⟶ B；X Y : Subobject B；h₁ : mk f <= X；h₂ : X <= Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
 -/
-theorem ofMkLE_comp_ofLE {B A₁ : C} (f : A₁ ⟶ B) [Mono f] (X Y : Subobject B) (h₁ : mk f <= X)
-    (h₂ : X <= Y) : ofMkLE f X h₁ ≫ ofLE X Y h₂ = ofMkLE f Y (h₁.trans h₂) := by
+theorem ofMkLE_comp_ofLE {B A₁ : C} (f : A₁ ⟶ B) [Mono f] (X Y : Subobject B) (h₁ : mk f ≤ X)
+    (h₂ : X ≤ Y) : ofMkLE f X h₁ ≫ ofLE X Y h₂ = ofMkLE f Y (h₁.trans h₂) := by
   simp only [ofMkLE, ofLE, ← Functor.map_comp underlying,
     assoc]
   congr 1
 
 @[reassoc (attr := simp)]
-/--
-theorem `ofMkLE_comp_ofLEMk` / 定理 `ofMkLE_comp_ofLEMk`
-
-English:
-theorem ofMkLE_comp_ofLEMk
-  statement: {B A₁ A₂ : C} (f : A₁ ⟶ B) [Mono f] (X : Subobject B) (g : A₂ ⟶ B)
-  proof: by
-  simp only [ofMkLE, ofLEMk, ofLE, ofMkLEMk, ← Functor.map_comp_assoc underlying, assoc]
-  congr 1
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 ofMkLE_comp_ofLEMk
-  结论: {B A₁ A₂ : C} (f : A₁ ⟶ B) [单态射 f] (X : Subobject B) (g : A₂ ⟶ B)
-  证明: by
-  simp only [ofMkLE, ofLEMk, ofLE, ofMkLEMk, ← Functor.map_comp_assoc underlying, assoc]
-  congr 1
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Functor, Functor.map_comp_assoc, map_comp_assoc, ofLEMk, ofMkLE, ofMkLEMk, underlying
+/-
+**CategoryTheory.Subobject.ofMkLE_comp_ofLEMk** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Subobject`。
+形式化陈述：ofMkLE_comp_ofLEMk {B A₁ A₂ : C} (f : A₁ ⟶ B) [Mono f] (X : Subobject B) (
+g : A₂ ⟶ B) [Mono g] (h₁ : mk f <= X) (h₂ : X <= mk g) : ofMkLE f X h₁ ≫ ofLEMk 
+X g h₂ = ofMkLEMk f g (h₁.trans h₂)
+参数：f : A₁ ⟶ B；X : Subobject B；g : A₂ ⟶ B；h₁ : mk f <= X；h₂ : X <= mk g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp_assoc`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v_1, u₁} C] {D : Type u₂}   [inst_1 : CategoryTheory.Category.{v
+_2, u₂} D] (F : CategoryThe…
 -/
 theorem ofMkLE_comp_ofLEMk {B A₁ A₂ : C} (f : A₁ ⟶ B) [Mono f] (X : Subobject B) (g : A₂ ⟶ B)
-    [Mono g] (h₁ : mk f <= X) (h₂ : X <= mk g) :
+    [Mono g] (h₁ : mk f ≤ X) (h₂ : X ≤ mk g) :
     ofMkLE f X h₁ ≫ ofLEMk X g h₂ = ofMkLEMk f g (h₁.trans h₂) := by
   simp only [ofMkLE, ofLEMk, ofLE, ofMkLEMk, ← Functor.map_comp_assoc underlying, assoc]
   congr 1
 
 @[reassoc (attr := simp)]
-/--
-theorem `ofMkLEMk_comp_ofMkLE` / 定理 `ofMkLEMk_comp_ofMkLE`
-
-English:
-theorem ofMkLEMk_comp_ofMkLE
-  statement: {B A₁ A₂ : C} (f : A₁ ⟶ B) [Mono f] (g : A₂ ⟶ B) [Mono g]
-  proof: by
-  simp only [ofMkLE, ofLE, ofMkLEMk, ← Functor.map_comp underlying,
-    assoc, Iso.hom_inv_id_assoc]
-  congr 1
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 ofMkLEMk_comp_ofMkLE
-  结论: {B A₁ A₂ : C} (f : A₁ ⟶ B) [单态射 f] (g : A₂ ⟶ B) [单态射 g]
-  证明: by
-  simp only [ofMkLE, ofLE, ofMkLEMk, ← Functor.map_comp underlying,
-    assoc, Iso.hom_inv_id_assoc]
-  congr 1
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Functor, Functor.map_comp, Iso.hom_inv_id_assoc, hom_inv_id_assoc, map_comp, ofMkLE, ofMkLEMk, underlying
+/-
+**CategoryTheory.Subobject.ofMkLEMk_comp_ofMkLE** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Subobject`。
+形式化陈述：ofMkLEMk_comp_ofMkLE {B A₁ A₂ : C} (f : A₁ ⟶ B) [Mono f] (g : A₂ ⟶ B) [Mon
+o g] (X : Subobject B) (h₁ : mk f <= mk g) (h₂ : mk g <= X) : ofMkLEMk f g h₁ ≫ 
+ofMkLE g X h₂ = ofMkLE f X (h₁.trans h₂)
+参数：f : A₁ ⟶ B；g : A₂ ⟶ B；X : Subobject B；h₁ : mk f <= mk g；h₂ : mk g <= X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
 -/
 theorem ofMkLEMk_comp_ofMkLE {B A₁ A₂ : C} (f : A₁ ⟶ B) [Mono f] (g : A₂ ⟶ B) [Mono g]
-    (X : Subobject B) (h₁ : mk f <= mk g) (h₂ : mk g <= X) :
+    (X : Subobject B) (h₁ : mk f ≤ mk g) (h₂ : mk g ≤ X) :
     ofMkLEMk f g h₁ ≫ ofMkLE g X h₂ = ofMkLE f X (h₁.trans h₂) := by
   simp only [ofMkLE, ofLE, ofMkLEMk, ← Functor.map_comp underlying,
     assoc, Iso.hom_inv_id_assoc]
   congr 1
 
 @[reassoc (attr := simp)]
-/--
-theorem `ofMkLEMk_comp_ofMkLEMk` / 定理 `ofMkLEMk_comp_ofMkLEMk`
-
-English:
-theorem ofMkLEMk_comp_ofMkLEMk
-  statement: {B A₁ A₂ A₃ : C} (f : A₁ ⟶ B) [Mono f] (g : A₂ ⟶ B) [Mono g]
-  proof: by
-  simp only [ofLE, ofMkLEMk, ← Functor.map_comp_assoc underlying, assoc,
-    Iso.hom_inv_id_assoc]
-  congr 1
-
-@[simp]
-
-中文:
-定理 ofMkLEMk_comp_ofMkLEMk
-  结论: {B A₁ A₂ A₃ : C} (f : A₁ ⟶ B) [单态射 f] (g : A₂ ⟶ B) [单态射 g]
-  证明: by
-  simp only [ofLE, ofMkLEMk, ← Functor.map_comp_assoc underlying, assoc,
-    Iso.hom_inv_id_assoc]
-  congr 1
-
-@[simp]
-
-Depends on / 依赖: Functor, Functor.map_comp_assoc, Iso.hom_inv_id_assoc, hom_inv_id_assoc, map_comp_assoc, ofMkLEMk, underlying
+/-
+**CategoryTheory.Subobject.ofMkLEMk_comp_ofMkLEMk** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Subobject`。
+形式化陈述：ofMkLEMk_comp_ofMkLEMk {B A₁ A₂ A₃ : C} (f : A₁ ⟶ B) [Mono f] (g : A₂ ⟶ B)
+ [Mono g] (h : A₃ ⟶ B) [Mono h] (h₁ : mk f <= mk g) (h₂ : mk g <= mk h) : ofMkLE
+Mk f g h₁ ≫ ofMkLEMk g h h₂ = ofMkLEMk f h (h₁.trans h₂)
+参数：f : A₁ ⟶ B；g : A₂ ⟶ B；h : A₃ ⟶ B；h₁ : mk f <= mk g；h₂ : mk g <= mk h。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : X ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp_assoc`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v_1, u₁} C] {D : Type u₂}   [inst_1 : CategoryTheory.Category.{v
+_2, u₂} D] (F : CategoryThe…
 -/
 theorem ofMkLEMk_comp_ofMkLEMk {B A₁ A₂ A₃ : C} (f : A₁ ⟶ B) [Mono f] (g : A₂ ⟶ B) [Mono g]
-    (h : A₃ ⟶ B) [Mono h] (h₁ : mk f <= mk g) (h₂ : mk g <= mk h) :
+    (h : A₃ ⟶ B) [Mono h] (h₁ : mk f ≤ mk g) (h₂ : mk g ≤ mk h) :
     ofMkLEMk f g h₁ ≫ ofMkLEMk g h h₂ = ofMkLEMk f h (h₁.trans h₂) := by
   simp only [ofLE, ofMkLEMk, ← Functor.map_comp_assoc underlying, assoc,
     Iso.hom_inv_id_assoc]
   congr 1
 
 @[simp]
-/--
-theorem `ofLE_refl` / 定理 `ofLE_refl`
-
-English:
-theorem ofLE_refl
-  given: {B : C} (X : Subobject B)
-  statement: ofLE X X le_rfl = 𝟙 _
-  proof: by
-  apply (cancel_mono X.arrow).mp
-  simp
-
-@[simp]
-
-中文:
-定理 ofLE_refl
-  条件: {B : C} (X : Subobject B)
-  结论: ofLE X X le_rfl = 𝟙 _
-  证明: by
-  apply (cancel_mono X.arrow).mp
-  simp
-
-@[simp]
-
-Depends on / 依赖: X.arrow, cancel_mono
+/-
+**CategoryTheory.Subobject.ofLE_refl** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.S
+ubobject`。
+形式化陈述：ofLE_refl {B : C} (X : Subobject B) : ofLE X X le_rfl = 𝟙 _
+参数：X : Subobject B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Subobject.ofLE_arrow`：ofLE_arrow {B : C} {X Y : Subobject
+ B} (h : X <= Y) : ofLE X Y h ≫ Y.arrow = X.arrow
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem ofLE_refl {B : C} (X : Subobject B) : ofLE X X le_rfl = 𝟙 _ := by
   apply (cancel_mono X.arrow).mp
   simp
 
 @[simp]
-/--
-theorem `ofMkLEMk_refl` / 定理 `ofMkLEMk_refl`
-
-English:
-theorem ofMkLEMk_refl
-  given: {B A₁ : C} (f : A₁ ⟶ B) [Mono f]
-  statement: ofMkLEMk f f le_rfl = 𝟙 _
-  proof: by
-  apply (cancel_mono f).mp
-  simp
-
-中文:
-定理 ofMkLEMk_refl
-  条件: {B A₁ : C} (f : A₁ ⟶ B) [单态射 f]
-  结论: ofMkLEMk f f le_rfl = 𝟙 _
-  证明: by
-  apply (cancel_mono f).mp
-  simp
-
-Depends on / 依赖: cancel_mono
+/-
+**CategoryTheory.Subobject.ofMkLEMk_refl** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Subobject`。
+形式化陈述：ofMkLEMk_refl {B A₁ : C} (f : A₁ ⟶ B) [Mono f] : ofMkLEMk f f le_rfl = 𝟙 _
+参数：f : A₁ ⟶ B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Subobject.ofMkLEMk_comp`：ofMkLEMk_comp {B A₁ A₂ : C} {f :
+ A₁ ⟶ B} {g : A₂ ⟶ B} [Mono f] [Mono g] (h : mk f <= mk g) : ofMkLEMk f g h ≫ g 
+= f
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem ofMkLEMk_refl {B A₁ : C} (f : A₁ ⟶ B) [Mono f] : ofMkLEMk f f le_rfl = 𝟙 _ := by
   apply (cancel_mono f).mp
@@ -1336,22 +1358,19 @@ theorem ofMkLEMk_refl {B A₁ : C} (f : A₁ ⟶ B) [Mono f] : ofMkLEMk f f le_r
 /-- An equality of subobjects gives an isomorphism of the corresponding objects.
 (One could use `underlying.mapIso (eqToIso h))` here, but this is more readable.) -/
 @[simps]
-/--
-Definition of `isoOfEq` / `isoOfEq` 的定义
+/-
+**CategoryTheory.Subobject.isoOfEq** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Sub
+object`。
+形式化陈述：isoOfEq {B : C} (X Y : Subobject B) (h : X = Y) : (X : C) ≅ (Y : C) where 
+hom
+参数：X Y : Subobject B；h : X = Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoOfEq
-  signature: {B : C} (X Y : Subobject B) (h : X = Y)
-  body: ofLE _ _ h.le
-  inv := ofLE _ _ h.ge
-
-中文:
-定义 isoOfEq
-  签名: {B : C} (X Y : Subobject B) (h : X = Y)
-  定义体: ofLE _ _ h.le
-  inv := ofLE _ _ h.ge
-
-Depends on / 依赖: h.le
+--- 原说明 ---
+An equality of subobjects gives an isomorphism of the corresponding objects.
+(One could use `underlying.mapIso (eqToIso h))` here, but this is more readable.
+)
 -/
 def isoOfEq {B : C} (X Y : Subobject B) (h : X = Y) : (X : C) ≅ (Y : C) where
   hom := ofLE _ _ h.le
@@ -1359,22 +1378,17 @@ def isoOfEq {B : C} (X Y : Subobject B) (h : X = Y) : (X : C) ≅ (Y : C) where
 
 /-- An equality of subobjects gives an isomorphism of the corresponding objects. -/
 @[simps]
-/--
-Definition of `isoOfEqMk` / `isoOfEqMk` 的定义
+/-
+**CategoryTheory.Subobject.isoOfEqMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.S
+ubobject`。
+形式化陈述：isoOfEqMk {B A : C} (X : Subobject B) (f : A ⟶ B) [Mono f] (h : X = mk f) 
+: (X : C) ≅ A where hom
+参数：X : Subobject B；f : A ⟶ B；h : X = mk f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoOfEqMk
-  signature: {B A : C} (X : Subobject B) (f : A ⟶ B) [Mono f] (h : X = mk f)
-  body: ofLEMk X f h.le
-  inv := ofMkLE f X h.ge
-
-中文:
-定义 isoOfEqMk
-  签名: {B A : C} (X : Subobject B) (f : A ⟶ B) [单态射 f] (h : X = mk f)
-  定义体: ofLEMk X f h.le
-  inv := ofMkLE f X h.ge
-
-Depends on / 依赖: h.le, ofLEMk
+--- 原说明 ---
+An equality of subobjects gives an isomorphism of the corresponding objects.
 -/
 def isoOfEqMk {B A : C} (X : Subobject B) (f : A ⟶ B) [Mono f] (h : X = mk f) : (X : C) ≅ A where
   hom := ofLEMk X f h.le
@@ -1382,22 +1396,17 @@ def isoOfEqMk {B A : C} (X : Subobject B) (f : A ⟶ B) [Mono f] (h : X = mk f) 
 
 /-- An equality of subobjects gives an isomorphism of the corresponding objects. -/
 @[simps]
-/--
-Definition of `isoOfMkEq` / `isoOfMkEq` 的定义
+/-
+**CategoryTheory.Subobject.isoOfMkEq** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.S
+ubobject`。
+形式化陈述：isoOfMkEq {B A : C} (f : A ⟶ B) [Mono f] (X : Subobject B) (h : mk f = X) 
+: A ≅ (X : C) where hom
+参数：f : A ⟶ B；X : Subobject B；h : mk f = X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoOfMkEq
-  signature: {B A : C} (f : A ⟶ B) [Mono f] (X : Subobject B) (h : mk f = X)
-  body: ofMkLE f X h.le
-  inv := ofLEMk X f h.ge
-
-中文:
-定义 isoOfMkEq
-  签名: {B A : C} (f : A ⟶ B) [单态射 f] (X : Subobject B) (h : mk f = X)
-  定义体: ofMkLE f X h.le
-  inv := ofLEMk X f h.ge
-
-Depends on / 依赖: h.le, ofMkLE
+--- 原说明 ---
+An equality of subobjects gives an isomorphism of the corresponding objects.
 -/
 def isoOfMkEq {B A : C} (f : A ⟶ B) [Mono f] (X : Subobject B) (h : mk f = X) : A ≅ (X : C) where
   hom := ofMkLE f X h.le
@@ -1405,54 +1414,51 @@ def isoOfMkEq {B A : C} (f : A ⟶ B) [Mono f] (X : Subobject B) (h : mk f = X) 
 
 /-- An equality of subobjects gives an isomorphism of the corresponding objects. -/
 @[simps]
-/--
-Definition of `isoOfMkEqMk` / `isoOfMkEqMk` 的定义
+/-
+**CategoryTheory.Subobject.isoOfMkEqMk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Subobject`。
+形式化陈述：isoOfMkEqMk {B A₁ A₂ : C} (f : A₁ ⟶ B) (g : A₂ ⟶ B) [Mono f] [Mono g] (h :
+ mk f = mk g) : A₁ ≅ A₂ where hom
+参数：f : A₁ ⟶ B；g : A₂ ⟶ B；h : mk f = mk g。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoOfMkEqMk
-  signature: {B A₁ A₂ : C} (f : A₁ ⟶ B) (g : A₂ ⟶ B) [Mono f] [Mono g] (h : mk f = mk g)
-  body: ofMkLEMk f g h.le
-  inv := ofMkLEMk g f h.ge
-
-中文:
-定义 isoOfMkEqMk
-  签名: {B A₁ A₂ : C} (f : A₁ ⟶ B) (g : A₂ ⟶ B) [单态射 f] [单态射 g] (h : mk f = mk g)
-  定义体: ofMkLEMk f g h.le
-  inv := ofMkLEMk g f h.ge
-
-Depends on / 依赖: h.le, ofMkLEMk
+--- 原说明 ---
+An equality of subobjects gives an isomorphism of the corresponding objects.
 -/
 def isoOfMkEqMk {B A₁ A₂ : C} (f : A₁ ⟶ B) (g : A₂ ⟶ B) [Mono f] [Mono g] (h : mk f = mk g) :
     A₁ ≅ A₂ where
   hom := ofMkLEMk f g h.le
   inv := ofMkLEMk g f h.ge
-
-/--
-lemma `mk_lt_mk_of_comm` / 引理 `mk_lt_mk_of_comm`
-
-English:
-lemma mk_lt_mk_of_comm
-  statement: {X A₁ A₂ : C} {i₁ : A₁ ⟶ X} {i₂ : A₂ ⟶ X} [Mono i₁] [Mono i₂]
-  proof: by
-  obtain _ | h := (mk_le_mk_of_comm _ fac).lt_or_eq
-  · assumption
-  · exfalso
-    apply hf
-    convert! (isoOfMkEqMk i₁ i₂ h).isIso_hom
-    rw [← cancel_mono i₂]; rw [isoOfMkEqMk_hom]; rw [ofMkLEMk_comp]; rw [fac]
-
-中文:
-引理 mk_lt_mk_of_comm
-  结论: {X A₁ A₂ : C} {i₁ : A₁ ⟶ X} {i₂ : A₂ ⟶ X} [单态射 i₁] [单态射 i₂]
-  证明: by
-  obtain _ | h := (mk_le_mk_of_comm _ fac).lt_or_eq
-  · assumption
-  · exfalso
-    apply hf
-    convert! (isoOfMkEqMk i₁ i₂ h).isIso_hom
-    rw [← cancel_mono i₂]; rw [isoOfMkEqMk_hom]; rw [ofMkLEMk_comp]; rw [fac]
-
-Depends on / 依赖: cancel_mono, convert, isIso_hom, isoOfMkEqMk, isoOfMkEqMk_hom, lt_or_eq, mk_le_mk_of_comm, ofMkLEMk_comp
+/-
+**CategoryTheory.Subobject.mk_lt_mk_of_comm** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.Subobject`。
+形式化陈述：mk_lt_mk_of_comm {X A₁ A₂ : C} {i₁ : A₁ ⟶ X} {i₂ : A₂ ⟶ X} [Mono i₁] [Mono
+ i₂] (f : A₁ ⟶ A₂) (fac : f ≫ i₂ = i₁) (hf : ¬ IsIso f) : Subobject.mk i₁ < Subo
+bject.mk i₂
+参数：f : A₁ ⟶ A₂；fac : f ≫ i₂ = i₁；hf : ¬ IsIso f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.lt_or_eq`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a < b ∨ a = b
+· 使用定理 `CategoryTheory.Subobject.mk_le_mk_of_comm`：mk_le_mk_of_comm {B A₁ A₂ : C
+} {f₁ : A₁ ⟶ B} {f₂ : A₂ ⟶ B} [Mono f₁] [Mono f₂] (g : A₁ ⟶ A₂) (w : g ≫ f₂ = f₁
+) : mk f₁ <= mk f₂
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.Subobject.isoOfMkEqMk_hom`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {B A₁ A₂ : C} (f : A₁ ⟶ B) (g : A₂ ⟶ B)   [inst_1 
+: CategoryTheory.Mono f] [inst…
+· 使用定理 `CategoryTheory.Subobject.ofMkLEMk_comp`：ofMkLEMk_comp {B A₁ A₂ : C} {f :
+ A₁ ⟶ B} {g : A₂ ⟶ B} [Mono f] [Mono g] (h : mk f <= mk g) : ofMkLEMk f g h ≫ g 
+= f
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 -/
 lemma mk_lt_mk_of_comm {X A₁ A₂ : C} {i₁ : A₁ ⟶ X} {i₂ : A₂ ⟶ X} [Mono i₁] [Mono i₂]
     (f : A₁ ⟶ A₂) (fac : f ≫ i₂ = i₁) (hf : ¬ IsIso f) :
@@ -1462,29 +1468,32 @@ lemma mk_lt_mk_of_comm {X A₁ A₂ : C} {i₁ : A₁ ⟶ X} {i₂ : A₂ ⟶ X}
   · exfalso
     apply hf
     convert! (isoOfMkEqMk i₁ i₂ h).isIso_hom
-    rw [← cancel_mono i₂]; rw [isoOfMkEqMk_hom]; rw [ofMkLEMk_comp]; rw [fac]
-
-/--
-lemma `mk_lt_mk_iff_of_comm` / 引理 `mk_lt_mk_iff_of_comm`
-
-English:
-lemma mk_lt_mk_iff_of_comm
-  statement: {X A₁ A₂ : C} {i₁ : A₁ ⟶ X} {i₂ : A₂ ⟶ X} [Mono i₁] [Mono i₂]
-  proof: ⟨fun h hf => by simp only [mk_eq_mk_of_comm i₁ i₂ (asIso f) fac, lt_self_iff_false] at h,
-    mk_lt_mk_of_comm f fac⟩
-
-中文:
-引理 mk_lt_mk_iff_of_comm
-  结论: {X A₁ A₂ : C} {i₁ : A₁ ⟶ X} {i₂ : A₂ ⟶ X} [单态射 i₁] [单态射 i₂]
-  证明: ⟨fun h hf => by simp only [mk_eq_mk_of_comm i₁ i₂ (asIso f) fac, lt_self_iff_false] at h,
-    mk_lt_mk_of_comm f fac⟩
-
-Depends on / 依赖: lt_self_iff_false, mk_eq_mk_of_comm, mk_lt_mk_of_comm
+    rw [← cancel_mono i₂, isoOfMkEqMk_hom, ofMkLEMk_comp, fac]
+/-
+**CategoryTheory.Subobject.mk_lt_mk_iff_of_comm** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.Subobject`。
+形式化陈述：mk_lt_mk_iff_of_comm {X A₁ A₂ : C} {i₁ : A₁ ⟶ X} {i₂ : A₂ ⟶ X} [Mono i₁] [
+Mono i₂] (f : A₁ ⟶ A₂) (fac : f ≫ i₂ = i₁) : Subobject.mk i₁ < Subobject.mk i₂ ↔
+ ¬ IsIso f
+参数：f : A₁ ⟶ A₂；fac : f ≫ i₂ = i₁。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Subobject.mk_eq_mk_of_comm`：mk_eq_mk_of_comm {B A₁ A₂ : C
+} (f : A₁ ⟶ B) (g : A₂ ⟶ B) [Mono f] [Mono g] (i : A₁ ≅ A₂) (w : i.hom ≫ g = f) 
+: mk f = mk g
+· 使用引理 `CategoryTheory.Subobject.mk_lt_mk_of_comm`：mk_lt_mk_of_comm {X A₁ A₂ : C
+} {i₁ : A₁ ⟶ X} {i₂ : A₂ ⟶ X} [Mono i₁] [Mono i₂] (f : A₁ ⟶ A₂) (fac : f ≫ i₂ = 
+i₁) (hf : ¬ IsIso f) : Subobjec…
 -/
 lemma mk_lt_mk_iff_of_comm {X A₁ A₂ : C} {i₁ : A₁ ⟶ X} {i₂ : A₂ ⟶ X} [Mono i₁] [Mono i₂]
     (f : A₁ ⟶ A₂) (fac : f ≫ i₂ = i₁) :
     Subobject.mk i₁ < Subobject.mk i₂ ↔ ¬ IsIso f :=
-  ⟨fun h hf => by simp only [mk_eq_mk_of_comm i₁ i₂ (asIso f) fac, lt_self_iff_false] at h,
+  ⟨fun h hf ↦ by simp only [mk_eq_mk_of_comm i₁ i₂ (asIso f) fac, lt_self_iff_false] at h,
     mk_lt_mk_of_comm f fac⟩
 
 end Subobject
@@ -1494,64 +1503,87 @@ namespace MonoOver
 variable {P Q : MonoOver X} (f : P ⟶ Q)
 
 include f in
-/--
-lemma `subobjectMk_le_mk_of_hom` / 引理 `subobjectMk_le_mk_of_hom`
-
-English:
-lemma subobjectMk_le_mk_of_hom
-  proof: Subobject.mk_le_mk_of_comm f.hom.left (by simp)
-
-中文:
-引理 subobjectMk_le_mk_of_hom
-  证明: Subobject.mk_le_mk_of_comm f.hom.left (by simp)
-
-Depends on / 依赖: Subobject, Subobject.mk_le_mk_of_comm, f.hom.left, mk_le_mk_of_comm
+/-
+**CategoryTheory.MonoOver.subobjectMk_le_mk_of_hom** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.MonoOver`。
+形式化陈述：subobjectMk_le_mk_of_hom : Subobject.mk P.obj.hom <= Subobject.mk Q.obj.ho
+m
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Subobject.mk_le_mk_of_comm`：mk_le_mk_of_comm {B A₁ A₂ : C
+} {f₁ : A₁ ⟶ B} {f₂ : A₂ ⟶ B} [Mono f₁] [Mono f₂] (g : A₁ ⟶ A₂) (w : g ≫ f₂ = f₁
+) : mk f₁ <= mk f₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Over.w`：w : φ.left ≫ g.hom = f.hom
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma subobjectMk_le_mk_of_hom :
-    Subobject.mk P.obj.hom <= Subobject.mk Q.obj.hom :=
+    Subobject.mk P.obj.hom ≤ Subobject.mk Q.obj.hom :=
   Subobject.mk_le_mk_of_comm f.hom.left (by simp)
-
-/--
-lemma `isIso_hom_left_iff_subobjectMk_eq` / 引理 `isIso_hom_left_iff_subobjectMk_eq`
-
-English:
-lemma isIso_hom_left_iff_subobjectMk_eq
-  proof: ⟨fun _ => Subobject.mk_eq_mk_of_comm _ _ (asIso f.hom.left) (by simp),
-    fun h => ⟨Subobject.ofMkLEMk _ _ h.symm.le, by simp [← cancel_mono P.1.hom],
-      by simp [← cancel_mono Q.1.hom]⟩⟩
-
-中文:
-引理 isIso_hom_left_iff_subobjectMk_eq
-  证明: ⟨fun _ => Subobject.mk_eq_mk_of_comm _ _ (asIso f.hom.left) (by simp),
-    fun h => ⟨Subobject.ofMkLEMk _ _ h.symm.le, by simp [← cancel_mono P.1.hom],
-      by simp [← cancel_mono Q.1.hom]⟩⟩
-
-Depends on / 依赖: Subobject, Subobject.mk_eq_mk_of_comm, Subobject.ofMkLEMk, cancel_mono, f.hom.left, h.symm.le, mk_eq_mk_of_comm, ofMkLEMk
+/-
+**CategoryTheory.MonoOver.isIso_hom_left_iff_subobjectMk_eq** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.MonoOver`。
+形式化陈述：isIso_hom_left_iff_subobjectMk_eq : IsIso f.hom.left ↔ Subobject.mk P.1.ho
+m = Subobject.mk Q.1.hom
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Subobject.mk_eq_mk_of_comm`：mk_eq_mk_of_comm {B A₁ A₂ : C
+} (f : A₁ ⟶ B) (g : A₂ ⟶ B) [Mono f] [Mono g] (i : A₁ ≅ A₂) (w : i.hom ≫ g = f) 
+: mk f = mk g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Over.w`：w : φ.left ≫ g.hom = f.hom
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Subobject.ofMkLEMk_comp`：ofMkLEMk_comp {B A₁ A₂ : C} {f :
+ A₁ ⟶ B} {g : A₂ ⟶ B} [Mono f] [Mono g] (h : mk f <= mk g) : ofMkLEMk f g h ≫ g 
+= f
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 lemma isIso_hom_left_iff_subobjectMk_eq :
     IsIso f.hom.left ↔ Subobject.mk P.1.hom = Subobject.mk Q.1.hom :=
-  ⟨fun _ => Subobject.mk_eq_mk_of_comm _ _ (asIso f.hom.left) (by simp),
-    fun h => ⟨Subobject.ofMkLEMk _ _ h.symm.le, by simp [← cancel_mono P.1.hom],
+  ⟨fun _ ↦ Subobject.mk_eq_mk_of_comm _ _ (asIso f.hom.left) (by simp),
+    fun h ↦ ⟨Subobject.ofMkLEMk _ _ h.symm.le, by simp [← cancel_mono P.1.hom],
       by simp [← cancel_mono Q.1.hom]⟩⟩
-
-/--
-lemma `isIso_iff_subobjectMk_eq` / 引理 `isIso_iff_subobjectMk_eq`
-
-English:
-lemma isIso_iff_subobjectMk_eq
-  proof: by
-  rw [isIso_iff_isIso_hom_left]; rw [isIso_hom_left_iff_subobjectMk_eq]
-
-中文:
-引理 isIso_iff_subobjectMk_eq
-  证明: by
-  rw [isIso_iff_isIso_hom_left]; rw [isIso_hom_left_iff_subobjectMk_eq]
-
-Depends on / 依赖: isIso_hom_left_iff_subobjectMk_eq, isIso_iff_isIso_hom_left
+/-
+**CategoryTheory.MonoOver.isIso_iff_subobjectMk_eq** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.MonoOver`。
+形式化陈述：isIso_iff_subobjectMk_eq : IsIso f ↔ Subobject.mk P.1.hom = Subobject.mk Q
+.1.hom
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.MonoOver.isIso_iff_isIso_hom_left`：isIso_iff_isIso_hom_le
+ft {A B : MonoOver X} (f : A ⟶ B) : IsIso f ↔ IsIso f.hom.left
+· 使用引理 `CategoryTheory.MonoOver.isIso_hom_left_iff_subobjectMk_eq`：isIso_hom_lef
+t_iff_subobjectMk_eq : IsIso f.hom.left ↔ Subobject.mk P.1.hom = Subobject.mk Q.
+1.hom
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isIso_iff_subobjectMk_eq :
     IsIso f ↔ Subobject.mk P.1.hom = Subobject.mk Q.1.hom := by
-  rw [isIso_iff_isIso_hom_left]; rw [isIso_hom_left_iff_subobjectMk_eq]
+  rw [isIso_iff_isIso_hom_left, isIso_hom_left_iff_subobjectMk_eq]
 
 end MonoOver
 
@@ -1562,117 +1594,108 @@ namespace Subobject
 /-- Any functor `MonoOver X ⥤ MonoOver Y` descends to a functor
 `Subobject X ⥤ Subobject Y`, because `MonoOver Y` is thin. -/
 @[implicit_reducible]
-/--
-Definition of `lower` / `lower` 的定义
+/-
+**CategoryTheory.Subobject.lower** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Subob
+ject`。
+形式化陈述：lower {Y : D} (F : MonoOver X ⥤ MonoOver Y) : Subobject X ⥤ Subobject Y
+参数：F : MonoOver X ⥤ MonoOver Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lower
-  signature: {Y : D} (F : MonoOver X ⥤ MonoOver Y)
-  body: ThinSkeleton.map F
-
-中文:
-定义 lower
-  签名: {Y : D} (F : MonoOver X ⥤ MonoOver Y)
-  定义体: ThinSkeleton.map F
-
-Depends on / 依赖: ThinSkeleton, ThinSkeleton.map
+--- 原说明 ---
+Any functor `MonoOver X ⥤ MonoOver Y` descends to a functor
+`Subobject X ⥤ Subobject Y`, because `MonoOver Y` is thin.
 -/
 def lower {Y : D} (F : MonoOver X ⥤ MonoOver Y) : Subobject X ⥤ Subobject Y :=
   ThinSkeleton.map F
 
-/--
-theorem `lower_iso` / 定理 `lower_iso`
+/-- Isomorphic functors become equal when lowered to `Subobject`.
+(It's not as evil as usual to talk about equality between functors
+because the categories are thin and skeletal.) -/
+/-
+**CategoryTheory.Subobject.lower_iso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.S
+ubobject`。
+形式化陈述：lower_iso (F₁ F₂ : MonoOver X ⥤ MonoOver Y) (h : F₁ ≅ F₂) : lower F₁ = low
+er F₂
+参数：F₁ F₂ : MonoOver X ⥤ MonoOver Y；h : F₁ ≅ F₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ThinSkeleton.map_iso_eq`：map_iso_eq {F₁ F₂ : D ⥤ C} (h : 
+F₁ ≅ F₂) : map F₁ = map F₂
 
-English:
-theorem lower_iso
-  given: (F₁ F₂ : MonoOver X ⥤ MonoOver Y) (h : F₁ ≅ F₂)
-  statement: lower F₁ = lower F₂
-  proof: ThinSkeleton.map_iso_eq h
-
-中文:
-定理 lower_iso
-  条件: (F₁ F₂ : MonoOver X ⥤ MonoOver Y) (h : F₁ ≅ F₂)
-  结论: lower F₁ = lower F₂
-  证明: ThinSkeleton.map_iso_eq h
-
-Depends on / 依赖: ThinSkeleton, ThinSkeleton.map_iso_eq, map_iso_eq
+--- 原说明 ---
+Isomorphic functors become equal when lowered to `Subobject`.
+(It's not as evil as usual to talk about equality between functors
+because the categories are thin and skeletal.)
 -/
 theorem lower_iso (F₁ F₂ : MonoOver X ⥤ MonoOver Y) (h : F₁ ≅ F₂) : lower F₁ = lower F₂ :=
   ThinSkeleton.map_iso_eq h
 
-/--
-Definition of `lower₂` / `lower₂` 的定义
+/-- A ternary version of `Subobject.lower`. -/
+/-
+**CategoryTheory.Subobject.lower** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Subob
+ject`。
+形式化陈述：lower {Y : D} (F : MonoOver X ⥤ MonoOver Y) : Subobject X ⥤ Subobject Y
+参数：F : MonoOver X ⥤ MonoOver Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lower₂
-  signature: (F : MonoOver X ⥤ MonoOver Y ⥤ MonoOver Z)
-  body: ThinSkeleton.map₂ F
-
-@[simp]
-
-中文:
-定义 lower₂
-  签名: (F : MonoOver X ⥤ MonoOver Y ⥤ MonoOver Z)
-  定义体: ThinSkeleton.map₂ F
-
-@[simp]
-
-Depends on / 依赖: ThinSkeleton, ThinSkeleton.map
+--- 原说明 ---
+A ternary version of `Subobject.lower`.
 -/
 def lower₂ (F : MonoOver X ⥤ MonoOver Y ⥤ MonoOver Z) : Subobject X ⥤ Subobject Y ⥤ Subobject Z :=
   ThinSkeleton.map₂ F
 
 @[simp]
-/--
-theorem `lower_comm` / 定理 `lower_comm`
-
-English:
-theorem lower_comm
-  given: (F : MonoOver Y ⥤ MonoOver X)
-  proof: rfl
-
-中文:
-定理 lower_comm
-  条件: (F : MonoOver Y ⥤ MonoOver X)
-  证明: rfl
+/-
+**CategoryTheory.Subobject.lower_comm** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Subobject`。
+形式化陈述：lower_comm (F : MonoOver Y ⥤ MonoOver X) : toThinSkeleton _ ⋙ lower F = F 
+⋙ toThinSkeleton _
+参数：F : MonoOver Y ⥤ MonoOver X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lower_comm (F : MonoOver Y ⥤ MonoOver X) :
     toThinSkeleton _ ⋙ lower F = F ⋙ toThinSkeleton _ :=
   rfl
 
 /--
-Definition of `lowerCompRepresentativeIso` / `lowerCompRepresentativeIso` 的定义
+Applying `lower F` and then `representative` is isomorphic to first applying `representative`
+and then applying `F`.
+-/
+/-
+**CategoryTheory.Subobject.lowerCompRepresentativeIso** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Subobject`。
+形式化陈述：lowerCompRepresentativeIso (F : MonoOver Y ⥤ MonoOver X) : lower F ⋙ repre
+sentative ≅ representative ⋙ F
+参数：F : MonoOver Y ⥤ MonoOver X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lowerCompRepresentativeIso
-  signature: (F : MonoOver Y ⥤ MonoOver X)
-  body: ThinSkeleton.mapCompFromThinSkeletonIso _
-
-中文:
-定义 lowerCompRepresentativeIso
-  签名: (F : MonoOver Y ⥤ MonoOver X)
-  定义体: ThinSkeleton.mapCompFromThinSkeletonIso _
-
-Depends on / 依赖: ThinSkeleton, ThinSkeleton.mapCompFromThinSkeletonIso, mapCompFromThinSkeletonIso
+--- 原说明 ---
+Applying `lower F` and then `representative` is isomorphic to first applying `re
+presentative`
+and then applying `F`.
 -/
 def lowerCompRepresentativeIso (F : MonoOver Y ⥤ MonoOver X) :
     lower F ⋙ representative ≅ representative ⋙ F :=
   ThinSkeleton.mapCompFromThinSkeletonIso _
 
-/--
-Definition of `lowerAdjunction` / `lowerAdjunction` 的定义
+/-- An adjunction between `MonoOver A` and `MonoOver B` gives an adjunction
+between `Subobject A` and `Subobject B`. -/
+/-
+**CategoryTheory.Subobject.lowerAdjunction** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Subobject`。
+形式化陈述：lowerAdjunction {A : C} {B : D} {L : MonoOver A ⥤ MonoOver B} {R : MonoOve
+r B ⥤ MonoOver A} (h : L ⊣ R) : lower L ⊣ lower R
+参数：h : L ⊣ R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lowerAdjunction
-  signature: {A : C} {B : D} {L : MonoOver A ⥤ MonoOver B} {R : MonoOver B ⥤ MonoOver A}
-  body: ThinSkeleton.lowerAdjunction _ _ h
-
-中文:
-定义 lowerAdjunction
-  签名: {A : C} {B : D} {L : MonoOver A ⥤ MonoOver B} {R : MonoOver B ⥤ MonoOver A}
-  定义体: ThinSkeleton.lowerAdjunction _ _ h
-
-Depends on / 依赖: ThinSkeleton, ThinSkeleton.lowerAdjunction, lowerAdjunction
+--- 原说明 ---
+An adjunction between `MonoOver A` and `MonoOver B` gives an adjunction
+between `Subobject A` and `Subobject B`.
 -/
 def lowerAdjunction {A : C} {B : D} {L : MonoOver A ⥤ MonoOver B} {R : MonoOver B ⥤ MonoOver A}
     (h : L ⊣ R) : lower L ⊣ lower R :=
@@ -1682,42 +1705,18 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- An equivalence between `MonoOver A` and `MonoOver B` gives an equivalence
 between `Subobject A` and `Subobject B`. -/
 @[simps]
-/--
-Definition of `lowerEquivalence` / `lowerEquivalence` 的定义
+/-
+**CategoryTheory.Subobject.lowerEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Subobject`。
+形式化陈述：lowerEquivalence {A : C} {B : D} (e : MonoOver A ≌ MonoOver B) : Subobject
+ A ≌ Subobject B where functor
+参数：e : MonoOver A ≌ MonoOver B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lowerEquivalence
-  signature: {A : C} {B : D} (e : MonoOver A ≌ MonoOver B)
-  body: lower e.functor
-  inverse := lower e.inverse
-  unitIso := by
-    apply eqToIso
-    convert! ThinSkeleton.map_iso_eq e.unitIso
-    · exact ThinSkeleton.map_id_eq.symm
-    · exact (ThinSkeleton.map_comp_eq _ _).symm
-  counitIso := by
-    apply eqToIso
-    convert! ThinSkeleton.map_iso_eq e.counitIso
-    · exact (ThinSkeleton.map_comp_eq _ _).symm
-    · exact ThinSkeleton.map_id_eq.symm
-
-中文:
-定义 lowerEquivalence
-  签名: {A : C} {B : D} (e : MonoOver A ≌ MonoOver B)
-  定义体: lower e.functor
-  inverse := lower e.inverse
-  unitIso := by
-    apply eqToIso
-    convert! ThinSkeleton.map_iso_eq e.unitIso
-    · exact ThinSkeleton.map_id_eq.symm
-    · exact (ThinSkeleton.map_comp_eq _ _).symm
-  counitIso := by
-    apply eqToIso
-    convert! ThinSkeleton.map_iso_eq e.counitIso
-    · exact (ThinSkeleton.map_comp_eq _ _).symm
-    · exact ThinSkeleton.map_id_eq.symm
-
-Depends on / 依赖: e.functor, functor
+--- 原说明 ---
+An equivalence between `MonoOver A` and `MonoOver B` gives an equivalence
+between `Subobject A` and `Subobject B`.
 -/
 def lowerEquivalence {A : C} {B : D} (e : MonoOver A ≌ MonoOver B) : Subobject A ≌ Subobject B where
   functor := lower e.functor
@@ -1737,59 +1736,46 @@ section Limits
 
 variable {J : Type u₃} [Category.{v₃} J]
 
-/--
-Instance `hasLimitsOfShape` / 实例 `hasLimitsOfShape`
-
-English:
-instance hasLimitsOfShape
-  signature: [HasLimitsOfShape J (Over X)]
-  body: by
-  apply hasLimitsOfShape_thinSkeleton
-
-中文:
-实例 hasLimitsOfShape
-  签名: [有形状极限 J (Over X)]
-  定义体: by
-  apply hasLimitsOfShape_thinSkeleton
-
-Depends on / 依赖: hasLimitsOfShape_thinSkeleton
+/-
+**CategoryTheory.Subobject.hasLimitsOfShape** 是 Mathlib 中的一个实例，位于命名空间 `CategoryT
+heory.Subobject`。
+形式化陈述：hasLimitsOfShape [HasLimitsOfShape J (Over X)] : HasLimitsOfShape J (Subob
+ject X)
+参数：Over X。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.MonoOver.hasLimitsOfShape`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {J : Type u₃} [inst_1 : CategoryTheory.Category.{v
+₃, u₃} J]   (X : C) [CategoryT…
 -/
 instance hasLimitsOfShape [HasLimitsOfShape J (Over X)] :
     HasLimitsOfShape J (Subobject X) := by
   apply hasLimitsOfShape_thinSkeleton
-
-/--
-Instance `hasFiniteLimits` / 实例 `hasFiniteLimits`
-
-English:
-instance hasFiniteLimits
-  signature: [HasFiniteLimits (Over X)]
-  body: by infer_instance
-
-中文:
-实例 hasFiniteLimits
-  签名: [有有限极限 (Over X)]
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**CategoryTheory.Subobject.hasFiniteLimits** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory.Subobject`。
+形式化陈述：hasFiniteLimits [HasFiniteLimits (Over X)] : HasFiniteLimits (Subobject X)
+ where out _ _ _
+参数：Over X。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasLimitsOfShape_of_hasFiniteLimits`：∀ (C : Type u
+) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFiniteLimi
+ts C] (J : Type w)   [inst_2 : CategoryTheory.S…
 -/
 instance hasFiniteLimits [HasFiniteLimits (Over X)] : HasFiniteLimits (Subobject X) where
   out _ _ _ := by infer_instance
-
-/--
-Instance `hasLimitsOfSize` / 实例 `hasLimitsOfSize`
-
-English:
-instance hasLimitsOfSize
-  signature: [HasLimitsOfSize.{w, w'} (Over X)]
-  body: by infer_instance
-
-中文:
-实例 hasLimitsOfSize
-  签名: [有LimitsOfSize.{w, w'} (Over X)]
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**CategoryTheory.Subobject.hasLimitsOfSize** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory.Subobject`。
+形式化陈述：hasLimitsOfSize [HasLimitsOfSize.{w, w'} (Over X)] : HasLimitsOfSize.{w, w
+'} (Subobject X) where has_limits_of_shape _ _
+参数：Over X。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasLimitsOfShapeOfHasLimitsOfSize`：∀ {C : Type
+ u} [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTh
+eory.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
 -/
 instance hasLimitsOfSize [HasLimitsOfSize.{w, w'} (Over X)] :
     HasLimitsOfSize.{w, w'} (Subobject X) where
@@ -1801,22 +1787,12 @@ section Colimits
 
 variable [HasCoproducts C] [HasStrongEpiMonoFactorisations C]
 
-/--
-Instance `hasColimitsOfSize` / 实例 `hasColimitsOfSize`
-
-English:
-instance hasColimitsOfSize
-  signature: : HasColimitsOfSize.{w, w'} (Subobject X)
-  body: by
-  apply hasColimitsOfSize_thinSkeleton
-
-中文:
-实例 hasColimitsOfSize
-  签名: : 有余limitsOfSize.{w, w'} (Subobject X)
-  定义体: by
-  apply hasColimitsOfSize_thinSkeleton
-
-Depends on / 依赖: hasColimitsOfSize_thinSkeleton
+/-
+**CategoryTheory.Subobject.hasColimitsOfSize** 是 Mathlib 中的一个实例，位于命名空间 `Category
+Theory.Subobject`。
+形式化陈述：hasColimitsOfSize : HasColimitsOfSize.{w, w'} (Subobject X)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasColimitsOfSize : HasColimitsOfSize.{w, w'} (Subobject X) := by
   apply hasColimitsOfSize_thinSkeleton
@@ -1827,89 +1803,66 @@ section Pullback
 
 variable [HasPullbacks C]
 
-/--
-Definition of `pullback` / `pullback` 的定义
+/-- When `C` has pullbacks, a morphism `f : X ⟶ Y` induces a functor `Subobject Y ⥤ Subobject X`,
+by pulling back a monomorphism along `f`. -/
+/-
+**CategoryTheory.Subobject.pullback** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Su
+bobject`。
+形式化陈述：pullback (f : X ⟶ Y) : Subobject Y ⥤ Subobject X
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pullback
-  signature: (f : X ⟶ Y)
-  body: lower (MonoOver.pullback f)
-
-中文:
-定义 pullback
-  签名: (f : X ⟶ Y)
-  定义体: lower (MonoOver.pullback f)
-
-Depends on / 依赖: MonoOver, MonoOver.pullback, pullback
+--- 原说明 ---
+When `C` has pullbacks, a morphism `f : X ⟶ Y` induces a functor `Subobject Y ⥤ 
+Subobject X`,
+by pulling back a monomorphism along `f`.
 -/
 def pullback (f : X ⟶ Y) : Subobject Y ⥤ Subobject X :=
   lower (MonoOver.pullback f)
-
-/--
-theorem `pullback_id` / 定理 `pullback_id`
-
-English:
-theorem pullback_id
-  given: (x : Subobject X)
-  statement: (pullback (𝟙 X)).obj x = x
-  proof: by
-  induction x using Quotient.inductionOn' with | _ f
-  exact Quotient.sound ⟨MonoOver.pullbackId.app f⟩
-
-中文:
-定理 pullback_id
-  条件: (x : Subobject X)
-  结论: (pullback (𝟙 X)).obj x = x
-  证明: by
-  induction x using Quotient.inductionOn' with | _ f
-  exact Quotient.sound ⟨MonoOver.pullbackId.app f⟩
-
-Depends on / 依赖: MonoOver, MonoOver.pullbackId.app, Quotient, Quotient.inductionOn, Quotient.sound, inductionOn, pullbackId
+/-
+**CategoryTheory.Subobject.pullback_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Subobject`。
+形式化陈述：pullback_id (x : Subobject X) : (pullback (𝟙 X)).obj x = x
+参数：x : Subobject X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
+· 使用定理 `Quotient.sound`：∀ {α : Sort u} {s : Setoid α} {a b : α}, a ≈ b → ⟦a⟧ = ⟦
+b⟧
 -/
 theorem pullback_id (x : Subobject X) : (pullback (𝟙 X)).obj x = x := by
   induction x using Quotient.inductionOn' with | _ f
   exact Quotient.sound ⟨MonoOver.pullbackId.app f⟩
-
-/--
-theorem `pullback_comp` / 定理 `pullback_comp`
-
-English:
-theorem pullback_comp
-  given: (f : X ⟶ Y) (g : Y ⟶ Z) (x : Subobject Z)
-  proof: by
-  induction x using Quotient.inductionOn' with | _ t
-  exact Quotient.sound ⟨(MonoOver.pullbackComp _ _).app t⟩
-
-中文:
-定理 pullback_comp
-  条件: (f : X ⟶ Y) (g : Y ⟶ Z) (x : Subobject Z)
-  证明: by
-  induction x using Quotient.inductionOn' with | _ t
-  exact Quotient.sound ⟨(MonoOver.pullbackComp _ _).app t⟩
-
-Depends on / 依赖: MonoOver, MonoOver.pullbackComp, Quotient, Quotient.inductionOn, Quotient.sound, inductionOn, pullbackComp
+/-
+**CategoryTheory.Subobject.pullback_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Subobject`。
+形式化陈述：pullback_comp (f : X ⟶ Y) (g : Y ⟶ Z) (x : Subobject Z) : (pullback (f ≫ g
+)).obj x = (pullback f).obj ((pullback g).obj x)
+参数：f : X ⟶ Y；g : Y ⟶ Z；x : Subobject Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
+· 使用定理 `Quotient.sound`：∀ {α : Sort u} {s : Setoid α} {a b : α}, a ≈ b → ⟦a⟧ = ⟦
+b⟧
 -/
 theorem pullback_comp (f : X ⟶ Y) (g : Y ⟶ Z) (x : Subobject Z) :
     (pullback (f ≫ g)).obj x = (pullback f).obj ((pullback g).obj x) := by
   induction x using Quotient.inductionOn' with | _ t
   exact Quotient.sound ⟨(MonoOver.pullbackComp _ _).app t⟩
-
-/--
-theorem `pullback_obj_mk` / 定理 `pullback_obj_mk`
-
-English:
-theorem pullback_obj_mk
-  statement: {A B X Y : C} {f : Y ⟶ X} {i : A ⟶ X} [Mono i]
-  proof: ((equivMonoOver Y).inverse.mapIso
-    (MonoOver.pullbackObjIsoOfIsPullback _ _ _ _ h)).to_eq
-
-中文:
-定理 pullback_obj_mk
-  结论: {A B X Y : C} {f : Y ⟶ X} {i : A ⟶ X} [单态射 i]
-  证明: ((equivMonoOver Y).inverse.mapIso
-    (MonoOver.pullbackObjIsoOfIsPullback _ _ _ _ h)).to_eq
-
-Depends on / 依赖: MonoOver, MonoOver.pullbackObjIsoOfIsPullback, equivMonoOver, inverse, inverse.mapIso, mapIso, pullbackObjIsoOfIsPullback, to_eq
+/-
+**CategoryTheory.Subobject.pullback_obj_mk** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Subobject`。
+形式化陈述：pullback_obj_mk {A B X Y : C} {f : Y ⟶ X} {i : A ⟶ X} [Mono i] {j : B ⟶ Y}
+ [Mono j] {f' : B ⟶ A} (h : IsPullback f' j i f) : (pullback f).obj (mk i) = mk 
+j
+参数：h : IsPullback f' j i f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.to_eq`：∀ {X : Type u} [inst : PartialOrder X] {x y : 
+X} (f : x ≅ y), x = y
 -/
 theorem pullback_obj_mk {A B X Y : C} {f : Y ⟶ X} {i : A ⟶ X} [Mono i]
     {j : B ⟶ Y} [Mono j] {f' : B ⟶ A}
@@ -1919,28 +1872,60 @@ theorem pullback_obj_mk {A B X Y : C} {f : Y ⟶ X} {i : A ⟶ X} [Mono i]
     (MonoOver.pullbackObjIsoOfIsPullback _ _ _ _ h)).to_eq
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `pullback_obj` / 定理 `pullback_obj`
-
-English:
-theorem pullback_obj
-  given: {X Y : C} (f : Y ⟶ X) (x : Subobject X)
-  proof: by
-  obtain ⟨Z, i, _, rfl⟩ := mk_surjective x
-  rw [pullback_obj_mk (IsPullback.of_hasPullback i f)]
-  exact mk_eq_mk_of_comm _ _ (asIso (pullback.map i f (mk i).arrow f
-    (underlyingIso i).inv (𝟙 _) (𝟙 _) (by simp) (by simp))) (by simp)
-
-中文:
-定理 pullback_obj
-  条件: {X Y : C} (f : Y ⟶ X) (x : Subobject X)
-  证明: by
-  obtain ⟨Z, i, _, rfl⟩ := mk_surjective x
-  rw [pullback_obj_mk (IsPullback.of_hasPullback i f)]
-  exact mk_eq_mk_of_comm _ _ (asIso (pullback.map i f (mk i).arrow f
-    (underlyingIso i).inv (𝟙 _) (𝟙 _) (by simp) (by simp))) (by simp)
-
-Depends on / 依赖: IsPullback, IsPullback.of_hasPullback, mk_eq_mk_of_comm, mk_surjective, of_hasPullback, pullback, pullback.map, pullback_obj_mk, underlyingIso
+/-
+**CategoryTheory.Subobject.pullback_obj** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Subobject`。
+形式化陈述：pullback_obj {X Y : C} (f : Y ⟶ X) (x : Subobject X) : (pullback f).obj x 
+= mk (pullback.snd x.arrow f)
+参数：f : Y ⟶ X；x : Subobject X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.pullback.snd_of_mono`：∀ {C : Type u} [inst : Categ
+oryTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Cat
+egoryTheory.Limits.HasPullback f…
+· 使用引理 `CategoryTheory.Subobject.mk_surjective`：mk_surjective {X : C} (S : Subob
+ject X) : exists (A : C) (i : A ⟶ X) (_ : Mono i), S = Subobject.mk i
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Subobject.pullback_obj_mk`：pullback_obj_mk {A B X Y : C} 
+{f : Y ⟶ X} {i : A ⟶ X} [Mono i] {j : B ⟶ Y} [Mono j] {f' : B ⟶ A} (h : IsPullba
+ck f' j i f) : (pullback f).ob…
+· 使用定理 `CategoryTheory.IsPullback.of_hasPullback`：of_hasPullback (f : X ⟶ Z) (g 
+: Y ⟶ Z) [HasPullback f g] : IsPullback (pullback.fst f g) (pullback.snd f g) f 
+g
+· 使用定理 `CategoryTheory.Subobject.mk_eq_mk_of_comm`：mk_eq_mk_of_comm {B A₁ A₂ : C
+} (f : A₁ ⟶ B) (g : A₂ ⟶ B) [Mono f] [Mono g] (i : A₁ ≅ A₂) (w : i.hom ≫ g = f) 
+: mk f = mk g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Subobject.underlyingIso_arrow`：underlyingIso_arrow {X Y :
+ C} (f : X ⟶ Y) [Mono f] : (underlyingIso f).inv ≫ (Subobject.mk f).arrow = f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Limits.pullback.map_isIso`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {W X Y Z S T : C} (f₁ : W ⟶ S) (f₂ : X ⟶ S)   [inst_1
+ : CategoryTheory.Limits.HasPu…
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Limits.limit.lift_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.PullbackCone.mk_π_app`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} {W : C} (fst :
+ W ⟶ X)   (snd : W ⟶ Y)   (eq :  …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem pullback_obj {X Y : C} (f : Y ⟶ X) (x : Subobject X) :
     (pullback f).obj x = mk (pullback.snd x.arrow f) := by
@@ -1948,38 +1933,58 @@ theorem pullback_obj {X Y : C} (f : Y ⟶ X) (x : Subobject X) :
   rw [pullback_obj_mk (IsPullback.of_hasPullback i f)]
   exact mk_eq_mk_of_comm _ _ (asIso (pullback.map i f (mk i).arrow f
     (underlyingIso i).inv (𝟙 _) (𝟙 _) (by simp) (by simp))) (by simp)
-
+/-
+**CategoryTheory.Subobject.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Subobject`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (f : X ⟶ Y) : (pullback f).Faithful where
-
-/--
-lemma `isPullback_aux` / 引理 `isPullback_aux`
-
-English:
-lemma isPullback_aux
-  given: (f : X ⟶ Y) (y : Subobject Y)
-  proof: by
-  obtain ⟨A, i, ⟨_, rfl⟩⟩ := mk_surjective y
-  rw [pullback_obj]
-  exists (underlyingIso (pullback.snd (mk i).arrow f)).hom ≫ pullback.fst (mk i).arrow f
-  exact IsPullback.of_iso (IsPullback.of_hasPullback (mk i).arrow f)
-        (underlyingIso (pullback.snd (mk i).arrow f)).symm (Iso.refl _) (Iso.refl _) (Iso.refl _)
-        (by simp) (by simp) (by simp) (by simp)
-
-中文:
-引理 isPullback_aux
-  条件: (f : X ⟶ Y) (y : Subobject Y)
-  证明: by
-  obtain ⟨A, i, ⟨_, rfl⟩⟩ := mk_surjective y
-  rw [pullback_obj]
-  exists (underlyingIso (pullback.snd (mk i).arrow f)).hom ≫ pullback.fst (mk i).arrow f
-  exact IsPullback.of_iso (IsPullback.of_hasPullback (mk i).arrow f)
-        (underlyingIso (pullback.snd (mk i).arrow f)).symm (Iso.refl _) (Iso.refl _) (Iso.refl _)
-        (by simp) (by simp) (by simp) (by simp)
-
-Depends on / 依赖: IsPullback, IsPullback.of_hasPullback, IsPullback.of_iso, Iso.refl, mk_surjective, of_hasPullback, of_iso, pullback, pullback.fst, pullback.snd, pullback_obj, underlyingIso
+/-
+**CategoryTheory.Subobject.isPullback_aux** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Subobject`。
+形式化陈述：isPullback_aux (f : X ⟶ Y) (y : Subobject Y) : exists φ, IsPullback φ ((pu
+llback f).obj y).arrow y.arrow f
+参数：f : X ⟶ Y；y : Subobject Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Subobject.mk_surjective`：mk_surjective {X : C} (S : Subob
+ject X) : exists (A : C) (i : A ⟶ X) (_ : Mono i), S = Subobject.mk i
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.pullback.snd_of_mono`：∀ {C : Type u} [inst : Categ
+oryTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Cat
+egoryTheory.Limits.HasPullback f…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Subobject.pullback_obj`：pullback_obj {X Y : C} (f : Y ⟶ X
+) (x : Subobject X) : (pullback f).obj x = mk (pullback.snd x.arrow f)
+· 使用引理 `CategoryTheory.IsPullback.of_iso`：of_iso (h : IsPullback fst snd f g) {P
+' X' Y' Z' : C} {fst' : P' ⟶ X'} {snd' : P' ⟶ Y'} {f' : X' ⟶ Z'} {g' : Y' ⟶ Z'} 
+(e₁ : P ≅ P') (e₂ : X …
+· 使用定理 `CategoryTheory.IsPullback.of_hasPullback`：of_hasPullback (f : X ⟶ Z) (g 
+: Y ⟶ Z) [HasPullback f g] : IsPullback (pullback.fst f g) (pullback.snd f g) f 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Subobject.underlyingIso_arrow`：underlyingIso_arrow {X Y :
+ C} (f : X ⟶ Y) [Mono f] : (underlyingIso f).inv ≫ (Subobject.mk f).arrow = f
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma isPullback_aux (f : X ⟶ Y) (y : Subobject Y) :
-    exists φ, IsPullback φ ((pullback f).obj y).arrow y.arrow f := by
+    ∃ φ, IsPullback φ ((pullback f).obj y).arrow y.arrow f := by
   obtain ⟨A, i, ⟨_, rfl⟩⟩ := mk_surjective y
   rw [pullback_obj]
   exists (underlyingIso (pullback.snd (mk i).arrow f)).hom ≫ pullback.fst (mk i).arrow f
@@ -1987,39 +1992,68 @@ lemma isPullback_aux (f : X ⟶ Y) (y : Subobject Y) :
         (underlyingIso (pullback.snd (mk i).arrow f)).symm (Iso.refl _) (Iso.refl _) (Iso.refl _)
         (by simp) (by simp) (by simp) (by simp)
 
-/--
-Definition of `pullbackπ` / `pullbackπ` 的定义
+/-- For any morphism `f : X ⟶ Y` and subobject `y` of `Y`, `Subobject.pullbackπ f y` is the first
+    projection in the following pullback square:
 
-English:
-definition pullbackπ
-  signature: (f : X ⟶ Y) (y : Subobject Y)
-  body: (isPullback_aux f y).choose
+    ```
+    (Subobject.pullback f).obj y ----pullbackπ f y---> (y : C)
+             |                                            |
+    ((Subobject.pullback f).obj y).arrow               y.arrow
+             |                                            |
+             v                                            v
+             X ---------------------f-------------------> Y
+    ```
 
-中文:
-定义 pullbackπ
-  签名: (f : X ⟶ Y) (y : Subobject Y)
-  定义体: (isPullback_aux f y).choose
+    For instance in the category of sets, `Subobject.pullbackπ f y` is the restriction of `f` to
+    elements of `X` that are in the preimage of `y ⊆ Y`.
+-/
+/-
+**CategoryTheory.Subobject.pullback** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Su
+bobject`。
+形式化陈述：pullback (f : X ⟶ Y) : Subobject Y ⥤ Subobject X
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: isPullback_aux
+--- 原说明 ---
+For any morphism `f : X ⟶ Y` and subobject `y` of `Y`, `Subobject.pullbackπ f y`
+ is the first
+    projection in the following pullback square:
+
+    ```
+    (Subobject.pullback f).obj y ----pullbackπ f y---> (y : C)
+             |                                            |
+    ((Subobject.pullback f).obj y).arrow               y.arrow
+             |                                            |
+             v                                            v
+             X ---------------------f-------------------> Y
+    ```
+
+    For instance in the category of sets, `Subobject.pullbackπ f y` is the restr
+iction of `f` to
+    elements of `X` that are in the preimage of `y ⊆ Y`.
 -/
 noncomputable def pullbackπ (f : X ⟶ Y) (y : Subobject Y) :
     ((Subobject.pullback f).obj y : C) ⟶ (y : C) :=
   (isPullback_aux f y).choose
 
-/--
-theorem `isPullback` / 定理 `isPullback`
+/-- This states that `pullbackπ f y` indeed forms a pullback square (see `Subobject.pullbackπ`). -/
+/-
+**CategoryTheory.Subobject.isPullback** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Subobject`。
+形式化陈述：isPullback (f : X ⟶ Y) (y : Subobject Y) : IsPullback (pullbackπ f y) ((pu
+llback f).obj y).arrow y.arrow f
+参数：f : X ⟶ Y；y : Subobject Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用引理 `CategoryTheory.Subobject.isPullback_aux`：isPullback_aux (f : X ⟶ Y) (y :
+ Subobject Y) : exists φ, IsPullback φ ((pullback f).obj y).arrow y.arrow f
 
-English:
-theorem isPullback
-  given: (f : X ⟶ Y) (y : Subobject Y)
-  proof: (isPullback_aux f y).choose_spec
-
-中文:
-定理 isPullback
-  条件: (f : X ⟶ Y) (y : Subobject Y)
-  证明: (isPullback_aux f y).choose_spec
-
-Depends on / 依赖: choose_spec, isPullback_aux
+--- 原说明 ---
+This states that `pullbackπ f y` indeed forms a pullback square (see `Subobject.
+pullbackπ`).
 -/
 theorem isPullback (f : X ⟶ Y) (y : Subobject Y) :
     IsPullback (pullbackπ f y) ((pullback f).obj y).arrow y.arrow f :=
@@ -2029,134 +2063,128 @@ end Pullback
 
 section Map
 
-/--
-Definition of `map` / `map` 的定义
+/-- We can map subobjects of `X` to subobjects of `Y`
+by post-composition with a monomorphism `f : X ⟶ Y`.
+-/
+/-
+**CategoryTheory.Subobject.map** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Subobje
+ct`。
+形式化陈述：map (f : X ⟶ Y) [Mono f] : Subobject X ⥤ Subobject Y
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (f : X ⟶ Y) [Mono f]
-  body: lower (MonoOver.map f)
-
-中文:
-定义 map
-  签名: (f : X ⟶ Y) [单态射 f]
-  定义体: lower (MonoOver.map f)
-
-Depends on / 依赖: MonoOver, MonoOver.map
+--- 原说明 ---
+We can map subobjects of `X` to subobjects of `Y`
+by post-composition with a monomorphism `f : X ⟶ Y`.
 -/
 def map (f : X ⟶ Y) [Mono f] : Subobject X ⥤ Subobject Y :=
   lower (MonoOver.map f)
-
-/--
-lemma `map_mk` / 引理 `map_mk`
-
-English:
-lemma map_mk
-  given: {A X Y : C} (i : A ⟶ X) [Mono i] (f : X ⟶ Y) [Mono f]
-  proof: rfl
-
-中文:
-引理 map_mk
-  条件: {A X Y : C} (i : A ⟶ X) [单态射 i] (f : X ⟶ Y) [单态射 f]
-  证明: rfl
+/-
+**CategoryTheory.Subobject.map_mk** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Subo
+bject`。
+形式化陈述：map_mk {A X Y : C} (i : A ⟶ X) [Mono i] (f : X ⟶ Y) [Mono f] : (map f).obj
+ (mk i) = mk (i ≫ f)
+参数：i : A ⟶ X；f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma map_mk {A X Y : C} (i : A ⟶ X) [Mono i] (f : X ⟶ Y) [Mono f] :
     (map f).obj (mk i) = mk (i ≫ f) :=
   rfl
-
-/--
-theorem `map_id` / 定理 `map_id`
-
-English:
-theorem map_id
-  given: (x : Subobject X)
-  statement: (map (𝟙 X)).obj x = x
-  proof: by
-  induction x using Quotient.inductionOn' with | _ f
-  exact Quotient.sound ⟨(MonoOver.mapId _).app f⟩
-
-中文:
-定理 map_id
-  条件: (x : Subobject X)
-  结论: (map (𝟙 X)).obj x = x
-  证明: by
-  induction x using Quotient.inductionOn' with | _ f
-  exact Quotient.sound ⟨(MonoOver.mapId _).app f⟩
-
-Depends on / 依赖: MonoOver, MonoOver.mapId, Quotient, Quotient.inductionOn, Quotient.sound, inductionOn
+/-
+**CategoryTheory.Subobject.map_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Subo
+bject`。
+形式化陈述：map_id (x : Subobject X) : (map (𝟙 X)).obj x = x
+参数：x : Subobject X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
+· 使用定理 `CategoryTheory.instMonoId`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] (X : C),   CategoryTheory.Mono (CategoryTheory.CategoryStruct.id X)
+· 使用定理 `Quotient.sound`：∀ {α : Sort u} {s : Setoid α} {a b : α}, a ≈ b → ⟦a⟧ = ⟦
+b⟧
 -/
 theorem map_id (x : Subobject X) : (map (𝟙 X)).obj x = x := by
   induction x using Quotient.inductionOn' with | _ f
   exact Quotient.sound ⟨(MonoOver.mapId _).app f⟩
-
-/--
-theorem `map_comp` / 定理 `map_comp`
-
-English:
-theorem map_comp
-  given: (f : X ⟶ Y) (g : Y ⟶ Z) [Mono f] [Mono g] (x : Subobject X)
-  proof: by
-  induction x using Quotient.inductionOn' with | _ t
-  exact Quotient.sound ⟨(MonoOver.mapComp _ _).app t⟩
-
-中文:
-定理 map_comp
-  条件: (f : X ⟶ Y) (g : Y ⟶ Z) [单态射 f] [单态射 g] (x : Subobject X)
-  证明: by
-  induction x using Quotient.inductionOn' with | _ t
-  exact Quotient.sound ⟨(MonoOver.mapComp _ _).app t⟩
-
-Depends on / 依赖: MonoOver, MonoOver.mapComp, Quotient, Quotient.inductionOn, Quotient.sound, inductionOn, mapComp
+/-
+**CategoryTheory.Subobject.map_comp** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Su
+bobject`。
+形式化陈述：map_comp (f : X ⟶ Y) (g : Y ⟶ Z) [Mono f] [Mono g] (x : Subobject X) : (ma
+p (f ≫ g)).obj x = (map g).obj ((map f).obj x)
+参数：f : X ⟶ Y；g : Y ⟶ Z；x : Subobject X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
+· 使用定理 `CategoryTheory.mono_comp`：∀ {C : Type u} [inst : CategoryTheory.Category
+.{v, u} C] {X Y Z : C} (g : Z ⟶ Y) [CategoryTheory.Mono g] (f : Y ⟶ X)   [Catego
+ryTheory.Mono …
+· 使用定理 `Quotient.sound`：∀ {α : Sort u} {s : Setoid α} {a b : α}, a ≈ b → ⟦a⟧ = ⟦
+b⟧
 -/
 theorem map_comp (f : X ⟶ Y) (g : Y ⟶ Z) [Mono f] [Mono g] (x : Subobject X) :
     (map (f ≫ g)).obj x = (map g).obj ((map f).obj x) := by
   induction x using Quotient.inductionOn' with | _ t
   exact Quotient.sound ⟨(MonoOver.mapComp _ _).app t⟩
-
-/--
-lemma `map_obj_injective` / 引理 `map_obj_injective`
-
-English:
-lemma map_obj_injective
-  given: {X Y : C} (f : X ⟶ Y) [Mono f]
-  proof: fun X₁ X₂ h => by
-  induction X₁ using Subobject.ind
-  induction X₂ using Subobject.ind
-  simp only [map_mk] at h
-  exact mk_eq_mk_of_comm _ _ (isoOfMkEqMk _ _ h) (by simp [← cancel_mono f])
-
-中文:
-引理 map_obj_injective
-  条件: {X Y : C} (f : X ⟶ Y) [单态射 f]
-  证明: fun X₁ X₂ h => by
-  induction X₁ using Subobject.ind
-  induction X₂ using Subobject.ind
-  simp only [map_mk] at h
-  exact mk_eq_mk_of_comm _ _ (isoOfMkEqMk _ _ h) (by simp [← cancel_mono f])
-
-Depends on / 依赖: Subobject, Subobject.ind, cancel_mono, isoOfMkEqMk, map_mk, mk_eq_mk_of_comm
+/-
+**CategoryTheory.Subobject.map_obj_injective** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.Subobject`。
+形式化陈述：map_obj_injective {X Y : C} (f : X ⟶ Y) [Mono f] : Function.Injective (Sub
+object.map f).obj
+参数：f : X ⟶ Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Subobject.ind`：∀ {C : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} C] {X : C} (p : CategoryTheory.Subobject X → Prop),   (∀ ⦃A : C⦄ 
+(f : A ⟶ X) [inst_…
+· 使用定理 `CategoryTheory.Subobject.mk_eq_mk_of_comm`：mk_eq_mk_of_comm {B A₁ A₂ : C
+} (f : A₁ ⟶ B) (g : A₂ ⟶ B) [Mono f] [Mono g] (i : A₁ ≅ A₂) (w : i.hom ≫ g = f) 
+: mk f = mk g
+· 使用定理 `CategoryTheory.mono_comp`：∀ {C : Type u} [inst : CategoryTheory.Category
+.{v, u} C] {X Y Z : C} (g : Z ⟶ Y) [CategoryTheory.Mono g] (f : Y ⟶ X)   [Catego
+ryTheory.Mono …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Subobject.isoOfMkEqMk_hom`：∀ {C : Type u₁} [inst : Catego
+ryTheory.Category.{v₁, u₁} C] {B A₁ A₂ : C} (f : A₁ ⟶ B) (g : A₂ ⟶ B)   [inst_1 
+: CategoryTheory.Mono f] [inst…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Subobject.ofMkLEMk_comp`：ofMkLEMk_comp {B A₁ A₂ : C} {f :
+ A₁ ⟶ B} {g : A₂ ⟶ B} [Mono f] [Mono g] (h : mk f <= mk g) : ofMkLEMk f g h ≫ g 
+= f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma map_obj_injective {X Y : C} (f : X ⟶ Y) [Mono f] :
-    Function.Injective (Subobject.map f).obj := fun X₁ X₂ h => by
+    Function.Injective (Subobject.map f).obj := fun X₁ X₂ h ↦ by
   induction X₁ using Subobject.ind
   induction X₂ using Subobject.ind
   simp only [map_mk] at h
   exact mk_eq_mk_of_comm _ _ (isoOfMkEqMk _ _ h) (by simp [← cancel_mono f])
 
-/--
-Definition of `mapIso` / `mapIso` 的定义
+/-- Isomorphic objects have equivalent subobject lattices. -/
+/-
+**CategoryTheory.Subobject.mapIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Subo
+bject`。
+形式化陈述：mapIso {A B : C} (e : A ≅ B) : Subobject A ≌ Subobject B
+参数：e : A ≅ B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapIso
-  signature: {A B : C} (e : A ≅ B)
-  body: lowerEquivalence (MonoOver.mapIso e)
-
-中文:
-定义 mapIso
-  签名: {A B : C} (e : A ≅ B)
-  定义体: lowerEquivalence (MonoOver.mapIso e)
-
-Depends on / 依赖: MonoOver, MonoOver.mapIso, lowerEquivalence, mapIso
+--- 原说明 ---
+Isomorphic objects have equivalent subobject lattices.
 -/
 def mapIso {A B : C} (e : A ≅ B) : Subobject A ≌ Subobject B :=
   lowerEquivalence (MonoOver.mapIso e)
@@ -2165,48 +2193,18 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- In fact, there's a type level bijection between the subobjects of isomorphic objects,
 which preserves the order. -/
 @[simps]
-/--
-Definition of `mapIsoToOrderIso` / `mapIsoToOrderIso` 的定义
+/-
+**CategoryTheory.Subobject.mapIsoToOrderIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory.Subobject`。
+形式化陈述：mapIsoToOrderIso (e : X ≅ Y) : Subobject X ≃o Subobject Y where toFun
+参数：e : X ≅ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapIsoToOrderIso
-  signature: (e : X ≅ Y)
-  body: (map e.hom).obj
-  invFun := (map e.inv).obj
-  left_inv g := by simp_rw [← map_comp, e.hom_inv_id, map_id]
-  right_inv g := by simp_rw [← map_comp, e.inv_hom_id, map_id]
-  map_rel_iff' {A B} := by
-    dsimp
-    constructor
-    · intro h
-      apply_fun (map e.inv).obj at h
-      · simpa only [← map_comp, e.hom_inv_id, map_id] using h
-      · apply Functor.monotone
-    · intro h
-      apply_fun (map e.hom).obj at h
-      · exact h
-      · apply Functor.monotone
-
-中文:
-定义 mapIsoToOrderIso
-  签名: (e : X ≅ Y)
-  定义体: (map e.hom).obj
-  invFun := (map e.inv).obj
-  left_inv g := by simp_rw [← map_comp, e.hom_inv_id, map_id]
-  right_inv g := by simp_rw [← map_comp, e.inv_hom_id, map_id]
-  map_rel_iff' {A B} := by
-    dsimp
-    constructor
-    · intro h
-      apply_fun (map e.inv).obj at h
-      · simpa only [← map_comp, e.hom_inv_id, map_id] using h
-      · apply Functor.monotone
-    · intro h
-      apply_fun (map e.hom).obj at h
-      · exact h
-      · apply Functor.monotone
-
-Depends on / 依赖: e.hom
+--- 原说明 ---
+In fact, there's a type level bijection between the subobjects of isomorphic obj
+ects,
+which preserves the order.
 -/
 def mapIsoToOrderIso (e : X ≅ Y) : Subobject X ≃o Subobject Y where
   toFun := (map e.hom).obj
@@ -2225,47 +2223,36 @@ def mapIsoToOrderIso (e : X ≅ Y) : Subobject X ≃o Subobject Y where
       · exact h
       · apply Functor.monotone
 
-/--
-Definition of `mapPullbackAdj` / `mapPullbackAdj` 的定义
+/-- `map f : Subobject X ⥤ Subobject Y` is
+the left adjoint of `pullback f : Subobject Y ⥤ Subobject X`. -/
+/-
+**CategoryTheory.Subobject.mapPullbackAdj** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Subobject`。
+形式化陈述：mapPullbackAdj [HasPullbacks C] (f : X ⟶ Y) [Mono f] : map f ⊣ pullback f
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapPullbackAdj
-  signature: [HasPullbacks C] (f : X ⟶ Y) [Mono f]
-  body: lowerAdjunction (MonoOver.mapPullbackAdj f)
-
-@[simp]
-
-中文:
-定义 mapPullbackAdj
-  签名: [有Pullbacks C] (f : X ⟶ Y) [单态射 f]
-  定义体: lowerAdjunction (MonoOver.mapPullbackAdj f)
-
-@[simp]
-
-Depends on / 依赖: MonoOver, MonoOver.mapPullbackAdj, lowerAdjunction, mapPullbackAdj
+--- 原说明 ---
+`map f : Subobject X ⥤ Subobject Y` is
+the left adjoint of `pullback f : Subobject Y ⥤ Subobject X`.
 -/
 def mapPullbackAdj [HasPullbacks C] (f : X ⟶ Y) [Mono f] : map f ⊣ pullback f :=
   lowerAdjunction (MonoOver.mapPullbackAdj f)
 
 @[simp]
-/--
-theorem `pullback_map_self` / 定理 `pullback_map_self`
-
-English:
-theorem pullback_map_self
-  given: [HasPullbacks C] (f : X ⟶ Y) [Mono f] (g : Subobject X)
-  proof: by
-  revert g
-  exact Quotient.ind (fun g' => Quotient.sound ⟨(MonoOver.pullbackMapSelf f).app _⟩)
-
-中文:
-定理 pullback_map_self
-  条件: [有Pullbacks C] (f : X ⟶ Y) [单态射 f] (g : Subobject X)
-  证明: by
-  revert g
-  exact Quotient.ind (fun g' => Quotient.sound ⟨(MonoOver.pullbackMapSelf f).app _⟩)
-
-Depends on / 依赖: MonoOver, MonoOver.pullbackMapSelf, Quotient, Quotient.ind, Quotient.sound, pullbackMapSelf, revert
+/-
+**CategoryTheory.Subobject.pullback_map_self** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Subobject`。
+形式化陈述：pullback_map_self [HasPullbacks C] (f : X ⟶ Y) [Mono f] (g : Subobject X) 
+: (pullback f).obj ((map f).obj g) = g
+参数：f : X ⟶ Y；g : Subobject X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.ind`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s → Prop}
+, (∀ (a : α), motive ⟦a⟧) → ∀ (q : Quotient s), motive q
+· 使用定理 `Quotient.sound`：∀ {α : Sort u} {s : Setoid α} {a b : α}, a ≈ b → ⟦a⟧ = ⟦
+b⟧
 -/
 theorem pullback_map_self [HasPullbacks C] (f : X ⟶ Y) [Mono f] (g : Subobject X) :
     (pullback f).obj ((map f).obj g) = g := by
@@ -2273,50 +2260,54 @@ theorem pullback_map_self [HasPullbacks C] (f : X ⟶ Y) [Mono f] (g : Subobject
   exact Quotient.ind (fun g' => Quotient.sound ⟨(MonoOver.pullbackMapSelf f).app _⟩)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `map_pullback` / 定理 `map_pullback`
-
-English:
-theorem map_pullback
-  statement: [HasPullbacks C] {X Y Z W : C} {f : X ⟶ Y} {g : X ⟶ Z} {h : Y ⟶ W} {k : Z ⟶ W}
-  proof: by
-  revert p
-  apply Quotient.ind'
-  intro a
-  apply Quotient.sound
-  apply ThinSkeleton.equiv_of_both_ways
-  · refine MonoOver.homMk (pullback.lift (pullback.fst _ _) _ ?_) (pullback.lift_snd _ _ _)
-    simp [← comm, pullback.condition_assoc]
-  · refine MonoOver.homMk (pullback.lift (pullback.fst _ _)
-      (PullbackCone.IsLimit.lift t (pullback.fst _ _ ≫ a.arrow) (pullback.snd _ _) _)
-      (PullbackCone.IsLimit.lift_fst _ _ _ ?_).symm) ?_
-    · rw [← pullback.condition, assoc]
-      rfl
-    · dsimp
-      rw [pullback.lift_snd_assoc]
-      apply PullbackCone.IsLimit.lift_snd
-
-中文:
-定理 map_pullback
-  结论: [有Pullbacks C] {X Y Z W : C} {f : X ⟶ Y} {g : X ⟶ Z} {h : Y ⟶ W} {k : Z ⟶ W}
-  证明: by
-  revert p
-  apply Quotient.ind'
-  intro a
-  apply Quotient.sound
-  apply ThinSkeleton.equiv_of_both_ways
-  · refine MonoOver.homMk (pullback.lift (pullback.fst _ _) _ ?_) (pullback.lift_snd _ _ _)
-    simp [← comm, pullback.condition_assoc]
-  · refine MonoOver.homMk (pullback.lift (pullback.fst _ _)
-      (PullbackCone.IsLimit.lift t (pullback.fst _ _ ≫ a.arrow) (pullback.snd _ _) _)
-      (PullbackCone.IsLimit.lift_fst _ _ _ ?_).symm) ?_
-    · rw [← pullback.condition, assoc]
-      rfl
-    · dsimp
-      rw [pullback.lift_snd_assoc]
-      apply PullbackCone.IsLimit.lift_snd
-
-Depends on / 依赖: IsLimit, MonoOver, MonoOver.homMk, PullbackCone, PullbackCone.IsLimit.lift, PullbackCone.IsLimit.lift_fst, Quotient, Quotient.ind, Quotient.sound, ThinSkeleton, ThinSkeleton.equiv_of_both_ways, a.arrow, condition, condition_assoc, equiv_of_both_ways, lift_fst, lift_snd, lift_snd_assoc, pullback, pullback.condition
+/-
+**CategoryTheory.Subobject.map_pullback** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Subobject`。
+形式化陈述：map_pullback [HasPullbacks C] {X Y Z W : C} {f : X ⟶ Y} {g : X ⟶ Z} {h : Y
+ ⟶ W} {k : Z ⟶ W} [Mono h] [Mono g] (comm : f ≫ h = g ≫ k) (t : IsLimit (Pullbac
+kCone.mk f g comm)) (p : Subobject Y) : (map g).obj ((pullback f).obj p) = (pull
+back k).obj ((map h).obj p)
+参数：comm : f ≫ h = g ≫ k；t : IsLimit (PullbackCone.mk f g comm)；p : Subobject Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.ind'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁ → Prop}
+, (∀ (a : α), p (Quotient.mk'' a)) → ∀ (q : Quotient s₁), p q
+· 使用定理 `Quotient.sound`：∀ {α : Sort u} {s : Setoid α} {a b : α}, a ≈ b → ⟦a⟧ = ⟦
+b⟧
+· 使用定理 `CategoryTheory.ThinSkeleton.equiv_of_both_ways`：equiv_of_both_ways {X Y 
+: C} (f : X ⟶ Y) (g : Y ⟶ X) : X ≈ Y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.pullback.condition_assoc`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 :
+ CategoryTheory.Limits.HasPullback f…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Limits.pullback.lift_snd`：∀ {C : Type u} [inst : Category
+Theory.Category.{v, u} C] {W X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Cate
+goryTheory.Limits.HasPullback…
+· 使用定理 `CategoryTheory.Limits.pullback.condition`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categ
+oryTheory.Limits.HasPullback f…
+· 使用定理 `CategoryTheory.Limits.PullbackCone.IsLimit.lift_fst`：∀ {C : Type u} [ins
+t : CategoryTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   {t :
+ CategoryTheory.Limits.PullbackCone f g} …
+· 使用定理 `CategoryTheory.Limits.pullback.lift_snd_assoc`：∀ {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C] {W X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 
+: CategoryTheory.Limits.HasPullback…
+· 使用定理 `CategoryTheory.Limits.PullbackCone.IsLimit.lift_snd`：∀ {C : Type u} [ins
+t : CategoryTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   {t :
+ CategoryTheory.Limits.PullbackCone f g} …
 -/
 theorem map_pullback [HasPullbacks C] {X Y Z W : C} {f : X ⟶ Y} {g : X ⟶ Z} {h : Y ⟶ W} {k : Z ⟶ W}
     [Mono h] [Mono g] (comm : f ≫ h = g ≫ k) (t : IsLimit (PullbackCone.mk f g comm))
@@ -2343,131 +2334,126 @@ section Exists
 
 variable [HasImages C]
 
-/--
-Definition of `«exists»` / `«exists»` 的定义
+/-- The functor from subobjects of `X` to subobjects of `Y` given by
+sending the subobject `S` to its "image" under `f`, usually denoted $\exists_f$.
+For instance, when `C` is the category of types,
+viewing `Subobject X` as `Set X` this is just `Set.image f`.
 
-English:
-definition «exists»
-  signature: (f : X ⟶ Y)
-  body: lower (MonoOver.exists f)
+This functor is left adjoint to the `pullback f` functor (shown in `existsPullbackAdj`)
+provided both are defined, and generalises the `map f` functor, again provided it is defined.
+-/
+/-
+**CategoryTheory.Subobject.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Subobject`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 «存在»
-  签名: (f : X ⟶ Y)
-  定义体: lower (MonoOver.exists f)
+--- 原说明 ---
+The functor from subobjects of `X` to subobjects of `Y` given by
+sending the subobject `S` to its "image" under `f`, usually denoted $\exists_f$.
+For instance, when `C` is the category of types,
+viewing `Subobject X` as `Set X` this is just `Set.image f`.
+
+This functor is left adjoint to the `pullback f` functor (shown in `existsPullba
+ckAdj`)
+provided both are defined, and generalises the `map f` functor, again provided i
+t is defined.
 -/
 def «exists» (f : X ⟶ Y) : Subobject X ⥤ Subobject Y :=
   lower (MonoOver.exists f)
 
-/--
-theorem `exists_iso_map` / 定理 `exists_iso_map`
+/-- When `f : X ⟶ Y` is a monomorphism, `exists f` agrees with `map f`.
+-/
+/-
+**CategoryTheory.Subobject.exists_iso_map** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Subobject`。
+形式化陈述：exists_iso_map (f : X ⟶ Y) [Mono f] : «exists» f = map f
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Subobject.lower_iso`：lower_iso (F₁ F₂ : MonoOver X ⥤ Mono
+Over Y) (h : F₁ ≅ F₂) : lower F₁ = lower F₂
 
-English:
-theorem exists_iso_map
-  given: (f : X ⟶ Y) [Mono f]
-  statement: «exists» f = map f
-  proof: lower_iso _ _ (MonoOver.existsIsoMap f)
-
-中文:
-定理 存在_iso_map
-  条件: (f : X ⟶ Y) [单态射 f]
-  结论: «存在» f = map f
-  证明: lower_iso _ _ (MonoOver.existsIsoMap f)
-
-Depends on / 依赖: MonoOver, MonoOver.existsIsoMap, existsIsoMap, lower_iso
+--- 原说明 ---
+When `f : X ⟶ Y` is a monomorphism, `exists f` agrees with `map f`.
 -/
 theorem exists_iso_map (f : X ⟶ Y) [Mono f] : «exists» f = map f :=
   lower_iso _ _ (MonoOver.existsIsoMap f)
 
-/--
-Definition of `existsPullbackAdj` / `existsPullbackAdj` 的定义
+/-- `exists f : Subobject X ⥤ Subobject Y` is
+left adjoint to `pullback f : Subobject Y ⥤ Subobject X`.
+-/
+/-
+**CategoryTheory.Subobject.existsPullbackAdj** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Subobject`。
+形式化陈述：existsPullbackAdj (f : X ⟶ Y) [HasPullbacks C] : «exists» f ⊣ pullback f
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition existsPullbackAdj
-  signature: (f : X ⟶ Y) [HasPullbacks C]
-  body: lowerAdjunction (MonoOver.existsPullbackAdj f)
-
-中文:
-定义 存在PullbackAdj
-  签名: (f : X ⟶ Y) [有Pullbacks C]
-  定义体: lowerAdjunction (MonoOver.existsPullbackAdj f)
-
-Depends on / 依赖: MonoOver, MonoOver.existsPullbackAdj, existsPullbackAdj, lowerAdjunction
+--- 原说明 ---
+`exists f : Subobject X ⥤ Subobject Y` is
+left adjoint to `pullback f : Subobject Y ⥤ Subobject X`.
 -/
 def existsPullbackAdj (f : X ⟶ Y) [HasPullbacks C] : «exists» f ⊣ pullback f :=
   lowerAdjunction (MonoOver.existsPullbackAdj f)
 
 /--
-Definition of `existsCompRepresentativeIso` / `existsCompRepresentativeIso` 的定义
+Taking representatives and then `MonoOver.exists` is isomorphic to taking `Subobject.exists`
+and then taking representatives.
+-/
+/-
+**CategoryTheory.Subobject.existsCompRepresentativeIso** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.Subobject`。
+形式化陈述：existsCompRepresentativeIso (f : X ⟶ Y) : «exists» f ⋙ representative ≅ re
+presentative ⋙ MonoOver.exists f
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition existsCompRepresentativeIso
-  signature: (f : X ⟶ Y)
-  body: lowerCompRepresentativeIso _
-
-中文:
-定义 存在CompRepresentativeIso
-  签名: (f : X ⟶ Y)
-  定义体: lowerCompRepresentativeIso _
-
-Depends on / 依赖: lowerCompRepresentativeIso
+--- 原说明 ---
+Taking representatives and then `MonoOver.exists` is isomorphic to taking `Subob
+ject.exists`
+and then taking representatives.
 -/
 def existsCompRepresentativeIso (f : X ⟶ Y) :
     «exists» f ⋙ representative ≅ representative ⋙ MonoOver.exists f :=
   lowerCompRepresentativeIso _
 
-/--
-Definition of `existsIsoImage` / `existsIsoImage` 的定义
+/-- `exists f` applied to a subobject `x` is isomorphic to the image of `x.arrow ≫ f`. -/
+/-
+**CategoryTheory.Subobject.existsIsoImage** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Subobject`。
+形式化陈述：existsIsoImage (f : X ⟶ Y) (x : Subobject X) : ((«exists» f).obj x : C) ≅ 
+Limits.image (x.arrow ≫ f)
+参数：f : X ⟶ Y；x : Subobject X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition existsIsoImage
-  signature: (f : X ⟶ Y) (x : Subobject X)
-  body: (MonoOver.forget Y ⋙ Over.forget Y).mapIso (existsCompRepresentativeIso f).app x
-
-#adaptation_note
-
-中文:
-定义 存在IsoImage
-  签名: (f : X ⟶ Y) (x : Subobject X)
-  定义体: (MonoOver.forget Y ⋙ Over.forget Y).mapIso (existsCompRepresentativeIso f).app x
-
-#adaptation_note
-
-Depends on / 依赖: MonoOver, MonoOver.forget, Over.forget, existsCompRepresentativeIso, forget, mapIso
+--- 原说明 ---
+`exists f` applied to a subobject `x` is isomorphic to the image of `x.arrow ≫ f
+`.
 -/
 def existsIsoImage (f : X ⟶ Y) (x : Subobject X) :
     ((«exists» f).obj x : C) ≅ Limits.image (x.arrow ≫ f) :=
-(MonoOver.forget Y ⋙ Over.forget Y).mapIso (existsCompRepresentativeIso f).app x
+  (MonoOver.forget Y ⋙ Over.forget Y).mapIso <| (existsCompRepresentativeIso f).app x
 
 #adaptation_note
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
 /-- Given a subobject `x`, the `ImageFactorisation` of `x.arrow ≫ f` through `(exists f).obj x`. -/
 @[simps! F_I F_m]
-/--
-Definition of `imageFactorisation` / `imageFactorisation` 的定义
+/-
+**CategoryTheory.Subobject.imageFactorisation** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Subobject`。
+形式化陈述：imageFactorisation (f : X ⟶ Y) (x : Subobject X) : ImageFactorisation (x.a
+rrow ≫ f)
+参数：f : X ⟶ Y；x : Subobject X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition imageFactorisation
-  signature: (f : X ⟶ Y) (x : Subobject X)
-  body: let :=
-    ImageFactorisation.ofIsoI
-      (Image.imageFactorisation (x.arrow ≫ f))
-      (existsIsoImage f x).symm
-  ImageFactorisation.copy this ((«exists» f).obj x).arrow this.F.e (by
-    simpa [this, -Over.w] using! (Over.w ((existsCompRepresentativeIso f).app x).hom.hom).symm)
-
-中文:
-定义 imageFactorisation
-  签名: (f : X ⟶ Y) (x : Subobject X)
-  定义体: let :=
-    ImageFactorisation.ofIsoI
-      (Image.imageFactorisation (x.arrow ≫ f))
-      (existsIsoImage f x).symm
-  ImageFactorisation.copy this ((«exists» f).obj x).arrow this.F.e (by
-    simpa [this, -Over.w] using! (Over.w ((existsCompRepresentativeIso f).app x).hom.hom).symm)
-
-Depends on / 依赖: Image.imageFactorisation, ImageFactorisation, ImageFactorisation.copy, ImageFactorisation.ofIsoI, Over.w, existsCompRepresentativeIso, existsIsoImage, hom.hom, imageFactorisation, ofIsoI, this.F.e, x.arrow
+--- 原说明 ---
+Given a subobject `x`, the `ImageFactorisation` of `x.arrow ≫ f` through `(exist
+s f).obj x`.
 -/
 def imageFactorisation (f : X ⟶ Y) (x : Subobject X) :
     ImageFactorisation (x.arrow ≫ f) :=
@@ -2483,3 +2469,4 @@ end Exists
 end Subobject
 
 end CategoryTheory
+

@@ -28,24 +28,13 @@ variable {M : Type uM}
 
 namespace AddMonoid.End
 
-/--
-Instance `instAddMonoidWithOne` / 实例 `instAddMonoidWithOne`
-
-English:
-instance instAddMonoidWithOne
-  signature: (M) [AddCommMonoid M]
-  body: n • (1 : AddMonoid.End M)
-  natCast_zero := AddMonoid.nsmul_zero _
-  natCast_succ n := AddMonoid.nsmul_succ n 1
-
-中文:
-实例 instAddMonoidWithOne
-  签名: (M) [加法交换幺半群 M]
-  定义体: n • (1 : AddMonoid.End M)
-  natCast_zero := AddMonoid.nsmul_zero _
-  natCast_succ n := AddMonoid.nsmul_succ n 1
-
-Depends on / 依赖: AddMonoid, AddMonoid.End
+/-
+**AddMonoid.End.instAddMonoidWithOne** 是 Mathlib 中的一个实例，位于命名空间 `AddMonoid.End`。
+形式化陈述：instAddMonoidWithOne (M) [AddCommMonoid M] : AddMonoidWithOne (AddMonoid.E
+nd M) where natCast n
+参数：M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddMonoidWithOne (M) [AddCommMonoid M] : AddMonoidWithOne (AddMonoid.End M) where
   natCast n := n • (1 : AddMonoid.End M)
@@ -54,65 +43,32 @@ instance instAddMonoidWithOne (M) [AddCommMonoid M] : AddMonoidWithOne (AddMonoi
 
 /-- See also `AddMonoid.End.natCast_def`. -/
 @[simp]
-/--
-lemma `natCast_apply` / 引理 `natCast_apply`
+/-
+**AddMonoid.End.natCast_apply** 是 Mathlib 中的一个引理，位于命名空间 `AddMonoid.End`。
+形式化陈述：natCast_apply [AddCommMonoid M] (n : Nat) (m : M) : (↑n : AddMonoid.End M)
+ m = n • m
+参数：n : Nat；m : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma natCast_apply
-  given: [AddCommMonoid M] (n : Nat) (m : M)
-  statement: (↑n : AddMonoid.End M) m = n • m
-  proof: rfl
-
-中文:
-引理 natCast_apply
-  条件: [加法交换幺半群 M] (n : 自然数) (m : M)
-  结论: (↑n : 加法幺半群.End M) m = n • m
-  证明: rfl
+--- 原说明 ---
+See also `AddMonoid.End.natCast_def`.
 -/
-lemma natCast_apply [AddCommMonoid M] (n : Nat) (m : M) : (↑n : AddMonoid.End M) m = n • m := rfl
-
-/--
-lemma `ofNat_apply` / 引理 `ofNat_apply`
-
-English:
-lemma ofNat_apply
-  given: [AddCommMonoid M] (n : Nat) [n.AtLeastTwo] (m : M)
-  proof: rfl
-
-中文:
-引理 of自然数_apply
-  条件: [加法交换幺半群 M] (n : 自然数) [n.AtLeastTwo] (m : M)
-  证明: rfl
+lemma natCast_apply [AddCommMonoid M] (n : ℕ) (m : M) : (↑n : AddMonoid.End M) m = n • m := rfl
+/-
+**AddMonoid.End.ofNat_apply** 是 Mathlib 中的一个定理，位于命名空间 `AddMonoid.End`。
+形式化陈述：∀ {M : Type uM} [inst : AddCommMonoid M] (n : ℕ) [inst_1 : n.AtLeastTwo] (
+m : M), (OfNat.ofNat n) m = n • m
+参数：n : ℕ；m : M；OfNat.ofNat n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma ofNat_apply [AddCommMonoid M] (n : Nat) [n.AtLeastTwo] (m : M) :
+@[simp] lemma ofNat_apply [AddCommMonoid M] (n : ℕ) [n.AtLeastTwo] (m : M) :
     (ofNat(n) : AddMonoid.End M) m = n • m := rfl
-
-/--
-Instance `instSemiring` / 实例 `instSemiring`
-
-English:
-instance instSemiring
-  signature: [AddCommMonoid M]
-  body: fast_instance% { AddMonoid.End.instMonoid M,
-    AddMonoidHom.instAddCommMonoid,
-    AddMonoid.End.instAddMonoidWithOne M with
-    zero_mul := fun _ => AddMonoidHom.ext fun _ => rfl,
-    mul_zero := fun _ => AddMonoidHom.ext fun _ => AddMonoidHom.map_zero _,
-    left_distrib := fun _ _ _ => AddMonoidHom.ext fun _ => AddMonoidHom.map_add _ _ _,
-    right_distrib := fun _ _ _ => AddMonoidHom.ext fun _ => rfl }
-
-中文:
-实例 instSemiring
-  签名: [加法交换幺半群 M]
-  定义体: fast_instance% { AddMonoid.End.instMonoid M,
-    AddMonoidHom.instAddCommMonoid,
-    AddMonoid.End.instAddMonoidWithOne M with
-    zero_mul := fun _ => AddMonoidHom.ext fun _ => rfl,
-    mul_zero := fun _ => AddMonoidHom.ext fun _ => AddMonoidHom.map_zero _,
-    left_distrib := fun _ _ _ => AddMonoidHom.ext fun _ => AddMonoidHom.map_add _ _ _,
-    right_distrib := fun _ _ _ => AddMonoidHom.ext fun _ => rfl }
-
-Depends on / 依赖: AddMonoid, AddMonoid.End.instAddMonoidWithOne, AddMonoid.End.instMonoid, AddMonoidHom, AddMonoidHom.ext, AddMonoidHom.instAddCommMonoid, AddMonoidHom.map_add, AddMonoidHom.map_zero, fast_instance, instAddCommMonoid, instAddMonoidWithOne, instMonoid, left_distrib, map_add, map_zero, mul_zero, right_distrib, zero_mul
+/-
+**AddMonoid.End.instSemiring** 是 Mathlib 中的一个实例，位于命名空间 `AddMonoid.End`。
+形式化陈述：instSemiring [AddCommMonoid M] : Semiring (AddMonoid.End M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSemiring [AddCommMonoid M] : Semiring (AddMonoid.End M) :=
   fast_instance% { AddMonoid.End.instMonoid M,
@@ -122,47 +78,25 @@ instance instSemiring [AddCommMonoid M] : Semiring (AddMonoid.End M) :=
     mul_zero := fun _ => AddMonoidHom.ext fun _ => AddMonoidHom.map_zero _,
     left_distrib := fun _ _ _ => AddMonoidHom.ext fun _ => AddMonoidHom.map_add _ _ _,
     right_distrib := fun _ _ _ => AddMonoidHom.ext fun _ => rfl }
-
-/--
-Instance `instRing` / 实例 `instRing`
-
-English:
-instance instRing
-  signature: [AddCommGroup M]
-  body: fast_instance% { AddMonoid.End.instSemiring, AddMonoid.End.instAddCommGroup with
-    intCast := fun z => z • (1 : AddMonoid.End M),
-    intCast_ofNat := natCast_zsmul _,
-    intCast_negSucc := negSucc_zsmul _ }
-
-example [AddCommGroup M] :
-    (AddMonoid.End.instRing (M := M)).toAddCommGroup.toAddGroup.toSubNegMonoid =
-    (AddMonoid.End.instRing (M := M)).toAddGroupWithOne.toAddGroup.toSubNegMonoid := by
-  with_reducible_and_instances rfl
-
-中文:
-实例 instRing
-  签名: [加法交换群 M]
-  定义体: fast_instance% { AddMonoid.End.instSemiring, AddMonoid.End.instAddCommGroup with
-    intCast := fun z => z • (1 : AddMonoid.End M),
-    intCast_ofNat := natCast_zsmul _,
-    intCast_negSucc := negSucc_zsmul _ }
-
-example [AddCommGroup M] :
-    (AddMonoid.End.instRing (M := M)).toAddCommGroup.toAddGroup.toSubNegMonoid =
-    (AddMonoid.End.instRing (M := M)).toAddGroupWithOne.toAddGroup.toSubNegMonoid := by
-  with_reducible_and_instances rfl
-
-Depends on / 依赖: AddMonoid, AddMonoid.End, AddMonoid.End.instAddCommGroup, AddMonoid.End.instSemiring, fast_instance, instAddCommGroup, instSemiring, intCast, intCast_negSucc, intCast_ofNat, natCast_zsmul, negSucc_zsmul
+/-
+**AddMonoid.End.instRing** 是 Mathlib 中的一个实例，位于命名空间 `AddMonoid.End`。
+形式化陈述：instRing [AddCommGroup M] : Ring (AddMonoid.End M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instRing [AddCommGroup M] : Ring (AddMonoid.End M) :=
   fast_instance% { AddMonoid.End.instSemiring, AddMonoid.End.instAddCommGroup with
     intCast := fun z => z • (1 : AddMonoid.End M),
     intCast_ofNat := natCast_zsmul _,
     intCast_negSucc := negSucc_zsmul _ }
-
+/-
+**AddMonoid.End.** 是 Mathlib 中的一个示例，位于命名空间 `AddMonoid.End`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example [AddCommGroup M] :
     (AddMonoid.End.instRing (M := M)).toAddCommGroup.toAddGroup.toSubNegMonoid =
     (AddMonoid.End.instRing (M := M)).toAddGroupWithOne.toAddGroup.toSubNegMonoid := by
   with_reducible_and_instances rfl
 
 end AddMonoid.End
+

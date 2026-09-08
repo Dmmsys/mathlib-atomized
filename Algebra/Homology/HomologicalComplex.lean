@@ -46,34 +46,39 @@ open CategoryTheory CategoryTheory.Category CategoryTheory.Limits
 variable {ι : Type*}
 variable (V : Type u) [Category.{v} V] [HasZeroMorphisms V]
 
-/--
-Definition of `HomologicalComplex` / `HomologicalComplex` 的定义
+/-- A `HomologicalComplex V c` with a "shape" controlled by `c : ComplexShape ι`
+has chain groups `X i` (objects in `V`) indexed by `i : ι`,
+and a differential `d i j` whenever `c.Rel i j`.
 
-English:
-structure HomologicalComplex
-  parameters: (c : ComplexShape ι)
-  axioms and operations (4):
-    - X : ι -> V
-    - d : forall i j, X i ⟶ X j
-    - shape : forall i j, ¬c.Rel i j -> d i j = 0  [default: by cat_disch]
-    - d_comp_d' : forall i j k, c.Rel i j -> c.Rel j k -> d i j ≫ d j k = 0  [default: by cat_disch]
+We in fact ask for differentials `d i j` for all `i j : ι`,
+but have a field `shape` requiring that these are zero when not allowed by `c`.
+This avoids a lot of dependent type theory hell!
 
-中文:
-结构 同调复形
-  参数: (c : 余mplexShape ι)
-  公理与运算 (4 个):
-    - X : ι -> V
-    - d : 对任意 i j, X i ⟶ X j
-    - shape : 对任意 i j, ¬c.关系 i j -> d i j = 0  [默认: by cat_disch]
-    - d_comp_d' : 对任意 i j k, c.关系 i j -> c.关系 j k -> d i j ≫ d j k = 0  [默认: by cat_disch]
+The composite of any two differentials `d i j ≫ d j k` must be zero.
+-/
+/-
+**HomologicalComplex** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：HomologicalComplex (c : ComplexShape ι) where X : ι -> V d : forall i j, X
+ i ⟶ X j shape : forall i j, ¬c.Rel i j -> d i j = 0
+参数：c : ComplexShape ι。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: c.Rel, cat_disch, d_comp_d
+--- 原说明 ---
+A `HomologicalComplex V c` with a "shape" controlled by `c : ComplexShape ι`
+has chain groups `X i` (objects in `V`) indexed by `i : ι`,
+and a differential `d i j` whenever `c.Rel i j`.
+
+We in fact ask for differentials `d i j` for all `i j : ι`,
+but have a field `shape` requiring that these are zero when not allowed by `c`.
+This avoids a lot of dependent type theory hell!
+
+The composite of any two differentials `d i j ≫ d j k` must be zero.
 -/
 structure HomologicalComplex (c : ComplexShape ι) where
-  X : ι -> V
-  d : forall i j, X i ⟶ X j
-  shape : forall i j, ¬c.Rel i j -> d i j = 0 := by cat_disch
-  d_comp_d' : forall i j k, c.Rel i j -> c.Rel j k -> d i j ≫ d j k = 0 := by cat_disch
+  X : ι → V
+  d : ∀ i j, X i ⟶ X j
+  shape : ∀ i j, ¬c.Rel i j → d i j = 0 := by cat_disch
+  d_comp_d' : ∀ i j k, c.Rel i j → c.Rel j k → d i j ≫ d j k = 0 := by cat_disch
 
 namespace HomologicalComplex
 
@@ -82,32 +87,24 @@ attribute [simp] shape
 variable {V} {c : ComplexShape ι}
 
 @[reassoc (attr := simp)]
-/--
-theorem `d_comp_d` / 定理 `d_comp_d`
-
-English:
-theorem d_comp_d
-  given: (C : HomologicalComplex V c) (i j k : ι)
-  statement: C.d i j ≫ C.d j k = 0
-  proof: by
-  by_cases hij : c.Rel i j
-  · by_cases hjk : c.Rel j k
-    · exact C.d_comp_d' i j k hij hjk
-    · rw [C.shape j k hjk, comp_zero]
-  · rw [C.shape i j hij, zero_comp]
-
-中文:
-定理 d_comp_d
-  条件: (C : 同调复形 V c) (i j k : ι)
-  结论: C.d i j ≫ C.d j k = 0
-  证明: by
-  by_cases hij : c.Rel i j
-  · by_cases hjk : c.Rel j k
-    · exact C.d_comp_d' i j k hij hjk
-    · rw [C.shape j k hjk, comp_zero]
-  · rw [C.shape i j hij, zero_comp]
-
-Depends on / 依赖: C.d_comp_d, C.shape, c.Rel, comp_zero, d_comp_d, zero_comp
+/-
+**HomologicalComplex.d_comp_d** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalComplex`。
+形式化陈述：d_comp_d (C : HomologicalComplex V c) (i j k : ι) : C.d i j ≫ C.d j k = 0
+参数：C : HomologicalComplex V c；i j k : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomologicalComplex.d_comp_d'`：∀ {ι : Type u_1} {V : Type u} [inst : Cate
+goryTheory.Category.{v, u} V]   [inst_1 : CategoryTheory.Limits.HasZeroMorphisms
+ V] {c : ComplexSh…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HomologicalComplex.shape`：∀ {ι : Type u_1} {V : Type u} [inst : Category
+Theory.Category.{v, u} V]   [inst_1 : CategoryTheory.Limits.HasZeroMorphisms V] 
+{c : ComplexSh…
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
+· 使用定理 `CategoryTheory.Limits.zero_comp`：zero_comp [HasZeroMorphisms C] {X : C} 
+{Y Z : C} {f : Y ⟶ Z} : (0 : X ⟶ Y) ≫ f = (0 : X ⟶ Z)
 -/
 theorem d_comp_d (C : HomologicalComplex V c) (i j k : ι) : C.d i j ≫ C.d j k = 0 := by
   by_cases hij : c.Rel i j
@@ -115,44 +112,41 @@ theorem d_comp_d (C : HomologicalComplex V c) (i j k : ι) : C.d i j ≫ C.d j k
     · exact C.d_comp_d' i j k hij hjk
     · rw [C.shape j k hjk, comp_zero]
   · rw [C.shape i j hij, zero_comp]
-
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  statement: {C₁ C₂ : HomologicalComplex V c} (h_X : C₁.X = C₂.X)
-  proof: by
-  obtain ⟨X₁, d₁, s₁, h₁⟩ := C₁
-  obtain ⟨X₂, d₂, s₂, h₂⟩ := C₂
-  dsimp at h_X
-  subst h_X
-  simp only [mk.injEq, heq_eq_eq, true_and]
-  ext i j
-  by_cases hij : c.Rel i j
-  · simpa only [comp_id, id_comp, eqToHom_refl] using h_d i j hij
-  · rw [s₁ i j hij, s₂ i j hij]
-
-中文:
-定理 ext
-  结论: {C₁ C₂ : 同调复形 V c} (h_X : C₁.X = C₂.X)
-  证明: by
-  obtain ⟨X₁, d₁, s₁, h₁⟩ := C₁
-  obtain ⟨X₂, d₂, s₂, h₂⟩ := C₂
-  dsimp at h_X
-  subst h_X
-  simp only [mk.injEq, heq_eq_eq, true_and]
-  ext i j
-  by_cases hij : c.Rel i j
-  · simpa only [comp_id, id_comp, eqToHom_refl] using h_d i j hij
-  · rw [s₁ i j hij, s₂ i j hij]
-
-Depends on / 依赖: c.Rel, comp_id, eqToHom_refl, heq_eq_eq, id_comp, mk.injEq, true_and
+/-
+**HomologicalComplex.ext** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalComplex`。
+形式化陈述：ext {C₁ C₂ : HomologicalComplex V c} (h_X : C₁.X = C₂.X) (h_d : forall i j
+ : ι, c.Rel i j -> C₁.d i j ≫ eqToHom (congr_fun h_X j) = eqToHom (congr_fun h_X
+ i) ≫ C₂.d i j) : C₁ = C₂
+参数：h_X : C₁.X = C₂.X；h_d : forall i j : ι, c.Rel i j -> C₁.d i j ≫ eqToHom (cong
+r_fun h_X j) = eqToHom (congr_fun h_X i) ≫ C₂.d i j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `HomologicalComplex.mk.injEq`：∀ {ι : Type u_1} {V : Type u} [inst : Categ
+oryTheory.Category.{v, u} V]   [inst_1 : CategoryTheory.Limits.HasZeroMorphisms 
+V] {c : ComplexSh…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `heq_eq_eq`：∀ {α : Sort u_1} (a b : α), (a ≍ b) = (a = b)
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 theorem ext {C₁ C₂ : HomologicalComplex V c} (h_X : C₁.X = C₂.X)
     (h_d :
-      forall i j : ι,
-        c.Rel i j -> C₁.d i j ≫ eqToHom (congr_fun h_X j) = eqToHom (congr_fun h_X i) ≫ C₂.d i j) :
+      ∀ i j : ι,
+        c.Rel i j → C₁.d i j ≫ eqToHom (congr_fun h_X j) = eqToHom (congr_fun h_X i) ≫ C₂.d i j) :
     C₁ = C₂ := by
   obtain ⟨X₁, d₁, s₁, h₁⟩ := C₁
   obtain ⟨X₂, d₂, s₂, h₂⟩ := C₂
@@ -164,72 +158,53 @@ theorem ext {C₁ C₂ : HomologicalComplex V c} (h_X : C₁.X = C₂.X)
   · simpa only [comp_id, id_comp, eqToHom_refl] using h_d i j hij
   · rw [s₁ i j hij, s₂ i j hij]
 
-/--
-Definition of `XIsoOfEq` / `XIsoOfEq` 的定义
+/-- The obvious isomorphism `K.X p ≅ K.X q` when `p = q`. -/
+/-
+**HomologicalComplex.XIsoOfEq** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex`。
+形式化陈述：XIsoOfEq (K : HomologicalComplex V c) {p q : ι} (h : p = q) : K.X p ≅ K.X 
+q
+参数：K : HomologicalComplex V c；h : p = q。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition XIsoOfEq
-  signature: (K : HomologicalComplex V c) {p q : ι} (h : p = q)
-  body: eqToIso (by rw [h])
-
-@[simp]
-
-中文:
-定义 XIsoOfEq
-  签名: (K : 同调复形 V c) {p q : ι} (h : p = q)
-  定义体: eqToIso (by rw [h])
-
-@[simp]
-
-Depends on / 依赖: eqToIso
+--- 原说明 ---
+The obvious isomorphism `K.X p ≅ K.X q` when `p = q`.
 -/
 def XIsoOfEq (K : HomologicalComplex V c) {p q : ι} (h : p = q) : K.X p ≅ K.X q :=
   eqToIso (by rw [h])
 
 @[simp]
-/--
-lemma `XIsoOfEq_rfl` / 引理 `XIsoOfEq_rfl`
-
-English:
-lemma XIsoOfEq_rfl
-  given: (K : HomologicalComplex V c) (p : ι)
-  proof: rfl
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 XIsoOfEq_rfl
-  条件: (K : 同调复形 V c) (p : ι)
-  证明: rfl
-
-@[reassoc (attr := simp)]
+/-
+**HomologicalComplex.XIsoOfEq_rfl** 是 Mathlib 中的一个引理，位于命名空间 `HomologicalComplex`
+。
+形式化陈述：XIsoOfEq_rfl (K : HomologicalComplex V c) (p : ι) : K.XIsoOfEq (rfl : p = 
+p) = Iso.refl _
+参数：K : HomologicalComplex V c；p : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma XIsoOfEq_rfl (K : HomologicalComplex V c) (p : ι) :
     K.XIsoOfEq (rfl : p = p) = Iso.refl _ := rfl
 
 @[reassoc (attr := simp)]
-/--
-lemma `XIsoOfEq_hom_comp_XIsoOfEq_hom` / 引理 `XIsoOfEq_hom_comp_XIsoOfEq_hom`
-
-English:
-lemma XIsoOfEq_hom_comp_XIsoOfEq_hom
-  statement: (K : HomologicalComplex V c) {p₁ p₂ p₃ : ι}
-  proof: by
-  dsimp [XIsoOfEq]
-  simp only [eqToHom_trans]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 XIsoOfEq_hom_comp_XIsoOfEq_hom
-  结论: (K : 同调复形 V c) {p₁ p₂ p₃ : ι}
-  证明: by
-  dsimp [XIsoOfEq]
-  simp only [eqToHom_trans]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: XIsoOfEq, eqToHom_trans
+/-
+**HomologicalComplex.XIsoOfEq_hom_comp_XIsoOfEq_hom** 是 Mathlib 中的一个引理，位于命名空间 `H
+omologicalComplex`。
+形式化陈述：XIsoOfEq_hom_comp_XIsoOfEq_hom (K : HomologicalComplex V c) {p₁ p₂ p₃ : ι}
+ (h₁₂ : p₁ = p₂) (h₂₃ : p₂ = p₃) : (K.XIsoOfEq h₁₂).hom ≫ (K.XIsoOfEq h₂₃).hom =
+ (K.XIsoOfEq (h₁₂.trans h₂₃)).hom
+参数：K : HomologicalComplex V c；h₁₂ : p₁ = p₂；h₂₃ : p₂ = p₃。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.eqToHom_trans`：eqToHom_trans {X Y Z : C} (p : X = Y) (q :
+ Y = Z) : eqToHom p ≫ eqToHom q = eqToHom (p.trans q)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma XIsoOfEq_hom_comp_XIsoOfEq_hom (K : HomologicalComplex V c) {p₁ p₂ p₃ : ι}
     (h₁₂ : p₁ = p₂) (h₂₃ : p₂ = p₃) :
@@ -238,28 +213,25 @@ lemma XIsoOfEq_hom_comp_XIsoOfEq_hom (K : HomologicalComplex V c) {p₁ p₂ p�
   simp only [eqToHom_trans]
 
 @[reassoc (attr := simp)]
-/--
-lemma `XIsoOfEq_hom_comp_XIsoOfEq_inv` / 引理 `XIsoOfEq_hom_comp_XIsoOfEq_inv`
-
-English:
-lemma XIsoOfEq_hom_comp_XIsoOfEq_inv
-  statement: (K : HomologicalComplex V c) {p₁ p₂ p₃ : ι}
-  proof: by
-  dsimp [XIsoOfEq]
-  simp only [eqToHom_trans]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 XIsoOfEq_hom_comp_XIsoOfEq_inv
-  结论: (K : 同调复形 V c) {p₁ p₂ p₃ : ι}
-  证明: by
-  dsimp [XIsoOfEq]
-  simp only [eqToHom_trans]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: XIsoOfEq, eqToHom_trans
+/-
+**HomologicalComplex.XIsoOfEq_hom_comp_XIsoOfEq_inv** 是 Mathlib 中的一个引理，位于命名空间 `H
+omologicalComplex`。
+形式化陈述：XIsoOfEq_hom_comp_XIsoOfEq_inv (K : HomologicalComplex V c) {p₁ p₂ p₃ : ι}
+ (h₁₂ : p₁ = p₂) (h₃₂ : p₃ = p₂) : (K.XIsoOfEq h₁₂).hom ≫ (K.XIsoOfEq h₃₂).inv =
+ (K.XIsoOfEq (h₁₂.trans h₃₂.symm)).hom
+参数：K : HomologicalComplex V c；h₁₂ : p₁ = p₂；h₃₂ : p₃ = p₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.eqToHom_trans`：eqToHom_trans {X Y Z : C} (p : X = Y) (q :
+ Y = Z) : eqToHom p ≫ eqToHom q = eqToHom (p.trans q)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma XIsoOfEq_hom_comp_XIsoOfEq_inv (K : HomologicalComplex V c) {p₁ p₂ p₃ : ι}
     (h₁₂ : p₁ = p₂) (h₃₂ : p₃ = p₂) :
@@ -268,28 +240,25 @@ lemma XIsoOfEq_hom_comp_XIsoOfEq_inv (K : HomologicalComplex V c) {p₁ p₂ p�
   simp only [eqToHom_trans]
 
 @[reassoc (attr := simp)]
-/--
-lemma `XIsoOfEq_inv_comp_XIsoOfEq_hom` / 引理 `XIsoOfEq_inv_comp_XIsoOfEq_hom`
-
-English:
-lemma XIsoOfEq_inv_comp_XIsoOfEq_hom
-  statement: (K : HomologicalComplex V c) {p₁ p₂ p₃ : ι}
-  proof: by
-  dsimp [XIsoOfEq]
-  simp only [eqToHom_trans]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 XIsoOfEq_inv_comp_XIsoOfEq_hom
-  结论: (K : 同调复形 V c) {p₁ p₂ p₃ : ι}
-  证明: by
-  dsimp [XIsoOfEq]
-  simp only [eqToHom_trans]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: XIsoOfEq, eqToHom_trans
+/-
+**HomologicalComplex.XIsoOfEq_inv_comp_XIsoOfEq_hom** 是 Mathlib 中的一个引理，位于命名空间 `H
+omologicalComplex`。
+形式化陈述：XIsoOfEq_inv_comp_XIsoOfEq_hom (K : HomologicalComplex V c) {p₁ p₂ p₃ : ι}
+ (h₂₁ : p₂ = p₁) (h₂₃ : p₂ = p₃) : (K.XIsoOfEq h₂₁).inv ≫ (K.XIsoOfEq h₂₃).hom =
+ (K.XIsoOfEq (h₂₁.symm.trans h₂₃)).hom
+参数：K : HomologicalComplex V c；h₂₁ : p₂ = p₁；h₂₃ : p₂ = p₃。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.eqToHom_trans`：eqToHom_trans {X Y Z : C} (p : X = Y) (q :
+ Y = Z) : eqToHom p ≫ eqToHom q = eqToHom (p.trans q)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma XIsoOfEq_inv_comp_XIsoOfEq_hom (K : HomologicalComplex V c) {p₁ p₂ p₃ : ι}
     (h₂₁ : p₂ = p₁) (h₂₃ : p₂ = p₃) :
@@ -298,28 +267,25 @@ lemma XIsoOfEq_inv_comp_XIsoOfEq_hom (K : HomologicalComplex V c) {p₁ p₂ p�
   simp only [eqToHom_trans]
 
 @[reassoc (attr := simp)]
-/--
-lemma `XIsoOfEq_inv_comp_XIsoOfEq_inv` / 引理 `XIsoOfEq_inv_comp_XIsoOfEq_inv`
-
-English:
-lemma XIsoOfEq_inv_comp_XIsoOfEq_inv
-  statement: (K : HomologicalComplex V c) {p₁ p₂ p₃ : ι}
-  proof: by
-  dsimp [XIsoOfEq]
-  simp only [eqToHom_trans]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 XIsoOfEq_inv_comp_XIsoOfEq_inv
-  结论: (K : 同调复形 V c) {p₁ p₂ p₃ : ι}
-  证明: by
-  dsimp [XIsoOfEq]
-  simp only [eqToHom_trans]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: XIsoOfEq, eqToHom_trans
+/-
+**HomologicalComplex.XIsoOfEq_inv_comp_XIsoOfEq_inv** 是 Mathlib 中的一个引理，位于命名空间 `H
+omologicalComplex`。
+形式化陈述：XIsoOfEq_inv_comp_XIsoOfEq_inv (K : HomologicalComplex V c) {p₁ p₂ p₃ : ι}
+ (h₂₁ : p₂ = p₁) (h₃₂ : p₃ = p₂) : (K.XIsoOfEq h₂₁).inv ≫ (K.XIsoOfEq h₃₂).inv =
+ (K.XIsoOfEq (h₃₂.trans h₂₁).symm).hom
+参数：K : HomologicalComplex V c；h₂₁ : p₂ = p₁；h₃₂ : p₃ = p₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.eqToHom_trans`：eqToHom_trans {X Y Z : C} (p : X = Y) (q :
+ Y = Z) : eqToHom p ≫ eqToHom q = eqToHom (p.trans q)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma XIsoOfEq_inv_comp_XIsoOfEq_inv (K : HomologicalComplex V c) {p₁ p₂ p₃ : ι}
     (h₂₁ : p₂ = p₁) (h₃₂ : p₃ = p₂) :
@@ -328,119 +294,133 @@ lemma XIsoOfEq_inv_comp_XIsoOfEq_inv (K : HomologicalComplex V c) {p₁ p₂ p�
   simp only [eqToHom_trans]
 
 @[reassoc (attr := simp)]
-/--
-lemma `XIsoOfEq_hom_comp_d` / 引理 `XIsoOfEq_hom_comp_d`
-
-English:
-lemma XIsoOfEq_hom_comp_d
-  given: (K : HomologicalComplex V c) {p₁ p₂ : ι} (h : p₁ = p₂) (p₃ : ι)
-  proof: by subst h; simp
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 XIsoOfEq_hom_comp_d
-  条件: (K : 同调复形 V c) {p₁ p₂ : ι} (h : p₁ = p₂) (p₃ : ι)
-  证明: by subst h; simp
-
-@[reassoc (attr := simp)]
+/-
+**HomologicalComplex.XIsoOfEq_hom_comp_d** 是 Mathlib 中的一个引理，位于命名空间 `HomologicalC
+omplex`。
+形式化陈述：XIsoOfEq_hom_comp_d (K : HomologicalComplex V c) {p₁ p₂ : ι} (h : p₁ = p₂)
+ (p₃ : ι) : (K.XIsoOfEq h).hom ≫ K.d p₂ p₃ = K.d p₁ p₃
+参数：K : HomologicalComplex V c；h : p₁ = p₂；p₃ : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma XIsoOfEq_hom_comp_d (K : HomologicalComplex V c) {p₁ p₂ : ι} (h : p₁ = p₂) (p₃ : ι) :
     (K.XIsoOfEq h).hom ≫ K.d p₂ p₃ = K.d p₁ p₃ := by subst h; simp
 
 @[reassoc (attr := simp)]
-/--
-lemma `XIsoOfEq_inv_comp_d` / 引理 `XIsoOfEq_inv_comp_d`
-
-English:
-lemma XIsoOfEq_inv_comp_d
-  given: (K : HomologicalComplex V c) {p₂ p₁ : ι} (h : p₂ = p₁) (p₃ : ι)
-  proof: by subst h; simp
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 XIsoOfEq_inv_comp_d
-  条件: (K : 同调复形 V c) {p₂ p₁ : ι} (h : p₂ = p₁) (p₃ : ι)
-  证明: by subst h; simp
-
-@[reassoc (attr := simp)]
+/-
+**HomologicalComplex.XIsoOfEq_inv_comp_d** 是 Mathlib 中的一个引理，位于命名空间 `HomologicalC
+omplex`。
+形式化陈述：XIsoOfEq_inv_comp_d (K : HomologicalComplex V c) {p₂ p₁ : ι} (h : p₂ = p₁)
+ (p₃ : ι) : (K.XIsoOfEq h).inv ≫ K.d p₂ p₃ = K.d p₁ p₃
+参数：K : HomologicalComplex V c；h : p₂ = p₁；p₃ : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma XIsoOfEq_inv_comp_d (K : HomologicalComplex V c) {p₂ p₁ : ι} (h : p₂ = p₁) (p₃ : ι) :
     (K.XIsoOfEq h).inv ≫ K.d p₂ p₃ = K.d p₁ p₃ := by subst h; simp
 
 @[reassoc (attr := simp)]
-/--
-lemma `d_comp_XIsoOfEq_hom` / 引理 `d_comp_XIsoOfEq_hom`
-
-English:
-lemma d_comp_XIsoOfEq_hom
-  given: (K : HomologicalComplex V c) {p₂ p₃ : ι} (h : p₂ = p₃) (p₁ : ι)
-  proof: by subst h; simp
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 d_comp_XIsoOfEq_hom
-  条件: (K : 同调复形 V c) {p₂ p₃ : ι} (h : p₂ = p₃) (p₁ : ι)
-  证明: by subst h; simp
-
-@[reassoc (attr := simp)]
+/-
+**HomologicalComplex.d_comp_XIsoOfEq_hom** 是 Mathlib 中的一个引理，位于命名空间 `HomologicalC
+omplex`。
+形式化陈述：d_comp_XIsoOfEq_hom (K : HomologicalComplex V c) {p₂ p₃ : ι} (h : p₂ = p₃)
+ (p₁ : ι) : K.d p₁ p₂ ≫ (K.XIsoOfEq h).hom = K.d p₁ p₃
+参数：K : HomologicalComplex V c；h : p₂ = p₃；p₁ : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma d_comp_XIsoOfEq_hom (K : HomologicalComplex V c) {p₂ p₃ : ι} (h : p₂ = p₃) (p₁ : ι) :
     K.d p₁ p₂ ≫ (K.XIsoOfEq h).hom = K.d p₁ p₃ := by subst h; simp
 
 @[reassoc (attr := simp)]
-/--
-lemma `d_comp_XIsoOfEq_inv` / 引理 `d_comp_XIsoOfEq_inv`
-
-English:
-lemma d_comp_XIsoOfEq_inv
-  given: (K : HomologicalComplex V c) {p₂ p₃ : ι} (h : p₃ = p₂) (p₁ : ι)
-  proof: by subst h; simp
-
-中文:
-引理 d_comp_XIsoOfEq_inv
-  条件: (K : 同调复形 V c) {p₂ p₃ : ι} (h : p₃ = p₂) (p₁ : ι)
-  证明: by subst h; simp
+/-
+**HomologicalComplex.d_comp_XIsoOfEq_inv** 是 Mathlib 中的一个引理，位于命名空间 `HomologicalC
+omplex`。
+形式化陈述：d_comp_XIsoOfEq_inv (K : HomologicalComplex V c) {p₂ p₃ : ι} (h : p₃ = p₂)
+ (p₁ : ι) : K.d p₁ p₂ ≫ (K.XIsoOfEq h).inv = K.d p₁ p₃
+参数：K : HomologicalComplex V c；h : p₃ = p₂；p₁ : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma d_comp_XIsoOfEq_inv (K : HomologicalComplex V c) {p₂ p₃ : ι} (h : p₃ = p₂) (p₁ : ι) :
     K.d p₁ p₂ ≫ (K.XIsoOfEq h).inv = K.d p₁ p₃ := by subst h; simp
 
 end HomologicalComplex
 
-/--
-Definition of `ChainComplex` / `ChainComplex` 的定义
+/-- An `α`-indexed chain complex is a `HomologicalComplex`
+in which `d i j ≠ 0` only if `j + 1 = i`.
+-/
+/-
+**ChainComplex** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：ChainComplex (α : Type*) [AddRightCancelSemigroup α] [One α] : Type _
+参数：α : Type*。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 
-English:
-abbreviation ChainComplex
-  signature: (α : Type*) [AddRightCancelSemigroup α] [One α]
-  body: HomologicalComplex V (ComplexShape.down α)
-
-中文:
-缩写 链复形
-  签名: (α : 类型) [加法右消去半群 α] [幺 α]
-  定义体: HomologicalComplex V (ComplexShape.down α)
-
-Depends on / 依赖: ComplexShape, ComplexShape.down, HomologicalComplex
+--- 原说明 ---
+An `α`-indexed chain complex is a `HomologicalComplex`
+in which `d i j ≠ 0` only if `j + 1 = i`.
 -/
 abbrev ChainComplex (α : Type*) [AddRightCancelSemigroup α] [One α] : Type _ :=
   HomologicalComplex V (ComplexShape.down α)
 
-/--
-Definition of `CochainComplex` / `CochainComplex` 的定义
+/-- An `α`-indexed cochain complex is a `HomologicalComplex`
+in which `d i j ≠ 0` only if `i + 1 = j`.
+-/
+/-
+**CochainComplex** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：CochainComplex (α : Type*) [AddRightCancelSemigroup α] [One α] : Type _
+参数：α : Type*。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 
-English:
-abbreviation CochainComplex
-  signature: (α : Type*) [AddRightCancelSemigroup α] [One α]
-  body: HomologicalComplex V (ComplexShape.up α)
-
-中文:
-缩写 上链复形
-  签名: (α : 类型) [加法右消去半群 α] [幺 α]
-  定义体: HomologicalComplex V (ComplexShape.up α)
-
-Depends on / 依赖: ComplexShape, ComplexShape.up, HomologicalComplex
+--- 原说明 ---
+An `α`-indexed cochain complex is a `HomologicalComplex`
+in which `d i j ≠ 0` only if `i + 1 = j`.
 -/
 abbrev CochainComplex (α : Type*) [AddRightCancelSemigroup α] [One α] : Type _ :=
   HomologicalComplex V (ComplexShape.up α)
@@ -448,216 +428,142 @@ abbrev CochainComplex (α : Type*) [AddRightCancelSemigroup α] [One α] : Type 
 namespace ChainComplex
 
 @[simp]
-/--
-theorem `prev` / 定理 `prev`
-
-English:
-theorem prev
-  given: (α : Type*) [AddRightCancelSemigroup α] [One α] (i : α)
-  proof: (ComplexShape.down α).prev_eq' rfl
-
-@[simp]
-
-中文:
-定理 prev
-  条件: (α : 类型) [加法右消去半群 α] [幺 α] (i : α)
-  证明: (ComplexShape.down α).prev_eq' rfl
-
-@[simp]
-
-Depends on / 依赖: ComplexShape, ComplexShape.down, prev_eq
+/-
+**ChainComplex.prev** 是 Mathlib 中的一个定理，位于命名空间 `ChainComplex`。
+形式化陈述：prev (α : Type*) [AddRightCancelSemigroup α] [One α] (i : α) : (ComplexSha
+pe.down α).prev i = i + 1
+参数：α : Type*；i : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplexShape.prev_eq'`：∀ {ι : Type u_1} (c : ComplexShape ι) {i j : ι}, 
+c.Rel j i → c.prev i = j
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
 theorem prev (α : Type*) [AddRightCancelSemigroup α] [One α] (i : α) :
     (ComplexShape.down α).prev i = i + 1 :=
   (ComplexShape.down α).prev_eq' rfl
 
 @[simp]
-/--
-theorem `next` / 定理 `next`
-
-English:
-theorem next
-  given: (α : Type*) [AddGroup α] [One α] (i : α)
-  statement: (ComplexShape.down α).next i = i - 1
-  proof: (ComplexShape.down α).next_eq' sub_add_cancel _ _
-
-@[simp]
-
-中文:
-定理 next
-  条件: (α : 类型) [加法群 α] [幺 α] (i : α)
-  结论: (余mplexShape.down α).next i = i - 1
-  证明: (ComplexShape.down α).next_eq' sub_add_cancel _ _
-
-@[simp]
-
-Depends on / 依赖: ComplexShape, ComplexShape.down, next_eq, sub_add_cancel
+/-
+**ChainComplex.next** 是 Mathlib 中的一个定理，位于命名空间 `ChainComplex`。
+形式化陈述：next (α : Type*) [AddGroup α] [One α] (i : α) : (ComplexShape.down α).next
+ i = i - 1
+参数：α : Type*；i : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplexShape.next_eq'`：next_eq' (c : ComplexShape ι) {i j : ι} (h : c.Re
+l i j) : c.next i = j
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
 -/
 theorem next (α : Type*) [AddGroup α] [One α] (i : α) : (ComplexShape.down α).next i = i - 1 :=
-(ComplexShape.down α).next_eq' sub_add_cancel _ _
+  (ComplexShape.down α).next_eq' <| sub_add_cancel _ _
 
 @[simp]
-/--
-theorem `next_nat_zero` / 定理 `next_nat_zero`
-
-English:
-theorem next_nat_zero
-  statement: (ComplexShape.down Nat).next 0 = 0
-  proof: by
-  refine dif_neg ?_
-  push Not
-  intro
-  apply Nat.noConfusion
-
-@[simp]
-
-中文:
-定理 next_nat_zero
-  结论: (余mplexShape.down 自然数).next 0 = 0
-  证明: by
-  refine dif_neg ?_
-  push Not
-  intro
-  apply Nat.noConfusion
-
-@[simp]
-
-Depends on / 依赖: Nat.noConfusion, dif_neg, noConfusion
+/-
+**ChainComplex.next_nat_zero** 是 Mathlib 中的一个定理，位于命名空间 `ChainComplex`。
+形式化陈述：next_nat_zero : (ComplexShape.down Nat).next 0 = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
-theorem next_nat_zero : (ComplexShape.down Nat).next 0 = 0 := by
+theorem next_nat_zero : (ComplexShape.down ℕ).next 0 = 0 := by
   refine dif_neg ?_
   push Not
   intro
   apply Nat.noConfusion
 
 @[simp]
-/--
-theorem `next_nat_succ` / 定理 `next_nat_succ`
-
-English:
-theorem next_nat_succ
-  given: (i : Nat)
-  statement: (ComplexShape.down Nat).next (i + 1) = i
-  proof: (ComplexShape.down Nat).next_eq' rfl
-
-中文:
-定理 next_nat_succ
-  条件: (i : 自然数)
-  结论: (余mplexShape.down 自然数).next (i + 1) = i
-  证明: (ComplexShape.down Nat).next_eq' rfl
-
-Depends on / 依赖: ComplexShape, ComplexShape.down, next_eq
+/-
+**ChainComplex.next_nat_succ** 是 Mathlib 中的一个定理，位于命名空间 `ChainComplex`。
+形式化陈述：next_nat_succ (i : Nat) : (ComplexShape.down Nat).next (i + 1) = i
+参数：i : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplexShape.next_eq'`：next_eq' (c : ComplexShape ι) {i j : ι} (h : c.Re
+l i j) : c.next i = j
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
-theorem next_nat_succ (i : Nat) : (ComplexShape.down Nat).next (i + 1) = i :=
-  (ComplexShape.down Nat).next_eq' rfl
+theorem next_nat_succ (i : ℕ) : (ComplexShape.down ℕ).next (i + 1) = i :=
+  (ComplexShape.down ℕ).next_eq' rfl
 
 end ChainComplex
 
 namespace CochainComplex
 
 @[simp]
-/--
-theorem `prev` / 定理 `prev`
-
-English:
-theorem prev
-  given: (α : Type*) [AddGroup α] [One α] (i : α)
-  statement: (ComplexShape.up α).prev i = i - 1
-  proof: (ComplexShape.up α).prev_eq' sub_add_cancel _ _
-
-@[simp]
-
-中文:
-定理 prev
-  条件: (α : 类型) [加法群 α] [幺 α] (i : α)
-  结论: (余mplexShape.up α).prev i = i - 1
-  证明: (ComplexShape.up α).prev_eq' sub_add_cancel _ _
-
-@[simp]
-
-Depends on / 依赖: ComplexShape, ComplexShape.up, prev_eq, sub_add_cancel
+/-
+**CochainComplex.prev** 是 Mathlib 中的一个定理，位于命名空间 `CochainComplex`。
+形式化陈述：prev (α : Type*) [AddGroup α] [One α] (i : α) : (ComplexShape.up α).prev i
+ = i - 1
+参数：α : Type*；i : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplexShape.prev_eq'`：∀ {ι : Type u_1} (c : ComplexShape ι) {i j : ι}, 
+c.Rel j i → c.prev i = j
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
 -/
 theorem prev (α : Type*) [AddGroup α] [One α] (i : α) : (ComplexShape.up α).prev i = i - 1 :=
-(ComplexShape.up α).prev_eq' sub_add_cancel _ _
+  (ComplexShape.up α).prev_eq' <| sub_add_cancel _ _
 
 @[simp]
-/--
-theorem `next` / 定理 `next`
-
-English:
-theorem next
-  given: (α : Type*) [AddRightCancelSemigroup α] [One α] (i : α)
-  proof: (ComplexShape.up α).next_eq' rfl
-
-@[simp]
-
-中文:
-定理 next
-  条件: (α : 类型) [加法右消去半群 α] [幺 α] (i : α)
-  证明: (ComplexShape.up α).next_eq' rfl
-
-@[simp]
-
-Depends on / 依赖: ComplexShape, ComplexShape.up, next_eq
+/-
+**CochainComplex.next** 是 Mathlib 中的一个定理，位于命名空间 `CochainComplex`。
+形式化陈述：next (α : Type*) [AddRightCancelSemigroup α] [One α] (i : α) : (ComplexSha
+pe.up α).next i = i + 1
+参数：α : Type*；i : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplexShape.next_eq'`：next_eq' (c : ComplexShape ι) {i j : ι} (h : c.Re
+l i j) : c.next i = j
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
 theorem next (α : Type*) [AddRightCancelSemigroup α] [One α] (i : α) :
     (ComplexShape.up α).next i = i + 1 :=
   (ComplexShape.up α).next_eq' rfl
 
 @[simp]
-/--
-theorem `prev_nat_zero` / 定理 `prev_nat_zero`
-
-English:
-theorem prev_nat_zero
-  statement: (ComplexShape.up Nat).prev 0 = 0
-  proof: by
-  refine dif_neg ?_
-  push Not
-  intro
-  apply Nat.noConfusion
-
-@[simp]
-
-中文:
-定理 prev_nat_zero
-  结论: (余mplexShape.up 自然数).prev 0 = 0
-  证明: by
-  refine dif_neg ?_
-  push Not
-  intro
-  apply Nat.noConfusion
-
-@[simp]
-
-Depends on / 依赖: Nat.noConfusion, dif_neg, noConfusion
+/-
+**CochainComplex.prev_nat_zero** 是 Mathlib 中的一个定理，位于命名空间 `CochainComplex`。
+形式化陈述：prev_nat_zero : (ComplexShape.up Nat).prev 0 = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
-theorem prev_nat_zero : (ComplexShape.up Nat).prev 0 = 0 := by
+theorem prev_nat_zero : (ComplexShape.up ℕ).prev 0 = 0 := by
   refine dif_neg ?_
   push Not
   intro
   apply Nat.noConfusion
 
 @[simp]
-/--
-theorem `prev_nat_succ` / 定理 `prev_nat_succ`
-
-English:
-theorem prev_nat_succ
-  given: (i : Nat)
-  statement: (ComplexShape.up Nat).prev (i + 1) = i
-  proof: (ComplexShape.up Nat).prev_eq' rfl
-
-中文:
-定理 prev_nat_succ
-  条件: (i : 自然数)
-  结论: (余mplexShape.up 自然数).prev (i + 1) = i
-  证明: (ComplexShape.up Nat).prev_eq' rfl
-
-Depends on / 依赖: ComplexShape, ComplexShape.up, prev_eq
+/-
+**CochainComplex.prev_nat_succ** 是 Mathlib 中的一个定理，位于命名空间 `CochainComplex`。
+形式化陈述：prev_nat_succ (i : Nat) : (ComplexShape.up Nat).prev (i + 1) = i
+参数：i : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplexShape.prev_eq'`：∀ {ι : Type u_1} (c : ComplexShape ι) {i j : ι}, 
+c.Rel j i → c.prev i = j
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
-theorem prev_nat_succ (i : Nat) : (ComplexShape.up Nat).prev (i + 1) = i :=
-  (ComplexShape.up Nat).prev_eq' rfl
+theorem prev_nat_succ (i : ℕ) : (ComplexShape.up ℕ).prev (i + 1) = i :=
+  (ComplexShape.up ℕ).prev_eq' rfl
 
 end CochainComplex
 
@@ -670,87 +576,80 @@ variable {c : ComplexShape ι} (C : HomologicalComplex V c)
 commuting with the differentials.
 -/
 @[ext]
-/--
-Definition of `Hom` / `Hom` 的定义
+/-
+**HomologicalComplex.Hom** 是 Mathlib 中的一个结构，位于命名空间 `HomologicalComplex`。
+形式化陈述：Hom (A B : HomologicalComplex V c) where f : forall i, A.X i ⟶ B.X i comm'
+ : forall i j, c.Rel i j -> f i ≫ B.d i j = A.d i j ≫ f j
+参数：A B : HomologicalComplex V c。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (A B : HomologicalComplex V c)
-  axioms and operations (2):
-    - f : forall i, A.X i ⟶ B.X i
-    - comm' : forall i j, c.Rel i j -> f i ≫ B.d i j = A.d i j ≫ f j  [default: by cat_disch]
-
-中文:
-结构 态射
-  参数: (A B : 同调复形 V c)
-  公理与运算 (2 个):
-    - f : 对任意 i, A.X i ⟶ B.X i
-    - comm' : 对任意 i j, c.关系 i j -> f i ≫ B.d i j = A.d i j ≫ f j  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+A morphism of homological complexes consists of maps between the chain groups,
+commuting with the differentials.
 -/
 structure Hom (A B : HomologicalComplex V c) where
-  f : forall i, A.X i ⟶ B.X i
-  comm' : forall i j, c.Rel i j -> f i ≫ B.d i j = A.d i j ≫ f j := by cat_disch
+  f : ∀ i, A.X i ⟶ B.X i
+  comm' : ∀ i j, c.Rel i j → f i ≫ B.d i j = A.d i j ≫ f j := by cat_disch
 
 @[reassoc (attr := simp)]
-/--
-theorem `Hom.comm` / 定理 `Hom.comm`
-
-English:
-theorem Hom.comm
-  given: {A B : HomologicalComplex V c} (f : A.Hom B) (i j : ι)
-  proof: by
-  by_cases hij : c.Rel i j
-  · exact f.comm' i j hij
-  · rw [A.shape i j hij, B.shape i j hij, comp_zero, zero_comp]
-
-中文:
-定理 态射.comm
-  条件: {A B : 同调复形 V c} (f : A.态射 B) (i j : ι)
-  证明: by
-  by_cases hij : c.Rel i j
-  · exact f.comm' i j hij
-  · rw [A.shape i j hij, B.shape i j hij, comp_zero, zero_comp]
-
-Depends on / 依赖: A.shape, B.shape, c.Rel, comp_zero, f.comm, zero_comp
+/-
+**HomologicalComplex.Hom.comm** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalComplex.Hom`
+。
+形式化陈述：∀ {ι : Type u_1} {V : Type u} [inst : CategoryTheory.Category.{v, u} V]   
+[inst_1 : CategoryTheory.Limits.HasZeroMorphisms V] {c : ComplexShape ι} {A B : 
+HomologicalComplex V c} (f : A.Hom B)   (i j : ι), CategoryTheory.CategoryStruct
+.comp (f.f i) (B.d i j) = CategoryTheory.CategoryStruct.comp (A.d i j) (f.f j)
+参数：f : A.Hom B；i j : ι；f.f i；B.d i j；A.d i j；f.f j。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomologicalComplex.Hom.comm'`：∀ {ι : Type u_1} {V : Type u} [inst : Cate
+goryTheory.Category.{v, u} V]   [inst_1 : CategoryTheory.Limits.HasZeroMorphisms
+ V] {c : ComplexSh…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HomologicalComplex.shape`：∀ {ι : Type u_1} {V : Type u} [inst : Category
+Theory.Category.{v, u} V]   [inst_1 : CategoryTheory.Limits.HasZeroMorphisms V] 
+{c : ComplexSh…
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
+· 使用定理 `CategoryTheory.Limits.zero_comp`：zero_comp [HasZeroMorphisms C] {X : C} 
+{Y Z : C} {f : Y ⟶ Z} : (0 : X ⟶ Y) ≫ f = (0 : X ⟶ Z)
 -/
 theorem Hom.comm {A B : HomologicalComplex V c} (f : A.Hom B) (i j : ι) :
     f.f i ≫ B.d i j = A.d i j ≫ f.f j := by
   by_cases hij : c.Rel i j
   · exact f.comm' i j hij
   · rw [A.shape i j hij, B.shape i j hij, comp_zero, zero_comp]
-
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (A B : HomologicalComplex V c) : Inhabited (Hom A B) :=
   ⟨{ f := fun _ => 0 }⟩
 
-/--
-Definition of `id` / `id` 的定义
+/-- Identity chain map. -/
+/-
+**HomologicalComplex.id** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex`。
+形式化陈述：id (A : HomologicalComplex V c) : Hom A A where f _
+参数：A : HomologicalComplex V c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: (A : HomologicalComplex V c)
-  body: 𝟙 _
-
-中文:
-定义 id
-  签名: (A : 同调复形 V c)
-  定义体: 𝟙 _
+--- 原说明 ---
+Identity chain map.
 -/
 def id (A : HomologicalComplex V c) : Hom A A where f _ := 𝟙 _
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- Composition of chain maps. -/
+/-
+**HomologicalComplex.comp** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex`。
+形式化陈述：comp (A B C : HomologicalComplex V c) (φ : Hom A B) (ψ : Hom B C) : Hom A 
+C where f i
+参数：A B C : HomologicalComplex V c；φ : Hom A B；ψ : Hom B C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (A B C : HomologicalComplex V c) (φ : Hom A B) (ψ : Hom B C)
-  body: φ.f i ≫ ψ.f i
-
-中文:
-定义 comp
-  签名: (A B C : 同调复形 V c) (φ : 态射 A B) (ψ : 态射 B C)
-  定义体: φ.f i ≫ ψ.f i
+--- 原说明 ---
+Composition of chain maps.
 -/
 def comp (A B C : HomologicalComplex V c) (φ : Hom A B) (ψ : Hom B C) : Hom A C where
   f i := φ.f i ≫ ψ.f i
@@ -759,22 +658,9 @@ section
 
 attribute [local simp] id comp
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (HomologicalComplex V c)
-  body: Hom
-  id := id
-  comp := comp _ _ _
-
-中文:
-实例 :
-  签名: 范畴 (同调复形 V c)
-  定义体: Hom
-  id := id
-  comp := comp _ _ _
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (HomologicalComplex V c) where
   Hom := Hom
@@ -784,99 +670,62 @@ instance : Category (HomologicalComplex V c) where
 end
 
 @[ext]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  statement: {C D : HomologicalComplex V c} (f g : C ⟶ D)
-  proof: by
-  apply Hom.ext
-  funext
-  apply h
-
-@[simp]
-
-中文:
-引理 hom_ext
-  结论: {C D : 同调复形 V c} (f g : C ⟶ D)
-  证明: by
-  apply Hom.ext
-  funext
-  apply h
-
-@[simp]
-
-Depends on / 依赖: Hom.ext
+/-
+**HomologicalComplex.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `HomologicalComplex`。
+形式化陈述：hom_ext {C D : HomologicalComplex V c} (f g : C ⟶ D) (h : forall i, f.f i 
+= g.f i) : f = g
+参数：f g : C ⟶ D；h : forall i, f.f i = g.f i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomologicalComplex.Hom.ext`：∀ {ι : Type u_1} {V : Type u} {inst : Catego
+ryTheory.Category.{v, u} V}   {inst_1 : CategoryTheory.Limits.HasZeroMorphisms V
+} {c : ComplexSh…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 lemma hom_ext {C D : HomologicalComplex V c} (f g : C ⟶ D)
-    (h : forall i, f.f i = g.f i) : f = g := by
+    (h : ∀ i, f.f i = g.f i) : f = g := by
   apply Hom.ext
   funext
   apply h
 
 @[simp]
-/--
-theorem `id_f` / 定理 `id_f`
-
-English:
-theorem id_f
-  given: (C : HomologicalComplex V c) (i : ι)
-  statement: Hom.f (𝟙 C) i = 𝟙 (C.X i)
-  proof: rfl
-
-@[simp, reassoc]
-
-中文:
-定理 id_f
-  条件: (C : 同调复形 V c) (i : ι)
-  结论: 态射.f (𝟙 C) i = 𝟙 (C.X i)
-  证明: rfl
-
-@[simp, reassoc]
+/-
+**HomologicalComplex.id_f** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalComplex`。
+形式化陈述：id_f (C : HomologicalComplex V c) (i : ι) : Hom.f (𝟙 C) i = 𝟙 (C.X i)
+参数：C : HomologicalComplex V c；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_f (C : HomologicalComplex V c) (i : ι) : Hom.f (𝟙 C) i = 𝟙 (C.X i) :=
   rfl
 
 @[simp, reassoc]
-/--
-theorem `comp_f` / 定理 `comp_f`
-
-English:
-theorem comp_f
-  given: {C₁ C₂ C₃ : HomologicalComplex V c} (f : C₁ ⟶ C₂) (g : C₂ ⟶ C₃) (i : ι)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_f
-  条件: {C₁ C₂ C₃ : 同调复形 V c} (f : C₁ ⟶ C₂) (g : C₂ ⟶ C₃) (i : ι)
-  证明: rfl
-
-@[simp]
+/-
+**HomologicalComplex.comp_f** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalComplex`。
+形式化陈述：comp_f {C₁ C₂ C₃ : HomologicalComplex V c} (f : C₁ ⟶ C₂) (g : C₂ ⟶ C₃) (i 
+: ι) : (f ≫ g).f i = f.f i ≫ g.f i
+参数：f : C₁ ⟶ C₂；g : C₂ ⟶ C₃；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_f {C₁ C₂ C₃ : HomologicalComplex V c} (f : C₁ ⟶ C₂) (g : C₂ ⟶ C₃) (i : ι) :
     (f ≫ g).f i = f.f i ≫ g.f i :=
   rfl
 
 @[simp]
-/--
-theorem `eqToHom_f` / 定理 `eqToHom_f`
-
-English:
-theorem eqToHom_f
-  given: {C₁ C₂ : HomologicalComplex V c} (h : C₁ = C₂) (n : ι)
-  proof: by
-  subst h
-  rfl
-
-中文:
-定理 eqToHom_f
-  条件: {C₁ C₂ : 同调复形 V c} (h : C₁ = C₂) (n : ι)
-  证明: by
-  subst h
-  rfl
+/-
+**HomologicalComplex.eqToHom_f** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalComplex`。
+形式化陈述：eqToHom_f {C₁ C₂ : HomologicalComplex V c} (h : C₁ = C₂) (n : ι) : Homolog
+icalComplex.Hom.f (eqToHom h) n = eqToHom (congr_fun (congr_arg HomologicalCompl
+ex.X h) n)
+参数：h : C₁ = C₂；n : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem eqToHom_f {C₁ C₂ : HomologicalComplex V c} (h : C₁ = C₂) (n : ι) :
     HomologicalComplex.Hom.f (eqToHom h) n =
@@ -885,106 +734,77 @@ theorem eqToHom_f {C₁ C₂ : HomologicalComplex V c} (h : C₁ = C₂) (n : ι
   rfl
 
 -- We'll use this later to show that `HomologicalComplex V c` is preadditive when `V` is.
-/--
-theorem `hom_f_injective` / 定理 `hom_f_injective`
-
-English:
-theorem hom_f_injective
-  given: {C₁ C₂ : HomologicalComplex V c}
-  proof: by cat_disch
-
-中文:
-定理 hom_f_injective
-  条件: {C₁ C₂ : 同调复形 V c}
-  证明: by cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**HomologicalComplex.hom_f_injective** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalCompl
+ex`。
+形式化陈述：hom_f_injective {C₁ C₂ : HomologicalComplex V c} : Function.Injective fun 
+f : Hom C₁ C₂ => f.f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomologicalComplex.Hom.ext`：∀ {ι : Type u_1} {V : Type u} {inst : Catego
+ryTheory.Category.{v, u} V}   {inst_1 : CategoryTheory.Limits.HasZeroMorphisms V
+} {c : ComplexSh…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem hom_f_injective {C₁ C₂ : HomologicalComplex V c} :
     Function.Injective fun f : Hom C₁ C₂ => f.f := by cat_disch
-
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X Y : HomologicalComplex V c) : Zero (X ⟶ Y) :=
   ⟨{ f := fun _ => 0}⟩
 
 @[simp]
-/--
-theorem `zero_f` / 定理 `zero_f`
-
-English:
-theorem zero_f
-  given: (C D : HomologicalComplex V c) (i : ι)
-  statement: (0 : C ⟶ D).f i = 0
-  proof: rfl
-
-中文:
-定理 zero_f
-  条件: (C D : 同调复形 V c) (i : ι)
-  结论: (0 : C ⟶ D).f i = 0
-  证明: rfl
+/-
+**HomologicalComplex.zero_f** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalComplex`。
+形式化陈述：zero_f (C D : HomologicalComplex V c) (i : ι) : (0 : C ⟶ D).f i = 0
+参数：C D : HomologicalComplex V c；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem zero_f (C D : HomologicalComplex V c) (i : ι) : (0 : C ⟶ D).f i = 0 :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasZeroMorphisms (HomologicalComplex V c)
-
-中文:
-实例 :
-  签名: 有ZeroMorphisms (同调复形 V c)
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasZeroMorphisms (HomologicalComplex V c) where
 
 open ZeroObject
 
-/--
-Definition of `zero` / `zero` 的定义
+/-- The zero complex -/
+/-
+**HomologicalComplex.zero** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex`。
+形式化陈述：zero [HasZeroObject V] : HomologicalComplex V c where X _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition zero
-  signature: [HasZeroObject V]
-  body: 0
-  d _ _ := 0
-
-中文:
-定义 zero
-  签名: [有ZeroObject V]
-  定义体: 0
-  d _ _ := 0
+--- 原说明 ---
+The zero complex
 -/
 noncomputable def zero [HasZeroObject V] : HomologicalComplex V c where
   X _ := 0
   d _ _ := 0
-
-/--
-theorem `isZero_zero` / 定理 `isZero_zero`
-
-English:
-theorem isZero_zero
-  given: [HasZeroObject V]
-  statement: IsZero (zero : HomologicalComplex V c)
-  proof: by
-  refine ⟨fun X => ⟨⟨⟨0⟩, fun f => ?_⟩⟩, fun X => ⟨⟨⟨0⟩, fun f => ?_⟩⟩⟩
-  all_goals
-    ext
-    dsimp only [zero]
-    subsingleton
-
-中文:
-定理 isZero_zero
-  条件: [有ZeroObject V]
-  结论: 是零 (zero : 同调复形 V c)
-  证明: by
-  refine ⟨fun X => ⟨⟨⟨0⟩, fun f => ?_⟩⟩, fun X => ⟨⟨⟨0⟩, fun f => ?_⟩⟩⟩
-  all_goals
-    ext
-    dsimp only [zero]
-    subsingleton
-
-Depends on / 依赖: all_goals, subsingleton
+/-
+**HomologicalComplex.isZero_zero** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalComplex`。
+形式化陈述：isZero_zero [HasZeroObject V] : IsZero (zero : HomologicalComplex V c)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `HomologicalComplex.hom_ext`：hom_ext {C D : HomologicalComplex V c} (f g 
+: C ⟶ D) (h : forall i, f.f i = g.f i) : f = g
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
 theorem isZero_zero [HasZeroObject V] : IsZero (zero : HomologicalComplex V c) := by
   refine ⟨fun X => ⟨⟨⟨0⟩, fun f => ?_⟩⟩, fun X => ⟨⟨⟨0⟩, fun f => ?_⟩⟩⟩
@@ -992,111 +812,78 @@ theorem isZero_zero [HasZeroObject V] : IsZero (zero : HomologicalComplex V c) :
     ext
     dsimp only [zero]
     subsingleton
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasZeroObject
-  signature: V] : HasZeroObject (HomologicalComplex V c)
-  body: ⟨⟨zero, isZero_zero⟩⟩
-
-中文:
-实例 [有ZeroObject
-  签名: V] : 有ZeroObject (同调复形 V c)
-  定义体: ⟨⟨zero, isZero_zero⟩⟩
-
-Depends on / 依赖: isZero_zero
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasZeroObject V] : HasZeroObject (HomologicalComplex V c) :=
   ⟨⟨zero, isZero_zero⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasZeroObject
-  signature: V] : Inhabited (HomologicalComplex V c)
-  body: ⟨zero⟩
-
-中文:
-实例 [有ZeroObject
-  签名: V] : 可居 (同调复形 V c)
-  定义体: ⟨zero⟩
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance [HasZeroObject V] : Inhabited (HomologicalComplex V c) :=
   ⟨zero⟩
-
-/--
-theorem `congr_hom` / 定理 `congr_hom`
-
-English:
-theorem congr_hom
-  given: {C D : HomologicalComplex V c} {f g : C ⟶ D} (w : f = g) (i : ι)
-  proof: congr_fun (congr_arg Hom.f w) i
-
-中文:
-定理 congr_hom
-  条件: {C D : 同调复形 V c} {f g : C ⟶ D} (w : f = g) (i : ι)
-  证明: congr_fun (congr_arg Hom.f w) i
-
-Depends on / 依赖: Hom.f, congr_arg, congr_fun
+/-
+**HomologicalComplex.congr_hom** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalComplex`。
+形式化陈述：congr_hom {C D : HomologicalComplex V c} {f g : C ⟶ D} (w : f = g) (i : ι)
+ : f.f i = g.f i
+参数：w : f = g；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem congr_hom {C D : HomologicalComplex V c} {f g : C ⟶ D} (w : f = g) (i : ι) :
     f.f i = g.f i :=
   congr_fun (congr_arg Hom.f w) i
-
-/--
-lemma `mono_of_mono_f` / 引理 `mono_of_mono_f`
-
-English:
-lemma mono_of_mono_f
-  statement: {K L : HomologicalComplex V c} (φ : K ⟶ L)
-  proof: by
-    ext i
-    rw [← cancel_mono (φ.f i)]
-    exact congr_hom eq i
-
-中文:
-引理 mono_of_mono_f
-  结论: {K L : 同调复形 V c} (φ : K ⟶ L)
-  证明: by
-    ext i
-    rw [← cancel_mono (φ.f i)]
-    exact congr_hom eq i
-
-Depends on / 依赖: cancel_mono, congr_hom
+/-
+**HomologicalComplex.mono_of_mono_f** 是 Mathlib 中的一个引理，位于命名空间 `HomologicalComple
+x`。
+形式化陈述：mono_of_mono_f {K L : HomologicalComplex V c} (φ : K ⟶ L) (hφ : forall i, 
+Mono (φ.f i)) : Mono φ where right_cancellation g h eq
+参数：φ : K ⟶ L；hφ : forall i, Mono (φ.f i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `HomologicalComplex.hom_ext`：hom_ext {C D : HomologicalComplex V c} (f g 
+: C ⟶ D) (h : forall i, f.f i = g.f i) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `HomologicalComplex.congr_hom`：congr_hom {C D : HomologicalComplex V c} {
+f g : C ⟶ D} (w : f = g) (i : ι) : f.f i = g.f i
 -/
 lemma mono_of_mono_f {K L : HomologicalComplex V c} (φ : K ⟶ L)
-    (hφ : forall i, Mono (φ.f i)) : Mono φ where
+    (hφ : ∀ i, Mono (φ.f i)) : Mono φ where
   right_cancellation g h eq := by
     ext i
     rw [← cancel_mono (φ.f i)]
     exact congr_hom eq i
-
-/--
-lemma `epi_of_epi_f` / 引理 `epi_of_epi_f`
-
-English:
-lemma epi_of_epi_f
-  statement: {K L : HomologicalComplex V c} (φ : K ⟶ L)
-  proof: by
-    ext i
-    rw [← cancel_epi (φ.f i)]
-    exact congr_hom eq i
-
-中文:
-引理 epi_of_epi_f
-  结论: {K L : 同调复形 V c} (φ : K ⟶ L)
-  证明: by
-    ext i
-    rw [← cancel_epi (φ.f i)]
-    exact congr_hom eq i
-
-Depends on / 依赖: cancel_epi, congr_hom
+/-
+**HomologicalComplex.epi_of_epi_f** 是 Mathlib 中的一个引理，位于命名空间 `HomologicalComplex`
+。
+形式化陈述：epi_of_epi_f {K L : HomologicalComplex V c} (φ : K ⟶ L) (hφ : forall i, Ep
+i (φ.f i)) : Epi φ where left_cancellation g h eq
+参数：φ : K ⟶ L；hφ : forall i, Epi (φ.f i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `HomologicalComplex.hom_ext`：hom_ext {C D : HomologicalComplex V c} (f g 
+: C ⟶ D) (h : forall i, f.f i = g.f i) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `HomologicalComplex.congr_hom`：congr_hom {C D : HomologicalComplex V c} {
+f g : C ⟶ D} (w : f = g) (i : ι) : f.f i = g.f i
 -/
 lemma epi_of_epi_f {K L : HomologicalComplex V c} (φ : K ⟶ L)
-    (hφ : forall i, Epi (φ.f i)) : Epi φ where
+    (hφ : ∀ i, Epi (φ.f i)) : Epi φ where
   left_cancellation g h eq := by
     ext i
     rw [← cancel_epi (φ.f i)]
@@ -1108,66 +895,42 @@ variable (V c)
 
 /-- The functor picking out the `i`-th object of a complex. -/
 @[simps]
-/--
-Definition of `eval` / `eval` 的定义
+/-
+**HomologicalComplex.eval** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex`。
+形式化陈述：eval (i : ι) : HomologicalComplex V c ⥤ V where obj C
+参数：i : ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eval
-  signature: (i : ι)
-  body: C.X i
-  map f := f.f i
-
-中文:
-定义 eval
-  签名: (i : ι)
-  定义体: C.X i
-  map f := f.f i
+--- 原说明 ---
+The functor picking out the `i`-th object of a complex.
 -/
 def eval (i : ι) : HomologicalComplex V c ⥤ V where
   obj C := C.X i
   map f := f.f i
-
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (i : ι) : (eval V c i).PreservesZeroMorphisms where
 
 /-- The functor forgetting the differential in a complex, obtaining a graded object. -/
 @[simps]
-/--
-Definition of `forget` / `forget` 的定义
+/-
+**HomologicalComplex.forget** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex`。
+形式化陈述：forget : HomologicalComplex V c ⥤ GradedObject ι V where obj C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forget
-  signature: : HomologicalComplex V c ⥤ GradedObject ι V where
-  body: C.X
-  map f := f.f
-
-中文:
-定义 forget
-  签名: : 同调复形 V c ⥤ GradedObject ι V where
-  定义体: C.X
-  map f := f.f
+--- 原说明 ---
+The functor forgetting the differential in a complex, obtaining a graded object.
 -/
 def forget : HomologicalComplex V c ⥤ GradedObject ι V where
   obj C := C.X
   map f := f.f
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget V c).Faithful
-  body: by
-    ext i
-    exact congr_fun h i
-
-中文:
-实例 :
-  签名: (forget V c).忠实
-  定义体: by
-    ext i
-    exact congr_fun h i
-
-Depends on / 依赖: congr_fun
+/-
+**HomologicalComplex.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget V c).Faithful where
   map_injective h := by
@@ -1178,37 +941,33 @@ set_option backward.defeqAttrib.useBackward true in
 /-- Forgetting the differentials than picking out the `i`-th object is the same as
 just picking out the `i`-th object. -/
 @[simps!]
-/--
-Definition of `forgetEval` / `forgetEval` 的定义
+/-
+**HomologicalComplex.forgetEval** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex`。
+形式化陈述：forgetEval (i : ι) : forget V c ⋙ GradedObject.eval i ≅ eval V c i
+参数：i : ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forgetEval
-  signature: (i : ι)
-  body: NatIso.ofComponents fun _ => Iso.refl _
-
-中文:
-定义 forgetEval
-  签名: (i : ι)
-  定义体: NatIso.ofComponents fun _ => Iso.refl _
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+Forgetting the differentials than picking out the `i`-th object is the same as
+just picking out the `i`-th object.
 -/
 def forgetEval (i : ι) : forget V c ⋙ GradedObject.eval i ≅ eval V c i :=
   NatIso.ofComponents fun _ => Iso.refl _
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `dNatTrans` / `dNatTrans` 的定义
+/-- The differential as a natural transformation between `eval`. -/
+/-
+**HomologicalComplex.dNatTrans** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex`。
+形式化陈述：{ι : Type u_1} →   (V : Type u) →     [inst : CategoryTheory.Category.{v, 
+u} V] →       [inst_1 : CategoryTheory.Limits.HasZeroMorphisms V] →         (c :
+ ComplexShape ι) → (i j : ι) → HomologicalComplex.eval V c i ⟶ HomologicalComple
+x.eval V c j
+参数：V : Type u；c : ComplexShape ι；i j : ι。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dNatTrans
-  signature: (i j : ι)
-  body: X.d i j
-
-中文:
-定义 d自然数Trans
-  签名: (i j : ι)
-  定义体: X.d i j
+--- 原说明 ---
+The differential as a natural transformation between `eval`.
 -/
 @[simps] def dNatTrans (i j : ι) :
     HomologicalComplex.eval V c i ⟶ HomologicalComplex.eval V c j where
@@ -1219,39 +978,53 @@ end
 noncomputable section
 
 @[reassoc]
-/--
-lemma `XIsoOfEq_hom_naturality` / 引理 `XIsoOfEq_hom_naturality`
-
-English:
-lemma XIsoOfEq_hom_naturality
-  given: {K L : HomologicalComplex V c} (φ : K ⟶ L) {n n' : ι} (h : n = n')
-  proof: by subst h; simp
-
-@[reassoc]
-
-中文:
-引理 XIsoOfEq_hom_naturality
-  条件: {K L : 同调复形 V c} (φ : K ⟶ L) {n n' : ι} (h : n = n')
-  证明: by subst h; simp
-
-@[reassoc]
+/-
+**HomologicalComplex.XIsoOfEq_hom_naturality** 是 Mathlib 中的一个引理，位于命名空间 `Homologi
+calComplex`。
+形式化陈述：XIsoOfEq_hom_naturality {K L : HomologicalComplex V c} (φ : K ⟶ L) {n n' :
+ ι} (h : n = n') : φ.f n ≫ (L.XIsoOfEq h).hom = (K.XIsoOfEq h).hom ≫ φ.f n'
+参数：φ : K ⟶ L；h : n = n'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma XIsoOfEq_hom_naturality {K L : HomologicalComplex V c} (φ : K ⟶ L) {n n' : ι} (h : n = n') :
     φ.f n ≫ (L.XIsoOfEq h).hom = (K.XIsoOfEq h).hom ≫ φ.f n' := by subst h; simp
 
 @[reassoc]
-/--
-lemma `XIsoOfEq_inv_naturality` / 引理 `XIsoOfEq_inv_naturality`
-
-English:
-lemma XIsoOfEq_inv_naturality
-  given: {K L : HomologicalComplex V c} (φ : K ⟶ L) {n n' : ι} (h : n = n')
-  proof: by subst h; simp
-
-中文:
-引理 XIsoOfEq_inv_naturality
-  条件: {K L : 同调复形 V c} (φ : K ⟶ L) {n n' : ι} (h : n = n')
-  证明: by subst h; simp
+/-
+**HomologicalComplex.XIsoOfEq_inv_naturality** 是 Mathlib 中的一个引理，位于命名空间 `Homologi
+calComplex`。
+形式化陈述：XIsoOfEq_inv_naturality {K L : HomologicalComplex V c} (φ : K ⟶ L) {n n' :
+ ι} (h : n = n') : φ.f n' ≫ (L.XIsoOfEq h).inv = (K.XIsoOfEq h).inv ≫ φ.f n
+参数：φ : K ⟶ L；h : n = n'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma XIsoOfEq_inv_naturality {K L : HomologicalComplex V c} (φ : K ⟶ L) {n n' : ι} (h : n = n') :
     φ.f n' ≫ (L.XIsoOfEq h).inv = (K.XIsoOfEq h).inv ≫ φ.f n := by subst h; simp
@@ -1260,24 +1033,32 @@ lemma XIsoOfEq_inv_naturality {K L : HomologicalComplex V c} (φ : K ⟶ L) {n n
 and so the differentials only differ by an `eqToHom`.
 -/
 @[simp]
-/--
-theorem `d_comp_eqToHom` / 定理 `d_comp_eqToHom`
+/-
+**HomologicalComplex.d_comp_eqToHom** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalComple
+x`。
+形式化陈述：d_comp_eqToHom {i j j' : ι} (rij : c.Rel i j) (rij' : c.Rel i j') : C.d i 
+j' ≫ eqToHom (congr_arg C.X (c.next_eq rij' rij)) = C.d i j
+参数：rij : c.Rel i j；rij' : c.Rel i j'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `ComplexShape.next_eq`：∀ {ι : Type u_1} (self : ComplexShape ι) {i j j' :
+ ι}, self.Rel i j → self.Rel i j' → j = j'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem d_comp_eqToHom
-  given: {i j j' : ι} (rij : c.Rel i j) (rij' : c.Rel i j')
-  proof: by
-  obtain rfl := c.next_eq rij rij'
-  simp only [eqToHom_refl, comp_id]
-
-中文:
-定理 d_comp_eqToHom
-  条件: {i j j' : ι} (rij : c.关系 i j) (rij' : c.关系 i j')
-  证明: by
-  obtain rfl := c.next_eq rij rij'
-  simp only [eqToHom_refl, comp_id]
-
-Depends on / 依赖: c.next_eq, comp_id, eqToHom_refl, next_eq
+--- 原说明 ---
+If `C.d i j` and `C.d i j'` are both allowed, then we must have `j = j'`,
+and so the differentials only differ by an `eqToHom`.
 -/
 theorem d_comp_eqToHom {i j j' : ι} (rij : c.Rel i j) (rij' : c.Rel i j') :
     C.d i j' ≫ eqToHom (congr_arg C.X (c.next_eq rij' rij)) = C.d i j := by
@@ -1288,72 +1069,102 @@ theorem d_comp_eqToHom {i j j' : ι} (rij : c.Rel i j) (rij' : c.Rel i j') :
 and so the differentials only differ by an `eqToHom`.
 -/
 @[simp]
-/--
-theorem `eqToHom_comp_d` / 定理 `eqToHom_comp_d`
+/-
+**HomologicalComplex.eqToHom_comp_d** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalComple
+x`。
+形式化陈述：eqToHom_comp_d {i i' j : ι} (rij : c.Rel i j) (rij' : c.Rel i' j) : eqToHo
+m (congr_arg C.X (c.prev_eq rij rij')) ≫ C.d i' j = C.d i j
+参数：rij : c.Rel i j；rij' : c.Rel i' j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `ComplexShape.prev_eq`：∀ {ι : Type u_1} (self : ComplexShape ι) {i i' j :
+ ι}, self.Rel i j → self.Rel i' j → i = i'
 
-English:
-theorem eqToHom_comp_d
-  given: {i i' j : ι} (rij : c.Rel i j) (rij' : c.Rel i' j)
-  proof: by
-  obtain rfl := c.prev_eq rij rij'
-  simp only [eqToHom_refl, id_comp]
-
-中文:
-定理 eqToHom_comp_d
-  条件: {i i' j : ι} (rij : c.关系 i j) (rij' : c.关系 i' j)
-  证明: by
-  obtain rfl := c.prev_eq rij rij'
-  simp only [eqToHom_refl, id_comp]
-
-Depends on / 依赖: c.prev_eq, eqToHom_refl, id_comp, prev_eq
+--- 原说明 ---
+If `C.d i j` and `C.d i' j` are both allowed, then we must have `i = i'`,
+and so the differentials only differ by an `eqToHom`.
 -/
 theorem eqToHom_comp_d {i i' j : ι} (rij : c.Rel i j) (rij' : c.Rel i' j) :
     eqToHom (congr_arg C.X (c.prev_eq rij rij')) ≫ C.d i' j = C.d i j := by
   obtain rfl := c.prev_eq rij rij'
   simp only [eqToHom_refl, id_comp]
-
-/--
-theorem `kernel_eq_kernel` / 定理 `kernel_eq_kernel`
-
-English:
-theorem kernel_eq_kernel
-  given: [HasKernels V] {i j j' : ι} (r : c.Rel i j) (r' : c.Rel i j')
-  proof: by
-  rw [← d_comp_eqToHom C r r']
-  apply kernelSubobject_comp_mono
-
-中文:
-定理 kernel_eq_kernel
-  条件: [有Kernels V] {i j j' : ι} (r : c.关系 i j) (r' : c.关系 i j')
-  证明: by
-  rw [← d_comp_eqToHom C r r']
-  apply kernelSubobject_comp_mono
-
-Depends on / 依赖: d_comp_eqToHom, kernelSubobject_comp_mono
+/-
+**HomologicalComplex.kernel_eq_kernel** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalComp
+lex`。
+形式化陈述：kernel_eq_kernel [HasKernels V] {i j j' : ι} (r : c.Rel i j) (r' : c.Rel i
+ j') : kernelSubobject (C.d i j) = kernelSubobject (C.d i j')
+参数：r : c.Rel i j；r' : c.Rel i j'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasKernels.has_limit`：∀ {C : Type u} {inst : Categ
+oryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZeroMorphisms C}
+   [self : CategoryTheory.Limits…
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `ComplexShape.next_eq`：∀ {ι : Type u_1} (self : ComplexShape ι) {i j j' :
+ ι}, self.Rel i j → self.Rel i j' → j = j'
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `HomologicalComplex.d_comp_eqToHom`：d_comp_eqToHom {i j j' : ι} (rij : c.
+Rel i j) (rij' : c.Rel i j') : C.d i j' ≫ eqToHom (congr_arg C.X (c.next_eq rij'
+ rij)) = C.d i j
+· 使用定理 `CategoryTheory.Limits.kernelSubobject_comp_mono`：kernelSubobject_comp_mo
+no (f : X ⟶ Y) [HasKernel f] {Z : C} (h : Y ⟶ Z) [Mono h] : kernelSubobject (f ≫
+ h) = kernelSubobject f
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
+· 使用定理 `CategoryTheory.instIsIsoEqToHom`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {X Y : C} (h : X = Y),   CategoryTheory.IsIso (CategoryTheo
+ry.eqToHom h)
 -/
 theorem kernel_eq_kernel [HasKernels V] {i j j' : ι} (r : c.Rel i j) (r' : c.Rel i j') :
     kernelSubobject (C.d i j) = kernelSubobject (C.d i j') := by
   rw [← d_comp_eqToHom C r r']
   apply kernelSubobject_comp_mono
-
-/--
-theorem `image_eq_image` / 定理 `image_eq_image`
-
-English:
-theorem image_eq_image
-  statement: [HasImages V] [HasEqualizers V] {i i' j : ι} (r : c.Rel i j)
-  proof: by
-  rw [← eqToHom_comp_d C r r']
-  apply imageSubobject_iso_comp
-
-中文:
-定理 image_eq_image
-  结论: [有Images V] [HasEqualizers V] {i i' j : ι} (r : c.关系 i j)
-  证明: by
-  rw [← eqToHom_comp_d C r r']
-  apply imageSubobject_iso_comp
-
-Depends on / 依赖: eqToHom_comp_d, imageSubobject_iso_comp
+/-
+**HomologicalComplex.image_eq_image** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalComple
+x`。
+形式化陈述：image_eq_image [HasImages V] [HasEqualizers V] {i i' j : ι} (r : c.Rel i j
+) (r' : c.Rel i' j) : imageSubobject (C.d i j) = imageSubobject (C.d i' j)
+参数：r : c.Rel i j；r' : c.Rel i' j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasImages.has_image`：∀ {C : Type u} {inst : Catego
+ryTheory.Category.{v, u} C} [self : CategoryTheory.Limits.HasImages C] {X Y : C}
+   (f : X ⟶ Y), CategoryTheory.…
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `ComplexShape.prev_eq`：∀ {ι : Type u_1} (self : ComplexShape ι) {i i' j :
+ ι}, self.Rel i j → self.Rel i' j → i = i'
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `HomologicalComplex.eqToHom_comp_d`：eqToHom_comp_d {i i' j : ι} (rij : c.
+Rel i j) (rij' : c.Rel i' j) : eqToHom (congr_arg C.X (c.prev_eq rij rij')) ≫ C.
+d i' j = C.d i j
+· 使用定理 `CategoryTheory.Limits.imageSubobject_iso_comp`：imageSubobject_iso_comp [
+HasEqualizers C] {X' : C} (h : X' ⟶ X) [IsIso h] (f : X ⟶ Y) [HasImage f] : imag
+eSubobject (h ≫ f) = imageSubobject…
+· 使用定理 `CategoryTheory.instIsIsoEqToHom`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {X Y : C} (h : X = Y),   CategoryTheory.IsIso (CategoryTheo
+ry.eqToHom h)
 -/
 theorem image_eq_image [HasImages V] [HasEqualizers V] {i i' j : ι} (r : c.Rel i j)
     (r' : c.Rel i' j) : imageSubobject (C.d i j) = imageSubobject (C.d i' j) := by
@@ -1362,73 +1173,48 @@ theorem image_eq_image [HasImages V] [HasEqualizers V] {i i' j : ι} (r : c.Rel 
 
 section
 
-/--
-Definition of `xPrev` / `xPrev` 的定义
+/-- Either `C.X i`, if there is some `i` with `c.Rel i j`, or `C.X j`. -/
+/-
+**HomologicalComplex.xPrev** 是 Mathlib 中的一个缩写定义，位于命名空间 `HomologicalComplex`。
+形式化陈述：xPrev (j : ι) : V
+参数：j : ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation xPrev
-  signature: (j : ι)
-  body: C.X (c.prev j)
-
-中文:
-缩写 xPrev
-  签名: (j : ι)
-  定义体: C.X (c.prev j)
-
-Depends on / 依赖: c.prev
+--- 原说明 ---
+Either `C.X i`, if there is some `i` with `c.Rel i j`, or `C.X j`.
 -/
 abbrev xPrev (j : ι) : V :=
   C.X (c.prev j)
 
-/--
-Definition of `xPrevIso` / `xPrevIso` 的定义
+/-- If `c.Rel i j`, then `C.xPrev j` is isomorphic to `C.X i`. -/
+/-
+**HomologicalComplex.xPrevIso** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex`。
+形式化陈述：xPrevIso {i j : ι} (r : c.Rel i j) : C.xPrev j ≅ C.X i
+参数：r : c.Rel i j。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition xPrevIso
-  signature: {i j : ι} (r : c.Rel i j)
-  body: eqToIso by rw [← c.prev_eq' r]
-
-中文:
-定义 xPrevIso
-  签名: {i j : ι} (r : c.关系 i j)
-  定义体: eqToIso by rw [← c.prev_eq' r]
-
-Depends on / 依赖: c.prev_eq, eqToIso, prev_eq
+--- 原说明 ---
+If `c.Rel i j`, then `C.xPrev j` is isomorphic to `C.X i`.
 -/
 def xPrevIso {i j : ι} (r : c.Rel i j) : C.xPrev j ≅ C.X i :=
-eqToIso by rw [← c.prev_eq' r]
+  eqToIso <| by rw [← c.prev_eq' r]
 
-/--
-Definition of `xPrevIsoSelf` / `xPrevIsoSelf` 的定义
+/-- If there is no `i` so `c.Rel i j`, then `C.xPrev j` is isomorphic to `C.X j`. -/
+/-
+**HomologicalComplex.xPrevIsoSelf** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex`
+。
+形式化陈述：xPrevIsoSelf {j : ι} (h : ¬c.Rel (c.prev j) j) : C.xPrev j ≅ C.X j
+参数：h : ¬c.Rel (c.prev j) j。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition xPrevIsoSelf
-  signature: {j : ι} (h : ¬c.Rel (c.prev j) j)
-  body: eqToIso
-    congr_arg C.X
-      (by
-        dsimp [ComplexShape.prev]
-        rw [dif_neg]
-        push Not; intro i hi
-        have : c.prev j = i := c.prev_eq' hi
-        rw [this] at h; contradiction)
-
-中文:
-定义 xPrevIsoSelf
-  签名: {j : ι} (h : ¬c.关系 (c.prev j) j)
-  定义体: eqToIso
-    congr_arg C.X
-      (by
-        dsimp [ComplexShape.prev]
-        rw [dif_neg]
-        push Not; intro i hi
-        have : c.prev j = i := c.prev_eq' hi
-        rw [this] at h; contradiction)
-
-Depends on / 依赖: ComplexShape, ComplexShape.prev, c.prev, c.prev_eq, congr_arg, dif_neg, eqToIso, prev_eq
+--- 原说明 ---
+If there is no `i` so `c.Rel i j`, then `C.xPrev j` is isomorphic to `C.X j`.
 -/
 def xPrevIsoSelf {j : ι} (h : ¬c.Rel (c.prev j) j) : C.xPrev j ≅ C.X j :=
-eqToIso
+  eqToIso <|
     congr_arg C.X
       (by
         dsimp [ComplexShape.prev]
@@ -1437,71 +1223,48 @@ eqToIso
         have : c.prev j = i := c.prev_eq' hi
         rw [this] at h; contradiction)
 
-/--
-Definition of `xNext` / `xNext` 的定义
+/-- Either `C.X j`, if there is some `j` with `c.rel i j`, or `C.X i`. -/
+/-
+**HomologicalComplex.xNext** 是 Mathlib 中的一个缩写定义，位于命名空间 `HomologicalComplex`。
+形式化陈述：xNext (i : ι) : V
+参数：i : ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation xNext
-  signature: (i : ι)
-  body: C.X (c.next i)
-
-中文:
-缩写 xNext
-  签名: (i : ι)
-  定义体: C.X (c.next i)
-
-Depends on / 依赖: c.next, infer_instance, singleFunctor, singleFunctors
+--- 原说明 ---
+Either `C.X j`, if there is some `j` with `c.rel i j`, or `C.X i`.
 -/
 abbrev xNext (i : ι) : V :=
   C.X (c.next i)
 
-/--
-Definition of `xNextIso` / `xNextIso` 的定义
+/-- If `c.Rel i j`, then `C.xNext i` is isomorphic to `C.X j`. -/
+/-
+**HomologicalComplex.xNextIso** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex`。
+形式化陈述：xNextIso {i j : ι} (r : c.Rel i j) : C.xNext i ≅ C.X j
+参数：r : c.Rel i j。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition xNextIso
-  signature: {i j : ι} (r : c.Rel i j)
-  body: eqToIso by rw [← c.next_eq' r]
-
-中文:
-定义 xNextIso
-  签名: {i j : ι} (r : c.关系 i j)
-  定义体: eqToIso by rw [← c.next_eq' r]
-
-Depends on / 依赖: c.next_eq, eqToIso, next_eq
+--- 原说明 ---
+If `c.Rel i j`, then `C.xNext i` is isomorphic to `C.X j`.
 -/
 def xNextIso {i j : ι} (r : c.Rel i j) : C.xNext i ≅ C.X j :=
-eqToIso by rw [← c.next_eq' r]
+  eqToIso <| by rw [← c.next_eq' r]
 
-/--
-Definition of `xNextIsoSelf` / `xNextIsoSelf` 的定义
+/-- If there is no `j` so `c.Rel i j`, then `C.xNext i` is isomorphic to `C.X i`. -/
+/-
+**HomologicalComplex.xNextIsoSelf** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex`
+。
+形式化陈述：xNextIsoSelf {i : ι} (h : ¬c.Rel i (c.next i)) : C.xNext i ≅ C.X i
+参数：h : ¬c.Rel i (c.next i)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition xNextIsoSelf
-  signature: {i : ι} (h : ¬c.Rel i (c.next i))
-  body: eqToIso
-    congr_arg C.X
-      (by
-        dsimp [ComplexShape.next]
-        rw [dif_neg]; rintro ⟨j, hj⟩
-        have : c.next i = j := c.next_eq' hj
-        rw [this] at h; contradiction)
-
-中文:
-定义 xNextIsoSelf
-  签名: {i : ι} (h : ¬c.关系 i (c.next i))
-  定义体: eqToIso
-    congr_arg C.X
-      (by
-        dsimp [ComplexShape.next]
-        rw [dif_neg]; rintro ⟨j, hj⟩
-        have : c.next i = j := c.next_eq' hj
-        rw [this] at h; contradiction)
-
-Depends on / 依赖: ComplexShape, ComplexShape.next, c.next, c.next_eq, congr_arg, dif_neg, eqToIso, next_eq
+--- 原说明 ---
+If there is no `j` so `c.Rel i j`, then `C.xNext i` is isomorphic to `C.X i`.
 -/
 def xNextIsoSelf {i : ι} (h : ¬c.Rel i (c.next i)) : C.xNext i ≅ C.X i :=
-eqToIso
+  eqToIso <|
     congr_arg C.X
       (by
         dsimp [ComplexShape.next]
@@ -1509,290 +1272,287 @@ eqToIso
         have : c.next i = j := c.next_eq' hj
         rw [this] at h; contradiction)
 
-/--
-Definition of `dTo` / `dTo` 的定义
+/-- The differential mapping into `C.X j`, or zero if there isn't one.
+-/
+/-
+**HomologicalComplex.dTo** 是 Mathlib 中的一个缩写定义，位于命名空间 `HomologicalComplex`。
+形式化陈述：dTo (j : ι) : C.xPrev j ⟶ C.X j
+参数：j : ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation dTo
-  signature: (j : ι)
-  body: C.d (c.prev j) j
-
-中文:
-缩写 dTo
-  签名: (j : ι)
-  定义体: C.d (c.prev j) j
-
-Depends on / 依赖: c.prev
+--- 原说明 ---
+The differential mapping into `C.X j`, or zero if there isn't one.
 -/
 abbrev dTo (j : ι) : C.xPrev j ⟶ C.X j :=
   C.d (c.prev j) j
 
-/--
-Definition of `dFrom` / `dFrom` 的定义
+/-- The differential mapping out of `C.X i`, or zero if there isn't one.
+-/
+/-
+**HomologicalComplex.dFrom** 是 Mathlib 中的一个缩写定义，位于命名空间 `HomologicalComplex`。
+形式化陈述：dFrom (i : ι) : C.X i ⟶ C.xNext i
+参数：i : ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation dFrom
-  signature: (i : ι)
-  body: C.d i (c.next i)
-
-中文:
-缩写 dFrom
-  签名: (i : ι)
-  定义体: C.d i (c.next i)
-
-Depends on / 依赖: c.next
+--- 原说明 ---
+The differential mapping out of `C.X i`, or zero if there isn't one.
 -/
 abbrev dFrom (i : ι) : C.X i ⟶ C.xNext i :=
   C.d i (c.next i)
-
-/--
-theorem `dTo_eq` / 定理 `dTo_eq`
-
-English:
-theorem dTo_eq
-  given: {i j : ι} (r : c.Rel i j)
-  statement: C.dTo j = (C.xPrevIso r).hom ≫ C.d i j
-  proof: by
-  obtain rfl := c.prev_eq' r
-  exact (Category.id_comp _).symm
-
-中文:
-定理 dTo_eq
-  条件: {i j : ι} (r : c.关系 i j)
-  结论: C.dTo j = (C.xPrevIso r).hom ≫ C.d i j
-  证明: by
-  obtain rfl := c.prev_eq' r
-  exact (Category.id_comp _).symm
-
-Depends on / 依赖: Category, Category.id_comp, c.prev_eq, id_comp, prev_eq
+/-
+**HomologicalComplex.dTo_eq** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalComplex`。
+形式化陈述：dTo_eq {i j : ι} (r : c.Rel i j) : C.dTo j = (C.xPrevIso r).hom ≫ C.d i j
+参数：r : c.Rel i j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `ComplexShape.prev_eq'`：∀ {ι : Type u_1} (c : ComplexShape ι) {i j : ι}, 
+c.Rel j i → c.prev i = j
 -/
 theorem dTo_eq {i j : ι} (r : c.Rel i j) : C.dTo j = (C.xPrevIso r).hom ≫ C.d i j := by
   obtain rfl := c.prev_eq' r
   exact (Category.id_comp _).symm
-
-/--
-theorem `dTo_eq_zero` / 定理 `dTo_eq_zero`
-
-English:
-theorem dTo_eq_zero
-  given: {j : ι} (h : ¬c.Rel (c.prev j) j)
-  statement: C.dTo j = 0
-  proof: by
-  simp [h]
-
-中文:
-定理 dTo_eq_zero
-  条件: {j : ι} (h : ¬c.关系 (c.prev j) j)
-  结论: C.dTo j = 0
-  证明: by
-  simp [h]
+/-
+**HomologicalComplex.dTo_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalComplex`。
+形式化陈述：dTo_eq_zero {j : ι} (h : ¬c.Rel (c.prev j) j) : C.dTo j = 0
+参数：h : ¬c.Rel (c.prev j) j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HomologicalComplex.shape`：∀ {ι : Type u_1} {V : Type u} [inst : Category
+Theory.Category.{v, u} V]   [inst_1 : CategoryTheory.Limits.HasZeroMorphisms V] 
+{c : ComplexSh…
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem dTo_eq_zero {j : ι} (h : ¬c.Rel (c.prev j) j) : C.dTo j = 0 := by
   simp [h]
-
-/--
-theorem `dFrom_eq` / 定理 `dFrom_eq`
-
-English:
-theorem dFrom_eq
-  given: {i j : ι} (r : c.Rel i j)
-  statement: C.dFrom i = C.d i j ≫ (C.xNextIso r).inv
-  proof: by
-  obtain rfl := c.next_eq' r
-  exact (Category.comp_id _).symm
-
-中文:
-定理 dFrom_eq
-  条件: {i j : ι} (r : c.关系 i j)
-  结论: C.dFrom i = C.d i j ≫ (C.xNextIso r).inv
-  证明: by
-  obtain rfl := c.next_eq' r
-  exact (Category.comp_id _).symm
-
-Depends on / 依赖: Category, Category.comp_id, c.next_eq, comp_id, next_eq
+/-
+**HomologicalComplex.dFrom_eq** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalComplex`。
+形式化陈述：dFrom_eq {i j : ι} (r : c.Rel i j) : C.dFrom i = C.d i j ≫ (C.xNextIso r).
+inv
+参数：r : c.Rel i j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `ComplexShape.next_eq'`：next_eq' (c : ComplexShape ι) {i j : ι} (h : c.Re
+l i j) : c.next i = j
 -/
 theorem dFrom_eq {i j : ι} (r : c.Rel i j) : C.dFrom i = C.d i j ≫ (C.xNextIso r).inv := by
   obtain rfl := c.next_eq' r
   exact (Category.comp_id _).symm
-
-/--
-theorem `dFrom_eq_zero` / 定理 `dFrom_eq_zero`
-
-English:
-theorem dFrom_eq_zero
-  given: {i : ι} (h : ¬c.Rel i (c.next i))
-  statement: C.dFrom i = 0
-  proof: by
-  simp [h]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 dFrom_eq_zero
-  条件: {i : ι} (h : ¬c.关系 i (c.next i))
-  结论: C.dFrom i = 0
-  证明: by
-  simp [h]
-
-@[reassoc (attr := simp)]
+/-
+**HomologicalComplex.dFrom_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalComplex
+`。
+形式化陈述：dFrom_eq_zero {i : ι} (h : ¬c.Rel i (c.next i)) : C.dFrom i = 0
+参数：h : ¬c.Rel i (c.next i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HomologicalComplex.shape`：∀ {ι : Type u_1} {V : Type u} [inst : Category
+Theory.Category.{v, u} V]   [inst_1 : CategoryTheory.Limits.HasZeroMorphisms V] 
+{c : ComplexSh…
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem dFrom_eq_zero {i : ι} (h : ¬c.Rel i (c.next i)) : C.dFrom i = 0 := by
   simp [h]
 
 @[reassoc (attr := simp)]
-/--
-theorem `xPrevIso_comp_dTo` / 定理 `xPrevIso_comp_dTo`
-
-English:
-theorem xPrevIso_comp_dTo
-  given: {i j : ι} (r : c.Rel i j)
-  statement: (C.xPrevIso r).inv ≫ C.dTo j = C.d i j
-  proof: by
-  simp [C.dTo_eq r]
-
-@[reassoc]
-
-中文:
-定理 xPrevIso_comp_dTo
-  条件: {i j : ι} (r : c.关系 i j)
-  结论: (C.xPrevIso r).inv ≫ C.dTo j = C.d i j
-  证明: by
-  simp [C.dTo_eq r]
-
-@[reassoc]
-
-Depends on / 依赖: C.dTo_eq, dTo_eq
+/-
+**HomologicalComplex.xPrevIso_comp_dTo** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalCom
+plex`。
+形式化陈述：xPrevIso_comp_dTo {i j : ι} (r : c.Rel i j) : (C.xPrevIso r).inv ≫ C.dTo j
+ = C.d i j
+参数：r : c.Rel i j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HomologicalComplex.dTo_eq`：dTo_eq {i j : ι} (r : c.Rel i j) : C.dTo j = 
+(C.xPrevIso r).hom ≫ C.d i j
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_assoc`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {Z : C} (h : Y ⟶ Z),   CategoryTh
+eory.CategoryStruct.comp …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem xPrevIso_comp_dTo {i j : ι} (r : c.Rel i j) : (C.xPrevIso r).inv ≫ C.dTo j = C.d i j := by
   simp [C.dTo_eq r]
 
 @[reassoc]
-/--
-theorem `xPrevIsoSelf_comp_dTo` / 定理 `xPrevIsoSelf_comp_dTo`
-
-English:
-theorem xPrevIsoSelf_comp_dTo
-  given: {j : ι} (h : ¬c.Rel (c.prev j) j)
-  proof: by simp [h]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 xPrevIsoSelf_comp_dTo
-  条件: {j : ι} (h : ¬c.关系 (c.prev j) j)
-  证明: by simp [h]
-
-@[reassoc (attr := simp)]
+/-
+**HomologicalComplex.xPrevIsoSelf_comp_dTo** 是 Mathlib 中的一个定理，位于命名空间 `Homologica
+lComplex`。
+形式化陈述：xPrevIsoSelf_comp_dTo {j : ι} (h : ¬c.Rel (c.prev j) j) : (C.xPrevIsoSelf 
+h).inv ≫ C.dTo j = 0
+参数：h : ¬c.Rel (c.prev j) j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HomologicalComplex.shape`：∀ {ι : Type u_1} {V : Type u} [inst : Category
+Theory.Category.{v, u} V]   [inst_1 : CategoryTheory.Limits.HasZeroMorphisms V] 
+{c : ComplexSh…
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem xPrevIsoSelf_comp_dTo {j : ι} (h : ¬c.Rel (c.prev j) j) :
     (C.xPrevIsoSelf h).inv ≫ C.dTo j = 0 := by simp [h]
 
 @[reassoc (attr := simp)]
-/--
-theorem `dFrom_comp_xNextIso` / 定理 `dFrom_comp_xNextIso`
-
-English:
-theorem dFrom_comp_xNextIso
-  given: {i j : ι} (r : c.Rel i j)
-  proof: by
-  simp [C.dFrom_eq r]
-
-@[reassoc]
-
-中文:
-定理 dFrom_comp_xNextIso
-  条件: {i j : ι} (r : c.关系 i j)
-  证明: by
-  simp [C.dFrom_eq r]
-
-@[reassoc]
-
-Depends on / 依赖: C.dFrom_eq, dFrom_eq
+/-
+**HomologicalComplex.dFrom_comp_xNextIso** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalC
+omplex`。
+形式化陈述：dFrom_comp_xNextIso {i j : ι} (r : c.Rel i j) : C.dFrom i ≫ (C.xNextIso r)
+.hom = C.d i j
+参数：r : c.Rel i j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HomologicalComplex.dFrom_eq`：dFrom_eq {i j : ι} (r : c.Rel i j) : C.dFro
+m i = C.d i j ≫ (C.xNextIso r).inv
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id`：∀ {C : Type u} [inst : CategoryTheory.Cat
+egory.{v, u} C] {X Y : C} (self : X ≅ Y),   CategoryTheory.CategoryStruct.comp s
+elf.inv self.hom = …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem dFrom_comp_xNextIso {i j : ι} (r : c.Rel i j) :
     C.dFrom i ≫ (C.xNextIso r).hom = C.d i j := by
   simp [C.dFrom_eq r]
 
 @[reassoc]
-/--
-theorem `dFrom_comp_xNextIsoSelf` / 定理 `dFrom_comp_xNextIsoSelf`
-
-English:
-theorem dFrom_comp_xNextIsoSelf
-  given: {i : ι} (h : ¬c.Rel i (c.next i))
-  proof: by simp [h]
-
-中文:
-定理 dFrom_comp_xNextIsoSelf
-  条件: {i : ι} (h : ¬c.关系 i (c.next i))
-  证明: by simp [h]
+/-
+**HomologicalComplex.dFrom_comp_xNextIsoSelf** 是 Mathlib 中的一个定理，位于命名空间 `Homologi
+calComplex`。
+形式化陈述：dFrom_comp_xNextIsoSelf {i : ι} (h : ¬c.Rel i (c.next i)) : C.dFrom i ≫ (C
+.xNextIsoSelf h).hom = 0
+参数：h : ¬c.Rel i (c.next i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HomologicalComplex.shape`：∀ {ι : Type u_1} {V : Type u} [inst : Category
+Theory.Category.{v, u} V]   [inst_1 : CategoryTheory.Limits.HasZeroMorphisms V] 
+{c : ComplexSh…
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `CategoryTheory.Limits.zero_comp`：zero_comp [HasZeroMorphisms C] {X : C} 
+{Y Z : C} {f : Y ⟶ Z} : (0 : X ⟶ Y) ≫ f = (0 : X ⟶ Z)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem dFrom_comp_xNextIsoSelf {i : ι} (h : ¬c.Rel i (c.next i)) :
     C.dFrom i ≫ (C.xNextIsoSelf h).hom = 0 := by simp [h]
 
 -- This is not a simp lemma; the LHS already simplifies.
-/--
-theorem `dTo_comp_dFrom` / 定理 `dTo_comp_dFrom`
-
-English:
-theorem dTo_comp_dFrom
-  given: (j : ι)
-  statement: C.dTo j ≫ C.dFrom j = 0
-  proof: C.d_comp_d _ _ _
-
-中文:
-定理 dTo_comp_dFrom
-  条件: (j : ι)
-  结论: C.dTo j ≫ C.dFrom j = 0
-  证明: C.d_comp_d _ _ _
-
-Depends on / 依赖: C.d_comp_d, d_comp_d
+/-
+**HomologicalComplex.dTo_comp_dFrom** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalComple
+x`。
+形式化陈述：dTo_comp_dFrom (j : ι) : C.dTo j ≫ C.dFrom j = 0
+参数：j : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomologicalComplex.d_comp_d`：d_comp_d (C : HomologicalComplex V c) (i j 
+k : ι) : C.d i j ≫ C.d j k = 0
 -/
 theorem dTo_comp_dFrom (j : ι) : C.dTo j ≫ C.dFrom j = 0 :=
   C.d_comp_d _ _ _
-
-/--
-theorem `kernel_from_eq_kernel` / 定理 `kernel_from_eq_kernel`
-
-English:
-theorem kernel_from_eq_kernel
-  given: [HasKernels V] {i j : ι} (r : c.Rel i j)
-  proof: by
-  rw [C.dFrom_eq r]
-  apply kernelSubobject_comp_mono
-
-中文:
-定理 kernel_from_eq_kernel
-  条件: [有Kernels V] {i j : ι} (r : c.关系 i j)
-  证明: by
-  rw [C.dFrom_eq r]
-  apply kernelSubobject_comp_mono
-
-Depends on / 依赖: C.dFrom_eq, dFrom_eq, kernelSubobject_comp_mono
+/-
+**HomologicalComplex.kernel_from_eq_kernel** 是 Mathlib 中的一个定理，位于命名空间 `Homologica
+lComplex`。
+形式化陈述：kernel_from_eq_kernel [HasKernels V] {i j : ι} (r : c.Rel i j) : kernelSub
+object (C.dFrom i) = kernelSubobject (C.d i j)
+参数：r : c.Rel i j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasKernels.has_limit`：∀ {C : Type u} {inst : Categ
+oryTheory.Category.{v, u} C} {inst_1 : CategoryTheory.Limits.HasZeroMorphisms C}
+   [self : CategoryTheory.Limits…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HomologicalComplex.dFrom_eq`：dFrom_eq {i j : ι} (r : c.Rel i j) : C.dFro
+m i = C.d i j ≫ (C.xNextIso r).inv
+· 使用定理 `CategoryTheory.Limits.kernelSubobject_comp_mono`：kernelSubobject_comp_mo
+no (f : X ⟶ Y) [HasKernel f] {Z : C} (h : Y ⟶ Z) [Mono h] : kernelSubobject (f ≫
+ h) = kernelSubobject f
+· 使用定理 `CategoryTheory.StrongMono.mono`：∀ {C : Type u} {inst : CategoryTheory.Ca
+tegory.{v, u} C} {P Q : C} {f : P ⟶ Q} [self : CategoryTheory.StrongMono f],   C
+ategoryTheory.Mono f
+· 使用定理 `CategoryTheory.strongMono_of_isIso`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {P Q : C} (f : Q ⟶ P) [CategoryTheory.IsIso f],   CategoryT
+heory.StrongMono f
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
 -/
 theorem kernel_from_eq_kernel [HasKernels V] {i j : ι} (r : c.Rel i j) :
     kernelSubobject (C.dFrom i) = kernelSubobject (C.d i j) := by
   rw [C.dFrom_eq r]
   apply kernelSubobject_comp_mono
-
-/--
-theorem `image_to_eq_image` / 定理 `image_to_eq_image`
-
-English:
-theorem image_to_eq_image
-  given: [HasImages V] [HasEqualizers V] {i j : ι} (r : c.Rel i j)
-  proof: by
-  rw [C.dTo_eq r]
-  apply imageSubobject_iso_comp
-
-中文:
-定理 image_to_eq_image
-  条件: [有Images V] [HasEqualizers V] {i j : ι} (r : c.关系 i j)
-  证明: by
-  rw [C.dTo_eq r]
-  apply imageSubobject_iso_comp
-
-Depends on / 依赖: C.dTo_eq, dTo_eq, imageSubobject_iso_comp
+/-
+**HomologicalComplex.image_to_eq_image** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalCom
+plex`。
+形式化陈述：image_to_eq_image [HasImages V] [HasEqualizers V] {i j : ι} (r : c.Rel i j
+) : imageSubobject (C.dTo j) = imageSubobject (C.d i j)
+参数：r : c.Rel i j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasImages.has_image`：∀ {C : Type u} {inst : Catego
+ryTheory.Category.{v, u} C} [self : CategoryTheory.Limits.HasImages C] {X Y : C}
+   (f : X ⟶ Y), CategoryTheory.…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HomologicalComplex.dTo_eq`：dTo_eq {i j : ι} (r : c.Rel i j) : C.dTo j = 
+(C.xPrevIso r).hom ≫ C.d i j
+· 使用定理 `CategoryTheory.Limits.imageSubobject_iso_comp`：imageSubobject_iso_comp [
+HasEqualizers C] {X' : C} (h : X' ⟶ X) [IsIso h] (f : X ⟶ Y) [HasImage f] : imag
+eSubobject (h ≫ f) = imageSubobject…
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 -/
 theorem image_to_eq_image [HasImages V] [HasEqualizers V] {i j : ι} (r : c.Rel i j) :
     imageSubobject (C.dTo j) = imageSubobject (C.d i j) := by
@@ -1807,20 +1567,16 @@ variable {C₁ C₂ C₃ : HomologicalComplex V c}
 
 /-- The `i`-th component of an isomorphism of chain complexes. -/
 @[simps!]
-/--
-Definition of `isoApp` / `isoApp` 的定义
+/-
+**HomologicalComplex.Hom.isoApp** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex.Ho
+m`。
+形式化陈述：isoApp (f : C₁ ≅ C₂) (i : ι) : C₁.X i ≅ C₂.X i
+参数：f : C₁ ≅ C₂；i : ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoApp
-  signature: (f : C₁ ≅ C₂) (i : ι)
-  body: (eval V c i).mapIso f
-
-中文:
-定义 isoApp
-  签名: (f : C₁ ≅ C₂) (i : ι)
-  定义体: (eval V c i).mapIso f
-
-Depends on / 依赖: mapIso
+--- 原说明 ---
+The `i`-th component of an isomorphism of chain complexes.
 -/
 def isoApp (f : C₁ ≅ C₂) (i : ι) : C₁.X i ≅ C₂.X i :=
   (eval V c i).mapIso f
@@ -1828,55 +1584,20 @@ def isoApp (f : C₁ ≅ C₂) (i : ι) : C₁.X i ≅ C₂.X i :=
 /-- Construct an isomorphism of chain complexes from isomorphism of the objects
 which commute with the differentials. -/
 @[simps]
-/--
-Definition of `isoOfComponents` / `isoOfComponents` 的定义
+/-
+**HomologicalComplex.Hom.isoOfComponents** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalC
+omplex.Hom`。
+形式化陈述：isoOfComponents (f : forall i, C₁.X i ≅ C₂.X i) (hf : forall i j, c.Rel i 
+j -> (f i).hom ≫ C₂.d i j = C₁.d i j ≫ (f j).hom
+参数：f : forall i, C₁.X i ≅ C₂.X i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoOfComponents
-  signature: (f : forall i, C₁.X i ≅ C₂.X i)
-  body: { f := fun i => (f i).hom
-      comm' := hf }
-  inv :=
-    { f := fun i => (f i).inv
-      comm' := fun i j hij =>
-        calc
-          (f i).inv ≫ C₁.d i j = (f i).inv ≫ (C₁.d i j ≫ (f j).hom) ≫ (f j).inv := by simp
-          _ = (f i).inv ≫ ((f i).hom ≫ C₂.d i j) ≫ (f j).inv := by rw [hf i j hij]
-          _ = C₂.d i j ≫ (f j).inv := by simp }
-  hom_inv_id := by
-    ext i
-    exact (f i).hom_inv_id
-  inv_hom_id := by
-    ext i
-    exact (f i).inv_hom_id
-
-@[simp]
-
-中文:
-定义 isoOfComponents
-  签名: (f : 对任意 i, C₁.X i ≅ C₂.X i)
-  定义体: { f := fun i => (f i).hom
-      comm' := hf }
-  inv :=
-    { f := fun i => (f i).inv
-      comm' := fun i j hij =>
-        calc
-          (f i).inv ≫ C₁.d i j = (f i).inv ≫ (C₁.d i j ≫ (f j).hom) ≫ (f j).inv := by simp
-          _ = (f i).inv ≫ ((f i).hom ≫ C₂.d i j) ≫ (f j).inv := by rw [hf i j hij]
-          _ = C₂.d i j ≫ (f j).inv := by simp }
-  hom_inv_id := by
-    ext i
-    exact (f i).hom_inv_id
-  inv_hom_id := by
-    ext i
-    exact (f i).inv_hom_id
-
-@[simp]
-
-Depends on / 依赖: cat_disch, hom_inv_id, inv_hom_id
+--- 原说明 ---
+Construct an isomorphism of chain complexes from isomorphism of the objects
+which commute with the differentials.
 -/
-def isoOfComponents (f : forall i, C₁.X i ≅ C₂.X i)
-    (hf : forall i j, c.Rel i j -> (f i).hom ≫ C₂.d i j = C₁.d i j ≫ (f j).hom := by cat_disch) :
+def isoOfComponents (f : ∀ i, C₁.X i ≅ C₂.X i)
+    (hf : ∀ i j, c.Rel i j → (f i).hom ≫ C₂.d i j = C₁.d i j ≫ (f j).hom := by cat_disch) :
     C₁ ≅ C₂ where
   hom :=
     { f := fun i => (f i).hom
@@ -1896,130 +1617,138 @@ def isoOfComponents (f : forall i, C₁.X i ≅ C₂.X i)
     exact (f i).inv_hom_id
 
 @[simp]
-/--
-theorem `isoOfComponents_app` / 定理 `isoOfComponents_app`
-
-English:
-theorem isoOfComponents_app
-  statement: (f : forall i, C₁.X i ≅ C₂.X i)
-  proof: by
-  ext
-  simp
-
-中文:
-定理 isoOfComponents_app
-  结论: (f : 对任意 i, C₁.X i ≅ C₂.X i)
-  证明: by
-  ext
-  simp
+/-
+**HomologicalComplex.Hom.isoOfComponents_app** 是 Mathlib 中的一个定理，位于命名空间 `Homologi
+calComplex.Hom`。
+形式化陈述：isoOfComponents_app (f : forall i, C₁.X i ≅ C₂.X i) (hf : forall i j, c.Re
+l i j -> (f i).hom ≫ C₂.d i j = C₁.d i j ≫ (f j).hom) (i : ι) : isoApp (isoOfCom
+ponents f hf) i = f i
+参数：f : forall i, C₁.X i ≅ C₂.X i；hf : forall i j, c.Rel i j -> (f i).hom ≫ C₂.d 
+i j = C₁.d i j ≫ (f j).hom；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.ext`：ext ⦃α β : X ≅ Y⦄ (w : α.hom = β.hom) : α = β
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HomologicalComplex.Hom.isoApp_hom`：∀ {ι : Type u_1} {V : Type u} [inst :
+ CategoryTheory.Category.{v, u} V]   [inst_1 : CategoryTheory.Limits.HasZeroMorp
+hisms V] {c : ComplexSh…
+· 使用定理 `HomologicalComplex.Hom.isoOfComponents_hom_f`：∀ {ι : Type u_1} {V : Type
+ u} [inst : CategoryTheory.Category.{v, u} V]   [inst_1 : CategoryTheory.Limits.
+HasZeroMorphisms V] {c : ComplexSh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem isoOfComponents_app (f : forall i, C₁.X i ≅ C₂.X i)
-    (hf : forall i j, c.Rel i j -> (f i).hom ≫ C₂.d i j = C₁.d i j ≫ (f j).hom) (i : ι) :
+theorem isoOfComponents_app (f : ∀ i, C₁.X i ≅ C₂.X i)
+    (hf : ∀ i j, c.Rel i j → (f i).hom ≫ C₂.d i j = C₁.d i j ≫ (f j).hom) (i : ι) :
     isoApp (isoOfComponents f hf) i = f i := by
   ext
   simp
-
-/--
-theorem `isIso_of_components` / 定理 `isIso_of_components`
-
-English:
-theorem isIso_of_components
-  given: (f : C₁ ⟶ C₂) [forall n : ι, IsIso (f.f n)]
-  statement: IsIso f
-  proof: (HomologicalComplex.Hom.isoOfComponents fun n => asIso (f.f n)).isIso_hom
-
-中文:
-定理 isIso_of_components
-  条件: (f : C₁ ⟶ C₂) [对任意 n : ι, 是同构 (f.f n)]
-  结论: 是同构 f
-  证明: (HomologicalComplex.Hom.isoOfComponents fun n => asIso (f.f n)).isIso_hom
-
-Depends on / 依赖: HomologicalComplex, HomologicalComplex.Hom.isoOfComponents, isIso_hom, isoOfComponents
+/-
+**HomologicalComplex.Hom.isIso_of_components** 是 Mathlib 中的一个定理，位于命名空间 `Homologi
+calComplex.Hom`。
+形式化陈述：isIso_of_components (f : C₁ ⟶ C₂) [forall n : ι, IsIso (f.f n)] : IsIso f
+参数：f : C₁ ⟶ C₂；f.f n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HomologicalComplex.Hom.comm`：∀ {ι : Type u_1} {V : Type u} [inst : Categ
+oryTheory.Category.{v, u} V]   [inst_1 : CategoryTheory.Limits.HasZeroMorphisms 
+V] {c : ComplexSh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem isIso_of_components (f : C₁ ⟶ C₂) [forall n : ι, IsIso (f.f n)] : IsIso f :=
+theorem isIso_of_components (f : C₁ ⟶ C₂) [∀ n : ι, IsIso (f.f n)] : IsIso f :=
   (HomologicalComplex.Hom.isoOfComponents fun n => asIso (f.f n)).isIso_hom
 
 /-! Lemmas relating chain maps and `dTo`/`dFrom`. -/
 
 
-/--
-Definition of `prev` / `prev` 的定义
+/-- `f.prev j` is `f.f i` if there is some `r i j`, and `f.f j` otherwise. -/
+/-
+**HomologicalComplex.Hom.prev** 是 Mathlib 中的一个缩写定义，位于命名空间 `HomologicalComplex.Ho
+m`。
+形式化陈述：prev (f : Hom C₁ C₂) (j : ι) : C₁.xPrev j ⟶ C₂.xPrev j
+参数：f : Hom C₁ C₂；j : ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation prev
-  signature: (f : Hom C₁ C₂) (j : ι)
-  body: f.f _
-
-中文:
-缩写 prev
-  签名: (f : 态射 C₁ C₂) (j : ι)
-  定义体: f.f _
+--- 原说明 ---
+`f.prev j` is `f.f i` if there is some `r i j`, and `f.f j` otherwise.
 -/
 abbrev prev (f : Hom C₁ C₂) (j : ι) : C₁.xPrev j ⟶ C₂.xPrev j :=
   f.f _
-
-/--
-theorem `prev_eq` / 定理 `prev_eq`
-
-English:
-theorem prev_eq
-  given: (f : Hom C₁ C₂) {i j : ι} (w : c.Rel i j)
-  proof: by
-  obtain rfl := c.prev_eq' w
-  simp only [xPrevIso, eqToIso_refl, Iso.refl_hom, Iso.refl_inv, comp_id, id_comp]
-
-中文:
-定理 prev_eq
-  条件: (f : 态射 C₁ C₂) {i j : ι} (w : c.关系 i j)
-  证明: by
-  obtain rfl := c.prev_eq' w
-  simp only [xPrevIso, eqToIso_refl, Iso.refl_hom, Iso.refl_inv, comp_id, id_comp]
-
-Depends on / 依赖: Iso.refl_hom, Iso.refl_inv, c.prev_eq, comp_id, eqToIso_refl, id_comp, prev_eq, refl_hom, refl_inv, xPrevIso
+/-
+**HomologicalComplex.Hom.prev_eq** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalComplex.H
+om`。
+形式化陈述：prev_eq (f : Hom C₁ C₂) {i j : ι} (w : c.Rel i j) : f.prev j = (C₁.xPrevIs
+o w).hom ≫ f.f i ≫ (C₂.xPrevIso w).inv
+参数：f : Hom C₁ C₂；w : c.Rel i j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `ComplexShape.prev_eq'`：∀ {ι : Type u_1} (c : ComplexShape ι) {i j : ι}, 
+c.Rel j i → c.prev i = j
 -/
 theorem prev_eq (f : Hom C₁ C₂) {i j : ι} (w : c.Rel i j) :
     f.prev j = (C₁.xPrevIso w).hom ≫ f.f i ≫ (C₂.xPrevIso w).inv := by
   obtain rfl := c.prev_eq' w
   simp only [xPrevIso, eqToIso_refl, Iso.refl_hom, Iso.refl_inv, comp_id, id_comp]
 
-/--
-Definition of `next` / `next` 的定义
+/-- `f.next i` is `f.f j` if there is some `r i j`, and `f.f j` otherwise. -/
+/-
+**HomologicalComplex.Hom.next** 是 Mathlib 中的一个缩写定义，位于命名空间 `HomologicalComplex.Ho
+m`。
+形式化陈述：next (f : Hom C₁ C₂) (i : ι) : C₁.xNext i ⟶ C₂.xNext i
+参数：f : Hom C₁ C₂；i : ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation next
-  signature: (f : Hom C₁ C₂) (i : ι)
-  body: f.f _
-
-中文:
-缩写 next
-  签名: (f : 态射 C₁ C₂) (i : ι)
-  定义体: f.f _
+--- 原说明 ---
+`f.next i` is `f.f j` if there is some `r i j`, and `f.f j` otherwise.
 -/
 abbrev next (f : Hom C₁ C₂) (i : ι) : C₁.xNext i ⟶ C₂.xNext i :=
   f.f _
-
-/--
-theorem `next_eq` / 定理 `next_eq`
-
-English:
-theorem next_eq
-  given: (f : Hom C₁ C₂) {i j : ι} (w : c.Rel i j)
-  proof: by
-  obtain rfl := c.next_eq' w
-  simp only [xNextIso, eqToIso_refl, Iso.refl_hom, Iso.refl_inv, comp_id, id_comp]
-
-@[reassoc, elementwise]
-
-中文:
-定理 next_eq
-  条件: (f : 态射 C₁ C₂) {i j : ι} (w : c.关系 i j)
-  证明: by
-  obtain rfl := c.next_eq' w
-  simp only [xNextIso, eqToIso_refl, Iso.refl_hom, Iso.refl_inv, comp_id, id_comp]
-
-@[reassoc, elementwise]
-
-Depends on / 依赖: Iso.refl_hom, Iso.refl_inv, c.next_eq, comp_id, eqToIso_refl, id_comp, next_eq, refl_hom, refl_inv, xNextIso
+/-
+**HomologicalComplex.Hom.next_eq** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalComplex.H
+om`。
+形式化陈述：next_eq (f : Hom C₁ C₂) {i j : ι} (w : c.Rel i j) : f.next i = (C₁.xNextIs
+o w).hom ≫ f.f j ≫ (C₂.xNextIso w).inv
+参数：f : Hom C₁ C₂；w : c.Rel i j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `ComplexShape.next_eq'`：next_eq' (c : ComplexShape ι) {i j : ι} (h : c.Re
+l i j) : c.next i = j
 -/
 theorem next_eq (f : Hom C₁ C₂) {i j : ι} (w : c.Rel i j) :
     f.next i = (C₁.xNextIso w).hom ≫ f.f j ≫ (C₂.xNextIso w).inv := by
@@ -2027,22 +1756,17 @@ theorem next_eq (f : Hom C₁ C₂) {i j : ι} (w : c.Rel i j) :
   simp only [xNextIso, eqToIso_refl, Iso.refl_hom, Iso.refl_inv, comp_id, id_comp]
 
 @[reassoc, elementwise]
-/--
-theorem `comm_from` / 定理 `comm_from`
-
-English:
-theorem comm_from
-  given: (f : Hom C₁ C₂) (i : ι)
-  statement: f.f i ≫ C₂.dFrom i = C₁.dFrom i ≫ f.next i
-  proof: f.comm _ _
-
-中文:
-定理 comm_from
-  条件: (f : 态射 C₁ C₂) (i : ι)
-  结论: f.f i ≫ C₂.dFrom i = C₁.dFrom i ≫ f.next i
-  证明: f.comm _ _
-
-Depends on / 依赖: f.comm
+/-
+**HomologicalComplex.Hom.comm_from** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalComplex
+.Hom`。
+形式化陈述：comm_from (f : Hom C₁ C₂) (i : ι) : f.f i ≫ C₂.dFrom i = C₁.dFrom i ≫ f.ne
+xt i
+参数：f : Hom C₁ C₂；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomologicalComplex.Hom.comm`：∀ {ι : Type u_1} {V : Type u} [inst : Categ
+oryTheory.Category.{v, u} V]   [inst_1 : CategoryTheory.Limits.HasZeroMorphisms 
+V] {c : ComplexSh…
 -/
 theorem comm_from (f : Hom C₁ C₂) (i : ι) : f.f i ≫ C₂.dFrom i = C₁.dFrom i ≫ f.next i :=
   f.comm _ _
@@ -2050,231 +1774,180 @@ theorem comm_from (f : Hom C₁ C₂) (i : ι) : f.f i ≫ C₂.dFrom i = C₁.d
 attribute [simp] comm_from_apply
 
 @[reassoc, elementwise]
-/--
-theorem `comm_to` / 定理 `comm_to`
-
-English:
-theorem comm_to
-  given: (f : Hom C₁ C₂) (j : ι)
-  statement: f.prev j ≫ C₂.dTo j = C₁.dTo j ≫ f.f j
-  proof: f.comm _ _
-
-中文:
-定理 comm_to
-  条件: (f : 态射 C₁ C₂) (j : ι)
-  结论: f.prev j ≫ C₂.dTo j = C₁.dTo j ≫ f.f j
-  证明: f.comm _ _
-
-Depends on / 依赖: f.comm
+/-
+**HomologicalComplex.Hom.comm_to** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalComplex.H
+om`。
+形式化陈述：comm_to (f : Hom C₁ C₂) (j : ι) : f.prev j ≫ C₂.dTo j = C₁.dTo j ≫ f.f j
+参数：f : Hom C₁ C₂；j : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomologicalComplex.Hom.comm`：∀ {ι : Type u_1} {V : Type u} [inst : Categ
+oryTheory.Category.{v, u} V]   [inst_1 : CategoryTheory.Limits.HasZeroMorphisms 
+V] {c : ComplexSh…
 -/
 theorem comm_to (f : Hom C₁ C₂) (j : ι) : f.prev j ≫ C₂.dTo j = C₁.dTo j ≫ f.f j :=
   f.comm _ _
 
 attribute [simp] comm_to_apply
 
-/--
-Definition of `sqFrom` / `sqFrom` 的定义
+/-- A morphism of chain complexes
+induces a morphism of arrows of the differentials out of each object.
+-/
+/-
+**HomologicalComplex.Hom.sqFrom** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex.Ho
+m`。
+形式化陈述：sqFrom (f : Hom C₁ C₂) (i : ι) : Arrow.mk (C₁.dFrom i) ⟶ Arrow.mk (C₂.dFro
+m i)
+参数：f : Hom C₁ C₂；i : ι。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `HomologicalComplex.Hom.comm_from`：comm_from (f : Hom C₁ C₂) (i : ι) : f.
+f i ≫ C₂.dFrom i = C₁.dFrom i ≫ f.next i
 
-English:
-definition sqFrom
-  signature: (f : Hom C₁ C₂) (i : ι)
-  body: Arrow.homMk _ _ (f.comm_from i)
-
-@[simp]
-
-中文:
-定义 sqFrom
-  签名: (f : 态射 C₁ C₂) (i : ι)
-  定义体: Arrow.homMk _ _ (f.comm_from i)
-
-@[simp]
-
-Depends on / 依赖: Arrow.homMk, comm_from, f.comm_from
+--- 原说明 ---
+A morphism of chain complexes
+induces a morphism of arrows of the differentials out of each object.
 -/
 def sqFrom (f : Hom C₁ C₂) (i : ι) : Arrow.mk (C₁.dFrom i) ⟶ Arrow.mk (C₂.dFrom i) :=
   Arrow.homMk _ _ (f.comm_from i)
 
 @[simp]
-/--
-theorem `sqFrom_left` / 定理 `sqFrom_left`
-
-English:
-theorem sqFrom_left
-  given: (f : Hom C₁ C₂) (i : ι)
-  statement: (f.sqFrom i).left = f.f i
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 sqFrom_left
-  条件: (f : 态射 C₁ C₂) (i : ι)
-  结论: (f.sqFrom i).left = f.f i
-  证明: rfl
-
-@[simp]
+/-
+**HomologicalComplex.Hom.sqFrom_left** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalCompl
+ex.Hom`。
+形式化陈述：sqFrom_left (f : Hom C₁ C₂) (i : ι) : (f.sqFrom i).left = f.f i
+参数：f : Hom C₁ C₂；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sqFrom_left (f : Hom C₁ C₂) (i : ι) : (f.sqFrom i).left = f.f i :=
   rfl
 
 @[simp]
-/--
-theorem `sqFrom_right` / 定理 `sqFrom_right`
-
-English:
-theorem sqFrom_right
-  given: (f : Hom C₁ C₂) (i : ι)
-  statement: (f.sqFrom i).right = f.next i
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 sqFrom_right
-  条件: (f : 态射 C₁ C₂) (i : ι)
-  结论: (f.sqFrom i).right = f.next i
-  证明: rfl
-
-@[simp]
+/-
+**HomologicalComplex.Hom.sqFrom_right** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalComp
+lex.Hom`。
+形式化陈述：sqFrom_right (f : Hom C₁ C₂) (i : ι) : (f.sqFrom i).right = f.next i
+参数：f : Hom C₁ C₂；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sqFrom_right (f : Hom C₁ C₂) (i : ι) : (f.sqFrom i).right = f.next i :=
   rfl
 
 @[simp]
-/--
-theorem `sqFrom_id` / 定理 `sqFrom_id`
-
-English:
-theorem sqFrom_id
-  given: (C₁ : HomologicalComplex V c) (i : ι)
-  statement: sqFrom (𝟙 C₁) i = 𝟙 _
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 sqFrom_id
-  条件: (C₁ : 同调复形 V c) (i : ι)
-  结论: sqFrom (𝟙 C₁) i = 𝟙 _
-  证明: rfl
-
-@[simp]
+/-
+**HomologicalComplex.Hom.sqFrom_id** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalComplex
+.Hom`。
+形式化陈述：sqFrom_id (C₁ : HomologicalComplex V c) (i : ι) : sqFrom (𝟙 C₁) i = 𝟙 _
+参数：C₁ : HomologicalComplex V c；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sqFrom_id (C₁ : HomologicalComplex V c) (i : ι) : sqFrom (𝟙 C₁) i = 𝟙 _ :=
   rfl
 
 @[simp]
-/--
-theorem `sqFrom_comp` / 定理 `sqFrom_comp`
-
-English:
-theorem sqFrom_comp
-  given: (f : C₁ ⟶ C₂) (g : C₂ ⟶ C₃) (i : ι)
-  proof: rfl
-
-中文:
-定理 sqFrom_comp
-  条件: (f : C₁ ⟶ C₂) (g : C₂ ⟶ C₃) (i : ι)
-  证明: rfl
+/-
+**HomologicalComplex.Hom.sqFrom_comp** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalCompl
+ex.Hom`。
+形式化陈述：sqFrom_comp (f : C₁ ⟶ C₂) (g : C₂ ⟶ C₃) (i : ι) : sqFrom (f ≫ g) i = sqFro
+m f i ≫ sqFrom g i
+参数：f : C₁ ⟶ C₂；g : C₂ ⟶ C₃；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sqFrom_comp (f : C₁ ⟶ C₂) (g : C₂ ⟶ C₃) (i : ι) :
     sqFrom (f ≫ g) i = sqFrom f i ≫ sqFrom g i :=
   rfl
 
-/--
-Definition of `sqTo` / `sqTo` 的定义
+/-- A morphism of chain complexes
+induces a morphism of arrows of the differentials into each object.
+-/
+/-
+**HomologicalComplex.Hom.sqTo** 是 Mathlib 中的一个定义，位于命名空间 `HomologicalComplex.Hom`
+。
+形式化陈述：sqTo (f : Hom C₁ C₂) (j : ι) : Arrow.mk (C₁.dTo j) ⟶ Arrow.mk (C₂.dTo j)
+参数：f : Hom C₁ C₂；j : ι。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `HomologicalComplex.Hom.comm_to`：comm_to (f : Hom C₁ C₂) (j : ι) : f.prev
+ j ≫ C₂.dTo j = C₁.dTo j ≫ f.f j
 
-English:
-definition sqTo
-  signature: (f : Hom C₁ C₂) (j : ι)
-  body: Arrow.homMk _ _ (f.comm_to j)
-
-@[simp]
-
-中文:
-定义 sqTo
-  签名: (f : 态射 C₁ C₂) (j : ι)
-  定义体: Arrow.homMk _ _ (f.comm_to j)
-
-@[simp]
-
-Depends on / 依赖: Arrow.homMk, comm_to, f.comm_to
+--- 原说明 ---
+A morphism of chain complexes
+induces a morphism of arrows of the differentials into each object.
 -/
 def sqTo (f : Hom C₁ C₂) (j : ι) : Arrow.mk (C₁.dTo j) ⟶ Arrow.mk (C₂.dTo j) :=
   Arrow.homMk _ _ (f.comm_to j)
 
 @[simp]
-/--
-theorem `sqTo_left` / 定理 `sqTo_left`
-
-English:
-theorem sqTo_left
-  given: (f : Hom C₁ C₂) (j : ι)
-  statement: (f.sqTo j).left = f.prev j
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 sqTo_left
-  条件: (f : 态射 C₁ C₂) (j : ι)
-  结论: (f.sqTo j).left = f.prev j
-  证明: rfl
-
-@[simp]
+/-
+**HomologicalComplex.Hom.sqTo_left** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalComplex
+.Hom`。
+形式化陈述：sqTo_left (f : Hom C₁ C₂) (j : ι) : (f.sqTo j).left = f.prev j
+参数：f : Hom C₁ C₂；j : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sqTo_left (f : Hom C₁ C₂) (j : ι) : (f.sqTo j).left = f.prev j :=
   rfl
 
 @[simp]
-/--
-theorem `sqTo_right` / 定理 `sqTo_right`
-
-English:
-theorem sqTo_right
-  given: (f : Hom C₁ C₂) (j : ι)
-  statement: (f.sqTo j).right = f.f j
-  proof: rfl
-
-中文:
-定理 sqTo_right
-  条件: (f : 态射 C₁ C₂) (j : ι)
-  结论: (f.sqTo j).right = f.f j
-  证明: rfl
+/-
+**HomologicalComplex.Hom.sqTo_right** 是 Mathlib 中的一个定理，位于命名空间 `HomologicalComple
+x.Hom`。
+形式化陈述：sqTo_right (f : Hom C₁ C₂) (j : ι) : (f.sqTo j).right = f.f j
+参数：f : Hom C₁ C₂；j : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sqTo_right (f : Hom C₁ C₂) (j : ι) : (f.sqTo j).right = f.f j :=
   rfl
-
+/-
+**HomologicalComplex.Hom.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex.Hom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (f : C₁ ⟶ C₂) [IsIso f] (j : ι) : IsIso (f.f j) :=
   inferInstanceAs (IsIso ((eval _ _ j).map f))
-
+/-
+**HomologicalComplex.Hom.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex.Hom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (f : C₁ ⟶ C₂) [IsSplitEpi f] (j : ι) : IsSplitEpi (f.f j) :=
   inferInstanceAs (IsSplitEpi ((eval _ _ j).map f))
-
+/-
+**HomologicalComplex.Hom.** 是 Mathlib 中的一个实例，位于命名空间 `HomologicalComplex.Hom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (f : C₁ ⟶ C₂) [IsSplitMono f] (j : ι) : IsSplitMono (f.f j) :=
   inferInstanceAs (IsSplitMono ((eval _ _ j).map f))
 
 @[push ←, simp]
-/--
-lemma `inv_f_apply` / 引理 `inv_f_apply`
-
-English:
-lemma inv_f_apply
-  given: (f : C₁ ⟶ C₂) [IsIso f] (j : ι)
-  statement: (inv f).f j = inv (f.f j)
-  proof: by
-  apply IsIso.eq_inv_of_inv_hom_id
-  simp [← comp_f]
-
-中文:
-引理 inv_f_apply
-  条件: (f : C₁ ⟶ C₂) [是同构 f] (j : ι)
-  结论: (inv f).f j = inv (f.f j)
-  证明: by
-  apply IsIso.eq_inv_of_inv_hom_id
-  simp [← comp_f]
-
-Depends on / 依赖: IsIso.eq_inv_of_inv_hom_id, comp_f, eq_inv_of_inv_hom_id
+/-
+**HomologicalComplex.Hom.inv_f_apply** 是 Mathlib 中的一个引理，位于命名空间 `HomologicalCompl
+ex.Hom`。
+形式化陈述：inv_f_apply (f : C₁ ⟶ C₂) [IsIso f] (j : ι) : (inv f).f j = inv (f.f j)
+参数：f : C₁ ⟶ C₂；j : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsIso.eq_inv_of_inv_hom_id`：∀ {C : Type u} [inst : Catego
+ryTheory.Category.{v, u} C] {X Y : C} {f : Y ⟶ X} [inst_1 : CategoryTheory.IsIso
+ f]   {g : X ⟶ Y}, CategoryTheo…
+· 使用定理 `HomologicalComplex.Hom.instIsIsoF`：∀ {ι : Type u_1} {V : Type u} [inst :
+ CategoryTheory.Category.{v, u} V]   [inst_1 : CategoryTheory.Limits.HasZeroMorp
+hisms V] {c : ComplexSh…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `CategoryTheory.IsIso.inv_hom_id`：inv_hom_id (f : X ⟶ Y) [I : IsIso f] : 
+inv f ≫ f = 𝟙 Y
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma inv_f_apply (f : C₁ ⟶ C₂) [IsIso f] (j : ι) : (inv f).f j = inv (f.f j) := by
   apply IsIso.eq_inv_of_inv_hom_id
@@ -2292,53 +1965,39 @@ section Of
 
 variable {V} {α : Type*} [AddRightCancelSemigroup α] [One α] [DecidableEq α]
 
-/--
-Definition of `of.d` / `of.d` 的定义
+/-- Auxiliary definition for differentials for `ChainComplex.of`. -/
+/-
+**ChainComplex.of.d** 是 Mathlib 中的一个定义，位于命名空间 `ChainComplex.of`。
+形式化陈述：{V : Type u} →   [inst : CategoryTheory.Category.{v, u} V] →     [Category
+Theory.Limits.HasZeroMorphisms V] →       {α : Type u_2} →         [inst_2 : Add
+RightCancelSemigroup α] →           [inst_3 : One α] → [DecidableEq α] → (X : α 
+→ V) → ((n : α) → X (n + 1) ⟶ X n) → (i j : α) → X i ⟶ X j
+参数：X : α → V；(n : α) → X (n + 1) ⟶ X n；i j : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition of.d
-  signature: (X : α -> V) (d : forall n, X (n + 1) ⟶ X n) (i : α) (j : α)
-  body: if h : i = j + 1 then eqToHom (by rw [h]) ≫ d j else 0
-
-中文:
-定义 of.d
-  签名: (X : α -> V) (d : 对任意 n, X (n + 1) ⟶ X n) (i : α) (j : α)
-  定义体: if h : i = j + 1 then eqToHom (by rw [h]) ≫ d j else 0
-
-Depends on / 依赖: eqToHom
+--- 原说明 ---
+Auxiliary definition for differentials for `ChainComplex.of`.
 -/
-def of.d (X : α -> V) (d : forall n, X (n + 1) ⟶ X n) (i : α) (j : α) : X i ⟶ X j :=
+def of.d (X : α → V) (d : ∀ n, X (n + 1) ⟶ X n) (i : α) (j : α) : X i ⟶ X j :=
   if h : i = j + 1 then eqToHom (by rw [h]) ≫ d j else 0
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `of` / `of` 的定义
-
-English:
-abbreviation of
-  signature: (X : α -> V) (d : forall n, X (n + 1) ⟶ X n) (sq : forall n, d (n + 1) ≫ d n = 0)
-  body: { X := X
-    d := of.d X d
-    shape := fun i j w => by simp [of.d, (Ne.symm w)]
-    d_comp_d' := fun i j k hij hjk => by
-      dsimp [of.d] at hij hjk ⊢
-      subst hij hjk
-      simp only [eqToHom_refl, id_comp, dite_eq_ite, ite_true, sq] }
-
-中文:
-缩写 of
-  签名: (X : α -> V) (d : 对任意 n, X (n + 1) ⟶ X n) (sq : 对任意 n, d (n + 1) ≫ d n = 0)
-  定义体: { X := X
-    d := of.d X d
-    shape := fun i j w => by simp [of.d, (Ne.symm w)]
-    d_comp_d' := fun i j k hij hjk => by
-      dsimp [of.d] at hij hjk ⊢
-      subst hij hjk
-      simp only [eqToHom_refl, id_comp, dite_eq_ite, ite_true, sq] }
-
-Depends on / 依赖: Ne.symm, d_comp_d, dite_eq_ite, eqToHom_refl, id_comp, ite_true, of.d
+/-- Construct an `α`-indexed chain complex from a dependently-typed differential.
 -/
-abbrev of (X : α -> V) (d : forall n, X (n + 1) ⟶ X n) (sq : forall n, d (n + 1) ≫ d n = 0) :
+/-
+**ChainComplex.of** 是 Mathlib 中的一个缩写定义，位于命名空间 `ChainComplex`。
+形式化陈述：of (X : α -> V) (d : forall n, X (n + 1) ⟶ X n) (sq : forall n, d (n + 1) 
+≫ d n = 0) : ChainComplex V α
+参数：X : α -> V；d : forall n, X (n + 1) ⟶ X n；sq : forall n, d (n + 1) ≫ d n = 0。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+
+--- 原说明 ---
+Construct an `α`-indexed chain complex from a dependently-typed differential.
+-/
+abbrev of (X : α → V) (d : ∀ n, X (n + 1) ⟶ X n) (sq : ∀ n, d (n + 1) ≫ d n = 0) :
     ChainComplex V α :=
   { X := X
     d := of.d X d
@@ -2348,74 +2007,53 @@ abbrev of (X : α -> V) (d : forall n, X (n + 1) ⟶ X n) (sq : forall n, d (n +
       subst hij hjk
       simp only [eqToHom_refl, id_comp, dite_eq_ite, ite_true, sq] }
 
-variable (X : α -> V) (d : forall n, X (n + 1) ⟶ X n) (sq : forall n, d (n + 1) ≫ d n = 0)
-
-/--
-theorem `of_X` / 定理 `of_X`
-
-English:
-theorem of_X
-  statement: (of X d sq).X = X
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 of_X
-  结论: (of X d sq).X = X
-  证明: rfl
-
-@[simp]
+variable (X : α → V) (d : ∀ n, X (n + 1) ⟶ X n) (sq : ∀ n, d (n + 1) ≫ d n = 0)
+/-
+**ChainComplex.of_X** 是 Mathlib 中的一个定理，位于命名空间 `ChainComplex`。
+形式化陈述：of_X : (of X d sq).X = X
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
 theorem of_X : (of X d sq).X = X :=
   rfl
 
 @[simp]
-/--
-theorem `of_d` / 定理 `of_d`
-
-English:
-theorem of_d
-  given: (j : α)
-  statement: of.d X d (j + 1) j = d j
-  proof: by
-  dsimp [of.d]
-  rw [if_pos rfl]; rw [Category.id_comp]
-
-中文:
-定理 of_d
-  条件: (j : α)
-  结论: of.d X d (j + 1) j = d j
-  证明: by
-  dsimp [of.d]
-  rw [if_pos rfl]; rw [Category.id_comp]
-
-Depends on / 依赖: Category, Category.id_comp, id_comp, if_pos, of.d
+/-
+**ChainComplex.of_d** 是 Mathlib 中的一个定理，位于命名空间 `ChainComplex`。
+形式化陈述：of_d (j : α) : of.d X d (j + 1) j = d j
+参数：j : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 theorem of_d (j : α) : of.d X d (j + 1) j = d j := by
   dsimp [of.d]
-  rw [if_pos rfl]; rw [Category.id_comp]
-
-/--
-theorem `of_d_ne` / 定理 `of_d_ne`
-
-English:
-theorem of_d_ne
-  given: {i j : α} (h : i != j + 1)
-  statement: of.d X d i j = 0
-  proof: by
-  simp [of.d, dif_neg h]
-
-中文:
-定理 of_d_ne
-  条件: {i j : α} (h : i != j + 1)
-  结论: of.d X d i j = 0
-  证明: by
-  simp [of.d, dif_neg h]
-
-Depends on / 依赖: dif_neg, of.d
+  rw [if_pos rfl, Category.id_comp]
+/-
+**ChainComplex.of_d_ne** 是 Mathlib 中的一个定理，位于命名空间 `ChainComplex`。
+形式化陈述：of_d_ne {i j : α} (h : i != j + 1) : of.d X d i j = 0
+参数：h : i != j + 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem of_d_ne {i j : α} (h : i != j + 1) : of.d X d i j = 0 := by
+theorem of_d_ne {i j : α} (h : i ≠ j + 1) : of.d X d i j = 0 := by
   simp [of.d, dif_neg h]
 
 end Of
@@ -2423,32 +2061,30 @@ end Of
 section OfHom
 
 variable {V} {α : Type*} [AddRightCancelSemigroup α] [One α] [DecidableEq α]
-variable (X : α -> V) (d_X : forall n, X (n + 1) ⟶ X n) (sq_X : forall n, d_X (n + 1) ≫ d_X n = 0) (Y : α -> V)
-  (d_Y : forall n, Y (n + 1) ⟶ Y n) (sq_Y : forall n, d_Y (n + 1) ≫ d_Y n = 0)
+variable (X : α → V) (d_X : ∀ n, X (n + 1) ⟶ X n) (sq_X : ∀ n, d_X (n + 1) ≫ d_X n = 0) (Y : α → V)
+  (d_Y : ∀ n, Y (n + 1) ⟶ Y n) (sq_Y : ∀ n, d_Y (n + 1) ≫ d_Y n = 0)
 
-/--
-Definition of `ofHom` / `ofHom` 的定义
-
-English:
-abbreviation ofHom
-  signature: {X Y : ChainComplex V α} (f : forall i : α, X.X i ⟶ Y.X i)
-  body: f
-  comm' n m := by
-    simp only [ComplexShape.down_Rel]
-    rintro rfl
-    simpa using comm m
-
-中文:
-缩写 ofHom
-  签名: {X Y : 链复形 V α} (f : 对任意 i : α, X.X i ⟶ Y.X i)
-  定义体: f
-  comm' n m := by
-    simp only [ComplexShape.down_Rel]
-    rintro rfl
-    simpa using comm m
+/-- A constructor for chain maps between `α`-indexed chain complexes built using `ChainComplex.of`,
+from a dependently typed collection of morphisms.
 -/
-abbrev ofHom {X Y : ChainComplex V α} (f : forall i : α, X.X i ⟶ Y.X i)
-    (comm : forall i : α, f (i + 1) ≫ Y.d (i + 1) i = X.d (i + 1) i ≫ f i) :
+/-
+**ChainComplex.ofHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `ChainComplex`。
+形式化陈述：ofHom {X Y : ChainComplex V α} (f : forall i : α, X.X i ⟶ Y.X i) (comm : f
+orall i : α, f (i + 1) ≫ Y.d (i + 1) i = X.d (i + 1) i ≫ f i) : X ⟶ Y where f
+参数：f : forall i : α, X.X i ⟶ Y.X i；comm : forall i : α, f (i + 1) ≫ Y.d (i + 1) 
+i = X.d (i + 1) i ≫ f i。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+
+--- 原说明 ---
+A constructor for chain maps between `α`-indexed chain complexes built using `Ch
+ainComplex.of`,
+from a dependently typed collection of morphisms.
+-/
+abbrev ofHom {X Y : ChainComplex V α} (f : ∀ i : α, X.X i ⟶ Y.X i)
+    (comm : ∀ i : α, f (i + 1) ≫ Y.d (i + 1) i = X.d (i + 1) i ≫ f i) :
     X ⟶ Y where
   f := f
   comm' n m := by
@@ -2464,195 +2100,141 @@ variable {V}
 
 
 variable (X₀ X₁ X₂ : V) (d₀ : X₁ ⟶ X₀) (d₁ : X₂ ⟶ X₁) (s : d₁ ≫ d₀ = 0)
-  (succ : forall (S : ShortComplex V), Σ' (X₃ : V) (d₂ : X₃ ⟶ S.X₁), d₂ ≫ S.f = 0)
+  (succ : ∀ (S : ShortComplex V), Σ' (X₃ : V) (d₂ : X₃ ⟶ S.X₁), d₂ ≫ S.f = 0)
 
-/--
-Definition of `mkAux` / `mkAux` 的定义
+/-- Auxiliary definition for `mk`. -/
+/-
+**ChainComplex.mkAux** 是 Mathlib 中的一个定义，位于命名空间 `ChainComplex`。
+形式化陈述：{V : Type u} →   [inst : CategoryTheory.Category.{v, u} V] →     [inst_1 :
+ CategoryTheory.Limits.HasZeroMorphisms V] →       (X₀ X₁ X₂ : V) →         (d₀ 
+: X₁ ⟶ X₀) →           (d₁ : X₂ ⟶ X₁) →             CategoryTheory.CategoryStruc
+t.comp d₁ d₀ = 0 →               ((S : CategoryTheory.ShortComplex V) →         
+          (X₃ : V) ×' (d₂ : X₃ ⟶ S.X₁) ×' CategoryTheory.CategoryStruct.comp d₂ 
+S.f = 0) →                 ℕ → CategoryTheory.ShortComplex V
+参数：X₀ X₁ X₂ : V；d₀ : X₁ ⟶ X₀；d₁ : X₂ ⟶ X₁；(S : CategoryTheory.ShortComplex V) → 
+                  (X₃ : V) ×' (d₂ : X₃ ⟶ S.X₁) ×' CategoryTheory.CategoryStruct.
+comp d₂ S.f = 0。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkAux
-  signature: : Nat -> ShortComplex V
-
-中文:
-定义 mkAux
-  签名: : 自然数 -> 短复形 V
+--- 原说明 ---
+Auxiliary definition for `mk`.
 -/
-def mkAux : Nat -> ShortComplex V
+def mkAux : ℕ → ShortComplex V
   | 0 => ShortComplex.mk _ _ s
   | n + 1 => ShortComplex.mk _ _ (succ (mkAux n)).2.2
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- An inductive constructor for `ℕ`-indexed chain complexes.
 
-English:
-definition mk
-  signature: : ChainComplex V Nat
-  body: of (fun n => (mkAux X₀ X₁ X₂ d₀ d₁ s succ n).X₃) (fun n => (mkAux X₀ X₁ X₂ d₀ d₁ s succ n).g)
-    fun n => (mkAux X₀ X₁ X₂ d₀ d₁ s succ n).zero
+You provide explicitly the first two differentials,
+then a function which takes two differentials and the fact they compose to zero,
+and returns the next object, its differential, and the fact it composes appropriately to zero.
 
-@[simp]
-
-中文:
-定义 mk
-  签名: : 链复形 V 自然数
-  定义体: of (fun n => (mkAux X₀ X₁ X₂ d₀ d₁ s succ n).X₃) (fun n => (mkAux X₀ X₁ X₂ d₀ d₁ s succ n).g)
-    fun n => (mkAux X₀ X₁ X₂ d₀ d₁ s succ n).zero
-
-@[simp]
+See also `mk'`, which only sees the previous differential in the inductive step.
 -/
-def mk : ChainComplex V Nat :=
+/-
+**ChainComplex.mk** 是 Mathlib 中的一个定义，位于命名空间 `ChainComplex`。
+形式化陈述：mk : ChainComplex V Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+An inductive constructor for `ℕ`-indexed chain complexes.
+
+You provide explicitly the first two differentials,
+then a function which takes two differentials and the fact they compose to zero,
+and returns the next object, its differential, and the fact it composes appropri
+ately to zero.
+
+See also `mk'`, which only sees the previous differential in the inductive step.
+-/
+def mk : ChainComplex V ℕ :=
   of (fun n => (mkAux X₀ X₁ X₂ d₀ d₁ s succ n).X₃) (fun n => (mkAux X₀ X₁ X₂ d₀ d₁ s succ n).g)
     fun n => (mkAux X₀ X₁ X₂ d₀ d₁ s succ n).zero
 
 @[simp]
-/--
-theorem `mk_X_0` / 定理 `mk_X_0`
-
-English:
-theorem mk_X_0
-  statement: (mk X₀ X₁ X₂ d₀ d₁ s succ).X 0 = X₀
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk_X_0
-  结论: (mk X₀ X₁ X₂ d₀ d₁ s succ).X 0 = X₀
-  证明: rfl
-
-@[simp]
+/-
+**ChainComplex.mk_X_0** 是 Mathlib 中的一个定理，位于命名空间 `ChainComplex`。
+形式化陈述：mk_X_0 : (mk X₀ X₁ X₂ d₀ d₁ s succ).X 0 = X₀
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
 theorem mk_X_0 : (mk X₀ X₁ X₂ d₀ d₁ s succ).X 0 = X₀ :=
   rfl
 
 @[simp]
-/--
-theorem `mk_X_1` / 定理 `mk_X_1`
-
-English:
-theorem mk_X_1
-  statement: (mk X₀ X₁ X₂ d₀ d₁ s succ).X 1 = X₁
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk_X_1
-  结论: (mk X₀ X₁ X₂ d₀ d₁ s succ).X 1 = X₁
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: CochainComplex, CochainComplex.mappingCone.mapTrianglehIso, ComplexShape, ComplexShape.up, G.mapHomotopyCategory, mapHomotopyCategory, mapIso, mapTriangle, mapTriangle.mapIso, mapTrianglehIso, mappingCone
+/-
+**ChainComplex.mk_X_1** 是 Mathlib 中的一个定理，位于命名空间 `ChainComplex`。
+形式化陈述：mk_X_1 : (mk X₀ X₁ X₂ d₀ d₁ s succ).X 1 = X₁
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
 theorem mk_X_1 : (mk X₀ X₁ X₂ d₀ d₁ s succ).X 1 = X₁ :=
   rfl
 
 @[simp]
-/--
-theorem `mk_X_2` / 定理 `mk_X_2`
-
-English:
-theorem mk_X_2
-  statement: (mk X₀ X₁ X₂ d₀ d₁ s succ).X 2 = X₂
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk_X_2
-  结论: (mk X₀ X₁ X₂ d₀ d₁ s succ).X 2 = X₂
-  证明: rfl
-
-@[simp]
+/-
+**ChainComplex.mk_X_2** 是 Mathlib 中的一个定理，位于命名空间 `ChainComplex`。
+形式化陈述：mk_X_2 : (mk X₀ X₁ X₂ d₀ d₁ s succ).X 2 = X₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
 theorem mk_X_2 : (mk X₀ X₁ X₂ d₀ d₁ s succ).X 2 = X₂ :=
   rfl
 
 @[simp]
-/--
-theorem `mk_d_1_0` / 定理 `mk_d_1_0`
-
-English:
-theorem mk_d_1_0
-  statement: (mk X₀ X₁ X₂ d₀ d₁ s succ).d 1 0 = d₀
-  proof: by
-  change ite (1 = 0 + 1) (𝟙 X₁ ≫ d₀) 0 = d₀
-  rw [if_pos rfl]; rw [Category.id_comp]
-
-@[simp]
-
-中文:
-定理 mk_d_1_0
-  结论: (mk X₀ X₁ X₂ d₀ d₁ s succ).d 1 0 = d₀
-  证明: by
-  change ite (1 = 0 + 1) (𝟙 X₁ ≫ d₀) 0 = d₀
-  rw [if_pos rfl]; rw [Category.id_comp]
-
-@[simp]
-
-Depends on / 依赖: Category, Category.id_comp, id_comp, if_pos
+/-
+**ChainComplex.mk_d_1_0** 是 Mathlib 中的一个定理，位于命名空间 `ChainComplex`。
+形式化陈述：mk_d_1_0 : (mk X₀ X₁ X₂ d₀ d₁ s succ).d 1 0 = d₀
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 theorem mk_d_1_0 : (mk X₀ X₁ X₂ d₀ d₁ s succ).d 1 0 = d₀ := by
   change ite (1 = 0 + 1) (𝟙 X₁ ≫ d₀) 0 = d₀
-  rw [if_pos rfl]; rw [Category.id_comp]
+  rw [if_pos rfl, Category.id_comp]
 
 @[simp]
-/--
-theorem `mk_d_2_1` / 定理 `mk_d_2_1`
-
-English:
-theorem mk_d_2_1
-  statement: (mk X₀ X₁ X₂ d₀ d₁ s succ).d 2 1 = d₁
-  proof: by
-  change ite (2 = 1 + 1) (𝟙 X₂ ≫ d₁) 0 = d₁
-  rw [if_pos rfl]; rw [Category.id_comp]
-
-中文:
-定理 mk_d_2_1
-  结论: (mk X₀ X₁ X₂ d₀ d₁ s succ).d 2 1 = d₁
-  证明: by
-  change ite (2 = 1 + 1) (𝟙 X₂ ≫ d₁) 0 = d₁
-  rw [if_pos rfl]; rw [Category.id_comp]
-
-Depends on / 依赖: Category, Category.id_comp, id_comp, if_pos
+/-
+**ChainComplex.mk_d_2_1** 是 Mathlib 中的一个定理，位于命名空间 `ChainComplex`。
+形式化陈述：mk_d_2_1 : (mk X₀ X₁ X₂ d₀ d₁ s succ).d 2 1 = d₁
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 theorem mk_d_2_1 : (mk X₀ X₁ X₂ d₀ d₁ s succ).d 2 1 = d₁ := by
   change ite (2 = 1 + 1) (𝟙 X₂ ≫ d₁) 0 = d₁
-  rw [if_pos rfl]; rw [Category.id_comp]
-
-/--
-lemma `mk_congr_succ_X₃` / 引理 `mk_congr_succ_X₃`
-
-English:
-lemma mk_congr_succ_X₃
-  given: {S S' : ShortComplex V} (h : S = S')
-  proof: by rw [h]
-
-中文:
-引理 mk_congr_succ_X₃
-  条件: {S S' : 短复形 V} (h : S = S')
-  证明: by rw [h]
+  rw [if_pos rfl, Category.id_comp]
+/-
+**ChainComplex.mk_congr_succ_X** 是 Mathlib 中的一个引理，位于命名空间 `ChainComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mk_congr_succ_X₃ {S S' : ShortComplex V} (h : S = S') :
     (succ S).1 = (succ S').1 := by rw [h]
-
-/--
-lemma `mk_congr_succ_d₂` / 引理 `mk_congr_succ_d₂`
-
-English:
-lemma mk_congr_succ_d₂
-  given: {S S' : ShortComplex V} (h : S = S')
-  proof: by
-  subst h
-  simp
-
-中文:
-引理 mk_congr_succ_d₂
-  条件: {S S' : 短复形 V} (h : S = S')
-  证明: by
-  subst h
-  simp
+/-
+**ChainComplex.mk_congr_succ_d** 是 Mathlib 中的一个引理，位于命名空间 `ChainComplex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mk_congr_succ_d₂ {S S' : ShortComplex V} (h : S = S') :
     (succ S).2.1 = eqToHom (by subst h; rfl) ≫ (succ S').2.1 ≫ eqToHom (by subst h; rfl) := by
@@ -2660,53 +2242,49 @@ lemma mk_congr_succ_d₂ {S S' : ShortComplex V} (h : S = S') :
   simp
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `mkAux_eq_shortComplex_mk_d_comp_d` / 引理 `mkAux_eq_shortComplex_mk_d_comp_d`
-
-English:
-lemma mkAux_eq_shortComplex_mk_d_comp_d
-  given: (n : Nat)
-  proof: by
-  rw [show n + 2 = n + 1 + 1 from rfl]
-  simp [mk, mkAux]
-
-中文:
-引理 mkAux_eq_shortComplex_mk_d_comp_d
-  条件: (n : 自然数)
-  证明: by
-  rw [show n + 2 = n + 1 + 1 from rfl]
-  simp [mk, mkAux]
-
-Depends on / 依赖: Additive, CochainComplex, CochainComplex.shiftFunctor, shiftFunctor
+/-
+**ChainComplex.mkAux_eq_shortComplex_mk_d_comp_d** 是 Mathlib 中的一个引理，位于命名空间 `Chai
+nComplex`。
+形式化陈述：mkAux_eq_shortComplex_mk_d_comp_d (n : Nat) : mkAux X₀ X₁ X₂ d₀ d₁ s succ 
+n = ShortComplex.mk _ _ ((mk X₀ X₁ X₂ d₀ d₁ s succ).d_comp_d (n + 2) (n + 1) n)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `HomologicalComplex.d_comp_d`：d_comp_d (C : HomologicalComplex V c) (i j 
+k : ι) : C.d i j ≫ C.d j k = 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `ChainComplex.of_d`：of_d (j : α) : of.d X d (j + 1) j = d j
+· 使用定理 `CategoryTheory.ShortComplex.mk.congr_simp`：∀ {C : Type u_1} [inst : Cate
+goryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Limits.HasZeroMorphis
+ms C]   {X₁ X₂ X₃ : C} (f f_1 :…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma mkAux_eq_shortComplex_mk_d_comp_d (n : Nat) :
+lemma mkAux_eq_shortComplex_mk_d_comp_d (n : ℕ) :
     mkAux X₀ X₁ X₂ d₀ d₁ s succ n =
       ShortComplex.mk _ _ ((mk X₀ X₁ X₂ d₀ d₁ s succ).d_comp_d (n + 2) (n + 1) n) := by
   rw [show n + 2 = n + 1 + 1 from rfl]
   simp [mk, mkAux]
 
-/--
-Definition of `mkXIso` / `mkXIso` 的定义
+/-- The isomorphism from `(mk X₀ X₁ X₂ d₀ d₁ s succ).X (n + 3)` that is given by
+the inductive construction. -/
+/-
+**ChainComplex.mkXIso** 是 Mathlib 中的一个定义，位于命名空间 `ChainComplex`。
+形式化陈述：mkXIso (n : Nat) : (mk X₀ X₁ X₂ d₀ d₁ s succ).X (n + 3) ≅ (succ (ShortComp
+lex.mk _ _ ((mk X₀ X₁ X₂ d₀ d₁ s succ).d_comp_d (n + 2) (n + 1) n))).1
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkXIso
-  signature: (n : Nat)
-  body: eqToIso (by
-    rw [← mk_congr_succ_X₃ succ
-      (mkAux_eq_shortComplex_mk_d_comp_d X₀ X₁ X₂ d₀ d₁ s succ n)]
-    rfl)
-
-中文:
-定义 mkXIso
-  签名: (n : 自然数)
-  定义体: eqToIso (by
-    rw [← mk_congr_succ_X₃ succ
-      (mkAux_eq_shortComplex_mk_d_comp_d X₀ X₁ X₂ d₀ d₁ s succ n)]
-    rfl)
-
-Depends on / 依赖: eqToIso, mkAux_eq_shortComplex_mk_d_comp_d
+--- 原说明 ---
+The isomorphism from `(mk X₀ X₁ X₂ d₀ d₁ s succ).X (n + 3)` that is given by
+the inductive construction.
 -/
-def mkXIso (n : Nat) :
+def mkXIso (n : ℕ) :
     (mk X₀ X₁ X₂ d₀ d₁ s succ).X (n + 3) ≅
       (succ (ShortComplex.mk _ _ ((mk X₀ X₁ X₂ d₀ d₁ s succ).d_comp_d (n + 2) (n + 1) n))).1 :=
   eqToIso (by
@@ -2715,221 +2293,223 @@ def mkXIso (n : Nat) :
     rfl)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `mk_d` / 引理 `mk_d`
-
-English:
-lemma mk_d
-  given: (n : Nat)
-  proof: by
-  have eq := mk_congr_succ_d₂ succ
-    (mkAux_eq_shortComplex_mk_d_comp_d X₀ X₁ X₂ d₀ d₁ s succ n)
-  set_option backward.isDefEq.respectTransparency false in
-    rw [eqToHom_refl]; rw [comp_id] at eq
-  refine Eq.trans ?_ eq
-  dsimp only [mk, of, of.d]
-  rw [dif_pos (by rfl)]; rw [eqToHom_refl]; rw [id_comp]
-  rfl
-
-中文:
-引理 mk_d
-  条件: (n : 自然数)
-  证明: by
-  have eq := mk_congr_succ_d₂ succ
-    (mkAux_eq_shortComplex_mk_d_comp_d X₀ X₁ X₂ d₀ d₁ s succ n)
-  set_option backward.isDefEq.respectTransparency false in
-    rw [eqToHom_refl]; rw [comp_id] at eq
-  refine Eq.trans ?_ eq
-  dsimp only [mk, of, of.d]
-  rw [dif_pos (by rfl)]; rw [eqToHom_refl]; rw [id_comp]
-  rfl
-
-Depends on / 依赖: Eq.trans, backward, backward.isDefEq.respectTransparency, comp_id, dif_pos, eqToHom_refl, id_comp, isDefEq, mkAux_eq_shortComplex_mk_d_comp_d, of.d, respectTransparency, set_option
+/-
+**ChainComplex.mk_d** 是 Mathlib 中的一个引理，位于命名空间 `ChainComplex`。
+形式化陈述：mk_d (n : Nat) : (mk X₀ X₁ X₂ d₀ d₁ s succ).d (n + 3) (n + 2) = (mkXIso X₀
+ X₁ X₂ d₀ d₁ s succ n).hom ≫ (succ (ShortComplex.mk _ _ ((mk X₀ X₁ X₂ d₀ d₁ s su
+cc).d_comp_d (n + 2) (n + 1) n))).2.1
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `HomologicalComplex.d_comp_d`：d_comp_d (C : HomologicalComplex V c) (i j 
+k : ι) : C.d i j ≫ C.d j k = 0
+· 使用引理 `ChainComplex.mkAux_eq_shortComplex_mk_d_comp_d`：mkAux_eq_shortComplex_mk
+_d_comp_d (n : Nat) : mkAux X₀ X₁ X₂ d₀ d₁ s succ n = ShortComplex.mk _ _ ((mk X
+₀ X₁ X₂ d₀ d₁ s succ).d_comp_d (n + …
+· 使用引理 `ChainComplex.mk_congr_succ_d₂`：mk_congr_succ_d₂ {S S' : ShortComplex V} 
+(h : S = S') : (succ S).2.1 = eqToHom (by subst h; rfl) ≫ (succ S').2.1 ≫ eqToHo
+m (by subst h; rfl)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `CategoryTheory.eqToHom_refl`：eqToHom_refl {C : Type u₁} [CategoryStruct.
+{v₁} C] (X : C) (p : X = X) : eqToHom p = 𝟙 X
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
-lemma mk_d (n : Nat) :
+lemma mk_d (n : ℕ) :
     (mk X₀ X₁ X₂ d₀ d₁ s succ).d (n + 3) (n + 2) =
       (mkXIso X₀ X₁ X₂ d₀ d₁ s succ n).hom ≫ (succ
         (ShortComplex.mk _ _ ((mk X₀ X₁ X₂ d₀ d₁ s succ).d_comp_d (n + 2) (n + 1) n))).2.1 := by
   have eq := mk_congr_succ_d₂ succ
     (mkAux_eq_shortComplex_mk_d_comp_d X₀ X₁ X₂ d₀ d₁ s succ n)
   set_option backward.isDefEq.respectTransparency false in
-    rw [eqToHom_refl]; rw [comp_id] at eq
+    rw [eqToHom_refl, comp_id] at eq
   refine Eq.trans ?_ eq
   dsimp only [mk, of, of.d]
-  rw [dif_pos (by rfl)]; rw [eqToHom_refl]; rw [id_comp]
+  rw [dif_pos (by rfl), eqToHom_refl, id_comp]
   rfl
 
-/--
-Definition of `mk'` / `mk'` 的定义
+/-- A simpler inductive constructor for `ℕ`-indexed chain complexes.
 
-English:
-definition mk'
-  signature: (X₀ X₁ : V) (d : X₁ ⟶ X₀)
-  body: mk _ _ _ _ _ (succ' d).2.2 (fun S => succ' S.f)
+You provide explicitly the first differential,
+then a function which takes a differential,
+and returns the next object, its differential, and the fact it composes appropriately to zero.
+-/
+/-
+**ChainComplex.mk'** 是 Mathlib 中的一个定义，位于命名空间 `ChainComplex`。
+形式化陈述：mk' (X₀ X₁ : V) (d : X₁ ⟶ X₀) (succ' : forall {X₀ X₁ : V} (f : X₁ ⟶ X₀), Σ
+' (X₂ : V) (d : X₂ ⟶ X₁), d ≫ f = 0) : ChainComplex V Nat
+参数：X₀ X₁ : V；d : X₁ ⟶ X₀；succ' : forall {X₀ X₁ : V} (f : X₁ ⟶ X₀), Σ' (X₂ : V) (
+d : X₂ ⟶ X₁), d ≫ f = 0。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 mk'
-  签名: (X₀ X₁ : V) (d : X₁ ⟶ X₀)
-  定义体: mk _ _ _ _ _ (succ' d).2.2 (fun S => succ' S.f)
+--- 原说明 ---
+A simpler inductive constructor for `ℕ`-indexed chain complexes.
+
+You provide explicitly the first differential,
+then a function which takes a differential,
+and returns the next object, its differential, and the fact it composes appropri
+ately to zero.
 -/
 def mk' (X₀ X₁ : V) (d : X₁ ⟶ X₀)
-    (succ' : forall {X₀ X₁ : V} (f : X₁ ⟶ X₀), Σ' (X₂ : V) (d : X₂ ⟶ X₁), d ≫ f = 0) :
-    ChainComplex V Nat :=
+    (succ' : ∀ {X₀ X₁ : V} (f : X₁ ⟶ X₀), Σ' (X₂ : V) (d : X₂ ⟶ X₁), d ≫ f = 0) :
+    ChainComplex V ℕ :=
   mk _ _ _ _ _ (succ' d).2.2 (fun S => succ' S.f)
 
-variable (succ' : forall {X₀ X₁ : V} (f : X₁ ⟶ X₀), Σ' (X₂ : V) (d : X₂ ⟶ X₁), d ≫ f = 0)
+variable (succ' : ∀ {X₀ X₁ : V} (f : X₁ ⟶ X₀), Σ' (X₂ : V) (d : X₂ ⟶ X₁), d ≫ f = 0)
 
 @[simp]
-/--
-theorem `mk'_X_0` / 定理 `mk'_X_0`
-
-English:
-theorem mk'_X_0
-  statement: (mk' X₀ X₁ d₀ succ').X 0 = X₀
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk'_X_0
-  结论: (mk' X₀ X₁ d₀ succ').X 0 = X₀
-  证明: rfl
-
-@[simp]
+/-
+**ChainComplex.mk'_X_0** 是 Mathlib 中的一个定理，位于命名空间 `ChainComplex`。
+形式化陈述：∀ {V : Type u} [inst : CategoryTheory.Category.{v, u} V] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms V] (X₀ X₁ : V)   (d₀ : X₁ ⟶ X₀)   (succ' : {X₀ X
+₁ : V} → (f : X₁ ⟶ X₀) → (X₂ : V) ×' (d : X₂ ⟶ X₁) ×' CategoryTheory.CategoryStr
+uct.comp d f = 0),   (ChainComplex.mk' X₀ X₁ d₀ fun {X₀ X₁} => succ').X 0 = X₀
+参数：X₀ X₁ : V；d₀ : X₁ ⟶ X₀；succ' : {X₀ X₁ : V} → (f : X₁ ⟶ X₀) → (X₂ : V) ×' (d :
+ X₂ ⟶ X₁) ×' CategoryTheory.CategoryStruct.comp d f = 0；ChainComplex.mk' X₀ X₁ d
+₀ fun {X₀ X₁} => succ'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
 theorem mk'_X_0 : (mk' X₀ X₁ d₀ succ').X 0 = X₀ :=
   rfl
 
 @[simp]
-/--
-theorem `mk'_X_1` / 定理 `mk'_X_1`
-
-English:
-theorem mk'_X_1
-  statement: (mk' X₀ X₁ d₀ succ').X 1 = X₁
-  proof: rfl
-
-
-@[simp]
-
-中文:
-定理 mk'_X_1
-  结论: (mk' X₀ X₁ d₀ succ').X 1 = X₁
-  证明: rfl
-
-
-@[simp]
+/-
+**ChainComplex.mk'_X_1** 是 Mathlib 中的一个定理，位于命名空间 `ChainComplex`。
+形式化陈述：∀ {V : Type u} [inst : CategoryTheory.Category.{v, u} V] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms V] (X₀ X₁ : V)   (d₀ : X₁ ⟶ X₀)   (succ' : {X₀ X
+₁ : V} → (f : X₁ ⟶ X₀) → (X₂ : V) ×' (d : X₂ ⟶ X₁) ×' CategoryTheory.CategoryStr
+uct.comp d f = 0),   (ChainComplex.mk' X₀ X₁ d₀ fun {X₀ X₁} => succ').X 1 = X₁
+参数：X₀ X₁ : V；d₀ : X₁ ⟶ X₀；succ' : {X₀ X₁ : V} → (f : X₁ ⟶ X₀) → (X₂ : V) ×' (d :
+ X₂ ⟶ X₁) ×' CategoryTheory.CategoryStruct.comp d f = 0；ChainComplex.mk' X₀ X₁ d
+₀ fun {X₀ X₁} => succ'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
 theorem mk'_X_1 : (mk' X₀ X₁ d₀ succ').X 1 = X₁ :=
   rfl
 
 
 @[simp]
-/--
-theorem `mk'_d_1_0` / 定理 `mk'_d_1_0`
-
-English:
-theorem mk'_d_1_0
-  statement: (mk' X₀ X₁ d₀ succ').d 1 0 = d₀
-  proof: by
-  change ite (1 = 0 + 1) (𝟙 X₁ ≫ d₀) 0 = d₀
-  rw [if_pos rfl]; rw [Category.id_comp]
-
-中文:
-定理 mk'_d_1_0
-  结论: (mk' X₀ X₁ d₀ succ').d 1 0 = d₀
-  证明: by
-  change ite (1 = 0 + 1) (𝟙 X₁ ≫ d₀) 0 = d₀
-  rw [if_pos rfl]; rw [Category.id_comp]
-
-Depends on / 依赖: _eq_shiftFunctorAdd, shiftFunctorAdd, shiftFunctorAdd_inv_app_f
+/-
+**ChainComplex.mk'_d_1_0** 是 Mathlib 中的一个定理，位于命名空间 `ChainComplex`。
+形式化陈述：∀ {V : Type u} [inst : CategoryTheory.Category.{v, u} V] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms V] (X₀ X₁ : V)   (d₀ : X₁ ⟶ X₀)   (succ' : {X₀ X
+₁ : V} → (f : X₁ ⟶ X₀) → (X₂ : V) ×' (d : X₂ ⟶ X₁) ×' CategoryTheory.CategoryStr
+uct.comp d f = 0),   (ChainComplex.mk' X₀ X₁ d₀ fun {X₀ X₁} => succ').d 1 0 = d₀
+参数：X₀ X₁ : V；d₀ : X₁ ⟶ X₀；succ' : {X₀ X₁ : V} → (f : X₁ ⟶ X₀) → (X₂ : V) ×' (d :
+ X₂ ⟶ X₁) ×' CategoryTheory.CategoryStruct.comp d f = 0；ChainComplex.mk' X₀ X₁ d
+₀ fun {X₀ X₁} => succ'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
 -/
 theorem mk'_d_1_0 : (mk' X₀ X₁ d₀ succ').d 1 0 = d₀ := by
   change ite (1 = 0 + 1) (𝟙 X₁ ≫ d₀) 0 = d₀
-  rw [if_pos rfl]; rw [Category.id_comp]
+  rw [if_pos rfl, Category.id_comp]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `mk'XIso` / `mk'XIso` 的定义
+/-- The isomorphism from `(mk' X₀ X₁ d₀ succ').X (n + 2)` that is given by
+the inductive construction. -/
+/-
+**ChainComplex.mk'XIso** 是 Mathlib 中的一个定义，位于命名空间 `ChainComplex`。
+形式化陈述：{V : Type u} →   [inst : CategoryTheory.Category.{v, u} V] →     [inst_1 :
+ CategoryTheory.Limits.HasZeroMorphisms V] →       (X₀ X₁ : V) →         (d₀ : X
+₁ ⟶ X₀) →           (succ' :               {X₀ X₁ : V} → (f : X₁ ⟶ X₀) → (X₂ : V
+) ×' (d : X₂ ⟶ X₁) ×' CategoryTheory.CategoryStruct.comp d f = 0) →             
+(n : ℕ) →               (ChainComplex.mk' X₀ X₁ d₀ fun {X₀ X₁} => succ').X (n + 
+2) ≅                 (succ' ((ChainComplex.mk' X₀ X₁ d₀ fun {X₀ X₁} => succ').d 
+(n + 1) n)).fst
+参数：X₀ X₁ : V；d₀ : X₁ ⟶ X₀；succ' :               {X₀ X₁ : V} → (f : X₁ ⟶ X₀) → (X
+₂ : V) ×' (d : X₂ ⟶ X₁) ×' CategoryTheory.CategoryStruct.comp d f = 0；n : ℕ；Chai
+nComplex.mk' X₀ X₁ d₀ fun {X₀ X₁} => succ'；n + 2；succ' ((ChainComplex.mk' X₀ X₁ 
+d₀ fun {X₀ X₁} => succ').d (n + 1) n)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk'XIso
-  signature: (n : Nat)
-  body: by
-  obtain _ | n := n
-  · apply eqToIso
-    dsimp [mk', mk, of, mkAux, of.d]
-    rw [id_comp]
-  · exact mkXIso _ _ _ _ _ (succ' d₀).2.2 (fun S => succ' S.f) n
-
-中文:
-定义 mk'XIso
-  签名: (n : 自然数)
-  定义体: by
-  obtain _ | n := n
-  · apply eqToIso
-    dsimp [mk', mk, of, mkAux, of.d]
-    rw [id_comp]
-  · exact mkXIso _ _ _ _ _ (succ' d₀).2.2 (fun S => succ' S.f) n
-
-Depends on / 依赖: _eq_shiftFunctorAdd, shiftFunctorAdd, shiftFunctorAdd_hom_app_f
+--- 原说明 ---
+The isomorphism from `(mk' X₀ X₁ d₀ succ').X (n + 2)` that is given by
+the inductive construction.
 -/
-def mk'XIso (n : Nat) :
+def mk'XIso (n : ℕ) :
     (mk' X₀ X₁ d₀ succ').X (n + 2) ≅ (succ' ((mk' X₀ X₁ d₀ succ').d (n + 1) n)).1 := by
   obtain _ | n := n
   · apply eqToIso
     dsimp [mk', mk, of, mkAux, of.d]
     rw [id_comp]
   · exact mkXIso _ _ _ _ _ (succ' d₀).2.2 (fun S => succ' S.f) n
-
-/--
-lemma `mk'_congr_succ'_d` / 引理 `mk'_congr_succ'_d`
-
-English:
-lemma mk'_congr_succ'_d
-  given: {X Y : V} (f g : X ⟶ Y) (h : f = g)
-  proof: by
-  subst h
-  simp
-
-中文:
-引理 mk'_congr_succ'_d
-  条件: {X Y : V} (f g : X ⟶ Y) (h : f = g)
-  证明: by
-  subst h
-  simp
+/-
+**ChainComplex.mk'_congr_succ'_d** 是 Mathlib 中的一个定理，位于命名空间 `ChainComplex`。
+形式化陈述：∀ {V : Type u} [inst : CategoryTheory.Category.{v, u} V] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms V]   (succ' : {X₀ X₁ : V} → (f : X₁ ⟶ X₀) → (X₂ 
+: V) ×' (d : X₂ ⟶ X₁) ×' CategoryTheory.CategoryStruct.comp d f = 0)   {X Y : V}
+ (f g : X ⟶ Y) (h : f = g),   (succ' f).snd.fst = CategoryTheory.CategoryStruct.
+comp (CategoryTheory.eqToHom ⋯) (succ' g).snd.fst
+参数：succ' : {X₀ X₁ : V} → (f : X₁ ⟶ X₀) → (X₂ : V) ×' (d : X₂ ⟶ X₁) ×' CategoryTh
+eory.CategoryStruct.comp d f = 0；f g : X ⟶ Y；h : f = g；succ' f；CategoryTheory.eq
+ToHom ⋯；succ' g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma mk'_congr_succ'_d {X Y : V} (f g : X ⟶ Y) (h : f = g) :
     (succ' f).2.1 = eqToHom (by rw [h]) ≫ (succ' g).2.1 := by
   subst h
   simp
-
-/--
-lemma `mk'_d` / 引理 `mk'_d`
-
-English:
-lemma mk'_d
-  given: (n : Nat)
-  proof: by
-  obtain _ | n := n
-  · dsimp [mk'XIso, mk']
-    rw [mk_d_2_1]
-    apply mk'_congr_succ'_d
-    rw [mk_d_1_0]
-  · apply mk_d
-
-中文:
-引理 mk'_d
-  条件: (n : 自然数)
-  证明: by
-  obtain _ | n := n
-  · dsimp [mk'XIso, mk']
-    rw [mk_d_2_1]
-    apply mk'_congr_succ'_d
-    rw [mk_d_1_0]
-  · apply mk_d
+/-
+**ChainComplex.mk'_d** 是 Mathlib 中的一个定理，位于命名空间 `ChainComplex`。
+形式化陈述：∀ {V : Type u} [inst : CategoryTheory.Category.{v, u} V] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms V] (X₀ X₁ : V)   (d₀ : X₁ ⟶ X₀)   (succ' : {X₀ X
+₁ : V} → (f : X₁ ⟶ X₀) → (X₂ : V) ×' (d : X₂ ⟶ X₁) ×' CategoryTheory.CategoryStr
+uct.comp d f = 0)   (n : ℕ),   (ChainComplex.mk' X₀ X₁ d₀ fun {X₀ X₁} => succ').
+d (n + 2) (n + 1) =     CategoryTheory.CategoryStruct.comp (ChainComplex.mk'XIso
+ X₀ X₁ d₀ (fun {X₀ X₁} => succ') n).hom       (succ' ((ChainComplex.mk' X₀ X₁ d₀
+ fun {X₀ X₁} => succ').d (n + 1) n)).snd.fst
+参数：X₀ X₁ : V；d₀ : X₁ ⟶ X₀；succ' : {X₀ X₁ : V} → (f : X₁ ⟶ X₀) → (X₂ : V) ×' (d :
+ X₂ ⟶ X₁) ×' CategoryTheory.CategoryStruct.comp d f = 0；n : ℕ；ChainComplex.mk' X
+₀ X₁ d₀ fun {X₀ X₁} => succ'；n + 2；n + 1；ChainComplex.mk'XIso X₀ X₁ d₀ (fun {X₀ 
+X₁} => succ') n；succ' ((ChainComplex.mk' X₀ X₁ d₀ fun {X₀ X₁} => succ').d (n + 1
+) n)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ChainComplex.mk_d_2_1`：mk_d_2_1 : (mk X₀ X₁ X₂ d₀ d₁ s succ).d 2 1 = d₁
+· 使用定理 `ChainComplex.mk'_congr_succ'_d`：∀ {V : Type u} [inst : CategoryTheory.Ca
+tegory.{v, u} V] [inst_1 : CategoryTheory.Limits.HasZeroMorphisms V]   (succ' : 
+{X₀ X₁ : V} → (f : X…
+· 使用定理 `ChainComplex.mk_d_1_0`：mk_d_1_0 : (mk X₀ X₁ X₂ d₀ d₁ s succ).d 1 0 = d₀
+· 使用引理 `ChainComplex.mk_d`：mk_d (n : Nat) : (mk X₀ X₁ X₂ d₀ d₁ s succ).d (n + 3)
+ (n + 2) = (mkXIso X₀ X₁ X₂ d₀ d₁ s succ n).hom ≫ (succ (ShortComplex.mk _ _ ((m
+k X₀ X₁…
 -/
-lemma mk'_d (n : Nat) :
+lemma mk'_d (n : ℕ) :
     (mk' X₀ X₁ d₀ succ').d (n + 2) (n + 1) = (mk'XIso X₀ X₁ d₀ succ' n).hom ≫
       (succ' ((mk' X₀ X₁ d₀ succ').d (n + 1) n)).2.1 := by
   obtain _ | n := n
@@ -2944,57 +2524,92 @@ end Mk
 section MkHom
 
 variable {V}
-variable (P Q : ChainComplex V Nat) (zero : P.X 0 ⟶ Q.X 0) (one : P.X 1 ⟶ Q.X 1)
+variable (P Q : ChainComplex V ℕ) (zero : P.X 0 ⟶ Q.X 0) (one : P.X 1 ⟶ Q.X 1)
   (one_zero_comm : one ≫ Q.d 1 0 = P.d 1 0 ≫ zero)
   (succ :
-    forall (n : Nat)
+    ∀ (n : ℕ)
       (p :
         Σ' (f : P.X n ⟶ Q.X n) (f' : P.X (n + 1) ⟶ Q.X (n + 1)),
           f' ≫ Q.d (n + 1) n = P.d (n + 1) n ≫ f),
       Σ' f'' : P.X (n + 2) ⟶ Q.X (n + 2), f'' ≫ Q.d (n + 2) (n + 1) = P.d (n + 2) (n + 1) ≫ p.2.1)
 
-/--
-Definition of `mkHomAux` / `mkHomAux` 的定义
+/-- An auxiliary construction for `mkHom`.
 
-English:
-definition mkHomAux
-  signature: :
+Here we build by induction a family of commutative squares,
+but don't require at the type level that these successive commutative squares actually agree.
+They do in fact agree, and we then capture that at the type level (i.e. by constructing a chain map)
+in `mkHom`.
+-/
+/-
+**ChainComplex.mkHomAux** 是 Mathlib 中的一个定义，位于命名空间 `ChainComplex`。
+形式化陈述：{V : Type u} →   [inst : CategoryTheory.Category.{v, u} V] →     [inst_1 :
+ CategoryTheory.Limits.HasZeroMorphisms V] →       (P Q : ChainComplex V ℕ) →   
+      (zero : P.X 0 ⟶ Q.X 0) →           (one : P.X 1 ⟶ Q.X 1) →             Cat
+egoryTheory.CategoryStruct.comp one (Q.d 1 0) = CategoryTheory.CategoryStruct.co
+mp (P.d 1 0) zero →               ((n : ℕ) →                   (p :             
+          (f : P.X n ⟶ Q.X n) ×'                         (f' : P.X (n + 1) ⟶ Q.X
+ (n + 1)) ×'                           CategoryTheory.CategoryStruct.comp f' (Q.
+d (n + 1) n) =                             CategoryTheory.CategoryStruct.comp (P
+.d (n + 1) n) f) →                     (f'' : P.X (n + 2) ⟶ Q.X (n + 2)) ×'     
+                  CategoryTheory.CategoryStruct.comp f'' (Q.d (n + 2) (n + 1)) =
+                         CategoryTheory.CategoryStruct.comp (P.d (n + 2) (n + 1)
+) p.snd.fst) →                 (n : ℕ) →                   (f : P.X n ⟶ Q.X n) ×
+'                     (f' : P.X (n + 1) ⟶ Q.X (n + 1)) ×'                       
+CategoryTheory.CategoryStruct.comp f' (Q.d (n + 1) n) =                         
+CategoryTheory.CategoryStruct.comp (P.d (n + 1) n) f
+参数：P Q : ChainComplex V ℕ；zero : P.X 0 ⟶ Q.X 0；one : P.X 1 ⟶ Q.X 1；Q.d 1 0；P.d 1
+ 0；(n : ℕ) →                   (p :                       (f : P.X n ⟶ Q.X n) ×'
+                         (f' : P.X (n + 1) ⟶ Q.X (n + 1)) ×'                    
+       CategoryTheory.CategoryStruct.comp f' (Q.d (n + 1) n) =                  
+           CategoryTheory.CategoryStruct.comp (P.d (n + 1) n) f) →              
+       (f'' : P.X (n + 2) ⟶ Q.X (n + 2)) ×'                       CategoryTheory
+.CategoryStruct.comp f'' (Q.d (n + 2) (n + 1)) =                         Categor
+yTheory.CategoryStruct.comp (P.d (n + 2) (n + 1)) p.snd.fst；n : ℕ；f : P.X n ⟶ Q.
+X n；f' : P.X (n + 1) ⟶ Q.X (n + 1)；Q.d (n + 1) n；P.d (n + 1) n。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 mkHomAux
-  签名: :
+--- 原说明 ---
+An auxiliary construction for `mkHom`.
+
+Here we build by induction a family of commutative squares,
+but don't require at the type level that these successive commutative squares ac
+tually agree.
+They do in fact agree, and we then capture that at the type level (i.e. by const
+ructing a chain map)
+in `mkHom`.
 -/
 def mkHomAux :
-    forall n,
+    ∀ n,
       Σ' (f : P.X n ⟶ Q.X n) (f' : P.X (n + 1) ⟶ Q.X (n + 1)),
         f' ≫ Q.d (n + 1) n = P.d (n + 1) n ≫ f
   | 0 => ⟨zero, one, one_zero_comm⟩
   | n + 1 => ⟨(mkHomAux n).2.1, (succ n (mkHomAux n)).1, (succ n (mkHomAux n)).2⟩
 
-/--
-Definition of `mkHom` / `mkHom` 的定义
+/-- A constructor for chain maps between `ℕ`-indexed chain complexes,
+working by induction on commutative squares.
 
-English:
-definition mkHom
-  signature: : P ⟶ Q where
-  body: (mkHomAux P Q zero one one_zero_comm succ n).1
-  comm' n m := by
-    rintro (rfl : m + 1 = n)
-    exact (mkHomAux P Q zero one one_zero_comm succ m).2.2
+You need to provide the components of the chain map in degrees 0 and 1,
+show that these form a commutative square,
+and then give a construction of each component,
+and the fact that it forms a commutative square with the previous component,
+using as an inductive hypothesis the data (and commutativity) of the previous two components.
+-/
+/-
+**ChainComplex.mkHom** 是 Mathlib 中的一个定义，位于命名空间 `ChainComplex`。
+形式化陈述：mkHom : P ⟶ Q where f n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+A constructor for chain maps between `ℕ`-indexed chain complexes,
+working by induction on commutative squares.
 
-中文:
-定义 mkHom
-  签名: : P ⟶ Q where
-  定义体: (mkHomAux P Q zero one one_zero_comm succ n).1
-  comm' n m := by
-    rintro (rfl : m + 1 = n)
-    exact (mkHomAux P Q zero one one_zero_comm succ m).2.2
-
-@[simp]
-
-Depends on / 依赖: XIsoOfEq, _hom_app_f, eqToIso, eqToIso.hom, mkHomAux, one_zero_comm, shiftFunctorAdd
+You need to provide the components of the chain map in degrees 0 and 1,
+show that these form a commutative square,
+and then give a construction of each component,
+and the fact that it forms a commutative square with the previous component,
+using as an inductive hypothesis the data (and commutativity) of the previous tw
+o components.
 -/
 def mkHom : P ⟶ Q where
   f n := (mkHomAux P Q zero one one_zero_comm succ n).1
@@ -3003,66 +2618,43 @@ def mkHom : P ⟶ Q where
     exact (mkHomAux P Q zero one one_zero_comm succ m).2.2
 
 @[simp]
-/--
-theorem `mkHom_f_0` / 定理 `mkHom_f_0`
-
-English:
-theorem mkHom_f_0
-  statement: (mkHom P Q zero one one_zero_comm succ).f 0 = zero
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mkHom_f_0
-  结论: (mkHom P Q zero one one_zero_comm succ).f 0 = zero
-  证明: rfl
-
-@[simp]
+/-
+**ChainComplex.mkHom_f_0** 是 Mathlib 中的一个定理，位于命名空间 `ChainComplex`。
+形式化陈述：mkHom_f_0 : (mkHom P Q zero one one_zero_comm succ).f 0 = zero
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
 theorem mkHom_f_0 : (mkHom P Q zero one one_zero_comm succ).f 0 = zero :=
   rfl
 
 @[simp]
-/--
-theorem `mkHom_f_1` / 定理 `mkHom_f_1`
-
-English:
-theorem mkHom_f_1
-  statement: (mkHom P Q zero one one_zero_comm succ).f 1 = one
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mkHom_f_1
-  结论: (mkHom P Q zero one one_zero_comm succ).f 1 = one
-  证明: rfl
-
-@[simp]
+/-
+**ChainComplex.mkHom_f_1** 是 Mathlib 中的一个定理，位于命名空间 `ChainComplex`。
+形式化陈述：mkHom_f_1 : (mkHom P Q zero one one_zero_comm succ).f 1 = one
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
 theorem mkHom_f_1 : (mkHom P Q zero one one_zero_comm succ).f 1 = one :=
   rfl
 
 @[simp]
-/--
-theorem `mkHom_f_succ_succ` / 定理 `mkHom_f_succ_succ`
-
-English:
-theorem mkHom_f_succ_succ
-  given: (n : Nat)
-  proof: by
-  dsimp [mkHom, mkHomAux]
-
-中文:
-定理 mkHom_f_succ_succ
-  条件: (n : 自然数)
-  证明: by
-  dsimp [mkHom, mkHomAux]
-
-Depends on / 依赖: mkHomAux
+/-
+**ChainComplex.mkHom_f_succ_succ** 是 Mathlib 中的一个定理，位于命名空间 `ChainComplex`。
+形式化陈述：mkHom_f_succ_succ (n : Nat) : (mkHom P Q zero one one_zero_comm succ).f (n
+ + 2) = (succ n ⟨(mkHom P Q zero one one_zero_comm succ).f n, (mkHom P Q zero on
+e one_zero_comm succ).f (n + 1), (mkHom P Q zero one one_zero_comm succ).comm (n
+ + 1) n⟩).1
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
-theorem mkHom_f_succ_succ (n : Nat) :
+theorem mkHom_f_succ_succ (n : ℕ) :
     (mkHom P Q zero one one_zero_comm succ).f (n + 2) =
       (succ n
           ⟨(mkHom P Q zero one one_zero_comm succ).f n,
@@ -3080,55 +2672,39 @@ section Of
 
 variable {V} {α : Type*} [AddRightCancelSemigroup α] [One α] [DecidableEq α]
 
-/--
-Definition of `of.d` / `of.d` 的定义
+/-- Auxiliary definition for differentials for `CochainComplex.of`. -/
+/-
+**CochainComplex.of.d** 是 Mathlib 中的一个定义，位于命名空间 `CochainComplex.of`。
+形式化陈述：{V : Type u} →   [inst : CategoryTheory.Category.{v, u} V] →     [Category
+Theory.Limits.HasZeroMorphisms V] →       {α : Type u_2} →         [inst_2 : Add
+RightCancelSemigroup α] →           [inst_3 : One α] → [DecidableEq α] → (X : α 
+→ V) → ((n : α) → X n ⟶ X (n + 1)) → (i j : α) → X i ⟶ X j
+参数：X : α → V；(n : α) → X n ⟶ X (n + 1)；i j : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition of.d
-  signature: (X : α -> V) (d : forall n, X n ⟶ X (n + 1)) (i : α) (j : α)
-  body: if h : i + 1 = j then d _ ≫ eqToHom (by rw [h]) else 0
-
-中文:
-定义 of.d
-  签名: (X : α -> V) (d : 对任意 n, X n ⟶ X (n + 1)) (i : α) (j : α)
-  定义体: if h : i + 1 = j then d _ ≫ eqToHom (by rw [h]) else 0
+--- 原说明 ---
+Auxiliary definition for differentials for `CochainComplex.of`.
 -/
-def of.d (X : α -> V) (d : forall n, X n ⟶ X (n + 1)) (i : α) (j : α) : X i ⟶ X j :=
+def of.d (X : α → V) (d : ∀ n, X n ⟶ X (n + 1)) (i : α) (j : α) : X i ⟶ X j :=
   if h : i + 1 = j then d _ ≫ eqToHom (by rw [h]) else 0
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `of` / `of` 的定义
-
-English:
-abbreviation of
-  signature: (X : α -> V) (d : forall n, X n ⟶ X (n + 1)) (sq : forall n, d n ≫ d (n + 1) = 0)
-  body: { X := X
-    d := of.d X d
-    shape := fun i j w => dif_neg (c := i + 1 = j) w
-    d_comp_d' := fun i j k => by
-      dsimp [of.d]
-      split_ifs with h h' h'
-      · subst h h'
-        simp [sq]
-      all_goals simp }
-
-中文:
-缩写 of
-  签名: (X : α -> V) (d : 对任意 n, X n ⟶ X (n + 1)) (sq : 对任意 n, d n ≫ d (n + 1) = 0)
-  定义体: { X := X
-    d := of.d X d
-    shape := fun i j w => dif_neg (c := i + 1 = j) w
-    d_comp_d' := fun i j k => by
-      dsimp [of.d]
-      split_ifs with h h' h'
-      · subst h h'
-        simp [sq]
-      all_goals simp }
-
-Depends on / 依赖: all_goals, d_comp_d, dif_neg, of.d, split_ifs
+/-- Construct an `α`-indexed cochain complex from a dependently-typed differential.
 -/
-abbrev of (X : α -> V) (d : forall n, X n ⟶ X (n + 1)) (sq : forall n, d n ≫ d (n + 1) = 0) :
+/-
+**CochainComplex.of** 是 Mathlib 中的一个缩写定义，位于命名空间 `CochainComplex`。
+形式化陈述：of (X : α -> V) (d : forall n, X n ⟶ X (n + 1)) (sq : forall n, d n ≫ d (n
+ + 1) = 0) : CochainComplex V α
+参数：X : α -> V；d : forall n, X n ⟶ X (n + 1)；sq : forall n, d n ≫ d (n + 1) = 0。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+
+--- 原说明 ---
+Construct an `α`-indexed cochain complex from a dependently-typed differential.
+-/
+abbrev of (X : α → V) (d : ∀ n, X n ⟶ X (n + 1)) (sq : ∀ n, d n ≫ d (n + 1) = 0) :
     CochainComplex V α :=
   { X := X
     d := of.d X d
@@ -3140,74 +2716,53 @@ abbrev of (X : α -> V) (d : forall n, X n ⟶ X (n + 1)) (sq : forall n, d n �
         simp [sq]
       all_goals simp }
 
-variable (X : α -> V) (d : forall n, X n ⟶ X (n + 1)) (sq : forall n, d n ≫ d (n + 1) = 0)
-
-/--
-theorem `of_X` / 定理 `of_X`
-
-English:
-theorem of_X
-  statement: (of X d sq).X = X
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 of_X
-  结论: (of X d sq).X = X
-  证明: rfl
-
-@[simp]
+variable (X : α → V) (d : ∀ n, X n ⟶ X (n + 1)) (sq : ∀ n, d n ≫ d (n + 1) = 0)
+/-
+**CochainComplex.of_X** 是 Mathlib 中的一个定理，位于命名空间 `CochainComplex`。
+形式化陈述：of_X : (of X d sq).X = X
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
 theorem of_X : (of X d sq).X = X :=
   rfl
 
 @[simp]
-/--
-theorem `of_d` / 定理 `of_d`
-
-English:
-theorem of_d
-  given: (j : α)
-  statement: of.d X d j (j + 1) = d j
-  proof: by
-  dsimp [of.d]
-  rw [if_pos rfl]; rw [Category.comp_id]
-
-中文:
-定理 of_d
-  条件: (j : α)
-  结论: of.d X d j (j + 1) = d j
-  证明: by
-  dsimp [of.d]
-  rw [if_pos rfl]; rw [Category.comp_id]
-
-Depends on / 依赖: Category, Category.comp_id, comp_id, if_pos, of.d
+/-
+**CochainComplex.of_d** 是 Mathlib 中的一个定理，位于命名空间 `CochainComplex`。
+形式化陈述：of_d (j : α) : of.d X d j (j + 1) = d j
+参数：j : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 theorem of_d (j : α) : of.d X d j (j + 1) = d j := by
   dsimp [of.d]
-  rw [if_pos rfl]; rw [Category.comp_id]
-
-/--
-theorem `of_d_ne` / 定理 `of_d_ne`
-
-English:
-theorem of_d_ne
-  given: {i j : α} (h : i + 1 != j)
-  statement: of.d X d i j = 0
-  proof: by
-  simp [of.d, dif_neg h]
-
-中文:
-定理 of_d_ne
-  条件: {i j : α} (h : i + 1 != j)
-  结论: of.d X d i j = 0
-  证明: by
-  simp [of.d, dif_neg h]
-
-Depends on / 依赖: dif_neg, of.d
+  rw [if_pos rfl, Category.comp_id]
+/-
+**CochainComplex.of_d_ne** 是 Mathlib 中的一个定理，位于命名空间 `CochainComplex`。
+形式化陈述：of_d_ne {i j : α} (h : i + 1 != j) : of.d X d i j = 0
+参数：h : i + 1 != j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem of_d_ne {i j : α} (h : i + 1 != j) : of.d X d i j = 0 := by
+theorem of_d_ne {i j : α} (h : i + 1 ≠ j) : of.d X d i j = 0 := by
   simp [of.d, dif_neg h]
 
 end Of
@@ -3215,32 +2770,31 @@ end Of
 section OfHom
 
 variable {V} {α : Type*} [AddRightCancelSemigroup α] [One α] [DecidableEq α]
-variable (X : α -> V) (d_X : forall n, X n ⟶ X (n + 1)) (sq_X : forall n, d_X n ≫ d_X (n + 1) = 0) (Y : α -> V)
-  (d_Y : forall n, Y n ⟶ Y (n + 1)) (sq_Y : forall n, d_Y n ≫ d_Y (n + 1) = 0)
+variable (X : α → V) (d_X : ∀ n, X n ⟶ X (n + 1)) (sq_X : ∀ n, d_X n ≫ d_X (n + 1) = 0) (Y : α → V)
+  (d_Y : ∀ n, Y n ⟶ Y (n + 1)) (sq_Y : ∀ n, d_Y n ≫ d_Y (n + 1) = 0)
 
 /--
-Definition of `ofHom` / `ofHom` 的定义
-
-English:
-abbreviation ofHom
-  signature: {X Y : CochainComplex V α} (f : forall i : α, X.X i ⟶ Y.X i)
-  body: f
-  comm' n m := by
-    simp only [ComplexShape.up_Rel]
-    rintro rfl
-    simpa using comm n
-
-中文:
-缩写 ofHom
-  签名: {X Y : 上链复形 V α} (f : 对任意 i : α, X.X i ⟶ Y.X i)
-  定义体: f
-  comm' n m := by
-    simp only [ComplexShape.up_Rel]
-    rintro rfl
-    simpa using comm n
+A constructor for chain maps between `α`-indexed cochain complexes built using `CochainComplex.of`,
+from a dependently typed collection of morphisms.
 -/
-abbrev ofHom {X Y : CochainComplex V α} (f : forall i : α, X.X i ⟶ Y.X i)
-    (comm : forall i : α, f i ≫ Y.d i (i + 1) = X.d i (i + 1) ≫ f (i + 1)) :
+/-
+**CochainComplex.ofHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `CochainComplex`。
+形式化陈述：ofHom {X Y : CochainComplex V α} (f : forall i : α, X.X i ⟶ Y.X i) (comm :
+ forall i : α, f i ≫ Y.d i (i + 1) = X.d i (i + 1) ≫ f (i + 1)) : X ⟶ Y where f
+参数：f : forall i : α, X.X i ⟶ Y.X i；comm : forall i : α, f i ≫ Y.d i (i + 1) = X.
+d i (i + 1) ≫ f (i + 1)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+
+--- 原说明 ---
+A constructor for chain maps between `α`-indexed cochain complexes built using `
+CochainComplex.of`,
+from a dependently typed collection of morphisms.
+-/
+abbrev ofHom {X Y : CochainComplex V α} (f : ∀ i : α, X.X i ⟶ Y.X i)
+    (comm : ∀ i : α, f i ≫ Y.d i (i + 1) = X.d i (i + 1) ≫ f (i + 1)) :
     X ⟶ Y where
   f := f
   comm' n m := by
@@ -3254,246 +2808,225 @@ section Mk
 
 variable {V}
 variable (X₀ X₁ X₂ : V) (d₀ : X₀ ⟶ X₁) (d₁ : X₁ ⟶ X₂) (s : d₀ ≫ d₁ = 0)
-  (succ : forall (S : ShortComplex V), Σ' (X₄ : V) (d₂ : S.X₃ ⟶ X₄), S.g ≫ d₂ = 0)
+  (succ : ∀ (S : ShortComplex V), Σ' (X₄ : V) (d₂ : S.X₃ ⟶ X₄), S.g ≫ d₂ = 0)
 
-/--
-Definition of `mkAux` / `mkAux` 的定义
+/-- Auxiliary definition for `mk`. -/
+/-
+**CochainComplex.mkAux** 是 Mathlib 中的一个定义，位于命名空间 `CochainComplex`。
+形式化陈述：{V : Type u} →   [inst : CategoryTheory.Category.{v, u} V] →     [inst_1 :
+ CategoryTheory.Limits.HasZeroMorphisms V] →       (X₀ X₁ X₂ : V) →         (d₀ 
+: X₀ ⟶ X₁) →           (d₁ : X₁ ⟶ X₂) →             CategoryTheory.CategoryStruc
+t.comp d₀ d₁ = 0 →               ((S : CategoryTheory.ShortComplex V) →         
+          (X₄ : V) ×' (d₂ : S.X₃ ⟶ X₄) ×' CategoryTheory.CategoryStruct.comp S.g
+ d₂ = 0) →                 ℕ → CategoryTheory.ShortComplex V
+参数：X₀ X₁ X₂ : V；d₀ : X₀ ⟶ X₁；d₁ : X₁ ⟶ X₂；(S : CategoryTheory.ShortComplex V) → 
+                  (X₄ : V) ×' (d₂ : S.X₃ ⟶ X₄) ×' CategoryTheory.CategoryStruct.
+comp S.g d₂ = 0。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkAux
-  signature: : Nat -> ShortComplex V
-
-中文:
-定义 mkAux
-  签名: : 自然数 -> 短复形 V
+--- 原说明 ---
+Auxiliary definition for `mk`.
 -/
-def mkAux : Nat -> ShortComplex V
+def mkAux : ℕ → ShortComplex V
   | 0 => ShortComplex.mk _ _ s
   | n + 1 => ShortComplex.mk _ _ (succ (mkAux n)).2.2
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- An inductive constructor for `ℕ`-indexed cochain complexes.
 
-English:
-definition mk
-  signature: : CochainComplex V Nat
-  body: of (fun n => (mkAux X₀ X₁ X₂ d₀ d₁ s succ n).X₁) (fun n => (mkAux X₀ X₁ X₂ d₀ d₁ s succ n).f)
-    fun n => (mkAux X₀ X₁ X₂ d₀ d₁ s succ n).zero
+You provide explicitly the first two differentials,
+then a function which takes two differentials and the fact they compose to zero,
+and returns the next object, its differential, and the fact it composes appropriately to zero.
 
-@[simp]
-
-中文:
-定义 mk
-  签名: : 上链复形 V 自然数
-  定义体: of (fun n => (mkAux X₀ X₁ X₂ d₀ d₁ s succ n).X₁) (fun n => (mkAux X₀ X₁ X₂ d₀ d₁ s succ n).f)
-    fun n => (mkAux X₀ X₁ X₂ d₀ d₁ s succ n).zero
-
-@[simp]
+See also `mk'`, which only sees the previous differential in the inductive step.
 -/
-def mk : CochainComplex V Nat :=
+/-
+**CochainComplex.mk** 是 Mathlib 中的一个定义，位于命名空间 `CochainComplex`。
+形式化陈述：mk : CochainComplex V Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+An inductive constructor for `ℕ`-indexed cochain complexes.
+
+You provide explicitly the first two differentials,
+then a function which takes two differentials and the fact they compose to zero,
+and returns the next object, its differential, and the fact it composes appropri
+ately to zero.
+
+See also `mk'`, which only sees the previous differential in the inductive step.
+-/
+def mk : CochainComplex V ℕ :=
   of (fun n => (mkAux X₀ X₁ X₂ d₀ d₁ s succ n).X₁) (fun n => (mkAux X₀ X₁ X₂ d₀ d₁ s succ n).f)
     fun n => (mkAux X₀ X₁ X₂ d₀ d₁ s succ n).zero
 
 @[simp]
-/--
-theorem `mk_X_0` / 定理 `mk_X_0`
-
-English:
-theorem mk_X_0
-  statement: (mk X₀ X₁ X₂ d₀ d₁ s succ).X 0 = X₀
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk_X_0
-  结论: (mk X₀ X₁ X₂ d₀ d₁ s succ).X 0 = X₀
-  证明: rfl
-
-@[simp]
+/-
+**CochainComplex.mk_X_0** 是 Mathlib 中的一个定理，位于命名空间 `CochainComplex`。
+形式化陈述：mk_X_0 : (mk X₀ X₁ X₂ d₀ d₁ s succ).X 0 = X₀
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
 theorem mk_X_0 : (mk X₀ X₁ X₂ d₀ d₁ s succ).X 0 = X₀ :=
   rfl
 
 @[simp]
-/--
-theorem `mk_X_1` / 定理 `mk_X_1`
-
-English:
-theorem mk_X_1
-  statement: (mk X₀ X₁ X₂ d₀ d₁ s succ).X 1 = X₁
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk_X_1
-  结论: (mk X₀ X₁ X₂ d₀ d₁ s succ).X 1 = X₁
-  证明: rfl
-
-@[simp]
+/-
+**CochainComplex.mk_X_1** 是 Mathlib 中的一个定理，位于命名空间 `CochainComplex`。
+形式化陈述：mk_X_1 : (mk X₀ X₁ X₂ d₀ d₁ s succ).X 1 = X₁
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
 theorem mk_X_1 : (mk X₀ X₁ X₂ d₀ d₁ s succ).X 1 = X₁ :=
   rfl
 
 @[simp]
-/--
-theorem `mk_X_2` / 定理 `mk_X_2`
-
-English:
-theorem mk_X_2
-  statement: (mk X₀ X₁ X₂ d₀ d₁ s succ).X 2 = X₂
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk_X_2
-  结论: (mk X₀ X₁ X₂ d₀ d₁ s succ).X 2 = X₂
-  证明: rfl
-
-@[simp]
+/-
+**CochainComplex.mk_X_2** 是 Mathlib 中的一个定理，位于命名空间 `CochainComplex`。
+形式化陈述：mk_X_2 : (mk X₀ X₁ X₂ d₀ d₁ s succ).X 2 = X₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
 theorem mk_X_2 : (mk X₀ X₁ X₂ d₀ d₁ s succ).X 2 = X₂ :=
   rfl
 
 @[simp]
-/--
-theorem `mk_d_1_0` / 定理 `mk_d_1_0`
-
-English:
-theorem mk_d_1_0
-  statement: (mk X₀ X₁ X₂ d₀ d₁ s succ).d 0 1 = d₀
-  proof: by
-  change ite (1 = 0 + 1) (d₀ ≫ 𝟙 X₁) 0 = d₀
-  rw [if_pos rfl]; rw [Category.comp_id]
-
-@[simp]
-
-中文:
-定理 mk_d_1_0
-  结论: (mk X₀ X₁ X₂ d₀ d₁ s succ).d 0 1 = d₀
-  证明: by
-  change ite (1 = 0 + 1) (d₀ ≫ 𝟙 X₁) 0 = d₀
-  rw [if_pos rfl]; rw [Category.comp_id]
-
-@[simp]
-
-Depends on / 依赖: Additive, Category, Category.comp_id, ComplexShape, ComplexShape.up, Functor, Functor.additive_of_full_essSurj_comp, Functor.additive_of_iso, additive_of_full_essSurj_comp, additive_of_iso, commShiftIso, comp_id, if_pos, quotient, shiftFunctor
+/-
+**CochainComplex.mk_d_1_0** 是 Mathlib 中的一个定理，位于命名空间 `CochainComplex`。
+形式化陈述：mk_d_1_0 : (mk X₀ X₁ X₂ d₀ d₁ s succ).d 0 1 = d₀
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 theorem mk_d_1_0 : (mk X₀ X₁ X₂ d₀ d₁ s succ).d 0 1 = d₀ := by
   change ite (1 = 0 + 1) (d₀ ≫ 𝟙 X₁) 0 = d₀
-  rw [if_pos rfl]; rw [Category.comp_id]
+  rw [if_pos rfl, Category.comp_id]
 
 @[simp]
-/--
-theorem `mk_d_2_0` / 定理 `mk_d_2_0`
-
-English:
-theorem mk_d_2_0
-  statement: (mk X₀ X₁ X₂ d₀ d₁ s succ).d 1 2 = d₁
-  proof: by
-  change ite (2 = 1 + 1) (d₁ ≫ 𝟙 X₂) 0 = d₁
-  rw [if_pos rfl]; rw [Category.comp_id]
-
-中文:
-定理 mk_d_2_0
-  结论: (mk X₀ X₁ X₂ d₀ d₁ s succ).d 1 2 = d₁
-  证明: by
-  change ite (2 = 1 + 1) (d₁ ≫ 𝟙 X₂) 0 = d₁
-  rw [if_pos rfl]; rw [Category.comp_id]
-
-Depends on / 依赖: Category, Category.comp_id, ComplexShape, ComplexShape.up, Functor, Functor.map_smul, HomotopyCategory, HomotopyCategory.quotient, NatIso, NatIso.naturality_1, commShiftIso, comp_id, if_pos, map_smul, map_surjective, naturality_1, quotient
+/-
+**CochainComplex.mk_d_2_0** 是 Mathlib 中的一个定理，位于命名空间 `CochainComplex`。
+形式化陈述：mk_d_2_0 : (mk X₀ X₁ X₂ d₀ d₁ s succ).d 1 2 = d₁
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 theorem mk_d_2_0 : (mk X₀ X₁ X₂ d₀ d₁ s succ).d 1 2 = d₁ := by
   change ite (2 = 1 + 1) (d₁ ≫ 𝟙 X₂) 0 = d₁
-  rw [if_pos rfl]; rw [Category.comp_id]
+  rw [if_pos rfl, Category.comp_id]
 
 -- TODO simp lemmas for the inductive steps? It's not entirely clear that they are needed.
-/--
-Definition of `mk'` / `mk'` 的定义
+/-- A simpler inductive constructor for `ℕ`-indexed cochain complexes.
 
-English:
-definition mk'
-  signature: (X₀ X₁ : V) (d : X₀ ⟶ X₁)
-  body: mk _ _ _ _ _ (succ' d).2.2 (fun S => succ' S.g)
+You provide explicitly the first differential,
+then a function which takes a differential,
+and returns the next object, its differential, and the fact it composes appropriately to zero.
+-/
+/-
+**CochainComplex.mk'** 是 Mathlib 中的一个定义，位于命名空间 `CochainComplex`。
+形式化陈述：mk' (X₀ X₁ : V) (d : X₀ ⟶ X₁) -- (succ' : ∀ : Σ X₀ X₁ : V, X₀ ⟶ X₁, Σ' (X₂
+ : V) (d : t.2.1 ⟶ X₂), t.2.2 ≫ d = 0) : (succ' : forall {X₀ X₁ : V} (f : X₀ ⟶ X
+₁), Σ' (X₂ : V) (d : X₁ ⟶ X₂), f ≫ d = 0) : CochainComplex V Nat
+参数：X₀ X₁ : V；d : X₀ ⟶ X₁；succ' : ∀ : Σ X₀ X₁ : V, X₀ ⟶ X₁, Σ' (X₂ : V) (d : t.2.
+1 ⟶ X₂), t.2.2 ≫ d = 0。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 mk'
-  签名: (X₀ X₁ : V) (d : X₀ ⟶ X₁)
-  定义体: mk _ _ _ _ _ (succ' d).2.2 (fun S => succ' S.g)
+--- 原说明 ---
+A simpler inductive constructor for `ℕ`-indexed cochain complexes.
+
+You provide explicitly the first differential,
+then a function which takes a differential,
+and returns the next object, its differential, and the fact it composes appropri
+ately to zero.
 -/
 def mk' (X₀ X₁ : V) (d : X₀ ⟶ X₁)
     -- (succ' : ∀ : Σ X₀ X₁ : V, X₀ ⟶ X₁, Σ' (X₂ : V) (d : t.2.1 ⟶ X₂), t.2.2 ≫ d = 0) :
-    (succ' : forall {X₀ X₁ : V} (f : X₀ ⟶ X₁), Σ' (X₂ : V) (d : X₁ ⟶ X₂), f ≫ d = 0) :
-    CochainComplex V Nat :=
+    (succ' : ∀ {X₀ X₁ : V} (f : X₀ ⟶ X₁), Σ' (X₂ : V) (d : X₁ ⟶ X₂), f ≫ d = 0) :
+    CochainComplex V ℕ :=
   mk _ _ _ _ _ (succ' d).2.2 (fun S => succ' S.g)
 
-variable (succ' : forall {X₀ X₁ : V} (f : X₀ ⟶ X₁), Σ' (X₂ : V) (d : X₁ ⟶ X₂), f ≫ d = 0)
+variable (succ' : ∀ {X₀ X₁ : V} (f : X₀ ⟶ X₁), Σ' (X₂ : V) (d : X₁ ⟶ X₂), f ≫ d = 0)
 
 @[simp]
-/--
-theorem `mk'_X_0` / 定理 `mk'_X_0`
-
-English:
-theorem mk'_X_0
-  statement: (mk' X₀ X₁ d₀ succ').X 0 = X₀
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk'_X_0
-  结论: (mk' X₀ X₁ d₀ succ').X 0 = X₀
-  证明: rfl
-
-@[simp]
+/-
+**CochainComplex.mk'_X_0** 是 Mathlib 中的一个定理，位于命名空间 `CochainComplex`。
+形式化陈述：∀ {V : Type u} [inst : CategoryTheory.Category.{v, u} V] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms V] (X₀ X₁ : V)   (d₀ : X₀ ⟶ X₁)   (succ' : {X₀ X
+₁ : V} → (f : X₀ ⟶ X₁) → (X₂ : V) ×' (d : X₁ ⟶ X₂) ×' CategoryTheory.CategoryStr
+uct.comp f d = 0),   (CochainComplex.mk' X₀ X₁ d₀ fun {X₀ X₁} => succ').X 0 = X₀
+参数：X₀ X₁ : V；d₀ : X₀ ⟶ X₁；succ' : {X₀ X₁ : V} → (f : X₀ ⟶ X₁) → (X₂ : V) ×' (d :
+ X₁ ⟶ X₂) ×' CategoryTheory.CategoryStruct.comp f d = 0；CochainComplex.mk' X₀ X₁
+ d₀ fun {X₀ X₁} => succ'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
 theorem mk'_X_0 : (mk' X₀ X₁ d₀ succ').X 0 = X₀ :=
   rfl
 
 @[simp]
-/--
-theorem `mk'_X_1` / 定理 `mk'_X_1`
-
-English:
-theorem mk'_X_1
-  statement: (mk' X₀ X₁ d₀ succ').X 1 = X₁
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mk'_X_1
-  结论: (mk' X₀ X₁ d₀ succ').X 1 = X₁
-  证明: rfl
-
-@[simp]
+/-
+**CochainComplex.mk'_X_1** 是 Mathlib 中的一个定理，位于命名空间 `CochainComplex`。
+形式化陈述：∀ {V : Type u} [inst : CategoryTheory.Category.{v, u} V] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms V] (X₀ X₁ : V)   (d₀ : X₀ ⟶ X₁)   (succ' : {X₀ X
+₁ : V} → (f : X₀ ⟶ X₁) → (X₂ : V) ×' (d : X₁ ⟶ X₂) ×' CategoryTheory.CategoryStr
+uct.comp f d = 0),   (CochainComplex.mk' X₀ X₁ d₀ fun {X₀ X₁} => succ').X 1 = X₁
+参数：X₀ X₁ : V；d₀ : X₀ ⟶ X₁；succ' : {X₀ X₁ : V} → (f : X₀ ⟶ X₁) → (X₂ : V) ×' (d :
+ X₁ ⟶ X₂) ×' CategoryTheory.CategoryStruct.comp f d = 0；CochainComplex.mk' X₀ X₁
+ d₀ fun {X₀ X₁} => succ'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
 theorem mk'_X_1 : (mk' X₀ X₁ d₀ succ').X 1 = X₁ :=
   rfl
 
 @[simp]
-/--
-theorem `mk'_d_1_0` / 定理 `mk'_d_1_0`
-
-English:
-theorem mk'_d_1_0
-  statement: (mk' X₀ X₁ d₀ succ').d 0 1 = d₀
-  proof: by
-  change ite (1 = 0 + 1) (d₀ ≫ 𝟙 X₁) 0 = d₀
-  rw [if_pos rfl]; rw [Category.comp_id]
-
-中文:
-定理 mk'_d_1_0
-  结论: (mk' X₀ X₁ d₀ succ').d 0 1 = d₀
-  证明: by
-  change ite (1 = 0 + 1) (d₀ ≫ 𝟙 X₁) 0 = d₀
-  rw [if_pos rfl]; rw [Category.comp_id]
+/-
+**CochainComplex.mk'_d_1_0** 是 Mathlib 中的一个定理，位于命名空间 `CochainComplex`。
+形式化陈述：∀ {V : Type u} [inst : CategoryTheory.Category.{v, u} V] [inst_1 : Categor
+yTheory.Limits.HasZeroMorphisms V] (X₀ X₁ : V)   (d₀ : X₀ ⟶ X₁)   (succ' : {X₀ X
+₁ : V} → (f : X₀ ⟶ X₁) → (X₂ : V) ×' (d : X₁ ⟶ X₂) ×' CategoryTheory.CategoryStr
+uct.comp f d = 0),   (CochainComplex.mk' X₀ X₁ d₀ fun {X₀ X₁} => succ').d 0 1 = 
+d₀
+参数：X₀ X₁ : V；d₀ : X₀ ⟶ X₁；succ' : {X₀ X₁ : V} → (f : X₀ ⟶ X₁) → (X₂ : V) ×' (d :
+ X₁ ⟶ X₂) ×' CategoryTheory.CategoryStruct.comp f d = 0；CochainComplex.mk' X₀ X₁
+ d₀ fun {X₀ X₁} => succ'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
 -/
 theorem mk'_d_1_0 : (mk' X₀ X₁ d₀ succ').d 0 1 = d₀ := by
   change ite (1 = 0 + 1) (d₀ ≫ 𝟙 X₁) 0 = d₀
-  rw [if_pos rfl]; rw [Category.comp_id]
+  rw [if_pos rfl, Category.comp_id]
 
 -- TODO simp lemmas for the inductive steps? It's not entirely clear that they are needed.
 end Mk
@@ -3501,54 +3034,89 @@ end Mk
 section MkHom
 
 variable {V}
-variable (P Q : CochainComplex V Nat) (zero : P.X 0 ⟶ Q.X 0) (one : P.X 1 ⟶ Q.X 1)
+variable (P Q : CochainComplex V ℕ) (zero : P.X 0 ⟶ Q.X 0) (one : P.X 1 ⟶ Q.X 1)
   (one_zero_comm : zero ≫ Q.d 0 1 = P.d 0 1 ≫ one)
-  (succ : forall (n : Nat) (p : Σ' (f : P.X n ⟶ Q.X n) (f' : P.X (n + 1) ⟶ Q.X (n + 1)),
+  (succ : ∀ (n : ℕ) (p : Σ' (f : P.X n ⟶ Q.X n) (f' : P.X (n + 1) ⟶ Q.X (n + 1)),
           f ≫ Q.d n (n + 1) = P.d n (n + 1) ≫ f'),
       Σ' f'' : P.X (n + 2) ⟶ Q.X (n + 2), p.2.1 ≫ Q.d (n + 1) (n + 2) = P.d (n + 1) (n + 2) ≫ f'')
 
-/--
-Definition of `mkHomAux` / `mkHomAux` 的定义
+/-- An auxiliary construction for `mkHom`.
 
-English:
-definition mkHomAux
-  signature: :
+Here we build by induction a family of commutative squares,
+but don't require at the type level that these successive commutative squares actually agree.
+They do in fact agree, and we then capture that at the type level (i.e. by constructing a chain map)
+in `mkHom`.
+-/
+/-
+**CochainComplex.mkHomAux** 是 Mathlib 中的一个定义，位于命名空间 `CochainComplex`。
+形式化陈述：{V : Type u} →   [inst : CategoryTheory.Category.{v, u} V] →     [inst_1 :
+ CategoryTheory.Limits.HasZeroMorphisms V] →       (P Q : CochainComplex V ℕ) → 
+        (zero : P.X 0 ⟶ Q.X 0) →           (one : P.X 1 ⟶ Q.X 1) →             C
+ategoryTheory.CategoryStruct.comp zero (Q.d 0 1) = CategoryTheory.CategoryStruct
+.comp (P.d 0 1) one →               ((n : ℕ) →                   (p :           
+            (f : P.X n ⟶ Q.X n) ×'                         (f' : P.X (n + 1) ⟶ Q
+.X (n + 1)) ×'                           CategoryTheory.CategoryStruct.comp f (Q
+.d n (n + 1)) =                             CategoryTheory.CategoryStruct.comp (
+P.d n (n + 1)) f') →                     (f'' : P.X (n + 2) ⟶ Q.X (n + 2)) ×'   
+                    CategoryTheory.CategoryStruct.comp p.snd.fst (Q.d (n + 1) (n
+ + 2)) =                         CategoryTheory.CategoryStruct.comp (P.d (n + 1)
+ (n + 2)) f'') →                 (n : ℕ) →                   (f : P.X n ⟶ Q.X n)
+ ×'                     (f' : P.X (n + 1) ⟶ Q.X (n + 1)) ×'                     
+  CategoryTheory.CategoryStruct.comp f (Q.d n (n + 1)) =                        
+ CategoryTheory.CategoryStruct.comp (P.d n (n + 1)) f'
+参数：P Q : CochainComplex V ℕ；zero : P.X 0 ⟶ Q.X 0；one : P.X 1 ⟶ Q.X 1；Q.d 0 1；P.d
+ 0 1；(n : ℕ) →                   (p :                       (f : P.X n ⟶ Q.X n) 
+×'                         (f' : P.X (n + 1) ⟶ Q.X (n + 1)) ×'                  
+         CategoryTheory.CategoryStruct.comp f (Q.d n (n + 1)) =                 
+            CategoryTheory.CategoryStruct.comp (P.d n (n + 1)) f') →            
+         (f'' : P.X (n + 2) ⟶ Q.X (n + 2)) ×'                       CategoryTheo
+ry.CategoryStruct.comp p.snd.fst (Q.d (n + 1) (n + 2)) =                        
+ CategoryTheory.CategoryStruct.comp (P.d (n + 1) (n + 2)) f''；n : ℕ；f : P.X n ⟶ 
+Q.X n；f' : P.X (n + 1) ⟶ Q.X (n + 1)；Q.d n (n + 1)；P.d n (n + 1)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 mkHomAux
-  签名: :
+--- 原说明 ---
+An auxiliary construction for `mkHom`.
+
+Here we build by induction a family of commutative squares,
+but don't require at the type level that these successive commutative squares ac
+tually agree.
+They do in fact agree, and we then capture that at the type level (i.e. by const
+ructing a chain map)
+in `mkHom`.
 -/
 def mkHomAux :
-    forall n,
+    ∀ n,
       Σ' (f : P.X n ⟶ Q.X n) (f' : P.X (n + 1) ⟶ Q.X (n + 1)),
         f ≫ Q.d n (n + 1) = P.d n (n + 1) ≫ f'
   | 0 => ⟨zero, one, one_zero_comm⟩
   | n + 1 => ⟨(mkHomAux n).2.1, (succ n (mkHomAux n)).1, (succ n (mkHomAux n)).2⟩
 
-/--
-Definition of `mkHom` / `mkHom` 的定义
+/-- A constructor for chain maps between `ℕ`-indexed cochain complexes,
+working by induction on commutative squares.
 
-English:
-definition mkHom
-  signature: : P ⟶ Q where
-  body: (mkHomAux P Q zero one one_zero_comm succ n).1
-  comm' n m := by
-    rintro (rfl : n + 1 = m)
-    exact (mkHomAux P Q zero one one_zero_comm succ n).2.2
+You need to provide the components of the chain map in degrees 0 and 1,
+show that these form a commutative square,
+and then give a construction of each component,
+and the fact that it forms a commutative square with the previous component,
+using as an inductive hypothesis the data (and commutativity) of the previous two components.
+-/
+/-
+**CochainComplex.mkHom** 是 Mathlib 中的一个定义，位于命名空间 `CochainComplex`。
+形式化陈述：mkHom : P ⟶ Q where f n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+A constructor for chain maps between `ℕ`-indexed cochain complexes,
+working by induction on commutative squares.
 
-中文:
-定义 mkHom
-  签名: : P ⟶ Q where
-  定义体: (mkHomAux P Q zero one one_zero_comm succ n).1
-  comm' n m := by
-    rintro (rfl : n + 1 = m)
-    exact (mkHomAux P Q zero one one_zero_comm succ n).2.2
-
-@[simp]
-
-Depends on / 依赖: mkHomAux, one_zero_comm
+You need to provide the components of the chain map in degrees 0 and 1,
+show that these form a commutative square,
+and then give a construction of each component,
+and the fact that it forms a commutative square with the previous component,
+using as an inductive hypothesis the data (and commutativity) of the previous tw
+o components.
 -/
 def mkHom : P ⟶ Q where
   f n := (mkHomAux P Q zero one one_zero_comm succ n).1
@@ -3557,66 +3125,43 @@ def mkHom : P ⟶ Q where
     exact (mkHomAux P Q zero one one_zero_comm succ n).2.2
 
 @[simp]
-/--
-theorem `mkHom_f_0` / 定理 `mkHom_f_0`
-
-English:
-theorem mkHom_f_0
-  statement: (mkHom P Q zero one one_zero_comm succ).f 0 = zero
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mkHom_f_0
-  结论: (mkHom P Q zero one one_zero_comm succ).f 0 = zero
-  证明: rfl
-
-@[simp]
+/-
+**CochainComplex.mkHom_f_0** 是 Mathlib 中的一个定理，位于命名空间 `CochainComplex`。
+形式化陈述：mkHom_f_0 : (mkHom P Q zero one one_zero_comm succ).f 0 = zero
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
 theorem mkHom_f_0 : (mkHom P Q zero one one_zero_comm succ).f 0 = zero :=
   rfl
 
 @[simp]
-/--
-theorem `mkHom_f_1` / 定理 `mkHom_f_1`
-
-English:
-theorem mkHom_f_1
-  statement: (mkHom P Q zero one one_zero_comm succ).f 1 = one
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 mkHom_f_1
-  结论: (mkHom P Q zero one one_zero_comm succ).f 1 = one
-  证明: rfl
-
-@[simp]
+/-
+**CochainComplex.mkHom_f_1** 是 Mathlib 中的一个定理，位于命名空间 `CochainComplex`。
+形式化陈述：mkHom_f_1 : (mkHom P Q zero one one_zero_comm succ).f 1 = one
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
 theorem mkHom_f_1 : (mkHom P Q zero one one_zero_comm succ).f 1 = one :=
   rfl
 
 @[simp]
-/--
-theorem `mkHom_f_succ_succ` / 定理 `mkHom_f_succ_succ`
-
-English:
-theorem mkHom_f_succ_succ
-  given: (n : Nat)
-  proof: by
-  dsimp [mkHom, mkHomAux]
-
-中文:
-定理 mkHom_f_succ_succ
-  条件: (n : 自然数)
-  证明: by
-  dsimp [mkHom, mkHomAux]
-
-Depends on / 依赖: mkHomAux
+/-
+**CochainComplex.mkHom_f_succ_succ** 是 Mathlib 中的一个定理，位于命名空间 `CochainComplex`。
+形式化陈述：mkHom_f_succ_succ (n : Nat) : (mkHom P Q zero one one_zero_comm succ).f (n
+ + 2) = (succ n ⟨(mkHom P Q zero one one_zero_comm succ).f n, (mkHom P Q zero on
+e one_zero_comm succ).f (n + 1), (mkHom P Q zero one one_zero_comm succ).comm n 
+(n + 1)⟩).1
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
 -/
-theorem mkHom_f_succ_succ (n : Nat) :
+theorem mkHom_f_succ_succ (n : ℕ) :
     (mkHom P Q zero one one_zero_comm succ).f (n + 2) =
       (succ n
           ⟨(mkHom P Q zero one one_zero_comm succ).f n,
@@ -3627,3 +3172,4 @@ theorem mkHom_f_succ_succ (n : Nat) :
 end MkHom
 
 end CochainComplex
+

@@ -52,26 +52,18 @@ universe u v w
 open Function
 open scoped TensorProduct
 
-/--
-Definition of `Bialgebra` / `Bialgebra` 的定义
+/-- A bialgebra over a commutative (semi)ring `R` is both an algebra and a coalgebra over `R`, such
+that the counit and comultiplication are algebra morphisms. -/
+/-
+**Bialgebra** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u) → (A : Type v) → [CommSemiring R] → [Semiring A] → Type (max 
+u v)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Bialgebra
-  parameters: (R : Type u) (A : Type v) [CommSemiring R] [Semiring A]
-  axioms and operations (4):
-    - counit_one : counit 1 = 1
-    - mul_compr₂_counit : (LinearMap.mul R A).compr₂ counit = (LinearMap.mul R R).compl₁₂ counit counit
-    - comul_one : comul 1 = 1
-    - mul_compr₂_comul : (LinearMap.mul R A).compr₂ comul = (LinearMap.mul R (A otimes[R] A)).compl₁₂ comul comul
-
-中文:
-类 双代数
-  参数: (R : 类型u) (A : 类型v) [交换半环 R] [半环 A]
-  公理与运算 (4 个):
-    - counit_one : counit 1 = 1
-    - mul_compr₂_counit : (线性映射.mul R A).compr₂ counit = (线性映射.mul R R).compl₁₂ counit counit
-    - comul_one : comul 1 = 1
-    - mul_compr₂_comul : (线性映射.mul R A).compr₂ comul = (线性映射.mul R (A otimes[R] A)).compl₁₂ comul comul
+--- 原说明 ---
+A bialgebra over a commutative (semi)ring `R` is both an algebra and a coalgebra
+ over `R`, such
+that the counit and comultiplication are algebra morphisms.
 -/
 class Bialgebra (R : Type u) (A : Type v) [CommSemiring R] [Semiring A] extends
     Algebra R A, Coalgebra R A where
@@ -100,7 +92,7 @@ class Bialgebra (R : Type u) (A : Type v) [CommSemiring R] [Semiring A] extends
   See `Bialgebra.mk'` for a constructor for bialgebras which uses the more familiar
   but mathematically equivalent `comul (a * b) = comul a * comul b`. -/
   mul_compr₂_comul :
-    (LinearMap.mul R A).compr₂ comul = (LinearMap.mul R (A otimes[R] A)).compl₁₂ comul comul
+    (LinearMap.mul R A).compr₂ comul = (LinearMap.mul R (A ⊗[R] A)).compl₁₂ comul comul
 
 namespace Bialgebra
 
@@ -109,42 +101,39 @@ open Coalgebra
 variable {R : Type u} {A : Type v}
 variable [CommSemiring R] [Semiring A] [Bialgebra R A]
 
-/--
-lemma `counit_mul` / 引理 `counit_mul`
-
-English:
-lemma counit_mul
-  given: (a b : A)
-  statement: counit (R := R) (a * b) = counit a * counit b
-  proof: DFunLike.congr_fun (DFunLike.congr_fun mul_compr₂_counit a) b
-
-中文:
-引理 counit_mul
-  条件: (a b : A)
-  结论: counit (R := R) (a * b) = counit a * counit b
-  证明: DFunLike.congr_fun (DFunLike.congr_fun mul_compr₂_counit a) b
-
-Depends on / 依赖: counit
+/-
+**Bialgebra.counit_mul** 是 Mathlib 中的一个引理，位于命名空间 `Bialgebra`。
+形式化陈述：counit_mul (a b : A) : counit (R
+参数：a b : A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Bialgebra.mul_compr₂_counit`：∀ {R : Type u} {A : Type v} {inst : CommSem
+iring R} {inst_1 : Semiring A} [self : Bialgebra R A],   (LinearMap.mul R A).com
+pr₂ CoalgebraStru…
 -/
 lemma counit_mul (a b : A) : counit (R := R) (a * b) = counit a * counit b :=
   DFunLike.congr_fun (DFunLike.congr_fun mul_compr₂_counit a) b
-
-/--
-lemma `comul_mul` / 引理 `comul_mul`
-
-English:
-lemma comul_mul
-  given: (a b : A)
-  statement: comul (R := R) (a * b) = comul a * comul b
-  proof: DFunLike.congr_fun (DFunLike.congr_fun mul_compr₂_comul a) b
-
-中文:
-引理 comul_mul
-  条件: (a b : A)
-  结论: comul (R := R) (a * b) = comul a * comul b
-  证明: DFunLike.congr_fun (DFunLike.congr_fun mul_compr₂_comul a) b
-
-Depends on / 依赖: H.pos.ne
+/-
+**Bialgebra.comul_mul** 是 Mathlib 中的一个引理，位于命名空间 `Bialgebra`。
+形式化陈述：comul_mul (a b : A) : comul (R
+参数：a b : A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `Bialgebra.mul_compr₂_comul`：∀ {R : Type u} {A : Type v} {inst : CommSemi
+ring R} {inst_1 : Semiring A} [self : Bialgebra R A],   (LinearMap.mul R A).comp
+r₂ CoalgebraStru…
 -/
 lemma comul_mul (a b : A) : comul (R := R) (a * b) = comul a * comul b :=
   DFunLike.congr_fun (DFunLike.congr_fun mul_compr₂_comul a) b
@@ -155,34 +144,41 @@ attribute [simp] counit_one comul_one counit_mul comul_mul
 is an `R`-algebra with a coalgebra structure, then `Bialgebra.mk'`
 consumes proofs that the counit and comultiplication preserve
 the identity and multiplication, and produces a bialgebra
+/-
+**Bialgebra.on** 是 Mathlib 中的一个结构，位于命名空间 `Bialgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 structure on `A`. -/
 @[instance_reducible]
-/--
-Definition of `mk'` / `mk'` 的定义
+/-
+**Bialgebra.mk'** 是 Mathlib 中的一个定义，位于命名空间 `Bialgebra`。
+形式化陈述：mk' (R : Type u) (A : Type v) [CommSemiring R] [Semiring A] [Algebra R A] 
+[C : Coalgebra R A] (counit_one : C.counit 1 = 1) (counit_mul : forall {a b}, C.
+counit (a * b) = C.counit a * C.counit b) (comul_one : C.comul 1 = 1) (comul_mul
+ : forall {a b}, C.comul (a * b) = C.comul a * C.comul b) : Bialgebra R A where 
+counit_one
+参数：R : Type u；A : Type v；counit_one : C.counit 1 = 1；counit_mul : forall {a b}, 
+C.counit (a * b) = C.counit a * C.counit b；comul_one : C.comul 1 = 1；comul_mul :
+ forall {a b}, C.comul (a * b) = C.comul a * C.comul b。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
 
-English:
-definition mk'
-  signature: (R : Type u) (A : Type v) [CommSemiring R] [Semiring A]
-  body: counit_one
-  mul_compr₂_counit := by ext; exact counit_mul
-  comul_one := comul_one
-  mul_compr₂_comul := by ext; exact comul_mul
-
-中文:
-定义 mk'
-  签名: (R : 类型u) (A : 类型v) [交换半环 R] [半环 A]
-  定义体: counit_one
-  mul_compr₂_counit := by ext; exact counit_mul
-  comul_one := comul_one
-  mul_compr₂_comul := by ext; exact comul_mul
-
-Depends on / 依赖: counit_one
+--- 原说明 ---
+If `R` is a field (or even a commutative semiring) and `A`
+is an `R`-algebra with a coalgebra structure, then `Bialgebra.mk'`
+consumes proofs that the counit and comultiplication preserve
+the identity and multiplication, and produces a bialgebra
+structure on `A`.
 -/
 def mk' (R : Type u) (A : Type v) [CommSemiring R] [Semiring A]
     [Algebra R A] [C : Coalgebra R A] (counit_one : C.counit 1 = 1)
-    (counit_mul : forall {a b}, C.counit (a * b) = C.counit a * C.counit b)
+    (counit_mul : ∀ {a b}, C.counit (a * b) = C.counit a * C.counit b)
     (comul_one : C.comul 1 = 1)
-    (comul_mul : forall {a b}, C.comul (a * b) = C.comul a * C.comul b) :
+    (comul_mul : ∀ {a b}, C.comul (a * b) = C.comul a * C.comul b) :
     Bialgebra R A where
   counit_one := counit_one
   mul_compr₂_counit := by ext; exact counit_mul
@@ -193,180 +189,157 @@ variable (R A)
 
 /-- `counitAlgHom R A` is the counit of the `R`-bialgebra `A`, as an `R`-algebra map. -/
 @[simps!]
-/--
-Definition of `counitAlgHom` / `counitAlgHom` 的定义
+/-
+**Bialgebra.counitAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `Bialgebra`。
+形式化陈述：counitAlgHom : A ->ₐ[R] R
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Bialgebra.counit_one`：∀ {R : Type u} {A : Type v} {inst : CommSemiring R
+} {inst_1 : Semiring A} [self : Bialgebra R A],   CoalgebraStruct.counit 1 = 1
+· 使用引理 `Bialgebra.counit_mul`：counit_mul (a b : A) : counit (R
 
-English:
-definition counitAlgHom
-  signature: : A ->ₐ[R] R
-  body: .ofLinearMap counit counit_one counit_mul
-
-中文:
-定义 counitAlgHom
-  签名: : A ->ₐ[R] R
-  定义体: .ofLinearMap counit counit_one counit_mul
-
-Depends on / 依赖: counit, counit_mul, counit_one, ofLinearMap
+--- 原说明 ---
+`counitAlgHom R A` is the counit of the `R`-bialgebra `A`, as an `R`-algebra map
+.
 -/
-def counitAlgHom : A ->ₐ[R] R :=
+def counitAlgHom : A →ₐ[R] R :=
   .ofLinearMap counit counit_one counit_mul
 
 /-- `comulAlgHom R A` is the comultiplication of the `R`-bialgebra `A`, as an `R`-algebra map. -/
 @[simps!]
-/--
-Definition of `comulAlgHom` / `comulAlgHom` 的定义
+/-
+**Bialgebra.comulAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `Bialgebra`。
+形式化陈述：comulAlgHom : A ->ₐ[R] A otimes[R] A
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Bialgebra.comul_one`：∀ {R : Type u} {A : Type v} {inst : CommSemiring R}
+ {inst_1 : Semiring A} [self : Bialgebra R A],   CoalgebraStruct.comul 1 = 1
+· 使用引理 `Bialgebra.comul_mul`：comul_mul (a b : A) : comul (R
 
-English:
-definition comulAlgHom
-  signature: : A ->ₐ[R] A otimes[R] A
-  body: .ofLinearMap comul comul_one comul_mul
-
-中文:
-定义 comulAlgHom
-  签名: : A ->ₐ[R] A otimes[R] A
-  定义体: .ofLinearMap comul comul_one comul_mul
-
-Depends on / 依赖: comul_mul, comul_one, ofLinearMap
+--- 原说明 ---
+`comulAlgHom R A` is the comultiplication of the `R`-bialgebra `A`, as an `R`-al
+gebra map.
 -/
-def comulAlgHom : A ->ₐ[R] A otimes[R] A :=
+def comulAlgHom : A →ₐ[R] A ⊗[R] A :=
   .ofLinearMap comul comul_one comul_mul
 
 variable {R A}
-
-/--
-lemma `toLinearMap_counitAlgHom` / 引理 `toLinearMap_counitAlgHom`
-
-English:
-lemma toLinearMap_counitAlgHom
-  statement: (counitAlgHom R A).toLinearMap = counit
-  proof: rfl
-
-中文:
-引理 toLinearMap_counitAlgHom
-  结论: (counitAlgHom R A).toLinearMap = counit
-  证明: rfl
+/-
+**Bialgebra.toLinearMap_counitAlgHom** 是 Mathlib 中的一个定理，位于命名空间 `Bialgebra`。
+形式化陈述：∀ {R : Type u} {A : Type v} [inst : CommSemiring R] [inst_1 : Semiring A] 
+[inst_2 : Bialgebra R A],   (Bialgebra.counitAlgHom R A).toLinearMap = Coalgebra
+Struct.counit
+参数：Bialgebra.counitAlgHom R A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toLinearMap_counitAlgHom : (counitAlgHom R A).toLinearMap = counit := rfl
-/--
-lemma `toLinearMap_comulAlgHom` / 引理 `toLinearMap_comulAlgHom`
-
-English:
-lemma toLinearMap_comulAlgHom
-  statement: (comulAlgHom R A).toLinearMap = comul
-  proof: rfl
-
-中文:
-引理 toLinearMap_comulAlgHom
-  结论: (comulAlgHom R A).toLinearMap = comul
-  证明: rfl
+/-
+**Bialgebra.toLinearMap_comulAlgHom** 是 Mathlib 中的一个定理，位于命名空间 `Bialgebra`。
+形式化陈述：∀ {R : Type u} {A : Type v} [inst : CommSemiring R] [inst_1 : Semiring A] 
+[inst_2 : Bialgebra R A],   (Bialgebra.comulAlgHom R A).toLinearMap = CoalgebraS
+truct.comul
+参数：Bialgebra.comulAlgHom R A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma toLinearMap_comulAlgHom : (comulAlgHom R A).toLinearMap = comul := rfl
-
-/--
-lemma `counit_algebraMap` / 引理 `counit_algebraMap`
-
-English:
-lemma counit_algebraMap
-  given: (r : R)
-  statement: counit (R := R) (algebraMap R A r) = r
-  proof: (counitAlgHom R A).commutes r
-
-中文:
-引理 counit_algebraMap
-  条件: (r : R)
-  结论: counit (R := R) (algebraMap R A r) = r
-  证明: (counitAlgHom R A).commutes r
+/-
+**Bialgebra.counit_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `Bialgebra`。
+形式化陈述：∀ {R : Type u} {A : Type v} [inst : CommSemiring R] [inst_1 : Semiring A] 
+[inst_2 : Bialgebra R A] (r : R),   CoalgebraStruct.counit ((algebraMap R A) r) 
+= r
+参数：r : R；(algebraMap R A) r。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.commutes`：commutes (r : R) : φ (algebraMap R A r) = algebraMap R 
+B r
 -/
 @[simp] lemma counit_algebraMap (r : R) : counit (R := R) (algebraMap R A r) = r :=
   (counitAlgHom R A).commutes r
-
-/--
-lemma `comul_algebraMap` / 引理 `comul_algebraMap`
-
-English:
-lemma comul_algebraMap
-  given: (r : R)
-  proof: (comulAlgHom R A).commutes r
-
-中文:
-引理 comul_algebraMap
-  条件: (r : R)
-  证明: (comulAlgHom R A).commutes r
+/-
+**Bialgebra.comul_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `Bialgebra`。
+形式化陈述：∀ {R : Type u} {A : Type v} [inst : CommSemiring R] [inst_1 : Semiring A] 
+[inst_2 : Bialgebra R A] (r : R),   CoalgebraStruct.comul ((algebraMap R A) r) =
+ (algebraMap R (TensorProduct R A A)) r
+参数：r : R；(algebraMap R A) r；algebraMap R (TensorProduct R A A)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.commutes`：commutes (r : R) : φ (algebraMap R A r) = algebraMap R 
+B r
 -/
 @[simp] lemma comul_algebraMap (r : R) :
-    comul (R := R) (algebraMap R A r) = algebraMap R (A otimes[R] A) r :=
+    comul (R := R) (algebraMap R A r) = algebraMap R (A ⊗[R] A) r :=
   (comulAlgHom R A).commutes r
-
-/--
-lemma `counit_natCast` / 引理 `counit_natCast`
-
-English:
-lemma counit_natCast
-  given: (n : Nat)
-  statement: counit (R := R) (n : A) = n
-  proof: map_natCast (counitAlgHom R A) _
-
-中文:
-引理 counit_natCast
-  条件: (n : 自然数)
-  结论: counit (R := R) (n : A) = n
-  证明: map_natCast (counitAlgHom R A) _
+/-
+**Bialgebra.counit_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Bialgebra`。
+形式化陈述：∀ {R : Type u} {A : Type v} [inst : CommSemiring R] [inst_1 : Semiring A] 
+[inst_2 : Bialgebra R A] (n : ℕ),   CoalgebraStruct.counit ↑n = ↑n
+参数：n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
 -/
-@[simp] lemma counit_natCast (n : Nat) : counit (R := R) (n : A) = n :=
+@[simp] lemma counit_natCast (n : ℕ) : counit (R := R) (n : A) = n :=
   map_natCast (counitAlgHom R A) _
-
-/--
-lemma `comul_natCast` / 引理 `comul_natCast`
-
-English:
-lemma comul_natCast
-  given: (n : Nat)
-  statement: comul (R := R) (n : A) = n
-  proof: map_natCast (comulAlgHom R A) _
-
-中文:
-引理 comul_natCast
-  条件: (n : 自然数)
-  结论: comul (R := R) (n : A) = n
-  证明: map_natCast (comulAlgHom R A) _
+/-
+**Bialgebra.comul_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Bialgebra`。
+形式化陈述：∀ {R : Type u} {A : Type v} [inst : CommSemiring R] [inst_1 : Semiring A] 
+[inst_2 : Bialgebra R A] (n : ℕ),   CoalgebraStruct.comul ↑n = ↑n
+参数：n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
 -/
-@[simp] lemma comul_natCast (n : Nat) : comul (R := R) (n : A) = n :=
+@[simp] lemma comul_natCast (n : ℕ) : comul (R := R) (n : A) = n :=
   map_natCast (comulAlgHom R A) _
-
-/--
-lemma `counit_pow` / 引理 `counit_pow`
-
-English:
-lemma counit_pow
-  given: (a : A) (n : Nat)
-  statement: counit (R := R) (a ^ n) = counit a ^ n
-  proof: map_pow (counitAlgHom R A) a n
-
-中文:
-引理 counit_pow
-  条件: (a : A) (n : 自然数)
-  结论: counit (R := R) (a ^ n) = counit a ^ n
-  证明: map_pow (counitAlgHom R A) a n
+/-
+**Bialgebra.counit_pow** 是 Mathlib 中的一个定理，位于命名空间 `Bialgebra`。
+形式化陈述：∀ {R : Type u} {A : Type v} [inst : CommSemiring R] [inst_1 : Semiring A] 
+[inst_2 : Bialgebra R A] (a : A) (n : ℕ),   CoalgebraStruct.counit (a ^ n) = Coa
+lgebraStruct.counit a ^ n
+参数：a : A；n : ℕ；a ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
 -/
-@[simp] lemma counit_pow (a : A) (n : Nat) : counit (R := R) (a ^ n) = counit a ^ n :=
+@[simp] lemma counit_pow (a : A) (n : ℕ) : counit (R := R) (a ^ n) = counit a ^ n :=
   map_pow (counitAlgHom R A) a n
-
-/--
-lemma `comul_pow` / 引理 `comul_pow`
-
-English:
-lemma comul_pow
-  given: (a : A) (n : Nat)
-  statement: comul (R := R) (a ^ n) = comul a ^ n
-  proof: map_pow (comulAlgHom R A) a n
-
-中文:
-引理 comul_pow
-  条件: (a : A) (n : 自然数)
-  结论: comul (R := R) (a ^ n) = comul a ^ n
-  证明: map_pow (comulAlgHom R A) a n
+/-
+**Bialgebra.comul_pow** 是 Mathlib 中的一个定理，位于命名空间 `Bialgebra`。
+形式化陈述：∀ {R : Type u} {A : Type v} [inst : CommSemiring R] [inst_1 : Semiring A] 
+[inst_2 : Bialgebra R A] (a : A) (n : ℕ),   CoalgebraStruct.comul (a ^ n) = Coal
+gebraStruct.comul a ^ n
+参数：a : A；n : ℕ；a ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
 -/
-@[simp] lemma comul_pow (a : A) (n : Nat) : comul (R := R) (a ^ n) = comul a ^ n :=
+@[simp] lemma comul_pow (a : A) (n : ℕ) : comul (R := R) (a ^ n) = comul a ^ n :=
   map_pow (comulAlgHom R A) a n
 
 end Bialgebra
@@ -376,26 +349,15 @@ variable (R : Type u) [CommSemiring R]
 
 open Bialgebra
 
-/--
-Instance `toBialgebra` / 实例 `toBialgebra`
+/-- Every commutative (semi)ring is a bialgebra over itself -/
+/-
+**CommSemiring.toBialgebra** 是 Mathlib 中的一个实例，位于命名空间 `CommSemiring`。
+形式化陈述：toBialgebra : Bialgebra R R where mul_compr₂_counit
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance toBialgebra
-  signature: : Bialgebra R R where
-  body: by ext; simp
-  counit_one := rfl
-  mul_compr₂_comul := by ext; simp
-  comul_one := rfl
-
-中文:
-实例 toBialgebra
-  签名: : 双代数 R R where
-  定义体: by ext; simp
-  counit_one := rfl
-  mul_compr₂_comul := by ext; simp
-  comul_one := rfl
-
-Depends on / 依赖: comul_one, counit_one
+--- 原说明 ---
+Every commutative (semi)ring is a bialgebra over itself
 -/
 instance toBialgebra : Bialgebra R R where
   mul_compr₂_counit := by ext; simp
@@ -409,51 +371,43 @@ namespace Bialgebra
 
 variable {R A : Type*} [CommSemiring R] [Semiring A] [Algebra R A]
 
-/--
-lemma `counitAlgHom_self` / 引理 `counitAlgHom_self`
-
-English:
-lemma counitAlgHom_self
-  statement: counitAlgHom R R = .id R R
-  proof: rfl
-
-中文:
-引理 counitAlgHom_self
-  结论: counitAlgHom R R = .id R R
-  证明: rfl
+/-
+**Bialgebra.counitAlgHom_self** 是 Mathlib 中的一个定理，位于命名空间 `Bialgebra`。
+形式化陈述：∀ {R : Type u_1} [inst : CommSemiring R], Bialgebra.counitAlgHom R R = Alg
+Hom.id R R
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma counitAlgHom_self : counitAlgHom R R = .id R R := rfl
 
-/--
-Definition of `ofAlgHom` / `ofAlgHom` 的定义
+/-- If `R` is a commutative semiring and `A` is an `R`-algebra,
+then `Bialgebra.ofAlgHom` consumes the counit and comultiplication
+as algebra homomorphisms that satisfy the coalgebra axioms to define
+a bialgebra structure on `A`. -/
+/-
+**Bialgebra.ofAlgHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `Bialgebra`。
+形式化陈述：ofAlgHom (comul : A ->ₐ[R] (A otimes[R] A)) (counit : A ->ₐ[R] R) (h_coass
+oc : (Algebra.TensorProduct.assoc R R R A A A).toAlgHom.comp ((Algebra.TensorPro
+duct.map comul (.id R A)).comp comul) = (Algebra.TensorProduct.map (.id R A) com
+ul).comp comul) (h_rTensor : (Algebra.TensorProduct.map counit (.id R A)).comp c
+omul = (Algebra.TensorProduct.lid R A).symm) (h_lTensor : (Algebra.TensorProduct
+.map (.id R A) counit).comp comul = (Algebra.TensorProduct.rid R R A).symm) : Bi
+algebra R A
+参数：comul : A ->ₐ[R] (A otimes[R] A)；counit : A ->ₐ[R] R；h_coassoc : (Algebra.Ten
+sorProduct.assoc R R R A A A).toAlgHom.comp ((Algebra.TensorProduct.map comul (.
+id R A)).comp comul) = (Algebra.TensorProduct.map (.id R A) comul).comp comul；h_
+rTensor : (Algebra.TensorProduct.map counit (.id R A)).comp comul = (Algebra.Ten
+sorProduct.lid R A).symm；h_lTensor : (Algebra.TensorProduct.map (.id R A) counit
+).comp comul = (Algebra.TensorProduct.rid R R A).symm。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofAlgHom
-  signature: (comul : A ->ₐ[R] (A otimes[R] A)) (counit : A ->ₐ[R] R)
-  body: letI : Coalgebra R A := {
-    comul := comul
-    counit := counit
-    coassoc := congr(($h_coassoc).toLinearMap)
-    rTensor_counit_comp_comul := congr(($h_rTensor).toLinearMap)
-    lTensor_counit_comp_comul := congr(($h_lTensor).toLinearMap)
-  }
-  .mk' _ _ (map_one counit) (map_mul counit _ _) (map_one comul) (map_mul comul _ _)
-
-中文:
-缩写 ofAlgHom
-  签名: (comul : A ->ₐ[R] (A otimes[R] A)) (counit : A ->ₐ[R] R)
-  定义体: letI : Coalgebra R A := {
-    comul := comul
-    counit := counit
-    coassoc := congr(($h_coassoc).toLinearMap)
-    rTensor_counit_comp_comul := congr(($h_rTensor).toLinearMap)
-    lTensor_counit_comp_comul := congr(($h_lTensor).toLinearMap)
-  }
-  .mk' _ _ (map_one counit) (map_mul counit _ _) (map_one comul) (map_mul comul _ _)
-
-Depends on / 依赖: Coalgebra, coassoc, counit, h_coassoc, h_lTensor, h_rTensor, lTensor_counit_comp_comul, map_mul, map_one, rTensor_counit_comp_comul, toLinearMap
+--- 原说明 ---
+If `R` is a commutative semiring and `A` is an `R`-algebra,
+then `Bialgebra.ofAlgHom` consumes the counit and comultiplication
+as algebra homomorphisms that satisfy the coalgebra axioms to define
+a bialgebra structure on `A`.
 -/
-abbrev ofAlgHom (comul : A ->ₐ[R] (A otimes[R] A)) (counit : A ->ₐ[R] R)
+abbrev ofAlgHom (comul : A →ₐ[R] (A ⊗[R] A)) (counit : A →ₐ[R] R)
     (h_coassoc : (Algebra.TensorProduct.assoc R R R A A A).toAlgHom.comp
       ((Algebra.TensorProduct.map comul (.id R A)).comp comul)
       = (Algebra.TensorProduct.map (.id R A) comul).comp comul)
@@ -477,64 +431,49 @@ namespace Bialgebra
 variable {R A : Type*} [CommSemiring R] [Semiring A] [Bialgebra R A]
 
 variable (A) in
-/--
-lemma `algebraMap_injective` / 引理 `algebraMap_injective`
-
-English:
-lemma algebraMap_injective
-  statement: Injective (algebraMap R A)
-  proof: RightInverse.injective counit_algebraMap
-
-中文:
-引理 algebraMap_injective
-  结论: 单射 (algebraMap R A)
-  证明: RightInverse.injective counit_algebraMap
-
-Depends on / 依赖: RightInverse, RightInverse.injective, counit_algebraMap, injective
+/-
+**Bialgebra.algebraMap_injective** 是 Mathlib 中的一个引理，位于命名空间 `Bialgebra`。
+形式化陈述：algebraMap_injective : Injective (algebraMap R A)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.RightInverse.injective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α 
+→ β} {g : β → α}, Function.RightInverse f g → Function.Injective f
+· 使用定理 `Bialgebra.counit_algebraMap`：∀ {R : Type u} {A : Type v} [inst : CommSem
+iring R] [inst_1 : Semiring A] [inst_2 : Bialgebra R A] (r : R),   CoalgebraStru
+ct.counit ((algeb…
 -/
 lemma algebraMap_injective : Injective (algebraMap R A) := RightInverse.injective counit_algebraMap
-
-/--
-lemma `counit_surjective` / 引理 `counit_surjective`
-
-English:
-lemma counit_surjective
-  statement: Surjective (Coalgebra.counit : A ->ₗ[R] R)
-  proof: RightInverse.surjective counit_algebraMap
-
-include R in
-
-中文:
-引理 counit_surjective
-  结论: 满射 (余algebra.counit : A ->ₗ[R] R)
-  证明: RightInverse.surjective counit_algebraMap
-
-include R in
-
-Depends on / 依赖: RightInverse, RightInverse.surjective, counit_algebraMap, surjective
+/-
+**Bialgebra.counit_surjective** 是 Mathlib 中的一个引理，位于命名空间 `Bialgebra`。
+形式化陈述：counit_surjective : Surjective (Coalgebra.counit : A ->ₗ[R] R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.RightInverse.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α
+ → β} {g : β → α}, Function.RightInverse g f → Function.Surjective f
+· 使用定理 `Bialgebra.counit_algebraMap`：∀ {R : Type u} {A : Type v} [inst : CommSem
+iring R] [inst_1 : Semiring A] [inst_2 : Bialgebra R A] (r : R),   CoalgebraStru
+ct.counit ((algeb…
 -/
-lemma counit_surjective : Surjective (Coalgebra.counit : A ->ₗ[R] R) :=
+lemma counit_surjective : Surjective (Coalgebra.counit : A →ₗ[R] R) :=
   RightInverse.surjective counit_algebraMap
 
 include R in
 variable (R) in
-/--
-lemma `nontrivial` / 引理 `nontrivial`
+/-- A bialgebra over a nontrivial ring is nontrivial. -/
+/-
+**Bialgebra.nontrivial** 是 Mathlib 中的一个引理，位于命名空间 `Bialgebra`。
+形式化陈述：nontrivial [Nontrivial R] : Nontrivial A
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.nontrivial`：∀ {α : Type u_1} {β : Type u_2} [Nontrivi
+al α] {f : α → β}, Function.Injective f → Nontrivial β
+· 使用引理 `Bialgebra.algebraMap_injective`：algebraMap_injective : Injective (algebr
+aMap R A)
 
-English:
-lemma nontrivial
-  given: [Nontrivial R]
-  statement: Nontrivial A
-  proof: (algebraMap_injective (R := R) _).nontrivial
-
-中文:
-引理 nontrivial
-  条件: [非平凡 R]
-  结论: 非平凡 A
-  证明: (algebraMap_injective (R := R) _).nontrivial
-
-Depends on / 依赖: algebraMap_injective, nontrivial
+--- 原说明 ---
+A bialgebra over a nontrivial ring is nontrivial.
 -/
 lemma nontrivial [Nontrivial R] : Nontrivial A := (algebraMap_injective (R := R) _).nontrivial
 
 end Bialgebra
+

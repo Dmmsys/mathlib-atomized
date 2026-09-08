@@ -46,20 +46,10 @@ equivalent to `EssSurj (uliftFunctor : Type v ⥤ Type max u v)`.
 -- output (since there are no input parameters at all).
 -- See Note [universe output parameters and typeclass caching].
 @[univ_out_params, pp_with_univ, mk_iff]
-/--
-Definition of `UnivLE` / `UnivLE` 的定义
-
-English:
-class UnivLE
-  parameters: : Prop where
-  axioms and operations (1):
-    - small((α : Type u)) : Small.{v} α
-
-中文:
-类 UnivLE
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - small((α : 类型u)) : Small.{v} α
+/-
+**UnivLE** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 class UnivLE : Prop where
   small (α : Type u) : Small.{v} α
@@ -67,145 +57,133 @@ class UnivLE : Prop where
 attribute [instance] UnivLE.small
 
 
-/--
-theorem `univLE_max` / 定理 `univLE_max`
+/- This is useless as an instance due to https://github.com/leanprover/lean4/issues/2297 -/
+/-
+**univLE_max** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：univLE_max : UnivLE.{u, max u v} where small α
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `small_max`：small_max (α : Type v) : Small.{max w v} α
 
-English:
-theorem univLE_max
-  statement: UnivLE.{u, max u v} where small α
-  proof: small_max.{v} α
-
-中文:
-定理 univLE_max
-  结论: UnivLE.{u, 最大值 u v} where small α
-  证明: small_max.{v} α
-
-Depends on / 依赖: small_max
+--- 原说明 ---
+This is useless as an instance due to https://github.com/leanprover/lean4/issues
+/2297
 -/
 theorem univLE_max : UnivLE.{u, max u v} where small α := small_max.{v} α
-
-/--
-theorem `Small.trans_univLE` / 定理 `Small.trans_univLE`
-
-English:
-theorem Small.trans_univLE
-  given: (α : Type w) [hα : Small.{u} α] [h : UnivLE.{u, v}]
-  proof: let ⟨β, ⟨f⟩⟩ := hα.equiv_small
-  let ⟨_, ⟨g⟩⟩ := (h.small β).equiv_small
-  ⟨_, ⟨f.trans g⟩⟩
-
-中文:
-定理 Small.trans_univLE
-  条件: (α : 类型 w) [hα : Small.{u} α] [h : UnivLE.{u, v}]
-  证明: let ⟨β, ⟨f⟩⟩ := hα.equiv_small
-  let ⟨_, ⟨g⟩⟩ := (h.small β).equiv_small
-  ⟨_, ⟨f.trans g⟩⟩
-
-Depends on / 依赖: equiv_small, f.trans, h.small
+/-
+**Small.trans_univLE** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Small.trans_univLE (α : Type w) [hα : Small.{u} α] [h : UnivLE.{u, v}] : S
+mall.{v} α
+参数：α : Type w。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Small.equiv_small`：∀ {α : Type v} [self : Small.{w, v} α], ∃ S, Nonempty
+ (α ≃ S)
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 -/
 theorem Small.trans_univLE (α : Type w) [hα : Small.{u} α] [h : UnivLE.{u, v}] :
     Small.{v} α :=
   let ⟨β, ⟨f⟩⟩ := hα.equiv_small
   let ⟨_, ⟨g⟩⟩ := (h.small β).equiv_small
   ⟨_, ⟨f.trans g⟩⟩
-
-/--
-theorem `UnivLE.trans` / 定理 `UnivLE.trans`
-
-English:
-theorem UnivLE.trans
-  given: [UnivLE.{u, v}] [UnivLE.{v, w}]
-  statement: UnivLE.{u, w} where
-  proof: Small.trans_univLE α
-
-中文:
-定理 UnivLE.trans
-  条件: [UnivLE.{u, v}] [UnivLE.{v, w}]
-  结论: UnivLE.{u, w} where
-  证明: Small.trans_univLE α
-
-Depends on / 依赖: Small.trans_univLE, trans_univLE
+/-
+**UnivLE.trans** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：UnivLE.trans [UnivLE.{u, v}] [UnivLE.{v, w}] : UnivLE.{u, w} where small α
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Small.trans_univLE`：Small.trans_univLE (α : Type w) [hα : Small.{u} α] [
+h : UnivLE.{u, v}] : Small.{v} α
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
 -/
 theorem UnivLE.trans [UnivLE.{u, v}] [UnivLE.{v, w}] : UnivLE.{u, w} where
   small α := Small.trans_univLE α
-
-/--
-Instance `UnivLE.self` / 实例 `UnivLE.self`
-
-English:
-instance UnivLE.self
-  signature: : UnivLE.{u, u}
-  body: ⟨inferInstance⟩
-
-中文:
-实例 UnivLE.self
-  签名: : UnivLE.{u, u}
-  定义体: ⟨inferInstance⟩
+/-
+**UnivLE.self** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：UnivLE.self : UnivLE.{u, u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance UnivLE.self : UnivLE.{u, u} := ⟨inferInstance⟩
-/--
-Instance `UnivLE.zero` / 实例 `UnivLE.zero`
-
-English:
-instance UnivLE.zero
-  signature: : UnivLE.{0, u}
-  body: ⟨inferInstance⟩
-
-中文:
-实例 UnivLE.zero
-  签名: : UnivLE.{0, u}
-  定义体: ⟨inferInstance⟩
+/-
+**UnivLE.zero** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：UnivLE.zero : UnivLE.{0, u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance UnivLE.zero : UnivLE.{0, u} := ⟨inferInstance⟩
 
-/--
-theorem `UnivLE.succ` / 定理 `UnivLE.succ`
+/-- This is redundant as an instance given the below. -/
+/-
+**UnivLE.succ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：UnivLE.succ [UnivLE.{u, v}] : UnivLE.{u, v + 1}
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UnivLE.trans`：UnivLE.trans [UnivLE.{u, v}] [UnivLE.{v, w}] : UnivLE.{u, 
+w} where small α
+· 使用定理 `small_succ`：∀ (α : Type v), Small.{v + 1, v} α
 
-English:
-theorem UnivLE.succ
-  given: [UnivLE.{u, v}]
-  statement: UnivLE.{u, v + 1}
-  proof: @UnivLE.trans _ ⟨inferInstance⟩
-
-中文:
-定理 UnivLE.succ
-  条件: [UnivLE.{u, v}]
-  结论: UnivLE.{u, v + 1}
-  证明: @UnivLE.trans _ ⟨inferInstance⟩
-
-Depends on / 依赖: UnivLE, UnivLE.trans
+--- 原说明 ---
+This is redundant as an instance given the below.
 -/
 theorem UnivLE.succ [UnivLE.{u, v}] : UnivLE.{u, v + 1} := @UnivLE.trans _ ⟨inferInstance⟩
 
-/--
-Instance `univLE_of_max` / 实例 `univLE_of_max`
+/-- This is the crucial instance that subsumes `univLE_max`. -/
+/-
+**univLE_of_max** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：univLE_of_max [UnivLE.{max u v, v}] : UnivLE.{u, v}
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `UnivLE.trans`：UnivLE.trans [UnivLE.{u, v}] [UnivLE.{v, w}] : UnivLE.{u, 
+w} where small α
+· 使用定理 `univLE_max`：univLE_max : UnivLE.{u, max u v} where small α
 
-English:
-instance univLE_of_max
-  signature: [UnivLE.{max u v, v}]
-  body: @UnivLE.trans univLE_max ‹_›
-
-中文:
-实例 univLE_of_max
-  签名: [UnivLE.{最大值 u v, v}]
-  定义体: @UnivLE.trans univLE_max ‹_›
-
-Depends on / 依赖: UnivLE, UnivLE.trans, univLE_max
+--- 原说明 ---
+This is the crucial instance that subsumes `univLE_max`.
 -/
 instance univLE_of_max [UnivLE.{max u v, v}] : UnivLE.{u, v} := @UnivLE.trans univLE_max ‹_›
 
 -- order doesn't matter
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : UnivLE.{v, max v u} := inferInstance
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : UnivLE.{v, max u v} := inferInstance
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : UnivLE.{u, max v u} := inferInstance
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : UnivLE.{u, max u v} := inferInstance
 -- `succ` is implied
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : UnivLE.{u, u + 1} := inferInstance
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : UnivLE.{2, 5} := inferInstance
 
 /- When `small_Pi` from `Mathlib/Logic/Small/Basic.lean` is imported, we have : -/
 -- example (α : Type u) (β : Type v) [UnivLE.{u, v}] : Small.{v} (α → β) := inferInstance
 
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : ¬UnivLE.{u + 1, u} := by
   simp only [univLE_iff, small_iff, not_forall, not_exists]
-  exact ⟨Type u, fun α ⟨f⟩ => Function.not_surjective_Type.{u, u} f.symm f.symm.surjective⟩
+  exact ⟨Type u, fun α => fun ⟨f⟩ => Function.not_surjective_Type.{u, u} f.symm f.symm.surjective⟩

@@ -18,721 +18,561 @@ namespace Nat
 /- We don't want to import the algebraic hierarchy in this file. -/
 assert_not_exists Monoid
 
-variable {m n a : Nat}
+variable {m n a : ℕ}
 
+/-!
+### `sqrt`
 
-/--
-lemma `sqrt_le'` / 引理 `sqrt_le'`
-
-English:
-lemma sqrt_le'
-  given: (n : Nat)
-  statement: sqrt n ^ 2 <= n
-  proof: by simpa [Nat.pow_two] using sqrt_le n
-
-中文:
-引理 sqrt_le'
-  条件: (n : 自然数)
-  结论: sqrt n ^ 2 <= n
-  证明: by simpa [Nat.pow_two] using sqrt_le n
-
-Depends on / 依赖: Nat.pow_two, pow_two, sqrt_le
+See [Wikipedia, *Methods of computing square roots*]
+(https://en.wikipedia.org/wiki/Methods_of_computing_square_roots#Binary_numeral_system_(base_2)).
 -/
-lemma sqrt_le' (n : Nat) : sqrt n ^ 2 <= n := by simpa [Nat.pow_two] using sqrt_le n
 
-/--
-lemma `lt_succ_sqrt'` / 引理 `lt_succ_sqrt'`
+/-
+**Nat.sqrt_le'** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：sqrt_le' (n : Nat) : sqrt n ^ 2 <= n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.pow_two`：∀ (a : ℕ), a ^ 2 = a * a
+· 使用定理 `Nat.sqrt_le`：∀ (n : ℕ), n.sqrt * n.sqrt ≤ n
 
-English:
-lemma lt_succ_sqrt'
-  given: (n : Nat)
-  statement: n < succ (sqrt n) ^ 2
-  proof: by simpa [Nat.pow_two] using lt_succ_sqrt n
+--- 原说明 ---
+### `sqrt`
 
-中文:
-引理 lt_succ_sqrt'
-  条件: (n : 自然数)
-  结论: n < succ (sqrt n) ^ 2
-  证明: by simpa [Nat.pow_two] using lt_succ_sqrt n
-
-Depends on / 依赖: Nat.pow_two, lt_succ_sqrt, pow_two
+See [Wikipedia, *Methods of computing square roots*]
+(https://en.wikipedia.org/wiki/Methods_of_computing_square_roots#Binary_numeral_
+system_(base_2)).
 -/
-lemma lt_succ_sqrt' (n : Nat) : n < succ (sqrt n) ^ 2 := by simpa [Nat.pow_two] using lt_succ_sqrt n
-
-/--
-lemma `sqrt_le_add` / 引理 `sqrt_le_add`
-
-English:
-lemma sqrt_le_add
-  given: (n : Nat)
-  statement: n <= sqrt n * sqrt n + sqrt n + sqrt n
-  proof: by
+lemma sqrt_le' (n : ℕ) : sqrt n ^ 2 ≤ n := by simpa [Nat.pow_two] using sqrt_le n
+/-
+**Nat.lt_succ_sqrt'** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：lt_succ_sqrt' (n : Nat) : n < succ (sqrt n) ^ 2
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.pow_two`：∀ (a : ℕ), a ^ 2 = a * a
+· 使用定理 `Nat.lt_succ_sqrt`：∀ (n : ℕ), n < n.sqrt.succ * n.sqrt.succ
+-/
+lemma lt_succ_sqrt' (n : ℕ) : n < succ (sqrt n) ^ 2 := by simpa [Nat.pow_two] using lt_succ_sqrt n
+/-
+**Nat.sqrt_le_add** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：sqrt_le_add (n : Nat) : n <= sqrt n * sqrt n + sqrt n + sqrt n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.succ_mul`：∀ (n m : ℕ), n.succ * m = n * m + m
+· 使用定理 `Nat.le_of_lt_succ`：∀ {m n : ℕ}, m < n.succ → m ≤ n
+· 使用定理 `Nat.lt_succ_sqrt`：∀ (n : ℕ), n < n.sqrt.succ * n.sqrt.succ
+-/
+lemma sqrt_le_add (n : ℕ) : n ≤ sqrt n * sqrt n + sqrt n + sqrt n := by
   rw [← succ_mul]; exact le_of_lt_succ (lt_succ_sqrt n)
-
-中文:
-引理 sqrt_le_add
-  条件: (n : 自然数)
-  结论: n <= sqrt n * sqrt n + sqrt n + sqrt n
-  证明: by
-  rw [← succ_mul]; exact le_of_lt_succ (lt_succ_sqrt n)
-
-Depends on / 依赖: le_of_lt_succ, lt_succ_sqrt, succ_mul
+/-
+**Nat.le_sqrt** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：le_sqrt : m <= sqrt n ↔ m * m <= n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Nat.mul_self_le_mul_self`：∀ {m n : ℕ}, m ≤ n → m * m ≤ n * n
+· 使用定理 `Nat.sqrt_le`：∀ (n : ℕ), n.sqrt * n.sqrt ≤ n
+· 使用定理 `Nat.le_of_lt_succ`：∀ {m n : ℕ}, m < n.succ → m ≤ n
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.mul_self_lt_mul_self_iff`：∀ {m n : ℕ}, m * m < n * n ↔ m < n
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `Nat.lt_succ_sqrt`：∀ (n : ℕ), n < n.sqrt.succ * n.sqrt.succ
 -/
-lemma sqrt_le_add (n : Nat) : n <= sqrt n * sqrt n + sqrt n + sqrt n := by
-  rw [← succ_mul]; exact le_of_lt_succ (lt_succ_sqrt n)
-
-/--
-lemma `le_sqrt` / 引理 `le_sqrt`
-
-English:
-lemma le_sqrt
-  statement: m <= sqrt n ↔ m * m <= n
-  proof: ⟨fun h => le_trans (mul_self_le_mul_self h) (sqrt_le n),
-fun h => le_of_lt_succ Nat.mul_self_lt_mul_self_iff.1 lt_of_le_of_lt h (lt_succ_sqrt n)⟩
-
-中文:
-引理 le_sqrt
-  结论: m <= sqrt n ↔ m * m <= n
-  证明: ⟨fun h => le_trans (mul_self_le_mul_self h) (sqrt_le n),
-fun h => le_of_lt_succ Nat.mul_self_lt_mul_self_iff.1 lt_of_le_of_lt h (lt_succ_sqrt n)⟩
-
-Depends on / 依赖: Nat.mul_self_lt_mul_self_iff, le_of_lt_succ, le_trans, lt_of_le_of_lt, lt_succ_sqrt, mul_self_le_mul_self, mul_self_lt_mul_self_iff, sqrt_le
+lemma le_sqrt : m ≤ sqrt n ↔ m * m ≤ n :=
+  ⟨fun h ↦ le_trans (mul_self_le_mul_self h) (sqrt_le n),
+    fun h ↦ le_of_lt_succ <| Nat.mul_self_lt_mul_self_iff.1 <| lt_of_le_of_lt h (lt_succ_sqrt n)⟩
+/-
+**Nat.le_sqrt'** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：le_sqrt' : m <= sqrt n ↔ m ^ 2 <= n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.pow_two`：∀ (a : ℕ), a ^ 2 = a * a
+· 使用引理 `Nat.le_sqrt`：le_sqrt : m <= sqrt n ↔ m * m <= n
 -/
-lemma le_sqrt : m <= sqrt n ↔ m * m <= n :=
-  ⟨fun h => le_trans (mul_self_le_mul_self h) (sqrt_le n),
-fun h => le_of_lt_succ Nat.mul_self_lt_mul_self_iff.1 lt_of_le_of_lt h (lt_succ_sqrt n)⟩
-
-/--
-lemma `le_sqrt'` / 引理 `le_sqrt'`
-
-English:
-lemma le_sqrt'
-  statement: m <= sqrt n ↔ m ^ 2 <= n
-  proof: by simpa only [Nat.pow_two] using le_sqrt
-
-中文:
-引理 le_sqrt'
-  结论: m <= sqrt n ↔ m ^ 2 <= n
-  证明: by simpa only [Nat.pow_two] using le_sqrt
-
-Depends on / 依赖: Nat.pow_two, le_sqrt, pow_two
--/
-lemma le_sqrt' : m <= sqrt n ↔ m ^ 2 <= n := by simpa only [Nat.pow_two] using le_sqrt
-
-/--
-lemma `sqrt_lt` / 引理 `sqrt_lt`
-
-English:
-lemma sqrt_lt
-  statement: sqrt m < n ↔ m < n * n
-  proof: by simp only [← not_le, le_sqrt]
-
-中文:
-引理 sqrt_lt
-  结论: sqrt m < n ↔ m < n * n
-  证明: by simp only [← not_le, le_sqrt]
-
-Depends on / 依赖: le_sqrt, not_le
+lemma le_sqrt' : m ≤ sqrt n ↔ m ^ 2 ≤ n := by simpa only [Nat.pow_two] using le_sqrt
+/-
+**Nat.sqrt_lt** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：sqrt_lt : sqrt m < n ↔ m < n * n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma sqrt_lt : sqrt m < n ↔ m < n * n := by simp only [← not_le, le_sqrt]
-
-/--
-lemma `sqrt_lt'` / 引理 `sqrt_lt'`
-
-English:
-lemma sqrt_lt'
-  statement: sqrt m < n ↔ m < n ^ 2
-  proof: by simp only [← not_le, le_sqrt']
-
-中文:
-引理 sqrt_lt'
-  结论: sqrt m < n ↔ m < n ^ 2
-  证明: by simp only [← not_le, le_sqrt']
-
-Depends on / 依赖: le_sqrt, not_le
+/-
+**Nat.sqrt_lt'** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：sqrt_lt' : sqrt m < n ↔ m < n ^ 2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma sqrt_lt' : sqrt m < n ↔ m < n ^ 2 := by simp only [← not_le, le_sqrt']
-
-/--
-lemma `sqrt_le_self` / 引理 `sqrt_le_self`
-
-English:
-lemma sqrt_le_self
-  given: (n : Nat)
-  statement: sqrt n <= n
-  proof: le_trans (le_mul_self _) (sqrt_le n)
+/-
+**Nat.sqrt_le_self** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：sqrt_le_self (n : Nat) : sqrt n <= n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Nat.le_mul_self`：∀ (n : ℕ), n ≤ n * n
+· 使用定理 `Nat.sqrt_le`：∀ (n : ℕ), n.sqrt * n.sqrt ≤ n
+-/
+lemma sqrt_le_self (n : ℕ) : sqrt n ≤ n := le_trans (le_mul_self _) (sqrt_le n)
 
 @[gcongr]
-
-中文:
-引理 sqrt_le_self
-  条件: (n : 自然数)
-  结论: sqrt n <= n
-  证明: le_trans (le_mul_self _) (sqrt_le n)
-
-@[gcongr]
-
-Depends on / 依赖: le_mul_self, le_trans, sqrt_le
+/-
+**Nat.sqrt_le_sqrt** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：sqrt_le_sqrt (h : m <= n) : sqrt m <= sqrt n
+参数：h : m <= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Nat.le_sqrt`：le_sqrt : m <= sqrt n ↔ m * m <= n
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Nat.sqrt_le`：∀ (n : ℕ), n.sqrt * n.sqrt ≤ n
 -/
-lemma sqrt_le_self (n : Nat) : sqrt n <= n := le_trans (le_mul_self _) (sqrt_le n)
-
-@[gcongr]
-/--
-lemma `sqrt_le_sqrt` / 引理 `sqrt_le_sqrt`
-
-English:
-lemma sqrt_le_sqrt
-  given: (h : m <= n)
-  statement: sqrt m <= sqrt n
-  proof: le_sqrt.2 (le_trans (sqrt_le _) h)
-
-中文:
-引理 sqrt_le_sqrt
-  条件: (h : m <= n)
-  结论: sqrt m <= sqrt n
-  证明: le_sqrt.2 (le_trans (sqrt_le _) h)
-
-Depends on / 依赖: le_sqrt, le_trans, sqrt_le
+lemma sqrt_le_sqrt (h : m ≤ n) : sqrt m ≤ sqrt n := le_sqrt.2 (le_trans (sqrt_le _) h)
+/-
+**Nat.eq_sqrt** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：eq_sqrt : a = sqrt n ↔ a * a <= n ∧ n < (a + 1) * (a + 1)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.sqrt_le`：∀ (n : ℕ), n.sqrt * n.sqrt ≤ n
+· 使用定理 `Nat.lt_succ_sqrt`：∀ (n : ℕ), n < n.sqrt.succ * n.sqrt.succ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Nat.le_sqrt`：le_sqrt : m <= sqrt n ↔ m * m <= n
+· 使用定理 `Nat.le_of_lt_succ`：∀ {m n : ℕ}, m < n.succ → m ≤ n
+· 使用引理 `Nat.sqrt_lt`：sqrt_lt : sqrt m < n ↔ m < n * n
 -/
-lemma sqrt_le_sqrt (h : m <= n) : sqrt m <= sqrt n := le_sqrt.2 (le_trans (sqrt_le _) h)
-
-/--
-lemma `eq_sqrt` / 引理 `eq_sqrt`
-
-English:
-lemma eq_sqrt
-  statement: a = sqrt n ↔ a * a <= n ∧ n < (a + 1) * (a + 1)
-  proof: ⟨fun e => e.symm ▸ ⟨sqrt_le n, lt_succ_sqrt n⟩,
-   fun ⟨h₁, h₂⟩ => le_antisymm (le_sqrt.2 h₁) (le_of_lt_succ <| sqrt_lt.2 h₂)⟩
-
-中文:
-引理 eq_sqrt
-  结论: a = sqrt n ↔ a * a <= n ∧ n < (a + 1) * (a + 1)
-  证明: ⟨fun e => e.symm ▸ ⟨sqrt_le n, lt_succ_sqrt n⟩,
-   fun ⟨h₁, h₂⟩ => le_antisymm (le_sqrt.2 h₁) (le_of_lt_succ <| sqrt_lt.2 h₂)⟩
-
-Depends on / 依赖: e.symm, le_antisymm, le_of_lt_succ, le_sqrt, lt_succ_sqrt, sqrt_le, sqrt_lt
+lemma eq_sqrt : a = sqrt n ↔ a * a ≤ n ∧ n < (a + 1) * (a + 1) :=
+  ⟨fun e ↦ e.symm ▸ ⟨sqrt_le n, lt_succ_sqrt n⟩,
+   fun ⟨h₁, h₂⟩ ↦ le_antisymm (le_sqrt.2 h₁) (le_of_lt_succ <| sqrt_lt.2 h₂)⟩
+/-
+**Nat.eq_sqrt'** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：eq_sqrt' : a = sqrt n ↔ a ^ 2 <= n ∧ n < (a + 1) ^ 2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.pow_two`：∀ (a : ℕ), a ^ 2 = a * a
+· 使用引理 `Nat.eq_sqrt`：eq_sqrt : a = sqrt n ↔ a * a <= n ∧ n < (a + 1) * (a + 1)
 -/
-lemma eq_sqrt : a = sqrt n ↔ a * a <= n ∧ n < (a + 1) * (a + 1) :=
-  ⟨fun e => e.symm ▸ ⟨sqrt_le n, lt_succ_sqrt n⟩,
-   fun ⟨h₁, h₂⟩ => le_antisymm (le_sqrt.2 h₁) (le_of_lt_succ <| sqrt_lt.2 h₂)⟩
-
-/--
-lemma `eq_sqrt'` / 引理 `eq_sqrt'`
-
-English:
-lemma eq_sqrt'
-  statement: a = sqrt n ↔ a ^ 2 <= n ∧ n < (a + 1) ^ 2
-  proof: by
+lemma eq_sqrt' : a = sqrt n ↔ a ^ 2 ≤ n ∧ n < (a + 1) ^ 2 := by
   simpa only [Nat.pow_two] using eq_sqrt
-
-中文:
-引理 eq_sqrt'
-  结论: a = sqrt n ↔ a ^ 2 <= n ∧ n < (a + 1) ^ 2
-  证明: by
-  simpa only [Nat.pow_two] using eq_sqrt
-
-Depends on / 依赖: Nat.pow_two, eq_sqrt, pow_two
+/-
+**Nat.le_three_of_sqrt_eq_one** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：le_three_of_sqrt_eq_one (h : sqrt n = 1) : n <= 3
+参数：h : sqrt n = 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.le_of_lt_succ`：∀ {m n : ℕ}, m < n.succ → m ≤ n
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Nat.sqrt_lt`：sqrt_lt : sqrt m < n ↔ m < n * n
 -/
-lemma eq_sqrt' : a = sqrt n ↔ a ^ 2 <= n ∧ n < (a + 1) ^ 2 := by
-  simpa only [Nat.pow_two] using eq_sqrt
-
-/--
-lemma `le_three_of_sqrt_eq_one` / 引理 `le_three_of_sqrt_eq_one`
-
-English:
-lemma le_three_of_sqrt_eq_one
-  given: (h : sqrt n = 1)
-  statement: n <= 3
-  proof: le_of_lt_succ (@sqrt_lt n 2).1 by grind
-
-中文:
-引理 le_three_of_sqrt_eq_one
-  条件: (h : sqrt n = 1)
-  结论: n <= 3
-  证明: le_of_lt_succ (@sqrt_lt n 2).1 by grind
-
-Depends on / 依赖: le_of_lt_succ, sqrt_lt
--/
-lemma le_three_of_sqrt_eq_one (h : sqrt n = 1) : n <= 3 :=
-le_of_lt_succ (@sqrt_lt n 2).1 by grind
-
-/--
-lemma `sqrt_lt_self` / 引理 `sqrt_lt_self`
-
-English:
-lemma sqrt_lt_self
-  given: (h : 1 < n)
-  statement: sqrt n < n
-  proof: sqrt_lt.2 by have := Nat.mul_lt_mul_of_pos_left h (lt_of_succ_lt h); grind
-
-@[grind =]
-
-中文:
-引理 sqrt_lt_self
-  条件: (h : 1 < n)
-  结论: sqrt n < n
-  证明: sqrt_lt.2 by have := Nat.mul_lt_mul_of_pos_left h (lt_of_succ_lt h); grind
-
-@[grind =]
-
-Depends on / 依赖: Nat.mul_lt_mul_of_pos_left, lt_of_succ_lt, mul_lt_mul_of_pos_left, sqrt_lt
+lemma le_three_of_sqrt_eq_one (h : sqrt n = 1) : n ≤ 3 :=
+  le_of_lt_succ <| (@sqrt_lt n 2).1 <| by grind
+/-
+**Nat.sqrt_lt_self** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：sqrt_lt_self (h : 1 < n) : sqrt n < n
+参数：h : 1 < n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Nat.sqrt_lt`：sqrt_lt : sqrt m < n ↔ m < n * n
+· 使用定理 `Nat.mul_lt_mul_of_pos_left`：∀ {n m k : ℕ}, n < m → k > 0 → k * n < k * m
+· 使用定理 `Nat.lt_of_succ_lt`：∀ {n m : ℕ}, n.succ < m → n < m
 -/
 lemma sqrt_lt_self (h : 1 < n) : sqrt n < n :=
-sqrt_lt.2 by have := Nat.mul_lt_mul_of_pos_left h (lt_of_succ_lt h); grind
+  sqrt_lt.2 <| by have := Nat.mul_lt_mul_of_pos_left h (lt_of_succ_lt h); grind
 
 @[grind =]
-/--
-lemma `sqrt_pos` / 引理 `sqrt_pos`
-
-English:
-lemma sqrt_pos
-  statement: 0 < sqrt n ↔ 0 < n
-  proof: le_sqrt
-
-中文:
-引理 sqrt_pos
-  结论: 0 < sqrt n ↔ 0 < n
-  证明: le_sqrt
-
-Depends on / 依赖: le_sqrt
+/-
+**Nat.sqrt_pos** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：sqrt_pos : 0 < sqrt n ↔ 0 < n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Nat.le_sqrt`：le_sqrt : m <= sqrt n ↔ m * m <= n
 -/
 lemma sqrt_pos : 0 < sqrt n ↔ 0 < n :=
   le_sqrt
-
-/--
-lemma `sqrt_add_eq` / 引理 `sqrt_add_eq`
-
-English:
-lemma sqrt_add_eq
-  given: (n : Nat) (h : a <= n + n)
-  statement: sqrt (n * n + a) = n
-  proof: le_antisymm
-    (le_of_lt_succ <| sqrt_lt.2 <| by grind)
-    (le_sqrt.2 <| by grind)
-
-中文:
-引理 sqrt_add_eq
-  条件: (n : 自然数) (h : a <= n + n)
-  结论: sqrt (n * n + a) = n
-  证明: le_antisymm
-    (le_of_lt_succ <| sqrt_lt.2 <| by grind)
-    (le_sqrt.2 <| by grind)
-
-Depends on / 依赖: le_antisymm, le_of_lt_succ, le_sqrt, sqrt_lt
+/-
+**Nat.sqrt_add_eq** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：sqrt_add_eq (n : Nat) (h : a <= n + n) : sqrt (n * n + a) = n
+参数：n : Nat；h : a <= n + n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Nat.le_of_lt_succ`：∀ {m n : ℕ}, m < n.succ → m ≤ n
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Nat.sqrt_lt`：sqrt_lt : sqrt m < n ↔ m < n * n
+· 使用引理 `Nat.le_sqrt`：le_sqrt : m <= sqrt n ↔ m * m <= n
 -/
-lemma sqrt_add_eq (n : Nat) (h : a <= n + n) : sqrt (n * n + a) = n :=
+lemma sqrt_add_eq (n : ℕ) (h : a ≤ n + n) : sqrt (n * n + a) = n :=
   le_antisymm
     (le_of_lt_succ <| sqrt_lt.2 <| by grind)
     (le_sqrt.2 <| by grind)
-
-/--
-lemma `sqrt_add_eq'` / 引理 `sqrt_add_eq'`
-
-English:
-lemma sqrt_add_eq'
-  given: (n : Nat) (h : a <= n + n)
-  statement: sqrt (n ^ 2 + a) = n
-  proof: by
+/-
+**Nat.sqrt_add_eq'** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：sqrt_add_eq' (n : Nat) (h : a <= n + n) : sqrt (n ^ 2 + a) = n
+参数：n : Nat；h : a <= n + n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.pow_two`：∀ (a : ℕ), a ^ 2 = a * a
+· 使用引理 `Nat.sqrt_add_eq`：sqrt_add_eq (n : Nat) (h : a <= n + n) : sqrt (n * n + 
+a) = n
+-/
+lemma sqrt_add_eq' (n : ℕ) (h : a ≤ n + n) : sqrt (n ^ 2 + a) = n := by
   simpa [Nat.pow_two] using sqrt_add_eq n h
 
 @[simp]
-
-中文:
-引理 sqrt_add_eq'
-  条件: (n : 自然数) (h : a <= n + n)
-  结论: sqrt (n ^ 2 + a) = n
-  证明: by
-  simpa [Nat.pow_two] using sqrt_add_eq n h
-
-@[simp]
-
-Depends on / 依赖: Nat.pow_two, pow_two, sqrt_add_eq
+/-
+**Nat.sqrt_eq** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：sqrt_eq (n : Nat) : sqrt (n * n) = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Nat.sqrt_add_eq`：sqrt_add_eq (n : Nat) (h : a <= n + n) : sqrt (n * n + 
+a) = n
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
 -/
-lemma sqrt_add_eq' (n : Nat) (h : a <= n + n) : sqrt (n ^ 2 + a) = n := by
-  simpa [Nat.pow_two] using sqrt_add_eq n h
+lemma sqrt_eq (n : ℕ) : sqrt (n * n) = n := sqrt_add_eq n (zero_le _)
 
 @[simp]
-/--
-lemma `sqrt_eq` / 引理 `sqrt_eq`
-
-English:
-lemma sqrt_eq
-  given: (n : Nat)
-  statement: sqrt (n * n) = n
-  proof: sqrt_add_eq n (zero_le _)
-
-@[simp]
-
-中文:
-引理 sqrt_eq
-  条件: (n : 自然数)
-  结论: sqrt (n * n) = n
-  证明: sqrt_add_eq n (zero_le _)
-
-@[simp]
-
-Depends on / 依赖: sqrt_add_eq, zero_le
+/-
+**Nat.sqrt_eq'** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：sqrt_eq' (n : Nat) : sqrt (n ^ 2) = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Nat.sqrt_add_eq'`：sqrt_add_eq' (n : Nat) (h : a <= n + n) : sqrt (n ^ 2 
++ a) = n
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
 -/
-lemma sqrt_eq (n : Nat) : sqrt (n * n) = n := sqrt_add_eq n (zero_le _)
-
-@[simp]
-/--
-lemma `sqrt_eq'` / 引理 `sqrt_eq'`
-
-English:
-lemma sqrt_eq'
-  given: (n : Nat)
-  statement: sqrt (n ^ 2) = n
-  proof: sqrt_add_eq' n (zero_le _)
-
-中文:
-引理 sqrt_eq'
-  条件: (n : 自然数)
-  结论: sqrt (n ^ 2) = n
-  证明: sqrt_add_eq' n (zero_le _)
-
-Depends on / 依赖: sqrt_add_eq, zero_le
+lemma sqrt_eq' (n : ℕ) : sqrt (n ^ 2) = n := sqrt_add_eq' n (zero_le _)
+/-
+**Nat.sqrt_succ_le_succ_sqrt** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：sqrt_succ_le_succ_sqrt (n : Nat) : sqrt n.succ <= n.sqrt.succ
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.le_of_lt_succ`：∀ {m n : ℕ}, m < n.succ → m ≤ n
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Nat.sqrt_lt`：sqrt_lt : sqrt m < n ↔ m < n * n
+· 使用引理 `Nat.sqrt_le_add`：sqrt_le_add (n : Nat) : n <= sqrt n * sqrt n + sqrt n +
+ sqrt n
 -/
-lemma sqrt_eq' (n : Nat) : sqrt (n ^ 2) = n := sqrt_add_eq' n (zero_le _)
-
-/--
-lemma `sqrt_succ_le_succ_sqrt` / 引理 `sqrt_succ_le_succ_sqrt`
-
-English:
-lemma sqrt_succ_le_succ_sqrt
-  given: (n : Nat)
-  statement: sqrt n.succ <= n.sqrt.succ
-  proof: le_of_lt_succ sqrt_lt.2 (have := sqrt_le_add n; by grind)
+lemma sqrt_succ_le_succ_sqrt (n : ℕ) : sqrt n.succ ≤ n.sqrt.succ :=
+  le_of_lt_succ <| sqrt_lt.2 <| (have := sqrt_le_add n; by grind)
 
 @[simp]
-
-中文:
-引理 sqrt_succ_le_succ_sqrt
-  条件: (n : 自然数)
-  结论: sqrt n.succ <= n.sqrt.succ
-  证明: le_of_lt_succ sqrt_lt.2 (have := sqrt_le_add n; by grind)
-
-@[simp]
-
-Depends on / 依赖: le_of_lt_succ, sqrt_le_add, sqrt_lt
+/-
+**Nat.log2_two** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：log2_two : (2 : Nat).log2 = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.log2_def`：∀ (n : ℕ), n.log2 = if 2 ≤ n then (n / 2).log2 + 1 else 0
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `Std.instReflLeOfIsPreorder`：∀ {α : Type u} [inst : LE α] [Std.IsPreorder
+ α], Std.Refl fun x1 x2 => x1 ≤ x2
+· 使用定理 `Lean.Grind.instIsPreorderNat`：Std.IsPreorder ℕ
+· 使用定理 `Nat.div_self`：∀ {n : ℕ}, 0 < n → n / n = 1
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false_of_decide`：∀ {p : Prop} {x : Decidable p}, decide p = false → p
+ = False
+· 使用定理 `Nat.zero_add`：∀ (n : ℕ), 0 + n = n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma sqrt_succ_le_succ_sqrt (n : Nat) : sqrt n.succ <= n.sqrt.succ :=
-le_of_lt_succ sqrt_lt.2 (have := sqrt_le_add n; by grind)
-
-@[simp]
-/--
-lemma `log2_two` / 引理 `log2_two`
-
-English:
-lemma log2_two
-  statement: (2 : Nat).log2 = 1
-  proof: by simp [log2_def]
-
-中文:
-引理 log2_two
-  结论: (2 : 自然数).log2 = 1
-  证明: by simp [log2_def]
-
-Depends on / 依赖: log2_def
--/
-lemma log2_two : (2 : Nat).log2 = 1 := by simp [log2_def]
-
-/--
-lemma `sqrt_zero` / 引理 `sqrt_zero`
-
-English:
-lemma sqrt_zero
-  statement: sqrt 0 = 0
-  proof: eq_comm.1 (by simp [eq_sqrt])
-
-中文:
-引理 sqrt_zero
-  结论: sqrt 0 = 0
-  证明: eq_comm.1 (by simp [eq_sqrt])
+lemma log2_two : (2 : ℕ).log2 = 1 := by simp [log2_def]
+/-
+**Nat.sqrt_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：Nat.sqrt 0 = 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Std.instReflLeOfIsPreorder`：∀ {α : Type u} [inst : LE α] [Std.IsPreorder
+ α], Std.Refl fun x1 x2 => x1 ≤ x2
+· 使用定理 `Lean.Grind.instIsPreorderNat`：Std.IsPreorder ℕ
+· 使用定理 `Nat.zero_add`：∀ (n : ℕ), 0 + n = n
+· 使用定理 `Nat.mul_one`：∀ (n : ℕ), n * 1 = n
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 @[simp, grind =] lemma sqrt_zero : sqrt 0 = 0 :=
   eq_comm.1 (by simp [eq_sqrt])
-
-/--
-lemma `sqrt_one` / 引理 `sqrt_one`
-
-English:
-lemma sqrt_one
-  statement: sqrt 1 = 1
-  proof: eq_comm.1 (by simp [eq_sqrt])
-
-中文:
-引理 sqrt_one
-  结论: sqrt 1 = 1
-  证明: eq_comm.1 (by simp [eq_sqrt])
+/-
+**Nat.sqrt_one** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：Nat.sqrt 1 = 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.mul_one`：∀ (n : ℕ), n * 1 = n
+· 使用定理 `Std.instReflLeOfIsPreorder`：∀ {α : Type u} [inst : LE α] [Std.IsPreorder
+ α], Std.Refl fun x1 x2 => x1 ≤ x2
+· 使用定理 `Lean.Grind.instIsPreorderNat`：Std.IsPreorder ℕ
+· 使用定理 `eq_true_of_decide`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 @[simp, grind =] lemma sqrt_one : sqrt 1 = 1 :=
   eq_comm.1 (by simp [eq_sqrt])
-
-/--
-lemma `sqrt_eq_zero` / 引理 `sqrt_eq_zero`
-
-English:
-lemma sqrt_eq_zero
-  statement: sqrt n = 0 ↔ n = 0
-  proof: ⟨fun h => have := @sqrt_lt n 1; by grind, by grind⟩
-
-@[simp]
-
-中文:
-引理 sqrt_eq_zero
-  结论: sqrt n = 0 ↔ n = 0
-  证明: ⟨fun h => have := @sqrt_lt n 1; by grind, by grind⟩
-
-@[simp]
-
-Depends on / 依赖: sqrt_lt
+/-
+**Nat.sqrt_eq_zero** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：sqrt_eq_zero : sqrt n = 0 ↔ n = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Nat.sqrt_lt`：sqrt_lt : sqrt m < n ↔ m < n * n
 -/
 lemma sqrt_eq_zero : sqrt n = 0 ↔ n = 0 :=
-  ⟨fun h => have := @sqrt_lt n 1; by grind, by grind⟩
+  ⟨fun h ↦ have := @sqrt_lt n 1; by grind, by grind⟩
 
 @[simp]
-/--
-lemma `sqrt_two` / 引理 `sqrt_two`
-
-English:
-lemma sqrt_two
-  statement: sqrt 2 = 1
-  proof: eq_comm.1 (by simp [eq_sqrt])
-
-中文:
-引理 sqrt_two
-  结论: sqrt 2 = 1
-  证明: eq_comm.1 (by simp [eq_sqrt])
-
-Depends on / 依赖: eq_comm, eq_sqrt
+/-
+**Nat.sqrt_two** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：sqrt_two : sqrt 2 = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.mul_one`：∀ (n : ℕ), n * 1 = n
+· 使用定理 `eq_true_of_decide`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
 -/
 lemma sqrt_two : sqrt 2 = 1 :=
   eq_comm.1 (by simp [eq_sqrt])
-
-/--
-lemma `add_one_sqrt_le_of_ne_zero` / 引理 `add_one_sqrt_le_of_ne_zero`
-
-English:
-lemma add_one_sqrt_le_of_ne_zero
-  given: {n : Nat} (hn : n != 0)
-  statement: (n + 1).sqrt <= n
-  proof: le_induction (by simp) (fun n _ ih => le_trans n.succ.sqrt_succ_le_succ_sqrt (succ_le_succ ih)) n
+/-
+**Nat.add_one_sqrt_le_of_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：add_one_sqrt_le_of_ne_zero {n : Nat} (hn : n != 0) : (n + 1).sqrt <= n
+参数：hn : n != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Nat.le_induction`：le_induction {m : Nat} {P : forall n, m <= n -> Prop} 
+(base : P m m.le_refl) (succ : forall n hmn, P n hmn -> P (n + 1) (le_succ_of_le
+ hmn))…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.zero_add`：∀ (n : ℕ), 0 + n = n
+· 使用引理 `Nat.sqrt_two`：sqrt_two : sqrt 2 = 1
+· 使用定理 `Std.instReflLeOfIsPreorder`：∀ {α : Type u} [inst : LE α] [Std.IsPreorder
+ α], Std.Refl fun x1 x2 => x1 ≤ x2
+· 使用定理 `Lean.Grind.instIsPreorderNat`：Std.IsPreorder ℕ
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用引理 `Nat.sqrt_succ_le_succ_sqrt`：sqrt_succ_le_succ_sqrt (n : Nat) : sqrt n.su
+cc <= n.sqrt.succ
+· 使用定理 `Nat.succ_le_succ`：∀ {n m : ℕ}, n ≤ m → n.succ ≤ m.succ
+· 使用定理 `Nat.pos_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → 0 < n
+-/
+lemma add_one_sqrt_le_of_ne_zero {n : ℕ} (hn : n ≠ 0) : (n + 1).sqrt ≤ n :=
+  le_induction (by simp) (fun n _ ih ↦ le_trans n.succ.sqrt_succ_le_succ_sqrt (succ_le_succ ih)) n
     (Nat.pos_of_ne_zero hn)
-
-中文:
-引理 add_one_sqrt_le_of_ne_zero
-  条件: {n : 自然数} (hn : n != 0)
-  结论: (n + 1).sqrt <= n
-  证明: le_induction (by simp) (fun n _ ih => le_trans n.succ.sqrt_succ_le_succ_sqrt (succ_le_succ ih)) n
-    (Nat.pos_of_ne_zero hn)
-
-Depends on / 依赖: AdjoinRoot, AdjoinRoot.mk, AdjoinRoot.mk_surjective, Derivation, Derivation.liftOfSurjective, Nat.pos_of_ne_zero, le_induction, le_trans, liftOfSurjective, mk_surjective, n.succ.sqrt_succ_le_succ_sqrt, pos_of_ne_zero, sqrt_succ_le_succ_sqrt, succ_le_succ, toIntAlgHom
+/-
+**Nat.exists_mul_self** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：exists_mul_self (x : Nat) : (exists n, n * n = x) ↔ sqrt x * sqrt x = x
+参数：x : Nat。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Nat.sqrt_eq`：sqrt_eq (n : Nat) : sqrt (n * n) = n
 -/
-lemma add_one_sqrt_le_of_ne_zero {n : Nat} (hn : n != 0) : (n + 1).sqrt <= n :=
-  le_induction (by simp) (fun n _ ih => le_trans n.succ.sqrt_succ_le_succ_sqrt (succ_le_succ ih)) n
-    (Nat.pos_of_ne_zero hn)
-
-/--
-lemma `exists_mul_self` / 引理 `exists_mul_self`
-
-English:
-lemma exists_mul_self
-  given: (x : Nat)
-  statement: (exists n, n * n = x) ↔ sqrt x * sqrt x = x
-  proof: ⟨fun ⟨n, hn⟩ => by rw [← hn, sqrt_eq], fun h => ⟨sqrt x, h⟩⟩
-
-中文:
-引理 存在_mul_self
-  条件: (x : 自然数)
-  结论: (存在 n, n * n = x) ↔ sqrt x * sqrt x = x
-  证明: ⟨fun ⟨n, hn⟩ => by rw [← hn, sqrt_eq], fun h => ⟨sqrt x, h⟩⟩
-
-Depends on / 依赖: AdjoinRoot, AdjoinRoot.mk, Derivation, Derivation.liftOfSurjective, Derivation.liftOfSurjective_apply, implicitDeriv_C, liftOfSurjective, liftOfSurjective_apply, sqrt_eq, toIntAlgHom
+lemma exists_mul_self (x : ℕ) : (∃ n, n * n = x) ↔ sqrt x * sqrt x = x :=
+  ⟨fun ⟨n, hn⟩ ↦ by rw [← hn, sqrt_eq], fun h ↦ ⟨sqrt x, h⟩⟩
+/-
+**Nat.exists_mul_self'** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：exists_mul_self' (x : Nat) : (exists n, n ^ 2 = x) ↔ sqrt x ^ 2 = x
+参数：x : Nat。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.pow_two`：∀ (a : ℕ), a ^ 2 = a * a
+· 使用引理 `Nat.exists_mul_self`：exists_mul_self (x : Nat) : (exists n, n * n = x) ↔
+ sqrt x * sqrt x = x
 -/
-lemma exists_mul_self (x : Nat) : (exists n, n * n = x) ↔ sqrt x * sqrt x = x :=
-  ⟨fun ⟨n, hn⟩ => by rw [← hn, sqrt_eq], fun h => ⟨sqrt x, h⟩⟩
-
-/--
-lemma `exists_mul_self'` / 引理 `exists_mul_self'`
-
-English:
-lemma exists_mul_self'
-  given: (x : Nat)
-  statement: (exists n, n ^ 2 = x) ↔ sqrt x ^ 2 = x
-  proof: by
+lemma exists_mul_self' (x : ℕ) : (∃ n, n ^ 2 = x) ↔ sqrt x ^ 2 = x := by
   simpa only [Nat.pow_two] using exists_mul_self x
-
-中文:
-引理 存在_mul_self'
-  条件: (x : 自然数)
-  结论: (存在 n, n ^ 2 = x) ↔ sqrt x ^ 2 = x
-  证明: by
-  simpa only [Nat.pow_two] using exists_mul_self x
-
-Depends on / 依赖: Nat.pow_two, exists_mul_self, pow_two
+/-
+**Nat.sqrt_mul_sqrt_lt_succ** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：sqrt_mul_sqrt_lt_succ (n : Nat) : sqrt n * sqrt n < n + 1
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.lt_succ_iff`：∀ {m n : ℕ}, m < n.succ ↔ m ≤ n
+· 使用定理 `Nat.sqrt_le`：∀ (n : ℕ), n.sqrt * n.sqrt ≤ n
 -/
-lemma exists_mul_self' (x : Nat) : (exists n, n ^ 2 = x) ↔ sqrt x ^ 2 = x := by
-  simpa only [Nat.pow_two] using exists_mul_self x
-
-/--
-lemma `sqrt_mul_sqrt_lt_succ` / 引理 `sqrt_mul_sqrt_lt_succ`
-
-English:
-lemma sqrt_mul_sqrt_lt_succ
-  given: (n : Nat)
-  statement: sqrt n * sqrt n < n + 1
-  proof: Nat.lt_succ_iff.mpr (sqrt_le _)
-
-中文:
-引理 sqrt_mul_sqrt_lt_succ
-  条件: (n : 自然数)
-  结论: sqrt n * sqrt n < n + 1
-  证明: Nat.lt_succ_iff.mpr (sqrt_le _)
-
-Depends on / 依赖: Nat.lt_succ_iff.mpr, lt_succ_iff, sqrt_le
--/
-lemma sqrt_mul_sqrt_lt_succ (n : Nat) : sqrt n * sqrt n < n + 1 :=
+lemma sqrt_mul_sqrt_lt_succ (n : ℕ) : sqrt n * sqrt n < n + 1 :=
   Nat.lt_succ_iff.mpr (sqrt_le _)
-
-/--
-lemma `sqrt_mul_sqrt_lt_succ'` / 引理 `sqrt_mul_sqrt_lt_succ'`
-
-English:
-lemma sqrt_mul_sqrt_lt_succ'
-  given: (n : Nat)
-  statement: sqrt n ^ 2 < n + 1
-  proof: Nat.lt_succ_iff.mpr (sqrt_le' _)
-
-中文:
-引理 sqrt_mul_sqrt_lt_succ'
-  条件: (n : 自然数)
-  结论: sqrt n ^ 2 < n + 1
-  证明: Nat.lt_succ_iff.mpr (sqrt_le' _)
-
-Depends on / 依赖: Nat.lt_succ_iff.mpr, lt_succ_iff, sqrt_le
+/-
+**Nat.sqrt_mul_sqrt_lt_succ'** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：sqrt_mul_sqrt_lt_succ' (n : Nat) : sqrt n ^ 2 < n + 1
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.lt_succ_iff`：∀ {m n : ℕ}, m < n.succ ↔ m ≤ n
+· 使用引理 `Nat.sqrt_le'`：sqrt_le' (n : Nat) : sqrt n ^ 2 <= n
 -/
-lemma sqrt_mul_sqrt_lt_succ' (n : Nat) : sqrt n ^ 2 < n + 1 :=
+lemma sqrt_mul_sqrt_lt_succ' (n : ℕ) : sqrt n ^ 2 < n + 1 :=
   Nat.lt_succ_iff.mpr (sqrt_le' _)
-
-/--
-lemma `succ_le_succ_sqrt` / 引理 `succ_le_succ_sqrt`
-
-English:
-lemma succ_le_succ_sqrt
-  given: (n : Nat)
-  statement: n + 1 <= (sqrt n + 1) * (sqrt n + 1)
-  proof: le_of_pred_lt (lt_succ_sqrt _)
-
-中文:
-引理 succ_le_succ_sqrt
-  条件: (n : 自然数)
-  结论: n + 1 <= (sqrt n + 1) * (sqrt n + 1)
-  证明: le_of_pred_lt (lt_succ_sqrt _)
-
-Depends on / 依赖: differentialFiniteDimensional, le_of_pred_lt, lt_succ_sqrt
+/-
+**Nat.succ_le_succ_sqrt** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：succ_le_succ_sqrt (n : Nat) : n + 1 <= (sqrt n + 1) * (sqrt n + 1)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.le_of_pred_lt`：∀ {n : ℕ} {m : ℕ}, m.pred < n → m ≤ n
+· 使用定理 `Nat.lt_succ_sqrt`：∀ (n : ℕ), n < n.sqrt.succ * n.sqrt.succ
 -/
-lemma succ_le_succ_sqrt (n : Nat) : n + 1 <= (sqrt n + 1) * (sqrt n + 1) :=
+lemma succ_le_succ_sqrt (n : ℕ) : n + 1 ≤ (sqrt n + 1) * (sqrt n + 1) :=
   le_of_pred_lt (lt_succ_sqrt _)
-
-/--
-lemma `succ_le_succ_sqrt'` / 引理 `succ_le_succ_sqrt'`
-
-English:
-lemma succ_le_succ_sqrt'
-  given: (n : Nat)
-  statement: n + 1 <= (sqrt n + 1) ^ 2
-  proof: le_of_pred_lt (lt_succ_sqrt' _)
-
-中文:
-引理 succ_le_succ_sqrt'
-  条件: (n : 自然数)
-  结论: n + 1 <= (sqrt n + 1) ^ 2
-  证明: le_of_pred_lt (lt_succ_sqrt' _)
-
-Depends on / 依赖: differentialAlgebraFiniteDimensional, le_of_pred_lt, lt_succ_sqrt
+/-
+**Nat.succ_le_succ_sqrt'** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：succ_le_succ_sqrt' (n : Nat) : n + 1 <= (sqrt n + 1) ^ 2
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.le_of_pred_lt`：∀ {n : ℕ} {m : ℕ}, m.pred < n → m ≤ n
+· 使用引理 `Nat.lt_succ_sqrt'`：lt_succ_sqrt' (n : Nat) : n < succ (sqrt n) ^ 2
 -/
-lemma succ_le_succ_sqrt' (n : Nat) : n + 1 <= (sqrt n + 1) ^ 2 :=
+lemma succ_le_succ_sqrt' (n : ℕ) : n + 1 ≤ (sqrt n + 1) ^ 2 :=
   le_of_pred_lt (lt_succ_sqrt' _)
 
-/--
-lemma `not_exists_sq` / 引理 `not_exists_sq`
+/-- There are no perfect squares strictly between m² and (m+1)² -/
+/-
+**Nat.not_exists_sq** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：not_exists_sq (hl : m * m < n) (hr : n < (m + 1) * (m + 1)) : ¬exists t, t
+ * t = n
+参数：hl : m * m < n；hr : n < (m + 1) * (m + 1)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.mul_self_lt_mul_self_iff`：∀ {m n : ℕ}, m * m < n * n ↔ m < n
 
-English:
-lemma not_exists_sq
-  given: (hl : m * m < n) (hr : n < (m + 1) * (m + 1))
-  statement: ¬exists t, t * t = n
-  proof: by
+--- 原说明 ---
+There are no perfect squares strictly between m² and (m+1)²
+-/
+lemma not_exists_sq (hl : m * m < n) (hr : n < (m + 1) * (m + 1)) : ¬∃ t, t * t = n := by
   rintro ⟨t, rfl⟩
   have h1 : m < t := Nat.mul_self_lt_mul_self_iff.1 hl
   have h2 : t < m + 1 := Nat.mul_self_lt_mul_self_iff.1 hr
   grind
-
-中文:
-引理 not_存在_sq
-  条件: (hl : m * m < n) (hr : n < (m + 1) * (m + 1))
-  结论: ¬存在 t, t * t = n
-  证明: by
-  rintro ⟨t, rfl⟩
-  have h1 : m < t := Nat.mul_self_lt_mul_self_iff.1 hl
-  have h2 : t < m + 1 := Nat.mul_self_lt_mul_self_iff.1 hr
-  grind
-
-Depends on / 依赖: Nat.mul_self_lt_mul_self_iff, mul_self_lt_mul_self_iff
+/-
+**Nat.not_exists_sq'** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：not_exists_sq' : m ^ 2 < n -> n < (m + 1) ^ 2 -> ¬exists t, t ^ 2 = n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.pow_two`：∀ (a : ℕ), a ^ 2 = a * a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `Nat.not_exists_sq`：not_exists_sq (hl : m * m < n) (hr : n < (m + 1) * (m
+ + 1)) : ¬exists t, t * t = n
 -/
-lemma not_exists_sq (hl : m * m < n) (hr : n < (m + 1) * (m + 1)) : ¬exists t, t * t = n := by
-  rintro ⟨t, rfl⟩
-  have h1 : m < t := Nat.mul_self_lt_mul_self_iff.1 hl
-  have h2 : t < m + 1 := Nat.mul_self_lt_mul_self_iff.1 hr
-  grind
-
-/--
-lemma `not_exists_sq'` / 引理 `not_exists_sq'`
-
-English:
-lemma not_exists_sq'
-  statement: m ^ 2 < n -> n < (m + 1) ^ 2 -> ¬exists t, t ^ 2 = n
-  proof: by
+lemma not_exists_sq' : m ^ 2 < n → n < (m + 1) ^ 2 → ¬∃ t, t ^ 2 = n := by
   simpa only [Nat.pow_two] using not_exists_sq
-
-中文:
-引理 not_存在_sq'
-  结论: m ^ 2 < n -> n < (m + 1) ^ 2 -> ¬存在 t, t ^ 2 = n
-  证明: by
-  simpa only [Nat.pow_two] using not_exists_sq
-
-Depends on / 依赖: Nat.pow_two, not_exists_sq, pow_two
+/-
+**Nat.le_sqrt_of_eq_mul** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：le_sqrt_of_eq_mul {a b c : Nat} (h : a = b * c) : b <= a.sqrt ∨ c <= a.sqr
+t
+参数：h : a = b * c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Nat.le_sqrt`：le_sqrt : m <= sqrt n ↔ m * m <= n
+· 使用定理 `Nat.mul_le_mul_left`：∀ {n m : ℕ} (k : ℕ), n ≤ m → k * n ≤ k * m
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.mul_le_mul_right`：∀ {n m : ℕ} (k : ℕ), n ≤ m → n * k ≤ m * k
 -/
-lemma not_exists_sq' : m ^ 2 < n -> n < (m + 1) ^ 2 -> ¬exists t, t ^ 2 = n := by
-  simpa only [Nat.pow_two] using not_exists_sq
-
-/--
-lemma `le_sqrt_of_eq_mul` / 引理 `le_sqrt_of_eq_mul`
-
-English:
-lemma le_sqrt_of_eq_mul
-  given: {a b c : Nat} (h : a = b * c)
-  statement: b <= a.sqrt ∨ c <= a.sqrt
-  proof: by
+lemma le_sqrt_of_eq_mul {a b c : ℕ} (h : a = b * c) : b ≤ a.sqrt ∨ c ≤ a.sqrt := by
   rcases le_total b c with bc | cb
-· exact Or.inl le_sqrt.mpr h ▸ mul_le_mul_left b bc
-· exact Or.inr le_sqrt.mpr h ▸ mul_le_mul_right c cb
-
-中文:
-引理 le_sqrt_of_eq_mul
-  条件: {a b c : 自然数} (h : a = b * c)
-  结论: b <= a.sqrt ∨ c <= a.sqrt
-  证明: by
-  rcases le_total b c with bc | cb
-· exact Or.inl le_sqrt.mpr h ▸ mul_le_mul_left b bc
-· exact Or.inr le_sqrt.mpr h ▸ mul_le_mul_right c cb
-
-Depends on / 依赖: Or.inl, Or.inr, le_sqrt, le_sqrt.mpr, le_total, mul_le_mul_left, mul_le_mul_right
--/
-lemma le_sqrt_of_eq_mul {a b c : Nat} (h : a = b * c) : b <= a.sqrt ∨ c <= a.sqrt := by
-  rcases le_total b c with bc | cb
-· exact Or.inl le_sqrt.mpr h ▸ mul_le_mul_left b bc
-· exact Or.inr le_sqrt.mpr h ▸ mul_le_mul_right c cb
+  · exact Or.inl <| le_sqrt.mpr <| h ▸ mul_le_mul_left b bc
+  · exact Or.inr <| le_sqrt.mpr <| h ▸ mul_le_mul_right c cb
 
 end Nat
+

@@ -30,500 +30,284 @@ to choices of square roots of `d` in `R`.
   These have the form `a + b √d` where `a b : ℤ`. The components
   are called `re` and `im` by analogy to the negative `d` case. -/
 @[ext]
-/--
-Definition of `Zsqrtd` / `Zsqrtd` 的定义
+/-
+**Zsqrtd** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：ℤ → Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Zsqrtd
-  parameters: (d : Int)
-  axioms and operations (2):
-    - re : Int
-    - im : Int
-
-中文:
-结构 Zsqrtd
-  参数: (d : 整数)
-  公理与运算 (2 个):
-    - re : 整数
-    - im : 整数
+--- 原说明 ---
+The ring of integers adjoined with a square root of `d`.
+  These have the form `a + b √d` where `a b : ℤ`. The components
+  are called `re` and `im` by analogy to the negative `d` case.
 -/
-structure Zsqrtd (d : Int) where
+structure Zsqrtd (d : ℤ) where
   /-- Component of the integer not multiplied by `√d` -/
-  re : Int
+  re : ℤ
   /-- Component of the integer multiplied by `√d` -/
-  im : Int
+  im : ℤ
   deriving DecidableEq
 
-@[inherit_doc] prefix:100 "Int√" => Zsqrtd
+@[inherit_doc] prefix:100 "ℤ√" => Zsqrtd
 
 namespace Zsqrtd
 
 section
 
-variable {d : Int}
+variable {d : ℤ}
 
-/--
-Definition of `ofInt` / `ofInt` 的定义
+/-- Convert an integer to a `ℤ√d` -/
+/-
+**Zsqrtd.ofInt** 是 Mathlib 中的一个定义，位于命名空间 `Zsqrtd`。
+形式化陈述：ofInt (n : Int) : Int√d
+参数：n : Int。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofInt
-  signature: (n : Int)
-  body: ⟨n, 0⟩
-
-中文:
-定义 of整数
-  签名: (n : 整数)
-  定义体: ⟨n, 0⟩
+--- 原说明 ---
+Convert an integer to a `ℤ√d`
 -/
-def ofInt (n : Int) : Int√d :=
+def ofInt (n : ℤ) : ℤ√d :=
   ⟨n, 0⟩
-
-/--
-theorem `re_ofInt` / 定理 `re_ofInt`
-
-English:
-theorem re_ofInt
-  given: (n : Int)
-  statement: (ofInt n : Int√d).re = n
-  proof: rfl
-
-中文:
-定理 re_of整数
-  条件: (n : 整数)
-  结论: (of整数 n : 整数√d).re = n
-  证明: rfl
+/-
+**Zsqrtd.re_ofInt** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：re_ofInt (n : Int) : (ofInt n : Int√d).re = n
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem re_ofInt (n : Int) : (ofInt n : Int√d).re = n :=
+theorem re_ofInt (n : ℤ) : (ofInt n : ℤ√d).re = n :=
+  rfl
+/-
+**Zsqrtd.im_ofInt** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：im_ofInt (n : Int) : (ofInt n : Int√d).im = 0
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem im_ofInt (n : ℤ) : (ofInt n : ℤ√d).im = 0 :=
   rfl
 
-/--
-theorem `im_ofInt` / 定理 `im_ofInt`
+/-- The zero of the ring -/
+/-
+**Zsqrtd.** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem im_ofInt
-  given: (n : Int)
-  statement: (ofInt n : Int√d).im = 0
-  proof: rfl
-
-中文:
-定理 im_of整数
-  条件: (n : 整数)
-  结论: (of整数 n : 整数√d).im = 0
-  证明: rfl
+--- 原说明 ---
+The zero of the ring
 -/
-theorem im_ofInt (n : Int) : (ofInt n : Int√d).im = 0 :=
-  rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Zero (Int√d)
-  body: ⟨ofInt 0⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 零 (整数√d)
-  定义体: ⟨ofInt 0⟩
-
-@[simp]
--/
-instance : Zero (Int√d) :=
+instance : Zero (ℤ√d) :=
   ⟨ofInt 0⟩
 
 @[simp]
-/--
-theorem `re_zero` / 定理 `re_zero`
-
-English:
-theorem re_zero
-  statement: (0 : Int√d).re = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 re_zero
-  结论: (0 : 整数√d).re = 0
-  证明: rfl
-
-@[simp]
+/-
+**Zsqrtd.re_zero** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：re_zero : (0 : Int√d).re = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem re_zero : (0 : Int√d).re = 0 :=
+theorem re_zero : (0 : ℤ√d).re = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `im_zero` / 定理 `im_zero`
-
-English:
-theorem im_zero
-  statement: (0 : Int√d).im = 0
-  proof: rfl
-
-中文:
-定理 im_zero
-  结论: (0 : 整数√d).im = 0
-  证明: rfl
+/-
+**Zsqrtd.im_zero** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：im_zero : (0 : Int√d).im = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem im_zero : (0 : Int√d).im = 0 :=
+theorem im_zero : (0 : ℤ√d).im = 0 :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Int√d)
-  body: ⟨0⟩
-
-中文:
-实例 :
-  签名: 可居 (整数√d)
-  定义体: ⟨0⟩
+/-
+**Zsqrtd.** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Inhabited (Int√d) :=
+instance : Inhabited (ℤ√d) :=
   ⟨0⟩
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The one of the ring -/
+/-
+**Zsqrtd.** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: One (Int√d)
-  body: ⟨ofInt 1⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 幺 (整数√d)
-  定义体: ⟨ofInt 1⟩
-
-@[simp]
+--- 原说明 ---
+The one of the ring
 -/
-instance : One (Int√d) :=
+instance : One (ℤ√d) :=
   ⟨ofInt 1⟩
 
 @[simp]
-/--
-theorem `re_one` / 定理 `re_one`
-
-English:
-theorem re_one
-  statement: (1 : Int√d).re = 1
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 re_one
-  结论: (1 : 整数√d).re = 1
-  证明: rfl
-
-@[simp]
+/-
+**Zsqrtd.re_one** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：re_one : (1 : Int√d).re = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem re_one : (1 : Int√d).re = 1 :=
+theorem re_one : (1 : ℤ√d).re = 1 :=
   rfl
 
 @[simp]
-/--
-theorem `im_one` / 定理 `im_one`
-
-English:
-theorem im_one
-  statement: (1 : Int√d).im = 0
-  proof: rfl
-
-中文:
-定理 im_one
-  结论: (1 : 整数√d).im = 0
-  证明: rfl
+/-
+**Zsqrtd.im_one** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：im_one : (1 : Int√d).im = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem im_one : (1 : Int√d).im = 0 :=
+theorem im_one : (1 : ℤ√d).im = 0 :=
   rfl
 
-/--
-Definition of `sqrtd` / `sqrtd` 的定义
+/-- The representative of `√d` in the ring -/
+/-
+**Zsqrtd.sqrtd** 是 Mathlib 中的一个定义，位于命名空间 `Zsqrtd`。
+形式化陈述：sqrtd : Int√d
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sqrtd
-  signature: : Int√d
-  body: ⟨0, 1⟩
-
-@[simp]
-
-中文:
-定义 sqrtd
-  签名: : 整数√d
-  定义体: ⟨0, 1⟩
-
-@[simp]
+--- 原说明 ---
+The representative of `√d` in the ring
 -/
-def sqrtd : Int√d :=
+def sqrtd : ℤ√d :=
   ⟨0, 1⟩
 
 @[simp]
-/--
-theorem `re_sqrtd` / 定理 `re_sqrtd`
-
-English:
-theorem re_sqrtd
-  statement: (sqrtd : Int√d).re = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 re_sqrtd
-  结论: (sqrtd : 整数√d).re = 0
-  证明: rfl
-
-@[simp]
+/-
+**Zsqrtd.re_sqrtd** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：re_sqrtd : (sqrtd : Int√d).re = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem re_sqrtd : (sqrtd : Int√d).re = 0 :=
+theorem re_sqrtd : (sqrtd : ℤ√d).re = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `im_sqrtd` / 定理 `im_sqrtd`
-
-English:
-theorem im_sqrtd
-  statement: (sqrtd : Int√d).im = 1
-  proof: rfl
-
-中文:
-定理 im_sqrtd
-  结论: (sqrtd : 整数√d).im = 1
-  证明: rfl
+/-
+**Zsqrtd.im_sqrtd** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：im_sqrtd : (sqrtd : Int√d).im = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem im_sqrtd : (sqrtd : Int√d).im = 1 :=
+theorem im_sqrtd : (sqrtd : ℤ√d).im = 1 :=
   rfl
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Addition of elements of `ℤ√d` -/
+/-
+**Zsqrtd.** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Add (Int√d)
-  body: ⟨fun z w => ⟨z.1 + w.1, z.2 + w.2⟩⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 加法 (整数√d)
-  定义体: ⟨fun z w => ⟨z.1 + w.1, z.2 + w.2⟩⟩
-
-@[simp]
+--- 原说明 ---
+Addition of elements of `ℤ√d`
 -/
-instance : Add (Int√d) :=
+instance : Add (ℤ√d) :=
   ⟨fun z w => ⟨z.1 + w.1, z.2 + w.2⟩⟩
 
 @[simp]
-/--
-theorem `add_def` / 定理 `add_def`
-
-English:
-theorem add_def
-  given: (x y x' y' : Int)
-  statement: (⟨x, y⟩ + ⟨x', y'⟩ : Int√d) = ⟨x + x', y + y'⟩
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 add_def
-  条件: (x y x' y' : 整数)
-  结论: (⟨x, y⟩ + ⟨x', y'⟩ : 整数√d) = ⟨x + x', y + y'⟩
-  证明: rfl
-
-@[simp]
+/-
+**Zsqrtd.add_def** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：add_def (x y x' y' : Int) : (⟨x, y⟩ + ⟨x', y'⟩ : Int√d) = ⟨x + x', y + y'⟩
+参数：x y x' y' : Int。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem add_def (x y x' y' : Int) : (⟨x, y⟩ + ⟨x', y'⟩ : Int√d) = ⟨x + x', y + y'⟩ :=
+theorem add_def (x y x' y' : ℤ) : (⟨x, y⟩ + ⟨x', y'⟩ : ℤ√d) = ⟨x + x', y + y'⟩ :=
   rfl
 
 @[simp]
-/--
-theorem `re_add` / 定理 `re_add`
-
-English:
-theorem re_add
-  given: (z w : Int√d)
-  statement: (z + w).re = z.re + w.re
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 re_add
-  条件: (z w : 整数√d)
-  结论: (z + w).re = z.re + w.re
-  证明: rfl
-
-@[simp]
+/-
+**Zsqrtd.re_add** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：re_add (z w : Int√d) : (z + w).re = z.re + w.re
+参数：z w : Int√d。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem re_add (z w : Int√d) : (z + w).re = z.re + w.re :=
+theorem re_add (z w : ℤ√d) : (z + w).re = z.re + w.re :=
   rfl
 
 @[simp]
-/--
-theorem `im_add` / 定理 `im_add`
-
-English:
-theorem im_add
-  given: (z w : Int√d)
-  statement: (z + w).im = z.im + w.im
-  proof: rfl
-
-中文:
-定理 im_add
-  条件: (z w : 整数√d)
-  结论: (z + w).im = z.im + w.im
-  证明: rfl
+/-
+**Zsqrtd.im_add** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：im_add (z w : Int√d) : (z + w).im = z.im + w.im
+参数：z w : Int√d。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem im_add (z w : Int√d) : (z + w).im = z.im + w.im :=
+theorem im_add (z w : ℤ√d) : (z + w).im = z.im + w.im :=
   rfl
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Negation in `ℤ√d` -/
+/-
+**Zsqrtd.** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Neg (Int√d)
-  body: ⟨fun z => ⟨-z.1, -z.2⟩⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 取负 (整数√d)
-  定义体: ⟨fun z => ⟨-z.1, -z.2⟩⟩
-
-@[simp]
+--- 原说明 ---
+Negation in `ℤ√d`
 -/
-instance : Neg (Int√d) :=
+instance : Neg (ℤ√d) :=
   ⟨fun z => ⟨-z.1, -z.2⟩⟩
 
 @[simp]
-/--
-theorem `re_neg` / 定理 `re_neg`
-
-English:
-theorem re_neg
-  given: (z : Int√d)
-  statement: (-z).re = -z.re
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 re_neg
-  条件: (z : 整数√d)
-  结论: (-z).re = -z.re
-  证明: rfl
-
-@[simp]
+/-
+**Zsqrtd.re_neg** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：re_neg (z : Int√d) : (-z).re = -z.re
+参数：z : Int√d。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem re_neg (z : Int√d) : (-z).re = -z.re :=
+theorem re_neg (z : ℤ√d) : (-z).re = -z.re :=
   rfl
 
 @[simp]
-/--
-theorem `im_neg` / 定理 `im_neg`
-
-English:
-theorem im_neg
-  given: (z : Int√d)
-  statement: (-z).im = -z.im
-  proof: rfl
-
-中文:
-定理 im_neg
-  条件: (z : 整数√d)
-  结论: (-z).im = -z.im
-  证明: rfl
+/-
+**Zsqrtd.im_neg** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：im_neg (z : Int√d) : (-z).im = -z.im
+参数：z : Int√d。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem im_neg (z : Int√d) : (-z).im = -z.im :=
+theorem im_neg (z : ℤ√d) : (-z).im = -z.im :=
   rfl
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Multiplication in `ℤ√d` -/
+/-
+**Zsqrtd.** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Mul (Int√d)
-  body: ⟨fun z w => ⟨z.1 * w.1 + d * z.2 * w.2, z.1 * w.2 + z.2 * w.1⟩⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 乘法 (整数√d)
-  定义体: ⟨fun z w => ⟨z.1 * w.1 + d * z.2 * w.2, z.1 * w.2 + z.2 * w.1⟩⟩
-
-@[simp]
+--- 原说明 ---
+Multiplication in `ℤ√d`
 -/
-instance : Mul (Int√d) :=
+instance : Mul (ℤ√d) :=
   ⟨fun z w => ⟨z.1 * w.1 + d * z.2 * w.2, z.1 * w.2 + z.2 * w.1⟩⟩
 
 @[simp]
-/--
-theorem `re_mul` / 定理 `re_mul`
-
-English:
-theorem re_mul
-  given: (z w : Int√d)
-  statement: (z * w).re = z.re * w.re + d * z.im * w.im
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 re_mul
-  条件: (z w : 整数√d)
-  结论: (z * w).re = z.re * w.re + d * z.im * w.im
-  证明: rfl
-
-@[simp]
+/-
+**Zsqrtd.re_mul** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：re_mul (z w : Int√d) : (z * w).re = z.re * w.re + d * z.im * w.im
+参数：z w : Int√d。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem re_mul (z w : Int√d) : (z * w).re = z.re * w.re + d * z.im * w.im :=
+theorem re_mul (z w : ℤ√d) : (z * w).re = z.re * w.re + d * z.im * w.im :=
   rfl
 
 @[simp]
-/--
-theorem `im_mul` / 定理 `im_mul`
-
-English:
-theorem im_mul
-  given: (z w : Int√d)
-  statement: (z * w).im = z.re * w.im + z.im * w.re
-  proof: rfl
-
-中文:
-定理 im_mul
-  条件: (z w : 整数√d)
-  结论: (z * w).im = z.re * w.im + z.im * w.re
-  证明: rfl
+/-
+**Zsqrtd.im_mul** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：im_mul (z w : Int√d) : (z * w).im = z.re * w.im + z.im * w.re
+参数：z w : Int√d。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem im_mul (z w : Int√d) : (z * w).im = z.re * w.im + z.im * w.re :=
+theorem im_mul (z w : ℤ√d) : (z * w).im = z.re * w.im + z.im * w.re :=
   rfl
-
-/--
-Instance `addCommGroup` / 实例 `addCommGroup`
-
-English:
-instance addCommGroup
-  signature: : AddCommGroup (Int√d)
-  body: by
+/-
+**Zsqrtd.addCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+形式化陈述：addCommGroup : AddCommGroup (Int√d)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance addCommGroup : AddCommGroup (ℤ√d) := by
   refine
   { sub := fun a b => a + -b
-    nsmul := @nsmulRec (Int√d) ⟨0⟩ ⟨(· + ·)⟩
-    zsmul := @zsmulRec (Int√d) ⟨0⟩ ⟨(· + ·)⟩ ⟨Neg.neg⟩ (@nsmulRec (Int√d) ⟨0⟩ ⟨(· + ·)⟩)
+    nsmul := @nsmulRec (ℤ√d) ⟨0⟩ ⟨(· + ·)⟩
+    zsmul := @zsmulRec (ℤ√d) ⟨0⟩ ⟨(· + ·)⟩ ⟨Neg.neg⟩ (@nsmulRec (ℤ√d) ⟨0⟩ ⟨(· + ·)⟩)
     add_assoc := ?_
     zero_add := ?_
     add_zero := ?_
@@ -534,118 +318,46 @@ instance addCommGroup
   simp [add_comm, add_left_comm]
 
 @[simp]
-
-中文:
-实例 addCommGroup
-  签名: : 加法交换群 (整数√d)
-  定义体: by
-  refine
-  { sub := fun a b => a + -b
-    nsmul := @nsmulRec (Int√d) ⟨0⟩ ⟨(· + ·)⟩
-    zsmul := @zsmulRec (Int√d) ⟨0⟩ ⟨(· + ·)⟩ ⟨Neg.neg⟩ (@nsmulRec (Int√d) ⟨0⟩ ⟨(· + ·)⟩)
-    add_assoc := ?_
-    zero_add := ?_
-    add_zero := ?_
-    neg_add_cancel := ?_
-    add_comm := ?_ } <;>
-  intros <;>
-  ext <;>
-  simp [add_comm, add_left_comm]
-
-@[simp]
-
-Depends on / 依赖: Neg.neg, add_assoc, add_comm, add_left_comm, add_zero, intros, neg_add_cancel, nsmulRec, zero_add, zsmulRec
+/-
+**Zsqrtd.re_sub** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：re_sub (z w : Int√d) : (z - w).re = z.re - w.re
+参数：z w : Int√d。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance addCommGroup : AddCommGroup (Int√d) := by
-  refine
-  { sub := fun a b => a + -b
-    nsmul := @nsmulRec (Int√d) ⟨0⟩ ⟨(· + ·)⟩
-    zsmul := @zsmulRec (Int√d) ⟨0⟩ ⟨(· + ·)⟩ ⟨Neg.neg⟩ (@nsmulRec (Int√d) ⟨0⟩ ⟨(· + ·)⟩)
-    add_assoc := ?_
-    zero_add := ?_
-    add_zero := ?_
-    neg_add_cancel := ?_
-    add_comm := ?_ } <;>
-  intros <;>
-  ext <;>
-  simp [add_comm, add_left_comm]
-
-@[simp]
-/--
-theorem `re_sub` / 定理 `re_sub`
-
-English:
-theorem re_sub
-  given: (z w : Int√d)
-  statement: (z - w).re = z.re - w.re
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 re_sub
-  条件: (z w : 整数√d)
-  结论: (z - w).re = z.re - w.re
-  证明: rfl
-
-@[simp]
--/
-theorem re_sub (z w : Int√d) : (z - w).re = z.re - w.re :=
+theorem re_sub (z w : ℤ√d) : (z - w).re = z.re - w.re :=
   rfl
 
 @[simp]
-/--
-theorem `im_sub` / 定理 `im_sub`
-
-English:
-theorem im_sub
-  given: (z w : Int√d)
-  statement: (z - w).im = z.im - w.im
-  proof: rfl
-
-中文:
-定理 im_sub
-  条件: (z w : 整数√d)
-  结论: (z - w).im = z.im - w.im
-  证明: rfl
+/-
+**Zsqrtd.im_sub** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：im_sub (z w : Int√d) : (z - w).im = z.im - w.im
+参数：z w : Int√d。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem im_sub (z w : Int√d) : (z - w).im = z.im - w.im :=
+theorem im_sub (z w : ℤ√d) : (z - w).im = z.im - w.im :=
   rfl
-
-/--
-Instance `addGroupWithOne` / 实例 `addGroupWithOne`
-
-English:
-instance addGroupWithOne
-  signature: : AddGroupWithOne (Int√d)
-  body: { Zsqrtd.addCommGroup with
-    natCast := fun n => ofInt n
-    intCast := ofInt }
-
-中文:
-实例 addGroupWithOne
-  签名: : 加法带幺群 (整数√d)
-  定义体: { Zsqrtd.addCommGroup with
-    natCast := fun n => ofInt n
-    intCast := ofInt }
-
-Depends on / 依赖: Zsqrtd, Zsqrtd.addCommGroup, addCommGroup, intCast, natCast
+/-
+**Zsqrtd.addGroupWithOne** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+形式化陈述：addGroupWithOne : AddGroupWithOne (Int√d)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance addGroupWithOne : AddGroupWithOne (Int√d) :=
+instance addGroupWithOne : AddGroupWithOne (ℤ√d) :=
   { Zsqrtd.addCommGroup with
     natCast := fun n => ofInt n
     intCast := ofInt }
-
-/--
-Instance `commRing` / 实例 `commRing`
-
-English:
-instance commRing
-  signature: : CommRing (Int√d)
-  body: by
+/-
+**Zsqrtd.commRing** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+形式化陈述：commRing : CommRing (Int√d)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance commRing : CommRing (ℤ√d) := by
   refine
   { Zsqrtd.addGroupWithOne with
-    npow := @npowRec (Int√d) ⟨1⟩ ⟨(· * ·)⟩,
+    npow := @npowRec (ℤ√d) ⟨1⟩ ⟨(· * ·)⟩,
     add_comm := ?_
     left_distrib := ?_
     right_distrib := ?_
@@ -659,934 +371,633 @@ instance commRing
   ext <;>
   simp <;>
   ring
-
-中文:
-实例 commRing
-  签名: : 交换环 (整数√d)
-  定义体: by
-  refine
-  { Zsqrtd.addGroupWithOne with
-    npow := @npowRec (Int√d) ⟨1⟩ ⟨(· * ·)⟩,
-    add_comm := ?_
-    left_distrib := ?_
-    right_distrib := ?_
-    zero_mul := ?_
-    mul_zero := ?_
-    mul_assoc := ?_
-    one_mul := ?_
-    mul_one := ?_
-    mul_comm := ?_ } <;>
-  intros <;>
-  ext <;>
-  simp <;>
-  ring
-
-Depends on / 依赖: Zsqrtd, Zsqrtd.addGroupWithOne, addGroupWithOne, add_comm, intros, left_distrib, mul_assoc, mul_comm, mul_one, mul_zero, npowRec, one_mul, right_distrib, zero_mul
+/-
+**Zsqrtd.** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance commRing : CommRing (Int√d) := by
-  refine
-  { Zsqrtd.addGroupWithOne with
-    npow := @npowRec (Int√d) ⟨1⟩ ⟨(· * ·)⟩,
-    add_comm := ?_
-    left_distrib := ?_
-    right_distrib := ?_
-    zero_mul := ?_
-    mul_zero := ?_
-    mul_assoc := ?_
-    one_mul := ?_
-    mul_one := ?_
-    mul_comm := ?_ } <;>
-  intros <;>
-  ext <;>
-  simp <;>
-  ring
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddMonoid (Int√d)
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 加法幺半群 (整数√d)
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance : AddMonoid (ℤ√d) := by infer_instance
+/-
+**Zsqrtd.** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : AddMonoid (Int√d) := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Monoid (Int√d)
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 幺半群 (整数√d)
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance : Monoid (ℤ√d) := by infer_instance
+/-
+**Zsqrtd.** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Monoid (Int√d) := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CommMonoid (Int√d)
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 交换幺半群 (整数√d)
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance : CommMonoid (ℤ√d) := by infer_instance
+/-
+**Zsqrtd.** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CommMonoid (Int√d) := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CommSemigroup (Int√d)
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 交换半群 (整数√d)
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance : CommSemigroup (ℤ√d) := by infer_instance
+/-
+**Zsqrtd.** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CommSemigroup (Int√d) := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Semigroup (Int√d)
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 半群 (整数√d)
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance : Semigroup (ℤ√d) := by infer_instance
+/-
+**Zsqrtd.** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Semigroup (Int√d) := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddCommSemigroup (Int√d)
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 加法交换半群 (整数√d)
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance : AddCommSemigroup (ℤ√d) := by infer_instance
+/-
+**Zsqrtd.** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : AddCommSemigroup (Int√d) := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: AddSemigroup (Int√d)
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 加法半群 (整数√d)
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance : AddSemigroup (ℤ√d) := by infer_instance
+/-
+**Zsqrtd.** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : AddSemigroup (Int√d) := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CommSemiring (Int√d)
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 交换半环 (整数√d)
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance : CommSemiring (ℤ√d) := by infer_instance
+/-
+**Zsqrtd.** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CommSemiring (Int√d) := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Semiring (Int√d)
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 半环 (整数√d)
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance : Semiring (ℤ√d) := by infer_instance
+/-
+**Zsqrtd.** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Semiring (Int√d) := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Ring (Int√d)
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: 环 (整数√d)
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+instance : Ring (ℤ√d) := by infer_instance
+/-
+**Zsqrtd.** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Ring (Int√d) := by infer_instance
+instance : Distrib (ℤ√d) := by infer_instance
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Conjugation in `ℤ√d`. The conjugate of `a + b √d` is `a - b √d`. -/
+/-
+**Zsqrtd.** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Distrib (Int√d)
-  body: by infer_instance
-
-中文:
-实例 :
-  签名: Distrib (整数√d)
-  定义体: by infer_instance
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+Conjugation in `ℤ√d`. The conjugate of `a + b √d` is `a - b √d`.
 -/
-instance : Distrib (Int√d) := by infer_instance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Star (Int√d)
-  body: ⟨z.1, -z.2⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 对合 (整数√d)
-  定义体: ⟨z.1, -z.2⟩
-
-@[simp]
--/
-instance : Star (Int√d) where
+instance : Star (ℤ√d) where
   star z := ⟨z.1, -z.2⟩
 
 @[simp]
-/--
-theorem `star_mk` / 定理 `star_mk`
-
-English:
-theorem star_mk
-  given: (x y : Int)
-  statement: star (⟨x, y⟩ : Int√d) = ⟨x, -y⟩
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 star_mk
-  条件: (x y : 整数)
-  结论: star (⟨x, y⟩ : 整数√d) = ⟨x, -y⟩
-  证明: rfl
-
-@[simp]
+/-
+**Zsqrtd.star_mk** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：star_mk (x y : Int) : star (⟨x, y⟩ : Int√d) = ⟨x, -y⟩
+参数：x y : Int。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem star_mk (x y : Int) : star (⟨x, y⟩ : Int√d) = ⟨x, -y⟩ :=
+theorem star_mk (x y : ℤ) : star (⟨x, y⟩ : ℤ√d) = ⟨x, -y⟩ :=
   rfl
 
 @[simp]
-/--
-theorem `re_star` / 定理 `re_star`
-
-English:
-theorem re_star
-  given: (z : Int√d)
-  statement: (star z).re = z.re
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 re_star
-  条件: (z : 整数√d)
-  结论: (star z).re = z.re
-  证明: rfl
-
-@[simp]
+/-
+**Zsqrtd.re_star** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：re_star (z : Int√d) : (star z).re = z.re
+参数：z : Int√d。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem re_star (z : Int√d) : (star z).re = z.re :=
+theorem re_star (z : ℤ√d) : (star z).re = z.re :=
   rfl
 
 @[simp]
-/--
-theorem `im_star` / 定理 `im_star`
-
-English:
-theorem im_star
-  given: (z : Int√d)
-  statement: (star z).im = -z.im
-  proof: rfl
-
-中文:
-定理 im_star
-  条件: (z : 整数√d)
-  结论: (star z).im = -z.im
-  证明: rfl
+/-
+**Zsqrtd.im_star** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：im_star (z : Int√d) : (star z).im = -z.im
+参数：z : Int√d。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem im_star (z : Int√d) : (star z).im = -z.im :=
+theorem im_star (z : ℤ√d) : (star z).im = -z.im :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: StarRing (Int√d)
-  body: Zsqrtd.ext rfl (neg_neg _)
-  star_mul a b := by ext <;> simp <;> ring
-  star_add _ _ := Zsqrtd.ext rfl (neg_add _ _)
-
-中文:
-实例 :
-  签名: 对合环 (整数√d)
-  定义体: Zsqrtd.ext rfl (neg_neg _)
-  star_mul a b := by ext <;> simp <;> ring
-  star_add _ _ := Zsqrtd.ext rfl (neg_add _ _)
-
-Depends on / 依赖: Zsqrtd, Zsqrtd.ext, neg_neg
+/-
+**Zsqrtd.** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : StarRing (Int√d) where
+instance : StarRing (ℤ√d) where
   star_involutive _ := Zsqrtd.ext rfl (neg_neg _)
   star_mul a b := by ext <;> simp <;> ring
   star_add _ _ := Zsqrtd.ext rfl (neg_add _ _)
 
 -- Porting note: proof was `by decide`
-/--
-Instance `nontrivial` / 实例 `nontrivial`
-
-English:
-instance nontrivial
-  signature: : Nontrivial (Int√d)
-  body: ⟨⟨0, 1, Zsqrtd.ext_iff.not.mpr (by simp)⟩⟩
-
-@[simp]
-
-中文:
-实例 nontrivial
-  签名: : 非平凡 (整数√d)
-  定义体: ⟨⟨0, 1, Zsqrtd.ext_iff.not.mpr (by simp)⟩⟩
-
-@[simp]
-
-Depends on / 依赖: Zsqrtd, Zsqrtd.ext_iff.not.mpr, ext_iff
+/-
+**Zsqrtd.nontrivial** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+形式化陈述：nontrivial : Nontrivial (Int√d)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Zsqrtd.ext_iff`：∀ {d : ℤ} {x y : ℤ√d}, x = y ↔ x.re = y.re ∧ x.im = y.im
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Int.instNeZeroOfNatOfNat`：∀ {n : ℕ} [NeZero n], NeZero (OfNat.ofNat n)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-instance nontrivial : Nontrivial (Int√d) :=
+instance nontrivial : Nontrivial (ℤ√d) :=
   ⟨⟨0, 1, Zsqrtd.ext_iff.not.mpr (by simp)⟩⟩
 
 @[simp]
-/--
-theorem `re_natCast` / 定理 `re_natCast`
-
-English:
-theorem re_natCast
-  given: (n : Nat)
-  statement: (n : Int√d).re = n
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 re_natCast
-  条件: (n : 自然数)
-  结论: (n : 整数√d).re = n
-  证明: rfl
-
-@[simp]
+/-
+**Zsqrtd.re_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：re_natCast (n : Nat) : (n : Int√d).re = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem re_natCast (n : Nat) : (n : Int√d).re = n :=
+theorem re_natCast (n : ℕ) : (n : ℤ√d).re = n :=
   rfl
 
 @[simp]
-/--
-theorem `re_ofNat` / 定理 `re_ofNat`
-
-English:
-theorem re_ofNat
-  given: (n : Nat) [n.AtLeastTwo]
-  statement: (ofNat(n) : Int√d).re = n
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 re_of自然数
-  条件: (n : 自然数) [n.AtLeastTwo]
-  结论: (of自然数(n) : 整数√d).re = n
-  证明: rfl
-
-@[simp]
+/-
+**Zsqrtd.re_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：re_ofNat (n : Nat) [n.AtLeastTwo] : (ofNat(n) : Int√d).re = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem re_ofNat (n : Nat) [n.AtLeastTwo] : (ofNat(n) : Int√d).re = n :=
+theorem re_ofNat (n : ℕ) [n.AtLeastTwo] : (ofNat(n) : ℤ√d).re = n :=
   rfl
 
 @[simp]
-/--
-theorem `im_natCast` / 定理 `im_natCast`
-
-English:
-theorem im_natCast
-  given: (n : Nat)
-  statement: (n : Int√d).im = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 im_natCast
-  条件: (n : 自然数)
-  结论: (n : 整数√d).im = 0
-  证明: rfl
-
-@[simp]
+/-
+**Zsqrtd.im_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：im_natCast (n : Nat) : (n : Int√d).im = 0
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem im_natCast (n : Nat) : (n : Int√d).im = 0 :=
+theorem im_natCast (n : ℕ) : (n : ℤ√d).im = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `im_ofNat` / 定理 `im_ofNat`
-
-English:
-theorem im_ofNat
-  given: (n : Nat) [n.AtLeastTwo]
-  statement: (ofNat(n) : Int√d).im = 0
-  proof: rfl
-
-中文:
-定理 im_of自然数
-  条件: (n : 自然数) [n.AtLeastTwo]
-  结论: (of自然数(n) : 整数√d).im = 0
-  证明: rfl
+/-
+**Zsqrtd.im_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：im_ofNat (n : Nat) [n.AtLeastTwo] : (ofNat(n) : Int√d).im = 0
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem im_ofNat (n : Nat) [n.AtLeastTwo] : (ofNat(n) : Int√d).im = 0 :=
+theorem im_ofNat (n : ℕ) [n.AtLeastTwo] : (ofNat(n) : ℤ√d).im = 0 :=
   rfl
-
-/--
-theorem `natCast_val` / 定理 `natCast_val`
-
-English:
-theorem natCast_val
-  given: (n : Nat)
-  statement: (n : Int√d) = ⟨n, 0⟩
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 natCast_val
-  条件: (n : 自然数)
-  结论: (n : 整数√d) = ⟨n, 0⟩
-  证明: rfl
-
-@[simp]
+/-
+**Zsqrtd.natCast_val** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：natCast_val (n : Nat) : (n : Int√d) = ⟨n, 0⟩
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem natCast_val (n : Nat) : (n : Int√d) = ⟨n, 0⟩ :=
+theorem natCast_val (n : ℕ) : (n : ℤ√d) = ⟨n, 0⟩ :=
   rfl
 
 @[simp]
-/--
-theorem `re_intCast` / 定理 `re_intCast`
-
-English:
-theorem re_intCast
-  given: (n : Int)
-  statement: (n : Int√d).re = n
-  proof: by cases n <;> rfl
-
-@[simp]
-
-中文:
-定理 re_intCast
-  条件: (n : 整数)
-  结论: (n : 整数√d).re = n
-  证明: by cases n <;> rfl
-
-@[simp]
+/-
+**Zsqrtd.re_intCast** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：re_intCast (n : Int) : (n : Int√d).re = n
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem re_intCast (n : Int) : (n : Int√d).re = n := by cases n <;> rfl
+theorem re_intCast (n : ℤ) : (n : ℤ√d).re = n := by cases n <;> rfl
 
 @[simp]
-/--
-theorem `im_intCast` / 定理 `im_intCast`
-
-English:
-theorem im_intCast
-  given: (n : Int)
-  statement: (n : Int√d).im = 0
-  proof: by cases n <;> rfl
-
-中文:
-定理 im_intCast
-  条件: (n : 整数)
-  结论: (n : 整数√d).im = 0
-  证明: by cases n <;> rfl
+/-
+**Zsqrtd.im_intCast** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：im_intCast (n : Int) : (n : Int√d).im = 0
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem im_intCast (n : Int) : (n : Int√d).im = 0 := by cases n <;> rfl
-
-/--
-theorem `intCast_val` / 定理 `intCast_val`
-
-English:
-theorem intCast_val
-  given: (n : Int)
-  statement: (n : Int√d) = ⟨n, 0⟩
-  proof: by ext <;> simp
-
-中文:
-定理 intCast_val
-  条件: (n : 整数)
-  结论: (n : 整数√d) = ⟨n, 0⟩
-  证明: by ext <;> simp
+theorem im_intCast (n : ℤ) : (n : ℤ√d).im = 0 := by cases n <;> rfl
+/-
+**Zsqrtd.intCast_val** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：intCast_val (n : Int) : (n : Int√d) = ⟨n, 0⟩
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Zsqrtd.ext`：∀ {d : ℤ} {x y : ℤ√d}, x.re = y.re → x.im = y.im → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Zsqrtd.re_intCast`：re_intCast (n : Int) : (n : Int√d).re = n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Zsqrtd.im_intCast`：im_intCast (n : Int) : (n : Int√d).im = 0
 -/
-theorem intCast_val (n : Int) : (n : Int√d) = ⟨n, 0⟩ := by ext <;> simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CharZero (Int√d)
-  body: by simp [Zsqrtd.ext_iff]
-
-@[simp]
-
-中文:
-实例 :
-  签名: 特征零 (整数√d)
-  定义体: by simp [Zsqrtd.ext_iff]
-
-@[simp]
-
-Depends on / 依赖: Zsqrtd, Zsqrtd.ext_iff, ext_iff
+theorem intCast_val (n : ℤ) : (n : ℤ√d) = ⟨n, 0⟩ := by ext <;> simp
+/-
+**Zsqrtd.** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CharZero (Int√d) where cast_injective m n := by simp [Zsqrtd.ext_iff]
+instance : CharZero (ℤ√d) where cast_injective m n := by simp [Zsqrtd.ext_iff]
 
 @[simp]
-/--
-theorem `ofInt_eq_intCast` / 定理 `ofInt_eq_intCast`
-
-English:
-theorem ofInt_eq_intCast
-  given: (n : Int)
-  statement: (ofInt n : Int√d) = n
-  proof: by ext <;> simp [re_ofInt, im_ofInt]
-
-@[simp]
-
-中文:
-定理 of整数_eq_intCast
-  条件: (n : 整数)
-  结论: (of整数 n : 整数√d) = n
-  证明: by ext <;> simp [re_ofInt, im_ofInt]
-
-@[simp]
-
-Depends on / 依赖: im_ofInt, re_ofInt
+/-
+**Zsqrtd.ofInt_eq_intCast** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：ofInt_eq_intCast (n : Int) : (ofInt n : Int√d) = n
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Zsqrtd.ext`：∀ {d : ℤ} {x y : ℤ√d}, x.re = y.re → x.im = y.im → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Zsqrtd.re_intCast`：re_intCast (n : Int) : (n : Int√d).re = n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Zsqrtd.im_intCast`：im_intCast (n : Int) : (n : Int√d).im = 0
 -/
-theorem ofInt_eq_intCast (n : Int) : (ofInt n : Int√d) = n := by ext <;> simp [re_ofInt, im_ofInt]
+theorem ofInt_eq_intCast (n : ℤ) : (ofInt n : ℤ√d) = n := by ext <;> simp [re_ofInt, im_ofInt]
 
 @[simp]
-/--
-theorem `nsmul_val` / 定理 `nsmul_val`
-
-English:
-theorem nsmul_val
-  given: (n : Nat) (x y : Int)
-  statement: (n : Int√d) * ⟨x, y⟩ = ⟨n * x, n * y⟩
-  proof: by ext <;> simp
-
-@[simp]
-
-中文:
-定理 nsmul_val
-  条件: (n : 自然数) (x y : 整数)
-  结论: (n : 整数√d) * ⟨x, y⟩ = ⟨n * x, n * y⟩
-  证明: by ext <;> simp
-
-@[simp]
+/-
+**Zsqrtd.nsmul_val** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：nsmul_val (n : Nat) (x y : Int) : (n : Int√d) * ⟨x, y⟩ = ⟨n * x, n * y⟩
+参数：n : Nat；x y : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Zsqrtd.ext`：∀ {d : ℤ} {x y : ℤ√d}, x.re = y.re → x.im = y.im → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem nsmul_val (n : Nat) (x y : Int) : (n : Int√d) * ⟨x, y⟩ = ⟨n * x, n * y⟩ := by ext <;> simp
+theorem nsmul_val (n : ℕ) (x y : ℤ) : (n : ℤ√d) * ⟨x, y⟩ = ⟨n * x, n * y⟩ := by ext <;> simp
 
 @[simp]
-/--
-theorem `smul_val` / 定理 `smul_val`
-
-English:
-theorem smul_val
-  given: (n x y : Int)
-  statement: (n : Int√d) * ⟨x, y⟩ = ⟨n * x, n * y⟩
-  proof: by ext <;> simp
-
-中文:
-定理 smul_val
-  条件: (n x y : 整数)
-  结论: (n : 整数√d) * ⟨x, y⟩ = ⟨n * x, n * y⟩
-  证明: by ext <;> simp
+/-
+**Zsqrtd.smul_val** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：smul_val (n x y : Int) : (n : Int√d) * ⟨x, y⟩ = ⟨n * x, n * y⟩
+参数：n x y : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Zsqrtd.ext`：∀ {d : ℤ} {x y : ℤ√d}, x.re = y.re → x.im = y.im → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Zsqrtd.re_intCast`：re_intCast (n : Int) : (n : Int√d).re = n
+· 使用定理 `Zsqrtd.im_intCast`：im_intCast (n : Int) : (n : Int√d).im = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem smul_val (n x y : Int) : (n : Int√d) * ⟨x, y⟩ = ⟨n * x, n * y⟩ := by ext <;> simp
-
-/--
-theorem `re_smul` / 定理 `re_smul`
-
-English:
-theorem re_smul
-  given: (a : Int) (b : Int√d)
-  statement: (↑a * b).re = a * b.re
-  proof: by simp
-
-中文:
-定理 re_smul
-  条件: (a : 整数) (b : 整数√d)
-  结论: (↑a * b).re = a * b.re
-  证明: by simp
+theorem smul_val (n x y : ℤ) : (n : ℤ√d) * ⟨x, y⟩ = ⟨n * x, n * y⟩ := by ext <;> simp
+/-
+**Zsqrtd.re_smul** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：re_smul (a : Int) (b : Int√d) : (↑a * b).re = a * b.re
+参数：a : Int；b : Int√d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Zsqrtd.re_intCast`：re_intCast (n : Int) : (n : Int√d).re = n
+· 使用定理 `Zsqrtd.im_intCast`：im_intCast (n : Int) : (n : Int√d).im = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem re_smul (a : Int) (b : Int√d) : (↑a * b).re = a * b.re := by simp
-
-/--
-theorem `im_smul` / 定理 `im_smul`
-
-English:
-theorem im_smul
-  given: (a : Int) (b : Int√d)
-  statement: (↑a * b).im = a * b.im
-  proof: by simp
-
-@[simp]
-
-中文:
-定理 im_smul
-  条件: (a : 整数) (b : 整数√d)
-  结论: (↑a * b).im = a * b.im
-  证明: by simp
-
-@[simp]
+theorem re_smul (a : ℤ) (b : ℤ√d) : (↑a * b).re = a * b.re := by simp
+/-
+**Zsqrtd.im_smul** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：im_smul (a : Int) (b : Int√d) : (↑a * b).im = a * b.im
+参数：a : Int；b : Int√d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Zsqrtd.re_intCast`：re_intCast (n : Int) : (n : Int√d).re = n
+· 使用定理 `Zsqrtd.im_intCast`：im_intCast (n : Int) : (n : Int√d).im = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem im_smul (a : Int) (b : Int√d) : (↑a * b).im = a * b.im := by simp
+theorem im_smul (a : ℤ) (b : ℤ√d) : (↑a * b).im = a * b.im := by simp
 
 @[simp]
-/--
-theorem `muld_val` / 定理 `muld_val`
-
-English:
-theorem muld_val
-  given: (x y : Int)
-  statement: sqrtd (d := d) * ⟨x, y⟩ = ⟨d * y, x⟩
-  proof: by ext <;> simp
-
-@[simp]
-
-中文:
-定理 muld_val
-  条件: (x y : 整数)
-  结论: sqrtd (d := d) * ⟨x, y⟩ = ⟨d * y, x⟩
-  证明: by ext <;> simp
-
-@[simp]
+/-
+**Zsqrtd.muld_val** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：muld_val (x y : Int) : sqrtd (d
+参数：x y : Int。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Zsqrtd.ext`：∀ {d : ℤ} {x y : ℤ√d}, x.re = y.re → x.im = y.im → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
-theorem muld_val (x y : Int) : sqrtd (d := d) * ⟨x, y⟩ = ⟨d * y, x⟩ := by ext <;> simp
+theorem muld_val (x y : ℤ) : sqrtd (d := d) * ⟨x, y⟩ = ⟨d * y, x⟩ := by ext <;> simp
 
 @[simp]
-/--
-theorem `dmuld` / 定理 `dmuld`
-
-English:
-theorem dmuld
-  statement: sqrtd (d := d) * sqrtd (d := d) = d
-  proof: by ext <;> simp
-
-@[simp]
-
-中文:
-定理 dmuld
-  结论: sqrtd (d := d) * sqrtd (d := d) = d
-  证明: by ext <;> simp
-
-@[simp]
+/-
+**Zsqrtd.dmuld** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：dmuld : sqrtd (d
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Zsqrtd.ext`：∀ {d : ℤ} {x y : ℤ√d}, x.re = y.re → x.im = y.im → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Zsqrtd.re_intCast`：re_intCast (n : Int) : (n : Int√d).re = n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Zsqrtd.im_intCast`：im_intCast (n : Int) : (n : Int√d).im = 0
 -/
 theorem dmuld : sqrtd (d := d) * sqrtd (d := d) = d := by ext <;> simp
 
 @[simp]
-/--
-theorem `smuld_val` / 定理 `smuld_val`
-
-English:
-theorem smuld_val
-  given: (n x y : Int)
-  statement: sqrtd * (n : Int√d) * ⟨x, y⟩ = ⟨d * n * y, n * x⟩
-  proof: by ext <;> simp
-
-中文:
-定理 smuld_val
-  条件: (n x y : 整数)
-  结论: sqrtd * (n : 整数√d) * ⟨x, y⟩ = ⟨d * n * y, n * x⟩
-  证明: by ext <;> simp
+/-
+**Zsqrtd.smuld_val** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：smuld_val (n x y : Int) : sqrtd * (n : Int√d) * ⟨x, y⟩ = ⟨d * n * y, n * x
+⟩
+参数：n x y : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Zsqrtd.ext`：∀ {d : ℤ} {x y : ℤ√d}, x.re = y.re → x.im = y.im → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Zsqrtd.re_intCast`：re_intCast (n : Int) : (n : Int√d).re = n
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Zsqrtd.im_intCast`：im_intCast (n : Int) : (n : Int√d).im = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem smuld_val (n x y : Int) : sqrtd * (n : Int√d) * ⟨x, y⟩ = ⟨d * n * y, n * x⟩ := by ext <;> simp
-
-/--
-theorem `decompose` / 定理 `decompose`
-
-English:
-theorem decompose
-  given: {x y : Int}
-  statement: (⟨x, y⟩ : Int√d) = x + sqrtd (d := d) * y
-  proof: by ext <;> simp
-
-中文:
-定理 decompose
-  条件: {x y : 整数}
-  结论: (⟨x, y⟩ : 整数√d) = x + sqrtd (d := d) * y
-  证明: by ext <;> simp
+theorem smuld_val (n x y : ℤ) : sqrtd * (n : ℤ√d) * ⟨x, y⟩ = ⟨d * n * y, n * x⟩ := by ext <;> simp
+/-
+**Zsqrtd.decompose** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：decompose {x y : Int} : (⟨x, y⟩ : Int√d) = x + sqrtd (d
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Zsqrtd.ext`：∀ {d : ℤ} {x y : ℤ√d}, x.re = y.re → x.im = y.im → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Zsqrtd.re_intCast`：re_intCast (n : Int) : (n : Int√d).re = n
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Zsqrtd.im_intCast`：im_intCast (n : Int) : (n : Int√d).im = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
 -/
-theorem decompose {x y : Int} : (⟨x, y⟩ : Int√d) = x + sqrtd (d := d) * y := by ext <;> simp
-
-/--
-theorem `mul_star` / 定理 `mul_star`
-
-English:
-theorem mul_star
-  given: {x y : Int}
-  statement: (⟨x, y⟩ * star ⟨x, y⟩ : Int√d) = x * x - d * y * y
-  proof: by
-  ext <;> simp [sub_eq_add_neg, mul_comm]
-
-中文:
-定理 mul_star
-  条件: {x y : 整数}
-  结论: (⟨x, y⟩ * star ⟨x, y⟩ : 整数√d) = x * x - d * y * y
-  证明: by
-  ext <;> simp [sub_eq_add_neg, mul_comm]
-
-Depends on / 依赖: mul_comm, sub_eq_add_neg
+theorem decompose {x y : ℤ} : (⟨x, y⟩ : ℤ√d) = x + sqrtd (d := d) * y := by ext <;> simp
+/-
+**Zsqrtd.mul_star** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：mul_star {x y : Int} : (⟨x, y⟩ * star ⟨x, y⟩ : Int√d) = x * x - d * y * y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Zsqrtd.ext`：∀ {d : ℤ} {x y : ℤ√d}, x.re = y.re → x.im = y.im → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Zsqrtd.re_intCast`：re_intCast (n : Int) : (n : Int√d).re = n
+· 使用定理 `Zsqrtd.im_intCast`：im_intCast (n : Int) : (n : Int√d).im = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `neg_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), -a + a = 0
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
 -/
-theorem mul_star {x y : Int} : (⟨x, y⟩ * star ⟨x, y⟩ : Int√d) = x * x - d * y * y := by
+theorem mul_star {x y : ℤ} : (⟨x, y⟩ * star ⟨x, y⟩ : ℤ√d) = x * x - d * y * y := by
   ext <;> simp [sub_eq_add_neg, mul_comm]
-
-/--
-theorem `intCast_dvd` / 定理 `intCast_dvd`
-
-English:
-theorem intCast_dvd
-  given: (z : Int) (a : Int√d)
-  statement: ↑z ∣ a ↔ z ∣ a.re ∧ z ∣ a.im
-  proof: by
+/-
+**Zsqrtd.intCast_dvd** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：intCast_dvd (z : Int) (a : Int√d) : ↑z ∣ a ↔ z ∣ a.re ∧ z ∣ a.im
+参数：z : Int；a : Int√d。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Zsqrtd.re_intCast`：re_intCast (n : Int) : (n : Int√d).re = n
+· 使用定理 `Zsqrtd.im_intCast`：im_intCast (n : Int) : (n : Int√d).im = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Zsqrtd.smul_val`：smul_val (n x y : Int) : (n : Int√d) * ⟨x, y⟩ = ⟨n * x,
+ n * y⟩
+· 使用定理 `Zsqrtd.ext_iff`：∀ {d : ℤ} {x y : ℤ√d}, x = y ↔ x.re = y.re ∧ x.im = y.im
+-/
+theorem intCast_dvd (z : ℤ) (a : ℤ√d) : ↑z ∣ a ↔ z ∣ a.re ∧ z ∣ a.im := by
   constructor
   · rintro ⟨x, rfl⟩
     simp
   · rintro ⟨⟨r, hr⟩, ⟨i, hi⟩⟩
     use ⟨r, i⟩
-    rw [smul_val]; rw [Zsqrtd.ext_iff]
+    rw [smul_val, Zsqrtd.ext_iff]
     exact ⟨hr, hi⟩
 
 @[simp, norm_cast]
-
-中文:
-定理 intCast_dvd
-  条件: (z : 整数) (a : 整数√d)
-  结论: ↑z ∣ a ↔ z ∣ a.re ∧ z ∣ a.im
-  证明: by
-  constructor
-  · rintro ⟨x, rfl⟩
-    simp
-  · rintro ⟨⟨r, hr⟩, ⟨i, hi⟩⟩
-    use ⟨r, i⟩
-    rw [smul_val]; rw [Zsqrtd.ext_iff]
-    exact ⟨hr, hi⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Zsqrtd, Zsqrtd.ext_iff, ext_iff, smul_val
+/-
+**Zsqrtd.intCast_dvd_intCast** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：intCast_dvd_intCast (a b : Int) : (a : Int√d) ∣ b ↔ a ∣ b
+参数：a b : Int。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Zsqrtd.intCast_dvd`：intCast_dvd (z : Int) (a : Int√d) : ↑z ∣ a ↔ z ∣ a.r
+e ∧ z ∣ a.im
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Zsqrtd.re_intCast`：re_intCast (n : Int) : (n : Int√d).re = n
+· 使用定理 `Zsqrtd.im_intCast`：im_intCast (n : Int) : (n : Int√d).im = 0
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem intCast_dvd (z : Int) (a : Int√d) : ↑z ∣ a ↔ z ∣ a.re ∧ z ∣ a.im := by
-  constructor
-  · rintro ⟨x, rfl⟩
-    simp
-  · rintro ⟨⟨r, hr⟩, ⟨i, hi⟩⟩
-    use ⟨r, i⟩
-    rw [smul_val]; rw [Zsqrtd.ext_iff]
-    exact ⟨hr, hi⟩
-
-@[simp, norm_cast]
-/--
-theorem `intCast_dvd_intCast` / 定理 `intCast_dvd_intCast`
-
-English:
-theorem intCast_dvd_intCast
-  given: (a b : Int)
-  statement: (a : Int√d) ∣ b ↔ a ∣ b
-  proof: by
+theorem intCast_dvd_intCast (a b : ℤ) : (a : ℤ√d) ∣ b ↔ a ∣ b := by
   rw [intCast_dvd]
   simp
-
-中文:
-定理 intCast_dvd_intCast
-  条件: (a b : 整数)
-  结论: (a : 整数√d) ∣ b ↔ a ∣ b
-  证明: by
-  rw [intCast_dvd]
-  simp
-
-Depends on / 依赖: intCast_dvd
+/-
+**Zsqrtd.eq_of_smul_eq_smul_left** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：∀ {d a : ℤ} {b c : ℤ√d}, a ≠ 0 → ↑a * b = ↑a * c → b = c
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Zsqrtd.ext_iff`：∀ {d : ℤ} {x y : ℤ√d}, x = y ↔ x.re = y.re ∧ x.im = y.im
+· 使用定理 `And.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∧ b → c ∧ d
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Zsqrtd.re_smul`：re_smul (a : Int) (b : Int√d) : (↑a * b).re = a * b.re
+· 使用定理 `mul_left_cancel₀`：mul_left_cancel₀ (ha : a != 0) (h : a * b = a * c) : b
+ = c
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `Int.instIsCancelMulZero`：IsCancelMulZero ℤ
+· 使用定理 `Zsqrtd.im_smul`：im_smul (a : Int) (b : Int√d) : (↑a * b).im = a * b.im
 -/
-theorem intCast_dvd_intCast (a b : Int) : (a : Int√d) ∣ b ↔ a ∣ b := by
-  rw [intCast_dvd]
-  simp
-
-/--
-theorem `eq_of_smul_eq_smul_left` / 定理 `eq_of_smul_eq_smul_left`
-
-English:
-theorem eq_of_smul_eq_smul_left
-  given: {a : Int} {b c : Int√d} (ha : a != 0) (h : ↑a * b = a * c)
-  proof: by
-  rw [Zsqrtd.ext_iff] at h ⊢
-  apply And.imp _ _ h <;> simpa only [re_smul, im_smul] using mul_left_cancel₀ ha
-
-中文:
-定理 eq_of_smul_eq_smul_left
-  条件: {a : 整数} {b c : 整数√d} (ha : a != 0) (h : ↑a * b = a * c)
-  证明: by
-  rw [Zsqrtd.ext_iff] at h ⊢
-  apply And.imp _ _ h <;> simpa only [re_smul, im_smul] using mul_left_cancel₀ ha
--/
-protected theorem eq_of_smul_eq_smul_left {a : Int} {b c : Int√d} (ha : a != 0) (h : ↑a * b = a * c) :
+protected theorem eq_of_smul_eq_smul_left {a : ℤ} {b c : ℤ√d} (ha : a ≠ 0) (h : ↑a * b = a * c) :
     b = c := by
   rw [Zsqrtd.ext_iff] at h ⊢
   apply And.imp _ _ h <;> simpa only [re_smul, im_smul] using mul_left_cancel₀ ha
 
 section Gcd
 
-/--
-theorem `gcd_eq_zero_iff` / 定理 `gcd_eq_zero_iff`
-
-English:
-theorem gcd_eq_zero_iff
-  given: (a : Int√d)
-  statement: Int.gcd a.re a.im = 0 ↔ a = 0
-  proof: by
-  simp only [Int.gcd_eq_zero_iff, Zsqrtd.ext_iff, im_zero, re_zero]
-
-中文:
-定理 gcd_eq_zero_iff
-  条件: (a : 整数√d)
-  结论: 整数.最大公约数 a.re a.im = 0 ↔ a = 0
-  证明: by
-  simp only [Int.gcd_eq_zero_iff, Zsqrtd.ext_iff, im_zero, re_zero]
-
-Depends on / 依赖: Int.gcd_eq_zero_iff, Zsqrtd, Zsqrtd.ext_iff, ext_iff, gcd_eq_zero_iff, im_zero, re_zero
+/-
+**Zsqrtd.gcd_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：gcd_eq_zero_iff (a : Int√d) : Int.gcd a.re a.im = 0 ↔ a = 0
+参数：a : Int√d。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem gcd_eq_zero_iff (a : Int√d) : Int.gcd a.re a.im = 0 ↔ a = 0 := by
+theorem gcd_eq_zero_iff (a : ℤ√d) : Int.gcd a.re a.im = 0 ↔ a = 0 := by
   simp only [Int.gcd_eq_zero_iff, Zsqrtd.ext_iff, im_zero, re_zero]
-
-/--
-theorem `gcd_pos_iff` / 定理 `gcd_pos_iff`
-
-English:
-theorem gcd_pos_iff
-  given: (a : Int√d)
-  statement: 0 < Int.gcd a.re a.im ↔ a != 0
-  proof: pos_iff_ne_zero.trans not_congr a.gcd_eq_zero_iff
-
-中文:
-定理 gcd_pos_iff
-  条件: (a : 整数√d)
-  结论: 0 < 整数.最大公约数 a.re a.im ↔ a != 0
-  证明: pos_iff_ne_zero.trans not_congr a.gcd_eq_zero_iff
-
-Depends on / 依赖: a.gcd_eq_zero_iff, gcd_eq_zero_iff, not_congr, pos_iff_ne_zero, pos_iff_ne_zero.trans
+/-
+**Zsqrtd.gcd_pos_iff** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：gcd_pos_iff (a : Int√d) : 0 < Int.gcd a.re a.im ↔ a != 0
+参数：a : Int√d。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `pos_iff_ne_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [inst_
+1 : Zero α] [IsBotZeroClass α], 0 < a ↔ a ≠ 0
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `not_congr`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Zsqrtd.gcd_eq_zero_iff`：gcd_eq_zero_iff (a : Int√d) : Int.gcd a.re a.im 
+= 0 ↔ a = 0
 -/
-theorem gcd_pos_iff (a : Int√d) : 0 < Int.gcd a.re a.im ↔ a != 0 :=
-pos_iff_ne_zero.trans not_congr a.gcd_eq_zero_iff
-
-/--
-theorem `isCoprime_of_dvd_isCoprime` / 定理 `isCoprime_of_dvd_isCoprime`
-
-English:
-theorem isCoprime_of_dvd_isCoprime
-  given: {a b : Int√d} (hcoprime : IsCoprime a.re a.im) (hdvd : b ∣ a)
-  proof: by
-  apply isCoprime_of_dvd
-  · rintro ⟨hre, him⟩
-    obtain rfl : b = 0 := Zsqrtd.ext hre him
-    rw [zero_dvd_iff] at hdvd
-    simp [hdvd, im_zero, re_zero, not_isCoprime_zero_zero] at hcoprime
-  · rintro z hz - hzdvdu hzdvdv
-    apply hz
-    obtain ⟨ha, hb⟩ : z ∣ a.re ∧ z ∣ a.im := by
-      rw [← intCast_dvd]
-      apply dvd_trans _ hdvd
-      rw [intCast_dvd]
-      exact ⟨hzdvdu, hzdvdv⟩
-    exact hcoprime.isUnit_of_dvd' ha hb
-
-中文:
-定理 isCoprime_of_dvd_isCoprime
-  条件: {a b : 整数√d} (hcoprime : IsCoprime a.re a.im) (hdvd : b ∣ a)
-  证明: by
-  apply isCoprime_of_dvd
-  · rintro ⟨hre, him⟩
-    obtain rfl : b = 0 := Zsqrtd.ext hre him
-    rw [zero_dvd_iff] at hdvd
-    simp [hdvd, im_zero, re_zero, not_isCoprime_zero_zero] at hcoprime
-  · rintro z hz - hzdvdu hzdvdv
-    apply hz
-    obtain ⟨ha, hb⟩ : z ∣ a.re ∧ z ∣ a.im := by
-      rw [← intCast_dvd]
-      apply dvd_trans _ hdvd
-      rw [intCast_dvd]
-      exact ⟨hzdvdu, hzdvdv⟩
-    exact hcoprime.isUnit_of_dvd' ha hb
-
-Depends on / 依赖: Zsqrtd, Zsqrtd.ext, a.im, a.re, dvd_trans, hcoprime, hcoprime.isUnit_of_dvd, hzdvdu, hzdvdv, im_zero, intCast_dvd, isCoprime_of_dvd, isUnit_of_dvd, not_isCoprime_zero_zero, re_zero, zero_dvd_iff
+theorem gcd_pos_iff (a : ℤ√d) : 0 < Int.gcd a.re a.im ↔ a ≠ 0 :=
+  pos_iff_ne_zero.trans <| not_congr a.gcd_eq_zero_iff
+/-
+**Zsqrtd.isCoprime_of_dvd_isCoprime** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：isCoprime_of_dvd_isCoprime {a b : Int√d} (hcoprime : IsCoprime a.re a.im) 
+(hdvd : b ∣ a) : IsCoprime b.re b.im
+参数：hcoprime : IsCoprime a.re a.im；hdvd : b ∣ a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isCoprime_of_dvd`：isCoprime_of_dvd (x y : R) (nonzero : ¬(x = 0 ∧ y = 0)
+) (H : forall z in nonunits R, z != 0 -> z ∣ x -> ¬z ∣ y) : IsCoprime x y
+· 使用定理 `IsBezout.of_isPrincipalIdealRing`：∀ (R : Type u) [inst : Semiring R] [Is
+PrincipalIdealRing R], IsBezout R
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_dvd_iff`：zero_dvd_iff : 0 ∣ a ↔ a = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Zsqrtd.ext`：∀ {d : ℤ} {x y : ℤ√d}, x.re = y.re → x.im = y.im → x = y
+· 使用定理 `Zsqrtd.intCast_dvd`：intCast_dvd (z : Int) (a : Int√d) : ↑z ∣ a ↔ z ∣ a.r
+e ∧ z ∣ a.im
+· 使用定理 `dvd_trans`：dvd_trans : a ∣ b -> b ∣ c -> a ∣ c | ⟨d, h₁⟩, ⟨e, h₂⟩ => ⟨d 
+* e, h₁ ▸ h₂.trans mul_assoc a d e⟩  alias Dvd.dvd.trans
+· 使用定理 `IsCoprime.isUnit_of_dvd'`：IsCoprime.isUnit_of_dvd' {a b x : R} (h : IsCo
+prime a b) (ha : x ∣ a) (hb : x ∣ b) : IsUnit x
 -/
-theorem isCoprime_of_dvd_isCoprime {a b : Int√d} (hcoprime : IsCoprime a.re a.im) (hdvd : b ∣ a) :
+theorem isCoprime_of_dvd_isCoprime {a b : ℤ√d} (hcoprime : IsCoprime a.re a.im) (hdvd : b ∣ a) :
     IsCoprime b.re b.im := by
   apply isCoprime_of_dvd
   · rintro ⟨hre, him⟩
@@ -1601,34 +1012,26 @@ theorem isCoprime_of_dvd_isCoprime {a b : Int√d} (hcoprime : IsCoprime a.re a.
       rw [intCast_dvd]
       exact ⟨hzdvdu, hzdvdv⟩
     exact hcoprime.isUnit_of_dvd' ha hb
-
-/--
-theorem `exists_coprime_of_gcd_pos` / 定理 `exists_coprime_of_gcd_pos`
-
-English:
-theorem exists_coprime_of_gcd_pos
-  given: {a : Int√d} (hgcd : 0 < Int.gcd a.re a.im)
-  proof: by
-  obtain ⟨re, im, H1, Hre, Him⟩ := Int.exists_gcd_one hgcd
-  rw [mul_comm] at Hre Him
-  refine ⟨⟨re, im⟩, ?_, ?_⟩
-  · rw [smul_val, ← Hre, ← Him]
-  · rw [Int.isCoprime_iff_gcd_eq_one, H1]
-
-中文:
-定理 存在_coprime_of_gcd_pos
-  条件: {a : 整数√d} (hgcd : 0 < 整数.最大公约数 a.re a.im)
-  证明: by
-  obtain ⟨re, im, H1, Hre, Him⟩ := Int.exists_gcd_one hgcd
-  rw [mul_comm] at Hre Him
-  refine ⟨⟨re, im⟩, ?_, ?_⟩
-  · rw [smul_val, ← Hre, ← Him]
-  · rw [Int.isCoprime_iff_gcd_eq_one, H1]
-
-Depends on / 依赖: Int.exists_gcd_one, Int.isCoprime_iff_gcd_eq_one, exists_gcd_one, isCoprime_iff_gcd_eq_one, mul_comm, smul_val
+/-
+**Zsqrtd.exists_coprime_of_gcd_pos** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：exists_coprime_of_gcd_pos {a : Int√d} (hgcd : 0 < Int.gcd a.re a.im) : exi
+sts b : Int√d, a = ((Int.gcd a.re a.im : Int) : Int√d) * b ∧ IsCoprime b.re b.im
+参数：hgcd : 0 < Int.gcd a.re a.im。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.exists_gcd_one`：exists_gcd_one {m n : Int} (H : 0 < gcd m n) : exist
+s m' n' : Int, gcd m' n' = 1 ∧ m = m' * gcd m n ∧ n = n' * gcd m n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Zsqrtd.smul_val`：smul_val (n x y : Int) : (n : Int√d) * ⟨x, y⟩ = ⟨n * x,
+ n * y⟩
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Int.isCoprime_iff_gcd_eq_one`：Int.isCoprime_iff_gcd_eq_one {m n : Int} :
+ IsCoprime m n ↔ Int.gcd m n = 1
 -/
-theorem exists_coprime_of_gcd_pos {a : Int√d} (hgcd : 0 < Int.gcd a.re a.im) :
-    exists b : Int√d, a = ((Int.gcd a.re a.im : Int) : Int√d) * b ∧ IsCoprime b.re b.im := by
+theorem exists_coprime_of_gcd_pos {a : ℤ√d} (hgcd : 0 < Int.gcd a.re a.im) :
+    ∃ b : ℤ√d, a = ((Int.gcd a.re a.im : ℤ) : ℤ√d) * b ∧ IsCoprime b.re b.im := by
   obtain ⟨re, im, H1, Hre, Him⟩ := Int.exists_gcd_one hgcd
   rw [mul_comm] at Hre Him
   refine ⟨⟨re, im⟩, ?_, ?_⟩
@@ -1637,128 +1040,144 @@ theorem exists_coprime_of_gcd_pos {a : Int√d} (hgcd : 0 < Int.gcd a.re a.im) :
 
 end Gcd
 
-/--
-Definition of `SqLe` / `SqLe` 的定义
+/-- Read `SqLe a c b d` as `a √c ≤ b √d` -/
+/-
+**Zsqrtd.SqLe** 是 Mathlib 中的一个定义，位于命名空间 `Zsqrtd`。
+形式化陈述：SqLe (a c b d : Nat) : Prop
+参数：a c b d : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SqLe
-  signature: (a c b d : Nat)
-  body: c * a * a <= d * b * b
-
-中文:
-定义 SqLe
-  签名: (a c b d : 自然数)
-  定义体: c * a * a <= d * b * b
+--- 原说明 ---
+Read `SqLe a c b d` as `a √c ≤ b √d`
 -/
-def SqLe (a c b d : Nat) : Prop :=
-  c * a * a <= d * b * b
-
-/--
-theorem `sqLe_of_le` / 定理 `sqLe_of_le`
-
-English:
-theorem sqLe_of_le
-  given: {c d x y z w : Nat} (xz : z <= x) (yw : y <= w) (xy : SqLe x c y d)
-  proof: calc
-  c * z * z <= c * x * x := by gcongr
-  _ <= d * y * y := xy
-  _ <= d * w * w := by gcongr
-
-中文:
-定理 sqLe_of_le
-  条件: {c d x y z w : 自然数} (xz : z <= x) (yw : y <= w) (xy : SqLe x c y d)
-  证明: calc
-  c * z * z <= c * x * x := by gcongr
-  _ <= d * y * y := xy
-  _ <= d * w * w := by gcongr
+def SqLe (a c b d : ℕ) : Prop :=
+  c * a * a ≤ d * b * b
+/-
+**Zsqrtd.sqLe_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：sqLe_of_le {c d x y z w : Nat} (xz : z <= x) (yw : y <= w) (xy : SqLe x c 
+y d) : SqLe z c w d
+参数：xz : z <= x；yw : y <= w；xy : SqLe x c y d。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mul_le_mul'`：mul_le_mul' [MulLeftMono α] [MulRightMono α] {a b c d : α} 
+(h₁ : a <= b) (h₂ : c <= d) : a * c <= b * d
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-theorem sqLe_of_le {c d x y z w : Nat} (xz : z <= x) (yw : y <= w) (xy : SqLe x c y d) :
+theorem sqLe_of_le {c d x y z w : ℕ} (xz : z ≤ x) (yw : y ≤ w) (xy : SqLe x c y d) :
     SqLe z c w d := calc
-  c * z * z <= c * x * x := by gcongr
-  _ <= d * y * y := xy
-  _ <= d * w * w := by gcongr
-
-/--
-theorem `sqLe_add_mixed` / 定理 `sqLe_add_mixed`
-
-English:
-theorem sqLe_add_mixed
-  given: {c d x y z w : Nat} (xy : SqLe x c y d) (zw : SqLe z c w d)
-  proof: Nat.mul_self_le_mul_self_iff.1 by
-    simpa [mul_comm, mul_left_comm] using Nat.mul_le_mul xy zw
-
-中文:
-定理 sqLe_add_mixed
-  条件: {c d x y z w : 自然数} (xy : SqLe x c y d) (zw : SqLe z c w d)
-  证明: Nat.mul_self_le_mul_self_iff.1 by
-    simpa [mul_comm, mul_left_comm] using Nat.mul_le_mul xy zw
-
-Depends on / 依赖: Nat.mul_le_mul, Nat.mul_self_le_mul_self_iff, mul_comm, mul_le_mul, mul_left_comm, mul_self_le_mul_self_iff
+  c * z * z ≤ c * x * x := by gcongr
+  _ ≤ d * y * y := xy
+  _ ≤ d * w * w := by gcongr
+/-
+**Zsqrtd.sqLe_add_mixed** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：sqLe_add_mixed {c d x y z w : Nat} (xy : SqLe x c y d) (zw : SqLe z c w d)
+ : c * (x * z) <= d * (y * w)
+参数：xy : SqLe x c y d；zw : SqLe z c w d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.mul_self_le_mul_self_iff`：∀ {m n : ℕ}, m * m ≤ n * n ↔ m ≤ n
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `mul_left_comm`：mul_left_comm (a b c : G) : a * (b * c) = b * (a * c)
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Nat.mul_le_mul`：∀ {n₁ m₁ n₂ m₂ : ℕ}, n₁ ≤ n₂ → m₁ ≤ m₂ → n₁ * m₁ ≤ n₂ * 
+m₂
 -/
-theorem sqLe_add_mixed {c d x y z w : Nat} (xy : SqLe x c y d) (zw : SqLe z c w d) :
-    c * (x * z) <= d * (y * w) :=
-Nat.mul_self_le_mul_self_iff.1 by
+theorem sqLe_add_mixed {c d x y z w : ℕ} (xy : SqLe x c y d) (zw : SqLe z c w d) :
+    c * (x * z) ≤ d * (y * w) :=
+  Nat.mul_self_le_mul_self_iff.1 <| by
     simpa [mul_comm, mul_left_comm] using Nat.mul_le_mul xy zw
-
-/--
-theorem `sqLe_add` / 定理 `sqLe_add`
-
-English:
-theorem sqLe_add
-  given: {c d x y z w : Nat} (xy : SqLe x c y d) (zw : SqLe z c w d)
-  proof: by
-  have xz := sqLe_add_mixed xy zw
-  simp only [SqLe, mul_assoc] at xy zw
-  simp [SqLe, mul_add, mul_comm, mul_left_comm, add_le_add, *]
-
-中文:
-定理 sqLe_add
-  条件: {c d x y z w : 自然数} (xy : SqLe x c y d) (zw : SqLe z c w d)
-  证明: by
-  have xz := sqLe_add_mixed xy zw
-  simp only [SqLe, mul_assoc] at xy zw
-  simp [SqLe, mul_add, mul_comm, mul_left_comm, add_le_add, *]
-
-Depends on / 依赖: add_le_add, mul_add, mul_assoc, mul_comm, mul_left_comm, sqLe_add_mixed
+/-
+**Zsqrtd.sqLe_add** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：sqLe_add {c d x y z w : Nat} (xy : SqLe x c y d) (zw : SqLe z c w d) : SqL
+e (x + z) c (y + w) d
+参数：xy : SqLe x c y d；zw : SqLe z c w d。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Zsqrtd.sqLe_add_mixed`：sqLe_add_mixed {c d x y z w : Nat} (xy : SqLe x c
+ y d) (zw : SqLe z c w d) : c * (x * z) <= d * (y * w)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `mul_left_comm`：mul_left_comm (a b c : G) : a * (b * c) = b * (a * c)
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 -/
-theorem sqLe_add {c d x y z w : Nat} (xy : SqLe x c y d) (zw : SqLe z c w d) :
+theorem sqLe_add {c d x y z w : ℕ} (xy : SqLe x c y d) (zw : SqLe z c w d) :
     SqLe (x + z) c (y + w) d := by
   have xz := sqLe_add_mixed xy zw
   simp only [SqLe, mul_assoc] at xy zw
   simp [SqLe, mul_add, mul_comm, mul_left_comm, add_le_add, *]
-
-/--
-theorem `sqLe_cancel` / 定理 `sqLe_cancel`
-
-English:
-theorem sqLe_cancel
-  given: {c d x y z w : Nat} (zw : SqLe y d x c) (h : SqLe (x + z) c (y + w) d)
-  proof: by
-  apply le_of_not_gt
-  intro l
-  refine not_le_of_gt ?_ h
-  simp only [mul_add, mul_comm, mul_left_comm, add_assoc]
-  have hm := sqLe_add_mixed zw (le_of_lt l)
-  simp only [SqLe, mul_assoc] at l zw
-  grw [zw, hm]
-  gcongr
-
-中文:
-定理 sqLe_cancel
-  条件: {c d x y z w : 自然数} (zw : SqLe y d x c) (h : SqLe (x + z) c (y + w) d)
-  证明: by
-  apply le_of_not_gt
-  intro l
-  refine not_le_of_gt ?_ h
-  simp only [mul_add, mul_comm, mul_left_comm, add_assoc]
-  have hm := sqLe_add_mixed zw (le_of_lt l)
-  simp only [SqLe, mul_assoc] at l zw
-  grw [zw, hm]
-  gcongr
-
-Depends on / 依赖: add_assoc, le_of_lt, le_of_not_gt, mul_add, mul_assoc, mul_comm, mul_left_comm, not_le_of_gt, sqLe_add_mixed
+/-
+**Zsqrtd.sqLe_cancel** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：sqLe_cancel {c d x y z w : Nat} (zw : SqLe y d x c) (h : SqLe (x + z) c (y
+ + w) d) : SqLe z c w d
+参数：zw : SqLe y d x c；h : SqLe (x + z) c (y + w) d。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
+· 使用定理 `not_le_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `mul_left_comm`：mul_left_comm (a b c : G) : a * (b * c) = b * (a * c)
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `Zsqrtd.sqLe_add_mixed`：sqLe_add_mixed {c d x y z w : Nat} (xy : SqLe x c
+ y d) (zw : SqLe z c w d) : c * (x * z) <= d * (y * w)
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `lt_imp_lt_of_le_of_le`：lt_imp_lt_of_le_of_le (h₁ : c <= a) (h₂ : b <= d)
+ : a < b -> c < d
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `add_lt_add_right`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LT α] [AddLe
+ftStrictMono α] {b c : α}, b < c → ∀ (a : α), a + b < a + c
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
 -/
-theorem sqLe_cancel {c d x y z w : Nat} (zw : SqLe y d x c) (h : SqLe (x + z) c (y + w) d) :
+theorem sqLe_cancel {c d x y z w : ℕ} (zw : SqLe y d x c) (h : SqLe (x + z) c (y + w) d) :
     SqLe z c w d := by
   apply le_of_not_gt
   intro l
@@ -1768,67 +1187,102 @@ theorem sqLe_cancel {c d x y z w : Nat} (zw : SqLe y d x c) (h : SqLe (x + z) c 
   simp only [SqLe, mul_assoc] at l zw
   grw [zw, hm]
   gcongr
-
-/--
-theorem `sqLe_smul` / 定理 `sqLe_smul`
-
-English:
-theorem sqLe_smul
-  given: {c d x y : Nat} (n : Nat) (xy : SqLe x c y d)
-  statement: SqLe (n * x) c (n * y) d
-  proof: by
-  simpa [SqLe, mul_left_comm, mul_assoc] using Nat.mul_le_mul_left (n * n) xy
-
-中文:
-定理 sqLe_smul
-  条件: {c d x y : 自然数} (n : 自然数) (xy : SqLe x c y d)
-  结论: SqLe (n * x) c (n * y) d
-  证明: by
-  simpa [SqLe, mul_left_comm, mul_assoc] using Nat.mul_le_mul_left (n * n) xy
-
-Depends on / 依赖: Nat.mul_le_mul_left, mul_assoc, mul_le_mul_left, mul_left_comm
+/-
+**Zsqrtd.sqLe_smul** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：sqLe_smul {c d x y : Nat} (n : Nat) (xy : SqLe x c y d) : SqLe (n * x) c (
+n * y) d
+参数：n : Nat；xy : SqLe x c y d。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `mul_left_comm`：mul_left_comm (a b c : G) : a * (b * c) = b * (a * c)
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Nat.mul_le_mul_left`：∀ {n m : ℕ} (k : ℕ), n ≤ m → k * n ≤ k * m
 -/
-theorem sqLe_smul {c d x y : Nat} (n : Nat) (xy : SqLe x c y d) : SqLe (n * x) c (n * y) d := by
+theorem sqLe_smul {c d x y : ℕ} (n : ℕ) (xy : SqLe x c y d) : SqLe (n * x) c (n * y) d := by
   simpa [SqLe, mul_left_comm, mul_assoc] using Nat.mul_le_mul_left (n * n) xy
-
-/--
-theorem `sqLe_mul` / 定理 `sqLe_mul`
-
-English:
-theorem sqLe_mul
-  given: {d x y z w : Nat}
-  proof: by
-  refine ⟨?_, ?_, ?_, ?_⟩ <;>
-    · intro xy zw
-      have :=
-        Int.mul_nonneg (sub_nonneg_of_le (Int.ofNat_le_ofNat_of_le xy))
-          (sub_nonneg_of_le (Int.ofNat_le_ofNat_of_le zw))
-      refine Int.le_of_ofNat_le_ofNat (le_of_sub_nonneg ?_)
-      convert! this using 1
-      simp only [one_mul, Int.natCast_add, Int.natCast_mul]
-      ring
-
-中文:
-定理 sqLe_mul
-  条件: {d x y z w : 自然数}
-  证明: by
-  refine ⟨?_, ?_, ?_, ?_⟩ <;>
-    · intro xy zw
-      have :=
-        Int.mul_nonneg (sub_nonneg_of_le (Int.ofNat_le_ofNat_of_le xy))
-          (sub_nonneg_of_le (Int.ofNat_le_ofNat_of_le zw))
-      refine Int.le_of_ofNat_le_ofNat (le_of_sub_nonneg ?_)
-      convert! this using 1
-      simp only [one_mul, Int.natCast_add, Int.natCast_mul]
-      ring
-
-Depends on / 依赖: Int.le_of_ofNat_le_ofNat, Int.mul_nonneg, Int.natCast_add, Int.natCast_mul, Int.ofNat_le_ofNat_of_le, convert, le_of_ofNat_le_ofNat, le_of_sub_nonneg, mul_nonneg, natCast_add, natCast_mul, ofNat_le_ofNat_of_le, one_mul, sub_nonneg_of_le
+/-
+**Zsqrtd.sqLe_mul** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：sqLe_mul {d x y z w : Nat} : (SqLe x 1 y d -> SqLe z 1 w d -> SqLe (x * w 
++ y * z) d (x * z + d * y * w) 1) ∧ (SqLe x 1 y d -> SqLe w d z 1 -> SqLe (x * z
+ + d * y * w) 1 (x * w + y * z) d) ∧ (SqLe y d x 1 -> SqLe z 1 w d -> SqLe (x * 
+z + d * y * w) 1 (x * w + y * z) d) ∧ (SqLe y d x 1 -> SqLe w d z 1 -> SqLe (x *
+ w + y * z) d (x * z + d * y * w) 1)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.mul_nonneg`：∀ {a b : ℤ}, 0 ≤ a → 0 ≤ b → 0 ≤ a * b
+· 使用定理 `sub_nonneg_of_le`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [Ad
+dRightMono α] {a b : α}, b ≤ a → 0 ≤ a - b
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `Int.ofNat_le_ofNat_of_le`：∀ {m n : ℕ}, m ≤ n → ↑m ≤ ↑n
+· 使用定理 `Int.le_of_ofNat_le_ofNat`：∀ {m n : ℕ}, ↑m ≤ ↑n → m ≤ n
+· 使用定理 `le_of_sub_nonneg`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [Ad
+dRightMono α] {a b : α}, 0 ≤ a - b → b ≤ a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_lt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a₂ b c : R} (a₁ : R), a₂ + b = c → a₁ + a₂ + b = a₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pp_pf_overlap`：∀ {R : Type u_1} [inst : C
+ommSemiring R] {a₂ b₂ c : R} {ea eb e : ℕ} (x : R),   ea + eb = e → a₂ * b₂ = c 
+→ x ^ ea * a₂ * (x ^ eb * b₂) = x …
+（共 47 条，此处仅展示前 30 条）
 -/
-theorem sqLe_mul {d x y z w : Nat} :
-    (SqLe x 1 y d -> SqLe z 1 w d -> SqLe (x * w + y * z) d (x * z + d * y * w) 1) ∧
-      (SqLe x 1 y d -> SqLe w d z 1 -> SqLe (x * z + d * y * w) 1 (x * w + y * z) d) ∧
-        (SqLe y d x 1 -> SqLe z 1 w d -> SqLe (x * z + d * y * w) 1 (x * w + y * z) d) ∧
-          (SqLe y d x 1 -> SqLe w d z 1 -> SqLe (x * w + y * z) d (x * z + d * y * w) 1) := by
+theorem sqLe_mul {d x y z w : ℕ} :
+    (SqLe x 1 y d → SqLe z 1 w d → SqLe (x * w + y * z) d (x * z + d * y * w) 1) ∧
+      (SqLe x 1 y d → SqLe w d z 1 → SqLe (x * z + d * y * w) 1 (x * w + y * z) d) ∧
+        (SqLe y d x 1 → SqLe z 1 w d → SqLe (x * z + d * y * w) 1 (x * w + y * z) d) ∧
+          (SqLe y d x 1 → SqLe w d z 1 → SqLe (x * w + y * z) d (x * z + d * y * w) 1) := by
   refine ⟨?_, ?_, ?_, ?_⟩ <;>
     · intro xy zw
       have :=
@@ -1840,541 +1294,582 @@ theorem sqLe_mul {d x y z w : Nat} :
       ring
 
 open Int in
-/--
-Definition of `Nonnegg` / `Nonnegg` 的定义
+/-- "Generalized" `nonneg`. `nonnegg c d x y` means `a √c + b √d ≥ 0`;
+  we are interested in the case `c = 1` but this is more symmetric -/
+/-
+**Zsqrtd.Nonnegg** 是 Mathlib 中的一个定义，位于命名空间 `Zsqrtd`。
+形式化陈述：ℕ → ℕ → ℤ → ℤ → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Nonnegg
-  signature: (c d : Nat)
-
-中文:
-定义 Nonnegg
-  签名: (c d : 自然数)
+--- 原说明 ---
+"Generalized" `nonneg`. `nonnegg c d x y` means `a √c + b √d ≥ 0`;
+  we are interested in the case `c = 1` but this is more symmetric
 -/
-def Nonnegg (c d : Nat) : Int -> Int -> Prop
-  | (a : Nat), (b : Nat) => True
-  | (a : Nat), -[b+1] => SqLe (b + 1) c a d
-  | -[a+1], (b : Nat) => SqLe (a + 1) d b c
+def Nonnegg (c d : ℕ) : ℤ → ℤ → Prop
+  | (a : ℕ), (b : ℕ) => True
+  | (a : ℕ), -[b+1] => SqLe (b + 1) c a d
+  | -[a+1], (b : ℕ) => SqLe (a + 1) d b c
   | -[_+1], -[_+1] => False
-
-/--
-theorem `nonnegg_comm` / 定理 `nonnegg_comm`
-
-English:
-theorem nonnegg_comm
-  given: {c d : Nat} {x y : Int}
-  statement: Nonnegg c d x y = Nonnegg d c y x
-  proof: by
-  cases x <;> cases y <;> rfl
-
-中文:
-定理 nonnegg_comm
-  条件: {c d : 自然数} {x y : 整数}
-  结论: Nonnegg c d x y = Nonnegg d c y x
-  证明: by
-  cases x <;> cases y <;> rfl
+/-
+**Zsqrtd.nonnegg_comm** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：nonnegg_comm {c d : Nat} {x y : Int} : Nonnegg c d x y = Nonnegg d c y x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem nonnegg_comm {c d : Nat} {x y : Int} : Nonnegg c d x y = Nonnegg d c y x := by
+theorem nonnegg_comm {c d : ℕ} {x y : ℤ} : Nonnegg c d x y = Nonnegg d c y x := by
   cases x <;> cases y <;> rfl
-
-/--
-theorem `nonnegg_neg_pos` / 定理 `nonnegg_neg_pos`
-
-English:
-theorem nonnegg_neg_pos
-  given: {c d}
-  statement: forall {a b : Nat}, Nonnegg c d (-a) b ↔ SqLe a d b c
-
-中文:
-定理 nonnegg_neg_pos
-  条件: {c d}
-  结论: 对任意 {a b : 自然数}, Nonnegg c d (-a) b ↔ SqLe a d b c
+/-
+**Zsqrtd.nonnegg_neg_pos** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：∀ {c d a b : ℕ}, Zsqrtd.Nonnegg c d (-↑a) ↑b ↔ Zsqrtd.SqLe a d b c
+参数：-↑a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `trivial`：True
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem nonnegg_neg_pos {c d} : forall {a b : Nat}, Nonnegg c d (-a) b ↔ SqLe a d b c
+theorem nonnegg_neg_pos {c d} : ∀ {a b : ℕ}, Nonnegg c d (-a) b ↔ SqLe a d b c
   | 0, b => ⟨by simp [SqLe], fun _ => trivial⟩
   | a + 1, b => by rfl
-
-/--
-theorem `nonnegg_pos_neg` / 定理 `nonnegg_pos_neg`
-
-English:
-theorem nonnegg_pos_neg
-  given: {c d} {a b : Nat}
-  statement: Nonnegg c d a (-b) ↔ SqLe b c a d
-  proof: by
-  rw [nonnegg_comm]; exact nonnegg_neg_pos
-
-中文:
-定理 nonnegg_pos_neg
-  条件: {c d} {a b : 自然数}
-  结论: Nonnegg c d a (-b) ↔ SqLe b c a d
-  证明: by
-  rw [nonnegg_comm]; exact nonnegg_neg_pos
-
-Depends on / 依赖: nonnegg_comm, nonnegg_neg_pos
+/-
+**Zsqrtd.nonnegg_pos_neg** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：nonnegg_pos_neg {c d} {a b : Nat} : Nonnegg c d a (-b) ↔ SqLe b c a d
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Zsqrtd.nonnegg_comm`：nonnegg_comm {c d : Nat} {x y : Int} : Nonnegg c d 
+x y = Nonnegg d c y x
+· 使用定理 `Zsqrtd.nonnegg_neg_pos`：∀ {c d a b : ℕ}, Zsqrtd.Nonnegg c d (-↑a) ↑b ↔ Z
+sqrtd.SqLe a d b c
 -/
-theorem nonnegg_pos_neg {c d} {a b : Nat} : Nonnegg c d a (-b) ↔ SqLe b c a d := by
+theorem nonnegg_pos_neg {c d} {a b : ℕ} : Nonnegg c d a (-b) ↔ SqLe b c a d := by
   rw [nonnegg_comm]; exact nonnegg_neg_pos
 
 open Int in
-/--
-theorem `nonnegg_cases_right` / 定理 `nonnegg_cases_right`
-
-English:
-theorem nonnegg_cases_right
-  given: {c d} {a : Nat}
-
-中文:
-定理 nonnegg_cases_right
-  条件: {c d} {a : 自然数}
+/-
+**Zsqrtd.nonnegg_cases_right** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：∀ {c d a : ℕ} {b : ℤ}, (∀ (x : ℕ), b = -↑x → Zsqrtd.SqLe x c a d) → Zsqrtd
+.Nonnegg c d (↑a) b
+参数：∀ (x : ℕ), b = -↑x → Zsqrtd.SqLe x c a d；↑a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
 -/
-theorem nonnegg_cases_right {c d} {a : Nat} :
-    forall {b : Int}, (forall x : Nat, b = -x -> SqLe x c a d) -> Nonnegg c d a b
+theorem nonnegg_cases_right {c d} {a : ℕ} :
+    ∀ {b : ℤ}, (∀ x : ℕ, b = -x → SqLe x c a d) → Nonnegg c d a b
   | (b : Nat), _ => trivial
   | -[b+1], h => h (b + 1) rfl
-
-/--
-theorem `nonnegg_cases_left` / 定理 `nonnegg_cases_left`
-
-English:
-theorem nonnegg_cases_left
-  given: {c d} {b : Nat} {a : Int} (h : forall x : Nat, a = -x -> SqLe x d b c)
-  proof: cast nonnegg_comm (nonnegg_cases_right h)
-
-中文:
-定理 nonnegg_cases_left
-  条件: {c d} {b : 自然数} {a : 整数} (h : 对任意 x : 自然数, a = -x -> SqLe x d b c)
-  证明: cast nonnegg_comm (nonnegg_cases_right h)
-
-Depends on / 依赖: nonnegg_cases_right, nonnegg_comm
+/-
+**Zsqrtd.nonnegg_cases_left** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：nonnegg_cases_left {c d} {b : Nat} {a : Int} (h : forall x : Nat, a = -x -
+> SqLe x d b c) : Nonnegg c d a b
+参数：h : forall x : Nat, a = -x -> SqLe x d b c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Zsqrtd.nonnegg_comm`：nonnegg_comm {c d : Nat} {x y : Int} : Nonnegg c d 
+x y = Nonnegg d c y x
+· 使用定理 `Zsqrtd.nonnegg_cases_right`：∀ {c d a : ℕ} {b : ℤ}, (∀ (x : ℕ), b = -↑x →
+ Zsqrtd.SqLe x c a d) → Zsqrtd.Nonnegg c d (↑a) b
 -/
-theorem nonnegg_cases_left {c d} {b : Nat} {a : Int} (h : forall x : Nat, a = -x -> SqLe x d b c) :
+theorem nonnegg_cases_left {c d} {b : ℕ} {a : ℤ} (h : ∀ x : ℕ, a = -x → SqLe x d b c) :
     Nonnegg c d a b :=
   cast nonnegg_comm (nonnegg_cases_right h)
 
 section Norm
 
-/--
-Definition of `norm` / `norm` 的定义
+/-- The norm of an element of `ℤ[√d]`. -/
+/-
+**Zsqrtd.norm** 是 Mathlib 中的一个定义，位于命名空间 `Zsqrtd`。
+形式化陈述：norm (n : Int√d) : Int
+参数：n : Int√d。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition norm
-  signature: (n : Int√d)
-  body: n.re * n.re - d * n.im * n.im
-
-中文:
-定义 norm
-  签名: (n : 整数√d)
-  定义体: n.re * n.re - d * n.im * n.im
-
-Depends on / 依赖: n.im, n.re
+--- 原说明 ---
+The norm of an element of `ℤ[√d]`.
 -/
-def norm (n : Int√d) : Int :=
+def norm (n : ℤ√d) : ℤ :=
   n.re * n.re - d * n.im * n.im
-
-/--
-theorem `norm_def` / 定理 `norm_def`
-
-English:
-theorem norm_def
-  given: (n : Int√d)
-  statement: n.norm = n.re * n.re - d * n.im * n.im
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 norm_def
-  条件: (n : 整数√d)
-  结论: n.norm = n.re * n.re - d * n.im * n.im
-  证明: rfl
-
-@[simp]
+/-
+**Zsqrtd.norm_def** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：norm_def (n : Int√d) : n.norm = n.re * n.re - d * n.im * n.im
+参数：n : Int√d。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem norm_def (n : Int√d) : n.norm = n.re * n.re - d * n.im * n.im :=
+theorem norm_def (n : ℤ√d) : n.norm = n.re * n.re - d * n.im * n.im :=
   rfl
 
 @[simp]
-/--
-theorem `norm_zero` / 定理 `norm_zero`
-
-English:
-theorem norm_zero
-  statement: norm (0 : Int√d) = 0
-  proof: by simp [norm]
-
-@[simp]
-
-中文:
-定理 norm_zero
-  结论: norm (0 : 整数√d) = 0
-  证明: by simp [norm]
-
-@[simp]
+/-
+**Zsqrtd.norm_zero** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：norm_zero : norm (0 : Int√d) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem norm_zero : norm (0 : Int√d) = 0 := by simp [norm]
+theorem norm_zero : norm (0 : ℤ√d) = 0 := by simp [norm]
 
 @[simp]
-/--
-theorem `norm_one` / 定理 `norm_one`
-
-English:
-theorem norm_one
-  statement: norm (1 : Int√d) = 1
-  proof: by simp [norm]
-
-@[simp]
-
-中文:
-定理 norm_one
-  结论: norm (1 : 整数√d) = 1
-  证明: by simp [norm]
-
-@[simp]
+/-
+**Zsqrtd.norm_one** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：norm_one : norm (1 : Int√d) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem norm_one : norm (1 : Int√d) = 1 := by simp [norm]
+theorem norm_one : norm (1 : ℤ√d) = 1 := by simp [norm]
 
 @[simp]
-/--
-theorem `norm_intCast` / 定理 `norm_intCast`
-
-English:
-theorem norm_intCast
-  given: (n : Int)
-  statement: norm (n : Int√d) = n * n
-  proof: by simp [norm]
-
-@[simp]
-
-中文:
-定理 norm_intCast
-  条件: (n : 整数)
-  结论: norm (n : 整数√d) = n * n
-  证明: by simp [norm]
-
-@[simp]
+/-
+**Zsqrtd.norm_intCast** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：norm_intCast (n : Int) : norm (n : Int√d) = n * n
+参数：n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Zsqrtd.re_intCast`：re_intCast (n : Int) : (n : Int√d).re = n
+· 使用定理 `Zsqrtd.im_intCast`：im_intCast (n : Int) : (n : Int√d).im = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem norm_intCast (n : Int) : norm (n : Int√d) = n * n := by simp [norm]
+theorem norm_intCast (n : ℤ) : norm (n : ℤ√d) = n * n := by simp [norm]
 
 @[simp]
-/--
-theorem `norm_natCast` / 定理 `norm_natCast`
-
-English:
-theorem norm_natCast
-  given: (n : Nat)
-  statement: norm (n : Int√d) = n * n
-  proof: norm_intCast n
-
-@[simp]
-
-中文:
-定理 norm_natCast
-  条件: (n : 自然数)
-  结论: norm (n : 整数√d) = n * n
-  证明: norm_intCast n
-
-@[simp]
-
-Depends on / 依赖: norm_intCast
+/-
+**Zsqrtd.norm_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：norm_natCast (n : Nat) : norm (n : Int√d) = n * n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Zsqrtd.norm_intCast`：norm_intCast (n : Int) : norm (n : Int√d) = n * n
 -/
-theorem norm_natCast (n : Nat) : norm (n : Int√d) = n * n :=
+theorem norm_natCast (n : ℕ) : norm (n : ℤ√d) = n * n :=
   norm_intCast n
 
 @[simp]
-/--
-theorem `norm_mul` / 定理 `norm_mul`
-
-English:
-theorem norm_mul
-  given: (n m : Int√d)
-  statement: norm (n * m) = norm n * norm m
-  proof: by
-  simp only [norm, im_mul, re_mul]
-  ring
-
-中文:
-定理 norm_mul
-  条件: (n m : 整数√d)
-  结论: norm (n * m) = norm n * norm m
-  证明: by
-  simp only [norm, im_mul, re_mul]
-  ring
-
-Depends on / 依赖: im_mul, re_mul
+/-
+**Zsqrtd.norm_mul** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：norm_mul (n m : Int√d) : norm (n * m) = norm n * norm m
+参数：n m : Int√d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_lt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a₂ b c : R} (a₁ : R), a₂ + b = c → a₁ + a₂ + b = a₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pp_pf_overlap`：∀ {R : Type u_1} [inst : C
+ommSemiring R] {a₂ b₂ c : R} {ea eb e : ℕ} (x : R),   ea + eb = e → a₂ * b₂ = c 
+→ x ^ ea * a₂ * (x ^ eb * b₂) = x …
+· 使用定理 `Mathlib.Meta.NormNum.isNat_add`：∀ {α : Type u_1} [inst : AddMonoidWithOn
+e α] {f : α → α → α} {a b : α} {a' b' c : ℕ},   f = HAdd.hAdd →     Mathlib.Meta
+.NormNum.IsNat a a' …
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_gt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a b₂ c : R} (b₁ : R), a + b₂ = c → a + (b₁ + b₂) = b₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_overlap`：∀ {R : Type u_1} [inst : 
+CommSemiring R] {a₁ a₂ b₁ b₂ c₁ c₂ : R},   a₁ + b₁ = c₁ → a₂ + b₂ = c₂ → a₁ + a₂
+ + (b₁ + b₂) = c₁ + c₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_overlap_pf`：∀ {R : Type u_1} [inst : Comm
+Semiring R] {a b c : R} (x : R) (e : ℕ), a + b = c → x ^ e * a + x ^ e * b = x ^
+ e * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_pf`：∀ {R : Type u_2} [inst : CommRing R] 
+{a b c d : R}, -b = c → a + c = d → a - b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_mul`：∀ {R : Type u_2} [inst : CommRing R]
+ (a₁ : R) (a₂ : ℕ) {a₃ b : R}, -a₃ = b → -(a₁ ^ a₂ * a₃) = a₁ ^ a₂ * b
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+（共 37 条，此处仅展示前 30 条）
 -/
-theorem norm_mul (n m : Int√d) : norm (n * m) = norm n * norm m := by
+theorem norm_mul (n m : ℤ√d) : norm (n * m) = norm n * norm m := by
   simp only [norm, im_mul, re_mul]
   ring
 
-/--
-Definition of `normMonoidHom` / `normMonoidHom` 的定义
+/-- `norm` as a `MonoidHom`. -/
+/-
+**Zsqrtd.normMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `Zsqrtd`。
+形式化陈述：normMonoidHom : Int√d ->* Int where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Zsqrtd.norm_one`：norm_one : norm (1 : Int√d) = 1
+· 使用定理 `Zsqrtd.norm_mul`：norm_mul (n m : Int√d) : norm (n * m) = norm n * norm m
 
-English:
-definition normMonoidHom
-  signature: : Int√d ->* Int where
-  body: norm
-  map_mul' := norm_mul
-  map_one' := norm_one
-
-中文:
-定义 normMonoidHom
-  签名: : 整数√d ->* 整数 where
-  定义体: norm
-  map_mul' := norm_mul
-  map_one' := norm_one
+--- 原说明 ---
+`norm` as a `MonoidHom`.
 -/
-def normMonoidHom : Int√d ->* Int where
+def normMonoidHom : ℤ√d →* ℤ where
   toFun := norm
   map_mul' := norm_mul
   map_one' := norm_one
-
-/--
-theorem `norm_eq_mul_conj` / 定理 `norm_eq_mul_conj`
-
-English:
-theorem norm_eq_mul_conj
-  given: (n : Int√d)
-  statement: (norm n : Int√d) = n * star n
-  proof: by
+/-
+**Zsqrtd.norm_eq_mul_conj** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：norm_eq_mul_conj (n : Int√d) : (norm n : Int√d) = n * star n
+参数：n : Int√d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Zsqrtd.ext`：∀ {d : ℤ} {x y : ℤ√d}, x.re = y.re → x.im = y.im → x = y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Int.cast_add`：∀ {R : Type u} [inst : AddGroupWithOne R] (m n : ℤ), ↑(m +
+ n) = ↑m + ↑n
+· 使用引理 `Int.cast_mul`：cast_mul {α : Type*} [NonAssocRing α] : forall m n, ((m * 
+n : Int) : α) = m * n
+· 使用定理 `Int.cast_neg`：∀ {R : Type u} [inst : AddGroupWithOne R] (n : ℤ), ↑(-n) =
+ -↑n
+· 使用定理 `Zsqrtd.re_intCast`：re_intCast (n : Int) : (n : Int√d).re = n
+· 使用定理 `Zsqrtd.im_intCast`：im_intCast (n : Int) : (n : Int√d).im = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
+· 使用定理 `neg_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), -a + a = 0
+-/
+theorem norm_eq_mul_conj (n : ℤ√d) : (norm n : ℤ√d) = n * star n := by
   ext <;> simp [norm, star, mul_comm, sub_eq_add_neg]
 
 @[simp]
-
-中文:
-定理 norm_eq_mul_conj
-  条件: (n : 整数√d)
-  结论: (norm n : 整数√d) = n * star n
-  证明: by
-  ext <;> simp [norm, star, mul_comm, sub_eq_add_neg]
-
-@[simp]
-
-Depends on / 依赖: mul_comm, sub_eq_add_neg
+/-
+**Zsqrtd.norm_neg** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：norm_neg (x : Int√d) : (-x).norm = x.norm
+参数：x : Int√d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Int.cast_inj`：cast_inj : (m : α) = n ↔ m = n
+· 使用定理 `Zsqrtd.instCharZero`：∀ {d : ℤ}, CharZero (ℤ√d)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Zsqrtd.norm_eq_mul_conj`：norm_eq_mul_conj (n : Int√d) : (norm n : Int√d)
+ = n * star n
+· 使用定理 `star_neg`：star_neg [AddGroup R] [StarAddMonoid R] (r : R) : star (-r) = 
+-star r
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem norm_eq_mul_conj (n : Int√d) : (norm n : Int√d) = n * star n := by
-  ext <;> simp [norm, star, mul_comm, sub_eq_add_neg]
+theorem norm_neg (x : ℤ√d) : (-x).norm = x.norm :=
+  (Int.cast_inj (α := ℤ√d)).1 <| by simp [norm_eq_mul_conj]
 
 @[simp]
-/--
-theorem `norm_neg` / 定理 `norm_neg`
-
-English:
-theorem norm_neg
-  given: (x : Int√d)
-  statement: (-x).norm = x.norm
-  proof: (Int.cast_inj (α := Int√d)).1 by simp [norm_eq_mul_conj]
-
-@[simp]
-
-中文:
-定理 norm_neg
-  条件: (x : 整数√d)
-  结论: (-x).norm = x.norm
-  证明: (Int.cast_inj (α := Int√d)).1 by simp [norm_eq_mul_conj]
-
-@[simp]
-
-Depends on / 依赖: Int.cast_inj, cast_inj, norm_eq_mul_conj
+/-
+**Zsqrtd.norm_conj** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：norm_conj (x : Int√d) : (star x).norm = x.norm
+参数：x : Int√d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Int.cast_inj`：cast_inj : (m : α) = n ↔ m = n
+· 使用定理 `Zsqrtd.instCharZero`：∀ {d : ℤ}, CharZero (ℤ√d)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Zsqrtd.norm_eq_mul_conj`：norm_eq_mul_conj (n : Int√d) : (norm n : Int√d)
+ = n * star n
+· 使用定理 `star_star`：star_star [InvolutiveStar R] (r : R) : star (star r) = r
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem norm_neg (x : Int√d) : (-x).norm = x.norm :=
-(Int.cast_inj (α := Int√d)).1 by simp [norm_eq_mul_conj]
-
-@[simp]
-/--
-theorem `norm_conj` / 定理 `norm_conj`
-
-English:
-theorem norm_conj
-  given: (x : Int√d)
-  statement: (star x).norm = x.norm
-  proof: (Int.cast_inj (α := Int√d)).1 by simp [norm_eq_mul_conj, mul_comm]
-
-中文:
-定理 norm_conj
-  条件: (x : 整数√d)
-  结论: (star x).norm = x.norm
-  证明: (Int.cast_inj (α := Int√d)).1 by simp [norm_eq_mul_conj, mul_comm]
-
-Depends on / 依赖: Int.cast_inj, cast_inj, mul_comm, norm_eq_mul_conj
+theorem norm_conj (x : ℤ√d) : (star x).norm = x.norm :=
+  (Int.cast_inj (α := ℤ√d)).1 <| by simp [norm_eq_mul_conj, mul_comm]
+/-
+**Zsqrtd.norm_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：norm_nonneg (hd : d <= 0) (n : Int√d) : 0 <= n.norm
+参数：hd : d <= 0；n : Int√d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_nonneg`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1 : Preorder 
+α] [AddLeftMono α] {a b : α}, 0 ≤ a → 0 ≤ b → 0 ≤ a + b
+· 使用引理 `mul_self_nonneg`：mul_self_nonneg [ExistsAddOfLE R] [PosMulMono R] [AddLe
+ftMono R] (a : R) : 0 <= a * a
+· 使用定理 `AddGroup.existsAddOfLE`：∀ (α : Type u) [inst : AddGroup α] [inst_1 : LE 
+α], ExistsAddOfLE α
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `neg_mul_eq_neg_mul`：neg_mul_eq_neg_mul (a b : α) : -(a * b) = -a * b
+· 使用定理 `mul_nonneg`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 :
+ Preorder α] [PosMulMono α], 0 ≤ a → 0 ≤ b → 0 ≤ a * b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `neg_nonneg`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [AddLeftM
+ono α] {a : α}, 0 ≤ -a ↔ a ≤ 0
 -/
-theorem norm_conj (x : Int√d) : (star x).norm = x.norm :=
-(Int.cast_inj (α := Int√d)).1 by simp [norm_eq_mul_conj, mul_comm]
-
-/--
-theorem `norm_nonneg` / 定理 `norm_nonneg`
-
-English:
-theorem norm_nonneg
-  given: (hd : d <= 0) (n : Int√d)
-  statement: 0 <= n.norm
-  proof: add_nonneg (mul_self_nonneg _)
-    (by
-      rw [mul_assoc]; rw [neg_mul_eq_neg_mul]
-      exact mul_nonneg (neg_nonneg.2 hd) (mul_self_nonneg _))
-
-@[simp]
-
-中文:
-定理 norm_nonneg
-  条件: (hd : d <= 0) (n : 整数√d)
-  结论: 0 <= n.norm
-  证明: add_nonneg (mul_self_nonneg _)
-    (by
-      rw [mul_assoc]; rw [neg_mul_eq_neg_mul]
-      exact mul_nonneg (neg_nonneg.2 hd) (mul_self_nonneg _))
-
-@[simp]
-
-Depends on / 依赖: add_nonneg, mul_assoc, mul_nonneg, mul_self_nonneg, neg_mul_eq_neg_mul, neg_nonneg
--/
-theorem norm_nonneg (hd : d <= 0) (n : Int√d) : 0 <= n.norm :=
+theorem norm_nonneg (hd : d ≤ 0) (n : ℤ√d) : 0 ≤ n.norm :=
   add_nonneg (mul_self_nonneg _)
     (by
-      rw [mul_assoc]; rw [neg_mul_eq_neg_mul]
+      rw [mul_assoc, neg_mul_eq_neg_mul]
       exact mul_nonneg (neg_nonneg.2 hd) (mul_self_nonneg _))
 
 @[simp]
-/--
-theorem `abs_norm` / 定理 `abs_norm`
-
-English:
-theorem abs_norm
-  given: (hd : d <= 0) (n : Int√d)
-  statement: |n.norm| = n.norm
-  proof: abs_of_nonneg norm_nonneg hd n
-
-中文:
-定理 abs_norm
-  条件: (hd : d <= 0) (n : 整数√d)
-  结论: |n.norm| = n.norm
-  证明: abs_of_nonneg norm_nonneg hd n
-
-Depends on / 依赖: abs_of_nonneg, norm_nonneg
+/-
+**Zsqrtd.abs_norm** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：abs_norm (hd : d <= 0) (n : Int√d) : |n.norm| = n.norm
+参数：hd : d <= 0；n : Int√d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `abs_of_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α]
+ {a : α} [AddLeftMono α], 0 ≤ a → |a| = a
+· 使用定理 `Zsqrtd.norm_nonneg`：norm_nonneg (hd : d <= 0) (n : Int√d) : 0 <= n.norm
 -/
-theorem abs_norm (hd : d <= 0) (n : Int√d) : |n.norm| = n.norm :=
-abs_of_nonneg norm_nonneg hd n
-
-/--
-theorem `norm_eq_one_iff` / 定理 `norm_eq_one_iff`
-
-English:
-theorem norm_eq_one_iff
-  given: {x : Int√d}
-  statement: x.norm.natAbs = 1 ↔ IsUnit x
-  proof: ⟨fun h =>
-isUnit_iff_dvd_one.2
-      (le_total 0 (norm x)).casesOn
-        (fun hx =>
-          ⟨star x, by
-            rwa [← Int.natCast_inj, Int.natAbs_of_nonneg hx, ← @Int.cast_inj (Int√d) _ _,
-              norm_eq_mul_conj, eq_comm] at h⟩)
-        fun hx =>
-          ⟨-star x, by
-            rwa [← Int.natCast_inj, Int.ofNat_natAbs_of_nonpos hx, ← @Int.cast_inj (Int√d) _ _,
-              Int.cast_neg, norm_eq_mul_conj, neg_mul_eq_mul_neg, eq_comm] at h⟩,
-    fun h => by
-    let ⟨y, hy⟩ := isUnit_iff_dvd_one.1 h
-    have := congr_arg (Int.natAbs ∘ norm) hy
-    rw [Function.comp_apply]; rw [Function.comp_apply]; rw [norm_mul]; rw [Int.natAbs_mul]; rw [norm_one]; rw [Int.natAbs_one]; rw [eq_comm]; rw [mul_eq_one] at this
-    exact this.1⟩
-
-中文:
-定理 norm_eq_one_iff
-  条件: {x : 整数√d}
-  结论: x.norm.natAbs = 1 ↔ 是单位 x
-  证明: ⟨fun h =>
-isUnit_iff_dvd_one.2
-      (le_total 0 (norm x)).casesOn
-        (fun hx =>
-          ⟨star x, by
-            rwa [← Int.natCast_inj, Int.natAbs_of_nonneg hx, ← @Int.cast_inj (Int√d) _ _,
-              norm_eq_mul_conj, eq_comm] at h⟩)
-        fun hx =>
-          ⟨-star x, by
-            rwa [← Int.natCast_inj, Int.ofNat_natAbs_of_nonpos hx, ← @Int.cast_inj (Int√d) _ _,
-              Int.cast_neg, norm_eq_mul_conj, neg_mul_eq_mul_neg, eq_comm] at h⟩,
-    fun h => by
-    let ⟨y, hy⟩ := isUnit_iff_dvd_one.1 h
-    have := congr_arg (Int.natAbs ∘ norm) hy
-    rw [Function.comp_apply]; rw [Function.comp_apply]; rw [norm_mul]; rw [Int.natAbs_mul]; rw [norm_one]; rw [Int.natAbs_one]; rw [eq_comm]; rw [mul_eq_one] at this
-    exact this.1⟩
-
-Depends on / 依赖: Function, Function.comp_apply, Int.cast_inj, Int.cast_neg, Int.natAbs, Int.natAbs_of_nonneg, Int.natCast_inj, Int.ofNat_natAbs_of_nonpos, casesOn, cast_inj, cast_neg, comp_apply, congr_arg, eq_comm, isUnit_iff_dvd_one, le_total, natAbs, natAbs_of_nonneg, natCast_inj, neg_mul_eq_mul_neg
+theorem abs_norm (hd : d ≤ 0) (n : ℤ√d) : |n.norm| = n.norm :=
+  abs_of_nonneg <| norm_nonneg hd n
+/-
+**Zsqrtd.norm_eq_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：norm_eq_one_iff {x : Int√d} : x.norm.natAbs = 1 ↔ IsUnit x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `isUnit_iff_dvd_one`：isUnit_iff_dvd_one {x : α} : IsUnit x ↔ x ∣ 1
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Zsqrtd.norm_eq_mul_conj`：norm_eq_mul_conj (n : Int√d) : (norm n : Int√d)
+ = n * star n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Int.cast_inj`：cast_inj : (m : α) = n ↔ m = n
+· 使用定理 `Zsqrtd.instCharZero`：∀ {d : ℤ}, CharZero (ℤ√d)
+· 使用定理 `Int.natAbs_of_nonneg`：∀ {a : ℤ}, 0 ≤ a → ↑a.natAbs = a
+· 使用定理 `Int.natCast_inj`：∀ {m n : ℕ}, ↑m = ↑n ↔ m = n
+· 使用定理 `neg_mul_eq_mul_neg`：neg_mul_eq_mul_neg (a b : α) : -(a * b) = a * -b
+· 使用定理 `Int.cast_neg`：∀ {R : Type u} [inst : AddGroupWithOne R] (n : ℤ), ↑(-n) =
+ -↑n
+· 使用定理 `Int.ofNat_natAbs_of_nonpos`：∀ {a : ℤ}, a ≤ 0 → ↑a.natAbs = -a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `mul_eq_one`：mul_eq_one : a * b = 1 ↔ a = 1 ∧ b = 1
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
+· 使用定理 `Int.natAbs_one`：Int.natAbs 1 = 1
+· 使用定理 `Zsqrtd.norm_one`：norm_one : norm (1 : Int√d) = 1
+· 使用定理 `Int.natAbs_mul`：∀ (a b : ℤ), (a * b).natAbs = a.natAbs * b.natAbs
+· 使用定理 `Zsqrtd.norm_mul`：norm_mul (n m : Int√d) : norm (n * m) = norm n * norm m
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
 -/
-theorem norm_eq_one_iff {x : Int√d} : x.norm.natAbs = 1 ↔ IsUnit x :=
+theorem norm_eq_one_iff {x : ℤ√d} : x.norm.natAbs = 1 ↔ IsUnit x :=
   ⟨fun h =>
-isUnit_iff_dvd_one.2
+    isUnit_iff_dvd_one.2 <|
       (le_total 0 (norm x)).casesOn
         (fun hx =>
           ⟨star x, by
-            rwa [← Int.natCast_inj, Int.natAbs_of_nonneg hx, ← @Int.cast_inj (Int√d) _ _,
+            rwa [← Int.natCast_inj, Int.natAbs_of_nonneg hx, ← @Int.cast_inj (ℤ√d) _ _,
               norm_eq_mul_conj, eq_comm] at h⟩)
         fun hx =>
           ⟨-star x, by
-            rwa [← Int.natCast_inj, Int.ofNat_natAbs_of_nonpos hx, ← @Int.cast_inj (Int√d) _ _,
+            rwa [← Int.natCast_inj, Int.ofNat_natAbs_of_nonpos hx, ← @Int.cast_inj (ℤ√d) _ _,
               Int.cast_neg, norm_eq_mul_conj, neg_mul_eq_mul_neg, eq_comm] at h⟩,
     fun h => by
     let ⟨y, hy⟩ := isUnit_iff_dvd_one.1 h
     have := congr_arg (Int.natAbs ∘ norm) hy
-    rw [Function.comp_apply]; rw [Function.comp_apply]; rw [norm_mul]; rw [Int.natAbs_mul]; rw [norm_one]; rw [Int.natAbs_one]; rw [eq_comm]; rw [mul_eq_one] at this
+    rw [Function.comp_apply, Function.comp_apply, norm_mul, Int.natAbs_mul, norm_one,
+      Int.natAbs_one, eq_comm, mul_eq_one] at this
     exact this.1⟩
-
-/--
-theorem `isUnit_iff_norm_isUnit` / 定理 `isUnit_iff_norm_isUnit`
-
-English:
-theorem isUnit_iff_norm_isUnit
-  given: {d : Int} (z : Int√d)
-  statement: IsUnit z ↔ IsUnit z.norm
-  proof: by
-  rw [Int.isUnit_iff_natAbs_eq]; rw [norm_eq_one_iff]
-
-中文:
-定理 isUnit_iff_norm_isUnit
-  条件: {d : 整数} (z : 整数√d)
-  结论: 是单位 z ↔ 是单位 z.norm
-  证明: by
-  rw [Int.isUnit_iff_natAbs_eq]; rw [norm_eq_one_iff]
-
-Depends on / 依赖: Int.isUnit_iff_natAbs_eq, isUnit_iff_natAbs_eq, norm_eq_one_iff
+/-
+**Zsqrtd.isUnit_iff_norm_isUnit** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：isUnit_iff_norm_isUnit {d : Int} (z : Int√d) : IsUnit z ↔ IsUnit z.norm
+参数：z : Int√d。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Int.isUnit_iff_natAbs_eq`：isUnit_iff_natAbs_eq : IsUnit u ↔ u.natAbs = 1
+· 使用定理 `Zsqrtd.norm_eq_one_iff`：norm_eq_one_iff {x : Int√d} : x.norm.natAbs = 1 
+↔ IsUnit x
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem isUnit_iff_norm_isUnit {d : Int} (z : Int√d) : IsUnit z ↔ IsUnit z.norm := by
-  rw [Int.isUnit_iff_natAbs_eq]; rw [norm_eq_one_iff]
-
-/--
-theorem `norm_eq_one_iff'` / 定理 `norm_eq_one_iff'`
-
-English:
-theorem norm_eq_one_iff'
-  given: {d : Int} (hd : d <= 0) (z : Int√d)
-  statement: z.norm = 1 ↔ IsUnit z
-  proof: by
-  rw [← norm_eq_one_iff]; rw [← Int.natCast_inj]; rw [Int.natAbs_of_nonneg (norm_nonneg hd z)]; rw [Int.ofNat_one]
-
-中文:
-定理 norm_eq_one_iff'
-  条件: {d : 整数} (hd : d <= 0) (z : 整数√d)
-  结论: z.norm = 1 ↔ 是单位 z
-  证明: by
-  rw [← norm_eq_one_iff]; rw [← Int.natCast_inj]; rw [Int.natAbs_of_nonneg (norm_nonneg hd z)]; rw [Int.ofNat_one]
-
-Depends on / 依赖: Int.natAbs_of_nonneg, Int.natCast_inj, Int.ofNat_one, natAbs_of_nonneg, natCast_inj, norm_eq_one_iff, norm_nonneg, ofNat_one
+theorem isUnit_iff_norm_isUnit {d : ℤ} (z : ℤ√d) : IsUnit z ↔ IsUnit z.norm := by
+  rw [Int.isUnit_iff_natAbs_eq, norm_eq_one_iff]
+/-
+**Zsqrtd.norm_eq_one_iff'** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：norm_eq_one_iff' {d : Int} (hd : d <= 0) (z : Int√d) : z.norm = 1 ↔ IsUnit
+ z
+参数：hd : d <= 0；z : Int√d。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Zsqrtd.norm_eq_one_iff`：norm_eq_one_iff {x : Int√d} : x.norm.natAbs = 1 
+↔ IsUnit x
+· 使用定理 `Int.natCast_inj`：∀ {m n : ℕ}, ↑m = ↑n ↔ m = n
+· 使用定理 `Int.natAbs_of_nonneg`：∀ {a : ℤ}, 0 ≤ a → ↑a.natAbs = a
+· 使用定理 `Zsqrtd.norm_nonneg`：norm_nonneg (hd : d <= 0) (n : Int√d) : 0 <= n.norm
+· 使用定理 `Int.ofNat_one`：↑1 = 1
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem norm_eq_one_iff' {d : Int} (hd : d <= 0) (z : Int√d) : z.norm = 1 ↔ IsUnit z := by
-  rw [← norm_eq_one_iff]; rw [← Int.natCast_inj]; rw [Int.natAbs_of_nonneg (norm_nonneg hd z)]; rw [Int.ofNat_one]
-
-/--
-theorem `norm_eq_zero_iff` / 定理 `norm_eq_zero_iff`
-
-English:
-theorem norm_eq_zero_iff
-  given: {d : Int} (hd : d < 0) (z : Int√d)
-  statement: z.norm = 0 ↔ z = 0
-  proof: by
+theorem norm_eq_one_iff' {d : ℤ} (hd : d ≤ 0) (z : ℤ√d) : z.norm = 1 ↔ IsUnit z := by
+  rw [← norm_eq_one_iff, ← Int.natCast_inj, Int.natAbs_of_nonneg (norm_nonneg hd z), Int.ofNat_one]
+/-
+**Zsqrtd.norm_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：norm_eq_zero_iff {d : Int} (hd : d < 0) (z : Int√d) : z.norm = 0 ↔ z = 0
+参数：hd : d < 0；z : Int√d。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `mul_self_nonneg`：mul_self_nonneg [ExistsAddOfLE R] [PosMulMono R] [AddLe
+ftMono R] (a : R) : 0 <= a * a
+· 使用定理 `AddGroup.existsAddOfLE`：∀ (α : Type u) [inst : AddGroup α] [inst_1 : LE 
+α], ExistsAddOfLE α
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `neg_nonneg`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [AddLeftM
+ono α] {a : α}, 0 ≤ -a ↔ a ≤ 0
+· 使用定理 `mul_nonpos_of_nonpos_of_nonneg`：mul_nonpos_of_nonpos_of_nonneg [MulPosMo
+no α] (ha : a <= 0) (hb : 0 <= b) : a * b <= 0
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `add_eq_zero_iff_of_nonneg`：∀ {α : Type u_1} [inst : AddZeroClass α] [ins
+t_1 : PartialOrder α] [AddLeftMono α] [AddRightMono α] {a b : α},   0 ≤ a → 0 ≤ 
+b → (a + b = 0 …
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Zsqrtd.norm_def`：norm_def (n : Int√d) : n.norm = n.re * n.re - d * n.im 
+* n.im
+· 使用定理 `Zsqrtd.ext`：∀ {d : ℤ} {x y : ℤ√d}, x.re = y.re → x.im = y.im → x = y
+· 使用定理 `eq_zero_of_mul_self_eq_zero`：eq_zero_of_mul_self_eq_zero (h : a * a = 0)
+ : a = 0
+· 使用定理 `IsStrictOrderedRing.noZeroDivisors`：∀ {R : Type u} [inst : Semiring R] [
+inst_1 : LinearOrder R] [IsStrictOrderedRing R] [ExistsAddOfLE R], NoZeroDivisor
+s R
+· 使用定理 `Or.resolve_left`：∀ {a b : Prop}, a ∨ b → ¬a → b
+· 使用定理 `mul_eq_zero`：mul_eq_zero : a * b = 0 ↔ a = 0 ∨ b = 0
+· 使用定理 `neg_eq_zero`：∀ {α : Type u_1} [inst : SubtractionMonoid α] {a : α}, -a =
+ 0 ↔ a = 0
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `Zsqrtd.norm_zero`：norm_zero : norm (0 : Int√d) = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+-/
+theorem norm_eq_zero_iff {d : ℤ} (hd : d < 0) (z : ℤ√d) : z.norm = 0 ↔ z = 0 := by
   constructor
   · intro h
-    rw [norm_def]; rw [sub_eq_add_neg]; rw [mul_assoc] at h
+    rw [norm_def, sub_eq_add_neg, mul_assoc] at h
     have left := mul_self_nonneg z.re
     have right := neg_nonneg.mpr (mul_nonpos_of_nonpos_of_nonneg hd.le (mul_self_nonneg z.im))
     obtain ⟨ha, hb⟩ := (add_eq_zero_iff_of_nonneg left right).mp h
@@ -2384,64 +1879,26 @@ theorem norm_eq_zero_iff
       exact hb.resolve_left hd.ne
   · rintro rfl
     exact norm_zero
-
-中文:
-定理 norm_eq_zero_iff
-  条件: {d : 整数} (hd : d < 0) (z : 整数√d)
-  结论: z.norm = 0 ↔ z = 0
-  证明: by
-  constructor
-  · intro h
-    rw [norm_def]; rw [sub_eq_add_neg]; rw [mul_assoc] at h
-    have left := mul_self_nonneg z.re
-    have right := neg_nonneg.mpr (mul_nonpos_of_nonpos_of_nonneg hd.le (mul_self_nonneg z.im))
-    obtain ⟨ha, hb⟩ := (add_eq_zero_iff_of_nonneg left right).mp h
-    ext <;> apply eq_zero_of_mul_self_eq_zero
-    · exact ha
-    · rw [neg_eq_zero, mul_eq_zero] at hb
-      exact hb.resolve_left hd.ne
-  · rintro rfl
-    exact norm_zero
-
-Depends on / 依赖: add_eq_zero_iff_of_nonneg, eq_zero_of_mul_self_eq_zero, hb.resolve_left, hd.le, hd.ne, mul_assoc, mul_eq_zero, mul_nonpos_of_nonpos_of_nonneg, mul_self_nonneg, neg_eq_zero, neg_nonneg, neg_nonneg.mpr, norm_def, norm_zero, resolve_left, sub_eq_add_neg, z.im, z.re
+/-
+**Zsqrtd.norm_eq_of_associated** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：norm_eq_of_associated {d : Int} (hd : d <= 0) {x y : Int√d} (h : Associate
+d x y) : x.norm = y.norm
+参数：hd : d <= 0；h : Associated x y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Zsqrtd.norm_mul`：norm_mul (n m : Int√d) : norm (n * m) = norm n * norm m
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Zsqrtd.norm_eq_one_iff'`：norm_eq_one_iff' {d : Int} (hd : d <= 0) (z : I
+nt√d) : z.norm = 1 ↔ IsUnit z
+· 使用定理 `Units.isUnit`：∀ {M : Type u_1} [inst : Monoid M] (u : Mˣ), IsUnit ↑u
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
-theorem norm_eq_zero_iff {d : Int} (hd : d < 0) (z : Int√d) : z.norm = 0 ↔ z = 0 := by
-  constructor
-  · intro h
-    rw [norm_def]; rw [sub_eq_add_neg]; rw [mul_assoc] at h
-    have left := mul_self_nonneg z.re
-    have right := neg_nonneg.mpr (mul_nonpos_of_nonpos_of_nonneg hd.le (mul_self_nonneg z.im))
-    obtain ⟨ha, hb⟩ := (add_eq_zero_iff_of_nonneg left right).mp h
-    ext <;> apply eq_zero_of_mul_self_eq_zero
-    · exact ha
-    · rw [neg_eq_zero, mul_eq_zero] at hb
-      exact hb.resolve_left hd.ne
-  · rintro rfl
-    exact norm_zero
-
-/--
-theorem `norm_eq_of_associated` / 定理 `norm_eq_of_associated`
-
-English:
-theorem norm_eq_of_associated
-  given: {d : Int} (hd : d <= 0) {x y : Int√d} (h : Associated x y)
-  proof: by
-  obtain ⟨u, rfl⟩ := h
-  rw [norm_mul]; rw [(norm_eq_one_iff' hd _).mpr u.isUnit]; rw [mul_one]
-
-中文:
-定理 norm_eq_of_associated
-  条件: {d : 整数} (hd : d <= 0) {x y : 整数√d} (h : Associated x y)
-  证明: by
-  obtain ⟨u, rfl⟩ := h
-  rw [norm_mul]; rw [(norm_eq_one_iff' hd _).mpr u.isUnit]; rw [mul_one]
-
-Depends on / 依赖: isUnit, mul_one, norm_eq_one_iff, norm_mul, u.isUnit
--/
-theorem norm_eq_of_associated {d : Int} (hd : d <= 0) {x y : Int√d} (h : Associated x y) :
+theorem norm_eq_of_associated {d : ℤ} (hd : d ≤ 0) {x y : ℤ√d} (h : Associated x y) :
     x.norm = y.norm := by
   obtain ⟨u, rfl⟩ := h
-  rw [norm_mul]; rw [(norm_eq_one_iff' hd _).mpr u.isUnit]; rw [mul_one]
+  rw [norm_mul, (norm_eq_one_iff' hd _).mpr u.isUnit, mul_one]
 
 end Norm
 
@@ -2449,203 +1906,181 @@ end
 
 section
 
-variable {d : Nat}
+variable {d : ℕ}
 
-/--
-Definition of `Nonneg` / `Nonneg` 的定义
+/-- Nonnegativity of an element of `ℤ√d`. -/
+/-
+**Zsqrtd.Nonneg** 是 Mathlib 中的一个定义，位于命名空间 `Zsqrtd`。
+形式化陈述：{d : ℕ} → ℤ√↑d → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Nonneg
-  signature: : Int√d -> Prop
-
-中文:
-定义 Nonneg
-  签名: : 整数√d -> 命题
+--- 原说明 ---
+Nonnegativity of an element of `ℤ√d`.
 -/
-def Nonneg : Int√d -> Prop
+def Nonneg : ℤ√d → Prop
   | ⟨a, b⟩ => Nonnegg d 1 a b
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LE (Int√d)
-  body: ⟨fun a b => Nonneg (b - a)⟩
-
-中文:
-实例 :
-  签名: LE (整数√d)
-  定义体: ⟨fun a b => Nonneg (b - a)⟩
-
-Depends on / 依赖: Nonneg
+/-
+**Zsqrtd.** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : LE (Int√d) :=
+instance : LE (ℤ√d) :=
   ⟨fun a b => Nonneg (b - a)⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LT (Int√d)
-  body: ⟨fun a b => ¬b <= a⟩
-
-中文:
-实例 :
-  签名: LT (整数√d)
-  定义体: ⟨fun a b => ¬b <= a⟩
+/-
+**Zsqrtd.** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : LT (Int√d) :=
-  ⟨fun a b => ¬b <= a⟩
-
-/--
-Instance `decidableNonnegg` / 实例 `decidableNonnegg`
-
-English:
-instance decidableNonnegg
-  signature: (c d)
-
-中文:
-实例 decidableNonnegg
-  签名: (c d)
+instance : LT (ℤ√d) :=
+  ⟨fun a b => ¬b ≤ a⟩
+/-
+**Zsqrtd.decidableNonnegg** 是 Mathlib 中的一个定义，位于命名空间 `Zsqrtd`。
+形式化陈述：(c d : ℕ) → DecidableRel (Zsqrtd.Nonnegg c d)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance decidableNonnegg (c d) : DecidableRel (Nonnegg c d)
-| .ofNat _, .ofNat _ => inferInstanceAs Decidable True
-| .ofNat _, .negSucc _ => inferInstanceAs Decidable (_ <= _)
-| .negSucc _, .ofNat _ => inferInstanceAs Decidable (_ <= _)
-| .negSucc _, .negSucc _ => inferInstanceAs Decidable False
-
-/--
-Instance `decidableNonneg` / 实例 `decidableNonneg`
-
-English:
-instance decidableNonneg
-  signature: : forall a : Int√d, Decidable (Nonneg a)
-
-中文:
-实例 decidableNonneg
-  签名: : 对任意 a : 整数√d, 可判定 (Nonneg a)
+  | .ofNat _, .ofNat _ => inferInstanceAs <| Decidable True
+  | .ofNat _, .negSucc _ => inferInstanceAs <| Decidable (_ ≤ _)
+  | .negSucc _, .ofNat _ => inferInstanceAs <| Decidable (_ ≤ _)
+  | .negSucc _, .negSucc _ => inferInstanceAs <| Decidable False
+/-
+**Zsqrtd.decidableNonneg** 是 Mathlib 中的一个定义，位于命名空间 `Zsqrtd`。
+形式化陈述：{d : ℕ} → (a : ℤ√↑d) → Decidable a.Nonneg
+参数：a : ℤ√↑d。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance decidableNonneg : forall a : Int√d, Decidable (Nonneg a)
+instance decidableNonneg : ∀ a : ℤ√d, Decidable (Nonneg a)
   | ⟨_, _⟩ => Zsqrtd.decidableNonnegg _ _ _ _
-
-/--
-Instance `decidableLE` / 实例 `decidableLE`
-
-English:
-instance decidableLE
-  signature: : DecidableLE (Int√d)
-  body: fun _ _ => decidableNonneg _
-
-中文:
-实例 decidableLE
-  签名: : DecidableLE (整数√d)
-  定义体: fun _ _ => decidableNonneg _
-
-Depends on / 依赖: decidableNonneg
+/-
+**Zsqrtd.decidableLE** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+形式化陈述：decidableLE : DecidableLE (Int√d)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance decidableLE : DecidableLE (Int√d) := fun _ _ => decidableNonneg _
+instance decidableLE : DecidableLE (ℤ√d) := fun _ _ => decidableNonneg _
 
 open Int in
-/--
-theorem `nonneg_cases` / 定理 `nonneg_cases`
-
-English:
-theorem nonneg_cases
-  statement: forall {a : Int√d}, Nonneg a -> exists x y : Nat, a = ⟨x, y⟩ ∨ a = ⟨x, -y⟩ ∨ a = ⟨-x, y⟩
-
-中文:
-定理 nonneg_cases
-  结论: 对任意 {a : 整数√d}, Nonneg a -> 存在 x y : 自然数, a = ⟨x, y⟩ ∨ a = ⟨x, -y⟩ ∨ a = ⟨-x, y⟩
+/-
+**Zsqrtd.nonneg_cases** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：∀ {d : ℕ} {a : ℤ√↑d},   a.Nonneg → ∃ x y, a = { re := ↑x, im := ↑y } ∨ a =
+ { re := ↑x, im := -↑y } ∨ a = { re := -↑x, im := ↑y }
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem nonneg_cases : forall {a : Int√d}, Nonneg a -> exists x y : Nat, a = ⟨x, y⟩ ∨ a = ⟨x, -y⟩ ∨ a = ⟨-x, y⟩
-  | ⟨(x : Nat), (y : Nat)⟩, _ => ⟨x, y, Or.inl rfl⟩
-| ⟨(x : Nat), -[y+1]⟩, _ => ⟨x, y + 1, Or.inr Or.inl rfl⟩
-| ⟨-[x+1], (y : Nat)⟩, _ => ⟨x + 1, y, Or.inr Or.inr rfl⟩
+theorem nonneg_cases : ∀ {a : ℤ√d}, Nonneg a → ∃ x y : ℕ, a = ⟨x, y⟩ ∨ a = ⟨x, -y⟩ ∨ a = ⟨-x, y⟩
+  | ⟨(x : ℕ), (y : ℕ)⟩, _ => ⟨x, y, Or.inl rfl⟩
+  | ⟨(x : ℕ), -[y+1]⟩, _ => ⟨x, y + 1, Or.inr <| Or.inl rfl⟩
+  | ⟨-[x+1], (y : ℕ)⟩, _ => ⟨x + 1, y, Or.inr <| Or.inr rfl⟩
   | ⟨-[_+1], -[_+1]⟩, h => False.elim h
 
 open Int in
-/--
-theorem `nonneg_add_lem` / 定理 `nonneg_add_lem`
-
-English:
-theorem nonneg_add_lem
-  given: {x y z w : Nat} (xy : Nonneg (⟨x, -y⟩ : Int√d)) (zw : Nonneg (⟨-z, w⟩ : Int√d))
-  proof: by
-  have : Nonneg ⟨Int.subNatNat x z, Int.subNatNat w y⟩ :=
-    Int.subNatNat_elim x z
-      (fun m n i => SqLe y d m 1 -> SqLe n 1 w d -> Nonneg ⟨i, Int.subNatNat w y⟩)
-      (fun j k =>
-        Int.subNatNat_elim w y
-          (fun m n i => SqLe n d (k + j) 1 -> SqLe k 1 m d -> Nonneg ⟨Int.ofNat j, i⟩)
-          (fun _ _ _ _ => trivial) fun m n xy zw => sqLe_cancel zw xy)
-      (fun j k =>
-        Int.subNatNat_elim w y
-          (fun m n i => SqLe n d k 1 -> SqLe (k + j + 1) 1 m d -> Nonneg ⟨-[j+1], i⟩)
-          (fun m n xy zw => sqLe_cancel xy zw) fun m n xy zw =>
-          let t := Nat.le_trans zw (sqLe_of_le (Nat.le_add_right n (m + 1)) le_rfl xy)
-          have : k + j + 1 <= k :=
-            Nat.mul_self_le_mul_self_iff.1 (by simpa [one_mul] using t)
-          absurd this (not_le_of_gt <| Nat.succ_le_succ <| Nat.le_add_right _ _))
-      (nonnegg_pos_neg.1 xy) (nonnegg_neg_pos.1 zw)
-  rw [add_def]; rw [neg_add_eq_sub]
-  rwa [Int.subNatNat_eq_coe, Int.subNatNat_eq_coe] at this
-
-中文:
-定理 nonneg_add_lem
-  条件: {x y z w : 自然数} (xy : Nonneg (⟨x, -y⟩ : 整数√d)) (zw : Nonneg (⟨-z, w⟩ : 整数√d))
-  证明: by
-  have : Nonneg ⟨Int.subNatNat x z, Int.subNatNat w y⟩ :=
-    Int.subNatNat_elim x z
-      (fun m n i => SqLe y d m 1 -> SqLe n 1 w d -> Nonneg ⟨i, Int.subNatNat w y⟩)
-      (fun j k =>
-        Int.subNatNat_elim w y
-          (fun m n i => SqLe n d (k + j) 1 -> SqLe k 1 m d -> Nonneg ⟨Int.ofNat j, i⟩)
-          (fun _ _ _ _ => trivial) fun m n xy zw => sqLe_cancel zw xy)
-      (fun j k =>
-        Int.subNatNat_elim w y
-          (fun m n i => SqLe n d k 1 -> SqLe (k + j + 1) 1 m d -> Nonneg ⟨-[j+1], i⟩)
-          (fun m n xy zw => sqLe_cancel xy zw) fun m n xy zw =>
-          let t := Nat.le_trans zw (sqLe_of_le (Nat.le_add_right n (m + 1)) le_rfl xy)
-          have : k + j + 1 <= k :=
-            Nat.mul_self_le_mul_self_iff.1 (by simpa [one_mul] using t)
-          absurd this (not_le_of_gt <| Nat.succ_le_succ <| Nat.le_add_right _ _))
-      (nonnegg_pos_neg.1 xy) (nonnegg_neg_pos.1 zw)
-  rw [add_def]; rw [neg_add_eq_sub]
-  rwa [Int.subNatNat_eq_coe, Int.subNatNat_eq_coe] at this
-
-Depends on / 依赖: Int.ofNat, Int.subNatNat, Int.subNatNat_elim, Nonneg, sqLe_cancel, subNatNat, subNatNat_elim
+/-
+**Zsqrtd.nonneg_add_lem** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：nonneg_add_lem {x y z w : Nat} (xy : Nonneg (⟨x, -y⟩ : Int√d)) (zw : Nonne
+g (⟨-z, w⟩ : Int√d)) : Nonneg (⟨x, -y⟩ + ⟨-z, w⟩ : Int√d)
+参数：xy : Nonneg (⟨x, -y⟩ : Int√d)；zw : Nonneg (⟨-z, w⟩ : Int√d)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.subNatNat_elim`：∀ (m n : ℕ) (motive : ℕ → ℕ → ℤ → Prop),   (∀ (i n :
+ ℕ), motive (n + i) n ↑i) →     (∀ (i m : ℕ), motive m (m + i + 1) (Int.negSucc 
+i)) → mo…
+· 使用定理 `trivial`：True
+· 使用定理 `Zsqrtd.sqLe_cancel`：sqLe_cancel {c d x y z w : Nat} (zw : SqLe y d x c) 
+(h : SqLe (x + z) c (y + w) d) : SqLe z c w d
+· 使用定理 `Nat.le_trans`：∀ {n m k : ℕ}, n ≤ m → m ≤ k → n ≤ k
+· 使用定理 `Zsqrtd.sqLe_of_le`：sqLe_of_le {c d x y z w : Nat} (xz : z <= x) (yw : y 
+<= w) (xy : SqLe x c y d) : SqLe z c w d
+· 使用定理 `Nat.le_add_right`：∀ (n k : ℕ), n ≤ n + k
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.mul_self_le_mul_self_iff`：∀ {m n : ℕ}, m * m ≤ n * n ↔ m ≤ n
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `not_le_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用定理 `Nat.succ_le_succ`：∀ {n m : ℕ}, n ≤ m → n.succ ≤ m.succ
+· 使用定理 `Zsqrtd.nonnegg_pos_neg`：nonnegg_pos_neg {c d} {a b : Nat} : Nonnegg c d 
+a (-b) ↔ SqLe b c a d
+· 使用定理 `Zsqrtd.nonnegg_neg_pos`：∀ {c d a b : ℕ}, Zsqrtd.Nonnegg c d (-↑a) ↑b ↔ Z
+sqrtd.SqLe a d b c
+· 使用定理 `Zsqrtd.add_def`：add_def (x y x' y' : Int) : (⟨x, y⟩ + ⟨x', y'⟩ : Int√d) 
+= ⟨x + x', y + y'⟩
+· 使用定理 `neg_add_eq_sub`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b :
+ α), -a + b = b - a
+· 使用定理 `Int.subNatNat_eq_coe`：∀ {m n : ℕ}, Int.subNatNat m n = ↑m - ↑n
 -/
-theorem nonneg_add_lem {x y z w : Nat} (xy : Nonneg (⟨x, -y⟩ : Int√d)) (zw : Nonneg (⟨-z, w⟩ : Int√d)) :
-    Nonneg (⟨x, -y⟩ + ⟨-z, w⟩ : Int√d) := by
+theorem nonneg_add_lem {x y z w : ℕ} (xy : Nonneg (⟨x, -y⟩ : ℤ√d)) (zw : Nonneg (⟨-z, w⟩ : ℤ√d)) :
+    Nonneg (⟨x, -y⟩ + ⟨-z, w⟩ : ℤ√d) := by
   have : Nonneg ⟨Int.subNatNat x z, Int.subNatNat w y⟩ :=
     Int.subNatNat_elim x z
-      (fun m n i => SqLe y d m 1 -> SqLe n 1 w d -> Nonneg ⟨i, Int.subNatNat w y⟩)
+      (fun m n i => SqLe y d m 1 → SqLe n 1 w d → Nonneg ⟨i, Int.subNatNat w y⟩)
       (fun j k =>
         Int.subNatNat_elim w y
-          (fun m n i => SqLe n d (k + j) 1 -> SqLe k 1 m d -> Nonneg ⟨Int.ofNat j, i⟩)
+          (fun m n i => SqLe n d (k + j) 1 → SqLe k 1 m d → Nonneg ⟨Int.ofNat j, i⟩)
           (fun _ _ _ _ => trivial) fun m n xy zw => sqLe_cancel zw xy)
       (fun j k =>
         Int.subNatNat_elim w y
-          (fun m n i => SqLe n d k 1 -> SqLe (k + j + 1) 1 m d -> Nonneg ⟨-[j+1], i⟩)
+          (fun m n i => SqLe n d k 1 → SqLe (k + j + 1) 1 m d → Nonneg ⟨-[j+1], i⟩)
           (fun m n xy zw => sqLe_cancel xy zw) fun m n xy zw =>
           let t := Nat.le_trans zw (sqLe_of_le (Nat.le_add_right n (m + 1)) le_rfl xy)
-          have : k + j + 1 <= k :=
+          have : k + j + 1 ≤ k :=
             Nat.mul_self_le_mul_self_iff.1 (by simpa [one_mul] using t)
           absurd this (not_le_of_gt <| Nat.succ_le_succ <| Nat.le_add_right _ _))
       (nonnegg_pos_neg.1 xy) (nonnegg_neg_pos.1 zw)
-  rw [add_def]; rw [neg_add_eq_sub]
+  rw [add_def, neg_add_eq_sub]
   rwa [Int.subNatNat_eq_coe, Int.subNatNat_eq_coe] at this
-
-/--
-theorem `Nonneg.add` / 定理 `Nonneg.add`
-
-English:
-theorem Nonneg.add
-  given: {a b : Int√d} (ha : Nonneg a) (hb : Nonneg b)
-  statement: Nonneg (a + b)
-  proof: by
+/-
+**Zsqrtd.Nonneg.add** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd.Nonneg`。
+形式化陈述：∀ {d : ℕ} {a b : ℤ√↑d}, a.Nonneg → b.Nonneg → (a + b).Nonneg
+参数：a + b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Zsqrtd.nonneg_cases`：∀ {d : ℕ} {a : ℤ√↑d},   a.Nonneg → ∃ x y, a = { re 
+:= ↑x, im := ↑y } ∨ a = { re := ↑x, im := -↑y } ∨ a = { re := -↑x, im := ↑y }
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Zsqrtd.nonnegg_cases_right`：∀ {c d a : ℕ} {b : ℤ}, (∀ (x : ℕ), b = -↑x →
+ Zsqrtd.SqLe x c a d) → Zsqrtd.Nonnegg c d (↑a) b
+· 使用定理 `Zsqrtd.sqLe_of_le`：sqLe_of_le {c d x y z w : Nat} (xz : z <= x) (yw : y 
+<= w) (xy : SqLe x c y d) : SqLe z c w d
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Int.ofNat_le`：∀ {m n : ℕ}, ↑m ≤ ↑n ↔ m ≤ n
+· 使用定理 `le_of_neg_le_neg`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [Ad
+dLeftMono α] {a b : α} [AddRightMono α], -a ≤ -b → b ≤ a
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `Int.le.intro`：∀ {a b : ℤ} (n : ℕ), a + ↑n = b → a ≤ b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Nat.le_add_left`：∀ (n m : ℕ), n ≤ m + n
+· 使用定理 `Zsqrtd.nonnegg_pos_neg`：nonnegg_pos_neg {c d} {a b : Nat} : Nonnegg c d 
+a (-b) ↔ SqLe b c a d
+· 使用定理 `Zsqrtd.nonnegg_cases_left`：nonnegg_cases_left {c d} {b : Nat} {a : Int} 
+(h : forall x : Nat, a = -x -> SqLe x d b c) : Nonnegg c d a b
+· 使用定理 `Zsqrtd.nonnegg_neg_pos`：∀ {c d a b : ℕ}, Zsqrtd.Nonnegg c d (-↑a) ↑b ↔ Z
+sqrtd.SqLe a d b c
+· 使用定理 `Nat.le_add_right`：∀ (n k : ℕ), n ≤ n + k
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Zsqrtd.sqLe_add`：sqLe_add {c d x y z w : Nat} (xy : SqLe x c y d) (zw : 
+SqLe z c w d) : SqLe (x + z) c (y + w) d
+· 使用定理 `Zsqrtd.add_def`：add_def (x y x' y' : Int) : (⟨x, y⟩ + ⟨x', y'⟩ : Int√d) 
+= ⟨x + x', y + y'⟩
+· 使用定理 `neg_add`：neg_add {R} [CommRing R] {a₁ a₂ b₁ b₂ : R} (_ : -a₁ = b₁) (_ : 
+-a₂ = b₂) : -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `Zsqrtd.nonneg_add_lem`：nonneg_add_lem {x y z w : Nat} (xy : Nonneg (⟨x, 
+-y⟩ : Int√d)) (zw : Nonneg (⟨-z, w⟩ : Int√d)) : Nonneg (⟨x, -y⟩ + ⟨-z, w⟩ : Int√
+d)
+-/
+theorem Nonneg.add {a b : ℤ√d} (ha : Nonneg a) (hb : Nonneg b) : Nonneg (a + b) := by
   rcases nonneg_cases ha with ⟨x, y, rfl | rfl | rfl⟩ <;>
     rcases nonneg_cases hb with ⟨z, w, rfl | rfl | rfl⟩
   · trivial
@@ -2663,7 +2098,7 @@ theorem Nonneg.add
     · apply Nat.le_add_right
   · have : Nonneg ⟨_, _⟩ :=
       nonnegg_pos_neg.2 (sqLe_add (nonnegg_pos_neg.1 ha) (nonnegg_pos_neg.1 hb))
-    rw [Nat.cast_add]; rw [Nat.cast_add]; rw [neg_add] at this
+    rw [Nat.cast_add, Nat.cast_add, neg_add] at this
     rwa [add_def]
   · exact nonneg_add_lem ha hb
   · refine nonnegg_cases_left fun i h => sqLe_of_le ?_ ?_ (nonnegg_neg_pos.1 ha)
@@ -2671,264 +2106,133 @@ theorem Nonneg.add
       exact Int.ofNat_le.1 (le_of_neg_le_neg (Int.le.intro _ h))
     · apply Nat.le_add_right
   · dsimp
-    rw [add_comm]; rw [add_comm (y : Int)]
+    rw [add_comm, add_comm (y : ℤ)]
     exact nonneg_add_lem hb ha
   · have : Nonneg ⟨_, _⟩ :=
       nonnegg_neg_pos.2 (sqLe_add (nonnegg_neg_pos.1 ha) (nonnegg_neg_pos.1 hb))
-    rw [Nat.cast_add]; rw [Nat.cast_add]; rw [neg_add] at this
+    rw [Nat.cast_add, Nat.cast_add, neg_add] at this
     rwa [add_def]
-
-中文:
-定理 Nonneg.add
-  条件: {a b : 整数√d} (ha : Nonneg a) (hb : Nonneg b)
-  结论: Nonneg (a + b)
-  证明: by
-  rcases nonneg_cases ha with ⟨x, y, rfl | rfl | rfl⟩ <;>
-    rcases nonneg_cases hb with ⟨z, w, rfl | rfl | rfl⟩
-  · trivial
-  · refine nonnegg_cases_right fun i h => sqLe_of_le ?_ ?_ (nonnegg_pos_neg.1 hb)
-    · dsimp only at h
-      exact Int.ofNat_le.1 (le_of_neg_le_neg (Int.le.intro y (by simp [add_comm, *])))
-    · apply Nat.le_add_left
-  · refine nonnegg_cases_left fun i h => sqLe_of_le ?_ ?_ (nonnegg_neg_pos.1 hb)
-    · dsimp only at h
-      exact Int.ofNat_le.1 (le_of_neg_le_neg (Int.le.intro x (by simp [add_comm, *])))
-    · apply Nat.le_add_left
-  · refine nonnegg_cases_right fun i h => sqLe_of_le ?_ ?_ (nonnegg_pos_neg.1 ha)
-    · dsimp only at h
-      exact Int.ofNat_le.1 (le_of_neg_le_neg (Int.le.intro w (by simp [*])))
-    · apply Nat.le_add_right
-  · have : Nonneg ⟨_, _⟩ :=
-      nonnegg_pos_neg.2 (sqLe_add (nonnegg_pos_neg.1 ha) (nonnegg_pos_neg.1 hb))
-    rw [Nat.cast_add]; rw [Nat.cast_add]; rw [neg_add] at this
-    rwa [add_def]
-  · exact nonneg_add_lem ha hb
-  · refine nonnegg_cases_left fun i h => sqLe_of_le ?_ ?_ (nonnegg_neg_pos.1 ha)
-    · dsimp only at h
-      exact Int.ofNat_le.1 (le_of_neg_le_neg (Int.le.intro _ h))
-    · apply Nat.le_add_right
-  · dsimp
-    rw [add_comm]; rw [add_comm (y : Int)]
-    exact nonneg_add_lem hb ha
-  · have : Nonneg ⟨_, _⟩ :=
-      nonnegg_neg_pos.2 (sqLe_add (nonnegg_neg_pos.1 ha) (nonnegg_neg_pos.1 hb))
-    rw [Nat.cast_add]; rw [Nat.cast_add]; rw [neg_add] at this
-    rwa [add_def]
+/-
+**Zsqrtd.nonneg_iff_zero_le** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：nonneg_iff_zero_le {a : Int√d} : Nonneg a ↔ 0 <= a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem Nonneg.add {a b : Int√d} (ha : Nonneg a) (hb : Nonneg b) : Nonneg (a + b) := by
-  rcases nonneg_cases ha with ⟨x, y, rfl | rfl | rfl⟩ <;>
-    rcases nonneg_cases hb with ⟨z, w, rfl | rfl | rfl⟩
-  · trivial
-  · refine nonnegg_cases_right fun i h => sqLe_of_le ?_ ?_ (nonnegg_pos_neg.1 hb)
-    · dsimp only at h
-      exact Int.ofNat_le.1 (le_of_neg_le_neg (Int.le.intro y (by simp [add_comm, *])))
-    · apply Nat.le_add_left
-  · refine nonnegg_cases_left fun i h => sqLe_of_le ?_ ?_ (nonnegg_neg_pos.1 hb)
-    · dsimp only at h
-      exact Int.ofNat_le.1 (le_of_neg_le_neg (Int.le.intro x (by simp [add_comm, *])))
-    · apply Nat.le_add_left
-  · refine nonnegg_cases_right fun i h => sqLe_of_le ?_ ?_ (nonnegg_pos_neg.1 ha)
-    · dsimp only at h
-      exact Int.ofNat_le.1 (le_of_neg_le_neg (Int.le.intro w (by simp [*])))
-    · apply Nat.le_add_right
-  · have : Nonneg ⟨_, _⟩ :=
-      nonnegg_pos_neg.2 (sqLe_add (nonnegg_pos_neg.1 ha) (nonnegg_pos_neg.1 hb))
-    rw [Nat.cast_add]; rw [Nat.cast_add]; rw [neg_add] at this
-    rwa [add_def]
-  · exact nonneg_add_lem ha hb
-  · refine nonnegg_cases_left fun i h => sqLe_of_le ?_ ?_ (nonnegg_neg_pos.1 ha)
-    · dsimp only at h
-      exact Int.ofNat_le.1 (le_of_neg_le_neg (Int.le.intro _ h))
-    · apply Nat.le_add_right
-  · dsimp
-    rw [add_comm]; rw [add_comm (y : Int)]
-    exact nonneg_add_lem hb ha
-  · have : Nonneg ⟨_, _⟩ :=
-      nonnegg_neg_pos.2 (sqLe_add (nonnegg_neg_pos.1 ha) (nonnegg_neg_pos.1 hb))
-    rw [Nat.cast_add]; rw [Nat.cast_add]; rw [neg_add] at this
-    rwa [add_def]
-
-/--
-theorem `nonneg_iff_zero_le` / 定理 `nonneg_iff_zero_le`
-
-English:
-theorem nonneg_iff_zero_le
-  given: {a : Int√d}
-  statement: Nonneg a ↔ 0 <= a
-  proof: show _ ↔ Nonneg _ by simp
-
-中文:
-定理 nonneg_iff_zero_le
-  条件: {a : 整数√d}
-  结论: Nonneg a ↔ 0 <= a
-  证明: show _ ↔ Nonneg _ by simp
-
-Depends on / 依赖: Nonneg
--/
-theorem nonneg_iff_zero_le {a : Int√d} : Nonneg a ↔ 0 <= a :=
+theorem nonneg_iff_zero_le {a : ℤ√d} : Nonneg a ↔ 0 ≤ a :=
   show _ ↔ Nonneg _ by simp
-
-/--
-theorem `le_of_le_le` / 定理 `le_of_le_le`
-
-English:
-theorem le_of_le_le
-  given: {x y z w : Int} (xz : x <= z) (yw : y <= w)
-  statement: (⟨x, y⟩ : Int√d) <= ⟨z, w⟩
-  proof: show Nonneg ⟨z - x, w - y⟩ from
-    match z - x, w - y, Int.le.dest_sub xz, Int.le.dest_sub yw with
-    | _, _, ⟨_, rfl⟩, ⟨_, rfl⟩ => trivial
-
-中文:
-定理 le_of_le_le
-  条件: {x y z w : 整数} (xz : x <= z) (yw : y <= w)
-  结论: (⟨x, y⟩ : 整数√d) <= ⟨z, w⟩
-  证明: show Nonneg ⟨z - x, w - y⟩ from
-    match z - x, w - y, Int.le.dest_sub xz, Int.le.dest_sub yw with
-    | _, _, ⟨_, rfl⟩, ⟨_, rfl⟩ => trivial
-
-Depends on / 依赖: Int.le.dest_sub, Nonneg, dest_sub
+/-
+**Zsqrtd.le_of_le_le** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：le_of_le_le {x y z w : Int} (xz : x <= z) (yw : y <= w) : (⟨x, y⟩ : Int√d)
+ <= ⟨z, w⟩
+参数：xz : x <= z；yw : y <= w。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.le.dest_sub`：∀ {a b : ℤ}, a ≤ b → ∃ n, b - a = ↑n
+· 使用定理 `trivial`：True
 -/
-theorem le_of_le_le {x y z w : Int} (xz : x <= z) (yw : y <= w) : (⟨x, y⟩ : Int√d) <= ⟨z, w⟩ :=
+theorem le_of_le_le {x y z w : ℤ} (xz : x ≤ z) (yw : y ≤ w) : (⟨x, y⟩ : ℤ√d) ≤ ⟨z, w⟩ :=
   show Nonneg ⟨z - x, w - y⟩ from
     match z - x, w - y, Int.le.dest_sub xz, Int.le.dest_sub yw with
     | _, _, ⟨_, rfl⟩, ⟨_, rfl⟩ => trivial
 
 open Int in
-/--
-theorem `nonneg_total` / 定理 `nonneg_total`
-
-English:
-theorem nonneg_total
-  statement: forall a : Int√d, Nonneg a ∨ Nonneg (-a)
-
-中文:
-定理 nonneg_total
-  结论: 对任意 a : 整数√d, Nonneg a ∨ Nonneg (-a)
+/-
+**Zsqrtd.nonneg_total** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：∀ {d : ℕ} (a : ℤ√↑d), a.Nonneg ∨ (-a).Nonneg
+参数：a : ℤ√↑d；-a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `trivial`：True
+· 使用定理 `Nat.le_total`：∀ (m n : ℕ), m ≤ n ∨ n ≤ m
 -/
-protected theorem nonneg_total : forall a : Int√d, Nonneg a ∨ Nonneg (-a)
-  | ⟨(x : Nat), (y : Nat)⟩ => Or.inl trivial
+protected theorem nonneg_total : ∀ a : ℤ√d, Nonneg a ∨ Nonneg (-a)
+  | ⟨(x : ℕ), (y : ℕ)⟩ => Or.inl trivial
   | ⟨-[_+1], -[_+1]⟩ => Or.inr trivial
   | ⟨0, -[_+1]⟩ => Or.inr trivial
   | ⟨-[_+1], 0⟩ => Or.inr trivial
-  | ⟨(_ + 1 : Nat), -[_+1]⟩ => Nat.le_total _ _
-  | ⟨-[_+1], (_ + 1 : Nat)⟩ => Nat.le_total _ _
+  | ⟨(_ + 1 : ℕ), -[_+1]⟩ => Nat.le_total _ _
+  | ⟨-[_+1], (_ + 1 : ℕ)⟩ => Nat.le_total _ _
 
 @[deprecated _root_.le_total (since := "2026-02-19")]
-/--
-theorem `le_total` / 定理 `le_total`
-
-English:
-theorem le_total
-  given: (a b : Int√d)
-  statement: a <= b ∨ b <= a
-  proof: by
-  have t := (b - a).nonneg_total
-  rwa [neg_sub] at t
-
-中文:
-定理 le_total
-  条件: (a b : 整数√d)
-  结论: a <= b ∨ b <= a
-  证明: by
-  have t := (b - a).nonneg_total
-  rwa [neg_sub] at t
+/-
+**Zsqrtd.le_total** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：∀ {d : ℕ} (a b : ℤ√↑d), a ≤ b ∨ b ≤ a
+参数：a b : ℤ√↑d。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Zsqrtd.nonneg_total`：∀ {d : ℕ} (a : ℤ√↑d), a.Nonneg ∨ (-a).Nonneg
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `neg_sub`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α), -(a - 
+b) = b - a
 -/
-protected theorem le_total (a b : Int√d) : a <= b ∨ b <= a := by
+protected theorem le_total (a b : ℤ√d) : a ≤ b ∨ b ≤ a := by
   have t := (b - a).nonneg_total
   rwa [neg_sub] at t
-
-/--
-Instance `preorder` / 实例 `preorder`
-
-English:
-instance preorder
-  signature: : Preorder (Int√d) where
-  body: show Nonneg (a - a) by simp only [sub_self]; trivial
-  le_trans a b c hab hbc := by simpa [sub_add_sub_cancel'] using! hab.add hbc
-  lt_iff_le_not_ge a b := by
-    have ht : b <= a ∨ a <= b := by
-      have t := (a - b).nonneg_total
-      rwa [neg_sub] at t
-    exact (and_iff_right_of_imp ht.resolve_left).symm
-
-中文:
-实例 preorder
-  签名: : 预序 (整数√d) where
-  定义体: show Nonneg (a - a) by simp only [sub_self]; trivial
-  le_trans a b c hab hbc := by simpa [sub_add_sub_cancel'] using! hab.add hbc
-  lt_iff_le_not_ge a b := by
-    have ht : b <= a ∨ a <= b := by
-      have t := (a - b).nonneg_total
-      rwa [neg_sub] at t
-    exact (and_iff_right_of_imp ht.resolve_left).symm
-
-Depends on / 依赖: Nonneg, sub_self
+/-
+**Zsqrtd.preorder** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+形式化陈述：preorder : Preorder (Int√d) where le_refl a
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance preorder : Preorder (Int√d) where
+instance preorder : Preorder (ℤ√d) where
   le_refl a := show Nonneg (a - a) by simp only [sub_self]; trivial
   le_trans a b c hab hbc := by simpa [sub_add_sub_cancel'] using! hab.add hbc
   lt_iff_le_not_ge a b := by
-    have ht : b <= a ∨ a <= b := by
+    have ht : b ≤ a ∨ a ≤ b := by
       have t := (a - b).nonneg_total
       rwa [neg_sub] at t
     exact (and_iff_right_of_imp ht.resolve_left).symm
 
 open Int in
 -- TODO add an `Archimedean (ℤ√d)` instance and drop this lemma
-/--
-theorem `le_arch` / 定理 `le_arch`
-
-English:
-theorem le_arch
-  given: (a : Int√d)
-  statement: exists n : Nat, a <= n
-  proof: by
-  obtain ⟨x, y, (h : a <= ⟨x, y⟩)⟩ : exists x y : Nat, Nonneg (⟨x, y⟩ + -a) :=
-    match -a with
-    | ⟨Int.ofNat x, Int.ofNat y⟩ => ⟨0, 0, by trivial⟩
-    | ⟨Int.ofNat x, -[y+1]⟩ => ⟨0, y + 1, by simp [Int.negSucc_eq, add_assoc, Nonneg, Nonnegg]⟩
-    | ⟨-[x+1], Int.ofNat y⟩ => ⟨x + 1, 0, by simp [Int.negSucc_eq, add_assoc, Nonneg, Nonnegg]⟩
-    | ⟨-[x+1], -[y+1]⟩ => ⟨x + 1, y + 1, by simp [Int.negSucc_eq, add_assoc, Nonneg, Nonnegg]⟩
-  refine ⟨x + d * y, h.trans ?_⟩
-  change Nonneg ⟨↑x + d * y - ↑x, 0 - ↑y⟩
-  rcases y with - | y
-  · simp only [Nat.cast_zero, mul_zero, add_zero, sub_self]
-    trivial
-  have h : forall y, SqLe y d (d * y) 1 := fun y => by
-    simpa [SqLe, mul_comm, mul_left_comm] using Nat.mul_le_mul_right (y * y) (Nat.le_mul_self d)
-  rw [show (x : Int) + d * Nat.succ y - x = d * Nat.succ y by simp]
-  exact h (y + 1)
-
-@[deprecated _root_.add_le_add_left (since := "2026-02-19")]
-
-中文:
-定理 le_arch
-  条件: (a : 整数√d)
-  结论: 存在 n : 自然数, a <= n
-  证明: by
-  obtain ⟨x, y, (h : a <= ⟨x, y⟩)⟩ : exists x y : Nat, Nonneg (⟨x, y⟩ + -a) :=
-    match -a with
-    | ⟨Int.ofNat x, Int.ofNat y⟩ => ⟨0, 0, by trivial⟩
-    | ⟨Int.ofNat x, -[y+1]⟩ => ⟨0, y + 1, by simp [Int.negSucc_eq, add_assoc, Nonneg, Nonnegg]⟩
-    | ⟨-[x+1], Int.ofNat y⟩ => ⟨x + 1, 0, by simp [Int.negSucc_eq, add_assoc, Nonneg, Nonnegg]⟩
-    | ⟨-[x+1], -[y+1]⟩ => ⟨x + 1, y + 1, by simp [Int.negSucc_eq, add_assoc, Nonneg, Nonnegg]⟩
-  refine ⟨x + d * y, h.trans ?_⟩
-  change Nonneg ⟨↑x + d * y - ↑x, 0 - ↑y⟩
-  rcases y with - | y
-  · simp only [Nat.cast_zero, mul_zero, add_zero, sub_self]
-    trivial
-  have h : forall y, SqLe y d (d * y) 1 := fun y => by
-    simpa [SqLe, mul_comm, mul_left_comm] using Nat.mul_le_mul_right (y * y) (Nat.le_mul_self d)
-  rw [show (x : Int) + d * Nat.succ y - x = d * Nat.succ y by simp]
-  exact h (y + 1)
-
-@[deprecated _root_.add_le_add_left (since := "2026-02-19")]
-
-Depends on / 依赖: Int.negSucc_eq, Int.ofNat, Nonneg, Nonnegg, add_assoc, h.trans, negSucc_eq
+/-
+**Zsqrtd.le_arch** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：le_arch (a : Int√d) : exists n : Nat, a <= n
+参数：a : Int√d。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `neg_add_rev`：∀ {G : Type u_1} [inst : SubtractionMonoid G] (a b : G), -(
+a + b) = -b + -a
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `add_neg_cancel_left`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a +
+ (-a + b) = b
+· 使用定理 `add_neg_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a + -a = 0
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `mul_left_comm`：mul_left_comm (a b c : G) : a * (b * c) = b * (a * c)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Nat.mul_le_mul_right`：∀ {n m : ℕ} (k : ℕ), n ≤ m → n * k ≤ m * k
+· 使用定理 `Nat.le_mul_self`：∀ (n : ℕ), n ≤ n * n
+· 使用定理 `add_sub_cancel_left`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G),
+ a + b - a = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem le_arch (a : Int√d) : exists n : Nat, a <= n := by
-  obtain ⟨x, y, (h : a <= ⟨x, y⟩)⟩ : exists x y : Nat, Nonneg (⟨x, y⟩ + -a) :=
+theorem le_arch (a : ℤ√d) : ∃ n : ℕ, a ≤ n := by
+  obtain ⟨x, y, (h : a ≤ ⟨x, y⟩)⟩ : ∃ x y : ℕ, Nonneg (⟨x, y⟩ + -a) :=
     match -a with
     | ⟨Int.ofNat x, Int.ofNat y⟩ => ⟨0, 0, by trivial⟩
     | ⟨Int.ofNat x, -[y+1]⟩ => ⟨0, y + 1, by simp [Int.negSucc_eq, add_assoc, Nonneg, Nonnegg]⟩
@@ -2939,398 +2243,315 @@ theorem le_arch (a : Int√d) : exists n : Nat, a <= n := by
   rcases y with - | y
   · simp only [Nat.cast_zero, mul_zero, add_zero, sub_self]
     trivial
-  have h : forall y, SqLe y d (d * y) 1 := fun y => by
+  have h : ∀ y, SqLe y d (d * y) 1 := fun y => by
     simpa [SqLe, mul_comm, mul_left_comm] using Nat.mul_le_mul_right (y * y) (Nat.le_mul_self d)
-  rw [show (x : Int) + d * Nat.succ y - x = d * Nat.succ y by simp]
+  rw [show (x : ℤ) + d * Nat.succ y - x = d * Nat.succ y by simp]
   exact h (y + 1)
 
 @[deprecated _root_.add_le_add_left (since := "2026-02-19")]
-/--
-theorem `add_le_add_left` / 定理 `add_le_add_left`
-
-English:
-theorem add_le_add_left
-  given: (a b : Int√d) (ab : a <= b) (c : Int√d)
-  statement: a + c <= b + c
-  proof: show Nonneg _ by rwa [add_sub_add_right_eq_sub]
-
-中文:
-定理 add_le_add_left
-  条件: (a b : 整数√d) (ab : a <= b) (c : 整数√d)
-  结论: a + c <= b + c
-  证明: show Nonneg _ by rwa [add_sub_add_right_eq_sub]
+/-
+**Zsqrtd.add_le_add_left** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：∀ {d : ℕ} (a b : ℤ√↑d), a ≤ b → ∀ (c : ℤ√↑d), a + c ≤ b + c
+参数：a b : ℤ√↑d；c : ℤ√↑d。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_sub_add_right_eq_sub`：∀ {G : Type u_3} [inst : AddGroup G] (a b c : 
+G), a + c - (b + c) = a - b
 -/
-protected theorem add_le_add_left (a b : Int√d) (ab : a <= b) (c : Int√d) : a + c <= b + c :=
+protected theorem add_le_add_left (a b : ℤ√d) (ab : a ≤ b) (c : ℤ√d) : a + c ≤ b + c :=
   show Nonneg _ by rwa [add_sub_add_right_eq_sub]
-
-
-
-/--
-theorem `nonneg_smul` / 定理 `nonneg_smul`
-
-English:
-theorem nonneg_smul
-  given: {a : Int√d} {n : Nat} (ha : Nonneg a)
-  statement: Nonneg ((n : Int√d) * a)
-  proof: by
-  rw [← Int.cast_natCast n]
-  exact
-    match a, nonneg_cases ha, ha with
-    | _, ⟨x, y, Or.inl rfl⟩, _ => by rw [smul_val]; trivial
-| _, ⟨x, y, Or.inr Or.inl rfl⟩, ha => by
-      rw [smul_val]; simpa using! nonnegg_pos_neg.2 (sqLe_smul n <| nonnegg_pos_neg.1 ha)
-| _, ⟨x, y, Or.inr Or.inr rfl⟩, ha => by
-      rw [smul_val]; simpa using! nonnegg_neg_pos.2 (sqLe_smul n <| nonnegg_neg_pos.1 ha)
-
-中文:
-定理 nonneg_smul
-  条件: {a : 整数√d} {n : 自然数} (ha : Nonneg a)
-  结论: Nonneg ((n : 整数√d) * a)
-  证明: by
-  rw [← Int.cast_natCast n]
-  exact
-    match a, nonneg_cases ha, ha with
-    | _, ⟨x, y, Or.inl rfl⟩, _ => by rw [smul_val]; trivial
-| _, ⟨x, y, Or.inr Or.inl rfl⟩, ha => by
-      rw [smul_val]; simpa using! nonnegg_pos_neg.2 (sqLe_smul n <| nonnegg_pos_neg.1 ha)
-| _, ⟨x, y, Or.inr Or.inr rfl⟩, ha => by
-      rw [smul_val]; simpa using! nonnegg_neg_pos.2 (sqLe_smul n <| nonnegg_neg_pos.1 ha)
-
-Depends on / 依赖: Int.cast_natCast, Or.inl, Or.inr, cast_natCast, nonneg_cases, nonnegg_neg_pos, nonnegg_pos_neg, smul_val, sqLe_smul
+/-
+**Zsqrtd.nonneg_smul** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：nonneg_smul {a : Int√d} {n : Nat} (ha : Nonneg a) : Nonneg ((n : Int√d) * 
+a)
+参数：ha : Nonneg a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `Zsqrtd.nonneg_cases`：∀ {d : ℕ} {a : ℤ√↑d},   a.Nonneg → ∃ x y, a = { re 
+:= ↑x, im := ↑y } ∨ a = { re := ↑x, im := -↑y } ∨ a = { re := -↑x, im := ↑y }
+· 使用定理 `Zsqrtd.smul_val`：smul_val (n x y : Int) : (n : Int√d) * ⟨x, y⟩ = ⟨n * x,
+ n * y⟩
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.cast_mul`：∀ {α : Type u_1} [inst : NonAssocSemiring α] (m n : ℕ), ↑(
+m * n) = ↑m * ↑n
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Zsqrtd.nonnegg_pos_neg`：nonnegg_pos_neg {c d} {a b : Nat} : Nonnegg c d 
+a (-b) ↔ SqLe b c a d
+· 使用定理 `Zsqrtd.sqLe_smul`：sqLe_smul {c d x y : Nat} (n : Nat) (xy : SqLe x c y d
+) : SqLe (n * x) c (n * y) d
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Zsqrtd.nonnegg_neg_pos`：∀ {c d a b : ℕ}, Zsqrtd.Nonnegg c d (-↑a) ↑b ↔ Z
+sqrtd.SqLe a d b c
 -/
-theorem nonneg_smul {a : Int√d} {n : Nat} (ha : Nonneg a) : Nonneg ((n : Int√d) * a) := by
+theorem nonneg_smul {a : ℤ√d} {n : ℕ} (ha : Nonneg a) : Nonneg ((n : ℤ√d) * a) := by
   rw [← Int.cast_natCast n]
   exact
     match a, nonneg_cases ha, ha with
     | _, ⟨x, y, Or.inl rfl⟩, _ => by rw [smul_val]; trivial
-| _, ⟨x, y, Or.inr Or.inl rfl⟩, ha => by
+    | _, ⟨x, y, Or.inr <| Or.inl rfl⟩, ha => by
       rw [smul_val]; simpa using! nonnegg_pos_neg.2 (sqLe_smul n <| nonnegg_pos_neg.1 ha)
-| _, ⟨x, y, Or.inr Or.inr rfl⟩, ha => by
+    | _, ⟨x, y, Or.inr <| Or.inr rfl⟩, ha => by
       rw [smul_val]; simpa using! nonnegg_neg_pos.2 (sqLe_smul n <| nonnegg_neg_pos.1 ha)
-
-/--
-theorem `nonneg_muld` / 定理 `nonneg_muld`
-
-English:
-theorem nonneg_muld
-  given: {a : Int√d} (ha : Nonneg a)
-  statement: Nonneg (sqrtd * a)
-  proof: match a, nonneg_cases ha, ha with
-  | _, ⟨_, _, Or.inl rfl⟩, _ => trivial
-| _, ⟨x, y, Or.inr Or.inl rfl⟩, ha => by
-    simp only [muld_val, mul_neg]
-    apply nonnegg_neg_pos.2
-    simpa [SqLe, mul_comm, mul_left_comm] using Nat.mul_le_mul_left d (nonnegg_pos_neg.1 ha)
-| _, ⟨x, y, Or.inr Or.inr rfl⟩, ha => by
-    simp only [muld_val]
-    apply nonnegg_pos_neg.2
-    simpa [SqLe, mul_comm, mul_left_comm] using Nat.mul_le_mul_left d (nonnegg_neg_pos.1 ha)
-
-中文:
-定理 nonneg_muld
-  条件: {a : 整数√d} (ha : Nonneg a)
-  结论: Nonneg (sqrtd * a)
-  证明: match a, nonneg_cases ha, ha with
-  | _, ⟨_, _, Or.inl rfl⟩, _ => trivial
-| _, ⟨x, y, Or.inr Or.inl rfl⟩, ha => by
-    simp only [muld_val, mul_neg]
-    apply nonnegg_neg_pos.2
-    simpa [SqLe, mul_comm, mul_left_comm] using Nat.mul_le_mul_left d (nonnegg_pos_neg.1 ha)
-| _, ⟨x, y, Or.inr Or.inr rfl⟩, ha => by
-    simp only [muld_val]
-    apply nonnegg_pos_neg.2
-    simpa [SqLe, mul_comm, mul_left_comm] using Nat.mul_le_mul_left d (nonnegg_neg_pos.1 ha)
-
-Depends on / 依赖: Nat.mul_le_mul_left, Or.inl, Or.inr, mul_comm, mul_le_mul_left, mul_left_comm, mul_neg, muld_val, nonneg_cases, nonnegg_neg_pos, nonnegg_pos_neg
+/-
+**Zsqrtd.nonneg_muld** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：nonneg_muld {a : Int√d} (ha : Nonneg a) : Nonneg (sqrtd * a)
+参数：ha : Nonneg a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Zsqrtd.nonneg_cases`：∀ {d : ℕ} {a : ℤ√↑d},   a.Nonneg → ∃ x y, a = { re 
+:= ↑x, im := ↑y } ∨ a = { re := ↑x, im := -↑y } ∨ a = { re := -↑x, im := ↑y }
+· 使用定理 `trivial`：True
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Zsqrtd.muld_val`：muld_val (x y : Int) : sqrtd (d
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Zsqrtd.nonnegg_neg_pos`：∀ {c d a b : ℕ}, Zsqrtd.Nonnegg c d (-↑a) ↑b ↔ Z
+sqrtd.SqLe a d b c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `mul_left_comm`：mul_left_comm (a b c : G) : a * (b * c) = b * (a * c)
+· 使用定理 `Nat.mul_le_mul_left`：∀ {n m : ℕ} (k : ℕ), n ≤ m → k * n ≤ k * m
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Zsqrtd.nonnegg_pos_neg`：nonnegg_pos_neg {c d} {a b : Nat} : Nonnegg c d 
+a (-b) ↔ SqLe b c a d
 -/
-theorem nonneg_muld {a : Int√d} (ha : Nonneg a) : Nonneg (sqrtd * a) :=
+theorem nonneg_muld {a : ℤ√d} (ha : Nonneg a) : Nonneg (sqrtd * a) :=
   match a, nonneg_cases ha, ha with
   | _, ⟨_, _, Or.inl rfl⟩, _ => trivial
-| _, ⟨x, y, Or.inr Or.inl rfl⟩, ha => by
+  | _, ⟨x, y, Or.inr <| Or.inl rfl⟩, ha => by
     simp only [muld_val, mul_neg]
     apply nonnegg_neg_pos.2
     simpa [SqLe, mul_comm, mul_left_comm] using Nat.mul_le_mul_left d (nonnegg_pos_neg.1 ha)
-| _, ⟨x, y, Or.inr Or.inr rfl⟩, ha => by
+  | _, ⟨x, y, Or.inr <| Or.inr rfl⟩, ha => by
     simp only [muld_val]
     apply nonnegg_pos_neg.2
     simpa [SqLe, mul_comm, mul_left_comm] using Nat.mul_le_mul_left d (nonnegg_neg_pos.1 ha)
-
-/--
-theorem `nonneg_mul_lem` / 定理 `nonneg_mul_lem`
-
-English:
-theorem nonneg_mul_lem
-  given: {x y : Nat} {a : Int√d} (ha : Nonneg a)
-  statement: Nonneg (⟨x, y⟩ * a)
-  proof: by
-  have : (⟨x, y⟩ * a : Int√d) = (x : Int√d) * a + sqrtd * ((y : Int√d) * a) := by
-    rw [decompose]; rw [right_distrib]; rw [mul_assoc]; rw [Int.cast_natCast]; rw [Int.cast_natCast]
-  rw [this]
-  exact (nonneg_smul ha).add (nonneg_muld <| nonneg_smul ha)
-
-中文:
-定理 nonneg_mul_lem
-  条件: {x y : 自然数} {a : 整数√d} (ha : Nonneg a)
-  结论: Nonneg (⟨x, y⟩ * a)
-  证明: by
-  have : (⟨x, y⟩ * a : Int√d) = (x : Int√d) * a + sqrtd * ((y : Int√d) * a) := by
-    rw [decompose]; rw [right_distrib]; rw [mul_assoc]; rw [Int.cast_natCast]; rw [Int.cast_natCast]
-  rw [this]
-  exact (nonneg_smul ha).add (nonneg_muld <| nonneg_smul ha)
-
-Depends on / 依赖: Int.cast_natCast, cast_natCast, decompose, mul_assoc, nonneg_muld, nonneg_smul, right_distrib
+/-
+**Zsqrtd.nonneg_mul_lem** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：nonneg_mul_lem {x y : Nat} {a : Int√d} (ha : Nonneg a) : Nonneg (⟨x, y⟩ * 
+a)
+参数：ha : Nonneg a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Zsqrtd.decompose`：decompose {x y : Int} : (⟨x, y⟩ : Int√d) = x + sqrtd (
+d
+· 使用定理 `right_distrib`：right_distrib [Mul R] [Add R] [RightDistribClass R] (a b 
+c : R) : (a + b) * c = a * c + b * c
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `Zsqrtd.Nonneg.add`：∀ {d : ℕ} {a b : ℤ√↑d}, a.Nonneg → b.Nonneg → (a + b)
+.Nonneg
+· 使用定理 `Zsqrtd.nonneg_smul`：nonneg_smul {a : Int√d} {n : Nat} (ha : Nonneg a) : 
+Nonneg ((n : Int√d) * a)
+· 使用定理 `Zsqrtd.nonneg_muld`：nonneg_muld {a : Int√d} (ha : Nonneg a) : Nonneg (sq
+rtd * a)
 -/
-theorem nonneg_mul_lem {x y : Nat} {a : Int√d} (ha : Nonneg a) : Nonneg (⟨x, y⟩ * a) := by
-  have : (⟨x, y⟩ * a : Int√d) = (x : Int√d) * a + sqrtd * ((y : Int√d) * a) := by
-    rw [decompose]; rw [right_distrib]; rw [mul_assoc]; rw [Int.cast_natCast]; rw [Int.cast_natCast]
+theorem nonneg_mul_lem {x y : ℕ} {a : ℤ√d} (ha : Nonneg a) : Nonneg (⟨x, y⟩ * a) := by
+  have : (⟨x, y⟩ * a : ℤ√d) = (x : ℤ√d) * a + sqrtd * ((y : ℤ√d) * a) := by
+    rw [decompose, right_distrib, mul_assoc, Int.cast_natCast, Int.cast_natCast]
   rw [this]
   exact (nonneg_smul ha).add (nonneg_muld <| nonneg_smul ha)
-
-/--
-theorem `nonneg_mul` / 定理 `nonneg_mul`
-
-English:
-theorem nonneg_mul
-  given: {a b : Int√d} (ha : Nonneg a) (hb : Nonneg b)
-  statement: Nonneg (a * b)
-  proof: match a, b, nonneg_cases ha, nonneg_cases hb, ha, hb with
-  | _, _, ⟨_, _, Or.inl rfl⟩, ⟨_, _, Or.inl rfl⟩, _, _ => trivial
-| _, _, ⟨x, y, Or.inl rfl⟩, ⟨z, w, Or.inr Or.inr rfl⟩, _, hb => nonneg_mul_lem hb
-| _, _, ⟨x, y, Or.inl rfl⟩, ⟨z, w, Or.inr Or.inl rfl⟩, _, hb => nonneg_mul_lem hb
-| _, _, ⟨x, y, Or.inr Or.inr rfl⟩, ⟨z, w, Or.inl rfl⟩, ha, _ => by
-    rw [mul_comm]; exact nonneg_mul_lem ha
-| _, _, ⟨x, y, Or.inr Or.inl rfl⟩, ⟨z, w, Or.inl rfl⟩, ha, _ => by
-    rw [mul_comm]; exact nonneg_mul_lem ha
-| _, _, ⟨x, y, Or.inr Or.inr rfl⟩, ⟨z, w, Or.inr Or.inr rfl⟩, ha, hb => by
-    rw [calc
-          (⟨-x]; rw [y⟩ * ⟨-z]; rw [w⟩ : Int√d) = ⟨_]; rw [_⟩ := rfl
-          _ = ⟨x * z + d * y * w]; rw [-(x * w + y * z)⟩ := by simp [add_comm]]
-    exact nonnegg_pos_neg.2 (sqLe_mul.left (nonnegg_neg_pos.1 ha) (nonnegg_neg_pos.1 hb))
-| _, _, ⟨x, y, Or.inr Or.inr rfl⟩, ⟨z, w, Or.inr Or.inl rfl⟩, ha, hb => by
-    rw [calc
-          (⟨-x]; rw [y⟩ * ⟨z]; rw [-w⟩ : Int√d) = ⟨_]; rw [_⟩ := rfl
-          _ = ⟨-(x * z + d * y * w)]; rw [x * w + y * z⟩ := by simp [add_comm]]
-    exact nonnegg_neg_pos.2 (sqLe_mul.right.left (nonnegg_neg_pos.1 ha) (nonnegg_pos_neg.1 hb))
-| _, _, ⟨x, y, Or.inr Or.inl rfl⟩, ⟨z, w, Or.inr Or.inr rfl⟩, ha, hb => by
-    rw [calc
-          (⟨x]; rw [-y⟩ * ⟨-z]; rw [w⟩ : Int√d) = ⟨_]; rw [_⟩ := rfl
-          _ = ⟨-(x * z + d * y * w)]; rw [x * w + y * z⟩ := by simp [add_comm]]
-    exact
-        nonnegg_neg_pos.2 (sqLe_mul.right.right.left (nonnegg_pos_neg.1 ha) (nonnegg_neg_pos.1 hb))
-| _, _, ⟨x, y, Or.inr Or.inl rfl⟩, ⟨z, w, Or.inr Or.inl rfl⟩, ha, hb => by
-    rw [calc
-          (⟨x]; rw [-y⟩ * ⟨z]; rw [-w⟩ : Int√d) = ⟨_]; rw [_⟩ := rfl
-          _ = ⟨x * z + d * y * w]; rw [-(x * w + y * z)⟩ := by simp [add_comm]]
-    exact
-        nonnegg_pos_neg.2
-          (sqLe_mul.right.right.right (nonnegg_pos_neg.1 ha) (nonnegg_pos_neg.1 hb))
-
-中文:
-定理 nonneg_mul
-  条件: {a b : 整数√d} (ha : Nonneg a) (hb : Nonneg b)
-  结论: Nonneg (a * b)
-  证明: match a, b, nonneg_cases ha, nonneg_cases hb, ha, hb with
-  | _, _, ⟨_, _, Or.inl rfl⟩, ⟨_, _, Or.inl rfl⟩, _, _ => trivial
-| _, _, ⟨x, y, Or.inl rfl⟩, ⟨z, w, Or.inr Or.inr rfl⟩, _, hb => nonneg_mul_lem hb
-| _, _, ⟨x, y, Or.inl rfl⟩, ⟨z, w, Or.inr Or.inl rfl⟩, _, hb => nonneg_mul_lem hb
-| _, _, ⟨x, y, Or.inr Or.inr rfl⟩, ⟨z, w, Or.inl rfl⟩, ha, _ => by
-    rw [mul_comm]; exact nonneg_mul_lem ha
-| _, _, ⟨x, y, Or.inr Or.inl rfl⟩, ⟨z, w, Or.inl rfl⟩, ha, _ => by
-    rw [mul_comm]; exact nonneg_mul_lem ha
-| _, _, ⟨x, y, Or.inr Or.inr rfl⟩, ⟨z, w, Or.inr Or.inr rfl⟩, ha, hb => by
-    rw [calc
-          (⟨-x]; rw [y⟩ * ⟨-z]; rw [w⟩ : Int√d) = ⟨_]; rw [_⟩ := rfl
-          _ = ⟨x * z + d * y * w]; rw [-(x * w + y * z)⟩ := by simp [add_comm]]
-    exact nonnegg_pos_neg.2 (sqLe_mul.left (nonnegg_neg_pos.1 ha) (nonnegg_neg_pos.1 hb))
-| _, _, ⟨x, y, Or.inr Or.inr rfl⟩, ⟨z, w, Or.inr Or.inl rfl⟩, ha, hb => by
-    rw [calc
-          (⟨-x]; rw [y⟩ * ⟨z]; rw [-w⟩ : Int√d) = ⟨_]; rw [_⟩ := rfl
-          _ = ⟨-(x * z + d * y * w)]; rw [x * w + y * z⟩ := by simp [add_comm]]
-    exact nonnegg_neg_pos.2 (sqLe_mul.right.left (nonnegg_neg_pos.1 ha) (nonnegg_pos_neg.1 hb))
-| _, _, ⟨x, y, Or.inr Or.inl rfl⟩, ⟨z, w, Or.inr Or.inr rfl⟩, ha, hb => by
-    rw [calc
-          (⟨x]; rw [-y⟩ * ⟨-z]; rw [w⟩ : Int√d) = ⟨_]; rw [_⟩ := rfl
-          _ = ⟨-(x * z + d * y * w)]; rw [x * w + y * z⟩ := by simp [add_comm]]
-    exact
-        nonnegg_neg_pos.2 (sqLe_mul.right.right.left (nonnegg_pos_neg.1 ha) (nonnegg_neg_pos.1 hb))
-| _, _, ⟨x, y, Or.inr Or.inl rfl⟩, ⟨z, w, Or.inr Or.inl rfl⟩, ha, hb => by
-    rw [calc
-          (⟨x]; rw [-y⟩ * ⟨z]; rw [-w⟩ : Int√d) = ⟨_]; rw [_⟩ := rfl
-          _ = ⟨x * z + d * y * w]; rw [-(x * w + y * z)⟩ := by simp [add_comm]]
-    exact
-        nonnegg_pos_neg.2
-          (sqLe_mul.right.right.right (nonnegg_pos_neg.1 ha) (nonnegg_pos_neg.1 hb))
-
-Depends on / 依赖: Or.inl, Or.inr, mul_comm, nonneg_cases, nonneg_mul_lem
+/-
+**Zsqrtd.nonneg_mul** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：nonneg_mul {a b : Int√d} (ha : Nonneg a) (hb : Nonneg b) : Nonneg (a * b)
+参数：ha : Nonneg a；hb : Nonneg b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Zsqrtd.nonneg_cases`：∀ {d : ℕ} {a : ℤ√↑d},   a.Nonneg → ∃ x y, a = { re 
+:= ↑x, im := ↑y } ∨ a = { re := ↑x, im := -↑y } ∨ a = { re := -↑x, im := ↑y }
+· 使用定理 `trivial`：True
+· 使用定理 `Zsqrtd.nonneg_mul_lem`：nonneg_mul_lem {x y : Nat} {a : Int√d} (ha : Nonn
+eg a) : Nonneg (⟨x, y⟩ * a)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `neg_add_rev`：∀ {G : Type u_1} [inst : SubtractionMonoid G] (a b : G), -(
+a + b) = -b + -a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Zsqrtd.nonnegg_pos_neg`：nonnegg_pos_neg {c d} {a b : Nat} : Nonnegg c d 
+a (-b) ↔ SqLe b c a d
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Zsqrtd.sqLe_mul`：sqLe_mul {d x y z w : Nat} : (SqLe x 1 y d -> SqLe z 1 
+w d -> SqLe (x * w + y * z) d (x * z + d * y * w) 1) ∧ (SqLe x 1 y d -> SqLe w d
+ z 1 …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Zsqrtd.nonnegg_neg_pos`：∀ {c d a b : ℕ}, Zsqrtd.Nonnegg c d (-↑a) ↑b ↔ Z
+sqrtd.SqLe a d b c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem nonneg_mul {a b : Int√d} (ha : Nonneg a) (hb : Nonneg b) : Nonneg (a * b) :=
+theorem nonneg_mul {a b : ℤ√d} (ha : Nonneg a) (hb : Nonneg b) : Nonneg (a * b) :=
   match a, b, nonneg_cases ha, nonneg_cases hb, ha, hb with
   | _, _, ⟨_, _, Or.inl rfl⟩, ⟨_, _, Or.inl rfl⟩, _, _ => trivial
-| _, _, ⟨x, y, Or.inl rfl⟩, ⟨z, w, Or.inr Or.inr rfl⟩, _, hb => nonneg_mul_lem hb
-| _, _, ⟨x, y, Or.inl rfl⟩, ⟨z, w, Or.inr Or.inl rfl⟩, _, hb => nonneg_mul_lem hb
-| _, _, ⟨x, y, Or.inr Or.inr rfl⟩, ⟨z, w, Or.inl rfl⟩, ha, _ => by
+  | _, _, ⟨x, y, Or.inl rfl⟩, ⟨z, w, Or.inr <| Or.inr rfl⟩, _, hb => nonneg_mul_lem hb
+  | _, _, ⟨x, y, Or.inl rfl⟩, ⟨z, w, Or.inr <| Or.inl rfl⟩, _, hb => nonneg_mul_lem hb
+  | _, _, ⟨x, y, Or.inr <| Or.inr rfl⟩, ⟨z, w, Or.inl rfl⟩, ha, _ => by
     rw [mul_comm]; exact nonneg_mul_lem ha
-| _, _, ⟨x, y, Or.inr Or.inl rfl⟩, ⟨z, w, Or.inl rfl⟩, ha, _ => by
+  | _, _, ⟨x, y, Or.inr <| Or.inl rfl⟩, ⟨z, w, Or.inl rfl⟩, ha, _ => by
     rw [mul_comm]; exact nonneg_mul_lem ha
-| _, _, ⟨x, y, Or.inr Or.inr rfl⟩, ⟨z, w, Or.inr Or.inr rfl⟩, ha, hb => by
+  | _, _, ⟨x, y, Or.inr <| Or.inr rfl⟩, ⟨z, w, Or.inr <| Or.inr rfl⟩, ha, hb => by
     rw [calc
-          (⟨-x]; rw [y⟩ * ⟨-z]; rw [w⟩ : Int√d) = ⟨_]; rw [_⟩ := rfl
-          _ = ⟨x * z + d * y * w]; rw [-(x * w + y * z)⟩ := by simp [add_comm]]
+          (⟨-x, y⟩ * ⟨-z, w⟩ : ℤ√d) = ⟨_, _⟩ := rfl
+          _ = ⟨x * z + d * y * w, -(x * w + y * z)⟩ := by simp [add_comm]]
     exact nonnegg_pos_neg.2 (sqLe_mul.left (nonnegg_neg_pos.1 ha) (nonnegg_neg_pos.1 hb))
-| _, _, ⟨x, y, Or.inr Or.inr rfl⟩, ⟨z, w, Or.inr Or.inl rfl⟩, ha, hb => by
+  | _, _, ⟨x, y, Or.inr <| Or.inr rfl⟩, ⟨z, w, Or.inr <| Or.inl rfl⟩, ha, hb => by
     rw [calc
-          (⟨-x]; rw [y⟩ * ⟨z]; rw [-w⟩ : Int√d) = ⟨_]; rw [_⟩ := rfl
-          _ = ⟨-(x * z + d * y * w)]; rw [x * w + y * z⟩ := by simp [add_comm]]
+          (⟨-x, y⟩ * ⟨z, -w⟩ : ℤ√d) = ⟨_, _⟩ := rfl
+          _ = ⟨-(x * z + d * y * w), x * w + y * z⟩ := by simp [add_comm]]
     exact nonnegg_neg_pos.2 (sqLe_mul.right.left (nonnegg_neg_pos.1 ha) (nonnegg_pos_neg.1 hb))
-| _, _, ⟨x, y, Or.inr Or.inl rfl⟩, ⟨z, w, Or.inr Or.inr rfl⟩, ha, hb => by
+  | _, _, ⟨x, y, Or.inr <| Or.inl rfl⟩, ⟨z, w, Or.inr <| Or.inr rfl⟩, ha, hb => by
     rw [calc
-          (⟨x]; rw [-y⟩ * ⟨-z]; rw [w⟩ : Int√d) = ⟨_]; rw [_⟩ := rfl
-          _ = ⟨-(x * z + d * y * w)]; rw [x * w + y * z⟩ := by simp [add_comm]]
+          (⟨x, -y⟩ * ⟨-z, w⟩ : ℤ√d) = ⟨_, _⟩ := rfl
+          _ = ⟨-(x * z + d * y * w), x * w + y * z⟩ := by simp [add_comm]]
     exact
         nonnegg_neg_pos.2 (sqLe_mul.right.right.left (nonnegg_pos_neg.1 ha) (nonnegg_neg_pos.1 hb))
-| _, _, ⟨x, y, Or.inr Or.inl rfl⟩, ⟨z, w, Or.inr Or.inl rfl⟩, ha, hb => by
+  | _, _, ⟨x, y, Or.inr <| Or.inl rfl⟩, ⟨z, w, Or.inr <| Or.inl rfl⟩, ha, hb => by
     rw [calc
-          (⟨x]; rw [-y⟩ * ⟨z]; rw [-w⟩ : Int√d) = ⟨_]; rw [_⟩ := rfl
-          _ = ⟨x * z + d * y * w]; rw [-(x * w + y * z)⟩ := by simp [add_comm]]
+          (⟨x, -y⟩ * ⟨z, -w⟩ : ℤ√d) = ⟨_, _⟩ := rfl
+          _ = ⟨x * z + d * y * w, -(x * w + y * z)⟩ := by simp [add_comm]]
     exact
         nonnegg_pos_neg.2
           (sqLe_mul.right.right.right (nonnegg_pos_neg.1 ha) (nonnegg_pos_neg.1 hb))
-
-/--
-theorem `mul_nonneg` / 定理 `mul_nonneg`
-
-English:
-theorem mul_nonneg
-  given: (a b : Int√d)
-  statement: 0 <= a -> 0 <= b -> 0 <= a * b
-  proof: by
-  simp_rw [← nonneg_iff_zero_le]
-  exact nonneg_mul
-
-中文:
-定理 mul_nonneg
-  条件: (a b : 整数√d)
-  结论: 0 <= a -> 0 <= b -> 0 <= a * b
-  证明: by
-  simp_rw [← nonneg_iff_zero_le]
-  exact nonneg_mul
+/-
+**Zsqrtd.mul_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：∀ {d : ℕ} (a b : ℤ√↑d), 0 ≤ a → 0 ≤ b → 0 ≤ a * b
+参数：a b : ℤ√↑d。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Zsqrtd.nonneg_mul`：nonneg_mul {a b : Int√d} (ha : Nonneg a) (hb : Nonneg
+ b) : Nonneg (a * b)
 -/
-protected theorem mul_nonneg (a b : Int√d) : 0 <= a -> 0 <= b -> 0 <= a * b := by
+protected theorem mul_nonneg (a b : ℤ√d) : 0 ≤ a → 0 ≤ b → 0 ≤ a * b := by
   simp_rw [← nonneg_iff_zero_le]
   exact nonneg_mul
-
-/--
-theorem `not_sqLe_succ` / 定理 `not_sqLe_succ`
-
-English:
-theorem not_sqLe_succ
-  given: (c d y) (h : 0 < c)
-  statement: ¬SqLe (y + 1) c 0 d
-  proof: not_le_of_gt mul_pos (mul_pos h <| Nat.succ_pos _) Nat.succ_pos _
-
-中文:
-定理 not_sqLe_succ
-  条件: (c d y) (h : 0 < c)
-  结论: ¬SqLe (y + 1) c 0 d
-  证明: not_le_of_gt mul_pos (mul_pos h <| Nat.succ_pos _) Nat.succ_pos _
-
-Depends on / 依赖: Nat.succ_pos, mul_pos, not_le_of_gt, succ_pos
+/-
+**Zsqrtd.not_sqLe_succ** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：not_sqLe_succ (c d y) (h : 0 < c) : ¬SqLe (y + 1) c 0 d
+参数：c d y；h : 0 < c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_le_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用定理 `mul_pos`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 : Pr
+eorder α] [PosMulStrictMono α], 0 < a → 0 < b → 0 < a * b
+· 使用定理 `LinearOrderedCommMonoidWithZero.toPosMulStrictMono`：∀ {α : Type u_3} [se
+lf : LinearOrderedCommMonoidWithZero α], PosMulStrictMono α
+· 使用定理 `Nat.succ_pos`：∀ (n : ℕ), 0 < n.succ
 -/
 theorem not_sqLe_succ (c d y) (h : 0 < c) : ¬SqLe (y + 1) c 0 d :=
-not_le_of_gt mul_pos (mul_pos h <| Nat.succ_pos _) Nat.succ_pos _
+  not_le_of_gt <| mul_pos (mul_pos h <| Nat.succ_pos _) <| Nat.succ_pos _
 
-/--
-Definition of `Nonsquare` / `Nonsquare` 的定义
+/-- A nonsquare is a natural number that is not equal to the square of an
+  integer. This is implemented as a typeclass because it's a necessary condition
+  for much of the Pell equation theory. -/
+/-
+**Zsqrtd.Nonsquare** 是 Mathlib 中的一个归纳类型，位于命名空间 `Zsqrtd`。
+形式化陈述：ℕ → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Nonsquare
-  parameters: (x : Nat)
-  axioms and operations (1):
-    - ns((x)) : forall n : Nat, x != n * n
-
-中文:
-类 Nonsquare
-  参数: (x : 自然数)
-  公理与运算 (1 个):
-    - ns((x)) : 对任意 n : 自然数, x != n * n
+--- 原说明 ---
+A nonsquare is a natural number that is not equal to the square of an
+  integer. This is implemented as a typeclass because it's a necessary condition
+  for much of the Pell equation theory.
 -/
-class Nonsquare (x : Nat) : Prop where
-  ns (x) : forall n : Nat, x != n * n
+class Nonsquare (x : ℕ) : Prop where
+  ns (x) : ∀ n : ℕ, x ≠ n * n
 
 variable [dnsq : Nonsquare d]
-
-/--
-theorem `d_pos` / 定理 `d_pos`
-
-English:
-theorem d_pos
-  statement: 0 < d
-  proof: lt_of_le_of_ne (Nat.zero_le _) Ne.symm Nonsquare.ns d 0
-
-中文:
-定理 d_pos
-  结论: 0 < d
-  证明: lt_of_le_of_ne (Nat.zero_le _) Ne.symm Nonsquare.ns d 0
-
-Depends on / 依赖: Nat.zero_le, Ne.symm, Nonsquare, Nonsquare.ns, lt_of_le_of_ne, zero_le
+/-
+**Zsqrtd.d_pos** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：d_pos : 0 < d
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_of_le_of_ne`：lt_of_le_of_ne : a <= b -> a != b -> a < b
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `Zsqrtd.Nonsquare.ns`：∀ (x : ℕ) [self : Zsqrtd.Nonsquare x] (n : ℕ), x ≠ 
+n * n
 -/
 theorem d_pos : 0 < d :=
-lt_of_le_of_ne (Nat.zero_le _) Ne.symm Nonsquare.ns d 0
-
-/--
-theorem `divides_sq_eq_zero` / 定理 `divides_sq_eq_zero`
-
-English:
-theorem divides_sq_eq_zero
-  given: {x y} (h : x * x = d * y * y)
-  statement: x = 0 ∧ y = 0
-  proof: let g := x.gcd y
-  Or.elim g.eq_zero_or_pos
-    (fun H => ⟨Nat.eq_zero_of_gcd_eq_zero_left H, Nat.eq_zero_of_gcd_eq_zero_right H⟩) fun gpos =>
-False.elim by
-      let ⟨m, n, co, (hx : x = m * g), (hy : y = n * g)⟩ := Nat.exists_coprime _ _
-      rw [hx]; rw [hy] at h
-      have : m * m = d * (n * n) := by
-        refine mul_left_cancel₀ (mul_pos gpos gpos).ne' ?_
-        simpa [mul_comm, mul_left_comm, mul_assoc] using h
-      have co2 :=
-        let co1 := co.mul_right co
-        co1.mul_left co1
-      exact
-        Nonsquare.ns d m
-          (Nat.dvd_antisymm (by rw [this]; apply dvd_mul_right) <|
-co2.dvd_of_dvd_mul_right by simp [this])
-
-中文:
-定理 divides_sq_eq_zero
-  条件: {x y} (h : x * x = d * y * y)
-  结论: x = 0 ∧ y = 0
-  证明: let g := x.gcd y
-  Or.elim g.eq_zero_or_pos
-    (fun H => ⟨Nat.eq_zero_of_gcd_eq_zero_left H, Nat.eq_zero_of_gcd_eq_zero_right H⟩) fun gpos =>
-False.elim by
-      let ⟨m, n, co, (hx : x = m * g), (hy : y = n * g)⟩ := Nat.exists_coprime _ _
-      rw [hx]; rw [hy] at h
-      have : m * m = d * (n * n) := by
-        refine mul_left_cancel₀ (mul_pos gpos gpos).ne' ?_
-        simpa [mul_comm, mul_left_comm, mul_assoc] using h
-      have co2 :=
-        let co1 := co.mul_right co
-        co1.mul_left co1
-      exact
-        Nonsquare.ns d m
-          (Nat.dvd_antisymm (by rw [this]; apply dvd_mul_right) <|
-co2.dvd_of_dvd_mul_right by simp [this])
-
-Depends on / 依赖: False.elim, Nat.dvd_antisymm, Nat.eq_zero_of_gcd_eq_zero_left, Nat.eq_zero_of_gcd_eq_zero_right, Nat.exists_coprime, Nonsquare, Nonsquare.ns, Or.elim, co.mul_right, co1.mul_left, dvd_antisymm, eq_zero_of_gcd_eq_zero_left, eq_zero_of_gcd_eq_zero_right, eq_zero_or_pos, exists_coprime, g.eq_zero_or_pos, mul_assoc, mul_comm, mul_left, mul_left_comm
+  lt_of_le_of_ne (Nat.zero_le _) <| Ne.symm <| Nonsquare.ns d 0
+/-
+**Zsqrtd.divides_sq_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：divides_sq_eq_zero {x y} (h : x * x = d * y * y) : x = 0 ∧ y = 0
+参数：h : x * x = d * y * y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `Nat.eq_zero_or_pos`：∀ (n : ℕ), n = 0 ∨ n > 0
+· 使用定理 `Nat.eq_zero_of_gcd_eq_zero_left`：∀ {m n : ℕ}, m.gcd n = 0 → m = 0
+· 使用定理 `Nat.eq_zero_of_gcd_eq_zero_right`：∀ {m n : ℕ}, m.gcd n = 0 → n = 0
+· 使用定理 `Nat.exists_coprime`：∀ (m n : ℕ), ∃ m' n', m'.Coprime n' ∧ m = m' * m.gcd
+ n ∧ n = n' * m.gcd n
+· 使用定理 `mul_left_cancel₀`：mul_left_cancel₀ (ha : a != 0) (h : a * b = a * c) : b
+ = c
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `mul_pos`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 : Pr
+eorder α] [PosMulStrictMono α], 0 < a → 0 < b → 0 < a * b
+· 使用定理 `LinearOrderedCommMonoidWithZero.toPosMulStrictMono`：∀ {α : Type u_3} [se
+lf : LinearOrderedCommMonoidWithZero α], PosMulStrictMono α
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `mul_left_comm`：mul_left_comm (a b c : G) : a * (b * c) = b * (a * c)
+· 使用定理 `Nat.Coprime.mul_right`：∀ {k m n : ℕ}, k.Coprime m → k.Coprime n → k.Copr
+ime (m * n)
+· 使用定理 `Nat.Coprime.mul_left`：∀ {m k n : ℕ}, m.Coprime k → n.Coprime k → (m * n)
+.Coprime k
+· 使用定理 `Zsqrtd.Nonsquare.ns`：∀ (x : ℕ) [self : Zsqrtd.Nonsquare x] (n : ℕ), x ≠ 
+n * n
+· 使用定理 `Nat.dvd_antisymm`：∀ {m n : ℕ}, m ∣ n → n ∣ m → m = n
+· 使用定理 `dvd_mul_right`：dvd_mul_right (a b : α) : a ∣ a * b
+· 使用定理 `Nat.Coprime.dvd_of_dvd_mul_right`：∀ {k n m : ℕ}, k.Coprime n → k ∣ m * n
+ → k ∣ m
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
 theorem divides_sq_eq_zero {x y} (h : x * x = d * y * y) : x = 0 ∧ y = 0 :=
   let g := x.gcd y
   Or.elim g.eq_zero_or_pos
     (fun H => ⟨Nat.eq_zero_of_gcd_eq_zero_left H, Nat.eq_zero_of_gcd_eq_zero_right H⟩) fun gpos =>
-False.elim by
+    False.elim <| by
       let ⟨m, n, co, (hx : x = m * g), (hy : y = n * g)⟩ := Nat.exists_coprime _ _
-      rw [hx]; rw [hy] at h
+      rw [hx, hy] at h
       have : m * m = d * (n * n) := by
         refine mul_left_cancel₀ (mul_pos gpos gpos).ne' ?_
         simpa [mul_comm, mul_left_comm, mul_assoc] using h
@@ -3340,97 +2561,71 @@ False.elim by
       exact
         Nonsquare.ns d m
           (Nat.dvd_antisymm (by rw [this]; apply dvd_mul_right) <|
-co2.dvd_of_dvd_mul_right by simp [this])
-
-/--
-theorem `divides_sq_eq_zero_z` / 定理 `divides_sq_eq_zero_z`
-
-English:
-theorem divides_sq_eq_zero_z
-  given: {x y : Int} (h : x * x = d * y * y)
-  statement: x = 0 ∧ y = 0
-  proof: by
-  rw [mul_assoc]; rw [← Int.natAbs_mul_self]; rw [← Int.natAbs_mul_self]; rw [← Int.natCast_mul]; rw [← mul_assoc] at h
-  exact
-    let ⟨h1, h2⟩ := divides_sq_eq_zero (Int.ofNat.inj h)
-    ⟨Int.natAbs_eq_zero.mp h1, Int.natAbs_eq_zero.mp h2⟩
-
-中文:
-定理 divides_sq_eq_zero_z
-  条件: {x y : 整数} (h : x * x = d * y * y)
-  结论: x = 0 ∧ y = 0
-  证明: by
-  rw [mul_assoc]; rw [← Int.natAbs_mul_self]; rw [← Int.natAbs_mul_self]; rw [← Int.natCast_mul]; rw [← mul_assoc] at h
-  exact
-    let ⟨h1, h2⟩ := divides_sq_eq_zero (Int.ofNat.inj h)
-    ⟨Int.natAbs_eq_zero.mp h1, Int.natAbs_eq_zero.mp h2⟩
-
-Depends on / 依赖: Int.natAbs_eq_zero.mp, Int.natAbs_mul_self, Int.natCast_mul, Int.ofNat.inj, divides_sq_eq_zero, mul_assoc, natAbs_eq_zero, natAbs_mul_self, natCast_mul
+            co2.dvd_of_dvd_mul_right <| by simp [this])
+/-
+**Zsqrtd.divides_sq_eq_zero_z** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：divides_sq_eq_zero_z {x y : Int} (h : x * x = d * y * y) : x = 0 ∧ y = 0
+参数：h : x * x = d * y * y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Zsqrtd.divides_sq_eq_zero`：divides_sq_eq_zero {x y} (h : x * x = d * y *
+ y) : x = 0 ∧ y = 0
+· 使用定理 `Int.ofNat.inj`：∀ {a a_1 : ℕ}, Int.ofNat a = Int.ofNat a_1 → a = a_1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Int.natCast_mul`：∀ (n m : ℕ), ↑(n * m) = ↑n * ↑m
+· 使用定理 `Int.natAbs_mul_self`：∀ {a : ℤ}, ↑(a.natAbs * a.natAbs) = a * a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Int.natAbs_eq_zero`：∀ {a : ℤ}, a.natAbs = 0 ↔ a = 0
 -/
-theorem divides_sq_eq_zero_z {x y : Int} (h : x * x = d * y * y) : x = 0 ∧ y = 0 := by
-  rw [mul_assoc]; rw [← Int.natAbs_mul_self]; rw [← Int.natAbs_mul_self]; rw [← Int.natCast_mul]; rw [← mul_assoc] at h
+theorem divides_sq_eq_zero_z {x y : ℤ} (h : x * x = d * y * y) : x = 0 ∧ y = 0 := by
+  rw [mul_assoc, ← Int.natAbs_mul_self, ← Int.natAbs_mul_self, ← Int.natCast_mul, ← mul_assoc] at h
   exact
     let ⟨h1, h2⟩ := divides_sq_eq_zero (Int.ofNat.inj h)
     ⟨Int.natAbs_eq_zero.mp h1, Int.natAbs_eq_zero.mp h2⟩
-
-/--
-theorem `not_divides_sq` / 定理 `not_divides_sq`
-
-English:
-theorem not_divides_sq
-  given: (x y)
-  statement: (x + 1) * (x + 1) != d * (y + 1) * (y + 1)
-  proof: fun e => by
-  have t := (divides_sq_eq_zero e).left
-  contradiction
-
-中文:
-定理 not_divides_sq
-  条件: (x y)
-  结论: (x + 1) * (x + 1) != d * (y + 1) * (y + 1)
-  证明: fun e => by
-  have t := (divides_sq_eq_zero e).left
-  contradiction
-
-Depends on / 依赖: divides_sq_eq_zero
+/-
+**Zsqrtd.not_divides_sq** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：not_divides_sq (x y) : (x + 1) * (x + 1) != d * (y + 1) * (y + 1)
+参数：x y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Zsqrtd.divides_sq_eq_zero`：divides_sq_eq_zero {x y} (h : x * x = d * y *
+ y) : x = 0 ∧ y = 0
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
 -/
-theorem not_divides_sq (x y) : (x + 1) * (x + 1) != d * (y + 1) * (y + 1) := fun e => by
+theorem not_divides_sq (x y) : (x + 1) * (x + 1) ≠ d * (y + 1) * (y + 1) := fun e => by
   have t := (divides_sq_eq_zero e).left
   contradiction
 
 open Int in
-/--
-theorem `nonneg_antisymm` / 定理 `nonneg_antisymm`
-
-English:
-theorem nonneg_antisymm
-  statement: forall {a : Int√d}, Nonneg a -> Nonneg (-a) -> a = 0
-  proof: le_antisymm yx xy
-    rw [one_mul] at t
-    exact absurd t (not_divides_sq _ _)
-  | ⟨-[x+1], (y + 1 : Nat)⟩, (xy : SqLe _ _ _ _), (yx : SqLe _ _ _ _) => by
-    let t := le_antisymm xy yx
-    rw [one_mul] at t
-    exact absurd t (not_divides_sq _ _)
-
-@[deprecated _root_.le_antisymm (since := "2026-02-19")]
-
-中文:
-定理 nonneg_antisymm
-  结论: 对任意 {a : 整数√d}, Nonneg a -> Nonneg (-a) -> a = 0
-  证明: le_antisymm yx xy
-    rw [one_mul] at t
-    exact absurd t (not_divides_sq _ _)
-  | ⟨-[x+1], (y + 1 : Nat)⟩, (xy : SqLe _ _ _ _), (yx : SqLe _ _ _ _) => by
-    let t := le_antisymm xy yx
-    rw [one_mul] at t
-    exact absurd t (not_divides_sq _ _)
-
-@[deprecated _root_.le_antisymm (since := "2026-02-19")]
-
-Depends on / 依赖: le_antisymm
+/-
+**Zsqrtd.nonneg_antisymm** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：nonneg_antisymm : forall {a : Int√d}, Nonneg a -> Nonneg (-a) -> a = 0 | ⟨
+0, 0⟩, _, _ => rfl | ⟨-[_+1], -[_+1]⟩, xy, _ => False.elim xy | ⟨(_ + 1 : Nat), 
+(_ + 1 : Nat)⟩, _, yx => False.elim yx | ⟨-[_+1], 0⟩, xy, _ => absurd xy (not_sq
+Le_succ _ _ _ (by decide)) | ⟨(_ + 1 : Nat), 0⟩, _, yx => absurd yx (not_sqLe_su
+cc _ _ _ (by decide)) | ⟨0, -[_+1]⟩, xy, _ => absurd xy (not_sqLe_succ _ _ _ d_p
+os) | ⟨0, (_ + 1 : Nat)⟩, _, yx => absurd yx (not_sqLe_succ _ _ _ d_pos) | ⟨(x +
+ 1 : Nat), -[y+1]⟩, (xy : 
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Zsqrtd.not_sqLe_succ`：not_sqLe_succ (c d y) (h : 0 < c) : ¬SqLe (y + 1) 
+c 0 d
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `Zsqrtd.d_pos`：d_pos : 0 < d
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Zsqrtd.not_divides_sq`：not_divides_sq (x y) : (x + 1) * (x + 1) != d * (
+y + 1) * (y + 1)
 -/
-theorem nonneg_antisymm : forall {a : Int√d}, Nonneg a -> Nonneg (-a) -> a = 0
+theorem nonneg_antisymm : ∀ {a : ℤ√d}, Nonneg a → Nonneg (-a) → a = 0
   | ⟨0, 0⟩, _, _ => rfl
   | ⟨-[_+1], -[_+1]⟩, xy, _ => False.elim xy
   | ⟨(_ + 1 : Nat), (_ + 1 : Nat)⟩, _, yx => False.elim yx
@@ -3448,129 +2643,73 @@ theorem nonneg_antisymm : forall {a : Int√d}, Nonneg a -> Nonneg (-a) -> a = 0
     exact absurd t (not_divides_sq _ _)
 
 @[deprecated _root_.le_antisymm (since := "2026-02-19")]
-/--
-theorem `le_antisymm` / 定理 `le_antisymm`
-
-English:
-theorem le_antisymm
-  given: {a b : Int√d} (ab : a <= b) (ba : b <= a)
-  statement: a = b
-  proof: eq_of_sub_eq_zero nonneg_antisymm ba (by rwa [neg_sub])
-
-中文:
-定理 le_antisymm
-  条件: {a b : 整数√d} (ab : a <= b) (ba : b <= a)
-  结论: a = b
-  证明: eq_of_sub_eq_zero nonneg_antisymm ba (by rwa [neg_sub])
-
-Depends on / 依赖: eq_of_sub_eq_zero, neg_sub, nonneg_antisymm
+/-
+**Zsqrtd.le_antisymm** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：le_antisymm {a b : Int√d} (ab : a <= b) (ba : b <= a) : a = b
+参数：ab : a <= b；ba : b <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_sub_eq_zero`：∀ {α : Type u_1} [inst : SubtractionMonoid α] {a b : 
+α}, a - b = 0 → a = b
+· 使用定理 `Zsqrtd.nonneg_antisymm`：nonneg_antisymm : forall {a : Int√d}, Nonneg a -
+> Nonneg (-a) -> a = 0 | ⟨0, 0⟩, _, _ => rfl | ⟨-[_+1], -[_+1]⟩, xy, _ => False.
+elim xy | ⟨(…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `neg_sub`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α), -(a - 
+b) = b - a
 -/
-theorem le_antisymm {a b : Int√d} (ab : a <= b) (ba : b <= a) : a = b :=
-eq_of_sub_eq_zero nonneg_antisymm ba (by rwa [neg_sub])
-
-/--
-Instance `linearOrder` / 实例 `linearOrder`
-
-English:
-instance linearOrder
-  signature: : LinearOrder (Int√d)
-  body: { Zsqrtd.preorder with
-le_antisymm := fun _ _ ab ba => eq_of_sub_eq_zero nonneg_antisymm ba (by rwa [neg_sub])
-    le_total := fun a b => by
-      have t := (b - a).nonneg_total
-      rwa [neg_sub] at t
-    toDecidableLE := Zsqrtd.decidableLE
-    toDecidableEq := inferInstance }
-
-中文:
-实例 linearOrder
-  签名: : 线性序 (整数√d)
-  定义体: { Zsqrtd.preorder with
-le_antisymm := fun _ _ ab ba => eq_of_sub_eq_zero nonneg_antisymm ba (by rwa [neg_sub])
-    le_total := fun a b => by
-      have t := (b - a).nonneg_total
-      rwa [neg_sub] at t
-    toDecidableLE := Zsqrtd.decidableLE
-    toDecidableEq := inferInstance }
-
-Depends on / 依赖: Zsqrtd, Zsqrtd.decidableLE, Zsqrtd.preorder, decidableLE, eq_of_sub_eq_zero, le_antisymm, le_total, neg_sub, nonneg_antisymm, nonneg_total, preorder, toDecidableEq, toDecidableLE
+theorem le_antisymm {a b : ℤ√d} (ab : a ≤ b) (ba : b ≤ a) : a = b :=
+  eq_of_sub_eq_zero <| nonneg_antisymm ba (by rwa [neg_sub])
+/-
+**Zsqrtd.linearOrder** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+形式化陈述：linearOrder : LinearOrder (Int√d)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance linearOrder : LinearOrder (Int√d) :=
+instance linearOrder : LinearOrder (ℤ√d) :=
   { Zsqrtd.preorder with
-le_antisymm := fun _ _ ab ba => eq_of_sub_eq_zero nonneg_antisymm ba (by rwa [neg_sub])
+    le_antisymm := fun _ _ ab ba => eq_of_sub_eq_zero <| nonneg_antisymm ba (by rwa [neg_sub])
     le_total := fun a b => by
       have t := (b - a).nonneg_total
       rwa [neg_sub] at t
     toDecidableLE := Zsqrtd.decidableLE
     toDecidableEq := inferInstance }
-
-/--
-theorem `eq_zero_or_eq_zero_of_mul_eq_zero` / 定理 `eq_zero_or_eq_zero_of_mul_eq_zero`
-
-English:
-theorem eq_zero_or_eq_zero_of_mul_eq_zero
-  statement: forall {a b : Int√d}, a * b = 0 -> a = 0 ∨ b = 0
-  proof: eq_neg_of_add_eq_zero_left h1
-    have h2 : x * w = -(y * z) := eq_neg_of_add_eq_zero_left h2
-    have fin : x * x = d * y * y -> (⟨x, y⟩ : Int√d) = 0 := fun e =>
-      match x, y, divides_sq_eq_zero_z e with
-      | _, _, ⟨rfl, rfl⟩ => rfl
-    exact
-      if z0 : z = 0 then
-        if w0 : w = 0 then
-          Or.inr
-            (match z, w, z0, w0 with
-            | _, _, rfl, rfl => rfl)
-        else
-Or.inl
-fin
-mul_right_cancel₀ w0
-                calc
-                  x * x * w = -y * (x * z) := by simp [h2, mul_assoc, mul_left_comm]
-                  _ = d * y * y * w := by simp [h1, mul_assoc, mul_left_comm]
-      else
-Or.inl
-fin
-mul_right_cancel₀ z0
-              calc
-                x * x * z = d * -y * (x * w) := by simp [h1, mul_assoc, mul_left_comm]
-                _ = d * y * y * z := by simp [h2, mul_assoc, mul_left_comm]
-
-中文:
-定理 eq_zero_or_eq_zero_of_mul_eq_zero
-  结论: 对任意 {a b : 整数√d}, a * b = 0 -> a = 0 ∨ b = 0
-  证明: eq_neg_of_add_eq_zero_left h1
-    have h2 : x * w = -(y * z) := eq_neg_of_add_eq_zero_left h2
-    have fin : x * x = d * y * y -> (⟨x, y⟩ : Int√d) = 0 := fun e =>
-      match x, y, divides_sq_eq_zero_z e with
-      | _, _, ⟨rfl, rfl⟩ => rfl
-    exact
-      if z0 : z = 0 then
-        if w0 : w = 0 then
-          Or.inr
-            (match z, w, z0, w0 with
-            | _, _, rfl, rfl => rfl)
-        else
-Or.inl
-fin
-mul_right_cancel₀ w0
-                calc
-                  x * x * w = -y * (x * z) := by simp [h2, mul_assoc, mul_left_comm]
-                  _ = d * y * y * w := by simp [h1, mul_assoc, mul_left_comm]
-      else
-Or.inl
-fin
-mul_right_cancel₀ z0
-              calc
-                x * x * z = d * -y * (x * w) := by simp [h1, mul_assoc, mul_left_comm]
-                _ = d * y * y * z := by simp [h2, mul_assoc, mul_left_comm]
+/-
+**Zsqrtd.eq_zero_or_eq_zero_of_mul_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：∀ {d : ℕ} [dnsq : Zsqrtd.Nonsquare d] {a b : ℤ√↑d}, a * b = 0 → a = 0 ∨ b 
+= 0
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_neg_of_add_eq_zero_left`：∀ {G : Type u_1} [inst : SubtractionMonoid G
+] {a b : G}, a + b = 0 → a = -b
+· 使用定理 `Zsqrtd.divides_sq_eq_zero_z`：divides_sq_eq_zero_z {x y : Int} (h : x * x
+ = d * y * y) : x = 0 ∧ y = 0
+· 使用定理 `mul_right_cancel₀`：mul_right_cancel₀ (hb : b != 0) (h : a * b = c * b) :
+ a = c
+· 使用定理 `IsCancelMulZero.toIsRightCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} 
+{inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsRightCancelMulZero M₀
+· 使用定理 `Int.instIsCancelMulZero`：IsCancelMulZero ℤ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `mul_left_comm`：mul_left_comm (a b c : G) : a * (b * c) = b * (a * c)
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
-protected theorem eq_zero_or_eq_zero_of_mul_eq_zero : forall {a b : Int√d}, a * b = 0 -> a = 0 ∨ b = 0
+protected theorem eq_zero_or_eq_zero_of_mul_eq_zero : ∀ {a b : ℤ√d}, a * b = 0 → a = 0 ∨ b = 0
   | ⟨x, y⟩, ⟨z, w⟩, h => by
     injection h with h1 h2
     have h1 : x * z = -(d * y * w) := eq_neg_of_add_eq_zero_left h1
     have h2 : x * w = -(y * z) := eq_neg_of_add_eq_zero_left h2
-    have fin : x * x = d * y * y -> (⟨x, y⟩ : Int√d) = 0 := fun e =>
+    have fin : x * x = d * y * y → (⟨x, y⟩ : ℤ√d) = 0 := fun e =>
       match x, y, divides_sq_eq_zero_z e with
       | _, _, ⟨rfl, rfl⟩ => rfl
     exact
@@ -3580,279 +2719,227 @@ protected theorem eq_zero_or_eq_zero_of_mul_eq_zero : forall {a b : Int√d}, a 
             (match z, w, z0, w0 with
             | _, _, rfl, rfl => rfl)
         else
-Or.inl
-fin
-mul_right_cancel₀ w0
+          Or.inl <|
+            fin <|
+              mul_right_cancel₀ w0 <|
                 calc
                   x * x * w = -y * (x * z) := by simp [h2, mul_assoc, mul_left_comm]
                   _ = d * y * y * w := by simp [h1, mul_assoc, mul_left_comm]
       else
-Or.inl
-fin
-mul_right_cancel₀ z0
+        Or.inl <|
+          fin <|
+            mul_right_cancel₀ z0 <|
               calc
                 x * x * z = d * -y * (x * w) := by simp [h1, mul_assoc, mul_left_comm]
                 _ = d * y * y * z := by simp [h2, mul_assoc, mul_left_comm]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: NoZeroDivisors (Int√d)
-  body: Zsqrtd.eq_zero_or_eq_zero_of_mul_eq_zero
-
-中文:
-实例 :
-  签名: 无零因子 (整数√d)
-  定义体: Zsqrtd.eq_zero_or_eq_zero_of_mul_eq_zero
-
-Depends on / 依赖: Zsqrtd, Zsqrtd.eq_zero_or_eq_zero_of_mul_eq_zero, eq_zero_or_eq_zero_of_mul_eq_zero
+/-
+**Zsqrtd.** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : NoZeroDivisors (Int√d) where
+instance : NoZeroDivisors (ℤ√d) where
   eq_zero_or_eq_zero_of_mul_eq_zero := Zsqrtd.eq_zero_or_eq_zero_of_mul_eq_zero
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsDomain (Int√d)
-  body: NoZeroDivisors.to_isDomain _
-
-中文:
-实例 :
-  签名: 是整环 (整数√d)
-  定义体: NoZeroDivisors.to_isDomain _
-
-Depends on / 依赖: NoZeroDivisors, NoZeroDivisors.to_isDomain, to_isDomain
+/-
+**Zsqrtd.** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsDomain (Int√d) :=
+instance : IsDomain (ℤ√d) :=
   NoZeroDivisors.to_isDomain _
-
-/--
-theorem `mul_pos` / 定理 `mul_pos`
-
-English:
-theorem mul_pos
-  given: (a b : Int√d) (a0 : 0 < a) (b0 : 0 < b)
-  statement: 0 < a * b
-  proof: fun ab =>
-  Or.elim
-    (eq_zero_or_eq_zero_of_mul_eq_zero
-      (_root_.le_antisymm ab (Zsqrtd.mul_nonneg _ _ (le_of_lt a0) (le_of_lt b0))))
-    (fun e => ne_of_gt a0 e) fun e => ne_of_gt b0 e
-
-中文:
-定理 mul_pos
-  条件: (a b : 整数√d) (a0 : 0 < a) (b0 : 0 < b)
-  结论: 0 < a * b
-  证明: fun ab =>
-  Or.elim
-    (eq_zero_or_eq_zero_of_mul_eq_zero
-      (_root_.le_antisymm ab (Zsqrtd.mul_nonneg _ _ (le_of_lt a0) (le_of_lt b0))))
-    (fun e => ne_of_gt a0 e) fun e => ne_of_gt b0 e
+/-
+**Zsqrtd.mul_pos** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：∀ {d : ℕ} [dnsq : Zsqrtd.Nonsquare d] (a b : ℤ√↑d), 0 < a → 0 < b → 0 < a 
+* b
+参数：a b : ℤ√↑d。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `NoZeroDivisors.eq_zero_or_eq_zero_of_mul_eq_zero`：∀ {M₀ : Type u_2} {ins
+t : Mul M₀} {inst_1 : Zero M₀} [self : NoZeroDivisors M₀] {a b : M₀}, a * b = 0 
+→ a = 0 ∨ b = 0
+· 使用定理 `Zsqrtd.instNoZeroDivisorsCastInt`：∀ {d : ℕ} [dnsq : Zsqrtd.Nonsquare d],
+ NoZeroDivisors (ℤ√↑d)
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Zsqrtd.mul_nonneg`：∀ {d : ℕ} (a b : ℤ√↑d), 0 ≤ a → 0 ≤ b → 0 ≤ a * b
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
 -/
-protected theorem mul_pos (a b : Int√d) (a0 : 0 < a) (b0 : 0 < b) : 0 < a * b := fun ab =>
+protected theorem mul_pos (a b : ℤ√d) (a0 : 0 < a) (b0 : 0 < b) : 0 < a * b := fun ab =>
   Or.elim
     (eq_zero_or_eq_zero_of_mul_eq_zero
       (_root_.le_antisymm ab (Zsqrtd.mul_nonneg _ _ (le_of_lt a0) (le_of_lt b0))))
     (fun e => ne_of_gt a0 e) fun e => ne_of_gt b0 e
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ZeroLEOneClass (Int√d)
-  body: { zero_le_one := by trivial }
-
-中文:
-实例 :
-  签名: ZeroLEOne类 (整数√d)
-  定义体: { zero_le_one := by trivial }
-
-Depends on / 依赖: zero_le_one
+/-
+**Zsqrtd.** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ZeroLEOneClass (Int√d) :=
+instance : ZeroLEOneClass (ℤ√d) :=
   { zero_le_one := by trivial }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsOrderedAddMonoid (Int√d)
-  body: { add_le_add_left := fun a b ab c => show Nonneg _ by rwa [add_sub_add_right_eq_sub] }
-
-@[deprecated _root_.le_of_add_le_add_left (since := "2026-02-19")]
-
-中文:
-实例 :
-  签名: 是OrderedAdd幺半群 (整数√d)
-  定义体: { add_le_add_left := fun a b ab c => show Nonneg _ by rwa [add_sub_add_right_eq_sub] }
-
-@[deprecated _root_.le_of_add_le_add_left (since := "2026-02-19")]
-
-Depends on / 依赖: Nonneg, add_le_add_left, add_sub_add_right_eq_sub
+/-
+**Zsqrtd.** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsOrderedAddMonoid (Int√d) :=
+instance : IsOrderedAddMonoid (ℤ√d) :=
   { add_le_add_left := fun a b ab c => show Nonneg _ by rwa [add_sub_add_right_eq_sub] }
 
 @[deprecated _root_.le_of_add_le_add_left (since := "2026-02-19")]
-/--
-theorem `le_of_add_le_add_left` / 定理 `le_of_add_le_add_left`
-
-English:
-theorem le_of_add_le_add_left
-  given: (a b c : Int√d) (h : c + a <= c + b)
-  statement: a <= b
-  proof: by
+/-
+**Zsqrtd.le_of_add_le_add_left** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：∀ {d : ℕ} [dnsq : Zsqrtd.Nonsquare d] (a b c : ℤ√↑d), c + a ≤ c + b → a ≤ 
+b
+参数：a b c : ℤ√↑d。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_of_add_le_add_left`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] [
+AddLeftReflectLE α] {a b c : α}, a + b ≤ a + c → b ≤ c
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Zsqrtd.instIsOrderedAddMonoidCastInt`：∀ {d : ℕ}, IsOrderedAddMonoid (ℤ√↑
+d)
+-/
+protected theorem le_of_add_le_add_left (a b c : ℤ√d) (h : c + a ≤ c + b) : a ≤ b := by
   exact _root_.le_of_add_le_add_left h
 
 @[deprecated _root_.add_lt_add_left (since := "2026-02-19")]
-
-中文:
-定理 le_of_add_le_add_left
-  条件: (a b c : 整数√d) (h : c + a <= c + b)
-  结论: a <= b
-  证明: by
-  exact _root_.le_of_add_le_add_left h
-
-@[deprecated _root_.add_lt_add_left (since := "2026-02-19")]
+/-
+**Zsqrtd.add_lt_add_left** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：∀ {d : ℕ} [dnsq : Zsqrtd.Nonsquare d] (a b : ℤ√↑d), a < b → ∀ (c : ℤ√↑d), 
+c + a < c + b
+参数：a b : ℤ√↑d；c : ℤ√↑d。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_of_add_le_add_left`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] [
+AddLeftReflectLE α] {a b c : α}, a + b ≤ a + c → b ≤ c
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Zsqrtd.instIsOrderedAddMonoidCastInt`：∀ {d : ℕ}, IsOrderedAddMonoid (ℤ√↑
+d)
 -/
-protected theorem le_of_add_le_add_left (a b c : Int√d) (h : c + a <= c + b) : a <= b := by
-  exact _root_.le_of_add_le_add_left h
-
-@[deprecated _root_.add_lt_add_left (since := "2026-02-19")]
-/--
-theorem `add_lt_add_left` / 定理 `add_lt_add_left`
-
-English:
-theorem add_lt_add_left
-  given: (a b : Int√d) (h : a < b) (c)
-  statement: c + a < c + b
-  proof: fun h' =>
+protected theorem add_lt_add_left (a b : ℤ√d) (h : a < b) (c) : c + a < c + b := fun h' =>
   h (_root_.le_of_add_le_add_left h')
-
-中文:
-定理 add_lt_add_left
-  条件: (a b : 整数√d) (h : a < b) (c)
-  结论: c + a < c + b
-  证明: fun h' =>
-  h (_root_.le_of_add_le_add_left h')
-
-Depends on / 依赖: Kernel, isFiniteKernel_of_isFiniteKernel_fst
+/-
+**Zsqrtd.** 是 Mathlib 中的一个实例，位于命名空间 `Zsqrtd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem add_lt_add_left (a b : Int√d) (h : a < b) (c) : c + a < c + b := fun h' =>
-  h (_root_.le_of_add_le_add_left h')
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsStrictOrderedRing (Int√d)
-  body: .of_mul_pos Zsqrtd.mul_pos
-
-中文:
-实例 :
-  签名: 是StrictOrdered环 (整数√d)
-  定义体: .of_mul_pos Zsqrtd.mul_pos
-
-Depends on / 依赖: Zsqrtd, Zsqrtd.mul_pos, mul_pos, of_mul_pos
--/
-instance : IsStrictOrderedRing (Int√d) :=
+instance : IsStrictOrderedRing (ℤ√d) :=
   .of_mul_pos Zsqrtd.mul_pos
 
 end
 
-/--
-theorem `norm_eq_zero` / 定理 `norm_eq_zero`
-
-English:
-theorem norm_eq_zero
-  given: {d : Int} (h_nonsquare : forall n : Int, d != n * n) (a : Int√d)
-  statement: norm a = 0 ↔ a = 0
-  proof: by
-  refine ⟨fun ha => Zsqrtd.ext_iff.mpr ?_, fun h => by rw [h, norm_zero]⟩
-  dsimp only [norm] at ha
-  rw [sub_eq_zero] at ha
-  by_cases! h : 0 <= d
-  · obtain ⟨d', rfl⟩ := Int.eq_ofNat_of_zero_le h
-have : Nonsquare d' := ⟨fun n h => h_nonsquare n mod_cast h⟩
-    exact divides_sq_eq_zero_z ha
-  · suffices a.re * a.re = 0 by
-      rw [eq_zero_of_mul_self_eq_zero this] at ha ⊢
-      simpa only [true_and, or_self_right, re_zero, im_zero, eq_self_iff_true, zero_eq_mul,
-        mul_zero, mul_eq_zero, h.ne, false_or, or_self_iff] using ha
-    apply _root_.le_antisymm _ (mul_self_nonneg _)
-    rw [ha]; rw [mul_assoc]
-    exact mul_nonpos_of_nonpos_of_nonneg h.le (mul_self_nonneg _)
-
-中文:
-定理 norm_eq_zero
-  条件: {d : 整数} (h_nonsquare : 对任意 n : 整数, d != n * n) (a : 整数√d)
-  结论: norm a = 0 ↔ a = 0
-  证明: by
-  refine ⟨fun ha => Zsqrtd.ext_iff.mpr ?_, fun h => by rw [h, norm_zero]⟩
-  dsimp only [norm] at ha
-  rw [sub_eq_zero] at ha
-  by_cases! h : 0 <= d
-  · obtain ⟨d', rfl⟩ := Int.eq_ofNat_of_zero_le h
-have : Nonsquare d' := ⟨fun n h => h_nonsquare n mod_cast h⟩
-    exact divides_sq_eq_zero_z ha
-  · suffices a.re * a.re = 0 by
-      rw [eq_zero_of_mul_self_eq_zero this] at ha ⊢
-      simpa only [true_and, or_self_right, re_zero, im_zero, eq_self_iff_true, zero_eq_mul,
-        mul_zero, mul_eq_zero, h.ne, false_or, or_self_iff] using ha
-    apply _root_.le_antisymm _ (mul_self_nonneg _)
-    rw [ha]; rw [mul_assoc]
-    exact mul_nonpos_of_nonpos_of_nonneg h.le (mul_self_nonneg _)
-
-Depends on / 依赖: Int.eq_ofNat_of_zero_le, Nonsquare, Zsqrtd, Zsqrtd.ext_iff.mpr, a.re, divides_sq_eq_zero_z, eq_ofNat_of_zero_le, eq_self_iff_true, eq_zero_of_mul_self_eq_zero, ext_iff, false_or, h.ne, h_nonsquare, im_zero, mod_cast, mul_eq_zero, mul_zero, norm_zero, or_self_iff, or_self_right
+/-
+**Zsqrtd.norm_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：norm_eq_zero {d : Int} (h_nonsquare : forall n : Int, d != n * n) (a : Int
+√d) : norm a = 0 ↔ a = 0
+参数：h_nonsquare : forall n : Int, d != n * n；a : Int√d。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Zsqrtd.ext_iff`：∀ {d : ℤ} {x y : ℤ√d}, x = y ↔ x.re = y.re ∧ x.im = y.im
+· 使用定理 `Int.eq_ofNat_of_zero_le`：∀ {a : ℤ}, 0 ≤ a → ∃ n, a = ↑n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Zsqrtd.divides_sq_eq_zero_z`：divides_sq_eq_zero_z {x y : Int} (h : x * x
+ = d * y * y) : x = 0 ∧ y = 0
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `mul_nonpos_of_nonpos_of_nonneg`：mul_nonpos_of_nonpos_of_nonneg [MulPosMo
+no α] (ha : a <= 0) (hb : 0 <= b) : a * b <= 0
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用引理 `mul_self_nonneg`：mul_self_nonneg [ExistsAddOfLE R] [PosMulMono R] [AddLe
+ftMono R] (a : R) : 0 <= a * a
+· 使用定理 `AddGroup.existsAddOfLE`：∀ (α : Type u) [inst : AddGroup α] [inst_1 : LE 
+α], ExistsAddOfLE α
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `eq_zero_of_mul_self_eq_zero`：eq_zero_of_mul_self_eq_zero (h : a * a = 0)
+ : a = 0
+· 使用定理 `IsStrictOrderedRing.noZeroDivisors`：∀ {R : Type u} [inst : Semiring R] [
+inst_1 : LinearOrder R] [IsStrictOrderedRing R] [ExistsAddOfLE R], NoZeroDivisor
+s R
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `Zsqrtd.norm_zero`：norm_zero : norm (0 : Int√d) = 0
 -/
-theorem norm_eq_zero {d : Int} (h_nonsquare : forall n : Int, d != n * n) (a : Int√d) : norm a = 0 ↔ a = 0 := by
+theorem norm_eq_zero {d : ℤ} (h_nonsquare : ∀ n : ℤ, d ≠ n * n) (a : ℤ√d) : norm a = 0 ↔ a = 0 := by
   refine ⟨fun ha => Zsqrtd.ext_iff.mpr ?_, fun h => by rw [h, norm_zero]⟩
   dsimp only [norm] at ha
   rw [sub_eq_zero] at ha
-  by_cases! h : 0 <= d
+  by_cases! h : 0 ≤ d
   · obtain ⟨d', rfl⟩ := Int.eq_ofNat_of_zero_le h
-have : Nonsquare d' := ⟨fun n h => h_nonsquare n mod_cast h⟩
+    have : Nonsquare d' := ⟨fun n h => h_nonsquare n <| mod_cast h⟩
     exact divides_sq_eq_zero_z ha
   · suffices a.re * a.re = 0 by
       rw [eq_zero_of_mul_self_eq_zero this] at ha ⊢
       simpa only [true_and, or_self_right, re_zero, im_zero, eq_self_iff_true, zero_eq_mul,
         mul_zero, mul_eq_zero, h.ne, false_or, or_self_iff] using ha
     apply _root_.le_antisymm _ (mul_self_nonneg _)
-    rw [ha]; rw [mul_assoc]
+    rw [ha, mul_assoc]
     exact mul_nonpos_of_nonpos_of_nonneg h.le (mul_self_nonneg _)
 
 variable {R : Type*}
 
 @[ext]
-/--
-theorem `hom_ext` / 定理 `hom_ext`
-
-English:
-theorem hom_ext
-  given: [NonAssocRing R] {d : Int} (f g : Int√d ->+* R) (h : f sqrtd = g sqrtd)
-  statement: f = g
-  proof: by
-  ext ⟨re_x, im_x⟩
-  simp [decompose, h]
-
-中文:
-定理 hom_ext
-  条件: [非结合环 R] {d : 整数} (f g : 整数√d ->+* R) (h : f sqrtd = g sqrtd)
-  结论: f = g
-  证明: by
-  ext ⟨re_x, im_x⟩
-  simp [decompose, h]
-
-Depends on / 依赖: decompose, im_x, re_x
+/-
+**Zsqrtd.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：hom_ext [NonAssocRing R] {d : Int} (f g : Int√d ->+* R) (h : f sqrtd = g s
+qrtd) : f = g
+参数：f g : Int√d ->+* R；h : f sqrtd = g sqrtd。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Zsqrtd.decompose`：decompose {x y : Int} : (⟨x, y⟩ : Int√d) = x + sqrtd (
+d
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `map_intCast`：map_intCast [FunLike F α β] [RingHomClass F α β] (f : F) (n
+ : Int) : f n = n
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem hom_ext [NonAssocRing R] {d : Int} (f g : Int√d ->+* R) (h : f sqrtd = g sqrtd) : f = g := by
+theorem hom_ext [NonAssocRing R] {d : ℤ} (f g : ℤ√d →+* R) (h : f sqrtd = g sqrtd) : f = g := by
   ext ⟨re_x, im_x⟩
   simp [decompose, h]
 
@@ -3861,56 +2948,19 @@ variable [CommRing R]
 /-- The unique `RingHom` from `ℤ√d` to a ring `R`, constructed by replacing `√d` with the provided
 root. Conversely, this associates to every mapping `ℤ√d →+* R` a value of `√d` in `R`. -/
 @[simps]
-/--
-Definition of `lift` / `lift` 的定义
+/-
+**Zsqrtd.lift** 是 Mathlib 中的一个定义，位于命名空间 `Zsqrtd`。
+形式化陈述：lift {d : Int} : { r : R // r * r = ↑d } ≃ (Int√d ->+* R) where toFun r
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: {d : Int}
-  body: { toFun := fun a => a.1 + a.2 * (r : R)
-      map_zero' := by simp
-      map_add' := fun a b => by
-        simp only [re_add, Int.cast_add, im_add]
-        ring
-      map_one' := by simp
-      map_mul' := fun a b => by
-        have :
-          (a.re + a.im * r : R) * (b.re + b.im * r) =
-            a.re * b.re + (a.re * b.im + a.im * b.re) * r + a.im * b.im * (r * r) := by
-          ring
-        simp only [re_mul, Int.cast_add, Int.cast_mul, im_mul, this, r.prop]
-        ring }
-  invFun f := ⟨f sqrtd, by rw [← f.map_mul, dmuld, map_intCast]⟩
-  left_inv r := by simp
-  right_inv f := by
-    ext
-    simp
-
-中文:
-定义 lift
-  签名: {d : 整数}
-  定义体: { toFun := fun a => a.1 + a.2 * (r : R)
-      map_zero' := by simp
-      map_add' := fun a b => by
-        simp only [re_add, Int.cast_add, im_add]
-        ring
-      map_one' := by simp
-      map_mul' := fun a b => by
-        have :
-          (a.re + a.im * r : R) * (b.re + b.im * r) =
-            a.re * b.re + (a.re * b.im + a.im * b.re) * r + a.im * b.im * (r * r) := by
-          ring
-        simp only [re_mul, Int.cast_add, Int.cast_mul, im_mul, this, r.prop]
-        ring }
-  invFun f := ⟨f sqrtd, by rw [← f.map_mul, dmuld, map_intCast]⟩
-  left_inv r := by simp
-  right_inv f := by
-    ext
-    simp
-
-Depends on / 依赖: Int.cast_add, Int.cast_mul, a.im, a.re, b.im, b.re, cast_add, cast_mul, f.map_mul, im_add, im_mul, invFun, left_inv, map_add, map_intCast, map_mul, map_one, map_zero, r.prop, re_add
+--- 原说明 ---
+The unique `RingHom` from `ℤ√d` to a ring `R`, constructed by replacing `√d` wit
+h the provided
+root. Conversely, this associates to every mapping `ℤ√d →+* R` a value of `√d` i
+n `R`.
 -/
-def lift {d : Int} : { r : R // r * r = ↑d } ≃ (Int√d ->+* R) where
+def lift {d : ℤ} : { r : R // r * r = ↑d } ≃ (ℤ√d →+* R) where
   toFun r :=
     { toFun := fun a => a.1 + a.2 * (r : R)
       map_zero' := by simp
@@ -3931,86 +2981,118 @@ def lift {d : Int} : { r : R // r * r = ↑d } ≃ (Int√d ->+* R) where
     ext
     simp
 
-/--
-theorem `lift_injective` / 定理 `lift_injective`
+/-- `lift r` is injective if `d` is non-square, and R has characteristic zero (that is, the map from
+`ℤ` into `R` is injective). -/
+/-
+**Zsqrtd.lift_injective** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：lift_injective [CharZero R] {d : Int} (r : { r : R // r * r = ↑d }) (hd : 
+forall n : Int, d != n * n) : Function.Injective (lift r)
+参数：r : { r : R // r * r = ↑d }；hd : forall n : Int, d != n * n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `injective_iff_map_eq_zero`：∀ {F : Type u_7} {G : Type u_8} {H : Type u_9
+} [inst : AddGroup G] [inst_1 : AddZeroClass H] [inst_2 : FunLike F G H]   [AddM
+onoidHomClass F…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用引理 `Int.cast_injective`：cast_injective : Injective (Int.cast : Int -> α)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Zsqrtd.norm_eq_mul_conj`：norm_eq_mul_conj (n : Int√d) : (norm n : Int√d)
+ = n * star n
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `Zsqrtd.norm_eq_zero`：norm_eq_zero {d : Int} (h_nonsquare : forall n : In
+t, d != n * n) (a : Int√d) : norm a = 0 ↔ a = 0
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.cast_zero`：cast_zero : ((0 : Int) : R) = 0
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Zsqrtd.lift_apply_apply`：∀ {R : Type u_1} [inst : CommRing R] {d : ℤ} (r
+ : { r // r * r = ↑d }) (a : ℤ√d), (Zsqrtd.lift r) a = ↑a.re + ↑a.im * ↑r
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Zsqrtd.re_intCast`：re_intCast (n : Int) : (n : Int√d).re = n
+· 使用定理 `Zsqrtd.im_intCast`：im_intCast (n : Int) : (n : Int√d).im = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 
-English:
-theorem lift_injective
-  statement: [CharZero R] {d : Int} (r : { r : R // r * r = ↑d })
-  proof: (injective_iff_map_eq_zero (lift r)).mpr fun a ha => by
-    have h_inj : Function.Injective ((↑) : Int -> R) := Int.cast_injective
-    suffices lift r a.norm = 0 by
-      simp only [re_intCast, add_zero, lift_apply_apply, im_intCast, Int.cast_zero,
-        zero_mul] at this
-      rwa [← Int.cast_zero, h_inj.eq_iff, norm_eq_zero hd] at this
-    rw [norm_eq_mul_conj]; rw [map_mul]; rw [ha]; rw [zero_mul]
-
-中文:
-定理 lift_injective
-  结论: [特征零 R] {d : 整数} (r : { r : R // r * r = ↑d })
-  证明: (injective_iff_map_eq_zero (lift r)).mpr fun a ha => by
-    have h_inj : Function.Injective ((↑) : Int -> R) := Int.cast_injective
-    suffices lift r a.norm = 0 by
-      simp only [re_intCast, add_zero, lift_apply_apply, im_intCast, Int.cast_zero,
-        zero_mul] at this
-      rwa [← Int.cast_zero, h_inj.eq_iff, norm_eq_zero hd] at this
-    rw [norm_eq_mul_conj]; rw [map_mul]; rw [ha]; rw [zero_mul]
-
-Depends on / 依赖: Function, Function.Injective, Injective, Int.cast_injective, Int.cast_zero, a.norm, add_zero, cast_injective, cast_zero, eq_iff, h_inj, h_inj.eq_iff, im_intCast, injective_iff_map_eq_zero, lift_apply_apply, map_mul, norm_eq_mul_conj, norm_eq_zero, re_intCast, zero_mul
+--- 原说明 ---
+`lift r` is injective if `d` is non-square, and R has characteristic zero (that 
+is, the map from
+`ℤ` into `R` is injective).
 -/
-theorem lift_injective [CharZero R] {d : Int} (r : { r : R // r * r = ↑d })
-    (hd : forall n : Int, d != n * n) : Function.Injective (lift r) :=
+theorem lift_injective [CharZero R] {d : ℤ} (r : { r : R // r * r = ↑d })
+    (hd : ∀ n : ℤ, d ≠ n * n) : Function.Injective (lift r) :=
   (injective_iff_map_eq_zero (lift r)).mpr fun a ha => by
-    have h_inj : Function.Injective ((↑) : Int -> R) := Int.cast_injective
+    have h_inj : Function.Injective ((↑) : ℤ → R) := Int.cast_injective
     suffices lift r a.norm = 0 by
       simp only [re_intCast, add_zero, lift_apply_apply, im_intCast, Int.cast_zero,
         zero_mul] at this
       rwa [← Int.cast_zero, h_inj.eq_iff, norm_eq_zero hd] at this
-    rw [norm_eq_mul_conj]; rw [map_mul]; rw [ha]; rw [zero_mul]
+    rw [norm_eq_mul_conj, map_mul, ha, zero_mul]
 
-/--
-theorem `norm_eq_one_iff_mem_unitary` / 定理 `norm_eq_one_iff_mem_unitary`
+/-- An element of `ℤ√d` has norm equal to `1` if and only if it is contained in the submonoid
+of unitary elements. -/
+/-
+**Zsqrtd.norm_eq_one_iff_mem_unitary** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：norm_eq_one_iff_mem_unitary {d : Int} {a : Int√d} : a.norm = 1 ↔ a in unit
+ary (Int√d)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Unitary.mem_iff_self_mul_star`：mem_iff_self_mul_star {U : R} : U in unit
+ary R ↔ U * star U = 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Zsqrtd.norm_eq_mul_conj`：norm_eq_mul_conj (n : Int√d) : (norm n : Int√d)
+ = n * star n
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Int.cast_one`：cast_one : ((1 : Int) : R) = 1
+· 使用定理 `Zsqrtd.instCharZero`：∀ {d : ℤ}, CharZero (ℤ√d)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem norm_eq_one_iff_mem_unitary
-  given: {d : Int} {a : Int√d}
-  statement: a.norm = 1 ↔ a in unitary (Int√d)
-  proof: by
-  rw [Unitary.mem_iff_self_mul_star]; rw [← norm_eq_mul_conj]
-  norm_cast
-
-中文:
-定理 norm_eq_one_iff_mem_unitary
-  条件: {d : 整数} {a : 整数√d}
-  结论: a.norm = 1 ↔ a in unitary (整数√d)
-  证明: by
-  rw [Unitary.mem_iff_self_mul_star]; rw [← norm_eq_mul_conj]
-  norm_cast
-
-Depends on / 依赖: Unitary, Unitary.mem_iff_self_mul_star, mem_iff_self_mul_star, norm_eq_mul_conj
+--- 原说明 ---
+An element of `ℤ√d` has norm equal to `1` if and only if it is contained in the 
+submonoid
+of unitary elements.
 -/
-theorem norm_eq_one_iff_mem_unitary {d : Int} {a : Int√d} : a.norm = 1 ↔ a in unitary (Int√d) := by
-  rw [Unitary.mem_iff_self_mul_star]; rw [← norm_eq_mul_conj]
+theorem norm_eq_one_iff_mem_unitary {d : ℤ} {a : ℤ√d} : a.norm = 1 ↔ a ∈ unitary (ℤ√d) := by
+  rw [Unitary.mem_iff_self_mul_star, ← norm_eq_mul_conj]
   norm_cast
 
-/--
-theorem `mker_norm_eq_unitary` / 定理 `mker_norm_eq_unitary`
+/-- The kernel of the norm map on `ℤ√d` equals the submonoid of unitary elements. -/
+/-
+**Zsqrtd.mker_norm_eq_unitary** 是 Mathlib 中的一个定理，位于命名空间 `Zsqrtd`。
+形式化陈述：mker_norm_eq_unitary {d : Int} : MonoidHom.mker (@normMonoidHom d) = unita
+ry (Int√d)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submonoid.ext`：ext {S T : Submonoid M} (h : forall x, x in S ↔ x in T) :
+ S = T
+· 使用定理 `Zsqrtd.norm_eq_one_iff_mem_unitary`：norm_eq_one_iff_mem_unitary {d : Int
+} {a : Int√d} : a.norm = 1 ↔ a in unitary (Int√d)
 
-English:
-theorem mker_norm_eq_unitary
-  given: {d : Int}
-  statement: MonoidHom.mker (@normMonoidHom d) = unitary (Int√d)
-  proof: Submonoid.ext fun _ => norm_eq_one_iff_mem_unitary
-
-中文:
-定理 mker_norm_eq_unitary
-  条件: {d : 整数}
-  结论: 幺半群态射.mker (@normMonoidHom d) = unitary (整数√d)
-  证明: Submonoid.ext fun _ => norm_eq_one_iff_mem_unitary
-
-Depends on / 依赖: Submonoid, Submonoid.ext, norm_eq_one_iff_mem_unitary
+--- 原说明 ---
+The kernel of the norm map on `ℤ√d` equals the submonoid of unitary elements.
 -/
-theorem mker_norm_eq_unitary {d : Int} : MonoidHom.mker (@normMonoidHom d) = unitary (Int√d) :=
+theorem mker_norm_eq_unitary {d : ℤ} : MonoidHom.mker (@normMonoidHom d) = unitary (ℤ√d) :=
   Submonoid.ext fun _ => norm_eq_one_iff_mem_unitary
 
 end Zsqrtd
+

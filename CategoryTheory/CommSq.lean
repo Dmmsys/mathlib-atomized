@@ -36,32 +36,35 @@ set_option linter.translate.warnInvalid false in
 /-- The proposition that a square
 ```
   W ---f---> X
-  | |
-  g h
-  | |
-  v v
+  |          |
+  g          h
+  |          |
+  v          v
   Y ---i---> Z
 
 ```
 is a commuting square.
 -/
 @[to_dual self (reorder := W Z, X Y, f i, g h)]
-/--
-Definition of `CommSq` / `CommSq` 的定义
+/-
+**CategoryTheory.CommSq** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory`。
+形式化陈述：CommSq {W X Y Z : C} (f : W ⟶ X) (g : W ⟶ Y) (h : X ⟶ Z) (i : Y ⟶ Z) : Pro
+p where /-- The square commutes. -/ w : f ≫ h = g ≫ i
+参数：f : W ⟶ X；g : W ⟶ Y；h : X ⟶ Z；i : Y ⟶ Z。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CommSq
-  parameters: {W X Y Z : C} (f : W ⟶ X) (g : W ⟶ Y) (h : X ⟶ Z) (i : Y ⟶ Z)
-  axioms and operations (1):
-    - w : f ≫ h = g ≫ i  [default: by cat_disch]
+--- 原说明 ---
+The proposition that a square
+```
+  W ---f---> X
+  |          |
+  g          h
+  |          |
+  v          v
+  Y ---i---> Z
 
-中文:
-结构 交换Sq
-  参数: {W X Y Z : C} (f : W ⟶ X) (g : W ⟶ Y) (h : X ⟶ Z) (i : Y ⟶ Z)
-  公理与运算 (1 个):
-    - w : f ≫ h = g ≫ i  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+```
+is a commuting square.
 -/
 structure CommSq {W X Y Z : C} (f : W ⟶ X) (g : W ⟶ Y) (h : X ⟶ Z) (i : Y ⟶ Z) : Prop where
   /-- The square commutes. -/
@@ -74,44 +77,31 @@ namespace CommSq
 variable {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i : Y ⟶ Z}
 
 @[to_dual existing w]
-/--
-lemma `w'` / 引理 `w'`
-
-English:
-lemma w'
-  given: (self : CommSq f g h i)
-  statement: g ≫ i = f ≫ h
-  proof: self.w.symm
-
-中文:
-引理 w'
-  条件: (self : 交换Sq f g h i)
-  结论: g ≫ i = f ≫ h
-  证明: self.w.symm
-
-Depends on / 依赖: self.w.symm
+/-
+**CategoryTheory.CommSq.w'** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.CommSq`。
+形式化陈述：w' (self : CommSq f g h i) : g ≫ i = f ≫ h
+参数：self : CommSq f g h i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.CommSq.w`：∀ {C : Type u_1} [inst : CategoryTheory.Categor
+y.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z},
+   CategoryTh…
 -/
 lemma w' (self : CommSq f g h i) : g ≫ i = f ≫ h := self.w.symm
 
 /-- `CommSq.mk'` is the dual of `CommSq.mk`, which we need for `to_dual`.
 Please avoid using this directly. -/
 @[to_dual existing mk]
-/--
-lemma `mk'` / 引理 `mk'`
+/-
+**CategoryTheory.CommSq.mk'** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.CommSq`。
+形式化陈述：mk' (w : g ≫ i = f ≫ h
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-lemma mk'
-  given: (w : g ≫ i = f ≫ h := by cat_disch)
-  statement: CommSq f g h i
-  proof: ⟨w.symm⟩
-
-中文:
-引理 mk'
-  条件: (w : g ≫ i = f ≫ h := by cat_disch)
-  结论: 交换Sq f g h i
-  证明: ⟨w.symm⟩
-
-Depends on / 依赖: CommSq, cat_disch, w.symm
+--- 原说明 ---
+`CommSq.mk'` is the dual of `CommSq.mk`, which we need for `to_dual`.
+Please avoid using this directly.
 -/
 lemma mk' (w : g ≫ i = f ≫ h := by cat_disch) : CommSq f g h i :=
   ⟨w.symm⟩
@@ -119,132 +109,122 @@ lemma mk' (w : g ≫ i = f ≫ h := by cat_disch) : CommSq f g h i :=
 attribute [reassoc] CommSq.w
 
 @[to_dual self]
-/--
-theorem `flip` / 定理 `flip`
-
-English:
-theorem flip
-  given: (p : CommSq f g h i)
-  statement: CommSq g f i h
-  proof: ⟨p.w.symm⟩
-
-中文:
-定理 flip
-  条件: (p : 交换Sq f g h i)
-  结论: 交换Sq g f i h
-  证明: ⟨p.w.symm⟩
-
-Depends on / 依赖: p.w.symm
+/-
+**CategoryTheory.CommSq.flip** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.CommSq`。
+形式化陈述：flip (p : CommSq f g h i) : CommSq g f i h
+参数：p : CommSq f g h i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.CommSq.w`：∀ {C : Type u_1} [inst : CategoryTheory.Categor
+y.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z},
+   CategoryTh…
 -/
 theorem flip (p : CommSq f g h i) : CommSq g f i h :=
   ⟨p.w.symm⟩
-
-/--
-theorem `of_arrow` / 定理 `of_arrow`
-
-English:
-theorem of_arrow
-  given: {f g : Arrow C} (h : f ⟶ g)
-  statement: CommSq f.hom h.left h.right g.hom
-  proof: ⟨h.w.symm⟩
-
-中文:
-定理 of_arrow
-  条件: {f g : 箭头 C} (h : f ⟶ g)
-  结论: 交换Sq f.hom h.left h.right g.hom
-  证明: ⟨h.w.symm⟩
-
-Depends on / 依赖: h.w.symm
+/-
+**CategoryTheory.CommSq.of_arrow** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.CommS
+q`。
+形式化陈述：of_arrow {f g : Arrow C} (h : f ⟶ g) : CommSq f.hom h.left h.right g.hom
+参数：h : f ⟶ g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Arrow.Hom.w`：∀ {T : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} T] {f g : CategoryTheory.Arrow T} (sq : f ⟶ g),   CategoryTheory.Categ
+oryStruct.comp (…
 -/
 theorem of_arrow {f g : Arrow C} (h : f ⟶ g) : CommSq f.hom h.left h.right g.hom :=
   ⟨h.w.symm⟩
 
 /-- The commutative square in the opposite category associated to a commutative square. -/
 @[to_dual self]
-/--
-theorem `op` / 定理 `op`
+/-
+**CategoryTheory.CommSq.op** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.CommSq`。
+形式化陈述：op (p : CommSq f g h i) : CommSq i.op h.op g.op f.op
+参数：p : CommSq f g h i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.CommSq.w`：∀ {C : Type u_1} [inst : CategoryTheory.Categor
+y.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z},
+   CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem op
-  given: (p : CommSq f g h i)
-  statement: CommSq i.op h.op g.op f.op
-  proof: ⟨by simp only [← op_comp, p.w]⟩
-
-中文:
-定理 op
-  条件: (p : 交换Sq f g h i)
-  结论: 交换Sq i.op h.op g.op f.op
-  证明: ⟨by simp only [← op_comp, p.w]⟩
-
-Depends on / 依赖: op_comp
+--- 原说明 ---
+The commutative square in the opposite category associated to a commutative squa
+re.
 -/
 theorem op (p : CommSq f g h i) : CommSq i.op h.op g.op f.op :=
   ⟨by simp only [← op_comp, p.w]⟩
 
 /-- The commutative square associated to a commutative square in the opposite category. -/
 @[to_dual self]
-/--
-theorem `unop` / 定理 `unop`
+/-
+**CategoryTheory.CommSq.unop** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.CommSq`。
+形式化陈述：unop {W X Y Z : Cᵒᵖ} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i : Y ⟶ Z} (p : 
+CommSq f g h i) : CommSq i.unop h.unop g.unop f.unop
+参数：p : CommSq f g h i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.CommSq.w`：∀ {C : Type u_1} [inst : CategoryTheory.Categor
+y.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z},
+   CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem unop
-  given: {W X Y Z : Cᵒᵖ} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i : Y ⟶ Z} (p : CommSq f g h i)
-  proof: ⟨by simp only [← unop_comp, p.w]⟩
-
-@[to_dual none]
-
-中文:
-定理 unop
-  条件: {W X Y Z : Cᵒᵖ} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i : Y ⟶ Z} (p : 交换Sq f g h i)
-  证明: ⟨by simp only [← unop_comp, p.w]⟩
-
-@[to_dual none]
-
-Depends on / 依赖: unop_comp
+--- 原说明 ---
+The commutative square associated to a commutative square in the opposite catego
+ry.
 -/
 theorem unop {W X Y Z : Cᵒᵖ} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i : Y ⟶ Z} (p : CommSq f g h i) :
     CommSq i.unop h.unop g.unop f.unop :=
   ⟨by simp only [← unop_comp, p.w]⟩
 
 @[to_dual none]
-/--
-theorem `vert_inv` / 定理 `vert_inv`
-
-English:
-theorem vert_inv
-  given: {g : W ≅ Y} {h : X ≅ Z} (p : CommSq f g.hom h.hom i)
-  proof: ⟨by rw [Iso.comp_inv_eq, Category.assoc, Iso.eq_inv_comp, p.w]⟩
-
-@[to_dual none]
-
-中文:
-定理 vert_inv
-  条件: {g : W ≅ Y} {h : X ≅ Z} (p : 交换Sq f g.hom h.hom i)
-  证明: ⟨by rw [Iso.comp_inv_eq, Category.assoc, Iso.eq_inv_comp, p.w]⟩
-
-@[to_dual none]
-
-Depends on / 依赖: Category, Category.assoc, Iso.comp_inv_eq, Iso.eq_inv_comp, comp_inv_eq, eq_inv_comp
+/-
+**CategoryTheory.CommSq.vert_inv** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.CommS
+q`。
+形式化陈述：vert_inv {g : W ≅ Y} {h : X ≅ Z} (p : CommSq f g.hom h.hom i) : CommSq i g
+.inv h.inv f
+参数：p : CommSq f g.hom h.hom i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.comp_inv_eq`：comp_inv_eq (α : X ≅ Y) {f : Z ⟶ Y} {g :
+ Z ⟶ X} : f ≫ α.inv = g ↔ f = g ≫ α.hom
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.eq_inv_comp`：eq_inv_comp (α : X ≅ Y) {f : X ⟶ Z} {g :
+ Y ⟶ Z} : g = α.inv ≫ f ↔ α.hom ≫ g = f
+· 使用定理 `CategoryTheory.CommSq.w`：∀ {C : Type u_1} [inst : CategoryTheory.Categor
+y.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z},
+   CategoryTh…
 -/
 theorem vert_inv {g : W ≅ Y} {h : X ≅ Z} (p : CommSq f g.hom h.hom i) :
     CommSq i g.inv h.inv f :=
   ⟨by rw [Iso.comp_inv_eq, Category.assoc, Iso.eq_inv_comp, p.w]⟩
 
 @[to_dual none]
-/--
-theorem `horiz_inv` / 定理 `horiz_inv`
-
-English:
-theorem horiz_inv
-  given: {f : W ≅ X} {i : Y ≅ Z} (p : CommSq f.hom g h i.hom)
-  proof: flip (vert_inv (flip p))
-
-中文:
-定理 horiz_inv
-  条件: {f : W ≅ X} {i : Y ≅ Z} (p : 交换Sq f.hom g h i.hom)
-  证明: flip (vert_inv (flip p))
-
-Depends on / 依赖: vert_inv
+/-
+**CategoryTheory.CommSq.horiz_inv** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Comm
+Sq`。
+形式化陈述：horiz_inv {f : W ≅ X} {i : Y ≅ Z} (p : CommSq f.hom g h i.hom) : CommSq f.
+inv h g i.inv
+参数：p : CommSq f.hom g h i.hom。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CommSq.flip`：flip (p : CommSq f g h i) : CommSq g f i h
+· 使用定理 `CategoryTheory.CommSq.vert_inv`：vert_inv {g : W ≅ Y} {h : X ≅ Z} (p : Co
+mmSq f g.hom h.hom i) : CommSq i g.inv h.inv f
 -/
 theorem horiz_inv {f : W ≅ X} {i : Y ≅ Z} (p : CommSq f.hom g h i.hom) :
     CommSq f.inv h g i.inv :=
@@ -253,29 +233,46 @@ theorem horiz_inv {f : W ≅ X} {i : Y ≅ Z} (p : CommSq f.hom g h i.hom) :
 /-- The horizontal composition of two commutative squares as below is a commutative square.
 ```
   W ---f---> X ---f'--> X'
-  | | |
-  g h h'
-  | | |
-  v v v
+  |          |          |
+  g          h          h'
+  |          |          |
+  v          v          v
   Y ---i---> Z ---i'--> Z'
 
 ```
 -/
 @[to_dual self (reorder := W Z', X Z, X' Y, f i', f' i, g h', hsq₁ hsq₂)]
-/--
-lemma `horiz_comp` / 引理 `horiz_comp`
+/-
+**CategoryTheory.CommSq.horiz_comp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Com
+mSq`。
+形式化陈述：horiz_comp {W X X' Y Z Z' : C} {f : W ⟶ X} {f' : X ⟶ X'} {g : W ⟶ Y} {h : 
+X ⟶ Z} {h' : X' ⟶ Z'} {i : Y ⟶ Z} {i' : Z ⟶ Z'} (hsq₁ : CommSq f g h i) (hsq₂ : 
+CommSq f' h h' i') : CommSq (f ≫ f') g h' (i ≫ i')
+参数：hsq₁ : CommSq f g h i；hsq₂ : CommSq f' h h' i'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.CommSq.w`：∀ {C : Type u_1} [inst : CategoryTheory.Categor
+y.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z},
+   CategoryTh…
 
-English:
-lemma horiz_comp
-  statement: {W X X' Y Z Z' : C} {f : W ⟶ X} {f' : X ⟶ X'} {g : W ⟶ Y} {h : X ⟶ Z}
-  proof: ⟨by rw [← Category.assoc, Category.assoc, ← hsq₁.w, hsq₂.w, Category.assoc]⟩
+--- 原说明 ---
+The horizontal composition of two commutative squares as below is a commutative 
+square.
+```
+  W ---f---> X ---f'--> X'
+  |          |          |
+  g          h          h'
+  |          |          |
+  v          v          v
+  Y ---i---> Z ---i'--> Z'
 
-中文:
-引理 horiz_comp
-  结论: {W X X' Y Z Z' : C} {f : W ⟶ X} {f' : X ⟶ X'} {g : W ⟶ Y} {h : X ⟶ Z}
-  证明: ⟨by rw [← Category.assoc, Category.assoc, ← hsq₁.w, hsq₂.w, Category.assoc]⟩
-
-Depends on / 依赖: Category, Category.assoc
+```
 -/
 lemma horiz_comp {W X X' Y Z Z' : C} {f : W ⟶ X} {f' : X ⟶ X'} {g : W ⟶ Y} {h : X ⟶ Z}
     {h' : X' ⟶ Z'} {i : Y ⟶ Z} {i' : Z ⟶ Z'} (hsq₁ : CommSq f g h i) (hsq₂ : CommSq f' h h' i') :
@@ -285,34 +282,51 @@ lemma horiz_comp {W X X' Y Z Z' : C} {f : W ⟶ X} {f' : X ⟶ X'} {g : W ⟶ Y}
 /-- The vertical composition of two commutative squares as below is a commutative square.
 ```
   W ---f---> X
-  | |
-  g h
-  | |
-  v v
+  |          |
+  g          h
+  |          |
+  v          v
   Y ---i---> Z
-  | |
-  g' h'
-  | |
-  v v
+  |          |
+  g'         h'
+  |          |
+  v          v
   Y'---i'--> Z'
 
 ```
 -/
 @[to_dual self (reorder := W Z', Y Z, Y' X, g h', g' h, f i', hsq₁ hsq₂)]
-/--
-lemma `vert_comp` / 引理 `vert_comp`
+/-
+**CategoryTheory.CommSq.vert_comp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Comm
+Sq`。
+形式化陈述：vert_comp {W X Y Y' Z Z' : C} {f : W ⟶ X} {g : W ⟶ Y} {g' : Y ⟶ Y'} {h : X
+ ⟶ Z} {h' : Z ⟶ Z'} {i : Y ⟶ Z} {i' : Y' ⟶ Z'} (hsq₁ : CommSq f g h i) (hsq₂ : C
+ommSq i g' h' i') : CommSq f (g ≫ g') (h ≫ h') i'
+参数：hsq₁ : CommSq f g h i；hsq₂ : CommSq i g' h' i'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CommSq.flip`：flip (p : CommSq f g h i) : CommSq g f i h
+· 使用引理 `CategoryTheory.CommSq.horiz_comp`：horiz_comp {W X X' Y Z Z' : C} {f : W 
+⟶ X} {f' : X ⟶ X'} {g : W ⟶ Y} {h : X ⟶ Z} {h' : X' ⟶ Z'} {i : Y ⟶ Z} {i' : Z ⟶ 
+Z'} (hsq₁ : CommSq f g…
 
-English:
-lemma vert_comp
-  statement: {W X Y Y' Z Z' : C} {f : W ⟶ X} {g : W ⟶ Y} {g' : Y ⟶ Y'} {h : X ⟶ Z}
-  proof: flip (horiz_comp (flip hsq₁) (flip hsq₂))
+--- 原说明 ---
+The vertical composition of two commutative squares as below is a commutative sq
+uare.
+```
+  W ---f---> X
+  |          |
+  g          h
+  |          |
+  v          v
+  Y ---i---> Z
+  |          |
+  g'         h'
+  |          |
+  v          v
+  Y'---i'--> Z'
 
-中文:
-引理 vert_comp
-  结论: {W X Y Y' Z Z' : C} {f : W ⟶ X} {g : W ⟶ Y} {g' : Y ⟶ Y'} {h : X ⟶ Z}
-  证明: flip (horiz_comp (flip hsq₁) (flip hsq₂))
-
-Depends on / 依赖: horiz_comp
+```
 -/
 lemma vert_comp {W X Y Y' Z Z' : C} {f : W ⟶ X} {g : W ⟶ Y} {g' : Y ⟶ Y'} {h : X ⟶ Z}
     {h' : Z ⟶ Z'} {i : Y ⟶ Z} {i' : Y' ⟶ Z'} (hsq₁ : CommSq f g h i) (hsq₂ : CommSq i g' h' i') :
@@ -325,47 +339,40 @@ section
 variable {W X Y : C}
 
 @[to_dual none]
-/--
-theorem `eq_of_mono` / 定理 `eq_of_mono`
-
-English:
-theorem eq_of_mono
-  given: {f : W ⟶ X} {g : W ⟶ X} {i : X ⟶ Y} [Mono i] (sq : CommSq f g i i)
-  statement: f = g
-  proof: (cancel_mono i).1 sq.w
-
-@[to_dual none]
-
-中文:
-定理 eq_of_mono
-  条件: {f : W ⟶ X} {g : W ⟶ X} {i : X ⟶ Y} [单态射 i] (sq : 交换Sq f g i i)
-  结论: f = g
-  证明: (cancel_mono i).1 sq.w
-
-@[to_dual none]
-
-Depends on / 依赖: cancel_mono, sq.w
+/-
+**CategoryTheory.CommSq.eq_of_mono** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Com
+mSq`。
+形式化陈述：eq_of_mono {f : W ⟶ X} {g : W ⟶ X} {i : X ⟶ Y} [Mono i] (sq : CommSq f g i
+ i) : f = g
+参数：sq : CommSq f g i i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_mono`：∀ {C : Type u} [inst : CategoryTheory.Catego
+ry.{v, u} C] {X Y Z : C} (f : Y ⟶ X) [CategoryTheory.Mono f] {g h : Z ⟶ Y},   Ca
+tegoryTheory.Cat…
+· 使用定理 `CategoryTheory.CommSq.w`：∀ {C : Type u_1} [inst : CategoryTheory.Categor
+y.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z},
+   CategoryTh…
 -/
 theorem eq_of_mono {f : W ⟶ X} {g : W ⟶ X} {i : X ⟶ Y} [Mono i] (sq : CommSq f g i i) : f = g :=
   (cancel_mono i).1 sq.w
 
 @[to_dual none]
-/--
-theorem `eq_of_epi` / 定理 `eq_of_epi`
-
-English:
-theorem eq_of_epi
-  given: {f : W ⟶ X} {h : X ⟶ Y} {i : X ⟶ Y} [Epi f] (sq : CommSq f f h i)
-  statement: h = i
-  proof: (cancel_epi f).1 sq.w
-
-中文:
-定理 eq_of_epi
-  条件: {f : W ⟶ X} {h : X ⟶ Y} {i : X ⟶ Y} [满态射 f] (sq : 交换Sq f f h i)
-  结论: h = i
-  证明: (cancel_epi f).1 sq.w
-
-Depends on / 依赖: cancel_epi, sq.w
+/-
+**CategoryTheory.CommSq.eq_of_epi** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Comm
+Sq`。
+形式化陈述：eq_of_epi {f : W ⟶ X} {h : X ⟶ Y} {i : X ⟶ Y} [Epi f] (sq : CommSq f f h i
+) : h = i
+参数：sq : CommSq f f h i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.CommSq.w`：∀ {C : Type u_1} [inst : CategoryTheory.Categor
+y.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z},
+   CategoryTh…
 -/
 theorem eq_of_epi {f : W ⟶ X} {h : X ⟶ Y} {i : X ⟶ Y} [Epi f] (sq : CommSq f f h i) : h = i :=
   (cancel_epi f).1 sq.w
@@ -380,22 +387,26 @@ variable {D : Type*} [Category* D]
 variable (F : C ⥤ D) {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i : Y ⟶ Z}
 
 @[to_dual self]
-/--
-theorem `map_commSq` / 定理 `map_commSq`
-
-English:
-theorem map_commSq
-  given: (s : CommSq f g h i)
-  statement: CommSq (F.map f) (F.map g) (F.map h) (F.map i)
-  proof: ⟨by simpa using congr_arg (fun k : W ⟶ Z => F.map k) s.w⟩
-
-中文:
-定理 map_commSq
-  条件: (s : 交换Sq f g h i)
-  结论: 交换Sq (F.map f) (F.map g) (F.map h) (F.map i)
-  证明: ⟨by simpa using congr_arg (fun k : W ⟶ Z => F.map k) s.w⟩
-
-Depends on / 依赖: F.map, congr_arg
+/-
+**CategoryTheory.Functor.map_commSq** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Fu
+nctor`。
+形式化陈述：map_commSq (s : CommSq f g h i) : CommSq (F.map f) (F.map g) (F.map h) (F.
+map i)
+参数：s : CommSq f g h i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `CategoryTheory.CommSq.w`：∀ {C : Type u_1} [inst : CategoryTheory.Categor
+y.{v_1, u_1} C] {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z}   {i : Y ⟶ Z},
+   CategoryTh…
 -/
 theorem map_commSq (s : CommSq f g h i) : CommSq (F.map f) (F.map g) (F.map h) (F.map i) :=
   ⟨by simpa using congr_arg (fun k : W ⟶ Z => F.map k) s.w⟩
@@ -414,36 +425,37 @@ set_option linter.translate.warnInvalid false in
 /-- Now we consider a square:
 ```
   A ---f---> X
-  | |
-  i p
-  | |
-  v v
+  |          |
+  i          p
+  |          |
+  v          v
   B ---g---> Y
 ```
 
 The datum of a lift in a commutative square, i.e. an up-right-diagonal
 morphism which makes both triangles commute. -/
 @[ext, to_dual self]
-/--
-Definition of `LiftStruct` / `LiftStruct` 的定义
+/-
+**CategoryTheory.CommSq.LiftStruct** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory.Com
+mSq`。
+形式化陈述：LiftStruct (sq : CommSq f i p g) where /-- The lift. -/ l : B ⟶ X /-- The 
+upper left triangle commutes. -/ fac_left : i ≫ l = f
+参数：sq : CommSq f i p g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure LiftStruct
-  parameters: (sq : CommSq f i p g)
-  axioms and operations (3):
-    - l : B ⟶ X
-    - fac_left : i ≫ l = f  [default: by cat_disch]
-    - fac_right : l ≫ p = g  [default: by cat_disch]
+--- 原说明 ---
+Now we consider a square:
+```
+  A ---f---> X
+  |          |
+  i          p
+  |          |
+  v          v
+  B ---g---> Y
+```
 
-中文:
-结构 LiftStruct
-  参数: (sq : 交换Sq f i p g)
-  公理与运算 (3 个):
-    - l : B ⟶ X
-    - fac_left : i ≫ l = f  [默认: by cat_disch]
-    - fac_right : l ≫ p = g  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+The datum of a lift in a commutative square, i.e. an up-right-diagonal
+morphism which makes both triangles commute.
 -/
 structure LiftStruct (sq : CommSq f i p g) where
   /-- The lift. -/
@@ -462,24 +474,19 @@ namespace LiftStruct
 /-- A `LiftStruct` for a commutative square gives a `LiftStruct` for the
 corresponding square in the opposite category. -/
 @[simps, to_dual self]
-/--
-Definition of `op` / `op` 的定义
+/-
+**CategoryTheory.CommSq.LiftStruct.op** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+CommSq.LiftStruct`。
+形式化陈述：op {sq : CommSq f i p g} (l : LiftStruct sq) : LiftStruct sq.op where l
+参数：l : LiftStruct sq。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CommSq.op`：op (p : CommSq f g h i) : CommSq i.op h.op g.o
+p f.op
 
-English:
-definition op
-  signature: {sq : CommSq f i p g} (l : LiftStruct sq)
-  body: l.l.op
-  fac_left := by rw [← op_comp, l.fac_right]
-  fac_right := by rw [← op_comp, l.fac_left]
-
-中文:
-定义 op
-  签名: {sq : 交换Sq f i p g} (l : LiftStruct sq)
-  定义体: l.l.op
-  fac_left := by rw [← op_comp, l.fac_right]
-  fac_right := by rw [← op_comp, l.fac_left]
-
-Depends on / 依赖: l.l.op
+--- 原说明 ---
+A `LiftStruct` for a commutative square gives a `LiftStruct` for the
+corresponding square in the opposite category.
 -/
 def op {sq : CommSq f i p g} (l : LiftStruct sq) : LiftStruct sq.op where
   l := l.l.op
@@ -489,24 +496,21 @@ def op {sq : CommSq f i p g} (l : LiftStruct sq) : LiftStruct sq.op where
 /-- A `LiftStruct` for a commutative square in the opposite category
 gives a `LiftStruct` for the corresponding square in the original category. -/
 @[simps, to_dual self]
-/--
-Definition of `unop` / `unop` 的定义
+/-
+**CategoryTheory.CommSq.LiftStruct.unop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.CommSq.LiftStruct`。
+形式化陈述：unop {A B X Y : Cᵒᵖ} {f : A ⟶ X} {i : A ⟶ B} {p : X ⟶ Y} {g : B ⟶ Y} {sq :
+ CommSq f i p g} (l : LiftStruct sq) : LiftStruct sq.unop where l
+参数：l : LiftStruct sq。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CommSq.unop`：unop {W X Y Z : Cᵒᵖ} {f : W ⟶ X} {g : W ⟶ Y}
+ {h : X ⟶ Z} {i : Y ⟶ Z} (p : CommSq f g h i) : CommSq i.unop h.unop g.unop f.un
+op
 
-English:
-definition unop
-  signature: {A B X Y : Cᵒᵖ} {f : A ⟶ X} {i : A ⟶ B} {p : X ⟶ Y} {g : B ⟶ Y} {sq : CommSq f i p g}
-  body: l.l.unop
-  fac_left := by rw [← unop_comp, l.fac_right]
-  fac_right := by rw [← unop_comp, l.fac_left]
-
-中文:
-定义 unop
-  签名: {A B X Y : Cᵒᵖ} {f : A ⟶ X} {i : A ⟶ B} {p : X ⟶ Y} {g : B ⟶ Y} {sq : 交换Sq f i p g}
-  定义体: l.l.unop
-  fac_left := by rw [← unop_comp, l.fac_right]
-  fac_right := by rw [← unop_comp, l.fac_left]
-
-Depends on / 依赖: l.l.unop
+--- 原说明 ---
+A `LiftStruct` for a commutative square in the opposite category
+gives a `LiftStruct` for the corresponding square in the original category.
 -/
 def unop {A B X Y : Cᵒᵖ} {f : A ⟶ X} {i : A ⟶ B} {p : X ⟶ Y} {g : B ⟶ Y} {sq : CommSq f i p g}
     (l : LiftStruct sq) : LiftStruct sq.unop where
@@ -517,24 +521,20 @@ def unop {A B X Y : Cᵒᵖ} {f : A ⟶ X} {i : A ⟶ B} {p : X ⟶ Y} {g : B �
 /-- Equivalences of `LiftStruct` for a square and the corresponding square
 in the opposite category. -/
 @[simps, to_dual self]
-/--
-Definition of `opEquiv` / `opEquiv` 的定义
+/-
+**CategoryTheory.CommSq.LiftStruct.opEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.CommSq.LiftStruct`。
+形式化陈述：opEquiv (sq : CommSq f i p g) : LiftStruct sq ≃ LiftStruct sq.op where toF
+un
+参数：sq : CommSq f i p g。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CommSq.op`：op (p : CommSq f g h i) : CommSq i.op h.op g.o
+p f.op
 
-English:
-definition opEquiv
-  signature: (sq : CommSq f i p g)
-  body: op
-  invFun := unop
-  left_inv := by cat_disch
-  right_inv := by cat_disch
-
-中文:
-定义 opEquiv
-  签名: (sq : 交换Sq f i p g)
-  定义体: op
-  invFun := unop
-  left_inv := by cat_disch
-  right_inv := by cat_disch
+--- 原说明 ---
+Equivalences of `LiftStruct` for a square and the corresponding square
+in the opposite category.
 -/
 def opEquiv (sq : CommSq f i p g) : LiftStruct sq ≃ LiftStruct sq.op where
   toFun := op
@@ -545,24 +545,21 @@ def opEquiv (sq : CommSq f i p g) : LiftStruct sq ≃ LiftStruct sq.op where
 /-- Equivalences of `LiftStruct` for a square in the opposite category and
 the corresponding square in the original category. -/
 @[simps, to_dual self]
-/--
-Definition of `unopEquiv` / `unopEquiv` 的定义
+/-
+**CategoryTheory.CommSq.LiftStruct.unopEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.CommSq.LiftStruct`。
+形式化陈述：unopEquiv {A B X Y : Cᵒᵖ} {f : A ⟶ X} {i : A ⟶ B} {p : X ⟶ Y} {g : B ⟶ Y} 
+(sq : CommSq f i p g) : LiftStruct sq ≃ LiftStruct sq.unop where toFun
+参数：sq : CommSq f i p g。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CommSq.unop`：unop {W X Y Z : Cᵒᵖ} {f : W ⟶ X} {g : W ⟶ Y}
+ {h : X ⟶ Z} {i : Y ⟶ Z} (p : CommSq f g h i) : CommSq i.unop h.unop g.unop f.un
+op
 
-English:
-definition unopEquiv
-  signature: {A B X Y : Cᵒᵖ} {f : A ⟶ X} {i : A ⟶ B} {p : X ⟶ Y} {g : B ⟶ Y}
-  body: unop
-  invFun := op
-  left_inv := by cat_disch
-  right_inv := by cat_disch
-
-中文:
-定义 unopEquiv
-  签名: {A B X Y : Cᵒᵖ} {f : A ⟶ X} {i : A ⟶ B} {p : X ⟶ Y} {g : B ⟶ Y}
-  定义体: unop
-  invFun := op
-  left_inv := by cat_disch
-  right_inv := by cat_disch
+--- 原说明 ---
+Equivalences of `LiftStruct` for a square in the opposite category and
+the corresponding square in the original category.
 -/
 def unopEquiv {A B X Y : Cᵒᵖ} {f : A ⟶ X} {i : A ⟶ B} {p : X ⟶ Y} {g : B ⟶ Y}
     (sq : CommSq f i p g) : LiftStruct sq ≃ LiftStruct sq.unop where
@@ -574,26 +571,30 @@ def unopEquiv {A B X Y : Cᵒᵖ} {f : A ⟶ X} {i : A ⟶ B} {p : X ⟶ Y} {g :
 end LiftStruct
 
 @[to_dual]
-/--
-Instance `subsingleton_liftStruct_of_epi` / 实例 `subsingleton_liftStruct_of_epi`
-
-English:
-instance subsingleton_liftStruct_of_epi
-  signature: (sq : CommSq f i p g) [Epi i]
-  body: ⟨fun l₁ l₂ => by
-    ext
-    rw [← cancel_epi i]
-    simp only [LiftStruct.fac_left]⟩
-
-中文:
-实例 subsingleton_liftStruct_of_epi
-  签名: (sq : 交换Sq f i p g) [满态射 i]
-  定义体: ⟨fun l₁ l₂ => by
-    ext
-    rw [← cancel_epi i]
-    simp only [LiftStruct.fac_left]⟩
-
-Depends on / 依赖: LiftStruct, LiftStruct.fac_left, cancel_epi, fac_left
+/-
+**CategoryTheory.CommSq.subsingleton_liftStruct_of_epi** 是 Mathlib 中的一个实例，位于命名空间
+ `CategoryTheory.CommSq`。
+形式化陈述：subsingleton_liftStruct_of_epi (sq : CommSq f i p g) [Epi i] : Subsingleto
+n (LiftStruct sq)
+参数：sq : CommSq f i p g。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CommSq.LiftStruct.ext`：∀ {C : Type u_1} {inst : CategoryT
+heory.Category.{v_1, u_1} C} {A B X Y : C} {f : A ⟶ X} {i : A ⟶ B} {p : X ⟶ Y}  
+ {g : B ⟶ Y} {sq : Categor…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.CommSq.LiftStruct.fac_left`：∀ {C : Type u_1} [inst : Cate
+goryTheory.Category.{v_1, u_1} C] {A B X Y : C} {f : A ⟶ X} {i : A ⟶ B} {p : X ⟶
+ Y}   {g : B ⟶ Y} {sq : Categor…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 instance subsingleton_liftStruct_of_epi (sq : CommSq f i p g) [Epi i] :
     Subsingleton (LiftStruct sq) :=
@@ -606,20 +607,16 @@ variable (sq : CommSq f i p g)
 
 /-- The assertion that a square has a `LiftStruct`. -/
 @[to_dual self]
-/--
-Definition of `HasLift` / `HasLift` 的定义
+/-
+**CategoryTheory.CommSq.HasLift** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.Comm
+Sq`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     {A 
+B X Y : C} → {f : A ⟶ X} → {i : A ⟶ B} → {p : X ⟶ Y} → {g : B ⟶ Y} → CategoryThe
+ory.CommSq f i p g → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasLift
-  parameters: : Prop where
-  axioms and operations (1):
-    - exists_lift : Nonempty sq.LiftStruct
-
-中文:
-类 有Lift
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - exists_lift : 非空 sq.LiftStruct
+--- 原说明 ---
+The assertion that a square has a `LiftStruct`.
 -/
 class HasLift : Prop where
   /-- Square has a `LiftStruct`. -/
@@ -629,109 +626,74 @@ namespace HasLift
 
 variable {sq} in
 @[to_dual self]
-/--
-theorem `mk'` / 定理 `mk'`
-
-English:
-theorem mk'
-  given: (l : sq.LiftStruct)
-  statement: HasLift sq
-  proof: ⟨Nonempty.intro l⟩
-
-@[to_dual self]
-
-中文:
-定理 mk'
-  条件: (l : sq.LiftStruct)
-  结论: 有Lift sq
-  证明: ⟨Nonempty.intro l⟩
-
-@[to_dual self]
-
-Depends on / 依赖: Nonempty, Nonempty.intro
+/-
+**CategoryTheory.CommSq.HasLift.mk'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Co
+mmSq.HasLift`。
+形式化陈述：mk' (l : sq.LiftStruct) : HasLift sq
+参数：l : sq.LiftStruct。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk' (l : sq.LiftStruct) : HasLift sq :=
   ⟨Nonempty.intro l⟩
 
 @[to_dual self]
-/--
-theorem `iff` / 定理 `iff`
-
-English:
-theorem iff
-  statement: HasLift sq ↔ Nonempty sq.LiftStruct
-  proof: by
-  constructor
-  exacts [fun h => h.exists_lift, fun h => mk h]
-
-@[to_dual self]
-
-中文:
-定理 iff
-  结论: 有Lift sq ↔ 非空 sq.LiftStruct
-  证明: by
-  constructor
-  exacts [fun h => h.exists_lift, fun h => mk h]
-
-@[to_dual self]
-
-Depends on / 依赖: exacts, exists_lift, h.exists_lift
+/-
+**CategoryTheory.CommSq.HasLift.iff** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Co
+mmSq.HasLift`。
+形式化陈述：iff : HasLift sq ↔ Nonempty sq.LiftStruct
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CommSq.HasLift.exists_lift`：∀ {C : Type u_1} {inst : Cate
+goryTheory.Category.{v_1, u_1} C} {A B X Y : C} {f : A ⟶ X} {i : A ⟶ B} {p : X ⟶
+ Y}   {g : B ⟶ Y} {sq : Categor…
 -/
 theorem iff : HasLift sq ↔ Nonempty sq.LiftStruct := by
   constructor
   exacts [fun h => h.exists_lift, fun h => mk h]
 
 @[to_dual self]
-/--
-theorem `iff_op` / 定理 `iff_op`
-
-English:
-theorem iff_op
-  statement: HasLift sq ↔ HasLift sq.op
-  proof: by
-  rw [iff]; rw [iff]
-  exact Nonempty.congr (LiftStruct.opEquiv sq).toFun (LiftStruct.opEquiv sq).invFun
-
-@[to_dual self]
-
-中文:
-定理 iff_op
-  结论: 有Lift sq ↔ 有Lift sq.op
-  证明: by
-  rw [iff]; rw [iff]
-  exact Nonempty.congr (LiftStruct.opEquiv sq).toFun (LiftStruct.opEquiv sq).invFun
-
-@[to_dual self]
-
-Depends on / 依赖: LiftStruct, LiftStruct.opEquiv, Nonempty, Nonempty.congr, invFun, opEquiv
+/-
+**CategoryTheory.CommSq.HasLift.iff_op** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.CommSq.HasLift`。
+形式化陈述：iff_op : HasLift sq ↔ HasLift sq.op
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CommSq.op`：op (p : CommSq f g h i) : CommSq i.op h.op g.o
+p f.op
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.CommSq.HasLift.iff`：iff : HasLift sq ↔ Nonempty sq.LiftSt
+ruct
+· 使用定理 `Nonempty.congr`：∀ {α : Sort u_3} {β : Sort u_4} (f : α → β) (g : β → α),
+ Nonempty α ↔ Nonempty β
 -/
 theorem iff_op : HasLift sq ↔ HasLift sq.op := by
-  rw [iff]; rw [iff]
+  rw [iff, iff]
   exact Nonempty.congr (LiftStruct.opEquiv sq).toFun (LiftStruct.opEquiv sq).invFun
 
 @[to_dual self]
-/--
-theorem `iff_unop` / 定理 `iff_unop`
-
-English:
-theorem iff_unop
-  statement: {A B X Y : Cᵒᵖ} {f : A ⟶ X} {i : A ⟶ B} {p : X ⟶ Y} {g : B ⟶ Y}
-  proof: by
-  rw [iff]; rw [iff]
-  exact Nonempty.congr (LiftStruct.unopEquiv sq).toFun (LiftStruct.unopEquiv sq).invFun
-
-中文:
-定理 iff_unop
-  结论: {A B X Y : Cᵒᵖ} {f : A ⟶ X} {i : A ⟶ B} {p : X ⟶ Y} {g : B ⟶ Y}
-  证明: by
-  rw [iff]; rw [iff]
-  exact Nonempty.congr (LiftStruct.unopEquiv sq).toFun (LiftStruct.unopEquiv sq).invFun
-
-Depends on / 依赖: LiftStruct, LiftStruct.unopEquiv, Nonempty, Nonempty.congr, invFun, unopEquiv
+/-
+**CategoryTheory.CommSq.HasLift.iff_unop** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.CommSq.HasLift`。
+形式化陈述：iff_unop {A B X Y : Cᵒᵖ} {f : A ⟶ X} {i : A ⟶ B} {p : X ⟶ Y} {g : B ⟶ Y} (
+sq : CommSq f i p g) : HasLift sq ↔ HasLift sq.unop
+参数：sq : CommSq f i p g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CommSq.unop`：unop {W X Y Z : Cᵒᵖ} {f : W ⟶ X} {g : W ⟶ Y}
+ {h : X ⟶ Z} {i : Y ⟶ Z} (p : CommSq f g h i) : CommSq i.unop h.unop g.unop f.un
+op
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.CommSq.HasLift.iff`：iff : HasLift sq ↔ Nonempty sq.LiftSt
+ruct
+· 使用定理 `Nonempty.congr`：∀ {α : Sort u_3} {β : Sort u_4} (f : α → β) (g : β → α),
+ Nonempty α ↔ Nonempty β
 -/
 theorem iff_unop {A B X Y : Cᵒᵖ} {f : A ⟶ X} {i : A ⟶ B} {p : X ⟶ Y} {g : B ⟶ Y}
     (sq : CommSq f i p g) : HasLift sq ↔ HasLift sq.unop := by
-  rw [iff]; rw [iff]
+  rw [iff, iff]
   exact Nonempty.congr (LiftStruct.unopEquiv sq).toFun (LiftStruct.unopEquiv sq).invFun
 
 end HasLift
@@ -739,45 +701,35 @@ end HasLift
 /-- A choice of a diagonal morphism that is part of a `LiftStruct` when
 the square has a lift. -/
 @[to_dual self]
-/--
-Definition of `lift` / `lift` 的定义
+/-
+**CategoryTheory.CommSq.lift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.CommSq`。
+形式化陈述：lift [hsq : HasLift sq] : B ⟶ X
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CommSq.HasLift.exists_lift`：∀ {C : Type u_1} {inst : Cate
+goryTheory.Category.{v_1, u_1} C} {A B X Y : C} {f : A ⟶ X} {i : A ⟶ B} {p : X ⟶
+ Y}   {g : B ⟶ Y} {sq : Categor…
 
-English:
-definition lift
-  signature: [hsq : HasLift sq]
-  body: hsq.exists_lift.some.l
-
-@[to_dual (attr := reassoc (attr := simp)) fac_right]
-
-中文:
-定义 lift
-  签名: [hsq : 有Lift sq]
-  定义体: hsq.exists_lift.some.l
-
-@[to_dual (attr := reassoc (attr := simp)) fac_right]
-
-Depends on / 依赖: exists_lift, hsq.exists_lift.some.l
+--- 原说明 ---
+A choice of a diagonal morphism that is part of a `LiftStruct` when
+the square has a lift.
 -/
 noncomputable def lift [hsq : HasLift sq] : B ⟶ X :=
   hsq.exists_lift.some.l
 
 @[to_dual (attr := reassoc (attr := simp)) fac_right]
-/--
-theorem `fac_left` / 定理 `fac_left`
-
-English:
-theorem fac_left
-  given: [hsq : HasLift sq]
-  statement: i ≫ sq.lift = f
-  proof: hsq.exists_lift.some.fac_left
-
-中文:
-定理 fac_left
-  条件: [hsq : 有Lift sq]
-  结论: i ≫ sq.lift = f
-  证明: hsq.exists_lift.some.fac_left
-
-Depends on / 依赖: exists_lift, fac_left, hsq.exists_lift.some.fac_left
+/-
+**CategoryTheory.CommSq.fac_left** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.CommS
+q`。
+形式化陈述：fac_left [hsq : HasLift sq] : i ≫ sq.lift = f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.CommSq.LiftStruct.fac_left`：∀ {C : Type u_1} [inst : Cate
+goryTheory.Category.{v_1, u_1} C] {A B X Y : C} {f : A ⟶ X} {i : A ⟶ B} {p : X ⟶
+ Y}   {g : B ⟶ Y} {sq : Categor…
+· 使用定理 `CategoryTheory.CommSq.HasLift.exists_lift`：∀ {C : Type u_1} {inst : Cate
+goryTheory.Category.{v_1, u_1} C} {A B X Y : C} {f : A ⟶ X} {i : A ⟶ B} {p : X ⟶
+ Y}   {g : B ⟶ Y} {sq : Categor…
 -/
 theorem fac_left [hsq : HasLift sq] : i ≫ sq.lift = f :=
   hsq.exists_lift.some.fac_left
@@ -785,3 +737,4 @@ theorem fac_left [hsq : HasLift sq] : i ≫ sq.lift = f :=
 end CommSq
 
 end CategoryTheory
+

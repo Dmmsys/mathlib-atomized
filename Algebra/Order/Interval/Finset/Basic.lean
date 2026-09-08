@@ -25,342 +25,546 @@ namespace Finset
 variable [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
   [ExistsAddOfLE α] [LocallyFiniteOrder α]
 
-/--
-lemma `map_add_left_Icc` / 引理 `map_add_left_Icc`
-
-English:
-lemma map_add_left_Icc
-  given: (a b c : α)
-  proof: by
-  rw [← coe_inj]; rw [coe_map]; rw [coe_Icc]; rw [coe_Icc]
-  exact Set.image_const_add_Icc _ _ _
-
-中文:
-引理 map_add_left_Icc
-  条件: (a b c : α)
-  证明: by
-  rw [← coe_inj]; rw [coe_map]; rw [coe_Icc]; rw [coe_Icc]
-  exact Set.image_const_add_Icc _ _ _
+/-
+**Finset.map_add_left_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_2} [inst : AddCommMonoid α] [inst_1 : PartialOrder α] [inst_
+2 : IsOrderedCancelAddMonoid α]   [ExistsAddOfLE α] [inst_4 : LocallyFiniteOrder
+ α] (a b c : α),   Finset.map (addLeftEmbedding c) (Finset.Icc a b) = Finset.Icc
+ (c + a) (c + b)
+参数：a b c : α；addLeftEmbedding c；Finset.Icc a b；c + a；c + b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.coe_inj`：coe_inj {s₁ s₂ : Finset α} : (s₁ : Set α) = s₂ ↔ s₁ = s₂
+· 使用定理 `Finset.coe_map`：coe_map (f : α ↪ β) (s : Finset α) : (s.map f : Set β) =
+ f '' s
+· 使用定理 `Finset.coe_Icc`：coe_Icc (a b : α) : (Icc a b : Set α) = Set.Icc a b
+· 使用定理 `Set.image_const_add_Icc`：image_const_add_Icc : (fun x => a + x) '' Icc b
+ c = Icc (a + b) (a + c)
 -/
 @[simp] lemma map_add_left_Icc (a b c : α) :
     (Icc a b).map (addLeftEmbedding c) = Icc (c + a) (c + b) := by
-  rw [← coe_inj]; rw [coe_map]; rw [coe_Icc]; rw [coe_Icc]
+  rw [← coe_inj, coe_map, coe_Icc, coe_Icc]
   exact Set.image_const_add_Icc _ _ _
-
-/--
-lemma `map_add_right_Icc` / 引理 `map_add_right_Icc`
-
-English:
-lemma map_add_right_Icc
-  given: (a b c : α)
-  proof: by
-  rw [← coe_inj]; rw [coe_map]; rw [coe_Icc]; rw [coe_Icc]
-  exact Set.image_add_const_Icc _ _ _
-
-中文:
-引理 map_add_right_Icc
-  条件: (a b c : α)
-  证明: by
-  rw [← coe_inj]; rw [coe_map]; rw [coe_Icc]; rw [coe_Icc]
-  exact Set.image_add_const_Icc _ _ _
+/-
+**Finset.map_add_right_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_2} [inst : AddCommMonoid α] [inst_1 : PartialOrder α] [inst_
+2 : IsOrderedCancelAddMonoid α]   [ExistsAddOfLE α] [inst_4 : LocallyFiniteOrder
+ α] (a b c : α),   Finset.map (addRightEmbedding c) (Finset.Icc a b) = Finset.Ic
+c (a + c) (b + c)
+参数：a b c : α；addRightEmbedding c；Finset.Icc a b；a + c；b + c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `IsCancelAdd.toIsLeftCancelAdd`：∀ {G : Type u} {inst : Add G} [self : IsC
+ancelAdd G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedCancelAddMonoid.toIsCancelAdd`：∀ {α : Type u_1} [inst : AddComm
+Monoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], IsCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLT`：∀ {α : Type u_1} [inst : Ad
+dCommMonoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], AddLeftRe
+flectLT α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.coe_inj`：coe_inj {s₁ s₂ : Finset α} : (s₁ : Set α) = s₂ ↔ s₁ = s₂
+· 使用定理 `Finset.coe_map`：coe_map (f : α ↪ β) (s : Finset α) : (s.map f : Set β) =
+ f '' s
+· 使用定理 `Finset.coe_Icc`：coe_Icc (a b : α) : (Icc a b : Set α) = Set.Icc a b
+· 使用定理 `Set.image_add_const_Icc`：image_add_const_Icc : (fun x => x + a) '' Icc b
+ c = Icc (b + a) (c + a)
 -/
 @[simp] lemma map_add_right_Icc (a b c : α) :
     (Icc a b).map (addRightEmbedding c) = Icc (a + c) (b + c) := by
-  rw [← coe_inj]; rw [coe_map]; rw [coe_Icc]; rw [coe_Icc]
+  rw [← coe_inj, coe_map, coe_Icc, coe_Icc]
   exact Set.image_add_const_Icc _ _ _
-
-/--
-lemma `map_add_left_Ico` / 引理 `map_add_left_Ico`
-
-English:
-lemma map_add_left_Ico
-  given: (a b c : α)
-  proof: by
-  rw [← coe_inj]; rw [coe_map]; rw [coe_Ico]; rw [coe_Ico]
-  exact Set.image_const_add_Ico _ _ _
-
-中文:
-引理 map_add_left_Ico
-  条件: (a b c : α)
-  证明: by
-  rw [← coe_inj]; rw [coe_map]; rw [coe_Ico]; rw [coe_Ico]
-  exact Set.image_const_add_Ico _ _ _
+/-
+**Finset.map_add_left_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_2} [inst : AddCommMonoid α] [inst_1 : PartialOrder α] [inst_
+2 : IsOrderedCancelAddMonoid α]   [ExistsAddOfLE α] [inst_4 : LocallyFiniteOrder
+ α] (a b c : α),   Finset.map (addLeftEmbedding c) (Finset.Ico a b) = Finset.Ico
+ (c + a) (c + b)
+参数：a b c : α；addLeftEmbedding c；Finset.Ico a b；c + a；c + b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.coe_inj`：coe_inj {s₁ s₂ : Finset α} : (s₁ : Set α) = s₂ ↔ s₁ = s₂
+· 使用定理 `Finset.coe_map`：coe_map (f : α ↪ β) (s : Finset α) : (s.map f : Set β) =
+ f '' s
+· 使用定理 `Finset.coe_Ico`：coe_Ico (a b : α) : (Ico a b : Set α) = Set.Ico a b
+· 使用定理 `Set.image_const_add_Ico`：image_const_add_Ico : (fun x => a + x) '' Ico b
+ c = Ico (a + b) (a + c)
 -/
 @[simp] lemma map_add_left_Ico (a b c : α) :
     (Ico a b).map (addLeftEmbedding c) = Ico (c + a) (c + b) := by
-  rw [← coe_inj]; rw [coe_map]; rw [coe_Ico]; rw [coe_Ico]
+  rw [← coe_inj, coe_map, coe_Ico, coe_Ico]
   exact Set.image_const_add_Ico _ _ _
-
-/--
-lemma `map_add_right_Ico` / 引理 `map_add_right_Ico`
-
-English:
-lemma map_add_right_Ico
-  given: (a b c : α)
-  proof: by
-  rw [← coe_inj]; rw [coe_map]; rw [coe_Ico]; rw [coe_Ico]
-  exact Set.image_add_const_Ico _ _ _
-
-中文:
-引理 map_add_right_Ico
-  条件: (a b c : α)
-  证明: by
-  rw [← coe_inj]; rw [coe_map]; rw [coe_Ico]; rw [coe_Ico]
-  exact Set.image_add_const_Ico _ _ _
+/-
+**Finset.map_add_right_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_2} [inst : AddCommMonoid α] [inst_1 : PartialOrder α] [inst_
+2 : IsOrderedCancelAddMonoid α]   [ExistsAddOfLE α] [inst_4 : LocallyFiniteOrder
+ α] (a b c : α),   Finset.map (addRightEmbedding c) (Finset.Ico a b) = Finset.Ic
+o (a + c) (b + c)
+参数：a b c : α；addRightEmbedding c；Finset.Ico a b；a + c；b + c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `IsCancelAdd.toIsLeftCancelAdd`：∀ {G : Type u} {inst : Add G} [self : IsC
+ancelAdd G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedCancelAddMonoid.toIsCancelAdd`：∀ {α : Type u_1} [inst : AddComm
+Monoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], IsCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLT`：∀ {α : Type u_1} [inst : Ad
+dCommMonoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], AddLeftRe
+flectLT α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.coe_inj`：coe_inj {s₁ s₂ : Finset α} : (s₁ : Set α) = s₂ ↔ s₁ = s₂
+· 使用定理 `Finset.coe_map`：coe_map (f : α ↪ β) (s : Finset α) : (s.map f : Set β) =
+ f '' s
+· 使用定理 `Finset.coe_Ico`：coe_Ico (a b : α) : (Ico a b : Set α) = Set.Ico a b
+· 使用定理 `Set.image_add_const_Ico`：image_add_const_Ico : (fun x => x + a) '' Ico b
+ c = Ico (b + a) (c + a)
 -/
 @[simp] lemma map_add_right_Ico (a b c : α) :
     (Ico a b).map (addRightEmbedding c) = Ico (a + c) (b + c) := by
-  rw [← coe_inj]; rw [coe_map]; rw [coe_Ico]; rw [coe_Ico]
+  rw [← coe_inj, coe_map, coe_Ico, coe_Ico]
   exact Set.image_add_const_Ico _ _ _
-
-/--
-lemma `map_add_left_Ioc` / 引理 `map_add_left_Ioc`
-
-English:
-lemma map_add_left_Ioc
-  given: (a b c : α)
-  proof: by
-  rw [← coe_inj]; rw [coe_map]; rw [coe_Ioc]; rw [coe_Ioc]
-  exact Set.image_const_add_Ioc _ _ _
-
-中文:
-引理 map_add_left_Ioc
-  条件: (a b c : α)
-  证明: by
-  rw [← coe_inj]; rw [coe_map]; rw [coe_Ioc]; rw [coe_Ioc]
-  exact Set.image_const_add_Ioc _ _ _
+/-
+**Finset.map_add_left_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_2} [inst : AddCommMonoid α] [inst_1 : PartialOrder α] [inst_
+2 : IsOrderedCancelAddMonoid α]   [ExistsAddOfLE α] [inst_4 : LocallyFiniteOrder
+ α] (a b c : α),   Finset.map (addLeftEmbedding c) (Finset.Ioc a b) = Finset.Ioc
+ (c + a) (c + b)
+参数：a b c : α；addLeftEmbedding c；Finset.Ioc a b；c + a；c + b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.coe_inj`：coe_inj {s₁ s₂ : Finset α} : (s₁ : Set α) = s₂ ↔ s₁ = s₂
+· 使用定理 `Finset.coe_map`：coe_map (f : α ↪ β) (s : Finset α) : (s.map f : Set β) =
+ f '' s
+· 使用定理 `Finset.coe_Ioc`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrder α] (b a : α), ↑(Finset.Ioc b a) = Set.Ioc b a
+· 使用定理 `Set.image_const_add_Ioc`：image_const_add_Ioc : (fun x => a + x) '' Ioc b
+ c = Ioc (a + b) (a + c)
 -/
 @[simp] lemma map_add_left_Ioc (a b c : α) :
     (Ioc a b).map (addLeftEmbedding c) = Ioc (c + a) (c + b) := by
-  rw [← coe_inj]; rw [coe_map]; rw [coe_Ioc]; rw [coe_Ioc]
+  rw [← coe_inj, coe_map, coe_Ioc, coe_Ioc]
   exact Set.image_const_add_Ioc _ _ _
-
-/--
-lemma `map_add_right_Ioc` / 引理 `map_add_right_Ioc`
-
-English:
-lemma map_add_right_Ioc
-  given: (a b c : α)
-  proof: by
-  rw [← coe_inj]; rw [coe_map]; rw [coe_Ioc]; rw [coe_Ioc]
-  exact Set.image_add_const_Ioc _ _ _
-
-中文:
-引理 map_add_right_Ioc
-  条件: (a b c : α)
-  证明: by
-  rw [← coe_inj]; rw [coe_map]; rw [coe_Ioc]; rw [coe_Ioc]
-  exact Set.image_add_const_Ioc _ _ _
+/-
+**Finset.map_add_right_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_2} [inst : AddCommMonoid α] [inst_1 : PartialOrder α] [inst_
+2 : IsOrderedCancelAddMonoid α]   [ExistsAddOfLE α] [inst_4 : LocallyFiniteOrder
+ α] (a b c : α),   Finset.map (addRightEmbedding c) (Finset.Ioc a b) = Finset.Io
+c (a + c) (b + c)
+参数：a b c : α；addRightEmbedding c；Finset.Ioc a b；a + c；b + c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `IsCancelAdd.toIsLeftCancelAdd`：∀ {G : Type u} {inst : Add G} [self : IsC
+ancelAdd G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedCancelAddMonoid.toIsCancelAdd`：∀ {α : Type u_1} [inst : AddComm
+Monoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], IsCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLT`：∀ {α : Type u_1} [inst : Ad
+dCommMonoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], AddLeftRe
+flectLT α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.coe_inj`：coe_inj {s₁ s₂ : Finset α} : (s₁ : Set α) = s₂ ↔ s₁ = s₂
+· 使用定理 `Finset.coe_map`：coe_map (f : α ↪ β) (s : Finset α) : (s.map f : Set β) =
+ f '' s
+· 使用定理 `Finset.coe_Ioc`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrder α] (b a : α), ↑(Finset.Ioc b a) = Set.Ioc b a
+· 使用定理 `Set.image_add_const_Ioc`：image_add_const_Ioc : (fun x => x + a) '' Ioc b
+ c = Ioc (b + a) (c + a)
 -/
 @[simp] lemma map_add_right_Ioc (a b c : α) :
     (Ioc a b).map (addRightEmbedding c) = Ioc (a + c) (b + c) := by
-  rw [← coe_inj]; rw [coe_map]; rw [coe_Ioc]; rw [coe_Ioc]
+  rw [← coe_inj, coe_map, coe_Ioc, coe_Ioc]
   exact Set.image_add_const_Ioc _ _ _
-
-/--
-lemma `map_add_left_Ioo` / 引理 `map_add_left_Ioo`
-
-English:
-lemma map_add_left_Ioo
-  given: (a b c : α)
-  proof: by
-  rw [← coe_inj]; rw [coe_map]; rw [coe_Ioo]; rw [coe_Ioo]
-  exact Set.image_const_add_Ioo _ _ _
-
-中文:
-引理 map_add_left_Ioo
-  条件: (a b c : α)
-  证明: by
-  rw [← coe_inj]; rw [coe_map]; rw [coe_Ioo]; rw [coe_Ioo]
-  exact Set.image_const_add_Ioo _ _ _
+/-
+**Finset.map_add_left_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_2} [inst : AddCommMonoid α] [inst_1 : PartialOrder α] [inst_
+2 : IsOrderedCancelAddMonoid α]   [ExistsAddOfLE α] [inst_4 : LocallyFiniteOrder
+ α] (a b c : α),   Finset.map (addLeftEmbedding c) (Finset.Ioo a b) = Finset.Ioo
+ (c + a) (c + b)
+参数：a b c : α；addLeftEmbedding c；Finset.Ioo a b；c + a；c + b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.coe_inj`：coe_inj {s₁ s₂ : Finset α} : (s₁ : Set α) = s₂ ↔ s₁ = s₂
+· 使用定理 `Finset.coe_map`：coe_map (f : α ↪ β) (s : Finset α) : (s.map f : Set β) =
+ f '' s
+· 使用定理 `Finset.coe_Ioo`：coe_Ioo (a b : α) : (Ioo a b : Set α) = Set.Ioo a b
+· 使用定理 `Set.image_const_add_Ioo`：image_const_add_Ioo : (fun x => a + x) '' Ioo b
+ c = Ioo (a + b) (a + c)
 -/
 @[simp] lemma map_add_left_Ioo (a b c : α) :
     (Ioo a b).map (addLeftEmbedding c) = Ioo (c + a) (c + b) := by
-  rw [← coe_inj]; rw [coe_map]; rw [coe_Ioo]; rw [coe_Ioo]
+  rw [← coe_inj, coe_map, coe_Ioo, coe_Ioo]
   exact Set.image_const_add_Ioo _ _ _
-
-/--
-lemma `map_add_right_Ioo` / 引理 `map_add_right_Ioo`
-
-English:
-lemma map_add_right_Ioo
-  given: (a b c : α)
-  proof: by
-  rw [← coe_inj]; rw [coe_map]; rw [coe_Ioo]; rw [coe_Ioo]
-  exact Set.image_add_const_Ioo _ _ _
-
-中文:
-引理 map_add_right_Ioo
-  条件: (a b c : α)
-  证明: by
-  rw [← coe_inj]; rw [coe_map]; rw [coe_Ioo]; rw [coe_Ioo]
-  exact Set.image_add_const_Ioo _ _ _
+/-
+**Finset.map_add_right_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_2} [inst : AddCommMonoid α] [inst_1 : PartialOrder α] [inst_
+2 : IsOrderedCancelAddMonoid α]   [ExistsAddOfLE α] [inst_4 : LocallyFiniteOrder
+ α] (a b c : α),   Finset.map (addRightEmbedding c) (Finset.Ioo a b) = Finset.Io
+o (a + c) (b + c)
+参数：a b c : α；addRightEmbedding c；Finset.Ioo a b；a + c；b + c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `IsCancelAdd.toIsLeftCancelAdd`：∀ {G : Type u} {inst : Add G} [self : IsC
+ancelAdd G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedCancelAddMonoid.toIsCancelAdd`：∀ {α : Type u_1} [inst : AddComm
+Monoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], IsCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLT`：∀ {α : Type u_1} [inst : Ad
+dCommMonoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], AddLeftRe
+flectLT α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.coe_inj`：coe_inj {s₁ s₂ : Finset α} : (s₁ : Set α) = s₂ ↔ s₁ = s₂
+· 使用定理 `Finset.coe_map`：coe_map (f : α ↪ β) (s : Finset α) : (s.map f : Set β) =
+ f '' s
+· 使用定理 `Finset.coe_Ioo`：coe_Ioo (a b : α) : (Ioo a b : Set α) = Set.Ioo a b
+· 使用定理 `Set.image_add_const_Ioo`：image_add_const_Ioo : (fun x => x + a) '' Ioo b
+ c = Ioo (b + a) (c + a)
 -/
 @[simp] lemma map_add_right_Ioo (a b c : α) :
     (Ioo a b).map (addRightEmbedding c) = Ioo (a + c) (b + c) := by
-  rw [← coe_inj]; rw [coe_map]; rw [coe_Ioo]; rw [coe_Ioo]
+  rw [← coe_inj, coe_map, coe_Ioo, coe_Ioo]
   exact Set.image_add_const_Ioo _ _ _
 
 variable [DecidableEq α]
-
-/--
-lemma `image_add_left_Icc` / 引理 `image_add_left_Icc`
-
-English:
-lemma image_add_left_Icc
-  given: (a b c : α)
-  statement: (Icc a b).image (c + ·) = Icc (c + a) (c + b)
-  proof: by
-  rw [← map_add_left_Icc]; rw [map_eq_image]; rw [addLeftEmbedding]; rw [Embedding.coeFn_mk]
-
-中文:
-引理 image_add_left_Icc
-  条件: (a b c : α)
-  结论: (闭区间 a b).像 (c + ·) = 闭区间 (c + a) (c + b)
-  证明: by
-  rw [← map_add_left_Icc]; rw [map_eq_image]; rw [addLeftEmbedding]; rw [Embedding.coeFn_mk]
+/-
+**Finset.image_add_left_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_2} [inst : AddCommMonoid α] [inst_1 : PartialOrder α] [IsOrd
+eredCancelAddMonoid α] [ExistsAddOfLE α]   [inst_4 : LocallyFiniteOrder α] [inst
+_5 : DecidableEq α] (a b c : α),   Finset.image (fun x => c + x) (Finset.Icc a b
+) = Finset.Icc (c + a) (c + b)
+参数：a b c : α；fun x => c + x；Finset.Icc a b；c + a；c + b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.map_add_left_Icc`：∀ {α : Type u_2} [inst : AddCommMonoid α] [inst
+_1 : PartialOrder α] [inst_2 : IsOrderedCancelAddMonoid α]   [ExistsAddOfLE α] [
+inst_4 : Loca…
+· 使用定理 `Finset.map_eq_image`：map_eq_image (f : α ↪ β) (s : Finset α) : s.map f =
+ s.image f
+· 使用定理 `add_right_injective`：∀ {G : Type u_1} [inst : Add G] [IsLeftCancelAdd G]
+ (a : G), Function.Injective fun x => a + x
+· 使用定理 `addLeftEmbedding.eq_1`：∀ {G : Type u_1} [inst : Add G] [inst_1 : IsLeftC
+ancelAdd G] (g : G),   addLeftEmbedding g = { toFun := fun h => g + h, inj' := ⋯
+ }
+· 使用定理 `Function.Embedding.coeFn_mk`：coeFn_mk {α β} (f : α -> β) (i) : (@mk _ _ 
+f i : α -> β) = f
 -/
 @[simp] lemma image_add_left_Icc (a b c : α) : (Icc a b).image (c + ·) = Icc (c + a) (c + b) := by
-  rw [← map_add_left_Icc]; rw [map_eq_image]; rw [addLeftEmbedding]; rw [Embedding.coeFn_mk]
-
-/--
-lemma `image_add_left_Ico` / 引理 `image_add_left_Ico`
-
-English:
-lemma image_add_left_Ico
-  given: (a b c : α)
-  statement: (Ico a b).image (c + ·) = Ico (c + a) (c + b)
-  proof: by
-  rw [← map_add_left_Ico]; rw [map_eq_image]; rw [addLeftEmbedding]; rw [Embedding.coeFn_mk]
-
-中文:
-引理 image_add_left_Ico
-  条件: (a b c : α)
-  结论: (左闭右开区间 a b).像 (c + ·) = 左闭右开区间 (c + a) (c + b)
-  证明: by
-  rw [← map_add_left_Ico]; rw [map_eq_image]; rw [addLeftEmbedding]; rw [Embedding.coeFn_mk]
+  rw [← map_add_left_Icc, map_eq_image, addLeftEmbedding, Embedding.coeFn_mk]
+/-
+**Finset.image_add_left_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_2} [inst : AddCommMonoid α] [inst_1 : PartialOrder α] [IsOrd
+eredCancelAddMonoid α] [ExistsAddOfLE α]   [inst_4 : LocallyFiniteOrder α] [inst
+_5 : DecidableEq α] (a b c : α),   Finset.image (fun x => c + x) (Finset.Ico a b
+) = Finset.Ico (c + a) (c + b)
+参数：a b c : α；fun x => c + x；Finset.Ico a b；c + a；c + b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.map_add_left_Ico`：∀ {α : Type u_2} [inst : AddCommMonoid α] [inst
+_1 : PartialOrder α] [inst_2 : IsOrderedCancelAddMonoid α]   [ExistsAddOfLE α] [
+inst_4 : Loca…
+· 使用定理 `Finset.map_eq_image`：map_eq_image (f : α ↪ β) (s : Finset α) : s.map f =
+ s.image f
+· 使用定理 `add_right_injective`：∀ {G : Type u_1} [inst : Add G] [IsLeftCancelAdd G]
+ (a : G), Function.Injective fun x => a + x
+· 使用定理 `addLeftEmbedding.eq_1`：∀ {G : Type u_1} [inst : Add G] [inst_1 : IsLeftC
+ancelAdd G] (g : G),   addLeftEmbedding g = { toFun := fun h => g + h, inj' := ⋯
+ }
+· 使用定理 `Function.Embedding.coeFn_mk`：coeFn_mk {α β} (f : α -> β) (i) : (@mk _ _ 
+f i : α -> β) = f
 -/
 @[simp] lemma image_add_left_Ico (a b c : α) : (Ico a b).image (c + ·) = Ico (c + a) (c + b) := by
-  rw [← map_add_left_Ico]; rw [map_eq_image]; rw [addLeftEmbedding]; rw [Embedding.coeFn_mk]
-
-/--
-lemma `image_add_left_Ioc` / 引理 `image_add_left_Ioc`
-
-English:
-lemma image_add_left_Ioc
-  given: (a b c : α)
-  statement: (Ioc a b).image (c + ·) = Ioc (c + a) (c + b)
-  proof: by
-  rw [← map_add_left_Ioc]; rw [map_eq_image]; rw [addLeftEmbedding]; rw [Embedding.coeFn_mk]
-
-中文:
-引理 image_add_left_Ioc
-  条件: (a b c : α)
-  结论: (左开右闭区间 a b).像 (c + ·) = 左开右闭区间 (c + a) (c + b)
-  证明: by
-  rw [← map_add_left_Ioc]; rw [map_eq_image]; rw [addLeftEmbedding]; rw [Embedding.coeFn_mk]
+  rw [← map_add_left_Ico, map_eq_image, addLeftEmbedding, Embedding.coeFn_mk]
+/-
+**Finset.image_add_left_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_2} [inst : AddCommMonoid α] [inst_1 : PartialOrder α] [IsOrd
+eredCancelAddMonoid α] [ExistsAddOfLE α]   [inst_4 : LocallyFiniteOrder α] [inst
+_5 : DecidableEq α] (a b c : α),   Finset.image (fun x => c + x) (Finset.Ioc a b
+) = Finset.Ioc (c + a) (c + b)
+参数：a b c : α；fun x => c + x；Finset.Ioc a b；c + a；c + b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.map_add_left_Ioc`：∀ {α : Type u_2} [inst : AddCommMonoid α] [inst
+_1 : PartialOrder α] [inst_2 : IsOrderedCancelAddMonoid α]   [ExistsAddOfLE α] [
+inst_4 : Loca…
+· 使用定理 `Finset.map_eq_image`：map_eq_image (f : α ↪ β) (s : Finset α) : s.map f =
+ s.image f
+· 使用定理 `add_right_injective`：∀ {G : Type u_1} [inst : Add G] [IsLeftCancelAdd G]
+ (a : G), Function.Injective fun x => a + x
+· 使用定理 `addLeftEmbedding.eq_1`：∀ {G : Type u_1} [inst : Add G] [inst_1 : IsLeftC
+ancelAdd G] (g : G),   addLeftEmbedding g = { toFun := fun h => g + h, inj' := ⋯
+ }
+· 使用定理 `Function.Embedding.coeFn_mk`：coeFn_mk {α β} (f : α -> β) (i) : (@mk _ _ 
+f i : α -> β) = f
 -/
 @[simp] lemma image_add_left_Ioc (a b c : α) : (Ioc a b).image (c + ·) = Ioc (c + a) (c + b) := by
-  rw [← map_add_left_Ioc]; rw [map_eq_image]; rw [addLeftEmbedding]; rw [Embedding.coeFn_mk]
-
-/--
-lemma `image_add_left_Ioo` / 引理 `image_add_left_Ioo`
-
-English:
-lemma image_add_left_Ioo
-  given: (a b c : α)
-  statement: (Ioo a b).image (c + ·) = Ioo (c + a) (c + b)
-  proof: by
-  rw [← map_add_left_Ioo]; rw [map_eq_image]; rw [addLeftEmbedding]; rw [Embedding.coeFn_mk]
-
-中文:
-引理 image_add_left_Ioo
-  条件: (a b c : α)
-  结论: (开区间 a b).像 (c + ·) = 开区间 (c + a) (c + b)
-  证明: by
-  rw [← map_add_left_Ioo]; rw [map_eq_image]; rw [addLeftEmbedding]; rw [Embedding.coeFn_mk]
+  rw [← map_add_left_Ioc, map_eq_image, addLeftEmbedding, Embedding.coeFn_mk]
+/-
+**Finset.image_add_left_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_2} [inst : AddCommMonoid α] [inst_1 : PartialOrder α] [IsOrd
+eredCancelAddMonoid α] [ExistsAddOfLE α]   [inst_4 : LocallyFiniteOrder α] [inst
+_5 : DecidableEq α] (a b c : α),   Finset.image (fun x => c + x) (Finset.Ioo a b
+) = Finset.Ioo (c + a) (c + b)
+参数：a b c : α；fun x => c + x；Finset.Ioo a b；c + a；c + b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.map_add_left_Ioo`：∀ {α : Type u_2} [inst : AddCommMonoid α] [inst
+_1 : PartialOrder α] [inst_2 : IsOrderedCancelAddMonoid α]   [ExistsAddOfLE α] [
+inst_4 : Loca…
+· 使用定理 `Finset.map_eq_image`：map_eq_image (f : α ↪ β) (s : Finset α) : s.map f =
+ s.image f
+· 使用定理 `add_right_injective`：∀ {G : Type u_1} [inst : Add G] [IsLeftCancelAdd G]
+ (a : G), Function.Injective fun x => a + x
+· 使用定理 `addLeftEmbedding.eq_1`：∀ {G : Type u_1} [inst : Add G] [inst_1 : IsLeftC
+ancelAdd G] (g : G),   addLeftEmbedding g = { toFun := fun h => g + h, inj' := ⋯
+ }
+· 使用定理 `Function.Embedding.coeFn_mk`：coeFn_mk {α β} (f : α -> β) (i) : (@mk _ _ 
+f i : α -> β) = f
 -/
 @[simp] lemma image_add_left_Ioo (a b c : α) : (Ioo a b).image (c + ·) = Ioo (c + a) (c + b) := by
-  rw [← map_add_left_Ioo]; rw [map_eq_image]; rw [addLeftEmbedding]; rw [Embedding.coeFn_mk]
-
-/--
-lemma `image_add_right_Icc` / 引理 `image_add_right_Icc`
-
-English:
-lemma image_add_right_Icc
-  given: (a b c : α)
-  statement: (Icc a b).image (· + c) = Icc (a + c) (b + c)
-  proof: by
-  rw [← map_add_right_Icc]; rw [map_eq_image]; rw [addRightEmbedding]; rw [Embedding.coeFn_mk]
-
-中文:
-引理 image_add_right_Icc
-  条件: (a b c : α)
-  结论: (闭区间 a b).像 (· + c) = 闭区间 (a + c) (b + c)
-  证明: by
-  rw [← map_add_right_Icc]; rw [map_eq_image]; rw [addRightEmbedding]; rw [Embedding.coeFn_mk]
+  rw [← map_add_left_Ioo, map_eq_image, addLeftEmbedding, Embedding.coeFn_mk]
+/-
+**Finset.image_add_right_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_2} [inst : AddCommMonoid α] [inst_1 : PartialOrder α] [IsOrd
+eredCancelAddMonoid α] [ExistsAddOfLE α]   [inst_4 : LocallyFiniteOrder α] [inst
+_5 : DecidableEq α] (a b c : α),   Finset.image (fun x => x + c) (Finset.Icc a b
+) = Finset.Icc (a + c) (b + c)
+参数：a b c : α；fun x => x + c；Finset.Icc a b；a + c；b + c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `IsCancelAdd.toIsLeftCancelAdd`：∀ {G : Type u} {inst : Add G} [self : IsC
+ancelAdd G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedCancelAddMonoid.toIsCancelAdd`：∀ {α : Type u_1} [inst : AddComm
+Monoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], IsCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLT`：∀ {α : Type u_1} [inst : Ad
+dCommMonoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], AddLeftRe
+flectLT α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.map_add_right_Icc`：∀ {α : Type u_2} [inst : AddCommMonoid α] [ins
+t_1 : PartialOrder α] [inst_2 : IsOrderedCancelAddMonoid α]   [ExistsAddOfLE α] 
+[inst_4 : Loca…
+· 使用定理 `Finset.map_eq_image`：map_eq_image (f : α ↪ β) (s : Finset α) : s.map f =
+ s.image f
+· 使用定理 `add_left_injective`：∀ {G : Type u_1} [inst : Add G] [IsRightCancelAdd G]
+ (a : G), Function.Injective fun x => x + a
+· 使用定理 `addRightEmbedding.eq_1`：∀ {G : Type u_1} [inst : Add G] [inst_1 : IsRigh
+tCancelAdd G] (g : G),   addRightEmbedding g = { toFun := fun h => h + g, inj' :
+= ⋯ }
+· 使用定理 `Function.Embedding.coeFn_mk`：coeFn_mk {α β} (f : α -> β) (i) : (@mk _ _ 
+f i : α -> β) = f
 -/
 @[simp] lemma image_add_right_Icc (a b c : α) : (Icc a b).image (· + c) = Icc (a + c) (b + c) := by
-  rw [← map_add_right_Icc]; rw [map_eq_image]; rw [addRightEmbedding]; rw [Embedding.coeFn_mk]
-
-/--
-lemma `image_add_right_Ico` / 引理 `image_add_right_Ico`
-
-English:
-lemma image_add_right_Ico
-  given: (a b c : α)
-  statement: (Ico a b).image (· + c) = Ico (a + c) (b + c)
-  proof: by
-  rw [← map_add_right_Ico]; rw [map_eq_image]; rw [addRightEmbedding]; rw [Embedding.coeFn_mk]
-
-中文:
-引理 image_add_right_Ico
-  条件: (a b c : α)
-  结论: (左闭右开区间 a b).像 (· + c) = 左闭右开区间 (a + c) (b + c)
-  证明: by
-  rw [← map_add_right_Ico]; rw [map_eq_image]; rw [addRightEmbedding]; rw [Embedding.coeFn_mk]
+  rw [← map_add_right_Icc, map_eq_image, addRightEmbedding, Embedding.coeFn_mk]
+/-
+**Finset.image_add_right_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_2} [inst : AddCommMonoid α] [inst_1 : PartialOrder α] [IsOrd
+eredCancelAddMonoid α] [ExistsAddOfLE α]   [inst_4 : LocallyFiniteOrder α] [inst
+_5 : DecidableEq α] (a b c : α),   Finset.image (fun x => x + c) (Finset.Ico a b
+) = Finset.Ico (a + c) (b + c)
+参数：a b c : α；fun x => x + c；Finset.Ico a b；a + c；b + c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `IsCancelAdd.toIsLeftCancelAdd`：∀ {G : Type u} {inst : Add G} [self : IsC
+ancelAdd G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedCancelAddMonoid.toIsCancelAdd`：∀ {α : Type u_1} [inst : AddComm
+Monoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], IsCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLT`：∀ {α : Type u_1} [inst : Ad
+dCommMonoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], AddLeftRe
+flectLT α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.map_add_right_Ico`：∀ {α : Type u_2} [inst : AddCommMonoid α] [ins
+t_1 : PartialOrder α] [inst_2 : IsOrderedCancelAddMonoid α]   [ExistsAddOfLE α] 
+[inst_4 : Loca…
+· 使用定理 `Finset.map_eq_image`：map_eq_image (f : α ↪ β) (s : Finset α) : s.map f =
+ s.image f
+· 使用定理 `add_left_injective`：∀ {G : Type u_1} [inst : Add G] [IsRightCancelAdd G]
+ (a : G), Function.Injective fun x => x + a
+· 使用定理 `addRightEmbedding.eq_1`：∀ {G : Type u_1} [inst : Add G] [inst_1 : IsRigh
+tCancelAdd G] (g : G),   addRightEmbedding g = { toFun := fun h => h + g, inj' :
+= ⋯ }
+· 使用定理 `Function.Embedding.coeFn_mk`：coeFn_mk {α β} (f : α -> β) (i) : (@mk _ _ 
+f i : α -> β) = f
 -/
 @[simp] lemma image_add_right_Ico (a b c : α) : (Ico a b).image (· + c) = Ico (a + c) (b + c) := by
-  rw [← map_add_right_Ico]; rw [map_eq_image]; rw [addRightEmbedding]; rw [Embedding.coeFn_mk]
-
-/--
-lemma `image_add_right_Ioc` / 引理 `image_add_right_Ioc`
-
-English:
-lemma image_add_right_Ioc
-  given: (a b c : α)
-  statement: (Ioc a b).image (· + c) = Ioc (a + c) (b + c)
-  proof: by
-  rw [← map_add_right_Ioc]; rw [map_eq_image]; rw [addRightEmbedding]; rw [Embedding.coeFn_mk]
-
-中文:
-引理 image_add_right_Ioc
-  条件: (a b c : α)
-  结论: (左开右闭区间 a b).像 (· + c) = 左开右闭区间 (a + c) (b + c)
-  证明: by
-  rw [← map_add_right_Ioc]; rw [map_eq_image]; rw [addRightEmbedding]; rw [Embedding.coeFn_mk]
+  rw [← map_add_right_Ico, map_eq_image, addRightEmbedding, Embedding.coeFn_mk]
+/-
+**Finset.image_add_right_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_2} [inst : AddCommMonoid α] [inst_1 : PartialOrder α] [IsOrd
+eredCancelAddMonoid α] [ExistsAddOfLE α]   [inst_4 : LocallyFiniteOrder α] [inst
+_5 : DecidableEq α] (a b c : α),   Finset.image (fun x => x + c) (Finset.Ioc a b
+) = Finset.Ioc (a + c) (b + c)
+参数：a b c : α；fun x => x + c；Finset.Ioc a b；a + c；b + c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `IsCancelAdd.toIsLeftCancelAdd`：∀ {G : Type u} {inst : Add G} [self : IsC
+ancelAdd G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedCancelAddMonoid.toIsCancelAdd`：∀ {α : Type u_1} [inst : AddComm
+Monoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], IsCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLT`：∀ {α : Type u_1} [inst : Ad
+dCommMonoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], AddLeftRe
+flectLT α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.map_add_right_Ioc`：∀ {α : Type u_2} [inst : AddCommMonoid α] [ins
+t_1 : PartialOrder α] [inst_2 : IsOrderedCancelAddMonoid α]   [ExistsAddOfLE α] 
+[inst_4 : Loca…
+· 使用定理 `Finset.map_eq_image`：map_eq_image (f : α ↪ β) (s : Finset α) : s.map f =
+ s.image f
+· 使用定理 `add_left_injective`：∀ {G : Type u_1} [inst : Add G] [IsRightCancelAdd G]
+ (a : G), Function.Injective fun x => x + a
+· 使用定理 `addRightEmbedding.eq_1`：∀ {G : Type u_1} [inst : Add G] [inst_1 : IsRigh
+tCancelAdd G] (g : G),   addRightEmbedding g = { toFun := fun h => h + g, inj' :
+= ⋯ }
+· 使用定理 `Function.Embedding.coeFn_mk`：coeFn_mk {α β} (f : α -> β) (i) : (@mk _ _ 
+f i : α -> β) = f
 -/
 @[simp] lemma image_add_right_Ioc (a b c : α) : (Ioc a b).image (· + c) = Ioc (a + c) (b + c) := by
-  rw [← map_add_right_Ioc]; rw [map_eq_image]; rw [addRightEmbedding]; rw [Embedding.coeFn_mk]
-
-/--
-lemma `image_add_right_Ioo` / 引理 `image_add_right_Ioo`
-
-English:
-lemma image_add_right_Ioo
-  given: (a b c : α)
-  statement: (Ioo a b).image (· + c) = Ioo (a + c) (b + c)
-  proof: by
-  rw [← map_add_right_Ioo]; rw [map_eq_image]; rw [addRightEmbedding]; rw [Embedding.coeFn_mk]
-
-中文:
-引理 image_add_right_Ioo
-  条件: (a b c : α)
-  结论: (开区间 a b).像 (· + c) = 开区间 (a + c) (b + c)
-  证明: by
-  rw [← map_add_right_Ioo]; rw [map_eq_image]; rw [addRightEmbedding]; rw [Embedding.coeFn_mk]
+  rw [← map_add_right_Ioc, map_eq_image, addRightEmbedding, Embedding.coeFn_mk]
+/-
+**Finset.image_add_right_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_2} [inst : AddCommMonoid α] [inst_1 : PartialOrder α] [IsOrd
+eredCancelAddMonoid α] [ExistsAddOfLE α]   [inst_4 : LocallyFiniteOrder α] [inst
+_5 : DecidableEq α] (a b c : α),   Finset.image (fun x => x + c) (Finset.Ioo a b
+) = Finset.Ioo (a + c) (b + c)
+参数：a b c : α；fun x => x + c；Finset.Ioo a b；a + c；b + c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `IsCancelAdd.toIsLeftCancelAdd`：∀ {G : Type u} {inst : Add G} [self : IsC
+ancelAdd G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedCancelAddMonoid.toIsCancelAdd`：∀ {α : Type u_1} [inst : AddComm
+Monoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], IsCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLT`：∀ {α : Type u_1} [inst : Ad
+dCommMonoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], AddLeftRe
+flectLT α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.map_add_right_Ioo`：∀ {α : Type u_2} [inst : AddCommMonoid α] [ins
+t_1 : PartialOrder α] [inst_2 : IsOrderedCancelAddMonoid α]   [ExistsAddOfLE α] 
+[inst_4 : Loca…
+· 使用定理 `Finset.map_eq_image`：map_eq_image (f : α ↪ β) (s : Finset α) : s.map f =
+ s.image f
+· 使用定理 `add_left_injective`：∀ {G : Type u_1} [inst : Add G] [IsRightCancelAdd G]
+ (a : G), Function.Injective fun x => x + a
+· 使用定理 `addRightEmbedding.eq_1`：∀ {G : Type u_1} [inst : Add G] [inst_1 : IsRigh
+tCancelAdd G] (g : G),   addRightEmbedding g = { toFun := fun h => h + g, inj' :
+= ⋯ }
+· 使用定理 `Function.Embedding.coeFn_mk`：coeFn_mk {α β} (f : α -> β) (i) : (@mk _ _ 
+f i : α -> β) = f
 -/
 @[simp] lemma image_add_right_Ioo (a b c : α) : (Ioo a b).image (· + c) = Ioo (a + c) (b + c) := by
-  rw [← map_add_right_Ioo]; rw [map_eq_image]; rw [addRightEmbedding]; rw [Embedding.coeFn_mk]
+  rw [← map_add_right_Ioo, map_eq_image, addRightEmbedding, Embedding.coeFn_mk]
 
 end Finset
+

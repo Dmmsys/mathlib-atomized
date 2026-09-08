@@ -40,439 +40,393 @@ section
 variable (R)
 
 -- TODO: define a subalgebra of `IsInteger`s
-/--
-Definition of `IsInteger` / `IsInteger` 的定义
+/-- Given `a : S`, `S` a localization of `R`, `IsInteger R a` iff `a` is in the image of
+the localization map from `R` to `S`. -/
+/-
+**IsLocalization.IsInteger** 是 Mathlib 中的一个定义，位于命名空间 `IsLocalization`。
+形式化陈述：IsInteger (a : S) : Prop
+参数：a : S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IsInteger
-  signature: (a : S)
-  body: a in (algebraMap R S).rangeS
-
-中文:
-定义 Is整数eger
-  签名: (a : S)
-  定义体: a in (algebraMap R S).rangeS
-
-Depends on / 依赖: algebraMap, rangeS
+--- 原说明 ---
+Given `a : S`, `S` a localization of `R`, `IsInteger R a` iff `a` is in the imag
+e of
+the localization map from `R` to `S`.
 -/
 def IsInteger (a : S) : Prop :=
-  a in (algebraMap R S).rangeS
+  a ∈ (algebraMap R S).rangeS
 
 end
 
-/--
-theorem `isInteger_zero` / 定理 `isInteger_zero`
-
-English:
-theorem isInteger_zero
-  statement: IsInteger R (0 : S)
-  proof: Subsemiring.zero_mem _
-
-中文:
-定理 is整数eger_zero
-  结论: Is整数eger R (0 : S)
-  证明: Subsemiring.zero_mem _
-
-Depends on / 依赖: Subsemiring, Subsemiring.zero_mem, zero_mem
+/-
+**IsLocalization.isInteger_zero** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：isInteger_zero : IsInteger R (0 : S)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsemiring.zero_mem`：∀ {R : Type u} [inst : NonAssocSemiring R] (s : Su
+bsemiring R), 0 ∈ s
 -/
 theorem isInteger_zero : IsInteger R (0 : S) :=
   Subsemiring.zero_mem _
-
-/--
-theorem `isInteger_one` / 定理 `isInteger_one`
-
-English:
-theorem isInteger_one
-  statement: IsInteger R (1 : S)
-  proof: Subsemiring.one_mem _
-
-中文:
-定理 is整数eger_one
-  结论: Is整数eger R (1 : S)
-  证明: Subsemiring.one_mem _
-
-Depends on / 依赖: Subsemiring, Subsemiring.one_mem, one_mem
+/-
+**IsLocalization.isInteger_one** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：isInteger_one : IsInteger R (1 : S)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsemiring.one_mem`：∀ {R : Type u} [inst : NonAssocSemiring R] (s : Sub
+semiring R), 1 ∈ s
 -/
 theorem isInteger_one : IsInteger R (1 : S) :=
   Subsemiring.one_mem _
-
-/--
-theorem `isInteger_add` / 定理 `isInteger_add`
-
-English:
-theorem isInteger_add
-  given: {a b : S} (ha : IsInteger R a) (hb : IsInteger R b)
-  statement: IsInteger R (a + b)
-  proof: Subsemiring.add_mem _ ha hb
-
-中文:
-定理 is整数eger_add
-  条件: {a b : S} (ha : Is整数eger R a) (hb : Is整数eger R b)
-  结论: Is整数eger R (a + b)
-  证明: Subsemiring.add_mem _ ha hb
-
-Depends on / 依赖: Subsemiring, Subsemiring.add_mem, add_mem
+/-
+**IsLocalization.isInteger_add** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：isInteger_add {a b : S} (ha : IsInteger R a) (hb : IsInteger R b) : IsInte
+ger R (a + b)
+参数：ha : IsInteger R a；hb : IsInteger R b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsemiring.add_mem`：∀ {R : Type u} [inst : NonAssocSemiring R] (s : Sub
+semiring R) {x y : R}, x ∈ s → y ∈ s → x + y ∈ s
 -/
 theorem isInteger_add {a b : S} (ha : IsInteger R a) (hb : IsInteger R b) : IsInteger R (a + b) :=
   Subsemiring.add_mem _ ha hb
-
-/--
-theorem `isInteger_mul` / 定理 `isInteger_mul`
-
-English:
-theorem isInteger_mul
-  given: {a b : S} (ha : IsInteger R a) (hb : IsInteger R b)
-  statement: IsInteger R (a * b)
-  proof: Subsemiring.mul_mem _ ha hb
-
-中文:
-定理 is整数eger_mul
-  条件: {a b : S} (ha : Is整数eger R a) (hb : Is整数eger R b)
-  结论: Is整数eger R (a * b)
-  证明: Subsemiring.mul_mem _ ha hb
-
-Depends on / 依赖: Subsemiring, Subsemiring.mul_mem, mul_mem
+/-
+**IsLocalization.isInteger_mul** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：isInteger_mul {a b : S} (ha : IsInteger R a) (hb : IsInteger R b) : IsInte
+ger R (a * b)
+参数：ha : IsInteger R a；hb : IsInteger R b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsemiring.mul_mem`：∀ {R : Type u} [inst : NonAssocSemiring R] (s : Sub
+semiring R) {x y : R}, x ∈ s → y ∈ s → x * y ∈ s
 -/
 theorem isInteger_mul {a b : S} (ha : IsInteger R a) (hb : IsInteger R b) : IsInteger R (a * b) :=
   Subsemiring.mul_mem _ ha hb
-
-/--
-theorem `isInteger_smul` / 定理 `isInteger_smul`
-
-English:
-theorem isInteger_smul
-  given: {a : R} {b : S} (hb : IsInteger R b)
-  statement: IsInteger R (a • b)
-  proof: by
-  rcases hb with ⟨b', hb⟩
-  use a * b'
-  rw [← hb]; rw [(algebraMap R S).map_mul]; rw [Algebra.smul_def]
-
-中文:
-定理 is整数eger_smul
-  条件: {a : R} {b : S} (hb : Is整数eger R b)
-  结论: Is整数eger R (a • b)
-  证明: by
-  rcases hb with ⟨b', hb⟩
-  use a * b'
-  rw [← hb]; rw [(algebraMap R S).map_mul]; rw [Algebra.smul_def]
-
-Depends on / 依赖: Algebra, Algebra.smul_def, algebraMap, map_mul, smul_def
+/-
+**IsLocalization.isInteger_smul** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：isInteger_smul {a : R} {b : S} (hb : IsInteger R b) : IsInteger R (a • b)
+参数：hb : IsInteger R b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RingHom.map_mul`：∀ {α : Type u_2} {β : Type u_3} {x : NonAssocSemiring α
+} {x_1 : NonAssocSemiring β} (f : α →+* β) (a b : α),   f (a * b) = f a * f b
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
 -/
 theorem isInteger_smul {a : R} {b : S} (hb : IsInteger R b) : IsInteger R (a • b) := by
   rcases hb with ⟨b', hb⟩
   use a * b'
-  rw [← hb]; rw [(algebraMap R S).map_mul]; rw [Algebra.smul_def]
+  rw [← hb, (algebraMap R S).map_mul, Algebra.smul_def]
 
 variable (M)
 variable [IsLocalization M S]
 
-/--
-theorem `exists_integer_multiple'` / 定理 `exists_integer_multiple'`
+/-- Each element `a : S` has an `M`-multiple which is an integer.
 
-English:
-theorem exists_integer_multiple'
-  given: (a : S)
-  statement: exists b : M, IsInteger R (a * algebraMap R S b)
-  proof: let ⟨⟨Num, denom⟩, h⟩ := IsLocalization.surj _ a
-  ⟨denom, Set.mem_range.mpr ⟨Num, h.symm⟩⟩
-
-中文:
-定理 存在_integer_multiple'
-  条件: (a : S)
-  结论: 存在 b : M, Is整数eger R (a * algebraMap R S b)
-  证明: let ⟨⟨Num, denom⟩, h⟩ := IsLocalization.surj _ a
-  ⟨denom, Set.mem_range.mpr ⟨Num, h.symm⟩⟩
-
-Depends on / 依赖: IsLocalization, IsLocalization.surj, Set.mem_range.mpr, h.symm, mem_range
+This version multiplies `a` on the right, matching the argument order in `LocalizationMap.surj`.
 -/
-theorem exists_integer_multiple' (a : S) : exists b : M, IsInteger R (a * algebraMap R S b) :=
+/-
+**IsLocalization.exists_integer_multiple'** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalizat
+ion`。
+形式化陈述：exists_integer_multiple' (a : S) : exists b : M, IsInteger R (a * algebraM
+ap R S b)
+参数：a : S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalization.surj`：surj : forall z : S, exists x : R × M, z * algebraM
+ap R S x.2 = algebraMap R S x.1
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.mem_range`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} {x : α}, x ∈ Se
+t.range f ↔ ∃ y, f y = x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+
+--- 原说明 ---
+Each element `a : S` has an `M`-multiple which is an integer.
+
+This version multiplies `a` on the right, matching the argument order in `Locali
+zationMap.surj`.
+-/
+theorem exists_integer_multiple' (a : S) : ∃ b : M, IsInteger R (a * algebraMap R S b) :=
   let ⟨⟨Num, denom⟩, h⟩ := IsLocalization.surj _ a
   ⟨denom, Set.mem_range.mpr ⟨Num, h.symm⟩⟩
 
-/--
-theorem `exists_integer_multiple` / 定理 `exists_integer_multiple`
+/-- Each element `a : S` has an `M`-multiple which is an integer.
 
-English:
-theorem exists_integer_multiple
-  given: (a : S)
-  statement: exists b : M, IsInteger R ((b : R) • a)
-  proof: by
-  simp_rw [Algebra.smul_def, mul_comm _ a]
-  apply exists_integer_multiple'
-
-中文:
-定理 存在_integer_multiple
-  条件: (a : S)
-  结论: 存在 b : M, Is整数eger R ((b : R) • a)
-  证明: by
-  simp_rw [Algebra.smul_def, mul_comm _ a]
-  apply exists_integer_multiple'
-
-Depends on / 依赖: Algebra, Algebra.smul_def, exists_integer_multiple, mul_comm, simp_rw, smul_def
+This version multiplies `a` on the left, matching the argument order in the `SMul` instance.
 -/
-theorem exists_integer_multiple (a : S) : exists b : M, IsInteger R ((b : R) • a) := by
+/-
+**IsLocalization.exists_integer_multiple** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalizati
+on`。
+形式化陈述：exists_integer_multiple (a : S) : exists b : M, IsInteger R ((b : R) • a)
+参数：a : S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `IsLocalization.exists_integer_multiple'`：exists_integer_multiple' (a : S
+) : exists b : M, IsInteger R (a * algebraMap R S b)
+
+--- 原说明 ---
+Each element `a : S` has an `M`-multiple which is an integer.
+
+This version multiplies `a` on the left, matching the argument order in the `SMu
+l` instance.
+-/
+theorem exists_integer_multiple (a : S) : ∃ b : M, IsInteger R ((b : R) • a) := by
   simp_rw [Algebra.smul_def, mul_comm _ a]
   apply exists_integer_multiple'
 
-/--
-theorem `exist_integer_multiples` / 定理 `exist_integer_multiples`
+/-- We can clear the denominators of a `Finset`-indexed family of fractions. -/
+/-
+**IsLocalization.exist_integer_multiples** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalizati
+on`。
+形式化陈述：exist_integer_multiples {ι : Type*} (s : Finset ι) (f : ι -> S) : exists b
+ : M, forall i in s, IsLocalization.IsInteger R ((b : R) • f i)
+参数：s : Finset ι；f : ι -> S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `IsLocalization.sec_spec'`：sec_spec' (z : S) : algebraMap R S (IsLocaliza
+tion.sec M z).1 = algebraMap R S (IsLocalization.sec M z).2 * z
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `RingHom.map_mul`：∀ {α : Type u_2} {β : Type u_3} {x : NonAssocSemiring α
+} {x_1 : NonAssocSemiring β} (f : α →+* β) (a b : α),   f (a * b) = f a * f b
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
+· 使用引理 `trans`：trans [IsTrans α r] : a ≺ b -> b ≺ c -> a ≺ c
+· 使用定理 `IsPreorder.toIsTrans`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsPreo
+rder α r], IsTrans α r
+· 使用定理 `IsEquiv.toIsPreorder`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsEqui
+v α r], IsPreorder α r
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Submonoid.coe_finsetProd`：coe_finsetProd {ι M} [CommMonoid M] (S : Submo
+noid M) (f : ι -> S) (s : Finset ι) : ↑(∏ i in s, f i) = (∏ i in s, f i : M)
+· 使用定理 `Finset.prod_insert`：prod_insert [DecidableEq ι] : a ∉ s -> ∏ x in insert
+ a s, f x = f a * ∏ x in s, f x
+· 使用定理 `Finset.notMem_erase`：notMem_erase (a : α) (s : Finset α) : a ∉ erase s a
+· 使用定理 `Finset.insert_erase`：∀ {α : Type u_1} [inst : DecidableEq α] {s : Finset
+ α} {a : α}, a ∈ s → insert a (s.erase a) = s
+· 使用定理 `map_prod`：map_prod [CommMonoid M] [CommMonoid N] {G : Type*} [FunLike G 
+M N] [MonoidHomClass G M N] (g : G) (f : ι -> M) (s : Finset ι) : g (∏ x in s,…
 
-English:
-theorem exist_integer_multiples
-  given: {ι : Type*} (s : Finset ι) (f : ι -> S)
-  proof: by
-  have := Classical.propDecidable
-  refine ⟨∏ i in s, (sec M (f i)).2, fun i hi => ⟨?_, ?_⟩⟩
-  · exact (∏ j in s.erase i, (sec M (f j)).2) * (sec M (f i)).1
-  rw [map_mul]; rw [sec_spec']; rw [← mul_assoc]; rw [← (algebraMap R S).map_mul]; rw [← Algebra.smul_def]
-  congr 2
-  refine _root_.trans ?_ (map_prod (Submonoid.subtype M) _ _).symm
-  rw [mul_comm]; rw [Submonoid.coe_finsetProd]; rw [-- Porting note: explicitly supplied `f`
-    ← Finset.prod_insert (f := fun i => ((sec M (f i)).snd : R)) (s.notMem_erase i)]; rw [Finset.insert_erase hi]
-  rfl
-
-中文:
-定理 exist_integer_multiples
-  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> S)
-  证明: by
-  have := Classical.propDecidable
-  refine ⟨∏ i in s, (sec M (f i)).2, fun i hi => ⟨?_, ?_⟩⟩
-  · exact (∏ j in s.erase i, (sec M (f j)).2) * (sec M (f i)).1
-  rw [map_mul]; rw [sec_spec']; rw [← mul_assoc]; rw [← (algebraMap R S).map_mul]; rw [← Algebra.smul_def]
-  congr 2
-  refine _root_.trans ?_ (map_prod (Submonoid.subtype M) _ _).symm
-  rw [mul_comm]; rw [Submonoid.coe_finsetProd]; rw [-- Porting note: explicitly supplied `f`
-    ← Finset.prod_insert (f := fun i => ((sec M (f i)).snd : R)) (s.notMem_erase i)]; rw [Finset.insert_erase hi]
-  rfl
-
-Depends on / 依赖: Algebra, Algebra.smul_def, Classical, Classical.propDecidable, Finset, Finset.prod_insert, Porting, Submonoid, Submonoid.coe_finsetProd, Submonoid.subtype, _root_, _root_.trans, algebraMap, coe_finsetProd, explicitly, map_mul, map_prod, mul_assoc, mul_comm, notMem_erase
+--- 原说明 ---
+We can clear the denominators of a `Finset`-indexed family of fractions.
 -/
-theorem exist_integer_multiples {ι : Type*} (s : Finset ι) (f : ι -> S) :
-    exists b : M, forall i in s, IsLocalization.IsInteger R ((b : R) • f i) := by
+theorem exist_integer_multiples {ι : Type*} (s : Finset ι) (f : ι → S) :
+    ∃ b : M, ∀ i ∈ s, IsLocalization.IsInteger R ((b : R) • f i) := by
   have := Classical.propDecidable
-  refine ⟨∏ i in s, (sec M (f i)).2, fun i hi => ⟨?_, ?_⟩⟩
-  · exact (∏ j in s.erase i, (sec M (f j)).2) * (sec M (f i)).1
-  rw [map_mul]; rw [sec_spec']; rw [← mul_assoc]; rw [← (algebraMap R S).map_mul]; rw [← Algebra.smul_def]
+  refine ⟨∏ i ∈ s, (sec M (f i)).2, fun i hi => ⟨?_, ?_⟩⟩
+  · exact (∏ j ∈ s.erase i, (sec M (f j)).2) * (sec M (f i)).1
+  rw [map_mul, sec_spec', ← mul_assoc, ← (algebraMap R S).map_mul, ← Algebra.smul_def]
   congr 2
   refine _root_.trans ?_ (map_prod (Submonoid.subtype M) _ _).symm
-  rw [mul_comm]; rw [Submonoid.coe_finsetProd]; rw [-- Porting note: explicitly supplied `f`
-    ← Finset.prod_insert (f := fun i => ((sec M (f i)).snd : R)) (s.notMem_erase i)]; rw [Finset.insert_erase hi]
+  rw [mul_comm, Submonoid.coe_finsetProd,
+    -- Porting note: explicitly supplied `f`
+    ← Finset.prod_insert (f := fun i => ((sec M (f i)).snd : R)) (s.notMem_erase i),
+    Finset.insert_erase hi]
   rfl
 
-/--
-theorem `exist_integer_multiples_of_finite` / 定理 `exist_integer_multiples_of_finite`
+/-- We can clear the denominators of a finite indexed family of fractions. -/
+/-
+**IsLocalization.exist_integer_multiples_of_finite** 是 Mathlib 中的一个定理，位于命名空间 `Is
+Localization`。
+形式化陈述：exist_integer_multiples_of_finite {ι : Type*} [Finite ι] (f : ι -> S) : ex
+ists b : M, forall i, IsLocalization.IsInteger R ((b : R) • f i)
+参数：f : ι -> S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_fintype`：nonempty_fintype (α : Type*) [Finite α] : Nonempty (Fi
+ntype α)
+· 使用定理 `IsLocalization.exist_integer_multiples`：exist_integer_multiples {ι : Typ
+e*} (s : Finset ι) (f : ι -> S) : exists b : M, forall i in s, IsLocalization.Is
+Integer R ((b : R) • f i)
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
 
-English:
-theorem exist_integer_multiples_of_finite
-  given: {ι : Type*} [Finite ι] (f : ι -> S)
-  proof: by
+--- 原说明 ---
+We can clear the denominators of a finite indexed family of fractions.
+-/
+theorem exist_integer_multiples_of_finite {ι : Type*} [Finite ι] (f : ι → S) :
+    ∃ b : M, ∀ i, IsLocalization.IsInteger R ((b : R) • f i) := by
   cases nonempty_fintype ι
   obtain ⟨b, hb⟩ := exist_integer_multiples M Finset.univ f
   exact ⟨b, fun i => hb i (Finset.mem_univ _)⟩
 
-中文:
-定理 exist_integer_multiples_of_finite
-  条件: {ι : 类型} [有限 ι] (f : ι -> S)
-  证明: by
-  cases nonempty_fintype ι
-  obtain ⟨b, hb⟩ := exist_integer_multiples M Finset.univ f
-  exact ⟨b, fun i => hb i (Finset.mem_univ _)⟩
+/-- We can clear the denominators of a finite set of fractions. -/
+/-
+**IsLocalization.exist_integer_multiples_of_finset** 是 Mathlib 中的一个定理，位于命名空间 `Is
+Localization`。
+形式化陈述：exist_integer_multiples_of_finset (s : Finset S) : exists b : M, forall a 
+in s, IsInteger R ((b : R) • a)
+参数：s : Finset S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalization.exist_integer_multiples`：exist_integer_multiples {ι : Typ
+e*} (s : Finset ι) (f : ι -> S) : exists b : M, forall i in s, IsLocalization.Is
+Integer R ((b : R) • f i)
 
-Depends on / 依赖: Finset, Finset.mem_univ, Finset.univ, exist_integer_multiples, mem_univ, nonempty_fintype
--/
-theorem exist_integer_multiples_of_finite {ι : Type*} [Finite ι] (f : ι -> S) :
-    exists b : M, forall i, IsLocalization.IsInteger R ((b : R) • f i) := by
-  cases nonempty_fintype ι
-  obtain ⟨b, hb⟩ := exist_integer_multiples M Finset.univ f
-  exact ⟨b, fun i => hb i (Finset.mem_univ _)⟩
-
-/--
-theorem `exist_integer_multiples_of_finset` / 定理 `exist_integer_multiples_of_finset`
-
-English:
-theorem exist_integer_multiples_of_finset
-  given: (s : Finset S)
-  proof: exist_integer_multiples M s id
-
-中文:
-定理 exist_integer_multiples_of_finset
-  条件: (s : 有限集 S)
-  证明: exist_integer_multiples M s id
-
-Depends on / 依赖: exist_integer_multiples
+--- 原说明 ---
+We can clear the denominators of a finite set of fractions.
 -/
 theorem exist_integer_multiples_of_finset (s : Finset S) :
-    exists b : M, forall a in s, IsInteger R ((b : R) • a) :=
+    ∃ b : M, ∀ a ∈ s, IsInteger R ((b : R) • a) :=
   exist_integer_multiples M s id
 
-/--
-Definition of `commonDenom` / `commonDenom` 的定义
+/-- A choice of a common multiple of the denominators of a `Finset`-indexed family of fractions. -/
+/-
+**IsLocalization.commonDenom** 是 Mathlib 中的一个定义，位于命名空间 `IsLocalization`。
+形式化陈述：commonDenom {ι : Type*} (s : Finset ι) (f : ι -> S) : M
+参数：s : Finset ι；f : ι -> S。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalization.exist_integer_multiples`：exist_integer_multiples {ι : Typ
+e*} (s : Finset ι) (f : ι -> S) : exists b : M, forall i in s, IsLocalization.Is
+Integer R ((b : R) • f i)
 
-English:
-definition commonDenom
-  signature: {ι : Type*} (s : Finset ι) (f : ι -> S)
-  body: (exist_integer_multiples M s f).choose
-
-中文:
-定义 commonDenom
-  签名: {ι : 类型} (s : 有限集 ι) (f : ι -> S)
-  定义体: (exist_integer_multiples M s f).choose
-
-Depends on / 依赖: exist_integer_multiples
+--- 原说明 ---
+A choice of a common multiple of the denominators of a `Finset`-indexed family o
+f fractions.
 -/
-noncomputable def commonDenom {ι : Type*} (s : Finset ι) (f : ι -> S) : M :=
+noncomputable def commonDenom {ι : Type*} (s : Finset ι) (f : ι → S) : M :=
   (exist_integer_multiples M s f).choose
 
-/--
-Definition of `integerMultiple` / `integerMultiple` 的定义
+/-- The numerator of a fraction after clearing the denominators
+of a `Finset`-indexed family of fractions. -/
+/-
+**IsLocalization.integerMultiple** 是 Mathlib 中的一个定义，位于命名空间 `IsLocalization`。
+形式化陈述：integerMultiple {ι : Type*} (s : Finset ι) (f : ι -> S) (i : s) : R
+参数：s : Finset ι；f : ι -> S；i : s。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocalization.exist_integer_multiples`：exist_integer_multiples {ι : Typ
+e*} (s : Finset ι) (f : ι -> S) : exists b : M, forall i in s, IsLocalization.Is
+Integer R ((b : R) • f i)
 
-English:
-definition integerMultiple
-  signature: {ι : Type*} (s : Finset ι) (f : ι -> S) (i : s)
-  body: ((exist_integer_multiples M s f).choose_spec i i.prop).choose
-
-@[simp]
-
-中文:
-定义 integerMultiple
-  签名: {ι : 类型} (s : 有限集 ι) (f : ι -> S) (i : s)
-  定义体: ((exist_integer_multiples M s f).choose_spec i i.prop).choose
-
-@[simp]
-
-Depends on / 依赖: choose_spec, exist_integer_multiples, i.prop
+--- 原说明 ---
+The numerator of a fraction after clearing the denominators
+of a `Finset`-indexed family of fractions.
 -/
-noncomputable def integerMultiple {ι : Type*} (s : Finset ι) (f : ι -> S) (i : s) : R :=
+noncomputable def integerMultiple {ι : Type*} (s : Finset ι) (f : ι → S) (i : s) : R :=
   ((exist_integer_multiples M s f).choose_spec i i.prop).choose
 
 @[simp]
-/--
-theorem `map_integerMultiple` / 定理 `map_integerMultiple`
-
-English:
-theorem map_integerMultiple
-  given: {ι : Type*} (s : Finset ι) (f : ι -> S) (i : s)
-  proof: ((exist_integer_multiples M s f).choose_spec _ i.prop).choose_spec
-
-中文:
-定理 map_integerMultiple
-  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> S) (i : s)
-  证明: ((exist_integer_multiples M s f).choose_spec _ i.prop).choose_spec
-
-Depends on / 依赖: choose_spec, exist_integer_multiples, i.prop
+/-
+**IsLocalization.map_integerMultiple** 是 Mathlib 中的一个定理，位于命名空间 `IsLocalization`。
+形式化陈述：map_integerMultiple {ι : Type*} (s : Finset ι) (f : ι -> S) (i : s) : alge
+braMap R S (integerMultiple M s f i) = commonDenom M s f • f i
+参数：s : Finset ι；f : ι -> S；i : s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `IsLocalization.exist_integer_multiples`：exist_integer_multiples {ι : Typ
+e*} (s : Finset ι) (f : ι -> S) : exists b : M, forall i in s, IsLocalization.Is
+Integer R ((b : R) • f i)
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
 -/
-theorem map_integerMultiple {ι : Type*} (s : Finset ι) (f : ι -> S) (i : s) :
+theorem map_integerMultiple {ι : Type*} (s : Finset ι) (f : ι → S) (i : s) :
     algebraMap R S (integerMultiple M s f i) = commonDenom M s f • f i :=
   ((exist_integer_multiples M s f).choose_spec _ i.prop).choose_spec
-
-/--
-theorem `integerMultiple_injective` / 定理 `integerMultiple_injective`
-
-English:
-theorem integerMultiple_injective
-  statement: {ι : Type*} (s : Finset ι) (f : ι -> S)
-  proof: by
-  intro i j h
-  rw [← SetLike.coe_eq_coe]; rw [← hf.eq_iff]; rw [← (IsLocalization.smul_bijective S (commonDenom M s f)).injective.eq_iff]; rw [← map_integerMultiple M s f i]; rw [← map_integerMultiple M s f j]; rw [h]
-
-@[deprecated (since := "2026-07-18")] alias integerMultipleMultiple_injective :=
-  integerMultiple_injective
-
-中文:
-定理 integerMultiple_injective
-  结论: {ι : 类型} (s : 有限集 ι) (f : ι -> S)
-  证明: by
-  intro i j h
-  rw [← SetLike.coe_eq_coe]; rw [← hf.eq_iff]; rw [← (IsLocalization.smul_bijective S (commonDenom M s f)).injective.eq_iff]; rw [← map_integerMultiple M s f i]; rw [← map_integerMultiple M s f j]; rw [h]
-
-@[deprecated (since := "2026-07-18")] alias integerMultipleMultiple_injective :=
-  integerMultiple_injective
-
-Depends on / 依赖: IsLocalization, IsLocalization.smul_bijective, SetLike, SetLike.coe_eq_coe, coe_eq_coe, commonDenom, eq_iff, hf.eq_iff, injective, injective.eq_iff, map_integerMultiple, smul_bijective
+/-
+**IsLocalization.integerMultiple_injective** 是 Mathlib 中的一个定理，位于命名空间 `IsLocaliza
+tion`。
+形式化陈述：integerMultiple_injective {ι : Type*} (s : Finset ι) (f : ι -> S) (hf : Fu
+nction.Injective f) : Function.Injective (integerMultiple M s f)
+参数：s : Finset ι；f : ι -> S；hf : Function.Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SetLike.coe_eq_coe`：coe_eq_coe {x y : p} : (x : B) = y ↔ x = y
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Function.Bijective.injective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β
+}, Function.Bijective f → Function.Injective f
+· 使用定理 `IsLocalization.smul_bijective`：smul_bijective (m : M) : Bijective fun s 
+: S => m • s
+· 使用定理 `IsLocalization.map_integerMultiple`：map_integerMultiple {ι : Type*} (s :
+ Finset ι) (f : ι -> S) (i : s) : algebraMap R S (integerMultiple M s f i) = com
+monDenom M s f • f i
 -/
-theorem integerMultiple_injective {ι : Type*} (s : Finset ι) (f : ι -> S)
+theorem integerMultiple_injective {ι : Type*} (s : Finset ι) (f : ι → S)
     (hf : Function.Injective f) : Function.Injective (integerMultiple M s f) := by
   intro i j h
-  rw [← SetLike.coe_eq_coe]; rw [← hf.eq_iff]; rw [← (IsLocalization.smul_bijective S (commonDenom M s f)).injective.eq_iff]; rw [← map_integerMultiple M s f i]; rw [← map_integerMultiple M s f j]; rw [h]
+  rw [← SetLike.coe_eq_coe, ← hf.eq_iff,
+    ← (IsLocalization.smul_bijective S (commonDenom M s f)).injective.eq_iff,
+    ← map_integerMultiple M s f i, ← map_integerMultiple M s f j, h]
 
 @[deprecated (since := "2026-07-18")] alias integerMultipleMultiple_injective :=
   integerMultiple_injective
 
-/--
-Definition of `commonDenomOfFinset` / `commonDenomOfFinset` 的定义
+/-- A choice of a common multiple of the denominators of a finite set of fractions. -/
+/-
+**IsLocalization.commonDenomOfFinset** 是 Mathlib 中的一个定义，位于命名空间 `IsLocalization`。
+形式化陈述：commonDenomOfFinset (s : Finset S) : M
+参数：s : Finset S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition commonDenomOfFinset
-  signature: (s : Finset S)
-  body: commonDenom M s id
-
-中文:
-定义 commonDenomOfFinset
-  签名: (s : 有限集 S)
-  定义体: commonDenom M s id
-
-Depends on / 依赖: commonDenom
+--- 原说明 ---
+A choice of a common multiple of the denominators of a finite set of fractions.
 -/
 noncomputable def commonDenomOfFinset (s : Finset S) : M :=
   commonDenom M s id
 
-/--
-Definition of `finsetIntegerMultiple` / `finsetIntegerMultiple` 的定义
+/-- The finset of numerators after clearing the denominators of a finite set of fractions. -/
+/-
+**IsLocalization.finsetIntegerMultiple** 是 Mathlib 中的一个定义，位于命名空间 `IsLocalization
+`。
+形式化陈述：finsetIntegerMultiple [DecidableEq R] (s : Finset S) : Finset R
+参数：s : Finset S。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finsetIntegerMultiple
-  signature: [DecidableEq R] (s : Finset S)
-  body: s.attach.image fun t => integerMultiple M s id t
-
-中文:
-定义 finset整数egerMultiple
-  签名: [DecidableEq R] (s : 有限集 S)
-  定义体: s.attach.image fun t => integerMultiple M s id t
-
-Depends on / 依赖: attach, integerMultiple, s.attach.image
+--- 原说明 ---
+The finset of numerators after clearing the denominators of a finite set of frac
+tions.
 -/
 noncomputable def finsetIntegerMultiple [DecidableEq R] (s : Finset S) : Finset R :=
   s.attach.image fun t => integerMultiple M s id t
 
 open scoped Pointwise
-
-/--
-theorem `finsetIntegerMultiple_image` / 定理 `finsetIntegerMultiple_image`
-
-English:
-theorem finsetIntegerMultiple_image
-  given: [DecidableEq R] (s : Finset S)
-  proof: by
-  delta finsetIntegerMultiple commonDenom
-  rw [Finset.coe_image]
-  ext
-  constructor
-  · rintro ⟨_, ⟨x, -, rfl⟩, rfl⟩
-    rw [map_integerMultiple]
-    exact Set.mem_image_of_mem _ x.prop
-  · rintro ⟨x, hx, rfl⟩
-    exact ⟨_, ⟨⟨x, hx⟩, s.mem_attach _, rfl⟩, map_integerMultiple M s id _⟩
-
-@[simp]
-
-中文:
-定理 finset整数egerMultiple_image
-  条件: [DecidableEq R] (s : 有限集 S)
-  证明: by
-  delta finsetIntegerMultiple commonDenom
-  rw [Finset.coe_image]
-  ext
-  constructor
-  · rintro ⟨_, ⟨x, -, rfl⟩, rfl⟩
-    rw [map_integerMultiple]
-    exact Set.mem_image_of_mem _ x.prop
-  · rintro ⟨x, hx, rfl⟩
-    exact ⟨_, ⟨⟨x, hx⟩, s.mem_attach _, rfl⟩, map_integerMultiple M s id _⟩
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.coe_image, Set.mem_image_of_mem, coe_image, commonDenom, finsetIntegerMultiple, map_integerMultiple, mem_attach, mem_image_of_mem, s.mem_attach, x.prop
+/-
+**IsLocalization.finsetIntegerMultiple_image** 是 Mathlib 中的一个定理，位于命名空间 `IsLocali
+zation`。
+形式化陈述：finsetIntegerMultiple_image [DecidableEq R] (s : Finset S) : algebraMap R 
+S '' finsetIntegerMultiple M s = commonDenomOfFinset M s • (s : Set S)
+参数：s : Finset S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.coe_image`：coe_image : ↑(s.image f) = f '' ↑s
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `IsLocalization.map_integerMultiple`：map_integerMultiple {ι : Type*} (s :
+ Finset ι) (f : ι -> S) (i : s) : algebraMap R S (integerMultiple M s f i) = com
+monDenom M s f • f i
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
+· 使用定理 `Finset.mem_attach`：mem_attach (s : Finset α) : forall x, x in s.attach
 -/
 theorem finsetIntegerMultiple_image [DecidableEq R] (s : Finset S) :
     algebraMap R S '' finsetIntegerMultiple M s = commonDenomOfFinset M s • (s : Set S) := by
@@ -487,22 +441,22 @@ theorem finsetIntegerMultiple_image [DecidableEq R] (s : Finset S) :
     exact ⟨_, ⟨⟨x, hx⟩, s.mem_attach _, rfl⟩, map_integerMultiple M s id _⟩
 
 @[simp]
-/--
-theorem `card_finsetIntegerMultiple` / 定理 `card_finsetIntegerMultiple`
-
-English:
-theorem card_finsetIntegerMultiple
-  given: [DecidableEq R] (s : Finset S)
-  proof: (Finset.card_image_of_injective _ (integerMultiple_injective M s id injective_id)).trans
-    Finset.card_attach
-
-中文:
-定理 card_finset整数egerMultiple
-  条件: [DecidableEq R] (s : 有限集 S)
-  证明: (Finset.card_image_of_injective _ (integerMultiple_injective M s id injective_id)).trans
-    Finset.card_attach
-
-Depends on / 依赖: Finset, Finset.card_attach, Finset.card_image_of_injective, card_attach, card_image_of_injective, injective_id, integerMultiple_injective
+/-
+**IsLocalization.card_finsetIntegerMultiple** 是 Mathlib 中的一个定理，位于命名空间 `IsLocaliz
+ation`。
+形式化陈述：card_finsetIntegerMultiple [DecidableEq R] (s : Finset S) : (finsetInteger
+Multiple M s).card = s.card
+参数：s : Finset S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.card_image_of_injective`：card_image_of_injective [DecidableEq β] 
+(s : Finset α) (H : Injective f) : #(s.image f) = #s
+· 使用定理 `IsLocalization.integerMultiple_injective`：integerMultiple_injective {ι :
+ Type*} (s : Finset ι) (f : ι -> S) (hf : Function.Injective f) : Function.Injec
+tive (integerMultiple M s f)
+· 使用定理 `Function.injective_id`：∀ {α : Sort u_1}, Function.Injective id
+· 使用定理 `Finset.card_attach`：card_attach : #s.attach = #s
 -/
 theorem card_finsetIntegerMultiple [DecidableEq R] (s : Finset S) :
     (finsetIntegerMultiple M s).card = s.card :=
@@ -510,3 +464,4 @@ theorem card_finsetIntegerMultiple [DecidableEq R] (s : Finset S) :
     Finset.card_attach
 
 end IsLocalization
+

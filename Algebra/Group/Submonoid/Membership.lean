@@ -54,229 +54,271 @@ namespace Submonoid
 -- such that `CompleteLattice.LE` coincides with `SetLike.LE`
 
 @[to_additive]
-/--
-lemma `mem_iSup_of_directed` / 引理 `mem_iSup_of_directed`
-
-English:
-lemma mem_iSup_of_directed
-  statement: {ι : Sort*} [Nonempty ι] {S : ι -> Submonoid M} (hS : Directed (· <= ·) S)
-  proof: by
-  refine ⟨?_, fun ⟨i, hi⟩ => le_iSup S i hi⟩
-  suffices x in closure (⋃ i, (S i : Set M)) -> exists i, x in S i by
+/-
+**Submonoid.mem_iSup_of_directed** 是 Mathlib 中的一个引理，位于命名空间 `Submonoid`。
+形式化陈述：mem_iSup_of_directed {ι : Sort*} [Nonempty ι] {S : ι -> Submonoid M} (hS :
+ Directed (· <= ·) S) {x : M} : x in ⨆ i, S i ↔ exists i, x in S i
+参数：hS : Directed (· <= ·) S。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submonoid.closure_induction`：closure_induction {s : Set M} {motive : (x 
+: M) -> x in closure s -> Prop} (mem : forall (x) (h : x in s), motive x (subset
+_closure h)) (one…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `Submonoid.instSubmonoidClass`：∀ {M : Type u_1} [inst : MulOneClass M], S
+ubmonoidClass (Submonoid M) M
+· 使用定理 `MulMemClass.mul_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Mul M} {inst_1 : SetLike S M} [self : MulMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `SubmonoidClass.toMulMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   Mu
+lMemClass S M
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Submonoid.closure_iUnion`：closure_iUnion {ι} (s : ι -> Set M) : closure 
+(⋃ i, s i) = ⨆ i, closure (s i)
+· 使用定理 `Submonoid.closure_eq`：closure_eq : closure (S : Set M) = S
+· 使用定理 `le_iSup`：le_iSup (f : ι -> α) (i : ι) : f i <= iSup f
+-/
+lemma mem_iSup_of_directed {ι : Sort*} [Nonempty ι] {S : ι → Submonoid M} (hS : Directed (· ≤ ·) S)
+    {x : M} : x ∈ ⨆ i, S i ↔ ∃ i, x ∈ S i := by
+  refine ⟨?_, fun ⟨i, hi⟩ ↦ le_iSup S i hi⟩
+  suffices x ∈ closure (⋃ i, (S i : Set M)) → ∃ i, x ∈ S i by
     simpa only [closure_iUnion, closure_eq (S _)] using this
-  refine fun hx => closure_induction (by simp) (by simp) ?_ hx
+  refine fun hx ↦ closure_induction (by simp) (by simp) ?_ hx
   rintro x y _ _ ⟨i, hi⟩ ⟨j, hj⟩
   obtain ⟨k, hik, hjk⟩ := hS i j
   exact ⟨k, mul_mem (hik hi) (hjk hj)⟩
 
 @[to_additive]
-
-中文:
-引理 mem_iSup_of_directed
-  结论: {ι : 类型层*} [非空 ι] {S : ι -> 子幺半群 M} (hS : Directed (· <= ·) S)
-  证明: by
-  refine ⟨?_, fun ⟨i, hi⟩ => le_iSup S i hi⟩
-  suffices x in closure (⋃ i, (S i : Set M)) -> exists i, x in S i by
-    simpa only [closure_iUnion, closure_eq (S _)] using this
-  refine fun hx => closure_induction (by simp) (by simp) ?_ hx
-  rintro x y _ _ ⟨i, hi⟩ ⟨j, hj⟩
-  obtain ⟨k, hik, hjk⟩ := hS i j
-  exact ⟨k, mul_mem (hik hi) (hjk hj)⟩
-
-@[to_additive]
-
-Depends on / 依赖: closure, closure_eq, closure_iUnion, closure_induction, le_iSup, mul_mem
+/-
+**Submonoid.mem_biSup_of_directedOn** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：mem_biSup_of_directedOn {ι : Type*} {p : ι -> Prop} (hp : exists i, p i) {
+S : ι -> Submonoid M} (hS : DirectedOn ((· <= ·) on S) {i | p i}) {x : M} : x in
+ ⨆ i, ⨆ (_h : p i), S i ↔ exists i, p i ∧ x in S i
+参数：hp : exists i, p i；hS : DirectedOn ((· <= ·) on S) {i | p i}。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iSup_subtype'`：iSup_subtype' {p : ι -> Prop} {f : forall i, p i -> α} : 
+⨆ (i) (h), f i h = ⨆ x : Subtype p, f x x.property
+· 使用引理 `Submonoid.mem_iSup_of_directed`：mem_iSup_of_directed {ι : Sort*} [Nonemp
+ty ι] {S : ι -> Submonoid M} (hS : Directed (· <= ·) S) {x : M} : x in ⨆ i, S i 
+↔ exists i, x in S i
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `nonempty_subtype`：nonempty_subtype {α} {p : α -> Prop} : Nonempty (Subty
+pe p) ↔ exists a : α, p a
+· 使用定理 `Function.comp_def`：∀ {α : Sort u_1} {β : Sort u_2} {δ : Sort u_3} (f : β
+ → δ) (g : α → β), f ∘ g = fun x => f (g x)
+· 使用定理 `directed_comp`：directed_comp {ι} {f : ι -> β} {g : β -> α} : Directed r 
+(g ∘ f) ↔ Directed (g ⁻¹'o r) f
+· 使用定理 `DirectedOn.directed_val`：∀ {α : Type u_1} {r : α → α → Prop} {s : Set α}
+, DirectedOn r s → Directed r Subtype.val
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma mem_iSup_of_directed {ι : Sort*} [Nonempty ι] {S : ι -> Submonoid M} (hS : Directed (· <= ·) S)
-    {x : M} : x in ⨆ i, S i ↔ exists i, x in S i := by
-  refine ⟨?_, fun ⟨i, hi⟩ => le_iSup S i hi⟩
-  suffices x in closure (⋃ i, (S i : Set M)) -> exists i, x in S i by
-    simpa only [closure_iUnion, closure_eq (S _)] using this
-  refine fun hx => closure_induction (by simp) (by simp) ?_ hx
-  rintro x y _ _ ⟨i, hi⟩ ⟨j, hj⟩
-  obtain ⟨k, hik, hjk⟩ := hS i j
-  exact ⟨k, mul_mem (hik hi) (hjk hj)⟩
-
-@[to_additive]
-/--
-theorem `mem_biSup_of_directedOn` / 定理 `mem_biSup_of_directedOn`
-
-English:
-theorem mem_biSup_of_directedOn
-  statement: {ι : Type*} {p : ι -> Prop} (hp : exists i, p i) {S : ι -> Submonoid M}
-  proof: by
+theorem mem_biSup_of_directedOn {ι : Type*} {p : ι → Prop} (hp : ∃ i, p i) {S : ι → Submonoid M}
+    (hS : DirectedOn ((· ≤ ·) on S) {i | p i}) {x : M} :
+    x ∈ ⨆ i, ⨆ (_h : p i), S i ↔ ∃ i, p i ∧ x ∈ S i := by
   rw [← nonempty_subtype] at hp
-  rw [iSup_subtype']; rw [mem_iSup_of_directed]
+  rw [iSup_subtype', mem_iSup_of_directed]
   · simp
-  rw [← Function.comp_def]; rw [directed_comp]
+  rw [← Function.comp_def, directed_comp]
   exact hS.directed_val
 
 @[to_additive (attr := simp)]
-
-中文:
-定理 mem_biSup_of_directedOn
-  结论: {ι : 类型} {p : ι -> 命题} (hp : 存在 i, p i) {S : ι -> 子幺半群 M}
-  证明: by
-  rw [← nonempty_subtype] at hp
-  rw [iSup_subtype']; rw [mem_iSup_of_directed]
-  · simp
-  rw [← Function.comp_def]; rw [directed_comp]
-  exact hS.directed_val
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Function, Function.comp_def, comp_def, directed_comp, directed_val, hS.directed_val, iSup_subtype, mem_iSup_of_directed, nonempty_subtype
+/-
+**Submonoid.mem_iSup_prop** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：mem_iSup_prop {p : Prop} {S : p -> Submonoid M} {x : M} : x in ⨆ (h : p), 
+S h ↔ x = 1 ∨ exists (h : p), x in S h
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iSup_congr_Prop`：iSup_congr_Prop {p q : Prop} {f₁ : p -> α} {f₂ : q -> α
+} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iSup f₁ = iSup f₂
+· 使用定理 `iSup_pos`：iSup_pos {p : Prop} {f : p -> α} (hp : p) : ⨆ h : p, f h = f h
+p
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `Submonoid.instSubmonoidClass`：∀ {M : Type u_1} [inst : MulOneClass M], S
+ubmonoidClass (Submonoid M) M
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `iSup_neg`：iSup_neg {p : Prop} {f : p -> α} (hp : ¬p) : ⨆ h : p, f h = ⊥
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_biSup_of_directedOn {ι : Type*} {p : ι -> Prop} (hp : exists i, p i) {S : ι -> Submonoid M}
-    (hS : DirectedOn ((· <= ·) on S) {i | p i}) {x : M} :
-    x in ⨆ i, ⨆ (_h : p i), S i ↔ exists i, p i ∧ x in S i := by
-  rw [← nonempty_subtype] at hp
-  rw [iSup_subtype']; rw [mem_iSup_of_directed]
-  · simp
-  rw [← Function.comp_def]; rw [directed_comp]
-  exact hS.directed_val
-
-@[to_additive (attr := simp)]
-/--
-theorem `mem_iSup_prop` / 定理 `mem_iSup_prop`
-
-English:
-theorem mem_iSup_prop
-  given: {p : Prop} {S : p -> Submonoid M} {x : M}
-  proof: by
+theorem mem_iSup_prop {p : Prop} {S : p → Submonoid M} {x : M} :
+    x ∈ ⨆ (h : p), S h ↔ x = 1 ∨ ∃ (h : p), x ∈ S h := by
   by_cases h : p <;>
   simp +contextual [h]
 
 @[to_additive]
-
-中文:
-定理 mem_iSup_prop
-  条件: {p : 命题} {S : p -> 子幺半群 M} {x : M}
-  证明: by
-  by_cases h : p <;>
-  simp +contextual [h]
-
-@[to_additive]
-
-Depends on / 依赖: contextual
+/-
+**Submonoid.coe_iSup_of_directed** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：coe_iSup_of_directed {ι} [Nonempty ι] {S : ι -> Submonoid M} (hS : Directe
+d (· <= ·) S) : ((⨆ i, S i : Submonoid M) : Set M) = ⋃ i, S i
+参数：hS : Directed (· <= ·) S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Submonoid.mem_iSup_of_directed`：mem_iSup_of_directed {ι : Sort*} [Nonemp
+ty ι] {S : ι -> Submonoid M} (hS : Directed (· <= ·) S) {x : M} : x in ⨆ i, S i 
+↔ exists i, x in S i
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_iSup_prop {p : Prop} {S : p -> Submonoid M} {x : M} :
-    x in ⨆ (h : p), S h ↔ x = 1 ∨ exists (h : p), x in S h := by
-  by_cases h : p <;>
-  simp +contextual [h]
-
-@[to_additive]
-/--
-theorem `coe_iSup_of_directed` / 定理 `coe_iSup_of_directed`
-
-English:
-theorem coe_iSup_of_directed
-  given: {ι} [Nonempty ι] {S : ι -> Submonoid M} (hS : Directed (· <= ·) S)
-  proof: Set.ext fun x => by simp [mem_iSup_of_directed hS]
-
-@[to_additive]
-
-中文:
-定理 coe_iSup_of_directed
-  条件: {ι} [非空 ι] {S : ι -> 子幺半群 M} (hS : Directed (· <= ·) S)
-  证明: Set.ext fun x => by simp [mem_iSup_of_directed hS]
-
-@[to_additive]
-
-Depends on / 依赖: Set.ext, mem_iSup_of_directed
--/
-theorem coe_iSup_of_directed {ι} [Nonempty ι] {S : ι -> Submonoid M} (hS : Directed (· <= ·) S) :
+theorem coe_iSup_of_directed {ι} [Nonempty ι] {S : ι → Submonoid M} (hS : Directed (· ≤ ·) S) :
     ((⨆ i, S i : Submonoid M) : Set M) = ⋃ i, S i :=
-  Set.ext fun x => by simp [mem_iSup_of_directed hS]
+  Set.ext fun x ↦ by simp [mem_iSup_of_directed hS]
 
 @[to_additive]
-/--
-theorem `mem_sSup_of_directedOn` / 定理 `mem_sSup_of_directedOn`
-
-English:
-theorem mem_sSup_of_directedOn
-  statement: {S : Set (Submonoid M)} (Sne : S.Nonempty)
-  proof: by
-  have : Nonempty S := Sne.to_subtype
-  simp [sSup_eq_iSup', mem_iSup_of_directed hS.directed_val]
-
-@[to_additive]
-
-中文:
-定理 mem_sSup_of_directedOn
-  结论: {S : 集合 (子幺半群 M)} (Sne : S.非空)
-  证明: by
-  have : Nonempty S := Sne.to_subtype
-  simp [sSup_eq_iSup', mem_iSup_of_directed hS.directed_val]
-
-@[to_additive]
-
-Depends on / 依赖: Nonempty, Sne.to_subtype, directed_val, hS.directed_val, mem_iSup_of_directed, sSup_eq_iSup, to_subtype
+/-
+**Submonoid.mem_sSup_of_directedOn** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：mem_sSup_of_directedOn {S : Set (Submonoid M)} (Sne : S.Nonempty) (hS : Di
+rectedOn (· <= ·) S) {x : M} : x in sSup S ↔ exists s in S, x in s
+参数：Submonoid M；Sne : S.Nonempty；hS : DirectedOn (· <= ·) S。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.to_subtype`：∀ {α : Type u} {s : Set α}, s.Nonempty → Nonemp
+ty ↑s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sSup_eq_iSup'`：sSup_eq_iSup' (s : Set α) : sSup s = ⨆ a : s, (a : α)
+· 使用引理 `Submonoid.mem_iSup_of_directed`：mem_iSup_of_directed {ι : Sort*} [Nonemp
+ty ι] {S : ι -> Submonoid M} (hS : Directed (· <= ·) S) {x : M} : x in ⨆ i, S i 
+↔ exists i, x in S i
+· 使用定理 `DirectedOn.directed_val`：∀ {α : Type u_1} {r : α → α → Prop} {s : Set α}
+, DirectedOn r s → Directed r Subtype.val
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem mem_sSup_of_directedOn {S : Set (Submonoid M)} (Sne : S.Nonempty)
-    (hS : DirectedOn (· <= ·) S) {x : M} : x in sSup S ↔ exists s in S, x in s := by
+    (hS : DirectedOn (· ≤ ·) S) {x : M} : x ∈ sSup S ↔ ∃ s ∈ S, x ∈ s := by
   have : Nonempty S := Sne.to_subtype
   simp [sSup_eq_iSup', mem_iSup_of_directed hS.directed_val]
 
 @[to_additive]
-/--
-theorem `coe_sSup_of_directedOn` / 定理 `coe_sSup_of_directedOn`
-
-English:
-theorem coe_sSup_of_directedOn
-  statement: {S : Set (Submonoid M)} (Sne : S.Nonempty)
-  proof: Set.ext fun x => by simp [mem_sSup_of_directedOn Sne hS]
-
-@[to_additive]
-
-中文:
-定理 coe_sSup_of_directedOn
-  结论: {S : 集合 (子幺半群 M)} (Sne : S.非空)
-  证明: Set.ext fun x => by simp [mem_sSup_of_directedOn Sne hS]
-
-@[to_additive]
-
-Depends on / 依赖: Set.ext, mem_sSup_of_directedOn
+/-
+**Submonoid.coe_sSup_of_directedOn** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：coe_sSup_of_directedOn {S : Set (Submonoid M)} (Sne : S.Nonempty) (hS : Di
+rectedOn (· <= ·) S) : (↑(sSup S) : Set M) = ⋃ s in S, ↑s
+参数：Submonoid M；Sne : S.Nonempty；hS : DirectedOn (· <= ·) S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submonoid.mem_sSup_of_directedOn`：mem_sSup_of_directedOn {S : Set (Submo
+noid M)} (Sne : S.Nonempty) (hS : DirectedOn (· <= ·) S) {x : M} : x in sSup S ↔
+ exists s in S, x in s
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem coe_sSup_of_directedOn {S : Set (Submonoid M)} (Sne : S.Nonempty)
-    (hS : DirectedOn (· <= ·) S) : (↑(sSup S) : Set M) = ⋃ s in S, ↑s :=
+    (hS : DirectedOn (· ≤ ·) S) : (↑(sSup S) : Set M) = ⋃ s ∈ S, ↑s :=
   Set.ext fun x => by simp [mem_sSup_of_directedOn Sne hS]
 
 @[to_additive]
-/--
-theorem `isMulCommutative_iSup` / 定理 `isMulCommutative_iSup`
-
-English:
-theorem isMulCommutative_iSup
-  statement: {ι : Sort*} [Nonempty ι]
-  proof: by
-  refine .of_setLike_mul_comm ?_
-  simp_rw [← SetLike.mem_coe, coe_iSup_of_directed dir, Set.mem_iUnion,
-    SetLike.mem_coe, forall_exists_index]
-  intro a i ha b j hb
-  obtain ⟨k, hik, hjk⟩ := dir i j
-  exact setLike_mul_comm (hik ha) (hjk hb)
-
-@[to_additive]
-
-中文:
-定理 isMulCommutative_iSup
-  结论: {ι : 类型层*} [非空 ι]
-  证明: by
-  refine .of_setLike_mul_comm ?_
-  simp_rw [← SetLike.mem_coe, coe_iSup_of_directed dir, Set.mem_iUnion,
-    SetLike.mem_coe, forall_exists_index]
-  intro a i ha b j hb
-  obtain ⟨k, hik, hjk⟩ := dir i j
-  exact setLike_mul_comm (hik ha) (hjk hb)
-
-@[to_additive]
-
-Depends on / 依赖: Set.mem_iUnion, SetLike, SetLike.mem_coe, coe_iSup_of_directed, forall_exists_index, mem_coe, mem_iUnion, of_setLike_mul_comm, setLike_mul_comm, simp_rw
+/-
+**Submonoid.isMulCommutative_iSup** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：isMulCommutative_iSup {ι : Sort*} [Nonempty ι] {S : ι -> Submonoid M} [hS 
+: forall i, IsMulCommutative (S i)] (dir : Directed (· <= ·) S) : IsMulCommutati
+ve (⨆ i, S i : Submonoid M)
+参数：S i；dir : Directed (· <= ·) S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsMulCommutative.of_setLike_mul_comm`：∀ {S : Type u_3} {M : Type u_4} [i
+nst : SetLike S M] [inst_1 : Mul M] [inst_2 : MulMemClass S M] {s : S},   (∀ a ∈
+ s, ∀ b ∈ s, a * b = b * a…
+· 使用定理 `SubmonoidClass.toMulMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   Mu
+lMemClass S M
+· 使用定理 `Submonoid.instSubmonoidClass`：∀ {M : Type u_1} [inst : MulOneClass M], S
+ubmonoidClass (Submonoid M) M
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submonoid.coe_iSup_of_directed`：coe_iSup_of_directed {ι} [Nonempty ι] {S
+ : ι -> Submonoid M} (hS : Directed (· <= ·) S) : ((⨆ i, S i : Submonoid M) : Se
+t M) = ⋃ i, S i
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `setLike_mul_comm`：setLike_mul_comm {S M : Type*} [SetLike S M] [Mul M] [
+MulMemClass S M] {s : S} [IsMulCommutative s] ⦃a b : M⦄ (ha : a in s) (hb : b in
+ s) : …
 -/
 theorem isMulCommutative_iSup {ι : Sort*} [Nonempty ι]
-    {S : ι -> Submonoid M} [hS : forall i, IsMulCommutative (S i)]
-    (dir : Directed (· <= ·) S) : IsMulCommutative (⨆ i, S i : Submonoid M) := by
+    {S : ι → Submonoid M} [hS : ∀ i, IsMulCommutative (S i)]
+    (dir : Directed (· ≤ ·) S) : IsMulCommutative (⨆ i, S i : Submonoid M) := by
   refine .of_setLike_mul_comm ?_
   simp_rw [← SetLike.mem_coe, coe_iSup_of_directed dir, Set.mem_iUnion,
     SetLike.mem_coe, forall_exists_index]
@@ -285,166 +327,124 @@ theorem isMulCommutative_iSup {ι : Sort*} [Nonempty ι]
   exact setLike_mul_comm (hik ha) (hjk hb)
 
 @[to_additive]
-/--
-Instance `instIsMulCommutative_iSup` / 实例 `instIsMulCommutative_iSup`
-
-English:
-instance instIsMulCommutative_iSup
-  signature: {ι : Type*} [Nonempty ι] [Preorder ι]
-  body: Submonoid.isMulCommutative_iSup S.monotone.directed_le
-
-@[to_additive]
-
-中文:
-实例 instIsMulCommutative_iSup
-  签名: {ι : 类型} [非空 ι] [预序 ι]
-  定义体: Submonoid.isMulCommutative_iSup S.monotone.directed_le
-
-@[to_additive]
-
-Depends on / 依赖: S.monotone.directed_le, Submonoid, Submonoid.isMulCommutative_iSup, directed_le, isMulCommutative_iSup, monotone
+/-
+**Submonoid.instIsMulCommutative_iSup** 是 Mathlib 中的一个实例，位于命名空间 `Submonoid`。
+形式化陈述：instIsMulCommutative_iSup {ι : Type*} [Nonempty ι] [Preorder ι] [IsDirecte
+dOrder ι] {S : ι ->o Submonoid M} [hS : forall i, IsMulCommutative (S i)] : IsMu
+lCommutative (⨆ i, S i : Submonoid M)
+参数：S i。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submonoid.isMulCommutative_iSup`：isMulCommutative_iSup {ι : Sort*} [None
+mpty ι] {S : ι -> Submonoid M} [hS : forall i, IsMulCommutative (S i)] (dir : Di
+rected (· <= ·) S) : …
+· 使用定理 `Monotone.directed_le`：Monotone.directed_le [Preorder α] [IsDirectedOrder
+ α] [Preorder β] {f : α -> β} : Monotone f -> Directed (· <= ·) f
+· 使用定理 `OrderHom.monotone`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] [
+inst_1 : Preorder β] (f : α →o β), Monotone ⇑f
 -/
 instance instIsMulCommutative_iSup {ι : Type*} [Nonempty ι] [Preorder ι]
-    [IsDirectedOrder ι] {S : ι ->o Submonoid M} [hS : forall i, IsMulCommutative (S i)] :
+    [IsDirectedOrder ι] {S : ι →o Submonoid M} [hS : ∀ i, IsMulCommutative (S i)] :
     IsMulCommutative (⨆ i, S i : Submonoid M) :=
   Submonoid.isMulCommutative_iSup S.monotone.directed_le
 
 @[to_additive]
-/--
-theorem `mem_sup_left` / 定理 `mem_sup_left`
-
-English:
-theorem mem_sup_left
-  given: {S T : Submonoid M}
-  statement: forall {x : M}, x in S -> x in S ⊔ T
-  proof: by
+/-
+**Submonoid.mem_sup_left** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：mem_sup_left {S T : Submonoid M} : forall {x : M}, x in S -> x in S ⊔ T
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SetLike.le_def`：le_def {S T : A} : S <= T ↔ forall ⦃x : B⦄, x in S -> x 
+in T
+· 使用定理 `instIsConcreteLE`：∀ (A : Type u_1) (B : Type u_2) [inst : SetLike A B], 
+IsConcreteLE A B
+· 使用定理 `le_sup_left`：le_sup_left : a <= a ⊔ b
+-/
+theorem mem_sup_left {S T : Submonoid M} : ∀ {x : M}, x ∈ S → x ∈ S ⊔ T := by
   rw [← SetLike.le_def]
   exact le_sup_left
 
 @[to_additive]
-
-中文:
-定理 mem_sup_left
-  条件: {S T : 子幺半群 M}
-  结论: 对任意 {x : M}, x in S -> x in S ⊔ T
-  证明: by
-  rw [← SetLike.le_def]
-  exact le_sup_left
-
-@[to_additive]
-
-Depends on / 依赖: SetLike, SetLike.le_def, le_def, le_sup_left
+/-
+**Submonoid.mem_sup_right** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：mem_sup_right {S T : Submonoid M} : forall {x : M}, x in T -> x in S ⊔ T
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SetLike.le_def`：le_def {S T : A} : S <= T ↔ forall ⦃x : B⦄, x in S -> x 
+in T
+· 使用定理 `instIsConcreteLE`：∀ (A : Type u_1) (B : Type u_2) [inst : SetLike A B], 
+IsConcreteLE A B
+· 使用定理 `le_sup_right`：le_sup_right : b <= a ⊔ b
 -/
-theorem mem_sup_left {S T : Submonoid M} : forall {x : M}, x in S -> x in S ⊔ T := by
-  rw [← SetLike.le_def]
-  exact le_sup_left
-
-@[to_additive]
-/--
-theorem `mem_sup_right` / 定理 `mem_sup_right`
-
-English:
-theorem mem_sup_right
-  given: {S T : Submonoid M}
-  statement: forall {x : M}, x in T -> x in S ⊔ T
-  proof: by
+theorem mem_sup_right {S T : Submonoid M} : ∀ {x : M}, x ∈ T → x ∈ S ⊔ T := by
   rw [← SetLike.le_def]
   exact le_sup_right
 
 @[to_additive]
-
-中文:
-定理 mem_sup_right
-  条件: {S T : 子幺半群 M}
-  结论: 对任意 {x : M}, x in T -> x in S ⊔ T
-  证明: by
-  rw [← SetLike.le_def]
-  exact le_sup_right
-
-@[to_additive]
-
-Depends on / 依赖: SetLike, SetLike.le_def, le_def, le_sup_right
+/-
+**Submonoid.mul_mem_sup** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：mul_mem_sup {S T : Submonoid M} {x y : M} (hx : x in S) (hy : y in T) : x 
+* y in S ⊔ T
+参数：hx : x in S；hy : y in T。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submonoid.mul_mem`：∀ {M : Type u_1} [inst : MulOneClass M] (S : Submonoi
+d M) {x y : M}, x ∈ S → y ∈ S → x * y ∈ S
+· 使用定理 `Submonoid.mem_sup_left`：mem_sup_left {S T : Submonoid M} : forall {x : M
+}, x in S -> x in S ⊔ T
+· 使用定理 `Submonoid.mem_sup_right`：mem_sup_right {S T : Submonoid M} : forall {x :
+ M}, x in T -> x in S ⊔ T
 -/
-theorem mem_sup_right {S T : Submonoid M} : forall {x : M}, x in T -> x in S ⊔ T := by
-  rw [← SetLike.le_def]
-  exact le_sup_right
-
-@[to_additive]
-/--
-theorem `mul_mem_sup` / 定理 `mul_mem_sup`
-
-English:
-theorem mul_mem_sup
-  given: {S T : Submonoid M} {x y : M} (hx : x in S) (hy : y in T)
-  statement: x * y in S ⊔ T
-  proof: (S ⊔ T).mul_mem (mem_sup_left hx) (mem_sup_right hy)
-
-@[to_additive]
-
-中文:
-定理 mul_mem_sup
-  条件: {S T : 子幺半群 M} {x y : M} (hx : x in S) (hy : y in T)
-  结论: x * y in S ⊔ T
-  证明: (S ⊔ T).mul_mem (mem_sup_left hx) (mem_sup_right hy)
-
-@[to_additive]
-
-Depends on / 依赖: mem_sup_left, mem_sup_right, mul_mem
--/
-theorem mul_mem_sup {S T : Submonoid M} {x y : M} (hx : x in S) (hy : y in T) : x * y in S ⊔ T :=
+theorem mul_mem_sup {S T : Submonoid M} {x y : M} (hx : x ∈ S) (hy : y ∈ T) : x * y ∈ S ⊔ T :=
   (S ⊔ T).mul_mem (mem_sup_left hx) (mem_sup_right hy)
 
 @[to_additive]
-/--
-theorem `mem_iSup_of_mem` / 定理 `mem_iSup_of_mem`
-
-English:
-theorem mem_iSup_of_mem
-  given: {ι : Sort*} {S : ι -> Submonoid M} (i : ι)
-  proof: by
-  rw [← SetLike.le_def]
-  exact le_iSup _ _
-
-@[to_additive]
-
-中文:
-定理 mem_iSup_of_mem
-  条件: {ι : 类型层*} {S : ι -> 子幺半群 M} (i : ι)
-  证明: by
-  rw [← SetLike.le_def]
-  exact le_iSup _ _
-
-@[to_additive]
-
-Depends on / 依赖: SetLike, SetLike.le_def, le_def, le_iSup
+/-
+**Submonoid.mem_iSup_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：mem_iSup_of_mem {ι : Sort*} {S : ι -> Submonoid M} (i : ι) : forall {x : M
+}, x in S i -> x in iSup S
+参数：i : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SetLike.le_def`：le_def {S T : A} : S <= T ↔ forall ⦃x : B⦄, x in S -> x 
+in T
+· 使用定理 `instIsConcreteLE`：∀ (A : Type u_1) (B : Type u_2) [inst : SetLike A B], 
+IsConcreteLE A B
+· 使用定理 `le_iSup`：le_iSup (f : ι -> α) (i : ι) : f i <= iSup f
 -/
-theorem mem_iSup_of_mem {ι : Sort*} {S : ι -> Submonoid M} (i : ι) :
-    forall {x : M}, x in S i -> x in iSup S := by
+theorem mem_iSup_of_mem {ι : Sort*} {S : ι → Submonoid M} (i : ι) :
+    ∀ {x : M}, x ∈ S i → x ∈ iSup S := by
   rw [← SetLike.le_def]
   exact le_iSup _ _
 
 @[to_additive]
-/--
-theorem `mem_sSup_of_mem` / 定理 `mem_sSup_of_mem`
-
-English:
-theorem mem_sSup_of_mem
-  given: {S : Set (Submonoid M)} {s : Submonoid M} (hs : s in S)
-  proof: by
-  rw [← SetLike.le_def]
-  exact le_sSup hs
-
-中文:
-定理 mem_sSup_of_mem
-  条件: {S : 集合 (子幺半群 M)} {s : 子幺半群 M} (hs : s in S)
-  证明: by
-  rw [← SetLike.le_def]
-  exact le_sSup hs
-
-Depends on / 依赖: SetLike, SetLike.le_def, le_def, le_sSup
+/-
+**Submonoid.mem_sSup_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：mem_sSup_of_mem {S : Set (Submonoid M)} {s : Submonoid M} (hs : s in S) : 
+forall {x : M}, x in s -> x in sSup S
+参数：Submonoid M；hs : s in S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SetLike.le_def`：le_def {S T : A} : S <= T ↔ forall ⦃x : B⦄, x in S -> x 
+in T
+· 使用定理 `instIsConcreteLE`：∀ (A : Type u_1) (B : Type u_2) [inst : SetLike A B], 
+IsConcreteLE A B
+· 使用定理 `le_sSup`：le_sSup (h : a in s) : a <= sSup s
 -/
-theorem mem_sSup_of_mem {S : Set (Submonoid M)} {s : Submonoid M} (hs : s in S) :
-    forall {x : M}, x in s -> x in sSup S := by
+theorem mem_sSup_of_mem {S : Set (Submonoid M)} {s : Submonoid M} (hs : s ∈ S) :
+    ∀ {x : M}, x ∈ s → x ∈ sSup S := by
   rw [← SetLike.le_def]
   exact le_sSup hs
 
@@ -455,75 +455,80 @@ then it holds for all elements of the supremum of `S`. -/
       /-- An induction principle for elements of `⨆ i, S i`.
       If `C` holds for `0` and all elements of `S i` for all `i`, and is preserved under addition,
       then it holds for all elements of the supremum of `S`. -/]
-/--
-theorem `iSup_induction` / 定理 `iSup_induction`
-
-English:
-theorem iSup_induction
-  statement: {ι : Sort*} (S : ι -> Submonoid M) {motive : M -> Prop} {x : M}
-  proof: by
-  rw [iSup_eq_closure] at hx
-  refine closure_induction (fun x hx => ?_) one (fun _ _ _ _ => mul _ _) hx
-  obtain ⟨i, hi⟩ := Set.mem_iUnion.mp hx
-  exact mem _ _ hi
-
-中文:
-定理 iSup_induction
-  结论: {ι : 类型层*} (S : ι -> 子幺半群 M) {motive : M -> 命题} {x : M}
-  证明: by
-  rw [iSup_eq_closure] at hx
-  refine closure_induction (fun x hx => ?_) one (fun _ _ _ _ => mul _ _) hx
-  obtain ⟨i, hi⟩ := Set.mem_iUnion.mp hx
-  exact mem _ _ hi
-
-Depends on / 依赖: Set.mem_iUnion.mp, closure_induction, iSup_eq_closure, mem_iUnion
+/-
+**Submonoid.iSup_induction** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：iSup_induction {ι : Sort*} (S : ι -> Submonoid M) {motive : M -> Prop} {x 
+: M} (hx : x in ⨆ i, S i) (mem : forall (i), forall x in S i, motive x) (one : m
+otive 1) (mul : forall x y, motive x -> motive y -> motive (x * y)) : motive x
+参数：S : ι -> Submonoid M；hx : x in ⨆ i, S i；mem : forall (i), forall x in S i, mo
+tive x；one : motive 1；mul : forall x y, motive x -> motive y -> motive (x * y)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submonoid.closure_induction`：closure_induction {s : Set M} {motive : (x 
+: M) -> x in closure s -> Prop} (mem : forall (x) (h : x in s), motive x (subset
+_closure h)) (one…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_iUnion`：mem_iUnion {x : α} {s : ι -> Set α} : (x in ⋃ i, s i) ↔ 
+exists i, x in s i
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submonoid.iSup_eq_closure`：iSup_eq_closure {ι : Sort*} (p : ι -> Submono
+id M) : ⨆ i, p i = Submonoid.closure (⋃ i, (p i : Set M))
 -/
-theorem iSup_induction {ι : Sort*} (S : ι -> Submonoid M) {motive : M -> Prop} {x : M}
-    (hx : x in ⨆ i, S i) (mem : forall (i), forall x in S i, motive x) (one : motive 1)
-    (mul : forall x y, motive x -> motive y -> motive (x * y)) : motive x := by
+theorem iSup_induction {ι : Sort*} (S : ι → Submonoid M) {motive : M → Prop} {x : M}
+    (hx : x ∈ ⨆ i, S i) (mem : ∀ (i), ∀ x ∈ S i, motive x) (one : motive 1)
+    (mul : ∀ x y, motive x → motive y → motive (x * y)) : motive x := by
   rw [iSup_eq_closure] at hx
-  refine closure_induction (fun x hx => ?_) one (fun _ _ _ _ => mul _ _) hx
+  refine closure_induction (fun x hx => ?_) one (fun _ _ _ _ ↦ mul _ _) hx
   obtain ⟨i, hi⟩ := Set.mem_iUnion.mp hx
   exact mem _ _ hi
 
 /-- A dependent version of `Submonoid.iSup_induction`. -/
 @[to_additive (attr := elab_as_elim) /-- A dependent version of `AddSubmonoid.iSup_induction`. -/]
-/--
-theorem `iSup_induction'` / 定理 `iSup_induction'`
+/-
+**Submonoid.iSup_induction'** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：iSup_induction' {ι : Sort*} (S : ι -> Submonoid M) {motive : forall x, (x 
+in ⨆ i, S i) -> Prop} (mem : forall (i), forall (x) (hxS : x in S i), motive x (
+mem_iSup_of_mem i hxS)) (one : motive 1 (one_mem _)) (mul : forall x y hx hy, mo
+tive x hx -> motive y hy -> motive (x * y) (mul_mem ‹_› ‹_›)) {x : M} (hx : x in
+ ⨆ i, S i) : motive x hx
+参数：S : ι -> Submonoid M；x in ⨆ i, S i；mem : forall (i), forall (x) (hxS : x in S
+ i), motive x (mem_iSup_of_mem i hxS)；one : motive 1 (one_mem _)；mul : forall x 
+y hx hy, motive x hx -> motive y hy -> motive (x * y) (mul_mem ‹_› ‹_›)；hx : x i
+n ⨆ i, S i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submonoid.mem_iSup_of_mem`：mem_iSup_of_mem {ι : Sort*} {S : ι -> Submono
+id M} (i : ι) : forall {x : M}, x in S i -> x in iSup S
+· 使用定理 `OneMemClass.one_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+One M} {inst_1 : SetLike S M} [self : OneMemClass S M] (s : S), 1 ∈ s
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `Submonoid.instSubmonoidClass`：∀ {M : Type u_1} [inst : MulOneClass M], S
+ubmonoidClass (Submonoid M) M
+· 使用定理 `MulMemClass.mul_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Mul M} {inst_1 : SetLike S M} [self : MulMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `SubmonoidClass.toMulMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   Mu
+lMemClass S M
+· 使用定理 `Exists.elim`：∀ {α : Sort u} {p : α → Prop} {b : Prop}, (∃ x, p x) → (∀ (
+a : α), p a → b) → b
+· 使用定理 `Submonoid.iSup_induction`：iSup_induction {ι : Sort*} (S : ι -> Submonoid
+ M) {motive : M -> Prop} {x : M} (hx : x in ⨆ i, S i) (mem : forall (i), forall 
+x in S i, moti…
 
-English:
-theorem iSup_induction'
-  statement: {ι : Sort*} (S : ι -> Submonoid M) {motive : forall x, (x in ⨆ i, S i) -> Prop}
-  proof: by
-  refine Exists.elim (?_ : exists Hx, motive x Hx) fun (hx : x in ⨆ i, S i) (hc : motive x hx) => hc
-  refine @iSup_induction _ _ ι S (fun m => exists hm, motive m hm) _ hx (fun i x hx => ?_) ?_
-      fun x y => ?_
-  · exact ⟨_, mem _ _ hx⟩
-  · exact ⟨_, one⟩
-  · rintro ⟨_, Cx⟩ ⟨_, Cy⟩
-    exact ⟨_, mul _ _ _ _ Cx Cy⟩
-
-中文:
-定理 iSup_induction'
-  结论: {ι : 类型层*} (S : ι -> 子幺半群 M) {motive : 对任意 x, (x in ⨆ i, S i) -> 命题}
-  证明: by
-  refine Exists.elim (?_ : exists Hx, motive x Hx) fun (hx : x in ⨆ i, S i) (hc : motive x hx) => hc
-  refine @iSup_induction _ _ ι S (fun m => exists hm, motive m hm) _ hx (fun i x hx => ?_) ?_
-      fun x y => ?_
-  · exact ⟨_, mem _ _ hx⟩
-  · exact ⟨_, one⟩
-  · rintro ⟨_, Cx⟩ ⟨_, Cy⟩
-    exact ⟨_, mul _ _ _ _ Cx Cy⟩
-
-Depends on / 依赖: Exists, Exists.elim, iSup_induction, motive
+--- 原说明 ---
+A dependent version of `Submonoid.iSup_induction`.
 -/
-theorem iSup_induction' {ι : Sort*} (S : ι -> Submonoid M) {motive : forall x, (x in ⨆ i, S i) -> Prop}
-    (mem : forall (i), forall (x) (hxS : x in S i), motive x (mem_iSup_of_mem i hxS))
+theorem iSup_induction' {ι : Sort*} (S : ι → Submonoid M) {motive : ∀ x, (x ∈ ⨆ i, S i) → Prop}
+    (mem : ∀ (i), ∀ (x) (hxS : x ∈ S i), motive x (mem_iSup_of_mem i hxS))
     (one : motive 1 (one_mem _))
-    (mul : forall x y hx hy, motive x hx -> motive y hy -> motive (x * y) (mul_mem ‹_› ‹_›)) {x : M}
-    (hx : x in ⨆ i, S i) : motive x hx := by
-  refine Exists.elim (?_ : exists Hx, motive x Hx) fun (hx : x in ⨆ i, S i) (hc : motive x hx) => hc
-  refine @iSup_induction _ _ ι S (fun m => exists hm, motive m hm) _ hx (fun i x hx => ?_) ?_
+    (mul : ∀ x y hx hy, motive x hx → motive y hy → motive (x * y) (mul_mem ‹_› ‹_›)) {x : M}
+    (hx : x ∈ ⨆ i, S i) : motive x hx := by
+  refine Exists.elim (?_ : ∃ Hx, motive x Hx) fun (hx : x ∈ ⨆ i, S i) (hc : motive x hx) => hc
+  refine @iSup_induction _ _ ι S (fun m => ∃ hm, motive m hm) _ hx (fun i x hx => ?_) ?_
       fun x y => ?_
   · exact ⟨_, mem _ _ hx⟩
   · exact ⟨_, one⟩
@@ -541,24 +546,29 @@ variable {α : Type*}
 open Submonoid
 
 @[to_additive]
-/--
-theorem `closure_range_of` / 定理 `closure_range_of`
-
-English:
-theorem closure_range_of
-  statement: closure (Set.range <| @of α) = ⊤
-  proof: eq_top_iff.2 fun x _ =>
-    FreeMonoid.recOn x (one_mem _) fun _x _xs hxs =>
-      mul_mem (subset_closure <| Set.mem_range_self _) hxs
-
-中文:
-定理 closure_range_of
-  结论: closure (集合.range <| @of α) = ⊤
-  证明: eq_top_iff.2 fun x _ =>
-    FreeMonoid.recOn x (one_mem _) fun _x _xs hxs =>
-      mul_mem (subset_closure <| Set.mem_range_self _) hxs
-
-Depends on / 依赖: FreeMonoid, FreeMonoid.recOn, Set.mem_range_self, eq_top_iff, mem_range_self, mul_mem, one_mem, subset_closure
+/-
+**FreeMonoid.closure_range_of** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：closure_range_of : closure (Set.range <| @of α) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `OneMemClass.one_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+One M} {inst_1 : SetLike S M} [self : OneMemClass S M] (s : S), 1 ∈ s
+· 使用定理 `SubmonoidClass.toOneMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   On
+eMemClass S M
+· 使用定理 `Submonoid.instSubmonoidClass`：∀ {M : Type u_1} [inst : MulOneClass M], S
+ubmonoidClass (Submonoid M) M
+· 使用定理 `MulMemClass.mul_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Mul M} {inst_1 : SetLike S M} [self : MulMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `SubmonoidClass.toMulMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   Mu
+lMemClass S M
+· 使用定理 `Submonoid.subset_closure`：subset_closure : s subseteq closure s
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
 -/
 theorem closure_range_of : closure (Set.range <| @of α) = ⊤ :=
   eq_top_iff.2 fun x _ =>
@@ -572,87 +582,85 @@ variable [Monoid M] {a : M}
 
 open MonoidHom
 
-/--
-theorem `closure_singleton_eq` / 定理 `closure_singleton_eq`
-
-English:
-theorem closure_singleton_eq
-  given: (x : M)
-  statement: closure ({x} : Set M) = mrange (powersHom M x)
-  proof: closure_eq_of_le (Set.singleton_subset_iff.2 ⟨Multiplicative.ofAdd 1, pow_one x⟩) fun _ ⟨_, hn⟩ =>
-    hn ▸ pow_mem (subset_closure <| Set.mem_singleton _) _
-
-中文:
-定理 closure_singleton_eq
-  条件: (x : M)
-  结论: closure ({x} : 集合 M) = mrange (powersHom M x)
-  证明: closure_eq_of_le (Set.singleton_subset_iff.2 ⟨Multiplicative.ofAdd 1, pow_one x⟩) fun _ ⟨_, hn⟩ =>
-    hn ▸ pow_mem (subset_closure <| Set.mem_singleton _) _
-
-Depends on / 依赖: Multiplicative, Multiplicative.ofAdd, Set.mem_singleton, Set.singleton_subset_iff, closure_eq_of_le, mem_singleton, pow_mem, pow_one, singleton_subset_iff, subset_closure
+/-
+**Submonoid.closure_singleton_eq** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：closure_singleton_eq (x : M) : closure ({x} : Set M) = mrange (powersHom M
+ x)
+参数：x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submonoid.closure_eq_of_le`：closure_eq_of_le (h₁ : s subseteq S) (h₂ : S
+ <= closure s) : closure s = S
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.singleton_subset_iff`：singleton_subset_iff {a : α} {s : Set α} : {a}
+ subseteq s ↔ a in s
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `pow_mem`：∀ {M : Type u_3} {A : Type u_4} [inst : Monoid M] [inst_1 : Set
+Like A M] [SubmonoidClass A M] {S : A} {x : M},   x ∈ S → ∀ (n : ℕ), x ^ n ∈ …
+· 使用定理 `Submonoid.instSubmonoidClass`：∀ {M : Type u_1} [inst : MulOneClass M], S
+ubmonoidClass (Submonoid M) M
+· 使用定理 `Submonoid.subset_closure`：subset_closure : s subseteq closure s
+· 使用定理 `Set.mem_singleton`：mem_singleton (a : α) : a in ({a} : Set α)
 -/
 theorem closure_singleton_eq (x : M) : closure ({x} : Set M) = mrange (powersHom M x) :=
   closure_eq_of_le (Set.singleton_subset_iff.2 ⟨Multiplicative.ofAdd 1, pow_one x⟩) fun _ ⟨_, hn⟩ =>
     hn ▸ pow_mem (subset_closure <| Set.mem_singleton _) _
 
-/--
-theorem `mem_closure_singleton` / 定理 `mem_closure_singleton`
+/-- The submonoid generated by an element of a monoid equals the set of natural number powers of
+the element. -/
+/-
+**Submonoid.mem_closure_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：mem_closure_singleton {x y : M} : y in closure ({x} : Set M) ↔ exists n : 
+Nat, x ^ n = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submonoid.closure_singleton_eq`：closure_singleton_eq (x : M) : closure (
+{x} : Set M) = mrange (powersHom M x)
+· 使用定理 `MonoidHom.mem_mrange`：mem_mrange {f : F} {y : N} : y in mrange f ↔ exist
+s x, f x = y
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem mem_closure_singleton
-  given: {x y : M}
-  statement: y in closure ({x} : Set M) ↔ exists n : Nat, x ^ n = y
-  proof: by
-  rw [closure_singleton_eq]; rw [mem_mrange]; rfl
-
-中文:
-定理 mem_closure_singleton
-  条件: {x y : M}
-  结论: y in closure ({x} : 集合 M) ↔ 存在 n : 自然数, x ^ n = y
-  证明: by
-  rw [closure_singleton_eq]; rw [mem_mrange]; rfl
-
-Depends on / 依赖: closure_singleton_eq, mem_mrange
+--- 原说明 ---
+The submonoid generated by an element of a monoid equals the set of natural numb
+er powers of
+the element.
 -/
-theorem mem_closure_singleton {x y : M} : y in closure ({x} : Set M) ↔ exists n : Nat, x ^ n = y := by
-  rw [closure_singleton_eq]; rw [mem_mrange]; rfl
-
-/--
-theorem `mem_closure_singleton_self` / 定理 `mem_closure_singleton_self`
-
-English:
-theorem mem_closure_singleton_self
-  given: {y : M}
-  statement: y in closure ({y} : Set M)
-  proof: mem_closure_singleton.2 ⟨1, pow_one y⟩
-
-中文:
-定理 mem_closure_singleton_self
-  条件: {y : M}
-  结论: y in closure ({y} : 集合 M)
-  证明: mem_closure_singleton.2 ⟨1, pow_one y⟩
-
-Depends on / 依赖: mem_closure_singleton, pow_one
+theorem mem_closure_singleton {x y : M} : y ∈ closure ({x} : Set M) ↔ ∃ n : ℕ, x ^ n = y := by
+  rw [closure_singleton_eq, mem_mrange]; rfl
+/-
+**Submonoid.mem_closure_singleton_self** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：mem_closure_singleton_self {y : M} : y in closure ({y} : Set M)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Submonoid.mem_closure_singleton`：mem_closure_singleton {x y : M} : y in 
+closure ({x} : Set M) ↔ exists n : Nat, x ^ n = y
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
 -/
-theorem mem_closure_singleton_self {y : M} : y in closure ({y} : Set M) :=
+theorem mem_closure_singleton_self {y : M} : y ∈ closure ({y} : Set M) :=
   mem_closure_singleton.2 ⟨1, pow_one y⟩
-
-/--
-theorem `closure_singleton_one` / 定理 `closure_singleton_one`
-
-English:
-theorem closure_singleton_one
-  statement: closure ({1} : Set M) = ⊥
-  proof: by
-  simp [eq_bot_iff_forall, mem_closure_singleton]
-
-中文:
-定理 closure_singleton_one
-  结论: closure ({1} : 集合 M) = ⊥
-  证明: by
-  simp [eq_bot_iff_forall, mem_closure_singleton]
-
-Depends on / 依赖: eq_bot_iff_forall, mem_closure_singleton
+/-
+**Submonoid.closure_singleton_one** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：closure_singleton_one : closure ({1} : Set M) = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem closure_singleton_one : closure ({1} : Set M) = ⊥ := by
   simp [eq_bot_iff_forall, mem_closure_singleton]
@@ -664,133 +672,101 @@ open Fintype
 /-- curly brackets `{}` are used here instead of instance brackets `[]` because
 the instance in a goal is often not the same as the one inferred by type class inference. -/
 @[to_additive]
-/--
-theorem `card_bot` / 定理 `card_bot`
+/-
+**Submonoid.card_bot** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：card_bot {_ : Fintype (⊥ : Submonoid M)} : card (⊥ : Submonoid M) = 1
+参数：⊥ : Submonoid M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Fintype.card_eq_one_iff`：card_eq_one_iff : card α = 1 ↔ exists x : α, fo
+rall y, y = x
+· 使用定理 `Set.mem_singleton`：mem_singleton (a : α) : a in ({a} : Set α)
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Submonoid.mem_bot`：mem_bot {x : M} : x in (⊥ : Submonoid M) ↔ x = 1
 
-English:
-theorem card_bot
-  given: {_ : Fintype (⊥ : Submonoid M)}
-  statement: card (⊥ : Submonoid M) = 1
-  proof: card_eq_one_iff.2
-⟨⟨(1 : M), Set.mem_singleton 1⟩, fun ⟨_y, hy⟩ => Subtype.ext mem_bot.1 hy⟩
-
-@[to_additive]
-
-中文:
-定理 card_bot
-  条件: {_ : 有限类型 (⊥ : 子幺半群 M)}
-  结论: card (⊥ : 子幺半群 M) = 1
-  证明: card_eq_one_iff.2
-⟨⟨(1 : M), Set.mem_singleton 1⟩, fun ⟨_y, hy⟩ => Subtype.ext mem_bot.1 hy⟩
-
-@[to_additive]
-
-Depends on / 依赖: Set.mem_singleton, Subtype, Subtype.ext, card_eq_one_iff, mem_bot, mem_singleton
+--- 原说明 ---
+curly brackets `{}` are used here instead of instance brackets `[]` because
+the instance in a goal is often not the same as the one inferred by type class i
+nference.
 -/
 theorem card_bot {_ : Fintype (⊥ : Submonoid M)} : card (⊥ : Submonoid M) = 1 :=
   card_eq_one_iff.2
-⟨⟨(1 : M), Set.mem_singleton 1⟩, fun ⟨_y, hy⟩ => Subtype.ext mem_bot.1 hy⟩
+    ⟨⟨(1 : M), Set.mem_singleton 1⟩, fun ⟨_y, hy⟩ => Subtype.ext <| mem_bot.1 hy⟩
 
 @[to_additive]
-/--
-theorem `eq_bot_of_card_le` / 定理 `eq_bot_of_card_le`
-
-English:
-theorem eq_bot_of_card_le
-  given: (h : card S <= 1)
-  statement: S = ⊥
-  proof: let _ := card_le_one_iff_subsingleton.mp h
-  eq_bot_of_subsingleton S
-
-@[to_additive]
-
-中文:
-定理 eq_bot_of_card_le
-  条件: (h : card S <= 1)
-  结论: S = ⊥
-  证明: let _ := card_le_one_iff_subsingleton.mp h
-  eq_bot_of_subsingleton S
-
-@[to_additive]
-
-Depends on / 依赖: card_le_one_iff_subsingleton, card_le_one_iff_subsingleton.mp, eq_bot_of_subsingleton
+/-
+**Submonoid.eq_bot_of_card_le** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：eq_bot_of_card_le (h : card S <= 1) : S = ⊥
+参数：h : card S <= 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Fintype.card_le_one_iff_subsingleton`：card_le_one_iff_subsingleton : car
+d α <= 1 ↔ Subsingleton α
+· 使用定理 `Submonoid.eq_bot_of_subsingleton`：eq_bot_of_subsingleton [Subsingleton S
+] : S = ⊥
 -/
-theorem eq_bot_of_card_le (h : card S <= 1) : S = ⊥ :=
+theorem eq_bot_of_card_le (h : card S ≤ 1) : S = ⊥ :=
   let _ := card_le_one_iff_subsingleton.mp h
   eq_bot_of_subsingleton S
 
 @[to_additive]
-/--
-theorem `eq_bot_of_card_eq` / 定理 `eq_bot_of_card_eq`
-
-English:
-theorem eq_bot_of_card_eq
-  given: (h : card S = 1)
-  statement: S = ⊥
-  proof: S.eq_bot_of_card_le (le_of_eq h)
-
-@[to_additive card_le_one_iff_eq_bot]
-
-中文:
-定理 eq_bot_of_card_eq
-  条件: (h : card S = 1)
-  结论: S = ⊥
-  证明: S.eq_bot_of_card_le (le_of_eq h)
-
-@[to_additive card_le_one_iff_eq_bot]
-
-Depends on / 依赖: S.eq_bot_of_card_le, eq_bot_of_card_le, le_of_eq
+/-
+**Submonoid.eq_bot_of_card_eq** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：eq_bot_of_card_eq (h : card S = 1) : S = ⊥
+参数：h : card S = 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submonoid.eq_bot_of_card_le`：eq_bot_of_card_le (h : card S <= 1) : S = ⊥
+· 使用定理 `le_of_eq`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
 -/
 theorem eq_bot_of_card_eq (h : card S = 1) : S = ⊥ :=
   S.eq_bot_of_card_le (le_of_eq h)
 
 @[to_additive card_le_one_iff_eq_bot]
-/--
-theorem `card_le_one_iff_eq_bot` / 定理 `card_le_one_iff_eq_bot`
-
-English:
-theorem card_le_one_iff_eq_bot
-  statement: card S <= 1 ↔ S = ⊥
-  proof: ⟨fun h =>
-    (eq_bot_iff_forall _).2 fun x hx => by
-      simpa [Subtype.ext_iff] using card_le_one_iff.1 h ⟨x, hx⟩ 1,
-    fun h => by simp [h]⟩
-
-@[to_additive]
-
-中文:
-定理 card_le_one_iff_eq_bot
-  结论: card S <= 1 ↔ S = ⊥
-  证明: ⟨fun h =>
-    (eq_bot_iff_forall _).2 fun x hx => by
-      simpa [Subtype.ext_iff] using card_le_one_iff.1 h ⟨x, hx⟩ 1,
-    fun h => by simp [h]⟩
-
-@[to_additive]
-
-Depends on / 依赖: Subtype, Subtype.ext_iff, card_le_one_iff, eq_bot_iff_forall, ext_iff
+/-
+**Submonoid.card_le_one_iff_eq_bot** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：card_le_one_iff_eq_bot : card S <= 1 ↔ S = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Submonoid.eq_bot_iff_forall`：eq_bot_iff_forall : S = ⊥ ↔ forall x in S, 
+x = (1 : M)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Fintype.card_le_one_iff`：card_le_one_iff : card α <= 1 ↔ forall a b : α,
+ a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fintype.card_congr'`：card_congr' {α β} [Fintype α] [Fintype β] (h : α = 
+β) : card α = card β
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Fintype.card_unique`：card_unique [Unique α] [h : Fintype α] : Fintype.ca
+rd α = 1
 -/
-theorem card_le_one_iff_eq_bot : card S <= 1 ↔ S = ⊥ :=
+theorem card_le_one_iff_eq_bot : card S ≤ 1 ↔ S = ⊥ :=
   ⟨fun h =>
     (eq_bot_iff_forall _).2 fun x hx => by
       simpa [Subtype.ext_iff] using card_le_one_iff.1 h ⟨x, hx⟩ 1,
     fun h => by simp [h]⟩
 
 @[to_additive]
-/--
-lemma `eq_bot_iff_card` / 引理 `eq_bot_iff_card`
-
-English:
-lemma eq_bot_iff_card
-  statement: S = ⊥ ↔ card S = 1
-  proof: ⟨by rintro rfl; exact card_bot, eq_bot_of_card_eq⟩
-
-中文:
-引理 eq_bot_iff_card
-  结论: S = ⊥ ↔ card S = 1
-  证明: ⟨by rintro rfl; exact card_bot, eq_bot_of_card_eq⟩
-
-Depends on / 依赖: card_bot, eq_bot_of_card_eq
+/-
+**Submonoid.eq_bot_iff_card** 是 Mathlib 中的一个引理，位于命名空间 `Submonoid`。
+形式化陈述：eq_bot_iff_card : S = ⊥ ↔ card S = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submonoid.card_bot`：card_bot {_ : Fintype (⊥ : Submonoid M)} : card (⊥ :
+ Submonoid M) = 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submonoid.eq_bot_of_card_eq`：eq_bot_of_card_eq (h : card S = 1) : S = ⊥
 -/
 lemma eq_bot_iff_card : S = ⊥ ↔ card S = 1 :=
   ⟨by rintro rfl; exact card_bot, eq_bot_of_card_eq⟩
@@ -798,181 +774,66 @@ lemma eq_bot_iff_card : S = ⊥ ↔ card S = 1 :=
 end Submonoid
 
 @[to_additive]
-/--
-theorem `_root_.FreeMonoid.mrange_lift` / 定理 `_root_.FreeMonoid.mrange_lift`
-
-English:
-theorem _root_.FreeMonoid.mrange_lift
-  given: {α} (f : α -> M)
-  proof: by
-  rw [mrange_eq_map]; rw [← FreeMonoid.closure_range_of]; rw [map_mclosure]; rw [← Set.range_comp]; rw [FreeMonoid.lift_comp_of]
-
-@[to_additive]
-
-中文:
-定理 _root_.自由幺半群.mrange_lift
-  条件: {α} (f : α -> M)
-  证明: by
-  rw [mrange_eq_map]; rw [← FreeMonoid.closure_range_of]; rw [map_mclosure]; rw [← Set.range_comp]; rw [FreeMonoid.lift_comp_of]
-
-@[to_additive]
-
-Depends on / 依赖: FreeMonoid, FreeMonoid.closure_range_of, FreeMonoid.lift_comp_of, Set.range_comp, closure_range_of, lift_comp_of, map_mclosure, mrange_eq_map, range_comp
+/-
+**_root_.FreeMonoid.mrange_lift** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：_root_.FreeMonoid.mrange_lift {α} (f : α -> M) : mrange (FreeMonoid.lift f
+) = closure (Set.range f)
+参数：f : α -> M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.FreeMonoid.mrange_lift {α} (f : α -> M) :
+theorem _root_.FreeMonoid.mrange_lift {α} (f : α → M) :
     mrange (FreeMonoid.lift f) = closure (Set.range f) := by
-  rw [mrange_eq_map]; rw [← FreeMonoid.closure_range_of]; rw [map_mclosure]; rw [← Set.range_comp]; rw [FreeMonoid.lift_comp_of]
+  rw [mrange_eq_map, ← FreeMonoid.closure_range_of, map_mclosure, ← Set.range_comp,
+    FreeMonoid.lift_comp_of]
 
 @[to_additive]
-/--
-theorem `closure_eq_mrange` / 定理 `closure_eq_mrange`
-
-English:
-theorem closure_eq_mrange
-  given: (s : Set M)
-  statement: closure s = mrange (FreeMonoid.lift ((↑) : s -> M))
-  proof: by
-  rw [FreeMonoid.mrange_lift]; rw [Subtype.range_coe]
-
-@[to_additive]
-
-中文:
-定理 closure_eq_mrange
-  条件: (s : 集合 M)
-  结论: closure s = mrange (自由幺半群.lift ((↑) : s -> M))
-  证明: by
-  rw [FreeMonoid.mrange_lift]; rw [Subtype.range_coe]
-
-@[to_additive]
-
-Depends on / 依赖: FreeMonoid, FreeMonoid.mrange_lift, Subtype, Subtype.range_coe, mrange_lift, range_coe
+/-
+**closure_eq_mrange** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem closure_eq_mrange (s : Set M) : closure s = mrange (FreeMonoid.lift ((↑) : s -> M)) := by
-  rw [FreeMonoid.mrange_lift]; rw [Subtype.range_coe]
+theorem closure_eq_mrange (s : Set M) : closure s = mrange (FreeMonoid.lift ((↑) : s → M)) := by
+  rw [FreeMonoid.mrange_lift, Subtype.range_coe]
 
 @[to_additive]
-/--
-theorem `closure_eq_image_prod` / 定理 `closure_eq_image_prod`
-
-English:
-theorem closure_eq_image_prod
-  given: (s : Set M)
-  proof: by
-  rw [closure_eq_mrange]; rw [coe_mrange]; rw [← Set.range_list_map_coe]; rw [← Set.range_comp]
-  exact congrArg _ (funext <| FreeMonoid.lift_apply _)
-
-@[to_additive]
-
-中文:
-定理 closure_eq_image_prod
-  条件: (s : 集合 M)
-  证明: by
-  rw [closure_eq_mrange]; rw [coe_mrange]; rw [← Set.range_list_map_coe]; rw [← Set.range_comp]
-  exact congrArg _ (funext <| FreeMonoid.lift_apply _)
-
-@[to_additive]
-
-Depends on / 依赖: FreeMonoid, FreeMonoid.lift_apply, Set.range_comp, Set.range_list_map_coe, closure_eq_mrange, coe_mrange, lift_apply, range_comp, range_list_map_coe
+/-
+**closure_eq_image_prod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem closure_eq_image_prod (s : Set M) :
-    (closure s : Set M) = List.prod '' { l : List M | forall x in l, x in s } := by
-  rw [closure_eq_mrange]; rw [coe_mrange]; rw [← Set.range_list_map_coe]; rw [← Set.range_comp]
+    (closure s : Set M) = List.prod '' { l : List M | ∀ x ∈ l, x ∈ s } := by
+  rw [closure_eq_mrange, coe_mrange, ← Set.range_list_map_coe, ← Set.range_comp]
   exact congrArg _ (funext <| FreeMonoid.lift_apply _)
 
 @[to_additive]
-/--
-theorem `exists_list_of_mem_closure` / 定理 `exists_list_of_mem_closure`
-
-English:
-theorem exists_list_of_mem_closure
-  given: {s : Set M} {x : M} (hx : x in closure s)
-  proof: by
-  rwa [← SetLike.mem_coe, closure_eq_image_prod, Set.mem_image] at hx
-
-@[to_additive]
-
-中文:
-定理 存在_list_of_mem_closure
-  条件: {s : 集合 M} {x : M} (hx : x in closure s)
-  证明: by
-  rwa [← SetLike.mem_coe, closure_eq_image_prod, Set.mem_image] at hx
-
-@[to_additive]
-
-Depends on / 依赖: Set.mem_image, SetLike, SetLike.mem_coe, closure_eq_image_prod, mem_coe, mem_image
+/-
+**exists_list_of_mem_closure** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem exists_list_of_mem_closure {s : Set M} {x : M} (hx : x in closure s) :
-    exists l : List M, (forall y in l, y in s) ∧ l.prod = x := by
+theorem exists_list_of_mem_closure {s : Set M} {x : M} (hx : x ∈ closure s) :
+    ∃ l : List M, (∀ y ∈ l, y ∈ s) ∧ l.prod = x := by
   rwa [← SetLike.mem_coe, closure_eq_image_prod, Set.mem_image] at hx
 
 @[to_additive]
-/--
-theorem `exists_multiset_of_mem_closure` / 定理 `exists_multiset_of_mem_closure`
-
-English:
-theorem exists_multiset_of_mem_closure
-  statement: {M : Type*} [CommMonoid M] {s : Set M} {x : M}
-  proof: by
-  obtain ⟨l, h1, h2⟩ := exists_list_of_mem_closure hx
-  exact ⟨l, h1, (Multiset.prod_coe l).trans h2⟩
-
-@[to_additive (attr := elab_as_elim)]
-
-中文:
-定理 存在_multiset_of_mem_closure
-  结论: {M : 类型} [交换幺半群 M] {s : 集合 M} {x : M}
-  证明: by
-  obtain ⟨l, h1, h2⟩ := exists_list_of_mem_closure hx
-  exact ⟨l, h1, (Multiset.prod_coe l).trans h2⟩
-
-@[to_additive (attr := elab_as_elim)]
-
-Depends on / 依赖: Multiset, Multiset.prod_coe, exists_list_of_mem_closure, prod_coe
+/-
+**exists_multiset_of_mem_closure** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem exists_multiset_of_mem_closure {M : Type*} [CommMonoid M] {s : Set M} {x : M}
-    (hx : x in closure s) : exists l : Multiset M, (forall y in l, y in s) ∧ l.prod = x := by
+    (hx : x ∈ closure s) : ∃ l : Multiset M, (∀ y ∈ l, y ∈ s) ∧ l.prod = x := by
   obtain ⟨l, h1, h2⟩ := exists_list_of_mem_closure hx
   exact ⟨l, h1, (Multiset.prod_coe l).trans h2⟩
 
 @[to_additive (attr := elab_as_elim)]
-/--
-theorem `closure_induction_left` / 定理 `closure_induction_left`
-
-English:
-theorem closure_induction_left
-  proof: by
-  simp_rw [closure_eq_mrange] at h
-  obtain ⟨l, rfl⟩ := h
-  induction l using FreeMonoid.inductionOn' with
-  | one => exact one
-  | of_mul x y ih =>
-    simp only [map_mul, FreeMonoid.lift_eval_of]
-    refine mul_left _ x.prop (FreeMonoid.lift Subtype.val y) _ (ih ?_)
-    simp only [closure_eq_mrange, mem_mrange, exists_apply_eq_apply]
-
-@[to_additive (attr := elab_as_elim)]
-
-中文:
-定理 closure_induction_left
-  证明: by
-  simp_rw [closure_eq_mrange] at h
-  obtain ⟨l, rfl⟩ := h
-  induction l using FreeMonoid.inductionOn' with
-  | one => exact one
-  | of_mul x y ih =>
-    simp only [map_mul, FreeMonoid.lift_eval_of]
-    refine mul_left _ x.prop (FreeMonoid.lift Subtype.val y) _ (ih ?_)
-    simp only [closure_eq_mrange, mem_mrange, exists_apply_eq_apply]
-
-@[to_additive (attr := elab_as_elim)]
-
-Depends on / 依赖: FreeMonoid, FreeMonoid.inductionOn, FreeMonoid.lift, FreeMonoid.lift_eval_of, Subtype, Subtype.val, closure_eq_mrange, exists_apply_eq_apply, inductionOn, lift_eval_of, map_mul, mem_mrange, mul_left, of_mul, simp_rw, x.prop
+/-
+**closure_induction_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem closure_induction_left
-    {s : Set M} {motive : (m : M) -> m in closure s -> Prop} (one : motive 1 (one_mem _))
-    (mul_left : forall x (hx : x in s), forall y hy,
-      motive y hy -> motive (x * y) (mul_mem (subset_closure hx) hy))
-    {x : M} (h : x in closure s) : motive x h := by
+    {s : Set M} {motive : (m : M) → m ∈ closure s → Prop} (one : motive 1 (one_mem _))
+    (mul_left : ∀ x (hx : x ∈ s), ∀ y hy,
+      motive y hy → motive (x * y) (mul_mem (subset_closure hx) hy))
+    {x : M} (h : x ∈ closure s) : motive x h := by
   simp_rw [closure_eq_mrange] at h
   obtain ⟨l, rfl⟩ := h
   induction l using FreeMonoid.inductionOn' with
@@ -983,316 +844,111 @@ theorem closure_induction_left
     simp only [closure_eq_mrange, mem_mrange, exists_apply_eq_apply]
 
 @[to_additive (attr := elab_as_elim)]
-/--
-theorem `induction_of_closure_eq_top_left` / 定理 `induction_of_closure_eq_top_left`
-
-English:
-theorem induction_of_closure_eq_top_left
-  statement: {s : Set M} {motive : M -> Prop} (hs : closure s = ⊤)
-  proof: by
-  have : x in closure s := by simp [hs]
-  induction this using closure_induction_left with
-  | one => exact one
-  | mul_left x hx y _ ih => exact mul_left x hx y ih
-
-@[to_additive (attr := elab_as_elim)]
-
-中文:
-定理 induction_of_closure_eq_top_left
-  结论: {s : 集合 M} {motive : M -> 命题} (hs : closure s = ⊤)
-  证明: by
-  have : x in closure s := by simp [hs]
-  induction this using closure_induction_left with
-  | one => exact one
-  | mul_left x hx y _ ih => exact mul_left x hx y ih
-
-@[to_additive (attr := elab_as_elim)]
-
-Depends on / 依赖: closure, closure_induction_left, mul_left
+/-
+**induction_of_closure_eq_top_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem induction_of_closure_eq_top_left {s : Set M} {motive : M -> Prop} (hs : closure s = ⊤)
-    (x : M) (one : motive 1) (mul_left : forall x in s, forall y, motive y -> motive (x * y)) : motive x := by
-  have : x in closure s := by simp [hs]
+theorem induction_of_closure_eq_top_left {s : Set M} {motive : M → Prop} (hs : closure s = ⊤)
+    (x : M) (one : motive 1) (mul_left : ∀ x ∈ s, ∀ y, motive y → motive (x * y)) : motive x := by
+  have : x ∈ closure s := by simp [hs]
   induction this using closure_induction_left with
   | one => exact one
   | mul_left x hx y _ ih => exact mul_left x hx y ih
 
 @[to_additive (attr := elab_as_elim)]
-/--
-theorem `closure_induction_right` / 定理 `closure_induction_right`
-
-English:
-theorem closure_induction_right
-  proof: closure_induction_left (s := MulOpposite.unop ⁻¹' s)
-    (motive := fun m hm => motive m.unop <| by rwa [← op_closure] at hm)
-    one (fun _x hx _y _ => mul_right _ _ _ hx) (by rwa [← op_closure])
-
-@[to_additive (attr := elab_as_elim)]
-
-中文:
-定理 closure_induction_right
-  证明: closure_induction_left (s := MulOpposite.unop ⁻¹' s)
-    (motive := fun m hm => motive m.unop <| by rwa [← op_closure] at hm)
-    one (fun _x hx _y _ => mul_right _ _ _ hx) (by rwa [← op_closure])
-
-@[to_additive (attr := elab_as_elim)]
-
-Depends on / 依赖: MulOpposite, MulOpposite.unop, closure_induction_left, m.unop, motive, mul_right, op_closure
+/-
+**closure_induction_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem closure_induction_right
-    {s : Set M} {motive : (m : M) -> m in closure s -> Prop} (one : motive 1 (one_mem _))
-    (mul_right : forall x hx, forall y (hy : y in s),
-      motive x hx -> motive (x * y) (mul_mem hx (subset_closure hy)))
-    {x : M} (h : x in closure s) : motive x h :=
+    {s : Set M} {motive : (m : M) → m ∈ closure s → Prop} (one : motive 1 (one_mem _))
+    (mul_right : ∀ x hx, ∀ y (hy : y ∈ s),
+      motive x hx → motive (x * y) (mul_mem hx (subset_closure hy)))
+    {x : M} (h : x ∈ closure s) : motive x h :=
   closure_induction_left (s := MulOpposite.unop ⁻¹' s)
     (motive := fun m hm => motive m.unop <| by rwa [← op_closure] at hm)
     one (fun _x hx _y _ => mul_right _ _ _ hx) (by rwa [← op_closure])
 
 @[to_additive (attr := elab_as_elim)]
-/--
-theorem `induction_of_closure_eq_top_right` / 定理 `induction_of_closure_eq_top_right`
-
-English:
-theorem induction_of_closure_eq_top_right
-  statement: {s : Set M} {motive : M -> Prop} (hs : closure s = ⊤)
-  proof: by
-  have : x in closure s := by simp [hs]
-  induction this using closure_induction_right with
-  | one => exact one
-  | mul_right x _ y hy ih => exact mul_right x y hy ih
-
-中文:
-定理 induction_of_closure_eq_top_right
-  结论: {s : 集合 M} {motive : M -> 命题} (hs : closure s = ⊤)
-  证明: by
-  have : x in closure s := by simp [hs]
-  induction this using closure_induction_right with
-  | one => exact one
-  | mul_right x _ y hy ih => exact mul_right x y hy ih
-
-Depends on / 依赖: closure, closure_induction_right, mul_right
+/-
+**induction_of_closure_eq_top_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem induction_of_closure_eq_top_right {s : Set M} {motive : M -> Prop} (hs : closure s = ⊤)
-    (x : M) (one : motive 1) (mul_right : forall x, forall y in s, motive x -> motive (x * y)) : motive x := by
-  have : x in closure s := by simp [hs]
+theorem induction_of_closure_eq_top_right {s : Set M} {motive : M → Prop} (hs : closure s = ⊤)
+    (x : M) (one : motive 1) (mul_right : ∀ x, ∀ y ∈ s, motive x → motive (x * y)) : motive x := by
+  have : x ∈ closure s := by simp [hs]
   induction this using closure_induction_right with
   | one => exact one
   | mul_right x _ y hy ih => exact mul_right x y hy ih
 
-/--
-Definition of `powers` / `powers` 的定义
+/-- The submonoid generated by an element. -/
+/-
+**powers** 是 Mathlib 中的一个定义，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition powers
-  signature: (n : M)
-  body: Submonoid.copy (mrange (powersHom M n)) (Set.range (n ^ · : Nat -> M))
-    Set.ext fun n => exists_congr fun i => by simp; rfl
-
-中文:
-定义 powers
-  签名: (n : M)
-  定义体: Submonoid.copy (mrange (powersHom M n)) (Set.range (n ^ · : Nat -> M))
-    Set.ext fun n => exists_congr fun i => by simp; rfl
-
-Depends on / 依赖: Set.ext, Set.range, Submonoid, Submonoid.copy, exists_congr, mrange, powersHom
+--- 原说明 ---
+The submonoid generated by an element.
 -/
 def powers (n : M) : Submonoid M :=
-Submonoid.copy (mrange (powersHom M n)) (Set.range (n ^ · : Nat -> M))
+  Submonoid.copy (mrange (powersHom M n)) (Set.range (n ^ · : ℕ → M)) <|
     Set.ext fun n => exists_congr fun i => by simp; rfl
-
-/--
-theorem `mem_powers` / 定理 `mem_powers`
-
-English:
-theorem mem_powers
-  given: (n : M)
-  statement: n in powers n
-  proof: ⟨1, pow_one _⟩
-
-中文:
-定理 mem_powers
-  条件: (n : M)
-  结论: n in powers n
-  证明: ⟨1, pow_one _⟩
-
-Depends on / 依赖: pow_one
+/-
+**mem_powers** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_powers (n : M) : n in powers n :=
+theorem mem_powers (n : M) : n ∈ powers n :=
   ⟨1, pow_one _⟩
-
-/--
-theorem `coe_powers` / 定理 `coe_powers`
-
-English:
-theorem coe_powers
-  given: (x : M)
-  statement: ↑(powers x) = Set.range fun n : Nat => x ^ n
-  proof: rfl
-
-中文:
-定理 coe_powers
-  条件: (x : M)
-  结论: ↑(powers x) = 集合.range fun n : 自然数 => x ^ n
-  证明: rfl
+/-
+**coe_powers** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_powers (x : M) : ↑(powers x) = Set.range fun n : Nat => x ^ n :=
+theorem coe_powers (x : M) : ↑(powers x) = Set.range fun n : ℕ => x ^ n :=
   rfl
-
-/--
-theorem `mem_powers_iff` / 定理 `mem_powers_iff`
-
-English:
-theorem mem_powers_iff
-  given: (x z : M)
-  statement: x in powers z ↔ exists n : Nat, z ^ n = x
-  proof: Iff.rfl
-
-中文:
-定理 mem_powers_iff
-  条件: (x z : M)
-  结论: x in powers z ↔ 存在 n : 自然数, z ^ n = x
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**mem_powers_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mem_powers_iff (x z : M) : x in powers z ↔ exists n : Nat, z ^ n = x :=
+theorem mem_powers_iff (x z : M) : x ∈ powers z ↔ ∃ n : ℕ, z ^ n = x :=
   Iff.rfl
-
-/--
-Instance `decidableMemPowers` / 实例 `decidableMemPowers`
-
-English:
-instance decidableMemPowers
-  signature: : DecidablePred (· in Submonoid.powers a)
-  body: Classical.decPred _
-
-中文:
-实例 decidableMemPowers
-  签名: : DecidablePred (· in 子幺半群.powers a)
-  定义体: Classical.decPred _
-
-Depends on / 依赖: Classical, Classical.decPred, decPred
+/-
+**decidableMemPowers** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable instance decidableMemPowers : DecidablePred (· in Submonoid.powers a) :=
+noncomputable instance decidableMemPowers : DecidablePred (· ∈ Submonoid.powers a) :=
   Classical.decPred _
 
 -- TODO the following instance should follow from a more general principle
 -- See also https://github.com/leanprover-community/mathlib4/issues/2417
-/--
-Instance `fintypePowers` / 实例 `fintypePowers`
-
-English:
-instance fintypePowers
-  signature: [Fintype M]
-  body: inferInstanceAs Fintype {y // y in powers a}
-
-中文:
-实例 fintypePowers
-  签名: [有限类型 M]
-  定义体: inferInstanceAs Fintype {y // y in powers a}
-
-Depends on / 依赖: Fintype, powers
+/-
+**fintypePowers** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance fintypePowers [Fintype M] : Fintype (powers a) :=
-inferInstanceAs Fintype {y // y in powers a}
-
-/--
-theorem `powers_eq_closure` / 定理 `powers_eq_closure`
-
-English:
-theorem powers_eq_closure
-  given: (n : M)
-  statement: powers n = closure {n}
-  proof: by
-  ext
-  exact mem_closure_singleton.symm
-
-中文:
-定理 powers_eq_closure
-  条件: (n : M)
-  结论: powers n = closure {n}
-  证明: by
-  ext
-  exact mem_closure_singleton.symm
-
-Depends on / 依赖: mem_closure_singleton, mem_closure_singleton.symm
+  inferInstanceAs <| Fintype {y // y ∈ powers a}
+/-
+**powers_eq_closure** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem powers_eq_closure (n : M) : powers n = closure {n} := by
   ext
   exact mem_closure_singleton.symm
-
-/--
-lemma `powers_le` / 引理 `powers_le`
-
-English:
-lemma powers_le
-  given: {n : M} {P : Submonoid M}
-  statement: powers n <= P ↔ n in P
-  proof: by simp [powers_eq_closure]
-
-中文:
-引理 powers_le
-  条件: {n : M} {P : 子幺半群 M}
-  结论: powers n <= P ↔ n in P
-  证明: by simp [powers_eq_closure]
-
-Depends on / 依赖: powers_eq_closure
+/-
+**powers_le** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma powers_le {n : M} {P : Submonoid M} : powers n <= P ↔ n in P := by simp [powers_eq_closure]
-
-/--
-lemma `powers_one` / 引理 `powers_one`
-
-English:
-lemma powers_one
-  statement: powers (1 : M) = ⊥
-  proof: bot_unique powers_le.2 one_mem _
-
-中文:
-引理 powers_one
-  结论: powers (1 : M) = ⊥
-  证明: bot_unique powers_le.2 one_mem _
-
-Depends on / 依赖: bot_unique, one_mem, powers_le
+lemma powers_le {n : M} {P : Submonoid M} : powers n ≤ P ↔ n ∈ P := by simp [powers_eq_closure]
+/-
+**powers_one** 是 Mathlib 中的一个引理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma powers_one : powers (1 : M) = ⊥ := bot_unique powers_le.2 one_mem _
-
-/--
-theorem `_root_.IsIdempotentElem.coe_powers` / 定理 `_root_.IsIdempotentElem.coe_powers`
-
-English:
-theorem _root_.IsIdempotentElem.coe_powers
-  given: {a : M} (ha : IsIdempotentElem a)
-  proof: let S : Submonoid M :=
-  { carrier := {1, a},
-    mul_mem' := by
-      rintro _ _ (rfl | rfl) (rfl | rfl)
-      · rw [one_mul]; exact .inl rfl
-      · rw [one_mul]; exact .inr rfl
-      · rw [mul_one]; exact .inr rfl
-      · rw [ha]; exact .inr rfl
-    one_mem' := .inl rfl }
-  suffices Submonoid.powers a = S from congr_arg _ this
-  le_antisymm (Submonoid.powers_le.mpr <| .inr rfl)
-    (by rintro _ (rfl | rfl); exacts [one_mem _, Submonoid.mem_powers _])
-
-中文:
-定理 _root_.IsIdempotentElem.coe_powers
-  条件: {a : M} (ha : IsIdempotentElem a)
-  证明: let S : Submonoid M :=
-  { carrier := {1, a},
-    mul_mem' := by
-      rintro _ _ (rfl | rfl) (rfl | rfl)
-      · rw [one_mul]; exact .inl rfl
-      · rw [one_mul]; exact .inr rfl
-      · rw [mul_one]; exact .inr rfl
-      · rw [ha]; exact .inr rfl
-    one_mem' := .inl rfl }
-  suffices Submonoid.powers a = S from congr_arg _ this
-  le_antisymm (Submonoid.powers_le.mpr <| .inr rfl)
-    (by rintro _ (rfl | rfl); exacts [one_mem _, Submonoid.mem_powers _])
-
-Depends on / 依赖: Submonoid, Submonoid.mem_powers, Submonoid.powers, Submonoid.powers_le.mpr, carrier, congr_arg, exacts, le_antisymm, mem_powers, mul_mem, mul_one, one_mem, one_mul, powers, powers_le
+lemma powers_one : powers (1 : M) = ⊥ := bot_unique <| powers_le.2 <| one_mem _
+/-
+**_root_.IsIdempotentElem.coe_powers** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：_root_.IsIdempotentElem.coe_powers {a : M} (ha : IsIdempotentElem a) : (Su
+bmonoid.powers a : Set M) = {1, a}
+参数：ha : IsIdempotentElem a。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.IsIdempotentElem.coe_powers {a : M} (ha : IsIdempotentElem a) :
     (Submonoid.powers a : Set M) = {1, a} :=
@@ -1309,75 +965,21 @@ theorem _root_.IsIdempotentElem.coe_powers {a : M} (ha : IsIdempotentElem a) :
   le_antisymm (Submonoid.powers_le.mpr <| .inr rfl)
     (by rintro _ (rfl | rfl); exacts [one_mem _, Submonoid.mem_powers _])
 
-/--
-Definition of `groupPowers` / `groupPowers` 的定义
+/-- The submonoid generated by an element is a group if that element has finite order. -/
+/-
+**groupPowers** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation groupPowers
-  signature: {x : M} {n : Nat} (hpos : 0 < n) (hx : x ^ n = 1)
-  body: x ^ (n - 1)
-inv_mul_cancel y := Subtype.ext by
-    obtain ⟨_, k, rfl⟩ := y
-    simp only [coe_one, coe_mul, SubmonoidClass.coe_pow]
-    rw [← pow_succ]; rw [Nat.sub_add_cancel hpos]; rw [← pow_mul]; rw [mul_comm]; rw [pow_mul]; rw [hx]; rw [one_pow]
-  zpow z x := x ^ z.natMod n
-  zpow_zero' z := by
-    simp_rw [HPow.hPow, Pow.pow]
-    simp only [Int.natMod, Int.zero_emod, Int.toNat_zero, pow_zero]
-  zpow_neg' m x := by
-    change x ^ (Int.natMod _ n) = (x ^ (Int.natMod _ n)) ^ (n - 1)
-    ext
-    obtain ⟨_, k, rfl⟩ := x
-    simp only [← pow_mul, Int.natMod, SubmonoidClass.coe_pow]
-    rw [Int.negSucc_eq]; rw [← Int.natCast_succ]; rw [← Int.add_mul_emod_self_right (b := (m + 1 : Nat))]
-    nth_rw 1 [← mul_one ((m + 1 : Nat) : Int)]
-    rw [← sub_eq_neg_add]; rw [← Int.mul_sub]; rw [← Int.natCast_pred_of_pos hpos]; norm_cast
-    simp only [Int.toNat_natCast]
-    rw [mul_comm]; rw [pow_mul]; rw [← pow_eq_pow_mod _ hx]; rw [mul_comm k]; rw [mul_assoc]; rw [pow_mul _ (_ % _)]; rw [← pow_eq_pow_mod _ hx]; rw [pow_mul]; rw [pow_mul]
-zpow_succ' m x := Subtype.ext by
-    simp_rw [HPow.hPow, Pow.pow]
-    obtain ⟨_, k, rfl⟩ := x
-    simp only [← pow_mul, Int.natMod, SubmonoidClass.coe_pow, coe_mul]
-    norm_cast
-    iterate 2 rw [Int.toNat_natCast, mul_comm, pow_mul, ← pow_eq_pow_mod _ hx]
-    rw [← pow_mul _ m]; rw [mul_comm]; rw [pow_mul]; rw [← pow_succ]; rw [← pow_mul]; rw [mul_comm]; rw [pow_mul]
-
-中文:
-缩写 groupPowers
-  签名: {x : M} {n : 自然数} (hpos : 0 < n) (hx : x ^ n = 1)
-  定义体: x ^ (n - 1)
-inv_mul_cancel y := Subtype.ext by
-    obtain ⟨_, k, rfl⟩ := y
-    simp only [coe_one, coe_mul, SubmonoidClass.coe_pow]
-    rw [← pow_succ]; rw [Nat.sub_add_cancel hpos]; rw [← pow_mul]; rw [mul_comm]; rw [pow_mul]; rw [hx]; rw [one_pow]
-  zpow z x := x ^ z.natMod n
-  zpow_zero' z := by
-    simp_rw [HPow.hPow, Pow.pow]
-    simp only [Int.natMod, Int.zero_emod, Int.toNat_zero, pow_zero]
-  zpow_neg' m x := by
-    change x ^ (Int.natMod _ n) = (x ^ (Int.natMod _ n)) ^ (n - 1)
-    ext
-    obtain ⟨_, k, rfl⟩ := x
-    simp only [← pow_mul, Int.natMod, SubmonoidClass.coe_pow]
-    rw [Int.negSucc_eq]; rw [← Int.natCast_succ]; rw [← Int.add_mul_emod_self_right (b := (m + 1 : Nat))]
-    nth_rw 1 [← mul_one ((m + 1 : Nat) : Int)]
-    rw [← sub_eq_neg_add]; rw [← Int.mul_sub]; rw [← Int.natCast_pred_of_pos hpos]; norm_cast
-    simp only [Int.toNat_natCast]
-    rw [mul_comm]; rw [pow_mul]; rw [← pow_eq_pow_mod _ hx]; rw [mul_comm k]; rw [mul_assoc]; rw [pow_mul _ (_ % _)]; rw [← pow_eq_pow_mod _ hx]; rw [pow_mul]; rw [pow_mul]
-zpow_succ' m x := Subtype.ext by
-    simp_rw [HPow.hPow, Pow.pow]
-    obtain ⟨_, k, rfl⟩ := x
-    simp only [← pow_mul, Int.natMod, SubmonoidClass.coe_pow, coe_mul]
-    norm_cast
-    iterate 2 rw [Int.toNat_natCast, mul_comm, pow_mul, ← pow_eq_pow_mod _ hx]
-    rw [← pow_mul _ m]; rw [mul_comm]; rw [pow_mul]; rw [← pow_succ]; rw [← pow_mul]; rw [mul_comm]; rw [pow_mul]
+--- 原说明 ---
+The submonoid generated by an element is a group if that element has finite orde
+r.
 -/
-abbrev groupPowers {x : M} {n : Nat} (hpos : 0 < n) (hx : x ^ n = 1) : Group (powers x) where
+abbrev groupPowers {x : M} {n : ℕ} (hpos : 0 < n) (hx : x ^ n = 1) : Group (powers x) where
   inv x := x ^ (n - 1)
-inv_mul_cancel y := Subtype.ext by
+  inv_mul_cancel y := Subtype.ext <| by
     obtain ⟨_, k, rfl⟩ := y
     simp only [coe_one, coe_mul, SubmonoidClass.coe_pow]
-    rw [← pow_succ]; rw [Nat.sub_add_cancel hpos]; rw [← pow_mul]; rw [mul_comm]; rw [pow_mul]; rw [hx]; rw [one_pow]
+    rw [← pow_succ, Nat.sub_add_cancel hpos, ← pow_mul, mul_comm, pow_mul, hx, one_pow]
   zpow z x := x ^ z.natMod n
   zpow_zero' z := by
     simp_rw [HPow.hPow, Pow.pow]
@@ -1387,238 +989,118 @@ inv_mul_cancel y := Subtype.ext by
     ext
     obtain ⟨_, k, rfl⟩ := x
     simp only [← pow_mul, Int.natMod, SubmonoidClass.coe_pow]
-    rw [Int.negSucc_eq]; rw [← Int.natCast_succ]; rw [← Int.add_mul_emod_self_right (b := (m + 1 : Nat))]
-    nth_rw 1 [← mul_one ((m + 1 : Nat) : Int)]
-    rw [← sub_eq_neg_add]; rw [← Int.mul_sub]; rw [← Int.natCast_pred_of_pos hpos]; norm_cast
+    rw [Int.negSucc_eq, ← Int.natCast_succ, ← Int.add_mul_emod_self_right (b := (m + 1 : ℕ))]
+    nth_rw 1 [← mul_one ((m + 1 : ℕ) : ℤ)]
+    rw [← sub_eq_neg_add, ← Int.mul_sub, ← Int.natCast_pred_of_pos hpos]; norm_cast
     simp only [Int.toNat_natCast]
-    rw [mul_comm]; rw [pow_mul]; rw [← pow_eq_pow_mod _ hx]; rw [mul_comm k]; rw [mul_assoc]; rw [pow_mul _ (_ % _)]; rw [← pow_eq_pow_mod _ hx]; rw [pow_mul]; rw [pow_mul]
-zpow_succ' m x := Subtype.ext by
+    rw [mul_comm, pow_mul, ← pow_eq_pow_mod _ hx, mul_comm k, mul_assoc, pow_mul _ (_ % _),
+      ← pow_eq_pow_mod _ hx, pow_mul, pow_mul]
+  zpow_succ' m x := Subtype.ext <| by
     simp_rw [HPow.hPow, Pow.pow]
     obtain ⟨_, k, rfl⟩ := x
     simp only [← pow_mul, Int.natMod, SubmonoidClass.coe_pow, coe_mul]
     norm_cast
     iterate 2 rw [Int.toNat_natCast, mul_comm, pow_mul, ← pow_eq_pow_mod _ hx]
-    rw [← pow_mul _ m]; rw [mul_comm]; rw [pow_mul]; rw [← pow_succ]; rw [← pow_mul]; rw [mul_comm]; rw [pow_mul]
+    rw [← pow_mul _ m, mul_comm, pow_mul, ← pow_succ, ← pow_mul, mul_comm, pow_mul]
 
 /-- Exponentiation map from natural numbers to powers. -/
 @[simps!]
-/--
-Definition of `pow` / `pow` 的定义
+/-
+**pow** 是 Mathlib 中的一个定义，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pow
-  signature: (n : M) (m : Nat)
-  body: (powersHom M n).mrangeRestrict (Multiplicative.ofAdd m)
-
-中文:
-定义 pow
-  签名: (n : M) (m : 自然数)
-  定义体: (powersHom M n).mrangeRestrict (Multiplicative.ofAdd m)
-
-Depends on / 依赖: Multiplicative, Multiplicative.ofAdd, mrangeRestrict, powersHom
+--- 原说明 ---
+Exponentiation map from natural numbers to powers.
 -/
-def pow (n : M) (m : Nat) : powers n :=
+def pow (n : M) (m : ℕ) : powers n :=
   (powersHom M n).mrangeRestrict (Multiplicative.ofAdd m)
-
-/--
-theorem `pow_apply` / 定理 `pow_apply`
-
-English:
-theorem pow_apply
-  given: (n : M) (m : Nat)
-  statement: Submonoid.pow n m = ⟨n ^ m, m, rfl⟩
-  proof: rfl
-
-中文:
-定理 pow_apply
-  条件: (n : M) (m : 自然数)
-  结论: 子幺半群.pow n m = ⟨n ^ m, m, rfl⟩
-  证明: rfl
+/-
+**pow_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {M : Type u_1} {F : Type u_2} {α : outParam (Type u_3)} {β : outParam (T
+ype u_4)} {inst : FunLike F α β}   {inst_1 : Pow β M} {inst_2 : Pow F M} [self :
+ IsPowApply M F α β] (f : F) (n : M) (x : α), (f ^ n) x = f x ^ n
+参数：Type u_3；Type u_4；f : F；n : M；x : α；f ^ n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPowApply.pow_apply`：∀ {M : Type u_1} {F : Type u_2} {α : outParam (Typ
+e u_3)} {β : outParam (Type u_4)} {inst : FunLike F α β}   {inst_1 : Pow β M} {i
+nst_2 : Po…
 -/
-theorem pow_apply (n : M) (m : Nat) : Submonoid.pow n m = ⟨n ^ m, m, rfl⟩ :=
+theorem pow_apply (n : M) (m : ℕ) : Submonoid.pow n m = ⟨n ^ m, m, rfl⟩ :=
   rfl
 
-/--
-Definition of `log` / `log` 的定义
+/-- Logarithms from powers to natural numbers. -/
+/-
+**log** 是 Mathlib 中的一个定义，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition log
-  signature: [DecidableEq M] {n : M} (p : powers n)
-  body: Nat.find (mem_powers_iff p.val n).mp p.prop
-
-@[simp]
-
-中文:
-定义 log
-  签名: [DecidableEq M] {n : M} (p : powers n)
-  定义体: Nat.find (mem_powers_iff p.val n).mp p.prop
-
-@[simp]
-
-Depends on / 依赖: Nat.find, mem_powers_iff, p.prop, p.val
+--- 原说明 ---
+Logarithms from powers to natural numbers.
 -/
-def log [DecidableEq M] {n : M} (p : powers n) : Nat :=
-Nat.find (mem_powers_iff p.val n).mp p.prop
+def log [DecidableEq M] {n : M} (p : powers n) : ℕ :=
+  Nat.find <| (mem_powers_iff p.val n).mp p.prop
 
 @[simp]
-/--
-theorem `pow_log_eq_self` / 定理 `pow_log_eq_self`
-
-English:
-theorem pow_log_eq_self
-  given: [DecidableEq M] {n : M} (p : powers n)
-  statement: pow n (log p) = p
-  proof: Subtype.ext Nat.find_spec p.prop
-
-中文:
-定理 pow_log_eq_self
-  条件: [DecidableEq M] {n : M} (p : powers n)
-  结论: pow n (log p) = p
-  证明: Subtype.ext Nat.find_spec p.prop
-
-Depends on / 依赖: Nat.find_spec, Subtype, Subtype.ext, find_spec, p.prop
+/-
+**pow_log_eq_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem pow_log_eq_self [DecidableEq M] {n : M} (p : powers n) : pow n (log p) = p :=
-Subtype.ext Nat.find_spec p.prop
-
-/--
-theorem `pow_right_injective_iff_pow_injective` / 定理 `pow_right_injective_iff_pow_injective`
-
-English:
-theorem pow_right_injective_iff_pow_injective
-  given: {n : M}
-  proof: Subtype.coe_injective.of_comp_iff (pow n)
-
-@[simp]
-
-中文:
-定理 pow_right_injective_iff_pow_injective
-  条件: {n : M}
-  证明: Subtype.coe_injective.of_comp_iff (pow n)
-
-@[simp]
-
-Depends on / 依赖: Subtype, Subtype.coe_injective.of_comp_iff, coe_injective, of_comp_iff
+  Subtype.ext <| Nat.find_spec p.prop
+/-
+**pow_right_injective_iff_pow_injective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem pow_right_injective_iff_pow_injective {n : M} :
-    (Function.Injective fun m : Nat => n ^ m) ↔ Function.Injective (pow n) :=
+    (Function.Injective fun m : ℕ => n ^ m) ↔ Function.Injective (pow n) :=
   Subtype.coe_injective.of_comp_iff (pow n)
 
 @[simp]
-/--
-theorem `log_pow_eq_self` / 定理 `log_pow_eq_self`
-
-English:
-theorem log_pow_eq_self
-  statement: [DecidableEq M] {n : M} (h : Function.Injective fun m : Nat => n ^ m)
-  proof: pow_right_injective_iff_pow_injective.mp h pow_log_eq_self _
-
-中文:
-定理 log_pow_eq_self
-  结论: [DecidableEq M] {n : M} (h : 函数.单射 fun m : 自然数 => n ^ m)
-  证明: pow_right_injective_iff_pow_injective.mp h pow_log_eq_self _
-
-Depends on / 依赖: pow_log_eq_self, pow_right_injective_iff_pow_injective, pow_right_injective_iff_pow_injective.mp
+/-
+**log_pow_eq_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem log_pow_eq_self [DecidableEq M] {n : M} (h : Function.Injective fun m : Nat => n ^ m)
-    (m : Nat) : log (pow n m) = m :=
-pow_right_injective_iff_pow_injective.mp h pow_log_eq_self _
+theorem log_pow_eq_self [DecidableEq M] {n : M} (h : Function.Injective fun m : ℕ => n ^ m)
+    (m : ℕ) : log (pow n m) = m :=
+  pow_right_injective_iff_pow_injective.mp h <| pow_log_eq_self _
 
 set_option backward.isDefEq.respectTransparency false in
 /-- The exponentiation map is an isomorphism from the additive monoid on natural numbers to powers
 when it is injective. The inverse is given by the logarithms. -/
 @[simps]
-/--
-Definition of `powLogEquiv` / `powLogEquiv` 的定义
+/-
+**powLogEquiv** 是 Mathlib 中的一个定义，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition powLogEquiv
-  signature: [DecidableEq M] {n : M} (h : Function.Injective fun m : Nat => n ^ m)
-  body: pow n m.toAdd
-  invFun m := Multiplicative.ofAdd (log m)
-  left_inv := log_pow_eq_self h
-  right_inv := pow_log_eq_self
-  map_mul' _ _ := by simp only [pow, map_mul, ofAdd_add, toAdd_mul]
-
-中文:
-定义 powLogEquiv
-  签名: [DecidableEq M] {n : M} (h : 函数.单射 fun m : 自然数 => n ^ m)
-  定义体: pow n m.toAdd
-  invFun m := Multiplicative.ofAdd (log m)
-  left_inv := log_pow_eq_self h
-  right_inv := pow_log_eq_self
-  map_mul' _ _ := by simp only [pow, map_mul, ofAdd_add, toAdd_mul]
-
-Depends on / 依赖: m.toAdd
+--- 原说明 ---
+The exponentiation map is an isomorphism from the additive monoid on natural num
+bers to powers
+when it is injective. The inverse is given by the logarithms.
 -/
-def powLogEquiv [DecidableEq M] {n : M} (h : Function.Injective fun m : Nat => n ^ m) :
-    Multiplicative Nat ≃* powers n where
+def powLogEquiv [DecidableEq M] {n : M} (h : Function.Injective fun m : ℕ => n ^ m) :
+    Multiplicative ℕ ≃* powers n where
   toFun m := pow n m.toAdd
   invFun m := Multiplicative.ofAdd (log m)
   left_inv := log_pow_eq_self h
   right_inv := pow_log_eq_self
   map_mul' _ _ := by simp only [pow, map_mul, ofAdd_add, toAdd_mul]
-
-/--
-theorem `log_mul` / 定理 `log_mul`
-
-English:
-theorem log_mul
-  statement: [DecidableEq M] {n : M} (h : Function.Injective fun m : Nat => n ^ m)
-  proof: map_mul (powLogEquiv h).symm x y
-
-中文:
-定理 log_mul
-  结论: [DecidableEq M] {n : M} (h : 函数.单射 fun m : 自然数 => n ^ m)
-  证明: map_mul (powLogEquiv h).symm x y
-
-Depends on / 依赖: map_mul, powLogEquiv
+/-
+**log_mul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem log_mul [DecidableEq M] {n : M} (h : Function.Injective fun m : Nat => n ^ m)
+theorem log_mul [DecidableEq M] {n : M} (h : Function.Injective fun m : ℕ => n ^ m)
     (x y : powers (n : M)) : log (x * y) = log x + log y :=
   map_mul (powLogEquiv h).symm x y
-
-/--
-theorem `log_pow_int_eq_self` / 定理 `log_pow_int_eq_self`
-
-English:
-theorem log_pow_int_eq_self
-  given: {x : Int} (h : 1 < x.natAbs) (m : Nat)
-  statement: log (pow x m) = m
-  proof: (powLogEquiv (Int.pow_right_injective h)).symm_apply_apply _
-
-@[simp]
-
-中文:
-定理 log_pow_int_eq_self
-  条件: {x : 整数} (h : 1 < x.natAbs) (m : 自然数)
-  结论: log (pow x m) = m
-  证明: (powLogEquiv (Int.pow_right_injective h)).symm_apply_apply _
-
-@[simp]
-
-Depends on / 依赖: Int.pow_right_injective, powLogEquiv, pow_right_injective, symm_apply_apply
+/-
+**log_pow_int_eq_self** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem log_pow_int_eq_self {x : Int} (h : 1 < x.natAbs) (m : Nat) : log (pow x m) = m :=
+theorem log_pow_int_eq_self {x : ℤ} (h : 1 < x.natAbs) (m : ℕ) : log (pow x m) = m :=
   (powLogEquiv (Int.pow_right_injective h)).symm_apply_apply _
 
 @[simp]
-/--
-theorem `map_powers` / 定理 `map_powers`
-
-English:
-theorem map_powers
-  statement: {N : Type*} {F : Type*} [Monoid N] [FunLike F M N] [MonoidHomClass F M N]
-  proof: by
-  simp only [powers_eq_closure, map_mclosure f, Set.image_singleton]
-
-中文:
-定理 map_powers
-  结论: {N : 类型} {F : 类型} [幺半群 N] [函数状 F M N] [幺半群态射类 F M N]
-  证明: by
-  simp only [powers_eq_closure, map_mclosure f, Set.image_singleton]
-
-Depends on / 依赖: Set.image_singleton, image_singleton, map_mclosure, powers_eq_closure
+/-
+**map_powers** 是 Mathlib 中的一个定理，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem map_powers {N : Type*} {F : Type*} [Monoid N] [FunLike F M N] [MonoidHomClass F M N]
     (f : F) (m : M) :
@@ -1628,84 +1110,64 @@ theorem map_powers {N : Type*} {F : Type*} [Monoid N] [FunLike F M N] [MonoidHom
 end Submonoid
 
 @[to_additive]
-/--
-theorem `IsScalarTower.of_mclosure_eq_top` / 定理 `IsScalarTower.of_mclosure_eq_top`
-
-English:
-theorem IsScalarTower.of_mclosure_eq_top
-  statement: {N α} [Monoid M] [MulAction M N] [SMul N α] [MulAction M α]
-  proof: by
-  refine ⟨fun x => Submonoid.induction_of_closure_eq_top_left htop x ?_ ?_⟩
-  · intro y z
-    rw [one_smul]; rw [one_smul]
-  · clear x
-    intro x hx x' hx' y z
-    rw [mul_smul]; rw [mul_smul]; rw [hs x hx]; rw [hx']
-
-@[to_additive]
-
-中文:
-定理 标量塔.of_mclosure_eq_top
-  结论: {N α} [幺半群 M] [乘法作用 M N] [标量乘法 N α] [乘法作用 M α]
-  证明: by
-  refine ⟨fun x => Submonoid.induction_of_closure_eq_top_left htop x ?_ ?_⟩
-  · intro y z
-    rw [one_smul]; rw [one_smul]
-  · clear x
-    intro x hx x' hx' y z
-    rw [mul_smul]; rw [mul_smul]; rw [hs x hx]; rw [hx']
-
-@[to_additive]
-
-Depends on / 依赖: Submonoid, Submonoid.induction_of_closure_eq_top_left, induction_of_closure_eq_top_left, mul_smul, one_smul
+/-
+**IsScalarTower.of_mclosure_eq_top** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsScalarTower.of_mclosure_eq_top {N α} [Monoid M] [MulAction M N] [SMul N 
+α] [MulAction M α] {s : Set M} (htop : Submonoid.closure s = ⊤) (hs : forall x i
+n s, forall (y : N) (z : α), (x • y) • z = x • y • z) : IsScalarTower M N α
+参数：htop : Submonoid.closure s = ⊤；hs : forall x in s, forall (y : N) (z : α), (x
+ • y) • z = x • y • z。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submonoid.induction_of_closure_eq_top_left`：induction_of_closure_eq_top_
+left {s : Set M} {motive : M -> Prop} (hs : closure s = ⊤) (x : M) (one : motive
+ 1) (mul_left : forall x in s, f…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
 -/
 theorem IsScalarTower.of_mclosure_eq_top {N α} [Monoid M] [MulAction M N] [SMul N α] [MulAction M α]
     {s : Set M} (htop : Submonoid.closure s = ⊤)
-    (hs : forall x in s, forall (y : N) (z : α), (x • y) • z = x • y • z) : IsScalarTower M N α := by
+    (hs : ∀ x ∈ s, ∀ (y : N) (z : α), (x • y) • z = x • y • z) : IsScalarTower M N α := by
   refine ⟨fun x => Submonoid.induction_of_closure_eq_top_left htop x ?_ ?_⟩
   · intro y z
-    rw [one_smul]; rw [one_smul]
+    rw [one_smul, one_smul]
   · clear x
     intro x hx x' hx' y z
-    rw [mul_smul]; rw [mul_smul]; rw [hs x hx]; rw [hx']
+    rw [mul_smul, mul_smul, hs x hx, hx']
 
 @[to_additive]
-/--
-theorem `SMulCommClass.of_mclosure_eq_top` / 定理 `SMulCommClass.of_mclosure_eq_top`
-
-English:
-theorem SMulCommClass.of_mclosure_eq_top
-  statement: {N α} [Monoid M] [SMul N α] [MulAction M α] {s : Set M}
-  proof: by
-  refine ⟨fun x => Submonoid.induction_of_closure_eq_top_left htop x ?_ ?_⟩
-  · intro y z
-    rw [one_smul]; rw [one_smul]
-  · clear x
-    intro x hx x' hx' y z
-    rw [mul_smul]; rw [mul_smul]; rw [hx']; rw [hs x hx]
-
-中文:
-定理 标量交换类.of_mclosure_eq_top
-  结论: {N α} [幺半群 M] [标量乘法 N α] [乘法作用 M α] {s : 集合 M}
-  证明: by
-  refine ⟨fun x => Submonoid.induction_of_closure_eq_top_left htop x ?_ ?_⟩
-  · intro y z
-    rw [one_smul]; rw [one_smul]
-  · clear x
-    intro x hx x' hx' y z
-    rw [mul_smul]; rw [mul_smul]; rw [hx']; rw [hs x hx]
-
-Depends on / 依赖: Submonoid, Submonoid.induction_of_closure_eq_top_left, induction_of_closure_eq_top_left, mul_smul, one_smul
+/-
+**SMulCommClass.of_mclosure_eq_top** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：SMulCommClass.of_mclosure_eq_top {N α} [Monoid M] [SMul N α] [MulAction M 
+α] {s : Set M} (htop : Submonoid.closure s = ⊤) (hs : forall x in s, forall (y :
+ N) (z : α), x • y • z = y • x • z) : SMulCommClass M N α
+参数：htop : Submonoid.closure s = ⊤；hs : forall x in s, forall (y : N) (z : α), x 
+• y • z = y • x • z。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submonoid.induction_of_closure_eq_top_left`：induction_of_closure_eq_top_
+left {s : Set M} {motive : M -> Prop} (hs : closure s = ⊤) (x : M) (one : motive
+ 1) (mul_left : forall x in s, f…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
 -/
 theorem SMulCommClass.of_mclosure_eq_top {N α} [Monoid M] [SMul N α] [MulAction M α] {s : Set M}
-    (htop : Submonoid.closure s = ⊤) (hs : forall x in s, forall (y : N) (z : α), x • y • z = y • x • z) :
+    (htop : Submonoid.closure s = ⊤) (hs : ∀ x ∈ s, ∀ (y : N) (z : α), x • y • z = y • x • z) :
     SMulCommClass M N α := by
   refine ⟨fun x => Submonoid.induction_of_closure_eq_top_left htop x ?_ ?_⟩
   · intro y z
-    rw [one_smul]; rw [one_smul]
+    rw [one_smul, one_smul]
   · clear x
     intro x hx x' hx' y z
-    rw [mul_smul]; rw [mul_smul]; rw [hx']; rw [hs x hx]
+    rw [mul_smul, mul_smul, hx', hs x hx]
 
 namespace Submonoid
 
@@ -1714,109 +1176,106 @@ variable {N : Type*} [CommMonoid N]
 open MonoidHom
 
 @[to_additive]
-/--
-theorem `sup_eq_range` / 定理 `sup_eq_range`
-
-English:
-theorem sup_eq_range
-  given: (s t : Submonoid N)
-  statement: s ⊔ t = mrange (s.subtype.coprod t.subtype)
-  proof: by
-  rw [mrange_eq_map]; rw [← mrange_inl_sup_mrange_inr]; rw [map_sup]; rw [map_mrange]; rw [coprod_comp_inl]; rw [map_mrange]; rw [coprod_comp_inr]; rw [mrange_subtype]; rw [mrange_subtype]
-
-@[to_additive]
-
-中文:
-定理 sup_eq_range
-  条件: (s t : 子幺半群 N)
-  结论: s ⊔ t = mrange (s.subtype.coprod t.subtype)
-  证明: by
-  rw [mrange_eq_map]; rw [← mrange_inl_sup_mrange_inr]; rw [map_sup]; rw [map_mrange]; rw [coprod_comp_inl]; rw [map_mrange]; rw [coprod_comp_inr]; rw [mrange_subtype]; rw [mrange_subtype]
-
-@[to_additive]
-
-Depends on / 依赖: coprod_comp_inl, coprod_comp_inr, map_mrange, map_sup, mrange_eq_map, mrange_inl_sup_mrange_inr, mrange_subtype
+/-
+**Submonoid.sup_eq_range** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：sup_eq_range (s t : Submonoid N) : s ⊔ t = mrange (s.subtype.coprod t.subt
+ype)
+参数：s t : Submonoid N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonoidHom.mrange_eq_map`：mrange_eq_map (f : F) : mrange f = (⊤ : Submono
+id M).map f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submonoid.mrange_inl_sup_mrange_inr`：mrange_inl_sup_mrange_inr : mrange 
+(inl M N) ⊔ mrange (inr M N) = ⊤
+· 使用定理 `Submonoid.map_sup`：map_sup (S T : Submonoid M) (f : F) : (S ⊔ T).map f =
+ S.map f ⊔ T.map f
+· 使用定理 `MonoidHom.map_mrange`：map_mrange (g : N ->* P) (f : M ->* N) : (mrange f
+).map g = mrange (comp g f)
+· 使用定理 `MonoidHom.coprod_comp_inl`：coprod_comp_inl : (f.coprod g).comp (inl M N)
+ = f
+· 使用定理 `MonoidHom.coprod_comp_inr`：coprod_comp_inr : (f.coprod g).comp (inr M N)
+ = g
+· 使用定理 `Submonoid.mrange_subtype`：mrange_subtype (s : Submonoid M) : mrange s.su
+btype = s
 -/
 theorem sup_eq_range (s t : Submonoid N) : s ⊔ t = mrange (s.subtype.coprod t.subtype) := by
-  rw [mrange_eq_map]; rw [← mrange_inl_sup_mrange_inr]; rw [map_sup]; rw [map_mrange]; rw [coprod_comp_inl]; rw [map_mrange]; rw [coprod_comp_inr]; rw [mrange_subtype]; rw [mrange_subtype]
+  rw [mrange_eq_map, ← mrange_inl_sup_mrange_inr, map_sup, map_mrange, coprod_comp_inl, map_mrange,
+    coprod_comp_inr, mrange_subtype, mrange_subtype]
 
 @[to_additive]
-/--
-theorem `mem_sup` / 定理 `mem_sup`
-
-English:
-theorem mem_sup
-  given: {s t : Submonoid N} {x : N}
-  statement: x in s ⊔ t ↔ exists y in s, exists z in t, y * z = x
-  proof: by
-  simp only [sup_eq_range, mem_mrange, coprod_apply, coe_subtype, Prod.exists,
-    Subtype.exists, exists_prop]
-
-中文:
-定理 mem_sup
-  条件: {s t : 子幺半群 N} {x : N}
-  结论: x in s ⊔ t ↔ 存在 y in s, 存在 z in t, y * z = x
-  证明: by
-  simp only [sup_eq_range, mem_mrange, coprod_apply, coe_subtype, Prod.exists,
-    Subtype.exists, exists_prop]
-
-Depends on / 依赖: Prod.exists, Subtype, Subtype.exists, coe_subtype, coprod_apply, exists_prop, mem_mrange, sup_eq_range
+/-
+**Submonoid.mem_sup** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：mem_sup {s t : Submonoid N} {x : N} : x in s ⊔ t ↔ exists y in s, exists z
+ in t, y * z = x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submonoid.sup_eq_range`：sup_eq_range (s t : Submonoid N) : s ⊔ t = mrang
+e (s.subtype.coprod t.subtype)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_sup {s t : Submonoid N} {x : N} : x in s ⊔ t ↔ exists y in s, exists z in t, y * z = x := by
+theorem mem_sup {s t : Submonoid N} {x : N} : x ∈ s ⊔ t ↔ ∃ y ∈ s, ∃ z ∈ t, y * z = x := by
   simp only [sup_eq_range, mem_mrange, coprod_apply, coe_subtype, Prod.exists,
     Subtype.exists, exists_prop]
 
-variable {P : N -> Prop}
+variable {P : N → Prop}
 
 @[to_additive, simp high]
-/--
-lemma `forall_mem_sup` / 引理 `forall_mem_sup`
-
-English:
-lemma forall_mem_sup
-  given: {s t : Submonoid N}
-  proof: by
-  simp [mem_sup]
-  aesop
-
-@[to_additive, simp high]
-
-中文:
-引理 对任意_mem_sup
-  条件: {s t : 子幺半群 N}
-  证明: by
-  simp [mem_sup]
-  aesop
-
-@[to_additive, simp high]
-
-Depends on / 依赖: mem_sup
+/-
+**Submonoid.forall_mem_sup** 是 Mathlib 中的一个引理，位于命名空间 `Submonoid`。
+形式化陈述：forall_mem_sup {s t : Submonoid N} : (forall x in s ⊔ t, P x) ↔ (forall x₁
+ in s, forall x₂ in t, P (x₁ * x₂))
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
 -/
 lemma forall_mem_sup {s t : Submonoid N} :
-    (forall x in s ⊔ t, P x) ↔ (forall x₁ in s, forall x₂ in t, P (x₁ * x₂)) := by
+    (∀ x ∈ s ⊔ t, P x) ↔ (∀ x₁ ∈ s, ∀ x₂ ∈ t, P (x₁ * x₂)) := by
   simp [mem_sup]
   aesop
 
 @[to_additive, simp high]
-/--
-lemma `exists_mem_sup` / 引理 `exists_mem_sup`
-
-English:
-lemma exists_mem_sup
-  given: {s t : Submonoid N}
-  proof: by
-  simp [mem_sup]
-
-中文:
-引理 存在_mem_sup
-  条件: {s t : 子幺半群 N}
-  证明: by
-  simp [mem_sup]
-
-Depends on / 依赖: mem_sup
+/-
+**Submonoid.exists_mem_sup** 是 Mathlib 中的一个引理，位于命名空间 `Submonoid`。
+形式化陈述：exists_mem_sup {s t : Submonoid N} : (exists x in s ⊔ t, P x) ↔ (exists x₁
+ in s, exists x₂ in t, P (x₁ * x₂))
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma exists_mem_sup {s t : Submonoid N} :
-    (exists x in s ⊔ t, P x) ↔ (exists x₁ in s, exists x₂ in t, P (x₁ * x₂)) := by
+    (∃ x ∈ s ⊔ t, P x) ↔ (∃ x₁ ∈ s, ∃ x₂ ∈ t, P (x₁ * x₂)) := by
   simp [mem_sup]
 
 end Submonoid
@@ -1827,89 +1286,97 @@ variable [AddMonoid A]
 
 open Set
 
-/--
-theorem `closure_singleton_eq` / 定理 `closure_singleton_eq`
-
-English:
-theorem closure_singleton_eq
-  given: (x : A)
-  proof: closure_eq_of_le (Set.singleton_subset_iff.2 ⟨1, one_nsmul x⟩) fun _ ⟨_n, hn⟩ =>
-    hn ▸ nsmul_mem (subset_closure <| Set.mem_singleton _) _
-
-中文:
-定理 closure_singleton_eq
-  条件: (x : A)
-  证明: closure_eq_of_le (Set.singleton_subset_iff.2 ⟨1, one_nsmul x⟩) fun _ ⟨_n, hn⟩ =>
-    hn ▸ nsmul_mem (subset_closure <| Set.mem_singleton _) _
-
-Depends on / 依赖: Set.mem_singleton, Set.singleton_subset_iff, closure_eq_of_le, mem_singleton, nsmul_mem, one_nsmul, singleton_subset_iff, subset_closure
+/-
+**AddSubmonoid.closure_singleton_eq** 是 Mathlib 中的一个定理，位于命名空间 `AddSubmonoid`。
+形式化陈述：closure_singleton_eq (x : A) : closure ({x} : Set A) = AddMonoidHom.mrange
+ (multiplesHom A x)
+参数：x : A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubmonoid.closure_eq_of_le`：∀ {M : Type u_1} [inst : AddZeroClass M] 
+{s : Set M} {S : AddSubmonoid M},   s ⊆ ↑S → S ≤ AddSubmonoid.closure s → AddSub
+monoid.closure s = …
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.singleton_subset_iff`：singleton_subset_iff {a : α} {s : Set α} : {a}
+ subseteq s ↔ a in s
+· 使用定理 `one_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 1 • a = a
+· 使用定理 `nsmul_mem`：∀ {M : Type u_3} {A : Type u_4} [inst : AddMonoid M] [inst_1 
+: SetLike A M] [AddSubmonoidClass A M] {S : A} {x : M},   x ∈ S → ∀ (n : ℕ), n …
+· 使用定理 `AddSubmonoid.instAddSubmonoidClass`：∀ {M : Type u_1} [inst : AddZeroClas
+s M], AddSubmonoidClass (AddSubmonoid M) M
+· 使用定理 `AddSubmonoid.subset_closure`：∀ {M : Type u_1} [inst : AddZeroClass M] {s
+ : Set M}, s ⊆ ↑(AddSubmonoid.closure s)
+· 使用定理 `Set.mem_singleton`：mem_singleton (a : α) : a in ({a} : Set α)
 -/
 theorem closure_singleton_eq (x : A) :
     closure ({x} : Set A) = AddMonoidHom.mrange (multiplesHom A x) :=
   closure_eq_of_le (Set.singleton_subset_iff.2 ⟨1, one_nsmul x⟩) fun _ ⟨_n, hn⟩ =>
     hn ▸ nsmul_mem (subset_closure <| Set.mem_singleton _) _
 
-/--
-theorem `mem_closure_singleton` / 定理 `mem_closure_singleton`
+/-- The `AddSubmonoid` generated by an element of an `AddMonoid` equals the set of
+natural number multiples of the element. -/
+/-
+**AddSubmonoid.mem_closure_singleton** 是 Mathlib 中的一个定理，位于命名空间 `AddSubmonoid`。
+形式化陈述：mem_closure_singleton {x y : A} : y in closure ({x} : Set A) ↔ exists n : 
+Nat, n • x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddSubmonoid.closure_singleton_eq`：closure_singleton_eq (x : A) : closur
+e ({x} : Set A) = AddMonoidHom.mrange (multiplesHom A x)
+· 使用定理 `AddMonoidHom.mem_mrange`：∀ {M : Type u_1} {N : Type u_2} [inst : AddZero
+Class M] [inst_1 : AddZeroClass N] {F : Type u_4}   [inst_2 : FunLike F M N] [mc
+ : AddMonoidH…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem mem_closure_singleton
-  given: {x y : A}
-  statement: y in closure ({x} : Set A) ↔ exists n : Nat, n • x = y
-  proof: by
-  rw [closure_singleton_eq]; rw [AddMonoidHom.mem_mrange]; rfl
-
-中文:
-定理 mem_closure_singleton
-  条件: {x y : A}
-  结论: y in closure ({x} : 集合 A) ↔ 存在 n : 自然数, n • x = y
-  证明: by
-  rw [closure_singleton_eq]; rw [AddMonoidHom.mem_mrange]; rfl
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.mem_mrange, closure_singleton_eq, mem_mrange
+--- 原说明 ---
+The `AddSubmonoid` generated by an element of an `AddMonoid` equals the set of
+natural number multiples of the element.
 -/
-theorem mem_closure_singleton {x y : A} : y in closure ({x} : Set A) ↔ exists n : Nat, n • x = y := by
-  rw [closure_singleton_eq]; rw [AddMonoidHom.mem_mrange]; rfl
-
-/--
-theorem `closure_singleton_zero` / 定理 `closure_singleton_zero`
-
-English:
-theorem closure_singleton_zero
-  statement: closure ({0} : Set A) = ⊥
-  proof: by
-  simp [eq_bot_iff_forall, mem_closure_singleton, nsmul_zero]
-
-中文:
-定理 closure_singleton_zero
-  结论: closure ({0} : 集合 A) = ⊥
-  证明: by
-  simp [eq_bot_iff_forall, mem_closure_singleton, nsmul_zero]
-
-Depends on / 依赖: eq_bot_iff_forall, mem_closure_singleton, nsmul_zero
+theorem mem_closure_singleton {x y : A} : y ∈ closure ({x} : Set A) ↔ ∃ n : ℕ, n • x = y := by
+  rw [closure_singleton_eq, AddMonoidHom.mem_mrange]; rfl
+/-
+**AddSubmonoid.closure_singleton_zero** 是 Mathlib 中的一个定理，位于命名空间 `AddSubmonoid`。
+形式化陈述：closure_singleton_zero : closure ({0} : Set A) = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `nsmul_zero`：∀ {M : Type u_2} [inst : AddMonoid M] (n : ℕ), n • 0 = 0
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem closure_singleton_zero : closure ({0} : Set A) = ⊥ := by
   simp [eq_bot_iff_forall, mem_closure_singleton, nsmul_zero]
 
-/--
-Definition of `multiples` / `multiples` 的定义
+/-- The additive submonoid generated by an element. -/
+/-
+**AddSubmonoid.multiples** 是 Mathlib 中的一个定义，位于命名空间 `AddSubmonoid`。
+形式化陈述：multiples (x : A) : AddSubmonoid A
+参数：x : A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition multiples
-  signature: (x : A)
-  body: AddSubmonoid.copy (AddMonoidHom.mrange (multiplesHom A x)) (Set.range (fun i => i • x : Nat -> A))
-    Set.ext fun n => exists_congr fun i => by simp
-
-中文:
-定义 multiples
-  签名: (x : A)
-  定义体: AddSubmonoid.copy (AddMonoidHom.mrange (multiplesHom A x)) (Set.range (fun i => i • x : Nat -> A))
-    Set.ext fun n => exists_congr fun i => by simp
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.mrange, AddSubmonoid, AddSubmonoid.copy, Set.ext, Set.range, exists_congr, mrange, multiplesHom
+--- 原说明 ---
+The additive submonoid generated by an element.
 -/
 def multiples (x : A) : AddSubmonoid A :=
-AddSubmonoid.copy (AddMonoidHom.mrange (multiplesHom A x)) (Set.range (fun i => i • x : Nat -> A))
+  AddSubmonoid.copy (AddMonoidHom.mrange (multiplesHom A x)) (Set.range (fun i => i • x : ℕ → A)) <|
     Set.ext fun n => exists_congr fun i => by simp
 
 attribute [to_additive existing] Submonoid.powers
@@ -1942,78 +1409,73 @@ elements. -/
 @[to_additive
       /-- An element is in the closure of a two-element set if it is a linear combination of
       those two elements. -/]
-/--
-theorem `mem_closure_pair` / 定理 `mem_closure_pair`
-
-English:
-theorem mem_closure_pair
-  given: {A : Type*} [CommMonoid A] (a b c : A)
-  proof: by
-  rw [← Set.singleton_union]; rw [Submonoid.closure_union]; rw [mem_sup]
-  simp_rw [mem_closure_singleton, exists_exists_eq_and]
-
-中文:
-定理 mem_closure_pair
-  条件: {A : 类型} [交换幺半群 A] (a b c : A)
-  证明: by
-  rw [← Set.singleton_union]; rw [Submonoid.closure_union]; rw [mem_sup]
-  simp_rw [mem_closure_singleton, exists_exists_eq_and]
-
-Depends on / 依赖: Set.singleton_union, Submonoid, Submonoid.closure_union, closure_union, exists_exists_eq_and, mem_closure_singleton, mem_sup, simp_rw, singleton_union
+/-
+**Submonoid.mem_closure_pair** 是 Mathlib 中的一个定理，位于命名空间 `Submonoid`。
+形式化陈述：mem_closure_pair {A : Type*} [CommMonoid A] (a b c : A) : c in Submonoid.c
+losure ({a, b} : Set A) ↔ exists m n : Nat, a ^ m * b ^ n = c
+参数：a b c : A。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.singleton_union`：singleton_union : {a} union s = insert a s
+· 使用定理 `Submonoid.closure_union`：closure_union (s t : Set M) : closure (s union 
+t) = closure s ⊔ closure t
+· 使用定理 `Submonoid.mem_sup`：mem_sup {s t : Submonoid N} {x : N} : x in s ⊔ t ↔ ex
+ists y in s, exists z in t, y * z = x
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem mem_closure_pair {A : Type*} [CommMonoid A] (a b c : A) :
-    c in Submonoid.closure ({a, b} : Set A) ↔ exists m n : Nat, a ^ m * b ^ n = c := by
-  rw [← Set.singleton_union]; rw [Submonoid.closure_union]; rw [mem_sup]
+    c ∈ Submonoid.closure ({a, b} : Set A) ↔ ∃ m n : ℕ, a ^ m * b ^ n = c := by
+  rw [← Set.singleton_union, Submonoid.closure_union, mem_sup]
   simp_rw [mem_closure_singleton, exists_exists_eq_and]
 
 end Submonoid
 
 section mul_add
 
-/--
-theorem `ofMul_image_powers_eq_multiples_ofMul` / 定理 `ofMul_image_powers_eq_multiples_ofMul`
-
-English:
-theorem ofMul_image_powers_eq_multiples_ofMul
-  given: [Monoid M] {x : M}
-  proof: by
-  ext
-  exact Set.mem_image_iff_of_inverse (congrFun rfl) (congrFun rfl)
-
-中文:
-定理 ofMul_image_powers_eq_multiples_ofMul
-  条件: [幺半群 M] {x : M}
-  证明: by
-  ext
-  exact Set.mem_image_iff_of_inverse (congrFun rfl) (congrFun rfl)
-
-Depends on / 依赖: Set.mem_image_iff_of_inverse, mem_image_iff_of_inverse
+/-
+**ofMul_image_powers_eq_multiples_ofMul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofMul_image_powers_eq_multiples_ofMul [Monoid M] {x : M} : Additive.ofMul 
+'' (Submonoid.powers x : Set M) = AddSubmonoid.multiples (Additive.ofMul x)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Set.mem_image_iff_of_inverse`：mem_image_iff_of_inverse {f : α -> β} {g :
+ β -> α} {b : β} {s : Set α} (h₁ : LeftInverse g f) (h₂ : RightInverse g f) : b 
+in f '' s ↔ g b in…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
 -/
 theorem ofMul_image_powers_eq_multiples_ofMul [Monoid M] {x : M} :
     Additive.ofMul '' (Submonoid.powers x : Set M) = AddSubmonoid.multiples (Additive.ofMul x) := by
   ext
   exact Set.mem_image_iff_of_inverse (congrFun rfl) (congrFun rfl)
-
-/--
-theorem `ofAdd_image_multiples_eq_powers_ofAdd` / 定理 `ofAdd_image_multiples_eq_powers_ofAdd`
-
-English:
-theorem ofAdd_image_multiples_eq_powers_ofAdd
-  given: [AddMonoid A] {x : A}
-  proof: by
-  symm
-  rw [Equiv.eq_image_iff_symm_image_eq]
-  exact ofMul_image_powers_eq_multiples_ofMul
-
-中文:
-定理 ofAdd_image_multiples_eq_powers_ofAdd
-  条件: [加法幺半群 A] {x : A}
-  证明: by
-  symm
-  rw [Equiv.eq_image_iff_symm_image_eq]
-  exact ofMul_image_powers_eq_multiples_ofMul
-
-Depends on / 依赖: Equiv.eq_image_iff_symm_image_eq, eq_image_iff_symm_image_eq, ofMul_image_powers_eq_multiples_ofMul
+/-
+**ofAdd_image_multiples_eq_powers_ofAdd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofAdd_image_multiples_eq_powers_ofAdd [AddMonoid A] {x : A} : Multiplicati
+ve.ofAdd '' (AddSubmonoid.multiples x : Set A) = Submonoid.powers (Multiplicativ
+e.ofAdd x)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.eq_image_iff_symm_image_eq`：eq_image_iff_symm_image_eq {α β} (e : 
+α ≃ β) (s : Set α) (t : Set β) : t = e '' s ↔ e.symm '' t = s
+· 使用定理 `ofMul_image_powers_eq_multiples_ofMul`：ofMul_image_powers_eq_multiples_o
+fMul [Monoid M] {x : M} : Additive.ofMul '' (Submonoid.powers x : Set M) = AddSu
+bmonoid.multiples (Additive…
 -/
 theorem ofAdd_image_multiples_eq_powers_ofAdd [AddMonoid A] {x : A} :
     Multiplicative.ofAdd '' (AddSubmonoid.multiples x : Set A) =
@@ -2024,23 +1486,25 @@ theorem ofAdd_image_multiples_eq_powers_ofAdd [AddMonoid A] {x : A} :
 
 end mul_add
 
-/--
-theorem `Nat.addSubmonoidClosure_one` / 定理 `Nat.addSubmonoidClosure_one`
-
-English:
-theorem Nat.addSubmonoidClosure_one
-  statement: AddSubmonoid.closure ({1} : Set Nat) = ⊤
-  proof: by
-  ext
-  simp [AddSubmonoid.mem_closure_singleton]
-
-中文:
-定理 自然数.addSubmonoidClosure_one
-  结论: 加法子幺半群.closure ({1} : 集合 自然数) = ⊤
-  证明: by
-  ext
-  simp [AddSubmonoid.mem_closure_singleton]
+/-
+**Nat.addSubmonoidClosure_one** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：AddSubmonoid.closure {1} = ⊤
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddSubmonoid.ext`：∀ {M : Type u_1} [inst : AddZeroClass M] {S T : AddSub
+monoid M}, (∀ (x : M), x ∈ S ↔ x ∈ T) → S = T
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-@[simp] theorem Nat.addSubmonoidClosure_one : AddSubmonoid.closure ({1} : Set Nat) = ⊤ := by
+@[simp] theorem Nat.addSubmonoidClosure_one : AddSubmonoid.closure ({1} : Set ℕ) = ⊤ := by
   ext
   simp [AddSubmonoid.mem_closure_singleton]

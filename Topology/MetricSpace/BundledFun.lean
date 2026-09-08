@@ -34,36 +34,25 @@ variable {X R : Type*}
 variable (X R) in
 /-- A pseudometric as a bundled function. -/
 @[ext]
-/--
-Definition of `PseudoMetric` / `PseudoMetric` 的定义
+/-
+**PseudoMetric** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → (R : Type u_2) → [Zero R] → [Add R] → [LE R] → Type (max u_1 u_
+2)
+参数：R : Type u_2；max u_1 u_2。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure PseudoMetric
-  parameters: [Zero R] [Add R] [LE R]
-  axioms and operations (4):
-    - toFun : X -> X -> R
-    - refl'(x) : toFun x x = 0
-    - symm'(x y) : toFun x y = toFun y x
-    - triangle'(x y z) : toFun x z <= toFun x y + toFun y z
-
-中文:
-结构 PseudoMetric
-  参数: [零 R] [加法 R] [LE R]
-  公理与运算 (4 个):
-    - toFun : X -> X -> R
-    - refl'(x) : toFun x x = 0
-    - symm'(x y) : toFun x y = toFun y x
-    - triangle'(x y z) : toFun x z <= toFun x y + toFun y z
+--- 原说明 ---
+A pseudometric as a bundled function.
 -/
 structure PseudoMetric [Zero R] [Add R] [LE R] where
   /-- The underlying binary function mapping into a linearly ordered additive monoid. -/
-  toFun : X -> X -> R
+  toFun : X → X → R
   /-- A pseudometric must take identical elements to 0. -/
   refl' x : toFun x x = 0
   /-- A pseudometric must be symmetric. -/
   symm' x y : toFun x y = toFun y x
   /-- A pseudometric must respect the triangle inequality. -/
-  triangle' x y z : toFun x z <= toFun x y + toFun y z
+  triangle' x y z : toFun x z ≤ toFun x y + toFun y z
 
 namespace PseudoMetric
 
@@ -71,199 +60,99 @@ section Basic
 
 variable [Zero R] [Add R] [LE R] (d : PseudoMetric X R)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (PseudoMetric X R) X (X -> R)
-  body: PseudoMetric.toFun
-  coe_injective _ := by aesop
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 函数状 (PseudoMetric X R) X (X -> R)
-  定义体: PseudoMetric.toFun
-  coe_injective _ := by aesop
-
-@[simp, norm_cast]
-
-Depends on / 依赖: PseudoMetric, PseudoMetric.toFun
+/-
+**PseudoMetric.** 是 Mathlib 中的一个实例，位于命名空间 `PseudoMetric`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : FunLike (PseudoMetric X R) X (X -> R) where
+instance : FunLike (PseudoMetric X R) X (X → R) where
   coe := PseudoMetric.toFun
   coe_injective _ := by aesop
 
 @[simp, norm_cast]
-/--
-lemma `coe_mk` / 引理 `coe_mk`
-
-English:
-lemma coe_mk
-  given: (d : X -> X -> R) (refl symm triangle)
-  statement: mk d refl symm triangle = d
-  proof: rfl
-
-中文:
-引理 coe_mk
-  条件: (d : X -> X -> R) (refl symm triangle)
-  结论: mk d refl symm triangle = d
-  证明: rfl
+/-
+**PseudoMetric.coe_mk** 是 Mathlib 中的一个引理，位于命名空间 `PseudoMetric`。
+形式化陈述：coe_mk (d : X -> X -> R) (refl symm triangle) : mk d refl symm triangle = 
+d
+参数：d : X -> X -> R；refl symm triangle。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_mk (d : X -> X -> R) (refl symm triangle) : mk d refl symm triangle = d := rfl
-
-/--
-lemma `mk_apply` / 引理 `mk_apply`
-
-English:
-lemma mk_apply
-  given: (d : X -> X -> R) (refl symm triangle) (x y : X)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 mk_apply
-  条件: (d : X -> X -> R) (refl symm triangle) (x y : X)
-  证明: rfl
-
-@[simp]
+lemma coe_mk (d : X → X → R) (refl symm triangle) : mk d refl symm triangle = d := rfl
+/-
+**PseudoMetric.mk_apply** 是 Mathlib 中的一个引理，位于命名空间 `PseudoMetric`。
+形式化陈述：mk_apply (d : X -> X -> R) (refl symm triangle) (x y : X) : mk d refl symm
+ triangle x y = d x y
+参数：d : X -> X -> R；refl symm triangle；x y : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma mk_apply (d : X -> X -> R) (refl symm triangle) (x y : X) :
+lemma mk_apply (d : X → X → R) (refl symm triangle) (x y : X) :
     mk d refl symm triangle x y = d x y :=
   rfl
 
 @[simp]
-/--
-lemma `refl` / 引理 `refl`
-
-English:
-lemma refl
-  given: (x : X)
-  statement: d x x = 0
-  proof: d.refl' x
-
-中文:
-引理 refl
-  条件: (x : X)
-  结论: d x x = 0
-  证明: d.refl' x
+/-
+**PseudoMetric.refl** 是 Mathlib 中的一个定理，位于命名空间 `PseudoMetric`。
+形式化陈述：∀ {X : Type u_1} {R : Type u_2} [inst : Zero R] [inst_1 : Add R] [inst_2 :
+ LE R] (d : PseudoMetric X R) (x : X),   d x x = 0
+参数：d : PseudoMetric X R；x : X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PseudoMetric.refl'`：∀ {X : Type u_1} {R : Type u_2} [inst : Zero R] [ins
+t_1 : Add R] [inst_2 : LE R] (self : PseudoMetric X R) (x : X),   self.toFun x x
+ = 0
 -/
 protected lemma refl (x : X) : d x x = 0 := d.refl' x
-/--
-lemma `symm` / 引理 `symm`
-
-English:
-lemma symm
-  given: (x y : X)
-  statement: d x y = d y x
-  proof: d.symm' x y
-
-中文:
-引理 symm
-  条件: (x y : X)
-  结论: d x y = d y x
-  证明: d.symm' x y
+/-
+**PseudoMetric.symm** 是 Mathlib 中的一个定理，位于命名空间 `PseudoMetric`。
+形式化陈述：∀ {X : Type u_1} {R : Type u_2} [inst : Zero R] [inst_1 : Add R] [inst_2 :
+ LE R] (d : PseudoMetric X R) (x y : X),   d x y = d y x
+参数：d : PseudoMetric X R；x y : X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PseudoMetric.symm'`：∀ {X : Type u_1} {R : Type u_2} [inst : Zero R] [ins
+t_1 : Add R] [inst_2 : LE R] (self : PseudoMetric X R) (x y : X),   self.toFun x
+ y = sel…
 -/
 protected lemma symm (x y : X) : d x y = d y x := d.symm' x y
-/--
-lemma `triangle` / 引理 `triangle`
-
-English:
-lemma triangle
-  given: (x y z : X)
-  statement: d x z <= d x y + d y z
-  proof: d.triangle' x y z
-
-中文:
-引理 triangle
-  条件: (x y z : X)
-  结论: d x z <= d x y + d y z
-  证明: d.triangle' x y z
+/-
+**PseudoMetric.triangle** 是 Mathlib 中的一个定理，位于命名空间 `PseudoMetric`。
+形式化陈述：∀ {X : Type u_1} {R : Type u_2} [inst : Zero R] [inst_1 : Add R] [inst_2 :
+ LE R] (d : PseudoMetric X R) (x y z : X),   d x z ≤ d x y + d y z
+参数：d : PseudoMetric X R；x y z : X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PseudoMetric.triangle'`：∀ {X : Type u_1} {R : Type u_2} [inst : Zero R] 
+[inst_1 : Add R] [inst_2 : LE R] (self : PseudoMetric X R) (x y z : X),   self.t
+oFun x z ≤ s…
 -/
-protected lemma triangle (x y z : X) : d x z <= d x y + d y z := d.triangle' x y z
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LE (PseudoMetric X R)
-  body: ⟨fun d d' => ⇑d <= d'⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: LE (PseudoMetric X R)
-  定义体: ⟨fun d d' => ⇑d <= d'⟩
-
-@[simp, norm_cast]
+protected lemma triangle (x y z : X) : d x z ≤ d x y + d y z := d.triangle' x y z
+/-
+**PseudoMetric.** 是 Mathlib 中的一个实例，位于命名空间 `PseudoMetric`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : LE (PseudoMetric X R) := ⟨fun d d' => ⇑d <= d'⟩
+instance : LE (PseudoMetric X R) := ⟨fun d d' ↦ ⇑d ≤ d'⟩
 
 @[simp, norm_cast]
-/--
-lemma `coe_le_coe` / 引理 `coe_le_coe`
-
-English:
-lemma coe_le_coe
-  given: {d d' : PseudoMetric X R}
-  proof: Iff.rfl
-
-中文:
-引理 coe_le_coe
-  条件: {d d' : PseudoMetric X R}
-  证明: Iff.rfl
+/-
+**PseudoMetric.coe_le_coe** 是 Mathlib 中的一个定理，位于命名空间 `PseudoMetric`。
+形式化陈述：∀ {X : Type u_1} {R : Type u_2} [inst : Zero R] [inst_1 : Add R] [inst_2 :
+ LE R] {d d' : PseudoMetric X R},   ⇑d ≤ ⇑d' ↔ d ≤ d'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 protected lemma coe_le_coe {d d' : PseudoMetric X R} :
-    (d : X -> X -> R) <= d' ↔ d <= d' :=
+    (d : X → X → R) ≤ d' ↔ d ≤ d' :=
   Iff.rfl
 
 end Basic
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Zero
-  signature: R] [Add R] [PartialOrder R] : PartialOrder (PseudoMetric X R)
-  body: .lift _ DFunLike.coe_injective
-
-中文:
-实例 [零
-  签名: R] [加法 R] [偏序 R] : 偏序 (PseudoMetric X R)
-  定义体: .lift _ DFunLike.coe_injective
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
+/-
+**PseudoMetric.** 是 Mathlib 中的一个实例，位于命名空间 `PseudoMetric`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Zero R] [Add R] [PartialOrder R] : PartialOrder (PseudoMetric X R) :=
   .lift _ DFunLike.coe_injective
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddZeroClass
-  signature: R] [Preorder R] : Bot (PseudoMetric X R) where
-  body: 0
-  bot.refl' _ := rfl
-  bot.symm' _ _ := rfl
-  bot.triangle' _ _ _ := by simp
-
-@[simp, norm_cast]
-
-中文:
-实例 [加法零类
-  签名: R] [预序 R] : 底元素 (PseudoMetric X R) where
-  定义体: 0
-  bot.refl' _ := rfl
-  bot.symm' _ _ := rfl
-  bot.triangle' _ _ _ := by simp
-
-@[simp, norm_cast]
+/-
+**PseudoMetric.** 是 Mathlib 中的一个实例，位于命名空间 `PseudoMetric`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddZeroClass R] [Preorder R] : Bot (PseudoMetric X R) where
   bot.toFun := 0
@@ -272,84 +161,33 @@ instance [AddZeroClass R] [Preorder R] : Bot (PseudoMetric X R) where
   bot.triangle' _ _ _ := by simp
 
 @[simp, norm_cast]
-/--
-lemma `coe_bot` / 引理 `coe_bot`
-
-English:
-lemma coe_bot
-  given: [AddZeroClass R] [Preorder R]
-  statement: ⇑(⊥ : PseudoMetric X R) = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_bot
-  条件: [加法零类 R] [预序 R]
-  结论: ⇑(⊥ : PseudoMetric X R) = 0
-  证明: rfl
-
-@[simp]
+/-
+**PseudoMetric.coe_bot** 是 Mathlib 中的一个引理，位于命名空间 `PseudoMetric`。
+形式化陈述：coe_bot [AddZeroClass R] [Preorder R] : ⇑(⊥ : PseudoMetric X R) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_bot [AddZeroClass R] [Preorder R] : ⇑(⊥ : PseudoMetric X R) = 0 := rfl
 
 @[simp]
-/--
-lemma `bot_apply` / 引理 `bot_apply`
-
-English:
-lemma bot_apply
-  given: [AddZeroClass R] [Preorder R] (x y : X)
-  proof: rfl
-
-中文:
-引理 bot_apply
-  条件: [加法零类 R] [预序 R] (x y : X)
-  证明: rfl
+/-
+**PseudoMetric.bot_apply** 是 Mathlib 中的一个定理，位于命名空间 `PseudoMetric`。
+形式化陈述：∀ {X : Type u_1} {R : Type u_2} [inst : AddZeroClass R] [inst_1 : Preorder
+ R] (x y : X), ⊥ x y = 0
+参数：x y : X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected lemma bot_apply [AddZeroClass R] [Preorder R] (x y : X) :
     (⊥ : PseudoMetric X R) x y = 0 :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddZeroClass
-  signature: R] [SemilatticeSup R] [AddLeftMono R] [AddRightMono R] :
-  body: {
-    toFun := fun x y => (d x y) ⊔ (d' x y)
-    refl' _ := by simp
-    symm' x y := by simp [d.symm, d'.symm]
-    triangle' := by
-      intro x y z
-      simp only [sup_le_iff]
-      refine ⟨(d.triangle x y z).trans ?_, (d'.triangle x y z).trans ?_⟩ <;>
-      apply add_le_add <;> simp
-  }
-
-@[simp, push_cast]
-
-中文:
-实例 [加法零类
-  签名: R] [SemilatticeSup R] [AddLeftMono R] [AddRightMono R] :
-  定义体: {
-    toFun := fun x y => (d x y) ⊔ (d' x y)
-    refl' _ := by simp
-    symm' x y := by simp [d.symm, d'.symm]
-    triangle' := by
-      intro x y z
-      simp only [sup_le_iff]
-      refine ⟨(d.triangle x y z).trans ?_, (d'.triangle x y z).trans ?_⟩ <;>
-      apply add_le_add <;> simp
-  }
-
-@[simp, push_cast]
+/-
+**PseudoMetric.** 是 Mathlib 中的一个实例，位于命名空间 `PseudoMetric`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddZeroClass R] [SemilatticeSup R] [AddLeftMono R] [AddRightMono R] :
     Max (PseudoMetric X R) where
   max d d' := {
-    toFun := fun x y => (d x y) ⊔ (d' x y)
+    toFun := fun x y ↦ (d x y) ⊔ (d' x y)
     refl' _ := by simp
     symm' x y := by simp [d.symm, d'.symm]
     triangle' := by
@@ -360,180 +198,155 @@ instance [AddZeroClass R] [SemilatticeSup R] [AddLeftMono R] [AddRightMono R] :
   }
 
 @[simp, push_cast]
-/--
-lemma `coe_sup` / 引理 `coe_sup`
-
-English:
-lemma coe_sup
-  statement: [AddZeroClass R] [SemilatticeSup R] [AddLeftMono R] [AddRightMono R]
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_sup
-  结论: [加法零类 R] [SemilatticeSup R] [AddLeftMono R] [AddRightMono R]
-  证明: rfl
-
-@[simp]
+/-
+**PseudoMetric.coe_sup** 是 Mathlib 中的一个引理，位于命名空间 `PseudoMetric`。
+形式化陈述：coe_sup [AddZeroClass R] [SemilatticeSup R] [AddLeftMono R] [AddRightMono 
+R] (d d' : PseudoMetric X R) : ((d ⊔ d' : PseudoMetric X R) : X -> X -> R) = (d 
+: X -> X -> R) ⊔ d'
+参数：d d' : PseudoMetric X R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_sup [AddZeroClass R] [SemilatticeSup R] [AddLeftMono R] [AddRightMono R]
     (d d' : PseudoMetric X R) :
-    ((d ⊔ d' : PseudoMetric X R) : X -> X -> R) = (d : X -> X -> R) ⊔ d' := rfl
+    ((d ⊔ d' : PseudoMetric X R) : X → X → R) = (d : X → X → R) ⊔ d' := rfl
 
 @[simp]
-/--
-lemma `sup_apply` / 引理 `sup_apply`
-
-English:
-lemma sup_apply
-  statement: [AddZeroClass R] [SemilatticeSup R] [AddLeftMono R] [AddRightMono R]
-  proof: rfl
-
-中文:
-引理 sup_apply
-  结论: [加法零类 R] [SemilatticeSup R] [AddLeftMono R] [AddRightMono R]
-  证明: rfl
+/-
+**PseudoMetric.sup_apply** 是 Mathlib 中的一个定理，位于命名空间 `PseudoMetric`。
+形式化陈述：∀ {X : Type u_1} {R : Type u_2} [inst : AddZeroClass R] [inst_1 : Semilatt
+iceSup R] [inst_2 : AddLeftMono R]   [inst_3 : AddRightMono R] (d d' : PseudoMet
+ric X R) (x y : X), (d ⊔ d') x y = d x y ⊔ d' x y
+参数：d d' : PseudoMetric X R；x y : X；d ⊔ d'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected lemma sup_apply [AddZeroClass R] [SemilatticeSup R] [AddLeftMono R] [AddRightMono R]
     (d d' : PseudoMetric X R) (x y : X) :
     (d ⊔ d') x y = d x y ⊔ d' x y :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddZeroClass
-  signature: R] [SemilatticeSup R] [AddLeftMono R] [AddRightMono R] :
-  body: max
-  le_sup_left := by simp [← PseudoMetric.coe_le_coe]
-  le_sup_right := by simp [← PseudoMetric.coe_le_coe]
-  sup_le _ _ _ := fun h h' _ _ => sup_le (h _ _) (h' _ _)
-
-中文:
-实例 [加法零类
-  签名: R] [SemilatticeSup R] [AddLeftMono R] [AddRightMono R] :
-  定义体: max
-  le_sup_left := by simp [← PseudoMetric.coe_le_coe]
-  le_sup_right := by simp [← PseudoMetric.coe_le_coe]
-  sup_le _ _ _ := fun h h' _ _ => sup_le (h _ _) (h' _ _)
+/-
+**PseudoMetric.** 是 Mathlib 中的一个实例，位于命名空间 `PseudoMetric`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddZeroClass R] [SemilatticeSup R] [AddLeftMono R] [AddRightMono R] :
     SemilatticeSup (PseudoMetric X R) where
   sup := max
   le_sup_left := by simp [← PseudoMetric.coe_le_coe]
   le_sup_right := by simp [← PseudoMetric.coe_le_coe]
-  sup_le _ _ _ := fun h h' _ _ => sup_le (h _ _) (h' _ _)
+  sup_le _ _ _ := fun h h' _ _ ↦ sup_le (h _ _) (h' _ _)
 
 section OrderBot
 
 variable [AddCommMonoid R] [LinearOrder R] [AddLeftStrictMono R]
 
-/--
-lemma `nonneg` / 引理 `nonneg`
-
-English:
-lemma nonneg
-  given: (d : PseudoMetric X R) (x y : X)
-  statement: 0 <= d x y
-  proof: by
-  by_contra! H
-  have : d x x < 0 := by
-    calc d x x <= d x y + d y x := d.triangle' x y x
-      _ < 0 + 0 := by refine add_lt_add H (d.symm x y ▸ H)
-      _ = 0 := by simp
-  exact this.ne (d.refl x)
-
-中文:
-引理 nonneg
-  条件: (d : PseudoMetric X R) (x y : X)
-  结论: 0 <= d x y
-  证明: by
-  by_contra! H
-  have : d x x < 0 := by
-    calc d x x <= d x y + d y x := d.triangle' x y x
-      _ < 0 + 0 := by refine add_lt_add H (d.symm x y ▸ H)
-      _ = 0 := by simp
-  exact this.ne (d.refl x)
+/-
+**PseudoMetric.nonneg** 是 Mathlib 中的一个定理，位于命名空间 `PseudoMetric`。
+形式化陈述：∀ {X : Type u_1} {R : Type u_2} [inst : AddCommMonoid R] [inst_1 : LinearO
+rder R] [AddLeftStrictMono R]   (d : PseudoMetric X R) (x y : X), 0 ≤ d x y
+参数：d : PseudoMetric X R；x y : X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `PseudoMetric.triangle'`：∀ {X : Type u_1} {R : Type u_2} [inst : Zero R] 
+[inst_1 : Add R] [inst_2 : LE R] (self : PseudoMetric X R) (x y z : X),   self.t
+oFun x z ≤ s…
+· 使用定理 `add_lt_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftStrictMono α] [AddRightStrictMono α] {a b c d : α},   a < b → c < d → a + c < 
+…
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `PseudoMetric.symm`：∀ {X : Type u_1} {R : Type u_2} [inst : Zero R] [inst
+_1 : Add R] [inst_2 : LE R] (d : PseudoMetric X R) (x y : X),   d x y = d y x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `PseudoMetric.refl`：∀ {X : Type u_1} {R : Type u_2} [inst : Zero R] [inst
+_1 : Add R] [inst_2 : LE R] (d : PseudoMetric X R) (x : X),   d x x = 0
 -/
-protected lemma nonneg (d : PseudoMetric X R) (x y : X) : 0 <= d x y := by
+protected lemma nonneg (d : PseudoMetric X R) (x y : X) : 0 ≤ d x y := by
   by_contra! H
   have : d x x < 0 := by
-    calc d x x <= d x y + d y x := d.triangle' x y x
+    calc d x x ≤ d x y + d y x := d.triangle' x y x
       _ < 0 + 0 := by refine add_lt_add H (d.symm x y ▸ H)
       _ = 0 := by simp
   exact this.ne (d.refl x)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: OrderBot (PseudoMetric X R)
-  body: f.nonneg _ _
-
-@[simp, push_cast]
-
-中文:
-实例 :
-  签名: 有底序 (PseudoMetric X R)
-  定义体: f.nonneg _ _
-
-@[simp, push_cast]
-
-Depends on / 依赖: f.nonneg, nonneg
+/-
+**PseudoMetric.** 是 Mathlib 中的一个实例，位于命名空间 `PseudoMetric`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : OrderBot (PseudoMetric X R) where
   bot_le f _ _ := f.nonneg _ _
 
 @[simp, push_cast]
-/--
-lemma `coe_finsetSup` / 引理 `coe_finsetSup`
-
-English:
-lemma coe_finsetSup
-  statement: [IsOrderedAddMonoid R] {Y : Type*} {f : Y -> PseudoMetric X R} {s : Finset Y}
-  proof: by
-  simpa using (Finset.sup'_eq_sup hs (f ·)).symm
-
-中文:
-引理 coe_finsetSup
-  结论: [是OrderedAdd幺半群 R] {Y : 类型} {f : Y -> PseudoMetric X R} {s : 有限集 Y}
-  证明: by
-  simpa using (Finset.sup'_eq_sup hs (f ·)).symm
-
-Depends on / 依赖: Finset, Finset.sup, _eq_sup
+/-
+**PseudoMetric.coe_finsetSup** 是 Mathlib 中的一个引理，位于命名空间 `PseudoMetric`。
+形式化陈述：coe_finsetSup [IsOrderedAddMonoid R] {Y : Type*} {f : Y -> PseudoMetric X 
+R} {s : Finset Y} (hs : s.Nonempty) : ⇑(s.sup f) = s.sup' hs (f ·)
+参数：hs : s.Nonempty。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用引理 `Finset.sup'`：sup'_one [SemilatticeSup β] (f : α -> β) : sup' 1 one_nonem
+pty f = f 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sup'_eq_sup`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeS
+up α] [inst_1 : OrderBot α] {s : Finset β} (H : s.Nonempty)   (f : β → α), s.sup
+' H f = …
 -/
-lemma coe_finsetSup [IsOrderedAddMonoid R] {Y : Type*} {f : Y -> PseudoMetric X R} {s : Finset Y}
+lemma coe_finsetSup [IsOrderedAddMonoid R] {Y : Type*} {f : Y → PseudoMetric X R} {s : Finset Y}
     (hs : s.Nonempty) :
     ⇑(s.sup f) = s.sup' hs (f ·) := by
   simpa using (Finset.sup'_eq_sup hs (f ·)).symm
-
-/--
-lemma `finsetSup_apply` / 引理 `finsetSup_apply`
-
-English:
-lemma finsetSup_apply
-  statement: [IsOrderedAddMonoid R] {Y : Type*} {f : Y -> PseudoMetric X R}
-  proof: by
-  induction hs using Finset.Nonempty.cons_induction with
-  | singleton i => simp
-  | cons a s ha hs ih => simp [hs, ih]
-
-中文:
-引理 finsetSup_apply
-  结论: [是OrderedAdd幺半群 R] {Y : 类型} {f : Y -> PseudoMetric X R}
-  证明: by
-  induction hs using Finset.Nonempty.cons_induction with
-  | singleton i => simp
-  | cons a s ha hs ih => simp [hs, ih]
-
-Depends on / 依赖: Finset, Finset.Nonempty.cons_induction, Nonempty, cons_induction, singleton
+/-
+**PseudoMetric.finsetSup_apply** 是 Mathlib 中的一个引理，位于命名空间 `PseudoMetric`。
+形式化陈述：finsetSup_apply [IsOrderedAddMonoid R] {Y : Type*} {f : Y -> PseudoMetric 
+X R} {s : Finset Y} (hs : s.Nonempty) (x y : X) : s.sup f x y = s.sup' hs fun i 
+=> f i x y
+参数：hs : s.Nonempty；x y : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.Nonempty.cons_induction`：∀ {α : Type u_3} {motive : (s : Finset α
+) → s.Nonempty → Prop},   (∀ (a : α), motive {a} ⋯) →     (∀ (a : α) (s : Finset
+ α) (h : a ∉ s) (hs …
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用引理 `Finset.sup'`：sup'_one [SemilatticeSup β] (f : α -> β) : sup' 1 one_nonem
+pty f = f 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sup_singleton`：sup_singleton {b : β} : ({b} : Finset β).sup f = f
+ b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Finset.cons_nonempty`：cons_nonempty (h : a ∉ s) : (cons a s h).Nonempty
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.sup_cons`：sup_cons {b : β} (h : b ∉ s) : (cons b s h).sup f = f b
+ ⊔ s.sup f
+· 使用定理 `Finset.sup'_cons`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeSup
+ α] {s : Finset β} (H : s.Nonempty) (f : β → α) {b : β}   {hb : b ∉ s}, (Finset.
+cons b…
 -/
-lemma finsetSup_apply [IsOrderedAddMonoid R] {Y : Type*} {f : Y -> PseudoMetric X R}
+lemma finsetSup_apply [IsOrderedAddMonoid R] {Y : Type*} {f : Y → PseudoMetric X R}
     {s : Finset Y} (hs : s.Nonempty) (x y : X) :
-    s.sup f x y = s.sup' hs fun i => f i x y := by
+    s.sup f x y = s.sup' hs fun i ↦ f i x y := by
   induction hs using Finset.Nonempty.cons_induction with
   | singleton i => simp
   | cons a s ha hs ih => simp [hs, ih]
@@ -542,137 +355,125 @@ end OrderBot
 
 section IsUltra
 
-/--
-Definition of `IsUltra` / `IsUltra` 的定义
+/-- A pseudometric can be nonarchimedean (or ultrametric), with a stronger triangle
+inequality such that `d x z ≤ max (d x y) (d y z)`. -/
+/-
+**PseudoMetric.IsUltra** 是 Mathlib 中的一个归纳类型，位于命名空间 `PseudoMetric`。
+形式化陈述：{X : Type u_1} →   {R : Type u_2} → [inst : Zero R] → [inst_1 : Add R] → [
+inst_2 : LE R] → [Max R] → PseudoMetric X R → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsUltra
-  parameters: [Zero R] [Add R] [LE R] [Max R] (d : PseudoMetric X R)
-  axioms and operations (1):
-    - le_sup' : forall x y z, d x z <= d x y ⊔ d y z
-
-中文:
-类 是Ultra
-  参数: [零 R] [加法 R] [LE R] [最大值 R] (d : PseudoMetric X R)
-  公理与运算 (1 个):
-    - le_sup' : 对任意 x y z, d x z <= d x y ⊔ d y z
+--- 原说明 ---
+A pseudometric can be nonarchimedean (or ultrametric), with a stronger triangle
+inequality such that `d x z ≤ max (d x y) (d y z)`.
 -/
 class IsUltra [Zero R] [Add R] [LE R] [Max R] (d : PseudoMetric X R) : Prop where
   /-- Strong triangle inequality of an ultrametric. -/
-  le_sup' : forall x y z, d x z <= d x y ⊔ d y z
-
-/--
-lemma `IsUltra.le_sup` / 引理 `IsUltra.le_sup`
-
-English:
-lemma IsUltra.le_sup
-  statement: [Zero R] [Add R] [LE R] [Max R] {d : PseudoMetric X R} [hd : IsUltra d]
-  proof: hd.le_sup' x y z
-
-中文:
-引理 是Ultra.le_sup
-  结论: [零 R] [加法 R] [LE R] [最大值 R] {d : PseudoMetric X R} [hd : 是Ultra d]
-  证明: hd.le_sup' x y z
-
-Depends on / 依赖: hd.le_sup, le_sup
+  le_sup' : ∀ x y z, d x z ≤ d x y ⊔ d y z
+/-
+**PseudoMetric.IsUltra.le_sup** 是 Mathlib 中的一个定理，位于命名空间 `PseudoMetric.IsUltra`。
+形式化陈述：∀ {X : Type u_1} {R : Type u_2} [inst : Zero R] [inst_1 : Add R] [inst_2 :
+ LE R] [inst_3 : Max R] {d : PseudoMetric X R}   [hd : d.IsUltra] {x y z : X}, d
+ x z ≤ d x y ⊔ d y z
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PseudoMetric.IsUltra.le_sup'`：∀ {X : Type u_1} {R : Type u_2} {inst : Ze
+ro R} {inst_1 : Add R} {inst_2 : LE R} {inst_3 : Max R} {d : PseudoMetric X R}  
+ [self : d.IsUltra…
 -/
 lemma IsUltra.le_sup [Zero R] [Add R] [LE R] [Max R] {d : PseudoMetric X R} [hd : IsUltra d]
-    {x y z : X} : d x z <= d x y ⊔ d y z :=
+    {x y z : X} : d x z ≤ d x y ⊔ d y z :=
   hd.le_sup' x y z
-
-/--
-Instance `IsUltra.bot` / 实例 `IsUltra.bot`
-
-English:
-instance IsUltra.bot
-  signature: [AddZeroClass R] [SemilatticeSup R]
-  body: by simp
-
-中文:
-实例 是Ultra.bot
-  签名: [加法零类 R] [SemilatticeSup R]
-  定义体: by simp
+/-
+**PseudoMetric.IsUltra.bot** 是 Mathlib 中的一个定理，位于命名空间 `PseudoMetric.IsUltra`。
+形式化陈述：∀ {X : Type u_1} {R : Type u_2} [inst : AddZeroClass R] [inst_1 : Semilatt
+iceSup R], ⊥.IsUltra
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sup_of_le_left`：∀ {α : Type u} [inst : SemilatticeSup α] {a b : α}, b ≤ 
+a → a ⊔ b = a
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 instance IsUltra.bot [AddZeroClass R] [SemilatticeSup R] :
     IsUltra (⊥ : PseudoMetric X R) where
   le_sup' := by simp
-
-/--
-Instance `IsUltra.sup` / 实例 `IsUltra.sup`
-
-English:
-instance IsUltra.sup
-  signature: [AddZeroClass R] [SemilatticeSup R] [AddLeftMono R] [AddRightMono R]
-  body: by
-  constructor
-  intro x y z
-  simp only [PseudoMetric.sup_apply]
-  calc d x z ⊔ d' x z <= d x y ⊔ d y z ⊔ (d' x y ⊔ d' y z) := sup_le_sup le_sup le_sup
-  _ <= d x y ⊔ d' x y ⊔ (d y z ⊔ d' y z) := by simp [sup_comm, sup_left_comm]
-
-中文:
-实例 是Ultra.上确界
-  签名: [加法零类 R] [SemilatticeSup R] [AddLeftMono R] [AddRightMono R]
-  定义体: by
-  constructor
-  intro x y z
-  simp only [PseudoMetric.sup_apply]
-  calc d x z ⊔ d' x z <= d x y ⊔ d y z ⊔ (d' x y ⊔ d' y z) := sup_le_sup le_sup le_sup
-  _ <= d x y ⊔ d' x y ⊔ (d y z ⊔ d' y z) := by simp [sup_comm, sup_left_comm]
-
-Depends on / 依赖: PseudoMetric, PseudoMetric.sup_apply, le_sup, sup_apply, sup_comm, sup_le_sup, sup_left_comm
+/-
+**PseudoMetric.IsUltra.sup** 是 Mathlib 中的一个定理，位于命名空间 `PseudoMetric.IsUltra`。
+形式化陈述：∀ {X : Type u_1} {R : Type u_2} [inst : AddZeroClass R] [inst_1 : Semilatt
+iceSup R] [inst_2 : AddLeftMono R]   [inst_3 : AddRightMono R] {d d' : PseudoMet
+ric X R} [d.IsUltra] [d'.IsUltra], (d ⊔ d').IsUltra
+参数：d ⊔ d'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sup_le_sup`：sup_le_sup (h₁ : a <= b) (h₂ : c <= d) : a ⊔ c <= b ⊔ d
+· 使用定理 `PseudoMetric.IsUltra.le_sup`：∀ {X : Type u_1} {R : Type u_2} [inst : Zer
+o R] [inst_1 : Add R] [inst_2 : LE R] [inst_3 : Max R] {d : PseudoMetric X R}   
+[hd : d.IsUltra] …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sup_left_comm`：sup_left_comm (a b c : α) : a ⊔ (b ⊔ c) = b ⊔ (a ⊔ c)
+· 使用定理 `sup_comm`：sup_comm (a b : α) : a ⊔ b = b ⊔ a
 -/
 instance IsUltra.sup [AddZeroClass R] [SemilatticeSup R] [AddLeftMono R] [AddRightMono R]
     {d d' : PseudoMetric X R} [IsUltra d] [IsUltra d'] : IsUltra (d ⊔ d') := by
   constructor
   intro x y z
   simp only [PseudoMetric.sup_apply]
-  calc d x z ⊔ d' x z <= d x y ⊔ d y z ⊔ (d' x y ⊔ d' y z) := sup_le_sup le_sup le_sup
-  _ <= d x y ⊔ d' x y ⊔ (d y z ⊔ d' y z) := by simp [sup_comm, sup_left_comm]
-
-/--
-lemma `IsUltra.finsetSup` / 引理 `IsUltra.finsetSup`
-
-English:
-lemma IsUltra.finsetSup
-  statement: {Y : Type*} [AddCommMonoid R] [LinearOrder R] [AddLeftStrictMono R]
-  proof: by
-  constructor
-  intro x y z
-  rcases s.eq_empty_or_nonempty with rfl | hs
-  · simp
-  simp_rw [finsetSup_apply hs]
-  apply Finset.sup'_le
-  simp only [le_sup_iff, Finset.le_sup'_iff]
-  intro i hi
-  have h := (h i hi).le_sup' x y z
-  simp only [le_sup_iff] at h
-  refine h.imp ?_ ?_ <;>
-  intro H <;>
-  exact ⟨i, hi, H⟩
-
-中文:
-引理 是Ultra.finsetSup
-  结论: {Y : 类型} [加法交换幺半群 R] [线性序 R] [AddLeftStrictMono R]
-  证明: by
-  constructor
-  intro x y z
-  rcases s.eq_empty_or_nonempty with rfl | hs
-  · simp
-  simp_rw [finsetSup_apply hs]
-  apply Finset.sup'_le
-  simp only [le_sup_iff, Finset.le_sup'_iff]
-  intro i hi
-  have h := (h i hi).le_sup' x y z
-  simp only [le_sup_iff] at h
-  refine h.imp ?_ ?_ <;>
-  intro H <;>
-  exact ⟨i, hi, H⟩
-
-Depends on / 依赖: Finset, Finset.le_sup, Finset.sup, _iff, eq_empty_or_nonempty, finsetSup_apply, h.imp, le_sup, le_sup_iff, s.eq_empty_or_nonempty, simp_rw
+  calc d x z ⊔ d' x z ≤ d x y ⊔ d y z ⊔ (d' x y ⊔ d' y z) := sup_le_sup le_sup le_sup
+  _ ≤ d x y ⊔ d' x y ⊔ (d y z ⊔ d' y z) := by simp [sup_comm, sup_left_comm]
+/-
+**PseudoMetric.IsUltra.finsetSup** 是 Mathlib 中的一个定理，位于命名空间 `PseudoMetric.IsUltra
+`。
+形式化陈述：∀ {X : Type u_1} {R : Type u_2} {Y : Type u_3} [inst : AddCommMonoid R] [i
+nst_1 : LinearOrder R]   [inst_2 : AddLeftStrictMono R] [inst_3 : IsOrderedAddMo
+noid R] {f : Y → PseudoMetric X R} {s : Finset Y},   (∀ d ∈ s, (f d).IsUltra) → 
+(s.sup f).IsUltra
+参数：∀ d ∈ s, (f d).IsUltra；s.sup f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `Finset.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Finset α) : s = ∅
+ ∨ s.Nonempty
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.sup_empty`：sup_empty : (∅ : Finset β).sup f = ⊥
+· 使用定理 `max_self`：∀ {α : Type u_1} [inst : LinearOrder α] (a : α), max a a = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Finset.sup'`：sup'_one [SemilatticeSup β] (f : α -> β) : sup' 1 one_nonem
+pty f = f 1
+· 使用引理 `PseudoMetric.finsetSup_apply`：finsetSup_apply [IsOrderedAddMonoid R] {Y 
+: Type*} {f : Y -> PseudoMetric X R} {s : Finset Y} (hs : s.Nonempty) (x y : X) 
+: s.sup f x y = s.…
+· 使用定理 `Finset.sup'_le`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeSup α
+] {s : Finset β} (H : s.Nonempty) (f : β → α) {a : α},   (∀ b ∈ s, f b ≤ a) → s.
+sup'…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `PseudoMetric.IsUltra.le_sup'`：∀ {X : Type u_1} {R : Type u_2} {inst : Ze
+ro R} {inst_1 : Add R} {inst_2 : LE R} {inst_3 : Max R} {d : PseudoMetric X R}  
+ [self : d.IsUltra…
+· 使用定理 `Or.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∨ b → c ∨ d
 -/
 lemma IsUltra.finsetSup {Y : Type*} [AddCommMonoid R] [LinearOrder R] [AddLeftStrictMono R]
-    [IsOrderedAddMonoid R] {f : Y -> PseudoMetric X R} {s : Finset Y} (h : forall d in s, IsUltra (f d)) :
+    [IsOrderedAddMonoid R] {f : Y → PseudoMetric X R} {s : Finset Y} (h : ∀ d ∈ s, IsUltra (f d)) :
     IsUltra (s.sup f) := by
   constructor
   intro x y z
@@ -692,84 +493,95 @@ end IsUltra
 
 section ball
 
-/--
-Instance `isSymm_ball` / 实例 `isSymm_ball`
-
-English:
-instance isSymm_ball
-  signature: [Add R] [Zero R] [Preorder R] (d : PseudoMetric X R) {ε : R}
-  body: by simp [d.symm]
-
-中文:
-实例 isSymm_ball
-  签名: [加法 R] [零 R] [预序 R] (d : PseudoMetric X R) {ε : R}
-  定义体: by simp [d.symm]
-
-Depends on / 依赖: d.symm
+/-
+**PseudoMetric.isSymm_ball** 是 Mathlib 中的一个实例，位于命名空间 `PseudoMetric`。
+形式化陈述：isSymm_ball [Add R] [Zero R] [Preorder R] (d : PseudoMetric X R) {ε : R} :
+ SetRel.IsSymm {xy | d xy.1 xy.2 < ε} where symm
+参数：d : PseudoMetric X R。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PseudoMetric.symm`：∀ {X : Type u_1} {R : Type u_2} [inst : Zero R] [inst
+_1 : Add R] [inst_2 : LE R] (d : PseudoMetric X R) (x y : X),   d x y = d y x
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 instance isSymm_ball [Add R] [Zero R] [Preorder R] (d : PseudoMetric X R) {ε : R} :
     SetRel.IsSymm {xy | d xy.1 xy.2 < ε} where
   symm := by simp [d.symm]
-
-/--
-Instance `isSymm_closedBall` / 实例 `isSymm_closedBall`
-
-English:
-instance isSymm_closedBall
-  signature: [Add R] [Zero R] [LE R] (d : PseudoMetric X R) {ε : R}
-  body: by simp [d.symm]
-
-中文:
-实例 isSymm_closedBall
-  签名: [加法 R] [零 R] [LE R] (d : PseudoMetric X R) {ε : R}
-  定义体: by simp [d.symm]
-
-Depends on / 依赖: d.symm
+/-
+**PseudoMetric.isSymm_closedBall** 是 Mathlib 中的一个实例，位于命名空间 `PseudoMetric`。
+形式化陈述：isSymm_closedBall [Add R] [Zero R] [LE R] (d : PseudoMetric X R) {ε : R} :
+ SetRel.IsSymm {xy | d xy.1 xy.2 <= ε} where symm
+参数：d : PseudoMetric X R。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PseudoMetric.symm`：∀ {X : Type u_1} {R : Type u_2} [inst : Zero R] [inst
+_1 : Add R] [inst_2 : LE R] (d : PseudoMetric X R) (x y : X),   d x y = d y x
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 instance isSymm_closedBall [Add R] [Zero R] [LE R] (d : PseudoMetric X R) {ε : R} :
-    SetRel.IsSymm {xy | d xy.1 xy.2 <= ε} where
+    SetRel.IsSymm {xy | d xy.1 xy.2 ≤ ε} where
   symm := by simp [d.symm]
-
-/--
-Instance `IsUltra.isTrans_ball` / 实例 `IsUltra.isTrans_ball`
-
-English:
-instance IsUltra.isTrans_ball
-  signature: [Add R] [Zero R] [LinearOrder R] (d : PseudoMetric X R)
-  body: le_sup.trans_lt (max_lt hxy hyz)
-
-中文:
-实例 是Ultra.isTrans_ball
-  签名: [加法 R] [零 R] [线性序 R] (d : PseudoMetric X R)
-  定义体: le_sup.trans_lt (max_lt hxy hyz)
-
-Depends on / 依赖: le_sup, le_sup.trans_lt, max_lt, trans_lt
+/-
+**PseudoMetric.IsUltra.isTrans_ball** 是 Mathlib 中的一个定理，位于命名空间 `PseudoMetric.IsUl
+tra`。
+形式化陈述：∀ {X : Type u_1} {R : Type u_2} [inst : Add R] [inst_1 : Zero R] [inst_2 :
+ LinearOrder R] (d : PseudoMetric X R)   [d.IsUltra] {ε : R}, SetRel.IsTrans {xy
+ | d xy.1 xy.2 < ε}
+参数：d : PseudoMetric X R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `PseudoMetric.IsUltra.le_sup`：∀ {X : Type u_1} {R : Type u_2} [inst : Zer
+o R] [inst_1 : Add R] [inst_2 : LE R] [inst_3 : Max R] {d : PseudoMetric X R}   
+[hd : d.IsUltra] …
+· 使用定理 `max_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b c : α}, b < a → c <
+ a → max b c < a
 -/
 instance IsUltra.isTrans_ball [Add R] [Zero R] [LinearOrder R] (d : PseudoMetric X R)
     [d.IsUltra] {ε : R} :
       SetRel.IsTrans {xy | d xy.1 xy.2 < ε} where
     trans _ _ _ hxy hyz := le_sup.trans_lt (max_lt hxy hyz)
-
-/--
-Instance `IsUltra.isTrans_closedBall` / 实例 `IsUltra.isTrans_closedBall`
-
-English:
-instance IsUltra.isTrans_closedBall
-  signature: [Add R] [Zero R] [SemilatticeSup R] (d : PseudoMetric X R)
-  body: le_sup.trans (sup_le hxy hyz)
-
-中文:
-实例 是Ultra.isTrans_closedBall
-  签名: [加法 R] [零 R] [SemilatticeSup R] (d : PseudoMetric X R)
-  定义体: le_sup.trans (sup_le hxy hyz)
-
-Depends on / 依赖: le_sup, le_sup.trans, sup_le
+/-
+**PseudoMetric.IsUltra.isTrans_closedBall** 是 Mathlib 中的一个定理，位于命名空间 `PseudoMetri
+c.IsUltra`。
+形式化陈述：∀ {X : Type u_1} {R : Type u_2} [inst : Add R] [inst_1 : Zero R] [inst_2 :
+ SemilatticeSup R] (d : PseudoMetric X R)   [d.IsUltra] {ε : R}, SetRel.IsTrans 
+{xy | d xy.1 xy.2 ≤ ε}
+参数：d : PseudoMetric X R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `PseudoMetric.IsUltra.le_sup`：∀ {X : Type u_1} {R : Type u_2} [inst : Zer
+o R] [inst_1 : Add R] [inst_2 : LE R] [inst_3 : Max R] {d : PseudoMetric X R}   
+[hd : d.IsUltra] …
+· 使用定理 `sup_le`：sup_le : a <= c -> b <= c -> a ⊔ b <= c
 -/
 instance IsUltra.isTrans_closedBall [Add R] [Zero R] [SemilatticeSup R] (d : PseudoMetric X R)
     [d.IsUltra] {ε : R} :
-    SetRel.IsTrans {xy | d xy.1 xy.2 <= ε} where
+    SetRel.IsTrans {xy | d xy.1 xy.2 ≤ ε} where
   trans _ _ _ hxy hyz := le_sup.trans (sup_le hxy hyz)
 
 end ball
 
 end PseudoMetric
+

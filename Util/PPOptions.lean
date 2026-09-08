@@ -23,26 +23,23 @@ should use binder predicate notation (such as `∀ x < 2, p x`).
 -/
 register_option pp.mathlib.binderPredicates : Bool := {
   defValue := true
-  descr := "(pretty printer) pretty prints binders such as \
-    `forall (x : α) (x < 2), p x` as `forall x < 2, p x`"
+  descr    := "(pretty printer) pretty prints binders such as \
+    `∀ (x : α) (x < 2), p x` as `∀ x < 2, p x`"
 }
 
-/--
-Definition of `getPPBinderPredicates` / `getPPBinderPredicates` 的定义
+/-- Gets whether `pp.mathlib.binderPredicates` is enabled. -/
+/-
+**Mathlib.getPPBinderPredicates** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib`。
+形式化陈述：getPPBinderPredicates (o : Options) : Bool
+参数：o : Options。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getPPBinderPredicates
-  signature: (o : Options)
-  body: o.get pp.mathlib.binderPredicates.name (!getPPAll o)
-
-中文:
-定义 getPPBinderPredicates
-  签名: (o : Options)
-  定义体: o.get pp.mathlib.binderPredicates.name (!getPPAll o)
-
-Depends on / 依赖: binderPredicates, getPPAll, mathlib, o.get, pp.mathlib.binderPredicates.name
+--- 原说明 ---
+Gets whether `pp.mathlib.binderPredicates` is enabled.
 -/
 def getPPBinderPredicates (o : Options) : Bool :=
   o.get pp.mathlib.binderPredicates.name (!getPPAll o)
 
 end Mathlib
+

@@ -28,309 +28,216 @@ open Filter Metric Set Topology
 
 namespace Int
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Dist Int
-  body: ⟨fun x y => dist (x : Real) y⟩
-
-中文:
-实例 :
-  签名: Dist 整数
-  定义体: ⟨fun x y => dist (x : Real) y⟩
+/-
+**Int.** 是 Mathlib 中的一个实例，位于命名空间 `Int`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Dist Int :=
-  ⟨fun x y => dist (x : Real) y⟩
-
-/--
-theorem `dist_eq` / 定理 `dist_eq`
-
-English:
-theorem dist_eq
-  given: (x y : Int)
-  statement: dist x y = |(x : Real) - y|
-  proof: rfl
-
-中文:
-定理 dist_eq
-  条件: (x y : 整数)
-  结论: dist x y = |(x : 实数) - y|
-  证明: rfl
+instance : Dist ℤ :=
+  ⟨fun x y => dist (x : ℝ) y⟩
+/-
+**Int.dist_eq** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：dist_eq (x y : Int) : dist x y = |(x : Real) - y|
+参数：x y : Int。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem dist_eq (x y : Int) : dist x y = |(x : Real) - y| := rfl
-
-/--
-theorem `dist_eq'` / 定理 `dist_eq'`
-
-English:
-theorem dist_eq'
-  given: (m n : Int)
-  statement: dist m n = |m - n|
-  proof: by rw [dist_eq]; norm_cast
+theorem dist_eq (x y : ℤ) : dist x y = |(x : ℝ) - y| := rfl
+/-
+**Int.dist_eq'** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：dist_eq' (m n : Int) : dist m n = |m - n|
+参数：m n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.dist_eq`：dist_eq (x y : Int) : dist x y = |(x : Real) - y|
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+-/
+theorem dist_eq' (m n : ℤ) : dist m n = |m - n| := by rw [dist_eq]; norm_cast
 
 @[norm_cast, simp]
-
-中文:
-定理 dist_eq'
-  条件: (m n : 整数)
-  结论: dist m n = |m - n|
-  证明: by rw [dist_eq]; norm_cast
-
-@[norm_cast, simp]
-
-Depends on / 依赖: dist_eq
+/-
+**Int.dist_cast_real** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：dist_cast_real (x y : Int) : dist (x : Real) y = dist x y
+参数：x y : Int。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem dist_eq' (m n : Int) : dist m n = |m - n| := by rw [dist_eq]; norm_cast
-
-@[norm_cast, simp]
-/--
-theorem `dist_cast_real` / 定理 `dist_cast_real`
-
-English:
-theorem dist_cast_real
-  given: (x y : Int)
-  statement: dist (x : Real) y = dist x y
-  proof: rfl
-
-中文:
-定理 dist_cast_real
-  条件: (x y : 整数)
-  结论: dist (x : 实数) y = dist x y
-  证明: rfl
--/
-theorem dist_cast_real (x y : Int) : dist (x : Real) y = dist x y :=
+theorem dist_cast_real (x y : ℤ) : dist (x : ℝ) y = dist x y :=
   rfl
-
-/--
-theorem `pairwise_one_le_dist` / 定理 `pairwise_one_le_dist`
-
-English:
-theorem pairwise_one_le_dist
-  statement: Pairwise fun m n : Int => 1 <= dist m n
-  proof: by
-  intro m n hne
-  rw [dist_eq]; norm_cast; rwa [← zero_add (1 : Int), Int.add_one_le_iff, abs_pos, sub_ne_zero]
-
-中文:
-定理 pairwise_one_le_dist
-  结论: 两两 fun m n : 整数 => 1 <= dist m n
-  证明: by
-  intro m n hne
-  rw [dist_eq]; norm_cast; rwa [← zero_add (1 : Int), Int.add_one_le_iff, abs_pos, sub_ne_zero]
-
-Depends on / 依赖: Int.add_one_le_iff, abs_pos, add_one_le_iff, dist_eq, sub_ne_zero, zero_add
+/-
+**Int.pairwise_one_le_dist** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：pairwise_one_le_dist : Pairwise fun m n : Int => 1 <= dist m n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.dist_eq`：dist_eq (x y : Int) : dist x y = |(x : Real) - y|
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Int.cast_one`：cast_one : ((1 : Int) : R) = 1
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Int.add_one_le_iff`：∀ {a b : ℤ}, a + 1 ≤ b ↔ a < b
+· 使用定理 `abs_pos`：∀ {α : Type u_1} [inst : AddGroup α] [inst_1 : LinearOrder α] [
+AddLeftMono α] {a : α}, 0 < |a| ↔ a ≠ 0
+· 使用定理 `sub_ne_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b ≠ 0 ↔
+ a ≠ b
 -/
-theorem pairwise_one_le_dist : Pairwise fun m n : Int => 1 <= dist m n := by
+theorem pairwise_one_le_dist : Pairwise fun m n : ℤ => 1 ≤ dist m n := by
   intro m n hne
-  rw [dist_eq]; norm_cast; rwa [← zero_add (1 : Int), Int.add_one_le_iff, abs_pos, sub_ne_zero]
-
-/--
-theorem `isUniformEmbedding_coe_real` / 定理 `isUniformEmbedding_coe_real`
-
-English:
-theorem isUniformEmbedding_coe_real
-  statement: IsUniformEmbedding ((↑) : Int -> Real)
-  proof: isUniformEmbedding_bot_of_pairwise_le_dist zero_lt_one pairwise_one_le_dist
-
-中文:
-定理 isUniformEmbedding_coe_real
-  结论: 是一致嵌入 ((↑) : 整数 -> 实数)
-  证明: isUniformEmbedding_bot_of_pairwise_le_dist zero_lt_one pairwise_one_le_dist
-
-Depends on / 依赖: isUniformEmbedding_bot_of_pairwise_le_dist, pairwise_one_le_dist, zero_lt_one
+  rw [dist_eq]; norm_cast; rwa [← zero_add (1 : ℤ), Int.add_one_le_iff, abs_pos, sub_ne_zero]
+/-
+**Int.isUniformEmbedding_coe_real** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：isUniformEmbedding_coe_real : IsUniformEmbedding ((↑) : Int -> Real)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.isUniformEmbedding_bot_of_pairwise_le_dist`：isUniformEmbedding_bo
+t_of_pairwise_le_dist {β : Type*} {ε : Real} (hε : 0 < ε) {f : β -> α} (hf : Pai
+rwise fun x y => ε <= dist (f x) (f y))…
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Int.pairwise_one_le_dist`：pairwise_one_le_dist : Pairwise fun m n : Int 
+=> 1 <= dist m n
 -/
-theorem isUniformEmbedding_coe_real : IsUniformEmbedding ((↑) : Int -> Real) :=
+theorem isUniformEmbedding_coe_real : IsUniformEmbedding ((↑) : ℤ → ℝ) :=
   isUniformEmbedding_bot_of_pairwise_le_dist zero_lt_one pairwise_one_le_dist
-
-/--
-theorem `isClosedEmbedding_coe_real` / 定理 `isClosedEmbedding_coe_real`
-
-English:
-theorem isClosedEmbedding_coe_real
-  statement: IsClosedEmbedding ((↑) : Int -> Real)
-  proof: isClosedEmbedding_of_pairwise_le_dist zero_lt_one pairwise_one_le_dist
-
-中文:
-定理 isClosedEmbedding_coe_real
-  结论: 是闭嵌入 ((↑) : 整数 -> 实数)
-  证明: isClosedEmbedding_of_pairwise_le_dist zero_lt_one pairwise_one_le_dist
-
-Depends on / 依赖: isClosedEmbedding_of_pairwise_le_dist, pairwise_one_le_dist, zero_lt_one
+/-
+**Int.isClosedEmbedding_coe_real** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：isClosedEmbedding_coe_real : IsClosedEmbedding ((↑) : Int -> Real)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.isClosedEmbedding_of_pairwise_le_dist`：isClosedEmbedding_of_pairw
+ise_le_dist {α : Type*} [TopologicalSpace α] [DiscreteTopology α] {ε : Real} (hε
+ : 0 < ε) {f : α -> γ} (hf : Pairw…
+· 使用定理 `instDiscreteTopologyInt`：DiscreteTopology ℤ
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Int.pairwise_one_le_dist`：pairwise_one_le_dist : Pairwise fun m n : Int 
+=> 1 <= dist m n
 -/
-theorem isClosedEmbedding_coe_real : IsClosedEmbedding ((↑) : Int -> Real) :=
+theorem isClosedEmbedding_coe_real : IsClosedEmbedding ((↑) : ℤ → ℝ) :=
   isClosedEmbedding_of_pairwise_le_dist zero_lt_one pairwise_one_le_dist
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MetricSpace Int
-  body: Int.isUniformEmbedding_coe_real.comapMetricSpace _
-
-中文:
-实例 :
-  签名: 度量空间 整数
-  定义体: Int.isUniformEmbedding_coe_real.comapMetricSpace _
-
-Depends on / 依赖: Int.isUniformEmbedding_coe_real.comapMetricSpace, comapMetricSpace, isUniformEmbedding_coe_real
+/-
+**Int.** 是 Mathlib 中的一个实例，位于命名空间 `Int`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : MetricSpace Int := Int.isUniformEmbedding_coe_real.comapMetricSpace _
-
-/--
-theorem `preimage_ball` / 定理 `preimage_ball`
-
-English:
-theorem preimage_ball
-  given: (x : Int) (r : Real)
-  statement: (↑) ⁻¹' ball (x : Real) r = ball x r
-  proof: rfl
-
-中文:
-定理 preimage_ball
-  条件: (x : 整数) (r : 实数)
-  结论: (↑) ⁻¹' ball (x : 实数) r = ball x r
-  证明: rfl
+instance : MetricSpace ℤ := Int.isUniformEmbedding_coe_real.comapMetricSpace _
+/-
+**Int.preimage_ball** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：preimage_ball (x : Int) (r : Real) : (↑) ⁻¹' ball (x : Real) r = ball x r
+参数：x : Int；r : Real。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem preimage_ball (x : Int) (r : Real) : (↑) ⁻¹' ball (x : Real) r = ball x r := rfl
-
-/--
-theorem `preimage_closedBall` / 定理 `preimage_closedBall`
-
-English:
-theorem preimage_closedBall
-  given: (x : Int) (r : Real)
-  statement: (↑) ⁻¹' closedBall (x : Real) r = closedBall x r
-  proof: rfl
-
-中文:
-定理 preimage_closedBall
-  条件: (x : 整数) (r : 实数)
-  结论: (↑) ⁻¹' closedBall (x : 实数) r = closedBall x r
-  证明: rfl
+theorem preimage_ball (x : ℤ) (r : ℝ) : (↑) ⁻¹' ball (x : ℝ) r = ball x r := rfl
+/-
+**Int.preimage_closedBall** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：preimage_closedBall (x : Int) (r : Real) : (↑) ⁻¹' closedBall (x : Real) r
+ = closedBall x r
+参数：x : Int；r : Real。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem preimage_closedBall (x : Int) (r : Real) : (↑) ⁻¹' closedBall (x : Real) r = closedBall x r := rfl
-
-/--
-theorem `ball_eq_Ioo` / 定理 `ball_eq_Ioo`
-
-English:
-theorem ball_eq_Ioo
-  given: (x : Int) (r : Real)
-  statement: ball x r = Ioo ⌊↑x - r⌋ ⌈↑x + r⌉
-  proof: by
-  rw [← preimage_ball]; rw [Real.ball_eq_Ioo]; rw [preimage_Ioo]
-
-中文:
-定理 ball_eq_Ioo
-  条件: (x : 整数) (r : 实数)
-  结论: ball x r = 开区间 ⌊↑x - r⌋ ⌈↑x + r⌉
-  证明: by
-  rw [← preimage_ball]; rw [Real.ball_eq_Ioo]; rw [preimage_Ioo]
-
-Depends on / 依赖: Real.ball_eq_Ioo, ball_eq_Ioo, preimage_Ioo, preimage_ball
+theorem preimage_closedBall (x : ℤ) (r : ℝ) : (↑) ⁻¹' closedBall (x : ℝ) r = closedBall x r := rfl
+/-
+**Int.ball_eq_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：ball_eq_Ioo (x : Int) (r : Real) : ball x r = Ioo ⌊↑x - r⌋ ⌈↑x + r⌉
+参数：x : Int；r : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.preimage_ball`：preimage_ball (x : Int) (r : Real) : (↑) ⁻¹' ball (x 
+: Real) r = ball x r
+· 使用定理 `Real.ball_eq_Ioo`：Real.ball_eq_Ioo (x r : Real) : ball x r = Ioo (x - r)
+ (x + r)
+· 使用定理 `Int.preimage_Ioo`：preimage_Ioo {a b : R} : ((↑) : Int -> R) ⁻¹' Set.Ioo 
+a b = Set.Ioo ⌊a⌋ ⌈b⌉
 -/
-theorem ball_eq_Ioo (x : Int) (r : Real) : ball x r = Ioo ⌊↑x - r⌋ ⌈↑x + r⌉ := by
-  rw [← preimage_ball]; rw [Real.ball_eq_Ioo]; rw [preimage_Ioo]
-
-/--
-theorem `closedBall_eq_Icc` / 定理 `closedBall_eq_Icc`
-
-English:
-theorem closedBall_eq_Icc
-  given: (x : Int) (r : Real)
-  statement: closedBall x r = Icc ⌈↑x - r⌉ ⌊↑x + r⌋
-  proof: by
-  rw [← preimage_closedBall]; rw [Real.closedBall_eq_Icc]; rw [preimage_Icc]
-
-中文:
-定理 closedBall_eq_Icc
-  条件: (x : 整数) (r : 实数)
-  结论: closedBall x r = 闭区间 ⌈↑x - r⌉ ⌊↑x + r⌋
-  证明: by
-  rw [← preimage_closedBall]; rw [Real.closedBall_eq_Icc]; rw [preimage_Icc]
-
-Depends on / 依赖: Real.closedBall_eq_Icc, closedBall_eq_Icc, preimage_Icc, preimage_closedBall
+theorem ball_eq_Ioo (x : ℤ) (r : ℝ) : ball x r = Ioo ⌊↑x - r⌋ ⌈↑x + r⌉ := by
+  rw [← preimage_ball, Real.ball_eq_Ioo, preimage_Ioo]
+/-
+**Int.closedBall_eq_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：closedBall_eq_Icc (x : Int) (r : Real) : closedBall x r = Icc ⌈↑x - r⌉ ⌊↑x
+ + r⌋
+参数：x : Int；r : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.preimage_closedBall`：preimage_closedBall (x : Int) (r : Real) : (↑) 
+⁻¹' closedBall (x : Real) r = closedBall x r
+· 使用定理 `Real.closedBall_eq_Icc`：Real.closedBall_eq_Icc {x r : Real} : closedBall
+ x r = Icc (x - r) (x + r)
+· 使用定理 `Int.preimage_Icc`：preimage_Icc {a b : R} : ((↑) : Int -> R) ⁻¹' Set.Icc 
+a b = Set.Icc ⌈a⌉ ⌊b⌋
 -/
-theorem closedBall_eq_Icc (x : Int) (r : Real) : closedBall x r = Icc ⌈↑x - r⌉ ⌊↑x + r⌋ := by
-  rw [← preimage_closedBall]; rw [Real.closedBall_eq_Icc]; rw [preimage_Icc]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ProperSpace Int
-  body: ⟨fun x r => by
-    rw [closedBall_eq_Icc]
-    exact (Set.finite_Icc _ _).isCompact⟩
-
-中文:
-实例 :
-  签名: 真空间 整数
-  定义体: ⟨fun x r => by
-    rw [closedBall_eq_Icc]
-    exact (Set.finite_Icc _ _).isCompact⟩
-
-Depends on / 依赖: Set.finite_Icc, closedBall_eq_Icc, finite_Icc, isCompact
+theorem closedBall_eq_Icc (x : ℤ) (r : ℝ) : closedBall x r = Icc ⌈↑x - r⌉ ⌊↑x + r⌋ := by
+  rw [← preimage_closedBall, Real.closedBall_eq_Icc, preimage_Icc]
+/-
+**Int.** 是 Mathlib 中的一个实例，位于命名空间 `Int`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ProperSpace Int :=
+instance : ProperSpace ℤ :=
   ⟨fun x r => by
     rw [closedBall_eq_Icc]
     exact (Set.finite_Icc _ _).isCompact⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsOrderBornology Int
-  body: .of_isCompactIcc 0 (by simp [Int.closedBall_eq_Icc]) (by simp [Int.closedBall_eq_Icc])
-
-@[deprecated (since := "2026-04-07")]
-alias cobounded_eq := IsOrderBornology.cobounded_eq
-
-@[simp]
-
-中文:
-实例 :
-  签名: 是OrderBornology 整数
-  定义体: .of_isCompactIcc 0 (by simp [Int.closedBall_eq_Icc]) (by simp [Int.closedBall_eq_Icc])
-
-@[deprecated (since := "2026-04-07")]
-alias cobounded_eq := IsOrderBornology.cobounded_eq
-
-@[simp]
-
-Depends on / 依赖: Int.closedBall_eq_Icc, closedBall_eq_Icc, of_isCompactIcc
+/-
+**Int.** 是 Mathlib 中的一个实例，位于命名空间 `Int`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsOrderBornology Int :=
+instance : IsOrderBornology ℤ :=
   .of_isCompactIcc 0 (by simp [Int.closedBall_eq_Icc]) (by simp [Int.closedBall_eq_Icc])
 
 @[deprecated (since := "2026-04-07")]
 alias cobounded_eq := IsOrderBornology.cobounded_eq
 
 @[simp]
-/--
-theorem `cofinite_eq` / 定理 `cofinite_eq`
-
-English:
-theorem cofinite_eq
-  statement: (cofinite : Filter Int) = atBot ⊔ atTop
-  proof: by
-  rw [← cocompact_eq_cofinite]; rw [cocompact_eq_atBot_atTop]
-
-中文:
-定理 cofinite_eq
-  结论: (cofinite : 滤子 整数) = atBot ⊔ atTop
-  证明: by
-  rw [← cocompact_eq_cofinite]; rw [cocompact_eq_atBot_atTop]
-
-Depends on / 依赖: cocompact_eq_atBot_atTop, cocompact_eq_cofinite
+/-
+**Int.cofinite_eq** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：cofinite_eq : (cofinite : Filter Int) = atBot ⊔ atTop
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Filter.cocompact_eq_cofinite`：cocompact_eq_cofinite (X : Type*) [Topolog
+icalSpace X] [DiscreteTopology X] : cocompact X = cofinite
+· 使用定理 `instDiscreteTopologyInt`：DiscreteTopology ℤ
+· 使用定理 `cocompact_eq_atBot_atTop`：cocompact_eq_atBot_atTop [NoMaxOrder α] [NoMin
+Order α] [OrderClosedTopology α] [CompactIccSpace α] : cocompact α = atBot ⊔ atT
+op
+· 使用定理 `instNoMaxOrderOfNontrivial`：∀ {R : Type u} [inst : Ring R] [inst_1 : Par
+tialOrder R] [IsOrderedRing R] [Nontrivial R], NoMaxOrder R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instNoMinOrderOfNontrivial`：∀ {R : Type u} [inst : Ring R] [inst_1 : Par
+tialOrder R] [IsOrderedRing R] [Nontrivial R], NoMinOrder R
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `ConditionallyCompleteLinearOrder.toCompactIccSpace`：∀ (α : Type u_2) [in
+st : ConditionallyCompleteLinearOrder α] [inst_1 : TopologicalSpace α] [OrderTop
+ology α],   CompactIccSpace α
 -/
-theorem cofinite_eq : (cofinite : Filter Int) = atBot ⊔ atTop := by
-  rw [← cocompact_eq_cofinite]; rw [cocompact_eq_atBot_atTop]
+theorem cofinite_eq : (cofinite : Filter ℤ) = atBot ⊔ atTop := by
+  rw [← cocompact_eq_cofinite, cocompact_eq_atBot_atTop]
 
 end Int
+

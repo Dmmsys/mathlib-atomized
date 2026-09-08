@@ -56,183 +56,135 @@ variable {F α β : Type*}
 
 /-! ### Floor semiring -/
 
-/--
-Definition of `FloorSemiring` / `FloorSemiring` 的定义
+/-- A `FloorSemiring` is an ordered semiring over `α` with a function
+`floor : α → ℕ` satisfying `∀ (n : ℕ) (x : α), n ≤ ⌊x⌋ ↔ (n : α) ≤ x)`.
+Note that many lemmas require a `LinearOrder`. Please see the above `TODO`. -/
+/-
+**FloorSemiring** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_4) → [Semiring α] → [PartialOrder α] → Type u_4
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class FloorSemiring
-  parameters: (α) [Semiring α] [PartialOrder α]
-  axioms and operations (5):
-    - floor : α -> Nat
-    - ceil : α -> Nat
-    - floor_of_neg({a : α} (ha : a < 0)) : floor a = 0
-    - gc_floor({a : α} {n : Nat} (ha : 0 <= a)) : n <= floor a ↔ (n : α) <= a
-    - gc_ceil : GaloisConnection ceil (↑)
-
-中文:
-类 FloorSemiring
-  参数: (α) [半环 α] [偏序 α]
-  公理与运算 (5 个):
-    - floor : α -> 自然数
-    - ceil : α -> 自然数
-    - floor_of_neg({a : α} (ha : a < 0)) : floor a = 0
-    - gc_floor({a : α} {n : 自然数} (ha : 0 <= a)) : n <= floor a ↔ (n : α) <= a
-    - gc_ceil : GaloisConnection ceil (↑)
+--- 原说明 ---
+A `FloorSemiring` is an ordered semiring over `α` with a function
+`floor : α → ℕ` satisfying `∀ (n : ℕ) (x : α), n ≤ ⌊x⌋ ↔ (n : α) ≤ x)`.
+Note that many lemmas require a `LinearOrder`. Please see the above `TODO`.
 -/
 class FloorSemiring (α) [Semiring α] [PartialOrder α] where
   /-- `FloorSemiring.floor a` computes the greatest natural `n` such that `(n : α) ≤ a`. -/
-  floor : α -> Nat
+  floor : α → ℕ
   /-- `FloorSemiring.ceil a` computes the least natural `n` such that `a ≤ (n : α)`. -/
-  ceil : α -> Nat
+  ceil : α → ℕ
   /-- `FloorSemiring.floor` of a negative element is zero. -/
   floor_of_neg {a : α} (ha : a < 0) : floor a = 0
   /-- A natural number `n` is smaller than `FloorSemiring.floor a` iff its coercion to `α` is
   smaller than `a`. -/
-  gc_floor {a : α} {n : Nat} (ha : 0 <= a) : n <= floor a ↔ (n : α) <= a
+  gc_floor {a : α} {n : ℕ} (ha : 0 ≤ a) : n ≤ floor a ↔ (n : α) ≤ a
   /-- `FloorSemiring.ceil` is the lower adjoint of the coercion `↑ : ℕ → α`. -/
   gc_ceil : GaloisConnection ceil (↑)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FloorSemiring Nat
-  body: id
-  ceil := id
-  floor_of_neg ha := (Nat.not_lt_zero _ ha).elim
-  gc_floor _ := by
-    rw [Nat.cast_id]; rw [id_def]
-  gc_ceil n a := by
-    rw [Nat.cast_id]; rw [id_def]
-
-中文:
-实例 :
-  签名: FloorSemiring 自然数
-  定义体: id
-  ceil := id
-  floor_of_neg ha := (Nat.not_lt_zero _ ha).elim
-  gc_floor _ := by
-    rw [Nat.cast_id]; rw [id_def]
-  gc_ceil n a := by
-    rw [Nat.cast_id]; rw [id_def]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : FloorSemiring Nat where
+instance : FloorSemiring ℕ where
   floor := id
   ceil := id
   floor_of_neg ha := (Nat.not_lt_zero _ ha).elim
   gc_floor _ := by
-    rw [Nat.cast_id]; rw [id_def]
+    rw [Nat.cast_id, id_def]
   gc_ceil n a := by
-    rw [Nat.cast_id]; rw [id_def]
+    rw [Nat.cast_id, id_def]
 
 namespace FloorSemiring
 
 variable [Semiring α] [PartialOrder α] [FloorSemiring α]
 
-/--
-theorem `natCast_mono` / 定理 `natCast_mono`
+/-- A version of `Nat.mono_cast` for floor semirings, whose addition is not necessarily monotone. -/
+/-
+**FloorSemiring.natCast_mono** 是 Mathlib 中的一个定理，位于命名空间 `FloorSemiring`。
+形式化陈述：natCast_mono : Monotone (Nat.cast : Nat -> α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `FloorSemiring.gc_ceil`：∀ {α : Type u_4} {inst : Semiring α} {inst_1 : Pa
+rtialOrder α} [self : FloorSemiring α],   GaloisConnection FloorSemiring.ceil Na
+t.cast
+· 使用定理 `LE.le.trans'`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, b ≤ a → 
+c ≤ b → c ≤ a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 
-English:
-theorem natCast_mono
-  statement: Monotone (Nat.cast : Nat -> α)
-  proof: fun _ _ h => (gc_ceil _ _).mp h.trans' (gc_ceil _ _).mpr (le_refl _)
-
-中文:
-定理 natCast_mono
-  结论: 递增 (自然数.cast : 自然数 -> α)
-  证明: fun _ _ h => (gc_ceil _ _).mp h.trans' (gc_ceil _ _).mpr (le_refl _)
-
-Depends on / 依赖: gc_ceil, h.trans, le_refl
+--- 原说明 ---
+A version of `Nat.mono_cast` for floor semirings, whose addition is not necessar
+ily monotone.
 -/
-theorem natCast_mono : Monotone (Nat.cast : Nat -> α) :=
-fun _ _ h => (gc_ceil _ _).mp h.trans' (gc_ceil _ _).mpr (le_refl _)
+theorem natCast_mono : Monotone (Nat.cast : ℕ → α) :=
+  fun _ _ h ↦ (gc_ceil _ _).mp <| h.trans' <| (gc_ceil _ _).mpr (le_refl _)
 
-/--
-theorem `natCast_nonneg` / 定理 `natCast_nonneg`
+/-- A version of `Nat.cast_nonneg'` for floor semirings, whose addition is not necessarily
+  monotone. -/
+/-
+**FloorSemiring.natCast_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `FloorSemiring`。
+形式化陈述：natCast_nonneg (n : Nat) : 0 <= (n : α)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `FloorSemiring.natCast_mono`：natCast_mono : Monotone (Nat.cast : Nat -> α
+)
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
 
-English:
-theorem natCast_nonneg
-  given: (n : Nat)
-  statement: 0 <= (n : α)
-  proof: by
+--- 原说明 ---
+A version of `Nat.cast_nonneg'` for floor semirings, whose addition is not neces
+sarily
+  monotone.
+-/
+theorem natCast_nonneg (n : ℕ) : 0 ≤ (n : α) := by
   simpa using natCast_mono n.zero_le
 
-中文:
-定理 natCast_nonneg
-  条件: (n : 自然数)
-  结论: 0 <= (n : α)
-  证明: by
-  simpa using natCast_mono n.zero_le
+/-- A version of `Nat.strictMono_cast` for floor semirings, whose addition is not necessarily
+  monotone. -/
+/-
+**FloorSemiring.natCast_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `FloorSemiring`。
+形式化陈述：natCast_strictMono : StrictMono (Nat.cast : Nat -> α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `strictMono_nat_of_lt_succ`：strictMono_nat_of_lt_succ {f : Nat -> α} (hf 
+: forall n, f n < f (n + 1)) : StrictMono f
+· 使用定理 `LE.le.lt_of_ne`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a ≠ b → a < b
+· 使用定理 `FloorSemiring.natCast_mono`：natCast_mono : Monotone (Nat.cast : Nat -> α
+)
+· 使用定理 `Nat.le_succ`：∀ (n : ℕ), n ≤ n.succ
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `FloorSemiring.gc_floor`：∀ {α : Type u_4} {inst : Semiring α} {inst_1 : P
+artialOrder α} [self : FloorSemiring α] {a : α} {n : ℕ},   0 ≤ a → (n ≤ FloorSem
+iring.floor …
+· 使用定理 `FloorSemiring.natCast_nonneg`：natCast_nonneg (n : Nat) : 0 <= (n : α)
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
 
-Depends on / 依赖: n.zero_le, natCast_mono, zero_le
+--- 原说明 ---
+A version of `Nat.strictMono_cast` for floor semirings, whose addition is not ne
+cessarily
+  monotone.
 -/
-theorem natCast_nonneg (n : Nat) : 0 <= (n : α) := by
-  simpa using natCast_mono n.zero_le
-
-/--
-theorem `natCast_strictMono` / 定理 `natCast_strictMono`
-
-English:
-theorem natCast_strictMono
-  statement: StrictMono (Nat.cast : Nat -> α)
-  proof: by
+theorem natCast_strictMono : StrictMono (Nat.cast : ℕ → α) := by
   refine strictMono_nat_of_lt_succ fun n => (natCast_mono (Nat.le_succ n)).lt_of_ne fun hn => ?_
-  replace hn (k : Nat) : ((n + k : Nat) : α) = n := by
+  replace hn (k : ℕ) : ((n + k : ℕ) : α) = n := by
     induction k with | zero => rfl | succ k k_ih => grind
-  have h : n + (floor (n : α) + 1) <= floor (n : α) := (gc_floor (natCast_nonneg n)).mpr (hn _).le
+  have h : n + (floor (n : α) + 1) ≤ floor (n : α) := (gc_floor (natCast_nonneg n)).mpr (hn _).le
   grind
-
-中文:
-定理 natCast_strictMono
-  结论: 严格递增 (自然数.cast : 自然数 -> α)
-  证明: by
-  refine strictMono_nat_of_lt_succ fun n => (natCast_mono (Nat.le_succ n)).lt_of_ne fun hn => ?_
-  replace hn (k : Nat) : ((n + k : Nat) : α) = n := by
-    induction k with | zero => rfl | succ k k_ih => grind
-  have h : n + (floor (n : α) + 1) <= floor (n : α) := (gc_floor (natCast_nonneg n)).mpr (hn _).le
-  grind
-
-Depends on / 依赖: Nat.le_succ, gc_floor, k_ih, le_succ, lt_of_ne, natCast_mono, natCast_nonneg, replace, strictMono_nat_of_lt_succ
--/
-theorem natCast_strictMono : StrictMono (Nat.cast : Nat -> α) := by
-  refine strictMono_nat_of_lt_succ fun n => (natCast_mono (Nat.le_succ n)).lt_of_ne fun hn => ?_
-  replace hn (k : Nat) : ((n + k : Nat) : α) = n := by
-    induction k with | zero => rfl | succ k k_ih => grind
-  have h : n + (floor (n : α) + 1) <= floor (n : α) := (gc_floor (natCast_nonneg n)).mpr (hn _).le
-  grind
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ZeroLEOneClass α
-  body: ⟨by simpa only [Nat.cast_one] using natCast_nonneg 1⟩
-
-中文:
-实例 :
-  签名: ZeroLEOne类 α
-  定义体: ⟨by simpa only [Nat.cast_one] using natCast_nonneg 1⟩
-
-Depends on / 依赖: Nat.cast_one, cast_one, natCast_nonneg
+/-
+**FloorSemiring.** 是 Mathlib 中的一个实例，位于命名空间 `FloorSemiring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ZeroLEOneClass α := ⟨by simpa only [Nat.cast_one] using natCast_nonneg 1⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CharZero α
-  body: ⟨natCast_strictMono.injective⟩
-
-中文:
-实例 :
-  签名: 特征零 α
-  定义体: ⟨natCast_strictMono.injective⟩
-
-Depends on / 依赖: injective, natCast_strictMono, natCast_strictMono.injective
+/-
+**FloorSemiring.** 是 Mathlib 中的一个实例，位于命名空间 `FloorSemiring`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CharZero α := ⟨natCast_strictMono.injective⟩
 
@@ -242,96 +194,53 @@ namespace Nat
 
 section OrderedSemiring
 
-variable [Semiring α] [PartialOrder α] [FloorSemiring α] {a : α} {n : Nat}
+variable [Semiring α] [PartialOrder α] [FloorSemiring α] {a : α} {n : ℕ}
 
-/--
-Definition of `floor` / `floor` 的定义
+/-- `⌊a⌋₊` is the greatest natural `n` such that `n ≤ a`. If `a` is negative, then `⌊a⌋₊ = 0`. -/
+/-
+**Nat.floor** 是 Mathlib 中的一个定义，位于命名空间 `Nat`。
+形式化陈述：floor : α -> Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition floor
-  signature: : α -> Nat
-  body: FloorSemiring.floor
-
-中文:
-定义 floor
-  签名: : α -> 自然数
-  定义体: FloorSemiring.floor
-
-Depends on / 依赖: FloorSemiring, FloorSemiring.floor
+--- 原说明 ---
+`⌊a⌋₊` is the greatest natural `n` such that `n ≤ a`. If `a` is negative, then `
+⌊a⌋₊ = 0`.
 -/
-def floor : α -> Nat :=
+def floor : α → ℕ :=
   FloorSemiring.floor
 
-/--
-Definition of `ceil` / `ceil` 的定义
+/-- `⌈a⌉₊` is the least natural `n` such that `a ≤ n` -/
+/-
+**Nat.ceil** 是 Mathlib 中的一个定义，位于命名空间 `Nat`。
+形式化陈述：ceil : α -> Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ceil
-  signature: : α -> Nat
-  body: FloorSemiring.ceil
-
-@[simp]
-
-中文:
-定义 ceil
-  签名: : α -> 自然数
-  定义体: FloorSemiring.ceil
-
-@[simp]
-
-Depends on / 依赖: FloorSemiring, FloorSemiring.ceil
+--- 原说明 ---
+`⌈a⌉₊` is the least natural `n` such that `a ≤ n`
 -/
-def ceil : α -> Nat :=
+def ceil : α → ℕ :=
   FloorSemiring.ceil
 
 @[simp]
-/--
-theorem `floor_nat` / 定理 `floor_nat`
-
-English:
-theorem floor_nat
-  statement: (Nat.floor : Nat -> Nat) = id
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 floor_nat
-  结论: (自然数.floor : 自然数 -> 自然数) = id
-  证明: rfl
-
-@[simp]
+/-
+**Nat.floor_nat** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_nat : (Nat.floor : Nat -> Nat) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem floor_nat : (Nat.floor : Nat -> Nat) = id :=
+theorem floor_nat : (Nat.floor : ℕ → ℕ) = id :=
   rfl
 
 @[simp]
-/--
-theorem `ceil_nat` / 定理 `ceil_nat`
-
-English:
-theorem ceil_nat
-  statement: (Nat.ceil : Nat -> Nat) = id
-  proof: rfl
-
-@[inherit_doc]
-notation "⌊" a "⌋₊" => Nat.floor a
-
-@[inherit_doc]
-notation "⌈" a "⌉₊" => Nat.ceil a
-
-中文:
-定理 ceil_nat
-  结论: (自然数.ceil : 自然数 -> 自然数) = id
-  证明: rfl
-
-@[inherit_doc]
-notation "⌊" a "⌋₊" => Nat.floor a
-
-@[inherit_doc]
-notation "⌈" a "⌉₊" => Nat.ceil a
+/-
+**Nat.ceil_nat** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ceil_nat : (Nat.ceil : Nat -> Nat) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ceil_nat : (Nat.ceil : Nat -> Nat) = id :=
+theorem ceil_nat : (Nat.ceil : ℕ → ℕ) = id :=
   rfl
 
 @[inherit_doc]
@@ -339,131 +248,84 @@ notation "⌊" a "⌋₊" => Nat.floor a
 
 @[inherit_doc]
 notation "⌈" a "⌉₊" => Nat.ceil a
-
-/--
-theorem `le_floor_iff` / 定理 `le_floor_iff`
-
-English:
-theorem le_floor_iff
-  given: (ha : 0 <= a)
-  statement: n <= ⌊a⌋₊ ↔ (n : α) <= a
-  proof: FloorSemiring.gc_floor ha
-
-中文:
-定理 le_floor_iff
-  条件: (ha : 0 <= a)
-  结论: n <= ⌊a⌋₊ ↔ (n : α) <= a
-  证明: FloorSemiring.gc_floor ha
-
-Depends on / 依赖: FloorSemiring, FloorSemiring.gc_floor, gc_floor
+/-
+**Nat.le_floor_iff** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：le_floor_iff (ha : 0 <= a) : n <= ⌊a⌋₊ ↔ (n : α) <= a
+参数：ha : 0 <= a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FloorSemiring.gc_floor`：∀ {α : Type u_4} {inst : Semiring α} {inst_1 : P
+artialOrder α} [self : FloorSemiring α] {a : α} {n : ℕ},   0 ≤ a → (n ≤ FloorSem
+iring.floor …
 -/
-theorem le_floor_iff (ha : 0 <= a) : n <= ⌊a⌋₊ ↔ (n : α) <= a :=
+theorem le_floor_iff (ha : 0 ≤ a) : n ≤ ⌊a⌋₊ ↔ (n : α) ≤ a :=
   FloorSemiring.gc_floor ha
-
-/--
-theorem `le_floor` / 定理 `le_floor`
-
-English:
-theorem le_floor
-  given: (h : (n : α) <= a)
-  statement: n <= ⌊a⌋₊
-  proof: (le_floor_iff ((FloorSemiring.natCast_nonneg n).trans h)).2 h
-
-中文:
-定理 le_floor
-  条件: (h : (n : α) <= a)
-  结论: n <= ⌊a⌋₊
-  证明: (le_floor_iff ((FloorSemiring.natCast_nonneg n).trans h)).2 h
-
-Depends on / 依赖: FloorSemiring, FloorSemiring.natCast_nonneg, le_floor_iff, natCast_nonneg
+/-
+**Nat.le_floor** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：le_floor (h : (n : α) <= a) : n <= ⌊a⌋₊
+参数：h : (n : α) <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.le_floor_iff`：le_floor_iff (ha : 0 <= a) : n <= ⌊a⌋₊ ↔ (n : α) <= a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `FloorSemiring.natCast_nonneg`：natCast_nonneg (n : Nat) : 0 <= (n : α)
 -/
-theorem le_floor (h : (n : α) <= a) : n <= ⌊a⌋₊ :=
+theorem le_floor (h : (n : α) ≤ a) : n ≤ ⌊a⌋₊ :=
   (le_floor_iff ((FloorSemiring.natCast_nonneg n).trans h)).2 h
-
-/--
-theorem `gc_ceil_coe` / 定理 `gc_ceil_coe`
-
-English:
-theorem gc_ceil_coe
-  statement: GaloisConnection (ceil : α -> Nat) (↑)
-  proof: FloorSemiring.gc_ceil
-
-@[simp]
-
-中文:
-定理 gc_ceil_coe
-  结论: GaloisConnection (ceil : α -> 自然数) (↑)
-  证明: FloorSemiring.gc_ceil
-
-@[simp]
-
-Depends on / 依赖: FloorSemiring, FloorSemiring.gc_ceil, gc_ceil
+/-
+**Nat.gc_ceil_coe** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：gc_ceil_coe : GaloisConnection (ceil : α -> Nat) (↑)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FloorSemiring.gc_ceil`：∀ {α : Type u_4} {inst : Semiring α} {inst_1 : Pa
+rtialOrder α} [self : FloorSemiring α],   GaloisConnection FloorSemiring.ceil Na
+t.cast
 -/
-theorem gc_ceil_coe : GaloisConnection (ceil : α -> Nat) (↑) :=
+theorem gc_ceil_coe : GaloisConnection (ceil : α → ℕ) (↑) :=
   FloorSemiring.gc_ceil
 
 @[simp]
-/--
-theorem `ceil_le` / 定理 `ceil_le`
-
-English:
-theorem ceil_le
-  statement: ⌈a⌉₊ <= n ↔ a <= n
-  proof: gc_ceil_coe _ _
-
-中文:
-定理 ceil_le
-  结论: ⌈a⌉₊ <= n ↔ a <= n
-  证明: gc_ceil_coe _ _
-
-Depends on / 依赖: gc_ceil_coe
+/-
+**Nat.ceil_le** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ceil_le : ⌈a⌉₊ <= n ↔ a <= n
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.gc_ceil_coe`：gc_ceil_coe : GaloisConnection (ceil : α -> Nat) (↑)
 -/
-theorem ceil_le : ⌈a⌉₊ <= n ↔ a <= n :=
+theorem ceil_le : ⌈a⌉₊ ≤ n ↔ a ≤ n :=
   gc_ceil_coe _ _
 
 end OrderedSemiring
 
 section LinearOrderedSemiring
 
-variable [Semiring α] [LinearOrder α] [FloorSemiring α] {a b : α} {n : Nat}
+variable [Semiring α] [LinearOrder α] [FloorSemiring α] {a b : α} {n : ℕ}
 
-/--
-theorem `lt_ceil` / 定理 `lt_ceil`
-
-English:
-theorem lt_ceil
-  statement: n < ⌈a⌉₊ ↔ (n : α) < a
-  proof: lt_iff_lt_of_le_iff_le ceil_le
-
-@[simp]
-
-中文:
-定理 lt_ceil
-  结论: n < ⌈a⌉₊ ↔ (n : α) < a
-  证明: lt_iff_lt_of_le_iff_le ceil_le
-
-@[simp]
-
-Depends on / 依赖: ceil_le, lt_iff_lt_of_le_iff_le
+/-
+**Nat.lt_ceil** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：lt_ceil : n < ⌈a⌉₊ ↔ (n : α) < a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_iff_lt_of_le_iff_le`：lt_iff_lt_of_le_iff_le {β} [LinearOrder α] [Line
+arOrder β] {a b : α} {c d : β} (H : a <= b ↔ c <= d) : b < a ↔ d < c
+· 使用定理 `Nat.ceil_le`：ceil_le : ⌈a⌉₊ <= n ↔ a <= n
 -/
 theorem lt_ceil : n < ⌈a⌉₊ ↔ (n : α) < a :=
   lt_iff_lt_of_le_iff_le ceil_le
 
 @[simp]
-/--
-theorem `ceil_pos` / 定理 `ceil_pos`
-
-English:
-theorem ceil_pos
-  statement: 0 < ⌈a⌉₊ ↔ 0 < a
-  proof: by rw [lt_ceil, cast_zero]
-
-中文:
-定理 ceil_pos
-  结论: 0 < ⌈a⌉₊ ↔ 0 < a
-  证明: by rw [lt_ceil, cast_zero]
-
-Depends on / 依赖: cast_zero, lt_ceil
+/-
+**Nat.ceil_pos** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ceil_pos : 0 < ⌈a⌉₊ ↔ 0 < a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.lt_ceil`：lt_ceil : n < ⌈a⌉₊ ↔ (n : α) < a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem ceil_pos : 0 < ⌈a⌉₊ ↔ 0 < a := by rw [lt_ceil, cast_zero]
 
@@ -473,96 +335,53 @@ end Nat
 
 /-! ### Floor rings -/
 
-/--
-Definition of `FloorRing` / `FloorRing` 的定义
+/-- A `FloorRing` is a linear ordered ring over `α` with a function
+`floor : α → ℤ` satisfying `∀ (z : ℤ) (a : α), z ≤ floor a ↔ (z : α) ≤ a)`.
+-/
+/-
+**FloorRing** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_4) → [Ring α] → [LinearOrder α] → Type u_4
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class FloorRing
-  parameters: (α) [Ring α] [LinearOrder α]
-  axioms and operations (4):
-    - floor : α -> Int
-    - ceil : α -> Int
-    - gc_coe_floor : GaloisConnection (↑) floor
-    - gc_ceil_coe : GaloisConnection ceil (↑)
-
-中文:
-类 Floor环
-  参数: (α) [环 α] [线性序 α]
-  公理与运算 (4 个):
-    - floor : α -> 整数
-    - ceil : α -> 整数
-    - gc_coe_floor : GaloisConnection (↑) floor
-    - gc_ceil_coe : GaloisConnection ceil (↑)
-
-Depends on / 依赖: MulLeftMono, MulLeftMono.toPosMulMono, toPosMulMono
+--- 原说明 ---
+A `FloorRing` is a linear ordered ring over `α` with a function
+`floor : α → ℤ` satisfying `∀ (z : ℤ) (a : α), z ≤ floor a ↔ (z : α) ≤ a)`.
 -/
 class FloorRing (α) [Ring α] [LinearOrder α] where
   /-- `FloorRing.floor a` computes the greatest integer `z` such that `(z : α) ≤ a`. -/
-  floor : α -> Int
+  floor : α → ℤ
   /-- `FloorRing.ceil a` computes the least integer `z` such that `a ≤ (z : α)`. -/
-  ceil : α -> Int
+  ceil : α → ℤ
   /-- `FloorRing.ceil` is the upper adjoint of the coercion `↑ : ℤ → α`. -/
   gc_coe_floor : GaloisConnection (↑) floor
   /-- `FloorRing.ceil` is the lower adjoint of the coercion `↑ : ℤ → α`. -/
   gc_ceil_coe : GaloisConnection ceil (↑)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FloorRing Int
-  body: id
-  ceil := id
-  gc_coe_floor a b := by
-    rw [Int.cast_id]; rw [id_def]
-  gc_ceil_coe a b := by
-    rw [Int.cast_id]; rw [id_def]
-
-中文:
-实例 :
-  签名: Floor环 整数
-  定义体: id
-  ceil := id
-  gc_coe_floor a b := by
-    rw [Int.cast_id]; rw [id_def]
-  gc_ceil_coe a b := by
-    rw [Int.cast_id]; rw [id_def]
-
-Depends on / 依赖: MulRightMono, MulRightMono.toMulPosMono, toMulPosMono
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : FloorRing Int where
+instance : FloorRing ℤ where
   floor := id
   ceil := id
   gc_coe_floor a b := by
-    rw [Int.cast_id]; rw [id_def]
+    rw [Int.cast_id, id_def]
   gc_ceil_coe a b := by
-    rw [Int.cast_id]; rw [id_def]
+    rw [Int.cast_id, id_def]
 
 /-- A `FloorRing` constructor from the `floor` function alone. -/
 @[instance_reducible]
-/--
-Definition of `FloorRing.ofFloor` / `FloorRing.ofFloor` 的定义
+/-
+**FloorRing.ofFloor** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：FloorRing.ofFloor (α) [Ring α] [LinearOrder α] [IsOrderedRing α] (floor : 
+α -> Int) (gc_coe_floor : GaloisConnection (↑) floor) : FloorRing α
+参数：α；floor : α -> Int；gc_coe_floor : GaloisConnection (↑) floor。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FloorRing.ofFloor
-  signature: (α) [Ring α] [LinearOrder α] [IsOrderedRing α] (floor : α -> Int)
-  body: { floor
-    ceil := fun a => -floor (-a)
-    gc_coe_floor
-    gc_ceil_coe := fun a z => by rw [neg_le, ← gc_coe_floor, Int.cast_neg, neg_le_neg_iff] }
-
-中文:
-定义 Floor环.ofFloor
-  签名: (α) [环 α] [线性序 α] [是Ordered环 α] (floor : α -> 整数)
-  定义体: { floor
-    ceil := fun a => -floor (-a)
-    gc_coe_floor
-    gc_ceil_coe := fun a z => by rw [neg_le, ← gc_coe_floor, Int.cast_neg, neg_le_neg_iff] }
-
-Depends on / 依赖: Int.cast_neg, MulLeftStrictMono, MulLeftStrictMono.toPosMulStrictMono, cast_neg, gc_ceil_coe, gc_coe_floor, neg_le, neg_le_neg_iff, toPosMulStrictMono
+--- 原说明 ---
+A `FloorRing` constructor from the `floor` function alone.
 -/
-def FloorRing.ofFloor (α) [Ring α] [LinearOrder α] [IsOrderedRing α] (floor : α -> Int)
+def FloorRing.ofFloor (α) [Ring α] [LinearOrder α] [IsOrderedRing α] (floor : α → ℤ)
     (gc_coe_floor : GaloisConnection (↑) floor) : FloorRing α :=
   { floor
     ceil := fun a => -floor (-a)
@@ -571,28 +390,18 @@ def FloorRing.ofFloor (α) [Ring α] [LinearOrder α] [IsOrderedRing α] (floor 
 
 /-- A `FloorRing` constructor from the `ceil` function alone. -/
 @[instance_reducible]
-/--
-Definition of `FloorRing.ofCeil` / `FloorRing.ofCeil` 的定义
+/-
+**FloorRing.ofCeil** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：FloorRing.ofCeil (α) [Ring α] [LinearOrder α] [IsOrderedRing α] (ceil : α 
+-> Int) (gc_ceil_coe : GaloisConnection ceil (↑)) : FloorRing α
+参数：α；ceil : α -> Int；gc_ceil_coe : GaloisConnection ceil (↑)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FloorRing.ofCeil
-  signature: (α) [Ring α] [LinearOrder α] [IsOrderedRing α] (ceil : α -> Int)
-  body: { floor := fun a => -ceil (-a)
-    ceil
-    gc_coe_floor := fun a z => by rw [le_neg, gc_ceil_coe, Int.cast_neg, neg_le_neg_iff]
-    gc_ceil_coe }
-
-中文:
-定义 Floor环.ofCeil
-  签名: (α) [环 α] [线性序 α] [是Ordered环 α] (ceil : α -> 整数)
-  定义体: { floor := fun a => -ceil (-a)
-    ceil
-    gc_coe_floor := fun a z => by rw [le_neg, gc_ceil_coe, Int.cast_neg, neg_le_neg_iff]
-    gc_ceil_coe }
-
-Depends on / 依赖: Int.cast_neg, MulRightStrictMono, MulRightStrictMono.toMulPosStrictMono, cast_neg, gc_ceil_coe, gc_coe_floor, le_neg, neg_le_neg_iff, toMulPosStrictMono
+--- 原说明 ---
+A `FloorRing` constructor from the `ceil` function alone.
 -/
-def FloorRing.ofCeil (α) [Ring α] [LinearOrder α] [IsOrderedRing α] (ceil : α -> Int)
+def FloorRing.ofCeil (α) [Ring α] [LinearOrder α] [IsOrderedRing α] (ceil : α → ℤ)
     (gc_ceil_coe : GaloisConnection ceil (↑)) : FloorRing α :=
   { floor := fun a => -ceil (-a)
     ceil
@@ -600,239 +409,171 @@ def FloorRing.ofCeil (α) [Ring α] [LinearOrder α] [IsOrderedRing α] (ceil : 
     gc_ceil_coe }
 
 open scoped Classical in
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
-
-English:
-definition noncomputable
-  signature: def floorAux
-  body: by
-  let n := Classical.indefiniteDescription _ above
-  refine Int.greatestOfBdd (P := (· <= x)) n.1 (fun m hm => ?_) below
-  rw [← Int.cast_le (R := α)]
-  exact hm.trans n.2
-
-中文:
-定义 noncomputable
-  签名: def floorAux
-  定义体: by
-  let n := Classical.indefiniteDescription _ above
-  refine Int.greatestOfBdd (P := (· <= x)) n.1 (fun m hm => ?_) below
-  rw [← Int.cast_le (R := α)]
-  exact hm.trans n.2
-
-Depends on / 依赖: MulLeftMono, MulLeftMono.toPosMulReflectLT, MulLeftReflectLT, toPosMulReflectLT
+/-
+**floorAux** 是 Mathlib 中的一个定义，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private noncomputable def floorAux
     {α} [Ring α] [PartialOrder α] [IsOrderedRing α] [Nontrivial α] {x : α}
-    (below : exists n : Int, n <= x) (above : exists n : Int, x <= n) :
-    {n : Int // n <= x ∧ forall m : Int, m <= x -> m <= n} := by
+    (below : ∃ n : ℤ, n ≤ x) (above : ∃ n : ℤ, x ≤ n) :
+    {n : ℤ // n ≤ x ∧ ∀ m : ℤ, m ≤ x → m ≤ n} := by
   let n := Classical.indefiniteDescription _ above
-  refine Int.greatestOfBdd (P := (· <= x)) n.1 (fun m hm => ?_) below
+  refine Int.greatestOfBdd (P := (· ≤ x)) n.1 (fun m hm ↦ ?_) below
   rw [← Int.cast_le (R := α)]
   exact hm.trans n.2
 
-/--
-theorem `exists_floor'` / 定理 `exists_floor'`
+/-- See `exists_floor` for a variant which instead assumes an `Archimedean` ring. -/
+/-
+**exists_floor'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_floor' {α} [Ring α] [PartialOrder α] [IsOrderedRing α] [Nontrivial 
+α] (x : α) (below : exists n : Int, n <= x) (above : exists n : Int, x <= n) : e
+xists fl : Int, forall z : Int, z <= fl ↔ (z : α) <= x
+参数：x : α；below : exists n : Int, n <= x；above : exists n : Int, x <= n。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.cast_le`：∀ {R : Type u_1} [inst : AddCommGroupWithOne R] [inst_1 : P
+artialOrder R] [AddLeftMono R] [ZeroLEOneClass R] [NeZero 1]   {m n : ℤ}, ↑m ≤ ↑
+n…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsOrderedRing.toZeroLEOneClass`：∀ {R : Type u_1} {inst : Semiring R} {in
+st_1 : PartialOrder R} [self : IsOrderedRing R], ZeroLEOneClass R
+· 使用定理 `le_trans'`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, b ≤ a → c ≤
+ b → c ≤ a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-theorem exists_floor'
-  proof: by
-  refine ⟨_, fun n => ⟨?_, (floorAux below above).2.2 _⟩⟩
-  rw [← Int.cast_le (R := α)]
-  exact le_trans' (floorAux below above).2.1
-
-中文:
-定理 存在_floor'
-  证明: by
-  refine ⟨_, fun n => ⟨?_, (floorAux below above).2.2 _⟩⟩
-  rw [← Int.cast_le (R := α)]
-  exact le_trans' (floorAux below above).2.1
-
-Depends on / 依赖: Int.cast_le, MulRightMono, MulRightMono.toMulPosReflectLT, MulRightReflectLT, cast_le, floorAux, le_trans, toMulPosReflectLT
+--- 原说明 ---
+See `exists_floor` for a variant which instead assumes an `Archimedean` ring.
 -/
 theorem exists_floor'
     {α} [Ring α] [PartialOrder α] [IsOrderedRing α] [Nontrivial α] (x : α)
-    (below : exists n : Int, n <= x) (above : exists n : Int, x <= n) :
-    exists fl : Int, forall z : Int, z <= fl ↔ (z : α) <= x := by
-  refine ⟨_, fun n => ⟨?_, (floorAux below above).2.2 _⟩⟩
+    (below : ∃ n : ℤ, n ≤ x) (above : ∃ n : ℤ, x ≤ n) :
+    ∃ fl : ℤ, ∀ z : ℤ, z ≤ fl ↔ (z : α) ≤ x := by
+  refine ⟨_, fun n ↦ ⟨?_, (floorAux below above).2.2 _⟩⟩
   rw [← Int.cast_le (R := α)]
   exact le_trans' (floorAux below above).2.1
 
 /-- Construct a `FloorRing` instance noncomputably, from the hypothesis that every element is
 bounded above by a natural number. -/
 @[no_expose, instance_reducible]
-/--
-Definition of `FloorRing.ofBounded` / `FloorRing.ofBounded` 的定义
+/-
+**FloorRing.ofBounded** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：FloorRing.ofBounded (α) [Ring α] [LinearOrder α] [IsOrderedRing α] [Nontri
+vial α] (bounded : forall x : α, exists n : Nat, x <= n) : FloorRing α
+参数：α；bounded : forall x : α, exists n : Nat, x <= n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FloorRing.ofBounded
-  body: have below (x : α) : exists n : Int, n <= x := by
-    obtain ⟨n, hn⟩ := bounded (-x)
-    use -n
-    simpa [neg_le]
-  have above (x : α) : exists n : Int, x <= n := by
-    obtain ⟨n, hn⟩ := bounded x
-    use n
-    exact_mod_cast hn
-  .ofFloor _ _ fun n x => (Classical.choose_spec (exists_floor' x (below x) (above x)) n).symm
-
-中文:
-定义 Floor环.ofBounded
-  定义体: have below (x : α) : exists n : Int, n <= x := by
-    obtain ⟨n, hn⟩ := bounded (-x)
-    use -n
-    simpa [neg_le]
-  have above (x : α) : exists n : Int, x <= n := by
-    obtain ⟨n, hn⟩ := bounded x
-    use n
-    exact_mod_cast hn
-  .ofFloor _ _ fun n x => (Classical.choose_spec (exists_floor' x (below x) (above x)) n).symm
-
-Depends on / 依赖: Classical, Classical.choose_spec, MulLeftReflectLE, MulLeftStrictMono, MulLeftStrictMono.toPosMulReflectLE, bounded, choose_spec, exists_floor, neg_le, ofFloor, toPosMulReflectLE
+--- 原说明 ---
+Construct a `FloorRing` instance noncomputably, from the hypothesis that every e
+lement is
+bounded above by a natural number.
 -/
 noncomputable def FloorRing.ofBounded
     (α) [Ring α] [LinearOrder α] [IsOrderedRing α] [Nontrivial α]
-    (bounded : forall x : α, exists n : Nat, x <= n) : FloorRing α :=
-  have below (x : α) : exists n : Int, n <= x := by
+    (bounded : ∀ x : α, ∃ n : ℕ, x ≤ n) : FloorRing α :=
+  have below (x : α) : ∃ n : ℤ, n ≤ x := by
     obtain ⟨n, hn⟩ := bounded (-x)
     use -n
     simpa [neg_le]
-  have above (x : α) : exists n : Int, x <= n := by
+  have above (x : α) : ∃ n : ℤ, x ≤ n := by
     obtain ⟨n, hn⟩ := bounded x
     use n
     exact_mod_cast hn
-  .ofFloor _ _ fun n x => (Classical.choose_spec (exists_floor' x (below x) (above x)) n).symm
+  .ofFloor _ _ fun n x ↦ (Classical.choose_spec (exists_floor' x (below x) (above x)) n).symm
 
 namespace Int
 
-variable [Ring α] [LinearOrder α] [FloorRing α] {z : Int} {a b : α}
+variable [Ring α] [LinearOrder α] [FloorRing α] {z : ℤ} {a b : α}
 
-/--
-Definition of `floor` / `floor` 的定义
+/-- `Int.floor a` is the greatest integer `z` such that `z ≤ a`. It is denoted with `⌊a⌋`. -/
+/-
+**Int.floor** 是 Mathlib 中的一个定义，位于命名空间 `Int`。
+形式化陈述：floor : α -> Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition floor
-  signature: : α -> Int
-  body: FloorRing.floor
-
-中文:
-定义 floor
-  签名: : α -> 整数
-  定义体: FloorRing.floor
-
-Depends on / 依赖: FloorRing, FloorRing.floor, MulRightReflectLE, MulRightStrictMono, MulRightStrictMono.toMulPosReflectLE, toMulPosReflectLE
+--- 原说明 ---
+`Int.floor a` is the greatest integer `z` such that `z ≤ a`. It is denoted with 
+`⌊a⌋`.
 -/
-def floor : α -> Int :=
+def floor : α → ℤ :=
   FloorRing.floor
 
-/--
-Definition of `ceil` / `ceil` 的定义
+/-- `Int.ceil a` is the smallest integer `z` such that `a ≤ z`. It is denoted with `⌈a⌉`. -/
+/-
+**Int.ceil** 是 Mathlib 中的一个定义，位于命名空间 `Int`。
+形式化陈述：ceil : α -> Int
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ceil
-  signature: : α -> Int
-  body: FloorRing.ceil
-
-中文:
-定义 ceil
-  签名: : α -> 整数
-  定义体: FloorRing.ceil
-
-Depends on / 依赖: FloorRing, FloorRing.ceil
+--- 原说明 ---
+`Int.ceil a` is the smallest integer `z` such that `a ≤ z`. It is denoted with `
+⌈a⌉`.
 -/
-def ceil : α -> Int :=
+def ceil : α → ℤ :=
   FloorRing.ceil
 
-/--
-Definition of `fract` / `fract` 的定义
+/-- `Int.fract a` the fractional part of `a`, is `a` minus its floor. -/
+/-
+**Int.fract** 是 Mathlib 中的一个定义，位于命名空间 `Int`。
+形式化陈述：fract (a : α) : α
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fract
-  signature: (a : α)
-  body: a - floor a
-
-@[simp]
-
-中文:
-定义 fract
-  签名: (a : α)
-  定义体: a - floor a
-
-@[simp]
+--- 原说明 ---
+`Int.fract a` the fractional part of `a`, is `a` minus its floor.
 -/
 def fract (a : α) : α :=
   a - floor a
 
 @[simp]
-/--
-theorem `floor_int` / 定理 `floor_int`
-
-English:
-theorem floor_int
-  statement: (Int.floor : Int -> Int) = id
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 floor_int
-  结论: (整数.floor : 整数 -> 整数) = id
-  证明: rfl
-
-@[simp]
+/-
+**Int.floor_int** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：floor_int : (Int.floor : Int -> Int) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem floor_int : (Int.floor : Int -> Int) = id :=
+theorem floor_int : (Int.floor : ℤ → ℤ) = id :=
   rfl
 
 @[simp]
-/--
-theorem `ceil_int` / 定理 `ceil_int`
-
-English:
-theorem ceil_int
-  statement: (Int.ceil : Int -> Int) = id
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ceil_int
-  结论: (整数.ceil : 整数 -> 整数) = id
-  证明: rfl
-
-@[simp]
+/-
+**Int.ceil_int** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：ceil_int : (Int.ceil : Int -> Int) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ceil_int : (Int.ceil : Int -> Int) = id :=
+theorem ceil_int : (Int.ceil : ℤ → ℤ) = id :=
   rfl
 
 @[simp]
-/--
-theorem `fract_int` / 定理 `fract_int`
-
-English:
-theorem fract_int
-  statement: (Int.fract : Int -> Int) = 0
-  proof: funext fun x => by simp [fract]
-
-@[inherit_doc]
-notation "⌊" a "⌋" => Int.floor a
-
-@[inherit_doc]
-notation "⌈" a "⌉" => Int.ceil a
-
-中文:
-定理 fract_int
-  结论: (整数.fract : 整数 -> 整数) = 0
-  证明: funext fun x => by simp [fract]
-
-@[inherit_doc]
-notation "⌊" a "⌋" => Int.floor a
-
-@[inherit_doc]
-notation "⌈" a "⌉" => Int.ceil a
+/-
+**Int.fract_int** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：fract_int : (Int.fract : Int -> Int) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem fract_int : (Int.fract : Int -> Int) = 0 :=
+theorem fract_int : (Int.fract : ℤ → ℤ) = 0 :=
   funext fun x => by simp [fract]
 
 @[inherit_doc]
@@ -844,341 +585,249 @@ notation "⌈" a "⌉" => Int.ceil a
 -- Mathematical notation for `fract a` is usually `{a}`. Let's not even go there.
 
 @[simp]
-/--
-theorem `floorRing_floor_eq` / 定理 `floorRing_floor_eq`
-
-English:
-theorem floorRing_floor_eq
-  statement: @FloorRing.floor = @Int.floor
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 floorRing_floor_eq
-  结论: @Floor环.floor = @整数.floor
-  证明: rfl
-
-@[simp]
+/-
+**Int.floorRing_floor_eq** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：floorRing_floor_eq : @FloorRing.floor = @Int.floor
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem floorRing_floor_eq : @FloorRing.floor = @Int.floor :=
   rfl
 
 @[simp]
-/--
-theorem `floorRing_ceil_eq` / 定理 `floorRing_ceil_eq`
-
-English:
-theorem floorRing_ceil_eq
-  statement: @FloorRing.ceil = @Int.ceil
-  proof: rfl
-
-中文:
-定理 floorRing_ceil_eq
-  结论: @Floor环.ceil = @整数.ceil
-  证明: rfl
+/-
+**Int.floorRing_ceil_eq** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：floorRing_ceil_eq : @FloorRing.ceil = @Int.ceil
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem floorRing_ceil_eq : @FloorRing.ceil = @Int.ceil :=
   rfl
 
+/-! #### Floor -/
 
-/--
-theorem `gc_coe_floor` / 定理 `gc_coe_floor`
+/-
+**Int.gc_coe_floor** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：gc_coe_floor : GaloisConnection ((↑) : Int -> α) floor
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FloorRing.gc_coe_floor`：∀ {α : Type u_4} {inst : Ring α} {inst_1 : Linea
+rOrder α} [self : FloorRing α],   GaloisConnection Int.cast FloorRing.floor
 
-English:
-theorem gc_coe_floor
-  statement: GaloisConnection ((↑) : Int -> α) floor
-  proof: FloorRing.gc_coe_floor
-
-中文:
-定理 gc_coe_floor
-  结论: GaloisConnection ((↑) : 整数 -> α) floor
-  证明: FloorRing.gc_coe_floor
-
-Depends on / 依赖: FloorRing, FloorRing.gc_coe_floor, gc_coe_floor
+--- 原说明 ---
+#### Floor
 -/
-theorem gc_coe_floor : GaloisConnection ((↑) : Int -> α) floor :=
+theorem gc_coe_floor : GaloisConnection ((↑) : ℤ → α) floor :=
   FloorRing.gc_coe_floor
-
-/--
-theorem `le_floor` / 定理 `le_floor`
-
-English:
-theorem le_floor
-  statement: z <= ⌊a⌋ ↔ (z : α) <= a
-  proof: (gc_coe_floor z a).symm
-
-中文:
-定理 le_floor
-  结论: z <= ⌊a⌋ ↔ (z : α) <= a
-  证明: (gc_coe_floor z a).symm
-
-Depends on / 依赖: gc_coe_floor
+/-
+**Int.le_floor** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：le_floor : z <= ⌊a⌋ ↔ (z : α) <= a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Int.gc_coe_floor`：gc_coe_floor : GaloisConnection ((↑) : Int -> α) floor
 -/
-theorem le_floor : z <= ⌊a⌋ ↔ (z : α) <= a :=
+theorem le_floor : z ≤ ⌊a⌋ ↔ (z : α) ≤ a :=
   (gc_coe_floor z a).symm
-
-/--
-theorem `floor_lt` / 定理 `floor_lt`
-
-English:
-theorem floor_lt
-  statement: ⌊a⌋ < z ↔ a < z
-  proof: lt_iff_lt_of_le_iff_le le_floor
-
-@[bound]
-
-中文:
-定理 floor_lt
-  结论: ⌊a⌋ < z ↔ a < z
-  证明: lt_iff_lt_of_le_iff_le le_floor
-
-@[bound]
-
-Depends on / 依赖: le_floor, lt_iff_lt_of_le_iff_le
+/-
+**Int.floor_lt** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：floor_lt : ⌊a⌋ < z ↔ a < z
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_iff_lt_of_le_iff_le`：lt_iff_lt_of_le_iff_le {β} [LinearOrder α] [Line
+arOrder β] {a b : α} {c d : β} (H : a <= b ↔ c <= d) : b < a ↔ d < c
+· 使用定理 `Int.le_floor`：le_floor : z <= ⌊a⌋ ↔ (z : α) <= a
 -/
 theorem floor_lt : ⌊a⌋ < z ↔ a < z :=
   lt_iff_lt_of_le_iff_le le_floor
 
 @[bound]
-/--
-theorem `floor_le` / 定理 `floor_le`
-
-English:
-theorem floor_le
-  given: (a : α)
-  statement: (⌊a⌋ : α) <= a
-  proof: gc_coe_floor.l_u_le a
-
-中文:
-定理 floor_le
-  条件: (a : α)
-  结论: (⌊a⌋ : α) <= a
-  证明: gc_coe_floor.l_u_le a
-
-Depends on / 依赖: gc_coe_floor, gc_coe_floor.l_u_le, l_u_le
+/-
+**Int.floor_le** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：floor_le (a : α) : (⌊a⌋ : α) <= a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_u_le`：∀ {α : Type u} {β : Type v} [inst : Preorder α]
+ [inst_1 : Preorder β] {u : α → β} {l : β → α},   GaloisConnection l u → ∀ (a : 
+α), l (u a) ≤…
+· 使用定理 `Int.gc_coe_floor`：gc_coe_floor : GaloisConnection ((↑) : Int -> α) floor
 -/
-theorem floor_le (a : α) : (⌊a⌋ : α) <= a :=
+theorem floor_le (a : α) : (⌊a⌋ : α) ≤ a :=
   gc_coe_floor.l_u_le a
-
-/--
-theorem `floor_le_iff` / 定理 `floor_le_iff`
-
-English:
-theorem floor_le_iff
-  statement: ⌊a⌋ <= z ↔ a < z + 1
-  proof: by rw [← lt_add_one_iff, floor_lt]; norm_cast
-
-中文:
-定理 floor_le_iff
-  结论: ⌊a⌋ <= z ↔ a < z + 1
-  证明: by rw [← lt_add_one_iff, floor_lt]; norm_cast
-
-Depends on / 依赖: floor_lt, lt_add_one_iff
+/-
+**Int.floor_le_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：floor_le_iff : ⌊a⌋ <= z ↔ a < z + 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.lt_add_one_iff`：∀ {a b : ℤ}, a < b + 1 ↔ a ≤ b
+· 使用定理 `Int.floor_lt`：floor_lt : ⌊a⌋ < z ↔ a < z
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Int.cast_one`：cast_one : ((1 : Int) : R) = 1
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem floor_le_iff : ⌊a⌋ <= z ↔ a < z + 1 := by rw [← lt_add_one_iff, floor_lt]; norm_cast
-
-/--
-theorem `lt_floor_iff` / 定理 `lt_floor_iff`
-
-English:
-theorem lt_floor_iff
-  statement: z < ⌊a⌋ ↔ z + 1 <= a
-  proof: by rw [← add_one_le_iff, le_floor]; norm_cast
-
-中文:
-定理 lt_floor_iff
-  结论: z < ⌊a⌋ ↔ z + 1 <= a
-  证明: by rw [← add_one_le_iff, le_floor]; norm_cast
-
-Depends on / 依赖: add_one_le_iff, le_floor
+theorem floor_le_iff : ⌊a⌋ ≤ z ↔ a < z + 1 := by rw [← lt_add_one_iff, floor_lt]; norm_cast
+/-
+**Int.lt_floor_iff** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：lt_floor_iff : z < ⌊a⌋ ↔ z + 1 <= a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.add_one_le_iff`：∀ {a b : ℤ}, a + 1 ≤ b ↔ a < b
+· 使用定理 `Int.le_floor`：le_floor : z <= ⌊a⌋ ↔ (z : α) <= a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Int.cast_one`：cast_one : ((1 : Int) : R) = 1
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem lt_floor_iff : z < ⌊a⌋ ↔ z + 1 <= a := by rw [← add_one_le_iff, le_floor]; norm_cast
-
-/--
-theorem `floor_nonneg` / 定理 `floor_nonneg`
-
-English:
-theorem floor_nonneg
-  statement: 0 <= ⌊a⌋ ↔ 0 <= a
-  proof: by rw [le_floor, Int.cast_zero]
-
-中文:
-定理 floor_nonneg
-  结论: 0 <= ⌊a⌋ ↔ 0 <= a
-  证明: by rw [le_floor, Int.cast_zero]
-
-Depends on / 依赖: Int.cast_zero, cast_zero, le_floor
+theorem lt_floor_iff : z < ⌊a⌋ ↔ z + 1 ≤ a := by rw [← add_one_le_iff, le_floor]; norm_cast
+/-
+**Int.floor_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：floor_nonneg : 0 <= ⌊a⌋ ↔ 0 <= a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.le_floor`：le_floor : z <= ⌊a⌋ ↔ (z : α) <= a
+· 使用定理 `Int.cast_zero`：cast_zero : ((0 : Int) : R) = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem floor_nonneg : 0 <= ⌊a⌋ ↔ 0 <= a := by rw [le_floor, Int.cast_zero]
-
-/--
-theorem `floor_lt_zero` / 定理 `floor_lt_zero`
-
-English:
-theorem floor_lt_zero
-  statement: ⌊a⌋ < 0 ↔ a < 0
-  proof: by rw [floor_lt, Int.cast_zero]
-
-中文:
-定理 floor_lt_zero
-  结论: ⌊a⌋ < 0 ↔ a < 0
-  证明: by rw [floor_lt, Int.cast_zero]
-
-Depends on / 依赖: Int.cast_zero, cast_zero, floor_lt
+theorem floor_nonneg : 0 ≤ ⌊a⌋ ↔ 0 ≤ a := by rw [le_floor, Int.cast_zero]
+/-
+**Int.floor_lt_zero** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：floor_lt_zero : ⌊a⌋ < 0 ↔ a < 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.floor_lt`：floor_lt : ⌊a⌋ < z ↔ a < z
+· 使用定理 `Int.cast_zero`：cast_zero : ((0 : Int) : R) = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem floor_lt_zero : ⌊a⌋ < 0 ↔ a < 0 := by rw [floor_lt, Int.cast_zero]
 
+/-! #### Ceil -/
 
-/--
-theorem `gc_ceil_coe` / 定理 `gc_ceil_coe`
+/-
+**Int.gc_ceil_coe** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：gc_ceil_coe : GaloisConnection ceil ((↑) : Int -> α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FloorRing.gc_ceil_coe`：∀ {α : Type u_4} {inst : Ring α} {inst_1 : Linear
+Order α} [self : FloorRing α], GaloisConnection FloorRing.ceil Int.cast
 
-English:
-theorem gc_ceil_coe
-  statement: GaloisConnection ceil ((↑) : Int -> α)
-  proof: FloorRing.gc_ceil_coe
-
-中文:
-定理 gc_ceil_coe
-  结论: GaloisConnection ceil ((↑) : 整数 -> α)
-  证明: FloorRing.gc_ceil_coe
-
-Depends on / 依赖: FloorRing, FloorRing.gc_ceil_coe, gc_ceil_coe
+--- 原说明 ---
+#### Ceil
 -/
-theorem gc_ceil_coe : GaloisConnection ceil ((↑) : Int -> α) :=
+theorem gc_ceil_coe : GaloisConnection ceil ((↑) : ℤ → α) :=
   FloorRing.gc_ceil_coe
-
-/--
-theorem `ceil_le` / 定理 `ceil_le`
-
-English:
-theorem ceil_le
-  statement: ⌈a⌉ <= z ↔ a <= z
-  proof: gc_ceil_coe a z
-
-中文:
-定理 ceil_le
-  结论: ⌈a⌉ <= z ↔ a <= z
-  证明: gc_ceil_coe a z
-
-Depends on / 依赖: gc_ceil_coe
+/-
+**Int.ceil_le** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：ceil_le : ⌈a⌉ <= z ↔ a <= z
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Int.gc_ceil_coe`：gc_ceil_coe : GaloisConnection ceil ((↑) : Int -> α)
 -/
-theorem ceil_le : ⌈a⌉ <= z ↔ a <= z :=
+theorem ceil_le : ⌈a⌉ ≤ z ↔ a ≤ z :=
   gc_ceil_coe a z
-
-/--
-theorem `lt_ceil` / 定理 `lt_ceil`
-
-English:
-theorem lt_ceil
-  statement: z < ⌈a⌉ ↔ (z : α) < a
-  proof: lt_iff_lt_of_le_iff_le ceil_le
-
-@[bound]
-
-中文:
-定理 lt_ceil
-  结论: z < ⌈a⌉ ↔ (z : α) < a
-  证明: lt_iff_lt_of_le_iff_le ceil_le
-
-@[bound]
-
-Depends on / 依赖: ceil_le, lt_iff_lt_of_le_iff_le
+/-
+**Int.lt_ceil** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：lt_ceil : z < ⌈a⌉ ↔ (z : α) < a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_iff_lt_of_le_iff_le`：lt_iff_lt_of_le_iff_le {β} [LinearOrder α] [Line
+arOrder β] {a b : α} {c d : β} (H : a <= b ↔ c <= d) : b < a ↔ d < c
+· 使用定理 `Int.ceil_le`：ceil_le : ⌈a⌉ <= z ↔ a <= z
 -/
 theorem lt_ceil : z < ⌈a⌉ ↔ (z : α) < a :=
   lt_iff_lt_of_le_iff_le ceil_le
 
 @[bound]
-/--
-theorem `le_ceil` / 定理 `le_ceil`
-
-English:
-theorem le_ceil
-  given: (a : α)
-  statement: a <= ⌈a⌉
-  proof: gc_ceil_coe.le_u_l a
-
-中文:
-定理 le_ceil
-  条件: (a : α)
-  结论: a <= ⌈a⌉
-  证明: gc_ceil_coe.le_u_l a
-
-Depends on / 依赖: gc_ceil_coe, gc_ceil_coe.le_u_l, le_u_l
+/-
+**Int.le_ceil** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：le_ceil (a : α) : a <= ⌈a⌉
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.le_u_l`：le_u_l (a) : a <= u (l a)
+· 使用定理 `Int.gc_ceil_coe`：gc_ceil_coe : GaloisConnection ceil ((↑) : Int -> α)
 -/
-theorem le_ceil (a : α) : a <= ⌈a⌉ :=
+theorem le_ceil (a : α) : a ≤ ⌈a⌉ :=
   gc_ceil_coe.le_u_l a
-
-/--
-lemma `le_ceil_iff` / 引理 `le_ceil_iff`
-
-English:
-lemma le_ceil_iff
-  statement: z <= ⌈a⌉ ↔ z - 1 < a
-  proof: by rw [← sub_one_lt_iff, lt_ceil]; norm_cast
-
-中文:
-引理 le_ceil_iff
-  结论: z <= ⌈a⌉ ↔ z - 1 < a
-  证明: by rw [← sub_one_lt_iff, lt_ceil]; norm_cast
-
-Depends on / 依赖: lt_ceil, sub_one_lt_iff
+/-
+**Int.le_ceil_iff** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：le_ceil_iff : z <= ⌈a⌉ ↔ z - 1 < a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.sub_one_lt_iff`：∀ {m n : ℤ}, m - 1 < n ↔ m ≤ n
+· 使用定理 `Int.lt_ceil`：lt_ceil : z < ⌈a⌉ ↔ (z : α) < a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Int.cast_one`：cast_one : ((1 : Int) : R) = 1
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma le_ceil_iff : z <= ⌈a⌉ ↔ z - 1 < a := by rw [← sub_one_lt_iff, lt_ceil]; norm_cast
-
-/--
-lemma `ceil_lt_iff` / 引理 `ceil_lt_iff`
-
-English:
-lemma ceil_lt_iff
-  statement: ⌈a⌉ < z ↔ a <= z - 1
-  proof: by rw [← le_sub_one_iff, ceil_le]; norm_cast
-
-中文:
-引理 ceil_lt_iff
-  结论: ⌈a⌉ < z ↔ a <= z - 1
-  证明: by rw [← le_sub_one_iff, ceil_le]; norm_cast
-
-Depends on / 依赖: ceil_le, le_sub_one_iff
+lemma le_ceil_iff : z ≤ ⌈a⌉ ↔ z - 1 < a := by rw [← sub_one_lt_iff, lt_ceil]; norm_cast
+/-
+**Int.ceil_lt_iff** 是 Mathlib 中的一个引理，位于命名空间 `Int`。
+形式化陈述：ceil_lt_iff : ⌈a⌉ < z ↔ a <= z - 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.le_sub_one_iff`：∀ {m n : ℤ}, m ≤ n - 1 ↔ m < n
+· 使用定理 `Int.ceil_le`：ceil_le : ⌈a⌉ <= z ↔ a <= z
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Int.cast_one`：cast_one : ((1 : Int) : R) = 1
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma ceil_lt_iff : ⌈a⌉ < z ↔ a <= z - 1 := by rw [← le_sub_one_iff, ceil_le]; norm_cast
-
-/--
-theorem `ceil_nonpos` / 定理 `ceil_nonpos`
-
-English:
-theorem ceil_nonpos
-  statement: ⌈a⌉ <= 0 ↔ a <= 0
-  proof: by rw [ceil_le, cast_zero]
+lemma ceil_lt_iff : ⌈a⌉ < z ↔ a ≤ z - 1 := by rw [← le_sub_one_iff, ceil_le]; norm_cast
+/-
+**Int.ceil_nonpos** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：ceil_nonpos : ⌈a⌉ <= 0 ↔ a <= 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.ceil_le`：ceil_le : ⌈a⌉ <= z ↔ a <= z
+· 使用定理 `Int.cast_zero`：cast_zero : ((0 : Int) : R) = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+-/
+theorem ceil_nonpos : ⌈a⌉ ≤ 0 ↔ a ≤ 0 := by rw [ceil_le, cast_zero]
 
 @[simp]
-
-中文:
-定理 ceil_nonpos
-  结论: ⌈a⌉ <= 0 ↔ a <= 0
-  证明: by rw [ceil_le, cast_zero]
-
-@[simp]
-
-Depends on / 依赖: cast_zero, ceil_le
--/
-theorem ceil_nonpos : ⌈a⌉ <= 0 ↔ a <= 0 := by rw [ceil_le, cast_zero]
-
-@[simp]
-/--
-theorem `ceil_pos` / 定理 `ceil_pos`
-
-English:
-theorem ceil_pos
-  statement: 0 < ⌈a⌉ ↔ 0 < a
-  proof: by rw [lt_ceil, cast_zero]
-
-中文:
-定理 ceil_pos
-  结论: 0 < ⌈a⌉ ↔ 0 < a
-  证明: by rw [lt_ceil, cast_zero]
-
-Depends on / 依赖: cast_zero, lt_ceil
+/-
+**Int.ceil_pos** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：ceil_pos : 0 < ⌈a⌉ ↔ 0 < a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Int.lt_ceil`：lt_ceil : z < ⌈a⌉ ↔ (z : α) < a
+· 使用定理 `Int.cast_zero`：cast_zero : ((0 : Int) : R) = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem ceil_pos : 0 < ⌈a⌉ ↔ 0 < a := by rw [lt_ceil, cast_zero]
 
@@ -1191,89 +840,53 @@ variable [Ring α] [LinearOrder α] [FloorRing α]
 /-! #### A floor ring as a floor semiring -/
 
 -- see Note [lower instance priority]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) FloorRing.toFloorSemiring : FloorSemiring α where
   floor a := ⌊a⌋.toNat
   ceil a := ⌈a⌉.toNat
   floor_of_neg {_} ha := Int.toNat_of_nonpos (Int.floor_lt.mpr (ha.trans_eq Int.cast_zero.symm)).le
   gc_floor {a n} ha := by rw [Int.le_toNat (Int.floor_nonneg.2 ha), Int.le_floor, Int.cast_natCast]
   gc_ceil a n := by rw [Int.toNat_le, Int.ceil_le, Int.cast_natCast]
-
-/--
-theorem `Int.floor_toNat` / 定理 `Int.floor_toNat`
-
-English:
-theorem Int.floor_toNat
-  given: (a : α)
-  statement: ⌊a⌋.toNat = ⌊a⌋₊
-  proof: rfl
-
-中文:
-定理 整数.floor_to自然数
-  条件: (a : α)
-  结论: ⌊a⌋.to自然数 = ⌊a⌋₊
-  证明: rfl
+/-
+**Int.floor_toNat** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Int.floor_toNat (a : α) : ⌊a⌋.toNat = ⌊a⌋₊
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Int.floor_toNat (a : α) : ⌊a⌋.toNat = ⌊a⌋₊ :=
   rfl
-
-/--
-theorem `Int.ceil_toNat` / 定理 `Int.ceil_toNat`
-
-English:
-theorem Int.ceil_toNat
-  given: (a : α)
-  statement: ⌈a⌉.toNat = ⌈a⌉₊
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 整数.ceil_to自然数
-  条件: (a : α)
-  结论: ⌈a⌉.to自然数 = ⌈a⌉₊
-  证明: rfl
-
-@[simp]
+/-
+**Int.ceil_toNat** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Int.ceil_toNat (a : α) : ⌈a⌉.toNat = ⌈a⌉₊
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Int.ceil_toNat (a : α) : ⌈a⌉.toNat = ⌈a⌉₊ :=
   rfl
 
 @[simp]
-/--
-theorem `Nat.floor_int` / 定理 `Nat.floor_int`
-
-English:
-theorem Nat.floor_int
-  statement: (Nat.floor : Int -> Nat) = Int.toNat
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 自然数.floor_int
-  结论: (自然数.floor : 整数 -> 自然数) = 整数.to自然数
-  证明: rfl
-
-@[simp]
+/-
+**Nat.floor_int** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Nat.floor_int : (Nat.floor : Int -> Nat) = Int.toNat
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Nat.floor_int : (Nat.floor : Int -> Nat) = Int.toNat :=
+theorem Nat.floor_int : (Nat.floor : ℤ → ℕ) = Int.toNat :=
   rfl
 
 @[simp]
-/--
-theorem `Nat.ceil_int` / 定理 `Nat.ceil_int`
-
-English:
-theorem Nat.ceil_int
-  statement: (Nat.ceil : Int -> Nat) = Int.toNat
-  proof: rfl
-
-中文:
-定理 自然数.ceil_int
-  结论: (自然数.ceil : 整数 -> 自然数) = 整数.to自然数
-  证明: rfl
+/-
+**Nat.ceil_int** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Nat.ceil_int : (Nat.ceil : Int -> Nat) = Int.toNat
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Nat.ceil_int : (Nat.ceil : Int -> Nat) = Int.toNat :=
+theorem Nat.ceil_int : (Nat.ceil : ℤ → ℕ) = Int.toNat :=
   rfl
 
 end FloorRingToSemiring
@@ -1284,46 +897,50 @@ namespace FloorRing
 
 variable [Ring α] [LinearOrder α] [FloorRing α]
 
-/--
-theorem `intCast_mono` / 定理 `intCast_mono`
+/-- A version of `Int.cast_mono` for floor rings, whose addition is not necessarily monotone. -/
+/-
+**FloorRing.intCast_mono** 是 Mathlib 中的一个定理，位于命名空间 `FloorRing`。
+形式化陈述：intCast_mono : Monotone (Int.cast : Int -> α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `FloorRing.gc_ceil_coe`：∀ {α : Type u_4} {inst : Ring α} {inst_1 : Linear
+Order α} [self : FloorRing α], GaloisConnection FloorRing.ceil Int.cast
+· 使用定理 `LE.le.trans'`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, b ≤ a → 
+c ≤ b → c ≤ a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 
-English:
-theorem intCast_mono
-  statement: Monotone (Int.cast : Int -> α)
-  proof: fun _ _ h => (gc_ceil_coe _ _).mp h.trans' (gc_ceil_coe _ _).mpr (le_refl _)
-
-中文:
-定理 intCast_mono
-  结论: 递增 (整数.cast : 整数 -> α)
-  证明: fun _ _ h => (gc_ceil_coe _ _).mp h.trans' (gc_ceil_coe _ _).mpr (le_refl _)
-
-Depends on / 依赖: gc_ceil_coe, h.trans, le_refl
+--- 原说明 ---
+A version of `Int.cast_mono` for floor rings, whose addition is not necessarily 
+monotone.
 -/
-theorem intCast_mono : Monotone (Int.cast : Int -> α) :=
-fun _ _ h => (gc_ceil_coe _ _).mp h.trans' (gc_ceil_coe _ _).mpr (le_refl _)
+theorem intCast_mono : Monotone (Int.cast : ℤ → α) :=
+  fun _ _ h ↦ (gc_ceil_coe _ _).mp <| h.trans' <| (gc_ceil_coe _ _).mpr (le_refl _)
 
-/--
-theorem `intCast_strictMono` / 定理 `intCast_strictMono`
+/-- A version of `Int.cast_strictMono` for floor rings, whose addition is not necessarily
+  monotone. -/
+/-
+**FloorRing.intCast_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `FloorRing`。
+形式化陈述：intCast_strictMono : StrictMono (Int.cast : Int -> α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `strictMono_int_of_lt_succ`：strictMono_int_of_lt_succ {f : Int -> α} (hf 
+: forall n, f n < f (n + 1)) : StrictMono f
+· 使用定理 `LE.le.lt_of_ne`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a ≠ b → a < b
+· 使用定理 `FloorRing.intCast_mono`：intCast_mono : Monotone (Int.cast : Int -> α)
+· 使用定理 `Int.le_add_one`：∀ {a b : ℤ}, a ≤ b → a ≤ b + 1
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 
-English:
-theorem intCast_strictMono
-  statement: StrictMono (Int.cast : Int -> α)
-  proof: by
-  obtain ⟨h⟩ : NeZero (1 : α) := inferInstance
-  refine strictMono_int_of_lt_succ fun n => (intCast_mono (Int.le_add_one (le_refl _))).lt_of_ne ?_
-  grind
-
-中文:
-定理 intCast_strictMono
-  结论: 严格递增 (整数.cast : 整数 -> α)
-  证明: by
-  obtain ⟨h⟩ : NeZero (1 : α) := inferInstance
-  refine strictMono_int_of_lt_succ fun n => (intCast_mono (Int.le_add_one (le_refl _))).lt_of_ne ?_
-  grind
-
-Depends on / 依赖: Int.le_add_one, NeZero, intCast_mono, le_add_one, le_refl, lt_of_ne, strictMono_int_of_lt_succ
+--- 原说明 ---
+A version of `Int.cast_strictMono` for floor rings, whose addition is not necess
+arily
+  monotone.
 -/
-theorem intCast_strictMono : StrictMono (Int.cast : Int -> α) := by
+theorem intCast_strictMono : StrictMono (Int.cast : ℤ → α) := by
   obtain ⟨h⟩ : NeZero (1 : α) := inferInstance
   refine strictMono_int_of_lt_succ fun n => (intCast_mono (Int.le_add_one (le_refl _))).lt_of_ne ?_
   grind
@@ -1332,62 +949,53 @@ end FloorRing
 
 namespace Int
 
-variable [Ring α] [LinearOrder α] [FloorRing α] {z : Int} {a b : α}
+variable [Ring α] [LinearOrder α] [FloorRing α] {z : ℤ} {a b : α}
 
 @[bound]
-/--
-theorem `ceil_nonneg` / 定理 `ceil_nonneg`
-
-English:
-theorem ceil_nonneg
-  given: (ha : 0 <= a)
-  statement: 0 <= ⌈a⌉
-  proof: by
-  rw [← FloorRing.intCast_strictMono.le_iff_le (β := α)]; rw [Int.cast_zero]
-  exact ha.trans (le_ceil a)
-
-@[bound]
-
-中文:
-定理 ceil_nonneg
-  条件: (ha : 0 <= a)
-  结论: 0 <= ⌈a⌉
-  证明: by
-  rw [← FloorRing.intCast_strictMono.le_iff_le (β := α)]; rw [Int.cast_zero]
-  exact ha.trans (le_ceil a)
-
-@[bound]
-
-Depends on / 依赖: FloorRing, FloorRing.intCast_strictMono.le_iff_le, Int.cast_zero, cast_zero, ha.trans, intCast_strictMono, le_ceil, le_iff_le
+/-
+**Int.ceil_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：ceil_nonneg (ha : 0 <= a) : 0 <= ⌈a⌉
+参数：ha : 0 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `StrictMono.le_iff_le`：StrictMono.le_iff_le (hf : StrictMono f) {a b : α}
+ : f a <= f b ↔ a <= b
+· 使用定理 `FloorRing.intCast_strictMono`：intCast_strictMono : StrictMono (Int.cast 
+: Int -> α)
+· 使用定理 `Int.cast_zero`：cast_zero : ((0 : Int) : R) = 0
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Int.le_ceil`：le_ceil (a : α) : a <= ⌈a⌉
 -/
-theorem ceil_nonneg (ha : 0 <= a) : 0 <= ⌈a⌉ := by
-  rw [← FloorRing.intCast_strictMono.le_iff_le (β := α)]; rw [Int.cast_zero]
+theorem ceil_nonneg (ha : 0 ≤ a) : 0 ≤ ⌈a⌉ := by
+  rw [← FloorRing.intCast_strictMono.le_iff_le (β := α), Int.cast_zero]
   exact ha.trans (le_ceil a)
 
 @[bound]
-/--
-theorem `floor_nonpos` / 定理 `floor_nonpos`
-
-English:
-theorem floor_nonpos
-  given: (ha : a <= 0)
-  statement: ⌊a⌋ <= 0
-  proof: by
-  rw [← FloorRing.intCast_strictMono.le_iff_le (β := α)]; rw [Int.cast_zero]
-  exact (floor_le a).trans ha
-
-中文:
-定理 floor_nonpos
-  条件: (ha : a <= 0)
-  结论: ⌊a⌋ <= 0
-  证明: by
-  rw [← FloorRing.intCast_strictMono.le_iff_le (β := α)]; rw [Int.cast_zero]
-  exact (floor_le a).trans ha
-
-Depends on / 依赖: FloorRing, FloorRing.intCast_strictMono.le_iff_le, Int.cast_zero, cast_zero, floor_le, intCast_strictMono, le_iff_le
+/-
+**Int.floor_nonpos** 是 Mathlib 中的一个定理，位于命名空间 `Int`。
+形式化陈述：floor_nonpos (ha : a <= 0) : ⌊a⌋ <= 0
+参数：ha : a <= 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `StrictMono.le_iff_le`：StrictMono.le_iff_le (hf : StrictMono f) {a b : α}
+ : f a <= f b ↔ a <= b
+· 使用定理 `FloorRing.intCast_strictMono`：intCast_strictMono : StrictMono (Int.cast 
+: Int -> α)
+· 使用定理 `Int.cast_zero`：cast_zero : ((0 : Int) : R) = 0
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Int.floor_le`：floor_le (a : α) : (⌊a⌋ : α) <= a
 -/
-theorem floor_nonpos (ha : a <= 0) : ⌊a⌋ <= 0 := by
-  rw [← FloorRing.intCast_strictMono.le_iff_le (β := α)]; rw [Int.cast_zero]
+theorem floor_nonpos (ha : a ≤ 0) : ⌊a⌋ ≤ 0 := by
+  rw [← FloorRing.intCast_strictMono.le_iff_le (β := α), Int.cast_zero]
   exact (floor_le a).trans ha
 
 end Int
+

@@ -48,363 +48,397 @@ section CommSemiring
 variable [CommSemiring R] [AddCommMonoid M] [Module R M] [DecidableEq ι]
 variable (b : Basis ι R M)
 
-/--
-Definition of `toDual` / `toDual` 的定义
+/-- The linear map from a vector space equipped with basis to its dual vector space,
+taking basis elements to corresponding dual basis elements. -/
+/-
+**Module.Basis.toDual** 是 Mathlib 中的一个定义，位于命名空间 `Module.Basis`。
+形式化陈述：toDual : M ->ₗ[R] Module.Dual R M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toDual
-  signature: : M ->ₗ[R] Module.Dual R M
-  body: b.constr Nat fun v => b.constr Nat fun w => if w = v then (1 : R) else 0
-
-中文:
-定义 toDual
-  签名: : M ->ₗ[R] 模.对偶 R M
-  定义体: b.constr Nat fun v => b.constr Nat fun w => if w = v then (1 : R) else 0
-
-Depends on / 依赖: b.constr, constr
+--- 原说明 ---
+The linear map from a vector space equipped with basis to its dual vector space,
+taking basis elements to corresponding dual basis elements.
 -/
-def toDual : M ->ₗ[R] Module.Dual R M :=
-  b.constr Nat fun v => b.constr Nat fun w => if w = v then (1 : R) else 0
-
-/--
-theorem `toDual_apply` / 定理 `toDual_apply`
-
-English:
-theorem toDual_apply
-  given: (i j : ι)
-  statement: b.toDual (b i) (b j) = if i = j then 1 else 0
-  proof: by
-  rw [toDual]; rw [constr_basis b]; rw [constr_basis b]
-  simp only [eq_comm]
-
-中文:
-定理 toDual_apply
-  条件: (i j : ι)
-  结论: b.toDual (b i) (b j) = if i = j then 1 else 0
-  证明: by
-  rw [toDual]; rw [constr_basis b]; rw [constr_basis b]
-  simp only [eq_comm]
-
-Depends on / 依赖: constr_basis, eq_comm, toDual
+def toDual : M →ₗ[R] Module.Dual R M :=
+  b.constr ℕ fun v => b.constr ℕ fun w => if w = v then (1 : R) else 0
+/-
+**Module.Basis.toDual_apply** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：toDual_apply (i j : ι) : b.toDual (b i) (b j) = if i = j then 1 else 0
+参数：i j : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.Basis.toDual.eq_1`：∀ {R : Type uR} {M : Type uM} {ι : Type uι} [i
+nst : CommSemiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] 
+[inst_3 : Deci…
+· 使用定理 `Module.Basis.constr_basis`：constr_basis (f : ι -> M') (i : ι) : (constr 
+(M'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem toDual_apply (i j : ι) : b.toDual (b i) (b j) = if i = j then 1 else 0 := by
-  rw [toDual]; rw [constr_basis b]; rw [constr_basis b]
+  rw [toDual, constr_basis b, constr_basis b]
   simp only [eq_comm]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `toDual_linearCombination_left` / 定理 `toDual_linearCombination_left`
-
-English:
-theorem toDual_linearCombination_left
-  given: (f : ι ->₀ R) (i : ι)
-  proof: by
-  rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum]; rw [map_sum]; rw [LinearMap.sum_apply]
-  simp_rw [map_smul, LinearMap.smul_apply, toDual_apply, smul_eq_mul, mul_boole,
-    Finset.sum_ite_eq', Finsupp.if_mem_support]
-
-中文:
-定理 toDual_linearCombination_left
-  条件: (f : ι ->₀ R) (i : ι)
-  证明: by
-  rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum]; rw [map_sum]; rw [LinearMap.sum_apply]
-  simp_rw [map_smul, LinearMap.smul_apply, toDual_apply, smul_eq_mul, mul_boole,
-    Finset.sum_ite_eq', Finsupp.if_mem_support]
-
-Depends on / 依赖: Finset, Finset.sum_ite_eq, Finsupp, Finsupp.if_mem_support, Finsupp.linearCombination_apply, Finsupp.sum, LinearMap, LinearMap.smul_apply, LinearMap.sum_apply, if_mem_support, linearCombination_apply, map_smul, map_sum, mul_boole, simp_rw, smul_apply, smul_eq_mul, sum_apply, sum_ite_eq, toDual_apply
+/-
+**Module.Basis.toDual_linearCombination_left** 是 Mathlib 中的一个定理，位于命名空间 `Module.B
+asis`。
+形式化陈述：toDual_linearCombination_left (f : ι ->₀ R) (i : ι) : b.toDual (Finsupp.li
+nearCombination R b f) (b i) = f i
+参数：f : ι ->₀ R；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.linearCombination_apply`：linearCombination_apply (l : α ->₀ R) :
+ linearCombination R v l = l.sum fun i a => a • v i
+· 使用定理 `Finsupp.sum.eq_1`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10} [inst 
+: Zero M] [inst_1 : AddCommMonoid N] (f : α →₀ M) (g : α → M → N),   f.sum g = ∑
+ a ∈ f…
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `LinearMap.sum_apply`：sum_apply (t : Finset ι) (f : ι -> M ->ₛₗ[σ₁₂] M₂) 
+(b : M) : (∑ d in t, f d) b = ∑ d in t, f d b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `Module.Basis.toDual_apply`：toDual_apply (i j : ι) : b.toDual (b i) (b j)
+ = if i = j then 1 else 0
+· 使用定理 `mul_boole`：mul_boole {α} [MulZeroOneClass α] (P : Prop) [Decidable P] (a
+ : α) : (a * if P then 1 else 0) = if P then a else 0
+· 使用定理 `Finset.sum_ite_eq'`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoi
+d M] [inst_1 : DecidableEq ι] (s : Finset ι) (a : ι) (b : ι → M),   (∑ x ∈ s, if
+ x = a t…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finsupp.if_mem_support`：if_mem_support [DecidableEq α] {N : Type*} [Zero
+ N] (f : α ->₀ N) (a : α) : (if a in f.support then f a else 0) = f a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toDual_linearCombination_left (f : ι ->₀ R) (i : ι) :
+theorem toDual_linearCombination_left (f : ι →₀ R) (i : ι) :
     b.toDual (Finsupp.linearCombination R b f) (b i) = f i := by
-  rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum]; rw [map_sum]; rw [LinearMap.sum_apply]
+  rw [Finsupp.linearCombination_apply, Finsupp.sum, map_sum, LinearMap.sum_apply]
   simp_rw [map_smul, LinearMap.smul_apply, toDual_apply, smul_eq_mul, mul_boole,
     Finset.sum_ite_eq', Finsupp.if_mem_support]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `toDual_linearCombination_right` / 定理 `toDual_linearCombination_right`
-
-English:
-theorem toDual_linearCombination_right
-  given: (f : ι ->₀ R) (i : ι)
-  proof: by
-  rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum]; rw [map_sum]
-  simp_rw [map_smul, toDual_apply, smul_eq_mul, mul_boole, Finset.sum_ite_eq,
-    Finsupp.if_mem_support]
-
-中文:
-定理 toDual_linearCombination_right
-  条件: (f : ι ->₀ R) (i : ι)
-  证明: by
-  rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum]; rw [map_sum]
-  simp_rw [map_smul, toDual_apply, smul_eq_mul, mul_boole, Finset.sum_ite_eq,
-    Finsupp.if_mem_support]
-
-Depends on / 依赖: Finset, Finset.sum_ite_eq, Finsupp, Finsupp.if_mem_support, Finsupp.linearCombination_apply, Finsupp.sum, _eq_zero, _eq_zero_of_ae_zero, ae_eq_zero_of_eLpNorm, eLpNorm, hq0_lt, if_mem_support, le_of_lt, linearCombination_apply, map_smul, map_sum, mul_boole, simp_rw, smul_eq_mul, sum_ite_eq
+/-
+**Module.Basis.toDual_linearCombination_right** 是 Mathlib 中的一个定理，位于命名空间 `Module.
+Basis`。
+形式化陈述：toDual_linearCombination_right (f : ι ->₀ R) (i : ι) : b.toDual (b i) (Fin
+supp.linearCombination R b f) = f i
+参数：f : ι ->₀ R；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.linearCombination_apply`：linearCombination_apply (l : α ->₀ R) :
+ linearCombination R v l = l.sum fun i a => a • v i
+· 使用定理 `Finsupp.sum.eq_1`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10} [inst 
+: Zero M] [inst_1 : AddCommMonoid N] (f : α →₀ M) (g : α → M → N),   f.sum g = ∑
+ a ∈ f…
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `Module.Basis.toDual_apply`：toDual_apply (i j : ι) : b.toDual (b i) (b j)
+ = if i = j then 1 else 0
+· 使用定理 `mul_boole`：mul_boole {α} [MulZeroOneClass α] (P : Prop) [Decidable P] (a
+ : α) : (a * if P then 1 else 0) = if P then a else 0
+· 使用定理 `Finset.sum_ite_eq`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid
+ M] [inst_1 : DecidableEq ι] (s : Finset ι) (a : ι) (b : ι → M),   (∑ x ∈ s, if 
+a = x t…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finsupp.if_mem_support`：if_mem_support [DecidableEq α] {N : Type*} [Zero
+ N] (f : α ->₀ N) (a : α) : (if a in f.support then f a else 0) = f a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toDual_linearCombination_right (f : ι ->₀ R) (i : ι) :
+theorem toDual_linearCombination_right (f : ι →₀ R) (i : ι) :
     b.toDual (b i) (Finsupp.linearCombination R b f) = f i := by
-  rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum]; rw [map_sum]
+  rw [Finsupp.linearCombination_apply, Finsupp.sum, map_sum]
   simp_rw [map_smul, toDual_apply, smul_eq_mul, mul_boole, Finset.sum_ite_eq,
     Finsupp.if_mem_support]
-
-/--
-theorem `toDual_apply_left` / 定理 `toDual_apply_left`
-
-English:
-theorem toDual_apply_left
-  given: (m : M) (i : ι)
-  statement: b.toDual m (b i) = b.repr m i
-  proof: by
-  rw [← b.toDual_linearCombination_left]; rw [b.linearCombination_repr]
-
-中文:
-定理 toDual_apply_left
-  条件: (m : M) (i : ι)
-  结论: b.toDual m (b i) = b.repr m i
-  证明: by
-  rw [← b.toDual_linearCombination_left]; rw [b.linearCombination_repr]
-
-Depends on / 依赖: b.linearCombination_repr, b.toDual_linearCombination_left, linearCombination_repr, toDual_linearCombination_left
+/-
+**Module.Basis.toDual_apply_left** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：toDual_apply_left (m : M) (i : ι) : b.toDual m (b i) = b.repr m i
+参数：m : M；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Module.Basis.toDual_linearCombination_left`：toDual_linearCombination_lef
+t (f : ι ->₀ R) (i : ι) : b.toDual (Finsupp.linearCombination R b f) (b i) = f i
+· 使用定理 `Module.Basis.linearCombination_repr`：linearCombination_repr : Finsupp.li
+nearCombination _ b (b.repr x) = x
 -/
 theorem toDual_apply_left (m : M) (i : ι) : b.toDual m (b i) = b.repr m i := by
-  rw [← b.toDual_linearCombination_left]; rw [b.linearCombination_repr]
-
-/--
-theorem `toDual_apply_right` / 定理 `toDual_apply_right`
-
-English:
-theorem toDual_apply_right
-  given: (i : ι) (m : M)
-  statement: b.toDual (b i) m = b.repr m i
-  proof: by
-  rw [← b.toDual_linearCombination_right]; rw [b.linearCombination_repr]
-
-中文:
-定理 toDual_apply_right
-  条件: (i : ι) (m : M)
-  结论: b.toDual (b i) m = b.repr m i
-  证明: by
-  rw [← b.toDual_linearCombination_right]; rw [b.linearCombination_repr]
-
-Depends on / 依赖: b.linearCombination_repr, b.toDual_linearCombination_right, linearCombination_repr, toDual_linearCombination_right
+  rw [← b.toDual_linearCombination_left, b.linearCombination_repr]
+/-
+**Module.Basis.toDual_apply_right** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：toDual_apply_right (i : ι) (m : M) : b.toDual (b i) m = b.repr m i
+参数：i : ι；m : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Module.Basis.toDual_linearCombination_right`：toDual_linearCombination_ri
+ght (f : ι ->₀ R) (i : ι) : b.toDual (b i) (Finsupp.linearCombination R b f) = f
+ i
+· 使用定理 `Module.Basis.linearCombination_repr`：linearCombination_repr : Finsupp.li
+nearCombination _ b (b.repr x) = x
 -/
 theorem toDual_apply_right (i : ι) (m : M) : b.toDual (b i) m = b.repr m i := by
-  rw [← b.toDual_linearCombination_right]; rw [b.linearCombination_repr]
-
-/--
-theorem `coe_toDual_self` / 定理 `coe_toDual_self`
-
-English:
-theorem coe_toDual_self
-  given: (i : ι)
-  statement: b.toDual (b i) = b.coord i
-  proof: by
-  ext
-  apply toDual_apply_right
-
-中文:
-定理 coe_toDual_self
-  条件: (i : ι)
-  结论: b.toDual (b i) = b.coord i
-  证明: by
-  ext
-  apply toDual_apply_right
-
-Depends on / 依赖: toDual_apply_right
+  rw [← b.toDual_linearCombination_right, b.linearCombination_repr]
+/-
+**Module.Basis.coe_toDual_self** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：coe_toDual_self (i : ι) : b.toDual (b i) = b.coord i
+参数：i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Module.Basis.toDual_apply_right`：toDual_apply_right (i : ι) (m : M) : b.
+toDual (b i) m = b.repr m i
 -/
 theorem coe_toDual_self (i : ι) : b.toDual (b i) = b.coord i := by
   ext
   apply toDual_apply_right
 
-/--
-Definition of `toDualFlip` / `toDualFlip` 的定义
+/-- `h.toDualFlip v` is the linear map sending `w` to `h.toDual w v`. -/
+/-
+**Module.Basis.toDualFlip** 是 Mathlib 中的一个定义，位于命名空间 `Module.Basis`。
+形式化陈述：toDualFlip (m : M) : M ->ₗ[R] R
+参数：m : M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toDualFlip
-  signature: (m : M)
-  body: b.toDual.flip m
-
-中文:
-定义 toDualFlip
-  签名: (m : M)
-  定义体: b.toDual.flip m
-
-Depends on / 依赖: b.toDual.flip, toDual
+--- 原说明 ---
+`h.toDualFlip v` is the linear map sending `w` to `h.toDual w v`.
 -/
-def toDualFlip (m : M) : M ->ₗ[R] R :=
+def toDualFlip (m : M) : M →ₗ[R] R :=
   b.toDual.flip m
-
-/--
-theorem `toDualFlip_apply` / 定理 `toDualFlip_apply`
-
-English:
-theorem toDualFlip_apply
-  given: (m₁ m₂ : M)
-  statement: b.toDualFlip m₁ m₂ = b.toDual m₂ m₁
-  proof: rfl
-
-中文:
-定理 toDualFlip_apply
-  条件: (m₁ m₂ : M)
-  结论: b.toDualFlip m₁ m₂ = b.toDual m₂ m₁
-  证明: rfl
+/-
+**Module.Basis.toDualFlip_apply** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：toDualFlip_apply (m₁ m₂ : M) : b.toDualFlip m₁ m₂ = b.toDual m₂ m₁
+参数：m₁ m₂ : M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toDualFlip_apply (m₁ m₂ : M) : b.toDualFlip m₁ m₂ = b.toDual m₂ m₁ :=
   rfl
-
-/--
-theorem `toDual_eq_repr` / 定理 `toDual_eq_repr`
-
-English:
-theorem toDual_eq_repr
-  given: (m : M) (i : ι)
-  statement: b.toDual m (b i) = b.repr m i
-  proof: b.toDual_apply_left m i
-
-中文:
-定理 toDual_eq_repr
-  条件: (m : M) (i : ι)
-  结论: b.toDual m (b i) = b.repr m i
-  证明: b.toDual_apply_left m i
-
-Depends on / 依赖: b.toDual_apply_left, toDual_apply_left
+/-
+**Module.Basis.toDual_eq_repr** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：toDual_eq_repr (m : M) (i : ι) : b.toDual m (b i) = b.repr m i
+参数：m : M；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Basis.toDual_apply_left`：toDual_apply_left (m : M) (i : ι) : b.to
+Dual m (b i) = b.repr m i
 -/
 theorem toDual_eq_repr (m : M) (i : ι) : b.toDual m (b i) = b.repr m i :=
   b.toDual_apply_left m i
-
-/--
-theorem `toDual_eq_equivFun` / 定理 `toDual_eq_equivFun`
-
-English:
-theorem toDual_eq_equivFun
-  given: [Finite ι] (m : M) (i : ι)
-  statement: b.toDual m (b i) = b.equivFun m i
-  proof: by
-  rw [b.equivFun_apply]; rw [toDual_eq_repr]
-
-中文:
-定理 toDual_eq_equivFun
-  条件: [有限 ι] (m : M) (i : ι)
-  结论: b.toDual m (b i) = b.equivFun m i
-  证明: by
-  rw [b.equivFun_apply]; rw [toDual_eq_repr]
-
-Depends on / 依赖: b.equivFun_apply, equivFun_apply, toDual_eq_repr
+/-
+**Module.Basis.toDual_eq_equivFun** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：toDual_eq_equivFun [Finite ι] (m : M) (i : ι) : b.toDual m (b i) = b.equiv
+Fun m i
+参数：m : M；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.Basis.equivFun_apply`：∀ {ι : Type u_1} {R : Type u_3} {M : Type u
+_6} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M
+] [inst_3 : Finit…
+· 使用定理 `Module.Basis.toDual_eq_repr`：toDual_eq_repr (m : M) (i : ι) : b.toDual m
+ (b i) = b.repr m i
 -/
 theorem toDual_eq_equivFun [Finite ι] (m : M) (i : ι) : b.toDual m (b i) = b.equivFun m i := by
-  rw [b.equivFun_apply]; rw [toDual_eq_repr]
-
-/--
-theorem `toDual_injective` / 定理 `toDual_injective`
-
-English:
-theorem toDual_injective
-  statement: Injective b.toDual
-  proof: fun x y h => b.ext_elem_iff.mpr fun i => by
-  simp_rw [← toDual_eq_repr]; exact DFunLike.congr_fun h _
-
-中文:
-定理 toDual_injective
-  结论: 单射 b.toDual
-  证明: fun x y h => b.ext_elem_iff.mpr fun i => by
-  simp_rw [← toDual_eq_repr]; exact DFunLike.congr_fun h _
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, b.ext_elem_iff.mpr, congr_fun, ext_elem_iff, simp_rw, toDual_eq_repr
+  rw [b.equivFun_apply, toDual_eq_repr]
+/-
+**Module.Basis.toDual_injective** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：toDual_injective : Injective b.toDual
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Module.Basis.ext_elem_iff`：ext_elem_iff {x y : M} : x = y ↔ forall i, b.
+repr x i = b.repr y i
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 -/
-theorem toDual_injective : Injective b.toDual := fun x y h => b.ext_elem_iff.mpr fun i => by
+theorem toDual_injective : Injective b.toDual := fun x y h ↦ b.ext_elem_iff.mpr fun i ↦ by
   simp_rw [← toDual_eq_repr]; exact DFunLike.congr_fun h _
-
-/--
-theorem `toDual_inj` / 定理 `toDual_inj`
-
-English:
-theorem toDual_inj
-  given: (m : M) (a : b.toDual m = 0)
-  statement: m = 0
-  proof: b.toDual_injective (by rwa [map_zero])
-
-中文:
-定理 toDual_inj
-  条件: (m : M) (a : b.toDual m = 0)
-  结论: m = 0
-  证明: b.toDual_injective (by rwa [map_zero])
-
-Depends on / 依赖: b.toDual_injective, map_zero, toDual_injective
+/-
+**Module.Basis.toDual_inj** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：toDual_inj (m : M) (a : b.toDual m = 0) : m = 0
+参数：m : M；a : b.toDual m = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Module.Basis.toDual_injective`：toDual_injective : Injective b.toDual
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
 -/
 theorem toDual_inj (m : M) (a : b.toDual m = 0) : m = 0 :=
   b.toDual_injective (by rwa [map_zero])
-
-/--
-theorem `toDual_ker` / 定理 `toDual_ker`
-
-English:
-theorem toDual_ker
-  statement: LinearMap.ker b.toDual = ⊥
-  proof: ker_eq_bot'.mpr b.toDual_inj
-
-中文:
-定理 toDual_ker
-  结论: 线性映射.ker b.toDual = ⊥
-  证明: ker_eq_bot'.mpr b.toDual_inj
-
-Depends on / 依赖: b.toDual_inj, ker_eq_bot, toDual_inj
+/-
+**Module.Basis.toDual_ker** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：toDual_ker : LinearMap.ker b.toDual = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `LinearMap.ker_eq_bot'`：ker_eq_bot' {f : M ->ₛₗ[τ₁₂] M₂} : ker f = ⊥ ↔ fo
+rall m, f m = 0 -> m = 0
+· 使用定理 `Module.Basis.toDual_inj`：toDual_inj (m : M) (a : b.toDual m = 0) : m = 0
 -/
 theorem toDual_ker : LinearMap.ker b.toDual = ⊥ :=
   ker_eq_bot'.mpr b.toDual_inj
-
-/--
-theorem `toDual_range` / 定理 `toDual_range`
-
-English:
-theorem toDual_range
-  given: [Finite ι]
-  statement: LinearMap.range b.toDual = ⊤
-  proof: eq_top_iff'.2 fun f => ⟨Finsupp.linearCombination R b
-    Finsupp.equivFunOnFinite.symm fun i => f (b i), b.ext fun i => by simp⟩
-
-omit [DecidableEq ι] in
-@[simp]
-
-中文:
-定理 toDual_range
-  条件: [有限 ι]
-  结论: 线性映射.range b.toDual = ⊤
-  证明: eq_top_iff'.2 fun f => ⟨Finsupp.linearCombination R b
-    Finsupp.equivFunOnFinite.symm fun i => f (b i), b.ext fun i => by simp⟩
-
-omit [DecidableEq ι] in
-@[simp]
-
-Depends on / 依赖: Finsupp, Finsupp.equivFunOnFinite.symm, Finsupp.linearCombination, b.ext, eq_top_iff, equivFunOnFinite, linearCombination
+/-
+**Module.Basis.toDual_range** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：toDual_range [Finite ι] : LinearMap.range b.toDual = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Submodule.eq_top_iff'`：eq_top_iff' {p : Submodule R M} : p = ⊤ ↔ forall 
+x, x in p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Module.Basis.ext`：ext {f₁ f₂ : M ->ₛₗ[σ] M₁} (h : forall i, f₁ (b i) = f
+₂ (b i)) : f₁ = f₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.Basis.toDual_linearCombination_left`：toDual_linearCombination_lef
+t (f : ι ->₀ R) (i : ι) : b.toDual (Finsupp.linearCombination R b f) (b i) = f i
+· 使用定理 `Finsupp.equivFunOnFinite_symm_apply_apply`：∀ {α : Type u_1} {M : Type u_
+4} [inst : Zero M] [inst_1 : Finite α] (f : α → M) (a : α),   (Finsupp.equivFunO
+nFinite.symm f) a = f a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem toDual_range [Finite ι] : LinearMap.range b.toDual = ⊤ :=
-eq_top_iff'.2 fun f => ⟨Finsupp.linearCombination R b
+  eq_top_iff'.2 fun f => ⟨Finsupp.linearCombination R b <|
     Finsupp.equivFunOnFinite.symm fun i => f (b i), b.ext fun i => by simp⟩
 
 omit [DecidableEq ι] in
 @[simp]
-/--
-theorem `sum_dual_apply_smul_coord` / 定理 `sum_dual_apply_smul_coord`
-
-English:
-theorem sum_dual_apply_smul_coord
-  given: [Fintype ι] (f : Module.Dual R M)
-  proof: by
-  ext m
-  simp_rw [LinearMap.sum_apply, LinearMap.smul_apply, smul_eq_mul, mul_comm (f _), ← smul_eq_mul,
-    ← f.map_smul, ← map_sum, Basis.coord_apply, Basis.sum_repr]
-
-中文:
-定理 sum_dual_apply_smul_coord
-  条件: [有限类型 ι] (f : 模.对偶 R M)
-  证明: by
-  ext m
-  simp_rw [LinearMap.sum_apply, LinearMap.smul_apply, smul_eq_mul, mul_comm (f _), ← smul_eq_mul,
-    ← f.map_smul, ← map_sum, Basis.coord_apply, Basis.sum_repr]
-
-Depends on / 依赖: Basis.coord_apply, Basis.sum_repr, LinearMap, LinearMap.smul_apply, LinearMap.sum_apply, coord_apply, f.map_smul, map_smul, map_sum, mul_comm, simp_rw, smul_apply, smul_eq_mul, sum_apply, sum_repr
+/-
+**Module.Basis.sum_dual_apply_smul_coord** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis
+`。
+形式化陈述：sum_dual_apply_smul_coord [Fintype ι] (f : Module.Dual R M) : (∑ x, f (b x
+) • b.coord x) = f
+参数：f : Module.Dual R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.sum_apply`：sum_apply (t : Finset ι) (f : ι -> M ->ₛₗ[σ₁₂] M₂) 
+(b : M) : (∑ d in t, f d) b = ∑ d in t, f d b
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearMap.map_smul`：∀ {R : Type u_1} {M : Type u_8} {M₂ : Type u_10} [in
+st : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : AddCommMonoid M₂] [inst_
+3 : _roo…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `Module.Basis.coord_apply`：∀ {ι : Type u_10} {R : Type u_11} {M : Type u_
+12} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M
+] (b : Module.…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Module.Basis.sum_repr`：∀ {ι : Type u_1} {R : Type u_3} {M : Type u_6} [i
+nst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] [ins
+t_3 : Finty…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem sum_dual_apply_smul_coord [Fintype ι] (f : Module.Dual R M) :
     (∑ x, f (b x) • b.coord x) = f := by
@@ -416,357 +450,342 @@ section Finite
 
 variable [Finite ι]
 
-/--
-Definition of `toDualEquiv` / `toDualEquiv` 的定义
+/-- A vector space is linearly equivalent to its dual space. -/
+/-
+**Module.Basis.toDualEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Module.Basis`。
+形式化陈述：toDualEquiv : M ≃ₗ[R] Dual R M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toDualEquiv
-  signature: : M ≃ₗ[R] Dual R M
-  body: .ofBijective b.toDual ⟨b.toDual_injective, range_eq_top.mp b.toDual_range⟩
-
-中文:
-定义 toDualEquiv
-  签名: : M ≃ₗ[R] 对偶 R M
-  定义体: .ofBijective b.toDual ⟨b.toDual_injective, range_eq_top.mp b.toDual_range⟩
-
-Depends on / 依赖: b.toDual, b.toDual_injective, b.toDual_range, ofBijective, range_eq_top, range_eq_top.mp, toDual, toDual_injective, toDual_range
+--- 原说明 ---
+A vector space is linearly equivalent to its dual space.
 -/
 def toDualEquiv : M ≃ₗ[R] Dual R M :=
   .ofBijective b.toDual ⟨b.toDual_injective, range_eq_top.mp b.toDual_range⟩
 
 -- `simps` times out when generating this
 @[simp]
-/--
-theorem `toDualEquiv_apply` / 定理 `toDualEquiv_apply`
-
-English:
-theorem toDualEquiv_apply
-  given: (m : M)
-  statement: b.toDualEquiv m = b.toDual m
-  proof: rfl
-
-中文:
-定理 toDualEquiv_apply
-  条件: (m : M)
-  结论: b.toDualEquiv m = b.toDual m
-  证明: rfl
+/-
+**Module.Basis.toDualEquiv_apply** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：toDualEquiv_apply (m : M) : b.toDualEquiv m = b.toDual m
+参数：m : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
 -/
 theorem toDualEquiv_apply (m : M) : b.toDualEquiv m = b.toDual m :=
   rfl
 
-/--
-Definition of `dualBasis` / `dualBasis` 的定义
+/-- Maps a basis for `V` to a basis for the dual space. -/
+/-
+**Module.Basis.dualBasis** 是 Mathlib 中的一个定义，位于命名空间 `Module.Basis`。
+形式化陈述：dualBasis : Basis ι R (Dual R M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dualBasis
-  signature: : Basis ι R (Dual R M)
-  body: b.map b.toDualEquiv
-
-中文:
-定义 dualBasis
-  签名: : 基 ι R (对偶 R M)
-  定义体: b.map b.toDualEquiv
-
-Depends on / 依赖: b.map, b.toDualEquiv, toDualEquiv
+--- 原说明 ---
+Maps a basis for `V` to a basis for the dual space.
 -/
 def dualBasis : Basis ι R (Dual R M) :=
   b.map b.toDualEquiv
 
 -- We use `j = i` to match `Basis.repr_self`
-/--
-theorem `dualBasis_apply_self` / 定理 `dualBasis_apply_self`
-
-English:
-theorem dualBasis_apply_self
-  given: (i j : ι)
-  statement: b.dualBasis i (b j) =
-  proof: by
-  convert! b.toDual_apply i j using 2
-  rw [@eq_comm _ j i]
-
-中文:
-定理 dualBasis_apply_self
-  条件: (i j : ι)
-  结论: b.dualBasis i (b j) =
-  证明: by
-  convert! b.toDual_apply i j using 2
-  rw [@eq_comm _ j i]
-
-Depends on / 依赖: b.toDual_apply, convert, eq_comm, toDual_apply
+/-
+**Module.Basis.dualBasis_apply_self** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：dualBasis_apply_self (i j : ι) : b.dualBasis i (b j) = if j = i then 1 els
+e 0
+参数：i j : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `Module.Basis.toDual_apply`：toDual_apply (i j : ι) : b.toDual (b i) (b j)
+ = if i = j then 1 else 0
 -/
 theorem dualBasis_apply_self (i j : ι) : b.dualBasis i (b j) =
     if j = i then 1 else 0 := by
   convert! b.toDual_apply i j using 2
   rw [@eq_comm _ j i]
-
-/--
-theorem `linearCombination_dualBasis` / 定理 `linearCombination_dualBasis`
-
-English:
-theorem linearCombination_dualBasis
-  given: (f : ι ->₀ R) (i : ι)
-  proof: by
-  cases nonempty_fintype ι
-  rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum_fintype]; rw [LinearMap.sum_apply]
-  · simp_rw [LinearMap.smul_apply, smul_eq_mul, dualBasis_apply_self, mul_boole,
-      Finset.sum_ite_eq, if_pos (Finset.mem_univ i)]
-  · intro
-    rw [zero_smul]
-
-中文:
-定理 linearCombination_dualBasis
-  条件: (f : ι ->₀ R) (i : ι)
-  证明: by
-  cases nonempty_fintype ι
-  rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum_fintype]; rw [LinearMap.sum_apply]
-  · simp_rw [LinearMap.smul_apply, smul_eq_mul, dualBasis_apply_self, mul_boole,
-      Finset.sum_ite_eq, if_pos (Finset.mem_univ i)]
-  · intro
-    rw [zero_smul]
-
-Depends on / 依赖: Finset, Finset.mem_univ, Finset.sum_ite_eq, Finsupp, Finsupp.linearCombination_apply, Finsupp.sum_fintype, LinearMap, LinearMap.smul_apply, LinearMap.sum_apply, dualBasis_apply_self, if_pos, linearCombination_apply, mem_univ, mul_boole, nonempty_fintype, simp_rw, smul_apply, smul_eq_mul, sum_apply, sum_fintype
+/-
+**Module.Basis.linearCombination_dualBasis** 是 Mathlib 中的一个定理，位于命名空间 `Module.Bas
+is`。
+形式化陈述：linearCombination_dualBasis (f : ι ->₀ R) (i : ι) : Finsupp.linearCombinat
+ion R b.dualBasis f (b i) = f i
+参数：f : ι ->₀ R；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_fintype`：nonempty_fintype (α : Type*) [Finite α] : Nonempty (Fi
+ntype α)
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.linearCombination_apply`：linearCombination_apply (l : α ->₀ R) :
+ linearCombination R v l = l.sum fun i a => a • v i
+· 使用定理 `Finsupp.sum_fintype`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10} [in
+st : Zero M] [inst_1 : AddCommMonoid N] [inst_2 : Fintype α]   (f : α →₀ M) (g :
+ α → M → …
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `LinearMap.sum_apply`：sum_apply (t : Finset ι) (f : ι -> M ->ₛₗ[σ₁₂] M₂) 
+(b : M) : (∑ d in t, f d) b = ∑ d in t, f d b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Module.Basis.dualBasis_apply_self`：dualBasis_apply_self (i j : ι) : b.du
+alBasis i (b j) = if j = i then 1 else 0
+· 使用定理 `mul_boole`：mul_boole {α} [MulZeroOneClass α] (P : Prop) [Decidable P] (a
+ : α) : (a * if P then 1 else 0) = if P then a else 0
+· 使用定理 `Finset.sum_ite_eq`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMonoid
+ M] [inst_1 : DecidableEq ι] (s : Finset ι) (a : ι) (b : ι → M),   (∑ x ∈ s, if 
+a = x t…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `Finset.mem_univ`：mem_univ (x : α) : x in (univ : Finset α)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem linearCombination_dualBasis (f : ι ->₀ R) (i : ι) :
+theorem linearCombination_dualBasis (f : ι →₀ R) (i : ι) :
     Finsupp.linearCombination R b.dualBasis f (b i) = f i := by
   cases nonempty_fintype ι
-  rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum_fintype]; rw [LinearMap.sum_apply]
+  rw [Finsupp.linearCombination_apply, Finsupp.sum_fintype, LinearMap.sum_apply]
   · simp_rw [LinearMap.smul_apply, smul_eq_mul, dualBasis_apply_self, mul_boole,
       Finset.sum_ite_eq, if_pos (Finset.mem_univ i)]
   · intro
     rw [zero_smul]
-
-/--
-theorem `dualBasis_repr` / 定理 `dualBasis_repr`
-
-English:
-theorem dualBasis_repr
-  given: (l : Dual R M) (i : ι)
-  statement: b.dualBasis.repr l i = l (b i)
-  proof: by
-  rw [← linearCombination_dualBasis b]; rw [Basis.linearCombination_repr b.dualBasis l]
-
-中文:
-定理 dualBasis_repr
-  条件: (l : 对偶 R M) (i : ι)
-  结论: b.dualBasis.repr l i = l (b i)
-  证明: by
-  rw [← linearCombination_dualBasis b]; rw [Basis.linearCombination_repr b.dualBasis l]
+/-
+**Module.Basis.dualBasis_repr** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：∀ {R : Type uR} {M : Type uM} {ι : Type uι} [inst : CommSemiring R] [inst_
+1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] [inst_3 : DecidableEq ι] (b 
+: Module.Basis ι R M) [inst_4 : Finite ι]   (l : Module.Dual R M) (i : ι), (b.du
+alBasis.repr l) i = l (b i)
+参数：b : Module.Basis ι R M；l : Module.Dual R M；i : ι；b.dualBasis.repr l；b i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Module.Basis.linearCombination_dualBasis`：linearCombination_dualBasis (f
+ : ι ->₀ R) (i : ι) : Finsupp.linearCombination R b.dualBasis f (b i) = f i
+· 使用定理 `Module.Basis.linearCombination_repr`：linearCombination_repr : Finsupp.li
+nearCombination _ b (b.repr x) = x
 -/
 @[simp] theorem dualBasis_repr (l : Dual R M) (i : ι) : b.dualBasis.repr l i = l (b i) := by
-  rw [← linearCombination_dualBasis b]; rw [Basis.linearCombination_repr b.dualBasis l]
-
-/--
-theorem `dualBasis_apply` / 定理 `dualBasis_apply`
-
-English:
-theorem dualBasis_apply
-  given: (i : ι) (m : M)
-  statement: b.dualBasis i m = b.repr m i
-  proof: b.toDual_apply_right i m
-
-@[simp]
-
-中文:
-定理 dualBasis_apply
-  条件: (i : ι) (m : M)
-  结论: b.dualBasis i m = b.repr m i
-  证明: b.toDual_apply_right i m
-
-@[simp]
-
-Depends on / 依赖: b.toDual_apply_right, toDual_apply_right
+  rw [← linearCombination_dualBasis b, Basis.linearCombination_repr b.dualBasis l]
+/-
+**Module.Basis.dualBasis_apply** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：dualBasis_apply (i : ι) (m : M) : b.dualBasis i m = b.repr m i
+参数：i : ι；m : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Basis.toDual_apply_right`：toDual_apply_right (i : ι) (m : M) : b.
+toDual (b i) m = b.repr m i
 -/
 theorem dualBasis_apply (i : ι) (m : M) : b.dualBasis i m = b.repr m i :=
   b.toDual_apply_right i m
 
 @[simp]
-/--
-theorem `coe_dualBasis` / 定理 `coe_dualBasis`
-
-English:
-theorem coe_dualBasis
-  statement: ⇑b.dualBasis = b.coord
-  proof: by
-  ext i x
-  apply dualBasis_apply
-
-@[simp]
-
-中文:
-定理 coe_dualBasis
-  结论: ⇑b.dualBasis = b.coord
-  证明: by
-  ext i x
-  apply dualBasis_apply
-
-@[simp]
-
-Depends on / 依赖: dualBasis_apply
+/-
+**Module.Basis.coe_dualBasis** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：coe_dualBasis : ⇑b.dualBasis = b.coord
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `Module.Basis.dualBasis_apply`：dualBasis_apply (i : ι) (m : M) : b.dualBa
+sis i m = b.repr m i
 -/
 theorem coe_dualBasis : ⇑b.dualBasis = b.coord := by
   ext i x
   apply dualBasis_apply
 
 @[simp]
-/--
-theorem `toDual_toDual` / 定理 `toDual_toDual`
-
-English:
-theorem toDual_toDual
-  statement: b.dualBasis.toDual.comp b.toDual = Dual.eval R M
-  proof: by
-  refine b.ext fun i => b.dualBasis.ext fun j => ?_
-  rw [LinearMap.comp_apply]; rw [toDual_apply_left]; rw [coe_toDual_self]; rw [← coe_dualBasis]; rw [Dual.eval_apply]; rw [Basis.repr_self]; rw [Finsupp.single_apply]; rw [dualBasis_apply_self]
-
-中文:
-定理 toDual_toDual
-  结论: b.dualBasis.toDual.comp b.toDual = 对偶.eval R M
-  证明: by
-  refine b.ext fun i => b.dualBasis.ext fun j => ?_
-  rw [LinearMap.comp_apply]; rw [toDual_apply_left]; rw [coe_toDual_self]; rw [← coe_dualBasis]; rw [Dual.eval_apply]; rw [Basis.repr_self]; rw [Finsupp.single_apply]; rw [dualBasis_apply_self]
-
-Depends on / 依赖: Basis.repr_self, Dual.eval_apply, Finsupp, Finsupp.single_apply, LinearMap, LinearMap.comp_apply, b.dualBasis.ext, b.ext, coe_dualBasis, coe_toDual_self, comp_apply, dualBasis, dualBasis_apply_self, eval_apply, repr_self, single_apply, toDual_apply_left
+/-
+**Module.Basis.toDual_toDual** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：toDual_toDual : b.dualBasis.toDual.comp b.toDual = Dual.eval R M
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Basis.ext`：ext {f₁ f₂ : M ->ₛₗ[σ] M₁} (h : forall i, f₁ (b i) = f
+₂ (b i)) : f₁ = f₂
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.comp_apply`：comp_apply (x : M₁) : f.comp g x = f (g x)
+· 使用定理 `Module.Basis.toDual_apply_left`：toDual_apply_left (m : M) (i : ι) : b.to
+Dual m (b i) = b.repr m i
+· 使用定理 `Module.Basis.coe_toDual_self`：coe_toDual_self (i : ι) : b.toDual (b i) =
+ b.coord i
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Module.Basis.coe_dualBasis`：coe_dualBasis : ⇑b.dualBasis = b.coord
+· 使用定理 `Module.Dual.eval_apply`：eval_apply (v : M) (a : Dual R M) : eval R M v a
+ = a v
+· 使用定理 `Module.Basis.repr_self`：repr_self : b.repr (b i) = Finsupp.single i 1
+· 使用定理 `Finsupp.single_apply`：single_apply [Decidable (a = a')] : single a b a' 
+= if a = a' then b else 0
+· 使用定理 `Module.Basis.dualBasis_apply_self`：dualBasis_apply_self (i j : ι) : b.du
+alBasis i (b j) = if j = i then 1 else 0
 -/
 theorem toDual_toDual : b.dualBasis.toDual.comp b.toDual = Dual.eval R M := by
   refine b.ext fun i => b.dualBasis.ext fun j => ?_
-  rw [LinearMap.comp_apply]; rw [toDual_apply_left]; rw [coe_toDual_self]; rw [← coe_dualBasis]; rw [Dual.eval_apply]; rw [Basis.repr_self]; rw [Finsupp.single_apply]; rw [dualBasis_apply_self]
+  rw [LinearMap.comp_apply, toDual_apply_left, coe_toDual_self, ← coe_dualBasis,
+    Dual.eval_apply, Basis.repr_self, Finsupp.single_apply, dualBasis_apply_self]
 
 end Finite
 
-/--
-theorem `dualBasis_equivFun` / 定理 `dualBasis_equivFun`
-
-English:
-theorem dualBasis_equivFun
-  given: [Finite ι] (l : Dual R M) (i : ι)
-  proof: by rw [Basis.equivFun_apply, dualBasis_repr]
-
-中文:
-定理 dualBasis_equivFun
-  条件: [有限 ι] (l : 对偶 R M) (i : ι)
-  证明: by rw [Basis.equivFun_apply, dualBasis_repr]
-
-Depends on / 依赖: Basis.equivFun_apply, dualBasis_repr, equivFun_apply
+/-
+**Module.Basis.dualBasis_equivFun** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：dualBasis_equivFun [Finite ι] (l : Dual R M) (i : ι) : b.dualBasis.equivFu
+n l i = l (b i)
+参数：l : Dual R M；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.Basis.equivFun_apply`：∀ {ι : Type u_1} {R : Type u_3} {M : Type u
+_6} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M
+] [inst_3 : Finit…
+· 使用定理 `Module.Basis.dualBasis_repr`：∀ {R : Type uR} {M : Type uM} {ι : Type uι}
+ [inst : CommSemiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R 
+M] [inst_3 : Deci…
 -/
 theorem dualBasis_equivFun [Finite ι] (l : Dual R M) (i : ι) :
     b.dualBasis.equivFun l i = l (b i) := by rw [Basis.equivFun_apply, dualBasis_repr]
-
-/--
-theorem `eval_injective` / 定理 `eval_injective`
-
-English:
-theorem eval_injective
-  given: {ι : Type*} (b : Basis ι R M)
-  statement: Function.Injective (Dual.eval R M)
-  proof: by
-  intro m m' eq
-  simp_rw [LinearMap.ext_iff, Dual.eval_apply] at eq
-  exact b.ext_elem fun i => eq (b.coord i)
-
-中文:
-定理 eval_injective
-  条件: {ι : 类型} (b : 基 ι R M)
-  结论: 函数.单射 (对偶.eval R M)
-  证明: by
-  intro m m' eq
-  simp_rw [LinearMap.ext_iff, Dual.eval_apply] at eq
-  exact b.ext_elem fun i => eq (b.coord i)
-
-Depends on / 依赖: Dual.eval_apply, LinearMap, LinearMap.ext_iff, _enorm, b.coord, b.ext_elem, eval_apply, ext_elem, ext_iff, hp_ne_top, hp_ne_zero, meas_ge_lt_top, p.meas_ge_lt_top, simp_rw
+/-
+**Module.Basis.eval_injective** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：eval_injective {ι : Type*} (b : Basis ι R M) : Function.Injective (Dual.ev
+al R M)
+参数：b : Basis ι R M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Module.Basis.ext_elem`：∀ {ι : Type u_10} {R : Type u_11} {M : Type u_12}
+ [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M] (
+b : Module.…
 -/
 theorem eval_injective {ι : Type*} (b : Basis ι R M) : Function.Injective (Dual.eval R M) := by
   intro m m' eq
   simp_rw [LinearMap.ext_iff, Dual.eval_apply] at eq
-  exact b.ext_elem fun i => eq (b.coord i)
-
-/--
-theorem `eval_ker` / 定理 `eval_ker`
-
-English:
-theorem eval_ker
-  given: {ι : Type*} (b : Basis ι R M)
-  statement: LinearMap.ker (Dual.eval R M) = ⊥
-  proof: ker_eq_bot_of_injective (eval_injective b)
-
-中文:
-定理 eval_ker
-  条件: {ι : 类型} (b : 基 ι R M)
-  结论: 线性映射.ker (对偶.eval R M) = ⊥
-  证明: ker_eq_bot_of_injective (eval_injective b)
-
-Depends on / 依赖: eval_injective, ker_eq_bot_of_injective
+  exact b.ext_elem fun i ↦ eq (b.coord i)
+/-
+**Module.Basis.eval_ker** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：eval_ker {ι : Type*} (b : Basis ι R M) : LinearMap.ker (Dual.eval R M) = ⊥
+参数：b : Basis ι R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ker_eq_bot_of_injective`：ker_eq_bot_of_injective {f : M ->ₛₗ[τ
+₁₂] M₂} (hf : Injective f) : ker f = ⊥
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Module.Basis.eval_injective`：eval_injective {ι : Type*} (b : Basis ι R M
+) : Function.Injective (Dual.eval R M)
 -/
 theorem eval_ker {ι : Type*} (b : Basis ι R M) : LinearMap.ker (Dual.eval R M) = ⊥ :=
   ker_eq_bot_of_injective (eval_injective b)
-
-/--
-theorem `eval_range` / 定理 `eval_range`
-
-English:
-theorem eval_range
-  given: {ι : Type*} [Finite ι] (b : Basis ι R M)
-  proof: by
-  classical
-    cases nonempty_fintype ι
-    rw [← b.toDual_toDual]; rw [range_comp]; rw [b.toDual_range]; rw [Submodule.map_top]; rw [toDual_range _]
-
-中文:
-定理 eval_range
-  条件: {ι : 类型} [有限 ι] (b : 基 ι R M)
-  证明: by
-  classical
-    cases nonempty_fintype ι
-    rw [← b.toDual_toDual]; rw [range_comp]; rw [b.toDual_range]; rw [Submodule.map_top]; rw [toDual_range _]
-
-Depends on / 依赖: Submodule, Submodule.map_top, b.toDual_range, b.toDual_toDual, classical, map_top, nonempty_fintype, range_comp, toDual_range, toDual_toDual
+/-
+**Module.Basis.eval_range** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：eval_range {ι : Type*} [Finite ι] (b : Basis ι R M) : LinearMap.range (Dua
+l.eval R M) = ⊤
+参数：b : Basis ι R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nonempty_fintype`：nonempty_fintype (α : Type*) [Finite α] : Nonempty (Fi
+ntype α)
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Module.Basis.toDual_toDual`：toDual_toDual : b.dualBasis.toDual.comp b.to
+Dual = Dual.eval R M
+· 使用定理 `LinearMap.range_comp`：range_comp [RingHomSurjective τ₁₂] [RingHomSurject
+ive τ₂₃] [RingHomSurjective τ₁₃] (f : M ->ₛₗ[τ₁₂] M₂) (g : M₂ ->ₛₗ[τ₂₃] M₃) : ra
+nge (g.com…
+· 使用定理 `Module.Basis.toDual_range`：toDual_range [Finite ι] : LinearMap.range b.t
+oDual = ⊤
+· 使用定理 `Submodule.map_top`：map_top [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) 
+: map f ⊤ = range f
 -/
 theorem eval_range {ι : Type*} [Finite ι] (b : Basis ι R M) :
     LinearMap.range (Dual.eval R M) = ⊤ := by
   classical
     cases nonempty_fintype ι
-    rw [← b.toDual_toDual]; rw [range_comp]; rw [b.toDual_range]; rw [Submodule.map_top]; rw [toDual_range _]
-
-/--
-lemma `dualBasis_coord_toDualEquiv_apply` / 引理 `dualBasis_coord_toDualEquiv_apply`
-
-English:
-lemma dualBasis_coord_toDualEquiv_apply
-  given: [Finite ι] (i : ι) (f : M)
-  proof: by
-  simp [-toDualEquiv_apply, Basis.dualBasis]
-
-中文:
-引理 dualBasis_coord_toDualEquiv_apply
-  条件: [有限 ι] (i : ι) (f : M)
-  证明: by
-  simp [-toDualEquiv_apply, Basis.dualBasis]
-
-Depends on / 依赖: Basis.dualBasis, ENNReal, ENNReal.rpow_zero, _eq_lintegral_enorm, dualBasis, eLpNorm, h_rw, hp0_lt, hpq_eq, hq0_lt, lintegral_congr, lt_of_le_of_ne, lt_of_lt_of_le, mul_one, repeat, rpow_zero, sub_self, toDualEquiv_apply
+    rw [← b.toDual_toDual, range_comp, b.toDual_range, Submodule.map_top, toDual_range _]
+/-
+**Module.Basis.dualBasis_coord_toDualEquiv_apply** 是 Mathlib 中的一个引理，位于命名空间 `Modu
+le.Basis`。
+形式化陈述：dualBasis_coord_toDualEquiv_apply [Finite ι] (i : ι) (f : M) : b.dualBasis
+.coord i (b.toDualEquiv f) = b.coord i f
+参数：i : ι；f : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.Basis.coord_apply`：∀ {ι : Type u_10} {R : Type u_11} {M : Type u_
+12} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M
+] (b : Module.…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Module.Basis.map_repr`：∀ {ι : Type u_1} {R : Type u_3} {M : Type u_6} {M
+' : Type u_7} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.
+Module R M]…
+· 使用定理 `LinearEquiv.symm_apply_apply`：symm_apply_apply (b : M) : e.symm (e b) = 
+b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma dualBasis_coord_toDualEquiv_apply [Finite ι] (i : ι) (f : M) :
     b.dualBasis.coord i (b.toDualEquiv f) = b.coord i f := by
   simp [-toDualEquiv_apply, Basis.dualBasis]
-
-/--
-lemma `coord_toDualEquiv_symm_apply` / 引理 `coord_toDualEquiv_symm_apply`
-
-English:
-lemma coord_toDualEquiv_symm_apply
-  given: [Finite ι] (i : ι) (f : Module.Dual R M)
-  proof: by
-  simp [Basis.dualBasis]
-
-omit [DecidableEq ι]
-
-中文:
-引理 coord_toDualEquiv_symm_apply
-  条件: [有限 ι] (i : ι) (f : 模.对偶 R M)
-  证明: by
-  simp [Basis.dualBasis]
-
-omit [DecidableEq ι]
-
-Depends on / 依赖: Basis.dualBasis, ENNReal, ENNReal.mul_rpow_of_nonneg, ENNReal.rpow_mul, ENNReal.rpow_one, dualBasis, eLpNorm, eLpNormEssSup, enorm_ae_le_eLpNormEssSup, h_le, h_nnnorm_le_eLpNorm_ess_sup, h_nnnorm_le_eLpNorm_ess_sup.mono, hq_pos, hq_pos.le, lintegral_const, lintegral_mono_ae, mul_rpow_of_nonneg, ne_of_lt, nth_rw, one_div
+/-
+**Module.Basis.coord_toDualEquiv_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 `Module.Ba
+sis`。
+形式化陈述：coord_toDualEquiv_symm_apply [Finite ι] (i : ι) (f : Module.Dual R M) : b.
+coord i (b.toDualEquiv.symm f) = b.dualBasis.coord i f
+参数：i : ι；f : Module.Dual R M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.Basis.coord_apply`：∀ {ι : Type u_10} {R : Type u_11} {M : Type u_
+12} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M
+] (b : Module.…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Module.Basis.map_repr`：∀ {ι : Type u_1} {R : Type u_3} {M : Type u_6} {M
+' : Type u_7} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.
+Module R M]…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma coord_toDualEquiv_symm_apply [Finite ι] (i : ι) (f : Module.Dual R M) :
     b.coord i (b.toDualEquiv.symm f) = b.dualBasis.coord i f := by
@@ -776,29 +795,29 @@ omit [DecidableEq ι]
 
 /-- `simp` normal form version of `linearCombination_dualBasis` -/
 @[simp]
-/--
-theorem `linearCombination_coord` / 定理 `linearCombination_coord`
+/-
+**Module.Basis.linearCombination_coord** 是 Mathlib 中的一个定理，位于命名空间 `Module.Basis`。
+形式化陈述：linearCombination_coord [Finite ι] (b : Basis ι R M) (f : ι ->₀ R) (i : ι)
+ : Finsupp.linearCombination R b.coord f (b i) = f i
+参数：b : Basis ι R M；f : ι ->₀ R；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Module.Basis.coe_dualBasis`：coe_dualBasis : ⇑b.dualBasis = b.coord
+· 使用定理 `Module.Basis.linearCombination_dualBasis`：linearCombination_dualBasis (f
+ : ι ->₀ R) (i : ι) : Finsupp.linearCombination R b.dualBasis f (b i) = f i
 
-English:
-theorem linearCombination_coord
-  given: [Finite ι] (b : Basis ι R M) (f : ι ->₀ R) (i : ι)
-  proof: by
-  have := Classical.decEq ι
-  rw [← coe_dualBasis]; rw [linearCombination_dualBasis]
-
-中文:
-定理 linearCombination_coord
-  条件: [有限 ι] (b : 基 ι R M) (f : ι ->₀ R) (i : ι)
-  证明: by
-  have := Classical.decEq ι
-  rw [← coe_dualBasis]; rw [linearCombination_dualBasis]
-
-Depends on / 依赖: Classical, Classical.decEq, coe_dualBasis, linearCombination_dualBasis
+--- 原说明 ---
+`simp` normal form version of `linearCombination_dualBasis`
 -/
-theorem linearCombination_coord [Finite ι] (b : Basis ι R M) (f : ι ->₀ R) (i : ι) :
+theorem linearCombination_coord [Finite ι] (b : Basis ι R M) (f : ι →₀ R) (i : ι) :
     Finsupp.linearCombination R b.coord f (b i) = f i := by
   have := Classical.decEq ι
-  rw [← coe_dualBasis]; rw [linearCombination_dualBasis]
+  rw [← coe_dualBasis, linearCombination_dualBasis]
 
 end CommSemiring
 
@@ -817,34 +836,24 @@ meta def evalUseFiniteInstance : TacticM Unit := do
 @[inherit_doc evalUseFiniteInstance]
 elab "use_finite_instance" : tactic => evalUseFiniteInstance
 
-/--
-Definition of `Module.DualBases` / `Module.DualBases` 的定义
+/-- `e` and `ε` have characteristic properties of a basis and its dual -/
+/-
+**Module.DualBases** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：Module.DualBases (e : ι -> M) (ε : ι -> Dual R M) : Prop where eval_same :
+ forall i, ε i (e i) = 1 eval_of_ne : Pairwise fun i j => ε i (e j) = 0 protecte
+d total : forall {m₁ m₂ : M}, (forall i, ε i m₁ = ε i m₂) -> m₁ = m₂ protected f
+inite : forall m : M, {i | ε i m != 0}.Finite
+参数：e : ι -> M；ε : ι -> Dual R M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Module.DualBases
-  parameters: (e : ι -> M) (ε : ι -> Dual R M)
-  axioms and operations (4):
-    - eval_same : forall i, ε i (e i) = 1
-    - eval_of_ne : Pairwise fun i j => ε i (e j) = 0
-    - total : forall {m₁ m₂ : M}, (forall i, ε i m₁ = ε i m₂) -> m₁ = m₂
-    - finite : forall m : M, {i | ε i m != 0}.Finite  [default: by use_finite_instance]
-
-中文:
-结构 模.DualBases
-  参数: (e : ι -> M) (ε : ι -> 对偶 R M)
-  公理与运算 (4 个):
-    - eval_same : 对任意 i, ε i (e i) = 1
-    - eval_of_ne : 两两 fun i j => ε i (e j) = 0
-    - total : 对任意 {m₁ m₂ : M}, (对任意 i, ε i m₁ = ε i m₂) -> m₁ = m₂
-    - finite : 对任意 m : M, {i | ε i m != 0}.有限  [默认: by use_finite_instance]
-
-Depends on / 依赖: ENNReal, ENNReal.one_rpow, _le_eLpNorm, _mul_rpow_measure_univ, eLpNorm, hp0_lt, measure_univ, mul_one, one_rpow, use_finite_instance
+--- 原说明 ---
+`e` and `ε` have characteristic properties of a basis and its dual
 -/
-structure Module.DualBases (e : ι -> M) (ε : ι -> Dual R M) : Prop where
-  eval_same : forall i, ε i (e i) = 1
-  eval_of_ne : Pairwise fun i j => ε i (e j) = 0
-  protected total : forall {m₁ m₂ : M}, (forall i, ε i m₁ = ε i m₂) -> m₁ = m₂
-  protected finite : forall m : M, {i | ε i m != 0}.Finite := by use_finite_instance
+structure Module.DualBases (e : ι → M) (ε : ι → Dual R M) : Prop where
+  eval_same : ∀ i, ε i (e i) = 1
+  eval_of_ne : Pairwise fun i j ↦ ε i (e j) = 0
+  protected total : ∀ {m₁ m₂ : M}, (∀ i, ε i m₁ = ε i m₂) → m₁ = m₂
+  protected finite : ∀ m : M, {i | ε i m ≠ 0}.Finite := by use_finite_instance
 
 end DualBases
 
@@ -854,221 +863,190 @@ open LinearMap Function
 
 variable {R M ι : Type*}
 variable [CommSemiring R] [AddCommMonoid M] [Module R M]
-variable {e : ι -> M} {ε : ι -> Dual R M}
+variable {e : ι → M} {ε : ι → Dual R M}
 
-/--
-Definition of `coeffs` / `coeffs` 的定义
+/-- The coefficients of `v` on the basis `e` -/
+/-
+**Module.DualBases.coeffs** 是 Mathlib 中的一个定义，位于命名空间 `Module.DualBases`。
+形式化陈述：coeffs (h : DualBases e ε) (m : M) : ι ->₀ R where toFun i
+参数：h : DualBases e ε；m : M。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.DualBases.finite`：∀ {R : Type u_1} {M : Type u_2} {ι : Type u_3} 
+[inst : CommSemiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M
+] {e : ι → M}…
 
-English:
-definition coeffs
-  signature: (h : DualBases e ε) (m : M)
-  body: ε i m
-  support := (h.finite m).toFinset
-  mem_support_toFun i := by rw [Set.Finite.mem_toFinset, Set.mem_ofPred_eq]
-
-@[simp]
-
-中文:
-定义 coeffs
-  签名: (h : DualBases e ε) (m : M)
-  定义体: ε i m
-  support := (h.finite m).toFinset
-  mem_support_toFun i := by rw [Set.Finite.mem_toFinset, Set.mem_ofPred_eq]
-
-@[simp]
-
-Depends on / 依赖: _le_eLpNormEssSup_mul_rpow_measure_univ, eLpNorm, hq_pos, measure_univ, trans_eq
+--- 原说明 ---
+The coefficients of `v` on the basis `e`
 -/
-def coeffs (h : DualBases e ε) (m : M) : ι ->₀ R where
+def coeffs (h : DualBases e ε) (m : M) : ι →₀ R where
   toFun i := ε i m
   support := (h.finite m).toFinset
   mem_support_toFun i := by rw [Set.Finite.mem_toFinset, Set.mem_ofPred_eq]
 
 @[simp]
-/--
-theorem `coeffs_apply` / 定理 `coeffs_apply`
-
-English:
-theorem coeffs_apply
-  given: (h : DualBases e ε) (m : M) (i : ι)
-  statement: h.coeffs m i = ε i m
-  proof: rfl
-
-中文:
-定理 coeffs_apply
-  条件: (h : DualBases e ε) (m : M) (i : ι)
-  结论: h.coeffs m i = ε i m
-  证明: rfl
+/-
+**Module.DualBases.coeffs_apply** 是 Mathlib 中的一个定理，位于命名空间 `Module.DualBases`。
+形式化陈述：coeffs_apply (h : DualBases e ε) (m : M) (i : ι) : h.coeffs m i = ε i m
+参数：h : DualBases e ε；m : M；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coeffs_apply (h : DualBases e ε) (m : M) (i : ι) : h.coeffs m i = ε i m :=
   rfl
 
-/--
-Definition of `lc` / `lc` 的定义
+/-- linear combinations of elements of `e`.
+This is a convenient abbreviation for `Finsupp.linearCombination R e l` -/
+/-
+**Module.DualBases.lc** 是 Mathlib 中的一个定义，位于命名空间 `Module.DualBases`。
+形式化陈述：lc {ι} (e : ι -> M) (l : ι ->₀ R) : M
+参数：e : ι -> M；l : ι ->₀ R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lc
-  signature: {ι} (e : ι -> M) (l : ι ->₀ R)
-  body: l.sum fun (i : ι) (a : R) => a • e i
-
-中文:
-定义 lc
-  签名: {ι} (e : ι -> M) (l : ι ->₀ R)
-  定义体: l.sum fun (i : ι) (a : R) => a • e i
-
-Depends on / 依赖: ENNReal, ENNReal.mul_lt_top_iff, ENNReal.rpow_lt_top_of_nonneg, Or.inl, Set.univ, _le_eLpNorm, _mul_rpow_measure_univ, eLpNorm, finiteness, hfq_lt_top, hp_nonneg, hp_nonpos, hp_pos, hq_pos, l.sum, le_antisymm, le_or_gt, le_sub_comm, lt_of_lt_of_le, mul_lt_top_iff
+--- 原说明 ---
+linear combinations of elements of `e`.
+This is a convenient abbreviation for `Finsupp.linearCombination R e l`
 -/
-def lc {ι} (e : ι -> M) (l : ι ->₀ R) : M :=
+def lc {ι} (e : ι → M) (l : ι →₀ R) : M :=
   l.sum fun (i : ι) (a : R) => a • e i
-
-/--
-theorem `lc_def` / 定理 `lc_def`
-
-English:
-theorem lc_def
-  given: (e : ι -> M) (l : ι ->₀ R)
-  statement: lc e l = Finsupp.linearCombination R e l
-  proof: rfl
-
-中文:
-定理 lc_def
-  条件: (e : ι -> M) (l : ι ->₀ R)
-  结论: lc e l = 有限支撑.linearCombination R e l
-  证明: rfl
+/-
+**Module.DualBases.lc_def** 是 Mathlib 中的一个定理，位于命名空间 `Module.DualBases`。
+形式化陈述：lc_def (e : ι -> M) (l : ι ->₀ R) : lc e l = Finsupp.linearCombination R e
+ l
+参数：e : ι -> M；l : ι ->₀ R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem lc_def (e : ι -> M) (l : ι ->₀ R) : lc e l = Finsupp.linearCombination R e l :=
+theorem lc_def (e : ι → M) (l : ι →₀ R) : lc e l = Finsupp.linearCombination R e l :=
   rfl
 
 open Module
 
 variable (h : DualBases e ε)
 include h
-
-/--
-theorem `dual_lc` / 定理 `dual_lc`
-
-English:
-theorem dual_lc
-  given: (l : ι ->₀ R) (i : ι)
-  statement: ε i (DualBases.lc e l) = l i
-  proof: by
-  rw [lc]; rw [map_finsuppSum]; rw [Finsupp.sum_eq_single i (g := fun a b => (ε i) (b • e a))]
-  · simp [h.eval_same, smul_eq_mul]
-  · intro q _ q_ne
-    simp [h.eval_of_ne q_ne.symm, smul_eq_mul]
-  · simp
-
-@[simp]
-
-中文:
-定理 dual_lc
-  条件: (l : ι ->₀ R) (i : ι)
-  结论: ε i (DualBases.lc e l) = l i
-  证明: by
-  rw [lc]; rw [map_finsuppSum]; rw [Finsupp.sum_eq_single i (g := fun a b => (ε i) (b • e a))]
-  · simp [h.eval_same, smul_eq_mul]
-  · intro q _ q_ne
-    simp [h.eval_of_ne q_ne.symm, smul_eq_mul]
-  · simp
-
-@[simp]
-
-Depends on / 依赖: Finsupp, Finsupp.sum_eq_single, eval_of_ne, eval_same, h.eval_of_ne, h.eval_same, map_finsuppSum, q_ne, q_ne.symm, smul_eq_mul, sum_eq_single
+/-
+**Module.DualBases.dual_lc** 是 Mathlib 中的一个定理，位于命名空间 `Module.DualBases`。
+形式化陈述：dual_lc (l : ι ->₀ R) (i : ι) : ε i (DualBases.lc e l) = l i
+参数：l : ι ->₀ R；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.DualBases.lc.eq_1`：∀ {R : Type u_1} {M : Type u_2} [inst : CommSe
+miring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   {ι : Type u_
+4} (e : ι → M)…
+· 使用定理 `map_finsuppSum`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10} {P : Typ
+e u_11} [inst : Zero M] [inst_1 : AddCommMonoid N]   [inst_2 : AddCommMonoid P] 
+{H :…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `Finsupp.sum_eq_single`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10} [
+inst : Zero M] [inst_1 : AddCommMonoid N] {f : α →₀ M} (a : α)   {g : α → M → N}
+, (∀ (b : α…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `Module.DualBases.eval_of_ne`：∀ {R : Type u_1} {M : Type u_2} {ι : Type u
+_3} [inst : CommSemiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module
+ R M] {e : ι → M}…
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Module.DualBases.eval_same`：∀ {R : Type u_1} {M : Type u_2} {ι : Type u_
+3} [inst : CommSemiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module 
+R M] {e : ι → M}…
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
-theorem dual_lc (l : ι ->₀ R) (i : ι) : ε i (DualBases.lc e l) = l i := by
-  rw [lc]; rw [map_finsuppSum]; rw [Finsupp.sum_eq_single i (g := fun a b => (ε i) (b • e a))]
+theorem dual_lc (l : ι →₀ R) (i : ι) : ε i (DualBases.lc e l) = l i := by
+  rw [lc, map_finsuppSum, Finsupp.sum_eq_single i (g := fun a b ↦ (ε i) (b • e a))]
   · simp [h.eval_same, smul_eq_mul]
   · intro q _ q_ne
     simp [h.eval_of_ne q_ne.symm, smul_eq_mul]
   · simp
 
 @[simp]
-/--
-theorem `coeffs_lc` / 定理 `coeffs_lc`
-
-English:
-theorem coeffs_lc
-  given: (l : ι ->₀ R)
-  statement: h.coeffs (DualBases.lc e l) = l
-  proof: by
-  ext i
-  rw [h.coeffs_apply]; rw [h.dual_lc]
-
-中文:
-定理 coeffs_lc
-  条件: (l : ι ->₀ R)
-  结论: h.coeffs (DualBases.lc e l) = l
-  证明: by
-  ext i
-  rw [h.coeffs_apply]; rw [h.dual_lc]
-
-Depends on / 依赖: coeffs_apply, dual_lc, h.coeffs_apply, h.dual_lc
+/-
+**Module.DualBases.coeffs_lc** 是 Mathlib 中的一个定理，位于命名空间 `Module.DualBases`。
+形式化陈述：coeffs_lc (l : ι ->₀ R) : h.coeffs (DualBases.lc e l) = l
+参数：l : ι ->₀ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.DualBases.coeffs_apply`：coeffs_apply (h : DualBases e ε) (m : M) 
+(i : ι) : h.coeffs m i = ε i m
+· 使用定理 `Module.DualBases.dual_lc`：dual_lc (l : ι ->₀ R) (i : ι) : ε i (DualBases
+.lc e l) = l i
 -/
-theorem coeffs_lc (l : ι ->₀ R) : h.coeffs (DualBases.lc e l) = l := by
+theorem coeffs_lc (l : ι →₀ R) : h.coeffs (DualBases.lc e l) = l := by
   ext i
-  rw [h.coeffs_apply]; rw [h.dual_lc]
+  rw [h.coeffs_apply, h.dual_lc]
 
 /-- For any `m : M n`, $\sum_{p ∈ Q n} (ε p m) • e p = m$ -/
 @[simp]
-/--
-theorem `lc_coeffs` / 定理 `lc_coeffs`
+/-
+**Module.DualBases.lc_coeffs** 是 Mathlib 中的一个定理，位于命名空间 `Module.DualBases`。
+形式化陈述：lc_coeffs (m : M) : DualBases.lc e (h.coeffs m) = m
+参数：m : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.DualBases.total`：∀ {R : Type u_1} {M : Type u_2} {ι : Type u_3} [
+inst : CommSemiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M]
+ {e : ι → M}…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.DualBases.dual_lc`：dual_lc (l : ι ->₀ R) (i : ι) : ε i (DualBases
+.lc e l) = l i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 
-English:
-theorem lc_coeffs
-  given: (m : M)
-  statement: DualBases.lc e (h.coeffs m) = m
-  proof: h.total by simp [h.dual_lc]
-
-中文:
-定理 lc_coeffs
-  条件: (m : M)
-  结论: DualBases.lc e (h.coeffs m) = m
-  证明: h.total by simp [h.dual_lc]
-
-Depends on / 依赖: dual_lc, h.dual_lc, h.total
+--- 原说明 ---
+For any `m : M n`, $\sum_{p ∈ Q n} (ε p m) • e p = m$
 -/
-theorem lc_coeffs (m : M) : DualBases.lc e (h.coeffs m) = m := h.total by simp [h.dual_lc]
+theorem lc_coeffs (m : M) : DualBases.lc e (h.coeffs m) = m := h.total <| by simp [h.dual_lc]
 
 /-- `(h : DualBases e ε).basis` shows the family of vectors `e` forms a basis. -/
 @[simps repr_apply, simps -isSimp repr_symm_apply]
-/--
-Definition of `basis` / `basis` 的定义
+/-
+**Module.DualBases.basis** 是 Mathlib 中的一个定义，位于命名空间 `Module.DualBases`。
+形式化陈述：basis : Basis ι R M
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.DualBases.lc_coeffs`：lc_coeffs (m : M) : DualBases.lc e (h.coeffs
+ m) = m
+· 使用定理 `Module.DualBases.coeffs_lc`：coeffs_lc (l : ι ->₀ R) : h.coeffs (DualBase
+s.lc e l) = l
 
-English:
-definition basis
-  signature: : Basis ι R M
-  body: Basis.ofRepr
-    { toFun := coeffs h
-      invFun := lc e
-      left_inv := lc_coeffs h
-      right_inv := coeffs_lc h
-      map_add' := fun v w => by
-        ext i
-        exact (ε i).map_add v w
-      map_smul' := fun c v => by
-        ext i
-        exact (ε i).map_smul c v }
-
-@[simp]
-
-中文:
-定义 basis
-  签名: : 基 ι R M
-  定义体: Basis.ofRepr
-    { toFun := coeffs h
-      invFun := lc e
-      left_inv := lc_coeffs h
-      right_inv := coeffs_lc h
-      map_add' := fun v w => by
-        ext i
-        exact (ε i).map_add v w
-      map_smul' := fun c v => by
-        ext i
-        exact (ε i).map_smul c v }
-
-@[simp]
-
-Depends on / 依赖: Basis.ofRepr, ENNReal, ENNReal.coe_le_coe, ENNReal.ofReal_coe_nnreal, Pi.smul_def, Real.enorm_eq_ofReal, _const_smul, c.coe_nonneg, coe_le_coe, coe_nonneg, coeffs, coeffs_lc, eLpNorm, enorm_, enorm_eq_nnnorm, enorm_eq_ofReal, h.mono, hro_lt, invFun, lc_coeffs
+--- 原说明 ---
+`(h : DualBases e ε).basis` shows the family of vectors `e` forms a basis.
 -/
 def basis : Basis ι R M :=
   Basis.ofRepr
@@ -1084,32 +1062,41 @@ def basis : Basis ι R M :=
         exact (ε i).map_smul c v }
 
 @[simp]
-/--
-theorem `coe_basis` / 定理 `coe_basis`
-
-English:
-theorem coe_basis
-  statement: ⇑h.basis = e
-  proof: by
-  ext i
-  rw [Basis.apply_eq_iff]
-  ext j
-  rcases eq_or_ne i j with rfl | hne
-  · simp [h.eval_same]
-  · simp [hne, h.eval_of_ne hne.symm]
-
-中文:
-定理 coe_basis
-  结论: ⇑h.basis = e
-  证明: by
-  ext i
-  rw [Basis.apply_eq_iff]
-  ext j
-  rcases eq_or_ne i j with rfl | hne
-  · simp [h.eval_same]
-  · simp [hne, h.eval_of_ne hne.symm]
-
-Depends on / 依赖: Basis.apply_eq_iff, apply_eq_iff, eq_or_ne, eval_of_ne, eval_same, h.eval_of_ne, h.eval_same, hne.symm
+/-
+**Module.DualBases.coe_basis** 是 Mathlib 中的一个定理，位于命名空间 `Module.DualBases`。
+形式化陈述：coe_basis : ⇑h.basis = e
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.Basis.apply_eq_iff`：apply_eq_iff {b : Basis ι R M} {x : M} {i : ι
+} : b i = x ↔ b.repr x = Finsupp.single i 1
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Module.DualBases.basis_repr_apply`：∀ {R : Type u_1} {M : Type u_2} {ι : 
+Type u_3} [inst : CommSemiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.
+Module R M] {e : ι → M}…
+· 使用定理 `Module.DualBases.eval_same`：∀ {R : Type u_1} {M : Type u_2} {ι : Type u_
+3} [inst : CommSemiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module 
+R M] {e : ι → M}…
+· 使用定理 `Finsupp.single_eq_same`：single_eq_same : (single a b : α ->₀ M) a = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Module.DualBases.eval_of_ne`：∀ {R : Type u_1} {M : Type u_2} {ι : Type u
+_3} [inst : CommSemiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module
+ R M] {e : ι → M}…
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `Finsupp.single_eq_of_ne'`：single_eq_of_ne' (h : a != a') : (single a b :
+ α ->₀ M) a' = 0
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
 theorem coe_basis : ⇑h.basis = e := by
   ext i
@@ -1118,55 +1105,67 @@ theorem coe_basis : ⇑h.basis = e := by
   rcases eq_or_ne i j with rfl | hne
   · simp [h.eval_same]
   · simp [hne, h.eval_of_ne hne.symm]
-
-/--
-theorem `mem_of_mem_span` / 定理 `mem_of_mem_span`
-
-English:
-theorem mem_of_mem_span
-  given: {H : Set ι} {x : M} (hmem : x in Submodule.span R (e '' H))
-  proof: by
-  intro i hi
-  rcases (Finsupp.mem_span_image_iff_linearCombination _).mp hmem with ⟨l, supp_l, rfl⟩
-  apply not_imp_comm.mp ((Finsupp.mem_supported' _ _).mp supp_l i)
-  rwa [← lc_def, h.dual_lc] at hi
-
-中文:
-定理 mem_of_mem_span
-  条件: {H : 集合 ι} {x : M} (hmem : x in 子模.span R (e '' H))
-  证明: by
-  intro i hi
-  rcases (Finsupp.mem_span_image_iff_linearCombination _).mp hmem with ⟨l, supp_l, rfl⟩
-  apply not_imp_comm.mp ((Finsupp.mem_supported' _ _).mp supp_l i)
-  rwa [← lc_def, h.dual_lc] at hi
-
-Depends on / 依赖: Finsupp, Finsupp.mem_span_image_iff_linearCombination, Finsupp.mem_supported, dual_lc, h.dual_lc, lc_def, mem_span_image_iff_linearCombination, mem_supported, not_imp_comm, not_imp_comm.mp, supp_l
+/-
+**Module.DualBases.mem_of_mem_span** 是 Mathlib 中的一个定理，位于命名空间 `Module.DualBases`。
+形式化陈述：mem_of_mem_span {H : Set ι} {x : M} (hmem : x in Submodule.span R (e '' H)
+) : forall i : ι, ε i x != 0 -> i in H
+参数：hmem : x in Submodule.span R (e '' H)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finsupp.mem_span_image_iff_linearCombination`：mem_span_image_iff_linearC
+ombination {s : Set α} {x : M} : x in span R (v '' s) ↔ exists l in supported R 
+R s, linearCombination R v l = x
+· 使用定理 `not_imp_comm`：not_imp_comm : ¬a -> b ↔ ¬b -> a
+· 使用定理 `Finsupp.mem_supported'`：mem_supported' {s : Set α} (p : α ->₀ M) : p in 
+supported M R s ↔ forall x ∉ s, p x = 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.DualBases.dual_lc`：dual_lc (l : ι ->₀ R) (i : ι) : ε i (DualBases
+.lc e l) = l i
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Module.DualBases.lc_def`：lc_def (e : ι -> M) (l : ι ->₀ R) : lc e l = Fi
+nsupp.linearCombination R e l
 -/
-theorem mem_of_mem_span {H : Set ι} {x : M} (hmem : x in Submodule.span R (e '' H)) :
-    forall i : ι, ε i x != 0 -> i in H := by
+theorem mem_of_mem_span {H : Set ι} {x : M} (hmem : x ∈ Submodule.span R (e '' H)) :
+    ∀ i : ι, ε i x ≠ 0 → i ∈ H := by
   intro i hi
   rcases (Finsupp.mem_span_image_iff_linearCombination _).mp hmem with ⟨l, supp_l, rfl⟩
   apply not_imp_comm.mp ((Finsupp.mem_supported' _ _).mp supp_l i)
   rwa [← lc_def, h.dual_lc] at hi
-
-/--
-theorem `coe_dualBasis` / 定理 `coe_dualBasis`
-
-English:
-theorem coe_dualBasis
-  given: [DecidableEq ι] [Finite ι]
-  statement: ⇑h.basis.dualBasis = ε
-  proof: funext fun i => h.basis.ext fun j => by simp
-
-中文:
-定理 coe_dualBasis
-  条件: [DecidableEq ι] [有限 ι]
-  结论: ⇑h.basis.dualBasis = ε
-  证明: funext fun i => h.basis.ext fun j => by simp
-
-Depends on / 依赖: h.basis.ext
+/-
+**Module.DualBases.coe_dualBasis** 是 Mathlib 中的一个定理，位于命名空间 `Module.DualBases`。
+形式化陈述：coe_dualBasis [DecidableEq ι] [Finite ι] : ⇑h.basis.dualBasis = ε
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `instSMulCommClassOfIsScalarTower`：∀ {R : Type u_9} {M : Type u_10} [inst
+ : CommMonoid M] [inst_1 : SMul R M] [IsScalarTower R M M], SMulCommClass R M M
+· 使用定理 `Module.Basis.ext`：ext {f₁ f₂ : M ->ₛₗ[σ] M₁} (h : forall i, f₁ (b i) = f
+₂ (b i)) : f₁ = f₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Module.Basis.coe_dualBasis`：coe_dualBasis : ⇑b.dualBasis = b.coord
+· 使用定理 `Module.DualBases.coe_basis`：coe_basis : ⇑h.basis = e
+· 使用定理 `Module.Basis.coord_apply`：∀ {ι : Type u_10} {R : Type u_11} {M : Type u_
+12} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module R M
+] (b : Module.…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Module.DualBases.basis_repr_apply`：∀ {R : Type u_1} {M : Type u_2} {ι : 
+Type u_3} [inst : CommSemiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.
+Module R M] {e : ι → M}…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem coe_dualBasis [DecidableEq ι] [Finite ι] : ⇑h.basis.dualBasis = ε :=
   funext fun i => h.basis.ext fun j => by simp
 
 end Module.DualBases
+

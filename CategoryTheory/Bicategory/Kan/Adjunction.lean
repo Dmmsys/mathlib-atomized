@@ -45,81 +45,34 @@ open LeftExtension
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `Adjunction.isAbsoluteLeftKan` / `Adjunction.isAbsoluteLeftKan` 的定义
+/-- For an adjunction `f ⊣ u`, `u` is an absolute left Kan extension of the identity along `f`.
+The unit of this Kan extension is given by the unit of the adjunction. -/
+/-
+**CategoryTheory.Bicategory.Adjunction.isAbsoluteLeftKan** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.Bicategory.Adjunction`。
+形式化陈述：{B : Type u} →   [inst : CategoryTheory.Bicategory B] →     {a b : B} →   
+    {f : a ⟶ b} →         {u : b ⟶ a} →           (adj : CategoryTheory.Bicatego
+ry.Adjunction f u) →             (CategoryTheory.Bicategory.LeftExtension.mk u a
+dj.unit).IsAbsKan
+参数：adj : CategoryTheory.Bicategory.Adjunction f u；CategoryTheory.Bicategory.Left
+Extension.mk u adj.unit。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Adjunction.isAbsoluteLeftKan
-  signature: {f : a ⟶ b} {u : b ⟶ a} (adj : f ⊣ u)
-  body: fun {x} h =>
-  .mk (fun s => LeftExtension.homMk
-(𝟙 _ otimes≫ u ◁ s.unit otimes≫ adj.counit ▷ s.extension otimes≫ 𝟙 _ : u ≫ h ⟶ s.extension)
-      calc _
-        _ = 𝟙 _ otimes≫ (adj.unit ▷ _ ≫ _ ◁ s.unit) otimes≫ f ◁ adj.counit ▷ s.extension otimes≫ 𝟙 _ := by
-          dsimp only [whisker_extension, StructuredArrow.mk_right, whisker_unit,
-            StructuredArrow.mk_hom_eq_self]
-          bicategory
-        _ = 𝟙 _ otimes≫ s.unit otimes≫ leftZigzag adj.unit adj.counit ▷ s.extension otimes≫ 𝟙 _ := by
-          rw [← whisker_exchange]; bicategory
-        _ = s.unit := by
-          rw [adj.left_triangle]; bicategory) <| by
-    intro s τ₀
-    ext
-    /- We need to specify the type of `τ` to use the notation `⊗≫`. -/
-    let τ : u ≫ h ⟶ s.extension := τ₀.right
-    have hτ : adj.unit ▷ h otimes≫ f ◁ τ = s.unit := by
-      simpa [bicategoricalComp] using LeftExtension.w τ₀
-    calc τ
-      _ = 𝟙 _ otimes≫ rightZigzag adj.unit adj.counit ▷ h otimes≫ τ otimes≫ 𝟙 _ := by
-        rw [adj.right_triangle]; bicategory
-      _ = 𝟙 _ otimes≫ u ◁ adj.unit ▷ h otimes≫ (adj.counit ▷ _ ≫ _ ◁ τ) otimes≫ 𝟙 _ := by
-        rw [rightZigzag]; bicategory
-      _ = 𝟙 _ otimes≫ u ◁ (adj.unit ▷ h otimes≫ f ◁ τ) otimes≫ adj.counit ▷ s.extension otimes≫ 𝟙 _ := by
-        rw [← whisker_exchange]; bicategory
-      _ = _ := by
-        rw [hτ]; dsimp only [StructuredArrow.homMk_right]
-
-中文:
-定义 伴随.isAbsoluteLeftKan
-  签名: {f : a ⟶ b} {u : b ⟶ a} (adj : f ⊣ u)
-  定义体: fun {x} h =>
-  .mk (fun s => LeftExtension.homMk
-(𝟙 _ otimes≫ u ◁ s.unit otimes≫ adj.counit ▷ s.extension otimes≫ 𝟙 _ : u ≫ h ⟶ s.extension)
-      calc _
-        _ = 𝟙 _ otimes≫ (adj.unit ▷ _ ≫ _ ◁ s.unit) otimes≫ f ◁ adj.counit ▷ s.extension otimes≫ 𝟙 _ := by
-          dsimp only [whisker_extension, StructuredArrow.mk_right, whisker_unit,
-            StructuredArrow.mk_hom_eq_self]
-          bicategory
-        _ = 𝟙 _ otimes≫ s.unit otimes≫ leftZigzag adj.unit adj.counit ▷ s.extension otimes≫ 𝟙 _ := by
-          rw [← whisker_exchange]; bicategory
-        _ = s.unit := by
-          rw [adj.left_triangle]; bicategory) <| by
-    intro s τ₀
-    ext
-    /- We need to specify the type of `τ` to use the notation `⊗≫`. -/
-    let τ : u ≫ h ⟶ s.extension := τ₀.right
-    have hτ : adj.unit ▷ h otimes≫ f ◁ τ = s.unit := by
-      simpa [bicategoricalComp] using LeftExtension.w τ₀
-    calc τ
-      _ = 𝟙 _ otimes≫ rightZigzag adj.unit adj.counit ▷ h otimes≫ τ otimes≫ 𝟙 _ := by
-        rw [adj.right_triangle]; bicategory
-      _ = 𝟙 _ otimes≫ u ◁ adj.unit ▷ h otimes≫ (adj.counit ▷ _ ≫ _ ◁ τ) otimes≫ 𝟙 _ := by
-        rw [rightZigzag]; bicategory
-      _ = 𝟙 _ otimes≫ u ◁ (adj.unit ▷ h otimes≫ f ◁ τ) otimes≫ adj.counit ▷ s.extension otimes≫ 𝟙 _ := by
-        rw [← whisker_exchange]; bicategory
-      _ = _ := by
-        rw [hτ]; dsimp only [StructuredArrow.homMk_right]
+--- 原说明 ---
+For an adjunction `f ⊣ u`, `u` is an absolute left Kan extension of the identity
+ along `f`.
+The unit of this Kan extension is given by the unit of the adjunction.
 -/
 def Adjunction.isAbsoluteLeftKan {f : a ⟶ b} {u : b ⟶ a} (adj : f ⊣ u) :
-    IsAbsKan (.mk u adj.unit) := fun {x} h =>
-  .mk (fun s => LeftExtension.homMk
-(𝟙 _ otimes≫ u ◁ s.unit otimes≫ adj.counit ▷ s.extension otimes≫ 𝟙 _ : u ≫ h ⟶ s.extension)
+    IsAbsKan (.mk u adj.unit) := fun {x} h ↦
+  .mk (fun s  ↦ LeftExtension.homMk
+    (𝟙 _ ⊗≫ u ◁ s.unit ⊗≫ adj.counit ▷ s.extension ⊗≫ 𝟙 _ : u ≫ h ⟶ s.extension) <|
       calc _
-        _ = 𝟙 _ otimes≫ (adj.unit ▷ _ ≫ _ ◁ s.unit) otimes≫ f ◁ adj.counit ▷ s.extension otimes≫ 𝟙 _ := by
+        _ = 𝟙 _ ⊗≫ (adj.unit ▷ _ ≫ _ ◁ s.unit) ⊗≫ f ◁ adj.counit ▷ s.extension ⊗≫ 𝟙 _ := by
           dsimp only [whisker_extension, StructuredArrow.mk_right, whisker_unit,
             StructuredArrow.mk_hom_eq_self]
           bicategory
-        _ = 𝟙 _ otimes≫ s.unit otimes≫ leftZigzag adj.unit adj.counit ▷ s.extension otimes≫ 𝟙 _ := by
+        _ = 𝟙 _ ⊗≫ s.unit ⊗≫ leftZigzag adj.unit adj.counit ▷ s.extension ⊗≫ 𝟙 _ := by
           rw [← whisker_exchange]; bicategory
         _ = s.unit := by
           rw [adj.left_triangle]; bicategory) <| by
@@ -127,74 +80,45 @@ def Adjunction.isAbsoluteLeftKan {f : a ⟶ b} {u : b ⟶ a} (adj : f ⊣ u) :
     ext
     /- We need to specify the type of `τ` to use the notation `⊗≫`. -/
     let τ : u ≫ h ⟶ s.extension := τ₀.right
-    have hτ : adj.unit ▷ h otimes≫ f ◁ τ = s.unit := by
+    have hτ : adj.unit ▷ h ⊗≫ f ◁ τ = s.unit := by
       simpa [bicategoricalComp] using LeftExtension.w τ₀
     calc τ
-      _ = 𝟙 _ otimes≫ rightZigzag adj.unit adj.counit ▷ h otimes≫ τ otimes≫ 𝟙 _ := by
+      _ = 𝟙 _ ⊗≫ rightZigzag adj.unit adj.counit ▷ h ⊗≫ τ ⊗≫ 𝟙 _ := by
         rw [adj.right_triangle]; bicategory
-      _ = 𝟙 _ otimes≫ u ◁ adj.unit ▷ h otimes≫ (adj.counit ▷ _ ≫ _ ◁ τ) otimes≫ 𝟙 _ := by
+      _ = 𝟙 _ ⊗≫ u ◁ adj.unit ▷ h ⊗≫ (adj.counit ▷ _ ≫ _ ◁ τ) ⊗≫ 𝟙 _ := by
         rw [rightZigzag]; bicategory
-      _ = 𝟙 _ otimes≫ u ◁ (adj.unit ▷ h otimes≫ f ◁ τ) otimes≫ adj.counit ▷ s.extension otimes≫ 𝟙 _ := by
+      _ = 𝟙 _ ⊗≫ u ◁ (adj.unit ▷ h ⊗≫ f ◁ τ) ⊗≫ adj.counit ▷ s.extension ⊗≫ 𝟙 _ := by
         rw [← whisker_exchange]; bicategory
       _ = _ := by
         rw [hτ]; dsimp only [StructuredArrow.homMk_right]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `LeftExtension.IsKan.adjunction` / `LeftExtension.IsKan.adjunction` 的定义
+/-- A left Kan extension `t` of the identity along `f` that commutes with `f`, in the sense that
+`t.whisker f` is a left Kan extension, is a right adjoint to `f`. The unit of this adjoint is
+given by the unit of the Kan extension. -/
+/-
+**CategoryTheory.Bicategory.LeftExtension.IsKan.adjunction** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.Bicategory.LeftExtension.IsKan`。
+形式化陈述：{B : Type u} →   [inst : CategoryTheory.Bicategory B] →     {a b : B} →   
+    {f : a ⟶ b} →         {t : CategoryTheory.Bicategory.LeftExtension f (Catego
+ryTheory.CategoryStruct.id a)} →           t.IsKan → (t.whisker f).IsKan → Categ
+oryTheory.Bicategory.Adjunction f t.extension
+参数：CategoryTheory.CategoryStruct.id a；t.whisker f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition LeftExtension.IsKan.adjunction
-  signature: {f : a ⟶ b} {t : LeftExtension f (𝟙 a)}
-  body: let ε : t.extension ≫ f ⟶ 𝟙 b := H'.desc .mk _ (fun_ f).hom ≫ (ρ_ f).inv
-  have Hε : leftZigzag t.unit ε = (fun_ f).hom ≫ (ρ_ f).inv := by
-simpa [leftZigzag, bicategoricalComp] using H'.fac .mk _ (fun_ f).hom ≫ (ρ_ f).inv
-  { unit := t.unit
-    counit := ε
-    left_triangle := Hε
-    right_triangle := by
-      apply (cancel_epi (ρ_ _).inv).mp
-      apply H.hom_ext
-      calc _
-        _ = 𝟙 _ otimes≫ t.unit otimes≫ f ◁ rightZigzag t.unit ε otimes≫ 𝟙 _ := by
-          bicategory
-        _ = 𝟙 _ otimes≫ (t.unit ▷ _ ≫ _ ◁ t.unit) otimes≫ f ◁ ε ▷ t.extension otimes≫ 𝟙 _ := by
-          rw [rightZigzag]; bicategory
-        _ = 𝟙 _ otimes≫ t.unit otimes≫ (t.unit ▷ f otimes≫ f ◁ ε) ▷ t.extension otimes≫ 𝟙 _ := by
-          rw [← whisker_exchange]; bicategory
-        _ = _ := by
-          rw [← leftZigzag]; rw [Hε]; bicategory }
-
-中文:
-定义 LeftExtension.IsKan.adjunction
-  签名: {f : a ⟶ b} {t : LeftExtension f (𝟙 a)}
-  定义体: let ε : t.extension ≫ f ⟶ 𝟙 b := H'.desc .mk _ (fun_ f).hom ≫ (ρ_ f).inv
-  have Hε : leftZigzag t.unit ε = (fun_ f).hom ≫ (ρ_ f).inv := by
-simpa [leftZigzag, bicategoricalComp] using H'.fac .mk _ (fun_ f).hom ≫ (ρ_ f).inv
-  { unit := t.unit
-    counit := ε
-    left_triangle := Hε
-    right_triangle := by
-      apply (cancel_epi (ρ_ _).inv).mp
-      apply H.hom_ext
-      calc _
-        _ = 𝟙 _ otimes≫ t.unit otimes≫ f ◁ rightZigzag t.unit ε otimes≫ 𝟙 _ := by
-          bicategory
-        _ = 𝟙 _ otimes≫ (t.unit ▷ _ ≫ _ ◁ t.unit) otimes≫ f ◁ ε ▷ t.extension otimes≫ 𝟙 _ := by
-          rw [rightZigzag]; bicategory
-        _ = 𝟙 _ otimes≫ t.unit otimes≫ (t.unit ▷ f otimes≫ f ◁ ε) ▷ t.extension otimes≫ 𝟙 _ := by
-          rw [← whisker_exchange]; bicategory
-        _ = _ := by
-          rw [← leftZigzag]; rw [Hε]; bicategory }
-
-Depends on / 依赖: H.hom_ext, bicategoricalComp, bicategory, cancel_epi, counit, extension, fun_, hom_ext, leftZigzag, left_triangle, otimes, rightZigzag, right_triangle, t.extension, t.unit
+--- 原说明 ---
+A left Kan extension `t` of the identity along `f` that commutes with `f`, in th
+e sense that
+`t.whisker f` is a left Kan extension, is a right adjoint to `f`. The unit of th
+is adjoint is
+given by the unit of the Kan extension.
 -/
 def LeftExtension.IsKan.adjunction {f : a ⟶ b} {t : LeftExtension f (𝟙 a)}
     (H : IsKan t) (H' : IsKan (t.whisker f)) :
       f ⊣ t.extension :=
-let ε : t.extension ≫ f ⟶ 𝟙 b := H'.desc .mk _ (fun_ f).hom ≫ (ρ_ f).inv
-  have Hε : leftZigzag t.unit ε = (fun_ f).hom ≫ (ρ_ f).inv := by
-simpa [leftZigzag, bicategoricalComp] using H'.fac .mk _ (fun_ f).hom ≫ (ρ_ f).inv
+  let ε : t.extension ≫ f ⟶ 𝟙 b := H'.desc <| .mk _ <| (λ_ f).hom ≫ (ρ_ f).inv
+  have Hε : leftZigzag t.unit ε = (λ_ f).hom ≫ (ρ_ f).inv := by
+    simpa [leftZigzag, bicategoricalComp] using H'.fac <| .mk _ <| (λ_ f).hom ≫ (ρ_ f).inv
   { unit := t.unit
     counit := ε
     left_triangle := Hε
@@ -202,74 +126,72 @@ simpa [leftZigzag, bicategoricalComp] using H'.fac .mk _ (fun_ f).hom ≫ (ρ_ f
       apply (cancel_epi (ρ_ _).inv).mp
       apply H.hom_ext
       calc _
-        _ = 𝟙 _ otimes≫ t.unit otimes≫ f ◁ rightZigzag t.unit ε otimes≫ 𝟙 _ := by
+        _ = 𝟙 _ ⊗≫ t.unit ⊗≫ f ◁ rightZigzag t.unit ε ⊗≫ 𝟙 _ := by
           bicategory
-        _ = 𝟙 _ otimes≫ (t.unit ▷ _ ≫ _ ◁ t.unit) otimes≫ f ◁ ε ▷ t.extension otimes≫ 𝟙 _ := by
+        _ = 𝟙 _ ⊗≫ (t.unit ▷ _ ≫ _ ◁ t.unit) ⊗≫ f ◁ ε ▷ t.extension ⊗≫ 𝟙 _ := by
           rw [rightZigzag]; bicategory
-        _ = 𝟙 _ otimes≫ t.unit otimes≫ (t.unit ▷ f otimes≫ f ◁ ε) ▷ t.extension otimes≫ 𝟙 _ := by
+        _ = 𝟙 _ ⊗≫ t.unit ⊗≫ (t.unit ▷ f ⊗≫ f ◁ ε) ▷ t.extension ⊗≫ 𝟙 _ := by
           rw [← whisker_exchange]; bicategory
         _ = _ := by
-          rw [← leftZigzag]; rw [Hε]; bicategory }
+          rw [← leftZigzag, Hε]; bicategory }
 
-/--
-Definition of `LeftExtension.IsAbsKan.adjunction` / `LeftExtension.IsAbsKan.adjunction` 的定义
+/-- An absolute left Kan extension of the identity along `f` is a right adjoint to `f`.
+The unit of this adjunction is given by the unit of the Kan extension. -/
+/-
+**CategoryTheory.Bicategory.LeftExtension.IsAbsKan.adjunction** 是 Mathlib 中的一个定义
+，位于命名空间 `CategoryTheory.Bicategory.LeftExtension.IsAbsKan`。
+形式化陈述：{B : Type u} →   [inst : CategoryTheory.Bicategory B] →     {a b : B} →   
+    {f : a ⟶ b} →         (t : CategoryTheory.Bicategory.LeftExtension f (Catego
+ryTheory.CategoryStruct.id a)) →           t.IsAbsKan → CategoryTheory.Bicategor
+y.Adjunction f t.extension
+参数：t : CategoryTheory.Bicategory.LeftExtension f (CategoryTheory.CategoryStruct.
+id a)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition LeftExtension.IsAbsKan.adjunction
-  signature: {f : a ⟶ b} (t : LeftExtension f (𝟙 a)) (H : IsAbsKan t)
-  body: H.isKan.adjunction (H f)
-
-中文:
-定义 LeftExtension.IsAbsKan.adjunction
-  签名: {f : a ⟶ b} (t : LeftExtension f (𝟙 a)) (H : IsAbsKan t)
-  定义体: H.isKan.adjunction (H f)
-
-Depends on / 依赖: H.isKan.adjunction, adjunction
+--- 原说明 ---
+An absolute left Kan extension of the identity along `f` is a right adjoint to `
+f`.
+The unit of this adjunction is given by the unit of the Kan extension.
 -/
 def LeftExtension.IsAbsKan.adjunction {f : a ⟶ b} (t : LeftExtension f (𝟙 a)) (H : IsAbsKan t) :
     f ⊣ t.extension :=
   H.isKan.adjunction (H f)
-
-/--
-theorem `isLeftAdjoint_TFAE` / 定理 `isLeftAdjoint_TFAE`
-
-English:
-theorem isLeftAdjoint_TFAE
-  given: (f : a ⟶ b)
-  proof: by
-  tfae_have 1 -> 2
-  | h => IsAbsKan.hasAbsLeftKanExtension (Adjunction.ofIsLeftAdjoint f).isAbsoluteLeftKan
-  tfae_have 2 -> 3
-  | h => ⟨inferInstance, inferInstance⟩
-  tfae_have 3 -> 1
-| ⟨h, h'⟩ => .mk (lanIsKan f (𝟙 a)).adjunction Lan.CommuteWith.isKan f (𝟙 a) f
-  tfae_finish
-
-中文:
-定理 isLeftAdjoint_TFAE
-  条件: (f : a ⟶ b)
-  证明: by
-  tfae_have 1 -> 2
-  | h => IsAbsKan.hasAbsLeftKanExtension (Adjunction.ofIsLeftAdjoint f).isAbsoluteLeftKan
-  tfae_have 2 -> 3
-  | h => ⟨inferInstance, inferInstance⟩
-  tfae_have 3 -> 1
-| ⟨h, h'⟩ => .mk (lanIsKan f (𝟙 a)).adjunction Lan.CommuteWith.isKan f (𝟙 a) f
-  tfae_finish
-
-Depends on / 依赖: Adjunction, Adjunction.ofIsLeftAdjoint, CommuteWith, IsAbsKan, IsAbsKan.hasAbsLeftKanExtension, Lan.CommuteWith.isKan, adjunction, hasAbsLeftKanExtension, isAbsoluteLeftKan, lanIsKan, ofIsLeftAdjoint, tfae_finish, tfae_have
+/-
+**CategoryTheory.Bicategory.isLeftAdjoint_TFAE** 是 Mathlib 中的一个定理，位于命名空间 `Catego
+ryTheory.Bicategory`。
+形式化陈述：isLeftAdjoint_TFAE (f : a ⟶ b) : List.TFAE [ IsLeftAdjoint f, HasAbsLeftKa
+nExtension f (𝟙 a), exists _ : HasLeftKanExtension f (𝟙 a), Lan.CommuteWith f (𝟙
+ a) f]
+参数：f : a ⟶ b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Bicategory.LeftExtension.IsAbsKan.hasAbsLeftKanExtension`
+：∀ {B : Type u} [inst : CategoryTheory.Bicategory B] {a b c : B} {f : a ⟶ b} {g 
+: a ⟶ c}   {t : CategoryTheory.Bicategory.LeftExtension f g} …
+· 使用定理 `CategoryTheory.Bicategory.HasAbsLeftKanExtension.toHasLeftKanExtension`：
+∀ {B : Type u} {inst : CategoryTheory.Bicategory B} {a b c : B} {f : a ⟶ b} {g :
+ a ⟶ c}   [self : CategoryTheory.Bicategory.HasAbsLeftKanExt…
+· 使用定理 `CategoryTheory.Bicategory.instCommuteWith`：∀ {B : Type u} [inst : Catego
+ryTheory.Bicategory B] {a b c : B} {f : a ⟶ b} {g : a ⟶ c}   [inst_1 : CategoryT
+heory.Bicategory.HasAbsLeftKanE…
+· 使用定理 `CategoryTheory.Bicategory.IsLeftAdjoint.mk`：∀ {B : Type u₁} [inst : Cate
+goryTheory.Bicategory B] {a b : B} {f : a ⟶ b} {g : b ⟶ a}   (adj : CategoryTheo
+ry.Bicategory.Adjunction f g), C…
+· 使用定理 `List.tfae_of_cycle`：tfae_of_cycle {a b} {l : List Prop} (h_chain : List.
+IsChain (· -> ·) (a :: b :: l)) (h_last : getLastD l b -> a) : TFAE (a :: b :: l
+)
 -/
 theorem isLeftAdjoint_TFAE (f : a ⟶ b) :
     List.TFAE [
       IsLeftAdjoint f,
       HasAbsLeftKanExtension f (𝟙 a),
-      exists _ : HasLeftKanExtension f (𝟙 a), Lan.CommuteWith f (𝟙 a) f] := by
-  tfae_have 1 -> 2
+      ∃ _ : HasLeftKanExtension f (𝟙 a), Lan.CommuteWith f (𝟙 a) f] := by
+  tfae_have 1 → 2
   | h => IsAbsKan.hasAbsLeftKanExtension (Adjunction.ofIsLeftAdjoint f).isAbsoluteLeftKan
-  tfae_have 2 -> 3
+  tfae_have 2 → 3
   | h => ⟨inferInstance, inferInstance⟩
-  tfae_have 3 -> 1
-| ⟨h, h'⟩ => .mk (lanIsKan f (𝟙 a)).adjunction Lan.CommuteWith.isKan f (𝟙 a) f
+  tfae_have 3 → 1
+  | ⟨h, h'⟩ => .mk <| (lanIsKan f (𝟙 a)).adjunction <| Lan.CommuteWith.isKan f (𝟙 a) f
   tfae_finish
 
 end LeftExtension
@@ -280,230 +202,150 @@ open LeftLift
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `Adjunction.isAbsoluteLeftKanLift` / `Adjunction.isAbsoluteLeftKanLift` 的定义
+/-- For an adjunction `f ⊣ u`, `f` is an absolute left Kan lift of the identity along `u`.
+The unit of this Kan lift is given by the unit of the adjunction. -/
+/-
+**CategoryTheory.Bicategory.Adjunction.isAbsoluteLeftKanLift** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.Bicategory.Adjunction`。
+形式化陈述：{B : Type u} →   [inst : CategoryTheory.Bicategory B] →     {a b : B} →   
+    {f : a ⟶ b} →         {u : b ⟶ a} →           (adj : CategoryTheory.Bicatego
+ry.Adjunction f u) → (CategoryTheory.Bicategory.LeftLift.mk f adj.unit).IsAbsKan
+参数：adj : CategoryTheory.Bicategory.Adjunction f u；CategoryTheory.Bicategory.Left
+Lift.mk f adj.unit。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Adjunction.isAbsoluteLeftKanLift
-  signature: {f : a ⟶ b} {u : b ⟶ a} (adj : f ⊣ u)
-  body: fun {x} h =>
-  .mk (fun s => LeftLift.homMk
-(𝟙 _ otimes≫ s.unit ▷ f otimes≫ s.lift ◁ adj.counit otimes≫ 𝟙 _ : h ≫ f ⟶ s.lift)
-      calc _
-      _ = 𝟙 _ otimes≫ (_ ◁ adj.unit ≫ s.unit ▷ _) otimes≫ s.lift ◁ adj.counit ▷ u otimes≫ 𝟙 _ := by
-        dsimp only [whisker_lift, StructuredArrow.mk_right, whisker_unit,
-          StructuredArrow.mk_hom_eq_self]
-        bicategory
-      _ = s.unit otimes≫ s.lift ◁ (rightZigzag adj.unit adj.counit) otimes≫ 𝟙 _ := by
-        rw [whisker_exchange]; rw [rightZigzag]; bicategory
-      _ = s.unit := by
-        rw [adj.right_triangle]; bicategory) <| by
-      intro s τ₀
-      ext
-      /- We need to specify the type of `τ` to use the notation `⊗≫`. -/
-      let τ : h ≫ f ⟶ s.lift := τ₀.right
-      have hτ : h ◁ adj.unit otimes≫ τ ▷ u = s.unit := by simpa [bicategoricalComp] using LeftLift.w τ₀
-      calc τ
-        _ = 𝟙 _ otimes≫ h ◁ leftZigzag adj.unit adj.counit otimes≫ τ otimes≫ 𝟙 _ := by
-          rw [adj.left_triangle]; bicategory
-        _ = 𝟙 _ otimes≫ h ◁ adj.unit ▷ f otimes≫ (_ ◁ adj.counit ≫ τ ▷ _) otimes≫ 𝟙 _ := by
-          rw [leftZigzag]; bicategory
-        _ = 𝟙 _ otimes≫ (h ◁ adj.unit otimes≫ τ ▷ u) ▷ f otimes≫ s.lift ◁ adj.counit otimes≫ 𝟙 _ := by
-          rw [whisker_exchange]; bicategory
-        _ = _ := by
-          rw [hτ]; dsimp only [StructuredArrow.homMk_right]
-
-中文:
-定义 伴随.isAbsoluteLeftKanLift
-  签名: {f : a ⟶ b} {u : b ⟶ a} (adj : f ⊣ u)
-  定义体: fun {x} h =>
-  .mk (fun s => LeftLift.homMk
-(𝟙 _ otimes≫ s.unit ▷ f otimes≫ s.lift ◁ adj.counit otimes≫ 𝟙 _ : h ≫ f ⟶ s.lift)
-      calc _
-      _ = 𝟙 _ otimes≫ (_ ◁ adj.unit ≫ s.unit ▷ _) otimes≫ s.lift ◁ adj.counit ▷ u otimes≫ 𝟙 _ := by
-        dsimp only [whisker_lift, StructuredArrow.mk_right, whisker_unit,
-          StructuredArrow.mk_hom_eq_self]
-        bicategory
-      _ = s.unit otimes≫ s.lift ◁ (rightZigzag adj.unit adj.counit) otimes≫ 𝟙 _ := by
-        rw [whisker_exchange]; rw [rightZigzag]; bicategory
-      _ = s.unit := by
-        rw [adj.right_triangle]; bicategory) <| by
-      intro s τ₀
-      ext
-      /- We need to specify the type of `τ` to use the notation `⊗≫`. -/
-      let τ : h ≫ f ⟶ s.lift := τ₀.right
-      have hτ : h ◁ adj.unit otimes≫ τ ▷ u = s.unit := by simpa [bicategoricalComp] using LeftLift.w τ₀
-      calc τ
-        _ = 𝟙 _ otimes≫ h ◁ leftZigzag adj.unit adj.counit otimes≫ τ otimes≫ 𝟙 _ := by
-          rw [adj.left_triangle]; bicategory
-        _ = 𝟙 _ otimes≫ h ◁ adj.unit ▷ f otimes≫ (_ ◁ adj.counit ≫ τ ▷ _) otimes≫ 𝟙 _ := by
-          rw [leftZigzag]; bicategory
-        _ = 𝟙 _ otimes≫ (h ◁ adj.unit otimes≫ τ ▷ u) ▷ f otimes≫ s.lift ◁ adj.counit otimes≫ 𝟙 _ := by
-          rw [whisker_exchange]; bicategory
-        _ = _ := by
-          rw [hτ]; dsimp only [StructuredArrow.homMk_right]
-
-Depends on / 依赖: reflectsLimitsOfShapeOfCreatesLimitsOfShape
+--- 原说明 ---
+For an adjunction `f ⊣ u`, `f` is an absolute left Kan lift of the identity alon
+g `u`.
+The unit of this Kan lift is given by the unit of the adjunction.
 -/
 def Adjunction.isAbsoluteLeftKanLift {f : a ⟶ b} {u : b ⟶ a} (adj : f ⊣ u) :
-    IsAbsKan (.mk f adj.unit) := fun {x} h =>
-  .mk (fun s => LeftLift.homMk
-(𝟙 _ otimes≫ s.unit ▷ f otimes≫ s.lift ◁ adj.counit otimes≫ 𝟙 _ : h ≫ f ⟶ s.lift)
+    IsAbsKan (.mk f adj.unit) := fun {x} h ↦
+  .mk (fun s ↦ LeftLift.homMk
+    (𝟙 _ ⊗≫ s.unit ▷ f ⊗≫ s.lift ◁ adj.counit ⊗≫ 𝟙 _ : h ≫ f ⟶ s.lift) <|
       calc _
-      _ = 𝟙 _ otimes≫ (_ ◁ adj.unit ≫ s.unit ▷ _) otimes≫ s.lift ◁ adj.counit ▷ u otimes≫ 𝟙 _ := by
+      _ = 𝟙 _ ⊗≫ (_ ◁ adj.unit ≫ s.unit ▷ _) ⊗≫ s.lift ◁ adj.counit ▷ u ⊗≫ 𝟙 _ := by
         dsimp only [whisker_lift, StructuredArrow.mk_right, whisker_unit,
           StructuredArrow.mk_hom_eq_self]
         bicategory
-      _ = s.unit otimes≫ s.lift ◁ (rightZigzag adj.unit adj.counit) otimes≫ 𝟙 _ := by
-        rw [whisker_exchange]; rw [rightZigzag]; bicategory
+      _ = s.unit ⊗≫ s.lift ◁ (rightZigzag adj.unit adj.counit) ⊗≫ 𝟙 _ := by
+        rw [whisker_exchange, rightZigzag]; bicategory
       _ = s.unit := by
         rw [adj.right_triangle]; bicategory) <| by
       intro s τ₀
       ext
       /- We need to specify the type of `τ` to use the notation `⊗≫`. -/
       let τ : h ≫ f ⟶ s.lift := τ₀.right
-      have hτ : h ◁ adj.unit otimes≫ τ ▷ u = s.unit := by simpa [bicategoricalComp] using LeftLift.w τ₀
+      have hτ : h ◁ adj.unit ⊗≫ τ ▷ u = s.unit := by simpa [bicategoricalComp] using LeftLift.w τ₀
       calc τ
-        _ = 𝟙 _ otimes≫ h ◁ leftZigzag adj.unit adj.counit otimes≫ τ otimes≫ 𝟙 _ := by
+        _ = 𝟙 _ ⊗≫ h ◁ leftZigzag adj.unit adj.counit ⊗≫ τ ⊗≫ 𝟙 _ := by
           rw [adj.left_triangle]; bicategory
-        _ = 𝟙 _ otimes≫ h ◁ adj.unit ▷ f otimes≫ (_ ◁ adj.counit ≫ τ ▷ _) otimes≫ 𝟙 _ := by
+        _ = 𝟙 _ ⊗≫ h ◁ adj.unit ▷ f ⊗≫ (_ ◁ adj.counit ≫ τ ▷ _) ⊗≫ 𝟙 _ := by
           rw [leftZigzag]; bicategory
-        _ = 𝟙 _ otimes≫ (h ◁ adj.unit otimes≫ τ ▷ u) ▷ f otimes≫ s.lift ◁ adj.counit otimes≫ 𝟙 _ := by
+        _ = 𝟙 _ ⊗≫ (h ◁ adj.unit ⊗≫ τ ▷ u) ▷ f ⊗≫ s.lift ◁ adj.counit ⊗≫ 𝟙 _ := by
           rw [whisker_exchange]; bicategory
         _ = _ := by
           rw [hτ]; dsimp only [StructuredArrow.homMk_right]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `LeftLift.IsKan.adjunction` / `LeftLift.IsKan.adjunction` 的定义
+/-- A left Kan lift `t` of the identity along `u` that commutes with `u`, in the sense that
+`t.whisker u` is a left Kan lift, is a left adjoint to `u`. The unit of this adjoint is given by
+the unit of the Kan lift. -/
+/-
+**CategoryTheory.Bicategory.LeftLift.IsKan.adjunction** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Bicategory.LeftLift.IsKan`。
+形式化陈述：{B : Type u} →   [inst : CategoryTheory.Bicategory B] →     {a b : B} →   
+    {u : b ⟶ a} →         {t : CategoryTheory.Bicategory.LeftLift u (CategoryThe
+ory.CategoryStruct.id a)} →           t.IsKan → (t.whisker u).IsKan → CategoryTh
+eory.Bicategory.Adjunction t.lift u
+参数：CategoryTheory.CategoryStruct.id a；t.whisker u。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition LeftLift.IsKan.adjunction
-  signature: {u : b ⟶ a} {t : LeftLift u (𝟙 a)}
-  body: let ε : u ≫ t.lift ⟶ 𝟙 b := H'.desc .mk _ (ρ_ u).hom ≫ (fun_ u).inv
-  have Hε : rightZigzag t.unit ε = (ρ_ u).hom ≫ (fun_ u).inv := by
-simpa [rightZigzag, bicategoricalComp] using H'.fac .mk _ (ρ_ u).hom ≫ (fun_ u).inv
-  { unit := t.unit
-    counit := ε
-    left_triangle := by
-      apply (cancel_epi (fun_ _).inv).mp
-      apply H.hom_ext
-      calc _
-        _ = 𝟙 _ otimes≫ t.unit otimes≫ leftZigzag t.unit ε ▷ u otimes≫ 𝟙 _ := by
-          bicategory
-        _ = 𝟙 _ otimes≫ (_ ◁ t.unit ≫ t.unit ▷ _) otimes≫ t.lift ◁ ε ▷ u otimes≫ 𝟙 _ := by
-          rw [leftZigzag]; bicategory
-        _ = 𝟙 _ otimes≫ t.unit otimes≫ t.lift ◁ (u ◁ t.unit otimes≫ ε ▷ u) otimes≫ 𝟙 _ := by
-          rw [whisker_exchange]; bicategory
-        _ = _ := by
-          rw [← rightZigzag]; rw [Hε]; bicategory
-    right_triangle := Hε }
-
-中文:
-定义 LeftLift.IsKan.adjunction
-  签名: {u : b ⟶ a} {t : LeftLift u (𝟙 a)}
-  定义体: let ε : u ≫ t.lift ⟶ 𝟙 b := H'.desc .mk _ (ρ_ u).hom ≫ (fun_ u).inv
-  have Hε : rightZigzag t.unit ε = (ρ_ u).hom ≫ (fun_ u).inv := by
-simpa [rightZigzag, bicategoricalComp] using H'.fac .mk _ (ρ_ u).hom ≫ (fun_ u).inv
-  { unit := t.unit
-    counit := ε
-    left_triangle := by
-      apply (cancel_epi (fun_ _).inv).mp
-      apply H.hom_ext
-      calc _
-        _ = 𝟙 _ otimes≫ t.unit otimes≫ leftZigzag t.unit ε ▷ u otimes≫ 𝟙 _ := by
-          bicategory
-        _ = 𝟙 _ otimes≫ (_ ◁ t.unit ≫ t.unit ▷ _) otimes≫ t.lift ◁ ε ▷ u otimes≫ 𝟙 _ := by
-          rw [leftZigzag]; bicategory
-        _ = 𝟙 _ otimes≫ t.unit otimes≫ t.lift ◁ (u ◁ t.unit otimes≫ ε ▷ u) otimes≫ 𝟙 _ := by
-          rw [whisker_exchange]; bicategory
-        _ = _ := by
-          rw [← rightZigzag]; rw [Hε]; bicategory
-    right_triangle := Hε }
-
-Depends on / 依赖: H.hom_ext, bicategoricalComp, bicategory, cancel_epi, counit, fun_, hom_ext, leftZigzag, left_triangle, otimes, reflectsLimitsOfCreatesLimits, rightZigzag, t.lift, t.unit
+--- 原说明 ---
+A left Kan lift `t` of the identity along `u` that commutes with `u`, in the sen
+se that
+`t.whisker u` is a left Kan lift, is a left adjoint to `u`. The unit of this adj
+oint is given by
+the unit of the Kan lift.
 -/
 def LeftLift.IsKan.adjunction {u : b ⟶ a} {t : LeftLift u (𝟙 a)}
     (H : IsKan t) (H' : IsKan (t.whisker u)) :
       t.lift ⊣ u :=
-let ε : u ≫ t.lift ⟶ 𝟙 b := H'.desc .mk _ (ρ_ u).hom ≫ (fun_ u).inv
-  have Hε : rightZigzag t.unit ε = (ρ_ u).hom ≫ (fun_ u).inv := by
-simpa [rightZigzag, bicategoricalComp] using H'.fac .mk _ (ρ_ u).hom ≫ (fun_ u).inv
+  let ε : u ≫ t.lift ⟶ 𝟙 b := H'.desc <| .mk _ <| (ρ_ u).hom ≫ (λ_ u).inv
+  have Hε : rightZigzag t.unit ε = (ρ_ u).hom ≫ (λ_ u).inv := by
+    simpa [rightZigzag, bicategoricalComp] using H'.fac <| .mk _ <| (ρ_ u).hom ≫ (λ_ u).inv
   { unit := t.unit
     counit := ε
     left_triangle := by
-      apply (cancel_epi (fun_ _).inv).mp
+      apply (cancel_epi (λ_ _).inv).mp
       apply H.hom_ext
       calc _
-        _ = 𝟙 _ otimes≫ t.unit otimes≫ leftZigzag t.unit ε ▷ u otimes≫ 𝟙 _ := by
+        _ = 𝟙 _ ⊗≫ t.unit ⊗≫ leftZigzag t.unit ε ▷ u ⊗≫ 𝟙 _ := by
           bicategory
-        _ = 𝟙 _ otimes≫ (_ ◁ t.unit ≫ t.unit ▷ _) otimes≫ t.lift ◁ ε ▷ u otimes≫ 𝟙 _ := by
+        _ = 𝟙 _ ⊗≫ (_ ◁ t.unit ≫ t.unit ▷ _) ⊗≫ t.lift ◁ ε ▷ u ⊗≫ 𝟙 _ := by
           rw [leftZigzag]; bicategory
-        _ = 𝟙 _ otimes≫ t.unit otimes≫ t.lift ◁ (u ◁ t.unit otimes≫ ε ▷ u) otimes≫ 𝟙 _ := by
+        _ = 𝟙 _ ⊗≫ t.unit ⊗≫ t.lift ◁ (u ◁ t.unit ⊗≫ ε ▷ u) ⊗≫ 𝟙 _ := by
           rw [whisker_exchange]; bicategory
         _ = _ := by
-          rw [← rightZigzag]; rw [Hε]; bicategory
+          rw [← rightZigzag, Hε]; bicategory
     right_triangle := Hε }
 
-/--
-Definition of `LeftLift.IsAbsKan.adjunction` / `LeftLift.IsAbsKan.adjunction` 的定义
+/-- An absolute left Kan lift of the identity along `u` is a left adjoint to `u`.
+The unit of this adjunction is given by the unit of the Kan lift. -/
+/-
+**CategoryTheory.Bicategory.LeftLift.IsAbsKan.adjunction** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.Bicategory.LeftLift.IsAbsKan`。
+形式化陈述：{B : Type u} →   [inst : CategoryTheory.Bicategory B] →     {a b : B} →   
+    {u : b ⟶ a} →         (t : CategoryTheory.Bicategory.LeftLift u (CategoryThe
+ory.CategoryStruct.id a)) →           t.IsAbsKan → CategoryTheory.Bicategory.Adj
+unction t.lift u
+参数：t : CategoryTheory.Bicategory.LeftLift u (CategoryTheory.CategoryStruct.id a)
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition LeftLift.IsAbsKan.adjunction
-  signature: {u : b ⟶ a} (t : LeftLift u (𝟙 a)) (H : IsAbsKan t)
-  body: H.isKan.adjunction (H u)
-
-中文:
-定义 LeftLift.IsAbsKan.adjunction
-  签名: {u : b ⟶ a} (t : LeftLift u (𝟙 a)) (H : IsAbsKan t)
-  定义体: H.isKan.adjunction (H u)
-
-Depends on / 依赖: H.isKan.adjunction, adjunction, reflectsColimitsOfShapeOfCreatesColimitsOfShape
+--- 原说明 ---
+An absolute left Kan lift of the identity along `u` is a left adjoint to `u`.
+The unit of this adjunction is given by the unit of the Kan lift.
 -/
 def LeftLift.IsAbsKan.adjunction {u : b ⟶ a} (t : LeftLift u (𝟙 a)) (H : IsAbsKan t) :
     t.lift ⊣ u :=
   H.isKan.adjunction (H u)
-
-/--
-theorem `isRightAdjoint_TFAE` / 定理 `isRightAdjoint_TFAE`
-
-English:
-theorem isRightAdjoint_TFAE
-  given: (u : b ⟶ a)
-  proof: by
-  tfae_have 1 -> 2
-  | h => IsAbsKan.hasAbsLeftKanLift (Adjunction.ofIsRightAdjoint u).isAbsoluteLeftKanLift
-  tfae_have 2 -> 3
-  | h => ⟨inferInstance, inferInstance⟩
-  tfae_have 3 -> 1
-| ⟨h, h'⟩ => .mk (lanLiftIsKan u (𝟙 a)).adjunction LanLift.CommuteWith.isKan u (𝟙 a) u
-  tfae_finish
-
-中文:
-定理 isRightAdjoint_TFAE
-  条件: (u : b ⟶ a)
-  证明: by
-  tfae_have 1 -> 2
-  | h => IsAbsKan.hasAbsLeftKanLift (Adjunction.ofIsRightAdjoint u).isAbsoluteLeftKanLift
-  tfae_have 2 -> 3
-  | h => ⟨inferInstance, inferInstance⟩
-  tfae_have 3 -> 1
-| ⟨h, h'⟩ => .mk (lanLiftIsKan u (𝟙 a)).adjunction LanLift.CommuteWith.isKan u (𝟙 a) u
-  tfae_finish
-
-Depends on / 依赖: Adjunction, Adjunction.ofIsRightAdjoint, CommuteWith, IsAbsKan, IsAbsKan.hasAbsLeftKanLift, LanLift, LanLift.CommuteWith.isKan, adjunction, hasAbsLeftKanLift, isAbsoluteLeftKanLift, lanLiftIsKan, ofIsRightAdjoint, reflectsColimitsOfCreatesColimits, tfae_finish, tfae_have
+/-
+**CategoryTheory.Bicategory.isRightAdjoint_TFAE** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Bicategory`。
+形式化陈述：isRightAdjoint_TFAE (u : b ⟶ a) : List.TFAE [ IsRightAdjoint u, HasAbsLeft
+KanLift u (𝟙 a), exists _ : HasLeftKanLift u (𝟙 a), LanLift.CommuteWith u (𝟙 a) 
+u]
+参数：u : b ⟶ a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Bicategory.LeftLift.IsAbsKan.hasAbsLeftKanLift`：∀ {B : Ty
+pe u} [inst : CategoryTheory.Bicategory B] {a b c : B} {f : b ⟶ a} {g : c ⟶ a}  
+ {t : CategoryTheory.Bicategory.LeftLift f g} (H : …
+· 使用定理 `CategoryTheory.Bicategory.HasAbsLeftKanLift.toHasLeftKanLift`：∀ {B : Typ
+e u} {inst : CategoryTheory.Bicategory B} {a b c : B} {f : b ⟶ a} {g : c ⟶ a}   
+[self : CategoryTheory.Bicategory.HasAbsLeftKanLif…
+· 使用定理 `CategoryTheory.Bicategory.instCommuteWith_1`：∀ {B : Type u} [inst : Cate
+goryTheory.Bicategory B] {a b c : B} {f : b ⟶ a} {g : c ⟶ a}   [inst_1 : Categor
+yTheory.Bicategory.HasAbsLeftKanL…
+· 使用定理 `CategoryTheory.Bicategory.IsRightAdjoint.mk`：∀ {B : Type u₁} [inst : Cat
+egoryTheory.Bicategory B] {a b : B} {f : a ⟶ b} {g : b ⟶ a}   (adj : CategoryThe
+ory.Bicategory.Adjunction f g), C…
+· 使用定理 `List.tfae_of_cycle`：tfae_of_cycle {a b} {l : List Prop} (h_chain : List.
+IsChain (· -> ·) (a :: b :: l)) (h_last : getLastD l b -> a) : TFAE (a :: b :: l
+)
 -/
 theorem isRightAdjoint_TFAE (u : b ⟶ a) :
     List.TFAE [
       IsRightAdjoint u,
       HasAbsLeftKanLift u (𝟙 a),
-      exists _ : HasLeftKanLift u (𝟙 a), LanLift.CommuteWith u (𝟙 a) u] := by
-  tfae_have 1 -> 2
+      ∃ _ : HasLeftKanLift u (𝟙 a), LanLift.CommuteWith u (𝟙 a) u] := by
+  tfae_have 1 → 2
   | h => IsAbsKan.hasAbsLeftKanLift (Adjunction.ofIsRightAdjoint u).isAbsoluteLeftKanLift
-  tfae_have 2 -> 3
+  tfae_have 2 → 3
   | h => ⟨inferInstance, inferInstance⟩
-  tfae_have 3 -> 1
-| ⟨h, h'⟩ => .mk (lanLiftIsKan u (𝟙 a)).adjunction LanLift.CommuteWith.isKan u (𝟙 a) u
+  tfae_have 3 → 1
+  | ⟨h, h'⟩ => .mk <| (lanLiftIsKan u (𝟙 a)).adjunction <| LanLift.CommuteWith.isKan u (𝟙 a) u
   tfae_finish
 
 end LeftLift
@@ -512,116 +354,19 @@ namespace LeftExtension
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `isKanOfWhiskerLeftAdjoint` / `isKanOfWhiskerLeftAdjoint` 的定义
+/-- A left adjoint commutes with a left Kan extension. -/
+/-
+**CategoryTheory.Bicategory.LeftExtension.isKanOfWhiskerLeftAdjoint** 是 Mathlib 
+中的一个定义，位于命名空间 `CategoryTheory.Bicategory.LeftExtension`。
+形式化陈述：isKanOfWhiskerLeftAdjoint {f : a ⟶ b} {g : a ⟶ c} {t : LeftExtension f g} 
+(H : LeftExtension.IsKan t) {x : B} {h : c ⟶ x} {u : x ⟶ c} (adj : h ⊣ u) : Left
+Extension.IsKan (t.whisker h)
+参数：H : LeftExtension.IsKan t；adj : h ⊣ u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isKanOfWhiskerLeftAdjoint
-  body: let η' := adj.unit
-  let H' : LeftLift.IsAbsKan (.mk _ η') := adj.isAbsoluteLeftKanLift
-  .mk (fun s =>
-    let k := s.extension
-    let θ := s.unit
-let sτ := LeftExtension.mk _ 𝟙 _ otimes≫ g ◁ η' otimes≫ θ ▷ u otimes≫ 𝟙 _
-    let τ : t.extension ⟶ k ≫ u := H.desc sτ
-let sσ := LeftLift.mk _ (ρ_ _).hom ≫ τ
-    let σ : t.extension ≫ h ⟶ k := H'.desc sσ
-LeftExtension.homMk σ (H' g).hom_ext by
-      have Hσ : t.extension ◁ η' otimes≫ σ ▷ u = 𝟙 _ otimes≫ τ := by
-        simpa [bicategoricalComp] using (H' _).fac (.mk _ <| (ρ_ _).hom ≫ τ)
-      dsimp only [LeftLift.whisker_lift, StructuredArrow.mk_right, LeftLift.whisker_unit,
-        StructuredArrow.mk_hom_eq_self, whisker_extension, whisker_unit]
-      calc _
-        _ = (g ◁ η' ≫ t.unit ▷ (h ≫ u)) otimes≫ f ◁ σ ▷ u otimes≫ 𝟙 _ := by
-          bicategory
-        _ = t.unit ▷ (𝟙 c) otimes≫ f ◁ (t.extension ◁ η' otimes≫ σ ▷ u) otimes≫ 𝟙 _ := by
-          rw [whisker_exchange]; bicategory
-        _ = (ρ_ g).hom ≫ t.unit ≫ f ◁ H.desc sτ ≫ (α_ f s.extension u).inv := by
-          rw [Hσ]
-          dsimp only [τ]
-          bicategory
-        _ = _ := by
-          rw [IsKan.fac_assoc]
-          dsimp only [StructuredArrow.mk_right, StructuredArrow.mk_hom_eq_self, sτ]
-          bicategory) <| by
-    intro s' τ₀'
-    let τ' : t.extension ≫ h ⟶ s'.extension := τ₀'.right
-    have Hτ' : t.unit ▷ h otimes≫ f ◁ τ' = s'.unit := by simpa [bicategoricalComp] using τ₀'.w
-    ext
-    apply (H' _).hom_ext
-    dsimp only [StructuredArrow.homMk_right]
-    rw [(H' _).fac]
-    apply (cancel_epi (ρ_ _).inv).mp
-    apply H.hom_ext
-    dsimp only [LeftLift.whisker_lift, StructuredArrow.mk_right, LeftLift.whisker_unit,
-      StructuredArrow.mk_hom_eq_self]
-    let σs' := LeftExtension.mk (s'.extension ≫ u)
-      (𝟙 g otimes≫ g ◁ η' otimes≫ s'.unit ▷ u otimes≫ 𝟙 (f ≫ s'.extension ≫ u))
-    calc _
-      _ = 𝟙 _ otimes≫ (t.unit ▷ (𝟙 c) ≫ (f ≫ t.extension) ◁ η') otimes≫ f ◁ τ' ▷ u := by
-        bicategory
-      _ = 𝟙 g otimes≫ g ◁ η' otimes≫ (t.unit ▷ h otimes≫ f ◁ τ') ▷ u otimes≫ 𝟙 _ := by
-        rw [← whisker_exchange]; bicategory
-      _ = t.unit ≫ f ◁ H.desc σs' := by
-        rw [Hτ']; rw [IsKan.fac]
-        dsimp only [StructuredArrow.mk_hom_eq_self, σs']
-      _ = _ := by
-        bicategory
-
-中文:
-定义 isKanOfWhiskerLeftAdjoint
-  定义体: let η' := adj.unit
-  let H' : LeftLift.IsAbsKan (.mk _ η') := adj.isAbsoluteLeftKanLift
-  .mk (fun s =>
-    let k := s.extension
-    let θ := s.unit
-let sτ := LeftExtension.mk _ 𝟙 _ otimes≫ g ◁ η' otimes≫ θ ▷ u otimes≫ 𝟙 _
-    let τ : t.extension ⟶ k ≫ u := H.desc sτ
-let sσ := LeftLift.mk _ (ρ_ _).hom ≫ τ
-    let σ : t.extension ≫ h ⟶ k := H'.desc sσ
-LeftExtension.homMk σ (H' g).hom_ext by
-      have Hσ : t.extension ◁ η' otimes≫ σ ▷ u = 𝟙 _ otimes≫ τ := by
-        simpa [bicategoricalComp] using (H' _).fac (.mk _ <| (ρ_ _).hom ≫ τ)
-      dsimp only [LeftLift.whisker_lift, StructuredArrow.mk_right, LeftLift.whisker_unit,
-        StructuredArrow.mk_hom_eq_self, whisker_extension, whisker_unit]
-      calc _
-        _ = (g ◁ η' ≫ t.unit ▷ (h ≫ u)) otimes≫ f ◁ σ ▷ u otimes≫ 𝟙 _ := by
-          bicategory
-        _ = t.unit ▷ (𝟙 c) otimes≫ f ◁ (t.extension ◁ η' otimes≫ σ ▷ u) otimes≫ 𝟙 _ := by
-          rw [whisker_exchange]; bicategory
-        _ = (ρ_ g).hom ≫ t.unit ≫ f ◁ H.desc sτ ≫ (α_ f s.extension u).inv := by
-          rw [Hσ]
-          dsimp only [τ]
-          bicategory
-        _ = _ := by
-          rw [IsKan.fac_assoc]
-          dsimp only [StructuredArrow.mk_right, StructuredArrow.mk_hom_eq_self, sτ]
-          bicategory) <| by
-    intro s' τ₀'
-    let τ' : t.extension ≫ h ⟶ s'.extension := τ₀'.right
-    have Hτ' : t.unit ▷ h otimes≫ f ◁ τ' = s'.unit := by simpa [bicategoricalComp] using τ₀'.w
-    ext
-    apply (H' _).hom_ext
-    dsimp only [StructuredArrow.homMk_right]
-    rw [(H' _).fac]
-    apply (cancel_epi (ρ_ _).inv).mp
-    apply H.hom_ext
-    dsimp only [LeftLift.whisker_lift, StructuredArrow.mk_right, LeftLift.whisker_unit,
-      StructuredArrow.mk_hom_eq_self]
-    let σs' := LeftExtension.mk (s'.extension ≫ u)
-      (𝟙 g otimes≫ g ◁ η' otimes≫ s'.unit ▷ u otimes≫ 𝟙 (f ≫ s'.extension ≫ u))
-    calc _
-      _ = 𝟙 _ otimes≫ (t.unit ▷ (𝟙 c) ≫ (f ≫ t.extension) ◁ η') otimes≫ f ◁ τ' ▷ u := by
-        bicategory
-      _ = 𝟙 g otimes≫ g ◁ η' otimes≫ (t.unit ▷ h otimes≫ f ◁ τ') ▷ u otimes≫ 𝟙 _ := by
-        rw [← whisker_exchange]; bicategory
-      _ = t.unit ≫ f ◁ H.desc σs' := by
-        rw [Hτ']; rw [IsKan.fac]
-        dsimp only [StructuredArrow.mk_hom_eq_self, σs']
-      _ = _ := by
-        bicategory
-
-Depends on / 依赖: H.desc, IsAbsKan, LeftExtension, LeftExtension.homMk, LeftExtension.mk, LeftLift, LeftLift.IsAbsKan, LeftLift.mk, adj.isAbsoluteLeftKanLift, adj.unit, bicategoricalComp, extension, hom_ext, isAbsoluteLeftKanLift, otimes, s.extension, s.unit, t.extension
+--- 原说明 ---
+A left adjoint commutes with a left Kan extension.
 -/
 def isKanOfWhiskerLeftAdjoint
     {f : a ⟶ b} {g : a ⟶ c} {t : LeftExtension f g} (H : LeftExtension.IsKan t)
@@ -629,22 +374,22 @@ def isKanOfWhiskerLeftAdjoint
         LeftExtension.IsKan (t.whisker h) :=
   let η' := adj.unit
   let H' : LeftLift.IsAbsKan (.mk _ η') := adj.isAbsoluteLeftKanLift
-  .mk (fun s =>
+  .mk (fun s ↦
     let k := s.extension
     let θ := s.unit
-let sτ := LeftExtension.mk _ 𝟙 _ otimes≫ g ◁ η' otimes≫ θ ▷ u otimes≫ 𝟙 _
+    let sτ := LeftExtension.mk _ <| 𝟙 _ ⊗≫ g ◁ η' ⊗≫ θ ▷ u ⊗≫ 𝟙 _
     let τ : t.extension ⟶ k ≫ u := H.desc sτ
-let sσ := LeftLift.mk _ (ρ_ _).hom ≫ τ
+    let sσ := LeftLift.mk _ <| (ρ_ _).hom ≫ τ
     let σ : t.extension ≫ h ⟶ k := H'.desc sσ
-LeftExtension.homMk σ (H' g).hom_ext by
-      have Hσ : t.extension ◁ η' otimes≫ σ ▷ u = 𝟙 _ otimes≫ τ := by
+    LeftExtension.homMk σ <| (H' g).hom_ext <| by
+      have Hσ : t.extension ◁ η' ⊗≫ σ ▷ u  = 𝟙 _ ⊗≫ τ := by
         simpa [bicategoricalComp] using (H' _).fac (.mk _ <| (ρ_ _).hom ≫ τ)
       dsimp only [LeftLift.whisker_lift, StructuredArrow.mk_right, LeftLift.whisker_unit,
         StructuredArrow.mk_hom_eq_self, whisker_extension, whisker_unit]
       calc _
-        _ = (g ◁ η' ≫ t.unit ▷ (h ≫ u)) otimes≫ f ◁ σ ▷ u otimes≫ 𝟙 _ := by
+        _ = (g ◁ η' ≫ t.unit ▷ (h ≫ u)) ⊗≫ f ◁ σ ▷ u ⊗≫ 𝟙 _ := by
           bicategory
-        _ = t.unit ▷ (𝟙 c) otimes≫ f ◁ (t.extension ◁ η' otimes≫ σ ▷ u) otimes≫ 𝟙 _ := by
+        _ = t.unit ▷ (𝟙 c) ⊗≫ f ◁ (t.extension ◁ η' ⊗≫ σ ▷ u) ⊗≫ 𝟙 _ := by
           rw [whisker_exchange]; bicategory
         _ = (ρ_ g).hom ≫ t.unit ≫ f ◁ H.desc sτ ≫ (α_ f s.extension u).inv := by
           rw [Hσ]
@@ -656,7 +401,7 @@ LeftExtension.homMk σ (H' g).hom_ext by
           bicategory) <| by
     intro s' τ₀'
     let τ' : t.extension ≫ h ⟶ s'.extension := τ₀'.right
-    have Hτ' : t.unit ▷ h otimes≫ f ◁ τ' = s'.unit := by simpa [bicategoricalComp] using τ₀'.w
+    have Hτ' : t.unit ▷ h ⊗≫ f ◁ τ' = s'.unit := by simpa [bicategoricalComp] using τ₀'.w
     ext
     apply (H' _).hom_ext
     dsimp only [StructuredArrow.homMk_right]
@@ -666,18 +411,22 @@ LeftExtension.homMk σ (H' g).hom_ext by
     dsimp only [LeftLift.whisker_lift, StructuredArrow.mk_right, LeftLift.whisker_unit,
       StructuredArrow.mk_hom_eq_self]
     let σs' := LeftExtension.mk (s'.extension ≫ u)
-      (𝟙 g otimes≫ g ◁ η' otimes≫ s'.unit ▷ u otimes≫ 𝟙 (f ≫ s'.extension ≫ u))
+      (𝟙 g ⊗≫ g ◁ η' ⊗≫ s'.unit ▷ u ⊗≫ 𝟙 (f ≫ s'.extension ≫ u))
     calc _
-      _ = 𝟙 _ otimes≫ (t.unit ▷ (𝟙 c) ≫ (f ≫ t.extension) ◁ η') otimes≫ f ◁ τ' ▷ u := by
+      _ = 𝟙 _ ⊗≫ (t.unit ▷ (𝟙 c) ≫ (f ≫ t.extension) ◁ η') ⊗≫ f ◁ τ' ▷ u := by
         bicategory
-      _ = 𝟙 g otimes≫ g ◁ η' otimes≫ (t.unit ▷ h otimes≫ f ◁ τ') ▷ u otimes≫ 𝟙 _ := by
+      _ = 𝟙 g ⊗≫ g ◁ η' ⊗≫ (t.unit ▷ h ⊗≫ f ◁ τ') ▷ u ⊗≫ 𝟙 _ := by
         rw [← whisker_exchange]; bicategory
       _ = t.unit ≫ f ◁ H.desc σs' := by
-        rw [Hτ']; rw [IsKan.fac]
+        rw [Hτ', IsKan.fac]
         dsimp only [StructuredArrow.mk_hom_eq_self, σs']
       _ = _ := by
         bicategory
-
+/-
+**CategoryTheory.Bicategory.LeftExtension.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory.Bicategory.LeftExtension`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {f : a ⟶ b} {g : a ⟶ c} {x : B} {h : c ⟶ x} [IsLeftAdjoint h] [HasLeftKanExtension f g] :
     Lan.CommuteWith f g h :=
   ⟨⟨isKanOfWhiskerLeftAdjoint (lanIsKan f g) (Adjunction.ofIsLeftAdjoint h)⟩⟩
@@ -687,3 +436,4 @@ end LeftExtension
 end Bicategory
 
 end CategoryTheory
+

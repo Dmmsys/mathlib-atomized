@@ -24,278 +24,199 @@ Results about `Nontrivial`.
 variable {α : Type*} {β : Type*}
 
 -- `x` and `y` are explicit here, as they are often needed to guide typechecking of `h`.
-/--
-theorem `nontrivial_of_lt` / 定理 `nontrivial_of_lt`
-
-English:
-theorem nontrivial_of_lt
-  given: [Preorder α] (x y : α) (h : x < y)
-  statement: Nontrivial α
-  proof: ⟨⟨x, y, ne_of_lt h⟩⟩
-
-中文:
-定理 nontrivial_of_lt
-  条件: [预序 α] (x y : α) (h : x < y)
-  结论: 非平凡 α
-  证明: ⟨⟨x, y, ne_of_lt h⟩⟩
-
-Depends on / 依赖: ne_of_lt
+/-
+**nontrivial_of_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nontrivial_of_lt [Preorder α] (x y : α) (h : x < y) : Nontrivial α
+参数：x y : α；h : x < y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ne_of_lt`：ne_of_lt (h : a < b) : a != b
 -/
 theorem nontrivial_of_lt [Preorder α] (x y : α) (h : x < y) : Nontrivial α :=
   ⟨⟨x, y, ne_of_lt h⟩⟩
-
-/--
-theorem `exists_pair_lt` / 定理 `exists_pair_lt`
-
-English:
-theorem exists_pair_lt
-  given: (α : Type*) [Nontrivial α] [LinearOrder α]
-  statement: exists x y : α, x < y
-  proof: by
+/-
+**exists_pair_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_pair_lt (α : Type*) [Nontrivial α] [LinearOrder α] : exists x y : α
+, x < y
+参数：α : Type*。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_pair_ne`：exists_pair_ne (α : Type*) [Nontrivial α] : exists x y :
+ α, x != y
+· 使用引理 `lt_or_gt_of_ne`：lt_or_gt_of_ne (h : a != b) : a < b ∨ b < a
+-/
+theorem exists_pair_lt (α : Type*) [Nontrivial α] [LinearOrder α] : ∃ x y : α, x < y := by
   rcases exists_pair_ne α with ⟨x, y, hxy⟩
   cases lt_or_gt_of_ne hxy <;> exact ⟨_, _, ‹_›⟩
-
-中文:
-定理 存在_pair_lt
-  条件: (α : 类型) [非平凡 α] [线性序 α]
-  结论: 存在 x y : α, x < y
-  证明: by
-  rcases exists_pair_ne α with ⟨x, y, hxy⟩
-  cases lt_or_gt_of_ne hxy <;> exact ⟨_, _, ‹_›⟩
-
-Depends on / 依赖: exists_pair_ne, lt_or_gt_of_ne
+/-
+**nontrivial_iff_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nontrivial_iff_lt [LinearOrder α] : Nontrivial α ↔ exists x y : α, x < y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_pair_lt`：exists_pair_lt (α : Type*) [Nontrivial α] [LinearOrder α
+] : exists x y : α, x < y
+· 使用定理 `nontrivial_of_lt`：nontrivial_of_lt [Preorder α] (x y : α) (h : x < y) : 
+Nontrivial α
 -/
-theorem exists_pair_lt (α : Type*) [Nontrivial α] [LinearOrder α] : exists x y : α, x < y := by
-  rcases exists_pair_ne α with ⟨x, y, hxy⟩
-  cases lt_or_gt_of_ne hxy <;> exact ⟨_, _, ‹_›⟩
-
-/--
-theorem `nontrivial_iff_lt` / 定理 `nontrivial_iff_lt`
-
-English:
-theorem nontrivial_iff_lt
-  given: [LinearOrder α]
-  statement: Nontrivial α ↔ exists x y : α, x < y
-  proof: ⟨fun h => @exists_pair_lt α h _, fun ⟨x, y, h⟩ => nontrivial_of_lt x y h⟩
-
-中文:
-定理 nontrivial_iff_lt
-  条件: [线性序 α]
-  结论: 非平凡 α ↔ 存在 x y : α, x < y
-  证明: ⟨fun h => @exists_pair_lt α h _, fun ⟨x, y, h⟩ => nontrivial_of_lt x y h⟩
-
-Depends on / 依赖: exists_pair_lt, nontrivial_of_lt
+theorem nontrivial_iff_lt [LinearOrder α] : Nontrivial α ↔ ∃ x y : α, x < y :=
+  ⟨fun h ↦ @exists_pair_lt α h _, fun ⟨x, y, h⟩ ↦ nontrivial_of_lt x y h⟩
+/-
+**Subtype.nontrivial_iff_exists_ne** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Subtype.nontrivial_iff_exists_ne (p : α -> Prop) (x : Subtype p) : Nontriv
+ial (Subtype p) ↔ exists (y : α) (_ : p y), y != x
+参数：p : α -> Prop；x : Subtype p。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nontrivial_iff_exists_ne`：nontrivial_iff_exists_ne (x : α) : Nontrivial 
+α ↔ exists y, y != x
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem nontrivial_iff_lt [LinearOrder α] : Nontrivial α ↔ exists x y : α, x < y :=
-  ⟨fun h => @exists_pair_lt α h _, fun ⟨x, y, h⟩ => nontrivial_of_lt x y h⟩
-
-/--
-theorem `Subtype.nontrivial_iff_exists_ne` / 定理 `Subtype.nontrivial_iff_exists_ne`
-
-English:
-theorem Subtype.nontrivial_iff_exists_ne
-  given: (p : α -> Prop) (x : Subtype p)
-  proof: by
-  simp only [_root_.nontrivial_iff_exists_ne x, Subtype.exists, Ne, Subtype.ext_iff]
-
-中文:
-定理 子类型.nontrivial_iff_存在_ne
-  条件: (p : α -> 命题) (x : 子类型 p)
-  证明: by
-  simp only [_root_.nontrivial_iff_exists_ne x, Subtype.exists, Ne, Subtype.ext_iff]
-
-Depends on / 依赖: Subtype, Subtype.exists, Subtype.ext_iff, _root_, _root_.nontrivial_iff_exists_ne, ext_iff, nontrivial_iff_exists_ne
--/
-theorem Subtype.nontrivial_iff_exists_ne (p : α -> Prop) (x : Subtype p) :
-    Nontrivial (Subtype p) ↔ exists (y : α) (_ : p y), y != x := by
+theorem Subtype.nontrivial_iff_exists_ne (p : α → Prop) (x : Subtype p) :
+    Nontrivial (Subtype p) ↔ ∃ (y : α) (_ : p y), y ≠ x := by
   simp only [_root_.nontrivial_iff_exists_ne x, Subtype.exists, Ne, Subtype.ext_iff]
 
 open scoped Classical in
-/--
-Definition of `nontrivialPSumUnique` / `nontrivialPSumUnique` 的定义
+/-- An inhabited type is either nontrivial, or has a unique element. -/
+/-
+**nontrivialPSumUnique** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：nontrivialPSumUnique (α : Type*) [Inhabited α] : Nontrivial α oplus' Uniqu
+e α
+参数：α : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition nontrivialPSumUnique
-  signature: (α : Type*) [Inhabited α]
-  body: if h : Nontrivial α then PSum.inl h
-  else
-    PSum.inr
-      { default := default,
-        uniq := fun x : α => by
-          by_contra H
-          exact h ⟨_, _, H⟩ }
-
-中文:
-定义 nontrivialPSumUnique
-  签名: (α : 类型) [可居 α]
-  定义体: if h : Nontrivial α then PSum.inl h
-  else
-    PSum.inr
-      { default := default,
-        uniq := fun x : α => by
-          by_contra H
-          exact h ⟨_, _, H⟩ }
-
-Depends on / 依赖: Nontrivial, PSum.inl, PSum.inr
+--- 原说明 ---
+An inhabited type is either nontrivial, or has a unique element.
 -/
 noncomputable def nontrivialPSumUnique (α : Type*) [Inhabited α] :
-    Nontrivial α oplus' Unique α :=
+    Nontrivial α ⊕' Unique α :=
   if h : Nontrivial α then PSum.inl h
   else
     PSum.inr
       { default := default,
-        uniq := fun x : α => by
+        uniq := fun x : α ↦ by
           by_contra H
           exact h ⟨_, _, H⟩ }
-
-/--
-Instance `Option.nontrivial` / 实例 `Option.nontrivial`
-
-English:
-instance Option.nontrivial
-  signature: [Nonempty α]
-  body: by
-  inhabit α
-  exact ⟨none, some default, nofun⟩
-
-中文:
-实例 选项类型.nontrivial
-  签名: [非空 α]
-  定义体: by
-  inhabit α
-  exact ⟨none, some default, nofun⟩
-
-Depends on / 依赖: inhabit
+/-
+**Option.nontrivial** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Option.nontrivial [Nonempty α] : Nontrivial (Option α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Option.nontrivial [Nonempty α] : Nontrivial (Option α) := by
   inhabit α
   exact ⟨none, some default, nofun⟩
-
-/--
-Instance `nontrivial_prod_right` / 实例 `nontrivial_prod_right`
-
-English:
-instance nontrivial_prod_right
-  signature: [Nonempty α] [Nontrivial β]
-  body: Prod.snd_surjective.nontrivial
-
-中文:
-实例 nontrivial_prod_right
-  签名: [非空 α] [非平凡 β]
-  定义体: Prod.snd_surjective.nontrivial
-
-Depends on / 依赖: Prod.snd_surjective.nontrivial, nontrivial, snd_surjective
+/-
+**nontrivial_prod_right** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：nontrivial_prod_right [Nonempty α] [Nontrivial β] : Nontrivial (α × β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Surjective.nontrivial`：∀ {α : Type u_1} {β : Type u_2} [Nontriv
+ial β] {f : α → β}, Function.Surjective f → Nontrivial α
+· 使用定理 `Prod.snd_surjective`：snd_surjective [h : Nonempty α] : Function.Surjecti
+ve (@snd α β)
 -/
 instance nontrivial_prod_right [Nonempty α] [Nontrivial β] : Nontrivial (α × β) :=
   Prod.snd_surjective.nontrivial
-
-/--
-Instance `nontrivial_prod_left` / 实例 `nontrivial_prod_left`
-
-English:
-instance nontrivial_prod_left
-  signature: [Nontrivial α] [Nonempty β]
-  body: Prod.fst_surjective.nontrivial
-
-中文:
-实例 nontrivial_prod_left
-  签名: [非平凡 α] [非空 β]
-  定义体: Prod.fst_surjective.nontrivial
-
-Depends on / 依赖: Prod.fst_surjective.nontrivial, fst_surjective, nontrivial
+/-
+**nontrivial_prod_left** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：nontrivial_prod_left [Nontrivial α] [Nonempty β] : Nontrivial (α × β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Surjective.nontrivial`：∀ {α : Type u_1} {β : Type u_2} [Nontriv
+ial β] {f : α → β}, Function.Surjective f → Nontrivial α
+· 使用定理 `Prod.fst_surjective`：fst_surjective [h : Nonempty β] : Function.Surjecti
+ve (@fst α β)
 -/
 instance nontrivial_prod_left [Nontrivial α] [Nonempty β] : Nontrivial (α × β) :=
   Prod.fst_surjective.nontrivial
 
 namespace Pi
 
-variable {I : Type*} {f : I -> Type*}
+variable {I : Type*} {f : I → Type*}
 
-/--
-theorem `nontrivial_at` / 定理 `nontrivial_at`
+/-- A pi type is nontrivial if it's nonempty everywhere and nontrivial somewhere. -/
+/-
+**Pi.nontrivial_at** 是 Mathlib 中的一个定理，位于命名空间 `Pi`。
+形式化陈述：nontrivial_at (i' : I) [inst : forall i, Nonempty (f i)] [Nontrivial (f i'
+)] : Nontrivial (forall i : I, f i)
+参数：i' : I；f i；f i'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.nontrivial`：∀ {α : Type u_1} {β : Type u_2} [Nontrivi
+al α] {f : α → β}, Function.Injective f → Nontrivial β
+· 使用定理 `Function.update_injective`：update_injective (f : forall a, β a) (a' : α)
+ : Injective (update f a')
 
-English:
-theorem nontrivial_at
-  given: (i' : I) [inst : forall i, Nonempty (f i)] [Nontrivial (f i')]
-  proof: by
-  classical
-  let := Classical.decEq (forall i : I, f i)
-  exact (Function.update_injective (fun i => Classical.choice (inst i)) i').nontrivial
-
-中文:
-定理 nontrivial_at
-  条件: (i' : I) [inst : 对任意 i, 非空 (f i)] [非平凡 (f i')]
-  证明: by
-  classical
-  let := Classical.decEq (forall i : I, f i)
-  exact (Function.update_injective (fun i => Classical.choice (inst i)) i').nontrivial
-
-Depends on / 依赖: Classical, Classical.choice, Classical.decEq, Function, Function.update_injective, choice, classical, nontrivial, update_injective
+--- 原说明 ---
+A pi type is nontrivial if it's nonempty everywhere and nontrivial somewhere.
 -/
-theorem nontrivial_at (i' : I) [inst : forall i, Nonempty (f i)] [Nontrivial (f i')] :
-    Nontrivial (forall i : I, f i) := by
+theorem nontrivial_at (i' : I) [inst : ∀ i, Nonempty (f i)] [Nontrivial (f i')] :
+    Nontrivial (∀ i : I, f i) := by
   classical
-  let := Classical.decEq (forall i : I, f i)
-  exact (Function.update_injective (fun i => Classical.choice (inst i)) i').nontrivial
+  let := Classical.decEq (∀ i : I, f i)
+  exact (Function.update_injective (fun i ↦ Classical.choice (inst i)) i').nontrivial
 
-/--
-Instance `nontrivial` / 实例 `nontrivial`
+/-- As a convenience, provide an instance automatically if `(f default)` is nontrivial.
 
-English:
-instance nontrivial
-  signature: [Inhabited I] [forall i, Nonempty (f i)] [Nontrivial (f default)]
-  body: nontrivial_at default
-
-中文:
-实例 nontrivial
-  签名: [可居 I] [对任意 i, 非空 (f i)] [非平凡 (f default)]
-  定义体: nontrivial_at default
-
-Depends on / 依赖: nontrivial_at
+If a different index has the non-trivial type, then use `haveI := nontrivial_at that_index`.
 -/
-instance nontrivial [Inhabited I] [forall i, Nonempty (f i)] [Nontrivial (f default)] :
-    Nontrivial (forall i : I, f i) :=
+/-
+**Pi.nontrivial** 是 Mathlib 中的一个实例，位于命名空间 `Pi`。
+形式化陈述：nontrivial [Inhabited I] [forall i, Nonempty (f i)] [Nontrivial (f default
+)] : Nontrivial (forall i : I, f i)
+参数：f i；f default。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Pi.nontrivial_at`：nontrivial_at (i' : I) [inst : forall i, Nonempty (f i
+)] [Nontrivial (f i')] : Nontrivial (forall i : I, f i)
+
+--- 原说明 ---
+As a convenience, provide an instance automatically if `(f default)` is nontrivi
+al.
+
+If a different index has the non-trivial type, then use `haveI := nontrivial_at 
+that_index`.
+-/
+instance nontrivial [Inhabited I] [∀ i, Nonempty (f i)] [Nontrivial (f default)] :
+    Nontrivial (∀ i : I, f i) :=
   nontrivial_at default
 
 end Pi
 
-/--
-Instance `Function.nontrivial` / 实例 `Function.nontrivial`
-
-English:
-instance Function.nontrivial
-  signature: [h : Nonempty α] [Nontrivial β]
-  body: h.elim fun a => Pi.nontrivial_at a
-
-@[nontriviality]
-
-中文:
-实例 函数.nontrivial
-  签名: [h : 非空 α] [非平凡 β]
-  定义体: h.elim fun a => Pi.nontrivial_at a
-
-@[nontriviality]
-
-Depends on / 依赖: Pi.nontrivial_at, h.elim, nontrivial_at
+/-
+**Function.nontrivial** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Function.nontrivial [h : Nonempty α] [Nontrivial β] : Nontrivial (α -> β)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonempty.elim`：∀ {α : Sort u} {p : Prop}, Nonempty α → (∀ (a : α), p) → 
+p
+· 使用定理 `Pi.nontrivial_at`：nontrivial_at (i' : I) [inst : forall i, Nonempty (f i
+)] [Nontrivial (f i')] : Nontrivial (forall i : I, f i)
+· 使用定理 `Nontrivial.to_nonempty`：∀ {α : Type u_1} [Nontrivial α], Nonempty α
 -/
-instance Function.nontrivial [h : Nonempty α] [Nontrivial β] : Nontrivial (α -> β) :=
-  h.elim fun a => Pi.nontrivial_at a
+instance Function.nontrivial [h : Nonempty α] [Nontrivial β] : Nontrivial (α → β) :=
+  h.elim fun a ↦ Pi.nontrivial_at a
 
 @[nontriviality]
-/--
-theorem `Subsingleton.le` / 定理 `Subsingleton.le`
-
-English:
-theorem Subsingleton.le
-  given: [Preorder α] [Subsingleton α] (x y : α)
-  statement: x <= y
-  proof: le_of_eq (Subsingleton.elim x y)
-
-中文:
-定理 子单例.le
-  条件: [预序 α] [子单例 α] (x y : α)
-  结论: x <= y
-  证明: le_of_eq (Subsingleton.elim x y)
+/-
+**Subsingleton.le** 是 Mathlib 中的一个定理，位于命名空间 `Subsingleton`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [Subsingleton α] (x y : α), x ≤ y
+参数：x y : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_of_eq`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
 -/
-protected theorem Subsingleton.le [Preorder α] [Subsingleton α] (x y : α) : x <= y :=
+protected theorem Subsingleton.le [Preorder α] [Subsingleton α] (x y : α) : x ≤ y :=
   le_of_eq (Subsingleton.elim x y)

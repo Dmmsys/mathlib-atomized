@@ -40,266 +40,246 @@ namespace AlgebraicGeometry.LocallyRingedSpace
 
 variable (X : LocallyRingedSpace.{u}) {U : Opens X}
 
-/--
-Definition of `residueField` / `residueField` 的定义
+/-- The residue field of `X` at a point `x` is the residue field of the stalk of `X`
+at `x`. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.residueField** 是 Mathlib 中的一个定义，位于命名空间 `A
+lgebraicGeometry.LocallyRingedSpace`。
+形式化陈述：residueField (x : X) : CommRingCat
+参数：x : X。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.instIsLocalRingCarrierStalkCommRing
+CatPresheaf`：∀ (X : AlgebraicGeometry.LocallyRingedSpace) (x : ↑X.toTopCat), IsL
+ocalRing ↑(X.presheaf.stalk x)
 
-English:
-definition residueField
-  signature: (x : X)
-  body: CommRingCat.of IsLocalRing.ResidueField (X.presheaf.stalk x)
-
-中文:
-定义 residueField
-  签名: (x : X)
-  定义体: CommRingCat.of IsLocalRing.ResidueField (X.presheaf.stalk x)
-
-Depends on / 依赖: CommRingCat, CommRingCat.of, IsLocalRing, IsLocalRing.ResidueField, ResidueField, X.presheaf.stalk, presheaf
+--- 原说明 ---
+The residue field of `X` at a point `x` is the residue field of the stalk of `X`
+at `x`.
 -/
 def residueField (x : X) : CommRingCat :=
-CommRingCat.of IsLocalRing.ResidueField (X.presheaf.stalk x)
-
+  CommRingCat.of <| IsLocalRing.ResidueField (X.presheaf.stalk x)
+/-
+**AlgebraicGeometry.LocallyRingedSpace.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeom
+etry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (x : X) : Field (X.residueField x) :=
-inferInstanceAs Field (IsLocalRing.ResidueField (X.presheaf.stalk x))
+  inferInstanceAs <| Field (IsLocalRing.ResidueField (X.presheaf.stalk x))
 
-/--
-Definition of `residue` / `residue` 的定义
+/-- The residue map from the stalk to the residue field. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.residue** 是 Mathlib 中的一个定义，位于命名空间 `Algebr
+aicGeometry.LocallyRingedSpace`。
+形式化陈述：residue (X : LocallyRingedSpace.{u}) (x : X) : X.presheaf.stalk x ⟶ X.resi
+dueField x
+参数：X : LocallyRingedSpace.{u}；x : X。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.instIsLocalRingCarrierStalkCommRing
+CatPresheaf`：∀ (X : AlgebraicGeometry.LocallyRingedSpace) (x : ↑X.toTopCat), IsL
+ocalRing ↑(X.presheaf.stalk x)
 
-English:
-definition residue
-  signature: (X : LocallyRingedSpace.{u}) (x : X)
-  body: CommRingCat.ofHom (IsLocalRing.residue (X.presheaf.stalk x))
-
-中文:
-定义 residue
-  签名: (X : LocallyRinged空间.{u}) (x : X)
-  定义体: CommRingCat.ofHom (IsLocalRing.residue (X.presheaf.stalk x))
-
-Depends on / 依赖: CommRingCat, CommRingCat.ofHom, IsLocalRing, IsLocalRing.residue, X.presheaf.stalk, presheaf, residue
+--- 原说明 ---
+The residue map from the stalk to the residue field.
 -/
 def residue (X : LocallyRingedSpace.{u}) (x : X) : X.presheaf.stalk x ⟶ X.residueField x :=
   CommRingCat.ofHom (IsLocalRing.residue (X.presheaf.stalk x))
-
-/--
-lemma `residue_surjective` / 引理 `residue_surjective`
-
-English:
-lemma residue_surjective
-  given: (x : X)
-  statement: Function.Surjective (X.residue x)
-  proof: Ideal.Quotient.mk_surjective
-
-中文:
-引理 residue_surjective
-  条件: (x : X)
-  结论: 函数.满射 (X.residue x)
-  证明: Ideal.Quotient.mk_surjective
-
-Depends on / 依赖: Ideal.Quotient.mk_surjective, Quotient, mk_surjective
+/-
+**AlgebraicGeometry.LocallyRingedSpace.residue_surjective** 是 Mathlib 中的一个引理，位于命
+名空间 `AlgebraicGeometry.LocallyRingedSpace`。
+形式化陈述：residue_surjective (x : X) : Function.Surjective (X.residue x)
+参数：x : X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.Quotient.mk_surjective`：mk_surjective : Function.Surjective (mk I)
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.instIsLocalRingCarrierStalkCommRing
+CatPresheaf`：∀ (X : AlgebraicGeometry.LocallyRingedSpace) (x : ↑X.toTopCat), IsL
+ocalRing ↑(X.presheaf.stalk x)
 -/
 lemma residue_surjective (x : X) : Function.Surjective (X.residue x) :=
   Ideal.Quotient.mk_surjective
-
+/-
+**AlgebraicGeometry.LocallyRingedSpace.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeom
+etry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (x : X) : Epi (X.residue x) :=
   ConcreteCategory.epi_of_surjective _ (X.residue_surjective x)
 
 /--
-Definition of `evaluation` / `evaluation` 的定义
+If `U` is an open of `X` containing `x`, we have a canonical ring map from the sections
+over `U` to the residue field of `x`.
 
-English:
-definition evaluation
-  signature: (x : U)
-  body: X.presheaf.germ U x.1 x.2 ≫ X.residue _
+If we interpret sections over `U` as functions of `X` defined on `U`, then this ring map
+corresponds to evaluation at `x`.
+-/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.evaluation** 是 Mathlib 中的一个定义，位于命名空间 `Alg
+ebraicGeometry.LocallyRingedSpace`。
+形式化陈述：evaluation (x : U) : X.presheaf.obj (op U) ⟶ X.residueField x
+参数：x : U。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 evaluation
-  签名: (x : U)
-  定义体: X.presheaf.germ U x.1 x.2 ≫ X.residue _
+--- 原说明 ---
+If `U` is an open of `X` containing `x`, we have a canonical ring map from the s
+ections
+over `U` to the residue field of `x`.
 
-Depends on / 依赖: X.presheaf.germ, X.residue, presheaf, residue
+If we interpret sections over `U` as functions of `X` defined on `U`, then this 
+ring map
+corresponds to evaluation at `x`.
 -/
 def evaluation (x : U) : X.presheaf.obj (op U) ⟶ X.residueField x :=
   X.presheaf.germ U x.1 x.2 ≫ X.residue _
 
-/--
-Definition of `Γevaluation` / `Γevaluation` 的定义
+/-- The global evaluation map from `Γ(X, ⊤)` to the residue field at `x`. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeom
+etry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Γevaluation
-  signature: (x : X)
-  body: X.evaluation ⟨x, show x in ⊤ from trivial⟩
-
-中文:
-定义 Γevaluation
-  签名: (x : X)
-  定义体: X.evaluation ⟨x, show x in ⊤ from trivial⟩
-
-Depends on / 依赖: X.evaluation, evaluation
+--- 原说明 ---
+The global evaluation map from `Γ(X, ⊤)` to the residue field at `x`.
 -/
 def Γevaluation (x : X) : X.presheaf.obj (op ⊤) ⟶ X.residueField x :=
-  X.evaluation ⟨x, show x in ⊤ from trivial⟩
+  X.evaluation ⟨x, show x ∈ ⊤ from trivial⟩
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `evaluation_eq_zero_iff_notMem_basicOpen` / 引理 `evaluation_eq_zero_iff_notMem_basicOpen`
-
-English:
-lemma evaluation_eq_zero_iff_notMem_basicOpen
-  given: (x : U) (f : X.presheaf.obj (op U))
-  proof: by
-  rw [X.toRingedSpace.mem_basicOpen f x.1 x.2]; rw [← not_iff_not]; rw [not_not]
-  exact (IsLocalRing.residue_ne_zero_iff_isUnit _)
-
-中文:
-引理 evaluation_eq_zero_iff_notMem_basicOpen
-  条件: (x : U) (f : X.presheaf.obj (op U))
-  证明: by
-  rw [X.toRingedSpace.mem_basicOpen f x.1 x.2]; rw [← not_iff_not]; rw [not_not]
-  exact (IsLocalRing.residue_ne_zero_iff_isUnit _)
-
-Depends on / 依赖: IsLocalRing, IsLocalRing.residue_ne_zero_iff_isUnit, X.toRingedSpace.mem_basicOpen, mem_basicOpen, not_iff_not, not_not, residue_ne_zero_iff_isUnit, toRingedSpace
+/-
+**AlgebraicGeometry.LocallyRingedSpace.evaluation_eq_zero_iff_notMem_basicOpen**
+ 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace`。
+形式化陈述：evaluation_eq_zero_iff_notMem_basicOpen (x : U) (f : X.presheaf.obj (op U)
+) : X.evaluation x f = 0 ↔ x.val ∉ X.toRingedSpace.basicOpen f
+参数：x : U；f : X.presheaf.obj (op U)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicGeometry.RingedSpace.mem_basicOpen`：mem_basicOpen {U : Opens X}
+ (f : X.presheaf.obj (op U)) (x : X) (hx : x in U) : x in X.basicOpen f ↔ IsUnit
+ (X.presheaf.germ U x hx f)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_iff_not`：not_iff_not : (¬a ↔ ¬b) ↔ (a ↔ b)
+· 使用定理 `Classical.not_not`：∀ {a : Prop}, ¬¬a ↔ a
+· 使用引理 `IsLocalRing.residue_ne_zero_iff_isUnit`：residue_ne_zero_iff_isUnit (x : 
+R) : residue R x != 0 ↔ IsUnit x
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.instIsLocalRingCarrierStalkCommRing
+CatPresheaf`：∀ (X : AlgebraicGeometry.LocallyRingedSpace) (x : ↑X.toTopCat), IsL
+ocalRing ↑(X.presheaf.stalk x)
 -/
 lemma evaluation_eq_zero_iff_notMem_basicOpen (x : U) (f : X.presheaf.obj (op U)) :
     X.evaluation x f = 0 ↔ x.val ∉ X.toRingedSpace.basicOpen f := by
-  rw [X.toRingedSpace.mem_basicOpen f x.1 x.2]; rw [← not_iff_not]; rw [not_not]
+  rw [X.toRingedSpace.mem_basicOpen f x.1 x.2, ← not_iff_not, not_not]
   exact (IsLocalRing.residue_ne_zero_iff_isUnit _)
-
-/--
-lemma `evaluation_ne_zero_iff_mem_basicOpen` / 引理 `evaluation_ne_zero_iff_mem_basicOpen`
-
-English:
-lemma evaluation_ne_zero_iff_mem_basicOpen
-  given: (x : U) (f : X.presheaf.obj (op U))
-  proof: by
-  simp
-
-中文:
-引理 evaluation_ne_zero_iff_mem_basicOpen
-  条件: (x : U) (f : X.presheaf.obj (op U))
-  证明: by
-  simp
+/-
+**AlgebraicGeometry.LocallyRingedSpace.evaluation_ne_zero_iff_mem_basicOpen** 是 
+Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace`。
+形式化陈述：evaluation_ne_zero_iff_mem_basicOpen (x : U) (f : X.presheaf.obj (op U)) :
+ X.evaluation x f != 0 ↔ x.val in X.toRingedSpace.basicOpen f
+参数：x : U；f : X.presheaf.obj (op U)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma evaluation_ne_zero_iff_mem_basicOpen (x : U) (f : X.presheaf.obj (op U)) :
-    X.evaluation x f != 0 ↔ x.val in X.toRingedSpace.basicOpen f := by
+    X.evaluation x f ≠ 0 ↔ x.val ∈ X.toRingedSpace.basicOpen f := by
   simp
-
-/--
-lemma `basicOpen_eq_bot_iff_forall_evaluation_eq_zero` / 引理 `basicOpen_eq_bot_iff_forall_evaluation_eq_zero`
-
-English:
-lemma basicOpen_eq_bot_iff_forall_evaluation_eq_zero
-  given: (f : X.presheaf.obj (op U))
-  proof: by
-  simp only [evaluation_eq_zero_iff_notMem_basicOpen, Subtype.forall]
-  exact ⟨fun h => h ▸ fun a _ hc => hc,
-fun h => eq_bot_iff.mpr fun a ha => h a (X.toRingedSpace.basicOpen_le f ha) ha⟩
-
-@[simp]
-
-中文:
-引理 basicOpen_eq_bot_iff_对任意_evaluation_eq_zero
-  条件: (f : X.presheaf.obj (op U))
-  证明: by
-  simp only [evaluation_eq_zero_iff_notMem_basicOpen, Subtype.forall]
-  exact ⟨fun h => h ▸ fun a _ hc => hc,
-fun h => eq_bot_iff.mpr fun a ha => h a (X.toRingedSpace.basicOpen_le f ha) ha⟩
-
-@[simp]
-
-Depends on / 依赖: Subtype, Subtype.forall, X.toRingedSpace.basicOpen_le, basicOpen_le, eq_bot_iff, eq_bot_iff.mpr, evaluation_eq_zero_iff_notMem_basicOpen, toRingedSpace
+/-
+**AlgebraicGeometry.LocallyRingedSpace.basicOpen_eq_bot_iff_forall_evaluation_eq
+_zero** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace`。
+形式化陈述：basicOpen_eq_bot_iff_forall_evaluation_eq_zero (f : X.presheaf.obj (op U))
+ : X.toRingedSpace.basicOpen f = ⊥ ↔ forall (x : U), X.evaluation x f = 0
+参数：f : X.presheaf.obj (op U)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `eq_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a = ⊥ ↔ a ≤ ⊥
+· 使用定理 `AlgebraicGeometry.RingedSpace.basicOpen_le`：basicOpen_le {U : Opens X} (
+f : X.presheaf.obj (op U)) : X.basicOpen f <= U
 -/
 lemma basicOpen_eq_bot_iff_forall_evaluation_eq_zero (f : X.presheaf.obj (op U)) :
-    X.toRingedSpace.basicOpen f = ⊥ ↔ forall (x : U), X.evaluation x f = 0 := by
+    X.toRingedSpace.basicOpen f = ⊥ ↔ ∀ (x : U), X.evaluation x f = 0 := by
   simp only [evaluation_eq_zero_iff_notMem_basicOpen, Subtype.forall]
-  exact ⟨fun h => h ▸ fun a _ hc => hc,
-fun h => eq_bot_iff.mpr fun a ha => h a (X.toRingedSpace.basicOpen_le f ha) ha⟩
+  exact ⟨fun h ↦ h ▸ fun a _ hc ↦ hc,
+    fun h ↦ eq_bot_iff.mpr <| fun a ha ↦ h a (X.toRingedSpace.basicOpen_le f ha) ha⟩
 
 @[simp]
-/--
-lemma `Γevaluation_eq_zero_iff_notMem_basicOpen` / 引理 `Γevaluation_eq_zero_iff_notMem_basicOpen`
-
-English:
-lemma Γevaluation_eq_zero_iff_notMem_basicOpen
-  given: (x : X) (f : X.presheaf.obj (op ⊤))
-  proof: evaluation_eq_zero_iff_notMem_basicOpen X ⟨x, show x in ⊤ by trivial⟩ f
-
-中文:
-引理 Γevaluation_eq_zero_iff_notMem_basicOpen
-  条件: (x : X) (f : X.presheaf.obj (op ⊤))
-  证明: evaluation_eq_zero_iff_notMem_basicOpen X ⟨x, show x in ⊤ by trivial⟩ f
-
-Depends on / 依赖: evaluation_eq_zero_iff_notMem_basicOpen
+/-
+**AlgebraicGeometry.LocallyRingedSpace.** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeom
+etry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Γevaluation_eq_zero_iff_notMem_basicOpen (x : X) (f : X.presheaf.obj (op ⊤)) :
     X.Γevaluation x f = 0 ↔ x ∉ X.toRingedSpace.basicOpen f :=
-  evaluation_eq_zero_iff_notMem_basicOpen X ⟨x, show x in ⊤ by trivial⟩ f
-
-/--
-lemma `Γevaluation_ne_zero_iff_mem_basicOpen` / 引理 `Γevaluation_ne_zero_iff_mem_basicOpen`
-
-English:
-lemma Γevaluation_ne_zero_iff_mem_basicOpen
-  given: (x : X) (f : X.presheaf.obj (op ⊤))
-  proof: evaluation_ne_zero_iff_mem_basicOpen X ⟨x, show x in ⊤ by trivial⟩ f
-
-中文:
-引理 Γevaluation_ne_zero_iff_mem_basicOpen
-  条件: (x : X) (f : X.presheaf.obj (op ⊤))
-  证明: evaluation_ne_zero_iff_mem_basicOpen X ⟨x, show x in ⊤ by trivial⟩ f
-
-Depends on / 依赖: evaluation_ne_zero_iff_mem_basicOpen
+  evaluation_eq_zero_iff_notMem_basicOpen X ⟨x, show x ∈ ⊤ by trivial⟩ f
+/-
+**AlgebraicGeometry.LocallyRingedSpace.** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeom
+etry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Γevaluation_ne_zero_iff_mem_basicOpen (x : X) (f : X.presheaf.obj (op ⊤)) :
-    X.Γevaluation x f != 0 ↔ x in X.toRingedSpace.basicOpen f :=
-  evaluation_ne_zero_iff_mem_basicOpen X ⟨x, show x in ⊤ by trivial⟩ f
+    X.Γevaluation x f ≠ 0 ↔ x ∈ X.toRingedSpace.basicOpen f :=
+  evaluation_ne_zero_iff_mem_basicOpen X ⟨x, show x ∈ ⊤ by trivial⟩ f
 
 variable {X Y : LocallyRingedSpace.{u}} (f : X ⟶ Y) (x : X)
 
-/--
-Definition of `residueFieldMap` / `residueFieldMap` 的定义
+/-- If `X ⟶ Y` is a morphism of locally ringed spaces and `x` a point of `X`, we obtain
+a morphism of residue fields in the other direction. -/
+/-
+**AlgebraicGeometry.LocallyRingedSpace.residueFieldMap** 是 Mathlib 中的一个定义，位于命名空间
+ `AlgebraicGeometry.LocallyRingedSpace`。
+形式化陈述：residueFieldMap (x : X) : Y.residueField (f.base x) ⟶ X.residueField x
+参数：x : X。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.instIsLocalRingCarrierStalkCommRing
+CatPresheaf`：∀ (X : AlgebraicGeometry.LocallyRingedSpace) (x : ↑X.toTopCat), IsL
+ocalRing ↑(X.presheaf.stalk x)
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.isLocalHomValStalkMap`：isLocalHomVa
+lStalkMap {X Y : LocallyRingedSpace.{u}} (f : Hom X Y) (x : X) : IsLocalHom (f.s
+talkMap x).hom
 
-English:
-definition residueFieldMap
-  signature: (x : X)
-  body: CommRingCat.ofHom (IsLocalRing.ResidueField.map (f.stalkMap x).hom)
-
-@[reassoc]
-
-中文:
-定义 residueFieldMap
-  签名: (x : X)
-  定义体: CommRingCat.ofHom (IsLocalRing.ResidueField.map (f.stalkMap x).hom)
-
-@[reassoc]
-
-Depends on / 依赖: CommRingCat, CommRingCat.ofHom, IsLocalRing, IsLocalRing.ResidueField.map, ResidueField, f.stalkMap, stalkMap
+--- 原说明 ---
+If `X ⟶ Y` is a morphism of locally ringed spaces and `x` a point of `X`, we obt
+ain
+a morphism of residue fields in the other direction.
 -/
 def residueFieldMap (x : X) : Y.residueField (f.base x) ⟶ X.residueField x :=
   CommRingCat.ofHom (IsLocalRing.ResidueField.map (f.stalkMap x).hom)
 
 @[reassoc]
-/--
-lemma `residue_comp_residueFieldMap_eq_stalkMap_comp_residue` / 引理 `residue_comp_residueFieldMap_eq_stalkMap_comp_residue`
-
-English:
-lemma residue_comp_residueFieldMap_eq_stalkMap_comp_residue
-  given: (x : X)
-  proof: by
-  simp [residueFieldMap]
-  rfl
-
-@[simp]
-
-中文:
-引理 residue_comp_residueFieldMap_eq_stalkMap_comp_residue
-  条件: (x : X)
-  证明: by
-  simp [residueFieldMap]
-  rfl
-
-@[simp]
-
-Depends on / 依赖: residueFieldMap
+/-
+**AlgebraicGeometry.LocallyRingedSpace.residue_comp_residueFieldMap_eq_stalkMap_
+comp_residue** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace`。
+形式化陈述：residue_comp_residueFieldMap_eq_stalkMap_comp_residue (x : X) : Y.residue 
+_ ≫ residueFieldMap f x = f.stalkMap x ≫ X.residue _
+参数：x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.instIsLocalRingCarrierStalkCommRing
+CatPresheaf`：∀ (X : AlgebraicGeometry.LocallyRingedSpace) (x : ↑X.toTopCat), IsL
+ocalRing ↑(X.presheaf.stalk x)
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.isLocalHomValStalkMap`：isLocalHomVa
+lStalkMap {X Y : LocallyRingedSpace.{u}} (f : Hom X Y) (x : X) : IsLocalHom (f.s
+talkMap x).hom
 -/
 lemma residue_comp_residueFieldMap_eq_stalkMap_comp_residue (x : X) :
     Y.residue _ ≫ residueFieldMap f x = f.stalkMap x ≫ X.residue _ := by
@@ -307,26 +287,33 @@ lemma residue_comp_residueFieldMap_eq_stalkMap_comp_residue (x : X) :
   rfl
 
 @[simp]
-/--
-lemma `residueFieldMap_id` / 引理 `residueFieldMap_id`
-
-English:
-lemma residueFieldMap_id
-  given: (x : X)
-  proof: by
-  ext : 1
-  simp only [residueFieldMap, stalkMap_id]
-  apply IsLocalRing.ResidueField.map_id
-
-中文:
-引理 residueFieldMap_id
-  条件: (x : X)
-  证明: by
-  ext : 1
-  simp only [residueFieldMap, stalkMap_id]
-  apply IsLocalRing.ResidueField.map_id
-
-Depends on / 依赖: IsLocalRing, IsLocalRing.ResidueField.map_id, ResidueField, map_id, residueFieldMap, stalkMap_id
+/-
+**AlgebraicGeometry.LocallyRingedSpace.residueFieldMap_id** 是 Mathlib 中的一个引理，位于命
+名空间 `AlgebraicGeometry.LocallyRingedSpace`。
+形式化陈述：residueFieldMap_id (x : X) : residueFieldMap (𝟙 X) x = 𝟙 (X.residueField x
+)
+参数：x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CommRingCat.hom_ext`：hom_ext {R S : CommRingCat} {f g : R ⟶ S} (hf : f.h
+om = g.hom) : f = g
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.instIsLocalRingCarrierStalkCommRing
+CatPresheaf`：∀ (X : AlgebraicGeometry.LocallyRingedSpace) (x : ↑X.toTopCat), IsL
+ocalRing ↑(X.presheaf.stalk x)
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.isLocalHomValStalkMap`：isLocalHomVa
+lStalkMap {X Y : LocallyRingedSpace.{u}} (f : Hom X Y) (x : X) : IsLocalHom (f.s
+talkMap x).hom
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AlgebraicGeometry.LocallyRingedSpace.stalkMap_id`：stalkMap_id (X : Local
+lyRingedSpace.{u}) (x : X) : (𝟙 X : X ⟶ X).stalkMap x = 𝟙 (X.presheaf.stalk x)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `IsLocalRing.ResidueField.map.congr_simp`：∀ {R : Type u_1} {S : Type u_2}
+ [inst : CommRing R] [inst_1 : IsLocalRing R] [inst_2 : CommRing S]   [inst_3 : 
+IsLocalRing S] (f f_1 : R →+*…
+· 使用定理 `IsLocalRing.ResidueField.map_id`：map_id : IsLocalRing.ResidueField.map (
+RingHom.id R) = RingHom.id (IsLocalRing.ResidueField R)
 -/
 lemma residueFieldMap_id (x : X) :
     residueFieldMap (𝟙 X) x = 𝟙 (X.residueField x) := by
@@ -336,26 +323,34 @@ lemma residueFieldMap_id (x : X) :
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `residueFieldMap_comp` / 引理 `residueFieldMap_comp`
-
-English:
-lemma residueFieldMap_comp
-  given: {Z : LocallyRingedSpace.{u}} (g : Y ⟶ Z) (x : X)
-  proof: by
-  ext : 1
-  simp only [residueFieldMap, stalkMap_comp]
-  apply IsLocalRing.ResidueField.map_comp (Hom.stalkMap g (f.base x)).hom (Hom.stalkMap f x).hom
-
-中文:
-引理 residueFieldMap_comp
-  条件: {Z : LocallyRinged空间.{u}} (g : Y ⟶ Z) (x : X)
-  证明: by
-  ext : 1
-  simp only [residueFieldMap, stalkMap_comp]
-  apply IsLocalRing.ResidueField.map_comp (Hom.stalkMap g (f.base x)).hom (Hom.stalkMap f x).hom
-
-Depends on / 依赖: Hom.stalkMap, IsLocalRing, IsLocalRing.ResidueField.map_comp, ResidueField, f.base, map_comp, residueFieldMap, stalkMap, stalkMap_comp
+/-
+**AlgebraicGeometry.LocallyRingedSpace.residueFieldMap_comp** 是 Mathlib 中的一个引理，位
+于命名空间 `AlgebraicGeometry.LocallyRingedSpace`。
+形式化陈述：residueFieldMap_comp {Z : LocallyRingedSpace.{u}} (g : Y ⟶ Z) (x : X) : re
+sidueFieldMap (f ≫ g) x = residueFieldMap g (f.base x) ≫ residueFieldMap f x
+参数：g : Y ⟶ Z；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CommRingCat.hom_ext`：hom_ext {R S : CommRingCat} {f g : R ⟶ S} (hf : f.h
+om = g.hom) : f = g
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.instIsLocalRingCarrierStalkCommRing
+CatPresheaf`：∀ (X : AlgebraicGeometry.LocallyRingedSpace) (x : ↑X.toTopCat), IsL
+ocalRing ↑(X.presheaf.stalk x)
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.isLocalHomValStalkMap`：isLocalHomVa
+lStalkMap {X Y : LocallyRingedSpace.{u}} (f : Hom X Y) (x : X) : IsLocalHom (f.s
+talkMap x).hom
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AlgebraicGeometry.LocallyRingedSpace.stalkMap_comp`：stalkMap_comp (x : X
+) : (f ≫ g : X ⟶ Z).stalkMap x = g.stalkMap (f.base x) ≫ f.stalkMap x
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `IsLocalRing.ResidueField.map.congr_simp`：∀ {R : Type u_1} {S : Type u_2}
+ [inst : CommRing R] [inst_1 : IsLocalRing R] [inst_2 : CommRing S]   [inst_3 : 
+IsLocalRing S] (f f_1 : R →+*…
+· 使用定理 `IsLocalRing.ResidueField.map_comp`：map_comp (f : T ->+* R) (g : R ->+* S
+) [IsLocalHom f] [IsLocalHom g] : IsLocalRing.ResidueField.map (g.comp f) = (IsL
+ocalRing.ResidueField.m…
 -/
 lemma residueFieldMap_comp {Z : LocallyRingedSpace.{u}} (g : Y ⟶ Z) (x : X) :
     residueFieldMap (f ≫ g) x = residueFieldMap g (f.base x) ≫ residueFieldMap f x := by
@@ -365,36 +360,41 @@ lemma residueFieldMap_comp {Z : LocallyRingedSpace.{u}} (g : Y ⟶ Z) (x : X) :
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc]
-/--
-lemma `evaluation_naturality` / 引理 `evaluation_naturality`
-
-English:
-lemma evaluation_naturality
-  given: {V : Opens Y} (x : (Opens.map f.base).obj V)
-  proof: by
-  dsimp only [LocallyRingedSpace.evaluation,
-    LocallyRingedSpace.residueFieldMap]
-  rw [Category.assoc]
-  ext a
-  simp only [CommRingCat.comp_apply]
-  erw [IsLocalRing.ResidueField.map_residue]
-  rw [LocallyRingedSpace.stalkMap_germ_apply]
-  rfl
-
-中文:
-引理 evaluation_naturality
-  条件: {V : Opens Y} (x : (Opens.map f.base).obj V)
-  证明: by
-  dsimp only [LocallyRingedSpace.evaluation,
-    LocallyRingedSpace.residueFieldMap]
-  rw [Category.assoc]
-  ext a
-  simp only [CommRingCat.comp_apply]
-  erw [IsLocalRing.ResidueField.map_residue]
-  rw [LocallyRingedSpace.stalkMap_germ_apply]
-  rfl
-
-Depends on / 依赖: Category, Category.assoc, CommRingCat, CommRingCat.comp_apply, IsLocalRing, IsLocalRing.ResidueField.map_residue, LocallyRingedSpace, LocallyRingedSpace.evaluation, LocallyRingedSpace.residueFieldMap, LocallyRingedSpace.stalkMap_germ_apply, ResidueField, comp_apply, evaluation, map_residue, residueFieldMap, stalkMap_germ_apply
+/-
+**AlgebraicGeometry.LocallyRingedSpace.evaluation_naturality** 是 Mathlib 中的一个引理，
+位于命名空间 `AlgebraicGeometry.LocallyRingedSpace`。
+形式化陈述：evaluation_naturality {V : Opens Y} (x : (Opens.map f.base).obj V) : Y.eva
+luation ⟨f.base x, x.property⟩ ≫ residueFieldMap f x.val = f.c.app (op V) ≫ X.ev
+aluation x
+参数：x : (Opens.map f.base).obj V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.instIsLocalRingCarrierStalkCommRing
+CatPresheaf`：∀ (X : AlgebraicGeometry.LocallyRingedSpace) (x : ↑X.toTopCat), IsL
+ocalRing ↑(X.presheaf.stalk x)
+· 使用定理 `AlgebraicGeometry.LocallyRingedSpace.isLocalHomValStalkMap`：isLocalHomVa
+lStalkMap {X Y : LocallyRingedSpace.{u}} (f : Hom X Y) (x : X) : IsLocalHom (f.s
+talkMap x).hom
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CommRingCat.hom_ext`：hom_ext {R S : CommRingCat} {f g : R ⟶ S} (hf : f.h
+om = g.hom) : f = g
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `CommRingCat.comp_apply`：comp_apply {R S T : CommRingCat} (f : R ⟶ S) (g 
+: S ⟶ T) (r : R) : (f ≫ g) r = g (f r)
+· 使用定理 `IsLocalRing.ResidueField.map_residue`：map_residue (f : R ->+* S) [IsLoca
+lHom f] (r : R) : ResidueField.map f (residue R r) = residue S (f r)
+· 使用引理 `AlgebraicGeometry.LocallyRingedSpace.stalkMap_germ_apply`：stalkMap_germ_
+apply (U : Opens Y) (x : X) (hx : f.base x in U) (y) : f.stalkMap x (Y.presheaf.
+germ U (f.base x) hx y) = X.presheaf.germ ((Op…
 -/
 lemma evaluation_naturality {V : Opens Y} (x : (Opens.map f.base).obj V) :
     Y.evaluation ⟨f.base x, x.property⟩ ≫ residueFieldMap f x.val =
@@ -407,25 +407,24 @@ lemma evaluation_naturality {V : Opens Y} (x : (Opens.map f.base).obj V) :
   erw [IsLocalRing.ResidueField.map_residue]
   rw [LocallyRingedSpace.stalkMap_germ_apply]
   rfl
-
-/--
-lemma `evaluation_naturality_apply` / 引理 `evaluation_naturality_apply`
-
-English:
-lemma evaluation_naturality_apply
-  statement: {V : Opens Y} (x : (Opens.map f.base).obj V)
-  proof: by
-  simpa using! congrFun (congrArg (DFunLike.coe ∘ CommRingCat.Hom.hom) <|
-    evaluation_naturality f x) a
-
-中文:
-引理 evaluation_naturality_apply
-  结论: {V : Opens Y} (x : (Opens.map f.base).obj V)
-  证明: by
-  simpa using! congrFun (congrArg (DFunLike.coe ∘ CommRingCat.Hom.hom) <|
-    evaluation_naturality f x) a
-
-Depends on / 依赖: CommRingCat, CommRingCat.Hom.hom, DFunLike, DFunLike.coe, evaluation_naturality
+/-
+**AlgebraicGeometry.LocallyRingedSpace.evaluation_naturality_apply** 是 Mathlib 中
+的一个引理，位于命名空间 `AlgebraicGeometry.LocallyRingedSpace`。
+形式化陈述：evaluation_naturality_apply {V : Opens Y} (x : (Opens.map f.base).obj V) (
+a : Y.presheaf.obj (op V)) : residueFieldMap f x.val (Y.evaluation ⟨f.base x, x.
+property⟩ a) = X.evaluation x (f.c.app (op V) a)
+参数：x : (Opens.map f.base).obj V；a : Y.presheaf.obj (op V)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `AlgebraicGeometry.LocallyRingedSpace.evaluation_naturality`：evaluation_n
+aturality {V : Opens Y} (x : (Opens.map f.base).obj V) : Y.evaluation ⟨f.base x,
+ x.property⟩ ≫ residueFieldMap f x.val = f.c.app…
 -/
 lemma evaluation_naturality_apply {V : Opens Y} (x : (Opens.map f.base).obj V)
     (a : Y.presheaf.obj (op V)) :
@@ -436,40 +435,19 @@ lemma evaluation_naturality_apply {V : Opens Y} (x : (Opens.map f.base).obj V)
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `Γevaluation_naturality` / 引理 `Γevaluation_naturality`
-
-English:
-lemma Γevaluation_naturality
-  given: (x : X)
-  proof: evaluation_naturality f ⟨x, by simp only [Opens.map_top]; trivial⟩
-
-中文:
-引理 Γevaluation_naturality
-  条件: (x : X)
-  证明: evaluation_naturality f ⟨x, by simp only [Opens.map_top]; trivial⟩
-
-Depends on / 依赖: Opens.map_top, evaluation_naturality, map_top
+/-
+**AlgebraicGeometry.LocallyRingedSpace.** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeom
+etry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Γevaluation_naturality (x : X) :
     Y.Γevaluation (f.base x) ≫ residueFieldMap f x =
       f.c.app (op ⊤) ≫ X.Γevaluation x :=
   evaluation_naturality f ⟨x, by simp only [Opens.map_top]; trivial⟩
-
-/--
-lemma `Γevaluation_naturality_apply` / 引理 `Γevaluation_naturality_apply`
-
-English:
-lemma Γevaluation_naturality_apply
-  given: (x : X) (a : Y.presheaf.obj (op ⊤))
-  proof: evaluation_naturality_apply f ⟨x, by simp only [Opens.map_top]; trivial⟩ a
-
-中文:
-引理 Γevaluation_naturality_apply
-  条件: (x : X) (a : Y.presheaf.obj (op ⊤))
-  证明: evaluation_naturality_apply f ⟨x, by simp only [Opens.map_top]; trivial⟩ a
-
-Depends on / 依赖: Opens.map_top, evaluation_naturality_apply, map_top
+/-
+**AlgebraicGeometry.LocallyRingedSpace.** 是 Mathlib 中的一个引理，位于命名空间 `AlgebraicGeom
+etry.LocallyRingedSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Γevaluation_naturality_apply (x : X) (a : Y.presheaf.obj (op ⊤)) :
     residueFieldMap f x (Y.Γevaluation (f.base x) a) =
@@ -479,3 +457,4 @@ lemma Γevaluation_naturality_apply (x : X) (a : Y.presheaf.obj (op ⊤)) :
 end LocallyRingedSpace
 
 end AlgebraicGeometry
+

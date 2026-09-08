@@ -41,133 +41,102 @@ variable {α : Type*} (m : MeasurableSpace α) {s t : Set α}
 /-- The `MeasurableSpace` of sets which are measurable with respect to a given σ-algebra `m`
 on `α`, modulo a given σ-filter `l` on `α`. -/
 @[instance_reducible]
-/--
-Definition of `eventuallyMeasurableSpace` / `eventuallyMeasurableSpace` 的定义
+/-
+**eventuallyMeasurableSpace** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：eventuallyMeasurableSpace (l : Filter α) [CountableInterFilter l] : Measur
+ableSpace α where MeasurableSet' s
+参数：l : Filter α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eventuallyMeasurableSpace
-  signature: (l : Filter α) [CountableInterFilter l]
-  body: exists t, MeasurableSet t ∧ s =ᶠ[l] t
-  measurableSet_empty := ⟨∅, MeasurableSet.empty, EventuallyEq.refl _ _ ⟩
-  measurableSet_compl := fun _ ⟨t, ht, hts⟩ => ⟨tᶜ, ht.compl, hts.compl⟩
-  measurableSet_iUnion s hs := by
-    choose t ht hts using hs
-    exact ⟨⋃ i, t i, MeasurableSet.iUnion ht, .countable_iUnion hts⟩
-
-中文:
-定义 eventuallyMeasurableSpace
-  签名: (l : 滤子 α) [余untable整数erFilter l]
-  定义体: exists t, MeasurableSet t ∧ s =ᶠ[l] t
-  measurableSet_empty := ⟨∅, MeasurableSet.empty, EventuallyEq.refl _ _ ⟩
-  measurableSet_compl := fun _ ⟨t, ht, hts⟩ => ⟨tᶜ, ht.compl, hts.compl⟩
-  measurableSet_iUnion s hs := by
-    choose t ht hts using hs
-    exact ⟨⋃ i, t i, MeasurableSet.iUnion ht, .countable_iUnion hts⟩
-
-Depends on / 依赖: MeasurableSet
+--- 原说明 ---
+The `MeasurableSpace` of sets which are measurable with respect to a given σ-alg
+ebra `m`
+on `α`, modulo a given σ-filter `l` on `α`.
 -/
 def eventuallyMeasurableSpace (l : Filter α) [CountableInterFilter l] : MeasurableSpace α where
-  MeasurableSet' s := exists t, MeasurableSet t ∧ s =ᶠ[l] t
+  MeasurableSet' s := ∃ t, MeasurableSet t ∧ s =ᶠ[l] t
   measurableSet_empty := ⟨∅, MeasurableSet.empty, EventuallyEq.refl _ _ ⟩
   measurableSet_compl := fun _ ⟨t, ht, hts⟩ => ⟨tᶜ, ht.compl, hts.compl⟩
   measurableSet_iUnion s hs := by
     choose t ht hts using hs
     exact ⟨⋃ i, t i, MeasurableSet.iUnion ht, .countable_iUnion hts⟩
 
-/--
-Definition of `EventuallyMeasurableSet` / `EventuallyMeasurableSet` 的定义
+/-- We say a set `s` is an `EventuallyMeasurableSet` with respect to a given
+σ-algebra `m` and σ-filter `l` if it differs from a set in `m` by a set in
+the dual ideal of `l`. -/
+/-
+**EventuallyMeasurableSet** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：EventuallyMeasurableSet (l : Filter α) [CountableInterFilter l] (s : Set α
+) : Prop
+参数：l : Filter α；s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition EventuallyMeasurableSet
-  signature: (l : Filter α) [CountableInterFilter l] (s : Set α)
-  body: @MeasurableSet _ (eventuallyMeasurableSpace m l) s
-
-中文:
-定义 EventuallyMeasurableSet
-  签名: (l : 滤子 α) [余untable整数erFilter l] (s : 集合 α)
-  定义体: @MeasurableSet _ (eventuallyMeasurableSpace m l) s
-
-Depends on / 依赖: MeasurableSet, eventuallyMeasurableSpace
+--- 原说明 ---
+We say a set `s` is an `EventuallyMeasurableSet` with respect to a given
+σ-algebra `m` and σ-filter `l` if it differs from a set in `m` by a set in
+the dual ideal of `l`.
 -/
 def EventuallyMeasurableSet (l : Filter α) [CountableInterFilter l] (s : Set α) : Prop :=
   @MeasurableSet _ (eventuallyMeasurableSpace m l) s
 
 variable {l : Filter α} [CountableInterFilter l]
 variable {m}
-
-/--
-theorem `MeasurableSet.eventuallyMeasurableSet` / 定理 `MeasurableSet.eventuallyMeasurableSet`
-
-English:
-theorem MeasurableSet.eventuallyMeasurableSet
-  given: (hs : MeasurableSet s)
-  proof: ⟨s, hs, EventuallyEq.refl _ _⟩
-
-中文:
-定理 可测集.eventuallyMeasurableSet
-  条件: (hs : 可测集 s)
-  证明: ⟨s, hs, EventuallyEq.refl _ _⟩
-
-Depends on / 依赖: EventuallyEq, EventuallyEq.refl
+/-
+**MeasurableSet.eventuallyMeasurableSet** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MeasurableSet.eventuallyMeasurableSet (hs : MeasurableSet s) : EventuallyM
+easurableSet m l s
+参数：hs : MeasurableSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.EventuallyEq.refl`：∀ {α : Type u} {β : Type v} (l : Filter α) (f 
+: α → β), f =ᶠ[l] f
 -/
 theorem MeasurableSet.eventuallyMeasurableSet (hs : MeasurableSet s) :
     EventuallyMeasurableSet m l s :=
   ⟨s, hs, EventuallyEq.refl _ _⟩
-
-/--
-theorem `le_eventuallyMeasurableSpace` / 定理 `le_eventuallyMeasurableSpace`
-
-English:
-theorem le_eventuallyMeasurableSpace
-  statement: m <= eventuallyMeasurableSpace m l
-  proof: fun _ hs => hs.eventuallyMeasurableSet
-
-中文:
-定理 le_eventuallyMeasurableSpace
-  结论: m <= eventuallyMeasurableSpace m l
-  证明: fun _ hs => hs.eventuallyMeasurableSet
-
-Depends on / 依赖: eventuallyMeasurableSet, hs.eventuallyMeasurableSet
+/-
+**le_eventuallyMeasurableSpace** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_eventuallyMeasurableSpace : m <= eventuallyMeasurableSpace m l
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.eventuallyMeasurableSet`：MeasurableSet.eventuallyMeasurabl
+eSet (hs : MeasurableSet s) : EventuallyMeasurableSet m l s
 -/
-theorem le_eventuallyMeasurableSpace : m <= eventuallyMeasurableSpace m l :=
+theorem le_eventuallyMeasurableSpace : m ≤ eventuallyMeasurableSpace m l :=
   fun _ hs => hs.eventuallyMeasurableSet
-
-/--
-theorem `eventuallyMeasurableSet_of_mem_filter` / 定理 `eventuallyMeasurableSet_of_mem_filter`
-
-English:
-theorem eventuallyMeasurableSet_of_mem_filter
-  given: (hs : s in l)
-  statement: EventuallyMeasurableSet m l s
-  proof: ⟨univ, MeasurableSet.univ, eventuallyEq_univ.mpr hs⟩
-
-中文:
-定理 eventuallyMeasurableSet_of_mem_filter
-  条件: (hs : s in l)
-  结论: EventuallyMeasurableSet m l s
-  证明: ⟨univ, MeasurableSet.univ, eventuallyEq_univ.mpr hs⟩
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.univ, eventuallyEq_univ, eventuallyEq_univ.mpr
+/-
+**eventuallyMeasurableSet_of_mem_filter** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：eventuallyMeasurableSet_of_mem_filter (hs : s in l) : EventuallyMeasurable
+Set m l s
+参数：hs : s in l。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.univ`：∀ {α : Type u_1} {m : MeasurableSpace α}, Measurable
+Set Set.univ
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.eventuallyEq_univ`：eventuallyEq_univ {s : Set α} {l : Filter α} :
+ s =ᶠ[l] univ ↔ s in l
 -/
-theorem eventuallyMeasurableSet_of_mem_filter (hs : s in l) : EventuallyMeasurableSet m l s :=
+theorem eventuallyMeasurableSet_of_mem_filter (hs : s ∈ l) : EventuallyMeasurableSet m l s :=
   ⟨univ, MeasurableSet.univ, eventuallyEq_univ.mpr hs⟩
 
-/--
-theorem `EventuallyMeasurableSet.congr` / 定理 `EventuallyMeasurableSet.congr`
+/-- A set which is `EventuallyEq` to an `EventuallyMeasurableSet`
+is an `EventuallyMeasurableSet`. -/
+/-
+**EventuallyMeasurableSet.congr** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：EventuallyMeasurableSet.congr (ht : EventuallyMeasurableSet m l t) (hst : 
+s =ᶠ[l] t) : EventuallyMeasurableSet m l s
+参数：ht : EventuallyMeasurableSet m l t；hst : s =ᶠ[l] t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.EventuallyEq.trans`：∀ {α : Type u} {β : Type v} {l : Filter α} {f
+ g h : α → β}, f =ᶠ[l] g → g =ᶠ[l] h → f =ᶠ[l] h
 
-English:
-theorem EventuallyMeasurableSet.congr
-  proof: by
-  rcases ht with ⟨t', ht', htt'⟩
-  exact ⟨t', ht', hst.trans htt'⟩
-
-中文:
-定理 EventuallyMeasurableSet.congr
-  证明: by
-  rcases ht with ⟨t', ht', htt'⟩
-  exact ⟨t', ht', hst.trans htt'⟩
-
-Depends on / 依赖: hst.trans
+--- 原说明 ---
+A set which is `EventuallyEq` to an `EventuallyMeasurableSet`
+is an `EventuallyMeasurableSet`.
 -/
 theorem EventuallyMeasurableSet.congr
     (ht : EventuallyMeasurableSet m l t) (hst : s =ᶠ[l] t) : EventuallyMeasurableSet m l s := by
@@ -176,24 +145,20 @@ theorem EventuallyMeasurableSet.congr
 
 section instances
 
-/--
-Instance `eventuallyMeasurableSingleton` / 实例 `eventuallyMeasurableSingleton`
-
-English:
-instance eventuallyMeasurableSingleton
-  signature: [MeasurableSingletonClass α]
-  body: @MeasurableSingletonClass.mk _ (_) fun x => (MeasurableSet.singleton x).eventuallyMeasurableSet
-
-中文:
-实例 eventuallyMeasurableSingleton
-  签名: [MeasurableSingleton类 α]
-  定义体: @MeasurableSingletonClass.mk _ (_) fun x => (MeasurableSet.singleton x).eventuallyMeasurableSet
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.singleton, MeasurableSingletonClass, MeasurableSingletonClass.mk, eventuallyMeasurableSet, singleton
+/-
+**eventuallyMeasurableSingleton** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：eventuallyMeasurableSingleton [MeasurableSingletonClass α] : @MeasurableSi
+ngletonClass α (eventuallyMeasurableSpace m l)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableSet.eventuallyMeasurableSet`：MeasurableSet.eventuallyMeasurabl
+eSet (hs : MeasurableSet s) : EventuallyMeasurableSet m l s
+· 使用引理 `MeasurableSet.singleton`：MeasurableSet.singleton [MeasurableSpace α] [Me
+asurableSingletonClass α] (a : α) : MeasurableSet {a}
 -/
 instance eventuallyMeasurableSingleton [MeasurableSingletonClass α] :
     @MeasurableSingletonClass α (eventuallyMeasurableSpace m l) :=
-@MeasurableSingletonClass.mk _ (_) fun x => (MeasurableSet.singleton x).eventuallyMeasurableSet
+  @MeasurableSingletonClass.mk _ (_) <| fun x => (MeasurableSet.singleton x).eventuallyMeasurableSet
 
 end instances
 
@@ -203,99 +168,105 @@ open Function
 
 variable (m l) {β γ : Type*} [MeasurableSpace β] [MeasurableSpace γ]
 
-/--
-Definition of `EventuallyMeasurable` / `EventuallyMeasurable` 的定义
+/-- We say a function is `EventuallyMeasurable` with respect to a given
+σ-algebra `m` and σ-filter `l` if the preimage of any measurable set is equal to some
+`m`-measurable set modulo `l`.
+Warning: This is not always the same as being equal to some `m`-measurable function modulo `l`.
+In general it is weaker. See `Measurable.eventuallyMeasurable_of_eventuallyEq`.
+*TODO*: Add lemmas about when these are equivalent. -/
+/-
+**EventuallyMeasurable** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：EventuallyMeasurable (f : α -> β) : Prop
+参数：f : α -> β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition EventuallyMeasurable
-  signature: (f : α -> β)
-  body: @Measurable _ _ (eventuallyMeasurableSpace m l) _ f
-
-中文:
-定义 EventuallyMeasurable
-  签名: (f : α -> β)
-  定义体: @Measurable _ _ (eventuallyMeasurableSpace m l) _ f
-
-Depends on / 依赖: Measurable, eventuallyMeasurableSpace
+--- 原说明 ---
+We say a function is `EventuallyMeasurable` with respect to a given
+σ-algebra `m` and σ-filter `l` if the preimage of any measurable set is equal to
+ some
+`m`-measurable set modulo `l`.
+Warning: This is not always the same as being equal to some `m`-measurable funct
+ion modulo `l`.
+In general it is weaker. See `Measurable.eventuallyMeasurable_of_eventuallyEq`.
+*TODO*: Add lemmas about when these are equivalent.
 -/
-def EventuallyMeasurable (f : α -> β) : Prop := @Measurable _ _ (eventuallyMeasurableSpace m l) _ f
+def EventuallyMeasurable (f : α → β) : Prop := @Measurable _ _ (eventuallyMeasurableSpace m l) _ f
 
-variable {m l} {f g : α -> β} {h : β -> γ}
-
-/--
-theorem `Measurable.eventuallyMeasurable` / 定理 `Measurable.eventuallyMeasurable`
-
-English:
-theorem Measurable.eventuallyMeasurable
-  given: (hf : Measurable f)
-  statement: EventuallyMeasurable m l f
-  proof: hf.le le_eventuallyMeasurableSpace
-
-中文:
-定理 可测.eventuallyMeasurable
-  条件: (hf : 可测 f)
-  结论: EventuallyMeasurable m l f
-  证明: hf.le le_eventuallyMeasurableSpace
-
-Depends on / 依赖: hf.le, le_eventuallyMeasurableSpace
+variable {m l} {f g : α → β} {h : β → γ}
+/-
+**Measurable.eventuallyMeasurable** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.eventuallyMeasurable (hf : Measurable f) : EventuallyMeasurable
+ m l f
+参数：hf : Measurable f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.le`：Measurable.le {α} {m m0 : MeasurableSpace α} {_ : Measura
+bleSpace β} (hm : m <= m0) {f : α -> β} (hf : Measurable[m] f) : Measurable[m0] 
+f
+· 使用定理 `le_eventuallyMeasurableSpace`：le_eventuallyMeasurableSpace : m <= eventu
+allyMeasurableSpace m l
 -/
 theorem Measurable.eventuallyMeasurable (hf : Measurable f) : EventuallyMeasurable m l f :=
   hf.le le_eventuallyMeasurableSpace
-
-/--
-theorem `Measurable.comp_eventuallyMeasurable` / 定理 `Measurable.comp_eventuallyMeasurable`
-
-English:
-theorem Measurable.comp_eventuallyMeasurable
-  given: (hh : Measurable h) (hf : EventuallyMeasurable m l f)
-  proof: hh.comp hf
-
-中文:
-定理 可测.comp_eventuallyMeasurable
-  条件: (hh : 可测 h) (hf : EventuallyMeasurable m l f)
-  证明: hh.comp hf
-
-Depends on / 依赖: hh.comp
+/-
+**Measurable.comp_eventuallyMeasurable** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.comp_eventuallyMeasurable (hh : Measurable h) (hf : EventuallyM
+easurable m l f) : EventuallyMeasurable m l (h ∘ f)
+参数：hh : Measurable h；hf : EventuallyMeasurable m l f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Measurable.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x : Mea
+surableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β → γ
+} {f …
 -/
 theorem Measurable.comp_eventuallyMeasurable (hh : Measurable h) (hf : EventuallyMeasurable m l f) :
     EventuallyMeasurable m l (h ∘ f) :=
   hh.comp hf
 
-/--
-theorem `EventuallyMeasurable.congr` / 定理 `EventuallyMeasurable.congr`
+/-- A function which is `EventuallyEq` to some `EventuallyMeasurable` function
+is `EventuallyMeasurable`. -/
+/-
+**EventuallyMeasurable.congr** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：EventuallyMeasurable.congr (hf : EventuallyMeasurable m l f) (hgf : g =ᶠ[l
+] f) : EventuallyMeasurable m l g
+参数：hf : EventuallyMeasurable m l f；hgf : g =ᶠ[l] f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EventuallyMeasurableSet.congr`：EventuallyMeasurableSet.congr (ht : Event
+uallyMeasurableSet m l t) (hst : s =ᶠ[l] t) : EventuallyMeasurableSet m l s
+· 使用定理 `Filter.EventuallyEq.preimage`：∀ {α : Type u} {β : Type v} {l : Filter α}
+ {f g : α → β}, f =ᶠ[l] g → ∀ (s : Set β), f ⁻¹' s =ᶠ[l] g ⁻¹' s
 
-English:
-theorem EventuallyMeasurable.congr
-  proof: fun _ hs => EventuallyMeasurableSet.congr (hf hs)
-    (hgf.preimage _)
-
-中文:
-定理 EventuallyMeasurable.congr
-  证明: fun _ hs => EventuallyMeasurableSet.congr (hf hs)
-    (hgf.preimage _)
-
-Depends on / 依赖: EventuallyMeasurableSet, EventuallyMeasurableSet.congr, hgf.preimage, preimage
+--- 原说明 ---
+A function which is `EventuallyEq` to some `EventuallyMeasurable` function
+is `EventuallyMeasurable`.
 -/
 theorem EventuallyMeasurable.congr
     (hf : EventuallyMeasurable m l f) (hgf : g =ᶠ[l] f) : EventuallyMeasurable m l g :=
   fun _ hs => EventuallyMeasurableSet.congr (hf hs)
     (hgf.preimage _)
 
-/--
-theorem `Measurable.eventuallyMeasurable_of_eventuallyEq` / 定理 `Measurable.eventuallyMeasurable_of_eventuallyEq`
+/-- A function which is `EventuallyEq` to some `Measurable` function is `EventuallyMeasurable`. -/
+/-
+**Measurable.eventuallyMeasurable_of_eventuallyEq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Measurable.eventuallyMeasurable_of_eventuallyEq (hf : Measurable f) (hgf :
+ g =ᶠ[l] f) : EventuallyMeasurable m l g
+参数：hf : Measurable f；hgf : g =ᶠ[l] f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EventuallyMeasurable.congr`：EventuallyMeasurable.congr (hf : EventuallyM
+easurable m l f) (hgf : g =ᶠ[l] f) : EventuallyMeasurable m l g
+· 使用定理 `Measurable.eventuallyMeasurable`：Measurable.eventuallyMeasurable (hf : M
+easurable f) : EventuallyMeasurable m l f
 
-English:
-theorem Measurable.eventuallyMeasurable_of_eventuallyEq
-  proof: hf.eventuallyMeasurable.congr hgf
-
-中文:
-定理 可测.eventuallyMeasurable_of_eventuallyEq
-  证明: hf.eventuallyMeasurable.congr hgf
-
-Depends on / 依赖: eventuallyMeasurable, hf.eventuallyMeasurable.congr
+--- 原说明 ---
+A function which is `EventuallyEq` to some `Measurable` function is `EventuallyM
+easurable`.
 -/
 theorem Measurable.eventuallyMeasurable_of_eventuallyEq
     (hf : Measurable f) (hgf : g =ᶠ[l] f) : EventuallyMeasurable m l g :=
   hf.eventuallyMeasurable.congr hgf
 
 end EventuallyMeasurable
+

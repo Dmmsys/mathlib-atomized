@@ -40,44 +40,40 @@ variable (k G X) in
 /-- Every Set `X` that has a `G`-action on it can be made into a `G`-rep by using `X →₀ k` as
   the base module and `G`-action on it is induced by the `G`-action on `X`. -/
 @[simps]
-/--
-Definition of `linearize` / `linearize` 的定义
+/-
+**Representation.linearize** 是 Mathlib 中的一个定义，位于命名空间 `Representation`。
+形式化陈述：linearize : Representation k G k[X.V] where toFun g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition linearize
-  signature: : Representation k G k[X.V] where
-  body: MonoidAlgebra.mapDomainLinearMap k k (X.ρ g)
-  map_one' := by ext; simp
-  map_mul' _ _ := by ext; simp
-
-中文:
-定义 linearize
-  签名: : Representation k G k[X.V] where
-  定义体: MonoidAlgebra.mapDomainLinearMap k k (X.ρ g)
-  map_one' := by ext; simp
-  map_mul' _ _ := by ext; simp
-
-Depends on / 依赖: MonoidAlgebra, MonoidAlgebra.mapDomainLinearMap, mapDomainLinearMap
+--- 原说明 ---
+Every Set `X` that has a `G`-action on it can be made into a `G`-rep by using `X
+ →₀ k` as
+  the base module and `G`-action on it is induced by the `G`-action on `X`.
 -/
 def linearize : Representation k G k[X.V] where
   toFun g := MonoidAlgebra.mapDomainLinearMap k k (X.ρ g)
   map_one' := by ext; simp
   map_mul' _ _ := by ext; simp
-
-/--
-lemma `linearize_single` / 引理 `linearize_single`
-
-English:
-lemma linearize_single
-  given: (g : G) (x : X.V)
-  proof: by
-  simp
-
-中文:
-引理 linearize_single
-  条件: (g : G) (x : X.V)
-  证明: by
-  simp
+/-
+**Representation.linearize_single** 是 Mathlib 中的一个引理，位于命名空间 `Representation`。
+形式化陈述：linearize_single (g : G) (x : X.V) : linearize k G X g (.single x 1) = .si
+ngle (X.ρ g x) 1
+参数：g : G；x : X.V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Representation.linearize_apply`：∀ (k : Type u) (G : Type v) [inst : Mono
+id G] [inst_1 : Semiring k] (X : Action (Type w) G) (g : G),   (Representation.l
+inearize k G X) g = …
+· 使用引理 `MonoidAlgebra.mapDomainLinearMap_single`：mapDomainLinearMap_single (f : 
+M -> N) (s : S) (m : M) : mapDomainLinearMap R S f (single m s) = single (f m) s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma linearize_single (g : G) (x : X.V) :
     linearize k G X g (.single x 1) = .single (X.ρ g x) 1 := by
@@ -86,48 +82,38 @@ lemma linearize_single (g : G) (x : X.V) :
 /-- Every morphism between `G`-sets could be made into an intertwining map between
   `Representation`s by the linear map induced on the indexing sets. -/
 @[simps toLinearMap]
-/--
-Definition of `linearizeMap` / `linearizeMap` 的定义
+/-
+**Representation.linearizeMap** 是 Mathlib 中的一个定义，位于命名空间 `Representation`。
+形式化陈述：linearizeMap (f : X ⟶ Y) : IntertwiningMap (A
+参数：f : X ⟶ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition linearizeMap
-  signature: (f : X ⟶ Y)
-  body: MonoidAlgebra.mapDomainLinearMap k k f.hom
-  isIntertwining' g := by ext x y; simp [(congr($(f.comm g) x) : f.hom (X.ρ g x) = Y.ρ g (f.hom x))]
-
-@[simp]
-
-中文:
-定义 linearizeMap
-  签名: (f : X ⟶ Y)
-  定义体: MonoidAlgebra.mapDomainLinearMap k k f.hom
-  isIntertwining' g := by ext x y; simp [(congr($(f.comm g) x) : f.hom (X.ρ g x) = Y.ρ g (f.hom x))]
-
-@[simp]
-
-Depends on / 依赖: linearize
+--- 原说明 ---
+Every morphism between `G`-sets could be made into an intertwining map between
+  `Representation`s by the linear map induced on the indexing sets.
 -/
 def linearizeMap (f : X ⟶ Y) : IntertwiningMap (A := k) (linearize k G X) (linearize k G Y) where
   toLinearMap := MonoidAlgebra.mapDomainLinearMap k k f.hom
   isIntertwining' g := by ext x y; simp [(congr($(f.comm g) x) : f.hom (X.ρ g x) = Y.ρ g (f.hom x))]
 
 @[simp]
-/--
-lemma `linearizeMap_single` / 引理 `linearizeMap_single`
-
-English:
-lemma linearizeMap_single
-  given: (f : X ⟶ Y) (x : X.V) (r : k)
-  proof: by
-  simp [linearizeMap]
-
-中文:
-引理 linearizeMap_single
-  条件: (f : X ⟶ Y) (x : X.V) (r : k)
-  证明: by
-  simp [linearizeMap]
-
-Depends on / 依赖: linearizeMap
+/-
+**Representation.linearizeMap_single** 是 Mathlib 中的一个引理，位于命名空间 `Representation`。
+形式化陈述：linearizeMap_single (f : X ⟶ Y) (x : X.V) (r : k) : (linearizeMap f) (.sin
+gle x r) = .single (f.hom x) r
+参数：f : X ⟶ Y；x : X.V；r : k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MonoidAlgebra.mapDomainLinearMap_single`：mapDomainLinearMap_single (f : 
+M -> N) (s : S) (m : M) : mapDomainLinearMap R S f (single m s) = single (f m) s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma linearizeMap_single (f : X ⟶ Y) (x : X.V) (r : k) :
     (linearizeMap f) (.single x r) = .single (f.hom x) r := by
@@ -141,67 +127,37 @@ attribute [local simp] types_tensorObj_def types_tensorUnit_def
 
 -- These two unification hints are to help lean understand the underlying types of these actions
 -- which it fails without them because `types` abuses defeq.
-unif_hint (X Y : Action (Type w) G) where ⊢ (X otimes Y).V ≟ X.V × Y.V
+unif_hint (X Y : Action (Type w) G) where ⊢ (X ⊗ Y).V ≟ X.V × Y.V
 unif_hint where ⊢ (𝟙_ (Action (Type w) G)).V ≟ PUnit
 
-/--
-lemma `_root_.Action.tensor_ρ_apply` / 引理 `_root_.Action.tensor_ρ_apply`
-
-English:
-lemma _root_.Action.tensor_ρ_apply
-  given: (g : G) (xy : (X otimes Y).V)
-  proof: rfl
-
-中文:
-引理 _root_.作用.tensor_ρ_apply
-  条件: (g : G) (xy : (X otimes Y).V)
-  证明: rfl
+/-
+**Representation.LinearizeMonoidal._root_.Action.tensor_** 是 Mathlib 中的一个引理，位于命名
+空间 `Representation.LinearizeMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.Action.tensor_ρ_apply (g : G) (xy : (X otimes Y).V) :
-    (X otimes Y).ρ g xy = (X.ρ g xy.1, Y.ρ g xy.2) := rfl
+lemma _root_.Action.tensor_ρ_apply (g : G) (xy : (X ⊗ Y).V) :
+    (X ⊗ Y).ρ g xy = (X.ρ g xy.1, Y.ρ g xy.2) := rfl
 
 variable (k G) in
 -- I could use `Action.trivial G (PUnit)` but that's not reducibly equal to the tensor unit
 /-- The counit of the linearize functor. -/
 @[simps toLinearMap]
-/--
-Definition of `ε` / `ε` 的定义
+/-
+**Representation.LinearizeMonoidal.** 是 Mathlib 中的一个定义，位于命名空间 `Representation.Li
+nearizeMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ε
-  signature: : (trivial k G k).IntertwiningMap (linearize k G (MonoidalCategoryStruct.tensorUnit
-  body: MonoidAlgebra.uniqueLinearEquiv k PUnit
-  isIntertwining' g := by ext1; simp [linearize_single _]
-
-中文:
-定义 ε
-  签名: : (trivial k G k).整数ertwining映射 (linearize k G (幺半群范畴结构.tensorUnit
-  定义体: MonoidAlgebra.uniqueLinearEquiv k PUnit
-  isIntertwining' g := by ext1; simp [linearize_single _]
-
-Depends on / 依赖: MonoidAlgebra, MonoidAlgebra.uniqueLinearEquiv, uniqueLinearEquiv
+--- 原说明 ---
+The counit of the linearize functor.
 -/
 def ε : (trivial k G k).IntertwiningMap (linearize k G (MonoidalCategoryStruct.tensorUnit
     (Action (Type w) G))) where
-.symm.toLinearMap __ := MonoidAlgebra.uniqueLinearEquiv k PUnit
+  __ := MonoidAlgebra.uniqueLinearEquiv k PUnit |>.symm.toLinearMap
   isIntertwining' g := by ext1; simp [linearize_single _]
-
-/--
-lemma `ε_one` / 引理 `ε_one`
-
-English:
-lemma ε_one
-  statement: ε k G 1 = .single PUnit.unit 1
-  proof: by
-  simp [← toLinearMap_apply, types_tensorUnit_def]
-
-中文:
-引理 ε_one
-  结论: ε k G 1 = .single 命题单元.unit 1
-  证明: by
-  simp [← toLinearMap_apply, types_tensorUnit_def]
-
-Depends on / 依赖: toLinearMap_apply, types_tensorUnit_def
+/-
+**Representation.LinearizeMonoidal.** 是 Mathlib 中的一个引理，位于命名空间 `Representation.Li
+nearizeMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ε_one : ε k G 1 = .single PUnit.unit 1 := by
   simp [← toLinearMap_apply, types_tensorUnit_def]
@@ -211,78 +167,38 @@ open scoped MonoidalCategory
 variable (k G) in
 /-- The unit of the linearize functor. -/
 @[simps toLinearMap]
-/--
-Definition of `η` / `η` 的定义
+/-
+**Representation.LinearizeMonoidal.** 是 Mathlib 中的一个定义，位于命名空间 `Representation.Li
+nearizeMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition η
-  signature: : (linearize k G (𝟙_ (Action (Type u) G))).IntertwiningMap (trivial k G k) where
-  body: (MonoidAlgebra.uniqueLinearEquiv k PUnit).toLinearMap
-  isIntertwining' g := by ext; simp [linearize_single _]
-
-中文:
-定义 η
-  签名: : (linearize k G (𝟙_ (作用 (类型u) G))).整数ertwining映射 (trivial k G k) where
-  定义体: (MonoidAlgebra.uniqueLinearEquiv k PUnit).toLinearMap
-  isIntertwining' g := by ext; simp [linearize_single _]
-
-Depends on / 依赖: MonoidAlgebra, MonoidAlgebra.uniqueLinearEquiv, toLinearMap, uniqueLinearEquiv
+--- 原说明 ---
+The unit of the linearize functor.
 -/
 def η : (linearize k G (𝟙_ (Action (Type u) G))).IntertwiningMap (trivial k G k) where
   toLinearMap := (MonoidAlgebra.uniqueLinearEquiv k PUnit).toLinearMap
   isIntertwining' g := by ext; simp [linearize_single _]
-
-/--
-lemma `η_single` / 引理 `η_single`
-
-English:
-lemma η_single
-  given: (x : PUnit)
-  statement: η k G (.single x 1) = 1
-  proof: by
-  simp [← toLinearMap_apply, types_tensorUnit_def]
-
-中文:
-引理 η_single
-  条件: (x : 命题单元)
-  结论: η k G (.single x 1) = 1
-  证明: by
-  simp [← toLinearMap_apply, types_tensorUnit_def]
-
-Depends on / 依赖: toLinearMap_apply, types_tensorUnit_def
+/-
+**Representation.LinearizeMonoidal.** 是 Mathlib 中的一个引理，位于命名空间 `Representation.Li
+nearizeMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma η_single (x : PUnit) : η k G (.single x 1) = 1 := by
   simp [← toLinearMap_apply, types_tensorUnit_def]
 
 variable (k G) in
-/--
-lemma `ε_η` / 引理 `ε_η`
-
-English:
-lemma ε_η
-  statement: (ε k G).comp (η k G) = .id _
-  proof: by ext; simp
-
-中文:
-引理 ε_η
-  结论: (ε k G).comp (η k G) = .id _
-  证明: by ext; simp
+/-
+**Representation.LinearizeMonoidal.** 是 Mathlib 中的一个引理，位于命名空间 `Representation.Li
+nearizeMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ε_η : (ε k G).comp (η k G) = .id _ := by ext; simp
 
 variable (k G) in
-/--
-lemma `η_ε` / 引理 `η_ε`
-
-English:
-lemma η_ε
-  statement: (η k G).comp (ε k G) = .id _
-  proof: by ext; simp
-
-中文:
-引理 η_ε
-  结论: (η k G).comp (ε k G) = .id _
-  证明: by ext; simp
+/-
+**Representation.LinearizeMonoidal.** 是 Mathlib 中的一个引理，位于命名空间 `Representation.Li
+nearizeMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma η_ε : (η k G).comp (ε k G) = .id _ := by ext; simp
 
@@ -296,103 +212,46 @@ variable {k : Type u} [CommSemiring k] [Module k V] [Module k W] {σ : Represent
 variable (X Y) in
 /-- The tensor (multiplication) of the linearize functor. -/
 @[simps toLinearMap]
-/--
-Definition of `μ` / `μ` 的定义
+/-
+**Representation.LinearizeMonoidal.** 是 Mathlib 中的一个定义，位于命名空间 `Representation.Li
+nearizeMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition μ
-  signature: : ((linearize k G X).tprod (linearize k G Y)).IntertwiningMap (linearize k G (X otimes Y)) where
-  body: (MonoidAlgebra.tensorEquiv k).toLinearMap
-  isIntertwining' g := by ext; simp [linearize_single _]; rfl
-
-中文:
-定义 μ
-  签名: : ((linearize k G X).tprod (linearize k G Y)).整数ertwining映射 (linearize k G (X otimes Y)) where
-  定义体: (MonoidAlgebra.tensorEquiv k).toLinearMap
-  isIntertwining' g := by ext; simp [linearize_single _]; rfl
-
-Depends on / 依赖: MonoidAlgebra, MonoidAlgebra.tensorEquiv, tensorEquiv, toLinearMap
+--- 原说明 ---
+The tensor (multiplication) of the linearize functor.
 -/
-def μ : ((linearize k G X).tprod (linearize k G Y)).IntertwiningMap (linearize k G (X otimes Y)) where
+def μ : ((linearize k G X).tprod (linearize k G Y)).IntertwiningMap (linearize k G (X ⊗ Y)) where
   toLinearMap := (MonoidAlgebra.tensorEquiv k).toLinearMap
   isIntertwining' g := by ext; simp [linearize_single _]; rfl
-
-/--
-lemma `μ_apply_single_single` / 引理 `μ_apply_single_single`
-
-English:
-lemma μ_apply_single_single
-  given: (x : X.V) (y : Y.V) (r s : k)
-  proof: by
-  ext; simp [← toLinearMap_apply]
-
-中文:
-引理 μ_apply_single_single
-  条件: (x : X.V) (y : Y.V) (r s : k)
-  证明: by
-  ext; simp [← toLinearMap_apply]
-
-Depends on / 依赖: single, toLinearMap_apply
+/-
+**Representation.LinearizeMonoidal.** 是 Mathlib 中的一个引理，位于命名空间 `Representation.Li
+nearizeMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma μ_apply_single_single (x : X.V) (y : Y.V) (r s : k) :
-    μ (k := k) X Y (.single x r otimesₜ .single y s) = .single (x, y) (r * s) := by
+    μ (k := k) X Y (.single x r ⊗ₜ .single y s) = .single (x, y) (r * s) := by
   ext; simp [← toLinearMap_apply]
-
-/--
-lemma `coeff_μ_tmul` / 引理 `coeff_μ_tmul`
-
-English:
-lemma coeff_μ_tmul
-  given: (l1 : k[X.V]) (l2 : k[Y.V]) (xy : (X otimes Y).V)
-  proof: by
-  simp [← toLinearMap_apply, types_tensorObj_def, finsuppTensorFinsupp'_apply_apply _]
-
-中文:
-引理 coeff_μ_tmul
-  条件: (l1 : k[X.V]) (l2 : k[Y.V]) (xy : (X otimes Y).V)
-  证明: by
-  simp [← toLinearMap_apply, types_tensorObj_def, finsuppTensorFinsupp'_apply_apply _]
-
-Depends on / 依赖: _apply_apply, finsuppTensorFinsupp, toLinearMap_apply, types_tensorObj_def
+/-
+**Representation.LinearizeMonoidal.coeff_** 是 Mathlib 中的一个引理，位于命名空间 `Representat
+ion.LinearizeMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coeff_μ_tmul (l1 : k[X.V]) (l2 : k[Y.V]) (xy : (X otimes Y).V) :
-    (μ X Y (l1 otimesₜ l2)).coeff xy = l1.coeff xy.1 * l2.coeff xy.2 := by
+lemma coeff_μ_tmul (l1 : k[X.V]) (l2 : k[Y.V]) (xy : (X ⊗ Y).V) :
+    (μ X Y (l1 ⊗ₜ l2)).coeff xy = l1.coeff xy.1 * l2.coeff xy.2 := by
   simp [← toLinearMap_apply, types_tensorObj_def, finsuppTensorFinsupp'_apply_apply _]
-
-/--
-lemma `μ_comp_rTensor` / 引理 `μ_comp_rTensor`
-
-English:
-lemma μ_comp_rTensor
-  given: (f : X ⟶ Y) (Z : Action (Type w) G)
-  proof: by
-  ext; simp
-
-中文:
-引理 μ_comp_rTensor
-  条件: (f : X ⟶ Y) (Z : 作用 (类型 w) G)
-  证明: by
-  ext; simp
+/-
+**Representation.LinearizeMonoidal.** 是 Mathlib 中的一个引理，位于命名空间 `Representation.Li
+nearizeMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma μ_comp_rTensor (f : X ⟶ Y) (Z : Action (Type w) G) :
     (μ Y Z).comp (rTensor (linearize k G Z) (linearizeMap f)) =
       (linearizeMap (f ▷ Z)).comp (μ X Z) := by
   ext; simp
-
-/--
-lemma `μ_comp_lTensor` / 引理 `μ_comp_lTensor`
-
-English:
-lemma μ_comp_lTensor
-  given: (f : X ⟶ Y) (Z : Action (Type w) G)
-  proof: by
-  ext; simp
-
-中文:
-引理 μ_comp_lTensor
-  条件: (f : X ⟶ Y) (Z : 作用 (类型 w) G)
-  证明: by
-  ext; simp
+/-
+**Representation.LinearizeMonoidal.** 是 Mathlib 中的一个引理，位于命名空间 `Representation.Li
+nearizeMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma μ_comp_lTensor (f : X ⟶ Y) (Z : Action (Type w) G) :
     (μ Z Y).comp ((linearizeMap f).lTensor (linearize k G Z)) =
@@ -400,43 +259,13 @@ lemma μ_comp_lTensor (f : X ⟶ Y) (Z : Action (Type w) G) :
   ext; simp
 
 variable (X Y Z) in
-/--
-lemma `μ_comp_assoc` / 引理 `μ_comp_assoc`
-
-English:
-lemma μ_comp_assoc
-  statement: ((linearizeMap (α_ X Y Z).hom).comp
-  proof: by
-  ext x y z : 9
-  -- experiment with monoidal structure of `Action` on `Type`
-  simp only [Action.tensorObj_V, types_tensorObj_def, comp_toLinearMap, μ_toLinearMap,
-    toLinearMap_rTensor, LinearMap.coe_comp, Function.comp_apply,
-    TensorProduct.AlgebraTensorModule.curry_apply, LinearMap.restrictScalars_self,
-    TensorProduct.curry_apply, LinearEquiv.coe_coe, LinearMap.rTensor_tmul, toLinearMap_apply,
-    toLinearMap_lTensor, toLinearMap_assoc, TensorProduct.assoc_tmul, LinearMap.lTensor_tmul]
-  -- after fixing the defeq problems in `Action` and in the monoidal category structure of `types`
-  -- this line should close the goal so this is left as an indicator.
-  convert dsimp% linearizeMap_single (α_ X Y Z).hom ((x, y), z) (1 : k)
-  all_goals with_reducible simp
-
-中文:
-引理 μ_comp_assoc
-  结论: ((linearizeMap (α_ X Y Z).hom).comp
-  证明: by
-  ext x y z : 9
-  -- experiment with monoidal structure of `Action` on `Type`
-  simp only [Action.tensorObj_V, types_tensorObj_def, comp_toLinearMap, μ_toLinearMap,
-    toLinearMap_rTensor, LinearMap.coe_comp, Function.comp_apply,
-    TensorProduct.AlgebraTensorModule.curry_apply, LinearMap.restrictScalars_self,
-    TensorProduct.curry_apply, LinearEquiv.coe_coe, LinearMap.rTensor_tmul, toLinearMap_apply,
-    toLinearMap_lTensor, toLinearMap_assoc, TensorProduct.assoc_tmul, LinearMap.lTensor_tmul]
-  -- after fixing the defeq problems in `Action` and in the monoidal category structure of `types`
-  -- this line should close the goal so this is left as an indicator.
-  convert dsimp% linearizeMap_single (α_ X Y Z).hom ((x, y), z) (1 : k)
-  all_goals with_reducible simp
+/-
+**Representation.LinearizeMonoidal.** 是 Mathlib 中的一个引理，位于命名空间 `Representation.Li
+nearizeMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma μ_comp_assoc : ((linearizeMap (α_ X Y Z).hom).comp
-    (μ (X otimes Y) Z)).comp ((μ X Y).rTensor (linearize k G Z)) = ((μ X (Y otimes Z)).comp
+    (μ (X ⊗ Y) Z)).comp ((μ X Y).rTensor (linearize k G Z)) = ((μ X (Y ⊗ Z)).comp
     ((μ Y Z).lTensor (linearize k G X))).comp (assoc (linearize k G X) (linearize k G Y)
     (linearize k G Z)).toIntertwiningMap := by
   ext x y z : 9
@@ -452,45 +281,21 @@ lemma μ_comp_assoc : ((linearizeMap (α_ X Y Z).hom).comp
   all_goals with_reducible simp
 
 variable (X) in
-/--
-lemma `μ_leftUnitor` / 引理 `μ_leftUnitor`
-
-English:
-lemma μ_leftUnitor
-  statement: (lid k (linearize k G X)).toIntertwiningMap =
-  proof: by
-  ext; simp
-
-中文:
-引理 μ_leftUnitor
-  结论: (lid k (linearize k G X)).to整数ertwiningMap =
-  证明: by
-  ext; simp
+/-
+**Representation.LinearizeMonoidal.** 是 Mathlib 中的一个引理，位于命名空间 `Representation.Li
+nearizeMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma μ_leftUnitor : (lid k (linearize k G X)).toIntertwiningMap =
-    ((linearizeMap (fun_ X).hom).comp (μ (𝟙_ (Action (Type w) G)) X)).comp (rTensor
+    ((linearizeMap (λ_ X).hom).comp (μ (𝟙_ (Action (Type w) G)) X)).comp (rTensor
     (linearize k G X) (ε k G)) := by
   ext; simp
 
 variable (X) in
-/--
-lemma `μ_rightUnitor` / 引理 `μ_rightUnitor`
-
-English:
-lemma μ_rightUnitor
-  statement: (rid k (linearize k G X)).toIntertwiningMap =
-  proof: by
-  ext x; simp [types_tensorObj_def, types_tensorUnit_def, Action.tensorObj_V, linearizeMap,
-    Action.rightUnitor_hom_hom]
-
-中文:
-引理 μ_rightUnitor
-  结论: (rid k (linearize k G X)).to整数ertwiningMap =
-  证明: by
-  ext x; simp [types_tensorObj_def, types_tensorUnit_def, Action.tensorObj_V, linearizeMap,
-    Action.rightUnitor_hom_hom]
-
-Depends on / 依赖: Action, Action.rightUnitor_hom_hom, Action.tensorObj_V, linearizeMap, rightUnitor_hom_hom, tensorObj_V, types_tensorObj_def, types_tensorUnit_def
+/-
+**Representation.LinearizeMonoidal.** 是 Mathlib 中的一个引理，位于命名空间 `Representation.Li
+nearizeMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma μ_rightUnitor : (rid k (linearize k G X)).toIntertwiningMap =
     ((linearizeMap (ρ_ X).hom).comp (μ X (𝟙_ (Action (Type w) G)))).comp ((ε k G).lTensor
@@ -499,67 +304,34 @@ lemma μ_rightUnitor : (rid k (linearize k G X)).toIntertwiningMap =
     Action.rightUnitor_hom_hom]
 
 variable (X Y) in
-/--
-Definition of `δ` / `δ` 的定义
+/-- The comultiplication of the linearize functor. -/
+/-
+**Representation.LinearizeMonoidal.** 是 Mathlib 中的一个定义，位于命名空间 `Representation.Li
+nearizeMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition δ
-  signature: : (linearize k G (X otimes Y)).IntertwiningMap
-  body: (MonoidAlgebra.tensorEquiv k).symm.toLinearMap
-  isIntertwining' g := by
-    ext; simp [linearize_single _, MonoidAlgebra.tensorEquiv_symm_single_eq_single_one_tmul]; rfl
-
-中文:
-定义 δ
-  签名: : (linearize k G (X otimes Y)).整数ertwining映射
-  定义体: (MonoidAlgebra.tensorEquiv k).symm.toLinearMap
-  isIntertwining' g := by
-    ext; simp [linearize_single _, MonoidAlgebra.tensorEquiv_symm_single_eq_single_one_tmul]; rfl
-
-Depends on / 依赖: MonoidAlgebra, MonoidAlgebra.tensorEquiv, symm.toLinearMap, tensorEquiv, toLinearMap
+--- 原说明 ---
+The comultiplication of the linearize functor.
 -/
-def δ : (linearize k G (X otimes Y)).IntertwiningMap
+def δ : (linearize k G (X ⊗ Y)).IntertwiningMap
     ((linearize k G X).tprod (linearize k G Y)) where
   toLinearMap := (MonoidAlgebra.tensorEquiv k).symm.toLinearMap
   isIntertwining' g := by
     ext; simp [linearize_single _, MonoidAlgebra.tensorEquiv_symm_single_eq_single_one_tmul]; rfl
-
-/--
-lemma `δ_apply_single` / 引理 `δ_apply_single`
-
-English:
-lemma δ_apply_single
-  given: (xy : (X otimes Y).V)
-  proof: by
-  simp [δ, MonoidAlgebra.tensorEquiv_symm_single_eq_single_one_tmul]
-
-中文:
-引理 δ_apply_single
-  条件: (xy : (X otimes Y).V)
-  证明: by
-  simp [δ, MonoidAlgebra.tensorEquiv_symm_single_eq_single_one_tmul]
-
-Depends on / 依赖: MonoidAlgebra, MonoidAlgebra.tensorEquiv_symm_single_eq_single_one_tmul, single, tensorEquiv_symm_single_eq_single_one_tmul
+/-
+**Representation.LinearizeMonoidal.** 是 Mathlib 中的一个引理，位于命名空间 `Representation.Li
+nearizeMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma δ_apply_single (xy : (X otimes Y).V) :
-    (δ (k := k) X Y) (.single xy 1) = .single xy.1 1 otimesₜ .single xy.2 1 := by
+lemma δ_apply_single (xy : (X ⊗ Y).V) :
+    (δ (k := k) X Y) (.single xy 1) = .single xy.1 1 ⊗ₜ .single xy.2 1 := by
   simp [δ, MonoidAlgebra.tensorEquiv_symm_single_eq_single_one_tmul]
 
 variable (Z) in
-/--
-lemma `rTensor_comp_δ` / 引理 `rTensor_comp_δ`
-
-English:
-lemma rTensor_comp_δ
-  given: (f : X ⟶ Y)
-  proof: by
-  ext; simp [δ_apply_single _]
-
-中文:
-引理 rTensor_comp_δ
-  条件: (f : X ⟶ Y)
-  证明: by
-  ext; simp [δ_apply_single _]
+/-
+**Representation.LinearizeMonoidal.rTensor_comp_** 是 Mathlib 中的一个引理，位于命名空间 `Repr
+esentation.LinearizeMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma rTensor_comp_δ (f : X ⟶ Y) :
     ((linearizeMap f).rTensor (linearize k G Z)).comp (δ X Z) =
@@ -567,20 +339,10 @@ lemma rTensor_comp_δ (f : X ⟶ Y) :
   ext; simp [δ_apply_single _]
 
 variable (Z) in
-/--
-lemma `lTensor_comp_δ` / 引理 `lTensor_comp_δ`
-
-English:
-lemma lTensor_comp_δ
-  given: (f : X ⟶ Y)
-  proof: by
-  ext; simp [δ_apply_single _]
-
-中文:
-引理 lTensor_comp_δ
-  条件: (f : X ⟶ Y)
-  证明: by
-  ext; simp [δ_apply_single _]
+/-
+**Representation.LinearizeMonoidal.lTensor_comp_** 是 Mathlib 中的一个引理，位于命名空间 `Repr
+esentation.LinearizeMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma lTensor_comp_δ (f : X ⟶ Y) :
     ((linearizeMap f).lTensor (linearize k G Z)).comp (δ Z X) =
@@ -588,82 +350,35 @@ lemma lTensor_comp_δ (f : X ⟶ Y) :
   ext; simp [δ_apply_single _]
 
 variable (X Y Z) in
-/--
-lemma `assoc_comp_δ` / 引理 `assoc_comp_δ`
-
-English:
-lemma assoc_comp_δ
-  statement: ((assoc (linearize k G X) (linearize k G Y)
-  proof: by
-  ext
-  -- TODO : try not to `simp` with `δ` and `linearizeMap` directly here
-  simp [linearizeMap, δ, MonoidAlgebra.tensorEquiv_symm_single_eq_single_one_tmul]
-
-中文:
-引理 assoc_comp_δ
-  结论: ((assoc (linearize k G X) (linearize k G Y)
-  证明: by
-  ext
-  -- TODO : try not to `simp` with `δ` and `linearizeMap` directly here
-  simp [linearizeMap, δ, MonoidAlgebra.tensorEquiv_symm_single_eq_single_one_tmul]
+/-
+**Representation.LinearizeMonoidal.assoc_comp_** 是 Mathlib 中的一个引理，位于命名空间 `Repres
+entation.LinearizeMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma assoc_comp_δ : ((assoc (linearize k G X) (linearize k G Y)
     (linearize k G Z)).toIntertwiningMap.comp ((δ X Y).rTensor (linearize k G Z))).comp
-    (δ (X otimes Y) Z) = (((δ Y Z).lTensor (linearize k G X)).comp (δ X (Y otimes Z))).comp
+    (δ (X ⊗ Y) Z) = (((δ Y Z).lTensor (linearize k G X)).comp (δ X (Y ⊗ Z))).comp
     (linearizeMap (α_ X Y Z).hom) := by
   ext
   -- TODO : try not to `simp` with `δ` and `linearizeMap` directly here
   simp [linearizeMap, δ, MonoidAlgebra.tensorEquiv_symm_single_eq_single_one_tmul]
-
-/--
-lemma `leftUnitor_δ` / 引理 `leftUnitor_δ`
-
-English:
-lemma leftUnitor_δ
-  given: (X : Action (Type u) G)
-  statement: (lid k (linearize k G X)).symm.toIntertwiningMap =
-  proof: by
-  ext
-  -- TODO : try not to `simp` with `δ` and `linearizeMap` directly here
-  simp [linearizeMap, δ, MonoidAlgebra.tensorEquiv_symm_single_eq_single_one_tmul]
-
-unif_hint (X : Action (Type u) G) where ⊢ (X otimes 𝟙_ (Action (Type u) G)).V ≟ X.V × PUnit in
-
-中文:
-引理 leftUnitor_δ
-  条件: (X : 作用 (类型u) G)
-  结论: (lid k (linearize k G X)).symm.to整数ertwiningMap =
-  证明: by
-  ext
-  -- TODO : try not to `simp` with `δ` and `linearizeMap` directly here
-  simp [linearizeMap, δ, MonoidAlgebra.tensorEquiv_symm_single_eq_single_one_tmul]
-
-unif_hint (X : Action (Type u) G) where ⊢ (X otimes 𝟙_ (Action (Type u) G)).V ≟ X.V × PUnit in
+/-
+**Representation.LinearizeMonoidal.leftUnitor_** 是 Mathlib 中的一个引理，位于命名空间 `Repres
+entation.LinearizeMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma leftUnitor_δ (X : Action (Type u) G) : (lid k (linearize k G X)).symm.toIntertwiningMap =
     (((η k G).rTensor (linearize k G X)).comp (δ (𝟙_ (Action (Type u) G)) X)).comp
-      (linearizeMap (fun_ X).inv) := by
+      (linearizeMap (λ_ X).inv) := by
   ext
   -- TODO : try not to `simp` with `δ` and `linearizeMap` directly here
   simp [linearizeMap, δ, MonoidAlgebra.tensorEquiv_symm_single_eq_single_one_tmul]
 
-unif_hint (X : Action (Type u) G) where ⊢ (X otimes 𝟙_ (Action (Type u) G)).V ≟ X.V × PUnit in
-/--
-lemma `rightUnitor_δ` / 引理 `rightUnitor_δ`
-
-English:
-lemma rightUnitor_δ
-  given: (X : Action (Type u) G)
-  statement: (rid k (linearize k G X)).symm.toIntertwiningMap =
-  proof: by
-  ext; simp [δ_apply_single _]
-
-中文:
-引理 rightUnitor_δ
-  条件: (X : 作用 (类型u) G)
-  结论: (rid k (linearize k G X)).symm.to整数ertwiningMap =
-  证明: by
-  ext; simp [δ_apply_single _]
+unif_hint (X : Action (Type u) G) where ⊢ (X ⊗ 𝟙_ (Action (Type u) G)).V ≟ X.V × PUnit in
+/-
+**Representation.LinearizeMonoidal.rightUnitor_** 是 Mathlib 中的一个引理，位于命名空间 `Repre
+sentation.LinearizeMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma rightUnitor_δ (X : Action (Type u) G) : (rid k (linearize k G X)).symm.toIntertwiningMap =
     (((η k G).lTensor (linearize k G X)).comp (δ X (𝟙_ (Action (Type u) G)))).comp
@@ -671,39 +386,19 @@ lemma rightUnitor_δ (X : Action (Type u) G) : (rid k (linearize k G X)).symm.to
   ext; simp [δ_apply_single _]
 
 variable (X Y) in
-/--
-lemma `μ_δ` / 引理 `μ_δ`
-
-English:
-lemma μ_δ
-  statement: (μ X Y).comp (δ (k := k) X Y) = .id _
-  proof: by
-  ext; simp [δ_apply_single _]
-
-中文:
-引理 μ_δ
-  结论: (μ X Y).comp (δ (k := k) X Y) = .id _
-  证明: by
-  ext; simp [δ_apply_single _]
+/-
+**Representation.LinearizeMonoidal.** 是 Mathlib 中的一个引理，位于命名空间 `Representation.Li
+nearizeMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma μ_δ : (μ X Y).comp (δ (k := k) X Y) = .id _ := by
   ext; simp [δ_apply_single _]
 
 variable (X Y) in
-/--
-lemma `δ_μ` / 引理 `δ_μ`
-
-English:
-lemma δ_μ
-  statement: (δ X Y).comp (μ (k := k) X Y) = .id _
-  proof: by
-  ext; simp [δ_apply_single _]
-
-中文:
-引理 δ_μ
-  结论: (δ X Y).comp (μ (k := k) X Y) = .id _
-  证明: by
-  ext; simp [δ_apply_single _]
+/-
+**Representation.LinearizeMonoidal.** 是 Mathlib 中的一个引理，位于命名空间 `Representation.Li
+nearizeMonoidal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma δ_μ : (δ X Y).comp (μ (k := k) X Y) = .id _ := by
   ext; simp [δ_apply_single _]
@@ -713,125 +408,120 @@ end comm
 end LinearizeMonoidal
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `linearizeTrivial_def` / 引理 `linearizeTrivial_def`
-
-English:
-lemma linearizeTrivial_def
-  given: (X : Type w) (g : G)
-  proof: by
-  ext (x : X) : 2
-  rw [LinearMap.comp_apply]; rw [LinearMap.id_comp]; rw [MonoidAlgebra.lsingle_apply]; rw [linearize_single]
-  simp only [Action.trivial_ρ]
-  rfl
-
-中文:
-引理 linearizeTrivial_def
-  条件: (X : 类型 w) (g : G)
-  证明: by
-  ext (x : X) : 2
-  rw [LinearMap.comp_apply]; rw [LinearMap.id_comp]; rw [MonoidAlgebra.lsingle_apply]; rw [linearize_single]
-  simp only [Action.trivial_ρ]
-  rfl
-
-Depends on / 依赖: Action, Action.trivial_, LinearMap, LinearMap.comp_apply, LinearMap.id_comp, MonoidAlgebra, MonoidAlgebra.lsingle_apply, comp_apply, id_comp, linearize_single, lsingle_apply
+/-
+**Representation.linearizeTrivial_def** 是 Mathlib 中的一个引理，位于命名空间 `Representation`
+。
+形式化陈述：linearizeTrivial_def (X : Type w) (g : G) : linearize k G (Action.trivial 
+_ X) g = LinearMap.id
+参数：X : Type w；g : G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MonoidAlgebra.lhom_ext'`：lhom_ext' {N : Type*} [Semiring R] [AddCommMono
+id N] [Module R N] [Module R S] ⦃f g : S[M] ->ₗ[R] N⦄ (H : forall (x : M), Linea
+rMap.comp f (…
+· 使用定理 `LinearMap.ext_ring`：ext_ring {f g : R ->ₛₗ[σ] M₃} (h : f 1 = g 1) : f = 
+g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LinearMap.comp_apply`：comp_apply (x : M₁) : f.comp g x = f (g x)
+· 使用定理 `LinearMap.id_comp`：id_comp : id.comp f = f
+· 使用引理 `MonoidAlgebra.lsingle_apply`：lsingle_apply [Semiring R] [Module R S] (a 
+: M) (b : S) : lsingle (R
+· 使用引理 `Representation.linearize_single`：linearize_single (g : G) (x : X.V) : li
+nearize k G X g (.single x 1) = .single (X.ρ g x) 1
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `CategoryTheory.types_congr_hom`：types_congr_hom {X Y : Type u} {f g : X 
+⟶ Y} (h : f = g) (x : X) : f x = g x
+· 使用定理 `Action.trivial_ρ`：∀ {V : Type u_1} [inst : CategoryTheory.Category.{v_1,
+ u_1} V] (G : Type u_2) [inst_1 : Monoid G] (X : V),   (Action.trivial G X).ρ = 
+1
 -/
 lemma linearizeTrivial_def (X : Type w) (g : G) :
     linearize k G (Action.trivial _ X) g = LinearMap.id := by
   ext (x : X) : 2
-  rw [LinearMap.comp_apply]; rw [LinearMap.id_comp]; rw [MonoidAlgebra.lsingle_apply]; rw [linearize_single]
+  rw [LinearMap.comp_apply, LinearMap.id_comp, MonoidAlgebra.lsingle_apply, linearize_single]
   simp only [Action.trivial_ρ]
   rfl
 
 variable (k G) in
-/--
-Definition of `linearizeTrivialIso` / `linearizeTrivialIso` 的定义
+/-- This a type-changing equivalence (which requires a non-trivial proof that
+  `LinearEquiv.refl _ _` is `G`-equivariant) to avoid abusing defeq. -/
+/-
+**Representation.linearizeTrivialIso** 是 Mathlib 中的一个定义，位于命名空间 `Representation`。
+形式化陈述：linearizeTrivialIso (X : Type w) : (linearize k G (.trivial _ X)).Equiv (t
+rivial k G k[X])
+参数：X : Type w。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition linearizeTrivialIso
-  signature: (X : Type w)
-  body: .mk (.refl ..) fun g => by erw [linearizeTrivial_def, LinearMap.comp_id]
-
-中文:
-定义 linearizeTrivialIso
-  签名: (X : 类型 w)
-  定义体: .mk (.refl ..) fun g => by erw [linearizeTrivial_def, LinearMap.comp_id]
-
-Depends on / 依赖: LinearMap, LinearMap.comp_id, comp_id, linearizeTrivial_def
+--- 原说明 ---
+This a type-changing equivalence (which requires a non-trivial proof that
+  `LinearEquiv.refl _ _` is `G`-equivariant) to avoid abusing defeq.
 -/
 def linearizeTrivialIso (X : Type w) : (linearize k G (.trivial _ X)).Equiv (trivial k G k[X]) :=
-  .mk (.refl ..) fun g => by erw [linearizeTrivial_def, LinearMap.comp_id]
+  .mk (.refl ..) fun g ↦ by erw [linearizeTrivial_def, LinearMap.comp_id]
 
 open CategoryTheory
-/--
-lemma `linearizeTrivialIso_apply` / 引理 `linearizeTrivialIso_apply`
-
-English:
-lemma linearizeTrivialIso_apply
-  given: {X : Type w} (f : k[(Action.trivial _ X).V])
-  proof: rfl
-
-中文:
-引理 linearizeTrivialIso_apply
-  条件: {X : 类型 w} (f : k[(作用.trivial _ X).V])
-  证明: rfl
+/-
+**Representation.linearizeTrivialIso_apply** 是 Mathlib 中的一个引理，位于命名空间 `Representa
+tion`。
+形式化陈述：linearizeTrivialIso_apply {X : Type w} (f : k[(Action.trivial _ X).V]) : l
+inearizeTrivialIso k G X f = f
+参数：f : k[(Action.trivial _ X).V]。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma linearizeTrivialIso_apply {X : Type w} (f : k[(Action.trivial _ X).V]) :
     linearizeTrivialIso k G X f = f := rfl
-
-/--
-lemma `linearizeTrivialIso_symm_apply` / 引理 `linearizeTrivialIso_symm_apply`
-
-English:
-lemma linearizeTrivialIso_symm_apply
-  given: {X : Type w} (f : k[X])
-  proof: rfl
-
-中文:
-引理 linearizeTrivialIso_symm_apply
-  条件: {X : 类型 w} (f : k[X])
-  证明: rfl
+/-
+**Representation.linearizeTrivialIso_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 `Repre
+sentation`。
+形式化陈述：linearizeTrivialIso_symm_apply {X : Type w} (f : k[X]) : (linearizeTrivial
+Iso k G X).symm f = f
+参数：f : k[X]。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma linearizeTrivialIso_symm_apply {X : Type w} (f : k[X]) :
     (linearizeTrivialIso k G X).symm f = f := rfl
 
 variable (k G) in
-/--
-Definition of `linearizeOfMulActionIso` / `linearizeOfMulActionIso` 的定义
+/-- This a type-changing equivalence to avoid abusing defeq. -/
+/-
+**Representation.linearizeOfMulActionIso** 是 Mathlib 中的一个定义，位于命名空间 `Representati
+on`。
+形式化陈述：linearizeOfMulActionIso (H : Type w) [MulAction G H] : (linearize k G (Act
+ion.ofMulAction G H)).Equiv (ofMulAction k G H)
+参数：H : Type w。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition linearizeOfMulActionIso
-  signature: (H : Type w) [MulAction G H]
-  body: .mk (.refl ..) fun _ => rfl
-
-中文:
-定义 linearizeOfMulActionIso
-  签名: (H : 类型 w) [乘法作用 G H]
-  定义体: .mk (.refl ..) fun _ => rfl
+--- 原说明 ---
+This a type-changing equivalence to avoid abusing defeq.
 -/
 def linearizeOfMulActionIso (H : Type w) [MulAction G H] :
     (linearize k G (Action.ofMulAction G H)).Equiv (ofMulAction k G H) :=
-  .mk (.refl ..) fun _ => rfl
+  .mk (.refl ..) fun _ ↦ rfl
 
 variable (k G) in
-/--
-Definition of `linearizeDiagonalEquiv` / `linearizeDiagonalEquiv` 的定义
+/-- This a type-changing equivalence to avoid abusing defeq. -/
+/-
+**Representation.linearizeDiagonalEquiv** 是 Mathlib 中的一个缩写定义，位于命名空间 `Representat
+ion`。
+形式化陈述：linearizeDiagonalEquiv (n : Nat) : (linearize k G (Action.diagonal G n)).E
+quiv (diagonal k G n)
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation linearizeDiagonalEquiv
-  signature: (n : Nat)
-  body: linearizeOfMulActionIso k G (Fin n -> G)
-
-中文:
-缩写 linearizeDiagonalEquiv
-  签名: (n : 自然数)
-  定义体: linearizeOfMulActionIso k G (Fin n -> G)
-
-Depends on / 依赖: linearizeOfMulActionIso
+--- 原说明 ---
+This a type-changing equivalence to avoid abusing defeq.
 -/
-abbrev linearizeDiagonalEquiv (n : Nat) : (linearize k G (Action.diagonal G n)).Equiv
-    (diagonal k G n) := linearizeOfMulActionIso k G (Fin n -> G)
+abbrev linearizeDiagonalEquiv (n : ℕ) : (linearize k G (Action.diagonal G n)).Equiv
+    (diagonal k G n) := linearizeOfMulActionIso k G (Fin n → G)
 
 end
 
 end Representation
+

@@ -36,567 +36,367 @@ variable {α : Type*} {s t : Set α} {a : α}
 In the usual case where `star` is involutive, it is equal to `{star s | x ∈ s}`, see
 `Set.image_star`. -/
 @[instance_reducible]
-/--
-Definition of `star` / `star` 的定义
+/-
+**Set.star** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：{α : Type u_1} → [Star α] → Star (Set α)
+参数：Set α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition star
-  signature: [Star α]
-  body: ⟨preimage Star.star⟩
-
-scoped[Pointwise] attribute [instance] Set.star
-
-@[simp]
-
-中文:
-定义 star
-  签名: [对合 α]
-  定义体: ⟨preimage Star.star⟩
-
-scoped[Pointwise] attribute [instance] Set.star
-
-@[simp]
+--- 原说明 ---
+The set `(star s : Set α)` is defined as `{x | star x ∈ s}` in the scope `Pointw
+ise`.
+In the usual case where `star` is involutive, it is equal to `{star s | x ∈ s}`,
+ see
+`Set.image_star`.
 -/
 protected def star [Star α] : Star (Set α) := ⟨preimage Star.star⟩
 
 scoped[Pointwise] attribute [instance] Set.star
 
 @[simp]
-/--
-theorem `star_empty` / 定理 `star_empty`
-
-English:
-theorem star_empty
-  given: [Star α]
-  statement: (∅ : Set α)⋆ = ∅
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 star_empty
-  条件: [对合 α]
-  结论: (∅ : 集合 α)⋆ = ∅
-  证明: rfl
-
-@[simp]
+/-
+**Set.star_empty** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：star_empty [Star α] : (∅ : Set α)⋆ = ∅
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem star_empty [Star α] : (∅ : Set α)⋆ = ∅ := rfl
 
 @[simp]
-/--
-theorem `star_univ` / 定理 `star_univ`
-
-English:
-theorem star_univ
-  given: [Star α]
-  statement: (univ : Set α)⋆ = univ
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 star_univ
-  条件: [对合 α]
-  结论: (univ : 集合 α)⋆ = univ
-  证明: rfl
-
-@[simp]
+/-
+**Set.star_univ** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：star_univ [Star α] : (univ : Set α)⋆ = univ
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem star_univ [Star α] : (univ : Set α)⋆ = univ := rfl
 
 @[simp]
-/--
-theorem `nonempty_star` / 定理 `nonempty_star`
-
-English:
-theorem nonempty_star
-  given: [InvolutiveStar α] {s : Set α}
-  statement: s⋆.Nonempty ↔ s.Nonempty
-  proof: star_involutive.surjective.nonempty_preimage
-
-中文:
-定理 nonempty_star
-  条件: [InvolutiveStar α] {s : 集合 α}
-  结论: s⋆.非空 ↔ s.非空
-  证明: star_involutive.surjective.nonempty_preimage
-
-Depends on / 依赖: nonempty_preimage, star_involutive, star_involutive.surjective.nonempty_preimage, surjective
+/-
+**Set.nonempty_star** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：nonempty_star [InvolutiveStar α] {s : Set α} : s⋆.Nonempty ↔ s.Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Surjective.nonempty_preimage`：∀ {α : Type u_1} {β : Type u_2} {
+f : α → β}, Function.Surjective f → ∀ {s : Set β}, (f ⁻¹' s).Nonempty ↔ s.Nonemp
+ty
+· 使用定理 `Function.Involutive.surjective`：∀ {α : Sort u} {f : α → α}, Function.Inv
+olutive f → Function.Surjective f
+· 使用定理 `InvolutiveStar.star_involutive`：∀ {R : Type u} [self : InvolutiveStar R]
+, Function.Involutive star
 -/
 theorem nonempty_star [InvolutiveStar α] {s : Set α} : s⋆.Nonempty ↔ s.Nonempty :=
   star_involutive.surjective.nonempty_preimage
-
-/--
-theorem `Nonempty.star` / 定理 `Nonempty.star`
-
-English:
-theorem Nonempty.star
-  given: [InvolutiveStar α] {s : Set α} (h : s.Nonempty)
-  statement: s⋆.Nonempty
-  proof: nonempty_star.2 h
-
-@[simp, push]
-
-中文:
-定理 非空.star
-  条件: [InvolutiveStar α] {s : 集合 α} (h : s.非空)
-  结论: s⋆.非空
-  证明: nonempty_star.2 h
-
-@[simp, push]
-
-Depends on / 依赖: nonempty_star
+/-
+**Set.Nonempty.star** 是 Mathlib 中的一个定理，位于命名空间 `Set.Nonempty`。
+形式化陈述：∀ {α : Type u_1} [inst : InvolutiveStar α] {s : Set α}, s.Nonempty → (star
+ s).Nonempty
+参数：star s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.nonempty_star`：nonempty_star [InvolutiveStar α] {s : Set α} : s⋆.Non
+empty ↔ s.Nonempty
 -/
 theorem Nonempty.star [InvolutiveStar α] {s : Set α} (h : s.Nonempty) : s⋆.Nonempty :=
   nonempty_star.2 h
 
 @[simp, push]
-/--
-theorem `mem_star` / 定理 `mem_star`
-
-English:
-theorem mem_star
-  given: [Star α]
-  statement: a in s⋆ ↔ a⋆ in s
-  proof: Iff.rfl
-
-中文:
-定理 mem_star
-  条件: [对合 α]
-  结论: a in s⋆ ↔ a⋆ in s
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Set.mem_star** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_star [Star α] : a in s⋆ ↔ a⋆ in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_star [Star α] : a in s⋆ ↔ a⋆ in s := Iff.rfl
-
-/--
-theorem `star_mem_star` / 定理 `star_mem_star`
-
-English:
-theorem star_mem_star
-  given: [InvolutiveStar α]
-  statement: a⋆ in s⋆ ↔ a in s
-  proof: by simp only [mem_star, star_star]
-
-@[simp]
-
-中文:
-定理 star_mem_star
-  条件: [InvolutiveStar α]
-  结论: a⋆ in s⋆ ↔ a in s
-  证明: by simp only [mem_star, star_star]
-
-@[simp]
-
-Depends on / 依赖: mem_star, star_star
+theorem mem_star [Star α] : a ∈ s⋆ ↔ a⋆ ∈ s := Iff.rfl
+/-
+**Set.star_mem_star** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：star_mem_star [InvolutiveStar α] : a⋆ in s⋆ ↔ a in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `star_star`：star_star [InvolutiveStar R] (r : R) : star (star r) = r
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem star_mem_star [InvolutiveStar α] : a⋆ in s⋆ ↔ a in s := by simp only [mem_star, star_star]
+theorem star_mem_star [InvolutiveStar α] : a⋆ ∈ s⋆ ↔ a ∈ s := by simp only [mem_star, star_star]
 
 @[simp]
-/--
-theorem `star_preimage` / 定理 `star_preimage`
-
-English:
-theorem star_preimage
-  given: [Star α]
-  statement: Star.star ⁻¹' s = s⋆
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 star_preimage
-  条件: [对合 α]
-  结论: 对合.star ⁻¹' s = s⋆
-  证明: rfl
-
-@[simp]
+/-
+**Set.star_preimage** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：star_preimage [Star α] : Star.star ⁻¹' s = s⋆
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem star_preimage [Star α] : Star.star ⁻¹' s = s⋆ := rfl
 
 @[simp]
-/--
-theorem `image_star` / 定理 `image_star`
-
-English:
-theorem image_star
-  given: [InvolutiveStar α]
-  statement: Star.star '' s = s⋆
-  proof: by
-  simp only [← star_preimage]
-  rw [image_eq_preimage_of_inverse] <;> intro <;> simp only [star_star]
-
-@[simp]
-
-中文:
-定理 image_star
-  条件: [InvolutiveStar α]
-  结论: 对合.star '' s = s⋆
-  证明: by
-  simp only [← star_preimage]
-  rw [image_eq_preimage_of_inverse] <;> intro <;> simp only [star_star]
-
-@[simp]
-
-Depends on / 依赖: image_eq_preimage_of_inverse, star_preimage, star_star
+/-
+**Set.image_star** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：image_star [InvolutiveStar α] : Star.star '' s = s⋆
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_eq_preimage_of_inverse`：image_eq_preimage_of_inverse {f : α ->
+ β} {g : β -> α} (h₁ : LeftInverse g f) (h₂ : RightInverse g f) : image f = prei
+mage g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `star_star`：star_star [InvolutiveStar R] (r : R) : star (star r) = r
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem image_star [InvolutiveStar α] : Star.star '' s = s⋆ := by
   simp only [← star_preimage]
   rw [image_eq_preimage_of_inverse] <;> intro <;> simp only [star_star]
 
 @[simp]
-/--
-theorem `inter_star` / 定理 `inter_star`
-
-English:
-theorem inter_star
-  given: [Star α]
-  statement: (s inter t)⋆ = s⋆ inter t⋆
-  proof: preimage_inter
-
-@[simp]
-
-中文:
-定理 inter_star
-  条件: [对合 α]
-  结论: (s inter t)⋆ = s⋆ inter t⋆
-  证明: preimage_inter
-
-@[simp]
-
-Depends on / 依赖: preimage_inter
+/-
+**Set.inter_star** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：inter_star [Star α] : (s inter t)⋆ = s⋆ inter t⋆
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.preimage_inter`：preimage_inter {s t : Set β} : f ⁻¹' (s inter t) = f
+ ⁻¹' s inter f ⁻¹' t
 -/
-theorem inter_star [Star α] : (s inter t)⋆ = s⋆ inter t⋆ := preimage_inter
+theorem inter_star [Star α] : (s ∩ t)⋆ = s⋆ ∩ t⋆ := preimage_inter
 
 @[simp]
-/--
-theorem `union_star` / 定理 `union_star`
-
-English:
-theorem union_star
-  given: [Star α]
-  statement: (s union t)⋆ = s⋆ union t⋆
-  proof: preimage_union
-
-@[simp]
-
-中文:
-定理 union_star
-  条件: [对合 α]
-  结论: (s union t)⋆ = s⋆ union t⋆
-  证明: preimage_union
-
-@[simp]
-
-Depends on / 依赖: preimage_union
+/-
+**Set.union_star** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：union_star [Star α] : (s union t)⋆ = s⋆ union t⋆
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.preimage_union`：preimage_union {s t : Set β} : f ⁻¹' (s union t) = f
+ ⁻¹' s union f ⁻¹' t
 -/
-theorem union_star [Star α] : (s union t)⋆ = s⋆ union t⋆ := preimage_union
+theorem union_star [Star α] : (s ∪ t)⋆ = s⋆ ∪ t⋆ := preimage_union
 
 @[simp]
-/--
-theorem `iInter_star` / 定理 `iInter_star`
-
-English:
-theorem iInter_star
-  given: {ι : Sort*} [Star α] (s : ι -> Set α)
-  statement: (⋂ i, s i)⋆ = ⋂ i, (s i)⋆
-  proof: preimage_iInter
-
-@[simp]
-
-中文:
-定理 i整数er_star
-  条件: {ι : 类型层*} [对合 α] (s : ι -> 集合 α)
-  结论: (⋂ i, s i)⋆ = ⋂ i, (s i)⋆
-  证明: preimage_iInter
-
-@[simp]
-
-Depends on / 依赖: preimage_iInter
+/-
+**Set.iInter_star** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：iInter_star {ι : Sort*} [Star α] (s : ι -> Set α) : (⋂ i, s i)⋆ = ⋂ i, (s 
+i)⋆
+参数：s : ι -> Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.preimage_iInter`：preimage_iInter {f : α -> β} {s : ι -> Set β} : (f 
+⁻¹' ⋂ i, s i) = ⋂ i, f ⁻¹' s i
 -/
-theorem iInter_star {ι : Sort*} [Star α] (s : ι -> Set α) : (⋂ i, s i)⋆ = ⋂ i, (s i)⋆ :=
+theorem iInter_star {ι : Sort*} [Star α] (s : ι → Set α) : (⋂ i, s i)⋆ = ⋂ i, (s i)⋆ :=
   preimage_iInter
 
 @[simp]
-/--
-theorem `iUnion_star` / 定理 `iUnion_star`
-
-English:
-theorem iUnion_star
-  given: {ι : Sort*} [Star α] (s : ι -> Set α)
-  statement: (⋃ i, s i)⋆ = ⋃ i, (s i)⋆
-  proof: preimage_iUnion
-
-@[simp]
-
-中文:
-定理 iUnion_star
-  条件: {ι : 类型层*} [对合 α] (s : ι -> 集合 α)
-  结论: (⋃ i, s i)⋆ = ⋃ i, (s i)⋆
-  证明: preimage_iUnion
-
-@[simp]
-
-Depends on / 依赖: preimage_iUnion
+/-
+**Set.iUnion_star** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：iUnion_star {ι : Sort*} [Star α] (s : ι -> Set α) : (⋃ i, s i)⋆ = ⋃ i, (s 
+i)⋆
+参数：s : ι -> Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.preimage_iUnion`：preimage_iUnion {f : α -> β} {s : ι -> Set β} : (f 
+⁻¹' ⋃ i, s i) = ⋃ i, f ⁻¹' s i
 -/
-theorem iUnion_star {ι : Sort*} [Star α] (s : ι -> Set α) : (⋃ i, s i)⋆ = ⋃ i, (s i)⋆ :=
+theorem iUnion_star {ι : Sort*} [Star α] (s : ι → Set α) : (⋃ i, s i)⋆ = ⋃ i, (s i)⋆ :=
   preimage_iUnion
 
 @[simp]
-/--
-theorem `compl_star` / 定理 `compl_star`
-
-English:
-theorem compl_star
-  given: [Star α]
-  statement: sᶜ⋆ = s⋆ᶜ
-  proof: preimage_compl
-
-@[simp]
-
-中文:
-定理 compl_star
-  条件: [对合 α]
-  结论: sᶜ⋆ = s⋆ᶜ
-  证明: preimage_compl
-
-@[simp]
-
-Depends on / 依赖: preimage_compl
+/-
+**Set.compl_star** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：compl_star [Star α] : sᶜ⋆ = s⋆ᶜ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.preimage_compl`：preimage_compl {s : Set β} : f ⁻¹' sᶜ = (f ⁻¹' s)ᶜ
 -/
 theorem compl_star [Star α] : sᶜ⋆ = s⋆ᶜ := preimage_compl
 
 @[simp]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [InvolutiveStar
-  signature: α] : InvolutiveStar (Set α) where
-  body: by simp only [← star_preimage, preimage_preimage, star_star, preimage_id']
-
-@[simp]
-
-中文:
-实例 [InvolutiveStar
-  签名: α] : InvolutiveStar (集合 α) where
-  定义体: by simp only [← star_preimage, preimage_preimage, star_star, preimage_id']
-
-@[simp]
-
-Depends on / 依赖: preimage_id, preimage_preimage, star_preimage, star_star
+/-
+**Set.** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [InvolutiveStar α] : InvolutiveStar (Set α) where
   star_involutive s := by simp only [← star_preimage, preimage_preimage, star_star, preimage_id']
 
 @[simp]
-/--
-theorem `star_subset_star` / 定理 `star_subset_star`
-
-English:
-theorem star_subset_star
-  given: [InvolutiveStar α] {s t : Set α}
-  statement: s⋆ subseteq t⋆ ↔ s subseteq t
-  proof: Equiv.Perm.star.surjective.preimage_subset_preimage_iff
-
-中文:
-定理 star_subset_star
-  条件: [InvolutiveStar α] {s t : 集合 α}
-  结论: s⋆ subseteq t⋆ ↔ s subseteq t
-  证明: Equiv.Perm.star.surjective.preimage_subset_preimage_iff
-
-Depends on / 依赖: Equiv.Perm.star.surjective.preimage_subset_preimage_iff, preimage_subset_preimage_iff, surjective
+/-
+**Set.star_subset_star** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：star_subset_star [InvolutiveStar α] {s t : Set α} : s⋆ subseteq t⋆ ↔ s sub
+seteq t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Surjective.preimage_subset_preimage_iff`：∀ {α : Type u_1} {β : 
+Type u_2} {f : α → β} {s t : Set β}, Function.Surjective f → (f ⁻¹' s ⊆ f ⁻¹' t 
+↔ s ⊆ t)
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
 -/
-theorem star_subset_star [InvolutiveStar α] {s t : Set α} : s⋆ subseteq t⋆ ↔ s subseteq t :=
+theorem star_subset_star [InvolutiveStar α] {s t : Set α} : s⋆ ⊆ t⋆ ↔ s ⊆ t :=
   Equiv.Perm.star.surjective.preimage_subset_preimage_iff
-
-/--
-theorem `star_subset` / 定理 `star_subset`
-
-English:
-theorem star_subset
-  given: [InvolutiveStar α] {s t : Set α}
-  statement: s⋆ subseteq t ↔ s subseteq t⋆
-  proof: by
-  rw [← star_subset_star]; rw [star_star]
-
-中文:
-定理 star_subset
-  条件: [InvolutiveStar α] {s t : 集合 α}
-  结论: s⋆ subseteq t ↔ s subseteq t⋆
-  证明: by
-  rw [← star_subset_star]; rw [star_star]
-
-Depends on / 依赖: star_star, star_subset_star
+/-
+**Set.star_subset** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：star_subset [InvolutiveStar α] {s t : Set α} : s⋆ subseteq t ↔ s subseteq 
+t⋆
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.star_subset_star`：star_subset_star [InvolutiveStar α] {s t : Set α} 
+: s⋆ subseteq t⋆ ↔ s subseteq t
+· 使用定理 `star_star`：star_star [InvolutiveStar R] (r : R) : star (star r) = r
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem star_subset [InvolutiveStar α] {s t : Set α} : s⋆ subseteq t ↔ s subseteq t⋆ := by
-  rw [← star_subset_star]; rw [star_star]
-
-/--
-theorem `Finite.star` / 定理 `Finite.star`
-
-English:
-theorem Finite.star
-  given: [InvolutiveStar α] {s : Set α} (hs : s.Finite)
-  statement: s⋆.Finite
-  proof: hs.preimage star_injective.injOn
-
-中文:
-定理 有限.star
-  条件: [InvolutiveStar α] {s : 集合 α} (hs : s.有限)
-  结论: s⋆.有限
-  证明: hs.preimage star_injective.injOn
-
-Depends on / 依赖: hs.preimage, preimage, star_injective, star_injective.injOn
+theorem star_subset [InvolutiveStar α] {s t : Set α} : s⋆ ⊆ t ↔ s ⊆ t⋆ := by
+  rw [← star_subset_star, star_star]
+/-
+**Set.Finite.star** 是 Mathlib 中的一个定理，位于命名空间 `Set.Finite`。
+形式化陈述：∀ {α : Type u_1} [inst : InvolutiveStar α] {s : Set α}, s.Finite → (star s
+).Finite
+参数：star s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.preimage`：∀ {α : Type u} {β : Type v} {f : α → β} {s : Set β}
+, Set.InjOn f (f ⁻¹' s) → s.Finite → (f ⁻¹' s).Finite
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `star_injective`：star_injective [InvolutiveStar R] : Function.Injective (
+star : R -> R)
 -/
 theorem Finite.star [InvolutiveStar α] {s : Set α} (hs : s.Finite) : s⋆.Finite :=
   hs.preimage star_injective.injOn
-
-/--
-theorem `star_singleton` / 定理 `star_singleton`
-
-English:
-theorem star_singleton
-  given: {β : Type*} [InvolutiveStar β] (x : β)
-  statement: ({x} : Set β)⋆ = {x⋆}
-  proof: by
-  ext1 y
-  rw [mem_star]; rw [mem_singleton_iff]; rw [mem_singleton_iff]; rw [star_eq_iff_star_eq]; rw [eq_comm]
-
-中文:
-定理 star_singleton
-  条件: {β : 类型} [InvolutiveStar β] (x : β)
-  结论: ({x} : 集合 β)⋆ = {x⋆}
-  证明: by
-  ext1 y
-  rw [mem_star]; rw [mem_singleton_iff]; rw [mem_singleton_iff]; rw [star_eq_iff_star_eq]; rw [eq_comm]
-
-Depends on / 依赖: eq_comm, mem_singleton_iff, mem_star, star_eq_iff_star_eq
+/-
+**Set.star_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：star_singleton {β : Type*} [InvolutiveStar β] (x : β) : ({x} : Set β)⋆ = {
+x⋆}
+参数：x : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.mem_star`：mem_star [Star α] : a in s⋆ ↔ a⋆ in s
+· 使用定理 `Set.mem_singleton_iff`：mem_singleton_iff {a b : α} : a in ({b} : Set α) 
+↔ a = b
+· 使用定理 `star_eq_iff_star_eq`：star_eq_iff_star_eq [InvolutiveStar R] {r s : R} : 
+star r = s ↔ star s = r
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem star_singleton {β : Type*} [InvolutiveStar β] (x : β) : ({x} : Set β)⋆ = {x⋆} := by
   ext1 y
-  rw [mem_star]; rw [mem_singleton_iff]; rw [mem_singleton_iff]; rw [star_eq_iff_star_eq]; rw [eq_comm]
-
-/--
-theorem `star_mul` / 定理 `star_mul`
-
-English:
-theorem star_mul
-  given: [Mul α] [StarMul α] (s t : Set α)
-  statement: (s * t)⋆ = t⋆ * s⋆
-  proof: by
-  simp_rw [← image_star, ← image2_mul, image_image2, image2_image_left, image2_image_right,
-    star_mul, image2_swap _ s t]
-
-中文:
-定理 star_mul
-  条件: [乘法 α] [StarMul α] (s t : 集合 α)
-  结论: (s * t)⋆ = t⋆ * s⋆
-  证明: by
-  simp_rw [← image_star, ← image2_mul, image_image2, image2_image_left, image2_image_right,
-    star_mul, image2_swap _ s t]
+  rw [mem_star, mem_singleton_iff, mem_singleton_iff, star_eq_iff_star_eq, eq_comm]
+/-
+**Set.star_mul** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} [inst : Mul α] [inst_1 : StarMul α] (s t : Set α), star (
+s * t) = star t * star s
+参数：s t : Set α；s * t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.image_image2`：image_image2 (f : α -> β -> γ) (g : γ -> δ) : g '' ima
+ge2 f s t = image2 (fun a b => g (f a b)) s t
+· 使用定理 `Set.image2_image_left`：image2_image_left (f : γ -> β -> δ) (g : α -> γ) 
+: image2 f (g '' s) t = image2 (fun a b => f (g a) b) s t
+· 使用定理 `Set.image2_image_right`：image2_image_right (f : α -> γ -> δ) (g : β -> γ
+) : image2 f s (g '' t) = image2 (fun a b => f a (g b)) s t
+· 使用定理 `Set.image2_congr`：image2_congr (h : forall a in s, forall b in t, f a b 
+= f' a b) : image2 f s t = image2 f' s t
+· 使用定理 `StarMul.star_mul`：∀ {R : Type u} {inst : Mul R} [self : StarMul R] (r s 
+: R), star (r * s) = star s * star r
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.image2_swap`：image2_swap (s : Set α) (t : Set β) : image2 f s t = im
+age2 (fun a b => f b a) t s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 protected theorem star_mul [Mul α] [StarMul α] (s t : Set α) : (s * t)⋆ = t⋆ * s⋆ := by
   simp_rw [← image_star, ← image2_mul, image_image2, image2_image_left, image2_image_right,
     star_mul, image2_swap _ s t]
-
-/--
-theorem `star_add` / 定理 `star_add`
-
-English:
-theorem star_add
-  given: [AddMonoid α] [StarAddMonoid α] (s t : Set α)
-  statement: (s + t)⋆ = s⋆ + t⋆
-  proof: by
-  simp_rw [← image_star, ← image2_add, image_image2, image2_image_left, image2_image_right,
-    star_add]
-
-@[simp]
-
-中文:
-定理 star_add
-  条件: [加法幺半群 α] [StarAdd幺半群 α] (s t : 集合 α)
-  结论: (s + t)⋆ = s⋆ + t⋆
-  证明: by
-  simp_rw [← image_star, ← image2_add, image_image2, image2_image_left, image2_image_right,
-    star_add]
-
-@[simp]
+/-
+**Set.star_add** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} [inst : AddMonoid α] [inst_1 : StarAddMonoid α] (s t : Se
+t α), star (s + t) = star s + star t
+参数：s t : Set α；s + t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.image_image2`：image_image2 (f : α -> β -> γ) (g : γ -> δ) : g '' ima
+ge2 f s t = image2 (fun a b => g (f a b)) s t
+· 使用定理 `Set.image2_image_left`：image2_image_left (f : γ -> β -> δ) (g : α -> γ) 
+: image2 f (g '' s) t = image2 (fun a b => f (g a) b) s t
+· 使用定理 `Set.image2_image_right`：image2_image_right (f : α -> γ -> δ) (g : β -> γ
+) : image2 f s (g '' t) = image2 (fun a b => f a (g b)) s t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.image2_congr`：image2_congr (h : forall a in s, forall b in t, f a b 
+= f' a b) : image2 f s t = image2 f' s t
+· 使用定理 `StarAddMonoid.star_add`：∀ {R : Type u} {inst : AddMonoid R} [self : Star
+AddMonoid R] (r s : R), star (r + s) = star r + star s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 protected theorem star_add [AddMonoid α] [StarAddMonoid α] (s t : Set α) : (s + t)⋆ = s⋆ + t⋆ := by
   simp_rw [← image_star, ← image2_add, image_image2, image2_image_left, image2_image_right,
     star_add]
 
 @[simp]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Star
-  signature: α] [TrivialStar α] : TrivialStar (Set α) where
-  body: by
-    rw [← star_preimage]
-    ext1
-    simp [star_trivial]
-
-中文:
-实例 [对合
-  签名: α] [TrivialStar α] : TrivialStar (集合 α) where
-  定义体: by
-    rw [← star_preimage]
-    ext1
-    simp [star_trivial]
-
-Depends on / 依赖: star_preimage, star_trivial
+/-
+**Set.** 是 Mathlib 中的一个实例，位于命名空间 `Set`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Star α] [TrivialStar α] : TrivialStar (Set α) where
   star_trivial s := by
     rw [← star_preimage]
     ext1
     simp [star_trivial]
-
-/--
-theorem `star_inv` / 定理 `star_inv`
-
-English:
-theorem star_inv
-  given: [Group α] [StarMul α] (s : Set α)
-  statement: s⁻¹⋆ = s⋆⁻¹
-  proof: by
-  ext
-  simp only [mem_star, mem_inv, star_inv]
-
-中文:
-定理 star_inv
-  条件: [群 α] [StarMul α] (s : 集合 α)
-  结论: s⁻¹⋆ = s⋆⁻¹
-  证明: by
-  ext
-  simp only [mem_star, mem_inv, star_inv]
+/-
+**Set.star_inv** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} [inst : Group α] [inst_1 : StarMul α] (s : Set α), star s
+⁻¹ = (star s)⁻¹
+参数：s : Set α；star s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `star_inv`：star_inv [Group R] [StarMul R] (x : R) : star x⁻¹ = (star x)⁻¹
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 protected theorem star_inv [Group α] [StarMul α] (s : Set α) : s⁻¹⋆ = s⋆⁻¹ := by
   ext
   simp only [mem_star, mem_inv, star_inv]
-
-/--
-theorem `star_inv'` / 定理 `star_inv'`
-
-English:
-theorem star_inv'
-  given: [GroupWithZero α] [StarMul α] (s : Set α)
-  statement: s⁻¹⋆ = s⋆⁻¹
-  proof: by
-  ext
-  simp only [mem_star, mem_inv, star_inv₀]
-
-中文:
-定理 star_inv'
-  条件: [带零群 α] [StarMul α] (s : 集合 α)
-  结论: s⁻¹⋆ = s⋆⁻¹
-  证明: by
-  ext
-  simp only [mem_star, mem_inv, star_inv₀]
+/-
+**Set.star_inv'** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：∀ {α : Type u_1} [inst : GroupWithZero α] [inst_1 : StarMul α] (s : Set α)
+, star s⁻¹ = (star s)⁻¹
+参数：s : Set α；star s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `star_inv₀`：star_inv₀ [GroupWithZero R] [StarMul R] (x : R) : star x⁻¹ = 
+(star x)⁻¹
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 protected theorem star_inv' [GroupWithZero α] [StarMul α] (s : Set α) : s⁻¹⋆ = s⋆⁻¹ := by
   ext
@@ -605,24 +405,21 @@ protected theorem star_inv' [GroupWithZero α] [StarMul α] (s : Set α) : s⁻�
 end Set
 
 @[simp]
-/--
-lemma `StarMemClass.star_coe_eq` / 引理 `StarMemClass.star_coe_eq`
-
-English:
-lemma StarMemClass.star_coe_eq
-  statement: {S α : Type*} [InvolutiveStar α] [SetLike S α]
-  proof: by
-  ext
-  simpa using star_mem_iff
-
-中文:
-引理 StarMem类.star_coe_eq
-  结论: {S α : 类型} [InvolutiveStar α] [集合状 S α]
-  证明: by
-  ext
-  simpa using star_mem_iff
-
-Depends on / 依赖: star_mem_iff
+/-
+**StarMemClass.star_coe_eq** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：StarMemClass.star_coe_eq {S α : Type*} [InvolutiveStar α] [SetLike S α] [S
+tarMemClass S α] (s : S) : star (s : Set α) = s
+参数：s : S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `star_mem_iff`：star_mem_iff {S : Type*} [SetLike S R] [InvolutiveStar R] 
+[StarMemClass S R] {s : S} {x : R} : star x in s ↔ x in s
 -/
 lemma StarMemClass.star_coe_eq {S α : Type*} [InvolutiveStar α] [SetLike S α]
     [StarMemClass S α] (s : S) : star (s : Set α) = s := by

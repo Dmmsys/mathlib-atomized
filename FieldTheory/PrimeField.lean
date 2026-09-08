@@ -29,74 +29,93 @@ contains a unique prime field: it is the smallest field contained in `K`.
 
 public section
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Subsingleton (Subfield Rat)
-  body: subsingleton_of_top_le_bot fun x _ =>
-  have h := Subsingleton.elim ((⊥ : Subfield Rat).subtype.comp (Rat.castHom _)) (.id _ : Rat ->+* Rat)
-  (congr($h x) : _ = x) ▸ Subtype.prop _
-
-中文:
-实例 :
-  签名: 子单例 (子域 有理数)
-  定义体: subsingleton_of_top_le_bot fun x _ =>
-  have h := Subsingleton.elim ((⊥ : Subfield Rat).subtype.comp (Rat.castHom _)) (.id _ : Rat ->+* Rat)
-  (congr($h x) : _ = x) ▸ Subtype.prop _
-
-Depends on / 依赖: subsingleton_of_top_le_bot
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Subsingleton (Subfield Rat) := subsingleton_of_top_le_bot fun x _ =>
-  have h := Subsingleton.elim ((⊥ : Subfield Rat).subtype.comp (Rat.castHom _)) (.id _ : Rat ->+* Rat)
+instance : Subsingleton (Subfield ℚ) := subsingleton_of_top_le_bot fun x _ ↦
+  have h := Subsingleton.elim ((⊥ : Subfield ℚ).subtype.comp (Rat.castHom _)) (.id _ : ℚ →+* ℚ)
   (congr($h x) : _ = x) ▸ Subtype.prop _
-
-instance (p : Nat) [hp : Fact (Nat.Prime p)] : Subsingleton (Subfield (ZMod p)) :=
-  subsingleton_of_top_le_bot fun x _ =>
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (p : ℕ) [hp : Fact (Nat.Prime p)] : Subsingleton (Subfield (ZMod p)) :=
+  subsingleton_of_top_le_bot fun x _ ↦
     have h := Subsingleton.elim ((⊥ : Subfield (ZMod p)).subtype.comp
-      (ZMod.castHom dvd_rfl _)) (.id _ : ZMod p ->+* ZMod p)
+      (ZMod.castHom dvd_rfl _)) (.id _ : ZMod p →+* ZMod p)
     (congr($h x) : _ = x) ▸ Subtype.prop _
 
 /--
-theorem `Subfield.bot_eq_of_charZero` / 定理 `Subfield.bot_eq_of_charZero`
+The smallest subfield of a field of characteristic `0` is (the image of) `ℚ`.
+-/
+/-
+**Subfield.bot_eq_of_charZero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Subfield.bot_eq_of_charZero {K : Type*} [Field K] [CharZero K] : (⊥ : Subf
+ield K) = (algebraMap Rat K).fieldRange
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `eq_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a = ⊥ ↔ a ≤ ⊥
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subfield.map_bot`：map_bot (f : K ->+* L) : (⊥ : Subfield K).map f = ⊥
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `subsingleton_iff_bot_eq_top`：subsingleton_iff_bot_eq_top : (⊥ : α) = (⊤ 
+: α) ↔ Subsingleton α
+· 使用定理 `instSubsingletonSubfieldRat`：Subsingleton (Subfield ℚ)
+· 使用定理 `RingHom.fieldRange_eq_map`：fieldRange_eq_map : f.fieldRange = Subfield.m
+ap f ⊤
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 
-English:
-theorem Subfield.bot_eq_of_charZero
-  given: {K : Type*} [Field K] [CharZero K]
-  proof: by
-  rw [eq_comm]; rw [eq_bot_iff]; rw [← Subfield.map_bot (algebraMap Rat K)]; rw [subsingleton_iff_bot_eq_top.mpr inferInstance]; rw [← RingHom.fieldRange_eq_map]
-
-中文:
-定理 子域.bot_eq_of_charZero
-  条件: {K : 类型} [域 K] [特征零 K]
-  证明: by
-  rw [eq_comm]; rw [eq_bot_iff]; rw [← Subfield.map_bot (algebraMap Rat K)]; rw [subsingleton_iff_bot_eq_top.mpr inferInstance]; rw [← RingHom.fieldRange_eq_map]
-
-Depends on / 依赖: RingHom, RingHom.fieldRange_eq_map, Subfield, Subfield.map_bot, algebraMap, eq_bot_iff, eq_comm, fieldRange_eq_map, map_bot, subsingleton_iff_bot_eq_top, subsingleton_iff_bot_eq_top.mpr
+--- 原说明 ---
+The smallest subfield of a field of characteristic `0` is (the image of) `ℚ`.
 -/
 theorem Subfield.bot_eq_of_charZero {K : Type*} [Field K] [CharZero K] :
-    (⊥ : Subfield K) = (algebraMap Rat K).fieldRange := by
-  rw [eq_comm]; rw [eq_bot_iff]; rw [← Subfield.map_bot (algebraMap Rat K)]; rw [subsingleton_iff_bot_eq_top.mpr inferInstance]; rw [← RingHom.fieldRange_eq_map]
+    (⊥ : Subfield K) = (algebraMap ℚ K).fieldRange := by
+  rw [eq_comm, eq_bot_iff, ← Subfield.map_bot (algebraMap ℚ K),
+    subsingleton_iff_bot_eq_top.mpr inferInstance, ← RingHom.fieldRange_eq_map]
 
 /--
-theorem `Subfield.bot_eq_of_zMod_algebra` / 定理 `Subfield.bot_eq_of_zMod_algebra`
-
-English:
-theorem Subfield.bot_eq_of_zMod_algebra
-  statement: {K : Type*} (p : Nat) [hp : Fact (Nat.Prime p)]
-  proof: by
-  rw [eq_comm]; rw [eq_bot_iff]; rw [← Subfield.map_bot (algebraMap (ZMod p) K)]; rw [subsingleton_iff_bot_eq_top.mpr inferInstance]; rw [← RingHom.fieldRange_eq_map]
-
-中文:
-定理 子域.bot_eq_of_zMod_algebra
-  结论: {K : 类型} (p : 自然数) [hp : Fact (自然数.素 p)]
-  证明: by
-  rw [eq_comm]; rw [eq_bot_iff]; rw [← Subfield.map_bot (algebraMap (ZMod p) K)]; rw [subsingleton_iff_bot_eq_top.mpr inferInstance]; rw [← RingHom.fieldRange_eq_map]
-
-Depends on / 依赖: RingHom, RingHom.fieldRange_eq_map, Subfield, Subfield.map_bot, algebraMap, eq_bot_iff, eq_comm, fieldRange_eq_map, map_bot, subsingleton_iff_bot_eq_top, subsingleton_iff_bot_eq_top.mpr
+The smallest subfield of a field of characteristic `p` is (the image of) `ZMod p`.
+Note that the fact that the field `K` is of characteristic `p` is stated by the fact that it is
+`ZMod p`-algebra.
 -/
-theorem Subfield.bot_eq_of_zMod_algebra {K : Type*} (p : Nat) [hp : Fact (Nat.Prime p)]
+/-
+**Subfield.bot_eq_of_zMod_algebra** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Subfield.bot_eq_of_zMod_algebra {K : Type*} (p : Nat) [hp : Fact (Nat.Prim
+e p)] [Field K] [Algebra (ZMod p) K] : (⊥ : Subfield K) = (algebraMap (ZMod p) K
+).fieldRange
+参数：p : Nat；Nat.Prime p；ZMod p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `eq_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a = ⊥ ↔ a ≤ ⊥
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subfield.map_bot`：map_bot (f : K ->+* L) : (⊥ : Subfield K).map f = ⊥
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `subsingleton_iff_bot_eq_top`：subsingleton_iff_bot_eq_top : (⊥ : α) = (⊤ 
+: α) ↔ Subsingleton α
+· 使用定理 `instSubsingletonSubfieldZMod`：∀ (p : ℕ) [hp : Fact (Nat.Prime p)], Subsi
+ngleton (Subfield (ZMod p))
+· 使用定理 `RingHom.fieldRange_eq_map`：fieldRange_eq_map : f.fieldRange = Subfield.m
+ap f ⊤
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+
+--- 原说明 ---
+The smallest subfield of a field of characteristic `p` is (the image of) `ZMod p
+`.
+Note that the fact that the field `K` is of characteristic `p` is stated by the 
+fact that it is
+`ZMod p`-algebra.
+-/
+theorem Subfield.bot_eq_of_zMod_algebra {K : Type*} (p : ℕ) [hp : Fact (Nat.Prime p)]
     [Field K] [Algebra (ZMod p) K] :
     (⊥ : Subfield K) = (algebraMap (ZMod p) K).fieldRange := by
-  rw [eq_comm]; rw [eq_bot_iff]; rw [← Subfield.map_bot (algebraMap (ZMod p) K)]; rw [subsingleton_iff_bot_eq_top.mpr inferInstance]; rw [← RingHom.fieldRange_eq_map]
+  rw [eq_comm, eq_bot_iff, ← Subfield.map_bot (algebraMap (ZMod p) K),
+    subsingleton_iff_bot_eq_top.mpr inferInstance, ← RingHom.fieldRange_eq_map]

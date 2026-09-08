@@ -16,24 +16,18 @@ public import Mathlib.Order.Hom.Basic
 
 /-- `toLex` as an `OrderHom`. -/
 @[simps]
-/--
-Definition of `Prod.Lex.toLexOrderHom` / `Prod.Lex.toLexOrderHom` 的定义
+/-
+**Prod.Lex.toLexOrderHom** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Prod.Lex.toLexOrderHom {α β : Type*} [PartialOrder α] [Preorder β] : α × β
+ ->o α ×ₗ β where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Prod.Lex.toLex_mono`：toLex_mono : Monotone (toLex : α × β -> α ×ₗ β)
 
-English:
-definition Prod.Lex.toLexOrderHom
-  signature: {α β : Type*} [PartialOrder α] [Preorder β]
-  body: toLex
-  monotone' := Prod.Lex.toLex_mono
-
-中文:
-定义 积类型.Lex.toLexOrderHom
-  签名: {α β : 类型} [偏序 α] [预序 β]
-  定义体: toLex
-  monotone' := Prod.Lex.toLex_mono
-
-Depends on / 依赖: _eq_iff_mk, toLocalizationMap
+--- 原说明 ---
+`toLex` as an `OrderHom`.
 -/
 def Prod.Lex.toLexOrderHom {α β : Type*} [PartialOrder α] [Preorder β] :
-    α × β ->o α ×ₗ β where
+    α × β →o α ×ₗ β where
   toFun := toLex
   monotone' := Prod.Lex.toLex_mono

@@ -26,58 +26,49 @@ open CategoryTheory
 
 variable (C : Type u) [Category.{v} C]
 
-/--
-Definition of `CategoryWithFibrations` / `CategoryWithFibrations` 的定义
+/-- A category with fibrations is a category equipped with
+a class of morphisms named "fibrations". -/
+/-
+**HomotopicalAlgebra.CategoryWithFibrations** 是 Mathlib 中的一个归纳类型，位于命名空间 `Homotop
+icalAlgebra`。
+形式化陈述：(C : Type u) → [CategoryTheory.Category.{v, u} C] → Type (max u v)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class CategoryWithFibrations
-  parameters: where
-  axioms and operations (1):
-    - fibrations : MorphismProperty C
-
-中文:
-类 带纤维化范畴
-  参数: where
-  公理与运算 (1 个):
-    - fibrations : MorphismProperty C
+--- 原说明 ---
+A category with fibrations is a category equipped with
+a class of morphisms named "fibrations".
 -/
 class CategoryWithFibrations where
   /-- the class of fibrations -/
   fibrations : MorphismProperty C
 
-/--
-Definition of `CategoryWithCofibrations` / `CategoryWithCofibrations` 的定义
+/-- A category with cofibrations is a category equipped with
+a class of morphisms named "cofibrations". -/
+/-
+**HomotopicalAlgebra.CategoryWithCofibrations** 是 Mathlib 中的一个归纳类型，位于命名空间 `Homot
+opicalAlgebra`。
+形式化陈述：(C : Type u) → [CategoryTheory.Category.{v, u} C] → Type (max u v)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class CategoryWithCofibrations
-  parameters: where
-  axioms and operations (1):
-    - cofibrations : MorphismProperty C
-
-中文:
-类 带余纤维化范畴
-  参数: where
-  公理与运算 (1 个):
-    - cofibrations : MorphismProperty C
+--- 原说明 ---
+A category with cofibrations is a category equipped with
+a class of morphisms named "cofibrations".
 -/
 class CategoryWithCofibrations where
   /-- the class of cofibrations -/
   cofibrations : MorphismProperty C
 
-/--
-Definition of `CategoryWithWeakEquivalences` / `CategoryWithWeakEquivalences` 的定义
+/-- A category with weak equivalences is a category equipped with
+a class of morphisms named "weak equivalences". -/
+/-
+**HomotopicalAlgebra.CategoryWithWeakEquivalences** 是 Mathlib 中的一个归纳类型，位于命名空间 `H
+omotopicalAlgebra`。
+形式化陈述：(C : Type u) → [CategoryTheory.Category.{v, u} C] → Type (max u v)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class CategoryWithWeakEquivalences
-  parameters: where
-  axioms and operations (1):
-    - weakEquivalences : MorphismProperty C
-
-中文:
-类 带弱等价范畴
-  参数: where
-  公理与运算 (1 个):
-    - weakEquivalences : MorphismProperty C
+--- 原说明 ---
+A category with weak equivalences is a category equipped with
+a class of morphisms named "weak equivalences".
 -/
 class CategoryWithWeakEquivalences where
   /-- the class of weak equivalences -/
@@ -89,20 +80,15 @@ section Fib
 
 variable [CategoryWithFibrations C]
 
-/--
-Definition of `fibrations` / `fibrations` 的定义
+/-- The class of fibrations in a category with fibrations. -/
+/-
+**HomotopicalAlgebra.fibrations** 是 Mathlib 中的一个定义，位于命名空间 `HomotopicalAlgebra`。
+形式化陈述：fibrations : MorphismProperty C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fibrations
-  signature: : MorphismProperty C
-  body: CategoryWithFibrations.fibrations
-
-中文:
-定义 fibrations
-  签名: : MorphismProperty C
-  定义体: CategoryWithFibrations.fibrations
-
-Depends on / 依赖: CategoryWithFibrations, CategoryWithFibrations.fibrations, fibrations
+--- 原说明 ---
+The class of fibrations in a category with fibrations.
 -/
 def fibrations : MorphismProperty C := CategoryWithFibrations.fibrations
 
@@ -110,40 +96,27 @@ variable {C}
 
 /-- A morphism `f` satisfies `[Fibration f]` if it belongs to `fibrations C`. -/
 @[mk_iff]
-/--
-Definition of `Fibration` / `Fibration` 的定义
+/-
+**HomotopicalAlgebra.Fibration** 是 Mathlib 中的一个归纳类型，位于命名空间 `HomotopicalAlgebra`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] → {X Y : C} → (
+X ⟶ Y) → [HomotopicalAlgebra.CategoryWithFibrations C] → Prop
+参数：X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Fibration
-  parameters: : Prop where
-  axioms and operations (1):
-    - mem : fibrations C f
-
-中文:
-类 纤维化
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - mem : fibrations C f
+--- 原说明 ---
+A morphism `f` satisfies `[Fibration f]` if it belongs to `fibrations C`.
 -/
 class Fibration : Prop where
   mem : fibrations C f
-
-/--
-lemma `mem_fibrations` / 引理 `mem_fibrations`
-
-English:
-lemma mem_fibrations
-  given: [Fibration f]
-  statement: fibrations C f
-  proof: Fibration.mem
-
-中文:
-引理 mem_fibrations
-  条件: [纤维化 f]
-  结论: fibrations C f
-  证明: Fibration.mem
-
-Depends on / 依赖: Fibration, Fibration.mem
+/-
+**HomotopicalAlgebra.mem_fibrations** 是 Mathlib 中的一个引理，位于命名空间 `HomotopicalAlgebr
+a`。
+形式化陈述：mem_fibrations [Fibration f] : fibrations C f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomotopicalAlgebra.Fibration.mem`：∀ {C : Type u} {inst : CategoryTheory.
+Category.{v, u} C} {X Y : C} {f : X ⟶ Y}   {inst_1 : HomotopicalAlgebra.Category
+WithFibrations C} [sel…
 -/
 lemma mem_fibrations [Fibration f] : fibrations C f := Fibration.mem
 
@@ -153,20 +126,16 @@ section Cof
 
 variable [CategoryWithCofibrations C]
 
-/--
-Definition of `cofibrations` / `cofibrations` 的定义
+/-- The class of cofibrations in a category with cofibrations. -/
+/-
+**HomotopicalAlgebra.cofibrations** 是 Mathlib 中的一个定义，位于命名空间 `HomotopicalAlgebra`
+。
+形式化陈述：cofibrations : MorphismProperty C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cofibrations
-  signature: : MorphismProperty C
-  body: CategoryWithCofibrations.cofibrations
-
-中文:
-定义 cofibrations
-  签名: : MorphismProperty C
-  定义体: CategoryWithCofibrations.cofibrations
-
-Depends on / 依赖: CategoryWithCofibrations, CategoryWithCofibrations.cofibrations, cofibrations
+--- 原说明 ---
+The class of cofibrations in a category with cofibrations.
 -/
 def cofibrations : MorphismProperty C := CategoryWithCofibrations.cofibrations
 
@@ -174,40 +143,28 @@ variable {C}
 
 /-- A morphism `f` satisfies `[Cofibration f]` if it belongs to `cofibrations C`. -/
 @[mk_iff]
-/--
-Definition of `Cofibration` / `Cofibration` 的定义
+/-
+**HomotopicalAlgebra.Cofibration** 是 Mathlib 中的一个归纳类型，位于命名空间 `HomotopicalAlgebra
+`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {X Y : C}
+ → (X ⟶ Y) → [HomotopicalAlgebra.CategoryWithCofibrations C] → Prop
+参数：X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Cofibration
-  parameters: : Prop where
-  axioms and operations (1):
-    - mem : cofibrations C f
-
-中文:
-类 余纤维化
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - mem : cofibrations C f
+--- 原说明 ---
+A morphism `f` satisfies `[Cofibration f]` if it belongs to `cofibrations C`.
 -/
 class Cofibration : Prop where
   mem : cofibrations C f
-
-/--
-lemma `mem_cofibrations` / 引理 `mem_cofibrations`
-
-English:
-lemma mem_cofibrations
-  given: [Cofibration f]
-  statement: cofibrations C f
-  proof: Cofibration.mem
-
-中文:
-引理 mem_cofibrations
-  条件: [余纤维化 f]
-  结论: cofibrations C f
-  证明: Cofibration.mem
-
-Depends on / 依赖: Cofibration, Cofibration.mem
+/-
+**HomotopicalAlgebra.mem_cofibrations** 是 Mathlib 中的一个引理，位于命名空间 `HomotopicalAlge
+bra`。
+形式化陈述：mem_cofibrations [Cofibration f] : cofibrations C f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomotopicalAlgebra.Cofibration.mem`：∀ {C : Type u} {inst : CategoryTheor
+y.Category.{v, u} C} {X Y : C} {f : X ⟶ Y}   {inst_1 : HomotopicalAlgebra.Catego
+ryWithCofibrations C} [s…
 -/
 lemma mem_cofibrations [Cofibration f] : cofibrations C f := Cofibration.mem
 
@@ -217,20 +174,16 @@ section W
 
 variable [CategoryWithWeakEquivalences C]
 
-/--
-Definition of `weakEquivalences` / `weakEquivalences` 的定义
+/-- The class of weak equivalences in a category with weak equivalences. -/
+/-
+**HomotopicalAlgebra.weakEquivalences** 是 Mathlib 中的一个定义，位于命名空间 `HomotopicalAlge
+bra`。
+形式化陈述：weakEquivalences : MorphismProperty C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition weakEquivalences
-  signature: : MorphismProperty C
-  body: CategoryWithWeakEquivalences.weakEquivalences
-
-中文:
-定义 weakEquivalences
-  签名: : MorphismProperty C
-  定义体: CategoryWithWeakEquivalences.weakEquivalences
-
-Depends on / 依赖: CategoryWithWeakEquivalences, CategoryWithWeakEquivalences.weakEquivalences, weakEquivalences
+--- 原说明 ---
+The class of weak equivalences in a category with weak equivalences.
 -/
 def weakEquivalences : MorphismProperty C := CategoryWithWeakEquivalences.weakEquivalences
 
@@ -238,40 +191,29 @@ variable {C}
 
 /-- A morphism `f` satisfies `[WeakEquivalence f]` if it belongs to `weakEquivalences C`. -/
 @[mk_iff]
-/--
-Definition of `WeakEquivalence` / `WeakEquivalence` 的定义
+/-
+**HomotopicalAlgebra.WeakEquivalence** 是 Mathlib 中的一个归纳类型，位于命名空间 `HomotopicalAlg
+ebra`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {X Y : C}
+ → (X ⟶ Y) → [HomotopicalAlgebra.CategoryWithWeakEquivalences C] → Prop
+参数：X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class WeakEquivalence
-  parameters: : Prop where
-  axioms and operations (1):
-    - mem : weakEquivalences C f
-
-中文:
-类 弱等价
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - mem : weakEquivalences C f
+--- 原说明 ---
+A morphism `f` satisfies `[WeakEquivalence f]` if it belongs to `weakEquivalence
+s C`.
 -/
 class WeakEquivalence : Prop where
   mem : weakEquivalences C f
-
-/--
-lemma `mem_weakEquivalences` / 引理 `mem_weakEquivalences`
-
-English:
-lemma mem_weakEquivalences
-  given: [WeakEquivalence f]
-  statement: weakEquivalences C f
-  proof: WeakEquivalence.mem
-
-中文:
-引理 mem_weakEquivalences
-  条件: [弱等价 f]
-  结论: weakEquivalences C f
-  证明: WeakEquivalence.mem
-
-Depends on / 依赖: WeakEquivalence, WeakEquivalence.mem
+/-
+**HomotopicalAlgebra.mem_weakEquivalences** 是 Mathlib 中的一个引理，位于命名空间 `Homotopical
+Algebra`。
+形式化陈述：mem_weakEquivalences [WeakEquivalence f] : weakEquivalences C f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HomotopicalAlgebra.WeakEquivalence.mem`：∀ {C : Type u} {inst : CategoryT
+heory.Category.{v, u} C} {X Y : C} {f : X ⟶ Y}   {inst_1 : HomotopicalAlgebra.Ca
+tegoryWithWeakEquivalences C…
 -/
 lemma mem_weakEquivalences [WeakEquivalence f] : weakEquivalences C f := WeakEquivalence.mem
 
@@ -281,96 +223,77 @@ section TrivFib
 
 variable [CategoryWithFibrations C] [CategoryWithWeakEquivalences C]
 
-/--
-Definition of `trivialFibrations` / `trivialFibrations` 的定义
+/-- A trivial fibration is a morphism that is both a fibration and a weak equivalence. -/
+/-
+**HomotopicalAlgebra.trivialFibrations** 是 Mathlib 中的一个定义，位于命名空间 `HomotopicalAlg
+ebra`。
+形式化陈述：trivialFibrations : MorphismProperty C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trivialFibrations
-  signature: : MorphismProperty C
-  body: fibrations C ⊓ weakEquivalences C
-
-中文:
-定义 trivialFibrations
-  签名: : MorphismProperty C
-  定义体: fibrations C ⊓ weakEquivalences C
-
-Depends on / 依赖: fibrations, weakEquivalences
+--- 原说明 ---
+A trivial fibration is a morphism that is both a fibration and a weak equivalenc
+e.
 -/
 def trivialFibrations : MorphismProperty C := fibrations C ⊓ weakEquivalences C
-
-/--
-lemma `trivialFibrations_sub_fibrations` / 引理 `trivialFibrations_sub_fibrations`
-
-English:
-lemma trivialFibrations_sub_fibrations
-  statement: trivialFibrations C <= fibrations C
-  proof: fun _ _ _ hf => hf.1
-
-中文:
-引理 trivialFibrations_sub_fibrations
-  结论: trivialFibrations C <= fibrations C
-  证明: fun _ _ _ hf => hf.1
+/-
+**HomotopicalAlgebra.trivialFibrations_sub_fibrations** 是 Mathlib 中的一个引理，位于命名空间 
+`HomotopicalAlgebra`。
+形式化陈述：trivialFibrations_sub_fibrations : trivialFibrations C <= fibrations C
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-lemma trivialFibrations_sub_fibrations : trivialFibrations C <= fibrations C :=
-  fun _ _ _ hf => hf.1
-
-/--
-lemma `trivialFibrations_sub_weakEquivalences` / 引理 `trivialFibrations_sub_weakEquivalences`
-
-English:
-lemma trivialFibrations_sub_weakEquivalences
-  statement: trivialFibrations C <= weakEquivalences C
-  proof: fun _ _ _ hf => hf.2
-
-中文:
-引理 trivialFibrations_sub_weakEquivalences
-  结论: trivialFibrations C <= weakEquivalences C
-  证明: fun _ _ _ hf => hf.2
+lemma trivialFibrations_sub_fibrations : trivialFibrations C ≤ fibrations C :=
+  fun _ _ _ hf ↦ hf.1
+/-
+**HomotopicalAlgebra.trivialFibrations_sub_weakEquivalences** 是 Mathlib 中的一个引理，位
+于命名空间 `HomotopicalAlgebra`。
+形式化陈述：trivialFibrations_sub_weakEquivalences : trivialFibrations C <= weakEquiva
+lences C
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-lemma trivialFibrations_sub_weakEquivalences : trivialFibrations C <= weakEquivalences C :=
-  fun _ _ _ hf => hf.2
+lemma trivialFibrations_sub_weakEquivalences : trivialFibrations C ≤ weakEquivalences C :=
+  fun _ _ _ hf ↦ hf.2
 
 variable {C}
-
-/--
-lemma `mem_trivialFibrations` / 引理 `mem_trivialFibrations`
-
-English:
-lemma mem_trivialFibrations
-  given: [Fibration f] [WeakEquivalence f]
-  proof: ⟨mem_fibrations f, mem_weakEquivalences f⟩
-
-中文:
-引理 mem_trivialFibrations
-  条件: [纤维化 f] [弱等价 f]
-  证明: ⟨mem_fibrations f, mem_weakEquivalences f⟩
-
-Depends on / 依赖: mem_fibrations, mem_weakEquivalences
+/-
+**HomotopicalAlgebra.mem_trivialFibrations** 是 Mathlib 中的一个引理，位于命名空间 `Homotopica
+lAlgebra`。
+形式化陈述：mem_trivialFibrations [Fibration f] [WeakEquivalence f] : trivialFibration
+s C f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `HomotopicalAlgebra.mem_fibrations`：mem_fibrations [Fibration f] : fibrat
+ions C f
+· 使用引理 `HomotopicalAlgebra.mem_weakEquivalences`：mem_weakEquivalences [WeakEquiv
+alence f] : weakEquivalences C f
 -/
 lemma mem_trivialFibrations [Fibration f] [WeakEquivalence f] :
     trivialFibrations C f :=
   ⟨mem_fibrations f, mem_weakEquivalences f⟩
-
-/--
-lemma `mem_trivialFibrations_iff` / 引理 `mem_trivialFibrations_iff`
-
-English:
-lemma mem_trivialFibrations_iff
-  proof: by
-  rw [fibration_iff]; rw [weakEquivalence_iff]
-  rfl
-
-中文:
-引理 mem_trivialFibrations_iff
-  证明: by
-  rw [fibration_iff]; rw [weakEquivalence_iff]
-  rfl
-
-Depends on / 依赖: fibration_iff, weakEquivalence_iff
+/-
+**HomotopicalAlgebra.mem_trivialFibrations_iff** 是 Mathlib 中的一个引理，位于命名空间 `Homoto
+picalAlgebra`。
+形式化陈述：mem_trivialFibrations_iff : trivialFibrations C f ↔ Fibration f ∧ WeakEqui
+valence f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HomotopicalAlgebra.fibration_iff`：∀ {C : Type u} [inst : CategoryTheory.
+Category.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : HomotopicalAlgebra.Category
+WithFibrations C],   H…
+· 使用定理 `HomotopicalAlgebra.weakEquivalence_iff`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : HomotopicalAlgebra.Ca
+tegoryWithWeakEquivalences C…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma mem_trivialFibrations_iff :
     trivialFibrations C f ↔ Fibration f ∧ WeakEquivalence f := by
-  rw [fibration_iff]; rw [weakEquivalence_iff]
+  rw [fibration_iff, weakEquivalence_iff]
   rfl
 
 end TrivFib
@@ -379,97 +302,79 @@ section TrivCof
 
 variable [CategoryWithCofibrations C] [CategoryWithWeakEquivalences C]
 
-/--
-Definition of `trivialCofibrations` / `trivialCofibrations` 的定义
+/-- A trivial cofibration is a morphism that is both a cofibration and a weak equivalence. -/
+/-
+**HomotopicalAlgebra.trivialCofibrations** 是 Mathlib 中的一个定义，位于命名空间 `HomotopicalA
+lgebra`。
+形式化陈述：trivialCofibrations : MorphismProperty C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trivialCofibrations
-  signature: : MorphismProperty C
-  body: cofibrations C ⊓ weakEquivalences C
-
-中文:
-定义 trivialCofibrations
-  签名: : MorphismProperty C
-  定义体: cofibrations C ⊓ weakEquivalences C
-
-Depends on / 依赖: cofibrations, weakEquivalences
+--- 原说明 ---
+A trivial cofibration is a morphism that is both a cofibration and a weak equiva
+lence.
 -/
 def trivialCofibrations : MorphismProperty C := cofibrations C ⊓ weakEquivalences C
-
-/--
-lemma `trivialCofibrations_sub_cofibrations` / 引理 `trivialCofibrations_sub_cofibrations`
-
-English:
-lemma trivialCofibrations_sub_cofibrations
-  statement: trivialCofibrations C <= cofibrations C
-  proof: fun _ _ _ hf => hf.1
-
-中文:
-引理 trivialCofibrations_sub_cofibrations
-  结论: trivialCofibrations C <= cofibrations C
-  证明: fun _ _ _ hf => hf.1
+/-
+**HomotopicalAlgebra.trivialCofibrations_sub_cofibrations** 是 Mathlib 中的一个引理，位于命
+名空间 `HomotopicalAlgebra`。
+形式化陈述：trivialCofibrations_sub_cofibrations : trivialCofibrations C <= cofibratio
+ns C
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-lemma trivialCofibrations_sub_cofibrations : trivialCofibrations C <= cofibrations C :=
-  fun _ _ _ hf => hf.1
-
-/--
-lemma `trivialCofibrations_sub_weakEquivalences` / 引理 `trivialCofibrations_sub_weakEquivalences`
-
-English:
-lemma trivialCofibrations_sub_weakEquivalences
-  statement: trivialCofibrations C <= weakEquivalences C
-  proof: fun _ _ _ hf => hf.2
-
-中文:
-引理 trivialCofibrations_sub_weakEquivalences
-  结论: trivialCofibrations C <= weakEquivalences C
-  证明: fun _ _ _ hf => hf.2
+lemma trivialCofibrations_sub_cofibrations : trivialCofibrations C ≤ cofibrations C :=
+  fun _ _ _ hf ↦ hf.1
+/-
+**HomotopicalAlgebra.trivialCofibrations_sub_weakEquivalences** 是 Mathlib 中的一个引理
+，位于命名空间 `HomotopicalAlgebra`。
+形式化陈述：trivialCofibrations_sub_weakEquivalences : trivialCofibrations C <= weakEq
+uivalences C
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-lemma trivialCofibrations_sub_weakEquivalences : trivialCofibrations C <= weakEquivalences C :=
-  fun _ _ _ hf => hf.2
+lemma trivialCofibrations_sub_weakEquivalences : trivialCofibrations C ≤ weakEquivalences C :=
+  fun _ _ _ hf ↦ hf.2
 
 
 variable {C}
-
-/--
-lemma `mem_trivialCofibrations` / 引理 `mem_trivialCofibrations`
-
-English:
-lemma mem_trivialCofibrations
-  given: [Cofibration f] [WeakEquivalence f]
-  proof: ⟨mem_cofibrations f, mem_weakEquivalences f⟩
-
-中文:
-引理 mem_trivialCofibrations
-  条件: [余纤维化 f] [弱等价 f]
-  证明: ⟨mem_cofibrations f, mem_weakEquivalences f⟩
-
-Depends on / 依赖: mem_cofibrations, mem_weakEquivalences
+/-
+**HomotopicalAlgebra.mem_trivialCofibrations** 是 Mathlib 中的一个引理，位于命名空间 `Homotopi
+calAlgebra`。
+形式化陈述：mem_trivialCofibrations [Cofibration f] [WeakEquivalence f] : trivialCofib
+rations C f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `HomotopicalAlgebra.mem_cofibrations`：mem_cofibrations [Cofibration f] : 
+cofibrations C f
+· 使用引理 `HomotopicalAlgebra.mem_weakEquivalences`：mem_weakEquivalences [WeakEquiv
+alence f] : weakEquivalences C f
 -/
 lemma mem_trivialCofibrations [Cofibration f] [WeakEquivalence f] :
     trivialCofibrations C f :=
   ⟨mem_cofibrations f, mem_weakEquivalences f⟩
-
-/--
-lemma `mem_trivialCofibrations_iff` / 引理 `mem_trivialCofibrations_iff`
-
-English:
-lemma mem_trivialCofibrations_iff
-  proof: by
-  rw [cofibration_iff]; rw [weakEquivalence_iff]
-  rfl
-
-中文:
-引理 mem_trivialCofibrations_iff
-  证明: by
-  rw [cofibration_iff]; rw [weakEquivalence_iff]
-  rfl
-
-Depends on / 依赖: cofibration_iff, weakEquivalence_iff
+/-
+**HomotopicalAlgebra.mem_trivialCofibrations_iff** 是 Mathlib 中的一个引理，位于命名空间 `Homo
+topicalAlgebra`。
+形式化陈述：mem_trivialCofibrations_iff : trivialCofibrations C f ↔ Cofibration f ∧ We
+akEquivalence f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HomotopicalAlgebra.cofibration_iff`：∀ {C : Type u} [inst : CategoryTheor
+y.Category.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : HomotopicalAlgebra.Catego
+ryWithCofibrations C],  …
+· 使用定理 `HomotopicalAlgebra.weakEquivalence_iff`：∀ {C : Type u} [inst : CategoryT
+heory.Category.{v, u} C] {X Y : C} (f : X ⟶ Y)   [inst_1 : HomotopicalAlgebra.Ca
+tegoryWithWeakEquivalences C…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma mem_trivialCofibrations_iff :
     trivialCofibrations C f ↔ Cofibration f ∧ WeakEquivalence f := by
-  rw [cofibration_iff]; rw [weakEquivalence_iff]
+  rw [cofibration_iff, weakEquivalence_iff]
   rfl
 
 end TrivCof
@@ -478,116 +383,75 @@ section
 
 variable [CategoryWithCofibrations C]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CategoryWithFibrations Cᵒᵖ
-  body: (cofibrations C).op
-
-中文:
-实例 :
-  签名: 带纤维化范畴 Cᵒᵖ
-  定义体: (cofibrations C).op
-
-Depends on / 依赖: cofibrations
+/-
+**HomotopicalAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CategoryWithFibrations Cᵒᵖ where
   fibrations := (cofibrations C).op
-
-/--
-lemma `fibrations_op` / 引理 `fibrations_op`
-
-English:
-lemma fibrations_op
-  statement: fibrations Cᵒᵖ = (cofibrations C).op
-  proof: rfl
-
-中文:
-引理 fibrations_op
-  结论: fibrations Cᵒᵖ = (cofibrations C).op
-  证明: rfl
+/-
+**HomotopicalAlgebra.fibrations_op** 是 Mathlib 中的一个引理，位于命名空间 `HomotopicalAlgebra
+`。
+形式化陈述：fibrations_op : fibrations Cᵒᵖ = (cofibrations C).op
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fibrations_op : fibrations Cᵒᵖ = (cofibrations C).op := rfl
-/--
-lemma `cofibrations_eq_unop` / 引理 `cofibrations_eq_unop`
-
-English:
-lemma cofibrations_eq_unop
-  statement: cofibrations C = (fibrations Cᵒᵖ).unop
-  proof: rfl
-
-中文:
-引理 cofibrations_eq_unop
-  结论: cofibrations C = (fibrations Cᵒᵖ).unop
-  证明: rfl
+/-
+**HomotopicalAlgebra.cofibrations_eq_unop** 是 Mathlib 中的一个引理，位于命名空间 `Homotopical
+Algebra`。
+形式化陈述：cofibrations_eq_unop : cofibrations C = (fibrations Cᵒᵖ).unop
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma cofibrations_eq_unop : cofibrations C = (fibrations Cᵒᵖ).unop := rfl
 
 variable {C}
-
-/--
-lemma `fibration_op_iff` / 引理 `fibration_op_iff`
-
-English:
-lemma fibration_op_iff
-  statement: Fibration f.op ↔ Cofibration f
-  proof: by
-  simp [cofibration_iff, fibration_iff, cofibrations_eq_unop]
-
-中文:
-引理 fibration_op_iff
-  结论: 纤维化 f.op ↔ 余纤维化 f
-  证明: by
-  simp [cofibration_iff, fibration_iff, cofibrations_eq_unop]
-
-Depends on / 依赖: cofibration_iff, cofibrations_eq_unop, fibration_iff
+/-
+**HomotopicalAlgebra.fibration_op_iff** 是 Mathlib 中的一个引理，位于命名空间 `HomotopicalAlge
+bra`。
+形式化陈述：fibration_op_iff : Fibration f.op ↔ Cofibration f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma fibration_op_iff : Fibration f.op ↔ Cofibration f := by
   simp [cofibration_iff, fibration_iff, cofibrations_eq_unop]
-
-/--
-lemma `cofibration_unop_iff` / 引理 `cofibration_unop_iff`
-
-English:
-lemma cofibration_unop_iff
-  given: {X Y : Cᵒᵖ} (f : X ⟶ Y)
-  proof: by
-  simp [cofibration_iff, fibration_iff, cofibrations_eq_unop]
-
-中文:
-引理 cofibration_unop_iff
-  条件: {X Y : Cᵒᵖ} (f : X ⟶ Y)
-  证明: by
-  simp [cofibration_iff, fibration_iff, cofibrations_eq_unop]
-
-Depends on / 依赖: cofibration_iff, cofibrations_eq_unop, fibration_iff
+/-
+**HomotopicalAlgebra.cofibration_unop_iff** 是 Mathlib 中的一个引理，位于命名空间 `Homotopical
+Algebra`。
+形式化陈述：cofibration_unop_iff {X Y : Cᵒᵖ} (f : X ⟶ Y) : Cofibration f.unop ↔ Fibrat
+ion f
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma cofibration_unop_iff {X Y : Cᵒᵖ} (f : X ⟶ Y) :
     Cofibration f.unop ↔ Fibration f := by
   simp [cofibration_iff, fibration_iff, cofibrations_eq_unop]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Cofibration
-  signature: f] : Fibration f.op
-  body: by
-  rwa [fibration_op_iff]
-
-中文:
-实例 [余纤维化
-  签名: f] : 纤维化 f.op
-  定义体: by
-  rwa [fibration_op_iff]
-
-Depends on / 依赖: fibration_op_iff
+/-
+**HomotopicalAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Cofibration f] : Fibration f.op := by
   rwa [fibration_op_iff]
-
+/-
+**HomotopicalAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : Cᵒᵖ} (f : X ⟶ Y) [Fibration f] : Cofibration f.unop := by
   rwa [cofibration_unop_iff]
 
@@ -597,116 +461,75 @@ section
 
 variable [CategoryWithFibrations C]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CategoryWithCofibrations Cᵒᵖ
-  body: (fibrations C).op
-
-中文:
-实例 :
-  签名: 带余纤维化范畴 Cᵒᵖ
-  定义体: (fibrations C).op
-
-Depends on / 依赖: fibrations
+/-
+**HomotopicalAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CategoryWithCofibrations Cᵒᵖ where
   cofibrations := (fibrations C).op
-
-/--
-lemma `cofibrations_op` / 引理 `cofibrations_op`
-
-English:
-lemma cofibrations_op
-  statement: cofibrations Cᵒᵖ = (fibrations C).op
-  proof: rfl
-
-中文:
-引理 cofibrations_op
-  结论: cofibrations Cᵒᵖ = (fibrations C).op
-  证明: rfl
+/-
+**HomotopicalAlgebra.cofibrations_op** 是 Mathlib 中的一个引理，位于命名空间 `HomotopicalAlgeb
+ra`。
+形式化陈述：cofibrations_op : cofibrations Cᵒᵖ = (fibrations C).op
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma cofibrations_op : cofibrations Cᵒᵖ = (fibrations C).op := rfl
-/--
-lemma `fibrations_eq_unop` / 引理 `fibrations_eq_unop`
-
-English:
-lemma fibrations_eq_unop
-  statement: fibrations C = (cofibrations Cᵒᵖ).unop
-  proof: rfl
-
-中文:
-引理 fibrations_eq_unop
-  结论: fibrations C = (cofibrations Cᵒᵖ).unop
-  证明: rfl
+/-
+**HomotopicalAlgebra.fibrations_eq_unop** 是 Mathlib 中的一个引理，位于命名空间 `HomotopicalAl
+gebra`。
+形式化陈述：fibrations_eq_unop : fibrations C = (cofibrations Cᵒᵖ).unop
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fibrations_eq_unop : fibrations C = (cofibrations Cᵒᵖ).unop := rfl
 
 variable {C}
-
-/--
-lemma `cofibration_op_iff` / 引理 `cofibration_op_iff`
-
-English:
-lemma cofibration_op_iff
-  statement: Cofibration f.op ↔ Fibration f
-  proof: by
-  simp [cofibration_iff, fibration_iff, fibrations_eq_unop]
-
-中文:
-引理 cofibration_op_iff
-  结论: 余纤维化 f.op ↔ 纤维化 f
-  证明: by
-  simp [cofibration_iff, fibration_iff, fibrations_eq_unop]
-
-Depends on / 依赖: cofibration_iff, fibration_iff, fibrations_eq_unop
+/-
+**HomotopicalAlgebra.cofibration_op_iff** 是 Mathlib 中的一个引理，位于命名空间 `HomotopicalAl
+gebra`。
+形式化陈述：cofibration_op_iff : Cofibration f.op ↔ Fibration f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma cofibration_op_iff : Cofibration f.op ↔ Fibration f := by
   simp [cofibration_iff, fibration_iff, fibrations_eq_unop]
-
-/--
-lemma `fibration_unop_iff` / 引理 `fibration_unop_iff`
-
-English:
-lemma fibration_unop_iff
-  given: {X Y : Cᵒᵖ} (f : X ⟶ Y)
-  proof: by
-  simp [cofibration_iff, fibration_iff, fibrations_eq_unop]
-
-中文:
-引理 fibration_unop_iff
-  条件: {X Y : Cᵒᵖ} (f : X ⟶ Y)
-  证明: by
-  simp [cofibration_iff, fibration_iff, fibrations_eq_unop]
-
-Depends on / 依赖: cofibration_iff, fibration_iff, fibrations_eq_unop
+/-
+**HomotopicalAlgebra.fibration_unop_iff** 是 Mathlib 中的一个引理，位于命名空间 `HomotopicalAl
+gebra`。
+形式化陈述：fibration_unop_iff {X Y : Cᵒᵖ} (f : X ⟶ Y) : Fibration f.unop ↔ Cofibratio
+n f
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma fibration_unop_iff {X Y : Cᵒᵖ} (f : X ⟶ Y) :
     Fibration f.unop ↔ Cofibration f := by
   simp [cofibration_iff, fibration_iff, fibrations_eq_unop]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Fibration
-  signature: f] : Cofibration f.op
-  body: by
-  rwa [cofibration_op_iff]
-
-中文:
-实例 [纤维化
-  签名: f] : 余纤维化 f.op
-  定义体: by
-  rwa [cofibration_op_iff]
-
-Depends on / 依赖: cofibration_op_iff
+/-
+**HomotopicalAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Fibration f] : Cofibration f.op := by
   rwa [cofibration_op_iff]
-
+/-
+**HomotopicalAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : Cᵒᵖ} (f : X ⟶ Y) [Cofibration f] : Fibration f.unop := by
   rwa [fibration_unop_iff]
 
@@ -716,114 +539,72 @@ section
 
 variable [CategoryWithWeakEquivalences C]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CategoryWithWeakEquivalences Cᵒᵖ
-  body: (weakEquivalences C).op
-
-中文:
-实例 :
-  签名: 带弱等价范畴 Cᵒᵖ
-  定义体: (weakEquivalences C).op
-
-Depends on / 依赖: weakEquivalences
+/-
+**HomotopicalAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CategoryWithWeakEquivalences Cᵒᵖ where
   weakEquivalences := (weakEquivalences C).op
-
-/--
-lemma `weakEquivalences_op` / 引理 `weakEquivalences_op`
-
-English:
-lemma weakEquivalences_op
-  statement: weakEquivalences Cᵒᵖ = (weakEquivalences C).op
-  proof: rfl
-
-中文:
-引理 weakEquivalences_op
-  结论: weakEquivalences Cᵒᵖ = (weakEquivalences C).op
-  证明: rfl
+/-
+**HomotopicalAlgebra.weakEquivalences_op** 是 Mathlib 中的一个引理，位于命名空间 `HomotopicalA
+lgebra`。
+形式化陈述：weakEquivalences_op : weakEquivalences Cᵒᵖ = (weakEquivalences C).op
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma weakEquivalences_op : weakEquivalences Cᵒᵖ = (weakEquivalences C).op := rfl
-/--
-lemma `weakEquivalences_eq_unop` / 引理 `weakEquivalences_eq_unop`
-
-English:
-lemma weakEquivalences_eq_unop
-  statement: weakEquivalences C = (weakEquivalences Cᵒᵖ).unop
-  proof: rfl
-
-中文:
-引理 weakEquivalences_eq_unop
-  结论: weakEquivalences C = (weakEquivalences Cᵒᵖ).unop
-  证明: rfl
+/-
+**HomotopicalAlgebra.weakEquivalences_eq_unop** 是 Mathlib 中的一个引理，位于命名空间 `Homotop
+icalAlgebra`。
+形式化陈述：weakEquivalences_eq_unop : weakEquivalences C = (weakEquivalences Cᵒᵖ).uno
+p
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma weakEquivalences_eq_unop : weakEquivalences C = (weakEquivalences Cᵒᵖ).unop := rfl
 
 variable {C}
-
-/--
-lemma `weakEquivalences_op_iff` / 引理 `weakEquivalences_op_iff`
-
-English:
-lemma weakEquivalences_op_iff
-  statement: WeakEquivalence f.op ↔ WeakEquivalence f
-  proof: by
-  simp [weakEquivalence_iff, weakEquivalences_op]
-
-中文:
-引理 weakEquivalences_op_iff
-  结论: 弱等价 f.op ↔ 弱等价 f
-  证明: by
-  simp [weakEquivalence_iff, weakEquivalences_op]
-
-Depends on / 依赖: weakEquivalence_iff, weakEquivalences_op
+/-
+**HomotopicalAlgebra.weakEquivalences_op_iff** 是 Mathlib 中的一个引理，位于命名空间 `Homotopi
+calAlgebra`。
+形式化陈述：weakEquivalences_op_iff : WeakEquivalence f.op ↔ WeakEquivalence f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma weakEquivalences_op_iff : WeakEquivalence f.op ↔ WeakEquivalence f := by
   simp [weakEquivalence_iff, weakEquivalences_op]
-
-/--
-lemma `weakEquivalences_unop_iff` / 引理 `weakEquivalences_unop_iff`
-
-English:
-lemma weakEquivalences_unop_iff
-  given: {X Y : Cᵒᵖ} (f : X ⟶ Y)
-  proof: (weakEquivalences_op_iff f.unop).symm
-
-中文:
-引理 weakEquivalences_unop_iff
-  条件: {X Y : Cᵒᵖ} (f : X ⟶ Y)
-  证明: (weakEquivalences_op_iff f.unop).symm
-
-Depends on / 依赖: f.unop, weakEquivalences_op_iff
+/-
+**HomotopicalAlgebra.weakEquivalences_unop_iff** 是 Mathlib 中的一个引理，位于命名空间 `Homoto
+picalAlgebra`。
+形式化陈述：weakEquivalences_unop_iff {X Y : Cᵒᵖ} (f : X ⟶ Y) : WeakEquivalence f.unop
+ ↔ WeakEquivalence f
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用引理 `HomotopicalAlgebra.weakEquivalences_op_iff`：weakEquivalences_op_iff : We
+akEquivalence f.op ↔ WeakEquivalence f
 -/
 lemma weakEquivalences_unop_iff {X Y : Cᵒᵖ} (f : X ⟶ Y) :
     WeakEquivalence f.unop ↔ WeakEquivalence f :=
   (weakEquivalences_op_iff f.unop).symm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [WeakEquivalence
-  signature: f] : WeakEquivalence f.op
-  body: by
-  rwa [weakEquivalences_op_iff]
-
-中文:
-实例 [弱等价
-  签名: f] : 弱等价 f.op
-  定义体: by
-  rwa [weakEquivalences_op_iff]
-
-Depends on / 依赖: weakEquivalences_op_iff
+/-
+**HomotopicalAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [WeakEquivalence f] : WeakEquivalence f.op := by
   rwa [weakEquivalences_op_iff]
-
+/-
+**HomotopicalAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : Cᵒᵖ} (f : X ⟶ Y) [WeakEquivalence f] : WeakEquivalence f.unop := by
   rwa [weakEquivalences_unop_iff]
 
@@ -833,32 +614,21 @@ section
 
 variable [CategoryWithWeakEquivalences C] [CategoryWithCofibrations C]
 
-/--
-lemma `trivialFibrations_op` / 引理 `trivialFibrations_op`
-
-English:
-lemma trivialFibrations_op
-  statement: trivialFibrations Cᵒᵖ = (trivialCofibrations C).op
-  proof: rfl
-
-中文:
-引理 trivialFibrations_op
-  结论: trivialFibrations Cᵒᵖ = (trivialCofibrations C).op
-  证明: rfl
+/-
+**HomotopicalAlgebra.trivialFibrations_op** 是 Mathlib 中的一个引理，位于命名空间 `Homotopical
+Algebra`。
+形式化陈述：trivialFibrations_op : trivialFibrations Cᵒᵖ = (trivialCofibrations C).op
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma trivialFibrations_op : trivialFibrations Cᵒᵖ = (trivialCofibrations C).op := rfl
-/--
-lemma `trivialCofibrations_eq_unop` / 引理 `trivialCofibrations_eq_unop`
-
-English:
-lemma trivialCofibrations_eq_unop
-  statement: trivialCofibrations C = (trivialFibrations Cᵒᵖ).unop
-  proof: rfl
-
-中文:
-引理 trivialCofibrations_eq_unop
-  结论: trivialCofibrations C = (trivialFibrations Cᵒᵖ).unop
-  证明: rfl
+/-
+**HomotopicalAlgebra.trivialCofibrations_eq_unop** 是 Mathlib 中的一个引理，位于命名空间 `Homo
+topicalAlgebra`。
+形式化陈述：trivialCofibrations_eq_unop : trivialCofibrations C = (trivialFibrations C
+ᵒᵖ).unop
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma trivialCofibrations_eq_unop : trivialCofibrations C = (trivialFibrations Cᵒᵖ).unop := rfl
 
@@ -868,32 +638,22 @@ section
 
 variable [CategoryWithWeakEquivalences C] [CategoryWithFibrations C]
 
-/--
-lemma `trivialCofibrations_op` / 引理 `trivialCofibrations_op`
-
-English:
-lemma trivialCofibrations_op
-  statement: trivialCofibrations Cᵒᵖ = (trivialFibrations C).op
-  proof: rfl
-
-中文:
-引理 trivialCofibrations_op
-  结论: trivialCofibrations Cᵒᵖ = (trivialFibrations C).op
-  证明: rfl
+/-
+**HomotopicalAlgebra.trivialCofibrations_op** 是 Mathlib 中的一个引理，位于命名空间 `Homotopic
+alAlgebra`。
+形式化陈述：trivialCofibrations_op : trivialCofibrations Cᵒᵖ = (trivialFibrations C).o
+p
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma trivialCofibrations_op : trivialCofibrations Cᵒᵖ = (trivialFibrations C).op := rfl
-/--
-lemma `trivialFibrations_eq_unop` / 引理 `trivialFibrations_eq_unop`
-
-English:
-lemma trivialFibrations_eq_unop
-  statement: trivialFibrations C = (trivialCofibrations Cᵒᵖ).unop
-  proof: rfl
-
-中文:
-引理 trivialFibrations_eq_unop
-  结论: trivialFibrations C = (trivialCofibrations Cᵒᵖ).unop
-  证明: rfl
+/-
+**HomotopicalAlgebra.trivialFibrations_eq_unop** 是 Mathlib 中的一个引理，位于命名空间 `Homoto
+picalAlgebra`。
+形式化陈述：trivialFibrations_eq_unop : trivialFibrations C = (trivialCofibrations Cᵒᵖ
+).unop
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma trivialFibrations_eq_unop : trivialFibrations C = (trivialCofibrations Cᵒᵖ).unop := rfl
 
@@ -903,108 +663,63 @@ section ObjectProperty
 
 variable [CategoryWithWeakEquivalences C] {P : ObjectProperty C}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CategoryWithWeakEquivalences P.FullSubcategory
-  body: (weakEquivalences C).inverseImage P.ι
-
-中文:
-实例 :
-  签名: 带弱等价范畴 P.满子范畴
-  定义体: (weakEquivalences C).inverseImage P.ι
-
-Depends on / 依赖: inverseImage, weakEquivalences
+/-
+**HomotopicalAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CategoryWithWeakEquivalences P.FullSubcategory where
   weakEquivalences := (weakEquivalences C).inverseImage P.ι
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [(weakEquivalences
-  signature: C).HasTwoOutOfThreeProperty] :
-  body: inferInstanceAs ((weakEquivalences C).inverseImage P.ι).HasTwoOutOfThreeProperty
-
-中文:
-实例 [(weakEquivalences
-  签名: C).有TwoOutOfThreeProperty] :
-  定义体: inferInstanceAs ((weakEquivalences C).inverseImage P.ι).HasTwoOutOfThreeProperty
-
-Depends on / 依赖: HasTwoOutOfThreeProperty, inverseImage, weakEquivalences
+/-
+**HomotopicalAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [(weakEquivalences C).HasTwoOutOfThreeProperty] :
     (weakEquivalences P.FullSubcategory).HasTwoOutOfThreeProperty :=
   inferInstanceAs ((weakEquivalences C).inverseImage P.ι).HasTwoOutOfThreeProperty
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [(weakEquivalences
-  signature: C).IsMultiplicative] :
-  body: inferInstanceAs ((weakEquivalences C).inverseImage P.ι).IsMultiplicative
-
-中文:
-实例 [(weakEquivalences
-  签名: C).是Multiplicative] :
-  定义体: inferInstanceAs ((weakEquivalences C).inverseImage P.ι).IsMultiplicative
-
-Depends on / 依赖: IsMultiplicative, inverseImage, weakEquivalences
+/-
+**HomotopicalAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [(weakEquivalences C).IsMultiplicative] :
     (weakEquivalences P.FullSubcategory).IsMultiplicative :=
   inferInstanceAs ((weakEquivalences C).inverseImage P.ι).IsMultiplicative
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [(weakEquivalences
-  signature: C).RespectsIso] :
-  body: inferInstanceAs ((weakEquivalences C).inverseImage P.ι).RespectsIso
-
-中文:
-实例 [(weakEquivalences
-  签名: C).RespectsIso] :
-  定义体: inferInstanceAs ((weakEquivalences C).inverseImage P.ι).RespectsIso
-
-Depends on / 依赖: RespectsIso, inverseImage, weakEquivalences
+/-
+**HomotopicalAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [(weakEquivalences C).RespectsIso] :
     (weakEquivalences P.FullSubcategory).RespectsIso :=
   inferInstanceAs ((weakEquivalences C).inverseImage P.ι).RespectsIso
-
-/--
-lemma `weakEquivalence_iff_of_objectProperty` / 引理 `weakEquivalence_iff_of_objectProperty`
-
-English:
-lemma weakEquivalence_iff_of_objectProperty
-  proof: by
-  simp only [weakEquivalence_iff]
-  rfl
-
-中文:
-引理 weakEquivalence_iff_of_objectProperty
-  证明: by
-  simp only [weakEquivalence_iff]
-  rfl
-
-Depends on / 依赖: weakEquivalence_iff
+/-
+**HomotopicalAlgebra.weakEquivalence_iff_of_objectProperty** 是 Mathlib 中的一个引理，位于
+命名空间 `HomotopicalAlgebra`。
+形式化陈述：weakEquivalence_iff_of_objectProperty {X Y : P.FullSubcategory} (f : X ⟶ Y
+) : WeakEquivalence f ↔ WeakEquivalence f.hom
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma weakEquivalence_iff_of_objectProperty
     {X Y : P.FullSubcategory} (f : X ⟶ Y) :
     WeakEquivalence f ↔ WeakEquivalence f.hom := by
   simp only [weakEquivalence_iff]
   rfl
-
+/-
+**HomotopicalAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : P.FullSubcategory} (f : X ⟶ Y) [WeakEquivalence f] :
     WeakEquivalence f.hom := by
   rwa [← weakEquivalence_iff_of_objectProperty]
-
+/-
+**HomotopicalAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : P.FullSubcategory} (f : X ⟶ Y) [WeakEquivalence f] :
     WeakEquivalence (P.ι.map f) := by
   dsimp
@@ -1013,3 +728,4 @@ instance {X Y : P.FullSubcategory} (f : X ⟶ Y) [WeakEquivalence f] :
 end ObjectProperty
 
 end HomotopicalAlgebra
+

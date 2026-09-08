@@ -25,309 +25,143 @@ namespace LocallyConstant
 variable {X Y : Type*} [TopologicalSpace X]
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [One
-  signature: Y] : One (LocallyConstant X Y) where one
-  body: const X 1
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 [幺
-  签名: Y] : 幺 (局部常数 X Y) where one
-  定义体: const X 1
-
-@[to_additive (attr := simp)]
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [One Y] : One (LocallyConstant X Y) where one := const X 1
 
 @[to_additive (attr := simp)]
-/--
-theorem `coe_one` / 定理 `coe_one`
-
-English:
-theorem coe_one
-  given: [One Y]
-  statement: ⇑(1 : LocallyConstant X Y) = (1 : X -> Y)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 coe_one
-  条件: [幺 Y]
-  结论: ⇑(1 : 局部常数 X Y) = (1 : X -> Y)
-  证明: rfl
-
-@[to_additive]
+/-
+**LocallyConstant.coe_one** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：coe_one [One Y] : ⇑(1 : LocallyConstant X Y) = (1 : X -> Y)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_one [One Y] : ⇑(1 : LocallyConstant X Y) = (1 : X -> Y) :=
+theorem coe_one [One Y] : ⇑(1 : LocallyConstant X Y) = (1 : X → Y) :=
   rfl
 
 @[to_additive]
-/--
-theorem `one_apply` / 定理 `one_apply`
-
-English:
-theorem one_apply
-  given: [One Y] (x : X)
-  statement: (1 : LocallyConstant X Y) x = 1
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 one_apply
-  条件: [幺 Y] (x : X)
-  结论: (1 : 局部常数 X Y) x = 1
-  证明: rfl
-
-@[to_additive]
+/-
+**LocallyConstant.one_apply** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：one_apply [One Y] (x : X) : (1 : LocallyConstant X Y) x = 1
+参数：x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem one_apply [One Y] (x : X) : (1 : LocallyConstant X Y) x = 1 :=
   rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inv
-  signature: Y] : Inv (LocallyConstant X Y) where inv f
-  body: ⟨f⁻¹, f.isLocallyConstant.inv⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 [取逆
-  签名: Y] : 取逆 (局部常数 X Y) where inv f
-  定义体: ⟨f⁻¹, f.isLocallyConstant.inv⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: f.isLocallyConstant.inv, isLocallyConstant
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inv Y] : Inv (LocallyConstant X Y) where inv f := ⟨f⁻¹, f.isLocallyConstant.inv⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `coe_inv` / 定理 `coe_inv`
-
-English:
-theorem coe_inv
-  given: [Inv Y] (f : LocallyConstant X Y)
-  statement: ⇑(f⁻¹ : LocallyConstant X Y) = (f : X -> Y)⁻¹
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 coe_inv
-  条件: [取逆 Y] (f : 局部常数 X Y)
-  结论: ⇑(f⁻¹ : 局部常数 X Y) = (f : X -> Y)⁻¹
-  证明: rfl
-
-@[to_additive]
+/-
+**LocallyConstant.coe_inv** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：coe_inv [Inv Y] (f : LocallyConstant X Y) : ⇑(f⁻¹ : LocallyConstant X Y) =
+ (f : X -> Y)⁻¹
+参数：f : LocallyConstant X Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_inv [Inv Y] (f : LocallyConstant X Y) : ⇑(f⁻¹ : LocallyConstant X Y) = (f : X -> Y)⁻¹ :=
+theorem coe_inv [Inv Y] (f : LocallyConstant X Y) : ⇑(f⁻¹ : LocallyConstant X Y) = (f : X → Y)⁻¹ :=
   rfl
 
 @[to_additive]
-/--
-theorem `inv_apply` / 定理 `inv_apply`
-
-English:
-theorem inv_apply
-  given: [Inv Y] (f : LocallyConstant X Y) (x : X)
-  statement: f⁻¹ x = (f x)⁻¹
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 inv_apply
-  条件: [取逆 Y] (f : 局部常数 X Y) (x : X)
-  结论: f⁻¹ x = (f x)⁻¹
-  证明: rfl
-
-@[to_additive]
+/-
+**LocallyConstant.inv_apply** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：inv_apply [Inv Y] (f : LocallyConstant X Y) (x : X) : f⁻¹ x = (f x)⁻¹
+参数：f : LocallyConstant X Y；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem inv_apply [Inv Y] (f : LocallyConstant X Y) (x : X) : f⁻¹ x = (f x)⁻¹ :=
   rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mul
-  signature: Y] : Mul (LocallyConstant X Y) where
-  body: ⟨f * g, f.isLocallyConstant.mul g.isLocallyConstant⟩
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 [乘法
-  签名: Y] : 乘法 (局部常数 X Y) where
-  定义体: ⟨f * g, f.isLocallyConstant.mul g.isLocallyConstant⟩
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: f.isLocallyConstant.mul, g.isLocallyConstant, isLocallyConstant
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Mul Y] : Mul (LocallyConstant X Y) where
   mul f g := ⟨f * g, f.isLocallyConstant.mul g.isLocallyConstant⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `coe_mul` / 定理 `coe_mul`
-
-English:
-theorem coe_mul
-  given: [Mul Y] (f g : LocallyConstant X Y)
-  statement: ⇑(f * g) = f * g
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 coe_mul
-  条件: [乘法 Y] (f g : 局部常数 X Y)
-  结论: ⇑(f * g) = f * g
-  证明: rfl
-
-@[to_additive]
+/-
+**LocallyConstant.coe_mul** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：coe_mul [Mul Y] (f g : LocallyConstant X Y) : ⇑(f * g) = f * g
+参数：f g : LocallyConstant X Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_mul [Mul Y] (f g : LocallyConstant X Y) : ⇑(f * g) = f * g :=
   rfl
 
 @[to_additive]
-/--
-theorem `mul_apply` / 定理 `mul_apply`
-
-English:
-theorem mul_apply
-  given: [Mul Y] (f g : LocallyConstant X Y) (x : X)
-  statement: (f * g) x = f x * g x
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 mul_apply
-  条件: [乘法 Y] (f g : 局部常数 X Y) (x : X)
-  结论: (f * g) x = f x * g x
-  证明: rfl
-
-@[to_additive]
+/-
+**LocallyConstant.mul_apply** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：mul_apply [Mul Y] (f g : LocallyConstant X Y) (x : X) : (f * g) x = f x * 
+g x
+参数：f g : LocallyConstant X Y；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mul_apply [Mul Y] (f g : LocallyConstant X Y) (x : X) : (f * g) x = f x * g x :=
   rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [MulOneClass
-  signature: Y] : MulOneClass (LocallyConstant X Y)
-  body: Function.Injective.mulOneClass DFunLike.coe DFunLike.coe_injective rfl fun _ _ => rfl
-
-中文:
-实例 [MulOne类
-  签名: Y] : MulOne类 (局部常数 X Y)
-  定义体: Function.Injective.mulOneClass DFunLike.coe DFunLike.coe_injective rfl fun _ _ => rfl
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.mulOneClass, Injective, coe_injective, mulOneClass
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [MulOneClass Y] : MulOneClass (LocallyConstant X Y) :=
   Function.Injective.mulOneClass DFunLike.coe DFunLike.coe_injective rfl fun _ _ => rfl
 
 /-- `DFunLike.coe` as a `MonoidHom`. -/
 @[to_additive (attr := simps) /-- `DFunLike.coe` as an `AddMonoidHom`. -/]
-/--
-Definition of `coeFnMonoidHom` / `coeFnMonoidHom` 的定义
+/-
+**LocallyConstant.coeFnMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：coeFnMonoidHom [MulOneClass Y] : LocallyConstant X Y ->* X -> Y where toFu
+n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coeFnMonoidHom
-  signature: [MulOneClass Y]
-  body: DFunLike.coe
-  map_one' := rfl
-  map_mul' _ _ := rfl
-
-中文:
-定义 coeFnMonoidHom
-  签名: [MulOne类 Y]
-  定义体: DFunLike.coe
-  map_one' := rfl
-  map_mul' _ _ := rfl
-
-Depends on / 依赖: DFunLike, DFunLike.coe
+--- 原说明 ---
+`DFunLike.coe` as a `MonoidHom`.
 -/
-def coeFnMonoidHom [MulOneClass Y] : LocallyConstant X Y ->* X -> Y where
+def coeFnMonoidHom [MulOneClass Y] : LocallyConstant X Y →* X → Y where
   toFun := DFunLike.coe
   map_one' := rfl
   map_mul' _ _ := rfl
 
 /-- The constant-function embedding, as a multiplicative monoid hom. -/
 @[to_additive (attr := simps) /-- The constant-function embedding, as an additive monoid hom. -/]
-/--
-Definition of `constMonoidHom` / `constMonoidHom` 的定义
+/-
+**LocallyConstant.constMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：constMonoidHom [MulOneClass Y] : Y ->* LocallyConstant X Y where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition constMonoidHom
-  signature: [MulOneClass Y]
-  body: const X
-  map_one' := rfl
-  map_mul' _ _ := rfl
-
-中文:
-定义 constMonoidHom
-  签名: [MulOne类 Y]
-  定义体: const X
-  map_one' := rfl
-  map_mul' _ _ := rfl
+--- 原说明 ---
+The constant-function embedding, as a multiplicative monoid hom.
 -/
-def constMonoidHom [MulOneClass Y] : Y ->* LocallyConstant X Y where
+def constMonoidHom [MulOneClass Y] : Y →* LocallyConstant X Y where
   toFun := const X
   map_one' := rfl
   map_mul' _ _ := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [MulZeroClass
-  signature: Y] : MulZeroClass (LocallyConstant X Y)
-  body: Function.Injective.mulZeroClass DFunLike.coe DFunLike.coe_injective rfl fun _ _ => rfl
-
-中文:
-实例 [乘零类
-  签名: Y] : 乘零类 (局部常数 X Y)
-  定义体: Function.Injective.mulZeroClass DFunLike.coe DFunLike.coe_injective rfl fun _ _ => rfl
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.mulZeroClass, Injective, coe_injective, mulZeroClass
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [MulZeroClass Y] : MulZeroClass (LocallyConstant X Y) :=
   Function.Injective.mulZeroClass DFunLike.coe DFunLike.coe_injective rfl fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [MulZeroOneClass
-  signature: Y] : MulZeroOneClass (LocallyConstant X Y)
-  body: Function.Injective.mulZeroOneClass DFunLike.coe DFunLike.coe_injective rfl rfl fun _ _ => rfl
-
-中文:
-实例 [乘零幺类
-  签名: Y] : 乘零幺类 (局部常数 X Y)
-  定义体: Function.Injective.mulZeroOneClass DFunLike.coe DFunLike.coe_injective rfl rfl fun _ _ => rfl
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.mulZeroOneClass, Injective, coe_injective, mulZeroOneClass
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [MulZeroOneClass Y] : MulZeroOneClass (LocallyConstant X Y) :=
   Function.Injective.mulZeroOneClass DFunLike.coe DFunLike.coe_injective rfl rfl fun _ _ => rfl
@@ -336,228 +170,123 @@ section CharFn
 
 variable (Y) [MulZeroOneClass Y] {U V : Set X}
 
-/--
-Definition of `charFn` / `charFn` 的定义
+/-- Characteristic functions are locally constant functions taking `x : X` to `1` if `x ∈ U`,
+  where `U` is a clopen set, and `0` otherwise. -/
+/-
+**LocallyConstant.charFn** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：charFn (hU : IsClopen U) : LocallyConstant X Y
+参数：hU : IsClopen U。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition charFn
-  signature: (hU : IsClopen U)
-  body: indicator 1 hU
-
-中文:
-定义 charFn
-  签名: (hU : IsClopen U)
-  定义体: indicator 1 hU
-
-Depends on / 依赖: indicator
+--- 原说明 ---
+Characteristic functions are locally constant functions taking `x : X` to `1` if
+ `x ∈ U`,
+  where `U` is a clopen set, and `0` otherwise.
 -/
 noncomputable def charFn (hU : IsClopen U) : LocallyConstant X Y :=
   indicator 1 hU
-
-/--
-theorem `coe_charFn` / 定理 `coe_charFn`
-
-English:
-theorem coe_charFn
-  given: (hU : IsClopen U)
-  statement: (charFn Y hU : X -> Y) = Set.indicator U 1
-  proof: rfl
-
-中文:
-定理 coe_charFn
-  条件: (hU : IsClopen U)
-  结论: (charFn Y hU : X -> Y) = 集合.indicator U 1
-  证明: rfl
+/-
+**LocallyConstant.coe_charFn** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：coe_charFn (hU : IsClopen U) : (charFn Y hU : X -> Y) = Set.indicator U 1
+参数：hU : IsClopen U。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_charFn (hU : IsClopen U) : (charFn Y hU : X -> Y) = Set.indicator U 1 :=
+theorem coe_charFn (hU : IsClopen U) : (charFn Y hU : X → Y) = Set.indicator U 1 :=
   rfl
-
-/--
-theorem `charFn_eq_one` / 定理 `charFn_eq_one`
-
-English:
-theorem charFn_eq_one
-  given: [Nontrivial Y] (x : X) (hU : IsClopen U)
-  statement: charFn Y hU x = (1 : Y) ↔ x in U
-  proof: Set.indicator_eq_one_iff_mem _
-
-中文:
-定理 charFn_eq_one
-  条件: [非平凡 Y] (x : X) (hU : IsClopen U)
-  结论: charFn Y hU x = (1 : Y) ↔ x in U
-  证明: Set.indicator_eq_one_iff_mem _
-
-Depends on / 依赖: Set.indicator_eq_one_iff_mem, indicator_eq_one_iff_mem
+/-
+**LocallyConstant.charFn_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：charFn_eq_one [Nontrivial Y] (x : X) (hU : IsClopen U) : charFn Y hU x = (
+1 : Y) ↔ x in U
+参数：x : X；hU : IsClopen U。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.indicator_eq_one_iff_mem`：indicator_eq_one_iff_mem : indicator s 1 i
+ = (1 : M₀) ↔ i in s
 -/
-theorem charFn_eq_one [Nontrivial Y] (x : X) (hU : IsClopen U) : charFn Y hU x = (1 : Y) ↔ x in U :=
+theorem charFn_eq_one [Nontrivial Y] (x : X) (hU : IsClopen U) : charFn Y hU x = (1 : Y) ↔ x ∈ U :=
   Set.indicator_eq_one_iff_mem _
-
-/--
-theorem `charFn_eq_zero` / 定理 `charFn_eq_zero`
-
-English:
-theorem charFn_eq_zero
-  given: [Nontrivial Y] (x : X) (hU : IsClopen U)
-  statement: charFn Y hU x = (0 : Y) ↔ x ∉ U
-  proof: Set.indicator_eq_zero_iff_notMem _
-
-中文:
-定理 charFn_eq_zero
-  条件: [非平凡 Y] (x : X) (hU : IsClopen U)
-  结论: charFn Y hU x = (0 : Y) ↔ x ∉ U
-  证明: Set.indicator_eq_zero_iff_notMem _
-
-Depends on / 依赖: Set.indicator_eq_zero_iff_notMem, indicator_eq_zero_iff_notMem
+/-
+**LocallyConstant.charFn_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：charFn_eq_zero [Nontrivial Y] (x : X) (hU : IsClopen U) : charFn Y hU x = 
+(0 : Y) ↔ x ∉ U
+参数：x : X；hU : IsClopen U。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.indicator_eq_zero_iff_notMem`：indicator_eq_zero_iff_notMem : indicat
+or s 1 i = (0 : M₀) ↔ i ∉ s
 -/
 theorem charFn_eq_zero [Nontrivial Y] (x : X) (hU : IsClopen U) : charFn Y hU x = (0 : Y) ↔ x ∉ U :=
   Set.indicator_eq_zero_iff_notMem _
-
-/--
-theorem `charFn_inj` / 定理 `charFn_inj`
-
-English:
-theorem charFn_inj
-  statement: [Nontrivial Y] (hU : IsClopen U) (hV : IsClopen V)
-  proof: Set.indicator_one_inj Y coe_inj.mpr h
-
-中文:
-定理 charFn_inj
-  结论: [非平凡 Y] (hU : IsClopen U) (hV : IsClopen V)
-  证明: Set.indicator_one_inj Y coe_inj.mpr h
-
-Depends on / 依赖: Set.indicator_one_inj, coe_inj, coe_inj.mpr, indicator_one_inj
+/-
+**LocallyConstant.charFn_inj** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：charFn_inj [Nontrivial Y] (hU : IsClopen U) (hV : IsClopen V) (h : charFn 
+Y hU = charFn Y hV) : U = V
+参数：hU : IsClopen U；hV : IsClopen V；h : charFn Y hU = charFn Y hV。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Set.indicator_one_inj`：indicator_one_inj (h : indicator s (1 : ι -> M₀) 
+= indicator t 1) : s = t
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LocallyConstant.coe_inj`：coe_inj {f g : LocallyConstant X Y} : (f : X ->
+ Y) = g ↔ f = g
 -/
 theorem charFn_inj [Nontrivial Y] (hU : IsClopen U) (hV : IsClopen V)
     (h : charFn Y hU = charFn Y hV) : U = V :=
-Set.indicator_one_inj Y coe_inj.mpr h
+  Set.indicator_one_inj Y <| coe_inj.mpr h
 
 end CharFn
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Div
-  signature: Y] : Div (LocallyConstant X Y) where
-  body: ⟨f / g, f.isLocallyConstant.div g.isLocallyConstant⟩
-
-@[to_additive]
-
-中文:
-实例 [除法
-  签名: Y] : 除法 (局部常数 X Y) where
-  定义体: ⟨f / g, f.isLocallyConstant.div g.isLocallyConstant⟩
-
-@[to_additive]
-
-Depends on / 依赖: f.isLocallyConstant.div, g.isLocallyConstant, isLocallyConstant
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Div Y] : Div (LocallyConstant X Y) where
   div f g := ⟨f / g, f.isLocallyConstant.div g.isLocallyConstant⟩
 
 @[to_additive]
-/--
-theorem `coe_div` / 定理 `coe_div`
-
-English:
-theorem coe_div
-  given: [Div Y] (f g : LocallyConstant X Y)
-  statement: ⇑(f / g) = f / g
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 coe_div
-  条件: [除法 Y] (f g : 局部常数 X Y)
-  结论: ⇑(f / g) = f / g
-  证明: rfl
-
-@[to_additive]
+/-
+**LocallyConstant.coe_div** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：coe_div [Div Y] (f g : LocallyConstant X Y) : ⇑(f / g) = f / g
+参数：f g : LocallyConstant X Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_div [Div Y] (f g : LocallyConstant X Y) : ⇑(f / g) = f / g :=
   rfl
 
 @[to_additive]
-/--
-theorem `div_apply` / 定理 `div_apply`
-
-English:
-theorem div_apply
-  given: [Div Y] (f g : LocallyConstant X Y) (x : X)
-  statement: (f / g) x = f x / g x
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 div_apply
-  条件: [除法 Y] (f g : 局部常数 X Y) (x : X)
-  结论: (f / g) x = f x / g x
-  证明: rfl
-
-@[to_additive]
+/-
+**LocallyConstant.div_apply** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：div_apply [Div Y] (f g : LocallyConstant X Y) (x : X) : (f / g) x = f x / 
+g x
+参数：f g : LocallyConstant X Y；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem div_apply [Div Y] (f g : LocallyConstant X Y) (x : X) : (f / g) x = f x / g x :=
   rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Semigroup
-  signature: Y] : Semigroup (LocallyConstant X Y)
-  body: Function.Injective.semigroup DFunLike.coe DFunLike.coe_injective fun _ _ => rfl
-
-中文:
-实例 [半群
-  签名: Y] : 半群 (局部常数 X Y)
-  定义体: Function.Injective.semigroup DFunLike.coe DFunLike.coe_injective fun _ _ => rfl
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.semigroup, Injective, coe_injective, semigroup
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Semigroup Y] : Semigroup (LocallyConstant X Y) :=
   Function.Injective.semigroup DFunLike.coe DFunLike.coe_injective fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SemigroupWithZero
-  signature: Y] : SemigroupWithZero (LocallyConstant X Y)
-  body: Function.Injective.semigroupWithZero DFunLike.coe DFunLike.coe_injective rfl fun _ _ => rfl
-
-@[to_additive]
-
-中文:
-实例 [带零半群
-  签名: Y] : 带零半群 (局部常数 X Y)
-  定义体: Function.Injective.semigroupWithZero DFunLike.coe DFunLike.coe_injective rfl fun _ _ => rfl
-
-@[to_additive]
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.semigroupWithZero, Injective, coe_injective, semigroupWithZero
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SemigroupWithZero Y] : SemigroupWithZero (LocallyConstant X Y) :=
   Function.Injective.semigroupWithZero DFunLike.coe DFunLike.coe_injective rfl fun _ _ => rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CommSemigroup
-  signature: Y] : CommSemigroup (LocallyConstant X Y)
-  body: Function.Injective.commSemigroup DFunLike.coe DFunLike.coe_injective fun _ _ => rfl
-
-中文:
-实例 [交换半群
-  签名: Y] : 交换半群 (局部常数 X Y)
-  定义体: Function.Injective.commSemigroup DFunLike.coe DFunLike.coe_injective fun _ _ => rfl
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.commSemigroup, Injective, coe_injective, commSemigroup
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CommSemigroup Y] : CommSemigroup (LocallyConstant X Y) :=
   Function.Injective.commSemigroup DFunLike.coe DFunLike.coe_injective fun _ _ => rfl
@@ -565,323 +294,123 @@ instance [CommSemigroup Y] : CommSemigroup (LocallyConstant X Y) :=
 variable {α R : Type*}
 
 @[to_additive]
-/--
-Instance `smul` / 实例 `smul`
-
-English:
-instance smul
-  signature: [SMul α Y]
-  body: f.map (n • ·)
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 smul
-  签名: [标量乘法 α Y]
-  定义体: f.map (n • ·)
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: f.map
+/-
+**LocallyConstant.smul** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+形式化陈述：smul [SMul α Y] : SMul α (LocallyConstant X Y) where smul n f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance smul [SMul α Y] : SMul α (LocallyConstant X Y) where
   smul n f := f.map (n • ·)
 
 @[to_additive (attr := simp)]
-/--
-theorem `coe_smul` / 定理 `coe_smul`
-
-English:
-theorem coe_smul
-  given: [SMul R Y] (r : R) (f : LocallyConstant X Y)
-  statement: ⇑(r • f) = r • (f : X -> Y)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-定理 coe_smul
-  条件: [标量乘法 R Y] (r : R) (f : 局部常数 X Y)
-  结论: ⇑(r • f) = r • (f : X -> Y)
-  证明: rfl
-
-@[to_additive]
+/-
+**LocallyConstant.coe_smul** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：coe_smul [SMul R Y] (r : R) (f : LocallyConstant X Y) : ⇑(r • f) = r • (f 
+: X -> Y)
+参数：r : R；f : LocallyConstant X Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_smul [SMul R Y] (r : R) (f : LocallyConstant X Y) : ⇑(r • f) = r • (f : X -> Y) :=
+theorem coe_smul [SMul R Y] (r : R) (f : LocallyConstant X Y) : ⇑(r • f) = r • (f : X → Y) :=
   rfl
 
 @[to_additive]
-/--
-theorem `smul_apply` / 定理 `smul_apply`
-
-English:
-theorem smul_apply
-  given: [SMul R Y] (r : R) (f : LocallyConstant X Y) (x : X)
-  statement: (r • f) x = r • f x
-  proof: rfl
-
-@[to_additive existing LocallyConstant.smul]
-
-中文:
-定理 smul_apply
-  条件: [标量乘法 R Y] (r : R) (f : 局部常数 X Y) (x : X)
-  结论: (r • f) x = r • f x
-  证明: rfl
-
-@[to_additive existing LocallyConstant.smul]
+/-
+**LocallyConstant.smul_apply** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：smul_apply [SMul R Y] (r : R) (f : LocallyConstant X Y) (x : X) : (r • f) 
+x = r • f x
+参数：r : R；f : LocallyConstant X Y；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_apply [SMul R Y] (r : R) (f : LocallyConstant X Y) (x : X) : (r • f) x = r • f x :=
   rfl
 
 @[to_additive existing LocallyConstant.smul]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Pow
-  signature: Y α] : Pow (LocallyConstant X Y) α where
-  body: f.map (· ^ n)
-
-@[to_additive]
-
-中文:
-实例 [幂
-  签名: Y α] : 幂 (局部常数 X Y) α where
-  定义体: f.map (· ^ n)
-
-@[to_additive]
-
-Depends on / 依赖: f.map
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Pow Y α] : Pow (LocallyConstant X Y) α where
   pow f n := f.map (· ^ n)
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: Y] : Monoid (LocallyConstant X Y)
-  body: Function.Injective.monoid DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 [幺半群
-  签名: Y] : 幺半群 (局部常数 X Y)
-  定义体: Function.Injective.monoid DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.monoid, Injective, coe_injective, monoid
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid Y] : Monoid (LocallyConstant X Y) :=
   Function.Injective.monoid DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NatCast
-  signature: Y] : NatCast (LocallyConstant X Y) where
-  body: const X n
-
-中文:
-实例 [自然数嵌入
-  签名: Y] : 自然数嵌入 (局部常数 X Y) where
-  定义体: const X n
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NatCast Y] : NatCast (LocallyConstant X Y) where
   natCast n := const X n
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IntCast
-  signature: Y] : IntCast (LocallyConstant X Y) where
-  body: const X n
-
-中文:
-实例 [整数嵌入
-  签名: Y] : 整数嵌入 (局部常数 X Y) where
-  定义体: const X n
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IntCast Y] : IntCast (LocallyConstant X Y) where
   intCast n := const X n
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddMonoidWithOne
-  signature: Y] : AddMonoidWithOne (LocallyConstant X Y)
-  body: Function.Injective.addMonoidWithOne DFunLike.coe DFunLike.coe_injective rfl rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ => rfl
-
-@[to_additive]
-
-中文:
-实例 [加法带幺幺半群
-  签名: Y] : 加法带幺幺半群 (局部常数 X Y)
-  定义体: Function.Injective.addMonoidWithOne DFunLike.coe DFunLike.coe_injective rfl rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) fun _ => rfl
-
-@[to_additive]
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.addMonoidWithOne, Injective, addMonoidWithOne, coe_injective
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddMonoidWithOne Y] : AddMonoidWithOne (LocallyConstant X Y) :=
   Function.Injective.addMonoidWithOne DFunLike.coe DFunLike.coe_injective rfl rfl (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ => rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CommMonoid
-  signature: Y] : CommMonoid (LocallyConstant X Y)
-  body: Function.Injective.commMonoid DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl)
-    fun _ _ => rfl
-
-@[to_additive]
-
-中文:
-实例 [交换幺半群
-  签名: Y] : 交换幺半群 (局部常数 X Y)
-  定义体: Function.Injective.commMonoid DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl)
-    fun _ _ => rfl
-
-@[to_additive]
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.commMonoid, Injective, coe_injective, commMonoid
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CommMonoid Y] : CommMonoid (LocallyConstant X Y) :=
   Function.Injective.commMonoid DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl)
     fun _ _ => rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Group
-  signature: Y] : Group (LocallyConstant X Y)
-  body: Function.Injective.group DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl)
-    (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-@[to_additive]
-
-中文:
-实例 [群
-  签名: Y] : 群 (局部常数 X Y)
-  定义体: Function.Injective.group DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl)
-    (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-@[to_additive]
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.group, Injective, coe_injective
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Group Y] : Group (LocallyConstant X Y) :=
   Function.Injective.group DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl)
     (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CommGroup
-  signature: Y] : CommGroup (LocallyConstant X Y)
-  body: Function.Injective.commGroup DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl)
-    (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-中文:
-实例 [交换群
-  签名: Y] : 交换群 (局部常数 X Y)
-  定义体: Function.Injective.commGroup DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl)
-    (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.commGroup, Injective, coe_injective, commGroup
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CommGroup Y] : CommGroup (LocallyConstant X Y) :=
   Function.Injective.commGroup DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl)
     (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Distrib
-  signature: Y] : Distrib (LocallyConstant X Y)
-  body: Function.Injective.distrib DFunLike.coe DFunLike.coe_injective (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 [Distrib
-  签名: Y] : Distrib (局部常数 X Y)
-  定义体: Function.Injective.distrib DFunLike.coe DFunLike.coe_injective (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.distrib, Injective, coe_injective, distrib
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Distrib Y] : Distrib (LocallyConstant X Y) :=
   Function.Injective.distrib DFunLike.coe DFunLike.coe_injective (fun _ _ => rfl) fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalNonAssocSemiring
-  signature: Y] : NonUnitalNonAssocSemiring (LocallyConstant X Y)
-  body: Function.Injective.nonUnitalNonAssocSemiring DFunLike.coe DFunLike.coe_injective rfl
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-中文:
-实例 [非幺非结合半环
-  签名: Y] : 非幺非结合半环 (局部常数 X Y)
-  定义体: Function.Injective.nonUnitalNonAssocSemiring DFunLike.coe DFunLike.coe_injective rfl
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.nonUnitalNonAssocSemiring, Injective, coe_injective, nonUnitalNonAssocSemiring
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalNonAssocSemiring Y] : NonUnitalNonAssocSemiring (LocallyConstant X Y) :=
   Function.Injective.nonUnitalNonAssocSemiring DFunLike.coe DFunLike.coe_injective rfl
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalSemiring
-  signature: Y] : NonUnitalSemiring (LocallyConstant X Y)
-  body: Function.Injective.nonUnitalSemiring DFunLike.coe DFunLike.coe_injective rfl
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-中文:
-实例 [非幺半环
-  签名: Y] : 非幺半环 (局部常数 X Y)
-  定义体: Function.Injective.nonUnitalSemiring DFunLike.coe DFunLike.coe_injective rfl
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.nonUnitalSemiring, Injective, coe_injective, nonUnitalSemiring
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalSemiring Y] : NonUnitalSemiring (LocallyConstant X Y) :=
   Function.Injective.nonUnitalSemiring DFunLike.coe DFunLike.coe_injective rfl
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonAssocSemiring
-  signature: Y] : NonAssocSemiring (LocallyConstant X Y)
-  body: Function.Injective.nonAssocSemiring DFunLike.coe DFunLike.coe_injective rfl rfl
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
-
-中文:
-实例 [非结合半环
-  签名: Y] : 非结合半环 (局部常数 X Y)
-  定义体: Function.Injective.nonAssocSemiring DFunLike.coe DFunLike.coe_injective rfl rfl
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.nonAssocSemiring, Injective, coe_injective, nonAssocSemiring
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonAssocSemiring Y] : NonAssocSemiring (LocallyConstant X Y) :=
   Function.Injective.nonAssocSemiring DFunLike.coe DFunLike.coe_injective rfl rfl
@@ -889,216 +418,78 @@ instance [NonAssocSemiring Y] : NonAssocSemiring (LocallyConstant X Y) :=
 
 /-- The constant-function embedding, as a ring hom. -/
 @[simps]
-/--
-Definition of `constRingHom` / `constRingHom` 的定义
+/-
+**LocallyConstant.constRingHom** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：constRingHom [NonAssocSemiring Y] : Y ->+* LocallyConstant X Y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition constRingHom
-  signature: [NonAssocSemiring Y]
-  body: { constMonoidHom, constAddMonoidHom with toFun := const X }
-
-中文:
-定义 constRingHom
-  签名: [非结合半环 Y]
-  定义体: { constMonoidHom, constAddMonoidHom with toFun := const X }
-
-Depends on / 依赖: constAddMonoidHom, constMonoidHom
+--- 原说明 ---
+The constant-function embedding, as a ring hom.
 -/
-def constRingHom [NonAssocSemiring Y] : Y ->+* LocallyConstant X Y :=
+def constRingHom [NonAssocSemiring Y] : Y →+* LocallyConstant X Y :=
   { constMonoidHom, constAddMonoidHom with toFun := const X }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Semiring
-  signature: Y] : Semiring (LocallyConstant X Y)
-  body: Function.Injective.semiring DFunLike.coe DFunLike.coe_injective rfl rfl
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
-
-中文:
-实例 [半环
-  签名: Y] : 半环 (局部常数 X Y)
-  定义体: Function.Injective.semiring DFunLike.coe DFunLike.coe_injective rfl rfl
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.semiring, Injective, coe_injective, semiring
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Semiring Y] : Semiring (LocallyConstant X Y) :=
   Function.Injective.semiring DFunLike.coe DFunLike.coe_injective rfl rfl
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalCommSemiring
-  signature: Y] : NonUnitalCommSemiring (LocallyConstant X Y)
-  body: Function.Injective.nonUnitalCommSemiring DFunLike.coe DFunLike.coe_injective rfl
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-中文:
-实例 [非幺交换半环
-  签名: Y] : 非幺交换半环 (局部常数 X Y)
-  定义体: Function.Injective.nonUnitalCommSemiring DFunLike.coe DFunLike.coe_injective rfl
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.nonUnitalCommSemiring, Injective, coe_injective, nonUnitalCommSemiring
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalCommSemiring Y] : NonUnitalCommSemiring (LocallyConstant X Y) :=
   Function.Injective.nonUnitalCommSemiring DFunLike.coe DFunLike.coe_injective rfl
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CommSemiring
-  signature: Y] : CommSemiring (LocallyConstant X Y)
-  body: Function.Injective.commSemiring DFunLike.coe DFunLike.coe_injective rfl rfl
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
-
-中文:
-实例 [交换半环
-  签名: Y] : 交换半环 (局部常数 X Y)
-  定义体: Function.Injective.commSemiring DFunLike.coe DFunLike.coe_injective rfl rfl
-    (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.commSemiring, Injective, coe_injective, commSemiring
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CommSemiring Y] : CommSemiring (LocallyConstant X Y) :=
   Function.Injective.commSemiring DFunLike.coe DFunLike.coe_injective rfl rfl
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalNonAssocRing
-  signature: Y] : NonUnitalNonAssocRing (LocallyConstant X Y)
-  body: Function.Injective.nonUnitalNonAssocRing DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-中文:
-实例 [非幺非结合环
-  签名: Y] : 非幺非结合环 (局部常数 X Y)
-  定义体: Function.Injective.nonUnitalNonAssocRing DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.nonUnitalNonAssocRing, Injective, coe_injective, nonUnitalNonAssocRing
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalNonAssocRing Y] : NonUnitalNonAssocRing (LocallyConstant X Y) :=
   Function.Injective.nonUnitalNonAssocRing DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalRing
-  signature: Y] : NonUnitalRing (LocallyConstant X Y)
-  body: Function.Injective.nonUnitalRing DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-中文:
-实例 [非幺环
-  签名: Y] : 非幺环 (局部常数 X Y)
-  定义体: Function.Injective.nonUnitalRing DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.nonUnitalRing, Injective, coe_injective, nonUnitalRing
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalRing Y] : NonUnitalRing (LocallyConstant X Y) :=
   Function.Injective.nonUnitalRing DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonAssocRing
-  signature: Y] : NonAssocRing (LocallyConstant X Y)
-  body: Function.Injective.nonAssocRing DFunLike.coe DFunLike.coe_injective rfl rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-    (fun _ => rfl) (fun _ => rfl)
-
-中文:
-实例 [非结合环
-  签名: Y] : 非结合环 (局部常数 X Y)
-  定义体: Function.Injective.nonAssocRing DFunLike.coe DFunLike.coe_injective rfl rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-    (fun _ => rfl) (fun _ => rfl)
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.nonAssocRing, Injective, coe_injective, nonAssocRing
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonAssocRing Y] : NonAssocRing (LocallyConstant X Y) :=
   Function.Injective.nonAssocRing DFunLike.coe DFunLike.coe_injective rfl rfl (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
     (fun _ => rfl) (fun _ => rfl)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Ring
-  signature: Y] : Ring (LocallyConstant X Y)
-  body: Function.Injective.ring DFunLike.coe DFunLike.coe_injective rfl rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) fun _ => rfl
-
-中文:
-实例 [环
-  签名: Y] : 环 (局部常数 X Y)
-  定义体: Function.Injective.ring DFunLike.coe DFunLike.coe_injective rfl rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) fun _ => rfl
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.ring, Injective, coe_injective
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Ring Y] : Ring (LocallyConstant X Y) :=
   Function.Injective.ring DFunLike.coe DFunLike.coe_injective rfl rfl (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ => rfl) fun _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalCommRing
-  signature: Y] : NonUnitalCommRing (LocallyConstant X Y)
-  body: Function.Injective.nonUnitalCommRing DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-中文:
-实例 [非幺交换环
-  签名: Y] : 非幺交换环 (局部常数 X Y)
-  定义体: Function.Injective.nonUnitalCommRing DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.nonUnitalCommRing, Injective, coe_injective, nonUnitalCommRing
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalCommRing Y] : NonUnitalCommRing (LocallyConstant X Y) :=
   Function.Injective.nonUnitalCommRing DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CommRing
-  signature: Y] : CommRing (LocallyConstant X Y)
-  body: Function.Injective.commRing DFunLike.coe DFunLike.coe_injective rfl rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) fun _ => rfl
-
-中文:
-实例 [交换环
-  签名: Y] : 交换环 (局部常数 X Y)
-  定义体: Function.Injective.commRing DFunLike.coe DFunLike.coe_injective rfl rfl (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
-    (fun _ _ => rfl) (fun _ => rfl) fun _ => rfl
-
-Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.commRing, Injective, coe_injective, commRing
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CommRing Y] : CommRing (LocallyConstant X Y) :=
   Function.Injective.commRing DFunLike.coe DFunLike.coe_injective rfl rfl (fun _ _ => rfl)
@@ -1106,58 +497,22 @@ instance [CommRing Y] : CommRing (LocallyConstant X Y) :=
     (fun _ _ => rfl) (fun _ => rfl) fun _ => rfl
 
 variable {R : Type*}
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: R] [MulAction R Y] : MulAction R (LocallyConstant X Y)
-  body: Function.Injective.mulAction _ coe_injective fun _ _ => rfl
-
-中文:
-实例 [幺半群
-  签名: R] [乘法作用 R Y] : 乘法作用 R (局部常数 X Y)
-  定义体: Function.Injective.mulAction _ coe_injective fun _ _ => rfl
-
-Depends on / 依赖: Function, Function.Injective.mulAction, Injective, coe_injective, mulAction
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid R] [MulAction R Y] : MulAction R (LocallyConstant X Y) :=
   Function.Injective.mulAction _ coe_injective fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Monoid
-  signature: R] [AddMonoid Y] [DistribMulAction R Y] :
-  body: Function.Injective.distribMulAction coeFnAddMonoidHom coe_injective fun _ _ => rfl
-
-中文:
-实例 [幺半群
-  签名: R] [加法幺半群 Y] [分配乘法作用 R Y] :
-  定义体: Function.Injective.distribMulAction coeFnAddMonoidHom coe_injective fun _ _ => rfl
-
-Depends on / 依赖: Function, Function.Injective.distribMulAction, Injective, coeFnAddMonoidHom, coe_injective, distribMulAction
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Monoid R] [AddMonoid Y] [DistribMulAction R Y] :
     DistribMulAction R (LocallyConstant X Y) :=
   Function.Injective.distribMulAction coeFnAddMonoidHom coe_injective fun _ _ => rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Semiring
-  signature: R] [AddCommMonoid Y] [Module R Y] : Module R (LocallyConstant X Y)
-  body: Function.Injective.module R coeFnAddMonoidHom coe_injective fun _ _ => rfl
-
-中文:
-实例 [半环
-  签名: R] [加法交换幺半群 Y] [模 R Y] : 模 R (局部常数 X Y)
-  定义体: Function.Injective.module R coeFnAddMonoidHom coe_injective fun _ _ => rfl
-
-Depends on / 依赖: Function, Function.Injective.module, Injective, coeFnAddMonoidHom, coe_injective, module
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Semiring R] [AddCommMonoid Y] [Module R Y] : Module R (LocallyConstant X Y) :=
   Function.Injective.module R coeFnAddMonoidHom coe_injective fun _ _ => rfl
@@ -1166,43 +521,12 @@ section Algebra
 
 variable [CommSemiring R] [Semiring Y] [Algebra R Y]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Algebra R (LocallyConstant X Y)
-  body: constRingHom.comp algebraMap R Y
-  commutes' := by
-    intros
-    ext
-    exact Algebra.commutes' _ _
-  smul_def' := by
-    intros
-    ext
-    exact Algebra.smul_def' _ _
-
-@[simp]
-
-中文:
-实例 :
-  签名: 代数 R (局部常数 X Y)
-  定义体: constRingHom.comp algebraMap R Y
-  commutes' := by
-    intros
-    ext
-    exact Algebra.commutes' _ _
-  smul_def' := by
-    intros
-    ext
-    exact Algebra.smul_def' _ _
-
-@[simp]
-
-Depends on / 依赖: algebraMap, constRingHom, constRingHom.comp
+/-
+**LocallyConstant.** 是 Mathlib 中的一个实例，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Algebra R (LocallyConstant X Y) where
-algebraMap := constRingHom.comp algebraMap R Y
+  algebraMap := constRingHom.comp <| algebraMap R Y
   commutes' := by
     intros
     ext
@@ -1213,84 +537,62 @@ algebraMap := constRingHom.comp algebraMap R Y
     exact Algebra.smul_def' _ _
 
 @[simp]
-/--
-theorem `coe_algebraMap` / 定理 `coe_algebraMap`
-
-English:
-theorem coe_algebraMap
-  given: (r : R)
-  statement: ⇑(algebraMap R (LocallyConstant X Y) r) = algebraMap R (X -> Y) r
-  proof: rfl
-
-中文:
-定理 coe_algebraMap
-  条件: (r : R)
-  结论: ⇑(algebraMap R (局部常数 X Y) r) = algebraMap R (X -> Y) r
-  证明: rfl
+/-
+**LocallyConstant.coe_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `LocallyConstant`。
+形式化陈述：coe_algebraMap (r : R) : ⇑(algebraMap R (LocallyConstant X Y) r) = algebra
+Map R (X -> Y) r
+参数：r : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_algebraMap (r : R) : ⇑(algebraMap R (LocallyConstant X Y) r) = algebraMap R (X -> Y) r :=
+theorem coe_algebraMap (r : R) : ⇑(algebraMap R (LocallyConstant X Y) r) = algebraMap R (X → Y) r :=
   rfl
 
 end Algebra
 
 section coeFn
 
-/--
-Definition of `coeFnRingHom` / `coeFnRingHom` 的定义
+/-- `DFunLike.coe` as a `RingHom`. -/
+/-
+**LocallyConstant.coeFnRingHom** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：{X : Type u_1} → {Y : Type u_2} → [inst : TopologicalSpace X] → [inst_1 : 
+Semiring Y] → LocallyConstant X Y →+* X → Y
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coeFnRingHom
-  signature: [Semiring Y]
-  body: coeFnMonoidHom
-  __ := coeFnAddMonoidHom
-
-中文:
-定义 coeFnRingHom
-  签名: [半环 Y]
-  定义体: coeFnMonoidHom
-  __ := coeFnAddMonoidHom
+--- 原说明 ---
+`DFunLike.coe` as a `RingHom`.
 -/
-@[simps!] def coeFnRingHom [Semiring Y] : LocallyConstant X Y ->+* X -> Y where
+@[simps!] def coeFnRingHom [Semiring Y] : LocallyConstant X Y →+* X → Y where
   toMonoidHom := coeFnMonoidHom
   __ := coeFnAddMonoidHom
 
-/--
-Definition of `coeFnₗ` / `coeFnₗ` 的定义
+/-- `DFunLike.coe` as a linear map. -/
+/-
+**LocallyConstant.coeFn** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coeFnₗ
-  signature: (R : Type*) [Semiring R] [AddCommMonoid Y]
-  body: coeFnAddMonoidHom.toAddHom
-  map_smul' _ _ := rfl
-
-中文:
-定义 coeFnₗ
-  签名: (R : 类型) [半环 R] [加法交换幺半群 Y]
-  定义体: coeFnAddMonoidHom.toAddHom
-  map_smul' _ _ := rfl
+--- 原说明 ---
+`DFunLike.coe` as a linear map.
 -/
 @[simps!] def coeFnₗ (R : Type*) [Semiring R] [AddCommMonoid Y]
-    [Module R Y] : LocallyConstant X Y ->ₗ[R] X -> Y where
+    [Module R Y] : LocallyConstant X Y →ₗ[R] X → Y where
   toAddHom := coeFnAddMonoidHom.toAddHom
   map_smul' _ _ := rfl
 
-/--
-Definition of `coeFnAlgHom` / `coeFnAlgHom` 的定义
+/-- `DFunLike.coe` as an `AlgHom`. -/
+/-
+**LocallyConstant.coeFnAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：{X : Type u_1} →   {Y : Type u_2} →     [inst : TopologicalSpace X] →     
+  (R : Type u_6) →         [inst_1 : CommSemiring R] → [inst_2 : Semiring Y] → [
+inst_3 : Algebra R Y] → LocallyConstant X Y →ₐ[R] X → Y
+参数：R : Type u_6。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coeFnAlgHom
-  signature: (R : Type*) [CommSemiring R] [Semiring Y] [Algebra R Y]
-  body: coeFnRingHom
-  commutes' _ := rfl
-
-中文:
-定义 coeFnAlgHom
-  签名: (R : 类型) [交换半环 R] [半环 Y] [代数 R Y]
-  定义体: coeFnRingHom
-  commutes' _ := rfl
+--- 原说明 ---
+`DFunLike.coe` as an `AlgHom`.
 -/
 @[simps!] def coeFnAlgHom (R : Type*) [CommSemiring R] [Semiring Y] [Algebra R Y] :
-    LocallyConstant X Y ->ₐ[R] X -> Y where
+    LocallyConstant X Y →ₐ[R] X → Y where
   toRingHom := coeFnRingHom
   commutes' _ := rfl
 
@@ -1300,76 +602,63 @@ section Eval
 
 /-- Evaluation as a `MonoidHom` -/
 @[to_additive (attr := simps!) /-- Evaluation as an `AddMonoidHom` -/]
-/--
-Definition of `evalMonoidHom` / `evalMonoidHom` 的定义
+/-
+**LocallyConstant.evalMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：evalMonoidHom [MulOneClass Y] (x : X) : LocallyConstant X Y ->* Y
+参数：x : X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalMonoidHom
-  signature: [MulOneClass Y] (x : X)
-  body: (Pi.evalMonoidHom _ x).comp coeFnMonoidHom
-
-中文:
-定义 evalMonoidHom
-  签名: [MulOne类 Y] (x : X)
-  定义体: (Pi.evalMonoidHom _ x).comp coeFnMonoidHom
-
-Depends on / 依赖: Pi.evalMonoidHom, coeFnMonoidHom, evalMonoidHom
+--- 原说明 ---
+Evaluation as a `MonoidHom`
 -/
-def evalMonoidHom [MulOneClass Y] (x : X) : LocallyConstant X Y ->* Y :=
+def evalMonoidHom [MulOneClass Y] (x : X) : LocallyConstant X Y →* Y :=
   (Pi.evalMonoidHom _ x).comp coeFnMonoidHom
 
-/--
-Definition of `evalₗ` / `evalₗ` 的定义
+/-- Evaluation as a linear map -/
+/-
+**LocallyConstant.eval** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：eval {ι : Type*} {X : ι -> Type*} [forall i, TopologicalSpace (X i)] (i : 
+ι) [DiscreteTopology (X i)] : LocallyConstant (Π i, X i) (X i) where toFun
+参数：X i；i : ι；X i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalₗ
-  signature: (R : Type*) [Semiring R] [AddCommMonoid Y]
-  body: (LinearMap.proj x).comp (coeFnₗ R)
-
-中文:
-定义 evalₗ
-  签名: (R : 类型) [半环 R] [加法交换幺半群 Y]
-  定义体: (LinearMap.proj x).comp (coeFnₗ R)
+--- 原说明 ---
+Evaluation as a linear map
 -/
 @[simps!] def evalₗ (R : Type*) [Semiring R] [AddCommMonoid Y]
-    [Module R Y] (x : X) : LocallyConstant X Y ->ₗ[R] Y :=
+    [Module R Y] (x : X) : LocallyConstant X Y →ₗ[R] Y :=
   (LinearMap.proj x).comp (coeFnₗ R)
 
-/--
-Definition of `evalRingHom` / `evalRingHom` 的定义
+/-- Evaluation as a `RingHom` -/
+/-
+**LocallyConstant.evalRingHom** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：{X : Type u_1} → {Y : Type u_2} → [inst : TopologicalSpace X] → [inst_1 : 
+Semiring Y] → X → LocallyConstant X Y →+* Y
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalRingHom
-  signature: [Semiring Y] (x : X)
-  body: (Pi.evalRingHom _ x).comp coeFnRingHom
-
-中文:
-定义 evalRingHom
-  签名: [半环 Y] (x : X)
-  定义体: (Pi.evalRingHom _ x).comp coeFnRingHom
+--- 原说明 ---
+Evaluation as a `RingHom`
 -/
-@[simps!] def evalRingHom [Semiring Y] (x : X) : LocallyConstant X Y ->+* Y :=
+@[simps!] def evalRingHom [Semiring Y] (x : X) : LocallyConstant X Y →+* Y :=
   (Pi.evalRingHom _ x).comp coeFnRingHom
 
 /-- Evaluation as an `AlgHom` -/
 @[simps!]
-/--
-Definition of `evalₐ` / `evalₐ` 的定义
+/-
+**LocallyConstant.eval** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：eval {ι : Type*} {X : ι -> Type*} [forall i, TopologicalSpace (X i)] (i : 
+ι) [DiscreteTopology (X i)] : LocallyConstant (Π i, X i) (X i) where toFun
+参数：X i；i : ι；X i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalₐ
-  signature: (R : Type*) [CommSemiring R] [Semiring Y] [Algebra R Y] (x : X)
-  body: (Pi.evalAlgHom _ _ x).comp (coeFnAlgHom R)
-
-中文:
-定义 evalₐ
-  签名: (R : 类型) [交换半环 R] [半环 Y] [代数 R Y] (x : X)
-  定义体: (Pi.evalAlgHom _ _ x).comp (coeFnAlgHom R)
-
-Depends on / 依赖: Pi.evalAlgHom, coeFnAlgHom, evalAlgHom
+--- 原说明 ---
+Evaluation as an `AlgHom`
 -/
 def evalₐ (R : Type*) [CommSemiring R] [Semiring Y] [Algebra R Y] (x : X) :
-    LocallyConstant X Y ->ₐ[R] Y :=
+    LocallyConstant X Y →ₐ[R] Y :=
   (Pi.evalAlgHom _ _ x).comp (coeFnAlgHom R)
 
 end Eval
@@ -1380,140 +669,96 @@ variable [TopologicalSpace Y] {Z : Type*}
 
 /-- `LocallyConstant.comap` as a `MonoidHom`. -/
 @[to_additive (attr := simps) /-- `LocallyConstant.comap` as an `AddMonoidHom`. -/]
-/--
-Definition of `comapMonoidHom` / `comapMonoidHom` 的定义
+/-
+**LocallyConstant.comapMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：comapMonoidHom [MulOneClass Z] (f : C(X, Y)) : LocallyConstant Y Z ->* Loc
+allyConstant X Z where toFun
+参数：f : C(X, Y)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comapMonoidHom
-  signature: [MulOneClass Z] (f : C(X, Y))
-  body: comap f
-  map_one' := rfl
-  map_mul' _ _ := rfl
-
-中文:
-定义 comapMonoidHom
-  签名: [MulOne类 Z] (f : C(X, Y))
-  定义体: comap f
-  map_one' := rfl
-  map_mul' _ _ := rfl
+--- 原说明 ---
+`LocallyConstant.comap` as a `MonoidHom`.
 -/
 def comapMonoidHom [MulOneClass Z] (f : C(X, Y)) :
-    LocallyConstant Y Z ->* LocallyConstant X Z where
+    LocallyConstant Y Z →* LocallyConstant X Z where
   toFun := comap f
   map_one' := rfl
   map_mul' _ _ := rfl
 
 /-- `LocallyConstant.comap` as a linear map. -/
 @[simps!]
-/--
-Definition of `comapₗ` / `comapₗ` 的定义
+/-
+**LocallyConstant.comap** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：comap (f : C(X, Y)) (g : LocallyConstant Y Z) : LocallyConstant X Z
+参数：f : C(X, Y)；g : LocallyConstant Y Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comapₗ
-  signature: (R : Type*) [Semiring R] [AddCommMonoid Z] [Module R Z] (f : C(X, Y))
-  body: comap f
-  map_add' := map_add (comapAddMonoidHom f)
-  map_smul' _ _ := rfl
-
-中文:
-定义 comapₗ
-  签名: (R : 类型) [半环 R] [加法交换幺半群 Z] [模 R Z] (f : C(X, Y))
-  定义体: comap f
-  map_add' := map_add (comapAddMonoidHom f)
-  map_smul' _ _ := rfl
+--- 原说明 ---
+`LocallyConstant.comap` as a linear map.
 -/
 def comapₗ (R : Type*) [Semiring R] [AddCommMonoid Z] [Module R Z] (f : C(X, Y)) :
-    LocallyConstant Y Z ->ₗ[R] LocallyConstant X Z where
+    LocallyConstant Y Z →ₗ[R] LocallyConstant X Z where
   toFun := comap f
   map_add' := map_add (comapAddMonoidHom f)
   map_smul' _ _ := rfl
 
 /-- `LocallyConstant.comap` as a `RingHom`. -/
 @[simps!]
-/--
-Definition of `comapRingHom` / `comapRingHom` 的定义
+/-
+**LocallyConstant.comapRingHom** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：comapRingHom [Semiring Z] (f : C(X, Y)) : LocallyConstant Y Z ->+* Locally
+Constant X Z where toMonoidHom
+参数：f : C(X, Y)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comapRingHom
-  signature: [Semiring Z] (f : C(X, Y))
-  body: comapMonoidHom f
-  __ := (comapAddMonoidHom f)
-
-中文:
-定义 comapRingHom
-  签名: [半环 Z] (f : C(X, Y))
-  定义体: comapMonoidHom f
-  __ := (comapAddMonoidHom f)
-
-Depends on / 依赖: comapMonoidHom
+--- 原说明 ---
+`LocallyConstant.comap` as a `RingHom`.
 -/
 def comapRingHom [Semiring Z] (f : C(X, Y)) :
-    LocallyConstant Y Z ->+* LocallyConstant X Z where
+    LocallyConstant Y Z →+* LocallyConstant X Z where
   toMonoidHom := comapMonoidHom f
   __ := (comapAddMonoidHom f)
 
 /-- `LocallyConstant.comap` as an `AlgHom` -/
 @[simps!]
-/--
-Definition of `comapₐ` / `comapₐ` 的定义
+/-
+**LocallyConstant.comap** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：comap (f : C(X, Y)) (g : LocallyConstant Y Z) : LocallyConstant X Z
+参数：f : C(X, Y)；g : LocallyConstant Y Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comapₐ
-  signature: (R : Type*) [CommSemiring R] [Semiring Z] [Algebra R Z]
-  body: comapRingHom f
-  commutes' _ := rfl
-
-中文:
-定义 comapₐ
-  签名: (R : 类型) [交换半环 R] [半环 Z] [代数 R Z]
-  定义体: comapRingHom f
-  commutes' _ := rfl
-
-Depends on / 依赖: comapRingHom
+--- 原说明 ---
+`LocallyConstant.comap` as an `AlgHom`
 -/
 def comapₐ (R : Type*) [CommSemiring R] [Semiring Z] [Algebra R Z]
-    (f : C(X, Y)) : LocallyConstant Y Z ->ₐ[R] LocallyConstant X Z where
+    (f : C(X, Y)) : LocallyConstant Y Z →ₐ[R] LocallyConstant X Z where
   toRingHom := comapRingHom f
   commutes' _ := rfl
-
-/--
-lemma `ker_comapₗ` / 引理 `ker_comapₗ`
-
-English:
-lemma ker_comapₗ
-  statement: [Semiring R] [AddCommMonoid Z] [Module R Z] (f : C(X, Y))
-  proof: LinearMap.ker_eq_bot_of_injective comap_injective _ hfs
-
-中文:
-引理 ker_comapₗ
-  结论: [半环 R] [加法交换幺半群 Z] [模 R Z] (f : C(X, Y))
-  证明: LinearMap.ker_eq_bot_of_injective comap_injective _ hfs
-
-Depends on / 依赖: LinearMap, LinearMap.ker_eq_bot_of_injective, comap_injective, ker_eq_bot_of_injective
+/-
+**LocallyConstant.ker_comap** 是 Mathlib 中的一个引理，位于命名空间 `LocallyConstant`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ker_comapₗ [Semiring R] [AddCommMonoid Z] [Module R Z] (f : C(X, Y))
     (hfs : Function.Surjective f) :
-    LinearMap.ker (comapₗ R f : LocallyConstant Y Z ->ₗ[R] LocallyConstant X Z) = ⊥ :=
-LinearMap.ker_eq_bot_of_injective comap_injective _ hfs
+    LinearMap.ker (comapₗ R f : LocallyConstant Y Z →ₗ[R] LocallyConstant X Z) = ⊥ :=
+  LinearMap.ker_eq_bot_of_injective <| comap_injective _ hfs
 
 /-- `LocallyConstant.congrLeft` as a linear equivalence. -/
 @[simps!]
-/--
-Definition of `congrLeftₗ` / `congrLeftₗ` 的定义
+/-
+**LocallyConstant.congrLeft** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：congrLeft [TopologicalSpace Y] (e : X ≃ₜ Y) : LocallyConstant X Z ≃ Locall
+yConstant Y Z where toFun
+参数：e : X ≃ₜ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition congrLeftₗ
-  signature: (R : Type*) [Semiring R] [AddCommMonoid Z] [Module R Z] (e : X ≃ₜ Y)
-  body: comapₗ R ⟨_, e.symm.continuous⟩
-  __ := congrLeft e
-
-中文:
-定义 congrLeftₗ
-  签名: (R : 类型) [半环 R] [加法交换幺半群 Z] [模 R Z] (e : X ≃ₜ Y)
-  定义体: comapₗ R ⟨_, e.symm.continuous⟩
-  __ := congrLeft e
-
-Depends on / 依赖: continuous, e.symm.continuous
+--- 原说明 ---
+`LocallyConstant.congrLeft` as a linear equivalence.
 -/
 def congrLeftₗ (R : Type*) [Semiring R] [AddCommMonoid Z] [Module R Z] (e : X ≃ₜ Y) :
     LocallyConstant X Z ≃ₗ[R] LocallyConstant Y Z where
@@ -1522,24 +767,17 @@ def congrLeftₗ (R : Type*) [Semiring R] [AddCommMonoid Z] [Module R Z] (e : X 
 
 /-- `LocallyConstant.congrLeft` as a `RingEquiv`. -/
 @[simps!]
-/--
-Definition of `congrLeftRingEquiv` / `congrLeftRingEquiv` 的定义
+/-
+**LocallyConstant.congrLeftRingEquiv** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`
+。
+形式化陈述：congrLeftRingEquiv [Semiring Z] (e : X ≃ₜ Y) : LocallyConstant X Z ≃+* Loc
+allyConstant Y Z where toEquiv
+参数：e : X ≃ₜ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition congrLeftRingEquiv
-  signature: [Semiring Z] (e : X ≃ₜ Y)
-  body: congrLeft e
-  __ := comapMonoidHom ⟨_, e.symm.continuous⟩
-  __ := comapAddMonoidHom ⟨_, e.symm.continuous⟩
-
-中文:
-定义 congrLeftRingEquiv
-  签名: [半环 Z] (e : X ≃ₜ Y)
-  定义体: congrLeft e
-  __ := comapMonoidHom ⟨_, e.symm.continuous⟩
-  __ := comapAddMonoidHom ⟨_, e.symm.continuous⟩
-
-Depends on / 依赖: congrLeft
+--- 原说明 ---
+`LocallyConstant.congrLeft` as a `RingEquiv`.
 -/
 def congrLeftRingEquiv [Semiring Z] (e : X ≃ₜ Y) :
     LocallyConstant X Z ≃+* LocallyConstant Y Z where
@@ -1549,22 +787,16 @@ def congrLeftRingEquiv [Semiring Z] (e : X ≃ₜ Y) :
 
 /-- `LocallyConstant.congrLeft` as an `AlgEquiv`. -/
 @[simps!]
-/--
-Definition of `congrLeftₐ` / `congrLeftₐ` 的定义
+/-
+**LocallyConstant.congrLeft** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：congrLeft [TopologicalSpace Y] (e : X ≃ₜ Y) : LocallyConstant X Z ≃ Locall
+yConstant Y Z where toFun
+参数：e : X ≃ₜ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition congrLeftₐ
-  signature: (R : Type*) [CommSemiring R] [Semiring Z] [Algebra R Z] (e : X ≃ₜ Y)
-  body: congrLeft e
-  __ := comapₐ R ⟨_, e.symm.continuous⟩
-
-中文:
-定义 congrLeftₐ
-  签名: (R : 类型) [交换半环 R] [半环 Z] [代数 R Z] (e : X ≃ₜ Y)
-  定义体: congrLeft e
-  __ := comapₐ R ⟨_, e.symm.continuous⟩
-
-Depends on / 依赖: congrLeft
+--- 原说明 ---
+`LocallyConstant.congrLeft` as an `AlgEquiv`.
 -/
 def congrLeftₐ (R : Type*) [CommSemiring R] [Semiring Z] [Algebra R Z] (e : X ≃ₜ Y) :
     LocallyConstant X Z ≃ₐ[R] LocallyConstant Y Z where
@@ -1579,119 +811,90 @@ variable {Z : Type*}
 
 /-- `LocallyConstant.map` as a `MonoidHom`. -/
 @[to_additive (attr := simps) /-- `LocallyConstant.map` as an `AddMonoidHom`. -/]
-/--
-Definition of `mapMonoidHom` / `mapMonoidHom` 的定义
+/-
+**LocallyConstant.mapMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：mapMonoidHom [MulOneClass Y] [MulOneClass Z] (f : Y ->* Z) : LocallyConsta
+nt X Y ->* LocallyConstant X Z where toFun
+参数：f : Y ->* Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapMonoidHom
-  signature: [MulOneClass Y] [MulOneClass Z] (f : Y ->* Z)
-  body: map f
-  map_one' := by aesop
-  map_mul' := by aesop
-
-中文:
-定义 mapMonoidHom
-  签名: [MulOne类 Y] [MulOne类 Z] (f : Y ->* Z)
-  定义体: map f
-  map_one' := by aesop
-  map_mul' := by aesop
+--- 原说明 ---
+`LocallyConstant.map` as a `MonoidHom`.
 -/
-def mapMonoidHom [MulOneClass Y] [MulOneClass Z] (f : Y ->* Z) :
-    LocallyConstant X Y ->* LocallyConstant X Z where
+def mapMonoidHom [MulOneClass Y] [MulOneClass Z] (f : Y →* Z) :
+    LocallyConstant X Y →* LocallyConstant X Z where
   toFun := map f
   map_one' := by aesop
   map_mul' := by aesop
 
 /-- `LocallyConstant.map` as a linear map. -/
 @[simps!]
-/--
-Definition of `mapₗ` / `mapₗ` 的定义
+/-
+**LocallyConstant.map** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：map (f : Y -> Z) (g : LocallyConstant X Y) : LocallyConstant X Z
+参数：f : Y -> Z；g : LocallyConstant X Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapₗ
-  signature: (R : Type*) [Semiring R] [AddCommMonoid Y] [Module R Y]
-  body: map f
-  map_add' := by aesop
-  map_smul' := by aesop
-
-中文:
-定义 mapₗ
-  签名: (R : 类型) [半环 R] [加法交换幺半群 Y] [模 R Y]
-  定义体: map f
-  map_add' := by aesop
-  map_smul' := by aesop
+--- 原说明 ---
+`LocallyConstant.map` as a linear map.
 -/
 def mapₗ (R : Type*) [Semiring R] [AddCommMonoid Y] [Module R Y]
-    [AddCommMonoid Z] [Module R Z] (f : Y ->ₗ[R] Z) :
-    LocallyConstant X Y ->ₗ[R] LocallyConstant X Z where
+    [AddCommMonoid Z] [Module R Z] (f : Y →ₗ[R] Z) :
+    LocallyConstant X Y →ₗ[R] LocallyConstant X Z where
   toFun := map f
   map_add' := by aesop
   map_smul' := by aesop
 
 /-- `LocallyConstant.map` as a `RingHom`. -/
 @[simps!]
-/--
-Definition of `mapRingHom` / `mapRingHom` 的定义
+/-
+**LocallyConstant.mapRingHom** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：mapRingHom [Semiring Y] [Semiring Z] (f : Y ->+* Z) : LocallyConstant X Y 
+->+* LocallyConstant X Z where toMonoidHom
+参数：f : Y ->+* Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapRingHom
-  signature: [Semiring Y] [Semiring Z] (f : Y ->+* Z)
-  body: mapMonoidHom f
-  __ := (mapAddMonoidHom f.toAddMonoidHom)
-
-中文:
-定义 mapRingHom
-  签名: [半环 Y] [半环 Z] (f : Y ->+* Z)
-  定义体: mapMonoidHom f
-  __ := (mapAddMonoidHom f.toAddMonoidHom)
-
-Depends on / 依赖: mapMonoidHom
+--- 原说明 ---
+`LocallyConstant.map` as a `RingHom`.
 -/
-def mapRingHom [Semiring Y] [Semiring Z] (f : Y ->+* Z) :
-    LocallyConstant X Y ->+* LocallyConstant X Z where
+def mapRingHom [Semiring Y] [Semiring Z] (f : Y →+* Z) :
+    LocallyConstant X Y →+* LocallyConstant X Z where
   toMonoidHom := mapMonoidHom f
   __ := (mapAddMonoidHom f.toAddMonoidHom)
 
 /-- `LocallyConstant.map` as an `AlgHom` -/
 @[simps!]
-/--
-Definition of `mapₐ` / `mapₐ` 的定义
+/-
+**LocallyConstant.map** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：map (f : Y -> Z) (g : LocallyConstant X Y) : LocallyConstant X Z
+参数：f : Y -> Z；g : LocallyConstant X Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapₐ
-  signature: (R : Type*) [CommSemiring R] [Semiring Y] [Algebra R Y] [Semiring Z] [Algebra R Z]
-  body: mapRingHom f
-  commutes' _ := by aesop
-
-中文:
-定义 mapₐ
-  签名: (R : 类型) [交换半环 R] [半环 Y] [代数 R Y] [半环 Z] [代数 R Z]
-  定义体: mapRingHom f
-  commutes' _ := by aesop
-
-Depends on / 依赖: mapRingHom
+--- 原说明 ---
+`LocallyConstant.map` as an `AlgHom`
 -/
 def mapₐ (R : Type*) [CommSemiring R] [Semiring Y] [Algebra R Y] [Semiring Z] [Algebra R Z]
-    (f : Y ->ₐ[R] Z) : LocallyConstant X Y ->ₐ[R] LocallyConstant X Z where
+    (f : Y →ₐ[R] Z) : LocallyConstant X Y →ₐ[R] LocallyConstant X Z where
   toRingHom := mapRingHom f
   commutes' _ := by aesop
 
 /-- `LocallyConstant.congrRight` as a linear equivalence. -/
 @[simps!]
-/--
-Definition of `congrRightₗ` / `congrRightₗ` 的定义
+/-
+**LocallyConstant.congrRight** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：congrRight (e : Y ≃ Z) : LocallyConstant X Y ≃ LocallyConstant X Z where t
+oFun
+参数：e : Y ≃ Z。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition congrRightₗ
-  signature: (R : Type*) [Semiring R] [AddCommMonoid Y] [Module R Y]
-  body: mapₗ R e
-  __ := congrRight e.toEquiv
-
-中文:
-定义 congrRightₗ
-  签名: (R : 类型) [半环 R] [加法交换幺半群 Y] [模 R Y]
-  定义体: mapₗ R e
-  __ := congrRight e.toEquiv
+--- 原说明 ---
+`LocallyConstant.congrRight` as a linear equivalence.
 -/
 def congrRightₗ (R : Type*) [Semiring R] [AddCommMonoid Y] [Module R Y]
     [AddCommMonoid Z] [Module R Z] (e : Y ≃ₗ[R] Z) :
@@ -1701,24 +904,17 @@ def congrRightₗ (R : Type*) [Semiring R] [AddCommMonoid Y] [Module R Y]
 
 /-- `LocallyConstant.congrRight` as a `RingEquiv`. -/
 @[simps!]
-/--
-Definition of `congrRightRingEquiv` / `congrRightRingEquiv` 的定义
+/-
+**LocallyConstant.congrRightRingEquiv** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant
+`。
+形式化陈述：congrRightRingEquiv [Semiring Y] [Semiring Z] (e : Y ≃+* Z) : LocallyConst
+ant X Y ≃+* LocallyConstant X Z where toEquiv
+参数：e : Y ≃+* Z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition congrRightRingEquiv
-  signature: [Semiring Y] [Semiring Z] (e : Y ≃+* Z)
-  body: congrRight e
-  __ := mapMonoidHom e.toMonoidHom
-  __ := mapAddMonoidHom e.toAddMonoidHom
-
-中文:
-定义 congrRightRingEquiv
-  签名: [半环 Y] [半环 Z] (e : Y ≃+* Z)
-  定义体: congrRight e
-  __ := mapMonoidHom e.toMonoidHom
-  __ := mapAddMonoidHom e.toAddMonoidHom
-
-Depends on / 依赖: congrRight
+--- 原说明 ---
+`LocallyConstant.congrRight` as a `RingEquiv`.
 -/
 def congrRightRingEquiv [Semiring Y] [Semiring Z] (e : Y ≃+* Z) :
     LocallyConstant X Y ≃+* LocallyConstant X Z where
@@ -1728,22 +924,17 @@ def congrRightRingEquiv [Semiring Y] [Semiring Z] (e : Y ≃+* Z) :
 
 /-- `LocallyConstant.congrRight` as an `AlgEquiv`. -/
 @[simps!]
-/--
-Definition of `congrRightₐ` / `congrRightₐ` 的定义
+/-
+**LocallyConstant.congrRight** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：congrRight (e : Y ≃ Z) : LocallyConstant X Y ≃ LocallyConstant X Z where t
+oFun
+参数：e : Y ≃ Z。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition congrRightₐ
-  signature: (R : Type*) [CommSemiring R] [Semiring Y] [Algebra R Y] [Semiring Z] [Algebra R Z]
-  body: congrRight e
-  __ := mapₐ R e.toAlgHom
-
-中文:
-定义 congrRightₐ
-  签名: (R : 类型) [交换半环 R] [半环 Y] [代数 R Y] [半环 Z] [代数 R Z]
-  定义体: congrRight e
-  __ := mapₐ R e.toAlgHom
-
-Depends on / 依赖: congrRight
+--- 原说明 ---
+`LocallyConstant.congrRight` as an `AlgEquiv`.
 -/
 def congrRightₐ (R : Type*) [CommSemiring R] [Semiring Y] [Algebra R Y] [Semiring Z] [Algebra R Z]
     (e : Y ≃ₐ[R] Z) : LocallyConstant X Y ≃ₐ[R] LocallyConstant X Z where
@@ -1756,53 +947,46 @@ section Const
 
 /-- `LocallyConstant.const` as a linear map. -/
 @[simps!]
-/--
-Definition of `constₗ` / `constₗ` 的定义
+/-
+**LocallyConstant.const** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：const (X : Type*) {Y : Type*} [TopologicalSpace X] (y : Y) : LocallyConsta
+nt X Y
+参数：X : Type*；y : Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocallyConstant.const`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolog
+icalSpace X] (y : Y), IsLocallyConstant (Function.const X y)
 
-English:
-definition constₗ
-  signature: (R : Type*) [Semiring R] [AddCommMonoid Y] [Module R Y]
-  body: const X
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
-
-中文:
-定义 constₗ
-  签名: (R : 类型) [半环 R] [加法交换幺半群 Y] [模 R Y]
-  定义体: const X
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
+--- 原说明 ---
+`LocallyConstant.const` as a linear map.
 -/
 def constₗ (R : Type*) [Semiring R] [AddCommMonoid Y] [Module R Y] :
-    Y ->ₗ[R] LocallyConstant X Y where
+    Y →ₗ[R] LocallyConstant X Y where
   toFun := const X
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
 
 /-- `LocallyConstant.const` as an `AlgHom` -/
 @[simps!]
-/--
-Definition of `constₐ` / `constₐ` 的定义
+/-
+**LocallyConstant.const** 是 Mathlib 中的一个定义，位于命名空间 `LocallyConstant`。
+形式化陈述：const (X : Type*) {Y : Type*} [TopologicalSpace X] (y : Y) : LocallyConsta
+nt X Y
+参数：X : Type*；y : Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLocallyConstant.const`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolog
+icalSpace X] (y : Y), IsLocallyConstant (Function.const X y)
 
-English:
-definition constₐ
-  signature: (R : Type*) [CommSemiring R] [Semiring Y] [Algebra R Y]
-  body: constRingHom
-  commutes' _ := rfl
-
-中文:
-定义 constₐ
-  签名: (R : 类型) [交换半环 R] [半环 Y] [代数 R Y]
-  定义体: constRingHom
-  commutes' _ := rfl
-
-Depends on / 依赖: constRingHom
+--- 原说明 ---
+`LocallyConstant.const` as an `AlgHom`
 -/
 def constₐ (R : Type*) [CommSemiring R] [Semiring Y] [Algebra R Y] :
-    Y ->ₐ[R] LocallyConstant X Y where
+    Y →ₐ[R] LocallyConstant X Y where
   toRingHom := constRingHom
   commutes' _ := rfl
 
 end Const
 
 end LocallyConstant
+

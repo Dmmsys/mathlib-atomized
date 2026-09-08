@@ -38,32 +38,19 @@ variable (C : Type u₁) (D : Type u₂) [Category.{v₁} C] [Category.{v₂} D]
 
 /-- Custom structure to construct profunctors, i.e. bifunctors `C ⥤ Dᵒᵖ ⥤ Type w`. -/
 @[pp_with_univ]
-/--
-Definition of `ProfunctorCore` / `ProfunctorCore` 的定义
+/-
+**CategoryTheory.ProfunctorCore** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory`。
+形式化陈述：ProfunctorCore where /-- The object part -/ obj : C -> D -> Type w /-- The
+ morphism part -/ map {X X' : C} {Y Y' : D} (f : X ⟶ X') (g : Y ⟶ Y') : obj X Y'
+ ⟶ obj X' Y map_id (X : C) (Y : D) : map (𝟙 X) (𝟙 Y) = 𝟙 _
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ProfunctorCore
-  parameters: where
-  axioms and operations (4):
-    - obj : C -> D -> Type w
-    - map({X X' : C} {Y Y' : D} (f : X ⟶ X') (g : Y ⟶ Y')) : obj X Y' ⟶ obj X' Y
-    - map_id((X : C) (Y : D)) : map (𝟙 X) (𝟙 Y) = 𝟙 _  [default: by cat_disch]
-    - map_comp({X₁ X₂ X₃ : C} {Y₁ Y₂ Y₃ : D} (f : X₁ ⟶ X₂) (f' : X₂ ⟶ X₃) (g : Y₁ ⟶ Y₂) (g' : Y₂ ⟶ Y₃)) : map (f ≫ f') (g ≫ g') = map f g' ≫ map f' g  [default: by cat_disch]
-
-中文:
-结构 ProfunctorCore
-  参数: where
-  公理与运算 (4 个):
-    - obj : C -> D -> 类型 w
-    - map({X X' : C} {Y Y' : D} (f : X ⟶ X') (g : Y ⟶ Y')) : obj X Y' ⟶ obj X' Y
-    - map_id((X : C) (Y : D)) : map (𝟙 X) (𝟙 Y) = 𝟙 _  [默认: by cat_disch]
-    - map_comp({X₁ X₂ X₃ : C} {Y₁ Y₂ Y₃ : D} (f : X₁ ⟶ X₂) (f' : X₂ ⟶ X₃) (g : Y₁ ⟶ Y₂) (g' : Y₂ ⟶ Y₃)) : map (f ≫ f') (g ≫ g') = map f g' ≫ map f' g  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch, map_comp
+--- 原说明 ---
+Custom structure to construct profunctors, i.e. bifunctors `C ⥤ Dᵒᵖ ⥤ Type w`.
 -/
 structure ProfunctorCore where
   /-- The object part -/
-  obj : C -> D -> Type w
+  obj : C → D → Type w
   /-- The morphism part -/
   map {X X' : C} {Y Y' : D} (f : X ⟶ X') (g : Y ⟶ Y') : obj X Y' ⟶ obj X' Y
   map_id (X : C) (Y : D) : map (𝟙 X) (𝟙 Y) = 𝟙 _ := by cat_disch
@@ -74,56 +61,52 @@ attribute [simp] ProfunctorCore.map_id ProfunctorCore.map_comp
 
 /-- A profunctor from C to D (`Profunctor.{w} C D`) is a bifunctor `C ⥤ Dᵒᵖ ⥤ Type w`. -/
 @[pp_with_univ]
-/--
-Definition of `Profunctor` / `Profunctor` 的定义
+/-
+**CategoryTheory.Profunctor** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory`。
+形式化陈述：Profunctor
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Profunctor
-  body: C ⥤ Dᵒᵖ ⥤ Type w
-
-中文:
-缩写 Profunctor
-  定义体: C ⥤ Dᵒᵖ ⥤ Type w
+--- 原说明 ---
+A profunctor from C to D (`Profunctor.{w} C D`) is a bifunctor `C ⥤ Dᵒᵖ ⥤ Type w
+`.
 -/
 abbrev Profunctor := C ⥤ Dᵒᵖ ⥤ Type w
 
 variable {C D}
 
-/--
-Definition of `Functor.profunctor` / `Functor.profunctor` 的定义
+/-- Typecheck a bifunctor `C ⥤ Dᵒᵖ ⥤ Type w` as a profunctor. -/
+/-
+**CategoryTheory.Functor.profunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Fu
+nctor`。
+形式化陈述：{C : Type u₁} →   {D : Type u₂} →     [inst : CategoryTheory.Category.{v₁,
+ u₁} C] →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         Category
+Theory.Functor C (CategoryTheory.Functor Dᵒᵖ (Type w)) →           CategoryTheor
+y.Profunctor.{w, v₁, v₂, u₁, u₂} C D
+参数：CategoryTheory.Functor Dᵒᵖ (Type w)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Functor.profunctor
-  signature: (F : C ⥤ Dᵒᵖ ⥤ Type w)
-  body: F
-
-中文:
-缩写 函子.profunctor
-  签名: (F : C ⥤ Dᵒᵖ ⥤ 类型 w)
-  定义体: F
+--- 原说明 ---
+Typecheck a bifunctor `C ⥤ Dᵒᵖ ⥤ Type w` as a profunctor.
 -/
 abbrev Functor.profunctor (F : C ⥤ Dᵒᵖ ⥤ Type w) : Profunctor.{w} C D := F
 
 namespace ProfunctorCore
 
-/--
-Definition of `Hom` / `Hom` 的定义
+/-- Custom structure to construct natural transformations between profunctors, see
+`CategoryTheory.Profunctor.ofHom`. -/
+/-
+**CategoryTheory.ProfunctorCore.Hom** 是 Mathlib 中的一个结构，位于命名空间 `CategoryTheory.Pr
+ofunctorCore`。
+形式化陈述：Hom (P Q : ProfunctorCore.{w} C D) where /-- The components of the natural
+ transformation -/ app (X : C) (Y : D) : P.obj X Y ⟶ Q.obj X Y naturality ⦃X X' 
+: C⦄ ⦃Y Y' : D⦄ (f : X ⟶ X') (g : Y ⟶ Y') : P.map f g ≫ app X' Y = app X Y' ≫ Q.
+map f g
+参数：P Q : ProfunctorCore.{w} C D；X : C；Y : D。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Hom
-  parameters: (P Q : ProfunctorCore.{w} C D)
-  axioms and operations (2):
-    - app((X : C) (Y : D)) : P.obj X Y ⟶ Q.obj X Y
-    - naturality(⦃X X') : C⦄ ⦃Y Y' : D⦄ (f : X ⟶ X') (g : Y ⟶ Y') : P.map f g ≫ app X' Y = app X Y' ≫ Q.map f g  [default: by cat_disch]
-
-中文:
-结构 态射
-  参数: (P Q : ProfunctorCore.{w} C D)
-  公理与运算 (2 个):
-    - app((X : C) (Y : D)) : P.obj X Y ⟶ Q.obj X Y
-    - naturality(⦃X X') : C⦄ ⦃Y Y' : D⦄ (f : X ⟶ X') (g : Y ⟶ Y') : P.map f g ≫ app X' Y = app X Y' ≫ Q.map f g  [默认: by cat_disch]
-
-Depends on / 依赖: cat_disch
+--- 原说明 ---
+Custom structure to construct natural transformations between profunctors, see
+`CategoryTheory.Profunctor.ofHom`.
 -/
 structure Hom (P Q : ProfunctorCore.{w} C D) where
   /-- The components of the natural transformation -/
@@ -134,28 +117,28 @@ structure Hom (P Q : ProfunctorCore.{w} C D) where
 attribute [reassoc (attr := simp)] ProfunctorCore.Hom.naturality
 
 @[simp]
-/--
-lemma `map_id_comp` / 引理 `map_id_comp`
-
-English:
-lemma map_id_comp
-  statement: (P : ProfunctorCore.{w} C D) (X : C) {Y Y' Y'' : D}
-  proof: by
-  nth_rw 1 [← Category.id_comp (𝟙 X)]
-  simp only [P.map_comp]
-
-@[simp]
-
-中文:
-引理 map_id_comp
-  结论: (P : ProfunctorCore.{w} C D) (X : C) {Y Y' Y'' : D}
-  证明: by
-  nth_rw 1 [← Category.id_comp (𝟙 X)]
-  simp only [P.map_comp]
-
-@[simp]
-
-Depends on / 依赖: Category, Category.id_comp, P.map_comp, id_comp, map_comp, nth_rw
+/-
+**CategoryTheory.ProfunctorCore.map_id_comp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.ProfunctorCore`。
+形式化陈述：map_id_comp (P : ProfunctorCore.{w} C D) (X : C) {Y Y' Y'' : D} (g : Y ⟶ Y
+') (g' : Y' ⟶ Y'') : P.map (𝟙 X) (g ≫ g') = P.map (𝟙 X) g' ≫ P.map (𝟙 X) g
+参数：P : ProfunctorCore.{w} C D；X : C；g : Y ⟶ Y'；g' : Y' ⟶ Y''。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.ProfunctorCore.map_comp`：∀ {C : Type u₁} {D : Type u₂} [i
+nst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Category.{v₂,
+ u₂} D]   (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma map_id_comp (P : ProfunctorCore.{w} C D) (X : C) {Y Y' Y'' : D}
     (g : Y ⟶ Y') (g' : Y' ⟶ Y'') :
@@ -164,28 +147,28 @@ lemma map_id_comp (P : ProfunctorCore.{w} C D) (X : C) {Y Y' Y'' : D}
   simp only [P.map_comp]
 
 @[simp]
-/--
-lemma `map_comp_id` / 引理 `map_comp_id`
-
-English:
-lemma map_comp_id
-  statement: (P : ProfunctorCore.{w} C D) {X X' X'' : C} (Y : D)
-  proof: by
-  nth_rw 1 [← Category.id_comp (𝟙 Y)]
-  simp only [P.map_comp]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 map_comp_id
-  结论: (P : ProfunctorCore.{w} C D) {X X' X'' : C} (Y : D)
-  证明: by
-  nth_rw 1 [← Category.id_comp (𝟙 Y)]
-  simp only [P.map_comp]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Category, Category.id_comp, P.map_comp, id_comp, map_comp, nth_rw
+/-
+**CategoryTheory.ProfunctorCore.map_comp_id** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.ProfunctorCore`。
+形式化陈述：map_comp_id (P : ProfunctorCore.{w} C D) {X X' X'' : C} (Y : D) (f : X ⟶ X
+') (f' : X' ⟶ X'') : P.map (f ≫ f') (𝟙 Y) = P.map f (𝟙 Y) ≫ P.map f' (𝟙 Y)
+参数：P : ProfunctorCore.{w} C D；Y : D；f : X ⟶ X'；f' : X' ⟶ X''。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.ProfunctorCore.map_comp`：∀ {C : Type u₁} {D : Type u₂} [i
+nst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Category.{v₂,
+ u₂} D]   (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma map_comp_id (P : ProfunctorCore.{w} C D) {X X' X'' : C} (Y : D)
     (f : X ⟶ X') (f' : X' ⟶ X'') :
@@ -194,48 +177,60 @@ lemma map_comp_id (P : ProfunctorCore.{w} C D) {X X' X'' : C} (Y : D)
   simp only [P.map_comp]
 
 @[reassoc (attr := simp)]
-/--
-lemma `map_lid_comp_map_rid` / 引理 `map_lid_comp_map_rid`
-
-English:
-lemma map_lid_comp_map_rid
-  statement: (P : ProfunctorCore.{w} C D) {X X' : C} {Y Y' : D}
-  proof: by
-  simp [← P.map_comp]
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 map_lid_comp_map_rid
-  结论: (P : ProfunctorCore.{w} C D) {X X' : C} {Y Y' : D}
-  证明: by
-  simp [← P.map_comp]
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: P.map_comp, map_comp
+/-
+**CategoryTheory.ProfunctorCore.map_lid_comp_map_rid** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.ProfunctorCore`。
+形式化陈述：map_lid_comp_map_rid (P : ProfunctorCore.{w} C D) {X X' : C} {Y Y' : D} (f
+ : X ⟶ X') (g : Y ⟶ Y') : P.map (𝟙 _) g ≫ P.map f (𝟙 _) = P.map f g
+参数：P : ProfunctorCore.{w} C D；f : X ⟶ X'；g : Y ⟶ Y'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.ProfunctorCore.map_comp`：∀ {C : Type u₁} {D : Type u₂} [i
+nst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Category.{v₂,
+ u₂} D]   (self : CategoryTh…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma map_lid_comp_map_rid (P : ProfunctorCore.{w} C D) {X X' : C} {Y Y' : D}
     (f : X ⟶ X') (g : Y ⟶ Y') : P.map (𝟙 _) g ≫ P.map f (𝟙 _) = P.map f g := by
   simp [← P.map_comp]
 
 @[reassoc (attr := simp)]
-/--
-lemma `map_rid_comp_map_lid` / 引理 `map_rid_comp_map_lid`
-
-English:
-lemma map_rid_comp_map_lid
-  statement: (P : ProfunctorCore.{w} C D) {X X' : C} {Y Y' : D}
-  proof: by
-  simp [← P.map_comp]
-
-中文:
-引理 map_rid_comp_map_lid
-  结论: (P : ProfunctorCore.{w} C D) {X X' : C} {Y Y' : D}
-  证明: by
-  simp [← P.map_comp]
-
-Depends on / 依赖: P.map_comp, map_comp
+/-
+**CategoryTheory.ProfunctorCore.map_rid_comp_map_lid** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.ProfunctorCore`。
+形式化陈述：map_rid_comp_map_lid (P : ProfunctorCore.{w} C D) {X X' : C} {Y Y' : D} (f
+ : X ⟶ X') (g : Y ⟶ Y') : P.map f (𝟙 _) ≫ P.map (𝟙 _) g = P.map f g
+参数：P : ProfunctorCore.{w} C D；f : X ⟶ X'；g : Y ⟶ Y'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.ProfunctorCore.map_comp`：∀ {C : Type u₁} {D : Type u₂} [i
+nst : CategoryTheory.Category.{v₁, u₁} C] [inst_1 : CategoryTheory.Category.{v₂,
+ u₂} D]   (self : CategoryTh…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma map_rid_comp_map_lid (P : ProfunctorCore.{w} C D) {X X' : C} {Y Y' : D}
     (f : X ⟶ X') (g : Y ⟶ Y') : P.map f (𝟙 _) ≫ P.map (𝟙 _) g = P.map f g := by
@@ -247,22 +242,16 @@ namespace Profunctor
 
 /-- Construct a profunctor from a `ProfunctorCore`. -/
 @[simps]
-/--
-Definition of `ofCore` / `ofCore` 的定义
+/-
+**CategoryTheory.Profunctor.ofCore** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Pro
+functor`。
+形式化陈述：ofCore (P : ProfunctorCore.{w} C D) : Profunctor.{w} C D where obj X
+参数：P : ProfunctorCore.{w} C D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofCore
-  signature: (P : ProfunctorCore.{w} C D)
-  body: { obj Y := P.obj X (unop Y), map f := P.map (𝟙 _) f.unop }
-  map g := { app X := P.map g (𝟙 _) }
-
-中文:
-定义 ofCore
-  签名: (P : ProfunctorCore.{w} C D)
-  定义体: { obj Y := P.obj X (unop Y), map f := P.map (𝟙 _) f.unop }
-  map g := { app X := P.map g (𝟙 _) }
-
-Depends on / 依赖: P.map, P.obj, f.unop
+--- 原说明 ---
+Construct a profunctor from a `ProfunctorCore`.
 -/
 def ofCore (P : ProfunctorCore.{w} C D) : Profunctor.{w} C D where
   obj X := { obj Y := P.obj X (unop Y), map f := P.map (𝟙 _) f.unop }
@@ -271,59 +260,50 @@ def ofCore (P : ProfunctorCore.{w} C D) : Profunctor.{w} C D where
 set_option backward.defeqAttrib.useBackward true in
 /-- Construct a natural transformation between profunctors from a `ProfunctorCore.Hom`. -/
 @[simps]
-/--
-Definition of `ofHom` / `ofHom` 的定义
+/-
+**CategoryTheory.Profunctor.ofHom** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Prof
+unctor`。
+形式化陈述：ofHom {P Q : ProfunctorCore.{w} C D} (f : P.Hom Q) : ofCore P ⟶ ofCore Q w
+here app X
+参数：f : P.Hom Q。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofHom
-  signature: {P Q : ProfunctorCore.{w} C D} (f : P.Hom Q)
-  body: { app Y := f.app X (unop Y) }
-
-中文:
-定义 ofHom
-  签名: {P Q : ProfunctorCore.{w} C D} (f : P.态射 Q)
-  定义体: { app Y := f.app X (unop Y) }
-
-Depends on / 依赖: f.app
+--- 原说明 ---
+Construct a natural transformation between profunctors from a `ProfunctorCore.Ho
+m`.
 -/
 def ofHom {P Q : ProfunctorCore.{w} C D} (f : P.Hom Q) : ofCore P ⟶ ofCore Q where
   app X := { app Y := f.app X (unop Y) }
 
 /-- The identity profunctor from `C` to `C`. This is defined as the Yoneda bifunctor. -/
 @[simps! obj_obj obj_map map_app]
-/--
-Definition of `id` / `id` 的定义
+/-
+**CategoryTheory.Profunctor.id** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Profunc
+tor`。
+形式化陈述：{C : Type u₁} → [inst : CategoryTheory.Category.{v₁, u₁} C] → CategoryTheo
+ry.Profunctor.{v₁, v₁, v₁, u₁, u₁} C C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : Profunctor.{v₁} C C
-  body: yoneda
-
-中文:
-定义 id
-  签名: : Profunctor.{v₁} C C
-  定义体: yoneda
+--- 原说明 ---
+The identity profunctor from `C` to `C`. This is defined as the Yoneda bifunctor
+.
 -/
 protected def id : Profunctor.{v₁} C C := yoneda
 
 /-- The opposite of a profunctor. -/
 @[simps! obj_obj obj_map map_app]
-/--
-Definition of `op` / `op` 的定义
+/-
+**CategoryTheory.Profunctor.op** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Profunc
+tor`。
+形式化陈述：{C : Type u₁} →   {D : Type u₂} →     [inst : CategoryTheory.Category.{v₁,
+ u₁} C] →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         Category
+Theory.Profunctor.{w, v₁, v₂, u₁, u₂} C D → CategoryTheory.Profunctor.{w, v₂, v₁
+, u₂, u₁} Dᵒᵖ Cᵒᵖ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition op
-  signature: (P : Profunctor.{w} C D)
-  body: .ofCore {
-    obj X Y := (P.obj (unop Y)).obj X
-    map f g := (P.map g.unop).app _ ≫ (P.obj _).map f }
-
-中文:
-定义 op
-  签名: (P : Profunctor.{w} C D)
-  定义体: .ofCore {
-    obj X Y := (P.obj (unop Y)).obj X
-    map f g := (P.map g.unop).app _ ≫ (P.obj _).map f }
+--- 原说明 ---
+The opposite of a profunctor.
 -/
 protected def op (P : Profunctor.{w} C D) : Profunctor.{w} Dᵒᵖ Cᵒᵖ :=
   .ofCore {
@@ -332,20 +312,13 @@ protected def op (P : Profunctor.{w} C D) : Profunctor.{w} Dᵒᵖ Cᵒᵖ :=
 
 /-- Whisker a profunctor from `C` to `D` with functors into `C` and `D`. -/
 @[simps! obj_obj obj_map map_app]
-/--
-Definition of `whiskerLeft₂` / `whiskerLeft₂` 的定义
+/-
+**CategoryTheory.Profunctor.whiskerLeft** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Profunctor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whiskerLeft₂
-  signature: {A B : Type*} [Category* A] [Category* B]
-  body: (((Functor.whiskeringLeft₂ _).obj F).obj G.op).obj P
-
-中文:
-定义 whiskerLeft₂
-  签名: {A B : 类型} [范畴* A] [范畴* B]
-  定义体: (((Functor.whiskeringLeft₂ _).obj F).obj G.op).obj P
-
-Depends on / 依赖: Functor, Functor.whiskeringLeft, G.op
+--- 原说明 ---
+Whisker a profunctor from `C` to `D` with functors into `C` and `D`.
 -/
 def whiskerLeft₂ {A B : Type*} [Category* A] [Category* B]
     (P : Profunctor.{w} C D) (F : A ⥤ C) (G : B ⥤ D) : Profunctor.{w} A B :=
@@ -353,38 +326,34 @@ def whiskerLeft₂ {A B : Type*} [Category* A] [Category* B]
 
 /-- Increase the universe level of a profunctor. -/
 @[pp_with_univ, simps! obj_obj obj_map map_app]
-/--
-Definition of `ulift` / `ulift` 的定义
+/-
+**CategoryTheory.Profunctor.ulift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Prof
+unctor`。
+形式化陈述：ulift (P : Profunctor.{w} C D) : Profunctor.{max w' w} C D
+参数：P : Profunctor.{w} C D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ulift
-  signature: (P : Profunctor.{w} C D)
-  body: (Functor.postcompose₂.obj uliftFunctor).obj P
-
-中文:
-定义 ulift
-  签名: (P : Profunctor.{w} C D)
-  定义体: (Functor.postcompose₂.obj uliftFunctor).obj P
-
-Depends on / 依赖: Functor, Functor.postcompose, uliftFunctor
+--- 原说明 ---
+Increase the universe level of a profunctor.
 -/
 def ulift (P : Profunctor.{w} C D) : Profunctor.{max w' w} C D :=
   (Functor.postcompose₂.obj uliftFunctor).obj P
 
-/--
-Definition of `ulift1` / `ulift1` 的定义
+/-- Increase the universe level of a profunctor by one. This enables dot notation `P.ulift1`,
+which is not possible with `Profunctor.ulift`. -/
+/-
+**CategoryTheory.Profunctor.ulift1** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.P
+rofunctor`。
+形式化陈述：ulift1 (P : Profunctor.{w} C D) : Profunctor.{w + 1} C D
+参数：P : Profunctor.{w} C D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ulift1
-  signature: (P : Profunctor.{w} C D)
-  body: Profunctor.ulift.{w + 1} P
-
-中文:
-缩写 ulift1
-  签名: (P : Profunctor.{w} C D)
-  定义体: Profunctor.ulift.{w + 1} P
-
-Depends on / 依赖: Profunctor, Profunctor.ulift
+--- 原说明 ---
+Increase the universe level of a profunctor by one. This enables dot notation `P
+.ulift1`,
+which is not possible with `Profunctor.ulift`.
 -/
 abbrev ulift1 (P : Profunctor.{w} C D) : Profunctor.{w + 1} C D :=
   Profunctor.ulift.{w + 1} P
@@ -393,42 +362,37 @@ end Profunctor
 
 /-- Given a functor from `C` to `D`, this is the corresponding profunctor from `C` to `D`. -/
 @[simps! obj_obj obj_map map_app]
-/--
-Definition of `Functor.toProfunctor` / `Functor.toProfunctor` 的定义
+/-
+**CategoryTheory.Functor.toProfunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Functor`。
+形式化陈述：{C : Type u₁} →   {D : Type u₂} →     [inst : CategoryTheory.Category.{v₁,
+ u₁} C] →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         Category
+Theory.Functor C D → CategoryTheory.Profunctor.{v₂, v₁, v₂, u₁, u₂} C D
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Functor.toProfunctor
-  signature: (F : C ⥤ D)
-  body: (Profunctor.id (C := D)).whiskerLeft₂ F (𝟭 _)
-
-中文:
-定义 函子.toProfunctor
-  签名: (F : C ⥤ D)
-  定义体: (Profunctor.id (C := D)).whiskerLeft₂ F (𝟭 _)
-
-Depends on / 依赖: Profunctor, Profunctor.id
+--- 原说明 ---
+Given a functor from `C` to `D`, this is the corresponding profunctor from `C` t
+o `D`.
 -/
 def Functor.toProfunctor (F : C ⥤ D) : Profunctor.{v₂} C D :=
   (Profunctor.id (C := D)).whiskerLeft₂ F (𝟭 _)
 
 /-- Given a functor from `C` to `D`, this is the corresponding profunctor from `D` to `C`. -/
 @[simps! obj_obj obj_map map_app]
-/--
-Definition of `Functor.toProfunctorRev` / `Functor.toProfunctorRev` 的定义
+/-
+**CategoryTheory.Functor.toProfunctorRev** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Functor`。
+形式化陈述：{C : Type u₁} →   {D : Type u₂} →     [inst : CategoryTheory.Category.{v₁,
+ u₁} C] →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         Category
+Theory.Functor C D → CategoryTheory.Profunctor.{v₂, v₂, v₁, u₂, u₁} D C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Functor.toProfunctorRev
-  signature: (F : C ⥤ D)
-  body: (Profunctor.id (C := D)).whiskerLeft₂ (𝟭 _) F
-
-中文:
-定义 函子.toProfunctorRev
-  签名: (F : C ⥤ D)
-  定义体: (Profunctor.id (C := D)).whiskerLeft₂ (𝟭 _) F
-
-Depends on / 依赖: Profunctor, Profunctor.id
+--- 原说明 ---
+Given a functor from `C` to `D`, this is the corresponding profunctor from `D` t
+o `C`.
 -/
 def Functor.toProfunctorRev (F : C ⥤ D) : Profunctor.{v₂} D C :=
   (Profunctor.id (C := D)).whiskerLeft₂ (𝟭 _) F
 
 end CategoryTheory
+

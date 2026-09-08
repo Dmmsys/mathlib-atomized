@@ -40,26 +40,13 @@ noncomputable section
 
 /-- The structure representing a cubic polynomial. -/
 @[ext]
-/--
-Definition of `Cubic` / `Cubic` 的定义
+/-
+**Cubic** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Cubic
-  parameters: (R : Type*)
-  axioms and operations (4):
-    - a : R
-    - b : R
-    - c : R
-    - d : R
-
-中文:
-结构 三次
-  参数: (R : 类型)
-  公理与运算 (4 个):
-    - a : R
-    - b : R
-    - c : R
-    - d : R
+--- 原说明 ---
+The structure representing a cubic polynomial.
 -/
 structure Cubic (R : Type*) where
   /-- The degree-3 coefficient -/
@@ -77,34 +64,15 @@ open Polynomial
 
 variable {R S F K : Type*}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: R] : Inhabited (Cubic R)
-  body: ⟨⟨default, default, default, default⟩⟩
-
-中文:
-实例 [可居
-  签名: R] : 可居 (三次 R)
-  定义体: ⟨⟨default, default, default, default⟩⟩
+/-
+**Cubic.** 是 Mathlib 中的一个实例，位于命名空间 `Cubic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited R] : Inhabited (Cubic R) :=
   ⟨⟨default, default, default, default⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Zero
-  signature: R] : Zero (Cubic R)
-  body: ⟨⟨0, 0, 0, 0⟩⟩
-
-中文:
-实例 [零
-  签名: R] : 零 (三次 R)
-  定义体: ⟨⟨0, 0, 0, 0⟩⟩
+/-
+**Cubic.** 是 Mathlib 中的一个实例，位于命名空间 `Cubic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Zero R] : Zero (Cubic R) :=
   ⟨⟨0, 0, 0, 0⟩⟩
@@ -113,963 +81,740 @@ section Basic
 
 variable {P Q : Cubic R} {a b c d a' b' c' d' : R} [Semiring R]
 
-/--
-Definition of `toPoly` / `toPoly` 的定义
+/-- Convert a cubic polynomial to a polynomial. -/
+/-
+**Cubic.toPoly** 是 Mathlib 中的一个定义，位于命名空间 `Cubic`。
+形式化陈述：toPoly (P : Cubic R) : R[X]
+参数：P : Cubic R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toPoly
-  signature: (P : Cubic R)
-  body: C P.a * X ^ 3 + C P.b * X ^ 2 + C P.c * X + C P.d
-
-中文:
-定义 toPoly
-  签名: (P : 三次 R)
-  定义体: C P.a * X ^ 3 + C P.b * X ^ 2 + C P.c * X + C P.d
+--- 原说明 ---
+Convert a cubic polynomial to a polynomial.
 -/
 def toPoly (P : Cubic R) : R[X] :=
   C P.a * X ^ 3 + C P.b * X ^ 2 + C P.c * X + C P.d
-
-/--
-theorem `C_mul_prod_X_sub_C_eq` / 定理 `C_mul_prod_X_sub_C_eq`
-
-English:
-theorem C_mul_prod_X_sub_C_eq
-  given: [CommRing S] {w x y z : S}
-  proof: by
-  simp only [toPoly, C_neg, C_add, C_mul]
-  ring1
-
-中文:
-定理 C_mul_prod_X_sub_C_eq
-  条件: [交换环 S] {w x y z : S}
-  证明: by
-  simp only [toPoly, C_neg, C_add, C_mul]
-  ring1
-
-Depends on / 依赖: C_add, C_mul, C_neg, toPoly
+/-
+**Cubic.C_mul_prod_X_sub_C_eq** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：C_mul_prod_X_sub_C_eq [CommRing S] {w x y z : S} : C w * (X - C x) * (X - 
+C y) * (X - C z) = toPoly ⟨w, w * -(x + y + z), w * (x * y + x * z + y * z), w *
+ -(x * y * z)⟩
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Polynomial.C_mul`：C_mul : C (a * b) = C a * C b
+· 使用定理 `Polynomial.C_neg`：C_neg : C (-a) = -C a
+· 使用定理 `Polynomial.C_add`：C_add : C (a + b) = C a + C b
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_pf`：∀ {R : Type u_2} [inst : CommRing R] 
+{a b c d : R}, -b = c → a + c = d → a - b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_mul`：∀ {R : Type u_2} [inst : CommRing R]
+ (a₁ : R) (a₂ : ℕ) {a₃ b : R}, -a₃ = b → -(a₁ ^ a₂ * a₃) = a₁ ^ a₂ * b
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_lt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a₂ b c : R} (a₁ : R), a₂ + b = c → a₁ + a₂ + b = a₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.isInt_mul`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α → α} {a b : α} {a' b' c : ℤ},   f = HMul.hMul →     Mathlib.Meta.NormNum.IsI
+nt a a' →       Math…
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.of_raw`：∀ (α : Type u_1) [inst : Ring α] (n :
+ ℤ), Mathlib.Meta.NormNum.IsInt n.rawCast n
+（共 47 条，此处仅展示前 30 条）
 -/
 theorem C_mul_prod_X_sub_C_eq [CommRing S] {w x y z : S} :
     C w * (X - C x) * (X - C y) * (X - C z) =
       toPoly ⟨w, w * -(x + y + z), w * (x * y + x * z + y * z), w * -(x * y * z)⟩ := by
   simp only [toPoly, C_neg, C_add, C_mul]
   ring1
-
-/--
-theorem `prod_X_sub_C_eq` / 定理 `prod_X_sub_C_eq`
-
-English:
-theorem prod_X_sub_C_eq
-  given: [CommRing S] {x y z : S}
-  proof: by
-  rw [← one_mul <| X - C x]; rw [← C_1]; rw [C_mul_prod_X_sub_C_eq]; rw [one_mul]; rw [one_mul]; rw [one_mul]
-
-中文:
-定理 prod_X_sub_C_eq
-  条件: [交换环 S] {x y z : S}
-  证明: by
-  rw [← one_mul <| X - C x]; rw [← C_1]; rw [C_mul_prod_X_sub_C_eq]; rw [one_mul]; rw [one_mul]; rw [one_mul]
-
-Depends on / 依赖: C_mul_prod_X_sub_C_eq, one_mul
+/-
+**Cubic.prod_X_sub_C_eq** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：prod_X_sub_C_eq [CommRing S] {x y z : S} : (X - C x) * (X - C y) * (X - C 
+z) = toPoly ⟨1, -(x + y + z), x * y + x * z + y * z, -(x * y * z)⟩
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Polynomial.C_1`：C_1 : C (1 : R) = 1
+· 使用定理 `Cubic.C_mul_prod_X_sub_C_eq`：C_mul_prod_X_sub_C_eq [CommRing S] {w x y z
+ : S} : C w * (X - C x) * (X - C y) * (X - C z) = toPoly ⟨w, w * -(x + y + z), w
+ * (x * y + x * z…
 -/
 theorem prod_X_sub_C_eq [CommRing S] {x y z : S} :
     (X - C x) * (X - C y) * (X - C z) =
       toPoly ⟨1, -(x + y + z), x * y + x * z + y * z, -(x * y * z)⟩ := by
-  rw [← one_mul <| X - C x]; rw [← C_1]; rw [C_mul_prod_X_sub_C_eq]; rw [one_mul]; rw [one_mul]; rw [one_mul]
+  rw [← one_mul <| X - C x, ← C_1, C_mul_prod_X_sub_C_eq, one_mul, one_mul, one_mul]
 
 /-! ### Coefficients -/
 
 
 section Coeff
 
-/--
-theorem `coeffs` / 定理 `coeffs`
-
-English:
-theorem coeffs
-  statement: (forall n > 3, P.toPoly.coeff n = 0) ∧ P.toPoly.coeff 3 = P.a ∧
-  proof: by
-  simp only [Cubic.toPoly, Polynomial.coeff_add, Polynomial.coeff_C, Polynomial.coeff_C_mul_X,
-    Polynomial.coeff_C_mul_X_pow]
-  grind [zero_add]
-
-@[simp]
-
-中文:
-定理 coeffs
-  结论: (对任意 n > 3, P.toPoly.coeff n = 0) ∧ P.toPoly.coeff 3 = P.a ∧
-  证明: by
-  simp only [Cubic.toPoly, Polynomial.coeff_add, Polynomial.coeff_C, Polynomial.coeff_C_mul_X,
-    Polynomial.coeff_C_mul_X_pow]
-  grind [zero_add]
-
-@[simp]
+/-
+**Cubic.coeffs** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem coeffs : (forall n > 3, P.toPoly.coeff n = 0) ∧ P.toPoly.coeff 3 = P.a ∧
+private theorem coeffs : (∀ n > 3, P.toPoly.coeff n = 0) ∧ P.toPoly.coeff 3 = P.a ∧
     P.toPoly.coeff 2 = P.b ∧ P.toPoly.coeff 1 = P.c ∧ P.toPoly.coeff 0 = P.d := by
   simp only [Cubic.toPoly, Polynomial.coeff_add, Polynomial.coeff_C, Polynomial.coeff_C_mul_X,
     Polynomial.coeff_C_mul_X_pow]
   grind [zero_add]
 
 @[simp]
-/--
-theorem `coeff_eq_zero` / 定理 `coeff_eq_zero`
-
-English:
-theorem coeff_eq_zero
-  given: {n : Nat} (hn : 3 < n)
-  statement: P.toPoly.coeff n = 0
-  proof: coeffs.1 n hn
-
-@[simp]
-
-中文:
-定理 coeff_eq_zero
-  条件: {n : 自然数} (hn : 3 < n)
-  结论: P.toPoly.coeff n = 0
-  证明: coeffs.1 n hn
-
-@[simp]
-
-Depends on / 依赖: coeffs
+/-
+**Cubic.coeff_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：coeff_eq_zero {n : Nat} (hn : 3 < n) : P.toPoly.coeff n = 0
+参数：hn : 3 < n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `_private.Mathlib.Algebra.CubicDiscriminant.0.Cubic.coeffs`：∀ {R : Type u
+_1} {P : Cubic R} [inst : Semiring R],   (∀ n > 3, P.toPoly.coeff n = 0) ∧     P
+.toPoly.coeff 3 = P.a ∧ P.toPoly.coeff 2 = P.b …
 -/
-theorem coeff_eq_zero {n : Nat} (hn : 3 < n) : P.toPoly.coeff n = 0 :=
+theorem coeff_eq_zero {n : ℕ} (hn : 3 < n) : P.toPoly.coeff n = 0 :=
   coeffs.1 n hn
 
 @[simp]
-/--
-theorem `coeff_eq_a` / 定理 `coeff_eq_a`
-
-English:
-theorem coeff_eq_a
-  statement: P.toPoly.coeff 3 = P.a
-  proof: coeffs.2.1
-
-@[simp]
-
-中文:
-定理 coeff_eq_a
-  结论: P.toPoly.coeff 3 = P.a
-  证明: coeffs.2.1
-
-@[simp]
-
-Depends on / 依赖: coeffs
+/-
+**Cubic.coeff_eq_a** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：coeff_eq_a : P.toPoly.coeff 3 = P.a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `_private.Mathlib.Algebra.CubicDiscriminant.0.Cubic.coeffs`：∀ {R : Type u
+_1} {P : Cubic R} [inst : Semiring R],   (∀ n > 3, P.toPoly.coeff n = 0) ∧     P
+.toPoly.coeff 3 = P.a ∧ P.toPoly.coeff 2 = P.b …
 -/
 theorem coeff_eq_a : P.toPoly.coeff 3 = P.a :=
   coeffs.2.1
 
 @[simp]
-/--
-theorem `coeff_eq_b` / 定理 `coeff_eq_b`
-
-English:
-theorem coeff_eq_b
-  statement: P.toPoly.coeff 2 = P.b
-  proof: coeffs.2.2.1
-
-@[simp]
-
-中文:
-定理 coeff_eq_b
-  结论: P.toPoly.coeff 2 = P.b
-  证明: coeffs.2.2.1
-
-@[simp]
-
-Depends on / 依赖: coeffs
+/-
+**Cubic.coeff_eq_b** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：coeff_eq_b : P.toPoly.coeff 2 = P.b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `_private.Mathlib.Algebra.CubicDiscriminant.0.Cubic.coeffs`：∀ {R : Type u
+_1} {P : Cubic R} [inst : Semiring R],   (∀ n > 3, P.toPoly.coeff n = 0) ∧     P
+.toPoly.coeff 3 = P.a ∧ P.toPoly.coeff 2 = P.b …
 -/
 theorem coeff_eq_b : P.toPoly.coeff 2 = P.b :=
   coeffs.2.2.1
 
 @[simp]
-/--
-theorem `coeff_eq_c` / 定理 `coeff_eq_c`
-
-English:
-theorem coeff_eq_c
-  statement: P.toPoly.coeff 1 = P.c
-  proof: coeffs.2.2.2.1
-
-@[simp]
-
-中文:
-定理 coeff_eq_c
-  结论: P.toPoly.coeff 1 = P.c
-  证明: coeffs.2.2.2.1
-
-@[simp]
-
-Depends on / 依赖: coeffs
+/-
+**Cubic.coeff_eq_c** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：coeff_eq_c : P.toPoly.coeff 1 = P.c
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `_private.Mathlib.Algebra.CubicDiscriminant.0.Cubic.coeffs`：∀ {R : Type u
+_1} {P : Cubic R} [inst : Semiring R],   (∀ n > 3, P.toPoly.coeff n = 0) ∧     P
+.toPoly.coeff 3 = P.a ∧ P.toPoly.coeff 2 = P.b …
 -/
 theorem coeff_eq_c : P.toPoly.coeff 1 = P.c :=
   coeffs.2.2.2.1
 
 @[simp]
-/--
-theorem `coeff_eq_d` / 定理 `coeff_eq_d`
-
-English:
-theorem coeff_eq_d
-  statement: P.toPoly.coeff 0 = P.d
-  proof: coeffs.2.2.2.2
-
-中文:
-定理 coeff_eq_d
-  结论: P.toPoly.coeff 0 = P.d
-  证明: coeffs.2.2.2.2
-
-Depends on / 依赖: coeffs
+/-
+**Cubic.coeff_eq_d** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：coeff_eq_d : P.toPoly.coeff 0 = P.d
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `_private.Mathlib.Algebra.CubicDiscriminant.0.Cubic.coeffs`：∀ {R : Type u
+_1} {P : Cubic R} [inst : Semiring R],   (∀ n > 3, P.toPoly.coeff n = 0) ∧     P
+.toPoly.coeff 3 = P.a ∧ P.toPoly.coeff 2 = P.b …
 -/
 theorem coeff_eq_d : P.toPoly.coeff 0 = P.d :=
   coeffs.2.2.2.2
-
-/--
-theorem `a_of_eq` / 定理 `a_of_eq`
-
-English:
-theorem a_of_eq
-  given: (h : P.toPoly = Q.toPoly)
-  statement: P.a = Q.a
-  proof: by rw [← coeff_eq_a, h, coeff_eq_a]
-
-中文:
-定理 a_of_eq
-  条件: (h : P.toPoly = Q.toPoly)
-  结论: P.a = Q.a
-  证明: by rw [← coeff_eq_a, h, coeff_eq_a]
-
-Depends on / 依赖: coeff_eq_a
+/-
+**Cubic.a_of_eq** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：a_of_eq (h : P.toPoly = Q.toPoly) : P.a = Q.a
+参数：h : P.toPoly = Q.toPoly。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cubic.coeff_eq_a`：coeff_eq_a : P.toPoly.coeff 3 = P.a
 -/
 theorem a_of_eq (h : P.toPoly = Q.toPoly) : P.a = Q.a := by rw [← coeff_eq_a, h, coeff_eq_a]
-
-/--
-theorem `b_of_eq` / 定理 `b_of_eq`
-
-English:
-theorem b_of_eq
-  given: (h : P.toPoly = Q.toPoly)
-  statement: P.b = Q.b
-  proof: by rw [← coeff_eq_b, h, coeff_eq_b]
-
-中文:
-定理 b_of_eq
-  条件: (h : P.toPoly = Q.toPoly)
-  结论: P.b = Q.b
-  证明: by rw [← coeff_eq_b, h, coeff_eq_b]
-
-Depends on / 依赖: coeff_eq_b
+/-
+**Cubic.b_of_eq** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：b_of_eq (h : P.toPoly = Q.toPoly) : P.b = Q.b
+参数：h : P.toPoly = Q.toPoly。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cubic.coeff_eq_b`：coeff_eq_b : P.toPoly.coeff 2 = P.b
 -/
 theorem b_of_eq (h : P.toPoly = Q.toPoly) : P.b = Q.b := by rw [← coeff_eq_b, h, coeff_eq_b]
-
-/--
-theorem `c_of_eq` / 定理 `c_of_eq`
-
-English:
-theorem c_of_eq
-  given: (h : P.toPoly = Q.toPoly)
-  statement: P.c = Q.c
-  proof: by rw [← coeff_eq_c, h, coeff_eq_c]
-
-中文:
-定理 c_of_eq
-  条件: (h : P.toPoly = Q.toPoly)
-  结论: P.c = Q.c
-  证明: by rw [← coeff_eq_c, h, coeff_eq_c]
-
-Depends on / 依赖: coeff_eq_c
+/-
+**Cubic.c_of_eq** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：c_of_eq (h : P.toPoly = Q.toPoly) : P.c = Q.c
+参数：h : P.toPoly = Q.toPoly。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cubic.coeff_eq_c`：coeff_eq_c : P.toPoly.coeff 1 = P.c
 -/
 theorem c_of_eq (h : P.toPoly = Q.toPoly) : P.c = Q.c := by rw [← coeff_eq_c, h, coeff_eq_c]
-
-/--
-theorem `d_of_eq` / 定理 `d_of_eq`
-
-English:
-theorem d_of_eq
-  given: (h : P.toPoly = Q.toPoly)
-  statement: P.d = Q.d
-  proof: by rw [← coeff_eq_d, h, coeff_eq_d]
-
-中文:
-定理 d_of_eq
-  条件: (h : P.toPoly = Q.toPoly)
-  结论: P.d = Q.d
-  证明: by rw [← coeff_eq_d, h, coeff_eq_d]
-
-Depends on / 依赖: coeff_eq_d
+/-
+**Cubic.d_of_eq** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：d_of_eq (h : P.toPoly = Q.toPoly) : P.d = Q.d
+参数：h : P.toPoly = Q.toPoly。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cubic.coeff_eq_d`：coeff_eq_d : P.toPoly.coeff 0 = P.d
 -/
 theorem d_of_eq (h : P.toPoly = Q.toPoly) : P.d = Q.d := by rw [← coeff_eq_d, h, coeff_eq_d]
-
-/--
-theorem `toPoly_injective` / 定理 `toPoly_injective`
-
-English:
-theorem toPoly_injective
-  given: (P Q : Cubic R)
-  statement: P.toPoly = Q.toPoly ↔ P = Q
-  proof: ⟨fun h => Cubic.ext (a_of_eq h) (b_of_eq h) (c_of_eq h) (d_of_eq h), congr_arg toPoly⟩
-
-中文:
-定理 toPoly_injective
-  条件: (P Q : 三次 R)
-  结论: P.toPoly = Q.toPoly ↔ P = Q
-  证明: ⟨fun h => Cubic.ext (a_of_eq h) (b_of_eq h) (c_of_eq h) (d_of_eq h), congr_arg toPoly⟩
-
-Depends on / 依赖: Cubic.ext, a_of_eq, b_of_eq, c_of_eq, congr_arg, d_of_eq, toPoly
+/-
+**Cubic.toPoly_injective** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：toPoly_injective (P Q : Cubic R) : P.toPoly = Q.toPoly ↔ P = Q
+参数：P Q : Cubic R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cubic.ext`：∀ {R : Type u_1} {x y : Cubic R}, x.a = y.a → x.b = y.b → x.c
+ = y.c → x.d = y.d → x = y
+· 使用定理 `Cubic.a_of_eq`：a_of_eq (h : P.toPoly = Q.toPoly) : P.a = Q.a
+· 使用定理 `Cubic.b_of_eq`：b_of_eq (h : P.toPoly = Q.toPoly) : P.b = Q.b
+· 使用定理 `Cubic.c_of_eq`：c_of_eq (h : P.toPoly = Q.toPoly) : P.c = Q.c
+· 使用定理 `Cubic.d_of_eq`：d_of_eq (h : P.toPoly = Q.toPoly) : P.d = Q.d
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem toPoly_injective (P Q : Cubic R) : P.toPoly = Q.toPoly ↔ P = Q :=
-  ⟨fun h => Cubic.ext (a_of_eq h) (b_of_eq h) (c_of_eq h) (d_of_eq h), congr_arg toPoly⟩
-
-/--
-theorem `of_a_eq_zero` / 定理 `of_a_eq_zero`
-
-English:
-theorem of_a_eq_zero
-  given: (ha : P.a = 0)
-  statement: P.toPoly = C P.b * X ^ 2 + C P.c * X + C P.d
-  proof: by
-  rw [toPoly]; rw [ha]; rw [C_0]; rw [zero_mul]; rw [zero_add]
-
-中文:
-定理 of_a_eq_zero
-  条件: (ha : P.a = 0)
-  结论: P.toPoly = C P.b * X ^ 2 + C P.c * X + C P.d
-  证明: by
-  rw [toPoly]; rw [ha]; rw [C_0]; rw [zero_mul]; rw [zero_add]
-
-Depends on / 依赖: toPoly, zero_add, zero_mul
+  ⟨fun h ↦ Cubic.ext (a_of_eq h) (b_of_eq h) (c_of_eq h) (d_of_eq h), congr_arg toPoly⟩
+/-
+**Cubic.of_a_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：of_a_eq_zero (ha : P.a = 0) : P.toPoly = C P.b * X ^ 2 + C P.c * X + C P.d
+参数：ha : P.a = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.toPoly.eq_1`：∀ {R : Type u_1} [inst : Semiring R] (P : Cubic R),  
+ P.toPoly =     Polynomial.C P.a * Polynomial.X ^ 3 + Polynomial.C P.b * Polynom
+ial.X ^…
+· 使用定理 `Polynomial.C_0`：C_0 : C (0 : R) = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
 -/
 theorem of_a_eq_zero (ha : P.a = 0) : P.toPoly = C P.b * X ^ 2 + C P.c * X + C P.d := by
-  rw [toPoly]; rw [ha]; rw [C_0]; rw [zero_mul]; rw [zero_add]
-
-/--
-theorem `of_a_eq_zero'` / 定理 `of_a_eq_zero'`
-
-English:
-theorem of_a_eq_zero'
-  statement: toPoly ⟨0, b, c, d⟩ = C b * X ^ 2 + C c * X + C d
-  proof: of_a_eq_zero rfl
-
-中文:
-定理 of_a_eq_zero'
-  结论: toPoly ⟨0, b, c, d⟩ = C b * X ^ 2 + C c * X + C d
-  证明: of_a_eq_zero rfl
-
-Depends on / 依赖: of_a_eq_zero
+  rw [toPoly, ha, C_0, zero_mul, zero_add]
+/-
+**Cubic.of_a_eq_zero'** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：of_a_eq_zero' : toPoly ⟨0, b, c, d⟩ = C b * X ^ 2 + C c * X + C d
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cubic.of_a_eq_zero`：of_a_eq_zero (ha : P.a = 0) : P.toPoly = C P.b * X ^
+ 2 + C P.c * X + C P.d
 -/
 theorem of_a_eq_zero' : toPoly ⟨0, b, c, d⟩ = C b * X ^ 2 + C c * X + C d :=
   of_a_eq_zero rfl
-
-/--
-theorem `of_b_eq_zero` / 定理 `of_b_eq_zero`
-
-English:
-theorem of_b_eq_zero
-  given: (ha : P.a = 0) (hb : P.b = 0)
-  statement: P.toPoly = C P.c * X + C P.d
-  proof: by
-  rw [of_a_eq_zero ha]; rw [hb]; rw [C_0]; rw [zero_mul]; rw [zero_add]
-
-中文:
-定理 of_b_eq_zero
-  条件: (ha : P.a = 0) (hb : P.b = 0)
-  结论: P.toPoly = C P.c * X + C P.d
-  证明: by
-  rw [of_a_eq_zero ha]; rw [hb]; rw [C_0]; rw [zero_mul]; rw [zero_add]
-
-Depends on / 依赖: CharZero, CharZero.infinite, Infinite, infinite, of_a_eq_zero, zero_add, zero_mul
+/-
+**Cubic.of_b_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：of_b_eq_zero (ha : P.a = 0) (hb : P.b = 0) : P.toPoly = C P.c * X + C P.d
+参数：ha : P.a = 0；hb : P.b = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.of_a_eq_zero`：of_a_eq_zero (ha : P.a = 0) : P.toPoly = C P.b * X ^
+ 2 + C P.c * X + C P.d
+· 使用定理 `Polynomial.C_0`：C_0 : C (0 : R) = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
 -/
 theorem of_b_eq_zero (ha : P.a = 0) (hb : P.b = 0) : P.toPoly = C P.c * X + C P.d := by
-  rw [of_a_eq_zero ha]; rw [hb]; rw [C_0]; rw [zero_mul]; rw [zero_add]
-
-/--
-theorem `of_b_eq_zero'` / 定理 `of_b_eq_zero'`
-
-English:
-theorem of_b_eq_zero'
-  statement: toPoly ⟨0, 0, c, d⟩ = C c * X + C d
-  proof: of_b_eq_zero rfl rfl
-
-中文:
-定理 of_b_eq_zero'
-  结论: toPoly ⟨0, 0, c, d⟩ = C c * X + C d
-  证明: of_b_eq_zero rfl rfl
-
-Depends on / 依赖: of_b_eq_zero
+  rw [of_a_eq_zero ha, hb, C_0, zero_mul, zero_add]
+/-
+**Cubic.of_b_eq_zero'** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：of_b_eq_zero' : toPoly ⟨0, 0, c, d⟩ = C c * X + C d
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cubic.of_b_eq_zero`：of_b_eq_zero (ha : P.a = 0) (hb : P.b = 0) : P.toPol
+y = C P.c * X + C P.d
 -/
 theorem of_b_eq_zero' : toPoly ⟨0, 0, c, d⟩ = C c * X + C d :=
   of_b_eq_zero rfl rfl
-
-/--
-theorem `of_c_eq_zero` / 定理 `of_c_eq_zero`
-
-English:
-theorem of_c_eq_zero
-  given: (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0)
-  statement: P.toPoly = C P.d
-  proof: by
-  rw [of_b_eq_zero ha hb]; rw [hc]; rw [C_0]; rw [zero_mul]; rw [zero_add]
-
-中文:
-定理 of_c_eq_zero
-  条件: (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0)
-  结论: P.toPoly = C P.d
-  证明: by
-  rw [of_b_eq_zero ha hb]; rw [hc]; rw [C_0]; rw [zero_mul]; rw [zero_add]
-
-Depends on / 依赖: of_b_eq_zero, zero_add, zero_mul
+/-
+**Cubic.of_c_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：of_c_eq_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0) : P.toPoly = C P
+.d
+参数：ha : P.a = 0；hb : P.b = 0；hc : P.c = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.of_b_eq_zero`：of_b_eq_zero (ha : P.a = 0) (hb : P.b = 0) : P.toPol
+y = C P.c * X + C P.d
+· 使用定理 `Polynomial.C_0`：C_0 : C (0 : R) = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
 -/
 theorem of_c_eq_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0) : P.toPoly = C P.d := by
-  rw [of_b_eq_zero ha hb]; rw [hc]; rw [C_0]; rw [zero_mul]; rw [zero_add]
-
-/--
-theorem `of_c_eq_zero'` / 定理 `of_c_eq_zero'`
-
-English:
-theorem of_c_eq_zero'
-  statement: toPoly ⟨0, 0, 0, d⟩ = C d
-  proof: of_c_eq_zero rfl rfl rfl
-
-中文:
-定理 of_c_eq_zero'
-  结论: toPoly ⟨0, 0, 0, d⟩ = C d
-  证明: of_c_eq_zero rfl rfl rfl
-
-Depends on / 依赖: of_c_eq_zero
+  rw [of_b_eq_zero ha hb, hc, C_0, zero_mul, zero_add]
+/-
+**Cubic.of_c_eq_zero'** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：of_c_eq_zero' : toPoly ⟨0, 0, 0, d⟩ = C d
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cubic.of_c_eq_zero`：of_c_eq_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c
+ = 0) : P.toPoly = C P.d
 -/
 theorem of_c_eq_zero' : toPoly ⟨0, 0, 0, d⟩ = C d :=
   of_c_eq_zero rfl rfl rfl
-
-/--
-theorem `of_d_eq_zero` / 定理 `of_d_eq_zero`
-
-English:
-theorem of_d_eq_zero
-  given: (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0) (hd : P.d = 0)
-  proof: by
-  rw [of_c_eq_zero ha hb hc]; rw [hd]; rw [C_0]
-
-中文:
-定理 of_d_eq_zero
-  条件: (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0) (hd : P.d = 0)
-  证明: by
-  rw [of_c_eq_zero ha hb hc]; rw [hd]; rw [C_0]
-
-Depends on / 依赖: of_c_eq_zero
+/-
+**Cubic.of_d_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：of_d_eq_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0) (hd : P.d = 0) :
+ P.toPoly = 0
+参数：ha : P.a = 0；hb : P.b = 0；hc : P.c = 0；hd : P.d = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.of_c_eq_zero`：of_c_eq_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c
+ = 0) : P.toPoly = C P.d
+· 使用定理 `Polynomial.C_0`：C_0 : C (0 : R) = 0
 -/
 theorem of_d_eq_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0) (hd : P.d = 0) :
     P.toPoly = 0 := by
-  rw [of_c_eq_zero ha hb hc]; rw [hd]; rw [C_0]
-
-/--
-theorem `of_d_eq_zero'` / 定理 `of_d_eq_zero'`
-
-English:
-theorem of_d_eq_zero'
-  statement: (⟨0, 0, 0, 0⟩ : Cubic R).toPoly = 0
-  proof: of_d_eq_zero rfl rfl rfl rfl
-
-中文:
-定理 of_d_eq_zero'
-  结论: (⟨0, 0, 0, 0⟩ : 三次 R).toPoly = 0
-  证明: of_d_eq_zero rfl rfl rfl rfl
-
-Depends on / 依赖: of_d_eq_zero
+  rw [of_c_eq_zero ha hb hc, hd, C_0]
+/-
+**Cubic.of_d_eq_zero'** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：of_d_eq_zero' : (⟨0, 0, 0, 0⟩ : Cubic R).toPoly = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cubic.of_d_eq_zero`：of_d_eq_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c
+ = 0) (hd : P.d = 0) : P.toPoly = 0
 -/
 theorem of_d_eq_zero' : (⟨0, 0, 0, 0⟩ : Cubic R).toPoly = 0 :=
   of_d_eq_zero rfl rfl rfl rfl
-
-/--
-theorem `zero` / 定理 `zero`
-
-English:
-theorem zero
-  statement: (0 : Cubic R).toPoly = 0
-  proof: of_d_eq_zero'
-
-中文:
-定理 zero
-  结论: (0 : 三次 R).toPoly = 0
-  证明: of_d_eq_zero'
-
-Depends on / 依赖: of_d_eq_zero
+/-
+**Cubic.zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：zero : (0 : Cubic R).toPoly = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cubic.of_d_eq_zero'`：of_d_eq_zero' : (⟨0, 0, 0, 0⟩ : Cubic R).toPoly = 0
 -/
 theorem zero : (0 : Cubic R).toPoly = 0 :=
   of_d_eq_zero'
-
-/--
-theorem `toPoly_eq_zero_iff` / 定理 `toPoly_eq_zero_iff`
-
-English:
-theorem toPoly_eq_zero_iff
-  given: (P : Cubic R)
-  statement: P.toPoly = 0 ↔ P = 0
-  proof: by
-  rw [← zero]; rw [toPoly_injective]
-
-中文:
-定理 toPoly_eq_zero_iff
-  条件: (P : 三次 R)
-  结论: P.toPoly = 0 ↔ P = 0
-  证明: by
-  rw [← zero]; rw [toPoly_injective]
-
-Depends on / 依赖: toPoly_injective
+/-
+**Cubic.toPoly_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：toPoly_eq_zero_iff (P : Cubic R) : P.toPoly = 0 ↔ P = 0
+参数：P : Cubic R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cubic.zero`：zero : (0 : Cubic R).toPoly = 0
+· 使用定理 `Cubic.toPoly_injective`：toPoly_injective (P Q : Cubic R) : P.toPoly = Q.
+toPoly ↔ P = Q
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem toPoly_eq_zero_iff (P : Cubic R) : P.toPoly = 0 ↔ P = 0 := by
-  rw [← zero]; rw [toPoly_injective]
-
-/--
-theorem `ne_zero` / 定理 `ne_zero`
-
-English:
-theorem ne_zero
-  given: (h0 : P.a != 0 ∨ P.b != 0 ∨ P.c != 0 ∨ P.d != 0)
-  statement: P.toPoly != 0
-  proof: by
-  contrapose! h0
-  rw [(toPoly_eq_zero_iff P).mp h0]
-  exact ⟨rfl, rfl, rfl, rfl⟩
-
-中文:
-定理 ne_zero
-  条件: (h0 : P.a != 0 ∨ P.b != 0 ∨ P.c != 0 ∨ P.d != 0)
-  结论: P.toPoly != 0
-  证明: by
-  contrapose! h0
-  rw [(toPoly_eq_zero_iff P).mp h0]
-  exact ⟨rfl, rfl, rfl, rfl⟩
+  rw [← zero, toPoly_injective]
+/-
+**Cubic.ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem ne_zero (h0 : P.a != 0 ∨ P.b != 0 ∨ P.c != 0 ∨ P.d != 0) : P.toPoly != 0 := by
+private theorem ne_zero (h0 : P.a ≠ 0 ∨ P.b ≠ 0 ∨ P.c ≠ 0 ∨ P.d ≠ 0) : P.toPoly ≠ 0 := by
   contrapose! h0
   rw [(toPoly_eq_zero_iff P).mp h0]
   exact ⟨rfl, rfl, rfl, rfl⟩
-
-/--
-theorem `ne_zero_of_a_ne_zero` / 定理 `ne_zero_of_a_ne_zero`
-
-English:
-theorem ne_zero_of_a_ne_zero
-  given: (ha : P.a != 0)
-  statement: P.toPoly != 0
-  proof: (or_imp.mp ne_zero).1 ha
-
-中文:
-定理 ne_zero_of_a_ne_zero
-  条件: (ha : P.a != 0)
-  结论: P.toPoly != 0
-  证明: (or_imp.mp ne_zero).1 ha
-
-Depends on / 依赖: ne_zero, or_imp, or_imp.mp
+/-
+**Cubic.ne_zero_of_a_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：ne_zero_of_a_ne_zero (ha : P.a != 0) : P.toPoly != 0
+参数：ha : P.a != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `or_imp`：∀ {a b c : Prop}, a ∨ b → c ↔ (a → c) ∧ (b → c)
+· 使用定理 `_private.Mathlib.Algebra.CubicDiscriminant.0.Cubic.ne_zero`：∀ {R : Type 
+u_1} {P : Cubic R} [inst : Semiring R], P.a ≠ 0 ∨ P.b ≠ 0 ∨ P.c ≠ 0 ∨ P.d ≠ 0 → 
+P.toPoly ≠ 0
 -/
-theorem ne_zero_of_a_ne_zero (ha : P.a != 0) : P.toPoly != 0 :=
+theorem ne_zero_of_a_ne_zero (ha : P.a ≠ 0) : P.toPoly ≠ 0 :=
   (or_imp.mp ne_zero).1 ha
-
-/--
-theorem `ne_zero_of_b_ne_zero` / 定理 `ne_zero_of_b_ne_zero`
-
-English:
-theorem ne_zero_of_b_ne_zero
-  given: (hb : P.b != 0)
-  statement: P.toPoly != 0
-  proof: (or_imp.mp (or_imp.mp ne_zero).2).1 hb
-
-中文:
-定理 ne_zero_of_b_ne_zero
-  条件: (hb : P.b != 0)
-  结论: P.toPoly != 0
-  证明: (or_imp.mp (or_imp.mp ne_zero).2).1 hb
-
-Depends on / 依赖: ne_zero, or_imp, or_imp.mp
+/-
+**Cubic.ne_zero_of_b_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：ne_zero_of_b_ne_zero (hb : P.b != 0) : P.toPoly != 0
+参数：hb : P.b != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `or_imp`：∀ {a b c : Prop}, a ∨ b → c ↔ (a → c) ∧ (b → c)
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `_private.Mathlib.Algebra.CubicDiscriminant.0.Cubic.ne_zero`：∀ {R : Type 
+u_1} {P : Cubic R} [inst : Semiring R], P.a ≠ 0 ∨ P.b ≠ 0 ∨ P.c ≠ 0 ∨ P.d ≠ 0 → 
+P.toPoly ≠ 0
 -/
-theorem ne_zero_of_b_ne_zero (hb : P.b != 0) : P.toPoly != 0 :=
+theorem ne_zero_of_b_ne_zero (hb : P.b ≠ 0) : P.toPoly ≠ 0 :=
   (or_imp.mp (or_imp.mp ne_zero).2).1 hb
-
-/--
-theorem `ne_zero_of_c_ne_zero` / 定理 `ne_zero_of_c_ne_zero`
-
-English:
-theorem ne_zero_of_c_ne_zero
-  given: (hc : P.c != 0)
-  statement: P.toPoly != 0
-  proof: (or_imp.mp (or_imp.mp (or_imp.mp ne_zero).2).2).1 hc
-
-中文:
-定理 ne_zero_of_c_ne_zero
-  条件: (hc : P.c != 0)
-  结论: P.toPoly != 0
-  证明: (or_imp.mp (or_imp.mp (or_imp.mp ne_zero).2).2).1 hc
-
-Depends on / 依赖: ne_zero, or_imp, or_imp.mp
+/-
+**Cubic.ne_zero_of_c_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：ne_zero_of_c_ne_zero (hc : P.c != 0) : P.toPoly != 0
+参数：hc : P.c != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `or_imp`：∀ {a b c : Prop}, a ∨ b → c ↔ (a → c) ∧ (b → c)
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `_private.Mathlib.Algebra.CubicDiscriminant.0.Cubic.ne_zero`：∀ {R : Type 
+u_1} {P : Cubic R} [inst : Semiring R], P.a ≠ 0 ∨ P.b ≠ 0 ∨ P.c ≠ 0 ∨ P.d ≠ 0 → 
+P.toPoly ≠ 0
 -/
-theorem ne_zero_of_c_ne_zero (hc : P.c != 0) : P.toPoly != 0 :=
+theorem ne_zero_of_c_ne_zero (hc : P.c ≠ 0) : P.toPoly ≠ 0 :=
   (or_imp.mp (or_imp.mp (or_imp.mp ne_zero).2).2).1 hc
-
-/--
-theorem `ne_zero_of_d_ne_zero` / 定理 `ne_zero_of_d_ne_zero`
-
-English:
-theorem ne_zero_of_d_ne_zero
-  given: (hd : P.d != 0)
-  statement: P.toPoly != 0
-  proof: (or_imp.mp (or_imp.mp (or_imp.mp ne_zero).2).2).2 hd
-
-@[simp]
-
-中文:
-定理 ne_zero_of_d_ne_zero
-  条件: (hd : P.d != 0)
-  结论: P.toPoly != 0
-  证明: (or_imp.mp (or_imp.mp (or_imp.mp ne_zero).2).2).2 hd
-
-@[simp]
-
-Depends on / 依赖: ne_zero, or_imp, or_imp.mp
+/-
+**Cubic.ne_zero_of_d_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：ne_zero_of_d_ne_zero (hd : P.d != 0) : P.toPoly != 0
+参数：hd : P.d != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `or_imp`：∀ {a b c : Prop}, a ∨ b → c ↔ (a → c) ∧ (b → c)
+· 使用定理 `_private.Mathlib.Algebra.CubicDiscriminant.0.Cubic.ne_zero`：∀ {R : Type 
+u_1} {P : Cubic R} [inst : Semiring R], P.a ≠ 0 ∨ P.b ≠ 0 ∨ P.c ≠ 0 ∨ P.d ≠ 0 → 
+P.toPoly ≠ 0
 -/
-theorem ne_zero_of_d_ne_zero (hd : P.d != 0) : P.toPoly != 0 :=
+theorem ne_zero_of_d_ne_zero (hd : P.d ≠ 0) : P.toPoly ≠ 0 :=
   (or_imp.mp (or_imp.mp (or_imp.mp ne_zero).2).2).2 hd
 
 @[simp]
-/--
-theorem `leadingCoeff_of_a_ne_zero` / 定理 `leadingCoeff_of_a_ne_zero`
-
-English:
-theorem leadingCoeff_of_a_ne_zero
-  given: (ha : P.a != 0)
-  statement: P.toPoly.leadingCoeff = P.a
-  proof: leadingCoeff_cubic ha
-
-中文:
-定理 leadingCoeff_of_a_ne_zero
-  条件: (ha : P.a != 0)
-  结论: P.toPoly.leadingCoeff = P.a
-  证明: leadingCoeff_cubic ha
-
-Depends on / 依赖: leadingCoeff_cubic
+/-
+**Cubic.leadingCoeff_of_a_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：leadingCoeff_of_a_ne_zero (ha : P.a != 0) : P.toPoly.leadingCoeff = P.a
+参数：ha : P.a != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.leadingCoeff_cubic`：leadingCoeff_cubic (ha : a != 0) : leadin
+gCoeff (C a * X ^ 3 + C b * X ^ 2 + C c * X + C d) = a
 -/
-theorem leadingCoeff_of_a_ne_zero (ha : P.a != 0) : P.toPoly.leadingCoeff = P.a :=
+theorem leadingCoeff_of_a_ne_zero (ha : P.a ≠ 0) : P.toPoly.leadingCoeff = P.a :=
   leadingCoeff_cubic ha
-
-/--
-theorem `leadingCoeff_of_a_ne_zero'` / 定理 `leadingCoeff_of_a_ne_zero'`
-
-English:
-theorem leadingCoeff_of_a_ne_zero'
-  given: (ha : a != 0)
-  statement: (toPoly ⟨a, b, c, d⟩).leadingCoeff = a
-  proof: by
+/-
+**Cubic.leadingCoeff_of_a_ne_zero'** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：leadingCoeff_of_a_ne_zero' (ha : a != 0) : (toPoly ⟨a, b, c, d⟩).leadingCo
+eff = a
+参数：ha : a != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.leadingCoeff_of_a_ne_zero`：leadingCoeff_of_a_ne_zero (ha : P.a != 
+0) : P.toPoly.leadingCoeff = P.a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem leadingCoeff_of_a_ne_zero' (ha : a ≠ 0) : (toPoly ⟨a, b, c, d⟩).leadingCoeff = a := by
   simp [ha]
 
 @[simp]
-
-中文:
-定理 leadingCoeff_of_a_ne_zero'
-  条件: (ha : a != 0)
-  结论: (toPoly ⟨a, b, c, d⟩).leadingCoeff = a
-  证明: by
-  simp [ha]
-
-@[simp]
+/-
+**Cubic.leadingCoeff_of_b_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：leadingCoeff_of_b_ne_zero (ha : P.a = 0) (hb : P.b != 0) : P.toPoly.leadin
+gCoeff = P.b
+参数：ha : P.a = 0；hb : P.b != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.of_a_eq_zero`：of_a_eq_zero (ha : P.a = 0) : P.toPoly = C P.b * X ^
+ 2 + C P.c * X + C P.d
+· 使用定理 `Polynomial.leadingCoeff_quadratic`：leadingCoeff_quadratic (ha : a != 0) 
+: leadingCoeff (C a * X ^ 2 + C b * X + C c) = a
 -/
-theorem leadingCoeff_of_a_ne_zero' (ha : a != 0) : (toPoly ⟨a, b, c, d⟩).leadingCoeff = a := by
-  simp [ha]
-
-@[simp]
-/--
-theorem `leadingCoeff_of_b_ne_zero` / 定理 `leadingCoeff_of_b_ne_zero`
-
-English:
-theorem leadingCoeff_of_b_ne_zero
-  given: (ha : P.a = 0) (hb : P.b != 0)
-  statement: P.toPoly.leadingCoeff = P.b
-  proof: by
-  rw [of_a_eq_zero ha]; rw [leadingCoeff_quadratic hb]
-
-中文:
-定理 leadingCoeff_of_b_ne_zero
-  条件: (ha : P.a = 0) (hb : P.b != 0)
-  结论: P.toPoly.leadingCoeff = P.b
-  证明: by
-  rw [of_a_eq_zero ha]; rw [leadingCoeff_quadratic hb]
-
-Depends on / 依赖: leadingCoeff_quadratic, of_a_eq_zero
+theorem leadingCoeff_of_b_ne_zero (ha : P.a = 0) (hb : P.b ≠ 0) : P.toPoly.leadingCoeff = P.b := by
+  rw [of_a_eq_zero ha, leadingCoeff_quadratic hb]
+/-
+**Cubic.leadingCoeff_of_b_ne_zero'** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：leadingCoeff_of_b_ne_zero' (hb : b != 0) : (toPoly ⟨0, b, c, d⟩).leadingCo
+eff = b
+参数：hb : b != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.leadingCoeff_of_b_ne_zero`：leadingCoeff_of_b_ne_zero (ha : P.a = 0
+) (hb : P.b != 0) : P.toPoly.leadingCoeff = P.b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-theorem leadingCoeff_of_b_ne_zero (ha : P.a = 0) (hb : P.b != 0) : P.toPoly.leadingCoeff = P.b := by
-  rw [of_a_eq_zero ha]; rw [leadingCoeff_quadratic hb]
-
-/--
-theorem `leadingCoeff_of_b_ne_zero'` / 定理 `leadingCoeff_of_b_ne_zero'`
-
-English:
-theorem leadingCoeff_of_b_ne_zero'
-  given: (hb : b != 0)
-  statement: (toPoly ⟨0, b, c, d⟩).leadingCoeff = b
-  proof: by
+theorem leadingCoeff_of_b_ne_zero' (hb : b ≠ 0) : (toPoly ⟨0, b, c, d⟩).leadingCoeff = b := by
   simp [hb]
 
 @[simp]
-
-中文:
-定理 leadingCoeff_of_b_ne_zero'
-  条件: (hb : b != 0)
-  结论: (toPoly ⟨0, b, c, d⟩).leadingCoeff = b
-  证明: by
-  simp [hb]
-
-@[simp]
+/-
+**Cubic.leadingCoeff_of_c_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：leadingCoeff_of_c_ne_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c != 0) : 
+P.toPoly.leadingCoeff = P.c
+参数：ha : P.a = 0；hb : P.b = 0；hc : P.c != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.of_b_eq_zero`：of_b_eq_zero (ha : P.a = 0) (hb : P.b = 0) : P.toPol
+y = C P.c * X + C P.d
+· 使用定理 `Polynomial.leadingCoeff_linear`：leadingCoeff_linear (ha : a != 0) : lead
+ingCoeff (C a * X + C b) = a
 -/
-theorem leadingCoeff_of_b_ne_zero' (hb : b != 0) : (toPoly ⟨0, b, c, d⟩).leadingCoeff = b := by
-  simp [hb]
-
-@[simp]
-/--
-theorem `leadingCoeff_of_c_ne_zero` / 定理 `leadingCoeff_of_c_ne_zero`
-
-English:
-theorem leadingCoeff_of_c_ne_zero
-  given: (ha : P.a = 0) (hb : P.b = 0) (hc : P.c != 0)
-  proof: by
-  rw [of_b_eq_zero ha hb]; rw [leadingCoeff_linear hc]
-
-中文:
-定理 leadingCoeff_of_c_ne_zero
-  条件: (ha : P.a = 0) (hb : P.b = 0) (hc : P.c != 0)
-  证明: by
-  rw [of_b_eq_zero ha hb]; rw [leadingCoeff_linear hc]
-
-Depends on / 依赖: leadingCoeff_linear, of_b_eq_zero
--/
-theorem leadingCoeff_of_c_ne_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c != 0) :
+theorem leadingCoeff_of_c_ne_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c ≠ 0) :
     P.toPoly.leadingCoeff = P.c := by
-  rw [of_b_eq_zero ha hb]; rw [leadingCoeff_linear hc]
-
-/--
-theorem `leadingCoeff_of_c_ne_zero'` / 定理 `leadingCoeff_of_c_ne_zero'`
-
-English:
-theorem leadingCoeff_of_c_ne_zero'
-  given: (hc : c != 0)
-  statement: (toPoly ⟨0, 0, c, d⟩).leadingCoeff = c
-  proof: by
-  simp [hc]
-
-@[simp]
-
-中文:
-定理 leadingCoeff_of_c_ne_zero'
-  条件: (hc : c != 0)
-  结论: (toPoly ⟨0, 0, c, d⟩).leadingCoeff = c
-  证明: by
-  simp [hc]
-
-@[simp]
+  rw [of_b_eq_zero ha hb, leadingCoeff_linear hc]
+/-
+**Cubic.leadingCoeff_of_c_ne_zero'** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：leadingCoeff_of_c_ne_zero' (hc : c != 0) : (toPoly ⟨0, 0, c, d⟩).leadingCo
+eff = c
+参数：hc : c != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.leadingCoeff_of_c_ne_zero`：leadingCoeff_of_c_ne_zero (ha : P.a = 0
+) (hb : P.b = 0) (hc : P.c != 0) : P.toPoly.leadingCoeff = P.c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-theorem leadingCoeff_of_c_ne_zero' (hc : c != 0) : (toPoly ⟨0, 0, c, d⟩).leadingCoeff = c := by
+theorem leadingCoeff_of_c_ne_zero' (hc : c ≠ 0) : (toPoly ⟨0, 0, c, d⟩).leadingCoeff = c := by
   simp [hc]
 
 @[simp]
-/--
-theorem `leadingCoeff_of_c_eq_zero` / 定理 `leadingCoeff_of_c_eq_zero`
-
-English:
-theorem leadingCoeff_of_c_eq_zero
-  given: (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0)
-  proof: by
-  rw [of_c_eq_zero ha hb hc]; rw [leadingCoeff_C]
-
-中文:
-定理 leadingCoeff_of_c_eq_zero
-  条件: (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0)
-  证明: by
-  rw [of_c_eq_zero ha hb hc]; rw [leadingCoeff_C]
-
-Depends on / 依赖: leadingCoeff_C, of_c_eq_zero
+/-
+**Cubic.leadingCoeff_of_c_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：leadingCoeff_of_c_eq_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0) : P
+.toPoly.leadingCoeff = P.d
+参数：ha : P.a = 0；hb : P.b = 0；hc : P.c = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.of_c_eq_zero`：of_c_eq_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c
+ = 0) : P.toPoly = C P.d
+· 使用定理 `Polynomial.leadingCoeff_C`：leadingCoeff_C (a : R) : leadingCoeff (C a) =
+ a
 -/
 theorem leadingCoeff_of_c_eq_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0) :
     P.toPoly.leadingCoeff = P.d := by
-  rw [of_c_eq_zero ha hb hc]; rw [leadingCoeff_C]
-
-/--
-theorem `leadingCoeff_of_c_eq_zero'` / 定理 `leadingCoeff_of_c_eq_zero'`
-
-English:
-theorem leadingCoeff_of_c_eq_zero'
-  statement: (toPoly ⟨0, 0, 0, d⟩).leadingCoeff = d
-  proof: leadingCoeff_of_c_eq_zero rfl rfl rfl
-
-中文:
-定理 leadingCoeff_of_c_eq_zero'
-  结论: (toPoly ⟨0, 0, 0, d⟩).leadingCoeff = d
-  证明: leadingCoeff_of_c_eq_zero rfl rfl rfl
-
-Depends on / 依赖: leadingCoeff_of_c_eq_zero
+  rw [of_c_eq_zero ha hb hc, leadingCoeff_C]
+/-
+**Cubic.leadingCoeff_of_c_eq_zero'** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：leadingCoeff_of_c_eq_zero' : (toPoly ⟨0, 0, 0, d⟩).leadingCoeff = d
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cubic.leadingCoeff_of_c_eq_zero`：leadingCoeff_of_c_eq_zero (ha : P.a = 0
+) (hb : P.b = 0) (hc : P.c = 0) : P.toPoly.leadingCoeff = P.d
 -/
 theorem leadingCoeff_of_c_eq_zero' : (toPoly ⟨0, 0, 0, d⟩).leadingCoeff = d :=
   leadingCoeff_of_c_eq_zero rfl rfl rfl
-
-/--
-theorem `monic_of_a_eq_one` / 定理 `monic_of_a_eq_one`
-
-English:
-theorem monic_of_a_eq_one
-  given: (ha : P.a = 1)
-  statement: P.toPoly.Monic
-  proof: by
-  nontriviality R
-  rw [Monic]; rw [leadingCoeff_of_a_ne_zero (ha ▸ one_ne_zero)]; rw [ha]
-
-中文:
-定理 monic_of_a_eq_one
-  条件: (ha : P.a = 1)
-  结论: P.toPoly.Monic
-  证明: by
-  nontriviality R
-  rw [Monic]; rw [leadingCoeff_of_a_ne_zero (ha ▸ one_ne_zero)]; rw [ha]
-
-Depends on / 依赖: leadingCoeff_of_a_ne_zero, nontriviality, one_ne_zero
+/-
+**Cubic.monic_of_a_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：monic_of_a_eq_one (ha : P.a = 1) : P.toPoly.Monic
+参数：ha : P.a = 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.Nontriviality.subsingleton_or_nontrivial_elim`：subsinglet
+on_or_nontrivial_elim {p : Prop} {α : Type u} (h₁ : Subsingleton α -> p) (h₂ : N
+ontrivial α -> p) : p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.Monic.eq_1`：∀ {R : Type u} [inst : Semiring R] (p : Polynomia
+l R), p.Monic = (p.leadingCoeff = 1)
+· 使用定理 `Cubic.leadingCoeff_of_a_ne_zero`：leadingCoeff_of_a_ne_zero (ha : P.a != 
+0) : P.toPoly.leadingCoeff = P.a
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem monic_of_a_eq_one (ha : P.a = 1) : P.toPoly.Monic := by
   nontriviality R
-  rw [Monic]; rw [leadingCoeff_of_a_ne_zero (ha ▸ one_ne_zero)]; rw [ha]
-
-/--
-theorem `monic_of_a_eq_one'` / 定理 `monic_of_a_eq_one'`
-
-English:
-theorem monic_of_a_eq_one'
-  statement: (toPoly ⟨1, b, c, d⟩).Monic
-  proof: monic_of_a_eq_one rfl
-
-中文:
-定理 monic_of_a_eq_one'
-  结论: (toPoly ⟨1, b, c, d⟩).Monic
-  证明: monic_of_a_eq_one rfl
-
-Depends on / 依赖: monic_of_a_eq_one
+  rw [Monic, leadingCoeff_of_a_ne_zero (ha ▸ one_ne_zero), ha]
+/-
+**Cubic.monic_of_a_eq_one'** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：monic_of_a_eq_one' : (toPoly ⟨1, b, c, d⟩).Monic
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cubic.monic_of_a_eq_one`：monic_of_a_eq_one (ha : P.a = 1) : P.toPoly.Mon
+ic
 -/
 theorem monic_of_a_eq_one' : (toPoly ⟨1, b, c, d⟩).Monic :=
   monic_of_a_eq_one rfl
-
-/--
-theorem `monic_of_b_eq_one` / 定理 `monic_of_b_eq_one`
-
-English:
-theorem monic_of_b_eq_one
-  given: (ha : P.a = 0) (hb : P.b = 1)
-  statement: P.toPoly.Monic
-  proof: by
-  nontriviality R
-  rw [Monic]; rw [leadingCoeff_of_b_ne_zero ha (hb ▸ one_ne_zero)]; rw [hb]
-
-中文:
-定理 monic_of_b_eq_one
-  条件: (ha : P.a = 0) (hb : P.b = 1)
-  结论: P.toPoly.Monic
-  证明: by
-  nontriviality R
-  rw [Monic]; rw [leadingCoeff_of_b_ne_zero ha (hb ▸ one_ne_zero)]; rw [hb]
-
-Depends on / 依赖: leadingCoeff_of_b_ne_zero, nontriviality, one_ne_zero
+/-
+**Cubic.monic_of_b_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：monic_of_b_eq_one (ha : P.a = 0) (hb : P.b = 1) : P.toPoly.Monic
+参数：ha : P.a = 0；hb : P.b = 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.Nontriviality.subsingleton_or_nontrivial_elim`：subsinglet
+on_or_nontrivial_elim {p : Prop} {α : Type u} (h₁ : Subsingleton α -> p) (h₂ : N
+ontrivial α -> p) : p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.Monic.eq_1`：∀ {R : Type u} [inst : Semiring R] (p : Polynomia
+l R), p.Monic = (p.leadingCoeff = 1)
+· 使用定理 `Cubic.leadingCoeff_of_b_ne_zero`：leadingCoeff_of_b_ne_zero (ha : P.a = 0
+) (hb : P.b != 0) : P.toPoly.leadingCoeff = P.b
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem monic_of_b_eq_one (ha : P.a = 0) (hb : P.b = 1) : P.toPoly.Monic := by
   nontriviality R
-  rw [Monic]; rw [leadingCoeff_of_b_ne_zero ha (hb ▸ one_ne_zero)]; rw [hb]
-
-/--
-theorem `monic_of_b_eq_one'` / 定理 `monic_of_b_eq_one'`
-
-English:
-theorem monic_of_b_eq_one'
-  statement: (toPoly ⟨0, 1, c, d⟩).Monic
-  proof: monic_of_b_eq_one rfl rfl
-
-中文:
-定理 monic_of_b_eq_one'
-  结论: (toPoly ⟨0, 1, c, d⟩).Monic
-  证明: monic_of_b_eq_one rfl rfl
-
-Depends on / 依赖: monic_of_b_eq_one
+  rw [Monic, leadingCoeff_of_b_ne_zero ha (hb ▸ one_ne_zero), hb]
+/-
+**Cubic.monic_of_b_eq_one'** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：monic_of_b_eq_one' : (toPoly ⟨0, 1, c, d⟩).Monic
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cubic.monic_of_b_eq_one`：monic_of_b_eq_one (ha : P.a = 0) (hb : P.b = 1)
+ : P.toPoly.Monic
 -/
 theorem monic_of_b_eq_one' : (toPoly ⟨0, 1, c, d⟩).Monic :=
   monic_of_b_eq_one rfl rfl
-
-/--
-theorem `monic_of_c_eq_one` / 定理 `monic_of_c_eq_one`
-
-English:
-theorem monic_of_c_eq_one
-  given: (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 1)
-  statement: P.toPoly.Monic
-  proof: by
-  nontriviality R
-  rw [Monic]; rw [leadingCoeff_of_c_ne_zero ha hb (hc ▸ one_ne_zero)]; rw [hc]
-
-中文:
-定理 monic_of_c_eq_one
-  条件: (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 1)
-  结论: P.toPoly.Monic
-  证明: by
-  nontriviality R
-  rw [Monic]; rw [leadingCoeff_of_c_ne_zero ha hb (hc ▸ one_ne_zero)]; rw [hc]
-
-Depends on / 依赖: leadingCoeff_of_c_ne_zero, nontriviality, one_ne_zero
+/-
+**Cubic.monic_of_c_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：monic_of_c_eq_one (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 1) : P.toPoly.
+Monic
+参数：ha : P.a = 0；hb : P.b = 0；hc : P.c = 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Mathlib.Tactic.Nontriviality.subsingleton_or_nontrivial_elim`：subsinglet
+on_or_nontrivial_elim {p : Prop} {α : Type u} (h₁ : Subsingleton α -> p) (h₂ : N
+ontrivial α -> p) : p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.Monic.eq_1`：∀ {R : Type u} [inst : Semiring R] (p : Polynomia
+l R), p.Monic = (p.leadingCoeff = 1)
+· 使用定理 `Cubic.leadingCoeff_of_c_ne_zero`：leadingCoeff_of_c_ne_zero (ha : P.a = 0
+) (hb : P.b = 0) (hc : P.c != 0) : P.toPoly.leadingCoeff = P.c
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem monic_of_c_eq_one (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 1) : P.toPoly.Monic := by
   nontriviality R
-  rw [Monic]; rw [leadingCoeff_of_c_ne_zero ha hb (hc ▸ one_ne_zero)]; rw [hc]
-
-/--
-theorem `monic_of_c_eq_one'` / 定理 `monic_of_c_eq_one'`
-
-English:
-theorem monic_of_c_eq_one'
-  statement: (toPoly ⟨0, 0, 1, d⟩).Monic
-  proof: monic_of_c_eq_one rfl rfl rfl
-
-中文:
-定理 monic_of_c_eq_one'
-  结论: (toPoly ⟨0, 0, 1, d⟩).Monic
-  证明: monic_of_c_eq_one rfl rfl rfl
-
-Depends on / 依赖: monic_of_c_eq_one
+  rw [Monic, leadingCoeff_of_c_ne_zero ha hb (hc ▸ one_ne_zero), hc]
+/-
+**Cubic.monic_of_c_eq_one'** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：monic_of_c_eq_one' : (toPoly ⟨0, 0, 1, d⟩).Monic
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cubic.monic_of_c_eq_one`：monic_of_c_eq_one (ha : P.a = 0) (hb : P.b = 0)
+ (hc : P.c = 1) : P.toPoly.Monic
 -/
 theorem monic_of_c_eq_one' : (toPoly ⟨0, 0, 1, d⟩).Monic :=
   monic_of_c_eq_one rfl rfl rfl
-
-/--
-theorem `monic_of_d_eq_one` / 定理 `monic_of_d_eq_one`
-
-English:
-theorem monic_of_d_eq_one
-  given: (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0) (hd : P.d = 1)
-  proof: by
-  rw [Monic]; rw [leadingCoeff_of_c_eq_zero ha hb hc]; rw [hd]
-
-中文:
-定理 monic_of_d_eq_one
-  条件: (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0) (hd : P.d = 1)
-  证明: by
-  rw [Monic]; rw [leadingCoeff_of_c_eq_zero ha hb hc]; rw [hd]
-
-Depends on / 依赖: leadingCoeff_of_c_eq_zero
+/-
+**Cubic.monic_of_d_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：monic_of_d_eq_one (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0) (hd : P.d =
+ 1) : P.toPoly.Monic
+参数：ha : P.a = 0；hb : P.b = 0；hc : P.c = 0；hd : P.d = 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.Monic.eq_1`：∀ {R : Type u} [inst : Semiring R] (p : Polynomia
+l R), p.Monic = (p.leadingCoeff = 1)
+· 使用定理 `Cubic.leadingCoeff_of_c_eq_zero`：leadingCoeff_of_c_eq_zero (ha : P.a = 0
+) (hb : P.b = 0) (hc : P.c = 0) : P.toPoly.leadingCoeff = P.d
 -/
 theorem monic_of_d_eq_one (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0) (hd : P.d = 1) :
     P.toPoly.Monic := by
-  rw [Monic]; rw [leadingCoeff_of_c_eq_zero ha hb hc]; rw [hd]
-
-/--
-theorem `monic_of_d_eq_one'` / 定理 `monic_of_d_eq_one'`
-
-English:
-theorem monic_of_d_eq_one'
-  statement: (toPoly ⟨0, 0, 0, 1⟩).Monic
-  proof: monic_of_d_eq_one rfl rfl rfl rfl
-
-中文:
-定理 monic_of_d_eq_one'
-  结论: (toPoly ⟨0, 0, 0, 1⟩).Monic
-  证明: monic_of_d_eq_one rfl rfl rfl rfl
-
-Depends on / 依赖: monic_of_d_eq_one
+  rw [Monic, leadingCoeff_of_c_eq_zero ha hb hc, hd]
+/-
+**Cubic.monic_of_d_eq_one'** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：monic_of_d_eq_one' : (toPoly ⟨0, 0, 0, 1⟩).Monic
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cubic.monic_of_d_eq_one`：monic_of_d_eq_one (ha : P.a = 0) (hb : P.b = 0)
+ (hc : P.c = 0) (hd : P.d = 1) : P.toPoly.Monic
 -/
 theorem monic_of_d_eq_one' : (toPoly ⟨0, 0, 0, 1⟩).Monic :=
   monic_of_d_eq_one rfl rfl rfl rfl
@@ -1083,42 +828,17 @@ section Degree
 
 /-- The equivalence between cubic polynomials and polynomials of degree at most three. -/
 @[simps]
-/--
-Definition of `equiv` / `equiv` 的定义
+/-
+**Cubic.equiv** 是 Mathlib 中的一个定义，位于命名空间 `Cubic`。
+形式化陈述：equiv : Cubic R ≃ { p : R[X] // p.degree <= 3 } where toFun P
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equiv
-  signature: : Cubic R ≃ { p : R[X] // p.degree <= 3 } where
-  body: ⟨P.toPoly, degree_cubic_le⟩
-  invFun f := ⟨coeff f 3, coeff f 2, coeff f 1, coeff f 0⟩
-  left_inv P := by ext <;> simp only [coeffs]
-  right_inv f := by
-    ext n
-    obtain hn | hn := le_or_gt n 3
-    · interval_cases n <;> simp only <;> ring_nf <;> try simp only [coeffs]
-    · rw [coeff_eq_zero hn, (degree_le_iff_coeff_zero (f : R[X]) 3).mp f.2]
-      simpa using hn
-
-@[simp]
-
-中文:
-定义 equiv
-  签名: : 三次 R ≃ { p : R[X] // p.degree <= 3 } where
-  定义体: ⟨P.toPoly, degree_cubic_le⟩
-  invFun f := ⟨coeff f 3, coeff f 2, coeff f 1, coeff f 0⟩
-  left_inv P := by ext <;> simp only [coeffs]
-  right_inv f := by
-    ext n
-    obtain hn | hn := le_or_gt n 3
-    · interval_cases n <;> simp only <;> ring_nf <;> try simp only [coeffs]
-    · rw [coeff_eq_zero hn, (degree_le_iff_coeff_zero (f : R[X]) 3).mp f.2]
-      simpa using hn
-
-@[simp]
-
-Depends on / 依赖: P.toPoly, degree_cubic_le, toPoly
+--- 原说明 ---
+The equivalence between cubic polynomials and polynomials of degree at most thre
+e.
 -/
-def equiv : Cubic R ≃ { p : R[X] // p.degree <= 3 } where
+def equiv : Cubic R ≃ { p : R[X] // p.degree ≤ 3 } where
   toFun P := ⟨P.toPoly, degree_cubic_le⟩
   invFun f := ⟨coeff f 3, coeff f 2, coeff f 1, coeff f 0⟩
   left_inv P := by ext <;> simp only [coeffs]
@@ -1130,654 +850,485 @@ def equiv : Cubic R ≃ { p : R[X] // p.degree <= 3 } where
       simpa using hn
 
 @[simp]
-/--
-theorem `degree_of_a_ne_zero` / 定理 `degree_of_a_ne_zero`
-
-English:
-theorem degree_of_a_ne_zero
-  given: (ha : P.a != 0)
-  statement: P.toPoly.degree = 3
-  proof: degree_cubic ha
-
-中文:
-定理 degree_of_a_ne_zero
-  条件: (ha : P.a != 0)
-  结论: P.toPoly.degree = 3
-  证明: degree_cubic ha
-
-Depends on / 依赖: degree_cubic
+/-
+**Cubic.degree_of_a_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：degree_of_a_ne_zero (ha : P.a != 0) : P.toPoly.degree = 3
+参数：ha : P.a != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.degree_cubic`：degree_cubic (ha : a != 0) : degree (C a * X ^ 
+3 + C b * X ^ 2 + C c * X + C d) = 3
 -/
-theorem degree_of_a_ne_zero (ha : P.a != 0) : P.toPoly.degree = 3 :=
+theorem degree_of_a_ne_zero (ha : P.a ≠ 0) : P.toPoly.degree = 3 :=
   degree_cubic ha
-
-/--
-theorem `degree_of_a_ne_zero'` / 定理 `degree_of_a_ne_zero'`
-
-English:
-theorem degree_of_a_ne_zero'
-  given: (ha : a != 0)
-  statement: (toPoly ⟨a, b, c, d⟩).degree = 3
-  proof: by
-  simp [ha]
-
-中文:
-定理 degree_of_a_ne_zero'
-  条件: (ha : a != 0)
-  结论: (toPoly ⟨a, b, c, d⟩).degree = 3
-  证明: by
-  simp [ha]
+/-
+**Cubic.degree_of_a_ne_zero'** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：degree_of_a_ne_zero' (ha : a != 0) : (toPoly ⟨a, b, c, d⟩).degree = 3
+参数：ha : a != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.degree_of_a_ne_zero`：degree_of_a_ne_zero (ha : P.a != 0) : P.toPol
+y.degree = 3
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem degree_of_a_ne_zero' (ha : a != 0) : (toPoly ⟨a, b, c, d⟩).degree = 3 := by
+theorem degree_of_a_ne_zero' (ha : a ≠ 0) : (toPoly ⟨a, b, c, d⟩).degree = 3 := by
   simp [ha]
-
-/--
-theorem `degree_of_a_eq_zero` / 定理 `degree_of_a_eq_zero`
-
-English:
-theorem degree_of_a_eq_zero
-  given: (ha : P.a = 0)
-  statement: P.toPoly.degree <= 2
-  proof: by
-  simpa only [of_a_eq_zero ha] using degree_quadratic_le
-
-中文:
-定理 degree_of_a_eq_zero
-  条件: (ha : P.a = 0)
-  结论: P.toPoly.degree <= 2
-  证明: by
-  simpa only [of_a_eq_zero ha] using degree_quadratic_le
-
-Depends on / 依赖: degree_quadratic_le, of_a_eq_zero
+/-
+**Cubic.degree_of_a_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：degree_of_a_eq_zero (ha : P.a = 0) : P.toPoly.degree <= 2
+参数：ha : P.a = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.of_a_eq_zero`：of_a_eq_zero (ha : P.a = 0) : P.toPoly = C P.b * X ^
+ 2 + C P.c * X + C P.d
+· 使用定理 `Polynomial.degree_quadratic_le`：degree_quadratic_le : degree (C a * X ^ 
+2 + C b * X + C c) <= 2
 -/
-theorem degree_of_a_eq_zero (ha : P.a = 0) : P.toPoly.degree <= 2 := by
+theorem degree_of_a_eq_zero (ha : P.a = 0) : P.toPoly.degree ≤ 2 := by
   simpa only [of_a_eq_zero ha] using degree_quadratic_le
-
-/--
-theorem `degree_of_a_eq_zero'` / 定理 `degree_of_a_eq_zero'`
-
-English:
-theorem degree_of_a_eq_zero'
-  statement: (toPoly ⟨0, b, c, d⟩).degree <= 2
-  proof: degree_of_a_eq_zero rfl
-
-@[simp]
-
-中文:
-定理 degree_of_a_eq_zero'
-  结论: (toPoly ⟨0, b, c, d⟩).degree <= 2
-  证明: degree_of_a_eq_zero rfl
-
-@[simp]
-
-Depends on / 依赖: degree_of_a_eq_zero
+/-
+**Cubic.degree_of_a_eq_zero'** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：degree_of_a_eq_zero' : (toPoly ⟨0, b, c, d⟩).degree <= 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cubic.degree_of_a_eq_zero`：degree_of_a_eq_zero (ha : P.a = 0) : P.toPoly
+.degree <= 2
 -/
-theorem degree_of_a_eq_zero' : (toPoly ⟨0, b, c, d⟩).degree <= 2 :=
+theorem degree_of_a_eq_zero' : (toPoly ⟨0, b, c, d⟩).degree ≤ 2 :=
   degree_of_a_eq_zero rfl
 
 @[simp]
-/--
-theorem `degree_of_b_ne_zero` / 定理 `degree_of_b_ne_zero`
-
-English:
-theorem degree_of_b_ne_zero
-  given: (ha : P.a = 0) (hb : P.b != 0)
-  statement: P.toPoly.degree = 2
-  proof: by
-  rw [of_a_eq_zero ha]; rw [degree_quadratic hb]
-
-中文:
-定理 degree_of_b_ne_zero
-  条件: (ha : P.a = 0) (hb : P.b != 0)
-  结论: P.toPoly.degree = 2
-  证明: by
-  rw [of_a_eq_zero ha]; rw [degree_quadratic hb]
-
-Depends on / 依赖: degree_quadratic, of_a_eq_zero
+/-
+**Cubic.degree_of_b_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：degree_of_b_ne_zero (ha : P.a = 0) (hb : P.b != 0) : P.toPoly.degree = 2
+参数：ha : P.a = 0；hb : P.b != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.of_a_eq_zero`：of_a_eq_zero (ha : P.a = 0) : P.toPoly = C P.b * X ^
+ 2 + C P.c * X + C P.d
+· 使用定理 `Polynomial.degree_quadratic`：degree_quadratic (ha : a != 0) : degree (C 
+a * X ^ 2 + C b * X + C c) = 2
 -/
-theorem degree_of_b_ne_zero (ha : P.a = 0) (hb : P.b != 0) : P.toPoly.degree = 2 := by
-  rw [of_a_eq_zero ha]; rw [degree_quadratic hb]
-
-/--
-theorem `degree_of_b_ne_zero'` / 定理 `degree_of_b_ne_zero'`
-
-English:
-theorem degree_of_b_ne_zero'
-  given: (hb : b != 0)
-  statement: (toPoly ⟨0, b, c, d⟩).degree = 2
-  proof: by
+theorem degree_of_b_ne_zero (ha : P.a = 0) (hb : P.b ≠ 0) : P.toPoly.degree = 2 := by
+  rw [of_a_eq_zero ha, degree_quadratic hb]
+/-
+**Cubic.degree_of_b_ne_zero'** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：degree_of_b_ne_zero' (hb : b != 0) : (toPoly ⟨0, b, c, d⟩).degree = 2
+参数：hb : b != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.degree_of_b_ne_zero`：degree_of_b_ne_zero (ha : P.a = 0) (hb : P.b 
+!= 0) : P.toPoly.degree = 2
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+-/
+theorem degree_of_b_ne_zero' (hb : b ≠ 0) : (toPoly ⟨0, b, c, d⟩).degree = 2 := by
   simp [hb]
-
-中文:
-定理 degree_of_b_ne_zero'
-  条件: (hb : b != 0)
-  结论: (toPoly ⟨0, b, c, d⟩).degree = 2
-  证明: by
-  simp [hb]
+/-
+**Cubic.degree_of_b_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：degree_of_b_eq_zero (ha : P.a = 0) (hb : P.b = 0) : P.toPoly.degree <= 1
+参数：ha : P.a = 0；hb : P.b = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.of_b_eq_zero`：of_b_eq_zero (ha : P.a = 0) (hb : P.b = 0) : P.toPol
+y = C P.c * X + C P.d
+· 使用定理 `Polynomial.degree_linear_le`：degree_linear_le : degree (C a * X + C b) <
+= 1
 -/
-theorem degree_of_b_ne_zero' (hb : b != 0) : (toPoly ⟨0, b, c, d⟩).degree = 2 := by
-  simp [hb]
-
-/--
-theorem `degree_of_b_eq_zero` / 定理 `degree_of_b_eq_zero`
-
-English:
-theorem degree_of_b_eq_zero
-  given: (ha : P.a = 0) (hb : P.b = 0)
-  statement: P.toPoly.degree <= 1
-  proof: by
+theorem degree_of_b_eq_zero (ha : P.a = 0) (hb : P.b = 0) : P.toPoly.degree ≤ 1 := by
   simpa only [of_b_eq_zero ha hb] using degree_linear_le
-
-中文:
-定理 degree_of_b_eq_zero
-  条件: (ha : P.a = 0) (hb : P.b = 0)
-  结论: P.toPoly.degree <= 1
-  证明: by
-  simpa only [of_b_eq_zero ha hb] using degree_linear_le
-
-Depends on / 依赖: degree_linear_le, of_b_eq_zero
+/-
+**Cubic.degree_of_b_eq_zero'** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：degree_of_b_eq_zero' : (toPoly ⟨0, 0, c, d⟩).degree <= 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cubic.degree_of_b_eq_zero`：degree_of_b_eq_zero (ha : P.a = 0) (hb : P.b 
+= 0) : P.toPoly.degree <= 1
 -/
-theorem degree_of_b_eq_zero (ha : P.a = 0) (hb : P.b = 0) : P.toPoly.degree <= 1 := by
-  simpa only [of_b_eq_zero ha hb] using degree_linear_le
-
-/--
-theorem `degree_of_b_eq_zero'` / 定理 `degree_of_b_eq_zero'`
-
-English:
-theorem degree_of_b_eq_zero'
-  statement: (toPoly ⟨0, 0, c, d⟩).degree <= 1
-  proof: degree_of_b_eq_zero rfl rfl
-
-@[simp]
-
-中文:
-定理 degree_of_b_eq_zero'
-  结论: (toPoly ⟨0, 0, c, d⟩).degree <= 1
-  证明: degree_of_b_eq_zero rfl rfl
-
-@[simp]
-
-Depends on / 依赖: degree_of_b_eq_zero
--/
-theorem degree_of_b_eq_zero' : (toPoly ⟨0, 0, c, d⟩).degree <= 1 :=
+theorem degree_of_b_eq_zero' : (toPoly ⟨0, 0, c, d⟩).degree ≤ 1 :=
   degree_of_b_eq_zero rfl rfl
 
 @[simp]
-/--
-theorem `degree_of_c_ne_zero` / 定理 `degree_of_c_ne_zero`
-
-English:
-theorem degree_of_c_ne_zero
-  given: (ha : P.a = 0) (hb : P.b = 0) (hc : P.c != 0)
-  statement: P.toPoly.degree = 1
-  proof: by
-  rw [of_b_eq_zero ha hb]; rw [degree_linear hc]
-
-中文:
-定理 degree_of_c_ne_zero
-  条件: (ha : P.a = 0) (hb : P.b = 0) (hc : P.c != 0)
-  结论: P.toPoly.degree = 1
-  证明: by
-  rw [of_b_eq_zero ha hb]; rw [degree_linear hc]
-
-Depends on / 依赖: degree_linear, of_b_eq_zero
+/-
+**Cubic.degree_of_c_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：degree_of_c_ne_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c != 0) : P.toPo
+ly.degree = 1
+参数：ha : P.a = 0；hb : P.b = 0；hc : P.c != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.of_b_eq_zero`：of_b_eq_zero (ha : P.a = 0) (hb : P.b = 0) : P.toPol
+y = C P.c * X + C P.d
+· 使用定理 `Polynomial.degree_linear`：degree_linear (ha : a != 0) : degree (C a * X 
++ C b) = 1
 -/
-theorem degree_of_c_ne_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c != 0) : P.toPoly.degree = 1 := by
-  rw [of_b_eq_zero ha hb]; rw [degree_linear hc]
-
-/--
-theorem `degree_of_c_ne_zero'` / 定理 `degree_of_c_ne_zero'`
-
-English:
-theorem degree_of_c_ne_zero'
-  given: (hc : c != 0)
-  statement: (toPoly ⟨0, 0, c, d⟩).degree = 1
-  proof: by
+theorem degree_of_c_ne_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c ≠ 0) : P.toPoly.degree = 1 := by
+  rw [of_b_eq_zero ha hb, degree_linear hc]
+/-
+**Cubic.degree_of_c_ne_zero'** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：degree_of_c_ne_zero' (hc : c != 0) : (toPoly ⟨0, 0, c, d⟩).degree = 1
+参数：hc : c != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.degree_of_c_ne_zero`：degree_of_c_ne_zero (ha : P.a = 0) (hb : P.b 
+= 0) (hc : P.c != 0) : P.toPoly.degree = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+-/
+theorem degree_of_c_ne_zero' (hc : c ≠ 0) : (toPoly ⟨0, 0, c, d⟩).degree = 1 := by
   simp [hc]
-
-中文:
-定理 degree_of_c_ne_zero'
-  条件: (hc : c != 0)
-  结论: (toPoly ⟨0, 0, c, d⟩).degree = 1
-  证明: by
-  simp [hc]
+/-
+**Cubic.degree_of_c_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：degree_of_c_eq_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0) : P.toPol
+y.degree <= 0
+参数：ha : P.a = 0；hb : P.b = 0；hc : P.c = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.of_c_eq_zero`：of_c_eq_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c
+ = 0) : P.toPoly = C P.d
+· 使用定理 `Polynomial.degree_C_le`：degree_C_le : degree (C a) <= 0
 -/
-theorem degree_of_c_ne_zero' (hc : c != 0) : (toPoly ⟨0, 0, c, d⟩).degree = 1 := by
-  simp [hc]
-
-/--
-theorem `degree_of_c_eq_zero` / 定理 `degree_of_c_eq_zero`
-
-English:
-theorem degree_of_c_eq_zero
-  given: (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0)
-  statement: P.toPoly.degree <= 0
-  proof: by
+theorem degree_of_c_eq_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0) : P.toPoly.degree ≤ 0 := by
   simpa only [of_c_eq_zero ha hb hc] using degree_C_le
-
-中文:
-定理 degree_of_c_eq_zero
-  条件: (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0)
-  结论: P.toPoly.degree <= 0
-  证明: by
-  simpa only [of_c_eq_zero ha hb hc] using degree_C_le
-
-Depends on / 依赖: degree_C_le, of_c_eq_zero
+/-
+**Cubic.degree_of_c_eq_zero'** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：degree_of_c_eq_zero' : (toPoly ⟨0, 0, 0, d⟩).degree <= 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cubic.degree_of_c_eq_zero`：degree_of_c_eq_zero (ha : P.a = 0) (hb : P.b 
+= 0) (hc : P.c = 0) : P.toPoly.degree <= 0
 -/
-theorem degree_of_c_eq_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0) : P.toPoly.degree <= 0 := by
-  simpa only [of_c_eq_zero ha hb hc] using degree_C_le
-
-/--
-theorem `degree_of_c_eq_zero'` / 定理 `degree_of_c_eq_zero'`
-
-English:
-theorem degree_of_c_eq_zero'
-  statement: (toPoly ⟨0, 0, 0, d⟩).degree <= 0
-  proof: degree_of_c_eq_zero rfl rfl rfl
-
-@[simp]
-
-中文:
-定理 degree_of_c_eq_zero'
-  结论: (toPoly ⟨0, 0, 0, d⟩).degree <= 0
-  证明: degree_of_c_eq_zero rfl rfl rfl
-
-@[simp]
-
-Depends on / 依赖: degree_of_c_eq_zero
--/
-theorem degree_of_c_eq_zero' : (toPoly ⟨0, 0, 0, d⟩).degree <= 0 :=
+theorem degree_of_c_eq_zero' : (toPoly ⟨0, 0, 0, d⟩).degree ≤ 0 :=
   degree_of_c_eq_zero rfl rfl rfl
 
 @[simp]
-/--
-theorem `degree_of_d_ne_zero` / 定理 `degree_of_d_ne_zero`
-
-English:
-theorem degree_of_d_ne_zero
-  given: (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0) (hd : P.d != 0)
-  proof: by
-  rw [of_c_eq_zero ha hb hc]; rw [degree_C hd]
-
-中文:
-定理 degree_of_d_ne_zero
-  条件: (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0) (hd : P.d != 0)
-  证明: by
-  rw [of_c_eq_zero ha hb hc]; rw [degree_C hd]
-
-Depends on / 依赖: degree_C, of_c_eq_zero
+/-
+**Cubic.degree_of_d_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：degree_of_d_ne_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0) (hd : P.d
+ != 0) : P.toPoly.degree = 0
+参数：ha : P.a = 0；hb : P.b = 0；hc : P.c = 0；hd : P.d != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.of_c_eq_zero`：of_c_eq_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c
+ = 0) : P.toPoly = C P.d
+· 使用定理 `Polynomial.degree_C`：degree_C (ha : a != 0) : degree (C a) = (0 : WithBo
+t Nat)
 -/
-theorem degree_of_d_ne_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0) (hd : P.d != 0) :
+theorem degree_of_d_ne_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0) (hd : P.d ≠ 0) :
     P.toPoly.degree = 0 := by
-  rw [of_c_eq_zero ha hb hc]; rw [degree_C hd]
-
-/--
-theorem `degree_of_d_ne_zero'` / 定理 `degree_of_d_ne_zero'`
-
-English:
-theorem degree_of_d_ne_zero'
-  given: (hd : d != 0)
-  statement: (toPoly ⟨0, 0, 0, d⟩).degree = 0
-  proof: by
-  simp [hd]
-
-@[simp]
-
-中文:
-定理 degree_of_d_ne_zero'
-  条件: (hd : d != 0)
-  结论: (toPoly ⟨0, 0, 0, d⟩).degree = 0
-  证明: by
-  simp [hd]
-
-@[simp]
+  rw [of_c_eq_zero ha hb hc, degree_C hd]
+/-
+**Cubic.degree_of_d_ne_zero'** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：degree_of_d_ne_zero' (hd : d != 0) : (toPoly ⟨0, 0, 0, d⟩).degree = 0
+参数：hd : d != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.degree_of_d_ne_zero`：degree_of_d_ne_zero (ha : P.a = 0) (hb : P.b 
+= 0) (hc : P.c = 0) (hd : P.d != 0) : P.toPoly.degree = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-theorem degree_of_d_ne_zero' (hd : d != 0) : (toPoly ⟨0, 0, 0, d⟩).degree = 0 := by
+theorem degree_of_d_ne_zero' (hd : d ≠ 0) : (toPoly ⟨0, 0, 0, d⟩).degree = 0 := by
   simp [hd]
 
 @[simp]
-/--
-theorem `degree_of_d_eq_zero` / 定理 `degree_of_d_eq_zero`
-
-English:
-theorem degree_of_d_eq_zero
-  given: (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0) (hd : P.d = 0)
-  proof: by
-  rw [of_d_eq_zero ha hb hc hd]; rw [degree_zero]
-
-中文:
-定理 degree_of_d_eq_zero
-  条件: (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0) (hd : P.d = 0)
-  证明: by
-  rw [of_d_eq_zero ha hb hc hd]; rw [degree_zero]
-
-Depends on / 依赖: degree_zero, of_d_eq_zero
+/-
+**Cubic.degree_of_d_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：degree_of_d_eq_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0) (hd : P.d
+ = 0) : P.toPoly.degree = ⊥
+参数：ha : P.a = 0；hb : P.b = 0；hc : P.c = 0；hd : P.d = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.of_d_eq_zero`：of_d_eq_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c
+ = 0) (hd : P.d = 0) : P.toPoly = 0
+· 使用定理 `Polynomial.degree_zero`：degree_zero : degree (0 : R[X]) = ⊥
 -/
 theorem degree_of_d_eq_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0) (hd : P.d = 0) :
     P.toPoly.degree = ⊥ := by
-  rw [of_d_eq_zero ha hb hc hd]; rw [degree_zero]
-
-/--
-theorem `degree_of_d_eq_zero'` / 定理 `degree_of_d_eq_zero'`
-
-English:
-theorem degree_of_d_eq_zero'
-  statement: (⟨0, 0, 0, 0⟩ : Cubic R).toPoly.degree = ⊥
-  proof: degree_of_d_eq_zero rfl rfl rfl rfl
-
-@[simp]
-
-中文:
-定理 degree_of_d_eq_zero'
-  结论: (⟨0, 0, 0, 0⟩ : 三次 R).toPoly.degree = ⊥
-  证明: degree_of_d_eq_zero rfl rfl rfl rfl
-
-@[simp]
-
-Depends on / 依赖: degree_of_d_eq_zero
+  rw [of_d_eq_zero ha hb hc hd, degree_zero]
+/-
+**Cubic.degree_of_d_eq_zero'** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：degree_of_d_eq_zero' : (⟨0, 0, 0, 0⟩ : Cubic R).toPoly.degree = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cubic.degree_of_d_eq_zero`：degree_of_d_eq_zero (ha : P.a = 0) (hb : P.b 
+= 0) (hc : P.c = 0) (hd : P.d = 0) : P.toPoly.degree = ⊥
 -/
 theorem degree_of_d_eq_zero' : (⟨0, 0, 0, 0⟩ : Cubic R).toPoly.degree = ⊥ :=
   degree_of_d_eq_zero rfl rfl rfl rfl
 
 @[simp]
-/--
-theorem `degree_of_zero` / 定理 `degree_of_zero`
-
-English:
-theorem degree_of_zero
-  statement: (0 : Cubic R).toPoly.degree = ⊥
-  proof: degree_of_d_eq_zero'
-
-@[simp]
-
-中文:
-定理 degree_of_zero
-  结论: (0 : 三次 R).toPoly.degree = ⊥
-  证明: degree_of_d_eq_zero'
-
-@[simp]
-
-Depends on / 依赖: degree_of_d_eq_zero
+/-
+**Cubic.degree_of_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：degree_of_zero : (0 : Cubic R).toPoly.degree = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cubic.degree_of_d_eq_zero'`：degree_of_d_eq_zero' : (⟨0, 0, 0, 0⟩ : Cubic
+ R).toPoly.degree = ⊥
 -/
 theorem degree_of_zero : (0 : Cubic R).toPoly.degree = ⊥ :=
   degree_of_d_eq_zero'
 
 @[simp]
-/--
-theorem `natDegree_of_a_ne_zero` / 定理 `natDegree_of_a_ne_zero`
-
-English:
-theorem natDegree_of_a_ne_zero
-  given: (ha : P.a != 0)
-  statement: P.toPoly.natDegree = 3
-  proof: natDegree_cubic ha
-
-中文:
-定理 natDegree_of_a_ne_zero
-  条件: (ha : P.a != 0)
-  结论: P.toPoly.natDegree = 3
-  证明: natDegree_cubic ha
-
-Depends on / 依赖: natDegree_cubic
+/-
+**Cubic.natDegree_of_a_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：natDegree_of_a_ne_zero (ha : P.a != 0) : P.toPoly.natDegree = 3
+参数：ha : P.a != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Polynomial.natDegree_cubic`：natDegree_cubic (ha : a != 0) : natDegree (C
+ a * X ^ 3 + C b * X ^ 2 + C c * X + C d) = 3
 -/
-theorem natDegree_of_a_ne_zero (ha : P.a != 0) : P.toPoly.natDegree = 3 :=
+theorem natDegree_of_a_ne_zero (ha : P.a ≠ 0) : P.toPoly.natDegree = 3 :=
   natDegree_cubic ha
-
-/--
-theorem `natDegree_of_a_ne_zero'` / 定理 `natDegree_of_a_ne_zero'`
-
-English:
-theorem natDegree_of_a_ne_zero'
-  given: (ha : a != 0)
-  statement: (toPoly ⟨a, b, c, d⟩).natDegree = 3
-  proof: by
-  simp [ha]
-
-中文:
-定理 natDegree_of_a_ne_zero'
-  条件: (ha : a != 0)
-  结论: (toPoly ⟨a, b, c, d⟩).natDegree = 3
-  证明: by
-  simp [ha]
+/-
+**Cubic.natDegree_of_a_ne_zero'** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：natDegree_of_a_ne_zero' (ha : a != 0) : (toPoly ⟨a, b, c, d⟩).natDegree = 
+3
+参数：ha : a != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.natDegree_of_a_ne_zero`：natDegree_of_a_ne_zero (ha : P.a != 0) : P
+.toPoly.natDegree = 3
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem natDegree_of_a_ne_zero' (ha : a != 0) : (toPoly ⟨a, b, c, d⟩).natDegree = 3 := by
+theorem natDegree_of_a_ne_zero' (ha : a ≠ 0) : (toPoly ⟨a, b, c, d⟩).natDegree = 3 := by
   simp [ha]
-
-/--
-theorem `natDegree_of_a_eq_zero` / 定理 `natDegree_of_a_eq_zero`
-
-English:
-theorem natDegree_of_a_eq_zero
-  given: (ha : P.a = 0)
-  statement: P.toPoly.natDegree <= 2
-  proof: by
-  simpa only [of_a_eq_zero ha] using natDegree_quadratic_le
-
-中文:
-定理 natDegree_of_a_eq_zero
-  条件: (ha : P.a = 0)
-  结论: P.toPoly.natDegree <= 2
-  证明: by
-  simpa only [of_a_eq_zero ha] using natDegree_quadratic_le
-
-Depends on / 依赖: natDegree_quadratic_le, of_a_eq_zero
+/-
+**Cubic.natDegree_of_a_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：natDegree_of_a_eq_zero (ha : P.a = 0) : P.toPoly.natDegree <= 2
+参数：ha : P.a = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.of_a_eq_zero`：of_a_eq_zero (ha : P.a = 0) : P.toPoly = C P.b * X ^
+ 2 + C P.c * X + C P.d
+· 使用定理 `Polynomial.natDegree_quadratic_le`：natDegree_quadratic_le : natDegree (C
+ a * X ^ 2 + C b * X + C c) <= 2
 -/
-theorem natDegree_of_a_eq_zero (ha : P.a = 0) : P.toPoly.natDegree <= 2 := by
+theorem natDegree_of_a_eq_zero (ha : P.a = 0) : P.toPoly.natDegree ≤ 2 := by
   simpa only [of_a_eq_zero ha] using natDegree_quadratic_le
-
-/--
-theorem `natDegree_of_a_eq_zero'` / 定理 `natDegree_of_a_eq_zero'`
-
-English:
-theorem natDegree_of_a_eq_zero'
-  statement: (toPoly ⟨0, b, c, d⟩).natDegree <= 2
-  proof: natDegree_of_a_eq_zero rfl
-
-@[simp]
-
-中文:
-定理 natDegree_of_a_eq_zero'
-  结论: (toPoly ⟨0, b, c, d⟩).natDegree <= 2
-  证明: natDegree_of_a_eq_zero rfl
-
-@[simp]
-
-Depends on / 依赖: natDegree_of_a_eq_zero
+/-
+**Cubic.natDegree_of_a_eq_zero'** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：natDegree_of_a_eq_zero' : (toPoly ⟨0, b, c, d⟩).natDegree <= 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cubic.natDegree_of_a_eq_zero`：natDegree_of_a_eq_zero (ha : P.a = 0) : P.
+toPoly.natDegree <= 2
 -/
-theorem natDegree_of_a_eq_zero' : (toPoly ⟨0, b, c, d⟩).natDegree <= 2 :=
+theorem natDegree_of_a_eq_zero' : (toPoly ⟨0, b, c, d⟩).natDegree ≤ 2 :=
   natDegree_of_a_eq_zero rfl
 
 @[simp]
-/--
-theorem `natDegree_of_b_ne_zero` / 定理 `natDegree_of_b_ne_zero`
-
-English:
-theorem natDegree_of_b_ne_zero
-  given: (ha : P.a = 0) (hb : P.b != 0)
-  statement: P.toPoly.natDegree = 2
-  proof: by
-  rw [of_a_eq_zero ha]; rw [natDegree_quadratic hb]
-
-中文:
-定理 natDegree_of_b_ne_zero
-  条件: (ha : P.a = 0) (hb : P.b != 0)
-  结论: P.toPoly.natDegree = 2
-  证明: by
-  rw [of_a_eq_zero ha]; rw [natDegree_quadratic hb]
-
-Depends on / 依赖: natDegree_quadratic, of_a_eq_zero
+/-
+**Cubic.natDegree_of_b_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：natDegree_of_b_ne_zero (ha : P.a = 0) (hb : P.b != 0) : P.toPoly.natDegree
+ = 2
+参数：ha : P.a = 0；hb : P.b != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.of_a_eq_zero`：of_a_eq_zero (ha : P.a = 0) : P.toPoly = C P.b * X ^
+ 2 + C P.c * X + C P.d
+· 使用定理 `Polynomial.natDegree_quadratic`：natDegree_quadratic (ha : a != 0) : natD
+egree (C a * X ^ 2 + C b * X + C c) = 2
 -/
-theorem natDegree_of_b_ne_zero (ha : P.a = 0) (hb : P.b != 0) : P.toPoly.natDegree = 2 := by
-  rw [of_a_eq_zero ha]; rw [natDegree_quadratic hb]
-
-/--
-theorem `natDegree_of_b_ne_zero'` / 定理 `natDegree_of_b_ne_zero'`
-
-English:
-theorem natDegree_of_b_ne_zero'
-  given: (hb : b != 0)
-  statement: (toPoly ⟨0, b, c, d⟩).natDegree = 2
-  proof: by
+theorem natDegree_of_b_ne_zero (ha : P.a = 0) (hb : P.b ≠ 0) : P.toPoly.natDegree = 2 := by
+  rw [of_a_eq_zero ha, natDegree_quadratic hb]
+/-
+**Cubic.natDegree_of_b_ne_zero'** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：natDegree_of_b_ne_zero' (hb : b != 0) : (toPoly ⟨0, b, c, d⟩).natDegree = 
+2
+参数：hb : b != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.natDegree_of_b_ne_zero`：natDegree_of_b_ne_zero (ha : P.a = 0) (hb 
+: P.b != 0) : P.toPoly.natDegree = 2
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+-/
+theorem natDegree_of_b_ne_zero' (hb : b ≠ 0) : (toPoly ⟨0, b, c, d⟩).natDegree = 2 := by
   simp [hb]
-
-中文:
-定理 natDegree_of_b_ne_zero'
-  条件: (hb : b != 0)
-  结论: (toPoly ⟨0, b, c, d⟩).natDegree = 2
-  证明: by
-  simp [hb]
+/-
+**Cubic.natDegree_of_b_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：natDegree_of_b_eq_zero (ha : P.a = 0) (hb : P.b = 0) : P.toPoly.natDegree 
+<= 1
+参数：ha : P.a = 0；hb : P.b = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.of_b_eq_zero`：of_b_eq_zero (ha : P.a = 0) (hb : P.b = 0) : P.toPol
+y = C P.c * X + C P.d
+· 使用定理 `Polynomial.natDegree_linear_le`：natDegree_linear_le : natDegree (C a * X
+ + C b) <= 1
 -/
-theorem natDegree_of_b_ne_zero' (hb : b != 0) : (toPoly ⟨0, b, c, d⟩).natDegree = 2 := by
-  simp [hb]
-
-/--
-theorem `natDegree_of_b_eq_zero` / 定理 `natDegree_of_b_eq_zero`
-
-English:
-theorem natDegree_of_b_eq_zero
-  given: (ha : P.a = 0) (hb : P.b = 0)
-  statement: P.toPoly.natDegree <= 1
-  proof: by
+theorem natDegree_of_b_eq_zero (ha : P.a = 0) (hb : P.b = 0) : P.toPoly.natDegree ≤ 1 := by
   simpa only [of_b_eq_zero ha hb] using natDegree_linear_le
-
-中文:
-定理 natDegree_of_b_eq_zero
-  条件: (ha : P.a = 0) (hb : P.b = 0)
-  结论: P.toPoly.natDegree <= 1
-  证明: by
-  simpa only [of_b_eq_zero ha hb] using natDegree_linear_le
-
-Depends on / 依赖: natDegree_linear_le, of_b_eq_zero
+/-
+**Cubic.natDegree_of_b_eq_zero'** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：natDegree_of_b_eq_zero' : (toPoly ⟨0, 0, c, d⟩).natDegree <= 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cubic.natDegree_of_b_eq_zero`：natDegree_of_b_eq_zero (ha : P.a = 0) (hb 
+: P.b = 0) : P.toPoly.natDegree <= 1
 -/
-theorem natDegree_of_b_eq_zero (ha : P.a = 0) (hb : P.b = 0) : P.toPoly.natDegree <= 1 := by
-  simpa only [of_b_eq_zero ha hb] using natDegree_linear_le
-
-/--
-theorem `natDegree_of_b_eq_zero'` / 定理 `natDegree_of_b_eq_zero'`
-
-English:
-theorem natDegree_of_b_eq_zero'
-  statement: (toPoly ⟨0, 0, c, d⟩).natDegree <= 1
-  proof: natDegree_of_b_eq_zero rfl rfl
-
-@[simp]
-
-中文:
-定理 natDegree_of_b_eq_zero'
-  结论: (toPoly ⟨0, 0, c, d⟩).natDegree <= 1
-  证明: natDegree_of_b_eq_zero rfl rfl
-
-@[simp]
-
-Depends on / 依赖: natDegree_of_b_eq_zero
--/
-theorem natDegree_of_b_eq_zero' : (toPoly ⟨0, 0, c, d⟩).natDegree <= 1 :=
+theorem natDegree_of_b_eq_zero' : (toPoly ⟨0, 0, c, d⟩).natDegree ≤ 1 :=
   natDegree_of_b_eq_zero rfl rfl
 
 @[simp]
-/--
-theorem `natDegree_of_c_ne_zero` / 定理 `natDegree_of_c_ne_zero`
-
-English:
-theorem natDegree_of_c_ne_zero
-  given: (ha : P.a = 0) (hb : P.b = 0) (hc : P.c != 0)
-  proof: by
-  rw [of_b_eq_zero ha hb]; rw [natDegree_linear hc]
-
-中文:
-定理 natDegree_of_c_ne_zero
-  条件: (ha : P.a = 0) (hb : P.b = 0) (hc : P.c != 0)
-  证明: by
-  rw [of_b_eq_zero ha hb]; rw [natDegree_linear hc]
-
-Depends on / 依赖: natDegree_linear, of_b_eq_zero
+/-
+**Cubic.natDegree_of_c_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：natDegree_of_c_ne_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c != 0) : P.t
+oPoly.natDegree = 1
+参数：ha : P.a = 0；hb : P.b = 0；hc : P.c != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.of_b_eq_zero`：of_b_eq_zero (ha : P.a = 0) (hb : P.b = 0) : P.toPol
+y = C P.c * X + C P.d
+· 使用定理 `Polynomial.natDegree_linear`：natDegree_linear (ha : a != 0) : natDegree 
+(C a * X + C b) = 1
 -/
-theorem natDegree_of_c_ne_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c != 0) :
+theorem natDegree_of_c_ne_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c ≠ 0) :
     P.toPoly.natDegree = 1 := by
-  rw [of_b_eq_zero ha hb]; rw [natDegree_linear hc]
-
-/--
-theorem `natDegree_of_c_ne_zero'` / 定理 `natDegree_of_c_ne_zero'`
-
-English:
-theorem natDegree_of_c_ne_zero'
-  given: (hc : c != 0)
-  statement: (toPoly ⟨0, 0, c, d⟩).natDegree = 1
-  proof: by
-  simp [hc]
-
-@[simp]
-
-中文:
-定理 natDegree_of_c_ne_zero'
-  条件: (hc : c != 0)
-  结论: (toPoly ⟨0, 0, c, d⟩).natDegree = 1
-  证明: by
-  simp [hc]
-
-@[simp]
+  rw [of_b_eq_zero ha hb, natDegree_linear hc]
+/-
+**Cubic.natDegree_of_c_ne_zero'** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：natDegree_of_c_ne_zero' (hc : c != 0) : (toPoly ⟨0, 0, c, d⟩).natDegree = 
+1
+参数：hc : c != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.natDegree_of_c_ne_zero`：natDegree_of_c_ne_zero (ha : P.a = 0) (hb 
+: P.b = 0) (hc : P.c != 0) : P.toPoly.natDegree = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-theorem natDegree_of_c_ne_zero' (hc : c != 0) : (toPoly ⟨0, 0, c, d⟩).natDegree = 1 := by
+theorem natDegree_of_c_ne_zero' (hc : c ≠ 0) : (toPoly ⟨0, 0, c, d⟩).natDegree = 1 := by
   simp [hc]
 
 @[simp]
-/--
-theorem `natDegree_of_c_eq_zero` / 定理 `natDegree_of_c_eq_zero`
-
-English:
-theorem natDegree_of_c_eq_zero
-  given: (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0)
-  proof: by
-  rw [of_c_eq_zero ha hb hc]; rw [natDegree_C]
-
-中文:
-定理 natDegree_of_c_eq_zero
-  条件: (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0)
-  证明: by
-  rw [of_c_eq_zero ha hb hc]; rw [natDegree_C]
-
-Depends on / 依赖: natDegree_C, of_c_eq_zero
+/-
+**Cubic.natDegree_of_c_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：natDegree_of_c_eq_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0) : P.to
+Poly.natDegree = 0
+参数：ha : P.a = 0；hb : P.b = 0；hc : P.c = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.of_c_eq_zero`：of_c_eq_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c
+ = 0) : P.toPoly = C P.d
+· 使用定理 `Polynomial.natDegree_C`：natDegree_C (a : R) : natDegree (C a) = 0
 -/
 theorem natDegree_of_c_eq_zero (ha : P.a = 0) (hb : P.b = 0) (hc : P.c = 0) :
     P.toPoly.natDegree = 0 := by
-  rw [of_c_eq_zero ha hb hc]; rw [natDegree_C]
-
-/--
-theorem `natDegree_of_c_eq_zero'` / 定理 `natDegree_of_c_eq_zero'`
-
-English:
-theorem natDegree_of_c_eq_zero'
-  statement: (toPoly ⟨0, 0, 0, d⟩).natDegree = 0
-  proof: natDegree_of_c_eq_zero rfl rfl rfl
-
-@[simp]
-
-中文:
-定理 natDegree_of_c_eq_zero'
-  结论: (toPoly ⟨0, 0, 0, d⟩).natDegree = 0
-  证明: natDegree_of_c_eq_zero rfl rfl rfl
-
-@[simp]
-
-Depends on / 依赖: natDegree_of_c_eq_zero
+  rw [of_c_eq_zero ha hb hc, natDegree_C]
+/-
+**Cubic.natDegree_of_c_eq_zero'** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：natDegree_of_c_eq_zero' : (toPoly ⟨0, 0, 0, d⟩).natDegree = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cubic.natDegree_of_c_eq_zero`：natDegree_of_c_eq_zero (ha : P.a = 0) (hb 
+: P.b = 0) (hc : P.c = 0) : P.toPoly.natDegree = 0
 -/
 theorem natDegree_of_c_eq_zero' : (toPoly ⟨0, 0, 0, d⟩).natDegree = 0 :=
   natDegree_of_c_eq_zero rfl rfl rfl
 
 @[simp]
-/--
-theorem `natDegree_of_zero` / 定理 `natDegree_of_zero`
-
-English:
-theorem natDegree_of_zero
-  statement: (0 : Cubic R).toPoly.natDegree = 0
-  proof: natDegree_of_c_eq_zero'
-
-中文:
-定理 natDegree_of_zero
-  结论: (0 : 三次 R).toPoly.natDegree = 0
-  证明: natDegree_of_c_eq_zero'
-
-Depends on / 依赖: natDegree_of_c_eq_zero
+/-
+**Cubic.natDegree_of_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：natDegree_of_zero : (0 : Cubic R).toPoly.natDegree = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cubic.natDegree_of_c_eq_zero'`：natDegree_of_c_eq_zero' : (toPoly ⟨0, 0, 
+0, d⟩).natDegree = 0
 -/
 theorem natDegree_of_zero : (0 : Cubic R).toPoly.natDegree = 0 :=
   natDegree_of_c_eq_zero'
@@ -1789,40 +1340,46 @@ end Degree
 
 section Map
 
-variable [Semiring S] {φ : R ->+* S}
+variable [Semiring S] {φ : R →+* S}
 
-/--
-Definition of `map` / `map` 的定义
+/-- Map a cubic polynomial across a semiring homomorphism. -/
+/-
+**Cubic.map** 是 Mathlib 中的一个定义，位于命名空间 `Cubic`。
+形式化陈述：map (φ : R ->+* S) (P : Cubic R) : Cubic S
+参数：φ : R ->+* S；P : Cubic R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (φ : R ->+* S) (P : Cubic R)
-  body: ⟨φ P.a, φ P.b, φ P.c, φ P.d⟩
-
-中文:
-定义 map
-  签名: (φ : R ->+* S) (P : 三次 R)
-  定义体: ⟨φ P.a, φ P.b, φ P.c, φ P.d⟩
+--- 原说明 ---
+Map a cubic polynomial across a semiring homomorphism.
 -/
-def map (φ : R ->+* S) (P : Cubic R) : Cubic S :=
+def map (φ : R →+* S) (P : Cubic R) : Cubic S :=
   ⟨φ P.a, φ P.b, φ P.c, φ P.d⟩
-
-/--
-theorem `map_toPoly` / 定理 `map_toPoly`
-
-English:
-theorem map_toPoly
-  statement: (map φ P).toPoly = Polynomial.map φ P.toPoly
-  proof: by
-  simp only [map, toPoly, map_C, map_X, Polynomial.map_add, Polynomial.map_mul, Polynomial.map_pow]
-
-中文:
-定理 map_toPoly
-  结论: (map φ P).toPoly = 多项式.map φ P.toPoly
-  证明: by
-  simp only [map, toPoly, map_C, map_X, Polynomial.map_add, Polynomial.map_mul, Polynomial.map_pow]
-
-Depends on / 依赖: Polynomial, Polynomial.map_add, Polynomial.map_mul, Polynomial.map_pow, map_C, map_X, map_add, map_mul, map_pow, toPoly
+/-
+**Cubic.map_toPoly** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：map_toPoly : (map φ P).toPoly = Polynomial.map φ P.toPoly
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.map_add`：∀ {R : Type u} {S : Type v} [inst : Semiring R] {p q
+ : Polynomial R} [inst_1 : Semiring S] (f : R →+* S),   Polynomial.map f (p + q)
+ = Polyn…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Polynomial.map_mul`：∀ {R : Type u} {S : Type v} [inst : Semiring R] {p q
+ : Polynomial R} [inst_1 : Semiring S] (f : R →+* S),   Polynomial.map f (p * q)
+ = Polyn…
+· 使用定理 `Polynomial.map_C`：map_C : (C a).map f = C (f a)
+· 使用定理 `Polynomial.map_pow`：∀ {R : Type u} {S : Type v} [inst : Semiring R] {p :
+ Polynomial R} [inst_1 : Semiring S] (f : R →+* S) (n : ℕ),   Polynomial.map f (
+p ^ n) =…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Polynomial.map_X`：map_X : X.map f = X
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem map_toPoly : (map φ P).toPoly = Polynomial.map φ P.toPoly := by
   simp only [map, toPoly, map_C, map_X, Polynomial.map_add, Polynomial.map_mul, Polynomial.map_pow]
@@ -1840,98 +1397,99 @@ open Multiset
 
 section Extension
 
-variable {P : Cubic R} [CommRing R] [CommRing S] {φ : R ->+* S}
+variable {P : Cubic R} [CommRing R] [CommRing S] {φ : R →+* S}
 
-/--
-Definition of `roots` / `roots` 的定义
+/-- The roots of a cubic polynomial. -/
+/-
+**Cubic.roots** 是 Mathlib 中的一个定义，位于命名空间 `Cubic`。
+形式化陈述：roots [IsDomain R] (P : Cubic R) : Multiset R
+参数：P : Cubic R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition roots
-  signature: [IsDomain R] (P : Cubic R)
-  body: P.toPoly.roots
-
-中文:
-定义 roots
-  签名: [是整环 R] (P : 三次 R)
-  定义体: P.toPoly.roots
-
-Depends on / 依赖: P.toPoly.roots, toPoly
+--- 原说明 ---
+The roots of a cubic polynomial.
 -/
 def roots [IsDomain R] (P : Cubic R) : Multiset R :=
   P.toPoly.roots
-
-/--
-theorem `map_roots` / 定理 `map_roots`
-
-English:
-theorem map_roots
-  given: [IsDomain S]
-  statement: (map φ P).roots = (Polynomial.map φ P.toPoly).roots
-  proof: by
-  rw [roots]; rw [map_toPoly]
-
-中文:
-定理 map_roots
-  条件: [是整环 S]
-  结论: (map φ P).roots = (多项式.map φ P.toPoly).roots
-  证明: by
-  rw [roots]; rw [map_toPoly]
-
-Depends on / 依赖: map_toPoly
+/-
+**Cubic.map_roots** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：map_roots [IsDomain S] : (map φ P).roots = (Polynomial.map φ P.toPoly).roo
+ts
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.roots.eq_1`：∀ {R : Type u_1} [inst : CommRing R] [inst_1 : IsDomai
+n R] (P : Cubic R), P.roots = P.toPoly.roots
+· 使用定理 `Cubic.map_toPoly`：map_toPoly : (map φ P).toPoly = Polynomial.map φ P.toP
+oly
 -/
 theorem map_roots [IsDomain S] : (map φ P).roots = (Polynomial.map φ P.toPoly).roots := by
-  rw [roots]; rw [map_toPoly]
-
-/--
-theorem `mem_roots_iff` / 定理 `mem_roots_iff`
-
-English:
-theorem mem_roots_iff
-  given: [IsDomain R] (h0 : P.toPoly != 0) (x : R)
-  proof: by
-  rw [roots]; rw [mem_roots h0]; rw [IsRoot]; rw [toPoly]
-  simp only [eval_C, eval_X, eval_add, eval_mul, eval_pow]
-
-中文:
-定理 mem_roots_iff
-  条件: [是整环 R] (h0 : P.toPoly != 0) (x : R)
-  证明: by
-  rw [roots]; rw [mem_roots h0]; rw [IsRoot]; rw [toPoly]
-  simp only [eval_C, eval_X, eval_add, eval_mul, eval_pow]
-
-Depends on / 依赖: IsRoot, eval_C, eval_X, eval_add, eval_mul, eval_pow, mem_roots, toPoly
+  rw [roots, map_toPoly]
+/-
+**Cubic.mem_roots_iff** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：mem_roots_iff [IsDomain R] (h0 : P.toPoly != 0) (x : R) : x in P.roots ↔ P
+.a * x ^ 3 + P.b * x ^ 2 + P.c * x + P.d = 0
+参数：h0 : P.toPoly != 0；x : R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.roots.eq_1`：∀ {R : Type u_1} [inst : CommRing R] [inst_1 : IsDomai
+n R] (P : Cubic R), P.roots = P.toPoly.roots
+· 使用定理 `Polynomial.mem_roots`：mem_roots (hp : p != 0) : a in p.roots ↔ IsRoot p 
+a
+· 使用定理 `Polynomial.IsRoot.eq_1`：∀ {R : Type u} [inst : Semiring R] (p : Polynomi
+al R) (a : R), p.IsRoot a = (Polynomial.eval a p = 0)
+· 使用定理 `Cubic.toPoly.eq_1`：∀ {R : Type u_1} [inst : Semiring R] (P : Cubic R),  
+ P.toPoly =     Polynomial.C P.a * Polynomial.X ^ 3 + Polynomial.C P.b * Polynom
+ial.X ^…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Polynomial.eval_add`：eval_add : (p + q).eval x = p.eval x + q.eval x
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Polynomial.eval_mul`：eval_mul : (p * q).eval x = p.eval x * q.eval x
+· 使用定理 `Polynomial.eval_C`：eval_C : (C a).eval x = a
+· 使用定理 `Polynomial.eval_pow`：eval_pow (n : Nat) : (p ^ n).eval x = p.eval x ^ n
+· 使用定理 `Polynomial.eval_X`：eval_X : X.eval x = x
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_roots_iff [IsDomain R] (h0 : P.toPoly != 0) (x : R) :
-    x in P.roots ↔ P.a * x ^ 3 + P.b * x ^ 2 + P.c * x + P.d = 0 := by
-  rw [roots]; rw [mem_roots h0]; rw [IsRoot]; rw [toPoly]
+theorem mem_roots_iff [IsDomain R] (h0 : P.toPoly ≠ 0) (x : R) :
+    x ∈ P.roots ↔ P.a * x ^ 3 + P.b * x ^ 2 + P.c * x + P.d = 0 := by
+  rw [roots, mem_roots h0, IsRoot, toPoly]
   simp only [eval_C, eval_X, eval_add, eval_mul, eval_pow]
-
-/--
-theorem `card_roots_le` / 定理 `card_roots_le`
-
-English:
-theorem card_roots_le
-  given: [IsDomain R] [DecidableEq R]
-  statement: P.roots.toFinset.card <= 3
-  proof: by
-  apply (toFinset_card_le P.toPoly.roots).trans
-  by_cases hP : P.toPoly = 0
-  · simp [hP]
-  · exact WithBot.coe_le_coe.1 ((card_roots hP).trans degree_cubic_le)
-
-中文:
-定理 card_roots_le
-  条件: [是整环 R] [DecidableEq R]
-  结论: P.roots.toFinset.card <= 3
-  证明: by
-  apply (toFinset_card_le P.toPoly.roots).trans
-  by_cases hP : P.toPoly = 0
-  · simp [hP]
-  · exact WithBot.coe_le_coe.1 ((card_roots hP).trans degree_cubic_le)
-
-Depends on / 依赖: P.toPoly, P.toPoly.roots, WithBot, WithBot.coe_le_coe, card_roots, coe_le_coe, degree_cubic_le, toFinset_card_le, toPoly
+/-
+**Cubic.card_roots_le** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：card_roots_le [IsDomain R] [DecidableEq R] : P.roots.toFinset.card <= 3
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Multiset.toFinset_card_le`：Multiset.toFinset_card_le : #m.toFinset <= Mu
+ltiset.card m
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.roots.congr_simp`：∀ {R : Type u} [inst : CommRing R] [inst_1 
+: IsDomain R] (p p_1 : Polynomial R), p = p_1 → p.roots = p_1.roots
+· 使用定理 `Polynomial.roots_zero`：roots_zero : (0 : R[X]).roots = 0
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `WithBot.coe_le_coe`：coe_le_coe : (a : WithBot α) <= b ↔ a <= b
+· 使用定理 `Polynomial.card_roots`：card_roots (hp0 : p != 0) : (Multiset.card (roots
+ p) : WithBot Nat) <= degree p
+· 使用定理 `Polynomial.degree_cubic_le`：degree_cubic_le : degree (C a * X ^ 3 + C b 
+* X ^ 2 + C c * X + C d) <= 3
 -/
-theorem card_roots_le [IsDomain R] [DecidableEq R] : P.roots.toFinset.card <= 3 := by
+theorem card_roots_le [IsDomain R] [DecidableEq R] : P.roots.toFinset.card ≤ 3 := by
   apply (toFinset_card_le P.toPoly.roots).trans
   by_cases hP : P.toPoly = 0
   · simp [hP]
@@ -1939,176 +1497,184 @@ theorem card_roots_le [IsDomain R] [DecidableEq R] : P.roots.toFinset.card <= 3 
 
 end Extension
 
-variable {P : Cubic F} [Field F] [Field K] {φ : F ->+* K} {x y z : K}
+variable {P : Cubic F} [Field F] [Field K] {φ : F →+* K} {x y z : K}
 
 /-! ### Roots over a splitting field -/
 
 
 section Split
 
-/--
-theorem `splits_iff_card_roots` / 定理 `splits_iff_card_roots`
-
-English:
-theorem splits_iff_card_roots
-  given: (ha : P.a != 0)
-  proof: by
-  replace ha : (map φ P).a != 0 := (map_ne_zero φ).mpr ha
-  rw [roots]; rw [← map_toPoly]; rw [Polynomial.splits_iff_card_roots]; rw [← ((degree_eq_iff_natDegree_eq <| ne_zero_of_a_ne_zero ha).1 <| degree_of_a_ne_zero ha : _ = 3)]
-
-中文:
-定理 splits_iff_card_roots
-  条件: (ha : P.a != 0)
-  证明: by
-  replace ha : (map φ P).a != 0 := (map_ne_zero φ).mpr ha
-  rw [roots]; rw [← map_toPoly]; rw [Polynomial.splits_iff_card_roots]; rw [← ((degree_eq_iff_natDegree_eq <| ne_zero_of_a_ne_zero ha).1 <| degree_of_a_ne_zero ha : _ = 3)]
-
-Depends on / 依赖: Polynomial, Polynomial.splits_iff_card_roots, degree_eq_iff_natDegree_eq, degree_of_a_ne_zero, map_ne_zero, map_toPoly, ne_zero_of_a_ne_zero, replace, splits_iff_card_roots
+/-
+**Cubic.splits_iff_card_roots** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：splits_iff_card_roots (ha : P.a != 0) : Splits (P.toPoly.map φ) ↔ (map φ P
+).roots.card = 3
+参数：ha : P.a != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `map_ne_zero`：map_ne_zero : f a != 0 ↔ a != 0
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.roots.eq_1`：∀ {R : Type u_1} [inst : CommRing R] [inst_1 : IsDomai
+n R] (P : Cubic R), P.roots = P.toPoly.roots
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cubic.map_toPoly`：map_toPoly : (map φ P).toPoly = Polynomial.map φ P.toP
+oly
+· 使用定理 `Polynomial.splits_iff_card_roots`：splits_iff_card_roots : Splits f ↔ f.r
+oots.card = f.natDegree
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Polynomial.degree_eq_iff_natDegree_eq`：degree_eq_iff_natDegree_eq {p : R
+[X]} {n : Nat} (hp : p != 0) : p.degree = n ↔ p.natDegree = n
+· 使用定理 `Cubic.ne_zero_of_a_ne_zero`：ne_zero_of_a_ne_zero (ha : P.a != 0) : P.toP
+oly != 0
+· 使用定理 `Cubic.degree_of_a_ne_zero`：degree_of_a_ne_zero (ha : P.a != 0) : P.toPol
+y.degree = 3
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem splits_iff_card_roots (ha : P.a != 0) :
+theorem splits_iff_card_roots (ha : P.a ≠ 0) :
     Splits (P.toPoly.map φ) ↔ (map φ P).roots.card = 3 := by
-  replace ha : (map φ P).a != 0 := (map_ne_zero φ).mpr ha
-  rw [roots]; rw [← map_toPoly]; rw [Polynomial.splits_iff_card_roots]; rw [← ((degree_eq_iff_natDegree_eq <| ne_zero_of_a_ne_zero ha).1 <| degree_of_a_ne_zero ha : _ = 3)]
-
-/--
-theorem `splits_iff_roots_eq_three` / 定理 `splits_iff_roots_eq_three`
-
-English:
-theorem splits_iff_roots_eq_three
-  given: (ha : P.a != 0)
-  proof: by
-  rw [splits_iff_card_roots ha]; rw [card_eq_three]
-
-中文:
-定理 splits_iff_roots_eq_three
-  条件: (ha : P.a != 0)
-  证明: by
-  rw [splits_iff_card_roots ha]; rw [card_eq_three]
-
-Depends on / 依赖: card_eq_three, splits_iff_card_roots
+  replace ha : (map φ P).a ≠ 0 := (map_ne_zero φ).mpr ha
+  rw [roots, ← map_toPoly, Polynomial.splits_iff_card_roots,
+    ← ((degree_eq_iff_natDegree_eq <| ne_zero_of_a_ne_zero ha).1 <| degree_of_a_ne_zero ha : _ = 3)]
+/-
+**Cubic.splits_iff_roots_eq_three** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：splits_iff_roots_eq_three (ha : P.a != 0) : Splits (P.toPoly.map φ) ↔ exis
+ts x y z : K, (map φ P).roots = {x, y, z}
+参数：ha : P.a != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.splits_iff_card_roots`：splits_iff_card_roots (ha : P.a != 0) : Spl
+its (P.toPoly.map φ) ↔ (map φ P).roots.card = 3
+· 使用定理 `Multiset.card_eq_three`：card_eq_three {s : Multiset α} : card s = 3 ↔ ex
+ists x y z, s = {x, y, z}
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem splits_iff_roots_eq_three (ha : P.a != 0) :
-    Splits (P.toPoly.map φ) ↔ exists x y z : K, (map φ P).roots = {x, y, z} := by
-  rw [splits_iff_card_roots ha]; rw [card_eq_three]
-
-/--
-theorem `eq_prod_three_roots` / 定理 `eq_prod_three_roots`
-
-English:
-theorem eq_prod_three_roots
-  given: (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, z})
-  proof: by
-  rw [map_toPoly]; rw [Splits.eq_prod_roots
-(splits_iff_roots_eq_three ha).mpr Exists.intro x Exists.intro y Exists.intro z h3]; rw [leadingCoeff_map]; rw [leadingCoeff_of_a_ne_zero ha]; rw [← map_roots]; rw [h3]
-  change C (φ P.a) * ((X - C x) ::ₘ (X - C y) ::ₘ {X - C z}).prod = _
-  rw [prod_cons]; rw [prod_cons]; rw [prod_singleton]; rw [mul_assoc]; rw [mul_assoc]
-
-中文:
-定理 eq_prod_three_roots
-  条件: (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, z})
-  证明: by
-  rw [map_toPoly]; rw [Splits.eq_prod_roots
-(splits_iff_roots_eq_three ha).mpr Exists.intro x Exists.intro y Exists.intro z h3]; rw [leadingCoeff_map]; rw [leadingCoeff_of_a_ne_zero ha]; rw [← map_roots]; rw [h3]
-  change C (φ P.a) * ((X - C x) ::ₘ (X - C y) ::ₘ {X - C z}).prod = _
-  rw [prod_cons]; rw [prod_cons]; rw [prod_singleton]; rw [mul_assoc]; rw [mul_assoc]
-
-Depends on / 依赖: Exists, Exists.intro, Splits, Splits.eq_prod_roots, eq_prod_roots, leadingCoeff_map, leadingCoeff_of_a_ne_zero, map_roots, map_toPoly, mul_assoc, prod_cons, prod_singleton, splits_iff_roots_eq_three
+theorem splits_iff_roots_eq_three (ha : P.a ≠ 0) :
+    Splits (P.toPoly.map φ) ↔ ∃ x y z : K, (map φ P).roots = {x, y, z} := by
+  rw [splits_iff_card_roots ha, card_eq_three]
+/-
+**Cubic.eq_prod_three_roots** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：eq_prod_three_roots (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, z}) : (
+map φ P).toPoly = C (φ P.a) * (X - C x) * (X - C y) * (X - C z)
+参数：ha : P.a != 0；h3 : (map φ P).roots = {x, y, z}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.map_toPoly`：map_toPoly : (map φ P).toPoly = Polynomial.map φ P.toP
+oly
+· 使用定理 `Polynomial.Splits.eq_prod_roots`：∀ {R : Type u_1} [inst : CommRing R] {f
+ : Polynomial R} [inst_1 : IsDomain R],   f.Splits → f = Polynomial.C f.leadingC
+oeff * (Multiset.map …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Cubic.splits_iff_roots_eq_three`：splits_iff_roots_eq_three (ha : P.a != 
+0) : Splits (P.toPoly.map φ) ↔ exists x y z : K, (map φ P).roots = {x, y, z}
+· 使用定理 `Polynomial.leadingCoeff_map`：leadingCoeff_map (f : R ->+* S) : (p.map f)
+.leadingCoeff = f p.leadingCoeff
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `Cubic.leadingCoeff_of_a_ne_zero`：leadingCoeff_of_a_ne_zero (ha : P.a != 
+0) : P.toPoly.leadingCoeff = P.a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cubic.map_roots`：map_roots [IsDomain S] : (map φ P).roots = (Polynomial.
+map φ P.toPoly).roots
+· 使用定理 `Multiset.prod_cons`：prod_cons (a : M) (s) : prod (a ::ₘ s) = a * prod s
+· 使用定理 `Multiset.prod_singleton`：prod_singleton (a : M) : prod {a} = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 -/
-theorem eq_prod_three_roots (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, z}) :
+theorem eq_prod_three_roots (ha : P.a ≠ 0) (h3 : (map φ P).roots = {x, y, z}) :
     (map φ P).toPoly = C (φ P.a) * (X - C x) * (X - C y) * (X - C z) := by
-  rw [map_toPoly]; rw [Splits.eq_prod_roots
-(splits_iff_roots_eq_three ha).mpr Exists.intro x Exists.intro y Exists.intro z h3]; rw [leadingCoeff_map]; rw [leadingCoeff_of_a_ne_zero ha]; rw [← map_roots]; rw [h3]
+  rw [map_toPoly,
+    Splits.eq_prod_roots <|
+      (splits_iff_roots_eq_three ha).mpr <| Exists.intro x <| Exists.intro y <| Exists.intro z h3,
+    leadingCoeff_map, leadingCoeff_of_a_ne_zero ha, ← map_roots, h3]
   change C (φ P.a) * ((X - C x) ::ₘ (X - C y) ::ₘ {X - C z}).prod = _
-  rw [prod_cons]; rw [prod_cons]; rw [prod_singleton]; rw [mul_assoc]; rw [mul_assoc]
-
-/--
-theorem `eq_sum_three_roots` / 定理 `eq_sum_three_roots`
-
-English:
-theorem eq_sum_three_roots
-  given: (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, z})
-  proof: by
-  apply_fun toPoly
-  · rw [eq_prod_three_roots ha h3, C_mul_prod_X_sub_C_eq]
-  · exact fun P Q => (toPoly_injective P Q).mp
-
-中文:
-定理 eq_sum_three_roots
-  条件: (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, z})
-  证明: by
-  apply_fun toPoly
-  · rw [eq_prod_three_roots ha h3, C_mul_prod_X_sub_C_eq]
-  · exact fun P Q => (toPoly_injective P Q).mp
-
-Depends on / 依赖: C_mul_prod_X_sub_C_eq, apply_fun, eq_prod_three_roots, toPoly, toPoly_injective
+  rw [prod_cons, prod_cons, prod_singleton, mul_assoc, mul_assoc]
+/-
+**Cubic.eq_sum_three_roots** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：eq_sum_three_roots (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, z}) : ma
+p φ P = ⟨φ P.a, φ P.a * -(x + y + z), φ P.a * (x * y + x * z + y * z), φ P.a * -
+(x * y * z)⟩
+参数：ha : P.a != 0；h3 : (map φ P).roots = {x, y, z}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Cubic.toPoly_injective`：toPoly_injective (P Q : Cubic R) : P.toPoly = Q.
+toPoly ↔ P = Q
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.eq_prod_three_roots`：eq_prod_three_roots (ha : P.a != 0) (h3 : (ma
+p φ P).roots = {x, y, z}) : (map φ P).toPoly = C (φ P.a) * (X - C x) * (X - C y)
+ * (X - C z)
+· 使用定理 `Cubic.C_mul_prod_X_sub_C_eq`：C_mul_prod_X_sub_C_eq [CommRing S] {w x y z
+ : S} : C w * (X - C x) * (X - C y) * (X - C z) = toPoly ⟨w, w * -(x + y + z), w
+ * (x * y + x * z…
 -/
-theorem eq_sum_three_roots (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, z}) :
+theorem eq_sum_three_roots (ha : P.a ≠ 0) (h3 : (map φ P).roots = {x, y, z}) :
     map φ P =
       ⟨φ P.a, φ P.a * -(x + y + z), φ P.a * (x * y + x * z + y * z), φ P.a * -(x * y * z)⟩ := by
   apply_fun toPoly
   · rw [eq_prod_three_roots ha h3, C_mul_prod_X_sub_C_eq]
-  · exact fun P Q => (toPoly_injective P Q).mp
-
-/--
-theorem `b_eq_three_roots` / 定理 `b_eq_three_roots`
-
-English:
-theorem b_eq_three_roots
-  given: (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, z})
-  proof: by
-  injection eq_sum_three_roots ha h3
-
-中文:
-定理 b_eq_three_roots
-  条件: (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, z})
-  证明: by
-  injection eq_sum_three_roots ha h3
-
-Depends on / 依赖: eq_sum_three_roots, injection
+  · exact fun P Q ↦ (toPoly_injective P Q).mp
+/-
+**Cubic.b_eq_three_roots** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：b_eq_three_roots (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, z}) : φ P.
+b = φ P.a * -(x + y + z)
+参数：ha : P.a != 0；h3 : (map φ P).roots = {x, y, z}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Cubic.eq_sum_three_roots`：eq_sum_three_roots (ha : P.a != 0) (h3 : (map 
+φ P).roots = {x, y, z}) : map φ P = ⟨φ P.a, φ P.a * -(x + y + z), φ P.a * (x * y
+ + x * z + y *…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
-theorem b_eq_three_roots (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, z}) :
+theorem b_eq_three_roots (ha : P.a ≠ 0) (h3 : (map φ P).roots = {x, y, z}) :
     φ P.b = φ P.a * -(x + y + z) := by
   injection eq_sum_three_roots ha h3
-
-/--
-theorem `c_eq_three_roots` / 定理 `c_eq_three_roots`
-
-English:
-theorem c_eq_three_roots
-  given: (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, z})
-  proof: by
-  injection eq_sum_three_roots ha h3
-
-中文:
-定理 c_eq_three_roots
-  条件: (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, z})
-  证明: by
-  injection eq_sum_three_roots ha h3
-
-Depends on / 依赖: eq_sum_three_roots, injection
+/-
+**Cubic.c_eq_three_roots** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：c_eq_three_roots (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, z}) : φ P.
+c = φ P.a * (x * y + x * z + y * z)
+参数：ha : P.a != 0；h3 : (map φ P).roots = {x, y, z}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Cubic.eq_sum_three_roots`：eq_sum_three_roots (ha : P.a != 0) (h3 : (map 
+φ P).roots = {x, y, z}) : map φ P = ⟨φ P.a, φ P.a * -(x + y + z), φ P.a * (x * y
+ + x * z + y *…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
-theorem c_eq_three_roots (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, z}) :
+theorem c_eq_three_roots (ha : P.a ≠ 0) (h3 : (map φ P).roots = {x, y, z}) :
     φ P.c = φ P.a * (x * y + x * z + y * z) := by
   injection eq_sum_three_roots ha h3
-
-/--
-theorem `d_eq_three_roots` / 定理 `d_eq_three_roots`
-
-English:
-theorem d_eq_three_roots
-  given: (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, z})
-  proof: by
-  injection eq_sum_three_roots ha h3
-
-中文:
-定理 d_eq_three_roots
-  条件: (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, z})
-  证明: by
-  injection eq_sum_three_roots ha h3
-
-Depends on / 依赖: eq_sum_three_roots, injection
+/-
+**Cubic.d_eq_three_roots** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：d_eq_three_roots (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, z}) : φ P.
+d = φ P.a * -(x * y * z)
+参数：ha : P.a != 0；h3 : (map φ P).roots = {x, y, z}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Cubic.eq_sum_three_roots`：eq_sum_three_roots (ha : P.a != 0) (h3 : (map 
+φ P).roots = {x, y, z}) : map φ P = ⟨φ P.a, φ P.a * -(x + y + z), φ P.a * (x * y
+ + x * z + y *…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
-theorem d_eq_three_roots (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, z}) :
+theorem d_eq_three_roots (ha : P.a ≠ 0) (h3 : (map φ P).roots = {x, y, z}) :
     φ P.d = φ P.a * -(x * y * z) := by
   injection eq_sum_three_roots ha h3
 
@@ -2119,136 +1685,187 @@ end Split
 
 section Discriminant
 
-/--
-Definition of `discr` / `discr` 的定义
+/-- The discriminant of a cubic polynomial. -/
+/-
+**Cubic.discr** 是 Mathlib 中的一个定义，位于命名空间 `Cubic`。
+形式化陈述：discr {R : Type*} [Ring R] (P : Cubic R) : R
+参数：P : Cubic R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition discr
-  signature: {R : Type*} [Ring R] (P : Cubic R)
-  body: P.b ^ 2 * P.c ^ 2 - 4 * P.a * P.c ^ 3 - 4 * P.b ^ 3 * P.d - 27 * P.a ^ 2 * P.d ^ 2 +
-    18 * P.a * P.b * P.c * P.d
-
-中文:
-定义 discr
-  签名: {R : 类型} [环 R] (P : 三次 R)
-  定义体: P.b ^ 2 * P.c ^ 2 - 4 * P.a * P.c ^ 3 - 4 * P.b ^ 3 * P.d - 27 * P.a ^ 2 * P.d ^ 2 +
-    18 * P.a * P.b * P.c * P.d
+--- 原说明 ---
+The discriminant of a cubic polynomial.
 -/
 def discr {R : Type*} [Ring R] (P : Cubic R) : R :=
   P.b ^ 2 * P.c ^ 2 - 4 * P.a * P.c ^ 3 - 4 * P.b ^ 3 * P.d - 27 * P.a ^ 2 * P.d ^ 2 +
     18 * P.a * P.b * P.c * P.d
-
-/--
-theorem `discr_eq_prod_three_roots` / 定理 `discr_eq_prod_three_roots`
-
-English:
-theorem discr_eq_prod_three_roots
-  given: (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, z})
-  proof: by
-  simp only [discr, RingHom.map_add, map_sub, map_mul, map_pow, map_ofNat]
-  rw [b_eq_three_roots ha h3]; rw [c_eq_three_roots ha h3]; rw [d_eq_three_roots ha h3]
-  ring1
-
-中文:
-定理 discr_eq_prod_three_roots
-  条件: (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, z})
-  证明: by
-  simp only [discr, RingHom.map_add, map_sub, map_mul, map_pow, map_ofNat]
-  rw [b_eq_three_roots ha h3]; rw [c_eq_three_roots ha h3]; rw [d_eq_three_roots ha h3]
-  ring1
-
-Depends on / 依赖: RingHom, RingHom.map_add, b_eq_three_roots, c_eq_three_roots, d_eq_three_roots, map_add, map_mul, map_ofNat, map_pow, map_sub
+/-
+**Cubic.discr_eq_prod_three_roots** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：discr_eq_prod_three_roots (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, z
+}) : φ P.discr = (φ P.a * φ P.a * (x - y) * (x - z) * (y - z)) ^ 2
+参数：ha : P.a != 0；h3 : (map φ P).roots = {x, y, z}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `RingHom.map_add`：∀ {α : Type u_2} {β : Type u_3} {x : NonAssocSemiring α
+} {x_1 : NonAssocSemiring β} (f : α →+* β) (a b : α),   f (a + b) = f a + f b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `map_ofNat`：map_ofNat [FunLike F R S] [RingHomClass F R S] (f : F) (n : N
+at) [Nat.AtLeastTwo n] : (f ofNat(n) : S) = OfNat.ofNat n
+· 使用定理 `Cubic.b_eq_three_roots`：b_eq_three_roots (ha : P.a != 0) (h3 : (map φ P)
+.roots = {x, y, z}) : φ P.b = φ P.a * -(x + y + z)
+· 使用定理 `Cubic.c_eq_three_roots`：c_eq_three_roots (ha : P.a != 0) (h3 : (map φ P)
+.roots = {x, y, z}) : φ P.c = φ P.a * (x * y + x * z + y * z)
+· 使用定理 `Cubic.d_eq_three_roots`：d_eq_three_roots (ha : P.a != 0) (h3 : (map φ P)
+.roots = {x, y, z}) : φ P.d = φ P.a * -(x * y * z)
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.pow_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' c : R} {b b' : ℕ}, a = a' → b = b' → a' ^ b' = c → a ^ b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b : R}, a = a' → -a' = b → -a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_lt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a₂ b c : R} (a₁ : R), a₂ + b = c → a₁ + a₂ + b = a₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_mul`：∀ {R : Type u_2} [inst : CommRing R]
+ (a₁ : R) (a₂ : ℕ) {a₃ b : R}, -a₃ = b → -(a₁ ^ a₂ * a₃) = a₁ ^ a₂ * b
+（共 74 条，此处仅展示前 30 条）
 -/
-theorem discr_eq_prod_three_roots (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, z}) :
+theorem discr_eq_prod_three_roots (ha : P.a ≠ 0) (h3 : (map φ P).roots = {x, y, z}) :
     φ P.discr = (φ P.a * φ P.a * (x - y) * (x - z) * (y - z)) ^ 2 := by
   simp only [discr, RingHom.map_add, map_sub, map_mul, map_pow, map_ofNat]
-  rw [b_eq_three_roots ha h3]; rw [c_eq_three_roots ha h3]; rw [d_eq_three_roots ha h3]
+  rw [b_eq_three_roots ha h3, c_eq_three_roots ha h3, d_eq_three_roots ha h3]
   ring1
-
-/--
-theorem `discr_ne_zero_iff_roots_ne` / 定理 `discr_ne_zero_iff_roots_ne`
-
-English:
-theorem discr_ne_zero_iff_roots_ne
-  given: (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, z})
-  proof: by
-  rw [← map_ne_zero φ]; rw [discr_eq_prod_three_roots ha h3]; rw [pow_two]
+/-
+**Cubic.discr_ne_zero_iff_roots_ne** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：discr_ne_zero_iff_roots_ne (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, 
+z}) : P.discr != 0 ↔ x != y ∧ x != z ∧ y != z
+参数：ha : P.a != 0；h3 : (map φ P).roots = {x, y, z}。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_ne_zero`：map_ne_zero : f a != 0 ↔ a != 0
+· 使用定理 `EuclideanDomain.toNontrivial`：∀ {R : Type u} [self : EuclideanDomain R],
+ Nontrivial R
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `Cubic.discr_eq_prod_three_roots`：discr_eq_prod_three_roots (ha : P.a != 
+0) (h3 : (map φ P).roots = {x, y, z}) : φ P.discr = (φ P.a * φ P.a * (x - y) * (
+x - z) * (y - z)) ^ 2
+· 使用定理 `pow_two`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `and_iff_right`：∀ {a b : Prop}, a → (a ∧ b ↔ b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+theorem discr_ne_zero_iff_roots_ne (ha : P.a ≠ 0) (h3 : (map φ P).roots = {x, y, z}) :
+    P.discr ≠ 0 ↔ x ≠ y ∧ x ≠ z ∧ y ≠ z := by
+  rw [← map_ne_zero φ, discr_eq_prod_three_roots ha h3, pow_two]
   simp_rw [mul_ne_zero_iff, sub_ne_zero, _root_.map_ne_zero, and_self_iff, and_iff_right ha,
     and_assoc]
-
-中文:
-定理 discr_ne_zero_iff_roots_ne
-  条件: (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, z})
-  证明: by
-  rw [← map_ne_zero φ]; rw [discr_eq_prod_three_roots ha h3]; rw [pow_two]
-  simp_rw [mul_ne_zero_iff, sub_ne_zero, _root_.map_ne_zero, and_self_iff, and_iff_right ha,
-    and_assoc]
-
-Depends on / 依赖: _root_, _root_.map_ne_zero, and_assoc, and_iff_right, and_self_iff, discr_eq_prod_three_roots, map_ne_zero, mul_ne_zero_iff, pow_two, simp_rw, sub_ne_zero
+/-
+**Cubic.discr_ne_zero_iff_roots_nodup** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：discr_ne_zero_iff_roots_nodup (ha : P.a != 0) (hP : (P.toPoly.map φ).Split
+s) : P.discr != 0 ↔ (map φ P).roots.Nodup
+参数：ha : P.a != 0；hP : (P.toPoly.map φ).Splits。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Cubic.splits_iff_roots_eq_three`：splits_iff_roots_eq_three (ha : P.a != 
+0) : Splits (P.toPoly.map φ) ↔ exists x y z : K, (map φ P).roots = {x, y, z}
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cubic.discr_ne_zero_iff_roots_ne`：discr_ne_zero_iff_roots_ne (ha : P.a !
+= 0) (h3 : (map φ P).roots = {x, y, z}) : P.discr != 0 ↔ x != y ∧ x != z ∧ y != 
+z
+· 使用定理 `Multiset.nodup_cons`：nodup_cons {a : α} {s : Multiset α} : Nodup (a ::ₘ 
+s) ↔ a ∉ s ∧ Nodup s
+· 使用定理 `Multiset.mem_cons`：mem_cons {a b : α} {s : Multiset α} : a in b ::ₘ s ↔ 
+a = b ∨ a in s
+· 使用定理 `Multiset.mem_singleton`：mem_singleton {a b : α} : b in ({a} : Multiset α
+) ↔ b = a
+· 使用定理 `not_or`：∀ {p q : Prop}, ¬(p ∨ q) ↔ ¬p ∧ ¬q
 -/
-theorem discr_ne_zero_iff_roots_ne (ha : P.a != 0) (h3 : (map φ P).roots = {x, y, z}) :
-    P.discr != 0 ↔ x != y ∧ x != z ∧ y != z := by
-  rw [← map_ne_zero φ]; rw [discr_eq_prod_three_roots ha h3]; rw [pow_two]
-  simp_rw [mul_ne_zero_iff, sub_ne_zero, _root_.map_ne_zero, and_self_iff, and_iff_right ha,
-    and_assoc]
-
-/--
-theorem `discr_ne_zero_iff_roots_nodup` / 定理 `discr_ne_zero_iff_roots_nodup`
-
-English:
-theorem discr_ne_zero_iff_roots_nodup
-  given: (ha : P.a != 0) (hP : (P.toPoly.map φ).Splits)
-  proof: by
+theorem discr_ne_zero_iff_roots_nodup (ha : P.a ≠ 0) (hP : (P.toPoly.map φ).Splits) :
+    P.discr ≠ 0 ↔ (map φ P).roots.Nodup := by
   have ⟨x, y, z, h3⟩ := (splits_iff_roots_eq_three ha).mp hP
-  rw [discr_ne_zero_iff_roots_ne ha h3]; rw [h3]
+  rw [discr_ne_zero_iff_roots_ne ha h3, h3]
   change _ ↔ (x ::ₘ y ::ₘ {z}).Nodup
-  rw [nodup_cons]; rw [nodup_cons]; rw [mem_cons]; rw [mem_singleton]; rw [mem_singleton]
+  rw [nodup_cons, nodup_cons, mem_cons, mem_singleton, mem_singleton]
   simp only [nodup_singleton]
   tauto
-
-中文:
-定理 discr_ne_zero_iff_roots_nodup
-  条件: (ha : P.a != 0) (hP : (P.toPoly.map φ).Splits)
-  证明: by
-  have ⟨x, y, z, h3⟩ := (splits_iff_roots_eq_three ha).mp hP
-  rw [discr_ne_zero_iff_roots_ne ha h3]; rw [h3]
-  change _ ↔ (x ::ₘ y ::ₘ {z}).Nodup
-  rw [nodup_cons]; rw [nodup_cons]; rw [mem_cons]; rw [mem_singleton]; rw [mem_singleton]
-  simp only [nodup_singleton]
-  tauto
-
-Depends on / 依赖: discr_ne_zero_iff_roots_ne, mem_cons, mem_singleton, nodup_cons, nodup_singleton, splits_iff_roots_eq_three
+/-
+**Cubic.card_roots_of_discr_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Cubic`。
+形式化陈述：card_roots_of_discr_ne_zero [DecidableEq K] (ha : P.a != 0) (h3 : (P.toPol
+y.map φ).Splits) (hd : P.discr != 0) : (map φ P).roots.toFinset.card = 3
+参数：ha : P.a != 0；h3 : (P.toPoly.map φ).Splits；hd : P.discr != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.toFinset_card_of_nodup`：Multiset.toFinset_card_of_nodup {m : Mu
+ltiset α} (h : m.Nodup) : #m.toFinset = Multiset.card m
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Cubic.discr_ne_zero_iff_roots_nodup`：discr_ne_zero_iff_roots_nodup (ha :
+ P.a != 0) (hP : (P.toPoly.map φ).Splits) : P.discr != 0 ↔ (map φ P).roots.Nodup
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cubic.splits_iff_card_roots`：splits_iff_card_roots (ha : P.a != 0) : Spl
+its (P.toPoly.map φ) ↔ (map φ P).roots.card = 3
 -/
-theorem discr_ne_zero_iff_roots_nodup (ha : P.a != 0) (hP : (P.toPoly.map φ).Splits) :
-    P.discr != 0 ↔ (map φ P).roots.Nodup := by
-  have ⟨x, y, z, h3⟩ := (splits_iff_roots_eq_three ha).mp hP
-  rw [discr_ne_zero_iff_roots_ne ha h3]; rw [h3]
-  change _ ↔ (x ::ₘ y ::ₘ {z}).Nodup
-  rw [nodup_cons]; rw [nodup_cons]; rw [mem_cons]; rw [mem_singleton]; rw [mem_singleton]
-  simp only [nodup_singleton]
-  tauto
-
-/--
-theorem `card_roots_of_discr_ne_zero` / 定理 `card_roots_of_discr_ne_zero`
-
-English:
-theorem card_roots_of_discr_ne_zero
-  statement: [DecidableEq K] (ha : P.a != 0) (h3 : (P.toPoly.map φ).Splits)
-  proof: by
-  rwa [toFinset_card_of_nodup <| (discr_ne_zero_iff_roots_nodup ha h3).mp hd,
-    ← splits_iff_card_roots ha]
-
-中文:
-定理 card_roots_of_discr_ne_zero
-  结论: [DecidableEq K] (ha : P.a != 0) (h3 : (P.toPoly.map φ).Splits)
-  证明: by
-  rwa [toFinset_card_of_nodup <| (discr_ne_zero_iff_roots_nodup ha h3).mp hd,
-    ← splits_iff_card_roots ha]
-
-Depends on / 依赖: discr_ne_zero_iff_roots_nodup, splits_iff_card_roots, toFinset_card_of_nodup
--/
-theorem card_roots_of_discr_ne_zero [DecidableEq K] (ha : P.a != 0) (h3 : (P.toPoly.map φ).Splits)
-    (hd : P.discr != 0) : (map φ P).roots.toFinset.card = 3 := by
+theorem card_roots_of_discr_ne_zero [DecidableEq K] (ha : P.a ≠ 0) (h3 : (P.toPoly.map φ).Splits)
+    (hd : P.discr ≠ 0) : (map φ P).roots.toFinset.card = 3 := by
   rwa [toFinset_card_of_nodup <| (discr_ne_zero_iff_roots_nodup ha h3).mp hd,
     ← splits_iff_card_roots ha]
 
@@ -2257,3 +1874,4 @@ end Discriminant
 end Roots
 
 end Cubic
+

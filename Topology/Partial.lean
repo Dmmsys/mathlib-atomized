@@ -24,88 +24,66 @@ open Topology
 
 variable {X Y : Type*} [TopologicalSpace X]
 
-/--
-theorem `rtendsto_nhds` / 定理 `rtendsto_nhds`
-
-English:
-theorem rtendsto_nhds
-  given: {r : SetRel Y X} {l : Filter Y} {x : X}
-  proof: all_mem_nhds_filter _ _ (fun _s _t => id) _
-
-中文:
-定理 rtendsto_nhds
-  条件: {r : SetRel Y X} {l : 滤子 Y} {x : X}
-  证明: all_mem_nhds_filter _ _ (fun _s _t => id) _
-
-Depends on / 依赖: all_mem_nhds_filter
+/-
+**rtendsto_nhds** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：rtendsto_nhds {r : SetRel Y X} {l : Filter Y} {x : X} : RTendsto r l (𝓝 x)
+ ↔ forall s, IsOpen s -> x in s -> r.core s in l
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `all_mem_nhds_filter`：all_mem_nhds_filter (x : X) (f : Set X -> Set α) (h
+f : forall s t, s subseteq t -> f s subseteq f t) (l : Filter α) : (forall s in 
+𝓝 x, f s …
 -/
 theorem rtendsto_nhds {r : SetRel Y X} {l : Filter Y} {x : X} :
-    RTendsto r l (𝓝 x) ↔ forall s, IsOpen s -> x in s -> r.core s in l :=
+    RTendsto r l (𝓝 x) ↔ ∀ s, IsOpen s → x ∈ s → r.core s ∈ l :=
   all_mem_nhds_filter _ _ (fun _s _t => id) _
-
-/--
-theorem `rtendsto'_nhds` / 定理 `rtendsto'_nhds`
-
-English:
-theorem rtendsto'_nhds
-  given: {r : SetRel Y X} {l : Filter Y} {x : X}
-  proof: by
-  rw [rtendsto'_def]
-  apply all_mem_nhds_filter
-  apply SetRel.preimage_mono
-
-中文:
-定理 rtendsto'_nhds
-  条件: {r : SetRel Y X} {l : 滤子 Y} {x : X}
-  证明: by
-  rw [rtendsto'_def]
-  apply all_mem_nhds_filter
-  apply SetRel.preimage_mono
-
-Depends on / 依赖: SetRel, SetRel.preimage_mono, _def, all_mem_nhds_filter, preimage_mono, rtendsto
+/-
+**rtendsto'_nhds** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace X] {r : SetRel Y 
+X} {l : Filter Y} {x : X},   Filter.RTendsto' r l (nhds x) ↔ ∀ (s : Set X), IsOp
+en s → x ∈ s → r.preimage s ∈ l
+参数：nhds x；s : Set X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.rtendsto'_def`：∀ {α : Type u} {β : Type v} (r : SetRel α β) (l₁ :
+ Filter α) (l₂ : Filter β),   Filter.RTendsto' r l₁ l₂ ↔ ∀ s ∈ l₂, r.preimage s 
+∈ l₁
+· 使用定理 `all_mem_nhds_filter`：all_mem_nhds_filter (x : X) (f : Set X -> Set α) (h
+f : forall s t, s subseteq t -> f s subseteq f t) (l : Filter α) : (forall s in 
+𝓝 x, f s …
+· 使用引理 `SetRel.preimage_mono`：preimage_mono : Monotone R.preimage
 -/
 theorem rtendsto'_nhds {r : SetRel Y X} {l : Filter Y} {x : X} :
-    RTendsto' r l (𝓝 x) ↔ forall s, IsOpen s -> x in s -> r.preimage s in l := by
+    RTendsto' r l (𝓝 x) ↔ ∀ s, IsOpen s → x ∈ s → r.preimage s ∈ l := by
   rw [rtendsto'_def]
   apply all_mem_nhds_filter
   apply SetRel.preimage_mono
-
-/--
-theorem `ptendsto_nhds` / 定理 `ptendsto_nhds`
-
-English:
-theorem ptendsto_nhds
-  given: {f : Y ->. X} {l : Filter Y} {x : X}
-  proof: rtendsto_nhds
-
-中文:
-定理 ptendsto_nhds
-  条件: {f : Y ->. X} {l : 滤子 Y} {x : X}
-  证明: rtendsto_nhds
-
-Depends on / 依赖: rtendsto_nhds
+/-
+**ptendsto_nhds** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ptendsto_nhds {f : Y ->. X} {l : Filter Y} {x : X} : PTendsto f l (𝓝 x) ↔ 
+forall s, IsOpen s -> x in s -> f.core s in l
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `rtendsto_nhds`：rtendsto_nhds {r : SetRel Y X} {l : Filter Y} {x : X} : R
+Tendsto r l (𝓝 x) ↔ forall s, IsOpen s -> x in s -> r.core s in l
 -/
-theorem ptendsto_nhds {f : Y ->. X} {l : Filter Y} {x : X} :
-    PTendsto f l (𝓝 x) ↔ forall s, IsOpen s -> x in s -> f.core s in l :=
+theorem ptendsto_nhds {f : Y →. X} {l : Filter Y} {x : X} :
+    PTendsto f l (𝓝 x) ↔ ∀ s, IsOpen s → x ∈ s → f.core s ∈ l :=
   rtendsto_nhds
-
-/--
-theorem `ptendsto'_nhds` / 定理 `ptendsto'_nhds`
-
-English:
-theorem ptendsto'_nhds
-  given: {f : Y ->. X} {l : Filter Y} {x : X}
-  proof: rtendsto'_nhds
-
-中文:
-定理 ptendsto'_nhds
-  条件: {f : Y ->. X} {l : 滤子 Y} {x : X}
-  证明: rtendsto'_nhds
-
-Depends on / 依赖: _nhds, rtendsto
+/-
+**ptendsto'_nhds** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace X] {f : Y →. X} {
+l : Filter Y} {x : X},   Filter.PTendsto' f l (nhds x) ↔ ∀ (s : Set X), IsOpen s
+ → x ∈ s → f.preimage s ∈ l
+参数：nhds x；s : Set X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `rtendsto'_nhds`：∀ {X : Type u_1} {Y : Type u_2} [inst : TopologicalSpace
+ X] {r : SetRel Y X} {l : Filter Y} {x : X},   Filter.RTendsto' r l (nhds x) ↔ ∀
+ (s …
 -/
-theorem ptendsto'_nhds {f : Y ->. X} {l : Filter Y} {x : X} :
-    PTendsto' f l (𝓝 x) ↔ forall s, IsOpen s -> x in s -> f.preimage s in l :=
+theorem ptendsto'_nhds {f : Y →. X} {l : Filter Y} {x : X} :
+    PTendsto' f l (𝓝 x) ↔ ∀ s, IsOpen s → x ∈ s → f.preimage s ∈ l :=
   rtendsto'_nhds
 
 /-! ### Continuity and partial functions -/
@@ -113,53 +91,60 @@ theorem ptendsto'_nhds {f : Y ->. X} {l : Filter Y} {x : X} :
 
 variable [TopologicalSpace Y]
 
-/--
-Definition of `PContinuous` / `PContinuous` 的定义
+/-- Continuity of a partial function -/
+/-
+**PContinuous** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：PContinuous (f : X ->. Y)
+参数：f : X ->. Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition PContinuous
-  signature: (f : X ->. Y)
-  body: forall s, IsOpen s -> IsOpen (f.preimage s)
-
-中文:
-定义 PContinuous
-  签名: (f : X ->. Y)
-  定义体: forall s, IsOpen s -> IsOpen (f.preimage s)
-
-Depends on / 依赖: IsOpen, f.preimage, preimage
+--- 原说明 ---
+Continuity of a partial function
 -/
-def PContinuous (f : X ->. Y) :=
-  forall s, IsOpen s -> IsOpen (f.preimage s)
-
-/--
-theorem `open_dom_of_pcontinuous` / 定理 `open_dom_of_pcontinuous`
-
-English:
-theorem open_dom_of_pcontinuous
-  given: {f : X ->. Y} (h : PContinuous f)
-  statement: IsOpen f.Dom
-  proof: by
-  rw [← PFun.preimage_univ]; exact h _ isOpen_univ
-
-中文:
-定理 open_dom_of_pcontinuous
-  条件: {f : X ->. Y} (h : PContinuous f)
-  结论: 是开集 f.Dom
-  证明: by
-  rw [← PFun.preimage_univ]; exact h _ isOpen_univ
-
-Depends on / 依赖: PFun.preimage_univ, isOpen_univ, preimage_univ
+def PContinuous (f : X →. Y) :=
+  ∀ s, IsOpen s → IsOpen (f.preimage s)
+/-
+**open_dom_of_pcontinuous** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：open_dom_of_pcontinuous {f : X ->. Y} (h : PContinuous f) : IsOpen f.Dom
+参数：h : PContinuous f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `PFun.preimage_univ`：preimage_univ : f.preimage Set.univ = f.Dom
+· 使用定理 `isOpen_univ`：∀ {X : Type u} [inst : TopologicalSpace X], IsOpen Set.univ
 -/
-theorem open_dom_of_pcontinuous {f : X ->. Y} (h : PContinuous f) : IsOpen f.Dom := by
+theorem open_dom_of_pcontinuous {f : X →. Y} (h : PContinuous f) : IsOpen f.Dom := by
   rw [← PFun.preimage_univ]; exact h _ isOpen_univ
-
-/--
-theorem `pcontinuous_iff'` / 定理 `pcontinuous_iff'`
-
-English:
-theorem pcontinuous_iff'
-  given: {f : X ->. Y}
-  proof: by
+/-
+**pcontinuous_iff'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：pcontinuous_iff' {f : X ->. Y} : PContinuous f ↔ forall {x y} (_ : y in f 
+x), PTendsto' f (𝓝 x) (𝓝 y)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `PFun.preimage_mono`：preimage_mono {s t : Set β} (h : s subseteq t) : f.p
+reimage s subseteq f.preimage t
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isOpen_iff_nhds`：isOpen_iff_nhds : IsOpen s ↔ forall x in s, 𝓝 x <= 𝓟 s
+· 使用定理 `Filter.mem_principal`：∀ {α : Type u_1} {s t : Set α}, s ∈ Filter.princip
+al t ↔ t ⊆ s
+· 使用定理 `Filter.mem_of_superset._gcongr_1`：∀ {α : Type u_1} {f : Filter α} {x y :
+ Set α}, x ⊆ y → x ∈ f → y ∈ f
+· 使用定理 `Filter.ptendsto'_def`：∀ {α : Type u} {β : Type v} (f : α →. β) (l₁ : Fil
+ter α) (l₂ : Filter β),   Filter.PTendsto' f l₁ l₂ ↔ ∀ s ∈ l₂, f.preimage s ∈ l₁
+· 使用定理 `mem_nhds_iff`：mem_nhds_iff : s in 𝓝 x ↔ exists t subseteq s, IsOpen t ∧ 
+x in t
+· 使用定理 `Set.Subset.refl`：∀ {α : Type u} (a : Set α), a ⊆ a
+-/
+theorem pcontinuous_iff' {f : X →. Y} :
+    PContinuous f ↔ ∀ {x y} (_ : y ∈ f x), PTendsto' f (𝓝 x) (𝓝 y) := by
   constructor
   · intro h x y h'
     simp only [ptendsto'_def, mem_nhds_iff]
@@ -169,83 +154,28 @@ theorem pcontinuous_iff'
   rw [isOpen_iff_nhds]
   rintro x ⟨y, ys, fxy⟩ t
   rw [mem_principal]
-  intro (h : f.preimage s subseteq t)
+  intro (h : f.preimage s ⊆ t)
   grw [← h]
-  have h' : forall s in 𝓝 y, f.preimage s in 𝓝 x := by
+  have h' : ∀ s ∈ 𝓝 y, f.preimage s ∈ 𝓝 x := by
     intro s hs
     have : PTendsto' f (𝓝 x) (𝓝 y) := hf fxy
     rw [ptendsto'_def] at this
     exact this s hs
-  change f.preimage s in 𝓝 x
+  change f.preimage s ∈ 𝓝 x
   apply h'
   rw [mem_nhds_iff]
   exact ⟨s, Set.Subset.refl _, os, ys⟩
-
-中文:
-定理 pcontinuous_iff'
-  条件: {f : X ->. Y}
-  证明: by
-  constructor
-  · intro h x y h'
-    simp only [ptendsto'_def, mem_nhds_iff]
-    rintro s ⟨t, tsubs, opent, yt⟩
-    exact ⟨f.preimage t, PFun.preimage_mono _ tsubs, h _ opent, ⟨y, yt, h'⟩⟩
-  intro hf s os
-  rw [isOpen_iff_nhds]
-  rintro x ⟨y, ys, fxy⟩ t
-  rw [mem_principal]
-  intro (h : f.preimage s subseteq t)
-  grw [← h]
-  have h' : forall s in 𝓝 y, f.preimage s in 𝓝 x := by
-    intro s hs
-    have : PTendsto' f (𝓝 x) (𝓝 y) := hf fxy
-    rw [ptendsto'_def] at this
-    exact this s hs
-  change f.preimage s in 𝓝 x
-  apply h'
-  rw [mem_nhds_iff]
-  exact ⟨s, Set.Subset.refl _, os, ys⟩
-
-Depends on / 依赖: PFun.preimage_mono, PTendsto, _def, f.preimage, isOpen_iff_nhds, mem_nhds_iff, mem_principal, preimage, preimage_mono, ptendsto, subseteq
+/-
+**continuousWithinAt_iff_ptendsto_res** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuousWithinAt_iff_ptendsto_res (f : X -> Y) {x : X} {s : Set X} : Con
+tinuousWithinAt f s x ↔ PTendsto (PFun.res f s) (𝓝 x) (𝓝 (f x))
+参数：f : X -> Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.tendsto_iff_ptendsto`：tendsto_iff_ptendsto (l₁ : Filter α) (l₂ : 
+Filter β) (s : Set α) (f : α -> β) : Tendsto f (l₁ ⊓ 𝓟 s) l₂ ↔ PTendsto (PFun.re
+s f s) l₁ l₂
 -/
-theorem pcontinuous_iff' {f : X ->. Y} :
-    PContinuous f ↔ forall {x y} (_ : y in f x), PTendsto' f (𝓝 x) (𝓝 y) := by
-  constructor
-  · intro h x y h'
-    simp only [ptendsto'_def, mem_nhds_iff]
-    rintro s ⟨t, tsubs, opent, yt⟩
-    exact ⟨f.preimage t, PFun.preimage_mono _ tsubs, h _ opent, ⟨y, yt, h'⟩⟩
-  intro hf s os
-  rw [isOpen_iff_nhds]
-  rintro x ⟨y, ys, fxy⟩ t
-  rw [mem_principal]
-  intro (h : f.preimage s subseteq t)
-  grw [← h]
-  have h' : forall s in 𝓝 y, f.preimage s in 𝓝 x := by
-    intro s hs
-    have : PTendsto' f (𝓝 x) (𝓝 y) := hf fxy
-    rw [ptendsto'_def] at this
-    exact this s hs
-  change f.preimage s in 𝓝 x
-  apply h'
-  rw [mem_nhds_iff]
-  exact ⟨s, Set.Subset.refl _, os, ys⟩
-
-/--
-theorem `continuousWithinAt_iff_ptendsto_res` / 定理 `continuousWithinAt_iff_ptendsto_res`
-
-English:
-theorem continuousWithinAt_iff_ptendsto_res
-  given: (f : X -> Y) {x : X} {s : Set X}
-  proof: tendsto_iff_ptendsto _ _ _ _
-
-中文:
-定理 continuousWithinAt_iff_ptendsto_res
-  条件: (f : X -> Y) {x : X} {s : 集合 X}
-  证明: tendsto_iff_ptendsto _ _ _ _
-
-Depends on / 依赖: tendsto_iff_ptendsto
--/
-theorem continuousWithinAt_iff_ptendsto_res (f : X -> Y) {x : X} {s : Set X} :
+theorem continuousWithinAt_iff_ptendsto_res (f : X → Y) {x : X} {s : Set X} :
     ContinuousWithinAt f s x ↔ PTendsto (PFun.res f s) (𝓝 x) (𝓝 (f x)) :=
   tendsto_iff_ptendsto _ _ _ _

@@ -63,351 +63,250 @@ open ULift CategoryTheory MulOpposite
 
 namespace Monoid
 
-variable {m : Type u -> Type u} [Monad m]
+variable {m : Type u → Type u} [Monad m]
 variable {α β : Type u}
 
-/--
-Definition of `Foldl` / `Foldl` 的定义
+/-- For a list, foldl f x [y₀,y₁] reduces as follows:
 
-English:
-abbreviation Foldl
-  signature: (α : Type u)
-  body: (End α)ᵐᵒᵖ
+```
+calc  foldl f x [y₀,y₁]
+    = foldl f (f x y₀) [y₁]      : rfl
+... = foldl f (f (f x y₀) y₁) [] : rfl
+... = f (f x y₀) y₁              : rfl
+```
+with
+```
+f : α → β → α
+x : α
+[y₀,y₁] : List β
+```
 
-中文:
-缩写 Foldl
-  签名: (α : 类型u)
-  定义体: (End α)ᵐᵒᵖ
+We can view the above as a composition of functions:
+```
+... = f (f x y₀) y₁              : rfl
+... = flip f y₁ (flip f y₀ x)    : rfl
+... = (flip f y₁ ∘ flip f y₀) x  : rfl
+```
+
+We can use traverse and const to construct this composition:
+```
+calc   const.run (traverse (fun y ↦ const.mk' (flip f y)) [y₀,y₁]) x
+     = const.run ((::) <$> const.mk' (flip f y₀) <*>
+         traverse (fun y ↦ const.mk' (flip f y)) [y₁]) x
+...  = const.run ((::) <$> const.mk' (flip f y₀) <*>
+         ( (::) <$> const.mk' (flip f y₁) <*> traverse (fun y ↦ const.mk' (flip f y)) [] )) x
+...  = const.run ((::) <$> const.mk' (flip f y₀) <*>
+         ( (::) <$> const.mk' (flip f y₁) <*> pure [] )) x
+...  = const.run ( ((::) <$> const.mk' (flip f y₁) <*> pure []) ∘
+         ((::) <$> const.mk' (flip f y₀)) ) x
+...  = const.run ( const.mk' (flip f y₁) ∘ const.mk' (flip f y₀) ) x
+...  = const.run ( flip f y₁ ∘ flip f y₀ ) x
+...  = f (f x y₀) y₁
+```
+
+And this is how `const` turns a monoid into an applicative functor and
+how the monoid of endofunctions define `Foldl`.
+-/
+/-
+**Monoid.Foldl** 是 Mathlib 中的一个缩写定义，位于命名空间 `Monoid`。
+形式化陈述：Foldl (α : Type u) : Type u
+参数：α : Type u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+For a list, foldl f x [y₀,y₁] reduces as follows:
+
+```
+calc  foldl f x [y₀,y₁]
+    = foldl f (f x y₀) [y₁]      : rfl
+... = foldl f (f (f x y₀) y₁) [] : rfl
+... = f (f x y₀) y₁              : rfl
+```
+with
+```
+f : α → β → α
+x : α
+[y₀,y₁] : List β
+```
+
+We can view the above as a composition of functions:
+```
+... = f (f x y₀) y₁              : rfl
+... = flip f y₁ (flip f y₀ x)    : rfl
+... = (flip f y₁ ∘ flip f y₀) x  : rfl
+```
+
+We can use traverse and const to construct this composition:
+```
+calc   const.run (traverse (fun y ↦ const.mk' (flip f y)) [y₀,y₁]) x
+     = const.run ((::) <$> const.mk' (flip f y₀) <*>
+         traverse (fun y ↦ const.mk' (flip f y)) [y₁]) x
+...  = const.run ((::) <$> const.mk' (flip f y₀) <*>
+         ( (::) <$> const.mk' (flip f y₁) <*> traverse (fun y ↦ const.mk' (flip 
+f y)) [] )) x
+...  = const.run ((::) <$> const.mk' (flip f y₀) <*>
+         ( (::) <$> const.mk' (flip f y₁) <*> pure [] )) x
+...  = const.run ( ((::) <$> const.mk' (flip f y₁) <*> pure []) ∘
+         ((::) <$> const.mk' (flip f y₀)) ) x
+...  = const.run ( const.mk' (flip f y₁) ∘ const.mk' (flip f y₀) ) x
+...  = const.run ( flip f y₁ ∘ flip f y₀ ) x
+...  = f (f x y₀) y₁
+```
+
+And this is how `const` turns a monoid into an applicative functor and
+how the monoid of endofunctions define `Foldl`.
 -/
 abbrev Foldl (α : Type u) : Type u :=
   (End α)ᵐᵒᵖ
-
-/--
-Definition of `Foldl.mk` / `Foldl.mk` 的定义
-
-English:
-definition Foldl.mk
-  signature: (f : α -> α)
-  body: op (↾f)
-
-中文:
-定义 Foldl.mk
-  签名: (f : α -> α)
-  定义体: op (↾f)
+/-
+**Monoid.Foldl.mk** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.Foldl`。
+形式化陈述：{α : Type u} → (α → α) → Monoid.Foldl α
+参数：α → α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def Foldl.mk (f : α -> α) : Foldl α :=
+def Foldl.mk (f : α → α) : Foldl α :=
   op (↾f)
-
-/--
-Definition of `Foldl.get` / `Foldl.get` 的定义
-
-English:
-definition Foldl.get
-  signature: (x : Foldl α)
-  body: ConcreteCategory.hom (unop x)
-
-@[simps]
-
-中文:
-定义 Foldl.get
-  签名: (x : Foldl α)
-  定义体: ConcreteCategory.hom (unop x)
-
-@[simps]
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom
+/-
+**Monoid.Foldl.get** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.Foldl`。
+形式化陈述：{α : Type u} → Monoid.Foldl α → α → α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def Foldl.get (x : Foldl α) : α -> α :=
+def Foldl.get (x : Foldl α) : α → α :=
   ConcreteCategory.hom (unop x)
 
 @[simps]
-/--
-Definition of `Foldl.ofFreeMonoid` / `Foldl.ofFreeMonoid` 的定义
-
-English:
-definition Foldl.ofFreeMonoid
-  signature: (f : β -> α -> β)
-  body: op ↾(flip (List.foldl f) (FreeMonoid.toList xs))
-  map_one' := rfl
-  map_mul' := by
-    intros
-    simp only [FreeMonoid.toList_mul, List.foldl_append, Function.flip_def]
-    rfl
-
-中文:
-定义 Foldl.ofFreeMonoid
-  签名: (f : β -> α -> β)
-  定义体: op ↾(flip (List.foldl f) (FreeMonoid.toList xs))
-  map_one' := rfl
-  map_mul' := by
-    intros
-    simp only [FreeMonoid.toList_mul, List.foldl_append, Function.flip_def]
-    rfl
-
-Depends on / 依赖: FreeMonoid, FreeMonoid.toList, List.foldl, toList
+/-
+**Monoid.Foldl.ofFreeMonoid** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.Foldl`。
+形式化陈述：{α β : Type u} → (β → α → β) → FreeMonoid α →* Monoid.Foldl β
+参数：β → α → β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def Foldl.ofFreeMonoid (f : β -> α -> β) : FreeMonoid α ->* Monoid.Foldl β where
-toFun xs := op ↾(flip (List.foldl f) (FreeMonoid.toList xs))
+def Foldl.ofFreeMonoid (f : β → α → β) : FreeMonoid α →* Monoid.Foldl β where
+  toFun xs := op <| ↾(flip (List.foldl f) (FreeMonoid.toList xs))
   map_one' := rfl
   map_mul' := by
     intros
     simp only [FreeMonoid.toList_mul, List.foldl_append, Function.flip_def]
     rfl
-
-/--
-Definition of `Foldr` / `Foldr` 的定义
-
-English:
-abbreviation Foldr
-  signature: (α : Type u)
-  body: End α
-
-中文:
-缩写 Foldr
-  签名: (α : 类型u)
-  定义体: End α
+/-
+**Monoid.Foldr** 是 Mathlib 中的一个缩写定义，位于命名空间 `Monoid`。
+形式化陈述：Foldr (α : Type u) : Type u
+参数：α : Type u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev Foldr (α : Type u) : Type u :=
   End α
-
-/--
-Definition of `Foldr.mk` / `Foldr.mk` 的定义
-
-English:
-definition Foldr.mk
-  signature: (f : α -> α)
-  body: ↾f
-
-中文:
-定义 Foldr.mk
-  签名: (f : α -> α)
-  定义体: ↾f
+/-
+**Monoid.Foldr.mk** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.Foldr`。
+形式化陈述：{α : Type u} → (α → α) → Monoid.Foldr α
+参数：α → α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def Foldr.mk (f : α -> α) : Foldr α :=
+def Foldr.mk (f : α → α) : Foldr α :=
   ↾f
-
-/--
-Definition of `Foldr.get` / `Foldr.get` 的定义
-
-English:
-definition Foldr.get
-  signature: (x : Foldr α)
-  body: ConcreteCategory.hom x
-
-@[simps]
-
-中文:
-定义 Foldr.get
-  签名: (x : Foldr α)
-  定义体: ConcreteCategory.hom x
-
-@[simps]
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom
+/-
+**Monoid.Foldr.get** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.Foldr`。
+形式化陈述：{α : Type u} → Monoid.Foldr α → α → α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def Foldr.get (x : Foldr α) : α -> α :=
+def Foldr.get (x : Foldr α) : α → α :=
   ConcreteCategory.hom x
 
 @[simps]
-/--
-Definition of `Foldr.ofFreeMonoid` / `Foldr.ofFreeMonoid` 的定义
-
-English:
-definition Foldr.ofFreeMonoid
-  signature: (f : α -> β -> β)
-  body: ↾(flip (List.foldr f) (FreeMonoid.toList xs))
-  map_one' := rfl
-  map_mul' _ _ := by
-    apply ConcreteCategory.ext
-    ext
-    apply List.foldr_append
-
-中文:
-定义 Foldr.ofFreeMonoid
-  签名: (f : α -> β -> β)
-  定义体: ↾(flip (List.foldr f) (FreeMonoid.toList xs))
-  map_one' := rfl
-  map_mul' _ _ := by
-    apply ConcreteCategory.ext
-    ext
-    apply List.foldr_append
-
-Depends on / 依赖: FreeMonoid, FreeMonoid.toList, List.foldr, toList
+/-
+**Monoid.Foldr.ofFreeMonoid** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.Foldr`。
+形式化陈述：{α β : Type u} → (α → β → β) → FreeMonoid α →* Monoid.Foldr β
+参数：α → β → β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def Foldr.ofFreeMonoid (f : α -> β -> β) : FreeMonoid α ->* Monoid.Foldr β where
+def Foldr.ofFreeMonoid (f : α → β → β) : FreeMonoid α →* Monoid.Foldr β where
   toFun xs := ↾(flip (List.foldr f) (FreeMonoid.toList xs))
   map_one' := rfl
   map_mul' _ _ := by
     apply ConcreteCategory.ext
     ext
     apply List.foldr_append
-
-/--
-Definition of `foldlM` / `foldlM` 的定义
-
-English:
-abbreviation foldlM
-  signature: (m : Type u -> Type u) [Monad m] (α : Type u)
-  body: MulOpposite End KleisliCat.mk m α
-
-中文:
-缩写 foldlM
-  签名: (m : 类型u -> 类型u) [单子 m] (α : 类型u)
-  定义体: MulOpposite End KleisliCat.mk m α
-
-Depends on / 依赖: KleisliCat, KleisliCat.mk, MulOpposite
+/-
+**Monoid.foldlM** 是 Mathlib 中的一个缩写定义，位于命名空间 `Monoid`。
+形式化陈述：foldlM (m : Type u -> Type u) [Monad m] (α : Type u) : Type u
+参数：m : Type u -> Type u；α : Type u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-abbrev foldlM (m : Type u -> Type u) [Monad m] (α : Type u) : Type u :=
-MulOpposite End KleisliCat.mk m α
-
-/--
-Definition of `foldlM.mk` / `foldlM.mk` 的定义
-
-English:
-definition foldlM.mk
-  signature: (f : α -> m α)
-  body: op f
-
-中文:
-定义 foldlM.mk
-  签名: (f : α -> m α)
-  定义体: op f
+abbrev foldlM (m : Type u → Type u) [Monad m] (α : Type u) : Type u :=
+  MulOpposite <| End <| KleisliCat.mk m α
+/-
+**Monoid.foldlM.mk** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.foldlM`。
+形式化陈述：{m : Type u → Type u} → [inst : Monad m] → {α : Type u} → (α → m α) → Mono
+id.foldlM m α
+参数：α → m α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def foldlM.mk (f : α -> m α) : foldlM m α :=
+def foldlM.mk (f : α → m α) : foldlM m α :=
   op f
-
-/--
-Definition of `foldlM.get` / `foldlM.get` 的定义
-
-English:
-definition foldlM.get
-  signature: (x : foldlM m α)
-  body: unop x
-
-@[simps]
-
-中文:
-定义 foldlM.get
-  签名: (x : foldlM m α)
-  定义体: unop x
-
-@[simps]
+/-
+**Monoid.foldlM.get** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.foldlM`。
+形式化陈述：{m : Type u → Type u} → [inst : Monad m] → {α : Type u} → Monoid.foldlM m 
+α → α → m α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def foldlM.get (x : foldlM m α) : α -> m α :=
+def foldlM.get (x : foldlM m α) : α → m α :=
   unop x
 
 @[simps]
-/--
-Definition of `foldlM.ofFreeMonoid` / `foldlM.ofFreeMonoid` 的定义
-
-English:
-definition foldlM.ofFreeMonoid
-  signature: [LawfulMonad m] (f : β -> α -> m β)
-  body: op flip (List.foldlM f) (FreeMonoid.toList xs)
+/-
+**Monoid.foldlM.ofFreeMonoid** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.foldlM`。
+形式化陈述：{m : Type u → Type u} →   [inst : Monad m] → {α β : Type u} → [inst_1 : La
+wfulMonad m] → (β → α → m β) → FreeMonoid α →* Monoid.foldlM m β
+参数：β → α → m β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+def foldlM.ofFreeMonoid [LawfulMonad m] (f : β → α → m β) : FreeMonoid α →* Monoid.foldlM m β where
+  toFun xs := op <| flip (List.foldlM f) (FreeMonoid.toList xs)
   map_one' := rfl
   map_mul' := by
     intros
     apply unop_injective
     funext
     apply List.foldlM_append
-
-中文:
-定义 foldlM.ofFreeMonoid
-  签名: [合法单子 m] (f : β -> α -> m β)
-  定义体: op flip (List.foldlM f) (FreeMonoid.toList xs)
-  map_one' := rfl
-  map_mul' := by
-    intros
-    apply unop_injective
-    funext
-    apply List.foldlM_append
-
-Depends on / 依赖: FreeMonoid, FreeMonoid.toList, List.foldlM, foldlM, toList
+/-
+**Monoid.foldrM** 是 Mathlib 中的一个缩写定义，位于命名空间 `Monoid`。
+形式化陈述：foldrM (m : Type u -> Type u) [Monad m] (α : Type u) : Type u
+参数：m : Type u -> Type u；α : Type u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def foldlM.ofFreeMonoid [LawfulMonad m] (f : β -> α -> m β) : FreeMonoid α ->* Monoid.foldlM m β where
-toFun xs := op flip (List.foldlM f) (FreeMonoid.toList xs)
-  map_one' := rfl
-  map_mul' := by
-    intros
-    apply unop_injective
-    funext
-    apply List.foldlM_append
-
-/--
-Definition of `foldrM` / `foldrM` 的定义
-
-English:
-abbreviation foldrM
-  signature: (m : Type u -> Type u) [Monad m] (α : Type u)
-  body: End KleisliCat.mk m α
-
-中文:
-缩写 foldrM
-  签名: (m : 类型u -> 类型u) [单子 m] (α : 类型u)
-  定义体: End KleisliCat.mk m α
-
-Depends on / 依赖: KleisliCat, KleisliCat.mk
+abbrev foldrM (m : Type u → Type u) [Monad m] (α : Type u) : Type u :=
+  End <| KleisliCat.mk m α
+/-
+**Monoid.foldrM.mk** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.foldrM`。
+形式化陈述：{m : Type u → Type u} → [inst : Monad m] → {α : Type u} → (α → m α) → Mono
+id.foldrM m α
+参数：α → m α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-abbrev foldrM (m : Type u -> Type u) [Monad m] (α : Type u) : Type u :=
-End KleisliCat.mk m α
-
-/--
-Definition of `foldrM.mk` / `foldrM.mk` 的定义
-
-English:
-definition foldrM.mk
-  signature: (f : α -> m α)
-  body: f
-
-中文:
-定义 foldrM.mk
-  签名: (f : α -> m α)
-  定义体: f
--/
-def foldrM.mk (f : α -> m α) : foldrM m α :=
+def foldrM.mk (f : α → m α) : foldrM m α :=
   f
-
-/--
-Definition of `foldrM.get` / `foldrM.get` 的定义
-
-English:
-definition foldrM.get
-  signature: (x : foldrM m α)
-  body: x
-
-@[simps]
-
-中文:
-定义 foldrM.get
-  签名: (x : foldrM m α)
-  定义体: x
-
-@[simps]
+/-
+**Monoid.foldrM.get** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.foldrM`。
+形式化陈述：{m : Type u → Type u} → [inst : Monad m] → {α : Type u} → Monoid.foldrM m 
+α → α → m α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def foldrM.get (x : foldrM m α) : α -> m α :=
+def foldrM.get (x : foldrM m α) : α → m α :=
   x
 
 @[simps]
-/--
-Definition of `foldrM.ofFreeMonoid` / `foldrM.ofFreeMonoid` 的定义
-
-English:
-definition foldrM.ofFreeMonoid
-  signature: [LawfulMonad m] (f : α -> β -> m β)
-  body: flip (List.foldrM f) (FreeMonoid.toList xs)
-  map_one' := rfl
-  map_mul' := by intros; funext; apply List.foldrM_append
-
-中文:
-定义 foldrM.ofFreeMonoid
-  签名: [合法单子 m] (f : α -> β -> m β)
-  定义体: flip (List.foldrM f) (FreeMonoid.toList xs)
-  map_one' := rfl
-  map_mul' := by intros; funext; apply List.foldrM_append
-
-Depends on / 依赖: FreeMonoid, FreeMonoid.toList, List.foldrM, foldrM, toList
+/-
+**Monoid.foldrM.ofFreeMonoid** 是 Mathlib 中的一个定义，位于命名空间 `Monoid.foldrM`。
+形式化陈述：{m : Type u → Type u} →   [inst : Monad m] → {α β : Type u} → [inst_1 : La
+wfulMonad m] → (α → β → m β) → FreeMonoid α →* Monoid.foldrM m β
+参数：α → β → m β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def foldrM.ofFreeMonoid [LawfulMonad m] (f : α -> β -> m β) : FreeMonoid α ->* Monoid.foldrM m β where
+def foldrM.ofFreeMonoid [LawfulMonad m] (f : α → β → m β) : FreeMonoid α →* Monoid.foldrM m β where
   toFun xs := flip (List.foldrM f) (FreeMonoid.toList xs)
   map_one' := rfl
   map_mul' := by intros; funext; apply List.foldrM_append
@@ -420,134 +319,106 @@ open Monoid Functor
 
 section Defs
 
-variable {α β : Type u} {t : Type u -> Type u} [Traversable t]
+variable {α β : Type u} {t : Type u → Type u} [Traversable t]
 
-/--
-Definition of `foldMap` / `foldMap` 的定义
-
-English:
-definition foldMap
-  signature: {α ω} [One ω] [Mul ω] (f : α -> ω)
-  body: traverse (Const.mk' ∘ f)
-
-中文:
-定义 foldMap
-  签名: {α ω} [幺 ω] [乘法 ω] (f : α -> ω)
-  定义体: traverse (Const.mk' ∘ f)
-
-Depends on / 依赖: Const.mk, traverse
+/-
+**Traversable.foldMap** 是 Mathlib 中的一个定义，位于命名空间 `Traversable`。
+形式化陈述：foldMap {α ω} [One ω] [Mul ω] (f : α -> ω) : t α -> ω
+参数：f : α -> ω。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def foldMap {α ω} [One ω] [Mul ω] (f : α -> ω) : t α -> ω :=
+def foldMap {α ω} [One ω] [Mul ω] (f : α → ω) : t α → ω :=
   traverse (Const.mk' ∘ f)
-
-/--
-Definition of `foldl` / `foldl` 的定义
-
-English:
-definition foldl
-  signature: (f : α -> β -> α) (x : α) (xs : t β)
-  body: (foldMap (Foldl.mk ∘ flip f) xs).get x
-
-中文:
-定义 foldl
-  签名: (f : α -> β -> α) (x : α) (xs : t β)
-  定义体: (foldMap (Foldl.mk ∘ flip f) xs).get x
-
-Depends on / 依赖: Foldl.mk, foldMap
+/-
+**Traversable.foldl** 是 Mathlib 中的一个定义，位于命名空间 `Traversable`。
+形式化陈述：foldl (f : α -> β -> α) (x : α) (xs : t β) : α
+参数：f : α -> β -> α；x : α；xs : t β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def foldl (f : α -> β -> α) (x : α) (xs : t β) : α :=
+def foldl (f : α → β → α) (x : α) (xs : t β) : α :=
   (foldMap (Foldl.mk ∘ flip f) xs).get x
-
-/--
-Definition of `foldr` / `foldr` 的定义
-
-English:
-definition foldr
-  signature: (f : α -> β -> β) (x : β) (xs : t α)
-  body: (foldMap (Foldr.mk ∘ f) xs).get x
-
-中文:
-定义 foldr
-  签名: (f : α -> β -> β) (x : β) (xs : t α)
-  定义体: (foldMap (Foldr.mk ∘ f) xs).get x
-
-Depends on / 依赖: Foldr.mk, foldMap
+/-
+**Traversable.foldr** 是 Mathlib 中的一个定义，位于命名空间 `Traversable`。
+形式化陈述：foldr (f : α -> β -> β) (x : β) (xs : t α) : β
+参数：f : α -> β -> β；x : β；xs : t α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def foldr (f : α -> β -> β) (x : β) (xs : t α) : β :=
+def foldr (f : α → β → β) (x : β) (xs : t α) : β :=
   (foldMap (Foldr.mk ∘ f) xs).get x
 
-/--
-Definition of `toList` / `toList` 的定义
+/-- Conceptually, `toList` collects all the elements of a collection
+in a list. This idea is formalized by
 
-English:
-definition toList
-  signature: : t α -> List α
-  body: List.reverse ∘ foldl (flip List.cons) []
+  `lemma toList_spec (x : t α) : toList x = foldMap FreeMonoid.mk x`.
 
-中文:
-定义 toList
-  签名: : t α -> 列表 α
-  定义体: List.reverse ∘ foldl (flip List.cons) []
+The definition of `toList` is based on `foldl` and `List.cons` for
+speed. It is faster than using `foldMap FreeMonoid.mk` because, by
+using `foldl` and `List.cons`, each insertion is done in constant
+time. As a consequence, `toList` performs in linear.
 
-Depends on / 依赖: List.cons, List.reverse, reverse
+On the other hand, `foldMap FreeMonoid.mk` creates a singleton list
+around each element and concatenates all the resulting lists. In
+`xs ++ ys`, concatenation takes a time proportional to `length xs`. Since
+the order in which concatenation is evaluated is unspecified, nothing
+prevents each element of the traversable to be appended at the end
+`xs ++ [x]` which would yield a `O(n²)` run time. -/
+/-
+**Traversable.toList** 是 Mathlib 中的一个定义，位于命名空间 `Traversable`。
+形式化陈述：toList : t α -> List α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Conceptually, `toList` collects all the elements of a collection
+in a list. This idea is formalized by
+
+  `lemma toList_spec (x : t α) : toList x = foldMap FreeMonoid.mk x`.
+
+The definition of `toList` is based on `foldl` and `List.cons` for
+speed. It is faster than using `foldMap FreeMonoid.mk` because, by
+using `foldl` and `List.cons`, each insertion is done in constant
+time. As a consequence, `toList` performs in linear.
+
+On the other hand, `foldMap FreeMonoid.mk` creates a singleton list
+around each element and concatenates all the resulting lists. In
+`xs ++ ys`, concatenation takes a time proportional to `length xs`. Since
+the order in which concatenation is evaluated is unspecified, nothing
+prevents each element of the traversable to be appended at the end
+`xs ++ [x]` which would yield a `O(n²)` run time.
 -/
-def toList : t α -> List α :=
+def toList : t α → List α :=
   List.reverse ∘ foldl (flip List.cons) []
-
-/--
-Definition of `length` / `length` 的定义
-
-English:
-definition length
-  signature: (xs : t α)
-  body: down foldl (fun l _ => up <| l.down + 1) (up 0) xs
-
-中文:
-定义 length
-  签名: (xs : t α)
-  定义体: down foldl (fun l _ => up <| l.down + 1) (up 0) xs
-
-Depends on / 依赖: l.down
+/-
+**Traversable.length** 是 Mathlib 中的一个定义，位于命名空间 `Traversable`。
+形式化陈述：length (xs : t α) : Nat
+参数：xs : t α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def length (xs : t α) : Nat :=
-down foldl (fun l _ => up <| l.down + 1) (up 0) xs
+def length (xs : t α) : ℕ :=
+  down <| foldl (fun l _ => up <| l.down + 1) (up 0) xs
 
-variable {m : Type u -> Type u} [Monad m]
-
-/--
-Definition of `foldlm` / `foldlm` 的定义
-
-English:
-definition foldlm
-  signature: (f : α -> β -> m α) (x : α) (xs : t β)
-  body: (foldMap (foldlM.mk ∘ flip f) xs).get x
-
-中文:
-定义 foldlm
-  签名: (f : α -> β -> m α) (x : α) (xs : t β)
-  定义体: (foldMap (foldlM.mk ∘ flip f) xs).get x
-
-Depends on / 依赖: foldMap, foldlM, foldlM.mk
+variable {m : Type u → Type u} [Monad m]
+/-
+**Traversable.foldlm** 是 Mathlib 中的一个定义，位于命名空间 `Traversable`。
+形式化陈述：foldlm (f : α -> β -> m α) (x : α) (xs : t β) : m α
+参数：f : α -> β -> m α；x : α；xs : t β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def foldlm (f : α -> β -> m α) (x : α) (xs : t β) : m α :=
+def foldlm (f : α → β → m α) (x : α) (xs : t β) : m α :=
   (foldMap (foldlM.mk ∘ flip f) xs).get x
-
-/--
-Definition of `foldrm` / `foldrm` 的定义
-
-English:
-definition foldrm
-  signature: (f : α -> β -> m β) (x : β) (xs : t α)
-  body: (foldMap (foldrM.mk ∘ f) xs).get x
-
-中文:
-定义 foldrm
-  签名: (f : α -> β -> m β) (x : β) (xs : t α)
-  定义体: (foldMap (foldrM.mk ∘ f) xs).get x
-
-Depends on / 依赖: foldMap, foldrM, foldrM.mk
+/-
+**Traversable.foldrm** 是 Mathlib 中的一个定义，位于命名空间 `Traversable`。
+形式化陈述：foldrm (f : α -> β -> m β) (x : β) (xs : t α) : m β
+参数：f : α -> β -> m β；x : β；xs : t α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def foldrm (f : α -> β -> m β) (x : β) (xs : t α) : m β :=
+def foldrm (f : α → β → m β) (x : β) (xs : t α) : m β :=
   (foldMap (foldrM.mk ∘ f) xs).get x
 
 end Defs
@@ -559,115 +430,79 @@ variable {α β γ : Type u}
 open Function hiding const
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `mapFold` / `mapFold` 的定义
-
-English:
-definition mapFold
-  signature: [Monoid α] [Monoid β] (f : α ->* β)
-  body: f
-  preserves_seq' := by intros; simp only [Seq.seq, map_mul]
-  preserves_pure' := by intros; simp only [map_one, pure]
-
-中文:
-定义 mapFold
-  签名: [幺半群 α] [幺半群 β] (f : α ->* β)
-  定义体: f
-  preserves_seq' := by intros; simp only [Seq.seq, map_mul]
-  preserves_pure' := by intros; simp only [map_one, pure]
+/-
+**Traversable.mapFold** 是 Mathlib 中的一个定义，位于命名空间 `Traversable`。
+形式化陈述：mapFold [Monoid α] [Monoid β] (f : α ->* β) : ApplicativeTransformation (C
+onst α) (Const β) where app _
+参数：f : α ->* β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def mapFold [Monoid α] [Monoid β] (f : α ->* β) : ApplicativeTransformation (Const α) (Const β) where
+def mapFold [Monoid α] [Monoid β] (f : α →* β) : ApplicativeTransformation (Const α) (Const β) where
   app _ := f
   preserves_seq' := by intros; simp only [Seq.seq, map_mul]
   preserves_pure' := by intros; simp only [map_one, pure]
-
-/--
-theorem `Free.map_eq_map` / 定理 `Free.map_eq_map`
-
-English:
-theorem Free.map_eq_map
-  given: (f : α -> β) (xs : List α)
-  proof: rfl
-
-中文:
-定理 自由.map_eq_map
-  条件: (f : α -> β) (xs : 列表 α)
-  证明: rfl
+/-
+**Traversable.Free.map_eq_map** 是 Mathlib 中的一个定理，位于命名空间 `Traversable.Free`。
+形式化陈述：∀ {α β : Type u} (f : α → β) (xs : List α), f <$> xs = FreeMonoid.toList (
+(FreeMonoid.map f) (FreeMonoid.ofList xs))
+参数：f : α → β；xs : List α；(FreeMonoid.map f) (FreeMonoid.ofList xs)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Free.map_eq_map (f : α -> β) (xs : List α) :
-f < > xs = (FreeMonoid.toList (FreeMonoid.map f (FreeMonoid.ofList xs))) :=
+theorem Free.map_eq_map (f : α → β) (xs : List α) :
+    f <$> xs = (FreeMonoid.toList (FreeMonoid.map f (FreeMonoid.ofList xs))) :=
   rfl
-
-/--
-theorem `foldl.unop_ofFreeMonoid` / 定理 `foldl.unop_ofFreeMonoid`
-
-English:
-theorem foldl.unop_ofFreeMonoid
-  given: (f : β -> α -> β) (xs : FreeMonoid α) (a : β)
-  proof: rfl
-
-中文:
-定理 foldl.unop_ofFreeMonoid
-  条件: (f : β -> α -> β) (xs : 自由幺半群 α) (a : β)
-  证明: rfl
+/-
+**Traversable.foldl.unop_ofFreeMonoid** 是 Mathlib 中的一个定理，位于命名空间 `Traversable.fol
+dl`。
+形式化陈述：∀ {α β : Type u} (f : β → α → β) (xs : FreeMonoid α) (a : β),   (CategoryT
+heory.ConcreteCategory.hom (MulOpposite.unop ((Monoid.Foldl.ofFreeMonoid f) xs))
+) a =     List.foldl f a (FreeMonoid.toList xs)
+参数：f : β → α → β；xs : FreeMonoid α；a : β；CategoryTheory.ConcreteCategory.hom (Mu
+lOpposite.unop ((Monoid.Foldl.ofFreeMonoid f) xs))；FreeMonoid.toList xs。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem foldl.unop_ofFreeMonoid (f : β -> α -> β) (xs : FreeMonoid α) (a : β) :
+theorem foldl.unop_ofFreeMonoid (f : β → α → β) (xs : FreeMonoid α) (a : β) :
     ConcreteCategory.hom (unop (Foldl.ofFreeMonoid f xs)) a =
       List.foldl f a (FreeMonoid.toList xs) :=
   rfl
 
-variable {t : Type u -> Type u} [Traversable t] [LawfulTraversable t]
+variable {t : Type u → Type u} [Traversable t] [LawfulTraversable t]
 
 open LawfulTraversable
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `foldMap_hom` / 定理 `foldMap_hom`
-
-English:
-theorem foldMap_hom
-  given: [Monoid α] [Monoid β] (f : α ->* β) (g : γ -> α) (x : t γ)
-  proof: calc
-    f (foldMap g x) = f (traverse (Const.mk' ∘ g) x) := rfl
-    _ = (mapFold f).app _ (traverse (Const.mk' ∘ g) x) := rfl
-    _ = traverse ((mapFold f).app _ ∘ Const.mk' ∘ g) x := naturality (mapFold f) _ _
-    _ = foldMap (f ∘ g) x := rfl
-
-中文:
-定理 foldMap_hom
-  条件: [幺半群 α] [幺半群 β] (f : α ->* β) (g : γ -> α) (x : t γ)
-  证明: calc
-    f (foldMap g x) = f (traverse (Const.mk' ∘ g) x) := rfl
-    _ = (mapFold f).app _ (traverse (Const.mk' ∘ g) x) := rfl
-    _ = traverse ((mapFold f).app _ ∘ Const.mk' ∘ g) x := naturality (mapFold f) _ _
-    _ = foldMap (f ∘ g) x := rfl
-
-Depends on / 依赖: Const.mk, foldMap, mapFold, naturality, traverse
+/-
+**Traversable.foldMap_hom** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：foldMap_hom [Monoid α] [Monoid β] (f : α ->* β) (g : γ -> α) (x : t γ) : f
+ (foldMap g x) = foldMap (f ∘ g) x
+参数：f : α ->* β；g : γ -> α；x : t γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LawfulTraversable.naturality`：∀ {t : Type u → Type u} {inst : Traversabl
+e t} [self : LawfulTraversable t] {F G : Type u → Type u}   [inst_1 : Applicativ
+e F] [inst_2 : App…
+· 使用定理 `instLawfulApplicativeConst`：∀ {α : Type u_1} [inst : Monoid α], LawfulAp
+plicative (Functor.Const α)
 -/
-theorem foldMap_hom [Monoid α] [Monoid β] (f : α ->* β) (g : γ -> α) (x : t γ) :
+theorem foldMap_hom [Monoid α] [Monoid β] (f : α →* β) (g : γ → α) (x : t γ) :
     f (foldMap g x) = foldMap (f ∘ g) x :=
   calc
     f (foldMap g x) = f (traverse (Const.mk' ∘ g) x) := rfl
     _ = (mapFold f).app _ (traverse (Const.mk' ∘ g) x) := rfl
     _ = traverse ((mapFold f).app _ ∘ Const.mk' ∘ g) x := naturality (mapFold f) _ _
     _ = foldMap (f ∘ g) x := rfl
-
-/--
-theorem `foldMap_hom_free` / 定理 `foldMap_hom_free`
-
-English:
-theorem foldMap_hom_free
-  given: [Monoid β] (f : FreeMonoid α ->* β) (x : t α)
-  proof: foldMap_hom f _ x
-
-中文:
-定理 foldMap_hom_free
-  条件: [幺半群 β] (f : 自由幺半群 α ->* β) (x : t α)
-  证明: foldMap_hom f _ x
-
-Depends on / 依赖: foldMap_hom
+/-
+**Traversable.foldMap_hom_free** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：foldMap_hom_free [Monoid β] (f : FreeMonoid α ->* β) (x : t α) : f (foldMa
+p FreeMonoid.of x) = foldMap (f ∘ FreeMonoid.of) x
+参数：f : FreeMonoid α ->* β；x : t α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Traversable.foldMap_hom`：foldMap_hom [Monoid α] [Monoid β] (f : α ->* β)
+ (g : γ -> α) (x : t γ) : f (foldMap g x) = foldMap (f ∘ g) x
 -/
-theorem foldMap_hom_free [Monoid β] (f : FreeMonoid α ->* β) (x : t α) :
+theorem foldMap_hom_free [Monoid β] (f : FreeMonoid α →* β) (x : t α) :
     f (foldMap FreeMonoid.of x) = foldMap (f ∘ FreeMonoid.of) x :=
   foldMap_hom f _ x
 
@@ -680,76 +515,58 @@ open LawfulTraversable
 open List (cons)
 
 variable {α β γ : Type u}
-variable {t : Type u -> Type u} [Traversable t] [LawfulTraversable t]
+variable {t : Type u → Type u} [Traversable t] [LawfulTraversable t]
 
 @[simp]
-/--
-theorem `foldl.ofFreeMonoid_comp_of` / 定理 `foldl.ofFreeMonoid_comp_of`
-
-English:
-theorem foldl.ofFreeMonoid_comp_of
-  given: (f : α -> β -> α)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 foldl.ofFreeMonoid_comp_of
-  条件: (f : α -> β -> α)
-  证明: rfl
-
-@[simp]
+/-
+**Traversable.foldl.ofFreeMonoid_comp_of** 是 Mathlib 中的一个定理，位于命名空间 `Traversable.
+foldl`。
+形式化陈述：∀ {α β : Type u} (f : α → β → α), ⇑(Monoid.Foldl.ofFreeMonoid f) ∘ FreeMon
+oid.of = Monoid.Foldl.mk ∘ flip f
+参数：f : α → β → α；Monoid.Foldl.ofFreeMonoid f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem foldl.ofFreeMonoid_comp_of (f : α -> β -> α) :
+theorem foldl.ofFreeMonoid_comp_of (f : α → β → α) :
     Foldl.ofFreeMonoid f ∘ FreeMonoid.of = Foldl.mk ∘ flip f :=
   rfl
 
 @[simp]
-/--
-theorem `foldr.ofFreeMonoid_comp_of` / 定理 `foldr.ofFreeMonoid_comp_of`
-
-English:
-theorem foldr.ofFreeMonoid_comp_of
-  given: (f : β -> α -> α)
-  proof: rfl
-
-中文:
-定理 foldr.ofFreeMonoid_comp_of
-  条件: (f : β -> α -> α)
-  证明: rfl
+/-
+**Traversable.foldr.ofFreeMonoid_comp_of** 是 Mathlib 中的一个定理，位于命名空间 `Traversable.
+foldr`。
+形式化陈述：∀ {α β : Type u} (f : β → α → α), ⇑(Monoid.Foldr.ofFreeMonoid f) ∘ FreeMon
+oid.of = Monoid.Foldr.mk ∘ f
+参数：f : β → α → α；Monoid.Foldr.ofFreeMonoid f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem foldr.ofFreeMonoid_comp_of (f : β -> α -> α) :
+theorem foldr.ofFreeMonoid_comp_of (f : β → α → α) :
     Foldr.ofFreeMonoid f ∘ FreeMonoid.of = Foldr.mk ∘ f :=
   rfl
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `foldlm.ofFreeMonoid_comp_of` / 定理 `foldlm.ofFreeMonoid_comp_of`
-
-English:
-theorem foldlm.ofFreeMonoid_comp_of
-  given: {m} [Monad m] [LawfulMonad m] (f : α -> β -> m α)
-  proof: by
-  ext1 x
-  simp only [foldlM.ofFreeMonoid, Function.flip_def, MonoidHom.coe_mk, OneHom.coe_mk,
-    Function.comp_apply, FreeMonoid.toList_of, List.foldlM_cons, List.foldlM_nil, bind_pure,
-    foldlM.mk, op_inj]
-  rfl
-
-中文:
-定理 foldlm.ofFreeMonoid_comp_of
-  条件: {m} [单子 m] [合法单子 m] (f : α -> β -> m α)
-  证明: by
-  ext1 x
-  simp only [foldlM.ofFreeMonoid, Function.flip_def, MonoidHom.coe_mk, OneHom.coe_mk,
-    Function.comp_apply, FreeMonoid.toList_of, List.foldlM_cons, List.foldlM_nil, bind_pure,
-    foldlM.mk, op_inj]
-  rfl
-
-Depends on / 依赖: FreeMonoid, FreeMonoid.toList_of, Function, Function.comp_apply, Function.flip_def, List.foldlM_cons, List.foldlM_nil, MonoidHom, MonoidHom.coe_mk, OneHom, OneHom.coe_mk, bind_pure, coe_mk, comp_apply, flip_def, foldlM, foldlM.mk, foldlM.ofFreeMonoid, foldlM_cons, foldlM_nil
+/-
+**Traversable.foldlm.ofFreeMonoid_comp_of** 是 Mathlib 中的一个定理，位于命名空间 `Traversable
+.foldlm`。
+形式化陈述：∀ {α β : Type u} {m : Type u → Type u} [inst : Monad m] [inst_1 : LawfulMo
+nad m] (f : α → β → m α),   ⇑(Monoid.foldlM.ofFreeMonoid f) ∘ FreeMonoid.of = Mo
+noid.foldlM.mk ∘ flip f
+参数：f : α → β → m α；Monoid.foldlM.ofFreeMonoid f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.foldlM_cons`：∀ {m : Type u_1 → Type u_2} {β : Type u_1} {α : Type u
+_3} [inst : Monad m] {f : β → α → m β} {b : β} {a : α}   {l : List α},   List.fo
+ldlM f…
+· 使用定理 `bind_pure`：∀ {m : Type u_1 → Type u_2} {α : Type u_1} [inst : Monad m] [
+LawfulMonad m] (x : m α), x >>= pure = x
 -/
-theorem foldlm.ofFreeMonoid_comp_of {m} [Monad m] [LawfulMonad m] (f : α -> β -> m α) :
+theorem foldlm.ofFreeMonoid_comp_of {m} [Monad m] [LawfulMonad m] (f : α → β → m α) :
     foldlM.ofFreeMonoid f ∘ FreeMonoid.of = foldlM.mk ∘ flip f := by
   ext1 x
   simp only [foldlM.ofFreeMonoid, Function.flip_def, MonoidHom.coe_mk, OneHom.coe_mk,
@@ -759,74 +576,81 @@ theorem foldlm.ofFreeMonoid_comp_of {m} [Monad m] [LawfulMonad m] (f : α -> β 
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `foldrm.ofFreeMonoid_comp_of` / 定理 `foldrm.ofFreeMonoid_comp_of`
-
-English:
-theorem foldrm.ofFreeMonoid_comp_of
-  given: {m} [Monad m] [LawfulMonad m] (f : β -> α -> m α)
-  proof: by
-  ext
-  simp [(· ∘ ·), foldrM.ofFreeMonoid, foldrM.mk, Function.flip_def]
-
-中文:
-定理 foldrm.ofFreeMonoid_comp_of
-  条件: {m} [单子 m] [合法单子 m] (f : β -> α -> m α)
-  证明: by
-  ext
-  simp [(· ∘ ·), foldrM.ofFreeMonoid, foldrM.mk, Function.flip_def]
-
-Depends on / 依赖: Function, Function.flip_def, flip_def, foldrM, foldrM.mk, foldrM.ofFreeMonoid, ofFreeMonoid
+/-
+**Traversable.foldrm.ofFreeMonoid_comp_of** 是 Mathlib 中的一个定理，位于命名空间 `Traversable
+.foldrm`。
+形式化陈述：∀ {α β : Type u} {m : Type u → Type u} [inst : Monad m] [inst_1 : LawfulMo
+nad m] (f : β → α → m α),   ⇑(Monoid.foldrM.ofFreeMonoid f) ∘ FreeMonoid.of = Mo
+noid.foldrM.mk ∘ f
+参数：f : β → α → m α；Monoid.foldrM.ofFreeMonoid f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.foldrM_cons`：∀ {m : Type u_1 → Type u_2} {α : Type u_3} {β : Type u
+_1} [inst : Monad m] [LawfulMonad m] {a : α} {l : List α}   {f : α → β → m β} {b
+ : β},…
+· 使用定理 `LawfulMonad.pure_bind`：∀ {m : Type u → Type v} {inst : Monad m} [self : 
+LawfulMonad m] {α β : Type u} (x : α) (f : α → m β), pure x >>= f = f x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem foldrm.ofFreeMonoid_comp_of {m} [Monad m] [LawfulMonad m] (f : β -> α -> m α) :
+theorem foldrm.ofFreeMonoid_comp_of {m} [Monad m] [LawfulMonad m] (f : β → α → m α) :
     foldrM.ofFreeMonoid f ∘ FreeMonoid.of = foldrM.mk ∘ f := by
   ext
   simp [(· ∘ ·), foldrM.ofFreeMonoid, foldrM.mk, Function.flip_def]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `toList_spec` / 定理 `toList_spec`
-
-English:
-theorem toList_spec
-  given: (xs : t α)
-  statement: toList xs = FreeMonoid.toList (foldMap FreeMonoid.of xs)
-  proof: Eq.symm
-    calc
-      FreeMonoid.toList (foldMap FreeMonoid.of xs) =
-          FreeMonoid.toList (foldMap FreeMonoid.of xs).reverse.reverse := by
-          simp only [FreeMonoid.reverse_reverse]
-      _ = (List.foldr cons [] (foldMap FreeMonoid.of xs).toList.reverse).reverse := by simp
-      _ = (ConcreteCategory.hom
-          (unop (Foldl.ofFreeMonoid (flip cons) (foldMap FreeMonoid.of xs))) []).reverse := by
-            simp [Function.flip_def, List.foldr_reverse, Foldl.ofFreeMonoid, unop_op]
-      _ = toList xs := by
-            rw [foldMap_hom_free (Foldl.ofFreeMonoid (flip <| @cons α))]
-            simp only [toList, foldl, Foldl.get, foldl.ofFreeMonoid_comp_of,
-              Function.comp_apply]
-
-中文:
-定理 toList_spec
-  条件: (xs : t α)
-  结论: toList xs = 自由幺半群.toList (foldMap 自由幺半群.of xs)
-  证明: Eq.symm
-    calc
-      FreeMonoid.toList (foldMap FreeMonoid.of xs) =
-          FreeMonoid.toList (foldMap FreeMonoid.of xs).reverse.reverse := by
-          simp only [FreeMonoid.reverse_reverse]
-      _ = (List.foldr cons [] (foldMap FreeMonoid.of xs).toList.reverse).reverse := by simp
-      _ = (ConcreteCategory.hom
-          (unop (Foldl.ofFreeMonoid (flip cons) (foldMap FreeMonoid.of xs))) []).reverse := by
-            simp [Function.flip_def, List.foldr_reverse, Foldl.ofFreeMonoid, unop_op]
-      _ = toList xs := by
-            rw [foldMap_hom_free (Foldl.ofFreeMonoid (flip <| @cons α))]
-            simp only [toList, foldl, Foldl.get, foldl.ofFreeMonoid_comp_of,
-              Function.comp_apply]
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom, Eq.symm, Foldl.ofFreeMonoid, FreeMonoid, FreeMonoid.of, FreeMonoid.reverse_reverse, FreeMonoid.toList, Function, Function.flip_def, List.foldr, List.foldr_reverse, flip_def, foldMap, foldMap_hom_free, foldr_reverse, ofFreeMonoid, reverse, reverse.reverse, reverse_reverse
+/-
+**Traversable.toList_spec** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：toList_spec (xs : t α) : toList xs = FreeMonoid.toList (foldMap FreeMonoid
+.of xs)
+参数：xs : t α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FreeMonoid.reverse_reverse`：reverse_reverse {a : FreeMonoid α} : reverse
+ (reverse a) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `List.foldr_reverse`：∀ {α : Type u_1} {β : Type u_2} {l : List α} {f : α 
+→ β → β} {b : β},   List.foldr f b l.reverse = List.foldl (fun x y => f y x) b l
+· 使用定理 `List.foldl_flip_cons_eq_append`：∀ {α : Type u_1} {β : Type u_2} {l : Lis
+t α} {f : α → β} {l' : List β},   List.foldl (fun xs y => f y :: xs) l' l = (Lis
+t.map f l).reverse +…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `List.map_id_fun'`：∀ {α : Type u_1}, (List.map fun a => a) = id
+· 使用定理 `List.append_nil`：∀ {α : Type u} (as : List α), as ++ [] = as
+· 使用定理 `List.reverse_reverse`：∀ {α : Type u_1} (as : List α), as.reverse.reverse
+ = as
+· 使用引理 `CategoryTheory.types_congr_hom`：types_congr_hom {X Y : Type u} {f g : X 
+⟶ Y} (h : f = g) (x : X) : f x = g x
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `OneHom.mk.congr_simp`：∀ {M : Type u_10} {N : Type u_11} [inst : One M] [
+inst_1 : One N] (toFun toFun_1 : M → N) (e_toFun : toFun = toFun_1)   (map_one' 
+: toFun 1 …
+· 使用定理 `MonoidHom.mk.congr_simp`：∀ {M : Type u_10} {N : Type u_11} [inst : MulOn
+e M] [inst_1 : MulOne N] (toOneHom toOneHom_1 : OneHom M N)   (e_toOneHom : toOn
+eHom = toOneH…
+· 使用定理 `Traversable.foldMap_hom_free`：foldMap_hom_free [Monoid β] (f : FreeMonoi
+d α ->* β) (x : t α) : f (foldMap FreeMonoid.of x) = foldMap (f ∘ FreeMonoid.of)
+ x
 -/
 theorem toList_spec (xs : t α) : toList xs = FreeMonoid.toList (foldMap FreeMonoid.of xs) :=
-Eq.symm
+  Eq.symm <|
     calc
       FreeMonoid.toList (foldMap FreeMonoid.of xs) =
           FreeMonoid.toList (foldMap FreeMonoid.of xs).reverse.reverse := by
@@ -841,223 +665,197 @@ Eq.symm
               Function.comp_apply]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `foldMap_map` / 定理 `foldMap_map`
-
-English:
-theorem foldMap_map
-  given: [Monoid γ] (f : α -> β) (g : β -> γ) (xs : t α)
-  proof: by
-  simp only [foldMap, traverse_map, Function.comp_def]
-
-中文:
-定理 foldMap_map
-  条件: [幺半群 γ] (f : α -> β) (g : β -> γ) (xs : t α)
-  证明: by
-  simp only [foldMap, traverse_map, Function.comp_def]
-
-Depends on / 依赖: Function, Function.comp_def, comp_def, foldMap, traverse_map
+/-
+**Traversable.foldMap_map** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：foldMap_map [Monoid γ] (f : α -> β) (g : β -> γ) (xs : t α) : foldMap g (f
+ <$> xs) = foldMap (g ∘ f) xs
+参数：f : α -> β；g : β -> γ；xs : t α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Traversable.traverse_map`：traverse_map (f : β -> F γ) (g : α -> β) (x : 
+t α) : traverse f (g <$> x) = traverse (f ∘ g) x
+· 使用定理 `instLawfulApplicativeConst`：∀ {α : Type u_1} [inst : Monoid α], LawfulAp
+plicative (Functor.Const α)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem foldMap_map [Monoid γ] (f : α -> β) (g : β -> γ) (xs : t α) :
+theorem foldMap_map [Monoid γ] (f : α → β) (g : β → γ) (xs : t α) :
     foldMap g (f <$> xs) = foldMap (g ∘ f) xs := by
   simp only [foldMap, traverse_map, Function.comp_def]
-
-/--
-theorem `foldl_toList` / 定理 `foldl_toList`
-
-English:
-theorem foldl_toList
-  given: (f : α -> β -> α) (xs : t β) (x : α)
-  proof: by
-  rw [← FreeMonoid.toList_ofList (toList xs)]; rw [← foldl.unop_ofFreeMonoid]
-  simp only [foldl, toList_spec, foldMap_hom_free, foldl.ofFreeMonoid_comp_of, Foldl.get,
-    FreeMonoid.ofList_toList]
-
-中文:
-定理 foldl_toList
-  条件: (f : α -> β -> α) (xs : t β) (x : α)
-  证明: by
-  rw [← FreeMonoid.toList_ofList (toList xs)]; rw [← foldl.unop_ofFreeMonoid]
-  simp only [foldl, toList_spec, foldMap_hom_free, foldl.ofFreeMonoid_comp_of, Foldl.get,
-    FreeMonoid.ofList_toList]
-
-Depends on / 依赖: Foldl.get, FreeMonoid, FreeMonoid.ofList_toList, FreeMonoid.toList_ofList, foldMap_hom_free, foldl.ofFreeMonoid_comp_of, foldl.unop_ofFreeMonoid, ofFreeMonoid_comp_of, ofList_toList, toList, toList_ofList, toList_spec, unop_ofFreeMonoid
+/-
+**Traversable.foldl_toList** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：foldl_toList (f : α -> β -> α) (xs : t β) (x : α) : foldl f x xs = List.fo
+ldl f x (toList xs)
+参数：f : α -> β -> α；xs : t β；x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `FreeMonoid.toList_ofList`：toList_ofList (l : List α) : toList (ofList l)
+ = l
+· 使用定理 `Traversable.foldl.unop_ofFreeMonoid`：∀ {α β : Type u} (f : β → α → β) (x
+s : FreeMonoid α) (a : β),   (CategoryTheory.ConcreteCategory.hom (MulOpposite.u
+nop ((Monoid.Foldl.ofFree…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `CategoryTheory.types_congr_hom`：types_congr_hom {X Y : Type u} {f g : X 
+⟶ Y} (h : f = g) (x : X) : f x = g x
+· 使用定理 `Traversable.toList_spec`：toList_spec (xs : t α) : toList xs = FreeMonoid
+.toList (foldMap FreeMonoid.of xs)
+· 使用定理 `Traversable.foldMap_hom_free`：foldMap_hom_free [Monoid β] (f : FreeMonoi
+d α ->* β) (x : t α) : f (foldMap FreeMonoid.of x) = foldMap (f ∘ FreeMonoid.of)
+ x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem foldl_toList (f : α -> β -> α) (xs : t β) (x : α) :
+theorem foldl_toList (f : α → β → α) (xs : t β) (x : α) :
     foldl f x xs = List.foldl f x (toList xs) := by
-  rw [← FreeMonoid.toList_ofList (toList xs)]; rw [← foldl.unop_ofFreeMonoid]
+  rw [← FreeMonoid.toList_ofList (toList xs), ← foldl.unop_ofFreeMonoid]
   simp only [foldl, toList_spec, foldMap_hom_free, foldl.ofFreeMonoid_comp_of, Foldl.get,
     FreeMonoid.ofList_toList]
-
-/--
-theorem `foldr_toList` / 定理 `foldr_toList`
-
-English:
-theorem foldr_toList
-  given: (f : α -> β -> β) (xs : t α) (x : β)
-  proof: by
-  change _ = (Foldr.ofFreeMonoid _ (FreeMonoid.ofList <| toList xs)).hom _
-  rw [toList_spec]; rw [foldr]; rw [Foldr.get]; rw [FreeMonoid.ofList_toList]; rw [foldMap_hom_free]; rw [foldr.ofFreeMonoid_comp_of]
-
-中文:
-定理 foldr_toList
-  条件: (f : α -> β -> β) (xs : t α) (x : β)
-  证明: by
-  change _ = (Foldr.ofFreeMonoid _ (FreeMonoid.ofList <| toList xs)).hom _
-  rw [toList_spec]; rw [foldr]; rw [Foldr.get]; rw [FreeMonoid.ofList_toList]; rw [foldMap_hom_free]; rw [foldr.ofFreeMonoid_comp_of]
-
-Depends on / 依赖: Foldr.get, Foldr.ofFreeMonoid, FreeMonoid, FreeMonoid.ofList, FreeMonoid.ofList_toList, foldMap_hom_free, foldr.ofFreeMonoid_comp_of, ofFreeMonoid, ofFreeMonoid_comp_of, ofList, ofList_toList, toList, toList_spec
+/-
+**Traversable.foldr_toList** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：foldr_toList (f : α -> β -> β) (xs : t α) (x : β) : foldr f x xs = List.fo
+ldr f x (toList xs)
+参数：f : α -> β -> β；xs : t α；x : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Traversable.toList_spec`：toList_spec (xs : t α) : toList xs = FreeMonoid
+.toList (foldMap FreeMonoid.of xs)
+· 使用定理 `Traversable.foldr.eq_1`：∀ {α β : Type u} {t : Type u → Type u} [inst : T
+raversable t] (f : α → β → β) (x : β) (xs : t α),   Traversable.foldr f x xs = (
+Traversable.…
+· 使用定理 `Monoid.Foldr.get.eq_1`：∀ {α : Type u} (x : Monoid.Foldr α), x.get = ⇑(Ca
+tegoryTheory.ConcreteCategory.hom x)
+· 使用定理 `FreeMonoid.ofList_toList`：ofList_toList (xs : FreeMonoid α) : ofList (to
+List xs) = xs
+· 使用定理 `Traversable.foldMap_hom_free`：foldMap_hom_free [Monoid β] (f : FreeMonoi
+d α ->* β) (x : t α) : f (foldMap FreeMonoid.of x) = foldMap (f ∘ FreeMonoid.of)
+ x
+· 使用定理 `Traversable.foldr.ofFreeMonoid_comp_of`：∀ {α β : Type u} (f : β → α → α)
+, ⇑(Monoid.Foldr.ofFreeMonoid f) ∘ FreeMonoid.of = Monoid.Foldr.mk ∘ f
 -/
-theorem foldr_toList (f : α -> β -> β) (xs : t α) (x : β) :
+theorem foldr_toList (f : α → β → β) (xs : t α) (x : β) :
     foldr f x xs = List.foldr f x (toList xs) := by
   change _ = (Foldr.ofFreeMonoid _ (FreeMonoid.ofList <| toList xs)).hom _
-  rw [toList_spec]; rw [foldr]; rw [Foldr.get]; rw [FreeMonoid.ofList_toList]; rw [foldMap_hom_free]; rw [foldr.ofFreeMonoid_comp_of]
-
-/--
-theorem `toList_map` / 定理 `toList_map`
-
-English:
-theorem toList_map
-  given: (f : α -> β) (xs : t α)
-  statement: toList (f <$> xs) = f < > toList xs
-  proof: by
-  simp only [toList_spec, Free.map_eq_map, foldMap_hom, foldMap_map, FreeMonoid.ofList_toList,
-    FreeMonoid.map_of, Function.comp_def]
-
-@[simp]
-
-中文:
-定理 toList_map
-  条件: (f : α -> β) (xs : t α)
-  结论: toList (f <$> xs) = f < > toList xs
-  证明: by
-  simp only [toList_spec, Free.map_eq_map, foldMap_hom, foldMap_map, FreeMonoid.ofList_toList,
-    FreeMonoid.map_of, Function.comp_def]
-
-@[simp]
-
-Depends on / 依赖: Free.map_eq_map, FreeMonoid, FreeMonoid.map_of, FreeMonoid.ofList_toList, Function, Function.comp_def, comp_def, foldMap_hom, foldMap_map, map_eq_map, map_of, ofList_toList, toList_spec
+  rw [toList_spec, foldr, Foldr.get, FreeMonoid.ofList_toList, foldMap_hom_free,
+    foldr.ofFreeMonoid_comp_of]
+/-
+**Traversable.toList_map** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：toList_map (f : α -> β) (xs : t α) : toList (f <$> xs) = f < > toList xs
+参数：f : α -> β；xs : t α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Traversable.toList_spec`：toList_spec (xs : t α) : toList xs = FreeMonoid
+.toList (foldMap FreeMonoid.of xs)
+· 使用定理 `Traversable.foldMap_map`：foldMap_map [Monoid γ] (f : α -> β) (g : β -> γ
+) (xs : t α) : foldMap g (f <$> xs) = foldMap (g ∘ f) xs
+· 使用定理 `Traversable.foldMap_hom`：foldMap_hom [Monoid α] [Monoid β] (f : α ->* β)
+ (g : γ -> α) (x : t γ) : f (foldMap g x) = foldMap (f ∘ g) x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem toList_map (f : α -> β) (xs : t α) : toList (f <$> xs) = f < > toList xs := by
+theorem toList_map (f : α → β) (xs : t α) : toList (f <$> xs) = f <$> toList xs := by
   simp only [toList_spec, Free.map_eq_map, foldMap_hom, foldMap_map, FreeMonoid.ofList_toList,
     FreeMonoid.map_of, Function.comp_def]
 
 @[simp]
-/--
-theorem `foldl_map` / 定理 `foldl_map`
-
-English:
-theorem foldl_map
-  given: (g : β -> γ) (f : α -> γ -> α) (a : α) (l : t β)
-  proof: by
-  simp only [foldl, foldMap_map, Function.comp_def, Function.flip_def]
-
-@[simp]
-
-中文:
-定理 foldl_map
-  条件: (g : β -> γ) (f : α -> γ -> α) (a : α) (l : t β)
-  证明: by
-  simp only [foldl, foldMap_map, Function.comp_def, Function.flip_def]
-
-@[simp]
-
-Depends on / 依赖: Function, Function.comp_def, Function.flip_def, comp_def, flip_def, foldMap_map
+/-
+**Traversable.foldl_map** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：foldl_map (g : β -> γ) (f : α -> γ -> α) (a : α) (l : t β) : foldl f a (g 
+<$> l) = foldl (fun x y => f x (g y)) a l
+参数：g : β -> γ；f : α -> γ -> α；a : α；l : t β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Traversable.foldMap_map`：foldMap_map [Monoid γ] (f : α -> β) (g : β -> γ
+) (xs : t α) : foldMap g (f <$> xs) = foldMap (g ∘ f) xs
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem foldl_map (g : β -> γ) (f : α -> γ -> α) (a : α) (l : t β) :
+theorem foldl_map (g : β → γ) (f : α → γ → α) (a : α) (l : t β) :
     foldl f a (g <$> l) = foldl (fun x y => f x (g y)) a l := by
   simp only [foldl, foldMap_map, Function.comp_def, Function.flip_def]
 
 @[simp]
-/--
-theorem `foldr_map` / 定理 `foldr_map`
-
-English:
-theorem foldr_map
-  given: (g : β -> γ) (f : γ -> α -> α) (a : α) (l : t β)
-  proof: by
-  simp only [foldr, foldMap_map, Function.comp_def]
-
-@[simp]
-
-中文:
-定理 foldr_map
-  条件: (g : β -> γ) (f : γ -> α -> α) (a : α) (l : t β)
-  证明: by
-  simp only [foldr, foldMap_map, Function.comp_def]
-
-@[simp]
-
-Depends on / 依赖: Function, Function.comp_def, comp_def, foldMap_map
+/-
+**Traversable.foldr_map** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：foldr_map (g : β -> γ) (f : γ -> α -> α) (a : α) (l : t β) : foldr f a (g 
+<$> l) = foldr (f ∘ g) a l
+参数：g : β -> γ；f : γ -> α -> α；a : α；l : t β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Traversable.foldMap_map`：foldMap_map [Monoid γ] (f : α -> β) (g : β -> γ
+) (xs : t α) : foldMap g (f <$> xs) = foldMap (g ∘ f) xs
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem foldr_map (g : β -> γ) (f : γ -> α -> α) (a : α) (l : t β) :
+theorem foldr_map (g : β → γ) (f : γ → α → α) (a : α) (l : t β) :
     foldr f a (g <$> l) = foldr (f ∘ g) a l := by
   simp only [foldr, foldMap_map, Function.comp_def]
 
 @[simp]
-/--
-theorem `toList_eq_self` / 定理 `toList_eq_self`
-
-English:
-theorem toList_eq_self
-  given: {xs : List α}
-  statement: toList xs = xs
-  proof: by
-  simp only [toList_spec, foldMap, traverse]
-  induction xs with
-  | nil => rfl
-  | cons _ _ ih => (conv_rhs => rw [← ih]); rfl
-
-中文:
-定理 toList_eq_self
-  条件: {xs : 列表 α}
-  结论: toList xs = xs
-  证明: by
-  simp only [toList_spec, foldMap, traverse]
-  induction xs with
-  | nil => rfl
-  | cons _ _ ih => (conv_rhs => rw [← ih]); rfl
-
-Depends on / 依赖: conv_rhs, foldMap, toList_spec, traverse
+/-
+**Traversable.toList_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：toList_eq_self {xs : List α} : toList xs = xs
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Traversable.toList_spec`：toList_spec (xs : t α) : toList xs = FreeMonoid
+.toList (foldMap FreeMonoid.of xs)
+· 使用定理 `List.instLawfulTraversable`：LawfulTraversable List
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem toList_eq_self {xs : List α} : toList xs = xs := by
   simp only [toList_spec, foldMap, traverse]
   induction xs with
   | nil => rfl
   | cons _ _ ih => (conv_rhs => rw [← ih]); rfl
-
-/--
-theorem `length_toList` / 定理 `length_toList`
-
-English:
-theorem length_toList
-  given: {xs : t α}
-  statement: length xs = List.length (toList xs)
-  proof: by
-  unfold length
-  rw [foldl_toList]
-  generalize toList xs = ys
-  rw [← Nat.add_zero ys.length]
-  generalize 0 = n
-  induction ys generalizing n with
-  | nil => simp
-  | cons _ _ ih => simp +arith [ih]
-
-中文:
-定理 length_toList
-  条件: {xs : t α}
-  结论: length xs = 列表.length (toList xs)
-  证明: by
-  unfold length
-  rw [foldl_toList]
-  generalize toList xs = ys
-  rw [← Nat.add_zero ys.length]
-  generalize 0 = n
-  induction ys generalizing n with
-  | nil => simp
-  | cons _ _ ih => simp +arith [ih]
-
-Depends on / 依赖: Nat.add_zero, add_zero, foldl_toList, generalize, generalizing, length, toList, ys.length
+/-
+**Traversable.length_toList** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：length_toList {xs : t α} : length xs = List.length (toList xs)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Traversable.foldl_toList`：foldl_toList (f : α -> β -> α) (xs : t β) (x :
+ α) : foldl f x xs = List.foldl f x (toList xs)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.add_zero`：∀ (n : ℕ), n + 0 = n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.Internal.Linear.ExprCnstr.eq_true_of_isValid`：∀ (ctx : Nat.Internal.
+Linear.Context) (c : Nat.Internal.Linear.ExprCnstr),   c.toNormPoly.isValid = tr
+ue → Nat.Internal.Linear.ExprCnstr.den…
 -/
 theorem length_toList {xs : t α} : length xs = List.length (toList xs) := by
   unfold length
@@ -1069,119 +867,114 @@ theorem length_toList {xs : t α} : length xs = List.length (toList xs) := by
   | nil => simp
   | cons _ _ ih => simp +arith [ih]
 
-variable {m : Type u -> Type u} [Monad m] [LawfulMonad m]
+variable {m : Type u → Type u} [Monad m] [LawfulMonad m]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `foldlm_toList` / 定理 `foldlm_toList`
-
-English:
-theorem foldlm_toList
-  given: {f : α -> β -> m α} {x : α} {xs : t β}
-  proof: calc foldlm f x xs
-    _ = unop (foldlM.ofFreeMonoid f (FreeMonoid.ofList <| toList xs)) x := by
-      simp only [foldlm, toList_spec, foldMap_hom_free (foldlM.ofFreeMonoid f),
-        foldlm.ofFreeMonoid_comp_of, foldlM.get, FreeMonoid.ofList_toList]
-    _ = List.foldlM f x (toList xs) := by simp [foldlM.ofFreeMonoid, unop_op, flip]
-
-中文:
-定理 foldlm_toList
-  条件: {f : α -> β -> m α} {x : α} {xs : t β}
-  证明: calc foldlm f x xs
-    _ = unop (foldlM.ofFreeMonoid f (FreeMonoid.ofList <| toList xs)) x := by
-      simp only [foldlm, toList_spec, foldMap_hom_free (foldlM.ofFreeMonoid f),
-        foldlm.ofFreeMonoid_comp_of, foldlM.get, FreeMonoid.ofList_toList]
-    _ = List.foldlM f x (toList xs) := by simp [foldlM.ofFreeMonoid, unop_op, flip]
-
-Depends on / 依赖: FreeMonoid, FreeMonoid.ofList, FreeMonoid.ofList_toList, List.foldlM, foldMap_hom_free, foldlM, foldlM.get, foldlM.ofFreeMonoid, foldlm, foldlm.ofFreeMonoid_comp_of, ofFreeMonoid, ofFreeMonoid_comp_of, ofList, ofList_toList, toList, toList_spec, unop_op
+/-
+**Traversable.foldlm_toList** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：foldlm_toList {f : α -> β -> m α} {x : α} {xs : t β} : foldlm f x xs = Lis
+t.foldlM f x (toList xs)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Traversable.toList_spec`：toList_spec (xs : t α) : toList xs = FreeMonoid
+.toList (foldMap FreeMonoid.of xs)
+· 使用定理 `Traversable.foldMap_hom_free`：foldMap_hom_free [Monoid β] (f : FreeMonoi
+d α ->* β) (x : t α) : f (foldMap FreeMonoid.of x) = foldMap (f ∘ FreeMonoid.of)
+ x
+· 使用定理 `Traversable.foldlm.ofFreeMonoid_comp_of`：∀ {α β : Type u} {m : Type u → 
+Type u} [inst : Monad m] [inst_1 : LawfulMonad m] (f : α → β → m α),   ⇑(Monoid.
+foldlM.ofFreeMonoid f) ∘ Free…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem foldlm_toList {f : α -> β -> m α} {x : α} {xs : t β} :
+theorem foldlm_toList {f : α → β → m α} {x : α} {xs : t β} :
     foldlm f x xs = List.foldlM f x (toList xs) :=
   calc foldlm f x xs
     _ = unop (foldlM.ofFreeMonoid f (FreeMonoid.ofList <| toList xs)) x := by
       simp only [foldlm, toList_spec, foldMap_hom_free (foldlM.ofFreeMonoid f),
         foldlm.ofFreeMonoid_comp_of, foldlM.get, FreeMonoid.ofList_toList]
     _ = List.foldlM f x (toList xs) := by simp [foldlM.ofFreeMonoid, unop_op, flip]
-
-/--
-theorem `foldrm_toList` / 定理 `foldrm_toList`
-
-English:
-theorem foldrm_toList
-  given: (f : α -> β -> m β) (x : β) (xs : t α)
-  proof: by
-  change _ = foldrM.ofFreeMonoid f (FreeMonoid.ofList <| toList xs) x
-  simp only [foldrm, toList_spec, foldMap_hom_free (foldrM.ofFreeMonoid f),
-    foldrm.ofFreeMonoid_comp_of, foldrM.get, FreeMonoid.ofList_toList]
-
-@[simp]
-
-中文:
-定理 foldrm_toList
-  条件: (f : α -> β -> m β) (x : β) (xs : t α)
-  证明: by
-  change _ = foldrM.ofFreeMonoid f (FreeMonoid.ofList <| toList xs) x
-  simp only [foldrm, toList_spec, foldMap_hom_free (foldrM.ofFreeMonoid f),
-    foldrm.ofFreeMonoid_comp_of, foldrM.get, FreeMonoid.ofList_toList]
-
-@[simp]
-
-Depends on / 依赖: FreeMonoid, FreeMonoid.ofList, FreeMonoid.ofList_toList, foldMap_hom_free, foldrM, foldrM.get, foldrM.ofFreeMonoid, foldrm, foldrm.ofFreeMonoid_comp_of, ofFreeMonoid, ofFreeMonoid_comp_of, ofList, ofList_toList, toList, toList_spec
+/-
+**Traversable.foldrm_toList** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：foldrm_toList (f : α -> β -> m β) (x : β) (xs : t α) : foldrm f x xs = Lis
+t.foldrM f x (toList xs)
+参数：f : α -> β -> m β；x : β；xs : t α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Traversable.toList_spec`：toList_spec (xs : t α) : toList xs = FreeMonoid
+.toList (foldMap FreeMonoid.of xs)
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Traversable.foldMap_hom_free`：foldMap_hom_free [Monoid β] (f : FreeMonoi
+d α ->* β) (x : t α) : f (foldMap FreeMonoid.of x) = foldMap (f ∘ FreeMonoid.of)
+ x
+· 使用定理 `Traversable.foldrm.ofFreeMonoid_comp_of`：∀ {α β : Type u} {m : Type u → 
+Type u} [inst : Monad m] [inst_1 : LawfulMonad m] (f : β → α → m α),   ⇑(Monoid.
+foldrM.ofFreeMonoid f) ∘ Free…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem foldrm_toList (f : α -> β -> m β) (x : β) (xs : t α) :
+theorem foldrm_toList (f : α → β → m β) (x : β) (xs : t α) :
     foldrm f x xs = List.foldrM f x (toList xs) := by
   change _ = foldrM.ofFreeMonoid f (FreeMonoid.ofList <| toList xs) x
   simp only [foldrm, toList_spec, foldMap_hom_free (foldrM.ofFreeMonoid f),
     foldrm.ofFreeMonoid_comp_of, foldrM.get, FreeMonoid.ofList_toList]
 
 @[simp]
-/--
-theorem `foldlm_map` / 定理 `foldlm_map`
-
-English:
-theorem foldlm_map
-  given: (g : β -> γ) (f : α -> γ -> m α) (a : α) (l : t β)
-  proof: by
-  simp only [foldlm, foldMap_map, Function.comp_def, Function.flip_def]
-
-@[simp]
-
-中文:
-定理 foldlm_map
-  条件: (g : β -> γ) (f : α -> γ -> m α) (a : α) (l : t β)
-  证明: by
-  simp only [foldlm, foldMap_map, Function.comp_def, Function.flip_def]
-
-@[simp]
-
-Depends on / 依赖: Function, Function.comp_def, Function.flip_def, comp_def, flip_def, foldMap_map, foldlm
+/-
+**Traversable.foldlm_map** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：foldlm_map (g : β -> γ) (f : α -> γ -> m α) (a : α) (l : t β) : foldlm f a
+ (g <$> l) = foldlm (fun x y => f x (g y)) a l
+参数：g : β -> γ；f : α -> γ -> m α；a : α；l : t β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Traversable.foldMap_map`：foldMap_map [Monoid γ] (f : α -> β) (g : β -> γ
+) (xs : t α) : foldMap g (f <$> xs) = foldMap (g ∘ f) xs
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem foldlm_map (g : β -> γ) (f : α -> γ -> m α) (a : α) (l : t β) :
+theorem foldlm_map (g : β → γ) (f : α → γ → m α) (a : α) (l : t β) :
     foldlm f a (g <$> l) = foldlm (fun x y => f x (g y)) a l := by
   simp only [foldlm, foldMap_map, Function.comp_def, Function.flip_def]
 
 @[simp]
-/--
-theorem `foldrm_map` / 定理 `foldrm_map`
-
-English:
-theorem foldrm_map
-  given: (g : β -> γ) (f : γ -> α -> m α) (a : α) (l : t β)
-  proof: by
-  simp only [foldrm, foldMap_map, Function.comp_def]
-
-中文:
-定理 foldrm_map
-  条件: (g : β -> γ) (f : γ -> α -> m α) (a : α) (l : t β)
-  证明: by
-  simp only [foldrm, foldMap_map, Function.comp_def]
-
-Depends on / 依赖: Function, Function.comp_def, comp_def, foldMap_map, foldrm
+/-
+**Traversable.foldrm_map** 是 Mathlib 中的一个定理，位于命名空间 `Traversable`。
+形式化陈述：foldrm_map (g : β -> γ) (f : γ -> α -> m α) (a : α) (l : t β) : foldrm f a
+ (g <$> l) = foldrm (f ∘ g) a l
+参数：g : β -> γ；f : γ -> α -> m α；a : α；l : t β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Traversable.foldMap_map`：foldMap_map [Monoid γ] (f : α -> β) (g : β -> γ
+) (xs : t α) : foldMap g (f <$> xs) = foldMap (g ∘ f) xs
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem foldrm_map (g : β -> γ) (f : γ -> α -> m α) (a : α) (l : t β) :
+theorem foldrm_map (g : β → γ) (f : γ → α → m α) (a : α) (l : t β) :
     foldrm f a (g <$> l) = foldrm (f ∘ g) a l := by
   simp only [foldrm, foldMap_map, Function.comp_def]
 
 end Equalities
 
 end Traversable
+

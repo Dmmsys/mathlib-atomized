@@ -31,22 +31,15 @@ universe u v
 
 open CategoryTheory
 
-/--
-Definition of `AddMonCat` / `AddMonCat` 的定义
+/-- The category of additive monoids and monoid morphisms. -/
+/-
+**AddMonCat** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type (u + 1)
+参数：u + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure AddMonCat
-  parameters: : Type (u + 1) where
-  axioms and operations (2):
-    - (carrier : Type u)
-    - [str : AddMonoid carrier]
-
-中文:
-结构 加法幺半群范畴
-  参数: : 类型 (u + 1) where
-  公理与运算 (2 个):
-    - (carrier : 类型u)
-    - [str : 加法幺半群 carrier]
+--- 原说明 ---
+The category of additive monoids and monoid morphisms.
 -/
 structure AddMonCat : Type (u + 1) where
   /-- The underlying type. -/
@@ -55,22 +48,14 @@ structure AddMonCat : Type (u + 1) where
 
 /-- The category of monoids and monoid morphisms. -/
 @[to_additive AddMonCat]
-/--
-Definition of `MonCat` / `MonCat` 的定义
+/-
+**MonCat** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type (u + 1)
+参数：u + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure MonCat
-  parameters: : Type (u + 1) where
-  axioms and operations (2):
-    - (carrier : Type u)
-    - [str : Monoid carrier]
-
-中文:
-结构 幺半群范畴
-  参数: : 类型 (u + 1) where
-  公理与运算 (2 个):
-    - (carrier : 类型u)
-    - [str : 幺半群 carrier]
+--- 原说明 ---
+The category of monoids and monoid morphisms.
 -/
 structure MonCat : Type (u + 1) where
   /-- The underlying type. -/
@@ -79,26 +64,15 @@ structure MonCat : Type (u + 1) where
 
 attribute [instance] AddMonCat.str MonCat.str
 
-initialize_simps_projections AddMonCat (carrier -> coe, -str)
-initialize_simps_projections MonCat (carrier -> coe, -str)
+initialize_simps_projections AddMonCat (carrier → coe, -str)
+initialize_simps_projections MonCat (carrier → coe, -str)
 
 namespace MonCat
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort MonCat (Type u)
-  body: ⟨MonCat.carrier⟩
-
-中文:
-实例 :
-  签名: CoeSort 幺半群范畴 (类型u)
-  定义体: ⟨MonCat.carrier⟩
-
-Depends on / 依赖: MonCat, MonCat.carrier, carrier
+/-
+**MonCat.** 是 Mathlib 中的一个实例，位于命名空间 `MonCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort MonCat (Type u) :=
   ⟨MonCat.carrier⟩
@@ -107,18 +81,15 @@ attribute [coe] AddMonCat.carrier MonCat.carrier
 
 /-- Construct a bundled `MonCat` from the underlying type and typeclass. -/
 @[to_additive /-- Construct a bundled `AddMonCat` from the underlying type and typeclass. -/]
-/--
-Definition of `of` / `of` 的定义
+/-
+**MonCat.of** 是 Mathlib 中的一个缩写定义，位于命名空间 `MonCat`。
+形式化陈述：of (M : Type u) [Monoid M] : MonCat
+参数：M : Type u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation of
-  signature: (M : Type u) [Monoid M]
-  body: ⟨M⟩
-
-中文:
-缩写 of
-  签名: (M : 类型u) [幺半群 M]
-  定义体: ⟨M⟩
+--- 原说明 ---
+Construct a bundled `MonCat` from the underlying type and typeclass.
 -/
 abbrev of (M : Type u) [Monoid M] : MonCat := ⟨M⟩
 
@@ -126,73 +97,42 @@ end MonCat
 
 /-- The type of morphisms in `AddMonCat`. -/
 @[ext]
-/--
-Definition of `AddMonCat.Hom` / `AddMonCat.Hom` 的定义
+/-
+**AddMonCat.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `AddMonCat`。
+形式化陈述：AddMonCat → AddMonCat → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure AddMonCat.Hom
-  parameters: (A B : AddMonCat.{u})
-  axioms and operations (2):
-    - private(mk) : :
-    - hom' : A ->+ B
-
-中文:
-结构 加法幺半群范畴.态射
-  参数: (A B : 加法幺半群范畴.{u})
-  公理与运算 (2 个):
-    - private(mk) : :
-    - hom' : A ->+ B
+--- 原说明 ---
+The type of morphisms in `AddMonCat`.
 -/
 structure AddMonCat.Hom (A B : AddMonCat.{u}) where
   private mk ::
   /-- The underlying monoid homomorphism. -/
-  hom' : A ->+ B
+  hom' : A →+ B
 
 /-- The type of morphisms in `MonCat`. -/
 @[to_additive, ext]
-/--
-Definition of `MonCat.Hom` / `MonCat.Hom` 的定义
+/-
+**MonCat.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `MonCat`。
+形式化陈述：MonCat → MonCat → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure MonCat.Hom
-  parameters: (A B : MonCat.{u})
-  axioms and operations (2):
-    - private(mk) : :
-    - hom' : A ->* B
-
-中文:
-结构 幺半群范畴.态射
-  参数: (A B : 幺半群范畴.{u})
-  公理与运算 (2 个):
-    - private(mk) : :
-    - hom' : A ->* B
+--- 原说明 ---
+The type of morphisms in `MonCat`.
 -/
 structure MonCat.Hom (A B : MonCat.{u}) where
   private mk ::
   /-- The underlying monoid homomorphism. -/
-  hom' : A ->* B
+  hom' : A →* B
 
 namespace MonCat
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category MonCat.{u}
-  body: Hom X Y
-  id X := ⟨MonoidHom.id X⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
-
-中文:
-实例 :
-  签名: 范畴 幺半群范畴.{u}
-  定义体: Hom X Y
-  id X := ⟨MonoidHom.id X⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
+/-
+**MonCat.** 是 Mathlib 中的一个实例，位于命名空间 `MonCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category MonCat.{u} where
   Hom X Y := Hom X Y
@@ -202,493 +142,300 @@ instance : Category MonCat.{u} where
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ConcreteCategory MonCat (· ->* ·)
-  body: Hom.hom'
-  ofHom := Hom.mk
-
-中文:
-实例 :
-  签名: 余ncrete范畴 幺半群范畴 (· ->* ·)
-  定义体: Hom.hom'
-  ofHom := Hom.mk
-
-Depends on / 依赖: Hom.hom
+/-
+**MonCat.** 是 Mathlib 中的一个实例，位于命名空间 `MonCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ConcreteCategory MonCat (· ->* ·) where
+instance : ConcreteCategory MonCat (· →* ·) where
   hom := Hom.hom'
   ofHom := Hom.mk
 
 /-- Turn a morphism in `MonCat` back into a `MonoidHom`. -/
 @[to_additive /-- Turn a morphism in `AddMonCat` back into an `AddMonoidHom`. -/]
-/--
-Definition of `Hom.hom` / `Hom.hom` 的定义
+/-
+**MonCat.Hom.hom** 是 Mathlib 中的一个定义，位于命名空间 `MonCat.Hom`。
+形式化陈述：{X Y : MonCat} → X.Hom Y → ↑X →* ↑Y
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.hom
-  signature: {X Y : MonCat.{u}} (f : Hom X Y)
-  body: ConcreteCategory.hom (C := MonCat) f
-
-中文:
-缩写 态射.hom
-  签名: {X Y : 幺半群范畴.{u}} (f : 态射 X Y)
-  定义体: ConcreteCategory.hom (C := MonCat) f
+--- 原说明 ---
+Turn a morphism in `MonCat` back into a `MonoidHom`.
 -/
 abbrev Hom.hom {X Y : MonCat.{u}} (f : Hom X Y) :=
   ConcreteCategory.hom (C := MonCat) f
 
 /-- Typecheck a `MonoidHom` as a morphism in `MonCat`. -/
 @[to_additive /-- Typecheck an `AddMonoidHom` as a morphism in `AddMonCat`. -/]
-/--
-Definition of `ofHom` / `ofHom` 的定义
+/-
+**MonCat.ofHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `MonCat`。
+形式化陈述：ofHom {X Y : Type u} [Monoid X] [Monoid Y] (f : X ->* Y) : of X ⟶ of Y
+参数：f : X ->* Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofHom
-  signature: {X Y : Type u} [Monoid X] [Monoid Y] (f : X ->* Y)
-  body: ConcreteCategory.ofHom (C := MonCat) f
-
-中文:
-缩写 ofHom
-  签名: {X Y : 类型u} [幺半群 X] [幺半群 Y] (f : X ->* Y)
-  定义体: ConcreteCategory.ofHom (C := MonCat) f
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, MonCat
+--- 原说明 ---
+Typecheck a `MonoidHom` as a morphism in `MonCat`.
 -/
-abbrev ofHom {X Y : Type u} [Monoid X] [Monoid Y] (f : X ->* Y) : of X ⟶ of Y :=
+abbrev ofHom {X Y : Type u} [Monoid X] [Monoid Y] (f : X →* Y) : of X ⟶ of Y :=
   ConcreteCategory.ofHom (C := MonCat) f
 
 /-- Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas. -/
 @[to_additive /-- Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas. -/]
-/--
-Definition of `Hom.Simps.hom` / `Hom.Simps.hom` 的定义
+/-
+**MonCat.Hom.Simps.hom** 是 Mathlib 中的一个定义，位于命名空间 `MonCat.Hom.Simps`。
+形式化陈述：(X Y : MonCat) → X.Hom Y → ↑X →* ↑Y
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.Simps.hom
-  signature: (X Y : MonCat.{u}) (f : Hom X Y)
-  body: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
-initialize_simps_projections AddMonCat.Hom (hom' -> hom)
-
-中文:
-定义 态射.Simps.hom
-  签名: (X Y : 幺半群范畴.{u}) (f : 态射 X Y)
-  定义体: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
-initialize_simps_projections AddMonCat.Hom (hom' -> hom)
+--- 原说明 ---
+Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas.
 -/
 def Hom.Simps.hom (X Y : MonCat.{u}) (f : Hom X Y) :=
   f.hom
 
-initialize_simps_projections Hom (hom' -> hom)
-initialize_simps_projections AddMonCat.Hom (hom' -> hom)
+initialize_simps_projections Hom (hom' → hom)
+initialize_simps_projections AddMonCat.Hom (hom' → hom)
 
 /-!
 The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep them for `dsimp`.
 -/
 
 @[to_additive (attr := simp)]
-/--
-lemma `coe_id` / 引理 `coe_id`
+/-
+**MonCat.coe_id** 是 Mathlib 中的一个引理，位于命名空间 `MonCat`。
+形式化陈述：coe_id {X : MonCat} : (𝟙 X : X -> X) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma coe_id
-  given: {X : MonCat}
-  statement: (𝟙 X : X -> X) = id
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 coe_id
-  条件: {X : 幺半群范畴}
-  结论: (𝟙 X : X -> X) = id
-  证明: rfl
-
-@[to_additive (attr := simp)]
+--- 原说明 ---
+The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep 
+them for `dsimp`.
 -/
-lemma coe_id {X : MonCat} : (𝟙 X : X -> X) = id := rfl
+lemma coe_id {X : MonCat} : (𝟙 X : X → X) = id := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `coe_comp` / 引理 `coe_comp`
-
-English:
-lemma coe_comp
-  given: {X Y Z : MonCat} {f : X ⟶ Y} {g : Y ⟶ Z}
-  statement: (f ≫ g : X -> Z) = g ∘ f
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 coe_comp
-  条件: {X Y Z : 幺半群范畴} {f : X ⟶ Y} {g : Y ⟶ Z}
-  结论: (f ≫ g : X -> Z) = g ∘ f
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**MonCat.coe_comp** 是 Mathlib 中的一个引理，位于命名空间 `MonCat`。
+形式化陈述：coe_comp {X Y Z : MonCat} {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g : X -> Z) = g ∘
+ f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_comp {X Y Z : MonCat} {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g : X -> Z) = g ∘ f := rfl
+lemma coe_comp {X Y Z : MonCat} {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g : X → Z) = g ∘ f := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `forget_map` / 引理 `forget_map`
-
-English:
-lemma forget_map
-  given: {X Y : MonCat} (f : X ⟶ Y)
-  proof: rfl
-
-@[to_additive (attr := ext)]
-
-中文:
-引理 forget_map
-  条件: {X Y : 幺半群范畴} (f : X ⟶ Y)
-  证明: rfl
-
-@[to_additive (attr := ext)]
+/-
+**MonCat.forget_map** 是 Mathlib 中的一个引理，位于命名空间 `MonCat`。
+形式化陈述：forget_map {X Y : MonCat} (f : X ⟶ Y) : (forget MonCat).map f = (f : _ -> 
+_)
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma forget_map {X Y : MonCat} (f : X ⟶ Y) :
-    (forget MonCat).map f = (f : _ -> _) := rfl
+    (forget MonCat).map f = (f : _ → _) := rfl
 
 @[to_additive (attr := ext)]
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: {X Y : MonCat} {f g : X ⟶ Y} (w : forall x : X, f x = g x)
-  statement: f = g
-  proof: ConcreteCategory.hom_ext _ _ w
-
-@[to_additive]
-
-中文:
-引理 ext
-  条件: {X Y : 幺半群范畴} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
-  结论: f = g
-  证明: ConcreteCategory.hom_ext _ _ w
-
-@[to_additive]
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ext, hom_ext
+/-
+**MonCat.ext** 是 Mathlib 中的一个引理，位于命名空间 `MonCat`。
+形式化陈述：ext {X Y : MonCat} {f g : X ⟶ Y} (w : forall x : X, f x = g x) : f = g
+参数：w : forall x : X, f x = g x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ext`：hom_ext {X Y : C} (f g : X ⟶ Y)
+ (w : forall x, f x = g x) : f = g
 -/
-lemma ext {X Y : MonCat} {f g : X ⟶ Y} (w : forall x : X, f x = g x) : f = g :=
+lemma ext {X Y : MonCat} {f g : X ⟶ Y} (w : ∀ x : X, f x = g x) : f = g :=
   ConcreteCategory.hom_ext _ _ w
 
 @[to_additive]
 -- This is not `simp` to avoid rewriting in types of terms.
-/--
-theorem `coe_of` / 定理 `coe_of`
-
-English:
-theorem coe_of
-  given: (M : Type u) [Monoid M]
-  statement: (MonCat.of M : Type u) = M
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 coe_of
-  条件: (M : 类型u) [幺半群 M]
-  结论: (幺半群范畴.of M : 类型u) = M
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**MonCat.coe_of** 是 Mathlib 中的一个定理，位于命名空间 `MonCat`。
+形式化陈述：coe_of (M : Type u) [Monoid M] : (MonCat.of M : Type u) = M
+参数：M : Type u。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_of (M : Type u) [Monoid M] : (MonCat.of M : Type u) = M := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `hom_id` / 引理 `hom_id`
-
-English:
-lemma hom_id
-  given: {M : MonCat}
-  statement: (𝟙 M : M ⟶ M).hom = MonoidHom.id M
-  proof: rfl
-
-中文:
-引理 hom_id
-  条件: {M : 幺半群范畴}
-  结论: (𝟙 M : M ⟶ M).hom = 幺半群态射.id M
-  证明: rfl
+/-
+**MonCat.hom_id** 是 Mathlib 中的一个引理，位于命名空间 `MonCat`。
+形式化陈述：hom_id {M : MonCat} : (𝟙 M : M ⟶ M).hom = MonoidHom.id M
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_id {M : MonCat} : (𝟙 M : M ⟶ M).hom = MonoidHom.id M := rfl
 
 /- Provided for rewriting. -/
 @[to_additive]
-/--
-lemma `id_apply` / 引理 `id_apply`
+/-
+**MonCat.id_apply** 是 Mathlib 中的一个引理，位于命名空间 `MonCat`。
+形式化陈述：id_apply (M : MonCat) (x : M) : (𝟙 M : M ⟶ M) x = x
+参数：M : MonCat；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonoidHom.id_apply`：∀ (M : Type u_10) [inst : MulOne M] (x : M), (Monoid
+Hom.id M) x = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma id_apply
-  given: (M : MonCat) (x : M)
-  proof: by simp
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 id_apply
-  条件: (M : 幺半群范畴) (x : M)
-  证明: by simp
-
-@[to_additive (attr := simp)]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma id_apply (M : MonCat) (x : M) :
     (𝟙 M : M ⟶ M) x = x := by simp
 
 @[to_additive (attr := simp)]
-/--
-lemma `hom_comp` / 引理 `hom_comp`
-
-English:
-lemma hom_comp
-  given: {M N T : MonCat} (f : M ⟶ N) (g : N ⟶ T)
-  proof: rfl
-
-中文:
-引理 hom_comp
-  条件: {M N T : 幺半群范畴} (f : M ⟶ N) (g : N ⟶ T)
-  证明: rfl
+/-
+**MonCat.hom_comp** 是 Mathlib 中的一个引理，位于命名空间 `MonCat`。
+形式化陈述：hom_comp {M N T : MonCat} (f : M ⟶ N) (g : N ⟶ T) : (f ≫ g).hom = g.hom.co
+mp f.hom
+参数：f : M ⟶ N；g : N ⟶ T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_comp {M N T : MonCat} (f : M ⟶ N) (g : N ⟶ T) :
     (f ≫ g).hom = g.hom.comp f.hom := rfl
 
 /- Provided for rewriting. -/
 @[to_additive]
-/--
-lemma `comp_apply` / 引理 `comp_apply`
+/-
+**MonCat.comp_apply** 是 Mathlib 中的一个引理，位于命名空间 `MonCat`。
+形式化陈述：comp_apply {M N T : MonCat} (f : M ⟶ N) (g : N ⟶ T) (x : M) : (f ≫ g) x = 
+g (f x)
+参数：f : M ⟶ N；g : N ⟶ T；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma comp_apply
-  given: {M N T : MonCat} (f : M ⟶ N) (g : N ⟶ T) (x : M)
-  proof: by simp
-
-@[to_additive (attr := ext)]
-
-中文:
-引理 comp_apply
-  条件: {M N T : 幺半群范畴} (f : M ⟶ N) (g : N ⟶ T) (x : M)
-  证明: by simp
-
-@[to_additive (attr := ext)]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma comp_apply {M N T : MonCat} (f : M ⟶ N) (g : N ⟶ T) (x : M) :
     (f ≫ g) x = g (f x) := by simp
 
 @[to_additive (attr := ext)]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {M N : MonCat} {f g : M ⟶ N} (hf : f.hom = g.hom)
-  statement: f = g
-  proof: Hom.ext hf
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 hom_ext
-  条件: {M N : 幺半群范畴} {f g : M ⟶ N} (hf : f.hom = g.hom)
-  结论: f = g
-  证明: Hom.ext hf
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Hom.ext
+/-
+**MonCat.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `MonCat`。
+形式化陈述：hom_ext {M N : MonCat} {f g : M ⟶ N} (hf : f.hom = g.hom) : f = g
+参数：hf : f.hom = g.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonCat.Hom.ext`：∀ {A B : MonCat} {x y : A.Hom B}, x.hom' = y.hom' → x = 
+y
 -/
 lemma hom_ext {M N : MonCat} {f g : M ⟶ N} (hf : f.hom = g.hom) : f = g :=
   Hom.ext hf
 
 @[to_additive (attr := simp)]
-/--
-lemma `hom_ofHom` / 引理 `hom_ofHom`
-
-English:
-lemma hom_ofHom
-  given: {M N : Type u} [Monoid M] [Monoid N] (f : M ->* N)
-  statement: (ofHom f).hom = f
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 hom_ofHom
-  条件: {M N : 类型u} [幺半群 M] [幺半群 N] (f : M ->* N)
-  结论: (ofHom f).hom = f
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**MonCat.hom_ofHom** 是 Mathlib 中的一个引理，位于命名空间 `MonCat`。
+形式化陈述：hom_ofHom {M N : Type u} [Monoid M] [Monoid N] (f : M ->* N) : (ofHom f).h
+om = f
+参数：f : M ->* N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma hom_ofHom {M N : Type u} [Monoid M] [Monoid N] (f : M ->* N) : (ofHom f).hom = f := rfl
+lemma hom_ofHom {M N : Type u} [Monoid M] [Monoid N] (f : M →* N) : (ofHom f).hom = f := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `ofHom_hom` / 引理 `ofHom_hom`
-
-English:
-lemma ofHom_hom
-  given: {M N : MonCat} (f : M ⟶ N)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 ofHom_hom
-  条件: {M N : 幺半群范畴} (f : M ⟶ N)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**MonCat.ofHom_hom** 是 Mathlib 中的一个引理，位于命名空间 `MonCat`。
+形式化陈述：ofHom_hom {M N : MonCat} (f : M ⟶ N) : ofHom (Hom.hom f) = f
+参数：f : M ⟶ N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_hom {M N : MonCat} (f : M ⟶ N) :
     ofHom (Hom.hom f) = f := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `ofHom_id` / 引理 `ofHom_id`
-
-English:
-lemma ofHom_id
-  given: {M : Type u} [Monoid M]
-  statement: ofHom (MonoidHom.id M) = 𝟙 (of M)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 ofHom_id
-  条件: {M : 类型u} [幺半群 M]
-  结论: ofHom (幺半群态射.id M) = 𝟙 (of M)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**MonCat.ofHom_id** 是 Mathlib 中的一个引理，位于命名空间 `MonCat`。
+形式化陈述：ofHom_id {M : Type u} [Monoid M] : ofHom (MonoidHom.id M) = 𝟙 (of M)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_id {M : Type u} [Monoid M] : ofHom (MonoidHom.id M) = 𝟙 (of M) := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `ofHom_comp` / 引理 `ofHom_comp`
-
-English:
-lemma ofHom_comp
-  statement: {M N P : Type u} [Monoid M] [Monoid N] [Monoid P]
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 ofHom_comp
-  结论: {M N P : 类型u} [幺半群 M] [幺半群 N] [幺半群 P]
-  证明: rfl
-
-@[to_additive]
+/-
+**MonCat.ofHom_comp** 是 Mathlib 中的一个引理，位于命名空间 `MonCat`。
+形式化陈述：ofHom_comp {M N P : Type u} [Monoid M] [Monoid N] [Monoid P] (f : M ->* N)
+ (g : N ->* P) : ofHom (g.comp f) = ofHom f ≫ ofHom g
+参数：f : M ->* N；g : N ->* P。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_comp {M N P : Type u} [Monoid M] [Monoid N] [Monoid P]
-    (f : M ->* N) (g : N ->* P) :
+    (f : M →* N) (g : N →* P) :
     ofHom (g.comp f) = ofHom f ≫ ofHom g :=
   rfl
 
 @[to_additive]
-/--
-lemma `ofHom_apply` / 引理 `ofHom_apply`
-
-English:
-lemma ofHom_apply
-  given: {X Y : Type u} [Monoid X] [Monoid Y] (f : X ->* Y) (x : X)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 ofHom_apply
-  条件: {X Y : 类型u} [幺半群 X] [幺半群 Y] (f : X ->* Y) (x : X)
-  证明: rfl
-
-@[to_additive]
+/-
+**MonCat.ofHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `MonCat`。
+形式化陈述：ofHom_apply {X Y : Type u} [Monoid X] [Monoid Y] (f : X ->* Y) (x : X) : (
+ofHom f) x = f x
+参数：f : X ->* Y；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma ofHom_apply {X Y : Type u} [Monoid X] [Monoid Y] (f : X ->* Y) (x : X) :
+lemma ofHom_apply {X Y : Type u} [Monoid X] [Monoid Y] (f : X →* Y) (x : X) :
     (ofHom f) x = f x := rfl
 
 @[to_additive]
-/--
-lemma `inv_hom_apply` / 引理 `inv_hom_apply`
-
-English:
-lemma inv_hom_apply
-  given: {M N : MonCat} (e : M ≅ N) (x : M)
-  statement: e.inv (e.hom x) = x
-  proof: by
-  simp
-
-@[to_additive]
-
-中文:
-引理 inv_hom_apply
-  条件: {M N : 幺半群范畴} (e : M ≅ N) (x : M)
-  结论: e.inv (e.hom x) = x
-  证明: by
-  simp
-
-@[to_additive]
+/-
+**MonCat.inv_hom_apply** 是 Mathlib 中的一个引理，位于命名空间 `MonCat`。
+形式化陈述：inv_hom_apply {M N : MonCat} (e : M ≅ N) (x : M) : e.inv (e.hom x) = x
+参数：e : M ≅ N；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma inv_hom_apply {M N : MonCat} (e : M ≅ N) (x : M) : e.inv (e.hom x) = x := by
   simp
 
 @[to_additive]
-/--
-lemma `hom_inv_apply` / 引理 `hom_inv_apply`
-
-English:
-lemma hom_inv_apply
-  given: {M N : MonCat} (e : M ≅ N) (s : N)
-  statement: e.hom (e.inv s) = s
-  proof: by
-  simp
-
-@[to_additive]
-
-中文:
-引理 hom_inv_apply
-  条件: {M N : 幺半群范畴} (e : M ≅ N) (s : N)
-  结论: e.hom (e.inv s) = s
-  证明: by
-  simp
-
-@[to_additive]
+/-
+**MonCat.hom_inv_apply** 是 Mathlib 中的一个引理，位于命名空间 `MonCat`。
+形式化陈述：hom_inv_apply {M N : MonCat} (e : M ≅ N) (s : N) : e.hom (e.inv s) = s
+参数：e : M ≅ N；s : N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma hom_inv_apply {M N : MonCat} (e : M ≅ N) (s : N) : e.hom (e.inv s) = s := by
   simp
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited MonCat
-  body: -- The default instance for `Monoid PUnit` is derived via `CommRing` which breaks to_additive
-  ⟨@of PUnit (@DivInvMonoid.toMonoid _ (@Group.toDivInvMonoid _
-    (@CommGroup.toGroup _ PUnit.commGroup)))⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 可居 幺半群范畴
-  定义体: -- The default instance for `Monoid PUnit` is derived via `CommRing` which breaks to_additive
-  ⟨@of PUnit (@DivInvMonoid.toMonoid _ (@Group.toDivInvMonoid _
-    (@CommGroup.toGroup _ PUnit.commGroup)))⟩
-
-@[to_additive]
+/-
+**MonCat.** 是 Mathlib 中的一个实例，位于命名空间 `MonCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited MonCat :=
   -- The default instance for `Monoid PUnit` is derived via `CommRing` which breaks to_additive
@@ -696,87 +443,49 @@ instance : Inhabited MonCat :=
     (@CommGroup.toGroup _ PUnit.commGroup)))⟩
 
 @[to_additive]
+/-
+**MonCat.** 是 Mathlib 中的一个实例，位于命名空间 `MonCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X Y : MonCat.{u}) : One (X ⟶ Y) := ⟨ofHom 1⟩
 
 @[to_additive (attr := simp)]
-/--
-lemma `hom_one` / 引理 `hom_one`
-
-English:
-lemma hom_one
-  given: (X Y : MonCat.{u})
-  statement: (1 : X ⟶ Y).hom = 1
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 hom_one
-  条件: (X Y : 幺半群范畴.{u})
-  结论: (1 : X ⟶ Y).hom = 1
-  证明: rfl
-
-@[to_additive]
+/-
+**MonCat.hom_one** 是 Mathlib 中的一个引理，位于命名空间 `MonCat`。
+形式化陈述：hom_one (X Y : MonCat.{u}) : (1 : X ⟶ Y).hom = 1
+参数：X Y : MonCat.{u}。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_one (X Y : MonCat.{u}) : (1 : X ⟶ Y).hom = 1 := rfl
 
 @[to_additive]
-/--
-lemma `oneHom_apply` / 引理 `oneHom_apply`
-
-English:
-lemma oneHom_apply
-  given: (X Y : MonCat.{u}) (x : X)
-  statement: (1 : X ⟶ Y).hom x = 1
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 oneHom_apply
-  条件: (X Y : 幺半群范畴.{u}) (x : X)
-  结论: (1 : X ⟶ Y).hom x = 1
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**MonCat.oneHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `MonCat`。
+形式化陈述：oneHom_apply (X Y : MonCat.{u}) (x : X) : (1 : X ⟶ Y).hom x = 1
+参数：X Y : MonCat.{u}；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma oneHom_apply (X Y : MonCat.{u}) (x : X) : (1 : X ⟶ Y).hom x = 1 := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `one_of` / 引理 `one_of`
-
-English:
-lemma one_of
-  given: {A : Type*} [Monoid A]
-  statement: (1 : MonCat.of A) = (1 : A)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 one_of
-  条件: {A : 类型} [幺半群 A]
-  结论: (1 : 幺半群范畴.of A) = (1 : A)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**MonCat.one_of** 是 Mathlib 中的一个引理，位于命名空间 `MonCat`。
+形式化陈述：one_of {A : Type*} [Monoid A] : (1 : MonCat.of A) = (1 : A)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma one_of {A : Type*} [Monoid A] : (1 : MonCat.of A) = (1 : A) := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `mul_of` / 引理 `mul_of`
-
-English:
-lemma mul_of
-  given: {A : Type*} [Monoid A] (a b : A)
-  proof: rfl
-
-中文:
-引理 mul_of
-  条件: {A : 类型} [幺半群 A] (a b : A)
-  证明: rfl
+/-
+**MonCat.mul_of** 是 Mathlib 中的一个引理，位于命名空间 `MonCat`。
+形式化陈述：mul_of {A : Type*} [Monoid A] (a b : A) : @HMul.hMul (MonCat.of A) (MonCat
+.of A) (MonCat.of A) _ a b = a * b
+参数：a b : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mul_of {A : Type*} [Monoid A] (a b : A) :
     @HMul.hMul (MonCat.of A) (MonCat.of A) (MonCat.of A) _ a b = a * b := rfl
@@ -784,54 +493,30 @@ lemma mul_of {A : Type*} [Monoid A] (a b : A) :
 /-- Universe lift functor for monoids. -/
 @[to_additive (attr := simps)
   /-- Universe lift functor for additive monoids. -/]
-/--
-Definition of `uliftFunctor` / `uliftFunctor` 的定义
-
-English:
-definition uliftFunctor
-  signature: : MonCat.{v} ⥤ MonCat.{max v u} where
-  body: MonCat.of (ULift.{u, v} X)
-map {_ _} f := MonCat.ofHom
-MulEquiv.ulift.symm.toMonoidHom.comp f.hom.comp MulEquiv.ulift.toMonoidHom
-  map_id X := by rfl
-  map_comp {X Y Z} f g := by rfl
-
-中文:
-定义 uliftFunctor
-  签名: : 幺半群范畴.{v} ⥤ 幺半群范畴.{最大值 v u} where
-  定义体: MonCat.of (ULift.{u, v} X)
-map {_ _} f := MonCat.ofHom
-MulEquiv.ulift.symm.toMonoidHom.comp f.hom.comp MulEquiv.ulift.toMonoidHom
-  map_id X := by rfl
-  map_comp {X Y Z} f g := by rfl
-
-Depends on / 依赖: MonCat, MonCat.of
+/-
+**MonCat.uliftFunctor** 是 Mathlib 中的一个定义，位于命名空间 `MonCat`。
+形式化陈述：uliftFunctor : MonCat.{v} ⥤ MonCat.{max v u} where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def uliftFunctor : MonCat.{v} ⥤ MonCat.{max v u} where
   obj X := MonCat.of (ULift.{u, v} X)
-map {_ _} f := MonCat.ofHom
-MulEquiv.ulift.symm.toMonoidHom.comp f.hom.comp MulEquiv.ulift.toMonoidHom
+  map {_ _} f := MonCat.ofHom <|
+    MulEquiv.ulift.symm.toMonoidHom.comp <| f.hom.comp MulEquiv.ulift.toMonoidHom
   map_id X := by rfl
   map_comp {X Y Z} f g := by rfl
 
 end MonCat
 
-/--
-Definition of `AddCommMonCat` / `AddCommMonCat` 的定义
+/-- The category of additive commutative monoids and monoid morphisms. -/
+/-
+**AddCommMonCat** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type (u + 1)
+参数：u + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure AddCommMonCat
-  parameters: : Type (u + 1) where
-  axioms and operations (2):
-    - (carrier : Type u)
-    - [str : AddCommMonoid carrier]
-
-中文:
-结构 加法交换幺半群范畴
-  参数: : 类型 (u + 1) where
-  公理与运算 (2 个):
-    - (carrier : 类型u)
-    - [str : 加法交换幺半群 carrier]
+--- 原说明 ---
+The category of additive commutative monoids and monoid morphisms.
 -/
 structure AddCommMonCat : Type (u + 1) where
   /-- The underlying type. -/
@@ -840,22 +525,14 @@ structure AddCommMonCat : Type (u + 1) where
 
 /-- The category of commutative monoids and monoid morphisms. -/
 @[to_additive AddCommMonCat]
-/--
-Definition of `CommMonCat` / `CommMonCat` 的定义
+/-
+**CommMonCat** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type (u + 1)
+参数：u + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CommMonCat
-  parameters: : Type (u + 1) where
-  axioms and operations (2):
-    - (carrier : Type u)
-    - [str : CommMonoid carrier]
-
-中文:
-结构 交换幺半群范畴
-  参数: : 类型 (u + 1) where
-  公理与运算 (2 个):
-    - (carrier : 类型u)
-    - [str : 交换幺半群 carrier]
+--- 原说明 ---
+The category of commutative monoids and monoid morphisms.
 -/
 structure CommMonCat : Type (u + 1) where
   /-- The underlying type. -/
@@ -864,26 +541,15 @@ structure CommMonCat : Type (u + 1) where
 
 attribute [instance] AddCommMonCat.str CommMonCat.str
 
-initialize_simps_projections AddCommMonCat (carrier -> coe, -str)
-initialize_simps_projections CommMonCat (carrier -> coe, -str)
+initialize_simps_projections AddCommMonCat (carrier → coe, -str)
+initialize_simps_projections CommMonCat (carrier → coe, -str)
 
 namespace CommMonCat
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort CommMonCat (Type u)
-  body: ⟨CommMonCat.carrier⟩
-
-中文:
-实例 :
-  签名: CoeSort 交换幺半群范畴 (类型u)
-  定义体: ⟨CommMonCat.carrier⟩
-
-Depends on / 依赖: CommMonCat, CommMonCat.carrier, carrier
+/-
+**CommMonCat.** 是 Mathlib 中的一个实例，位于命名空间 `CommMonCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort CommMonCat (Type u) :=
   ⟨CommMonCat.carrier⟩
@@ -892,18 +558,15 @@ attribute [coe] AddCommMonCat.carrier CommMonCat.carrier
 
 /-- Construct a bundled `CommMonCat` from the underlying type and typeclass. -/
 @[to_additive /-- Construct a bundled `AddCommMonCat` from the underlying type and typeclass. -/]
-/--
-Definition of `of` / `of` 的定义
+/-
+**CommMonCat.of** 是 Mathlib 中的一个缩写定义，位于命名空间 `CommMonCat`。
+形式化陈述：of (M : Type u) [CommMonoid M] : CommMonCat
+参数：M : Type u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation of
-  signature: (M : Type u) [CommMonoid M]
-  body: ⟨M⟩
-
-中文:
-缩写 of
-  签名: (M : 类型u) [交换幺半群 M]
-  定义体: ⟨M⟩
+--- 原说明 ---
+Construct a bundled `CommMonCat` from the underlying type and typeclass.
 -/
 abbrev of (M : Type u) [CommMonoid M] : CommMonCat := ⟨M⟩
 
@@ -911,73 +574,42 @@ end CommMonCat
 
 /-- The type of morphisms in `AddCommMonCat`. -/
 @[ext]
-/--
-Definition of `AddCommMonCat.Hom` / `AddCommMonCat.Hom` 的定义
+/-
+**AddCommMonCat.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `AddCommMonCat`。
+形式化陈述：AddCommMonCat → AddCommMonCat → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure AddCommMonCat.Hom
-  parameters: (A B : AddCommMonCat.{u})
-  axioms and operations (2):
-    - private(mk) : :
-    - hom' : A ->+ B
-
-中文:
-结构 加法交换幺半群范畴.态射
-  参数: (A B : 加法交换幺半群范畴.{u})
-  公理与运算 (2 个):
-    - private(mk) : :
-    - hom' : A ->+ B
+--- 原说明 ---
+The type of morphisms in `AddCommMonCat`.
 -/
 structure AddCommMonCat.Hom (A B : AddCommMonCat.{u}) where
   private mk ::
   /-- The underlying monoid homomorphism. -/
-  hom' : A ->+ B
+  hom' : A →+ B
 
 /-- The type of morphisms in `CommMonCat`. -/
 @[to_additive, ext]
-/--
-Definition of `CommMonCat.Hom` / `CommMonCat.Hom` 的定义
+/-
+**CommMonCat.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `CommMonCat`。
+形式化陈述：CommMonCat → CommMonCat → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CommMonCat.Hom
-  parameters: (A B : CommMonCat.{u})
-  axioms and operations (2):
-    - private(mk) : :
-    - hom' : A ->* B
-
-中文:
-结构 交换幺半群范畴.态射
-  参数: (A B : 交换幺半群范畴.{u})
-  公理与运算 (2 个):
-    - private(mk) : :
-    - hom' : A ->* B
+--- 原说明 ---
+The type of morphisms in `CommMonCat`.
 -/
 structure CommMonCat.Hom (A B : CommMonCat.{u}) where
   private mk ::
   /-- The underlying monoid homomorphism. -/
-  hom' : A ->* B
+  hom' : A →* B
 
 namespace CommMonCat
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category CommMonCat.{u}
-  body: Hom X Y
-  id X := ⟨MonoidHom.id X⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
-
-中文:
-实例 :
-  签名: 范畴 交换幺半群范畴.{u}
-  定义体: Hom X Y
-  id X := ⟨MonoidHom.id X⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
+/-
+**CommMonCat.** 是 Mathlib 中的一个实例，位于命名空间 `CommMonCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category CommMonCat.{u} where
   Hom X Y := Hom X Y
@@ -987,652 +619,369 @@ instance : Category CommMonCat.{u} where
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ConcreteCategory CommMonCat (· ->* ·)
-  body: Hom.hom'
-  ofHom := Hom.mk
-
-中文:
-实例 :
-  签名: 余ncrete范畴 交换幺半群范畴 (· ->* ·)
-  定义体: Hom.hom'
-  ofHom := Hom.mk
-
-Depends on / 依赖: Hom.hom
+/-
+**CommMonCat.** 是 Mathlib 中的一个实例，位于命名空间 `CommMonCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ConcreteCategory CommMonCat (· ->* ·) where
+instance : ConcreteCategory CommMonCat (· →* ·) where
   hom := Hom.hom'
   ofHom := Hom.mk
 
 /-- Turn a morphism in `CommMonCat` back into a `MonoidHom`. -/
 @[to_additive /-- Turn a morphism in `AddCommMonCat` back into an `AddMonoidHom`. -/]
-/--
-Definition of `Hom.hom` / `Hom.hom` 的定义
+/-
+**CommMonCat.Hom.hom** 是 Mathlib 中的一个定义，位于命名空间 `CommMonCat.Hom`。
+形式化陈述：{X Y : CommMonCat} → X.Hom Y → ↑X →* ↑Y
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.hom
-  signature: {X Y : CommMonCat.{u}} (f : Hom X Y)
-  body: ConcreteCategory.hom (C := CommMonCat) f
-
-中文:
-缩写 态射.hom
-  签名: {X Y : 交换幺半群范畴.{u}} (f : 态射 X Y)
-  定义体: ConcreteCategory.hom (C := CommMonCat) f
+--- 原说明 ---
+Turn a morphism in `CommMonCat` back into a `MonoidHom`.
 -/
 abbrev Hom.hom {X Y : CommMonCat.{u}} (f : Hom X Y) :=
   ConcreteCategory.hom (C := CommMonCat) f
 
 /-- Typecheck a `MonoidHom` as a morphism in `CommMonCat`. -/
 @[to_additive /-- Typecheck an `AddMonoidHom` as a morphism in `AddCommMonCat`. -/]
-/--
-Definition of `ofHom` / `ofHom` 的定义
+/-
+**CommMonCat.ofHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `CommMonCat`。
+形式化陈述：ofHom {X Y : Type u} [CommMonoid X] [CommMonoid Y] (f : X ->* Y) : of X ⟶ 
+of Y
+参数：f : X ->* Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofHom
-  signature: {X Y : Type u} [CommMonoid X] [CommMonoid Y] (f : X ->* Y)
-  body: ConcreteCategory.ofHom (C := CommMonCat) f
-
-中文:
-缩写 ofHom
-  签名: {X Y : 类型u} [交换幺半群 X] [交换幺半群 Y] (f : X ->* Y)
-  定义体: ConcreteCategory.ofHom (C := CommMonCat) f
-
-Depends on / 依赖: CommMonCat, ConcreteCategory, ConcreteCategory.ofHom
+--- 原说明 ---
+Typecheck a `MonoidHom` as a morphism in `CommMonCat`.
 -/
-abbrev ofHom {X Y : Type u} [CommMonoid X] [CommMonoid Y] (f : X ->* Y) : of X ⟶ of Y :=
+abbrev ofHom {X Y : Type u} [CommMonoid X] [CommMonoid Y] (f : X →* Y) : of X ⟶ of Y :=
   ConcreteCategory.ofHom (C := CommMonCat) f
 
 /-- Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas. -/
 @[to_additive /-- Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas. -/]
-/--
-Definition of `Hom.Simps.hom` / `Hom.Simps.hom` 的定义
+/-
+**CommMonCat.Hom.Simps.hom** 是 Mathlib 中的一个定义，位于命名空间 `CommMonCat.Hom.Simps`。
+形式化陈述：(X Y : CommMonCat) → X.Hom Y → ↑X →* ↑Y
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.Simps.hom
-  signature: (X Y : CommMonCat.{u}) (f : Hom X Y)
-  body: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
-initialize_simps_projections AddCommMonCat.Hom (hom' -> hom)
-
-中文:
-定义 态射.Simps.hom
-  签名: (X Y : 交换幺半群范畴.{u}) (f : 态射 X Y)
-  定义体: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
-initialize_simps_projections AddCommMonCat.Hom (hom' -> hom)
+--- 原说明 ---
+Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas.
 -/
 def Hom.Simps.hom (X Y : CommMonCat.{u}) (f : Hom X Y) :=
   f.hom
 
-initialize_simps_projections Hom (hom' -> hom)
-initialize_simps_projections AddCommMonCat.Hom (hom' -> hom)
+initialize_simps_projections Hom (hom' → hom)
+initialize_simps_projections AddCommMonCat.Hom (hom' → hom)
 
 /-!
 The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep them for `dsimp`.
 -/
 
 @[to_additive (attr := simp)]
-/--
-lemma `coe_id` / 引理 `coe_id`
+/-
+**CommMonCat.coe_id** 是 Mathlib 中的一个引理，位于命名空间 `CommMonCat`。
+形式化陈述：coe_id {X : CommMonCat} : (𝟙 X : X -> X) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma coe_id
-  given: {X : CommMonCat}
-  statement: (𝟙 X : X -> X) = id
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 coe_id
-  条件: {X : 交换幺半群范畴}
-  结论: (𝟙 X : X -> X) = id
-  证明: rfl
-
-@[to_additive (attr := simp)]
+--- 原说明 ---
+The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep 
+them for `dsimp`.
 -/
-lemma coe_id {X : CommMonCat} : (𝟙 X : X -> X) = id := rfl
+lemma coe_id {X : CommMonCat} : (𝟙 X : X → X) = id := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `coe_comp` / 引理 `coe_comp`
-
-English:
-lemma coe_comp
-  given: {X Y Z : CommMonCat} {f : X ⟶ Y} {g : Y ⟶ Z}
-  statement: (f ≫ g : X -> Z) = g ∘ f
-  proof: rfl
+/-
+**CommMonCat.coe_comp** 是 Mathlib 中的一个引理，位于命名空间 `CommMonCat`。
+形式化陈述：coe_comp {X Y Z : CommMonCat} {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g : X -> Z) =
+ g ∘ f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+lemma coe_comp {X Y Z : CommMonCat} {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g : X → Z) = g ∘ f := rfl
 
 @[deprecated (since := "2026-02-15")] alias forget_map := ConcreteCategory.forget_map_eq_ofHom
 
 @[to_additive (attr := ext)]
-
-中文:
-引理 coe_comp
-  条件: {X Y Z : 交换幺半群范畴} {f : X ⟶ Y} {g : Y ⟶ Z}
-  结论: (f ≫ g : X -> Z) = g ∘ f
-  证明: rfl
-
-@[deprecated (since := "2026-02-15")] alias forget_map := ConcreteCategory.forget_map_eq_ofHom
-
-@[to_additive (attr := ext)]
+/-
+**CommMonCat.ext** 是 Mathlib 中的一个引理，位于命名空间 `CommMonCat`。
+形式化陈述：ext {X Y : CommMonCat} {f g : X ⟶ Y} (w : forall x : X, f x = g x) : f = g
+参数：w : forall x : X, f x = g x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ext`：hom_ext {X Y : C} (f g : X ⟶ Y)
+ (w : forall x, f x = g x) : f = g
 -/
-lemma coe_comp {X Y Z : CommMonCat} {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g : X -> Z) = g ∘ f := rfl
-
-@[deprecated (since := "2026-02-15")] alias forget_map := ConcreteCategory.forget_map_eq_ofHom
-
-@[to_additive (attr := ext)]
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: {X Y : CommMonCat} {f g : X ⟶ Y} (w : forall x : X, f x = g x)
-  statement: f = g
-  proof: ConcreteCategory.hom_ext _ _ w
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 ext
-  条件: {X Y : 交换幺半群范畴} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
-  结论: f = g
-  证明: ConcreteCategory.hom_ext _ _ w
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ext, hom_ext
--/
-lemma ext {X Y : CommMonCat} {f g : X ⟶ Y} (w : forall x : X, f x = g x) : f = g :=
+lemma ext {X Y : CommMonCat} {f g : X ⟶ Y} (w : ∀ x : X, f x = g x) : f = g :=
   ConcreteCategory.hom_ext _ _ w
 
 @[to_additive (attr := simp)]
-/--
-lemma `hom_id` / 引理 `hom_id`
-
-English:
-lemma hom_id
-  given: {M : CommMonCat}
-  statement: (𝟙 M : M ⟶ M).hom = MonoidHom.id M
-  proof: rfl
-
-中文:
-引理 hom_id
-  条件: {M : 交换幺半群范畴}
-  结论: (𝟙 M : M ⟶ M).hom = 幺半群态射.id M
-  证明: rfl
+/-
+**CommMonCat.hom_id** 是 Mathlib 中的一个引理，位于命名空间 `CommMonCat`。
+形式化陈述：hom_id {M : CommMonCat} : (𝟙 M : M ⟶ M).hom = MonoidHom.id M
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_id {M : CommMonCat} : (𝟙 M : M ⟶ M).hom = MonoidHom.id M := rfl
 
 /- Provided for rewriting. -/
 @[to_additive]
-/--
-lemma `id_apply` / 引理 `id_apply`
+/-
+**CommMonCat.id_apply** 是 Mathlib 中的一个引理，位于命名空间 `CommMonCat`。
+形式化陈述：id_apply (M : CommMonCat) (x : M) : (𝟙 M : M ⟶ M) x = x
+参数：M : CommMonCat；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonoidHom.id_apply`：∀ (M : Type u_10) [inst : MulOne M] (x : M), (Monoid
+Hom.id M) x = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma id_apply
-  given: (M : CommMonCat) (x : M)
-  proof: by simp
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 id_apply
-  条件: (M : 交换幺半群范畴) (x : M)
-  证明: by simp
-
-@[to_additive (attr := simp)]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma id_apply (M : CommMonCat) (x : M) :
     (𝟙 M : M ⟶ M) x = x := by simp
 
 @[to_additive (attr := simp)]
-/--
-lemma `hom_comp` / 引理 `hom_comp`
-
-English:
-lemma hom_comp
-  given: {M N T : CommMonCat} (f : M ⟶ N) (g : N ⟶ T)
-  proof: rfl
-
-中文:
-引理 hom_comp
-  条件: {M N T : 交换幺半群范畴} (f : M ⟶ N) (g : N ⟶ T)
-  证明: rfl
-
-Depends on / 依赖: congr_map, map_injective, toPresheaf
+/-
+**CommMonCat.hom_comp** 是 Mathlib 中的一个引理，位于命名空间 `CommMonCat`。
+形式化陈述：hom_comp {M N T : CommMonCat} (f : M ⟶ N) (g : N ⟶ T) : (f ≫ g).hom = g.ho
+m.comp f.hom
+参数：f : M ⟶ N；g : N ⟶ T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_comp {M N T : CommMonCat} (f : M ⟶ N) (g : N ⟶ T) :
     (f ≫ g).hom = g.hom.comp f.hom := rfl
 
 /- Provided for rewriting. -/
 @[to_additive]
-/--
-lemma `comp_apply` / 引理 `comp_apply`
+/-
+**CommMonCat.comp_apply** 是 Mathlib 中的一个引理，位于命名空间 `CommMonCat`。
+形式化陈述：comp_apply {M N T : CommMonCat} (f : M ⟶ N) (g : N ⟶ T) (x : M) : (f ≫ g) 
+x = g (f x)
+参数：f : M ⟶ N；g : N ⟶ T；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma comp_apply
-  given: {M N T : CommMonCat} (f : M ⟶ N) (g : N ⟶ T) (x : M)
-  proof: by simp
-
-@[to_additive (attr := ext)]
-
-中文:
-引理 comp_apply
-  条件: {M N T : 交换幺半群范畴} (f : M ⟶ N) (g : N ⟶ T) (x : M)
-  证明: by simp
-
-@[to_additive (attr := ext)]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma comp_apply {M N T : CommMonCat} (f : M ⟶ N) (g : N ⟶ T) (x : M) :
     (f ≫ g) x = g (f x) := by simp
 
 @[to_additive (attr := ext)]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {M N : CommMonCat} {f g : M ⟶ N} (hf : f.hom = g.hom)
-  statement: f = g
-  proof: Hom.ext hf
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 hom_ext
-  条件: {M N : 交换幺半群范畴} {f g : M ⟶ N} (hf : f.hom = g.hom)
-  结论: f = g
-  证明: Hom.ext hf
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Hom.ext
+/-
+**CommMonCat.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `CommMonCat`。
+形式化陈述：hom_ext {M N : CommMonCat} {f g : M ⟶ N} (hf : f.hom = g.hom) : f = g
+参数：hf : f.hom = g.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CommMonCat.Hom.ext`：∀ {A B : CommMonCat} {x y : A.Hom B}, x.hom' = y.hom
+' → x = y
 -/
 lemma hom_ext {M N : CommMonCat} {f g : M ⟶ N} (hf : f.hom = g.hom) : f = g :=
   Hom.ext hf
 
 @[to_additive (attr := simp)]
-/--
-lemma `hom_ofHom` / 引理 `hom_ofHom`
-
-English:
-lemma hom_ofHom
-  given: {M N : Type u} [CommMonoid M] [CommMonoid N] (f : M ->* N)
-  statement: (ofHom f).hom = f
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 hom_ofHom
-  条件: {M N : 类型u} [交换幺半群 M] [交换幺半群 N] (f : M ->* N)
-  结论: (ofHom f).hom = f
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**CommMonCat.hom_ofHom** 是 Mathlib 中的一个引理，位于命名空间 `CommMonCat`。
+形式化陈述：hom_ofHom {M N : Type u} [CommMonoid M] [CommMonoid N] (f : M ->* N) : (of
+Hom f).hom = f
+参数：f : M ->* N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma hom_ofHom {M N : Type u} [CommMonoid M] [CommMonoid N] (f : M ->* N) : (ofHom f).hom = f := rfl
+lemma hom_ofHom {M N : Type u} [CommMonoid M] [CommMonoid N] (f : M →* N) : (ofHom f).hom = f := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `ofHom_hom` / 引理 `ofHom_hom`
-
-English:
-lemma ofHom_hom
-  given: {M N : CommMonCat} (f : M ⟶ N)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 ofHom_hom
-  条件: {M N : 交换幺半群范畴} (f : M ⟶ N)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**CommMonCat.ofHom_hom** 是 Mathlib 中的一个引理，位于命名空间 `CommMonCat`。
+形式化陈述：ofHom_hom {M N : CommMonCat} (f : M ⟶ N) : ofHom (Hom.hom f) = f
+参数：f : M ⟶ N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_hom {M N : CommMonCat} (f : M ⟶ N) :
     ofHom (Hom.hom f) = f := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `ofHom_id` / 引理 `ofHom_id`
-
-English:
-lemma ofHom_id
-  given: {M : Type u} [CommMonoid M]
-  statement: ofHom (MonoidHom.id M) = 𝟙 (of M)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 ofHom_id
-  条件: {M : 类型u} [交换幺半群 M]
-  结论: ofHom (幺半群态射.id M) = 𝟙 (of M)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**CommMonCat.ofHom_id** 是 Mathlib 中的一个引理，位于命名空间 `CommMonCat`。
+形式化陈述：ofHom_id {M : Type u} [CommMonoid M] : ofHom (MonoidHom.id M) = 𝟙 (of M)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_id {M : Type u} [CommMonoid M] : ofHom (MonoidHom.id M) = 𝟙 (of M) := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `ofHom_comp` / 引理 `ofHom_comp`
-
-English:
-lemma ofHom_comp
-  statement: {M N P : Type u} [CommMonoid M] [CommMonoid N] [CommMonoid P]
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 ofHom_comp
-  结论: {M N P : 类型u} [交换幺半群 M] [交换幺半群 N] [交换幺半群 P]
-  证明: rfl
-
-@[to_additive]
+/-
+**CommMonCat.ofHom_comp** 是 Mathlib 中的一个引理，位于命名空间 `CommMonCat`。
+形式化陈述：ofHom_comp {M N P : Type u} [CommMonoid M] [CommMonoid N] [CommMonoid P] (
+f : M ->* N) (g : N ->* P) : ofHom (g.comp f) = ofHom f ≫ ofHom g
+参数：f : M ->* N；g : N ->* P。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_comp {M N P : Type u} [CommMonoid M] [CommMonoid N] [CommMonoid P]
-    (f : M ->* N) (g : N ->* P) :
+    (f : M →* N) (g : N →* P) :
     ofHom (g.comp f) = ofHom f ≫ ofHom g :=
   rfl
 
 @[to_additive]
-/--
-lemma `ofHom_apply` / 引理 `ofHom_apply`
-
-English:
-lemma ofHom_apply
-  given: {X Y : Type u} [CommMonoid X] [CommMonoid Y] (f : X ->* Y) (x : X)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 ofHom_apply
-  条件: {X Y : 类型u} [交换幺半群 X] [交换幺半群 Y] (f : X ->* Y) (x : X)
-  证明: rfl
-
-@[to_additive]
+/-
+**CommMonCat.ofHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `CommMonCat`。
+形式化陈述：ofHom_apply {X Y : Type u} [CommMonoid X] [CommMonoid Y] (f : X ->* Y) (x 
+: X) : (ofHom f) x = f x
+参数：f : X ->* Y；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma ofHom_apply {X Y : Type u} [CommMonoid X] [CommMonoid Y] (f : X ->* Y) (x : X) :
+lemma ofHom_apply {X Y : Type u} [CommMonoid X] [CommMonoid Y] (f : X →* Y) (x : X) :
     (ofHom f) x = f x := rfl
 
 @[to_additive]
-/--
-lemma `inv_hom_apply` / 引理 `inv_hom_apply`
-
-English:
-lemma inv_hom_apply
-  given: {M N : CommMonCat} (e : M ≅ N) (x : M)
-  statement: e.inv (e.hom x) = x
-  proof: by
-  simp
-
-@[to_additive]
-
-中文:
-引理 inv_hom_apply
-  条件: {M N : 交换幺半群范畴} (e : M ≅ N) (x : M)
-  结论: e.inv (e.hom x) = x
-  证明: by
-  simp
-
-@[to_additive]
+/-
+**CommMonCat.inv_hom_apply** 是 Mathlib 中的一个引理，位于命名空间 `CommMonCat`。
+形式化陈述：inv_hom_apply {M N : CommMonCat} (e : M ≅ N) (x : M) : e.inv (e.hom x) = x
+参数：e : M ≅ N；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma inv_hom_apply {M N : CommMonCat} (e : M ≅ N) (x : M) : e.inv (e.hom x) = x := by
   simp
 
 @[to_additive]
-/--
-lemma `hom_inv_apply` / 引理 `hom_inv_apply`
-
-English:
-lemma hom_inv_apply
-  given: {M N : CommMonCat} (e : M ≅ N) (s : N)
-  statement: e.hom (e.inv s) = s
-  proof: by
-  simp
-
-@[to_additive]
-
-中文:
-引理 hom_inv_apply
-  条件: {M N : 交换幺半群范畴} (e : M ≅ N) (s : N)
-  结论: e.hom (e.inv s) = s
-  证明: by
-  simp
-
-@[to_additive]
+/-
+**CommMonCat.hom_inv_apply** 是 Mathlib 中的一个引理，位于命名空间 `CommMonCat`。
+形式化陈述：hom_inv_apply {M N : CommMonCat} (e : M ≅ N) (s : N) : e.hom (e.inv s) = s
+参数：e : M ≅ N；s : N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma hom_inv_apply {M N : CommMonCat} (e : M ≅ N) (s : N) : e.hom (e.inv s) = s := by
   simp
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited CommMonCat
-  body: -- The default instance for `CommMonoid PUnit` is derived via `CommRing` which breaks to_additive
-  ⟨@of PUnit (@CommGroup.toCommMonoid _ PUnit.commGroup)⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 可居 交换幺半群范畴
-  定义体: -- The default instance for `CommMonoid PUnit` is derived via `CommRing` which breaks to_additive
-  ⟨@of PUnit (@CommGroup.toCommMonoid _ PUnit.commGroup)⟩
-
-@[to_additive]
+/-
+**CommMonCat.** 是 Mathlib 中的一个实例，位于命名空间 `CommMonCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited CommMonCat :=
   -- The default instance for `CommMonoid PUnit` is derived via `CommRing` which breaks to_additive
   ⟨@of PUnit (@CommGroup.toCommMonoid _ PUnit.commGroup)⟩
 
 @[to_additive]
-/--
-theorem `coe_of` / 定理 `coe_of`
-
-English:
-theorem coe_of
-  given: (R : Type u) [CommMonoid R]
-  statement: (CommMonCat.of R : Type u) = R
-  proof: rfl
-
-@[to_additive hasForgetToAddMonCat]
-
-中文:
-定理 coe_of
-  条件: (R : 类型u) [交换幺半群 R]
-  结论: (交换幺半群范畴.of R : 类型u) = R
-  证明: rfl
-
-@[to_additive hasForgetToAddMonCat]
+/-
+**CommMonCat.coe_of** 是 Mathlib 中的一个定理，位于命名空间 `CommMonCat`。
+形式化陈述：coe_of (R : Type u) [CommMonoid R] : (CommMonCat.of R : Type u) = R
+参数：R : Type u。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_of (R : Type u) [CommMonoid R] : (CommMonCat.of R : Type u) = R :=
   rfl
 
 @[to_additive hasForgetToAddMonCat]
-/--
-Instance `hasForgetToMonCat` / 实例 `hasForgetToMonCat`
-
-English:
-instance hasForgetToMonCat
-  signature: : HasForget₂ CommMonCat MonCat where
-  body: { obj R := MonCat.of R
-      map f := MonCat.ofHom f.hom }
-
-中文:
-实例 hasForgetToMonCat
-  签名: : 有Forget₂ 交换幺半群范畴 幺半群范畴 where
-  定义体: { obj R := MonCat.of R
-      map f := MonCat.ofHom f.hom }
-
-Depends on / 依赖: MonCat, MonCat.of, MonCat.ofHom, f.hom
+/-
+**CommMonCat.hasForgetToMonCat** 是 Mathlib 中的一个实例，位于命名空间 `CommMonCat`。
+形式化陈述：hasForgetToMonCat : HasForget₂ CommMonCat MonCat where forget₂
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasForgetToMonCat : HasForget₂ CommMonCat MonCat where
   forget₂ :=
     { obj R := MonCat.of R
       map f := MonCat.ofHom f.hom }
-
-/--
-lemma `coe_forget₂_obj` / 引理 `coe_forget₂_obj`
-
-English:
-lemma coe_forget₂_obj
-  given: (X : CommMonCat)
-  proof: rfl
-
-中文:
-引理 coe_forget₂_obj
-  条件: (X : 交换幺半群范畴)
-  证明: rfl
+/-
+**CommMonCat.coe_forget** 是 Mathlib 中的一个引理，位于命名空间 `CommMonCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive (attr := simp)] lemma coe_forget₂_obj (X : CommMonCat) :
     ((forget₂ CommMonCat MonCat).obj X : Type _) = X := rfl
-
-/--
-lemma `hom_forget₂_map` / 引理 `hom_forget₂_map`
-
-English:
-lemma hom_forget₂_map
-  statement: {X Y : CommMonCat}
-  proof: rfl
-
-中文:
-引理 hom_forget₂_map
-  结论: {X Y : 交换幺半群范畴}
-  证明: rfl
+/-
+**CommMonCat.hom_forget** 是 Mathlib 中的一个引理，位于命名空间 `CommMonCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive (attr := simp)] lemma hom_forget₂_map {X Y : CommMonCat}
     (f : X ⟶ Y) :
     ((forget₂ CommMonCat MonCat).map f).hom = f.hom := rfl
-
-/--
-lemma `forget₂_map_ofHom` / 引理 `forget₂_map_ofHom`
-
-English:
-lemma forget₂_map_ofHom
-  statement: {X Y : Type u} [CommMonoid X] [CommMonoid Y]
-  proof: rfl
-
-中文:
-引理 forget₂_map_ofHom
-  结论: {X Y : 类型u} [交换幺半群 X] [交换幺半群 Y]
-  证明: rfl
+/-
+**CommMonCat.forget** 是 Mathlib 中的一个引理，位于命名空间 `CommMonCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[to_additive (attr := simp)] lemma forget₂_map_ofHom {X Y : Type u} [CommMonoid X] [CommMonoid Y]
-    (f : X ->* Y) :
+    (f : X →* Y) :
     (forget₂ CommMonCat MonCat).map (ofHom f) = MonCat.ofHom f := rfl
 
 /-- The forgetful functor from `CommMonCat` to `MonCat` is fully faithful. -/
 @[to_additive fullyFaithfulForgetToAddMonCat
   /-- The forgetful functor from `AddCommMonCat` to `AddMonCat` is fully faithful. -/]
-/--
-Definition of `fullyFaithfulForgetToMonCat` / `fullyFaithfulForgetToMonCat` 的定义
-
-English:
-definition fullyFaithfulForgetToMonCat
-  signature: : (forget₂ CommMonCat.{u} MonCat.{u}).FullyFaithful where
-  body: ofHom f.hom
-
-@[to_additive]
-
-中文:
-定义 fullyFaithfulForgetToMonCat
-  签名: : (forget₂ 交换幺半群范畴.{u} 幺半群范畴.{u}).满忠实 where
-  定义体: ofHom f.hom
-
-@[to_additive]
-
-Depends on / 依赖: f.hom
+/-
+**CommMonCat.fullyFaithfulForgetToMonCat** 是 Mathlib 中的一个定义，位于命名空间 `CommMonCat`。
+形式化陈述：fullyFaithfulForgetToMonCat : (forget₂ CommMonCat.{u} MonCat.{u}).FullyFai
+thful where preimage f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def fullyFaithfulForgetToMonCat : (forget₂ CommMonCat.{u} MonCat.{u}).FullyFaithful where
   preimage f := ofHom f.hom
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (forget₂ CommMonCat.{u} MonCat.{u}).Full
-  body: fullyFaithfulForgetToMonCat.full
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: (forget₂ 交换幺半群范畴.{u} 幺半群范畴.{u}).满
-  定义体: fullyFaithfulForgetToMonCat.full
-
-@[to_additive]
-
-Depends on / 依赖: fullyFaithfulForgetToMonCat, fullyFaithfulForgetToMonCat.full
+/-
+**CommMonCat.** 是 Mathlib 中的一个实例，位于命名空间 `CommMonCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (forget₂ CommMonCat.{u} MonCat.{u}).Full :=
   fullyFaithfulForgetToMonCat.full
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Coe CommMonCat.{u} MonCat.{u}
-  body: (forget₂ CommMonCat MonCat).obj
-
-中文:
-实例 :
-  签名: Coe 交换幺半群范畴.{u} 幺半群范畴.{u}
-  定义体: (forget₂ CommMonCat MonCat).obj
-
-Depends on / 依赖: CommMonCat, MonCat
+/-
+**CommMonCat.** 是 Mathlib 中的一个实例，位于命名空间 `CommMonCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Coe CommMonCat.{u} MonCat.{u} where coe := (forget₂ CommMonCat MonCat).obj
 
 /-- Universe lift functor for commutative monoids. -/
 @[to_additive (attr := simps)
   /-- Universe lift functor for additive commutative monoids. -/]
-/--
-Definition of `uliftFunctor` / `uliftFunctor` 的定义
-
-English:
-definition uliftFunctor
-  signature: : CommMonCat.{v} ⥤ CommMonCat.{max v u} where
-  body: CommMonCat.of (ULift.{u, v} X)
-map {_ _} f := CommMonCat.ofHom
-MulEquiv.ulift.symm.toMonoidHom.comp f.hom.comp MulEquiv.ulift.toMonoidHom
-  map_id X := by rfl
-  map_comp {X Y Z} f g := by rfl
-
-中文:
-定义 uliftFunctor
-  签名: : 交换幺半群范畴.{v} ⥤ 交换幺半群范畴.{最大值 v u} where
-  定义体: CommMonCat.of (ULift.{u, v} X)
-map {_ _} f := CommMonCat.ofHom
-MulEquiv.ulift.symm.toMonoidHom.comp f.hom.comp MulEquiv.ulift.toMonoidHom
-  map_id X := by rfl
-  map_comp {X Y Z} f g := by rfl
-
-Depends on / 依赖: CommMonCat, CommMonCat.of
+/-
+**CommMonCat.uliftFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CommMonCat`。
+形式化陈述：uliftFunctor : CommMonCat.{v} ⥤ CommMonCat.{max v u} where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def uliftFunctor : CommMonCat.{v} ⥤ CommMonCat.{max v u} where
   obj X := CommMonCat.of (ULift.{u, v} X)
-map {_ _} f := CommMonCat.ofHom
-MulEquiv.ulift.symm.toMonoidHom.comp f.hom.comp MulEquiv.ulift.toMonoidHom
+  map {_ _} f := CommMonCat.ofHom <|
+    MulEquiv.ulift.symm.toMonoidHom.comp <| f.hom.comp MulEquiv.ulift.toMonoidHom
   map_id X := by rfl
   map_comp {X Y Z} f g := by rfl
 
@@ -1648,22 +997,12 @@ variable [Monoid X] [Monoid Y]
 @[to_additive (attr := simps) AddEquiv.toAddMonCatIso
       /-- Build an isomorphism in the category `AddMonCat` from
 an `AddEquiv` between `AddMonoid`s. -/]
-/--
-Definition of `MulEquiv.toMonCatIso` / `MulEquiv.toMonCatIso` 的定义
-
-English:
-definition MulEquiv.toMonCatIso
-  signature: (e : X ≃* Y)
-  body: MonCat.ofHom e.toMonoidHom
-  inv := MonCat.ofHom e.symm.toMonoidHom
-
-中文:
-定义 乘法等价.toMonCatIso
-  签名: (e : X ≃* Y)
-  定义体: MonCat.ofHom e.toMonoidHom
-  inv := MonCat.ofHom e.symm.toMonoidHom
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, MonCat, MonCat.ofHom, congr_hom, e.toMonoidHom, toMonoidHom
+/-
+**MulEquiv.toMonCatIso** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：MulEquiv.toMonCatIso (e : X ≃* Y) : MonCat.of X ≅ MonCat.of Y where hom
+参数：e : X ≃* Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def MulEquiv.toMonCatIso (e : X ≃* Y) : MonCat.of X ≅ MonCat.of Y where
   hom := MonCat.ofHom e.toMonoidHom
@@ -1677,22 +1016,17 @@ variable [CommMonoid X] [CommMonoid Y]
 
 /-- Build an isomorphism in the category `CommMonCat` from a `MulEquiv` between `CommMonoid`s. -/
 @[to_additive (attr := simps) AddEquiv.toAddCommMonCatIso]
-/--
-Definition of `MulEquiv.toCommMonCatIso` / `MulEquiv.toCommMonCatIso` 的定义
+/-
+**MulEquiv.toCommMonCatIso** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：MulEquiv.toCommMonCatIso (e : X ≃* Y) : CommMonCat.of X ≅ CommMonCat.of Y 
+where hom
+参数：e : X ≃* Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MulEquiv.toCommMonCatIso
-  signature: (e : X ≃* Y)
-  body: CommMonCat.ofHom e.toMonoidHom
-  inv := CommMonCat.ofHom e.symm.toMonoidHom
-
-中文:
-定义 乘法等价.toCommMonCatIso
-  签名: (e : X ≃* Y)
-  定义体: CommMonCat.ofHom e.toMonoidHom
-  inv := CommMonCat.ofHom e.symm.toMonoidHom
-
-Depends on / 依赖: CommMonCat, CommMonCat.ofHom, e.toMonoidHom, toMonoidHom
+--- 原说明 ---
+Build an isomorphism in the category `CommMonCat` from a `MulEquiv` between `Com
+mMonoid`s.
 -/
 def MulEquiv.toCommMonCatIso (e : X ≃* Y) : CommMonCat.of X ≅ CommMonCat.of Y where
   hom := CommMonCat.ofHom e.toMonoidHom
@@ -1710,20 +1044,13 @@ namespace CategoryTheory.Iso
 @[to_additive addMonCatIsoToAddEquiv
       /-- Build an `AddEquiv` from an isomorphism in the category
 `AddMonCat`. -/]
-/--
-Definition of `monCatIsoToMulEquiv` / `monCatIsoToMulEquiv` 的定义
-
-English:
-definition monCatIsoToMulEquiv
-  signature: {X Y : MonCat} (i : X ≅ Y)
-  body: MonoidHom.toMulEquiv i.hom.hom i.inv.hom (by ext; simp) (by ext; simp)
-
-中文:
-定义 monCatIsoToMulEquiv
-  签名: {X Y : 幺半群范畴} (i : X ≅ Y)
-  定义体: MonoidHom.toMulEquiv i.hom.hom i.inv.hom (by ext; simp) (by ext; simp)
-
-Depends on / 依赖: MonoidHom, MonoidHom.toMulEquiv, i.hom.hom, i.inv.hom, toMulEquiv
+/-
+**CategoryTheory.Iso.monCatIsoToMulEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Iso`。
+形式化陈述：monCatIsoToMulEquiv {X Y : MonCat} (i : X ≅ Y) : X ≃* Y
+参数：i : X ≅ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def monCatIsoToMulEquiv {X Y : MonCat} (i : X ≅ Y) : X ≃* Y :=
   MonoidHom.toMulEquiv i.hom.hom i.inv.hom (by ext; simp) (by ext; simp)
@@ -1731,20 +1058,13 @@ def monCatIsoToMulEquiv {X Y : MonCat} (i : X ≅ Y) : X ≃* Y :=
 /-- Build a `MulEquiv` from an isomorphism in the category `CommMonCat`. -/
 @[to_additive /-- Build an `AddEquiv` from an isomorphism in the category
 `AddCommMonCat`. -/]
-/--
-Definition of `commMonCatIsoToMulEquiv` / `commMonCatIsoToMulEquiv` 的定义
-
-English:
-definition commMonCatIsoToMulEquiv
-  signature: {X Y : CommMonCat} (i : X ≅ Y)
-  body: MonoidHom.toMulEquiv i.hom.hom i.inv.hom (by ext; simp) (by ext; simp)
-
-中文:
-定义 commMonCatIsoToMulEquiv
-  签名: {X Y : 交换幺半群范畴} (i : X ≅ Y)
-  定义体: MonoidHom.toMulEquiv i.hom.hom i.inv.hom (by ext; simp) (by ext; simp)
-
-Depends on / 依赖: MonoidHom, MonoidHom.toMulEquiv, i.hom.hom, i.inv.hom, toMulEquiv
+/-
+**CategoryTheory.Iso.commMonCatIsoToMulEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Iso`。
+形式化陈述：commMonCatIsoToMulEquiv {X Y : CommMonCat} (i : X ≅ Y) : X ≃* Y
+参数：i : X ≅ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def commMonCatIsoToMulEquiv {X Y : CommMonCat} (i : X ≅ Y) : X ≃* Y :=
   MonoidHom.toMulEquiv i.hom.hom i.inv.hom (by ext; simp) (by ext; simp)
@@ -1754,27 +1074,22 @@ end CategoryTheory.Iso
 /-- multiplicative equivalences between `Monoid`s are the same as (isomorphic to) isomorphisms
 in `MonCat` -/
 @[to_additive addEquivIsoAddMonCatIso]
-/--
-Definition of `mulEquivIsoMonCatIso` / `mulEquivIsoMonCatIso` 的定义
+/-
+**mulEquivIsoMonCatIso** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：mulEquivIsoMonCatIso {X Y : Type u} [Monoid X] [Monoid Y] : (X ≃* Y) ≅ (Mo
+nCat.of X ≅ MonCat.of Y) where hom
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulEquivIsoMonCatIso
-  signature: {X Y : Type u} [Monoid X] [Monoid Y]
-  body: ↾fun e => e.toMonCatIso
-  inv := ↾fun i => i.monCatIsoToMulEquiv
-
-中文:
-定义 mulEquivIsoMonCatIso
-  签名: {X Y : 类型u} [幺半群 X] [幺半群 Y]
-  定义体: ↾fun e => e.toMonCatIso
-  inv := ↾fun i => i.monCatIsoToMulEquiv
-
-Depends on / 依赖: e.toMonCatIso, toMonCatIso
+--- 原说明 ---
+multiplicative equivalences between `Monoid`s are the same as (isomorphic to) is
+omorphisms
+in `MonCat`
 -/
 def mulEquivIsoMonCatIso {X Y : Type u} [Monoid X] [Monoid Y] :
     (X ≃* Y) ≅ (MonCat.of X ≅ MonCat.of Y) where
-  hom := ↾fun e => e.toMonCatIso
-  inv := ↾fun i => i.monCatIsoToMulEquiv
+  hom := ↾fun e ↦ e.toMonCatIso
+  inv := ↾fun i ↦ i.monCatIsoToMulEquiv
 
 /-- additive equivalences between `AddMonoid`s are the same
 as (isomorphic to) isomorphisms in `AddMonCat` -/
@@ -1783,57 +1098,43 @@ add_decl_doc addEquivIsoAddMonCatIso
 /-- multiplicative equivalences between `CommMonoid`s are the same as (isomorphic to) isomorphisms
 in `CommMonCat` -/
 @[to_additive addEquivIsoAddCommMonCatIso]
-/--
-Definition of `mulEquivIsoCommMonCatIso` / `mulEquivIsoCommMonCatIso` 的定义
+/-
+**mulEquivIsoCommMonCatIso** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：mulEquivIsoCommMonCatIso {X Y : Type u} [CommMonoid X] [CommMonoid Y] : (X
+ ≃* Y) ≅ (CommMonCat.of X ≅ CommMonCat.of Y) where hom
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulEquivIsoCommMonCatIso
-  signature: {X Y : Type u} [CommMonoid X] [CommMonoid Y]
-  body: ↾fun e => e.toCommMonCatIso
-  inv := ↾fun i => i.commMonCatIsoToMulEquiv
-
-中文:
-定义 mulEquivIsoCommMonCatIso
-  签名: {X Y : 类型u} [交换幺半群 X] [交换幺半群 Y]
-  定义体: ↾fun e => e.toCommMonCatIso
-  inv := ↾fun i => i.commMonCatIsoToMulEquiv
-
-Depends on / 依赖: e.toCommMonCatIso, toCommMonCatIso
+--- 原说明 ---
+multiplicative equivalences between `CommMonoid`s are the same as (isomorphic to
+) isomorphisms
+in `CommMonCat`
 -/
 def mulEquivIsoCommMonCatIso {X Y : Type u} [CommMonoid X] [CommMonoid Y] :
     (X ≃* Y) ≅ (CommMonCat.of X ≅ CommMonCat.of Y) where
-  hom := ↾fun e => e.toCommMonCatIso
-  inv := ↾fun i => i.commMonCatIsoToMulEquiv
+  hom := ↾fun e ↦ e.toCommMonCatIso
+  inv := ↾fun i ↦ i.commMonCatIsoToMulEquiv
 
 /-- additive equivalences between `AddCommMonoid`s are
 the same as (isomorphic to) isomorphisms in `AddCommMonCat` -/
 add_decl_doc addEquivIsoAddCommMonCatIso
 
 @[to_additive]
-/--
-Instance `MonCat.forget_reflects_isos` / 实例 `MonCat.forget_reflects_isos`
-
-English:
-instance MonCat.forget_reflects_isos
-  signature: : (forget MonCat.{u}).ReflectsIsomorphisms where
-  body: by
-    let i := asIso ((forget MonCat).map f)
-    let e : X ≃* Y := { f.hom, i.toEquiv with }
-    exact e.toMonCatIso.isIso_hom
-
-@[to_additive]
-
-中文:
-实例 幺半群范畴.forget_reflects_isos
-  签名: : (forget 幺半群范畴.{u}).反映同构 where
-  定义体: by
-    let i := asIso ((forget MonCat).map f)
-    let e : X ≃* Y := { f.hom, i.toEquiv with }
-    exact e.toMonCatIso.isIso_hom
-
-@[to_additive]
-
-Depends on / 依赖: MonCat, e.toMonCatIso.isIso_hom, f.hom, forget, i.toEquiv, isIso_hom, toEquiv, toMonCatIso
+/-
+**MonCat.forget_reflects_isos** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：MonCat.forget_reflects_isos : (forget MonCat.{u}).ReflectsIsomorphisms whe
+re reflects {X Y} f _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
+· 使用定理 `MonoidHom.map_mul'`：∀ {M : Type u_10} {N : Type u_11} [inst : MulOne M] 
+[inst_1 : MulOne N] (self : M →* N) (x y : M),   (↑self).toFun (x * y) = (↑self)
+.toFun x…
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 -/
 instance MonCat.forget_reflects_isos : (forget MonCat.{u}).ReflectsIsomorphisms where
   reflects {X Y} f _ := by
@@ -1842,26 +1143,21 @@ instance MonCat.forget_reflects_isos : (forget MonCat.{u}).ReflectsIsomorphisms 
     exact e.toMonCatIso.isIso_hom
 
 @[to_additive]
-/--
-Instance `CommMonCat.forget_reflects_isos` / 实例 `CommMonCat.forget_reflects_isos`
-
-English:
-instance CommMonCat.forget_reflects_isos
-  signature: : (forget CommMonCat.{u}).ReflectsIsomorphisms where
-  body: by
-    let i := asIso ((forget CommMonCat).map f)
-    let e : X ≃* Y := { f.hom, i.toEquiv with }
-    exact e.toCommMonCatIso.isIso_hom
-
-中文:
-实例 交换幺半群范畴.forget_reflects_isos
-  签名: : (forget 交换幺半群范畴.{u}).反映同构 where
-  定义体: by
-    let i := asIso ((forget CommMonCat).map f)
-    let e : X ≃* Y := { f.hom, i.toEquiv with }
-    exact e.toCommMonCatIso.isIso_hom
-
-Depends on / 依赖: CommMonCat, e.toCommMonCatIso.isIso_hom, f.hom, forget, i.toEquiv, isIso_hom, toCommMonCatIso, toEquiv
+/-
+**CommMonCat.forget_reflects_isos** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：CommMonCat.forget_reflects_isos : (forget CommMonCat.{u}).ReflectsIsomorph
+isms where reflects {X Y} f _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
+· 使用定理 `MonoidHom.map_mul'`：∀ {M : Type u_10} {N : Type u_11} [inst : MulOne M] 
+[inst_1 : MulOne N] (self : M →* N) (x y : M),   (↑self).toFun (x * y) = (↑self)
+.toFun x…
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 -/
 instance CommMonCat.forget_reflects_isos : (forget CommMonCat.{u}).ReflectsIsomorphisms where
   reflects {X Y} f _ := by
@@ -1872,28 +1168,16 @@ instance CommMonCat.forget_reflects_isos : (forget CommMonCat.{u}).ReflectsIsomo
 /-- Ensure that `forget₂ CommMonCat MonCat` automatically reflects isomorphisms. -/
 @[to_additive
   /-- Ensure that `forget₂ AddCommMonCat AddMonCat` automatically reflects isomorphisms. -/]
-/--
-Instance `CommMonCat.forget₂_full` / 实例 `CommMonCat.forget₂_full`
-
-English:
-instance CommMonCat.forget₂_full
-  signature: : (forget₂ CommMonCat MonCat).Full where
-  body: ⟨ofHom f.hom, rfl⟩
-
-example : (forget₂ CommMonCat MonCat).ReflectsIsomorphisms := inferInstance
-
-中文:
-实例 交换幺半群范畴.forget₂_full
-  签名: : (forget₂ 交换幺半群范畴 幺半群范畴).满 where
-  定义体: ⟨ofHom f.hom, rfl⟩
-
-example : (forget₂ CommMonCat MonCat).ReflectsIsomorphisms := inferInstance
-
-Depends on / 依赖: f.hom
+/-
+**CommMonCat.forget** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance CommMonCat.forget₂_full : (forget₂ CommMonCat MonCat).Full where
   map_surjective f := ⟨ofHom f.hom, rfl⟩
-
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : (forget₂ CommMonCat MonCat).ReflectsIsomorphisms := inferInstance
 
 /-!
@@ -1902,26 +1186,14 @@ example : (forget₂ CommMonCat MonCat).ReflectsIsomorphisms := inferInstance
 
 /-- The equivalence between `AddMonCat` and `MonCat`. -/
 @[simps]
-/--
-Definition of `AddMonCat.equivalence` / `AddMonCat.equivalence` 的定义
+/-
+**AddMonCat.equivalence** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：AddMonCat.equivalence : AddMonCat ≌ MonCat where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AddMonCat.equivalence
-  signature: : AddMonCat ≌ MonCat where
-  body: { obj X := .of (Multiplicative X), map f := MonCat.ofHom f.hom.toMultiplicative }
-  inverse := { obj X := .of (Additive X), map f := ofHom f.hom.toAdditive }
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-中文:
-定义 加法幺半群范畴.equivalence
-  签名: : 加法幺半群范畴 ≌ 幺半群范畴 where
-  定义体: { obj X := .of (Multiplicative X), map f := MonCat.ofHom f.hom.toMultiplicative }
-  inverse := { obj X := .of (Additive X), map f := ofHom f.hom.toAdditive }
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-Depends on / 依赖: MonCat, MonCat.ofHom, Multiplicative, f.hom.toMultiplicative, toMultiplicative
+--- 原说明 ---
+The equivalence between `AddMonCat` and `MonCat`.
 -/
 def AddMonCat.equivalence : AddMonCat ≌ MonCat where
   functor := { obj X := .of (Multiplicative X), map f := MonCat.ofHom f.hom.toMultiplicative }
@@ -1931,26 +1203,14 @@ def AddMonCat.equivalence : AddMonCat ≌ MonCat where
 
 /-- The equivalence between `AddCommMonCat` and `CommMonCat`. -/
 @[simps]
-/--
-Definition of `AddCommMonCat.equivalence` / `AddCommMonCat.equivalence` 的定义
+/-
+**AddCommMonCat.equivalence** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：AddCommMonCat.equivalence : AddCommMonCat ≌ CommMonCat where functor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AddCommMonCat.equivalence
-  signature: : AddCommMonCat ≌ CommMonCat where
-  body: { obj X := .of (Multiplicative X), map f := CommMonCat.ofHom f.hom.toMultiplicative }
-  inverse := { obj X := .of (Additive X), map f := ofHom f.hom.toAdditive }
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-中文:
-定义 加法交换幺半群范畴.equivalence
-  签名: : 加法交换幺半群范畴 ≌ 交换幺半群范畴 where
-  定义体: { obj X := .of (Multiplicative X), map f := CommMonCat.ofHom f.hom.toMultiplicative }
-  inverse := { obj X := .of (Additive X), map f := ofHom f.hom.toAdditive }
-  unitIso := Iso.refl _
-  counitIso := Iso.refl _
-
-Depends on / 依赖: CommMonCat, CommMonCat.ofHom, Multiplicative, f.hom.toMultiplicative, toMultiplicative
+--- 原说明 ---
+The equivalence between `AddCommMonCat` and `CommMonCat`.
 -/
 def AddCommMonCat.equivalence : AddCommMonCat ≌ CommMonCat where
   functor := { obj X := .of (Multiplicative X), map f := CommMonCat.ofHom f.hom.toMultiplicative }

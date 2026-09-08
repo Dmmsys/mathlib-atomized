@@ -12,7 +12,7 @@ public import Mathlib.RingTheory.Ideal.Maps
 
 For commutative rings `R` and `S` and ideals `I ≤ R`, `J ≤ S`, we define `Ideal.prod I J` as the
 product `I × J`, viewed as an ideal of `R × S`. In `ideal_prod_eq` we show that every ideal of
-`R × S` is of this form. Furthermore, we show that every prime ideal of `R × S` is of the form
+`R × S` is of this form.  Furthermore, we show that every prime ideal of `R × S` is of the form
 `p × S` or `R × p`, where `p` is a prime ideal.
 -/
 
@@ -25,278 +25,191 @@ variable {R : Type u} {S : Type v} [Semiring R] [Semiring S] (I : Ideal R) (J : 
 
 namespace Ideal
 
-/--
-Definition of `prod` / `prod` 的定义
+/-- `I × J` as an ideal of `R × S`. -/
+/-
+**Ideal.prod** 是 Mathlib 中的一个定义，位于命名空间 `Ideal`。
+形式化陈述：prod : Ideal (R × S)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod
-  signature: : Ideal (R × S)
-  body: I.comap (RingHom.fst R S) ⊓ J.comap (RingHom.snd R S)
-
-@[simp]
-
-中文:
-定义 乘积
-  签名: : 理想 (R × S)
-  定义体: I.comap (RingHom.fst R S) ⊓ J.comap (RingHom.snd R S)
-
-@[simp]
-
-Depends on / 依赖: I.comap, J.comap, RingHom, RingHom.fst, RingHom.snd
+--- 原说明 ---
+`I × J` as an ideal of `R × S`.
 -/
 def prod : Ideal (R × S) := I.comap (RingHom.fst R S) ⊓ J.comap (RingHom.snd R S)
 
 @[simp]
-/--
-theorem `coe_prod` / 定理 `coe_prod`
-
-English:
-theorem coe_prod
-  given: (I : Ideal R) (J : Ideal S)
-  statement: ↑(prod I J) = (I ×ˢ J : Set (R × S))
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_prod
-  条件: (I : 理想 R) (J : 理想 S)
-  结论: ↑(乘积 I J) = (I ×ˢ J : 集合 (R × S))
-  证明: rfl
-
-@[simp]
+/-
+**Ideal.coe_prod** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：coe_prod (I : Ideal R) (J : Ideal S) : ↑(prod I J) = (I ×ˢ J : Set (R × S)
+)
+参数：I : Ideal R；J : Ideal S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_prod (I : Ideal R) (J : Ideal S) : ↑(prod I J) = (I ×ˢ J : Set (R × S)) :=
   rfl
 
 @[simp]
-/--
-theorem `mem_prod` / 定理 `mem_prod`
-
-English:
-theorem mem_prod
-  given: {x : R × S}
-  statement: x in prod I J ↔ x.1 in I ∧ x.2 in J
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 mem_prod
-  条件: {x : R × S}
-  结论: x in 乘积 I J ↔ x.1 in I ∧ x.2 in J
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Ideal.mem_prod** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：mem_prod {x : R × S} : x in prod I J ↔ x.1 in I ∧ x.2 in J
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_prod {x : R × S} : x in prod I J ↔ x.1 in I ∧ x.2 in J :=
+theorem mem_prod {x : R × S} : x ∈ prod I J ↔ x.1 ∈ I ∧ x.2 ∈ J :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `_root_.RingHom.ker_prodMap` / 定理 `_root_.RingHom.ker_prodMap`
-
-English:
-theorem _root_.RingHom.ker_prodMap
-  statement: {T U : Type*} [Semiring T] [Semiring U] (f : R ->+* S)
-  proof: by
-  ext ⟨⟩; simp
-
-@[simp]
-
-中文:
-定理 _root_.环态射.ker_prodMap
-  结论: {T U : 类型} [半环 T] [半环 U] (f : R ->+* S)
-  证明: by
-  ext ⟨⟩; simp
-
-@[simp]
+/-
+**Ideal._root_.RingHom.ker_prodMap** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.RingHom.ker_prodMap {T U : Type*} [Semiring T] [Semiring U] (f : R ->+* S)
-    (g : T ->+* U) : RingHom.ker (f.prodMap g) = (RingHom.ker f).prod (RingHom.ker g) := by
+theorem _root_.RingHom.ker_prodMap {T U : Type*} [Semiring T] [Semiring U] (f : R →+* S)
+    (g : T →+* U) : RingHom.ker (f.prodMap g) = (RingHom.ker f).prod (RingHom.ker g) := by
   ext ⟨⟩; simp
 
 @[simp]
-/--
-theorem `prod_top_top` / 定理 `prod_top_top`
-
-English:
-theorem prod_top_top
-  statement: prod (⊤ : Ideal R) (⊤ : Ideal S) = ⊤
-  proof: Ideal.ext by simp
-
-@[simp]
-
-中文:
-定理 prod_top_top
-  结论: 乘积 (⊤ : 理想 R) (⊤ : 理想 S) = ⊤
-  证明: Ideal.ext by simp
-
-@[simp]
-
-Depends on / 依赖: Ideal.ext
+/-
+**Ideal.prod_top_top** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：prod_top_top : prod (⊤ : Ideal R) (⊤ : Ideal S) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.ext`：ext {I J : Ideal α} (h : forall x, x in I ↔ x in J) : I = J
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem prod_top_top : prod (⊤ : Ideal R) (⊤ : Ideal S) = ⊤ :=
-Ideal.ext by simp
+  Ideal.ext <| by simp
 
 @[simp]
-/--
-theorem `prod_bot_bot` / 定理 `prod_bot_bot`
-
-English:
-theorem prod_bot_bot
-  statement: prod (⊥ : Ideal R) (⊥ : Ideal S) = ⊥
-  proof: SetLike.coe_injective Set.singleton_prod_singleton
-
-@[gcongr]
-
-中文:
-定理 prod_bot_bot
-  结论: 乘积 (⊥ : 理想 R) (⊥ : 理想 S) = ⊥
-  证明: SetLike.coe_injective Set.singleton_prod_singleton
-
-@[gcongr]
-
-Depends on / 依赖: Set.singleton_prod_singleton, SetLike, SetLike.coe_injective, coe_injective, singleton_prod_singleton
+/-
+**Ideal.prod_bot_bot** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：prod_bot_bot : prod (⊥ : Ideal R) (⊥ : Ideal S) = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
+· 使用定理 `Set.singleton_prod_singleton`：singleton_prod_singleton : ({a} : Set α) ×
+ˢ ({b} : Set β) = {(a, b)}
 -/
 theorem prod_bot_bot : prod (⊥ : Ideal R) (⊥ : Ideal S) = ⊥ :=
-SetLike.coe_injective Set.singleton_prod_singleton
+  SetLike.coe_injective <| Set.singleton_prod_singleton
 
 @[gcongr]
-/--
-theorem `prod_mono` / 定理 `prod_mono`
-
-English:
-theorem prod_mono
-  given: {I₁ I₂ : Ideal R} {J₁ J₂ : Ideal S} (hI : I₁ <= I₂) (hJ : J₁ <= J₂)
-  proof: Set.prod_mono hI hJ
-
-中文:
-定理 prod_mono
-  条件: {I₁ I₂ : 理想 R} {J₁ J₂ : 理想 S} (hI : I₁ <= I₂) (hJ : J₁ <= J₂)
-  证明: Set.prod_mono hI hJ
-
-Depends on / 依赖: Set.prod_mono, prod_mono
+/-
+**Ideal.prod_mono** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：prod_mono {I₁ I₂ : Ideal R} {J₁ J₂ : Ideal S} (hI : I₁ <= I₂) (hJ : J₁ <= 
+J₂) : prod I₁ J₁ <= prod I₂ J₂
+参数：hI : I₁ <= I₂；hJ : J₁ <= J₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.prod_mono`：prod_mono (hs : s₁ subseteq s₂) (ht : t₁ subseteq t₂) : s
+₁ ×ˢ t₁ subseteq s₂ ×ˢ t₂
 -/
-theorem prod_mono {I₁ I₂ : Ideal R} {J₁ J₂ : Ideal S} (hI : I₁ <= I₂) (hJ : J₁ <= J₂) :
-    prod I₁ J₁ <= prod I₂ J₂ :=
+theorem prod_mono {I₁ I₂ : Ideal R} {J₁ J₂ : Ideal S} (hI : I₁ ≤ I₂) (hJ : J₁ ≤ J₂) :
+    prod I₁ J₁ ≤ prod I₂ J₂ :=
   Set.prod_mono hI hJ
-
-/--
-theorem `prod_mono_left` / 定理 `prod_mono_left`
-
-English:
-theorem prod_mono_left
-  given: {I₁ I₂ : Ideal R} {J : Ideal S} (hI : I₁ <= I₂)
-  statement: prod I₁ J <= prod I₂ J
-  proof: Set.prod_mono_left hI
-
-中文:
-定理 prod_mono_left
-  条件: {I₁ I₂ : 理想 R} {J : 理想 S} (hI : I₁ <= I₂)
-  结论: 乘积 I₁ J <= 乘积 I₂ J
-  证明: Set.prod_mono_left hI
-
-Depends on / 依赖: Set.prod_mono_left, prod_mono_left
+/-
+**Ideal.prod_mono_left** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：prod_mono_left {I₁ I₂ : Ideal R} {J : Ideal S} (hI : I₁ <= I₂) : prod I₁ J
+ <= prod I₂ J
+参数：hI : I₁ <= I₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.prod_mono_left`：prod_mono_left (hs : s₁ subseteq s₂) : s₁ ×ˢ t subse
+teq s₂ ×ˢ t
 -/
-theorem prod_mono_left {I₁ I₂ : Ideal R} {J : Ideal S} (hI : I₁ <= I₂) : prod I₁ J <= prod I₂ J :=
+theorem prod_mono_left {I₁ I₂ : Ideal R} {J : Ideal S} (hI : I₁ ≤ I₂) : prod I₁ J ≤ prod I₂ J :=
   Set.prod_mono_left hI
-
-/--
-theorem `prod_mono_right` / 定理 `prod_mono_right`
-
-English:
-theorem prod_mono_right
-  given: {I : Ideal R} {J₁ J₂ : Ideal S} (hJ : J₁ <= J₂)
-  statement: prod I J₁ <= prod I J₂
-  proof: Set.prod_mono_right hJ
-
-中文:
-定理 prod_mono_right
-  条件: {I : 理想 R} {J₁ J₂ : 理想 S} (hJ : J₁ <= J₂)
-  结论: 乘积 I J₁ <= 乘积 I J₂
-  证明: Set.prod_mono_right hJ
-
-Depends on / 依赖: Set.prod_mono_right, prod_mono_right
+/-
+**Ideal.prod_mono_right** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：prod_mono_right {I : Ideal R} {J₁ J₂ : Ideal S} (hJ : J₁ <= J₂) : prod I J
+₁ <= prod I J₂
+参数：hJ : J₁ <= J₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.prod_mono_right`：prod_mono_right (ht : t₁ subseteq t₂) : s ×ˢ t₁ sub
+seteq s ×ˢ t₂
 -/
-theorem prod_mono_right {I : Ideal R} {J₁ J₂ : Ideal S} (hJ : J₁ <= J₂) : prod I J₁ <= prod I J₂ :=
+theorem prod_mono_right {I : Ideal R} {J₁ J₂ : Ideal S} (hJ : J₁ ≤ J₂) : prod I J₁ ≤ prod I J₂ :=
   Set.prod_mono_right hJ
 
-/--
-theorem `ideal_prod_eq` / 定理 `ideal_prod_eq`
+/-- Every ideal of the product ring is of the form `I × J`, where `I` and `J` can be explicitly
+    given as the image under the projection maps. -/
+/-
+**Ideal.ideal_prod_eq** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：ideal_prod_eq (I : Ideal (R × S)) : I = Ideal.prod (map (RingHom.fst R S) 
+I : Ideal R) (map (RingHom.snd R S) I)
+参数：I : Ideal (R × S)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.ext`：ext {I J : Ideal α} (h : forall x, x in I ↔ x in J) : I = J
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.mem_prod`：mem_prod {x : R × S} : x in prod I J ↔ x.1 in I ∧ x.2 in
+ J
+· 使用定理 `Ideal.mem_map_iff_of_surjective`：mem_map_iff_of_surjective {I : Ideal R}
+ {y} : y in map f I ↔ exists x, x in I ∧ f x = y
+· 使用定理 `Prod.fst_surjective`：fst_surjective [h : Nonempty β] : Function.Surjecti
+ve (@fst α β)
+· 使用定理 `Zero.instNonempty`：∀ {α : Type u} [Zero α], Nonempty α
+· 使用定理 `Prod.snd_surjective`：snd_surjective [h : Nonempty α] : Function.Surjecti
+ve (@snd α β)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Ideal.add_mem`：∀ {α : Type u} [inst : Semiring α] (I : Ideal α) {a b : α
+}, a ∈ I → b ∈ I → a + b ∈ I
+· 使用定理 `Ideal.mul_mem_left`：mul_mem_left : b in I -> a * b in I
 
-English:
-theorem ideal_prod_eq
-  given: (I : Ideal (R × S))
-  proof: by
-  apply Ideal.ext
-  rintro ⟨r, s⟩
-  rw [mem_prod]; rw [mem_map_iff_of_surjective (RingHom.fst R S) Prod.fst_surjective]; rw [mem_map_iff_of_surjective (RingHom.snd R S) Prod.snd_surjective]
-  refine ⟨fun h => ⟨⟨_, ⟨h, rfl⟩⟩, ⟨_, ⟨h, rfl⟩⟩⟩, ?_⟩
-  rintro ⟨⟨⟨r, s'⟩, ⟨h₁, rfl⟩⟩, ⟨⟨r', s⟩, ⟨h₂, rfl⟩⟩⟩
-  simpa using I.add_mem (I.mul_mem_left (1, 0) h₁) (I.mul_mem_left (0, 1) h₂)
-
-@[simp]
-
-中文:
-定理 ideal_prod_eq
-  条件: (I : 理想 (R × S))
-  证明: by
-  apply Ideal.ext
-  rintro ⟨r, s⟩
-  rw [mem_prod]; rw [mem_map_iff_of_surjective (RingHom.fst R S) Prod.fst_surjective]; rw [mem_map_iff_of_surjective (RingHom.snd R S) Prod.snd_surjective]
-  refine ⟨fun h => ⟨⟨_, ⟨h, rfl⟩⟩, ⟨_, ⟨h, rfl⟩⟩⟩, ?_⟩
-  rintro ⟨⟨⟨r, s'⟩, ⟨h₁, rfl⟩⟩, ⟨⟨r', s⟩, ⟨h₂, rfl⟩⟩⟩
-  simpa using I.add_mem (I.mul_mem_left (1, 0) h₁) (I.mul_mem_left (0, 1) h₂)
-
-@[simp]
-
-Depends on / 依赖: I.add_mem, I.mul_mem_left, Ideal.ext, Prod.fst_surjective, Prod.snd_surjective, RingHom, RingHom.fst, RingHom.snd, add_mem, fst_surjective, mem_map_iff_of_surjective, mem_prod, mul_mem_left, snd_surjective
+--- 原说明 ---
+Every ideal of the product ring is of the form `I × J`, where `I` and `J` can be
+ explicitly
+    given as the image under the projection maps.
 -/
 theorem ideal_prod_eq (I : Ideal (R × S)) :
     I = Ideal.prod (map (RingHom.fst R S) I : Ideal R) (map (RingHom.snd R S) I) := by
   apply Ideal.ext
   rintro ⟨r, s⟩
-  rw [mem_prod]; rw [mem_map_iff_of_surjective (RingHom.fst R S) Prod.fst_surjective]; rw [mem_map_iff_of_surjective (RingHom.snd R S) Prod.snd_surjective]
+  rw [mem_prod, mem_map_iff_of_surjective (RingHom.fst R S) Prod.fst_surjective,
+    mem_map_iff_of_surjective (RingHom.snd R S) Prod.snd_surjective]
   refine ⟨fun h => ⟨⟨_, ⟨h, rfl⟩⟩, ⟨_, ⟨h, rfl⟩⟩⟩, ?_⟩
   rintro ⟨⟨⟨r, s'⟩, ⟨h₁, rfl⟩⟩, ⟨⟨r', s⟩, ⟨h₂, rfl⟩⟩⟩
   simpa using I.add_mem (I.mul_mem_left (1, 0) h₁) (I.mul_mem_left (0, 1) h₂)
 
 @[simp]
-/--
-theorem `map_fst_prod` / 定理 `map_fst_prod`
-
-English:
-theorem map_fst_prod
-  given: (I : Ideal R) (J : Ideal S)
-  statement: map (RingHom.fst R S) (prod I J) = I
-  proof: by
-  ext x
-  rw [mem_map_iff_of_surjective (RingHom.fst R S) Prod.fst_surjective]
-  exact
-    ⟨by
-      rintro ⟨x, ⟨h, rfl⟩⟩
-      exact h.1, fun h => ⟨⟨x, 0⟩, ⟨⟨h, Ideal.zero_mem _⟩, rfl⟩⟩⟩
-
-@[simp]
-
-中文:
-定理 map_fst_prod
-  条件: (I : 理想 R) (J : 理想 S)
-  结论: map (环态射.fst R S) (乘积 I J) = I
-  证明: by
-  ext x
-  rw [mem_map_iff_of_surjective (RingHom.fst R S) Prod.fst_surjective]
-  exact
-    ⟨by
-      rintro ⟨x, ⟨h, rfl⟩⟩
-      exact h.1, fun h => ⟨⟨x, 0⟩, ⟨⟨h, Ideal.zero_mem _⟩, rfl⟩⟩⟩
-
-@[simp]
-
-Depends on / 依赖: Ideal.zero_mem, Prod.fst_surjective, RingHom, RingHom.fst, fst_surjective, mem_map_iff_of_surjective, zero_mem
+/-
+**Ideal.map_fst_prod** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：map_fst_prod (I : Ideal R) (J : Ideal S) : map (RingHom.fst R S) (prod I J
+) = I
+参数：I : Ideal R；J : Ideal S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.ext`：ext {I J : Ideal α} (h : forall x, x in I ↔ x in J) : I = J
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.mem_map_iff_of_surjective`：mem_map_iff_of_surjective {I : Ideal R}
+ {y} : y in map f I ↔ exists x, x in I ∧ f x = y
+· 使用定理 `Prod.fst_surjective`：fst_surjective [h : Nonempty β] : Function.Surjecti
+ve (@fst α β)
+· 使用定理 `Zero.instNonempty`：∀ {α : Type u} [Zero α], Nonempty α
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Ideal.zero_mem`：∀ {α : Type u} [inst : Semiring α] (I : Ideal α), 0 ∈ I
 -/
 theorem map_fst_prod (I : Ideal R) (J : Ideal S) : map (RingHom.fst R S) (prod I J) = I := by
   ext x
@@ -307,38 +220,23 @@ theorem map_fst_prod (I : Ideal R) (J : Ideal S) : map (RingHom.fst R S) (prod I
       exact h.1, fun h => ⟨⟨x, 0⟩, ⟨⟨h, Ideal.zero_mem _⟩, rfl⟩⟩⟩
 
 @[simp]
-/--
-theorem `map_snd_prod` / 定理 `map_snd_prod`
-
-English:
-theorem map_snd_prod
-  given: (I : Ideal R) (J : Ideal S)
-  statement: map (RingHom.snd R S) (prod I J) = J
-  proof: by
-  ext x
-  rw [mem_map_iff_of_surjective (RingHom.snd R S) Prod.snd_surjective]
-  exact
-    ⟨by
-      rintro ⟨x, ⟨h, rfl⟩⟩
-      exact h.2, fun h => ⟨⟨0, x⟩, ⟨⟨Ideal.zero_mem _, h⟩, rfl⟩⟩⟩
-
-@[simp]
-
-中文:
-定理 map_snd_prod
-  条件: (I : 理想 R) (J : 理想 S)
-  结论: map (环态射.snd R S) (乘积 I J) = J
-  证明: by
-  ext x
-  rw [mem_map_iff_of_surjective (RingHom.snd R S) Prod.snd_surjective]
-  exact
-    ⟨by
-      rintro ⟨x, ⟨h, rfl⟩⟩
-      exact h.2, fun h => ⟨⟨0, x⟩, ⟨⟨Ideal.zero_mem _, h⟩, rfl⟩⟩⟩
-
-@[simp]
-
-Depends on / 依赖: Ideal.zero_mem, Prod.snd_surjective, RingHom, RingHom.snd, mem_map_iff_of_surjective, snd_surjective, zero_mem
+/-
+**Ideal.map_snd_prod** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：map_snd_prod (I : Ideal R) (J : Ideal S) : map (RingHom.snd R S) (prod I J
+) = J
+参数：I : Ideal R；J : Ideal S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.ext`：ext {I J : Ideal α} (h : forall x, x in I ↔ x in J) : I = J
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.mem_map_iff_of_surjective`：mem_map_iff_of_surjective {I : Ideal R}
+ {y} : y in map f I ↔ exists x, x in I ∧ f x = y
+· 使用定理 `Prod.snd_surjective`：snd_surjective [h : Nonempty α] : Function.Surjecti
+ve (@snd α β)
+· 使用定理 `Zero.instNonempty`：∀ {α : Type u} [Zero α], Nonempty α
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Ideal.zero_mem`：∀ {α : Type u} [inst : Semiring α] (I : Ideal α), 0 ∈ I
 -/
 theorem map_snd_prod (I : Ideal R) (J : Ideal S) : map (RingHom.snd R S) (prod I J) = J := by
   ext x
@@ -349,63 +247,58 @@ theorem map_snd_prod (I : Ideal R) (J : Ideal S) : map (RingHom.snd R S) (prod I
       exact h.2, fun h => ⟨⟨0, x⟩, ⟨⟨Ideal.zero_mem _, h⟩, rfl⟩⟩⟩
 
 @[simp]
-/--
-theorem `map_prodComm_prod` / 定理 `map_prodComm_prod`
-
-English:
-theorem map_prodComm_prod
-  proof: by
-  refine Trans.trans (ideal_prod_eq _) ?_
-  simp [map_map]
-
-中文:
-定理 map_prodComm_prod
-  证明: by
-  refine Trans.trans (ideal_prod_eq _) ?_
-  simp [map_map]
-
-Depends on / 依赖: Trans.trans, ideal_prod_eq, map_map
+/-
+**Ideal.map_prodComm_prod** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：map_prodComm_prod : map ((RingEquiv.prodComm : R × S ≃+* S × R) : R × S ->
++* S × R) (prod I J) = prod J I
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
+· 使用定理 `Ideal.ideal_prod_eq`：ideal_prod_eq (I : Ideal (R × S)) : I = Ideal.prod 
+(map (RingHom.fst R S) I : Ideal R) (map (RingHom.snd R S) I)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Ideal.map_map`：map_map {T : Type*} [Semiring T] {I : Ideal R} (f : R ->+
+* S) (g : S ->+* T) : (I.map f).map g = I.map (g.comp f)
+· 使用定理 `RingEquiv.fst_comp_coe_prodComm`：fst_comp_coe_prodComm : (RingHom.fst S 
+R).comp ↑(prodComm : R × S ≃+* S × R) = RingHom.snd R S
+· 使用定理 `Ideal.map_snd_prod`：map_snd_prod (I : Ideal R) (J : Ideal S) : map (Ring
+Hom.snd R S) (prod I J) = J
+· 使用定理 `RingEquiv.snd_comp_coe_prodComm`：snd_comp_coe_prodComm : (RingHom.snd S 
+R).comp ↑(prodComm : R × S ≃+* S × R) = RingHom.fst R S
+· 使用定理 `Ideal.map_fst_prod`：map_fst_prod (I : Ideal R) (J : Ideal S) : map (Ring
+Hom.fst R S) (prod I J) = I
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem map_prodComm_prod :
-    map ((RingEquiv.prodComm : R × S ≃+* S × R) : R × S ->+* S × R) (prod I J) = prod J I := by
+    map ((RingEquiv.prodComm : R × S ≃+* S × R) : R × S →+* S × R) (prod I J) = prod J I := by
   refine Trans.trans (ideal_prod_eq _) ?_
   simp [map_map]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `idealProdEquiv` / `idealProdEquiv` 的定义
+/-- Ideals of `R × S` are in one-to-one correspondence with pairs of ideals of `R` and ideals of
+`S`. -/
+/-
+**Ideal.idealProdEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Ideal`。
+形式化陈述：idealProdEquiv : Ideal (R × S) ≃o Ideal R × Ideal S where toFun I
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition idealProdEquiv
-  signature: : Ideal (R × S) ≃o Ideal R × Ideal S where
-  body: ⟨map (RingHom.fst R S) I, map (RingHom.snd R S) I⟩
-  invFun I := prod I.1 I.2
-  left_inv I := (ideal_prod_eq I).symm
-  right_inv := fun ⟨I, J⟩ => by simp
-  map_rel_iff' {I J} := by
-    simp only [Equiv.coe_fn_mk, Prod.mk_le_mk]
-    refine ⟨fun h => ?_, fun h => ⟨map_mono h, map_mono h⟩⟩
-    rw [ideal_prod_eq I]; rw [ideal_prod_eq J]
-    exact inf_le_inf (comap_mono h.1) (comap_mono h.2)
-
-@[simp]
-
-中文:
-定义 idealProdEquiv
-  签名: : 理想 (R × S) ≃o 理想 R × 理想 S where
-  定义体: ⟨map (RingHom.fst R S) I, map (RingHom.snd R S) I⟩
-  invFun I := prod I.1 I.2
-  left_inv I := (ideal_prod_eq I).symm
-  right_inv := fun ⟨I, J⟩ => by simp
-  map_rel_iff' {I J} := by
-    simp only [Equiv.coe_fn_mk, Prod.mk_le_mk]
-    refine ⟨fun h => ?_, fun h => ⟨map_mono h, map_mono h⟩⟩
-    rw [ideal_prod_eq I]; rw [ideal_prod_eq J]
-    exact inf_le_inf (comap_mono h.1) (comap_mono h.2)
-
-@[simp]
-
-Depends on / 依赖: RingHom, RingHom.fst, RingHom.snd
+--- 原说明 ---
+Ideals of `R × S` are in one-to-one correspondence with pairs of ideals of `R` a
+nd ideals of
+`S`.
 -/
 def idealProdEquiv : Ideal (R × S) ≃o Ideal R × Ideal S where
   toFun I := ⟨map (RingHom.fst R S) I, map (RingHom.snd R S) I⟩
@@ -414,94 +307,75 @@ def idealProdEquiv : Ideal (R × S) ≃o Ideal R × Ideal S where
   right_inv := fun ⟨I, J⟩ => by simp
   map_rel_iff' {I J} := by
     simp only [Equiv.coe_fn_mk, Prod.mk_le_mk]
-    refine ⟨fun h => ?_, fun h => ⟨map_mono h, map_mono h⟩⟩
-    rw [ideal_prod_eq I]; rw [ideal_prod_eq J]
+    refine ⟨fun h ↦ ?_, fun h ↦ ⟨map_mono h, map_mono h⟩⟩
+    rw [ideal_prod_eq I, ideal_prod_eq J]
     exact inf_le_inf (comap_mono h.1) (comap_mono h.2)
 
 @[simp]
-/--
-theorem `idealProdEquiv_symm_apply` / 定理 `idealProdEquiv_symm_apply`
-
-English:
-theorem idealProdEquiv_symm_apply
-  given: (I : Ideal R) (J : Ideal S)
-  proof: rfl
-
-中文:
-定理 idealProdEquiv_symm_apply
-  条件: (I : 理想 R) (J : 理想 S)
-  证明: rfl
+/-
+**Ideal.idealProdEquiv_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：idealProdEquiv_symm_apply (I : Ideal R) (J : Ideal S) : idealProdEquiv.sym
+m ⟨I, J⟩ = prod I J
+参数：I : Ideal R；J : Ideal S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem idealProdEquiv_symm_apply (I : Ideal R) (J : Ideal S) :
     idealProdEquiv.symm ⟨I, J⟩ = prod I J :=
   rfl
-
-/--
-theorem `span_prod_le` / 定理 `span_prod_le`
-
-English:
-theorem span_prod_le
-  given: {s : Set R} {t : Set S}
-  proof: by
-  rw [ideal_prod_eq (span (s ×ˢ t))]; rw [map_span]; rw [map_span]
-  gcongr
-  · exact Set.fst_image_prod_subset _ _
-  · exact Set.snd_image_prod_subset _ _
-
-中文:
-定理 span_prod_le
-  条件: {s : 集合 R} {t : 集合 S}
-  证明: by
-  rw [ideal_prod_eq (span (s ×ˢ t))]; rw [map_span]; rw [map_span]
-  gcongr
-  · exact Set.fst_image_prod_subset _ _
-  · exact Set.snd_image_prod_subset _ _
-
-Depends on / 依赖: Set.fst_image_prod_subset, Set.snd_image_prod_subset, fst_image_prod_subset, ideal_prod_eq, map_span, snd_image_prod_subset
+/-
+**Ideal.span_prod_le** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：span_prod_le {s : Set R} {t : Set S} : span (s ×ˢ t) <= prod (span s) (spa
+n t)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.ideal_prod_eq`：ideal_prod_eq (I : Ideal (R × S)) : I = Ideal.prod 
+(map (RingHom.fst R S) I : Ideal R) (map (RingHom.snd R S) I)
+· 使用定理 `Ideal.map_span`：map_span (s : Set R) : map f (span s) = span (f '' s)
+· 使用定理 `Ideal.prod_mono`：prod_mono {I₁ I₂ : Ideal R} {J₁ J₂ : Ideal S} (hI : I₁ 
+<= I₂) (hJ : J₁ <= J₂) : prod I₁ J₁ <= prod I₂ J₂
+· 使用定理 `Ideal.span_mono`：span_mono {s t : Set α} : s subseteq t -> span s <= spa
+n t
+· 使用定理 `Set.fst_image_prod_subset`：fst_image_prod_subset (s : Set α) (t : Set β)
+ : Prod.fst '' s ×ˢ t subseteq s
+· 使用定理 `Set.snd_image_prod_subset`：snd_image_prod_subset (s : Set α) (t : Set β)
+ : Prod.snd '' s ×ˢ t subseteq t
 -/
 theorem span_prod_le {s : Set R} {t : Set S} :
-    span (s ×ˢ t) <= prod (span s) (span t) := by
-  rw [ideal_prod_eq (span (s ×ˢ t))]; rw [map_span]; rw [map_span]
+    span (s ×ˢ t) ≤ prod (span s) (span t) := by
+  rw [ideal_prod_eq (span (s ×ˢ t)), map_span, map_span]
   gcongr
   · exact Set.fst_image_prod_subset _ _
   · exact Set.snd_image_prod_subset _ _
-
-/--
-theorem `span_prod` / 定理 `span_prod`
-
-English:
-theorem span_prod
-  given: {s : Set R} {t : Set S} (hst : s.Nonempty ↔ t.Nonempty)
-  proof: by
-  simp_rw [iff_iff_and_or_not_and_not, Set.not_nonempty_iff_eq_empty] at hst
-  obtain ⟨hs, ht⟩ | ⟨rfl, rfl⟩ := hst
-  · conv_lhs => rw [Ideal.ideal_prod_eq (Ideal.span (s ×ˢ t))]
-    congr 1
-    · rw [Ideal.map_span]
-      simp [Set.fst_image_prod _ ht]
-    · rw [Ideal.map_span]
-      simp [Set.snd_image_prod hs]
-  · simp
-
-@[simp]
-
-中文:
-定理 span_prod
-  条件: {s : 集合 R} {t : 集合 S} (hst : s.非空 ↔ t.非空)
-  证明: by
-  simp_rw [iff_iff_and_or_not_and_not, Set.not_nonempty_iff_eq_empty] at hst
-  obtain ⟨hs, ht⟩ | ⟨rfl, rfl⟩ := hst
-  · conv_lhs => rw [Ideal.ideal_prod_eq (Ideal.span (s ×ˢ t))]
-    congr 1
-    · rw [Ideal.map_span]
-      simp [Set.fst_image_prod _ ht]
-    · rw [Ideal.map_span]
-      simp [Set.snd_image_prod hs]
-  · simp
-
-@[simp]
-
-Depends on / 依赖: Ideal.ideal_prod_eq, Ideal.map_span, Ideal.span, Set.fst_image_prod, Set.not_nonempty_iff_eq_empty, Set.snd_image_prod, conv_lhs, fst_image_prod, ideal_prod_eq, iff_iff_and_or_not_and_not, map_span, not_nonempty_iff_eq_empty, simp_rw, snd_image_prod
+/-
+**Ideal.span_prod** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：span_prod {s : Set R} {t : Set S} (hst : s.Nonempty ↔ t.Nonempty) : span (
+s ×ˢ t) = prod (span s) (span t)
+参数：hst : s.Nonempty ↔ t.Nonempty。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Ideal.ideal_prod_eq`：ideal_prod_eq (I : Ideal (R × S)) : I = Ideal.prod 
+(map (RingHom.fst R S) I : Ideal R) (map (RingHom.snd R S) I)
+· 使用定理 `Ideal.map_span`：map_span (s : Set R) : map f (span s) = span (f '' s)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Set.fst_image_prod`：fst_image_prod (s : Set β) {t : Set α} (ht : t.Nonem
+pty) : Prod.fst '' s ×ˢ t = s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Set.snd_image_prod`：snd_image_prod {s : Set α} (hs : s.Nonempty) (t : Se
+t β) : Prod.snd '' s ×ˢ t = t
+· 使用定理 `Set.prod_empty`：prod_empty : s ×ˢ (∅ : Set β) = ∅
+· 使用定理 `Submodule.span_empty`：span_empty : span R (∅ : Set M) = ⊥
+· 使用定理 `Ideal.prod_bot_bot`：prod_bot_bot : prod (⊥ : Ideal R) (⊥ : Ideal S) = ⊥
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem span_prod {s : Set R} {t : Set S} (hst : s.Nonempty ↔ t.Nonempty) :
     span (s ×ˢ t) = prod (span s) (span t) := by
@@ -516,146 +390,131 @@ theorem span_prod {s : Set R} {t : Set S} (hst : s.Nonempty ↔ t.Nonempty) :
   · simp
 
 @[simp]
-/--
-theorem `prod_inj` / 定理 `prod_inj`
-
-English:
-theorem prod_inj
-  given: {I I' : Ideal R} {J J' : Ideal S}
-  proof: by
-  simp only [← idealProdEquiv_symm_apply, idealProdEquiv.symm.injective.eq_iff, Prod.mk_inj]
-
-@[simp]
-
-中文:
-定理 prod_inj
-  条件: {I I' : 理想 R} {J J' : 理想 S}
-  证明: by
-  simp only [← idealProdEquiv_symm_apply, idealProdEquiv.symm.injective.eq_iff, Prod.mk_inj]
-
-@[simp]
-
-Depends on / 依赖: Prod.mk_inj, eq_iff, idealProdEquiv, idealProdEquiv.symm.injective.eq_iff, idealProdEquiv_symm_apply, injective, mk_inj
+/-
+**Ideal.prod_inj** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：prod_inj {I I' : Ideal R} {J J' : Ideal S} : prod I J = prod I' J' ↔ I = I
+' ∧ J = J'
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `OrderIso.injective`：∀ {α : Type u_2} {β : Type u_3} [inst : LE α] [inst_
+1 : LE β] (e : α ≃o β), Function.Injective ⇑e
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem prod_inj {I I' : Ideal R} {J J' : Ideal S} :
     prod I J = prod I' J' ↔ I = I' ∧ J = J' := by
   simp only [← idealProdEquiv_symm_apply, idealProdEquiv.symm.injective.eq_iff, Prod.mk_inj]
 
 @[simp]
-/--
-theorem `prod_eq_bot_iff` / 定理 `prod_eq_bot_iff`
-
-English:
-theorem prod_eq_bot_iff
-  given: {I : Ideal R} {J : Ideal S}
-  proof: by
-  rw [← prod_inj]; rw [prod_bot_bot]
-
-@[simp]
-
-中文:
-定理 prod_eq_bot_iff
-  条件: {I : 理想 R} {J : 理想 S}
-  证明: by
-  rw [← prod_inj]; rw [prod_bot_bot]
-
-@[simp]
-
-Depends on / 依赖: prod_bot_bot, prod_inj
+/-
+**Ideal.prod_eq_bot_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：prod_eq_bot_iff {I : Ideal R} {J : Ideal S} : prod I J = ⊥ ↔ I = ⊥ ∧ J = ⊥
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.prod_inj`：prod_inj {I I' : Ideal R} {J J' : Ideal S} : prod I J = 
+prod I' J' ↔ I = I' ∧ J = J'
+· 使用定理 `Ideal.prod_bot_bot`：prod_bot_bot : prod (⊥ : Ideal R) (⊥ : Ideal S) = ⊥
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem prod_eq_bot_iff {I : Ideal R} {J : Ideal S} :
     prod I J = ⊥ ↔ I = ⊥ ∧ J = ⊥ := by
-  rw [← prod_inj]; rw [prod_bot_bot]
+  rw [← prod_inj, prod_bot_bot]
 
 @[simp]
-/--
-theorem `prod_eq_top_iff` / 定理 `prod_eq_top_iff`
-
-English:
-theorem prod_eq_top_iff
-  given: {I : Ideal R} {J : Ideal S}
-  proof: by
-  rw [← prod_inj]; rw [prod_top_top]
-
-中文:
-定理 prod_eq_top_iff
-  条件: {I : 理想 R} {J : 理想 S}
-  证明: by
-  rw [← prod_inj]; rw [prod_top_top]
-
-Depends on / 依赖: prod_inj, prod_top_top
+/-
+**Ideal.prod_eq_top_iff** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：prod_eq_top_iff {I : Ideal R} {J : Ideal S} : prod I J = ⊤ ↔ I = ⊤ ∧ J = ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.prod_inj`：prod_inj {I I' : Ideal R} {J J' : Ideal S} : prod I J = 
+prod I' J' ↔ I = I' ∧ J = J'
+· 使用定理 `Ideal.prod_top_top`：prod_top_top : prod (⊤ : Ideal R) (⊤ : Ideal S) = ⊤
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem prod_eq_top_iff {I : Ideal R} {J : Ideal S} :
     prod I J = ⊤ ↔ I = ⊤ ∧ J = ⊤ := by
-  rw [← prod_inj]; rw [prod_top_top]
-
-/--
-theorem `isPrime_of_isPrime_prod_top` / 定理 `isPrime_of_isPrime_prod_top`
-
-English:
-theorem isPrime_of_isPrime_prod_top
-  given: {I : Ideal R} (h : (Ideal.prod I (⊤ : Ideal S)).IsPrime)
-  proof: by
-  constructor
-  · contrapose h
-    rw [h]; rw [prod_top_top]; rw [isPrime_iff]
-    simp
-  · intro x y hxy
-    have : (⟨x, 1⟩ : R × S) * ⟨y, 1⟩ in prod I ⊤ := by
-      rw [Prod.mk_mul_mk]; rw [mul_one]; rw [mem_prod]
-      exact ⟨hxy, trivial⟩
-    simpa using h.mem_or_mem this
-
-中文:
-定理 isPrime_of_isPrime_prod_top
-  条件: {I : 理想 R} (h : (理想.乘积 I (⊤ : 理想 S)).是素)
-  证明: by
-  constructor
-  · contrapose h
-    rw [h]; rw [prod_top_top]; rw [isPrime_iff]
-    simp
-  · intro x y hxy
-    have : (⟨x, 1⟩ : R × S) * ⟨y, 1⟩ in prod I ⊤ := by
-      rw [Prod.mk_mul_mk]; rw [mul_one]; rw [mem_prod]
-      exact ⟨hxy, trivial⟩
-    simpa using h.mem_or_mem this
-
-Depends on / 依赖: Prod.mk_mul_mk, contrapose, h.mem_or_mem, isPrime_iff, mem_or_mem, mem_prod, mk_mul_mk, mul_one, prod_top_top
+  rw [← prod_inj, prod_top_top]
+/-
+**Ideal.isPrime_of_isPrime_prod_top** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：isPrime_of_isPrime_prod_top {I : Ideal R} (h : (Ideal.prod I (⊤ : Ideal S)
+).IsPrime) : I.IsPrime
+参数：h : (Ideal.prod I (⊤ : Ideal S)).IsPrime。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₃`：contrapose₃ {p q : Prop} : (q -> 
+¬ p) -> (p -> ¬ q)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.prod_top_top`：prod_top_top : prod (⊤ : Ideal R) (⊤ : Ideal S) = ⊤
+· 使用定理 `Ideal.isPrime_iff`：isPrime_iff {I : Ideal α} : IsPrime I ↔ I != ⊤ ∧ fora
+ll {x y : α}, x * y in I -> x in I ∨ y in I
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `or_self`：∀ (p : Prop), (p ∨ p) = p
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Prod.mk_mul_mk`：mk_mul_mk (a₁ a₂ : M) (b₁ b₂ : N) : (a₁, b₁) * (a₂, b₂) 
+= (a₁ * a₂, b₁ * b₂)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Ideal.mem_prod`：mem_prod {x : R × S} : x in prod I J ↔ x.1 in I ∧ x.2 in
+ J
+· 使用定理 `trivial`：True
+· 使用定理 `Ideal.IsPrime.mem_or_mem`：∀ {α : Type u} [inst : Semiring α] {I : Ideal 
+α}, I.IsPrime → ∀ {x y : α}, x * y ∈ I → x ∈ I ∨ y ∈ I
 -/
 theorem isPrime_of_isPrime_prod_top {I : Ideal R} (h : (Ideal.prod I (⊤ : Ideal S)).IsPrime) :
     I.IsPrime := by
   constructor
   · contrapose h
-    rw [h]; rw [prod_top_top]; rw [isPrime_iff]
+    rw [h, prod_top_top, isPrime_iff]
     simp
   · intro x y hxy
-    have : (⟨x, 1⟩ : R × S) * ⟨y, 1⟩ in prod I ⊤ := by
-      rw [Prod.mk_mul_mk]; rw [mul_one]; rw [mem_prod]
+    have : (⟨x, 1⟩ : R × S) * ⟨y, 1⟩ ∈ prod I ⊤ := by
+      rw [Prod.mk_mul_mk, mul_one, mem_prod]
       exact ⟨hxy, trivial⟩
     simpa using h.mem_or_mem this
-
-/--
-theorem `isPrime_of_isPrime_prod_top'` / 定理 `isPrime_of_isPrime_prod_top'`
-
-English:
-theorem isPrime_of_isPrime_prod_top'
-  given: {I : Ideal S} (h : (Ideal.prod (⊤ : Ideal R) I).IsPrime)
-  proof: by
-  apply isPrime_of_isPrime_prod_top (S := R)
-  rw [← map_prodComm_prod]
-  -- Note: couldn't synthesize the right instances without the `R` and `S` hints
-  exact map_isPrime_of_equiv (RingEquiv.prodComm (R := R) (S := S))
-
-中文:
-定理 isPrime_of_isPrime_prod_top'
-  条件: {I : 理想 S} (h : (理想.乘积 (⊤ : 理想 R) I).是素)
-  证明: by
-  apply isPrime_of_isPrime_prod_top (S := R)
-  rw [← map_prodComm_prod]
-  -- Note: couldn't synthesize the right instances without the `R` and `S` hints
-  exact map_isPrime_of_equiv (RingEquiv.prodComm (R := R) (S := S))
-
-Depends on / 依赖: isPrime_of_isPrime_prod_top, map_prodComm_prod
+/-
+**Ideal.isPrime_of_isPrime_prod_top'** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：isPrime_of_isPrime_prod_top' {I : Ideal S} (h : (Ideal.prod (⊤ : Ideal R) 
+I).IsPrime) : I.IsPrime
+参数：h : (Ideal.prod (⊤ : Ideal R) I).IsPrime。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.isPrime_of_isPrime_prod_top`：isPrime_of_isPrime_prod_top {I : Idea
+l R} (h : (Ideal.prod I (⊤ : Ideal S)).IsPrime) : I.IsPrime
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.map_prodComm_prod`：map_prodComm_prod : map ((RingEquiv.prodComm : 
+R × S ≃+* S × R) : R × S ->+* S × R) (prod I J) = prod J I
 -/
 theorem isPrime_of_isPrime_prod_top' {I : Ideal S} (h : (Ideal.prod (⊤ : Ideal R) I).IsPrime) :
     I.IsPrime := by
@@ -663,133 +522,131 @@ theorem isPrime_of_isPrime_prod_top' {I : Ideal S} (h : (Ideal.prod (⊤ : Ideal
   rw [← map_prodComm_prod]
   -- Note: couldn't synthesize the right instances without the `R` and `S` hints
   exact map_isPrime_of_equiv (RingEquiv.prodComm (R := R) (S := S))
-
-/--
-theorem `isPrime_ideal_prod_top` / 定理 `isPrime_ideal_prod_top`
-
-English:
-theorem isPrime_ideal_prod_top
-  given: {I : Ideal R} [h : I.IsPrime]
-  statement: (prod I (⊤ : Ideal S)).IsPrime where
-  proof: by simpa using h.ne_top
-  mem_or_mem' {x y} := by simpa using h.mem_or_mem
-
-中文:
-定理 isPrime_ideal_prod_top
-  条件: {I : 理想 R} [h : I.是素]
-  结论: (乘积 I (⊤ : 理想 S)).是素 where
-  证明: by simpa using h.ne_top
-  mem_or_mem' {x y} := by simpa using h.mem_or_mem
-
-Depends on / 依赖: h.mem_or_mem, h.ne_top, mem_or_mem, ne_top
+/-
+**Ideal.isPrime_ideal_prod_top** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：isPrime_ideal_prod_top {I : Ideal R} [h : I.IsPrime] : (prod I (⊤ : Ideal 
+S)).IsPrime where ne_top'
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `Ideal.IsPrime.ne_top`：∀ {α : Type u} [inst : Semiring α] {I : Ideal α}, 
+I.IsPrime → I ≠ ⊤
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Ideal.IsPrime.mem_or_mem`：∀ {α : Type u} [inst : Semiring α] {I : Ideal 
+α}, I.IsPrime → ∀ {x y : α}, x * y ∈ I → x ∈ I ∨ y ∈ I
 -/
 theorem isPrime_ideal_prod_top {I : Ideal R} [h : I.IsPrime] : (prod I (⊤ : Ideal S)).IsPrime where
   ne_top' := by simpa using h.ne_top
   mem_or_mem' {x y} := by simpa using h.mem_or_mem
-
-/--
-theorem `isPrime_ideal_prod_top'` / 定理 `isPrime_ideal_prod_top'`
-
-English:
-theorem isPrime_ideal_prod_top'
-  given: {I : Ideal S} [h : I.IsPrime]
-  statement: (prod (⊤ : Ideal R) I).IsPrime
-  proof: by
-  let : IsPrime (prod I (⊤ : Ideal R)) := isPrime_ideal_prod_top
-  rw [← map_prodComm_prod]
-  -- Note: couldn't synthesize the right instances without the `R` and `S` hints
-  exact map_isPrime_of_equiv (RingEquiv.prodComm (R := S) (S := R))
-
-中文:
-定理 isPrime_ideal_prod_top'
-  条件: {I : 理想 S} [h : I.是素]
-  结论: (乘积 (⊤ : 理想 R) I).是素
-  证明: by
-  let : IsPrime (prod I (⊤ : Ideal R)) := isPrime_ideal_prod_top
-  rw [← map_prodComm_prod]
-  -- Note: couldn't synthesize the right instances without the `R` and `S` hints
-  exact map_isPrime_of_equiv (RingEquiv.prodComm (R := S) (S := R))
-
-Depends on / 依赖: IsPrime, isPrime_ideal_prod_top, map_prodComm_prod
+/-
+**Ideal.isPrime_ideal_prod_top'** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：isPrime_ideal_prod_top' {I : Ideal S} [h : I.IsPrime] : (prod (⊤ : Ideal R
+) I).IsPrime
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.isPrime_ideal_prod_top`：isPrime_ideal_prod_top {I : Ideal R} [h : 
+I.IsPrime] : (prod I (⊤ : Ideal S)).IsPrime where ne_top'
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.map_prodComm_prod`：map_prodComm_prod : map ((RingEquiv.prodComm : 
+R × S ≃+* S × R) : R × S ->+* S × R) (prod I J) = prod J I
 -/
 theorem isPrime_ideal_prod_top' {I : Ideal S} [h : I.IsPrime] : (prod (⊤ : Ideal R) I).IsPrime := by
   let : IsPrime (prod I (⊤ : Ideal R)) := isPrime_ideal_prod_top
   rw [← map_prodComm_prod]
   -- Note: couldn't synthesize the right instances without the `R` and `S` hints
   exact map_isPrime_of_equiv (RingEquiv.prodComm (R := S) (S := R))
-
-/--
-theorem `ideal_prod_prime_aux` / 定理 `ideal_prod_prime_aux`
-
-English:
-theorem ideal_prod_prime_aux
-  given: {I : Ideal R} {J : Ideal S}
-  proof: by
-  contrapose!
-  simp only [ne_top_iff_one, isPrime_iff, not_and, not_forall, not_or]
-  exact fun ⟨hI, hJ⟩ _ => ⟨⟨0, 1⟩, ⟨1, 0⟩, by simp, by simp [hJ], by simp [hI]⟩
-
-中文:
-定理 ideal_prod_prime_aux
-  条件: {I : 理想 R} {J : 理想 S}
-  证明: by
-  contrapose!
-  simp only [ne_top_iff_one, isPrime_iff, not_and, not_forall, not_or]
-  exact fun ⟨hI, hJ⟩ _ => ⟨⟨0, 1⟩, ⟨1, 0⟩, by simp, by simp [hJ], by simp [hI]⟩
-
-Depends on / 依赖: contrapose, isPrime_iff, ne_top_iff_one, not_and, not_forall, not_or
+/-
+**Ideal.ideal_prod_prime_aux** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：ideal_prod_prime_aux {I : Ideal R} {J : Ideal S} : (Ideal.prod I J).IsPrim
+e -> I = ⊤ ∨ J = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
 -/
 theorem ideal_prod_prime_aux {I : Ideal R} {J : Ideal S} :
-    (Ideal.prod I J).IsPrime -> I = ⊤ ∨ J = ⊤ := by
+    (Ideal.prod I J).IsPrime → I = ⊤ ∨ J = ⊤ := by
   contrapose!
   simp only [ne_top_iff_one, isPrime_iff, not_and, not_forall, not_or]
   exact fun ⟨hI, hJ⟩ _ => ⟨⟨0, 1⟩, ⟨1, 0⟩, by simp, by simp [hJ], by simp [hI]⟩
 
-/--
-theorem `ideal_prod_prime` / 定理 `ideal_prod_prime`
+/-- Classification of prime ideals in product rings: the prime ideals of `R × S` are precisely the
+    ideals of the form `p × S` or `R × p`, where `p` is a prime ideal of `R` or `S`. -/
+/-
+**Ideal.ideal_prod_prime** 是 Mathlib 中的一个定理，位于命名空间 `Ideal`。
+形式化陈述：ideal_prod_prime (I : Ideal (R × S)) : I.IsPrime ↔ (exists p : Ideal R, p.
+IsPrime ∧ I = Ideal.prod p ⊤) ∨ exists p : Ideal S, p.IsPrime ∧ I = Ideal.prod ⊤
+ p
+参数：I : Ideal (R × S)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.ideal_prod_eq`：ideal_prod_eq (I : Ideal (R × S)) : I = Ideal.prod 
+(map (RingHom.fst R S) I : Ideal R) (map (RingHom.snd R S) I)
+· 使用定理 `Ideal.ideal_prod_prime_aux`：ideal_prod_prime_aux {I : Ideal R} {J : Idea
+l S} : (Ideal.prod I J).IsPrime -> I = ⊤ ∨ J = ⊤
+· 使用定理 `Ideal.isPrime_of_isPrime_prod_top'`：isPrime_of_isPrime_prod_top' {I : Id
+eal S} (h : (Ideal.prod (⊤ : Ideal R) I).IsPrime) : I.IsPrime
+· 使用定理 `Ideal.isPrime_of_isPrime_prod_top`：isPrime_of_isPrime_prod_top {I : Idea
+l R} (h : (Ideal.prod I (⊤ : Ideal S)).IsPrime) : I.IsPrime
+· 使用定理 `Ideal.isPrime_ideal_prod_top`：isPrime_ideal_prod_top {I : Ideal R} [h : 
+I.IsPrime] : (prod I (⊤ : Ideal S)).IsPrime where ne_top'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.isPrime_ideal_prod_top'`：isPrime_ideal_prod_top' {I : Ideal S} [h 
+: I.IsPrime] : (prod (⊤ : Ideal R) I).IsPrime
 
-English:
-theorem ideal_prod_prime
-  given: (I : Ideal (R × S))
-  proof: by
-  constructor
-  · rw [ideal_prod_eq I]
-    intro hI
-    rcases ideal_prod_prime_aux hI with (h | h)
-    · right
-      rw [h] at hI ⊢
-      exact ⟨_, ⟨isPrime_of_isPrime_prod_top' hI, rfl⟩⟩
-    · left
-      rw [h] at hI ⊢
-      exact ⟨_, ⟨isPrime_of_isPrime_prod_top hI, rfl⟩⟩
-  · rintro (⟨p, ⟨h, rfl⟩⟩ | ⟨p, ⟨h, rfl⟩⟩)
-    · exact isPrime_ideal_prod_top
-    · exact isPrime_ideal_prod_top'
-
-中文:
-定理 ideal_prod_prime
-  条件: (I : 理想 (R × S))
-  证明: by
-  constructor
-  · rw [ideal_prod_eq I]
-    intro hI
-    rcases ideal_prod_prime_aux hI with (h | h)
-    · right
-      rw [h] at hI ⊢
-      exact ⟨_, ⟨isPrime_of_isPrime_prod_top' hI, rfl⟩⟩
-    · left
-      rw [h] at hI ⊢
-      exact ⟨_, ⟨isPrime_of_isPrime_prod_top hI, rfl⟩⟩
-  · rintro (⟨p, ⟨h, rfl⟩⟩ | ⟨p, ⟨h, rfl⟩⟩)
-    · exact isPrime_ideal_prod_top
-    · exact isPrime_ideal_prod_top'
-
-Depends on / 依赖: ideal_prod_eq, ideal_prod_prime_aux, isPrime_ideal_prod_top, isPrime_of_isPrime_prod_top
+--- 原说明 ---
+Classification of prime ideals in product rings: the prime ideals of `R × S` are
+ precisely the
+    ideals of the form `p × S` or `R × p`, where `p` is a prime ideal of `R` or 
+`S`.
 -/
 theorem ideal_prod_prime (I : Ideal (R × S)) :
     I.IsPrime ↔
-      (exists p : Ideal R, p.IsPrime ∧ I = Ideal.prod p ⊤) ∨
-        exists p : Ideal S, p.IsPrime ∧ I = Ideal.prod ⊤ p := by
+      (∃ p : Ideal R, p.IsPrime ∧ I = Ideal.prod p ⊤) ∨
+        ∃ p : Ideal S, p.IsPrime ∧ I = Ideal.prod ⊤ p := by
   constructor
   · rw [ideal_prod_eq I]
     intro hI
@@ -807,26 +664,13 @@ theorem ideal_prod_prime (I : Ideal (R × S)) :
 end Ideal
 
 open Submodule.IsPrincipal in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsPrincipalIdealRing
-  signature: R] [IsPrincipalIdealRing S] : IsPrincipalIdealRing (R × S) where
-  body: by
-    rw [I.ideal_prod_eq]; rw [← span_singleton_generator (I.map _)]; rw [← span_singleton_generator (I.map (RingHom.snd R S))]; rw [← Ideal.span]; rw [← Ideal.span]; rw [← Ideal.span_prod (iff_of_true (by simp) (by simp))]; rw [Set.singleton_prod_singleton]
-    exact ⟨_, rfl⟩
-
-中文:
-实例 [是主理想环
-  签名: R] [是主理想环 S] : 是主理想环 (R × S) where
-  定义体: by
-    rw [I.ideal_prod_eq]; rw [← span_singleton_generator (I.map _)]; rw [← span_singleton_generator (I.map (RingHom.snd R S))]; rw [← Ideal.span]; rw [← Ideal.span]; rw [← Ideal.span_prod (iff_of_true (by simp) (by simp))]; rw [Set.singleton_prod_singleton]
-    exact ⟨_, rfl⟩
-
-Depends on / 依赖: I.ideal_prod_eq, I.map, Ideal.span, Ideal.span_prod, RingHom, RingHom.snd, Set.singleton_prod_singleton, ideal_prod_eq, iff_of_true, singleton_prod_singleton, span_prod, span_singleton_generator
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsPrincipalIdealRing R] [IsPrincipalIdealRing S] : IsPrincipalIdealRing (R × S) where
   principal I := by
-    rw [I.ideal_prod_eq]; rw [← span_singleton_generator (I.map _)]; rw [← span_singleton_generator (I.map (RingHom.snd R S))]; rw [← Ideal.span]; rw [← Ideal.span]; rw [← Ideal.span_prod (iff_of_true (by simp) (by simp))]; rw [Set.singleton_prod_singleton]
+    rw [I.ideal_prod_eq, ← span_singleton_generator (I.map _),
+      ← span_singleton_generator (I.map (RingHom.snd R S)), ← Ideal.span, ← Ideal.span,
+      ← Ideal.span_prod (iff_of_true (by simp) (by simp)), Set.singleton_prod_singleton]
     exact ⟨_, rfl⟩

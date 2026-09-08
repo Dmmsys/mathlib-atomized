@@ -31,112 +31,102 @@ open CategoryTheory
 variable {X Y : Scheme.{u}} (f : X.Hom Y) (S S' : Scheme.{u})
 
 /--
-Definition of `Over` / `Over` 的定义
+`X.Over S` is the typeclass containing the data of a structure morphism `X ↘ S : X ⟶ S`.
+-/
+/-
+**AlgebraicGeometry.Scheme.Over** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeometry.Sch
+eme`。
+形式化陈述：AlgebraicGeometry.Scheme → AlgebraicGeometry.Scheme → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Over
-  signature: (X S : Scheme.{u})
-  body: OverClass X S
-
-中文:
-缩写 Over
-  签名: (X S : 概形.{u})
-  定义体: OverClass X S
+--- 原说明 ---
+`X.Over S` is the typeclass containing the data of a structure morphism `X ↘ S :
+ X ⟶ S`.
 -/
 protected abbrev Over (X S : Scheme.{u}) := OverClass X S
 
 /--
-Definition of `CanonicallyOver` / `CanonicallyOver` 的定义
+`X.CanonicallyOver S` is the typeclass containing the data of a structure morphism `X ↘ S : X ⟶ S`,
+and that `S` is (uniquely) inferable from the structure of `X`.
+-/
+/-
+**AlgebraicGeometry.Scheme.CanonicallyOver** 是 Mathlib 中的一个缩写定义，位于命名空间 `Algebrai
+cGeometry.Scheme`。
+形式化陈述：CanonicallyOver (X S : Scheme.{u})
+参数：X S : Scheme.{u}。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation CanonicallyOver
-  signature: (X S : Scheme.{u})
-  body: CanonicallyOverClass X S
-
-中文:
-缩写 CanonicallyOver
-  签名: (X S : 概形.{u})
-  定义体: CanonicallyOverClass X S
-
-Depends on / 依赖: CanonicallyOverClass
+--- 原说明 ---
+`X.CanonicallyOver S` is the typeclass containing the data of a structure morphi
+sm `X ↘ S : X ⟶ S`,
+and that `S` is (uniquely) inferable from the structure of `X`.
 -/
 abbrev CanonicallyOver (X S : Scheme.{u}) := CanonicallyOverClass X S
 
-/--
-Definition of `Hom.IsOver` / `Hom.IsOver` 的定义
+/-- Given `X.Over S` and `Y.Over S` and `f : X ⟶ Y`,
+`f.IsOver S` is the typeclass asserting `f` commutes with the structure morphisms. -/
+/-
+**AlgebraicGeometry.Scheme.Hom.IsOver** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeomet
+ry.Scheme.Hom`。
+形式化陈述：{X Y : AlgebraicGeometry.Scheme} → X.Hom Y → (S : AlgebraicGeometry.Scheme
+) → [X.Over S] → [Y.Over S] → Prop
+参数：S : AlgebraicGeometry.Scheme。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.IsOver
-  signature: (f : X.Hom Y) (S : Scheme.{u}) [X.Over S] [Y.Over S]
-  body: HomIsOver f S
-
-@[simp]
-
-中文:
-缩写 态射.是Over
-  签名: (f : X.态射 Y) (S : 概形.{u}) [X.Over S] [Y.Over S]
-  定义体: HomIsOver f S
-
-@[simp]
-
-Depends on / 依赖: HomIsOver
+--- 原说明 ---
+Given `X.Over S` and `Y.Over S` and `f : X ⟶ Y`,
+`f.IsOver S` is the typeclass asserting `f` commutes with the structure morphism
+s.
 -/
 abbrev Hom.IsOver (f : X.Hom Y) (S : Scheme.{u}) [X.Over S] [Y.Over S] := HomIsOver f S
 
 @[simp]
-/--
-lemma `Hom.isOver_iff` / 引理 `Hom.isOver_iff`
-
-English:
-lemma Hom.isOver_iff
-  given: [X.Over S] [Y.Over S] {f : X ⟶ Y}
-  statement: f.IsOver S ↔ f ≫ Y ↘ S = X ↘ S
-  proof: ⟨fun H => H.1, fun h => ⟨h⟩⟩
-
-中文:
-引理 态射.isOver_iff
-  条件: [X.Over S] [Y.Over S] {f : X ⟶ Y}
-  结论: f.是Over S ↔ f ≫ Y ↘ S = X ↘ S
-  证明: ⟨fun H => H.1, fun h => ⟨h⟩⟩
+/-
+**AlgebraicGeometry.Scheme.Hom.isOver_iff** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicGe
+ometry.Scheme.Hom`。
+形式化陈述：∀ {X Y : AlgebraicGeometry.Scheme} (S : AlgebraicGeometry.Scheme) [inst : 
+X.Over S] [inst_1 : Y.Over S] {f : X ⟶ Y},   AlgebraicGeometry.Scheme.Hom.IsOver
+ f S ↔ CategoryTheory.CategoryStruct.comp f (Y ↘ S) = X ↘ S
+参数：S : AlgebraicGeometry.Scheme；Y ↘ S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.HomIsOver.comp_over`：∀ {C : Type u} {inst : CategoryTheor
+y.Category.{v, u} C} {X Y : C} {f : X ⟶ Y} {S : C}   {inst_1 : CategoryTheory.Ov
+erClass X S} {inst_2 : C…
 -/
 lemma Hom.isOver_iff [X.Over S] [Y.Over S] {f : X ⟶ Y} : f.IsOver S ↔ f ≫ Y ↘ S = X ↘ S :=
-  ⟨fun H => H.1, fun h => ⟨h⟩⟩
+  ⟨fun H ↦ H.1, fun h ↦ ⟨h⟩⟩
 
 /-! Also note the existence of `CategoryTheory.IsOverTower X Y S`. -/
 
-/--
-Definition of `asOver` / `asOver` 的定义
+/-- Given `X.Over S`, this is the bundled object of `Over S`. -/
+/-
+**AlgebraicGeometry.Scheme.asOver** 是 Mathlib 中的一个缩写定义，位于命名空间 `AlgebraicGeometry
+.Scheme`。
+形式化陈述：asOver (X S : Scheme.{u}) [X.Over S]
+参数：X S : Scheme.{u}。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation asOver
-  signature: (X S : Scheme.{u}) [X.Over S]
-  body: OverClass.asOver X S
-
-中文:
-缩写 asOver
-  签名: (X S : 概形.{u}) [X.Over S]
-  定义体: OverClass.asOver X S
-
-Depends on / 依赖: OverClass, OverClass.asOver, asOver
+--- 原说明 ---
+Given `X.Over S`, this is the bundled object of `Over S`.
 -/
 abbrev asOver (X S : Scheme.{u}) [X.Over S] := OverClass.asOver X S
 
-/--
-Definition of `Hom.asOver` / `Hom.asOver` 的定义
+/-- Given a morphism `X ⟶ Y` with `f.IsOver S`, this is the bundled morphism in `Over S`. -/
+/-
+**AlgebraicGeometry.Scheme.Hom.asOver** 是 Mathlib 中的一个定义，位于命名空间 `AlgebraicGeomet
+ry.Scheme.Hom`。
+形式化陈述：{X Y : AlgebraicGeometry.Scheme} →   (f : X.Hom Y) →     (S : AlgebraicGeo
+metry.Scheme) →       [inst : X.Over S] →         [inst_1 : Y.Over S] → [f.IsOve
+r S] → CategoryTheory.OverClass.asOver X S ⟶ CategoryTheory.OverClass.asOver Y S
+参数：f : X.Hom Y；S : AlgebraicGeometry.Scheme。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.asOver
-  signature: (f : X.Hom Y) (S : Scheme.{u}) [X.Over S] [Y.Over S] [f.IsOver S]
-  body: OverClass.asOverHom S f
-
-中文:
-缩写 态射.asOver
-  签名: (f : X.态射 Y) (S : 概形.{u}) [X.Over S] [Y.Over S] [f.是Over S]
-  定义体: OverClass.asOverHom S f
-
-Depends on / 依赖: OverClass, OverClass.asOverHom, asOverHom
+--- 原说明 ---
+Given a morphism `X ⟶ Y` with `f.IsOver S`, this is the bundled morphism in `Ove
+r S`.
 -/
 abbrev Hom.asOver (f : X.Hom Y) (S : Scheme.{u}) [X.Over S] [Y.Over S] [f.IsOver S] :=
   OverClass.asOverHom S f
 
 end AlgebraicGeometry.Scheme
+

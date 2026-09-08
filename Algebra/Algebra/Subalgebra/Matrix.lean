@@ -33,24 +33,17 @@ variable {n : Type*} [Fintype n] [DecidableEq n]
 Given a `Subalgebra` `S`, `S.matrix` is the `Subalgebra` of square matrices `m`
 all of whose entries `m i j` belong to `S`. -/
 @[simps!]
-/--
-Definition of `matrix` / `matrix` 的定义
+/-
+**Subalgebra.matrix** 是 Mathlib 中的一个定义，位于命名空间 `Subalgebra`。
+形式化陈述：matrix (S : Subalgebra R A) : Subalgebra R (Matrix n n A) where __
+参数：S : Subalgebra R A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition matrix
-  signature: (S : Subalgebra R A)
-  body: S.toSubsemiring.matrix
-  algebraMap_mem' _ :=
-    (diagonal_mem_matrix_iff (Subalgebra.zero_mem _)).mpr (fun _ => Subalgebra.algebraMap_mem _ _)
-
-中文:
-定义 matrix
-  签名: (S : 子代数 R A)
-  定义体: S.toSubsemiring.matrix
-  algebraMap_mem' _ :=
-    (diagonal_mem_matrix_iff (Subalgebra.zero_mem _)).mpr (fun _ => Subalgebra.algebraMap_mem _ _)
-
-Depends on / 依赖: S.toSubsemiring.matrix, matrix, toSubsemiring
+--- 原说明 ---
+A version of `Set.matrix` for `Subalgebra`s.
+Given a `Subalgebra` `S`, `S.matrix` is the `Subalgebra` of square matrices `m`
+all of whose entries `m i j` belong to `S`.
 -/
 def matrix (S : Subalgebra R A) : Subalgebra R (Matrix n n A) where
   __ := S.toSubsemiring.matrix
@@ -58,3 +51,4 @@ def matrix (S : Subalgebra R A) : Subalgebra R (Matrix n n A) where
     (diagonal_mem_matrix_iff (Subalgebra.zero_mem _)).mpr (fun _ => Subalgebra.algebraMap_mem _ _)
 
 end Subalgebra
+

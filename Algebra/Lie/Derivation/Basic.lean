@@ -40,26 +40,24 @@ This file defines *Lie derivations* and establishes some basic properties.
 
 @[expose] public section
 
-/--
-Definition of `LieDerivation` / `LieDerivation` 的定义
+/-- A Lie derivation `D` from the Lie `R`-algebra `L` to the `L`-module `M` is an `R`-linear map
+that satisfies the Leibniz rule `D [a, b] = [a, D b] - [b, D a]`. -/
+/-
+**LieDerivation** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_1) →   (L : Type u_2) →     (M : Type u_3) →       [inst : Com
+mRing R] →         [inst_1 : LieRing L] →           [inst_2 : LieAlgebra R L] → 
+            [inst_3 : AddCommGroup M] →               [inst_4 : _root_.Module R 
+M] → [inst_5 : LieRingModule L M] → [LieModule R L M] → Type (max u_2 u_3)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure LieDerivation
-  parameters: (R L M : Type*) [CommRing R] [LieRing L] [LieAlgebra R L]
-  extends: L ->ₗ[R] M
-  axioms and operations (1):
-    - leibniz'((a b : L)) : toLinearMap ⁅a, b⁆ = ⁅a, toLinearMap b⁆ - ⁅b, toLinearMap a⁆
-
-中文:
-结构 LieDerivation
-  参数: (R L M : 类型) [交换环 R] [Lie环 L] [Lie代数 R L]
-  继承: L ->ₗ[R] M
-  公理与运算 (1 个):
-    - leibniz'((a b : L)) : toLinearMap ⁅a, b⁆ = ⁅a, toLinearMap b⁆ - ⁅b, toLinearMap a⁆
+--- 原说明 ---
+A Lie derivation `D` from the Lie `R`-algebra `L` to the `L`-module `M` is an `R
+`-linear map
+that satisfies the Leibniz rule `D [a, b] = [a, D b] - [b, D a]`.
 -/
 structure LieDerivation (R L M : Type*) [CommRing R] [LieRing L] [LieAlgebra R L]
     [AddCommGroup M] [Module R M] [LieRingModule L M] [LieModule R L M]
-    extends L ->ₗ[R] M where
+    extends L →ₗ[R] M where
   protected leibniz' (a b : L) : toLinearMap ⁅a, b⁆ = ⁅a, toLinearMap b⁆ - ⁅b, toLinearMap a⁆
 
 /-- The `LinearMap` underlying a `LieDerivation`. -/
@@ -74,287 +72,206 @@ variable {R L M : Type*} [CommRing R] [LieRing L] [LieAlgebra R L]
 
 variable (D : LieDerivation R L M) {D1 D2 : LieDerivation R L M} (a b : L)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (LieDerivation R L M) L M
-  body: D.toFun
-  coe_injective D1 D2 h := by cases D1; cases D2; congr; exact DFunLike.coe_injective h
-
-中文:
-实例 :
-  签名: 函数状 (LieDerivation R L M) L M
-  定义体: D.toFun
-  coe_injective D1 D2 h := by cases D1; cases D2; congr; exact DFunLike.coe_injective h
-
-Depends on / 依赖: D.toFun
+/-
+**LieDerivation.** 是 Mathlib 中的一个实例，位于命名空间 `LieDerivation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : FunLike (LieDerivation R L M) L M where
   coe D := D.toFun
   coe_injective D1 D2 h := by cases D1; cases D2; congr; exact DFunLike.coe_injective h
-
-/--
-Instance `instLinearMapClass` / 实例 `instLinearMapClass`
-
-English:
-instance instLinearMapClass
-  signature: : LinearMapClass (LieDerivation R L M) R L M where
-  body: D.toLinearMap.map_add'
-  map_smulₛₗ D := D.toLinearMap.map_smul
-
-中文:
-实例 instLinearMapClass
-  签名: : 线性映射类 (LieDerivation R L M) R L M where
-  定义体: D.toLinearMap.map_add'
-  map_smulₛₗ D := D.toLinearMap.map_smul
-
-Depends on / 依赖: D.toLinearMap.map_add, map_add, toLinearMap
+/-
+**LieDerivation.instLinearMapClass** 是 Mathlib 中的一个实例，位于命名空间 `LieDerivation`。
+形式化陈述：instLinearMapClass : LinearMapClass (LieDerivation R L M) R L M where map_
+add D
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddHom.map_add'`：∀ {M : Type u_10} {N : Type u_11} [inst : Add M] [inst_
+1 : Add N] (self : M →ₙ+ N) (x y : M),   self.toFun (x + y) = self.toFun x + sel
+f.toF…
+· 使用定理 `LinearMap.map_smul`：∀ {R : Type u_1} {M : Type u_8} {M₂ : Type u_10} [in
+st : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : AddCommMonoid M₂] [inst_
+3 : _roo…
 -/
 instance instLinearMapClass : LinearMapClass (LieDerivation R L M) R L M where
   map_add D := D.toLinearMap.map_add'
   map_smulₛₗ D := D.toLinearMap.map_smul
-
-/--
-theorem `toFun_eq_coe` / 定理 `toFun_eq_coe`
-
-English:
-theorem toFun_eq_coe
-  statement: D.toFun = ⇑D
-  proof: rfl
-
-中文:
-定理 toFun_eq_coe
-  结论: D.toFun = ⇑D
-  证明: rfl
+/-
+**LieDerivation.toFun_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：toFun_eq_coe : D.toFun = ⇑D
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toFun_eq_coe : D.toFun = ⇑D := rfl
 
-/--
-Definition of `Simps.apply` / `Simps.apply` 的定义
+/-- See Note [custom simps projection] -/
+/-
+**LieDerivation.Simps.apply** 是 Mathlib 中的一个定义，位于命名空间 `LieDerivation.Simps`。
+形式化陈述：{R : Type u_1} →   {L : Type u_2} →     {M : Type u_3} →       [inst : Com
+mRing R] →         [inst_1 : LieRing L] →           [inst_2 : LieAlgebra R L] → 
+            [inst_3 : AddCommGroup M] →               [inst_4 : _root_.Module R 
+M] →                 [inst_5 : LieRingModule L M] → [inst_6 : LieModule R L M] →
+ LieDerivation R L M → L → M
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.apply
-  signature: (D : LieDerivation R L M)
-  body: D
-
-initialize_simps_projections LieDerivation (toFun -> apply)
-
-中文:
-定义 Simps.apply
-  签名: (D : LieDerivation R L M)
-  定义体: D
-
-initialize_simps_projections LieDerivation (toFun -> apply)
+--- 原说明 ---
+See Note [custom simps projection]
 -/
-def Simps.apply (D : LieDerivation R L M) : L -> M := D
+def Simps.apply (D : LieDerivation R L M) : L → M := D
 
-initialize_simps_projections LieDerivation (toFun -> apply)
+initialize_simps_projections LieDerivation (toFun → apply)
 
 attribute [coe] toLinearMap
-
-/--
-Instance `instCoeToLinearMap` / 实例 `instCoeToLinearMap`
-
-English:
-instance instCoeToLinearMap
-  signature: : Coe (LieDerivation R L M) (L ->ₗ[R] M)
-  body: ⟨fun D => D.toLinearMap⟩
-
-@[simp]
-
-中文:
-实例 instCoeToLinearMap
-  签名: : Coe (LieDerivation R L M) (L ->ₗ[R] M)
-  定义体: ⟨fun D => D.toLinearMap⟩
-
-@[simp]
-
-Depends on / 依赖: D.toLinearMap, toLinearMap
+/-
+**LieDerivation.instCoeToLinearMap** 是 Mathlib 中的一个实例，位于命名空间 `LieDerivation`。
+形式化陈述：instCoeToLinearMap : Coe (LieDerivation R L M) (L ->ₗ[R] M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance instCoeToLinearMap : Coe (LieDerivation R L M) (L ->ₗ[R] M) :=
+instance instCoeToLinearMap : Coe (LieDerivation R L M) (L →ₗ[R] M) :=
   ⟨fun D => D.toLinearMap⟩
 
 @[simp]
-/--
-theorem `mk_coe` / 定理 `mk_coe`
-
-English:
-theorem mk_coe
-  given: (f : L ->ₗ[R] M) (h₁)
-  statement: ((⟨f, h₁⟩ : LieDerivation R L M) : L -> M) = f
-  proof: rfl
-
-@[simp, norm_cast]
-
-中文:
-定理 mk_coe
-  条件: (f : L ->ₗ[R] M) (h₁)
-  结论: ((⟨f, h₁⟩ : LieDerivation R L M) : L -> M) = f
-  证明: rfl
-
-@[simp, norm_cast]
+/-
+**LieDerivation.mk_coe** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：mk_coe (f : L ->ₗ[R] M) (h₁) : ((⟨f, h₁⟩ : LieDerivation R L M) : L -> M) 
+= f
+参数：f : L ->ₗ[R] M；h₁。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem mk_coe (f : L ->ₗ[R] M) (h₁) : ((⟨f, h₁⟩ : LieDerivation R L M) : L -> M) = f :=
+theorem mk_coe (f : L →ₗ[R] M) (h₁) : ((⟨f, h₁⟩ : LieDerivation R L M) : L → M) = f :=
   rfl
 
 @[simp, norm_cast]
-/--
-theorem `coeFn_coe` / 定理 `coeFn_coe`
-
-English:
-theorem coeFn_coe
-  given: (f : LieDerivation R L M)
-  statement: ⇑(f : L ->ₗ[R] M) = f
-  proof: rfl
-
-中文:
-定理 coeFn_coe
-  条件: (f : LieDerivation R L M)
-  结论: ⇑(f : L ->ₗ[R] M) = f
-  证明: rfl
+/-
+**LieDerivation.coeFn_coe** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：coeFn_coe (f : LieDerivation R L M) : ⇑(f : L ->ₗ[R] M) = f
+参数：f : LieDerivation R L M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coeFn_coe (f : LieDerivation R L M) : ⇑(f : L ->ₗ[R] M) = f :=
+theorem coeFn_coe (f : LieDerivation R L M) : ⇑(f : L →ₗ[R] M) = f :=
   rfl
-
-/--
-theorem `coe_injective` / 定理 `coe_injective`
-
-English:
-theorem coe_injective
-  statement: @Function.Injective (LieDerivation R L M) (L -> M) DFunLike.coe
-  proof: DFunLike.coe_injective
-
-@[ext]
-
-中文:
-定理 coe_injective
-  结论: @函数.单射 (LieDerivation R L M) (L -> M) 依赖函数状.coe
-  证明: DFunLike.coe_injective
-
-@[ext]
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
+/-
+**LieDerivation.coe_injective** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：coe_injective : @Function.Injective (LieDerivation R L M) (L -> M) DFunLik
+e.coe
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
-theorem coe_injective : @Function.Injective (LieDerivation R L M) (L -> M) DFunLike.coe :=
+theorem coe_injective : @Function.Injective (LieDerivation R L M) (L → M) DFunLike.coe :=
   DFunLike.coe_injective
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: (H : forall a, D1 a = D2 a)
-  statement: D1 = D2
-  proof: DFunLike.ext _ _ H
-
-中文:
-定理 ext
-  条件: (H : 对任意 a, D1 a = D2 a)
-  结论: D1 = D2
-  证明: DFunLike.ext _ _ H
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**LieDerivation.ext** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：ext (H : forall a, D1 a = D2 a) : D1 = D2
+参数：H : forall a, D1 a = D2 a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext (H : forall a, D1 a = D2 a) : D1 = D2 :=
+theorem ext (H : ∀ a, D1 a = D2 a) : D1 = D2 :=
   DFunLike.ext _ _ H
-
-/--
-theorem `congr_fun` / 定理 `congr_fun`
-
-English:
-theorem congr_fun
-  given: (h : D1 = D2) (a : L)
-  statement: D1 a = D2 a
-  proof: DFunLike.congr_fun h a
-
-@[simp]
-
-中文:
-定理 congr_fun
-  条件: (h : D1 = D2) (a : L)
-  结论: D1 a = D2 a
-  证明: DFunLike.congr_fun h a
-
-@[simp]
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun
+/-
+**LieDerivation.congr_fun** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：congr_fun (h : D1 = D2) (a : L) : D1 a = D2 a
+参数：h : D1 = D2；a : L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 -/
 theorem congr_fun (h : D1 = D2) (a : L) : D1 a = D2 a :=
   DFunLike.congr_fun h a
 
 @[simp]
-/--
-lemma `apply_lie_eq_sub` / 引理 `apply_lie_eq_sub`
-
-English:
-lemma apply_lie_eq_sub
-  given: (D : LieDerivation R L M) (a b : L)
-  proof: D.leibniz' a b
-
-中文:
-引理 apply_lie_eq_sub
-  条件: (D : LieDerivation R L M) (a b : L)
-  证明: D.leibniz' a b
-
-Depends on / 依赖: D.leibniz, leibniz
+/-
+**LieDerivation.apply_lie_eq_sub** 是 Mathlib 中的一个引理，位于命名空间 `LieDerivation`。
+形式化陈述：apply_lie_eq_sub (D : LieDerivation R L M) (a b : L) : D ⁅a, b⁆ = ⁅a, D b⁆
+ - ⁅b, D a⁆
+参数：D : LieDerivation R L M；a b : L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieDerivation.leibniz'`：∀ {R : Type u_1} {L : Type u_2} {M : Type u_3} [
+inst : CommRing R] [inst_1 : LieRing L] [inst_2 : LieAlgebra R L]   [inst_3 : Ad
+dCommGroup M…
 -/
 lemma apply_lie_eq_sub (D : LieDerivation R L M) (a b : L) :
     D ⁅a, b⁆ = ⁅a, D b⁆ - ⁅b, D a⁆ :=
   D.leibniz' a b
 
-/--
-lemma `apply_lie_eq_add` / 引理 `apply_lie_eq_add`
+/-- For a Lie derivation from a Lie algebra to itself, the usual Leibniz rule holds. -/
+/-
+**LieDerivation.apply_lie_eq_add** 是 Mathlib 中的一个引理，位于命名空间 `LieDerivation`。
+形式化陈述：apply_lie_eq_add (D : LieDerivation R L L) (a b : L) : D ⁅a, b⁆ = ⁅a, D b⁆
+ + ⁅D a, b⁆
+参数：D : LieDerivation R L L；a b : L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `LieDerivation.apply_lie_eq_sub`：apply_lie_eq_sub (D : LieDerivation R L 
+M) (a b : L) : D ⁅a, b⁆ = ⁅a, D b⁆ - ⁅b, D a⁆
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `lie_skew`：lie_skew : -⁅y, x⁆ = ⁅x, y⁆
 
-English:
-lemma apply_lie_eq_add
-  given: (D : LieDerivation R L L) (a b : L)
-  proof: by
-  rw [LieDerivation.apply_lie_eq_sub]; rw [sub_eq_add_neg]; rw [lie_skew]
-
-中文:
-引理 apply_lie_eq_add
-  条件: (D : LieDerivation R L L) (a b : L)
-  证明: by
-  rw [LieDerivation.apply_lie_eq_sub]; rw [sub_eq_add_neg]; rw [lie_skew]
-
-Depends on / 依赖: LieDerivation, LieDerivation.apply_lie_eq_sub, apply_lie_eq_sub, lie_skew, sub_eq_add_neg
+--- 原说明 ---
+For a Lie derivation from a Lie algebra to itself, the usual Leibniz rule holds.
 -/
 lemma apply_lie_eq_add (D : LieDerivation R L L) (a b : L) :
     D ⁅a, b⁆ = ⁅a, D b⁆ + ⁅D a, b⁆ := by
-  rw [LieDerivation.apply_lie_eq_sub]; rw [sub_eq_add_neg]; rw [lie_skew]
+  rw [LieDerivation.apply_lie_eq_sub, sub_eq_add_neg, lie_skew]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `eqOn_lieSpan` / 定理 `eqOn_lieSpan`
+/-- Two Lie derivations equal on a set are equal on its Lie span. -/
+/-
+**LieDerivation.eqOn_lieSpan** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：eqOn_lieSpan {s : Set L} (h : Set.EqOn D1 D2 s) : Set.EqOn D1 D2 (LieSubal
+gebra.lieSpan R L s)
+参数：h : Set.EqOn D1 D2 s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieSubalgebra.lieSpan_induction`：lieSpan_induction {p : (x : L) -> x in 
+lieSpan R L s -> Prop} (mem : forall (x) (h : x in s), p x (subset_lieSpan h)) (
+zero : p 0 (LieSubalg…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用引理 `LieDerivation.apply_lie_eq_sub`：apply_lie_eq_sub (D : LieDerivation R L 
+M) (a b : L) : D ⁅a, b⁆ = ⁅a, D b⁆ - ⁅b, D a⁆
 
-English:
-theorem eqOn_lieSpan
-  given: {s : Set L} (h : Set.EqOn D1 D2 s)
-  proof: by
-  intro _ hx
-  induction hx using LieSubalgebra.lieSpan_induction with
-  | mem x hx => exact h hx
-  | zero => simp
-  | add x y _ _ hx hy => simp [hx, hy]
-  | smul t x _ hx => simp [hx]
-  | lie x y _ _ hx hy => simp [hx, hy]
-
-中文:
-定理 eqOn_lieSpan
-  条件: {s : 集合 L} (h : 集合.EqOn D1 D2 s)
-  证明: by
-  intro _ hx
-  induction hx using LieSubalgebra.lieSpan_induction with
-  | mem x hx => exact h hx
-  | zero => simp
-  | add x y _ _ hx hy => simp [hx, hy]
-  | smul t x _ hx => simp [hx]
-  | lie x y _ _ hx hy => simp [hx, hy]
-
-Depends on / 依赖: LieSubalgebra, LieSubalgebra.lieSpan_induction, lieSpan_induction
+--- 原说明 ---
+Two Lie derivations equal on a set are equal on its Lie span.
 -/
 theorem eqOn_lieSpan {s : Set L} (h : Set.EqOn D1 D2 s) :
     Set.EqOn D1 D2 (LieSubalgebra.lieSpan R L s) := by
@@ -366,117 +283,138 @@ theorem eqOn_lieSpan {s : Set L} (h : Set.EqOn D1 D2 s) :
   | smul t x _ hx => simp [hx]
   | lie x y _ _ hx hy => simp [hx, hy]
 
-/--
-theorem `ext_of_lieSpan_eq_top` / 定理 `ext_of_lieSpan_eq_top`
+/-- If the Lie span of a set is the whole Lie algebra, then two Lie derivations equal on this set
+are equal on the whole Lie algebra. -/
+/-
+**LieDerivation.ext_of_lieSpan_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：ext_of_lieSpan_eq_top (s : Set L) (hs : LieSubalgebra.lieSpan R L s = ⊤) (
+h : Set.EqOn D1 D2 s) : D1 = D2
+参数：s : Set L；hs : LieSubalgebra.lieSpan R L s = ⊤；h : Set.EqOn D1 D2 s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieDerivation.ext`：ext (H : forall a, D1 a = D2 a) : D1 = D2
+· 使用定理 `LieDerivation.eqOn_lieSpan`：eqOn_lieSpan {s : Set L} (h : Set.EqOn D1 D2
+ s) : Set.EqOn D1 D2 (LieSubalgebra.lieSpan R L s)
+· 使用定理 `trivial`：True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem ext_of_lieSpan_eq_top
-  statement: (s : Set L) (hs : LieSubalgebra.lieSpan R L s = ⊤)
-  proof: ext fun _ => eqOn_lieSpan h hs.symm ▸ trivial
-
-中文:
-定理 ext_of_lieSpan_eq_top
-  结论: (s : 集合 L) (hs : Lie子代数.lieSpan R L s = ⊤)
-  证明: ext fun _ => eqOn_lieSpan h hs.symm ▸ trivial
-
-Depends on / 依赖: eqOn_lieSpan, hs.symm
+--- 原说明 ---
+If the Lie span of a set is the whole Lie algebra, then two Lie derivations equa
+l on this set
+are equal on the whole Lie algebra.
 -/
 theorem ext_of_lieSpan_eq_top (s : Set L) (hs : LieSubalgebra.lieSpan R L s = ⊤)
     (h : Set.EqOn D1 D2 s) : D1 = D2 :=
-ext fun _ => eqOn_lieSpan h hs.symm ▸ trivial
+  ext fun _ => eqOn_lieSpan h <| hs.symm ▸ trivial
 
 section
 
 open Finset Nat
 
-/--
-theorem `iterate_apply_lie` / 定理 `iterate_apply_lie`
+/-- The general Leibniz rule for Lie derivatives. -/
+/-
+**LieDerivation.iterate_apply_lie** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：iterate_apply_lie (D : LieDerivation R L L) (n : Nat) (a b : L) : D^[n] ⁅a
+, b⁆ = ∑ ij in antidiagonal n, choose n ij.1 • ⁅D^[ij.1] a, D^[ij.2] b⁆
+参数：D : LieDerivation R L L；n : Nat；a b : L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.HasAntidiagonal.antidiagonal_zero`：∀ {A : Type u_1} [inst : AddCo
+mmMonoid A] [inst_1 : PartialOrder A] [CanonicallyOrderedAdd A]   [inst_3 : Fins
+et.HasAntidiagonal A], Finset.…
+· 使用定理 `Finset.sum_singleton`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] (f : ι → M) (a : ι), ∑ x ∈ {a}, f x = f a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.choose_self`：choose_self (n : Nat) : choose n n = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Finset.sum_antidiagonal_choose_succ_nsmul`：∀ {M : Type u_2} [inst : AddC
+ommMonoid M] (f : ℕ → ℕ → M) (n : ℕ),   ∑ ij ∈ Finset.HasAntidiagonal.antidiagon
+al (n + 1), (n + 1).choose ij.1…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Function.iterate_succ_apply'`：iterate_succ_apply' (n : Nat) (x : α) : f^
+[n.succ] x = f (f^[n] x)
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `map_nsmul`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLik
+e F G H] [inst_1 : AddMonoid G] [inst_2 : AddMonoid H]   [AddMonoidHomClass F G…
+· 使用引理 `LieDerivation.apply_lie_eq_add`：apply_lie_eq_add (D : LieDerivation R L 
+L) (a b : L) : D ⁅a, b⁆ = ⁅a, D b⁆ + ⁅D a, b⁆
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用定理 `Finset.sum_add_distrib`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [
+inst : AddCommMonoid M] {f g : ι → M},   ∑ x ∈ s, (f x + g x) = ∑ x ∈ s, f x + ∑
+ x ∈ s, g x
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `Nat.choose_symm_of_eq_add`：choose_symm_of_eq_add {n a b : Nat} (h : n = 
+a + b) : Nat.choose n a = Nat.choose n b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.HasAntidiagonal.mem_antidiagonal`：∀ {A : Type u_1} {inst : AddMon
+oid A} [self : Finset.HasAntidiagonal A] {n : A} {a : A × A},   a ∈ Finset.HasAn
+tidiagonal.antidiagonal n ↔ a…
 
-English:
-theorem iterate_apply_lie
-  given: (D : LieDerivation R L L) (n : Nat) (a b : L)
-  proof: by
-  induction n with
-  | zero => simp
-  | succ n ih =>
-    rw [sum_antidiagonal_choose_succ_nsmul (M := L) (fun i j => ⁅D^[i] a, D^[j] b⁆) n]
-    simp only [Function.iterate_succ_apply', ih, map_sum, map_nsmul, apply_lie_eq_add, smul_add,
-      sum_add_distrib, add_right_inj]
-    refine sum_congr rfl fun ⟨i, j⟩ hij => ?_
-    rw [n.choose_symm_of_eq_add (mem_antidiagonal.1 hij).symm]
-
-中文:
-定理 iterate_apply_lie
-  条件: (D : LieDerivation R L L) (n : 自然数) (a b : L)
-  证明: by
-  induction n with
-  | zero => simp
-  | succ n ih =>
-    rw [sum_antidiagonal_choose_succ_nsmul (M := L) (fun i j => ⁅D^[i] a, D^[j] b⁆) n]
-    simp only [Function.iterate_succ_apply', ih, map_sum, map_nsmul, apply_lie_eq_add, smul_add,
-      sum_add_distrib, add_right_inj]
-    refine sum_congr rfl fun ⟨i, j⟩ hij => ?_
-    rw [n.choose_symm_of_eq_add (mem_antidiagonal.1 hij).symm]
-
-Depends on / 依赖: Function, Function.iterate_succ_apply, add_right_inj, apply_lie_eq_add, choose_symm_of_eq_add, iterate_succ_apply, map_nsmul, map_sum, mem_antidiagonal, n.choose_symm_of_eq_add, smul_add, sum_add_distrib, sum_antidiagonal_choose_succ_nsmul, sum_congr
+--- 原说明 ---
+The general Leibniz rule for Lie derivatives.
 -/
-theorem iterate_apply_lie (D : LieDerivation R L L) (n : Nat) (a b : L) :
-    D^[n] ⁅a, b⁆ = ∑ ij in antidiagonal n, choose n ij.1 • ⁅D^[ij.1] a, D^[ij.2] b⁆ := by
+theorem iterate_apply_lie (D : LieDerivation R L L) (n : ℕ) (a b : L) :
+    D^[n] ⁅a, b⁆ = ∑ ij ∈ antidiagonal n, choose n ij.1 • ⁅D^[ij.1] a, D^[ij.2] b⁆ := by
   induction n with
   | zero => simp
   | succ n ih =>
     rw [sum_antidiagonal_choose_succ_nsmul (M := L) (fun i j => ⁅D^[i] a, D^[j] b⁆) n]
     simp only [Function.iterate_succ_apply', ih, map_sum, map_nsmul, apply_lie_eq_add, smul_add,
       sum_add_distrib, add_right_inj]
-    refine sum_congr rfl fun ⟨i, j⟩ hij => ?_
+    refine sum_congr rfl fun ⟨i, j⟩ hij ↦ ?_
     rw [n.choose_symm_of_eq_add (mem_antidiagonal.1 hij).symm]
 
-/--
-theorem `iterate_apply_lie'` / 定理 `iterate_apply_lie'`
+/-- Alternate version of the general Leibniz rule for Lie derivatives. -/
+/-
+**LieDerivation.iterate_apply_lie'** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：iterate_apply_lie' (D : LieDerivation R L L) (n : Nat) (a b : L) : D^[n] ⁅
+a, b⁆ = ∑ i in range (n + 1), n.choose i • ⁅D^[i] a, D^[n - i] b⁆
+参数：D : LieDerivation R L L；n : Nat；a b : L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LieDerivation.iterate_apply_lie`：iterate_apply_lie (D : LieDerivation R 
+L L) (n : Nat) (a b : L) : D^[n] ⁅a, b⁆ = ∑ ij in antidiagonal n, choose n ij.1 
+• ⁅D^[ij.1] a, D^[ij.…
+· 使用定理 `Finset.Nat.sum_antidiagonal_eq_sum_range_succ`：∀ {M : Type u_3} [inst : 
+AddCommMonoid M] (f : ℕ → ℕ → M) (n : ℕ),   ∑ ij ∈ Finset.HasAntidiagonal.antidi
+agonal n, f ij.1 ij.2 = ∑ k ∈ Finse…
 
-English:
-theorem iterate_apply_lie'
-  given: (D : LieDerivation R L L) (n : Nat) (a b : L)
-  proof: by
-  rw [iterate_apply_lie D n a b]
-  exact sum_antidiagonal_eq_sum_range_succ (fun i j => n.choose i • ⁅D^[i] a, D^[j] b⁆) n
-
-中文:
-定理 iterate_apply_lie'
-  条件: (D : LieDerivation R L L) (n : 自然数) (a b : L)
-  证明: by
-  rw [iterate_apply_lie D n a b]
-  exact sum_antidiagonal_eq_sum_range_succ (fun i j => n.choose i • ⁅D^[i] a, D^[j] b⁆) n
-
-Depends on / 依赖: iterate_apply_lie, n.choose, sum_antidiagonal_eq_sum_range_succ
+--- 原说明 ---
+Alternate version of the general Leibniz rule for Lie derivatives.
 -/
-theorem iterate_apply_lie' (D : LieDerivation R L L) (n : Nat) (a b : L) :
-    D^[n] ⁅a, b⁆ = ∑ i in range (n + 1), n.choose i • ⁅D^[i] a, D^[n - i] b⁆ := by
+theorem iterate_apply_lie' (D : LieDerivation R L L) (n : ℕ) (a b : L) :
+    D^[n] ⁅a, b⁆ = ∑ i ∈ range (n + 1), n.choose i • ⁅D^[i] a, D^[n - i] b⁆ := by
   rw [iterate_apply_lie D n a b]
-  exact sum_antidiagonal_eq_sum_range_succ (fun i j => n.choose i • ⁅D^[i] a, D^[j] b⁆) n
+  exact sum_antidiagonal_eq_sum_range_succ (fun i j ↦ n.choose i • ⁅D^[i] a, D^[j] b⁆) n
 
 end
 
-/--
-Instance `instZero` / 实例 `instZero`
-
-English:
-instance instZero
-  signature: : Zero (LieDerivation R L M) where
-  body: { toLinearMap := 0
-      leibniz' := fun a b => by simp only [LinearMap.zero_apply, lie_zero, sub_self] }
-
-@[simp]
-
-中文:
-实例 instZero
-  签名: : 零 (LieDerivation R L M) where
-  定义体: { toLinearMap := 0
-      leibniz' := fun a b => by simp only [LinearMap.zero_apply, lie_zero, sub_self] }
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.zero_apply, leibniz, lie_zero, sub_self, toLinearMap, zero_apply
+/-
+**LieDerivation.instZero** 是 Mathlib 中的一个实例，位于命名空间 `LieDerivation`。
+形式化陈述：instZero : Zero (LieDerivation R L M) where zero
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instZero : Zero (LieDerivation R L M) where
   zero :=
@@ -484,220 +422,124 @@ instance instZero : Zero (LieDerivation R L M) where
       leibniz' := fun a b => by simp only [LinearMap.zero_apply, lie_zero, sub_self] }
 
 @[simp]
-/--
-theorem `coe_zero` / 定理 `coe_zero`
-
-English:
-theorem coe_zero
-  statement: ⇑(0 : LieDerivation R L M) = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_zero
-  结论: ⇑(0 : LieDerivation R L M) = 0
-  证明: rfl
-
-@[simp]
+/-
+**LieDerivation.coe_zero** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：coe_zero : ⇑(0 : LieDerivation R L M) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_zero : ⇑(0 : LieDerivation R L M) = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `coe_zero_linearMap` / 定理 `coe_zero_linearMap`
-
-English:
-theorem coe_zero_linearMap
-  statement: ↑(0 : LieDerivation R L M) = (0 : L ->ₗ[R] M)
-  proof: rfl
-
-中文:
-定理 coe_zero_linearMap
-  结论: ↑(0 : LieDerivation R L M) = (0 : L ->ₗ[R] M)
-  证明: rfl
+/-
+**LieDerivation.coe_zero_linearMap** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：coe_zero_linearMap : ↑(0 : LieDerivation R L M) = (0 : L ->ₗ[R] M)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_zero_linearMap : ↑(0 : LieDerivation R L M) = (0 : L ->ₗ[R] M) :=
+theorem coe_zero_linearMap : ↑(0 : LieDerivation R L M) = (0 : L →ₗ[R] M) :=
   rfl
-
-/--
-theorem `zero_apply` / 定理 `zero_apply`
-
-English:
-theorem zero_apply
-  given: (a : L)
-  statement: (0 : LieDerivation R L M) a = 0
-  proof: rfl
-
-中文:
-定理 zero_apply
-  条件: (a : L)
-  结论: (0 : LieDerivation R L M) a = 0
-  证明: rfl
+/-
+**LieDerivation.zero_apply** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：zero_apply (a : L) : (0 : LieDerivation R L M) a = 0
+参数：a : L。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem zero_apply (a : L) : (0 : LieDerivation R L M) a = 0 :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (LieDerivation R L M)
-  body: ⟨0⟩
-
-中文:
-实例 :
-  签名: 可居 (LieDerivation R L M)
-  定义体: ⟨0⟩
+/-
+**LieDerivation.** 是 Mathlib 中的一个实例，位于命名空间 `LieDerivation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (LieDerivation R L M) :=
   ⟨0⟩
-
-/--
-Instance `instAdd` / 实例 `instAdd`
-
-English:
-instance instAdd
-  signature: : Add (LieDerivation R L M) where
-  body: { toLinearMap := D1 + D2
-      leibniz' := fun a b => by
-        simp only [LinearMap.add_apply, coeFn_coe, apply_lie_eq_sub, lie_add, add_sub_add_comm] }
-
-@[simp]
-
-中文:
-实例 instAdd
-  签名: : 加法 (LieDerivation R L M) where
-  定义体: { toLinearMap := D1 + D2
-      leibniz' := fun a b => by
-        simp only [LinearMap.add_apply, coeFn_coe, apply_lie_eq_sub, lie_add, add_sub_add_comm] }
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.add_apply, add_apply, add_sub_add_comm, apply_lie_eq_sub, coeFn_coe, leibniz, lie_add, toLinearMap
+/-
+**LieDerivation.instAdd** 是 Mathlib 中的一个实例，位于命名空间 `LieDerivation`。
+形式化陈述：instAdd : Add (LieDerivation R L M) where add D1 D2
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAdd : Add (LieDerivation R L M) where
   add D1 D2 :=
     { toLinearMap := D1 + D2
-      leibniz' := fun a b => by
+      leibniz' := fun a b ↦ by
         simp only [LinearMap.add_apply, coeFn_coe, apply_lie_eq_sub, lie_add, add_sub_add_comm] }
 
 @[simp]
-/--
-theorem `coe_add` / 定理 `coe_add`
-
-English:
-theorem coe_add
-  given: (D1 D2 : LieDerivation R L M)
-  statement: ⇑(D1 + D2) = D1 + D2
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_add
-  条件: (D1 D2 : LieDerivation R L M)
-  结论: ⇑(D1 + D2) = D1 + D2
-  证明: rfl
-
-@[simp]
+/-
+**LieDerivation.coe_add** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：coe_add (D1 D2 : LieDerivation R L M) : ⇑(D1 + D2) = D1 + D2
+参数：D1 D2 : LieDerivation R L M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_add (D1 D2 : LieDerivation R L M) : ⇑(D1 + D2) = D1 + D2 :=
   rfl
 
 @[simp]
-/--
-theorem `coe_add_linearMap` / 定理 `coe_add_linearMap`
-
-English:
-theorem coe_add_linearMap
-  given: (D1 D2 : LieDerivation R L M)
-  statement: ↑(D1 + D2) = (D1 + D2 : L ->ₗ[R] M)
-  proof: rfl
-
-中文:
-定理 coe_add_linearMap
-  条件: (D1 D2 : LieDerivation R L M)
-  结论: ↑(D1 + D2) = (D1 + D2 : L ->ₗ[R] M)
-  证明: rfl
+/-
+**LieDerivation.coe_add_linearMap** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：coe_add_linearMap (D1 D2 : LieDerivation R L M) : ↑(D1 + D2) = (D1 + D2 : 
+L ->ₗ[R] M)
+参数：D1 D2 : LieDerivation R L M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_add_linearMap (D1 D2 : LieDerivation R L M) : ↑(D1 + D2) = (D1 + D2 : L ->ₗ[R] M) :=
+theorem coe_add_linearMap (D1 D2 : LieDerivation R L M) : ↑(D1 + D2) = (D1 + D2 : L →ₗ[R] M) :=
   rfl
-
-/--
-theorem `add_apply` / 定理 `add_apply`
-
-English:
-theorem add_apply
-  statement: (D1 + D2) a = D1 a + D2 a
-  proof: rfl
-
-中文:
-定理 add_apply
-  结论: (D1 + D2) a = D1 a + D2 a
-  证明: rfl
+/-
+**LieDerivation.add_apply** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：add_apply : (D1 + D2) a = D1 a + D2 a
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem add_apply : (D1 + D2) a = D1 a + D2 a :=
   rfl
-
-/--
-theorem `map_neg` / 定理 `map_neg`
-
-English:
-theorem map_neg
-  statement: D (-a) = -D a
-  proof: map_neg D a
-
-中文:
-定理 map_neg
-  结论: D (-a) = -D a
-  证明: map_neg D a
+/-
+**LieDerivation.map_neg** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：∀ {R : Type u_1} {L : Type u_2} {M : Type u_3} [inst : CommRing R] [inst_1
+ : LieRing L] [inst_2 : LieAlgebra R L]   [inst_3 : AddCommGroup M] [inst_4 : _r
+oot_.Module R M] [inst_5 : LieRingModule L M] [inst_6 : LieModule R L M]   (D : 
+LieDerivation R L M) (a : L), D (-a) = -D a
+参数：D : LieDerivation R L M；a : L；-a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
 -/
 protected theorem map_neg : D (-a) = -D a :=
   map_neg D a
-
-/--
-theorem `map_sub` / 定理 `map_sub`
-
-English:
-theorem map_sub
-  statement: D (a - b) = D a - D b
-  proof: map_sub D a b
-
-中文:
-定理 map_sub
-  结论: D (a - b) = D a - D b
-  证明: map_sub D a b
+/-
+**LieDerivation.map_sub** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：∀ {R : Type u_1} {L : Type u_2} {M : Type u_3} [inst : CommRing R] [inst_1
+ : LieRing L] [inst_2 : LieAlgebra R L]   [inst_3 : AddCommGroup M] [inst_4 : _r
+oot_.Module R M] [inst_5 : LieRingModule L M] [inst_6 : LieModule R L M]   (D : 
+LieDerivation R L M) (a b : L), D (a - b) = D a - D b
+参数：D : LieDerivation R L M；a b : L；a - b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
 -/
 protected theorem map_sub : D (a - b) = D a - D b :=
   map_sub D a b
-
-/--
-Instance `instNeg` / 实例 `instNeg`
-
-English:
-instance instNeg
-  signature: : Neg (LieDerivation R L M)
-  body: ⟨fun D =>
-    mk (-D) fun a b => by
-      simp only [LinearMap.neg_apply, coeFn_coe, apply_lie_eq_sub,
-        neg_sub, lie_neg, sub_neg_eq_add, add_comm, ← sub_eq_add_neg] ⟩
-
-@[simp]
-
-中文:
-实例 instNeg
-  签名: : 取负 (LieDerivation R L M)
-  定义体: ⟨fun D =>
-    mk (-D) fun a b => by
-      simp only [LinearMap.neg_apply, coeFn_coe, apply_lie_eq_sub,
-        neg_sub, lie_neg, sub_neg_eq_add, add_comm, ← sub_eq_add_neg] ⟩
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.neg_apply, add_comm, apply_lie_eq_sub, coeFn_coe, lie_neg, neg_apply, neg_sub, sub_eq_add_neg, sub_neg_eq_add
+/-
+**LieDerivation.instNeg** 是 Mathlib 中的一个实例，位于命名空间 `LieDerivation`。
+形式化陈述：instNeg : Neg (LieDerivation R L M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNeg : Neg (LieDerivation R L M) :=
   ⟨fun D =>
@@ -706,199 +548,103 @@ instance instNeg : Neg (LieDerivation R L M) :=
         neg_sub, lie_neg, sub_neg_eq_add, add_comm, ← sub_eq_add_neg] ⟩
 
 @[simp]
-/--
-theorem `coe_neg` / 定理 `coe_neg`
-
-English:
-theorem coe_neg
-  given: (D : LieDerivation R L M)
-  statement: ⇑(-D) = -D
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_neg
-  条件: (D : LieDerivation R L M)
-  结论: ⇑(-D) = -D
-  证明: rfl
-
-@[simp]
+/-
+**LieDerivation.coe_neg** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：coe_neg (D : LieDerivation R L M) : ⇑(-D) = -D
+参数：D : LieDerivation R L M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_neg (D : LieDerivation R L M) : ⇑(-D) = -D :=
   rfl
 
 @[simp]
-/--
-theorem `coe_neg_linearMap` / 定理 `coe_neg_linearMap`
-
-English:
-theorem coe_neg_linearMap
-  given: (D : LieDerivation R L M)
-  statement: ↑(-D) = (-D : L ->ₗ[R] M)
-  proof: rfl
-
-中文:
-定理 coe_neg_linearMap
-  条件: (D : LieDerivation R L M)
-  结论: ↑(-D) = (-D : L ->ₗ[R] M)
-  证明: rfl
+/-
+**LieDerivation.coe_neg_linearMap** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：coe_neg_linearMap (D : LieDerivation R L M) : ↑(-D) = (-D : L ->ₗ[R] M)
+参数：D : LieDerivation R L M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_neg_linearMap (D : LieDerivation R L M) : ↑(-D) = (-D : L ->ₗ[R] M) :=
+theorem coe_neg_linearMap (D : LieDerivation R L M) : ↑(-D) = (-D : L →ₗ[R] M) :=
   rfl
-
-/--
-theorem `neg_apply` / 定理 `neg_apply`
-
-English:
-theorem neg_apply
-  statement: (-D) a = -D a
-  proof: rfl
-
-中文:
-定理 neg_apply
-  结论: (-D) a = -D a
-  证明: rfl
+/-
+**LieDerivation.neg_apply** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：neg_apply : (-D) a = -D a
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem neg_apply : (-D) a = -D a :=
   rfl
-
-/--
-Instance `instSub` / 实例 `instSub`
-
-English:
-instance instSub
-  signature: : Sub (LieDerivation R L M)
-  body: ⟨fun D1 D2 =>
-    mk (D1 - D2 : L ->ₗ[R] M) fun a b => by
-      simp only [LinearMap.sub_apply, coeFn_coe, apply_lie_eq_sub, lie_sub, sub_sub_sub_comm]⟩
-
-@[simp]
-
-中文:
-实例 instSub
-  签名: : 减法 (LieDerivation R L M)
-  定义体: ⟨fun D1 D2 =>
-    mk (D1 - D2 : L ->ₗ[R] M) fun a b => by
-      simp only [LinearMap.sub_apply, coeFn_coe, apply_lie_eq_sub, lie_sub, sub_sub_sub_comm]⟩
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.sub_apply, apply_lie_eq_sub, coeFn_coe, lie_sub, sub_apply, sub_sub_sub_comm
+/-
+**LieDerivation.instSub** 是 Mathlib 中的一个实例，位于命名空间 `LieDerivation`。
+形式化陈述：instSub : Sub (LieDerivation R L M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSub : Sub (LieDerivation R L M) :=
   ⟨fun D1 D2 =>
-    mk (D1 - D2 : L ->ₗ[R] M) fun a b => by
+    mk (D1 - D2 : L →ₗ[R] M) fun a b => by
       simp only [LinearMap.sub_apply, coeFn_coe, apply_lie_eq_sub, lie_sub, sub_sub_sub_comm]⟩
 
 @[simp]
-/--
-theorem `coe_sub` / 定理 `coe_sub`
-
-English:
-theorem coe_sub
-  given: (D1 D2 : LieDerivation R L M)
-  statement: ⇑(D1 - D2) = D1 - D2
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_sub
-  条件: (D1 D2 : LieDerivation R L M)
-  结论: ⇑(D1 - D2) = D1 - D2
-  证明: rfl
-
-@[simp]
+/-
+**LieDerivation.coe_sub** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：coe_sub (D1 D2 : LieDerivation R L M) : ⇑(D1 - D2) = D1 - D2
+参数：D1 D2 : LieDerivation R L M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_sub (D1 D2 : LieDerivation R L M) : ⇑(D1 - D2) = D1 - D2 :=
   rfl
 
 @[simp]
-/--
-theorem `coe_sub_linearMap` / 定理 `coe_sub_linearMap`
-
-English:
-theorem coe_sub_linearMap
-  given: (D1 D2 : LieDerivation R L M)
-  statement: ↑(D1 - D2) = (D1 - D2 : L ->ₗ[R] M)
-  proof: rfl
-
-中文:
-定理 coe_sub_linearMap
-  条件: (D1 D2 : LieDerivation R L M)
-  结论: ↑(D1 - D2) = (D1 - D2 : L ->ₗ[R] M)
-  证明: rfl
+/-
+**LieDerivation.coe_sub_linearMap** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：coe_sub_linearMap (D1 D2 : LieDerivation R L M) : ↑(D1 - D2) = (D1 - D2 : 
+L ->ₗ[R] M)
+参数：D1 D2 : LieDerivation R L M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_sub_linearMap (D1 D2 : LieDerivation R L M) : ↑(D1 - D2) = (D1 - D2 : L ->ₗ[R] M) :=
+theorem coe_sub_linearMap (D1 D2 : LieDerivation R L M) : ↑(D1 - D2) = (D1 - D2 : L →ₗ[R] M) :=
   rfl
-
-/--
-theorem `sub_apply` / 定理 `sub_apply`
-
-English:
-theorem sub_apply
-  given: {D1 D2 : LieDerivation R L M}
-  statement: (D1 - D2) a = D1 a - D2 a
-  proof: rfl
-
-中文:
-定理 sub_apply
-  条件: {D1 D2 : LieDerivation R L M}
-  结论: (D1 - D2) a = D1 a - D2 a
-  证明: rfl
+/-
+**LieDerivation.sub_apply** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：sub_apply {D1 D2 : LieDerivation R L M} : (D1 - D2) a = D1 a - D2 a
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sub_apply {D1 D2 : LieDerivation R L M} : (D1 - D2) a = D1 a - D2 a :=
   rfl
 
 section Scalar
 
-/--
-Definition of `SMulBracketCommClass` / `SMulBracketCommClass` 的定义
+/-- A typeclass mixin saying that scalar multiplication and Lie bracket are left commutative. -/
+/-
+**LieDerivation.SMulBracketCommClass** 是 Mathlib 中的一个归纳类型，位于命名空间 `LieDerivation`
+。
+形式化陈述：(S : Type u_4) →   (L : Type u_5) →     (α : Type u_6) → [SMul S α] → [ins
+t : LieRing L] → [inst_1 : AddCommGroup α] → [LieRingModule L α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class SMulBracketCommClass
-  parameters: (S L α : Type*) [SMul S α] [LieRing L] [AddCommGroup α]
-  axioms and operations (1):
-    - smul_bracket_comm : forall (s : S) (l : L) (a : α), s • ⁅l, a⁆ = ⁅l, s • a⁆
-
-中文:
-类 SMulBracketComm类
-  参数: (S L α : 类型) [标量乘法 S α] [Lie环 L] [加法交换群 α]
-  公理与运算 (1 个):
-    - smul_bracket_comm : 对任意 (s : S) (l : L) (a : α), s • ⁅l, a⁆ = ⁅l, s • a⁆
+--- 原说明 ---
+A typeclass mixin saying that scalar multiplication and Lie bracket are left com
+mutative.
 -/
 class SMulBracketCommClass (S L α : Type*) [SMul S α] [LieRing L] [AddCommGroup α]
     [LieRingModule L α] : Prop where
-  /-- `•` and `⁅⬝, ⬝⁆` are left commutative -/
-  smul_bracket_comm : forall (s : S) (l : L) (a : α), s • ⁅l, a⁆ = ⁅l, s • a⁆
+  /-- `•` and `⁅⬝, ⬝⁆`  are left commutative -/
+  smul_bracket_comm : ∀ (s : S) (l : L) (a : α), s • ⁅l, a⁆ = ⁅l, s • a⁆
 
 variable {S T : Type*}
 variable [Monoid S] [DistribMulAction S M] [SMulCommClass R S M] [SMulBracketCommClass S L M]
 variable [Monoid T] [DistribMulAction T M] [SMulCommClass R T M] [SMulBracketCommClass T L M]
-
-/--
-Instance `instSMul` / 实例 `instSMul`
-
-English:
-instance instSMul
-  signature: : SMul S (LieDerivation R L M) where
-  body: { toLinearMap := r • D
-      leibniz' := fun a b => by simp only [LinearMap.smul_apply, coeFn_coe, apply_lie_eq_sub,
-        smul_sub, SMulBracketCommClass.smul_bracket_comm] }
-
-@[simp]
-
-中文:
-实例 instSMul
-  签名: : 标量乘法 S (LieDerivation R L M) where
-  定义体: { toLinearMap := r • D
-      leibniz' := fun a b => by simp only [LinearMap.smul_apply, coeFn_coe, apply_lie_eq_sub,
-        smul_sub, SMulBracketCommClass.smul_bracket_comm] }
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.smul_apply, SMulBracketCommClass, SMulBracketCommClass.smul_bracket_comm, apply_lie_eq_sub, coeFn_coe, leibniz, smul_apply, smul_bracket_comm, smul_sub, toLinearMap
+/-
+**LieDerivation.instSMul** 是 Mathlib 中的一个实例，位于命名空间 `LieDerivation`。
+形式化陈述：instSMul : SMul S (LieDerivation R L M) where smul r D
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSMul : SMul S (LieDerivation R L M) where
   smul r D :=
@@ -907,248 +653,138 @@ instance instSMul : SMul S (LieDerivation R L M) where
         smul_sub, SMulBracketCommClass.smul_bracket_comm] }
 
 @[simp]
-/--
-theorem `coe_smul` / 定理 `coe_smul`
-
-English:
-theorem coe_smul
-  given: (r : S) (D : LieDerivation R L M)
-  statement: ⇑(r • D) = r • ⇑D
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_smul
-  条件: (r : S) (D : LieDerivation R L M)
-  结论: ⇑(r • D) = r • ⇑D
-  证明: rfl
-
-@[simp]
+/-
+**LieDerivation.coe_smul** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：coe_smul (r : S) (D : LieDerivation R L M) : ⇑(r • D) = r • ⇑D
+参数：r : S；D : LieDerivation R L M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_smul (r : S) (D : LieDerivation R L M) : ⇑(r • D) = r • ⇑D :=
   rfl
 
 @[simp]
-/--
-theorem `coe_smul_linearMap` / 定理 `coe_smul_linearMap`
-
-English:
-theorem coe_smul_linearMap
-  given: (r : S) (D : LieDerivation R L M)
-  statement: ↑(r • D) = r • (D : L ->ₗ[R] M)
-  proof: rfl
-
-中文:
-定理 coe_smul_linearMap
-  条件: (r : S) (D : LieDerivation R L M)
-  结论: ↑(r • D) = r • (D : L ->ₗ[R] M)
-  证明: rfl
+/-
+**LieDerivation.coe_smul_linearMap** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：coe_smul_linearMap (r : S) (D : LieDerivation R L M) : ↑(r • D) = r • (D :
+ L ->ₗ[R] M)
+参数：r : S；D : LieDerivation R L M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_smul_linearMap (r : S) (D : LieDerivation R L M) : ↑(r • D) = r • (D : L ->ₗ[R] M) :=
+theorem coe_smul_linearMap (r : S) (D : LieDerivation R L M) : ↑(r • D) = r • (D : L →ₗ[R] M) :=
   rfl
-
-/--
-theorem `smul_apply` / 定理 `smul_apply`
-
-English:
-theorem smul_apply
-  given: (r : S) (D : LieDerivation R L M)
-  statement: (r • D) a = r • D a
-  proof: rfl
-
-中文:
-定理 smul_apply
-  条件: (r : S) (D : LieDerivation R L M)
-  结论: (r • D) a = r • D a
-  证明: rfl
+/-
+**LieDerivation.smul_apply** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：smul_apply (r : S) (D : LieDerivation R L M) : (r • D) a = r • D a
+参数：r : S；D : LieDerivation R L M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_apply (r : S) (D : LieDerivation R L M) : (r • D) a = r • D a :=
   rfl
-
-/--
-Instance `instSMulBase` / 实例 `instSMulBase`
-
-English:
-instance instSMulBase
-  signature: : SMulBracketCommClass R L M
-  body: ⟨fun s l a => (lie_smul s l a).symm⟩
-
-中文:
-实例 instSMulBase
-  签名: : SMulBracketComm类 R L M
-  定义体: ⟨fun s l a => (lie_smul s l a).symm⟩
-
-Depends on / 依赖: lie_smul
+/-
+**LieDerivation.instSMulBase** 是 Mathlib 中的一个实例，位于命名空间 `LieDerivation`。
+形式化陈述：instSMulBase : SMulBracketCommClass R L M
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `lie_smul`：lie_smul : ⁅x, t • m⁆ = t • ⁅x, m⁆
 -/
-instance instSMulBase : SMulBracketCommClass R L M := ⟨fun s l a => (lie_smul s l a).symm⟩
-
-/--
-Instance `instSMulNat` / 实例 `instSMulNat`
-
-English:
-instance instSMulNat
-  signature: : SMulBracketCommClass Nat L M
-  body: ⟨fun s l a => (lie_nsmul l a s).symm⟩
-
-中文:
-实例 instSMul自然数
-  签名: : SMulBracketComm类 自然数 L M
-  定义体: ⟨fun s l a => (lie_nsmul l a s).symm⟩
-
-Depends on / 依赖: lie_nsmul
+instance instSMulBase : SMulBracketCommClass R L M := ⟨fun s l a ↦ (lie_smul s l a).symm⟩
+/-
+**LieDerivation.instSMulNat** 是 Mathlib 中的一个实例，位于命名空间 `LieDerivation`。
+形式化陈述：instSMulNat : SMulBracketCommClass Nat L M
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `lie_nsmul`：lie_nsmul (n : Nat) : ⁅x, n • m⁆ = n • ⁅x, m⁆
 -/
-instance instSMulNat : SMulBracketCommClass Nat L M := ⟨fun s l a => (lie_nsmul l a s).symm⟩
-
-/--
-Instance `instSMulInt` / 实例 `instSMulInt`
-
-English:
-instance instSMulInt
-  signature: : SMulBracketCommClass Int L M
-  body: ⟨fun s l a => (lie_zsmul l a s).symm⟩
-
-中文:
-实例 instSMul整数
-  签名: : SMulBracketComm类 整数 L M
-  定义体: ⟨fun s l a => (lie_zsmul l a s).symm⟩
-
-Depends on / 依赖: lie_zsmul
+instance instSMulNat : SMulBracketCommClass ℕ L M := ⟨fun s l a => (lie_nsmul l a s).symm⟩
+/-
+**LieDerivation.instSMulInt** 是 Mathlib 中的一个实例，位于命名空间 `LieDerivation`。
+形式化陈述：instSMulInt : SMulBracketCommClass Int L M
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `lie_zsmul`：lie_zsmul (a : Int) : ⁅x, a • m⁆ = a • ⁅x, m⁆
 -/
-instance instSMulInt : SMulBracketCommClass Int L M := ⟨fun s l a => (lie_zsmul l a s).symm⟩
-
-/--
-Instance `instAddCommGroup` / 实例 `instAddCommGroup`
-
-English:
-instance instAddCommGroup
-  signature: : AddCommGroup (LieDerivation R L M)
-  body: coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ => rfl
-
-中文:
-实例 instAddCommGroup
-  签名: : 加法交换群 (LieDerivation R L M)
-  定义体: coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ => rfl
-
-Depends on / 依赖: addCommGroup, coe_add, coe_injective, coe_injective.addCommGroup, coe_neg, coe_sub, coe_zero
+instance instSMulInt : SMulBracketCommClass ℤ L M := ⟨fun s l a => (lie_zsmul l a s).symm⟩
+/-
+**LieDerivation.instAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `LieDerivation`。
+形式化陈述：instAddCommGroup : AddCommGroup (LieDerivation R L M)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieDerivation.coe_injective`：coe_injective : @Function.Injective (LieDer
+ivation R L M) (L -> M) DFunLike.coe
+· 使用定理 `LieDerivation.coe_zero`：coe_zero : ⇑(0 : LieDerivation R L M) = 0
+· 使用定理 `LieDerivation.coe_add`：coe_add (D1 D2 : LieDerivation R L M) : ⇑(D1 + D2
+) = D1 + D2
+· 使用定理 `LieDerivation.coe_neg`：coe_neg (D : LieDerivation R L M) : ⇑(-D) = -D
+· 使用定理 `LieDerivation.coe_sub`：coe_sub (D1 D2 : LieDerivation R L M) : ⇑(D1 - D2
+) = D1 - D2
 -/
 instance instAddCommGroup : AddCommGroup (LieDerivation R L M) :=
   coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ => rfl
 
-/--
-Definition of `coeFnAddMonoidHom` / `coeFnAddMonoidHom` 的定义
+/-- `coe_fn` as an `AddMonoidHom`. -/
+/-
+**LieDerivation.coeFnAddMonoidHom** 是 Mathlib 中的一个定义，位于命名空间 `LieDerivation`。
+形式化陈述：coeFnAddMonoidHom : LieDerivation R L M ->+ L -> M where toFun
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `LieDerivation.coe_zero`：coe_zero : ⇑(0 : LieDerivation R L M) = 0
+· 使用定理 `LieDerivation.coe_add`：coe_add (D1 D2 : LieDerivation R L M) : ⇑(D1 + D2
+) = D1 + D2
 
-English:
-definition coeFnAddMonoidHom
-  signature: : LieDerivation R L M ->+ L -> M where
-  body: (↑)
-  map_zero' := coe_zero
-  map_add' := coe_add
-
-@[simp]
-
-中文:
-定义 coeFnAddMonoidHom
-  签名: : LieDerivation R L M ->+ L -> M where
-  定义体: (↑)
-  map_zero' := coe_zero
-  map_add' := coe_add
-
-@[simp]
+--- 原说明 ---
+`coe_fn` as an `AddMonoidHom`.
 -/
-def coeFnAddMonoidHom : LieDerivation R L M ->+ L -> M where
+def coeFnAddMonoidHom : LieDerivation R L M →+ L → M where
   toFun := (↑)
   map_zero' := coe_zero
   map_add' := coe_add
 
 @[simp]
-/--
-lemma `coeFnAddMonoidHom_apply` / 引理 `coeFnAddMonoidHom_apply`
-
-English:
-lemma coeFnAddMonoidHom_apply
-  given: (D : LieDerivation R L M)
-  statement: coeFnAddMonoidHom D = D
-  proof: rfl
-
-中文:
-引理 coeFnAddMonoidHom_apply
-  条件: (D : LieDerivation R L M)
-  结论: coeFnAddMonoidHom D = D
-  证明: rfl
+/-
+**LieDerivation.coeFnAddMonoidHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `LieDerivation
+`。
+形式化陈述：coeFnAddMonoidHom_apply (D : LieDerivation R L M) : coeFnAddMonoidHom D = 
+D
+参数：D : LieDerivation R L M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coeFnAddMonoidHom_apply (D : LieDerivation R L M) : coeFnAddMonoidHom D = D := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: DistribMulAction S (LieDerivation R L M)
-  body: Function.Injective.distribMulAction coeFnAddMonoidHom coe_injective coe_smul
-
-中文:
-实例 :
-  签名: 分配乘法作用 S (LieDerivation R L M)
-  定义体: Function.Injective.distribMulAction coeFnAddMonoidHom coe_injective coe_smul
-
-Depends on / 依赖: Function, Function.Injective.distribMulAction, Injective, coeFnAddMonoidHom, coe_injective, coe_smul, distribMulAction
+/-
+**LieDerivation.** 是 Mathlib 中的一个实例，位于命名空间 `LieDerivation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : DistribMulAction S (LieDerivation R L M) :=
   Function.Injective.distribMulAction coeFnAddMonoidHom coe_injective coe_smul
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: S T] [IsScalarTower S T M] : IsScalarTower S T (LieDerivation R L M)
-  body: ⟨fun _ _ _ => ext fun _ => smul_assoc _ _ _⟩
-
-中文:
-实例 [标量乘法
-  签名: S T] [标量塔 S T M] : 标量塔 S T (LieDerivation R L M)
-  定义体: ⟨fun _ _ _ => ext fun _ => smul_assoc _ _ _⟩
-
-Depends on / 依赖: smul_assoc
+/-
+**LieDerivation.** 是 Mathlib 中的一个实例，位于命名空间 `LieDerivation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul S T] [IsScalarTower S T M] : IsScalarTower S T (LieDerivation R L M) :=
   ⟨fun _ _ _ => ext fun _ => smul_assoc _ _ _⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMulCommClass
-  signature: S T M] : SMulCommClass S T (LieDerivation R L M)
-  body: ⟨fun _ _ _ => ext fun _ => smul_comm _ _ _⟩
-
-中文:
-实例 [标量交换类
-  签名: S T M] : 标量交换类 S T (LieDerivation R L M)
-  定义体: ⟨fun _ _ _ => ext fun _ => smul_comm _ _ _⟩
-
-Depends on / 依赖: smul_comm
+/-
+**LieDerivation.** 是 Mathlib 中的一个实例，位于命名空间 `LieDerivation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMulCommClass S T M] : SMulCommClass S T (LieDerivation R L M) :=
   ⟨fun _ _ _ => ext fun _ => smul_comm _ _ _⟩
 
 end Scalar
 
-/--
-Instance `instModule` / 实例 `instModule`
-
-English:
-instance instModule
-  signature: {S : Type*} [Semiring S] [Module S M] [SMulCommClass R S M]
-  body: Function.Injective.module S coeFnAddMonoidHom coe_injective coe_smul
-
-中文:
-实例 instModule
-  签名: {S : 类型} [半环 S] [模 S M] [标量交换类 R S M]
-  定义体: Function.Injective.module S coeFnAddMonoidHom coe_injective coe_smul
-
-Depends on / 依赖: Function, Function.Injective.module, Injective, coeFnAddMonoidHom, coe_injective, coe_smul, module
+/-
+**LieDerivation.instModule** 是 Mathlib 中的一个实例，位于命名空间 `LieDerivation`。
+形式化陈述：instModule {S : Type*} [Semiring S] [Module S M] [SMulCommClass R S M] [SM
+ulBracketCommClass S L M] : Module S (LieDerivation R L M)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieDerivation.coe_injective`：coe_injective : @Function.Injective (LieDer
+ivation R L M) (L -> M) DFunLike.coe
 -/
 instance instModule {S : Type*} [Semiring S] [Module S M] [SMulCommClass R S M]
     [SMulBracketCommClass S L M] : Module S (LieDerivation R L M) :=
@@ -1160,26 +796,16 @@ section
 
 variable {R L : Type*} [CommRing R] [LieRing L] [LieAlgebra R L]
 
-/--
-Instance `instBracket` / 实例 `instBracket`
+/-- The commutator of two Lie derivations on a Lie algebra is a Lie derivation. -/
+/-
+**LieDerivation.instBracket** 是 Mathlib 中的一个实例，位于命名空间 `LieDerivation`。
+形式化陈述：instBracket : Bracket (LieDerivation R L L) (LieDerivation R L L) where br
+acket D1 D2
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instBracket
-  signature: : Bracket (LieDerivation R L L) (LieDerivation R L L) where
-  body: LieDerivation.mk ⁅(D1 : Module.End R L), (D2 : Module.End R L)⁆ (fun a b => by
-    simp only [Ring.lie_def, apply_lie_eq_add, coeFn_coe,
-      LinearMap.sub_apply, Module.End.mul_apply, map_add, sub_lie, lie_sub, ← lie_skew b]
-    abel)
-
-中文:
-实例 instBracket
-  签名: : Bracket (LieDerivation R L L) (LieDerivation R L L) where
-  定义体: LieDerivation.mk ⁅(D1 : Module.End R L), (D2 : Module.End R L)⁆ (fun a b => by
-    simp only [Ring.lie_def, apply_lie_eq_add, coeFn_coe,
-      LinearMap.sub_apply, Module.End.mul_apply, map_add, sub_lie, lie_sub, ← lie_skew b]
-    abel)
-
-Depends on / 依赖: LieDerivation, LieDerivation.mk, LinearMap, LinearMap.sub_apply, Module, Module.End, Module.End.mul_apply, Ring.lie_def, apply_lie_eq_add, coeFn_coe, lie_def, lie_skew, lie_sub, map_add, mul_apply, sub_apply, sub_lie
+--- 原说明 ---
+The commutator of two Lie derivations on a Lie algebra is a Lie derivation.
 -/
 instance instBracket : Bracket (LieDerivation R L L) (LieDerivation R L L) where
   bracket D1 D2 := LieDerivation.mk ⁅(D1 : Module.End R L), (D2 : Module.End R L)⁆ (fun a b => by
@@ -1190,68 +816,28 @@ instance instBracket : Bracket (LieDerivation R L L) (LieDerivation R L L) where
 variable {D1 D2 : LieDerivation R L L}
 
 @[simp]
-/--
-lemma `commutator_coe_linear_map` / 引理 `commutator_coe_linear_map`
-
-English:
-lemma commutator_coe_linear_map
-  statement: ↑⁅D1, D2⁆ = ⁅(D1 : Module.End R L), (D2 : Module.End R L)⁆
-  proof: rfl
-
-中文:
-引理 commutator_coe_linear_map
-  结论: ↑⁅D1, D2⁆ = ⁅(D1 : 模.End R L), (D2 : 模.End R L)⁆
-  证明: rfl
+/-
+**LieDerivation.commutator_coe_linear_map** 是 Mathlib 中的一个引理，位于命名空间 `LieDerivati
+on`。
+形式化陈述：commutator_coe_linear_map : ↑⁅D1, D2⁆ = ⁅(D1 : Module.End R L), (D2 : Modu
+le.End R L)⁆
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma commutator_coe_linear_map : ↑⁅D1, D2⁆ = ⁅(D1 : Module.End R L), (D2 : Module.End R L)⁆ :=
   rfl
-
-/--
-lemma `commutator_apply` / 引理 `commutator_apply`
-
-English:
-lemma commutator_apply
-  given: (a : L)
-  statement: ⁅D1, D2⁆ a = D1 (D2 a) - D2 (D1 a)
-  proof: rfl
-
-中文:
-引理 commutator_apply
-  条件: (a : L)
-  结论: ⁅D1, D2⁆ a = D1 (D2 a) - D2 (D1 a)
-  证明: rfl
+/-
+**LieDerivation.commutator_apply** 是 Mathlib 中的一个引理，位于命名空间 `LieDerivation`。
+形式化陈述：commutator_apply (a : L) : ⁅D1, D2⁆ a = D1 (D2 a) - D2 (D1 a)
+参数：a : L。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma commutator_apply (a : L) : ⁅D1, D2⁆ a = D1 (D2 a) - D2 (D1 a) :=
   rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LieRing (LieDerivation R L L)
-  body: by
-    ext a; simp only [commutator_apply, add_apply, map_add]; abel
-  lie_add d e f := by
-    ext a; simp only [commutator_apply, add_apply, map_add]; abel
-  lie_self d := by
-    ext a; simp only [commutator_apply, zero_apply]; abel
-  leibniz_lie d e f := by
-    ext a; simp only [commutator_apply, add_apply, map_sub]; abel
-
-中文:
-实例 :
-  签名: Lie环 (LieDerivation R L L)
-  定义体: by
-    ext a; simp only [commutator_apply, add_apply, map_add]; abel
-  lie_add d e f := by
-    ext a; simp only [commutator_apply, add_apply, map_add]; abel
-  lie_self d := by
-    ext a; simp only [commutator_apply, zero_apply]; abel
-  leibniz_lie d e f := by
-    ext a; simp only [commutator_apply, add_apply, map_sub]; abel
-
-Depends on / 依赖: add_apply, commutator_apply, leibniz_lie, lie_add, lie_self, map_add, map_sub, zero_apply
+/-
+**LieDerivation.** 是 Mathlib 中的一个实例，位于命名空间 `LieDerivation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LieRing (LieDerivation R L L) where
   add_lie d e f := by
@@ -1264,36 +850,25 @@ instance : LieRing (LieDerivation R L L) where
     ext a; simp only [commutator_apply, add_apply, map_sub]; abel
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `instLieAlgebra` / 实例 `instLieAlgebra`
+/-- The set of Lie derivations from a Lie algebra `L` to itself is a Lie algebra. -/
+/-
+**LieDerivation.instLieAlgebra** 是 Mathlib 中的一个实例，位于命名空间 `LieDerivation`。
+形式化陈述：instLieAlgebra : LieAlgebra R (LieDerivation R L L) where lie_smul
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instLieAlgebra
-  signature: : LieAlgebra R (LieDerivation R L L) where
-  body: fun r d e => by ext a; simp only [commutator_apply, map_smul, smul_sub, smul_apply]
-
-中文:
-实例 instLieAlgebra
-  签名: : Lie代数 R (LieDerivation R L L) where
-  定义体: fun r d e => by ext a; simp only [commutator_apply, map_smul, smul_sub, smul_apply]
-
-Depends on / 依赖: commutator_apply, map_smul, smul_apply, smul_sub
+--- 原说明 ---
+The set of Lie derivations from a Lie algebra `L` to itself is a Lie algebra.
 -/
 instance instLieAlgebra : LieAlgebra R (LieDerivation R L L) where
   lie_smul := fun r d e => by ext a; simp only [commutator_apply, map_smul, smul_sub, smul_apply]
-
-/--
-lemma `lie_apply` / 引理 `lie_apply`
-
-English:
-lemma lie_apply
-  given: (D₁ D₂ : LieDerivation R L L) (x : L)
-  proof: rfl
-
-中文:
-引理 lie_apply
-  条件: (D₁ D₂ : LieDerivation R L L) (x : L)
-  证明: rfl
+/-
+**LieDerivation.lie_apply** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：∀ {R : Type u_1} {L : Type u_2} [inst : CommRing R] [inst_1 : LieRing L] [
+inst_2 : LieAlgebra R L]   (D₁ D₂ : LieDerivation R L L) (x : L), ⁅D₁, D₂⁆ x = D
+₁ (D₂ x) - D₂ (D₁ x)
+参数：D₁ D₂ : LieDerivation R L L；x : L；D₂ x；D₁ x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma lie_apply (D₁ D₂ : LieDerivation R L L) (x : L) :
     ⁅D₁, D₂⁆ x = D₁ (D₂ x) - D₂ (D₁ x) :=
@@ -1308,66 +883,62 @@ variable (R L : Type*) [CommRing R] [LieRing L] [LieAlgebra R L]
 attribute [local instance 100] LieRing.ofAssociativeRing
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `toLinearMapLieHom` / `toLinearMapLieHom` 的定义
+/-- The Lie algebra morphism from Lie derivations into linear endomorphisms. -/
+/-
+**LieDerivation.toLinearMapLieHom** 是 Mathlib 中的一个定义，位于命名空间 `LieDerivation`。
+形式化陈述：toLinearMapLieHom : LieDerivation R L L ->ₗ⁅R⁆ L ->ₗ[R] L where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toLinearMapLieHom
-  signature: : LieDerivation R L L ->ₗ⁅R⁆ L ->ₗ[R] L where
-  body: toLinearMap
-  map_add' := by intro D1 D2; dsimp
-  map_smul' := by intro D1 D2; dsimp
-  map_lie' := by intro D1 D2; dsimp
-
-中文:
-定义 toLinearMapLieHom
-  签名: : LieDerivation R L L ->ₗ⁅R⁆ L ->ₗ[R] L where
-  定义体: toLinearMap
-  map_add' := by intro D1 D2; dsimp
-  map_smul' := by intro D1 D2; dsimp
-  map_lie' := by intro D1 D2; dsimp
-
-Depends on / 依赖: toLinearMap
+--- 原说明 ---
+The Lie algebra morphism from Lie derivations into linear endomorphisms.
 -/
-def toLinearMapLieHom : LieDerivation R L L ->ₗ⁅R⁆ L ->ₗ[R] L where
+def toLinearMapLieHom : LieDerivation R L L →ₗ⁅R⁆ L →ₗ[R] L where
   toFun := toLinearMap
   map_add' := by intro D1 D2; dsimp
   map_smul' := by intro D1 D2; dsimp
   map_lie' := by intro D1 D2; dsimp
 
-/--
-lemma `toLinearMapLieHom_injective` / 引理 `toLinearMapLieHom_injective`
+/-- The map from Lie derivations to linear endomorphisms is injective. -/
+/-
+**LieDerivation.toLinearMapLieHom_injective** 是 Mathlib 中的一个引理，位于命名空间 `LieDeriva
+tion`。
+形式化陈述：toLinearMapLieHom_injective : Function.Injective (toLinearMapLieHom R L)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieDerivation.ext`：ext (H : forall a, D1 a = D2 a) : D1 = D2
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 
-English:
-lemma toLinearMapLieHom_injective
-  statement: Function.Injective (toLinearMapLieHom R L)
-  proof: fun _ _ h => ext fun a => congrFun (congrArg DFunLike.coe h) a
-
-中文:
-引理 toLinearMapLieHom_injective
-  结论: 函数.单射 (toLinearMapLieHom R L)
-  证明: fun _ _ h => ext fun a => congrFun (congrArg DFunLike.coe h) a
-
-Depends on / 依赖: DFunLike, DFunLike.coe
+--- 原说明 ---
+The map from Lie derivations to linear endomorphisms is injective.
 -/
 lemma toLinearMapLieHom_injective : Function.Injective (toLinearMapLieHom R L) :=
-  fun _ _ h => ext fun a => congrFun (congrArg DFunLike.coe h) a
+  fun _ _ h ↦ ext fun a ↦ congrFun (congrArg DFunLike.coe h) a
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `instNoetherian` / 实例 `instNoetherian`
+/-- Lie derivations over a Noetherian Lie algebra form a Noetherian module. -/
+/-
+**LieDerivation.instNoetherian** 是 Mathlib 中的一个实例，位于命名空间 `LieDerivation`。
+形式化陈述：instNoetherian [IsNoetherian R L] : IsNoetherian R (LieDerivation R L L)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `isNoetherian_of_linearEquiv`：isNoetherian_of_linearEquiv {σ : R ->+* S} 
+{σ' : S ->+* R} [RingHomInvPair σ σ'] [RingHomInvPair σ' σ] (f : M ≃ₛₗ[σ] P) [Is
+Noetherian R M] :…
+· 使用定理 `RingHomSurjective.invPair`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst : Sem
+iring R₁] [inst_1 : Semiring R₂] {σ₁ : R₁ →+* R₂} {σ₂ : R₂ →+* R₁}   [RingHomInv
+Pair σ₁ σ₂], Ri…
+· 使用引理 `LieDerivation.toLinearMapLieHom_injective`：toLinearMapLieHom_injective :
+ Function.Injective (toLinearMapLieHom R L)
+· 使用定理 `Module.IsNoetherian.finite`：∀ (R : Type u_1) (M : Type u_3) [inst : Semi
+ring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   [IsNoetherian 
+R M], Module.Fin…
 
-English:
-instance instNoetherian
-  signature: [IsNoetherian R L]
-  body: isNoetherian_of_linearEquiv (LinearEquiv.ofInjective _ (toLinearMapLieHom_injective R L)).symm
-
-中文:
-实例 instNoetherian
-  签名: [是Noether R L]
-  定义体: isNoetherian_of_linearEquiv (LinearEquiv.ofInjective _ (toLinearMapLieHom_injective R L)).symm
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.ofInjective, isNoetherian_of_linearEquiv, ofInjective, toLinearMapLieHom_injective
+--- 原说明 ---
+Lie derivations over a Noetherian Lie algebra form a Noetherian module.
 -/
 instance instNoetherian [IsNoetherian R L] : IsNoetherian R (LieDerivation R L L) :=
   isNoetherian_of_linearEquiv (LinearEquiv.ofInjective _ (toLinearMapLieHom_injective R L)).symm
@@ -1382,133 +953,129 @@ variable (R L M : Type*) [CommRing R] [LieRing L] [LieAlgebra R L]
 set_option backward.isDefEq.respectTransparency false in
 /-- The natural map from a Lie module to the derivations taking values in it. -/
 @[simps!]
-/--
-Definition of `inner` / `inner` 的定义
+/-
+**LieDerivation.inner** 是 Mathlib 中的一个定义，位于命名空间 `LieDerivation`。
+形式化陈述：inner : M ->ₗ[R] LieDerivation R L M where toFun m
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inner
-  signature: : M ->ₗ[R] LieDerivation R L M where
-  body: { __ := (LieModule.toEnd R L M : L ->ₗ[R] Module.End R M).flip m
-      leibniz' := by simp }
-  map_add' m n := by ext; simp
-  map_smul' t m := by ext; simp
-
-中文:
-定义 inner
-  签名: : M ->ₗ[R] LieDerivation R L M where
-  定义体: { __ := (LieModule.toEnd R L M : L ->ₗ[R] Module.End R M).flip m
-      leibniz' := by simp }
-  map_add' m n := by ext; simp
-  map_smul' t m := by ext; simp
-
-Depends on / 依赖: LieModule, LieModule.toEnd, Module, Module.End, leibniz, map_add, map_smul
+--- 原说明 ---
+The natural map from a Lie module to the derivations taking values in it.
 -/
-def inner : M ->ₗ[R] LieDerivation R L M where
+def inner : M →ₗ[R] LieDerivation R L M where
   toFun m :=
-    { __ := (LieModule.toEnd R L M : L ->ₗ[R] Module.End R M).flip m
+    { __ := (LieModule.toEnd R L M : L →ₗ[R] Module.End R M).flip m
       leibniz' := by simp }
   map_add' m n := by ext; simp
   map_smul' t m := by ext; simp
-
-/--
-Instance `instLieRingModule` / 实例 `instLieRingModule`
-
-English:
-instance instLieRingModule
-  signature: : LieRingModule L (LieDerivation R L M) where
-  body: inner R L M (D x)
-  add_lie x y D := by simp
-  lie_add x D₁ D₂ := by simp
-  leibniz_lie x y D := by simp
-
-中文:
-实例 instLieRingModule
-  签名: : Lie环模 L (LieDerivation R L M) where
-  定义体: inner R L M (D x)
-  add_lie x y D := by simp
-  lie_add x D₁ D₂ := by simp
-  leibniz_lie x y D := by simp
+/-
+**LieDerivation.instLieRingModule** 是 Mathlib 中的一个实例，位于命名空间 `LieDerivation`。
+形式化陈述：instLieRingModule : LieRingModule L (LieDerivation R L M) where bracket x 
+D
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instLieRingModule : LieRingModule L (LieDerivation R L M) where
   bracket x D := inner R L M (D x)
   add_lie x y D := by simp
   lie_add x D₁ D₂ := by simp
   leibniz_lie x y D := by simp
-
-/--
-lemma `lie_lieDerivation_apply` / 引理 `lie_lieDerivation_apply`
-
-English:
-lemma lie_lieDerivation_apply
-  given: (x y : L) (D : LieDerivation R L M)
-  proof: rfl
-
-中文:
-引理 lie_lieDerivation_apply
-  条件: (x y : L) (D : LieDerivation R L M)
-  证明: rfl
+/-
+**LieDerivation.lie_lieDerivation_apply** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation
+`。
+形式化陈述：∀ (R : Type u_1) (L : Type u_2) (M : Type u_3) [inst : CommRing R] [inst_1
+ : LieRing L] [inst_2 : LieAlgebra R L]   [inst_3 : AddCommGroup M] [inst_4 : _r
+oot_.Module R M] [inst_5 : LieRingModule L M] [inst_6 : LieModule R L M]   (x y 
+: L) (D : LieDerivation R L M), ⁅x, D⁆ y = ⁅y, D x⁆
+参数：R : Type u_1；L : Type u_2；M : Type u_3；x y : L；D : LieDerivation R L M。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma lie_lieDerivation_apply (x y : L) (D : LieDerivation R L M) :
     ⁅x, D⁆ y = ⁅y, D x⁆ :=
   rfl
-
-/--
-lemma `lie_coe_lieDerivation_apply` / 引理 `lie_coe_lieDerivation_apply`
-
-English:
-lemma lie_coe_lieDerivation_apply
-  given: (x : L) (D : LieDerivation R L M)
-  proof: by
-  ext; simp
-
-中文:
-引理 lie_coe_lieDerivation_apply
-  条件: (x : L) (D : LieDerivation R L M)
-  证明: by
-  ext; simp
+/-
+**LieDerivation.lie_coe_lieDerivation_apply** 是 Mathlib 中的一个定理，位于命名空间 `LieDeriva
+tion`。
+形式化陈述：∀ (R : Type u_1) (L : Type u_2) (M : Type u_3) [inst : CommRing R] [inst_1
+ : LieRing L] [inst_2 : LieAlgebra R L]   [inst_3 : AddCommGroup M] [inst_4 : _r
+oot_.Module R M] [inst_5 : LieRingModule L M] [inst_6 : LieModule R L M] (x : L)
+   (D : LieDerivation R L M), ⁅x, ↑D⁆ = ↑⁅x, D⁆
+参数：R : Type u_1；L : Type u_2；M : Type u_3；x : L；D : LieDerivation R L M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearMap.ext`：ext {f g : M ->ₛₗ[σ] M₃} (h : forall x, f x = g x) : f = 
+g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `LieDerivation.apply_lie_eq_sub`：apply_lie_eq_sub (D : LieDerivation R L 
+M) (a b : L) : D ⁅a, b⁆ = ⁅a, D b⁆ - ⁅b, D a⁆
+· 使用定理 `sub_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G), a - 
+(a - b) = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma lie_coe_lieDerivation_apply (x : L) (D : LieDerivation R L M) :
-    ⁅x, (D : L ->ₗ[R] M)⁆ = ⁅x, D⁆ := by
+    ⁅x, (D : L →ₗ[R] M)⁆ = ⁅x, D⁆ := by
   ext; simp
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `instLieModule` / 实例 `instLieModule`
-
-English:
-instance instLieModule
-  signature: : LieModule R L (LieDerivation R L M) where
-  body: by ext; simp
-  lie_smul t x D := by ext; simp
-
-中文:
-实例 instLieModule
-  签名: : Lie模 R L (LieDerivation R L M) where
-  定义体: by ext; simp
-  lie_smul t x D := by ext; simp
-
-Depends on / 依赖: lie_smul
+/-
+**LieDerivation.instLieModule** 是 Mathlib 中的一个实例，位于命名空间 `LieDerivation`。
+形式化陈述：instLieModule : LieModule R L (LieDerivation R L M) where smul_lie t x D
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieDerivation.ext`：ext (H : forall a, D1 a = D2 a) : D1 = D2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `lie_smul`：lie_smul : ⁅x, t • m⁆ = t • ⁅x, m⁆
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 instance instLieModule : LieModule R L (LieDerivation R L M) where
   smul_lie t x D := by ext; simp
   lie_smul t x D := by ext; simp
-
-/--
-lemma `leibniz_lie` / 引理 `leibniz_lie`
-
-English:
-lemma leibniz_lie
-  given: (x : L) (D₁ D₂ : LieDerivation R L L)
-  proof: by
-  ext y
-  simp [-lie_skew, ← lie_skew (D₁ x) (D₂ y), ← lie_skew (D₂ x) (D₁ y), sub_eq_neg_add]
-
-中文:
-引理 leibniz_lie
-  条件: (x : L) (D₁ D₂ : LieDerivation R L L)
-  证明: by
-  ext y
-  simp [-lie_skew, ← lie_skew (D₁ x) (D₂ y), ← lie_skew (D₂ x) (D₁ y), sub_eq_neg_add]
+/-
+**LieDerivation.leibniz_lie** 是 Mathlib 中的一个定理，位于命名空间 `LieDerivation`。
+形式化陈述：∀ (R : Type u_1) (L : Type u_2) [inst : CommRing R] [inst_1 : LieRing L] [
+inst_2 : LieAlgebra R L] (x : L)   (D₁ D₂ : LieDerivation R L L), ⁅x, ⁅D₁, D₂⁆⁆ 
+= ⁅⁅x, D₁⁆, D₂⁆ + ⁅D₁, ⁅x, D₂⁆⁆
+参数：R : Type u_1；L : Type u_2；x : L；D₁ D₂ : LieDerivation R L L。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LieDerivation.ext`：ext (H : forall a, D1 a = D2 a) : D1 = D2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_neg_add`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b :
+ α), a - b = -b + a
+· 使用定理 `lie_add`：lie_add : ⁅x, m + n⁆ = ⁅x, m⁆ + ⁅x, n⁆
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `lie_neg`：lie_neg : ⁅x, -m⁆ = -⁅x, m⁆
+· 使用引理 `LieDerivation.apply_lie_eq_sub`：apply_lie_eq_sub (D : LieDerivation R L 
+M) (a b : L) : D ⁅a, b⁆ = ⁅a, D b⁆ - ⁅b, D a⁆
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `lie_skew`：lie_skew : -⁅y, x⁆ = ⁅x, y⁆
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `neg_add_rev`：∀ {G : Type u_1} [inst : SubtractionMonoid G] (a b : G), -(
+a + b) = -b + -a
+· 使用定理 `neg_add_cancel_right`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a 
++ -b + b = a
+· 使用定理 `neg_add_cancel_left`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), -a 
++ (a + b) = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 protected lemma leibniz_lie (x : L) (D₁ D₂ : LieDerivation R L L) :
     ⁅x, ⁅D₁, D₂⁆⁆ = ⁅⁅x, D₁⁆, D₂⁆ + ⁅D₁, ⁅x, D₂⁆⁆ := by
@@ -1519,47 +1086,22 @@ end Inner
 
 section ExpNilpotent
 
-variable {R L : Type*} [CommRing R] [LieRing L] [LieAlgebra R L] [LieAlgebra Rat L]
+variable {R L : Type*} [CommRing R] [LieRing L] [LieAlgebra R L] [LieAlgebra ℚ L]
   (D : LieDerivation R L L)
 
-/--
-Definition of `exp` / `exp` 的定义
+/-- In characteristic zero, the exponential of a nilpotent derivation is a Lie algebra
+automorphism. -/
+/-
+**LieDerivation.exp** 是 Mathlib 中的一个定义，位于命名空间 `LieDerivation`。
+形式化陈述：exp (h : IsNilpotent D.toLinearMap) : L ≃ₗ⁅R⁆ L
+参数：h : IsNilpotent D.toLinearMap。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition exp
-  signature: (h : IsNilpotent D.toLinearMap)
-  body: { toLinearMap := IsNilpotent.exp D.toLinearMap
-    map_lie' := by
-      let _i := LieRing.toNonUnitalNonAssocRing L
-      have : SMulCommClass R L L := LieAlgebra.smulCommClass R L
-      have : IsScalarTower R L L := LieAlgebra.isScalarTower R L
-      exact Module.End.exp_mul_of_derivation R L D.toLinearMap D.apply_lie_eq_add h
-    invFun x := IsNilpotent.exp (- D.toLinearMap) x
-    left_inv x := by
-      simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, ← LinearMap.comp_apply,
-        ← Module.End.mul_eq_comp, h.exp_neg_mul_exp_self, Module.End.one_apply]
-    right_inv x := by
-      simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, ← LinearMap.comp_apply,
-        ← Module.End.mul_eq_comp, h.exp_mul_exp_neg_self, Module.End.one_apply] }
-
-中文:
-定义 exp
-  签名: (h : 是幂零 D.toLinearMap)
-  定义体: { toLinearMap := IsNilpotent.exp D.toLinearMap
-    map_lie' := by
-      let _i := LieRing.toNonUnitalNonAssocRing L
-      have : SMulCommClass R L L := LieAlgebra.smulCommClass R L
-      have : IsScalarTower R L L := LieAlgebra.isScalarTower R L
-      exact Module.End.exp_mul_of_derivation R L D.toLinearMap D.apply_lie_eq_add h
-    invFun x := IsNilpotent.exp (- D.toLinearMap) x
-    left_inv x := by
-      simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, ← LinearMap.comp_apply,
-        ← Module.End.mul_eq_comp, h.exp_neg_mul_exp_self, Module.End.one_apply]
-    right_inv x := by
-      simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, ← LinearMap.comp_apply,
-        ← Module.End.mul_eq_comp, h.exp_mul_exp_neg_self, Module.End.one_apply] }
-
-Depends on / 依赖: AddHom, AddHom.toFun_eq_coe, D.apply_lie_eq_add, D.toLinearMap, IsNilpotent, IsNilpotent.exp, IsScalarTower, LieAlgebra, LieAlgebra.isScalarTower, LieAlgebra.smulCommClass, LieRing, LieRing.toNonUnitalNonAssocRing, LinearMap, LinearMap.coe_toAddHom, LinearMap.comp_apply, Module, Module.End.exp_mul_of_derivation, Module.End.mul_eq_comp, SMulCommClass, apply_lie_eq_add
+--- 原说明 ---
+In characteristic zero, the exponential of a nilpotent derivation is a Lie algeb
+ra
+automorphism.
 -/
 noncomputable def exp (h : IsNilpotent D.toLinearMap) :
     L ≃ₗ⁅R⁆ L :=
@@ -1576,38 +1118,28 @@ noncomputable def exp (h : IsNilpotent D.toLinearMap) :
     right_inv x := by
       simp only [AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, ← LinearMap.comp_apply,
         ← Module.End.mul_eq_comp, h.exp_mul_exp_neg_self, Module.End.one_apply] }
-
-/--
-lemma `exp_apply` / 引理 `exp_apply`
-
-English:
-lemma exp_apply
-  given: (h : IsNilpotent D.toLinearMap)
-  proof: rfl
-
-中文:
-引理 exp_apply
-  条件: (h : 是幂零 D.toLinearMap)
-  证明: rfl
+/-
+**LieDerivation.exp_apply** 是 Mathlib 中的一个引理，位于命名空间 `LieDerivation`。
+形式化陈述：exp_apply (h : IsNilpotent D.toLinearMap) : exp D h = IsNilpotent.exp D.to
+LinearMap
+参数：h : IsNilpotent D.toLinearMap。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma exp_apply (h : IsNilpotent D.toLinearMap) :
     exp D h = IsNilpotent.exp D.toLinearMap :=
   rfl
-
-/--
-lemma `exp_map_apply` / 引理 `exp_map_apply`
-
-English:
-lemma exp_map_apply
-  given: (h : IsNilpotent D.toLinearMap) (l : L)
-  proof: DFunLike.congr_fun (exp_apply D h) l
-
-中文:
-引理 exp_map_apply
-  条件: (h : 是幂零 D.toLinearMap) (l : L)
-  证明: DFunLike.congr_fun (exp_apply D h) l
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, exp_apply
+/-
+**LieDerivation.exp_map_apply** 是 Mathlib 中的一个引理，位于命名空间 `LieDerivation`。
+形式化陈述：exp_map_apply (h : IsNilpotent D.toLinearMap) (l : L) : exp D h l = IsNilp
+otent.exp D.toLinearMap l
+参数：h : IsNilpotent D.toLinearMap；l : L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
+· 使用引理 `LieDerivation.exp_apply`：exp_apply (h : IsNilpotent D.toLinearMap) : exp
+ D h = IsNilpotent.exp D.toLinearMap
 -/
 lemma exp_map_apply (h : IsNilpotent D.toLinearMap) (l : L) :
     exp D h l = IsNilpotent.exp D.toLinearMap l :=
@@ -1616,3 +1148,4 @@ lemma exp_map_apply (h : IsNilpotent D.toLinearMap) (l : L) :
 end ExpNilpotent
 
 end LieDerivation
+

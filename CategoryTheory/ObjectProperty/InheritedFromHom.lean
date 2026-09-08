@@ -27,238 +27,179 @@ namespace ObjectProperty
 
 variable (P P' : ObjectProperty C) (Q Q' : MorphismProperty C)
 
-/--
-Definition of `InheritedFromSource` / `InheritedFromSource` 的定义
+/-- A property of objects `P` is inherited from the source of morphisms satisfying `Q` if
+whenever `P` holds for `X` and `f : X ⟶ Y` is a `Q`-morphism, then `P` holds for `Y`. -/
+/-
+**CategoryTheory.ObjectProperty.InheritedFromSource** 是 Mathlib 中的一个归纳类型，位于命名空间 
+`CategoryTheory.ObjectProperty`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     Cat
+egoryTheory.ObjectProperty C → CategoryTheory.MorphismProperty C → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class InheritedFromSource
-  parameters: (P : ObjectProperty C) (Q : MorphismProperty C)
-  axioms and operations (1):
-    - of_hom_of_source({X Y : C} (f : X ⟶ Y) (hf : Q f)) : P X -> P Y
-
-中文:
-类 InheritedFromSource
-  参数: (P : ObjectProperty C) (Q : MorphismProperty C)
-  公理与运算 (1 个):
-    - of_hom_of_source({X Y : C} (f : X ⟶ Y) (hf : Q f)) : P X -> P Y
+--- 原说明 ---
+A property of objects `P` is inherited from the source of morphisms satisfying `
+Q` if
+whenever `P` holds for `X` and `f : X ⟶ Y` is a `Q`-morphism, then `P` holds for
+ `Y`.
 -/
 class InheritedFromSource (P : ObjectProperty C) (Q : MorphismProperty C) : Prop where
-  of_hom_of_source {X Y : C} (f : X ⟶ Y) (hf : Q f) : P X -> P Y
+  of_hom_of_source {X Y : C} (f : X ⟶ Y) (hf : Q f) : P X → P Y
 
-/--
-Definition of `InheritedFromTarget` / `InheritedFromTarget` 的定义
+/-- A property of objects `P` is inherited from the target of morphisms satisfying `Q` if
+whenever `P` holds for `Y` and `f : X ⟶ Y` is a `Q`-morphism, then `P` holds for `X`. -/
+/-
+**CategoryTheory.ObjectProperty.InheritedFromTarget** 是 Mathlib 中的一个归纳类型，位于命名空间 
+`CategoryTheory.ObjectProperty`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     Cat
+egoryTheory.ObjectProperty C → CategoryTheory.MorphismProperty C → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class InheritedFromTarget
-  parameters: (P : ObjectProperty C) (Q : MorphismProperty C)
-  axioms and operations (1):
-    - of_hom_of_target({X Y : C} (f : X ⟶ Y) (hf : Q f)) : P Y -> P X
-
-中文:
-类 InheritedFromTarget
-  参数: (P : ObjectProperty C) (Q : MorphismProperty C)
-  公理与运算 (1 个):
-    - of_hom_of_target({X Y : C} (f : X ⟶ Y) (hf : Q f)) : P Y -> P X
+--- 原说明 ---
+A property of objects `P` is inherited from the target of morphisms satisfying `
+Q` if
+whenever `P` holds for `Y` and `f : X ⟶ Y` is a `Q`-morphism, then `P` holds for
+ `X`.
 -/
 class InheritedFromTarget (P : ObjectProperty C) (Q : MorphismProperty C) : Prop where
-  of_hom_of_target {X Y : C} (f : X ⟶ Y) (hf : Q f) : P Y -> P X
+  of_hom_of_target {X Y : C} (f : X ⟶ Y) (hf : Q f) : P Y → P X
 
 export InheritedFromSource (of_hom_of_source)
 export InheritedFromTarget (of_hom_of_target)
 
 namespace InheritedFromSource
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P.IsClosedUnderIsomorphisms]
-  signature: :
-  body: P.prop_of_iso (asIso f) h
-
-中文:
-实例 [P.在同构下封闭]
-  签名: :
-  定义体: P.prop_of_iso (asIso f) h
-
-Depends on / 依赖: P.prop_of_iso, prop_of_iso
+/-
+**CategoryTheory.ObjectProperty.InheritedFromSource.** 是 Mathlib 中的一个实例，位于命名空间 `
+CategoryTheory.ObjectProperty.InheritedFromSource`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [P.IsClosedUnderIsomorphisms] :
     P.InheritedFromSource (MorphismProperty.isomorphisms C) where
   of_hom_of_source f (_ : IsIso f) h := P.prop_of_iso (asIso f) h
-
-/--
-Instance `op` / 实例 `op`
-
-English:
-instance op
-  signature: [P.InheritedFromSource Q]
-  body: P.of_hom_of_source f.unop hf h
-
-中文:
-实例 op
-  签名: [P.InheritedFromSource Q]
-  定义体: P.of_hom_of_source f.unop hf h
-
-Depends on / 依赖: P.of_hom_of_source, f.unop, of_hom_of_source
+/-
+**CategoryTheory.ObjectProperty.InheritedFromSource.op** 是 Mathlib 中的一个实例，位于命名空间
+ `CategoryTheory.ObjectProperty.InheritedFromSource`。
+形式化陈述：op [P.InheritedFromSource Q] : P.op.InheritedFromTarget Q.op where of_hom_
+of_target f hf h
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.InheritedFromSource.of_hom_of_source`：∀ {C
+ : Type u_1} {inst : CategoryTheory.Category.{v_1, u_1} C} {P : CategoryTheory.O
+bjectProperty C}   {Q : CategoryTheory.MorphismProperty …
 -/
 instance op [P.InheritedFromSource Q] : P.op.InheritedFromTarget Q.op where
   of_hom_of_target f hf h := P.of_hom_of_source f.unop hf h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P.InheritedFromSource
-  signature: Q] [P'.InheritedFromSource Q] :
-  body: ⟨P.of_hom_of_source f hf h.1, P'.of_hom_of_source f hf h.2⟩
-
-中文:
-实例 [P.InheritedFromSource
-  签名: Q] [P'.InheritedFromSource Q] :
-  定义体: ⟨P.of_hom_of_source f hf h.1, P'.of_hom_of_source f hf h.2⟩
-
-Depends on / 依赖: P.of_hom_of_source, of_hom_of_source
+/-
+**CategoryTheory.ObjectProperty.InheritedFromSource.** 是 Mathlib 中的一个实例，位于命名空间 `
+CategoryTheory.ObjectProperty.InheritedFromSource`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [P.InheritedFromSource Q] [P'.InheritedFromSource Q] :
     (P ⊓ P').InheritedFromSource Q where
   of_hom_of_source f hf h := ⟨P.of_hom_of_source f hf h.1, P'.of_hom_of_source f hf h.2⟩
-
-/--
-lemma `of_le` / 引理 `of_le`
-
-English:
-lemma of_le
-  given: (hQ : Q <= Q') [P.InheritedFromSource Q']
-  statement: P.InheritedFromSource Q where
-  proof: P.of_hom_of_source f (hQ _ hf) h
-
-中文:
-引理 of_le
-  条件: (hQ : Q <= Q') [P.InheritedFromSource Q']
-  结论: P.InheritedFromSource Q where
-  证明: P.of_hom_of_source f (hQ _ hf) h
-
-Depends on / 依赖: P.of_hom_of_source, of_hom_of_source
+/-
+**CategoryTheory.ObjectProperty.InheritedFromSource.of_le** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.ObjectProperty.InheritedFromSource`。
+形式化陈述：of_le (hQ : Q <= Q') [P.InheritedFromSource Q'] : P.InheritedFromSource Q 
+where of_hom_of_source f hf h
+参数：hQ : Q <= Q'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.InheritedFromSource.of_hom_of_source`：∀ {C
+ : Type u_1} {inst : CategoryTheory.Category.{v_1, u_1} C} {P : CategoryTheory.O
+bjectProperty C}   {Q : CategoryTheory.MorphismProperty …
 -/
-lemma of_le (hQ : Q <= Q') [P.InheritedFromSource Q'] : P.InheritedFromSource Q where
+lemma of_le (hQ : Q ≤ Q') [P.InheritedFromSource Q'] : P.InheritedFromSource Q where
   of_hom_of_source f hf h := P.of_hom_of_source f (hQ _ hf) h
 
 end InheritedFromSource
 
 namespace InheritedFromTarget
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P.IsClosedUnderIsomorphisms]
-  signature: :
-  body: P.prop_of_iso (asIso f).symm h
-
-中文:
-实例 [P.在同构下封闭]
-  签名: :
-  定义体: P.prop_of_iso (asIso f).symm h
-
-Depends on / 依赖: P.prop_of_iso, prop_of_iso
+/-
+**CategoryTheory.ObjectProperty.InheritedFromTarget.** 是 Mathlib 中的一个实例，位于命名空间 `
+CategoryTheory.ObjectProperty.InheritedFromTarget`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [P.IsClosedUnderIsomorphisms] :
     P.InheritedFromTarget (MorphismProperty.isomorphisms C) where
   of_hom_of_target f (_ : IsIso f) h := P.prop_of_iso (asIso f).symm h
-
-/--
-Instance `op` / 实例 `op`
-
-English:
-instance op
-  signature: [P.InheritedFromTarget Q]
-  body: P.of_hom_of_target f.unop hf h
-
-中文:
-实例 op
-  签名: [P.InheritedFromTarget Q]
-  定义体: P.of_hom_of_target f.unop hf h
-
-Depends on / 依赖: P.of_hom_of_target, f.unop, of_hom_of_target
+/-
+**CategoryTheory.ObjectProperty.InheritedFromTarget.op** 是 Mathlib 中的一个实例，位于命名空间
+ `CategoryTheory.ObjectProperty.InheritedFromTarget`。
+形式化陈述：op [P.InheritedFromTarget Q] : P.op.InheritedFromSource Q.op where of_hom_
+of_source f hf h
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.InheritedFromTarget.of_hom_of_target`：∀ {C
+ : Type u_1} {inst : CategoryTheory.Category.{v_1, u_1} C} {P : CategoryTheory.O
+bjectProperty C}   {Q : CategoryTheory.MorphismProperty …
 -/
 instance op [P.InheritedFromTarget Q] : P.op.InheritedFromSource Q.op where
   of_hom_of_source f hf h := P.of_hom_of_target f.unop hf h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P.InheritedFromTarget
-  signature: Q] [P'.InheritedFromTarget Q] :
-  body: ⟨P.of_hom_of_target f hf h.1, P'.of_hom_of_target f hf h.2⟩
-
-中文:
-实例 [P.InheritedFromTarget
-  签名: Q] [P'.InheritedFromTarget Q] :
-  定义体: ⟨P.of_hom_of_target f hf h.1, P'.of_hom_of_target f hf h.2⟩
-
-Depends on / 依赖: P.of_hom_of_target, of_hom_of_target
+/-
+**CategoryTheory.ObjectProperty.InheritedFromTarget.** 是 Mathlib 中的一个实例，位于命名空间 `
+CategoryTheory.ObjectProperty.InheritedFromTarget`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [P.InheritedFromTarget Q] [P'.InheritedFromTarget Q] :
     (P ⊓ P').InheritedFromTarget Q where
   of_hom_of_target f hf h := ⟨P.of_hom_of_target f hf h.1, P'.of_hom_of_target f hf h.2⟩
-
-/--
-lemma `of_le` / 引理 `of_le`
-
-English:
-lemma of_le
-  given: (hQ : Q <= Q') [P.InheritedFromTarget Q']
-  statement: P.InheritedFromTarget Q where
-  proof: P.of_hom_of_target f (hQ _ hf) h
-
-中文:
-引理 of_le
-  条件: (hQ : Q <= Q') [P.InheritedFromTarget Q']
-  结论: P.InheritedFromTarget Q where
-  证明: P.of_hom_of_target f (hQ _ hf) h
-
-Depends on / 依赖: P.of_hom_of_target, of_hom_of_target
+/-
+**CategoryTheory.ObjectProperty.InheritedFromTarget.of_le** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.ObjectProperty.InheritedFromTarget`。
+形式化陈述：of_le (hQ : Q <= Q') [P.InheritedFromTarget Q'] : P.InheritedFromTarget Q 
+where of_hom_of_target f hf h
+参数：hQ : Q <= Q'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.InheritedFromTarget.of_hom_of_target`：∀ {C
+ : Type u_1} {inst : CategoryTheory.Category.{v_1, u_1} C} {P : CategoryTheory.O
+bjectProperty C}   {Q : CategoryTheory.MorphismProperty …
 -/
-lemma of_le (hQ : Q <= Q') [P.InheritedFromTarget Q'] : P.InheritedFromTarget Q where
+lemma of_le (hQ : Q ≤ Q') [P.InheritedFromTarget Q'] : P.InheritedFromTarget Q where
   of_hom_of_target f hf h := P.of_hom_of_target f (hQ _ hf) h
 
 end InheritedFromTarget
 
-/--
-lemma `IsClosedUnderIsomorphisms.of_inheritedFromSource` / 引理 `IsClosedUnderIsomorphisms.of_inheritedFromSource`
-
-English:
-lemma IsClosedUnderIsomorphisms.of_inheritedFromSource
-  statement: [P.InheritedFromSource Q] [Q.RespectsIso]
-  proof: P.of_hom_of_source e.hom (Q.of_isIso e.hom) h
-
-中文:
-引理 在同构下封闭.of_inheritedFromSource
-  结论: [P.InheritedFromSource Q] [Q.RespectsIso]
-  证明: P.of_hom_of_source e.hom (Q.of_isIso e.hom) h
-
-Depends on / 依赖: P.of_hom_of_source, Q.of_isIso, e.hom, of_hom_of_source, of_isIso
+/-
+**CategoryTheory.ObjectProperty.IsClosedUnderIsomorphisms.of_inheritedFromSource
+** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.ObjectProperty.IsClosedUnderIsomorphi
+sms`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (P : Catego
+ryTheory.ObjectProperty C)   (Q : CategoryTheory.MorphismProperty C) [P.Inherite
+dFromSource Q] [Q.RespectsIso] [Q.ContainsIdentities],   P.IsClosedUnderIsomorph
+isms
+参数：P : CategoryTheory.ObjectProperty C；Q : CategoryTheory.MorphismProperty C。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.InheritedFromSource.of_hom_of_source`：∀ {C
+ : Type u_1} {inst : CategoryTheory.Category.{v_1, u_1} C} {P : CategoryTheory.O
+bjectProperty C}   {Q : CategoryTheory.MorphismProperty …
+· 使用引理 `CategoryTheory.MorphismProperty.of_isIso`：of_isIso (P : MorphismProperty
+ C) [P.ContainsIdentities] [P.RespectsIso] {X Y : C} (f : X ⟶ Y) [IsIso f] : P f
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 -/
 lemma IsClosedUnderIsomorphisms.of_inheritedFromSource [P.InheritedFromSource Q] [Q.RespectsIso]
     [Q.ContainsIdentities] : P.IsClosedUnderIsomorphisms where
   of_iso e h := P.of_hom_of_source e.hom (Q.of_isIso e.hom) h
-
-/--
-lemma `IsClosedUnderIsomorphisms.of_inheritedFromTarget` / 引理 `IsClosedUnderIsomorphisms.of_inheritedFromTarget`
-
-English:
-lemma IsClosedUnderIsomorphisms.of_inheritedFromTarget
-  statement: [P.InheritedFromTarget Q] [Q.RespectsIso]
-  proof: P.of_hom_of_target e.inv (Q.of_isIso e.inv) h
-
-中文:
-引理 在同构下封闭.of_inheritedFromTarget
-  结论: [P.InheritedFromTarget Q] [Q.RespectsIso]
-  证明: P.of_hom_of_target e.inv (Q.of_isIso e.inv) h
-
-Depends on / 依赖: P.of_hom_of_target, Q.of_isIso, e.inv, of_hom_of_target, of_isIso
+/-
+**CategoryTheory.ObjectProperty.IsClosedUnderIsomorphisms.of_inheritedFromTarget
+** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.ObjectProperty.IsClosedUnderIsomorphi
+sms`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (P : Catego
+ryTheory.ObjectProperty C)   (Q : CategoryTheory.MorphismProperty C) [P.Inherite
+dFromTarget Q] [Q.RespectsIso] [Q.ContainsIdentities],   P.IsClosedUnderIsomorph
+isms
+参数：P : CategoryTheory.ObjectProperty C；Q : CategoryTheory.MorphismProperty C。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.InheritedFromTarget.of_hom_of_target`：∀ {C
+ : Type u_1} {inst : CategoryTheory.Category.{v_1, u_1} C} {P : CategoryTheory.O
+bjectProperty C}   {Q : CategoryTheory.MorphismProperty …
+· 使用引理 `CategoryTheory.MorphismProperty.of_isIso`：of_isIso (P : MorphismProperty
+ C) [P.ContainsIdentities] [P.RespectsIso] {X Y : C} (f : X ⟶ Y) [IsIso f] : P f
+· 使用定理 `CategoryTheory.Iso.isIso_inv`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.inv
 -/
 lemma IsClosedUnderIsomorphisms.of_inheritedFromTarget [P.InheritedFromTarget Q] [Q.RespectsIso]
     [Q.ContainsIdentities] : P.IsClosedUnderIsomorphisms where
@@ -267,3 +208,4 @@ lemma IsClosedUnderIsomorphisms.of_inheritedFromTarget [P.InheritedFromTarget Q]
 end ObjectProperty
 
 end CategoryTheory
+

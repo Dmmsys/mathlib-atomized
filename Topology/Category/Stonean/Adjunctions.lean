@@ -25,28 +25,16 @@ open CategoryTheory Adjunction
 
 namespace Stonean
 
-/--
-Definition of `stoneCechObj` / `stoneCechObj` 的定义
+/-- The object part of the compactification functor from types to Stonean spaces. -/
+/-
+**Stonean.stoneCechObj** 是 Mathlib 中的一个定义，位于命名空间 `Stonean`。
+形式化陈述：stoneCechObj (X : Type u) : Stonean
+参数：X : Type u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition stoneCechObj
-  signature: (X : Type u)
-  body: letI : TopologicalSpace X := ⊥
-  haveI : DiscreteTopology X := ⟨rfl⟩
-  haveI : ExtremallyDisconnected (StoneCech X) :=
-    CompactT2.Projective.extremallyDisconnected StoneCech.projective
-  of (StoneCech X)
-
-中文:
-定义 stoneCechObj
-  签名: (X : 类型u)
-  定义体: letI : TopologicalSpace X := ⊥
-  haveI : DiscreteTopology X := ⟨rfl⟩
-  haveI : ExtremallyDisconnected (StoneCech X) :=
-    CompactT2.Projective.extremallyDisconnected StoneCech.projective
-  of (StoneCech X)
-
-Depends on / 依赖: CompactT2, CompactT2.Projective.extremallyDisconnected, DiscreteTopology, ExtremallyDisconnected, Projective, StoneCech, StoneCech.projective, TopologicalSpace, extremallyDisconnected, projective
+--- 原说明 ---
+The object part of the compactification functor from types to Stonean spaces.
 -/
 def stoneCechObj (X : Type u) : Stonean :=
   letI : TopologicalSpace X := ⊥
@@ -55,30 +43,22 @@ def stoneCechObj (X : Type u) : Stonean :=
     CompactT2.Projective.extremallyDisconnected StoneCech.projective
   of (StoneCech X)
 
-/--
-Definition of `stoneCechEquivalence` / `stoneCechEquivalence` 的定义
+/-- The equivalence of homsets to establish the adjunction between the Stone-Cech compactification
+functor and the forgetful functor. -/
+/-
+**Stonean.stoneCechEquivalence** 是 Mathlib 中的一个定义，位于命名空间 `Stonean`。
+形式化陈述：stoneCechEquivalence (X : Type u) (Y : Stonean.{u}) : (stoneCechObj X ⟶ Y)
+ ≃ (X ⟶ Y)
+参数：X : Type u；Y : Stonean.{u}。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition stoneCechEquivalence
-  signature: (X : Type u) (Y : Stonean.{u})
-  body: by
-  letI : TopologicalSpace X := ⊥
-  haveI : DiscreteTopology X := ⟨rfl⟩
-  refine fullyFaithfulToCompHaus.homEquiv.trans ?_
-  exact (_root_.stoneCechEquivalence (TopCat.of X) (toCompHaus.obj Y)).trans
-    (TopCat.adj₁.homEquiv _ _)
-
-中文:
-定义 stoneCechEquivalence
-  签名: (X : 类型u) (Y : Stonean.{u})
-  定义体: by
-  letI : TopologicalSpace X := ⊥
-  haveI : DiscreteTopology X := ⟨rfl⟩
-  refine fullyFaithfulToCompHaus.homEquiv.trans ?_
-  exact (_root_.stoneCechEquivalence (TopCat.of X) (toCompHaus.obj Y)).trans
-    (TopCat.adj₁.homEquiv _ _)
-
-Depends on / 依赖: DiscreteTopology, TopCat, TopCat.adj, TopCat.of, TopologicalSpace, _root_, _root_.stoneCechEquivalence, fullyFaithfulToCompHaus, fullyFaithfulToCompHaus.homEquiv.trans, homEquiv, stoneCechEquivalence, toCompHaus, toCompHaus.obj
+--- 原说明 ---
+The equivalence of homsets to establish the adjunction between the Stone-Cech co
+mpactification
+functor and the forgetful functor.
 -/
 noncomputable def stoneCechEquivalence (X : Type u) (Y : Stonean.{u}) :
     (stoneCechObj X ⟶ Y) ≃ (X ⟶ Y) := by
@@ -90,60 +70,50 @@ noncomputable def stoneCechEquivalence (X : Type u) (Y : Stonean.{u}) :
 
 end Stonean
 
-/--
-Definition of `typeToStonean` / `typeToStonean` 的定义
+/-- The Stone-Cech compactification functor from types to Stonean spaces. -/
+/-
+**typeToStonean** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：typeToStonean : Type u ⥤ Stonean.{u}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition typeToStonean
-  signature: : Type u ⥤ Stonean.{u}
-  body: leftAdjointOfEquiv (G := forget _) Stonean.stoneCechEquivalence fun _ _ _ _ _ => rfl
-
-中文:
-定义 typeToStonean
-  签名: : 类型u ⥤ Stonean.{u}
-  定义体: leftAdjointOfEquiv (G := forget _) Stonean.stoneCechEquivalence fun _ _ _ _ _ => rfl
-
-Depends on / 依赖: Stonean, Stonean.stoneCechEquivalence, forget, leftAdjointOfEquiv, stoneCechEquivalence
+--- 原说明 ---
+The Stone-Cech compactification functor from types to Stonean spaces.
 -/
 noncomputable def typeToStonean : Type u ⥤ Stonean.{u} :=
   leftAdjointOfEquiv (G := forget _) Stonean.stoneCechEquivalence fun _ _ _ _ _ => rfl
 
 namespace Stonean
 
-/--
-Definition of `stoneCechAdjunction` / `stoneCechAdjunction` 的定义
+/-- The Stone-Cech compactification functor is left adjoint to the forgetful functor. -/
+/-
+**Stonean.stoneCechAdjunction** 是 Mathlib 中的一个定义，位于命名空间 `Stonean`。
+形式化陈述：stoneCechAdjunction : typeToStonean ⊣ (forget Stonean)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition stoneCechAdjunction
-  signature: : typeToStonean ⊣ (forget Stonean)
-  body: adjunctionOfEquivLeft (G := forget _) stoneCechEquivalence fun _ _ _ _ _ => rfl
-
-中文:
-定义 stoneCechAdjunction
-  签名: : typeToStonean ⊣ (forget Stonean)
-  定义体: adjunctionOfEquivLeft (G := forget _) stoneCechEquivalence fun _ _ _ _ _ => rfl
-
-Depends on / 依赖: adjunctionOfEquivLeft, forget, stoneCechEquivalence
+--- 原说明 ---
+The Stone-Cech compactification functor is left adjoint to the forgetful functor
+.
 -/
 noncomputable def stoneCechAdjunction : typeToStonean ⊣ (forget Stonean) :=
   adjunctionOfEquivLeft (G := forget _) stoneCechEquivalence fun _ _ _ _ _ => rfl
 
-/--
-Instance `forget.preservesLimits` / 实例 `forget.preservesLimits`
+/-- The forgetful functor from Stonean spaces, being a right adjoint, preserves limits. -/
+/-
+**Stonean.forget.preservesLimits** 是 Mathlib 中的一个定理，位于命名空间 `Stonean.forget`。
+形式化陈述：CategoryTheory.Limits.PreservesLimits (CategoryTheory.forget Stonean)
+参数：CategoryTheory.forget Stonean。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.rightAdjoint_preservesLimits`：rightAdjoint_pre
+servesLimits : PreservesLimitsOfSize.{v, u} G where preservesLimitsOfShape
 
-English:
-instance forget.preservesLimits
-  signature: : Limits.PreservesLimits (forget Stonean)
-  body: rightAdjoint_preservesLimits stoneCechAdjunction
-
-中文:
-实例 forget.preservesLimits
-  签名: : Limits.PreservesLimits (forget Stonean)
-  定义体: rightAdjoint_preservesLimits stoneCechAdjunction
-
-Depends on / 依赖: rightAdjoint_preservesLimits, stoneCechAdjunction
+--- 原说明 ---
+The forgetful functor from Stonean spaces, being a right adjoint, preserves limi
+ts.
 -/
 noncomputable instance forget.preservesLimits : Limits.PreservesLimits (forget Stonean) :=
   rightAdjoint_preservesLimits stoneCechAdjunction
 
 end Stonean
+

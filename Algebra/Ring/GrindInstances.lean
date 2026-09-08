@@ -20,6 +20,10 @@ variable (α : Type*)
 
 -- This is a low priority instance so that the built-in `Lean.Grind.Semiring Nat` instance
 -- (which has a non-defeq `ofNat` instance) is used preferentially.
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) Semiring.toGrindSemiring [s : Semiring α] :
     Grind.Semiring α :=
   { s with
@@ -46,12 +50,18 @@ instance (priority := 100) Semiring.toGrindSemiring [s : Semiring α] :
       change Nat.cast (n + 2 + 1) = Nat.cast (n + 2) + 1
       rw [← AddMonoidWithOne.natCast_succ]
     nsmul_eq_natCast_mul n a := nsmul_eq_mul n a }
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) CommSemiring.toGrindCommSemiring [s : CommSemiring α] :
     Grind.CommSemiring α :=
   { Semiring.toGrindSemiring α with
     mul_comm := s.mul_comm }
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) Ring.toGrindRing [s : Ring α] :
     Grind.Ring α :=
   { s, Semiring.toGrindSemiring α with
@@ -68,34 +78,30 @@ instance (priority := 100) Ring.toGrindRing [s : Ring α] :
     | _ + 2 => Int.cast_ofNat _
     intCast_neg := Int.cast_neg
     zsmul_natCast_eq_nsmul n a := natCast_zsmul a n }
-
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) CommRing.toGrindCommRing [s : CommRing α] :
     Grind.CommRing α :=
   { Ring.toGrindRing α with
     mul_comm := s.mul_comm }
-
-/--
-theorem `Semiring.toGrindSemiring_ofNat` / 定理 `Semiring.toGrindSemiring_ofNat`
-
-English:
-theorem Semiring.toGrindSemiring_ofNat
-  given: [Semiring α] (n : Nat)
-  proof: by
-  match n with
-  | 0 => simp
-  | 1 => simp
-  | n + 2 => rfl
-
-中文:
-定理 半环.toGrindSemiring_of自然数
-  条件: [半环 α] (n : 自然数)
-  证明: by
-  match n with
-  | 0 => simp
-  | 1 => simp
-  | n + 2 => rfl
+/-
+**Semiring.toGrindSemiring_ofNat** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Semiring.toGrindSemiring_ofNat [Semiring α] (n : Nat) : @OfNat.ofNat α n (
+Lean.Grind.Semiring.ofNat n) = n.cast
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
 -/
-theorem Semiring.toGrindSemiring_ofNat [Semiring α] (n : Nat) :
+theorem Semiring.toGrindSemiring_ofNat [Semiring α] (n : ℕ) :
     @OfNat.ofNat α n (Lean.Grind.Semiring.ofNat n) = n.cast := by
   match n with
   | 0 => simp
@@ -107,6 +113,10 @@ attribute [local instance] Grind.Semiring.natCast Grind.Ring.intCast in
 -- This is not an instance (or even a `def`) because this direction should never be used.
 -- There is no reason to expect that using `CommRing.toGrindCommRing` and then this construction
 -- will give a result defeq to the original `CommRing α`.
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example (s : Grind.CommRing α) : CommRing α :=
   { s with
     zero_add := Grind.AddCommMonoid.zero_add
@@ -122,10 +132,19 @@ example (s : Grind.CommRing α) : CommRing α :=
     intCast := Int.cast
     intCast_ofNat := Grind.Ring.intCast_natCast
     intCast_negSucc n := by
-      rw [Int.negSucc_eq]; rw [Grind.Ring.intCast_neg]; rw [Grind.Ring.intCast_natCast_add_one]; rw [Grind.Semiring.natCast_succ] }
+      rw [Int.negSucc_eq, Grind.Ring.intCast_neg,
+        Grind.Ring.intCast_natCast_add_one, Grind.Semiring.natCast_succ] }
 
 -- Verify that we do not have a defeq problems in `Lean.Grind.Semiring` instances.
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : (inferInstance : Lean.Grind.Semiring Nat) =
     (Lean.Grind.CommSemiring.toSemiring : Lean.Grind.Semiring Nat) := rfl
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : (inferInstance : Lean.Grind.Semiring UInt8) =
     (Lean.Grind.CommSemiring.toSemiring : Lean.Grind.Semiring UInt8) := rfl

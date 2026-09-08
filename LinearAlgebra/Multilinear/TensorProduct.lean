@@ -29,46 +29,33 @@ attribute [local simp] add_tmul tmul_add smul_tmul
 
 section
 
-variable {N : ι₁ oplus ι₂ -> Type*} [forall i, AddCommMonoid (N i)] [forall i, Module R (N i)]
+variable {N : ι₁ ⊕ ι₂ → Type*} [∀ i, AddCommMonoid (N i)] [∀ i, Module R (N i)]
 
 /-- Given a family of modules `N` indexed by a type `ι₁ ⊕ ι₂`,
 a multilinear map from the modules `N (.inl i₁)` to `N₁` and
 a multilinear map from the modules `N (.inr i₁)` to `N₂`, this
 is the induced multilinear map from all the modules `N i` to `N₁ ⊗ N₂`. -/
 @[simps apply]
-/--
-Definition of `domCoprodDep` / `domCoprodDep` 的定义
+/-
+**MultilinearMap.domCoprodDep** 是 Mathlib 中的一个定义，位于命名空间 `MultilinearMap`。
+形式化陈述：domCoprodDep (a : MultilinearMap R (fun i₁ => N (.inl i₁)) N₁) (b : Multil
+inearMap R (fun i₂ => N (.inr i₂)) N₂) : MultilinearMap R N (N₁ otimes[R] N₂) wh
+ere toFun v
+参数：a : MultilinearMap R (fun i₁ => N (.inl i₁)) N₁；b : MultilinearMap R (fun i₂ 
+=> N (.inr i₂)) N₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition domCoprodDep
-  signature: (a : MultilinearMap R (fun i₁ => N (.inl i₁)) N₁)
-  body: a (fun i₁ => v (.inl i₁)) otimesₜ b (fun i₂ => v (.inr i₂))
-  map_update_add' := by
-    rintro _ _ (_ | _) _ _
-    · let := Classical.decEq ι₁; simp
-    · let := Classical.decEq ι₂; simp
-  map_update_smul' := by
-    rintro _ m (i₁ | i₂) p q
-    · let := Classical.decEq ι₁; simp
-    · let := Classical.decEq ι₂; simp
-
-中文:
-定义 domCoprodDep
-  签名: (a : 多重线性映射 R (fun i₁ => N (.inl i₁)) N₁)
-  定义体: a (fun i₁ => v (.inl i₁)) otimesₜ b (fun i₂ => v (.inr i₂))
-  map_update_add' := by
-    rintro _ _ (_ | _) _ _
-    · let := Classical.decEq ι₁; simp
-    · let := Classical.decEq ι₂; simp
-  map_update_smul' := by
-    rintro _ m (i₁ | i₂) p q
-    · let := Classical.decEq ι₁; simp
-    · let := Classical.decEq ι₂; simp
+--- 原说明 ---
+Given a family of modules `N` indexed by a type `ι₁ ⊕ ι₂`,
+a multilinear map from the modules `N (.inl i₁)` to `N₁` and
+a multilinear map from the modules `N (.inr i₁)` to `N₂`, this
+is the induced multilinear map from all the modules `N i` to `N₁ ⊗ N₂`.
 -/
-def domCoprodDep (a : MultilinearMap R (fun i₁ => N (.inl i₁)) N₁)
-    (b : MultilinearMap R (fun i₂ => N (.inr i₂)) N₂) :
-    MultilinearMap R N (N₁ otimes[R] N₂) where
-  toFun v := a (fun i₁ => v (.inl i₁)) otimesₜ b (fun i₂ => v (.inr i₂))
+def domCoprodDep (a : MultilinearMap R (fun i₁ ↦ N (.inl i₁)) N₁)
+    (b : MultilinearMap R (fun i₂ ↦ N (.inr i₂)) N₂) :
+    MultilinearMap R N (N₁ ⊗[R] N₂) where
+  toFun v := a (fun i₁ ↦ v (.inl i₁)) ⊗ₜ b (fun i₂ ↦ v (.inr i₂))
   map_update_add' := by
     rintro _ _ (_ | _) _ _
     · let := Classical.decEq ι₁; simp
@@ -78,52 +65,43 @@ def domCoprodDep (a : MultilinearMap R (fun i₁ => N (.inl i₁)) N₁)
     · let := Classical.decEq ι₁; simp
     · let := Classical.decEq ι₂; simp
 
-/--
-Definition of `domCoprodDep'` / `domCoprodDep'` 的定义
+/-- A more bundled version of `MultilinearMap.domCoprodDep`, as a linear map
+from the tensor product of spaces of multilinear maps. -/
+/-
+**MultilinearMap.domCoprodDep'** 是 Mathlib 中的一个定义，位于命名空间 `MultilinearMap`。
+形式化陈述：domCoprodDep' : MultilinearMap R (fun i₁ => N (.inl i₁)) N₁ otimes[R] Mult
+ilinearMap R (fun i₂ => N (.inr i₂)) N₂ ->ₗ[R] MultilinearMap R N (N₁ otimes[R] 
+N₂)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition domCoprodDep'
-  signature: :
-  body: TensorProduct.lift (LinearMap.mk₂ R domCoprodDep
-    (by aesop) (by aesop) (by aesop) (by aesop))
-
-@[simp]
-
-中文:
-定义 domCoprodDep'
-  签名: :
-  定义体: TensorProduct.lift (LinearMap.mk₂ R domCoprodDep
-    (by aesop) (by aesop) (by aesop) (by aesop))
-
-@[simp]
-
-Depends on / 依赖: LinearMap, LinearMap.mk, TensorProduct, TensorProduct.lift, domCoprodDep
+--- 原说明 ---
+A more bundled version of `MultilinearMap.domCoprodDep`, as a linear map
+from the tensor product of spaces of multilinear maps.
 -/
 def domCoprodDep' :
-    MultilinearMap R (fun i₁ => N (.inl i₁)) N₁ otimes[R] MultilinearMap R (fun i₂ => N (.inr i₂)) N₂ ->ₗ[R]
-        MultilinearMap R N (N₁ otimes[R] N₂) :=
+    MultilinearMap R (fun i₁ ↦ N (.inl i₁)) N₁ ⊗[R] MultilinearMap R (fun i₂ ↦ N (.inr i₂)) N₂ →ₗ[R]
+        MultilinearMap R N (N₁ ⊗[R] N₂) :=
   TensorProduct.lift (LinearMap.mk₂ R domCoprodDep
     (by aesop) (by aesop) (by aesop) (by aesop))
 
 @[simp]
-/--
-theorem `domCoprodDep'_apply` / 定理 `domCoprodDep'_apply`
-
-English:
-theorem domCoprodDep'_apply
-  statement: (a : MultilinearMap R (fun i₁ => N (.inl i₁)) N₁)
-  proof: by
-  rfl
-
-中文:
-定理 domCoprodDep'_apply
-  结论: (a : 多重线性映射 R (fun i₁ => N (.inl i₁)) N₁)
-  证明: by
-  rfl
+/-
+**MultilinearMap.domCoprodDep'_apply** 是 Mathlib 中的一个定理，位于命名空间 `MultilinearMap`。
+形式化陈述：∀ {R : Type u_1} {ι₁ : Type u_2} {ι₂ : Type u_3} [inst : CommSemiring R] {
+N₁ : Type u_6} [inst_1 : AddCommMonoid N₁]   [inst_2 : _root_.Module R N₁] {N₂ :
+ Type u_7} [inst_3 : AddCommMonoid N₂] [inst_4 : _root_.Module R N₂]   {N : ι₁ ⊕
+ ι₂ → Type u_8} [inst_5 : (i : ι₁ ⊕ ι₂) → AddCommMonoid (N i)]   [inst_6 : (i : 
+ι₁ ⊕ ι₂) → _root_.Module R (N i)] (a : MultilinearMap R (fun i₁ => N (Sum.inl i₁
+)) N₁)   (b : MultilinearMap R (fun i₂ => N (Sum.inr i₂)) N₂), MultilinearMap.do
+mCoprodDep' (a ⊗ₜ[R] b) = a.domCoprodDep b
+参数：i : ι₁ ⊕ ι₂；N i；i : ι₁ ⊕ ι₂；N i；a : MultilinearMap R (fun i₁ => N (Sum.inl i₁
+)) N₁；b : MultilinearMap R (fun i₂ => N (Sum.inr i₂)) N₂；a ⊗ₜ[R] b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem domCoprodDep'_apply (a : MultilinearMap R (fun i₁ => N (.inl i₁)) N₁)
-    (b : MultilinearMap R (fun i₂ => N (.inr i₂)) N₂) :
-    domCoprodDep' (a otimesₜ b) = domCoprodDep a b := by
+theorem domCoprodDep'_apply (a : MultilinearMap R (fun i₁ ↦ N (.inl i₁)) N₁)
+    (b : MultilinearMap R (fun i₂ ↦ N (.inr i₂)) N₂) :
+    domCoprodDep' (a ⊗ₜ b) = domCoprodDep a b := by
   rfl
 
 end
@@ -144,80 +122,95 @@ to the simple case defined here. See
 [this zulip thread](https://leanprover.zulipchat.com/#narrow/stream/217875-Is-there.20code.20for.20X.3F/topic/Instances.20on.20.60sum.2Eelim.20A.20B.20i.60/near/218484619).
 -/
 @[simps! apply]
-/--
-Definition of `domCoprod` / `domCoprod` 的定义
+/-
+**MultilinearMap.domCoprod** 是 Mathlib 中的一个定义，位于命名空间 `MultilinearMap`。
+形式化陈述：domCoprod (a : MultilinearMap R (fun _ : ι₁ => N) N₁) (b : MultilinearMap 
+R (fun _ : ι₂ => N) N₂) : MultilinearMap R (fun _ : ι₁ oplus ι₂ => N) (N₁ otimes
+[R] N₂)
+参数：a : MultilinearMap R (fun _ : ι₁ => N) N₁；b : MultilinearMap R (fun _ : ι₂ =>
+ N) N₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition domCoprod
-  signature: (a : MultilinearMap R (fun _ : ι₁ => N) N₁)
-  body: domCoprodDep a b
+--- 原说明 ---
+Given two multilinear maps `(ι₁ → N) → N₁` and `(ι₂ → N) → N₂`, this produces th
+e map
+`(ι₁ ⊕ ι₂ → N) → N₁ ⊗ N₂` by taking the coproduct of the domain and the tensor p
+roduct
+of the codomain.
 
-中文:
-定义 domCoprod
-  签名: (a : 多重线性映射 R (fun _ : ι₁ => N) N₁)
-  定义体: domCoprodDep a b
+This can be thought of as combining `Equiv.sumArrowEquivProdArrow.symm` with
+`TensorProduct.map`, noting that the two operations can't be separated as the in
+termediate result
+is not a `MultilinearMap`.
 
-Depends on / 依赖: domCoprodDep
+While this can be generalized to work for dependent `Π i : ι₁, N'₁ i` instead of
+ `ι₁ → N`, doing so
+introduces `Sum.elim N'₁ N'₂` types in the result which are difficult to work wi
+th and not defeq
+to the simple case defined here. See
+[this zulip thread](https://leanprover.zulipchat.com/#narrow/stream/217875-Is-th
+ere.20code.20for.20X.3F/topic/Instances.20on.20.60sum.2Eelim.20A.20B.20i.60/near
+/218484619).
 -/
 def domCoprod (a : MultilinearMap R (fun _ : ι₁ => N) N₁)
     (b : MultilinearMap R (fun _ : ι₂ => N) N₂) :
-    MultilinearMap R (fun _ : ι₁ oplus ι₂ => N) (N₁ otimes[R] N₂) :=
+    MultilinearMap R (fun _ : ι₁ ⊕ ι₂ => N) (N₁ ⊗[R] N₂) :=
   domCoprodDep a b
 
-/--
-Definition of `domCoprod'` / `domCoprod'` 的定义
+/-- A more bundled version of `MultilinearMap.domCoprod` that maps
+`((ι₁ → N) → N₁) ⊗ ((ι₂ → N) → N₂)` to `(ι₁ ⊕ ι₂ → N) → N₁ ⊗ N₂`. -/
+/-
+**MultilinearMap.domCoprod'** 是 Mathlib 中的一个定义，位于命名空间 `MultilinearMap`。
+形式化陈述：domCoprod' : MultilinearMap R (fun _ : ι₁ => N) N₁ otimes[R] MultilinearMa
+p R (fun _ : ι₂ => N) N₂ ->ₗ[R] MultilinearMap R (fun _ : ι₁ oplus ι₂ => N) (N₁ 
+otimes[R] N₂)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition domCoprod'
-  signature: :
-  body: domCoprodDep' (R := R) (N := fun (_ : ι₁ oplus ι₂) => N)
-
-@[simp]
-
-中文:
-定义 domCoprod'
-  签名: :
-  定义体: domCoprodDep' (R := R) (N := fun (_ : ι₁ oplus ι₂) => N)
-
-@[simp]
-
-Depends on / 依赖: domCoprodDep
+--- 原说明 ---
+A more bundled version of `MultilinearMap.domCoprod` that maps
+`((ι₁ → N) → N₁) ⊗ ((ι₂ → N) → N₂)` to `(ι₁ ⊕ ι₂ → N) → N₁ ⊗ N₂`.
 -/
 def domCoprod' :
-    MultilinearMap R (fun _ : ι₁ => N) N₁ otimes[R] MultilinearMap R (fun _ : ι₂ => N) N₂ ->ₗ[R]
-      MultilinearMap R (fun _ : ι₁ oplus ι₂ => N) (N₁ otimes[R] N₂) :=
-  domCoprodDep' (R := R) (N := fun (_ : ι₁ oplus ι₂) => N)
+    MultilinearMap R (fun _ : ι₁ => N) N₁ ⊗[R] MultilinearMap R (fun _ : ι₂ => N) N₂ →ₗ[R]
+      MultilinearMap R (fun _ : ι₁ ⊕ ι₂ => N) (N₁ ⊗[R] N₂) :=
+  domCoprodDep' (R := R) (N := fun (_ : ι₁ ⊕ ι₂) ↦ N)
 
 @[simp]
-/--
-theorem `domCoprod'_apply` / 定理 `domCoprod'_apply`
-
-English:
-theorem domCoprod'_apply
-  statement: (a : MultilinearMap R (fun _ : ι₁ => N) N₁)
-  proof: rfl
-
-中文:
-定理 domCoprod'_apply
-  结论: (a : 多重线性映射 R (fun _ : ι₁ => N) N₁)
-  证明: rfl
+/-
+**MultilinearMap.domCoprod'_apply** 是 Mathlib 中的一个定理，位于命名空间 `MultilinearMap`。
+形式化陈述：∀ {R : Type u_1} {ι₁ : Type u_2} {ι₂ : Type u_3} [inst : CommSemiring R] {
+N₁ : Type u_6} [inst_1 : AddCommMonoid N₁]   [inst_2 : _root_.Module R N₁] {N₂ :
+ Type u_7} [inst_3 : AddCommMonoid N₂] [inst_4 : _root_.Module R N₂] {N : Type u
+_8}   [inst_5 : AddCommMonoid N] [inst_6 : _root_.Module R N] (a : MultilinearMa
+p R (fun x => N) N₁)   (b : MultilinearMap R (fun x => N) N₂), MultilinearMap.do
+mCoprod' (a ⊗ₜ[R] b) = a.domCoprod b
+参数：a : MultilinearMap R (fun x => N) N₁；b : MultilinearMap R (fun x => N) N₂；a ⊗
+ₜ[R] b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem domCoprod'_apply (a : MultilinearMap R (fun _ : ι₁ => N) N₁)
-    (b : MultilinearMap R (fun _ : ι₂ => N) N₂) : domCoprod' (a otimesₜ[R] b) = domCoprod a b :=
+    (b : MultilinearMap R (fun _ : ι₂ => N) N₂) : domCoprod' (a ⊗ₜ[R] b) = domCoprod a b :=
   rfl
 
-/--
-theorem `domCoprod_domDomCongr_sumCongr` / 定理 `domCoprod_domDomCongr_sumCongr`
+/-- When passed an `Equiv.sumCongr`, `MultilinearMap.domDomCongr` distributes over
+`MultilinearMap.domCoprod`. -/
+/-
+**MultilinearMap.domCoprod_domDomCongr_sumCongr** 是 Mathlib 中的一个定理，位于命名空间 `Multi
+linearMap`。
+形式化陈述：domCoprod_domDomCongr_sumCongr (a : MultilinearMap R (fun _ : ι₁ => N) N₁)
+ (b : MultilinearMap R (fun _ : ι₂ => N) N₂) (σa : ι₁ ≃ ι₃) (σb : ι₂ ≃ ι₄) : (a.
+domCoprod b).domDomCongr (σa.sumCongr σb) = (a.domDomCongr σa).domCoprod (b.domD
+omCongr σb)
+参数：a : MultilinearMap R (fun _ : ι₁ => N) N₁；b : MultilinearMap R (fun _ : ι₂ =>
+ N) N₂；σa : ι₁ ≃ ι₃；σb : ι₂ ≃ ι₄。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem domCoprod_domDomCongr_sumCongr
-  statement: (a : MultilinearMap R (fun _ : ι₁ => N) N₁)
-  proof: rfl
-
-中文:
-定理 domCoprod_domDomCongr_sumCongr
-  结论: (a : 多重线性映射 R (fun _ : ι₁ => N) N₁)
-  证明: rfl
+--- 原说明 ---
+When passed an `Equiv.sumCongr`, `MultilinearMap.domDomCongr` distributes over
+`MultilinearMap.domCoprod`.
 -/
 theorem domCoprod_domDomCongr_sumCongr (a : MultilinearMap R (fun _ : ι₁ => N) N₁)
     (b : MultilinearMap R (fun _ : ι₂ => N) N₂) (σa : ι₁ ≃ ι₃) (σb : ι₂ ≃ ι₄) :
@@ -228,3 +221,4 @@ theorem domCoprod_domDomCongr_sumCongr (a : MultilinearMap R (fun _ : ι₁ => N
 end DomCoprod
 
 end MultilinearMap
+

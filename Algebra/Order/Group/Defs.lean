@@ -44,6 +44,10 @@ attribute [to_additive] OrderedCommGroup.lt_of_mul_lt_mul_left
 
 -- See note [lower instance priority]
 @[to_additive IsOrderedAddMonoid.toIsOrderedCancelAddMonoid]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) IsOrderedMonoid.toIsOrderedCancelMonoid
     [CommGroup α] [Preorder α] [IsOrderedMonoid α] : IsOrderedCancelMonoid α where
   le_of_mul_le_mul_left a b c bc := by simpa using mul_le_mul_right bc a⁻¹
@@ -60,18 +64,19 @@ https://github.com/leanprover-community/mathlib4/pull/32828. -/
 
   TODO: make it an `instance`. To avoid slowdown, it was not an instance when it was submitted. See
   https://github.com/leanprover-community/mathlib4/pull/32828. -/]
-/--
-theorem `IsOrderedMonoid.toIsOrderedCancelMonoid'` / 定理 `IsOrderedMonoid.toIsOrderedCancelMonoid'`
-
-English:
-theorem IsOrderedMonoid.toIsOrderedCancelMonoid'
-  proof: le_of_mul_le_mul_left' h
-
-中文:
-定理 是Ordered幺半群.toIsOrderedCancelMonoid'
-  证明: le_of_mul_le_mul_left' h
-
-Depends on / 依赖: le_of_mul_le_mul_left
+/-
+**IsOrderedMonoid.toIsOrderedCancelMonoid'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsOrderedMonoid.toIsOrderedCancelMonoid' [CancelCommMonoid α] [LinearOrder
+ α] [IsOrderedMonoid α] : IsOrderedCancelMonoid α where le_of_mul_le_mul_left _ 
+_ _ h
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_of_mul_le_mul_left'`：le_of_mul_le_mul_left' [MulLeftReflectLE α] {a b
+ c : α} (bc : a * b <= a * c) : b <= c
+· 使用定理 `LeftCancelSemigroup.toIsLeftCancelMul`：∀ {G : Type u} [self : LeftCancel
+Semigroup G], IsLeftCancelMul G
+· 使用定理 `IsOrderedMonoid.toMulLeftMono`：∀ {α : Type u_1} [inst : CommMonoid α] [i
+nst_1 : Preorder α] [IsOrderedMonoid α], MulLeftMono α
 -/
 theorem IsOrderedMonoid.toIsOrderedCancelMonoid'
     [CancelCommMonoid α] [LinearOrder α] [IsOrderedMonoid α] : IsOrderedCancelMonoid α where
@@ -92,40 +97,24 @@ section LinearOrderedCommGroup
 variable [CommGroup α] [LinearOrder α] [IsOrderedMonoid α] {a : α}
 
 @[to_additive eq_zero_of_neg_eq]
-/--
-theorem `eq_one_of_inv_eq'` / 定理 `eq_one_of_inv_eq'`
-
-English:
-theorem eq_one_of_inv_eq'
-  given: (h : a⁻¹ = a)
-  statement: a = 1
-  proof: match lt_trichotomy a 1 with
-  | Or.inl h₁ =>
-    have : 1 < a := h ▸ one_lt_inv_of_inv h₁
-    absurd h₁ this.asymm
-  | Or.inr (Or.inl h₁) => h₁
-  | Or.inr (Or.inr h₁) =>
-    have : a < 1 := h ▸ inv_lt_one'.mpr h₁
-    absurd h₁ this.asymm
-
-@[to_additive exists_zero_lt]
-
-中文:
-定理 eq_one_of_inv_eq'
-  条件: (h : a⁻¹ = a)
-  结论: a = 1
-  证明: match lt_trichotomy a 1 with
-  | Or.inl h₁ =>
-    have : 1 < a := h ▸ one_lt_inv_of_inv h₁
-    absurd h₁ this.asymm
-  | Or.inr (Or.inl h₁) => h₁
-  | Or.inr (Or.inr h₁) =>
-    have : a < 1 := h ▸ inv_lt_one'.mpr h₁
-    absurd h₁ this.asymm
-
-@[to_additive exists_zero_lt]
-
-Depends on / 依赖: Or.inl, Or.inr, absurd, inv_lt_one, lt_trichotomy, one_lt_inv_of_inv, this.asymm
+/-
+**eq_one_of_inv_eq'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：eq_one_of_inv_eq' (h : a⁻¹ = a) : a = 1
+参数：h : a⁻¹ = a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_trichotomy`：lt_trichotomy (a b : α) : a < b ∨ a = b ∨ b < a
+· 使用定理 `one_lt_inv_of_inv`：∀ {α : Type u} [inst : Group α] [inst_1 : LT α] [MulL
+eftStrictMono α] {a : α}, a < 1 → 1 < a⁻¹
+· 使用定理 `instIsLeftCancelMulOfMulLeftReflectLE`：∀ {α : Type u_1} [inst : Mul α] [
+inst_1 : PartialOrder α] [MulLeftReflectLE α], IsLeftCancelMul α
+· 使用定理 `IsOrderedMonoid.toMulLeftMono`：∀ {α : Type u_1} [inst : CommMonoid α] [i
+nst_1 : Preorder α] [IsOrderedMonoid α], MulLeftMono α
+· 使用定理 `LT.lt.asymm`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b 
+< a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `inv_lt_one'`：∀ {α : Type u} [inst : Group α] [inst_1 : LT α] [MulLeftStr
+ictMono α] {a : α}, a⁻¹ < 1 ↔ 1 < a
 -/
 theorem eq_one_of_inv_eq' (h : a⁻¹ = a) : a = 1 :=
   match lt_trichotomy a 1 with
@@ -138,32 +127,23 @@ theorem eq_one_of_inv_eq' (h : a⁻¹ = a) : a = 1 :=
     absurd h₁ this.asymm
 
 @[to_additive exists_zero_lt]
-/--
-theorem `exists_one_lt'` / 定理 `exists_one_lt'`
-
-English:
-theorem exists_one_lt'
-  given: [Nontrivial α]
-  statement: exists a : α, 1 < a
-  proof: by
-  obtain ⟨y, hy⟩ := Decidable.exists_ne (1 : α)
-  obtain h | h := hy.lt_or_gt
-  · exact ⟨y⁻¹, one_lt_inv'.mpr h⟩
-  · exact ⟨y, h⟩
-
-中文:
-定理 存在_one_lt'
-  条件: [非平凡 α]
-  结论: 存在 a : α, 1 < a
-  证明: by
-  obtain ⟨y, hy⟩ := Decidable.exists_ne (1 : α)
-  obtain h | h := hy.lt_or_gt
-  · exact ⟨y⁻¹, one_lt_inv'.mpr h⟩
-  · exact ⟨y, h⟩
-
-Depends on / 依赖: Decidable, Decidable.exists_ne, exists_ne, hy.lt_or_gt, lt_or_gt, one_lt_inv
+/-
+**exists_one_lt'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_one_lt' [Nontrivial α] : exists a : α, 1 < a
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Decidable.exists_ne`：∀ {α : Type u_1} [Nontrivial α] [DecidableEq α] (x 
+: α), ∃ y, y ≠ x
+· 使用定理 `Ne.lt_or_gt`：Ne.lt_or_gt (h : a != b) : a < b ∨ b < a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `one_lt_inv'`：∀ {α : Type u} [inst : Group α] [inst_1 : LT α] [MulLeftStr
+ictMono α] {a : α}, 1 < a⁻¹ ↔ a < 1
+· 使用定理 `instIsLeftCancelMulOfMulLeftReflectLE`：∀ {α : Type u_1} [inst : Mul α] [
+inst_1 : PartialOrder α] [MulLeftReflectLE α], IsLeftCancelMul α
+· 使用定理 `IsOrderedMonoid.toMulLeftMono`：∀ {α : Type u_1} [inst : CommMonoid α] [i
+nst_1 : Preorder α] [IsOrderedMonoid α], MulLeftMono α
 -/
-theorem exists_one_lt' [Nontrivial α] : exists a : α, 1 < a := by
+theorem exists_one_lt' [Nontrivial α] : ∃ a : α, 1 < a := by
   obtain ⟨y, hy⟩ := Decidable.exists_ne (1 : α)
   obtain h | h := hy.lt_or_gt
   · exact ⟨y⁻¹, one_lt_inv'.mpr h⟩
@@ -171,99 +151,95 @@ theorem exists_one_lt' [Nontrivial α] : exists a : α, 1 < a := by
 
 -- see Note [lower instance priority]
 @[to_additive]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) LinearOrderedCommGroup.to_noMaxOrder [Nontrivial α] : NoMaxOrder α :=
   ⟨by
-    obtain ⟨y, hy⟩ : exists a : α, 1 < a := exists_one_lt'
+    obtain ⟨y, hy⟩ : ∃ a : α, 1 < a := exists_one_lt'
     exact fun a => ⟨a * y, lt_mul_of_one_lt_right' a hy⟩⟩
 
 -- see Note [lower instance priority]
 @[to_additive]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) LinearOrderedCommGroup.to_noMinOrder [Nontrivial α] : NoMinOrder α :=
   ⟨by
-    obtain ⟨y, hy⟩ : exists a : α, 1 < a := exists_one_lt'
+    obtain ⟨y, hy⟩ : ∃ a : α, 1 < a := exists_one_lt'
     exact fun a => ⟨a / y, (div_lt_self_iff a).mpr hy⟩⟩
 
 @[to_additive (attr := simp)]
-/--
-theorem `inv_le_self_iff` / 定理 `inv_le_self_iff`
-
-English:
-theorem inv_le_self_iff
-  statement: a⁻¹ <= a ↔ 1 <= a
-  proof: by simp [inv_le_iff_one_le_mul']
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 inv_le_self_iff
-  结论: a⁻¹ <= a ↔ 1 <= a
-  证明: by simp [inv_le_iff_one_le_mul']
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: inv_le_iff_one_le_mul
+/-
+**inv_le_self_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：inv_le_self_iff : a⁻¹ <= a ↔ 1 <= a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsOrderedMonoid.toMulLeftMono`：∀ {α : Type u_1} [inst : CommMonoid α] [i
+nst_1 : Preorder α] [IsOrderedMonoid α], MulLeftMono α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem inv_le_self_iff : a⁻¹ <= a ↔ 1 <= a := by simp [inv_le_iff_one_le_mul']
+theorem inv_le_self_iff : a⁻¹ ≤ a ↔ 1 ≤ a := by simp [inv_le_iff_one_le_mul']
 
 @[to_additive (attr := simp)]
-/--
-theorem `inv_lt_self_iff` / 定理 `inv_lt_self_iff`
-
-English:
-theorem inv_lt_self_iff
-  statement: a⁻¹ < a ↔ 1 < a
-  proof: by simp [inv_lt_iff_one_lt_mul]
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 inv_lt_self_iff
-  结论: a⁻¹ < a ↔ 1 < a
-  证明: by simp [inv_lt_iff_one_lt_mul]
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: inv_lt_iff_one_lt_mul
+/-
+**inv_lt_self_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：inv_lt_self_iff : a⁻¹ < a ↔ 1 < a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `instIsRightCancelMulOfMulRightReflectLE`：∀ {α : Type u_1} [inst : Mul α]
+ [inst_1 : PartialOrder α] [MulRightReflectLE α], IsRightCancelMul α
+· 使用定理 `LeftCancelSemigroup.toIsLeftCancelMul`：∀ {G : Type u} [self : LeftCancel
+Semigroup G], IsLeftCancelMul G
+· 使用定理 `IsOrderedMonoid.toMulLeftMono`：∀ {α : Type u_1} [inst : CommMonoid α] [i
+nst_1 : Preorder α] [IsOrderedMonoid α], MulLeftMono α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem inv_lt_self_iff : a⁻¹ < a ↔ 1 < a := by simp [inv_lt_iff_one_lt_mul]
 
 @[to_additive (attr := simp)]
-/--
-theorem `le_inv_self_iff` / 定理 `le_inv_self_iff`
-
-English:
-theorem le_inv_self_iff
-  statement: a <= a⁻¹ ↔ a <= 1
-  proof: by contrapose!; exact inv_lt_self_iff
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 le_inv_self_iff
-  结论: a <= a⁻¹ ↔ a <= 1
-  证明: by contrapose!; exact inv_lt_self_iff
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: contrapose, inv_lt_self_iff
+/-
+**le_inv_self_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：le_inv_self_iff : a <= a⁻¹ ↔ a <= 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose_iff₁`：contrapose_iff₁ {p q : Prop} 
+: (¬ p ↔ ¬ q) -> (p ↔ q)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inv_lt_self_iff`：inv_lt_self_iff : a⁻¹ < a ↔ 1 < a
 -/
-theorem le_inv_self_iff : a <= a⁻¹ ↔ a <= 1 := by contrapose!; exact inv_lt_self_iff
+theorem le_inv_self_iff : a ≤ a⁻¹ ↔ a ≤ 1 := by contrapose!; exact inv_lt_self_iff
 
 @[to_additive (attr := simp)]
-/--
-theorem `lt_inv_self_iff` / 定理 `lt_inv_self_iff`
-
-English:
-theorem lt_inv_self_iff
-  statement: a < a⁻¹ ↔ a < 1
-  proof: by contrapose!; exact inv_le_self_iff
-
-中文:
-定理 lt_inv_self_iff
-  结论: a < a⁻¹ ↔ a < 1
-  证明: by contrapose!; exact inv_le_self_iff
-
-Depends on / 依赖: contrapose, inv_le_self_iff
+/-
+**lt_inv_self_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lt_inv_self_iff : a < a⁻¹ ↔ a < 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose_iff₁`：contrapose_iff₁ {p q : Prop} 
+: (¬ p ↔ ¬ q) -> (p ↔ q)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inv_le_self_iff`：inv_le_self_iff : a⁻¹ <= a ↔ 1 <= a
 -/
 theorem lt_inv_self_iff : a < a⁻¹ ↔ a < 1 := by contrapose!; exact inv_le_self_iff
 
@@ -276,108 +252,91 @@ expected signatures. -/
 variable [CommGroup α] [PartialOrder α] [IsOrderedMonoid α] {a b : α}
 
 @[to_additive (attr := gcongr) neg_le_neg]
-/--
-theorem `inv_le_inv'` / 定理 `inv_le_inv'`
-
-English:
-theorem inv_le_inv'
-  statement: a <= b -> b⁻¹ <= a⁻¹
-  proof: inv_le_inv_iff.mpr
-
-@[to_additive (attr := gcongr) neg_lt_neg]
-
-中文:
-定理 inv_le_inv'
-  结论: a <= b -> b⁻¹ <= a⁻¹
-  证明: inv_le_inv_iff.mpr
-
-@[to_additive (attr := gcongr) neg_lt_neg]
-
-Depends on / 依赖: inv_le_inv_iff, inv_le_inv_iff.mpr
+/-
+**inv_le_inv'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：inv_le_inv' : a <= b -> b⁻¹ <= a⁻¹
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `inv_le_inv_iff`：inv_le_inv_iff : a⁻¹ <= b⁻¹ ↔ b <= a
+· 使用定理 `IsOrderedMonoid.toMulLeftMono`：∀ {α : Type u_1} [inst : CommMonoid α] [i
+nst_1 : Preorder α] [IsOrderedMonoid α], MulLeftMono α
 -/
-theorem inv_le_inv' : a <= b -> b⁻¹ <= a⁻¹ :=
+theorem inv_le_inv' : a ≤ b → b⁻¹ ≤ a⁻¹ :=
   inv_le_inv_iff.mpr
 
 @[to_additive (attr := gcongr) neg_lt_neg]
-/--
-theorem `inv_lt_inv'` / 定理 `inv_lt_inv'`
-
-English:
-theorem inv_lt_inv'
-  statement: a < b -> b⁻¹ < a⁻¹
-  proof: inv_lt_inv_iff.mpr
-
-中文:
-定理 inv_lt_inv'
-  结论: a < b -> b⁻¹ < a⁻¹
-  证明: inv_lt_inv_iff.mpr
-
-Depends on / 依赖: inv_lt_inv_iff, inv_lt_inv_iff.mpr
+/-
+**inv_lt_inv'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：inv_lt_inv' : a < b -> b⁻¹ < a⁻¹
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `inv_lt_inv_iff`：inv_lt_inv_iff : a⁻¹ < b⁻¹ ↔ b < a
+· 使用定理 `instIsLeftCancelMulOfMulLeftReflectLE`：∀ {α : Type u_1} [inst : Mul α] [
+inst_1 : PartialOrder α] [MulLeftReflectLE α], IsLeftCancelMul α
+· 使用定理 `IsOrderedMonoid.toMulLeftMono`：∀ {α : Type u_1} [inst : CommMonoid α] [i
+nst_1 : Preorder α] [IsOrderedMonoid α], MulLeftMono α
+· 使用定理 `instIsRightCancelMulOfMulRightReflectLE`：∀ {α : Type u_1} [inst : Mul α]
+ [inst_1 : PartialOrder α] [MulRightReflectLE α], IsRightCancelMul α
+· 使用定理 `LeftCancelSemigroup.toIsLeftCancelMul`：∀ {G : Type u} [self : LeftCancel
+Semigroup G], IsLeftCancelMul G
+· 使用定理 `IsOrderedCancelMonoid.toMulLeftReflectLT`：∀ {α : Type u_1} [inst : CommM
+onoid α] [inst_1 : PartialOrder α] [IsOrderedCancelMonoid α], MulLeftReflectLT α
+· 使用定理 `IsOrderedMonoid.toIsOrderedCancelMonoid`：∀ {α : Type u} [inst : CommGrou
+p α] [inst_1 : Preorder α] [IsOrderedMonoid α], IsOrderedCancelMonoid α
 -/
-theorem inv_lt_inv' : a < b -> b⁻¹ < a⁻¹ :=
+theorem inv_lt_inv' : a < b → b⁻¹ < a⁻¹ :=
   inv_lt_inv_iff.mpr
 
--- The additive version is also a `linarith` lemma.
+--  The additive version is also a `linarith` lemma.
 @[to_additive]
-/--
-theorem `inv_lt_one_of_one_lt` / 定理 `inv_lt_one_of_one_lt`
-
-English:
-theorem inv_lt_one_of_one_lt
-  statement: 1 < a -> a⁻¹ < 1
-  proof: inv_lt_one_iff_one_lt.mpr
-
-中文:
-定理 inv_lt_one_of_one_lt
-  结论: 1 < a -> a⁻¹ < 1
-  证明: inv_lt_one_iff_one_lt.mpr
-
-Depends on / 依赖: inv_lt_one_iff_one_lt, inv_lt_one_iff_one_lt.mpr
+/-
+**inv_lt_one_of_one_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：inv_lt_one_of_one_lt : 1 < a -> a⁻¹ < 1
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `inv_lt_one_iff_one_lt`：∀ {α : Type u} [inst : Group α] [inst_1 : LT α] [
+MulLeftStrictMono α] {a : α}, a⁻¹ < 1 ↔ 1 < a
+· 使用定理 `instIsLeftCancelMulOfMulLeftReflectLE`：∀ {α : Type u_1} [inst : Mul α] [
+inst_1 : PartialOrder α] [MulLeftReflectLE α], IsLeftCancelMul α
+· 使用定理 `IsOrderedMonoid.toMulLeftMono`：∀ {α : Type u_1} [inst : CommMonoid α] [i
+nst_1 : Preorder α] [IsOrderedMonoid α], MulLeftMono α
 -/
-theorem inv_lt_one_of_one_lt : 1 < a -> a⁻¹ < 1 :=
+theorem inv_lt_one_of_one_lt : 1 < a → a⁻¹ < 1 :=
   inv_lt_one_iff_one_lt.mpr
 
--- The additive version is also a `linarith` lemma.
+--  The additive version is also a `linarith` lemma.
 @[to_additive]
-/--
-theorem `inv_le_one_of_one_le` / 定理 `inv_le_one_of_one_le`
-
-English:
-theorem inv_le_one_of_one_le
-  statement: 1 <= a -> a⁻¹ <= 1
-  proof: inv_le_one'.mpr
-
-@[to_additive neg_nonneg_of_nonpos]
-
-中文:
-定理 inv_le_one_of_one_le
-  结论: 1 <= a -> a⁻¹ <= 1
-  证明: inv_le_one'.mpr
-
-@[to_additive neg_nonneg_of_nonpos]
-
-Depends on / 依赖: inv_le_one
+/-
+**inv_le_one_of_one_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：inv_le_one_of_one_le : 1 <= a -> a⁻¹ <= 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `inv_le_one'`：∀ {α : Type u} [inst : Group α] [inst_1 : LE α] [MulLeftMon
+o α] {a : α}, a⁻¹ ≤ 1 ↔ 1 ≤ a
+· 使用定理 `IsOrderedMonoid.toMulLeftMono`：∀ {α : Type u_1} [inst : CommMonoid α] [i
+nst_1 : Preorder α] [IsOrderedMonoid α], MulLeftMono α
 -/
-theorem inv_le_one_of_one_le : 1 <= a -> a⁻¹ <= 1 :=
+theorem inv_le_one_of_one_le : 1 ≤ a → a⁻¹ ≤ 1 :=
   inv_le_one'.mpr
 
 @[to_additive neg_nonneg_of_nonpos]
-/--
-theorem `one_le_inv_of_le_one` / 定理 `one_le_inv_of_le_one`
-
-English:
-theorem one_le_inv_of_le_one
-  statement: a <= 1 -> 1 <= a⁻¹
-  proof: one_le_inv'.mpr
-
-中文:
-定理 one_le_inv_of_le_one
-  结论: a <= 1 -> 1 <= a⁻¹
-  证明: one_le_inv'.mpr
-
-Depends on / 依赖: one_le_inv
+/-
+**one_le_inv_of_le_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：one_le_inv_of_le_one : a <= 1 -> 1 <= a⁻¹
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `one_le_inv'`：∀ {α : Type u} [inst : Group α] [inst_1 : LE α] [MulLeftMon
+o α] {a : α}, 1 ≤ a⁻¹ ↔ a ≤ 1
+· 使用定理 `IsOrderedMonoid.toMulLeftMono`：∀ {α : Type u_1} [inst : CommMonoid α] [i
+nst_1 : Preorder α] [IsOrderedMonoid α], MulLeftMono α
 -/
-theorem one_le_inv_of_le_one : a <= 1 -> 1 <= a⁻¹ :=
+theorem one_le_inv_of_le_one : a ≤ 1 → 1 ≤ a⁻¹ :=
   one_le_inv'.mpr
 
 end NormNumLemmas
+

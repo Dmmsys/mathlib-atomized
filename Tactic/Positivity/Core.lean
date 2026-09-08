@@ -50,171 +50,156 @@ Example:
 -/
 syntax (name := positivity) "positivity " term,+ : attr
 
-/--
-lemma `ne_of_ne_of_eq'` / 引理 `ne_of_ne_of_eq'`
-
-English:
-lemma ne_of_ne_of_eq'
-  given: {α : Sort*} {a c b : α} (hab : (a : α) != c) (hbc : a = b)
-  statement: b != c
-  proof: hbc ▸ hab
-
-中文:
-引理 ne_of_ne_of_eq'
-  条件: {α : 类型层*} {a c b : α} (hab : (a : α) != c) (hbc : a = b)
-  结论: b != c
-  证明: hbc ▸ hab
+/-
+**ne_of_ne_of_eq'** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：ne_of_ne_of_eq' {α : Sort*} {a c b : α} (hab : (a : α) != c) (hbc : a = b)
+ : b != c
+参数：hab : (a : α) != c；hbc : a = b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma ne_of_ne_of_eq' {α : Sort*} {a c b : α} (hab : (a : α) != c) (hbc : a = b) : b != c := hbc ▸ hab
+lemma ne_of_ne_of_eq' {α : Sort*} {a c b : α} (hab : (a : α) ≠ c) (hbc : a = b) : b ≠ c := hbc ▸ hab
 
 namespace Mathlib.Meta.Positivity
 
 variable {u : Level} {α : Q(Type u)} (zα : Q(Zero $α))
 
-/--
-Inductive type `Strictness` / 归纳类型 `Strictness`
+/-- The result of `positivity` running on an expression `e` of type `α`. -/
+/-
+**Mathlib.Meta.Positivity.Strictness** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Meta.P
+ositivity`。
+形式化陈述：{u : Level} → {α : Q(Type u)} → Q(Zero «$α») → Q(«$α») → Option Q(PartialO
+rder «$α») → Type
+参数：Type u；Zero «$α»；«$α»；PartialOrder «$α»。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Strictness
-  parameters: (e : Q($α))
-  constructors (4):
-    - positive: {pα : Q(PartialOrder $α)} (pf : Q(0 < $e)) : Strictness e pα
-    - nonnegative: {pα : Q(PartialOrder $α)} (pf : Q(0 <= $e)) : Strictness e pα
-    - nonzero: {pα?} (pf : Q($e != 0)) : Strictness e pα?
-    - none: {pα?} : Strictness e pα?
-
-中文:
-归纳类型 Strictness
-  参数: (e : Q($α))
-  构造子 (4 个):
-    - positive: {pα : Q(偏序 $α)} (pf : Q(0 < $e)) : Strictness e pα
-    - nonnegative: {pα : Q(偏序 $α)} (pf : Q(0 <= $e)) : Strictness e pα
-    - nonzero: {pα?} (pf : Q($e != 0)) : Strictness e pα?
-    - none: {pα?} : Strictness e pα?
+--- 原说明 ---
+The result of `positivity` running on an expression `e` of type `α`.
 -/
-inductive Strictness (e : Q($α)) : Option Q(PartialOrder $α) -> Type where
+inductive Strictness (e : Q($α)) : Option Q(PartialOrder $α) → Type where
   | positive {pα : Q(PartialOrder $α)} (pf : Q(0 < $e)) : Strictness e pα
-  | nonnegative {pα : Q(PartialOrder $α)} (pf : Q(0 <= $e)) : Strictness e pα
-  | nonzero {pα?} (pf : Q($e != 0)) : Strictness e pα?
+  | nonnegative {pα : Q(PartialOrder $α)} (pf : Q(0 ≤ $e)) : Strictness e pα
+  | nonzero {pα?} (pf : Q($e ≠ 0)) : Strictness e pα?
   | none {pα?} : Strictness e pα?
 
-/--
-Definition of `Strictness.toString` / `Strictness.toString` 的定义
+/-- Gives a generic description of the `positivity` result. -/
+/-
+**Mathlib.Meta.Positivity.Strictness.toString** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Meta.Positivity.Strictness`。
+形式化陈述：{u : Level} →   {α : Q(Type u)} →     (zα : Q(Zero «$α»)) →       {e : Q(«
+$α»)} → {pα? : Option Q(PartialOrder «$α»)} → Mathlib.Meta.Positivity.Strictness
+ zα e pα? → String
+参数：Type u；zα : Q(Zero «$α»)；«$α»；PartialOrder «$α»。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Strictness.toString
-  signature: {e pα?}
-
-中文:
-定义 Strictness.toString
-  签名: {e pα?}
+--- 原说明 ---
+Gives a generic description of the `positivity` result.
 -/
-def Strictness.toString {e pα?} : Strictness zα e pα? -> String
+def Strictness.toString {e pα?} : Strictness zα e pα? → String
   | positive _ => "positive"
   | nonnegative _ => "nonnegative"
   | nonzero _ => "nonzero"
   | none => "none"
 
-/--
-Definition of `Strictness.toPositive` / `Strictness.toPositive` 的定义
+/-- Extract a proof that `e` is positive, if possible, from `Strictness` information about `e`. -/
+/-
+**Mathlib.Meta.Positivity.Strictness.toPositive** 是 Mathlib 中的一个定义，位于命名空间 `Mathl
+ib.Meta.Positivity.Strictness`。
+形式化陈述：{u : Level} →   {α : Q(Type u)} →     (zα : Q(Zero «$α»)) →       {e : Q(«
+$α»)} →         {pα : Q(PartialOrder «$α»)} → Mathlib.Meta.Positivity.Strictness
+ zα e (some pα) → Option Q(0 < «$e»)
+参数：Type u；zα : Q(Zero «$α»)；«$α»；PartialOrder «$α»；some pα；0 < «$e»。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Strictness.toPositive
-  signature: {e pα}
-
-中文:
-定义 Strictness.toPositive
-  签名: {e pα}
+--- 原说明 ---
+Extract a proof that `e` is positive, if possible, from `Strictness` information
+ about `e`.
 -/
-def Strictness.toPositive {e pα} : Strictness zα e (some pα) -> Option Q(0 < $e)
+def Strictness.toPositive {e pα} : Strictness zα e (some pα) → Option Q(0 < $e)
   | .positive pf => some pf
   | _ => .none
 
-/--
-Definition of `Strictness.toNonneg` / `Strictness.toNonneg` 的定义
-
-English:
-definition Strictness.toNonneg
-  signature: {e pα}
-
-中文:
-定义 Strictness.toNonneg
-  签名: {e pα}
+/-- Extract a proof that `e` is nonnegative, if possible, from `Strictness` information about `e`.
 -/
-def Strictness.toNonneg {e pα} : Strictness zα e (some pα) -> Option Q(0 <= $e)
+/-
+**Mathlib.Meta.Positivity.Strictness.toNonneg** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Meta.Positivity.Strictness`。
+形式化陈述：{u : Level} →   {α : Q(Type u)} →     (zα : Q(Zero «$α»)) →       {e : Q(«
+$α»)} →         {pα : Q(PartialOrder «$α»)} → Mathlib.Meta.Positivity.Strictness
+ zα e (some pα) → Option Q(0 ≤ «$e»)
+参数：Type u；zα : Q(Zero «$α»)；«$α»；PartialOrder «$α»；some pα；0 ≤ «$e»。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Extract a proof that `e` is nonnegative, if possible, from `Strictness` informat
+ion about `e`.
+-/
+def Strictness.toNonneg {e pα} : Strictness zα e (some pα) → Option Q(0 ≤ $e)
   | .positive pf => some q(le_of_lt $pf)
   | .nonnegative pf => some pf
   | _ => .none
 
-/--
-Definition of `Strictness.toNonzero` / `Strictness.toNonzero` 的定义
+/-- Extract a proof that `e` is nonzero, if possible, from `Strictness` information about `e`. -/
+/-
+**Mathlib.Meta.Positivity.Strictness.toNonzero** 是 Mathlib 中的一个定义，位于命名空间 `Mathli
+b.Meta.Positivity.Strictness`。
+形式化陈述：{u : Level} →   {α : Q(Type u)} →     (zα : Q(Zero «$α»)) →       {e : Q(«
+$α»)} →         {pα? : Option Q(PartialOrder «$α»)} → Mathlib.Meta.Positivity.St
+rictness zα e pα? → Option Q(«$e» ≠ 0)
+参数：Type u；zα : Q(Zero «$α»)；«$α»；PartialOrder «$α»；«$e» ≠ 0。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Strictness.toNonzero
-  signature: {e pα?}
-
-中文:
-定义 Strictness.toNonzero
-  签名: {e pα?}
+--- 原说明 ---
+Extract a proof that `e` is nonzero, if possible, from `Strictness` information 
+about `e`.
 -/
-def Strictness.toNonzero {e pα?} : Strictness zα e pα? -> Option Q($e != 0)
+def Strictness.toNonzero {e pα?} : Strictness zα e pα? → Option Q($e ≠ 0)
   | .positive pf => some q(ne_of_gt $pf)
   | .nonzero pf => some pf
   | _ => .none
 
-/--
-Definition of `PositivityExt` / `PositivityExt` 的定义
+/-- An extension for `positivity`. -/
+/-
+**Mathlib.Meta.Positivity.PositivityExt** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Met
+a.Positivity`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure PositivityExt
-  parameters: where
-  axioms and operations (1):
-    - eval({u : Level} {α : Q(Type u)} (zα : Q(Zero $α)) (pα? : Option Q(PartialOrder $α)) (e : Q($α))) : MetaM (Strictness zα e pα?)
-
-中文:
-结构 PositivityExt
-  参数: where
-  公理与运算 (1 个):
-    - eval({u : Level} {α : Q(类型u)} (zα : Q(零 $α)) (pα? : 选项类型 Q(偏序 $α)) (e : Q($α))) : MetaM (Strictness zα e pα?)
+--- 原说明 ---
+An extension for `positivity`.
 -/
 structure PositivityExt where
   /-- Attempts to prove an expression `e : α` is `>0`, `≥0`, or `≠0`. -/
   eval {u : Level} {α : Q(Type u)} (zα : Q(Zero $α)) (pα? : Option Q(PartialOrder $α)) (e : Q($α)) :
     MetaM (Strictness zα e pα?)
 
-/--
-Definition of `mkPositivityExt` / `mkPositivityExt` 的定义
+/-- Read a `positivity` extension from a declaration of the right type. -/
+/-
+**Mathlib.Meta.Positivity.mkPositivityExt** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Met
+a.Positivity`。
+形式化陈述：mkPositivityExt (n : Name) : ImportM PositivityExt
+参数：n : Name。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkPositivityExt
-  signature: (n : Name)
-  body: do
-  let { env, opts, .. } ← read
-IO.ofExcept unsafe env.evalConstCheck PositivityExt opts ``PositivityExt n
-
-中文:
-定义 mkPositivityExt
-  签名: (n : Name)
-  定义体: do
-  let { env, opts, .. } ← read
-IO.ofExcept unsafe env.evalConstCheck PositivityExt opts ``PositivityExt n
+--- 原说明 ---
+Read a `positivity` extension from a declaration of the right type.
 -/
 def mkPositivityExt (n : Name) : ImportM PositivityExt := do
   let { env, opts, .. } ← read
-IO.ofExcept unsafe env.evalConstCheck PositivityExt opts ``PositivityExt n
+  IO.ofExcept <| unsafe env.evalConstCheck PositivityExt opts ``PositivityExt n
 
-/--
-Definition of `Entry` / `Entry` 的定义
+/-- Each `positivity` extension is labelled with a collection of patterns
+which determine the expressions to which it should be applied. -/
+/-
+**Mathlib.Meta.Positivity.Entry** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.Meta.Positi
+vity`。
+形式化陈述：Entry
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Entry
-  body: Array (Array DiscrTree.Key) × Name
-
-中文:
-缩写 Entry
-  定义体: Array (Array DiscrTree.Key) × Name
-
-Depends on / 依赖: DiscrTree, DiscrTree.Key
+--- 原说明 ---
+Each `positivity` extension is labelled with a collection of patterns
+which determine the expressions to which it should be applied.
 -/
 abbrev Entry := Array (Array DiscrTree.Key) × Name
 
@@ -248,14 +233,14 @@ initialize registerBuiltinAttribute {
         throwError "invalid attribute 'positivity', declaration is in an imported module"
       if (IR.getSorryDep env declName).isSome then return -- ignore in progress definitions
       let ext ← mkPositivityExt declName
-let keys ← MetaM.run' es.getElems.mapM fun stx => do
-let e ← TermElabM.run' withSaveInfoContext withAutoBoundImplicit
+      let keys ← MetaM.run' <| es.getElems.mapM fun stx => do
+        let e ← TermElabM.run' <| withSaveInfoContext <| withAutoBoundImplicit <|
           withReader ({ · with ignoreTCFailures := true }) do
             let e ← elabTerm stx none
             let (_, _, e) ← lambdaMetaTelescope (← mkLambdaFVars (← getLCtx).getFVars e)
             return e
         DiscrTree.mkPath e
-setEnv positivityExt.addEntry env ((keys, declName), ext)
+      setEnv <| positivityExt.addEntry env ((keys, declName), ext)
       -- TODO: track what `[positivity]` decls are actually used at use sites
       recordExtraRevUseOfCurrentModule
     | _ => throwUnsupportedSyntax
@@ -263,279 +248,297 @@ setEnv positivityExt.addEntry env ((keys, declName), ext)
 
 variable {A : Type*} {e : A}
 
-/--
-lemma `pos_of_isNat` / 引理 `pos_of_isNat`
-
-English:
-lemma pos_of_isNat
-  statement: {n : Nat} [Semiring A] [PartialOrder A] [IsOrderedRing A] [Nontrivial A]
-  proof: by
-  rw [NormNum.IsNat.to_eq h rfl]
-  apply Nat.cast_pos.2
-  simpa using! w
-
-中文:
-引理 pos_of_is自然数
-  结论: {n : 自然数} [半环 A] [偏序 A] [是Ordered环 A] [非平凡 A]
-  证明: by
-  rw [NormNum.IsNat.to_eq h rfl]
-  apply Nat.cast_pos.2
-  simpa using! w
-
-Depends on / 依赖: Nat.cast_pos, NormNum, NormNum.IsNat.to_eq, cast_pos, to_eq
+/-
+**Mathlib.Meta.Positivity.pos_of_isNat** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Meta.P
+ositivity`。
+形式化陈述：pos_of_isNat {n : Nat} [Semiring A] [PartialOrder A] [IsOrderedRing A] [No
+ntrivial A] (h : NormNum.IsNat e n) (w : Nat.ble 1 n = true) : 0 < (e : A)
+参数：h : NormNum.IsNat e n；w : Nat.ble 1 n = true。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_eq`：∀ {α : Type u} [inst : AddMonoidWithOn
+e α] {n : ℕ} {a a' : α}, Mathlib.Meta.NormNum.IsNat a n → ↑n = a' → a = a'
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.cast_pos`：cast_pos {α} [Semiring α] [PartialOrder α] [IsOrderedRing 
+α] [Nontrivial α] {n : Nat} : (0 : α) < n ↔ 0 < n
+· 使用定理 `Nat.ble_eq`：∀ {x y : ℕ}, (x.ble y = true) = (x ≤ y)
 -/
-lemma pos_of_isNat {n : Nat} [Semiring A] [PartialOrder A] [IsOrderedRing A] [Nontrivial A]
+lemma pos_of_isNat {n : ℕ} [Semiring A] [PartialOrder A] [IsOrderedRing A] [Nontrivial A]
     (h : NormNum.IsNat e n) (w : Nat.ble 1 n = true) : 0 < (e : A) := by
   rw [NormNum.IsNat.to_eq h rfl]
   apply Nat.cast_pos.2
   simpa using! w
-
-/--
-lemma `pos_of_isNat'` / 引理 `pos_of_isNat'`
-
-English:
-lemma pos_of_isNat'
-  statement: {n : Nat}
-  proof: by
-  rw [NormNum.IsNat.to_eq h rfl]
-  apply Nat.cast_pos'.2
-  simpa using! w
-
-中文:
-引理 pos_of_is自然数'
-  结论: {n : 自然数}
-  证明: by
-  rw [NormNum.IsNat.to_eq h rfl]
-  apply Nat.cast_pos'.2
-  simpa using! w
-
-Depends on / 依赖: Nat.cast_pos, NormNum, NormNum.IsNat.to_eq, cast_pos, to_eq
+/-
+**Mathlib.Meta.Positivity.pos_of_isNat'** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Meta.
+Positivity`。
+形式化陈述：pos_of_isNat' {n : Nat} [AddMonoidWithOne A] [PartialOrder A] [AddLeftMono
+ A] [ZeroLEOneClass A] [h'' : NeZero (1 : A)] (h : NormNum.IsNat e n) (w : Nat.b
+le 1 n = true) : 0 < (e : A)
+参数：1 : A；h : NormNum.IsNat e n；w : Nat.ble 1 n = true。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_eq`：∀ {α : Type u} [inst : AddMonoidWithOn
+e α] {n : ℕ} {a a' : α}, Mathlib.Meta.NormNum.IsNat a n → ↑n = a' → a = a'
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.cast_pos'`：cast_pos' {n : Nat} : (0 : α) < n ↔ 0 < n
+· 使用定理 `Nat.ble_eq`：∀ {x y : ℕ}, (x.ble y = true) = (x ≤ y)
 -/
-lemma pos_of_isNat' {n : Nat}
+lemma pos_of_isNat' {n : ℕ}
     [AddMonoidWithOne A] [PartialOrder A] [AddLeftMono A] [ZeroLEOneClass A] [h'' : NeZero (1 : A)]
     (h : NormNum.IsNat e n) (w : Nat.ble 1 n = true) : 0 < (e : A) := by
   rw [NormNum.IsNat.to_eq h rfl]
   apply Nat.cast_pos'.2
   simpa using! w
-
-/--
-lemma `nonneg_of_isNat` / 引理 `nonneg_of_isNat`
-
-English:
-lemma nonneg_of_isNat
-  statement: {n : Nat} [Semiring A] [PartialOrder A] [IsOrderedRing A]
-  proof: by
-  rw [NormNum.IsNat.to_eq h rfl]
-  exact Nat.cast_nonneg n
-
-中文:
-引理 nonneg_of_is自然数
-  结论: {n : 自然数} [半环 A] [偏序 A] [是Ordered环 A]
-  证明: by
-  rw [NormNum.IsNat.to_eq h rfl]
-  exact Nat.cast_nonneg n
-
-Depends on / 依赖: Nat.cast_nonneg, NormNum, NormNum.IsNat.to_eq, cast_nonneg, to_eq
+/-
+**Mathlib.Meta.Positivity.nonneg_of_isNat** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Met
+a.Positivity`。
+形式化陈述：nonneg_of_isNat {n : Nat} [Semiring A] [PartialOrder A] [IsOrderedRing A] 
+(h : NormNum.IsNat e n) : 0 <= (e : A)
+参数：h : NormNum.IsNat e n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_eq`：∀ {α : Type u} [inst : AddMonoidWithOn
+e α] {n : ℕ} {a a' : α}, Mathlib.Meta.NormNum.IsNat a n → ↑n = a' → a = a'
+· 使用定理 `Nat.cast_nonneg`：cast_nonneg {α} [Semiring α] [PartialOrder α] [IsOrdere
+dRing α] (n : Nat) : 0 <= (n : α)
 -/
-lemma nonneg_of_isNat {n : Nat} [Semiring A] [PartialOrder A] [IsOrderedRing A]
-    (h : NormNum.IsNat e n) : 0 <= (e : A) := by
+lemma nonneg_of_isNat {n : ℕ} [Semiring A] [PartialOrder A] [IsOrderedRing A]
+    (h : NormNum.IsNat e n) : 0 ≤ (e : A) := by
   rw [NormNum.IsNat.to_eq h rfl]
   exact Nat.cast_nonneg n
-
-/--
-lemma `nonneg_of_isNat'` / 引理 `nonneg_of_isNat'`
-
-English:
-lemma nonneg_of_isNat'
-  statement: {n : Nat}
-  proof: by
-  rw [NormNum.IsNat.to_eq h rfl]
-  exact Nat.cast_nonneg' n
-
-中文:
-引理 nonneg_of_is自然数'
-  结论: {n : 自然数}
-  证明: by
-  rw [NormNum.IsNat.to_eq h rfl]
-  exact Nat.cast_nonneg' n
-
-Depends on / 依赖: Nat.cast_nonneg, NormNum, NormNum.IsNat.to_eq, cast_nonneg, to_eq
+/-
+**Mathlib.Meta.Positivity.nonneg_of_isNat'** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Me
+ta.Positivity`。
+形式化陈述：nonneg_of_isNat' {n : Nat} [AddMonoidWithOne A] [PartialOrder A] [AddLeftM
+ono A] [ZeroLEOneClass A] (h : NormNum.IsNat e n) : 0 <= (e : A)
+参数：h : NormNum.IsNat e n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_eq`：∀ {α : Type u} [inst : AddMonoidWithOn
+e α] {n : ℕ} {a a' : α}, Mathlib.Meta.NormNum.IsNat a n → ↑n = a' → a = a'
+· 使用定理 `Nat.cast_nonneg'`：cast_nonneg' (n : Nat) : 0 <= (n : α)
 -/
-lemma nonneg_of_isNat' {n : Nat}
+lemma nonneg_of_isNat' {n : ℕ}
     [AddMonoidWithOne A] [PartialOrder A] [AddLeftMono A] [ZeroLEOneClass A]
-    (h : NormNum.IsNat e n) : 0 <= (e : A) := by
+    (h : NormNum.IsNat e n) : 0 ≤ (e : A) := by
   rw [NormNum.IsNat.to_eq h rfl]
   exact Nat.cast_nonneg' n
-
-/--
-lemma `nz_of_isNegNat` / 引理 `nz_of_isNegNat`
-
-English:
-lemma nz_of_isNegNat
-  statement: {n : Nat} [Ring A] [PartialOrder A] [IsStrictOrderedRing A]
-  proof: by
-  rw [NormNum.IsInt.neg_to_eq h rfl]
-  simp only [ne_eq, neg_eq_zero]
-  apply ne_of_gt
-  simpa using! w
-
-中文:
-引理 nz_of_isNeg自然数
-  结论: {n : 自然数} [环 A] [偏序 A] [是StrictOrdered环 A]
-  证明: by
-  rw [NormNum.IsInt.neg_to_eq h rfl]
-  simp only [ne_eq, neg_eq_zero]
-  apply ne_of_gt
-  simpa using! w
-
-Depends on / 依赖: NormNum, NormNum.IsInt.neg_to_eq, ne_eq, ne_of_gt, neg_eq_zero, neg_to_eq
+/-
+**Mathlib.Meta.Positivity.nz_of_isNegNat** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Meta
+.Positivity`。
+形式化陈述：nz_of_isNegNat {n : Nat} [Ring A] [PartialOrder A] [IsStrictOrderedRing A]
+ (h : NormNum.IsInt e (.negOfNat n)) (w : Nat.ble 1 n = true) : (e : A) != 0
+参数：h : NormNum.IsInt e (.negOfNat n)；w : Nat.ble 1 n = true。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.neg_to_eq`：∀ {α : Type u_1} [inst : Ring α] {
+n : ℕ} {a a' : α}, Mathlib.Meta.NormNum.IsInt a (Int.negOfNat n) → ↑n = a' → a =
+ -a'
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instNontrivialOfCharZero`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [
+CharZero α], Nontrivial α
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
+· 使用定理 `Nat.ble_eq`：∀ {x y : ℕ}, (x.ble y = true) = (x ≤ y)
 -/
-lemma nz_of_isNegNat {n : Nat} [Ring A] [PartialOrder A] [IsStrictOrderedRing A]
-    (h : NormNum.IsInt e (.negOfNat n)) (w : Nat.ble 1 n = true) : (e : A) != 0 := by
+lemma nz_of_isNegNat {n : ℕ} [Ring A] [PartialOrder A] [IsStrictOrderedRing A]
+    (h : NormNum.IsInt e (.negOfNat n)) (w : Nat.ble 1 n = true) : (e : A) ≠ 0 := by
   rw [NormNum.IsInt.neg_to_eq h rfl]
   simp only [ne_eq, neg_eq_zero]
   apply ne_of_gt
   simpa using! w
-
-/--
-lemma `pos_of_isNNRat` / 引理 `pos_of_isNNRat`
-
-English:
-lemma pos_of_isNNRat
-  given: {n d : Nat} [Semiring A] [LinearOrder A] [IsStrictOrderedRing A]
-  proof: pos_invOf_of_invertible_cast d
-.2 (of_decide_eq_true h) have pos_n : (0 < (n : A)) := Nat.cast_pos (n := n)
-    rw [eq]
-    exact mul_pos pos_n pos_invOf_d
-
-中文:
-引理 pos_of_isNNRat
-  条件: {n d : 自然数} [半环 A] [线性序 A] [是StrictOrdered环 A]
-  证明: pos_invOf_of_invertible_cast d
-.2 (of_decide_eq_true h) have pos_n : (0 < (n : A)) := Nat.cast_pos (n := n)
-    rw [eq]
-    exact mul_pos pos_n pos_invOf_d
-
-Depends on / 依赖: pos_invOf_of_invertible_cast
+/-
+**Mathlib.Meta.Positivity.pos_of_isNNRat** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Meta
+.Positivity`。
+形式化陈述：pos_of_isNNRat {n d : Nat} [Semiring A] [LinearOrder A] [IsStrictOrderedRi
+ng A] : (NormNum.IsNNRat e n d) -> (decide (0 < n)) -> ((0 : A) < (e : A)) | ⟨in
+v, eq⟩, h => by have pos_invOf_d : (0 < ⅟ (d : A))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `pos_invOf_of_invertible_cast`：pos_invOf_of_invertible_cast (n : Nat) [In
+vertible (n : R)] : 0 < ⅟(n : R)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.cast_pos`：cast_pos {α} [Semiring α] [PartialOrder α] [IsOrderedRing 
+α] [Nontrivial α] {n : Nat} : (0 : α) < n ↔ 0 < n
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instNontrivialOfCharZero`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [
+CharZero α], Nontrivial α
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_pos`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 : Pr
+eorder α] [PosMulStrictMono α], 0 < a → 0 < b → 0 < a * b
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
 -/
-lemma pos_of_isNNRat {n d : Nat} [Semiring A] [LinearOrder A] [IsStrictOrderedRing A] :
-    (NormNum.IsNNRat e n d) -> (decide (0 < n)) -> ((0 : A) < (e : A))
+lemma pos_of_isNNRat {n d : ℕ} [Semiring A] [LinearOrder A] [IsStrictOrderedRing A] :
+    (NormNum.IsNNRat e n d) → (decide (0 < n)) → ((0 : A) < (e : A))
   | ⟨inv, eq⟩, h => by
     have pos_invOf_d : (0 < ⅟ (d : A)) := pos_invOf_of_invertible_cast d
-.2 (of_decide_eq_true h) have pos_n : (0 < (n : A)) := Nat.cast_pos (n := n)
+    have pos_n : (0 < (n : A)) := Nat.cast_pos (n := n) |>.2 (of_decide_eq_true h)
     rw [eq]
     exact mul_pos pos_n pos_invOf_d
-
-/--
-lemma `pos_of_isRat` / 引理 `pos_of_isRat`
-
-English:
-lemma pos_of_isRat
-  given: {n : Int} {d : Nat} [Ring A] [LinearOrder A] [IsStrictOrderedRing A]
-  proof: pos_invOf_of_invertible_cast d
-.2 (of_decide_eq_true h) have pos_n : (0 < (n : A)) := Int.cast_pos (n := n)
-    rw [eq]
-    exact mul_pos pos_n pos_invOf_d
-
-中文:
-引理 pos_of_isRat
-  条件: {n : 整数} {d : 自然数} [环 A] [线性序 A] [是StrictOrdered环 A]
-  证明: pos_invOf_of_invertible_cast d
-.2 (of_decide_eq_true h) have pos_n : (0 < (n : A)) := Int.cast_pos (n := n)
-    rw [eq]
-    exact mul_pos pos_n pos_invOf_d
-
-Depends on / 依赖: pos_invOf_of_invertible_cast
+/-
+**Mathlib.Meta.Positivity.pos_of_isRat** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Meta.P
+ositivity`。
+形式化陈述：pos_of_isRat {n : Int} {d : Nat} [Ring A] [LinearOrder A] [IsStrictOrdered
+Ring A] : (NormNum.IsRat e n d) -> (decide (0 < n)) -> ((0 : A) < (e : A)) | ⟨in
+v, eq⟩, h => by have pos_invOf_d : (0 < ⅟(d : A))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `pos_invOf_of_invertible_cast`：pos_invOf_of_invertible_cast (n : Nat) [In
+vertible (n : R)] : 0 < ⅟(n : R)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Int.cast_pos`：∀ {R : Type u_1} [inst : AddCommGroupWithOne R] [inst_1 : 
+PartialOrder R] [AddLeftMono R] [ZeroLEOneClass R] [NeZero 1]   {n : ℤ}, 0 < ↑n 
+↔ …
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `IsStrictOrderedRing.toZeroLEOneClass`：∀ {R : Type u_1} {inst : Semiring 
+R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], ZeroLEOneClass R
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_pos`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 : Pr
+eorder α] [PosMulStrictMono α], 0 < a → 0 < b → 0 < a * b
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
 -/
-lemma pos_of_isRat {n : Int} {d : Nat} [Ring A] [LinearOrder A] [IsStrictOrderedRing A] :
-    (NormNum.IsRat e n d) -> (decide (0 < n)) -> ((0 : A) < (e : A))
+lemma pos_of_isRat {n : ℤ} {d : ℕ} [Ring A] [LinearOrder A] [IsStrictOrderedRing A] :
+    (NormNum.IsRat e n d) → (decide (0 < n)) → ((0 : A) < (e : A))
   | ⟨inv, eq⟩, h => by
     have pos_invOf_d : (0 < ⅟(d : A)) := pos_invOf_of_invertible_cast d
-.2 (of_decide_eq_true h) have pos_n : (0 < (n : A)) := Int.cast_pos (n := n)
+    have pos_n : (0 < (n : A)) := Int.cast_pos (n := n) |>.2 (of_decide_eq_true h)
     rw [eq]
     exact mul_pos pos_n pos_invOf_d
-
-/--
-lemma `nonneg_of_isNNRat` / 引理 `nonneg_of_isNNRat`
-
-English:
-lemma nonneg_of_isNNRat
-  given: {n d : Nat} [Semiring A] [LinearOrder A]
-
-中文:
-引理 nonneg_of_isNNRat
-  条件: {n d : 自然数} [半环 A] [线性序 A]
+/-
+**Mathlib.Meta.Positivity.nonneg_of_isNNRat** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.M
+eta.Positivity`。
+形式化陈述：∀ {A : Type u_1} {e : A} {n d : ℕ} [inst : Semiring A] [inst_1 : LinearOrd
+er A],   Mathlib.Meta.NormNum.IsNNRat e n d → decide (n = 0) = true → 0 ≤ e
+参数：n = 0。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
 -/
-lemma nonneg_of_isNNRat {n d : Nat} [Semiring A] [LinearOrder A] :
-    (NormNum.IsNNRat e n d) -> (decide (n = 0)) -> (0 <= (e : A))
+lemma nonneg_of_isNNRat {n d : ℕ} [Semiring A] [LinearOrder A] :
+    (NormNum.IsNNRat e n d) → (decide (n = 0)) → (0 ≤ (e : A))
   | ⟨inv, eq⟩, h => by rw [eq, of_decide_eq_true h]; simp
-
-/--
-lemma `nonneg_of_isRat` / 引理 `nonneg_of_isRat`
-
-English:
-lemma nonneg_of_isRat
-  given: {n : Int} {d : Nat} [Ring A] [LinearOrder A]
-
-中文:
-引理 nonneg_of_isRat
-  条件: {n : 整数} {d : 自然数} [环 A] [线性序 A]
+/-
+**Mathlib.Meta.Positivity.nonneg_of_isRat** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Met
+a.Positivity`。
+形式化陈述：∀ {A : Type u_1} {e : A} {n : ℤ} {d : ℕ} [inst : Ring A] [inst_1 : LinearO
+rder A],   Mathlib.Meta.NormNum.IsRat e n d → decide (n = 0) = true → 0 ≤ e
+参数：n = 0。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Int.cast_zero`：cast_zero : ((0 : Int) : R) = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
 -/
-lemma nonneg_of_isRat {n : Int} {d : Nat} [Ring A] [LinearOrder A] :
-    (NormNum.IsRat e n d) -> (decide (n = 0)) -> (0 <= (e : A))
+lemma nonneg_of_isRat {n : ℤ} {d : ℕ} [Ring A] [LinearOrder A] :
+    (NormNum.IsRat e n d) → (decide (n = 0)) → (0 ≤ (e : A))
   | ⟨inv, eq⟩, h => by rw [eq, of_decide_eq_true h]; simp
-
-/--
-lemma `nz_of_isRat` / 引理 `nz_of_isRat`
-
-English:
-lemma nz_of_isRat
-  given: {n : Int} {d : Nat} [Ring A] [LinearOrder A] [IsStrictOrderedRing A]
-  proof: pos_invOf_of_invertible_cast d
-.2 (of_decide_eq_true h) have neg_n : ((n : A) < 0) := Int.cast_lt_zero (n := n)
-    have neg := mul_neg_of_neg_of_pos neg_n pos_invOf_d
-    rw [eq]
-    exact ne_iff_lt_or_gt.2 (Or.inl neg)
-
-中文:
-引理 nz_of_isRat
-  条件: {n : 整数} {d : 自然数} [环 A] [线性序 A] [是StrictOrdered环 A]
-  证明: pos_invOf_of_invertible_cast d
-.2 (of_decide_eq_true h) have neg_n : ((n : A) < 0) := Int.cast_lt_zero (n := n)
-    have neg := mul_neg_of_neg_of_pos neg_n pos_invOf_d
-    rw [eq]
-    exact ne_iff_lt_or_gt.2 (Or.inl neg)
-
-Depends on / 依赖: pos_invOf_of_invertible_cast
+/-
+**Mathlib.Meta.Positivity.nz_of_isRat** 是 Mathlib 中的一个引理，位于命名空间 `Mathlib.Meta.Po
+sitivity`。
+形式化陈述：nz_of_isRat {n : Int} {d : Nat} [Ring A] [LinearOrder A] [IsStrictOrderedR
+ing A] : (NormNum.IsRat e n d) -> (decide (n < 0)) -> ((e : A) != 0) | ⟨inv, eq⟩
+, h => by have pos_invOf_d : (0 < ⅟(d : A))
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `pos_invOf_of_invertible_cast`：pos_invOf_of_invertible_cast (n : Nat) [In
+vertible (n : R)] : 0 < ⅟(n : R)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Int.cast_lt_zero`：∀ {R : Type u_1} [inst : AddCommGroupWithOne R] [inst_
+1 : PartialOrder R] [AddLeftMono R] [ZeroLEOneClass R] [NeZero 1]   {n : ℤ}, ↑n 
+< 0 ↔ …
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `IsStrictOrderedRing.toZeroLEOneClass`：∀ {R : Type u_1} {inst : Semiring 
+R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], ZeroLEOneClass R
+· 使用定理 `IsStrictOrderedRing.toCharZero`：∀ {R : Type u} [inst : Semiring R] [inst
+_1 : PartialOrder R] [IsStrictOrderedRing R], CharZero R
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `mul_neg_of_neg_of_pos`：mul_neg_of_neg_of_pos [MulPosStrictMono α] (ha : 
+a < 0) (hb : 0 < b) : a * b < 0
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ne_iff_lt_or_gt`：ne_iff_lt_or_gt : a != b ↔ a < b ∨ b < a
 -/
-lemma nz_of_isRat {n : Int} {d : Nat} [Ring A] [LinearOrder A] [IsStrictOrderedRing A] :
-    (NormNum.IsRat e n d) -> (decide (n < 0)) -> ((e : A) != 0)
+lemma nz_of_isRat {n : ℤ} {d : ℕ} [Ring A] [LinearOrder A] [IsStrictOrderedRing A] :
+    (NormNum.IsRat e n d) → (decide (n < 0)) → ((e : A) ≠ 0)
   | ⟨inv, eq⟩, h => by
     have pos_invOf_d : (0 < ⅟(d : A)) := pos_invOf_of_invertible_cast d
-.2 (of_decide_eq_true h) have neg_n : ((n : A) < 0) := Int.cast_lt_zero (n := n)
+    have neg_n : ((n : A) < 0) := Int.cast_lt_zero (n := n) |>.2 (of_decide_eq_true h)
     have neg := mul_neg_of_neg_of_pos neg_n pos_invOf_d
     rw [eq]
     exact ne_iff_lt_or_gt.2 (Or.inl neg)
 
 variable {zα} in
-/--
-Definition of `catchNone` / `catchNone` 的定义
+/-- Converts a `MetaM Strictness` which can fail
+into one that never fails and returns `.none` instead. -/
+/-
+**Mathlib.Meta.Positivity.catchNone** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Posi
+tivity`。
+形式化陈述：catchNone {e pα?} (t : MetaM (Strictness zα e pα?)) : MetaM (Strictness zα
+ e pα?)
+参数：t : MetaM (Strictness zα e pα?)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition catchNone
-  signature: {e pα?} (t : MetaM (Strictness zα e pα?))
-  body: try t catch e =>
-    trace[Tactic.positivity.failure] "{e.toMessageData}"
-    pure .none
-
-中文:
-定义 catchNone
-  签名: {e pα?} (t : MetaM (Strictness zα e pα?))
-  定义体: try t catch e =>
-    trace[Tactic.positivity.failure] "{e.toMessageData}"
-    pure .none
-
-Depends on / 依赖: Tactic, Tactic.positivity.failure, e.toMessageData, failure, toMessageData
+--- 原说明 ---
+Converts a `MetaM Strictness` which can fail
+into one that never fails and returns `.none` instead.
 -/
 def catchNone {e pα?} (t : MetaM (Strictness zα e pα?)) : MetaM (Strictness zα e pα?) :=
   try t catch e =>
@@ -543,202 +546,38 @@ def catchNone {e pα?} (t : MetaM (Strictness zα e pα?)) : MetaM (Strictness z
     pure .none
 
 variable {zα} in
-/--
-Definition of `throwNone` / `throwNone` 的定义
+/-- Converts a `MetaM Strictness` which can return `.none`
+into one which never returns `.none` but fails instead. -/
+/-
+**Mathlib.Meta.Positivity.throwNone** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Posi
+tivity`。
+形式化陈述：throwNone {e pα?} (t : MetaM (Strictness zα e pα?)) : MetaM (Strictness zα
+ e pα?)
+参数：t : MetaM (Strictness zα e pα?)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition throwNone
-  signature: {e pα?} (t : MetaM (Strictness zα e pα?))
-  body: do
-  match ← t with
-  | .none => throwError "Strictness result was `{.ofConstName ``Strictness.none}`."
-  | r => pure r
-
-中文:
-定义 throwNone
-  签名: {e pα?} (t : MetaM (Strictness zα e pα?))
-  定义体: do
-  match ← t with
-  | .none => throwError "Strictness result was `{.ofConstName ``Strictness.none}`."
-  | r => pure r
+--- 原说明 ---
+Converts a `MetaM Strictness` which can return `.none`
+into one which never returns `.none` but fails instead.
 -/
 def throwNone {e pα?} (t : MetaM (Strictness zα e pα?)) : MetaM (Strictness zα e pα?) := do
   match ← t with
   | .none => throwError "Strictness result was `{.ofConstName ``Strictness.none}`."
   | r => pure r
 
-/--
-Definition of `normNumPositivity` / `normNumPositivity` 的定义
+/-- Attempts to prove a `Strictness` result when `e` evaluates to a literal number. -/
+/-
+**Mathlib.Meta.Positivity.normNumPositivity** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.M
+eta.Positivity`。
+形式化陈述：normNumPositivity (pα : Q(PartialOrder $α)) (e : Q($α)) : MetaM (Strictnes
+s zα e (some pα))
+参数：pα : Q(PartialOrder $α)；e : Q($α)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition normNumPositivity
-  signature: (pα : Q(PartialOrder $α)) (e : Q($α))
-  body: catchNone do
-  match ← NormNum.derive e with
-  | .isBool .. => failure
-  | .isNat _ lit p =>
-    if 0 < lit.natLit! then
-      -- NB. The `try` branch is actually a special case of the `catch` branch,
-      -- hence is not strictly necessary. However, this makes a small but measurable performance
-      -- difference, as synthesising the `try` classes is a bit faster.
-      try
-        let _a ← synthInstanceQ q(Semiring $α)
-        let _a ← synthInstanceQ q(PartialOrder $α)
-        let _a ← synthInstanceQ q(IsOrderedRing $α)
-        let _a ← synthInstanceQ q(Nontrivial $α)
-        assumeInstancesCommute
-        have p : Q(NormNum.IsNat $e $lit) := p
-haveI' p' : Nat.ble 1 lit =Q true := ⟨⟩
-        pure (.positive q(pos_of_isNat (A := $α) $p $p'))
-      catch e : Exception =>
-        trace[Tactic.positivity.failure] "{e.toMessageData}"
-        let _a ← synthInstanceQ q(AddMonoidWithOne $α)
-        let _a ← synthInstanceQ q(PartialOrder $α)
-        let _a ← synthInstanceQ q(AddLeftMono $α)
-        let _a ← synthInstanceQ q(ZeroLEOneClass $α)
-        let _a ← synthInstanceQ q(NeZero (1 : $α))
-        assumeInstancesCommute
-        have p : Q(NormNum.IsNat $e $lit) := p
-haveI' p' : Nat.ble 1 lit =Q true := ⟨⟩
-        pure (.positive q(pos_of_isNat' (A := $α) $p $p'))
-    else
-      -- NB. The `try` branch is actually a special case of the `catch` branch,
-      -- hence is not strictly necessary. However, this makes a small but measurable performance
-      -- difference, as synthesising the `try` classes is a bit faster.
-      try
-        let _a ← synthInstanceQ q(Semiring $α)
-        let _a ← synthInstanceQ q(PartialOrder $α)
-        let _a ← synthInstanceQ q(IsOrderedRing $α)
-        assumeInstancesCommute
-        have p : Q(NormNum.IsNat $e $lit) := p
-        pure (.nonnegative q(nonneg_of_isNat $p))
-      catch e : Exception =>
-        trace[Tactic.positivity.failure] "{e.toMessageData}"
-        let _a ← synthInstanceQ q(AddMonoidWithOne $α)
-        let _a ← synthInstanceQ q(PartialOrder $α)
-        let _a ← synthInstanceQ q(AddLeftMono $α)
-        let _a ← synthInstanceQ q(ZeroLEOneClass $α)
-        assumeInstancesCommute
-        have p : Q(NormNum.IsNat $e $lit) := p
-        pure (.nonnegative q(nonneg_of_isNat' $p))
-  | .isNegNat _ lit p =>
-    let _a ← synthInstanceQ q(Ring $α)
-    let _a ← synthInstanceQ q(PartialOrder $α)
-    let _a ← synthInstanceQ q(IsStrictOrderedRing $α)
-    assumeInstancesCommute
-    have p : Q(NormNum.IsInt $e (Int.negOfNat $lit)) := p
-haveI' p' : Nat.ble 1 lit =Q true := ⟨⟩
-    pure (.nonzero q(nz_of_isNegNat $p $p'))
-  | .isNNRat _i q n d p =>
-    let _a ← synthInstanceQ q(Semiring $α)
-    let _a ← synthInstanceQ q(LinearOrder $α)
-    let _a ← synthInstanceQ q(IsStrictOrderedRing $α)
-    assumeInstancesCommute
-    have p : Q(NormNum.IsNNRat $e $n $d) := p
-    if 0 < q then
-      haveI' w : decide (0 < $n) =Q true := ⟨⟩
-      pure (.positive q(pos_of_isNNRat $p $w))
-    else -- should not be reachable, but just in case
-      haveI' w : decide ($n = 0) =Q true := ⟨⟩
-      pure (.nonnegative q(nonneg_of_isNNRat $p $w))
-  | .isNegNNRat _i q n d p =>
-    let _a ← synthInstanceQ q(Ring $α)
-    let _a ← synthInstanceQ q(LinearOrder $α)
-    let _a ← synthInstanceQ q(IsStrictOrderedRing $α)
-    assumeInstancesCommute
-    have p : Q(NormNum.IsRat $e (.negOfNat $n) $d) := p
-    if q < 0 then
-      haveI' w : decide (Int.negOfNat $n < 0) =Q true := ⟨⟩
-      pure (.nonzero q(nz_of_isRat $p $w))
-    else -- should not be reachable, but just in case
-      haveI' w : decide (Int.negOfNat $n = 0) =Q true := ⟨⟩
-      pure (.nonnegative q(nonneg_of_isRat $p $w))
-
-中文:
-定义 normNumPositivity
-  签名: (pα : Q(偏序 $α)) (e : Q($α))
-  定义体: catchNone do
-  match ← NormNum.derive e with
-  | .isBool .. => failure
-  | .isNat _ lit p =>
-    if 0 < lit.natLit! then
-      -- NB. The `try` branch is actually a special case of the `catch` branch,
-      -- hence is not strictly necessary. However, this makes a small but measurable performance
-      -- difference, as synthesising the `try` classes is a bit faster.
-      try
-        let _a ← synthInstanceQ q(Semiring $α)
-        let _a ← synthInstanceQ q(PartialOrder $α)
-        let _a ← synthInstanceQ q(IsOrderedRing $α)
-        let _a ← synthInstanceQ q(Nontrivial $α)
-        assumeInstancesCommute
-        have p : Q(NormNum.IsNat $e $lit) := p
-haveI' p' : Nat.ble 1 lit =Q true := ⟨⟩
-        pure (.positive q(pos_of_isNat (A := $α) $p $p'))
-      catch e : Exception =>
-        trace[Tactic.positivity.failure] "{e.toMessageData}"
-        let _a ← synthInstanceQ q(AddMonoidWithOne $α)
-        let _a ← synthInstanceQ q(PartialOrder $α)
-        let _a ← synthInstanceQ q(AddLeftMono $α)
-        let _a ← synthInstanceQ q(ZeroLEOneClass $α)
-        let _a ← synthInstanceQ q(NeZero (1 : $α))
-        assumeInstancesCommute
-        have p : Q(NormNum.IsNat $e $lit) := p
-haveI' p' : Nat.ble 1 lit =Q true := ⟨⟩
-        pure (.positive q(pos_of_isNat' (A := $α) $p $p'))
-    else
-      -- NB. The `try` branch is actually a special case of the `catch` branch,
-      -- hence is not strictly necessary. However, this makes a small but measurable performance
-      -- difference, as synthesising the `try` classes is a bit faster.
-      try
-        let _a ← synthInstanceQ q(Semiring $α)
-        let _a ← synthInstanceQ q(PartialOrder $α)
-        let _a ← synthInstanceQ q(IsOrderedRing $α)
-        assumeInstancesCommute
-        have p : Q(NormNum.IsNat $e $lit) := p
-        pure (.nonnegative q(nonneg_of_isNat $p))
-      catch e : Exception =>
-        trace[Tactic.positivity.failure] "{e.toMessageData}"
-        let _a ← synthInstanceQ q(AddMonoidWithOne $α)
-        let _a ← synthInstanceQ q(PartialOrder $α)
-        let _a ← synthInstanceQ q(AddLeftMono $α)
-        let _a ← synthInstanceQ q(ZeroLEOneClass $α)
-        assumeInstancesCommute
-        have p : Q(NormNum.IsNat $e $lit) := p
-        pure (.nonnegative q(nonneg_of_isNat' $p))
-  | .isNegNat _ lit p =>
-    let _a ← synthInstanceQ q(Ring $α)
-    let _a ← synthInstanceQ q(PartialOrder $α)
-    let _a ← synthInstanceQ q(IsStrictOrderedRing $α)
-    assumeInstancesCommute
-    have p : Q(NormNum.IsInt $e (Int.negOfNat $lit)) := p
-haveI' p' : Nat.ble 1 lit =Q true := ⟨⟩
-    pure (.nonzero q(nz_of_isNegNat $p $p'))
-  | .isNNRat _i q n d p =>
-    let _a ← synthInstanceQ q(Semiring $α)
-    let _a ← synthInstanceQ q(LinearOrder $α)
-    let _a ← synthInstanceQ q(IsStrictOrderedRing $α)
-    assumeInstancesCommute
-    have p : Q(NormNum.IsNNRat $e $n $d) := p
-    if 0 < q then
-      haveI' w : decide (0 < $n) =Q true := ⟨⟩
-      pure (.positive q(pos_of_isNNRat $p $w))
-    else -- should not be reachable, but just in case
-      haveI' w : decide ($n = 0) =Q true := ⟨⟩
-      pure (.nonnegative q(nonneg_of_isNNRat $p $w))
-  | .isNegNNRat _i q n d p =>
-    let _a ← synthInstanceQ q(Ring $α)
-    let _a ← synthInstanceQ q(LinearOrder $α)
-    let _a ← synthInstanceQ q(IsStrictOrderedRing $α)
-    assumeInstancesCommute
-    have p : Q(NormNum.IsRat $e (.negOfNat $n) $d) := p
-    if q < 0 then
-      haveI' w : decide (Int.negOfNat $n < 0) =Q true := ⟨⟩
-      pure (.nonzero q(nz_of_isRat $p $w))
-    else -- should not be reachable, but just in case
-      haveI' w : decide (Int.negOfNat $n = 0) =Q true := ⟨⟩
-      pure (.nonnegative q(nonneg_of_isRat $p $w))
-
-Depends on / 依赖: catchNone
+--- 原说明 ---
+Attempts to prove a `Strictness` result when `e` evaluates to a literal number.
 -/
 def normNumPositivity (pα : Q(PartialOrder $α)) (e : Q($α))
     : MetaM (Strictness zα e (some pα)) := catchNone do
@@ -756,7 +595,7 @@ def normNumPositivity (pα : Q(PartialOrder $α)) (e : Q($α))
         let _a ← synthInstanceQ q(Nontrivial $α)
         assumeInstancesCommute
         have p : Q(NormNum.IsNat $e $lit) := p
-haveI' p' : Nat.ble 1 lit =Q true := ⟨⟩
+        haveI' p' : Nat.ble 1 $lit =Q true := ⟨⟩
         pure (.positive q(pos_of_isNat (A := $α) $p $p'))
       catch e : Exception =>
         trace[Tactic.positivity.failure] "{e.toMessageData}"
@@ -767,7 +606,7 @@ haveI' p' : Nat.ble 1 lit =Q true := ⟨⟩
         let _a ← synthInstanceQ q(NeZero (1 : $α))
         assumeInstancesCommute
         have p : Q(NormNum.IsNat $e $lit) := p
-haveI' p' : Nat.ble 1 lit =Q true := ⟨⟩
+        haveI' p' : Nat.ble 1 $lit =Q true := ⟨⟩
         pure (.positive q(pos_of_isNat' (A := $α) $p $p'))
     else
       -- NB. The `try` branch is actually a special case of the `catch` branch,
@@ -795,7 +634,7 @@ haveI' p' : Nat.ble 1 lit =Q true := ⟨⟩
     let _a ← synthInstanceQ q(IsStrictOrderedRing $α)
     assumeInstancesCommute
     have p : Q(NormNum.IsInt $e (Int.negOfNat $lit)) := p
-haveI' p' : Nat.ble 1 lit =Q true := ⟨⟩
+    haveI' p' : Nat.ble 1 $lit =Q true := ⟨⟩
     pure (.nonzero q(nz_of_isNegNat $p $p'))
   | .isNNRat _i q n d p =>
     let _a ← synthInstanceQ q(Semiring $α)
@@ -822,28 +661,19 @@ haveI' p' : Nat.ble 1 lit =Q true := ⟨⟩
       haveI' w : decide (Int.negOfNat $n = 0) =Q true := ⟨⟩
       pure (.nonnegative q(nonneg_of_isRat $p $w))
 
-/--
-Definition of `positivityCanon` / `positivityCanon` 的定义
+/-- Attempts to prove that `e ≥ 0` using `zero_le` in a `CanonicallyOrderedAdd` monoid. -/
+/-
+**Mathlib.Meta.Positivity.positivityCanon** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Met
+a.Positivity`。
+形式化陈述：positivityCanon (pα : Q(PartialOrder $α)) (e : Q($α)) : MetaM (Strictness 
+zα e (some pα))
+参数：pα : Q(PartialOrder $α)；e : Q($α)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition positivityCanon
-  signature: (pα : Q(PartialOrder $α)) (e : Q($α))
-  body: do
-  let _add ← synthInstanceQ q(AddMonoid $α)
-  let _le ← synthInstanceQ q(PartialOrder $α)
-  let _i ← synthInstanceQ q(CanonicallyOrderedAdd $α)
-  assumeInstancesCommute
-  pure (.nonnegative q(zero_le (a := $e)))
-
-中文:
-定义 positivityCanon
-  签名: (pα : Q(偏序 $α)) (e : Q($α))
-  定义体: do
-  let _add ← synthInstanceQ q(AddMonoid $α)
-  let _le ← synthInstanceQ q(PartialOrder $α)
-  let _i ← synthInstanceQ q(CanonicallyOrderedAdd $α)
-  assumeInstancesCommute
-  pure (.nonnegative q(zero_le (a := $e)))
+--- 原说明 ---
+Attempts to prove that `e ≥ 0` using `zero_le` in a `CanonicallyOrderedAdd` mono
+id.
 -/
 def positivityCanon (pα : Q(PartialOrder $α)) (e : Q($α)) : MetaM (Strictness zα e (some pα)) := do
   let _add ← synthInstanceQ q(AddMonoid $α)
@@ -852,54 +682,40 @@ def positivityCanon (pα : Q(PartialOrder $α)) (e : Q($α)) : MetaM (Strictness
   assumeInstancesCommute
   pure (.nonnegative q(zero_le (a := $e)))
 
-/--
-Definition of `compareHypLE` / `compareHypLE` 的定义
+/-- A variation on `assumption` when the hypothesis is `lo ≤ e` where `lo` is a numeral. -/
+/-
+**Mathlib.Meta.Positivity.compareHypLE** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.P
+ositivity`。
+形式化陈述：compareHypLE (pα : Q(PartialOrder $α)) (lo e : Q($α)) (p₂ : Q($lo <= $e)) 
+: MetaM (Strictness zα e pα)
+参数：pα : Q(PartialOrder $α)；lo e : Q($α)；p₂ : Q($lo <= $e)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compareHypLE
-  signature: (pα : Q(PartialOrder $α)) (lo e : Q($α)) (p₂ : Q($lo <= $e))
-  body: do
-  match ← normNumPositivity zα pα lo with
-  | .positive p₁ => pure (.positive q(lt_of_lt_of_le $p₁ $p₂))
-  | .nonnegative p₁ => pure (.nonnegative q(le_trans $p₁ $p₂))
-  | _ => pure .none
-
-中文:
-定义 compareHypLE
-  签名: (pα : Q(偏序 $α)) (lo e : Q($α)) (p₂ : Q($lo <= $e))
-  定义体: do
-  match ← normNumPositivity zα pα lo with
-  | .positive p₁ => pure (.positive q(lt_of_lt_of_le $p₁ $p₂))
-  | .nonnegative p₁ => pure (.nonnegative q(le_trans $p₁ $p₂))
-  | _ => pure .none
+--- 原说明 ---
+A variation on `assumption` when the hypothesis is `lo ≤ e` where `lo` is a nume
+ral.
 -/
-def compareHypLE (pα : Q(PartialOrder $α)) (lo e : Q($α)) (p₂ : Q($lo <= $e))
+def compareHypLE (pα : Q(PartialOrder $α)) (lo e : Q($α)) (p₂ : Q($lo ≤ $e))
     : MetaM (Strictness zα e pα) := do
   match ← normNumPositivity zα pα lo with
   | .positive p₁ => pure (.positive q(lt_of_lt_of_le $p₁ $p₂))
   | .nonnegative p₁ => pure (.nonnegative q(le_trans $p₁ $p₂))
   | _ => pure .none
 
-/--
-Definition of `compareHypLT` / `compareHypLT` 的定义
+/-- A variation on `assumption` when the hypothesis is `lo < e` where `lo` is a numeral. -/
+/-
+**Mathlib.Meta.Positivity.compareHypLT** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.P
+ositivity`。
+形式化陈述：compareHypLT (pα : Q(PartialOrder $α)) (lo e : Q($α)) (p₂ : Q($lo < $e)) :
+ MetaM (Strictness zα e pα)
+参数：pα : Q(PartialOrder $α)；lo e : Q($α)；p₂ : Q($lo < $e)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compareHypLT
-  signature: (pα : Q(PartialOrder $α)) (lo e : Q($α)) (p₂ : Q($lo < $e))
-  body: do
-  match ← normNumPositivity zα pα lo with
-  | .positive p₁ => pure (.positive q(lt_trans $p₁ $p₂))
-  | .nonnegative p₁ => pure (.positive q(lt_of_le_of_lt $p₁ $p₂))
-  | _ => pure .none
-
-中文:
-定义 compareHypLT
-  签名: (pα : Q(偏序 $α)) (lo e : Q($α)) (p₂ : Q($lo < $e))
-  定义体: do
-  match ← normNumPositivity zα pα lo with
-  | .positive p₁ => pure (.positive q(lt_trans $p₁ $p₂))
-  | .nonnegative p₁ => pure (.positive q(lt_of_le_of_lt $p₁ $p₂))
-  | _ => pure .none
+--- 原说明 ---
+A variation on `assumption` when the hypothesis is `lo < e` where `lo` is a nume
+ral.
 -/
 def compareHypLT (pα : Q(PartialOrder $α)) (lo e : Q($α)) (p₂ : Q($lo < $e)) :
     MetaM (Strictness zα e pα) := do
@@ -908,28 +724,19 @@ def compareHypLT (pα : Q(PartialOrder $α)) (lo e : Q($α)) (p₂ : Q($lo < $e)
   | .nonnegative p₁ => pure (.positive q(lt_of_le_of_lt $p₁ $p₂))
   | _ => pure .none
 
-/--
-Definition of `compareHypEq` / `compareHypEq` 的定义
+/-- A variation on `assumption` when the hypothesis is `x = e` where `x` is a numeral. -/
+/-
+**Mathlib.Meta.Positivity.compareHypEq** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.P
+ositivity`。
+形式化陈述：compareHypEq (pα : Q(PartialOrder $α)) (e x : Q($α)) (p₂ : Q($x = $e)) : M
+etaM (Strictness zα e pα)
+参数：pα : Q(PartialOrder $α)；e x : Q($α)；p₂ : Q($x = $e)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compareHypEq
-  signature: (pα : Q(PartialOrder $α)) (e x : Q($α)) (p₂ : Q($x = $e))
-  body: do
-  match ← normNumPositivity zα pα x with
-  | .positive p₁ => pure (.positive q(lt_of_lt_of_eq $p₁ $p₂))
-  | .nonnegative p₁ => pure (.nonnegative q(le_of_le_of_eq $p₁ $p₂))
-  | .nonzero p₁ => pure (.nonzero q(ne_of_ne_of_eq' $p₁ $p₂))
-  | .none => pure .none
-
-中文:
-定义 compareHypEq
-  签名: (pα : Q(偏序 $α)) (e x : Q($α)) (p₂ : Q($x = $e))
-  定义体: do
-  match ← normNumPositivity zα pα x with
-  | .positive p₁ => pure (.positive q(lt_of_lt_of_eq $p₁ $p₂))
-  | .nonnegative p₁ => pure (.nonnegative q(le_of_le_of_eq $p₁ $p₂))
-  | .nonzero p₁ => pure (.nonzero q(ne_of_ne_of_eq' $p₁ $p₂))
-  | .none => pure .none
+--- 原说明 ---
+A variation on `assumption` when the hypothesis is `x = e` where `x` is a numera
+l.
 -/
 def compareHypEq (pα : Q(PartialOrder $α)) (e x : Q($α)) (p₂ : Q($x = $e)) :
     MetaM (Strictness zα e pα) := do
@@ -942,104 +749,21 @@ def compareHypEq (pα : Q(PartialOrder $α)) (e x : Q($α)) (p₂ : Q($x = $e)) 
 initialize registerTraceClass `Tactic.positivity
 initialize registerTraceClass `Tactic.positivity.failure
 
-/--
-Definition of `compareHyp` / `compareHyp` 的定义
+/-- A variation on `assumption` which checks if the hypothesis `ldecl` is `a [</≤/=] e`
+where `a` is a numeral. -/
+/-
+**Mathlib.Meta.Positivity.compareHyp** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Pos
+itivity`。
+形式化陈述：compareHyp (pα : Q(PartialOrder $α)) (e : Q($α)) (ldecl : LocalDecl) : Met
+aM (Strictness zα e pα)
+参数：pα : Q(PartialOrder $α)；e : Q($α)；ldecl : LocalDecl。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compareHyp
-  signature: (pα : Q(PartialOrder $α)) (e : Q($α)) (ldecl : LocalDecl)
-  body: do
-  unless ← isProp ldecl.type do return .none
-  have e' : Q(Prop) := ldecl.type
-  let p : Q($e') := .fvar ldecl.fvarId
-  match e' with
-  | ~q(@LE.le.{u} $β $_le $lo $hi) =>
-    let .defEq (_ : $α =Q $β) ← isDefEqQ α β | return .none
-    let .defEq _ ← isDefEqQ e hi | return .none
-    match lo with
-    | ~q(0) =>
-      assertInstancesCommute
-      return .nonnegative q($p)
-    | _ => compareHypLE zα pα lo e p
-  | ~q(@LT.lt.{u} $β $_lt $lo $hi) =>
-    let .defEq (_ : $α =Q $β) ← isDefEqQ α β | return .none
-    let .defEq _ ← isDefEqQ e hi | return .none
-    match lo with
-    | ~q(0) =>
-      assertInstancesCommute
-      return .positive q($p)
-    | _ => compareHypLT zα pα lo e p
-  | ~q(@Eq.{u+1} $α' $lhs $rhs) =>
-    let .defEq (_ : $α =Q $α') ← isDefEqQ α α' | pure .none
-    match ← isDefEqQ e rhs with
-    | .defEq _ =>
-      match lhs with
-| ~q(0) => pure .nonnegative q(le_of_eq $p)
-      | _ => compareHypEq zα pα e lhs q($p)
-    | .notDefEq =>
-      let .defEq _ ← isDefEqQ e lhs | pure .none
-      match rhs with
-| ~q(0) => pure .nonnegative q(ge_of_eq $p)
-      | _ => compareHypEq zα pα e rhs q(Eq.symm $p)
-  | ~q(@Ne.{u+1} $α' $lhs $rhs) =>
-    let .defEq (_ : $α =Q $α') ← isDefEqQ α α' | pure .none
-    match lhs, rhs with
-    | ~q(0), _ =>
-      let .defEq _ ← isDefEqQ e rhs | pure .none
-pure .nonzero q(Ne.symm $p)
-    | _, ~q(0) =>
-      let .defEq _ ← isDefEqQ e lhs | pure .none
-pure .nonzero q($p)
-    | _, _ => pure .none
-  | _ => pure .none
-
-中文:
-定义 compareHyp
-  签名: (pα : Q(偏序 $α)) (e : Q($α)) (ldecl : LocalDecl)
-  定义体: do
-  unless ← isProp ldecl.type do return .none
-  have e' : Q(Prop) := ldecl.type
-  let p : Q($e') := .fvar ldecl.fvarId
-  match e' with
-  | ~q(@LE.le.{u} $β $_le $lo $hi) =>
-    let .defEq (_ : $α =Q $β) ← isDefEqQ α β | return .none
-    let .defEq _ ← isDefEqQ e hi | return .none
-    match lo with
-    | ~q(0) =>
-      assertInstancesCommute
-      return .nonnegative q($p)
-    | _ => compareHypLE zα pα lo e p
-  | ~q(@LT.lt.{u} $β $_lt $lo $hi) =>
-    let .defEq (_ : $α =Q $β) ← isDefEqQ α β | return .none
-    let .defEq _ ← isDefEqQ e hi | return .none
-    match lo with
-    | ~q(0) =>
-      assertInstancesCommute
-      return .positive q($p)
-    | _ => compareHypLT zα pα lo e p
-  | ~q(@Eq.{u+1} $α' $lhs $rhs) =>
-    let .defEq (_ : $α =Q $α') ← isDefEqQ α α' | pure .none
-    match ← isDefEqQ e rhs with
-    | .defEq _ =>
-      match lhs with
-| ~q(0) => pure .nonnegative q(le_of_eq $p)
-      | _ => compareHypEq zα pα e lhs q($p)
-    | .notDefEq =>
-      let .defEq _ ← isDefEqQ e lhs | pure .none
-      match rhs with
-| ~q(0) => pure .nonnegative q(ge_of_eq $p)
-      | _ => compareHypEq zα pα e rhs q(Eq.symm $p)
-  | ~q(@Ne.{u+1} $α' $lhs $rhs) =>
-    let .defEq (_ : $α =Q $α') ← isDefEqQ α α' | pure .none
-    match lhs, rhs with
-    | ~q(0), _ =>
-      let .defEq _ ← isDefEqQ e rhs | pure .none
-pure .nonzero q(Ne.symm $p)
-    | _, ~q(0) =>
-      let .defEq _ ← isDefEqQ e lhs | pure .none
-pure .nonzero q($p)
-    | _, _ => pure .none
-  | _ => pure .none
+--- 原说明 ---
+A variation on `assumption` which checks if the hypothesis `ldecl` is `a [</≤/=]
+ e`
+where `a` is a numeral.
 -/
 def compareHyp (pα : Q(PartialOrder $α)) (e : Q($α)) (ldecl : LocalDecl) :
     MetaM (Strictness zα e pα) := do
@@ -1068,67 +792,37 @@ def compareHyp (pα : Q(PartialOrder $α)) (e : Q($α)) (ldecl : LocalDecl) :
     match ← isDefEqQ e rhs with
     | .defEq _ =>
       match lhs with
-| ~q(0) => pure .nonnegative q(le_of_eq $p)
+      | ~q(0) => pure <| .nonnegative q(le_of_eq $p)
       | _ => compareHypEq zα pα e lhs q($p)
     | .notDefEq =>
       let .defEq _ ← isDefEqQ e lhs | pure .none
       match rhs with
-| ~q(0) => pure .nonnegative q(ge_of_eq $p)
+      | ~q(0) => pure <| .nonnegative q(ge_of_eq $p)
       | _ => compareHypEq zα pα e rhs q(Eq.symm $p)
   | ~q(@Ne.{u+1} $α' $lhs $rhs) =>
     let .defEq (_ : $α =Q $α') ← isDefEqQ α α' | pure .none
     match lhs, rhs with
     | ~q(0), _ =>
       let .defEq _ ← isDefEqQ e rhs | pure .none
-pure .nonzero q(Ne.symm $p)
+      pure <| .nonzero q(Ne.symm $p)
     | _, ~q(0) =>
       let .defEq _ ← isDefEqQ e lhs | pure .none
-pure .nonzero q($p)
+      pure <| .nonzero q($p)
     | _, _ => pure .none
   | _ => pure .none
 
-/--
-Definition of `compareHypNonzero` / `compareHypNonzero` 的定义
+/-- A variation on `assumption` when the hypothesis is `e ≠ 0` or `0 ≠ e`. -/
+/-
+**Mathlib.Meta.Positivity.compareHypNonzero** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.M
+eta.Positivity`。
+形式化陈述：compareHypNonzero {pα?} (e : Q($α)) (ldecl : LocalDecl) : MetaM (Strictnes
+s zα e pα?)
+参数：e : Q($α)；ldecl : LocalDecl。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compareHypNonzero
-  signature: {pα?} (e : Q($α)) (ldecl : LocalDecl)
-  body: do
-  unless ← isProp ldecl.type do return .none
-  have e' : Q(Prop) := ldecl.type
-  let p : Q($e') := .fvar ldecl.fvarId
-  match e' with
-  | ~q(@Ne.{u+1} $α' $lhs $rhs) =>
-    let .defEq (_ : $α =Q $α') ← isDefEqQ α α' | pure .none
-    match lhs, rhs with
-    | ~q(0), _ =>
-      let .defEq _ ← isDefEqQ e rhs | pure .none
-pure .nonzero q(Ne.symm $p)
-    | _, ~q(0) =>
-      let .defEq _ ← isDefEqQ e lhs | pure .none
-pure .nonzero q($p)
-    | _, _ => pure .none
-  | _ => pure .none
-
-中文:
-定义 compareHypNonzero
-  签名: {pα?} (e : Q($α)) (ldecl : LocalDecl)
-  定义体: do
-  unless ← isProp ldecl.type do return .none
-  have e' : Q(Prop) := ldecl.type
-  let p : Q($e') := .fvar ldecl.fvarId
-  match e' with
-  | ~q(@Ne.{u+1} $α' $lhs $rhs) =>
-    let .defEq (_ : $α =Q $α') ← isDefEqQ α α' | pure .none
-    match lhs, rhs with
-    | ~q(0), _ =>
-      let .defEq _ ← isDefEqQ e rhs | pure .none
-pure .nonzero q(Ne.symm $p)
-    | _, ~q(0) =>
-      let .defEq _ ← isDefEqQ e lhs | pure .none
-pure .nonzero q($p)
-    | _, _ => pure .none
-  | _ => pure .none
+--- 原说明 ---
+A variation on `assumption` when the hypothesis is `e ≠ 0` or `0 ≠ e`.
 -/
 def compareHypNonzero {pα?} (e : Q($α)) (ldecl : LocalDecl) : MetaM (Strictness zα e pα?) := do
   unless ← isProp ldecl.type do return .none
@@ -1140,52 +834,34 @@ def compareHypNonzero {pα?} (e : Q($α)) (ldecl : LocalDecl) : MetaM (Strictnes
     match lhs, rhs with
     | ~q(0), _ =>
       let .defEq _ ← isDefEqQ e rhs | pure .none
-pure .nonzero q(Ne.symm $p)
+      pure <| .nonzero q(Ne.symm $p)
     | _, ~q(0) =>
       let .defEq _ ← isDefEqQ e lhs | pure .none
-pure .nonzero q($p)
+      pure <| .nonzero q($p)
     | _, _ => pure .none
   | _ => pure .none
 
 variable {zα} in
-/--
-Definition of `orElse` / `orElse` 的定义
+/-- The main combinator which combines multiple `positivity` results.
+It assumes `t₁` has already been run for a result, and runs `t₂` and takes the best result.
+It will skip `t₂` if `t₁` is already a proof of `.positive`, and can also combine
+`.nonnegative` and `.nonzero` to produce a `.positive` result. -/
+/-
+**Mathlib.Meta.Positivity.orElse** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Positiv
+ity`。
+形式化陈述：orElse {pα?} {e : Q($α)} (t₁ : Strictness zα e pα?) (t₂ : MetaM (Strictnes
+s zα e pα?)) : MetaM (Strictness zα e pα?)
+参数：$α；t₁ : Strictness zα e pα?；t₂ : MetaM (Strictness zα e pα?)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition orElse
-  signature: {pα?} {e : Q($α)} (t₁ : Strictness zα e pα?) (t₂ : MetaM (Strictness zα e pα?))
-  body: match t₁ with
-  | .none => catchNone t₂
-  | p@(.positive _) => pure p
-  | .nonnegative p₁ => do
-    match ← catchNone t₂ with
-    | p@(.positive _) => pure p
-    | .nonzero p₂ => pure (.positive q(lt_of_le_of_ne' $p₁ $p₂))
-    | _ => pure (.nonnegative p₁)
-  | .nonzero p₁ => do
-    match (dependent := true) ← catchNone t₂ with
-    | p@(.positive _) => pure p
-    | .nonnegative p₂ => pure (.positive q(lt_of_le_of_ne' $p₂ $p₁))
-    | _ => pure (.nonzero p₁)
-
-中文:
-定义 orElse
-  签名: {pα?} {e : Q($α)} (t₁ : Strictness zα e pα?) (t₂ : MetaM (Strictness zα e pα?))
-  定义体: match t₁ with
-  | .none => catchNone t₂
-  | p@(.positive _) => pure p
-  | .nonnegative p₁ => do
-    match ← catchNone t₂ with
-    | p@(.positive _) => pure p
-    | .nonzero p₂ => pure (.positive q(lt_of_le_of_ne' $p₁ $p₂))
-    | _ => pure (.nonnegative p₁)
-  | .nonzero p₁ => do
-    match (dependent := true) ← catchNone t₂ with
-    | p@(.positive _) => pure p
-    | .nonnegative p₂ => pure (.positive q(lt_of_le_of_ne' $p₂ $p₁))
-    | _ => pure (.nonzero p₁)
-
-Depends on / 依赖: catchNone, dependent, lt_of_le_of_ne, nonnegative, nonzero, positive
+--- 原说明 ---
+The main combinator which combines multiple `positivity` results.
+It assumes `t₁` has already been run for a result, and runs `t₂` and takes the b
+est result.
+It will skip `t₂` if `t₁` is already a proof of `.positive`, and can also combin
+e
+`.nonnegative` and `.nonzero` to produce a `.positive` result.
 -/
 def orElse {pα?} {e : Q($α)} (t₁ : Strictness zα e pα?) (t₂ : MetaM (Strictness zα e pα?)) :
     MetaM (Strictness zα e pα?) :=
@@ -1203,107 +879,42 @@ def orElse {pα?} {e : Q($α)} (t₁ : Strictness zα e pα?) (t₂ : MetaM (Str
     | .nonnegative p₂ => pure (.positive q(lt_of_le_of_ne' $p₂ $p₁))
     | _ => pure (.nonzero p₁)
 
-/--
-Definition of `core` / `core` 的定义
+/-- Run each registered `positivity` extension on an expression, returning a `NormNum.Result`. -/
+/-
+**Mathlib.Meta.Positivity.core** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Positivit
+y`。
+形式化陈述：core (pα? : Option Q(PartialOrder $α)) (e : Q($α)) : MetaM (Strictness zα 
+e pα?)
+参数：pα? : Option Q(PartialOrder $α)；e : Q($α)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition core
-  signature: (pα? : Option Q(PartialOrder $α)) (e : Q($α))
-  body: do
-  let mut result := .none
-  trace[Tactic.positivity] "trying to prove positivity of {e}"
-  for ext in ← (positivityExt.getState (← getEnv)).2.getMatch e do
-    try
-result ← orElse result ext.eval zα pα? e
-    catch err =>
-      trace[Tactic.positivity] "{e} failed: {err.toMessageData}"
-  trace[Tactic.positivity] "current result from positivity extensions: {result.toString}"
-  match h : pα?, result with
-  | some pα, res =>
-    trace[Tactic.positivity] "{α} has some {pα}"
-let mut res ← orElse res normNumPositivity zα pα e
-    trace[Tactic.positivity] "current result from normNum: {res.toString}"
-res ← orElse res positivityCanon zα pα e
-    trace[Tactic.positivity] "current result from canonicity: {res.toString}"
-    if let .positive _ := res then
-      trace[Tactic.positivity] "{e} => {res.toString}"
-      return h ▸ res
-    for ldecl in ← getLCtx do
-      if !ldecl.isImplementationDetail then
-res ← orElse res compareHyp zα pα e ldecl
-    trace[Tactic.positivity] "{e} => {res.toString}"
-    throwNone (pure (h ▸ res))
-  | .none, _ =>
-    trace[Tactic.positivity] "{α} has no PartialOrder"
-    if let .nonzero _ := result then
-      trace[Tactic.positivity] "{e} => {result.toString}"
-      return result
-    for ldecl in ← getLCtx do
-      if !ldecl.isImplementationDetail then
-result ← orElse result compareHypNonzero zα e ldecl
-    trace[Tactic.positivity] "{e} => {result.toString}"
-    throwNone (pure result)
-
-中文:
-定义 core
-  签名: (pα? : 选项类型 Q(偏序 $α)) (e : Q($α))
-  定义体: do
-  let mut result := .none
-  trace[Tactic.positivity] "trying to prove positivity of {e}"
-  for ext in ← (positivityExt.getState (← getEnv)).2.getMatch e do
-    try
-result ← orElse result ext.eval zα pα? e
-    catch err =>
-      trace[Tactic.positivity] "{e} failed: {err.toMessageData}"
-  trace[Tactic.positivity] "current result from positivity extensions: {result.toString}"
-  match h : pα?, result with
-  | some pα, res =>
-    trace[Tactic.positivity] "{α} has some {pα}"
-let mut res ← orElse res normNumPositivity zα pα e
-    trace[Tactic.positivity] "current result from normNum: {res.toString}"
-res ← orElse res positivityCanon zα pα e
-    trace[Tactic.positivity] "current result from canonicity: {res.toString}"
-    if let .positive _ := res then
-      trace[Tactic.positivity] "{e} => {res.toString}"
-      return h ▸ res
-    for ldecl in ← getLCtx do
-      if !ldecl.isImplementationDetail then
-res ← orElse res compareHyp zα pα e ldecl
-    trace[Tactic.positivity] "{e} => {res.toString}"
-    throwNone (pure (h ▸ res))
-  | .none, _ =>
-    trace[Tactic.positivity] "{α} has no PartialOrder"
-    if let .nonzero _ := result then
-      trace[Tactic.positivity] "{e} => {result.toString}"
-      return result
-    for ldecl in ← getLCtx do
-      if !ldecl.isImplementationDetail then
-result ← orElse result compareHypNonzero zα e ldecl
-    trace[Tactic.positivity] "{e} => {result.toString}"
-    throwNone (pure result)
+--- 原说明 ---
+Run each registered `positivity` extension on an expression, returning a `NormNu
+m.Result`.
 -/
 def core (pα? : Option Q(PartialOrder $α)) (e : Q($α)) : MetaM (Strictness zα e pα?) := do
   let mut result := .none
   trace[Tactic.positivity] "trying to prove positivity of {e}"
   for ext in ← (positivityExt.getState (← getEnv)).2.getMatch e do
     try
-result ← orElse result ext.eval zα pα? e
+      result ← orElse result <| ext.eval zα pα? e
     catch err =>
       trace[Tactic.positivity] "{e} failed: {err.toMessageData}"
   trace[Tactic.positivity] "current result from positivity extensions: {result.toString}"
   match h : pα?, result with
   | some pα, res =>
     trace[Tactic.positivity] "{α} has some {pα}"
-let mut res ← orElse res normNumPositivity zα pα e
+    let mut res ← orElse res <| normNumPositivity zα pα e
     trace[Tactic.positivity] "current result from normNum: {res.toString}"
-res ← orElse res positivityCanon zα pα e
+    res ← orElse res <| positivityCanon zα pα e
     trace[Tactic.positivity] "current result from canonicity: {res.toString}"
     if let .positive _ := res then
       trace[Tactic.positivity] "{e} => {res.toString}"
       return h ▸ res
     for ldecl in ← getLCtx do
       if !ldecl.isImplementationDetail then
-res ← orElse res compareHyp zα pα e ldecl
+        res ← orElse res <| compareHyp zα pα e ldecl
     trace[Tactic.positivity] "{e} => {res.toString}"
     throwNone (pure (h ▸ res))
   | .none, _ =>
@@ -1313,31 +924,13 @@ res ← orElse res compareHyp zα pα e ldecl
       return result
     for ldecl in ← getLCtx do
       if !ldecl.isImplementationDetail then
-result ← orElse result compareHypNonzero zα e ldecl
+        result ← orElse result <| compareHypNonzero zα e ldecl
     trace[Tactic.positivity] "{e} => {result.toString}"
     throwNone (pure result)
-
-
-/--
-Inductive type `OrderRel` / 归纳类型 `OrderRel`
-
-English:
-inductive OrderRel
-  parameters: : Type
-  constructors (4):
-    - le: OrderRel -- `0 ≤ a`
-    - lt: OrderRel -- `0 < a`
-    - ne: OrderRel -- `a ≠ 0`
-    - ne': OrderRel -- `0 ≠ a`
-
-中文:
-归纳类型 OrderRel
-  参数: : 类型
-  构造子 (4 个):
-    - le: OrderRel -- `0 ≤ a`
-    - lt: OrderRel -- `0 < a`
-    - ne: OrderRel -- `a ≠ 0`
-    - ne': OrderRel -- `0 ≠ a`
+/-
+**Mathlib.Meta.Positivity.OrderRel** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Meta.Pos
+itivity`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private inductive OrderRel : Type
 | le : OrderRel -- `0 ≤ a`
@@ -1348,167 +941,71 @@ private inductive OrderRel : Type
 end Meta.Positivity
 namespace Meta.Positivity
 
-/--
-Definition of `bestResult` / `bestResult` 的定义
+/-- Given an expression `e`, use the core method of the `positivity` tactic to prove it positive,
+or, failing that, nonnegative; return a Boolean (signalling whether the strict or non-strict
+inequality was established) together with the proof as an expression. -/
+/-
+**Mathlib.Meta.Positivity.bestResult** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Pos
+itivity`。
+形式化陈述：Expr → MetaM (Bool × Expr)
+参数：Bool × Expr。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bestResult
-  signature: (e : Expr)
-  body: do
-  let ⟨u, α, _⟩ ← inferTypeQ' e
-  let zα ← synthInstanceQ q(Zero $α)
-let pα? ← try? synthInstanceQ q(PartialOrder $α)
-  assumeInstancesCommute
-  match pα?, ← try? (Meta.Positivity.core zα pα? e) with
-  | _, some (.positive pf) => pure (true, pf)
-  | _, some (.nonnegative pf) => pure (false, pf)
-  | _, _ => throwError "could not establish the nonnegativity of {e}"
-
-中文:
-定义 bestResult
-  签名: (e : Expr)
-  定义体: do
-  let ⟨u, α, _⟩ ← inferTypeQ' e
-  let zα ← synthInstanceQ q(Zero $α)
-let pα? ← try? synthInstanceQ q(PartialOrder $α)
-  assumeInstancesCommute
-  match pα?, ← try? (Meta.Positivity.core zα pα? e) with
-  | _, some (.positive pf) => pure (true, pf)
-  | _, some (.nonnegative pf) => pure (false, pf)
-  | _, _ => throwError "could not establish the nonnegativity of {e}"
+--- 原说明 ---
+Given an expression `e`, use the core method of the `positivity` tactic to prove
+ it positive,
+or, failing that, nonnegative; return a Boolean (signalling whether the strict o
+r non-strict
+inequality was established) together with the proof as an expression.
 -/
 def bestResult (e : Expr) : MetaM (Bool × Expr) := do
   let ⟨u, α, _⟩ ← inferTypeQ' e
   let zα ← synthInstanceQ q(Zero $α)
-let pα? ← try? synthInstanceQ q(PartialOrder $α)
+  let pα? ← try? <| synthInstanceQ q(PartialOrder $α)
   assumeInstancesCommute
   match pα?, ← try? (Meta.Positivity.core zα pα? e) with
   | _, some (.positive pf) => pure (true, pf)
   | _, some (.nonnegative pf) => pure (false, pf)
   | _, _ => throwError "could not establish the nonnegativity of {e}"
 
-/--
-Definition of `proveNonneg` / `proveNonneg` 的定义
+/-- Given an expression `e`, use the core method of the `positivity` tactic to prove it nonnegative.
+-/
+/-
+**Mathlib.Meta.Positivity.proveNonneg** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Po
+sitivity`。
+形式化陈述：Expr → MetaM Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition proveNonneg
-  signature: (e : Expr)
-  body: do
-  let (strict, pf) ← bestResult e
-  if strict then mkAppM ``le_of_lt #[pf] else pure pf
-
-中文:
-定义 proveNonneg
-  签名: (e : Expr)
-  定义体: do
-  let (strict, pf) ← bestResult e
-  if strict then mkAppM ``le_of_lt #[pf] else pure pf
+--- 原说明 ---
+Given an expression `e`, use the core method of the `positivity` tactic to prove
+ it nonnegative.
 -/
 def proveNonneg (e : Expr) : MetaM Expr := do
   let (strict, pf) ← bestResult e
   if strict then mkAppM ``le_of_lt #[pf] else pure pf
 
-/--
-Definition of `solve` / `solve` 的定义
+/-- An auxiliary entry point to the `positivity` tactic. Given a proposition `t` of the form
+`0 [≤/</≠] e`, attempts to recurse on the structure of `t` to prove it. It returns a proof
+or fails. -/
+/-
+**Mathlib.Meta.Positivity.solve** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Positivi
+ty`。
+形式化陈述：Q(Prop) → MetaM Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition solve
-  signature: (t : Q(Prop))
-  body: do
-  let rest {u : Level} (α : Q(Type u)) z e (relDesired : OrderRel) : MetaM Expr := do
-    let zα ← synthInstanceQ q(Zero $α)
-    let .true ← isDefEq z q(0 : $α) | throwError "not a positivity goal"
-let pα? ← try? synthInstanceQ q(PartialOrder $α)
-let r ← catchNone Meta.Positivity.core zα pα? e
-    let throw (a b : String) : MetaM Expr := throwError
-      "failed to prove {a}, but it would be possible to prove {b} if desired"
-    match (dependent := true) pα? with
-    | some _ =>
-      match relDesired, r with
-      | .lt, .positive p
-      | .le, .nonnegative p
-      | .ne, .nonzero p => pure p
-      | .le, .positive p => pure q(le_of_lt $p)
-      | .ne, .positive p => pure q(ne_of_gt $p)
-      | .ne', .positive p => pure q(ne_of_lt $p)
-      | .ne', .nonzero p => pure q(Ne.symm $p)
-      | .lt, .nonnegative _ => throw "strict positivity" "nonnegativity"
-      | .lt, .nonzero _ => throw "strict positivity" "nonzeroness"
-      | .le, .nonzero _ => throw "nonnegativity" "nonzeroness"
-      | .ne, .nonnegative _
-      | .ne', .nonnegative _ => throw "nonzeroness" "nonnegativity"
-      | _, .none => throwError "failed to prove positivity/nonnegativity/nonzeroness"
-    | none =>
-      match relDesired, r with
-      | .ne, .nonzero p => pure p
-      | .ne', .nonzero p => pure q(Ne.symm $p)
-      | .lt, .nonzero _ => throw "strict positivity" "nonzeroness"
-      | .le, .nonzero _ => throw "nonnegativity" "nonzeroness"
-      | _, _ => throwError "failed to prove nonzeroness"
-  match t with
-  | ~q(@LE.le $α $_a $z $e) => rest α z e .le
-  | ~q(@LT.lt $α $_a $z $e) => rest α z e .lt
-  | ~q($a != ($b : ($α : Type _))) =>
-    let _zα ← synthInstanceQ q(Zero $α)
-    if ← isDefEq b q((0 : $α)) then
-      rest α b a .ne
-    else
-      let .true ← isDefEq a q((0 : $α)) | throwError "not a positivity goal"
-      rest α a b .ne'
-  | _ => throwError "not a positivity goal"
-
-中文:
-定义 solve
-  签名: (t : Q(命题))
-  定义体: do
-  let rest {u : Level} (α : Q(Type u)) z e (relDesired : OrderRel) : MetaM Expr := do
-    let zα ← synthInstanceQ q(Zero $α)
-    let .true ← isDefEq z q(0 : $α) | throwError "not a positivity goal"
-let pα? ← try? synthInstanceQ q(PartialOrder $α)
-let r ← catchNone Meta.Positivity.core zα pα? e
-    let throw (a b : String) : MetaM Expr := throwError
-      "failed to prove {a}, but it would be possible to prove {b} if desired"
-    match (dependent := true) pα? with
-    | some _ =>
-      match relDesired, r with
-      | .lt, .positive p
-      | .le, .nonnegative p
-      | .ne, .nonzero p => pure p
-      | .le, .positive p => pure q(le_of_lt $p)
-      | .ne, .positive p => pure q(ne_of_gt $p)
-      | .ne', .positive p => pure q(ne_of_lt $p)
-      | .ne', .nonzero p => pure q(Ne.symm $p)
-      | .lt, .nonnegative _ => throw "strict positivity" "nonnegativity"
-      | .lt, .nonzero _ => throw "strict positivity" "nonzeroness"
-      | .le, .nonzero _ => throw "nonnegativity" "nonzeroness"
-      | .ne, .nonnegative _
-      | .ne', .nonnegative _ => throw "nonzeroness" "nonnegativity"
-      | _, .none => throwError "failed to prove positivity/nonnegativity/nonzeroness"
-    | none =>
-      match relDesired, r with
-      | .ne, .nonzero p => pure p
-      | .ne', .nonzero p => pure q(Ne.symm $p)
-      | .lt, .nonzero _ => throw "strict positivity" "nonzeroness"
-      | .le, .nonzero _ => throw "nonnegativity" "nonzeroness"
-      | _, _ => throwError "failed to prove nonzeroness"
-  match t with
-  | ~q(@LE.le $α $_a $z $e) => rest α z e .le
-  | ~q(@LT.lt $α $_a $z $e) => rest α z e .lt
-  | ~q($a != ($b : ($α : Type _))) =>
-    let _zα ← synthInstanceQ q(Zero $α)
-    if ← isDefEq b q((0 : $α)) then
-      rest α b a .ne
-    else
-      let .true ← isDefEq a q((0 : $α)) | throwError "not a positivity goal"
-      rest α a b .ne'
-  | _ => throwError "not a positivity goal"
+--- 原说明 ---
+An auxiliary entry point to the `positivity` tactic. Given a proposition `t` of 
+the form
+`0 [≤/</≠] e`, attempts to recurse on the structure of `t` to prove it. It retur
+ns a proof
+or fails.
 -/
 def solve (t : Q(Prop)) : MetaM Expr := do
   let rest {u : Level} (α : Q(Type u)) z e (relDesired : OrderRel) : MetaM Expr := do
     let zα ← synthInstanceQ q(Zero $α)
     let .true ← isDefEq z q(0 : $α) | throwError "not a positivity goal"
-let pα? ← try? synthInstanceQ q(PartialOrder $α)
-let r ← catchNone Meta.Positivity.core zα pα? e
+    let pα? ← try? <| synthInstanceQ q(PartialOrder $α)
+    let r ← catchNone <| Meta.Positivity.core zα pα? e
     let throw (a b : String) : MetaM Expr := throwError
       "failed to prove {a}, but it would be possible to prove {b} if desired"
     match (dependent := true) pα? with
@@ -1537,7 +1034,7 @@ let r ← catchNone Meta.Positivity.core zα pα? e
   match t with
   | ~q(@LE.le $α $_a $z $e) => rest α z e .le
   | ~q(@LT.lt $α $_a $z $e) => rest α z e .lt
-  | ~q($a != ($b : ($α : Type _))) =>
+  | ~q($a ≠ ($b : ($α : Type _))) =>
     let _zα ← synthInstanceQ q(Zero $α)
     if ← isDefEq b q((0 : $α)) then
       rest α b a .ne
@@ -1546,24 +1043,20 @@ let r ← catchNone Meta.Positivity.core zα pα? e
       rest α a b .ne'
   | _ => throwError "not a positivity goal"
 
-/--
-Definition of `positivity` / `positivity` 的定义
+/-- The main entry point to the `positivity` tactic. Given a goal `goal` of the form `0 [≤/</≠] e`,
+attempts to recurse on the structure of `e` to prove the goal.
+It will either close `goal` or fail. -/
+/-
+**Mathlib.Meta.Positivity.positivity** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Meta.Pos
+itivity`。
+形式化陈述：MVarId → MetaM Unit
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition positivity
-  signature: (goal : MVarId)
-  body: do
-  let t : Q(Prop) ← withReducible goal.getType'
-  let p ← solve t
-  goal.assign p
-
-中文:
-定义 positivity
-  签名: (goal : MVarId)
-  定义体: do
-  let t : Q(Prop) ← withReducible goal.getType'
-  let p ← solve t
-  goal.assign p
+--- 原说明 ---
+The main entry point to the `positivity` tactic. Given a goal `goal` of the form
+ `0 [≤/</≠] e`,
+attempts to recurse on the structure of `e` to prove the goal.
+It will either close `goal` or fail.
 -/
 def positivity (goal : MVarId) : MetaM Unit := do
   let t : Q(Prop) ← withReducible goal.getType'
@@ -1631,3 +1124,4 @@ We register `positivity` with the `hint` tactic.
 
 register_hint 1000 positivity
 register_try?_tactic (priority := 1000) positivity
+

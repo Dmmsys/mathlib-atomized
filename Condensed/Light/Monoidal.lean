@@ -37,151 +37,62 @@ namespace LightCondensed
 
 variable (R : Type u) [CommRing R]
 
-.IsMonoidal := instance : (coherentTopology LightProfinite.{u}).W (A := ModuleCat.{u} R)
+/-
+**LightCondensed.** 是 Mathlib 中的一个实例，位于命名空间 `LightCondensed`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance : (coherentTopology LightProfinite.{u}).W (A := ModuleCat.{u} R) |>.IsMonoidal :=
   GrothendieckTopology.W.transport_isMonoidal _ _
     ((equivSmallModel.{u} LightProfinite.{u}).inverse.inducedTopology
       (coherentTopology LightProfinite.{u}))
     (equivSmallModel.{u} LightProfinite.{u}).inverse
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MonoidalCategory (LightCondMod.{u} R)
-  body: monoidalCategory _ _
-
-中文:
-实例 :
-  签名: 幺半群范畴 (LightCondMod.{u} R)
-  定义体: monoidalCategory _ _
-
-Depends on / 依赖: monoidalCategory
+/-
+**LightCondensed.** 是 Mathlib 中的一个实例，位于命名空间 `LightCondensed`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MonoidalCategory (LightCondMod.{u} R) :=
   monoidalCategory _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MonoidalCategory (Sheaf (coherentTopology LightProfinite.{u}) (ModuleCat.{u} R))
-  body: inferInstanceAs (MonoidalCategory (LightCondMod _))
-
-中文:
-实例 :
-  签名: 幺半群范畴 (层 (coherentTopology LightProfinite.{u}) (模范畴.{u} R))
-  定义体: inferInstanceAs (MonoidalCategory (LightCondMod _))
-
-Depends on / 依赖: LightCondMod, MonoidalCategory
+/-
+**LightCondensed.** 是 Mathlib 中的一个实例，位于命名空间 `LightCondensed`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MonoidalCategory (Sheaf (coherentTopology LightProfinite.{u}) (ModuleCat.{u} R)) :=
   inferInstanceAs (MonoidalCategory (LightCondMod _))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SymmetricCategory (LightCondMod.{u} R)
-  body: symmetricCategory _ _
-
-中文:
-实例 :
-  签名: 对称范畴 (LightCondMod.{u} R)
-  定义体: symmetricCategory _ _
-
-Depends on / 依赖: symmetricCategory
+/-
+**LightCondensed.** 是 Mathlib 中的一个实例，位于命名空间 `LightCondensed`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SymmetricCategory (LightCondMod.{u} R) :=
   symmetricCategory _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MonoidalClosed (LightProfinite.{u}ᵒᵖ ⥤ ModuleCat.{u} R)
-  body: .ofEquiv _ (equivSmallModel LightProfinite).op.congrLeft.toAdjunction
-
-中文:
-实例 :
-  签名: 幺半群闭 (LightProfinite.{u}ᵒᵖ ⥤ 模范畴.{u} R)
-  定义体: .ofEquiv _ (equivSmallModel LightProfinite).op.congrLeft.toAdjunction
-
-Depends on / 依赖: LightProfinite, congrLeft, equivSmallModel, ofEquiv, op.congrLeft.toAdjunction, toAdjunction
+/-
+**LightCondensed.** 是 Mathlib 中的一个实例，位于命名空间 `LightCondensed`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MonoidalClosed (LightProfinite.{u}ᵒᵖ ⥤ ModuleCat.{u} R) :=
   .ofEquiv _ (equivSmallModel LightProfinite).op.congrLeft.toAdjunction
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MonoidalClosed (Sheaf (coherentTopology LightProfinite.{u}) (ModuleCat.{u} R))
-  body: Reflective.monoidalClosed (sheafificationAdjunction _ _)
-
-中文:
-实例 :
-  签名: 幺半群闭 (层 (coherentTopology LightProfinite.{u}) (模范畴.{u} R))
-  定义体: Reflective.monoidalClosed (sheafificationAdjunction _ _)
-
-Depends on / 依赖: Reflective, Reflective.monoidalClosed, monoidalClosed, sheafificationAdjunction
+/-
+**LightCondensed.** 是 Mathlib 中的一个实例，位于命名空间 `LightCondensed`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MonoidalClosed (Sheaf (coherentTopology LightProfinite.{u}) (ModuleCat.{u} R)) :=
   Reflective.monoidalClosed (sheafificationAdjunction _ _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MonoidalClosed (LightCondMod.{u} R)
-  body: inferInstanceAs (MonoidalClosed (Sheaf _ _))
-
-中文:
-实例 :
-  签名: 幺半群闭 (LightCondMod.{u} R)
-  定义体: inferInstanceAs (MonoidalClosed (Sheaf _ _))
-
-Depends on / 依赖: MonoidalClosed
+/-
+**LightCondensed.** 是 Mathlib 中的一个实例，位于命名空间 `LightCondensed`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MonoidalClosed (LightCondMod.{u} R) :=
   inferInstanceAs (MonoidalClosed (Sheaf _ _))
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (presheafToSheaf (coherentTopology LightProfinite.{u}) (ModuleCat.{u} R)).Monoidal
-  body: inferInstance
-
-中文:
-实例 :
-  签名: (presheafToSheaf (coherentTopology LightProfinite.{u}) (模范畴.{u} R)).幺半群
-  定义体: inferInstance
+/-
+**LightCondensed.** 是 Mathlib 中的一个实例，位于命名空间 `LightCondensed`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (presheafToSheaf (coherentTopology LightProfinite.{u}) (ModuleCat.{u} R)).Monoidal :=
   inferInstance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (free R).Monoidal
-  body: inferInstanceAs (composeAndSheafify _ _).Monoidal
-
-中文:
-实例 :
-  签名: (free R).幺半群
-  定义体: inferInstanceAs (composeAndSheafify _ _).Monoidal
-
-Depends on / 依赖: Monoidal, composeAndSheafify
+/-
+**LightCondensed.** 是 Mathlib 中的一个实例，位于命名空间 `LightCondensed`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (free R).Monoidal := inferInstanceAs (composeAndSheafify _ _).Monoidal
 
 end LightCondensed
+

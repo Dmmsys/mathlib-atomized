@@ -23,1023 +23,382 @@ variable {R : Type*}
 
 namespace OrderDual
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Distrib
-  signature: R] : Distrib Rᵒᵈ
-  body: inferInstanceAs Distrib R
-
-中文:
-实例 [Distrib
-  签名: R] : Distrib Rᵒᵈ
-  定义体: inferInstanceAs Distrib R
-
-Depends on / 依赖: Distrib
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Distrib R] : Distrib Rᵒᵈ := inferInstanceAs Distrib R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mul
-  signature: R] [Add R] [LeftDistribClass R] : LeftDistribClass Rᵒᵈ
-  body: inferInstanceAs LeftDistribClass R
-
-中文:
-实例 [乘法
-  签名: R] [加法 R] [LeftDistrib类 R] : LeftDistrib类 Rᵒᵈ
-  定义体: inferInstanceAs LeftDistribClass R
-
-Depends on / 依赖: LeftDistribClass
+instance [Distrib R] : Distrib Rᵒᵈ := inferInstanceAs <| Distrib R
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Mul R] [Add R] [LeftDistribClass R] : LeftDistribClass Rᵒᵈ :=
-inferInstanceAs LeftDistribClass R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mul
-  signature: R] [Add R] [RightDistribClass R] : RightDistribClass Rᵒᵈ
-  body: inferInstanceAs RightDistribClass R
-
-中文:
-实例 [乘法
-  签名: R] [加法 R] [RightDistrib类 R] : RightDistrib类 Rᵒᵈ
-  定义体: inferInstanceAs RightDistribClass R
+  inferInstanceAs <| LeftDistribClass R
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Mul R] [Add R] [RightDistribClass R] : RightDistribClass Rᵒᵈ :=
-inferInstanceAs RightDistribClass R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalNonAssocSemiring
-  signature: R] : NonUnitalNonAssocSemiring Rᵒᵈ
-  body: inferInstanceAs NonUnitalNonAssocSemiring R
-
-中文:
-实例 [非幺非结合半环
-  签名: R] : 非幺非结合半环 Rᵒᵈ
-  定义体: inferInstanceAs NonUnitalNonAssocSemiring R
+  inferInstanceAs <| RightDistribClass R
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalNonAssocSemiring R] : NonUnitalNonAssocSemiring Rᵒᵈ :=
-inferInstanceAs NonUnitalNonAssocSemiring R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NatCast
-  signature: R] : NatCast Rᵒᵈ
-  body: inferInstanceAs NatCast R
-
-中文:
-实例 [自然数嵌入
-  签名: R] : 自然数嵌入 Rᵒᵈ
-  定义体: inferInstanceAs NatCast R
+  inferInstanceAs <| NonUnitalNonAssocSemiring R
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [NatCast R] : NatCast Rᵒᵈ := inferInstanceAs NatCast R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IntCast
-  signature: R] : IntCast Rᵒᵈ
-  body: inferInstanceAs IntCast R
-
-中文:
-实例 [整数嵌入
-  签名: R] : 整数嵌入 Rᵒᵈ
-  定义体: inferInstanceAs IntCast R
+instance [NatCast R] : NatCast Rᵒᵈ := inferInstanceAs <| NatCast R
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [IntCast R] : IntCast Rᵒᵈ := inferInstanceAs IntCast R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddMonoidWithOne
-  signature: R] : AddMonoidWithOne Rᵒᵈ
-  body: inferInstanceAs AddMonoidWithOne R
-
-中文:
-实例 [加法带幺幺半群
-  签名: R] : 加法带幺幺半群 Rᵒᵈ
-  定义体: inferInstanceAs AddMonoidWithOne R
+instance [IntCast R] : IntCast Rᵒᵈ := inferInstanceAs <| IntCast R
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [AddMonoidWithOne R] : AddMonoidWithOne Rᵒᵈ := inferInstanceAs AddMonoidWithOne R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCommMonoidWithOne
-  signature: R] : AddCommMonoidWithOne Rᵒᵈ
-  body: inferInstanceAs AddCommMonoidWithOne R
-
-中文:
-实例 [加法交换带幺幺半群
-  签名: R] : 加法交换带幺幺半群 Rᵒᵈ
-  定义体: inferInstanceAs AddCommMonoidWithOne R
+instance [AddMonoidWithOne R] : AddMonoidWithOne Rᵒᵈ := inferInstanceAs <| AddMonoidWithOne R
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddCommMonoidWithOne R] : AddCommMonoidWithOne Rᵒᵈ :=
-inferInstanceAs AddCommMonoidWithOne R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddGroupWithOne
-  signature: R] : AddGroupWithOne Rᵒᵈ
-  body: inferInstanceAs AddGroupWithOne R
-
-中文:
-实例 [加法带幺群
-  签名: R] : 加法带幺群 Rᵒᵈ
-  定义体: inferInstanceAs AddGroupWithOne R
+  inferInstanceAs <| AddCommMonoidWithOne R
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [AddGroupWithOne R] : AddGroupWithOne Rᵒᵈ := inferInstanceAs AddGroupWithOne R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCommGroupWithOne
-  signature: R] : AddCommGroupWithOne Rᵒᵈ
-  body: inferInstanceAs AddCommGroupWithOne R
-
-中文:
-实例 [加法交换带幺群
-  签名: R] : 加法交换带幺群 Rᵒᵈ
-  定义体: inferInstanceAs AddCommGroupWithOne R
-
-Depends on / 依赖: AddCommGroupWithOne
+instance [AddGroupWithOne R] : AddGroupWithOne Rᵒᵈ := inferInstanceAs <| AddGroupWithOne R
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddCommGroupWithOne R] : AddCommGroupWithOne Rᵒᵈ :=
-inferInstanceAs AddCommGroupWithOne R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalSemiring
-  signature: R] : NonUnitalSemiring Rᵒᵈ
-  body: inferInstanceAs NonUnitalSemiring R
-
-中文:
-实例 [非幺半环
-  签名: R] : 非幺半环 Rᵒᵈ
-  定义体: inferInstanceAs NonUnitalSemiring R
+  inferInstanceAs <| AddCommGroupWithOne R
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [NonUnitalSemiring R] : NonUnitalSemiring Rᵒᵈ := inferInstanceAs NonUnitalSemiring R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonAssocSemiring
-  signature: R] : NonAssocSemiring Rᵒᵈ
-  body: inferInstanceAs NonAssocSemiring R
-
-中文:
-实例 [非结合半环
-  签名: R] : 非结合半环 Rᵒᵈ
-  定义体: inferInstanceAs NonAssocSemiring R
+instance [NonUnitalSemiring R] : NonUnitalSemiring Rᵒᵈ := inferInstanceAs <| NonUnitalSemiring R
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [NonAssocSemiring R] : NonAssocSemiring Rᵒᵈ := inferInstanceAs NonAssocSemiring R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Semiring
-  signature: R] : Semiring Rᵒᵈ
-  body: inferInstanceAs Semiring R
-
-中文:
-实例 [半环
-  签名: R] : 半环 Rᵒᵈ
-  定义体: inferInstanceAs Semiring R
+instance [NonAssocSemiring R] : NonAssocSemiring Rᵒᵈ := inferInstanceAs <| NonAssocSemiring R
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Semiring R] : Semiring Rᵒᵈ := inferInstanceAs Semiring R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalCommSemiring
-  signature: R] : NonUnitalCommSemiring Rᵒᵈ
-  body: inferInstanceAs NonUnitalCommSemiring R
-
-中文:
-实例 [非幺交换半环
-  签名: R] : 非幺交换半环 Rᵒᵈ
-  定义体: inferInstanceAs NonUnitalCommSemiring R
-
-Depends on / 依赖: NonUnitalCommSemiring
+instance [Semiring R] : Semiring Rᵒᵈ := inferInstanceAs <| Semiring R
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalCommSemiring R] : NonUnitalCommSemiring Rᵒᵈ :=
-inferInstanceAs NonUnitalCommSemiring R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CommSemiring
-  signature: R] : CommSemiring Rᵒᵈ
-  body: inferInstanceAs CommSemiring R
-
-中文:
-实例 [交换半环
-  签名: R] : 交换半环 Rᵒᵈ
-  定义体: inferInstanceAs CommSemiring R
-
-Depends on / 依赖: CommSemiring
+  inferInstanceAs <| NonUnitalCommSemiring R
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [CommSemiring R] : CommSemiring Rᵒᵈ := inferInstanceAs CommSemiring R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mul
-  signature: R] [HasDistribNeg R] : HasDistribNeg Rᵒᵈ
-  body: inferInstanceAs HasDistribNeg R
-
-中文:
-实例 [乘法
-  签名: R] [有DistribNeg R] : 有DistribNeg Rᵒᵈ
-  定义体: inferInstanceAs HasDistribNeg R
-
-Depends on / 依赖: HasDistribNeg
+instance [CommSemiring R] : CommSemiring Rᵒᵈ := inferInstanceAs <| CommSemiring R
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Mul R] [HasDistribNeg R] : HasDistribNeg Rᵒᵈ := inferInstanceAs HasDistribNeg R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalNonAssocRing
-  signature: R] : NonUnitalNonAssocRing Rᵒᵈ
-  body: inferInstanceAs NonUnitalNonAssocRing R
-
-中文:
-实例 [非幺非结合环
-  签名: R] : 非幺非结合环 Rᵒᵈ
-  定义体: inferInstanceAs NonUnitalNonAssocRing R
-
-Depends on / 依赖: NonUnitalNonAssocRing
+instance [Mul R] [HasDistribNeg R] : HasDistribNeg Rᵒᵈ := inferInstanceAs <| HasDistribNeg R
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalNonAssocRing R] : NonUnitalNonAssocRing Rᵒᵈ :=
-inferInstanceAs NonUnitalNonAssocRing R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalRing
-  signature: R] : NonUnitalRing Rᵒᵈ
-  body: inferInstanceAs NonUnitalRing R
-
-中文:
-实例 [非幺环
-  签名: R] : 非幺环 Rᵒᵈ
-  定义体: inferInstanceAs NonUnitalRing R
-
-Depends on / 依赖: NonUnitalRing
+  inferInstanceAs <| NonUnitalNonAssocRing R
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [NonUnitalRing R] : NonUnitalRing Rᵒᵈ := inferInstanceAs NonUnitalRing R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonAssocRing
-  signature: R] : NonAssocRing Rᵒᵈ
-  body: inferInstanceAs NonAssocRing R
-
-中文:
-实例 [非结合环
-  签名: R] : 非结合环 Rᵒᵈ
-  定义体: inferInstanceAs NonAssocRing R
-
-Depends on / 依赖: NonAssocRing
+instance [NonUnitalRing R] : NonUnitalRing Rᵒᵈ := inferInstanceAs <| NonUnitalRing R
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [NonAssocRing R] : NonAssocRing Rᵒᵈ := inferInstanceAs NonAssocRing R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Ring
-  signature: R] : Ring Rᵒᵈ
-  body: inferInstanceAs Ring R
-
-中文:
-实例 [环
-  签名: R] : 环 Rᵒᵈ
-  定义体: inferInstanceAs Ring R
+instance [NonAssocRing R] : NonAssocRing Rᵒᵈ := inferInstanceAs <| NonAssocRing R
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Ring R] : Ring Rᵒᵈ := inferInstanceAs Ring R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalCommRing
-  signature: R] : NonUnitalCommRing Rᵒᵈ
-  body: inferInstanceAs NonUnitalCommRing R
-
-中文:
-实例 [非幺交换环
-  签名: R] : 非幺交换环 Rᵒᵈ
-  定义体: inferInstanceAs NonUnitalCommRing R
-
-Depends on / 依赖: NonUnitalCommRing
+instance [Ring R] : Ring Rᵒᵈ := inferInstanceAs <| Ring R
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [NonUnitalCommRing R] : NonUnitalCommRing Rᵒᵈ := inferInstanceAs NonUnitalCommRing R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CommRing
-  signature: R] : CommRing Rᵒᵈ
-  body: inferInstanceAs CommRing R
-
-中文:
-实例 [交换环
-  签名: R] : 交换环 Rᵒᵈ
-  定义体: inferInstanceAs CommRing R
-
-Depends on / 依赖: CommRing
+instance [NonUnitalCommRing R] : NonUnitalCommRing Rᵒᵈ := inferInstanceAs <| NonUnitalCommRing R
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [CommRing R] : CommRing Rᵒᵈ := inferInstanceAs CommRing R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Ring
-  signature: R] [IsDomain R] : IsDomain Rᵒᵈ
-  body: inferInstanceAs IsDomain R
-
-中文:
-实例 [环
-  签名: R] [是整环 R] : 是整环 Rᵒᵈ
-  定义体: inferInstanceAs IsDomain R
+instance [CommRing R] : CommRing Rᵒᵈ := inferInstanceAs <| CommRing R
+/-
+**OrderDual.** 是 Mathlib 中的一个实例，位于命名空间 `OrderDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Ring R] [IsDomain R] : IsDomain Rᵒᵈ := inferInstanceAs IsDomain R
+instance [Ring R] [IsDomain R] : IsDomain Rᵒᵈ := inferInstanceAs <| IsDomain R
 
 end OrderDual
 
 open OrderDual
 
 @[simp]
-/--
-theorem `toDual_natCast` / 定理 `toDual_natCast`
-
-English:
-theorem toDual_natCast
-  given: [NatCast R] (n : Nat)
-  statement: toDual (n : R) = n
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toDual_natCast
-  条件: [自然数嵌入 R] (n : 自然数)
-  结论: toDual (n : R) = n
-  证明: rfl
-
-@[simp]
+/-
+**toDual_natCast** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toDual_natCast [NatCast R] (n : Nat) : toDual (n : R) = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toDual_natCast [NatCast R] (n : Nat) : toDual (n : R) = n :=
+theorem toDual_natCast [NatCast R] (n : ℕ) : toDual (n : R) = n :=
   rfl
 
 @[simp]
-/--
-theorem `toDual_ofNat` / 定理 `toDual_ofNat`
-
-English:
-theorem toDual_ofNat
-  given: [NatCast R] (n : Nat) [n.AtLeastTwo]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toDual_of自然数
-  条件: [自然数嵌入 R] (n : 自然数) [n.AtLeastTwo]
-  证明: rfl
-
-@[simp]
+/-
+**toDual_ofNat** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toDual_ofNat [NatCast R] (n : Nat) [n.AtLeastTwo] : (toDual (ofNat(n) : R)
+) = ofNat(n)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toDual_ofNat [NatCast R] (n : Nat) [n.AtLeastTwo] :
+theorem toDual_ofNat [NatCast R] (n : ℕ) [n.AtLeastTwo] :
     (toDual (ofNat(n) : R)) = ofNat(n) :=
   rfl
 
 @[simp]
-/--
-theorem `ofDual_natCast` / 定理 `ofDual_natCast`
-
-English:
-theorem ofDual_natCast
-  given: [NatCast R] (n : Nat)
-  statement: (ofDual n : R) = n
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofDual_natCast
-  条件: [自然数嵌入 R] (n : 自然数)
-  结论: (ofDual n : R) = n
-  证明: rfl
-
-@[simp]
+/-
+**ofDual_natCast** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofDual_natCast [NatCast R] (n : Nat) : (ofDual n : R) = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofDual_natCast [NatCast R] (n : Nat) : (ofDual n : R) = n :=
+theorem ofDual_natCast [NatCast R] (n : ℕ) : (ofDual n : R) = n :=
   rfl
 
 @[simp]
-/--
-theorem `ofDual_ofNat` / 定理 `ofDual_ofNat`
-
-English:
-theorem ofDual_ofNat
-  given: [NatCast R] (n : Nat) [n.AtLeastTwo]
-  proof: rfl
-
-中文:
-定理 ofDual_of自然数
-  条件: [自然数嵌入 R] (n : 自然数) [n.AtLeastTwo]
-  证明: rfl
+/-
+**ofDual_ofNat** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofDual_ofNat [NatCast R] (n : Nat) [n.AtLeastTwo] : (ofDual (ofNat(n) : Rᵒ
+ᵈ)) = ofNat(n)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofDual_ofNat [NatCast R] (n : Nat) [n.AtLeastTwo] :
+theorem ofDual_ofNat [NatCast R] (n : ℕ) [n.AtLeastTwo] :
     (ofDual (ofNat(n) : Rᵒᵈ)) = ofNat(n) :=
   rfl
-
-/--
-lemma `toDual_intCast` / 引理 `toDual_intCast`
-
-English:
-lemma toDual_intCast
-  given: [IntCast R] (n : Int)
-  statement: toDual (n : R) = n
-  proof: rfl
-
-中文:
-引理 toDual_intCast
-  条件: [整数嵌入 R] (n : 整数)
-  结论: toDual (n : R) = n
-  证明: rfl
+/-
+**toDual_intCast** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {R : Type u_1} [inst : IntCast R] (n : ℤ), OrderDual.toDual ↑n = ↑n
+参数：n : ℤ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma toDual_intCast [IntCast R] (n : Int) : toDual (n : R) = n := rfl
-
-/--
-lemma `ofDual_intCast` / 引理 `ofDual_intCast`
-
-English:
-lemma ofDual_intCast
-  given: [IntCast R] (n : Int)
-  statement: (ofDual n : R) = n
-  proof: rfl
-
-中文:
-引理 ofDual_intCast
-  条件: [整数嵌入 R] (n : 整数)
-  结论: (ofDual n : R) = n
-  证明: rfl
+@[simp] lemma toDual_intCast [IntCast R] (n : ℤ) : toDual (n : R) = n := rfl
+/-
+**ofDual_intCast** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {R : Type u_1} [inst : IntCast R] (n : ℤ), OrderDual.ofDual ↑n = ↑n
+参数：n : ℤ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma ofDual_intCast [IntCast R] (n : Int) : (ofDual n : R) = n := rfl
+@[simp] lemma ofDual_intCast [IntCast R] (n : ℤ) : (ofDual n : R) = n := rfl
 
 /-! ### Lexicographical order -/
 
 namespace Lex
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Distrib
-  signature: R] : Distrib (Lex R)
-  body: inferInstanceAs Distrib R
-
-中文:
-实例 [Distrib
-  签名: R] : Distrib (Lex R)
-  定义体: inferInstanceAs Distrib R
-
-Depends on / 依赖: Distrib
+/-
+**Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Distrib R] : Distrib (Lex R) := inferInstanceAs Distrib R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mul
-  signature: R] [Add R] [LeftDistribClass R] : LeftDistribClass (Lex R)
-  body: inferInstanceAs LeftDistribClass R
-
-中文:
-实例 [乘法
-  签名: R] [加法 R] [LeftDistrib类 R] : LeftDistrib类 (Lex R)
-  定义体: inferInstanceAs LeftDistribClass R
-
-Depends on / 依赖: LeftDistribClass
+instance [Distrib R] : Distrib (Lex R) := inferInstanceAs <| Distrib R
+/-
+**Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Mul R] [Add R] [LeftDistribClass R] : LeftDistribClass (Lex R) :=
-inferInstanceAs LeftDistribClass R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mul
-  signature: R] [Add R] [RightDistribClass R] : RightDistribClass (Lex R)
-  body: inferInstanceAs RightDistribClass R
-
-中文:
-实例 [乘法
-  签名: R] [加法 R] [RightDistrib类 R] : RightDistrib类 (Lex R)
-  定义体: inferInstanceAs RightDistribClass R
-
-Depends on / 依赖: RightDistribClass
+  inferInstanceAs <| LeftDistribClass R
+/-
+**Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Mul R] [Add R] [RightDistribClass R] : RightDistribClass (Lex R) :=
-inferInstanceAs RightDistribClass R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalNonAssocSemiring
-  signature: R] : NonUnitalNonAssocSemiring (Lex R)
-  body: inferInstanceAs NonUnitalNonAssocSemiring R
-
-中文:
-实例 [非幺非结合半环
-  签名: R] : 非幺非结合半环 (Lex R)
-  定义体: inferInstanceAs NonUnitalNonAssocSemiring R
-
-Depends on / 依赖: NonUnitalNonAssocSemiring
+  inferInstanceAs <| RightDistribClass R
+/-
+**Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalNonAssocSemiring R] : NonUnitalNonAssocSemiring (Lex R) :=
-inferInstanceAs NonUnitalNonAssocSemiring R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalSemiring
-  signature: R] : NonUnitalSemiring (Lex R)
-  body: inferInstanceAs NonUnitalSemiring R
-
-中文:
-实例 [非幺半环
-  签名: R] : 非幺半环 (Lex R)
-  定义体: inferInstanceAs NonUnitalSemiring R
-
-Depends on / 依赖: NonUnitalSemiring
+  inferInstanceAs <| NonUnitalNonAssocSemiring R
+/-
+**Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [NonUnitalSemiring R] : NonUnitalSemiring (Lex R) := inferInstanceAs NonUnitalSemiring R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NatCast
-  signature: R] : NatCast (Lex R)
-  body: inferInstanceAs NatCast R
-
-中文:
-实例 [自然数嵌入
-  签名: R] : 自然数嵌入 (Lex R)
-  定义体: inferInstanceAs NatCast R
-
-Depends on / 依赖: NatCast
+instance [NonUnitalSemiring R] : NonUnitalSemiring (Lex R) := inferInstanceAs <| NonUnitalSemiring R
+/-
+**Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [NatCast R] : NatCast (Lex R) := inferInstanceAs NatCast R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IntCast
-  signature: R] : IntCast (Lex R)
-  body: inferInstanceAs IntCast R
-
-中文:
-实例 [整数嵌入
-  签名: R] : 整数嵌入 (Lex R)
-  定义体: inferInstanceAs IntCast R
-
-Depends on / 依赖: IntCast
+instance [NatCast R] : NatCast (Lex R) := inferInstanceAs <| NatCast R
+/-
+**Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [IntCast R] : IntCast (Lex R) := inferInstanceAs IntCast R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddMonoidWithOne
-  signature: R] : AddMonoidWithOne (Lex R)
-  body: inferInstanceAs AddMonoidWithOne R
-
-中文:
-实例 [加法带幺幺半群
-  签名: R] : 加法带幺幺半群 (Lex R)
-  定义体: inferInstanceAs AddMonoidWithOne R
-
-Depends on / 依赖: AddMonoidWithOne
+instance [IntCast R] : IntCast (Lex R) := inferInstanceAs <| IntCast R
+/-
+**Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [AddMonoidWithOne R] : AddMonoidWithOne (Lex R) := inferInstanceAs AddMonoidWithOne R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCommMonoidWithOne
-  signature: R] : AddCommMonoidWithOne (Lex R)
-  body: inferInstanceAs AddCommMonoidWithOne R
-
-中文:
-实例 [加法交换带幺幺半群
-  签名: R] : 加法交换带幺幺半群 (Lex R)
-  定义体: inferInstanceAs AddCommMonoidWithOne R
-
-Depends on / 依赖: AddCommMonoidWithOne
+instance [AddMonoidWithOne R] : AddMonoidWithOne (Lex R) := inferInstanceAs <| AddMonoidWithOne R
+/-
+**Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddCommMonoidWithOne R] : AddCommMonoidWithOne (Lex R) :=
-inferInstanceAs AddCommMonoidWithOne R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddGroupWithOne
-  signature: R] : AddGroupWithOne (Lex R)
-  body: inferInstanceAs AddGroupWithOne R
-
-中文:
-实例 [加法带幺群
-  签名: R] : 加法带幺群 (Lex R)
-  定义体: inferInstanceAs AddGroupWithOne R
-
-Depends on / 依赖: AddGroupWithOne
+  inferInstanceAs <| AddCommMonoidWithOne R
+/-
+**Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [AddGroupWithOne R] : AddGroupWithOne (Lex R) := inferInstanceAs AddGroupWithOne R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCommGroupWithOne
-  signature: R] : AddCommGroupWithOne (Lex R)
-  body: inferInstanceAs AddCommGroupWithOne R
-
-中文:
-实例 [加法交换带幺群
-  签名: R] : 加法交换带幺群 (Lex R)
-  定义体: inferInstanceAs AddCommGroupWithOne R
-
-Depends on / 依赖: AddCommGroupWithOne
+instance [AddGroupWithOne R] : AddGroupWithOne (Lex R) := inferInstanceAs <| AddGroupWithOne R
+/-
+**Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddCommGroupWithOne R] : AddCommGroupWithOne (Lex R) :=
-inferInstanceAs AddCommGroupWithOne R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonAssocSemiring
-  signature: R] : NonAssocSemiring (Lex R)
-  body: inferInstanceAs NonAssocSemiring R
-
-中文:
-实例 [非结合半环
-  签名: R] : 非结合半环 (Lex R)
-  定义体: inferInstanceAs NonAssocSemiring R
-
-Depends on / 依赖: NonAssocSemiring
+  inferInstanceAs <| AddCommGroupWithOne R
+/-
+**Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [NonAssocSemiring R] : NonAssocSemiring (Lex R) := inferInstanceAs NonAssocSemiring R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Semiring
-  signature: R] : Semiring (Lex R)
-  body: inferInstanceAs Semiring R
-
-中文:
-实例 [半环
-  签名: R] : 半环 (Lex R)
-  定义体: inferInstanceAs Semiring R
-
-Depends on / 依赖: Semiring
+instance [NonAssocSemiring R] : NonAssocSemiring (Lex R) := inferInstanceAs <| NonAssocSemiring R
+/-
+**Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Semiring R] : Semiring (Lex R) := inferInstanceAs Semiring R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalCommSemiring
-  signature: R] : NonUnitalCommSemiring (Lex R)
-  body: inferInstanceAs NonUnitalCommSemiring R
-
-中文:
-实例 [非幺交换半环
-  签名: R] : 非幺交换半环 (Lex R)
-  定义体: inferInstanceAs NonUnitalCommSemiring R
-
-Depends on / 依赖: NonUnitalCommSemiring
+instance [Semiring R] : Semiring (Lex R) := inferInstanceAs <| Semiring R
+/-
+**Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalCommSemiring R] : NonUnitalCommSemiring (Lex R) :=
-inferInstanceAs NonUnitalCommSemiring R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CommSemiring
-  signature: R] : CommSemiring (Lex R)
-  body: inferInstanceAs CommSemiring R
-
-中文:
-实例 [交换半环
-  签名: R] : 交换半环 (Lex R)
-  定义体: inferInstanceAs CommSemiring R
-
-Depends on / 依赖: CommSemiring
+  inferInstanceAs <| NonUnitalCommSemiring R
+/-
+**Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [CommSemiring R] : CommSemiring (Lex R) := inferInstanceAs CommSemiring R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mul
-  signature: R] [HasDistribNeg R] : HasDistribNeg (Lex R)
-  body: inferInstanceAs HasDistribNeg R
-
-中文:
-实例 [乘法
-  签名: R] [有DistribNeg R] : 有DistribNeg (Lex R)
-  定义体: inferInstanceAs HasDistribNeg R
-
-Depends on / 依赖: HasDistribNeg
+instance [CommSemiring R] : CommSemiring (Lex R) := inferInstanceAs <| CommSemiring R
+/-
+**Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Mul R] [HasDistribNeg R] : HasDistribNeg (Lex R) := inferInstanceAs HasDistribNeg R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalNonAssocRing
-  signature: R] : NonUnitalNonAssocRing (Lex R)
-  body: inferInstanceAs NonUnitalNonAssocRing R
-
-中文:
-实例 [非幺非结合环
-  签名: R] : 非幺非结合环 (Lex R)
-  定义体: inferInstanceAs NonUnitalNonAssocRing R
-
-Depends on / 依赖: NonUnitalNonAssocRing
+instance [Mul R] [HasDistribNeg R] : HasDistribNeg (Lex R) := inferInstanceAs <| HasDistribNeg R
+/-
+**Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalNonAssocRing R] : NonUnitalNonAssocRing (Lex R) :=
-inferInstanceAs NonUnitalNonAssocRing R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalRing
-  signature: R] : NonUnitalRing (Lex R)
-  body: inferInstanceAs NonUnitalRing R
-
-中文:
-实例 [非幺环
-  签名: R] : 非幺环 (Lex R)
-  定义体: inferInstanceAs NonUnitalRing R
-
-Depends on / 依赖: NonUnitalRing
+  inferInstanceAs <| NonUnitalNonAssocRing R
+/-
+**Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [NonUnitalRing R] : NonUnitalRing (Lex R) := inferInstanceAs NonUnitalRing R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonAssocRing
-  signature: R] : NonAssocRing (Lex R)
-  body: inferInstanceAs NonAssocRing R
-
-中文:
-实例 [非结合环
-  签名: R] : 非结合环 (Lex R)
-  定义体: inferInstanceAs NonAssocRing R
-
-Depends on / 依赖: NonAssocRing
+instance [NonUnitalRing R] : NonUnitalRing (Lex R) := inferInstanceAs <| NonUnitalRing R
+/-
+**Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [NonAssocRing R] : NonAssocRing (Lex R) := inferInstanceAs NonAssocRing R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Ring
-  signature: R] : Ring (Lex R)
-  body: inferInstanceAs Ring R
-
-中文:
-实例 [环
-  签名: R] : 环 (Lex R)
-  定义体: inferInstanceAs Ring R
+instance [NonAssocRing R] : NonAssocRing (Lex R) := inferInstanceAs <| NonAssocRing R
+/-
+**Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Ring R] : Ring (Lex R) := inferInstanceAs Ring R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalCommRing
-  signature: R] : NonUnitalCommRing (Lex R)
-  body: inferInstanceAs NonUnitalCommRing R
-
-中文:
-实例 [非幺交换环
-  签名: R] : 非幺交换环 (Lex R)
-  定义体: inferInstanceAs NonUnitalCommRing R
-
-Depends on / 依赖: NonUnitalCommRing
+instance [Ring R] : Ring (Lex R) := inferInstanceAs <| Ring R
+/-
+**Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [NonUnitalCommRing R] : NonUnitalCommRing (Lex R) := inferInstanceAs NonUnitalCommRing R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CommRing
-  signature: R] : CommRing (Lex R)
-  body: inferInstanceAs CommRing R
-
-中文:
-实例 [交换环
-  签名: R] : 交换环 (Lex R)
-  定义体: inferInstanceAs CommRing R
-
-Depends on / 依赖: CommRing
+instance [NonUnitalCommRing R] : NonUnitalCommRing (Lex R) := inferInstanceAs <| NonUnitalCommRing R
+/-
+**Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [CommRing R] : CommRing (Lex R) := inferInstanceAs CommRing R
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Ring
-  signature: R] [IsDomain R] : IsDomain (Lex R)
-  body: inferInstanceAs IsDomain R
-
-中文:
-实例 [环
-  签名: R] [是整环 R] : 是整环 (Lex R)
-  定义体: inferInstanceAs IsDomain R
-
-Depends on / 依赖: IsDomain
+instance [CommRing R] : CommRing (Lex R) := inferInstanceAs <| CommRing R
+/-
+**Lex.** 是 Mathlib 中的一个实例，位于命名空间 `Lex`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Ring R] [IsDomain R] : IsDomain (Lex R) := inferInstanceAs IsDomain R
+instance [Ring R] [IsDomain R] : IsDomain (Lex R) := inferInstanceAs <| IsDomain R
 
 end Lex
 
 @[simp]
-/--
-theorem `toLex_natCast` / 定理 `toLex_natCast`
-
-English:
-theorem toLex_natCast
-  given: [NatCast R] (n : Nat)
-  statement: toLex (n : R) = n
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toLex_natCast
-  条件: [自然数嵌入 R] (n : 自然数)
-  结论: toLex (n : R) = n
-  证明: rfl
-
-@[simp]
+/-
+**toLex_natCast** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toLex_natCast [NatCast R] (n : Nat) : toLex (n : R) = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toLex_natCast [NatCast R] (n : Nat) : toLex (n : R) = n :=
+theorem toLex_natCast [NatCast R] (n : ℕ) : toLex (n : R) = n :=
   rfl
 
 @[simp]
-/--
-theorem `toLex_ofNat` / 定理 `toLex_ofNat`
-
-English:
-theorem toLex_ofNat
-  given: [NatCast R] (n : Nat) [n.AtLeastTwo]
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toLex_of自然数
-  条件: [自然数嵌入 R] (n : 自然数) [n.AtLeastTwo]
-  证明: rfl
-
-@[simp]
+/-
+**toLex_ofNat** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toLex_ofNat [NatCast R] (n : Nat) [n.AtLeastTwo] : toLex (ofNat(n) : R) = 
+OfNat.ofNat n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toLex_ofNat [NatCast R] (n : Nat) [n.AtLeastTwo] :
+theorem toLex_ofNat [NatCast R] (n : ℕ) [n.AtLeastTwo] :
     toLex (ofNat(n) : R) = OfNat.ofNat n :=
   rfl
 
 @[simp]
-/--
-theorem `ofLex_natCast` / 定理 `ofLex_natCast`
-
-English:
-theorem ofLex_natCast
-  given: [NatCast R] (n : Nat)
-  statement: (ofLex n : R) = n
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofLex_natCast
-  条件: [自然数嵌入 R] (n : 自然数)
-  结论: (ofLex n : R) = n
-  证明: rfl
-
-@[simp]
+/-
+**ofLex_natCast** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofLex_natCast [NatCast R] (n : Nat) : (ofLex n : R) = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofLex_natCast [NatCast R] (n : Nat) : (ofLex n : R) = n :=
+theorem ofLex_natCast [NatCast R] (n : ℕ) : (ofLex n : R) = n :=
   rfl
 
 @[simp]
-/--
-theorem `ofLex_ofNat` / 定理 `ofLex_ofNat`
-
-English:
-theorem ofLex_ofNat
-  given: [NatCast R] (n : Nat) [n.AtLeastTwo]
-  proof: rfl
-
-中文:
-定理 ofLex_of自然数
-  条件: [自然数嵌入 R] (n : 自然数) [n.AtLeastTwo]
-  证明: rfl
-
-Depends on / 依赖: IntCast, toLex_intCast
+/-
+**ofLex_ofNat** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ofLex_ofNat [NatCast R] (n : Nat) [n.AtLeastTwo] : ofLex (ofNat(n) : Lex R
+) = OfNat.ofNat n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofLex_ofNat [NatCast R] (n : Nat) [n.AtLeastTwo] :
+theorem ofLex_ofNat [NatCast R] (n : ℕ) [n.AtLeastTwo] :
     ofLex (ofNat(n) : Lex R) = OfNat.ofNat n :=
   rfl
-/--
-lemma `toLex_intCast` / 引理 `toLex_intCast`
-
-English:
-lemma toLex_intCast
-  given: [IntCast R] (n : Int)
-  statement: toLex (n : R) = n
-  proof: rfl
-
-中文:
-引理 toLex_intCast
-  条件: [整数嵌入 R] (n : 整数)
-  结论: toLex (n : R) = n
-  证明: rfl
+/-
+**toLex_intCast** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {R : Type u_1} [inst : IntCast R] (n : ℤ), toLex ↑n = ↑n
+参数：n : ℤ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma toLex_intCast [IntCast R] (n : Int) : toLex (n : R) = n := rfl
-
-/--
-lemma `ofLex_intCast` / 引理 `ofLex_intCast`
-
-English:
-lemma ofLex_intCast
-  given: [IntCast R] (n : Int)
-  statement: (ofLex n : R) = n
-  proof: rfl
-
-中文:
-引理 ofLex_intCast
-  条件: [整数嵌入 R] (n : 整数)
-  结论: (ofLex n : R) = n
-  证明: rfl
+@[simp] lemma toLex_intCast [IntCast R] (n : ℤ) : toLex (n : R) = n := rfl
+/-
+**ofLex_intCast** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {R : Type u_1} [inst : IntCast R] (n : ℤ), ofLex ↑n = ↑n
+参数：n : ℤ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma ofLex_intCast [IntCast R] (n : Int) : (ofLex n : R) = n := rfl
+@[simp] lemma ofLex_intCast [IntCast R] (n : ℤ) : (ofLex n : R) = n := rfl

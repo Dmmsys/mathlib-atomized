@@ -21,22 +21,19 @@ variable {M N : Type*} [Mul M] [Mul N]
 namespace Subsemigroup
 
 @[to_additive]
-/--
-theorem `center_prod` / 定理 `center_prod`
-
-English:
-theorem center_prod
-  statement: center (M × N) = prod (center M) (center N)
-  proof: SetLike.coe_injective Set.center_prod
-
-中文:
-定理 center_prod
-  结论: center (M × N) = 乘积 (center M) (center N)
-  证明: SetLike.coe_injective Set.center_prod
-
-Depends on / 依赖: Equiv.swap_injective_of_left, Function, Function.Injective.nontrivial, Injective, Nontrivial, Nontrivial.to_nonempty, classical, nontrivial, swap_injective_of_left, to_nonempty
+/-
+**Subsemigroup.center_prod** 是 Mathlib 中的一个定理，位于命名空间 `Subsemigroup`。
+形式化陈述：∀ {M : Type u_1} {N : Type u_2} [inst : Mul M] [inst_1 : Mul N],   Subsemi
+group.center (M × N) = (Subsemigroup.center M).prod (Subsemigroup.center N)
+参数：M × N；Subsemigroup.center M；Subsemigroup.center N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
+· 使用定理 `Set.center_prod`：∀ {M : Type u_1} [inst : Mul M] {N : Type u_2} [inst_1 
+: Mul N], Set.center (M × N) = Set.center M ×ˢ Set.center N
 -/
 protected theorem center_prod : center (M × N) = prod (center M) (center N) :=
   SetLike.coe_injective Set.center_prod
 
 end Subsemigroup
+

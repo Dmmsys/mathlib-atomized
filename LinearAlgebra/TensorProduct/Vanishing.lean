@@ -66,74 +66,79 @@ open DirectSum LinearMap Function Submodule Finsupp
 
 namespace TensorProduct
 
-variable {ι : Type*} [Fintype ι] {m : ι -> M} {n : ι -> N}
+variable {ι : Type*} [Fintype ι] {m : ι → M} {n : ι → N}
 
 variable (m n) in
-/--
-Definition of `VanishesTrivially` / `VanishesTrivially` 的定义
+/-- An expression $\sum_i m_i \otimes n_i$ in $M \otimes N$
+*vanishes trivially* if there exist a finite index type $\kappa$ = `Fin k`,
+elements $(y_j)_{j \in \kappa}$ of $N$, and elements $(a_{ij})_{i \in \iota, j \in \kappa}$ of $R$
+such that for all $i$,
+$$n_i = \sum_j a_{ij} y_j$$
+and for all $j$,
+$$\sum_i a_{ij} m_i = 0.$$
+Note that this condition is not symmetric in $M$ and $N$.
+(The terminology "trivial" comes from [Stacks 00HK](https://stacks.math.columbia.edu/tag/00HK).) -/
+/-
+**TensorProduct.VanishesTrivially** 是 Mathlib 中的一个缩写定义，位于命名空间 `TensorProduct`。
+形式化陈述：VanishesTrivially : Prop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation VanishesTrivially
-  signature: : Prop
-  body: exists (k : Nat) (a : ι -> Fin k -> R) (y : Fin k -> N),
-    (forall i, n i = ∑ j, a i j • y j) ∧ forall j, ∑ i, a i j • m i = 0
-
-中文:
-缩写 VanishesTrivially
-  签名: : 命题
-  定义体: exists (k : Nat) (a : ι -> Fin k -> R) (y : Fin k -> N),
-    (forall i, n i = ∑ j, a i j • y j) ∧ forall j, ∑ i, a i j • m i = 0
+--- 原说明 ---
+An expression $\sum_i m_i \otimes n_i$ in $M \otimes N$
+*vanishes trivially* if there exist a finite index type $\kappa$ = `Fin k`,
+elements $(y_j)_{j \in \kappa}$ of $N$, and elements $(a_{ij})_{i \in \iota, j \
+in \kappa}$ of $R$
+such that for all $i$,
+$$n_i = \sum_j a_{ij} y_j$$
+and for all $j$,
+$$\sum_i a_{ij} m_i = 0.$$
+Note that this condition is not symmetric in $M$ and $N$.
+(The terminology "trivial" comes from [Stacks 00HK](https://stacks.math.columbia
+.edu/tag/00HK).)
 -/
 abbrev VanishesTrivially : Prop :=
-  exists (k : Nat) (a : ι -> Fin k -> R) (y : Fin k -> N),
-    (forall i, n i = ∑ j, a i j • y j) ∧ forall j, ∑ i, a i j • m i = 0
+  ∃ (k : ℕ) (a : ι → Fin k → R) (y : Fin k → N),
+    (∀ i, n i = ∑ j, a i j • y j) ∧ ∀ j, ∑ i, a i j • m i = 0
 
 variable {R}
-
-/--
-theorem `VanishesTrivially.of_fintype` / 定理 `VanishesTrivially.of_fintype`
-
-English:
-theorem VanishesTrivially.of_fintype
-  statement: {κ} [Fintype κ] (a : ι -> κ -> R) (y : κ -> N)
-  proof: have e := (Fintype.equivFin κ).symm
-  ⟨Fintype.card κ, (a · ∘ e), y ∘ e, by simpa only [← e.sum_comp] using! hay, by
-    rwa [← e.forall_congr_right] at ham⟩
-
-中文:
-定理 VanishesTrivially.of_fintype
-  结论: {κ} [有限类型 κ] (a : ι -> κ -> R) (y : κ -> N)
-  证明: have e := (Fintype.equivFin κ).symm
-  ⟨Fintype.card κ, (a · ∘ e), y ∘ e, by simpa only [← e.sum_comp] using! hay, by
-    rwa [← e.forall_congr_right] at ham⟩
-
-Depends on / 依赖: Fintype, Fintype.card, Fintype.equivFin, e.forall_congr_right, e.sum_comp, equivFin, forall_congr_right, sum_comp
+/-
+**TensorProduct.VanishesTrivially.of_fintype** 是 Mathlib 中的一个定理，位于命名空间 `TensorPr
+oduct.VanishesTrivially`。
+形式化陈述：∀ {R : Type u_1} [inst : CommRing R] {M : Type u_2} [inst_1 : AddCommGroup
+ M] [inst_2 : _root_.Module R M]   {N : Type u_3} [inst_3 : AddCommGroup N] [ins
+t_4 : _root_.Module R N] {ι : Type u_4} [inst_5 : Fintype ι] {m : ι → M}   {n : 
+ι → N} {κ : Type u_5} [inst_6 : Fintype κ] (a : ι → κ → R) (y : κ → N),   (∀ (i 
+: ι), n i = ∑ j, a i j • y j) → (∀ (j : κ), ∑ i, a i j • m i = 0) → TensorProduc
+t.VanishesTrivially R m n
+参数：a : ι → κ → R；y : κ → N；∀ (i : ι), n i = ∑ j, a i j • y j；∀ (j : κ), ∑ i, a i
+ j • m i = 0。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.sum_comp`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst : F
+intype ι] [inst_1 : Fintype κ] [inst_2 : AddCommMonoid M]   (e : ι ≃ κ) (g : κ →
+ M),…
+· 使用定理 `Equiv.forall_congr_right`：∀ {α : Sort u} {β : Sort v} {q : β → Prop} (e 
+: α ≃ β), (∀ (a : α), q (e a)) ↔ ∀ (b : β), q b
 -/
-theorem VanishesTrivially.of_fintype {κ} [Fintype κ] (a : ι -> κ -> R) (y : κ -> N)
-    (hay : forall i, n i = ∑ j, a i j • y j) (ham : forall j, ∑ i, a i j • m i = 0) :
+theorem VanishesTrivially.of_fintype {κ} [Fintype κ] (a : ι → κ → R) (y : κ → N)
+    (hay : ∀ i, n i = ∑ j, a i j • y j) (ham : ∀ j, ∑ i, a i j • m i = 0) :
     VanishesTrivially R m n :=
   have e := (Fintype.equivFin κ).symm
   ⟨Fintype.card κ, (a · ∘ e), y ∘ e, by simpa only [← e.sum_comp] using! hay, by
     rwa [← e.forall_congr_right] at ham⟩
-
-/--
-theorem `_root_.Equiv.vanishesTrivially_comp` / 定理 `_root_.Equiv.vanishesTrivially_comp`
-
-English:
-theorem _root_.Equiv.vanishesTrivially_comp
-  given: {κ} [Fintype κ] (e : κ ≃ ι)
-  proof: by
-  simp [VanishesTrivially, ← e.forall_congr_right,
-    ← (e.arrowCongr (.refl _)).exists_congr_right, ← e.sum_comp]
-
-中文:
-定理 _root_.等价.vanishesTrivially_comp
-  条件: {κ} [有限类型 κ] (e : κ ≃ ι)
-  证明: by
-  simp [VanishesTrivially, ← e.forall_congr_right,
-    ← (e.arrowCongr (.refl _)).exists_congr_right, ← e.sum_comp]
-
-Depends on / 依赖: VanishesTrivially, arrowCongr, e.arrowCongr, e.forall_congr_right, e.sum_comp, exists_congr_right, forall_congr_right, sum_comp
+/-
+**TensorProduct._root_.Equiv.vanishesTrivially_comp** 是 Mathlib 中的一个定理，位于命名空间 `T
+ensorProduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Equiv.vanishesTrivially_comp {κ} [Fintype κ] (e : κ ≃ ι) :
     VanishesTrivially R (m ∘ e) (n ∘ e) ↔ VanishesTrivially R m n := by
@@ -142,157 +147,145 @@ theorem _root_.Equiv.vanishesTrivially_comp {κ} [Fintype κ] (e : κ ≃ ι) :
 
 variable (R)
 
-/--
-theorem `sum_tmul_eq_zero_of_vanishesTrivially` / 定理 `sum_tmul_eq_zero_of_vanishesTrivially`
+/-- **Equational criterion for vanishing**
+[A. Altman and S. Kleiman, *A term of commutative algebra* (Lemma 8.16)][altman2021term],
+backward direction.
 
-English:
-theorem sum_tmul_eq_zero_of_vanishesTrivially
-  given: (hmn : VanishesTrivially R m n)
-  proof: by
-  obtain ⟨k, a, y, h₁, h₂⟩ := hmn
-  simp_rw [h₁, tmul_sum, tmul_smul]
-  rw [Finset.sum_comm]
-  simp_rw [← tmul_smul, ← smul_tmul, ← sum_tmul, h₂, zero_tmul, Finset.sum_const_zero]
+If the expression $\sum_i m_i \otimes n_i$ vanishes trivially, then it vanishes.
+That is, $\sum_i m_i \otimes n_i = 0$. -/
+/-
+**TensorProduct.sum_tmul_eq_zero_of_vanishesTrivially** 是 Mathlib 中的一个定理，位于命名空间 
+`TensorProduct`。
+形式化陈述：sum_tmul_eq_zero_of_vanishesTrivially (hmn : VanishesTrivially R m n) : ∑ 
+i, m i otimesₜ n i = (0 : M otimes[R] N)
+参数：hmn : VanishesTrivially R m n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `TensorProduct.tmul_sum`：tmul_sum (m : M) {α : Type*} (s : Finset α) (n :
+ α -> N) : (m otimesₜ[R] ∑ a in s, n a) = ∑ a in s, m otimesₜ[R] n a
+· 使用定理 `TensorProduct.tmul_smul`：tmul_smul [DistribMulAction R' N] [CompatibleSM
+ul R R' M N] (r : R') (x : M) (y : N) : x otimesₜ (r • y) = r • x otimesₜ[R] y
+· 使用定理 `TensorProduct.CompatibleSMul.isScalarTower`：∀ {R : Type u_1} {R' : Type 
+u_4} [inst : CommSemiring R] [inst_1 : Monoid R'] {M : Type u_7} {N : Type u_8} 
+  [inst_2 : AddCommMonoid M] [in…
+· 使用定理 `Finset.sum_comm`：∀ {α : Type u_3} {β : Type u_4} {γ : Type u_5} [inst : 
+AddCommMonoid β] {s : Finset γ} {t : Finset α} {f : γ → α → β},   ∑ x ∈ s, ∑ y ∈
+ t, f…
+· 使用定理 `TensorProduct.zero_tmul`：zero_tmul (n : N) : (0 : M) otimesₜ[R] n = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Finset.sum_const_zero`：∀ {ι : Type u_1} {M : Type u_3} {s : Finset ι} [i
+nst : AddCommMonoid M], ∑ _x ∈ s, 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-中文:
-定理 sum_tmul_eq_zero_of_vanishesTrivially
-  条件: (hmn : VanishesTrivially R m n)
-  证明: by
-  obtain ⟨k, a, y, h₁, h₂⟩ := hmn
-  simp_rw [h₁, tmul_sum, tmul_smul]
-  rw [Finset.sum_comm]
-  simp_rw [← tmul_smul, ← smul_tmul, ← sum_tmul, h₂, zero_tmul, Finset.sum_const_zero]
+--- 原说明 ---
+**Equational criterion for vanishing**
+[A. Altman and S. Kleiman, *A term of commutative algebra* (Lemma 8.16)][altman2
+021term],
+backward direction.
 
-Depends on / 依赖: Finset, Finset.sum_comm, Finset.sum_const_zero, simp_rw, smul_tmul, sum_comm, sum_const_zero, sum_tmul, tmul_smul, tmul_sum, zero_tmul
+If the expression $\sum_i m_i \otimes n_i$ vanishes trivially, then it vanishes.
+That is, $\sum_i m_i \otimes n_i = 0$.
 -/
 theorem sum_tmul_eq_zero_of_vanishesTrivially (hmn : VanishesTrivially R m n) :
-    ∑ i, m i otimesₜ n i = (0 : M otimes[R] N) := by
+    ∑ i, m i ⊗ₜ n i = (0 : M ⊗[R] N) := by
   obtain ⟨k, a, y, h₁, h₂⟩ := hmn
   simp_rw [h₁, tmul_sum, tmul_smul]
   rw [Finset.sum_comm]
   simp_rw [← tmul_smul, ← smul_tmul, ← sum_tmul, h₂, zero_tmul, Finset.sum_const_zero]
 
-/--
-theorem `vanishesTrivially_of_sum_tmul_eq_zero` / 定理 `vanishesTrivially_of_sum_tmul_eq_zero`
+/-- **Equational criterion for vanishing**
+[A. Altman and S. Kleiman, *A term of commutative algebra* (Lemma 8.16)][altman2021term],
+forward direction.
 
-English:
-theorem vanishesTrivially_of_sum_tmul_eq_zero
-  statement: (hm : Submodule.span R (Set.range m) = ⊤)
-  proof: by
-  -- Define a map $G \colon R^\iota \to M$ whose matrix entries are the $m_i$. It is surjective.
-  set G : (ι ->₀ R) ->ₗ[R] M := Finsupp.linearCombination R m with hG
-  have G_basis_eq (i : ι) : G (Finsupp.single i 1) = m i := by simp [hG]
-  have G_surjective : Surjective G := by
-    apply LinearMap.range_eq_top.mp
-    apply top_le_iff.mp
-    rw [← hm]
-    apply Submodule.span_le.mpr
-    rintro _ ⟨i, rfl⟩
-    use Finsupp.single i 1, G_basis_eq i
-  /- Consider the element $\sum_i e_i \otimes n_i$ of $R^\iota \otimes N$. It is in the kernel of
-  $R^\iota \otimes N \to M \otimes N$. -/
-  set en : (ι ->₀ R) otimes[R] N := ∑ i, Finsupp.single i 1 otimesₜ n i with hen
-  have en_mem_ker : en in ker (rTensor N G) := by simp [hen, G_basis_eq, hmn]
-  -- We have an exact sequence $\ker G \to R^\iota \to M \to 0$.
-  have exact_ker_subtype : Exact (ker G).subtype G := G.exact_subtype_ker_map
-  -- Tensor the exact sequence with $N$.
-  have exact_rTensor_ker_subtype : Exact (rTensor N (ker G).subtype) (rTensor N G) :=
-    rTensor_exact (M := ↥(ker G)) N exact_ker_subtype G_surjective
-  /- We conclude that $\sum_i e_i \otimes n_i$ is in the range of
-    $\ker G \otimes N \to R^\iota \otimes N$. -/
-  have en_mem_range : en in range (rTensor N (ker G).subtype) :=
-    exact_rTensor_ker_subtype.linearMap_ker_eq ▸ en_mem_ker
-  /- There is an element of in $\ker G \otimes N$ that maps to $\sum_i e_i \otimes n_i$.
-  Write it as a finite sum of pure tensors. -/
-  obtain ⟨kn, hkn⟩ := en_mem_range
-  obtain ⟨ma, rfl : kn = ∑ kj in ma, kj.1 otimesₜ[R] kj.2⟩ := exists_finset kn
-  /- Let $\sum_j k_j \otimes y_j$ be the sum obtained in the previous step.
-  In order to show that $\sum_i m_i \otimes n_i$ vanishes trivially, it suffices to prove that there
-  exist $(a_{ij})_{i, j}$ such that for all $i$,
-  $$n_i = \sum_j a_{ij} y_j$$
-  and for all $j$,
-  $$\sum_i a_{ij} m_i = 0.$$
-  For this, take $a_{ij}$ to be the coefficient of $e_i$ in $k_j$. -/
-  refine .of_fintype (κ := ma) (fun i ⟨⟨kj, _⟩, _⟩ => (kj : ι ->₀ R) i) (fun ⟨⟨_, yj⟩, _⟩ => yj) ?_ ?_
-  · intro i
-    classical
-    apply_fun finsuppScalarLeft R N ι at hkn
-    apply_fun (· i) at hkn
-    symm at hkn
-    simp only [map_sum, finsuppScalarLeft_apply_tmul, zero_smul, Finsupp.single_zero,
-      Finsupp.sum_single_index, one_smul, Finsupp.finsetSum_apply, Finsupp.single_apply,
-      Finset.sum_ite_eq', Finset.mem_univ, ↓reduceIte, rTensor_tmul, coe_subtype, Finsupp.sum_apply,
-      Finsupp.sum_ite_eq', Finsupp.mem_support_iff, ne_eq, ite_not, en] at hkn
-    simp only [Finset.univ_eq_attach, Finset.sum_attach ma (fun x => (x.1 : ι ->₀ R) i • x.2)]
-    convert! hkn using 2 with x _
-    split
-    · next h'x => rw [h'x, zero_smul]
-    · rfl
-  · rintro ⟨⟨⟨k, hk⟩, _⟩, _⟩
-    simpa only [hG, linearCombination_apply, zero_smul, implies_true, Finsupp.sum_fintype] using
-      mem_ker.mp hk
+Assume that the $m_i$ generate $M$. If the expression $\sum_i m_i \otimes n_i$
+vanishes, then it vanishes trivially. -/
+/-
+**TensorProduct.vanishesTrivially_of_sum_tmul_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 
+`TensorProduct`。
+形式化陈述：vanishesTrivially_of_sum_tmul_eq_zero (hm : Submodule.span R (Set.range m)
+ = ⊤) (hmn : ∑ i, m i otimesₜ n i = (0 : M otimes[R] N)) : VanishesTrivially R m
+ n
+参数：hm : Submodule.span R (Set.range m) = ⊤；hmn : ∑ i, m i otimesₜ n i = (0 : M o
+times[R] N)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.linearCombination_single`：linearCombination_single (c : R) (a : 
+α) : linearCombination R v (single a c) = c • v a
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `LinearMap.range_eq_top`：range_eq_top [RingHomSurjective τ₁₂] {f : M ->ₛₗ
+[τ₁₂] M₂} : range f = ⊤ ↔ Surjective f
+· 使用定理 `top_le_iff`：top_le_iff : ⊤ <= a ↔ a = ⊤
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Submodule.span_le`：span_le {p} : span R s <= p ↔ s subseteq p
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `LinearMap.exact_subtype_ker_map`：exact_subtype_ker_map (g : N ->ₗ[R] P) 
+: Exact (Submodule.subtype (ker g)) g
+· 使用定理 `rTensor_exact`：rTensor_exact : Exact (rTensor Q f) (rTensor Q g)
+· 使用定理 `Function.Exact.linearMap_ker_eq`：∀ {R : Type u_1} {M : Type u_2} {N : Ty
+pe u_4} {P : Type u_6} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 
+: AddCommMonoid N] [i…
+· 使用定理 `TensorProduct.exists_finset`：exists_finset (x : M otimes[R] N) : exists 
+S : Finset (M × N), x = S.sum fun i => i.1 otimesₜ[R] i.2
+· 使用定理 `TensorProduct.VanishesTrivially.of_fintype`：∀ {R : Type u_1} [inst : Com
+mRing R] {M : Type u_2} [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]  
+ {N : Type u_3} [inst_3 : AddCom…
+· 使用定理 `Finset.sum_attach`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMonoid
+ M] (s : Finset ι) (f : ι → M), ∑ x ∈ s.attach, f ↑x = ∑ x ∈ s, f x
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `SemilinearEquivClass.instSemilinearMapClass`：∀ {R : Type u_1} {S : Type 
+u_6} {M : Type u_7} {M₂ : Type u_9} (F : Type u_14) [inst : Semiring R] [inst_1 
+: Semiring S]   [inst_2 : AddComm…
+（共 46 条，此处仅展示前 30 条）
 
-中文:
-定理 vanishesTrivially_of_sum_tmul_eq_zero
-  结论: (hm : 子模.span R (集合.range m) = ⊤)
-  证明: by
-  -- Define a map $G \colon R^\iota \to M$ whose matrix entries are the $m_i$. It is surjective.
-  set G : (ι ->₀ R) ->ₗ[R] M := Finsupp.linearCombination R m with hG
-  have G_basis_eq (i : ι) : G (Finsupp.single i 1) = m i := by simp [hG]
-  have G_surjective : Surjective G := by
-    apply LinearMap.range_eq_top.mp
-    apply top_le_iff.mp
-    rw [← hm]
-    apply Submodule.span_le.mpr
-    rintro _ ⟨i, rfl⟩
-    use Finsupp.single i 1, G_basis_eq i
-  /- Consider the element $\sum_i e_i \otimes n_i$ of $R^\iota \otimes N$. It is in the kernel of
-  $R^\iota \otimes N \to M \otimes N$. -/
-  set en : (ι ->₀ R) otimes[R] N := ∑ i, Finsupp.single i 1 otimesₜ n i with hen
-  have en_mem_ker : en in ker (rTensor N G) := by simp [hen, G_basis_eq, hmn]
-  -- We have an exact sequence $\ker G \to R^\iota \to M \to 0$.
-  have exact_ker_subtype : Exact (ker G).subtype G := G.exact_subtype_ker_map
-  -- Tensor the exact sequence with $N$.
-  have exact_rTensor_ker_subtype : Exact (rTensor N (ker G).subtype) (rTensor N G) :=
-    rTensor_exact (M := ↥(ker G)) N exact_ker_subtype G_surjective
-  /- We conclude that $\sum_i e_i \otimes n_i$ is in the range of
-    $\ker G \otimes N \to R^\iota \otimes N$. -/
-  have en_mem_range : en in range (rTensor N (ker G).subtype) :=
-    exact_rTensor_ker_subtype.linearMap_ker_eq ▸ en_mem_ker
-  /- There is an element of in $\ker G \otimes N$ that maps to $\sum_i e_i \otimes n_i$.
-  Write it as a finite sum of pure tensors. -/
-  obtain ⟨kn, hkn⟩ := en_mem_range
-  obtain ⟨ma, rfl : kn = ∑ kj in ma, kj.1 otimesₜ[R] kj.2⟩ := exists_finset kn
-  /- Let $\sum_j k_j \otimes y_j$ be the sum obtained in the previous step.
-  In order to show that $\sum_i m_i \otimes n_i$ vanishes trivially, it suffices to prove that there
-  exist $(a_{ij})_{i, j}$ such that for all $i$,
-  $$n_i = \sum_j a_{ij} y_j$$
-  and for all $j$,
-  $$\sum_i a_{ij} m_i = 0.$$
-  For this, take $a_{ij}$ to be the coefficient of $e_i$ in $k_j$. -/
-  refine .of_fintype (κ := ma) (fun i ⟨⟨kj, _⟩, _⟩ => (kj : ι ->₀ R) i) (fun ⟨⟨_, yj⟩, _⟩ => yj) ?_ ?_
-  · intro i
-    classical
-    apply_fun finsuppScalarLeft R N ι at hkn
-    apply_fun (· i) at hkn
-    symm at hkn
-    simp only [map_sum, finsuppScalarLeft_apply_tmul, zero_smul, Finsupp.single_zero,
-      Finsupp.sum_single_index, one_smul, Finsupp.finsetSum_apply, Finsupp.single_apply,
-      Finset.sum_ite_eq', Finset.mem_univ, ↓reduceIte, rTensor_tmul, coe_subtype, Finsupp.sum_apply,
-      Finsupp.sum_ite_eq', Finsupp.mem_support_iff, ne_eq, ite_not, en] at hkn
-    simp only [Finset.univ_eq_attach, Finset.sum_attach ma (fun x => (x.1 : ι ->₀ R) i • x.2)]
-    convert! hkn using 2 with x _
-    split
-    · next h'x => rw [h'x, zero_smul]
-    · rfl
-  · rintro ⟨⟨⟨k, hk⟩, _⟩, _⟩
-    simpa only [hG, linearCombination_apply, zero_smul, implies_true, Finsupp.sum_fintype] using
-      mem_ker.mp hk
+--- 原说明 ---
+**Equational criterion for vanishing**
+[A. Altman and S. Kleiman, *A term of commutative algebra* (Lemma 8.16)][altman2
+021term],
+forward direction.
+
+Assume that the $m_i$ generate $M$. If the expression $\sum_i m_i \otimes n_i$
+vanishes, then it vanishes trivially.
 -/
 theorem vanishesTrivially_of_sum_tmul_eq_zero (hm : Submodule.span R (Set.range m) = ⊤)
-    (hmn : ∑ i, m i otimesₜ n i = (0 : M otimes[R] N)) : VanishesTrivially R m n := by
+    (hmn : ∑ i, m i ⊗ₜ n i = (0 : M ⊗[R] N)) : VanishesTrivially R m n := by
   -- Define a map $G \colon R^\iota \to M$ whose matrix entries are the $m_i$. It is surjective.
-  set G : (ι ->₀ R) ->ₗ[R] M := Finsupp.linearCombination R m with hG
+  set G : (ι →₀ R) →ₗ[R] M := Finsupp.linearCombination R m with hG
   have G_basis_eq (i : ι) : G (Finsupp.single i 1) = m i := by simp [hG]
   have G_surjective : Surjective G := by
     apply LinearMap.range_eq_top.mp
@@ -303,8 +296,8 @@ theorem vanishesTrivially_of_sum_tmul_eq_zero (hm : Submodule.span R (Set.range 
     use Finsupp.single i 1, G_basis_eq i
   /- Consider the element $\sum_i e_i \otimes n_i$ of $R^\iota \otimes N$. It is in the kernel of
   $R^\iota \otimes N \to M \otimes N$. -/
-  set en : (ι ->₀ R) otimes[R] N := ∑ i, Finsupp.single i 1 otimesₜ n i with hen
-  have en_mem_ker : en in ker (rTensor N G) := by simp [hen, G_basis_eq, hmn]
+  set en : (ι →₀ R) ⊗[R] N := ∑ i, Finsupp.single i 1 ⊗ₜ n i with hen
+  have en_mem_ker : en ∈ ker (rTensor N G) := by simp [hen, G_basis_eq, hmn]
   -- We have an exact sequence $\ker G \to R^\iota \to M \to 0$.
   have exact_ker_subtype : Exact (ker G).subtype G := G.exact_subtype_ker_map
   -- Tensor the exact sequence with $N$.
@@ -312,12 +305,12 @@ theorem vanishesTrivially_of_sum_tmul_eq_zero (hm : Submodule.span R (Set.range 
     rTensor_exact (M := ↥(ker G)) N exact_ker_subtype G_surjective
   /- We conclude that $\sum_i e_i \otimes n_i$ is in the range of
     $\ker G \otimes N \to R^\iota \otimes N$. -/
-  have en_mem_range : en in range (rTensor N (ker G).subtype) :=
+  have en_mem_range : en ∈ range (rTensor N (ker G).subtype) :=
     exact_rTensor_ker_subtype.linearMap_ker_eq ▸ en_mem_ker
   /- There is an element of in $\ker G \otimes N$ that maps to $\sum_i e_i \otimes n_i$.
   Write it as a finite sum of pure tensors. -/
   obtain ⟨kn, hkn⟩ := en_mem_range
-  obtain ⟨ma, rfl : kn = ∑ kj in ma, kj.1 otimesₜ[R] kj.2⟩ := exists_finset kn
+  obtain ⟨ma, rfl : kn = ∑ kj ∈ ma, kj.1 ⊗ₜ[R] kj.2⟩ := exists_finset kn
   /- Let $\sum_j k_j \otimes y_j$ be the sum obtained in the previous step.
   In order to show that $\sum_i m_i \otimes n_i$ vanishes trivially, it suffices to prove that there
   exist $(a_{ij})_{i, j}$ such that for all $i$,
@@ -325,7 +318,7 @@ theorem vanishesTrivially_of_sum_tmul_eq_zero (hm : Submodule.span R (Set.range 
   and for all $j$,
   $$\sum_i a_{ij} m_i = 0.$$
   For this, take $a_{ij}$ to be the coefficient of $e_i$ in $k_j$. -/
-  refine .of_fintype (κ := ma) (fun i ⟨⟨kj, _⟩, _⟩ => (kj : ι ->₀ R) i) (fun ⟨⟨_, yj⟩, _⟩ => yj) ?_ ?_
+  refine .of_fintype (κ := ma) (fun i ⟨⟨kj, _⟩, _⟩ ↦ (kj : ι →₀ R) i) (fun ⟨⟨_, yj⟩, _⟩ ↦ yj) ?_ ?_
   · intro i
     classical
     apply_fun finsuppScalarLeft R N ι at hkn
@@ -335,7 +328,7 @@ theorem vanishesTrivially_of_sum_tmul_eq_zero (hm : Submodule.span R (Set.range 
       Finsupp.sum_single_index, one_smul, Finsupp.finsetSum_apply, Finsupp.single_apply,
       Finset.sum_ite_eq', Finset.mem_univ, ↓reduceIte, rTensor_tmul, coe_subtype, Finsupp.sum_apply,
       Finsupp.sum_ite_eq', Finsupp.mem_support_iff, ne_eq, ite_not, en] at hkn
-    simp only [Finset.univ_eq_attach, Finset.sum_attach ma (fun x => (x.1 : ι ->₀ R) i • x.2)]
+    simp only [Finset.univ_eq_attach, Finset.sum_attach ma (fun x ↦ (x.1 : ι →₀ R) i • x.2)]
     convert! hkn using 2 with x _
     split
     · next h'x => rw [h'x, zero_smul]
@@ -344,77 +337,137 @@ theorem vanishesTrivially_of_sum_tmul_eq_zero (hm : Submodule.span R (Set.range 
     simpa only [hG, linearCombination_apply, zero_smul, implies_true, Finsupp.sum_fintype] using
       mem_ker.mp hk
 
-/--
-theorem `vanishesTrivially_iff_sum_tmul_eq_zero` / 定理 `vanishesTrivially_iff_sum_tmul_eq_zero`
+/-- **Equational criterion for vanishing**
+[A. Altman and S. Kleiman, *A term of commutative algebra* (Lemma 8.16)][altman2021term].
 
-English:
-theorem vanishesTrivially_iff_sum_tmul_eq_zero
-  given: (hm : Submodule.span R (Set.range m) = ⊤)
-  proof: ⟨sum_tmul_eq_zero_of_vanishesTrivially R, vanishesTrivially_of_sum_tmul_eq_zero R hm⟩
+Assume that the $m_i$ generate $M$. Then the expression $\sum_i m_i \otimes n_i$ vanishes
+trivially if and only if it vanishes. -/
+/-
+**TensorProduct.vanishesTrivially_iff_sum_tmul_eq_zero** 是 Mathlib 中的一个定理，位于命名空间
+ `TensorProduct`。
+形式化陈述：vanishesTrivially_iff_sum_tmul_eq_zero (hm : Submodule.span R (Set.range m
+) = ⊤) : VanishesTrivially R m n ↔ ∑ i, m i otimesₜ n i = (0 : M otimes[R] N)
+参数：hm : Submodule.span R (Set.range m) = ⊤。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.sum_tmul_eq_zero_of_vanishesTrivially`：sum_tmul_eq_zero_of
+_vanishesTrivially (hmn : VanishesTrivially R m n) : ∑ i, m i otimesₜ n i = (0 :
+ M otimes[R] N)
+· 使用定理 `TensorProduct.vanishesTrivially_of_sum_tmul_eq_zero`：vanishesTrivially_o
+f_sum_tmul_eq_zero (hm : Submodule.span R (Set.range m) = ⊤) (hmn : ∑ i, m i oti
+mesₜ n i = (0 : M otimes[R] N)) : Vanishe…
 
-中文:
-定理 vanishesTrivially_iff_sum_tmul_eq_zero
-  条件: (hm : 子模.span R (集合.range m) = ⊤)
-  证明: ⟨sum_tmul_eq_zero_of_vanishesTrivially R, vanishesTrivially_of_sum_tmul_eq_zero R hm⟩
+--- 原说明 ---
+**Equational criterion for vanishing**
+[A. Altman and S. Kleiman, *A term of commutative algebra* (Lemma 8.16)][altman2
+021term].
 
-Depends on / 依赖: sum_tmul_eq_zero_of_vanishesTrivially, vanishesTrivially_of_sum_tmul_eq_zero
+Assume that the $m_i$ generate $M$. Then the expression $\sum_i m_i \otimes n_i$
+ vanishes
+trivially if and only if it vanishes.
 -/
 theorem vanishesTrivially_iff_sum_tmul_eq_zero (hm : Submodule.span R (Set.range m) = ⊤) :
-    VanishesTrivially R m n ↔ ∑ i, m i otimesₜ n i = (0 : M otimes[R] N) :=
+    VanishesTrivially R m n ↔ ∑ i, m i ⊗ₜ n i = (0 : M ⊗[R] N) :=
   ⟨sum_tmul_eq_zero_of_vanishesTrivially R, vanishesTrivially_of_sum_tmul_eq_zero R hm⟩
 
-/--
-theorem `vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective` / 定理 `vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective`
+/-- **Equational criterion for vanishing**
+[A. Altman and S. Kleiman, *A term of commutative algebra* (Lemma 8.16)][altman2021term],
+forward direction, generalization.
 
-English:
-theorem vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective
-  proof: by
-  -- Restrict `m` on the codomain to $M'$, then apply `vanishesTrivially_of_sum_tmul_eq_zero`.
-  have mem_M' i : m i in span R (Set.range m) := subset_span ⟨i, rfl⟩
-  set m' : ι -> span R (Set.range m) := Subtype.coind m mem_M' with m'_eq
-  have hm' : span R (Set.range m') = ⊤ := by
-    apply map_injective_of_injective (injective_subtype (span R (Set.range m)))
-    rw [Submodule.map_span]; rw [Submodule.map_top]; rw [range_subtype]; rw [coe_subtype]; rw [← Set.range_comp]
-    rfl
-  have hm'n : ∑ i, m' i otimesₜ n i = (0 : span R (Set.range m) otimes[R] N) := by
-    apply hm
-    simp only [m'_eq, map_sum, rTensor_tmul, coe_subtype, Subtype.coind_coe, map_zero, hmn]
-  have : VanishesTrivially R m' n := vanishesTrivially_of_sum_tmul_eq_zero R hm' hm'n
-  unfold VanishesTrivially at this ⊢
-  convert! this with κ _ a y j
-  convert! (injective_iff_map_eq_zero' _).mp (injective_subtype (span R (Set.range m))) _
-  simp [m'_eq]
+Assume that the submodule $M' \subseteq M$ generated by the $m_i$
+satisfies the property that the map $M' \otimes N \to M \otimes N$ is injective. If the expression
+$\sum_i m_i \otimes n_i$ vanishes, then it vanishes trivially. -/
+/-
+**TensorProduct.vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective** 是 M
+athlib 中的一个定理，位于命名空间 `TensorProduct`。
+形式化陈述：vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective (hm : Injective
+ (rTensor N (span R (Set.range m)).subtype)) (hmn : ∑ i, m i otimesₜ n i = (0 : 
+M otimes[R] N)) : VanishesTrivially R m n
+参数：hm : Injective (rTensor N (span R (Set.range m)).subtype)；hmn : ∑ i, m i otim
+esₜ n i = (0 : M otimes[R] N)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.subset_span`：subset_span : s subseteq span R s
+· 使用定理 `Submodule.map_injective_of_injective`：map_injective_of_injective : Funct
+ion.Injective (map f)
+· 使用定理 `Submodule.injective_subtype`：injective_subtype : Injective p.subtype
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Submodule.map_span`：map_span [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂
+) (s : Set M) : (span R s).map f = span R₂ (f '' s)
+· 使用定理 `Submodule.map_top`：map_top [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) 
+: map f ⊤ = range f
+· 使用定理 `Submodule.range_subtype`：range_subtype : range p.subtype = p
+· 使用定理 `Submodule.coe_subtype`：coe_subtype : (Submodule.subtype p : p -> M) = Su
+btype.val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.range_comp`：range_comp (g : α -> β) (f : ι -> α) : range (g ∘ f) = g
+ '' range f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Subtype.coind_coe`：∀ {α : Sort u_4} {β : Sort u_5} (f : α → β) {p : β → 
+Prop} (h : ∀ (a : α), p (f a)) (a : α),   ↑(Subtype.coind f h a) = f a
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `TensorProduct.vanishesTrivially_of_sum_tmul_eq_zero`：vanishesTrivially_o
+f_sum_tmul_eq_zero (hm : Submodule.span R (Set.range m) = ⊤) (hmn : ∑ i, m i oti
+mesₜ n i = (0 : M otimes[R] N)) : Vanishe…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `pi_congr`：∀ {α : Sort u} {β β' : α → Sort v}, (∀ (a : α), β a = β' a) → 
+((a : α) → β a) = ((a : α) → β' a)
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `injective_iff_map_eq_zero'`：∀ {F : Type u_7} {G : Type u_8} {H : Type u_
+9} [inst : AddGroup G] [inst_1 : AddZeroClass H] [inst_2 : FunLike F G H]   [Add
+MonoidHomClass F…
 
-中文:
-定理 vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective
-  证明: by
-  -- Restrict `m` on the codomain to $M'$, then apply `vanishesTrivially_of_sum_tmul_eq_zero`.
-  have mem_M' i : m i in span R (Set.range m) := subset_span ⟨i, rfl⟩
-  set m' : ι -> span R (Set.range m) := Subtype.coind m mem_M' with m'_eq
-  have hm' : span R (Set.range m') = ⊤ := by
-    apply map_injective_of_injective (injective_subtype (span R (Set.range m)))
-    rw [Submodule.map_span]; rw [Submodule.map_top]; rw [range_subtype]; rw [coe_subtype]; rw [← Set.range_comp]
-    rfl
-  have hm'n : ∑ i, m' i otimesₜ n i = (0 : span R (Set.range m) otimes[R] N) := by
-    apply hm
-    simp only [m'_eq, map_sum, rTensor_tmul, coe_subtype, Subtype.coind_coe, map_zero, hmn]
-  have : VanishesTrivially R m' n := vanishesTrivially_of_sum_tmul_eq_zero R hm' hm'n
-  unfold VanishesTrivially at this ⊢
-  convert! this with κ _ a y j
-  convert! (injective_iff_map_eq_zero' _).mp (injective_subtype (span R (Set.range m))) _
-  simp [m'_eq]
+--- 原说明 ---
+**Equational criterion for vanishing**
+[A. Altman and S. Kleiman, *A term of commutative algebra* (Lemma 8.16)][altman2
+021term],
+forward direction, generalization.
+
+Assume that the submodule $M' \subseteq M$ generated by the $m_i$
+satisfies the property that the map $M' \otimes N \to M \otimes N$ is injective.
+ If the expression
+$\sum_i m_i \otimes n_i$ vanishes, then it vanishes trivially.
 -/
 theorem vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective
     (hm : Injective (rTensor N (span R (Set.range m)).subtype))
-    (hmn : ∑ i, m i otimesₜ n i = (0 : M otimes[R] N)) : VanishesTrivially R m n := by
+    (hmn : ∑ i, m i ⊗ₜ n i = (0 : M ⊗[R] N)) : VanishesTrivially R m n := by
   -- Restrict `m` on the codomain to $M'$, then apply `vanishesTrivially_of_sum_tmul_eq_zero`.
-  have mem_M' i : m i in span R (Set.range m) := subset_span ⟨i, rfl⟩
-  set m' : ι -> span R (Set.range m) := Subtype.coind m mem_M' with m'_eq
+  have mem_M' i : m i ∈ span R (Set.range m) := subset_span ⟨i, rfl⟩
+  set m' : ι → span R (Set.range m) := Subtype.coind m mem_M' with m'_eq
   have hm' : span R (Set.range m') = ⊤ := by
     apply map_injective_of_injective (injective_subtype (span R (Set.range m)))
-    rw [Submodule.map_span]; rw [Submodule.map_top]; rw [range_subtype]; rw [coe_subtype]; rw [← Set.range_comp]
+    rw [Submodule.map_span, Submodule.map_top, range_subtype, coe_subtype, ← Set.range_comp]
     rfl
-  have hm'n : ∑ i, m' i otimesₜ n i = (0 : span R (Set.range m) otimes[R] N) := by
+  have hm'n : ∑ i, m' i ⊗ₜ n i = (0 : span R (Set.range m) ⊗[R] N) := by
     apply hm
     simp only [m'_eq, map_sum, rTensor_tmul, coe_subtype, Subtype.coind_coe, map_zero, hmn]
   have : VanishesTrivially R m' n := vanishesTrivially_of_sum_tmul_eq_zero R hm' hm'n
@@ -423,73 +476,130 @@ theorem vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective
   convert! (injective_iff_map_eq_zero' _).mp (injective_subtype (span R (Set.range m))) _
   simp [m'_eq]
 
-/--
-theorem `vanishesTrivially_iff_sum_tmul_eq_zero_of_rTensor_injective` / 定理 `vanishesTrivially_iff_sum_tmul_eq_zero_of_rTensor_injective`
+/-- **Equational criterion for vanishing**
+[A. Altman and S. Kleiman, *A term of commutative algebra* (Lemma 8.16)][altman2021term],
+generalization.
 
-English:
-theorem vanishesTrivially_iff_sum_tmul_eq_zero_of_rTensor_injective
-  proof: ⟨sum_tmul_eq_zero_of_vanishesTrivially R,
-    vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective R hm⟩
+Assume that the submodule $M' \subseteq M$ generated by the $m_i$ satisfies the
+property that the map $M' \otimes N \to M \otimes N$ is injective. Then the expression
+$\sum_i m_i \otimes n_i$ vanishes trivially if and only if it vanishes. -/
+/-
+**TensorProduct.vanishesTrivially_iff_sum_tmul_eq_zero_of_rTensor_injective** 是 
+Mathlib 中的一个定理，位于命名空间 `TensorProduct`。
+形式化陈述：vanishesTrivially_iff_sum_tmul_eq_zero_of_rTensor_injective (hm : Injectiv
+e (rTensor N (span R (Set.range m)).subtype)) : VanishesTrivially R m n ↔ ∑ i, m
+ i otimesₜ n i = (0 : M otimes[R] N)
+参数：hm : Injective (rTensor N (span R (Set.range m)).subtype)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.sum_tmul_eq_zero_of_vanishesTrivially`：sum_tmul_eq_zero_of
+_vanishesTrivially (hmn : VanishesTrivially R m n) : ∑ i, m i otimesₜ n i = (0 :
+ M otimes[R] N)
+· 使用定理 `TensorProduct.vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective
+`：vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective (hm : Injective (rT
+ensor N (span R (Set.range m)).subtype)) (hmn : ∑ i, m i otime…
 
-中文:
-定理 vanishesTrivially_iff_sum_tmul_eq_zero_of_rTensor_injective
-  证明: ⟨sum_tmul_eq_zero_of_vanishesTrivially R,
-    vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective R hm⟩
+--- 原说明 ---
+**Equational criterion for vanishing**
+[A. Altman and S. Kleiman, *A term of commutative algebra* (Lemma 8.16)][altman2
+021term],
+generalization.
 
-Depends on / 依赖: sum_tmul_eq_zero_of_vanishesTrivially, vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective
+Assume that the submodule $M' \subseteq M$ generated by the $m_i$ satisfies the
+property that the map $M' \otimes N \to M \otimes N$ is injective. Then the expr
+ession
+$\sum_i m_i \otimes n_i$ vanishes trivially if and only if it vanishes.
 -/
 theorem vanishesTrivially_iff_sum_tmul_eq_zero_of_rTensor_injective
     (hm : Injective (rTensor N (span R (Set.range m)).subtype)) :
-    VanishesTrivially R m n ↔ ∑ i, m i otimesₜ n i = (0 : M otimes[R] N) :=
+    VanishesTrivially R m n ↔ ∑ i, m i ⊗ₜ n i = (0 : M ⊗[R] N) :=
   ⟨sum_tmul_eq_zero_of_vanishesTrivially R,
     vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective R hm⟩
 
-/--
-theorem `rTensor_injective_of_forall_vanishesTrivially` / 定理 `rTensor_injective_of_forall_vanishesTrivially`
+/-- Converse of `TensorProduct.vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective`.
 
-English:
-theorem rTensor_injective_of_forall_vanishesTrivially
-  proof: by
-  apply (injective_iff_map_eq_zero _).mpr
-  rintro x hx
-  obtain ⟨s, rfl⟩ := exists_finset x
-  rw [← Finset.sum_attach]
-  apply sum_tmul_eq_zero_of_vanishesTrivially
-  simp only [map_sum, rTensor_tmul, coe_subtype] at hx
-  have e := (Fintype.equivFin s).symm
-  rw [← Finset.sum_coe_sort]; rw [← e.sum_comp] at hx
-  have := hMN hx
-  rw [← e.vanishesTrivially_comp]
-  unfold VanishesTrivially at this ⊢
-  convert! this
-  symm
-  convert! (injective_iff_map_eq_zero' _).mp (injective_subtype M') _
-  simp
+Assume that every expression $\sum_i m_i \otimes n_i$ which vanishes also vanishes trivially.
+Then, for every submodule $M' \subseteq M$, the map $M' \otimes N \to M \otimes N$ is injective. -/
+/-
+**TensorProduct.rTensor_injective_of_forall_vanishesTrivially** 是 Mathlib 中的一个定理
+，位于命名空间 `TensorProduct`。
+形式化陈述：rTensor_injective_of_forall_vanishesTrivially (hMN : forall {l : Nat} {m :
+ Fin l -> M} {n : Fin l -> N}, ∑ i, m i otimesₜ n i = (0 : M otimes[R] N) -> Van
+ishesTrivially R m n) (M' : Submodule R M) : Injective (rTensor N M'.subtype)
+参数：hMN : forall {l : Nat} {m : Fin l -> M} {n : Fin l -> N}, ∑ i, m i otimesₜ n 
+i = (0 : M otimes[R] N) -> VanishesTrivially R m n；M' : Submodule R M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `injective_iff_map_eq_zero`：∀ {F : Type u_7} {G : Type u_8} {H : Type u_9
+} [inst : AddGroup G] [inst_1 : AddZeroClass H] [inst_2 : FunLike F G H]   [AddM
+onoidHomClass F…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `TensorProduct.exists_finset`：exists_finset (x : M otimes[R] N) : exists 
+S : Finset (M × N), x = S.sum fun i => i.1 otimesₜ[R] i.2
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sum_attach`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMonoid
+ M] (s : Finset ι) (f : ι → M), ∑ x ∈ s.attach, f ↑x = ∑ x ∈ s, f x
+· 使用定理 `TensorProduct.sum_tmul_eq_zero_of_vanishesTrivially`：sum_tmul_eq_zero_of
+_vanishesTrivially (hmn : VanishesTrivially R m n) : ∑ i, m i otimesₜ n i = (0 :
+ M otimes[R] N)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.sum_comp`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst : F
+intype ι] [inst_1 : Fintype κ] [inst_2 : AddCommMonoid M]   (e : ι ≃ κ) (g : κ →
+ M),…
+· 使用定理 `Finset.sum_coe_sort`：∀ {ι : Type u_1} {M : Type u_4} (s : Finset ι) [ins
+t : AddCommMonoid M] (f : ι → M), ∑ i, f ↑i = ∑ i ∈ s, f i
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `Equiv.vanishesTrivially_comp`：∀ {R : Type u_1} [inst : CommRing R] {M : 
+Type u_2} [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   {N : Type u_3
+} [inst_3 : AddCom…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `pi_congr`：∀ {α : Sort u} {β β' : α → Sort v}, (∀ (a : α), β a = β' a) → 
+((a : α) → β a) = ((a : α) → β' a)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `injective_iff_map_eq_zero'`：∀ {F : Type u_7} {G : Type u_8} {H : Type u_
+9} [inst : AddGroup G] [inst_1 : AddZeroClass H] [inst_2 : FunLike F G H]   [Add
+MonoidHomClass F…
+· 使用定理 `Submodule.injective_subtype`：injective_subtype : Injective p.subtype
 
-中文:
-定理 rTensor_injective_of_对任意_vanishesTrivially
-  证明: by
-  apply (injective_iff_map_eq_zero _).mpr
-  rintro x hx
-  obtain ⟨s, rfl⟩ := exists_finset x
-  rw [← Finset.sum_attach]
-  apply sum_tmul_eq_zero_of_vanishesTrivially
-  simp only [map_sum, rTensor_tmul, coe_subtype] at hx
-  have e := (Fintype.equivFin s).symm
-  rw [← Finset.sum_coe_sort]; rw [← e.sum_comp] at hx
-  have := hMN hx
-  rw [← e.vanishesTrivially_comp]
-  unfold VanishesTrivially at this ⊢
-  convert! this
-  symm
-  convert! (injective_iff_map_eq_zero' _).mp (injective_subtype M') _
-  simp
+--- 原说明 ---
+Converse of `TensorProduct.vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_inje
+ctive`.
 
-Depends on / 依赖: Finset, Finset.sum_attach, Finset.sum_coe_sort, Fintype, Fintype.equivFin, VanishesTrivially, coe_subtype, convert, e.sum_comp, e.vanishesTrivially_comp, equivFin, exists_finset, injective_iff_map_eq_zero, injective_subtype, map_sum, rTensor_tmul, sum_attach, sum_coe_sort, sum_comp, sum_tmul_eq_zero_of_vanishesTrivially
+Assume that every expression $\sum_i m_i \otimes n_i$ which vanishes also vanish
+es trivially.
+Then, for every submodule $M' \subseteq M$, the map $M' \otimes N \to M \otimes 
+N$ is injective.
 -/
 theorem rTensor_injective_of_forall_vanishesTrivially
-    (hMN : forall {l : Nat} {m : Fin l -> M} {n : Fin l -> N},
-      ∑ i, m i otimesₜ n i = (0 : M otimes[R] N) -> VanishesTrivially R m n)
+    (hMN : ∀ {l : ℕ} {m : Fin l → M} {n : Fin l → N},
+      ∑ i, m i ⊗ₜ n i = (0 : M ⊗[R] N) → VanishesTrivially R m n)
     (M' : Submodule R M) : Injective (rTensor N M'.subtype) := by
   apply (injective_iff_map_eq_zero _).mpr
   rintro x hx
@@ -498,7 +608,7 @@ theorem rTensor_injective_of_forall_vanishesTrivially
   apply sum_tmul_eq_zero_of_vanishesTrivially
   simp only [map_sum, rTensor_tmul, coe_subtype] at hx
   have e := (Fintype.equivFin s).symm
-  rw [← Finset.sum_coe_sort]; rw [← e.sum_comp] at hx
+  rw [← Finset.sum_coe_sort, ← e.sum_comp] at hx
   have := hMN hx
   rw [← e.vanishesTrivially_comp]
   unfold VanishesTrivially at this ⊢
@@ -507,68 +617,74 @@ theorem rTensor_injective_of_forall_vanishesTrivially
   convert! (injective_iff_map_eq_zero' _).mp (injective_subtype M') _
   simp
 
-/--
-theorem `forall_vanishesTrivially_iff_forall_rTensor_injective` / 定理 `forall_vanishesTrivially_iff_forall_rTensor_injective`
+/-- Every expression $\sum_i m_i \otimes n_i$ which vanishes also vanishes trivially if and only if
+for every submodule $M' \subseteq M$, the map $M' \otimes N \to M \otimes N$ is injective. -/
+/-
+**TensorProduct.forall_vanishesTrivially_iff_forall_rTensor_injective** 是 Mathli
+b 中的一个定理，位于命名空间 `TensorProduct`。
+形式化陈述：forall_vanishesTrivially_iff_forall_rTensor_injective : (forall {l : Nat} 
+{m : Fin l -> M} {n : Fin l -> N}, ∑ i, m i otimesₜ n i = (0 : M otimes[R] N) ->
+ VanishesTrivially R m n) ↔ forall M' : Submodule R M, Injective (rTensor N M'.s
+ubtype)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.rTensor_injective_of_forall_vanishesTrivially`：rTensor_inj
+ective_of_forall_vanishesTrivially (hMN : forall {l : Nat} {m : Fin l -> M} {n :
+ Fin l -> N}, ∑ i, m i otimesₜ n i = (0 : M otime…
+· 使用定理 `TensorProduct.vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective
+`：vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective (hm : Injective (rT
+ensor N (span R (Set.range m)).subtype)) (hmn : ∑ i, m i otime…
 
-English:
-theorem forall_vanishesTrivially_iff_forall_rTensor_injective
-  proof: by
-  constructor
-  · intro h
-    exact rTensor_injective_of_forall_vanishesTrivially R h
-  · intro h k m n hmn
-    exact vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective R (h _) hmn
-
-中文:
-定理 对任意_vanishesTrivially_iff_对任意_rTensor_injective
-  证明: by
-  constructor
-  · intro h
-    exact rTensor_injective_of_forall_vanishesTrivially R h
-  · intro h k m n hmn
-    exact vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective R (h _) hmn
-
-Depends on / 依赖: rTensor_injective_of_forall_vanishesTrivially, vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective
+--- 原说明 ---
+Every expression $\sum_i m_i \otimes n_i$ which vanishes also vanishes trivially
+ if and only if
+for every submodule $M' \subseteq M$, the map $M' \otimes N \to M \otimes N$ is 
+injective.
 -/
 theorem forall_vanishesTrivially_iff_forall_rTensor_injective :
-    (forall {l : Nat} {m : Fin l -> M} {n : Fin l -> N},
-      ∑ i, m i otimesₜ n i = (0 : M otimes[R] N) -> VanishesTrivially R m n) ↔
-    forall M' : Submodule R M, Injective (rTensor N M'.subtype) := by
+    (∀ {l : ℕ} {m : Fin l → M} {n : Fin l → N},
+      ∑ i, m i ⊗ₜ n i = (0 : M ⊗[R] N) → VanishesTrivially R m n) ↔
+    ∀ M' : Submodule R M, Injective (rTensor N M'.subtype) := by
   constructor
   · intro h
     exact rTensor_injective_of_forall_vanishesTrivially R h
   · intro h k m n hmn
     exact vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective R (h _) hmn
 
-/--
-theorem `forall_vanishesTrivially_iff_forall_fg_rTensor_injective` / 定理 `forall_vanishesTrivially_iff_forall_fg_rTensor_injective`
+/-- Every expression $\sum_i m_i \otimes n_i$ which vanishes also vanishes trivially if and only if
+for every finitely generated submodule $M' \subseteq M$, the map $M' \otimes N \to M \otimes N$ is
+injective. -/
+/-
+**TensorProduct.forall_vanishesTrivially_iff_forall_fg_rTensor_injective** 是 Mat
+hlib 中的一个定理，位于命名空间 `TensorProduct`。
+形式化陈述：forall_vanishesTrivially_iff_forall_fg_rTensor_injective : (forall {l : Na
+t} {m : Fin l -> M} {n : Fin l -> N}, ∑ i, m i otimesₜ n i = (0 : M otimes[R] N)
+ -> VanishesTrivially R m n) ↔ forall (M' : Submodule R M) (_ : M'.FG), Injectiv
+e (rTensor N M'.subtype)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorProduct.rTensor_injective_of_forall_vanishesTrivially`：rTensor_inj
+ective_of_forall_vanishesTrivially (hMN : forall {l : Nat} {m : Fin l -> M} {n :
+ Fin l -> N}, ∑ i, m i otimesₜ n i = (0 : M otime…
+· 使用定理 `TensorProduct.vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective
+`：vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective (hm : Injective (rT
+ensor N (span R (Set.range m)).subtype)) (hmn : ∑ i, m i otime…
+· 使用定理 `Submodule.fg_span`：fg_span {s : Set M} (hs : s.Finite) : FG (span R s)
+· 使用定理 `Set.finite_range`：finite_range (f : ι -> α) [Finite ι] : (range f).Finit
+e
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
 
-English:
-theorem forall_vanishesTrivially_iff_forall_fg_rTensor_injective
-  proof: by
-  constructor
-  · intro h M' _
-    exact rTensor_injective_of_forall_vanishesTrivially R h M'
-  · intro h k m n hmn
-    exact vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective R
-      (h _ (fg_span (Set.finite_range _))) hmn
-
-中文:
-定理 对任意_vanishesTrivially_iff_对任意_fg_rTensor_injective
-  证明: by
-  constructor
-  · intro h M' _
-    exact rTensor_injective_of_forall_vanishesTrivially R h M'
-  · intro h k m n hmn
-    exact vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective R
-      (h _ (fg_span (Set.finite_range _))) hmn
-
-Depends on / 依赖: Set.finite_range, fg_span, finite_range, rTensor_injective_of_forall_vanishesTrivially, vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective
+--- 原说明 ---
+Every expression $\sum_i m_i \otimes n_i$ which vanishes also vanishes trivially
+ if and only if
+for every finitely generated submodule $M' \subseteq M$, the map $M' \otimes N \
+to M \otimes N$ is
+injective.
 -/
 theorem forall_vanishesTrivially_iff_forall_fg_rTensor_injective :
-    (forall {l : Nat} {m : Fin l -> M} {n : Fin l -> N},
-      ∑ i, m i otimesₜ n i = (0 : M otimes[R] N) -> VanishesTrivially R m n) ↔
-    forall (M' : Submodule R M) (_ : M'.FG), Injective (rTensor N M'.subtype) := by
+    (∀ {l : ℕ} {m : Fin l → M} {n : Fin l → N},
+      ∑ i, m i ⊗ₜ n i = (0 : M ⊗[R] N) → VanishesTrivially R m n) ↔
+    ∀ (M' : Submodule R M) (_ : M'.FG), Injective (rTensor N M'.subtype) := by
   constructor
   · intro h M' _
     exact rTensor_injective_of_forall_vanishesTrivially R h M'
@@ -576,25 +692,38 @@ theorem forall_vanishesTrivially_iff_forall_fg_rTensor_injective :
     exact vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective R
       (h _ (fg_span (Set.finite_range _))) hmn
 
-/--
-theorem `rTensor_injective_of_forall_fg_rTensor_injective` / 定理 `rTensor_injective_of_forall_fg_rTensor_injective`
+/-- If the map $M' \otimes N \to M \otimes N$ is injective for every finitely generated submodule
+$M' \subseteq M$, then it is in fact injective for every submodule $M' \subseteq M$. -/
+/-
+**TensorProduct.rTensor_injective_of_forall_fg_rTensor_injective** 是 Mathlib 中的一
+个定理，位于命名空间 `TensorProduct`。
+形式化陈述：rTensor_injective_of_forall_fg_rTensor_injective (hMN : forall (M' : Submo
+dule R M) (_ : M'.FG), Injective (rTensor N M'.subtype)) (M' : Submodule R M) : 
+Injective (rTensor N M'.subtype)
+参数：hMN : forall (M' : Submodule R M) (_ : M'.FG), Injective (rTensor N M'.subtyp
+e)；M' : Submodule R M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `TensorProduct.forall_vanishesTrivially_iff_forall_rTensor_injective`：for
+all_vanishesTrivially_iff_forall_rTensor_injective : (forall {l : Nat} {m : Fin 
+l -> M} {n : Fin l -> N}, ∑ i, m i otimesₜ n i = (0 : M o…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `TensorProduct.forall_vanishesTrivially_iff_forall_fg_rTensor_injective`：
+forall_vanishesTrivially_iff_forall_fg_rTensor_injective : (forall {l : Nat} {m 
+: Fin l -> M} {n : Fin l -> N}, ∑ i, m i otimesₜ n i = (0 : …
 
-English:
-theorem rTensor_injective_of_forall_fg_rTensor_injective
-  proof: (forall_vanishesTrivially_iff_forall_rTensor_injective R).mp
-    ((forall_vanishesTrivially_iff_forall_fg_rTensor_injective R).mpr hMN) M'
-
-中文:
-定理 rTensor_injective_of_对任意_fg_rTensor_injective
-  证明: (forall_vanishesTrivially_iff_forall_rTensor_injective R).mp
-    ((forall_vanishesTrivially_iff_forall_fg_rTensor_injective R).mpr hMN) M'
-
-Depends on / 依赖: forall_vanishesTrivially_iff_forall_fg_rTensor_injective, forall_vanishesTrivially_iff_forall_rTensor_injective
+--- 原说明 ---
+If the map $M' \otimes N \to M \otimes N$ is injective for every finitely genera
+ted submodule
+$M' \subseteq M$, then it is in fact injective for every submodule $M' \subseteq
+ M$.
 -/
 theorem rTensor_injective_of_forall_fg_rTensor_injective
-    (hMN : forall (M' : Submodule R M) (_ : M'.FG), Injective (rTensor N M'.subtype))
+    (hMN : ∀ (M' : Submodule R M) (_ : M'.FG), Injective (rTensor N M'.subtype))
     (M' : Submodule R M) : Injective (rTensor N M'.subtype) :=
   (forall_vanishesTrivially_iff_forall_rTensor_injective R).mp
     ((forall_vanishesTrivially_iff_forall_fg_rTensor_injective R).mpr hMN) M'
 
 end TensorProduct
+

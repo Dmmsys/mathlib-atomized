@@ -24,192 +24,89 @@ variable {α : Type u}
 
 namespace ULift
 
-/--
-Instance `instNNRatCast` / 实例 `instNNRatCast`
-
-English:
-instance instNNRatCast
-  signature: [NNRatCast α]
-  body: up q
-
-中文:
-实例 instNNRatCast
-  签名: [非负有理数嵌入 α]
-  定义体: up q
+/-
+**ULift.instNNRatCast** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：instNNRatCast [NNRatCast α] : NNRatCast (ULift α) where nnratCast q
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNNRatCast [NNRatCast α] : NNRatCast (ULift α) where nnratCast q := up q
-/--
-Instance `instRatCast` / 实例 `instRatCast`
-
-English:
-instance instRatCast
-  signature: [RatCast α]
-  body: up q
-
-中文:
-实例 instRatCast
-  签名: [有理数嵌入 α]
-  定义体: up q
+/-
+**ULift.instRatCast** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：instRatCast [RatCast α] : RatCast (ULift α) where ratCast q
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instRatCast [RatCast α] : RatCast (ULift α) where ratCast q := up q
-
-/--
-lemma `up_nnratCast` / 引理 `up_nnratCast`
-
-English:
-lemma up_nnratCast
-  given: [NNRatCast α] (q : Rat>=0)
-  statement: up (q : α) = q
-  proof: rfl
-
-中文:
-引理 up_nnratCast
-  条件: [非负有理数嵌入 α] (q : 有理数>=0)
-  结论: up (q : α) = q
-  证明: rfl
+/-
+**ULift.up_nnratCast** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：∀ {α : Type u} [inst : NNRatCast α] (q : ℚ≥0), { down := ↑q } = ↑q
+参数：q : ℚ≥0。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma up_nnratCast [NNRatCast α] (q : Rat>=0) : up (q : α) = q := rfl
-/--
-lemma `down_nnratCast` / 引理 `down_nnratCast`
-
-English:
-lemma down_nnratCast
-  given: [NNRatCast α] (q : Rat>=0)
-  statement: down (q : ULift α) = q
-  proof: rfl
-
-中文:
-引理 down_nnratCast
-  条件: [非负有理数嵌入 α] (q : 有理数>=0)
-  结论: down (q : 类型层提升 α) = q
-  证明: rfl
+@[simp, norm_cast] lemma up_nnratCast [NNRatCast α] (q : ℚ≥0) : up (q : α) = q := rfl
+/-
+**ULift.down_nnratCast** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：∀ {α : Type u} [inst : NNRatCast α] (q : ℚ≥0), (↑q).down = ↑q
+参数：q : ℚ≥0；↑q。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma down_nnratCast [NNRatCast α] (q : Rat>=0) : down (q : ULift α) = q := rfl
-/--
-lemma `up_ratCast` / 引理 `up_ratCast`
-
-English:
-lemma up_ratCast
-  given: [RatCast α] (q : Rat)
-  statement: up (q : α) = q
-  proof: rfl
-
-中文:
-引理 up_ratCast
-  条件: [有理数嵌入 α] (q : 有理数)
-  结论: up (q : α) = q
-  证明: rfl
+@[simp, norm_cast] lemma down_nnratCast [NNRatCast α] (q : ℚ≥0) : down (q : ULift α) = q := rfl
+/-
+**ULift.up_ratCast** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：∀ {α : Type u} [inst : RatCast α] (q : ℚ), { down := ↑q } = ↑q
+参数：q : ℚ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma up_ratCast [RatCast α] (q : Rat) : up (q : α) = q := rfl
-/--
-lemma `down_ratCast` / 引理 `down_ratCast`
-
-English:
-lemma down_ratCast
-  given: [RatCast α] (q : Rat)
-  statement: down (q : ULift α) = q
-  proof: rfl
-
-中文:
-引理 down_ratCast
-  条件: [有理数嵌入 α] (q : 有理数)
-  结论: down (q : 类型层提升 α) = q
-  证明: rfl
+@[simp, norm_cast] lemma up_ratCast [RatCast α] (q : ℚ) : up (q : α) = q := rfl
+/-
+**ULift.down_ratCast** 是 Mathlib 中的一个定理，位于命名空间 `ULift`。
+形式化陈述：∀ {α : Type u} [inst : RatCast α] (q : ℚ), (↑q).down = ↑q
+参数：q : ℚ；↑q。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma down_ratCast [RatCast α] (q : Rat) : down (q : ULift α) = q := rfl
-
-/--
-Instance `divisionSemiring` / 实例 `divisionSemiring`
-
-English:
-instance divisionSemiring
-  signature: [DivisionSemiring α]
-  body: up (DivisionSemiring.nnqsmul q x.down)
-nnqsmul_def _ _ := congrArg up DivisionSemiring.nnqsmul_def _ _
-nnratCast_def _ := congrArg up DivisionSemiring.nnratCast_def _
-
-中文:
-实例 divisionSemiring
-  签名: [除半环 α]
-  定义体: up (DivisionSemiring.nnqsmul q x.down)
-nnqsmul_def _ _ := congrArg up DivisionSemiring.nnqsmul_def _ _
-nnratCast_def _ := congrArg up DivisionSemiring.nnratCast_def _
-
-Depends on / 依赖: DivisionSemiring, DivisionSemiring.nnqsmul, nnqsmul, x.down
+@[simp, norm_cast] lemma down_ratCast [RatCast α] (q : ℚ) : down (q : ULift α) = q := rfl
+/-
+**ULift.divisionSemiring** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：divisionSemiring [DivisionSemiring α] : DivisionSemiring (ULift α) where n
+nqsmul q x
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance divisionSemiring [DivisionSemiring α] : DivisionSemiring (ULift α) where
   nnqsmul q x := up (DivisionSemiring.nnqsmul q x.down)
-nnqsmul_def _ _ := congrArg up DivisionSemiring.nnqsmul_def _ _
-nnratCast_def _ := congrArg up DivisionSemiring.nnratCast_def _
-
-/--
-Instance `semifield` / 实例 `semifield`
-
-English:
-instance semifield
-  signature: [Semifield α]
-  body: { ULift.divisionSemiring, ULift.commGroupWithZero with }
-
-中文:
-实例 semifield
-  签名: [半域 α]
-  定义体: { ULift.divisionSemiring, ULift.commGroupWithZero with }
-
-Depends on / 依赖: ULift.commGroupWithZero, ULift.divisionSemiring, commGroupWithZero, divisionSemiring
+  nnqsmul_def _ _ := congrArg up <| DivisionSemiring.nnqsmul_def _ _
+  nnratCast_def _ := congrArg up <| DivisionSemiring.nnratCast_def _
+/-
+**ULift.semifield** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：semifield [Semifield α] : Semifield (ULift α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance semifield [Semifield α] : Semifield (ULift α) :=
   { ULift.divisionSemiring, ULift.commGroupWithZero with }
-
-/--
-Instance `divisionRing` / 实例 `divisionRing`
-
-English:
-instance divisionRing
-  signature: [DivisionRing α]
-  body: ring
-  __ := groupWithZero
-  nnqsmul q x := up (DivisionSemiring.nnqsmul q x.down)
-nnqsmul_def _ _ := congrArg up DivisionSemiring.nnqsmul_def _ _
-nnratCast_def _ := congrArg up DivisionSemiring.nnratCast_def _
-  qsmul q x := up (DivisionRing.qsmul q x.down)
-qsmul_def _ _ := congrArg up DivisionRing.qsmul_def _ _
-ratCast_def _ := congrArg up DivisionRing.ratCast_def _
-
-中文:
-实例 divisionRing
-  签名: [除环 α]
-  定义体: ring
-  __ := groupWithZero
-  nnqsmul q x := up (DivisionSemiring.nnqsmul q x.down)
-nnqsmul_def _ _ := congrArg up DivisionSemiring.nnqsmul_def _ _
-nnratCast_def _ := congrArg up DivisionSemiring.nnratCast_def _
-  qsmul q x := up (DivisionRing.qsmul q x.down)
-qsmul_def _ _ := congrArg up DivisionRing.qsmul_def _ _
-ratCast_def _ := congrArg up DivisionRing.ratCast_def _
+/-
+**ULift.divisionRing** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：divisionRing [DivisionRing α] : DivisionRing (ULift α) where toRing
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance divisionRing [DivisionRing α] : DivisionRing (ULift α) where
   toRing := ring
   __ := groupWithZero
   nnqsmul q x := up (DivisionSemiring.nnqsmul q x.down)
-nnqsmul_def _ _ := congrArg up DivisionSemiring.nnqsmul_def _ _
-nnratCast_def _ := congrArg up DivisionSemiring.nnratCast_def _
+  nnqsmul_def _ _ := congrArg up <| DivisionSemiring.nnqsmul_def _ _
+  nnratCast_def _ := congrArg up <| DivisionSemiring.nnratCast_def _
   qsmul q x := up (DivisionRing.qsmul q x.down)
-qsmul_def _ _ := congrArg up DivisionRing.qsmul_def _ _
-ratCast_def _ := congrArg up DivisionRing.ratCast_def _
-
-/--
-Instance `field` / 实例 `field`
-
-English:
-instance field
-  signature: [Field α]
-  body: {}
-
-中文:
-实例 field
-  签名: [域 α]
-  定义体: {}
+  qsmul_def _ _ := congrArg up <| DivisionRing.qsmul_def _ _
+  ratCast_def _ := congrArg up <| DivisionRing.ratCast_def _
+/-
+**ULift.field** 是 Mathlib 中的一个实例，位于命名空间 `ULift`。
+形式化陈述：field [Field α] : Field (ULift α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance field [Field α] : Field (ULift α) := {}
 
 end ULift
+

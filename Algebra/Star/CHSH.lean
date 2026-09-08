@@ -79,42 +79,25 @@ public section
 
 universe u
 
-/--
-Definition of `IsCHSHTuple` / `IsCHSHTuple` 的定义
+/-- A CHSH tuple in a \*-monoid consists of 4 self-adjoint involutions `A₀ A₁ B₀ B₁` such that
+the `Aᵢ` commute with the `Bⱼ`.
 
-English:
-structure IsCHSHTuple
-  parameters: {R} [Monoid R] [StarMul R] (A₀ A₁ B₀ B₁ : R)
-  axioms and operations (12):
-    - A₀_inv : A₀ ^ 2 = 1
-    - A₁_inv : A₁ ^ 2 = 1
-    - B₀_inv : B₀ ^ 2 = 1
-    - B₁_inv : B₁ ^ 2 = 1
-    - A₀_sa : star A₀ = A₀
-    - A₁_sa : star A₁ = A₁
-    - B₀_sa : star B₀ = B₀
-    - B₁_sa : star B₁ = B₁
-    - A₀B₀_commutes : A₀ * B₀ = B₀ * A₀
-    - A₀B₁_commutes : A₀ * B₁ = B₁ * A₀
-    - A₁B₀_commutes : A₁ * B₀ = B₀ * A₁
-    - A₁B₁_commutes : A₁ * B₁ = B₁ * A₁
+The physical interpretation is that `A₀` and `A₁` are a pair of Boolean observables which
+are spacelike separated from another pair `B₀` and `B₁` of Boolean observables.
+-/
+/-
+**IsCHSHTuple** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{R : Type u_1} → [inst : Monoid R] → [StarMul R] → R → R → R → R → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-结构 是CHSHTuple
-  参数: {R} [幺半群 R] [StarMul R] (A₀ A₁ B₀ B₁ : R)
-  公理与运算 (12 个):
-    - A₀_inv : A₀ ^ 2 = 1
-    - A₁_inv : A₁ ^ 2 = 1
-    - B₀_inv : B₀ ^ 2 = 1
-    - B₁_inv : B₁ ^ 2 = 1
-    - A₀_sa : star A₀ = A₀
-    - A₁_sa : star A₁ = A₁
-    - B₀_sa : star B₀ = B₀
-    - B₁_sa : star B₁ = B₁
-    - A₀B₀_commutes : A₀ * B₀ = B₀ * A₀
-    - A₀B₁_commutes : A₀ * B₁ = B₁ * A₀
-    - A₁B₀_commutes : A₁ * B₀ = B₀ * A₁
-    - A₁B₁_commutes : A₁ * B₁ = B₁ * A₁
+--- 原说明 ---
+A CHSH tuple in a \*-monoid consists of 4 self-adjoint involutions `A₀ A₁ B₀ B₁`
+ such that
+the `Aᵢ` commute with the `Bⱼ`.
+
+The physical interpretation is that `A₀` and `A₁` are a pair of Boolean observab
+les which
+are spacelike separated from another pair `B₀` and `B₁` of Boolean observables.
 -/
 structure IsCHSHTuple {R} [Monoid R] [StarMul R] (A₀ A₁ B₀ B₁ : R) : Prop where
   A₀_inv : A₀ ^ 2 = 1
@@ -131,21 +114,16 @@ structure IsCHSHTuple {R} [Monoid R] [StarMul R] (A₀ A₁ B₀ B₁ : R) : Pro
   A₁B₁_commutes : A₁ * B₁ = B₁ * A₁
 
 variable {R : Type u}
-
-/--
-theorem `CHSH_id` / 定理 `CHSH_id`
-
-English:
-theorem CHSH_id
-  statement: [CommRing R] {A₀ A₁ B₀ B₁ : R} (A₀_inv : A₀ ^ 2 = 1) (A₁_inv : A₁ ^ 2 = 1)
-  proof: by
-  grind
-
-中文:
-定理 CHSH_id
-  结论: [交换环 R] {A₀ A₁ B₀ B₁ : R} (A₀_inv : A₀ ^ 2 = 1) (A₁_inv : A₁ ^ 2 = 1)
-  证明: by
-  grind
+/-
+**CHSH_id** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：CHSH_id [CommRing R] {A₀ A₁ B₀ B₁ : R} (A₀_inv : A₀ ^ 2 = 1) (A₁_inv : A₁ 
+^ 2 = 1) (B₀_inv : B₀ ^ 2 = 1) (B₁_inv : B₁ ^ 2 = 1) : (2 - A₀ * B₀ - A₀ * B₁ - 
+A₁ * B₀ + A₁ * B₁) * (2 - A₀ * B₀ - A₀ * B₁ - A₁ * B₀ + A₁ * B₁) = 4 * (2 - A₀ *
+ B₀ - A₀ * B₁ - A₁ * B₀ + A₁ * B₁)
+参数：A₀_inv : A₀ ^ 2 = 1；A₁_inv : A₁ ^ 2 = 1；B₀_inv : B₀ ^ 2 = 1；B₁_inv : B₁ ^ 2 =
+ 1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem CHSH_id [CommRing R] {A₀ A₁ B₀ B₁ : R} (A₀_inv : A₀ ^ 2 = 1) (A₁_inv : A₁ ^ 2 = 1)
     (B₀_inv : B₀ ^ 2 = 1) (B₁_inv : B₁ ^ 2 = 1) :
@@ -153,67 +131,94 @@ theorem CHSH_id [CommRing R] {A₀ A₁ B₀ B₁ : R} (A₀_inv : A₀ ^ 2 = 1)
       4 * (2 - A₀ * B₀ - A₀ * B₁ - A₁ * B₀ + A₁ * B₁) := by
   grind
 
-/--
-theorem `CHSH_inequality_of_comm` / 定理 `CHSH_inequality_of_comm`
+/-- Given a CHSH tuple (A₀, A₁, B₀, B₁) in a *commutative* ordered \*-algebra over ℝ,
+`A₀ * B₀ + A₀ * B₁ + A₁ * B₀ - A₁ * B₁ ≤ 2`.
 
-English:
-theorem CHSH_inequality_of_comm
-  statement: [CommRing R] [PartialOrder R] [StarRing R] [StarOrderedRing R]
-  proof: by
-  let P := 2 - A₀ * B₀ - A₀ * B₁ - A₁ * B₀ + A₁ * B₁
-  have i₁ : 0 <= P := by
-    have idem : P * P = 4 * P := CHSH_id T.A₀_inv T.A₁_inv T.B₀_inv T.B₁_inv
-    have idem' : P = (1 / 4 : Real) • (P * P) := by
-      have h : 4 * P = (4 : Real) • P := by simp [map_ofNat, Algebra.smul_def]
-      rw [idem]; rw [h]; rw [← mul_smul]
-      simp
-    have sa : star P = P := by
-      dsimp [P]
-      simp only [star_add, star_sub, star_mul, star_ofNat, T.A₀_sa, T.A₁_sa, T.B₀_sa,
-        T.B₁_sa, mul_comm B₀, mul_comm B₁]
-    simpa only [← idem', sa]
-      using smul_nonneg (by simp : (0 : Real) <= 1 / 4) (star_mul_self_nonneg P)
-  apply le_of_sub_nonneg
-  simpa only [sub_add_eq_sub_sub, ← sub_add] using i₁
+(We could work over ℤ[⅟2] if we wanted to!)
+-/
+/-
+**CHSH_inequality_of_comm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：CHSH_inequality_of_comm [CommRing R] [PartialOrder R] [StarRing R] [StarOr
+deredRing R] [Algebra Real R] [IsOrderedModule Real R] (A₀ A₁ B₀ B₁ : R) (T : Is
+CHSHTuple A₀ A₁ B₀ B₁) : A₀ * B₀ + A₀ * B₁ + A₁ * B₀ - A₁ * B₁ <= 2
+参数：A₀ A₁ B₀ B₁ : R；T : IsCHSHTuple A₀ A₁ B₀ B₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `CHSH_id`：CHSH_id [CommRing R] {A₀ A₁ B₀ B₁ : R} (A₀_inv : A₀ ^ 2 = 1) (A
+₁_inv : A₁ ^ 2 = 1) (B₀_inv : B₀ ^ 2 = 1) (B₁_inv : B₁ ^ 2 = 1) : (2 - A₀ * B…
+· 使用定理 `IsCHSHTuple.A₀_inv`：∀ {R : Type u_1} [inst : Monoid R] [inst_1 : StarMul
+ R] {A₀ A₁ B₀ B₁ : R}, IsCHSHTuple A₀ A₁ B₀ B₁ → A₀ ^ 2 = 1
+· 使用定理 `IsCHSHTuple.A₁_inv`：∀ {R : Type u_1} [inst : Monoid R] [inst_1 : StarMul
+ R] {A₀ A₁ B₀ B₁ : R}, IsCHSHTuple A₀ A₁ B₀ B₁ → A₁ ^ 2 = 1
+· 使用定理 `IsCHSHTuple.B₀_inv`：∀ {R : Type u_1} [inst : Monoid R] [inst_1 : StarMul
+ R] {A₀ A₁ B₀ B₁ : R}, IsCHSHTuple A₀ A₁ B₀ B₁ → B₀ ^ 2 = 1
+· 使用定理 `IsCHSHTuple.B₁_inv`：∀ {R : Type u_1} [inst : Monoid R] [inst_1 : StarMul
+ R] {A₀ A₁ B₀ B₁ : R}, IsCHSHTuple A₀ A₁ B₀ B₁ → B₁ ^ 2 = 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.smul_def`：smul_def (r : R) (x : A) : r • x = algebraMap R A r * 
+x
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_ofNat`：map_ofNat [FunLike F R S] [RingHomClass F R S] (f : F) (n : N
+at) [Nat.AtLeastTwo n] : (f ofNat(n) : S) = OfNat.ofNat n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
+· 使用定理 `one_div`：one_div (a : G) : 1 / a = a⁻¹
+· 使用定理 `inv_mul_cancel₀`：inv_mul_cancel₀ (h : a != 0) : a⁻¹ * a = 1
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `StarAddMonoid.star_add`：∀ {R : Type u} {inst : AddMonoid R} [self : Star
+AddMonoid R] (r s : R), star (r + s) = star r + star s
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `star_sub`：star_sub [AddGroup R] [StarAddMonoid R] (r s : R) : star (r - 
+s) = star r - star s
+· 使用定理 `star_ofNat`：star_ofNat [NonAssocSemiring R] [StarRing R] (n : Nat) [n.At
+LeastTwo] : star (ofNat(n) : R) = ofNat(n)
+· 使用定理 `StarMul.star_mul`：∀ {R : Type u} {inst : Mul R} [self : StarMul R] (r s 
+: R), star (r * s) = star s * star r
+· 使用定理 `IsCHSHTuple.B₀_sa`：∀ {R : Type u_1} [inst : Monoid R] [inst_1 : StarMul 
+R] {A₀ A₁ B₀ B₁ : R}, IsCHSHTuple A₀ A₁ B₀ B₁ → star B₀ = B₀
+· 使用定理 `IsCHSHTuple.A₀_sa`：∀ {R : Type u_1} [inst : Monoid R] [inst_1 : StarMul 
+R] {A₀ A₁ B₀ B₁ : R}, IsCHSHTuple A₀ A₁ B₀ B₁ → star A₀ = A₀
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `IsCHSHTuple.B₁_sa`：∀ {R : Type u_1} [inst : Monoid R] [inst_1 : StarMul 
+R] {A₀ A₁ B₀ B₁ : R}, IsCHSHTuple A₀ A₁ B₀ B₁ → star B₁ = B₁
+（共 44 条，此处仅展示前 30 条）
 
-中文:
-定理 CHSH_inequality_of_comm
-  结论: [交换环 R] [偏序 R] [对合环 R] [StarOrdered环 R]
-  证明: by
-  let P := 2 - A₀ * B₀ - A₀ * B₁ - A₁ * B₀ + A₁ * B₁
-  have i₁ : 0 <= P := by
-    have idem : P * P = 4 * P := CHSH_id T.A₀_inv T.A₁_inv T.B₀_inv T.B₁_inv
-    have idem' : P = (1 / 4 : Real) • (P * P) := by
-      have h : 4 * P = (4 : Real) • P := by simp [map_ofNat, Algebra.smul_def]
-      rw [idem]; rw [h]; rw [← mul_smul]
-      simp
-    have sa : star P = P := by
-      dsimp [P]
-      simp only [star_add, star_sub, star_mul, star_ofNat, T.A₀_sa, T.A₁_sa, T.B₀_sa,
-        T.B₁_sa, mul_comm B₀, mul_comm B₁]
-    simpa only [← idem', sa]
-      using smul_nonneg (by simp : (0 : Real) <= 1 / 4) (star_mul_self_nonneg P)
-  apply le_of_sub_nonneg
-  simpa only [sub_add_eq_sub_sub, ← sub_add] using i₁
+--- 原说明 ---
+Given a CHSH tuple (A₀, A₁, B₀, B₁) in a *commutative* ordered \*-algebra over ℝ
+,
+`A₀ * B₀ + A₀ * B₁ + A₁ * B₀ - A₁ * B₁ ≤ 2`.
 
-Depends on / 依赖: Algebra, Algebra.smul_def, CHSH_id, map_ofNat, mul_comm, mul_smul, smul_def, smul_n, star_add, star_mul, star_ofNat, star_sub
+(We could work over ℤ[⅟2] if we wanted to!)
 -/
 theorem CHSH_inequality_of_comm [CommRing R] [PartialOrder R] [StarRing R] [StarOrderedRing R]
-    [Algebra Real R] [IsOrderedModule Real R] (A₀ A₁ B₀ B₁ : R) (T : IsCHSHTuple A₀ A₁ B₀ B₁) :
-    A₀ * B₀ + A₀ * B₁ + A₁ * B₀ - A₁ * B₁ <= 2 := by
+    [Algebra ℝ R] [IsOrderedModule ℝ R] (A₀ A₁ B₀ B₁ : R) (T : IsCHSHTuple A₀ A₁ B₀ B₁) :
+    A₀ * B₀ + A₀ * B₁ + A₁ * B₀ - A₁ * B₁ ≤ 2 := by
   let P := 2 - A₀ * B₀ - A₀ * B₁ - A₁ * B₀ + A₁ * B₁
-  have i₁ : 0 <= P := by
+  have i₁ : 0 ≤ P := by
     have idem : P * P = 4 * P := CHSH_id T.A₀_inv T.A₁_inv T.B₀_inv T.B₁_inv
-    have idem' : P = (1 / 4 : Real) • (P * P) := by
-      have h : 4 * P = (4 : Real) • P := by simp [map_ofNat, Algebra.smul_def]
-      rw [idem]; rw [h]; rw [← mul_smul]
+    have idem' : P = (1 / 4 : ℝ) • (P * P) := by
+      have h : 4 * P = (4 : ℝ) • P := by simp [map_ofNat, Algebra.smul_def]
+      rw [idem, h, ← mul_smul]
       simp
     have sa : star P = P := by
       dsimp [P]
       simp only [star_add, star_sub, star_mul, star_ofNat, T.A₀_sa, T.A₁_sa, T.B₀_sa,
         T.B₁_sa, mul_comm B₀, mul_comm B₁]
     simpa only [← idem', sa]
-      using smul_nonneg (by simp : (0 : Real) <= 1 / 4) (star_mul_self_nonneg P)
+      using smul_nonneg (by simp : (0 : ℝ) ≤ 1 / 4) (star_mul_self_nonneg P)
   apply le_of_sub_nonneg
   simpa only [sub_add_eq_sub_sub, ← sub_add] using i₁
 
@@ -225,27 +230,35 @@ which we hide in a namespace as they are unlikely to be useful elsewhere.
 
 namespace TsirelsonInequality
 
-
-/--
-theorem `sqrt_two_inv_mul_self` / 定理 `sqrt_two_inv_mul_self`
-
-English:
-theorem sqrt_two_inv_mul_self
-  statement: (√2)⁻¹ * (√2)⁻¹ = (2⁻¹ : Real)
-  proof: by
-  rw [← mul_inv]
-  simp
-
-中文:
-定理 sqrt_two_inv_mul_self
-  结论: (√2)⁻¹ * (√2)⁻¹ = (2⁻¹ : 实数)
-  证明: by
-  rw [← mul_inv]
-  simp
-
-Depends on / 依赖: mul_inv
+/-!
+Before proving Tsirelson's bound,
+we prepare some easy lemmas about √2.
 -/
-theorem sqrt_two_inv_mul_self : (√2)⁻¹ * (√2)⁻¹ = (2⁻¹ : Real) := by
+
+/-
+**TsirelsonInequality.sqrt_two_inv_mul_self** 是 Mathlib 中的一个定理，位于命名空间 `Tsirelson
+Inequality`。
+形式化陈述：sqrt_two_inv_mul_self : (√2)⁻¹ * (√2)⁻¹ = (2⁻¹ : Real)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_inv`：mul_inv : (a * b)⁻¹ = a⁻¹ * b⁻¹
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Real.mul_self_sqrt`：mul_self_sqrt (h : 0 <= x) : √x * √x = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+
+--- 原说明 ---
+Before proving Tsirelson's bound,
+we prepare some easy lemmas about √2.
+-/
+theorem sqrt_two_inv_mul_self : (√2)⁻¹ * (√2)⁻¹ = (2⁻¹ : ℝ) := by
   rw [← mul_inv]
   simp
 
@@ -253,90 +266,100 @@ end TsirelsonInequality
 
 open TsirelsonInequality
 
-/--
-theorem `tsirelson_inequality` / 定理 `tsirelson_inequality`
+/-- In a noncommutative ordered \*-algebra over ℝ,
+Tsirelson's bound for a CHSH tuple (A₀, A₁, B₀, B₁) is
+`A₀ * B₀ + A₀ * B₁ + A₁ * B₀ - A₁ * B₁ ≤ 2^(3/2) • 1`.
 
-English:
-theorem tsirelson_inequality
-  statement: [Ring R] [PartialOrder R] [StarRing R] [StarOrderedRing R]
-  proof: by
-  -- abel will create `ℤ` multiplication. We will `simp` them away to `ℝ` multiplication.
-  have M : forall (m : Int) (a : Real) (x : R), m • a • x = ((m : Real) * a) • x := fun m a x => by
-    rw [← Int.cast_smul_eq_zsmul Real]; rw [← mul_smul]
-  let P := (√2)⁻¹ • (A₁ + A₀) - B₀
-  let Q := (√2)⁻¹ • (A₁ - A₀) + B₁
-  have w : √2 ^ 3 • (1 : R) - A₀ * B₀ - A₀ * B₁ - A₁ * B₀ + A₁ * B₁ = (√2)⁻¹ • (P ^ 2 + Q ^ 2) := by
-    dsimp [P, Q]
-    -- distribute out all the powers and products appearing on the RHS
-    simp only [sq, sub_mul, mul_sub, add_mul, mul_add, smul_add, smul_sub]
-    -- pull all coefficients out to the front, and combine `√2`s where possible
-    simp only [Algebra.mul_smul_comm, Algebra.smul_mul_assoc, ← mul_smul, sqrt_two_inv_mul_self]
-    -- replace Aᵢ * Aᵢ = 1 and Bᵢ * Bᵢ = 1
-    simp only [← sq, T.A₀_inv, T.A₁_inv, T.B₀_inv, T.B₁_inv]
-    -- move Aᵢ to the left of Bᵢ
-    simp only [← T.A₀B₀_commutes, ← T.A₀B₁_commutes, ← T.A₁B₀_commutes, ← T.A₁B₁_commutes]
-    -- collect terms, simplify coefficients, and collect terms again:
-    abel_nf
-    -- all terms coincide, but the last one. Simplify all other terms
-    simp only [M]
-    simp only [neg_mul, mul_inv_cancel_of_invertible, add_assoc, add_comm,
-      add_left_comm, one_smul, Int.cast_neg, neg_smul, Int.cast_ofNat, ← add_smul]
-    grind
-  have pos : 0 <= (√2)⁻¹ • (P ^ 2 + Q ^ 2) := by
-    have P_sa : star P = P := by
-      simp only [P, star_smul, star_add, star_sub, star_id_of_comm, T.A₀_sa, T.A₁_sa, T.B₀_sa]
-    have Q_sa : star Q = Q := by
-      simp only [Q, star_smul, star_add, star_sub, star_id_of_comm, T.A₀_sa, T.A₁_sa, T.B₁_sa]
-    have P2_nonneg : 0 <= P ^ 2 := by simpa only [P_sa, sq] using star_mul_self_nonneg P
-    have Q2_nonneg : 0 <= Q ^ 2 := by simpa only [Q_sa, sq] using star_mul_self_nonneg Q
-    positivity
-  apply le_of_sub_nonneg
-  simpa only [sub_add_eq_sub_sub, ← sub_add, w, Nat.cast_zero] using pos
+We prove this by providing an explicit sum-of-squares decomposition
+of the difference.
 
-中文:
-定理 tsirelson_inequality
-  结论: [环 R] [偏序 R] [对合环 R] [StarOrdered环 R]
-  证明: by
-  -- abel will create `ℤ` multiplication. We will `simp` them away to `ℝ` multiplication.
-  have M : forall (m : Int) (a : Real) (x : R), m • a • x = ((m : Real) * a) • x := fun m a x => by
-    rw [← Int.cast_smul_eq_zsmul Real]; rw [← mul_smul]
-  let P := (√2)⁻¹ • (A₁ + A₀) - B₀
-  let Q := (√2)⁻¹ • (A₁ - A₀) + B₁
-  have w : √2 ^ 3 • (1 : R) - A₀ * B₀ - A₀ * B₁ - A₁ * B₀ + A₁ * B₁ = (√2)⁻¹ • (P ^ 2 + Q ^ 2) := by
-    dsimp [P, Q]
-    -- distribute out all the powers and products appearing on the RHS
-    simp only [sq, sub_mul, mul_sub, add_mul, mul_add, smul_add, smul_sub]
-    -- pull all coefficients out to the front, and combine `√2`s where possible
-    simp only [Algebra.mul_smul_comm, Algebra.smul_mul_assoc, ← mul_smul, sqrt_two_inv_mul_self]
-    -- replace Aᵢ * Aᵢ = 1 and Bᵢ * Bᵢ = 1
-    simp only [← sq, T.A₀_inv, T.A₁_inv, T.B₀_inv, T.B₁_inv]
-    -- move Aᵢ to the left of Bᵢ
-    simp only [← T.A₀B₀_commutes, ← T.A₀B₁_commutes, ← T.A₁B₀_commutes, ← T.A₁B₁_commutes]
-    -- collect terms, simplify coefficients, and collect terms again:
-    abel_nf
-    -- all terms coincide, but the last one. Simplify all other terms
-    simp only [M]
-    simp only [neg_mul, mul_inv_cancel_of_invertible, add_assoc, add_comm,
-      add_left_comm, one_smul, Int.cast_neg, neg_smul, Int.cast_ofNat, ← add_smul]
-    grind
-  have pos : 0 <= (√2)⁻¹ • (P ^ 2 + Q ^ 2) := by
-    have P_sa : star P = P := by
-      simp only [P, star_smul, star_add, star_sub, star_id_of_comm, T.A₀_sa, T.A₁_sa, T.B₀_sa]
-    have Q_sa : star Q = Q := by
-      simp only [Q, star_smul, star_add, star_sub, star_id_of_comm, T.A₀_sa, T.A₁_sa, T.B₁_sa]
-    have P2_nonneg : 0 <= P ^ 2 := by simpa only [P_sa, sq] using star_mul_self_nonneg P
-    have Q2_nonneg : 0 <= Q ^ 2 := by simpa only [Q_sa, sq] using star_mul_self_nonneg Q
-    positivity
-  apply le_of_sub_nonneg
-  simpa only [sub_add_eq_sub_sub, ← sub_add, w, Nat.cast_zero] using pos
+(We could work over `ℤ[2^(1/2), 2^(-1/2)]` if we really wanted to!)
+-/
+/-
+**tsirelson_inequality** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tsirelson_inequality [Ring R] [PartialOrder R] [StarRing R] [StarOrderedRi
+ng R] [Algebra Real R] [IsOrderedModule Real R] [StarModule Real R] (A₀ A₁ B₀ B₁
+ : R) (T : IsCHSHTuple A₀ A₁ B₀ B₁) : A₀ * B₀ + A₀ * B₁ + A₁ * B₀ - A₁ * B₁ <= √
+2 ^ 3 • (1 : R)
+参数：A₀ A₁ B₀ B₁ : R；T : IsCHSHTuple A₀ A₁ B₀ B₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Int.cast_smul_eq_zsmul`：Int.cast_smul_eq_zsmul (n : Int) (b : M) : (n : 
+R) • b = n • b
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用定理 `sq`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
+· 使用定理 `mul_sub`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), a 
+* (b - c) = a * b - a * c
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `sub_mul`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), (a
+ - b) * c = a * c - b * c
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
+· 使用定理 `smul_sub`：smul_sub (r : M) (x y : A) : r • (x - y) = r • x - r • y
+· 使用定理 `Algebra.mul_smul_comm`：∀ {R : Type u} {A : Type w} [inst : CommSemiring 
+R] [inst_1 : Semiring A] [inst_2 : Algebra R A] (s : R) (x y : A),   x * s • y =
+ s • (x * y…
+· 使用定理 `Algebra.smul_mul_assoc`：∀ {R : Type u} {A : Type w} [inst : CommSemiring
+ R] [inst_1 : Semiring A] [inst_2 : Algebra R A] (r : R) (x y : A),   r • x * y 
+= r • (x * y…
+· 使用定理 `TsirelsonInequality.sqrt_two_inv_mul_self`：sqrt_two_inv_mul_self : (√2)⁻
+¹ * (√2)⁻¹ = (2⁻¹ : Real)
+· 使用定理 `IsCHSHTuple.A₁_inv`：∀ {R : Type u_1} [inst : Monoid R] [inst_1 : StarMul
+ R] {A₀ A₁ B₀ B₁ : R}, IsCHSHTuple A₀ A₁ B₀ B₁ → A₁ ^ 2 = 1
+· 使用定理 `IsCHSHTuple.A₀_inv`：∀ {R : Type u_1} [inst : Monoid R] [inst_1 : StarMul
+ R] {A₀ A₁ B₀ B₁ : R}, IsCHSHTuple A₀ A₁ B₀ B₁ → A₀ ^ 2 = 1
+· 使用定理 `IsCHSHTuple.B₀_inv`：∀ {R : Type u_1} [inst : Monoid R] [inst_1 : StarMul
+ R] {A₀ A₁ B₀ B₁ : R}, IsCHSHTuple A₀ A₁ B₀ B₁ → B₀ ^ 2 = 1
+· 使用定理 `IsCHSHTuple.B₁_inv`：∀ {R : Type u_1} [inst : Monoid R] [inst_1 : StarMul
+ R] {A₀ A₁ B₀ B₁ : R}, IsCHSHTuple A₀ A₁ B₀ B₁ → B₁ ^ 2 = 1
+· 使用定理 `IsCHSHTuple.A₁B₀_commutes`：∀ {R : Type u_1} [inst : Monoid R] [inst_1 : 
+StarMul R] {A₀ A₁ B₀ B₁ : R}, IsCHSHTuple A₀ A₁ B₀ B₁ → A₁ * B₀ = B₀ * A₁
+· 使用定理 `IsCHSHTuple.A₀B₀_commutes`：∀ {R : Type u_1} [inst : Monoid R] [inst_1 : 
+StarMul R] {A₀ A₁ B₀ B₁ : R}, IsCHSHTuple A₀ A₁ B₀ B₁ → A₀ * B₀ = B₀ * A₀
+· 使用定理 `IsCHSHTuple.A₁B₁_commutes`：∀ {R : Type u_1} [inst : Monoid R] [inst_1 : 
+StarMul R] {A₀ A₁ B₀ B₁ : R}, IsCHSHTuple A₀ A₁ B₀ B₁ → A₁ * B₁ = B₁ * A₁
+· 使用定理 `IsCHSHTuple.A₀B₁_commutes`：∀ {R : Type u_1} [inst : Monoid R] [inst_1 : 
+StarMul R] {A₀ A₁ B₀ B₁ : R}, IsCHSHTuple A₀ A₁ B₀ B₁ → A₀ * B₁ = B₁ * A₀
+· 使用引理 `Mathlib.Tactic.Abel.subst_into_addg`：subst_into_addg {α} [AddCommGroup α
+] (l r tl tr t) (prl : (l : α) = tl) (prr : r = tr) (prt : tl + tr = t) : l + r 
+= t
+（共 88 条，此处仅展示前 30 条）
+
+--- 原说明 ---
+In a noncommutative ordered \*-algebra over ℝ,
+Tsirelson's bound for a CHSH tuple (A₀, A₁, B₀, B₁) is
+`A₀ * B₀ + A₀ * B₁ + A₁ * B₀ - A₁ * B₁ ≤ 2^(3/2) • 1`.
+
+We prove this by providing an explicit sum-of-squares decomposition
+of the difference.
+
+(We could work over `ℤ[2^(1/2), 2^(-1/2)]` if we really wanted to!)
 -/
 theorem tsirelson_inequality [Ring R] [PartialOrder R] [StarRing R] [StarOrderedRing R]
-    [Algebra Real R] [IsOrderedModule Real R] [StarModule Real R]
+    [Algebra ℝ R] [IsOrderedModule ℝ R] [StarModule ℝ R]
     (A₀ A₁ B₀ B₁ : R) (T : IsCHSHTuple A₀ A₁ B₀ B₁) :
-    A₀ * B₀ + A₀ * B₁ + A₁ * B₀ - A₁ * B₁ <= √2 ^ 3 • (1 : R) := by
+    A₀ * B₀ + A₀ * B₁ + A₁ * B₀ - A₁ * B₁ ≤ √2 ^ 3 • (1 : R) := by
   -- abel will create `ℤ` multiplication. We will `simp` them away to `ℝ` multiplication.
-  have M : forall (m : Int) (a : Real) (x : R), m • a • x = ((m : Real) * a) • x := fun m a x => by
-    rw [← Int.cast_smul_eq_zsmul Real]; rw [← mul_smul]
+  have M : ∀ (m : ℤ) (a : ℝ) (x : R), m • a • x = ((m : ℝ) * a) • x := fun m a x => by
+    rw [← Int.cast_smul_eq_zsmul ℝ, ← mul_smul]
   let P := (√2)⁻¹ • (A₁ + A₀) - B₀
   let Q := (√2)⁻¹ • (A₁ - A₀) + B₁
   have w : √2 ^ 3 • (1 : R) - A₀ * B₀ - A₀ * B₁ - A₁ * B₀ + A₁ * B₁ = (√2)⁻¹ • (P ^ 2 + Q ^ 2) := by
@@ -356,13 +379,13 @@ theorem tsirelson_inequality [Ring R] [PartialOrder R] [StarRing R] [StarOrdered
     simp only [neg_mul, mul_inv_cancel_of_invertible, add_assoc, add_comm,
       add_left_comm, one_smul, Int.cast_neg, neg_smul, Int.cast_ofNat, ← add_smul]
     grind
-  have pos : 0 <= (√2)⁻¹ • (P ^ 2 + Q ^ 2) := by
+  have pos : 0 ≤ (√2)⁻¹ • (P ^ 2 + Q ^ 2) := by
     have P_sa : star P = P := by
       simp only [P, star_smul, star_add, star_sub, star_id_of_comm, T.A₀_sa, T.A₁_sa, T.B₀_sa]
     have Q_sa : star Q = Q := by
       simp only [Q, star_smul, star_add, star_sub, star_id_of_comm, T.A₀_sa, T.A₁_sa, T.B₁_sa]
-    have P2_nonneg : 0 <= P ^ 2 := by simpa only [P_sa, sq] using star_mul_self_nonneg P
-    have Q2_nonneg : 0 <= Q ^ 2 := by simpa only [Q_sa, sq] using star_mul_self_nonneg Q
+    have P2_nonneg : 0 ≤ P ^ 2 := by simpa only [P_sa, sq] using star_mul_self_nonneg P
+    have Q2_nonneg : 0 ≤ Q ^ 2 := by simpa only [Q_sa, sq] using star_mul_self_nonneg Q
     positivity
   apply le_of_sub_nonneg
   simpa only [sub_add_eq_sub_sub, ← sub_add, w, Nat.cast_zero] using pos

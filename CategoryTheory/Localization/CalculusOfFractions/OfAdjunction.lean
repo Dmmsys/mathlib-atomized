@@ -36,52 +36,52 @@ namespace Adjunction
 variable {C₁ C₂ : Type*} [Category* C₁] [Category* C₂]
   {G : C₁ ⥤ C₂} {F : C₂ ⥤ C₁}
 
-/--
-lemma `hasLeftCalculusOfFractions` / 引理 `hasLeftCalculusOfFractions`
-
-English:
-lemma hasLeftCalculusOfFractions
-  statement: (adj : G ⊣ F) (W : MorphismProperty C₁)
-  proof: by
-    obtain ⟨T, s, _, f, rfl⟩ := φ.cases
-    dsimp
-    have := hW s (by assumption)
-    exact ⟨{
-      f := adj.unit.app X ≫ F.map (inv (G.map s)) ≫ F.map (G.map f)
-      s := adj.unit.app Y
-      hs := hW' Y}, by
-      have := adj.unit.naturality s
-      dsimp at this ⊢
-      rw [reassoc_of% this]; rw [Functor.map_inv]; rw [IsIso.hom_inv_id_assoc]; rw [adj.unit_naturality]⟩
-  ext X' X Y f₁ f₂ s _ h := by
-    have := hW s (by assumption)
-    refine ⟨_, adj.unit.app Y, hW' _, ?_⟩
-    rw [← adj.unit_naturality f₁]; rw [← adj.unit_naturality f₂]
-    congr 2
-    rw [← cancel_epi (G.map s)]; rw [← G.map_comp]; rw [← G.map_comp]; rw [h]
-
-中文:
-引理 hasLeftCalculusOfFractions
-  结论: (adj : G ⊣ F) (W : MorphismProperty C₁)
-  证明: by
-    obtain ⟨T, s, _, f, rfl⟩ := φ.cases
-    dsimp
-    have := hW s (by assumption)
-    exact ⟨{
-      f := adj.unit.app X ≫ F.map (inv (G.map s)) ≫ F.map (G.map f)
-      s := adj.unit.app Y
-      hs := hW' Y}, by
-      have := adj.unit.naturality s
-      dsimp at this ⊢
-      rw [reassoc_of% this]; rw [Functor.map_inv]; rw [IsIso.hom_inv_id_assoc]; rw [adj.unit_naturality]⟩
-  ext X' X Y f₁ f₂ s _ h := by
-    have := hW s (by assumption)
-    refine ⟨_, adj.unit.app Y, hW' _, ?_⟩
-    rw [← adj.unit_naturality f₁]; rw [← adj.unit_naturality f₂]
-    congr 2
-    rw [← cancel_epi (G.map s)]; rw [← G.map_comp]; rw [← G.map_comp]; rw [h]
-
-Depends on / 依赖: F.map, Functor, Functor.map_inv, G.map, IsIso.hom_inv_id_assoc, adj.unit.app, adj.unit.naturality, adj.unit_naturality, hom_inv_id_assoc, map_inv, naturality, reassoc_of, unit_naturality
+/-
+**CategoryTheory.Adjunction.hasLeftCalculusOfFractions** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.Adjunction`。
+形式化陈述：hasLeftCalculusOfFractions (adj : G ⊣ F) (W : MorphismProperty C₁) [W.IsMu
+ltiplicative] (hW : W.IsInvertedBy G) (hW' : (W.functorCategory C₁) adj.unit) : 
+W.HasLeftCalculusOfFractions where exists_leftFraction X Y φ
+参数：adj : G ⊣ F；W : MorphismProperty C₁；hW : W.IsInvertedBy G；hW' : (W.functorCat
+egory C₁) adj.unit。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.MorphismProperty.RightFraction.cases`：cases (α : W.RightF
+raction X Y) : exists (X' : C) (s : X' ⟶ X) (hs : W s) (f : X' ⟶ Y), α = RightFr
+action.mk s hs f
+· 使用定理 `CategoryTheory.NatTrans.naturality`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用定理 `CategoryTheory.Functor.map_inv`：map_inv (F : C ⥤ D) {X Y : C} (f : X ⟶ Y
+) [IsIso f] : F.map (inv f) = inv (F.map f)
+· 使用定理 `CategoryTheory.IsIso.hom_inv_id_assoc`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {X Y : C} (f : X ⟶ Y) [I : CategoryTheory.IsIso f] {Z : 
+C}   (h : X ⟶ Z), CategoryT…
+· 使用定理 `CategoryTheory.Adjunction.unit_naturality`：unit_naturality {X Y : C} (f 
+: X ⟶ Y) : dsimp% adj.unit.app X ≫ G.map (F.map f) = f ≫ adj.unit.app Y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.cancel_epi`：cancel_epi (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} 
+: f ≫ g = f ≫ h ↔ g = h
+· 使用定理 `CategoryTheory.IsSplitEpi.epi`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [hf : CategoryTheory.IsSplitEpi f],   C
+ategoryTheory.Epi f
+· 使用定理 `CategoryTheory.IsSplitEpi.of_iso`：∀ {C : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} C] {X Y : C} (f : X ⟶ Y) [CategoryTheory.IsIso f],   Category
+Theory.IsSplitEpi f
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
 -/
 lemma hasLeftCalculusOfFractions (adj : G ⊣ F) (W : MorphismProperty C₁)
     [W.IsMultiplicative] (hW : W.IsInvertedBy G) (hW' : (W.functorCategory C₁) adj.unit) :
@@ -96,77 +96,57 @@ lemma hasLeftCalculusOfFractions (adj : G ⊣ F) (W : MorphismProperty C₁)
       hs := hW' Y}, by
       have := adj.unit.naturality s
       dsimp at this ⊢
-      rw [reassoc_of% this]; rw [Functor.map_inv]; rw [IsIso.hom_inv_id_assoc]; rw [adj.unit_naturality]⟩
+      rw [reassoc_of% this, Functor.map_inv, IsIso.hom_inv_id_assoc, adj.unit_naturality]⟩
   ext X' X Y f₁ f₂ s _ h := by
     have := hW s (by assumption)
     refine ⟨_, adj.unit.app Y, hW' _, ?_⟩
-    rw [← adj.unit_naturality f₁]; rw [← adj.unit_naturality f₂]
+    rw [← adj.unit_naturality f₁, ← adj.unit_naturality f₂]
     congr 2
-    rw [← cancel_epi (G.map s)]; rw [← G.map_comp]; rw [← G.map_comp]; rw [h]
-
-/--
-lemma `hasRightCalculusOfFractions` / 引理 `hasRightCalculusOfFractions`
-
-English:
-lemma hasRightCalculusOfFractions
-  statement: (adj : F ⊣ G) (W : MorphismProperty C₁)
-  proof: have := hasLeftCalculusOfFractions adj.op W.op hW.op (fun _ => hW' _)
-  inferInstanceAs W.op.unop.HasRightCalculusOfFractions
-
-中文:
-引理 hasRightCalculusOfFractions
-  结论: (adj : F ⊣ G) (W : MorphismProperty C₁)
-  证明: have := hasLeftCalculusOfFractions adj.op W.op hW.op (fun _ => hW' _)
-  inferInstanceAs W.op.unop.HasRightCalculusOfFractions
-
-Depends on / 依赖: HasRightCalculusOfFractions, W.op, W.op.unop.HasRightCalculusOfFractions, adj.op, hW.op, hasLeftCalculusOfFractions
+    rw [← cancel_epi (G.map s), ← G.map_comp, ← G.map_comp, h]
+/-
+**CategoryTheory.Adjunction.hasRightCalculusOfFractions** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.Adjunction`。
+形式化陈述：hasRightCalculusOfFractions (adj : F ⊣ G) (W : MorphismProperty C₁) [W.IsM
+ultiplicative] (hW : W.IsInvertedBy G) (hW' : (W.functorCategory _) adj.counit) 
+: W.HasRightCalculusOfFractions
+参数：adj : F ⊣ G；W : MorphismProperty C₁；hW : W.IsInvertedBy G；hW' : (W.functorCat
+egory _) adj.counit。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.hasLeftCalculusOfFractions`：hasLeftCalculusOfF
+ractions (adj : G ⊣ F) (W : MorphismProperty C₁) [W.IsMultiplicative] (hW : W.Is
+InvertedBy G) (hW' : (W.functorCategory C₁…
+· 使用定理 `CategoryTheory.MorphismProperty.IsInvertedBy.op`：op {W : MorphismPropert
+y C} {L : C ⥤ D} (h : W.IsInvertedBy L) : W.op.IsInvertedBy L.op
 -/
 lemma hasRightCalculusOfFractions (adj : F ⊣ G) (W : MorphismProperty C₁)
     [W.IsMultiplicative] (hW : W.IsInvertedBy G) (hW' : (W.functorCategory _) adj.counit) :
     W.HasRightCalculusOfFractions :=
-  have := hasLeftCalculusOfFractions adj.op W.op hW.op (fun _ => hW' _)
+  have := hasLeftCalculusOfFractions adj.op W.op hW.op (fun _ ↦ hW' _)
   inferInstanceAs W.op.unop.HasRightCalculusOfFractions
 
 section
 
 variable [F.Full] [F.Faithful]
 
-/--
-lemma `isLocalization_leftAdjoint` / 引理 `isLocalization_leftAdjoint`
-
-English:
-lemma isLocalization_leftAdjoint
-  proof: by
-  let Φ : W.Localization ⥤ C₂ := Localization.lift _ hW W.Q
-  let e : W.Q ⋙ Φ ≅ G := by apply Localization.fac
-  have : IsIso (Functor.whiskerRight adj.unit W.Q) := by
-    rw [NatTrans.isIso_iff_isIso_app]
-    intro X
-    exact Localization.inverts W.Q W _ (hW' X)
-  exact Functor.IsLocalization.of_equivalence_target W.Q W _
-    (Equivalence.mk Φ (F ⋙ W.Q)
-      (Localization.liftNatIso W.Q W W.Q (G ⋙ F ⋙ W.Q) _ _
-        (W.Q.leftUnitor.symm ≪≫ asIso (Functor.whiskerRight adj.unit W.Q) ≪≫
-        Functor.associator _ _ _))
-      (Functor.associator _ _ _ ≪≫ Functor.isoWhiskerLeft _ e ≪≫ asIso adj.counit)) e
-
-中文:
-引理 isLocalization_leftAdjoint
-  证明: by
-  let Φ : W.Localization ⥤ C₂ := Localization.lift _ hW W.Q
-  let e : W.Q ⋙ Φ ≅ G := by apply Localization.fac
-  have : IsIso (Functor.whiskerRight adj.unit W.Q) := by
-    rw [NatTrans.isIso_iff_isIso_app]
-    intro X
-    exact Localization.inverts W.Q W _ (hW' X)
-  exact Functor.IsLocalization.of_equivalence_target W.Q W _
-    (Equivalence.mk Φ (F ⋙ W.Q)
-      (Localization.liftNatIso W.Q W W.Q (G ⋙ F ⋙ W.Q) _ _
-        (W.Q.leftUnitor.symm ≪≫ asIso (Functor.whiskerRight adj.unit W.Q) ≪≫
-        Functor.associator _ _ _))
-      (Functor.associator _ _ _ ≪≫ Functor.isoWhiskerLeft _ e ≪≫ asIso adj.counit)) e
-
-Depends on / 依赖: Equivalence, Equivalence.mk, Functor, Functor.IsLocalization.of_equivalence_target, Functor.assoc, Functor.associator, Functor.whiskerRight, IsLocalization, Localization, Localization.fac, Localization.inverts, Localization.lift, Localization.liftNatIso, NatTrans, NatTrans.isIso_iff_isIso_app, W.Localization, W.Q.leftUnitor.symm, adj.unit, associator, inverts
+/-
+**CategoryTheory.Adjunction.isLocalization_leftAdjoint** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.Adjunction`。
+形式化陈述：isLocalization_leftAdjoint (adj : G ⊣ F) (W : MorphismProperty C₁) (hW : W
+.IsInvertedBy G) (hW' : (W.functorCategory C₁) adj.unit) : G.IsLocalization W
+参数：adj : G ⊣ F；W : MorphismProperty C₁；hW : W.IsInvertedBy G；hW' : (W.functorCat
+egory C₁) adj.unit。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.NatTrans.isIso_iff_isIso_app`：∀ {C : Type u₁} [inst : Cat
+egoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category
+.{v₂, u₂} D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Localization.inverts`：inverts : W.IsInvertedBy L
+· 使用定理 `CategoryTheory.Functor.IsLocalization.of_equivalence_target`：of_equivale
+nce_target {E : Type*} [Category* E] (L' : C ⥤ E) (eq : D ≌ E) [L.IsLocalization
+ W] (e : L ⋙ eq.functor ≅ L') : L'.IsLocalization…
 -/
 lemma isLocalization_leftAdjoint
     (adj : G ⊣ F) (W : MorphismProperty C₁)
@@ -184,168 +164,155 @@ lemma isLocalization_leftAdjoint
         (W.Q.leftUnitor.symm ≪≫ asIso (Functor.whiskerRight adj.unit W.Q) ≪≫
         Functor.associator _ _ _))
       (Functor.associator _ _ _ ≪≫ Functor.isoWhiskerLeft _ e ≪≫ asIso adj.counit)) e
-
-/--
-lemma `isLocalization_rightAdjoint` / 引理 `isLocalization_rightAdjoint`
-
-English:
-lemma isLocalization_rightAdjoint
-  proof: by
-  simpa using isLocalization_leftAdjoint adj.op W.op hW.op (fun X => hW' X.unop)
-
-中文:
-引理 isLocalization_rightAdjoint
-  证明: by
-  simpa using isLocalization_leftAdjoint adj.op W.op hW.op (fun X => hW' X.unop)
-
-Depends on / 依赖: W.op, X.unop, adj.op, hW.op, isLocalization_leftAdjoint
+/-
+**CategoryTheory.Adjunction.isLocalization_rightAdjoint** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.Adjunction`。
+形式化陈述：isLocalization_rightAdjoint (adj : F ⊣ G) (W : MorphismProperty C₁) (hW : 
+W.IsInvertedBy G) (hW' : (W.functorCategory C₁) adj.counit) : G.IsLocalization W
+参数：adj : F ⊣ G；W : MorphismProperty C₁；hW : W.IsInvertedBy G；hW' : (W.functorCat
+egory C₁) adj.counit。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.isLocalization_leftAdjoint`：isLocalization_lef
+tAdjoint (adj : G ⊣ F) (W : MorphismProperty C₁) (hW : W.IsInvertedBy G) (hW' : 
+(W.functorCategory C₁) adj.unit) : G.IsLoc…
+· 使用定理 `CategoryTheory.Functor.instFullOppositeOp`：∀ {C : Type u₁} [inst : Categ
+oryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{
+v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.instFaithfulOppositeOp`：∀ {C : Type u₁} [inst : C
+ategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Catego
+ry.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.MorphismProperty.IsInvertedBy.op`：op {W : MorphismPropert
+y C} {L : C ⥤ D} (h : W.IsInvertedBy L) : W.op.IsInvertedBy L.op
 -/
 lemma isLocalization_rightAdjoint
     (adj : F ⊣ G) (W : MorphismProperty C₁)
     (hW : W.IsInvertedBy G) (hW' : (W.functorCategory C₁) adj.counit) :
     G.IsLocalization W := by
-  simpa using isLocalization_leftAdjoint adj.op W.op hW.op (fun X => hW' X.unop)
-
-/--
-lemma `functorCategory_inverseImage_isomorphisms_unit` / 引理 `functorCategory_inverseImage_isomorphisms_unit`
-
-English:
-lemma functorCategory_inverseImage_isomorphisms_unit
-  given: (adj : G ⊣ F)
-  proof: by
-  intro
-  simp only [Functor.id_obj, inverseImage_iff, isomorphisms.iff]
-  infer_instance
-
-中文:
-引理 functorCategory_inverseImage_isomorphisms_unit
-  条件: (adj : G ⊣ F)
-  证明: by
-  intro
-  simp only [Functor.id_obj, inverseImage_iff, isomorphisms.iff]
-  infer_instance
-
-Depends on / 依赖: Functor, Functor.id_obj, id_obj, infer_instance, inverseImage_iff, isomorphisms, isomorphisms.iff
+  simpa using isLocalization_leftAdjoint adj.op W.op hW.op (fun X ↦ hW' X.unop)
+/-
+**CategoryTheory.Adjunction.functorCategory_inverseImage_isomorphisms_unit** 是 M
+athlib 中的一个引理，位于命名空间 `CategoryTheory.Adjunction`。
+形式化陈述：functorCategory_inverseImage_isomorphisms_unit (adj : G ⊣ F) : ((isomorphi
+sms C₂).inverseImage G).functorCategory C₁ adj.unit
+参数：adj : G ⊣ F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Adjunction.instIsIsoMapAppUnitOfFaithfulOfFull`：∀ {C : Ty
+pe u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Categ
+oryTheory.Category.{v₂, u₂} D]   {L : CategoryTheor…
 -/
 lemma functorCategory_inverseImage_isomorphisms_unit (adj : G ⊣ F) :
     ((isomorphisms C₂).inverseImage G).functorCategory C₁ adj.unit := by
   intro
   simp only [Functor.id_obj, inverseImage_iff, isomorphisms.iff]
   infer_instance
-
-/--
-lemma `functorCategory_inverseImage_isomorphisms_counit` / 引理 `functorCategory_inverseImage_isomorphisms_counit`
-
-English:
-lemma functorCategory_inverseImage_isomorphisms_counit
-  given: (adj : F ⊣ G)
-  proof: by
-  intro
-  simp only [Functor.id_obj, inverseImage_iff, isomorphisms.iff]
-  infer_instance
-
-中文:
-引理 functorCategory_inverseImage_isomorphisms_counit
-  条件: (adj : F ⊣ G)
-  证明: by
-  intro
-  simp only [Functor.id_obj, inverseImage_iff, isomorphisms.iff]
-  infer_instance
-
-Depends on / 依赖: Functor, Functor.id_obj, id_obj, infer_instance, inverseImage_iff, isomorphisms, isomorphisms.iff
+/-
+**CategoryTheory.Adjunction.functorCategory_inverseImage_isomorphisms_counit** 是
+ Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Adjunction`。
+形式化陈述：functorCategory_inverseImage_isomorphisms_counit (adj : F ⊣ G) : ((isomorp
+hisms C₂).inverseImage G).functorCategory C₁ adj.counit
+参数：adj : F ⊣ G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Adjunction.instIsIsoMapAppCounitOfFaithfulOfFull`：∀ {C : 
+Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D]   {L : CategoryTheor…
 -/
 lemma functorCategory_inverseImage_isomorphisms_counit (adj : F ⊣ G) :
     ((isomorphisms C₂).inverseImage G).functorCategory C₁ adj.counit := by
   intro
   simp only [Functor.id_obj, inverseImage_iff, isomorphisms.iff]
   infer_instance
-
-/--
-lemma `isLocalization_leftAdjoint'` / 引理 `isLocalization_leftAdjoint'`
-
-English:
-lemma isLocalization_leftAdjoint'
-  given: (adj : G ⊣ F)
-  proof: adj.isLocalization_leftAdjoint _ (fun _ _ _ h => h)
-    adj.functorCategory_inverseImage_isomorphisms_unit
-
-中文:
-引理 isLocalization_leftAdjoint'
-  条件: (adj : G ⊣ F)
-  证明: adj.isLocalization_leftAdjoint _ (fun _ _ _ h => h)
-    adj.functorCategory_inverseImage_isomorphisms_unit
-
-Depends on / 依赖: adj.functorCategory_inverseImage_isomorphisms_unit, adj.isLocalization_leftAdjoint, functorCategory_inverseImage_isomorphisms_unit, isLocalization_leftAdjoint
+/-
+**CategoryTheory.Adjunction.isLocalization_leftAdjoint'** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.Adjunction`。
+形式化陈述：isLocalization_leftAdjoint' (adj : G ⊣ F) : G.IsLocalization ((isomorphism
+s C₂).inverseImage G)
+参数：adj : G ⊣ F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.isLocalization_leftAdjoint`：isLocalization_lef
+tAdjoint (adj : G ⊣ F) (W : MorphismProperty C₁) (hW : W.IsInvertedBy G) (hW' : 
+(W.functorCategory C₁) adj.unit) : G.IsLoc…
+· 使用引理 `CategoryTheory.Adjunction.functorCategory_inverseImage_isomorphisms_unit
+`：functorCategory_inverseImage_isomorphisms_unit (adj : G ⊣ F) : ((isomorphisms 
+C₂).inverseImage G).functorCategory C₁ adj.unit
 -/
 lemma isLocalization_leftAdjoint' (adj : G ⊣ F) :
     G.IsLocalization ((isomorphisms C₂).inverseImage G) :=
-  adj.isLocalization_leftAdjoint _ (fun _ _ _ h => h)
+  adj.isLocalization_leftAdjoint _ (fun _ _ _ h ↦ h)
     adj.functorCategory_inverseImage_isomorphisms_unit
-
-/--
-lemma `isLocalization_rightAdjoint'` / 引理 `isLocalization_rightAdjoint'`
-
-English:
-lemma isLocalization_rightAdjoint'
-  given: (adj : F ⊣ G)
-  proof: adj.isLocalization_rightAdjoint _ (fun _ _ _ h => h)
-    adj.functorCategory_inverseImage_isomorphisms_counit
-
-中文:
-引理 isLocalization_rightAdjoint'
-  条件: (adj : F ⊣ G)
-  证明: adj.isLocalization_rightAdjoint _ (fun _ _ _ h => h)
-    adj.functorCategory_inverseImage_isomorphisms_counit
-
-Depends on / 依赖: adj.functorCategory_inverseImage_isomorphisms_counit, adj.isLocalization_rightAdjoint, functorCategory_inverseImage_isomorphisms_counit, isLocalization_rightAdjoint
+/-
+**CategoryTheory.Adjunction.isLocalization_rightAdjoint'** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Adjunction`。
+形式化陈述：isLocalization_rightAdjoint' (adj : F ⊣ G) : G.IsLocalization ((isomorphis
+ms C₂).inverseImage G)
+参数：adj : F ⊣ G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.isLocalization_rightAdjoint`：isLocalization_ri
+ghtAdjoint (adj : F ⊣ G) (W : MorphismProperty C₁) (hW : W.IsInvertedBy G) (hW' 
+: (W.functorCategory C₁) adj.counit) : G.Is…
+· 使用引理 `CategoryTheory.Adjunction.functorCategory_inverseImage_isomorphisms_coun
+it`：functorCategory_inverseImage_isomorphisms_counit (adj : F ⊣ G) : ((isomorphi
+sms C₂).inverseImage G).functorCategory C₁ adj.counit
 -/
 lemma isLocalization_rightAdjoint' (adj : F ⊣ G) :
     G.IsLocalization ((isomorphisms C₂).inverseImage G) :=
-  adj.isLocalization_rightAdjoint _ (fun _ _ _ h => h)
+  adj.isLocalization_rightAdjoint _ (fun _ _ _ h ↦ h)
     adj.functorCategory_inverseImage_isomorphisms_counit
-
-/--
-lemma `hasLeftCalculusOfFractions'` / 引理 `hasLeftCalculusOfFractions'`
-
-English:
-lemma hasLeftCalculusOfFractions'
-  given: (adj : G ⊣ F)
-  proof: hasLeftCalculusOfFractions adj _ (fun _ _ _ h => h)
-    adj.functorCategory_inverseImage_isomorphisms_unit
-
-中文:
-引理 hasLeftCalculusOfFractions'
-  条件: (adj : G ⊣ F)
-  证明: hasLeftCalculusOfFractions adj _ (fun _ _ _ h => h)
-    adj.functorCategory_inverseImage_isomorphisms_unit
-
-Depends on / 依赖: adj.functorCategory_inverseImage_isomorphisms_unit, functorCategory_inverseImage_isomorphisms_unit, hasLeftCalculusOfFractions
+/-
+**CategoryTheory.Adjunction.hasLeftCalculusOfFractions'** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory.Adjunction`。
+形式化陈述：hasLeftCalculusOfFractions' (adj : G ⊣ F) : ((isomorphisms C₂).inverseImag
+e G).HasLeftCalculusOfFractions
+参数：adj : G ⊣ F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.hasLeftCalculusOfFractions`：hasLeftCalculusOfF
+ractions (adj : G ⊣ F) (W : MorphismProperty C₁) [W.IsMultiplicative] (hW : W.Is
+InvertedBy G) (hW' : (W.functorCategory C₁…
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instInverseImage`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C] {D : Type u'} [inst_1 : Cate
+goryTheory.Category.{v', u'} D]   {P : CategoryTheory.M…
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instIsomorphisms`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C],   (CategoryTheory.MorphismP
+roperty.isomorphisms C).IsMultiplicative
+· 使用引理 `CategoryTheory.Adjunction.functorCategory_inverseImage_isomorphisms_unit
+`：functorCategory_inverseImage_isomorphisms_unit (adj : G ⊣ F) : ((isomorphisms 
+C₂).inverseImage G).functorCategory C₁ adj.unit
 -/
 lemma hasLeftCalculusOfFractions' (adj : G ⊣ F) :
     ((isomorphisms C₂).inverseImage G).HasLeftCalculusOfFractions :=
-  hasLeftCalculusOfFractions adj _ (fun _ _ _ h => h)
+  hasLeftCalculusOfFractions adj _ (fun _ _ _ h ↦ h)
     adj.functorCategory_inverseImage_isomorphisms_unit
-
-/--
-lemma `hasRightCalculusOfFractions'` / 引理 `hasRightCalculusOfFractions'`
-
-English:
-lemma hasRightCalculusOfFractions'
-  given: (adj : F ⊣ G)
-  proof: hasRightCalculusOfFractions adj _ (fun _ _ _ h => h)
-    adj.functorCategory_inverseImage_isomorphisms_counit
-
-中文:
-引理 hasRightCalculusOfFractions'
-  条件: (adj : F ⊣ G)
-  证明: hasRightCalculusOfFractions adj _ (fun _ _ _ h => h)
-    adj.functorCategory_inverseImage_isomorphisms_counit
-
-Depends on / 依赖: adj.functorCategory_inverseImage_isomorphisms_counit, functorCategory_inverseImage_isomorphisms_counit, hasRightCalculusOfFractions
+/-
+**CategoryTheory.Adjunction.hasRightCalculusOfFractions'** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Adjunction`。
+形式化陈述：hasRightCalculusOfFractions' (adj : F ⊣ G) : ((isomorphisms C₂).inverseIma
+ge G).HasRightCalculusOfFractions
+参数：adj : F ⊣ G。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Adjunction.hasRightCalculusOfFractions`：hasRightCalculusO
+fFractions (adj : F ⊣ G) (W : MorphismProperty C₁) [W.IsMultiplicative] (hW : W.
+IsInvertedBy G) (hW' : (W.functorCategory _…
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instInverseImage`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C] {D : Type u'} [inst_1 : Cate
+goryTheory.Category.{v', u'} D]   {P : CategoryTheory.M…
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.instIsomorphisms`：∀ {C 
+: Type u} [inst : CategoryTheory.Category.{v, u} C],   (CategoryTheory.MorphismP
+roperty.isomorphisms C).IsMultiplicative
+· 使用引理 `CategoryTheory.Adjunction.functorCategory_inverseImage_isomorphisms_coun
+it`：functorCategory_inverseImage_isomorphisms_counit (adj : F ⊣ G) : ((isomorphi
+sms C₂).inverseImage G).functorCategory C₁ adj.counit
 -/
 lemma hasRightCalculusOfFractions' (adj : F ⊣ G) :
     ((isomorphisms C₂).inverseImage G).HasRightCalculusOfFractions :=
-  hasRightCalculusOfFractions adj _ (fun _ _ _ h => h)
+  hasRightCalculusOfFractions adj _ (fun _ _ _ h ↦ h)
     adj.functorCategory_inverseImage_isomorphisms_counit
 
 end
@@ -353,3 +320,4 @@ end
 end Adjunction
 
 end CategoryTheory
+

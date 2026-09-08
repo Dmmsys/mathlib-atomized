@@ -7,7 +7,7 @@ module
 
 public import Mathlib.Data.Finset.Lattice.Fold
 public import Mathlib.Data.Finset.Order
-public import Mathlib.Data.Set.Finite.Basic -- shake: keep (IsAtomic α), cf. lean#13417
+public import Mathlib.Data.Set.Finite.Basic  -- shake: keep (IsAtomic α), cf. lean#13417
 public import Mathlib.Data.Set.Finite.Range
 public import Mathlib.Order.Atoms
 
@@ -63,64 +63,53 @@ section Nonempty
 variable (α) [Nonempty α]
 
 -- See note [reducible non-instances]
-/--
-Definition of `toOrderBot` / `toOrderBot` 的定义
+/-- Constructs the `⊥` of a finite nonempty `SemilatticeInf`. -/
+/-
+**Fintype.toOrderBot** 是 Mathlib 中的一个缩写定义，位于命名空间 `Fintype`。
+形式化陈述：toOrderBot [SemilatticeInf α] : OrderBot α where bot
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.inf'`：inf'_one [SemilatticeInf β] (f : α -> β) : inf' 1 one_nonem
+pty f = f 1
+· 使用定理 `Finset.univ_nonempty`：univ_nonempty [Nonempty α] : (univ : Finset α).Non
+empty
 
-English:
-abbreviation toOrderBot
-  signature: [SemilatticeInf α]
-  body: univ.inf' univ_nonempty id
-bot_le a := inf'_le _ mem_univ a
-
-中文:
-缩写 toOrderBot
-  签名: [SemilatticeInf α]
-  定义体: univ.inf' univ_nonempty id
-bot_le a := inf'_le _ mem_univ a
-
-Depends on / 依赖: Terminates, _of_not_terminates, _of_terminates, length, length_cons, terminates_cons_iff, univ.inf, univ_nonempty
+--- 原说明 ---
+Constructs the `⊥` of a finite nonempty `SemilatticeInf`.
 -/
 abbrev toOrderBot [SemilatticeInf α] : OrderBot α where
   bot := univ.inf' univ_nonempty id
-bot_le a := inf'_le _ mem_univ a
+  bot_le a := inf'_le _ <| mem_univ a
 
 -- See note [reducible non-instances]
-/--
-Definition of `toOrderTop` / `toOrderTop` 的定义
+/-- Constructs the `⊤` of a finite nonempty `SemilatticeSup` -/
+/-
+**Fintype.toOrderTop** 是 Mathlib 中的一个缩写定义，位于命名空间 `Fintype`。
+形式化陈述：toOrderTop [SemilatticeSup α] : OrderTop α where top
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.sup'`：sup'_one [SemilatticeSup β] (f : α -> β) : sup' 1 one_nonem
+pty f = f 1
+· 使用定理 `Finset.univ_nonempty`：univ_nonempty [Nonempty α] : (univ : Finset α).Non
+empty
 
-English:
-abbreviation toOrderTop
-  signature: [SemilatticeSup α]
-  body: univ.sup' univ_nonempty id
-le_top a := le_sup' id mem_univ a
-
-中文:
-缩写 toOrderTop
-  签名: [SemilatticeSup α]
-  定义体: univ.sup' univ_nonempty id
-le_top a := le_sup' id mem_univ a
-
-Depends on / 依赖: univ.sup, univ_nonempty
+--- 原说明 ---
+Constructs the `⊤` of a finite nonempty `SemilatticeSup`
 -/
 abbrev toOrderTop [SemilatticeSup α] : OrderTop α where
   top := univ.sup' univ_nonempty id
-le_top a := le_sup' id mem_univ a
+  le_top a := le_sup' id <| mem_univ a
 
 -- See note [reducible non-instances]
-/--
-Definition of `toBoundedOrder` / `toBoundedOrder` 的定义
+/-- Constructs the `⊤` and `⊥` of a finite nonempty `Lattice`. -/
+/-
+**Fintype.toBoundedOrder** 是 Mathlib 中的一个缩写定义，位于命名空间 `Fintype`。
+形式化陈述：toBoundedOrder [Lattice α] : BoundedOrder α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toBoundedOrder
-  signature: [Lattice α]
-  body: { toOrderBot α, toOrderTop α with }
-
-中文:
-缩写 toBoundedOrder
-  签名: [格 α]
-  定义体: { toOrderBot α, toOrderTop α with }
-
-Depends on / 依赖: toOrderBot, toOrderTop
+--- 原说明 ---
+Constructs the `⊤` and `⊥` of a finite nonempty `Lattice`.
 -/
 abbrev toBoundedOrder [Lattice α] : BoundedOrder α :=
   { toOrderBot α, toOrderTop α with }
@@ -133,30 +122,16 @@ variable (α)
 
 open scoped Classical in
 -- See note [reducible non-instances]
-/--
-Definition of `toCompleteLattice` / `toCompleteLattice` 的定义
+/-- A finite bounded lattice is complete. -/
+/-
+**Fintype.toCompleteLattice** 是 Mathlib 中的一个缩写定义，位于命名空间 `Fintype`。
+形式化陈述：toCompleteLattice [Lattice α] [BoundedOrder α] : CompleteLattice α where _
+_
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toCompleteLattice
-  signature: [Lattice α] [BoundedOrder α]
-  body: ‹Lattice α›
-  __ := ‹BoundedOrder α›
-  sSup := fun s => s.toFinset.sup id
-  sInf := fun s => s.toFinset.inf id
-  isLUB_sSup s := Set.coe_toFinset s ▸ Finset.isLUB_sup_id
-  isGLB_sInf s := Set.coe_toFinset s ▸ Finset.isGLB_inf_id
-
-中文:
-缩写 toCompleteLattice
-  签名: [格 α] [有界序 α]
-  定义体: ‹Lattice α›
-  __ := ‹BoundedOrder α›
-  sSup := fun s => s.toFinset.sup id
-  sInf := fun s => s.toFinset.inf id
-  isLUB_sSup s := Set.coe_toFinset s ▸ Finset.isLUB_sup_id
-  isGLB_sInf s := Set.coe_toFinset s ▸ Finset.isGLB_inf_id
-
-Depends on / 依赖: Lattice
+--- 原说明 ---
+A finite bounded lattice is complete.
 -/
 noncomputable abbrev toCompleteLattice [Lattice α] [BoundedOrder α] : CompleteLattice α where
   __ := ‹Lattice α›
@@ -168,38 +143,17 @@ noncomputable abbrev toCompleteLattice [Lattice α] [BoundedOrder α] : Complete
 
 attribute [local instance] toCompleteLattice in
 -- See note [reducible non-instances]
-/--
-Definition of `toCompleteDistribLatticeMinimalAxioms` / `toCompleteDistribLatticeMinimalAxioms` 的定义
+/-- A finite bounded distributive lattice is completely distributive. -/
+/-
+**Fintype.toCompleteDistribLatticeMinimalAxioms** 是 Mathlib 中的一个缩写定义，位于命名空间 `Fin
+type`。
+形式化陈述：toCompleteDistribLatticeMinimalAxioms [DistribLattice α] [BoundedOrder α] 
+: CompleteDistribLattice.MinimalAxioms α where iInf_sup_le_sup_sInf
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toCompleteDistribLatticeMinimalAxioms
-  signature: [DistribLattice α] [BoundedOrder α]
-  body: fun a s => by
-    convert! (Finset.inf_sup_distrib_left s.toFinset id a).ge using 1
-    rw [Finset.inf_eq_iInf]
-    simp_rw [Set.mem_toFinset]
-    rfl
-  inf_sSup_le_iSup_inf := fun a s => by
-    convert! (Finset.sup_inf_distrib_left s.toFinset id a).le using 1
-    rw [Finset.sup_eq_iSup]
-    simp_rw [Set.mem_toFinset]
-    rfl
-
-中文:
-缩写 toCompleteDistribLatticeMinimalAxioms
-  签名: [Distrib格 α] [有界序 α]
-  定义体: fun a s => by
-    convert! (Finset.inf_sup_distrib_left s.toFinset id a).ge using 1
-    rw [Finset.inf_eq_iInf]
-    simp_rw [Set.mem_toFinset]
-    rfl
-  inf_sSup_le_iSup_inf := fun a s => by
-    convert! (Finset.sup_inf_distrib_left s.toFinset id a).le using 1
-    rw [Finset.sup_eq_iSup]
-    simp_rw [Set.mem_toFinset]
-    rfl
-
-Depends on / 依赖: Finset, Finset.inf_eq_iInf, Finset.inf_sup_distrib_left, Finset.sup_eq_iSup, Finset.sup_inf_distrib_left, Set.mem_toFinset, convert, inf_eq_iInf, inf_sSup_le_iSup_inf, inf_sup_distrib_left, mem_toFinset, s.toFinset, simp_rw, sup_eq_iSup, sup_inf_distrib_left, toFinset
+--- 原说明 ---
+A finite bounded distributive lattice is completely distributive.
 -/
 noncomputable abbrev toCompleteDistribLatticeMinimalAxioms [DistribLattice α] [BoundedOrder α] :
     CompleteDistribLattice.MinimalAxioms α where
@@ -216,79 +170,92 @@ noncomputable abbrev toCompleteDistribLatticeMinimalAxioms [DistribLattice α] [
 
 attribute [local instance] toCompleteLattice in
 -- See note [reducible non-instances]
-/--
-Definition of `toCompleteDistribLattice` / `toCompleteDistribLattice` 的定义
+/-- A finite bounded distributive lattice is completely distributive. -/
+/-
+**Fintype.toCompleteDistribLattice** 是 Mathlib 中的一个缩写定义，位于命名空间 `Fintype`。
+形式化陈述：toCompleteDistribLattice [DistribLattice α] [BoundedOrder α] : CompleteDis
+tribLattice α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toCompleteDistribLattice
-  signature: [DistribLattice α] [BoundedOrder α]
-  body: .ofMinimalAxioms (toCompleteDistribLatticeMinimalAxioms _)
-
-中文:
-缩写 toCompleteDistribLattice
-  签名: [Distrib格 α] [有界序 α]
-  定义体: .ofMinimalAxioms (toCompleteDistribLatticeMinimalAxioms _)
-
-Depends on / 依赖: ofMinimalAxioms, toCompleteDistribLatticeMinimalAxioms
+--- 原说明 ---
+A finite bounded distributive lattice is completely distributive.
 -/
 noncomputable abbrev toCompleteDistribLattice [DistribLattice α] [BoundedOrder α] :
     CompleteDistribLattice α := .ofMinimalAxioms (toCompleteDistribLatticeMinimalAxioms _)
 
 -- See note [reducible non-instances]
-/--
-Definition of `toCompleteLinearOrder` / `toCompleteLinearOrder` 的定义
+/-- A finite bounded linear order is complete.
 
-English:
-abbreviation toCompleteLinearOrder
-  body: { toCompleteLattice α, ‹LinearOrder α›, LinearOrder.toBiheytingAlgebra _ with }
+If the `α` is already a `BiheytingAlgebra`, then prefer to construct this instance manually using
+`Fintype.toCompleteLattice` instead, to avoid creating a diamond with
+`LinearOrder.toBiheytingAlgebra`. -/
+/-
+**Fintype.toCompleteLinearOrder** 是 Mathlib 中的一个缩写定义，位于命名空间 `Fintype`。
+形式化陈述：toCompleteLinearOrder [LinearOrder α] [BoundedOrder α] : CompleteLinearOrd
+er α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `BiheytingAlgebra.sdiff_le_iff`：∀ {α : Type u_4} [self : BiheytingAlgebra
+ α] (a b c : α), a \ b ≤ c ↔ a ≤ b ⊔ c
+· 使用定理 `BiheytingAlgebra.top_sdiff`：∀ {α : Type u_4} [self : BiheytingAlgebra α]
+ (a : α), ⊤ \ a = ￢a
+· 使用定理 `LinearOrder.le_total`：∀ {α : Type u_2} [self : LinearOrder α] (a b : α),
+ a ≤ b ∨ b ≤ a
+· 使用定理 `LinearOrder.compare_eq_compareOfLessAndEq`：∀ {α : Type u_2} [self : Line
+arOrder α] (a b : α), compare a b = compareOfLessAndEq a b
 
-中文:
-缩写 toCompleteLinearOrder
-  定义体: { toCompleteLattice α, ‹LinearOrder α›, LinearOrder.toBiheytingAlgebra _ with }
+--- 原说明 ---
+A finite bounded linear order is complete.
 
-Depends on / 依赖: LinearOrder, LinearOrder.toBiheytingAlgebra, Terminates, _of_not_terminates, _of_terminates, forall_not_of_not_exists, length, length_le_iff, s.Terminates, toBiheytingAlgebra, toCompleteLattice
+If the `α` is already a `BiheytingAlgebra`, then prefer to construct this instan
+ce manually using
+`Fintype.toCompleteLattice` instead, to avoid creating a diamond with
+`LinearOrder.toBiheytingAlgebra`.
 -/
 noncomputable abbrev toCompleteLinearOrder
     [LinearOrder α] [BoundedOrder α] : CompleteLinearOrder α :=
   { toCompleteLattice α, ‹LinearOrder α›, LinearOrder.toBiheytingAlgebra _ with }
 
 -- See note [reducible non-instances]
-/--
-Definition of `toCompleteBooleanAlgebra` / `toCompleteBooleanAlgebra` 的定义
+/-- A finite Boolean algebra is complete. -/
+/-
+**Fintype.toCompleteBooleanAlgebra** 是 Mathlib 中的一个缩写定义，位于命名空间 `Fintype`。
+形式化陈述：toCompleteBooleanAlgebra [BooleanAlgebra α] : CompleteBooleanAlgebra α whe
+re __
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `BooleanAlgebra.le_top`：∀ {α : Type u} [self : BooleanAlgebra α] (a : α),
+ a ≤ ⊤
+· 使用定理 `BooleanAlgebra.bot_le`：∀ {α : Type u} [self : BooleanAlgebra α] (a : α),
+ ⊥ ≤ a
+· 使用定理 `BooleanAlgebra.inf_compl_le_bot`：∀ {α : Type u} [self : BooleanAlgebra α
+] (x : α), x ⊓ xᶜ ≤ ⊥
+· 使用定理 `BooleanAlgebra.top_le_sup_compl`：∀ {α : Type u} [self : BooleanAlgebra α
+] (x : α), ⊤ ≤ x ⊔ xᶜ
+· 使用定理 `BooleanAlgebra.sdiff_eq`：∀ {α : Type u} [self : BooleanAlgebra α] (x y :
+ α), x \ y = x ⊓ yᶜ
+· 使用定理 `BooleanAlgebra.himp_eq`：∀ {α : Type u} [self : BooleanAlgebra α] (x y : 
+α), x ⇨ y = y ⊔ xᶜ
 
-English:
-abbreviation toCompleteBooleanAlgebra
-  signature: [BooleanAlgebra α]
-  body: ‹BooleanAlgebra α›
-  __ := Fintype.toCompleteDistribLattice α
-
-中文:
-缩写 toComplete布尔eanAlgebra
-  签名: [布尔代数 α]
-  定义体: ‹BooleanAlgebra α›
-  __ := Fintype.toCompleteDistribLattice α
-
-Depends on / 依赖: BooleanAlgebra
+--- 原说明 ---
+A finite Boolean algebra is complete.
 -/
 noncomputable abbrev toCompleteBooleanAlgebra [BooleanAlgebra α] : CompleteBooleanAlgebra α where
   __ := ‹BooleanAlgebra α›
   __ := Fintype.toCompleteDistribLattice α
 
 -- See note [reducible non-instances]
-/--
-Definition of `toCompleteAtomicBooleanAlgebra` / `toCompleteAtomicBooleanAlgebra` 的定义
+/-- A finite Boolean algebra is complete and atomic. -/
+/-
+**Fintype.toCompleteAtomicBooleanAlgebra** 是 Mathlib 中的一个缩写定义，位于命名空间 `Fintype`。
+形式化陈述：toCompleteAtomicBooleanAlgebra [BooleanAlgebra α] : CompleteAtomicBooleanA
+lgebra α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toCompleteAtomicBooleanAlgebra
-  signature: [BooleanAlgebra α]
-  body: (toCompleteBooleanAlgebra α).toCompleteAtomicBooleanAlgebra
-
-中文:
-缩写 toCompleteAtomic布尔eanAlgebra
-  签名: [布尔代数 α]
-  定义体: (toCompleteBooleanAlgebra α).toCompleteAtomicBooleanAlgebra
-
-Depends on / 依赖: toCompleteAtomicBooleanAlgebra, toCompleteBooleanAlgebra
+--- 原说明 ---
+A finite Boolean algebra is complete and atomic.
 -/
 noncomputable abbrev toCompleteAtomicBooleanAlgebra [BooleanAlgebra α] :
     CompleteAtomicBooleanAlgebra α :=
@@ -301,122 +268,91 @@ section Nonempty
 variable (α) [Nonempty α]
 
 -- See note [reducible non-instances]
-/--
-Definition of `toCompleteLatticeOfNonempty` / `toCompleteLatticeOfNonempty` 的定义
+/-- A nonempty finite lattice is complete. If the lattice is already a `BoundedOrder`, then use
+`Fintype.toCompleteLattice` instead, as this gives definitional equality for `⊥` and `⊤`. -/
+/-
+**Fintype.toCompleteLatticeOfNonempty** 是 Mathlib 中的一个缩写定义，位于命名空间 `Fintype`。
+形式化陈述：toCompleteLatticeOfNonempty [Lattice α] : CompleteLattice α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toCompleteLatticeOfNonempty
-  signature: [Lattice α]
-  body: @toCompleteLattice _ _ _ toBoundedOrder α
-
-中文:
-缩写 toCompleteLatticeOfNonempty
-  签名: [格 α]
-  定义体: @toCompleteLattice _ _ _ toBoundedOrder α
-
-Depends on / 依赖: toBoundedOrder, toCompleteLattice
+--- 原说明 ---
+A nonempty finite lattice is complete. If the lattice is already a `BoundedOrder
+`, then use
+`Fintype.toCompleteLattice` instead, as this gives definitional equality for `⊥`
+ and `⊤`.
 -/
 noncomputable abbrev toCompleteLatticeOfNonempty [Lattice α] : CompleteLattice α :=
-@toCompleteLattice _ _ _ toBoundedOrder α
+  @toCompleteLattice _ _ _ <| toBoundedOrder α
 
 -- See note [reducible non-instances]
-/--
-Definition of `toCompleteLinearOrderOfNonempty` / `toCompleteLinearOrderOfNonempty` 的定义
+/-- A nonempty finite linear order is complete. If the linear order is already a `BoundedOrder`,
+then use `Fintype.toCompleteLinearOrder` instead, as this gives definitional equality for `⊥` and
+`⊤`. -/
+/-
+**Fintype.toCompleteLinearOrderOfNonempty** 是 Mathlib 中的一个缩写定义，位于命名空间 `Fintype`。
+形式化陈述：toCompleteLinearOrderOfNonempty [LinearOrder α] : CompleteLinearOrder α
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toCompleteLinearOrderOfNonempty
-  signature: [LinearOrder α]
-  body: @toCompleteLinearOrder _ _ _ toBoundedOrder α
-
-中文:
-缩写 toCompleteLinearOrderOfNonempty
-  签名: [线性序 α]
-  定义体: @toCompleteLinearOrder _ _ _ toBoundedOrder α
-
-Depends on / 依赖: toBoundedOrder, toCompleteLinearOrder
+--- 原说明 ---
+A nonempty finite linear order is complete. If the linear order is already a `Bo
+undedOrder`,
+then use `Fintype.toCompleteLinearOrder` instead, as this gives definitional equ
+ality for `⊥` and
+`⊤`.
 -/
 noncomputable abbrev toCompleteLinearOrderOfNonempty [LinearOrder α] : CompleteLinearOrder α :=
-@toCompleteLinearOrder _ _ _ toBoundedOrder α
+  @toCompleteLinearOrder _ _ _ <| toBoundedOrder α
 
 end Nonempty
 
 end Fintype
 
+/-! ### Concrete instances -/
 
-/--
-Instance `Fin.completeLinearOrder` / 实例 `Fin.completeLinearOrder`
+/-
+**Fin.completeLinearOrder** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Fin.completeLinearOrder {n : Nat} [NeZero n] : CompleteLinearOrder (Fin n)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Fin.completeLinearOrder
-  signature: {n : Nat} [NeZero n]
-  body: Fintype.toCompleteLinearOrder _
-
-中文:
-实例 有限集.completeLinearOrder
-  签名: {n : 自然数} [NeZero n]
-  定义体: Fintype.toCompleteLinearOrder _
-
-Depends on / 依赖: Fintype, Fintype.toCompleteLinearOrder, toCompleteLinearOrder
+--- 原说明 ---
+### Concrete instances
 -/
-noncomputable instance Fin.completeLinearOrder {n : Nat} [NeZero n] : CompleteLinearOrder (Fin n) :=
+noncomputable instance Fin.completeLinearOrder {n : ℕ} [NeZero n] : CompleteLinearOrder (Fin n) :=
   Fintype.toCompleteLinearOrder _
-
-/--
-Instance `Bool.completeBooleanAlgebra` / 实例 `Bool.completeBooleanAlgebra`
-
-English:
-instance Bool.completeBooleanAlgebra
-  signature: : CompleteBooleanAlgebra Bool
-  body: Fintype.toCompleteBooleanAlgebra _
-
-中文:
-实例 布尔值.complete布尔eanAlgebra
-  签名: : 完备布尔代数 布尔值
-  定义体: Fintype.toCompleteBooleanAlgebra _
-
-Depends on / 依赖: Fintype, Fintype.toCompleteBooleanAlgebra, toCompleteBooleanAlgebra
+/-
+**Bool.completeBooleanAlgebra** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Bool.completeBooleanAlgebra : CompleteBooleanAlgebra Bool
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance Bool.completeBooleanAlgebra : CompleteBooleanAlgebra Bool :=
   Fintype.toCompleteBooleanAlgebra _
-
-/--
-Instance `Bool.completeLinearOrder` / 实例 `Bool.completeLinearOrder`
-
-English:
-instance Bool.completeLinearOrder
-  signature: : CompleteLinearOrder Bool where
-  body: Fintype.toCompleteLattice _
-  __ : BiheytingAlgebra Bool := inferInstance
-  __ : LinearOrder Bool := inferInstance
-
-中文:
-实例 布尔值.completeLinearOrder
-  签名: : 完备线性序 布尔值 where
-  定义体: Fintype.toCompleteLattice _
-  __ : BiheytingAlgebra Bool := inferInstance
-  __ : LinearOrder Bool := inferInstance
-
-Depends on / 依赖: Fintype, Fintype.toCompleteLattice, toCompleteLattice
+/-
+**Bool.completeLinearOrder** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Bool.completeLinearOrder : CompleteLinearOrder Bool where __
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `BiheytingAlgebra.sdiff_le_iff`：∀ {α : Type u_4} [self : BiheytingAlgebra
+ α] (a b c : α), a \ b ≤ c ↔ a ≤ b ⊔ c
+· 使用定理 `BiheytingAlgebra.top_sdiff`：∀ {α : Type u_4} [self : BiheytingAlgebra α]
+ (a : α), ⊤ \ a = ￢a
+· 使用定理 `LinearOrder.le_total`：∀ {α : Type u_2} [self : LinearOrder α] (a b : α),
+ a ≤ b ∨ b ≤ a
+· 使用定理 `LinearOrder.compare_eq_compareOfLessAndEq`：∀ {α : Type u_2} [self : Line
+arOrder α] (a b : α), compare a b = compareOfLessAndEq a b
 -/
 noncomputable instance Bool.completeLinearOrder : CompleteLinearOrder Bool where
   __ := Fintype.toCompleteLattice _
   __ : BiheytingAlgebra Bool := inferInstance
   __ : LinearOrder Bool := inferInstance
-
-/--
-Instance `Bool.completeAtomicBooleanAlgebra` / 实例 `Bool.completeAtomicBooleanAlgebra`
-
-English:
-instance Bool.completeAtomicBooleanAlgebra
-  signature: : CompleteAtomicBooleanAlgebra Bool
-  body: Fintype.toCompleteAtomicBooleanAlgebra _
-
-中文:
-实例 布尔值.completeAtomic布尔eanAlgebra
-  签名: : 余mpleteAtomic布尔ean代数 布尔值
-  定义体: Fintype.toCompleteAtomicBooleanAlgebra _
-
-Depends on / 依赖: Fintype, Fintype.toCompleteAtomicBooleanAlgebra, toCompleteAtomicBooleanAlgebra
+/-
+**Bool.completeAtomicBooleanAlgebra** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Bool.completeAtomicBooleanAlgebra : CompleteAtomicBooleanAlgebra Bool
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance Bool.completeAtomicBooleanAlgebra : CompleteAtomicBooleanAlgebra Bool :=
   Fintype.toCompleteAtomicBooleanAlgebra _
@@ -425,201 +361,161 @@ noncomputable instance Bool.completeAtomicBooleanAlgebra : CompleteAtomicBoolean
 
 section DirectedOrders
 
-variable {ι : Sort*} {α : Type*} {r : α -> α -> Prop} [IsTrans α r] {γ : Type*} [Nonempty γ]
-  {f : γ -> α} [Finite ι]
+variable {ι : Sort*} {α : Type*} {r : α → α → Prop} [IsTrans α r] {γ : Type*} [Nonempty γ]
+  {f : γ → α} [Finite ι]
 
-/--
-theorem `Directed.finite_set_le` / 定理 `Directed.finite_set_le`
-
-English:
-theorem Directed.finite_set_le
-  given: (D : Directed r f) {s : Set γ} (hs : s.Finite)
-  proof: by
-  convert! D.finset_le hs.toFinset using 3; rw [Set.Finite.mem_toFinset]
-
-中文:
-定理 Directed.finite_set_le
-  条件: (D : Directed r f) {s : 集合 γ} (hs : s.有限)
-  证明: by
-  convert! D.finset_le hs.toFinset using 3; rw [Set.Finite.mem_toFinset]
-
-Depends on / 依赖: D.finset_le, Finite, Set.Finite.mem_toFinset, convert, finset_le, hs.toFinset, mem_toFinset, toFinset
+/-
+**Directed.finite_set_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Directed.finite_set_le (D : Directed r f) {s : Set γ} (hs : s.Finite) : ex
+ists z, forall i in s, r (f i) (f z)
+参数：D : Directed r f；hs : s.Finite。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `pi_congr`：∀ {α : Sort u} {β β' : α → Sort v}, (∀ (a : α), β a = β' a) → 
+((a : α) → β a) = ((a : α) → β' a)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.Finite.mem_toFinset`：∀ {α : Type u} {s : Set α} {a : α} (hs : s.Fini
+te), a ∈ hs.toFinset ↔ a ∈ s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `Directed.finset_le`：Directed.finset_le {r : α -> α -> Prop} [IsTrans α r
+] {ι} [hι : Nonempty ι] {f : ι -> α} (D : Directed r f) (s : Finset ι) : exists 
+z, foral…
 -/
 theorem Directed.finite_set_le (D : Directed r f) {s : Set γ} (hs : s.Finite) :
-    exists z, forall i in s, r (f i) (f z) := by
+    ∃ z, ∀ i ∈ s, r (f i) (f z) := by
   convert! D.finset_le hs.toFinset using 3; rw [Set.Finite.mem_toFinset]
-
-/--
-lemma `Directed.finite_le` / 引理 `Directed.finite_le`
-
-English:
-lemma Directed.finite_le
-  statement: {ι κ : Sort*} [Nonempty ι] [Finite κ] {f : ι -> α} (hf : Directed r f)
-  proof: by
-  simpa using
-    (hf.comp_of_surjective PLift.down_surjective).finite_set_le (Set.finite_range (PLift.up ∘ g))
-
-中文:
-引理 Directed.finite_le
-  结论: {ι κ : 类型层*} [非空 ι] [有限 κ] {f : ι -> α} (hf : Directed r f)
-  证明: by
-  simpa using
-    (hf.comp_of_surjective PLift.down_surjective).finite_set_le (Set.finite_range (PLift.up ∘ g))
-
-Depends on / 依赖: PLift.down_surjective, PLift.up, Set.finite_range, comp_of_surjective, down_surjective, finite_range, finite_set_le, hf.comp_of_surjective
+/-
+**Directed.finite_le** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Directed.finite_le {ι κ : Sort*} [Nonempty ι] [Finite κ] {f : ι -> α} (hf 
+: Directed r f) (g : κ -> ι) : exists z, forall i, r (f (g i)) (f z)
+参数：hf : Directed r f；g : κ -> ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Directed.finite_set_le`：Directed.finite_set_le (D : Directed r f) {s : S
+et γ} (hs : s.Finite) : exists z, forall i in s, r (f i) (f z)
+· 使用定理 `PLift.instNonempty_mathlib`：∀ {α : Sort u} [Nonempty α], Nonempty (PLift
+ α)
+· 使用定理 `Directed.comp_of_surjective`：∀ {α : Type u_1} {ι : Sort u_3} {κ : Sort u
+_4} {r : α → α → Prop} {f : ι → κ},   Function.Surjective f → ∀ {g : κ → α}, Dir
+ected r g → Direc…
+· 使用定理 `PLift.down_surjective`：down_surjective : Surjective (@down α)
+· 使用定理 `Set.finite_range`：finite_range (f : ι -> α) [Finite ι] : (range f).Finit
+e
 -/
-lemma Directed.finite_le {ι κ : Sort*} [Nonempty ι] [Finite κ] {f : ι -> α} (hf : Directed r f)
-    (g : κ -> ι) : exists z, forall i, r (f (g i)) (f z) := by
+lemma Directed.finite_le {ι κ : Sort*} [Nonempty ι] [Finite κ] {f : ι → α} (hf : Directed r f)
+    (g : κ → ι) : ∃ z, ∀ i, r (f (g i)) (f z) := by
   simpa using
     (hf.comp_of_surjective PLift.down_surjective).finite_set_le (Set.finite_range (PLift.up ∘ g))
 
 variable [Nonempty α] [Preorder α]
-
-/--
-theorem `Finite.exists_le` / 定理 `Finite.exists_le`
-
-English:
-theorem Finite.exists_le
-  given: [IsDirectedOrder α] (f : ι -> α)
-  statement: exists M, forall i, f i <= M
-  proof: directed_id.finite_le _
-
-中文:
-定理 有限.存在_le
-  条件: [IsDirectedOrder α] (f : ι -> α)
-  结论: 存在 M, 对任意 i, f i <= M
-  证明: directed_id.finite_le _
-
-Depends on / 依赖: directed_id, directed_id.finite_le, finite_le
+/-
+**Finite.exists_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Finite.exists_le [IsDirectedOrder α] (f : ι -> α) : exists M, forall i, f 
+i <= M
+参数：f : ι -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Directed.finite_le`：Directed.finite_le {ι κ : Sort*} [Nonempty ι] [Finit
+e κ] {f : ι -> α} (hf : Directed r f) (g : κ -> ι) : exists z, forall i, r (f (g
+ i)) (f …
+· 使用定理 `instIsTransLe`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 ≤ x2
+· 使用定理 `directed_id`：directed_id [IsDirected α r] : Directed r id
 -/
-theorem Finite.exists_le [IsDirectedOrder α] (f : ι -> α) : exists M, forall i, f i <= M :=
+theorem Finite.exists_le [IsDirectedOrder α] (f : ι → α) : ∃ M, ∀ i, f i ≤ M :=
   directed_id.finite_le _
-
-/--
-theorem `Finite.exists_ge` / 定理 `Finite.exists_ge`
-
-English:
-theorem Finite.exists_ge
-  given: [IsCodirectedOrder α] (f : ι -> α)
-  statement: exists M, forall i, M <= f i
-  proof: directed_id.finite_le (r := (· >= ·)) _
-
-中文:
-定理 有限.存在_ge
-  条件: [IsCodirectedOrder α] (f : ι -> α)
-  结论: 存在 M, 对任意 i, M <= f i
-  证明: directed_id.finite_le (r := (· >= ·)) _
-
-Depends on / 依赖: directed_id, directed_id.finite_le, finite_le
+/-
+**Finite.exists_ge** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Finite.exists_ge [IsCodirectedOrder α] (f : ι -> α) : exists M, forall i, 
+M <= f i
+参数：f : ι -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Directed.finite_le`：Directed.finite_le {ι κ : Sort*} [Nonempty ι] [Finit
+e κ] {f : ι -> α} (hf : Directed r f) (g : κ -> ι) : exists z, forall i, r (f (g
+ i)) (f …
+· 使用定理 `instIsTransGe`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x2 ≤ x1
+· 使用定理 `directed_id`：directed_id [IsDirected α r] : Directed r id
 -/
-theorem Finite.exists_ge [IsCodirectedOrder α] (f : ι -> α) : exists M, forall i, M <= f i :=
-  directed_id.finite_le (r := (· >= ·)) _
-
-/--
-theorem `Set.Finite.exists_le` / 定理 `Set.Finite.exists_le`
-
-English:
-theorem Set.Finite.exists_le
-  given: [IsDirectedOrder α] {s : Set α} (hs : s.Finite)
-  proof: directed_id.finite_set_le hs
-
-中文:
-定理 集合.有限.存在_le
-  条件: [IsDirectedOrder α] {s : 集合 α} (hs : s.有限)
-  证明: directed_id.finite_set_le hs
-
-Depends on / 依赖: directed_id, directed_id.finite_set_le, finite_set_le
+theorem Finite.exists_ge [IsCodirectedOrder α] (f : ι → α) : ∃ M, ∀ i, M ≤ f i :=
+  directed_id.finite_le (r := (· ≥ ·)) _
+/-
+**Set.Finite.exists_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Set.Finite.exists_le [IsDirectedOrder α] {s : Set α} (hs : s.Finite) : exi
+sts M, forall i in s, i <= M
+参数：hs : s.Finite。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Directed.finite_set_le`：Directed.finite_set_le (D : Directed r f) {s : S
+et γ} (hs : s.Finite) : exists z, forall i in s, r (f i) (f z)
+· 使用定理 `instIsTransLe`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 ≤ x2
+· 使用定理 `directed_id`：directed_id [IsDirected α r] : Directed r id
 -/
 theorem Set.Finite.exists_le [IsDirectedOrder α] {s : Set α} (hs : s.Finite) :
-    exists M, forall i in s, i <= M :=
+    ∃ M, ∀ i ∈ s, i ≤ M :=
   directed_id.finite_set_le hs
-
-/--
-theorem `Set.Finite.exists_ge` / 定理 `Set.Finite.exists_ge`
-
-English:
-theorem Set.Finite.exists_ge
-  given: [IsCodirectedOrder α] {s : Set α} (hs : s.Finite)
-  proof: directed_id.finite_set_le (r := (· >= ·)) hs
-
-@[simp]
-
-中文:
-定理 集合.有限.存在_ge
-  条件: [IsCodirectedOrder α] {s : 集合 α} (hs : s.有限)
-  证明: directed_id.finite_set_le (r := (· >= ·)) hs
-
-@[simp]
-
-Depends on / 依赖: directed_id, directed_id.finite_set_le, finite_set_le
+/-
+**Set.Finite.exists_ge** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Set.Finite.exists_ge [IsCodirectedOrder α] {s : Set α} (hs : s.Finite) : e
+xists M, forall i in s, M <= i
+参数：hs : s.Finite。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Directed.finite_set_le`：Directed.finite_set_le (D : Directed r f) {s : S
+et γ} (hs : s.Finite) : exists z, forall i in s, r (f i) (f z)
+· 使用定理 `instIsTransGe`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x2 ≤ x1
+· 使用定理 `directed_id`：directed_id [IsDirected α r] : Directed r id
 -/
 theorem Set.Finite.exists_ge [IsCodirectedOrder α] {s : Set α} (hs : s.Finite) :
-    exists M, forall i in s, M <= i :=
-  directed_id.finite_set_le (r := (· >= ·)) hs
+    ∃ M, ∀ i ∈ s, M ≤ i :=
+  directed_id.finite_set_le (r := (· ≥ ·)) hs
 
 @[simp]
-/--
-theorem `Finite.bddAbove_range` / 定理 `Finite.bddAbove_range`
-
-English:
-theorem Finite.bddAbove_range
-  given: [IsDirectedOrder α] (f : ι -> α)
-  statement: BddAbove (Set.range f)
-  proof: by
-  obtain ⟨M, hM⟩ := Finite.exists_le f
-  refine ⟨M, fun a ha => ?_⟩
-  obtain ⟨b, rfl⟩ := ha
-  exact hM b
-
-@[simp]
-
-中文:
-定理 有限.bddAbove_range
-  条件: [IsDirectedOrder α] (f : ι -> α)
-  结论: BddAbove (集合.range f)
-  证明: by
-  obtain ⟨M, hM⟩ := Finite.exists_le f
-  refine ⟨M, fun a ha => ?_⟩
-  obtain ⟨b, rfl⟩ := ha
-  exact hM b
-
-@[simp]
-
-Depends on / 依赖: Finite, Finite.exists_le, exists_le
+/-
+**Finite.bddAbove_range** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Finite.bddAbove_range [IsDirectedOrder α] (f : ι -> α) : BddAbove (Set.ran
+ge f)
+参数：f : ι -> α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.exists_le`：Finite.exists_le [IsDirectedOrder α] (f : ι -> α) : ex
+ists M, forall i, f i <= M
 -/
-theorem Finite.bddAbove_range [IsDirectedOrder α] (f : ι -> α) : BddAbove (Set.range f) := by
+theorem Finite.bddAbove_range [IsDirectedOrder α] (f : ι → α) : BddAbove (Set.range f) := by
   obtain ⟨M, hM⟩ := Finite.exists_le f
   refine ⟨M, fun a ha => ?_⟩
   obtain ⟨b, rfl⟩ := ha
   exact hM b
 
 @[simp]
-/--
-theorem `Finite.bddBelow_range` / 定理 `Finite.bddBelow_range`
-
-English:
-theorem Finite.bddBelow_range
-  given: [IsCodirectedOrder α] (f : ι -> α)
-  statement: BddBelow (Set.range f)
-  proof: by
-  obtain ⟨M, hM⟩ := Finite.exists_ge f
-  refine ⟨M, fun a ha => ?_⟩
-  obtain ⟨b, rfl⟩ := ha
-  exact hM b
-
-中文:
-定理 有限.bddBelow_range
-  条件: [IsCodirectedOrder α] (f : ι -> α)
-  结论: BddBelow (集合.range f)
-  证明: by
-  obtain ⟨M, hM⟩ := Finite.exists_ge f
-  refine ⟨M, fun a ha => ?_⟩
-  obtain ⟨b, rfl⟩ := ha
-  exact hM b
-
-Depends on / 依赖: Finite, Finite.exists_ge, exists_ge
+/-
+**Finite.bddBelow_range** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Finite.bddBelow_range [IsCodirectedOrder α] (f : ι -> α) : BddBelow (Set.r
+ange f)
+参数：f : ι -> α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.exists_ge`：Finite.exists_ge [IsCodirectedOrder α] (f : ι -> α) : 
+exists M, forall i, M <= f i
 -/
-theorem Finite.bddBelow_range [IsCodirectedOrder α] (f : ι -> α) : BddBelow (Set.range f) := by
+theorem Finite.bddBelow_range [IsCodirectedOrder α] (f : ι → α) : BddBelow (Set.range f) := by
   obtain ⟨M, hM⟩ := Finite.exists_ge f
   refine ⟨M, fun a ha => ?_⟩
   obtain ⟨b, rfl⟩ := ha
@@ -628,53 +524,59 @@ theorem Finite.bddBelow_range [IsCodirectedOrder α] (f : ι -> α) : BddBelow (
 end DirectedOrders
 
 section
-variable {ι : Sort*} {α : Type*} [CompleteLattice α] {s : Set α} {a : α} {f : ι -> α}
+variable {ι : Sort*} {α : Type*} [CompleteLattice α] {s : Set α} {a : α} {f : ι → α}
 
-/--
-lemma `le_iSup_iff_of_directed` / 引理 `le_iSup_iff_of_directed`
-
-English:
-lemma le_iSup_iff_of_directed
-  given: [Nonempty ι] [Finite ι] (hf : Directed (· <= ·) f)
-  proof: by obtain ⟨i, hi⟩ := hf.finite_le id; exact ⟨i, ha.trans iSup_le hi⟩
-  mpr := by rintro ⟨i, hai⟩; exact le_iSup_of_le i hai
-
-中文:
-引理 le_iSup_iff_of_directed
-  条件: [非空 ι] [有限 ι] (hf : Directed (· <= ·) f)
-  证明: by obtain ⟨i, hi⟩ := hf.finite_le id; exact ⟨i, ha.trans iSup_le hi⟩
-  mpr := by rintro ⟨i, hai⟩; exact le_iSup_of_le i hai
-
-Depends on / 依赖: finite_le, ha.trans, hf.finite_le, iSup_le, le_iSup_of_le
+/-
+**le_iSup_iff_of_directed** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：le_iSup_iff_of_directed [Nonempty ι] [Finite ι] (hf : Directed (· <= ·) f)
+ : a <= ⨆ i, f i ↔ exists i, a <= f i where mp ha
+参数：hf : Directed (· <= ·) f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Directed.finite_le`：Directed.finite_le {ι κ : Sort*} [Nonempty ι] [Finit
+e κ] {f : ι -> α} (hf : Directed r f) (g : κ -> ι) : exists z, forall i, r (f (g
+ i)) (f …
+· 使用定理 `instIsTransLe`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x1 ≤ x2
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `iSup_le`：iSup_le (h : forall i, f i <= a) : iSup f <= a
+· 使用定理 `le_iSup_of_le`：le_iSup_of_le (i : ι) (h : a <= f i) : a <= iSup f
 -/
-lemma le_iSup_iff_of_directed [Nonempty ι] [Finite ι] (hf : Directed (· <= ·) f) :
-    a <= ⨆ i, f i ↔ exists i, a <= f i where
-mp ha := by obtain ⟨i, hi⟩ := hf.finite_le id; exact ⟨i, ha.trans iSup_le hi⟩
+lemma le_iSup_iff_of_directed [Nonempty ι] [Finite ι] (hf : Directed (· ≤ ·) f) :
+    a ≤ ⨆ i, f i ↔ ∃ i, a ≤ f i where
+  mp ha := by obtain ⟨i, hi⟩ := hf.finite_le id; exact ⟨i, ha.trans <| iSup_le hi⟩
   mpr := by rintro ⟨i, hai⟩; exact le_iSup_of_le i hai
-
-/--
-lemma `le_sSup_iff_of_directedOn` / 引理 `le_sSup_iff_of_directedOn`
-
-English:
-lemma le_sSup_iff_of_directedOn
-  given: (hs : s.Nonempty) (hs' : s.Finite) (hs'' : DirectedOn (· <= ·) s)
-  proof: by
-  have := hs.to_subtype
-  have := hs'.to_subtype
-  simp [sSup_eq_iSup', le_iSup_iff_of_directed hs''.directed_val]
-
-中文:
-引理 le_sSup_iff_of_directedOn
-  条件: (hs : s.非空) (hs' : s.有限) (hs'' : DirectedOn (· <= ·) s)
-  证明: by
-  have := hs.to_subtype
-  have := hs'.to_subtype
-  simp [sSup_eq_iSup', le_iSup_iff_of_directed hs''.directed_val]
-
-Depends on / 依赖: directed_val, hs.to_subtype, le_iSup_iff_of_directed, sSup_eq_iSup, to_subtype
+/-
+**le_sSup_iff_of_directedOn** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：le_sSup_iff_of_directedOn (hs : s.Nonempty) (hs' : s.Finite) (hs'' : Direc
+tedOn (· <= ·) s) : a <= sSup s ↔ exists b in s, a <= b
+参数：hs : s.Nonempty；hs' : s.Finite；hs'' : DirectedOn (· <= ·) s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.to_subtype`：∀ {α : Type u} {s : Set α}, s.Nonempty → Nonemp
+ty ↑s
+· 使用定理 `Set.Finite.to_subtype`：∀ {α : Type u} {s : Set α}, s.Finite → Finite ↑s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sSup_eq_iSup'`：sSup_eq_iSup' (s : Set α) : sSup s = ⨆ a : s, (a : α)
+· 使用引理 `le_iSup_iff_of_directed`：le_iSup_iff_of_directed [Nonempty ι] [Finite ι]
+ (hf : Directed (· <= ·) f) : a <= ⨆ i, f i ↔ exists i, a <= f i where mp ha
+· 使用定理 `DirectedOn.directed_val`：∀ {α : Type u_1} {r : α → α → Prop} {s : Set α}
+, DirectedOn r s → Directed r Subtype.val
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-lemma le_sSup_iff_of_directedOn (hs : s.Nonempty) (hs' : s.Finite) (hs'' : DirectedOn (· <= ·) s) :
-    a <= sSup s ↔ exists b in s, a <= b := by
+lemma le_sSup_iff_of_directedOn (hs : s.Nonempty) (hs' : s.Finite) (hs'' : DirectedOn (· ≤ ·) s) :
+    a ≤ sSup s ↔ ∃ b ∈ s, a ≤ b := by
   have := hs.to_subtype
   have := hs'.to_subtype
   simp [sSup_eq_iSup', le_iSup_iff_of_directed hs''.directed_val]
@@ -682,43 +584,33 @@ lemma le_sSup_iff_of_directedOn (hs : s.Nonempty) (hs' : s.Finite) (hs'' : Direc
 end
 
 namespace Set
-variable {ι : Sort*} {α : Type*} {S : Set (Set α)} {s : Set α} {f : ι -> Set α}
+variable {ι : Sort*} {α : Type*} {S : Set (Set α)} {s : Set α} {f : ι → Set α}
 
-/--
-lemma `subset_iUnion_iff_of_directed` / 引理 `subset_iUnion_iff_of_directed`
-
-English:
-lemma subset_iUnion_iff_of_directed
-  given: [Nonempty ι] [Finite ι] (hf : Directed (· <= ·) f)
-  proof: le_iSup_iff_of_directed hf
-
-中文:
-引理 subset_iUnion_iff_of_directed
-  条件: [非空 ι] [有限 ι] (hf : Directed (· <= ·) f)
-  证明: le_iSup_iff_of_directed hf
-
-Depends on / 依赖: le_iSup_iff_of_directed
+/-
+**Set.subset_iUnion_iff_of_directed** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：subset_iUnion_iff_of_directed [Nonempty ι] [Finite ι] (hf : Directed (· <=
+ ·) f) : s subseteq ⋃ i, f i ↔ exists i, s subseteq f i
+参数：hf : Directed (· <= ·) f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_iSup_iff_of_directed`：le_iSup_iff_of_directed [Nonempty ι] [Finite ι]
+ (hf : Directed (· <= ·) f) : a <= ⨆ i, f i ↔ exists i, a <= f i where mp ha
 -/
-lemma subset_iUnion_iff_of_directed [Nonempty ι] [Finite ι] (hf : Directed (· <= ·) f) :
-    s subseteq ⋃ i, f i ↔ exists i, s subseteq f i := le_iSup_iff_of_directed hf
-
-/--
-lemma `subset_sUnion_iff_of_directed` / 引理 `subset_sUnion_iff_of_directed`
-
-English:
-lemma subset_sUnion_iff_of_directed
-  statement: (hS : S.Nonempty) (hS' : S.Finite)
-  proof: le_sSup_iff_of_directedOn hS hS' hS''
-
-中文:
-引理 subset_sUnion_iff_of_directed
-  结论: (hS : S.非空) (hS' : S.有限)
-  证明: le_sSup_iff_of_directedOn hS hS' hS''
-
-Depends on / 依赖: le_sSup_iff_of_directedOn
+lemma subset_iUnion_iff_of_directed [Nonempty ι] [Finite ι] (hf : Directed (· ≤ ·) f) :
+    s ⊆ ⋃ i, f i ↔ ∃ i, s ⊆ f i := le_iSup_iff_of_directed hf
+/-
+**Set.subset_sUnion_iff_of_directed** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：subset_sUnion_iff_of_directed (hS : S.Nonempty) (hS' : S.Finite) (hS'' : D
+irectedOn (· <= ·) S) : s subseteq sSup S ↔ exists t in S, s subseteq t
+参数：hS : S.Nonempty；hS' : S.Finite；hS'' : DirectedOn (· <= ·) S。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_sSup_iff_of_directedOn`：le_sSup_iff_of_directedOn (hs : s.Nonempty) (
+hs' : s.Finite) (hs'' : DirectedOn (· <= ·) s) : a <= sSup s ↔ exists b in s, a 
+<= b
 -/
 lemma subset_sUnion_iff_of_directed (hS : S.Nonempty) (hS' : S.Finite)
-    (hS'' : DirectedOn (· <= ·) S) : s subseteq sSup S ↔ exists t in S, s subseteq t :=
+    (hS'' : DirectedOn (· ≤ ·) S) : s ⊆ sSup S ↔ ∃ t ∈ S, s ⊆ t :=
   le_sSup_iff_of_directedOn hS hS' hS''
 
 end Set
@@ -740,207 +632,157 @@ section CCL
 
 variable {α ι ι' : Type*} [Finite ι] [Finite ι'] [ConditionallyCompleteLattice α]
 
-/--
-lemma `le_ciSup_of_le` / 引理 `le_ciSup_of_le`
-
-English:
-lemma le_ciSup_of_le
-  given: {a : α} {f : ι -> α} (c : ι) (h : a <= f c)
-  statement: a <= iSup f
-  proof: _root_.le_ciSup_of_le (bddAbove_range f) c h
-
-中文:
-引理 le_ciSup_of_le
-  条件: {a : α} {f : ι -> α} (c : ι) (h : a <= f c)
-  结论: a <= iSup f
-  证明: _root_.le_ciSup_of_le (bddAbove_range f) c h
-
-Depends on / 依赖: _root_, _root_.le_ciSup_of_le, bddAbove_range, le_ciSup_of_le
+/-
+**Finite.le_ciSup_of_le** 是 Mathlib 中的一个引理，位于命名空间 `Finite`。
+形式化陈述：le_ciSup_of_le {a : α} {f : ι -> α} (c : ι) (h : a <= f c) : a <= iSup f
+参数：c : ι；h : a <= f c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_ciSup_of_le`：le_ciSup_of_le {f : ι -> α} (H : BddAbove (range f)) (c 
+: ι) (h : a <= f c) : a <= iSup f
+· 使用定理 `Finite.bddAbove_range`：Finite.bddAbove_range [IsDirectedOrder α] (f : ι 
+-> α) : BddAbove (Set.range f)
+· 使用定理 `supSet_to_nonempty`：∀ (α : Type u_1) [SupSet α], Nonempty α
+· 使用定理 `SemilatticeSup.instIsDirectedOrder`：∀ {α : Type u_1} [inst : Semilattice
+Sup α], IsDirectedOrder α
 -/
-lemma le_ciSup_of_le {a : α} {f : ι -> α} (c : ι) (h : a <= f c) : a <= iSup f :=
+lemma le_ciSup_of_le {a : α} {f : ι → α} (c : ι) (h : a ≤ f c) : a ≤ iSup f :=
   _root_.le_ciSup_of_le (bddAbove_range f) c h
-
-/--
-lemma `ciInf_le_of_le` / 引理 `ciInf_le_of_le`
-
-English:
-lemma ciInf_le_of_le
-  given: {a : α} {f : ι -> α} (c : ι) (h : f c <= a)
-  statement: iInf f <= a
-  proof: _root_.ciInf_le_of_le (bddBelow_range f) c h
-
-中文:
-引理 ciInf_le_of_le
-  条件: {a : α} {f : ι -> α} (c : ι) (h : f c <= a)
-  结论: iInf f <= a
-  证明: _root_.ciInf_le_of_le (bddBelow_range f) c h
-
-Depends on / 依赖: _root_, _root_.ciInf_le_of_le, bddBelow_range, ciInf_le_of_le
+/-
+**Finite.ciInf_le_of_le** 是 Mathlib 中的一个引理，位于命名空间 `Finite`。
+形式化陈述：ciInf_le_of_le {a : α} {f : ι -> α} (c : ι) (h : f c <= a) : iInf f <= a
+参数：c : ι；h : f c <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ciInf_le_of_le`：ciInf_le_of_le {f : ι -> α} (H : BddBelow (range f)) (c 
+: ι) (h : f c <= a) : iInf f <= a
+· 使用定理 `Finite.bddBelow_range`：Finite.bddBelow_range [IsCodirectedOrder α] (f : 
+ι -> α) : BddBelow (Set.range f)
+· 使用定理 `supSet_to_nonempty`：∀ (α : Type u_1) [SupSet α], Nonempty α
+· 使用定理 `SemilatticeInf.instIsCodirectedOrder`：∀ {α : Type u_1} [inst : Semilatti
+ceInf α], IsCodirectedOrder α
 -/
-lemma ciInf_le_of_le {a : α} {f : ι -> α} (c : ι) (h : f c <= a) : iInf f <= a :=
+lemma ciInf_le_of_le {a : α} {f : ι → α} (c : ι) (h : f c ≤ a) : iInf f ≤ a :=
   _root_.ciInf_le_of_le (bddBelow_range f) c h
-
-/--
-lemma `ciSup_mono` / 引理 `ciSup_mono`
-
-English:
-lemma ciSup_mono
-  given: {f g : ι -> α} (H : forall (x : ι), f x <= g x)
-  statement: iSup f <= iSup g
-  proof: _root_.ciSup_mono (bddAbove_range g) H
-
-中文:
-引理 ciSup_mono
-  条件: {f g : ι -> α} (H : 对任意 (x : ι), f x <= g x)
-  结论: iSup f <= iSup g
-  证明: _root_.ciSup_mono (bddAbove_range g) H
-
-Depends on / 依赖: _root_, _root_.ciSup_mono, bddAbove_range, ciSup_mono
+/-
+**Finite.ciSup_mono** 是 Mathlib 中的一个引理，位于命名空间 `Finite`。
+形式化陈述：ciSup_mono {f g : ι -> α} (H : forall (x : ι), f x <= g x) : iSup f <= iSu
+p g
+参数：H : forall (x : ι), f x <= g x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ciSup_mono`：ciSup_mono {f g : ι -> α} (B : BddAbove (range g)) (H : fora
+ll x, f x <= g x) : iSup f <= iSup g
+· 使用定理 `Finite.bddAbove_range`：Finite.bddAbove_range [IsDirectedOrder α] (f : ι 
+-> α) : BddAbove (Set.range f)
+· 使用定理 `supSet_to_nonempty`：∀ (α : Type u_1) [SupSet α], Nonempty α
+· 使用定理 `SemilatticeSup.instIsDirectedOrder`：∀ {α : Type u_1} [inst : Semilattice
+Sup α], IsDirectedOrder α
 -/
-lemma ciSup_mono {f g : ι -> α} (H : forall (x : ι), f x <= g x) : iSup f <= iSup g :=
+lemma ciSup_mono {f g : ι → α} (H : ∀ (x : ι), f x ≤ g x) : iSup f ≤ iSup g :=
   _root_.ciSup_mono (bddAbove_range g) H
-
-/--
-lemma `ciInf_mono` / 引理 `ciInf_mono`
-
-English:
-lemma ciInf_mono
-  given: {f g : ι -> α} (H : forall (x : ι), f x <= g x)
-  statement: iInf f <= iInf g
-  proof: _root_.ciInf_mono (bddBelow_range f) H
-
-中文:
-引理 ciInf_mono
-  条件: {f g : ι -> α} (H : 对任意 (x : ι), f x <= g x)
-  结论: iInf f <= iInf g
-  证明: _root_.ciInf_mono (bddBelow_range f) H
-
-Depends on / 依赖: _root_, _root_.ciInf_mono, bddBelow_range, ciInf_mono
+/-
+**Finite.ciInf_mono** 是 Mathlib 中的一个引理，位于命名空间 `Finite`。
+形式化陈述：ciInf_mono {f g : ι -> α} (H : forall (x : ι), f x <= g x) : iInf f <= iIn
+f g
+参数：H : forall (x : ι), f x <= g x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ciInf_mono`：ciInf_mono {f g : ι -> α} (B : BddBelow (range f)) (H : fora
+ll x, f x <= g x) : iInf f <= iInf g
+· 使用定理 `Finite.bddBelow_range`：Finite.bddBelow_range [IsCodirectedOrder α] (f : 
+ι -> α) : BddBelow (Set.range f)
+· 使用定理 `supSet_to_nonempty`：∀ (α : Type u_1) [SupSet α], Nonempty α
+· 使用定理 `SemilatticeInf.instIsCodirectedOrder`：∀ {α : Type u_1} [inst : Semilatti
+ceInf α], IsCodirectedOrder α
 -/
-lemma ciInf_mono {f g : ι -> α} (H : forall (x : ι), f x <= g x) : iInf f <= iInf g :=
+lemma ciInf_mono {f g : ι → α} (H : ∀ (x : ι), f x ≤ g x) : iInf f ≤ iInf g :=
   _root_.ciInf_mono (bddBelow_range f) H
-
-/--
-lemma `le_ciSup` / 引理 `le_ciSup`
-
-English:
-lemma le_ciSup
-  given: (f : ι -> α) (i : ι)
-  statement: f i <= ⨆ j, f j
-  proof: le_ciSup_of_le i le_rfl
-
-中文:
-引理 le_ciSup
-  条件: (f : ι -> α) (i : ι)
-  结论: f i <= ⨆ j, f j
-  证明: le_ciSup_of_le i le_rfl
-
-Depends on / 依赖: le_ciSup_of_le, le_rfl
+/-
+**Finite.le_ciSup** 是 Mathlib 中的一个引理，位于命名空间 `Finite`。
+形式化陈述：le_ciSup (f : ι -> α) (i : ι) : f i <= ⨆ j, f j
+参数：f : ι -> α；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finite.le_ciSup_of_le`：le_ciSup_of_le {a : α} {f : ι -> α} (c : ι) (h : 
+a <= f c) : a <= iSup f
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-lemma le_ciSup (f : ι -> α) (i : ι) : f i <= ⨆ j, f j :=
+lemma le_ciSup (f : ι → α) (i : ι) : f i ≤ ⨆ j, f j :=
   le_ciSup_of_le i le_rfl
-
-/--
-lemma `ciInf_le` / 引理 `ciInf_le`
-
-English:
-lemma ciInf_le
-  given: (f : ι -> α) (i : ι)
-  statement: ⨅ j, f j <= f i
-  proof: le_ciSup (α := αᵒᵈ) f i
-
-中文:
-引理 ciInf_le
-  条件: (f : ι -> α) (i : ι)
-  结论: ⨅ j, f j <= f i
-  证明: le_ciSup (α := αᵒᵈ) f i
-
-Depends on / 依赖: le_ciSup
+/-
+**Finite.ciInf_le** 是 Mathlib 中的一个引理，位于命名空间 `Finite`。
+形式化陈述：ciInf_le (f : ι -> α) (i : ι) : ⨅ j, f j <= f i
+参数：f : ι -> α；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finite.le_ciSup`：le_ciSup (f : ι -> α) (i : ι) : f i <= ⨆ j, f j
 -/
-lemma ciInf_le (f : ι -> α) (i : ι) : ⨅ j, f j <= f i :=
+lemma ciInf_le (f : ι → α) (i : ι) : ⨅ j, f j ≤ f i :=
   le_ciSup (α := αᵒᵈ) f i
-
-/--
-lemma `ciSup_sup` / 引理 `ciSup_sup`
-
-English:
-lemma ciSup_sup
-  given: [Nonempty ι] {f : ι -> α} {a : α}
-  proof: by
-refine le_antisymm (sup_le ?_ ?_) ciSup_le fun i => sup_le_sup_right (le_ciSup f i) a
-  · exact ciSup_le fun i => le_ciSup_of_le i le_sup_left
-  · exact le_ciSup_of_le (Classical.arbitrary ι) le_sup_right
-
-中文:
-引理 ciSup_sup
-  条件: [非空 ι] {f : ι -> α} {a : α}
-  证明: by
-refine le_antisymm (sup_le ?_ ?_) ciSup_le fun i => sup_le_sup_right (le_ciSup f i) a
-  · exact ciSup_le fun i => le_ciSup_of_le i le_sup_left
-  · exact le_ciSup_of_le (Classical.arbitrary ι) le_sup_right
-
-Depends on / 依赖: Classical, Classical.arbitrary, arbitrary, ciSup_le, le_antisymm, le_ciSup, le_ciSup_of_le, le_sup_left, le_sup_right, sup_le, sup_le_sup_right
+/-
+**Finite.ciSup_sup** 是 Mathlib 中的一个引理，位于命名空间 `Finite`。
+形式化陈述：ciSup_sup [Nonempty ι] {f : ι -> α} {a : α} : (⨆ i, f i) ⊔ a = ⨆ i, f i ⊔ 
+a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `sup_le`：sup_le : a <= c -> b <= c -> a ⊔ b <= c
+· 使用定理 `ciSup_le`：ciSup_le [Nonempty ι] {f : ι -> α} {c : α} (H : forall x, f x 
+<= c) : iSup f <= c
+· 使用引理 `Finite.le_ciSup_of_le`：le_ciSup_of_le {a : α} {f : ι -> α} (c : ι) (h : 
+a <= f c) : a <= iSup f
+· 使用定理 `le_sup_left`：le_sup_left : a <= a ⊔ b
+· 使用定理 `le_sup_right`：le_sup_right : b <= a ⊔ b
+· 使用定理 `sup_le_sup_right`：sup_le_sup_right (h₁ : a <= b) (c) : a ⊔ c <= b ⊔ c
+· 使用引理 `Finite.le_ciSup`：le_ciSup (f : ι -> α) (i : ι) : f i <= ⨆ j, f j
 -/
-lemma ciSup_sup [Nonempty ι] {f : ι -> α} {a : α} :
+lemma ciSup_sup [Nonempty ι] {f : ι → α} {a : α} :
     (⨆ i, f i) ⊔ a = ⨆ i, f i ⊔ a := by
-refine le_antisymm (sup_le ?_ ?_) ciSup_le fun i => sup_le_sup_right (le_ciSup f i) a
-  · exact ciSup_le fun i => le_ciSup_of_le i le_sup_left
+  refine le_antisymm (sup_le ?_ ?_) <| ciSup_le fun i ↦ sup_le_sup_right (le_ciSup f i) a
+  · exact ciSup_le fun i ↦ le_ciSup_of_le i le_sup_left
   · exact le_ciSup_of_le (Classical.arbitrary ι) le_sup_right
-
-/--
-lemma `ciInf_inf` / 引理 `ciInf_inf`
-
-English:
-lemma ciInf_inf
-  given: [Nonempty ι] {f : ι -> α} {a : α}
-  proof: ciSup_sup (α := αᵒᵈ) ..
-
-中文:
-引理 ciInf_inf
-  条件: [非空 ι] {f : ι -> α} {a : α}
-  证明: ciSup_sup (α := αᵒᵈ) ..
-
-Depends on / 依赖: ciSup_sup
+/-
+**Finite.ciInf_inf** 是 Mathlib 中的一个引理，位于命名空间 `Finite`。
+形式化陈述：ciInf_inf [Nonempty ι] {f : ι -> α} {a : α} : (⨅ i, f i) ⊓ a = ⨅ i, f i ⊓ 
+a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finite.ciSup_sup`：ciSup_sup [Nonempty ι] {f : ι -> α} {a : α} : (⨆ i, f 
+i) ⊔ a = ⨆ i, f i ⊔ a
 -/
-lemma ciInf_inf [Nonempty ι] {f : ι -> α} {a : α} :
+lemma ciInf_inf [Nonempty ι] {f : ι → α} {a : α} :
     (⨅ i, f i) ⊓ a = ⨅ i, f i ⊓ a :=
   ciSup_sup (α := αᵒᵈ) ..
-
-/--
-lemma `ciSup_prod` / 引理 `ciSup_prod`
-
-English:
-lemma ciSup_prod
-  given: (f : ι × ι' -> α)
-  proof: _root_.ciSup_prod (bddAbove_range f)
-
-中文:
-引理 ciSup_prod
-  条件: (f : ι × ι' -> α)
-  证明: _root_.ciSup_prod (bddAbove_range f)
-
-Depends on / 依赖: _root_, _root_.ciSup_prod, bddAbove_range, ciSup_prod
+/-
+**Finite.ciSup_prod** 是 Mathlib 中的一个引理，位于命名空间 `Finite`。
+形式化陈述：ciSup_prod (f : ι × ι' -> α) : ⨆ a, f a = ⨆ i, ⨆ i', f (i, i')
+参数：f : ι × ι' -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ciSup_prod`：ciSup_prod {f : β × γ -> α} (hf : BddAbove (Set.range f)) : 
+⨆ p, f p = ⨆ b, ⨆ c, f (b, c)
+· 使用定理 `Finite.bddAbove_range`：Finite.bddAbove_range [IsDirectedOrder α] (f : ι 
+-> α) : BddAbove (Set.range f)
+· 使用定理 `Finite.instProd`：∀ {α : Type u_1} {β : Type u_2} [Finite α] [Finite β], 
+Finite (α × β)
+· 使用定理 `supSet_to_nonempty`：∀ (α : Type u_1) [SupSet α], Nonempty α
+· 使用定理 `SemilatticeSup.instIsDirectedOrder`：∀ {α : Type u_1} [inst : Semilattice
+Sup α], IsDirectedOrder α
 -/
-lemma ciSup_prod (f : ι × ι' -> α) :
+lemma ciSup_prod (f : ι × ι' → α) :
     ⨆ a, f a = ⨆ i, ⨆ i', f (i, i') :=
   _root_.ciSup_prod (bddAbove_range f)
-
-/--
-lemma `ciInf_prod` / 引理 `ciInf_prod`
-
-English:
-lemma ciInf_prod
-  given: (f : ι × ι' -> α)
-  proof: ciSup_prod (α := αᵒᵈ) f
-
-中文:
-引理 ciInf_prod
-  条件: (f : ι × ι' -> α)
-  证明: ciSup_prod (α := αᵒᵈ) f
-
-Depends on / 依赖: ciSup_prod
+/-
+**Finite.ciInf_prod** 是 Mathlib 中的一个引理，位于命名空间 `Finite`。
+形式化陈述：ciInf_prod (f : ι × ι' -> α) : ⨅ a, f a = ⨅ i, ⨅ i', f (i, i')
+参数：f : ι × ι' -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finite.ciSup_prod`：ciSup_prod (f : ι × ι' -> α) : ⨆ a, f a = ⨆ i, ⨆ i', 
+f (i, i')
 -/
-lemma ciInf_prod (f : ι × ι' -> α) :
+lemma ciInf_prod (f : ι × ι' → α) :
     ⨅ a, f a = ⨅ i, ⨅ i', f (i, i') :=
   ciSup_prod (α := αᵒᵈ) f
 
@@ -951,170 +793,133 @@ section CCLO
 variable {α β ι : Type*} [ConditionallyCompleteLinearOrder α] [ConditionallyCompleteLattice β]
   [Finite ι] [Nonempty ι]
 
-/--
-lemma `map_iSup_of_monotoneOn` / 引理 `map_iSup_of_monotoneOn`
-
-English:
-lemma map_iSup_of_monotoneOn
-  statement: {s : Set α} {f : ι -> α} {g : α -> β} (hg : MonotoneOn g s)
-  proof: by
-  obtain ⟨j, hj⟩ : exists j, f j = ⨆ i, f i := exists_eq_ciSup_of_finite
-  rw [← hj]
-exact le_antisymm (le_ciSup_of_le j le_rfl)
-    ciSup_le fun i => hg (hs i) (hs j) (hj ▸ le_ciSup f i)
-
-中文:
-引理 map_iSup_of_monotoneOn
-  结论: {s : 集合 α} {f : ι -> α} {g : α -> β} (hg : MonotoneOn g s)
-  证明: by
-  obtain ⟨j, hj⟩ : exists j, f j = ⨆ i, f i := exists_eq_ciSup_of_finite
-  rw [← hj]
-exact le_antisymm (le_ciSup_of_le j le_rfl)
-    ciSup_le fun i => hg (hs i) (hs j) (hj ▸ le_ciSup f i)
-
-Depends on / 依赖: Terminates, _of_not_terminates, _of_terminates, ciSup_le, exists_eq_ciSup_of_finite, le_antisymm, le_ciSup, le_ciSup_of_le, le_rfl, length, length_map, s.map, terminates_map_iff
+/-
+**Finite.map_iSup_of_monotoneOn** 是 Mathlib 中的一个引理，位于命名空间 `Finite`。
+形式化陈述：map_iSup_of_monotoneOn {s : Set α} {f : ι -> α} {g : α -> β} (hg : Monoton
+eOn g s) (hs : forall i, f i in s) : g (⨆ i, f i) = ⨆ i, g (f i)
+参数：hg : MonotoneOn g s；hs : forall i, f i in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_eq_ciSup_of_finite`：exists_eq_ciSup_of_finite [Nonempty ι] [Finit
+e ι] {f : ι -> α} : exists i, f i = ⨆ i, f i
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `Finite.le_ciSup_of_le`：le_ciSup_of_le {a : α} {f : ι -> α} (c : ι) (h : 
+a <= f c) : a <= iSup f
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `ciSup_le`：ciSup_le [Nonempty ι] {f : ι -> α} {c : α} (H : forall x, f x 
+<= c) : iSup f <= c
+· 使用引理 `Finite.le_ciSup`：le_ciSup (f : ι -> α) (i : ι) : f i <= ⨆ j, f j
 -/
-lemma map_iSup_of_monotoneOn {s : Set α} {f : ι -> α} {g : α -> β} (hg : MonotoneOn g s)
-    (hs : forall i, f i in s) :
+lemma map_iSup_of_monotoneOn {s : Set α} {f : ι → α} {g : α → β} (hg : MonotoneOn g s)
+    (hs : ∀ i, f i ∈ s) :
     g (⨆ i, f i) = ⨆ i, g (f i) := by
-  obtain ⟨j, hj⟩ : exists j, f j = ⨆ i, f i := exists_eq_ciSup_of_finite
+  obtain ⟨j, hj⟩ : ∃ j, f j = ⨆ i, f i := exists_eq_ciSup_of_finite
   rw [← hj]
-exact le_antisymm (le_ciSup_of_le j le_rfl)
-    ciSup_le fun i => hg (hs i) (hs j) (hj ▸ le_ciSup f i)
-
-/--
-lemma `map_iInf_of_monotoneOn` / 引理 `map_iInf_of_monotoneOn`
-
-English:
-lemma map_iInf_of_monotoneOn
-  statement: {s : Set α} {f : ι -> α} {g : α -> β} (hg : MonotoneOn g s)
-  proof: map_iSup_of_monotoneOn (α := αᵒᵈ) (β := βᵒᵈ) (fun _ hi _ hj h => hg hj hi h) hs
-
-中文:
-引理 map_iInf_of_monotoneOn
-  结论: {s : 集合 α} {f : ι -> α} {g : α -> β} (hg : MonotoneOn g s)
-  证明: map_iSup_of_monotoneOn (α := αᵒᵈ) (β := βᵒᵈ) (fun _ hi _ hj h => hg hj hi h) hs
-
-Depends on / 依赖: map_iSup_of_monotoneOn
+  exact le_antisymm (le_ciSup_of_le j le_rfl) <|
+    ciSup_le fun i ↦ hg (hs i) (hs j) (hj ▸ le_ciSup f i)
+/-
+**Finite.map_iInf_of_monotoneOn** 是 Mathlib 中的一个引理，位于命名空间 `Finite`。
+形式化陈述：map_iInf_of_monotoneOn {s : Set α} {f : ι -> α} {g : α -> β} (hg : Monoton
+eOn g s) (hs : forall i, f i in s) : g (⨅ i, f i) = ⨅ i, g (f i)
+参数：hg : MonotoneOn g s；hs : forall i, f i in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finite.map_iSup_of_monotoneOn`：map_iSup_of_monotoneOn {s : Set α} {f : ι
+ -> α} {g : α -> β} (hg : MonotoneOn g s) (hs : forall i, f i in s) : g (⨆ i, f 
+i) = ⨆ i, g (f i)
 -/
-lemma map_iInf_of_monotoneOn {s : Set α} {f : ι -> α} {g : α -> β} (hg : MonotoneOn g s)
-    (hs : forall i, f i in s) :
+lemma map_iInf_of_monotoneOn {s : Set α} {f : ι → α} {g : α → β} (hg : MonotoneOn g s)
+    (hs : ∀ i, f i ∈ s) :
     g (⨅ i, f i) = ⨅ i, g (f i) :=
-  map_iSup_of_monotoneOn (α := αᵒᵈ) (β := βᵒᵈ) (fun _ hi _ hj h => hg hj hi h) hs
-
-/--
-lemma `map_iSup_of_antitoneOn` / 引理 `map_iSup_of_antitoneOn`
-
-English:
-lemma map_iSup_of_antitoneOn
-  statement: {s : Set α} {f : ι -> α} {g : α -> β} (hg : AntitoneOn g s)
-  proof: map_iSup_of_monotoneOn (β := βᵒᵈ) hg hs
-
-中文:
-引理 map_iSup_of_antitoneOn
-  结论: {s : 集合 α} {f : ι -> α} {g : α -> β} (hg : AntitoneOn g s)
-  证明: map_iSup_of_monotoneOn (β := βᵒᵈ) hg hs
-
-Depends on / 依赖: map_iSup_of_monotoneOn
+  map_iSup_of_monotoneOn (α := αᵒᵈ) (β := βᵒᵈ) (fun _ hi _ hj h ↦ hg hj hi h) hs
+/-
+**Finite.map_iSup_of_antitoneOn** 是 Mathlib 中的一个引理，位于命名空间 `Finite`。
+形式化陈述：map_iSup_of_antitoneOn {s : Set α} {f : ι -> α} {g : α -> β} (hg : Antiton
+eOn g s) (hs : forall i, f i in s) : g (⨆ i, f i) = ⨅ i, g (f i)
+参数：hg : AntitoneOn g s；hs : forall i, f i in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finite.map_iSup_of_monotoneOn`：map_iSup_of_monotoneOn {s : Set α} {f : ι
+ -> α} {g : α -> β} (hg : MonotoneOn g s) (hs : forall i, f i in s) : g (⨆ i, f 
+i) = ⨆ i, g (f i)
 -/
-lemma map_iSup_of_antitoneOn {s : Set α} {f : ι -> α} {g : α -> β} (hg : AntitoneOn g s)
-    (hs : forall i, f i in s) :
+lemma map_iSup_of_antitoneOn {s : Set α} {f : ι → α} {g : α → β} (hg : AntitoneOn g s)
+    (hs : ∀ i, f i ∈ s) :
     g (⨆ i, f i) = ⨅ i, g (f i) :=
   map_iSup_of_monotoneOn (β := βᵒᵈ) hg hs
-
-/--
-lemma `map_iInf_of_antitoneOn` / 引理 `map_iInf_of_antitoneOn`
-
-English:
-lemma map_iInf_of_antitoneOn
-  statement: {s : Set α} {f : ι -> α} {g : α -> β} (hg : AntitoneOn g s)
-  proof: map_iInf_of_monotoneOn (β := βᵒᵈ) hg hs
-
-中文:
-引理 map_iInf_of_antitoneOn
-  结论: {s : 集合 α} {f : ι -> α} {g : α -> β} (hg : AntitoneOn g s)
-  证明: map_iInf_of_monotoneOn (β := βᵒᵈ) hg hs
-
-Depends on / 依赖: map_iInf_of_monotoneOn
+/-
+**Finite.map_iInf_of_antitoneOn** 是 Mathlib 中的一个引理，位于命名空间 `Finite`。
+形式化陈述：map_iInf_of_antitoneOn {s : Set α} {f : ι -> α} {g : α -> β} (hg : Antiton
+eOn g s) (hs : forall i, f i in s) : g (⨅ i, f i) = ⨆ i, g (f i)
+参数：hg : AntitoneOn g s；hs : forall i, f i in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finite.map_iInf_of_monotoneOn`：map_iInf_of_monotoneOn {s : Set α} {f : ι
+ -> α} {g : α -> β} (hg : MonotoneOn g s) (hs : forall i, f i in s) : g (⨅ i, f 
+i) = ⨅ i, g (f i)
 -/
-lemma map_iInf_of_antitoneOn {s : Set α} {f : ι -> α} {g : α -> β} (hg : AntitoneOn g s)
-    (hs : forall i, f i in s) :
+lemma map_iInf_of_antitoneOn {s : Set α} {f : ι → α} {g : α → β} (hg : AntitoneOn g s)
+    (hs : ∀ i, f i ∈ s) :
     g (⨅ i, f i) = ⨆ i, g (f i) :=
   map_iInf_of_monotoneOn (β := βᵒᵈ) hg hs
-
-/--
-lemma `map_iSup_of_monotone` / 引理 `map_iSup_of_monotone`
-
-English:
-lemma map_iSup_of_monotone
-  given: (f : ι -> α) {g : α -> β} (hg : Monotone g)
-  proof: map_iSup_of_monotoneOn (monotoneOn_univ.mpr hg) (fun i => Set.mem_univ (f i))
-
-中文:
-引理 map_iSup_of_monotone
-  条件: (f : ι -> α) {g : α -> β} (hg : 递增 g)
-  证明: map_iSup_of_monotoneOn (monotoneOn_univ.mpr hg) (fun i => Set.mem_univ (f i))
-
-Depends on / 依赖: Set.mem_univ, map_iSup_of_monotoneOn, mem_univ, monotoneOn_univ, monotoneOn_univ.mpr
+/-
+**Finite.map_iSup_of_monotone** 是 Mathlib 中的一个引理，位于命名空间 `Finite`。
+形式化陈述：map_iSup_of_monotone (f : ι -> α) {g : α -> β} (hg : Monotone g) : g (⨆ i,
+ f i) = ⨆ i, g (f i)
+参数：f : ι -> α；hg : Monotone g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finite.map_iSup_of_monotoneOn`：map_iSup_of_monotoneOn {s : Set α} {f : ι
+ -> α} {g : α -> β} (hg : MonotoneOn g s) (hs : forall i, f i in s) : g (⨆ i, f 
+i) = ⨆ i, g (f i)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `monotoneOn_univ`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [inst_1
+ : Preorder β] {f : α → β}, MonotoneOn f Set.univ ↔ Monotone f
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
 -/
-lemma map_iSup_of_monotone (f : ι -> α) {g : α -> β} (hg : Monotone g) :
+lemma map_iSup_of_monotone (f : ι → α) {g : α → β} (hg : Monotone g) :
     g (⨆ i, f i) = ⨆ i, g (f i) :=
-  map_iSup_of_monotoneOn (monotoneOn_univ.mpr hg) (fun i => Set.mem_univ (f i))
-
-/--
-lemma `map_iInf_of_monotone` / 引理 `map_iInf_of_monotone`
-
-English:
-lemma map_iInf_of_monotone
-  given: (f : ι -> α) {g : α -> β} (hg : Monotone g)
-  proof: map_iSup_of_monotone (α := αᵒᵈ) (β := βᵒᵈ) f fun _ _ h => hg h
-
-中文:
-引理 map_iInf_of_monotone
-  条件: (f : ι -> α) {g : α -> β} (hg : 递增 g)
-  证明: map_iSup_of_monotone (α := αᵒᵈ) (β := βᵒᵈ) f fun _ _ h => hg h
-
-Depends on / 依赖: map_iSup_of_monotone
+  map_iSup_of_monotoneOn (monotoneOn_univ.mpr hg) (fun i ↦ Set.mem_univ (f i))
+/-
+**Finite.map_iInf_of_monotone** 是 Mathlib 中的一个引理，位于命名空间 `Finite`。
+形式化陈述：map_iInf_of_monotone (f : ι -> α) {g : α -> β} (hg : Monotone g) : g (⨅ i,
+ f i) = ⨅ i, g (f i)
+参数：f : ι -> α；hg : Monotone g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finite.map_iSup_of_monotone`：map_iSup_of_monotone (f : ι -> α) {g : α ->
+ β} (hg : Monotone g) : g (⨆ i, f i) = ⨆ i, g (f i)
 -/
-lemma map_iInf_of_monotone (f : ι -> α) {g : α -> β} (hg : Monotone g) :
+lemma map_iInf_of_monotone (f : ι → α) {g : α → β} (hg : Monotone g) :
     g (⨅ i, f i) = ⨅ i, g (f i) :=
-  map_iSup_of_monotone (α := αᵒᵈ) (β := βᵒᵈ) f fun _ _ h => hg h
-
-/--
-lemma `map_iSup_of_antitone` / 引理 `map_iSup_of_antitone`
-
-English:
-lemma map_iSup_of_antitone
-  given: (f : ι -> α) {g : α -> β} (hg : Antitone g)
-  proof: map_iSup_of_monotone (β := βᵒᵈ) f hg
-
-中文:
-引理 map_iSup_of_antitone
-  条件: (f : ι -> α) {g : α -> β} (hg : 递减 g)
-  证明: map_iSup_of_monotone (β := βᵒᵈ) f hg
-
-Depends on / 依赖: map_iSup_of_monotone
+  map_iSup_of_monotone (α := αᵒᵈ) (β := βᵒᵈ) f fun _ _ h ↦ hg h
+/-
+**Finite.map_iSup_of_antitone** 是 Mathlib 中的一个引理，位于命名空间 `Finite`。
+形式化陈述：map_iSup_of_antitone (f : ι -> α) {g : α -> β} (hg : Antitone g) : g (⨆ i,
+ f i) = ⨅ i, g (f i)
+参数：f : ι -> α；hg : Antitone g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finite.map_iSup_of_monotone`：map_iSup_of_monotone (f : ι -> α) {g : α ->
+ β} (hg : Monotone g) : g (⨆ i, f i) = ⨆ i, g (f i)
 -/
-lemma map_iSup_of_antitone (f : ι -> α) {g : α -> β} (hg : Antitone g) :
+lemma map_iSup_of_antitone (f : ι → α) {g : α → β} (hg : Antitone g) :
     g (⨆ i, f i) = ⨅ i, g (f i) :=
   map_iSup_of_monotone (β := βᵒᵈ) f hg
-
-/--
-lemma `map_iInf_of_antitone` / 引理 `map_iInf_of_antitone`
-
-English:
-lemma map_iInf_of_antitone
-  given: (f : ι -> α) {g : α -> β} (hg : Antitone g)
-  proof: map_iInf_of_monotone (β := βᵒᵈ) f hg
-
-中文:
-引理 map_iInf_of_antitone
-  条件: (f : ι -> α) {g : α -> β} (hg : 递减 g)
-  证明: map_iInf_of_monotone (β := βᵒᵈ) f hg
-
-Depends on / 依赖: map_iInf_of_monotone
+/-
+**Finite.map_iInf_of_antitone** 是 Mathlib 中的一个引理，位于命名空间 `Finite`。
+形式化陈述：map_iInf_of_antitone (f : ι -> α) {g : α -> β} (hg : Antitone g) : g (⨅ i,
+ f i) = ⨆ i, g (f i)
+参数：f : ι -> α；hg : Antitone g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finite.map_iInf_of_monotone`：map_iInf_of_monotone (f : ι -> α) {g : α ->
+ β} (hg : Monotone g) : g (⨅ i, f i) = ⨅ i, g (f i)
 -/
-lemma map_iInf_of_antitone (f : ι -> α) {g : α -> β} (hg : Antitone g) :
+lemma map_iInf_of_antitone (f : ι → α) {g : α → β} (hg : Antitone g) :
     g (⨅ i, f i) = ⨆ i, g (f i) :=
   map_iInf_of_monotone (β := βᵒᵈ) f hg
 
@@ -1123,3 +928,4 @@ end CCLO
 end Finite
 
 end ciSup
+

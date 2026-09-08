@@ -26,175 +26,154 @@ public section
 open scoped Topology
 open Filter
 
-/--
-Definition of `ContinuousEvalConst` / `ContinuousEvalConst` 的定义
+/-- A typeclass saying that `F` is a type of bundled morphisms (in the sense of `DFunLike`)
+with a topology on `F` such that evaluation at a point is continuous in `f : F`. -/
+/-
+**ContinuousEvalConst** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_1) →   (α : outParam (Type u_2)) →     (X : outParam (Type u_3
+)) → [FunLike F α X] → [TopologicalSpace F] → [TopologicalSpace X] → Prop
+参数：Type u_2；Type u_3。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class ContinuousEvalConst
-  parameters: (F : Type*) (α X : outParam Type*) [FunLike F α X]
-  axioms and operations (1):
-    - continuous_eval_const((x : α)) : Continuous fun f : F => f x
-
-中文:
-类 余ntinuousEvalConst
-  参数: (F : 类型) (α X : outParam 类型) [函数状 F α X]
-  公理与运算 (1 个):
-    - continuous_eval_const((x : α)) : 连续 fun f : F => f x
+--- 原说明 ---
+A typeclass saying that `F` is a type of bundled morphisms (in the sense of `DFu
+nLike`)
+with a topology on `F` such that evaluation at a point is continuous in `f : F`.
 -/
 class ContinuousEvalConst (F : Type*) (α X : outParam Type*) [FunLike F α X]
     [TopologicalSpace F] [TopologicalSpace X] : Prop where
-  continuous_eval_const (x : α) : Continuous fun f : F => f x
+  continuous_eval_const (x : α) : Continuous fun f : F ↦ f x
 
 export ContinuousEvalConst (continuous_eval_const)
 
 section ContinuousEvalConst
 
 variable {F α X Z : Type*} [FunLike F α X] [TopologicalSpace F] [TopologicalSpace X]
-  [ContinuousEvalConst F α X] [TopologicalSpace Z] {f : Z -> F} {s : Set Z} {z : Z}
+  [ContinuousEvalConst F α X] [TopologicalSpace Z] {f : Z → F} {s : Set Z} {z : Z}
 
-/--
-theorem `ContinuousEvalConst.of_continuous_forget` / 定理 `ContinuousEvalConst.of_continuous_forget`
+/-- If a type `F'` of bundled morphisms admits a continuous projection
+to a type satisfying `ContinuousEvalConst`,
+then `F'` satisfies this predicate too.
 
-English:
-theorem ContinuousEvalConst.of_continuous_forget
-  statement: {F' : Type*} [FunLike F' α X] [TopologicalSpace F']
-  proof: by simpa only [← hf] using! (continuous_eval_const x).comp hc
+The word "forget" in the name is motivated by the term "forgetful functor". -/
+/-
+**ContinuousEvalConst.of_continuous_forget** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousEvalConst.of_continuous_forget {F' : Type*} [FunLike F' α X] [To
+pologicalSpace F'] {f : F' -> F} (hc : Continuous f) (hf : forall g, ⇑(f g) = g
+参数：hc : Continuous f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用定理 `ContinuousEvalConst.continuous_eval_const`：∀ {F : Type u_1} {α : outPara
+m (Type u_2)} {X : outParam (Type u_3)} {inst : FunLike F α X}   {inst_1 : Topol
+ogicalSpace F} {inst_2 : Topolo…
 
-@[continuity, fun_prop]
+--- 原说明 ---
+If a type `F'` of bundled morphisms admits a continuous projection
+to a type satisfying `ContinuousEvalConst`,
+then `F'` satisfies this predicate too.
 
-中文:
-定理 余ntinuousEvalConst.of_continuous_forget
-  结论: {F' : 类型} [函数状 F' α X] [拓扑空间 F']
-  证明: by simpa only [← hf] using! (continuous_eval_const x).comp hc
-
-@[continuity, fun_prop]
-
-Depends on / 依赖: ContinuousEvalConst, continuous_eval_const
+The word "forget" in the name is motivated by the term "forgetful functor".
 -/
 theorem ContinuousEvalConst.of_continuous_forget {F' : Type*} [FunLike F' α X] [TopologicalSpace F']
-    {f : F' -> F} (hc : Continuous f) (hf : forall g, ⇑(f g) = g := by intro; rfl) :
+    {f : F' → F} (hc : Continuous f) (hf : ∀ g, ⇑(f g) = g := by intro; rfl) :
     ContinuousEvalConst F' α X where
   continuous_eval_const x := by simpa only [← hf] using! (continuous_eval_const x).comp hc
 
 @[continuity, fun_prop]
-/--
-theorem `Continuous.eval_const` / 定理 `Continuous.eval_const`
-
-English:
-theorem Continuous.eval_const
-  given: (hf : Continuous f) (x : α)
-  statement: Continuous (f · x)
-  proof: (continuous_eval_const x).comp hf
-
-中文:
-定理 连续.eval_const
-  条件: (hf : 连续 f) (x : α)
-  结论: 连续 (f · x)
-  证明: (continuous_eval_const x).comp hf
+/-
+**Continuous.eval_const** 是 Mathlib 中的一个定理，位于命名空间 `Continuous`。
+形式化陈述：∀ {F : Type u_1} {α : Type u_2} {X : Type u_3} {Z : Type u_4} [inst : FunL
+ike F α X] [inst_1 : TopologicalSpace F]   [inst_2 : TopologicalSpace X] [Contin
+uousEvalConst F α X] [inst_4 : TopologicalSpace Z] {f : Z → F},   Continuous f →
+ ∀ (x : α), Continuous fun x_1 => (f x_1) x
+参数：x : α；f x_1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用定理 `ContinuousEvalConst.continuous_eval_const`：∀ {F : Type u_1} {α : outPara
+m (Type u_2)} {X : outParam (Type u_3)} {inst : FunLike F α X}   {inst_1 : Topol
+ogicalSpace F} {inst_2 : Topolo…
 -/
 protected theorem Continuous.eval_const (hf : Continuous f) (x : α) : Continuous (f · x) :=
   (continuous_eval_const x).comp hf
-
-/--
-theorem `continuous_coeFun` / 定理 `continuous_coeFun`
-
-English:
-theorem continuous_coeFun
-  statement: Continuous (DFunLike.coe : F -> α -> X)
-  proof: continuous_pi continuous_eval_const
-
-中文:
-定理 continuous_coeFun
-  结论: 连续 (依赖函数状.coe : F -> α -> X)
-  证明: continuous_pi continuous_eval_const
-
-Depends on / 依赖: continuous_eval_const, continuous_pi
+/-
+**continuous_coeFun** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuous_coeFun : Continuous (DFunLike.coe : F -> α -> X)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_pi`：continuous_pi (f : X → α → Y) (hf : ∀ a, Continuous (f x 
+a)) : Continuous (fun x a ↦ f x a)
+· 使用定理 `ContinuousEvalConst.continuous_eval_const`：∀ {F : Type u_1} {α : outPara
+m (Type u_2)} {X : outParam (Type u_3)} {inst : FunLike F α X}   {inst_1 : Topol
+ogicalSpace F} {inst_2 : Topolo…
 -/
-theorem continuous_coeFun : Continuous (DFunLike.coe : F -> α -> X) :=
+theorem continuous_coeFun : Continuous (DFunLike.coe : F → α → X) :=
   continuous_pi continuous_eval_const
-
-/--
-theorem `Continuous.coeFun` / 定理 `Continuous.coeFun`
-
-English:
-theorem Continuous.coeFun
-  given: (hf : Continuous f)
-  statement: Continuous fun z => ⇑(f z)
-  proof: continuous_pi hf.eval_const
-
-中文:
-定理 连续.coeFun
-  条件: (hf : 连续 f)
-  结论: 连续 fun z => ⇑(f z)
-  证明: continuous_pi hf.eval_const
+/-
+**Continuous.coeFun** 是 Mathlib 中的一个定理，位于命名空间 `Continuous`。
+形式化陈述：∀ {F : Type u_1} {α : Type u_2} {X : Type u_3} {Z : Type u_4} [inst : FunL
+ike F α X] [inst_1 : TopologicalSpace F]   [inst_2 : TopologicalSpace X] [Contin
+uousEvalConst F α X] [inst_4 : TopologicalSpace Z] {f : Z → F},   Continuous f →
+ Continuous fun z => ⇑(f z)
+参数：f z。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_pi`：continuous_pi (f : X → α → Y) (hf : ∀ a, Continuous (f x 
+a)) : Continuous (fun x a ↦ f x a)
+· 使用定理 `Continuous.eval_const`：∀ {F : Type u_1} {α : Type u_2} {X : Type u_3} {Z
+ : Type u_4} [inst : FunLike F α X] [inst_1 : TopologicalSpace F]   [inst_2 : To
+pologicalSp…
 -/
-protected theorem Continuous.coeFun (hf : Continuous f) : Continuous fun z => ⇑(f z) :=
+protected theorem Continuous.coeFun (hf : Continuous f) : Continuous fun z ↦ ⇑(f z) :=
   continuous_pi hf.eval_const
-
-/--
-theorem `Filter.Tendsto.eval_const` / 定理 `Filter.Tendsto.eval_const`
-
-English:
-theorem Filter.Tendsto.eval_const
-  statement: {ι : Type*} {l : Filter ι} {f : ι -> F} {g : F}
-  proof: ((continuous_id.eval_const a).tendsto _).comp hf
-
-中文:
-定理 滤子.收敛.eval_const
-  结论: {ι : 类型} {l : 滤子 ι} {f : ι -> F} {g : F}
-  证明: ((continuous_id.eval_const a).tendsto _).comp hf
+/-
+**Filter.Tendsto.eval_const** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Tendsto`。
+形式化陈述：∀ {F : Type u_1} {α : Type u_2} {X : Type u_3} [inst : FunLike F α X] [ins
+t_1 : TopologicalSpace F]   [inst_2 : TopologicalSpace X] [ContinuousEvalConst F
+ α X] {ι : Type u_5} {l : Filter ι} {f : ι → F} {g : F},   Filter.Tendsto f l (n
+hds g) → ∀ (a : α), Filter.Tendsto (fun x => (f x) a) l (nhds (g a))
+参数：nhds g；a : α；fun x => (f x) a；nhds (g a)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {f :
+ α → β} {g : β → γ} {x : Filter α} {y : Filter β} {z : Filter γ},   Filter.Tends
+to g y z …
+· 使用定理 `Continuous.tendsto`：Continuous.tendsto (hf : Continuous f) (x) : Tendsto
+ f (𝓝 x) (𝓝 (f x))
+· 使用定理 `Continuous.eval_const`：∀ {F : Type u_1} {α : Type u_2} {X : Type u_3} {Z
+ : Type u_4} [inst : FunLike F α X] [inst_1 : TopologicalSpace F]   [inst_2 : To
+pologicalSp…
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
 -/
-protected theorem Filter.Tendsto.eval_const {ι : Type*} {l : Filter ι} {f : ι -> F} {g : F}
+protected theorem Filter.Tendsto.eval_const {ι : Type*} {l : Filter ι} {f : ι → F} {g : F}
     (hf : Tendsto f l (𝓝 g)) (a : α) : Tendsto (f · a) l (𝓝 (g a)) :=
   ((continuous_id.eval_const a).tendsto _).comp hf
-
-/--
-theorem `Filter.Tendsto.coeFun` / 定理 `Filter.Tendsto.coeFun`
-
-English:
-theorem Filter.Tendsto.coeFun
-  statement: {ι : Type*} {l : Filter ι} {f : ι -> F} {g : F}
-  proof: (continuous_id.coeFun.tendsto _).comp hf
-
-protected nonrec theorem ContinuousAt.eval_const (hf : ContinuousAt f z) (x : α) :
-    ContinuousAt (f · x) z :=
-  hf.eval_const x
-
-protected nonrec theorem ContinuousAt.coeFun (hf : ContinuousAt f z) :
-    ContinuousAt (fun z => ⇑(f z)) z :=
-  hf.coeFun
-
-protected nonrec theorem ContinuousWithinAt.eval_const (hf : ContinuousWithinAt f s z) (x : α) :
-    ContinuousWithinAt (f · x) s z :=
-  hf.eval_const x
-
-protected nonrec theorem ContinuousWithinAt.coeFun (hf : ContinuousWithinAt f s z) :
-    ContinuousWithinAt (fun z => ⇑(f z)) s z :=
-  hf.coeFun
-
-中文:
-定理 滤子.收敛.coeFun
-  结论: {ι : 类型} {l : 滤子 ι} {f : ι -> F} {g : F}
-  证明: (continuous_id.coeFun.tendsto _).comp hf
-
-protected nonrec theorem ContinuousAt.eval_const (hf : ContinuousAt f z) (x : α) :
-    ContinuousAt (f · x) z :=
-  hf.eval_const x
-
-protected nonrec theorem ContinuousAt.coeFun (hf : ContinuousAt f z) :
-    ContinuousAt (fun z => ⇑(f z)) z :=
-  hf.coeFun
-
-protected nonrec theorem ContinuousWithinAt.eval_const (hf : ContinuousWithinAt f s z) (x : α) :
-    ContinuousWithinAt (f · x) s z :=
-  hf.eval_const x
-
-protected nonrec theorem ContinuousWithinAt.coeFun (hf : ContinuousWithinAt f s z) :
-    ContinuousWithinAt (fun z => ⇑(f z)) s z :=
-  hf.coeFun
+/-
+**Filter.Tendsto.coeFun** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Tendsto`。
+形式化陈述：∀ {F : Type u_1} {α : Type u_2} {X : Type u_3} [inst : FunLike F α X] [ins
+t_1 : TopologicalSpace F]   [inst_2 : TopologicalSpace X] [ContinuousEvalConst F
+ α X] {ι : Type u_5} {l : Filter ι} {f : ι → F} {g : F},   Filter.Tendsto f l (n
+hds g) → Filter.Tendsto (fun i => ⇑(f i)) l (nhds ⇑g)
+参数：nhds g；fun i => ⇑(f i)；nhds ⇑g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {f :
+ α → β} {g : β → γ} {x : Filter α} {y : Filter β} {z : Filter γ},   Filter.Tends
+to g y z …
+· 使用定理 `Continuous.tendsto`：Continuous.tendsto (hf : Continuous f) (x) : Tendsto
+ f (𝓝 x) (𝓝 (f x))
+· 使用定理 `Continuous.coeFun`：∀ {F : Type u_1} {α : Type u_2} {X : Type u_3} {Z : T
+ype u_4} [inst : FunLike F α X] [inst_1 : TopologicalSpace F]   [inst_2 : Topolo
+gicalSp…
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
 -/
-protected theorem Filter.Tendsto.coeFun {ι : Type*} {l : Filter ι} {f : ι -> F} {g : F}
-    (hf : Tendsto f l (𝓝 g)) : Tendsto (fun i => ⇑(f i)) l (𝓝 ⇑g) :=
+protected theorem Filter.Tendsto.coeFun {ι : Type*} {l : Filter ι} {f : ι → F} {g : F}
+    (hf : Tendsto f l (𝓝 g)) : Tendsto (fun i ↦ ⇑(f i)) l (𝓝 ⇑g) :=
   (continuous_id.coeFun.tendsto _).comp hf
 
 protected nonrec theorem ContinuousAt.eval_const (hf : ContinuousAt f z) (x : α) :
@@ -202,7 +181,7 @@ protected nonrec theorem ContinuousAt.eval_const (hf : ContinuousAt f z) (x : α
   hf.eval_const x
 
 protected nonrec theorem ContinuousAt.coeFun (hf : ContinuousAt f z) :
-    ContinuousAt (fun z => ⇑(f z)) z :=
+    ContinuousAt (fun z ↦ ⇑(f z)) z :=
   hf.coeFun
 
 protected nonrec theorem ContinuousWithinAt.eval_const (hf : ContinuousWithinAt f s z) (x : α) :
@@ -210,42 +189,37 @@ protected nonrec theorem ContinuousWithinAt.eval_const (hf : ContinuousWithinAt 
   hf.eval_const x
 
 protected nonrec theorem ContinuousWithinAt.coeFun (hf : ContinuousWithinAt f s z) :
-    ContinuousWithinAt (fun z => ⇑(f z)) s z :=
+    ContinuousWithinAt (fun z ↦ ⇑(f z)) s z :=
   hf.coeFun
-
-/--
-theorem `ContinuousOn.eval_const` / 定理 `ContinuousOn.eval_const`
-
-English:
-theorem ContinuousOn.eval_const
-  given: (hf : ContinuousOn f s) (x : α)
-  proof: fun z hz => (hf z hz).eval_const x
-
-中文:
-定理 ContinuousOn.eval_const
-  条件: (hf : ContinuousOn f s) (x : α)
-  证明: fun z hz => (hf z hz).eval_const x
+/-
+**ContinuousOn.eval_const** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousOn`。
+形式化陈述：∀ {F : Type u_1} {α : Type u_2} {X : Type u_3} {Z : Type u_4} [inst : FunL
+ike F α X] [inst_1 : TopologicalSpace F]   [inst_2 : TopologicalSpace X] [Contin
+uousEvalConst F α X] [inst_4 : TopologicalSpace Z] {f : Z → F} {s : Set Z},   Co
+ntinuousOn f s → ∀ (x : α), ContinuousOn (fun x_1 => (f x_1) x) s
+参数：x : α；fun x_1 => (f x_1) x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousWithinAt.eval_const`：∀ {F : Type u_1} {α : Type u_2} {X : Type
+ u_3} {Z : Type u_4} [inst : FunLike F α X] [inst_1 : TopologicalSpace F]   [ins
+t_2 : TopologicalSp…
 -/
 protected theorem ContinuousOn.eval_const (hf : ContinuousOn f s) (x : α) :
     ContinuousOn (f · x) s :=
-  fun z hz => (hf z hz).eval_const x
-
-/--
-theorem `ContinuousOn.coeFun` / 定理 `ContinuousOn.coeFun`
-
-English:
-theorem ContinuousOn.coeFun
-  given: (hf : ContinuousOn f s) (x : α)
-  statement: ContinuousOn (f · x) s
-  proof: fun z hz => (hf z hz).eval_const x
-
-中文:
-定理 ContinuousOn.coeFun
-  条件: (hf : ContinuousOn f s) (x : α)
-  结论: ContinuousOn (f · x) s
-  证明: fun z hz => (hf z hz).eval_const x
+  fun z hz ↦ (hf z hz).eval_const x
+/-
+**ContinuousOn.coeFun** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousOn`。
+形式化陈述：∀ {F : Type u_1} {α : Type u_2} {X : Type u_3} {Z : Type u_4} [inst : FunL
+ike F α X] [inst_1 : TopologicalSpace F]   [inst_2 : TopologicalSpace X] [Contin
+uousEvalConst F α X] [inst_4 : TopologicalSpace Z] {f : Z → F} {s : Set Z},   Co
+ntinuousOn f s → ∀ (x : α), ContinuousOn (fun x_1 => (f x_1) x) s
+参数：x : α；fun x_1 => (f x_1) x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousWithinAt.eval_const`：∀ {F : Type u_1} {α : Type u_2} {X : Type
+ u_3} {Z : Type u_4} [inst : FunLike F α X] [inst_1 : TopologicalSpace F]   [ins
+t_2 : TopologicalSp…
 -/
 protected theorem ContinuousOn.coeFun (hf : ContinuousOn f s) (x : α) : ContinuousOn (f · x) s :=
-  fun z hz => (hf z hz).eval_const x
+  fun z hz ↦ (hf z hz).eval_const x
 
 end ContinuousEvalConst
+

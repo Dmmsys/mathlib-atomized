@@ -41,30 +41,19 @@ variable {C : Type u} [Groupoid C]
 
 /-- The vertex group at `c`. -/
 @[simps mul one inv]
-/--
-Instance `vertexGroup` / 实例 `vertexGroup`
+/-
+**CategoryTheory.Groupoid.vertexGroup** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.
+Groupoid`。
+形式化陈述：vertexGroup (c : C) : Group (c ⟶ c) where mul
+参数：c : C。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Groupoid.inv_comp`：∀ {obj : Type u} [self : CategoryTheor
+y.Groupoid obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.comp (C
+ategoryTheory.Groupoid…
 
-English:
-instance vertexGroup
-  signature: (c : C)
-  body: fun x y : c ⟶ c => x ≫ y
-  mul_assoc := Category.assoc
-  one := 𝟙 c
-  one_mul := Category.id_comp
-  mul_one := Category.comp_id
-  inv := Groupoid.inv
-  inv_mul_cancel := inv_comp
-
-中文:
-实例 vertexGroup
-  签名: (c : C)
-  定义体: fun x y : c ⟶ c => x ≫ y
-  mul_assoc := Category.assoc
-  one := 𝟙 c
-  one_mul := Category.id_comp
-  mul_one := Category.comp_id
-  inv := Groupoid.inv
-  inv_mul_cancel := inv_comp
+--- 原说明 ---
+The vertex group at `c`.
 -/
 instance vertexGroup (c : C) : Group (c ⟶ c) where
   mul := fun x y : c ⟶ c => x ≫ y
@@ -75,22 +64,20 @@ instance vertexGroup (c : C) : Group (c ⟶ c) where
   inv := Groupoid.inv
   inv_mul_cancel := inv_comp
 
-/--
-theorem `vertexGroup.inv_eq_inv` / 定理 `vertexGroup.inv_eq_inv`
+/-- The inverse in the group is equal to the inverse given by `CategoryTheory.inv`. -/
+/-
+**CategoryTheory.Groupoid.vertexGroup.inv_eq_inv** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Groupoid.vertexGroup`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Groupoid C] (c : C) (γ : c ⟶ c), γ⁻¹
+ = CategoryTheory.inv γ
+参数：c : C；γ : c ⟶ c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Groupoid.inv_eq_inv`：∀ {C : Type u} [inst : CategoryTheor
+y.Groupoid C] {X Y : C} (f : X ⟶ Y),   CategoryTheory.Groupoid.inv f = CategoryT
+heory.inv f
 
-English:
-theorem vertexGroup.inv_eq_inv
-  given: (c : C) (γ : c ⟶ c)
-  statement: γ⁻¹ = CategoryTheory.inv γ
-  proof: Groupoid.inv_eq_inv γ
-
-中文:
-定理 vertexGroup.inv_eq_inv
-  条件: (c : C) (γ : c ⟶ c)
-  结论: γ⁻¹ = 范畴论.inv γ
-  证明: Groupoid.inv_eq_inv γ
-
-Depends on / 依赖: Groupoid, Groupoid.inv_eq_inv, inv_eq_inv
+--- 原说明 ---
+The inverse in the group is equal to the inverse given by `CategoryTheory.inv`.
 -/
 theorem vertexGroup.inv_eq_inv (c : C) (γ : c ⟶ c) : γ⁻¹ = CategoryTheory.inv γ :=
   Groupoid.inv_eq_inv γ
@@ -99,36 +86,19 @@ theorem vertexGroup.inv_eq_inv (c : C) (γ : c ⟶ c) : γ⁻¹ = CategoryTheory
 its endpoints.
 -/
 @[simps]
-/--
-Definition of `vertexGroupIsomOfMap` / `vertexGroupIsomOfMap` 的定义
+/-
+**CategoryTheory.Groupoid.vertexGroupIsomOfMap** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Groupoid`。
+形式化陈述：vertexGroupIsomOfMap {c d : C} (f : c ⟶ d) : (c ⟶ c) ≃* (d ⟶ d) where toFu
+n γ
+参数：f : c ⟶ d。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition vertexGroupIsomOfMap
-  signature: {c d : C} (f : c ⟶ d)
-  body: inv f ≫ γ ≫ f
-  invFun δ := f ≫ δ ≫ inv f
-  left_inv γ := by
-    simp_rw [Category.assoc, comp_inv, Category.comp_id, ← Category.assoc, comp_inv,
-      Category.id_comp]
-  right_inv δ := by
-    simp_rw [Category.assoc, inv_comp, ← Category.assoc, inv_comp, Category.id_comp,
-      Category.comp_id]
-  map_mul' γ₁ γ₂ := by
-    simp only [vertexGroup_mul, inv_eq_inv, Category.assoc, IsIso.hom_inv_id_assoc]
-
-中文:
-定义 vertexGroupIsomOfMap
-  签名: {c d : C} (f : c ⟶ d)
-  定义体: inv f ≫ γ ≫ f
-  invFun δ := f ≫ δ ≫ inv f
-  left_inv γ := by
-    simp_rw [Category.assoc, comp_inv, Category.comp_id, ← Category.assoc, comp_inv,
-      Category.id_comp]
-  right_inv δ := by
-    simp_rw [Category.assoc, inv_comp, ← Category.assoc, inv_comp, Category.id_comp,
-      Category.comp_id]
-  map_mul' γ₁ γ₂ := by
-    simp only [vertexGroup_mul, inv_eq_inv, Category.assoc, IsIso.hom_inv_id_assoc]
+--- 原说明 ---
+An arrow in the groupoid defines, by conjugation, an isomorphism of groups betwe
+en
+its endpoints.
 -/
 def vertexGroupIsomOfMap {c d : C} (f : c ⟶ d) : (c ⟶ c) ≃* (d ⟶ d) where
   toFun γ := inv f ≫ γ ≫ f
@@ -142,45 +112,34 @@ def vertexGroupIsomOfMap {c d : C} (f : c ⟶ d) : (c ⟶ c) ≃* (d ⟶ d) wher
   map_mul' γ₁ γ₂ := by
     simp only [vertexGroup_mul, inv_eq_inv, Category.assoc, IsIso.hom_inv_id_assoc]
 
-/--
-Definition of `vertexGroupIsomOfPath` / `vertexGroupIsomOfPath` 的定义
+/-- A path in the groupoid defines an isomorphism between its endpoints.
+-/
+/-
+**CategoryTheory.Groupoid.vertexGroupIsomOfPath** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Groupoid`。
+形式化陈述：vertexGroupIsomOfPath {c d : C} (p : Quiver.Path c d) : (c ⟶ c) ≃* (d ⟶ d)
+参数：p : Quiver.Path c d。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition vertexGroupIsomOfPath
-  signature: {c d : C} (p : Quiver.Path c d)
-  body: vertexGroupIsomOfMap (composePath p)
-
-中文:
-定义 vertexGroupIsomOfPath
-  签名: {c d : C} (p : 箭图.道路 c d)
-  定义体: vertexGroupIsomOfMap (composePath p)
-
-Depends on / 依赖: composePath, vertexGroupIsomOfMap
+--- 原说明 ---
+A path in the groupoid defines an isomorphism between its endpoints.
 -/
 def vertexGroupIsomOfPath {c d : C} (p : Quiver.Path c d) : (c ⟶ c) ≃* (d ⟶ d) :=
   vertexGroupIsomOfMap (composePath p)
 
 /-- A functor defines a morphism of vertex groups. -/
 @[simps]
-/--
-Definition of `_root_.CategoryTheory.Functor.mapVertexGroup` / `_root_.CategoryTheory.Functor.mapVertexGroup` 的定义
+/-
+**CategoryTheory.Groupoid._root_.CategoryTheory.Functor.mapVertexGroup** 是 Mathl
+ib 中的一个定义，位于命名空间 `CategoryTheory.Groupoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.CategoryTheory.Functor.mapVertexGroup
-  signature: {D : Type v} [Groupoid D] (φ : C ⥤ D) (c : C)
-  body: φ.map
-  map_one' := φ.map_id c
-  map_mul' := φ.map_comp
-
-中文:
-定义 _root_.范畴论.函子.mapVertexGroup
-  签名: {D : 类型v} [群胚 D] (φ : C ⥤ D) (c : C)
-  定义体: φ.map
-  map_one' := φ.map_id c
-  map_mul' := φ.map_comp
+--- 原说明 ---
+A functor defines a morphism of vertex groups.
 -/
 def _root_.CategoryTheory.Functor.mapVertexGroup {D : Type v} [Groupoid D] (φ : C ⥤ D) (c : C) :
-    (c ⟶ c) ->* (φ.obj c ⟶ φ.obj c) where
+    (c ⟶ c) →* (φ.obj c ⟶ φ.obj c) where
   toFun := φ.map
   map_one' := φ.map_id c
   map_mul' := φ.map_comp
@@ -196,3 +155,4 @@ alias CategoryTheory.Functor.mapVertexGroup_apply := CategoryTheory.Functor.mapV
 end Groupoid
 
 end CategoryTheory
+

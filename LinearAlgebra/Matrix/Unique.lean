@@ -29,24 +29,14 @@ variable {m n A R : Type*} [Unique m] [Unique n]
 
 /-- The isomorphism between the type of all one by one matrices and the base type. -/
 @[simps]
-/--
-Definition of `uniqueEquiv` / `uniqueEquiv` 的定义
+/-
+**Matrix.uniqueEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：uniqueEquiv : Matrix m n A ≃ A where toFun M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uniqueEquiv
-  signature: : Matrix m n A ≃ A where
-  body: M default default
-  invFun a := .of fun _ _ => a
-  left_inv M := by ext i j; simp [Subsingleton.elim i default, Subsingleton.elim j default]
-  right_inv a := by simp
-
-中文:
-定义 uniqueEquiv
-  签名: : 矩阵 m n A ≃ A where
-  定义体: M default default
-  invFun a := .of fun _ _ => a
-  left_inv M := by ext i j; simp [Subsingleton.elim i default, Subsingleton.elim j default]
-  right_inv a := by simp
+--- 原说明 ---
+The isomorphism between the type of all one by one matrices and the base type.
 -/
 def uniqueEquiv : Matrix m n A ≃ A where
   toFun M := M default default
@@ -56,22 +46,14 @@ def uniqueEquiv : Matrix m n A ≃ A where
 
 /-- The obvious additive isomorphism between M₁(A) and A, if A has an addition. -/
 @[simps!]
-/--
-Definition of `uniqueAddEquiv` / `uniqueAddEquiv` 的定义
+/-
+**Matrix.uniqueAddEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：uniqueAddEquiv [Add A] : Matrix m n A ≃+ A where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uniqueAddEquiv
-  signature: [Add A]
-  body: uniqueEquiv
-  map_add' := by simp
-
-中文:
-定义 uniqueAddEquiv
-  签名: [加法 A]
-  定义体: uniqueEquiv
-  map_add' := by simp
-
-Depends on / 依赖: uniqueEquiv
+--- 原说明 ---
+The obvious additive isomorphism between M₁(A) and A, if A has an addition.
 -/
 def uniqueAddEquiv [Add A] : Matrix m n A ≃+ A where
   __ := uniqueEquiv
@@ -79,22 +61,15 @@ def uniqueAddEquiv [Add A] : Matrix m n A ≃+ A where
 
 /-- `M₁(A)` is linearly equivalent to `A` as an `R`-module where `R` is a semiring. -/
 @[simps]
-/--
-Definition of `uniqueLinearEquiv` / `uniqueLinearEquiv` 的定义
+/-
+**Matrix.uniqueLinearEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：uniqueLinearEquiv [Semiring R] [AddCommMonoid A] [Module R A] : Matrix m n
+ A ≃ₗ[R] A where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uniqueLinearEquiv
-  signature: [Semiring R] [AddCommMonoid A] [Module R A]
-  body: uniqueAddEquiv
-  map_smul' := by simp
-
-中文:
-定义 uniqueLinearEquiv
-  签名: [半环 R] [加法交换幺半群 A] [模 R A]
-  定义体: uniqueAddEquiv
-  map_smul' := by simp
-
-Depends on / 依赖: uniqueAddEquiv
+--- 原说明 ---
+`M₁(A)` is linearly equivalent to `A` as an `R`-module where `R` is a semiring.
 -/
 def uniqueLinearEquiv [Semiring R] [AddCommMonoid A] [Module R A] : Matrix m n A ≃ₗ[R] A where
   __ := uniqueAddEquiv
@@ -102,22 +77,15 @@ def uniqueLinearEquiv [Semiring R] [AddCommMonoid A] [Module R A] : Matrix m n A
 
 /-- `M₁(A)` and `A` are equivalent as rings. -/
 @[simps!]
-/--
-Definition of `uniqueRingEquiv` / `uniqueRingEquiv` 的定义
+/-
+**Matrix.uniqueRingEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：uniqueRingEquiv [NonUnitalNonAssocSemiring A] : Matrix m m A ≃+* A where _
+_
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uniqueRingEquiv
-  signature: [NonUnitalNonAssocSemiring A]
-  body: uniqueAddEquiv
-  map_mul' := by simp [mul_apply]
-
-中文:
-定义 uniqueRingEquiv
-  签名: [非幺非结合半环 A]
-  定义体: uniqueAddEquiv
-  map_mul' := by simp [mul_apply]
-
-Depends on / 依赖: uniqueAddEquiv
+--- 原说明 ---
+`M₁(A)` and `A` are equivalent as rings.
 -/
 def uniqueRingEquiv [NonUnitalNonAssocSemiring A] : Matrix m m A ≃+* A where
   __ := uniqueAddEquiv
@@ -125,25 +93,20 @@ def uniqueRingEquiv [NonUnitalNonAssocSemiring A] : Matrix m m A ≃+* A where
 
 /-- `M₁(A)` is equivalent to `A` as an `R`-algebra. -/
 @[simps!]
-/--
-Definition of `uniqueAlgEquiv` / `uniqueAlgEquiv` 的定义
+/-
+**Matrix.uniqueAlgEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：uniqueAlgEquiv [Semiring A] [CommSemiring R] [Algebra R A] : Matrix m m A 
+≃ₐ[R] A where __
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 
-English:
-definition uniqueAlgEquiv
-  signature: [Semiring A] [CommSemiring R] [Algebra R A]
-  body: uniqueRingEquiv
-  commutes' r := by aesop
-
-中文:
-定义 uniqueAlgEquiv
-  签名: [半环 A] [交换半环 R] [代数 R A]
-  定义体: uniqueRingEquiv
-  commutes' r := by aesop
-
-Depends on / 依赖: uniqueRingEquiv
+--- 原说明 ---
+`M₁(A)` is equivalent to `A` as an `R`-algebra.
 -/
 def uniqueAlgEquiv [Semiring A] [CommSemiring R] [Algebra R A] : Matrix m m A ≃ₐ[R] A where
   __ := uniqueRingEquiv
   commutes' r := by aesop
 
 end Matrix
+

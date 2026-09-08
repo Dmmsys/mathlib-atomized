@@ -24,38 +24,26 @@ namespace Set
 
 variable {J : Type u} [Preorder J] {S : Set J} (m : S)
 
-/--
-lemma `not_isMax_coe` / 引理 `not_isMax_coe`
-
-English:
-lemma not_isMax_coe
-  given: (hm : ¬ IsMax m)
-  proof: fun h => hm (fun _ hb => h hb)
-
-中文:
-引理 not_isMax_coe
-  条件: (hm : ¬ IsMax m)
-  证明: fun h => hm (fun _ hb => h hb)
+/-
+**Set.not_isMax_coe** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：not_isMax_coe (hm : ¬ IsMax m) : ¬ IsMax m.1
+参数：hm : ¬ IsMax m。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma not_isMax_coe (hm : ¬ IsMax m) :
     ¬ IsMax m.1 :=
-  fun h => hm (fun _ hb => h hb)
-
-/--
-lemma `not_isMin_coe` / 引理 `not_isMin_coe`
-
-English:
-lemma not_isMin_coe
-  given: (hm : ¬ IsMin m)
-  proof: fun h => hm (fun _ hb => h hb)
-
-中文:
-引理 not_isMin_coe
-  条件: (hm : ¬ IsMin m)
-  证明: fun h => hm (fun _ hb => h hb)
+  fun h ↦ hm (fun _ hb ↦ h hb)
+/-
+**Set.not_isMin_coe** 是 Mathlib 中的一个引理，位于命名空间 `Set`。
+形式化陈述：not_isMin_coe (hm : ¬ IsMin m) : ¬ IsMin m.1
+参数：hm : ¬ IsMin m。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma not_isMin_coe (hm : ¬ IsMin m) :
     ¬ IsMin m.1 :=
-  fun h => hm (fun _ hb => h hb)
+  fun h ↦ hm (fun _ hb ↦ h hb)
 
 end Set
+

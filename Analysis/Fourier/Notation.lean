@@ -26,43 +26,63 @@ universe u v w
 variable {ι R E F : Type*}
 
 /--
-Definition of `FourierTransform` / `FourierTransform` 的定义
+The notation typeclass for the Fourier transform.
 
-English:
-class FourierTransform
-  parameters: (E : Type u) (F : outParam (Type v))
-  axioms and operations (1):
-    - fourier : E -> F
+While the Fourier transform is a linear operator, the notation is for the function `E → F` without
+any additional properties. This makes it possible to use the notation for functions where
+integrability is an issue.
+Moreover, including a scalar multiplication causes problems for inferring the notation type class.
+-/
+/-
+**FourierTransform** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → outParam (Type v) → Type (max u v)
+参数：Type v；max u v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 Fourier变换
-  参数: (E : 类型u) (F : outParam (类型v))
-  公理与运算 (1 个):
-    - fourier : E -> F
+--- 原说明 ---
+The notation typeclass for the Fourier transform.
+
+While the Fourier transform is a linear operator, the notation is for the functi
+on `E → F` without
+any additional properties. This makes it possible to use the notation for functi
+ons where
+integrability is an issue.
+Moreover, including a scalar multiplication causes problems for inferring the no
+tation type class.
 -/
 class FourierTransform (E : Type u) (F : outParam (Type v)) where
   /-- `𝓕 f` is the Fourier transform of `f`. The meaning of this notation is type-dependent. -/
-  fourier : E -> F
+  fourier : E → F
 
 /--
-Definition of `FourierTransformInv` / `FourierTransformInv` 的定义
+The notation typeclass for the inverse Fourier transform.
 
-English:
-class FourierTransformInv
-  parameters: (E : Type u) (F : outParam (Type v))
-  axioms and operations (1):
-    - fourierInv : E -> F
+While the inverse Fourier transform is a linear operator, the notation is for the function `E → F`
+without any additional properties. This makes it possible to use the notation for functions where
+integrability is an issue.
+Moreover, including a scalar multiplication causes problems for inferring the notation type class.
+-/
+/-
+**FourierTransformInv** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → outParam (Type v) → Type (max u v)
+参数：Type v；max u v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 FourierTransformInv
-  参数: (E : 类型u) (F : outParam (类型v))
-  公理与运算 (1 个):
-    - fourierInv : E -> F
+--- 原说明 ---
+The notation typeclass for the inverse Fourier transform.
+
+While the inverse Fourier transform is a linear operator, the notation is for th
+e function `E → F`
+without any additional properties. This makes it possible to use the notation fo
+r functions where
+integrability is an issue.
+Moreover, including a scalar multiplication causes problems for inferring the no
+tation type class.
 -/
 class FourierTransformInv (E : Type u) (F : outParam (Type v)) where
   /-- `𝓕⁻ f` is the inverse Fourier transform of `f`. The meaning of this notation is
   type-dependent. -/
-  fourierInv : E -> F
+  fourierInv : E → F
 
 namespace FourierTransform
 
@@ -77,170 +97,133 @@ section Module
 
 open scoped FourierTransform
 
-/--
-Definition of `FourierAdd` / `FourierAdd` 的定义
+/-- A `FourierAdd` is a function space on which the Fourier transform is additive. -/
+/-
+**FourierAdd** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(E : Type u_5) → (F : outParam (Type u_6)) → [Add E] → [Add F] → [FourierT
+ransform E F] → Prop
+参数：Type u_6。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class FourierAdd
-  parameters: (E : Type*) (F : outParam (Type*)) [Add E] [Add F] [FourierTransform E F]
-  axioms and operations (1):
-    - fourier_add : forall (f g : E), 𝓕 (f + g) = 𝓕 f + 𝓕 g
-
-中文:
-类 FourierAdd
-  参数: (E : 类型) (F : outParam (类型)) [加法 E] [加法 F] [Fourier变换 E F]
-  公理与运算 (1 个):
-    - fourier_add : 对任意 (f g : E), 𝓕 (f + g) = 𝓕 f + 𝓕 g
+--- 原说明 ---
+A `FourierAdd` is a function space on which the Fourier transform is additive.
 -/
 class FourierAdd (E : Type*) (F : outParam (Type*)) [Add E] [Add F] [FourierTransform E F] where
-  fourier_add : forall (f g : E), 𝓕 (f + g) = 𝓕 f + 𝓕 g
+  fourier_add : ∀ (f g : E), 𝓕 (f + g) = 𝓕 f + 𝓕 g
 
-/--
-Definition of `FourierSMul` / `FourierSMul` 的定义
+/-- A `FourierSMul` is a function space on which the Fourier transform is homogeneous. -/
+/-
+**FourierSMul** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_5) → (E : Type u_6) → (F : outParam (Type u_7)) → [SMul R E] →
+ [SMul R F] → [FourierTransform E F] → Prop
+参数：Type u_7。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class FourierSMul
-  parameters: (R : Type*) (E : Type*) (F : outParam (Type*)) [SMul R E] [SMul R F]
-  axioms and operations (1):
-    - fourier_smul : forall (r : R) (f : E), 𝓕 (r • f) = r • 𝓕 f
-
-中文:
-类 FourierSMul
-  参数: (R : 类型) (E : 类型) (F : outParam (类型)) [标量乘法 R E] [标量乘法 R F]
-  公理与运算 (1 个):
-    - fourier_smul : 对任意 (r : R) (f : E), 𝓕 (r • f) = r • 𝓕 f
+--- 原说明 ---
+A `FourierSMul` is a function space on which the Fourier transform is homogeneou
+s.
 -/
 class FourierSMul (R : Type*) (E : Type*) (F : outParam (Type*)) [SMul R E] [SMul R F]
     [FourierTransform E F] where
-  fourier_smul : forall (r : R) (f : E), 𝓕 (r • f) = r • 𝓕 f
+  fourier_smul : ∀ (r : R) (f : E), 𝓕 (r • f) = r • 𝓕 f
 
-/--
-Definition of `ContinuousFourier` / `ContinuousFourier` 的定义
+/-- The Fourier transform is continuous. -/
+/-
+**ContinuousFourier** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(E : Type u_5) → (F : outParam (Type u_6)) → [TopologicalSpace E] → [Topol
+ogicalSpace F] → [FourierTransform E F] → Prop
+参数：Type u_6。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class ContinuousFourier
-  parameters: (E : Type*) (F : outParam (Type*))
-  axioms and operations (1):
-    - continuous_fourier : Continuous (𝓕 : E -> F)
-
-中文:
-类 余ntinuousFourier
-  参数: (E : 类型) (F : outParam (类型))
-  公理与运算 (1 个):
-    - continuous_fourier : 连续 (𝓕 : E -> F)
+--- 原说明 ---
+The Fourier transform is continuous.
 -/
 class ContinuousFourier (E : Type*) (F : outParam (Type*))
     [TopologicalSpace E] [TopologicalSpace F] [FourierTransform E F] where
-  continuous_fourier : Continuous (𝓕 : E -> F)
+  continuous_fourier : Continuous (𝓕 : E → F)
 
-/--
-Definition of `FourierInvAdd` / `FourierInvAdd` 的定义
+/-- A `FourierInvAdd` is a function space on which the inverse Fourier transform is additive. -/
+/-
+**FourierInvAdd** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(E : Type u_5) → (F : outParam (Type u_6)) → [Add E] → [Add F] → [FourierT
+ransformInv E F] → Prop
+参数：Type u_6。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class FourierInvAdd
-  parameters: (E : Type*) (F : outParam (Type*)) [Add E] [Add F] [FourierTransformInv E F]
-  axioms and operations (1):
-    - fourierInv_add : forall (f g : E), 𝓕⁻ (f + g) = 𝓕⁻ f + 𝓕⁻ g
-
-中文:
-类 FourierInvAdd
-  参数: (E : 类型) (F : outParam (类型)) [加法 E] [加法 F] [FourierTransformInv E F]
-  公理与运算 (1 个):
-    - fourierInv_add : 对任意 (f g : E), 𝓕⁻ (f + g) = 𝓕⁻ f + 𝓕⁻ g
+--- 原说明 ---
+A `FourierInvAdd` is a function space on which the inverse Fourier transform is 
+additive.
 -/
 class FourierInvAdd (E : Type*) (F : outParam (Type*)) [Add E] [Add F] [FourierTransformInv E F]
     where
-  fourierInv_add : forall (f g : E), 𝓕⁻ (f + g) = 𝓕⁻ f + 𝓕⁻ g
+  fourierInv_add : ∀ (f g : E), 𝓕⁻ (f + g) = 𝓕⁻ f + 𝓕⁻ g
 
-/--
-Definition of `FourierInvSMul` / `FourierInvSMul` 的定义
+/-- A `FourierInvSMul` is a function space on which the inverse Fourier transform is homogeneous. -/
+/-
+**FourierInvSMul** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_5) → (E : Type u_6) → (F : outParam (Type u_7)) → [SMul R E] →
+ [SMul R F] → [FourierTransformInv E F] → Prop
+参数：Type u_7。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class FourierInvSMul
-  parameters: (R : Type*) (E : Type*) (F : outParam (Type*)) [SMul R E] [SMul R F]
-  axioms and operations (1):
-    - fourierInv_smul : forall (r : R) (f : E), 𝓕⁻ (r • f) = r • 𝓕⁻ f
-
-中文:
-类 FourierInvSMul
-  参数: (R : 类型) (E : 类型) (F : outParam (类型)) [标量乘法 R E] [标量乘法 R F]
-  公理与运算 (1 个):
-    - fourierInv_smul : 对任意 (r : R) (f : E), 𝓕⁻ (r • f) = r • 𝓕⁻ f
+--- 原说明 ---
+A `FourierInvSMul` is a function space on which the inverse Fourier transform is
+ homogeneous.
 -/
 class FourierInvSMul (R : Type*) (E : Type*) (F : outParam (Type*)) [SMul R E] [SMul R F]
     [FourierTransformInv E F] where
-  fourierInv_smul : forall (r : R) (f : E), 𝓕⁻ (r • f) = r • 𝓕⁻ f
+  fourierInv_smul : ∀ (r : R) (f : E), 𝓕⁻ (r • f) = r • 𝓕⁻ f
 
-/--
-Definition of `ContinuousFourierInv` / `ContinuousFourierInv` 的定义
+/-- The inverse Fourier transform is continuous. -/
+/-
+**ContinuousFourierInv** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(E : Type u_5) →   (F : outParam (Type u_6)) → [TopologicalSpace E] → [Top
+ologicalSpace F] → [FourierTransformInv E F] → Prop
+参数：Type u_6。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class ContinuousFourierInv
-  parameters: (E : Type*) (F : outParam (Type*))
-  axioms and operations (1):
-    - continuous_fourierInv : Continuous (𝓕⁻ : E -> F)
-
-中文:
-类 余ntinuousFourierInv
-  参数: (E : 类型) (F : outParam (类型))
-  公理与运算 (1 个):
-    - continuous_fourierInv : 连续 (𝓕⁻ : E -> F)
+--- 原说明 ---
+The inverse Fourier transform is continuous.
 -/
 class ContinuousFourierInv (E : Type*) (F : outParam (Type*))
     [TopologicalSpace E] [TopologicalSpace F] [FourierTransformInv E F] where
-  continuous_fourierInv : Continuous (𝓕⁻ : E -> F)
+  continuous_fourierInv : Continuous (𝓕⁻ : E → F)
 
 /-- A `FourierModule` is a function space on which the Fourier transform is a linear map. -/
 @[deprecated "use `FourierAdd` and `FourierSMul` instead" (since := "2026-01-06")]
-/--
-Definition of `FourierModule` / `FourierModule` 的定义
+/-
+**FourierModule** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_5) →   (E : Type u_6) → (F : outParam (Type u_7)) → [Add E] → 
+[Add F] → [SMul R E] → [SMul R F] → Type (max u_6 u_7)
+参数：Type u_7。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure FourierModule
-  parameters: (R : Type*) (E : Type*) (F : outParam (Type*)) [Add E] [Add F] [SMul R E]
-  extends: FourierTransform E F
-  axioms and operations (2):
-    - fourier_add : forall (f g : E), 𝓕 (f + g) = 𝓕 f + 𝓕 g
-    - fourier_smul : forall (r : R) (f : E), 𝓕 (r • f) = r • 𝓕 f
-
-中文:
-结构 Fourier模
-  参数: (R : 类型) (E : 类型) (F : outParam (类型)) [加法 E] [加法 F] [标量乘法 R E]
-  继承: Fourier变换 E F
-  公理与运算 (2 个):
-    - fourier_add : 对任意 (f g : E), 𝓕 (f + g) = 𝓕 f + 𝓕 g
-    - fourier_smul : 对任意 (r : R) (f : E), 𝓕 (r • f) = r • 𝓕 f
+--- 原说明 ---
+A `FourierModule` is a function space on which the Fourier transform is a linear
+ map.
 -/
 structure FourierModule (R : Type*) (E : Type*) (F : outParam (Type*)) [Add E] [Add F] [SMul R E]
     [SMul R F] extends FourierTransform E F where
-  fourier_add : forall (f g : E), 𝓕 (f + g) = 𝓕 f + 𝓕 g
-  fourier_smul : forall (r : R) (f : E), 𝓕 (r • f) = r • 𝓕 f
+  fourier_add : ∀ (f g : E), 𝓕 (f + g) = 𝓕 f + 𝓕 g
+  fourier_smul : ∀ (r : R) (f : E), 𝓕 (r • f) = r • 𝓕 f
 
 /-- A `FourierInvModule` is a function space on which the Fourier transform is a linear map. -/
 @[deprecated "use `FourierInvAdd` and `FourierInvSMul` instead" (since := "2026-01-06")]
-/--
-Definition of `FourierInvModule` / `FourierInvModule` 的定义
+/-
+**FourierInvModule** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_5) →   (E : Type u_6) → (F : outParam (Type u_7)) → [Add E] → 
+[Add F] → [SMul R E] → [SMul R F] → Type (max u_6 u_7)
+参数：Type u_7。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure FourierInvModule
-  parameters: (R : Type*) (E : Type*) (F : outParam (Type*)) [Add E] [Add F] [SMul R E]
-  extends: FourierTransformInv E F
-  axioms and operations (2):
-    - fourierInv_add : forall (f g : E), 𝓕⁻ (f + g) = 𝓕⁻ f + 𝓕⁻ g
-    - fourierInv_smul : forall (r : R) (f : E), 𝓕⁻ (r • f) = r • 𝓕⁻ f
-
-中文:
-结构 FourierInv模
-  参数: (R : 类型) (E : 类型) (F : outParam (类型)) [加法 E] [加法 F] [标量乘法 R E]
-  继承: FourierTransformInv E F
-  公理与运算 (2 个):
-    - fourierInv_add : 对任意 (f g : E), 𝓕⁻ (f + g) = 𝓕⁻ f + 𝓕⁻ g
-    - fourierInv_smul : 对任意 (r : R) (f : E), 𝓕⁻ (r • f) = r • 𝓕⁻ f
+--- 原说明 ---
+A `FourierInvModule` is a function space on which the Fourier transform is a lin
+ear map.
 -/
 structure FourierInvModule (R : Type*) (E : Type*) (F : outParam (Type*)) [Add E] [Add F] [SMul R E]
     [SMul R F] extends FourierTransformInv E F where
-  fourierInv_add : forall (f g : E), 𝓕⁻ (f + g) = 𝓕⁻ f + 𝓕⁻ g
-  fourierInv_smul : forall (r : R) (f : E), 𝓕⁻ (r • f) = r • 𝓕⁻ f
+  fourierInv_add : ∀ (f g : E), 𝓕⁻ (f + g) = 𝓕⁻ f + 𝓕⁻ g
+  fourierInv_smul : ∀ (r : R) (f : E), 𝓕⁻ (r • f) = r • 𝓕⁻ f
 
 namespace FourierTransform
 
@@ -263,72 +246,60 @@ section fourier
 variable [AddCommGroup E] [AddCommGroup F] [FourierTransform E F] [FourierAdd E F]
 
 @[simp]
-/--
-theorem `fourier_zero` / 定理 `fourier_zero`
-
-English:
-theorem fourier_zero
-  statement: 𝓕 (0 : E) = 0
-  proof: map_zero (AddMonoidHom.mk' 𝓕 fourier_add)
-
-@[simp]
-
-中文:
-定理 fourier_zero
-  结论: 𝓕 (0 : E) = 0
-  证明: map_zero (AddMonoidHom.mk' 𝓕 fourier_add)
-
-@[simp]
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.mk, fourier_add, map_zero
+/-
+**FourierTransform.fourier_zero** 是 Mathlib 中的一个定理，位于命名空间 `FourierTransform`。
+形式化陈述：fourier_zero : 𝓕 (0 : E) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `FourierAdd.fourier_add`：∀ {E : Type u_5} {F : outParam (Type u_6)} {inst
+ : Add E} {inst_1 : Add F} {inst_2 : FourierTransform E F}   [self : FourierAdd 
+E F] (f g : …
 -/
 theorem fourier_zero : 𝓕 (0 : E) = 0 :=
   map_zero (AddMonoidHom.mk' 𝓕 fourier_add)
 
 @[simp]
-/--
-theorem `fourier_neg` / 定理 `fourier_neg`
-
-English:
-theorem fourier_neg
-  given: (f : E)
-  statement: 𝓕 (-f) = - 𝓕 f
-  proof: map_neg (AddMonoidHom.mk' 𝓕 fourier_add) f
-
-@[simp]
-
-中文:
-定理 fourier_neg
-  条件: (f : E)
-  结论: 𝓕 (-f) = - 𝓕 f
-  证明: map_neg (AddMonoidHom.mk' 𝓕 fourier_add) f
-
-@[simp]
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.mk, fourier_add, map_neg
+/-
+**FourierTransform.fourier_neg** 是 Mathlib 中的一个定理，位于命名空间 `FourierTransform`。
+形式化陈述：fourier_neg (f : E) : 𝓕 (-f) = - 𝓕 f
+参数：f : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `FourierAdd.fourier_add`：∀ {E : Type u_5} {F : outParam (Type u_6)} {inst
+ : Add E} {inst_1 : Add F} {inst_2 : FourierTransform E F}   [self : FourierAdd 
+E F] (f g : …
 -/
 theorem fourier_neg (f : E) : 𝓕 (-f) = - 𝓕 f :=
   map_neg (AddMonoidHom.mk' 𝓕 fourier_add) f
 
 @[simp]
-/--
-theorem `fourier_sum` / 定理 `fourier_sum`
-
-English:
-theorem fourier_sum
-  given: (f : ι -> E) (s : Finset ι)
-  statement: 𝓕 (∑ i in s, f i) = ∑ i in s, 𝓕 (f i)
-  proof: map_sum (AddMonoidHom.mk' 𝓕 fourier_add) f s
-
-中文:
-定理 fourier_sum
-  条件: (f : ι -> E) (s : 有限集 ι)
-  结论: 𝓕 (∑ i in s, f i) = ∑ i in s, 𝓕 (f i)
-  证明: map_sum (AddMonoidHom.mk' 𝓕 fourier_add) f s
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.mk, fourier_add, map_sum
+/-
+**FourierTransform.fourier_sum** 是 Mathlib 中的一个定理，位于命名空间 `FourierTransform`。
+形式化陈述：fourier_sum (f : ι -> E) (s : Finset ι) : 𝓕 (∑ i in s, f i) = ∑ i in s, 𝓕 
+(f i)
+参数：f : ι -> E；s : Finset ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `FourierAdd.fourier_add`：∀ {E : Type u_5} {F : outParam (Type u_6)} {inst
+ : Add E} {inst_1 : Add F} {inst_2 : FourierTransform E F}   [self : FourierAdd 
+E F] (f g : …
 -/
-theorem fourier_sum (f : ι -> E) (s : Finset ι) : 𝓕 (∑ i in s, f i) = ∑ i in s, 𝓕 (f i) :=
+theorem fourier_sum (f : ι → E) (s : Finset ι) : 𝓕 (∑ i ∈ s, f i) = ∑ i ∈ s, 𝓕 (f i) :=
   map_sum (AddMonoidHom.mk' 𝓕 fourier_add) f s
 
 end fourier
@@ -338,72 +309,60 @@ section fourierInv
 variable [AddCommGroup E] [AddCommGroup F] [FourierTransformInv E F] [FourierInvAdd E F]
 
 @[simp]
-/--
-theorem `fourierInv_zero` / 定理 `fourierInv_zero`
-
-English:
-theorem fourierInv_zero
-  statement: 𝓕⁻ (0 : E) = 0
-  proof: map_zero (AddMonoidHom.mk' 𝓕⁻ fourierInv_add)
-
-@[simp]
-
-中文:
-定理 fourierInv_zero
-  结论: 𝓕⁻ (0 : E) = 0
-  证明: map_zero (AddMonoidHom.mk' 𝓕⁻ fourierInv_add)
-
-@[simp]
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.mk, fourierInv_add, map_zero
+/-
+**FourierTransform.fourierInv_zero** 是 Mathlib 中的一个定理，位于命名空间 `FourierTransform`。
+形式化陈述：fourierInv_zero : 𝓕⁻ (0 : E) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `FourierInvAdd.fourierInv_add`：∀ {E : Type u_5} {F : outParam (Type u_6)}
+ {inst : Add E} {inst_1 : Add F} {inst_2 : FourierTransformInv E F}   [self : Fo
+urierInvAdd E F] (…
 -/
 theorem fourierInv_zero : 𝓕⁻ (0 : E) = 0 :=
   map_zero (AddMonoidHom.mk' 𝓕⁻ fourierInv_add)
 
 @[simp]
-/--
-theorem `fourierInv_neg` / 定理 `fourierInv_neg`
-
-English:
-theorem fourierInv_neg
-  given: (f : E)
-  statement: 𝓕⁻ (-f) = - 𝓕⁻ f
-  proof: map_neg (AddMonoidHom.mk' 𝓕⁻ fourierInv_add) f
-
-@[simp]
-
-中文:
-定理 fourierInv_neg
-  条件: (f : E)
-  结论: 𝓕⁻ (-f) = - 𝓕⁻ f
-  证明: map_neg (AddMonoidHom.mk' 𝓕⁻ fourierInv_add) f
-
-@[simp]
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.mk, fourierInv_add, map_neg
+/-
+**FourierTransform.fourierInv_neg** 是 Mathlib 中的一个定理，位于命名空间 `FourierTransform`。
+形式化陈述：fourierInv_neg (f : E) : 𝓕⁻ (-f) = - 𝓕⁻ f
+参数：f : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_neg`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `FourierInvAdd.fourierInv_add`：∀ {E : Type u_5} {F : outParam (Type u_6)}
+ {inst : Add E} {inst_1 : Add F} {inst_2 : FourierTransformInv E F}   [self : Fo
+urierInvAdd E F] (…
 -/
 theorem fourierInv_neg (f : E) : 𝓕⁻ (-f) = - 𝓕⁻ f :=
   map_neg (AddMonoidHom.mk' 𝓕⁻ fourierInv_add) f
 
 @[simp]
-/--
-theorem `fourierInv_sum` / 定理 `fourierInv_sum`
-
-English:
-theorem fourierInv_sum
-  given: (f : ι -> E) (s : Finset ι)
-  statement: 𝓕⁻ (∑ i in s, f i) = ∑ i in s, 𝓕⁻ (f i)
-  proof: map_sum (AddMonoidHom.mk' 𝓕⁻ fourierInv_add) f s
-
-中文:
-定理 fourierInv_sum
-  条件: (f : ι -> E) (s : 有限集 ι)
-  结论: 𝓕⁻ (∑ i in s, f i) = ∑ i in s, 𝓕⁻ (f i)
-  证明: map_sum (AddMonoidHom.mk' 𝓕⁻ fourierInv_add) f s
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.mk, fourierInv_add, map_sum
+/-
+**FourierTransform.fourierInv_sum** 是 Mathlib 中的一个定理，位于命名空间 `FourierTransform`。
+形式化陈述：fourierInv_sum (f : ι -> E) (s : Finset ι) : 𝓕⁻ (∑ i in s, f i) = ∑ i in s
+, 𝓕⁻ (f i)
+参数：f : ι -> E；s : Finset ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `AddMonoidHom.instAddMonoidHomClass`：∀ {M : Type u_4} {N : Type u_5} [ins
+t : AddZero M] [inst_1 : AddZero N], AddMonoidHomClass (M →+ N) M N
+· 使用定理 `FourierInvAdd.fourierInv_add`：∀ {E : Type u_5} {F : outParam (Type u_6)}
+ {inst : Add E} {inst_1 : Add F} {inst_2 : FourierTransformInv E F}   [self : Fo
+urierInvAdd E F] (…
 -/
-theorem fourierInv_sum (f : ι -> E) (s : Finset ι) : 𝓕⁻ (∑ i in s, f i) = ∑ i in s, 𝓕⁻ (f i) :=
+theorem fourierInv_sum (f : ι → E) (s : Finset ι) : 𝓕⁻ (∑ i ∈ s, f i) = ∑ i ∈ s, 𝓕⁻ (f i) :=
   map_sum (AddMonoidHom.mk' 𝓕⁻ fourierInv_add) f s
 
 end fourierInv
@@ -415,88 +374,56 @@ section fourierCLM
 variable [FourierTransform E F] [FourierAdd E F] [FourierSMul R E F]
 
 variable (R E) in
-/--
-Definition of `fourierₗ` / `fourierₗ` 的定义
+/-- The Fourier transform as a linear map. -/
+/-
+**FourierTransform.fourier** 是 Mathlib 中的一个定义，位于命名空间 `FourierTransform`。
+形式化陈述：{E : Type u} → {F : outParam (Type v)} → [self : FourierTransform E F] → E
+ → F
+参数：Type v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fourierₗ
-  signature: : E ->ₗ[R] F where
-  body: 𝓕
-  map_add' := fourier_add
-  map_smul' := fourier_smul
-
-@[simp]
-
-中文:
-定义 fourierₗ
-  签名: : E ->ₗ[R] F where
-  定义体: 𝓕
-  map_add' := fourier_add
-  map_smul' := fourier_smul
-
-@[simp]
+--- 原说明 ---
+The Fourier transform as a linear map.
 -/
-def fourierₗ : E ->ₗ[R] F where
+def fourierₗ : E →ₗ[R] F where
   toFun := 𝓕
   map_add' := fourier_add
   map_smul' := fourier_smul
 
 @[simp]
-/--
-lemma `fourierₗ_apply` / 引理 `fourierₗ_apply`
-
-English:
-lemma fourierₗ_apply
-  given: (f : E)
-  statement: fourierₗ R E f = 𝓕 f
-  proof: rfl
-
-中文:
-引理 fourierₗ_apply
-  条件: (f : E)
-  结论: fourierₗ R E f = 𝓕 f
-  证明: rfl
+/-
+**FourierTransform.fourier** 是 Mathlib 中的一个定义，位于命名空间 `FourierTransform`。
+形式化陈述：{E : Type u} → {F : outParam (Type v)} → [self : FourierTransform E F] → E
+ → F
+参数：Type v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fourierₗ_apply (f : E) : fourierₗ R E f = 𝓕 f := rfl
 
 variable [TopologicalSpace E] [TopologicalSpace F] [ContinuousFourier E F]
 
 variable (R E) in
-/--
-Definition of `fourierCLM` / `fourierCLM` 的定义
+/-- The Fourier transform as a continuous linear map. -/
+/-
+**FourierTransform.fourierCLM** 是 Mathlib 中的一个定义，位于命名空间 `FourierTransform`。
+形式化陈述：fourierCLM : E ->L[R] F where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fourierCLM
-  signature: : E ->L[R] F where
-  body: fourierₗ R E
-
-@[simp]
-
-中文:
-定义 fourierCLM
-  签名: : E ->L[R] F where
-  定义体: fourierₗ R E
-
-@[simp]
+--- 原说明 ---
+The Fourier transform as a continuous linear map.
 -/
-def fourierCLM : E ->L[R] F where
+def fourierCLM : E →L[R] F where
   __ := fourierₗ R E
 
 @[simp]
-/--
-lemma `fourierCLM_apply` / 引理 `fourierCLM_apply`
-
-English:
-lemma fourierCLM_apply
-  given: (f : E)
-  statement: fourierCLM R E f = 𝓕 f
-  proof: rfl
-
-中文:
-引理 fourierCLM_apply
-  条件: (f : E)
-  结论: fourierCLM R E f = 𝓕 f
-  证明: rfl
+/-
+**FourierTransform.fourierCLM_apply** 是 Mathlib 中的一个引理，位于命名空间 `FourierTransform`
+。
+形式化陈述：fourierCLM_apply (f : E) : fourierCLM R E f = 𝓕 f
+参数：f : E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fourierCLM_apply (f : E) : fourierCLM R E f = 𝓕 f := rfl
 
@@ -507,94 +434,52 @@ section fourierInvCLM
 variable [FourierTransformInv E F] [FourierInvAdd E F] [FourierInvSMul R E F]
 
 variable (R E) in
-/--
-Definition of `fourierInvₗ` / `fourierInvₗ` 的定义
+/-- The inverse Fourier transform as a linear map. -/
+/-
+**FourierTransform.fourierInv** 是 Mathlib 中的一个定义，位于命名空间 `FourierTransform`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fourierInvₗ
-  signature: : E ->ₗ[R] F where
-  body: 𝓕⁻
-  map_add' := fourierInv_add
-  map_smul' := fourierInv_smul
-
-@[simp]
-
-中文:
-定义 fourierInvₗ
-  签名: : E ->ₗ[R] F where
-  定义体: 𝓕⁻
-  map_add' := fourierInv_add
-  map_smul' := fourierInv_smul
-
-@[simp]
+--- 原说明 ---
+The inverse Fourier transform as a linear map.
 -/
-def fourierInvₗ : E ->ₗ[R] F where
+def fourierInvₗ : E →ₗ[R] F where
   toFun := 𝓕⁻
   map_add' := fourierInv_add
   map_smul' := fourierInv_smul
 
 @[simp]
-/--
-lemma `fourierInvₗ_apply` / 引理 `fourierInvₗ_apply`
-
-English:
-lemma fourierInvₗ_apply
-  given: (f : E)
-  statement: fourierInvₗ R E f = 𝓕⁻ f
-  proof: rfl
-
-中文:
-引理 fourierInvₗ_apply
-  条件: (f : E)
-  结论: fourierInvₗ R E f = 𝓕⁻ f
-  证明: rfl
+/-
+**FourierTransform.fourierInv** 是 Mathlib 中的一个引理，位于命名空间 `FourierTransform`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fourierInvₗ_apply (f : E) : fourierInvₗ R E f = 𝓕⁻ f := rfl
 
 variable [TopologicalSpace E] [TopologicalSpace F] [ContinuousFourierInv E F]
 
 variable (R E) in
-/--
-Definition of `fourierInvCLM` / `fourierInvCLM` 的定义
+/-- The inverse Fourier transform as a continuous linear map. -/
+/-
+**FourierTransform.fourierInvCLM** 是 Mathlib 中的一个定义，位于命名空间 `FourierTransform`。
+形式化陈述：fourierInvCLM : E ->L[R] F where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fourierInvCLM
-  signature: : E ->L[R] F where
-  body: 𝓕⁻
-  map_add' := fourierInv_add
-  map_smul' := fourierInv_smul
-
-@[simp]
-
-中文:
-定义 fourierInvCLM
-  签名: : E ->L[R] F where
-  定义体: 𝓕⁻
-  map_add' := fourierInv_add
-  map_smul' := fourierInv_smul
-
-@[simp]
+--- 原说明 ---
+The inverse Fourier transform as a continuous linear map.
 -/
-def fourierInvCLM : E ->L[R] F where
+def fourierInvCLM : E →L[R] F where
   toFun := 𝓕⁻
   map_add' := fourierInv_add
   map_smul' := fourierInv_smul
 
 @[simp]
-/--
-lemma `fourierInvCLM_apply` / 引理 `fourierInvCLM_apply`
-
-English:
-lemma fourierInvCLM_apply
-  given: (f : E)
-  statement: fourierInvCLM R E f = 𝓕⁻ f
-  proof: rfl
-
-中文:
-引理 fourierInvCLM_apply
-  条件: (f : E)
-  结论: fourierInvCLM R E f = 𝓕⁻ f
-  证明: rfl
+/-
+**FourierTransform.fourierInvCLM_apply** 是 Mathlib 中的一个引理，位于命名空间 `FourierTransfo
+rm`。
+形式化陈述：fourierInvCLM_apply (f : E) : fourierInvCLM R E f = 𝓕⁻ f
+参数：f : E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fourierInvCLM_apply (f : E) : fourierInvCLM R E f = 𝓕⁻ f := rfl
 
@@ -608,41 +493,32 @@ section Pair
 
 open FourierTransform
 
-/--
-Definition of `FourierPair` / `FourierPair` 的定义
+/-- A `FourierPair` is a pair of spaces `E` and `F` such that `𝓕⁻ ∘ 𝓕 = id` on `E`. -/
+/-
+**FourierPair** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(E : Type u_5) → (F : Type u_6) → [FourierTransform E F] → [FourierTransfo
+rmInv F E] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class FourierPair
-  parameters: (E F : Type*) [FourierTransform E F] [FourierTransformInv F E]
-  axioms and operations (1):
-    - fourierInv_fourier_eq : forall (f : E), 𝓕⁻ (𝓕 f) = f
-
-中文:
-类 FourierPair
-  参数: (E F : 类型) [Fourier变换 E F] [FourierTransformInv F E]
-  公理与运算 (1 个):
-    - fourierInv_fourier_eq : 对任意 (f : E), 𝓕⁻ (𝓕 f) = f
+--- 原说明 ---
+A `FourierPair` is a pair of spaces `E` and `F` such that `𝓕⁻ ∘ 𝓕 = id` on `E`.
 -/
 class FourierPair (E F : Type*) [FourierTransform E F] [FourierTransformInv F E] where
-  fourierInv_fourier_eq : forall (f : E), 𝓕⁻ (𝓕 f) = f
+  fourierInv_fourier_eq : ∀ (f : E), 𝓕⁻ (𝓕 f) = f
 
-/--
-Definition of `FourierInvPair` / `FourierInvPair` 的定义
+/-- A `FourierInvPair` is a pair of spaces `E` and `F` such that `𝓕 ∘ 𝓕⁻ = id` on `E`. -/
+/-
+**FourierInvPair** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(E : Type u_5) → (F : Type u_6) → [FourierTransform F E] → [FourierTransfo
+rmInv E F] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class FourierInvPair
-  parameters: (E F : Type*) [FourierTransform F E] [FourierTransformInv E F]
-  axioms and operations (1):
-    - fourier_fourierInv_eq : forall (f : E), 𝓕 (𝓕⁻ f) = f
-
-中文:
-类 FourierInvPair
-  参数: (E F : 类型) [Fourier变换 F E] [FourierTransformInv E F]
-  公理与运算 (1 个):
-    - fourier_fourierInv_eq : 对任意 (f : E), 𝓕 (𝓕⁻ f) = f
+--- 原说明 ---
+A `FourierInvPair` is a pair of spaces `E` and `F` such that `𝓕 ∘ 𝓕⁻ = id` on `E
+`.
 -/
 class FourierInvPair (E F : Type*) [FourierTransform F E] [FourierTransformInv E F] where
-  fourier_fourierInv_eq : forall (f : E), 𝓕 (𝓕⁻ f) = f
+  fourier_fourierInv_eq : ∀ (f : E), 𝓕 (𝓕⁻ f) = f
 
 namespace FourierTransform
 
@@ -658,28 +534,21 @@ variable {R E F : Type*} [Semiring R] [AddCommMonoid E] [AddCommMonoid F] [Modul
   [FourierPair E F] [FourierInvPair F E]
 
 variable (R E) in
-/--
-Definition of `fourierEquiv` / `fourierEquiv` 的定义
+/-- The Fourier transform as a linear equivalence. -/
+/-
+**FourierTransform.fourierEquiv** 是 Mathlib 中的一个定义，位于命名空间 `FourierTransform`。
+形式化陈述：fourierEquiv : E ≃ₗ[R] F where __
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `FourierPair.fourierInv_fourier_eq`：∀ {E : Type u_5} {F : Type u_6} {inst
+ : FourierTransform E F} {inst_1 : FourierTransformInv F E}   [self : FourierPai
+r E F] (f : E), Fourier…
+· 使用定理 `FourierInvPair.fourier_fourierInv_eq`：∀ {E : Type u_5} {F : Type u_6} {i
+nst : FourierTransform F E} {inst_1 : FourierTransformInv E F}   [self : Fourier
+InvPair E F] (f : E), Four…
 
-English:
-definition fourierEquiv
-  signature: : E ≃ₗ[R] F where
-  body: fourierₗ R E
-  invFun := 𝓕⁻
-  left_inv := fourierInv_fourier_eq
-  right_inv := fourier_fourierInv_eq
-
-@[simp]
-
-中文:
-定义 fourierEquiv
-  签名: : E ≃ₗ[R] F where
-  定义体: fourierₗ R E
-  invFun := 𝓕⁻
-  left_inv := fourierInv_fourier_eq
-  right_inv := fourier_fourierInv_eq
-
-@[simp]
+--- 原说明 ---
+The Fourier transform as a linear equivalence.
 -/
 def fourierEquiv : E ≃ₗ[R] F where
   __ := fourierₗ R E
@@ -688,42 +557,24 @@ def fourierEquiv : E ≃ₗ[R] F where
   right_inv := fourier_fourierInv_eq
 
 @[simp]
-/--
-lemma `fourierEquiv_apply` / 引理 `fourierEquiv_apply`
-
-English:
-lemma fourierEquiv_apply
-  given: (f : E)
-  statement: fourierEquiv R E f = 𝓕 f
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 fourierEquiv_apply
-  条件: (f : E)
-  结论: fourierEquiv R E f = 𝓕 f
-  证明: rfl
-
-@[simp]
+/-
+**FourierTransform.fourierEquiv_apply** 是 Mathlib 中的一个引理，位于命名空间 `FourierTransfor
+m`。
+形式化陈述：fourierEquiv_apply (f : E) : fourierEquiv R E f = 𝓕 f
+参数：f : E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fourierEquiv_apply (f : E) : fourierEquiv R E f = 𝓕 f := rfl
 
 @[simp]
-/--
-lemma `fourierEquiv_symm_apply` / 引理 `fourierEquiv_symm_apply`
-
-English:
-lemma fourierEquiv_symm_apply
-  given: (f : F)
-  statement: (fourierEquiv R E).symm f = 𝓕⁻ f
-  proof: rfl
-
-中文:
-引理 fourierEquiv_symm_apply
-  条件: (f : F)
-  结论: (fourierEquiv R E).symm f = 𝓕⁻ f
-  证明: rfl
+/-
+**FourierTransform.fourierEquiv_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 `FourierTra
+nsform`。
+形式化陈述：fourierEquiv_symm_apply (f : F) : (fourierEquiv R E).symm f = 𝓕⁻ f
+参数：f : F。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fourierEquiv_symm_apply (f : F) : (fourierEquiv R E).symm f = 𝓕⁻ f := rfl
 
@@ -731,68 +582,42 @@ variable [TopologicalSpace E] [TopologicalSpace F]
   [ContinuousFourier E F] [ContinuousFourierInv F E]
 
 variable (R E) in
-/--
-Definition of `fourierCLE` / `fourierCLE` 的定义
+/-- The Fourier transform as a continuous linear equivalence. -/
+/-
+**FourierTransform.fourierCLE** 是 Mathlib 中的一个定义，位于命名空间 `FourierTransform`。
+形式化陈述：fourierCLE : E ≃L[R] F where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fourierCLE
-  signature: : E ≃L[R] F where
-  body: fourierEquiv R E
-
-@[simp]
-
-中文:
-定义 fourierCLE
-  签名: : E ≃L[R] F where
-  定义体: fourierEquiv R E
-
-@[simp]
-
-Depends on / 依赖: fourierEquiv
+--- 原说明 ---
+The Fourier transform as a continuous linear equivalence.
 -/
 def fourierCLE : E ≃L[R] F where
   __ := fourierEquiv R E
 
 @[simp]
-/--
-lemma `fourierCLE_apply` / 引理 `fourierCLE_apply`
-
-English:
-lemma fourierCLE_apply
-  given: (f : E)
-  statement: fourierCLE R E f = 𝓕 f
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 fourierCLE_apply
-  条件: (f : E)
-  结论: fourierCLE R E f = 𝓕 f
-  证明: rfl
-
-@[simp]
+/-
+**FourierTransform.fourierCLE_apply** 是 Mathlib 中的一个引理，位于命名空间 `FourierTransform`
+。
+形式化陈述：fourierCLE_apply (f : E) : fourierCLE R E f = 𝓕 f
+参数：f : E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fourierCLE_apply (f : E) : fourierCLE R E f = 𝓕 f := rfl
 
 @[simp]
-/--
-lemma `fourierCLE_symm_apply` / 引理 `fourierCLE_symm_apply`
-
-English:
-lemma fourierCLE_symm_apply
-  given: (f : F)
-  statement: (fourierCLE R E).symm f = 𝓕⁻ f
-  proof: rfl
-
-中文:
-引理 fourierCLE_symm_apply
-  条件: (f : F)
-  结论: (fourierCLE R E).symm f = 𝓕⁻ f
-  证明: rfl
+/-
+**FourierTransform.fourierCLE_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 `FourierTrans
+form`。
+形式化陈述：fourierCLE_symm_apply (f : F) : (fourierCLE R E).symm f = 𝓕⁻ f
+参数：f : F。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fourierCLE_symm_apply (f : F) : (fourierCLE R E).symm f = 𝓕⁻ f := rfl
 
 end FourierTransform
 
 end Pair
+

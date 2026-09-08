@@ -41,889 +41,653 @@ namespace Multiset
 /-! ### `Multiset.map` -/
 
 
-/--
-Definition of `map` / `map` 的定义
+/-- `map f s` is the lift of the list `map` operation. The multiplicity
+  of `b` in `map f s` is the number of `a ∈ s` (counting multiplicity)
+  such that `f a = b`. -/
+/-
+**Multiset.map** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：map (f : α -> β) (s : Multiset α) : Multiset β
+参数：f : α -> β；s : Multiset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (f : α -> β) (s : Multiset α)
-  body: Quot.liftOn s (fun l : List α => (l.map f : Multiset β)) fun _l₁ _l₂ p => Quot.sound (p.map f)
-
-@[congr]
-
-中文:
-定义 map
-  签名: (f : α -> β) (s : Multiset α)
-  定义体: Quot.liftOn s (fun l : List α => (l.map f : Multiset β)) fun _l₁ _l₂ p => Quot.sound (p.map f)
-
-@[congr]
-
-Depends on / 依赖: Multiset, Quot.liftOn, Quot.sound, l.map, liftOn, p.map
+--- 原说明 ---
+`map f s` is the lift of the list `map` operation. The multiplicity
+  of `b` in `map f s` is the number of `a ∈ s` (counting multiplicity)
+  such that `f a = b`.
 -/
-def map (f : α -> β) (s : Multiset α) : Multiset β :=
+def map (f : α → β) (s : Multiset α) : Multiset β :=
   Quot.liftOn s (fun l : List α => (l.map f : Multiset β)) fun _l₁ _l₂ p => Quot.sound (p.map f)
 
 @[congr]
-/--
-theorem `map_congr` / 定理 `map_congr`
-
-English:
-theorem map_congr
-  given: {f g : α -> β} {s t : Multiset α}
-  proof: by
+/-
+**Multiset.map_congr** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_congr {f g : α -> β} {s t : Multiset α} : s = t -> (forall x in t, f x
+ = g x) -> map f s = map g t
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `List.map_congr_left`：∀ {α : Type u_1} {l : List α} {α_1 : Type u_2} {f g
+ : α → α_1}, (∀ a ∈ l, f a = g a) → List.map f l = List.map g l
+-/
+theorem map_congr {f g : α → β} {s t : Multiset α} :
+    s = t → (∀ x ∈ t, f x = g x) → map f s = map g t := by
   rintro rfl h
   induction s using Quot.inductionOn
   exact congr_arg _ (List.map_congr_left h)
-
-中文:
-定理 map_congr
-  条件: {f g : α -> β} {s t : Multiset α}
-  证明: by
-  rintro rfl h
-  induction s using Quot.inductionOn
-  exact congr_arg _ (List.map_congr_left h)
-
-Depends on / 依赖: List.map_congr_left, Quot.inductionOn, congr_arg, inductionOn, map_congr_left
+/-
+**Multiset.map_hcongr** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_hcongr {β' : Type v} {m : Multiset α} {f : α -> β} {f' : α -> β'} (h :
+ β = β') (hf : forall a in m, f a ≍ f' a) : map f m ≍ map f' m
+参数：h : β = β'；hf : forall a in m, f a ≍ f' a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `heq_eq_eq`：∀ {α : Sort u_1} (a b : α), (a ≍ b) = (a = b)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem map_congr {f g : α -> β} {s t : Multiset α} :
-    s = t -> (forall x in t, f x = g x) -> map f s = map g t := by
-  rintro rfl h
-  induction s using Quot.inductionOn
-  exact congr_arg _ (List.map_congr_left h)
-
-/--
-theorem `map_hcongr` / 定理 `map_hcongr`
-
-English:
-theorem map_hcongr
-  statement: {β' : Type v} {m : Multiset α} {f : α -> β} {f' : α -> β'} (h : β = β')
-  proof: by
+theorem map_hcongr {β' : Type v} {m : Multiset α} {f : α → β} {f' : α → β'} (h : β = β')
+    (hf : ∀ a ∈ m, f a ≍ f' a) : map f m ≍ map f' m := by
   subst h; simp at hf
   simp [map_congr rfl hf]
-
-中文:
-定理 map_hcongr
-  结论: {β' : 类型v} {m : Multiset α} {f : α -> β} {f' : α -> β'} (h : β = β')
-  证明: by
-  subst h; simp at hf
-  simp [map_congr rfl hf]
-
-Depends on / 依赖: map_congr
+/-
+**Multiset.forall_mem_map_iff** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：forall_mem_map_iff {f : α -> β} {p : β -> Prop} {s : Multiset α} : (forall
+ y in s.map f, p y) ↔ forall x in s, p (f x)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
+· 使用定理 `List.forall_mem_map`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {l : Li
+st α} {P : β → Prop}, (∀ i ∈ List.map f l, P i) ↔ ∀ j ∈ l, P (f j)
 -/
-theorem map_hcongr {β' : Type v} {m : Multiset α} {f : α -> β} {f' : α -> β'} (h : β = β')
-    (hf : forall a in m, f a ≍ f' a) : map f m ≍ map f' m := by
-  subst h; simp at hf
-  simp [map_congr rfl hf]
-
-/--
-theorem `forall_mem_map_iff` / 定理 `forall_mem_map_iff`
-
-English:
-theorem forall_mem_map_iff
-  given: {f : α -> β} {p : β -> Prop} {s : Multiset α}
-  proof: Quotient.inductionOn' s fun _L => List.forall_mem_map
-
-中文:
-定理 对任意_mem_map_iff
-  条件: {f : α -> β} {p : β -> 命题} {s : Multiset α}
-  证明: Quotient.inductionOn' s fun _L => List.forall_mem_map
-
-Depends on / 依赖: List.forall_mem_map, Quotient, Quotient.inductionOn, forall_mem_map, inductionOn
--/
-theorem forall_mem_map_iff {f : α -> β} {p : β -> Prop} {s : Multiset α} :
-    (forall y in s.map f, p y) ↔ forall x in s, p (f x) :=
+theorem forall_mem_map_iff {f : α → β} {p : β → Prop} {s : Multiset α} :
+    (∀ y ∈ s.map f, p y) ↔ ∀ x ∈ s, p (f x) :=
   Quotient.inductionOn' s fun _L => List.forall_mem_map
-
-/--
-lemma `map_coe` / 引理 `map_coe`
-
-English:
-lemma map_coe
-  given: (f : α -> β) (l : List α)
-  statement: map f l = l.map f
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 map_coe
-  条件: (f : α -> β) (l : 列表 α)
-  结论: map f l = l.map f
-  证明: rfl
-
-@[simp]
+/-
+**Multiset.map_coe** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：∀ {α : Type u_1} {β : Type v} (f : α → β) (l : List α), Multiset.map f ↑l 
+= ↑(List.map f l)
+参数：f : α → β；l : List α；List.map f l。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp, norm_cast] lemma map_coe (f : α -> β) (l : List α) : map f l = l.map f := rfl
+@[simp, norm_cast] lemma map_coe (f : α → β) (l : List α) : map f l = l.map f := rfl
 
 @[simp]
-/--
-theorem `map_zero` / 定理 `map_zero`
-
-English:
-theorem map_zero
-  given: (f : α -> β)
-  statement: map f 0 = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 map_zero
-  条件: (f : α -> β)
-  结论: map f 0 = 0
-  证明: rfl
-
-@[simp]
+/-
+**Multiset.map_zero** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_zero (f : α -> β) : map f 0 = 0
+参数：f : α -> β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_zero (f : α -> β) : map f 0 = 0 :=
+theorem map_zero (f : α → β) : map f 0 = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `map_cons` / 定理 `map_cons`
-
-English:
-theorem map_cons
-  given: (f : α -> β) (a s)
-  statement: map f (a ::ₘ s) = f a ::ₘ map f s
-  proof: Quot.inductionOn s fun _l => rfl
-
-中文:
-定理 map_cons
-  条件: (f : α -> β) (a s)
-  结论: map f (a ::ₘ s) = f a ::ₘ map f s
-  证明: Quot.inductionOn s fun _l => rfl
-
-Depends on / 依赖: Quot.inductionOn, inductionOn
+/-
+**Multiset.map_cons** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_cons (f : α -> β) (a s) : map f (a ::ₘ s) = f a ::ₘ map f s
+参数：f : α -> β；a s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
 -/
-theorem map_cons (f : α -> β) (a s) : map f (a ::ₘ s) = f a ::ₘ map f s :=
+theorem map_cons (f : α → β) (a s) : map f (a ::ₘ s) = f a ::ₘ map f s :=
   Quot.inductionOn s fun _l => rfl
-
-/--
-theorem `map_comp_cons` / 定理 `map_comp_cons`
-
-English:
-theorem map_comp_cons
-  given: (f : α -> β) (t)
-  statement: map f ∘ cons t = cons (f t) ∘ map f
-  proof: by
-  ext
-  simp
-
-@[simp]
-
-中文:
-定理 map_comp_cons
-  条件: (f : α -> β) (t)
-  结论: map f ∘ cons t = cons (f t) ∘ map f
-  证明: by
-  ext
-  simp
-
-@[simp]
+/-
+**Multiset.map_comp_cons** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_comp_cons (f : α -> β) (t) : map f ∘ cons t = cons (f t) ∘ map f
+参数：f : α -> β；t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.map_cons`：map_cons (f : α -> β) (a s) : map f (a ::ₘ s) = f a :
+:ₘ map f s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem map_comp_cons (f : α -> β) (t) : map f ∘ cons t = cons (f t) ∘ map f := by
+theorem map_comp_cons (f : α → β) (t) : map f ∘ cons t = cons (f t) ∘ map f := by
   ext
   simp
 
 @[simp]
-/--
-theorem `map_singleton` / 定理 `map_singleton`
-
-English:
-theorem map_singleton
-  given: (f : α -> β) (a : α)
-  statement: ({a} : Multiset α).map f = {f a}
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 map_singleton
-  条件: (f : α -> β) (a : α)
-  结论: ({a} : Multiset α).map f = {f a}
-  证明: rfl
-
-@[simp]
+/-
+**Multiset.map_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_singleton (f : α -> β) (a : α) : ({a} : Multiset α).map f = {f a}
+参数：f : α -> β；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_singleton (f : α -> β) (a : α) : ({a} : Multiset α).map f = {f a} :=
+theorem map_singleton (f : α → β) (a : α) : ({a} : Multiset α).map f = {f a} :=
   rfl
 
 @[simp]
-/--
-theorem `map_replicate` / 定理 `map_replicate`
-
-English:
-theorem map_replicate
-  given: (f : α -> β) (k : Nat) (a : α)
-  statement: (replicate k a).map f = replicate k (f a)
-  proof: by
-  simp only [← coe_replicate, map_coe, List.map_replicate]
-
-@[simp]
-
-中文:
-定理 map_replicate
-  条件: (f : α -> β) (k : 自然数) (a : α)
-  结论: (replicate k a).map f = replicate k (f a)
-  证明: by
-  simp only [← coe_replicate, map_coe, List.map_replicate]
-
-@[simp]
-
-Depends on / 依赖: List.map_replicate, coe_replicate, map_coe, map_replicate
+/-
+**Multiset.map_replicate** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_replicate (f : α -> β) (k : Nat) (a : α) : (replicate k a).map f = rep
+licate k (f a)
+参数：f : α -> β；k : Nat；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.map_replicate`：∀ {n : ℕ} {α : Type u_1} {a : α} {α_1 : Type u_2} {f
+ : α → α_1},   List.map f (List.replicate n a) = List.replicate n (f a)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem map_replicate (f : α -> β) (k : Nat) (a : α) : (replicate k a).map f = replicate k (f a) := by
+theorem map_replicate (f : α → β) (k : ℕ) (a : α) : (replicate k a).map f = replicate k (f a) := by
   simp only [← coe_replicate, map_coe, List.map_replicate]
 
 @[simp]
-/--
-theorem `map_add` / 定理 `map_add`
-
-English:
-theorem map_add
-  given: (f : α -> β) (s t)
-  statement: map f (s + t) = map f s + map f t
-  proof: Quotient.inductionOn₂ s t fun _l₁ _l₂ => congr_arg _ map_append
-
-中文:
-定理 map_add
-  条件: (f : α -> β) (s t)
-  结论: map f (s + t) = map f s + map f t
-  证明: Quotient.inductionOn₂ s t fun _l₁ _l₂ => congr_arg _ map_append
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, congr_arg, map_append
+/-
+**Multiset.map_add** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_add (f : α -> β) (s t) : map f (s + t) = map f s + map f t
+参数：f : α -> β；s t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn₂`：∀ {α : Sort uA} {β : Sort uB} {s₁ : Setoid α} {s₂
+ : Setoid β} {motive : Quotient s₁ → Quotient s₂ → Prop}   (q₁ : Quotient s₁) (q
+₂ : Quotien…
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `List.map_append`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {l₁ l₂ : Li
+st α}, List.map f (l₁ ++ l₂) = List.map f l₁ ++ List.map f l₂
 -/
-theorem map_add (f : α -> β) (s t) : map f (s + t) = map f s + map f t :=
+theorem map_add (f : α → β) (s t) : map f (s + t) = map f s + map f t :=
   Quotient.inductionOn₂ s t fun _l₁ _l₂ => congr_arg _ map_append
 
-/--
-Instance `canLift` / 实例 `canLift`
+/-- If each element of `s : Multiset α` can be lifted to `β`, then `s` can be lifted to
+`Multiset β`. -/
+/-
+**Multiset.canLift** 是 Mathlib 中的一个实例，位于命名空间 `Multiset`。
+形式化陈述：canLift (c) (p) [CanLift α β c p] : CanLift (Multiset α) (Multiset β) (map
+ c) fun s => forall x in s, p x where prf
+参数：c；p。
+该定义给出了一等式。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `Multiset.map_coe`：∀ {α : Type u_1} {β : Type v} (f : α → β) (l : List α)
+, Multiset.map f ↑l = ↑(List.map f l)
 
-English:
-instance canLift
-  signature: (c) (p) [CanLift α β c p]
-  body: by
-    rintro ⟨l⟩ hl
-    lift l to List β using hl
-    exact ⟨l, map_coe _ _⟩
-
-@[simp]
-
-中文:
-实例 canLift
-  签名: (c) (p) [CanLift α β c p]
-  定义体: by
-    rintro ⟨l⟩ hl
-    lift l to List β using hl
-    exact ⟨l, map_coe _ _⟩
-
-@[simp]
-
-Depends on / 依赖: map_coe
+--- 原说明 ---
+If each element of `s : Multiset α` can be lifted to `β`, then `s` can be lifted
+ to
+`Multiset β`.
 -/
 instance canLift (c) (p) [CanLift α β c p] :
-    CanLift (Multiset α) (Multiset β) (map c) fun s => forall x in s, p x where
+    CanLift (Multiset α) (Multiset β) (map c) fun s => ∀ x ∈ s, p x where
   prf := by
     rintro ⟨l⟩ hl
     lift l to List β using hl
     exact ⟨l, map_coe _ _⟩
 
 @[simp]
-/--
-theorem `mem_map` / 定理 `mem_map`
-
-English:
-theorem mem_map
-  given: {f : α -> β} {b : β} {s : Multiset α}
-  statement: b in map f s ↔ exists a, a in s ∧ f a = b
-  proof: Quot.inductionOn s fun _l => List.mem_map
-
-@[simp]
-
-中文:
-定理 mem_map
-  条件: {f : α -> β} {b : β} {s : Multiset α}
-  结论: b in map f s ↔ 存在 a, a in s ∧ f a = b
-  证明: Quot.inductionOn s fun _l => List.mem_map
-
-@[simp]
-
-Depends on / 依赖: List.mem_map, Quot.inductionOn, inductionOn, mem_map
+/-
+**Multiset.mem_map** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：mem_map {f : α -> β} {b : β} {s : Multiset α} : b in map f s ↔ exists a, a
+ in s ∧ f a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `List.mem_map`：∀ {α : Type u_1} {β : Type u_2} {b : β} {f : α → β} {l : L
+ist α}, b ∈ List.map f l ↔ ∃ a ∈ l, f a = b
 -/
-theorem mem_map {f : α -> β} {b : β} {s : Multiset α} : b in map f s ↔ exists a, a in s ∧ f a = b :=
+theorem mem_map {f : α → β} {b : β} {s : Multiset α} : b ∈ map f s ↔ ∃ a, a ∈ s ∧ f a = b :=
   Quot.inductionOn s fun _l => List.mem_map
 
 @[simp]
-/--
-theorem `card_map` / 定理 `card_map`
-
-English:
-theorem card_map
-  given: (f : α -> β) (s)
-  statement: card (map f s) = card s
-  proof: Quot.inductionOn s fun _ => length_map _
-
-@[simp]
-
-中文:
-定理 card_map
-  条件: (f : α -> β) (s)
-  结论: card (map f s) = card s
-  证明: Quot.inductionOn s fun _ => length_map _
-
-@[simp]
-
-Depends on / 依赖: Quot.inductionOn, inductionOn, length_map
+/-
+**Multiset.card_map** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：card_map (f : α -> β) (s) : card (map f s) = card s
+参数：f : α -> β；s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `List.length_map`：∀ {α : Type u_1} {β : Type u_2} {as : List α} (f : α → 
+β), (List.map f as).length = as.length
 -/
-theorem card_map (f : α -> β) (s) : card (map f s) = card s :=
+theorem card_map (f : α → β) (s) : card (map f s) = card s :=
   Quot.inductionOn s fun _ => length_map _
 
 @[simp]
-/--
-theorem `map_eq_zero` / 定理 `map_eq_zero`
-
-English:
-theorem map_eq_zero
-  given: {s : Multiset α} {f : α -> β}
-  statement: s.map f = 0 ↔ s = 0
-  proof: by
-  rw [← Multiset.card_eq_zero]; rw [Multiset.card_map]; rw [Multiset.card_eq_zero]
+/-
+**Multiset.map_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_eq_zero {s : Multiset α} {f : α -> β} : s.map f = 0 ↔ s = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.card_eq_zero`：card_eq_zero {s : Multiset α} : card s = 0 ↔ s = 
+0
+· 使用定理 `Multiset.card_map`：card_map (f : α -> β) (s) : card (map f s) = card s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+-/
+theorem map_eq_zero {s : Multiset α} {f : α → β} : s.map f = 0 ↔ s = 0 := by
+  rw [← Multiset.card_eq_zero, Multiset.card_map, Multiset.card_eq_zero]
 
 @[simp]
-
-中文:
-定理 map_eq_zero
-  条件: {s : Multiset α} {f : α -> β}
-  结论: s.map f = 0 ↔ s = 0
-  证明: by
-  rw [← Multiset.card_eq_zero]; rw [Multiset.card_map]; rw [Multiset.card_eq_zero]
-
-@[simp]
-
-Depends on / 依赖: Multiset, Multiset.card_eq_zero, Multiset.card_map, card_eq_zero, card_map
+/-
+**Multiset.zero_eq_map** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：zero_eq_map {s : Multiset α} {f : α -> β} : 0 = s.map f ↔ s = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Multiset.map_eq_zero`：map_eq_zero {s : Multiset α} {f : α -> β} : s.map 
+f = 0 ↔ s = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem map_eq_zero {s : Multiset α} {f : α -> β} : s.map f = 0 ↔ s = 0 := by
-  rw [← Multiset.card_eq_zero]; rw [Multiset.card_map]; rw [Multiset.card_eq_zero]
-
-@[simp]
-/--
-theorem `zero_eq_map` / 定理 `zero_eq_map`
-
-English:
-theorem zero_eq_map
-  given: {s : Multiset α} {f : α -> β}
-  statement: 0 = s.map f ↔ s = 0
-  proof: by
-  rw [eq_comm]; rw [map_eq_zero]
-
-中文:
-定理 zero_eq_map
-  条件: {s : Multiset α} {f : α -> β}
-  结论: 0 = s.map f ↔ s = 0
-  证明: by
-  rw [eq_comm]; rw [map_eq_zero]
-
-Depends on / 依赖: eq_comm, map_eq_zero
+theorem zero_eq_map {s : Multiset α} {f : α → β} : 0 = s.map f ↔ s = 0 := by
+  rw [eq_comm, map_eq_zero]
+/-
+**Multiset.mem_map_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：mem_map_of_mem (f : α -> β) {a : α} {s : Multiset α} (h : a in s) : f a in
+ map f s
+参数：f : α -> β；h : a in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Multiset.mem_map`：mem_map {f : α -> β} {b : β} {s : Multiset α} : b in m
+ap f s ↔ exists a, a in s ∧ f a = b
 -/
-theorem zero_eq_map {s : Multiset α} {f : α -> β} : 0 = s.map f ↔ s = 0 := by
-  rw [eq_comm]; rw [map_eq_zero]
-
-/--
-theorem `mem_map_of_mem` / 定理 `mem_map_of_mem`
-
-English:
-theorem mem_map_of_mem
-  given: (f : α -> β) {a : α} {s : Multiset α} (h : a in s)
-  statement: f a in map f s
-  proof: mem_map.2 ⟨_, h, rfl⟩
-
-中文:
-定理 mem_map_of_mem
-  条件: (f : α -> β) {a : α} {s : Multiset α} (h : a in s)
-  结论: f a in map f s
-  证明: mem_map.2 ⟨_, h, rfl⟩
-
-Depends on / 依赖: mem_map
--/
-theorem mem_map_of_mem (f : α -> β) {a : α} {s : Multiset α} (h : a in s) : f a in map f s :=
+theorem mem_map_of_mem (f : α → β) {a : α} {s : Multiset α} (h : a ∈ s) : f a ∈ map f s :=
   mem_map.2 ⟨_, h, rfl⟩
-
-/--
-theorem `map_eq_singleton` / 定理 `map_eq_singleton`
-
-English:
-theorem map_eq_singleton
-  given: {f : α -> β} {s : Multiset α} {b : β}
-  proof: by
-  constructor
-  · intro h
-    obtain ⟨a, ha⟩ : exists a, s = {a} := by rw [← card_eq_one, ← card_map, h, card_singleton]
-    refine ⟨a, ha, ?_⟩
-    rw [← mem_singleton]; rw [← h]; rw [ha]; rw [map_singleton]; rw [mem_singleton]
-  · rintro ⟨a, rfl, rfl⟩
-    simp
-
-中文:
-定理 map_eq_singleton
-  条件: {f : α -> β} {s : Multiset α} {b : β}
-  证明: by
-  constructor
-  · intro h
-    obtain ⟨a, ha⟩ : exists a, s = {a} := by rw [← card_eq_one, ← card_map, h, card_singleton]
-    refine ⟨a, ha, ?_⟩
-    rw [← mem_singleton]; rw [← h]; rw [ha]; rw [map_singleton]; rw [mem_singleton]
-  · rintro ⟨a, rfl, rfl⟩
-    simp
-
-Depends on / 依赖: card_eq_one, card_map, card_singleton, map_singleton, mem_singleton
+/-
+**Multiset.map_eq_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_eq_singleton {f : α -> β} {s : Multiset α} {b : β} : map f s = {b} ↔ e
+xists a : α, s = {a} ∧ f a = b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.card_eq_one`：card_eq_one {s : Multiset α} : card s = 1 ↔ exists
+ a, s = {a}
+· 使用定理 `Multiset.card_map`：card_map (f : α -> β) (s) : card (map f s) = card s
+· 使用定理 `Multiset.card_singleton`：card_singleton (a : α) : card ({a} : Multiset α
+) = 1
+· 使用定理 `Multiset.mem_singleton`：mem_singleton {a b : α} : b in ({a} : Multiset α
+) ↔ b = a
+· 使用定理 `Multiset.map_singleton`：map_singleton (f : α -> β) (a : α) : ({a} : Mult
+iset α).map f = {f a}
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem map_eq_singleton {f : α -> β} {s : Multiset α} {b : β} :
-    map f s = {b} ↔ exists a : α, s = {a} ∧ f a = b := by
+theorem map_eq_singleton {f : α → β} {s : Multiset α} {b : β} :
+    map f s = {b} ↔ ∃ a : α, s = {a} ∧ f a = b := by
   constructor
   · intro h
-    obtain ⟨a, ha⟩ : exists a, s = {a} := by rw [← card_eq_one, ← card_map, h, card_singleton]
+    obtain ⟨a, ha⟩ : ∃ a, s = {a} := by rw [← card_eq_one, ← card_map, h, card_singleton]
     refine ⟨a, ha, ?_⟩
-    rw [← mem_singleton]; rw [← h]; rw [ha]; rw [map_singleton]; rw [mem_singleton]
+    rw [← mem_singleton, ← h, ha, map_singleton, mem_singleton]
   · rintro ⟨a, rfl, rfl⟩
     simp
-
-/--
-theorem `map_eq_cons` / 定理 `map_eq_cons`
-
-English:
-theorem map_eq_cons
-  given: [DecidableEq α] (f : α -> β) (s : Multiset α) (t : Multiset β) (b : β)
-  proof: by
+/-
+**Multiset.map_eq_cons** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_eq_cons [DecidableEq α] (f : α -> β) (s : Multiset α) (t : Multiset β)
+ (b : β) : (exists a in s, f a = b ∧ (s.erase a).map f = t) ↔ s.map f = b ::ₘ t
+参数：f : α -> β；s : Multiset α；t : Multiset β；b : β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.map_cons`：map_cons (f : α -> β) (a s) : map f (a ::ₘ s) = f a :
+:ₘ map f s
+· 使用定理 `Multiset.cons_erase`：cons_erase {s : Multiset α} {a : α} : a in s -> a :
+:ₘ s.erase a = s
+· 使用定理 `Multiset.mem_cons_self`：mem_cons_self (a : α) (s : Multiset α) : a in a 
+::ₘ s
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Multiset.mem_map`：mem_map {f : α -> β} {b : β} {s : Multiset α} : b in m
+ap f s ↔ exists a, a in s ∧ f a = b
+· 使用定理 `Multiset.exists_cons_of_mem`：exists_cons_of_mem {s : Multiset α} {a : α}
+ : a in s -> exists t, s = a ::ₘ t
+· 使用定理 `Multiset.erase_cons_head`：erase_cons_head (a : α) (s : Multiset α) : (a 
+::ₘ s).erase a = s
+· 使用定理 `Multiset.cons_inj_right`：cons_inj_right (a : α) : forall {s t : Multiset
+ α}, a ::ₘ s = a ::ₘ t ↔ s = t
+-/
+theorem map_eq_cons [DecidableEq α] (f : α → β) (s : Multiset α) (t : Multiset β) (b : β) :
+    (∃ a ∈ s, f a = b ∧ (s.erase a).map f = t) ↔ s.map f = b ::ₘ t := by
   constructor
   · rintro ⟨a, ha, rfl, rfl⟩
-    rw [← map_cons]; rw [Multiset.cons_erase ha]
+    rw [← map_cons, Multiset.cons_erase ha]
   · intro h
-    have : b in s.map f := by
+    have : b ∈ s.map f := by
       rw [h]
       exact mem_cons_self _ _
     obtain ⟨a, h1, rfl⟩ := mem_map.mp this
     obtain ⟨u, rfl⟩ := exists_cons_of_mem h1
-    rw [map_cons]; rw [cons_inj_right] at h
+    rw [map_cons, cons_inj_right] at h
     refine ⟨a, mem_cons_self _ _, rfl, ?_⟩
-    rw [Multiset.erase_cons_head]; rw [h]
+    rw [Multiset.erase_cons_head, h]
 
 @[simp 1100]
-
-中文:
-定理 map_eq_cons
-  条件: [DecidableEq α] (f : α -> β) (s : Multiset α) (t : Multiset β) (b : β)
-  证明: by
-  constructor
-  · rintro ⟨a, ha, rfl, rfl⟩
-    rw [← map_cons]; rw [Multiset.cons_erase ha]
-  · intro h
-    have : b in s.map f := by
-      rw [h]
-      exact mem_cons_self _ _
-    obtain ⟨a, h1, rfl⟩ := mem_map.mp this
-    obtain ⟨u, rfl⟩ := exists_cons_of_mem h1
-    rw [map_cons]; rw [cons_inj_right] at h
-    refine ⟨a, mem_cons_self _ _, rfl, ?_⟩
-    rw [Multiset.erase_cons_head]; rw [h]
-
-@[simp 1100]
-
-Depends on / 依赖: Multiset, Multiset.cons_erase, Multiset.erase_cons_head, cons_erase, cons_inj_right, erase_cons_head, exists_cons_of_mem, map_cons, mem_cons_self, mem_map, mem_map.mp, s.map
+/-
+**Multiset.mem_map_of_injective** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：mem_map_of_injective {f : α -> β} (H : Function.Injective f) {a : α} {s : 
+Multiset α} : f a in map f s ↔ a in s
+参数：H : Function.Injective f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `List.mem_map_of_injective`：mem_map_of_injective {f : α -> β} (H : Inject
+ive f) {a : α} {l : List α} : f a in map f l ↔ a in l
 -/
-theorem map_eq_cons [DecidableEq α] (f : α -> β) (s : Multiset α) (t : Multiset β) (b : β) :
-    (exists a in s, f a = b ∧ (s.erase a).map f = t) ↔ s.map f = b ::ₘ t := by
-  constructor
-  · rintro ⟨a, ha, rfl, rfl⟩
-    rw [← map_cons]; rw [Multiset.cons_erase ha]
-  · intro h
-    have : b in s.map f := by
-      rw [h]
-      exact mem_cons_self _ _
-    obtain ⟨a, h1, rfl⟩ := mem_map.mp this
-    obtain ⟨u, rfl⟩ := exists_cons_of_mem h1
-    rw [map_cons]; rw [cons_inj_right] at h
-    refine ⟨a, mem_cons_self _ _, rfl, ?_⟩
-    rw [Multiset.erase_cons_head]; rw [h]
-
-@[simp 1100]
-/--
-theorem `mem_map_of_injective` / 定理 `mem_map_of_injective`
-
-English:
-theorem mem_map_of_injective
-  given: {f : α -> β} (H : Function.Injective f) {a : α} {s : Multiset α}
-  proof: Quot.inductionOn s fun _l => List.mem_map_of_injective H
-
-@[simp]
-
-中文:
-定理 mem_map_of_injective
-  条件: {f : α -> β} (H : 函数.单射 f) {a : α} {s : Multiset α}
-  证明: Quot.inductionOn s fun _l => List.mem_map_of_injective H
-
-@[simp]
-
-Depends on / 依赖: List.mem_map_of_injective, Quot.inductionOn, inductionOn, mem_map_of_injective
--/
-theorem mem_map_of_injective {f : α -> β} (H : Function.Injective f) {a : α} {s : Multiset α} :
-    f a in map f s ↔ a in s :=
+theorem mem_map_of_injective {f : α → β} (H : Function.Injective f) {a : α} {s : Multiset α} :
+    f a ∈ map f s ↔ a ∈ s :=
   Quot.inductionOn s fun _l => List.mem_map_of_injective H
 
 @[simp]
-/--
-theorem `map_map` / 定理 `map_map`
-
-English:
-theorem map_map
-  given: (g : β -> γ) (f : α -> β) (s : Multiset α)
-  statement: map g (map f s) = map (g ∘ f) s
-  proof: Quot.inductionOn s fun _l => congr_arg _ List.map_map
-
-中文:
-定理 map_map
-  条件: (g : β -> γ) (f : α -> β) (s : Multiset α)
-  结论: map g (map f s) = map (g ∘ f) s
-  证明: Quot.inductionOn s fun _l => congr_arg _ List.map_map
-
-Depends on / 依赖: List.map_map, Quot.inductionOn, congr_arg, inductionOn, map_map
+/-
+**Multiset.map_map** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : map g (map f s) = map
+ (g ∘ f) s
+参数：g : β -> γ；f : α -> β；s : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `List.map_map`：∀ {β : Type u_1} {γ : Type u_2} {α : Type u_3} {g : β → γ}
+ {f : α → β} {l : List α},   List.map g (List.map f l) = List.map (g ∘ f) l
 -/
-theorem map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : map g (map f s) = map (g ∘ f) s :=
+theorem map_map (g : β → γ) (f : α → β) (s : Multiset α) : map g (map f s) = map (g ∘ f) s :=
   Quot.inductionOn s fun _l => congr_arg _ List.map_map
-
-/--
-theorem `map_id` / 定理 `map_id`
-
-English:
-theorem map_id
-  given: (s : Multiset α)
-  statement: map id s = s
-  proof: Quot.inductionOn s fun _l => congr_arg _ List.map_id _
-
-@[simp]
-
-中文:
-定理 map_id
-  条件: (s : Multiset α)
-  结论: map id s = s
-  证明: Quot.inductionOn s fun _l => congr_arg _ List.map_id _
-
-@[simp]
-
-Depends on / 依赖: List.map_id, Quot.inductionOn, congr_arg, inductionOn, map_id
+/-
+**Multiset.map_id** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_id (s : Multiset α) : map id s = s
+参数：s : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `List.map_id`：∀ {α : Type u_1} (l : List α), List.map id l = l
 -/
 theorem map_id (s : Multiset α) : map id s = s :=
-Quot.inductionOn s fun _l => congr_arg _ List.map_id _
+  Quot.inductionOn s fun _l => congr_arg _ <| List.map_id _
 
 @[simp]
-/--
-theorem `map_id'` / 定理 `map_id'`
-
-English:
-theorem map_id'
-  given: (s : Multiset α)
-  statement: map (fun x => x) s = s
-  proof: map_id s
-
-中文:
-定理 map_id'
-  条件: (s : Multiset α)
-  结论: map (fun x => x) s = s
-  证明: map_id s
-
-Depends on / 依赖: map_id
+/-
+**Multiset.map_id'** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_id' (s : Multiset α) : map (fun x => x) s = s
+参数：s : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.map_id`：map_id (s : Multiset α) : map id s = s
 -/
 theorem map_id' (s : Multiset α) : map (fun x => x) s = s :=
   map_id s
 
 -- `simp`-normal form lemma is `map_const'`
-/--
-theorem `map_const` / 定理 `map_const`
-
-English:
-theorem map_const
-  given: (s : Multiset α) (b : β)
-  statement: map (const α b) s = replicate (card s) b
-  proof: Quot.inductionOn s fun _ => congr_arg _ List.map_const'
-
-中文:
-定理 map_const
-  条件: (s : Multiset α) (b : β)
-  结论: map (const α b) s = replicate (card s) b
-  证明: Quot.inductionOn s fun _ => congr_arg _ List.map_const'
-
-Depends on / 依赖: List.map_const, Quot.inductionOn, congr_arg, inductionOn, map_const
+/-
+**Multiset.map_const** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_const (s : Multiset α) (b : β) : map (const α b) s = replicate (card s
+) b
+参数：s : Multiset α；b : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `List.map_const'`：∀ {α : Type u_1} {β : Type u_2} {l : List α} {b : β}, L
+ist.map (fun x => b) l = List.replicate l.length b
 -/
 theorem map_const (s : Multiset α) (b : β) : map (const α b) s = replicate (card s) b :=
   Quot.inductionOn s fun _ => congr_arg _ List.map_const'
-
-/--
-theorem `map_const'` / 定理 `map_const'`
-
-English:
-theorem map_const'
-  given: (s : Multiset α) (b : β)
-  statement: map (fun _ => b) s = replicate (card s) b
-  proof: map_const _ _
-
-中文:
-定理 map_const'
-  条件: (s : Multiset α) (b : β)
-  结论: map (fun _ => b) s = replicate (card s) b
-  证明: map_const _ _
+/-
+**Multiset.map_const'** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：∀ {α : Type u_1} {β : Type v} (s : Multiset α) (b : β), Multiset.map (fun 
+x => b) s = Multiset.replicate s.card b
+参数：s : Multiset α；b : β；fun x => b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.map_const`：map_const (s : Multiset α) (b : β) : map (const α b)
+ s = replicate (card s) b
 -/
-@[simp] theorem map_const' (s : Multiset α) (b : β) : map (fun _ => b) s = replicate (card s) b :=
+@[simp] theorem map_const' (s : Multiset α) (b : β) : map (fun _ ↦ b) s = replicate (card s) b :=
   map_const _ _
-
-/--
-theorem `eq_of_mem_map_const` / 定理 `eq_of_mem_map_const`
-
-English:
-theorem eq_of_mem_map_const
-  given: {b₁ b₂ : β} {l : List α} (h : b₁ in map (Function.const α b₂) l)
-  proof: eq_of_mem_replicate (n := card (l : Multiset α)) by rwa [map_const] at h
-
-@[simp, gcongr]
-
-中文:
-定理 eq_of_mem_map_const
-  条件: {b₁ b₂ : β} {l : 列表 α} (h : b₁ in map (函数.const α b₂) l)
-  证明: eq_of_mem_replicate (n := card (l : Multiset α)) by rwa [map_const] at h
-
-@[simp, gcongr]
-
-Depends on / 依赖: Multiset, eq_of_mem_replicate, map_const
+/-
+**Multiset.eq_of_mem_map_const** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：eq_of_mem_map_const {b₁ b₂ : β} {l : List α} (h : b₁ in map (Function.cons
+t α b₂) l) : b₁ = b₂
+参数：h : b₁ in map (Function.const α b₂) l。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.eq_of_mem_replicate`：eq_of_mem_replicate {a b : α} {n} : b in r
+eplicate n a -> b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.map_const`：map_const (s : Multiset α) (b : β) : map (const α b)
+ s = replicate (card s) b
 -/
-theorem eq_of_mem_map_const {b₁ b₂ : β} {l : List α} (h : b₁ in map (Function.const α b₂) l) :
+theorem eq_of_mem_map_const {b₁ b₂ : β} {l : List α} (h : b₁ ∈ map (Function.const α b₂) l) :
     b₁ = b₂ :=
-eq_of_mem_replicate (n := card (l : Multiset α)) by rwa [map_const] at h
+  eq_of_mem_replicate (n := card (l : Multiset α)) <| by rwa [map_const] at h
 
 @[simp, gcongr]
-/--
-theorem `map_le_map` / 定理 `map_le_map`
-
-English:
-theorem map_le_map
-  given: {f : α -> β} {s t : Multiset α} (h : s <= t)
-  statement: map f s <= map f t
-  proof: leInductionOn h fun h => (h.map f).subperm
-
-@[simp, gcongr]
-
-中文:
-定理 map_le_map
-  条件: {f : α -> β} {s t : Multiset α} (h : s <= t)
-  结论: map f s <= map f t
-  证明: leInductionOn h fun h => (h.map f).subperm
-
-@[simp, gcongr]
-
-Depends on / 依赖: h.map, leInductionOn, subperm
+/-
+**Multiset.map_le_map** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_le_map {f : α -> β} {s t : Multiset α} (h : s <= t) : map f s <= map f
+ t
+参数：h : s <= t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.leInductionOn`：leInductionOn {C : Multiset α -> Multiset α -> P
+rop} {s t : Multiset α} (h : s <= t) (H : forall {l₁ l₂ : List α}, l₁ <+ l₂ -> C
+ l₁ l₂) : C …
+· 使用定理 `List.Sublist.subperm`：∀ {α : Type u_1} {l₁ l₂ : List α}, l₁.Sublist l₂ →
+ l₁.Subperm l₂
+· 使用定理 `List.Sublist.map`：∀ {α : Type u_1} {β : Type u_2} (f : α → β) {l₁ l₂ : L
+ist α}, l₁.Sublist l₂ → (List.map f l₁).Sublist (List.map f l₂)
 -/
-theorem map_le_map {f : α -> β} {s t : Multiset α} (h : s <= t) : map f s <= map f t :=
+theorem map_le_map {f : α → β} {s t : Multiset α} (h : s ≤ t) : map f s ≤ map f t :=
   leInductionOn h fun h => (h.map f).subperm
 
 @[simp, gcongr]
-/--
-theorem `map_lt_map` / 定理 `map_lt_map`
-
-English:
-theorem map_lt_map
-  given: {f : α -> β} {s t : Multiset α} (h : s < t)
-  statement: s.map f < t.map f
-  proof: by
-refine (map_le_map h.le).lt_of_not_ge fun H => h.ne eq_of_le_of_card_le h.le ?_
-  rw [← s.card_map f]; rw [← t.card_map f]
+/-
+**Multiset.map_lt_map** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_lt_map {f : α -> β} {s t : Multiset α} (h : s < t) : s.map f < t.map f
+参数：h : s < t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.lt_of_not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ 
+b → ¬b ≤ a → a < b
+· 使用定理 `Multiset.map_le_map`：map_le_map {f : α -> β} {s t : Multiset α} (h : s <
+= t) : map f s <= map f t
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `Multiset.eq_of_le_of_card_le`：eq_of_le_of_card_le {s t : Multiset α} (h 
+: s <= t) : card t <= card s -> s = t
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.card_map`：card_map (f : α -> β) (s) : card (map f s) = card s
+· 使用定理 `Multiset.card_le_card`：card_le_card {s t : Multiset α} (h : s <= t) : ca
+rd s <= card t
+-/
+theorem map_lt_map {f : α → β} {s t : Multiset α} (h : s < t) : s.map f < t.map f := by
+  refine (map_le_map h.le).lt_of_not_ge fun H => h.ne <| eq_of_le_of_card_le h.le ?_
+  rw [← s.card_map f, ← t.card_map f]
   exact card_le_card H
 
 @[gcongr]
-
-中文:
-定理 map_lt_map
-  条件: {f : α -> β} {s t : Multiset α} (h : s < t)
-  结论: s.map f < t.map f
-  证明: by
-refine (map_le_map h.le).lt_of_not_ge fun H => h.ne eq_of_le_of_card_le h.le ?_
-  rw [← s.card_map f]; rw [← t.card_map f]
-  exact card_le_card H
-
-@[gcongr]
-
-Depends on / 依赖: card_le_card, card_map, eq_of_le_of_card_le, h.le, h.ne, lt_of_not_ge, map_le_map, s.card_map, t.card_map
+/-
+**Multiset.map_mono** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_mono (f : α -> β) : Monotone (map f)
+参数：f : α -> β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.map_le_map`：map_le_map {f : α -> β} {s t : Multiset α} (h : s <
+= t) : map f s <= map f t
 -/
-theorem map_lt_map {f : α -> β} {s t : Multiset α} (h : s < t) : s.map f < t.map f := by
-refine (map_le_map h.le).lt_of_not_ge fun H => h.ne eq_of_le_of_card_le h.le ?_
-  rw [← s.card_map f]; rw [← t.card_map f]
-  exact card_le_card H
+theorem map_mono (f : α → β) : Monotone (map f) := fun _ _ => map_le_map
 
 @[gcongr]
-/--
-theorem `map_mono` / 定理 `map_mono`
-
-English:
-theorem map_mono
-  given: (f : α -> β)
-  statement: Monotone (map f)
-  proof: fun _ _ => map_le_map
-
-@[gcongr]
-
-中文:
-定理 map_mono
-  条件: (f : α -> β)
-  结论: 递增 (map f)
-  证明: fun _ _ => map_le_map
-
-@[gcongr]
-
-Depends on / 依赖: map_le_map
+/-
+**Multiset.map_strictMono** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_strictMono (f : α -> β) : StrictMono (map f)
+参数：f : α -> β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.map_lt_map`：map_lt_map {f : α -> β} {s t : Multiset α} (h : s <
+ t) : s.map f < t.map f
 -/
-theorem map_mono (f : α -> β) : Monotone (map f) := fun _ _ => map_le_map
-
-@[gcongr]
-/--
-theorem `map_strictMono` / 定理 `map_strictMono`
-
-English:
-theorem map_strictMono
-  given: (f : α -> β)
-  statement: StrictMono (map f)
-  proof: fun _ _ => map_lt_map
+theorem map_strictMono (f : α → β) : StrictMono (map f) := fun _ _ => map_lt_map
 
 @[simp, gcongr]
-
-中文:
-定理 map_strictMono
-  条件: (f : α -> β)
-  结论: 严格递增 (map f)
-  证明: fun _ _ => map_lt_map
-
-@[simp, gcongr]
-
-Depends on / 依赖: map_lt_map
+/-
+**Multiset.map_subset_map** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_subset_map {f : α -> β} {s t : Multiset α} (H : s subseteq t) : map f 
+s subseteq map f t
+参数：H : s subseteq t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Multiset.mem_map`：mem_map {f : α -> β} {b : β} {s : Multiset α} : b in m
+ap f s ↔ exists a, a in s ∧ f a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 -/
-theorem map_strictMono (f : α -> β) : StrictMono (map f) := fun _ _ => map_lt_map
-
-@[simp, gcongr]
-/--
-theorem `map_subset_map` / 定理 `map_subset_map`
-
-English:
-theorem map_subset_map
-  given: {f : α -> β} {s t : Multiset α} (H : s subseteq t)
-  statement: map f s subseteq map f t
-  proof: fun _b m =>
+theorem map_subset_map {f : α → β} {s t : Multiset α} (H : s ⊆ t) : map f s ⊆ map f t := fun _b m =>
   let ⟨a, h, e⟩ := mem_map.1 m
   mem_map.2 ⟨a, H h, e⟩
-
-中文:
-定理 map_subset_map
-  条件: {f : α -> β} {s t : Multiset α} (H : s subseteq t)
-  结论: map f s subseteq map f t
-  证明: fun _b m =>
-  let ⟨a, h, e⟩ := mem_map.1 m
-  mem_map.2 ⟨a, H h, e⟩
+/-
+**Multiset.map_erase** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_erase [DecidableEq α] [DecidableEq β] (f : α -> β) (hf : Function.Inje
+ctive f) (x : α) (s : Multiset α) : (s.erase x).map f = (s.map f).erase (f x)
+参数：f : α -> β；hf : Function.Injective f；x : α；s : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.induction_on`：∀ {α : Type u_1} {p : Multiset α → Prop} (s : Mul
+tiset α), p 0 → (∀ (a : α) (s : Multiset α), p s → p (a ::ₘ s)) → p s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
+· 使用定理 `Multiset.erase_of_notMem`：erase_of_notMem {a : α} {s : Multiset α} : a ∉
+ s -> s.erase a = s
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Multiset.erase_cons_head`：erase_cons_head (a : α) (s : Multiset α) : (a 
+::ₘ s).erase a = s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Multiset.map_cons`：map_cons (f : α -> β) (a s) : map f (a ::ₘ s) = f a :
+:ₘ map f s
+· 使用定理 `Multiset.erase_cons_tail`：erase_cons_tail {a b : α} (s : Multiset α) (h 
+: b != a) : (b ::ₘ s).erase a = b ::ₘ s.erase a
+· 使用定理 `Function.Injective.ne`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, Func
+tion.Injective f → ∀ {a₁ a₂ : α}, a₁ ≠ a₂ → f a₁ ≠ f a₂
 -/
-theorem map_subset_map {f : α -> β} {s t : Multiset α} (H : s subseteq t) : map f s subseteq map f t := fun _b m =>
-  let ⟨a, h, e⟩ := mem_map.1 m
-  mem_map.2 ⟨a, H h, e⟩
-
-/--
-theorem `map_erase` / 定理 `map_erase`
-
-English:
-theorem map_erase
-  statement: [DecidableEq α] [DecidableEq β] (f : α -> β) (hf : Function.Injective f) (x : α)
-  proof: by
-  induction s using Multiset.induction_on with | empty => simp | cons y s ih => ?_
-  by_cases hxy : y = x
-  · cases hxy
-    simp
-  · rw [s.erase_cons_tail hxy, map_cons, map_cons, (s.map f).erase_cons_tail (hf.ne hxy), ih]
-
-中文:
-定理 map_erase
-  结论: [DecidableEq α] [DecidableEq β] (f : α -> β) (hf : 函数.单射 f) (x : α)
-  证明: by
-  induction s using Multiset.induction_on with | empty => simp | cons y s ih => ?_
-  by_cases hxy : y = x
-  · cases hxy
-    simp
-  · rw [s.erase_cons_tail hxy, map_cons, map_cons, (s.map f).erase_cons_tail (hf.ne hxy), ih]
-
-Depends on / 依赖: Multiset, Multiset.induction_on, erase_cons_tail, hf.ne, induction_on, map_cons, s.erase_cons_tail, s.map
--/
-theorem map_erase [DecidableEq α] [DecidableEq β] (f : α -> β) (hf : Function.Injective f) (x : α)
+theorem map_erase [DecidableEq α] [DecidableEq β] (f : α → β) (hf : Function.Injective f) (x : α)
     (s : Multiset α) : (s.erase x).map f = (s.map f).erase (f x) := by
   induction s using Multiset.induction_on with | empty => simp | cons y s ih => ?_
   by_cases hxy : y = x
   · cases hxy
     simp
   · rw [s.erase_cons_tail hxy, map_cons, map_cons, (s.map f).erase_cons_tail (hf.ne hxy), ih]
-
-/--
-theorem `map_erase_of_mem` / 定理 `map_erase_of_mem`
-
-English:
-theorem map_erase_of_mem
-  statement: [DecidableEq α] [DecidableEq β] (f : α -> β)
-  proof: by
-  induction s using Multiset.induction_on with | empty => simp | cons y s ih => ?_
-  rcases eq_or_ne y x with rfl | hxy
-  · simp
-  replace h : x in s := by simpa [hxy.symm] using h
-  rw [s.erase_cons_tail hxy]; rw [map_cons]; rw [map_cons]; rw [ih h]; rw [erase_cons_tail_of_mem (mem_map_of_mem f h)]
-
-中文:
-定理 map_erase_of_mem
-  结论: [DecidableEq α] [DecidableEq β] (f : α -> β)
-  证明: by
-  induction s using Multiset.induction_on with | empty => simp | cons y s ih => ?_
-  rcases eq_or_ne y x with rfl | hxy
-  · simp
-  replace h : x in s := by simpa [hxy.symm] using h
-  rw [s.erase_cons_tail hxy]; rw [map_cons]; rw [map_cons]; rw [ih h]; rw [erase_cons_tail_of_mem (mem_map_of_mem f h)]
-
-Depends on / 依赖: Multiset, Multiset.induction_on, eq_or_ne, erase_cons_tail, erase_cons_tail_of_mem, hxy.symm, induction_on, map_cons, mem_map_of_mem, replace, s.erase_cons_tail
+/-
+**Multiset.map_erase_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_erase_of_mem [DecidableEq α] [DecidableEq β] (f : α -> β) (s : Multise
+t α) {x : α} (h : x in s) : (s.erase x).map f = (s.map f).erase (f x)
+参数：f : α -> β；s : Multiset α；h : x in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.induction_on`：∀ {α : Type u_1} {p : Multiset α → Prop} (s : Mul
+tiset α), p 0 → (∀ (a : α) (s : Multiset α), p s → p (a ::ₘ s)) → p s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
+· 使用定理 `Multiset.erase_of_notMem`：erase_of_notMem {a : α} {s : Multiset α} : a ∉
+ s -> s.erase a = s
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `Multiset.erase_cons_head`：erase_cons_head (a : α) (s : Multiset α) : (a 
+::ₘ s).erase a = s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Multiset.map_cons`：map_cons (f : α -> β) (a s) : map f (a ::ₘ s) = f a :
+:ₘ map f s
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `Multiset.erase_cons_tail`：erase_cons_tail {a b : α} (s : Multiset α) (h 
+: b != a) : (b ::ₘ s).erase a = b ::ₘ s.erase a
+· 使用定理 `Multiset.erase_cons_tail_of_mem`：erase_cons_tail_of_mem (h : a in s) : (
+b ::ₘ s).erase a = b ::ₘ s.erase a
+· 使用定理 `Multiset.mem_map_of_mem`：mem_map_of_mem (f : α -> β) {a : α} {s : Multis
+et α} (h : a in s) : f a in map f s
 -/
-theorem map_erase_of_mem [DecidableEq α] [DecidableEq β] (f : α -> β)
-    (s : Multiset α) {x : α} (h : x in s) : (s.erase x).map f = (s.map f).erase (f x) := by
+theorem map_erase_of_mem [DecidableEq α] [DecidableEq β] (f : α → β)
+    (s : Multiset α) {x : α} (h : x ∈ s) : (s.erase x).map f = (s.map f).erase (f x) := by
   induction s using Multiset.induction_on with | empty => simp | cons y s ih => ?_
   rcases eq_or_ne y x with rfl | hxy
   · simp
-  replace h : x in s := by simpa [hxy.symm] using h
-  rw [s.erase_cons_tail hxy]; rw [map_cons]; rw [map_cons]; rw [ih h]; rw [erase_cons_tail_of_mem (mem_map_of_mem f h)]
-
-/--
-theorem `map_surjective_of_surjective` / 定理 `map_surjective_of_surjective`
-
-English:
-theorem map_surjective_of_surjective
-  given: {f : α -> β} (hf : Function.Surjective f)
-  proof: by
-  intro s
-  induction s using Multiset.induction_on with
-  | empty => exact ⟨0, map_zero _⟩
-  | cons x s ih =>
-    obtain ⟨y, rfl⟩ := hf x
-    obtain ⟨t, rfl⟩ := ih
-    exact ⟨y ::ₘ t, map_cons _ _ _⟩
-
-中文:
-定理 map_surjective_of_surjective
-  条件: {f : α -> β} (hf : 函数.满射 f)
-  证明: by
-  intro s
-  induction s using Multiset.induction_on with
-  | empty => exact ⟨0, map_zero _⟩
-  | cons x s ih =>
-    obtain ⟨y, rfl⟩ := hf x
-    obtain ⟨t, rfl⟩ := ih
-    exact ⟨y ::ₘ t, map_cons _ _ _⟩
-
-Depends on / 依赖: Multiset, Multiset.induction_on, induction_on, map_cons, map_zero
+  replace h : x ∈ s := by simpa [hxy.symm] using h
+  rw [s.erase_cons_tail hxy, map_cons, map_cons, ih h, erase_cons_tail_of_mem (mem_map_of_mem f h)]
+/-
+**Multiset.map_surjective_of_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_surjective_of_surjective {f : α -> β} (hf : Function.Surjective f) : F
+unction.Surjective (map f)
+参数：hf : Function.Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.induction_on`：∀ {α : Type u_1} {p : Multiset α → Prop} (s : Mul
+tiset α), p 0 → (∀ (a : α) (s : Multiset α), p s → p (a ::ₘ s)) → p s
+· 使用定理 `Multiset.map_zero`：map_zero (f : α -> β) : map f 0 = 0
+· 使用定理 `Multiset.map_cons`：map_cons (f : α -> β) (a s) : map f (a ::ₘ s) = f a :
+:ₘ map f s
 -/
-theorem map_surjective_of_surjective {f : α -> β} (hf : Function.Surjective f) :
+theorem map_surjective_of_surjective {f : α → β} (hf : Function.Surjective f) :
     Function.Surjective (map f) := by
   intro s
   induction s using Multiset.induction_on with
@@ -938,91 +702,67 @@ theorem map_surjective_of_surjective {f : α -> β} (hf : Function.Surjective f)
 
 section foldl
 
-/--
-Definition of `foldl` / `foldl` 的定义
+/-- `foldl f H b s` is the lift of the list operation `foldl f b l`,
+  which folds `f` over the multiset. It is well defined when `f` is right-commutative,
+  that is, `f (f b a₁) a₂ = f (f b a₂) a₁`. -/
+/-
+**Multiset.foldl** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：foldl (f : β -> α -> β) [RightCommutative f] (b : β) (s : Multiset α) : β
+参数：f : β -> α -> β；b : β；s : Multiset α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Perm.foldl_eq`：∀ {α : Type u_1} {β : Type u_2} {f : β → α → β} {l₁ 
+l₂ : List α} [rcomm : RightCommutative f],   l₁.Perm l₂ → ∀ (b : β), List.foldl 
+f b l₁ =…
 
-English:
-definition foldl
-  signature: (f : β -> α -> β) [RightCommutative f] (b : β) (s : Multiset α)
-  body: Quot.liftOn s (fun l => List.foldl f b l) fun _l₁ _l₂ p => p.foldl_eq b
-
-中文:
-定义 foldl
-  签名: (f : β -> α -> β) [右交换 f] (b : β) (s : Multiset α)
-  定义体: Quot.liftOn s (fun l => List.foldl f b l) fun _l₁ _l₂ p => p.foldl_eq b
-
-Depends on / 依赖: List.foldl, Quot.liftOn, foldl_eq, liftOn, p.foldl_eq
+--- 原说明 ---
+`foldl f H b s` is the lift of the list operation `foldl f b l`,
+  which folds `f` over the multiset. It is well defined when `f` is right-commut
+ative,
+  that is, `f (f b a₁) a₂ = f (f b a₂) a₁`.
 -/
-def foldl (f : β -> α -> β) [RightCommutative f] (b : β) (s : Multiset α) : β :=
+def foldl (f : β → α → β) [RightCommutative f] (b : β) (s : Multiset α) : β :=
   Quot.liftOn s (fun l => List.foldl f b l) fun _l₁ _l₂ p => p.foldl_eq b
 
-variable (f : β -> α -> β) [RightCommutative f]
+variable (f : β → α → β) [RightCommutative f]
 
 @[simp]
-/--
-theorem `foldl_zero` / 定理 `foldl_zero`
-
-English:
-theorem foldl_zero
-  given: (b)
-  statement: foldl f b 0 = b
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 foldl_zero
-  条件: (b)
-  结论: foldl f b 0 = b
-  证明: rfl
-
-@[simp]
+/-
+**Multiset.foldl_zero** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：foldl_zero (b) : foldl f b 0 = b
+参数：b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem foldl_zero (b) : foldl f b 0 = b :=
   rfl
 
 @[simp]
-/--
-theorem `foldl_cons` / 定理 `foldl_cons`
-
-English:
-theorem foldl_cons
-  given: (b a s)
-  statement: foldl f b (a ::ₘ s) = foldl f (f b a) s
-  proof: Quot.inductionOn s fun _l => rfl
-
-@[simp]
-
-中文:
-定理 foldl_cons
-  条件: (b a s)
-  结论: foldl f b (a ::ₘ s) = foldl f (f b a) s
-  证明: Quot.inductionOn s fun _l => rfl
-
-@[simp]
-
-Depends on / 依赖: Quot.inductionOn, inductionOn
+/-
+**Multiset.foldl_cons** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：foldl_cons (b a s) : foldl f b (a ::ₘ s) = foldl f (f b a) s
+参数：b a s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
 -/
 theorem foldl_cons (b a s) : foldl f b (a ::ₘ s) = foldl f (f b a) s :=
   Quot.inductionOn s fun _l => rfl
 
 @[simp]
-/--
-theorem `foldl_add` / 定理 `foldl_add`
-
-English:
-theorem foldl_add
-  given: (b s t)
-  statement: foldl f b (s + t) = foldl f (foldl f b s) t
-  proof: Quotient.inductionOn₂ s t fun _ _ => foldl_append
-
-中文:
-定理 foldl_add
-  条件: (b s t)
-  结论: foldl f b (s + t) = foldl f (foldl f b s) t
-  证明: Quotient.inductionOn₂ s t fun _ _ => foldl_append
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, foldl_append
+/-
+**Multiset.foldl_add** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：foldl_add (b s t) : foldl f b (s + t) = foldl f (foldl f b s) t
+参数：b s t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn₂`：∀ {α : Sort uA} {β : Sort uB} {s₁ : Setoid α} {s₂
+ : Setoid β} {motive : Quotient s₁ → Quotient s₂ → Prop}   (q₁ : Quotient s₁) (q
+₂ : Quotien…
+· 使用定理 `List.foldl_append`：∀ {α : Type u_1} {β : Type u_2} {f : β → α → β} {b : 
+β} {l l' : List α},   List.foldl f b (l ++ l') = List.foldl f (List.foldl f b l)
+ l'
 -/
 theorem foldl_add (b s t) : foldl f b (s + t) = foldl f (foldl f b s) t :=
   Quotient.inductionOn₂ s t fun _ _ => foldl_append
@@ -1031,114 +771,78 @@ end foldl
 
 section foldr
 
-/--
-Definition of `foldr` / `foldr` 的定义
+/-- `foldr f H b s` is the lift of the list operation `foldr f b l`,
+  which folds `f` over the multiset. It is well defined when `f` is left-commutative,
+  that is, `f a₁ (f a₂ b) = f a₂ (f a₁ b)`. -/
+/-
+**Multiset.foldr** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：foldr (f : α -> β -> β) [LeftCommutative f] (b : β) (s : Multiset α) : β
+参数：f : α -> β -> β；b : β；s : Multiset α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Perm.foldr_eq`：∀ {α : Type u_1} {β : Type u_2} {f : α → β → β} {l₁ 
+l₂ : List α} [lcomm : LeftCommutative f],   l₁.Perm l₂ → ∀ (b : β), List.foldr f
+ b l₁ = …
 
-English:
-definition foldr
-  signature: (f : α -> β -> β) [LeftCommutative f] (b : β) (s : Multiset α)
-  body: Quot.liftOn s (fun l => List.foldr f b l) fun _l₁ _l₂ p => p.foldr_eq b
-
-中文:
-定义 foldr
-  签名: (f : α -> β -> β) [左交换 f] (b : β) (s : Multiset α)
-  定义体: Quot.liftOn s (fun l => List.foldr f b l) fun _l₁ _l₂ p => p.foldr_eq b
-
-Depends on / 依赖: List.foldr, Quot.liftOn, foldr_eq, liftOn, p.foldr_eq
+--- 原说明 ---
+`foldr f H b s` is the lift of the list operation `foldr f b l`,
+  which folds `f` over the multiset. It is well defined when `f` is left-commuta
+tive,
+  that is, `f a₁ (f a₂ b) = f a₂ (f a₁ b)`.
 -/
-def foldr (f : α -> β -> β) [LeftCommutative f] (b : β) (s : Multiset α) : β :=
+def foldr (f : α → β → β) [LeftCommutative f] (b : β) (s : Multiset α) : β :=
   Quot.liftOn s (fun l => List.foldr f b l) fun _l₁ _l₂ p => p.foldr_eq b
 
-variable (f : α -> β -> β) [LeftCommutative f]
+variable (f : α → β → β) [LeftCommutative f]
 
 @[simp]
-/--
-theorem `foldr_zero` / 定理 `foldr_zero`
-
-English:
-theorem foldr_zero
-  given: (b)
-  statement: foldr f b 0 = b
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 foldr_zero
-  条件: (b)
-  结论: foldr f b 0 = b
-  证明: rfl
-
-@[simp]
+/-
+**Multiset.foldr_zero** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：foldr_zero (b) : foldr f b 0 = b
+参数：b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem foldr_zero (b) : foldr f b 0 = b :=
   rfl
 
 @[simp]
-/--
-theorem `foldr_cons` / 定理 `foldr_cons`
-
-English:
-theorem foldr_cons
-  given: (b a s)
-  statement: foldr f b (a ::ₘ s) = f a (foldr f b s)
-  proof: Quot.inductionOn s fun _l => rfl
-
-@[simp]
-
-中文:
-定理 foldr_cons
-  条件: (b a s)
-  结论: foldr f b (a ::ₘ s) = f a (foldr f b s)
-  证明: Quot.inductionOn s fun _l => rfl
-
-@[simp]
-
-Depends on / 依赖: Quot.inductionOn, inductionOn
+/-
+**Multiset.foldr_cons** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：foldr_cons (b a s) : foldr f b (a ::ₘ s) = f a (foldr f b s)
+参数：b a s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
 -/
 theorem foldr_cons (b a s) : foldr f b (a ::ₘ s) = f a (foldr f b s) :=
   Quot.inductionOn s fun _l => rfl
 
 @[simp]
-/--
-theorem `foldr_singleton` / 定理 `foldr_singleton`
-
-English:
-theorem foldr_singleton
-  given: (b a)
-  statement: foldr f b ({a} : Multiset α) = f a b
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 foldr_singleton
-  条件: (b a)
-  结论: foldr f b ({a} : Multiset α) = f a b
-  证明: rfl
-
-@[simp]
+/-
+**Multiset.foldr_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：foldr_singleton (b a) : foldr f b ({a} : Multiset α) = f a b
+参数：b a。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem foldr_singleton (b a) : foldr f b ({a} : Multiset α) = f a b :=
   rfl
 
 @[simp]
-/--
-theorem `foldr_add` / 定理 `foldr_add`
-
-English:
-theorem foldr_add
-  given: (b s t)
-  statement: foldr f b (s + t) = foldr f (foldr f b t) s
-  proof: Quotient.inductionOn₂ s t fun _ _ => foldr_append
-
-中文:
-定理 foldr_add
-  条件: (b s t)
-  结论: foldr f b (s + t) = foldr f (foldr f b t) s
-  证明: Quotient.inductionOn₂ s t fun _ _ => foldr_append
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, foldr_append
+/-
+**Multiset.foldr_add** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：foldr_add (b s t) : foldr f b (s + t) = foldr f (foldr f b t) s
+参数：b s t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn₂`：∀ {α : Sort uA} {β : Sort uB} {s₁ : Setoid α} {s₂
+ : Setoid β} {motive : Quotient s₁ → Quotient s₂ → Prop}   (q₁ : Quotient s₁) (q
+₂ : Quotien…
+· 使用定理 `List.foldr_append`：∀ {α : Type u_1} {β : Type u_2} {f : α → β → β} {b : 
+β} {l l' : List α},   List.foldr f b (l ++ l') = List.foldr f (List.foldr f b l'
+) l
 -/
 theorem foldr_add (b s t) : foldr f b (s + t) = foldr f (foldr f b t) s :=
   Quotient.inductionOn₂ s t fun _ _ => foldr_append
@@ -1146,387 +850,350 @@ theorem foldr_add (b s t) : foldr f b (s + t) = foldr f (foldr f b t) s :=
 end foldr
 
 @[simp]
-/--
-theorem `coe_foldr` / 定理 `coe_foldr`
-
-English:
-theorem coe_foldr
-  given: (f : α -> β -> β) [LeftCommutative f] (b : β) (l : List α)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_foldr
-  条件: (f : α -> β -> β) [左交换 f] (b : β) (l : 列表 α)
-  证明: rfl
-
-@[simp]
+/-
+**Multiset.coe_foldr** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：coe_foldr (f : α -> β -> β) [LeftCommutative f] (b : β) (l : List α) : fol
+dr f b l = l.foldr f b
+参数：f : α -> β -> β；b : β；l : List α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_foldr (f : α -> β -> β) [LeftCommutative f] (b : β) (l : List α) :
+theorem coe_foldr (f : α → β → β) [LeftCommutative f] (b : β) (l : List α) :
     foldr f b l = l.foldr f b :=
   rfl
 
 @[simp]
-/--
-theorem `coe_foldl` / 定理 `coe_foldl`
-
-English:
-theorem coe_foldl
-  given: (f : β -> α -> β) [RightCommutative f] (b : β) (l : List α)
-  proof: rfl
-
-中文:
-定理 coe_foldl
-  条件: (f : β -> α -> β) [右交换 f] (b : β) (l : 列表 α)
-  证明: rfl
+/-
+**Multiset.coe_foldl** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：coe_foldl (f : β -> α -> β) [RightCommutative f] (b : β) (l : List α) : fo
+ldl f b l = l.foldl f b
+参数：f : β -> α -> β；b : β；l : List α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_foldl (f : β -> α -> β) [RightCommutative f] (b : β) (l : List α) :
+theorem coe_foldl (f : β → α → β) [RightCommutative f] (b : β) (l : List α) :
     foldl f b l = l.foldl f b :=
   rfl
-
-/--
-theorem `coe_foldr_swap` / 定理 `coe_foldr_swap`
-
-English:
-theorem coe_foldr_swap
-  given: (f : α -> β -> β) [LeftCommutative f] (b : β) (l : List α)
-  proof: (congr_arg (foldr f b) (coe_reverse l)).symm.trans foldr_reverse
-
-中文:
-定理 coe_foldr_swap
-  条件: (f : α -> β -> β) [左交换 f] (b : β) (l : 列表 α)
-  证明: (congr_arg (foldr f b) (coe_reverse l)).symm.trans foldr_reverse
-
-Depends on / 依赖: coe_reverse, congr_arg, foldr_reverse, symm.trans
+/-
+**Multiset.coe_foldr_swap** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：coe_foldr_swap (f : α -> β -> β) [LeftCommutative f] (b : β) (l : List α) 
+: foldr f b l = l.foldl (fun x y => f y x) b
+参数：f : α -> β -> β；b : β；l : List α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Multiset.coe_reverse`：coe_reverse (l : List α) : (reverse l : Multiset α
+) = l
+· 使用定理 `List.foldr_reverse`：∀ {α : Type u_1} {β : Type u_2} {l : List α} {f : α 
+→ β → β} {b : β},   List.foldr f b l.reverse = List.foldl (fun x y => f y x) b l
 -/
-theorem coe_foldr_swap (f : α -> β -> β) [LeftCommutative f] (b : β) (l : List α) :
+theorem coe_foldr_swap (f : α → β → β) [LeftCommutative f] (b : β) (l : List α) :
     foldr f b l = l.foldl (fun x y => f y x) b :=
   (congr_arg (foldr f b) (coe_reverse l)).symm.trans foldr_reverse
-
-/--
-theorem `foldr_swap` / 定理 `foldr_swap`
-
-English:
-theorem foldr_swap
-  given: (f : α -> β -> β) [LeftCommutative f] (b : β) (s : Multiset α)
-  proof: Quot.inductionOn s fun _l => coe_foldr_swap _ _ _
-
-中文:
-定理 foldr_swap
-  条件: (f : α -> β -> β) [左交换 f] (b : β) (s : Multiset α)
-  证明: Quot.inductionOn s fun _l => coe_foldr_swap _ _ _
-
-Depends on / 依赖: Quot.inductionOn, coe_foldr_swap, inductionOn
+/-
+**Multiset.foldr_swap** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：foldr_swap (f : α -> β -> β) [LeftCommutative f] (b : β) (s : Multiset α) 
+: foldr f b s = foldl (fun x y => f y x) b s
+参数：f : α -> β -> β；b : β；s : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `instRightCommutativeOfLeftCommutative`：∀ {α : Sort u} {β : Sort v} {f : 
+α → β → β} [h : LeftCommutative f], RightCommutative fun x y => f y x
+· 使用定理 `Multiset.coe_foldr_swap`：coe_foldr_swap (f : α -> β -> β) [LeftCommutati
+ve f] (b : β) (l : List α) : foldr f b l = l.foldl (fun x y => f y x) b
 -/
-theorem foldr_swap (f : α -> β -> β) [LeftCommutative f] (b : β) (s : Multiset α) :
+theorem foldr_swap (f : α → β → β) [LeftCommutative f] (b : β) (s : Multiset α) :
     foldr f b s = foldl (fun x y => f y x) b s :=
   Quot.inductionOn s fun _l => coe_foldr_swap _ _ _
-
-/--
-theorem `foldl_swap` / 定理 `foldl_swap`
-
-English:
-theorem foldl_swap
-  given: (f : β -> α -> β) [RightCommutative f] (b : β) (s : Multiset α)
-  proof: (foldr_swap _ _ _).symm
-
-中文:
-定理 foldl_swap
-  条件: (f : β -> α -> β) [右交换 f] (b : β) (s : Multiset α)
-  证明: (foldr_swap _ _ _).symm
-
-Depends on / 依赖: foldr_swap
+/-
+**Multiset.foldl_swap** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：foldl_swap (f : β -> α -> β) [RightCommutative f] (b : β) (s : Multiset α)
+ : foldl f b s = foldr (fun x y => f y x) b s
+参数：f : β -> α -> β；b : β；s : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `instLeftCommutativeOfRightCommutative`：∀ {α : Sort u} {β : Sort v} {f : 
+β → α → β} [h : RightCommutative f], LeftCommutative fun x y => f y x
+· 使用定理 `instRightCommutativeOfLeftCommutative`：∀ {α : Sort u} {β : Sort v} {f : 
+α → β → β} [h : LeftCommutative f], RightCommutative fun x y => f y x
+· 使用定理 `Multiset.foldr_swap`：foldr_swap (f : α -> β -> β) [LeftCommutative f] (b
+ : β) (s : Multiset α) : foldr f b s = foldl (fun x y => f y x) b s
 -/
-theorem foldl_swap (f : β -> α -> β) [RightCommutative f] (b : β) (s : Multiset α) :
+theorem foldl_swap (f : β → α → β) [RightCommutative f] (b : β) (s : Multiset α) :
     foldl f b s = foldr (fun x y => f y x) b s :=
   (foldr_swap _ _ _).symm
-
-/--
-theorem `foldr_induction'` / 定理 `foldr_induction'`
-
-English:
-theorem foldr_induction'
-  statement: (f : α -> β -> β) [LeftCommutative f] (x : β) (q : α -> Prop)
-  proof: by
-  induction s using Multiset.induction with
-  | empty => simpa
-  | cons a s ihs =>
-    simp only [forall_mem_cons, foldr_cons] at q_s ⊢
-    exact hpqf _ _ q_s.1 (ihs q_s.2)
-
-中文:
-定理 foldr_induction'
-  结论: (f : α -> β -> β) [左交换 f] (x : β) (q : α -> 命题)
-  证明: by
-  induction s using Multiset.induction with
-  | empty => simpa
-  | cons a s ihs =>
-    simp only [forall_mem_cons, foldr_cons] at q_s ⊢
-    exact hpqf _ _ q_s.1 (ihs q_s.2)
-
-Depends on / 依赖: Multiset, Multiset.induction, foldr_cons, forall_mem_cons
+/-
+**Multiset.foldr_induction'** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：foldr_induction' (f : α -> β -> β) [LeftCommutative f] (x : β) (q : α -> P
+rop) (p : β -> Prop) (s : Multiset α) (hpqf : forall a b, q a -> p b -> p (f a b
+)) (px : p x) (q_s : forall a in s, q a) : p (foldr f x s)
+参数：f : α -> β -> β；x : β；q : α -> Prop；p : β -> Prop；s : Multiset α；hpqf : foral
+l a b, q a -> p b -> p (f a b)；px : p x；q_s : forall a in s, q a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.induction`：∀ {α : Type u_1} {p : Multiset α → Prop},   p 0 → (∀
+ (a : α) (s : Multiset α), p s → p (a ::ₘ s)) → ∀ (s : Multiset α), p s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.foldr_cons`：foldr_cons (b a s) : foldr f b (a ::ₘ s) = f a (fol
+dr f b s)
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem foldr_induction' (f : α -> β -> β) [LeftCommutative f] (x : β) (q : α -> Prop)
-    (p : β -> Prop) (s : Multiset α) (hpqf : forall a b, q a -> p b -> p (f a b)) (px : p x)
-    (q_s : forall a in s, q a) : p (foldr f x s) := by
+theorem foldr_induction' (f : α → β → β) [LeftCommutative f] (x : β) (q : α → Prop)
+    (p : β → Prop) (s : Multiset α) (hpqf : ∀ a b, q a → p b → p (f a b)) (px : p x)
+    (q_s : ∀ a ∈ s, q a) : p (foldr f x s) := by
   induction s using Multiset.induction with
   | empty => simpa
   | cons a s ihs =>
     simp only [forall_mem_cons, foldr_cons] at q_s ⊢
     exact hpqf _ _ q_s.1 (ihs q_s.2)
-
-/--
-theorem `foldr_induction` / 定理 `foldr_induction`
-
-English:
-theorem foldr_induction
-  statement: (f : α -> α -> α) [LeftCommutative f] (x : α) (p : α -> Prop)
-  proof: foldr_induction' f x p p s p_f px p_s
-
-中文:
-定理 foldr_induction
-  结论: (f : α -> α -> α) [左交换 f] (x : α) (p : α -> 命题)
-  证明: foldr_induction' f x p p s p_f px p_s
-
-Depends on / 依赖: foldr_induction
+/-
+**Multiset.foldr_induction** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：foldr_induction (f : α -> α -> α) [LeftCommutative f] (x : α) (p : α -> Pr
+op) (s : Multiset α) (p_f : forall a b, p a -> p b -> p (f a b)) (px : p x) (p_s
+ : forall a in s, p a) : p (foldr f x s)
+参数：f : α -> α -> α；x : α；p : α -> Prop；s : Multiset α；p_f : forall a b, p a -> p
+ b -> p (f a b)；px : p x；p_s : forall a in s, p a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.foldr_induction'`：foldr_induction' (f : α -> β -> β) [LeftCommu
+tative f] (x : β) (q : α -> Prop) (p : β -> Prop) (s : Multiset α) (hpqf : foral
+l a b, q a -> p…
 -/
-theorem foldr_induction (f : α -> α -> α) [LeftCommutative f] (x : α) (p : α -> Prop)
-    (s : Multiset α) (p_f : forall a b, p a -> p b -> p (f a b)) (px : p x) (p_s : forall a in s, p a) :
+theorem foldr_induction (f : α → α → α) [LeftCommutative f] (x : α) (p : α → Prop)
+    (s : Multiset α) (p_f : ∀ a b, p a → p b → p (f a b)) (px : p x) (p_s : ∀ a ∈ s, p a) :
     p (foldr f x s) :=
   foldr_induction' f x p p s p_f px p_s
-
-/--
-theorem `foldl_induction'` / 定理 `foldl_induction'`
-
-English:
-theorem foldl_induction'
-  statement: (f : β -> α -> β) [RightCommutative f] (x : β) (q : α -> Prop)
-  proof: by
-  rw [foldl_swap]
-  exact foldr_induction' (fun x y => f y x) x q p s hpqf px q_s
-
-中文:
-定理 foldl_induction'
-  结论: (f : β -> α -> β) [右交换 f] (x : β) (q : α -> 命题)
-  证明: by
-  rw [foldl_swap]
-  exact foldr_induction' (fun x y => f y x) x q p s hpqf px q_s
-
-Depends on / 依赖: foldl_swap, foldr_induction
+/-
+**Multiset.foldl_induction'** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：foldl_induction' (f : β -> α -> β) [RightCommutative f] (x : β) (q : α -> 
+Prop) (p : β -> Prop) (s : Multiset α) (hpqf : forall a b, q a -> p b -> p (f b 
+a)) (px : p x) (q_s : forall a in s, q a) : p (foldl f x s)
+参数：f : β -> α -> β；x : β；q : α -> Prop；p : β -> Prop；s : Multiset α；hpqf : foral
+l a b, q a -> p b -> p (f b a)；px : p x；q_s : forall a in s, q a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instLeftCommutativeOfRightCommutative`：∀ {α : Sort u} {β : Sort v} {f : 
+β → α → β} [h : RightCommutative f], LeftCommutative fun x y => f y x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.foldl_swap`：foldl_swap (f : β -> α -> β) [RightCommutative f] (
+b : β) (s : Multiset α) : foldl f b s = foldr (fun x y => f y x) b s
+· 使用定理 `Multiset.foldr_induction'`：foldr_induction' (f : α -> β -> β) [LeftCommu
+tative f] (x : β) (q : α -> Prop) (p : β -> Prop) (s : Multiset α) (hpqf : foral
+l a b, q a -> p…
 -/
-theorem foldl_induction' (f : β -> α -> β) [RightCommutative f] (x : β) (q : α -> Prop)
-    (p : β -> Prop) (s : Multiset α) (hpqf : forall a b, q a -> p b -> p (f b a)) (px : p x)
-    (q_s : forall a in s, q a) : p (foldl f x s) := by
+theorem foldl_induction' (f : β → α → β) [RightCommutative f] (x : β) (q : α → Prop)
+    (p : β → Prop) (s : Multiset α) (hpqf : ∀ a b, q a → p b → p (f b a)) (px : p x)
+    (q_s : ∀ a ∈ s, q a) : p (foldl f x s) := by
   rw [foldl_swap]
   exact foldr_induction' (fun x y => f y x) x q p s hpqf px q_s
-
-/--
-theorem `foldl_induction` / 定理 `foldl_induction`
-
-English:
-theorem foldl_induction
-  statement: (f : α -> α -> α) [RightCommutative f] (x : α) (p : α -> Prop)
-  proof: foldl_induction' f x p p s p_f px p_s
-
-中文:
-定理 foldl_induction
-  结论: (f : α -> α -> α) [右交换 f] (x : α) (p : α -> 命题)
-  证明: foldl_induction' f x p p s p_f px p_s
-
-Depends on / 依赖: foldl_induction
+/-
+**Multiset.foldl_induction** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：foldl_induction (f : α -> α -> α) [RightCommutative f] (x : α) (p : α -> P
+rop) (s : Multiset α) (p_f : forall a b, p a -> p b -> p (f b a)) (px : p x) (p_
+s : forall a in s, p a) : p (foldl f x s)
+参数：f : α -> α -> α；x : α；p : α -> Prop；s : Multiset α；p_f : forall a b, p a -> p
+ b -> p (f b a)；px : p x；p_s : forall a in s, p a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.foldl_induction'`：foldl_induction' (f : β -> α -> β) [RightComm
+utative f] (x : β) (q : α -> Prop) (p : β -> Prop) (s : Multiset α) (hpqf : fora
+ll a b, q a -> …
 -/
-theorem foldl_induction (f : α -> α -> α) [RightCommutative f] (x : α) (p : α -> Prop)
-    (s : Multiset α) (p_f : forall a b, p a -> p b -> p (f b a)) (px : p x) (p_s : forall a in s, p a) :
+theorem foldl_induction (f : α → α → α) [RightCommutative f] (x : α) (p : α → Prop)
+    (s : Multiset α) (p_f : ∀ a b, p a → p b → p (f b a)) (px : p x) (p_s : ∀ a ∈ s, p a) :
     p (foldl f x s) :=
   foldl_induction' f x p p s p_f px p_s
 
+/-! ### Map for partial functions -/
 
-/--
-theorem `pmap_eq_map` / 定理 `pmap_eq_map`
+/-
+**Multiset.pmap_eq_map** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：pmap_eq_map (p : α -> Prop) (f : α -> β) (s : Multiset α) : forall H, @pma
+p _ _ p (fun a _ => f a) s H = map f s
+参数：p : α -> Prop；f : α -> β；s : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `List.pmap_eq_map`：∀ {α : Type u_1} {β : Type u_2} {p : α → Prop} {f : α 
+→ β} {l : List α} (H : ∀ a ∈ l, p a),   List.pmap (fun a x => f a) l H = List.ma
+p f l
 
-English:
-theorem pmap_eq_map
-  given: (p : α -> Prop) (f : α -> β) (s : Multiset α)
-  proof: Quot.inductionOn s fun _ H => congr_arg _ List.pmap_eq_map H
-
-中文:
-定理 pmap_eq_map
-  条件: (p : α -> 命题) (f : α -> β) (s : Multiset α)
-  证明: Quot.inductionOn s fun _ H => congr_arg _ List.pmap_eq_map H
-
-Depends on / 依赖: List.pmap_eq_map, Quot.inductionOn, congr_arg, inductionOn, pmap_eq_map
+--- 原说明 ---
+### Map for partial functions
 -/
-theorem pmap_eq_map (p : α -> Prop) (f : α -> β) (s : Multiset α) :
-    forall H, @pmap _ _ p (fun a _ => f a) s H = map f s :=
-Quot.inductionOn s fun _ H => congr_arg _ List.pmap_eq_map H
-
-/--
-theorem `map_pmap` / 定理 `map_pmap`
-
-English:
-theorem map_pmap
-  given: {p : α -> Prop} (g : β -> γ) (f : forall a, p a -> β) (s)
-  proof: Quot.inductionOn s fun _ H => congr_arg _ List.map_pmap H
-
-中文:
-定理 map_pmap
-  条件: {p : α -> 命题} (g : β -> γ) (f : 对任意 a, p a -> β) (s)
-  证明: Quot.inductionOn s fun _ H => congr_arg _ List.map_pmap H
-
-Depends on / 依赖: List.map_pmap, Quot.inductionOn, congr_arg, inductionOn, map_pmap
+theorem pmap_eq_map (p : α → Prop) (f : α → β) (s : Multiset α) :
+    ∀ H, @pmap _ _ p (fun a _ => f a) s H = map f s :=
+  Quot.inductionOn s fun _ H => congr_arg _ <| List.pmap_eq_map H
+/-
+**Multiset.map_pmap** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_pmap {p : α -> Prop} (g : β -> γ) (f : forall a, p a -> β) (s) : foral
+l H, map g (pmap f s H) = pmap (fun a h => g (f a h)) s H
+参数：g : β -> γ；f : forall a, p a -> β；s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `List.map_pmap`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {p : α → P
+rop} {g : β → γ} {f : (a : α) → p a → β} {l : List α}   (H : ∀ a ∈ l, p a), List
+.ma…
 -/
-theorem map_pmap {p : α -> Prop} (g : β -> γ) (f : forall a, p a -> β) (s) :
-    forall H, map g (pmap f s H) = pmap (fun a h => g (f a h)) s H :=
-Quot.inductionOn s fun _ H => congr_arg _ List.map_pmap H
-
-/--
-theorem `pmap_eq_map_attach` / 定理 `pmap_eq_map_attach`
-
-English:
-theorem pmap_eq_map_attach
-  given: {p : α -> Prop} (f : forall a, p a -> β) (s)
-  proof: Quot.inductionOn s fun _ H => congr_arg _ List.pmap_eq_map_attach H
-
-@[simp]
-
-中文:
-定理 pmap_eq_map_attach
-  条件: {p : α -> 命题} (f : 对任意 a, p a -> β) (s)
-  证明: Quot.inductionOn s fun _ H => congr_arg _ List.pmap_eq_map_attach H
-
-@[simp]
-
-Depends on / 依赖: List.pmap_eq_map_attach, Quot.inductionOn, congr_arg, inductionOn, pmap_eq_map_attach
+theorem map_pmap {p : α → Prop} (g : β → γ) (f : ∀ a, p a → β) (s) :
+    ∀ H, map g (pmap f s H) = pmap (fun a h => g (f a h)) s H :=
+  Quot.inductionOn s fun _ H => congr_arg _ <| List.map_pmap H
+/-
+**Multiset.pmap_eq_map_attach** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：pmap_eq_map_attach {p : α -> Prop} (f : forall a, p a -> β) (s) : forall H
+, pmap f s H = s.attach.map fun x => f x.1 (H _ x.2)
+参数：f : forall a, p a -> β；s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `List.pmap_eq_map_attach`：∀ {α : Type u_1} {β : Type u_2} {p : α → Prop} 
+{f : (a : α) → p a → β} {l : List α} (H : ∀ a ∈ l, p a),   List.pmap f l H = Lis
+t.map (fun x …
 -/
-theorem pmap_eq_map_attach {p : α -> Prop} (f : forall a, p a -> β) (s) :
-    forall H, pmap f s H = s.attach.map fun x => f x.1 (H _ x.2) :=
-Quot.inductionOn s fun _ H => congr_arg _ List.pmap_eq_map_attach H
+theorem pmap_eq_map_attach {p : α → Prop} (f : ∀ a, p a → β) (s) :
+    ∀ H, pmap f s H = s.attach.map fun x => f x.1 (H _ x.2) :=
+  Quot.inductionOn s fun _ H => congr_arg _ <| List.pmap_eq_map_attach H
 
 @[simp]
-/--
-theorem `attach_map_val'` / 定理 `attach_map_val'`
-
-English:
-theorem attach_map_val'
-  given: (s : Multiset α) (f : α -> β)
-  statement: (s.attach.map fun i => f i.val) = s.map f
-  proof: Quot.inductionOn s fun _ => congr_arg _ List.attach_map_val
-
-@[simp]
-
-中文:
-定理 attach_map_val'
-  条件: (s : Multiset α) (f : α -> β)
-  结论: (s.attach.map fun i => f i.val) = s.map f
-  证明: Quot.inductionOn s fun _ => congr_arg _ List.attach_map_val
-
-@[simp]
-
-Depends on / 依赖: List.attach_map_val, Quot.inductionOn, attach_map_val, congr_arg, inductionOn
+/-
+**Multiset.attach_map_val'** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：attach_map_val' (s : Multiset α) (f : α -> β) : (s.attach.map fun i => f i
+.val) = s.map f
+参数：s : Multiset α；f : α -> β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `List.attach_map_val`：∀ {α : Type u_1} {β : Type u_2} {l : List α} {f : α
+ → β}, List.map (fun i => f ↑i) l.attach = List.map f l
 -/
-theorem attach_map_val' (s : Multiset α) (f : α -> β) : (s.attach.map fun i => f i.val) = s.map f :=
+theorem attach_map_val' (s : Multiset α) (f : α → β) : (s.attach.map fun i => f i.val) = s.map f :=
   Quot.inductionOn s fun _ => congr_arg _ List.attach_map_val
 
 @[simp]
-/--
-theorem `attach_map_val` / 定理 `attach_map_val`
-
-English:
-theorem attach_map_val
-  given: (s : Multiset α)
-  statement: s.attach.map Subtype.val = s
-  proof: (attach_map_val' _ _).trans s.map_id
-
-中文:
-定理 attach_map_val
-  条件: (s : Multiset α)
-  结论: s.attach.map 子类型.val = s
-  证明: (attach_map_val' _ _).trans s.map_id
-
-Depends on / 依赖: attach_map_val, map_id, s.map_id
+/-
+**Multiset.attach_map_val** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：attach_map_val (s : Multiset α) : s.attach.map Subtype.val = s
+参数：s : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Multiset.attach_map_val'`：attach_map_val' (s : Multiset α) (f : α -> β) 
+: (s.attach.map fun i => f i.val) = s.map f
+· 使用定理 `Multiset.map_id`：map_id (s : Multiset α) : map id s = s
 -/
 theorem attach_map_val (s : Multiset α) : s.attach.map Subtype.val = s :=
   (attach_map_val' _ _).trans s.map_id
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `attach_cons` / 定理 `attach_cons`
-
-English:
-theorem attach_cons
-  given: (a : α) (m : Multiset α)
-  proof: Quotient.inductionOn m fun l =>
-congr_arg _
-congr_arg (List.cons _) by
-        rw [List.map_pmap]; exact List.pmap_congr_left _ fun _ _ _ _ => Subtype.ext rfl
-
-中文:
-定理 attach_cons
-  条件: (a : α) (m : Multiset α)
-  证明: Quotient.inductionOn m fun l =>
-congr_arg _
-congr_arg (List.cons _) by
-        rw [List.map_pmap]; exact List.pmap_congr_left _ fun _ _ _ _ => Subtype.ext rfl
-
-Depends on / 依赖: List.cons, List.map_pmap, List.pmap_congr_left, Quotient, Quotient.inductionOn, Subtype, Subtype.ext, congr_arg, inductionOn, map_pmap, pmap_congr_left
+/-
+**Multiset.attach_cons** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：attach_cons (a : α) (m : Multiset α) : (a ::ₘ m).attach = ⟨a, mem_cons_sel
+f a m⟩ ::ₘ m.attach.map fun p => ⟨p.1, mem_cons_of_mem p.2⟩
+参数：a : α；m : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `Multiset.mem_cons_self`：mem_cons_self (a : α) (s : Multiset α) : a in a 
+::ₘ s
+· 使用定理 `Multiset.mem_cons_of_mem`：mem_cons_of_mem {a b : α} {s : Multiset α} (h 
+: a in s) : a in b ::ₘ s
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.map_pmap`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {p : α → P
+rop} {g : β → γ} {f : (a : α) → p a → β} {l : List α}   (H : ∀ a ∈ l, p a), List
+.ma…
+· 使用定理 `List.pmap_congr_left`：∀ {α : Type u_1} {β : Type u_2} {p q : α → Prop} {
+f : (a : α) → p a → β} {g : (a : α) → q a → β} (l : List α)   {H₁ : ∀ a ∈ l, p a
+} {H₂ : ∀ …
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
 -/
 theorem attach_cons (a : α) (m : Multiset α) :
     (a ::ₘ m).attach =
       ⟨a, mem_cons_self a m⟩ ::ₘ m.attach.map fun p => ⟨p.1, mem_cons_of_mem p.2⟩ :=
   Quotient.inductionOn m fun l =>
-congr_arg _
-congr_arg (List.cons _) by
+    congr_arg _ <|
+      congr_arg (List.cons _) <| by
         rw [List.map_pmap]; exact List.pmap_congr_left _ fun _ _ _ _ => Subtype.ext rfl
 
 section
 
 variable [DecidableEq α] {s t u : Multiset α}
 
-/--
-lemma `erase_attach_map_val` / 引理 `erase_attach_map_val`
-
-English:
-lemma erase_attach_map_val
-  given: (s : Multiset α) (x : {x // x in s})
-  proof: by
-  rw [Multiset.map_erase _ val_injective]; rw [attach_map_val]
-
-中文:
-引理 erase_attach_map_val
-  条件: (s : Multiset α) (x : {x // x in s})
-  证明: by
-  rw [Multiset.map_erase _ val_injective]; rw [attach_map_val]
-
-Depends on / 依赖: Multiset, Multiset.map_erase, attach_map_val, map_erase, val_injective
+/-
+**Multiset.erase_attach_map_val** 是 Mathlib 中的一个引理，位于命名空间 `Multiset`。
+形式化陈述：erase_attach_map_val (s : Multiset α) (x : {x // x in s}) : (s.attach.eras
+e x).map (↑) = s.erase x
+参数：s : Multiset α；x : {x // x in s}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.map_erase`：map_erase [DecidableEq α] [DecidableEq β] (f : α -> 
+β) (hf : Function.Injective f) (x : α) (s : Multiset α) : (s.erase x).map f = (s
+.map f).…
+· 使用定理 `Subtype.val_injective`：∀ {α : Sort u_1} {p : α → Prop}, Function.Injecti
+ve Subtype.val
+· 使用定理 `Multiset.attach_map_val`：attach_map_val (s : Multiset α) : s.attach.map 
+Subtype.val = s
 -/
-lemma erase_attach_map_val (s : Multiset α) (x : {x // x in s}) :
+lemma erase_attach_map_val (s : Multiset α) (x : {x // x ∈ s}) :
     (s.attach.erase x).map (↑) = s.erase x := by
-  rw [Multiset.map_erase _ val_injective]; rw [attach_map_val]
-
-/--
-lemma `erase_attach_map` / 引理 `erase_attach_map`
-
-English:
-lemma erase_attach_map
-  given: (s : Multiset α) (f : α -> β) (x : {x // x in s})
-  proof: by
-  simp only [← Function.comp_apply (f := f)]
-  rw [← map_map]; rw [erase_attach_map_val]
-
-中文:
-引理 erase_attach_map
-  条件: (s : Multiset α) (f : α -> β) (x : {x // x in s})
-  证明: by
-  simp only [← Function.comp_apply (f := f)]
-  rw [← map_map]; rw [erase_attach_map_val]
-
-Depends on / 依赖: Function, Function.comp_apply, comp_apply, erase_attach_map_val, map_map
+  rw [Multiset.map_erase _ val_injective, attach_map_val]
+/-
+**Multiset.erase_attach_map** 是 Mathlib 中的一个引理，位于命名空间 `Multiset`。
+形式化陈述：erase_attach_map (s : Multiset α) (f : α -> β) (x : {x // x in s}) : (s.at
+tach.erase x).map (fun j : {x // x in s} => f j) = (s.erase x).map f
+参数：s : Multiset α；f : α -> β；x : {x // x in s}。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
+· 使用定理 `Multiset.map_map`：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : m
+ap g (map f s) = map (g ∘ f) s
+· 使用引理 `Multiset.erase_attach_map_val`：erase_attach_map_val (s : Multiset α) (x 
+: {x // x in s}) : (s.attach.erase x).map (↑) = s.erase x
 -/
-lemma erase_attach_map (s : Multiset α) (f : α -> β) (x : {x // x in s}) :
-    (s.attach.erase x).map (fun j : {x // x in s} => f j) = (s.erase x).map f := by
+lemma erase_attach_map (s : Multiset α) (f : α → β) (x : {x // x ∈ s}) :
+    (s.attach.erase x).map (fun j : {x // x ∈ s} ↦ f j) = (s.erase x).map f := by
   simp only [← Function.comp_apply (f := f)]
-  rw [← map_map]; rw [erase_attach_map_val]
+  rw [← map_map, erase_attach_map_val]
 
 end
 
@@ -1535,30 +1202,26 @@ end
 section sub
 variable [DecidableEq α] {s t u : Multiset α} {a : α}
 
-/--
-lemma `sub_eq_fold_erase` / 引理 `sub_eq_fold_erase`
-
-English:
-lemma sub_eq_fold_erase
-  given: (s t : Multiset α)
-  statement: s - t = foldl erase s t
-  proof: Quotient.inductionOn₂ s t fun l₁ l₂ => by
-    change ofList (l₁.diff l₂) = foldl erase l₁ l₂
-    rw [diff_eq_foldl l₁ l₂]
-    symm
-    exact foldl_hom _ fun x y => rfl
-
-中文:
-引理 sub_eq_fold_erase
-  条件: (s t : Multiset α)
-  结论: s - t = foldl erase s t
-  证明: Quotient.inductionOn₂ s t fun l₁ l₂ => by
-    change ofList (l₁.diff l₂) = foldl erase l₁ l₂
-    rw [diff_eq_foldl l₁ l₂]
-    symm
-    exact foldl_hom _ fun x y => rfl
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, diff_eq_foldl, foldl_hom, ofList
+/-
+**Multiset.sub_eq_fold_erase** 是 Mathlib 中的一个引理，位于命名空间 `Multiset`。
+形式化陈述：sub_eq_fold_erase (s t : Multiset α) : s - t = foldl erase s t
+参数：s t : Multiset α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn₂`：∀ {α : Sort uA} {β : Sort uB} {s₁ : Setoid α} {s₂
+ : Setoid β} {motive : Quotient s₁ → Quotient s₂ → Prop}   (q₁ : Quotient s₁) (q
+₂ : Quotien…
+· 使用定理 `Multiset.instRightCommutativeErase`：∀ {α : Type u_1} [inst : DecidableEq
+ α], RightCommutative Multiset.erase
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.diff_eq_foldl`：∀ {α : Type u_1} [inst : BEq α] [LawfulBEq α] (l₁ l₂
+ : List α), l₁.diff l₂ = List.foldl List.erase l₁ l₂
+· 使用定理 `instLawfulBEq`：∀ {α : Type u_1} [inst : DecidableEq α], LawfulBEq α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.foldl_hom`：∀ {α₁ : Type u_1} {α₂ : Type u_2} {β : Type u_3} (f : α₁
+ → α₂) {g₁ : α₁ → β → α₁} {g₂ : α₂ → β → α₂} {l : List β}   {init : α₁}, (∀ (x :
+ α₁)…
 -/
 lemma sub_eq_fold_erase (s t : Multiset α) : s - t = foldl erase s t :=
   Quotient.inductionOn₂ s t fun l₁ l₂ => by
@@ -1574,64 +1237,68 @@ end sub
 
 section Rel
 
-variable {δ : Type*} {r : α -> β -> Prop} {p : γ -> δ -> Prop}
+variable {δ : Type*} {r : α → β → Prop} {p : γ → δ → Prop}
 
-/--
-theorem `rel_map_left` / 定理 `rel_map_left`
-
-English:
-theorem rel_map_left
-  given: {s : Multiset γ} {f : γ -> α}
-  proof: @(Multiset.induction_on s (by simp) (by simp +contextual [rel_cons_left]))
-
-中文:
-定理 rel_map_left
-  条件: {s : Multiset γ} {f : γ -> α}
-  证明: @(Multiset.induction_on s (by simp) (by simp +contextual [rel_cons_left]))
-
-Depends on / 依赖: Multiset, Multiset.induction_on, contextual, induction_on, rel_cons_left
+/-
+**Multiset.rel_map_left** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：rel_map_left {s : Multiset γ} {f : γ -> α} : forall {t}, Rel r (s.map f) t
+ ↔ Rel (fun a b => r (f a) b) s t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.induction_on`：∀ {α : Type u_1} {p : Multiset α → Prop} (s : Mul
+tiset α), p 0 → (∀ (a : α) (s : Multiset α), p s → p (a ::ₘ s)) → p s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Multiset.map_cons`：map_cons (f : α -> β) (a s) : map f (a ::ₘ s) = f a :
+:ₘ map f s
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-theorem rel_map_left {s : Multiset γ} {f : γ -> α} :
-    forall {t}, Rel r (s.map f) t ↔ Rel (fun a b => r (f a) b) s t :=
+theorem rel_map_left {s : Multiset γ} {f : γ → α} :
+    ∀ {t}, Rel r (s.map f) t ↔ Rel (fun a b => r (f a) b) s t :=
   @(Multiset.induction_on s (by simp) (by simp +contextual [rel_cons_left]))
-
-/--
-theorem `rel_map_right` / 定理 `rel_map_right`
-
-English:
-theorem rel_map_right
-  given: {s : Multiset α} {t : Multiset γ} {f : γ -> β}
-  proof: by
-  rw [← rel_flip]; rw [rel_map_left]; rw [← rel_flip]; rfl
-
-中文:
-定理 rel_map_right
-  条件: {s : Multiset α} {t : Multiset γ} {f : γ -> β}
-  证明: by
-  rw [← rel_flip]; rw [rel_map_left]; rw [← rel_flip]; rfl
-
-Depends on / 依赖: rel_flip, rel_map_left
+/-
+**Multiset.rel_map_right** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：rel_map_right {s : Multiset α} {t : Multiset γ} {f : γ -> β} : Rel r s (t.
+map f) ↔ Rel (fun a b => r a (f b)) s t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.rel_flip`：rel_flip {s t} : Rel (flip r) s t ↔ Rel r t s
+· 使用定理 `Multiset.rel_map_left`：rel_map_left {s : Multiset γ} {f : γ -> α} : fora
+ll {t}, Rel r (s.map f) t ↔ Rel (fun a b => r (f a) b) s t
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem rel_map_right {s : Multiset α} {t : Multiset γ} {f : γ -> β} :
+theorem rel_map_right {s : Multiset α} {t : Multiset γ} {f : γ → β} :
     Rel r s (t.map f) ↔ Rel (fun a b => r a (f b)) s t := by
-  rw [← rel_flip]; rw [rel_map_left]; rw [← rel_flip]; rfl
-
-/--
-theorem `rel_map` / 定理 `rel_map`
-
-English:
-theorem rel_map
-  given: {s : Multiset α} {t : Multiset β} {f : α -> γ} {g : β -> δ}
-  proof: rel_map_left.trans rel_map_right
-
-中文:
-定理 rel_map
-  条件: {s : Multiset α} {t : Multiset β} {f : α -> γ} {g : β -> δ}
-  证明: rel_map_left.trans rel_map_right
-
-Depends on / 依赖: rel_map_left, rel_map_left.trans, rel_map_right
+  rw [← rel_flip, rel_map_left, ← rel_flip]; rfl
+/-
+**Multiset.rel_map** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：rel_map {s : Multiset α} {t : Multiset β} {f : α -> γ} {g : β -> δ} : Rel 
+p (s.map f) (t.map g) ↔ Rel (fun a b => p (f a) (g b)) s t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Multiset.rel_map_left`：rel_map_left {s : Multiset γ} {f : γ -> α} : fora
+ll {t}, Rel r (s.map f) t ↔ Rel (fun a b => r (f a) b) s t
+· 使用定理 `Multiset.rel_map_right`：rel_map_right {s : Multiset α} {t : Multiset γ} 
+{f : γ -> β} : Rel r s (t.map f) ↔ Rel (fun a b => r a (f b)) s t
 -/
-theorem rel_map {s : Multiset α} {t : Multiset β} {f : α -> γ} {g : β -> δ} :
+theorem rel_map {s : Multiset α} {t : Multiset β} {f : α → γ} {g : β → δ} :
     Rel p (s.map f) (t.map g) ↔ Rel (fun a b => p (f a) (g b)) s t :=
   rel_map_left.trans rel_map_right
 
@@ -1639,112 +1306,104 @@ end Rel
 
 section Map
 
-/--
-theorem `map_eq_map` / 定理 `map_eq_map`
-
-English:
-theorem map_eq_map
-  given: {f : α -> β} (hf : Function.Injective f) {s t : Multiset α}
-  proof: by
-  rw [← rel_eq]; rw [← rel_eq]; rw [rel_map]
-  simp only [hf.eq_iff]
-
-中文:
-定理 map_eq_map
-  条件: {f : α -> β} (hf : 函数.单射 f) {s t : Multiset α}
-  证明: by
-  rw [← rel_eq]; rw [← rel_eq]; rw [rel_map]
-  simp only [hf.eq_iff]
-
-Depends on / 依赖: eq_iff, hf.eq_iff, rel_eq, rel_map
+/-
+**Multiset.map_eq_map** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_eq_map {f : α -> β} (hf : Function.Injective f) {s t : Multiset α} : s
+.map f = t.map f ↔ s = t
+参数：hf : Function.Injective f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.rel_eq`：rel_eq {s t : Multiset α} : Rel (· = ·) s t ↔ s = t
+· 使用定理 `Multiset.rel_map`：rel_map {s : Multiset α} {t : Multiset β} {f : α -> γ}
+ {g : β -> δ} : Rel p (s.map f) (t.map g) ↔ Rel (fun a b => p (f a) (g b)) s t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem map_eq_map {f : α -> β} (hf : Function.Injective f) {s t : Multiset α} :
+theorem map_eq_map {f : α → β} (hf : Function.Injective f) {s t : Multiset α} :
     s.map f = t.map f ↔ s = t := by
-  rw [← rel_eq]; rw [← rel_eq]; rw [rel_map]
+  rw [← rel_eq, ← rel_eq, rel_map]
   simp only [hf.eq_iff]
-
-/--
-theorem `map_injective` / 定理 `map_injective`
-
-English:
-theorem map_injective
-  given: {f : α -> β} (hf : Function.Injective f)
-  proof: fun _x _y => (map_eq_map hf).1
-
-中文:
-定理 map_injective
-  条件: {f : α -> β} (hf : 函数.单射 f)
-  证明: fun _x _y => (map_eq_map hf).1
-
-Depends on / 依赖: map_eq_map
+/-
+**Multiset.map_injective** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_injective {f : α -> β} (hf : Function.Injective f) : Function.Injectiv
+e (Multiset.map f)
+参数：hf : Function.Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Multiset.map_eq_map`：map_eq_map {f : α -> β} (hf : Function.Injective f)
+ {s t : Multiset α} : s.map f = t.map f ↔ s = t
 -/
-theorem map_injective {f : α -> β} (hf : Function.Injective f) :
+theorem map_injective {f : α → β} (hf : Function.Injective f) :
     Function.Injective (Multiset.map f) := fun _x _y => (map_eq_map hf).1
 
 end Map
 
 section Quot
 
-/--
-theorem `map_mk_eq_map_mk_of_rel` / 定理 `map_mk_eq_map_mk_of_rel`
-
-English:
-theorem map_mk_eq_map_mk_of_rel
-  given: {r : α -> α -> Prop} {s t : Multiset α} (hst : s.Rel r t)
-  proof: Rel.recOn hst rfl fun hab _hst ih => by simp [ih, Quot.sound hab]
-
-中文:
-定理 map_mk_eq_map_mk_of_rel
-  条件: {r : α -> α -> 命题} {s t : Multiset α} (hst : s.关系 r t)
-  证明: Rel.recOn hst rfl fun hab _hst ih => by simp [ih, Quot.sound hab]
-
-Depends on / 依赖: Quot.sound, Rel.recOn, _hst
+/-
+**Multiset.map_mk_eq_map_mk_of_rel** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_mk_eq_map_mk_of_rel {r : α -> α -> Prop} {s t : Multiset α} (hst : s.R
+el r t) : s.map (Quot.mk r) = t.map (Quot.mk r)
+参数：hst : s.Rel r t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.map_cons`：map_cons (f : α -> β) (a s) : map f (a ::ₘ s) = f a :
+:ₘ map f s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem map_mk_eq_map_mk_of_rel {r : α -> α -> Prop} {s t : Multiset α} (hst : s.Rel r t) :
+theorem map_mk_eq_map_mk_of_rel {r : α → α → Prop} {s t : Multiset α} (hst : s.Rel r t) :
     s.map (Quot.mk r) = t.map (Quot.mk r) :=
   Rel.recOn hst rfl fun hab _hst ih => by simp [ih, Quot.sound hab]
-
-/--
-theorem `exists_multiset_eq_map_quot_mk` / 定理 `exists_multiset_eq_map_quot_mk`
-
-English:
-theorem exists_multiset_eq_map_quot_mk
-  given: {r : α -> α -> Prop} (s : Multiset (Quot r))
-  proof: Multiset.induction_on s ⟨0, rfl⟩ fun a _s ⟨t, ht⟩ =>
-    Quot.inductionOn a fun a => ht.symm ▸ ⟨a ::ₘ t, (map_cons _ _ _).symm⟩
-
-中文:
-定理 存在_multiset_eq_map_quot_mk
-  条件: {r : α -> α -> 命题} (s : Multiset (商 r))
-  证明: Multiset.induction_on s ⟨0, rfl⟩ fun a _s ⟨t, ht⟩ =>
-    Quot.inductionOn a fun a => ht.symm ▸ ⟨a ::ₘ t, (map_cons _ _ _).symm⟩
-
-Depends on / 依赖: Multiset, Multiset.induction_on, Quot.inductionOn, ht.symm, inductionOn, induction_on, map_cons
+/-
+**Multiset.exists_multiset_eq_map_quot_mk** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：exists_multiset_eq_map_quot_mk {r : α -> α -> Prop} (s : Multiset (Quot r)
+) : exists t : Multiset α, s = t.map (Quot.mk r)
+参数：s : Multiset (Quot r)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.induction_on`：∀ {α : Type u_1} {p : Multiset α → Prop} (s : Mul
+tiset α), p 0 → (∀ (a : α) (s : Multiset α), p s → p (a ::ₘ s)) → p s
+· 使用定理 `Quot.inductionOn`：∀ {α : Sort u} {r : α → α → Prop} {motive : Quot r → P
+rop} (q : Quot r), (∀ (a : α), motive (Quot.mk r a)) → motive q
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Multiset.map_cons`：map_cons (f : α -> β) (a s) : map f (a ::ₘ s) = f a :
+:ₘ map f s
 -/
-theorem exists_multiset_eq_map_quot_mk {r : α -> α -> Prop} (s : Multiset (Quot r)) :
-    exists t : Multiset α, s = t.map (Quot.mk r) :=
+theorem exists_multiset_eq_map_quot_mk {r : α → α → Prop} (s : Multiset (Quot r)) :
+    ∃ t : Multiset α, s = t.map (Quot.mk r) :=
   Multiset.induction_on s ⟨0, rfl⟩ fun a _s ⟨t, ht⟩ =>
     Quot.inductionOn a fun a => ht.symm ▸ ⟨a ::ₘ t, (map_cons _ _ _).symm⟩
-
-/--
-theorem `induction_on_multiset_quot` / 定理 `induction_on_multiset_quot`
-
-English:
-theorem induction_on_multiset_quot
-  statement: {r : α -> α -> Prop} {p : Multiset (Quot r) -> Prop}
-  proof: match s, exists_multiset_eq_map_quot_mk s with
-  | _, ⟨_t, rfl⟩ => fun h => h _
-
-中文:
-定理 induction_on_multiset_quot
-  结论: {r : α -> α -> 命题} {p : Multiset (商 r) -> 命题}
-  证明: match s, exists_multiset_eq_map_quot_mk s with
-  | _, ⟨_t, rfl⟩ => fun h => h _
-
-Depends on / 依赖: exists_multiset_eq_map_quot_mk
+/-
+**Multiset.induction_on_multiset_quot** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：induction_on_multiset_quot {r : α -> α -> Prop} {p : Multiset (Quot r) -> 
+Prop} (s : Multiset (Quot r)) : (forall s : Multiset α, p (s.map (Quot.mk r))) -
+> p s
+参数：Quot r；s : Multiset (Quot r)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.exists_multiset_eq_map_quot_mk`：exists_multiset_eq_map_quot_mk 
+{r : α -> α -> Prop} (s : Multiset (Quot r)) : exists t : Multiset α, s = t.map 
+(Quot.mk r)
 -/
-theorem induction_on_multiset_quot {r : α -> α -> Prop} {p : Multiset (Quot r) -> Prop}
-    (s : Multiset (Quot r)) : (forall s : Multiset α, p (s.map (Quot.mk r))) -> p s :=
+theorem induction_on_multiset_quot {r : α → α → Prop} {p : Multiset (Quot r) → Prop}
+    (s : Multiset (Quot r)) : (∀ s : Multiset α, p (s.map (Quot.mk r))) → p s :=
   match s, exists_multiset_eq_map_quot_mk s with
   | _, ⟨_t, rfl⟩ => fun h => h _
 
@@ -1754,224 +1413,195 @@ section Nodup
 
 variable {s : Multiset α}
 
-/--
-theorem `Nodup.of_map` / 定理 `Nodup.of_map`
-
-English:
-theorem Nodup.of_map
-  given: (f : α -> β)
-  statement: Nodup (map f s) -> Nodup s
-  proof: Quot.induction_on s fun _ => List.Nodup.of_map f
-
-中文:
-定理 Nodup.of_map
-  条件: (f : α -> β)
-  结论: Nodup (map f s) -> Nodup s
-  证明: Quot.induction_on s fun _ => List.Nodup.of_map f
+/-
+**Multiset.Nodup.of_map** 是 Mathlib 中的一个定理，位于命名空间 `Multiset.Nodup`。
+形式化陈述：∀ {α : Type u_1} {β : Type v} {s : Multiset α} (f : α → β), (Multiset.map 
+f s).Nodup → s.Nodup
+参数：f : α → β；Multiset.map f s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.induction_on`：∀ {α : Sort u_4} {r : α → α → Prop} {β : Quot r → Pro
+p} (q : Quot r), (∀ (a : α), β (Quot.mk r a)) → β q
+· 使用定理 `List.Nodup.of_map`：∀ {α : Type u} {β : Type v} (f : α → β) {l : List α},
+ (List.map f l).Nodup → l.Nodup
 -/
-theorem Nodup.of_map (f : α -> β) : Nodup (map f s) -> Nodup s :=
+theorem Nodup.of_map (f : α → β) : Nodup (map f s) → Nodup s :=
   Quot.induction_on s fun _ => List.Nodup.of_map f
-
-/--
-theorem `Nodup.map_on` / 定理 `Nodup.map_on`
-
-English:
-theorem Nodup.map_on
-  given: {f : α -> β}
-  proof: Quot.induction_on s fun _ => List.Nodup.map_on
-
-中文:
-定理 Nodup.map_on
-  条件: {f : α -> β}
-  证明: Quot.induction_on s fun _ => List.Nodup.map_on
+/-
+**Multiset.Nodup.map_on** 是 Mathlib 中的一个定理，位于命名空间 `Multiset.Nodup`。
+形式化陈述：∀ {α : Type u_1} {β : Type v} {s : Multiset α} {f : α → β},   (∀ x ∈ s, ∀ 
+y ∈ s, f x = f y → x = y) → s.Nodup → (Multiset.map f s).Nodup
+参数：∀ x ∈ s, ∀ y ∈ s, f x = f y → x = y；Multiset.map f s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.induction_on`：∀ {α : Sort u_4} {r : α → α → Prop} {β : Quot r → Pro
+p} (q : Quot r), (∀ (a : α), β (Quot.mk r a)) → β q
+· 使用定理 `List.Nodup.map_on`：∀ {α : Type u} {β : Type v} {l : List α} {f : α → β},
+   (∀ x ∈ l, ∀ y ∈ l, f x = f y → x = y) → l.Nodup → (List.map f l).Nodup
 -/
-theorem Nodup.map_on {f : α -> β} :
-    (forall x in s, forall y in s, f x = f y -> x = y) -> Nodup s -> Nodup (map f s) :=
+theorem Nodup.map_on {f : α → β} :
+    (∀ x ∈ s, ∀ y ∈ s, f x = f y → x = y) → Nodup s → Nodup (map f s) :=
   Quot.induction_on s fun _ => List.Nodup.map_on
-
-/--
-theorem `Nodup.map` / 定理 `Nodup.map`
-
-English:
-theorem Nodup.map
-  given: {f : α -> β} {s : Multiset α} (hf : Injective f)
-  statement: Nodup s -> Nodup (map f s)
-  proof: Nodup.map_on fun _ _ _ _ h => hf h
-
-中文:
-定理 Nodup.map
-  条件: {f : α -> β} {s : Multiset α} (hf : 单射 f)
-  结论: Nodup s -> Nodup (map f s)
-  证明: Nodup.map_on fun _ _ _ _ h => hf h
-
-Depends on / 依赖: Nodup.map_on, map_on
+/-
+**Multiset.Nodup.map** 是 Mathlib 中的一个定理，位于命名空间 `Multiset.Nodup`。
+形式化陈述：∀ {α : Type u_1} {β : Type v} {f : α → β} {s : Multiset α}, Function.Injec
+tive f → s.Nodup → (Multiset.map f s).Nodup
+参数：Multiset.map f s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.Nodup.map_on`：∀ {α : Type u_1} {β : Type v} {s : Multiset α} {f
+ : α → β},   (∀ x ∈ s, ∀ y ∈ s, f x = f y → x = y) → s.Nodup → (Multiset.map f s
+).Nodup
 -/
-theorem Nodup.map {f : α -> β} {s : Multiset α} (hf : Injective f) : Nodup s -> Nodup (map f s) :=
+theorem Nodup.map {f : α → β} {s : Multiset α} (hf : Injective f) : Nodup s → Nodup (map f s) :=
   Nodup.map_on fun _ _ _ _ h => hf h
-
-/--
-theorem `nodup_map_iff_of_inj_on` / 定理 `nodup_map_iff_of_inj_on`
-
-English:
-theorem nodup_map_iff_of_inj_on
-  given: {f : α -> β} (d : forall x in s, forall y in s, f x = f y -> x = y)
-  proof: ⟨Nodup.of_map _, fun h => h.map_on d⟩
-
-中文:
-定理 nodup_map_iff_of_inj_on
-  条件: {f : α -> β} (d : 对任意 x in s, 对任意 y in s, f x = f y -> x = y)
-  证明: ⟨Nodup.of_map _, fun h => h.map_on d⟩
-
-Depends on / 依赖: Nodup.of_map, h.map_on, map_on, of_map
+/-
+**Multiset.nodup_map_iff_of_inj_on** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：nodup_map_iff_of_inj_on {f : α -> β} (d : forall x in s, forall y in s, f 
+x = f y -> x = y) : Nodup (map f s) ↔ Nodup s
+参数：d : forall x in s, forall y in s, f x = f y -> x = y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.Nodup.of_map`：∀ {α : Type u_1} {β : Type v} {s : Multiset α} (f
+ : α → β), (Multiset.map f s).Nodup → s.Nodup
+· 使用定理 `Multiset.Nodup.map_on`：∀ {α : Type u_1} {β : Type v} {s : Multiset α} {f
+ : α → β},   (∀ x ∈ s, ∀ y ∈ s, f x = f y → x = y) → s.Nodup → (Multiset.map f s
+).Nodup
 -/
-theorem nodup_map_iff_of_inj_on {f : α -> β} (d : forall x in s, forall y in s, f x = f y -> x = y) :
+theorem nodup_map_iff_of_inj_on {f : α → β} (d : ∀ x ∈ s, ∀ y ∈ s, f x = f y → x = y) :
     Nodup (map f s) ↔ Nodup s :=
   ⟨Nodup.of_map _, fun h => h.map_on d⟩
-
-/--
-theorem `nodup_map_iff_of_injective` / 定理 `nodup_map_iff_of_injective`
-
-English:
-theorem nodup_map_iff_of_injective
-  given: {f : α -> β} (d : Function.Injective f)
-  proof: ⟨Nodup.of_map _, fun h => h.map d⟩
-
-中文:
-定理 nodup_map_iff_of_injective
-  条件: {f : α -> β} (d : 函数.单射 f)
-  证明: ⟨Nodup.of_map _, fun h => h.map d⟩
-
-Depends on / 依赖: Nodup.of_map, h.map, of_map
+/-
+**Multiset.nodup_map_iff_of_injective** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：nodup_map_iff_of_injective {f : α -> β} (d : Function.Injective f) : Nodup
+ (map f s) ↔ Nodup s
+参数：d : Function.Injective f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.Nodup.of_map`：∀ {α : Type u_1} {β : Type v} {s : Multiset α} (f
+ : α → β), (Multiset.map f s).Nodup → s.Nodup
+· 使用定理 `Multiset.Nodup.map`：∀ {α : Type u_1} {β : Type v} {f : α → β} {s : Multi
+set α}, Function.Injective f → s.Nodup → (Multiset.map f s).Nodup
 -/
-theorem nodup_map_iff_of_injective {f : α -> β} (d : Function.Injective f) :
+theorem nodup_map_iff_of_injective {f : α → β} (d : Function.Injective f) :
     Nodup (map f s) ↔ Nodup s :=
   ⟨Nodup.of_map _, fun h => h.map d⟩
-
-/--
-theorem `inj_on_of_nodup_map` / 定理 `inj_on_of_nodup_map`
-
-English:
-theorem inj_on_of_nodup_map
-  given: {f : α -> β} {s : Multiset α}
-  proof: Quot.induction_on s fun _ => List.inj_on_of_nodup_map
-
-中文:
-定理 inj_on_of_nodup_map
-  条件: {f : α -> β} {s : Multiset α}
-  证明: Quot.induction_on s fun _ => List.inj_on_of_nodup_map
-
-Depends on / 依赖: List.inj_on_of_nodup_map, Quot.induction_on, induction_on, inj_on_of_nodup_map
+/-
+**Multiset.inj_on_of_nodup_map** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：inj_on_of_nodup_map {f : α -> β} {s : Multiset α} : Nodup (map f s) -> for
+all x in s, forall y in s, f x = f y -> x = y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.induction_on`：∀ {α : Sort u_4} {r : α → α → Prop} {β : Quot r → Pro
+p} (q : Quot r), (∀ (a : α), β (Quot.mk r a)) → β q
+· 使用定理 `List.inj_on_of_nodup_map`：inj_on_of_nodup_map {f : α -> β} {l : List α} 
+(d : Nodup (map f l)) : forall ⦃x⦄, x in l -> forall ⦃y⦄, y in l -> f x = f y ->
+ x = y
 -/
-theorem inj_on_of_nodup_map {f : α -> β} {s : Multiset α} :
-    Nodup (map f s) -> forall x in s, forall y in s, f x = f y -> x = y :=
+theorem inj_on_of_nodup_map {f : α → β} {s : Multiset α} :
+    Nodup (map f s) → ∀ x ∈ s, ∀ y ∈ s, f x = f y → x = y :=
   Quot.induction_on s fun _ => List.inj_on_of_nodup_map
-
-/--
-theorem `nodup_map_iff_inj_on` / 定理 `nodup_map_iff_inj_on`
-
-English:
-theorem nodup_map_iff_inj_on
-  given: {f : α -> β} {s : Multiset α} (d : Nodup s)
-  proof: ⟨inj_on_of_nodup_map, fun h => d.map_on h⟩
-
-中文:
-定理 nodup_map_iff_inj_on
-  条件: {f : α -> β} {s : Multiset α} (d : Nodup s)
-  证明: ⟨inj_on_of_nodup_map, fun h => d.map_on h⟩
-
-Depends on / 依赖: d.map_on, inj_on_of_nodup_map, map_on
+/-
+**Multiset.nodup_map_iff_inj_on** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：nodup_map_iff_inj_on {f : α -> β} {s : Multiset α} (d : Nodup s) : Nodup (
+map f s) ↔ forall x in s, forall y in s, f x = f y -> x = y
+参数：d : Nodup s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.inj_on_of_nodup_map`：inj_on_of_nodup_map {f : α -> β} {s : Mult
+iset α} : Nodup (map f s) -> forall x in s, forall y in s, f x = f y -> x = y
+· 使用定理 `Multiset.Nodup.map_on`：∀ {α : Type u_1} {β : Type v} {s : Multiset α} {f
+ : α → β},   (∀ x ∈ s, ∀ y ∈ s, f x = f y → x = y) → s.Nodup → (Multiset.map f s
+).Nodup
 -/
-theorem nodup_map_iff_inj_on {f : α -> β} {s : Multiset α} (d : Nodup s) :
-    Nodup (map f s) ↔ forall x in s, forall y in s, f x = f y -> x = y :=
+theorem nodup_map_iff_inj_on {f : α → β} {s : Multiset α} (d : Nodup s) :
+    Nodup (map f s) ↔ ∀ x ∈ s, ∀ y ∈ s, f x = f y → x = y :=
   ⟨inj_on_of_nodup_map, fun h => d.map_on h⟩
-
-/--
-theorem `Nodup.pmap` / 定理 `Nodup.pmap`
-
-English:
-theorem Nodup.pmap
-  statement: {p : α -> Prop} {f : forall a, p a -> β} {s : Multiset α} {H}
-  proof: Quot.induction_on s (fun _ _ => List.Nodup.pmap hf) H
-
-@[simp]
-
-中文:
-定理 Nodup.pmap
-  结论: {p : α -> 命题} {f : 对任意 a, p a -> β} {s : Multiset α} {H}
-  证明: Quot.induction_on s (fun _ _ => List.Nodup.pmap hf) H
-
-@[simp]
+/-
+**Multiset.Nodup.pmap** 是 Mathlib 中的一个定理，位于命名空间 `Multiset.Nodup`。
+形式化陈述：∀ {α : Type u_1} {β : Type v} {p : α → Prop} {f : (a : α) → p a → β} {s : 
+Multiset α} {H : ∀ a ∈ s, p a},   (∀ (a : α) (ha : p a) (b : α) (hb : p b), f a 
+ha = f b hb → a = b) → s.Nodup → (Multiset.pmap f s H).Nodup
+参数：a : α；∀ (a : α) (ha : p a) (b : α) (hb : p b), f a ha = f b hb → a = b；Multis
+et.pmap f s H。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.induction_on`：∀ {α : Sort u_4} {r : α → α → Prop} {β : Quot r → Pro
+p} (q : Quot r), (∀ (a : α), β (Quot.mk r a)) → β q
+· 使用定理 `List.Nodup.pmap`：∀ {α : Type u} {β : Type v} {p : α → Prop} {f : (a : α)
+ → p a → β} {l : List α} {H : ∀ a ∈ l, p a},   (∀ (a : α) (ha : p a) (b : α) (hb
+ : p …
 -/
-theorem Nodup.pmap {p : α -> Prop} {f : forall a, p a -> β} {s : Multiset α} {H}
-    (hf : forall a ha b hb, f a ha = f b hb -> a = b) : Nodup s -> Nodup (pmap f s H) :=
+theorem Nodup.pmap {p : α → Prop} {f : ∀ a, p a → β} {s : Multiset α} {H}
+    (hf : ∀ a ha b hb, f a ha = f b hb → a = b) : Nodup s → Nodup (pmap f s H) :=
   Quot.induction_on s (fun _ _ => List.Nodup.pmap hf) H
 
 @[simp]
-/--
-theorem `nodup_attach` / 定理 `nodup_attach`
-
-English:
-theorem nodup_attach
-  given: {s : Multiset α}
-  statement: Nodup (attach s) ↔ Nodup s
-  proof: Quot.induction_on s fun _ => List.nodup_attach
-
-protected alias ⟨_, Nodup.attach⟩ := nodup_attach
-
-中文:
-定理 nodup_attach
-  条件: {s : Multiset α}
-  结论: Nodup (attach s) ↔ Nodup s
-  证明: Quot.induction_on s fun _ => List.nodup_attach
-
-protected alias ⟨_, Nodup.attach⟩ := nodup_attach
-
-Depends on / 依赖: List.nodup_attach, Quot.induction_on, induction_on, nodup_attach
+/-
+**Multiset.nodup_attach** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：nodup_attach {s : Multiset α} : Nodup (attach s) ↔ Nodup s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quot.induction_on`：∀ {α : Sort u_4} {r : α → α → Prop} {β : Quot r → Pro
+p} (q : Quot r), (∀ (a : α), β (Quot.mk r a)) → β q
+· 使用定理 `List.nodup_attach`：nodup_attach {l : List α} : Nodup (attach l) ↔ Nodup 
+l
 -/
 theorem nodup_attach {s : Multiset α} : Nodup (attach s) ↔ Nodup s :=
   Quot.induction_on s fun _ => List.nodup_attach
 
 protected alias ⟨_, Nodup.attach⟩ := nodup_attach
-
-/--
-theorem `map_eq_map_of_bij_of_nodup` / 定理 `map_eq_map_of_bij_of_nodup`
-
-English:
-theorem map_eq_map_of_bij_of_nodup
-  statement: (f : α -> γ) (g : β -> γ) {s : Multiset α} {t : Multiset β}
-  proof: by
-  have : t = s.attach.map fun x => i x.1 x.2 := by
-    rw [ht.ext]
-    · aesop
-· exact hs.attach.map fun x y hxy => Subtype.ext i_inj _ x.2 _ y.2 hxy
-  calc
-    s.map f = s.pmap (fun x _ => f x) fun _ => id := by rw [pmap_eq_map]
-    _ = s.attach.map fun x => f x.1 := by rw [pmap_eq_map_attach]
-    _ = t.map g := by rw [this, Multiset.map_map]; exact map_congr rfl fun x _ => h _ _
-
-中文:
-定理 map_eq_map_of_bij_of_nodup
-  结论: (f : α -> γ) (g : β -> γ) {s : Multiset α} {t : Multiset β}
-  证明: by
-  have : t = s.attach.map fun x => i x.1 x.2 := by
-    rw [ht.ext]
-    · aesop
-· exact hs.attach.map fun x y hxy => Subtype.ext i_inj _ x.2 _ y.2 hxy
-  calc
-    s.map f = s.pmap (fun x _ => f x) fun _ => id := by rw [pmap_eq_map]
-    _ = s.attach.map fun x => f x.1 := by rw [pmap_eq_map_attach]
-    _ = t.map g := by rw [this, Multiset.map_map]; exact map_congr rfl fun x _ => h _ _
-
-Depends on / 依赖: Multiset, Multiset.map_map, Subtype, Subtype.ext, attach, hs.attach.map, ht.ext, i_inj, map_congr, map_map, pmap_eq_map, pmap_eq_map_attach, s.attach.map, s.map, s.pmap, t.map
+/-
+**Multiset.map_eq_map_of_bij_of_nodup** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：map_eq_map_of_bij_of_nodup (f : α -> γ) (g : β -> γ) {s : Multiset α} {t :
+ Multiset β} (hs : s.Nodup) (ht : t.Nodup) (i : forall a in s, β) (hi : forall a
+ ha, i a ha in t) (i_inj : forall a₁ ha₁ a₂ ha₂, i a₁ ha₁ = i a₂ ha₂ -> a₁ = a₂)
+ (i_surj : forall b in t, exists a ha, i a ha = b) (h : forall a ha, f a = g (i 
+a ha)) : s.map f = t.map g
+参数：f : α -> γ；g : β -> γ；hs : s.Nodup；ht : t.Nodup；i : forall a in s, β；hi : for
+all a ha, i a ha in t；i_inj : forall a₁ ha₁ a₂ ha₂, i a₁ ha₁ = i a₂ ha₂ -> a₁ = 
+a₂；i_surj : forall b in t, exists a ha, i a ha = b；h : forall a ha, f a = g (i a
+ ha)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Nodup.ext`：∀ {α : Type u_1} {s t : Multiset α}, s.Nodup → t.Nod
+up → (s = t ↔ ∀ (a : α), a ∈ s ↔ a ∈ t)
+· 使用定理 `Multiset.Nodup.map`：∀ {α : Type u_1} {β : Type v} {f : α → β} {s : Multi
+set α}, Function.Injective f → s.Nodup → (Multiset.map f s).Nodup
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `Multiset.Nodup.attach`：∀ {α : Type u_1} {s : Multiset α}, s.Nodup → s.at
+tach.Nodup
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Multiset.pmap_eq_map`：pmap_eq_map (p : α -> Prop) (f : α -> β) (s : Mult
+iset α) : forall H, @pmap _ _ p (fun a _ => f a) s H = map f s
+· 使用定理 `Multiset.pmap_eq_map_attach`：pmap_eq_map_attach {p : α -> Prop} (f : for
+all a, p a -> β) (s) : forall H, pmap f s H = s.attach.map fun x => f x.1 (H _ x
+.2)
+· 使用定理 `Multiset.map_map`：map_map (g : β -> γ) (f : α -> β) (s : Multiset α) : m
+ap g (map f s) = map (g ∘ f) s
+· 使用定理 `Multiset.map_congr`：map_congr {f g : α -> β} {s t : Multiset α} : s = t 
+-> (forall x in t, f x = g x) -> map f s = map g t
 -/
-theorem map_eq_map_of_bij_of_nodup (f : α -> γ) (g : β -> γ) {s : Multiset α} {t : Multiset β}
-    (hs : s.Nodup) (ht : t.Nodup) (i : forall a in s, β) (hi : forall a ha, i a ha in t)
-    (i_inj : forall a₁ ha₁ a₂ ha₂, i a₁ ha₁ = i a₂ ha₂ -> a₁ = a₂)
-    (i_surj : forall b in t, exists a ha, i a ha = b) (h : forall a ha, f a = g (i a ha)) : s.map f = t.map g := by
+theorem map_eq_map_of_bij_of_nodup (f : α → γ) (g : β → γ) {s : Multiset α} {t : Multiset β}
+    (hs : s.Nodup) (ht : t.Nodup) (i : ∀ a ∈ s, β) (hi : ∀ a ha, i a ha ∈ t)
+    (i_inj : ∀ a₁ ha₁ a₂ ha₂, i a₁ ha₁ = i a₂ ha₂ → a₁ = a₂)
+    (i_surj : ∀ b ∈ t, ∃ a ha, i a ha = b) (h : ∀ a ha, f a = g (i a ha)) : s.map f = t.map g := by
   have : t = s.attach.map fun x => i x.1 x.2 := by
     rw [ht.ext]
     · aesop
-· exact hs.attach.map fun x y hxy => Subtype.ext i_inj _ x.2 _ y.2 hxy
+    · exact hs.attach.map fun x y hxy ↦ Subtype.ext <| i_inj _ x.2 _ y.2 hxy
   calc
     s.map f = s.pmap (fun x _ => f x) fun _ => id := by rw [pmap_eq_map]
     _ = s.attach.map fun x => f x.1 := by rw [pmap_eq_map_attach]
@@ -1980,3 +1610,4 @@ theorem map_eq_map_of_bij_of_nodup (f : α -> γ) (g : β -> γ) {s : Multiset �
 end Nodup
 
 end Multiset
+

@@ -76,27 +76,23 @@ open Subtype
 
 namespace DividedPowers
 
-/--
-Definition of `IsSubDPIdeal` / `IsSubDPIdeal` 的定义
+/-- A sub-ideal `J` of a divided power ideal `(I, hI)` is a sub-dp-ideal if for all `n > 0` and
+  all `x ∈ J`, `hI.dpow n j ∈ J`. -/
+/-
+**DividedPowers.IsSubDPIdeal** 是 Mathlib 中的一个归纳类型，位于命名空间 `DividedPowers`。
+形式化陈述：{A : Type u_1} → [inst : CommSemiring A] → {I : Ideal A} → DividedPowers I
+ → Ideal A → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsSubDPIdeal
-  parameters: {A : Type*} [CommSemiring A] {I : Ideal A} (hI : DividedPowers I)
-  axioms and operations (2):
-    - isSubideal : J <= I
-    - dpow_mem : forall (n : Nat) (_ : n != 0) {j : A} (_ : j in J), hI.dpow n j in J
-
-中文:
-结构 是SubDP理想
-  参数: {A : 类型} [交换半环 A] {I : 理想 A} (hI : DividedPowers I)
-  公理与运算 (2 个):
-    - isSubideal : J <= I
-    - dpow_mem : 对任意 (n : 自然数) (_ : n != 0) {j : A} (_ : j in J), hI.dpow n j in J
+--- 原说明 ---
+A sub-ideal `J` of a divided power ideal `(I, hI)` is a sub-dp-ideal if for all 
+`n > 0` and
+  all `x ∈ J`, `hI.dpow n j ∈ J`.
 -/
 structure IsSubDPIdeal {A : Type*} [CommSemiring A] {I : Ideal A} (hI : DividedPowers I)
     (J : Ideal A) : Prop where
-  isSubideal : J <= I
-  dpow_mem : forall (n : Nat) (_ : n != 0) {j : A} (_ : j in J), hI.dpow n j in J
+  isSubideal : J ≤ I
+  dpow_mem : ∀ (n : ℕ) (_ : n ≠ 0) {j : A} (_ : j ∈ J), hI.dpow n j ∈ J
 
 section IsSubDPIdeal
 
@@ -106,250 +102,232 @@ variable {A : Type*} [CommSemiring A] {I : Ideal A} (hI : DividedPowers I)
 
 open Ideal
 
-/--
-theorem `self` / 定理 `self`
-
-English:
-theorem self
-  statement: IsSubDPIdeal hI I where
-  proof: le_rfl
-  dpow_mem _ hn _ ha := hI.dpow_mem hn ha
-
-中文:
-定理 self
-  结论: 是SubDP理想 hI I where
-  证明: le_rfl
-  dpow_mem _ hn _ ha := hI.dpow_mem hn ha
-
-Depends on / 依赖: le_rfl
+/-
+**DividedPowers.IsSubDPIdeal.self** 是 Mathlib 中的一个定理，位于命名空间 `DividedPowers.IsSub
+DPIdeal`。
+形式化陈述：self : IsSubDPIdeal hI I where isSubideal
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `DividedPowers.dpow_mem`：∀ {A : Type u_1} [inst : CommSemiring A] {I : Id
+eal A} (self : DividedPowers I) {n : ℕ} {x : A},   n ≠ 0 → x ∈ I → self.dpow n x
+ ∈ I
 -/
 theorem self : IsSubDPIdeal hI I where
   isSubideal := le_rfl
   dpow_mem _ hn _ ha := hI.dpow_mem hn ha
 
 set_option linter.style.whitespace false in -- manual alignment is not recognised
-/--
-Definition of `dividedPowers` / `dividedPowers` 的定义
+/-- The divided power structure on a sub-dp-ideal. -/
+/-
+**DividedPowers.IsSubDPIdeal.dividedPowers** 是 Mathlib 中的一个定义，位于命名空间 `DividedPow
+ers.IsSubDPIdeal`。
+形式化陈述：dividedPowers {J : Ideal A} (hJ : IsSubDPIdeal hI J) [forall x, Decidable 
+(x in J)] : DividedPowers J where dpow n x
+参数：hJ : IsSubDPIdeal hI J；x in J。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dividedPowers
-  signature: {J : Ideal A} (hJ : IsSubDPIdeal hI J) [forall x, Decidable (x in J)]
-  body: if x in J then hI.dpow n x else 0
-  dpow_null hx := by simp [if_neg hx]
-  dpow_zero hx := by simp [if_pos hx, hI.dpow_zero (hJ.isSubideal hx)]
-  dpow_one hx := by simp [if_pos hx, hI.dpow_one (hJ.isSubideal hx)]
-  dpow_mem hn hx := by simp [if_pos hx, hJ.dpow_mem _ hn hx]
-  dpow_add hx hy := by simp_rw [if_pos hx, if_pos hy, if_pos (Ideal.add_mem J hx hy),
-    hI.dpow_add (hJ.isSubideal hx) (hJ.isSubideal hy)]
-  dpow_mul hx := by
-    simp [if_pos hx, if_pos (mul_mem_left J _ hx), hI.dpow_mul (hJ.isSubideal hx)]
-  mul_dpow hx := by simp [if_pos hx, hI.mul_dpow (hJ.isSubideal hx)]
-  dpow_comp hn hx := by
-    simp [if_pos hx, if_pos (hJ.dpow_mem _ hn hx), hI.dpow_comp hn (hJ.isSubideal hx)]
-
-中文:
-定义 dividedPowers
-  签名: {J : 理想 A} (hJ : 是SubDP理想 hI J) [对任意 x, 可判定 (x in J)]
-  定义体: if x in J then hI.dpow n x else 0
-  dpow_null hx := by simp [if_neg hx]
-  dpow_zero hx := by simp [if_pos hx, hI.dpow_zero (hJ.isSubideal hx)]
-  dpow_one hx := by simp [if_pos hx, hI.dpow_one (hJ.isSubideal hx)]
-  dpow_mem hn hx := by simp [if_pos hx, hJ.dpow_mem _ hn hx]
-  dpow_add hx hy := by simp_rw [if_pos hx, if_pos hy, if_pos (Ideal.add_mem J hx hy),
-    hI.dpow_add (hJ.isSubideal hx) (hJ.isSubideal hy)]
-  dpow_mul hx := by
-    simp [if_pos hx, if_pos (mul_mem_left J _ hx), hI.dpow_mul (hJ.isSubideal hx)]
-  mul_dpow hx := by simp [if_pos hx, hI.mul_dpow (hJ.isSubideal hx)]
-  dpow_comp hn hx := by
-    simp [if_pos hx, if_pos (hJ.dpow_mem _ hn hx), hI.dpow_comp hn (hJ.isSubideal hx)]
-
-Depends on / 依赖: hI.dpow
+--- 原说明 ---
+The divided power structure on a sub-dp-ideal.
 -/
-def dividedPowers {J : Ideal A} (hJ : IsSubDPIdeal hI J) [forall x, Decidable (x in J)] :
+def dividedPowers {J : Ideal A} (hJ : IsSubDPIdeal hI J) [∀ x, Decidable (x ∈ J)] :
     DividedPowers J where
-  dpow n x := if x in J then hI.dpow n x else 0
-  dpow_null hx := by simp [if_neg hx]
-  dpow_zero hx := by simp [if_pos hx, hI.dpow_zero (hJ.isSubideal hx)]
-  dpow_one hx := by simp [if_pos hx, hI.dpow_one (hJ.isSubideal hx)]
-  dpow_mem hn hx := by simp [if_pos hx, hJ.dpow_mem _ hn hx]
-  dpow_add hx hy := by simp_rw [if_pos hx, if_pos hy, if_pos (Ideal.add_mem J hx hy),
+  dpow n x        := if x ∈ J then hI.dpow n x else 0
+  dpow_null hx    := by simp [if_neg hx]
+  dpow_zero hx    := by simp [if_pos hx, hI.dpow_zero (hJ.isSubideal hx)]
+  dpow_one hx     := by simp [if_pos hx, hI.dpow_one (hJ.isSubideal hx)]
+  dpow_mem hn hx  := by simp [if_pos hx, hJ.dpow_mem _ hn hx]
+  dpow_add hx hy  := by simp_rw [if_pos hx, if_pos hy, if_pos (Ideal.add_mem J hx hy),
     hI.dpow_add (hJ.isSubideal hx) (hJ.isSubideal hy)]
-  dpow_mul hx := by
+  dpow_mul hx     := by
     simp [if_pos hx, if_pos (mul_mem_left J _ hx), hI.dpow_mul (hJ.isSubideal hx)]
-  mul_dpow hx := by simp [if_pos hx, hI.mul_dpow (hJ.isSubideal hx)]
+  mul_dpow hx     := by simp [if_pos hx, hI.mul_dpow (hJ.isSubideal hx)]
   dpow_comp hn hx := by
     simp [if_pos hx, if_pos (hJ.dpow_mem _ hn hx), hI.dpow_comp hn (hJ.isSubideal hx)]
 
-variable {J : Ideal A} (hJ : IsSubDPIdeal hI J) [forall x, Decidable (x in J)]
-
-/--
-lemma `dpow_eq` / 引理 `dpow_eq`
-
-English:
-lemma dpow_eq
-  given: (n : Nat) (a : A)
-  proof: rfl
-
-中文:
-引理 dpow_eq
-  条件: (n : 自然数) (a : A)
-  证明: rfl
-
-Depends on / 依赖: Module, Module.Free.of_divisionRing, of_divisionRing
+variable {J : Ideal A} (hJ : IsSubDPIdeal hI J) [∀ x, Decidable (x ∈ J)]
+/-
+**DividedPowers.IsSubDPIdeal.dpow_eq** 是 Mathlib 中的一个引理，位于命名空间 `DividedPowers.Is
+SubDPIdeal`。
+形式化陈述：dpow_eq (n : Nat) (a : A) : (IsSubDPIdeal.dividedPowers hI hJ).dpow n a = 
+if a in J then hI.dpow n a else 0
+参数：n : Nat；a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma dpow_eq (n : Nat) (a : A) :
-    (IsSubDPIdeal.dividedPowers hI hJ).dpow n a = if a in J then hI.dpow n a else 0 := rfl
-
-/--
-lemma `dpow_eq_of_mem` / 引理 `dpow_eq_of_mem`
-
-English:
-lemma dpow_eq_of_mem
-  given: {n : Nat} {a : A} (ha : a in J)
-  proof: by rw [dpow_eq, if_pos ha]
-
-中文:
-引理 dpow_eq_of_mem
-  条件: {n : 自然数} {a : A} (ha : a in J)
-  证明: by rw [dpow_eq, if_pos ha]
-
-Depends on / 依赖: dpow_eq, if_pos
+lemma dpow_eq (n : ℕ) (a : A) :
+    (IsSubDPIdeal.dividedPowers hI hJ).dpow n a = if a ∈ J then hI.dpow n a else 0 := rfl
+/-
+**DividedPowers.IsSubDPIdeal.dpow_eq_of_mem** 是 Mathlib 中的一个引理，位于命名空间 `DividedPo
+wers.IsSubDPIdeal`。
+形式化陈述：dpow_eq_of_mem {n : Nat} {a : A} (ha : a in J) : (IsSubDPIdeal.dividedPowe
+rs hI hJ).dpow n a = hI.dpow n a
+参数：ha : a in J。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `DividedPowers.IsSubDPIdeal.dpow_eq`：dpow_eq (n : Nat) (a : A) : (IsSubDP
+Ideal.dividedPowers hI hJ).dpow n a = if a in J then hI.dpow n a else 0
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
-lemma dpow_eq_of_mem {n : Nat} {a : A} (ha : a in J) :
+lemma dpow_eq_of_mem {n : ℕ} {a : A} (ha : a ∈ J) :
     (IsSubDPIdeal.dividedPowers hI hJ).dpow n a = hI.dpow n a := by rw [dpow_eq, if_pos ha]
-
-/--
-theorem `isDPMorphism` / 定理 `isDPMorphism`
-
-English:
-theorem isDPMorphism
-  given: (hJ : IsSubDPIdeal hI J)
-  proof: by
-  simpa only [isDPMorphism_iff, Ideal.map_id, RingHom.id_apply]
-    using ⟨hJ.1, fun _ _ _ ha => by rw [dpow_eq_of_mem _ _ ha]⟩
-
-中文:
-定理 isDPMorphism
-  条件: (hJ : 是SubDP理想 hI J)
-  证明: by
-  simpa only [isDPMorphism_iff, Ideal.map_id, RingHom.id_apply]
-    using ⟨hJ.1, fun _ _ _ ha => by rw [dpow_eq_of_mem _ _ ha]⟩
-
-Depends on / 依赖: Ideal.map_id, RingHom, RingHom.id_apply, dpow_eq_of_mem, id_apply, isDPMorphism_iff, map_id
+/-
+**DividedPowers.IsSubDPIdeal.isDPMorphism** 是 Mathlib 中的一个定理，位于命名空间 `DividedPowe
+rs.IsSubDPIdeal`。
+形式化陈述：isDPMorphism (hJ : IsSubDPIdeal hI J) : (IsSubDPIdeal.dividedPowers hI hJ)
+.IsDPMorphism hI (RingHom.id A)
+参数：hJ : IsSubDPIdeal hI J。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.map_id`：map_id : I.map (RingHom.id R) = I
+· 使用定理 `DividedPowers.IsSubDPIdeal.isSubideal`：∀ {A : Type u_1} [inst : CommSemi
+ring A] {I : Ideal A} {hI : DividedPowers I} {J : Ideal A}, hI.IsSubDPIdeal J → 
+J ≤ I
+· 使用引理 `DividedPowers.IsSubDPIdeal.dpow_eq_of_mem`：dpow_eq_of_mem {n : Nat} {a :
+ A} (ha : a in J) : (IsSubDPIdeal.dividedPowers hI hJ).dpow n a = hI.dpow n a
 -/
 theorem isDPMorphism (hJ : IsSubDPIdeal hI J) :
     (IsSubDPIdeal.dividedPowers hI hJ).IsDPMorphism hI (RingHom.id A) := by
   simpa only [isDPMorphism_iff, Ideal.map_id, RingHom.id_apply]
-    using ⟨hJ.1, fun _ _ _ ha => by rw [dpow_eq_of_mem _ _ ha]⟩
+    using ⟨hJ.1, fun _ _ _ ha ↦ by rw [dpow_eq_of_mem _ _ ha]⟩
 
 end IsSubDPIdeal
 
 open Finset Ideal
 
-/--
-theorem `isSubDPIdeal_inf_iff` / 定理 `isSubDPIdeal_inf_iff`
+/-- The ideal `J ⊓ I` is a sub-dp-ideal of `I` if and only if the divided powers have
+  some compatibility mod `J`. (The necessity was proved as a sanity check.) -/
+/-
+**DividedPowers.isSubDPIdeal_inf_iff** 是 Mathlib 中的一个定理，位于命名空间 `DividedPowers`。
+形式化陈述：isSubDPIdeal_inf_iff {A : Type*} [CommRing A] {I : Ideal A} (hI : DividedP
+owers I) {J : Ideal A} : IsSubDPIdeal hI (J ⊓ I) ↔ forall {n : Nat} {a b : A} (_
+ : a in I) (_ : b in I) (_ : a - b in J), hI.dpow n a - hI.dpow n b in J
+参数：hI : DividedPowers I。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.sub_mem`：∀ {α : Type u} [inst : Ring α] (I : Ideal α) {a b : α}, a
+ ∈ I → b ∈ I → a - b ∈ I
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G), a + 
+(b - a) = b
+· 使用定理 `DividedPowers.dpow_add'`：dpow_add' (hI : DividedPowers I) {n : Nat} (ha 
+: a in I) (hb : b in I) : hI.dpow n (a + b) = (range (n + 1)).sum fun k => hI.dp
+ow k a * hI.d…
+· 使用定理 `Finset.range_add_one`：range_add_one : range (n + 1) = insert n (range n)
+· 使用定理 `Finset.sum_insert`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι
+} [inst : AddCommMonoid M] {f : ι → M} [inst_1 : DecidableEq ι],   a ∉ s → ∑ x ∈
+ insert…
+· 使用定理 `Finset.notMem_range_self`：notMem_range_self : n ∉ range n
+· 使用定理 `tsub_self`：tsub_self (a : α) : a - a = 0
+· 使用定理 `DividedPowers.dpow_zero`：∀ {A : Type u_1} [inst : CommSemiring A] {I : I
+deal A} (self : DividedPowers I) {x : A}, x ∈ I → self.dpow 0 x = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `add_sub_cancel_left`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G),
+ a + b - a = b
+· 使用定理 `Submodule.sum_mem`：∀ {R : Type u} {M : Type v} {ι : Type w} [inst : Semi
+ring R] [inst_1 : AddCommMonoid M] {module_M : _root_.Module R M}   (p : Submodu
+le R M)…
+· 使用定理 `SemilatticeInf.inf_le_left`：∀ {α : Type u} [self : SemilatticeInf α] (a 
+b : α), SemilatticeInf.inf a b ≤ a
+· 使用定理 `Submodule.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
+· 使用定理 `DividedPowers.IsSubDPIdeal.dpow_mem`：∀ {A : Type u_1} [inst : CommSemiri
+ng A] {I : Ideal A} {hI : DividedPowers I} {J : Ideal A},   hI.IsSubDPIdeal J → 
+∀ (n : ℕ), n ≠ 0 → ∀ {j :…
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Nat.sub_pos_of_lt`：∀ {m n : ℕ}, m < n → 0 < n - m
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_range`：mem_range : m in range n ↔ m < n
+· 使用定理 `SemilatticeInf.inf_le_right`：∀ {α : Type u} [self : SemilatticeInf α] (a
+ b : α), SemilatticeInf.inf a b ≤ b
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `DividedPowers.dpow_eval_zero`：dpow_eval_zero {n : Nat} (hn : n != 0) : h
+I.dpow n 0 = 0
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Ideal.zero_mem`：∀ {α : Type u} [inst : Semiring α] (I : Ideal α), 0 ∈ I
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `DividedPowers.dpow_mem`：∀ {A : Type u_1} [inst : CommSemiring A] {I : Id
+eal A} (self : DividedPowers I) {n : ℕ} {x : A},   n ≠ 0 → x ∈ I → self.dpow n x
+ ∈ I
 
-English:
-theorem isSubDPIdeal_inf_iff
-  statement: {A : Type*} [CommRing A] {I : Ideal A} (hI : DividedPowers I)
-  proof: by
-  refine ⟨fun hIJ n a b ha hb hab => ?_, fun hIJ => ?_⟩
-  · have hab' : a - b in I := I.sub_mem ha hb
-    rw [← add_sub_cancel b a]; rw [hI.dpow_add' hb hab']; rw [range_add_one]; rw [sum_insert notMem_range_self]; rw [tsub_self]; rw [hI.dpow_zero hab']; rw [mul_one]; rw [add_sub_cancel_left]
-    exact J.sum_mem (fun i hi => SemilatticeInf.inf_le_left J I ((J ⊓ I).smul_mem _
-      (hIJ.dpow_mem _ (ne_of_gt (Nat.sub_pos_of_lt (mem_range.mp hi))) ⟨hab, hab'⟩)))
-  · refine ⟨SemilatticeInf.inf_le_right J I, fun {n} hn {a} ha => ⟨?_, hI.dpow_mem hn ha.right⟩⟩
-    rw [← sub_zero (hI.dpow n a)]; rw [← hI.dpow_eval_zero hn]
-    exact hIJ ha.right I.zero_mem (J.sub_mem ha.left J.zero_mem)
-
-中文:
-定理 isSubDPIdeal_inf_iff
-  结论: {A : 类型} [交换环 A] {I : 理想 A} (hI : DividedPowers I)
-  证明: by
-  refine ⟨fun hIJ n a b ha hb hab => ?_, fun hIJ => ?_⟩
-  · have hab' : a - b in I := I.sub_mem ha hb
-    rw [← add_sub_cancel b a]; rw [hI.dpow_add' hb hab']; rw [range_add_one]; rw [sum_insert notMem_range_self]; rw [tsub_self]; rw [hI.dpow_zero hab']; rw [mul_one]; rw [add_sub_cancel_left]
-    exact J.sum_mem (fun i hi => SemilatticeInf.inf_le_left J I ((J ⊓ I).smul_mem _
-      (hIJ.dpow_mem _ (ne_of_gt (Nat.sub_pos_of_lt (mem_range.mp hi))) ⟨hab, hab'⟩)))
-  · refine ⟨SemilatticeInf.inf_le_right J I, fun {n} hn {a} ha => ⟨?_, hI.dpow_mem hn ha.right⟩⟩
-    rw [← sub_zero (hI.dpow n a)]; rw [← hI.dpow_eval_zero hn]
-    exact hIJ ha.right I.zero_mem (J.sub_mem ha.left J.zero_mem)
-
-Depends on / 依赖: I.sub_mem, J.sum_mem, Nat.sub_pos_of_lt, SemilatticeInf, SemilatticeInf.inf_le_left, SemilatticeInf.inf_le_right, add_sub_cancel, add_sub_cancel_left, dpow_add, dpow_mem, dpow_zero, hI.dpow_add, hI.dpow_zero, hIJ.dpow_mem, inf_le_left, inf_le_right, mem_range, mem_range.mp, mul_one, ne_of_gt
+--- 原说明 ---
+The ideal `J ⊓ I` is a sub-dp-ideal of `I` if and only if the divided powers hav
+e
+  some compatibility mod `J`. (The necessity was proved as a sanity check.)
 -/
 theorem isSubDPIdeal_inf_iff {A : Type*} [CommRing A] {I : Ideal A} (hI : DividedPowers I)
     {J : Ideal A} : IsSubDPIdeal hI (J ⊓ I) ↔
-    forall {n : Nat} {a b : A} (_ : a in I) (_ : b in I) (_ : a - b in J), hI.dpow n a - hI.dpow n b in J := by
-  refine ⟨fun hIJ n a b ha hb hab => ?_, fun hIJ => ?_⟩
-  · have hab' : a - b in I := I.sub_mem ha hb
-    rw [← add_sub_cancel b a]; rw [hI.dpow_add' hb hab']; rw [range_add_one]; rw [sum_insert notMem_range_self]; rw [tsub_self]; rw [hI.dpow_zero hab']; rw [mul_one]; rw [add_sub_cancel_left]
-    exact J.sum_mem (fun i hi => SemilatticeInf.inf_le_left J I ((J ⊓ I).smul_mem _
+    ∀ {n : ℕ} {a b : A} (_ : a ∈ I) (_ : b ∈ I) (_ : a - b ∈ J), hI.dpow n a - hI.dpow n b ∈ J := by
+  refine ⟨fun hIJ n a b ha hb hab ↦ ?_, fun hIJ ↦ ?_⟩
+  · have hab' : a - b ∈ I := I.sub_mem ha hb
+    rw [← add_sub_cancel b a, hI.dpow_add' hb hab', range_add_one, sum_insert notMem_range_self,
+      tsub_self, hI.dpow_zero hab', mul_one, add_sub_cancel_left]
+    exact J.sum_mem (fun i hi ↦ SemilatticeInf.inf_le_left J I ((J ⊓ I).smul_mem _
       (hIJ.dpow_mem _ (ne_of_gt (Nat.sub_pos_of_lt (mem_range.mp hi))) ⟨hab, hab'⟩)))
-  · refine ⟨SemilatticeInf.inf_le_right J I, fun {n} hn {a} ha => ⟨?_, hI.dpow_mem hn ha.right⟩⟩
-    rw [← sub_zero (hI.dpow n a)]; rw [← hI.dpow_eval_zero hn]
+  · refine ⟨SemilatticeInf.inf_le_right J I, fun {n} hn {a} ha ↦ ⟨?_, hI.dpow_mem hn ha.right⟩⟩
+    rw [← sub_zero (hI.dpow n a), ← hI.dpow_eval_zero hn]
     exact hIJ ha.right I.zero_mem (J.sub_mem ha.left J.zero_mem)
 
 variable {A B : Type*} [CommSemiring A] {I : Ideal A} {hI : DividedPowers I} [CommSemiring B]
   {J : Ideal B} {hJ : DividedPowers J}
 
-/--
-theorem `span_isSubDPIdeal_iff` / 定理 `span_isSubDPIdeal_iff`
+/-- [P. Berthelot and A. Ogus, *Notes on crystalline cohomology* (Lemma 3.6)][BerthelotOgus-1978] -/
+/-
+**DividedPowers.span_isSubDPIdeal_iff** 是 Mathlib 中的一个定理，位于命名空间 `DividedPowers`。
+形式化陈述：span_isSubDPIdeal_iff {S : Set A} (hS : S subseteq I) : IsSubDPIdeal hI (s
+pan S) ↔ forall {n : Nat} (_ : n != 0), forall s in S, hI.dpow n s in span S
+参数：hS : S subseteq I。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DividedPowers.IsSubDPIdeal.dpow_mem`：∀ {A : Type u_1} [inst : CommSemiri
+ng A] {I : Ideal A} {hI : DividedPowers I} {J : Ideal A},   hI.IsSubDPIdeal J → 
+∀ (n : ℕ), n ≠ 0 → ∀ {j :…
+· 使用定理 `Ideal.subset_span`：subset_span {s : Set α} : s subseteq span s
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ideal.span_le`：span_le {s : Set α} {I} : span s <= I ↔ s subseteq I
+· 使用定理 `Submodule.span_induction`：span_induction {p : (x : M) -> x in span R s -
+> Prop} (mem : forall (x) (h : x in s), p x (subset_span h)) (zero : p 0 (Submod
+ule.zero_mem _…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DividedPowers.dpow_eval_zero`：dpow_eval_zero {n : Nat} (hn : n != 0) : h
+I.dpow n 0 = 0
+· 使用定理 `Ideal.zero_mem`：∀ {α : Type u} [inst : Semiring α] (I : Ideal α), 0 ∈ I
+· 使用定理 `DividedPowers.dpow_add'`：dpow_add' (hI : DividedPowers I) {n : Nat} (ha 
+: a in I) (hb : b in I) : hI.dpow n (a + b) = (range (n + 1)).sum fun k => hI.dp
+ow k a * hI.d…
+· 使用定理 `Submodule.sum_mem`：∀ {R : Type u} {M : Type v} {ι : Type w} [inst : Semi
+ring R] [inst_1 : AddCommMonoid M] {module_M : _root_.Module R M}   (p : Submodu
+le R M)…
+· 使用定理 `Ideal.mul_mem_left`：mul_mem_left : b in I -> a * b in I
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.mul_mem_right`：mul_mem_right {α} {a : α} (b : α) [Semiring α] (I :
+ Ideal α) [I.IsTwoSided] (h : a in I) : a * b in I
+· 使用定理 `Ideal.instIsTwoSided`：∀ {α : Type u} [inst : CommSemiring α] (I : Ideal 
+α), I.IsTwoSided
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `DividedPowers.dpow_mul`：∀ {A : Type u_1} [inst : CommSemiring A] {I : Id
+eal A} (self : DividedPowers I) {n : ℕ} {a x : A},   x ∈ I → self.dpow n (a * x)
+ = a ^ n * s…
 
-English:
-theorem span_isSubDPIdeal_iff
-  given: {S : Set A} (hS : S subseteq I)
-  proof: by
-  refine ⟨fun hhI n hn s hs => hhI.dpow_mem n hn (subset_span hs), fun hhI => ?_⟩
-  · -- interesting direction
-    have hSI := span_le.mpr hS
-    apply IsSubDPIdeal.mk hSI
-    intro m hm z hz
-    induction hz using Submodule.span_induction generalizing m hm with
-    | mem x h => exact hhI hm x h
-    | zero =>
-        rw [hI.dpow_eval_zero hm]
-        exact (span S).zero_mem
-    | add x y hxI hyI hx hy =>
-        rw [hI.dpow_add' (hSI hxI) (hSI hyI)]
-        apply Submodule.sum_mem (span S)
-        intro m _
-        by_cases hm0 : m = 0
-        · exact hm0 ▸ mul_mem_left (span S) _ (hy _ hm)
-        · exact mul_mem_right _ (span S) (hx _ hm0)
-    | smul a x hxI hx =>
-        rw [smul_eq_mul]; rw [hI.dpow_mul (hSI hxI)]
-        exact mul_mem_left (span S) (a ^ m) (hx m hm)
-
-中文:
-定理 span_isSubDPIdeal_iff
-  条件: {S : 集合 A} (hS : S subseteq I)
-  证明: by
-  refine ⟨fun hhI n hn s hs => hhI.dpow_mem n hn (subset_span hs), fun hhI => ?_⟩
-  · -- interesting direction
-    have hSI := span_le.mpr hS
-    apply IsSubDPIdeal.mk hSI
-    intro m hm z hz
-    induction hz using Submodule.span_induction generalizing m hm with
-    | mem x h => exact hhI hm x h
-    | zero =>
-        rw [hI.dpow_eval_zero hm]
-        exact (span S).zero_mem
-    | add x y hxI hyI hx hy =>
-        rw [hI.dpow_add' (hSI hxI) (hSI hyI)]
-        apply Submodule.sum_mem (span S)
-        intro m _
-        by_cases hm0 : m = 0
-        · exact hm0 ▸ mul_mem_left (span S) _ (hy _ hm)
-        · exact mul_mem_right _ (span S) (hx _ hm0)
-    | smul a x hxI hx =>
-        rw [smul_eq_mul]; rw [hI.dpow_mul (hSI hxI)]
-        exact mul_mem_left (span S) (a ^ m) (hx m hm)
-
-Depends on / 依赖: IsSubDPIdeal, IsSubDPIdeal.mk, Submodule, Submodule.span_induction, Submodule.sum_mem, direction, dpow_add, dpow_eval_zero, dpow_mem, generalizing, hI.dpow_add, hI.dpow_eval_zero, hhI.dpow_mem, interesting, mul_mem_left, span_induction, span_le, span_le.mpr, subset_span, sum_mem
+--- 原说明 ---
+[P. Berthelot and A. Ogus, *Notes on crystalline cohomology* (Lemma 3.6)][Berthe
+lotOgus-1978]
 -/
-theorem span_isSubDPIdeal_iff {S : Set A} (hS : S subseteq I) :
-    IsSubDPIdeal hI (span S) ↔ forall {n : Nat} (_ : n != 0), forall s in S, hI.dpow n s in span S := by
-  refine ⟨fun hhI n hn s hs => hhI.dpow_mem n hn (subset_span hs), fun hhI => ?_⟩
+theorem span_isSubDPIdeal_iff {S : Set A} (hS : S ⊆ I) :
+    IsSubDPIdeal hI (span S) ↔ ∀ {n : ℕ} (_ : n ≠ 0), ∀ s ∈ S, hI.dpow n s ∈ span S := by
+  refine ⟨fun hhI n hn s hs ↦ hhI.dpow_mem n hn (subset_span hs), fun hhI ↦ ?_⟩
   · -- interesting direction
     have hSI := span_le.mpr hS
     apply IsSubDPIdeal.mk hSI
@@ -367,166 +345,184 @@ theorem span_isSubDPIdeal_iff {S : Set A} (hS : S subseteq I) :
         · exact hm0 ▸ mul_mem_left (span S) _ (hy _ hm)
         · exact mul_mem_right _ (span S) (hx _ hm0)
     | smul a x hxI hx =>
-        rw [smul_eq_mul]; rw [hI.dpow_mul (hSI hxI)]
+        rw [smul_eq_mul, hI.dpow_mul (hSI hxI)]
         exact mul_mem_left (span S) (a ^ m) (hx m hm)
-
-/--
-theorem `isSubDPIdeal_sup` / 定理 `isSubDPIdeal_sup`
-
-English:
-theorem isSubDPIdeal_sup
-  given: {J K : Ideal A} (hJ : IsSubDPIdeal hI J) (hK : IsSubDPIdeal hI K)
-  proof: by
-  rw [← J.span_eq]; rw [← K.span_eq]; rw [← span_union]; rw [span_isSubDPIdeal_iff (Set.union_subset_iff.mpr ⟨hJ.1]; rw [hK.1⟩)]
-  intro n hn a ha
-  rcases ha with ha | ha
-  · exact span_mono Set.subset_union_left (subset_span (hJ.2 n hn ha))
-  · exact span_mono Set.subset_union_right (subset_span (hK.2 n hn ha))
-
-中文:
-定理 isSubDPIdeal_sup
-  条件: {J K : 理想 A} (hJ : 是SubDP理想 hI J) (hK : 是SubDP理想 hI K)
-  证明: by
-  rw [← J.span_eq]; rw [← K.span_eq]; rw [← span_union]; rw [span_isSubDPIdeal_iff (Set.union_subset_iff.mpr ⟨hJ.1]; rw [hK.1⟩)]
-  intro n hn a ha
-  rcases ha with ha | ha
-  · exact span_mono Set.subset_union_left (subset_span (hJ.2 n hn ha))
-  · exact span_mono Set.subset_union_right (subset_span (hK.2 n hn ha))
-
-Depends on / 依赖: J.span_eq, K.span_eq, Set.subset_union_left, Set.subset_union_right, Set.union_subset_iff.mpr, span_eq, span_isSubDPIdeal_iff, span_mono, span_union, subset_span, subset_union_left, subset_union_right, union_subset_iff
+/-
+**DividedPowers.isSubDPIdeal_sup** 是 Mathlib 中的一个定理，位于命名空间 `DividedPowers`。
+形式化陈述：isSubDPIdeal_sup {J K : Ideal A} (hJ : IsSubDPIdeal hI J) (hK : IsSubDPIde
+al hI K) : IsSubDPIdeal hI (J ⊔ K)
+参数：hJ : IsSubDPIdeal hI J；hK : IsSubDPIdeal hI K。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.span_eq`：span_eq : span (I : Set α) = I
+· 使用定理 `Ideal.span_union`：span_union (s t : Set α) : span (s union t) = span s ⊔
+ span t
+· 使用定理 `DividedPowers.span_isSubDPIdeal_iff`：span_isSubDPIdeal_iff {S : Set A} (
+hS : S subseteq I) : IsSubDPIdeal hI (span S) ↔ forall {n : Nat} (_ : n != 0), f
+orall s in S, hI.dpow n s…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.union_subset_iff`：union_subset_iff {s t u : Set α} : s union t subse
+teq u ↔ s subseteq u ∧ t subseteq u
+· 使用定理 `DividedPowers.IsSubDPIdeal.isSubideal`：∀ {A : Type u_1} [inst : CommSemi
+ring A] {I : Ideal A} {hI : DividedPowers I} {J : Ideal A}, hI.IsSubDPIdeal J → 
+J ≤ I
+· 使用定理 `Ideal.span_mono`：span_mono {s t : Set α} : s subseteq t -> span s <= spa
+n t
+· 使用定理 `Set.subset_union_left`：subset_union_left {s t : Set α} : s subseteq s un
+ion t
+· 使用定理 `Ideal.subset_span`：subset_span {s : Set α} : s subseteq span s
+· 使用定理 `DividedPowers.IsSubDPIdeal.dpow_mem`：∀ {A : Type u_1} [inst : CommSemiri
+ng A] {I : Ideal A} {hI : DividedPowers I} {J : Ideal A},   hI.IsSubDPIdeal J → 
+∀ (n : ℕ), n ≠ 0 → ∀ {j :…
+· 使用定理 `Set.subset_union_right`：subset_union_right {s t : Set α} : t subseteq s 
+union t
 -/
 theorem isSubDPIdeal_sup {J K : Ideal A} (hJ : IsSubDPIdeal hI J) (hK : IsSubDPIdeal hI K) :
     IsSubDPIdeal hI (J ⊔ K) := by
-  rw [← J.span_eq]; rw [← K.span_eq]; rw [← span_union]; rw [span_isSubDPIdeal_iff (Set.union_subset_iff.mpr ⟨hJ.1]; rw [hK.1⟩)]
+  rw [← J.span_eq, ← K.span_eq, ← span_union,
+    span_isSubDPIdeal_iff (Set.union_subset_iff.mpr ⟨hJ.1, hK.1⟩)]
   intro n hn a ha
   rcases ha with ha | ha
   · exact span_mono Set.subset_union_left (subset_span (hJ.2 n hn ha))
   · exact span_mono Set.subset_union_right (subset_span (hK.2 n hn ha))
-
-/--
-theorem `isSubDPIdeal_iSup` / 定理 `isSubDPIdeal_iSup`
-
-English:
-theorem isSubDPIdeal_iSup
-  given: {ι : Type*} {J : ι -> Ideal A} (hJ : forall i, IsSubDPIdeal hI (J i))
-  proof: by
-  rw [iSup_eq_span]; rw [span_isSubDPIdeal_iff (Set.iUnion_subset_iff.mpr <| fun i => (hJ i).1)]
-  simp_rw [Set.mem_iUnion]
-  rintro n hn a ⟨i, ha⟩
-  exact span_mono (Set.subset_iUnion _ i) (subset_span ((hJ i).2 n hn ha))
-
-中文:
-定理 isSubDPIdeal_iSup
-  条件: {ι : 类型} {J : ι -> 理想 A} (hJ : 对任意 i, 是SubDP理想 hI (J i))
-  证明: by
-  rw [iSup_eq_span]; rw [span_isSubDPIdeal_iff (Set.iUnion_subset_iff.mpr <| fun i => (hJ i).1)]
-  simp_rw [Set.mem_iUnion]
-  rintro n hn a ⟨i, ha⟩
-  exact span_mono (Set.subset_iUnion _ i) (subset_span ((hJ i).2 n hn ha))
-
-Depends on / 依赖: Set.iUnion_subset_iff.mpr, Set.mem_iUnion, Set.subset_iUnion, iSup_eq_span, iUnion_subset_iff, mem_iUnion, simp_rw, span_isSubDPIdeal_iff, span_mono, subset_iUnion, subset_span
+/-
+**DividedPowers.isSubDPIdeal_iSup** 是 Mathlib 中的一个定理，位于命名空间 `DividedPowers`。
+形式化陈述：isSubDPIdeal_iSup {ι : Type*} {J : ι -> Ideal A} (hJ : forall i, IsSubDPId
+eal hI (J i)) : IsSubDPIdeal hI (iSup J)
+参数：hJ : forall i, IsSubDPIdeal hI (J i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.iSup_eq_span`：iSup_eq_span {ι} (p : ι -> Ideal α) : ⨆ i, p i = spa
+n (⋃ i, ↑(p i))
+· 使用定理 `DividedPowers.span_isSubDPIdeal_iff`：span_isSubDPIdeal_iff {S : Set A} (
+hS : S subseteq I) : IsSubDPIdeal hI (span S) ↔ forall {n : Nat} (_ : n != 0), f
+orall s in S, hI.dpow n s…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.iUnion_subset_iff`：iUnion_subset_iff {s : ι -> Set α} {t : Set α} : 
+⋃ i, s i subseteq t ↔ forall i, s i subseteq t
+· 使用定理 `DividedPowers.IsSubDPIdeal.isSubideal`：∀ {A : Type u_1} [inst : CommSemi
+ring A] {I : Ideal A} {hI : DividedPowers I} {J : Ideal A}, hI.IsSubDPIdeal J → 
+J ≤ I
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Ideal.span_mono`：span_mono {s t : Set α} : s subseteq t -> span s <= spa
+n t
+· 使用定理 `Set.subset_iUnion`：subset_iUnion : forall (s : ι -> Set β) (i : ι), s i 
+subseteq ⋃ i, s i
+· 使用定理 `Ideal.subset_span`：subset_span {s : Set α} : s subseteq span s
+· 使用定理 `DividedPowers.IsSubDPIdeal.dpow_mem`：∀ {A : Type u_1} [inst : CommSemiri
+ng A] {I : Ideal A} {hI : DividedPowers I} {J : Ideal A},   hI.IsSubDPIdeal J → 
+∀ (n : ℕ), n ≠ 0 → ∀ {j :…
 -/
-theorem isSubDPIdeal_iSup {ι : Type*} {J : ι -> Ideal A} (hJ : forall i, IsSubDPIdeal hI (J i)) :
+theorem isSubDPIdeal_iSup {ι : Type*} {J : ι → Ideal A} (hJ : ∀ i, IsSubDPIdeal hI (J i)) :
     IsSubDPIdeal hI (iSup J) := by
-  rw [iSup_eq_span]; rw [span_isSubDPIdeal_iff (Set.iUnion_subset_iff.mpr <| fun i => (hJ i).1)]
+  rw [iSup_eq_span, span_isSubDPIdeal_iff (Set.iUnion_subset_iff.mpr <| fun i ↦ (hJ i).1)]
   simp_rw [Set.mem_iUnion]
   rintro n hn a ⟨i, ha⟩
   exact span_mono (Set.subset_iUnion _ i) (subset_span ((hJ i).2 n hn ha))
-
-/--
-theorem `isSubDPIdeal_iInf` / 定理 `isSubDPIdeal_iInf`
-
-English:
-theorem isSubDPIdeal_iInf
-  given: {ι : Type*} {J : ι -> Ideal A} (hJ : forall i, IsSubDPIdeal hI (J i))
-  proof: by
-  cases isEmpty_or_nonempty ι with
-  | inr _ =>
-    refine ⟨fun _ hx => hx.1, ?_⟩
-    intro n hn x hx
-    simp only [Ideal.mem_inf, mem_iInf] at hx ⊢
-    exact ⟨hI.dpow_mem hn hx.1, fun i => IsSubDPIdeal.dpow_mem (hJ i) n hn (hx.2 i)⟩
-  | inl _ =>
-    simp only [iInf_of_empty, le_top, inf_of_le_left]
-    exact IsSubDPIdeal.self hI
-
-中文:
-定理 isSubDPIdeal_iInf
-  条件: {ι : 类型} {J : ι -> 理想 A} (hJ : 对任意 i, 是SubDP理想 hI (J i))
-  证明: by
-  cases isEmpty_or_nonempty ι with
-  | inr _ =>
-    refine ⟨fun _ hx => hx.1, ?_⟩
-    intro n hn x hx
-    simp only [Ideal.mem_inf, mem_iInf] at hx ⊢
-    exact ⟨hI.dpow_mem hn hx.1, fun i => IsSubDPIdeal.dpow_mem (hJ i) n hn (hx.2 i)⟩
-  | inl _ =>
-    simp only [iInf_of_empty, le_top, inf_of_le_left]
-    exact IsSubDPIdeal.self hI
-
-Depends on / 依赖: Ideal.mem_inf, IsSubDPIdeal, IsSubDPIdeal.dpow_mem, IsSubDPIdeal.self, dpow_mem, hI.dpow_mem, iInf_of_empty, inf_of_le_left, isEmpty_or_nonempty, le_top, mem_iInf, mem_inf
+/-
+**DividedPowers.isSubDPIdeal_iInf** 是 Mathlib 中的一个定理，位于命名空间 `DividedPowers`。
+形式化陈述：isSubDPIdeal_iInf {ι : Type*} {J : ι -> Ideal A} (hJ : forall i, IsSubDPId
+eal hI (J i)) : IsSubDPIdeal hI (I ⊓ iInf (fun i => J i))
+参数：hJ : forall i, IsSubDPIdeal hI (J i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isEmpty_or_nonempty`：isEmpty_or_nonempty : IsEmpty α ∨ Nonempty α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iInf_of_empty`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α
+] [IsEmpty ι] (f : ι → α), iInf f = ⊤
+· 使用定理 `inf_of_le_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ≤ 
+b → a ⊓ b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `DividedPowers.IsSubDPIdeal.self`：self : IsSubDPIdeal hI I where isSubide
+al
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `DividedPowers.dpow_mem`：∀ {A : Type u_1} [inst : CommSemiring A] {I : Id
+eal A} (self : DividedPowers I) {n : ℕ} {x : A},   n ≠ 0 → x ∈ I → self.dpow n x
+ ∈ I
+· 使用定理 `DividedPowers.IsSubDPIdeal.dpow_mem`：∀ {A : Type u_1} [inst : CommSemiri
+ng A] {I : Ideal A} {hI : DividedPowers I} {J : Ideal A},   hI.IsSubDPIdeal J → 
+∀ (n : ℕ), n ≠ 0 → ∀ {j :…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem isSubDPIdeal_iInf {ι : Type*} {J : ι -> Ideal A} (hJ : forall i, IsSubDPIdeal hI (J i)) :
-    IsSubDPIdeal hI (I ⊓ iInf (fun i => J i)) := by
+theorem isSubDPIdeal_iInf {ι : Type*} {J : ι → Ideal A} (hJ : ∀ i, IsSubDPIdeal hI (J i)) :
+    IsSubDPIdeal hI (I ⊓ iInf (fun i ↦ J i)) := by
   cases isEmpty_or_nonempty ι with
   | inr _ =>
-    refine ⟨fun _ hx => hx.1, ?_⟩
+    refine ⟨fun _ hx ↦ hx.1, ?_⟩
     intro n hn x hx
     simp only [Ideal.mem_inf, mem_iInf] at hx ⊢
-    exact ⟨hI.dpow_mem hn hx.1, fun i => IsSubDPIdeal.dpow_mem (hJ i) n hn (hx.2 i)⟩
+    exact ⟨hI.dpow_mem hn hx.1, fun i ↦  IsSubDPIdeal.dpow_mem (hJ i) n hn (hx.2 i)⟩
   | inl _ =>
     simp only [iInf_of_empty, le_top, inf_of_le_left]
     exact IsSubDPIdeal.self hI
-
-/--
-theorem `isSubDPIdeal_map_of_isSubDPIdeal` / 定理 `isSubDPIdeal_map_of_isSubDPIdeal`
-
-English:
-theorem isSubDPIdeal_map_of_isSubDPIdeal
-  statement: {f : A ->+* B} (hf : IsDPMorphism hI hJ f) {K : Ideal A}
-  proof: by
-  rw [Ideal.map]; rw [span_isSubDPIdeal_iff]
-  · rintro n hn y ⟨x, hx, rfl⟩
-    exact hf.2 x (hK.1 hx) ▸ mem_map_of_mem _ (hK.2 _ hn hx)
-  · rintro y ⟨x, hx, rfl⟩
-    exact hf.1 (mem_map_of_mem f (hK.1 hx))
-
-中文:
-定理 isSubDPIdeal_map_of_isSubDPIdeal
-  结论: {f : A ->+* B} (hf : 是DP态射 hI hJ f) {K : 理想 A}
-  证明: by
-  rw [Ideal.map]; rw [span_isSubDPIdeal_iff]
-  · rintro n hn y ⟨x, hx, rfl⟩
-    exact hf.2 x (hK.1 hx) ▸ mem_map_of_mem _ (hK.2 _ hn hx)
-  · rintro y ⟨x, hx, rfl⟩
-    exact hf.1 (mem_map_of_mem f (hK.1 hx))
-
-Depends on / 依赖: Ideal.map, mem_map_of_mem, span_isSubDPIdeal_iff
+/-
+**DividedPowers.isSubDPIdeal_map_of_isSubDPIdeal** 是 Mathlib 中的一个定理，位于命名空间 `Divi
+dedPowers`。
+形式化陈述：isSubDPIdeal_map_of_isSubDPIdeal {f : A ->+* B} (hf : IsDPMorphism hI hJ f
+) {K : Ideal A} (hK : IsSubDPIdeal hI K) : IsSubDPIdeal hJ (map f K)
+参数：hf : IsDPMorphism hI hJ f；hK : IsSubDPIdeal hI K。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.map.eq_1`：∀ {R : Type u} {S : Type v} {F : Type u_1} [inst : Semir
+ing R] [inst_1 : Semiring S] [inst_2 : FunLike F R S] (f : F)   (I : Ideal R), I
+deal…
+· 使用定理 `DividedPowers.span_isSubDPIdeal_iff`：span_isSubDPIdeal_iff {S : Set A} (
+hS : S subseteq I) : IsSubDPIdeal hI (span S) ↔ forall {n : Nat} (_ : n != 0), f
+orall s in S, hI.dpow n s…
+· 使用定理 `DividedPowers.IsDPMorphism.ideal_comp`：∀ {A : Type u_1} {B : Type u_2} [
+inst : CommSemiring A] [inst_1 : CommSemiring B] {I : Ideal A} {J : Ideal B}   {
+hI : DividedPowers I} {hJ :…
+· 使用定理 `Ideal.mem_map_of_mem`：mem_map_of_mem (f : F) {I : Ideal R} {x : R} (h : 
+x in I) : f x in map f I
+· 使用定理 `DividedPowers.IsSubDPIdeal.isSubideal`：∀ {A : Type u_1} [inst : CommSemi
+ring A] {I : Ideal A} {hI : DividedPowers I} {J : Ideal A}, hI.IsSubDPIdeal J → 
+J ≤ I
+· 使用定理 `DividedPowers.IsSubDPIdeal.dpow_mem`：∀ {A : Type u_1} [inst : CommSemiri
+ng A] {I : Ideal A} {hI : DividedPowers I} {J : Ideal A},   hI.IsSubDPIdeal J → 
+∀ (n : ℕ), n ≠ 0 → ∀ {j :…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `DividedPowers.IsDPMorphism.dpow_comp`：∀ {A : Type u_1} {B : Type u_2} [i
+nst : CommSemiring A] [inst_1 : CommSemiring B] {I : Ideal A} {J : Ideal B}   {h
+I : DividedPowers I} {hJ :…
 -/
-theorem isSubDPIdeal_map_of_isSubDPIdeal {f : A ->+* B} (hf : IsDPMorphism hI hJ f) {K : Ideal A}
+theorem isSubDPIdeal_map_of_isSubDPIdeal {f : A →+* B} (hf : IsDPMorphism hI hJ f) {K : Ideal A}
     (hK : IsSubDPIdeal hI K) : IsSubDPIdeal hJ (map f K) := by
-  rw [Ideal.map]; rw [span_isSubDPIdeal_iff]
+  rw [Ideal.map, span_isSubDPIdeal_iff]
   · rintro n hn y ⟨x, hx, rfl⟩
     exact hf.2 x (hK.1 hx) ▸ mem_map_of_mem _ (hK.2 _ hn hx)
   · rintro y ⟨x, hx, rfl⟩
     exact hf.1 (mem_map_of_mem f (hK.1 hx))
 
-/--
-theorem `isSubDPIdeal_map` / 定理 `isSubDPIdeal_map`
+/-- The image of a divided power morphism from `I` to `J` is a sub-dp-ideal of `J`. -/
+/-
+**DividedPowers.isSubDPIdeal_map** 是 Mathlib 中的一个定理，位于命名空间 `DividedPowers`。
+形式化陈述：isSubDPIdeal_map {f : A ->+* B} (hf : IsDPMorphism hI hJ f) : IsSubDPIdeal
+ hJ (Ideal.map f I)
+参数：hf : IsDPMorphism hI hJ f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DividedPowers.isSubDPIdeal_map_of_isSubDPIdeal`：isSubDPIdeal_map_of_isSu
+bDPIdeal {f : A ->+* B} (hf : IsDPMorphism hI hJ f) {K : Ideal A} (hK : IsSubDPI
+deal hI K) : IsSubDPIdeal hJ (map f …
+· 使用定理 `DividedPowers.IsSubDPIdeal.self`：self : IsSubDPIdeal hI I where isSubide
+al
 
-English:
-theorem isSubDPIdeal_map
-  given: {f : A ->+* B} (hf : IsDPMorphism hI hJ f)
-  proof: isSubDPIdeal_map_of_isSubDPIdeal hf (IsSubDPIdeal.self hI)
-
-中文:
-定理 isSubDPIdeal_map
-  条件: {f : A ->+* B} (hf : 是DP态射 hI hJ f)
-  证明: isSubDPIdeal_map_of_isSubDPIdeal hf (IsSubDPIdeal.self hI)
-
-Depends on / 依赖: IsSubDPIdeal, IsSubDPIdeal.self, isSubDPIdeal_map_of_isSubDPIdeal
+--- 原说明 ---
+The image of a divided power morphism from `I` to `J` is a sub-dp-ideal of `J`.
 -/
-theorem isSubDPIdeal_map {f : A ->+* B} (hf : IsDPMorphism hI hJ f) :
+theorem isSubDPIdeal_map {f : A →+* B} (hf : IsDPMorphism hI hJ f) :
     IsSubDPIdeal hJ (Ideal.map f I) :=
   isSubDPIdeal_map_of_isSubDPIdeal hf (IsSubDPIdeal.self hI)
 
@@ -535,237 +531,143 @@ end IsSubDPIdeal
 /-- A `SubDPIdeal` of `I` is a sub-ideal `J` of `I` such that for all `n > 0` `x ∈ J`,
   `hI.dpow n j ∈ J`. The unbundled version of this definition is called `IsSubDPIdeal`. -/
 @[ext]
-/--
-Definition of `SubDPIdeal` / `SubDPIdeal` 的定义
+/-
+**DividedPowers.SubDPIdeal** 是 Mathlib 中的一个归纳类型，位于命名空间 `DividedPowers`。
+形式化陈述：{A : Type u_1} → [inst : CommSemiring A] → {I : Ideal A} → DividedPowers I
+ → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure SubDPIdeal
-  parameters: {A : Type*} [CommSemiring A] {I : Ideal A} (hI : DividedPowers I)
-  axioms and operations (3):
-    - carrier : Ideal A
-    - isSubideal : carrier <= I
-    - dpow_mem : forall (n : Nat) (_ : n != 0), forall j in carrier, hI.dpow n j in carrier
-
-中文:
-结构 SubDP理想
-  参数: {A : 类型} [交换半环 A] {I : 理想 A} (hI : DividedPowers I)
-  公理与运算 (3 个):
-    - carrier : 理想 A
-    - isSubideal : carrier <= I
-    - dpow_mem : 对任意 (n : 自然数) (_ : n != 0), 对任意 j in carrier, hI.dpow n j in carrier
+--- 原说明 ---
+A `SubDPIdeal` of `I` is a sub-ideal `J` of `I` such that for all `n > 0` `x ∈ J
+`,
+  `hI.dpow n j ∈ J`. The unbundled version of this definition is called `IsSubDP
+Ideal`.
 -/
 structure SubDPIdeal {A : Type*} [CommSemiring A] {I : Ideal A} (hI : DividedPowers I) where
   /-- The underlying ideal. -/
   carrier : Ideal A
-  isSubideal : carrier <= I
-  dpow_mem : forall (n : Nat) (_ : n != 0), forall j in carrier, hI.dpow n j in carrier
+  isSubideal : carrier ≤ I
+  dpow_mem : ∀ (n : ℕ) (_ : n ≠ 0), ∀ j ∈ carrier, hI.dpow n j ∈ carrier
 
 namespace SubDPIdeal
 
 variable {A : Type*} [CommSemiring A] {I : Ideal A} {hI : DividedPowers I}
 
-/--
-Definition of `mk'` / `mk'` 的定义
+/-- Constructs a `SubPDIdeal` given an ideal `J` satisfying `hI.IsSubDPIdeal J`. -/
+/-
+**DividedPowers.SubDPIdeal.mk'** 是 Mathlib 中的一个定义，位于命名空间 `DividedPowers.SubDPIde
+al`。
+形式化陈述：mk' {J : Ideal A} (hJ : hI.IsSubDPIdeal J) : hI.SubDPIdeal
+参数：hJ : hI.IsSubDPIdeal J。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `DividedPowers.IsSubDPIdeal.isSubideal`：∀ {A : Type u_1} [inst : CommSemi
+ring A] {I : Ideal A} {hI : DividedPowers I} {J : Ideal A}, hI.IsSubDPIdeal J → 
+J ≤ I
+· 使用定理 `DividedPowers.IsSubDPIdeal.dpow_mem`：∀ {A : Type u_1} [inst : CommSemiri
+ng A] {I : Ideal A} {hI : DividedPowers I} {J : Ideal A},   hI.IsSubDPIdeal J → 
+∀ (n : ℕ), n ≠ 0 → ∀ {j :…
 
-English:
-definition mk'
-  signature: {J : Ideal A} (hJ : hI.IsSubDPIdeal J)
-  body: ⟨J, hJ.1, hJ.2⟩
-
-中文:
-定义 mk'
-  签名: {J : 理想 A} (hJ : hI.是SubDP理想 J)
-  定义体: ⟨J, hJ.1, hJ.2⟩
+--- 原说明 ---
+Constructs a `SubPDIdeal` given an ideal `J` satisfying `hI.IsSubDPIdeal J`.
 -/
 def mk' {J : Ideal A} (hJ : hI.IsSubDPIdeal J) : hI.SubDPIdeal := ⟨J, hJ.1, hJ.2⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SetLike (SubDPIdeal hI) A
-  body: s.carrier
-  coe_injective p q h := by
-    rw [SetLike.coe_set_eq] at h
-    cases p; cases q; congr
-
-中文:
-实例 :
-  签名: 集合状 (SubDP理想 hI) A
-  定义体: s.carrier
-  coe_injective p q h := by
-    rw [SetLike.coe_set_eq] at h
-    cases p; cases q; congr
-
-Depends on / 依赖: carrier, s.carrier
+/-
+**DividedPowers.SubDPIdeal.** 是 Mathlib 中的一个实例，位于命名空间 `DividedPowers.SubDPIdeal`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SetLike (SubDPIdeal hI) A where
   coe s := s.carrier
   coe_injective p q h := by
     rw [SetLike.coe_set_eq] at h
     cases p; cases q; congr
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (SubDPIdeal hI)
-  body: .ofSetLike (SubDPIdeal hI) A
-
-中文:
-实例 :
-  签名: 偏序 (SubDP理想 hI)
-  定义体: .ofSetLike (SubDPIdeal hI) A
-
-Depends on / 依赖: SubDPIdeal, ofSetLike
+/-
+**DividedPowers.SubDPIdeal.** 是 Mathlib 中的一个实例，位于命名空间 `DividedPowers.SubDPIdeal`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (SubDPIdeal hI) := .ofSetLike (SubDPIdeal hI) A
 
 /-- The coercion from `SubDPIdeal` to `Ideal`. -/
 @[coe]
-/--
-Definition of `toIdeal` / `toIdeal` 的定义
+/-
+**DividedPowers.SubDPIdeal.toIdeal** 是 Mathlib 中的一个定义，位于命名空间 `DividedPowers.SubD
+PIdeal`。
+形式化陈述：toIdeal (J : hI.SubDPIdeal) : Ideal A
+参数：J : hI.SubDPIdeal。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toIdeal
-  signature: (J : hI.SubDPIdeal)
-  body: J.carrier
-
-中文:
-定义 toIdeal
-  签名: (J : hI.SubDP理想)
-  定义体: J.carrier
-
-Depends on / 依赖: J.carrier, carrier
+--- 原说明 ---
+The coercion from `SubDPIdeal` to `Ideal`.
 -/
 def toIdeal (J : hI.SubDPIdeal) : Ideal A := J.carrier
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeOut (hI.SubDPIdeal) (Ideal A)
-  body: ⟨fun J => J.toIdeal⟩
-
-中文:
-实例 :
-  签名: CoeOut (hI.SubDP理想) (理想 A)
-  定义体: ⟨fun J => J.toIdeal⟩
-
-Depends on / 依赖: J.toIdeal, toIdeal
+/-
+**DividedPowers.SubDPIdeal.** 是 Mathlib 中的一个实例，位于命名空间 `DividedPowers.SubDPIdeal`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CoeOut (hI.SubDPIdeal) (Ideal A) := ⟨fun J => J.toIdeal⟩
-
-/--
-theorem `coe_def` / 定理 `coe_def`
-
-English:
-theorem coe_def
-  given: (J : SubDPIdeal hI)
-  statement: J.toIdeal = J.carrier
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_def
-  条件: (J : SubDP理想 hI)
-  结论: J.toIdeal = J.carrier
-  证明: rfl
-
-@[simp]
+instance : CoeOut (hI.SubDPIdeal) (Ideal A) := ⟨fun J ↦ J.toIdeal⟩
+/-
+**DividedPowers.SubDPIdeal.coe_def** 是 Mathlib 中的一个定理，位于命名空间 `DividedPowers.SubD
+PIdeal`。
+形式化陈述：coe_def (J : SubDPIdeal hI) : J.toIdeal = J.carrier
+参数：J : SubDPIdeal hI。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_def (J : SubDPIdeal hI) : J.toIdeal = J.carrier := rfl
 
 @[simp]
-/--
-theorem `memCarrier` / 定理 `memCarrier`
-
-English:
-theorem memCarrier
-  given: {s : SubDPIdeal hI} {x : A}
-  statement: x in s.carrier ↔ x in s
-  proof: Iff.rfl
-
-中文:
-定理 memCarrier
-  条件: {s : SubDP理想 hI} {x : A}
-  结论: x in s.carrier ↔ x in s
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**DividedPowers.SubDPIdeal.memCarrier** 是 Mathlib 中的一个定理，位于命名空间 `DividedPowers.S
+ubDPIdeal`。
+形式化陈述：memCarrier {s : SubDPIdeal hI} {x : A} : x in s.carrier ↔ x in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem memCarrier {s : SubDPIdeal hI} {x : A} : x in s.carrier ↔ x in s := Iff.rfl
+theorem memCarrier {s : SubDPIdeal hI} {x : A} : x ∈ s.carrier ↔ x ∈ s := Iff.rfl
 
 set_option linter.style.whitespace false in -- manual alignment is not recognised
-/--
-lemma `toIsSubDPIdeal` / 引理 `toIsSubDPIdeal`
-
-English:
-lemma toIsSubDPIdeal
-  given: (J : SubDPIdeal hI)
-  statement: IsSubDPIdeal hI J.carrier where
-  proof: J.isSubideal
-  dpow_mem := J.dpow_mem
-
-中文:
-引理 toIsSubDPIdeal
-  条件: (J : SubDP理想 hI)
-  结论: 是SubDP理想 hI J.carrier where
-  证明: J.isSubideal
-  dpow_mem := J.dpow_mem
-
-Depends on / 依赖: J.isSubideal, isSubideal
+/-
+**DividedPowers.SubDPIdeal.toIsSubDPIdeal** 是 Mathlib 中的一个引理，位于命名空间 `DividedPowe
+rs.SubDPIdeal`。
+形式化陈述：toIsSubDPIdeal (J : SubDPIdeal hI) : IsSubDPIdeal hI J.carrier where isSub
+ideal
+参数：J : SubDPIdeal hI。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DividedPowers.SubDPIdeal.isSubideal`：∀ {A : Type u_1} [inst : CommSemiri
+ng A] {I : Ideal A} {hI : DividedPowers I} (self : hI.SubDPIdeal), self.carrier 
+≤ I
+· 使用定理 `DividedPowers.SubDPIdeal.dpow_mem`：∀ {A : Type u_1} [inst : CommSemiring
+ A] {I : Ideal A} {hI : DividedPowers I} (self : hI.SubDPIdeal) (n : ℕ),   n ≠ 0
+ → ∀ j ∈ self.carrier, …
 -/
 lemma toIsSubDPIdeal (J : SubDPIdeal hI) : IsSubDPIdeal hI J.carrier where
   isSubideal := J.isSubideal
-  dpow_mem := J.dpow_mem
+  dpow_mem   := J.dpow_mem
 
 open Ideal
 
-/--
-Definition of `prod` / `prod` 的定义
+/-- If `J` is an ideal of `A`, then `I⬝J` is a sub-dp-ideal of `I`.
+See [P. Berthelot, *Cohomologie cristalline des schémas de caractéristique $p$ > 0*,
+(Proposition 1.6.1 (i))][Berthelot-1974] -/
+/-
+**DividedPowers.SubDPIdeal.prod** 是 Mathlib 中的一个定义，位于命名空间 `DividedPowers.SubDPId
+eal`。
+形式化陈述：prod (J : Ideal A) : SubDPIdeal hI where carrier
+参数：J : Ideal A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod
-  signature: (J : Ideal A)
-  body: I • J
-  isSubideal := mul_le_left
-  dpow_mem m hm x hx := by
-    induction hx using Submodule.smul_induction_on' generalizing m with
-    | smul a ha b hb =>
-      rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_comm a b]; rw [hI.dpow_mul ha]; rw [mul_comm]
-      exact Submodule.mul_mem_mul (J.pow_mem_of_mem hb m (zero_lt_iff.mpr hm))
-        (hI.dpow_mem hm ha)
-    | add x hx y hy hx' hy' =>
-      rw [hI.dpow_add' (mul_le_left hx) (mul_le_left hy)]
-      apply Submodule.sum_mem (I • J)
-      intro k _
-      by_cases hk0 : k = 0
-      · exact hk0 ▸ mul_mem_left (I • J) _ (hy' _ hm)
-      · exact mul_mem_right _ (I • J) (hx' k hk0)
-
-中文:
-定义 乘积
-  签名: (J : 理想 A)
-  定义体: I • J
-  isSubideal := mul_le_left
-  dpow_mem m hm x hx := by
-    induction hx using Submodule.smul_induction_on' generalizing m with
-    | smul a ha b hb =>
-      rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_comm a b]; rw [hI.dpow_mul ha]; rw [mul_comm]
-      exact Submodule.mul_mem_mul (J.pow_mem_of_mem hb m (zero_lt_iff.mpr hm))
-        (hI.dpow_mem hm ha)
-    | add x hx y hy hx' hy' =>
-      rw [hI.dpow_add' (mul_le_left hx) (mul_le_left hy)]
-      apply Submodule.sum_mem (I • J)
-      intro k _
-      by_cases hk0 : k = 0
-      · exact hk0 ▸ mul_mem_left (I • J) _ (hy' _ hm)
-      · exact mul_mem_right _ (I • J) (hx' k hk0)
+--- 原说明 ---
+If `J` is an ideal of `A`, then `I⬝J` is a sub-dp-ideal of `I`.
+See [P. Berthelot, *Cohomologie cristalline des schémas de caractéristique $p$ >
+ 0*,
+(Proposition 1.6.1 (i))][Berthelot-1974]
 -/
 def prod (J : Ideal A) : SubDPIdeal hI where
   carrier := I • J
@@ -773,7 +675,7 @@ def prod (J : Ideal A) : SubDPIdeal hI where
   dpow_mem m hm x hx := by
     induction hx using Submodule.smul_induction_on' generalizing m with
     | smul a ha b hb =>
-      rw [smul_eq_mul]; rw [smul_eq_mul]; rw [mul_comm a b]; rw [hI.dpow_mul ha]; rw [mul_comm]
+      rw [smul_eq_mul, smul_eq_mul, mul_comm a b, hI.dpow_mul ha, mul_comm]
       exact Submodule.mul_mem_mul (J.pow_mem_of_mem hb m (zero_lt_iff.mpr hm))
         (hI.dpow_mem hm ha)
     | add x hx y hy hx' hy' =>
@@ -786,441 +688,200 @@ def prod (J : Ideal A) : SubDPIdeal hI where
 
 section CompleteLattice
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeOut (SubDPIdeal hI) (Set.Iic I)
-  body: ⟨fun J => ⟨J.carrier, J.isSubideal⟩⟩
-
-中文:
-实例 :
-  签名: CoeOut (SubDP理想 hI) (集合.左无界右闭区间 I)
-  定义体: ⟨fun J => ⟨J.carrier, J.isSubideal⟩⟩
-
-Depends on / 依赖: J.carrier, J.isSubideal, carrier, isSubideal
+/-
+**DividedPowers.SubDPIdeal.** 是 Mathlib 中的一个实例，位于命名空间 `DividedPowers.SubDPIdeal`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CoeOut (SubDPIdeal hI) (Set.Iic I) := ⟨fun J => ⟨J.carrier, J.isSubideal⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LE (SubDPIdeal hI)
-  body: ⟨fun J J' => J.carrier <= J'.carrier⟩
-
-中文:
-实例 :
-  签名: LE (SubDP理想 hI)
-  定义体: ⟨fun J J' => J.carrier <= J'.carrier⟩
-
-Depends on / 依赖: J.carrier, carrier
+instance : CoeOut (SubDPIdeal hI) (Set.Iic I) := ⟨fun J ↦ ⟨J.carrier, J.isSubideal⟩⟩
+/-
+**DividedPowers.SubDPIdeal.** 是 Mathlib 中的一个实例，位于命名空间 `DividedPowers.SubDPIdeal`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : LE (SubDPIdeal hI) := ⟨fun J J' => J.carrier <= J'.carrier⟩
-
-/--
-theorem `le_iff` / 定理 `le_iff`
-
-English:
-theorem le_iff
-  given: {J J' : SubDPIdeal hI}
-  statement: J <= J' ↔ J.carrier <= J'.carrier
-  proof: Iff.rfl
-
-中文:
-定理 le_iff
-  条件: {J J' : SubDP理想 hI}
-  结论: J <= J' ↔ J.carrier <= J'.carrier
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+instance : LE (SubDPIdeal hI) := ⟨fun J J' ↦ J.carrier ≤ J'.carrier⟩
+/-
+**DividedPowers.SubDPIdeal.le_iff** 是 Mathlib 中的一个定理，位于命名空间 `DividedPowers.SubDP
+Ideal`。
+形式化陈述：le_iff {J J' : SubDPIdeal hI} : J <= J' ↔ J.carrier <= J'.carrier
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem le_iff {J J' : SubDPIdeal hI} : J <= J' ↔ J.carrier <= J'.carrier := Iff.rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LT (SubDPIdeal hI)
-  body: ⟨fun J J' => J.carrier < J'.carrier⟩
-
-中文:
-实例 :
-  签名: LT (SubDP理想 hI)
-  定义体: ⟨fun J J' => J.carrier < J'.carrier⟩
-
-Depends on / 依赖: J.carrier, carrier
+theorem le_iff {J J' : SubDPIdeal hI} : J ≤ J' ↔ J.carrier ≤ J'.carrier := Iff.rfl
+/-
+**DividedPowers.SubDPIdeal.** 是 Mathlib 中的一个实例，位于命名空间 `DividedPowers.SubDPIdeal`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : LT (SubDPIdeal hI) := ⟨fun J J' => J.carrier < J'.carrier⟩
-
-/--
-theorem `lt_iff` / 定理 `lt_iff`
-
-English:
-theorem lt_iff
-  given: {J J' : SubDPIdeal hI}
-  statement: J < J' ↔ J.carrier < J'.carrier
-  proof: Iff.rfl
-
-中文:
-定理 lt_iff
-  条件: {J J' : SubDP理想 hI}
-  结论: J < J' ↔ J.carrier < J'.carrier
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+instance : LT (SubDPIdeal hI) := ⟨fun J J' ↦ J.carrier < J'.carrier⟩
+/-
+**DividedPowers.SubDPIdeal.lt_iff** 是 Mathlib 中的一个定理，位于命名空间 `DividedPowers.SubDP
+Ideal`。
+形式化陈述：lt_iff {J J' : SubDPIdeal hI} : J < J' ↔ J.carrier < J'.carrier
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem lt_iff {J J' : SubDPIdeal hI} : J < J' ↔ J.carrier < J'.carrier := Iff.rfl
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- `I` is a sub-dp-ideal of itself. -/
+/-
+**DividedPowers.SubDPIdeal.** 是 Mathlib 中的一个实例，位于命名空间 `DividedPowers.SubDPIdeal`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Top (SubDPIdeal hI)
-  body: ⟨{carrier := I
-    isSubideal := le_refl _
-    dpow_mem := fun _ hn _ hx => hI.dpow_mem hn hx }⟩
-
-中文:
-实例 :
-  签名: 顶元素 (SubDP理想 hI)
-  定义体: ⟨{carrier := I
-    isSubideal := le_refl _
-    dpow_mem := fun _ hn _ hx => hI.dpow_mem hn hx }⟩
-
-Depends on / 依赖: carrier, dpow_mem, hI.dpow_mem, isSubideal, le_refl
+--- 原说明 ---
+`I` is a sub-dp-ideal of itself.
 -/
 instance : Top (SubDPIdeal hI) :=
-  ⟨{carrier := I
+  ⟨{carrier    := I
     isSubideal := le_refl _
-    dpow_mem := fun _ hn _ hx => hI.dpow_mem hn hx }⟩
-
-/--
-Instance `inhabited` / 实例 `inhabited`
-
-English:
-instance inhabited
-  signature: : Inhabited hI.SubDPIdeal
-  body: ⟨⊤⟩
-
-中文:
-实例 inhabited
-  签名: : 可居 hI.SubDP理想
-  定义体: ⟨⊤⟩
+    dpow_mem   := fun _ hn _ hx ↦ hI.dpow_mem hn hx }⟩
+/-
+**DividedPowers.SubDPIdeal.inhabited** 是 Mathlib 中的一个实例，位于命名空间 `DividedPowers.Su
+bDPIdeal`。
+形式化陈述：inhabited : Inhabited hI.SubDPIdeal
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance inhabited : Inhabited hI.SubDPIdeal := ⟨⊤⟩
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- `(0)` is a sub-dp-ideal of the dp-ideal `I`. -/
+/-
+**DividedPowers.SubDPIdeal.** 是 Mathlib 中的一个实例，位于命名空间 `DividedPowers.SubDPIdeal`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Bot (SubDPIdeal hI)
-  body: ⟨{carrier := ⊥
-    isSubideal := bot_le
-    dpow_mem := fun _ hn x hx => by rw [mem_bot.mp hx, hI.dpow_eval_zero hn, mem_bot]}⟩
-
-中文:
-实例 :
-  签名: 底元素 (SubDP理想 hI)
-  定义体: ⟨{carrier := ⊥
-    isSubideal := bot_le
-    dpow_mem := fun _ hn x hx => by rw [mem_bot.mp hx, hI.dpow_eval_zero hn, mem_bot]}⟩
-
-Depends on / 依赖: bot_le, carrier, dpow_eval_zero, dpow_mem, hI.dpow_eval_zero, isSubideal, mem_bot, mem_bot.mp
+--- 原说明 ---
+`(0)` is a sub-dp-ideal of the dp-ideal `I`.
 -/
 instance : Bot (SubDPIdeal hI) :=
-  ⟨{carrier := ⊥
+  ⟨{carrier    := ⊥
     isSubideal := bot_le
-    dpow_mem := fun _ hn x hx => by rw [mem_bot.mp hx, hI.dpow_eval_zero hn, mem_bot]}⟩
+    dpow_mem   := fun _ hn x hx ↦ by rw [mem_bot.mp hx, hI.dpow_eval_zero hn, mem_bot]}⟩
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The intersection of two sub-dp-ideals is a sub-dp-ideal. -/
+/-
+**DividedPowers.SubDPIdeal.** 是 Mathlib 中的一个实例，位于命名空间 `DividedPowers.SubDPIdeal`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Min (SubDPIdeal hI)
-  body: ⟨fun J J' =>
-    { carrier := J.carrier ⊓ J'.carrier
-      isSubideal := fun _ hx => J.isSubideal hx.1
-      dpow_mem := fun _ hn x hx => ⟨J.dpow_mem _ hn x hx.1, J'.dpow_mem _ hn x hx.2⟩ }⟩
-
-中文:
-实例 :
-  签名: 最小值 (SubDP理想 hI)
-  定义体: ⟨fun J J' =>
-    { carrier := J.carrier ⊓ J'.carrier
-      isSubideal := fun _ hx => J.isSubideal hx.1
-      dpow_mem := fun _ hn x hx => ⟨J.dpow_mem _ hn x hx.1, J'.dpow_mem _ hn x hx.2⟩ }⟩
-
-Depends on / 依赖: J.carrier, J.dpow_mem, J.isSubideal, carrier, dpow_mem, isSubideal
+--- 原说明 ---
+The intersection of two sub-dp-ideals is a sub-dp-ideal.
 -/
 instance : Min (SubDPIdeal hI) :=
-  ⟨fun J J' =>
-    { carrier := J.carrier ⊓ J'.carrier
-      isSubideal := fun _ hx => J.isSubideal hx.1
-      dpow_mem := fun _ hn x hx => ⟨J.dpow_mem _ hn x hx.1, J'.dpow_mem _ hn x hx.2⟩ }⟩
-
-/--
-theorem `inf_carrier_def` / 定理 `inf_carrier_def`
-
-English:
-theorem inf_carrier_def
-  given: (J J' : SubDPIdeal hI)
-  statement: (J ⊓ J').carrier = J.carrier ⊓ J'.carrier
-  proof: rfl
-
-中文:
-定理 inf_carrier_def
-  条件: (J J' : SubDP理想 hI)
-  结论: (J ⊓ J').carrier = J.carrier ⊓ J'.carrier
-  证明: rfl
+  ⟨fun J J' ↦
+    { carrier    := J.carrier ⊓ J'.carrier
+      isSubideal := fun _ hx ↦ J.isSubideal hx.1
+      dpow_mem   := fun _ hn x hx ↦ ⟨J.dpow_mem _ hn x hx.1, J'.dpow_mem _ hn x hx.2⟩ }⟩
+/-
+**DividedPowers.SubDPIdeal.inf_carrier_def** 是 Mathlib 中的一个定理，位于命名空间 `DividedPow
+ers.SubDPIdeal`。
+形式化陈述：inf_carrier_def (J J' : SubDPIdeal hI) : (J ⊓ J').carrier = J.carrier ⊓ J'
+.carrier
+参数：J J' : SubDPIdeal hI。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem inf_carrier_def (J J' : SubDPIdeal hI) : (J ⊓ J').carrier = J.carrier ⊓ J'.carrier := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: InfSet (SubDPIdeal hI)
-  body: ⟨fun S =>
-    { carrier := ⨅ s in Insert.insert ⊤ S, (s : hI.SubDPIdeal).carrier
-      isSubideal := fun x hx => by
-        simp only [mem_iInf] at hx
-        exact hx ⊤ (Set.mem_insert ⊤ S)
-      dpow_mem := fun _ hn x hx => by
-        simp only [mem_iInf] at hx ⊢
-        exact fun s hs => s.dpow_mem _ hn x (hx s hs) }⟩
-
-中文:
-实例 :
-  签名: 下确界集 (SubDP理想 hI)
-  定义体: ⟨fun S =>
-    { carrier := ⨅ s in Insert.insert ⊤ S, (s : hI.SubDPIdeal).carrier
-      isSubideal := fun x hx => by
-        simp only [mem_iInf] at hx
-        exact hx ⊤ (Set.mem_insert ⊤ S)
-      dpow_mem := fun _ hn x hx => by
-        simp only [mem_iInf] at hx ⊢
-        exact fun s hs => s.dpow_mem _ hn x (hx s hs) }⟩
-
-Depends on / 依赖: Insert, Insert.insert, Set.mem_insert, SubDPIdeal, carrier, dpow_mem, hI.SubDPIdeal, insert, isSubideal, mem_iInf, mem_insert, s.dpow_mem
+/-
+**DividedPowers.SubDPIdeal.** 是 Mathlib 中的一个实例，位于命名空间 `DividedPowers.SubDPIdeal`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : InfSet (SubDPIdeal hI) :=
-  ⟨fun S =>
-    { carrier := ⨅ s in Insert.insert ⊤ S, (s : hI.SubDPIdeal).carrier
-      isSubideal := fun x hx => by
+  ⟨fun S ↦
+    { carrier    := ⨅ s ∈ Insert.insert ⊤ S, (s : hI.SubDPIdeal).carrier
+      isSubideal := fun x hx ↦ by
         simp only [mem_iInf] at hx
         exact hx ⊤ (Set.mem_insert ⊤ S)
-      dpow_mem := fun _ hn x hx => by
+      dpow_mem   := fun _ hn x hx ↦ by
         simp only [mem_iInf] at hx ⊢
-        exact fun s hs => s.dpow_mem _ hn x (hx s hs) }⟩
-
-/--
-theorem `sInf_carrier_def` / 定理 `sInf_carrier_def`
-
-English:
-theorem sInf_carrier_def
-  given: (S : Set (SubDPIdeal hI))
-  proof: rfl
-
-中文:
-定理 sInf_carrier_def
-  条件: (S : 集合 (SubDP理想 hI))
-  证明: rfl
+        exact fun s hs ↦ s.dpow_mem _ hn x (hx s hs) }⟩
+/-
+**DividedPowers.SubDPIdeal.sInf_carrier_def** 是 Mathlib 中的一个定理，位于命名空间 `DividedPo
+wers.SubDPIdeal`。
+形式化陈述：sInf_carrier_def (S : Set (SubDPIdeal hI)) : (sInf S).carrier = ⨅ s in Ins
+ert.insert ⊤ S, (s : hI.SubDPIdeal).carrier
+参数：S : Set (SubDPIdeal hI)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sInf_carrier_def (S : Set (SubDPIdeal hI)) :
-    (sInf S).carrier = ⨅ s in Insert.insert ⊤ S, (s : hI.SubDPIdeal).carrier := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Max (SubDPIdeal hI)
-  body: ⟨fun J J' => SubDPIdeal.mk' (isSubDPIdeal_sup J.toIsSubDPIdeal J'.toIsSubDPIdeal)⟩
-
-中文:
-实例 :
-  签名: 最大值 (SubDP理想 hI)
-  定义体: ⟨fun J J' => SubDPIdeal.mk' (isSubDPIdeal_sup J.toIsSubDPIdeal J'.toIsSubDPIdeal)⟩
-
-Depends on / 依赖: J.toIsSubDPIdeal, SubDPIdeal, SubDPIdeal.mk, isSubDPIdeal_sup, toIsSubDPIdeal
+    (sInf S).carrier = ⨅ s ∈ Insert.insert ⊤ S, (s : hI.SubDPIdeal).carrier := rfl
+/-
+**DividedPowers.SubDPIdeal.** 是 Mathlib 中的一个实例，位于命名空间 `DividedPowers.SubDPIdeal`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Max (SubDPIdeal hI) :=
-  ⟨fun J J' => SubDPIdeal.mk' (isSubDPIdeal_sup J.toIsSubDPIdeal J'.toIsSubDPIdeal)⟩
-
-/--
-theorem `sup_carrier_def` / 定理 `sup_carrier_def`
-
-English:
-theorem sup_carrier_def
-  given: (J J' : SubDPIdeal hI)
-  statement: (J ⊔ J').carrier = J ⊔ J'
-  proof: rfl
-
-中文:
-定理 sup_carrier_def
-  条件: (J J' : SubDP理想 hI)
-  结论: (J ⊔ J').carrier = J ⊔ J'
-  证明: rfl
+  ⟨fun J J' ↦ SubDPIdeal.mk' (isSubDPIdeal_sup J.toIsSubDPIdeal J'.toIsSubDPIdeal)⟩
+/-
+**DividedPowers.SubDPIdeal.sup_carrier_def** 是 Mathlib 中的一个定理，位于命名空间 `DividedPow
+ers.SubDPIdeal`。
+形式化陈述：sup_carrier_def (J J' : SubDPIdeal hI) : (J ⊔ J').carrier = J ⊔ J'
+参数：J J' : SubDPIdeal hI。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sup_carrier_def (J J' : SubDPIdeal hI) : (J ⊔ J').carrier = J ⊔ J' := rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SupSet (SubDPIdeal hI)
-  body: ⟨fun S => SubDPIdeal.mk' (J := sSup ((fun J => J.carrier) '' S)) by
-      have h : (⋃ (i : Ideal A) (_ : i in (fun J => J.carrier) '' S), ↑i) subseteq (I : Set A) := by
-        rintro a ⟨-, ⟨J, rfl⟩, haJ⟩
-        rw [Set.mem_iUnion]; rw [SetLike.mem_coe]; rw [exists_prop] at haJ
-        obtain ⟨J', hJ'⟩ := (Set.mem_image _ _ _).mp haJ.1
-        exact J'.isSubideal (hJ'.2 ▸ haJ.2)
-      rw [sSup_eq_iSup]; rw [Submodule.iSup_eq_span']; rw [submodule_span_eq]; rw [span_isSubDPIdeal_iff h]
-      rintro n hn x ⟨T, ⟨J, rfl⟩, ⟨J', ⟨⟨hJ', rfl⟩, h'⟩⟩⟩
-      apply subset_span
-      apply Set.mem_biUnion hJ'
-      obtain ⟨K, hKS, rfl⟩ := hJ'
-      exact K.dpow_mem _ hn x h'⟩
-
-中文:
-实例 :
-  签名: 上确界集 (SubDP理想 hI)
-  定义体: ⟨fun S => SubDPIdeal.mk' (J := sSup ((fun J => J.carrier) '' S)) by
-      have h : (⋃ (i : Ideal A) (_ : i in (fun J => J.carrier) '' S), ↑i) subseteq (I : Set A) := by
-        rintro a ⟨-, ⟨J, rfl⟩, haJ⟩
-        rw [Set.mem_iUnion]; rw [SetLike.mem_coe]; rw [exists_prop] at haJ
-        obtain ⟨J', hJ'⟩ := (Set.mem_image _ _ _).mp haJ.1
-        exact J'.isSubideal (hJ'.2 ▸ haJ.2)
-      rw [sSup_eq_iSup]; rw [Submodule.iSup_eq_span']; rw [submodule_span_eq]; rw [span_isSubDPIdeal_iff h]
-      rintro n hn x ⟨T, ⟨J, rfl⟩, ⟨J', ⟨⟨hJ', rfl⟩, h'⟩⟩⟩
-      apply subset_span
-      apply Set.mem_biUnion hJ'
-      obtain ⟨K, hKS, rfl⟩ := hJ'
-      exact K.dpow_mem _ hn x h'⟩
-
-Depends on / 依赖: J.carrier, Set.mem_iUnion, Set.mem_image, SetLike, SetLike.mem_coe, SubDPIdeal, SubDPIdeal.mk, Submodule, Submodule.iSup_eq_span, carrier, exists_prop, iSup_eq_span, isSubideal, mem_coe, mem_iUnion, mem_image, sSup_eq_iSup, span_isSubDPIdeal_iff, submodule_span_eq, subseteq
+/-
+**DividedPowers.SubDPIdeal.** 是 Mathlib 中的一个实例，位于命名空间 `DividedPowers.SubDPIdeal`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SupSet (SubDPIdeal hI) :=
-⟨fun S => SubDPIdeal.mk' (J := sSup ((fun J => J.carrier) '' S)) by
-      have h : (⋃ (i : Ideal A) (_ : i in (fun J => J.carrier) '' S), ↑i) subseteq (I : Set A) := by
+  ⟨fun S ↦ SubDPIdeal.mk' (J := sSup ((fun J ↦ J.carrier) '' S)) <| by
+      have h : (⋃ (i : Ideal A) (_ : i ∈ (fun J ↦ J.carrier) '' S), ↑i) ⊆ (I : Set A) := by
         rintro a ⟨-, ⟨J, rfl⟩, haJ⟩
-        rw [Set.mem_iUnion]; rw [SetLike.mem_coe]; rw [exists_prop] at haJ
+        rw [Set.mem_iUnion, SetLike.mem_coe, exists_prop] at haJ
         obtain ⟨J', hJ'⟩ := (Set.mem_image _ _ _).mp haJ.1
-        exact J'.isSubideal (hJ'.2 ▸ haJ.2)
-      rw [sSup_eq_iSup]; rw [Submodule.iSup_eq_span']; rw [submodule_span_eq]; rw [span_isSubDPIdeal_iff h]
+        exact  J'.isSubideal  (hJ'.2 ▸ haJ.2)
+      rw [sSup_eq_iSup, Submodule.iSup_eq_span', submodule_span_eq, span_isSubDPIdeal_iff h]
       rintro n hn x ⟨T, ⟨J, rfl⟩, ⟨J', ⟨⟨hJ', rfl⟩, h'⟩⟩⟩
       apply subset_span
       apply Set.mem_biUnion hJ'
       obtain ⟨K, hKS, rfl⟩ := hJ'
       exact K.dpow_mem _ hn x h'⟩
-
-/--
-theorem `sSup_carrier_def` / 定理 `sSup_carrier_def`
-
-English:
-theorem sSup_carrier_def
-  given: (S : Set (SubDPIdeal hI))
-  statement: (sSup S).carrier = sSup ((toIdeal) '' S)
-  proof: rfl
-
-中文:
-定理 sSup_carrier_def
-  条件: (S : 集合 (SubDP理想 hI))
-  结论: (sSup S).carrier = sSup ((toIdeal) '' S)
-  证明: rfl
+/-
+**DividedPowers.SubDPIdeal.sSup_carrier_def** 是 Mathlib 中的一个定理，位于命名空间 `DividedPo
+wers.SubDPIdeal`。
+形式化陈述：sSup_carrier_def (S : Set (SubDPIdeal hI)) : (sSup S).carrier = sSup ((toI
+deal) '' S)
+参数：S : Set (SubDPIdeal hI)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sSup_carrier_def (S : Set (SubDPIdeal hI)) : (sSup S).carrier = sSup ((toIdeal) '' S) := rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CompleteLattice (SubDPIdeal hI)
-  body: by
-  refine Function.Injective.completeLattice (fun J : SubDPIdeal hI => (J : Set.Iic I))
-    (fun J J' h => by simpa only [SubDPIdeal.ext_iff, Subtype.mk.injEq] using h)
-    .rfl .rfl (fun J J' => by rfl) (fun J J' => by rfl) (fun S => ?_) (fun S => ?_) rfl rfl
-  · conv_rhs => rw [iSup]
-    rw [Subtype.ext_iff]; rw [Set.Iic.coe_sSup]
-    dsimp only
-    rw [sSup_carrier_def]; rw [sSup_image]; rw [sSup_image]; rw [iSup_range]
-    have (J : hI.SubDPIdeal) :
-      ((⨆ (_ : J in S), (J : Set.Iic I) : Set.Iic I) : Ideal A) = ⨆ (_ : J in S), (J : Ideal A) := by
-      by_cases hJ : J in S
-      · simp [ciSup_pos hJ]
-      · simp [hJ, not_false_eq_true, iSup_neg, Set.Iic.coe_bot]
-    simp_rw [this]
-    rfl
-  · conv_rhs => rw [iInf]
-    rw [Subtype.ext_iff]; rw [Set.Iic.coe_sInf]
-    dsimp only
-    rw [sInf_carrier_def]; rw [sInf_image]; rw [iInf_range]; rw [inf_iInf]; rw [iInf_insert]; rw [inf_iInf]
-    apply iInf_congr (fun J => ?_)
-    by_cases hJ : J in S
-    · rw [ciInf_pos hJ, ciInf_pos hJ]; rfl
-    · simp [hJ, iInf_neg, le_top, inf_of_le_left, Set.Iic.coe_top]; rfl
-
-中文:
-实例 :
-  签名: 完备格 (SubDP理想 hI)
-  定义体: by
-  refine Function.Injective.completeLattice (fun J : SubDPIdeal hI => (J : Set.Iic I))
-    (fun J J' h => by simpa only [SubDPIdeal.ext_iff, Subtype.mk.injEq] using h)
-    .rfl .rfl (fun J J' => by rfl) (fun J J' => by rfl) (fun S => ?_) (fun S => ?_) rfl rfl
-  · conv_rhs => rw [iSup]
-    rw [Subtype.ext_iff]; rw [Set.Iic.coe_sSup]
-    dsimp only
-    rw [sSup_carrier_def]; rw [sSup_image]; rw [sSup_image]; rw [iSup_range]
-    have (J : hI.SubDPIdeal) :
-      ((⨆ (_ : J in S), (J : Set.Iic I) : Set.Iic I) : Ideal A) = ⨆ (_ : J in S), (J : Ideal A) := by
-      by_cases hJ : J in S
-      · simp [ciSup_pos hJ]
-      · simp [hJ, not_false_eq_true, iSup_neg, Set.Iic.coe_bot]
-    simp_rw [this]
-    rfl
-  · conv_rhs => rw [iInf]
-    rw [Subtype.ext_iff]; rw [Set.Iic.coe_sInf]
-    dsimp only
-    rw [sInf_carrier_def]; rw [sInf_image]; rw [iInf_range]; rw [inf_iInf]; rw [iInf_insert]; rw [inf_iInf]
-    apply iInf_congr (fun J => ?_)
-    by_cases hJ : J in S
-    · rw [ciInf_pos hJ, ciInf_pos hJ]; rfl
-    · simp [hJ, iInf_neg, le_top, inf_of_le_left, Set.Iic.coe_top]; rfl
-
-Depends on / 依赖: Function, Function.Injective.completeLattice, Injective, Set.Iic, Set.Iic.coe_sSup, SubDPIdeal, SubDPIdeal.ext_iff, Subtype, Subtype.ext_iff, Subtype.mk.injEq, coe_sSup, completeLattice, conv_rhs, eBody.instantiateRev, ext_iff, hI.SubDPIdeal, iSup_range, instantiateRev, sSup_carrier_def, sSup_image
+/-
+**DividedPowers.SubDPIdeal.** 是 Mathlib 中的一个实例，位于命名空间 `DividedPowers.SubDPIdeal`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CompleteLattice (SubDPIdeal hI) := by
-  refine Function.Injective.completeLattice (fun J : SubDPIdeal hI => (J : Set.Iic I))
-    (fun J J' h => by simpa only [SubDPIdeal.ext_iff, Subtype.mk.injEq] using h)
-    .rfl .rfl (fun J J' => by rfl) (fun J J' => by rfl) (fun S => ?_) (fun S => ?_) rfl rfl
+  refine Function.Injective.completeLattice (fun J : SubDPIdeal hI ↦ (J : Set.Iic I))
+    (fun J J' h ↦ by simpa only [SubDPIdeal.ext_iff, Subtype.mk.injEq] using h)
+    .rfl .rfl (fun J J' ↦ by rfl) (fun J J' ↦ by rfl) (fun S ↦ ?_) (fun S ↦ ?_) rfl rfl
   · conv_rhs => rw [iSup]
-    rw [Subtype.ext_iff]; rw [Set.Iic.coe_sSup]
+    rw [Subtype.ext_iff, Set.Iic.coe_sSup]
     dsimp only
-    rw [sSup_carrier_def]; rw [sSup_image]; rw [sSup_image]; rw [iSup_range]
+    rw [sSup_carrier_def, sSup_image, sSup_image, iSup_range]
     have (J : hI.SubDPIdeal) :
-      ((⨆ (_ : J in S), (J : Set.Iic I) : Set.Iic I) : Ideal A) = ⨆ (_ : J in S), (J : Ideal A) := by
-      by_cases hJ : J in S
+      ((⨆ (_ : J ∈ S), (J : Set.Iic I) : Set.Iic I) : Ideal A) = ⨆ (_ : J ∈ S), (J : Ideal A) := by
+      by_cases hJ : J ∈ S
       · simp [ciSup_pos hJ]
       · simp [hJ, not_false_eq_true, iSup_neg, Set.Iic.coe_bot]
     simp_rw [this]
     rfl
   · conv_rhs => rw [iInf]
-    rw [Subtype.ext_iff]; rw [Set.Iic.coe_sInf]
+    rw [Subtype.ext_iff, Set.Iic.coe_sInf]
     dsimp only
-    rw [sInf_carrier_def]; rw [sInf_image]; rw [iInf_range]; rw [inf_iInf]; rw [iInf_insert]; rw [inf_iInf]
-    apply iInf_congr (fun J => ?_)
-    by_cases hJ : J in S
+    rw [sInf_carrier_def, sInf_image, iInf_range, inf_iInf, iInf_insert, inf_iInf]
+    apply iInf_congr (fun J ↦ ?_)
+    by_cases hJ : J ∈ S
     · rw [ciInf_pos hJ, ciInf_pos hJ]; rfl
     · simp [hJ, iInf_neg, le_top, inf_of_le_left, Set.Iic.coe_top]; rfl
 
@@ -1230,66 +891,95 @@ section Generated
 
 variable (hI)
 
-/--
-Definition of `span` / `span` 的定义
+/-- The sub-dp-ideal of I generated by a family of elements of A. -/
+/-
+**DividedPowers.SubDPIdeal.span** 是 Mathlib 中的一个定义，位于命名空间 `DividedPowers.SubDPId
+eal`。
+形式化陈述：{A : Type u_1} → [inst : CommSemiring A] → {I : Ideal A} → (hI : DividedPo
+wers I) → Set A → hI.SubDPIdeal
+参数：hI : DividedPowers I。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition span
-  signature: (S : Set A)
-  body: sInf {J : SubDPIdeal hI | S subseteq J.carrier}
-
-中文:
-定义 span
-  签名: (S : 集合 A)
-  定义体: sInf {J : SubDPIdeal hI | S subseteq J.carrier}
+--- 原说明 ---
+The sub-dp-ideal of I generated by a family of elements of A.
 -/
-protected def span (S : Set A) : SubDPIdeal hI := sInf {J : SubDPIdeal hI | S subseteq J.carrier}
-
-/--
-theorem `_root_.DividedPowers.dpow_span_isSubideal` / 定理 `_root_.DividedPowers.dpow_span_isSubideal`
-
-English:
-theorem _root_.DividedPowers.dpow_span_isSubideal
-  given: {S : Set A} (hS : S subseteq I)
-  proof: by
-  rw [span_le]
-  rintro y ⟨n, hn, x, hx, hxy⟩
-  exact hxy ▸ hI.dpow_mem hn (hS hx)
-
-中文:
-定理 _root_.DividedPowers.dpow_span_isSubideal
-  条件: {S : 集合 A} (hS : S subseteq I)
-  证明: by
-  rw [span_le]
-  rintro y ⟨n, hn, x, hx, hxy⟩
-  exact hxy ▸ hI.dpow_mem hn (hS hx)
-
-Depends on / 依赖: dpow_mem, hI.dpow_mem, span_le
+protected def span (S : Set A) : SubDPIdeal hI := sInf {J : SubDPIdeal hI | S ⊆ J.carrier}
+/-
+**DividedPowers.SubDPIdeal._root_.DividedPowers.dpow_span_isSubideal** 是 Mathlib
+ 中的一个定理，位于命名空间 `DividedPowers.SubDPIdeal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.DividedPowers.dpow_span_isSubideal {S : Set A} (hS : S subseteq I) :
-    span {y : A | exists (n : Nat) (_ : n != 0) (x : A) (_ : x in S), y = hI.dpow n x} <= I := by
+theorem _root_.DividedPowers.dpow_span_isSubideal {S : Set A} (hS : S ⊆ I) :
+    span {y : A | ∃ (n : ℕ) (_ : n ≠ 0) (x : A) (_ : x ∈ S), y = hI.dpow n x} ≤ I := by
   rw [span_le]
   rintro y ⟨n, hn, x, hx, hxy⟩
   exact hxy ▸ hI.dpow_mem hn (hS hx)
-
-/--
-theorem `dpow_mem_span_of_mem_span` / 定理 `dpow_mem_span_of_mem_span`
-
-English:
-theorem dpow_mem_span_of_mem_span
-  statement: {S : Set A} (hS : S subseteq I) {k : Nat} (hk : k != 0)
-  proof: by
-  let J := span {y : A | exists (n : Nat) (_ : n != 0) (x : A) (_ : x in S), y = hI.dpow n x}
+/-
+**DividedPowers.SubDPIdeal.dpow_mem_span_of_mem_span** 是 Mathlib 中的一个定理，位于命名空间 `
+DividedPowers.SubDPIdeal`。
+形式化陈述：dpow_mem_span_of_mem_span {S : Set A} (hS : S subseteq I) {k : Nat} (hk : 
+k != 0) {z : A} (hz : z in span {y : A | exists (n : Nat) (_ : n != 0) (x : A) (
+_ : x in S), y = hI.dpow n x}) : hI.dpow k z in span {y : A | exists (n : Nat) (
+_ : n != 0) (x : A) (_ : x in S), y = hI.dpow n x}
+参数：hS : S subseteq I；hk : k != 0；hz : z in span {y : A | exists (n : Nat) (_ : n
+ != 0) (x : A) (_ : x in S), y = hI.dpow n x}。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DividedPowers.dpow_span_isSubideal`：∀ {A : Type u_1} [inst : CommSemirin
+g A] {I : Ideal A} (hI : DividedPowers I) {S : Set A},   S ⊆ ↑I → Ideal.span {y 
+| ∃ n, ∃ (_ : n ≠ 0), ∃ …
+· 使用定理 `Submodule.span_induction`：span_induction {p : (x : M) -> x in span R s -
+> Prop} (mem : forall (x) (h : x in s), p x (subset_span h)) (zero : p 0 (Submod
+ule.zero_mem _…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DividedPowers.dpow_comp`：∀ {A : Type u_1} [inst : CommSemiring A] {I : I
+deal A} (self : DividedPowers I) {m n : ℕ} {x : A},   n ≠ 0 → x ∈ I → self.dpow 
+m (self.dpow …
+· 使用定理 `Ideal.mul_mem_left`：mul_mem_left : b in I -> a * b in I
+· 使用定理 `Ideal.subset_span`：subset_span {s : Set α} : s subseteq span s
+· 使用定理 `mul_ne_zero`：mul_ne_zero (ha : a != 0) (hb : b != 0) : a * b != 0
+· 使用定理 `IsStrictOrderedRing.noZeroDivisors`：∀ {R : Type u} [inst : Semiring R] [
+inst_1 : LinearOrder R] [IsStrictOrderedRing R] [ExistsAddOfLE R], NoZeroDivisor
+s R
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `DividedPowers.dpow_eval_zero`：dpow_eval_zero {n : Nat} (hn : n != 0) : h
+I.dpow n 0 = 0
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `DividedPowers.dpow_add'`：dpow_add' (hI : DividedPowers I) {n : Nat} (ha 
+: a in I) (hb : b in I) : hI.dpow n (a + b) = (range (n + 1)).sum fun k => hI.dp
+ow k a * hI.d…
+· 使用定理 `Submodule.sum_mem`：∀ {R : Type u} {M : Type v} {ι : Type w} [inst : Semi
+ring R] [inst_1 : AddCommMonoid M] {module_M : _root_.Module R M}   (p : Submodu
+le R M)…
+· 使用定理 `Ideal.mul_mem_right`：mul_mem_right {α} {a : α} (b : α) [Semiring α] (I :
+ Ideal α) [I.IsTwoSided] (h : a in I) : a * b in I
+· 使用定理 `Ideal.instIsTwoSided`：∀ {α : Type u} [inst : CommSemiring α] (I : Ideal 
+α), I.IsTwoSided
+· 使用引理 `smul_eq_mul`：smul_eq_mul {α : Type*} [Mul α] (a b : α) : a • b = a * b
+· 使用定理 `DividedPowers.dpow_mul`：∀ {A : Type u_1} [inst : CommSemiring A] {I : Id
+eal A} (self : DividedPowers I) {n : ℕ} {a x : A},   x ∈ I → self.dpow n (a * x)
+ = a ^ n * s…
+-/
+theorem dpow_mem_span_of_mem_span {S : Set A} (hS : S ⊆ I) {k : ℕ} (hk : k ≠ 0)
+    {z : A} (hz : z ∈ span {y : A | ∃ (n : ℕ) (_ : n ≠ 0) (x : A) (_ : x ∈ S), y = hI.dpow n x}) :
+    hI.dpow k z ∈ span {y : A | ∃ (n : ℕ) (_ : n ≠ 0) (x : A) (_ : x ∈ S), y = hI.dpow n x} := by
+  let J := span {y : A | ∃ (n : ℕ) (_ : n ≠ 0) (x : A) (_ : x ∈ S), y = hI.dpow n x}
   have hSI := hI.dpow_span_isSubideal hS
-  have haux : forall (n : Nat) (_ : n != 0),
-      hI.dpow n z in span {y | exists n, exists (_ : n != 0), exists x, exists (_ : x in S), y = hI.dpow n x} := by
+  have haux : ∀ (n : ℕ) (_ : n ≠ 0),
+      hI.dpow n z ∈ span {y | ∃ n, ∃ (_ : n ≠ 0), ∃ x, ∃ (_ : x ∈ S), y = hI.dpow n x} := by
     refine Submodule.span_induction ?_ ?_ ?_ ?_ hz
     · -- Elements of S
       rintro y ⟨m, hm, x, hxS, hxy⟩ n hn
-      rw [hxy]; rw [hI.dpow_comp hm (hS hxS)]
+      rw [hxy, hI.dpow_comp hm (hS hxS)]
       exact mul_mem_left _ _ (subset_span ⟨n * m, mul_ne_zero hn hm, x, hxS, rfl⟩)
     · -- Zero
-      exact fun _ hn => by simp only [hI.dpow_eval_zero hn, zero_mem]
+      exact fun _ hn ↦ by simp only [hI.dpow_eval_zero hn, zero_mem]
     · intro x y hx hy hx_pow hy_pow n hn
       rw [hI.dpow_add' (hSI hx) (hSI hy)]
       apply Submodule.sum_mem (span _)
@@ -1298,137 +988,82 @@ theorem dpow_mem_span_of_mem_span
       · rw [hm0]; exact (span _).mul_mem_left _ (hy_pow n hn)
       · exact (span _).mul_mem_right _ (hx_pow m hm0)
     · intro a x hx hx_pow n hn
-      rw [smul_eq_mul]; rw [hI.dpow_mul (hSI hx)]
+      rw [smul_eq_mul, hI.dpow_mul (hSI hx)]
       exact mul_mem_left (span _) (a ^ n) (hx_pow n hn)
   exact haux _ hk
 
-中文:
-定理 dpow_mem_span_of_mem_span
-  结论: {S : 集合 A} (hS : S subseteq I) {k : 自然数} (hk : k != 0)
-  证明: by
-  let J := span {y : A | exists (n : Nat) (_ : n != 0) (x : A) (_ : x in S), y = hI.dpow n x}
-  have hSI := hI.dpow_span_isSubideal hS
-  have haux : forall (n : Nat) (_ : n != 0),
-      hI.dpow n z in span {y | exists n, exists (_ : n != 0), exists x, exists (_ : x in S), y = hI.dpow n x} := by
-    refine Submodule.span_induction ?_ ?_ ?_ ?_ hz
-    · -- Elements of S
-      rintro y ⟨m, hm, x, hxS, hxy⟩ n hn
-      rw [hxy]; rw [hI.dpow_comp hm (hS hxS)]
-      exact mul_mem_left _ _ (subset_span ⟨n * m, mul_ne_zero hn hm, x, hxS, rfl⟩)
-    · -- Zero
-      exact fun _ hn => by simp only [hI.dpow_eval_zero hn, zero_mem]
-    · intro x y hx hy hx_pow hy_pow n hn
-      rw [hI.dpow_add' (hSI hx) (hSI hy)]
-      apply Submodule.sum_mem (span _)
-      intro m _
-      by_cases hm0 : m = 0
-      · rw [hm0]; exact (span _).mul_mem_left _ (hy_pow n hn)
-      · exact (span _).mul_mem_right _ (hx_pow m hm0)
-    · intro a x hx hx_pow n hn
-      rw [smul_eq_mul]; rw [hI.dpow_mul (hSI hx)]
-      exact mul_mem_left (span _) (a ^ n) (hx_pow n hn)
-  exact haux _ hk
+/-- The underlying ideal of `SubDPIdeal.span hI S` is generated by the elements
+  of the form `hI.dpow n x` with `n > 0` and `x ∈ S`. -/
+/-
+**DividedPowers.SubDPIdeal.span_carrier_eq_dpow_span** 是 Mathlib 中的一个定理，位于命名空间 `
+DividedPowers.SubDPIdeal`。
+形式化陈述：span_carrier_eq_dpow_span {S : Set A} (hS : S subseteq I) : (SubDPIdeal.sp
+an hI S).carrier = span {y : A | exists (n : Nat) (_ : n != 0) (x : A) (_ : x in
+ S), y = hI.dpow n x}
+参数：hS : S subseteq I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DividedPowers.dpow_span_isSubideal`：∀ {A : Type u_1} [inst : CommSemirin
+g A] {I : Ideal A} (hI : DividedPowers I) {S : Set A},   S ⊆ ↑I → Ideal.span {y 
+| ∃ n, ∃ (_ : n ≠ 0), ∃ …
+· 使用定理 `DividedPowers.SubDPIdeal.dpow_mem_span_of_mem_span`：dpow_mem_span_of_mem
+_span {S : Set A} (hS : S subseteq I) {k : Nat} (hk : k != 0) {z : A} (hz : z in
+ span {y : A | exists (n : Nat) (_ : n !…
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Set.mem_insert_of_mem`：mem_insert_of_mem {x : α} {s : Set α} (y : α) : x
+ in s -> x in insert y s
+· 使用定理 `Ideal.subset_span`：subset_span {s : Set α} : s subseteq span s
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DividedPowers.dpow_one`：∀ {A : Type u_1} [inst : CommSemiring A] {I : Id
+eal A} (self : DividedPowers I) {x : A}, x ∈ I → self.dpow 1 x = x
+· 使用定理 `sInf_le_of_le`：∀ {α : Type u_1} [inst : CompleteSemilatticeInf α] {s : S
+et α} {a b : α}, b ∈ s → b ≤ a → sInf s ≤ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `ciInf_pos`：∀ {α : Type u_1} [inst : ConditionallyCompletePartialOrderInf
+ α] {p : Prop} {f : p → α} (hp : p), ⨅ (h : p), f h = f hp
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `le_iInf₂_iff`：∀ {α : Type u_1} {ι : Sort u_4} {κ : ι → Sort u_6} [inst :
+ CompleteLattice α] {a : α} {f : (i : ι) → κ i → α},   a ≤ ⨅ i, ⨅ j, f i j ↔ ∀ (
+i …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.span_le`：span_le {s : Set α} {I} : span s <= I ↔ s subseteq I
+· 使用定理 `DividedPowers.SubDPIdeal.dpow_mem`：∀ {A : Type u_1} [inst : CommSemiring
+ A] {I : Ideal A} {hI : DividedPowers I} (self : hI.SubDPIdeal) (n : ℕ),   n ≠ 0
+ → ∀ j ∈ self.carrier, …
 
-Depends on / 依赖: Elements, Submodule, Submodule.span_induction, dpow_comp, dpow_span_isSubideal, hI.dpow, hI.dpow_comp, hI.dpow_span_isSubideal, mul_mem_left, mul_ne_zero, span_induction, subset_span
+--- 原说明 ---
+The underlying ideal of `SubDPIdeal.span hI S` is generated by the elements
+  of the form `hI.dpow n x` with `n > 0` and `x ∈ S`.
 -/
-theorem dpow_mem_span_of_mem_span {S : Set A} (hS : S subseteq I) {k : Nat} (hk : k != 0)
-    {z : A} (hz : z in span {y : A | exists (n : Nat) (_ : n != 0) (x : A) (_ : x in S), y = hI.dpow n x}) :
-    hI.dpow k z in span {y : A | exists (n : Nat) (_ : n != 0) (x : A) (_ : x in S), y = hI.dpow n x} := by
-  let J := span {y : A | exists (n : Nat) (_ : n != 0) (x : A) (_ : x in S), y = hI.dpow n x}
-  have hSI := hI.dpow_span_isSubideal hS
-  have haux : forall (n : Nat) (_ : n != 0),
-      hI.dpow n z in span {y | exists n, exists (_ : n != 0), exists x, exists (_ : x in S), y = hI.dpow n x} := by
-    refine Submodule.span_induction ?_ ?_ ?_ ?_ hz
-    · -- Elements of S
-      rintro y ⟨m, hm, x, hxS, hxy⟩ n hn
-      rw [hxy]; rw [hI.dpow_comp hm (hS hxS)]
-      exact mul_mem_left _ _ (subset_span ⟨n * m, mul_ne_zero hn hm, x, hxS, rfl⟩)
-    · -- Zero
-      exact fun _ hn => by simp only [hI.dpow_eval_zero hn, zero_mem]
-    · intro x y hx hy hx_pow hy_pow n hn
-      rw [hI.dpow_add' (hSI hx) (hSI hy)]
-      apply Submodule.sum_mem (span _)
-      intro m _
-      by_cases hm0 : m = 0
-      · rw [hm0]; exact (span _).mul_mem_left _ (hy_pow n hn)
-      · exact (span _).mul_mem_right _ (hx_pow m hm0)
-    · intro a x hx hx_pow n hn
-      rw [smul_eq_mul]; rw [hI.dpow_mul (hSI hx)]
-      exact mul_mem_left (span _) (a ^ n) (hx_pow n hn)
-  exact haux _ hk
-
-/--
-theorem `span_carrier_eq_dpow_span` / 定理 `span_carrier_eq_dpow_span`
-
-English:
-theorem span_carrier_eq_dpow_span
-  given: {S : Set A} (hS : S subseteq I)
-  proof: by
-  set J : SubDPIdeal hI := {
-    carrier := span {y : A | exists (n : Nat) (_ : n != 0) (x : A) (_ : x in S), y = hI.dpow n x }
-    isSubideal := hI.dpow_span_isSubideal hS
-    dpow_mem _ hk _ hz := dpow_mem_span_of_mem_span hI hS hk hz }
-  simp only [SubDPIdeal.span, sInf_carrier_def]
-  apply le_antisymm
-  · have h : J in insert ⊤ {J : hI.SubDPIdeal | S subseteq ↑J.carrier} :=
-      Set.mem_insert_of_mem _
-        (fun x hx => subset_span ⟨1, one_ne_zero, x, hx, by rw [hI.dpow_one (hS hx)]⟩)
-    refine sInf_le_of_le ⟨J, ?_⟩ (le_refl _)
-    simp only [h, ciInf_pos, J]
-  · rw [le_iInf₂_iff]
-    intro K hK
-    have : S <= K := by
-      simp only [Set.mem_insert_iff, Set.mem_ofPred_eq] at hK
-      rcases hK with rfl | hKS
-      exacts [hS, hKS]
-    rw [span_le]
-    rintro y ⟨n, hn, x, hx, rfl⟩
-    exact K.dpow_mem n hn x (this hx)
-
-中文:
-定理 span_carrier_eq_dpow_span
-  条件: {S : 集合 A} (hS : S subseteq I)
-  证明: by
-  set J : SubDPIdeal hI := {
-    carrier := span {y : A | exists (n : Nat) (_ : n != 0) (x : A) (_ : x in S), y = hI.dpow n x }
-    isSubideal := hI.dpow_span_isSubideal hS
-    dpow_mem _ hk _ hz := dpow_mem_span_of_mem_span hI hS hk hz }
-  simp only [SubDPIdeal.span, sInf_carrier_def]
-  apply le_antisymm
-  · have h : J in insert ⊤ {J : hI.SubDPIdeal | S subseteq ↑J.carrier} :=
-      Set.mem_insert_of_mem _
-        (fun x hx => subset_span ⟨1, one_ne_zero, x, hx, by rw [hI.dpow_one (hS hx)]⟩)
-    refine sInf_le_of_le ⟨J, ?_⟩ (le_refl _)
-    simp only [h, ciInf_pos, J]
-  · rw [le_iInf₂_iff]
-    intro K hK
-    have : S <= K := by
-      simp only [Set.mem_insert_iff, Set.mem_ofPred_eq] at hK
-      rcases hK with rfl | hKS
-      exacts [hS, hKS]
-    rw [span_le]
-    rintro y ⟨n, hn, x, hx, rfl⟩
-    exact K.dpow_mem n hn x (this hx)
-
-Depends on / 依赖: J.carrier, Set.mem_insert_of_mem, SubDPIdeal, SubDPIdeal.span, carrier, dpow_mem, dpow_mem_span_of_mem_span, dpow_one, dpow_span_isSubideal, hI.SubDPIdeal, hI.dpow, hI.dpow_one, hI.dpow_span_isSubideal, insert, isSubideal, le_antisymm, mem_insert_of_mem, one_ne_zero, sInf_carrier_def, sInf_le_of_le
--/
-theorem span_carrier_eq_dpow_span {S : Set A} (hS : S subseteq I) :
+theorem span_carrier_eq_dpow_span {S : Set A} (hS : S ⊆ I) :
     (SubDPIdeal.span hI S).carrier =
-      span {y : A | exists (n : Nat) (_ : n != 0) (x : A) (_ : x in S), y = hI.dpow n x} := by
+      span {y : A | ∃ (n : ℕ) (_ : n ≠ 0) (x : A) (_ : x ∈ S), y = hI.dpow n x} := by
   set J : SubDPIdeal hI := {
-    carrier := span {y : A | exists (n : Nat) (_ : n != 0) (x : A) (_ : x in S), y = hI.dpow n x }
+    carrier := span {y : A | ∃ (n : ℕ) (_ : n ≠ 0) (x : A) (_ : x ∈ S), y = hI.dpow n x }
     isSubideal := hI.dpow_span_isSubideal hS
     dpow_mem _ hk _ hz := dpow_mem_span_of_mem_span hI hS hk hz }
   simp only [SubDPIdeal.span, sInf_carrier_def]
   apply le_antisymm
-  · have h : J in insert ⊤ {J : hI.SubDPIdeal | S subseteq ↑J.carrier} :=
+  · have h : J ∈ insert ⊤ {J : hI.SubDPIdeal | S ⊆ ↑J.carrier} :=
       Set.mem_insert_of_mem _
-        (fun x hx => subset_span ⟨1, one_ne_zero, x, hx, by rw [hI.dpow_one (hS hx)]⟩)
+        (fun x hx ↦ subset_span ⟨1, one_ne_zero, x, hx, by rw [hI.dpow_one (hS hx)]⟩)
     refine sInf_le_of_le ⟨J, ?_⟩ (le_refl _)
     simp only [h, ciInf_pos, J]
   · rw [le_iInf₂_iff]
     intro K hK
-    have : S <= K := by
+    have : S ≤ K := by
       simp only [Set.mem_insert_iff, Set.mem_ofPred_eq] at hK
       rcases hK with rfl | hKS
       exacts [hS, hKS]
@@ -1445,32 +1080,33 @@ section Ker
 variable {A : Type*} [CommRing A] {I : Ideal A} (hI : DividedPowers I)
   {B : Type*} [CommRing B] {J : Ideal B} (hJ : DividedPowers J)
 
-/--
-theorem `isSubDPIdeal_ker` / 定理 `isSubDPIdeal_ker`
+/-- The kernel of a divided power morphism from `I` to `J` is a sub-dp-ideal of `I`. -/
+/-
+**DividedPowers.isSubDPIdeal_ker** 是 Mathlib 中的一个定理，位于命名空间 `DividedPowers`。
+形式化陈述：isSubDPIdeal_ker {f : A ->+* B} (hf : IsDPMorphism hI hJ f) : IsSubDPIdeal
+ hI (RingHom.ker f ⊓ I)
+参数：hf : IsDPMorphism hI hJ f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DividedPowers.isSubDPIdeal_inf_iff`：isSubDPIdeal_inf_iff {A : Type*} [Co
+mmRing A] {I : Ideal A} (hI : DividedPowers I) {J : Ideal A} : IsSubDPIdeal hI (
+J ⊓ I) ↔ forall {n : Nat…
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 
-English:
-theorem isSubDPIdeal_ker
-  given: {f : A ->+* B} (hf : IsDPMorphism hI hJ f)
-  proof: by
-  rw [isSubDPIdeal_inf_iff]
-  simp only [isDPMorphism_def] at hf
-  intro n a b ha hb
-  simp only [RingHom.sub_mem_ker_iff, ← hf.2 a ha, ← hf.2 b hb]
-  exact congr_arg _
-
-中文:
-定理 isSubDPIdeal_ker
-  条件: {f : A ->+* B} (hf : 是DP态射 hI hJ f)
-  证明: by
-  rw [isSubDPIdeal_inf_iff]
-  simp only [isDPMorphism_def] at hf
-  intro n a b ha hb
-  simp only [RingHom.sub_mem_ker_iff, ← hf.2 a ha, ← hf.2 b hb]
-  exact congr_arg _
-
-Depends on / 依赖: RingHom, RingHom.sub_mem_ker_iff, congr_arg, isDPMorphism_def, isSubDPIdeal_inf_iff, sub_mem_ker_iff
+--- 原说明 ---
+The kernel of a divided power morphism from `I` to `J` is a sub-dp-ideal of `I`.
 -/
-theorem isSubDPIdeal_ker {f : A ->+* B} (hf : IsDPMorphism hI hJ f) :
+theorem isSubDPIdeal_ker {f : A →+* B} (hf : IsDPMorphism hI hJ f) :
     IsSubDPIdeal hI (RingHom.ker f ⊓ I) := by
   rw [isSubDPIdeal_inf_iff]
   simp only [isDPMorphism_def] at hf
@@ -1480,32 +1116,18 @@ theorem isSubDPIdeal_ker {f : A ->+* B} (hf : IsDPMorphism hI hJ f) :
 
 open Ideal
 
-/--
-Definition of `DPMorphism.ker` / `DPMorphism.ker` 的定义
+/-- The kernel of a divided power morphism, as a `SubDPIdeal`. -/
+/-
+**DividedPowers.DPMorphism.ker** 是 Mathlib 中的一个定义，位于命名空间 `DividedPowers.DPMorphi
+sm`。
+形式化陈述：{A : Type u_1} →   [inst : CommRing A] →     {I : Ideal A} →       (hI : D
+ividedPowers I) →         {B : Type u_2} →           [inst_1 : CommRing B] → {J 
+: Ideal B} → (hJ : DividedPowers J) → hI.DPMorphism hJ → hI.SubDPIdeal
+参数：hI : DividedPowers I；hJ : DividedPowers J。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition DPMorphism.ker
-  signature: (f : DPMorphism hI hJ)
-  body: RingHom.ker f.toRingHom ⊓ I
-  isSubideal := inf_le_right
-  dpow_mem _ hn a := by
-    simp only [mem_inf, and_imp, RingHom.mem_ker]
-    intro ha ha'
-    rw [← f.isDPMorphism.2 a ha']; rw [ha]
-    exact ⟨dpow_eval_zero hJ hn, hI.dpow_mem hn ha'⟩
-
-中文:
-定义 DP态射.ker
-  签名: (f : DP态射 hI hJ)
-  定义体: RingHom.ker f.toRingHom ⊓ I
-  isSubideal := inf_le_right
-  dpow_mem _ hn a := by
-    simp only [mem_inf, and_imp, RingHom.mem_ker]
-    intro ha ha'
-    rw [← f.isDPMorphism.2 a ha']; rw [ha]
-    exact ⟨dpow_eval_zero hJ hn, hI.dpow_mem hn ha'⟩
-
-Depends on / 依赖: RingHom, RingHom.ker, f.toRingHom, toRingHom
+--- 原说明 ---
+The kernel of a divided power morphism, as a `SubDPIdeal`.
 -/
 def DPMorphism.ker (f : DPMorphism hI hJ) : SubDPIdeal hI where
   carrier := RingHom.ker f.toRingHom ⊓ I
@@ -1513,7 +1135,7 @@ def DPMorphism.ker (f : DPMorphism hI hJ) : SubDPIdeal hI where
   dpow_mem _ hn a := by
     simp only [mem_inf, and_imp, RingHom.mem_ker]
     intro ha ha'
-    rw [← f.isDPMorphism.2 a ha']; rw [ha]
+    rw [← f.isDPMorphism.2 a ha', ha]
     exact ⟨dpow_eval_zero hJ hn, hI.dpow_mem hn ha'⟩
 
 end Ker
@@ -1522,198 +1144,156 @@ section Equalizer
 
 variable {A : Type*} [CommSemiring A] {I : Ideal A} (hI hI' : DividedPowers I)
 
--- TODO : prove that this is the largest ideal which is a sub-dp-ideal in both `hI` and `hI'`.
-/--
-Definition of `dpEqualizer` / `dpEqualizer` 的定义
-
-English:
-definition dpEqualizer
-  signature: : Ideal A where
-  body: { a in I | forall n : Nat, hI.dpow n a = hI'.dpow n a }
-  add_mem' {a b} ha hb := by
-    apply And.intro (I.add_mem ha.1 hb.1) (fun n => ?_)
-    rw [hI.dpow_add ha.1 hb.1]; rw [hI'.dpow_add ha.1 hb.1]
-    exact Finset.sum_congr rfl (fun k _ => by rw [ha.2, hb.2])
-  zero_mem' := by
-    apply And.intro I.zero_mem (fun n => ?_)
-    by_cases hn : n = 0
-    · rw [hn, hI.dpow_zero (zero_mem I), hI'.dpow_zero (zero_mem I)]
-    · rw [hI.dpow_eval_zero hn, hI'.dpow_eval_zero hn]
-  smul_mem' a x hx := by
-    rw [smul_eq_mul]
-    exact ⟨I.mul_mem_left a hx.1, (fun n => by rw [hI.dpow_mul hx.1, hI'.dpow_mul hx.1, hx.2])⟩
-
-中文:
-定义 dpEqualizer
-  签名: : 理想 A where
-  定义体: { a in I | forall n : Nat, hI.dpow n a = hI'.dpow n a }
-  add_mem' {a b} ha hb := by
-    apply And.intro (I.add_mem ha.1 hb.1) (fun n => ?_)
-    rw [hI.dpow_add ha.1 hb.1]; rw [hI'.dpow_add ha.1 hb.1]
-    exact Finset.sum_congr rfl (fun k _ => by rw [ha.2, hb.2])
-  zero_mem' := by
-    apply And.intro I.zero_mem (fun n => ?_)
-    by_cases hn : n = 0
-    · rw [hn, hI.dpow_zero (zero_mem I), hI'.dpow_zero (zero_mem I)]
-    · rw [hI.dpow_eval_zero hn, hI'.dpow_eval_zero hn]
-  smul_mem' a x hx := by
-    rw [smul_eq_mul]
-    exact ⟨I.mul_mem_left a hx.1, (fun n => by rw [hI.dpow_mul hx.1, hI'.dpow_mul hx.1, hx.2])⟩
-
-Depends on / 依赖: hI.dpow
+/-- The ideal of `A` in which the two divided power structures `hI` and `hI'` coincide. -/
+--  TODO : prove that this is the largest ideal which is a sub-dp-ideal in both `hI` and `hI'`.
+/-
+**DividedPowers.dpEqualizer** 是 Mathlib 中的一个定义，位于命名空间 `DividedPowers`。
+形式化陈述：dpEqualizer : Ideal A where carrier
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def dpEqualizer : Ideal A where
-  carrier := { a in I | forall n : Nat, hI.dpow n a = hI'.dpow n a }
+  carrier := { a ∈ I | ∀ n : ℕ, hI.dpow n a = hI'.dpow n a }
   add_mem' {a b} ha hb := by
-    apply And.intro (I.add_mem ha.1 hb.1) (fun n => ?_)
-    rw [hI.dpow_add ha.1 hb.1]; rw [hI'.dpow_add ha.1 hb.1]
-    exact Finset.sum_congr rfl (fun k _ => by rw [ha.2, hb.2])
+    apply And.intro (I.add_mem ha.1 hb.1) (fun n ↦ ?_)
+    rw [hI.dpow_add ha.1 hb.1, hI'.dpow_add ha.1 hb.1]
+    exact Finset.sum_congr rfl (fun k _ ↦ by rw [ha.2, hb.2])
   zero_mem' := by
-    apply And.intro I.zero_mem (fun n => ?_)
+    apply And.intro I.zero_mem (fun n ↦ ?_)
     by_cases hn : n = 0
     · rw [hn, hI.dpow_zero (zero_mem I), hI'.dpow_zero (zero_mem I)]
     · rw [hI.dpow_eval_zero hn, hI'.dpow_eval_zero hn]
   smul_mem' a x hx := by
     rw [smul_eq_mul]
-    exact ⟨I.mul_mem_left a hx.1, (fun n => by rw [hI.dpow_mul hx.1, hI'.dpow_mul hx.1, hx.2])⟩
-
-/--
-theorem `mem_dpEqualizer_iff` / 定理 `mem_dpEqualizer_iff`
-
-English:
-theorem mem_dpEqualizer_iff
-  given: {x : A}
-  proof: by
-  simp [dpEqualizer, Submodule.mem_mk, AddSubmonoid.mem_mk, AddSubsemigroup.mem_mk,
-    Set.mem_ofPred_eq]
-
-中文:
-定理 mem_dpEqualizer_iff
-  条件: {x : A}
-  证明: by
-  simp [dpEqualizer, Submodule.mem_mk, AddSubmonoid.mem_mk, AddSubsemigroup.mem_mk,
-    Set.mem_ofPred_eq]
-
-Depends on / 依赖: AddSubmonoid, AddSubmonoid.mem_mk, AddSubsemigroup, AddSubsemigroup.mem_mk, Set.mem_ofPred_eq, Submodule, Submodule.mem_mk, dpEqualizer, mem_mk, mem_ofPred_eq
+    exact ⟨I.mul_mem_left a hx.1, (fun n ↦ by rw [hI.dpow_mul hx.1, hI'.dpow_mul hx.1, hx.2])⟩
+/-
+**DividedPowers.mem_dpEqualizer_iff** 是 Mathlib 中的一个定理，位于命名空间 `DividedPowers`。
+形式化陈述：mem_dpEqualizer_iff {x : A} : x in dpEqualizer hI hI' ↔ x in I ∧ forall n 
+: Nat, hI.dpow n x = hI'.dpow n x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem mem_dpEqualizer_iff {x : A} :
-    x in dpEqualizer hI hI' ↔ x in I ∧ forall n : Nat, hI.dpow n x = hI'.dpow n x := by
+    x ∈ dpEqualizer hI hI' ↔ x ∈ I ∧ ∀ n : ℕ, hI.dpow n x = hI'.dpow n x := by
   simp [dpEqualizer, Submodule.mem_mk, AddSubmonoid.mem_mk, AddSubsemigroup.mem_mk,
     Set.mem_ofPred_eq]
-
-/--
-theorem `dpEqualizer_is_dp_ideal_left` / 定理 `dpEqualizer_is_dp_ideal_left`
-
-English:
-theorem dpEqualizer_is_dp_ideal_left
-  proof: IsSubDPIdeal.mk (fun _ hx => hx.1) (fun _ hn x hx => ⟨hI.dpow_mem hn hx.1,
-    fun m => by rw [hI.dpow_comp hn hx.1, hx.2, hx.2, hI'.dpow_comp hn hx.1]⟩)
-
-中文:
-定理 dpEqualizer_is_dp_ideal_left
-  证明: IsSubDPIdeal.mk (fun _ hx => hx.1) (fun _ hn x hx => ⟨hI.dpow_mem hn hx.1,
-    fun m => by rw [hI.dpow_comp hn hx.1, hx.2, hx.2, hI'.dpow_comp hn hx.1]⟩)
-
-Depends on / 依赖: IsSubDPIdeal, IsSubDPIdeal.mk, dpow_comp, dpow_mem, hI.dpow_comp, hI.dpow_mem
+/-
+**DividedPowers.dpEqualizer_is_dp_ideal_left** 是 Mathlib 中的一个定理，位于命名空间 `DividedP
+owers`。
+形式化陈述：dpEqualizer_is_dp_ideal_left : DividedPowers.IsSubDPIdeal hI (dpEqualizer 
+hI hI')
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `DividedPowers.dpow_mem`：∀ {A : Type u_1} [inst : CommSemiring A] {I : Id
+eal A} (self : DividedPowers I) {n : ℕ} {x : A},   n ≠ 0 → x ∈ I → self.dpow n x
+ ∈ I
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DividedPowers.dpow_comp`：∀ {A : Type u_1} [inst : CommSemiring A] {I : I
+deal A} (self : DividedPowers I) {m n : ℕ} {x : A},   n ≠ 0 → x ∈ I → self.dpow 
+m (self.dpow …
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem dpEqualizer_is_dp_ideal_left :
     DividedPowers.IsSubDPIdeal hI (dpEqualizer hI hI') :=
-  IsSubDPIdeal.mk (fun _ hx => hx.1) (fun _ hn x hx => ⟨hI.dpow_mem hn hx.1,
-    fun m => by rw [hI.dpow_comp hn hx.1, hx.2, hx.2, hI'.dpow_comp hn hx.1]⟩)
-
-/--
-theorem `dpEqualizer_is_dp_ideal_right` / 定理 `dpEqualizer_is_dp_ideal_right`
-
-English:
-theorem dpEqualizer_is_dp_ideal_right
-  proof: IsSubDPIdeal.mk (fun _ hx => hx.1) (fun _ hn x hx => ⟨hI'.dpow_mem hn hx.1, fun m => by
-    rw [← hx.2]; rw [hI.dpow_comp hn hx.1]; rw [hx.2]; rw [hx.2]; rw [hI'.dpow_comp hn hx.1]⟩)
-
-中文:
-定理 dpEqualizer_is_dp_ideal_right
-  证明: IsSubDPIdeal.mk (fun _ hx => hx.1) (fun _ hn x hx => ⟨hI'.dpow_mem hn hx.1, fun m => by
-    rw [← hx.2]; rw [hI.dpow_comp hn hx.1]; rw [hx.2]; rw [hx.2]; rw [hI'.dpow_comp hn hx.1]⟩)
-
-Depends on / 依赖: IsSubDPIdeal, IsSubDPIdeal.mk, dpow_comp, dpow_mem, hI.dpow_comp
+  IsSubDPIdeal.mk (fun _ hx ↦ hx.1) (fun _ hn x hx ↦ ⟨hI.dpow_mem hn hx.1,
+    fun m ↦ by rw [hI.dpow_comp hn hx.1, hx.2, hx.2, hI'.dpow_comp hn hx.1]⟩)
+/-
+**DividedPowers.dpEqualizer_is_dp_ideal_right** 是 Mathlib 中的一个定理，位于命名空间 `Divided
+Powers`。
+形式化陈述：dpEqualizer_is_dp_ideal_right : DividedPowers.IsSubDPIdeal hI' (dpEqualize
+r hI hI')
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `DividedPowers.dpow_mem`：∀ {A : Type u_1} [inst : CommSemiring A] {I : Id
+eal A} (self : DividedPowers I) {n : ℕ} {x : A},   n ≠ 0 → x ∈ I → self.dpow n x
+ ∈ I
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `DividedPowers.dpow_comp`：∀ {A : Type u_1} [inst : CommSemiring A] {I : I
+deal A} (self : DividedPowers I) {m n : ℕ} {x : A},   n ≠ 0 → x ∈ I → self.dpow 
+m (self.dpow …
 -/
 theorem dpEqualizer_is_dp_ideal_right :
     DividedPowers.IsSubDPIdeal hI' (dpEqualizer hI hI') :=
-  IsSubDPIdeal.mk (fun _ hx => hx.1) (fun _ hn x hx => ⟨hI'.dpow_mem hn hx.1, fun m => by
-    rw [← hx.2]; rw [hI.dpow_comp hn hx.1]; rw [hx.2]; rw [hx.2]; rw [hI'.dpow_comp hn hx.1]⟩)
+  IsSubDPIdeal.mk (fun _ hx ↦ hx.1) (fun _ hn x hx ↦ ⟨hI'.dpow_mem hn hx.1, fun m ↦ by
+    rw [← hx.2, hI.dpow_comp hn hx.1, hx.2, hx.2, hI'.dpow_comp hn hx.1]⟩)
 
 open Ideal
-
-/--
-theorem `le_equalizer_of_isDPMorphism` / 定理 `le_equalizer_of_isDPMorphism`
-
-English:
-theorem le_equalizer_of_isDPMorphism
-  statement: {B : Type*} [CommSemiring B] (f : A ->+* B)
-  proof: by
-  rw [Ideal.map]; rw [span_le]
-  rintro b ⟨a, ha, rfl⟩
-  exact ⟨hI_le_K (mem_map_of_mem f ha), fun n => by rw [hIK.2 a ha, hIK'.2 a ha]⟩
-
-中文:
-定理 le_equalizer_of_isDPMorphism
-  结论: {B : 类型} [交换半环 B] (f : A ->+* B)
-  证明: by
-  rw [Ideal.map]; rw [span_le]
-  rintro b ⟨a, ha, rfl⟩
-  exact ⟨hI_le_K (mem_map_of_mem f ha), fun n => by rw [hIK.2 a ha, hIK'.2 a ha]⟩
-
-Depends on / 依赖: Ideal.map, hI_le_K, mem_map_of_mem, span_le
+/-
+**DividedPowers.le_equalizer_of_isDPMorphism** 是 Mathlib 中的一个定理，位于命名空间 `DividedP
+owers`。
+形式化陈述：le_equalizer_of_isDPMorphism {B : Type*} [CommSemiring B] (f : A ->+* B) {
+K : Ideal B} (hI_le_K : Ideal.map f I <= K) (hK hK' : DividedPowers K) (hIK : Is
+DPMorphism hI hK f) (hIK' : IsDPMorphism hI hK' f) : Ideal.map f I <= dpEqualize
+r hK hK'
+参数：f : A ->+* B；hI_le_K : Ideal.map f I <= K；hK hK' : DividedPowers K；hIK : IsDP
+Morphism hI hK f；hIK' : IsDPMorphism hI hK' f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.map.eq_1`：∀ {R : Type u} {S : Type v} {F : Type u_1} [inst : Semir
+ing R] [inst_1 : Semiring S] [inst_2 : FunLike F R S] (f : F)   (I : Ideal R), I
+deal…
+· 使用定理 `Ideal.span_le`：span_le {s : Set α} {I} : span s <= I ↔ s subseteq I
+· 使用定理 `Ideal.mem_map_of_mem`：mem_map_of_mem (f : F) {I : Ideal R} {x : R} (h : 
+x in I) : f x in map f I
+· 使用定理 `DividedPowers.IsDPMorphism.dpow_comp`：∀ {A : Type u_1} {B : Type u_2} [i
+nst : CommSemiring A] [inst_1 : CommSemiring B] {I : Ideal A} {J : Ideal B}   {h
+I : DividedPowers I} {hJ :…
 -/
-theorem le_equalizer_of_isDPMorphism {B : Type*} [CommSemiring B] (f : A ->+* B)
-    {K : Ideal B} (hI_le_K : Ideal.map f I <= K)
+theorem le_equalizer_of_isDPMorphism {B : Type*} [CommSemiring B] (f : A →+* B)
+    {K : Ideal B} (hI_le_K : Ideal.map f I ≤ K)
     (hK hK' : DividedPowers K) (hIK : IsDPMorphism hI hK f) (hIK' : IsDPMorphism hI hK' f) :
-    Ideal.map f I <= dpEqualizer hK hK' := by
-  rw [Ideal.map]; rw [span_le]
+    Ideal.map f I ≤ dpEqualizer hK hK' := by
+  rw [Ideal.map, span_le]
   rintro b ⟨a, ha, rfl⟩
-  exact ⟨hI_le_K (mem_map_of_mem f ha), fun n => by rw [hIK.2 a ha, hIK'.2 a ha]⟩
+  exact ⟨hI_le_K (mem_map_of_mem f ha), fun n ↦ by rw [hIK.2 a ha, hIK'.2 a ha]⟩
 
 set_option linter.style.whitespace false in -- manual alignment is not recognised
-/--
-Definition of `subDPIdeal_inf_of_quot` / `subDPIdeal_inf_of_quot` 的定义
+/-- If there is a divided power structure on `I⬝(A/J)` such that the quotient map is
+a dp-morphism, then `J ⊓ I` is a sub-dp-ideal of `I`. -/
+/-
+**DividedPowers.subDPIdeal_inf_of_quot** 是 Mathlib 中的一个定义，位于命名空间 `DividedPowers`
+。
+形式化陈述：subDPIdeal_inf_of_quot {A : Type*} [CommRing A] {I : Ideal A} {hI : Divide
+dPowers I} {J : Ideal A} {hJ : DividedPowers (I.map (Ideal.Quotient.mk J))} {φ :
+ DPMorphism hI hJ} (hφ : φ.toRingHom = Ideal.Quotient.mk J) : SubDPIdeal hI wher
+e carrier
+参数：I.map (Ideal.Quotient.mk J)；hφ : φ.toRingHom = Ideal.Quotient.mk J。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
 
-English:
-definition subDPIdeal_inf_of_quot
-  signature: {A : Type*} [CommRing A] {I : Ideal A} {hI : DividedPowers I}
-  body: J ⊓ I
-  isSubideal := by simp only [inf_le_right]
-  dpow_mem := fun _ hn a ⟨haJ, haI⟩ => by
-    refine ⟨?_, hI.dpow_mem hn haI⟩
-    rw [SetLike.mem_coe]; rw [← Quotient.eq_zero_iff_mem]; rw [← hφ]; rw [← φ.dpow_comp a haI]
-    suffices ha0 : φ.toRingHom a = 0 by
-      rw [ha0]; rw [hJ.dpow_eval_zero hn]
-    rw [hφ]; rw [Quotient.eq_zero_iff_mem]
-    exact haJ
-
-中文:
-定义 subDPIdeal_inf_of_quot
-  签名: {A : 类型} [交换环 A] {I : 理想 A} {hI : DividedPowers I}
-  定义体: J ⊓ I
-  isSubideal := by simp only [inf_le_right]
-  dpow_mem := fun _ hn a ⟨haJ, haI⟩ => by
-    refine ⟨?_, hI.dpow_mem hn haI⟩
-    rw [SetLike.mem_coe]; rw [← Quotient.eq_zero_iff_mem]; rw [← hφ]; rw [← φ.dpow_comp a haI]
-    suffices ha0 : φ.toRingHom a = 0 by
-      rw [ha0]; rw [hJ.dpow_eval_zero hn]
-    rw [hφ]; rw [Quotient.eq_zero_iff_mem]
-    exact haJ
+--- 原说明 ---
+If there is a divided power structure on `I⬝(A/J)` such that the quotient map is
+a dp-morphism, then `J ⊓ I` is a sub-dp-ideal of `I`.
 -/
 def subDPIdeal_inf_of_quot {A : Type*} [CommRing A] {I : Ideal A} {hI : DividedPowers I}
     {J : Ideal A} {hJ : DividedPowers (I.map (Ideal.Quotient.mk J))} {φ : DPMorphism hI hJ}
     (hφ : φ.toRingHom = Ideal.Quotient.mk J) :
     SubDPIdeal hI where
-  carrier := J ⊓ I
+  carrier    := J ⊓ I
   isSubideal := by simp only [inf_le_right]
-  dpow_mem := fun _ hn a ⟨haJ, haI⟩ => by
+  dpow_mem   := fun _ hn a ⟨haJ, haI⟩ ↦ by
     refine ⟨?_, hI.dpow_mem hn haI⟩
-    rw [SetLike.mem_coe]; rw [← Quotient.eq_zero_iff_mem]; rw [← hφ]; rw [← φ.dpow_comp a haI]
+    rw [SetLike.mem_coe, ← Quotient.eq_zero_iff_mem, ← hφ, ← φ.dpow_comp a haI]
     suffices ha0 : φ.toRingHom a = 0 by
-      rw [ha0]; rw [hJ.dpow_eval_zero hn]
-    rw [hφ]; rw [Quotient.eq_zero_iff_mem]
+      rw [ha0, hJ.dpow_eval_zero hn]
+    rw [hφ, Quotient.eq_zero_iff_mem]
     exact haJ
 
 end Equalizer
@@ -1729,159 +1309,117 @@ variable {A : Type*} [CommRing A] {I : Ideal A} (hI : DividedPowers I)
 
 namespace OfSurjective
 
-variable {B : Type*} [CommRing B] (f : A ->+* B) (J : Ideal B)
+variable {B : Type*} [CommRing B] (f : A →+* B) (J : Ideal B)
 
-/--
-Definition of `dpow` / `dpow` 的定义
+/-- The definition of divided powers on the codomain `B` of a surjective ring homomorphism
+  from a ring `A` with divided powers `hI`. This definition is tagged as noncomputable
+  because it makes use of `Function.extend`, but under the hypothesis
+  `IsSubDPIdeal hI (RingHom.ker f ⊓ I)`, `dividedPowers_unique` proves that no choices are
+  involved. -/
+/-
+**DividedPowers.Quotient.OfSurjective.dpow** 是 Mathlib 中的一个定义，位于命名空间 `DividedPow
+ers.Quotient.OfSurjective`。
+形式化陈述：dpow : Nat -> B -> B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dpow
-  signature: : Nat -> B -> B
-  body: fun n =>
-  Function.extend (fun a => f a : I -> B) (fun a => f (hI.dpow n a) : I -> B) 0
-
-中文:
-定义 dpow
-  签名: : 自然数 -> B -> B
-  定义体: fun n =>
-  Function.extend (fun a => f a : I -> B) (fun a => f (hI.dpow n a) : I -> B) 0
+--- 原说明 ---
+The definition of divided powers on the codomain `B` of a surjective ring homomo
+rphism
+  from a ring `A` with divided powers `hI`. This definition is tagged as noncomp
+utable
+  because it makes use of `Function.extend`, but under the hypothesis
+  `IsSubDPIdeal hI (RingHom.ker f ⊓ I)`, `dividedPowers_unique` proves that no c
+hoices are
+  involved.
 -/
-noncomputable def dpow : Nat -> B -> B := fun n =>
-  Function.extend (fun a => f a : I -> B) (fun a => f (hI.dpow n a) : I -> B) 0
+noncomputable def dpow : ℕ → B → B := fun n ↦
+  Function.extend (fun a ↦ f a : I → B) (fun a ↦ f (hI.dpow n a) : I → B) 0
 
 variable {f} (hf : Function.Surjective f) {J} (hIJ : J = I.map f)
   (hIf : hI.IsSubDPIdeal (RingHom.ker f ⊓ I))
 
-/--
-theorem `dpow_apply'` / 定理 `dpow_apply'`
+/-- Divided powers on the codomain `B` of a surjective ring homomorphism `f` are compatible
+  with `f`. -/
+/-
+**DividedPowers.Quotient.OfSurjective.dpow_apply'** 是 Mathlib 中的一个定理，位于命名空间 `Div
+idedPowers.Quotient.OfSurjective`。
+形式化陈述：dpow_apply' (hIf : IsSubDPIdeal hI (RingHom.ker f ⊓ I)) {n : Nat} {a : A} 
+(ha : a in I) : dpow hI f n (f a) = f (hI.dpow n a)
+参数：hIf : IsSubDPIdeal hI (RingHom.ker f ⊓ I)；ha : a in I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.extend_def`：extend_def (f : α -> β) (g : α -> γ) (e' : β -> γ) 
+(b : β) [Decidable (exists a, f a = b)] : extend f g e' b = if h : exists a, f a
+ = b then…
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `map_sub`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : AddGroup G]   [inst_2 : SubtractionMonoid H] [AddMonoidHomCl…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `RingHom.mem_ker`：∀ {R : Type u} {S : Type v} {F : Type u_1} [inst : Semi
+ring R] [inst_1 : Semiring S] [inst_2 : FunLike F R S]   [rcf : RingHomClass F R
+ S] {…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `DividedPowers.isSubDPIdeal_inf_iff`：isSubDPIdeal_inf_iff {A : Type*} [Co
+mmRing A] {I : Ideal A} (hI : DividedPowers I) {J : Ideal A} : IsSubDPIdeal hI (
+J ⊓ I) ↔ forall {n : Nat…
+· 使用定理 `Submodule.coe_mem`：coe_mem (x : p) : (x : M) in p
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 
-English:
-theorem dpow_apply'
-  given: (hIf : IsSubDPIdeal hI (RingHom.ker f ⊓ I)) {n : Nat} {a : A} (ha : a in I)
-  proof: by
-  classical
-  simp only [dpow, Function.extend_def]
-  have h : exists (a_1 : I), f ↑a_1 = f a := by use ⟨a, ha⟩
-  rw [dif_pos h]; rw [← sub_eq_zero]; rw [← map_sub]; rw [← RingHom.mem_ker]
-  apply (hI.isSubDPIdeal_inf_iff.mp hIf) (Submodule.coe_mem _) ha
-  rw [RingHom.mem_ker]; rw [map_sub]; rw [sub_eq_zero]; rw [h.choose_spec]
-
-中文:
-定理 dpow_apply'
-  条件: (hIf : 是SubDP理想 hI (环态射.ker f ⊓ I)) {n : 自然数} {a : A} (ha : a in I)
-  证明: by
-  classical
-  simp only [dpow, Function.extend_def]
-  have h : exists (a_1 : I), f ↑a_1 = f a := by use ⟨a, ha⟩
-  rw [dif_pos h]; rw [← sub_eq_zero]; rw [← map_sub]; rw [← RingHom.mem_ker]
-  apply (hI.isSubDPIdeal_inf_iff.mp hIf) (Submodule.coe_mem _) ha
-  rw [RingHom.mem_ker]; rw [map_sub]; rw [sub_eq_zero]; rw [h.choose_spec]
-
-Depends on / 依赖: Function, Function.extend_def, RingHom, RingHom.mem_ker, Submodule, Submodule.coe_mem, choose_spec, classical, coe_mem, dif_pos, extend_def, h.choose_spec, hI.isSubDPIdeal_inf_iff.mp, isSubDPIdeal_inf_iff, map_sub, mem_ker, sub_eq_zero
+--- 原说明 ---
+Divided powers on the codomain `B` of a surjective ring homomorphism `f` are com
+patible
+  with `f`.
 -/
-theorem dpow_apply' (hIf : IsSubDPIdeal hI (RingHom.ker f ⊓ I)) {n : Nat} {a : A} (ha : a in I) :
+theorem dpow_apply' (hIf : IsSubDPIdeal hI (RingHom.ker f ⊓ I)) {n : ℕ} {a : A} (ha : a ∈ I) :
     dpow hI f n (f a) = f (hI.dpow n a) := by
   classical
   simp only [dpow, Function.extend_def]
-  have h : exists (a_1 : I), f ↑a_1 = f a := by use ⟨a, ha⟩
-  rw [dif_pos h]; rw [← sub_eq_zero]; rw [← map_sub]; rw [← RingHom.mem_ker]
+  have h : ∃ (a_1 : I), f ↑a_1 = f a := by use ⟨a, ha⟩
+  rw [dif_pos h, ← sub_eq_zero, ← map_sub, ← RingHom.mem_ker]
   apply (hI.isSubDPIdeal_inf_iff.mp hIf) (Submodule.coe_mem _) ha
-  rw [RingHom.mem_ker]; rw [map_sub]; rw [sub_eq_zero]; rw [h.choose_spec]
+  rw [RingHom.mem_ker, map_sub, sub_eq_zero, h.choose_spec]
 
 open Ideal
 
-/--
-Definition of `dividedPowers` / `dividedPowers` 的定义
+/-- When `f.ker ⊓ I` is a sub-dp-ideal of `I`, this is the induced divided power structure on
+  the ideal `I.map f` of the target. -/
+/-
+**DividedPowers.Quotient.OfSurjective.dividedPowers** 是 Mathlib 中的一个定义，位于命名空间 `D
+ividedPowers.Quotient.OfSurjective`。
+形式化陈述：dividedPowers : DividedPowers J where dpow
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dividedPowers
-  signature: : DividedPowers J where
-  body: dpow hI f
-  dpow_null n {x} hx' := by
-    classical
-    rw [dpow]; rw [Function.extend_def]; rw [dif_neg]; rw [Pi.zero_apply]
-    rintro ⟨⟨a, ha⟩, rfl⟩
-    exact (hIJ ▸ hx') (apply_coe_mem_map f I ⟨a, ha⟩)
-  dpow_zero {x} hx := by
-    obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
-    rw [dpow_apply' hI hIf ha]; rw [hI.dpow_zero ha]; rw [map_one]
-  dpow_one {x} hx := by
-    obtain ⟨a, ha, hax⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
-    rw [← hax]; rw [dpow_apply' hI hIf ha]; rw [hI.dpow_one ha]
-  dpow_mem {n x} hn hx := by
-    rw [hIJ] at hx ⊢
-    obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp hx
-    rw [dpow_apply' hI hIf ha]
-    exact mem_map_of_mem _ (hI.dpow_mem hn ha)
-  dpow_add hx hy := by
-    obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
-    obtain ⟨b, hb, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hy)
-    rw [← map_add]; rw [dpow_apply' hI hIf (I.add_mem ha hb)]; rw [hI.dpow_add ha hb]; rw [map_sum]; rw [Finset.sum_congr rfl]
-    exact fun k _ => by rw [dpow_apply' hI hIf ha, dpow_apply' hI hIf hb, ← _root_.map_mul]
-  dpow_mul {n x y} hy := by
-    obtain ⟨a, rfl⟩ := hf x
-    obtain ⟨b, hb, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hy)
-    rw [dpow_apply' hI hIf hb]; rw [← _root_.map_mul]; rw [← map_pow]; rw [dpow_apply' hI hIf (mul_mem_left I a hb)]; rw [hI.dpow_mul hb]; rw [_root_.map_mul]
-  mul_dpow hx := by
-    obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
-    simp only [dpow_apply' hI hIf ha]
-    rw [← _root_.map_mul]; rw [hI.mul_dpow ha]; rw [_root_.map_mul]; rw [map_natCast]
-  dpow_comp hn hx := by
-    obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
-    simp only [dpow_apply' hI hIf, ha, hI.dpow_mem hn ha]
-    rw [hI.dpow_comp hn ha]; rw [_root_.map_mul]; rw [map_natCast]
-
-中文:
-定义 dividedPowers
-  签名: : DividedPowers J where
-  定义体: dpow hI f
-  dpow_null n {x} hx' := by
-    classical
-    rw [dpow]; rw [Function.extend_def]; rw [dif_neg]; rw [Pi.zero_apply]
-    rintro ⟨⟨a, ha⟩, rfl⟩
-    exact (hIJ ▸ hx') (apply_coe_mem_map f I ⟨a, ha⟩)
-  dpow_zero {x} hx := by
-    obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
-    rw [dpow_apply' hI hIf ha]; rw [hI.dpow_zero ha]; rw [map_one]
-  dpow_one {x} hx := by
-    obtain ⟨a, ha, hax⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
-    rw [← hax]; rw [dpow_apply' hI hIf ha]; rw [hI.dpow_one ha]
-  dpow_mem {n x} hn hx := by
-    rw [hIJ] at hx ⊢
-    obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp hx
-    rw [dpow_apply' hI hIf ha]
-    exact mem_map_of_mem _ (hI.dpow_mem hn ha)
-  dpow_add hx hy := by
-    obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
-    obtain ⟨b, hb, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hy)
-    rw [← map_add]; rw [dpow_apply' hI hIf (I.add_mem ha hb)]; rw [hI.dpow_add ha hb]; rw [map_sum]; rw [Finset.sum_congr rfl]
-    exact fun k _ => by rw [dpow_apply' hI hIf ha, dpow_apply' hI hIf hb, ← _root_.map_mul]
-  dpow_mul {n x y} hy := by
-    obtain ⟨a, rfl⟩ := hf x
-    obtain ⟨b, hb, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hy)
-    rw [dpow_apply' hI hIf hb]; rw [← _root_.map_mul]; rw [← map_pow]; rw [dpow_apply' hI hIf (mul_mem_left I a hb)]; rw [hI.dpow_mul hb]; rw [_root_.map_mul]
-  mul_dpow hx := by
-    obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
-    simp only [dpow_apply' hI hIf ha]
-    rw [← _root_.map_mul]; rw [hI.mul_dpow ha]; rw [_root_.map_mul]; rw [map_natCast]
-  dpow_comp hn hx := by
-    obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
-    simp only [dpow_apply' hI hIf, ha, hI.dpow_mem hn ha]
-    rw [hI.dpow_comp hn ha]; rw [_root_.map_mul]; rw [map_natCast]
+--- 原说明 ---
+When `f.ker ⊓ I` is a sub-dp-ideal of `I`, this is the induced divided power str
+ucture on
+  the ideal `I.map f` of the target.
 -/
 noncomputable def dividedPowers : DividedPowers J where
   dpow := dpow hI f
   dpow_null n {x} hx' := by
     classical
-    rw [dpow]; rw [Function.extend_def]; rw [dif_neg]; rw [Pi.zero_apply]
+    rw [dpow, Function.extend_def, dif_neg, Pi.zero_apply]
     rintro ⟨⟨a, ha⟩, rfl⟩
     exact (hIJ ▸ hx') (apply_coe_mem_map f I ⟨a, ha⟩)
   dpow_zero {x} hx := by
     obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
-    rw [dpow_apply' hI hIf ha]; rw [hI.dpow_zero ha]; rw [map_one]
+    rw [dpow_apply' hI hIf ha, hI.dpow_zero ha, map_one]
   dpow_one {x} hx := by
     obtain ⟨a, ha, hax⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
-    rw [← hax]; rw [dpow_apply' hI hIf ha]; rw [hI.dpow_one ha]
+    rw [← hax, dpow_apply' hI hIf ha, hI.dpow_one ha]
   dpow_mem {n x} hn hx := by
     rw [hIJ] at hx ⊢
     obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp hx
@@ -1890,139 +1428,127 @@ noncomputable def dividedPowers : DividedPowers J where
   dpow_add hx hy := by
     obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
     obtain ⟨b, hb, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hy)
-    rw [← map_add]; rw [dpow_apply' hI hIf (I.add_mem ha hb)]; rw [hI.dpow_add ha hb]; rw [map_sum]; rw [Finset.sum_congr rfl]
-    exact fun k _ => by rw [dpow_apply' hI hIf ha, dpow_apply' hI hIf hb, ← _root_.map_mul]
+    rw [← map_add, dpow_apply' hI hIf (I.add_mem ha hb), hI.dpow_add ha hb, map_sum,
+      Finset.sum_congr rfl]
+    exact fun k _ ↦ by rw [dpow_apply' hI hIf ha, dpow_apply' hI hIf hb, ← _root_.map_mul]
   dpow_mul {n x y} hy := by
     obtain ⟨a, rfl⟩ := hf x
     obtain ⟨b, hb, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hy)
-    rw [dpow_apply' hI hIf hb]; rw [← _root_.map_mul]; rw [← map_pow]; rw [dpow_apply' hI hIf (mul_mem_left I a hb)]; rw [hI.dpow_mul hb]; rw [_root_.map_mul]
+    rw [dpow_apply' hI hIf hb, ← _root_.map_mul, ← map_pow,
+      dpow_apply' hI hIf (mul_mem_left I a hb), hI.dpow_mul hb, _root_.map_mul]
   mul_dpow hx := by
     obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
     simp only [dpow_apply' hI hIf ha]
-    rw [← _root_.map_mul]; rw [hI.mul_dpow ha]; rw [_root_.map_mul]; rw [map_natCast]
+    rw [← _root_.map_mul, hI.mul_dpow ha, _root_.map_mul, map_natCast]
   dpow_comp hn hx := by
     obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
     simp only [dpow_apply' hI hIf, ha, hI.dpow_mem hn ha]
-    rw [hI.dpow_comp hn ha]; rw [_root_.map_mul]; rw [map_natCast]
-
-/--
-theorem `dpow_def` / 定理 `dpow_def`
-
-English:
-theorem dpow_def
-  given: {n : Nat} {x : B}
-  statement: (dividedPowers hI hf hIJ hIf).dpow n x = dpow hI f n x
-  proof: rfl
-
-中文:
-定理 dpow_def
-  条件: {n : 自然数} {x : B}
-  结论: (dividedPowers hI hf hIJ hIf).dpow n x = dpow hI f n x
-  证明: rfl
+    rw [hI.dpow_comp hn ha, _root_.map_mul, map_natCast]
+/-
+**DividedPowers.Quotient.OfSurjective.dpow_def** 是 Mathlib 中的一个定理，位于命名空间 `Divide
+dPowers.Quotient.OfSurjective`。
+形式化陈述：dpow_def {n : Nat} {x : B} : (dividedPowers hI hf hIJ hIf).dpow n x = dpow
+ hI f n x
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem dpow_def {n : Nat} {x : B} : (dividedPowers hI hf hIJ hIf).dpow n x = dpow hI f n x := rfl
-
-/--
-theorem `dpow_apply` / 定理 `dpow_apply`
-
-English:
-theorem dpow_apply
-  given: {n : Nat} {a : A} (ha : a in I)
-  proof: by
-  rw [dpow_def]; rw [dpow_apply' hI hIf ha]
-
-中文:
-定理 dpow_apply
-  条件: {n : 自然数} {a : A} (ha : a in I)
-  证明: by
-  rw [dpow_def]; rw [dpow_apply' hI hIf ha]
-
-Depends on / 依赖: dpow_apply, dpow_def
+theorem dpow_def {n : ℕ} {x : B} : (dividedPowers hI hf hIJ hIf).dpow n x = dpow hI f n x := rfl
+/-
+**DividedPowers.Quotient.OfSurjective.dpow_apply** 是 Mathlib 中的一个定理，位于命名空间 `Divi
+dedPowers.Quotient.OfSurjective`。
+形式化陈述：dpow_apply {n : Nat} {a : A} (ha : a in I) : (dividedPowers hI hf hIJ hIf)
+.dpow n (f a) = f (hI.dpow n a)
+参数：ha : a in I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DividedPowers.Quotient.OfSurjective.dpow_def`：dpow_def {n : Nat} {x : B}
+ : (dividedPowers hI hf hIJ hIf).dpow n x = dpow hI f n x
+· 使用定理 `DividedPowers.Quotient.OfSurjective.dpow_apply'`：dpow_apply' (hIf : IsSu
+bDPIdeal hI (RingHom.ker f ⊓ I)) {n : Nat} {a : A} (ha : a in I) : dpow hI f n (
+f a) = f (hI.dpow n a)
 -/
-theorem dpow_apply {n : Nat} {a : A} (ha : a in I) :
+theorem dpow_apply {n : ℕ} {a : A} (ha : a ∈ I) :
     (dividedPowers hI hf hIJ hIf).dpow n (f a) = f (hI.dpow n a) := by
-  rw [dpow_def]; rw [dpow_apply' hI hIf ha]
-
-/--
-theorem `isDPMorphism` / 定理 `isDPMorphism`
-
-English:
-theorem isDPMorphism
-  statement: IsDPMorphism hI (dividedPowers hI hf hIJ hIf) f
-  proof: ⟨le_of_eq hIJ.symm, fun a ha => by rw [dpow_apply hI hf hIJ hIf ha]⟩
-
-中文:
-定理 isDPMorphism
-  结论: 是DP态射 hI (dividedPowers hI hf hIJ hIf) f
-  证明: ⟨le_of_eq hIJ.symm, fun a ha => by rw [dpow_apply hI hf hIJ hIf ha]⟩
-
-Depends on / 依赖: dpow_apply, hIJ.symm, le_of_eq
+  rw [dpow_def, dpow_apply' hI hIf ha]
+/-
+**DividedPowers.Quotient.OfSurjective.isDPMorphism** 是 Mathlib 中的一个定理，位于命名空间 `Di
+videdPowers.Quotient.OfSurjective`。
+形式化陈述：isDPMorphism : IsDPMorphism hI (dividedPowers hI hf hIJ hIf) f
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_of_eq`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DividedPowers.Quotient.OfSurjective.dpow_apply`：dpow_apply {n : Nat} {a 
+: A} (ha : a in I) : (dividedPowers hI hf hIJ hIf).dpow n (f a) = f (hI.dpow n a
+)
 -/
 theorem isDPMorphism : IsDPMorphism hI (dividedPowers hI hf hIJ hIf) f :=
-  ⟨le_of_eq hIJ.symm, fun a ha => by rw [dpow_apply hI hf hIJ hIf ha]⟩
-
-/--
-theorem `dividedPowers_unique` / 定理 `dividedPowers_unique`
-
-English:
-theorem dividedPowers_unique
-  statement: (hquot : DividedPowers J)
-  proof: ext _ _ fun n x hx => by
-    obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
-    rw [hm.2 a ha]; rw [dpow_apply hI hf hIJ hIf ha]
-
-中文:
-定理 dividedPowers_unique
-  结论: (hquot : DividedPowers J)
-  证明: ext _ _ fun n x hx => by
-    obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
-    rw [hm.2 a ha]; rw [dpow_apply hI hf hIJ hIf ha]
-
-Depends on / 依赖: T.toNat_injective, dpow_apply, mem_map_iff_of_surjective, toNat_injective
+  ⟨le_of_eq hIJ.symm, fun a ha ↦ by rw [dpow_apply hI hf hIJ hIf ha]⟩
+/-
+**DividedPowers.Quotient.OfSurjective.dividedPowers_unique** 是 Mathlib 中的一个定理，位于
+命名空间 `DividedPowers.Quotient.OfSurjective`。
+形式化陈述：dividedPowers_unique (hquot : DividedPowers J) (hm : DividedPowers.IsDPMor
+phism hI hquot f) : hquot = dividedPowers hI hf hIJ hIf
+参数：hquot : DividedPowers J；hm : DividedPowers.IsDPMorphism hI hquot f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DividedPowers.ext`：DividedPowers.ext (hI : DividedPowers I) (hI' : Divid
+edPowers I) (h_eq : forall (n : Nat) {x : A} (_ : x in I), hI.dpow n x = hI'.dpo
+w n x) …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ideal.mem_map_iff_of_surjective`：mem_map_iff_of_surjective {I : Ideal R}
+ {y} : y in map f I ↔ exists x, x in I ∧ f x = y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `DividedPowers.IsDPMorphism.dpow_comp`：∀ {A : Type u_1} {B : Type u_2} [i
+nst : CommSemiring A] [inst_1 : CommSemiring B] {I : Ideal A} {J : Ideal B}   {h
+I : DividedPowers I} {hJ :…
+· 使用定理 `DividedPowers.Quotient.OfSurjective.dpow_apply`：dpow_apply {n : Nat} {a 
+: A} (ha : a in I) : (dividedPowers hI hf hIJ hIf).dpow n (f a) = f (hI.dpow n a
+)
 -/
 theorem dividedPowers_unique (hquot : DividedPowers J)
     (hm : DividedPowers.IsDPMorphism hI hquot f) : hquot = dividedPowers hI hf hIJ hIf :=
-  ext _ _ fun n x hx => by
+  ext _ _ fun n x hx ↦ by
     obtain ⟨a, ha, rfl⟩ := (mem_map_iff_of_surjective f hf).mp (hIJ ▸ hx)
-    rw [hm.2 a ha]; rw [dpow_apply hI hf hIJ hIf ha]
+    rw [hm.2 a ha, dpow_apply hI hf hIJ hIf ha]
 
 end OfSurjective
 
 variable {J : Ideal A} (hIJ : IsSubDPIdeal hI (J ⊓ I))
 
-/--
-Definition of `dpow` / `dpow` 的定义
+/-- The definition of divided powers on `A ⧸ J`. Tagged as noncomputable because it makes use of
+  `Function.extend`, but under `IsSubDPIdeal hI (J ⊓ I)`, `dividedPowers_unique` proves that no
+  choices are involved. -/
+/-
+**DividedPowers.Quotient.dpow** 是 Mathlib 中的一个定义，位于命名空间 `DividedPowers.Quotient`
+。
+形式化陈述：dpow (J : Ideal A) : Nat -> A ⧸ J -> A ⧸ J
+参数：J : Ideal A。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
 
-English:
-definition dpow
-  signature: (J : Ideal A)
-  body: DividedPowers.Quotient.OfSurjective.dpow hI (Ideal.Quotient.mk J)
-
-中文:
-定义 dpow
-  签名: (J : 理想 A)
-  定义体: DividedPowers.Quotient.OfSurjective.dpow hI (Ideal.Quotient.mk J)
-
-Depends on / 依赖: DividedPowers, DividedPowers.Quotient.OfSurjective.dpow, Ideal.Quotient.mk, OfSurjective, Quotient
+--- 原说明 ---
+The definition of divided powers on `A ⧸ J`. Tagged as noncomputable because it 
+makes use of
+  `Function.extend`, but under `IsSubDPIdeal hI (J ⊓ I)`, `dividedPowers_unique`
+ proves that no
+  choices are involved.
 -/
-noncomputable def dpow (J : Ideal A) : Nat -> A ⧸ J -> A ⧸ J :=
+noncomputable def dpow (J : Ideal A) : ℕ → A ⧸ J → A ⧸ J :=
   DividedPowers.Quotient.OfSurjective.dpow hI (Ideal.Quotient.mk J)
 
 set_option backward.privateInPublic true in
-/--
-theorem `isSubDPIdeal_aux` / 定理 `isSubDPIdeal_aux`
-
-English:
-theorem isSubDPIdeal_aux
-  given: (hIJ : IsSubDPIdeal hI (J ⊓ I))
-  proof: by
-  simpa [Ideal.mk_ker] using hIJ
-
-中文:
-定理 isSubDPIdeal_aux
-  条件: (hIJ : 是SubDP理想 hI (J ⊓ I))
-  证明: by
-  simpa [Ideal.mk_ker] using hIJ
+/-
+**DividedPowers.Quotient.isSubDPIdeal_aux** 是 Mathlib 中的一个定理，位于命名空间 `DividedPowe
+rs.Quotient`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem isSubDPIdeal_aux (hIJ : IsSubDPIdeal hI (J ⊓ I)) :
     IsSubDPIdeal hI (RingHom.ker (Ideal.Quotient.mk J) ⊓ I) := by
@@ -2030,86 +1556,112 @@ private theorem isSubDPIdeal_aux (hIJ : IsSubDPIdeal hI (J ⊓ I)) :
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-Definition of `dividedPowers` / `dividedPowers` 的定义
+/-- When `I ⊓ J` is a sub-dp-ideal of `I`, this is the divided power structure on the ideal
+`I(A⧸J)` of the quotient. -/
+/-
+**DividedPowers.Quotient.dividedPowers** 是 Mathlib 中的一个定义，位于命名空间 `DividedPowers.
+Quotient`。
+形式化陈述：dividedPowers : DividedPowers (I.map (Ideal.Quotient.mk J))
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `_private.Mathlib.RingTheory.DividedPowers.SubDPIdeal.0.DividedPowers.Quo
+tient.isSubDPIdeal_aux`：∀ {A : Type u_1} [inst : CommRing A] {I : Ideal A} (hI :
+ DividedPowers I) {J : Ideal A},   hI.IsSubDPIdeal (J ⊓ I) → hI.IsSubDPIdeal (Ri
+ngHo…
 
-English:
-definition dividedPowers
-  signature: : DividedPowers (I.map (Ideal.Quotient.mk J))
-  body: DividedPowers.Quotient.OfSurjective.dividedPowers
-    hI Ideal.Quotient.mk_surjective (refl _) (isSubDPIdeal_aux hI hIJ)
-
-中文:
-定义 dividedPowers
-  签名: : DividedPowers (I.map (理想.商.mk J))
-  定义体: DividedPowers.Quotient.OfSurjective.dividedPowers
-    hI Ideal.Quotient.mk_surjective (refl _) (isSubDPIdeal_aux hI hIJ)
-
-Depends on / 依赖: DividedPowers, DividedPowers.Quotient.OfSurjective.dividedPowers, Ideal.Quotient.mk_surjective, OfSurjective, Quotient, dividedPowers, isSubDPIdeal_aux, mk_surjective
+--- 原说明 ---
+When `I ⊓ J` is a sub-dp-ideal of `I`, this is the divided power structure on th
+e ideal
+`I(A⧸J)` of the quotient.
 -/
 noncomputable def dividedPowers : DividedPowers (I.map (Ideal.Quotient.mk J)) :=
   DividedPowers.Quotient.OfSurjective.dividedPowers
     hI Ideal.Quotient.mk_surjective (refl _) (isSubDPIdeal_aux hI hIJ)
 
-/--
-theorem `dpow_apply` / 定理 `dpow_apply`
+/-- Divided powers on the quotient are compatible with quotient map -/
+/-
+**DividedPowers.Quotient.dpow_apply** 是 Mathlib 中的一个定理，位于命名空间 `DividedPowers.Quo
+tient`。
+形式化陈述：dpow_apply {n : Nat} {a : A} (ha : a in I) : (dividedPowers hI hIJ).dpow n
+ (Ideal.Quotient.mk J a) = (Ideal.Quotient.mk J) (hI.dpow n a)
+参数：ha : a in I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DividedPowers.Quotient.OfSurjective.dpow_apply`：dpow_apply {n : Nat} {a 
+: A} (ha : a in I) : (dividedPowers hI hf hIJ hIf).dpow n (f a) = f (hI.dpow n a
+)
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Ideal.Quotient.mk_surjective`：mk_surjective : Function.Surjective (mk I)
+· 使用引理 `refl`：refl [Std.Refl r] (a : α) : a ≺ a
+· 使用定理 `IsPreorder.toRefl`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsPreorde
+r α r], Std.Refl r
+· 使用定理 `IsEquiv.toIsPreorder`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsEqui
+v α r], IsPreorder α r
+· 使用定理 `_private.Mathlib.RingTheory.DividedPowers.SubDPIdeal.0.DividedPowers.Quo
+tient.isSubDPIdeal_aux`：∀ {A : Type u_1} [inst : CommRing A] {I : Ideal A} (hI :
+ DividedPowers I) {J : Ideal A},   hI.IsSubDPIdeal (J ⊓ I) → hI.IsSubDPIdeal (Ri
+ngHo…
 
-English:
-theorem dpow_apply
-  given: {n : Nat} {a : A} (ha : a in I)
-  proof: DividedPowers.Quotient.OfSurjective.dpow_apply
-    hI Ideal.Quotient.mk_surjective (refl _) (isSubDPIdeal_aux hI hIJ) ha
-
-中文:
-定理 dpow_apply
-  条件: {n : 自然数} {a : A} (ha : a in I)
-  证明: DividedPowers.Quotient.OfSurjective.dpow_apply
-    hI Ideal.Quotient.mk_surjective (refl _) (isSubDPIdeal_aux hI hIJ) ha
-
-Depends on / 依赖: DividedPowers, DividedPowers.Quotient.OfSurjective.dpow_apply, Ideal.Quotient.mk_surjective, OfSurjective, Quotient, dpow_apply, isSubDPIdeal_aux, mk_surjective
+--- 原说明 ---
+Divided powers on the quotient are compatible with quotient map
 -/
-theorem dpow_apply {n : Nat} {a : A} (ha : a in I) :
+theorem dpow_apply {n : ℕ} {a : A} (ha : a ∈ I) :
     (dividedPowers hI hIJ).dpow n (Ideal.Quotient.mk J a) = (Ideal.Quotient.mk J) (hI.dpow n a) :=
   DividedPowers.Quotient.OfSurjective.dpow_apply
     hI Ideal.Quotient.mk_surjective (refl _) (isSubDPIdeal_aux hI hIJ) ha
-
-/--
-theorem `isDPMorphism` / 定理 `isDPMorphism`
-
-English:
-theorem isDPMorphism
-  statement: hI.IsDPMorphism (dividedPowers hI hIJ) (Ideal.Quotient.mk J)
-  proof: DividedPowers.Quotient.OfSurjective.isDPMorphism
-    hI Ideal.Quotient.mk_surjective (refl _) (isSubDPIdeal_aux hI hIJ)
-
-中文:
-定理 isDPMorphism
-  结论: hI.是DP态射 (dividedPowers hI hIJ) (理想.商.mk J)
-  证明: DividedPowers.Quotient.OfSurjective.isDPMorphism
-    hI Ideal.Quotient.mk_surjective (refl _) (isSubDPIdeal_aux hI hIJ)
-
-Depends on / 依赖: DividedPowers, DividedPowers.Quotient.OfSurjective.isDPMorphism, Ideal.Quotient.mk_surjective, OfSurjective, Quotient, isDPMorphism, isSubDPIdeal_aux, mk_surjective
+/-
+**DividedPowers.Quotient.isDPMorphism** 是 Mathlib 中的一个定理，位于命名空间 `DividedPowers.Q
+uotient`。
+形式化陈述：isDPMorphism : hI.IsDPMorphism (dividedPowers hI hIJ) (Ideal.Quotient.mk J
+)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DividedPowers.Quotient.OfSurjective.isDPMorphism`：isDPMorphism : IsDPMor
+phism hI (dividedPowers hI hf hIJ hIf) f
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `Ideal.Quotient.mk_surjective`：mk_surjective : Function.Surjective (mk I)
+· 使用引理 `refl`：refl [Std.Refl r] (a : α) : a ≺ a
+· 使用定理 `IsPreorder.toRefl`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsPreorde
+r α r], Std.Refl r
+· 使用定理 `IsEquiv.toIsPreorder`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsEqui
+v α r], IsPreorder α r
+· 使用定理 `_private.Mathlib.RingTheory.DividedPowers.SubDPIdeal.0.DividedPowers.Quo
+tient.isSubDPIdeal_aux`：∀ {A : Type u_1} [inst : CommRing A] {I : Ideal A} (hI :
+ DividedPowers I) {J : Ideal A},   hI.IsSubDPIdeal (J ⊓ I) → hI.IsSubDPIdeal (Ri
+ngHo…
 -/
 theorem isDPMorphism : hI.IsDPMorphism (dividedPowers hI hIJ) (Ideal.Quotient.mk J) :=
   DividedPowers.Quotient.OfSurjective.isDPMorphism
     hI Ideal.Quotient.mk_surjective (refl _) (isSubDPIdeal_aux hI hIJ)
-
-/--
-theorem `dividedPowers_unique` / 定理 `dividedPowers_unique`
-
-English:
-theorem dividedPowers_unique
-  statement: (hquot : DividedPowers (I.map (Ideal.Quotient.mk J)))
-  proof: DividedPowers.Quotient.OfSurjective.dividedPowers_unique
-    hI Ideal.Quotient.mk_surjective (refl _) (isSubDPIdeal_aux hI hIJ) hquot hm
-
-中文:
-定理 dividedPowers_unique
-  结论: (hquot : DividedPowers (I.map (理想.商.mk J)))
-  证明: DividedPowers.Quotient.OfSurjective.dividedPowers_unique
-    hI Ideal.Quotient.mk_surjective (refl _) (isSubDPIdeal_aux hI hIJ) hquot hm
-
-Depends on / 依赖: DividedPowers, DividedPowers.Quotient.OfSurjective.dividedPowers_unique, Ideal.Quotient.mk_surjective, OfSurjective, Quotient, dividedPowers_unique, isSubDPIdeal_aux, mk_surjective
+/-
+**DividedPowers.Quotient.dividedPowers_unique** 是 Mathlib 中的一个定理，位于命名空间 `Divided
+Powers.Quotient`。
+形式化陈述：dividedPowers_unique (hquot : DividedPowers (I.map (Ideal.Quotient.mk J)))
+ (hm : DividedPowers.IsDPMorphism hI hquot (Ideal.Quotient.mk J)) : hquot = divi
+dedPowers hI hIJ
+参数：hquot : DividedPowers (I.map (Ideal.Quotient.mk J))；hm : DividedPowers.IsDPMo
+rphism hI hquot (Ideal.Quotient.mk J)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `DividedPowers.Quotient.OfSurjective.dividedPowers_unique`：dividedPowers_
+unique (hquot : DividedPowers J) (hm : DividedPowers.IsDPMorphism hI hquot f) : 
+hquot = dividedPowers hI hf hIJ hIf
+· 使用定理 `Ideal.Quotient.mk_surjective`：mk_surjective : Function.Surjective (mk I)
+· 使用引理 `refl`：refl [Std.Refl r] (a : α) : a ≺ a
+· 使用定理 `IsPreorder.toRefl`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsPreorde
+r α r], Std.Refl r
+· 使用定理 `IsEquiv.toIsPreorder`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsEqui
+v α r], IsPreorder α r
+· 使用定理 `_private.Mathlib.RingTheory.DividedPowers.SubDPIdeal.0.DividedPowers.Quo
+tient.isSubDPIdeal_aux`：∀ {A : Type u_1} [inst : CommRing A] {I : Ideal A} (hI :
+ DividedPowers I) {J : Ideal A},   hI.IsSubDPIdeal (J ⊓ I) → hI.IsSubDPIdeal (Ri
+ngHo…
 -/
 theorem dividedPowers_unique (hquot : DividedPowers (I.map (Ideal.Quotient.mk J)))
     (hm : DividedPowers.IsDPMorphism hI hquot (Ideal.Quotient.mk J)) :
@@ -2122,3 +1674,4 @@ end Quotient
 end Quotient
 
 end DividedPowers
+

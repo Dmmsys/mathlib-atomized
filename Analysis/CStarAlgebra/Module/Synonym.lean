@@ -56,18 +56,16 @@ set_option linter.unusedVariables false in
 /-- A type synonym for endowing a given type with a `CStarModule` structure. This has the scoped
 notation `C⋆ᵐᵒᵈ`. -/
 @[nolint unusedArguments]
-/--
-Definition of `WithCStarModule` / `WithCStarModule` 的定义
+/-
+**WithCStarModule** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：WithCStarModule (A E : Type*)
+参数：A E : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WithCStarModule
-  signature: (A E : Type*)
-  body: E
-
-中文:
-定义 WithCStarModule
-  签名: (A E : 类型)
-  定义体: E
+--- 原说明 ---
+A type synonym for endowing a given type with a `CStarModule` structure. This ha
+s the scoped
+notation `C⋆ᵐᵒᵈ`.
 -/
 def WithCStarModule (A E : Type*) := E
 
@@ -80,279 +78,146 @@ section Basic
 
 variable (R R' A E : Type*)
 
-/--
-Definition of `equiv` / `equiv` 的定义
+/-- The canonical equivalence between `C⋆ᵐᵒᵈ(A, E)` and `E`. This should always be used to
+convert back and forth between the representations. -/
+/-
+**WithCStarModule.equiv** 是 Mathlib 中的一个定义，位于命名空间 `WithCStarModule`。
+形式化陈述：equiv : WithCStarModule A E ≃ E
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-definition equiv
-  signature: : WithCStarModule A E ≃ E
-  body: Equiv.refl _
-
-中文:
-定义 equiv
-  签名: : WithCStarModule A E ≃ E
-  定义体: Equiv.refl _
-
-Depends on / 依赖: Equiv.refl
+--- 原说明 ---
+The canonical equivalence between `C⋆ᵐᵒᵈ(A, E)` and `E`. This should always be u
+sed to
+convert back and forth between the representations.
 -/
 def equiv : WithCStarModule A E ≃ E := Equiv.refl _
-
-/--
-Instance `instNontrivial` / 实例 `instNontrivial`
-
-English:
-instance instNontrivial
-  signature: [Nontrivial E]
-  body: ‹Nontrivial E›
-
-中文:
-实例 instNontrivial
-  签名: [非平凡 E]
-  定义体: ‹Nontrivial E›
-
-Depends on / 依赖: Nontrivial
+/-
+**WithCStarModule.instNontrivial** 是 Mathlib 中的一个实例，位于命名空间 `WithCStarModule`。
+形式化陈述：instNontrivial [Nontrivial E] : Nontrivial C⋆ᵐᵒᵈ(A, E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNontrivial [Nontrivial E] : Nontrivial C⋆ᵐᵒᵈ(A, E) := ‹Nontrivial E›
-/--
-Instance `instInhabited` / 实例 `instInhabited`
-
-English:
-instance instInhabited
-  signature: [Inhabited E]
-  body: ‹Inhabited E›
-
-中文:
-实例 instInhabited
-  签名: [可居 E]
-  定义体: ‹Inhabited E›
-
-Depends on / 依赖: Inhabited
+/-
+**WithCStarModule.instInhabited** 是 Mathlib 中的一个实例，位于命名空间 `WithCStarModule`。
+形式化陈述：instInhabited [Inhabited E] : Inhabited C⋆ᵐᵒᵈ(A, E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instInhabited [Inhabited E] : Inhabited C⋆ᵐᵒᵈ(A, E) := ‹Inhabited E›
-/--
-Instance `instNonempty` / 实例 `instNonempty`
-
-English:
-instance instNonempty
-  signature: [Nonempty E]
-  body: ‹Nonempty E›
-
-中文:
-实例 instNonempty
-  签名: [非空 E]
-  定义体: ‹Nonempty E›
-
-Depends on / 依赖: Nonempty
+/-
+**WithCStarModule.instNonempty** 是 Mathlib 中的一个实例，位于命名空间 `WithCStarModule`。
+形式化陈述：instNonempty [Nonempty E] : Nonempty C⋆ᵐᵒᵈ(A, E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNonempty [Nonempty E] : Nonempty C⋆ᵐᵒᵈ(A, E) := ‹Nonempty E›
-/--
-Instance `instUnique` / 实例 `instUnique`
-
-English:
-instance instUnique
-  signature: [Unique E]
-  body: ‹Unique E›
-
-中文:
-实例 instUnique
-  签名: [唯一 E]
-  定义体: ‹Unique E›
-
-Depends on / 依赖: Unique
+/-
+**WithCStarModule.instUnique** 是 Mathlib 中的一个实例，位于命名空间 `WithCStarModule`。
+形式化陈述：instUnique [Unique E] : Unique C⋆ᵐᵒᵈ(A, E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instUnique [Unique E] : Unique C⋆ᵐᵒᵈ(A, E) := ‹Unique E›
 
+/-! ## `C⋆ᵐᵒᵈ(A, E)` inherits various module-adjacent structures from `E`. -/
 
-/--
-Instance `instZero` / 实例 `instZero`
+/-
+**WithCStarModule.instZero** 是 Mathlib 中的一个实例，位于命名空间 `WithCStarModule`。
+形式化陈述：instZero [Zero E] : Zero C⋆ᵐᵒᵈ(A, E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instZero
-  signature: [Zero E]
-  body: ‹Zero E›
-
-中文:
-实例 instZero
-  签名: [零 E]
-  定义体: ‹Zero E›
+--- 原说明 ---
+## `C⋆ᵐᵒᵈ(A, E)` inherits various module-adjacent structures from `E`.
 -/
 instance instZero [Zero E] : Zero C⋆ᵐᵒᵈ(A, E) := ‹Zero E›
-/--
-Instance `instAdd` / 实例 `instAdd`
-
-English:
-instance instAdd
-  signature: [Add E]
-  body: ‹Add E›
-
-中文:
-实例 instAdd
-  签名: [加法 E]
-  定义体: ‹Add E›
+/-
+**WithCStarModule.instAdd** 是 Mathlib 中的一个实例，位于命名空间 `WithCStarModule`。
+形式化陈述：instAdd [Add E] : Add C⋆ᵐᵒᵈ(A, E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAdd [Add E] : Add C⋆ᵐᵒᵈ(A, E) := ‹Add E›
-/--
-Instance `instSub` / 实例 `instSub`
-
-English:
-instance instSub
-  signature: [Sub E]
-  body: ‹Sub E›
-
-中文:
-实例 instSub
-  签名: [减法 E]
-  定义体: ‹Sub E›
+/-
+**WithCStarModule.instSub** 是 Mathlib 中的一个实例，位于命名空间 `WithCStarModule`。
+形式化陈述：instSub [Sub E] : Sub C⋆ᵐᵒᵈ(A, E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSub [Sub E] : Sub C⋆ᵐᵒᵈ(A, E) := ‹Sub E›
-/--
-Instance `instNeg` / 实例 `instNeg`
-
-English:
-instance instNeg
-  signature: [Neg E]
-  body: ‹Neg E›
-
-中文:
-实例 instNeg
-  签名: [取负 E]
-  定义体: ‹Neg E›
+/-
+**WithCStarModule.instNeg** 是 Mathlib 中的一个实例，位于命名空间 `WithCStarModule`。
+形式化陈述：instNeg [Neg E] : Neg C⋆ᵐᵒᵈ(A, E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instNeg [Neg E] : Neg C⋆ᵐᵒᵈ(A, E) := ‹Neg E›
-/--
-Instance `instAddMonoid` / 实例 `instAddMonoid`
-
-English:
-instance instAddMonoid
-  signature: [AddMonoid E]
-  body: ‹AddMonoid E›
-
-中文:
-实例 instAddMonoid
-  签名: [加法幺半群 E]
-  定义体: ‹AddMonoid E›
-
-Depends on / 依赖: AddMonoid
+/-
+**WithCStarModule.instAddMonoid** 是 Mathlib 中的一个实例，位于命名空间 `WithCStarModule`。
+形式化陈述：instAddMonoid [AddMonoid E] : AddMonoid C⋆ᵐᵒᵈ(A, E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddMonoid [AddMonoid E] : AddMonoid C⋆ᵐᵒᵈ(A, E) := ‹AddMonoid E›
-/--
-Instance `instSubNegMonoid` / 实例 `instSubNegMonoid`
-
-English:
-instance instSubNegMonoid
-  signature: [SubNegMonoid E]
-  body: ‹SubNegMonoid E›
-
-中文:
-实例 instSubNegMonoid
-  签名: [SubNeg幺半群 E]
-  定义体: ‹SubNegMonoid E›
-
-Depends on / 依赖: SubNegMonoid
+/-
+**WithCStarModule.instSubNegMonoid** 是 Mathlib 中的一个实例，位于命名空间 `WithCStarModule`。
+形式化陈述：instSubNegMonoid [SubNegMonoid E] : SubNegMonoid C⋆ᵐᵒᵈ(A, E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSubNegMonoid [SubNegMonoid E] : SubNegMonoid C⋆ᵐᵒᵈ(A, E) := ‹SubNegMonoid E›
-/--
-Instance `instSubNegZeroMonoid` / 实例 `instSubNegZeroMonoid`
-
-English:
-instance instSubNegZeroMonoid
-  signature: [SubNegZeroMonoid E]
-  body: ‹SubNegZeroMonoid E›
-
-中文:
-实例 instSubNegZeroMonoid
-  签名: [SubNegZero幺半群 E]
-  定义体: ‹SubNegZeroMonoid E›
-
-Depends on / 依赖: SubNegZeroMonoid
+/-
+**WithCStarModule.instSubNegZeroMonoid** 是 Mathlib 中的一个实例，位于命名空间 `WithCStarModul
+e`。
+形式化陈述：instSubNegZeroMonoid [SubNegZeroMonoid E] : SubNegZeroMonoid C⋆ᵐᵒᵈ(A, E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSubNegZeroMonoid [SubNegZeroMonoid E] : SubNegZeroMonoid C⋆ᵐᵒᵈ(A, E) :=
   ‹SubNegZeroMonoid E›
-
-/--
-Instance `instAddCommGroup` / 实例 `instAddCommGroup`
-
-English:
-instance instAddCommGroup
-  signature: [AddCommGroup E]
-  body: ‹AddCommGroup E›
-
-中文:
-实例 instAddCommGroup
-  签名: [加法交换群 E]
-  定义体: ‹AddCommGroup E›
-
-Depends on / 依赖: AddCommGroup
+/-
+**WithCStarModule.instAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `WithCStarModule`。
+形式化陈述：instAddCommGroup [AddCommGroup E] : AddCommGroup C⋆ᵐᵒᵈ(A, E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddCommGroup [AddCommGroup E] : AddCommGroup C⋆ᵐᵒᵈ(A, E) := ‹AddCommGroup E›
-
-/--
-Instance `instSMul` / 实例 `instSMul`
-
-English:
-instance instSMul
-  signature: {R : Type*} [SMul R E]
-  body: ‹SMul R E›
-
-中文:
-实例 instSMul
-  签名: {R : 类型} [标量乘法 R E]
-  定义体: ‹SMul R E›
+/-
+**WithCStarModule.instSMul** 是 Mathlib 中的一个实例，位于命名空间 `WithCStarModule`。
+形式化陈述：instSMul {R : Type*} [SMul R E] : SMul R C⋆ᵐᵒᵈ(A, E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSMul {R : Type*} [SMul R E] : SMul R C⋆ᵐᵒᵈ(A, E) := ‹SMul R E›
-
-/--
-Instance `instModule` / 实例 `instModule`
-
-English:
-instance instModule
-  signature: {R : Type*} [Semiring R] [AddCommGroup E] [Module R E]
-  body: ‹Module R E›
-
-中文:
-实例 instModule
-  签名: {R : 类型} [半环 R] [加法交换群 E] [模 R E]
-  定义体: ‹Module R E›
-
-Depends on / 依赖: Module
+/-
+**WithCStarModule.instModule** 是 Mathlib 中的一个实例，位于命名空间 `WithCStarModule`。
+形式化陈述：instModule {R : Type*} [Semiring R] [AddCommGroup E] [Module R E] : Module
+ R C⋆ᵐᵒᵈ(A, E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instModule {R : Type*} [Semiring R] [AddCommGroup E] [Module R E] :
     Module R C⋆ᵐᵒᵈ(A, E) :=
   ‹Module R E›
-
-/--
-Instance `instIsScalarTower` / 实例 `instIsScalarTower`
-
-English:
-instance instIsScalarTower
-  signature: [SMul R R'] [SMul R E] [SMul R' E]
-  body: ‹IsScalarTower R R' E›
-
-中文:
-实例 instIsScalarTower
-  签名: [标量乘法 R R'] [标量乘法 R E] [标量乘法 R' E]
-  定义体: ‹IsScalarTower R R' E›
-
-Depends on / 依赖: IsScalarTower
+/-
+**WithCStarModule.instIsScalarTower** 是 Mathlib 中的一个实例，位于命名空间 `WithCStarModule`。
+形式化陈述：instIsScalarTower [SMul R R'] [SMul R E] [SMul R' E] [IsScalarTower R R' E
+] : IsScalarTower R R' C⋆ᵐᵒᵈ(A, E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instIsScalarTower [SMul R R'] [SMul R E] [SMul R' E]
     [IsScalarTower R R' E] : IsScalarTower R R' C⋆ᵐᵒᵈ(A, E) :=
   ‹IsScalarTower R R' E›
-
-/--
-Instance `instSMulCommClass` / 实例 `instSMulCommClass`
-
-English:
-instance instSMulCommClass
-  signature: [SMul R E] [SMul R' E] [SMulCommClass R R' E]
-  body: ‹SMulCommClass R R' E›
-
-中文:
-实例 instSMulCommClass
-  签名: [标量乘法 R E] [标量乘法 R' E] [标量交换类 R R' E]
-  定义体: ‹SMulCommClass R R' E›
-
-Depends on / 依赖: SMulCommClass
+/-
+**WithCStarModule.instSMulCommClass** 是 Mathlib 中的一个实例，位于命名空间 `WithCStarModule`。
+形式化陈述：instSMulCommClass [SMul R E] [SMul R' E] [SMulCommClass R R' E] : SMulComm
+Class R R' C⋆ᵐᵒᵈ(A, E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instSMulCommClass [SMul R E] [SMul R' E] [SMulCommClass R R' E] :
     SMulCommClass R R' C⋆ᵐᵒᵈ(A, E) :=
@@ -370,163 +235,89 @@ section AddCommGroup
 variable [AddCommGroup E]
 
 @[simp]
-/--
-theorem `equiv_zero` / 定理 `equiv_zero`
-
-English:
-theorem equiv_zero
-  statement: equiv A E 0 = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 equiv_zero
-  结论: equiv A E 0 = 0
-  证明: rfl
-
-@[simp]
+/-
+**WithCStarModule.equiv_zero** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：equiv_zero : equiv A E 0 = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem equiv_zero : equiv A E 0 = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `equiv_symm_zero` / 定理 `equiv_symm_zero`
-
-English:
-theorem equiv_symm_zero
-  statement: (equiv A E).symm 0 = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 equiv_symm_zero
-  结论: (equiv A E).symm 0 = 0
-  证明: rfl
-
-@[simp]
+/-
+**WithCStarModule.equiv_symm_zero** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：equiv_symm_zero : (equiv A E).symm 0 = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem equiv_symm_zero : (equiv A E).symm 0 = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `equiv_add` / 定理 `equiv_add`
-
-English:
-theorem equiv_add
-  statement: equiv A E (x + y) = equiv A E x + equiv A E y
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 equiv_add
-  结论: equiv A E (x + y) = equiv A E x + equiv A E y
-  证明: rfl
-
-@[simp]
+/-
+**WithCStarModule.equiv_add** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：equiv_add : equiv A E (x + y) = equiv A E x + equiv A E y
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem equiv_add : equiv A E (x + y) = equiv A E x + equiv A E y :=
   rfl
 
 @[simp]
-/--
-theorem `equiv_symm_add` / 定理 `equiv_symm_add`
-
-English:
-theorem equiv_symm_add
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 equiv_symm_add
-  证明: rfl
-
-@[simp]
+/-
+**WithCStarModule.equiv_symm_add** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：equiv_symm_add : (equiv A E).symm (x' + y') = (equiv A E).symm x' + (equiv
+ A E).symm y'
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem equiv_symm_add :
     (equiv A E).symm (x' + y') = (equiv A E).symm x' + (equiv A E).symm y' :=
   rfl
 
 @[simp]
-/--
-theorem `equiv_sub` / 定理 `equiv_sub`
-
-English:
-theorem equiv_sub
-  statement: equiv A E (x - y) = equiv A E x - equiv A E y
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 equiv_sub
-  结论: equiv A E (x - y) = equiv A E x - equiv A E y
-  证明: rfl
-
-@[simp]
+/-
+**WithCStarModule.equiv_sub** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：equiv_sub : equiv A E (x - y) = equiv A E x - equiv A E y
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem equiv_sub : equiv A E (x - y) = equiv A E x - equiv A E y :=
   rfl
 
 @[simp]
-/--
-theorem `equiv_symm_sub` / 定理 `equiv_symm_sub`
-
-English:
-theorem equiv_symm_sub
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 equiv_symm_sub
-  证明: rfl
-
-@[simp]
+/-
+**WithCStarModule.equiv_symm_sub** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：equiv_symm_sub : (equiv A E).symm (x' - y') = (equiv A E).symm x' - (equiv
+ A E).symm y'
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem equiv_symm_sub :
     (equiv A E).symm (x' - y') = (equiv A E).symm x' - (equiv A E).symm y' :=
   rfl
 
 @[simp]
-/--
-theorem `equiv_neg` / 定理 `equiv_neg`
-
-English:
-theorem equiv_neg
-  statement: equiv A E (-x) = -equiv A E x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 equiv_neg
-  结论: equiv A E (-x) = -equiv A E x
-  证明: rfl
-
-@[simp]
+/-
+**WithCStarModule.equiv_neg** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：equiv_neg : equiv A E (-x) = -equiv A E x
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem equiv_neg : equiv A E (-x) = -equiv A E x :=
   rfl
 
 @[simp]
-/--
-theorem `equiv_symm_neg` / 定理 `equiv_symm_neg`
-
-English:
-theorem equiv_symm_neg
-  statement: (equiv A E).symm (-x') = -(equiv A E).symm x'
-  proof: rfl
-
-中文:
-定理 equiv_symm_neg
-  结论: (equiv A E).symm (-x') = -(equiv A E).symm x'
-  证明: rfl
+/-
+**WithCStarModule.equiv_symm_neg** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：equiv_symm_neg : (equiv A E).symm (-x') = -(equiv A E).symm x'
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem equiv_symm_neg : (equiv A E).symm (-x') = -(equiv A E).symm x' :=
   rfl
@@ -534,63 +325,38 @@ theorem equiv_symm_neg : (equiv A E).symm (-x') = -(equiv A E).symm x' :=
 end AddCommGroup
 
 @[simp]
-/--
-theorem `equiv_smul` / 定理 `equiv_smul`
-
-English:
-theorem equiv_smul
-  statement: equiv A E (c • x) = c • equiv A E x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 equiv_smul
-  结论: equiv A E (c • x) = c • equiv A E x
-  证明: rfl
-
-@[simp]
+/-
+**WithCStarModule.equiv_smul** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：equiv_smul : equiv A E (c • x) = c • equiv A E x
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem equiv_smul : equiv A E (c • x) = c • equiv A E x :=
   rfl
 
 @[simp]
-/--
-theorem `equiv_symm_smul` / 定理 `equiv_symm_smul`
-
-English:
-theorem equiv_symm_smul
-  statement: (equiv A E).symm (c • x') = c • (equiv A E).symm x'
-  proof: rfl
-
-中文:
-定理 equiv_symm_smul
-  结论: (equiv A E).symm (c • x') = c • (equiv A E).symm x'
-  证明: rfl
+/-
+**WithCStarModule.equiv_symm_smul** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：equiv_symm_smul : (equiv A E).symm (c • x') = c • (equiv A E).symm x'
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem equiv_symm_smul : (equiv A E).symm (c • x') = c • (equiv A E).symm x' :=
   rfl
 
 end Equiv
 
-/--
-Definition of `addEquiv` / `addEquiv` 的定义
+/-- `WithCStarModule.equiv` as an additive equivalence. -/
+/-
+**WithCStarModule.addEquiv** 是 Mathlib 中的一个定义，位于命名空间 `WithCStarModule`。
+形式化陈述：addEquiv [AddCommGroup E] : C⋆ᵐᵒᵈ(A, E) ≃+ E
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition addEquiv
-  signature: [AddCommGroup E]
-  body: { AddEquiv.refl _ with
-    toFun := equiv _ _
-    invFun := (equiv _ _).symm }
-
-中文:
-定义 addEquiv
-  签名: [加法交换群 E]
-  定义体: { AddEquiv.refl _ with
-    toFun := equiv _ _
-    invFun := (equiv _ _).symm }
-
-Depends on / 依赖: AddEquiv, AddEquiv.refl, invFun
+--- 原说明 ---
+`WithCStarModule.equiv` as an additive equivalence.
 -/
 def addEquiv [AddCommGroup E] : C⋆ᵐᵒᵈ(A, E) ≃+ E :=
   { AddEquiv.refl _ with
@@ -599,63 +365,41 @@ def addEquiv [AddCommGroup E] : C⋆ᵐᵒᵈ(A, E) ≃+ E :=
 
 /-- `WithCStarModule.equiv` as a linear equivalence. -/
 @[simps -fullyApplied]
-/--
-Definition of `linearEquiv` / `linearEquiv` 的定义
+/-
+**WithCStarModule.linearEquiv** 是 Mathlib 中的一个定义，位于命名空间 `WithCStarModule`。
+形式化陈述：linearEquiv [Semiring R] [AddCommGroup E] [Module R E] : C⋆ᵐᵒᵈ(A, E) ≃ₗ[R]
+ E
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition linearEquiv
-  signature: [Semiring R] [AddCommGroup E] [Module R E]
-  body: { LinearEquiv.refl _ _ with
-    toFun := equiv _ _
-    invFun := (equiv _ _).symm }
-
-中文:
-定义 linearEquiv
-  签名: [半环 R] [加法交换群 E] [模 R E]
-  定义体: { LinearEquiv.refl _ _ with
-    toFun := equiv _ _
-    invFun := (equiv _ _).symm }
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.refl, invFun
+--- 原说明 ---
+`WithCStarModule.equiv` as a linear equivalence.
 -/
 def linearEquiv [Semiring R] [AddCommGroup E] [Module R E] : C⋆ᵐᵒᵈ(A, E) ≃ₗ[R] E :=
   { LinearEquiv.refl _ _ with
     toFun := equiv _ _
     invFun := (equiv _ _).symm }
-
-/--
-lemma `map_top_submodule` / 引理 `map_top_submodule`
-
-English:
-lemma map_top_submodule
-  given: {R : Type*} [Semiring R] [AddCommGroup E] [Module R E]
-  proof: Submodule.map_eq_top_iff.mpr rfl
-
-中文:
-引理 map_top_submodule
-  条件: {R : 类型} [半环 R] [加法交换群 E] [模 R E]
-  证明: Submodule.map_eq_top_iff.mpr rfl
-
-Depends on / 依赖: Submodule, Submodule.map_eq_top_iff.mpr, map_eq_top_iff
+/-
+**WithCStarModule.map_top_submodule** 是 Mathlib 中的一个引理，位于命名空间 `WithCStarModule`。
+形式化陈述：map_top_submodule {R : Type*} [Semiring R] [AddCommGroup E] [Module R E] :
+ (⊤ : Submodule R E).map (linearEquiv R A E).symm.toLinearMap = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Submodule.map_eq_top_iff`：∀ {R : Type u_1} {R₂ : Type u_3} {M : Type u_5
+} {M₂ : Type u_7} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddComm
+Monoid M] [ins…
 -/
 lemma map_top_submodule {R : Type*} [Semiring R] [AddCommGroup E] [Module R E] :
     (⊤ : Submodule R E).map (linearEquiv R A E).symm.toLinearMap = ⊤ :=
   Submodule.map_eq_top_iff.mpr rfl
-
-/--
-Instance `instModuleFinite` / 实例 `instModuleFinite`
-
-English:
-instance instModuleFinite
-  signature: [Semiring R] [AddCommGroup E] [Module R E] [Module.Finite R E]
-  body: ‹Module.Finite R E›
-
-中文:
-实例 instModuleFinite
-  签名: [半环 R] [加法交换群 E] [模 R E] [模.有限 R E]
-  定义体: ‹Module.Finite R E›
-
-Depends on / 依赖: Finite, Module, Module.Finite
+/-
+**WithCStarModule.instModuleFinite** 是 Mathlib 中的一个实例，位于命名空间 `WithCStarModule`。
+形式化陈述：instModuleFinite [Semiring R] [AddCommGroup E] [Module R E] [Module.Finite
+ R E] : Module.Finite R C⋆ᵐᵒᵈ(A, E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instModuleFinite [Semiring R] [AddCommGroup E] [Module R E] [Module.Finite R E] :
     Module.Finite R C⋆ᵐᵒᵈ(A, E) := ‹Module.Finite R E›
@@ -664,153 +408,69 @@ instance instModuleFinite [Semiring R] [AddCommGroup E] [Module R E] [Module.Fin
 
 variable {A E}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [u
-  signature: : UniformSpace E] : UniformSpace C⋆ᵐᵒᵈ(A, E)
-  body: u.comap equiv A E
-
-中文:
-实例 [u
-  签名: : 一致空间 E] : 一致空间 C⋆ᵐᵒᵈ(A, E)
-  定义体: u.comap equiv A E
-
-Depends on / 依赖: u.comap
+/-
+**WithCStarModule.** 是 Mathlib 中的一个实例，位于命名空间 `WithCStarModule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [u : UniformSpace E] : UniformSpace C⋆ᵐᵒᵈ(A, E) := u.comap equiv A E
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Bornology
-  signature: E] : Bornology C⋆ᵐᵒᵈ(A, E)
-  body: Bornology.induced equiv A E
-
-中文:
-实例 [有界结构
-  签名: E] : 有界结构 C⋆ᵐᵒᵈ(A, E)
-  定义体: Bornology.induced equiv A E
-
-Depends on / 依赖: Bornology, Bornology.induced, induced
+instance [u : UniformSpace E] : UniformSpace C⋆ᵐᵒᵈ(A, E) := u.comap <| equiv A E
+/-
+**WithCStarModule.** 是 Mathlib 中的一个实例，位于命名空间 `WithCStarModule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Bornology E] : Bornology C⋆ᵐᵒᵈ(A, E) := Bornology.induced equiv A E
+instance [Bornology E] : Bornology C⋆ᵐᵒᵈ(A, E) := Bornology.induced <| equiv A E
 
 
-/--
-Definition of `uniformEquiv` / `uniformEquiv` 的定义
+/-- `WithCStarModule.equiv` as a uniform equivalence between `C⋆ᵐᵒᵈ(A, E)` and `E`. -/
+/-
+**WithCStarModule.uniformEquiv** 是 Mathlib 中的一个定义，位于命名空间 `WithCStarModule`。
+形式化陈述：uniformEquiv [UniformSpace E] : C⋆ᵐᵒᵈ(A, E) ≃ᵤ E
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uniformEquiv
-  signature: [UniformSpace E]
-  body: .toUniformEquivOfIsUniformInducing ⟨rfl⟩ equiv A E
-
-中文:
-定义 uniformEquiv
-  签名: [一致空间 E]
-  定义体: .toUniformEquivOfIsUniformInducing ⟨rfl⟩ equiv A E
-
-Depends on / 依赖: toUniformEquivOfIsUniformInducing
+--- 原说明 ---
+`WithCStarModule.equiv` as a uniform equivalence between `C⋆ᵐᵒᵈ(A, E)` and `E`.
 -/
 def uniformEquiv [UniformSpace E] : C⋆ᵐᵒᵈ(A, E) ≃ᵤ E :=
-.toUniformEquivOfIsUniformInducing ⟨rfl⟩ equiv A E
+  equiv A E |>.toUniformEquivOfIsUniformInducing ⟨rfl⟩
 
 /-- `WithCStarModule.equiv` as a continuous linear equivalence between `C⋆ᵐᵒᵈ E` and `E`. -/
 @[simps! apply symm_apply]
-/--
-Definition of `equivL` / `equivL` 的定义
+/-
+**WithCStarModule.equivL** 是 Mathlib 中的一个定义，位于命名空间 `WithCStarModule`。
+形式化陈述：equivL [Semiring R] [AddCommGroup E] [UniformSpace E] [Module R E] : C⋆ᵐᵒᵈ
+(A, E) ≃L[R] E
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivL
-  signature: [Semiring R] [AddCommGroup E] [UniformSpace E] [Module R E]
-  body: { linearEquiv R A E with
-    continuous_toFun := UniformEquiv.continuous uniformEquiv
-    continuous_invFun := UniformEquiv.continuous uniformEquiv.symm }
-
-中文:
-定义 equivL
-  签名: [半环 R] [加法交换群 E] [一致空间 E] [模 R E]
-  定义体: { linearEquiv R A E with
-    continuous_toFun := UniformEquiv.continuous uniformEquiv
-    continuous_invFun := UniformEquiv.continuous uniformEquiv.symm }
-
-Depends on / 依赖: UniformEquiv, UniformEquiv.continuous, continuous, continuous_invFun, continuous_toFun, linearEquiv, uniformEquiv, uniformEquiv.symm
+--- 原说明 ---
+`WithCStarModule.equiv` as a continuous linear equivalence between `C⋆ᵐᵒᵈ E` and
+ `E`.
 -/
 def equivL [Semiring R] [AddCommGroup E] [UniformSpace E] [Module R E] : C⋆ᵐᵒᵈ(A, E) ≃L[R] E :=
   { linearEquiv R A E with
     continuous_toFun := UniformEquiv.continuous uniformEquiv
     continuous_invFun := UniformEquiv.continuous uniformEquiv.symm }
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [UniformSpace
-  signature: E] [CompleteSpace E] : CompleteSpace C⋆ᵐᵒᵈ(A, E)
-  body: uniformEquiv.completeSpace_iff.mpr inferInstance
-
-中文:
-实例 [一致空间
-  签名: E] [完备空间 E] : 完备空间 C⋆ᵐᵒᵈ(A, E)
-  定义体: uniformEquiv.completeSpace_iff.mpr inferInstance
-
-Depends on / 依赖: completeSpace_iff, uniformEquiv, uniformEquiv.completeSpace_iff.mpr
+/-
+**WithCStarModule.** 是 Mathlib 中的一个实例，位于命名空间 `WithCStarModule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [UniformSpace E] [CompleteSpace E] : CompleteSpace C⋆ᵐᵒᵈ(A, E) :=
   uniformEquiv.completeSpace_iff.mpr inferInstance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCommGroup
-  signature: E] [UniformSpace E] [ContinuousAdd E] : ContinuousAdd C⋆ᵐᵒᵈ(A, E)
-  body: ContinuousAdd.induced (addEquiv A E)
-
-中文:
-实例 [加法交换群
-  签名: E] [一致空间 E] [连续加法 E] : 连续加法 C⋆ᵐᵒᵈ(A, E)
-  定义体: ContinuousAdd.induced (addEquiv A E)
-
-Depends on / 依赖: ContinuousAdd, ContinuousAdd.induced, addEquiv, induced
+/-
+**WithCStarModule.** 是 Mathlib 中的一个实例，位于命名空间 `WithCStarModule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddCommGroup E] [UniformSpace E] [ContinuousAdd E] : ContinuousAdd C⋆ᵐᵒᵈ(A, E) :=
   ContinuousAdd.induced (addEquiv A E)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCommGroup
-  signature: E] [UniformSpace E] [IsUniformAddGroup E] : IsUniformAddGroup C⋆ᵐᵒᵈ(A, E)
-  body: IsUniformAddGroup.comap (addEquiv A E)
-
-中文:
-实例 [加法交换群
-  签名: E] [一致空间 E] [是UniformAdd群 E] : 是UniformAdd群 C⋆ᵐᵒᵈ(A, E)
-  定义体: IsUniformAddGroup.comap (addEquiv A E)
-
-Depends on / 依赖: IsUniformAddGroup, IsUniformAddGroup.comap, addEquiv
+/-
+**WithCStarModule.** 是 Mathlib 中的一个实例，位于命名空间 `WithCStarModule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddCommGroup E] [UniformSpace E] [IsUniformAddGroup E] : IsUniformAddGroup C⋆ᵐᵒᵈ(A, E) :=
   IsUniformAddGroup.comap (addEquiv A E)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Semiring
-  signature: R] [TopologicalSpace R] [AddCommGroup E] [UniformSpace E] [Module R E]
-  body: ContinuousSMul.induced (linearEquiv R A E)
-
-中文:
-实例 [半环
-  签名: R] [拓扑空间 R] [加法交换群 E] [一致空间 E] [模 R E]
-  定义体: ContinuousSMul.induced (linearEquiv R A E)
-
-Depends on / 依赖: ContinuousSMul, ContinuousSMul.induced, induced, linearEquiv
+/-
+**WithCStarModule.** 是 Mathlib 中的一个实例，位于命名空间 `WithCStarModule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Semiring R] [TopologicalSpace R] [AddCommGroup E] [UniformSpace E] [Module R E]
     [ContinuousSMul R E] : ContinuousSMul R C⋆ᵐᵒᵈ(A, E) :=
@@ -834,165 +494,81 @@ section AddCommGroup
 variable [AddCommGroup E] [AddCommGroup F]
 
 @[simp]
-/--
-theorem `zero_fst` / 定理 `zero_fst`
-
-English:
-theorem zero_fst
-  statement: (0 : C⋆ᵐᵒᵈ(A, E × F)).fst = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 zero_fst
-  结论: (0 : C⋆ᵐᵒᵈ(A, E × F)).fst = 0
-  证明: rfl
-
-@[simp]
+/-
+**WithCStarModule.zero_fst** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：zero_fst : (0 : C⋆ᵐᵒᵈ(A, E × F)).fst = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem zero_fst : (0 : C⋆ᵐᵒᵈ(A, E × F)).fst = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `zero_snd` / 定理 `zero_snd`
-
-English:
-theorem zero_snd
-  statement: (0 : C⋆ᵐᵒᵈ(A, E × F)).snd = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 zero_snd
-  结论: (0 : C⋆ᵐᵒᵈ(A, E × F)).snd = 0
-  证明: rfl
-
-@[simp]
+/-
+**WithCStarModule.zero_snd** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：zero_snd : (0 : C⋆ᵐᵒᵈ(A, E × F)).snd = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem zero_snd : (0 : C⋆ᵐᵒᵈ(A, E × F)).snd = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `add_fst` / 定理 `add_fst`
-
-English:
-theorem add_fst
-  statement: (x + y).fst = x.fst + y.fst
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 add_fst
-  结论: (x + y).fst = x.fst + y.fst
-  证明: rfl
-
-@[simp]
+/-
+**WithCStarModule.add_fst** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：add_fst : (x + y).fst = x.fst + y.fst
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem add_fst : (x + y).fst = x.fst + y.fst :=
   rfl
 
 @[simp]
-/--
-theorem `add_snd` / 定理 `add_snd`
-
-English:
-theorem add_snd
-  statement: (x + y).snd = x.snd + y.snd
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 add_snd
-  结论: (x + y).snd = x.snd + y.snd
-  证明: rfl
-
-@[simp]
+/-
+**WithCStarModule.add_snd** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：add_snd : (x + y).snd = x.snd + y.snd
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem add_snd : (x + y).snd = x.snd + y.snd :=
   rfl
 
 @[simp]
-/--
-theorem `sub_fst` / 定理 `sub_fst`
-
-English:
-theorem sub_fst
-  statement: (x - y).fst = x.fst - y.fst
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 sub_fst
-  结论: (x - y).fst = x.fst - y.fst
-  证明: rfl
-
-@[simp]
+/-
+**WithCStarModule.sub_fst** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：sub_fst : (x - y).fst = x.fst - y.fst
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sub_fst : (x - y).fst = x.fst - y.fst :=
   rfl
 
 @[simp]
-/--
-theorem `sub_snd` / 定理 `sub_snd`
-
-English:
-theorem sub_snd
-  statement: (x - y).snd = x.snd - y.snd
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 sub_snd
-  结论: (x - y).snd = x.snd - y.snd
-  证明: rfl
-
-@[simp]
+/-
+**WithCStarModule.sub_snd** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：sub_snd : (x - y).snd = x.snd - y.snd
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sub_snd : (x - y).snd = x.snd - y.snd :=
   rfl
 
 @[simp]
-/--
-theorem `neg_fst` / 定理 `neg_fst`
-
-English:
-theorem neg_fst
-  statement: (-x).fst = -x.fst
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 neg_fst
-  结论: (-x).fst = -x.fst
-  证明: rfl
-
-@[simp]
+/-
+**WithCStarModule.neg_fst** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：neg_fst : (-x).fst = -x.fst
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem neg_fst : (-x).fst = -x.fst :=
   rfl
 
 @[simp]
-/--
-theorem `neg_snd` / 定理 `neg_snd`
-
-English:
-theorem neg_snd
-  statement: (-x).snd = -x.snd
-  proof: rfl
-
-中文:
-定理 neg_snd
-  结论: (-x).snd = -x.snd
-  证明: rfl
+/-
+**WithCStarModule.neg_snd** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：neg_snd : (-x).snd = -x.snd
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem neg_snd : (-x).snd = -x.snd :=
   rfl
@@ -1000,39 +576,21 @@ theorem neg_snd : (-x).snd = -x.snd :=
 end AddCommGroup
 
 @[simp]
-/--
-theorem `smul_fst` / 定理 `smul_fst`
-
-English:
-theorem smul_fst
-  statement: (c • x).fst = c • x.fst
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 smul_fst
-  结论: (c • x).fst = c • x.fst
-  证明: rfl
-
-@[simp]
+/-
+**WithCStarModule.smul_fst** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：smul_fst : (c • x).fst = c • x.fst
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_fst : (c • x).fst = c • x.fst :=
   rfl
 
 @[simp]
-/--
-theorem `smul_snd` / 定理 `smul_snd`
-
-English:
-theorem smul_snd
-  statement: (c • x).snd = c • x.snd
-  proof: rfl
-
-中文:
-定理 smul_snd
-  结论: (c • x).snd = c • x.snd
-  证明: rfl
+/-
+**WithCStarModule.smul_snd** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：smul_snd : (c • x).snd = c • x.snd
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_snd : (c • x).snd = c • x.snd :=
   rfl
@@ -1041,95 +599,52 @@ theorem smul_snd : (c • x).snd = c • x.snd :=
 the use of the type synonym. -/
 
 @[simp]
-/--
-theorem `equiv_fst` / 定理 `equiv_fst`
+/-
+**WithCStarModule.equiv_fst** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：equiv_fst (x : C⋆ᵐᵒᵈ(A, E × F)) : (equiv A (E × F) x).fst = x.fst
+参数：x : C⋆ᵐᵒᵈ(A, E × F)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem equiv_fst
-  given: (x : C⋆ᵐᵒᵈ(A, E × F))
-  statement: (equiv A (E × F) x).fst = x.fst
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 equiv_fst
-  条件: (x : C⋆ᵐᵒᵈ(A, E × F))
-  结论: (equiv A (E × F) x).fst = x.fst
-  证明: rfl
-
-@[simp]
+--- 原说明 ---
+Note that the unapplied versions of these lemmas are deliberately omitted, as th
+ey break
+the use of the type synonym.
 -/
 theorem equiv_fst (x : C⋆ᵐᵒᵈ(A, E × F)) : (equiv A (E × F) x).fst = x.fst :=
   rfl
 
 @[simp]
-/--
-theorem `equiv_snd` / 定理 `equiv_snd`
-
-English:
-theorem equiv_snd
-  given: (x : C⋆ᵐᵒᵈ(A, E × F))
-  statement: (equiv A (E × F) x).snd = x.snd
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 equiv_snd
-  条件: (x : C⋆ᵐᵒᵈ(A, E × F))
-  结论: (equiv A (E × F) x).snd = x.snd
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: NormedAddCommGroup, NormedAddTorsor, NormedAddTorsor.toAddTorsor, toAddTorsor
+/-
+**WithCStarModule.equiv_snd** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：equiv_snd (x : C⋆ᵐᵒᵈ(A, E × F)) : (equiv A (E × F) x).snd = x.snd
+参数：x : C⋆ᵐᵒᵈ(A, E × F)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem equiv_snd (x : C⋆ᵐᵒᵈ(A, E × F)) : (equiv A (E × F) x).snd = x.snd :=
   rfl
 
 @[simp]
-/--
-theorem `equiv_symm_fst` / 定理 `equiv_symm_fst`
-
-English:
-theorem equiv_symm_fst
-  given: (x : E × F)
-  statement: ((equiv A (E × F)).symm x).fst = x.fst
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 equiv_symm_fst
-  条件: (x : E × F)
-  结论: ((equiv A (E × F)).symm x).fst = x.fst
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: IsIsometricVAdd, NormedAddTorsor, NormedAddTorsor.to_isIsIsometricVAdd, to_isIsIsometricVAdd
+/-
+**WithCStarModule.equiv_symm_fst** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：equiv_symm_fst (x : E × F) : ((equiv A (E × F)).symm x).fst = x.fst
+参数：x : E × F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem equiv_symm_fst (x : E × F) : ((equiv A (E × F)).symm x).fst = x.fst :=
   rfl
 
 @[simp]
-/--
-theorem `equiv_symm_snd` / 定理 `equiv_symm_snd`
-
-English:
-theorem equiv_symm_snd
-  given: (x : E × F)
-  statement: ((equiv A (E × F)).symm x).snd = x.snd
-  proof: rfl
-
-中文:
-定理 equiv_symm_snd
-  条件: (x : E × F)
-  结论: ((equiv A (E × F)).symm x).snd = x.snd
-  证明: rfl
-
-Depends on / 依赖: NormedAddTorsor, SeminormedAddCommGroup, SeminormedAddCommGroup.toNormedAddTorsor, toNormedAddTorsor
+/-
+**WithCStarModule.equiv_symm_snd** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：equiv_symm_snd (x : E × F) : ((equiv A (E × F)).symm x).snd = x.snd
+参数：x : E × F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem equiv_symm_snd (x : E × F) : ((equiv A (E × F)).symm x).snd = x.snd :=
   rfl
@@ -1147,111 +662,76 @@ section Pi
 
 /-- The following should not be a `FunLike` instance because then the coercion `⇑` would get
 unfolded to `FunLike.coe` instead of `WithCStarModule.equiv`. -/
-instance {A ι : Type*} (E : ι -> Type*) : CoeFun (C⋆ᵐᵒᵈ(A, Π i, E i)) (fun _ => Π i, E i) where
+/-
+**WithCStarModule.** 是 Mathlib 中的一个实例，位于命名空间 `WithCStarModule`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The following should not be a `FunLike` instance because then the coercion `⇑` w
+ould get
+unfolded to `FunLike.coe` instead of `WithCStarModule.equiv`.
+-/
+instance {A ι : Type*} (E : ι → Type*) : CoeFun (C⋆ᵐᵒᵈ(A, Π i, E i)) (fun _ ↦ Π i, E i) where
   coe := equiv _ _
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  statement: {A ι : Type*} {E : ι -> Type*} {x y : C⋆ᵐᵒᵈ(A, Π i, E i)}
-  proof: funext h
-
-中文:
-定理 ext
-  结论: {A ι : 类型} {E : ι -> 类型} {x y : C⋆ᵐᵒᵈ(A, Π i, E i)}
-  证明: funext h
+/-
+**WithCStarModule.ext** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：∀ {A : Type u_1} {ι : Type u_2} {E : ι → Type u_3} {x y : WithCStarModule 
+A ((i : ι) → E i)},   (∀ (i : ι), x i = y i) → x = y
+参数：(i : ι) → E i；∀ (i : ι), x i = y i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-protected theorem ext {A ι : Type*} {E : ι -> Type*} {x y : C⋆ᵐᵒᵈ(A, Π i, E i)}
-    (h : forall i, x i = y i) : x = y :=
+protected theorem ext {A ι : Type*} {E : ι → Type*} {x y : C⋆ᵐᵒᵈ(A, Π i, E i)}
+    (h : ∀ i, x i = y i) : x = y :=
   funext h
 
-variable {R A ι : Type*} {E : ι -> Type*}
-variable [forall i, SMul R (E i)]
+variable {R A ι : Type*} {E : ι → Type*}
+variable [∀ i, SMul R (E i)]
 variable (c : R) (x y : C⋆ᵐᵒᵈ(A, Π i, E i)) (i : ι)
 
 section AddCommGroup
 
-variable [forall i, AddCommGroup (E i)]
+variable [∀ i, AddCommGroup (E i)]
 
 @[simp]
-/--
-theorem `zero_apply` / 定理 `zero_apply`
-
-English:
-theorem zero_apply
-  statement: (0 : C⋆ᵐᵒᵈ(A, Π i, E i)) i = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 zero_apply
-  结论: (0 : C⋆ᵐᵒᵈ(A, Π i, E i)) i = 0
-  证明: rfl
-
-@[simp]
+/-
+**WithCStarModule.zero_apply** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：zero_apply : (0 : C⋆ᵐᵒᵈ(A, Π i, E i)) i = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem zero_apply : (0 : C⋆ᵐᵒᵈ(A, Π i, E i)) i = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `add_apply` / 定理 `add_apply`
-
-English:
-theorem add_apply
-  statement: (x + y) i = x i + y i
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 add_apply
-  结论: (x + y) i = x i + y i
-  证明: rfl
-
-@[simp]
+/-
+**WithCStarModule.add_apply** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：add_apply : (x + y) i = x i + y i
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem add_apply : (x + y) i = x i + y i :=
   rfl
 
 @[simp]
-/--
-theorem `sub_apply` / 定理 `sub_apply`
-
-English:
-theorem sub_apply
-  statement: (x - y) i = x i - y i
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 sub_apply
-  结论: (x - y) i = x i - y i
-  证明: rfl
-
-@[simp]
+/-
+**WithCStarModule.sub_apply** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：sub_apply : (x - y) i = x i - y i
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sub_apply : (x - y) i = x i - y i :=
   rfl
 
 @[simp]
-/--
-theorem `neg_apply` / 定理 `neg_apply`
-
-English:
-theorem neg_apply
-  statement: (-x) i = -x i
-  proof: rfl
-
-中文:
-定理 neg_apply
-  结论: (-x) i = -x i
-  证明: rfl
+/-
+**WithCStarModule.neg_apply** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：neg_apply : (-x) i = -x i
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem neg_apply : (-x) i = -x i :=
   rfl
@@ -1259,18 +739,11 @@ theorem neg_apply : (-x) i = -x i :=
 end AddCommGroup
 
 @[simp]
-/--
-theorem `smul_apply` / 定理 `smul_apply`
-
-English:
-theorem smul_apply
-  statement: (c • x) i = c • x i
-  proof: rfl
-
-中文:
-定理 smul_apply
-  结论: (c • x) i = c • x i
-  证明: rfl
+/-
+**WithCStarModule.smul_apply** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：smul_apply : (c • x) i = c • x i
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_apply : (c • x) i = c • x i :=
   rfl
@@ -1279,46 +752,37 @@ theorem smul_apply : (c • x) i = c • x i :=
 the use of the type synonym. -/
 
 @[simp]
-/--
-theorem `equiv_pi_apply` / 定理 `equiv_pi_apply`
+/-
+**WithCStarModule.equiv_pi_apply** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule`。
+形式化陈述：equiv_pi_apply (i : ι) : equiv _ _ x i = x i
+参数：i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem equiv_pi_apply
-  given: (i : ι)
-  statement: equiv _ _ x i = x i
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 equiv_pi_apply
-  条件: (i : ι)
-  结论: equiv _ _ x i = x i
-  证明: rfl
-
-@[simp]
+--- 原说明 ---
+Note that the unapplied versions of these lemmas are deliberately omitted, as th
+ey break
+the use of the type synonym.
 -/
 theorem equiv_pi_apply (i : ι) : equiv _ _ x i = x i :=
   rfl
 
 @[simp]
-/--
-theorem `equiv_symm_pi_apply` / 定理 `equiv_symm_pi_apply`
-
-English:
-theorem equiv_symm_pi_apply
-  given: (x : forall i, E i) (i : ι)
-  proof: rfl
-
-中文:
-定理 equiv_symm_pi_apply
-  条件: (x : 对任意 i, E i) (i : ι)
-  证明: rfl
+/-
+**WithCStarModule.equiv_symm_pi_apply** 是 Mathlib 中的一个定理，位于命名空间 `WithCStarModule
+`。
+形式化陈述：equiv_symm_pi_apply (x : forall i, E i) (i : ι) : (equiv A _).symm x i = x
+ i
+参数：x : forall i, E i；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-theorem equiv_symm_pi_apply (x : forall i, E i) (i : ι) :
+theorem equiv_symm_pi_apply (x : ∀ i, E i) (i : ι) :
     (equiv A _).symm x i = x i :=
   rfl
 
 end Pi
 
 end WithCStarModule
+

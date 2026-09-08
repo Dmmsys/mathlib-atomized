@@ -33,20 +33,11 @@ variable (M) in
 /-- The Grothendieck group of a monoid `M` is the localization at its top submonoid. -/
 @[to_additive
 /-- The Grothendieck group of an additive monoid `M` is the localization at its top submonoid. -/]
-/--
-Definition of `GrothendieckGroup` / `GrothendieckGroup` 的定义
-
-English:
-abbreviation GrothendieckGroup
-  signature: : Type _
-  body: Localization (⊤ : Submonoid M)
-
-中文:
-缩写 GrothendieckGroup
-  签名: : 类型 _
-  定义体: Localization (⊤ : Submonoid M)
-
-Depends on / 依赖: Localization, Submonoid
+/-
+**Algebra.GrothendieckGroup** 是 Mathlib 中的一个缩写定义，位于命名空间 `Algebra`。
+形式化陈述：GrothendieckGroup : Type _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev GrothendieckGroup : Type _ := Localization (⊤ : Submonoid M)
 
@@ -59,148 +50,96 @@ Note that this is only injective if `M` is cancellative. -/
 /-- The inclusion from an additive commutative monoid `M` to its Grothendieck group.
 
 Note that this is only injective if `M` is cancellative. -/]
-/--
-Definition of `of` / `of` 的定义
-
-English:
-abbreviation of
-  signature: : M ->* GrothendieckGroup M
-  body: (monoidOf ⊤).toMonoidHom
-
-@[to_additive]
-
-中文:
-缩写 of
-  签名: : M ->* GrothendieckGroup M
-  定义体: (monoidOf ⊤).toMonoidHom
-
-@[to_additive]
-
-Depends on / 依赖: monoidOf, toMonoidHom
+/-
+**Algebra.GrothendieckGroup.of** 是 Mathlib 中的一个缩写定义，位于命名空间 `Algebra.Grothendieck
+Group`。
+形式化陈述：of : M ->* GrothendieckGroup M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-abbrev of : M ->* GrothendieckGroup M := (monoidOf ⊤).toMonoidHom
+abbrev of : M →* GrothendieckGroup M := (monoidOf ⊤).toMonoidHom
 
 @[to_additive]
-/--
-lemma `of_injective` / 引理 `of_injective`
-
-English:
-lemma of_injective
-  given: [IsCancelMul M]
-  statement: Injective (of (M := M))
-  proof: fun m₁ m₂ => by simp [of, ← mk_one_eq_monoidOf_mk, mk_eq_mk_iff']
-
-@[to_additive]
-
-中文:
-引理 of_injective
-  条件: [是消去乘法 M]
-  结论: 单射 (of (M := M))
-  证明: fun m₁ m₂ => by simp [of, ← mk_one_eq_monoidOf_mk, mk_eq_mk_iff']
-
-@[to_additive]
+/-
+**Algebra.GrothendieckGroup.of_injective** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Grot
+hendieckGroup`。
+形式化陈述：of_injective [IsCancelMul M] : Injective (of (M
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
 lemma of_injective [IsCancelMul M] : Injective (of (M := M)) :=
-  fun m₁ m₂ => by simp [of, ← mk_one_eq_monoidOf_mk, mk_eq_mk_iff']
+  fun m₁ m₂ ↦ by simp [of, ← mk_one_eq_monoidOf_mk, mk_eq_mk_iff']
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inv (GrothendieckGroup M)
-  body: rec (fun m s => (.mk s ⟨m, Submonoid.mem_top m⟩ : GrothendieckGroup M))
-    fun {m₁ m₂ s₁ s₂} h => by simpa [r_iff_exists, mk_eq_mk_iff, eq_comm, mul_comm] using h
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 :
-  签名: 取逆 (GrothendieckGroup M)
-  定义体: rec (fun m s => (.mk s ⟨m, Submonoid.mem_top m⟩ : GrothendieckGroup M))
-    fun {m₁ m₂ s₁ s₂} h => by simpa [r_iff_exists, mk_eq_mk_iff, eq_comm, mul_comm] using h
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: GrothendieckGroup, Submonoid, Submonoid.mem_top, mem_top
+/-
+**Algebra.GrothendieckGroup.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.GrothendieckGrou
+p`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inv (GrothendieckGroup M) where
-  inv := rec (fun m s => (.mk s ⟨m, Submonoid.mem_top m⟩ : GrothendieckGroup M))
-    fun {m₁ m₂ s₁ s₂} h => by simpa [r_iff_exists, mk_eq_mk_iff, eq_comm, mul_comm] using h
+  inv := rec (fun m s ↦ (.mk s ⟨m, Submonoid.mem_top m⟩ : GrothendieckGroup M))
+    fun {m₁ m₂ s₁ s₂} h ↦ by simpa [r_iff_exists, mk_eq_mk_iff, eq_comm, mul_comm] using h
 
 @[to_additive (attr := simp)]
-/--
-lemma `inv_mk` / 引理 `inv_mk`
-
-English:
-lemma inv_mk
-  given: (m : M) (s : (⊤ : Submonoid M))
-  statement: (mk m s)⁻¹ = .mk s ⟨m, Submonoid.mem_top _⟩
-  proof: rfl
-
-中文:
-引理 inv_mk
-  条件: (m : M) (s : (⊤ : 子幺半群 M))
-  结论: (mk m s)⁻¹ = .mk s ⟨m, 子幺半群.mem_top _⟩
-  证明: rfl
+/-
+**Algebra.GrothendieckGroup.inv_mk** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Grothendie
+ckGroup`。
+形式化陈述：inv_mk (m : M) (s : (⊤ : Submonoid M)) : (mk m s)⁻¹ = .mk s ⟨m, Submonoid.
+mem_top _⟩
+参数：m : M；s : (⊤ : Submonoid M)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma inv_mk (m : M) (s : (⊤ : Submonoid M)) : (mk m s)⁻¹ = .mk s ⟨m, Submonoid.mem_top _⟩ := rfl
 
 /-- The Grothendieck group is a group. -/
 @[to_additive /-- The Grothendieck group is a group. -/]
-/--
-Instance `instCommGroup` / 实例 `instCommGroup`
+/-
+**Algebra.GrothendieckGroup.instCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.Gro
+thendieckGroup`。
+形式化陈述：instCommGroup : CommGroup (GrothendieckGroup M) where __ : CommMonoid (Gro
+thendieckGroup M)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instCommGroup
-  signature: : CommGroup (GrothendieckGroup M) where
-  body: inferInstance
-  inv_mul_cancel a := by
-    cases a using ind
-    rw [inv_mk]; rw [mk_eq_monoidOf_mk']; rw [← Submonoid.LocalizationMap.mk'_mul]
-    convert! Submonoid.LocalizationMap.mk'_self' _ _
-    rw [mul_comm]; rw [Submonoid.coe_mul]
-
-@[to_additive (attr := simp)]
-
-中文:
-实例 instCommGroup
-  签名: : 交换群 (GrothendieckGroup M) where
-  定义体: inferInstance
-  inv_mul_cancel a := by
-    cases a using ind
-    rw [inv_mk]; rw [mk_eq_monoidOf_mk']; rw [← Submonoid.LocalizationMap.mk'_mul]
-    convert! Submonoid.LocalizationMap.mk'_self' _ _
-    rw [mul_comm]; rw [Submonoid.coe_mul]
-
-@[to_additive (attr := simp)]
+--- 原说明 ---
+The Grothendieck group is a group.
 -/
 instance instCommGroup : CommGroup (GrothendieckGroup M) where
   __ : CommMonoid (GrothendieckGroup M) := inferInstance
   inv_mul_cancel a := by
     cases a using ind
-    rw [inv_mk]; rw [mk_eq_monoidOf_mk']; rw [← Submonoid.LocalizationMap.mk'_mul]
+    rw [inv_mk, mk_eq_monoidOf_mk', ← Submonoid.LocalizationMap.mk'_mul]
     convert! Submonoid.LocalizationMap.mk'_self' _ _
-    rw [mul_comm]; rw [Submonoid.coe_mul]
+    rw [mul_comm, Submonoid.coe_mul]
 
 @[to_additive (attr := simp)]
-/--
-lemma `mk_div_mk` / 引理 `mk_div_mk`
-
-English:
-lemma mk_div_mk
-  given: (m₁ m₂ : M) (s₁ s₂ : (⊤ : Submonoid M))
-  proof: by
-  simp [div_eq_mul_inv, mk_mul]; rfl
-
-中文:
-引理 mk_div_mk
-  条件: (m₁ m₂ : M) (s₁ s₂ : (⊤ : 子幺半群 M))
-  证明: by
-  simp [div_eq_mul_inv, mk_mul]; rfl
-
-Depends on / 依赖: div_eq_mul_inv, mk_mul
+/-
+**Algebra.GrothendieckGroup.mk_div_mk** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Grothen
+dieckGroup`。
+形式化陈述：mk_div_mk (m₁ m₂ : M) (s₁ s₂ : (⊤ : Submonoid M)) : mk m₁ s₁ / mk m₂ s₂ = 
+.mk (m₁ * s₂) ⟨s₁ * m₂, Submonoid.mem_top _⟩
+参数：m₁ m₂ : M；s₁ s₂ : (⊤ : Submonoid M)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submonoid.mem_top`：mem_top (x : M) : x in (⊤ : Submonoid M)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `Localization.mk_mul`：mk_mul (a c : M) (b d : S) : mk a b * mk c d = mk (
+a * c) (b * d)
 -/
 lemma mk_div_mk (m₁ m₂ : M) (s₁ s₂ : (⊤ : Submonoid M)) :
     mk m₁ s₁ / mk m₂ s₂ = .mk (m₁ * s₂) ⟨s₁ * m₂, Submonoid.mem_top _⟩ := by
@@ -211,54 +150,47 @@ Grothendieck group of `M` to `G`. -/
 @[to_additive (attr := simps symm_apply)
 /-- A monoid homomorphism from a monoid `M` to a group `G` lifts to a group homomorphism from the
 Grothendieck group of `M` to `G`. -/]
-/--
-Definition of `lift` / `lift` 的定义
-
-English:
-definition lift
-  signature: : (M ->* G) ≃ (GrothendieckGroup M ->* G) where
-  body: (monoidOf ⊤).lift (g := f) fun _ => Group.isUnit _
-  invFun f := f.comp of
-  left_inv f := by ext; simp
-  right_inv f := by ext; simp
-
-中文:
-定义 lift
-  签名: : (M ->* G) ≃ (GrothendieckGroup M ->* G) where
-  定义体: (monoidOf ⊤).lift (g := f) fun _ => Group.isUnit _
-  invFun f := f.comp of
-  left_inv f := by ext; simp
-  right_inv f := by ext; simp
-
-Depends on / 依赖: Group.isUnit, isUnit, monoidOf
+/-
+**Algebra.GrothendieckGroup.lift** 是 Mathlib 中的一个定义，位于命名空间 `Algebra.Grothendieck
+Group`。
+形式化陈述：lift : (M ->* G) ≃ (GrothendieckGroup M ->* G) where toFun f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-noncomputable def lift : (M ->* G) ≃ (GrothendieckGroup M ->* G) where
-  toFun f := (monoidOf ⊤).lift (g := f) fun _ => Group.isUnit _
+noncomputable def lift : (M →* G) ≃ (GrothendieckGroup M →* G) where
+  toFun f := (monoidOf ⊤).lift (g := f) fun _ ↦ Group.isUnit _
   invFun f := f.comp of
   left_inv f := by ext; simp
   right_inv f := by ext; simp
 
 set_option backward.isDefEq.respectTransparency false in
 @[to_additive]
-/--
-lemma `lift_apply` / 引理 `lift_apply`
-
-English:
-lemma lift_apply
-  given: (f : M ->* G) (x : GrothendieckGroup M)
-  proof: by
-  simp [lift, (monoidOf ⊤).lift_apply, div_eq_mul_inv]; congr
-
-中文:
-引理 lift_apply
-  条件: (f : M ->* G) (x : GrothendieckGroup M)
-  证明: by
-  simp [lift, (monoidOf ⊤).lift_apply, div_eq_mul_inv]; congr
-
-Depends on / 依赖: div_eq_mul_inv, lift_apply, monoidOf
+/-
+**Algebra.GrothendieckGroup.lift_apply** 是 Mathlib 中的一个引理，位于命名空间 `Algebra.Grothe
+ndieckGroup`。
+形式化陈述：lift_apply (f : M ->* G) (x : GrothendieckGroup M) : lift f x = f ((monoid
+Of ⊤).sec x).1 / f ((monoidOf ⊤).sec x).2
+参数：f : M ->* G；x : GrothendieckGroup M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submonoid.instSubmonoidClass`：∀ {M : Type u_1} [inst : MulOneClass M], S
+ubmonoidClass (Submonoid M) M
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `Submonoid.LocalizationMap.lift_apply`：lift_apply (z) : f.lift hg z = g (
+f.sec z).1 * (IsUnit.liftRight (g.domRestrict S) hg (f.sec z).2)⁻¹
+· 使用定理 `Units.val_inv_eq_inv_val`：∀ {α : Type u} [inst : DivisionMonoid α] (u : 
+αˣ), ↑u⁻¹ = (↑u)⁻¹
+· 使用定理 `div_eq_mul_inv`：div_eq_mul_inv (a b : G) : a / b = a * b⁻¹
+· 使用定理 `LeftCancelSemigroup.toIsLeftCancelMul`：∀ {G : Type u} [self : LeftCancel
+Semigroup G], IsLeftCancelMul G
 -/
-lemma lift_apply (f : M ->* G) (x : GrothendieckGroup M) :
+lemma lift_apply (f : M →* G) (x : GrothendieckGroup M) :
     lift f x = f ((monoidOf ⊤).sec x).1 / f ((monoidOf ⊤).sec x).2 := by
   simp [lift, (monoidOf ⊤).lift_apply, div_eq_mul_inv]; congr
 
 end Algebra.GrothendieckGroup
+

@@ -28,74 +28,40 @@ open CategoryTheory
 
 open Lean Meta Elab Tactic
 
-/--
-Definition of `forEachComposition` / `forEachComposition` 的定义
+/-- Find appearances of `CategoryStruct.comp C inst X Y Z f g`, and apply `f` to each. -/
+/-
+**Mathlib.Tactic.CheckCompositions.forEachComposition** 是 Mathlib 中的一个定义，位于命名空间 
+`Mathlib.Tactic.CheckCompositions`。
+形式化陈述：forEachComposition (e : Expr) (f : Expr -> MetaM Unit) : MetaM Unit
+参数：e : Expr；f : Expr -> MetaM Unit。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forEachComposition
-  signature: (e : Expr) (f : Expr -> MetaM Unit)
-  body: do
-  e.forEach (fun e => if e.isAppOfArity ``CategoryStruct.comp 7 then f e else pure ())
-
-中文:
-定义 forEachComposition
-  签名: (e : Expr) (f : Expr -> MetaM 单元)
-  定义体: do
-  e.forEach (fun e => if e.isAppOfArity ``CategoryStruct.comp 7 then f e else pure ())
+--- 原说明 ---
+Find appearances of `CategoryStruct.comp C inst X Y Z f g`, and apply `f` to eac
+h.
 -/
-def forEachComposition (e : Expr) (f : Expr -> MetaM Unit) : MetaM Unit := do
-  e.forEach (fun e => if e.isAppOfArity ``CategoryStruct.comp 7 then f e else pure ())
+def forEachComposition (e : Expr) (f : Expr → MetaM Unit) : MetaM Unit := do
+  e.forEach (fun e ↦ if e.isAppOfArity ``CategoryStruct.comp 7 then f e else pure ())
 
-/--
-Definition of `checkComposition` / `checkComposition` 的定义
+/-- Given a composition `CategoryStruct.comp _ _ X Y Z f g`,
+infer the types of `f` and `g` and check whether their sources and targets agree,
+at "instances and reducible" transparency, with `X`, `Y`, and `Z`,
+reporting any discrepancies. -/
+/-
+**Mathlib.Tactic.CheckCompositions.checkComposition** 是 Mathlib 中的一个定义，位于命名空间 `M
+athlib.Tactic.CheckCompositions`。
+形式化陈述：checkComposition (e : Expr) : MetaM Unit
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition checkComposition
-  signature: (e : Expr)
-  body: do
-  match_expr e with
-  | CategoryStruct.comp _ _ X Y Z f g =>
-    match_expr ← inferType f with
-    | Quiver.Hom _ _ X' Y' =>
-      withReducibleAndInstances do
-        if !(← isDefEq X' X) then
-          logInfo m!"In composition\n {e}\nthe source of\n {f}\nis\n {X'}\nbut should be\n {X}"
-        if !(← isDefEq Y' Y) then
-          logInfo m!"In composition\n {e}\nthe target of\n {f}\nis\n {Y'}\nbut should be\n {Y}"
-    | _ => throwError "In composition\n {e}\nthe type of\n {f}\nis not a morphism."
-    match_expr ← inferType g with
-    | Quiver.Hom _ _ Y' Z' =>
-      withReducibleAndInstances do
-        if !(← isDefEq Y' Y) then
-          logInfo m!"In composition\n {e}\nthe source of\n {g}\nis\n {Y'}\nbut should be\n {Y}"
-        if !(← isDefEq Z' Z) then
-          logInfo m!"In composition\n {e}\nthe target of\n {g}\nis\n {Z'}\nbut should be\n {Z}"
-    | _ => throwError "In composition\n {e}\nthe type of\n {g}\nis not a morphism."
-  | _ => throwError "{e} is not a composition."
-
-中文:
-定义 checkComposition
-  签名: (e : Expr)
-  定义体: do
-  match_expr e with
-  | CategoryStruct.comp _ _ X Y Z f g =>
-    match_expr ← inferType f with
-    | Quiver.Hom _ _ X' Y' =>
-      withReducibleAndInstances do
-        if !(← isDefEq X' X) then
-          logInfo m!"In composition\n {e}\nthe source of\n {f}\nis\n {X'}\nbut should be\n {X}"
-        if !(← isDefEq Y' Y) then
-          logInfo m!"In composition\n {e}\nthe target of\n {f}\nis\n {Y'}\nbut should be\n {Y}"
-    | _ => throwError "In composition\n {e}\nthe type of\n {f}\nis not a morphism."
-    match_expr ← inferType g with
-    | Quiver.Hom _ _ Y' Z' =>
-      withReducibleAndInstances do
-        if !(← isDefEq Y' Y) then
-          logInfo m!"In composition\n {e}\nthe source of\n {g}\nis\n {Y'}\nbut should be\n {Y}"
-        if !(← isDefEq Z' Z) then
-          logInfo m!"In composition\n {e}\nthe target of\n {g}\nis\n {Z'}\nbut should be\n {Z}"
-    | _ => throwError "In composition\n {e}\nthe type of\n {g}\nis not a morphism."
-  | _ => throwError "{e} is not a composition."
+--- 原说明 ---
+Given a composition `CategoryStruct.comp _ _ X Y Z f g`,
+infer the types of `f` and `g` and check whether their sources and targets agree
+,
+at "instances and reducible" transparency, with `X`, `Y`, and `Z`,
+reporting any discrepancies.
 -/
 def checkComposition (e : Expr) : MetaM Unit := do
   match_expr e with
@@ -104,56 +70,45 @@ def checkComposition (e : Expr) : MetaM Unit := do
     | Quiver.Hom _ _ X' Y' =>
       withReducibleAndInstances do
         if !(← isDefEq X' X) then
-          logInfo m!"In composition\n {e}\nthe source of\n {f}\nis\n {X'}\nbut should be\n {X}"
+          logInfo m!"In composition\n  {e}\nthe source of\n  {f}\nis\n  {X'}\nbut should be\n  {X}"
         if !(← isDefEq Y' Y) then
-          logInfo m!"In composition\n {e}\nthe target of\n {f}\nis\n {Y'}\nbut should be\n {Y}"
-    | _ => throwError "In composition\n {e}\nthe type of\n {f}\nis not a morphism."
+          logInfo m!"In composition\n  {e}\nthe target of\n  {f}\nis\n  {Y'}\nbut should be\n  {Y}"
+    | _ => throwError "In composition\n  {e}\nthe type of\n  {f}\nis not a morphism."
     match_expr ← inferType g with
     | Quiver.Hom _ _ Y' Z' =>
       withReducibleAndInstances do
         if !(← isDefEq Y' Y) then
-          logInfo m!"In composition\n {e}\nthe source of\n {g}\nis\n {Y'}\nbut should be\n {Y}"
+          logInfo m!"In composition\n  {e}\nthe source of\n  {g}\nis\n  {Y'}\nbut should be\n  {Y}"
         if !(← isDefEq Z' Z) then
-          logInfo m!"In composition\n {e}\nthe target of\n {g}\nis\n {Z'}\nbut should be\n {Z}"
-    | _ => throwError "In composition\n {e}\nthe type of\n {g}\nis not a morphism."
+          logInfo m!"In composition\n  {e}\nthe target of\n  {g}\nis\n  {Z'}\nbut should be\n  {Z}"
+    | _ => throwError "In composition\n  {e}\nthe type of\n  {g}\nis not a morphism."
   | _ => throwError "{e} is not a composition."
 
-/--
-Definition of `checkCompositions` / `checkCompositions` 的定义
+/-- Check the typing of categorical compositions in an expression. -/
+/-
+**Mathlib.Tactic.CheckCompositions.checkCompositions** 是 Mathlib 中的一个定义，位于命名空间 `
+Mathlib.Tactic.CheckCompositions`。
+形式化陈述：checkCompositions (e : Expr) : MetaM Unit
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition checkCompositions
-  signature: (e : Expr)
-  body: do
-  forEachComposition e checkComposition
-
-中文:
-定义 checkCompositions
-  签名: (e : Expr)
-  定义体: do
-  forEachComposition e checkComposition
+--- 原说明 ---
+Check the typing of categorical compositions in an expression.
 -/
 def checkCompositions (e : Expr) : MetaM Unit := do
   forEachComposition e checkComposition
 
-/--
-Definition of `checkCompositionsTac` / `checkCompositionsTac` 的定义
+/-- Check the typing of categorical compositions in the goal. -/
+/-
+**Mathlib.Tactic.CheckCompositions.checkCompositionsTac** 是 Mathlib 中的一个定义，位于命名空
+间 `Mathlib.Tactic.CheckCompositions`。
+形式化陈述：checkCompositionsTac : TacticM Unit
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition checkCompositionsTac
-  signature: : TacticM Unit
-  body: withMainContext do
-  let e ← getMainTarget
-  checkCompositions e
-
-中文:
-定义 checkCompositionsTac
-  签名: : TacticM 单元
-  定义体: withMainContext do
-  let e ← getMainTarget
-  checkCompositions e
-
-Depends on / 依赖: withMainContext
+--- 原说明 ---
+Check the typing of categorical compositions in the goal.
 -/
 def checkCompositionsTac : TacticM Unit := withMainContext do
   let e ← getMainTarget
@@ -187,13 +142,13 @@ example (j : J) :
   -- the following.
 
   -- info: In composition
-  -- colimit.ι ((F ⋙ G) ⋙ H) j ≫ (preservesColimitIso (G ⋙ H) F).inv
+  --   colimit.ι ((F ⋙ G) ⋙ H) j ≫ (preservesColimitIso (G ⋙ H) F).inv
   -- the source of
-  -- (preservesColimitIso (G ⋙ H) F).inv
+  --   (preservesColimitIso (G ⋙ H) F).inv
   -- is
-  -- colimit (F ⋙ G ⋙ H)
+  --   colimit (F ⋙ G ⋙ H)
   -- but should be
-  -- colimit ((F ⋙ G) ⋙ H)
+  --   colimit ((F ⋙ G) ⋙ H)
 
   check_compositions
 
@@ -211,3 +166,4 @@ example (j : J) :
 elab "check_compositions" : tactic => checkCompositionsTac
 
 end Mathlib.Tactic.CheckCompositions
+

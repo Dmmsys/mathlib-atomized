@@ -16,10 +16,10 @@ as the greatest fixpoint of a polynomial functor.
 
 ## Main definitions
 
-* `M.mk` - constructor
-* `M.dest` - destructor
-* `M.corec` - corecursor: useful for formulating infinite, productive computations
-* `M.bisim` - bisimulation: proof technique to show the equality of infinite objects
+* `M.mk`     - constructor
+* `M.dest`   - destructor
+* `M.corec`  - corecursor: useful for formulating infinite, productive computations
+* `M.bisim`  - bisimulation: proof technique to show the equality of infinite objects
 
 ## Implementation notes
 
@@ -58,68 +58,39 @@ namespace MvPFunctor
 
 open TypeVec
 
-variable {n : Nat} (P : MvPFunctor.{u} (n + 1))
+variable {n : ℕ} (P : MvPFunctor.{u} (n + 1))
 
-/--
-Inductive type `M.Path` / 归纳类型 `M.Path`
+/-- A path from the root of a tree to one of its node -/
+/-
+**MvPFunctor.M.Path** 是 Mathlib 中的一个归纳类型，位于命名空间 `MvPFunctor.M`。
+形式化陈述：{n : ℕ} → (P : MvPFunctor.{u} (n + 1)) → P.last.M → Fin2 n → Type u
+参数：P : MvPFunctor.{u} (n + 1)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive M.Path
-  parameters: : P.last.M -> Fin2 n -> Type u
-  constructors (2):
-    - root: (x : P.last.M) (a : P.A) (f : P.last.B a -> P.last.M) (h : PFunctor.M.dest x = ⟨a, f⟩) (i : Fin2 n) (c : P.drop.B a i) : M.Path x i
-    - child: (x : P.last.M) (a : P.A) (f : P.last.B a -> P.last.M) (h : PFunctor.M.dest x = ⟨a, f⟩) (j : P.last.B a) (i : Fin2 n) (c : M.Path (f j) i) : M.Path x i
-
-中文:
-归纳类型 M.道路
-  参数: : P.last.M -> Fin2 n -> 类型u
-  构造子 (2 个):
-    - root: (x : P.last.M) (a : P.A) (f : P.last.B a -> P.last.M) (h : P函子.M.dest x = ⟨a, f⟩) (i : Fin2 n) (c : P.drop.B a i) : M.道路 x i
-    - child: (x : P.last.M) (a : P.A) (f : P.last.B a -> P.last.M) (h : P函子.M.dest x = ⟨a, f⟩) (j : P.last.B a) (i : Fin2 n) (c : M.道路 (f j) i) : M.道路 x i
+--- 原说明 ---
+A path from the root of a tree to one of its node
 -/
-inductive M.Path : P.last.M -> Fin2 n -> Type u
+inductive M.Path : P.last.M → Fin2 n → Type u
   | root (x : P.last.M)
           (a : P.A)
-          (f : P.last.B a -> P.last.M)
+          (f : P.last.B a → P.last.M)
           (h : PFunctor.M.dest x = ⟨a, f⟩)
           (i : Fin2 n)
           (c : P.drop.B a i) : M.Path x i
   | child (x : P.last.M)
           (a : P.A)
-          (f : P.last.B a -> P.last.M)
+          (f : P.last.B a → P.last.M)
           (h : PFunctor.M.dest x = ⟨a, f⟩)
           (j : P.last.B a)
           (i : Fin2 n)
           (c : M.Path (f j) i) : M.Path x i
-
-/--
-Instance `M.Path.inhabited` / 实例 `M.Path.inhabited`
-
-English:
-instance M.Path.inhabited
-  signature: (x : P.last.M) {i} [Inhabited (P.drop.B x.head i)]
-  body: let a := PFunctor.M.head x
-  let f := PFunctor.M.children x
-  ⟨M.Path.root _ a f
-      (PFunctor.M.casesOn' x
-        (r := fun _ => PFunctor.M.dest x = ⟨a, f⟩)
- by
-        intros; simp [a]; rfl)
-      _ default⟩
-
-中文:
-实例 M.道路.inhabited
-  签名: (x : P.last.M) {i} [可居 (P.drop.B x.head i)]
-  定义体: let a := PFunctor.M.head x
-  let f := PFunctor.M.children x
-  ⟨M.Path.root _ a f
-      (PFunctor.M.casesOn' x
-        (r := fun _ => PFunctor.M.dest x = ⟨a, f⟩)
- by
-        intros; simp [a]; rfl)
-      _ default⟩
-
-Depends on / 依赖: M.Path.root, PFunctor, PFunctor.M.casesOn, PFunctor.M.children, PFunctor.M.dest, PFunctor.M.head, casesOn, children, intros
+/-
+**MvPFunctor.M.Path.inhabited** 是 Mathlib 中的一个定义，位于命名空间 `MvPFunctor.M.Path`。
+形式化陈述：{n : ℕ} →   (P : MvPFunctor.{u} (n + 1)) →     (x : P.last.M) → {i : Fin2 
+n} → [Inhabited (P.drop.B x.head i)] → Inhabited (MvPFunctor.M.Path P x i)
+参数：P : MvPFunctor.{u} (n + 1)；x : P.last.M；P.drop.B x.head i；MvPFunctor.M.Path P
+ x i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance M.Path.inhabited (x : P.last.M) {i} [Inhabited (P.drop.B x.head i)] :
     Inhabited (M.Path P x i) :=
@@ -128,422 +99,331 @@ instance M.Path.inhabited (x : P.last.M) {i} [Inhabited (P.drop.B x.head i)] :
   ⟨M.Path.root _ a f
       (PFunctor.M.casesOn' x
         (r := fun _ => PFunctor.M.dest x = ⟨a, f⟩)
- by
+        <| by
         intros; simp [a]; rfl)
       _ default⟩
 
-/--
-Definition of `mp` / `mp` 的定义
+/-- Polynomial functor of the M-type of `P`. `A` is a data-less
+possibly infinite tree whereas, for a given `a : A`, `B a` is a valid
+path in tree `a` so that `mp α` is made of a tree and a function
+from its valid paths to the values it contains -/
+/-
+**MvPFunctor.mp** 是 Mathlib 中的一个定义，位于命名空间 `MvPFunctor`。
+形式化陈述：mp : MvPFunctor n where A
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mp
-  signature: : MvPFunctor n where
-  body: P.last.M
-  B := M.Path P
-
-中文:
-定义 mp
-  签名: : MvP函子 n where
-  定义体: P.last.M
-  B := M.Path P
-
-Depends on / 依赖: P.last.M
+--- 原说明 ---
+Polynomial functor of the M-type of `P`. `A` is a data-less
+possibly infinite tree whereas, for a given `a : A`, `B a` is a valid
+path in tree `a` so that `mp α` is made of a tree and a function
+from its valid paths to the values it contains
 -/
 def mp : MvPFunctor n where
   A := P.last.M
   B := M.Path P
 
-/--
-Definition of `M` / `M` 的定义
+/-- `n`-ary M-type for `P` -/
+/-
+**MvPFunctor.M** 是 Mathlib 中的一个定义，位于命名空间 `MvPFunctor`。
+形式化陈述：M (α : TypeVec n) : Type _
+参数：α : TypeVec n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition M
-  signature: (α : TypeVec n)
-  body: P.mp α
-
-中文:
-定义 M
-  签名: (α : TypeVec n)
-  定义体: P.mp α
-
-Depends on / 依赖: P.mp
+--- 原说明 ---
+`n`-ary M-type for `P`
 -/
 def M (α : TypeVec n) : Type _ :=
   P.mp α
-
-/--
-Instance `mvfunctorM` / 实例 `mvfunctorM`
-
-English:
-instance mvfunctorM
-  signature: : MvFunctor P.M
-  body: by delta M; infer_instance
-
-中文:
-实例 mvfunctorM
-  签名: : Mv函子 P.M
-  定义体: by delta M; infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**MvPFunctor.mvfunctorM** 是 Mathlib 中的一个实例，位于命名空间 `MvPFunctor`。
+形式化陈述：mvfunctorM : MvFunctor P.M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance mvfunctorM : MvFunctor P.M := by delta M; infer_instance
-
-/--
-Instance `inhabitedM` / 实例 `inhabitedM`
-
-English:
-instance inhabitedM
-  signature: {α : TypeVec _} [I : Inhabited P.A] [forall i : Fin2 n, Inhabited (α i)]
-  body: @Obj.inhabited _ (mp P) _ (@PFunctor.M.inhabited P.last I) _
-
-中文:
-实例 inhabitedM
-  签名: {α : TypeVec _} [I : 可居 P.A] [对任意 i : Fin2 n, 可居 (α i)]
-  定义体: @Obj.inhabited _ (mp P) _ (@PFunctor.M.inhabited P.last I) _
-
-Depends on / 依赖: Obj.inhabited, P.last, PFunctor, PFunctor.M.inhabited, inhabited
+/-
+**MvPFunctor.inhabitedM** 是 Mathlib 中的一个实例，位于命名空间 `MvPFunctor`。
+形式化陈述：inhabitedM {α : TypeVec _} [I : Inhabited P.A] [forall i : Fin2 n, Inhabit
+ed (α i)] : Inhabited (P.M α)
+参数：α i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance inhabitedM {α : TypeVec _} [I : Inhabited P.A] [forall i : Fin2 n, Inhabited (α i)] :
+instance inhabitedM {α : TypeVec _} [I : Inhabited P.A] [∀ i : Fin2 n, Inhabited (α i)] :
     Inhabited (P.M α) :=
   @Obj.inhabited _ (mp P) _ (@PFunctor.M.inhabited P.last I) _
 
-/--
-Definition of `M.corecShape` / `M.corecShape` 的定义
+/-- construct through corecursion the shape of an M-type
+without its contents -/
+/-
+**MvPFunctor.M.corecShape** 是 Mathlib 中的一个定义，位于命名空间 `MvPFunctor.M`。
+形式化陈述：{n : ℕ} → (P : MvPFunctor.{u} (n + 1)) → {β : Type v} → (g₀ : β → P.A) → (
+(b : β) → P.last.B (g₀ b) → β) → β → P.last.M
+参数：P : MvPFunctor.{u} (n + 1)；g₀ : β → P.A；(b : β) → P.last.B (g₀ b) → β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition M.corecShape
-  signature: {β : Type v} (g₀ : β -> P.A) (g₂ : forall b : β, P.last.B (g₀ b) -> β)
-  body: PFunctor.M.corec fun b => ⟨g₀ b, g₂ b⟩
-
-中文:
-定义 M.corecShape
-  签名: {β : 类型v} (g₀ : β -> P.A) (g₂ : 对任意 b : β, P.last.B (g₀ b) -> β)
-  定义体: PFunctor.M.corec fun b => ⟨g₀ b, g₂ b⟩
-
-Depends on / 依赖: PFunctor, PFunctor.M.corec
+--- 原说明 ---
+construct through corecursion the shape of an M-type
+without its contents
 -/
-def M.corecShape {β : Type v} (g₀ : β -> P.A) (g₂ : forall b : β, P.last.B (g₀ b) -> β) :
-    β -> P.last.M :=
+def M.corecShape {β : Type v} (g₀ : β → P.A) (g₂ : ∀ b : β, P.last.B (g₀ b) → β) :
+    β → P.last.M :=
   PFunctor.M.corec fun b => ⟨g₀ b, g₂ b⟩
 
-/--
-Definition of `castDropB` / `castDropB` 的定义
+/-- Proof of type equality as an arrow -/
+/-
+**MvPFunctor.castDropB** 是 Mathlib 中的一个定义，位于命名空间 `MvPFunctor`。
+形式化陈述：castDropB {a a' : P.A} (h : a = a') : P.drop.B a ⟹ P.drop.B a'
+参数：h : a = a'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition castDropB
-  signature: {a a' : P.A} (h : a = a')
-  body: fun _i b => Eq.recOn h b
-
-中文:
-定义 castDropB
-  签名: {a a' : P.A} (h : a = a')
-  定义体: fun _i b => Eq.recOn h b
-
-Depends on / 依赖: Eq.recOn
+--- 原说明 ---
+Proof of type equality as an arrow
 -/
 def castDropB {a a' : P.A} (h : a = a') : P.drop.B a ⟹ P.drop.B a' := fun _i b => Eq.recOn h b
 
-/--
-Definition of `castLastB` / `castLastB` 的定义
+/-- Proof of type equality as a function -/
+/-
+**MvPFunctor.castLastB** 是 Mathlib 中的一个定义，位于命名空间 `MvPFunctor`。
+形式化陈述：castLastB {a a' : P.A} (h : a = a') : P.last.B a -> P.last.B a'
+参数：h : a = a'。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition castLastB
-  signature: {a a' : P.A} (h : a = a')
-  body: fun b => Eq.recOn h b
-
-中文:
-定义 castLastB
-  签名: {a a' : P.A} (h : a = a')
-  定义体: fun b => Eq.recOn h b
-
-Depends on / 依赖: Eq.recOn
+--- 原说明 ---
+Proof of type equality as a function
 -/
-def castLastB {a a' : P.A} (h : a = a') : P.last.B a -> P.last.B a' := fun b => Eq.recOn h b
+def castLastB {a a' : P.A} (h : a = a') : P.last.B a → P.last.B a' := fun b => Eq.recOn h b
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `M.corecContents` / `M.corecContents` 的定义
+/-- Using corecursion, construct the contents of an M-type -/
+/-
+**MvPFunctor.M.corecContents** 是 Mathlib 中的一个定义，位于命名空间 `MvPFunctor.M`。
+形式化陈述：{n : ℕ} →   (P : MvPFunctor.{u} (n + 1)) →     {α : TypeVec.{u} n} →      
+ {β : Type v} →         (g₀ : β → P.A) →           ((b : β) → (P.drop.B (g₀ b)).
+Arrow α) →             (g₂ : (b : β) → P.last.B (g₀ b) → β) →               (x :
+ P.last.M) → (b : β) → x = MvPFunctor.M.corecShape P g₀ g₂ b → TypeVec.Arrow (Mv
+PFunctor.M.Path P x) α
+参数：P : MvPFunctor.{u} (n + 1)；g₀ : β → P.A；(b : β) → (P.drop.B (g₀ b)).Arrow α；g
+₂ : (b : β) → P.last.B (g₀ b) → β；x : P.last.M；b : β；MvPFunctor.M.Path P x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition M.corecContents
-  signature: {α : TypeVec.{u} n}
-  body: by
-      rw [h]; rw [M.corecShape]; rw [PFunctor.M.dest_corec] at h'
-      cases h'
-      rfl
-    g₁ b i (P.castDropB this i c)
-  | _, M.Path.child x a f h' j i c =>
-    have h₀ : a = g₀ b := by
-      rw [h]; rw [M.corecShape]; rw [PFunctor.M.dest_corec] at h'
-      cases h'
-      rfl
-    have h₁ : f j = M.corecShape P g₀ g₂ (g₂ b (castLastB P h₀ j)) := by
-      rw [h]; rw [M.corecShape]; rw [PFunctor.M.dest_corec] at h'
-      cases h'
-      rfl
-    M.corecContents g₀ g₁ g₂ (f j) (g₂ b (P.castLastB h₀ j)) h₁ i c
-
-中文:
-定义 M.corecContents
-  签名: {α : TypeVec.{u} n}
-  定义体: by
-      rw [h]; rw [M.corecShape]; rw [PFunctor.M.dest_corec] at h'
-      cases h'
-      rfl
-    g₁ b i (P.castDropB this i c)
-  | _, M.Path.child x a f h' j i c =>
-    have h₀ : a = g₀ b := by
-      rw [h]; rw [M.corecShape]; rw [PFunctor.M.dest_corec] at h'
-      cases h'
-      rfl
-    have h₁ : f j = M.corecShape P g₀ g₂ (g₂ b (castLastB P h₀ j)) := by
-      rw [h]; rw [M.corecShape]; rw [PFunctor.M.dest_corec] at h'
-      cases h'
-      rfl
-    M.corecContents g₀ g₁ g₂ (f j) (g₂ b (P.castLastB h₀ j)) h₁ i c
-
-Depends on / 依赖: M.Path.child, M.corecContents, M.corecShape, P.castDropB, P.castLastB, PFunctor, PFunctor.M.dest_corec, castDropB, castLastB, corecContents, corecShape, dest_corec
+--- 原说明 ---
+Using corecursion, construct the contents of an M-type
 -/
 def M.corecContents {α : TypeVec.{u} n}
     {β : Type v}
-    (g₀ : β -> P.A)
-    (g₁ : forall b : β, P.drop.B (g₀ b) ⟹ α)
-    (g₂ : forall b : β, P.last.B (g₀ b) -> β)
+    (g₀ : β → P.A)
+    (g₁ : ∀ b : β, P.drop.B (g₀ b) ⟹ α)
+    (g₂ : ∀ b : β, P.last.B (g₀ b) → β)
     (x : _)
     (b : β)
     (h : x = M.corecShape P g₀ g₂ b) :
     M.Path P x ⟹ α
   | _, M.Path.root x a f h' i c =>
     have : a = g₀ b := by
-      rw [h]; rw [M.corecShape]; rw [PFunctor.M.dest_corec] at h'
+      rw [h, M.corecShape, PFunctor.M.dest_corec] at h'
       cases h'
       rfl
     g₁ b i (P.castDropB this i c)
   | _, M.Path.child x a f h' j i c =>
     have h₀ : a = g₀ b := by
-      rw [h]; rw [M.corecShape]; rw [PFunctor.M.dest_corec] at h'
+      rw [h, M.corecShape, PFunctor.M.dest_corec] at h'
       cases h'
       rfl
     have h₁ : f j = M.corecShape P g₀ g₂ (g₂ b (castLastB P h₀ j)) := by
-      rw [h]; rw [M.corecShape]; rw [PFunctor.M.dest_corec] at h'
+      rw [h, M.corecShape, PFunctor.M.dest_corec] at h'
       cases h'
       rfl
     M.corecContents g₀ g₁ g₂ (f j) (g₂ b (P.castLastB h₀ j)) h₁ i c
 
-/--
-Definition of `M.corec'` / `M.corec'` 的定义
+/-- Corecursor for M-type of `P` -/
+/-
+**MvPFunctor.M.corec'** 是 Mathlib 中的一个定义，位于命名空间 `MvPFunctor.M`。
+形式化陈述：{n : ℕ} →   (P : MvPFunctor.{u} (n + 1)) →     {α : TypeVec.{u} n} →      
+ {β : Type v} →         (g₀ : β → P.A) → ((b : β) → (P.drop.B (g₀ b)).Arrow α) →
+ ((b : β) → P.last.B (g₀ b) → β) → β → P.M α
+参数：P : MvPFunctor.{u} (n + 1)；g₀ : β → P.A；(b : β) → (P.drop.B (g₀ b)).Arrow α；(
+b : β) → P.last.B (g₀ b) → β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition M.corec'
-  signature: {α : TypeVec n} {β : Type v} (g₀ : β -> P.A) (g₁ : forall b : β, P.drop.B (g₀ b) ⟹ α)
-  body: fun b =>
-  ⟨M.corecShape P g₀ g₂ b, M.corecContents P g₀ g₁ g₂ _ _ rfl⟩
-
-中文:
-定义 M.corec'
-  签名: {α : TypeVec n} {β : 类型v} (g₀ : β -> P.A) (g₁ : 对任意 b : β, P.drop.B (g₀ b) ⟹ α)
-  定义体: fun b =>
-  ⟨M.corecShape P g₀ g₂ b, M.corecContents P g₀ g₁ g₂ _ _ rfl⟩
+--- 原说明 ---
+Corecursor for M-type of `P`
 -/
-def M.corec' {α : TypeVec n} {β : Type v} (g₀ : β -> P.A) (g₁ : forall b : β, P.drop.B (g₀ b) ⟹ α)
-    (g₂ : forall b : β, P.last.B (g₀ b) -> β) : β -> P.M α := fun b =>
+def M.corec' {α : TypeVec n} {β : Type v} (g₀ : β → P.A) (g₁ : ∀ b : β, P.drop.B (g₀ b) ⟹ α)
+    (g₂ : ∀ b : β, P.last.B (g₀ b) → β) : β → P.M α := fun b =>
   ⟨M.corecShape P g₀ g₂ b, M.corecContents P g₀ g₁ g₂ _ _ rfl⟩
 
-/--
-Definition of `M.corec` / `M.corec` 的定义
+/-- Corecursor for M-type of `P` -/
+/-
+**MvPFunctor.M.corec** 是 Mathlib 中的一个定义，位于命名空间 `MvPFunctor.M`。
+形式化陈述：{n : ℕ} → (P : MvPFunctor.{u} (n + 1)) → {α : TypeVec.{u} n} → {β : Type u
+} → (β → ↑P (α ::: β)) → β → P.M α
+参数：P : MvPFunctor.{u} (n + 1)；β → ↑P (α ::: β)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition M.corec
-  signature: {α : TypeVec n} {β : Type u} (g : β -> P (α.append1 β))
-  body: M.corec' P (fun b => (g b).fst) (fun b => dropFun (g b).snd) fun b => lastFun (g b).snd
-
-中文:
-定义 M.corec
-  签名: {α : TypeVec n} {β : 类型u} (g : β -> P (α.append1 β))
-  定义体: M.corec' P (fun b => (g b).fst) (fun b => dropFun (g b).snd) fun b => lastFun (g b).snd
-
-Depends on / 依赖: M.corec, dropFun, lastFun
+--- 原说明 ---
+Corecursor for M-type of `P`
 -/
-def M.corec {α : TypeVec n} {β : Type u} (g : β -> P (α.append1 β)) : β -> P.M α :=
+def M.corec {α : TypeVec n} {β : Type u} (g : β → P (α.append1 β)) : β → P.M α :=
   M.corec' P (fun b => (g b).fst) (fun b => dropFun (g b).snd) fun b => lastFun (g b).snd
 
-/--
-Definition of `M.pathDestLeft` / `M.pathDestLeft` 的定义
+/-- Implementation of destructor for M-type of `P` -/
+/-
+**MvPFunctor.M.pathDestLeft** 是 Mathlib 中的一个定义，位于命名空间 `MvPFunctor.M`。
+形式化陈述：{n : ℕ} →   (P : MvPFunctor.{u} (n + 1)) →     {α : TypeVec.{u_1} n} →    
+   {x : P.last.M} →         {a : P.A} →           {f : P.last.B a → P.last.M} → 
+x.dest = ⟨a, f⟩ → TypeVec.Arrow (MvPFunctor.M.Path P x) α → (P.drop.B a).Arrow α
+参数：P : MvPFunctor.{u} (n + 1)；MvPFunctor.M.Path P x；P.drop.B a。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition M.pathDestLeft
-  signature: {α : TypeVec n} {x : P.last.M} {a : P.A} {f : P.last.B a -> P.last.M}
-  body: fun i c =>
-  f' i (M.Path.root x a f h i c)
-
-中文:
-定义 M.pathDestLeft
-  签名: {α : TypeVec n} {x : P.last.M} {a : P.A} {f : P.last.B a -> P.last.M}
-  定义体: fun i c =>
-  f' i (M.Path.root x a f h i c)
+--- 原说明 ---
+Implementation of destructor for M-type of `P`
 -/
-def M.pathDestLeft {α : TypeVec n} {x : P.last.M} {a : P.A} {f : P.last.B a -> P.last.M}
+def M.pathDestLeft {α : TypeVec n} {x : P.last.M} {a : P.A} {f : P.last.B a → P.last.M}
     (h : PFunctor.M.dest x = ⟨a, f⟩) (f' : M.Path P x ⟹ α) : P.drop.B a ⟹ α := fun i c =>
   f' i (M.Path.root x a f h i c)
 
-/--
-Definition of `M.pathDestRight` / `M.pathDestRight` 的定义
+/-- Implementation of destructor for M-type of `P` -/
+/-
+**MvPFunctor.M.pathDestRight** 是 Mathlib 中的一个定义，位于命名空间 `MvPFunctor.M`。
+形式化陈述：{n : ℕ} →   (P : MvPFunctor.{u} (n + 1)) →     {α : TypeVec.{u_1} n} →    
+   {x : P.last.M} →         {a : P.A} →           {f : P.last.B a → P.last.M} → 
+            x.dest = ⟨a, f⟩ →               TypeVec.Arrow (MvPFunctor.M.Path P x
+) α → (j : P.last.B a) → TypeVec.Arrow (MvPFunctor.M.Path P (f j)) α
+参数：P : MvPFunctor.{u} (n + 1)；MvPFunctor.M.Path P x；j : P.last.B a；MvPFunctor.M.
+Path P (f j)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition M.pathDestRight
-  signature: {α : TypeVec n} {x : P.last.M} {a : P.A} {f : P.last.B a -> P.last.M}
-  body: fun j i c => f' i (M.Path.child x a f h j i c)
-
-中文:
-定义 M.pathDestRight
-  签名: {α : TypeVec n} {x : P.last.M} {a : P.A} {f : P.last.B a -> P.last.M}
-  定义体: fun j i c => f' i (M.Path.child x a f h j i c)
-
-Depends on / 依赖: M.Path.child
+--- 原说明 ---
+Implementation of destructor for M-type of `P`
 -/
-def M.pathDestRight {α : TypeVec n} {x : P.last.M} {a : P.A} {f : P.last.B a -> P.last.M}
+def M.pathDestRight {α : TypeVec n} {x : P.last.M} {a : P.A} {f : P.last.B a → P.last.M}
     (h : PFunctor.M.dest x = ⟨a, f⟩) (f' : M.Path P x ⟹ α) :
-    forall j : P.last.B a, M.Path P (f j) ⟹ α := fun j i c => f' i (M.Path.child x a f h j i c)
+    ∀ j : P.last.B a, M.Path P (f j) ⟹ α := fun j i c => f' i (M.Path.child x a f h j i c)
 
-/--
-Definition of `M.dest'` / `M.dest'` 的定义
+/-- Destructor for M-type of `P` -/
+/-
+**MvPFunctor.M.dest'** 是 Mathlib 中的一个定义，位于命名空间 `MvPFunctor.M`。
+形式化陈述：{n : ℕ} →   (P : MvPFunctor.{u} (n + 1)) →     {α : TypeVec.{u} n} →      
+ {x : P.last.M} →         {a : P.A} →           {f : P.last.B a → P.last.M} → x.
+dest = ⟨a, f⟩ → TypeVec.Arrow (MvPFunctor.M.Path P x) α → ↑P (α ::: P.M α)
+参数：P : MvPFunctor.{u} (n + 1)；MvPFunctor.M.Path P x；α ::: P.M α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition M.dest'
-  signature: {α : TypeVec n} {x : P.last.M} {a : P.A} {f : P.last.B a -> P.last.M}
-  body: ⟨a, splitFun (M.pathDestLeft P h f') fun x => ⟨f x, M.pathDestRight P h f' x⟩⟩
-
-中文:
-定义 M.dest'
-  签名: {α : TypeVec n} {x : P.last.M} {a : P.A} {f : P.last.B a -> P.last.M}
-  定义体: ⟨a, splitFun (M.pathDestLeft P h f') fun x => ⟨f x, M.pathDestRight P h f' x⟩⟩
-
-Depends on / 依赖: M.pathDestLeft, M.pathDestRight, pathDestLeft, pathDestRight, splitFun
+--- 原说明 ---
+Destructor for M-type of `P`
 -/
-def M.dest' {α : TypeVec n} {x : P.last.M} {a : P.A} {f : P.last.B a -> P.last.M}
+def M.dest' {α : TypeVec n} {x : P.last.M} {a : P.A} {f : P.last.B a → P.last.M}
     (h : PFunctor.M.dest x = ⟨a, f⟩) (f' : M.Path P x ⟹ α) : P (α.append1 (P.M α)) :=
   ⟨a, splitFun (M.pathDestLeft P h f') fun x => ⟨f x, M.pathDestRight P h f' x⟩⟩
 
-/--
-Definition of `M.dest` / `M.dest` 的定义
+/-- Destructor for M-types -/
+/-
+**MvPFunctor.M.dest** 是 Mathlib 中的一个定义，位于命名空间 `MvPFunctor.M`。
+形式化陈述：{n : ℕ} → (P : MvPFunctor.{u} (n + 1)) → {α : TypeVec.{u} n} → P.M α → ↑P 
+(α ::: P.M α)
+参数：P : MvPFunctor.{u} (n + 1)；α ::: P.M α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition M.dest
-  signature: {α : TypeVec n} (x : P.M α)
-  body: M.dest' P (Sigma.eta <| PFunctor.M.dest x.fst).symm x.snd
-
-中文:
-定义 M.dest
-  签名: {α : TypeVec n} (x : P.M α)
-  定义体: M.dest' P (Sigma.eta <| PFunctor.M.dest x.fst).symm x.snd
-
-Depends on / 依赖: M.dest, PFunctor, PFunctor.M.dest, Sigma.eta, x.fst, x.snd
+--- 原说明 ---
+Destructor for M-types
 -/
 def M.dest {α : TypeVec n} (x : P.M α) : P (α ::: P.M α) :=
   M.dest' P (Sigma.eta <| PFunctor.M.dest x.fst).symm x.snd
 
-/--
-Definition of `M.mk` / `M.mk` 的定义
+/-- Constructor for M-types -/
+/-
+**MvPFunctor.M.mk** 是 Mathlib 中的一个定义，位于命名空间 `MvPFunctor.M`。
+形式化陈述：{n : ℕ} → (P : MvPFunctor.{u} (n + 1)) → {α : TypeVec.{u} n} → ↑P (α ::: P
+.M α) → P.M α
+参数：P : MvPFunctor.{u} (n + 1)；α ::: P.M α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition M.mk
-  signature: {α : TypeVec n}
-  body: M.corec _ fun i => appendFun id (M.dest P) < > i
-
-中文:
-定义 M.mk
-  签名: {α : TypeVec n}
-  定义体: M.corec _ fun i => appendFun id (M.dest P) < > i
+--- 原说明 ---
+Constructor for M-types
 -/
-def M.mk {α : TypeVec n} : P (α.append1 (P.M α)) -> P.M α :=
-M.corec _ fun i => appendFun id (M.dest P) < > i
-
-/--
-theorem `M.dest'_eq_dest'` / 定理 `M.dest'_eq_dest'`
-
-English:
-theorem M.dest'_eq_dest'
-  statement: {α : TypeVec n} {x : P.last.M} {a₁ : P.A}
-  proof: by cases h₁.symm.trans h₂; rfl
-
-中文:
-定理 M.dest'_eq_dest'
-  结论: {α : TypeVec n} {x : P.last.M} {a₁ : P.A}
-  证明: by cases h₁.symm.trans h₂; rfl
+def M.mk {α : TypeVec n} : P (α.append1 (P.M α)) → P.M α :=
+  M.corec _ fun i => appendFun id (M.dest P) <$$> i
+/-
+**MvPFunctor.M.dest'_eq_dest'** 是 Mathlib 中的一个定理，位于命名空间 `MvPFunctor.M`。
+形式化陈述：∀ {n : ℕ} (P : MvPFunctor.{u} (n + 1)) {α : TypeVec.{u} n} {x : P.last.M} 
+{a₁ : P.A} {f₁ : P.last.B a₁ → P.last.M}   (h₁ : x.dest = ⟨a₁, f₁⟩) {a₂ : P.A} {
+f₂ : P.last.B a₂ → P.last.M} (h₂ : x.dest = ⟨a₂, f₂⟩)   (f' : TypeVec.Arrow (MvP
+Functor.M.Path P x) α), MvPFunctor.M.dest' P h₁ f' = MvPFunctor.M.dest' P h₂ f'
+参数：P : MvPFunctor.{u} (n + 1)；h₁ : x.dest = ⟨a₁, f₁⟩；h₂ : x.dest = ⟨a₂, f₂⟩；f' :
+ TypeVec.Arrow (MvPFunctor.M.Path P x) α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
 theorem M.dest'_eq_dest' {α : TypeVec n} {x : P.last.M} {a₁ : P.A}
-    {f₁ : P.last.B a₁ -> P.last.M} (h₁ : PFunctor.M.dest x = ⟨a₁, f₁⟩) {a₂ : P.A}
-    {f₂ : P.last.B a₂ -> P.last.M} (h₂ : PFunctor.M.dest x = ⟨a₂, f₂⟩) (f' : M.Path P x ⟹ α) :
+    {f₁ : P.last.B a₁ → P.last.M} (h₁ : PFunctor.M.dest x = ⟨a₁, f₁⟩) {a₂ : P.A}
+    {f₂ : P.last.B a₂ → P.last.M} (h₂ : PFunctor.M.dest x = ⟨a₂, f₂⟩) (f' : M.Path P x ⟹ α) :
     M.dest' P h₁ f' = M.dest' P h₂ f' := by cases h₁.symm.trans h₂; rfl
-
-/--
-theorem `M.dest_eq_dest'` / 定理 `M.dest_eq_dest'`
-
-English:
-theorem M.dest_eq_dest'
-  statement: {α : TypeVec n} {x : P.last.M} {a : P.A}
-  proof: M.dest'_eq_dest' _ _ _ _
-
-中文:
-定理 M.dest_eq_dest'
-  结论: {α : TypeVec n} {x : P.last.M} {a : P.A}
-  证明: M.dest'_eq_dest' _ _ _ _
-
-Depends on / 依赖: M.dest, _eq_dest
+/-
+**MvPFunctor.M.dest_eq_dest'** 是 Mathlib 中的一个定理，位于命名空间 `MvPFunctor.M`。
+形式化陈述：∀ {n : ℕ} (P : MvPFunctor.{u} (n + 1)) {α : TypeVec.{u} n} {x : P.last.M} 
+{a : P.A} {f : P.last.B a → P.last.M}   (h : x.dest = ⟨a, f⟩) (f' : TypeVec.Arro
+w (MvPFunctor.M.Path P x) α),   MvPFunctor.M.dest P ⟨x, f'⟩ = MvPFunctor.M.dest'
+ P h f'
+参数：P : MvPFunctor.{u} (n + 1)；h : x.dest = ⟨a, f⟩；f' : TypeVec.Arrow (MvPFunctor
+.M.Path P x) α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPFunctor.M.dest'_eq_dest'`：∀ {n : ℕ} (P : MvPFunctor.{u} (n + 1)) {α :
+ TypeVec.{u} n} {x : P.last.M} {a₁ : P.A} {f₁ : P.last.B a₁ → P.last.M}   (h₁ : 
+x.dest = ⟨a₁, f₁⟩…
 -/
 theorem M.dest_eq_dest' {α : TypeVec n} {x : P.last.M} {a : P.A}
-    {f : P.last.B a -> P.last.M} (h : PFunctor.M.dest x = ⟨a, f⟩) (f' : M.Path P x ⟹ α) :
+    {f : P.last.B a → P.last.M} (h : PFunctor.M.dest x = ⟨a, f⟩) (f' : M.Path P x ⟹ α) :
     M.dest P ⟨x, f'⟩ = M.dest' P h f' :=
   M.dest'_eq_dest' _ _ _ _
-
-/--
-theorem `M.dest_corec'` / 定理 `M.dest_corec'`
-
-English:
-theorem M.dest_corec'
-  statement: {α : TypeVec.{u} n} {β : Type v} (g₀ : β -> P.A)
-  proof: rfl
-
-中文:
-定理 M.dest_corec'
-  结论: {α : TypeVec.{u} n} {β : 类型v} (g₀ : β -> P.A)
-  证明: rfl
+/-
+**MvPFunctor.M.dest_corec'** 是 Mathlib 中的一个定理，位于命名空间 `MvPFunctor.M`。
+形式化陈述：∀ {n : ℕ} (P : MvPFunctor.{u} (n + 1)) {α : TypeVec.{u} n} {β : Type v} (g
+₀ : β → P.A)   (g₁ : (b : β) → (P.drop.B (g₀ b)).Arrow α) (g₂ : (b : β) → P.last
+.B (g₀ b) → β) (x : β),   MvPFunctor.M.dest P (MvPFunctor.M.corec' P g₀ g₁ g₂ x)
+ =     ⟨g₀ x, TypeVec.splitFun (g₁ x) (MvPFunctor.M.corec' P g₀ g₁ g₂ ∘ g₂ x)⟩
+参数：P : MvPFunctor.{u} (n + 1)；g₀ : β → P.A；g₁ : (b : β) → (P.drop.B (g₀ b)).Arro
+w α；g₂ : (b : β) → P.last.B (g₀ b) → β；x : β；MvPFunctor.M.corec' P g₀ g₁ g₂ x；g₁
+ x；MvPFunctor.M.corec' P g₀ g₁ g₂ ∘ g₂ x。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem M.dest_corec' {α : TypeVec.{u} n} {β : Type v} (g₀ : β -> P.A)
-    (g₁ : forall b : β, P.drop.B (g₀ b) ⟹ α) (g₂ : forall b : β, P.last.B (g₀ b) -> β) (x : β) :
+theorem M.dest_corec' {α : TypeVec.{u} n} {β : Type v} (g₀ : β → P.A)
+    (g₁ : ∀ b : β, P.drop.B (g₀ b) ⟹ α) (g₂ : ∀ b : β, P.last.B (g₀ b) → β) (x : β) :
     M.dest P (M.corec' P g₀ g₁ g₂ x) = ⟨g₀ x, splitFun (g₁ x) (M.corec' P g₀ g₁ g₂ ∘ g₂ x)⟩ :=
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `M.dest_corec` / 定理 `M.dest_corec`
-
-English:
-theorem M.dest_corec
-  given: {α : TypeVec n} {β : Type u} (g : β -> P (α.append1 β)) (x : β)
-  proof: by
-  trans
-  · apply M.dest_corec'
-  obtain ⟨a, f⟩ := g x; dsimp
-  rw [MvPFunctor.map_eq]; congr
-  conv_rhs => rw [← split_dropFun_lastFun f, appendFun_comp_splitFun]
-  rfl
-
-中文:
-定理 M.dest_corec
-  条件: {α : TypeVec n} {β : 类型u} (g : β -> P (α.append1 β)) (x : β)
-  证明: by
-  trans
-  · apply M.dest_corec'
-  obtain ⟨a, f⟩ := g x; dsimp
-  rw [MvPFunctor.map_eq]; congr
-  conv_rhs => rw [← split_dropFun_lastFun f, appendFun_comp_splitFun]
-  rfl
-
-Depends on / 依赖: M.dest_corec, MvPFunctor, MvPFunctor.map_eq, appendFun_comp_splitFun, conv_rhs, dest_corec, map_eq, split_dropFun_lastFun
+/-
+**MvPFunctor.M.dest_corec** 是 Mathlib 中的一个定理，位于命名空间 `MvPFunctor.M`。
+形式化陈述：∀ {n : ℕ} (P : MvPFunctor.{u} (n + 1)) {α : TypeVec.{u} n} {β : Type u} (g
+ : β → ↑P (α ::: β)) (x : β),   MvPFunctor.M.dest P (MvPFunctor.M.corec P g x) =
+ MvFunctor.map (TypeVec.id ::: MvPFunctor.M.corec P g) (g x)
+参数：P : MvPFunctor.{u} (n + 1)；g : β → ↑P (α ::: β)；x : β；MvPFunctor.M.corec P g 
+x；TypeVec.id ::: MvPFunctor.M.corec P g；g x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPFunctor.M.dest_corec'`：∀ {n : ℕ} (P : MvPFunctor.{u} (n + 1)) {α : Ty
+peVec.{u} n} {β : Type v} (g₀ : β → P.A)   (g₁ : (b : β) → (P.drop.B (g₀ b)).Arr
+ow α) (g₂ : (b…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPFunctor.map_eq`：map_eq {α β : TypeVec n} (g : α ⟹ β) (a : P.A) (f : P
+.B a ⟹ α) : @MvFunctor.map _ P.Obj _ _ _ g ⟨a, f⟩ = ⟨a, g ⊚ f⟩
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `TypeVec.split_dropFun_lastFun`：split_dropFun_lastFun {α α' : TypeVec (n 
++ 1)} (f : α ⟹ α') : splitFun (dropFun f) (lastFun f) = f
+· 使用定理 `TypeVec.appendFun_comp_splitFun`：appendFun_comp_splitFun {α γ : TypeVec 
+n} {β δ : Type*} {ε : TypeVec (n + 1)} (f₀ : drop ε ⟹ α) (f₁ : α ⟹ γ) (g₀ : last
+ ε -> β) (g₁ : β -> δ…
 -/
-theorem M.dest_corec {α : TypeVec n} {β : Type u} (g : β -> P (α.append1 β)) (x : β) :
-M.dest P (M.corec P g x) = appendFun id (M.corec P g) < > g x := by
+theorem M.dest_corec {α : TypeVec n} {β : Type u} (g : β → P (α.append1 β)) (x : β) :
+    M.dest P (M.corec P g x) = appendFun id (M.corec P g) <$$> g x := by
   trans
   · apply M.dest_corec'
   obtain ⟨a, f⟩ := g x; dsimp
@@ -552,35 +432,32 @@ M.dest P (M.corec P g x) = appendFun id (M.corec P g) < > g x := by
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `M.bisim_lemma` / 定理 `M.bisim_lemma`
-
-English:
-theorem M.bisim_lemma
-  statement: {α : TypeVec n} {a₁ : (mp P).A} {f₁ : (mp P).B a₁ ⟹ α} {a' : P.A}
-  proof: by
-  generalize ef : @splitFun n _ (append1 α (M P α)) f' f₁' = ff at e₁
-  let he₁' := PFunctor.M.dest a₁
-  rcases e₁' : he₁' with ⟨a₁', g₁'⟩
-  rw [M.dest_eq_dest' _ e₁'] at e₁
-  cases e₁; exact ⟨_, e₁', splitFun_inj ef⟩
-
-中文:
-定理 M.bisim_lemma
-  结论: {α : TypeVec n} {a₁ : (mp P).A} {f₁ : (mp P).B a₁ ⟹ α} {a' : P.A}
-  证明: by
-  generalize ef : @splitFun n _ (append1 α (M P α)) f' f₁' = ff at e₁
-  let he₁' := PFunctor.M.dest a₁
-  rcases e₁' : he₁' with ⟨a₁', g₁'⟩
-  rw [M.dest_eq_dest' _ e₁'] at e₁
-  cases e₁; exact ⟨_, e₁', splitFun_inj ef⟩
-
-Depends on / 依赖: M.dest_eq_dest, PFunctor, PFunctor.M.dest, append1, dest_eq_dest, generalize, splitFun, splitFun_inj
+/-
+**MvPFunctor.M.bisim_lemma** 是 Mathlib 中的一个定理，位于命名空间 `MvPFunctor.M`。
+形式化陈述：∀ {n : ℕ} (P : MvPFunctor.{u} (n + 1)) {α : TypeVec.{u} n} {a₁ : P.mp.A} {
+f₁ : (P.mp.B a₁).Arrow α} {a' : P.A}   {f' : (P.B a').drop.Arrow α} {f₁' : (P.B 
+a').last → P.M α},   MvPFunctor.M.dest P ⟨a₁, f₁⟩ = ⟨a', TypeVec.splitFun f' f₁'
+⟩ →     ∃ g₁',       ∃ (e₁' : PFunctor.M.dest a₁ = ⟨a', g₁'⟩),         f' = MvPF
+unctor.M.pathDestLeft P e₁' f₁ ∧ f₁' = fun x => ⟨g₁' x, MvPFunctor.M.pathDestRig
+ht P e₁' f₁ x⟩
+参数：P : MvPFunctor.{u} (n + 1)；P.mp.B a₁；P.B a'；P.B a'；e₁' : PFunctor.M.dest a₁ =
+ ⟨a', g₁'⟩。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPFunctor.M.dest_eq_dest'`：∀ {n : ℕ} (P : MvPFunctor.{u} (n + 1)) {α : 
+TypeVec.{u} n} {x : P.last.M} {a : P.A} {f : P.last.B a → P.last.M}   (h : x.des
+t = ⟨a, f⟩) (f' …
+· 使用定理 `TypeVec.splitFun_inj`：splitFun_inj {α α' : TypeVec (n + 1)} {f f' : drop
+ α ⟹ drop α'} {g g' : last α -> last α'} (H : splitFun f g = splitFun f' g') : f
+ = f' ∧ g …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
 theorem M.bisim_lemma {α : TypeVec n} {a₁ : (mp P).A} {f₁ : (mp P).B a₁ ⟹ α} {a' : P.A}
-    {f' : (P.B a').drop ⟹ α} {f₁' : (P.B a').last -> M P α}
+    {f' : (P.B a').drop ⟹ α} {f₁' : (P.B a').last → M P α}
     (e₁ : M.dest P ⟨a₁, f₁⟩ = ⟨a', splitFun f' f₁'⟩) :
-    exists (g₁' : _) (e₁' : PFunctor.M.dest a₁ = ⟨a', g₁'⟩),
+    ∃ (g₁' : _) (e₁' : PFunctor.M.dest a₁ = ⟨a', g₁'⟩),
       f' = M.pathDestLeft P e₁' f₁ ∧
         f₁' = fun x : (last P).B a' => ⟨g₁' x, M.pathDestRight P e₁' f₁ x⟩ := by
   generalize ef : @splitFun n _ (append1 α (M P α)) f' f₁' = ff at e₁
@@ -588,92 +465,56 @@ theorem M.bisim_lemma {α : TypeVec n} {a₁ : (mp P).A} {f₁ : (mp P).B a₁ �
   rcases e₁' : he₁' with ⟨a₁', g₁'⟩
   rw [M.dest_eq_dest' _ e₁'] at e₁
   cases e₁; exact ⟨_, e₁', splitFun_inj ef⟩
-
-/--
-theorem `M.bisim` / 定理 `M.bisim`
-
-English:
-theorem M.bisim
-  statement: {α : TypeVec n} (R : P.M α -> P.M α -> Prop)
-  proof: by
-  obtain ⟨a₁, f₁⟩ := x
-  obtain ⟨a₂, f₂⟩ := y
-  dsimp [mp] at *
-  have : a₁ = a₂ := by
-    refine
-      PFunctor.M.bisim (fun a₁ a₂ => exists x y, R x y ∧ x.1 = a₁ ∧ y.1 = a₂) ?_ _ _
-        ⟨⟨a₁, f₁⟩, ⟨a₂, f₂⟩, r, rfl, rfl⟩
-    rintro _ _ ⟨⟨a₁, f₁⟩, ⟨a₂, f₂⟩, r, rfl, rfl⟩
-    rcases h _ _ r with ⟨a', f', f₁', f₂', e₁, e₂, h'⟩
-    rcases M.bisim_lemma P e₁ with ⟨g₁', e₁', rfl, rfl⟩
-    rcases M.bisim_lemma P e₂ with ⟨g₂', e₂', _, rfl⟩
-    rw [e₁']; rw [e₂']
-    exact ⟨_, _, _, rfl, rfl, fun b => ⟨_, _, h' b, rfl, rfl⟩⟩
-  subst this
-  congr with (i p)
-  induction p with (
-    obtain ⟨a', f', f₁', f₂', e₁, e₂, h''⟩ := h _ _ r
-    obtain ⟨g₁', e₁', rfl, rfl⟩ := M.bisim_lemma P e₁
-    obtain ⟨g₂', e₂', e₃, rfl⟩ := M.bisim_lemma P e₂
-    cases h'.symm.trans e₁'
-    cases h'.symm.trans e₂')
-  | root x a f h' i c =>
-    exact congr_fun (congr_fun e₃ i) c
-  | child x a f h' i c p IH =>
-    exact IH _ _ (h'' _)
-
-中文:
-定理 M.bisim
-  结论: {α : TypeVec n} (R : P.M α -> P.M α -> 命题)
-  证明: by
-  obtain ⟨a₁, f₁⟩ := x
-  obtain ⟨a₂, f₂⟩ := y
-  dsimp [mp] at *
-  have : a₁ = a₂ := by
-    refine
-      PFunctor.M.bisim (fun a₁ a₂ => exists x y, R x y ∧ x.1 = a₁ ∧ y.1 = a₂) ?_ _ _
-        ⟨⟨a₁, f₁⟩, ⟨a₂, f₂⟩, r, rfl, rfl⟩
-    rintro _ _ ⟨⟨a₁, f₁⟩, ⟨a₂, f₂⟩, r, rfl, rfl⟩
-    rcases h _ _ r with ⟨a', f', f₁', f₂', e₁, e₂, h'⟩
-    rcases M.bisim_lemma P e₁ with ⟨g₁', e₁', rfl, rfl⟩
-    rcases M.bisim_lemma P e₂ with ⟨g₂', e₂', _, rfl⟩
-    rw [e₁']; rw [e₂']
-    exact ⟨_, _, _, rfl, rfl, fun b => ⟨_, _, h' b, rfl, rfl⟩⟩
-  subst this
-  congr with (i p)
-  induction p with (
-    obtain ⟨a', f', f₁', f₂', e₁, e₂, h''⟩ := h _ _ r
-    obtain ⟨g₁', e₁', rfl, rfl⟩ := M.bisim_lemma P e₁
-    obtain ⟨g₂', e₂', e₃, rfl⟩ := M.bisim_lemma P e₂
-    cases h'.symm.trans e₁'
-    cases h'.symm.trans e₂')
-  | root x a f h' i c =>
-    exact congr_fun (congr_fun e₃ i) c
-  | child x a f h' i c p IH =>
-    exact IH _ _ (h'' _)
-
-Depends on / 依赖: M.bisim_lemma, PFunctor, PFunctor.M.bisim, bisim_lemma
+/-
+**MvPFunctor.M.bisim** 是 Mathlib 中的一个定理，位于命名空间 `MvPFunctor.M`。
+形式化陈述：∀ {n : ℕ} (P : MvPFunctor.{u} (n + 1)) {α : TypeVec.{u} n} (R : P.M α → P.
+M α → Prop),   (∀ (x y : P.M α),       R x y →         ∃ a f f₁ f₂,           Mv
+PFunctor.M.dest P x = ⟨a, TypeVec.splitFun f f₁⟩ ∧             MvPFunctor.M.dest
+ P y = ⟨a, TypeVec.splitFun f f₂⟩ ∧ ∀ (i : (P.B a).last), R (f₁ i) (f₂ i)) →    
+ ∀ (x y : P.M α), R x y → x = y
+参数：P : MvPFunctor.{u} (n + 1)；R : P.M α → P.M α → Prop；∀ (x y : P.M α),       R 
+x y →         ∃ a f f₁ f₂,           MvPFunctor.M.dest P x = ⟨a, TypeVec.splitFu
+n f f₁⟩ ∧             MvPFunctor.M.dest P y = ⟨a, TypeVec.splitFun f f₂⟩ ∧ ∀ (i 
+: (P.B a).last), R (f₁ i) (f₂ i)；x y : P.M α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PFunctor.M.bisim`：bisim (R : M P -> M P -> Prop) (h : forall x y, R x y 
+-> exists a f f', M.dest x = ⟨a, f⟩ ∧ M.dest y = ⟨a, f'⟩ ∧ forall i, R (f i) (f'
+ i)) :…
+· 使用定理 `MvPFunctor.M.bisim_lemma`：∀ {n : ℕ} (P : MvPFunctor.{u} (n + 1)) {α : Ty
+peVec.{u} n} {a₁ : P.mp.A} {f₁ : (P.mp.B a₁).Arrow α} {a' : P.A}   {f' : (P.B a'
+).drop.Arrow α…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `TypeVec.Arrow.ext`：∀ {n : ℕ} {α : TypeVec.{u} n} {β : TypeVec.{v} n} (f 
+g : α.Arrow β), (∀ (i : Fin2 n), f i = g i) → f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
-theorem M.bisim {α : TypeVec n} (R : P.M α -> P.M α -> Prop)
+theorem M.bisim {α : TypeVec n} (R : P.M α → P.M α → Prop)
     (h :
-      forall x y,
-        R x y ->
-          exists a f f₁ f₂,
+      ∀ x y,
+        R x y →
+          ∃ a f f₁ f₂,
             M.dest P x = ⟨a, splitFun f f₁⟩ ∧
-              M.dest P y = ⟨a, splitFun f f₂⟩ ∧ forall i, R (f₁ i) (f₂ i))
+              M.dest P y = ⟨a, splitFun f f₂⟩ ∧ ∀ i, R (f₁ i) (f₂ i))
     (x y) (r : R x y) : x = y := by
   obtain ⟨a₁, f₁⟩ := x
   obtain ⟨a₂, f₂⟩ := y
   dsimp [mp] at *
   have : a₁ = a₂ := by
     refine
-      PFunctor.M.bisim (fun a₁ a₂ => exists x y, R x y ∧ x.1 = a₁ ∧ y.1 = a₂) ?_ _ _
+      PFunctor.M.bisim (fun a₁ a₂ => ∃ x y, R x y ∧ x.1 = a₁ ∧ y.1 = a₂) ?_ _ _
         ⟨⟨a₁, f₁⟩, ⟨a₂, f₂⟩, r, rfl, rfl⟩
     rintro _ _ ⟨⟨a₁, f₁⟩, ⟨a₂, f₂⟩, r, rfl, rfl⟩
     rcases h _ _ r with ⟨a', f', f₁', f₂', e₁, e₂, h'⟩
     rcases M.bisim_lemma P e₁ with ⟨g₁', e₁', rfl, rfl⟩
     rcases M.bisim_lemma P e₂ with ⟨g₂', e₂', _, rfl⟩
-    rw [e₁']; rw [e₂']
+    rw [e₁', e₂']
     exact ⟨_, _, _, rfl, rfl, fun b => ⟨_, _, h' b, rfl, rfl⟩⟩
   subst this
   congr with (i p)
@@ -689,73 +530,38 @@ theorem M.bisim {α : TypeVec n} (R : P.M α -> P.M α -> Prop)
     exact IH _ _ (h'' _)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `M.bisim₀` / 定理 `M.bisim₀`
-
-English:
-theorem M.bisim₀
-  statement: {α : TypeVec n} (R : P.M α -> P.M α -> Prop) (h₀ : Equivalence R)
-  proof: by
-  apply M.bisim P R _ _ _ r
-  clear r x y
-  introv Hr
-  specialize h _ _ Hr
-  clear Hr
-  revert h
-  rcases M.dest P x with ⟨ax, fx⟩
-  rcases M.dest P y with ⟨ay, fy⟩
-  intro h
-  rw [map_eq]; rw [map_eq] at h
-  injection h with h₀ h₁
-  subst ay
-  simp only [heq_eq_eq] at h₁
-  have Hdrop : dropFun fx = dropFun fy := by
-    replace h₁ := congr_arg dropFun h₁
-    simpa using! h₁
-  exists ax, dropFun fx, lastFun fx, lastFun fy
-  rw [split_dropFun_lastFun]; rw [Hdrop]; rw [split_dropFun_lastFun]
-  simp only [true_and]
-  intro i
-  replace h₁ := congr_fun (congr_fun h₁ Fin2.fz) i
-  simp only [TypeVec.comp, appendFun, splitFun] at h₁
-  replace h₁ := Quot.eqvGen_exact h₁
-  rw [h₀.eqvGen_iff] at h₁
-  exact h₁
-
-中文:
-定理 M.bisim₀
-  结论: {α : TypeVec n} (R : P.M α -> P.M α -> 命题) (h₀ : 等价 R)
-  证明: by
-  apply M.bisim P R _ _ _ r
-  clear r x y
-  introv Hr
-  specialize h _ _ Hr
-  clear Hr
-  revert h
-  rcases M.dest P x with ⟨ax, fx⟩
-  rcases M.dest P y with ⟨ay, fy⟩
-  intro h
-  rw [map_eq]; rw [map_eq] at h
-  injection h with h₀ h₁
-  subst ay
-  simp only [heq_eq_eq] at h₁
-  have Hdrop : dropFun fx = dropFun fy := by
-    replace h₁ := congr_arg dropFun h₁
-    simpa using! h₁
-  exists ax, dropFun fx, lastFun fx, lastFun fy
-  rw [split_dropFun_lastFun]; rw [Hdrop]; rw [split_dropFun_lastFun]
-  simp only [true_and]
-  intro i
-  replace h₁ := congr_fun (congr_fun h₁ Fin2.fz) i
-  simp only [TypeVec.comp, appendFun, splitFun] at h₁
-  replace h₁ := Quot.eqvGen_exact h₁
-  rw [h₀.eqvGen_iff] at h₁
-  exact h₁
-
-Depends on / 依赖: M.bisim, M.dest, congr_arg, dropFun, heq_eq_eq, injection, introv, lastFun, map_eq, replace, revert, specialize, split_dropFun_lastFun, true_and
+/-
+**MvPFunctor.M.bisim** 是 Mathlib 中的一个定理，位于命名空间 `MvPFunctor.M`。
+形式化陈述：∀ {n : ℕ} (P : MvPFunctor.{u} (n + 1)) {α : TypeVec.{u} n} (R : P.M α → P.
+M α → Prop),   (∀ (x y : P.M α),       R x y →         ∃ a f f₁ f₂,           Mv
+PFunctor.M.dest P x = ⟨a, TypeVec.splitFun f f₁⟩ ∧             MvPFunctor.M.dest
+ P y = ⟨a, TypeVec.splitFun f f₂⟩ ∧ ∀ (i : (P.B a).last), R (f₁ i) (f₂ i)) →    
+ ∀ (x y : P.M α), R x y → x = y
+参数：P : MvPFunctor.{u} (n + 1)；R : P.M α → P.M α → Prop；∀ (x y : P.M α),       R 
+x y →         ∃ a f f₁ f₂,           MvPFunctor.M.dest P x = ⟨a, TypeVec.splitFu
+n f f₁⟩ ∧             MvPFunctor.M.dest P y = ⟨a, TypeVec.splitFun f f₂⟩ ∧ ∀ (i 
+: (P.B a).last), R (f₁ i) (f₂ i)；x y : P.M α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PFunctor.M.bisim`：bisim (R : M P -> M P -> Prop) (h : forall x y, R x y 
+-> exists a f f', M.dest x = ⟨a, f⟩ ∧ M.dest y = ⟨a, f'⟩ ∧ forall i, R (f i) (f'
+ i)) :…
+· 使用定理 `MvPFunctor.M.bisim_lemma`：∀ {n : ℕ} (P : MvPFunctor.{u} (n + 1)) {α : Ty
+peVec.{u} n} {a₁ : P.mp.A} {f₁ : (P.mp.B a₁).Arrow α} {a' : P.A}   {f' : (P.B a'
+).drop.Arrow α…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `TypeVec.Arrow.ext`：∀ {n : ℕ} {α : TypeVec.{u} n} {β : TypeVec.{v} n} (f 
+g : α.Arrow β), (∀ (i : Fin2 n), f i = g i) → f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
 -/
-theorem M.bisim₀ {α : TypeVec n} (R : P.M α -> P.M α -> Prop) (h₀ : Equivalence R)
-    (h : forall x y, R x y -> (id ::: Quot.mk R) <$$> M.dest _ x = (id ::: Quot.mk R) <$$> M.dest _ y)
+theorem M.bisim₀ {α : TypeVec n} (R : P.M α → P.M α → Prop) (h₀ : Equivalence R)
+    (h : ∀ x y, R x y → (id ::: Quot.mk R) <$$> M.dest _ x = (id ::: Quot.mk R) <$$> M.dest _ y)
     (x y) (r : R x y) : x = y := by
   apply M.bisim P R _ _ _ r
   clear r x y
@@ -766,7 +572,7 @@ theorem M.bisim₀ {α : TypeVec n} (R : P.M α -> P.M α -> Prop) (h₀ : Equiv
   rcases M.dest P x with ⟨ax, fx⟩
   rcases M.dest P y with ⟨ay, fy⟩
   intro h
-  rw [map_eq]; rw [map_eq] at h
+  rw [map_eq, map_eq] at h
   injection h with h₀ h₁
   subst ay
   simp only [heq_eq_eq] at h₁
@@ -774,7 +580,7 @@ theorem M.bisim₀ {α : TypeVec n} (R : P.M α -> P.M α -> Prop) (h₀ : Equiv
     replace h₁ := congr_arg dropFun h₁
     simpa using! h₁
   exists ax, dropFun fx, lastFun fx, lastFun fy
-  rw [split_dropFun_lastFun]; rw [Hdrop]; rw [split_dropFun_lastFun]
+  rw [split_dropFun_lastFun, Hdrop, split_dropFun_lastFun]
   simp only [true_and]
   intro i
   replace h₁ := congr_fun (congr_fun h₁ Fin2.fz) i
@@ -782,123 +588,116 @@ theorem M.bisim₀ {α : TypeVec n} (R : P.M α -> P.M α -> Prop) (h₀ : Equiv
   replace h₁ := Quot.eqvGen_exact h₁
   rw [h₀.eqvGen_iff] at h₁
   exact h₁
-
-/--
-theorem `M.bisim'` / 定理 `M.bisim'`
-
-English:
-theorem M.bisim'
-  statement: {α : TypeVec n} (R : P.M α -> P.M α -> Prop)
-  proof: by
-  have := M.bisim₀ P (Relation.EqvGen R) ?_ ?_
-  · solve_by_elim [Relation.EqvGen.rel]
-  · apply Relation.EqvGen.is_equivalence
-  · clear r x y
-    introv Hr
-    have : forall x y, R x y -> Relation.EqvGen R x y := @Relation.EqvGen.rel _ R
-    induction Hr
-    · rw [← Quot.factor_mk_eq R (Relation.EqvGen R) this]
-      rwa [appendFun_comp_id, ← MvFunctor.map_map, ← MvFunctor.map_map, h]
-    all_goals simp_all
-
-中文:
-定理 M.bisim'
-  结论: {α : TypeVec n} (R : P.M α -> P.M α -> 命题)
-  证明: by
-  have := M.bisim₀ P (Relation.EqvGen R) ?_ ?_
-  · solve_by_elim [Relation.EqvGen.rel]
-  · apply Relation.EqvGen.is_equivalence
-  · clear r x y
-    introv Hr
-    have : forall x y, R x y -> Relation.EqvGen R x y := @Relation.EqvGen.rel _ R
-    induction Hr
-    · rw [← Quot.factor_mk_eq R (Relation.EqvGen R) this]
-      rwa [appendFun_comp_id, ← MvFunctor.map_map, ← MvFunctor.map_map, h]
-    all_goals simp_all
-
-Depends on / 依赖: EqvGen, M.bisim, MvFunctor, MvFunctor.map_map, Quot.factor_mk_eq, Relation, Relation.EqvGen, Relation.EqvGen.is_equivalence, Relation.EqvGen.rel, all_goals, appendFun_comp_id, factor_mk_eq, introv, is_equivalence, map_map, solve_by_elim
+/-
+**MvPFunctor.M.bisim'** 是 Mathlib 中的一个定理，位于命名空间 `MvPFunctor.M`。
+形式化陈述：∀ {n : ℕ} (P : MvPFunctor.{u} (n + 1)) {α : TypeVec.{u} n} (R : P.M α → P.
+M α → Prop),   (∀ (x y : P.M α),       R x y →         MvFunctor.map (TypeVec.id
+ ::: Quot.mk R) (MvPFunctor.M.dest P x) =           MvFunctor.map (TypeVec.id ::
+: Quot.mk R) (MvPFunctor.M.dest P y)) →     ∀ (x y : P.M α), R x y → x = y
+参数：P : MvPFunctor.{u} (n + 1)；R : P.M α → P.M α → Prop；∀ (x y : P.M α),       R 
+x y →         MvFunctor.map (TypeVec.id ::: Quot.mk R) (MvPFunctor.M.dest P x) =
+           MvFunctor.map (TypeVec.id ::: Quot.mk R) (MvPFunctor.M.dest P y)；x y 
+: P.M α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPFunctor.M.bisim₀`：∀ {n : ℕ} (P : MvPFunctor.{u} (n + 1)) {α : TypeVec
+.{u} n} (R : P.M α → P.M α → Prop),   Equivalence R →     (∀ (x y : P.M α),     
+    R x y…
+· 使用定理 `Relation.EqvGen.is_equivalence`：is_equivalence : Equivalence (@EqvGen α 
+r)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Quot.factor_mk_eq`：factor_mk_eq {α : Type*} (r s : α -> α -> Prop) (h : 
+forall x y, r x y -> s x y) : factor r s h ∘ Quot.mk _ = Quot.mk _
+· 使用定理 `TypeVec.appendFun_comp_id`：appendFun_comp_id {α : TypeVec n} {β₀ β₁ β₂ :
+ Type u} (g₀ : β₀ -> β₁) (g₁ : β₁ -> β₂) : (@id _ α ::: g₁ ∘ g₀) = (id ::: g₁) ⊚
+ (id ::: g₀)
+· 使用定理 `MvFunctor.map_map`：map_map (g : α ⟹ β) (h : β ⟹ γ) (x : F α) : h < > g <
+ > x = (h ⊚ g) < > x
+· 使用定理 `MvPFunctor.instLawfulMvFunctorObj`：∀ {n : ℕ} (P : MvPFunctor.{u} n), Law
+fulMvFunctor ↑P
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
-theorem M.bisim' {α : TypeVec n} (R : P.M α -> P.M α -> Prop)
-    (h : forall x y, R x y -> (id ::: Quot.mk R) <$$> M.dest _ x = (id ::: Quot.mk R) <$$> M.dest _ y)
+theorem M.bisim' {α : TypeVec n} (R : P.M α → P.M α → Prop)
+    (h : ∀ x y, R x y → (id ::: Quot.mk R) <$$> M.dest _ x = (id ::: Quot.mk R) <$$> M.dest _ y)
     (x y) (r : R x y) : x = y := by
   have := M.bisim₀ P (Relation.EqvGen R) ?_ ?_
   · solve_by_elim [Relation.EqvGen.rel]
   · apply Relation.EqvGen.is_equivalence
   · clear r x y
     introv Hr
-    have : forall x y, R x y -> Relation.EqvGen R x y := @Relation.EqvGen.rel _ R
+    have : ∀ x y, R x y → Relation.EqvGen R x y := @Relation.EqvGen.rel _ R
     induction Hr
     · rw [← Quot.factor_mk_eq R (Relation.EqvGen R) this]
       rwa [appendFun_comp_id, ← MvFunctor.map_map, ← MvFunctor.map_map, h]
     all_goals simp_all
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `M.dest_map` / 定理 `M.dest_map`
-
-English:
-theorem M.dest_map
-  given: {α β : TypeVec n} (g : α ⟹ β) (x : P.M α)
-  proof: by
-  obtain ⟨a, f⟩ := x
-  rw [map_eq]
-  conv =>
-    rhs
-    rw [M.dest]; rw [M.dest']; rw [map_eq]; rw [appendFun_comp_splitFun]
-  rfl
-
-中文:
-定理 M.dest_map
-  条件: {α β : TypeVec n} (g : α ⟹ β) (x : P.M α)
-  证明: by
-  obtain ⟨a, f⟩ := x
-  rw [map_eq]
-  conv =>
-    rhs
-    rw [M.dest]; rw [M.dest']; rw [map_eq]; rw [appendFun_comp_splitFun]
-  rfl
-
-Depends on / 依赖: M.dest, appendFun_comp_splitFun, map_eq
+/-
+**MvPFunctor.M.dest_map** 是 Mathlib 中的一个定理，位于命名空间 `MvPFunctor.M`。
+形式化陈述：∀ {n : ℕ} (P : MvPFunctor.{u} (n + 1)) {α β : TypeVec.{u} n} (g : α.Arrow 
+β) (x : P.M α),   MvPFunctor.M.dest P (MvFunctor.map g x) = MvFunctor.map (g :::
+ fun x => MvFunctor.map g x) (MvPFunctor.M.dest P x)
+参数：P : MvPFunctor.{u} (n + 1)；g : α.Arrow β；x : P.M α；MvFunctor.map g x；g ::: fu
+n x => MvFunctor.map g x；MvPFunctor.M.dest P x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPFunctor.map_eq`：map_eq {α β : TypeVec n} (g : α ⟹ β) (a : P.A) (f : P
+.B a ⟹ α) : @MvFunctor.map _ P.Obj _ _ _ g ⟨a, f⟩ = ⟨a, g ⊚ f⟩
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MvPFunctor.M.dest.eq_1`：∀ {n : ℕ} (P : MvPFunctor.{u} (n + 1)) {α : Type
+Vec.{u} n} (x : P.M α),   MvPFunctor.M.dest P x = MvPFunctor.M.dest' P ⋯ x.snd
+· 使用定理 `MvPFunctor.M.dest'.eq_1`：∀ {n : ℕ} (P : MvPFunctor.{u} (n + 1)) {α : Typ
+eVec.{u} n} {x : P.last.M} {a : P.A} {f : P.last.B a → P.last.M}   (h : x.dest =
+ ⟨a, f⟩) (f' …
+· 使用定理 `TypeVec.appendFun_comp_splitFun`：appendFun_comp_splitFun {α γ : TypeVec 
+n} {β δ : Type*} {ε : TypeVec (n + 1)} (f₀ : drop ε ⟹ α) (f₁ : α ⟹ γ) (g₀ : last
+ ε -> β) (g₁ : β -> δ…
 -/
 theorem M.dest_map {α β : TypeVec n} (g : α ⟹ β) (x : P.M α) :
-M.dest P (g <$$> x) = (appendFun g fun x => g <$$> x) < > M.dest P x := by
+    M.dest P (g <$$> x) = (appendFun g fun x => g <$$> x) <$$> M.dest P x := by
   obtain ⟨a, f⟩ := x
   rw [map_eq]
   conv =>
     rhs
-    rw [M.dest]; rw [M.dest']; rw [map_eq]; rw [appendFun_comp_splitFun]
+    rw [M.dest, M.dest', map_eq, appendFun_comp_splitFun]
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `M.map_dest` / 定理 `M.map_dest`
-
-English:
-theorem M.map_dest
-  statement: {α β : TypeVec n} (g : (α ::: P.M α) ⟹ (β ::: P.M β)) (x : P.M α)
-  proof: by
-  rw [M.dest_map]; congr
-  apply eq_of_drop_last_eq (by simp)
-  simp only [lastFun_appendFun]
-  ext1; apply h
-
-中文:
-定理 M.map_dest
-  结论: {α β : TypeVec n} (g : (α ::: P.M α) ⟹ (β ::: P.M β)) (x : P.M α)
-  证明: by
-  rw [M.dest_map]; congr
-  apply eq_of_drop_last_eq (by simp)
-  simp only [lastFun_appendFun]
-  ext1; apply h
-
-Depends on / 依赖: M.dest_map, dest_map, eq_of_drop_last_eq, lastFun_appendFun
+/-
+**MvPFunctor.M.map_dest** 是 Mathlib 中的一个定理，位于命名空间 `MvPFunctor.M`。
+形式化陈述：∀ {n : ℕ} (P : MvPFunctor.{u} (n + 1)) {α β : TypeVec.{u} n} (g : (α ::: P
+.M α).Arrow (β ::: P.M β)) (x : P.M α),   (∀ (x : P.M α), TypeVec.lastFun g x = 
+MvFunctor.map (TypeVec.dropFun g) x) →     MvFunctor.map g (MvPFunctor.M.dest P 
+x) = MvPFunctor.M.dest P (MvFunctor.map (TypeVec.dropFun g) x)
+参数：P : MvPFunctor.{u} (n + 1)；g : (α ::: P.M α).Arrow (β ::: P.M β)；x : P.M α；∀ 
+(x : P.M α), TypeVec.lastFun g x = MvFunctor.map (TypeVec.dropFun g) x；MvPFuncto
+r.M.dest P x；MvFunctor.map (TypeVec.dropFun g) x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPFunctor.M.dest_map`：∀ {n : ℕ} (P : MvPFunctor.{u} (n + 1)) {α β : Typ
+eVec.{u} n} (g : α.Arrow β) (x : P.M α),   MvPFunctor.M.dest P (MvFunctor.map g 
+x) = MvFunc…
+· 使用定理 `TypeVec.eq_of_drop_last_eq`：eq_of_drop_last_eq {α β : TypeVec (n + 1)} {
+f g : α ⟹ β} (h₀ : dropFun f = dropFun g) (h₁ : lastFun f = lastFun g) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 theorem M.map_dest {α β : TypeVec n} (g : (α ::: P.M α) ⟹ (β ::: P.M β)) (x : P.M α)
-    (h : forall x : P.M α, lastFun g x = (dropFun g <$$> x : P.M β)) :
-g < > M.dest P x = M.dest P (dropFun g <$$> x) := by
+    (h : ∀ x : P.M α, lastFun g x = (dropFun g <$$> x : P.M β)) :
+    g <$$> M.dest P x = M.dest P (dropFun g <$$> x) := by
   rw [M.dest_map]; congr
   apply eq_of_drop_last_eq (by simp)
   simp only [lastFun_appendFun]
   ext1; apply h
 
 end MvPFunctor
+

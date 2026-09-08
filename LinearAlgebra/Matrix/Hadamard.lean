@@ -39,40 +39,32 @@ variable {α m n R : Type*}
 
 namespace Matrix
 
-/--
-Definition of `hadamard` / `hadamard` 的定义
+/-- `Matrix.hadamard` (denoted as `⊙` within the Matrix namespace) defines the Hadamard product,
+which is the pointwise product of two matrices of the same size. -/
+/-
+**Matrix.hadamard** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：hadamard [Mul α] (A : Matrix m n α) (B : Matrix m n α) : Matrix m n α
+参数：A : Matrix m n α；B : Matrix m n α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition hadamard
-  signature: [Mul α] (A : Matrix m n α) (B : Matrix m n α)
-  body: of fun i j => A i j * B i j
-
-中文:
-定义 hadamard
-  签名: [乘法 α] (A : 矩阵 m n α) (B : 矩阵 m n α)
-  定义体: of fun i j => A i j * B i j
+--- 原说明 ---
+`Matrix.hadamard` (denoted as `⊙` within the Matrix namespace) defines the Hadam
+ard product,
+which is the pointwise product of two matrices of the same size.
 -/
 def hadamard [Mul α] (A : Matrix m n α) (B : Matrix m n α) : Matrix m n α :=
   of fun i j => A i j * B i j
 
 -- TODO: set as an equation lemma for `hadamard`, see https://github.com/leanprover-community/mathlib4/pull/3024
 @[simp]
-/--
-theorem `hadamard_apply` / 定理 `hadamard_apply`
-
-English:
-theorem hadamard_apply
-  given: [Mul α] (A : Matrix m n α) (B : Matrix m n α) (i j)
-  proof: rfl
-
-@[inherit_doc] scoped infixl:100 " ⊙ " => Matrix.hadamard
-
-中文:
-定理 hadamard_apply
-  条件: [乘法 α] (A : 矩阵 m n α) (B : 矩阵 m n α) (i j)
-  证明: rfl
-
-@[inherit_doc] scoped infixl:100 " ⊙ " => Matrix.hadamard
+/-
+**Matrix.hadamard_apply** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：hadamard_apply [Mul α] (A : Matrix m n α) (B : Matrix m n α) (i j) : hadam
+ard A B i j = A i j * B i j
+参数：A : Matrix m n α；B : Matrix m n α；i j。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem hadamard_apply [Mul α] (A : Matrix m n α) (B : Matrix m n α) (i j) :
     hadamard A B i j = A i j * B i j :=
@@ -85,84 +77,53 @@ section BasicProperties
 variable (A : Matrix m n α) (B : Matrix m n α) (C : Matrix m n α)
 
 -- commutativity
-/--
-theorem `hadamard_comm` / 定理 `hadamard_comm`
-
-English:
-theorem hadamard_comm
-  given: [CommMagma α]
-  statement: A ⊙ B = B ⊙ A
-  proof: ext fun _ _ => mul_comm _ _
-
-中文:
-定理 hadamard_comm
-  条件: [交换原群 α]
-  结论: A ⊙ B = B ⊙ A
-  证明: ext fun _ _ => mul_comm _ _
-
-Depends on / 依赖: mul_comm
+/-
+**Matrix.hadamard_comm** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：hadamard_comm [CommMagma α] : A ⊙ B = B ⊙ A
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
 theorem hadamard_comm [CommMagma α] : A ⊙ B = B ⊙ A :=
   ext fun _ _ => mul_comm _ _
 
 -- associativity
-/--
-theorem `hadamard_assoc` / 定理 `hadamard_assoc`
-
-English:
-theorem hadamard_assoc
-  given: [Semigroup α]
-  statement: A ⊙ B ⊙ C = A ⊙ (B ⊙ C)
-  proof: ext fun _ _ => mul_assoc _ _ _
-
-中文:
-定理 hadamard_assoc
-  条件: [半群 α]
-  结论: A ⊙ B ⊙ C = A ⊙ (B ⊙ C)
-  证明: ext fun _ _ => mul_assoc _ _ _
-
-Depends on / 依赖: mul_assoc
+/-
+**Matrix.hadamard_assoc** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：hadamard_assoc [Semigroup α] : A ⊙ B ⊙ C = A ⊙ (B ⊙ C)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 -/
 theorem hadamard_assoc [Semigroup α] : A ⊙ B ⊙ C = A ⊙ (B ⊙ C) :=
   ext fun _ _ => mul_assoc _ _ _
 
 -- distributivity
-/--
-theorem `hadamard_add` / 定理 `hadamard_add`
-
-English:
-theorem hadamard_add
-  given: [Distrib α]
-  statement: A ⊙ (B + C) = A ⊙ B + A ⊙ C
-  proof: ext fun _ _ => left_distrib _ _ _
-
-中文:
-定理 hadamard_add
-  条件: [Distrib α]
-  结论: A ⊙ (B + C) = A ⊙ B + A ⊙ C
-  证明: ext fun _ _ => left_distrib _ _ _
-
-Depends on / 依赖: left_distrib
+/-
+**Matrix.hadamard_add** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：hadamard_add [Distrib α] : A ⊙ (B + C) = A ⊙ B + A ⊙ C
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `left_distrib`：left_distrib [Mul R] [Add R] [LeftDistribClass R] (a b c :
+ R) : a * (b + c) = a * b + a * c
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
 -/
 theorem hadamard_add [Distrib α] : A ⊙ (B + C) = A ⊙ B + A ⊙ C :=
   ext fun _ _ => left_distrib _ _ _
-
-/--
-theorem `add_hadamard` / 定理 `add_hadamard`
-
-English:
-theorem add_hadamard
-  given: [Distrib α]
-  statement: (B + C) ⊙ A = B ⊙ A + C ⊙ A
-  proof: ext fun _ _ => right_distrib _ _ _
-
-中文:
-定理 add_hadamard
-  条件: [Distrib α]
-  结论: (B + C) ⊙ A = B ⊙ A + C ⊙ A
-  证明: ext fun _ _ => right_distrib _ _ _
-
-Depends on / 依赖: right_distrib
+/-
+**Matrix.add_hadamard** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：add_hadamard [Distrib α] : (B + C) ⊙ A = B ⊙ A + C ⊙ A
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `right_distrib`：right_distrib [Mul R] [Add R] [RightDistribClass R] (a b 
+c : R) : (a + b) * c = a * c + b * c
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
 -/
 theorem add_hadamard [Distrib α] : (B + C) ⊙ A = B ⊙ A + C ⊙ A :=
   ext fun _ _ => right_distrib _ _ _
@@ -171,47 +132,31 @@ theorem add_hadamard [Distrib α] : (B + C) ⊙ A = B ⊙ A + C ⊙ A :=
 section Scalar
 
 @[simp]
-/--
-theorem `smul_hadamard` / 定理 `smul_hadamard`
-
-English:
-theorem smul_hadamard
-  given: [Mul α] [SMul R α] [IsScalarTower R α α] (k : R)
-  statement: (k • A) ⊙ B = k • A ⊙ B
-  proof: ext fun _ _ => smul_mul_assoc _ _ _
-
-@[simp]
-
-中文:
-定理 smul_hadamard
-  条件: [乘法 α] [标量乘法 R α] [标量塔 R α α] (k : R)
-  结论: (k • A) ⊙ B = k • A ⊙ B
-  证明: ext fun _ _ => smul_mul_assoc _ _ _
-
-@[simp]
-
-Depends on / 依赖: smul_mul_assoc
+/-
+**Matrix.smul_hadamard** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：smul_hadamard [Mul α] [SMul R α] [IsScalarTower R α α] (k : R) : (k • A) ⊙
+ B = k • A ⊙ B
+参数：k : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用引理 `smul_mul_assoc`：smul_mul_assoc [Mul β] [SMul α β] [IsScalarTower α β β] 
+(r : α) (x y : β) : r • x * y = r • (x * y)
 -/
 theorem smul_hadamard [Mul α] [SMul R α] [IsScalarTower R α α] (k : R) : (k • A) ⊙ B = k • A ⊙ B :=
   ext fun _ _ => smul_mul_assoc _ _ _
 
 @[simp]
-/--
-theorem `hadamard_smul` / 定理 `hadamard_smul`
-
-English:
-theorem hadamard_smul
-  given: [Mul α] [SMul R α] [SMulCommClass R α α] (k : R)
-  statement: A ⊙ (k • B) = k • A ⊙ B
-  proof: ext fun _ _ => mul_smul_comm _ _ _
-
-中文:
-定理 hadamard_smul
-  条件: [乘法 α] [标量乘法 R α] [标量交换类 R α α] (k : R)
-  结论: A ⊙ (k • B) = k • A ⊙ B
-  证明: ext fun _ _ => mul_smul_comm _ _ _
-
-Depends on / 依赖: mul_smul_comm
+/-
+**Matrix.hadamard_smul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：hadamard_smul [Mul α] [SMul R α] [SMulCommClass R α α] (k : R) : A ⊙ (k • 
+B) = k • A ⊙ B
+参数：k : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用引理 `mul_smul_comm`：mul_smul_comm [Mul β] [SMul α β] [SMulCommClass α β β] (s
+ : α) (x y : β) : x * s • y = s • (x * y)
 -/
 theorem hadamard_smul [Mul α] [SMul R α] [SMulCommClass R α α] (k : R) : A ⊙ (k • B) = k • A ⊙ B :=
   ext fun _ _ => mul_smul_comm _ _ _
@@ -223,43 +168,27 @@ section Zero
 variable [MulZeroClass α]
 
 @[simp]
-/--
-theorem `hadamard_zero` / 定理 `hadamard_zero`
-
-English:
-theorem hadamard_zero
-  statement: A ⊙ (0 : Matrix m n α) = 0
-  proof: ext fun _ _ => mul_zero _
-
-@[simp]
-
-中文:
-定理 hadamard_zero
-  结论: A ⊙ (0 : 矩阵 m n α) = 0
-  证明: ext fun _ _ => mul_zero _
-
-@[simp]
-
-Depends on / 依赖: mul_zero
+/-
+**Matrix.hadamard_zero** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：hadamard_zero : A ⊙ (0 : Matrix m n α) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
 -/
 theorem hadamard_zero : A ⊙ (0 : Matrix m n α) = 0 :=
   ext fun _ _ => mul_zero _
 
 @[simp]
-/--
-theorem `zero_hadamard` / 定理 `zero_hadamard`
-
-English:
-theorem zero_hadamard
-  statement: (0 : Matrix m n α) ⊙ A = 0
-  proof: ext fun _ _ => zero_mul _
-
-中文:
-定理 zero_hadamard
-  结论: (0 : 矩阵 m n α) ⊙ A = 0
-  证明: ext fun _ _ => zero_mul _
-
-Depends on / 依赖: zero_mul
+/-
+**Matrix.zero_hadamard** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：zero_hadamard : (0 : Matrix m n α) ⊙ A = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
 -/
 theorem zero_hadamard : (0 : Matrix m n α) ⊙ A = 0 :=
   ext fun _ _ => zero_mul _
@@ -270,97 +199,121 @@ section Diagonal
 
 variable [DecidableEq n] [MulZeroClass α]
 
-/--
-theorem `hadamard_diagonal` / 定理 `hadamard_diagonal`
-
-English:
-theorem hadamard_diagonal
-  given: (M) (w : n -> α)
-  proof: by aesop (add simp diagonal)
-
-中文:
-定理 hadamard_diagonal
-  条件: (M) (w : n -> α)
-  证明: by aesop (add simp diagonal)
-
-Depends on / 依赖: diagonal
+/-
+**Matrix.hadamard_diagonal** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：hadamard_diagonal (M) (w : n -> α) : M ⊙ diagonal w = diagonal (M.diag * w
+)
+参数：M；w : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `mul_ite`：mul_ite (a b c : α) : (a * if P then b else c) = if P then a * 
+b else a * c
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem hadamard_diagonal (M) (w : n -> α) :
+theorem hadamard_diagonal (M) (w : n → α) :
     M ⊙ diagonal w = diagonal (M.diag * w) := by aesop (add simp diagonal)
-
-/--
-theorem `diagonal_hadamard` / 定理 `diagonal_hadamard`
-
-English:
-theorem diagonal_hadamard
-  given: (M) (w : n -> α)
-  proof: by aesop (add simp diagonal)
-
-中文:
-定理 diagonal_hadamard
-  条件: (M) (w : n -> α)
-  证明: by aesop (add simp diagonal)
-
-Depends on / 依赖: diagonal
+/-
+**Matrix.diagonal_hadamard** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：diagonal_hadamard (M) (w : n -> α) : diagonal w ⊙ M = diagonal (w * M.diag
+)
+参数：M；w : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `ite_mul`：ite_mul (a b c : α) : (if P then a else b) * c = if P then a * 
+c else b * c
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem diagonal_hadamard (M) (w : n -> α) :
+theorem diagonal_hadamard (M) (w : n → α) :
     diagonal w ⊙ M = diagonal (w * M.diag) := by aesop (add simp diagonal)
-
-/--
-theorem `diagonal_hadamard_diagonal` / 定理 `diagonal_hadamard_diagonal`
-
-English:
-theorem diagonal_hadamard_diagonal
-  given: (v : n -> α) (w : n -> α)
-  proof: by simp [diagonal_hadamard]
-
-中文:
-定理 diagonal_hadamard_diagonal
-  条件: (v : n -> α) (w : n -> α)
-  证明: by simp [diagonal_hadamard]
-
-Depends on / 依赖: diagonal_hadamard
+/-
+**Matrix.diagonal_hadamard_diagonal** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：diagonal_hadamard_diagonal (v : n -> α) (w : n -> α) : diagonal v ⊙ diagon
+al w = diagonal (v * w)
+参数：v : n -> α；w : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.diagonal_hadamard`：diagonal_hadamard (M) (w : n -> α) : diagonal 
+w ⊙ M = diagonal (w * M.diag)
+· 使用定理 `Matrix.diag_diagonal`：diag_diagonal [DecidableEq n] [Zero α] (a : n -> α
+) : diag (diagonal a) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem diagonal_hadamard_diagonal (v : n -> α) (w : n -> α) :
+theorem diagonal_hadamard_diagonal (v : n → α) (w : n → α) :
     diagonal v ⊙ diagonal w = diagonal (v * w) := by simp [diagonal_hadamard]
-
-/--
-theorem `diagonal_hadamard_eq_diagonal_iff` / 定理 `diagonal_hadamard_eq_diagonal_iff`
-
-English:
-theorem diagonal_hadamard_eq_diagonal_iff
-  given: {A : Matrix n n α} {d e}
-  proof: by
-  simp [diagonal_hadamard, diagonal_eq_diagonal_iff, funext_iff]
-
-中文:
-定理 diagonal_hadamard_eq_diagonal_iff
-  条件: {A : 矩阵 n n α} {d e}
-  证明: by
-  simp [diagonal_hadamard, diagonal_eq_diagonal_iff, funext_iff]
-
-Depends on / 依赖: diagonal_eq_diagonal_iff, diagonal_hadamard, funext_iff
+/-
+**Matrix.diagonal_hadamard_eq_diagonal_iff** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：diagonal_hadamard_eq_diagonal_iff {A : Matrix n n α} {d e} : diagonal d ⊙ 
+A = diagonal e ↔ d * A.diag = e
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Matrix.diagonal_hadamard`：diagonal_hadamard (M) (w : n -> α) : diagonal 
+w ⊙ M = diagonal (w * M.diag)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem diagonal_hadamard_eq_diagonal_iff {A : Matrix n n α} {d e} :
     diagonal d ⊙ A = diagonal e ↔ d * A.diag = e := by
   simp [diagonal_hadamard, diagonal_eq_diagonal_iff, funext_iff]
-
-/--
-theorem `hadamard_diagonal_eq_diagonal_iff` / 定理 `hadamard_diagonal_eq_diagonal_iff`
-
-English:
-theorem hadamard_diagonal_eq_diagonal_iff
-  given: {A : Matrix n n α} {d e}
-  proof: by
-  simp [hadamard_diagonal, diagonal_eq_diagonal_iff, funext_iff]
-
-中文:
-定理 hadamard_diagonal_eq_diagonal_iff
-  条件: {A : 矩阵 n n α} {d e}
-  证明: by
-  simp [hadamard_diagonal, diagonal_eq_diagonal_iff, funext_iff]
-
-Depends on / 依赖: diagonal_eq_diagonal_iff, funext_iff, hadamard_diagonal
+/-
+**Matrix.hadamard_diagonal_eq_diagonal_iff** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：hadamard_diagonal_eq_diagonal_iff {A : Matrix n n α} {d e} : A ⊙ diagonal 
+d = diagonal e ↔ A.diag * d = e
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Matrix.hadamard_diagonal`：hadamard_diagonal (M) (w : n -> α) : M ⊙ diago
+nal w = diagonal (M.diag * w)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem hadamard_diagonal_eq_diagonal_iff {A : Matrix n n α} {d e} :
     A ⊙ diagonal d = diagonal e ↔ A.diag * d = e := by
@@ -373,271 +326,191 @@ section One
 variable [DecidableEq n] [MulZeroOneClass α]
 variable (M : Matrix n n α)
 
-/--
-theorem `hadamard_one` / 定理 `hadamard_one`
-
-English:
-theorem hadamard_one
-  statement: M ⊙ 1 = diagonal M.diag
-  proof: mul_one M.diag ▸ hadamard_diagonal M 1
-
-中文:
-定理 hadamard_one
-  结论: M ⊙ 1 = diagonal M.diag
-  证明: mul_one M.diag ▸ hadamard_diagonal M 1
-
-Depends on / 依赖: M.diag, hadamard_diagonal, mul_one
+/-
+**Matrix.hadamard_one** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：hadamard_one : M ⊙ 1 = diagonal M.diag
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.hadamard_diagonal`：hadamard_diagonal (M) (w : n -> α) : M ⊙ diago
+nal w = diagonal (M.diag * w)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
 theorem hadamard_one : M ⊙ 1 = diagonal M.diag := mul_one M.diag ▸ hadamard_diagonal M 1
-
-/--
-theorem `one_hadamard` / 定理 `one_hadamard`
-
-English:
-theorem one_hadamard
-  statement: 1 ⊙ M = diagonal M.diag
-  proof: one_mul M.diag ▸ diagonal_hadamard M 1
-
-中文:
-定理 one_hadamard
-  结论: 1 ⊙ M = diagonal M.diag
-  证明: one_mul M.diag ▸ diagonal_hadamard M 1
-
-Depends on / 依赖: M.diag, diagonal_hadamard, one_mul
+/-
+**Matrix.one_hadamard** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：one_hadamard : 1 ⊙ M = diagonal M.diag
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.diagonal_hadamard`：diagonal_hadamard (M) (w : n -> α) : diagonal 
+w ⊙ M = diagonal (w * M.diag)
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
 theorem one_hadamard : 1 ⊙ M = diagonal M.diag := one_mul M.diag ▸ diagonal_hadamard M 1
-
-/--
-theorem `one_hadamard_eq_diagonal_iff` / 定理 `one_hadamard_eq_diagonal_iff`
-
-English:
-theorem one_hadamard_eq_diagonal_iff
-  given: {A : Matrix n n α} {d}
-  statement: 1 ⊙ A = diagonal d ↔ A.diag = d
-  proof: by
-  simpa using diagonal_hadamard_eq_diagonal_iff (A := A) (d := 1)
-
-中文:
-定理 one_hadamard_eq_diagonal_iff
-  条件: {A : 矩阵 n n α} {d}
-  结论: 1 ⊙ A = diagonal d ↔ A.diag = d
-  证明: by
-  simpa using diagonal_hadamard_eq_diagonal_iff (A := A) (d := 1)
-
-Depends on / 依赖: diagonal_hadamard_eq_diagonal_iff
+/-
+**Matrix.one_hadamard_eq_diagonal_iff** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：one_hadamard_eq_diagonal_iff {A : Matrix n n α} {d} : 1 ⊙ A = diagonal d ↔
+ A.diag = d
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Matrix.diagonal_hadamard_eq_diagonal_iff`：diagonal_hadamard_eq_diagonal_
+iff {A : Matrix n n α} {d e} : diagonal d ⊙ A = diagonal e ↔ d * A.diag = e
 -/
 theorem one_hadamard_eq_diagonal_iff {A : Matrix n n α} {d} : 1 ⊙ A = diagonal d ↔ A.diag = d := by
   simpa using diagonal_hadamard_eq_diagonal_iff (A := A) (d := 1)
-
-/--
-theorem `hadamard_one_eq_diagonal_iff` / 定理 `hadamard_one_eq_diagonal_iff`
-
-English:
-theorem hadamard_one_eq_diagonal_iff
-  given: {A : Matrix n n α} {d}
-  statement: A ⊙ 1 = diagonal d ↔ A.diag = d
-  proof: by
-  simpa using hadamard_diagonal_eq_diagonal_iff (A := A) (d := 1)
-
-中文:
-定理 hadamard_one_eq_diagonal_iff
-  条件: {A : 矩阵 n n α} {d}
-  结论: A ⊙ 1 = diagonal d ↔ A.diag = d
-  证明: by
-  simpa using hadamard_diagonal_eq_diagonal_iff (A := A) (d := 1)
-
-Depends on / 依赖: hadamard_diagonal_eq_diagonal_iff
+/-
+**Matrix.hadamard_one_eq_diagonal_iff** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：hadamard_one_eq_diagonal_iff {A : Matrix n n α} {d} : A ⊙ 1 = diagonal d ↔
+ A.diag = d
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Matrix.hadamard_diagonal_eq_diagonal_iff`：hadamard_diagonal_eq_diagonal_
+iff {A : Matrix n n α} {d e} : A ⊙ diagonal d = diagonal e ↔ A.diag * d = e
 -/
 theorem hadamard_one_eq_diagonal_iff {A : Matrix n n α} {d} : A ⊙ 1 = diagonal d ↔ A.diag = d := by
   simpa using hadamard_diagonal_eq_diagonal_iff (A := A) (d := 1)
-
-/--
-theorem `one_hadamard_eq_zero_iff` / 定理 `one_hadamard_eq_zero_iff`
-
-English:
-theorem one_hadamard_eq_zero_iff
-  given: {A : Matrix n n α}
-  statement: 1 ⊙ A = 0 ↔ A.diag = 0
-  proof: by
-  simpa using one_hadamard_eq_diagonal_iff (A := A) (d := 0)
-
-中文:
-定理 one_hadamard_eq_zero_iff
-  条件: {A : 矩阵 n n α}
-  结论: 1 ⊙ A = 0 ↔ A.diag = 0
-  证明: by
-  simpa using one_hadamard_eq_diagonal_iff (A := A) (d := 0)
-
-Depends on / 依赖: one_hadamard_eq_diagonal_iff
+/-
+**Matrix.one_hadamard_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：one_hadamard_eq_zero_iff {A : Matrix n n α} : 1 ⊙ A = 0 ↔ A.diag = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.diagonal_zero'`：diagonal_zero' [Zero α] : (diagonal 0 : Matrix n 
+n α) = 0
+· 使用定理 `Matrix.one_hadamard_eq_diagonal_iff`：one_hadamard_eq_diagonal_iff {A : M
+atrix n n α} {d} : 1 ⊙ A = diagonal d ↔ A.diag = d
 -/
 theorem one_hadamard_eq_zero_iff {A : Matrix n n α} : 1 ⊙ A = 0 ↔ A.diag = 0 := by
   simpa using one_hadamard_eq_diagonal_iff (A := A) (d := 0)
-
-/--
-theorem `hadamard_one_eq_zero_iff` / 定理 `hadamard_one_eq_zero_iff`
-
-English:
-theorem hadamard_one_eq_zero_iff
-  given: {A : Matrix n n α}
-  statement: A ⊙ 1 = 0 ↔ A.diag = 0
-  proof: by
-  simpa using hadamard_one_eq_diagonal_iff (A := A) (d := 0)
-
-中文:
-定理 hadamard_one_eq_zero_iff
-  条件: {A : 矩阵 n n α}
-  结论: A ⊙ 1 = 0 ↔ A.diag = 0
-  证明: by
-  simpa using hadamard_one_eq_diagonal_iff (A := A) (d := 0)
-
-Depends on / 依赖: hadamard_one_eq_diagonal_iff
+/-
+**Matrix.hadamard_one_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：hadamard_one_eq_zero_iff {A : Matrix n n α} : A ⊙ 1 = 0 ↔ A.diag = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.diagonal_zero'`：diagonal_zero' [Zero α] : (diagonal 0 : Matrix n 
+n α) = 0
+· 使用定理 `Matrix.hadamard_one_eq_diagonal_iff`：hadamard_one_eq_diagonal_iff {A : M
+atrix n n α} {d} : A ⊙ 1 = diagonal d ↔ A.diag = d
 -/
 theorem hadamard_one_eq_zero_iff {A : Matrix n n α} : A ⊙ 1 = 0 ↔ A.diag = 0 := by
   simpa using hadamard_one_eq_diagonal_iff (A := A) (d := 0)
-
-/--
-theorem `one_hadamard_eq_one_iff` / 定理 `one_hadamard_eq_one_iff`
-
-English:
-theorem one_hadamard_eq_one_iff
-  given: {A : Matrix n n α}
-  statement: 1 ⊙ A = 1 ↔ A.diag = 1
-  proof: one_hadamard_eq_diagonal_iff
-
-中文:
-定理 one_hadamard_eq_one_iff
-  条件: {A : 矩阵 n n α}
-  结论: 1 ⊙ A = 1 ↔ A.diag = 1
-  证明: one_hadamard_eq_diagonal_iff
-
-Depends on / 依赖: one_hadamard_eq_diagonal_iff
+/-
+**Matrix.one_hadamard_eq_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：one_hadamard_eq_one_iff {A : Matrix n n α} : 1 ⊙ A = 1 ↔ A.diag = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.one_hadamard_eq_diagonal_iff`：one_hadamard_eq_diagonal_iff {A : M
+atrix n n α} {d} : 1 ⊙ A = diagonal d ↔ A.diag = d
 -/
 theorem one_hadamard_eq_one_iff {A : Matrix n n α} : 1 ⊙ A = 1 ↔ A.diag = 1 :=
   one_hadamard_eq_diagonal_iff
-
-/--
-theorem `hadamard_one_eq_one_iff` / 定理 `hadamard_one_eq_one_iff`
-
-English:
-theorem hadamard_one_eq_one_iff
-  given: {A : Matrix n n α}
-  statement: A ⊙ 1 = 1 ↔ A.diag = 1
-  proof: hadamard_one_eq_diagonal_iff
-
-中文:
-定理 hadamard_one_eq_one_iff
-  条件: {A : 矩阵 n n α}
-  结论: A ⊙ 1 = 1 ↔ A.diag = 1
-  证明: hadamard_one_eq_diagonal_iff
-
-Depends on / 依赖: hadamard_one_eq_diagonal_iff
+/-
+**Matrix.hadamard_one_eq_one_iff** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：hadamard_one_eq_one_iff {A : Matrix n n α} : A ⊙ 1 = 1 ↔ A.diag = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.hadamard_one_eq_diagonal_iff`：hadamard_one_eq_diagonal_iff {A : M
+atrix n n α} {d} : A ⊙ 1 = diagonal d ↔ A.diag = d
 -/
 theorem hadamard_one_eq_one_iff {A : Matrix n n α} : A ⊙ 1 = 1 ↔ A.diag = 1 :=
   hadamard_one_eq_diagonal_iff
 
 end One
 
-/--
-theorem `hadamard_of_one` / 定理 `hadamard_of_one`
-
-English:
-theorem hadamard_of_one
-  given: [MulOneClass α] (A : Matrix m n α)
-  proof: by ext; simp
-
-中文:
-定理 hadamard_of_one
-  条件: [MulOne类 α] (A : 矩阵 m n α)
-  证明: by ext; simp
+/-
+**Matrix.hadamard_of_one** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {α : Type u_1} {m : Type u_2} {n : Type u_3} [inst : MulOneClass α] (A :
+ Matrix m n α), A.hadamard (Matrix.of 1) = A
+参数：A : Matrix m n α；Matrix.of 1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] theorem hadamard_of_one [MulOneClass α] (A : Matrix m n α) :
     A ⊙ of 1 = A := by ext; simp
-
-/--
-theorem `of_one_hadamard` / 定理 `of_one_hadamard`
-
-English:
-theorem of_one_hadamard
-  given: [MulOneClass α] (A : Matrix m n α)
-  proof: by ext; simp
-
-中文:
-定理 of_one_hadamard
-  条件: [MulOne类 α] (A : 矩阵 m n α)
-  证明: by ext; simp
+/-
+**Matrix.of_one_hadamard** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {α : Type u_1} {m : Type u_2} {n : Type u_3} [inst : MulOneClass α] (A :
+ Matrix m n α), (Matrix.of 1).hadamard A = A
+参数：A : Matrix m n α；Matrix.of 1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] theorem of_one_hadamard [MulOneClass α] (A : Matrix m n α) :
     of 1 ⊙ A = A := by ext; simp
-
-/--
-theorem `hadamard_self_eq_self_iff` / 定理 `hadamard_self_eq_self_iff`
-
-English:
-theorem hadamard_self_eq_self_iff
-  given: [Mul α] {A : Matrix m n α}
-  proof: ext_iff.symm
-
-中文:
-定理 hadamard_self_eq_self_iff
-  条件: [乘法 α] {A : 矩阵 m n α}
-  证明: ext_iff.symm
-
-Depends on / 依赖: ext_iff, ext_iff.symm
+/-
+**Matrix.hadamard_self_eq_self_iff** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：hadamard_self_eq_self_iff [Mul α] {A : Matrix m n α} : A ⊙ A = A ↔ forall 
+i j, IsIdempotentElem (A i j)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Matrix.ext_iff`：ext_iff : (forall i j, M i j = N i j) ↔ M = N
 -/
 theorem hadamard_self_eq_self_iff [Mul α] {A : Matrix m n α} :
-    A ⊙ A = A ↔ forall i j, IsIdempotentElem (A i j) := ext_iff.symm
-
-/--
-theorem `submatrix_hadamard` / 定理 `submatrix_hadamard`
-
-English:
-theorem submatrix_hadamard
-  statement: {l o : Type*} [Mul α]
-  proof: rfl
-
-中文:
-定理 submatrix_hadamard
-  结论: {l o : 类型} [乘法 α]
-  证明: rfl
+    A ⊙ A = A ↔ ∀ i j, IsIdempotentElem (A i j) := ext_iff.symm
+/-
+**Matrix.submatrix_hadamard** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：submatrix_hadamard {l o : Type*} [Mul α] (A B : Matrix m n α) (e : l -> m)
+ (f : o -> n) : (A ⊙ B).submatrix e f = A.submatrix e f ⊙ B.submatrix e f
+参数：A B : Matrix m n α；e : l -> m；f : o -> n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem submatrix_hadamard {l o : Type*} [Mul α]
-    (A B : Matrix m n α) (e : l -> m) (f : o -> n) :
+    (A B : Matrix m n α) (e : l → m) (f : o → n) :
     (A ⊙ B).submatrix e f = A.submatrix e f ⊙ B.submatrix e f := rfl
-
-/--
-theorem `transpose_hadamard` / 定理 `transpose_hadamard`
-
-English:
-theorem transpose_hadamard
-  given: [Mul α] (A B : Matrix m n α)
-  statement: (A ⊙ B)ᵀ = Aᵀ ⊙ Bᵀ
-  proof: ext fun _ _ => rfl
-
-中文:
-定理 transpose_hadamard
-  条件: [乘法 α] (A B : 矩阵 m n α)
-  结论: (A ⊙ B)ᵀ = Aᵀ ⊙ Bᵀ
-  证明: ext fun _ _ => rfl
+/-
+**Matrix.transpose_hadamard** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：transpose_hadamard [Mul α] (A B : Matrix m n α) : (A ⊙ B)ᵀ = Aᵀ ⊙ Bᵀ
+参数：A B : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
 -/
 theorem transpose_hadamard [Mul α] (A B : Matrix m n α) : (A ⊙ B)ᵀ = Aᵀ ⊙ Bᵀ :=
   ext fun _ _ => rfl
-
-/--
-theorem `conjTranspose_hadamard` / 定理 `conjTranspose_hadamard`
-
-English:
-theorem conjTranspose_hadamard
-  given: [Mul α] [StarMul α] (A B : Matrix m n α)
-  statement: (A ⊙ B)ᴴ = Bᴴ ⊙ Aᴴ
-  proof: ext fun _ _ => StarMul.star_mul _ _
-
-中文:
-定理 conjTranspose_hadamard
-  条件: [乘法 α] [StarMul α] (A B : 矩阵 m n α)
-  结论: (A ⊙ B)ᴴ = Bᴴ ⊙ Aᴴ
-  证明: ext fun _ _ => StarMul.star_mul _ _
-
-Depends on / 依赖: StarMul, StarMul.star_mul, star_mul
+/-
+**Matrix.conjTranspose_hadamard** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：conjTranspose_hadamard [Mul α] [StarMul α] (A B : Matrix m n α) : (A ⊙ B)ᴴ
+ = Bᴴ ⊙ Aᴴ
+参数：A B : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `StarMul.star_mul`：∀ {R : Type u} {inst : Mul R} [self : StarMul R] (r s 
+: R), star (r * s) = star s * star r
 -/
 theorem conjTranspose_hadamard [Mul α] [StarMul α] (A B : Matrix m n α) : (A ⊙ B)ᴴ = Bᴴ ⊙ Aᴴ :=
   ext fun _ _ => StarMul.star_mul _ _
@@ -646,41 +519,54 @@ section single
 
 variable [DecidableEq m] [DecidableEq n] [MulZeroClass α]
 
-/--
-theorem `single_hadamard_single_eq` / 定理 `single_hadamard_single_eq`
-
-English:
-theorem single_hadamard_single_eq
-  given: (i : m) (j : n) (a b : α)
-  proof: ext fun _ _ => (apply_ite₂ _ _ _ _ _ _).trans (congr_arg _ <| zero_mul 0)
-
-中文:
-定理 single_hadamard_single_eq
-  条件: (i : m) (j : n) (a b : α)
-  证明: ext fun _ _ => (apply_ite₂ _ _ _ _ _ _).trans (congr_arg _ <| zero_mul 0)
-
-Depends on / 依赖: congr_arg, zero_mul
+/-
+**Matrix.single_hadamard_single_eq** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：single_hadamard_single_eq (i : m) (j : n) (a b : α) : single i j a ⊙ singl
+e i j b = single i j (a * b)
+参数：i : m；j : n；a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `apply_ite₂`：apply_ite₂ {α β γ : Sort*} (f : α -> β -> γ) (P : Prop) [Dec
+idable P] (a b : α) (c d : β) : f (ite P a b) (ite P c d) = ite P (f a c) (f b d
+…
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
 -/
 theorem single_hadamard_single_eq (i : m) (j : n) (a b : α) :
     single i j a ⊙ single i j b = single i j (a * b) :=
   ext fun _ _ => (apply_ite₂ _ _ _ _ _ _).trans (congr_arg _ <| zero_mul 0)
-
-/--
-theorem `single_hadamard_single_of_ne` / 定理 `single_hadamard_single_of_ne`
-
-English:
-theorem single_hadamard_single_of_ne
-  proof: by
-  rw [not_and_or] at h
-  cases h <;> (simp only [single]; aesop)
-
-中文:
-定理 single_hadamard_single_of_ne
-  证明: by
-  rw [not_and_or] at h
-  cases h <;> (simp only [single]; aesop)
-
-Depends on / 依赖: not_and_or, single
+/-
+**Matrix.single_hadamard_single_of_ne** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：single_hadamard_single_of_ne {ia : m} {ja : n} {ib : m} {jb : n} (h : ¬(ia
+ = ib ∧ ja = jb)) (a b : α) : single ia ja a ⊙ single ib jb b = 0
+参数：h : ¬(ia = ib ∧ ja = jb)；a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_and_or`：not_and_or : ¬(a ∧ b) ↔ ¬a ∨ ¬b
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `mul_ite`：mul_ite (a b c : α) : (a * if P then b else c) = if P then a * 
+b else a * c
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用引理 `ite_mul`：ite_mul (a b c : α) : (if P then a else b) * c = if P then a * 
+c else b * c
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
 -/
 theorem single_hadamard_single_of_ne
     {ia : m} {ja : n} {ib : m} {jb : n} (h : ¬(ia = ib ∧ ja = jb)) (a b : α) :
@@ -695,45 +581,52 @@ section trace
 variable [Fintype m] [Fintype n]
 variable (R) [NonUnitalSemiring α]
 
-/--
-theorem `sum_hadamard_eq` / 定理 `sum_hadamard_eq`
-
-English:
-theorem sum_hadamard_eq
-  statement: (∑ i : m, ∑ j : n, (A ⊙ B) i j) = trace (A * Bᵀ)
-  proof: rfl
-
-中文:
-定理 sum_hadamard_eq
-  结论: (∑ i : m, ∑ j : n, (A ⊙ B) i j) = trace (A * Bᵀ)
-  证明: rfl
+/-
+**Matrix.sum_hadamard_eq** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：sum_hadamard_eq : (∑ i : m, ∑ j : n, (A ⊙ B) i j) = trace (A * Bᵀ)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sum_hadamard_eq : (∑ i : m, ∑ j : n, (A ⊙ B) i j) = trace (A * Bᵀ) :=
   rfl
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `dotProduct_vecMul_hadamard` / 定理 `dotProduct_vecMul_hadamard`
-
-English:
-theorem dotProduct_vecMul_hadamard
-  given: [DecidableEq m] [DecidableEq n] (v : m -> α) (w : n -> α)
-  proof: by
-  rw [← sum_hadamard_eq]; rw [Finset.sum_comm]
-  simp [dotProduct, vecMul, Finset.sum_mul, mul_assoc]
-
-中文:
-定理 dotProduct_vecMul_hadamard
-  条件: [DecidableEq m] [DecidableEq n] (v : m -> α) (w : n -> α)
-  证明: by
-  rw [← sum_hadamard_eq]; rw [Finset.sum_comm]
-  simp [dotProduct, vecMul, Finset.sum_mul, mul_assoc]
-
-Depends on / 依赖: Finset, Finset.sum_comm, Finset.sum_mul, dotProduct, mul_assoc, sum_comm, sum_hadamard_eq, sum_mul, vecMul
+/-
+**Matrix.dotProduct_vecMul_hadamard** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：dotProduct_vecMul_hadamard [DecidableEq m] [DecidableEq n] (v : m -> α) (w
+ : n -> α) : v ᵥ* (A ⊙ B) ⬝ᵥ w = trace (diagonal v * A * (B * diagonal w)ᵀ)
+参数：v : m -> α；w : n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.sum_hadamard_eq`：sum_hadamard_eq : (∑ i : m, ∑ j : n, (A ⊙ B) i j
+) = trace (A * Bᵀ)
+· 使用定理 `Finset.sum_comm`：∀ {α : Type u_3} {β : Type u_4} {γ : Type u_5} [inst : 
+AddCommMonoid β] {s : Finset γ} {t : Finset α} {f : γ → α → β},   ∑ x ∈ s, ∑ y ∈
+ t, f…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `Finset.sum_mul`：sum_mul (s : Finset ι) (f : ι -> R) (a : R) : (∑ i in s,
+ f i) * a = ∑ i in s, f i * a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Matrix.diagonal_mul`：diagonal_mul [Fintype m] [DecidableEq m] (d : m -> 
+α) (M : Matrix m n α) (i j) : (diagonal d * M) i j = d i * M i j
+· 使用定理 `Matrix.mul_diagonal`：mul_diagonal [Fintype n] [DecidableEq n] (d : n -> 
+α) (M : Matrix m n α) (i j) : (M * diagonal d) i j = M i j * d j
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem dotProduct_vecMul_hadamard [DecidableEq m] [DecidableEq n] (v : m -> α) (w : n -> α) :
+theorem dotProduct_vecMul_hadamard [DecidableEq m] [DecidableEq n] (v : m → α) (w : n → α) :
     v ᵥ* (A ⊙ B) ⬝ᵥ w = trace (diagonal v * A * (B * diagonal w)ᵀ) := by
-  rw [← sum_hadamard_eq]; rw [Finset.sum_comm]
+  rw [← sum_hadamard_eq, Finset.sum_comm]
   simp [dotProduct, vecMul, Finset.sum_mul, mul_assoc]
 
 end trace
@@ -741,3 +634,4 @@ end trace
 end BasicProperties
 
 end Matrix
+

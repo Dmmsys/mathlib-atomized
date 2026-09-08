@@ -40,39 +40,39 @@ open Cardinal Order Ordinal Set
 
 variable {α : Type*}
 
-/--
-Definition of `IsRegularCardinalOrder` / `IsRegularCardinalOrder` 的定义
+/-- A typeclass which expresses that the order type of a well-order equals (the initial ordinal of)
+its cofinality.
 
-English:
-class IsRegularCardinalOrder
-  parameters: (α : Type*) [LinearOrder α] [WellFoundedLT α]
-  axioms and operations (1):
-    - type_lt_le_ord_cof : typeLT α <= (cof α).ord
+If `α` is infinite, this implies that `α` is order isomorphic to `Iio c.ord` for some regular
+cardinal `c`. In the informal literature, one often says that `α` is a regular cardinal, by abuse
+of notation. -/
+/-
+**IsRegularCardinalOrder** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(α : Type u_2) → [inst : LinearOrder α] → [WellFoundedLT α] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-类 是RegularCardinal序
-  参数: (α : 类型) [线性序 α] [WellFoundedLT α]
-  公理与运算 (1 个):
-    - type_lt_le_ord_cof : typeLT α <= (cof α).ord
+--- 原说明 ---
+A typeclass which expresses that the order type of a well-order equals (the init
+ial ordinal of)
+its cofinality.
+
+If `α` is infinite, this implies that `α` is order isomorphic to `Iio c.ord` for
+ some regular
+cardinal `c`. In the informal literature, one often says that `α` is a regular c
+ardinal, by abuse
+of notation.
 -/
 class IsRegularCardinalOrder (α : Type*) [LinearOrder α] [WellFoundedLT α] where
-  type_lt_le_ord_cof : typeLT α <= (cof α).ord
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsRegularCardinalOrder Nat
-  body: ⟨by simp⟩
-
-中文:
-实例 :
-  签名: 是RegularCardinal序 自然数
-  定义体: ⟨by simp⟩
+  type_lt_le_ord_cof : typeLT α ≤ (cof α).ord
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsRegularCardinalOrder Nat := ⟨by simp⟩
-
+instance : IsRegularCardinalOrder ℕ := ⟨by simp⟩
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := low) [LinearOrder α] [WellFoundedLT α] [Subsingleton α] :
     IsRegularCardinalOrder α where
   type_lt_le_ord_cof := by
@@ -81,304 +81,274 @@ instance (priority := low) [LinearOrder α] [WellFoundedLT α] [Subsingleton α]
     · cases nonempty_unique α
       have := BoundedOrder.ofUnique α
       simp
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsRegularCardinalOrder Ordinal
-  body: by
-    rw [type_lt_ordinal]; rw [← ord_univ]; rw [ord_le_ord]; rw [le_cof_iff]
-    intro s hs
-    contrapose! hs
-    rw [← Cardinal.lift_id (#s)]; rw [← small_iff_lift_mk_lt_univ] at hs
-    rw [not_isCofinal_iff_bddAbove]
-    exact Ordinal.bddAbove_of_small
-
-中文:
-实例 :
-  签名: 是RegularCardinal序 序数
-  定义体: by
-    rw [type_lt_ordinal]; rw [← ord_univ]; rw [ord_le_ord]; rw [le_cof_iff]
-    intro s hs
-    contrapose! hs
-    rw [← Cardinal.lift_id (#s)]; rw [← small_iff_lift_mk_lt_univ] at hs
-    rw [not_isCofinal_iff_bddAbove]
-    exact Ordinal.bddAbove_of_small
-
-Depends on / 依赖: Cardinal, Cardinal.lift_id, Ordinal, Ordinal.bddAbove_of_small, bddAbove_of_small, contrapose, le_cof_iff, lift_id, not_isCofinal_iff_bddAbove, ord_le_ord, ord_univ, small_iff_lift_mk_lt_univ, type_lt_ordinal
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsRegularCardinalOrder Ordinal where
   type_lt_le_ord_cof := by
-    rw [type_lt_ordinal]; rw [← ord_univ]; rw [ord_le_ord]; rw [le_cof_iff]
+    rw [type_lt_ordinal, ← ord_univ, ord_le_ord, le_cof_iff]
     intro s hs
     contrapose! hs
-    rw [← Cardinal.lift_id (#s)]; rw [← small_iff_lift_mk_lt_univ] at hs
+    rw [← Cardinal.lift_id (#s), ← small_iff_lift_mk_lt_univ] at hs
     rw [not_isCofinal_iff_bddAbove]
     exact Ordinal.bddAbove_of_small
 
 namespace Order
 variable [LinearOrder α] [WellFoundedLT α] [IsRegularCardinalOrder α]
 
-/--
-theorem `ord_cof_eq_type_lt` / 定理 `ord_cof_eq_type_lt`
-
-English:
-theorem ord_cof_eq_type_lt
-  statement: (cof α).ord = typeLT α
-  proof: by
-  apply IsRegularCardinalOrder.type_lt_le_ord_cof.antisymm'
-  rw [ord_le]; rw [card_type]
-  exact cof_le_cardinalMk α
-
-@[simp]
-
-中文:
-定理 ord_cof_eq_type_lt
-  结论: (cof α).ord = typeLT α
-  证明: by
-  apply IsRegularCardinalOrder.type_lt_le_ord_cof.antisymm'
-  rw [ord_le]; rw [card_type]
-  exact cof_le_cardinalMk α
-
-@[simp]
-
-Depends on / 依赖: IsRegularCardinalOrder, IsRegularCardinalOrder.type_lt_le_ord_cof.antisymm, antisymm, card_type, cof_le_cardinalMk, ord_le, type_lt_le_ord_cof
+/-
+**Order.ord_cof_eq_type_lt** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：ord_cof_eq_type_lt : (cof α).ord = typeLT α
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm'`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, b ≤
+ a → a ≤ b → a = b
+· 使用定理 `isWellOrder_lt`：∀ {α : Type u} [inst : LinearOrder α] [WellFoundedLT α],
+ IsWellOrder α fun x1 x2 => x1 < x2
+· 使用定理 `IsRegularCardinalOrder.type_lt_le_ord_cof`：∀ {α : Type u_2} {inst : Line
+arOrder α} {inst_1 : WellFoundedLT α} [self : IsRegularCardinalOrder α],   (Ordi
+nal.type fun x1 x2 => x1 < x2) …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Cardinal.ord_le`：ord_le {c o} : ord c <= o ↔ c <= o.card
+· 使用定理 `Ordinal.card_type`：card_type (r : α -> α -> Prop) [IsWellOrder α r] : ca
+rd (type r) = #α
+· 使用定理 `Order.cof_le_cardinalMk`：cof_le_cardinalMk : cof α <= #α
 -/
 theorem ord_cof_eq_type_lt : (cof α).ord = typeLT α := by
   apply IsRegularCardinalOrder.type_lt_le_ord_cof.antisymm'
-  rw [ord_le]; rw [card_type]
+  rw [ord_le, card_type]
   exact cof_le_cardinalMk α
 
 @[simp]
-/--
-theorem `cof_eq_cardinalMk` / 定理 `cof_eq_cardinalMk`
-
-English:
-theorem cof_eq_cardinalMk
-  statement: cof α = #α
-  proof: by
-  rw [← card_type LT.lt]; rw [← ord_cof_eq_type_lt]; rw [card_ord]
-
-@[simp]
-
-中文:
-定理 cof_eq_cardinalMk
-  结论: cof α = #α
-  证明: by
-  rw [← card_type LT.lt]; rw [← ord_cof_eq_type_lt]; rw [card_ord]
-
-@[simp]
-
-Depends on / 依赖: LT.lt, card_ord, card_type, ord_cof_eq_type_lt
+/-
+**Order.cof_eq_cardinalMk** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：cof_eq_cardinalMk : cof α = #α
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isWellOrder_lt`：∀ {α : Type u} [inst : LinearOrder α] [WellFoundedLT α],
+ IsWellOrder α fun x1 x2 => x1 < x2
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ordinal.card_type`：card_type (r : α -> α -> Prop) [IsWellOrder α r] : ca
+rd (type r) = #α
+· 使用定理 `Order.ord_cof_eq_type_lt`：ord_cof_eq_type_lt : (cof α).ord = typeLT α
+· 使用定理 `Cardinal.card_ord`：card_ord (c) : (ord c).card = c
 -/
 theorem cof_eq_cardinalMk : cof α = #α := by
-  rw [← card_type LT.lt]; rw [← ord_cof_eq_type_lt]; rw [card_ord]
+  rw [← card_type LT.lt, ← ord_cof_eq_type_lt, card_ord]
 
 @[simp]
-/--
-theorem `_root_.Cardinal.ord_cardinalMk` / 定理 `_root_.Cardinal.ord_cardinalMk`
-
-English:
-theorem _root_.Cardinal.ord_cardinalMk
-  statement: ord #α = typeLT α
-  proof: by
-  rw [← ord_cof_eq_type_lt]; rw [cof_eq_cardinalMk]
-
-中文:
-定理 _root_.基数.ord_cardinalMk
-  结论: ord #α = typeLT α
-  证明: by
-  rw [← ord_cof_eq_type_lt]; rw [cof_eq_cardinalMk]
-
-Depends on / 依赖: cof_eq_cardinalMk, ord_cof_eq_type_lt
+/-
+**Order._root_.Cardinal.ord_cardinalMk** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Cardinal.ord_cardinalMk : ord #α = typeLT α := by
-  rw [← ord_cof_eq_type_lt]; rw [cof_eq_cardinalMk]
-
-/--
-theorem `cof_ordinal` / 定理 `cof_ordinal`
-
-English:
-theorem cof_ordinal
-  statement: cof Ordinal.{u} = Cardinal.univ.{u, u + 1}
-  proof: by
-  simp
-
-中文:
-定理 cof_ordinal
-  结论: cof 序数.{u} = 基数.univ.{u, u + 1}
-  证明: by
-  simp
+  rw [← ord_cof_eq_type_lt, cof_eq_cardinalMk]
+/-
+**Order.cof_ordinal** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：cof_ordinal : cof Ordinal.{u} = Cardinal.univ.{u, u + 1}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Order.cof_eq_cardinalMk`：cof_eq_cardinalMk : cof α = #α
+· 使用定理 `instIsRegularCardinalOrderOrdinal`：IsRegularCardinalOrder Ordinal.{u_2}
+· 使用定理 `Cardinal.mk_ordinal`：mk_ordinal : #Ordinal = univ.{u, u + 1}
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem cof_ordinal : cof Ordinal.{u} = Cardinal.univ.{u, u + 1} := by
   simp
-
-/--
-theorem `type_eq_of_isCofinal` / 定理 `type_eq_of_isCofinal`
-
-English:
-theorem type_eq_of_isCofinal
-  given: {s : Set α} (hs : IsCofinal s)
-  statement: typeLT s = typeLT α
-  proof: by
-  apply (RelEmbedding.ofMonotone Subtype.val (by simp)).ordinal_type_le.antisymm
-  rw [← ord_cardinalMk]; rw [ord_le]; rw [card_type]; rw [← cof_eq_cardinalMk]
-  exact cof_le hs
-
-中文:
-定理 type_eq_of_isCofinal
-  条件: {s : 集合 α} (hs : IsCofinal s)
-  结论: typeLT s = typeLT α
-  证明: by
-  apply (RelEmbedding.ofMonotone Subtype.val (by simp)).ordinal_type_le.antisymm
-  rw [← ord_cardinalMk]; rw [ord_le]; rw [card_type]; rw [← cof_eq_cardinalMk]
-  exact cof_le hs
-
-Depends on / 依赖: RelEmbedding, RelEmbedding.ofMonotone, Subtype, Subtype.val, antisymm, card_type, cof_eq_cardinalMk, cof_le, ofMonotone, ord_cardinalMk, ord_le, ordinal_type_le, ordinal_type_le.antisymm
+/-
+**Order.type_eq_of_isCofinal** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：type_eq_of_isCofinal {s : Set α} (hs : IsCofinal s) : typeLT s = typeLT α
+参数：hs : IsCofinal s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `isWellOrder_lt`：∀ {α : Type u} [inst : LinearOrder α] [WellFoundedLT α],
+ IsWellOrder α fun x1 x2 => x1 < x2
+· 使用定理 `RelEmbedding.ordinal_type_le`：∀ {α β : Type u_1} {r : α → α → Prop} {s :
+ β → β → Prop} [inst : IsWellOrder α r] [inst_1 : IsWellOrder β s]   (h : r ↪r s
+), Ordinal.type r …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.ord_cardinalMk`：∀ {α : Type u_1} [inst : LinearOrder α] [inst_1
+ : WellFoundedLT α] [IsRegularCardinalOrder α],   (Cardinal.mk α).ord = Ordinal.
+type fun x1 x…
+· 使用定理 `Cardinal.ord_le`：ord_le {c o} : ord c <= o ↔ c <= o.card
+· 使用定理 `Ordinal.card_type`：card_type (r : α -> α -> Prop) [IsWellOrder α r] : ca
+rd (type r) = #α
+· 使用定理 `Order.cof_eq_cardinalMk`：cof_eq_cardinalMk : cof α = #α
+· 使用定理 `Order.cof_le`：cof_le {s : Set α} (h : IsCofinal s) : cof α <= #s
 -/
 theorem type_eq_of_isCofinal {s : Set α} (hs : IsCofinal s) : typeLT s = typeLT α := by
   apply (RelEmbedding.ofMonotone Subtype.val (by simp)).ordinal_type_le.antisymm
-  rw [← ord_cardinalMk]; rw [ord_le]; rw [card_type]; rw [← cof_eq_cardinalMk]
+  rw [← ord_cardinalMk, ord_le, card_type, ← cof_eq_cardinalMk]
   exact cof_le hs
 
-/--
-Definition of `enum` / `enum` 的定义
+/-- Enumerate the elements of a cofinal subset of `α` by `α` itself. This is a generalization of
+`Nat.nth`. -/
+/-
+**Order.enum** 是 Mathlib 中的一个定义，位于命名空间 `Order`。
+形式化陈述：enum (s : Set α) (hs : IsCofinal s) : α ≃o s
+参数：s : Set α；hs : IsCofinal s。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition enum
-  signature: (s : Set α) (hs : IsCofinal s)
-  body: .ofRelIsoLT (type_eq.1 (type_eq_of_isCofinal hs).symm).some
-
-中文:
-定义 enum
-  签名: (s : 集合 α) (hs : IsCofinal s)
-  定义体: .ofRelIsoLT (type_eq.1 (type_eq_of_isCofinal hs).symm).some
-
-Depends on / 依赖: ofRelIsoLT, type_eq, type_eq_of_isCofinal
+--- 原说明 ---
+Enumerate the elements of a cofinal subset of `α` by `α` itself. This is a gener
+alization of
+`Nat.nth`.
 -/
 noncomputable def enum (s : Set α) (hs : IsCofinal s) : α ≃o s :=
   .ofRelIsoLT (type_eq.1 (type_eq_of_isCofinal hs).symm).some
 
 variable {s : Set α} {hs : IsCofinal s}
-
-/--
-theorem `enum_le_of_forall_lt` / 定理 `enum_le_of_forall_lt`
-
-English:
-theorem enum_le_of_forall_lt
-  given: {a o : α} (ho : o in s) (H : forall b < a, enum s hs b < o)
-  proof: by
-  rw [← Subtype.coe_mk o ho]; rw [Subtype.coe_le_coe]; rw [← OrderIso.le_symm_apply]
-  apply le_of_forall_lt
-  simpa [OrderIso.lt_symm_apply]
-
-中文:
-定理 enum_le_of_对任意_lt
-  条件: {a o : α} (ho : o in s) (H : 对任意 b < a, enum s hs b < o)
-  证明: by
-  rw [← Subtype.coe_mk o ho]; rw [Subtype.coe_le_coe]; rw [← OrderIso.le_symm_apply]
-  apply le_of_forall_lt
-  simpa [OrderIso.lt_symm_apply]
-
-Depends on / 依赖: OrderIso, OrderIso.le_symm_apply, OrderIso.lt_symm_apply, Subtype, Subtype.coe_le_coe, Subtype.coe_mk, coe_le_coe, coe_mk, le_of_forall_lt, le_symm_apply, lt_symm_apply
+/-
+**Order.enum_le_of_forall_lt** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：enum_le_of_forall_lt {a o : α} (ho : o in s) (H : forall b < a, enum s hs 
+b < o) : enum s hs a <= o
+参数：ho : o in s；H : forall b < a, enum s hs b < o。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subtype.coe_mk`：coe_mk (a h) : (@mk α p a h : α) = a
+· 使用定理 `Subtype.coe_le_coe`：coe_le_coe [LE α] {p : α -> Prop} {x y : Subtype p} 
+: (x : α) <= y ↔ x <= y
+· 使用定理 `OrderIso.le_symm_apply`：le_symm_apply (e : α ≃o β) {x : α} {y : β} : x <
+= e.symm y ↔ e x <= y
+· 使用定理 `le_of_forall_lt`：le_of_forall_lt (H : forall c, c < a -> c < b) : a <= b
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
-theorem enum_le_of_forall_lt {a o : α} (ho : o in s) (H : forall b < a, enum s hs b < o) :
-    enum s hs a <= o := by
-  rw [← Subtype.coe_mk o ho]; rw [Subtype.coe_le_coe]; rw [← OrderIso.le_symm_apply]
+theorem enum_le_of_forall_lt {a o : α} (ho : o ∈ s) (H : ∀ b < a, enum s hs b < o) :
+    enum s hs a ≤ o := by
+  rw [← Subtype.coe_mk o ho, Subtype.coe_le_coe, ← OrderIso.le_symm_apply]
   apply le_of_forall_lt
   simpa [OrderIso.lt_symm_apply]
-
-/--
-theorem `enum_succ_le_of_lt` / 定理 `enum_succ_le_of_lt`
-
-English:
-theorem enum_succ_le_of_lt
-  given: [SuccOrder α] {a o : α} (ha : o in s) (H : enum s hs a < o)
-  proof: by
-  refine enum_le_of_forall_lt ha fun b hb => H.trans_le' ?_
-  simpa using le_of_lt_succ hb
-
-@[simp]
-
-中文:
-定理 enum_succ_le_of_lt
-  条件: [Succ序 α] {a o : α} (ha : o in s) (H : enum s hs a < o)
-  证明: by
-  refine enum_le_of_forall_lt ha fun b hb => H.trans_le' ?_
-  simpa using le_of_lt_succ hb
-
-@[simp]
-
-Depends on / 依赖: H.trans_le, enum_le_of_forall_lt, le_of_lt_succ, trans_le
+/-
+**Order.enum_succ_le_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：enum_succ_le_of_lt [SuccOrder α] {a o : α} (ha : o in s) (H : enum s hs a 
+< o) : enum s hs (succ a) <= o
+参数：ha : o in s；H : enum s hs a < o。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.enum_le_of_forall_lt`：enum_le_of_forall_lt {a o : α} (ho : o in s)
+ (H : forall b < a, enum s hs b < o) : enum s hs a <= o
+· 使用定理 `LT.lt.trans_le'`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, b < a
+ → c ≤ b → c < a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `OrderIso.instOrderIsoClass`：∀ {α : Type u_2} {β : Type u_3} [inst : LE α
+] [inst_1 : LE β], OrderIsoClass (α ≃o β) α β
+· 使用定理 `Order.le_of_lt_succ`：le_of_lt_succ {a b : α} : a < succ b -> a <= b
 -/
-theorem enum_succ_le_of_lt [SuccOrder α] {a o : α} (ha : o in s) (H : enum s hs a < o) :
-    enum s hs (succ a) <= o := by
-  refine enum_le_of_forall_lt ha fun b hb => H.trans_le' ?_
+theorem enum_succ_le_of_lt [SuccOrder α] {a o : α} (ha : o ∈ s) (H : enum s hs a < o) :
+    enum s hs (succ a) ≤ o := by
+  refine enum_le_of_forall_lt ha fun b hb ↦ H.trans_le' ?_
   simpa using le_of_lt_succ hb
 
 @[simp]
-/--
-theorem `enum_univ` / 定理 `enum_univ`
-
-English:
-theorem enum_univ
-  given: (x : α)
-  statement: enum univ .univ x = ⟨x, mem_univ x⟩
-  proof: by
-  rw [← Subsingleton.allEq OrderIso.Set.univ.symm (enum univ .univ)]
-  rfl
-
-中文:
-定理 enum_univ
-  条件: (x : α)
-  结论: enum univ .univ x = ⟨x, mem_univ x⟩
-  证明: by
-  rw [← Subsingleton.allEq OrderIso.Set.univ.symm (enum univ .univ)]
-  rfl
-
-Depends on / 依赖: OrderIso, OrderIso.Set.univ.symm, Subsingleton, Subsingleton.allEq
+/-
+**Order.enum_univ** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：enum_univ (x : α) : enum univ .univ x = ⟨x, mem_univ x⟩
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCofinal.univ`：IsCofinal.univ : IsCofinal (@univ α)
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subsingleton.allEq`：∀ {α : Sort u} [self : Subsingleton α] (a b : α), a 
+= b
 -/
 theorem enum_univ (x : α) : enum univ .univ x = ⟨x, mem_univ x⟩ := by
   rw [← Subsingleton.allEq OrderIso.Set.univ.symm (enum univ .univ)]
   rfl
-
-/--
-theorem `enum_anti` / 定理 `enum_anti`
-
-English:
-theorem enum_anti
-  given: {hs : IsCofinal s} {t : Set α} {x : α} (h : s subseteq t)
-  proof: by
-  induction x using WellFoundedLT.induction with | ind x IH
-  exact enum_le_of_forall_lt (h (Subtype.prop _)) fun y hy =>
-    (IH y hy).trans_lt ((enum s hs).strictMono hy)
-
-中文:
-定理 enum_anti
-  条件: {hs : IsCofinal s} {t : 集合 α} {x : α} (h : s subseteq t)
-  证明: by
-  induction x using WellFoundedLT.induction with | ind x IH
-  exact enum_le_of_forall_lt (h (Subtype.prop _)) fun y hy =>
-    (IH y hy).trans_lt ((enum s hs).strictMono hy)
-
-Depends on / 依赖: Subtype, Subtype.prop, WellFoundedLT, WellFoundedLT.induction, enum_le_of_forall_lt, strictMono, trans_lt
+/-
+**Order.enum_anti** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：enum_anti {hs : IsCofinal s} {t : Set α} {x : α} (h : s subseteq t) : enum
+ t (hs.mono h) x <= (enum s hs x).1
+参数：h : s subseteq t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WellFoundedLT.induction`：induction {motive : α -> Prop} (a : α) (ind : f
+orall x, (forall y, y < x -> motive y) -> motive x) : motive a
+· 使用定理 `IsCofinal.mono`：IsCofinal.mono {s t : Set α} (h : s subseteq t) (hs : Is
+Cofinal s) : IsCofinal t
+· 使用定理 `Order.enum_le_of_forall_lt`：enum_le_of_forall_lt {a o : α} (ho : o in s)
+ (H : forall b < a, enum s hs b < o) : enum s hs a <= o
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `OrderIso.strictMono`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α]
+ [inst_1 : Preorder β] (e : α ≃o β), StrictMono ⇑e
 -/
-theorem enum_anti {hs : IsCofinal s} {t : Set α} {x : α} (h : s subseteq t) :
-    enum t (hs.mono h) x <= (enum s hs x).1 := by
+theorem enum_anti {hs : IsCofinal s} {t : Set α} {x : α} (h : s ⊆ t) :
+    enum t (hs.mono h) x ≤ (enum s hs x).1 := by
   induction x using WellFoundedLT.induction with | ind x IH
-  exact enum_le_of_forall_lt (h (Subtype.prop _)) fun y hy =>
+  exact enum_le_of_forall_lt (h (Subtype.prop _)) fun y hy ↦
     (IH y hy).trans_lt ((enum s hs).strictMono hy)
 
-/--
-theorem `enum_eq_iff` / 定理 `enum_eq_iff`
+/-- A characterization of `Order.enum s _`: it is the unique strictly monotone function
+with range `s`. -/
+/-
+**Order.enum_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：enum_eq_iff {f : α -> α} : Subtype.val ∘ enum s hs = f ↔ StrictMono f ∧ ra
+nge f = s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.comp`：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preord
+er α] [inst_1 : Preorder β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β}, Str
+ictMo…
+· 使用定理 `Subtype.strictMono_coe`：Subtype.strictMono_coe [Preorder α] (p : α -> Pr
+op) : StrictMono ((↑) : Subtype p -> α)
+· 使用定理 `OrderIso.strictMono`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α]
+ [inst_1 : Preorder β] (e : α ≃o β), StrictMono ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `EquivLike.range_comp`：∀ {ι : Sort u_1} {ι' : Sort u_2} {E : Type u_3} [i
+nst : EquivLike E ι ι'] {α : Type u_4} (f : ι' → α) (e : E),   Set.range (f ∘ ⇑e
+) = Set.ra…
+· 使用定理 `Subtype.range_coe_subtype`：range_coe_subtype {p : α -> Prop} : range ((↑
+) : Subtype p -> α) = { x | p x }
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `StrictMono.range_inj`：StrictMono.range_inj [WellFoundedLT β] {f g : β ->
+ γ} (hf : StrictMono f) (hg : StrictMono g) : Set.range f = Set.range g ↔ f = g
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 
-English:
-theorem enum_eq_iff
-  given: {f : α -> α}
-  statement: Subtype.val ∘ enum s hs = f ↔ StrictMono f ∧ range f = s
-  proof: by
+--- 原说明 ---
+A characterization of `Order.enum s _`: it is the unique strictly monotone funct
+ion
+with range `s`.
+-/
+theorem enum_eq_iff {f : α → α} : Subtype.val ∘ enum s hs = f ↔ StrictMono f ∧ range f = s := by
   have H := (Subtype.strictMono_coe _).comp (enum s hs).strictMono
   constructor
   · rintro rfl
@@ -388,166 +358,165 @@ theorem enum_eq_iff
     rw [← StrictMono.range_inj H hf]
     simp
     rfl
-
-中文:
-定理 enum_eq_iff
-  条件: {f : α -> α}
-  结论: 子类型.val ∘ enum s hs = f ↔ 严格递增 f ∧ range f = s
-  证明: by
-  have H := (Subtype.strictMono_coe _).comp (enum s hs).strictMono
-  constructor
-  · rintro rfl
-    use (Subtype.strictMono_coe _).comp (enum s hs).strictMono
-    simp
-  · rintro ⟨hf, rfl⟩
-    rw [← StrictMono.range_inj H hf]
-    simp
-    rfl
-
-Depends on / 依赖: StrictMono, StrictMono.range_inj, Subtype, Subtype.strictMono_coe, range_inj, strictMono, strictMono_coe
+/-
+**Order.enum_range** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：enum_range {f : α -> α} (hf : StrictMono f) : enum (range f) (isCofinal_ra
+nge_of_strictMono hf) = hf.orderIso
+参数：hf : StrictMono f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.ext`：ext {f g : α ≃o β} (h : (f : α -> β) = g) : f = g
+· 使用定理 `isCofinal_range_of_strictMono`：isCofinal_range_of_strictMono [WellFounde
+dLT α] {f : α -> α} (hf : StrictMono f) : IsCofinal (range f)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Order.enum_eq_iff`：enum_eq_iff {f : α -> α} : Subtype.val ∘ enum s hs = 
+f ↔ StrictMono f ∧ range f = s
+· 使用定理 `StrictMono.comp`：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preord
+er α] [inst_1 : Preorder β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β}, Str
+ictMo…
+· 使用定理 `Subtype.strictMono_coe`：Subtype.strictMono_coe [Preorder α] (p : α -> Pr
+op) : StrictMono ((↑) : Subtype p -> α)
+· 使用定理 `OrderIso.strictMono`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α]
+ [inst_1 : Preorder β] (e : α ≃o β), StrictMono ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `StrictMono.orderIso_apply`：∀ {α : Type u_1} {β : Type u_2} [inst : Linea
+rOrder α] [inst_1 : Preorder β] (f : α → β) (h_mono : StrictMono f)   (a : α), (
+StrictMono.orde…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem enum_eq_iff {f : α -> α} : Subtype.val ∘ enum s hs = f ↔ StrictMono f ∧ range f = s := by
-  have H := (Subtype.strictMono_coe _).comp (enum s hs).strictMono
-  constructor
-  · rintro rfl
-    use (Subtype.strictMono_coe _).comp (enum s hs).strictMono
-    simp
-  · rintro ⟨hf, rfl⟩
-    rw [← StrictMono.range_inj H hf]
-    simp
-    rfl
-
-/--
-theorem `enum_range` / 定理 `enum_range`
-
-English:
-theorem enum_range
-  given: {f : α -> α} (hf : StrictMono f)
-  proof: by
-  ext x
-  apply congrFun (enum_eq_iff.2 ⟨?_, ?_⟩)
-  · exact (Subtype.strictMono_coe _).comp (OrderIso.strictMono _)
-  · simp
-
-中文:
-定理 enum_range
-  条件: {f : α -> α} (hf : 严格递增 f)
-  证明: by
-  ext x
-  apply congrFun (enum_eq_iff.2 ⟨?_, ?_⟩)
-  · exact (Subtype.strictMono_coe _).comp (OrderIso.strictMono _)
-  · simp
-
-Depends on / 依赖: OrderIso, OrderIso.strictMono, Subtype, Subtype.strictMono_coe, enum_eq_iff, strictMono, strictMono_coe
--/
-theorem enum_range {f : α -> α} (hf : StrictMono f) :
+theorem enum_range {f : α → α} (hf : StrictMono f) :
     enum (range f) (isCofinal_range_of_strictMono hf) = hf.orderIso := by
   ext x
   apply congrFun (enum_eq_iff.2 ⟨?_, ?_⟩)
   · exact (Subtype.strictMono_coe _).comp (OrderIso.strictMono _)
   · simp
-
-/--
-theorem `enum_bot` / 定理 `enum_bot`
-
-English:
-theorem enum_bot
-  statement: {α : Type*} [ConditionallyCompleteLinearOrderBot α] [WellFoundedLT α]
-  proof: by
-  let : Bot s := ⟨⟨sInf s, csInf_mem hs.nonempty⟩⟩
-  let : OrderBot s := .mk fun a => csInf_le' a.2
-  rw [OrderIso.map_bot]
-  rfl
-
-中文:
-定理 enum_bot
-  结论: {α : 类型} [余nditionallyCompleteLinearOrderBot α] [WellFoundedLT α]
-  证明: by
-  let : Bot s := ⟨⟨sInf s, csInf_mem hs.nonempty⟩⟩
-  let : OrderBot s := .mk fun a => csInf_le' a.2
-  rw [OrderIso.map_bot]
-  rfl
-
-Depends on / 依赖: OrderBot, OrderIso, OrderIso.map_bot, csInf_le, csInf_mem, hs.nonempty, map_bot, nonempty
+/-
+**Order.enum_bot** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：enum_bot {α : Type*} [ConditionallyCompleteLinearOrderBot α] [WellFoundedL
+T α] [IsRegularCardinalOrder α] {s : Set α} {hs : IsCofinal s} : enum s hs ⊥ = s
+Inf s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `csInf_mem`：csInf_mem (hs : s.Nonempty) : sInf s in s
+· 使用定理 `IsCofinal.nonempty`：IsCofinal.nonempty [Nonempty α] {s : Set α} (hs : Is
+Cofinal s) : s.Nonempty
+· 使用定理 `bot_nonempty`：∀ (α : Type u_1) [Bot α], Nonempty α
+· 使用定理 `csInf_le'`：csInf_le' (h : a in s) : sInf s <= a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OrderIso.map_bot`：OrderIso.map_bot [LE α] [PartialOrder β] [OrderBot α] 
+[OrderBot β] (f : α ≃o β) : f ⊥ = ⊥
 -/
 theorem enum_bot {α : Type*} [ConditionallyCompleteLinearOrderBot α] [WellFoundedLT α]
     [IsRegularCardinalOrder α] {s : Set α} {hs : IsCofinal s} : enum s hs ⊥ = sInf s := by
   let : Bot s := ⟨⟨sInf s, csInf_mem hs.nonempty⟩⟩
-  let : OrderBot s := .mk fun a => csInf_le' a.2
+  let : OrderBot s := .mk fun a ↦ csInf_le' a.2
   rw [OrderIso.map_bot]
   rfl
 
-/--
-theorem `isNormal_enum_iff_dirSupClosed` / 定理 `isNormal_enum_iff_dirSupClosed`
+/-- Club sets in regular cardinals correspond one to one with normal functions.
 
-English:
-theorem isNormal_enum_iff_dirSupClosed
-  proof: by
-  let H := (Subtype.strictMono_coe _).comp (enum s hs).strictMono
-  refine ⟨fun he => by simpa using he.dirSupClosed_range, ?_⟩
-  rw [isNormal_iff]; rw [dirSupClosed_iff_of_linearOrder]
-  refine fun hs' => ⟨H, fun a ha b hb => ?_⟩
-  have bdd : BddAbove (Subtype.val ∘ enum s hs '' Iio a) := by
-    use enum s hs a
-    simpa [upperBounds] using fun x hx => hx.le
-  have : Nonempty α := ⟨a⟩
-  let := WellFoundedLT.toOrderBot α
-  let := WellFoundedLT.conditionallyCompleteLinearOrderBot α
-  trans sSup ((Subtype.val ∘ enum s hs) '' Iio a)
-  · refine enum_le_of_forall_lt (hs' ?_ ?_ (isLUB_csSup' bdd)) fun b hb => ?_
-    · grind
-    · simpa using ha.ne_bot
-    · obtain ⟨c, hca, hbc⟩ := ha.lt_iff_exists_lt.1 hb
-refine (H hbc).trans_le le_csSup bdd ⟨c, ?_⟩
-      simpa
-  · apply csSup_le'
-    simpa [upperBounds]
+See also `Order.isNormal_enum_iff_isClub`. -/
+/-
+**Order.isNormal_enum_iff_dirSupClosed** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：isNormal_enum_iff_dirSupClosed : IsNormal (Subtype.val ∘ enum s hs) ↔ DirS
+upClosed s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `StrictMono.comp`：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preord
+er α] [inst_1 : Preorder β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β}, Str
+ictMo…
+· 使用定理 `Subtype.strictMono_coe`：Subtype.strictMono_coe [Preorder α] (p : α -> Pr
+op) : StrictMono ((↑) : Subtype p -> α)
+· 使用定理 `OrderIso.strictMono`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α]
+ [inst_1 : Preorder β] (e : α ≃o β), StrictMono ⇑e
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `EquivLike.range_comp`：∀ {ι : Sort u_1} {ι' : Sort u_2} {E : Type u_3} [i
+nst : EquivLike E ι ι'] {α : Type u_4} (f : ι' → α) (e : E),   Set.range (f ∘ ⇑e
+) = Set.ra…
+· 使用定理 `Subtype.range_coe_subtype`：range_coe_subtype {p : α -> Prop} : range ((↑
+) : Subtype p -> α) = { x | p x }
+· 使用定理 `Order.IsNormal.dirSupClosed_range`：dirSupClosed_range {f : α -> α} (hf :
+ IsNormal f) : DirSupClosed (range f)
+· 使用定理 `Order.isNormal_iff`：isNormal_iff [LinearOrder α] [LinearOrder β] {f : α 
+-> β} : IsNormal f ↔ StrictMono f ∧ forall o, IsSuccLimit o -> forall a, (forall
+ b < o, …
+· 使用定理 `dirSupClosed_iff_of_linearOrder`：dirSupClosed_iff_of_linearOrder : DirSu
+pClosed s ↔ forall ⦃d⦄, d subseteq s -> d.Nonempty -> forall ⦃a⦄, IsLUB d a -> a
+ in s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `OrderIso.instOrderIsoClass`：∀ {α : Type u_2} {β : Type u_3} [inst : LE α
+] [inst_1 : LE β], OrderIsoClass (α ≃o β) α β
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Order.enum_le_of_forall_lt`：enum_le_of_forall_lt {a o : α} (ho : o in s)
+ (H : forall b < a, enum s hs b < o) : enum s hs a <= o
+· 使用定理 `Order.IsSuccLimit.ne_bot`：∀ {α : Type u_1} {a : α} [inst : Preorder α] [
+inst_1 : OrderBot α], Order.IsSuccLimit a → a ≠ ⊥
+· 使用定理 `isLUB_csSup'`：isLUB_csSup' {s : Set α} (hs : BddAbove s) : IsLUB s (sSup
+ s)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Order.IsSuccLimit.lt_iff_exists_lt`：∀ {α : Type u_1} {a b : α} [inst : L
+inearOrder α], Order.IsSuccLimit b → (a < b ↔ ∃ c < b, a < c)
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `le_csSup`：le_csSup (h₁ : BddAbove s) (h₂ : a in s) : a <= sSup s
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `csSup_le'`：csSup_le' {s : Set α} {a : α} (h : a in upperBounds s) : sSup
+ s <= a
 
-中文:
-定理 isNormal_enum_iff_dirSupClosed
-  证明: by
-  let H := (Subtype.strictMono_coe _).comp (enum s hs).strictMono
-  refine ⟨fun he => by simpa using he.dirSupClosed_range, ?_⟩
-  rw [isNormal_iff]; rw [dirSupClosed_iff_of_linearOrder]
-  refine fun hs' => ⟨H, fun a ha b hb => ?_⟩
-  have bdd : BddAbove (Subtype.val ∘ enum s hs '' Iio a) := by
-    use enum s hs a
-    simpa [upperBounds] using fun x hx => hx.le
-  have : Nonempty α := ⟨a⟩
-  let := WellFoundedLT.toOrderBot α
-  let := WellFoundedLT.conditionallyCompleteLinearOrderBot α
-  trans sSup ((Subtype.val ∘ enum s hs) '' Iio a)
-  · refine enum_le_of_forall_lt (hs' ?_ ?_ (isLUB_csSup' bdd)) fun b hb => ?_
-    · grind
-    · simpa using ha.ne_bot
-    · obtain ⟨c, hca, hbc⟩ := ha.lt_iff_exists_lt.1 hb
-refine (H hbc).trans_le le_csSup bdd ⟨c, ?_⟩
-      simpa
-  · apply csSup_le'
-    simpa [upperBounds]
+--- 原说明 ---
+Club sets in regular cardinals correspond one to one with normal functions.
 
-Depends on / 依赖: BddAbove, Nonempty, Subtype, Subtype.strictMono_coe, Subtype.val, WellFoundedLT, WellFoundedLT.conditionallyCompleteLinearOrderBot, WellFoundedLT.toOrderBot, conditionallyCompleteLinearOrderBot, dirSupClosed_iff_of_linearOrder, dirSupClosed_range, he.dirSupClosed_range, hx.le, isNormal_iff, strictMono, strictMono_coe, toOrderBot, upperBounds
+See also `Order.isNormal_enum_iff_isClub`.
 -/
 theorem isNormal_enum_iff_dirSupClosed :
     IsNormal (Subtype.val ∘ enum s hs) ↔ DirSupClosed s := by
   let H := (Subtype.strictMono_coe _).comp (enum s hs).strictMono
-  refine ⟨fun he => by simpa using he.dirSupClosed_range, ?_⟩
-  rw [isNormal_iff]; rw [dirSupClosed_iff_of_linearOrder]
-  refine fun hs' => ⟨H, fun a ha b hb => ?_⟩
+  refine ⟨fun he ↦ by simpa using he.dirSupClosed_range, ?_⟩
+  rw [isNormal_iff, dirSupClosed_iff_of_linearOrder]
+  refine fun hs' ↦ ⟨H, fun a ha b hb ↦ ?_⟩
   have bdd : BddAbove (Subtype.val ∘ enum s hs '' Iio a) := by
     use enum s hs a
-    simpa [upperBounds] using fun x hx => hx.le
+    simpa [upperBounds] using fun x hx ↦ hx.le
   have : Nonempty α := ⟨a⟩
   let := WellFoundedLT.toOrderBot α
   let := WellFoundedLT.conditionallyCompleteLinearOrderBot α
   trans sSup ((Subtype.val ∘ enum s hs) '' Iio a)
-  · refine enum_le_of_forall_lt (hs' ?_ ?_ (isLUB_csSup' bdd)) fun b hb => ?_
+  · refine enum_le_of_forall_lt (hs' ?_ ?_ (isLUB_csSup' bdd)) fun b hb ↦ ?_
     · grind
     · simpa using ha.ne_bot
     · obtain ⟨c, hca, hbc⟩ := ha.lt_iff_exists_lt.1 hb
-refine (H hbc).trans_le le_csSup bdd ⟨c, ?_⟩
+      refine (H hbc).trans_le <| le_csSup bdd ⟨c, ?_⟩
       simpa
   · apply csSup_le'
     simpa [upperBounds]
 
 end Order
+

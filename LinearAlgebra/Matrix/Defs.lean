@@ -54,23 +54,22 @@ universe u u' v w
 /-- `Matrix m n R` is the type of matrices with entries in `R`, whose rows are indexed by `m`
 and whose columns are indexed by `n`. -/
 @[wikidata Q44337]
-/--
-Definition of `Matrix` / `Matrix` 的定义
+/-
+**Matrix** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Matrix (m : Type u) (n : Type u') (α : Type v) : Type max u u' v
+参数：m : Type u；n : Type u'；α : Type v。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Matrix
-  signature: (m : Type u) (n : Type u') (α : Type v)
-  body: m -> n -> α
-
-中文:
-定义 矩阵
-  签名: (m : 类型u) (n : 类型u') (α : 类型v)
-  定义体: m -> n -> α
+--- 原说明 ---
+`Matrix m n R` is the type of matrices with entries in `R`, whose rows are index
+ed by `m`
+and whose columns are indexed by `n`.
 -/
 def Matrix (m : Type u) (n : Type u') (α : Type v) : Type max u u' v :=
-  m -> n -> α
+  m → n → α
 
-variable {l m n o : Type*} {m' : o -> Type*} {n' : o -> Type*}
+variable {l m n o : Type*} {m' : o → Type*} {n' : o → Type*}
 variable {R : Type*} {S : Type*} {α : Type v} {β : Type w} {γ : Type*}
 
 namespace Matrix
@@ -79,1165 +78,726 @@ section Ext
 
 variable {M N : Matrix m n α}
 
-/--
-theorem `ext_iff` / 定理 `ext_iff`
-
-English:
-theorem ext_iff
-  statement: (forall i j, M i j = N i j) ↔ M = N
-  proof: ⟨fun h => funext fun i => funext h i, fun h => by simp [h]⟩
-
-@[ext]
-
-中文:
-定理 ext_iff
-  结论: (对任意 i j, M i j = N i j) ↔ M = N
-  证明: ⟨fun h => funext fun i => funext h i, fun h => by simp [h]⟩
-
-@[ext]
+/-
+**Matrix.ext_iff** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：ext_iff : (forall i j, M i j = N i j) ↔ M = N
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem ext_iff : (forall i j, M i j = N i j) ↔ M = N :=
-⟨fun h => funext fun i => funext h i, fun h => by simp [h]⟩
+theorem ext_iff : (∀ i j, M i j = N i j) ↔ M = N :=
+  ⟨fun h => funext fun i => funext <| h i, fun h => by simp [h]⟩
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  statement: (forall i j, M i j = N i j) -> M = N
-  proof: ext_iff.mp
-
-中文:
-定理 ext
-  结论: (对任意 i j, M i j = N i j) -> M = N
-  证明: ext_iff.mp
-
-Depends on / 依赖: ext_iff, ext_iff.mp
+/-
+**Matrix.ext** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：ext : (forall i j, M i j = N i j) -> M = N
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Matrix.ext_iff`：ext_iff : (forall i j, M i j = N i j) ↔ M = N
 -/
-theorem ext : (forall i j, M i j = N i j) -> M = N :=
+theorem ext : (∀ i j, M i j = N i j) → M = N :=
   ext_iff.mp
 
 end Ext
 
-/--
-Definition of `of` / `of` 的定义
+/-- Cast a function into a matrix.
 
-English:
-definition of
-  signature: : (m -> n -> α) ≃ Matrix m n α
-  body: Equiv.refl _
+The two sides of the equivalence are definitionally equal types. We want to use an explicit cast
+to distinguish the types because `Matrix` has different instances to pi types (such as `Pi.mul`,
+which performs elementwise multiplication, vs `Matrix.mul`).
 
-@[simp]
-
-中文:
-定义 of
-  签名: : (m -> n -> α) ≃ 矩阵 m n α
-  定义体: Equiv.refl _
-
-@[simp]
-
-Depends on / 依赖: Equiv.refl
+If you are defining a matrix, in terms of its entries, use `of (fun i j ↦ _)`. The
+purpose of this approach is to ensure that terms of the form `(fun i j ↦ _) * (fun i j ↦ _)` do not
+appear, as the type of `*` can be misleading.
 -/
-def of : (m -> n -> α) ≃ Matrix m n α :=
+/-
+**Matrix.of** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：of : (m -> n -> α) ≃ Matrix m n α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+
+--- 原说明 ---
+Cast a function into a matrix.
+
+The two sides of the equivalence are definitionally equal types. We want to use 
+an explicit cast
+to distinguish the types because `Matrix` has different instances to pi types (s
+uch as `Pi.mul`,
+which performs elementwise multiplication, vs `Matrix.mul`).
+
+If you are defining a matrix, in terms of its entries, use `of (fun i j ↦ _)`. T
+he
+purpose of this approach is to ensure that terms of the form `(fun i j ↦ _) * (f
+un i j ↦ _)` do not
+appear, as the type of `*` can be misleading.
+-/
+def of : (m → n → α) ≃ Matrix m n α :=
   Equiv.refl _
 
 @[simp]
-/--
-theorem `of_apply` / 定理 `of_apply`
-
-English:
-theorem of_apply
-  given: (f : m -> n -> α) (i j)
-  statement: of f i j = f i j
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 of_apply
-  条件: (f : m -> n -> α) (i j)
-  结论: of f i j = f i j
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.of_apply** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：of_apply (f : m -> n -> α) (i j) : of f i j = f i j
+参数：f : m -> n -> α；i j。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem of_apply (f : m -> n -> α) (i j) : of f i j = f i j :=
+theorem of_apply (f : m → n → α) (i j) : of f i j = f i j :=
   rfl
 
 @[simp]
-/--
-theorem `of_symm_apply` / 定理 `of_symm_apply`
-
-English:
-theorem of_symm_apply
-  given: (f : Matrix m n α) (i j)
-  statement: of.symm f i j = f i j
-  proof: rfl
-
-中文:
-定理 of_symm_apply
-  条件: (f : 矩阵 m n α) (i j)
-  结论: of.symm f i j = f i j
-  证明: rfl
+/-
+**Matrix.of_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：of_symm_apply (f : Matrix m n α) (i j) : of.symm f i j = f i j
+参数：f : Matrix m n α；i j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem of_symm_apply (f : Matrix m n α) (i j) : of.symm f i j = f i j :=
   rfl
 
-/--
-Definition of `ofArray` / `ofArray` 的定义
+/-- Construct a matrix from an array in row-major ordering. -/
+/-
+**Matrix.ofArray** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：ofArray {m n : Nat} (A : Array R) (hA : A.size = m * n) : Matrix (Fin m) (
+Fin n) R
+参数：A : Array R；hA : A.size = m * n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofArray
-  signature: {m n : Nat} (A : Array R) (hA : A.size = m * n)
-  body: fun i j => A[Fin.mkDivMod i j]
-
-@[simp]
-
-中文:
-定义 ofArray
-  签名: {m n : 自然数} (A : 数组 R) (hA : A.size = m * n)
-  定义体: fun i j => A[Fin.mkDivMod i j]
-
-@[simp]
-
-Depends on / 依赖: Fin.mkDivMod, mkDivMod
+--- 原说明 ---
+Construct a matrix from an array in row-major ordering.
 -/
-def ofArray {m n : Nat} (A : Array R) (hA : A.size = m * n) : Matrix (Fin m) (Fin n) R :=
+def ofArray {m n : ℕ} (A : Array R) (hA : A.size = m * n) : Matrix (Fin m) (Fin n) R :=
   fun i j => A[Fin.mkDivMod i j]
 
 @[simp]
-/--
-theorem `ofArray_apply` / 定理 `ofArray_apply`
-
-English:
-theorem ofArray_apply
-  given: {m n : Nat} (A : Array R) (hA : A.size = m * n) (i : Fin m) (j : Fin n)
-  proof: rfl
-
-中文:
-定理 ofArray_apply
-  条件: {m n : 自然数} (A : 数组 R) (hA : A.size = m * n) (i : 有限集 m) (j : 有限集 n)
-  证明: rfl
+/-
+**Matrix.ofArray_apply** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：ofArray_apply {m n : Nat} (A : Array R) (hA : A.size = m * n) (i : Fin m) 
+(j : Fin n) : ofArray A hA i j = A[Fin.mkDivMod i j]
+参数：A : Array R；hA : A.size = m * n；i : Fin m；j : Fin n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofArray_apply {m n : Nat} (A : Array R) (hA : A.size = m * n) (i : Fin m) (j : Fin n) :
+theorem ofArray_apply {m n : ℕ} (A : Array R) (hA : A.size = m * n) (i : Fin m) (j : Fin n) :
     ofArray A hA i j = A[Fin.mkDivMod i j] := rfl
 
 /-- The matrix constructed from the row-major array of `A`'s entries is `A`. -/
 @[simp]
-/--
-theorem `ofArray_ofFn` / 定理 `ofArray_ofFn`
+/-
+**Matrix.ofArray_ofFn** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：ofArray_ofFn {m n : Nat} (A : Matrix (Fin m) (Fin n) R) : ofArray (.ofFn f
+un k : Fin (m * n) => A k.divNat k.modNat) Array.size_ofFn = A
+参数：A : Matrix (Fin m) (Fin n) R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `Array.size_ofFn`：∀ {α : Type u_1} {n : ℕ} {f : Fin n → α}, (Array.ofFn f
+).size = n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.ofArray_apply`：ofArray_apply {m n : Nat} (A : Array R) (hA : A.si
+ze = m * n) (i : Fin m) (j : Fin n) : ofArray A hA i j = A[Fin.mkDivMod i j]
+· 使用定理 `Fin.getElem_fin`：∀ {Cont : Type u_1} {Elem : Type u_2} {Dom : Cont → ℕ →
+ Prop} {n : ℕ} [inst : GetElem Cont ℕ Elem Dom] (a : Cont)   (i : Fin n) (h : Do
+m a ↑…
+· 使用定理 `Array.getElem_ofFn`：∀ {n : ℕ} {α : Type u_1} {f : Fin n → α} {i : ℕ} (h 
+: i < (Array.ofFn f).size), (Array.ofFn f)[i] = f ⟨i, ⋯⟩
+· 使用定理 `Fin.divNat_mkDivMod`：∀ {m n : ℕ} (i : Fin m) (j : Fin n), (i.mkDivMod j)
+.divNat = i
+· 使用定理 `Fin.modNat_mkDivMod`：∀ {m n : ℕ} (i : Fin m) (j : Fin n), (i.mkDivMod j)
+.modNat = j
 
-English:
-theorem ofArray_ofFn
-  given: {m n : Nat} (A : Matrix (Fin m) (Fin n) R)
-  proof: by
-  ext i j
-  rw [ofArray_apply]; rw [Fin.getElem_fin]; rw [Array.getElem_ofFn]; rw [Fin.divNat_mkDivMod]; rw [Fin.modNat_mkDivMod]
-
-中文:
-定理 ofArray_ofFn
-  条件: {m n : 自然数} (A : 矩阵 (有限集 m) (有限集 n) R)
-  证明: by
-  ext i j
-  rw [ofArray_apply]; rw [Fin.getElem_fin]; rw [Array.getElem_ofFn]; rw [Fin.divNat_mkDivMod]; rw [Fin.modNat_mkDivMod]
-
-Depends on / 依赖: Array.getElem_ofFn, Fin.divNat_mkDivMod, Fin.getElem_fin, Fin.modNat_mkDivMod, divNat_mkDivMod, getElem_fin, getElem_ofFn, modNat_mkDivMod, ofArray_apply
+--- 原说明 ---
+The matrix constructed from the row-major array of `A`'s entries is `A`.
 -/
-theorem ofArray_ofFn {m n : Nat} (A : Matrix (Fin m) (Fin n) R) :
-    ofArray (.ofFn fun k : Fin (m * n) => A k.divNat k.modNat) Array.size_ofFn = A := by
+theorem ofArray_ofFn {m n : ℕ} (A : Matrix (Fin m) (Fin n) R) :
+    ofArray (.ofFn fun k : Fin (m * n) ↦ A k.divNat k.modNat) Array.size_ofFn = A := by
   ext i j
-  rw [ofArray_apply]; rw [Fin.getElem_fin]; rw [Array.getElem_ofFn]; rw [Fin.divNat_mkDivMod]; rw [Fin.modNat_mkDivMod]
-
-/--
-lemma `ofArray_eq_of_getD` / 引理 `ofArray_eq_of_getD`
-
-English:
-lemma ofArray_eq_of_getD
-  given: [Zero R] {m n : Nat} (A : Array R) (hA : A.size = m * n)
-  proof: by
+  rw [ofArray_apply, Fin.getElem_fin, Array.getElem_ofFn, Fin.divNat_mkDivMod,
+    Fin.modNat_mkDivMod]
+/-
+**Matrix.ofArray_eq_of_getD** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：ofArray_eq_of_getD [Zero R] {m n : Nat} (A : Array R) (hA : A.size = m * n
+) : ofArray A hA = .of fun i j => A.getD (n * i.val + j.val) 0
+参数：A : Array R；hA : A.size = m * n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `Fin.isLt`：∀ {n : ℕ} (self : Fin n), ↑self < n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Array.getD_eq_getD_getElem?`：∀ {α : Type u_1} {xs : Array α} {i : ℕ} {d 
+: α}, xs.getD i d = xs[i]?.getD d
+· 使用定理 `getElem?_pos`：∀ {cont : Type u_1} {idx : Type u_2} {elem : Type u_3} {do
+m : cont → idx → Prop} [inst : GetElem? cont idx elem dom]   [LawfulGetElem cont
+ i…
+· 使用定理 `Array.instLawfulGetElemNatLtSize`：∀ {α : Type u_1}, LawfulGetElem (Array
+ α) ℕ α fun xs i => i < xs.size
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+lemma ofArray_eq_of_getD [Zero R] {m n : ℕ} (A : Array R) (hA : A.size = m * n) :
+    ofArray A hA = .of fun i j ↦ A.getD (n * i.val + j.val) 0 := by
   ext i j
   have : n * i.val + j.val < m * n := (Fin.mkDivMod i j).isLt
   simp [ofArray, hA, this]
 
-中文:
-引理 ofArray_eq_of_getD
-  条件: [零 R] {m n : 自然数} (A : 数组 R) (hA : A.size = m * n)
-  证明: by
-  ext i j
-  have : n * i.val + j.val < m * n := (Fin.mkDivMod i j).isLt
-  simp [ofArray, hA, this]
+/-- `M.map f` is the matrix obtained by applying `f` to each entry of the matrix `M`.
 
-Depends on / 依赖: Fin.mkDivMod, i.val, j.val, mkDivMod, ofArray
+This is available in bundled forms as:
+* `AddMonoidHom.mapMatrix`
+* `LinearMap.mapMatrix`
+* `RingHom.mapMatrix`
+* `AlgHom.mapMatrix`
+* `Equiv.mapMatrix`
+* `AddEquiv.mapMatrix`
+* `LinearEquiv.mapMatrix`
+* `RingEquiv.mapMatrix`
+* `AlgEquiv.mapMatrix`
 -/
-lemma ofArray_eq_of_getD [Zero R] {m n : Nat} (A : Array R) (hA : A.size = m * n) :
-    ofArray A hA = .of fun i j => A.getD (n * i.val + j.val) 0 := by
-  ext i j
-  have : n * i.val + j.val < m * n := (Fin.mkDivMod i j).isLt
-  simp [ofArray, hA, this]
+/-
+**Matrix.map** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：map (M : Matrix m n α) (f : α -> β) : Matrix m n β
+参数：M : Matrix m n α；f : α -> β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-Definition of `map` / `map` 的定义
+--- 原说明 ---
+`M.map f` is the matrix obtained by applying `f` to each entry of the matrix `M`
+.
 
-English:
-definition map
-  signature: (M : Matrix m n α) (f : α -> β)
-  body: of fun i j => f (M i j)
-
-@[simp]
-
-中文:
-定义 map
-  签名: (M : 矩阵 m n α) (f : α -> β)
-  定义体: of fun i j => f (M i j)
-
-@[simp]
+This is available in bundled forms as:
+* `AddMonoidHom.mapMatrix`
+* `LinearMap.mapMatrix`
+* `RingHom.mapMatrix`
+* `AlgHom.mapMatrix`
+* `Equiv.mapMatrix`
+* `AddEquiv.mapMatrix`
+* `LinearEquiv.mapMatrix`
+* `RingEquiv.mapMatrix`
+* `AlgEquiv.mapMatrix`
 -/
-def map (M : Matrix m n α) (f : α -> β) : Matrix m n β :=
+def map (M : Matrix m n α) (f : α → β) : Matrix m n β :=
   of fun i j => f (M i j)
 
 @[simp]
-/--
-theorem `map_apply` / 定理 `map_apply`
-
-English:
-theorem map_apply
-  given: {M : Matrix m n α} {f : α -> β} {i : m} {j : n}
-  statement: M.map f i j = f (M i j)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 map_apply
-  条件: {M : 矩阵 m n α} {f : α -> β} {i : m} {j : n}
-  结论: M.map f i j = f (M i j)
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.map_apply** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：map_apply {M : Matrix m n α} {f : α -> β} {i : m} {j : n} : M.map f i j = 
+f (M i j)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_apply {M : Matrix m n α} {f : α -> β} {i : m} {j : n} : M.map f i j = f (M i j) :=
+theorem map_apply {M : Matrix m n α} {f : α → β} {i : m} {j : n} : M.map f i j = f (M i j) :=
   rfl
 
 @[simp]
-/--
-theorem `map_id` / 定理 `map_id`
-
-English:
-theorem map_id
-  given: (M : Matrix m n α)
-  statement: M.map id = M
-  proof: by
-  ext
-  rfl
-
-@[simp]
-
-中文:
-定理 map_id
-  条件: (M : 矩阵 m n α)
-  结论: M.map id = M
-  证明: by
-  ext
-  rfl
-
-@[simp]
+/-
+**Matrix.map_id** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：map_id (M : Matrix m n α) : M.map id = M
+参数：M : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
 -/
 theorem map_id (M : Matrix m n α) : M.map id = M := by
   ext
   rfl
 
 @[simp]
-/--
-theorem `map_id'` / 定理 `map_id'`
-
-English:
-theorem map_id'
-  given: (M : Matrix m n α)
-  statement: M.map (·) = M
-  proof: map_id M
-
-@[simp]
-
-中文:
-定理 map_id'
-  条件: (M : 矩阵 m n α)
-  结论: M.map (·) = M
-  证明: map_id M
-
-@[simp]
-
-Depends on / 依赖: map_id
+/-
+**Matrix.map_id'** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：map_id' (M : Matrix m n α) : M.map (·) = M
+参数：M : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.map_id`：map_id (M : Matrix m n α) : M.map id = M
 -/
 theorem map_id' (M : Matrix m n α) : M.map (·) = M := map_id M
 
 @[simp]
-/--
-theorem `map_map` / 定理 `map_map`
-
-English:
-theorem map_map
-  given: {M : Matrix m n α} {β γ : Type*} {f : α -> β} {g : β -> γ}
-  proof: by
-  ext
-  rfl
-
-中文:
-定理 map_map
-  条件: {M : 矩阵 m n α} {β γ : 类型} {f : α -> β} {g : β -> γ}
-  证明: by
-  ext
-  rfl
+/-
+**Matrix.map_map** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：map_map {M : Matrix m n α} {β γ : Type*} {f : α -> β} {g : β -> γ} : (M.ma
+p f).map g = M.map (g ∘ f)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
 -/
-theorem map_map {M : Matrix m n α} {β γ : Type*} {f : α -> β} {g : β -> γ} :
+theorem map_map {M : Matrix m n α} {β γ : Type*} {f : α → β} {g : β → γ} :
     (M.map f).map g = M.map (g ∘ f) := by
   ext
   rfl
-
-/--
-theorem `map_injective` / 定理 `map_injective`
-
-English:
-theorem map_injective
-  given: {f : α -> β} (hf : Function.Injective f)
-  proof: fun _ _ h =>
-ext fun i j => hf ext_iff.mpr h i j
-
-中文:
-定理 map_injective
-  条件: {f : α -> β} (hf : 函数.单射 f)
-  证明: fun _ _ h =>
-ext fun i j => hf ext_iff.mpr h i j
+/-
+**Matrix.map_injective** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：map_injective {f : α -> β} (hf : Function.Injective f) : Function.Injectiv
+e fun M : Matrix m n α => M.map f
+参数：hf : Function.Injective f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Matrix.ext_iff`：ext_iff : (forall i j, M i j = N i j) ↔ M = N
 -/
-theorem map_injective {f : α -> β} (hf : Function.Injective f) :
+theorem map_injective {f : α → β} (hf : Function.Injective f) :
     Function.Injective fun M : Matrix m n α => M.map f := fun _ _ h =>
-ext fun i j => hf ext_iff.mpr h i j
-
-/--
-theorem `map_involutive` / 定理 `map_involutive`
-
-English:
-theorem map_involutive
-  given: {f : α -> α} (hf : Function.Involutive f)
-  proof: by intro; simp [hf]
-
-中文:
-定理 map_involutive
-  条件: {f : α -> α} (hf : 函数.对合 f)
-  证明: by intro; simp [hf]
+  ext fun i j => hf <| ext_iff.mpr h i j
+/-
+**Matrix.map_involutive** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：map_involutive {f : α -> α} (hf : Function.Involutive f) : Function.Involu
+tive fun M : Matrix m n α => M.map f
+参数：hf : Function.Involutive f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Matrix.map_map`：map_map {M : Matrix m n α} {β γ : Type*} {f : α -> β} {g
+ : β -> γ} : (M.map f).map g = M.map (g ∘ f)
+· 使用定理 `Function.Involutive.comp_self`：comp_self : f ∘ f = id
+· 使用定理 `Matrix.map_id`：map_id (M : Matrix m n α) : M.map id = M
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem map_involutive {f : α -> α} (hf : Function.Involutive f) :
-    Function.Involutive fun M : Matrix m n α => M.map f := by intro; simp [hf]
+theorem map_involutive {f : α → α} (hf : Function.Involutive f) :
+    Function.Involutive fun M : Matrix m n α ↦ M.map f := by intro; simp [hf]
 
-/--
-Definition of `transpose` / `transpose` 的定义
+/-- The transpose of a matrix.
 
-English:
-definition transpose
-  signature: (M : Matrix m n α)
-  body: of fun x y => M y x
+This is available in bundled forms as:
+* `Matrix.transposeAddEquiv`
+* `Matrix.transposeLinearEquiv`
+* `Matrix.transposeRingEquiv`
+* `Matrix.transposeAlgEquiv`
+* `RingEquiv.mopMatrix`
+* `AlgEquiv.mopMatrix`
+-/
+/-
+**Matrix.transpose** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：transpose (M : Matrix m n α) : Matrix n m α
+参数：M : Matrix m n α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 transpose
-  签名: (M : 矩阵 m n α)
-  定义体: of fun x y => M y x
+--- 原说明 ---
+The transpose of a matrix.
+
+This is available in bundled forms as:
+* `Matrix.transposeAddEquiv`
+* `Matrix.transposeLinearEquiv`
+* `Matrix.transposeRingEquiv`
+* `Matrix.transposeAlgEquiv`
+* `RingEquiv.mopMatrix`
+* `AlgEquiv.mopMatrix`
 -/
 def transpose (M : Matrix m n α) : Matrix n m α :=
   of fun x y => M y x
 
 -- TODO: set as an equation lemma for `transpose`, see https://github.com/leanprover-community/mathlib4/pull/3024
 @[simp]
-/--
-theorem `transpose_apply` / 定理 `transpose_apply`
-
-English:
-theorem transpose_apply
-  given: (M : Matrix m n α) (i j)
-  statement: transpose M i j = M j i
-  proof: rfl
-
-@[inherit_doc]
-scoped postfix:1024 "ᵀ" => Matrix.transpose
-
-中文:
-定理 transpose_apply
-  条件: (M : 矩阵 m n α) (i j)
-  结论: transpose M i j = M j i
-  证明: rfl
-
-@[inherit_doc]
-scoped postfix:1024 "ᵀ" => Matrix.transpose
+/-
+**Matrix.transpose_apply** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：transpose_apply (M : Matrix m n α) (i j) : transpose M i j = M j i
+参数：M : Matrix m n α；i j。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem transpose_apply (M : Matrix m n α) (i j) : transpose M i j = M j i :=
   rfl
 
 @[inherit_doc]
 scoped postfix:1024 "ᵀ" => Matrix.transpose
-
-/--
-Instance `inhabited` / 实例 `inhabited`
-
-English:
-instance inhabited
-  signature: [Inhabited α]
-  body: inferInstanceAs Inhabited (m -> n -> α)
-
-中文:
-实例 inhabited
-  签名: [可居 α]
-  定义体: inferInstanceAs Inhabited (m -> n -> α)
-
-Depends on / 依赖: Inhabited
+/-
+**Matrix.inhabited** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：inhabited [Inhabited α] : Inhabited (Matrix m n α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance inhabited [Inhabited α] : Inhabited (Matrix m n α) :=
-inferInstanceAs Inhabited (m -> n -> α)
-
-/--
-Instance `add` / 实例 `add`
-
-English:
-instance add
-  signature: [Add α]
-  body: inferInstanceAs Add (m -> n -> α)
-
-中文:
-实例 add
-  签名: [加法 α]
-  定义体: inferInstanceAs Add (m -> n -> α)
+  inferInstanceAs <| Inhabited (m → n → α)
+/-
+**Matrix.add** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：add [Add α] : Add (Matrix m n α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance add [Add α] : Add (Matrix m n α) :=
-inferInstanceAs Add (m -> n -> α)
-
-/--
-Instance `smul` / 实例 `smul`
-
-English:
-instance smul
-  signature: [SMul R α]
-  body: fun i => a • b i
-
-中文:
-实例 smul
-  签名: [标量乘法 R α]
-  定义体: fun i => a • b i
+  inferInstanceAs <| Add (m → n → α)
+/-
+**Matrix.smul** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：smul [SMul R α] : SMul R (Matrix m n α) where smul a b
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance smul [SMul R α] : SMul R (Matrix m n α) where
-  smul a b := fun i => a • b i
-
-/--
-Instance `addSemigroup` / 实例 `addSemigroup`
-
-English:
-instance addSemigroup
-  signature: [AddSemigroup α]
-  body: inferInstanceAs AddSemigroup (m -> n -> α)
-
-中文:
-实例 addSemigroup
-  签名: [加法半群 α]
-  定义体: inferInstanceAs AddSemigroup (m -> n -> α)
-
-Depends on / 依赖: AddSemigroup
+  smul a b := fun i ↦ a • b i
+/-
+**Matrix.addSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：addSemigroup [AddSemigroup α] : AddSemigroup (Matrix m n α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance addSemigroup [AddSemigroup α] : AddSemigroup (Matrix m n α) :=
-inferInstanceAs AddSemigroup (m -> n -> α)
-
-/--
-Instance `addCommSemigroup` / 实例 `addCommSemigroup`
-
-English:
-instance addCommSemigroup
-  signature: [AddCommSemigroup α]
-  body: inferInstanceAs AddCommSemigroup (m -> n -> α)
-
-中文:
-实例 addCommSemigroup
-  签名: [加法交换半群 α]
-  定义体: inferInstanceAs AddCommSemigroup (m -> n -> α)
-
-Depends on / 依赖: AddCommSemigroup
+  inferInstanceAs <| AddSemigroup (m → n → α)
+/-
+**Matrix.addCommSemigroup** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：addCommSemigroup [AddCommSemigroup α] : AddCommSemigroup (Matrix m n α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance addCommSemigroup [AddCommSemigroup α] : AddCommSemigroup (Matrix m n α) :=
-inferInstanceAs AddCommSemigroup (m -> n -> α)
-
-/--
-Instance `zero` / 实例 `zero`
-
-English:
-instance zero
-  signature: [Zero α]
-  body: inferInstanceAs Zero (m -> n -> α)
-
-中文:
-实例 zero
-  签名: [零 α]
-  定义体: inferInstanceAs Zero (m -> n -> α)
+  inferInstanceAs <| AddCommSemigroup (m → n → α)
+/-
+**Matrix.zero** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：zero [Zero α] : Zero (Matrix m n α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance zero [Zero α] : Zero (Matrix m n α) :=
-inferInstanceAs Zero (m -> n -> α)
-
-/--
-Instance `addZeroClass` / 实例 `addZeroClass`
-
-English:
-instance addZeroClass
-  signature: [AddZeroClass α]
-  body: inferInstanceAs AddZeroClass (m -> n -> α)
-
-中文:
-实例 addZeroClass
-  签名: [加法零类 α]
-  定义体: inferInstanceAs AddZeroClass (m -> n -> α)
-
-Depends on / 依赖: AddZeroClass
+  inferInstanceAs <| Zero (m → n → α)
+/-
+**Matrix.addZeroClass** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：addZeroClass [AddZeroClass α] : AddZeroClass (Matrix m n α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance addZeroClass [AddZeroClass α] : AddZeroClass (Matrix m n α) :=
-inferInstanceAs AddZeroClass (m -> n -> α)
-
-/--
-Instance `addMonoid` / 实例 `addMonoid`
-
-English:
-instance addMonoid
-  signature: [AddMonoid α]
-  body: inferInstanceAs AddMonoid (m -> n -> α)
-
-中文:
-实例 addMonoid
-  签名: [加法幺半群 α]
-  定义体: inferInstanceAs AddMonoid (m -> n -> α)
-
-Depends on / 依赖: AddMonoid
+  inferInstanceAs <| AddZeroClass (m → n → α)
+/-
+**Matrix.addMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：addMonoid [AddMonoid α] : AddMonoid (Matrix m n α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance addMonoid [AddMonoid α] : AddMonoid (Matrix m n α) :=
-inferInstanceAs AddMonoid (m -> n -> α)
-
-/--
-Instance `addCommMonoid` / 实例 `addCommMonoid`
-
-English:
-instance addCommMonoid
-  signature: [AddCommMonoid α]
-  body: inferInstanceAs AddCommMonoid (m -> n -> α)
-
-中文:
-实例 addCommMonoid
-  签名: [加法交换幺半群 α]
-  定义体: inferInstanceAs AddCommMonoid (m -> n -> α)
-
-Depends on / 依赖: AddCommMonoid
+  inferInstanceAs <| AddMonoid (m → n → α)
+/-
+**Matrix.addCommMonoid** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：addCommMonoid [AddCommMonoid α] : AddCommMonoid (Matrix m n α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance addCommMonoid [AddCommMonoid α] : AddCommMonoid (Matrix m n α) :=
-inferInstanceAs AddCommMonoid (m -> n -> α)
-
-/--
-Instance `neg` / 实例 `neg`
-
-English:
-instance neg
-  signature: [Neg α]
-  body: inferInstanceAs Neg (m -> n -> α)
-
-中文:
-实例 neg
-  签名: [取负 α]
-  定义体: inferInstanceAs Neg (m -> n -> α)
+  inferInstanceAs <| AddCommMonoid (m → n → α)
+/-
+**Matrix.neg** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：neg [Neg α] : Neg (Matrix m n α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance neg [Neg α] : Neg (Matrix m n α) :=
-inferInstanceAs Neg (m -> n -> α)
-
-/--
-Instance `involutiveNeg` / 实例 `involutiveNeg`
-
-English:
-instance involutiveNeg
-  signature: [InvolutiveNeg α]
-  body: inferInstanceAs InvolutiveNeg (m -> n -> α)
-
-中文:
-实例 involutiveNeg
-  签名: [InvolutiveNeg α]
-  定义体: inferInstanceAs InvolutiveNeg (m -> n -> α)
-
-Depends on / 依赖: InvolutiveNeg
+  inferInstanceAs <| Neg (m → n → α)
+/-
+**Matrix.involutiveNeg** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：involutiveNeg [InvolutiveNeg α] : InvolutiveNeg (Matrix m n α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance involutiveNeg [InvolutiveNeg α] : InvolutiveNeg (Matrix m n α) :=
-inferInstanceAs InvolutiveNeg (m -> n -> α)
-
-/--
-Instance `sub` / 实例 `sub`
-
-English:
-instance sub
-  signature: [Sub α]
-  body: inferInstanceAs Sub (m -> n -> α)
-
-中文:
-实例 sub
-  签名: [减法 α]
-  定义体: inferInstanceAs Sub (m -> n -> α)
+  inferInstanceAs <| InvolutiveNeg (m → n → α)
+/-
+**Matrix.sub** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：sub [Sub α] : Sub (Matrix m n α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance sub [Sub α] : Sub (Matrix m n α) :=
-inferInstanceAs Sub (m -> n -> α)
-
-/--
-Instance `addGroup` / 实例 `addGroup`
-
-English:
-instance addGroup
-  signature: [AddGroup α]
-  body: inferInstanceAs AddGroup (m -> n -> α)
-
-中文:
-实例 addGroup
-  签名: [加法群 α]
-  定义体: inferInstanceAs AddGroup (m -> n -> α)
-
-Depends on / 依赖: AddGroup
+  inferInstanceAs <| Sub (m → n → α)
+/-
+**Matrix.addGroup** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：addGroup [AddGroup α] : AddGroup (Matrix m n α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance addGroup [AddGroup α] : AddGroup (Matrix m n α) :=
-inferInstanceAs AddGroup (m -> n -> α)
-
-/--
-Instance `addCommGroup` / 实例 `addCommGroup`
-
-English:
-instance addCommGroup
-  signature: [AddCommGroup α]
-  body: inferInstanceAs AddCommGroup (m -> n -> α)
-
-中文:
-实例 addCommGroup
-  签名: [加法交换群 α]
-  定义体: inferInstanceAs AddCommGroup (m -> n -> α)
-
-Depends on / 依赖: AddCommGroup
+  inferInstanceAs <| AddGroup (m → n → α)
+/-
+**Matrix.addCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：addCommGroup [AddCommGroup α] : AddCommGroup (Matrix m n α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance addCommGroup [AddCommGroup α] : AddCommGroup (Matrix m n α) :=
-inferInstanceAs AddCommGroup (m -> n -> α)
-
-/--
-Instance `unique` / 实例 `unique`
-
-English:
-instance unique
-  signature: [Unique α]
-  body: inferInstanceAs Unique (m -> n -> α)
-
-中文:
-实例 unique
-  签名: [唯一 α]
-  定义体: inferInstanceAs Unique (m -> n -> α)
-
-Depends on / 依赖: Unique
+  inferInstanceAs <| AddCommGroup (m → n → α)
+/-
+**Matrix.unique** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：unique [Unique α] : Unique (Matrix m n α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance unique [Unique α] : Unique (Matrix m n α) :=
-inferInstanceAs Unique (m -> n -> α)
-
-/--
-Instance `subsingleton` / 实例 `subsingleton`
-
-English:
-instance subsingleton
-  signature: [Subsingleton α]
-  body: inferInstanceAs Subsingleton m -> n -> α
-
-中文:
-实例 subsingleton
-  签名: [子单例 α]
-  定义体: inferInstanceAs Subsingleton m -> n -> α
-
-Depends on / 依赖: Subsingleton
+  inferInstanceAs <| Unique (m → n → α)
+/-
+**Matrix.subsingleton** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：subsingleton [Subsingleton α] : Subsingleton (Matrix m n α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance subsingleton [Subsingleton α] : Subsingleton (Matrix m n α) :=
-inferInstanceAs Subsingleton m -> n -> α
-
-/--
-Instance `nonempty` / 实例 `nonempty`
-
-English:
-instance nonempty
-  signature: [Nonempty m] [Nonempty n] [Nontrivial α]
-  body: Function.nontrivial
-
-中文:
-实例 nonempty
-  签名: [非空 m] [非空 n] [非平凡 α]
-  定义体: Function.nontrivial
-
-Depends on / 依赖: Function, Function.nontrivial, nontrivial
+  inferInstanceAs <| Subsingleton <| m → n → α
+/-
+**Matrix.nonempty** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：nonempty [Nonempty m] [Nonempty n] [Nontrivial α] : Nontrivial (Matrix m n
+ α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance nonempty [Nonempty m] [Nonempty n] [Nontrivial α] : Nontrivial (Matrix m n α) :=
   Function.nontrivial
-
-/--
-Instance `smulCommClass` / 实例 `smulCommClass`
-
-English:
-instance smulCommClass
-  signature: [SMul R α] [SMul S α] [SMulCommClass R S α]
-  body: Pi.smulCommClass
-
-中文:
-实例 smulCommClass
-  签名: [标量乘法 R α] [标量乘法 S α] [标量交换类 R S α]
-  定义体: Pi.smulCommClass
-
-Depends on / 依赖: Pi.smulCommClass, smulCommClass
+/-
+**Matrix.smulCommClass** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：smulCommClass [SMul R α] [SMul S α] [SMulCommClass R S α] : SMulCommClass 
+R S (Matrix m n α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance smulCommClass [SMul R α] [SMul S α] [SMulCommClass R S α] :
     SMulCommClass R S (Matrix m n α) :=
   Pi.smulCommClass
-
-/--
-Instance `isScalarTower` / 实例 `isScalarTower`
-
-English:
-instance isScalarTower
-  signature: [SMul R S] [SMul R α] [SMul S α] [IsScalarTower R S α]
-  body: Pi.isScalarTower
-
-中文:
-实例 isScalarTower
-  签名: [标量乘法 R S] [标量乘法 R α] [标量乘法 S α] [标量塔 R S α]
-  定义体: Pi.isScalarTower
-
-Depends on / 依赖: Pi.isScalarTower, isScalarTower
+/-
+**Matrix.isScalarTower** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：isScalarTower [SMul R S] [SMul R α] [SMul S α] [IsScalarTower R S α] : IsS
+calarTower R S (Matrix m n α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance isScalarTower [SMul R S] [SMul R α] [SMul S α] [IsScalarTower R S α] :
     IsScalarTower R S (Matrix m n α) :=
   Pi.isScalarTower
-
-/--
-Instance `isCentralScalar` / 实例 `isCentralScalar`
-
-English:
-instance isCentralScalar
-  signature: [SMul R α] [SMul Rᵐᵒᵖ α] [IsCentralScalar R α]
-  body: Pi.isCentralScalar
-
-中文:
-实例 isCentralScalar
-  签名: [标量乘法 R α] [标量乘法 Rᵐᵒᵖ α] [中心标量 R α]
-  定义体: Pi.isCentralScalar
-
-Depends on / 依赖: Pi.isCentralScalar, isCentralScalar
+/-
+**Matrix.isCentralScalar** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：isCentralScalar [SMul R α] [SMul Rᵐᵒᵖ α] [IsCentralScalar R α] : IsCentral
+Scalar R (Matrix m n α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance isCentralScalar [SMul R α] [SMul Rᵐᵒᵖ α] [IsCentralScalar R α] :
     IsCentralScalar R (Matrix m n α) :=
   Pi.isCentralScalar
-
-/--
-Instance `mulAction` / 实例 `mulAction`
-
-English:
-instance mulAction
-  signature: [Monoid R] [MulAction R α]
-  body: inferInstanceAs MulAction R (m -> n -> α)
-
-中文:
-实例 mulAction
-  签名: [幺半群 R] [乘法作用 R α]
-  定义体: inferInstanceAs MulAction R (m -> n -> α)
-
-Depends on / 依赖: MulAction
+/-
+**Matrix.mulAction** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：mulAction [Monoid R] [MulAction R α] : MulAction R (Matrix m n α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance mulAction [Monoid R] [MulAction R α] : MulAction R (Matrix m n α) :=
-inferInstanceAs MulAction R (m -> n -> α)
-
-/--
-Instance `distribMulAction` / 实例 `distribMulAction`
-
-English:
-instance distribMulAction
-  signature: [Monoid R] [AddMonoid α] [DistribMulAction R α]
-  body: inferInstanceAs DistribMulAction R (m -> n -> α)
-
-中文:
-实例 distribMulAction
-  签名: [幺半群 R] [加法幺半群 α] [分配乘法作用 R α]
-  定义体: inferInstanceAs DistribMulAction R (m -> n -> α)
-
-Depends on / 依赖: DistribMulAction
+  inferInstanceAs <| MulAction R (m → n → α)
+/-
+**Matrix.distribMulAction** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：distribMulAction [Monoid R] [AddMonoid α] [DistribMulAction R α] : Distrib
+MulAction R (Matrix m n α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance distribMulAction [Monoid R] [AddMonoid α] [DistribMulAction R α] :
     DistribMulAction R (Matrix m n α) :=
-inferInstanceAs DistribMulAction R (m -> n -> α)
-
-/--
-Instance `module` / 实例 `module`
-
-English:
-instance module
-  signature: [Semiring R] [AddCommMonoid α] [Module R α]
-  body: inferInstanceAs Module R (m -> n -> α)
-
-中文:
-实例 module
-  签名: [半环 R] [加法交换幺半群 α] [模 R α]
-  定义体: inferInstanceAs Module R (m -> n -> α)
-
-Depends on / 依赖: Module
+  inferInstanceAs <| DistribMulAction R (m → n → α)
+/-
+**Matrix.module** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：module [Semiring R] [AddCommMonoid α] [Module R α] : Module R (Matrix m n 
+α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance module [Semiring R] [AddCommMonoid α] [Module R α] : Module R (Matrix m n α) :=
-inferInstanceAs Module R (m -> n -> α)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Add
-  signature: α] [IsAddCommutative α] : IsAddCommutative Matrix m n α
-  body: inferInstanceAs IsAddCommutative m -> n -> α
-
-中文:
-实例 [加法
-  签名: α] [是加法交换 α] : 是加法交换 矩阵 m n α
-  定义体: inferInstanceAs IsAddCommutative m -> n -> α
-
-Depends on / 依赖: IsAddCommutative
+  inferInstanceAs <| Module R (m → n → α)
+/-
+**Matrix.** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Add α] [IsAddCommutative α] : IsAddCommutative Matrix m n α :=
-inferInstanceAs IsAddCommutative m -> n -> α
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCommMagma
-  signature: α] : AddCommMagma Matrix m n α
-  body: inferInstanceAs AddCommMagma m -> n -> α
-
-中文:
-实例 [加法交换原群
-  签名: α] : 加法交换原群 矩阵 m n α
-  定义体: inferInstanceAs AddCommMagma m -> n -> α
-
-Depends on / 依赖: AddCommMagma
+instance [Add α] [IsAddCommutative α] : IsAddCommutative <| Matrix m n α :=
+  inferInstanceAs <| IsAddCommutative <| m → n → α
+/-
+**Matrix.** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [AddCommMagma α] : AddCommMagma Matrix m n α :=
-inferInstanceAs AddCommMagma m -> n -> α
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Add
-  signature: α] [IsLeftCancelAdd α] : IsLeftCancelAdd Matrix m n α
-  body: inferInstanceAs IsLeftCancelAdd m -> n -> α
-
-中文:
-实例 [加法
-  签名: α] [是左消去加法 α] : 是左消去加法 矩阵 m n α
-  定义体: inferInstanceAs IsLeftCancelAdd m -> n -> α
-
-Depends on / 依赖: IsLeftCancelAdd
+instance [AddCommMagma α] : AddCommMagma <| Matrix m n α :=
+  inferInstanceAs <| AddCommMagma <| m → n → α
+/-
+**Matrix.** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Add α] [IsLeftCancelAdd α] : IsLeftCancelAdd Matrix m n α :=
-inferInstanceAs IsLeftCancelAdd m -> n -> α
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Add
-  signature: α] [IsRightCancelAdd α] : IsRightCancelAdd Matrix m n α
-  body: inferInstanceAs IsRightCancelAdd m -> n -> α
-
-中文:
-实例 [加法
-  签名: α] [是右消去加法 α] : 是右消去加法 矩阵 m n α
-  定义体: inferInstanceAs IsRightCancelAdd m -> n -> α
-
-Depends on / 依赖: IsRightCancelAdd
+instance [Add α] [IsLeftCancelAdd α] : IsLeftCancelAdd <| Matrix m n α :=
+  inferInstanceAs <| IsLeftCancelAdd <| m → n → α
+/-
+**Matrix.** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Add α] [IsRightCancelAdd α] : IsRightCancelAdd Matrix m n α :=
-inferInstanceAs IsRightCancelAdd m -> n -> α
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Add
-  signature: α] [IsCancelAdd α] : IsCancelAdd Matrix m n α
-  body: inferInstanceAs IsCancelAdd m -> n -> α
-
-中文:
-实例 [加法
-  签名: α] [是消去加法 α] : 是消去加法 矩阵 m n α
-  定义体: inferInstanceAs IsCancelAdd m -> n -> α
-
-Depends on / 依赖: IsCancelAdd
+instance [Add α] [IsRightCancelAdd α] : IsRightCancelAdd <| Matrix m n α :=
+  inferInstanceAs <| IsRightCancelAdd <| m → n → α
+/-
+**Matrix.** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Add α] [IsCancelAdd α] : IsCancelAdd Matrix m n α :=
-inferInstanceAs IsCancelAdd m -> n -> α
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddLeftCancelSemigroup
-  signature: α] : AddLeftCancelSemigroup Matrix m n α
-  body: inferInstanceAs AddLeftCancelSemigroup m -> n -> α
-
-中文:
-实例 [加法左消去半群
-  签名: α] : 加法左消去半群 矩阵 m n α
-  定义体: inferInstanceAs AddLeftCancelSemigroup m -> n -> α
-
-Depends on / 依赖: AddLeftCancelSemigroup
+instance [Add α] [IsCancelAdd α] : IsCancelAdd <| Matrix m n α :=
+  inferInstanceAs <| IsCancelAdd <| m → n → α
+/-
+**Matrix.** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [AddLeftCancelSemigroup α] : AddLeftCancelSemigroup Matrix m n α :=
-inferInstanceAs AddLeftCancelSemigroup m -> n -> α
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddRightCancelSemigroup
-  signature: α] : AddRightCancelSemigroup Matrix m n α
-  body: inferInstanceAs AddRightCancelSemigroup m -> n -> α
-
-中文:
-实例 [加法右消去半群
-  签名: α] : 加法右消去半群 矩阵 m n α
-  定义体: inferInstanceAs AddRightCancelSemigroup m -> n -> α
-
-Depends on / 依赖: AddRightCancelSemigroup
+instance [AddLeftCancelSemigroup α] : AddLeftCancelSemigroup <| Matrix m n α :=
+  inferInstanceAs <| AddLeftCancelSemigroup <| m → n → α
+/-
+**Matrix.** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [AddRightCancelSemigroup α] : AddRightCancelSemigroup Matrix m n α :=
-inferInstanceAs AddRightCancelSemigroup m -> n -> α
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddLeftCancelMonoid
-  signature: α] : AddLeftCancelMonoid Matrix m n α
-  body: inferInstanceAs AddLeftCancelMonoid m -> n -> α
-
-中文:
-实例 [加法左消去幺半群
-  签名: α] : 加法左消去幺半群 矩阵 m n α
-  定义体: inferInstanceAs AddLeftCancelMonoid m -> n -> α
-
-Depends on / 依赖: AddLeftCancelMonoid
+instance [AddRightCancelSemigroup α] : AddRightCancelSemigroup <| Matrix m n α :=
+  inferInstanceAs <| AddRightCancelSemigroup <| m → n → α
+/-
+**Matrix.** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [AddLeftCancelMonoid α] : AddLeftCancelMonoid Matrix m n α :=
-inferInstanceAs AddLeftCancelMonoid m -> n -> α
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddRightCancelMonoid
-  signature: α] : AddRightCancelMonoid Matrix m n α
-  body: inferInstanceAs AddRightCancelMonoid m -> n -> α
-
-中文:
-实例 [加法右消去幺半群
-  签名: α] : 加法右消去幺半群 矩阵 m n α
-  定义体: inferInstanceAs AddRightCancelMonoid m -> n -> α
-
-Depends on / 依赖: AddRightCancelMonoid
+instance [AddLeftCancelMonoid α] : AddLeftCancelMonoid <| Matrix m n α :=
+  inferInstanceAs <| AddLeftCancelMonoid <| m → n → α
+/-
+**Matrix.** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [AddRightCancelMonoid α] : AddRightCancelMonoid Matrix m n α :=
-inferInstanceAs AddRightCancelMonoid m -> n -> α
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCancelMonoid
-  signature: α] : AddCancelMonoid Matrix m n α
-  body: inferInstanceAs AddCancelMonoid m -> n -> α
-
-中文:
-实例 [加法消去幺半群
-  签名: α] : 加法消去幺半群 矩阵 m n α
-  定义体: inferInstanceAs AddCancelMonoid m -> n -> α
-
-Depends on / 依赖: AddCancelMonoid
+instance [AddRightCancelMonoid α] : AddRightCancelMonoid <| Matrix m n α :=
+  inferInstanceAs <| AddRightCancelMonoid <| m → n → α
+/-
+**Matrix.** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [AddCancelMonoid α] : AddCancelMonoid Matrix m n α :=
-inferInstanceAs AddCancelMonoid m -> n -> α
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCancelCommMonoid
-  signature: α] : AddCancelCommMonoid Matrix m n α
-  body: inferInstanceAs AddCancelCommMonoid m -> n -> α
-
-中文:
-实例 [加法消去交换幺半群
-  签名: α] : 加法消去交换幺半群 矩阵 m n α
-  定义体: inferInstanceAs AddCancelCommMonoid m -> n -> α
-
-Depends on / 依赖: AddCancelCommMonoid
+instance [AddCancelMonoid α] : AddCancelMonoid <| Matrix m n α :=
+  inferInstanceAs <| AddCancelMonoid <| m → n → α
+/-
+**Matrix.** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [AddCancelCommMonoid α] : AddCancelCommMonoid Matrix m n α :=
-inferInstanceAs AddCancelCommMonoid m -> n -> α
+instance [AddCancelCommMonoid α] : AddCancelCommMonoid <| Matrix m n α :=
+  inferInstanceAs <| AddCancelCommMonoid <| m → n → α
 
 section
 
 @[simp]
-/--
-theorem `zero_apply` / 定理 `zero_apply`
-
-English:
-theorem zero_apply
-  given: [Zero α] (i : m) (j : n)
-  statement: (0 : Matrix m n α) i j = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 zero_apply
-  条件: [零 α] (i : m) (j : n)
-  结论: (0 : 矩阵 m n α) i j = 0
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.zero_apply** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：zero_apply [Zero α] (i : m) (j : n) : (0 : Matrix m n α) i j = 0
+参数：i : m；j : n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem zero_apply [Zero α] (i : m) (j : n) : (0 : Matrix m n α) i j = 0 := rfl
 
 @[simp]
-/--
-theorem `of_symm_zero` / 定理 `of_symm_zero`
-
-English:
-theorem of_symm_zero
-  given: [Zero α]
-  statement: of.symm (0 : Matrix m n α) = (0 : m -> n -> α)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 of_symm_zero
-  条件: [零 α]
-  结论: of.symm (0 : 矩阵 m n α) = (0 : m -> n -> α)
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.of_symm_zero** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：of_symm_zero [Zero α] : of.symm (0 : Matrix m n α) = (0 : m -> n -> α)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-theorem of_symm_zero [Zero α] : of.symm (0 : Matrix m n α) = (0 : m -> n -> α) := rfl
+theorem of_symm_zero [Zero α] : of.symm (0 : Matrix m n α) = (0 : m → n → α) := rfl
 
 @[simp]
-/--
-theorem `add_apply` / 定理 `add_apply`
-
-English:
-theorem add_apply
-  given: [Add α] (A B : Matrix m n α) (i : m) (j : n)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 add_apply
-  条件: [加法 α] (A B : 矩阵 m n α) (i : m) (j : n)
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.add_apply** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：add_apply [Add α] (A B : Matrix m n α) (i : m) (j : n) : (A + B) i j = (A 
+i j) + (B i j)
+参数：A B : Matrix m n α；i : m；j : n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem add_apply [Add α] (A B : Matrix m n α) (i : m) (j : n) :
     (A + B) i j = (A i j) + (B i j) := rfl
 
 @[simp]
-/--
-theorem `smul_apply` / 定理 `smul_apply`
-
-English:
-theorem smul_apply
-  given: [SMul β α] (r : β) (A : Matrix m n α) (i : m) (j : n)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 smul_apply
-  条件: [标量乘法 β α] (r : β) (A : 矩阵 m n α) (i : m) (j : n)
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.smul_apply** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：smul_apply [SMul β α] (r : β) (A : Matrix m n α) (i : m) (j : n) : (r • A)
+ i j = r • (A i j)
+参数：r : β；A : Matrix m n α；i : m；j : n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_apply [SMul β α] (r : β) (A : Matrix m n α) (i : m) (j : n) :
     (r • A) i j = r • (A i j) := rfl
 
 @[simp]
-/--
-theorem `sub_apply` / 定理 `sub_apply`
-
-English:
-theorem sub_apply
-  given: [Sub α] (A B : Matrix m n α) (i : m) (j : n)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 sub_apply
-  条件: [减法 α] (A B : 矩阵 m n α) (i : m) (j : n)
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.sub_apply** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：sub_apply [Sub α] (A B : Matrix m n α) (i : m) (j : n) : (A - B) i j = (A 
+i j) - (B i j)
+参数：A B : Matrix m n α；i : m；j : n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem sub_apply [Sub α] (A B : Matrix m n α) (i : m) (j : n) :
     (A - B) i j = (A i j) - (B i j) := rfl
 
 @[simp]
-/--
-theorem `neg_apply` / 定理 `neg_apply`
-
-English:
-theorem neg_apply
-  given: [Neg α] (A : Matrix m n α) (i : m) (j : n)
-  proof: rfl
-
-中文:
-定理 neg_apply
-  条件: [取负 α] (A : 矩阵 m n α) (i : m) (j : n)
-  证明: rfl
+/-
+**Matrix.neg_apply** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：neg_apply [Neg α] (A : Matrix m n α) (i : m) (j : n) : (-A) i j = -(A i j)
+参数：A : Matrix m n α；i : m；j : n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem neg_apply [Neg α] (A : Matrix m n α) (i : m) (j : n) :
     (-A) i j = -(A i j) := rfl
-
-/--
-theorem `dite_apply` / 定理 `dite_apply`
-
-English:
-theorem dite_apply
-  statement: (P : Prop) [Decidable P]
-  proof: by
-  by_cases h : P <;> simp [h]
-
-中文:
-定理 dite_apply
-  结论: (P : 命题) [可判定 P]
-  证明: by
-  by_cases h : P <;> simp [h]
+/-
+**Matrix.dite_apply** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_2} {n : Type u_3} {α : Type v} (P : Prop) [inst : Decidable 
+P] (A : P → Matrix m n α)   (B : ¬P → Matrix m n α) (i : m) (j : n), dite P A B 
+i j = if x : P then A x i j else B x i j
+参数：P : Prop；A : P → Matrix m n α；B : ¬P → Matrix m n α；i : m；j : n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `of_eq_false`：∀ {p : Prop}, p = False → ¬p
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
 -/
 protected theorem dite_apply (P : Prop) [Decidable P]
-    (A : P -> Matrix m n α) (B : ¬P -> Matrix m n α) (i : m) (j : n) :
+    (A : P → Matrix m n α) (B : ¬P → Matrix m n α) (i : m) (j : n) :
     dite P A B i j = dite P (A · i j) (B · i j) := by
   by_cases h : P <;> simp [h]
-
-/--
-theorem `ite_apply` / 定理 `ite_apply`
-
-English:
-theorem ite_apply
-  statement: (P : Prop) [Decidable P]
-  proof: Matrix.dite_apply _ _ _ _ _
-
-中文:
-定理 ite_apply
-  结论: (P : 命题) [可判定 P]
-  证明: Matrix.dite_apply _ _ _ _ _
+/-
+**Matrix.ite_apply** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_2} {n : Type u_3} {α : Type v} (P : Prop) [inst : Decidable 
+P] (A B : Matrix m n α) (i : m) (j : n),   (if P then A else B) i j = if P then 
+A i j else B i j
+参数：P : Prop；A B : Matrix m n α；i : m；j : n；if P then A else B。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.dite_apply`：∀ {m : Type u_2} {n : Type u_3} {α : Type v} (P : Pro
+p) [inst : Decidable P] (A : P → Matrix m n α)   (B : ¬P → Matrix m n α) (i : m)
+ (j : n…
 -/
 protected theorem ite_apply (P : Prop) [Decidable P]
     (A : Matrix m n α) (B : Matrix m n α) (i : m) (j : n) :
@@ -1249,421 +809,273 @@ end
 /-! simp-normal form pulls `of` to the outside. -/
 
 @[simp]
-/--
-theorem `of_zero` / 定理 `of_zero`
+/-
+**Matrix.of_zero** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：of_zero [Zero α] : of (0 : m -> n -> α) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem of_zero
-  given: [Zero α]
-  statement: of (0 : m -> n -> α) = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 of_zero
-  条件: [零 α]
-  结论: of (0 : m -> n -> α) = 0
-  证明: rfl
-
-@[simp]
+--- 原说明 ---
+simp-normal form pulls `of` to the outside.
 -/
-theorem of_zero [Zero α] : of (0 : m -> n -> α) = 0 :=
+theorem of_zero [Zero α] : of (0 : m → n → α) = 0 :=
   rfl
 
 @[simp]
-/--
-theorem `of_add_of` / 定理 `of_add_of`
-
-English:
-theorem of_add_of
-  given: [Add α] (f g : m -> n -> α)
-  statement: of f + of g = of (f + g)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 of_add_of
-  条件: [加法 α] (f g : m -> n -> α)
-  结论: of f + of g = of (f + g)
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.of_add_of** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：of_add_of [Add α] (f g : m -> n -> α) : of f + of g = of (f + g)
+参数：f g : m -> n -> α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem of_add_of [Add α] (f g : m -> n -> α) : of f + of g = of (f + g) :=
+theorem of_add_of [Add α] (f g : m → n → α) : of f + of g = of (f + g) :=
   rfl
 
 @[simp]
-/--
-theorem `of_sub_of` / 定理 `of_sub_of`
-
-English:
-theorem of_sub_of
-  given: [Sub α] (f g : m -> n -> α)
-  statement: of f - of g = of (f - g)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 of_sub_of
-  条件: [减法 α] (f g : m -> n -> α)
-  结论: of f - of g = of (f - g)
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.of_sub_of** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：of_sub_of [Sub α] (f g : m -> n -> α) : of f - of g = of (f - g)
+参数：f g : m -> n -> α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem of_sub_of [Sub α] (f g : m -> n -> α) : of f - of g = of (f - g) :=
+theorem of_sub_of [Sub α] (f g : m → n → α) : of f - of g = of (f - g) :=
   rfl
 
 @[simp]
-/--
-theorem `neg_of` / 定理 `neg_of`
-
-English:
-theorem neg_of
-  given: [Neg α] (f : m -> n -> α)
-  statement: -of f = of (-f)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 neg_of
-  条件: [取负 α] (f : m -> n -> α)
-  结论: -of f = of (-f)
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.neg_of** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：neg_of [Neg α] (f : m -> n -> α) : -of f = of (-f)
+参数：f : m -> n -> α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem neg_of [Neg α] (f : m -> n -> α) : -of f = of (-f) :=
+theorem neg_of [Neg α] (f : m → n → α) : -of f = of (-f) :=
   rfl
 
 @[simp]
-/--
-theorem `smul_of` / 定理 `smul_of`
-
-English:
-theorem smul_of
-  given: [SMul R α] (r : R) (f : m -> n -> α)
-  statement: r • of f = of (r • f)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 smul_of
-  条件: [标量乘法 R α] (r : R) (f : m -> n -> α)
-  结论: r • of f = of (r • f)
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.smul_of** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：smul_of [SMul R α] (r : R) (f : m -> n -> α) : r • of f = of (r • f)
+参数：r : R；f : m -> n -> α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem smul_of [SMul R α] (r : R) (f : m -> n -> α) : r • of f = of (r • f) :=
+theorem smul_of [SMul R α] (r : R) (f : m → n → α) : r • of f = of (r • f) :=
   rfl
 
 @[simp]
-/--
-theorem `map_zero` / 定理 `map_zero`
-
-English:
-theorem map_zero
-  given: [Zero α] [Zero β] (f : α -> β) (h : f 0 = 0)
-  proof: by
-  ext
-  simp [h]
-
-中文:
-定理 map_zero
-  条件: [零 α] [零 β] (f : α -> β) (h : f 0 = 0)
-  证明: by
-  ext
-  simp [h]
+/-
+**Matrix.map_zero** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_2} {n : Type u_3} {α : Type v} {β : Type w} [inst : Zero α] 
+[inst_1 : Zero β] (f : α → β),   f 0 = 0 → Matrix.map 0 f = 0
+参数：f : α → β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-protected theorem map_zero [Zero α] [Zero β] (f : α -> β) (h : f 0 = 0) :
+protected theorem map_zero [Zero α] [Zero β] (f : α → β) (h : f 0 = 0) :
     (0 : Matrix m n α).map f = 0 := by
   ext
   simp [h]
-
-/--
-theorem `map_add` / 定理 `map_add`
-
-English:
-theorem map_add
-  statement: [Add α] [Add β] (f : α -> β) (hf : forall a₁ a₂, f (a₁ + a₂) = f a₁ + f a₂)
-  proof: ext fun _ _ => hf _ _
-
-中文:
-定理 map_add
-  结论: [加法 α] [加法 β] (f : α -> β) (hf : 对任意 a₁ a₂, f (a₁ + a₂) = f a₁ + f a₂)
-  证明: ext fun _ _ => hf _ _
+/-
+**Matrix.map_add** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_2} {n : Type u_3} {α : Type v} {β : Type w} [inst : Add α] [
+inst_1 : Add β] (f : α → β),   (∀ (a₁ a₂ : α), f (a₁ + a₂) = f a₁ + f a₂) → ∀ (M
+ N : Matrix m n α), (M + N).map f = M.map f + N.map f
+参数：f : α → β；∀ (a₁ a₂ : α), f (a₁ + a₂) = f a₁ + f a₂；M N : Matrix m n α；M + N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
 -/
-protected theorem map_add [Add α] [Add β] (f : α -> β) (hf : forall a₁ a₂, f (a₁ + a₂) = f a₁ + f a₂)
+protected theorem map_add [Add α] [Add β] (f : α → β) (hf : ∀ a₁ a₂, f (a₁ + a₂) = f a₁ + f a₂)
     (M N : Matrix m n α) : (M + N).map f = M.map f + N.map f :=
   ext fun _ _ => hf _ _
-
-/--
-theorem `map_neg` / 定理 `map_neg`
-
-English:
-theorem map_neg
-  statement: [Neg α] [Neg β] (f : α -> β) (hf : forall a, f (-a) = -f a)
-  proof: ext fun _ _ => hf _
-
-中文:
-定理 map_neg
-  结论: [取负 α] [取负 β] (f : α -> β) (hf : 对任意 a, f (-a) = -f a)
-  证明: ext fun _ _ => hf _
+/-
+**Matrix.map_neg** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_2} {n : Type u_3} {α : Type v} {β : Type w} [inst : Neg α] [
+inst_1 : Neg β] (f : α → β),   (∀ (a : α), f (-a) = -f a) → ∀ (M : Matrix m n α)
+, (-M).map f = -M.map f
+参数：f : α → β；∀ (a : α), f (-a) = -f a；M : Matrix m n α；-M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
 -/
-protected theorem map_neg [Neg α] [Neg β] (f : α -> β) (hf : forall a, f (-a) = -f a)
+protected theorem map_neg [Neg α] [Neg β] (f : α → β) (hf : ∀ a, f (-a) = -f a)
     (M : Matrix m n α) : (-M).map f = -(M.map f) :=
   ext fun _ _ => hf _
-
-/--
-theorem `map_sub` / 定理 `map_sub`
-
-English:
-theorem map_sub
-  statement: [Sub α] [Sub β] (f : α -> β) (hf : forall a₁ a₂, f (a₁ - a₂) = f a₁ - f a₂)
-  proof: ext fun _ _ => hf _ _
-
-中文:
-定理 map_sub
-  结论: [减法 α] [减法 β] (f : α -> β) (hf : 对任意 a₁ a₂, f (a₁ - a₂) = f a₁ - f a₂)
-  证明: ext fun _ _ => hf _ _
+/-
+**Matrix.map_sub** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_2} {n : Type u_3} {α : Type v} {β : Type w} [inst : Sub α] [
+inst_1 : Sub β] (f : α → β),   (∀ (a₁ a₂ : α), f (a₁ - a₂) = f a₁ - f a₂) → ∀ (M
+ N : Matrix m n α), (M - N).map f = M.map f - N.map f
+参数：f : α → β；∀ (a₁ a₂ : α), f (a₁ - a₂) = f a₁ - f a₂；M N : Matrix m n α；M - N。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
 -/
-protected theorem map_sub [Sub α] [Sub β] (f : α -> β) (hf : forall a₁ a₂, f (a₁ - a₂) = f a₁ - f a₂)
+protected theorem map_sub [Sub α] [Sub β] (f : α → β) (hf : ∀ a₁ a₂, f (a₁ - a₂) = f a₁ - f a₂)
     (M N : Matrix m n α) : (M - N).map f = M.map f - N.map f :=
   ext fun _ _ => hf _ _
-
-/--
-theorem `map_smul` / 定理 `map_smul`
-
-English:
-theorem map_smul
-  statement: [SMul R α] [SMul R β] (f : α -> β) (r : R) (hf : forall a, f (r • a) = r • f a)
-  proof: ext fun _ _ => hf _
-
-中文:
-定理 map_smul
-  结论: [标量乘法 R α] [标量乘法 R β] (f : α -> β) (r : R) (hf : 对任意 a, f (r • a) = r • f a)
-  证明: ext fun _ _ => hf _
+/-
+**Matrix.map_smul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_2} {n : Type u_3} {R : Type u_7} {α : Type v} {β : Type w} [
+inst : SMul R α] [inst_1 : SMul R β]   (f : α → β) (r : R), (∀ (a : α), f (r • a
+) = r • f a) → ∀ (M : Matrix m n α), (r • M).map f = r • M.map f
+参数：f : α → β；r : R；∀ (a : α), f (r • a) = r • f a；M : Matrix m n α；r • M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
 -/
-protected theorem map_smul [SMul R α] [SMul R β] (f : α -> β) (r : R) (hf : forall a, f (r • a) = r • f a)
+protected theorem map_smul [SMul R α] [SMul R β] (f : α → β) (r : R) (hf : ∀ a, f (r • a) = r • f a)
     (M : Matrix m n α) : (r • M).map f = r • M.map f :=
   ext fun _ _ => hf _
-
-/--
-theorem `map_smulₛₗ` / 定理 `map_smulₛₗ`
-
-English:
-theorem map_smulₛₗ
-  statement: [SMul R α] [SMul S β] (f : α -> β) (σ : R -> S) (r : R)
-  proof: ext fun _ _ => hf _
-
-中文:
-定理 map_smulₛₗ
-  结论: [标量乘法 R α] [标量乘法 S β] (f : α -> β) (σ : R -> S) (r : R)
-  证明: ext fun _ _ => hf _
+/-
+**Matrix.map_smul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_2} {n : Type u_3} {R : Type u_7} {α : Type v} {β : Type w} [
+inst : SMul R α] [inst_1 : SMul R β]   (f : α → β) (r : R), (∀ (a : α), f (r • a
+) = r • f a) → ∀ (M : Matrix m n α), (r • M).map f = r • M.map f
+参数：f : α → β；r : R；∀ (a : α), f (r • a) = r • f a；M : Matrix m n α；r • M。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
 -/
-protected theorem map_smulₛₗ [SMul R α] [SMul S β] (f : α -> β) (σ : R -> S) (r : R)
-    (hf : forall a, f (r • a) = σ r • f a)
+protected theorem map_smulₛₗ [SMul R α] [SMul S β] (f : α → β) (σ : R → S) (r : R)
+    (hf : ∀ a, f (r • a) = σ r • f a)
     (M : Matrix m n α) : (r • M).map f = σ r • M.map f :=
   ext fun _ _ => hf _
 
-/--
-theorem `map_smul'` / 定理 `map_smul'`
+/-- The scalar action via `Mul.toSMul` is transformed by the same map as the elements
+of the matrix, when `f` preserves multiplication. -/
+/-
+**Matrix.map_smul'** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：map_smul' [Mul α] [Mul β] (f : α -> β) (r : α) (A : Matrix n n α) (hf : fo
+rall a₁ a₂, f (a₁ * a₂) = f a₁ * f a₂) : (r • A).map f = f r • A.map f
+参数：f : α -> β；r : α；A : Matrix n n α；hf : forall a₁ a₂, f (a₁ * a₂) = f a₁ * f a
+₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
 
-English:
-theorem map_smul'
-  statement: [Mul α] [Mul β] (f : α -> β) (r : α) (A : Matrix n n α)
-  proof: ext fun _ _ => hf _ _
-
-中文:
-定理 map_smul'
-  结论: [乘法 α] [乘法 β] (f : α -> β) (r : α) (A : 矩阵 n n α)
-  证明: ext fun _ _ => hf _ _
+--- 原说明 ---
+The scalar action via `Mul.toSMul` is transformed by the same map as the element
+s
+of the matrix, when `f` preserves multiplication.
 -/
-theorem map_smul' [Mul α] [Mul β] (f : α -> β) (r : α) (A : Matrix n n α)
-    (hf : forall a₁ a₂, f (a₁ * a₂) = f a₁ * f a₂) : (r • A).map f = f r • A.map f :=
+theorem map_smul' [Mul α] [Mul β] (f : α → β) (r : α) (A : Matrix n n α)
+    (hf : ∀ a₁ a₂, f (a₁ * a₂) = f a₁ * f a₂) : (r • A).map f = f r • A.map f :=
   ext fun _ _ => hf _ _
 
-/--
-theorem `map_op_smul'` / 定理 `map_op_smul'`
+/-- The scalar action via `mul.toOppositeSMul` is transformed by the same map as the
+elements of the matrix, when `f` preserves multiplication. -/
+/-
+**Matrix.map_op_smul'** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：map_op_smul' [Mul α] [Mul β] (f : α -> β) (r : α) (A : Matrix n n α) (hf :
+ forall a₁ a₂, f (a₁ * a₂) = f a₁ * f a₂) : (MulOpposite.op r • A).map f = MulOp
+posite.op (f r) • A.map f
+参数：f : α -> β；r : α；A : Matrix n n α；hf : forall a₁ a₂, f (a₁ * a₂) = f a₁ * f a
+₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
 
-English:
-theorem map_op_smul'
-  statement: [Mul α] [Mul β] (f : α -> β) (r : α) (A : Matrix n n α)
-  proof: ext fun _ _ => hf _ _
-
-中文:
-定理 map_op_smul'
-  结论: [乘法 α] [乘法 β] (f : α -> β) (r : α) (A : 矩阵 n n α)
-  证明: ext fun _ _ => hf _ _
+--- 原说明 ---
+The scalar action via `mul.toOppositeSMul` is transformed by the same map as the
+elements of the matrix, when `f` preserves multiplication.
 -/
-theorem map_op_smul' [Mul α] [Mul β] (f : α -> β) (r : α) (A : Matrix n n α)
-    (hf : forall a₁ a₂, f (a₁ * a₂) = f a₁ * f a₂) :
+theorem map_op_smul' [Mul α] [Mul β] (f : α → β) (r : α) (A : Matrix n n α)
+    (hf : ∀ a₁ a₂, f (a₁ * a₂) = f a₁ * f a₂) :
     (MulOpposite.op r • A).map f = MulOpposite.op (f r) • A.map f :=
   ext fun _ _ => hf _ _
-
-/--
-theorem `_root_.IsSMulRegular.matrix` / 定理 `_root_.IsSMulRegular.matrix`
-
-English:
-theorem _root_.IsSMulRegular.matrix
-  given: [SMul R S] {k : R} (hk : IsSMulRegular S k)
-  proof: IsSMulRegular.pi fun _ => IsSMulRegular.pi fun _ => hk
-
-中文:
-定理 _root_.IsSMulRegular.matrix
-  条件: [标量乘法 R S] {k : R} (hk : IsSMulRegular S k)
-  证明: IsSMulRegular.pi fun _ => IsSMulRegular.pi fun _ => hk
-
-Depends on / 依赖: IsSMulRegular, IsSMulRegular.pi
+/-
+**Matrix._root_.IsSMulRegular.matrix** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.IsSMulRegular.matrix [SMul R S] {k : R} (hk : IsSMulRegular S k) :
     IsSMulRegular (Matrix m n S) k :=
   IsSMulRegular.pi fun _ => IsSMulRegular.pi fun _ => hk
-
-/--
-theorem `_root_.IsLeftRegular.matrix` / 定理 `_root_.IsLeftRegular.matrix`
-
-English:
-theorem _root_.IsLeftRegular.matrix
-  given: [Mul α] {k : α} (hk : IsLeftRegular k)
-  proof: hk.isSMulRegular.matrix
-
-中文:
-定理 _root_.IsLeftRegular.matrix
-  条件: [乘法 α] {k : α} (hk : IsLeftRegular k)
-  证明: hk.isSMulRegular.matrix
-
-Depends on / 依赖: hk.isSMulRegular.matrix, isSMulRegular, matrix
+/-
+**Matrix._root_.IsLeftRegular.matrix** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.IsLeftRegular.matrix [Mul α] {k : α} (hk : IsLeftRegular k) :
     IsSMulRegular (Matrix m n α) k :=
   hk.isSMulRegular.matrix
-
-/--
-Instance `subsingleton_of_empty_left` / 实例 `subsingleton_of_empty_left`
-
-English:
-instance subsingleton_of_empty_left
-  signature: [IsEmpty m]
-  body: ⟨fun M N => by
-    ext i
-    exact isEmptyElim i⟩
-
-中文:
-实例 subsingleton_of_empty_left
-  签名: [是空 m]
-  定义体: ⟨fun M N => by
-    ext i
-    exact isEmptyElim i⟩
-
-Depends on / 依赖: isEmptyElim
+/-
+**Matrix.subsingleton_of_empty_left** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：subsingleton_of_empty_left [IsEmpty m] : Subsingleton (Matrix m n α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
 -/
 instance subsingleton_of_empty_left [IsEmpty m] : Subsingleton (Matrix m n α) :=
   ⟨fun M N => by
     ext i
     exact isEmptyElim i⟩
-
-/--
-Instance `subsingleton_of_empty_right` / 实例 `subsingleton_of_empty_right`
-
-English:
-instance subsingleton_of_empty_right
-  signature: [IsEmpty n]
-  body: ⟨fun M N => by
-    ext i j
-    exact isEmptyElim j⟩
-
-中文:
-实例 subsingleton_of_empty_right
-  签名: [是空 n]
-  定义体: ⟨fun M N => by
-    ext i j
-    exact isEmptyElim j⟩
-
-Depends on / 依赖: isEmptyElim
+/-
+**Matrix.subsingleton_of_empty_right** 是 Mathlib 中的一个实例，位于命名空间 `Matrix`。
+形式化陈述：subsingleton_of_empty_right [IsEmpty n] : Subsingleton (Matrix m n α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
 -/
 instance subsingleton_of_empty_right [IsEmpty n] : Subsingleton (Matrix m n α) :=
   ⟨fun M N => by
     ext i j
     exact isEmptyElim j⟩
 
-/--
-Definition of `ofAddEquiv` / `ofAddEquiv` 的定义
+/-- This is `Matrix.of` bundled as an additive equivalence. -/
+/-
+**Matrix.ofAddEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：ofAddEquiv [Add α] : (m -> n -> α) ≃+ Matrix m n α where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofAddEquiv
-  signature: [Add α]
-  body: of
-  map_add' _ _ := rfl
-
-中文:
-定义 ofAddEquiv
-  签名: [加法 α]
-  定义体: of
-  map_add' _ _ := rfl
+--- 原说明 ---
+This is `Matrix.of` bundled as an additive equivalence.
 -/
-def ofAddEquiv [Add α] : (m -> n -> α) ≃+ Matrix m n α where
+def ofAddEquiv [Add α] : (m → n → α) ≃+ Matrix m n α where
   __ := of
   map_add' _ _ := rfl
-
-/--
-lemma `coe_ofAddEquiv` / 引理 `coe_ofAddEquiv`
-
-English:
-lemma coe_ofAddEquiv
-  given: [Add α]
-  proof: rfl
-
-中文:
-引理 coe_ofAddEquiv
-  条件: [加法 α]
-  证明: rfl
+/-
+**Matrix.coe_ofAddEquiv** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_2} {n : Type u_3} {α : Type v} [inst : Add α], ⇑Matrix.ofAdd
+Equiv = ⇑Matrix.of
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_ofAddEquiv [Add α] :
-    ⇑(ofAddEquiv : (m -> n -> α) ≃+ Matrix m n α) = of := rfl
-/--
-lemma `coe_ofAddEquiv_symm` / 引理 `coe_ofAddEquiv_symm`
-
-English:
-lemma coe_ofAddEquiv_symm
-  given: [Add α]
-  proof: rfl
-
-中文:
-引理 coe_ofAddEquiv_symm
-  条件: [加法 α]
-  证明: rfl
+    ⇑(ofAddEquiv : (m → n → α) ≃+ Matrix m n α) = of := rfl
+/-
+**Matrix.coe_ofAddEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_2} {n : Type u_3} {α : Type v} [inst : Add α], ⇑Matrix.ofAdd
+Equiv.symm = ⇑Matrix.of.symm
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma coe_ofAddEquiv_symm [Add α] :
-    ⇑(ofAddEquiv.symm : Matrix m n α ≃+ (m -> n -> α)) = of.symm := rfl
-
-/--
-lemma `isAddUnit_iff` / 引理 `isAddUnit_iff`
-
-English:
-lemma isAddUnit_iff
-  given: [AddMonoid α] {A : Matrix m n α}
-  proof: by
-  simp_rw [isAddUnit_iff_exists, Classical.skolem, forall_and,
-    ← Matrix.ext_iff, add_apply, zero_apply]
-  rfl
-
-中文:
-引理 isAddUnit_iff
-  条件: [加法幺半群 α] {A : 矩阵 m n α}
-  证明: by
-  simp_rw [isAddUnit_iff_exists, Classical.skolem, forall_and,
-    ← Matrix.ext_iff, add_apply, zero_apply]
-  rfl
+    ⇑(ofAddEquiv.symm : Matrix m n α ≃+ (m → n → α)) = of.symm := rfl
+/-
+**Matrix.isAddUnit_iff** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_2} {n : Type u_3} {α : Type v} [inst : AddMonoid α] {A : Mat
+rix m n α},   IsAddUnit A ↔ ∀ (i : m) (j : n), IsAddUnit (A i j)
+参数：i : m；j : n；A i j。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma isAddUnit_iff [AddMonoid α] {A : Matrix m n α} :
-    IsAddUnit A ↔ forall i j, IsAddUnit (A i j) := by
+    IsAddUnit A ↔ ∀ i j, IsAddUnit (A i j) := by
   simp_rw [isAddUnit_iff_exists, Classical.skolem, forall_and,
     ← Matrix.ext_iff, add_apply, zero_apply]
   rfl
@@ -1677,488 +1089,298 @@ namespace Matrix
 section Transpose
 
 @[simp]
-/--
-theorem `transpose_transpose` / 定理 `transpose_transpose`
-
-English:
-theorem transpose_transpose
-  given: (M : Matrix m n α)
-  statement: Mᵀᵀ = M
-  proof: by
-  ext
-  rfl
-
-中文:
-定理 transpose_transpose
-  条件: (M : 矩阵 m n α)
-  结论: Mᵀᵀ = M
-  证明: by
-  ext
-  rfl
+/-
+**Matrix.transpose_transpose** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：transpose_transpose (M : Matrix m n α) : Mᵀᵀ = M
+参数：M : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
 -/
 theorem transpose_transpose (M : Matrix m n α) : Mᵀᵀ = M := by
   ext
   rfl
 
 variable (n α) in
-/--
-theorem `transpose_involutive` / 定理 `transpose_involutive`
-
-English:
-theorem transpose_involutive
-  statement: (transpose : Matrix n n α -> Matrix n n α).Involutive
-  proof: transpose_transpose
-
-中文:
-定理 transpose_involutive
-  结论: (transpose : 矩阵 n n α -> 矩阵 n n α).对合
-  证明: transpose_transpose
-
-Depends on / 依赖: transpose_transpose
+/-
+**Matrix.transpose_involutive** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：transpose_involutive : (transpose : Matrix n n α -> Matrix n n α).Involuti
+ve
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.transpose_transpose`：transpose_transpose (M : Matrix m n α) : Mᵀᵀ
+ = M
 -/
-theorem transpose_involutive : (transpose : Matrix n n α -> Matrix n n α).Involutive :=
+theorem transpose_involutive : (transpose : Matrix n n α → Matrix n n α).Involutive :=
   transpose_transpose
-
-/--
-theorem `transpose_injective` / 定理 `transpose_injective`
-
-English:
-theorem transpose_injective
-  statement: Function.Injective (transpose : Matrix m n α -> Matrix n m α)
-  proof: fun _ _ h => ext fun i j => ext_iff.2 h j i
-
-中文:
-定理 transpose_injective
-  结论: 函数.单射 (transpose : 矩阵 m n α -> 矩阵 n m α)
-  证明: fun _ _ h => ext fun i j => ext_iff.2 h j i
-
-Depends on / 依赖: ext_iff
+/-
+**Matrix.transpose_injective** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：transpose_injective : Function.Injective (transpose : Matrix m n α -> Matr
+ix n m α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Matrix.ext_iff`：ext_iff : (forall i j, M i j = N i j) ↔ M = N
 -/
-theorem transpose_injective : Function.Injective (transpose : Matrix m n α -> Matrix n m α) :=
+theorem transpose_injective : Function.Injective (transpose : Matrix m n α → Matrix n m α) :=
   fun _ _ h => ext fun i j => ext_iff.2 h j i
-
-/--
-theorem `transpose_inj` / 定理 `transpose_inj`
-
-English:
-theorem transpose_inj
-  given: {A B : Matrix m n α}
-  statement: Aᵀ = Bᵀ ↔ A = B
-  proof: transpose_injective.eq_iff
-
-@[simp]
-
-中文:
-定理 transpose_inj
-  条件: {A B : 矩阵 m n α}
-  结论: Aᵀ = Bᵀ ↔ A = B
-  证明: transpose_injective.eq_iff
-
-@[simp]
+/-
+**Matrix.transpose_inj** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：∀ {m : Type u_2} {n : Type u_3} {α : Type v} {A B : Matrix m n α}, A.trans
+pose = B.transpose ↔ A = B
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Matrix.transpose_injective`：transpose_injective : Function.Injective (tr
+anspose : Matrix m n α -> Matrix n m α)
 -/
 @[simp] theorem transpose_inj {A B : Matrix m n α} : Aᵀ = Bᵀ ↔ A = B := transpose_injective.eq_iff
 
 @[simp]
-/--
-theorem `transpose_zero` / 定理 `transpose_zero`
-
-English:
-theorem transpose_zero
-  given: [Zero α]
-  statement: (0 : Matrix m n α)ᵀ = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 transpose_zero
-  条件: [零 α]
-  结论: (0 : 矩阵 m n α)ᵀ = 0
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.transpose_zero** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：transpose_zero [Zero α] : (0 : Matrix m n α)ᵀ = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem transpose_zero [Zero α] : (0 : Matrix m n α)ᵀ = 0 := rfl
 
 @[simp]
-/--
-theorem `transpose_eq_zero` / 定理 `transpose_eq_zero`
-
-English:
-theorem transpose_eq_zero
-  given: [Zero α] {M : Matrix m n α}
-  statement: Mᵀ = 0 ↔ M = 0
-  proof: transpose_inj
-
-@[simp]
-
-中文:
-定理 transpose_eq_zero
-  条件: [零 α] {M : 矩阵 m n α}
-  结论: Mᵀ = 0 ↔ M = 0
-  证明: transpose_inj
-
-@[simp]
-
-Depends on / 依赖: transpose_inj
+/-
+**Matrix.transpose_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：transpose_eq_zero [Zero α] {M : Matrix m n α} : Mᵀ = 0 ↔ M = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.transpose_inj`：∀ {m : Type u_2} {n : Type u_3} {α : Type v} {A B 
+: Matrix m n α}, A.transpose = B.transpose ↔ A = B
 -/
 theorem transpose_eq_zero [Zero α] {M : Matrix m n α} : Mᵀ = 0 ↔ M = 0 := transpose_inj
 
 @[simp]
-/--
-theorem `transpose_add` / 定理 `transpose_add`
-
-English:
-theorem transpose_add
-  given: [Add α] (M : Matrix m n α) (N : Matrix m n α)
-  statement: (M + N)ᵀ = Mᵀ + Nᵀ
-  proof: by
-  ext
-  simp
-
-@[simp]
-
-中文:
-定理 transpose_add
-  条件: [加法 α] (M : 矩阵 m n α) (N : 矩阵 m n α)
-  结论: (M + N)ᵀ = Mᵀ + Nᵀ
-  证明: by
-  ext
-  simp
-
-@[simp]
+/-
+**Matrix.transpose_add** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：transpose_add [Add α] (M : Matrix m n α) (N : Matrix m n α) : (M + N)ᵀ = M
+ᵀ + Nᵀ
+参数：M : Matrix m n α；N : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem transpose_add [Add α] (M : Matrix m n α) (N : Matrix m n α) : (M + N)ᵀ = Mᵀ + Nᵀ := by
   ext
   simp
 
 @[simp]
-/--
-theorem `transpose_sub` / 定理 `transpose_sub`
-
-English:
-theorem transpose_sub
-  given: [Sub α] (M : Matrix m n α) (N : Matrix m n α)
-  statement: (M - N)ᵀ = Mᵀ - Nᵀ
-  proof: by
-  ext
-  simp
-
-@[simp]
-
-中文:
-定理 transpose_sub
-  条件: [减法 α] (M : 矩阵 m n α) (N : 矩阵 m n α)
-  结论: (M - N)ᵀ = Mᵀ - Nᵀ
-  证明: by
-  ext
-  simp
-
-@[simp]
+/-
+**Matrix.transpose_sub** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：transpose_sub [Sub α] (M : Matrix m n α) (N : Matrix m n α) : (M - N)ᵀ = M
+ᵀ - Nᵀ
+参数：M : Matrix m n α；N : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem transpose_sub [Sub α] (M : Matrix m n α) (N : Matrix m n α) : (M - N)ᵀ = Mᵀ - Nᵀ := by
   ext
   simp
 
 @[simp]
-/--
-theorem `transpose_smul` / 定理 `transpose_smul`
-
-English:
-theorem transpose_smul
-  given: {R : Type*} [SMul R α] (c : R) (M : Matrix m n α)
-  statement: (c • M)ᵀ = c • Mᵀ
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 transpose_smul
-  条件: {R : 类型} [标量乘法 R α] (c : R) (M : 矩阵 m n α)
-  结论: (c • M)ᵀ = c • Mᵀ
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.transpose_smul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：transpose_smul {R : Type*} [SMul R α] (c : R) (M : Matrix m n α) : (c • M)
+ᵀ = c • Mᵀ
+参数：c : R；M : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem transpose_smul {R : Type*} [SMul R α] (c : R) (M : Matrix m n α) : (c • M)ᵀ = c • Mᵀ :=
   rfl
 
 @[simp]
-/--
-theorem `transpose_neg` / 定理 `transpose_neg`
-
-English:
-theorem transpose_neg
-  given: [Neg α] (M : Matrix m n α)
-  statement: (-M)ᵀ = -Mᵀ
-  proof: rfl
-
-中文:
-定理 transpose_neg
-  条件: [取负 α] (M : 矩阵 m n α)
-  结论: (-M)ᵀ = -Mᵀ
-  证明: rfl
+/-
+**Matrix.transpose_neg** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：transpose_neg [Neg α] (M : Matrix m n α) : (-M)ᵀ = -Mᵀ
+参数：M : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem transpose_neg [Neg α] (M : Matrix m n α) : (-M)ᵀ = -Mᵀ :=
   rfl
-
-/--
-theorem `transpose_map` / 定理 `transpose_map`
-
-English:
-theorem transpose_map
-  given: {f : α -> β} {M : Matrix m n α}
-  statement: Mᵀ.map f = (M.map f)ᵀ
-  proof: rfl
-
-中文:
-定理 transpose_map
-  条件: {f : α -> β} {M : 矩阵 m n α}
-  结论: Mᵀ.map f = (M.map f)ᵀ
-  证明: rfl
+/-
+**Matrix.transpose_map** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：transpose_map {f : α -> β} {M : Matrix m n α} : Mᵀ.map f = (M.map f)ᵀ
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem transpose_map {f : α -> β} {M : Matrix m n α} : Mᵀ.map f = (M.map f)ᵀ :=
+theorem transpose_map {f : α → β} {M : Matrix m n α} : Mᵀ.map f = (M.map f)ᵀ :=
   rfl
 
 end Transpose
 
-/--
-Definition of `submatrix` / `submatrix` 的定义
+/-- Given maps `(r : l → m)` and `(c : o → n)` reindexing the rows and columns of
+a matrix `M : Matrix m n α`, the matrix `M.submatrix r c : Matrix l o α` is defined
+by `(M.submatrix r c) i j = M (r i) (c j)` for `(i,j) : l × o`.
+Note that the total number of row and columns does not have to be preserved. -/
+/-
+**Matrix.submatrix** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：submatrix (A : Matrix m n α) (r : l -> m) (c : o -> n) : Matrix l o α
+参数：A : Matrix m n α；r : l -> m；c : o -> n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition submatrix
-  signature: (A : Matrix m n α) (r : l -> m) (c : o -> n)
-  body: of fun i j => A (r i) (c j)
-
-@[simp]
-
-中文:
-定义 submatrix
-  签名: (A : 矩阵 m n α) (r : l -> m) (c : o -> n)
-  定义体: of fun i j => A (r i) (c j)
-
-@[simp]
+--- 原说明 ---
+Given maps `(r : l → m)` and `(c : o → n)` reindexing the rows and columns of
+a matrix `M : Matrix m n α`, the matrix `M.submatrix r c : Matrix l o α` is defi
+ned
+by `(M.submatrix r c) i j = M (r i) (c j)` for `(i,j) : l × o`.
+Note that the total number of row and columns does not have to be preserved.
 -/
-def submatrix (A : Matrix m n α) (r : l -> m) (c : o -> n) : Matrix l o α :=
+def submatrix (A : Matrix m n α) (r : l → m) (c : o → n) : Matrix l o α :=
   of fun i j => A (r i) (c j)
 
 @[simp]
-/--
-theorem `submatrix_apply` / 定理 `submatrix_apply`
-
-English:
-theorem submatrix_apply
-  given: (A : Matrix m n α) (r : l -> m) (c : o -> n) (i j)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 submatrix_apply
-  条件: (A : 矩阵 m n α) (r : l -> m) (c : o -> n) (i j)
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.submatrix_apply** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：submatrix_apply (A : Matrix m n α) (r : l -> m) (c : o -> n) (i j) : A.sub
+matrix r c i j = A (r i) (c j)
+参数：A : Matrix m n α；r : l -> m；c : o -> n；i j。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem submatrix_apply (A : Matrix m n α) (r : l -> m) (c : o -> n) (i j) :
+theorem submatrix_apply (A : Matrix m n α) (r : l → m) (c : o → n) (i j) :
     A.submatrix r c i j = A (r i) (c j) :=
   rfl
 
 @[simp]
-/--
-theorem `submatrix_id_id` / 定理 `submatrix_id_id`
-
-English:
-theorem submatrix_id_id
-  given: (A : Matrix m n α)
-  statement: A.submatrix id id = A
-  proof: ext fun _ _ => rfl
-
-@[simp]
-
-中文:
-定理 submatrix_id_id
-  条件: (A : 矩阵 m n α)
-  结论: A.submatrix id id = A
-  证明: ext fun _ _ => rfl
-
-@[simp]
+/-
+**Matrix.submatrix_id_id** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：submatrix_id_id (A : Matrix m n α) : A.submatrix id id = A
+参数：A : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
 -/
 theorem submatrix_id_id (A : Matrix m n α) : A.submatrix id id = A :=
   ext fun _ _ => rfl
 
 @[simp]
-/--
-theorem `submatrix_submatrix` / 定理 `submatrix_submatrix`
-
-English:
-theorem submatrix_submatrix
-  statement: {l₂ o₂ : Type*} (A : Matrix m n α) (r₁ : l -> m) (c₁ : o -> n)
-  proof: ext fun _ _ => rfl
-
-@[simp]
-
-中文:
-定理 submatrix_submatrix
-  结论: {l₂ o₂ : 类型} (A : 矩阵 m n α) (r₁ : l -> m) (c₁ : o -> n)
-  证明: ext fun _ _ => rfl
-
-@[simp]
+/-
+**Matrix.submatrix_submatrix** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：submatrix_submatrix {l₂ o₂ : Type*} (A : Matrix m n α) (r₁ : l -> m) (c₁ :
+ o -> n) (r₂ : l₂ -> l) (c₂ : o₂ -> o) : (A.submatrix r₁ c₁).submatrix r₂ c₂ = A
+.submatrix (r₁ ∘ r₂) (c₁ ∘ c₂)
+参数：A : Matrix m n α；r₁ : l -> m；c₁ : o -> n；r₂ : l₂ -> l；c₂ : o₂ -> o。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
 -/
-theorem submatrix_submatrix {l₂ o₂ : Type*} (A : Matrix m n α) (r₁ : l -> m) (c₁ : o -> n)
-    (r₂ : l₂ -> l) (c₂ : o₂ -> o) :
+theorem submatrix_submatrix {l₂ o₂ : Type*} (A : Matrix m n α) (r₁ : l → m) (c₁ : o → n)
+    (r₂ : l₂ → l) (c₂ : o₂ → o) :
     (A.submatrix r₁ c₁).submatrix r₂ c₂ = A.submatrix (r₁ ∘ r₂) (c₁ ∘ c₂) :=
   ext fun _ _ => rfl
 
 @[simp]
-/--
-theorem `transpose_submatrix` / 定理 `transpose_submatrix`
-
-English:
-theorem transpose_submatrix
-  given: (A : Matrix m n α) (r : l -> m) (c : o -> n)
-  proof: ext fun _ _ => rfl
-
-中文:
-定理 transpose_submatrix
-  条件: (A : 矩阵 m n α) (r : l -> m) (c : o -> n)
-  证明: ext fun _ _ => rfl
+/-
+**Matrix.transpose_submatrix** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：transpose_submatrix (A : Matrix m n α) (r : l -> m) (c : o -> n) : (A.subm
+atrix r c)ᵀ = Aᵀ.submatrix c r
+参数：A : Matrix m n α；r : l -> m；c : o -> n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
 -/
-theorem transpose_submatrix (A : Matrix m n α) (r : l -> m) (c : o -> n) :
+theorem transpose_submatrix (A : Matrix m n α) (r : l → m) (c : o → n) :
     (A.submatrix r c)ᵀ = Aᵀ.submatrix c r :=
   ext fun _ _ => rfl
-
-/--
-theorem `submatrix_add` / 定理 `submatrix_add`
-
-English:
-theorem submatrix_add
-  given: [Add α] (A B : Matrix m n α)
-  proof: rfl
-
-中文:
-定理 submatrix_add
-  条件: [加法 α] (A B : 矩阵 m n α)
-  证明: rfl
+/-
+**Matrix.submatrix_add** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：submatrix_add [Add α] (A B : Matrix m n α) : ((A + B).submatrix : (l -> m)
+ -> (o -> n) -> Matrix l o α) = A.submatrix + B.submatrix
+参数：A B : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem submatrix_add [Add α] (A B : Matrix m n α) :
-    ((A + B).submatrix : (l -> m) -> (o -> n) -> Matrix l o α) = A.submatrix + B.submatrix :=
+    ((A + B).submatrix : (l → m) → (o → n) → Matrix l o α) = A.submatrix + B.submatrix :=
   rfl
-
-/--
-theorem `submatrix_neg` / 定理 `submatrix_neg`
-
-English:
-theorem submatrix_neg
-  given: [Neg α] (A : Matrix m n α)
-  proof: rfl
-
-中文:
-定理 submatrix_neg
-  条件: [取负 α] (A : 矩阵 m n α)
-  证明: rfl
+/-
+**Matrix.submatrix_neg** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：submatrix_neg [Neg α] (A : Matrix m n α) : ((-A).submatrix : (l -> m) -> (
+o -> n) -> Matrix l o α) = -A.submatrix
+参数：A : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem submatrix_neg [Neg α] (A : Matrix m n α) :
-    ((-A).submatrix : (l -> m) -> (o -> n) -> Matrix l o α) = -A.submatrix :=
+    ((-A).submatrix : (l → m) → (o → n) → Matrix l o α) = -A.submatrix :=
   rfl
-
-/--
-theorem `submatrix_sub` / 定理 `submatrix_sub`
-
-English:
-theorem submatrix_sub
-  given: [Sub α] (A B : Matrix m n α)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 submatrix_sub
-  条件: [减法 α] (A B : 矩阵 m n α)
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.submatrix_sub** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：submatrix_sub [Sub α] (A B : Matrix m n α) : ((A - B).submatrix : (l -> m)
+ -> (o -> n) -> Matrix l o α) = A.submatrix - B.submatrix
+参数：A B : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem submatrix_sub [Sub α] (A B : Matrix m n α) :
-    ((A - B).submatrix : (l -> m) -> (o -> n) -> Matrix l o α) = A.submatrix - B.submatrix :=
+    ((A - B).submatrix : (l → m) → (o → n) → Matrix l o α) = A.submatrix - B.submatrix :=
   rfl
 
 @[simp]
-/--
-theorem `submatrix_zero` / 定理 `submatrix_zero`
-
-English:
-theorem submatrix_zero
-  given: [Zero α]
-  proof: rfl
-
-中文:
-定理 submatrix_zero
-  条件: [零 α]
-  证明: rfl
+/-
+**Matrix.submatrix_zero** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：submatrix_zero [Zero α] : ((0 : Matrix m n α).submatrix : (l -> m) -> (o -
+> n) -> Matrix l o α) = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem submatrix_zero [Zero α] :
-    ((0 : Matrix m n α).submatrix : (l -> m) -> (o -> n) -> Matrix l o α) = 0 :=
+    ((0 : Matrix m n α).submatrix : (l → m) → (o → n) → Matrix l o α) = 0 :=
   rfl
-
-/--
-theorem `submatrix_smul` / 定理 `submatrix_smul`
-
-English:
-theorem submatrix_smul
-  given: {R : Type*} [SMul R α] (r : R) (A : Matrix m n α)
-  proof: rfl
-
-中文:
-定理 submatrix_smul
-  条件: {R : 类型} [标量乘法 R α] (r : R) (A : 矩阵 m n α)
-  证明: rfl
+/-
+**Matrix.submatrix_smul** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：submatrix_smul {R : Type*} [SMul R α] (r : R) (A : Matrix m n α) : ((r • A
+ : Matrix m n α).submatrix : (l -> m) -> (o -> n) -> Matrix l o α) = r • A.subma
+trix
+参数：r : R；A : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem submatrix_smul {R : Type*} [SMul R α] (r : R) (A : Matrix m n α) :
-    ((r • A : Matrix m n α).submatrix : (l -> m) -> (o -> n) -> Matrix l o α) = r • A.submatrix :=
+    ((r • A : Matrix m n α).submatrix : (l → m) → (o → n) → Matrix l o α) = r • A.submatrix :=
   rfl
-
-/--
-theorem `submatrix_map` / 定理 `submatrix_map`
-
-English:
-theorem submatrix_map
-  given: (f : α -> β) (e₁ : l -> m) (e₂ : o -> n) (A : Matrix m n α)
-  proof: rfl
-
-中文:
-定理 submatrix_map
-  条件: (f : α -> β) (e₁ : l -> m) (e₂ : o -> n) (A : 矩阵 m n α)
-  证明: rfl
+/-
+**Matrix.submatrix_map** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：submatrix_map (f : α -> β) (e₁ : l -> m) (e₂ : o -> n) (A : Matrix m n α) 
+: (A.map f).submatrix e₁ e₂ = (A.submatrix e₁ e₂).map f
+参数：f : α -> β；e₁ : l -> m；e₂ : o -> n；A : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem submatrix_map (f : α -> β) (e₁ : l -> m) (e₂ : o -> n) (A : Matrix m n α) :
+theorem submatrix_map (f : α → β) (e₁ : l → m) (e₂ : o → n) (A : Matrix m n α) :
     (A.map f).submatrix e₁ e₂ = (A.submatrix e₁ e₂).map f :=
   rfl
 
-/--
-Definition of `reindex` / `reindex` 的定义
+/-- The natural map that reindexes a matrix's rows and columns with equivalent types is an
+equivalence. -/
+/-
+**Matrix.reindex** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：reindex (eₘ : m ≃ l) (eₙ : n ≃ o) : Matrix m n α ≃ Matrix l o α where toFu
+n M
+参数：eₘ : m ≃ l；eₙ : n ≃ o。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition reindex
-  signature: (eₘ : m ≃ l) (eₙ : n ≃ o)
-  body: M.submatrix eₘ.symm eₙ.symm
-  invFun M := M.submatrix eₘ eₙ
-  left_inv M := by simp
-  right_inv M := by simp
-
-@[simp]
-
-中文:
-定义 reindex
-  签名: (eₘ : m ≃ l) (eₙ : n ≃ o)
-  定义体: M.submatrix eₘ.symm eₙ.symm
-  invFun M := M.submatrix eₘ eₙ
-  left_inv M := by simp
-  right_inv M := by simp
-
-@[simp]
-
-Depends on / 依赖: M.submatrix, submatrix
+--- 原说明 ---
+The natural map that reindexes a matrix's rows and columns with equivalent types
+ is an
+equivalence.
 -/
 def reindex (eₘ : m ≃ l) (eₙ : n ≃ o) : Matrix m n α ≃ Matrix l o α where
   toFun M := M.submatrix eₘ.symm eₙ.symm
@@ -2167,250 +1389,197 @@ def reindex (eₘ : m ≃ l) (eₙ : n ≃ o) : Matrix m n α ≃ Matrix l o α 
   right_inv M := by simp
 
 @[simp]
-/--
-theorem `reindex_apply` / 定理 `reindex_apply`
-
-English:
-theorem reindex_apply
-  given: (eₘ : m ≃ l) (eₙ : n ≃ o) (M : Matrix m n α)
-  proof: rfl
-
-中文:
-定理 reindex_apply
-  条件: (eₘ : m ≃ l) (eₙ : n ≃ o) (M : 矩阵 m n α)
-  证明: rfl
+/-
+**Matrix.reindex_apply** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：reindex_apply (eₘ : m ≃ l) (eₙ : n ≃ o) (M : Matrix m n α) : reindex eₘ eₙ
+ M = M.submatrix eₘ.symm eₙ.symm
+参数：eₘ : m ≃ l；eₙ : n ≃ o；M : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem reindex_apply (eₘ : m ≃ l) (eₙ : n ≃ o) (M : Matrix m n α) :
     reindex eₘ eₙ M = M.submatrix eₘ.symm eₙ.symm :=
   rfl
-
-/--
-theorem `reindex_refl_refl` / 定理 `reindex_refl_refl`
-
-English:
-theorem reindex_refl_refl
-  given: (A : Matrix m n α)
-  statement: reindex (Equiv.refl _) (Equiv.refl _) A = A
-  proof: A.submatrix_id_id
-
-@[simp]
-
-中文:
-定理 reindex_refl_refl
-  条件: (A : 矩阵 m n α)
-  结论: reindex (等价.refl _) (等价.refl _) A = A
-  证明: A.submatrix_id_id
-
-@[simp]
-
-Depends on / 依赖: A.submatrix_id_id, submatrix_id_id
+/-
+**Matrix.reindex_refl_refl** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：reindex_refl_refl (A : Matrix m n α) : reindex (Equiv.refl _) (Equiv.refl 
+_) A = A
+参数：A : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.submatrix_id_id`：submatrix_id_id (A : Matrix m n α) : A.submatrix
+ id id = A
 -/
 theorem reindex_refl_refl (A : Matrix m n α) : reindex (Equiv.refl _) (Equiv.refl _) A = A :=
   A.submatrix_id_id
 
 @[simp]
-/--
-theorem `reindex_symm` / 定理 `reindex_symm`
-
-English:
-theorem reindex_symm
-  given: (eₘ : m ≃ l) (eₙ : n ≃ o)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 reindex_symm
-  条件: (eₘ : m ≃ l) (eₙ : n ≃ o)
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.reindex_symm** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：reindex_symm (eₘ : m ≃ l) (eₙ : n ≃ o) : (reindex eₘ eₙ).symm = (reindex e
+ₘ.symm eₙ.symm : Matrix l o α ≃ _)
+参数：eₘ : m ≃ l；eₙ : n ≃ o。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem reindex_symm (eₘ : m ≃ l) (eₙ : n ≃ o) :
     (reindex eₘ eₙ).symm = (reindex eₘ.symm eₙ.symm : Matrix l o α ≃ _) :=
   rfl
 
 @[simp]
-/--
-theorem `reindex_trans` / 定理 `reindex_trans`
-
-English:
-theorem reindex_trans
-  given: {l₂ o₂ : Type*} (eₘ : m ≃ l) (eₙ : n ≃ o) (eₘ₂ : l ≃ l₂) (eₙ₂ : o ≃ o₂)
-  proof: Equiv.ext fun A => (A.submatrix_submatrix eₘ.symm eₙ.symm eₘ₂.symm eₙ₂.symm :)
-
-中文:
-定理 reindex_trans
-  条件: {l₂ o₂ : 类型} (eₘ : m ≃ l) (eₙ : n ≃ o) (eₘ₂ : l ≃ l₂) (eₙ₂ : o ≃ o₂)
-  证明: Equiv.ext fun A => (A.submatrix_submatrix eₘ.symm eₙ.symm eₘ₂.symm eₙ₂.symm :)
-
-Depends on / 依赖: A.submatrix_submatrix, Equiv.ext, submatrix_submatrix
+/-
+**Matrix.reindex_trans** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：reindex_trans {l₂ o₂ : Type*} (eₘ : m ≃ l) (eₙ : n ≃ o) (eₘ₂ : l ≃ l₂) (eₙ
+₂ : o ≃ o₂) : (reindex eₘ eₙ).trans (reindex eₘ₂ eₙ₂) = (reindex (eₘ.trans eₘ₂) 
+(eₙ.trans eₙ₂) : Matrix m n α ≃ _)
+参数：eₘ : m ≃ l；eₙ : n ≃ o；eₘ₂ : l ≃ l₂；eₙ₂ : o ≃ o₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Matrix.submatrix_submatrix`：submatrix_submatrix {l₂ o₂ : Type*} (A : Mat
+rix m n α) (r₁ : l -> m) (c₁ : o -> n) (r₂ : l₂ -> l) (c₂ : o₂ -> o) : (A.submat
+rix r₁ c₁).subma…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem reindex_trans {l₂ o₂ : Type*} (eₘ : m ≃ l) (eₙ : n ≃ o) (eₘ₂ : l ≃ l₂) (eₙ₂ : o ≃ o₂) :
     (reindex eₘ eₙ).trans (reindex eₘ₂ eₙ₂) =
       (reindex (eₘ.trans eₘ₂) (eₙ.trans eₙ₂) : Matrix m n α ≃ _) :=
   Equiv.ext fun A => (A.submatrix_submatrix eₘ.symm eₙ.symm eₘ₂.symm eₙ₂.symm :)
-
-/--
-theorem `transpose_reindex` / 定理 `transpose_reindex`
-
-English:
-theorem transpose_reindex
-  given: (eₘ : m ≃ l) (eₙ : n ≃ o) (M : Matrix m n α)
-  proof: rfl
-
-中文:
-定理 transpose_reindex
-  条件: (eₘ : m ≃ l) (eₙ : n ≃ o) (M : 矩阵 m n α)
-  证明: rfl
+/-
+**Matrix.transpose_reindex** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：transpose_reindex (eₘ : m ≃ l) (eₙ : n ≃ o) (M : Matrix m n α) : (reindex 
+eₘ eₙ M)ᵀ = reindex eₙ eₘ Mᵀ
+参数：eₘ : m ≃ l；eₙ : n ≃ o；M : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem transpose_reindex (eₘ : m ≃ l) (eₙ : n ≃ o) (M : Matrix m n α) :
     (reindex eₘ eₙ M)ᵀ = reindex eₙ eₘ Mᵀ :=
   rfl
 
-/--
-Definition of `subLeft` / `subLeft` 的定义
+/-- The left `n × l` part of an `n × (l+r)` matrix. -/
+/-
+**Matrix.subLeft** 是 Mathlib 中的一个缩写定义，位于命名空间 `Matrix`。
+形式化陈述：subLeft {m l r : Nat} (A : Matrix (Fin m) (Fin (l + r)) α) : Matrix (Fin m
+) (Fin l) α
+参数：A : Matrix (Fin m) (Fin (l + r)) α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation subLeft
-  signature: {m l r : Nat} (A : Matrix (Fin m) (Fin (l + r)) α)
-  body: submatrix A id (Fin.castAdd r)
-
-中文:
-缩写 subLeft
-  签名: {m l r : 自然数} (A : 矩阵 (有限集 m) (有限集 (l + r)) α)
-  定义体: submatrix A id (Fin.castAdd r)
-
-Depends on / 依赖: Fin.castAdd, castAdd, submatrix
+--- 原说明 ---
+The left `n × l` part of an `n × (l+r)` matrix.
 -/
 abbrev subLeft {m l r : Nat} (A : Matrix (Fin m) (Fin (l + r)) α) : Matrix (Fin m) (Fin l) α :=
   submatrix A id (Fin.castAdd r)
 
-/--
-Definition of `subRight` / `subRight` 的定义
+/-- The right `n × r` part of an `n × (l+r)` matrix. -/
+/-
+**Matrix.subRight** 是 Mathlib 中的一个缩写定义，位于命名空间 `Matrix`。
+形式化陈述：subRight {m l r : Nat} (A : Matrix (Fin m) (Fin (l + r)) α) : Matrix (Fin 
+m) (Fin r) α
+参数：A : Matrix (Fin m) (Fin (l + r)) α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation subRight
-  signature: {m l r : Nat} (A : Matrix (Fin m) (Fin (l + r)) α)
-  body: submatrix A id (Fin.natAdd l)
-
-中文:
-缩写 subRight
-  签名: {m l r : 自然数} (A : 矩阵 (有限集 m) (有限集 (l + r)) α)
-  定义体: submatrix A id (Fin.natAdd l)
-
-Depends on / 依赖: Fin.natAdd, natAdd, submatrix
+--- 原说明 ---
+The right `n × r` part of an `n × (l+r)` matrix.
 -/
 abbrev subRight {m l r : Nat} (A : Matrix (Fin m) (Fin (l + r)) α) : Matrix (Fin m) (Fin r) α :=
   submatrix A id (Fin.natAdd l)
 
-/--
-Definition of `subUp` / `subUp` 的定义
+/-- The top `u × n` part of a `(u+d) × n` matrix. -/
+/-
+**Matrix.subUp** 是 Mathlib 中的一个缩写定义，位于命名空间 `Matrix`。
+形式化陈述：subUp {d u n : Nat} (A : Matrix (Fin (u + d)) (Fin n) α) : Matrix (Fin u) 
+(Fin n) α
+参数：A : Matrix (Fin (u + d)) (Fin n) α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation subUp
-  signature: {d u n : Nat} (A : Matrix (Fin (u + d)) (Fin n) α)
-  body: submatrix A (Fin.castAdd d) id
-
-中文:
-缩写 subUp
-  签名: {d u n : 自然数} (A : 矩阵 (有限集 (u + d)) (有限集 n) α)
-  定义体: submatrix A (Fin.castAdd d) id
-
-Depends on / 依赖: Fin.castAdd, castAdd, submatrix
+--- 原说明 ---
+The top `u × n` part of a `(u+d) × n` matrix.
 -/
 abbrev subUp {d u n : Nat} (A : Matrix (Fin (u + d)) (Fin n) α) : Matrix (Fin u) (Fin n) α :=
   submatrix A (Fin.castAdd d) id
 
-/--
-Definition of `subDown` / `subDown` 的定义
+/-- The bottom `d × n` part of a `(u+d) × n` matrix. -/
+/-
+**Matrix.subDown** 是 Mathlib 中的一个缩写定义，位于命名空间 `Matrix`。
+形式化陈述：subDown {d u n : Nat} (A : Matrix (Fin (u + d)) (Fin n) α) : Matrix (Fin d
+) (Fin n) α
+参数：A : Matrix (Fin (u + d)) (Fin n) α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation subDown
-  signature: {d u n : Nat} (A : Matrix (Fin (u + d)) (Fin n) α)
-  body: submatrix A (Fin.natAdd u) id
-
-中文:
-缩写 subDown
-  签名: {d u n : 自然数} (A : 矩阵 (有限集 (u + d)) (有限集 n) α)
-  定义体: submatrix A (Fin.natAdd u) id
-
-Depends on / 依赖: Fin.natAdd, natAdd, submatrix
+--- 原说明 ---
+The bottom `d × n` part of a `(u+d) × n` matrix.
 -/
 abbrev subDown {d u n : Nat} (A : Matrix (Fin (u + d)) (Fin n) α) : Matrix (Fin d) (Fin n) α :=
   submatrix A (Fin.natAdd u) id
 
-/--
-Definition of `subUpRight` / `subUpRight` 的定义
+/-- The top-right `u × r` part of a `(u+d) × (l+r)` matrix. -/
+/-
+**Matrix.subUpRight** 是 Mathlib 中的一个缩写定义，位于命名空间 `Matrix`。
+形式化陈述：subUpRight {d u l r : Nat} (A : Matrix (Fin (u + d)) (Fin (l + r)) α) : Ma
+trix (Fin u) (Fin r) α
+参数：A : Matrix (Fin (u + d)) (Fin (l + r)) α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation subUpRight
-  signature: {d u l r : Nat} (A : Matrix (Fin (u + d)) (Fin (l + r)) α)
-  body: subUp (subRight A)
-
-中文:
-缩写 subUpRight
-  签名: {d u l r : 自然数} (A : 矩阵 (有限集 (u + d)) (有限集 (l + r)) α)
-  定义体: subUp (subRight A)
-
-Depends on / 依赖: subRight
+--- 原说明 ---
+The top-right `u × r` part of a `(u+d) × (l+r)` matrix.
 -/
 abbrev subUpRight {d u l r : Nat} (A : Matrix (Fin (u + d)) (Fin (l + r)) α) :
     Matrix (Fin u) (Fin r) α :=
   subUp (subRight A)
 
-/--
-Definition of `subDownRight` / `subDownRight` 的定义
+/-- The bottom-right `d × r` part of a `(u+d) × (l+r)` matrix. -/
+/-
+**Matrix.subDownRight** 是 Mathlib 中的一个缩写定义，位于命名空间 `Matrix`。
+形式化陈述：subDownRight {d u l r : Nat} (A : Matrix (Fin (u + d)) (Fin (l + r)) α) : 
+Matrix (Fin d) (Fin r) α
+参数：A : Matrix (Fin (u + d)) (Fin (l + r)) α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation subDownRight
-  signature: {d u l r : Nat} (A : Matrix (Fin (u + d)) (Fin (l + r)) α)
-  body: subDown (subRight A)
-
-中文:
-缩写 subDownRight
-  签名: {d u l r : 自然数} (A : 矩阵 (有限集 (u + d)) (有限集 (l + r)) α)
-  定义体: subDown (subRight A)
-
-Depends on / 依赖: subDown, subRight
+--- 原说明 ---
+The bottom-right `d × r` part of a `(u+d) × (l+r)` matrix.
 -/
 abbrev subDownRight {d u l r : Nat} (A : Matrix (Fin (u + d)) (Fin (l + r)) α) :
     Matrix (Fin d) (Fin r) α :=
   subDown (subRight A)
 
-/--
-Definition of `subUpLeft` / `subUpLeft` 的定义
+/-- The top-left `u × l` part of a `(u+d) × (l+r)` matrix. -/
+/-
+**Matrix.subUpLeft** 是 Mathlib 中的一个缩写定义，位于命名空间 `Matrix`。
+形式化陈述：subUpLeft {d u l r : Nat} (A : Matrix (Fin (u + d)) (Fin (l + r)) α) : Mat
+rix (Fin u) (Fin l) α
+参数：A : Matrix (Fin (u + d)) (Fin (l + r)) α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation subUpLeft
-  signature: {d u l r : Nat} (A : Matrix (Fin (u + d)) (Fin (l + r)) α)
-  body: subUp (subLeft A)
-
-中文:
-缩写 subUpLeft
-  签名: {d u l r : 自然数} (A : 矩阵 (有限集 (u + d)) (有限集 (l + r)) α)
-  定义体: subUp (subLeft A)
-
-Depends on / 依赖: subLeft
+--- 原说明 ---
+The top-left `u × l` part of a `(u+d) × (l+r)` matrix.
 -/
 abbrev subUpLeft {d u l r : Nat} (A : Matrix (Fin (u + d)) (Fin (l + r)) α) :
     Matrix (Fin u) (Fin l) α :=
   subUp (subLeft A)
 
-/--
-Definition of `subDownLeft` / `subDownLeft` 的定义
+/-- The bottom-left `d × l` part of a `(u+d) × (l+r)` matrix. -/
+/-
+**Matrix.subDownLeft** 是 Mathlib 中的一个缩写定义，位于命名空间 `Matrix`。
+形式化陈述：subDownLeft {d u l r : Nat} (A : Matrix (Fin (u + d)) (Fin (l + r)) α) : M
+atrix (Fin d) (Fin l) α
+参数：A : Matrix (Fin (u + d)) (Fin (l + r)) α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation subDownLeft
-  signature: {d u l r : Nat} (A : Matrix (Fin (u + d)) (Fin (l + r)) α)
-  body: subDown (subLeft A)
-
-中文:
-缩写 subDownLeft
-  签名: {d u l r : 自然数} (A : 矩阵 (有限集 (u + d)) (有限集 (l + r)) α)
-  定义体: subDown (subLeft A)
-
-Depends on / 依赖: subDown, subLeft
+--- 原说明 ---
+The bottom-left `d × l` part of a `(u+d) × (l+r)` matrix.
 -/
 abbrev subDownLeft {d u l r : Nat} (A : Matrix (Fin (u + d)) (Fin (l + r)) α) :
     Matrix (Fin d) (Fin l) α :=
@@ -2418,413 +1587,273 @@ abbrev subDownLeft {d u l r : Nat} (A : Matrix (Fin (u + d)) (Fin (l + r)) α) :
 
 section RowCol
 
-/--
-Definition of `row` / `row` 的定义
+/-- For an `m × n` `α`-matrix `A`, `A.row i` is the `i`th row of `A` as a vector in `n → α`.
+`A.row` is defeq to `A`, but explicitly refers to the 'row function' of `A`
+while avoiding defeq abuse and noisy eta-expansions,
+such as in expressions like `Set.Injective A.row` and `Set.range A.row`.
+(Note 2025-04-07 : the identifier `Matrix.row` used to refer to a matrix with all rows equal;
+this is now called `Matrix.replicateRow`) -/
+/-
+**Matrix.row** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：row (A : Matrix m n α) : m -> n -> α
+参数：A : Matrix m n α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition row
-  signature: (A : Matrix m n α)
-  body: A
-
-中文:
-定义 row
-  签名: (A : 矩阵 m n α)
-  定义体: A
+--- 原说明 ---
+For an `m × n` `α`-matrix `A`, `A.row i` is the `i`th row of `A` as a vector in 
+`n → α`.
+`A.row` is defeq to `A`, but explicitly refers to the 'row function' of `A`
+while avoiding defeq abuse and noisy eta-expansions,
+such as in expressions like `Set.Injective A.row` and `Set.range A.row`.
+(Note 2025-04-07 : the identifier `Matrix.row` used to refer to a matrix with al
+l rows equal;
+this is now called `Matrix.replicateRow`)
 -/
-def row (A : Matrix m n α) : m -> n -> α := A
+def row (A : Matrix m n α) : m → n → α := A
 
-/--
-Definition of `col` / `col` 的定义
+/-- For an `m × n` `α`-matrix `A`, `A.col j` is the `j`th column of `A` as a vector in `m → α`.
+`A.col` is defeq to `Aᵀ`, but refers to the 'column function' of `A`
+while avoiding defeq abuse and noisy eta-expansions
+(and without the simplifier unfolding transposes) in expressions like `Set.Injective A.col`
+and `Set.range A.col`.
+(Note 2025-04-07 : the identifier `Matrix.col` used to refer to a matrix with all columns equal;
+this is now called `Matrix.replicateCol`) -/
+/-
+**Matrix.col** 是 Mathlib 中的一个定义，位于命名空间 `Matrix`。
+形式化陈述：col (A : Matrix m n α) : n -> m -> α
+参数：A : Matrix m n α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition col
-  signature: (A : Matrix m n α)
-  body: Aᵀ
-
-中文:
-定义 col
-  签名: (A : 矩阵 m n α)
-  定义体: Aᵀ
+--- 原说明 ---
+For an `m × n` `α`-matrix `A`, `A.col j` is the `j`th column of `A` as a vector 
+in `m → α`.
+`A.col` is defeq to `Aᵀ`, but refers to the 'column function' of `A`
+while avoiding defeq abuse and noisy eta-expansions
+(and without the simplifier unfolding transposes) in expressions like `Set.Injec
+tive A.col`
+and `Set.range A.col`.
+(Note 2025-04-07 : the identifier `Matrix.col` used to refer to a matrix with al
+l columns equal;
+this is now called `Matrix.replicateCol`)
 -/
-def col (A : Matrix m n α) : n -> m -> α := Aᵀ
-
-/--
-lemma `row_eq_self` / 引理 `row_eq_self`
-
-English:
-lemma row_eq_self
-  given: (A : Matrix m n α)
-  statement: A.row = of.symm A
-  proof: rfl
-
-中文:
-引理 row_eq_self
-  条件: (A : 矩阵 m n α)
-  结论: A.row = of.symm A
-  证明: rfl
+def col (A : Matrix m n α) : n → m → α := Aᵀ
+/-
+**Matrix.row_eq_self** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：row_eq_self (A : Matrix m n α) : A.row = of.symm A
+参数：A : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma row_eq_self (A : Matrix m n α) : A.row = of.symm A := rfl
-
-/--
-lemma `col_eq_transpose` / 引理 `col_eq_transpose`
-
-English:
-lemma col_eq_transpose
-  given: (A : Matrix m n α)
-  statement: A.col = of.symm Aᵀ
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 col_eq_transpose
-  条件: (A : 矩阵 m n α)
-  结论: A.col = of.symm Aᵀ
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.col_eq_transpose** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：col_eq_transpose (A : Matrix m n α) : A.col = of.symm Aᵀ
+参数：A : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma col_eq_transpose (A : Matrix m n α) : A.col = of.symm Aᵀ := rfl
 
 @[simp]
-/--
-lemma `of_row` / 引理 `of_row`
-
-English:
-lemma of_row
-  given: (f : m -> n -> α)
-  statement: (Matrix.of f).row = f
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 of_row
-  条件: (f : m -> n -> α)
-  结论: (矩阵.of f).row = f
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.of_row** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：of_row (f : m -> n -> α) : (Matrix.of f).row = f
+参数：f : m -> n -> α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma of_row (f : m -> n -> α) : (Matrix.of f).row = f := rfl
+lemma of_row (f : m → n → α) : (Matrix.of f).row = f := rfl
 
 @[simp]
-/--
-lemma `of_col` / 引理 `of_col`
-
-English:
-lemma of_col
-  given: (f : m -> n -> α)
-  statement: (Matrix.of f)ᵀ.col = f
-  proof: rfl
-
-中文:
-引理 of_col
-  条件: (f : m -> n -> α)
-  结论: (矩阵.of f)ᵀ.col = f
-  证明: rfl
+/-
+**Matrix.of_col** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：of_col (f : m -> n -> α) : (Matrix.of f)ᵀ.col = f
+参数：f : m -> n -> α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma of_col (f : m -> n -> α) : (Matrix.of f)ᵀ.col = f := rfl
-
-/--
-lemma `row_def` / 引理 `row_def`
-
-English:
-lemma row_def
-  given: (A : Matrix m n α)
-  statement: A.row = fun i => A i
-  proof: rfl
-
-中文:
-引理 row_def
-  条件: (A : 矩阵 m n α)
-  结论: A.row = fun i => A i
-  证明: rfl
+lemma of_col (f : m → n → α) : (Matrix.of f)ᵀ.col = f := rfl
+/-
+**Matrix.row_def** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：row_def (A : Matrix m n α) : A.row = fun i => A i
+参数：A : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma row_def (A : Matrix m n α) : A.row = fun i => A i := rfl
-
-/--
-lemma `col_def` / 引理 `col_def`
-
-English:
-lemma col_def
-  given: (A : Matrix m n α)
-  statement: A.col = fun j => Aᵀ j
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 col_def
-  条件: (A : 矩阵 m n α)
-  结论: A.col = fun j => Aᵀ j
-  证明: rfl
-
-@[simp]
+lemma row_def (A : Matrix m n α) : A.row = fun i ↦ A i := rfl
+/-
+**Matrix.col_def** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：col_def (A : Matrix m n α) : A.col = fun j => Aᵀ j
+参数：A : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma col_def (A : Matrix m n α) : A.col = fun j => Aᵀ j := rfl
+lemma col_def (A : Matrix m n α) : A.col = fun j ↦ Aᵀ j := rfl
 
 @[simp]
-/--
-lemma `row_apply` / 引理 `row_apply`
-
-English:
-lemma row_apply
-  given: (A : Matrix m n α) (i : m) (j : n)
-  statement: A.row i j = A i j
-  proof: rfl
-
-中文:
-引理 row_apply
-  条件: (A : 矩阵 m n α) (i : m) (j : n)
-  结论: A.row i j = A i j
-  证明: rfl
+/-
+**Matrix.row_apply** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：row_apply (A : Matrix m n α) (i : m) (j : n) : A.row i j = A i j
+参数：A : Matrix m n α；i : m；j : n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma row_apply (A : Matrix m n α) (i : m) (j : n) : A.row i j = A i j := rfl
 
-/--
-lemma `row_apply'` / 引理 `row_apply'`
+/-- A partially applied version of `Matrix.row_apply` -/
+/-
+**Matrix.row_apply'** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：row_apply' (A : Matrix m n α) (i : m) : A.row i = A i
+参数：A : Matrix m n α；i : m。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma row_apply'
-  given: (A : Matrix m n α) (i : m)
-  statement: A.row i = A i
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 row_apply'
-  条件: (A : 矩阵 m n α) (i : m)
-  结论: A.row i = A i
-  证明: rfl
-
-@[simp]
+--- 原说明 ---
+A partially applied version of `Matrix.row_apply`
 -/
 lemma row_apply' (A : Matrix m n α) (i : m) : A.row i = A i := rfl
 
 @[simp]
-/--
-lemma `col_apply` / 引理 `col_apply`
-
-English:
-lemma col_apply
-  given: (A : Matrix m n α) (i : n) (j : m)
-  statement: A.col i j = A j i
-  proof: rfl
-
-中文:
-引理 col_apply
-  条件: (A : 矩阵 m n α) (i : n) (j : m)
-  结论: A.col i j = A j i
-  证明: rfl
+/-
+**Matrix.col_apply** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：col_apply (A : Matrix m n α) (i : n) (j : m) : A.col i j = A j i
+参数：A : Matrix m n α；i : n；j : m。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma col_apply (A : Matrix m n α) (i : n) (j : m) : A.col i j = A j i := rfl
 
-/--
-lemma `col_apply'` / 引理 `col_apply'`
+/-- A partially applied version of `Matrix.col_apply` -/
+/-
+**Matrix.col_apply'** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：col_apply' (A : Matrix m n α) (i : n) : A.col i = fun j => A j i
+参数：A : Matrix m n α；i : n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma col_apply'
-  given: (A : Matrix m n α) (i : n)
-  statement: A.col i = fun j => A j i
-  proof: rfl
-
-中文:
-引理 col_apply'
-  条件: (A : 矩阵 m n α) (i : n)
-  结论: A.col i = fun j => A j i
-  证明: rfl
+--- 原说明 ---
+A partially applied version of `Matrix.col_apply`
 -/
-lemma col_apply' (A : Matrix m n α) (i : n) : A.col i = fun j => A j i := rfl
+lemma col_apply' (A : Matrix m n α) (i : n) : A.col i = fun j ↦ A j i := rfl
 
 section
 
 /-- Two matrices agree if their rows agree. -/
 @[local ext]
-/--
-lemma `ext_row` / 引理 `ext_row`
+/-
+**Matrix.ext_row** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：ext_row {A B : Matrix m n α} (h : forall i, A.row i = B.row i) : A = B
+参数：h : forall i, A.row i = B.row i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
 
-English:
-lemma ext_row
-  given: {A B : Matrix m n α} (h : forall i, A.row i = B.row i)
-  statement: A = B
-  proof: ext fun i j => congr_fun (h i) j
-
-中文:
-引理 ext_row
-  条件: {A B : 矩阵 m n α} (h : 对任意 i, A.row i = B.row i)
-  结论: A = B
-  证明: ext fun i j => congr_fun (h i) j
-
-Depends on / 依赖: congr_fun
+--- 原说明 ---
+Two matrices agree if their rows agree.
 -/
-lemma ext_row {A B : Matrix m n α} (h : forall i, A.row i = B.row i) : A = B :=
+lemma ext_row {A B : Matrix m n α} (h : ∀ i, A.row i = B.row i) : A = B :=
   ext fun i j => congr_fun (h i) j
 
 /-- Two matrices agree if their columns agree. -/
 @[local ext]
-/--
-lemma `ext_col` / 引理 `ext_col`
+/-
+**Matrix.ext_col** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：ext_col {A B : Matrix m n α} (h : forall j, A.col j = B.col j) : A = B
+参数：h : forall j, A.col j = B.col j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Matrix.ext`：ext : (forall i j, M i j = N i j) -> M = N
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
 
-English:
-lemma ext_col
-  given: {A B : Matrix m n α} (h : forall j, A.col j = B.col j)
-  statement: A = B
-  proof: ext fun i j => congr_fun (h j) i
-
-中文:
-引理 ext_col
-  条件: {A B : 矩阵 m n α} (h : 对任意 j, A.col j = B.col j)
-  结论: A = B
-  证明: ext fun i j => congr_fun (h j) i
-
-Depends on / 依赖: congr_fun
+--- 原说明 ---
+Two matrices agree if their columns agree.
 -/
-lemma ext_col {A B : Matrix m n α} (h : forall j, A.col j = B.col j) : A = B :=
+lemma ext_col {A B : Matrix m n α} (h : ∀ j, A.col j = B.col j) : A = B :=
   ext fun i j => congr_fun (h j) i
 
 end
 
-/--
-lemma `row_submatrix` / 引理 `row_submatrix`
-
-English:
-lemma row_submatrix
-  given: {m₀ n₀ : Type*} (A : Matrix m n α) (r : m₀ -> m) (c : n₀ -> n) (i : m₀)
-  proof: rfl
-
-中文:
-引理 row_submatrix
-  条件: {m₀ n₀ : 类型} (A : 矩阵 m n α) (r : m₀ -> m) (c : n₀ -> n) (i : m₀)
-  证明: rfl
+/-
+**Matrix.row_submatrix** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：row_submatrix {m₀ n₀ : Type*} (A : Matrix m n α) (r : m₀ -> m) (c : n₀ -> 
+n) (i : m₀) : (A.submatrix r c).row i = (A.submatrix id c).row (r i)
+参数：A : Matrix m n α；r : m₀ -> m；c : n₀ -> n；i : m₀。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma row_submatrix {m₀ n₀ : Type*} (A : Matrix m n α) (r : m₀ -> m) (c : n₀ -> n) (i : m₀) :
+lemma row_submatrix {m₀ n₀ : Type*} (A : Matrix m n α) (r : m₀ → m) (c : n₀ → n) (i : m₀) :
     (A.submatrix r c).row i = (A.submatrix id c).row (r i) := rfl
-
-/--
-lemma `row_submatrix_eq_comp` / 引理 `row_submatrix_eq_comp`
-
-English:
-lemma row_submatrix_eq_comp
-  given: {m₀ n₀ : Type*} (A : Matrix m n α) (r : m₀ -> m) (c : n₀ -> n) (i : m₀)
-  proof: rfl
-
-中文:
-引理 row_submatrix_eq_comp
-  条件: {m₀ n₀ : 类型} (A : 矩阵 m n α) (r : m₀ -> m) (c : n₀ -> n) (i : m₀)
-  证明: rfl
+/-
+**Matrix.row_submatrix_eq_comp** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：row_submatrix_eq_comp {m₀ n₀ : Type*} (A : Matrix m n α) (r : m₀ -> m) (c 
+: n₀ -> n) (i : m₀) : (A.submatrix r c).row i = A.row (r i) ∘ c
+参数：A : Matrix m n α；r : m₀ -> m；c : n₀ -> n；i : m₀。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma row_submatrix_eq_comp {m₀ n₀ : Type*} (A : Matrix m n α) (r : m₀ -> m) (c : n₀ -> n) (i : m₀) :
+lemma row_submatrix_eq_comp {m₀ n₀ : Type*} (A : Matrix m n α) (r : m₀ → m) (c : n₀ → n) (i : m₀) :
     (A.submatrix r c).row i = A.row (r i) ∘ c := rfl
-
-/--
-lemma `col_submatrix` / 引理 `col_submatrix`
-
-English:
-lemma col_submatrix
-  given: {m₀ n₀ : Type*} (A : Matrix m n α) (r : m₀ -> m) (c : n₀ -> n) (j : n₀)
-  proof: rfl
-
-中文:
-引理 col_submatrix
-  条件: {m₀ n₀ : 类型} (A : 矩阵 m n α) (r : m₀ -> m) (c : n₀ -> n) (j : n₀)
-  证明: rfl
+/-
+**Matrix.col_submatrix** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：col_submatrix {m₀ n₀ : Type*} (A : Matrix m n α) (r : m₀ -> m) (c : n₀ -> 
+n) (j : n₀) : (A.submatrix r c).col j = (A.submatrix r id).col (c j)
+参数：A : Matrix m n α；r : m₀ -> m；c : n₀ -> n；j : n₀。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma col_submatrix {m₀ n₀ : Type*} (A : Matrix m n α) (r : m₀ -> m) (c : n₀ -> n) (j : n₀) :
+lemma col_submatrix {m₀ n₀ : Type*} (A : Matrix m n α) (r : m₀ → m) (c : n₀ → n) (j : n₀) :
     (A.submatrix r c).col j = (A.submatrix r id).col (c j) := rfl
-
-/--
-lemma `col_submatrix_eq_comp` / 引理 `col_submatrix_eq_comp`
-
-English:
-lemma col_submatrix_eq_comp
-  given: {m₀ n₀ : Type*} (A : Matrix m n α) (r : m₀ -> m) (c : n₀ -> n) (j : n₀)
-  proof: rfl
-
-中文:
-引理 col_submatrix_eq_comp
-  条件: {m₀ n₀ : 类型} (A : 矩阵 m n α) (r : m₀ -> m) (c : n₀ -> n) (j : n₀)
-  证明: rfl
+/-
+**Matrix.col_submatrix_eq_comp** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：col_submatrix_eq_comp {m₀ n₀ : Type*} (A : Matrix m n α) (r : m₀ -> m) (c 
+: n₀ -> n) (j : n₀) : (A.submatrix r c).col j = A.col (c j) ∘ r
+参数：A : Matrix m n α；r : m₀ -> m；c : n₀ -> n；j : n₀。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma col_submatrix_eq_comp {m₀ n₀ : Type*} (A : Matrix m n α) (r : m₀ -> m) (c : n₀ -> n) (j : n₀) :
+lemma col_submatrix_eq_comp {m₀ n₀ : Type*} (A : Matrix m n α) (r : m₀ → m) (c : n₀ → n) (j : n₀) :
     (A.submatrix r c).col j = A.col (c j) ∘ r := rfl
-
-/--
-lemma `row_map` / 引理 `row_map`
-
-English:
-lemma row_map
-  given: (A : Matrix m n α) (f : α -> β) (i : m)
-  statement: (A.map f).row i = f ∘ A.row i
-  proof: rfl
-
-中文:
-引理 row_map
-  条件: (A : 矩阵 m n α) (f : α -> β) (i : m)
-  结论: (A.map f).row i = f ∘ A.row i
-  证明: rfl
+/-
+**Matrix.row_map** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：row_map (A : Matrix m n α) (f : α -> β) (i : m) : (A.map f).row i = f ∘ A.
+row i
+参数：A : Matrix m n α；f : α -> β；i : m。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma row_map (A : Matrix m n α) (f : α -> β) (i : m) : (A.map f).row i = f ∘ A.row i := rfl
-
-/--
-lemma `col_map` / 引理 `col_map`
-
-English:
-lemma col_map
-  given: (A : Matrix m n α) (f : α -> β) (j : n)
-  statement: (A.map f).col j = f ∘ A.col j
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 col_map
-  条件: (A : 矩阵 m n α) (f : α -> β) (j : n)
-  结论: (A.map f).col j = f ∘ A.col j
-  证明: rfl
-
-@[simp]
+lemma row_map (A : Matrix m n α) (f : α → β) (i : m) : (A.map f).row i = f ∘ A.row i := rfl
+/-
+**Matrix.col_map** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：col_map (A : Matrix m n α) (f : α -> β) (j : n) : (A.map f).col j = f ∘ A.
+col j
+参数：A : Matrix m n α；f : α -> β；j : n。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma col_map (A : Matrix m n α) (f : α -> β) (j : n) : (A.map f).col j = f ∘ A.col j := rfl
+lemma col_map (A : Matrix m n α) (f : α → β) (j : n) : (A.map f).col j = f ∘ A.col j := rfl
 
 @[simp]
-/--
-lemma `row_transpose` / 引理 `row_transpose`
-
-English:
-lemma row_transpose
-  given: (A : Matrix m n α)
-  statement: Aᵀ.row = A.col
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 row_transpose
-  条件: (A : 矩阵 m n α)
-  结论: Aᵀ.row = A.col
-  证明: rfl
-
-@[simp]
+/-
+**Matrix.row_transpose** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：row_transpose (A : Matrix m n α) : Aᵀ.row = A.col
+参数：A : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma row_transpose (A : Matrix m n α) : Aᵀ.row = A.col := rfl
 
 @[simp]
-/--
-lemma `col_transpose` / 引理 `col_transpose`
-
-English:
-lemma col_transpose
-  given: (A : Matrix m n α)
-  statement: Aᵀ.col = A.row
-  proof: rfl
-
-中文:
-引理 col_transpose
-  条件: (A : 矩阵 m n α)
-  结论: Aᵀ.col = A.row
-  证明: rfl
+/-
+**Matrix.col_transpose** 是 Mathlib 中的一个引理，位于命名空间 `Matrix`。
+形式化陈述：col_transpose (A : Matrix m n α) : Aᵀ.col = A.row
+参数：A : Matrix m n α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma col_transpose (A : Matrix m n α) : Aᵀ.col = A.row := rfl
 
@@ -2834,58 +1863,53 @@ end Matrix
 
 namespace Set
 
-/--
-Definition of `matrix` / `matrix` 的定义
+/-- Given a set `S`, `S.matrix` is the set of matrices `M`
+all of whose entries `M i j` belong to `S`. -/
+/-
+**Set.matrix** 是 Mathlib 中的一个定义，位于命名空间 `Set`。
+形式化陈述：matrix (S : Set α) : Set (Matrix m n α)
+参数：S : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition matrix
-  signature: (S : Set α)
-  body: {M | forall i j, M i j in S}
-
-中文:
-定义 matrix
-  签名: (S : 集合 α)
-  定义体: {M | forall i j, M i j in S}
+--- 原说明 ---
+Given a set `S`, `S.matrix` is the set of matrices `M`
+all of whose entries `M i j` belong to `S`.
 -/
-def matrix (S : Set α) : Set (Matrix m n α) := {M | forall i j, M i j in S}
-
-/--
-theorem `mem_matrix` / 定理 `mem_matrix`
-
-English:
-theorem mem_matrix
-  given: {S : Set α} {M : Matrix m n α}
-  proof: .rfl
-
-中文:
-定理 mem_matrix
-  条件: {S : 集合 α} {M : 矩阵 m n α}
-  证明: .rfl
+def matrix (S : Set α) : Set (Matrix m n α) := {M | ∀ i j, M i j ∈ S}
+/-
+**Set.mem_matrix** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：mem_matrix {S : Set α} {M : Matrix m n α} : M in S.matrix ↔ forall i j, M 
+i j in S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem mem_matrix {S : Set α} {M : Matrix m n α} :
-    M in S.matrix ↔ forall i j, M i j in S := .rfl
-
-/--
-theorem `matrix_eq_pi` / 定理 `matrix_eq_pi`
-
-English:
-theorem matrix_eq_pi
-  given: {S : Set α}
-  proof: by
-  ext
-  simp [Set.mem_matrix]
-
-中文:
-定理 matrix_eq_pi
-  条件: {S : 集合 α}
-  证明: by
-  ext
-  simp [Set.mem_matrix]
-
-Depends on / 依赖: Set.mem_matrix, mem_matrix
+    M ∈ S.matrix ↔ ∀ i j, M i j ∈ S := .rfl
+/-
+**Set.matrix_eq_pi** 是 Mathlib 中的一个定理，位于命名空间 `Set`。
+形式化陈述：matrix_eq_pi {S : Set α} : S.matrix = of.symm ⁻¹' Set.univ.pi fun (_ : m) 
+=> Set.univ.pi fun (_ : n) => S
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem matrix_eq_pi {S : Set α} :
-    S.matrix = of.symm ⁻¹' Set.univ.pi fun (_ : m) => Set.univ.pi fun (_ : n) => S := by
+    S.matrix = of.symm ⁻¹' Set.univ.pi fun (_ : m) ↦ Set.univ.pi fun (_ : n) ↦ S := by
   ext
   simp [Set.mem_matrix]
 
@@ -2896,60 +1920,52 @@ namespace Matrix
 variable {S : Set α}
 
 @[simp]
-/--
-theorem `transpose_mem_matrix_iff` / 定理 `transpose_mem_matrix_iff`
-
-English:
-theorem transpose_mem_matrix_iff
-  given: {M : Matrix m n α}
-  proof: forall_comm
-
-中文:
-定理 transpose_mem_matrix_iff
-  条件: {M : 矩阵 m n α}
-  证明: forall_comm
-
-Depends on / 依赖: forall_comm
+/-
+**Matrix.transpose_mem_matrix_iff** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：transpose_mem_matrix_iff {M : Matrix m n α} : Mᵀ in S.matrix ↔ M in S.matr
+ix
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_comm`：∀ {α : Sort u_2} {β : Sort u_1} {p : α → β → Prop}, (∀ (a :
+ α) (b : β), p a b) ↔ ∀ (b : β) (a : α), p a b
 -/
 theorem transpose_mem_matrix_iff {M : Matrix m n α} :
-    Mᵀ in S.matrix ↔ M in S.matrix := forall_comm
-
-/--
-theorem `submatrix_mem_matrix` / 定理 `submatrix_mem_matrix`
-
-English:
-theorem submatrix_mem_matrix
-  given: {M : Matrix m n α} {r : l -> m} {c : o -> n} (hM : M in S.matrix)
-  proof: by simp_all [Set.mem_matrix]
-
-中文:
-定理 submatrix_mem_matrix
-  条件: {M : 矩阵 m n α} {r : l -> m} {c : o -> n} (hM : M in S.matrix)
-  证明: by simp_all [Set.mem_matrix]
-
-Depends on / 依赖: Set.mem_matrix, mem_matrix
+    Mᵀ ∈ S.matrix ↔ M ∈ S.matrix := forall_comm
+/-
+**Matrix.submatrix_mem_matrix** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：submatrix_mem_matrix {M : Matrix m n α} {r : l -> m} {c : o -> n} (hM : M 
+in S.matrix) : M.submatrix r c in S.matrix
+参数：hM : M in S.matrix。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem submatrix_mem_matrix {M : Matrix m n α} {r : l -> m} {c : o -> n} (hM : M in S.matrix) :
-    M.submatrix r c in S.matrix := by simp_all [Set.mem_matrix]
-
-/--
-theorem `submatrix_mem_matrix_iff` / 定理 `submatrix_mem_matrix_iff`
-
-English:
-theorem submatrix_mem_matrix_iff
-  statement: {M : Matrix m n α} {r : l -> m} {c : o -> n}
-  proof: ⟨(hr.forall.mpr fun _ => hc.forall.mpr fun _ => · _ _), submatrix_mem_matrix⟩
-
-中文:
-定理 submatrix_mem_matrix_iff
-  结论: {M : 矩阵 m n α} {r : l -> m} {c : o -> n}
-  证明: ⟨(hr.forall.mpr fun _ => hc.forall.mpr fun _ => · _ _), submatrix_mem_matrix⟩
-
-Depends on / 依赖: hc.forall.mpr, hr.forall.mpr, submatrix_mem_matrix
+theorem submatrix_mem_matrix {M : Matrix m n α} {r : l → m} {c : o → n} (hM : M ∈ S.matrix) :
+    M.submatrix r c ∈ S.matrix := by simp_all [Set.mem_matrix]
+/-
+**Matrix.submatrix_mem_matrix_iff** 是 Mathlib 中的一个定理，位于命名空间 `Matrix`。
+形式化陈述：submatrix_mem_matrix_iff {M : Matrix m n α} {r : l -> m} {c : o -> n} (hr 
+: Function.Surjective r) (hc : Function.Surjective c) : M.submatrix r c in S.mat
+rix ↔ M in S.matrix
+参数：hr : Function.Surjective r；hc : Function.Surjective c。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `Matrix.submatrix_mem_matrix`：submatrix_mem_matrix {M : Matrix m n α} {r 
+: l -> m} {c : o -> n} (hM : M in S.matrix) : M.submatrix r c in S.matrix
 -/
-theorem submatrix_mem_matrix_iff {M : Matrix m n α} {r : l -> m} {c : o -> n}
+theorem submatrix_mem_matrix_iff {M : Matrix m n α} {r : l → m} {c : o → n}
     (hr : Function.Surjective r) (hc : Function.Surjective c) :
-    M.submatrix r c in S.matrix ↔ M in S.matrix :=
+    M.submatrix r c ∈ S.matrix ↔ M ∈ S.matrix :=
   ⟨(hr.forall.mpr fun _ => hc.forall.mpr fun _ => · _ _), submatrix_mem_matrix⟩
 
 end Matrix
+

@@ -48,252 +48,189 @@ variable {C : Type u} [Category.{v} C]
 -- We don't need an analogue of `Pair` (for binary products), `ParallelPair` (for equalizers),
 -- or `(Co)span`, since we already have `Discrete.functor`.
 
-/--
-Definition of `Fan` / `Fan` 的定义
+/-- A fan over `f : β → C` consists of a collection of maps from an object `P` to every `f b`. -/
+/-
+**CategoryTheory.Limits.Fan** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：Fan (f : β -> C)
+参数：f : β -> C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Fan
-  signature: (f : β -> C)
-  body: Cone (Discrete.functor f)
-
-中文:
-缩写 Fan
-  签名: (f : β -> C)
-  定义体: Cone (Discrete.functor f)
-
-Depends on / 依赖: Discrete, Discrete.functor, functor
+--- 原说明 ---
+A fan over `f : β → C` consists of a collection of maps from an object `P` to ev
+ery `f b`.
 -/
-abbrev Fan (f : β -> C) :=
+abbrev Fan (f : β → C) :=
   Cone (Discrete.functor f)
 
-/--
-Definition of `Cofan` / `Cofan` 的定义
+/-- A cofan over `f : β → C` consists of a collection of maps from every `f b` to an object `P`. -/
+/-
+**CategoryTheory.Limits.Cofan** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.Limits
+`。
+形式化陈述：Cofan (f : β -> C)
+参数：f : β -> C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Cofan
-  signature: (f : β -> C)
-  body: Cocone (Discrete.functor f)
-
-中文:
-缩写 Cofan
-  签名: (f : β -> C)
-  定义体: Cocone (Discrete.functor f)
-
-Depends on / 依赖: Cocone, Discrete, Discrete.functor, functor
+--- 原说明 ---
+A cofan over `f : β → C` consists of a collection of maps from every `f b` to an
+ object `P`.
 -/
-abbrev Cofan (f : β -> C) :=
+abbrev Cofan (f : β → C) :=
   Cocone (Discrete.functor f)
 
 /-- A fan over `f : β → C` consists of a collection of maps from an object `P` to every `f b`. -/
 @[simps! pt π_app, implicit_reducible]
-/--
-Definition of `Fan.mk` / `Fan.mk` 的定义
+/-
+**CategoryTheory.Limits.Fan.mk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits.
+Fan`。
+形式化陈述：{β : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {f : β → C} → (P : C) → ((b : β) → P ⟶ f b) → CategoryTheory.Limits.
+Fan f
+参数：P : C；(b : β) → P ⟶ f b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Fan.mk
-  signature: {f : β -> C} (P : C) (p : forall b, P ⟶ f b)
-  body: P
-  π := Discrete.natTrans (fun X => p X.as)
-
-中文:
-定义 Fan.mk
-  签名: {f : β -> C} (P : C) (p : 对任意 b, P ⟶ f b)
-  定义体: P
-  π := Discrete.natTrans (fun X => p X.as)
+--- 原说明 ---
+A fan over `f : β → C` consists of a collection of maps from an object `P` to ev
+ery `f b`.
 -/
-def Fan.mk {f : β -> C} (P : C) (p : forall b, P ⟶ f b) : Fan f where
+def Fan.mk {f : β → C} (P : C) (p : ∀ b, P ⟶ f b) : Fan f where
   pt := P
   π := Discrete.natTrans (fun X => p X.as)
 
 /-- A cofan over `f : β → C` consists of a collection of maps from every `f b` to an object `P`. -/
 @[simps! pt ι_app, implicit_reducible]
-/--
-Definition of `Cofan.mk` / `Cofan.mk` 的定义
+/-
+**CategoryTheory.Limits.Cofan.mk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limit
+s.Cofan`。
+形式化陈述：{β : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {f : β → C} → (P : C) → ((b : β) → f b ⟶ P) → CategoryTheory.Limits.
+Cofan f
+参数：P : C；(b : β) → f b ⟶ P。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cofan.mk
-  signature: {f : β -> C} (P : C) (p : forall b, f b ⟶ P)
-  body: P
-  ι := Discrete.natTrans (fun X => p X.as)
-
-中文:
-定义 Cofan.mk
-  签名: {f : β -> C} (P : C) (p : 对任意 b, f b ⟶ P)
-  定义体: P
-  ι := Discrete.natTrans (fun X => p X.as)
+--- 原说明 ---
+A cofan over `f : β → C` consists of a collection of maps from every `f b` to an
+ object `P`.
 -/
-def Cofan.mk {f : β -> C} (P : C) (p : forall b, f b ⟶ P) : Cofan f where
+def Cofan.mk {f : β → C} (P : C) (p : ∀ b, f b ⟶ P) : Cofan f where
   pt := P
   ι := Discrete.natTrans (fun X => p X.as)
 
-/--
-Definition of `Fan.proj` / `Fan.proj` 的定义
+/-- Get the `j`th "projection" in the fan.
+(Note that the initial letter of `proj` matches the greek letter in `Cone.π`.) -/
+/-
+**CategoryTheory.Limits.Fan.proj** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limit
+s.Fan`。
+形式化陈述：{β : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] → {f : β → C} → (p : CategoryTheory.Limits.Fan f) → (j : β) → p.pt ⟶ f j
+参数：p : CategoryTheory.Limits.Fan f；j : β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Fan.proj
-  signature: {f : β -> C} (p : Fan f) (j : β)
-  body: p.π.app (Discrete.mk j)
-
-中文:
-定义 Fan.proj
-  签名: {f : β -> C} (p : Fan f) (j : β)
-  定义体: p.π.app (Discrete.mk j)
-
-Depends on / 依赖: Discrete, Discrete.mk
+--- 原说明 ---
+Get the `j`th "projection" in the fan.
+(Note that the initial letter of `proj` matches the greek letter in `Cone.π`.)
 -/
-def Fan.proj {f : β -> C} (p : Fan f) (j : β) : p.pt ⟶ f j :=
+def Fan.proj {f : β → C} (p : Fan f) (j : β) : p.pt ⟶ f j :=
   p.π.app (Discrete.mk j)
 
-/--
-Definition of `Cofan.inj` / `Cofan.inj` 的定义
+/-- Get the `j`th "injection" in the cofan.
+(Note that the initial letter of `inj` matches the greek letter in `Cocone.ι`.) -/
+/-
+**CategoryTheory.Limits.Cofan.inj** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limi
+ts.Cofan`。
+形式化陈述：{β : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] → {f : β → C} → (p : CategoryTheory.Limits.Cofan f) → (j : β) → f j ⟶ p.pt
+参数：p : CategoryTheory.Limits.Cofan f；j : β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cofan.inj
-  signature: {f : β -> C} (p : Cofan f) (j : β)
-  body: p.ι.app (Discrete.mk j)
-
-@[simp]
-
-中文:
-定义 Cofan.inj
-  签名: {f : β -> C} (p : Cofan f) (j : β)
-  定义体: p.ι.app (Discrete.mk j)
-
-@[simp]
-
-Depends on / 依赖: Category, Category.assoc, Category.id_comp, Discrete, Discrete.mk, Functor, Functor.LaxMonoidal.ofTensorHom, Iso.cancel_iso_inv_left, LaxMonoidal, associativity, associator_naturality, cancel_iso_inv_left, cat_disch, conv_lhs, conv_r, fun_, id_comp, ofTensorHom, tensorHom_comp_tensorHom, tensorHom_id
+--- 原说明 ---
+Get the `j`th "injection" in the cofan.
+(Note that the initial letter of `inj` matches the greek letter in `Cocone.ι`.)
 -/
-def Cofan.inj {f : β -> C} (p : Cofan f) (j : β) : f j ⟶ p.pt :=
+def Cofan.inj {f : β → C} (p : Cofan f) (j : β) : f j ⟶ p.pt :=
   p.ι.app (Discrete.mk j)
 
 @[simp]
-/--
-theorem `fan_mk_proj` / 定理 `fan_mk_proj`
-
-English:
-theorem fan_mk_proj
-  given: {f : β -> C} (P : C) (p : forall b, P ⟶ f b)
-  statement: (Fan.mk P p).proj = p
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 fan_mk_proj
-  条件: {f : β -> C} (P : C) (p : 对任意 b, P ⟶ f b)
-  结论: (Fan.mk P p).proj = p
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Limits.fan_mk_proj** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Li
+mits`。
+形式化陈述：fan_mk_proj {f : β -> C} (P : C) (p : forall b, P ⟶ f b) : (Fan.mk P p).pr
+oj = p
+参数：P : C；p : forall b, P ⟶ f b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem fan_mk_proj {f : β -> C} (P : C) (p : forall b, P ⟶ f b) : (Fan.mk P p).proj = p :=
+theorem fan_mk_proj {f : β → C} (P : C) (p : ∀ b, P ⟶ f b) : (Fan.mk P p).proj = p :=
   rfl
 
 @[simp]
-/--
-theorem `cofan_mk_inj` / 定理 `cofan_mk_inj`
-
-English:
-theorem cofan_mk_inj
-  given: {f : β -> C} (P : C) (p : forall b, f b ⟶ P)
-  statement: (Cofan.mk P p).inj = p
-  proof: rfl
-
-中文:
-定理 cofan_mk_inj
-  条件: {f : β -> C} (P : C) (p : 对任意 b, f b ⟶ P)
-  结论: (Cofan.mk P p).inj = p
-  证明: rfl
+/-
+**CategoryTheory.Limits.cofan_mk_inj** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.L
+imits`。
+形式化陈述：cofan_mk_inj {f : β -> C} (P : C) (p : forall b, f b ⟶ P) : (Cofan.mk P p)
+.inj = p
+参数：P : C；p : forall b, f b ⟶ P。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem cofan_mk_inj {f : β -> C} (P : C) (p : forall b, f b ⟶ P) : (Cofan.mk P p).inj = p :=
+theorem cofan_mk_inj {f : β → C} (P : C) (p : ∀ b, f b ⟶ P) : (Cofan.mk P p).inj = p :=
   rfl
 
-/--
-Definition of `HasProduct` / `HasProduct` 的定义
+/-- An abbreviation for `HasLimit (Discrete.functor f)`. -/
+/-
+**CategoryTheory.Limits.HasProduct** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.L
+imits`。
+形式化陈述：HasProduct (f : β -> C)
+参数：f : β -> C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HasProduct
-  signature: (f : β -> C)
-  body: HasLimit (Discrete.functor f)
-
-中文:
-缩写 HasProduct
-  签名: (f : β -> C)
-  定义体: HasLimit (Discrete.functor f)
-
-Depends on / 依赖: Discrete, Discrete.functor, HasLimit, functor
+--- 原说明 ---
+An abbreviation for `HasLimit (Discrete.functor f)`.
 -/
-abbrev HasProduct (f : β -> C) :=
+abbrev HasProduct (f : β → C) :=
   HasLimit (Discrete.functor f)
 
-/--
-Definition of `HasCoproduct` / `HasCoproduct` 的定义
+/-- An abbreviation for `HasColimit (Discrete.functor f)`. -/
+/-
+**CategoryTheory.Limits.HasCoproduct** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory
+.Limits`。
+形式化陈述：HasCoproduct (f : β -> C)
+参数：f : β -> C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HasCoproduct
-  signature: (f : β -> C)
-  body: HasColimit (Discrete.functor f)
-
-中文:
-缩写 HasCoproduct
-  签名: (f : β -> C)
-  定义体: HasColimit (Discrete.functor f)
-
-Depends on / 依赖: Discrete, Discrete.functor, HasColimit, functor
+--- 原说明 ---
+An abbreviation for `HasColimit (Discrete.functor f)`.
 -/
-abbrev HasCoproduct (f : β -> C) :=
+abbrev HasCoproduct (f : β → C) :=
   HasColimit (Discrete.functor f)
-
-/--
-lemma `hasCoproduct_of_equiv_of_iso` / 引理 `hasCoproduct_of_equiv_of_iso`
-
-English:
-lemma hasCoproduct_of_equiv_of_iso
-  statement: (f : α -> C) (g : β -> C)
-  proof: by
-  have α : Discrete.functor g ≅ (Discrete.equivalence e).functor ⋙ Discrete.functor f :=
-    Discrete.natIso (fun ⟨j⟩ => iso j)
-  exact hasColimit_of_iso α
-
-中文:
-引理 hasCoproduct_of_equiv_of_iso
-  结论: (f : α -> C) (g : β -> C)
-  证明: by
-  have α : Discrete.functor g ≅ (Discrete.equivalence e).functor ⋙ Discrete.functor f :=
-    Discrete.natIso (fun ⟨j⟩ => iso j)
-  exact hasColimit_of_iso α
-
-Depends on / 依赖: Discrete, Discrete.equivalence, Discrete.functor, Discrete.natIso, equivalence, functor, hasColimit_of_iso, natIso
+/-
+**CategoryTheory.Limits.hasCoproduct_of_equiv_of_iso** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Limits`。
+形式化陈述：hasCoproduct_of_equiv_of_iso (f : α -> C) (g : β -> C) [HasCoproduct f] (e
+ : β ≃ α) (iso : forall j, g j ≅ f (e j)) : HasCoproduct g
+参数：f : α -> C；g : β -> C；e : β ≃ α；iso : forall j, g j ≅ f (e j)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasColimit_of_iso`：hasColimit_of_iso {F G : J ⥤ C}
+ [HasColimit F] (α : G ≅ F) : HasColimit G
 -/
-lemma hasCoproduct_of_equiv_of_iso (f : α -> C) (g : β -> C)
-    [HasCoproduct f] (e : β ≃ α) (iso : forall j, g j ≅ f (e j)) : HasCoproduct g := by
+lemma hasCoproduct_of_equiv_of_iso (f : α → C) (g : β → C)
+    [HasCoproduct f] (e : β ≃ α) (iso : ∀ j, g j ≅ f (e j)) : HasCoproduct g := by
   have α : Discrete.functor g ≅ (Discrete.equivalence e).functor ⋙ Discrete.functor f :=
     Discrete.natIso (fun ⟨j⟩ => iso j)
   exact hasColimit_of_iso α
-
-/--
-lemma `hasProduct_of_equiv_of_iso` / 引理 `hasProduct_of_equiv_of_iso`
-
-English:
-lemma hasProduct_of_equiv_of_iso
-  statement: (f : α -> C) (g : β -> C)
-  proof: by
-  have α : Discrete.functor g ≅ (Discrete.equivalence e).functor ⋙ Discrete.functor f :=
-    Discrete.natIso (fun ⟨j⟩ => iso j)
-  exact hasLimit_of_iso α.symm
-
-中文:
-引理 hasProduct_of_equiv_of_iso
-  结论: (f : α -> C) (g : β -> C)
-  证明: by
-  have α : Discrete.functor g ≅ (Discrete.equivalence e).functor ⋙ Discrete.functor f :=
-    Discrete.natIso (fun ⟨j⟩ => iso j)
-  exact hasLimit_of_iso α.symm
-
-Depends on / 依赖: Discrete, Discrete.equivalence, Discrete.functor, Discrete.natIso, equivalence, functor, hasLimit_of_iso, natIso
+/-
+**CategoryTheory.Limits.hasProduct_of_equiv_of_iso** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.Limits`。
+形式化陈述：hasProduct_of_equiv_of_iso (f : α -> C) (g : β -> C) [HasProduct f] (e : β
+ ≃ α) (iso : forall j, g j ≅ f (e j)) : HasProduct g
+参数：f : α -> C；g : β -> C；e : β ≃ α；iso : forall j, g j ≅ f (e j)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasLimit_of_iso`：hasLimit_of_iso {F G : J ⥤ C} [Ha
+sLimit F] (α : F ≅ G) : HasLimit G
 -/
-lemma hasProduct_of_equiv_of_iso (f : α -> C) (g : β -> C)
-    [HasProduct f] (e : β ≃ α) (iso : forall j, g j ≅ f (e j)) : HasProduct g := by
+lemma hasProduct_of_equiv_of_iso (f : α → C) (g : β → C)
+    [HasProduct f] (e : β ≃ α) (iso : ∀ j, g j ≅ f (e j)) : HasProduct g := by
   have α : Discrete.functor g ≅ (Discrete.equivalence e).functor ⋙ Discrete.functor f :=
     Discrete.natIso (fun ⟨j⟩ => iso j)
   exact hasLimit_of_iso α.symm
@@ -301,30 +238,33 @@ lemma hasProduct_of_equiv_of_iso (f : α -> C) (g : β -> C)
 /-- Make a fan `f` into a limit fan by providing `lift`, `fac`, and `uniq` --
   just a convenience lemma to avoid having to go through `Discrete` -/
 @[simps]
-/--
-Definition of `Fan.IsLimit.mk` / `Fan.IsLimit.mk` 的定义
+/-
+**CategoryTheory.Limits.Fan.IsLimit.mk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Limits.Fan.IsLimit`。
+形式化陈述：{β : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {f : β → C} →         (t : CategoryTheory.Limits.Fan f) →           
+(lift : (s : CategoryTheory.Limits.Fan f) → s.pt ⟶ t.pt) →             autoParam
+                 (∀ (s : CategoryTheory.Limits.Fan f) (j : β),                  
+ CategoryTheory.CategoryStruct.comp (lift s) (t.proj j) = s.proj j)             
+    CategoryTheory.Limits.Fan.IsLimit.mk._auto_1 →               autoParam      
+             (∀ (s : CategoryTheory.Limits.Fan f) (m : s.pt ⟶ t.pt),            
+         (∀ (j : β), CategoryTheory.CategoryStruct.comp m (t.proj j) = s.proj j)
+ → m = lift s)                   CategoryTheory.Limits.Fan.IsLimit.mk._auto_3 → 
+                CategoryTheory.Limits.IsLimit t
+参数：t : CategoryTheory.Limits.Fan f；lift : (s : CategoryTheory.Limits.Fan f) → s.
+pt ⟶ t.pt；∀ (s : CategoryTheory.Limits.Fan f) (j : β),                   Categor
+yTheory.CategoryStruct.comp (lift s) (t.proj j) = s.proj j；∀ (s : CategoryTheory
+.Limits.Fan f) (m : s.pt ⟶ t.pt),                     (∀ (j : β), CategoryTheory
+.CategoryStruct.comp m (t.proj j) = s.proj j) → m = lift s。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Fan.IsLimit.mk
-  signature: {f : β -> C} (t : Fan f) (lift : forall s : Fan f, s.pt ⟶ t.pt)
-  body: { lift }
-
-@[deprecated (since := "2026-05-19")]
-alias mkFanLimit := Fan.IsLimit.mk
-
-中文:
-定义 Fan.是极限.mk
-  签名: {f : β -> C} (t : Fan f) (lift : 对任意 s : Fan f, s.pt ⟶ t.pt)
-  定义体: { lift }
-
-@[deprecated (since := "2026-05-19")]
-alias mkFanLimit := Fan.IsLimit.mk
-
-Depends on / 依赖: IsLimit, cat_disch, s.proj, s.pt, t.proj, t.pt
+--- 原说明 ---
+Make a fan `f` into a limit fan by providing `lift`, `fac`, and `uniq` --
+  just a convenience lemma to avoid having to go through `Discrete`
 -/
-def Fan.IsLimit.mk {f : β -> C} (t : Fan f) (lift : forall s : Fan f, s.pt ⟶ t.pt)
-    (fac : forall (s : Fan f) (j : β), lift s ≫ t.proj j = s.proj j := by cat_disch)
-    (uniq : forall (s : Fan f) (m : s.pt ⟶ t.pt) (_ : forall j : β, m ≫ t.proj j = s.proj j),
+def Fan.IsLimit.mk {f : β → C} (t : Fan f) (lift : ∀ s : Fan f, s.pt ⟶ t.pt)
+    (fac : ∀ (s : Fan f) (j : β), lift s ≫ t.proj j = s.proj j := by cat_disch)
+    (uniq : ∀ (s : Fan f) (m : s.pt ⟶ t.pt) (_ : ∀ j : β, m ≫ t.proj j = s.proj j),
       m = lift s := by cat_disch) :
     IsLimit t :=
   { lift }
@@ -332,126 +272,111 @@ def Fan.IsLimit.mk {f : β -> C} (t : Fan f) (lift : forall s : Fan f, s.pt ⟶ 
 @[deprecated (since := "2026-05-19")]
 alias mkFanLimit := Fan.IsLimit.mk
 
-/--
-Definition of `Fan.IsLimit.lift` / `Fan.IsLimit.lift` 的定义
+/-- Constructor for morphisms to the point of a limit fan. -/
+/-
+**CategoryTheory.Limits.Fan.IsLimit.lift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Limits.Fan.IsLimit`。
+形式化陈述：{β : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {F : β → C} →         {c : CategoryTheory.Limits.Fan F} → CategoryTh
+eory.Limits.IsLimit c → {A : C} → ((i : β) → A ⟶ F i) → (A ⟶ c.pt)
+参数：(i : β) → A ⟶ F i；A ⟶ c.pt。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Fan.IsLimit.lift
-  signature: {F : β -> C} {c : Fan F} (hc : IsLimit c) {A : C}
-  body: hc.lift (Fan.mk A f)
-
-@[deprecated (since := "2026-01-12")] alias Fan.IsLimit.desc := Fan.IsLimit.lift
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 Fan.是极限.lift
-  签名: {F : β -> C} {c : Fan F} (hc : 是极限 c) {A : C}
-  定义体: hc.lift (Fan.mk A f)
-
-@[deprecated (since := "2026-01-12")] alias Fan.IsLimit.desc := Fan.IsLimit.lift
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Fan.mk, hc.lift
+--- 原说明 ---
+Constructor for morphisms to the point of a limit fan.
 -/
-def Fan.IsLimit.lift {F : β -> C} {c : Fan F} (hc : IsLimit c) {A : C}
-    (f : forall i, A ⟶ F i) : A ⟶ c.pt :=
+def Fan.IsLimit.lift {F : β → C} {c : Fan F} (hc : IsLimit c) {A : C}
+    (f : ∀ i, A ⟶ F i) : A ⟶ c.pt :=
   hc.lift (Fan.mk A f)
 
 @[deprecated (since := "2026-01-12")] alias Fan.IsLimit.desc := Fan.IsLimit.lift
 
 @[reassoc (attr := simp)]
-/--
-lemma `Fan.IsLimit.fac` / 引理 `Fan.IsLimit.fac`
-
-English:
-lemma Fan.IsLimit.fac
-  statement: {F : β -> C} {c : Fan F} (hc : IsLimit c) {A : C}
-  proof: hc.fac (Fan.mk A f) ⟨i⟩
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 Fan.是极限.fac
-  结论: {F : β -> C} {c : Fan F} (hc : 是极限 c) {A : C}
-  证明: hc.fac (Fan.mk A f) ⟨i⟩
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Fan.mk, hc.fac
+/-
+**CategoryTheory.Limits.Fan.IsLimit.fac** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Limits.Fan.IsLimit`。
+形式化陈述：∀ {β : Type w} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {F :
+ β → C} {c : CategoryTheory.Limits.Fan F}   (hc : CategoryTheory.Limits.IsLimit 
+c) {A : C} (f : (i : β) → A ⟶ F i) (i : β),   CategoryTheory.CategoryStruct.comp
+ (CategoryTheory.Limits.Fan.IsLimit.lift hc f) (c.proj i) = f i
+参数：hc : CategoryTheory.Limits.IsLimit c；f : (i : β) → A ⟶ F i；i : β；CategoryTheo
+ry.Limits.Fan.IsLimit.lift hc f；c.proj i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.fac`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} 
+C]   {F : CategoryTheor…
 -/
-lemma Fan.IsLimit.fac {F : β -> C} {c : Fan F} (hc : IsLimit c) {A : C}
-    (f : forall i, A ⟶ F i) (i : β) :
+lemma Fan.IsLimit.fac {F : β → C} {c : Fan F} (hc : IsLimit c) {A : C}
+    (f : ∀ i, A ⟶ F i) (i : β) :
     Fan.IsLimit.lift hc f ≫ c.proj i = f i :=
   hc.fac (Fan.mk A f) ⟨i⟩
 
 @[reassoc (attr := simp)]
-/--
-lemma `Fan.IsLimit.lift_proj` / 引理 `Fan.IsLimit.lift_proj`
-
-English:
-lemma Fan.IsLimit.lift_proj
-  statement: {X : β -> C} {c : Fan X} (d : Fan X) (hc : IsLimit c)
-  proof: hc.fac _ _
-
-中文:
-引理 Fan.是极限.lift_proj
-  结论: {X : β -> C} {c : Fan X} (d : Fan X) (hc : 是极限 c)
-  证明: hc.fac _ _
-
-Depends on / 依赖: hc.fac
+/-
+**CategoryTheory.Limits.Fan.IsLimit.lift_proj** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Limits.Fan.IsLimit`。
+形式化陈述：∀ {β : Type w} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X :
+ β → C} {c : CategoryTheory.Limits.Fan X}   (d : CategoryTheory.Limits.Fan X) (h
+c : CategoryTheory.Limits.IsLimit c) (i : β),   CategoryTheory.CategoryStruct.co
+mp (hc.lift d) (c.proj i) = d.proj i
+参数：d : CategoryTheory.Limits.Fan X；hc : CategoryTheory.Limits.IsLimit c；i : β；hc
+.lift d；c.proj i。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.fac`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} 
+C]   {F : CategoryTheor…
 -/
-lemma Fan.IsLimit.lift_proj {X : β -> C} {c : Fan X} (d : Fan X) (hc : IsLimit c)
+lemma Fan.IsLimit.lift_proj {X : β → C} {c : Fan X} (d : Fan X) (hc : IsLimit c)
     (i : β) : hc.lift d ≫ c.proj i = d.proj i :=
   hc.fac _ _
-
-/--
-lemma `Fan.IsLimit.hom_ext` / 引理 `Fan.IsLimit.hom_ext`
-
-English:
-lemma Fan.IsLimit.hom_ext
-  statement: {I : Type*} {F : I -> C} {c : Fan F} (hc : IsLimit c) {A : C}
-  proof: hc.hom_ext (fun ⟨i⟩ => h i)
-
-中文:
-引理 Fan.是极限.hom_ext
-  结论: {I : 类型} {F : I -> C} {c : Fan F} (hc : 是极限 c) {A : C}
-  证明: hc.hom_ext (fun ⟨i⟩ => h i)
-
-Depends on / 依赖: hc.hom_ext, hom_ext
+/-
+**CategoryTheory.Limits.Fan.IsLimit.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Limits.Fan.IsLimit`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {I : Type u_1} {F
+ : I → C} {c : CategoryTheory.Limits.Fan F}   (hc : CategoryTheory.Limits.IsLimi
+t c) {A : C} (f g : A ⟶ c.pt),   (∀ (i : I), CategoryTheory.CategoryStruct.comp 
+f (c.proj i) = CategoryTheory.CategoryStruct.comp g (c.proj i)) → f = g
+参数：hc : CategoryTheory.Limits.IsLimit c；f g : A ⟶ c.pt；∀ (i : I), CategoryTheory
+.CategoryStruct.comp f (c.proj i) = CategoryTheory.CategoryStruct.comp g (c.proj
+ i)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.hom_ext`：hom_ext (h : IsLimit t) {W : C} {
+f f' : W ⟶ t.pt} (w : forall j, f ≫ t.π.app j = f' ≫ t.π.app j) : f = f'
 -/
-lemma Fan.IsLimit.hom_ext {I : Type*} {F : I -> C} {c : Fan F} (hc : IsLimit c) {A : C}
-    (f g : A ⟶ c.pt) (h : forall i, f ≫ c.proj i = g ≫ c.proj i) : f = g :=
+lemma Fan.IsLimit.hom_ext {I : Type*} {F : I → C} {c : Fan F} (hc : IsLimit c) {A : C}
+    (f g : A ⟶ c.pt) (h : ∀ i, f ≫ c.proj i = g ≫ c.proj i) : f = g :=
   hc.hom_ext (fun ⟨i⟩ => h i)
 
 /-- Make a cofan `f` into a colimit cofan by providing `desc`, `fac`, and `uniq` --
   just a convenience lemma to avoid having to go through `Discrete` -/
 @[simps]
-/--
-Definition of `Cofan.IsColimit.mk` / `Cofan.IsColimit.mk` 的定义
+/-
+**CategoryTheory.Limits.Cofan.IsColimit.mk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Limits.Cofan.IsColimit`。
+形式化陈述：{β : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {f : β → C} →         (s : CategoryTheory.Limits.Cofan f) →         
+  (desc : (t : CategoryTheory.Limits.Cofan f) → s.pt ⟶ t.pt) →             autoP
+aram                 (∀ (t : CategoryTheory.Limits.Cofan f) (j : β),            
+       CategoryTheory.CategoryStruct.comp (s.inj j) (desc t) = t.inj j)         
+        CategoryTheory.Limits.Cofan.IsColimit.mk._auto_1 →               autoPar
+am                   (∀ (t : CategoryTheory.Limits.Cofan f) (m : s.pt ⟶ t.pt),  
+                   (∀ (j : β), CategoryTheory.CategoryStruct.comp (s.inj j) m = 
+t.inj j) → m = desc t)                   CategoryTheory.Limits.Cofan.IsColimit.m
+k._auto_3 →                 CategoryTheory.Limits.IsColimit s
+参数：s : CategoryTheory.Limits.Cofan f；desc : (t : CategoryTheory.Limits.Cofan f) 
+→ s.pt ⟶ t.pt；∀ (t : CategoryTheory.Limits.Cofan f) (j : β),                   C
+ategoryTheory.CategoryStruct.comp (s.inj j) (desc t) = t.inj j；∀ (t : CategoryTh
+eory.Limits.Cofan f) (m : s.pt ⟶ t.pt),                     (∀ (j : β), Category
+Theory.CategoryStruct.comp (s.inj j) m = t.inj j) → m = desc t。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cofan.IsColimit.mk
-  signature: {f : β -> C} (s : Cofan f) (desc : forall t : Cofan f, s.pt ⟶ t.pt)
-  body: { desc }
-
-@[deprecated (since := "2026-05-19")]
-alias mkCofanColimit := Cofan.IsColimit.mk
-
-中文:
-定义 Cofan.是余极限.mk
-  签名: {f : β -> C} (s : Cofan f) (desc : 对任意 t : Cofan f, s.pt ⟶ t.pt)
-  定义体: { desc }
-
-@[deprecated (since := "2026-05-19")]
-alias mkCofanColimit := Cofan.IsColimit.mk
-
-Depends on / 依赖: IsColimit, cat_disch, s.inj, s.pt, t.inj, t.pt
+--- 原说明 ---
+Make a cofan `f` into a colimit cofan by providing `desc`, `fac`, and `uniq` --
+  just a convenience lemma to avoid having to go through `Discrete`
 -/
-def Cofan.IsColimit.mk {f : β -> C} (s : Cofan f) (desc : forall t : Cofan f, s.pt ⟶ t.pt)
-    (fac : forall (t : Cofan f) (j : β), s.inj j ≫ desc t = t.inj j := by cat_disch)
-    (uniq : forall (t : Cofan f) (m : s.pt ⟶ t.pt) (_ : forall j : β, s.inj j ≫ m = t.inj j),
+def Cofan.IsColimit.mk {f : β → C} (s : Cofan f) (desc : ∀ t : Cofan f, s.pt ⟶ t.pt)
+    (fac : ∀ (t : Cofan f) (j : β), s.inj j ≫ desc t = t.inj j := by cat_disch)
+    (uniq : ∀ (t : Cofan f) (m : s.pt ⟶ t.pt) (_ : ∀ j : β, s.inj j ≫ m = t.inj j),
       m = desc t := by cat_disch) :
     IsColimit s :=
   { desc }
@@ -459,169 +384,150 @@ def Cofan.IsColimit.mk {f : β -> C} (s : Cofan f) (desc : forall t : Cofan f, s
 @[deprecated (since := "2026-05-19")]
 alias mkCofanColimit := Cofan.IsColimit.mk
 
-/--
-Definition of `Cofan.IsColimit.desc` / `Cofan.IsColimit.desc` 的定义
+/-- Constructor for morphisms from the point of a colimit cofan. -/
+/-
+**CategoryTheory.Limits.Cofan.IsColimit.desc** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Limits.Cofan.IsColimit`。
+形式化陈述：{β : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {F : β → C} →         {c : CategoryTheory.Limits.Cofan F} →         
+  CategoryTheory.Limits.IsColimit c → {A : C} → ((i : β) → F i ⟶ A) → (c.pt ⟶ A)
+参数：(i : β) → F i ⟶ A；c.pt ⟶ A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cofan.IsColimit.desc
-  signature: {F : β -> C} {c : Cofan F} (hc : IsColimit c) {A : C}
-  body: hc.desc (Cofan.mk A f)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 Cofan.是余极限.desc
-  签名: {F : β -> C} {c : Cofan F} (hc : 是余极限 c) {A : C}
-  定义体: hc.desc (Cofan.mk A f)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Cofan.mk, hc.desc
+--- 原说明 ---
+Constructor for morphisms from the point of a colimit cofan.
 -/
-def Cofan.IsColimit.desc {F : β -> C} {c : Cofan F} (hc : IsColimit c) {A : C}
-    (f : forall i, F i ⟶ A) : c.pt ⟶ A :=
+def Cofan.IsColimit.desc {F : β → C} {c : Cofan F} (hc : IsColimit c) {A : C}
+    (f : ∀ i, F i ⟶ A) : c.pt ⟶ A :=
   hc.desc (Cofan.mk A f)
 
 @[reassoc (attr := simp)]
-/--
-lemma `Cofan.IsColimit.fac` / 引理 `Cofan.IsColimit.fac`
-
-English:
-lemma Cofan.IsColimit.fac
-  statement: {F : β -> C} {c : Cofan F} (hc : IsColimit c) {A : C}
-  proof: hc.fac (Cofan.mk A f) ⟨i⟩
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 Cofan.是余极限.fac
-  结论: {F : β -> C} {c : Cofan F} (hc : 是余极限 c) {A : C}
-  证明: hc.fac (Cofan.mk A f) ⟨i⟩
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Cofan.mk, hc.fac
+/-
+**CategoryTheory.Limits.Cofan.IsColimit.fac** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Limits.Cofan.IsColimit`。
+形式化陈述：∀ {β : Type w} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {F :
+ β → C} {c : CategoryTheory.Limits.Cofan F}   (hc : CategoryTheory.Limits.IsColi
+mit c) {A : C} (f : (i : β) → F i ⟶ A) (i : β),   CategoryTheory.CategoryStruct.
+comp (c.inj i) (CategoryTheory.Limits.Cofan.IsColimit.desc hc f) = f i
+参数：hc : CategoryTheory.Limits.IsColimit c；f : (i : β) → F i ⟶ A；i : β；c.inj i；Ca
+tegoryTheory.Limits.Cofan.IsColimit.desc hc f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsColimit.fac`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃
+} C]   {F : CategoryTheor…
 -/
-lemma Cofan.IsColimit.fac {F : β -> C} {c : Cofan F} (hc : IsColimit c) {A : C}
-    (f : forall i, F i ⟶ A) (i : β) :
+lemma Cofan.IsColimit.fac {F : β → C} {c : Cofan F} (hc : IsColimit c) {A : C}
+    (f : ∀ i, F i ⟶ A) (i : β) :
     c.inj i ≫ Cofan.IsColimit.desc hc f = f i :=
   hc.fac (Cofan.mk A f) ⟨i⟩
 
 @[reassoc (attr := simp)]
-/--
-lemma `Cofan.IsColimit.inj_desc` / 引理 `Cofan.IsColimit.inj_desc`
-
-English:
-lemma Cofan.IsColimit.inj_desc
-  statement: {X : β -> C} {c : Cofan X} (d : Cofan X) (hc : IsColimit c)
-  proof: hc.fac _ _
-
-中文:
-引理 Cofan.是余极限.inj_desc
-  结论: {X : β -> C} {c : Cofan X} (d : Cofan X) (hc : 是余极限 c)
-  证明: hc.fac _ _
-
-Depends on / 依赖: hc.fac
+/-
+**CategoryTheory.Limits.Cofan.IsColimit.inj_desc** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Limits.Cofan.IsColimit`。
+形式化陈述：∀ {β : Type w} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X :
+ β → C} {c : CategoryTheory.Limits.Cofan X}   (d : CategoryTheory.Limits.Cofan X
+) (hc : CategoryTheory.Limits.IsColimit c) (i : β),   CategoryTheory.CategoryStr
+uct.comp (c.inj i) (hc.desc d) = d.inj i
+参数：d : CategoryTheory.Limits.Cofan X；hc : CategoryTheory.Limits.IsColimit c；i : 
+β；c.inj i；hc.desc d。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsColimit.fac`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃
+} C]   {F : CategoryTheor…
 -/
-lemma Cofan.IsColimit.inj_desc {X : β -> C} {c : Cofan X} (d : Cofan X) (hc : IsColimit c)
+lemma Cofan.IsColimit.inj_desc {X : β → C} {c : Cofan X} (d : Cofan X) (hc : IsColimit c)
     (i : β) : c.inj i ≫ hc.desc d = d.inj i :=
   hc.fac _ _
-
-/--
-lemma `Cofan.IsColimit.hom_ext` / 引理 `Cofan.IsColimit.hom_ext`
-
-English:
-lemma Cofan.IsColimit.hom_ext
-  statement: {I : Type*} {F : I -> C} {c : Cofan F} (hc : IsColimit c) {A : C}
-  proof: hc.hom_ext (fun ⟨i⟩ => h i)
-
-中文:
-引理 Cofan.是余极限.hom_ext
-  结论: {I : 类型} {F : I -> C} {c : Cofan F} (hc : 是余极限 c) {A : C}
-  证明: hc.hom_ext (fun ⟨i⟩ => h i)
-
-Depends on / 依赖: hc.hom_ext, hom_ext
+/-
+**CategoryTheory.Limits.Cofan.IsColimit.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `Categ
+oryTheory.Limits.Cofan.IsColimit`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {I : Type u_1} {F
+ : I → C} {c : CategoryTheory.Limits.Cofan F}   (hc : CategoryTheory.Limits.IsCo
+limit c) {A : C} (f g : c.pt ⟶ A),   (∀ (i : I), CategoryTheory.CategoryStruct.c
+omp (c.inj i) f = CategoryTheory.CategoryStruct.comp (c.inj i) g) → f = g
+参数：hc : CategoryTheory.Limits.IsColimit c；f g : c.pt ⟶ A；∀ (i : I), CategoryTheo
+ry.CategoryStruct.comp (c.inj i) f = CategoryTheory.CategoryStruct.comp (c.inj i
+) g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsColimit.hom_ext`：∀ {J : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃
+, u₃} C]   {F : CategoryTheor…
 -/
-lemma Cofan.IsColimit.hom_ext {I : Type*} {F : I -> C} {c : Cofan F} (hc : IsColimit c) {A : C}
-    (f g : c.pt ⟶ A) (h : forall i, c.inj i ≫ f = c.inj i ≫ g) : f = g :=
+lemma Cofan.IsColimit.hom_ext {I : Type*} {F : I → C} {c : Cofan F} (hc : IsColimit c) {A : C}
+    (f g : c.pt ⟶ A) (h : ∀ i, c.inj i ≫ f = c.inj i ≫ g) : f = g :=
   hc.hom_ext (fun ⟨i⟩ => h i)
 
 section
 
 variable (C)
 
-/--
-Definition of `HasProductsOfShape` / `HasProductsOfShape` 的定义
+/-- An abbreviation for `HasLimitsOfShape (Discrete f)`. -/
+/-
+**CategoryTheory.Limits.HasProductsOfShape** 是 Mathlib 中的一个缩写定义，位于命名空间 `Category
+Theory.Limits`。
+形式化陈述：HasProductsOfShape (β : Type v)
+参数：β : Type v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HasProductsOfShape
-  signature: (β : Type v)
-  body: HasLimitsOfShape.{v} (Discrete β)
-
-中文:
-缩写 HasProductsOfShape
-  签名: (β : 类型v)
-  定义体: HasLimitsOfShape.{v} (Discrete β)
-
-Depends on / 依赖: Discrete, HasLimitsOfShape
+--- 原说明 ---
+An abbreviation for `HasLimitsOfShape (Discrete f)`.
 -/
 abbrev HasProductsOfShape (β : Type v) :=
   HasLimitsOfShape.{v} (Discrete β)
 
-/--
-Definition of `HasCoproductsOfShape` / `HasCoproductsOfShape` 的定义
+/-- An abbreviation for `HasColimitsOfShape (Discrete f)`. -/
+/-
+**CategoryTheory.Limits.HasCoproductsOfShape** 是 Mathlib 中的一个缩写定义，位于命名空间 `Catego
+ryTheory.Limits`。
+形式化陈述：HasCoproductsOfShape (β : Type v)
+参数：β : Type v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HasCoproductsOfShape
-  signature: (β : Type v)
-  body: HasColimitsOfShape.{v} (Discrete β)
-
-中文:
-缩写 HasCoproductsOfShape
-  签名: (β : 类型v)
-  定义体: HasColimitsOfShape.{v} (Discrete β)
-
-Depends on / 依赖: Discrete, HasColimitsOfShape
+--- 原说明 ---
+An abbreviation for `HasColimitsOfShape (Discrete f)`.
 -/
 abbrev HasCoproductsOfShape (β : Type v) :=
   HasColimitsOfShape.{v} (Discrete β)
 
 end
 
-/--
-Definition of `piObj` / `piObj` 的定义
+/-- `piObj f` computes the product of a family of elements `f`.
+(It is defined as an abbreviation for `limit (Discrete.functor f)`,
+so for most facts about `piObj f`, you will just use general facts about limits.) -/
+/-
+**CategoryTheory.Limits.piObj** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.Limits
+`。
+形式化陈述：piObj (f : β -> C) [HasProduct f]
+参数：f : β -> C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation piObj
-  signature: (f : β -> C) [HasProduct f]
-  body: limit (Discrete.functor f)
-
-中文:
-缩写 piObj
-  签名: (f : β -> C) [HasProduct f]
-  定义体: limit (Discrete.functor f)
-
-Depends on / 依赖: Discrete, Discrete.functor, functor
+--- 原说明 ---
+`piObj f` computes the product of a family of elements `f`.
+(It is defined as an abbreviation for `limit (Discrete.functor f)`,
+so for most facts about `piObj f`, you will just use general facts about limits.
+)
 -/
-abbrev piObj (f : β -> C) [HasProduct f] :=
+abbrev piObj (f : β → C) [HasProduct f] :=
   limit (Discrete.functor f)
 
-/--
-Definition of `sigmaObj` / `sigmaObj` 的定义
+/-- `sigmaObj f` computes the coproduct of a family of elements `f`.
+(It is defined as an abbreviation for `colimit (Discrete.functor f)`,
+so for most facts about `sigmaObj f`, you will just use general facts about colimits.) -/
+/-
+**CategoryTheory.Limits.sigmaObj** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.Lim
+its`。
+形式化陈述：sigmaObj (f : β -> C) [HasCoproduct f]
+参数：f : β -> C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation sigmaObj
-  signature: (f : β -> C) [HasCoproduct f]
-  body: colimit (Discrete.functor f)
-
-中文:
-缩写 sigmaObj
-  签名: (f : β -> C) [HasCoproduct f]
-  定义体: colimit (Discrete.functor f)
-
-Depends on / 依赖: Discrete, Discrete.functor, colimit, functor
+--- 原说明 ---
+`sigmaObj f` computes the coproduct of a family of elements `f`.
+(It is defined as an abbreviation for `colimit (Discrete.functor f)`,
+so for most facts about `sigmaObj f`, you will just use general facts about coli
+mits.)
 -/
-abbrev sigmaObj (f : β -> C) [HasCoproduct f] :=
+abbrev sigmaObj (f : β → C) [HasCoproduct f] :=
   colimit (Discrete.functor f)
 
 /-- notation for categorical products. We need `ᶜ` to avoid conflict with `Finset.prod`. -/
@@ -630,800 +536,754 @@ notation "∏ᶜ " f:60 => piObj f
 /-- notation for categorical coproducts -/
 notation "∐ " f:60 => sigmaObj f
 
-/--
-Definition of `Pi.π` / `Pi.π` 的定义
+/-- The `b`-th projection from the pi object over `f` has the form `∏ᶜ f ⟶ f b`. -/
+/-
+**CategoryTheory.Limits.Pi.** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Pi.π
-  signature: (f : β -> C) [HasProduct f] (b : β)
-  body: limit.π (Discrete.functor f) (Discrete.mk b)
-
-中文:
-缩写 依赖函数类型.π
-  签名: (f : β -> C) [HasProduct f] (b : β)
-  定义体: limit.π (Discrete.functor f) (Discrete.mk b)
-
-Depends on / 依赖: Discrete, Discrete.functor, Discrete.mk, functor
+--- 原说明 ---
+The `b`-th projection from the pi object over `f` has the form `∏ᶜ f ⟶ f b`.
 -/
-abbrev Pi.π (f : β -> C) [HasProduct f] (b : β) : ∏ᶜ f ⟶ f b :=
+abbrev Pi.π (f : β → C) [HasProduct f] (b : β) : ∏ᶜ f ⟶ f b :=
   limit.π (Discrete.functor f) (Discrete.mk b)
 
-/--
-Definition of `Sigma.ι` / `Sigma.ι` 的定义
+/-- The `b`-th inclusion into the sigma object over `f` has the form `f b ⟶ ∐ f`. -/
+/-
+**CategoryTheory.Limits.Sigma.** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.Limit
+s`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Sigma.ι
-  signature: (f : β -> C) [HasCoproduct f] (b : β)
-  body: colimit.ι (Discrete.functor f) (Discrete.mk b)
-
-中文:
-缩写 依赖和类型.ι
-  签名: (f : β -> C) [HasCoproduct f] (b : β)
-  定义体: colimit.ι (Discrete.functor f) (Discrete.mk b)
-
-Depends on / 依赖: Discrete, Discrete.functor, Discrete.mk, colimit, functor
+--- 原说明 ---
+The `b`-th inclusion into the sigma object over `f` has the form `f b ⟶ ∐ f`.
 -/
-abbrev Sigma.ι (f : β -> C) [HasCoproduct f] (b : β) : f b ⟶ ∐ f :=
+abbrev Sigma.ι (f : β → C) [HasCoproduct f] (b : β) : f b ⟶ ∐ f :=
   colimit.ι (Discrete.functor f) (Discrete.mk b)
 
 /-- Without this lemma, `limit.hom_ext` would be applied, but the goal would involve terms
 in `Discrete β` rather than `β` itself. -/
 @[ext 1050]
-/--
-lemma `Pi.hom_ext` / 引理 `Pi.hom_ext`
+/-
+**CategoryTheory.Limits.Pi.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Lim
+its.Pi`。
+形式化陈述：∀ {β : Type w} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f :
+ β → C}   [inst_1 : CategoryTheory.Limits.HasProduct f] {X : C} (g₁ g₂ : X ⟶ ∏ᶜ 
+f),   (∀ (b : β),       CategoryTheory.CategoryStruct.comp g₁ (CategoryTheory.Li
+mits.Pi.π f b) =         CategoryTheory.CategoryStruct.comp g₂ (CategoryTheory.L
+imits.Pi.π f b)) →     g₁ = g₂
+参数：g₁ g₂ : X ⟶ ∏ᶜ f；∀ (b : β),       CategoryTheory.CategoryStruct.comp g₁ (Cate
+goryTheory.Limits.Pi.π f b) =         CategoryTheory.CategoryStruct.comp g₂ (Cat
+egoryTheory.Limits.Pi.π f b)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.limit.hom_ext`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
 
-English:
-lemma Pi.hom_ext
-  statement: {f : β -> C} [HasProduct f] {X : C} (g₁ g₂ : X ⟶ ∏ᶜ f)
-  proof: limit.hom_ext (fun ⟨j⟩ => h j)
-
-中文:
-引理 依赖函数类型.hom_ext
-  结论: {f : β -> C} [HasProduct f] {X : C} (g₁ g₂ : X ⟶ ∏ᶜ f)
-  证明: limit.hom_ext (fun ⟨j⟩ => h j)
-
-Depends on / 依赖: hom_ext, limit.hom_ext
+--- 原说明 ---
+Without this lemma, `limit.hom_ext` would be applied, but the goal would involve
+ terms
+in `Discrete β` rather than `β` itself.
 -/
-lemma Pi.hom_ext {f : β -> C} [HasProduct f] {X : C} (g₁ g₂ : X ⟶ ∏ᶜ f)
-    (h : forall (b : β), g₁ ≫ Pi.π f b = g₂ ≫ Pi.π f b) : g₁ = g₂ :=
+lemma Pi.hom_ext {f : β → C} [HasProduct f] {X : C} (g₁ g₂ : X ⟶ ∏ᶜ f)
+    (h : ∀ (b : β), g₁ ≫ Pi.π f b = g₂ ≫ Pi.π f b) : g₁ = g₂ :=
   limit.hom_ext (fun ⟨j⟩ => h j)
 
 /-- Without this lemma, `limit.hom_ext` would be applied, but the goal would involve terms
 in `Discrete β` rather than `β` itself. -/
 @[ext 1050]
-/--
-lemma `Sigma.hom_ext` / 引理 `Sigma.hom_ext`
+/-
+**CategoryTheory.Limits.Sigma.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Limits.Sigma`。
+形式化陈述：∀ {β : Type w} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f :
+ β → C}   [inst_1 : CategoryTheory.Limits.HasCoproduct f] {X : C} (g₁ g₂ : ∐ f ⟶
+ X),   (∀ (b : β),       CategoryTheory.CategoryStruct.comp (CategoryTheory.Limi
+ts.Sigma.ι f b) g₁ =         CategoryTheory.CategoryStruct.comp (CategoryTheory.
+Limits.Sigma.ι f b) g₂) →     g₁ = g₂
+参数：g₁ g₂ : ∐ f ⟶ X；∀ (b : β),       CategoryTheory.CategoryStruct.comp (Category
+Theory.Limits.Sigma.ι f b) g₁ =         CategoryTheory.CategoryStruct.comp (Cate
+goryTheory.Limits.Sigma.ι f b) g₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.colimit.hom_ext`：∀ {J : Type u₁} [inst : CategoryT
+heory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u}
+ C]   {F : CategoryTheory.F…
 
-English:
-lemma Sigma.hom_ext
-  statement: {f : β -> C} [HasCoproduct f] {X : C} (g₁ g₂ : ∐ f ⟶ X)
-  proof: colimit.hom_ext (fun ⟨j⟩ => h j)
-
-中文:
-引理 依赖和类型.hom_ext
-  结论: {f : β -> C} [HasCoproduct f] {X : C} (g₁ g₂ : ∐ f ⟶ X)
-  证明: colimit.hom_ext (fun ⟨j⟩ => h j)
-
-Depends on / 依赖: colimit, colimit.hom_ext, hom_ext
+--- 原说明 ---
+Without this lemma, `limit.hom_ext` would be applied, but the goal would involve
+ terms
+in `Discrete β` rather than `β` itself.
 -/
-lemma Sigma.hom_ext {f : β -> C} [HasCoproduct f] {X : C} (g₁ g₂ : ∐ f ⟶ X)
-    (h : forall (b : β), Sigma.ι f b ≫ g₁ = Sigma.ι f b ≫ g₂) : g₁ = g₂ :=
+lemma Sigma.hom_ext {f : β → C} [HasCoproduct f] {X : C} (g₁ g₂ : ∐ f ⟶ X)
+    (h : ∀ (b : β), Sigma.ι f b ≫ g₁ = Sigma.ι f b ≫ g₂) : g₁ = g₂ :=
   colimit.hom_ext (fun ⟨j⟩ => h j)
 
-/--
-Definition of `productIsProduct` / `productIsProduct` 的定义
+/-- The fan constructed of the projections from the product is limiting. -/
+/-
+**CategoryTheory.Limits.productIsProduct** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Limits`。
+形式化陈述：productIsProduct (f : β -> C) [HasProduct f] : IsLimit (Fan.mk _ (Pi.π f))
+参数：f : β -> C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition productIsProduct
-  signature: (f : β -> C) [HasProduct f]
-  body: IsLimit.ofIsoLimit (limit.isLimit (Discrete.functor f)) (Cone.ext (Iso.refl _))
-
-中文:
-定义 productIsProduct
-  签名: (f : β -> C) [HasProduct f]
-  定义体: IsLimit.ofIsoLimit (limit.isLimit (Discrete.functor f)) (Cone.ext (Iso.refl _))
-
-Depends on / 依赖: Cone.ext, Discrete, Discrete.functor, IsLimit, IsLimit.ofIsoLimit, Iso.refl, functor, isLimit, limit.isLimit, ofIsoLimit
+--- 原说明 ---
+The fan constructed of the projections from the product is limiting.
 -/
-def productIsProduct (f : β -> C) [HasProduct f] : IsLimit (Fan.mk _ (Pi.π f)) :=
+def productIsProduct (f : β → C) [HasProduct f] : IsLimit (Fan.mk _ (Pi.π f)) :=
   IsLimit.ofIsoLimit (limit.isLimit (Discrete.functor f)) (Cone.ext (Iso.refl _))
 
-/--
-Definition of `coproductIsCoproduct` / `coproductIsCoproduct` 的定义
+/-- The cofan constructed of the inclusions from the coproduct is colimiting. -/
+/-
+**CategoryTheory.Limits.coproductIsCoproduct** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Limits`。
+形式化陈述：coproductIsCoproduct (f : β -> C) [HasCoproduct f] : IsColimit (Cofan.mk _
+ (Sigma.ι f))
+参数：f : β -> C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coproductIsCoproduct
-  signature: (f : β -> C) [HasCoproduct f]
-  body: IsColimit.ofIsoColimit (colimit.isColimit (Discrete.functor f)) (Cocone.ext (Iso.refl _))
-
-中文:
-定义 coproductIsCoproduct
-  签名: (f : β -> C) [HasCoproduct f]
-  定义体: IsColimit.ofIsoColimit (colimit.isColimit (Discrete.functor f)) (Cocone.ext (Iso.refl _))
-
-Depends on / 依赖: Cocone, Cocone.ext, Discrete, Discrete.functor, IsColimit, IsColimit.ofIsoColimit, Iso.refl, colimit, colimit.isColimit, functor, isColimit, ofIsoColimit
+--- 原说明 ---
+The cofan constructed of the inclusions from the coproduct is colimiting.
 -/
-def coproductIsCoproduct (f : β -> C) [HasCoproduct f] : IsColimit (Cofan.mk _ (Sigma.ι f)) :=
+def coproductIsCoproduct (f : β → C) [HasCoproduct f] : IsColimit (Cofan.mk _ (Sigma.ι f)) :=
   IsColimit.ofIsoColimit (colimit.isColimit (Discrete.functor f)) (Cocone.ext (Iso.refl _))
 
 -- TODO?: simp can prove this using `eqToHom_naturality`
 -- but `eqToHom_naturality` applies less easily than this lemma
 @[reassoc]
-/--
-theorem `Pi.π_comp_eqToHom` / 定理 `Pi.π_comp_eqToHom`
-
-English:
-theorem Pi.π_comp_eqToHom
-  given: {J : Type*} (f : J -> C) [HasProduct f] {j j' : J} (w : j = j')
-  proof: by
-  simp [*]
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 依赖函数类型.π_comp_eqToHom
-  条件: {J : 类型} (f : J -> C) [HasProduct f] {j j' : J} (w : j = j')
-  证明: by
-  simp [*]
-
-@[reassoc (attr := simp)]
+/-
+**CategoryTheory.Limits.Pi.** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Pi.π_comp_eqToHom {J : Type*} (f : J -> C) [HasProduct f] {j j' : J} (w : j = j') :
+theorem Pi.π_comp_eqToHom {J : Type*} (f : J → C) [HasProduct f] {j j' : J} (w : j = j') :
     Pi.π f j ≫ eqToHom (by simp [w]) = Pi.π f j' := by
   simp [*]
 
 @[reassoc (attr := simp)]
-/--
-theorem `Sigma.eqToHom_comp_ι` / 定理 `Sigma.eqToHom_comp_ι`
-
-English:
-theorem Sigma.eqToHom_comp_ι
-  given: {J : Type*} (f : J -> C) [HasCoproduct f] {j j' : J} (w : j = j')
-  proof: by
-  cases w
-  simp
-
-中文:
-定理 依赖和类型.eqToHom_comp_ι
-  条件: {J : 类型} (f : J -> C) [HasCoproduct f] {j j' : J} (w : j = j')
-  证明: by
-  cases w
-  simp
+/-
+**CategoryTheory.Limits.Sigma.eqToHom_comp_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Sigma.eqToHom_comp_ι {J : Type*} (f : J -> C) [HasCoproduct f] {j j' : J} (w : j = j') :
+theorem Sigma.eqToHom_comp_ι {J : Type*} (f : J → C) [HasCoproduct f] {j j' : J} (w : j = j') :
     eqToHom (by simp [w]) ≫ Sigma.ι f j' = Sigma.ι f j := by
   cases w
   simp
 
-/--
-Definition of `Pi.lift` / `Pi.lift` 的定义
+/-- A collection of morphisms `P ⟶ f b` induces a morphism `P ⟶ ∏ᶜ f`. -/
+/-
+**CategoryTheory.Limits.Pi.lift** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits
+.Pi`。
+形式化陈述：{β : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {f : β → C} → [inst_1 : CategoryTheory.Limits.HasProduct f] → {P : C
+} → ((b : β) → P ⟶ f b) → (P ⟶ ∏ᶜ f)
+参数：(b : β) → P ⟶ f b；P ⟶ ∏ᶜ f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Pi.lift
-  signature: {f : β -> C} [HasProduct f] {P : C} (p : forall b, P ⟶ f b)
-  body: limit.lift _ (Fan.mk P p)
-
-@[reassoc, elementwise]
-
-中文:
-缩写 依赖函数类型.lift
-  签名: {f : β -> C} [HasProduct f] {P : C} (p : 对任意 b, P ⟶ f b)
-  定义体: limit.lift _ (Fan.mk P p)
-
-@[reassoc, elementwise]
-
-Depends on / 依赖: Fan.mk, limit.lift
+--- 原说明 ---
+A collection of morphisms `P ⟶ f b` induces a morphism `P ⟶ ∏ᶜ f`.
 -/
-abbrev Pi.lift {f : β -> C} [HasProduct f] {P : C} (p : forall b, P ⟶ f b) : P ⟶ ∏ᶜ f :=
+abbrev Pi.lift {f : β → C} [HasProduct f] {P : C} (p : ∀ b, P ⟶ f b) : P ⟶ ∏ᶜ f :=
   limit.lift _ (Fan.mk P p)
 
 @[reassoc, elementwise]
-/--
-theorem `Pi.lift_π` / 定理 `Pi.lift_π`
-
-English:
-theorem Pi.lift_π
-  given: {β : Type w} {f : β -> C} [HasProduct f] {P : C} (p : forall b, P ⟶ f b) (b : β)
-  proof: by
-  simp only [limit.lift_π, Fan.mk_π_app]
-
-中文:
-定理 依赖函数类型.lift_π
-  条件: {β : 类型 w} {f : β -> C} [HasProduct f] {P : C} (p : 对任意 b, P ⟶ f b) (b : β)
-  证明: by
-  simp only [limit.lift_π, Fan.mk_π_app]
-
-Depends on / 依赖: Fan.mk_, limit.lift_
+/-
+**CategoryTheory.Limits.Pi.lift_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limit
+s`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Pi.lift_π {β : Type w} {f : β -> C} [HasProduct f] {P : C} (p : forall b, P ⟶ f b) (b : β) :
+theorem Pi.lift_π {β : Type w} {f : β → C} [HasProduct f] {P : C} (p : ∀ b, P ⟶ f b) (b : β) :
     Pi.lift p ≫ Pi.π f b = p b := by
   simp only [limit.lift_π, Fan.mk_π_app]
 
 /-- A version of `Cone.ext` for `Fan`s. -/
 @[simps!]
-/--
-Definition of `Fan.ext` / `Fan.ext` 的定义
+/-
+**CategoryTheory.Limits.Fan.ext** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits
+.Fan`。
+形式化陈述：{β : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {f : β → C} →         {c₁ c₂ : CategoryTheory.Limits.Fan f} →       
+    (e : c₁.pt ≅ c₂.pt) →             autoParam (∀ (b : β), c₁.proj b = Category
+Theory.CategoryStruct.comp e.hom (c₂.proj b))                 CategoryTheory.Lim
+its.Fan.ext._auto_1 →               (c₁ ≅ c₂)
+参数：e : c₁.pt ≅ c₂.pt；∀ (b : β), c₁.proj b = CategoryTheory.CategoryStruct.comp e
+.hom (c₂.proj b)；c₁ ≅ c₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Fan.ext
-  signature: {f : β -> C} {c₁ c₂ : Fan f} (e : c₁.pt ≅ c₂.pt)
-  body: Cone.ext e (fun ⟨j⟩ => w j)
-
-中文:
-定义 Fan.ext
-  签名: {f : β -> C} {c₁ c₂ : Fan f} (e : c₁.pt ≅ c₂.pt)
-  定义体: Cone.ext e (fun ⟨j⟩ => w j)
-
-Depends on / 依赖: Cone.ext, cat_disch
+--- 原说明 ---
+A version of `Cone.ext` for `Fan`s.
 -/
-def Fan.ext {f : β -> C} {c₁ c₂ : Fan f} (e : c₁.pt ≅ c₂.pt)
-    (w : forall (b : β), c₁.proj b = e.hom ≫ c₂.proj b := by cat_disch) : c₁ ≅ c₂ :=
+def Fan.ext {f : β → C} {c₁ c₂ : Fan f} (e : c₁.pt ≅ c₂.pt)
+    (w : ∀ (b : β), c₁.proj b = e.hom ≫ c₂.proj b := by cat_disch) : c₁ ≅ c₂ :=
   Cone.ext e (fun ⟨j⟩ => w j)
 
-/--
-Definition of `Fan.isLimitOfIsIsoPiLift` / `Fan.isLimitOfIsIsoPiLift` 的定义
+/-- A fan `c` on `f` such that the induced map `c.pt ⟶ ∏ f` is an iso, is a product. -/
+/-
+**CategoryTheory.Limits.Fan.isLimitOfIsIsoPiLift** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Limits.Fan`。
+形式化陈述：{β : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {f : β → C} →         [inst_1 : CategoryTheory.Limits.HasProduct f] 
+→           (c : CategoryTheory.Limits.Fan f) →             [hc : CategoryTheory
+.IsIso (CategoryTheory.Limits.Pi.lift c.proj)] → CategoryTheory.Limits.IsLimit c
+参数：c : CategoryTheory.Limits.Fan f；CategoryTheory.Limits.Pi.lift c.proj。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Fan.isLimitOfIsIsoPiLift
-  signature: {f : β -> C} [HasProduct f] (c : Fan f)
-  body: IsLimit.ofIsoLimit (limit.isLimit (Discrete.functor f))
-    (Fan.ext (@asIso _ _ _ _ _ hc) (fun _ => (limit.lift_π _ _).symm)).symm
-
-中文:
-定义 Fan.isLimitOfIsIsoPiLift
-  签名: {f : β -> C} [HasProduct f] (c : Fan f)
-  定义体: IsLimit.ofIsoLimit (limit.isLimit (Discrete.functor f))
-    (Fan.ext (@asIso _ _ _ _ _ hc) (fun _ => (limit.lift_π _ _).symm)).symm
-
-Depends on / 依赖: Discrete, Discrete.functor, Fan.ext, IsLimit, IsLimit.ofIsoLimit, functor, isLimit, limit.isLimit, limit.lift_, ofIsoLimit
+--- 原说明 ---
+A fan `c` on `f` such that the induced map `c.pt ⟶ ∏ f` is an iso, is a product.
 -/
-def Fan.isLimitOfIsIsoPiLift {f : β -> C} [HasProduct f] (c : Fan f)
+def Fan.isLimitOfIsIsoPiLift {f : β → C} [HasProduct f] (c : Fan f)
     [hc : IsIso (Pi.lift c.proj)] : IsLimit c :=
   IsLimit.ofIsoLimit (limit.isLimit (Discrete.functor f))
     (Fan.ext (@asIso _ _ _ _ _ hc) (fun _ => (limit.lift_π _ _).symm)).symm
-
-/--
-lemma `Fan.nonempty_isLimit_iff_isIso_piLift` / 引理 `Fan.nonempty_isLimit_iff_isIso_piLift`
-
-English:
-lemma Fan.nonempty_isLimit_iff_isIso_piLift
-  given: {f : β -> C} [HasProduct f] (c : Fan f)
-  proof: (limit.isLimit (Discrete.functor f)).nonempty_isLimit_iff_isIso_lift
-
-中文:
-引理 Fan.nonempty_isLimit_iff_isIso_piLift
-  条件: {f : β -> C} [HasProduct f] (c : Fan f)
-  证明: (limit.isLimit (Discrete.functor f)).nonempty_isLimit_iff_isIso_lift
-
-Depends on / 依赖: Discrete, Discrete.functor, functor, isLimit, limit.isLimit, nonempty_isLimit_iff_isIso_lift
+/-
+**CategoryTheory.Limits.Fan.nonempty_isLimit_iff_isIso_piLift** 是 Mathlib 中的一个定理
+，位于命名空间 `CategoryTheory.Limits.Fan`。
+形式化陈述：∀ {β : Type w} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f :
+ β → C}   [inst_1 : CategoryTheory.Limits.HasProduct f] (c : CategoryTheory.Limi
+ts.Fan f),   Nonempty (CategoryTheory.Limits.IsLimit c) ↔ CategoryTheory.IsIso (
+CategoryTheory.Limits.Pi.lift c.proj)
+参数：c : CategoryTheory.Limits.Fan f；CategoryTheory.Limits.IsLimit c；CategoryTheor
+y.Limits.Pi.lift c.proj。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.IsLimit.nonempty_isLimit_iff_isIso_lift`：nonempty_
+isLimit_iff_isIso_lift {s t : Cone F} (hs : IsLimit s) : Nonempty (IsLimit t) ↔ 
+IsIso (hs.lift t)
 -/
-lemma Fan.nonempty_isLimit_iff_isIso_piLift {f : β -> C} [HasProduct f] (c : Fan f) :
+lemma Fan.nonempty_isLimit_iff_isIso_piLift {f : β → C} [HasProduct f] (c : Fan f) :
     Nonempty (IsLimit c) ↔ IsIso (Pi.lift c.proj) :=
   (limit.isLimit (Discrete.functor f)).nonempty_isLimit_iff_isIso_lift
 
-/--
-Definition of `Sigma.desc` / `Sigma.desc` 的定义
+/-- A collection of morphisms `f b ⟶ P` induces a morphism `∐ f ⟶ P`. -/
+/-
+**CategoryTheory.Limits.Sigma.desc** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Lim
+its.Sigma`。
+形式化陈述：{β : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {f : β → C} → [inst_1 : CategoryTheory.Limits.HasCoproduct f] → {P :
+ C} → ((b : β) → f b ⟶ P) → (∐ f ⟶ P)
+参数：(b : β) → f b ⟶ P；∐ f ⟶ P。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Sigma.desc
-  signature: {f : β -> C} [HasCoproduct f] {P : C} (p : forall b, f b ⟶ P)
-  body: colimit.desc _ (Cofan.mk P p)
-
-@[reassoc]
-
-中文:
-缩写 依赖和类型.desc
-  签名: {f : β -> C} [HasCoproduct f] {P : C} (p : 对任意 b, f b ⟶ P)
-  定义体: colimit.desc _ (Cofan.mk P p)
-
-@[reassoc]
-
-Depends on / 依赖: Cofan.mk, colimit, colimit.desc
+--- 原说明 ---
+A collection of morphisms `f b ⟶ P` induces a morphism `∐ f ⟶ P`.
 -/
-abbrev Sigma.desc {f : β -> C} [HasCoproduct f] {P : C} (p : forall b, f b ⟶ P) : ∐ f ⟶ P :=
+abbrev Sigma.desc {f : β → C} [HasCoproduct f] {P : C} (p : ∀ b, f b ⟶ P) : ∐ f ⟶ P :=
   colimit.desc _ (Cofan.mk P p)
 
 @[reassoc]
-/--
-theorem `Sigma.ι_desc` / 定理 `Sigma.ι_desc`
-
-English:
-theorem Sigma.ι_desc
-  given: {β : Type w} {f : β -> C} [HasCoproduct f] {P : C} (p : forall b, f b ⟶ P) (b : β)
-  proof: by
-  simp only [colimit.ι_desc, Cofan.mk_ι_app]
-
-中文:
-定理 依赖和类型.ι_desc
-  条件: {β : 类型 w} {f : β -> C} [HasCoproduct f] {P : C} (p : 对任意 b, f b ⟶ P) (b : β)
-  证明: by
-  simp only [colimit.ι_desc, Cofan.mk_ι_app]
-
-Depends on / 依赖: Cofan.mk_, colimit
+/-
+**CategoryTheory.Limits.Sigma.** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limits`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem Sigma.ι_desc {β : Type w} {f : β -> C} [HasCoproduct f] {P : C} (p : forall b, f b ⟶ P) (b : β) :
+theorem Sigma.ι_desc {β : Type w} {f : β → C} [HasCoproduct f] {P : C} (p : ∀ b, f b ⟶ P) (b : β) :
     Sigma.ι f b ≫ Sigma.desc p = p b := by
   simp only [colimit.ι_desc, Cofan.mk_ι_app]
-
-instance {f : β -> C} [HasCoproduct f] : IsIso (Sigma.desc (fun a => Sigma.ι f a)) := by
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {f : β → C} [HasCoproduct f] : IsIso (Sigma.desc (fun a ↦ Sigma.ι f a)) := by
   convert! IsIso.id _
   ext
   simp
 
 /-- A version of `Cocone.ext` for `Cofan`s. -/
 @[simps!]
-/--
-Definition of `Cofan.ext` / `Cofan.ext` 的定义
+/-
+**CategoryTheory.Limits.Cofan.ext** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limi
+ts.Cofan`。
+形式化陈述：{β : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {f : β → C} →         {c₁ c₂ : CategoryTheory.Limits.Cofan f} →     
+      (e : c₁.pt ≅ c₂.pt) →             autoParam (∀ (b : β), CategoryTheory.Cat
+egoryStruct.comp (c₁.inj b) e.hom = c₂.inj b)                 CategoryTheory.Lim
+its.Cofan.ext._auto_1 →               (c₁ ≅ c₂)
+参数：e : c₁.pt ≅ c₂.pt；∀ (b : β), CategoryTheory.CategoryStruct.comp (c₁.inj b) e.
+hom = c₂.inj b；c₁ ≅ c₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cofan.ext
-  signature: {f : β -> C} {c₁ c₂ : Cofan f} (e : c₁.pt ≅ c₂.pt)
-  body: Cocone.ext e (fun ⟨j⟩ => w j)
-
-中文:
-定义 Cofan.ext
-  签名: {f : β -> C} {c₁ c₂ : Cofan f} (e : c₁.pt ≅ c₂.pt)
-  定义体: Cocone.ext e (fun ⟨j⟩ => w j)
-
-Depends on / 依赖: Cocone, Cocone.ext, cat_disch
+--- 原说明 ---
+A version of `Cocone.ext` for `Cofan`s.
 -/
-def Cofan.ext {f : β -> C} {c₁ c₂ : Cofan f} (e : c₁.pt ≅ c₂.pt)
-    (w : forall (b : β), c₁.inj b ≫ e.hom = c₂.inj b := by cat_disch) : c₁ ≅ c₂ :=
+def Cofan.ext {f : β → C} {c₁ c₂ : Cofan f} (e : c₁.pt ≅ c₂.pt)
+    (w : ∀ (b : β), c₁.inj b ≫ e.hom = c₂.inj b := by cat_disch) : c₁ ≅ c₂ :=
   Cocone.ext e (fun ⟨j⟩ => w j)
 
-/--
-Definition of `Cofan.isColimitOfIsIsoSigmaDesc` / `Cofan.isColimitOfIsIsoSigmaDesc` 的定义
+/-- A cofan `c` on `f` such that the induced map `∐ f ⟶ c.pt` is an iso, is a coproduct. -/
+/-
+**CategoryTheory.Limits.Cofan.isColimitOfIsIsoSigmaDesc** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.Limits.Cofan`。
+形式化陈述：{β : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {f : β → C} →         [inst_1 : CategoryTheory.Limits.HasCoproduct f
+] →           (c : CategoryTheory.Limits.Cofan f) →             [hc : CategoryTh
+eory.IsIso (CategoryTheory.Limits.Sigma.desc c.inj)] → CategoryTheory.Limits.IsC
+olimit c
+参数：c : CategoryTheory.Limits.Cofan f；CategoryTheory.Limits.Sigma.desc c.inj。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cofan.isColimitOfIsIsoSigmaDesc
-  signature: {f : β -> C} [HasCoproduct f] (c : Cofan f)
-  body: IsColimit.ofIsoColimit (colimit.isColimit (Discrete.functor f))
-    (Cofan.ext (@asIso _ _ _ _ _ hc) (fun _ => colimit.ι_desc _ _))
-
-中文:
-定义 Cofan.isColimitOfIsIsoSigmaDesc
-  签名: {f : β -> C} [HasCoproduct f] (c : Cofan f)
-  定义体: IsColimit.ofIsoColimit (colimit.isColimit (Discrete.functor f))
-    (Cofan.ext (@asIso _ _ _ _ _ hc) (fun _ => colimit.ι_desc _ _))
-
-Depends on / 依赖: Cofan.ext, Discrete, Discrete.functor, IsColimit, IsColimit.ofIsoColimit, colimit, colimit.isColimit, functor, isColimit, ofIsoColimit
+--- 原说明 ---
+A cofan `c` on `f` such that the induced map `∐ f ⟶ c.pt` is an iso, is a coprod
+uct.
 -/
-def Cofan.isColimitOfIsIsoSigmaDesc {f : β -> C} [HasCoproduct f] (c : Cofan f)
+def Cofan.isColimitOfIsIsoSigmaDesc {f : β → C} [HasCoproduct f] (c : Cofan f)
     [hc : IsIso (Sigma.desc c.inj)] : IsColimit c :=
   IsColimit.ofIsoColimit (colimit.isColimit (Discrete.functor f))
     (Cofan.ext (@asIso _ _ _ _ _ hc) (fun _ => colimit.ι_desc _ _))
-
-/--
-lemma `Cofan.nonempty_isColimit_iff_isIso_sigmaDesc` / 引理 `Cofan.nonempty_isColimit_iff_isIso_sigmaDesc`
-
-English:
-lemma Cofan.nonempty_isColimit_iff_isIso_sigmaDesc
-  given: {f : β -> C} [HasCoproduct f] (c : Cofan f)
-  proof: (colimit.isColimit (Discrete.functor f)).nonempty_isColimit_iff_isIso_desc
-
-@[deprecated (since := "2026-01-21")]
-alias Cofan.isColimit_iff_isIso_sigmaDesc := Cofan.nonempty_isColimit_iff_isIso_sigmaDesc
-
-中文:
-引理 Cofan.nonempty_isColimit_iff_isIso_sigmaDesc
-  条件: {f : β -> C} [HasCoproduct f] (c : Cofan f)
-  证明: (colimit.isColimit (Discrete.functor f)).nonempty_isColimit_iff_isIso_desc
-
-@[deprecated (since := "2026-01-21")]
-alias Cofan.isColimit_iff_isIso_sigmaDesc := Cofan.nonempty_isColimit_iff_isIso_sigmaDesc
-
-Depends on / 依赖: Discrete, Discrete.functor, colimit, colimit.isColimit, functor, isColimit, nonempty_isColimit_iff_isIso_desc
+/-
+**CategoryTheory.Limits.Cofan.nonempty_isColimit_iff_isIso_sigmaDesc** 是 Mathlib
+ 中的一个定理，位于命名空间 `CategoryTheory.Limits.Cofan`。
+形式化陈述：∀ {β : Type w} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f :
+ β → C}   [inst_1 : CategoryTheory.Limits.HasCoproduct f] (c : CategoryTheory.Li
+mits.Cofan f),   Nonempty (CategoryTheory.Limits.IsColimit c) ↔ CategoryTheory.I
+sIso (CategoryTheory.Limits.Sigma.desc c.inj)
+参数：c : CategoryTheory.Limits.Cofan f；CategoryTheory.Limits.IsColimit c；CategoryT
+heory.Limits.Sigma.desc c.inj。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsColimit.nonempty_isColimit_iff_isIso_desc`：∀ {J 
+: Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : C
+ategoryTheory.Category.{v₃, u₃} C]   {F : CategoryTheor…
 -/
-lemma Cofan.nonempty_isColimit_iff_isIso_sigmaDesc {f : β -> C} [HasCoproduct f] (c : Cofan f) :
+lemma Cofan.nonempty_isColimit_iff_isIso_sigmaDesc {f : β → C} [HasCoproduct f] (c : Cofan f) :
     Nonempty (IsColimit c) ↔ IsIso (Sigma.desc c.inj) :=
   (colimit.isColimit (Discrete.functor f)).nonempty_isColimit_iff_isIso_desc
 
 @[deprecated (since := "2026-01-21")]
 alias Cofan.isColimit_iff_isIso_sigmaDesc := Cofan.nonempty_isColimit_iff_isIso_sigmaDesc
 
-/--
-Definition of `Cofan.isColimitTrans` / `Cofan.isColimitTrans` 的定义
+/-- A coproduct of coproducts is a coproduct -/
+/-
+**CategoryTheory.Limits.Cofan.isColimitTrans** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Limits.Cofan`。
+形式化陈述：{α : Type w₂} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u
+} C] →       {X : α → C} →         (c : CategoryTheory.Limits.Cofan X) →        
+   CategoryTheory.Limits.IsColimit c →             {β : α → Type u_1} →         
+      {Y : (a : α) → β a → C} →                 (π : (a : α) → (b : β a) → Y a b
+ ⟶ X a) →                   ((a : α) → CategoryTheory.Limits.IsColimit (Category
+Theory.Limits.Cofan.mk (X a) (π a))) →                     CategoryTheory.Limits
+.IsColimit                       (CategoryTheory.Limits.Cofan.mk c.pt fun x =>  
+                       match x with                         | ⟨a, b⟩ => Category
+Theory.CategoryStruct.comp (π a b) (c.inj a))
+参数：c : CategoryTheory.Limits.Cofan X；a : α；π : (a : α) → (b : β a) → Y a b ⟶ X a
+；(a : α) → CategoryTheory.Limits.IsColimit (CategoryTheory.Limits.Cofan.mk (X a)
+ (π a))；CategoryTheory.Limits.Cofan.mk c.pt fun x =>                         mat
+ch x with                         | ⟨a, b⟩ => CategoryTheory.CategoryStruct.comp
+ (π a b) (c.inj a)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cofan.isColimitTrans
-  signature: {X : α -> C} (c : Cofan X) (hc : IsColimit c)
-  body: by
-  refine Cofan.IsColimit.mk _ ?_ ?_ ?_
-  · exact fun t => hc.desc (Cofan.mk _ fun a => (hs a).desc (Cofan.mk t.pt (fun b => t.inj ⟨a, b⟩)))
-  · intro t ⟨a, b⟩
-    simp only [mk_pt, cofan_mk_inj, Category.assoc]
-    erw [hc.fac, (hs a).fac]
-    rfl
-  · intro t m h
-    refine hc.hom_ext fun ⟨a⟩ => (hs a).hom_ext fun ⟨b⟩ => ?_
-    erw [hc.fac, (hs a).fac]
-    simpa using! h ⟨a, b⟩
-
-中文:
-定义 Cofan.isColimitTrans
-  签名: {X : α -> C} (c : Cofan X) (hc : 是余极限 c)
-  定义体: by
-  refine Cofan.IsColimit.mk _ ?_ ?_ ?_
-  · exact fun t => hc.desc (Cofan.mk _ fun a => (hs a).desc (Cofan.mk t.pt (fun b => t.inj ⟨a, b⟩)))
-  · intro t ⟨a, b⟩
-    simp only [mk_pt, cofan_mk_inj, Category.assoc]
-    erw [hc.fac, (hs a).fac]
-    rfl
-  · intro t m h
-    refine hc.hom_ext fun ⟨a⟩ => (hs a).hom_ext fun ⟨b⟩ => ?_
-    erw [hc.fac, (hs a).fac]
-    simpa using! h ⟨a, b⟩
-
-Depends on / 依赖: c.pt
+--- 原说明 ---
+A coproduct of coproducts is a coproduct
 -/
-def Cofan.isColimitTrans {X : α -> C} (c : Cofan X) (hc : IsColimit c)
-    {β : α -> Type*} {Y : (a : α) -> β a -> C} (π : (a : α) -> (b : β a) -> Y a b ⟶ X a)
-      (hs : forall a, IsColimit (Cofan.mk (X a) (π a))) :
+def Cofan.isColimitTrans {X : α → C} (c : Cofan X) (hc : IsColimit c)
+    {β : α → Type*} {Y : (a : α) → β a → C} (π : (a : α) → (b : β a) → Y a b ⟶ X a)
+      (hs : ∀ a, IsColimit (Cofan.mk (X a) (π a))) :
         IsColimit (Cofan.mk (f := fun ⟨a,b⟩ => Y a b) c.pt
-          (fun (⟨a, b⟩ : Σ a, _) => π a b ≫ c.inj a)) := by
+          (fun (⟨a, b⟩ : Σ a, _) ↦ π a b ≫ c.inj a)) := by
   refine Cofan.IsColimit.mk _ ?_ ?_ ?_
-  · exact fun t => hc.desc (Cofan.mk _ fun a => (hs a).desc (Cofan.mk t.pt (fun b => t.inj ⟨a, b⟩)))
+  · exact fun t ↦ hc.desc (Cofan.mk _ fun a ↦ (hs a).desc (Cofan.mk t.pt (fun b ↦ t.inj ⟨a, b⟩)))
   · intro t ⟨a, b⟩
     simp only [mk_pt, cofan_mk_inj, Category.assoc]
     erw [hc.fac, (hs a).fac]
     rfl
   · intro t m h
-    refine hc.hom_ext fun ⟨a⟩ => (hs a).hom_ext fun ⟨b⟩ => ?_
+    refine hc.hom_ext fun ⟨a⟩ ↦ (hs a).hom_ext fun ⟨b⟩ ↦ ?_
     erw [hc.fac, (hs a).fac]
     simpa using! h ⟨a, b⟩
 
-/--
-Definition of `Pi.map` / `Pi.map` 的定义
-
-English:
-definition Pi.map
-  signature: {f g : β -> C} [HasProduct f] [HasProduct g] (p : forall b, f b ⟶ g b)
-  body: limMap (Discrete.natTrans fun X => p X.as)
-
-@[reassoc (attr := simp), elementwise nosimp]
-
-中文:
-定义 依赖函数类型.map
-  签名: {f g : β -> C} [HasProduct f] [HasProduct g] (p : 对任意 b, f b ⟶ g b)
-  定义体: limMap (Discrete.natTrans fun X => p X.as)
-
-@[reassoc (attr := simp), elementwise nosimp]
-
-Depends on / 依赖: Discrete, Discrete.natTrans, X.as, limMap, natTrans
+/-- Construct a morphism between categorical products (indexed by the same type)
+from a family of morphisms between the factors.
 -/
-def Pi.map {f g : β -> C} [HasProduct f] [HasProduct g] (p : forall b, f b ⟶ g b) : ∏ᶜ f ⟶ ∏ᶜ g :=
+/-
+**CategoryTheory.Limits.Pi.map** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits.
+Pi`。
+形式化陈述：{β : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {f g : β → C} →         [inst_1 : CategoryTheory.Limits.HasProduct f
+] →           [inst_2 : CategoryTheory.Limits.HasProduct g] → ((b : β) → f b ⟶ g
+ b) → (∏ᶜ f ⟶ ∏ᶜ g)
+参数：(b : β) → f b ⟶ g b；∏ᶜ f ⟶ ∏ᶜ g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Construct a morphism between categorical products (indexed by the same type)
+from a family of morphisms between the factors.
+-/
+def Pi.map {f g : β → C} [HasProduct f] [HasProduct g] (p : ∀ b, f b ⟶ g b) : ∏ᶜ f ⟶ ∏ᶜ g :=
   limMap (Discrete.natTrans fun X => p X.as)
 
 @[reassoc (attr := simp), elementwise nosimp]
-/--
-lemma `Pi.map_π` / 引理 `Pi.map_π`
-
-English:
-lemma Pi.map_π
-  given: {f g : β -> C} [HasProduct f] [HasProduct g] (p : forall b, f b ⟶ g b) (b : β)
-  proof: by simp [Pi.map]
-
-@[simp]
-
-中文:
-引理 依赖函数类型.map_π
-  条件: {f g : β -> C} [HasProduct f] [HasProduct g] (p : 对任意 b, f b ⟶ g b) (b : β)
-  证明: by simp [Pi.map]
-
-@[simp]
-
-Depends on / 依赖: Pi.map
+/-
+**CategoryTheory.Limits.Pi.map_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma Pi.map_π {f g : β -> C} [HasProduct f] [HasProduct g] (p : forall b, f b ⟶ g b) (b : β) :
+lemma Pi.map_π {f g : β → C} [HasProduct f] [HasProduct g] (p : ∀ b, f b ⟶ g b) (b : β) :
     Pi.map p ≫ Pi.π g b = Pi.π f b ≫ p b := by simp [Pi.map]
 
 @[simp]
-/--
-lemma `Pi.map_id` / 引理 `Pi.map_id`
-
-English:
-lemma Pi.map_id
-  given: {f : α -> C} [HasProduct f]
-  statement: Pi.map (fun a => 𝟙 (f a)) = 𝟙 (∏ᶜ f)
-  proof: by
-  ext; simp
-
-中文:
-引理 依赖函数类型.map_id
-  条件: {f : α -> C} [HasProduct f]
-  结论: 依赖函数类型.map (fun a => 𝟙 (f a)) = 𝟙 (∏ᶜ f)
-  证明: by
-  ext; simp
+/-
+**CategoryTheory.Limits.Pi.map_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limi
+ts.Pi`。
+形式化陈述：∀ {α : Type w₂} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f 
+: α → C}   [inst_1 : CategoryTheory.Limits.HasProduct f],   (CategoryTheory.Limi
+ts.Pi.map fun a => CategoryTheory.CategoryStruct.id (f a)) =     CategoryTheory.
+CategoryStruct.id (∏ᶜ f)
+参数：CategoryTheory.Limits.Pi.map fun a => CategoryTheory.CategoryStruct.id (f a)；
+∏ᶜ f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Pi.hom_ext`：∀ {β : Type w} {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C] {f : β → C}   [inst_1 : CategoryTheory.Limits.Ha
+sProduct f] {X : C} (g…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.Pi.map_π`：∀ {β : Type w} {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] {f g : β → C}   [inst_1 : CategoryTheory.Limits.Ha
+sProduct f] [inst_2 …
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Pi.map_id {f : α -> C} [HasProduct f] : Pi.map (fun a => 𝟙 (f a)) = 𝟙 (∏ᶜ f) := by
+lemma Pi.map_id {f : α → C} [HasProduct f] : Pi.map (fun a => 𝟙 (f a)) = 𝟙 (∏ᶜ f) := by
   ext; simp
-
-/--
-lemma `Pi.map_comp_map` / 引理 `Pi.map_comp_map`
-
-English:
-lemma Pi.map_comp_map
-  statement: {f g h : α -> C} [HasProduct f] [HasProduct g] [HasProduct h]
-  proof: by
-  ext; simp
-
-中文:
-引理 依赖函数类型.map_comp_map
-  结论: {f g h : α -> C} [HasProduct f] [HasProduct g] [HasProduct h]
-  证明: by
-  ext; simp
+/-
+**CategoryTheory.Limits.Pi.map_comp_map** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Limits.Pi`。
+形式化陈述：∀ {α : Type w₂} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f 
+g h : α → C}   [inst_1 : CategoryTheory.Limits.HasProduct f] [inst_2 : CategoryT
+heory.Limits.HasProduct g]   [inst_3 : CategoryTheory.Limits.HasProduct h] (q : 
+(a : α) → f a ⟶ g a) (q' : (a : α) → g a ⟶ h a),   CategoryTheory.CategoryStruct
+.comp (CategoryTheory.Limits.Pi.map q) (CategoryTheory.Limits.Pi.map q') =     C
+ategoryTheory.Limits.Pi.map fun a => CategoryTheory.CategoryStruct.comp (q a) (q
+' a)
+参数：q : (a : α) → f a ⟶ g a；q' : (a : α) → g a ⟶ h a；CategoryTheory.Limits.Pi.map
+ q；CategoryTheory.Limits.Pi.map q'；q a；q' a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Pi.hom_ext`：∀ {β : Type w} {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C] {f : β → C}   [inst_1 : CategoryTheory.Limits.Ha
+sProduct f] {X : C} (g…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.Pi.map_π`：∀ {β : Type w} {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] {f g : β → C}   [inst_1 : CategoryTheory.Limits.Ha
+sProduct f] [inst_2 …
+· 使用定理 `CategoryTheory.Limits.Pi.map_π_assoc`：∀ {β : Type w} {C : Type u} [inst 
+: CategoryTheory.Category.{v, u} C] {f g : β → C}   [inst_1 : CategoryTheory.Lim
+its.HasProduct f] [inst_2 …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Pi.map_comp_map {f g h : α -> C} [HasProduct f] [HasProduct g] [HasProduct h]
-    (q : forall (a : α), f a ⟶ g a) (q' : forall (a : α), g a ⟶ h a) :
+lemma Pi.map_comp_map {f g h : α → C} [HasProduct f] [HasProduct g] [HasProduct h]
+    (q : ∀ (a : α), f a ⟶ g a) (q' : ∀ (a : α), g a ⟶ h a) :
     Pi.map q ≫ Pi.map q' = Pi.map (fun a => q a ≫ q' a) := by
   ext; simp
-
-/--
-Instance `Pi.map_mono` / 实例 `Pi.map_mono`
-
-English:
-instance Pi.map_mono
-  signature: {f g : β -> C} [HasProduct f] [HasProduct g] (p : forall b, f b ⟶ g b)
-  body: @Limits.limMap_mono _ _ _ _ (Discrete.functor f) (Discrete.functor g) _ _
-    (Discrete.natTrans fun X => p X.as) (by dsimp; infer_instance)
-
-中文:
-实例 依赖函数类型.map_mono
-  签名: {f g : β -> C} [HasProduct f] [HasProduct g] (p : 对任意 b, f b ⟶ g b)
-  定义体: @Limits.limMap_mono _ _ _ _ (Discrete.functor f) (Discrete.functor g) _ _
-    (Discrete.natTrans fun X => p X.as) (by dsimp; infer_instance)
-
-Depends on / 依赖: Discrete, Discrete.functor, Discrete.natTrans, Limits, Limits.limMap_mono, X.as, functor, infer_instance, limMap_mono, natTrans
+/-
+**CategoryTheory.Limits.Pi.map_mono** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Li
+mits.Pi`。
+形式化陈述：∀ {β : Type w} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f g
+ : β → C}   [inst_1 : CategoryTheory.Limits.HasProduct f] [inst_2 : CategoryTheo
+ry.Limits.HasProduct g] (p : (b : β) → f b ⟶ g b)   [∀ (i : β), CategoryTheory.M
+ono (p i)], CategoryTheory.Mono (CategoryTheory.Limits.Pi.map p)
+参数：p : (b : β) → f b ⟶ g b；i : β；p i；CategoryTheory.Limits.Pi.map p。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Pi.map_mono {f g : β -> C} [HasProduct f] [HasProduct g] (p : forall b, f b ⟶ g b)
-[forall i, Mono (p i)] : Mono Pi.map p :=
+instance Pi.map_mono {f g : β → C} [HasProduct f] [HasProduct g] (p : ∀ b, f b ⟶ g b)
+    [∀ i, Mono (p i)] : Mono <| Pi.map p :=
   @Limits.limMap_mono _ _ _ _ (Discrete.functor f) (Discrete.functor g) _ _
     (Discrete.natTrans fun X => p X.as) (by dsimp; infer_instance)
 
-/--
-Definition of `Pi.map'` / `Pi.map'` 的定义
+/-- Construct a morphism between categorical products from a family of morphisms between the
+factors. -/
+/-
+**CategoryTheory.Limits.Pi.map'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits
+.Pi`。
+形式化陈述：{β : Type w} →   {α : Type w₂} →     {C : Type u} →       [inst : Category
+Theory.Category.{v, u} C] →         {f : α → C} →           {g : β → C} →       
+      [inst_1 : CategoryTheory.Limits.HasProduct f] →               [inst_2 : Ca
+tegoryTheory.Limits.HasProduct g] → (p : β → α) → ((b : β) → f (p b) ⟶ g b) → (∏
+ᶜ f ⟶ ∏ᶜ g)
+参数：p : β → α；(b : β) → f (p b) ⟶ g b；∏ᶜ f ⟶ ∏ᶜ g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Pi.map'
-  signature: {f : α -> C} {g : β -> C} [HasProduct f] [HasProduct g] (p : β -> α)
-  body: Pi.lift (fun a => Pi.π _ _ ≫ q a)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 依赖函数类型.map'
-  签名: {f : α -> C} {g : β -> C} [HasProduct f] [HasProduct g] (p : β -> α)
-  定义体: Pi.lift (fun a => Pi.π _ _ ≫ q a)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Pi.lift
+--- 原说明 ---
+Construct a morphism between categorical products from a family of morphisms bet
+ween the
+factors.
 -/
-def Pi.map' {f : α -> C} {g : β -> C} [HasProduct f] [HasProduct g] (p : β -> α)
-    (q : forall (b : β), f (p b) ⟶ g b) : ∏ᶜ f ⟶ ∏ᶜ g :=
+def Pi.map' {f : α → C} {g : β → C} [HasProduct f] [HasProduct g] (p : β → α)
+    (q : ∀ (b : β), f (p b) ⟶ g b) : ∏ᶜ f ⟶ ∏ᶜ g :=
   Pi.lift (fun a => Pi.π _ _ ≫ q a)
 
 @[reassoc (attr := simp)]
-/--
-lemma `Pi.map'_comp_π` / 引理 `Pi.map'_comp_π`
-
-English:
-lemma Pi.map'_comp_π
-  statement: {f : α -> C} {g : β -> C} [HasProduct f] [HasProduct g] (p : β -> α)
-  proof: limit.lift_π _ _
-
-中文:
-引理 依赖函数类型.map'_comp_π
-  结论: {f : α -> C} {g : β -> C} [HasProduct f] [HasProduct g] (p : β -> α)
-  证明: limit.lift_π _ _
+/-
+**CategoryTheory.Limits.Pi.map'_comp_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.
+Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma Pi.map'_comp_π {f : α -> C} {g : β -> C} [HasProduct f] [HasProduct g] (p : β -> α)
-    (q : forall (b : β), f (p b) ⟶ g b) (b : β) : Pi.map' p q ≫ Pi.π g b = Pi.π f (p b) ≫ q b :=
+lemma Pi.map'_comp_π {f : α → C} {g : β → C} [HasProduct f] [HasProduct g] (p : β → α)
+    (q : ∀ (b : β), f (p b) ⟶ g b) (b : β) : Pi.map' p q ≫ Pi.π g b = Pi.π f (p b) ≫ q b :=
   limit.lift_π _ _
-
-/--
-lemma `Pi.map'_id_id` / 引理 `Pi.map'_id_id`
-
-English:
-lemma Pi.map'_id_id
-  given: {f : α -> C} [HasProduct f]
-  statement: Pi.map' id (fun a => 𝟙 (f a)) = 𝟙 (∏ᶜ f)
-  proof: by
-  ext; simp
-
-@[simp]
-
-中文:
-引理 依赖函数类型.map'_id_id
-  条件: {f : α -> C} [HasProduct f]
-  结论: 依赖函数类型.map' id (fun a => 𝟙 (f a)) = 𝟙 (∏ᶜ f)
-  证明: by
-  ext; simp
-
-@[simp]
+/-
+**CategoryTheory.Limits.Pi.map'_id_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Limits.Pi`。
+形式化陈述：∀ {α : Type w₂} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f 
+: α → C}   [inst_1 : CategoryTheory.Limits.HasProduct f],   (CategoryTheory.Limi
+ts.Pi.map' id fun a => CategoryTheory.CategoryStruct.id (f a)) =     CategoryThe
+ory.CategoryStruct.id (∏ᶜ f)
+参数：CategoryTheory.Limits.Pi.map' id fun a => CategoryTheory.CategoryStruct.id (f
+ a)；∏ᶜ f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Pi.hom_ext`：∀ {β : Type w} {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C] {f : β → C}   [inst_1 : CategoryTheory.Limits.Ha
+sProduct f] {X : C} (g…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.Pi.map'_comp_π`：∀ {β : Type w} {α : Type w₂} {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] {f : α → C} {g : β → C}   [ins
+t_1 : CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Pi.map'_id_id {f : α -> C} [HasProduct f] : Pi.map' id (fun a => 𝟙 (f a)) = 𝟙 (∏ᶜ f) := by
+lemma Pi.map'_id_id {f : α → C} [HasProduct f] : Pi.map' id (fun a => 𝟙 (f a)) = 𝟙 (∏ᶜ f) := by
   ext; simp
 
 @[simp]
-/--
-lemma `Pi.map'_id` / 引理 `Pi.map'_id`
-
-English:
-lemma Pi.map'_id
-  given: {f g : α -> C} [HasProduct f] [HasProduct g] (p : forall b, f b ⟶ g b)
-  proof: rfl
-
-中文:
-引理 依赖函数类型.map'_id
-  条件: {f g : α -> C} [HasProduct f] [HasProduct g] (p : 对任意 b, f b ⟶ g b)
-  证明: rfl
+/-
+**CategoryTheory.Limits.Pi.map'_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Lim
+its.Pi`。
+形式化陈述：∀ {α : Type w₂} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f 
+g : α → C}   [inst_1 : CategoryTheory.Limits.HasProduct f] [inst_2 : CategoryThe
+ory.Limits.HasProduct g] (p : (b : α) → f b ⟶ g b),   CategoryTheory.Limits.Pi.m
+ap' id p = CategoryTheory.Limits.Pi.map p
+参数：p : (b : α) → f b ⟶ g b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma Pi.map'_id {f g : α -> C} [HasProduct f] [HasProduct g] (p : forall b, f b ⟶ g b) :
+lemma Pi.map'_id {f g : α → C} [HasProduct f] [HasProduct g] (p : ∀ b, f b ⟶ g b) :
     Pi.map' id p = Pi.map p :=
   rfl
-
-/--
-lemma `Pi.map'_comp_map'` / 引理 `Pi.map'_comp_map'`
-
-English:
-lemma Pi.map'_comp_map'
-  statement: {f : α -> C} {g : β -> C} {h : γ -> C} [HasProduct f] [HasProduct g]
-  proof: by
-  ext; simp
-
-中文:
-引理 依赖函数类型.map'_comp_map'
-  结论: {f : α -> C} {g : β -> C} {h : γ -> C} [HasProduct f] [HasProduct g]
-  证明: by
-  ext; simp
+/-
+**CategoryTheory.Limits.Pi.map'_comp_map'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryThe
+ory.Limits.Pi`。
+形式化陈述：∀ {β : Type w} {α : Type w₂} {γ : Type w₃} {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {f : α → C}   {g : β → C} {h : γ → C} [inst_1 : Category
+Theory.Limits.HasProduct f] [inst_2 : CategoryTheory.Limits.HasProduct g]   [ins
+t_3 : CategoryTheory.Limits.HasProduct h] (p : β → α) (p' : γ → β) (q : (b : β) 
+→ f (p b) ⟶ g b)   (q' : (c : γ) → g (p' c) ⟶ h c),   CategoryTheory.CategoryStr
+uct.comp (CategoryTheory.Limits.Pi.map' p q) (CategoryTheory.Limits.Pi.map' p' q
+') =     CategoryTheory.Limits.Pi.map' (p ∘ p') fun c => CategoryTheory.Category
+Struct.comp (q (p' c)) (q' c)
+参数：p : β → α；p' : γ → β；q : (b : β) → f (p b) ⟶ g b；q' : (c : γ) → g (p' c) ⟶ h 
+c；CategoryTheory.Limits.Pi.map' p q；CategoryTheory.Limits.Pi.map' p' q'；p ∘ p'；q
+ (p' c)；q' c。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Pi.hom_ext`：∀ {β : Type w} {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C] {f : β → C}   [inst_1 : CategoryTheory.Limits.Ha
+sProduct f] {X : C} (g…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.Pi.map'_comp_π`：∀ {β : Type w} {α : Type w₂} {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] {f : α → C} {g : β → C}   [ins
+t_1 : CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.Pi.map'_comp_π_assoc`：∀ {β : Type w} {α : Type w₂}
+ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f : α → C} {g : β → C} 
+  [inst_1 : CategoryTheory.Limit…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Pi.map'_comp_map' {f : α -> C} {g : β -> C} {h : γ -> C} [HasProduct f] [HasProduct g]
-    [HasProduct h] (p : β -> α) (p' : γ -> β) (q : forall (b : β), f (p b) ⟶ g b)
-    (q' : forall (c : γ), g (p' c) ⟶ h c) :
+lemma Pi.map'_comp_map' {f : α → C} {g : β → C} {h : γ → C} [HasProduct f] [HasProduct g]
+    [HasProduct h] (p : β → α) (p' : γ → β) (q : ∀ (b : β), f (p b) ⟶ g b)
+    (q' : ∀ (c : γ), g (p' c) ⟶ h c) :
     Pi.map' p q ≫ Pi.map' p' q' = Pi.map' (p ∘ p') (fun c => q (p' c) ≫ q' c) := by
   ext; simp
-
-/--
-lemma `Pi.map'_comp_map` / 引理 `Pi.map'_comp_map`
-
-English:
-lemma Pi.map'_comp_map
-  statement: {f : α -> C} {g h : β -> C} [HasProduct f] [HasProduct g] [HasProduct h]
-  proof: by
-  ext; simp
-
-中文:
-引理 依赖函数类型.map'_comp_map
-  结论: {f : α -> C} {g h : β -> C} [HasProduct f] [HasProduct g] [HasProduct h]
-  证明: by
-  ext; simp
+/-
+**CategoryTheory.Limits.Pi.map'_comp_map** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Limits.Pi`。
+形式化陈述：∀ {β : Type w} {α : Type w₂} {C : Type u} [inst : CategoryTheory.Category.
+{v, u} C] {f : α → C} {g h : β → C}   [inst_1 : CategoryTheory.Limits.HasProduct
+ f] [inst_2 : CategoryTheory.Limits.HasProduct g]   [inst_3 : CategoryTheory.Lim
+its.HasProduct h] (p : β → α) (q : (b : β) → f (p b) ⟶ g b) (q' : (b : β) → g b 
+⟶ h b),   CategoryTheory.CategoryStruct.comp (CategoryTheory.Limits.Pi.map' p q)
+ (CategoryTheory.Limits.Pi.map q') =     CategoryTheory.Limits.Pi.map' p fun b =
+> CategoryTheory.CategoryStruct.comp (q b) (q' b)
+参数：p : β → α；q : (b : β) → f (p b) ⟶ g b；q' : (b : β) → g b ⟶ h b；CategoryTheory
+.Limits.Pi.map' p q；CategoryTheory.Limits.Pi.map q'；q b；q' b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Pi.hom_ext`：∀ {β : Type w} {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C] {f : β → C}   [inst_1 : CategoryTheory.Limits.Ha
+sProduct f] {X : C} (g…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.Pi.map_π`：∀ {β : Type w} {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] {f g : β → C}   [inst_1 : CategoryTheory.Limits.Ha
+sProduct f] [inst_2 …
+· 使用定理 `CategoryTheory.Limits.Pi.map'_comp_π_assoc`：∀ {β : Type w} {α : Type w₂}
+ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f : α → C} {g : β → C} 
+  [inst_1 : CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.Pi.map'_comp_π`：∀ {β : Type w} {α : Type w₂} {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] {f : α → C} {g : β → C}   [ins
+t_1 : CategoryTheory.Limit…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Pi.map'_comp_map {f : α -> C} {g h : β -> C} [HasProduct f] [HasProduct g] [HasProduct h]
-    (p : β -> α) (q : forall (b : β), f (p b) ⟶ g b) (q' : forall (b : β), g b ⟶ h b) :
+lemma Pi.map'_comp_map {f : α → C} {g h : β → C} [HasProduct f] [HasProduct g] [HasProduct h]
+    (p : β → α) (q : ∀ (b : β), f (p b) ⟶ g b) (q' : ∀ (b : β), g b ⟶ h b) :
     Pi.map' p q ≫ Pi.map q' = Pi.map' p (fun b => q b ≫ q' b) := by
   ext; simp
-
-/--
-lemma `Pi.map_comp_map'` / 引理 `Pi.map_comp_map'`
-
-English:
-lemma Pi.map_comp_map'
-  statement: {f g : α -> C} {h : β -> C} [HasProduct f] [HasProduct g] [HasProduct h]
-  proof: by
-  ext; simp
-
-中文:
-引理 依赖函数类型.map_comp_map'
-  结论: {f g : α -> C} {h : β -> C} [HasProduct f] [HasProduct g] [HasProduct h]
-  证明: by
-  ext; simp
+/-
+**CategoryTheory.Limits.Pi.map_comp_map'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Limits.Pi`。
+形式化陈述：∀ {β : Type w} {α : Type w₂} {C : Type u} [inst : CategoryTheory.Category.
+{v, u} C] {f g : α → C} {h : β → C}   [inst_1 : CategoryTheory.Limits.HasProduct
+ f] [inst_2 : CategoryTheory.Limits.HasProduct g]   [inst_3 : CategoryTheory.Lim
+its.HasProduct h] (p : β → α) (q : (a : α) → f a ⟶ g a) (q' : (b : β) → g (p b) 
+⟶ h b),   CategoryTheory.CategoryStruct.comp (CategoryTheory.Limits.Pi.map q) (C
+ategoryTheory.Limits.Pi.map' p q') =     CategoryTheory.Limits.Pi.map' p fun b =
+> CategoryTheory.CategoryStruct.comp (q (p b)) (q' b)
+参数：p : β → α；q : (a : α) → f a ⟶ g a；q' : (b : β) → g (p b) ⟶ h b；CategoryTheory
+.Limits.Pi.map q；CategoryTheory.Limits.Pi.map' p q'；q (p b)；q' b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Pi.hom_ext`：∀ {β : Type w} {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C] {f : β → C}   [inst_1 : CategoryTheory.Limits.Ha
+sProduct f] {X : C} (g…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.Pi.map'_comp_π`：∀ {β : Type w} {α : Type w₂} {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] {f : α → C} {g : β → C}   [ins
+t_1 : CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.Pi.map_π_assoc`：∀ {β : Type w} {C : Type u} [inst 
+: CategoryTheory.Category.{v, u} C] {f g : β → C}   [inst_1 : CategoryTheory.Lim
+its.HasProduct f] [inst_2 …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Pi.map_comp_map' {f g : α -> C} {h : β -> C} [HasProduct f] [HasProduct g] [HasProduct h]
-    (p : β -> α) (q : forall (a : α), f a ⟶ g a) (q' : forall (b : β), g (p b) ⟶ h b) :
+lemma Pi.map_comp_map' {f g : α → C} {h : β → C} [HasProduct f] [HasProduct g] [HasProduct h]
+    (p : β → α) (q : ∀ (a : α), f a ⟶ g a) (q' : ∀ (b : β), g (p b) ⟶ h b) :
     Pi.map q ≫ Pi.map' p q' = Pi.map' p (fun b => q (p b) ≫ q' b) := by
   ext; simp
-
-/--
-lemma `Pi.map'_eq` / 引理 `Pi.map'_eq`
-
-English:
-lemma Pi.map'_eq
-  statement: {f : α -> C} {g : β -> C} [HasProduct f] [HasProduct g] {p p' : β -> α}
-  proof: by
-  cat_disch
-
-中文:
-引理 依赖函数类型.map'_eq
-  结论: {f : α -> C} {g : β -> C} [HasProduct f] [HasProduct g] {p p' : β -> α}
-  证明: by
-  cat_disch
+/-
+**CategoryTheory.Limits.Pi.map'_eq** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Lim
+its.Pi`。
+形式化陈述：∀ {β : Type w} {α : Type w₂} {C : Type u} [inst : CategoryTheory.Category.
+{v, u} C] {f : α → C} {g : β → C}   [inst_1 : CategoryTheory.Limits.HasProduct f
+] [inst_2 : CategoryTheory.Limits.HasProduct g] {p p' : β → α}   {q : (b : β) → 
+f (p b) ⟶ g b} {q' : (b : β) → f (p' b) ⟶ g b} (hp : p = p'),   (∀ (b : β), Cate
+goryTheory.CategoryStruct.comp (CategoryTheory.eqToHom ⋯) (q b) = q' b) →     Ca
+tegoryTheory.Limits.Pi.map' p q = CategoryTheory.Limits.Pi.map' p' q'
+参数：b : β；p b；b : β；p' b；hp : p = p'；∀ (b : β), CategoryTheory.CategoryStruct.com
+p (CategoryTheory.eqToHom ⋯) (q b) = q' b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Pi.hom_ext`：∀ {β : Type w} {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C] {f : β → C}   [inst_1 : CategoryTheory.Limits.Ha
+sProduct f] {X : C} (g…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.Pi.map'_comp_π`：∀ {β : Type w} {α : Type w₂} {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] {f : α → C} {g : β → C}   [ins
+t_1 : CategoryTheory.Limit…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Pi.map'_eq {f : α -> C} {g : β -> C} [HasProduct f] [HasProduct g] {p p' : β -> α}
-    {q : forall (b : β), f (p b) ⟶ g b} {q' : forall (b : β), f (p' b) ⟶ g b} (hp : p = p')
-    (hq : forall (b : β), eqToHom (hp ▸ rfl) ≫ q b = q' b) : Pi.map' p q = Pi.map' p' q' := by
+lemma Pi.map'_eq {f : α → C} {g : β → C} [HasProduct f] [HasProduct g] {p p' : β → α}
+    {q : ∀ (b : β), f (p b) ⟶ g b} {q' : ∀ (b : β), f (p' b) ⟶ g b} (hp : p = p')
+    (hq : ∀ (b : β), eqToHom (hp ▸ rfl) ≫ q b = q' b) : Pi.map' p q = Pi.map' p' q' := by
   cat_disch
 
-/--
-Definition of `Pi.mapIso` / `Pi.mapIso` 的定义
-
-English:
-definition Pi.mapIso
-  signature: {f g : β -> C} [HasProductsOfShape β C] (p : forall b, f b ≅ g b)
-  body: lim.mapIso (Discrete.natIso fun X => p X.as)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 依赖函数类型.mapIso
-  签名: {f g : β -> C} [HasProductsOfShape β C] (p : 对任意 b, f b ≅ g b)
-  定义体: lim.mapIso (Discrete.natIso fun X => p X.as)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Discrete, Discrete.natIso, X.as, lim.mapIso, mapIso, natIso
+/-- Construct an isomorphism between categorical products (indexed by the same type)
+from a family of isomorphisms between the factors.
 -/
-def Pi.mapIso {f g : β -> C} [HasProductsOfShape β C] (p : forall b, f b ≅ g b) : ∏ᶜ f ≅ ∏ᶜ g :=
+/-
+**CategoryTheory.Limits.Pi.mapIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limi
+ts.Pi`。
+形式化陈述：{β : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {f g : β → C} → [inst_1 : CategoryTheory.Limits.HasProductsOfShape β
+ C] → ((b : β) → f b ≅ g b) → (∏ᶜ f ≅ ∏ᶜ g)
+参数：(b : β) → f b ≅ g b；∏ᶜ f ≅ ∏ᶜ g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Construct an isomorphism between categorical products (indexed by the same type)
+from a family of isomorphisms between the factors.
+-/
+def Pi.mapIso {f g : β → C} [HasProductsOfShape β C] (p : ∀ b, f b ≅ g b) : ∏ᶜ f ≅ ∏ᶜ g :=
   lim.mapIso (Discrete.natIso fun X => p X.as)
 
 @[reassoc (attr := simp)]
-/--
-lemma `Pi.mapIso_hom_π` / 引理 `Pi.mapIso_hom_π`
-
-English:
-lemma Pi.mapIso_hom_π
-  given: {f g : β -> C} [HasProductsOfShape β C] (p : forall b, f b ≅ g b) (b : β)
-  proof: limMap_π _ _
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 依赖函数类型.mapIso_hom_π
-  条件: {f g : β -> C} [HasProductsOfShape β C] (p : 对任意 b, f b ≅ g b) (b : β)
-  证明: limMap_π _ _
-
-@[reassoc (attr := simp)]
+/-
+**CategoryTheory.Limits.Pi.mapIso_hom_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma Pi.mapIso_hom_π {f g : β -> C} [HasProductsOfShape β C] (p : forall b, f b ≅ g b) (b : β) :
+lemma Pi.mapIso_hom_π {f g : β → C} [HasProductsOfShape β C] (p : ∀ b, f b ≅ g b) (b : β) :
     (Pi.mapIso p).hom ≫ π _ _ = π _ _ ≫ (p b).hom :=
   limMap_π _ _
 
 @[reassoc (attr := simp)]
-/--
-lemma `Pi.mapIso_inv_π` / 引理 `Pi.mapIso_inv_π`
-
-English:
-lemma Pi.mapIso_inv_π
-  given: {f g : β -> C} [HasProductsOfShape β C] (p : forall b, f b ≅ g b) (b : β)
-  proof: limMap_π _ _
-
-中文:
-引理 依赖函数类型.mapIso_inv_π
-  条件: {f g : β -> C} [HasProductsOfShape β C] (p : 对任意 b, f b ≅ g b) (b : β)
-  证明: limMap_π _ _
+/-
+**CategoryTheory.Limits.Pi.mapIso_inv_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma Pi.mapIso_inv_π {f g : β -> C} [HasProductsOfShape β C] (p : forall b, f b ≅ g b) (b : β) :
+lemma Pi.mapIso_inv_π {f g : β → C} [HasProductsOfShape β C] (p : ∀ b, f b ≅ g b) (b : β) :
     (Pi.mapIso p).inv ≫ π _ _ = π _ _ ≫ (p b).inv :=
   limMap_π _ _
-
-/--
-Instance `Pi.map_isIso` / 实例 `Pi.map_isIso`
-
-English:
-instance Pi.map_isIso
-  signature: {f g : β -> C} [HasProductsOfShape β C] (p : forall b, f b ⟶ g b)
-  body: inferInstanceAs (IsIso (Pi.mapIso (fun b => asIso (p b))).hom)
-
-中文:
-实例 依赖函数类型.map_isIso
-  签名: {f g : β -> C} [HasProductsOfShape β C] (p : 对任意 b, f b ⟶ g b)
-  定义体: inferInstanceAs (IsIso (Pi.mapIso (fun b => asIso (p b))).hom)
-
-Depends on / 依赖: Pi.mapIso, mapIso
+/-
+**CategoryTheory.Limits.Pi.map_isIso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.L
+imits.Pi`。
+形式化陈述：∀ {β : Type w} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f g
+ : β → C}   [inst_1 : CategoryTheory.Limits.HasProductsOfShape β C] (p : (b : β)
+ → f b ⟶ g b)   [∀ (b : β), CategoryTheory.IsIso (p b)], CategoryTheory.IsIso (C
+ategoryTheory.Limits.Pi.map p)
+参数：p : (b : β) → f b ⟶ g b；b : β；p b；CategoryTheory.Limits.Pi.map p。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Pi.map_isIso {f g : β -> C} [HasProductsOfShape β C] (p : forall b, f b ⟶ g b)
-[forall b, IsIso <| p b] : IsIso Pi.map p :=
-  inferInstanceAs (IsIso (Pi.mapIso (fun b => asIso (p b))).hom)
+instance Pi.map_isIso {f g : β → C} [HasProductsOfShape β C] (p : ∀ b, f b ⟶ g b)
+    [∀ b, IsIso <| p b] : IsIso <| Pi.map p :=
+  inferInstanceAs (IsIso (Pi.mapIso (fun b ↦ asIso (p b))).hom)
 
 section
 
@@ -1435,54 +1295,35 @@ variable (X : Discrete α ⥤ C) [HasProduct (fun j => X.obj (Discrete.mk j))]
 /-- A limit cone for `X : Discrete α ⥤ C` that is given
 by `∏ᶜ (fun j => X.obj (Discrete.mk j))`. -/
 @[simps]
-/--
-Definition of `Pi.cone` / `Pi.cone` 的定义
+/-
+**CategoryTheory.Limits.Pi.cone** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits
+.Pi`。
+形式化陈述：{α : Type w₂} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u
+} C] →       (X : CategoryTheory.Functor (CategoryTheory.Discrete α) C) →       
+  [CategoryTheory.Limits.HasProduct fun j => X.obj { as := j }] → CategoryTheory
+.Limits.Cone X
+参数：X : CategoryTheory.Functor (CategoryTheory.Discrete α) C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Pi.cone
-  signature: : Cone X where
-  body: ∏ᶜ (fun j => X.obj (Discrete.mk j))
-  π := Discrete.natTrans (fun _ => Pi.π _ _)
-
-中文:
-定义 依赖函数类型.cone
-  签名: : 锥 X where
-  定义体: ∏ᶜ (fun j => X.obj (Discrete.mk j))
-  π := Discrete.natTrans (fun _ => Pi.π _ _)
-
-Depends on / 依赖: Discrete, Discrete.mk, X.obj
+--- 原说明 ---
+A limit cone for `X : Discrete α ⥤ C` that is given
+by `∏ᶜ (fun j => X.obj (Discrete.mk j))`.
 -/
 def Pi.cone : Cone X where
   pt := ∏ᶜ (fun j => X.obj (Discrete.mk j))
   π := Discrete.natTrans (fun _ => Pi.π _ _)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `productIsProduct'` / `productIsProduct'` 的定义
+/-- The cone `Pi.cone X` is a limit cone. -/
+/-
+**CategoryTheory.Limits.productIsProduct'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Limits`。
+形式化陈述：productIsProduct' : IsLimit (Pi.cone X) where lift s
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition productIsProduct'
-  signature: :
-  body: Pi.lift (fun j => s.π.app ⟨j⟩)
-  fac s := by simp
-  uniq s m hm := by
-    dsimp
-    ext
-    simp only [limit.lift_π, Fan.mk_pt, Fan.mk_π_app]
-    apply hm
-
-中文:
-定义 productIsProduct'
-  签名: :
-  定义体: Pi.lift (fun j => s.π.app ⟨j⟩)
-  fac s := by simp
-  uniq s m hm := by
-    dsimp
-    ext
-    simp only [limit.lift_π, Fan.mk_pt, Fan.mk_π_app]
-    apply hm
-
-Depends on / 依赖: Pi.lift
+--- 原说明 ---
+The cone `Pi.cone X` is a limit cone.
 -/
 def productIsProduct' :
     IsLimit (Pi.cone X) where
@@ -1496,68 +1337,41 @@ def productIsProduct' :
 
 variable [HasLimit X]
 
-/--
-Definition of `Pi.isoLimit` / `Pi.isoLimit` 的定义
+/-- The isomorphism `∏ᶜ (fun j => X.obj (Discrete.mk j)) ≅ limit X`. -/
+/-
+**CategoryTheory.Limits.Pi.isoLimit** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Li
+mits.Pi`。
+形式化陈述：{α : Type w₂} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u
+} C] →       (X : CategoryTheory.Functor (CategoryTheory.Discrete α) C) →       
+  [inst_1 : CategoryTheory.Limits.HasProduct fun j => X.obj { as := j }] →      
+     [inst_2 : CategoryTheory.Limits.HasLimit X] → (∏ᶜ fun j => X.obj { as := j 
+}) ≅ CategoryTheory.Limits.limit X
+参数：X : CategoryTheory.Functor (CategoryTheory.Discrete α) C；∏ᶜ fun j => X.obj { 
+as := j }。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Pi.isoLimit
-  signature: :
-  body: IsLimit.conePointUniqueUpToIso (productIsProduct' X) (limit.isLimit X)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 依赖函数类型.isoLimit
-  签名: :
-  定义体: IsLimit.conePointUniqueUpToIso (productIsProduct' X) (limit.isLimit X)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso, conePointUniqueUpToIso, isLimit, limit.isLimit, productIsProduct
+--- 原说明 ---
+The isomorphism `∏ᶜ (fun j => X.obj (Discrete.mk j)) ≅ limit X`.
 -/
 def Pi.isoLimit :
     ∏ᶜ (fun j => X.obj (Discrete.mk j)) ≅ limit X :=
   IsLimit.conePointUniqueUpToIso (productIsProduct' X) (limit.isLimit X)
 
 @[reassoc (attr := simp)]
-/--
-lemma `Pi.isoLimit_inv_π` / 引理 `Pi.isoLimit_inv_π`
-
-English:
-lemma Pi.isoLimit_inv_π
-  given: (j : α)
-  proof: IsLimit.conePointUniqueUpToIso_inv_comp _ _ _
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 依赖函数类型.isoLimit_inv_π
-  条件: (j : α)
-  证明: IsLimit.conePointUniqueUpToIso_inv_comp _ _ _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso_inv_comp, conePointUniqueUpToIso_inv_comp
+/-
+**CategoryTheory.Limits.Pi.isoLimit_inv_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Pi.isoLimit_inv_π (j : α) :
     (Pi.isoLimit X).inv ≫ Pi.π _ j = limit.π _ (Discrete.mk j) :=
   IsLimit.conePointUniqueUpToIso_inv_comp _ _ _
 
 @[reassoc (attr := simp)]
-/--
-lemma `Pi.isoLimit_hom_π` / 引理 `Pi.isoLimit_hom_π`
-
-English:
-lemma Pi.isoLimit_hom_π
-  given: (j : α)
-  proof: IsLimit.conePointUniqueUpToIso_hom_comp _ _ _
-
-中文:
-引理 依赖函数类型.isoLimit_hom_π
-  条件: (j : α)
-  证明: IsLimit.conePointUniqueUpToIso_hom_comp _ _ _
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso_hom_comp, conePointUniqueUpToIso_hom_comp
+/-
+**CategoryTheory.Limits.Pi.isoLimit_hom_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Pi.isoLimit_hom_π (j : α) :
     (Pi.isoLimit X).hom ≫ limit.π _ (Discrete.mk j) = Pi.π _ j :=
@@ -1565,364 +1379,409 @@ lemma Pi.isoLimit_hom_π (j : α) :
 
 end
 
-/--
-Definition of `Sigma.map` / `Sigma.map` 的定义
-
-English:
-definition Sigma.map
-  signature: {f g : β -> C} [HasCoproduct f] [HasCoproduct g] (p : forall b, f b ⟶ g b)
-  body: colimMap (Discrete.natTrans fun X => p X.as)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 依赖和类型.map
-  签名: {f g : β -> C} [HasCoproduct f] [HasCoproduct g] (p : 对任意 b, f b ⟶ g b)
-  定义体: colimMap (Discrete.natTrans fun X => p X.as)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Discrete, Discrete.natTrans, X.as, colimMap, natTrans
+/-- Construct a morphism between categorical coproducts (indexed by the same type)
+from a family of morphisms between the factors.
 -/
-def Sigma.map {f g : β -> C} [HasCoproduct f] [HasCoproduct g] (p : forall b, f b ⟶ g b) :
+/-
+**CategoryTheory.Limits.Sigma.map** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limi
+ts.Sigma`。
+形式化陈述：{β : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {f g : β → C} →         [inst_1 : CategoryTheory.Limits.HasCoproduct
+ f] →           [inst_2 : CategoryTheory.Limits.HasCoproduct g] → ((b : β) → f b
+ ⟶ g b) → (∐ f ⟶ ∐ g)
+参数：(b : β) → f b ⟶ g b；∐ f ⟶ ∐ g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Construct a morphism between categorical coproducts (indexed by the same type)
+from a family of morphisms between the factors.
+-/
+def Sigma.map {f g : β → C} [HasCoproduct f] [HasCoproduct g] (p : ∀ b, f b ⟶ g b) :
     ∐ f ⟶ ∐ g :=
   colimMap (Discrete.natTrans fun X => p X.as)
 
 @[reassoc (attr := simp)]
-/--
-lemma `Sigma.ι_map` / 引理 `Sigma.ι_map`
-
-English:
-lemma Sigma.ι_map
-  given: {f g : β -> C} [HasCoproduct f] [HasCoproduct g] (p : forall b, f b ⟶ g b) (b : β)
-  proof: by simp [Sigma.map]
-
-@[simp]
-
-中文:
-引理 依赖和类型.ι_map
-  条件: {f g : β -> C} [HasCoproduct f] [HasCoproduct g] (p : 对任意 b, f b ⟶ g b) (b : β)
-  证明: by simp [Sigma.map]
-
-@[simp]
-
-Depends on / 依赖: Sigma.map
+/-
+**CategoryTheory.Limits.Sigma.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma Sigma.ι_map {f g : β -> C} [HasCoproduct f] [HasCoproduct g] (p : forall b, f b ⟶ g b) (b : β) :
+lemma Sigma.ι_map {f g : β → C} [HasCoproduct f] [HasCoproduct g] (p : ∀ b, f b ⟶ g b) (b : β) :
     Sigma.ι f b ≫ Sigma.map p = p b ≫ Sigma.ι g b := by simp [Sigma.map]
 
 @[simp]
-/--
-lemma `Sigma.map_id` / 引理 `Sigma.map_id`
-
-English:
-lemma Sigma.map_id
-  given: {f : α -> C} [HasCoproduct f]
-  statement: Sigma.map (fun a => 𝟙 (f a)) = 𝟙 (∐ f)
-  proof: by
-  ext; simp
-
-中文:
-引理 依赖和类型.map_id
-  条件: {f : α -> C} [HasCoproduct f]
-  结论: 依赖和类型.map (fun a => 𝟙 (f a)) = 𝟙 (∐ f)
-  证明: by
-  ext; simp
+/-
+**CategoryTheory.Limits.Sigma.map_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.L
+imits.Sigma`。
+形式化陈述：∀ {α : Type w₂} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f 
+: α → C}   [inst_1 : CategoryTheory.Limits.HasCoproduct f],   (CategoryTheory.Li
+mits.Sigma.map fun a => CategoryTheory.CategoryStruct.id (f a)) =     CategoryTh
+eory.CategoryStruct.id (∐ f)
+参数：CategoryTheory.Limits.Sigma.map fun a => CategoryTheory.CategoryStruct.id (f 
+a)；∐ f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Sigma.hom_ext`：∀ {β : Type w} {C : Type u} [inst :
+ CategoryTheory.Category.{v, u} C] {f : β → C}   [inst_1 : CategoryTheory.Limits
+.HasCoproduct f] {X : C} …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.Sigma.ι_map`：∀ {β : Type w} {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] {f g : β → C}   [inst_1 : CategoryTheory.Limits
+.HasCoproduct f] [inst_…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Sigma.map_id {f : α -> C} [HasCoproduct f] : Sigma.map (fun a => 𝟙 (f a)) = 𝟙 (∐ f) := by
+lemma Sigma.map_id {f : α → C} [HasCoproduct f] : Sigma.map (fun a => 𝟙 (f a)) = 𝟙 (∐ f) := by
   ext; simp
-
-/--
-lemma `Sigma.map_comp_map` / 引理 `Sigma.map_comp_map`
-
-English:
-lemma Sigma.map_comp_map
-  statement: {f g h : α -> C} [HasCoproduct f] [HasCoproduct g] [HasCoproduct h]
-  proof: by
-  ext; simp
-
-中文:
-引理 依赖和类型.map_comp_map
-  结论: {f g h : α -> C} [HasCoproduct f] [HasCoproduct g] [HasCoproduct h]
-  证明: by
-  ext; simp
+/-
+**CategoryTheory.Limits.Sigma.map_comp_map** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Limits.Sigma`。
+形式化陈述：∀ {α : Type w₂} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f 
+g h : α → C}   [inst_1 : CategoryTheory.Limits.HasCoproduct f] [inst_2 : Categor
+yTheory.Limits.HasCoproduct g]   [inst_3 : CategoryTheory.Limits.HasCoproduct h]
+ (q : (a : α) → f a ⟶ g a) (q' : (a : α) → g a ⟶ h a),   CategoryTheory.Category
+Struct.comp (CategoryTheory.Limits.Sigma.map q) (CategoryTheory.Limits.Sigma.map
+ q') =     CategoryTheory.Limits.Sigma.map fun a => CategoryTheory.CategoryStruc
+t.comp (q a) (q' a)
+参数：q : (a : α) → f a ⟶ g a；q' : (a : α) → g a ⟶ h a；CategoryTheory.Limits.Sigma.
+map q；CategoryTheory.Limits.Sigma.map q'；q a；q' a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Sigma.hom_ext`：∀ {β : Type w} {C : Type u} [inst :
+ CategoryTheory.Category.{v, u} C] {f : β → C}   [inst_1 : CategoryTheory.Limits
+.HasCoproduct f] {X : C} …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.Sigma.ι_map_assoc`：∀ {β : Type w} {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {f g : β → C}   [inst_1 : CategoryTheory.
+Limits.HasCoproduct f] [inst_…
+· 使用定理 `CategoryTheory.Limits.Sigma.ι_map`：∀ {β : Type w} {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] {f g : β → C}   [inst_1 : CategoryTheory.Limits
+.HasCoproduct f] [inst_…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Sigma.map_comp_map {f g h : α -> C} [HasCoproduct f] [HasCoproduct g] [HasCoproduct h]
-    (q : forall (a : α), f a ⟶ g a) (q' : forall (a : α), g a ⟶ h a) :
+lemma Sigma.map_comp_map {f g h : α → C} [HasCoproduct f] [HasCoproduct g] [HasCoproduct h]
+    (q : ∀ (a : α), f a ⟶ g a) (q' : ∀ (a : α), g a ⟶ h a) :
     Sigma.map q ≫ Sigma.map q' = Sigma.map (fun a => q a ≫ q' a) := by
   ext; simp
-
-/--
-Instance `Sigma.map_epi` / 实例 `Sigma.map_epi`
-
-English:
-instance Sigma.map_epi
-  signature: {f g : β -> C} [HasCoproduct f] [HasCoproduct g] (p : forall b, f b ⟶ g b)
-  body: @Limits.colimMap_epi _ _ _ _ (Discrete.functor f) (Discrete.functor g) _ _
-    (Discrete.natTrans fun X => p X.as) (by dsimp; infer_instance)
-
-中文:
-实例 依赖和类型.map_epi
-  签名: {f g : β -> C} [HasCoproduct f] [HasCoproduct g] (p : 对任意 b, f b ⟶ g b)
-  定义体: @Limits.colimMap_epi _ _ _ _ (Discrete.functor f) (Discrete.functor g) _ _
-    (Discrete.natTrans fun X => p X.as) (by dsimp; infer_instance)
-
-Depends on / 依赖: Discrete, Discrete.functor, Discrete.natTrans, Limits, Limits.colimMap_epi, X.as, colimMap_epi, functor, infer_instance, natTrans
+/-
+**CategoryTheory.Limits.Sigma.map_epi** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Limits.Sigma`。
+形式化陈述：∀ {β : Type w} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f g
+ : β → C}   [inst_1 : CategoryTheory.Limits.HasCoproduct f] [inst_2 : CategoryTh
+eory.Limits.HasCoproduct g]   (p : (b : β) → f b ⟶ g b) [∀ (i : β), CategoryTheo
+ry.Epi (p i)],   CategoryTheory.Epi (CategoryTheory.Limits.Sigma.map p)
+参数：p : (b : β) → f b ⟶ g b；i : β；p i；CategoryTheory.Limits.Sigma.map p。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Sigma.map_epi {f g : β -> C} [HasCoproduct f] [HasCoproduct g] (p : forall b, f b ⟶ g b)
-[forall i, Epi (p i)] : Epi Sigma.map p :=
+instance Sigma.map_epi {f g : β → C} [HasCoproduct f] [HasCoproduct g] (p : ∀ b, f b ⟶ g b)
+    [∀ i, Epi (p i)] : Epi <| Sigma.map p :=
   @Limits.colimMap_epi _ _ _ _ (Discrete.functor f) (Discrete.functor g) _ _
     (Discrete.natTrans fun X => p X.as) (by dsimp; infer_instance)
 
-/--
-Definition of `Sigma.map'` / `Sigma.map'` 的定义
+/-- Construct a morphism between categorical coproducts from a family of morphisms between the
+factors. -/
+/-
+**CategoryTheory.Limits.Sigma.map'** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Lim
+its.Sigma`。
+形式化陈述：{β : Type w} →   {α : Type w₂} →     {C : Type u} →       [inst : Category
+Theory.Category.{v, u} C] →         {f : α → C} →           {g : β → C} →       
+      [inst_1 : CategoryTheory.Limits.HasCoproduct f] →               [inst_2 : 
+CategoryTheory.Limits.HasCoproduct g] → (p : α → β) → ((a : α) → f a ⟶ g (p a)) 
+→ (∐ f ⟶ ∐ g)
+参数：p : α → β；(a : α) → f a ⟶ g (p a)；∐ f ⟶ ∐ g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Sigma.map'
-  signature: {f : α -> C} {g : β -> C} [HasCoproduct f] [HasCoproduct g] (p : α -> β)
-  body: Sigma.desc (fun a => q a ≫ Sigma.ι _ _)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 依赖和类型.map'
-  签名: {f : α -> C} {g : β -> C} [HasCoproduct f] [HasCoproduct g] (p : α -> β)
-  定义体: Sigma.desc (fun a => q a ≫ Sigma.ι _ _)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Sigma.desc
+--- 原说明 ---
+Construct a morphism between categorical coproducts from a family of morphisms b
+etween the
+factors.
 -/
-def Sigma.map' {f : α -> C} {g : β -> C} [HasCoproduct f] [HasCoproduct g] (p : α -> β)
-    (q : forall (a : α), f a ⟶ g (p a)) : ∐ f ⟶ ∐ g :=
+def Sigma.map' {f : α → C} {g : β → C} [HasCoproduct f] [HasCoproduct g] (p : α → β)
+    (q : ∀ (a : α), f a ⟶ g (p a)) : ∐ f ⟶ ∐ g :=
   Sigma.desc (fun a => q a ≫ Sigma.ι _ _)
 
 @[reassoc (attr := simp)]
-/--
-lemma `Sigma.ι_comp_map'` / 引理 `Sigma.ι_comp_map'`
-
-English:
-lemma Sigma.ι_comp_map'
-  statement: {f : α -> C} {g : β -> C} [HasCoproduct f] [HasCoproduct g]
-  proof: colimit.ι_desc _ _
-
-中文:
-引理 依赖和类型.ι_comp_map'
-  结论: {f : α -> C} {g : β -> C} [HasCoproduct f] [HasCoproduct g]
-  证明: colimit.ι_desc _ _
-
-Depends on / 依赖: RespectsLeft, RespectsLeft.precomp, colimit, f.unop, i.unop, precomp
+/-
+**CategoryTheory.Limits.Sigma.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma Sigma.ι_comp_map' {f : α -> C} {g : β -> C} [HasCoproduct f] [HasCoproduct g]
-    (p : α -> β) (q : forall (a : α), f a ⟶ g (p a)) (a : α) :
+lemma Sigma.ι_comp_map' {f : α → C} {g : β → C} [HasCoproduct f] [HasCoproduct g]
+    (p : α → β) (q : ∀ (a : α), f a ⟶ g (p a)) (a : α) :
     Sigma.ι f a ≫ Sigma.map' p q = q a ≫ Sigma.ι g (p a) :=
   colimit.ι_desc _ _
-
-/--
-lemma `Sigma.map'_id_id` / 引理 `Sigma.map'_id_id`
-
-English:
-lemma Sigma.map'_id_id
-  given: {f : α -> C} [HasCoproduct f]
-  proof: by
-  ext; simp
-
-@[simp]
-
-中文:
-引理 依赖和类型.map'_id_id
-  条件: {f : α -> C} [HasCoproduct f]
-  证明: by
-  ext; simp
-
-@[simp]
-
-Depends on / 依赖: RespectsRight, RespectsRight.postcomp, f.unop, i.unop, postcomp
+/-
+**CategoryTheory.Limits.Sigma.map'_id_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheo
+ry.Limits.Sigma`。
+形式化陈述：∀ {α : Type w₂} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f 
+: α → C}   [inst_1 : CategoryTheory.Limits.HasCoproduct f],   (CategoryTheory.Li
+mits.Sigma.map' id fun a => CategoryTheory.CategoryStruct.id (f a)) =     Catego
+ryTheory.CategoryStruct.id (∐ f)
+参数：CategoryTheory.Limits.Sigma.map' id fun a => CategoryTheory.CategoryStruct.id
+ (f a)；∐ f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Sigma.hom_ext`：∀ {β : Type w} {C : Type u} [inst :
+ CategoryTheory.Category.{v, u} C] {f : β → C}   [inst_1 : CategoryTheory.Limits
+.HasCoproduct f] {X : C} …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.Sigma.ι_comp_map'`：∀ {β : Type w} {α : Type w₂} {C
+ : Type u} [inst : CategoryTheory.Category.{v, u} C] {f : α → C} {g : β → C}   [
+inst_1 : CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Sigma.map'_id_id {f : α -> C} [HasCoproduct f] :
+lemma Sigma.map'_id_id {f : α → C} [HasCoproduct f] :
     Sigma.map' id (fun a => 𝟙 (f a)) = 𝟙 (∐ f) := by
   ext; simp
 
 @[simp]
-/--
-lemma `Sigma.map'_id` / 引理 `Sigma.map'_id`
-
-English:
-lemma Sigma.map'_id
-  given: {f g : α -> C} [HasCoproduct f] [HasCoproduct g] (p : forall b, f b ⟶ g b)
-  proof: rfl
-
-中文:
-引理 依赖和类型.map'_id
-  条件: {f g : α -> C} [HasCoproduct f] [HasCoproduct g] (p : 对任意 b, f b ⟶ g b)
-  证明: rfl
+/-
+**CategoryTheory.Limits.Sigma.map'_id** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Limits.Sigma`。
+形式化陈述：∀ {α : Type w₂} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f 
+g : α → C}   [inst_1 : CategoryTheory.Limits.HasCoproduct f] [inst_2 : CategoryT
+heory.Limits.HasCoproduct g]   (p : (b : α) → f b ⟶ g b), CategoryTheory.Limits.
+Sigma.map' id p = CategoryTheory.Limits.Sigma.map p
+参数：p : (b : α) → f b ⟶ g b。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma Sigma.map'_id {f g : α -> C} [HasCoproduct f] [HasCoproduct g] (p : forall b, f b ⟶ g b) :
+lemma Sigma.map'_id {f g : α → C} [HasCoproduct f] [HasCoproduct g] (p : ∀ b, f b ⟶ g b) :
     Sigma.map' id p = Sigma.map p :=
   rfl
-
-/--
-lemma `Sigma.map'_comp_map'` / 引理 `Sigma.map'_comp_map'`
-
-English:
-lemma Sigma.map'_comp_map'
-  statement: {f : α -> C} {g : β -> C} {h : γ -> C} [HasCoproduct f] [HasCoproduct g]
-  proof: by
-  ext; simp
-
-中文:
-引理 依赖和类型.map'_comp_map'
-  结论: {f : α -> C} {g : β -> C} {h : γ -> C} [HasCoproduct f] [HasCoproduct g]
-  证明: by
-  ext; simp
+/-
+**CategoryTheory.Limits.Sigma.map'_comp_map'** 是 Mathlib 中的一个定理，位于命名空间 `Category
+Theory.Limits.Sigma`。
+形式化陈述：∀ {β : Type w} {α : Type w₂} {γ : Type w₃} {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {f : α → C}   {g : β → C} {h : γ → C} [inst_1 : Category
+Theory.Limits.HasCoproduct f]   [inst_2 : CategoryTheory.Limits.HasCoproduct g] 
+[inst_3 : CategoryTheory.Limits.HasCoproduct h] (p : α → β)   (p' : β → γ) (q : 
+(a : α) → f a ⟶ g (p a)) (q' : (b : β) → g b ⟶ h (p' b)),   CategoryTheory.Categ
+oryStruct.comp (CategoryTheory.Limits.Sigma.map' p q) (CategoryTheory.Limits.Sig
+ma.map' p' q') =     CategoryTheory.Limits.Sigma.map' (p' ∘ p) fun a => Category
+Theory.CategoryStruct.comp (q a) (q' (p a))
+参数：p : α → β；p' : β → γ；q : (a : α) → f a ⟶ g (p a)；q' : (b : β) → g b ⟶ h (p' b
+)；CategoryTheory.Limits.Sigma.map' p q；CategoryTheory.Limits.Sigma.map' p' q'；p'
+ ∘ p；q a；q' (p a)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Sigma.hom_ext`：∀ {β : Type w} {C : Type u} [inst :
+ CategoryTheory.Category.{v, u} C] {f : β → C}   [inst_1 : CategoryTheory.Limits
+.HasCoproduct f] {X : C} …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.Sigma.ι_comp_map'_assoc`：∀ {β : Type w} {α : Type 
+w₂} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f : α → C} {g : β → 
+C}   [inst_1 : CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.Sigma.ι_comp_map'`：∀ {β : Type w} {α : Type w₂} {C
+ : Type u} [inst : CategoryTheory.Category.{v, u} C] {f : α → C} {g : β → C}   [
+inst_1 : CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Sigma.map'_comp_map' {f : α -> C} {g : β -> C} {h : γ -> C} [HasCoproduct f] [HasCoproduct g]
-    [HasCoproduct h] (p : α -> β) (p' : β -> γ) (q : forall (a : α), f a ⟶ g (p a))
-    (q' : forall (b : β), g b ⟶ h (p' b)) :
+lemma Sigma.map'_comp_map' {f : α → C} {g : β → C} {h : γ → C} [HasCoproduct f] [HasCoproduct g]
+    [HasCoproduct h] (p : α → β) (p' : β → γ) (q : ∀ (a : α), f a ⟶ g (p a))
+    (q' : ∀ (b : β), g b ⟶ h (p' b)) :
     Sigma.map' p q ≫ Sigma.map' p' q' = Sigma.map' (p' ∘ p) (fun a => q a ≫ q' (p a)) := by
   ext; simp
-
-/--
-lemma `Sigma.map'_comp_map` / 引理 `Sigma.map'_comp_map`
-
-English:
-lemma Sigma.map'_comp_map
-  statement: {f : α -> C} {g h : β -> C} [HasCoproduct f] [HasCoproduct g]
-  proof: by
-  ext; simp
-
-中文:
-引理 依赖和类型.map'_comp_map
-  结论: {f : α -> C} {g h : β -> C} [HasCoproduct f] [HasCoproduct g]
-  证明: by
-  ext; simp
+/-
+**CategoryTheory.Limits.Sigma.map'_comp_map** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Limits.Sigma`。
+形式化陈述：∀ {β : Type w} {α : Type w₂} {C : Type u} [inst : CategoryTheory.Category.
+{v, u} C] {f : α → C} {g h : β → C}   [inst_1 : CategoryTheory.Limits.HasCoprodu
+ct f] [inst_2 : CategoryTheory.Limits.HasCoproduct g]   [inst_3 : CategoryTheory
+.Limits.HasCoproduct h] (p : α → β) (q : (a : α) → f a ⟶ g (p a)) (q' : (b : β) 
+→ g b ⟶ h b),   CategoryTheory.CategoryStruct.comp (CategoryTheory.Limits.Sigma.
+map' p q) (CategoryTheory.Limits.Sigma.map q') =     CategoryTheory.Limits.Sigma
+.map' p fun a => CategoryTheory.CategoryStruct.comp (q a) (q' (p a))
+参数：p : α → β；q : (a : α) → f a ⟶ g (p a)；q' : (b : β) → g b ⟶ h b；CategoryTheory
+.Limits.Sigma.map' p q；CategoryTheory.Limits.Sigma.map q'；q a；q' (p a)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Sigma.hom_ext`：∀ {β : Type w} {C : Type u} [inst :
+ CategoryTheory.Category.{v, u} C] {f : β → C}   [inst_1 : CategoryTheory.Limits
+.HasCoproduct f] {X : C} …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.Sigma.ι_comp_map'_assoc`：∀ {β : Type w} {α : Type 
+w₂} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f : α → C} {g : β → 
+C}   [inst_1 : CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.Sigma.ι_map`：∀ {β : Type w} {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] {f g : β → C}   [inst_1 : CategoryTheory.Limits
+.HasCoproduct f] [inst_…
+· 使用定理 `CategoryTheory.Limits.Sigma.ι_comp_map'`：∀ {β : Type w} {α : Type w₂} {C
+ : Type u} [inst : CategoryTheory.Category.{v, u} C] {f : α → C} {g : β → C}   [
+inst_1 : CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Sigma.map'_comp_map {f : α -> C} {g h : β -> C} [HasCoproduct f] [HasCoproduct g]
-    [HasCoproduct h] (p : α -> β) (q : forall (a : α), f a ⟶ g (p a)) (q' : forall (b : β), g b ⟶ h b) :
+lemma Sigma.map'_comp_map {f : α → C} {g h : β → C} [HasCoproduct f] [HasCoproduct g]
+    [HasCoproduct h] (p : α → β) (q : ∀ (a : α), f a ⟶ g (p a)) (q' : ∀ (b : β), g b ⟶ h b) :
     Sigma.map' p q ≫ Sigma.map q' = Sigma.map' p (fun a => q a ≫ q' (p a)) := by
   ext; simp
-
-/--
-lemma `Sigma.map_comp_map'` / 引理 `Sigma.map_comp_map'`
-
-English:
-lemma Sigma.map_comp_map'
-  statement: {f g : α -> C} {h : β -> C} [HasCoproduct f] [HasCoproduct g]
-  proof: by
-  ext; simp
-
-中文:
-引理 依赖和类型.map_comp_map'
-  结论: {f g : α -> C} {h : β -> C} [HasCoproduct f] [HasCoproduct g]
-  证明: by
-  ext; simp
+/-
+**CategoryTheory.Limits.Sigma.map_comp_map'** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Limits.Sigma`。
+形式化陈述：∀ {β : Type w} {α : Type w₂} {C : Type u} [inst : CategoryTheory.Category.
+{v, u} C] {f g : α → C} {h : β → C}   [inst_1 : CategoryTheory.Limits.HasCoprodu
+ct f] [inst_2 : CategoryTheory.Limits.HasCoproduct g]   [inst_3 : CategoryTheory
+.Limits.HasCoproduct h] (p : α → β) (q : (a : α) → f a ⟶ g a) (q' : (a : α) → g 
+a ⟶ h (p a)),   CategoryTheory.CategoryStruct.comp (CategoryTheory.Limits.Sigma.
+map q) (CategoryTheory.Limits.Sigma.map' p q') =     CategoryTheory.Limits.Sigma
+.map' p fun a => CategoryTheory.CategoryStruct.comp (q a) (q' a)
+参数：p : α → β；q : (a : α) → f a ⟶ g a；q' : (a : α) → g a ⟶ h (p a)；CategoryTheory
+.Limits.Sigma.map q；CategoryTheory.Limits.Sigma.map' p q'；q a；q' a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Sigma.hom_ext`：∀ {β : Type w} {C : Type u} [inst :
+ CategoryTheory.Category.{v, u} C] {f : β → C}   [inst_1 : CategoryTheory.Limits
+.HasCoproduct f] {X : C} …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.Sigma.ι_map_assoc`：∀ {β : Type w} {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {f g : β → C}   [inst_1 : CategoryTheory.
+Limits.HasCoproduct f] [inst_…
+· 使用定理 `CategoryTheory.Limits.Sigma.ι_comp_map'`：∀ {β : Type w} {α : Type w₂} {C
+ : Type u} [inst : CategoryTheory.Category.{v, u} C] {f : α → C} {g : β → C}   [
+inst_1 : CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Sigma.map_comp_map' {f g : α -> C} {h : β -> C} [HasCoproduct f] [HasCoproduct g]
-    [HasCoproduct h] (p : α -> β) (q : forall (a : α), f a ⟶ g a) (q' : forall (a : α), g a ⟶ h (p a)) :
+lemma Sigma.map_comp_map' {f g : α → C} {h : β → C} [HasCoproduct f] [HasCoproduct g]
+    [HasCoproduct h] (p : α → β) (q : ∀ (a : α), f a ⟶ g a) (q' : ∀ (a : α), g a ⟶ h (p a)) :
     Sigma.map q ≫ Sigma.map' p q' = Sigma.map' p (fun a => q a ≫ q' a) := by
   ext; simp
-
-/--
-lemma `Sigma.map'_eq` / 引理 `Sigma.map'_eq`
-
-English:
-lemma Sigma.map'_eq
-  statement: {f : α -> C} {g : β -> C} [HasCoproduct f] [HasCoproduct g]
-  proof: by
-  cat_disch
-
-中文:
-引理 依赖和类型.map'_eq
-  结论: {f : α -> C} {g : β -> C} [HasCoproduct f] [HasCoproduct g]
-  证明: by
-  cat_disch
+/-
+**CategoryTheory.Limits.Sigma.map'_eq** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Limits.Sigma`。
+形式化陈述：∀ {β : Type w} {α : Type w₂} {C : Type u} [inst : CategoryTheory.Category.
+{v, u} C] {f : α → C} {g : β → C}   [inst_1 : CategoryTheory.Limits.HasCoproduct
+ f] [inst_2 : CategoryTheory.Limits.HasCoproduct g] {p p' : α → β}   {q : (a : α
+) → f a ⟶ g (p a)} {q' : (a : α) → f a ⟶ g (p' a)} (hp : p = p'),   (∀ (a : α), 
+CategoryTheory.CategoryStruct.comp (q a) (CategoryTheory.eqToHom ⋯) = q' a) →   
+  CategoryTheory.Limits.Sigma.map' p q = CategoryTheory.Limits.Sigma.map' p' q'
+参数：a : α；p a；a : α；p' a；hp : p = p'；∀ (a : α), CategoryTheory.CategoryStruct.com
+p (q a) (CategoryTheory.eqToHom ⋯) = q' a。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Sigma.hom_ext`：∀ {β : Type w} {C : Type u} [inst :
+ CategoryTheory.Category.{v, u} C] {f : β → C}   [inst_1 : CategoryTheory.Limits
+.HasCoproduct f] {X : C} …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.Sigma.ι_comp_map'`：∀ {β : Type w} {α : Type w₂} {C
+ : Type u} [inst : CategoryTheory.Category.{v, u} C] {f : α → C} {g : β → C}   [
+inst_1 : CategoryTheory.Limit…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma Sigma.map'_eq {f : α -> C} {g : β -> C} [HasCoproduct f] [HasCoproduct g]
-    {p p' : α -> β} {q : forall (a : α), f a ⟶ g (p a)} {q' : forall (a : α), f a ⟶ g (p' a)}
-    (hp : p = p') (hq : forall (a : α), q a ≫ eqToHom (hp ▸ rfl) = q' a) :
+lemma Sigma.map'_eq {f : α → C} {g : β → C} [HasCoproduct f] [HasCoproduct g]
+    {p p' : α → β} {q : ∀ (a : α), f a ⟶ g (p a)} {q' : ∀ (a : α), f a ⟶ g (p' a)}
+    (hp : p = p') (hq : ∀ (a : α), q a ≫ eqToHom (hp ▸ rfl) = q' a) :
     Sigma.map' p q = Sigma.map' p' q' := by
   cat_disch
 
-/--
-Definition of `Sigma.mapIso` / `Sigma.mapIso` 的定义
-
-English:
-definition Sigma.mapIso
-  signature: {f g : β -> C} [HasCoproductsOfShape β C] (p : forall b, f b ≅ g b)
-  body: colim.mapIso (Discrete.natIso fun X => p X.as)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 依赖和类型.mapIso
-  签名: {f g : β -> C} [HasCoproductsOfShape β C] (p : 对任意 b, f b ≅ g b)
-  定义体: colim.mapIso (Discrete.natIso fun X => p X.as)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Discrete, Discrete.natIso, X.as, colim.mapIso, mapIso, natIso
+/-- Construct an isomorphism between categorical coproducts (indexed by the same type)
+from a family of isomorphisms between the factors.
 -/
-def Sigma.mapIso {f g : β -> C} [HasCoproductsOfShape β C] (p : forall b, f b ≅ g b) : ∐ f ≅ ∐ g :=
+/-
+**CategoryTheory.Limits.Sigma.mapIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.L
+imits.Sigma`。
+形式化陈述：{β : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {f g : β → C} → [inst_1 : CategoryTheory.Limits.HasCoproductsOfShape
+ β C] → ((b : β) → f b ≅ g b) → (∐ f ≅ ∐ g)
+参数：(b : β) → f b ≅ g b；∐ f ≅ ∐ g。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Construct an isomorphism between categorical coproducts (indexed by the same typ
+e)
+from a family of isomorphisms between the factors.
+-/
+def Sigma.mapIso {f g : β → C} [HasCoproductsOfShape β C] (p : ∀ b, f b ≅ g b) : ∐ f ≅ ∐ g :=
   colim.mapIso (Discrete.natIso fun X => p X.as)
 
 @[reassoc (attr := simp)]
-/--
-lemma `Sigma.ι_mapIso_hom` / 引理 `Sigma.ι_mapIso_hom`
-
-English:
-lemma Sigma.ι_mapIso_hom
-  given: {f g : β -> C} [HasCoproductsOfShape β C] (p : forall b, f b ≅ g b) (b : β)
-  proof: ι_colimMap _ _
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 依赖和类型.ι_mapIso_hom
-  条件: {f g : β -> C} [HasCoproductsOfShape β C] (p : 对任意 b, f b ≅ g b) (b : β)
-  证明: ι_colimMap _ _
-
-@[reassoc (attr := simp)]
+/-
+**CategoryTheory.Limits.Sigma.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma Sigma.ι_mapIso_hom {f g : β -> C} [HasCoproductsOfShape β C] (p : forall b, f b ≅ g b) (b : β) :
+lemma Sigma.ι_mapIso_hom {f g : β → C} [HasCoproductsOfShape β C] (p : ∀ b, f b ≅ g b) (b : β) :
     ι _ _ ≫ (Sigma.mapIso p).hom = (p b).hom ≫ ι _ _ :=
   ι_colimMap _ _
 
 @[reassoc (attr := simp)]
-/--
-lemma `Sigma.ι_mapIso_inv` / 引理 `Sigma.ι_mapIso_inv`
-
-English:
-lemma Sigma.ι_mapIso_inv
-  given: {f g : β -> C} [HasCoproductsOfShape β C] (p : forall b, f b ≅ g b) (b : β)
-  proof: ι_colimMap _ _
-
-中文:
-引理 依赖和类型.ι_mapIso_inv
-  条件: {f g : β -> C} [HasCoproductsOfShape β C] (p : 对任意 b, f b ≅ g b) (b : β)
-  证明: ι_colimMap _ _
+/-
+**CategoryTheory.Limits.Sigma.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma Sigma.ι_mapIso_inv {f g : β -> C} [HasCoproductsOfShape β C] (p : forall b, f b ≅ g b) (b : β) :
+lemma Sigma.ι_mapIso_inv {f g : β → C} [HasCoproductsOfShape β C] (p : ∀ b, f b ≅ g b) (b : β) :
     ι _ _ ≫ (Sigma.mapIso p).inv = (p b).inv ≫ ι _ _ :=
   ι_colimMap _ _
-
-/--
-Instance `Sigma.map_isIso` / 实例 `Sigma.map_isIso`
-
-English:
-instance Sigma.map_isIso
-  signature: {f g : β -> C} [HasCoproductsOfShape β C] (p : forall b, f b ⟶ g b)
-  body: inferInstanceAs (IsIso (Sigma.mapIso (fun b => asIso (p b))).hom)
-
-中文:
-实例 依赖和类型.map_isIso
-  签名: {f g : β -> C} [HasCoproductsOfShape β C] (p : 对任意 b, f b ⟶ g b)
-  定义体: inferInstanceAs (IsIso (Sigma.mapIso (fun b => asIso (p b))).hom)
-
-Depends on / 依赖: Sigma.mapIso, mapIso
+/-
+**CategoryTheory.Limits.Sigma.map_isIso** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Limits.Sigma`。
+形式化陈述：∀ {β : Type w} {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {f g
+ : β → C}   [inst_1 : CategoryTheory.Limits.HasCoproductsOfShape β C] (p : (b : 
+β) → f b ⟶ g b)   [∀ (b : β), CategoryTheory.IsIso (p b)], CategoryTheory.IsIso 
+(CategoryTheory.Limits.Sigma.map p)
+参数：p : (b : β) → f b ⟶ g b；b : β；p b；CategoryTheory.Limits.Sigma.map p。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Sigma.map_isIso {f g : β -> C} [HasCoproductsOfShape β C] (p : forall b, f b ⟶ g b)
-    [forall b, IsIso <| p b] : IsIso (Sigma.map p) :=
-  inferInstanceAs (IsIso (Sigma.mapIso (fun b => asIso (p b))).hom)
+instance Sigma.map_isIso {f g : β → C} [HasCoproductsOfShape β C] (p : ∀ b, f b ⟶ g b)
+    [∀ b, IsIso <| p b] : IsIso (Sigma.map p) :=
+  inferInstanceAs (IsIso (Sigma.mapIso (fun b ↦ asIso (p b))).hom)
 
 section
 
@@ -1934,54 +1793,35 @@ variable (X : Discrete α ⥤ C) [HasCoproduct (fun j => X.obj (Discrete.mk j))]
 /-- A colimit cocone for `X : Discrete α ⥤ C` that is given
 by `∐ (fun j => X.obj (Discrete.mk j))`. -/
 @[simps]
-/--
-Definition of `Sigma.cocone` / `Sigma.cocone` 的定义
+/-
+**CategoryTheory.Limits.Sigma.cocone** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.L
+imits.Sigma`。
+形式化陈述：{α : Type w₂} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u
+} C] →       (X : CategoryTheory.Functor (CategoryTheory.Discrete α) C) →       
+  [CategoryTheory.Limits.HasCoproduct fun j => X.obj { as := j }] → CategoryTheo
+ry.Limits.Cocone X
+参数：X : CategoryTheory.Functor (CategoryTheory.Discrete α) C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Sigma.cocone
-  signature: : Cocone X where
-  body: ∐ (fun j => X.obj (Discrete.mk j))
-  ι := Discrete.natTrans (fun _ => Sigma.ι (fun j => X.obj ⟨j⟩) _)
-
-中文:
-定义 依赖和类型.cocone
-  签名: : 余锥 X where
-  定义体: ∐ (fun j => X.obj (Discrete.mk j))
-  ι := Discrete.natTrans (fun _ => Sigma.ι (fun j => X.obj ⟨j⟩) _)
-
-Depends on / 依赖: Discrete, Discrete.mk, X.obj
+--- 原说明 ---
+A colimit cocone for `X : Discrete α ⥤ C` that is given
+by `∐ (fun j => X.obj (Discrete.mk j))`.
 -/
 def Sigma.cocone : Cocone X where
   pt := ∐ (fun j => X.obj (Discrete.mk j))
-  ι := Discrete.natTrans (fun _ => Sigma.ι (fun j => X.obj ⟨j⟩) _)
+  ι := Discrete.natTrans (fun _ => Sigma.ι (fun j ↦ X.obj ⟨j⟩) _)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `coproductIsCoproduct'` / `coproductIsCoproduct'` 的定义
+/-- The cocone `Sigma.cocone X` is a colimit cocone. -/
+/-
+**CategoryTheory.Limits.coproductIsCoproduct'** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：coproductIsCoproduct' : IsColimit (Sigma.cocone X) where desc s
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coproductIsCoproduct'
-  signature: :
-  body: Sigma.desc (fun j => s.ι.app ⟨j⟩)
-  fac s := by simp
-  uniq s m hm := by
-    dsimp
-    ext
-    simp only [colimit.ι_desc, Cofan.mk_pt, Cofan.mk_ι_app]
-    apply hm
-
-中文:
-定义 coproductIsCoproduct'
-  签名: :
-  定义体: Sigma.desc (fun j => s.ι.app ⟨j⟩)
-  fac s := by simp
-  uniq s m hm := by
-    dsimp
-    ext
-    simp only [colimit.ι_desc, Cofan.mk_pt, Cofan.mk_ι_app]
-    apply hm
-
-Depends on / 依赖: Sigma.desc
+--- 原说明 ---
+The cocone `Sigma.cocone X` is a colimit cocone.
 -/
 def coproductIsCoproduct' :
     IsColimit (Sigma.cocone X) where
@@ -1995,71 +1835,44 @@ def coproductIsCoproduct' :
 
 variable [HasColimit X]
 
-/--
-Definition of `Sigma.isoColimit` / `Sigma.isoColimit` 的定义
+/-- The isomorphism `∐ (fun j => X.obj (Discrete.mk j)) ≅ colimit X`. -/
+/-
+**CategoryTheory.Limits.Sigma.isoColimit** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Limits.Sigma`。
+形式化陈述：{α : Type w₂} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u
+} C] →       (X : CategoryTheory.Functor (CategoryTheory.Discrete α) C) →       
+  [inst_1 : CategoryTheory.Limits.HasCoproduct fun j => X.obj { as := j }] →    
+       [inst_2 : CategoryTheory.Limits.HasColimit X] →             (∐ fun j => X
+.obj { as := j }) ≅ CategoryTheory.Limits.colimit X
+参数：X : CategoryTheory.Functor (CategoryTheory.Discrete α) C；∐ fun j => X.obj { a
+s := j }。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Sigma.isoColimit
-  signature: :
-  body: IsColimit.coconePointUniqueUpToIso (coproductIsCoproduct' X) (colimit.isColimit X)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 依赖和类型.isoColimit
-  签名: :
-  定义体: IsColimit.coconePointUniqueUpToIso (coproductIsCoproduct' X) (colimit.isColimit X)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsColimit, IsColimit.coconePointUniqueUpToIso, coconePointUniqueUpToIso, colimit, colimit.isColimit, coproductIsCoproduct, isColimit
+--- 原说明 ---
+The isomorphism `∐ (fun j => X.obj (Discrete.mk j)) ≅ colimit X`.
 -/
 def Sigma.isoColimit :
     ∐ (fun j => X.obj (Discrete.mk j)) ≅ colimit X :=
   IsColimit.coconePointUniqueUpToIso (coproductIsCoproduct' X) (colimit.isColimit X)
 
 @[reassoc (attr := simp)]
-/--
-lemma `Sigma.ι_isoColimit_hom` / 引理 `Sigma.ι_isoColimit_hom`
-
-English:
-lemma Sigma.ι_isoColimit_hom
-  given: (j : α)
-  proof: IsColimit.comp_coconePointUniqueUpToIso_hom (coproductIsCoproduct' X) _ _
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 依赖和类型.ι_isoColimit_hom
-  条件: (j : α)
-  证明: IsColimit.comp_coconePointUniqueUpToIso_hom (coproductIsCoproduct' X) _ _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsColimit, IsColimit.comp_coconePointUniqueUpToIso_hom, comp_coconePointUniqueUpToIso_hom, coproductIsCoproduct
+/-
+**CategoryTheory.Limits.Sigma.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Sigma.ι_isoColimit_hom (j : α) :
     Sigma.ι _ j ≫ (Sigma.isoColimit X).hom = colimit.ι _ (Discrete.mk j) :=
   IsColimit.comp_coconePointUniqueUpToIso_hom (coproductIsCoproduct' X) _ _
 
 @[reassoc (attr := simp)]
-/--
-lemma `Sigma.ι_isoColimit_inv` / 引理 `Sigma.ι_isoColimit_inv`
-
-English:
-lemma Sigma.ι_isoColimit_inv
-  given: (j : α)
-  proof: IsColimit.comp_coconePointUniqueUpToIso_inv _ _ _
-
-中文:
-引理 依赖和类型.ι_isoColimit_inv
-  条件: (j : α)
-  证明: IsColimit.comp_coconePointUniqueUpToIso_inv _ _ _
-
-Depends on / 依赖: IsColimit, IsColimit.comp_coconePointUniqueUpToIso_inv, comp_coconePointUniqueUpToIso_inv
+/-
+**CategoryTheory.Limits.Sigma.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Sigma.ι_isoColimit_inv (j : α) :
-    colimit.ι _ ⟨j⟩ ≫ (Sigma.isoColimit X).inv = Sigma.ι (fun j => X.obj ⟨j⟩) _ :=
+    colimit.ι _ ⟨j⟩ ≫ (Sigma.isoColimit X).inv = Sigma.ι (fun j ↦ X.obj ⟨j⟩) _ :=
   IsColimit.comp_coconePointUniqueUpToIso_inv _ _ _
 
 end
@@ -2068,24 +1881,23 @@ end
 and up to isomorphism in the factors, are isomorphic.
 -/
 @[simps]
-/--
-Definition of `Pi.whiskerEquiv` / `Pi.whiskerEquiv` 的定义
+/-
+**CategoryTheory.Limits.Pi.whiskerEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Limits.Pi`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {J : Type
+ u_1} →       {K : Type u_2} →         {f : J → C} →           {g : K → C} →    
+         (e : J ≃ K) →               ((j : J) → g (e j) ≅ f j) →                
+ [inst_1 : CategoryTheory.Limits.HasProduct f] →                   [inst_2 : Cat
+egoryTheory.Limits.HasProduct g] → ∏ᶜ f ≅ ∏ᶜ g
+参数：e : J ≃ K；(j : J) → g (e j) ≅ f j。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition Pi.whiskerEquiv
-  signature: {J K : Type*} {f : J -> C} {g : K -> C} (e : J ≃ K) (w : forall j, g (e j) ≅ f j)
-  body: Pi.map' e.symm fun k => (w (e.symm k)).inv ≫ eqToHom (by simp)
-  inv := Pi.map' e fun j => (w j).hom
-
-中文:
-定义 依赖函数类型.whiskerEquiv
-  签名: {J K : 类型} {f : J -> C} {g : K -> C} (e : J ≃ K) (w : 对任意 j, g (e j) ≅ f j)
-  定义体: Pi.map' e.symm fun k => (w (e.symm k)).inv ≫ eqToHom (by simp)
-  inv := Pi.map' e fun j => (w j).hom
-
-Depends on / 依赖: Pi.map, e.symm, eqToHom
+--- 原说明 ---
+Two products which differ by an equivalence in the indexing type,
+and up to isomorphism in the factors, are isomorphic.
 -/
-def Pi.whiskerEquiv {J K : Type*} {f : J -> C} {g : K -> C} (e : J ≃ K) (w : forall j, g (e j) ≅ f j)
+def Pi.whiskerEquiv {J K : Type*} {f : J → C} {g : K → C} (e : J ≃ K) (w : ∀ j, g (e j) ≅ f j)
     [HasProduct f] [HasProduct g] : ∏ᶜ f ≅ ∏ᶜ g where
   hom := Pi.map' e.symm fun k => (w (e.symm k)).inv ≫ eqToHom (by simp)
   inv := Pi.map' e fun j => (w j).hom
@@ -2094,64 +1906,68 @@ def Pi.whiskerEquiv {J K : Type*} {f : J -> C} {g : K -> C} (e : J ≃ K) (w : f
 and up to isomorphism in the factors, are isomorphic.
 -/
 @[simps]
-/--
-Definition of `Sigma.whiskerEquiv` / `Sigma.whiskerEquiv` 的定义
+/-
+**CategoryTheory.Limits.Sigma.whiskerEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Limits.Sigma`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {J : Type
+ u_1} →       {K : Type u_2} →         {f : J → C} →           {g : K → C} →    
+         (e : J ≃ K) →               ((j : J) → g (e j) ≅ f j) →                
+ [inst_1 : CategoryTheory.Limits.HasCoproduct f] →                   [inst_2 : C
+ategoryTheory.Limits.HasCoproduct g] → ∐ f ≅ ∐ g
+参数：e : J ≃ K；(j : J) → g (e j) ≅ f j。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition Sigma.whiskerEquiv
-  signature: {J K : Type*} {f : J -> C} {g : K -> C} (e : J ≃ K) (w : forall j, g (e j) ≅ f j)
-  body: Sigma.map' e fun j => (w j).inv
-  inv := Sigma.map' e.symm fun k => eqToHom (by simp) ≫ (w (e.symm k)).hom
-
-中文:
-定义 依赖和类型.whiskerEquiv
-  签名: {J K : 类型} {f : J -> C} {g : K -> C} (e : J ≃ K) (w : 对任意 j, g (e j) ≅ f j)
-  定义体: Sigma.map' e fun j => (w j).inv
-  inv := Sigma.map' e.symm fun k => eqToHom (by simp) ≫ (w (e.symm k)).hom
-
-Depends on / 依赖: Sigma.map
+--- 原说明 ---
+Two coproducts which differ by an equivalence in the indexing type,
+and up to isomorphism in the factors, are isomorphic.
 -/
-def Sigma.whiskerEquiv {J K : Type*} {f : J -> C} {g : K -> C} (e : J ≃ K) (w : forall j, g (e j) ≅ f j)
+def Sigma.whiskerEquiv {J K : Type*} {f : J → C} {g : K → C} (e : J ≃ K) (w : ∀ j, g (e j) ≅ f j)
     [HasCoproduct f] [HasCoproduct g] : ∐ f ≅ ∐ g where
   hom := Sigma.map' e fun j => (w j).inv
   inv := Sigma.map' e.symm fun k => eqToHom (by simp) ≫ (w (e.symm k)).hom
-
-instance {ι : Type*} (f : ι -> Type*) (g : (i : ι) -> (f i) -> C)
-    [forall i, HasProduct (g i)] [HasProduct fun i => ∏ᶜ g i] :
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {ι : Type*} (f : ι → Type*) (g : (i : ι) → (f i) → C)
+    [∀ i, HasProduct (g i)] [HasProduct fun i => ∏ᶜ g i] :
     HasProduct fun p : Σ i, f i => g p.1 p.2 where
   exists_limit := Nonempty.intro
     { cone := Fan.mk (∏ᶜ fun i => ∏ᶜ g i) (fun X => Pi.π (fun i => ∏ᶜ g i) X.1 ≫ Pi.π (g X.1) X.2)
       isLimit := Fan.IsLimit.mk _ (fun s => Pi.lift fun b => Pi.lift fun c => s.proj ⟨b, c⟩)
         (by simp)
-        (by intro s (m : _ ⟶ (∏ᶜ fun i => ∏ᶜ g i)) w; aesop (add norm simp Sigma.forall)) }
+        (by intro s (m : _ ⟶ (∏ᶜ fun i ↦ ∏ᶜ g i)) w; aesop (add norm simp Sigma.forall)) }
 
 /-- An iterated product is a product over a sigma type. -/
 @[simps]
-/--
-Definition of `piPiIso` / `piPiIso` 的定义
+/-
+**CategoryTheory.Limits.piPiIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits
+`。
+形式化陈述：piPiIso {ι : Type*} (f : ι -> Type*) (g : (i : ι) -> (f i) -> C) [forall i
+, HasProduct (g i)] [HasProduct fun i => ∏ᶜ g i] : (∏ᶜ fun i => ∏ᶜ g i) ≅ (∏ᶜ fu
+n p : Σ i, f i => g p.1 p.2) where hom
+参数：f : ι -> Type*；g : (i : ι) -> (f i) -> C；g i。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasProductSigmaFstSndOfPiObj`：∀ {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] {ι : Type u_1} (f : ι → Type u_2) (g : 
+(i : ι) → f i → C)   [inst_1 : ∀ (i : ι), Ca…
 
-English:
-definition piPiIso
-  signature: {ι : Type*} (f : ι -> Type*) (g : (i : ι) -> (f i) -> C)
-  body: Pi.lift fun ⟨i, x⟩ => Pi.π _ i ≫ Pi.π _ x
-  inv := Pi.lift fun i => Pi.lift fun x => Pi.π _ (⟨i, x⟩ : Σ i, f i)
-
-中文:
-定义 piPiIso
-  签名: {ι : 类型} (f : ι -> 类型) (g : (i : ι) -> (f i) -> C)
-  定义体: Pi.lift fun ⟨i, x⟩ => Pi.π _ i ≫ Pi.π _ x
-  inv := Pi.lift fun i => Pi.lift fun x => Pi.π _ (⟨i, x⟩ : Σ i, f i)
-
-Depends on / 依赖: Pi.lift
+--- 原说明 ---
+An iterated product is a product over a sigma type.
 -/
-def piPiIso {ι : Type*} (f : ι -> Type*) (g : (i : ι) -> (f i) -> C)
-    [forall i, HasProduct (g i)] [HasProduct fun i => ∏ᶜ g i] :
+def piPiIso {ι : Type*} (f : ι → Type*) (g : (i : ι) → (f i) → C)
+    [∀ i, HasProduct (g i)] [HasProduct fun i => ∏ᶜ g i] :
     (∏ᶜ fun i => ∏ᶜ g i) ≅ (∏ᶜ fun p : Σ i, f i => g p.1 p.2) where
   hom := Pi.lift fun ⟨i, x⟩ => Pi.π _ i ≫ Pi.π _ x
   inv := Pi.lift fun i => Pi.lift fun x => Pi.π _ (⟨i, x⟩ : Σ i, f i)
-
-instance {ι : Type*} (f : ι -> Type*) (g : (i : ι) -> (f i) -> C)
-    [forall i, HasCoproduct (g i)] [HasCoproduct fun i => ∐ g i] :
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {ι : Type*} (f : ι → Type*) (g : (i : ι) → (f i) → C)
+    [∀ i, HasCoproduct (g i)] [HasCoproduct fun i => ∐ g i] :
     HasCoproduct fun p : Σ i, f i => g p.1 p.2 where
   exists_colimit := Nonempty.intro
     { cocone := Cofan.mk (∐ fun i => ∐ g i)
@@ -2159,29 +1975,28 @@ instance {ι : Type*} (f : ι -> Type*) (g : (i : ι) -> (f i) -> C)
       isColimit := Cofan.IsColimit.mk _
         (fun s => Sigma.desc fun b => Sigma.desc fun c => s.inj ⟨b, c⟩)
         (by simp)
-        (by intro s (m : (∐ fun i => ∐ g i) ⟶ _) w; aesop_cat (add norm simp Sigma.forall)) }
+        (by intro s (m : (∐ fun i ↦ ∐ g i) ⟶ _) w; aesop_cat (add norm simp Sigma.forall)) }
 
 /-- An iterated coproduct is a coproduct over a sigma type. -/
 @[simps]
-/--
-Definition of `sigmaSigmaIso` / `sigmaSigmaIso` 的定义
+/-
+**CategoryTheory.Limits.sigmaSigmaIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Limits`。
+形式化陈述：sigmaSigmaIso {ι : Type*} (f : ι -> Type*) (g : (i : ι) -> (f i) -> C) [fo
+rall i, HasCoproduct (g i)] [HasCoproduct fun i => ∐ g i] : (∐ fun i => ∐ g i) ≅
+ (∐ fun p : Σ i, f i => g p.1 p.2) where hom
+参数：f : ι -> Type*；g : (i : ι) -> (f i) -> C；g i。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasCoproductSigmaFstSndOfSigmaObj`：∀ {C : Type
+ u} [inst : CategoryTheory.Category.{v, u} C] {ι : Type u_1} (f : ι → Type u_2) 
+(g : (i : ι) → f i → C)   [inst_1 : ∀ (i : ι), Ca…
 
-English:
-definition sigmaSigmaIso
-  signature: {ι : Type*} (f : ι -> Type*) (g : (i : ι) -> (f i) -> C)
-  body: Sigma.desc fun i => Sigma.desc fun x => Sigma.ι (fun p : Σ i, f i => g p.1 p.2) ⟨i, x⟩
-  inv := Sigma.desc fun ⟨i, x⟩ => Sigma.ι (g i) x ≫ Sigma.ι (fun i => ∐ g i) i
-
-中文:
-定义 sigmaSigmaIso
-  签名: {ι : 类型} (f : ι -> 类型) (g : (i : ι) -> (f i) -> C)
-  定义体: Sigma.desc fun i => Sigma.desc fun x => Sigma.ι (fun p : Σ i, f i => g p.1 p.2) ⟨i, x⟩
-  inv := Sigma.desc fun ⟨i, x⟩ => Sigma.ι (g i) x ≫ Sigma.ι (fun i => ∐ g i) i
-
-Depends on / 依赖: Sigma.desc
+--- 原说明 ---
+An iterated coproduct is a coproduct over a sigma type.
 -/
-def sigmaSigmaIso {ι : Type*} (f : ι -> Type*) (g : (i : ι) -> (f i) -> C)
-    [forall i, HasCoproduct (g i)] [HasCoproduct fun i => ∐ g i] :
+def sigmaSigmaIso {ι : Type*} (f : ι → Type*) (g : (i : ι) → (f i) → C)
+    [∀ i, HasCoproduct (g i)] [HasCoproduct fun i => ∐ g i] :
     (∐ fun i => ∐ g i) ≅ (∐ fun p : Σ i, f i => g p.1 p.2) where
   hom := Sigma.desc fun i => Sigma.desc fun x => Sigma.ι (fun p : Σ i, f i => g p.1 p.2) ⟨i, x⟩
   inv := Sigma.desc fun ⟨i, x⟩ => Sigma.ι (g i) x ≫ Sigma.ι (fun i => ∐ g i) i
@@ -2189,436 +2004,365 @@ def sigmaSigmaIso {ι : Type*} (f : ι -> Type*) (g : (i : ι) -> (f i) -> C)
 section Comparison
 
 variable {D : Type u₂} [Category.{v₂} D] (G : C ⥤ D)
-variable (f : β -> C)
+variable (f : β → C)
 
-/--
-Definition of `piComparison` / `piComparison` 的定义
+/-- The comparison morphism for the product of `f`. This is an iso iff `G` preserves the product
+of `f`, see `PreservesProduct.ofIsoComparison`. -/
+/-
+**CategoryTheory.Limits.piComparison** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.L
+imits`。
+形式化陈述：piComparison [HasProduct f] [HasProduct fun b => G.obj (f b)] : G.obj (∏ᶜ 
+f) ⟶ ∏ᶜ fun b => G.obj (f b)
+参数：f b。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piComparison
-  signature: [HasProduct f] [HasProduct fun b => G.obj (f b)]
-  body: Pi.lift fun b => G.map (Pi.π f b)
-
-@[reassoc (attr := simp), elementwise nosimp]
-
-中文:
-定义 piComparison
-  签名: [HasProduct f] [HasProduct fun b => G.obj (f b)]
-  定义体: Pi.lift fun b => G.map (Pi.π f b)
-
-@[reassoc (attr := simp), elementwise nosimp]
-
-Depends on / 依赖: G.map, Pi.lift
+--- 原说明 ---
+The comparison morphism for the product of `f`. This is an iso iff `G` preserves
+ the product
+of `f`, see `PreservesProduct.ofIsoComparison`.
 -/
 def piComparison [HasProduct f] [HasProduct fun b => G.obj (f b)] :
     G.obj (∏ᶜ f) ⟶ ∏ᶜ fun b => G.obj (f b) :=
   Pi.lift fun b => G.map (Pi.π f b)
 
 @[reassoc (attr := simp), elementwise nosimp]
-/--
-theorem `piComparison_comp_π` / 定理 `piComparison_comp_π`
-
-English:
-theorem piComparison_comp_π
-  given: [HasProduct f] [HasProduct fun b => G.obj (f b)] (b : β)
-  proof: limit.lift_π _ (Discrete.mk b)
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 piComparison_comp_π
-  条件: [HasProduct f] [HasProduct fun b => G.obj (f b)] (b : β)
-  证明: limit.lift_π _ (Discrete.mk b)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Discrete, Discrete.mk, limit.lift_
+/-
+**CategoryTheory.Limits.piComparison_comp_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem piComparison_comp_π [HasProduct f] [HasProduct fun b => G.obj (f b)] (b : β) :
     piComparison G f ≫ Pi.π _ b = G.map (Pi.π f b) :=
   limit.lift_π _ (Discrete.mk b)
 
 @[reassoc (attr := simp)]
-/--
-theorem `map_lift_piComparison` / 定理 `map_lift_piComparison`
-
-English:
-theorem map_lift_piComparison
-  statement: [HasProduct f] [HasProduct fun b => G.obj (f b)] (P : C)
-  proof: by
-  ext j
-  simp only [Category.assoc, piComparison_comp_π, ← G.map_comp,
-    limit.lift_π, Fan.mk_π_app]
-
-中文:
-定理 map_lift_piComparison
-  结论: [HasProduct f] [HasProduct fun b => G.obj (f b)] (P : C)
-  证明: by
-  ext j
-  simp only [Category.assoc, piComparison_comp_π, ← G.map_comp,
-    limit.lift_π, Fan.mk_π_app]
-
-Depends on / 依赖: Category, Category.assoc, Fan.mk_, G.map_comp, limit.lift_, map_comp
+/-
+**CategoryTheory.Limits.map_lift_piComparison** 是 Mathlib 中的一个定理，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：map_lift_piComparison [HasProduct f] [HasProduct fun b => G.obj (f b)] (P 
+: C) (g : forall j, P ⟶ f j) : G.map (Pi.lift g) ≫ piComparison G f = Pi.lift fu
+n j => G.map (g j)
+参数：f b；P : C；g : forall j, P ⟶ f j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Pi.hom_ext`：∀ {β : Type w} {C : Type u} [inst : Ca
+tegoryTheory.Category.{v, u} C] {f : β → C}   [inst_1 : CategoryTheory.Limits.Ha
+sProduct f] {X : C} (g…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Limits.piComparison_comp_π`：piComparison_comp_π [HasProdu
+ct f] [HasProduct fun b => G.obj (f b)] (b : β) : piComparison G f ≫ Pi.π _ b = 
+G.map (Pi.π f b)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Limits.limit.lift_π`：∀ {J : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]
+   {F : CategoryTheory.F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem map_lift_piComparison [HasProduct f] [HasProduct fun b => G.obj (f b)] (P : C)
-    (g : forall j, P ⟶ f j) : G.map (Pi.lift g) ≫ piComparison G f = Pi.lift fun j => G.map (g j) := by
+    (g : ∀ j, P ⟶ f j) : G.map (Pi.lift g) ≫ piComparison G f = Pi.lift fun j => G.map (g j) := by
   ext j
   simp only [Category.assoc, piComparison_comp_π, ← G.map_comp,
     limit.lift_π, Fan.mk_π_app]
 
-/--
-Definition of `sigmaComparison` / `sigmaComparison` 的定义
+/-- The comparison morphism for the coproduct of `f`. This is an iso iff `G` preserves the coproduct
+of `f`, see `PreservesCoproduct.ofIsoComparison`. -/
+/-
+**CategoryTheory.Limits.sigmaComparison** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Limits`。
+形式化陈述：sigmaComparison [HasCoproduct f] [HasCoproduct fun b => G.obj (f b)] : ∐ (
+fun b => G.obj (f b)) ⟶ G.obj (∐ f)
+参数：f b。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sigmaComparison
-  signature: [HasCoproduct f] [HasCoproduct fun b => G.obj (f b)]
-  body: Sigma.desc fun b => G.map (Sigma.ι f b)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 sigmaComparison
-  签名: [HasCoproduct f] [HasCoproduct fun b => G.obj (f b)]
-  定义体: Sigma.desc fun b => G.map (Sigma.ι f b)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: G.map, Sigma.desc
+--- 原说明 ---
+The comparison morphism for the coproduct of `f`. This is an iso iff `G` preserv
+es the coproduct
+of `f`, see `PreservesCoproduct.ofIsoComparison`.
 -/
 def sigmaComparison [HasCoproduct f] [HasCoproduct fun b => G.obj (f b)] :
     ∐ (fun b => G.obj (f b)) ⟶ G.obj (∐ f) :=
   Sigma.desc fun b => G.map (Sigma.ι f b)
 
 @[reassoc (attr := simp)]
-/--
-theorem `ι_comp_sigmaComparison` / 定理 `ι_comp_sigmaComparison`
-
-English:
-theorem ι_comp_sigmaComparison
-  given: [HasCoproduct f] [HasCoproduct fun b => G.obj (f b)] (b : β)
-  proof: colimit.ι_desc _ (Discrete.mk b)
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 ι_comp_sigmaComparison
-  条件: [HasCoproduct f] [HasCoproduct fun b => G.obj (f b)] (b : β)
-  证明: colimit.ι_desc _ (Discrete.mk b)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Discrete, Discrete.mk, colimit
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem ι_comp_sigmaComparison [HasCoproduct f] [HasCoproduct fun b => G.obj (f b)] (b : β) :
     Sigma.ι _ b ≫ sigmaComparison G f = G.map (Sigma.ι f b) :=
   colimit.ι_desc _ (Discrete.mk b)
 
 @[reassoc (attr := simp)]
-/--
-theorem `sigmaComparison_map_desc` / 定理 `sigmaComparison_map_desc`
-
-English:
-theorem sigmaComparison_map_desc
-  statement: [HasCoproduct f] [HasCoproduct fun b => G.obj (f b)] (P : C)
-  proof: by
-  ext j
-  simp only [ι_comp_sigmaComparison_assoc, ← G.map_comp, colimit.ι_desc, Cofan.mk_ι_app]
-
-中文:
-定理 sigmaComparison_map_desc
-  结论: [HasCoproduct f] [HasCoproduct fun b => G.obj (f b)] (P : C)
-  证明: by
-  ext j
-  simp only [ι_comp_sigmaComparison_assoc, ← G.map_comp, colimit.ι_desc, Cofan.mk_ι_app]
-
-Depends on / 依赖: Cofan.mk_, G.map_comp, colimit, map_comp
+/-
+**CategoryTheory.Limits.sigmaComparison_map_desc** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Limits`。
+形式化陈述：sigmaComparison_map_desc [HasCoproduct f] [HasCoproduct fun b => G.obj (f 
+b)] (P : C) (g : forall j, f j ⟶ P) : sigmaComparison G f ≫ G.map (Sigma.desc g)
+ = Sigma.desc fun j => G.map (g j)
+参数：f b；P : C；g : forall j, f j ⟶ P。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Sigma.hom_ext`：∀ {β : Type w} {C : Type u} [inst :
+ CategoryTheory.Category.{v, u} C] {f : β → C}   [inst_1 : CategoryTheory.Limits
+.HasCoproduct f] {X : C} …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.ι_comp_sigmaComparison_assoc`：∀ {β : Type w} {C : 
+Type u} [inst : CategoryTheory.Category.{v, u} C] {D : Type u₂}   [inst_1 : Cate
+goryTheory.Category.{v₂, u₂} D] (G : Cat…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_desc`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} 
+C]   {F : CategoryTheory.F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem sigmaComparison_map_desc [HasCoproduct f] [HasCoproduct fun b => G.obj (f b)] (P : C)
-    (g : forall j, f j ⟶ P) :
+    (g : ∀ j, f j ⟶ P) :
     sigmaComparison G f ≫ G.map (Sigma.desc g) = Sigma.desc fun j => G.map (g j) := by
   ext j
   simp only [ι_comp_sigmaComparison_assoc, ← G.map_comp, colimit.ι_desc, Cofan.mk_ι_app]
 
-/--
-Definition of `Fan.isLimitMapConeEquiv` / `Fan.isLimitMapConeEquiv` 的定义
+/-- `F.mapCone c` being limiting is the same as the induced fan being limiting. -/
+/-
+**CategoryTheory.Limits.Fan.isLimitMapConeEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits.Fan`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {D : Type
+ u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         (F : Catego
+ryTheory.Functor C D) →           {ι : Type u_1} →             (X : ι → C) →    
+           (c : CategoryTheory.Limits.Fan X) →                 CategoryTheory.Li
+mits.IsLimit (F.mapCone c) ≃                   CategoryTheory.Limits.IsLimit (Ca
+tegoryTheory.Limits.Fan.mk (F.obj c.pt) fun i => F.map (c.proj i))
+参数：F : CategoryTheory.Functor C D；X : ι → C；c : CategoryTheory.Limits.Fan X；F.ma
+pCone c；CategoryTheory.Limits.Fan.mk (F.obj c.pt) fun i => F.map (c.proj i)。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition Fan.isLimitMapConeEquiv
-  signature: (F : C ⥤ D) {ι : Type*} (X : ι -> C) (c : Fan X)
-  body: (IsLimit.postcomposeHomEquiv Discrete.natIsoFunctor (F.mapCone c)).symm.trans
-    IsLimit.equivIsoLimit (Cone.ext (Iso.refl _))
-
-中文:
-定义 Fan.isLimitMapConeEquiv
-  签名: (F : C ⥤ D) {ι : 类型} (X : ι -> C) (c : Fan X)
-  定义体: (IsLimit.postcomposeHomEquiv Discrete.natIsoFunctor (F.mapCone c)).symm.trans
-    IsLimit.equivIsoLimit (Cone.ext (Iso.refl _))
-
-Depends on / 依赖: Cone.ext, Discrete, Discrete.natIsoFunctor, F.mapCone, IsLimit, IsLimit.equivIsoLimit, IsLimit.postcomposeHomEquiv, Iso.refl, equivIsoLimit, mapCone, natIsoFunctor, postcomposeHomEquiv, symm.trans
+--- 原说明 ---
+`F.mapCone c` being limiting is the same as the induced fan being limiting.
 -/
-def Fan.isLimitMapConeEquiv (F : C ⥤ D) {ι : Type*} (X : ι -> C) (c : Fan X) :
-    IsLimit (F.mapCone c) ≃ IsLimit (Fan.mk _ fun i => F.map (c.proj i)) :=
-(IsLimit.postcomposeHomEquiv Discrete.natIsoFunctor (F.mapCone c)).symm.trans
+def Fan.isLimitMapConeEquiv (F : C ⥤ D) {ι : Type*} (X : ι → C) (c : Fan X) :
+    IsLimit (F.mapCone c) ≃ IsLimit (Fan.mk _ fun i ↦ F.map (c.proj i)) :=
+  (IsLimit.postcomposeHomEquiv Discrete.natIsoFunctor (F.mapCone c)).symm.trans <|
     IsLimit.equivIsoLimit (Cone.ext (Iso.refl _))
 
-/--
-Definition of `Cofan.isColimitMapCoconeEquiv` / `Cofan.isColimitMapCoconeEquiv` 的定义
+/-- `F.mapCocone c` being colimiting is the same as the induced cofan being colimiting. -/
+/-
+**CategoryTheory.Limits.Cofan.isColimitMapCoconeEquiv** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Limits.Cofan`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {D : Type
+ u₂} →       [inst_1 : CategoryTheory.Category.{v₂, u₂} D] →         (F : Catego
+ryTheory.Functor C D) →           {ι : Type u_1} →             (X : ι → C) →    
+           (c : CategoryTheory.Limits.Cofan X) →                 CategoryTheory.
+Limits.IsColimit (F.mapCocone c) ≃                   CategoryTheory.Limits.IsCol
+imit (CategoryTheory.Limits.Cofan.mk (F.obj c.pt) fun i => F.map (c.inj i))
+参数：F : CategoryTheory.Functor C D；X : ι → C；c : CategoryTheory.Limits.Cofan X；F.
+mapCocone c；CategoryTheory.Limits.Cofan.mk (F.obj c.pt) fun i => F.map (c.inj i)
+。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition Cofan.isColimitMapCoconeEquiv
-  signature: (F : C ⥤ D) {ι : Type*} (X : ι -> C) (c : Cofan X)
-  body: (IsColimit.precomposeHomEquiv Discrete.natIsoFunctor.symm (F.mapCocone c)).symm.trans
-    IsColimit.equivIsoColimit (Cocone.ext (Iso.refl _))
-
-中文:
-定义 Cofan.isColimitMapCoconeEquiv
-  签名: (F : C ⥤ D) {ι : 类型} (X : ι -> C) (c : Cofan X)
-  定义体: (IsColimit.precomposeHomEquiv Discrete.natIsoFunctor.symm (F.mapCocone c)).symm.trans
-    IsColimit.equivIsoColimit (Cocone.ext (Iso.refl _))
-
-Depends on / 依赖: Cocone, Cocone.ext, Discrete, Discrete.natIsoFunctor.symm, F.mapCocone, IsColimit, IsColimit.equivIsoColimit, IsColimit.precomposeHomEquiv, Iso.refl, equivIsoColimit, mapCocone, natIsoFunctor, precomposeHomEquiv, symm.trans
+--- 原说明 ---
+`F.mapCocone c` being colimiting is the same as the induced cofan being colimiti
+ng.
 -/
-def Cofan.isColimitMapCoconeEquiv (F : C ⥤ D) {ι : Type*} (X : ι -> C) (c : Cofan X) :
-    IsColimit (F.mapCocone c) ≃ IsColimit (Cofan.mk _ fun i => F.map (c.inj i)) :=
-(IsColimit.precomposeHomEquiv Discrete.natIsoFunctor.symm (F.mapCocone c)).symm.trans
+def Cofan.isColimitMapCoconeEquiv (F : C ⥤ D) {ι : Type*} (X : ι → C) (c : Cofan X) :
+    IsColimit (F.mapCocone c) ≃ IsColimit (Cofan.mk _ fun i ↦ F.map (c.inj i)) :=
+  (IsColimit.precomposeHomEquiv Discrete.natIsoFunctor.symm (F.mapCocone c)).symm.trans <|
     IsColimit.equivIsoColimit (Cocone.ext (Iso.refl _))
 
 end Comparison
 
 variable (C)
 
-/--
-Definition of `HasProducts` / `HasProducts` 的定义
+/-- An abbreviation for `Π J, HasLimitsOfShape (Discrete J) C` -/
+/-
+**CategoryTheory.Limits.HasProducts** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.
+Limits`。
+形式化陈述：HasProducts
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HasProducts
-  body: forall J : Type w, HasLimitsOfShape (Discrete J) C
-
-中文:
-缩写 HasProducts
-  定义体: forall J : Type w, HasLimitsOfShape (Discrete J) C
-
-Depends on / 依赖: Discrete, HasLimitsOfShape
+--- 原说明 ---
+An abbreviation for `Π J, HasLimitsOfShape (Discrete J) C`
 -/
 abbrev HasProducts :=
-  forall J : Type w, HasLimitsOfShape (Discrete J) C
+  ∀ J : Type w, HasLimitsOfShape (Discrete J) C
 
-/--
-Definition of `HasCoproducts` / `HasCoproducts` 的定义
+/-- An abbreviation for `Π J, HasColimitsOfShape (Discrete J) C` -/
+/-
+**CategoryTheory.Limits.HasCoproducts** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheor
+y.Limits`。
+形式化陈述：HasCoproducts
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HasCoproducts
-  body: forall J : Type w, HasColimitsOfShape (Discrete J) C
-
-中文:
-缩写 HasCoproducts
-  定义体: forall J : Type w, HasColimitsOfShape (Discrete J) C
-
-Depends on / 依赖: Discrete, HasColimitsOfShape
+--- 原说明 ---
+An abbreviation for `Π J, HasColimitsOfShape (Discrete J) C`
 -/
 abbrev HasCoproducts :=
-  forall J : Type w, HasColimitsOfShape (Discrete J) C
+  ∀ J : Type w, HasColimitsOfShape (Discrete J) C
 
 variable {C}
-
-/--
-lemma `hasProducts_shrink` / 引理 `hasProducts_shrink`
-
-English:
-lemma hasProducts_shrink
-  given: [HasProducts.{max w w'} C]
-  statement: HasProducts.{w} C
-  proof: fun J =>
-  hasLimitsOfShape_of_equivalence (Discrete.equivalence Equiv.ulift : Discrete (ULift.{w'} J) ≌ _)
-
-中文:
-引理 hasProducts_shrink
-  条件: [HasProducts.{最大值 w w'} C]
-  结论: HasProducts.{w} C
-  证明: fun J =>
-  hasLimitsOfShape_of_equivalence (Discrete.equivalence Equiv.ulift : Discrete (ULift.{w'} J) ≌ _)
+/-
+**CategoryTheory.Limits.hasProducts_shrink** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.Limits`。
+形式化陈述：hasProducts_shrink [HasProducts.{max w w'} C] : HasProducts.{w} C
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasLimitsOfShape_of_equivalence`：hasLimitsOfShape_
+of_equivalence {J' : Type u₂} [Category.{v₂} J'] (e : J ≌ J') [HasLimitsOfShape 
+J C] : HasLimitsOfShape J' C
 -/
 lemma hasProducts_shrink [HasProducts.{max w w'} C] : HasProducts.{w} C := fun J =>
   hasLimitsOfShape_of_equivalence (Discrete.equivalence Equiv.ulift : Discrete (ULift.{w'} J) ≌ _)
-
-/--
-lemma `hasCoproducts_shrink` / 引理 `hasCoproducts_shrink`
-
-English:
-lemma hasCoproducts_shrink
-  given: [HasCoproducts.{max w w'} C]
-  statement: HasCoproducts.{w} C
-  proof: fun J =>
-  hasColimitsOfShape_of_equivalence (Discrete.equivalence Equiv.ulift : Discrete (ULift.{w'} J) ≌ _)
-
-中文:
-引理 hasCoproducts_shrink
-  条件: [HasCoproducts.{最大值 w w'} C]
-  结论: HasCoproducts.{w} C
-  证明: fun J =>
-  hasColimitsOfShape_of_equivalence (Discrete.equivalence Equiv.ulift : Discrete (ULift.{w'} J) ≌ _)
+/-
+**CategoryTheory.Limits.hasCoproducts_shrink** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.Limits`。
+形式化陈述：hasCoproducts_shrink [HasCoproducts.{max w w'} C] : HasCoproducts.{w} C
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasColimitsOfShape_of_equivalence`：hasColimitsOfSh
+ape_of_equivalence {J' : Type u₂} [Category.{v₂} J'] (e : J ≌ J') [HasColimitsOf
+Shape J C] : HasColimitsOfShape J' C
 -/
 lemma hasCoproducts_shrink [HasCoproducts.{max w w'} C] : HasCoproducts.{w} C := fun J =>
   hasColimitsOfShape_of_equivalence (Discrete.equivalence Equiv.ulift : Discrete (ULift.{w'} J) ≌ _)
-
-/--
-theorem `has_smallest_products_of_hasProducts` / 定理 `has_smallest_products_of_hasProducts`
-
-English:
-theorem has_smallest_products_of_hasProducts
-  given: [HasProducts.{w} C]
-  statement: HasProducts.{0} C
-  proof: hasProducts_shrink
-
-中文:
-定理 has_smallest_products_of_hasProducts
-  条件: [HasProducts.{w} C]
-  结论: HasProducts.{0} C
-  证明: hasProducts_shrink
-
-Depends on / 依赖: hasProducts_shrink
+/-
+**CategoryTheory.Limits.has_smallest_products_of_hasProducts** 是 Mathlib 中的一个定理，
+位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：has_smallest_products_of_hasProducts [HasProducts.{w} C] : HasProducts.{0}
+ C
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.hasProducts_shrink`：hasProducts_shrink [HasProduct
+s.{max w w'} C] : HasProducts.{w} C
 -/
 theorem has_smallest_products_of_hasProducts [HasProducts.{w} C] : HasProducts.{0} C :=
   hasProducts_shrink
-
-/--
-theorem `has_smallest_coproducts_of_hasCoproducts` / 定理 `has_smallest_coproducts_of_hasCoproducts`
-
-English:
-theorem has_smallest_coproducts_of_hasCoproducts
-  given: [HasCoproducts.{w} C]
-  statement: HasCoproducts.{0} C
-  proof: hasCoproducts_shrink
-
-中文:
-定理 has_smallest_coproducts_of_hasCoproducts
-  条件: [HasCoproducts.{w} C]
-  结论: HasCoproducts.{0} C
-  证明: hasCoproducts_shrink
-
-Depends on / 依赖: hasCoproducts_shrink
+/-
+**CategoryTheory.Limits.has_smallest_coproducts_of_hasCoproducts** 是 Mathlib 中的一
+个定理，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：has_smallest_coproducts_of_hasCoproducts [HasCoproducts.{w} C] : HasCoprod
+ucts.{0} C
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.hasCoproducts_shrink`：hasCoproducts_shrink [HasCop
+roducts.{max w w'} C] : HasCoproducts.{w} C
 -/
 theorem has_smallest_coproducts_of_hasCoproducts [HasCoproducts.{w} C] : HasCoproducts.{0} C :=
   hasCoproducts_shrink
-
-/--
-theorem `hasProducts_of_limit_fans` / 定理 `hasProducts_of_limit_fans`
-
-English:
-theorem hasProducts_of_limit_fans
-  statement: (lf : forall {J : Type w} (f : J -> C), Fan f)
-  proof: fun _ : Type w =>
-  { has_limit := fun F =>
-      HasLimit.mk
-        ⟨(Cone.postcompose Discrete.natIsoFunctor.inv).obj (lf fun j => F.obj ⟨j⟩),
-          (IsLimit.postcomposeInvEquiv _ _).symm (lf_isLimit _)⟩ }
-
-中文:
-定理 hasProducts_of_limit_fans
-  结论: (lf : 对任意 {J : 类型 w} (f : J -> C), Fan f)
-  证明: fun _ : Type w =>
-  { has_limit := fun F =>
-      HasLimit.mk
-        ⟨(Cone.postcompose Discrete.natIsoFunctor.inv).obj (lf fun j => F.obj ⟨j⟩),
-          (IsLimit.postcomposeInvEquiv _ _).symm (lf_isLimit _)⟩ }
-
-Depends on / 依赖: Cone.postcompose, Discrete, Discrete.natIsoFunctor.inv, F.obj, HasLimit, HasLimit.mk, IsLimit, IsLimit.postcomposeInvEquiv, has_limit, lf_isLimit, natIsoFunctor, postcompose, postcomposeInvEquiv
+/-
+**CategoryTheory.Limits.hasProducts_of_limit_fans** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.Limits`。
+形式化陈述：hasProducts_of_limit_fans (lf : forall {J : Type w} (f : J -> C), Fan f) (
+lf_isLimit : forall {J : Type w} (f : J -> C), IsLimit (lf f)) : HasProducts.{w}
+ C
+参数：lf : forall {J : Type w} (f : J -> C), Fan f；lf_isLimit : forall {J : Type w}
+ (f : J -> C), IsLimit (lf f)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasLimit.mk`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C] 
+  {F : CategoryTheory.F…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-theorem hasProducts_of_limit_fans (lf : forall {J : Type w} (f : J -> C), Fan f)
-    (lf_isLimit : forall {J : Type w} (f : J -> C), IsLimit (lf f)) : HasProducts.{w} C :=
+theorem hasProducts_of_limit_fans (lf : ∀ {J : Type w} (f : J → C), Fan f)
+    (lf_isLimit : ∀ {J : Type w} (f : J → C), IsLimit (lf f)) : HasProducts.{w} C :=
   fun _ : Type w =>
   { has_limit := fun F =>
       HasLimit.mk
         ⟨(Cone.postcompose Discrete.natIsoFunctor.inv).obj (lf fun j => F.obj ⟨j⟩),
           (IsLimit.postcomposeInvEquiv _ _).symm (lf_isLimit _)⟩ }
-
-/--
-theorem `hasCoproducts_of_colimit_cofans` / 定理 `hasCoproducts_of_colimit_cofans`
-
-English:
-theorem hasCoproducts_of_colimit_cofans
-  statement: (cf : forall {J : Type w} (f : J -> C), Cofan f)
-  proof: fun _ : Type w =>
-  { has_colimit := fun F =>
-      HasColimit.mk
-        ⟨(Cocone.precompose Discrete.natIsoFunctor.hom).obj (cf fun j => F.obj ⟨j⟩),
-          (IsColimit.precomposeHomEquiv _ _).symm (cf_isColimit _)⟩ }
-
-中文:
-定理 hasCoproducts_of_colimit_cofans
-  结论: (cf : 对任意 {J : 类型 w} (f : J -> C), Cofan f)
-  证明: fun _ : Type w =>
-  { has_colimit := fun F =>
-      HasColimit.mk
-        ⟨(Cocone.precompose Discrete.natIsoFunctor.hom).obj (cf fun j => F.obj ⟨j⟩),
-          (IsColimit.precomposeHomEquiv _ _).symm (cf_isColimit _)⟩ }
-
-Depends on / 依赖: Cocone, Cocone.precompose, Discrete, Discrete.natIsoFunctor.hom, F.obj, HasColimit, HasColimit.mk, IsColimit, IsColimit.precomposeHomEquiv, cf_isColimit, has_colimit, natIsoFunctor, precompose, precomposeHomEquiv
+/-
+**CategoryTheory.Limits.hasCoproducts_of_colimit_cofans** 是 Mathlib 中的一个定理，位于命名空
+间 `CategoryTheory.Limits`。
+形式化陈述：hasCoproducts_of_colimit_cofans (cf : forall {J : Type w} (f : J -> C), Co
+fan f) (cf_isColimit : forall {J : Type w} (f : J -> C), IsColimit (cf f)) : Has
+Coproducts.{w} C
+参数：cf : forall {J : Type w} (f : J -> C), Cofan f；cf_isColimit : forall {J : Typ
+e w} (f : J -> C), IsColimit (cf f)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.HasColimit.mk`：∀ {J : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C
+]   {F : CategoryTheory.F…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-theorem hasCoproducts_of_colimit_cofans (cf : forall {J : Type w} (f : J -> C), Cofan f)
-    (cf_isColimit : forall {J : Type w} (f : J -> C), IsColimit (cf f)) : HasCoproducts.{w} C :=
+theorem hasCoproducts_of_colimit_cofans (cf : ∀ {J : Type w} (f : J → C), Cofan f)
+    (cf_isColimit : ∀ {J : Type w} (f : J → C), IsColimit (cf f)) : HasCoproducts.{w} C :=
   fun _ : Type w =>
   { has_colimit := fun F =>
       HasColimit.mk
         ⟨(Cocone.precompose Discrete.natIsoFunctor.hom).obj (cf fun j => F.obj ⟨j⟩),
           (IsColimit.precomposeHomEquiv _ _).symm (cf_isColimit _)⟩ }
-
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) hasProductsOfShape_of_hasProducts [HasProducts.{w} C] (J : Type w) :
     HasProductsOfShape J C := inferInstance
-
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) hasCoproductsOfShape_of_hasCoproducts [HasCoproducts.{w} C]
     (J : Type w) : HasCoproductsOfShape J C := inferInstance
 
 open Opposite in
 /-- The functor sending `(X, n)` to the product of copies of `X` indexed by `n`. -/
 @[implicit_reducible, simps]
-/--
-Definition of `piConst` / `piConst` 的定义
+/-
+**CategoryTheory.Limits.piConst** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limits
+`。
+形式化陈述：piConst [Limits.HasProducts.{w} C] : C ⥤ Type wᵒᵖ ⥤ C where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piConst
-  signature: [Limits.HasProducts.{w} C]
-  body: { obj n := ∏ᶜ fun _ : (unop n :) => X, map f := Limits.Pi.map' f.unop fun _ => 𝟙 _ }
-  map f := { app n := Limits.Pi.map fun _ => f }
-
-中文:
-定义 piConst
-  签名: [Limits.HasProducts.{w} C]
-  定义体: { obj n := ∏ᶜ fun _ : (unop n :) => X, map f := Limits.Pi.map' f.unop fun _ => 𝟙 _ }
-  map f := { app n := Limits.Pi.map fun _ => f }
-
-Depends on / 依赖: Limits, Limits.Pi.map, f.unop
+--- 原说明 ---
+The functor sending `(X, n)` to the product of copies of `X` indexed by `n`.
 -/
 def piConst [Limits.HasProducts.{w} C] : C ⥤ Type wᵒᵖ ⥤ C where
-  obj X := { obj n := ∏ᶜ fun _ : (unop n :) => X, map f := Limits.Pi.map' f.unop fun _ => 𝟙 _ }
-  map f := { app n := Limits.Pi.map fun _ => f }
+  obj X := { obj n := ∏ᶜ fun _ : (unop n :) ↦ X, map f := Limits.Pi.map' f.unop fun _ ↦ 𝟙 _ }
+  map f := { app n := Limits.Pi.map fun _ ↦ f }
 
-/--
-Definition of `piConstAdj` / `piConstAdj` 的定义
+/-- `n ↦ ∏ₙ X` is left adjoint to `Hom(-, X)`. -/
+/-
+**CategoryTheory.Limits.piConstAdj** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Lim
+its`。
+形式化陈述：piConstAdj [Limits.HasProducts.{v} C] (X : C) : (piConst.obj X).rightOp ⊣ 
+yoneda.obj X where unit
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piConstAdj
-  signature: [Limits.HasProducts.{v} C] (X : C)
-  body: { app n := ↾fun i => Limits.Pi.π (fun _ : n => X) i }
-  counit :=
-  { app Y := (Limits.Pi.lift id).op,
-    naturality _ _ _ := by apply Quiver.Hom.unop_inj; cat_disch }
-  left_triangle_components _ := by apply Quiver.Hom.unop_inj; cat_disch
-
-中文:
-定义 piConstAdj
-  签名: [Limits.HasProducts.{v} C] (X : C)
-  定义体: { app n := ↾fun i => Limits.Pi.π (fun _ : n => X) i }
-  counit :=
-  { app Y := (Limits.Pi.lift id).op,
-    naturality _ _ _ := by apply Quiver.Hom.unop_inj; cat_disch }
-  left_triangle_components _ := by apply Quiver.Hom.unop_inj; cat_disch
-
-Depends on / 依赖: Limits, Limits.Pi
+--- 原说明 ---
+`n ↦ ∏ₙ X` is left adjoint to `Hom(-, X)`.
 -/
 def piConstAdj [Limits.HasProducts.{v} C] (X : C) :
     (piConst.obj X).rightOp ⊣ yoneda.obj X where
-  unit := { app n := ↾fun i => Limits.Pi.π (fun _ : n => X) i }
+  unit := { app n := ↾fun i ↦ Limits.Pi.π (fun _ : n ↦ X) i }
   counit :=
   { app Y := (Limits.Pi.lift id).op,
     naturality _ _ _ := by apply Quiver.Hom.unop_inj; cat_disch }
@@ -2626,47 +2370,36 @@ def piConstAdj [Limits.HasProducts.{v} C] (X : C) :
 
 /-- The functor sending `(X, n)` to the coproduct of copies of `X` indexed by `n`. -/
 @[implicit_reducible, simps]
-/--
-Definition of `sigmaConst` / `sigmaConst` 的定义
+/-
+**CategoryTheory.Limits.sigmaConst** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Lim
+its`。
+形式化陈述：sigmaConst [Limits.HasCoproducts.{w} C] : C ⥤ Type w ⥤ C where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sigmaConst
-  signature: [Limits.HasCoproducts.{w} C]
-  body: { obj n := ∐ fun _ : n => X, map f := Limits.Sigma.map' f fun _ => 𝟙 _ }
-  map f := { app n := Limits.Sigma.map fun _ => f }
-
-中文:
-定义 sigmaConst
-  签名: [Limits.HasCoproducts.{w} C]
-  定义体: { obj n := ∐ fun _ : n => X, map f := Limits.Sigma.map' f fun _ => 𝟙 _ }
-  map f := { app n := Limits.Sigma.map fun _ => f }
-
-Depends on / 依赖: Limits, Limits.Sigma.map
+--- 原说明 ---
+The functor sending `(X, n)` to the coproduct of copies of `X` indexed by `n`.
 -/
 def sigmaConst [Limits.HasCoproducts.{w} C] : C ⥤ Type w ⥤ C where
-  obj X := { obj n := ∐ fun _ : n => X, map f := Limits.Sigma.map' f fun _ => 𝟙 _ }
-  map f := { app n := Limits.Sigma.map fun _ => f }
+  obj X := { obj n := ∐ fun _ : n ↦ X, map f := Limits.Sigma.map' f fun _ ↦ 𝟙 _ }
+  map f := { app n := Limits.Sigma.map fun _ ↦ f }
 
-/--
-Definition of `sigmaConstAdj` / `sigmaConstAdj` 的定义
+/-- `n ↦ ∐ₙ X` is left adjoint to `Hom(X, -)`. -/
+/-
+**CategoryTheory.Limits.sigmaConstAdj** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Limits`。
+形式化陈述：sigmaConstAdj [Limits.HasCoproducts.{v} C] (X : C) : sigmaConst.obj X ⊣ co
+yoneda.obj (Opposite.op X) where unit
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sigmaConstAdj
-  signature: [Limits.HasCoproducts.{v} C] (X : C)
-  body: { app n := ↾fun i => Limits.Sigma.ι (fun _ : n => X) i }
-  counit := { app Y := Limits.Sigma.desc id }
-
-中文:
-定义 sigmaConstAdj
-  签名: [Limits.HasCoproducts.{v} C] (X : C)
-  定义体: { app n := ↾fun i => Limits.Sigma.ι (fun _ : n => X) i }
-  counit := { app Y := Limits.Sigma.desc id }
-
-Depends on / 依赖: Limits, Limits.Sigma
+--- 原说明 ---
+`n ↦ ∐ₙ X` is left adjoint to `Hom(X, -)`.
 -/
 def sigmaConstAdj [Limits.HasCoproducts.{v} C] (X : C) :
     sigmaConst.obj X ⊣ coyoneda.obj (Opposite.op X) where
-  unit := { app n := ↾fun i => Limits.Sigma.ι (fun _ : n => X) i }
+  unit := { app n := ↾fun i ↦ Limits.Sigma.ι (fun _ : n ↦ X) i }
   counit := { app Y := Limits.Sigma.desc id }
 
 /-!
@@ -2678,46 +2411,19 @@ section Unique
 
 /-- The limit cone for the product over an index type with exactly one term. -/
 @[simps]
-/--
-Definition of `limitConeOfUnique` / `limitConeOfUnique` 的定义
+/-
+**CategoryTheory.Limits.limitConeOfUnique** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Limits`。
+形式化陈述：limitConeOfUnique [Unique β] (f : β -> C) : LimitCone (Discrete.functor f)
+ where cone
+参数：f : β -> C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition limitConeOfUnique
-  signature: [Unique β] (f : β -> C)
-  body: { pt := f default
-      π := Discrete.natTrans (fun ⟨j⟩ => eqToHom (by
-        dsimp
-        congr
-        subsingleton)) }
-  isLimit :=
-    { lift := fun s => s.π.app default
-      fac := fun s j => by
-        obtain rfl := Subsingleton.elim j default
-        simp
-      uniq := fun s m w => by
-        specialize w default
-        simpa using w }
-
-中文:
-定义 limitConeOfUnique
-  签名: [唯一 β] (f : β -> C)
-  定义体: { pt := f default
-      π := Discrete.natTrans (fun ⟨j⟩ => eqToHom (by
-        dsimp
-        congr
-        subsingleton)) }
-  isLimit :=
-    { lift := fun s => s.π.app default
-      fac := fun s j => by
-        obtain rfl := Subsingleton.elim j default
-        simp
-      uniq := fun s m w => by
-        specialize w default
-        simpa using w }
-
-Depends on / 依赖: Discrete, Discrete.natTrans, Subsingleton, Subsingleton.elim, eqToHom, isLimit, natTrans, specialize, subsingleton
+--- 原说明 ---
+The limit cone for the product over an index type with exactly one term.
 -/
-def limitConeOfUnique [Unique β] (f : β -> C) : LimitCone (Discrete.functor f) where
+def limitConeOfUnique [Unique β] (f : β → C) : LimitCone (Discrete.functor f) where
   cone :=
     { pt := f default
       π := Discrete.natTrans (fun ⟨j⟩ => eqToHom (by
@@ -2732,159 +2438,96 @@ def limitConeOfUnique [Unique β] (f : β -> C) : LimitCone (Discrete.functor f)
       uniq := fun s m w => by
         specialize w default
         simpa using w }
-
-instance (priority := 100) hasProduct_unique [Nonempty β] [Subsingleton β] (f : β -> C) :
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (priority := 100) hasProduct_unique [Nonempty β] [Subsingleton β] (f : β → C) :
     HasProduct f :=
   let ⟨_⟩ := nonempty_unique β; HasLimit.mk (limitConeOfUnique f)
 
-/--
-Definition of `productUniqueIso` / `productUniqueIso` 的定义
+/-- A product over an index type with exactly one term is just the object over that term. -/
+/-
+**CategoryTheory.Limits.productUniqueIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Limits`。
+形式化陈述：productUniqueIso [Unique β] (f : β -> C) : ∏ᶜ f ≅ f default
+参数：f : β -> C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition productUniqueIso
-  signature: [Unique β] (f : β -> C)
-  body: IsLimit.conePointUniqueUpToIso (limit.isLimit _) (limitConeOfUnique f).isLimit
-
-@[simp]
-
-中文:
-定义 productUniqueIso
-  签名: [唯一 β] (f : β -> C)
-  定义体: IsLimit.conePointUniqueUpToIso (limit.isLimit _) (limitConeOfUnique f).isLimit
-
-@[simp]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso, conePointUniqueUpToIso, isLimit, limit.isLimit, limitConeOfUnique
+--- 原说明 ---
+A product over an index type with exactly one term is just the object over that 
+term.
 -/
-def productUniqueIso [Unique β] (f : β -> C) : ∏ᶜ f ≅ f default :=
+def productUniqueIso [Unique β] (f : β → C) : ∏ᶜ f ≅ f default :=
   IsLimit.conePointUniqueUpToIso (limit.isLimit _) (limitConeOfUnique f).isLimit
 
 @[simp]
-/--
-lemma `productUniqueIso_hom` / 引理 `productUniqueIso_hom`
-
-English:
-lemma productUniqueIso_hom
-  given: [Unique β] (f : β -> C)
-  statement: (productUniqueIso f).hom = Pi.π f default
-  proof: rfl
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 productUniqueIso_hom
-  条件: [唯一 β] (f : β -> C)
-  结论: (productUniqueIso f).hom = 依赖函数类型.π f default
-  证明: rfl
-
-@[reassoc (attr := simp)]
+/-
+**CategoryTheory.Limits.productUniqueIso_hom** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.Limits`。
+形式化陈述：productUniqueIso_hom [Unique β] (f : β -> C) : (productUniqueIso f).hom = 
+Pi.π f default
+参数：f : β -> C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasProduct_unique`：∀ {β : Type w} {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] [Nonempty β] [Subsingleton β] (f : β → C)
+,   CategoryTheory.Limits.Has…
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
-lemma productUniqueIso_hom [Unique β] (f : β -> C) : (productUniqueIso f).hom = Pi.π f default :=
+lemma productUniqueIso_hom [Unique β] (f : β → C) : (productUniqueIso f).hom = Pi.π f default :=
   rfl
 
 @[reassoc (attr := simp)]
-/--
-lemma `productUniqueIso_inv_π` / 引理 `productUniqueIso_inv_π`
-
-English:
-lemma productUniqueIso_inv_π
-  given: [Unique β] (f : β -> C) (b : β)
-  proof: by
-  obtain rfl := Subsingleton.allEq b default
-  simp [Iso.inv_comp_eq]
-
-@[deprecated (since := "2026-06-30")] alias productUniqueIso_inv := productUniqueIso_inv_π
-
-中文:
-引理 productUniqueIso_inv_π
-  条件: [唯一 β] (f : β -> C) (b : β)
-  证明: by
-  obtain rfl := Subsingleton.allEq b default
-  simp [Iso.inv_comp_eq]
-
-@[deprecated (since := "2026-06-30")] alias productUniqueIso_inv := productUniqueIso_inv_π
-
-Depends on / 依赖: Iso.inv_comp_eq, Subsingleton, Subsingleton.allEq, inv_comp_eq
+/-
+**CategoryTheory.Limits.productUniqueIso_inv_** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma productUniqueIso_inv_π [Unique β] (f : β -> C) (b : β) :
+lemma productUniqueIso_inv_π [Unique β] (f : β → C) (b : β) :
     (productUniqueIso f).inv ≫ Pi.π f b = eqToHom (congrArg _ <| Subsingleton.allEq _ _) := by
   obtain rfl := Subsingleton.allEq b default
   simp [Iso.inv_comp_eq]
 
 @[deprecated (since := "2026-06-30")] alias productUniqueIso_inv := productUniqueIso_inv_π
 
-/--
-Definition of `Fan.isLimitMkOfUnique` / `Fan.isLimitMkOfUnique` 的定义
+/-- Any isomorphism is the projection from a single object product. -/
+/-
+**CategoryTheory.Limits.Fan.isLimitMkOfUnique** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Limits.Fan`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {X Y : C}
+ →       (e : X ≅ Y) →         (J : Type u_1) → [Unique J] → CategoryTheory.Limi
+ts.IsLimit (CategoryTheory.Limits.Fan.mk X fun x => e.hom)
+参数：e : X ≅ Y；J : Type u_1；CategoryTheory.Limits.Fan.mk X fun x => e.hom。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Fan.isLimitMkOfUnique
-  signature: {X Y : C} (e : X ≅ Y) (J : Type*) [Unique J]
-  body: by
-  refine Fan.IsLimit.mk _ (fun s => s.proj default ≫ e.inv) (fun s j => ?_) fun s m hm => ?_
-  · obtain rfl : j = default := Subsingleton.elim _ _
-    simp
-  · simpa [← cancel_mono e.hom] using hm default
-
-中文:
-定义 Fan.isLimitMkOfUnique
-  签名: {X Y : C} (e : X ≅ Y) (J : 类型) [唯一 J]
-  定义体: by
-  refine Fan.IsLimit.mk _ (fun s => s.proj default ≫ e.inv) (fun s j => ?_) fun s m hm => ?_
-  · obtain rfl : j = default := Subsingleton.elim _ _
-    simp
-  · simpa [← cancel_mono e.hom] using hm default
-
-Depends on / 依赖: Fan.IsLimit.mk, IsLimit, Subsingleton, Subsingleton.elim, cancel_mono, e.hom, e.inv, s.proj
+--- 原说明 ---
+Any isomorphism is the projection from a single object product.
 -/
 def Fan.isLimitMkOfUnique {X Y : C} (e : X ≅ Y) (J : Type*) [Unique J] :
-    IsLimit (Fan.mk X fun _ : J => e.hom) := by
-  refine Fan.IsLimit.mk _ (fun s => s.proj default ≫ e.inv) (fun s j => ?_) fun s m hm => ?_
+    IsLimit (Fan.mk X fun _ : J ↦ e.hom) := by
+  refine Fan.IsLimit.mk _ (fun s ↦ s.proj default ≫ e.inv) (fun s j ↦ ?_) fun s m hm ↦ ?_
   · obtain rfl : j = default := Subsingleton.elim _ _
     simp
   · simpa [← cancel_mono e.hom] using hm default
 
 /-- The colimit cocone for the coproduct over an index type with exactly one term. -/
 @[simps]
-/--
-Definition of `colimitCoconeOfUnique` / `colimitCoconeOfUnique` 的定义
+/-
+**CategoryTheory.Limits.colimitCoconeOfUnique** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Limits`。
+形式化陈述：colimitCoconeOfUnique [Unique β] (f : β -> C) : ColimitCocone (Discrete.fu
+nctor f) where cocone
+参数：f : β -> C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition colimitCoconeOfUnique
-  signature: [Unique β] (f : β -> C)
-  body: { pt := f default
-      ι := Discrete.natTrans (fun ⟨j⟩ => eqToHom (by
-        dsimp
-        congr
-        subsingleton)) }
-  isColimit :=
-    { desc := fun s => s.ι.app default
-      fac := fun s j => by
-        obtain rfl := Subsingleton.elim j default
-        apply Category.id_comp
-      uniq := fun s m w => by
-        specialize w default
-        simp_all }
-
-中文:
-定义 colimitCoconeOfUnique
-  签名: [唯一 β] (f : β -> C)
-  定义体: { pt := f default
-      ι := Discrete.natTrans (fun ⟨j⟩ => eqToHom (by
-        dsimp
-        congr
-        subsingleton)) }
-  isColimit :=
-    { desc := fun s => s.ι.app default
-      fac := fun s j => by
-        obtain rfl := Subsingleton.elim j default
-        apply Category.id_comp
-      uniq := fun s m w => by
-        specialize w default
-        simp_all }
-
-Depends on / 依赖: Category, Category.id_comp, Discrete, Discrete.natTrans, Subsingleton, Subsingleton.elim, eqToHom, id_comp, isColimit, natTrans, specialize, subsingleton
+--- 原说明 ---
+The colimit cocone for the coproduct over an index type with exactly one term.
 -/
-def colimitCoconeOfUnique [Unique β] (f : β -> C) : ColimitCocone (Discrete.functor f) where
+def colimitCoconeOfUnique [Unique β] (f : β → C) : ColimitCocone (Discrete.functor f) where
   cocone :=
     { pt := f default
       ι := Discrete.natTrans (fun ⟨j⟩ => eqToHom (by
@@ -2899,82 +2542,55 @@ def colimitCoconeOfUnique [Unique β] (f : β -> C) : ColimitCocone (Discrete.fu
       uniq := fun s m w => by
         specialize w default
         simp_all }
-
-instance (priority := 100) hasCoproduct_unique [Nonempty β] [Subsingleton β] (f : β -> C) :
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (priority := 100) hasCoproduct_unique [Nonempty β] [Subsingleton β] (f : β → C) :
     HasCoproduct f :=
   let ⟨_⟩ := nonempty_unique β; HasColimit.mk (colimitCoconeOfUnique f)
 
-/--
-Definition of `coproductUniqueIso` / `coproductUniqueIso` 的定义
+/-- A coproduct over an index type with exactly one term is just the object over that term. -/
+/-
+**CategoryTheory.Limits.coproductUniqueIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Limits`。
+形式化陈述：coproductUniqueIso [Unique β] (f : β -> C) : ∐ f ≅ f default
+参数：f : β -> C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coproductUniqueIso
-  signature: [Unique β] (f : β -> C)
-  body: IsColimit.coconePointUniqueUpToIso (colimit.isColimit _) (colimitCoconeOfUnique f).isColimit
-
-@[simp]
-
-中文:
-定义 coproductUniqueIso
-  签名: [唯一 β] (f : β -> C)
-  定义体: IsColimit.coconePointUniqueUpToIso (colimit.isColimit _) (colimitCoconeOfUnique f).isColimit
-
-@[simp]
-
-Depends on / 依赖: IsColimit, IsColimit.coconePointUniqueUpToIso, coconePointUniqueUpToIso, colimit, colimit.isColimit, colimitCoconeOfUnique, isColimit
+--- 原说明 ---
+A coproduct over an index type with exactly one term is just the object over tha
+t term.
 -/
-def coproductUniqueIso [Unique β] (f : β -> C) : ∐ f ≅ f default :=
+def coproductUniqueIso [Unique β] (f : β → C) : ∐ f ≅ f default :=
   IsColimit.coconePointUniqueUpToIso (colimit.isColimit _) (colimitCoconeOfUnique f).isColimit
 
 @[simp]
-/--
-lemma `coproductUniqueIso_inv` / 引理 `coproductUniqueIso_inv`
-
-English:
-lemma coproductUniqueIso_inv
-  given: [Unique β] (f : β -> C)
-  proof: rfl
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 coproductUniqueIso_inv
-  条件: [唯一 β] (f : β -> C)
-  证明: rfl
-
-@[reassoc (attr := simp)]
+/-
+**CategoryTheory.Limits.coproductUniqueIso_inv** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.Limits`。
+形式化陈述：coproductUniqueIso_inv [Unique β] (f : β -> C) : (coproductUniqueIso f).in
+v = Sigma.ι f default
+参数：f : β -> C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasCoproduct_unique`：∀ {β : Type w} {C : Type u} [
+inst : CategoryTheory.Category.{v, u} C] [Nonempty β] [Subsingleton β] (f : β → 
+C),   CategoryTheory.Limits.Has…
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Unique.instSubsingleton`：∀ {α : Sort u_1} [Unique α], Subsingleton α
 -/
-lemma coproductUniqueIso_inv [Unique β] (f : β -> C) :
+lemma coproductUniqueIso_inv [Unique β] (f : β → C) :
     (coproductUniqueIso f).inv = Sigma.ι f default :=
   rfl
 
 @[reassoc (attr := simp)]
-/--
-lemma `ι_coproductUniqueIso_hom` / 引理 `ι_coproductUniqueIso_hom`
-
-English:
-lemma ι_coproductUniqueIso_hom
-  given: [Unique β] (f : β -> C) (b : β)
-  proof: by
-  obtain rfl := Subsingleton.allEq b default
-  symm
-  simp [← Iso.comp_inv_eq]
-
-@[deprecated (since := "2026-06-30")] alias coproductUniqueIso_hom := ι_coproductUniqueIso_hom
-
-中文:
-引理 ι_coproductUniqueIso_hom
-  条件: [唯一 β] (f : β -> C) (b : β)
-  证明: by
-  obtain rfl := Subsingleton.allEq b default
-  symm
-  simp [← Iso.comp_inv_eq]
-
-@[deprecated (since := "2026-06-30")] alias coproductUniqueIso_hom := ι_coproductUniqueIso_hom
-
-Depends on / 依赖: Iso.comp_inv_eq, Subsingleton, Subsingleton.allEq, comp_inv_eq
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma ι_coproductUniqueIso_hom [Unique β] (f : β -> C) (b : β) :
+lemma ι_coproductUniqueIso_hom [Unique β] (f : β → C) (b : β) :
     Sigma.ι f b ≫ (coproductUniqueIso f).hom = eqToHom (congrArg _ <| Subsingleton.allEq _ _) := by
   obtain rfl := Subsingleton.allEq b default
   symm
@@ -2982,32 +2598,22 @@ lemma ι_coproductUniqueIso_hom [Unique β] (f : β -> C) (b : β) :
 
 @[deprecated (since := "2026-06-30")] alias coproductUniqueIso_hom := ι_coproductUniqueIso_hom
 
-/--
-Definition of `Cofan.isColimitMkOfUnique` / `Cofan.isColimitMkOfUnique` 的定义
+/-- Any isomorphism is the projection from a single object product. -/
+/-
+**CategoryTheory.Limits.Cofan.isColimitMkOfUnique** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Limits.Cofan`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {X Y : C}
+ →       (e : X ≅ Y) →         (J : Type u_1) → [Unique J] → CategoryTheory.Limi
+ts.IsColimit (CategoryTheory.Limits.Cofan.mk Y fun x => e.hom)
+参数：e : X ≅ Y；J : Type u_1；CategoryTheory.Limits.Cofan.mk Y fun x => e.hom。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cofan.isColimitMkOfUnique
-  signature: {X Y : C} (e : X ≅ Y) (J : Type*) [Unique J]
-  body: by
-  refine Cofan.IsColimit.mk _ (fun s => e.inv ≫ s.inj default) (fun s j => ?_) fun s m hm => ?_
-  · obtain rfl : j = default := Subsingleton.elim _ _
-    simp
-  · simpa [← cancel_epi e.hom] using hm default
-
-中文:
-定义 Cofan.isColimitMkOfUnique
-  签名: {X Y : C} (e : X ≅ Y) (J : 类型) [唯一 J]
-  定义体: by
-  refine Cofan.IsColimit.mk _ (fun s => e.inv ≫ s.inj default) (fun s j => ?_) fun s m hm => ?_
-  · obtain rfl : j = default := Subsingleton.elim _ _
-    simp
-  · simpa [← cancel_epi e.hom] using hm default
-
-Depends on / 依赖: Cofan.IsColimit.mk, IsColimit, Subsingleton, Subsingleton.elim, cancel_epi, e.hom, e.inv, s.inj
+--- 原说明 ---
+Any isomorphism is the projection from a single object product.
 -/
 def Cofan.isColimitMkOfUnique {X Y : C} (e : X ≅ Y) (J : Type*) [Unique J] :
-    IsColimit (Cofan.mk Y fun _ : J => e.hom) := by
-  refine Cofan.IsColimit.mk _ (fun s => e.inv ≫ s.inj default) (fun s j => ?_) fun s m hm => ?_
+    IsColimit (Cofan.mk Y fun _ : J ↦ e.hom) := by
+  refine Cofan.IsColimit.mk _ (fun s ↦ e.inv ≫ s.inj default) (fun s j ↦ ?_) fun s m hm ↦ ?_
   · obtain rfl : j = default := Subsingleton.elim _ _
     simp
   · simpa [← cancel_epi e.hom] using hm default
@@ -3016,26 +2622,25 @@ end Unique
 
 section Reindex
 
-variable {γ : Type w'} (ε : β ≃ γ) (f : γ -> C)
+variable {γ : Type w'} (ε : β ≃ γ) (f : γ → C)
 
 section
 
 variable [HasProduct f] [HasProduct (f ∘ ε)]
 
-/--
-Definition of `Pi.reindex` / `Pi.reindex` 的定义
+/-- Reindex a categorical product via an equivalence of the index types. -/
+/-
+**CategoryTheory.Limits.Pi.reindex** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Lim
+its.Pi`。
+形式化陈述：{β : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {γ : Type w'} →         (ε : β ≃ γ) →           (f : γ → C) →       
+      [inst_1 : CategoryTheory.Limits.HasProduct f] →               [inst_2 : Ca
+tegoryTheory.Limits.HasProduct (f ∘ ⇑ε)] → ∏ᶜ f ∘ ⇑ε ≅ ∏ᶜ f
+参数：ε : β ≃ γ；f : γ → C；f ∘ ⇑ε。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Pi.reindex
-  signature: : piObj (f ∘ ε) ≅ piObj f
-  body: HasLimit.isoOfEquivalence (Discrete.equivalence ε) (Discrete.natIso fun _ => Iso.refl _)
-
-中文:
-定义 依赖函数类型.reindex
-  签名: : piObj (f ∘ ε) ≅ piObj f
-  定义体: HasLimit.isoOfEquivalence (Discrete.equivalence ε) (Discrete.natIso fun _ => Iso.refl _)
-
-Depends on / 依赖: Discrete, Discrete.equivalence, Discrete.natIso, HasLimit, HasLimit.isoOfEquivalence, Iso.refl, equivalence, isoOfEquivalence, natIso
+--- 原说明 ---
+Reindex a categorical product via an equivalence of the index types.
 -/
 def Pi.reindex : piObj (f ∘ ε) ≅ piObj f :=
   HasLimit.isoOfEquivalence (Discrete.equivalence ε) (Discrete.natIso fun _ => Iso.refl _)
@@ -3043,36 +2648,10 @@ def Pi.reindex : piObj (f ∘ ε) ≅ piObj f :=
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-theorem `Pi.reindex_hom_π` / 定理 `Pi.reindex_hom_π`
-
-English:
-theorem Pi.reindex_hom_π
-  given: (b : β)
-  statement: (Pi.reindex ε f).hom ≫ Pi.π f (ε b) = Pi.π (f ∘ ε) b
-  proof: by
-  dsimp [Pi.reindex]
-  simp only [HasLimit.isoOfEquivalence_hom_π, Discrete.equivalence_inverse, Discrete.functor_obj,
-    Function.comp_apply, Functor.id_obj, Discrete.equivalence_functor, Functor.comp_obj,
-    Discrete.natIso_inv_app, Iso.refl_inv, Category.id_comp]
-  exact limit.w (Discrete.functor (f ∘ ε)) (Discrete.eqToHom' (ε.symm_apply_apply b))
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 依赖函数类型.reindex_hom_π
-  条件: (b : β)
-  结论: (依赖函数类型.reindex ε f).hom ≫ 依赖函数类型.π f (ε b) = 依赖函数类型.π (f ∘ ε) b
-  证明: by
-  dsimp [Pi.reindex]
-  simp only [HasLimit.isoOfEquivalence_hom_π, Discrete.equivalence_inverse, Discrete.functor_obj,
-    Function.comp_apply, Functor.id_obj, Discrete.equivalence_functor, Functor.comp_obj,
-    Discrete.natIso_inv_app, Iso.refl_inv, Category.id_comp]
-  exact limit.w (Discrete.functor (f ∘ ε)) (Discrete.eqToHom' (ε.symm_apply_apply b))
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Category, Category.id_comp, Discrete, Discrete.eqToHom, Discrete.equivalence_functor, Discrete.equivalence_inverse, Discrete.functor, Discrete.functor_obj, Discrete.natIso_inv_app, Function, Function.comp_apply, Functor, Functor.comp_obj, Functor.id_obj, HasLimit, HasLimit.isoOfEquivalence_hom_, Iso.refl_inv, Pi.reindex, comp_apply, comp_obj
+/-
+**CategoryTheory.Limits.Pi.reindex_hom_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Pi.reindex_hom_π (b : β) : (Pi.reindex ε f).hom ≫ Pi.π f (ε b) = Pi.π (f ∘ ε) b := by
   dsimp [Pi.reindex]
@@ -3082,46 +2661,33 @@ theorem Pi.reindex_hom_π (b : β) : (Pi.reindex ε f).hom ≫ Pi.π f (ε b) = 
   exact limit.w (Discrete.functor (f ∘ ε)) (Discrete.eqToHom' (ε.symm_apply_apply b))
 
 @[reassoc (attr := simp)]
-/--
-theorem `Pi.reindex_inv_π` / 定理 `Pi.reindex_inv_π`
-
-English:
-theorem Pi.reindex_inv_π
-  given: (b : β)
-  statement: (Pi.reindex ε f).inv ≫ Pi.π (f ∘ ε) b = Pi.π f (ε b)
-  proof: by
-  simp [Iso.inv_comp_eq]
-
-中文:
-定理 依赖函数类型.reindex_inv_π
-  条件: (b : β)
-  结论: (依赖函数类型.reindex ε f).inv ≫ 依赖函数类型.π (f ∘ ε) b = 依赖函数类型.π f (ε b)
-  证明: by
-  simp [Iso.inv_comp_eq]
-
-Depends on / 依赖: Iso.inv_comp_eq, inv_comp_eq
+/-
+**CategoryTheory.Limits.Pi.reindex_inv_** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheor
+y.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Pi.reindex_inv_π (b : β) : (Pi.reindex ε f).inv ≫ Pi.π (f ∘ ε) b = Pi.π f (ε b) := by
   simp [Iso.inv_comp_eq]
 
 variable {f} in
-/--
-Definition of `Fan.isLimitEquivOfEquiv` / `Fan.isLimitEquivOfEquiv` 的定义
+/-- Being a limiting fan is stable under equivalences in the index type. -/
+/-
+**CategoryTheory.Limits.Fan.isLimitEquivOfEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits.Fan`。
+形式化陈述：{β : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {γ : Type w'} →         (ε : β ≃ γ) →           {f : γ → C} →       
+      (c : CategoryTheory.Limits.Fan f) →               CategoryTheory.Limits.Is
+Limit c ≃                 CategoryTheory.Limits.IsLimit (CategoryTheory.Limits.F
+an.mk c.pt fun i => c.proj (ε i))
+参数：ε : β ≃ γ；c : CategoryTheory.Limits.Fan f；CategoryTheory.Limits.Fan.mk c.pt f
+un i => c.proj (ε i)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Fan.isLimitEquivOfEquiv
-  signature: (c : Fan f)
-  body: IsLimit.whiskerEquivalenceEquiv (Discrete.equivalence ε)
-
-中文:
-定义 Fan.isLimitEquivOfEquiv
-  签名: (c : Fan f)
-  定义体: IsLimit.whiskerEquivalenceEquiv (Discrete.equivalence ε)
-
-Depends on / 依赖: Discrete, Discrete.equivalence, IsLimit, IsLimit.whiskerEquivalenceEquiv, equivalence, whiskerEquivalenceEquiv
+--- 原说明 ---
+Being a limiting fan is stable under equivalences in the index type.
 -/
 def Fan.isLimitEquivOfEquiv (c : Fan f) :
-    IsLimit c ≃ IsLimit (Fan.mk _ fun i : β => c.proj (ε i)) :=
+    IsLimit c ≃ IsLimit (Fan.mk _ fun i : β ↦ c.proj (ε i)) :=
   IsLimit.whiskerEquivalenceEquiv (Discrete.equivalence ε)
 
 end
@@ -3130,20 +2696,19 @@ section
 
 variable [HasCoproduct f] [HasCoproduct (f ∘ ε)]
 
-/--
-Definition of `Sigma.reindex` / `Sigma.reindex` 的定义
+/-- Reindex a categorical coproduct via an equivalence of the index types. -/
+/-
+**CategoryTheory.Limits.Sigma.reindex** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Limits.Sigma`。
+形式化陈述：{β : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {γ : Type w'} →         (ε : β ≃ γ) →           (f : γ → C) →       
+      [inst_1 : CategoryTheory.Limits.HasCoproduct f] →               [inst_2 : 
+CategoryTheory.Limits.HasCoproduct (f ∘ ⇑ε)] → ∐ f ∘ ⇑ε ≅ ∐ f
+参数：ε : β ≃ γ；f : γ → C；f ∘ ⇑ε。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Sigma.reindex
-  signature: : sigmaObj (f ∘ ε) ≅ sigmaObj f
-  body: HasColimit.isoOfEquivalence (Discrete.equivalence ε) (Discrete.natIso fun _ => Iso.refl _)
-
-中文:
-定义 依赖和类型.reindex
-  签名: : sigmaObj (f ∘ ε) ≅ sigmaObj f
-  定义体: HasColimit.isoOfEquivalence (Discrete.equivalence ε) (Discrete.natIso fun _ => Iso.refl _)
-
-Depends on / 依赖: Discrete, Discrete.equivalence, Discrete.natIso, HasColimit, HasColimit.isoOfEquivalence, Iso.refl, equivalence, isoOfEquivalence, natIso
+--- 原说明 ---
+Reindex a categorical coproduct via an equivalence of the index types.
 -/
 def Sigma.reindex : sigmaObj (f ∘ ε) ≅ sigmaObj f :=
   HasColimit.isoOfEquivalence (Discrete.equivalence ε) (Discrete.natIso fun _ => Iso.refl _)
@@ -3151,40 +2716,10 @@ def Sigma.reindex : sigmaObj (f ∘ ε) ≅ sigmaObj f :=
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-theorem `Sigma.ι_reindex_hom` / 定理 `Sigma.ι_reindex_hom`
-
-English:
-theorem Sigma.ι_reindex_hom
-  given: (b : β)
-  proof: by
-  dsimp [Sigma.reindex]
-  simp only [HasColimit.ι_isoOfEquivalence_hom, Functor.id_obj, Discrete.functor_obj,
-    Function.comp_apply, Discrete.equivalence_functor, Discrete.equivalence_inverse,
-    Functor.comp_obj, Discrete.natIso_inv_app, Iso.refl_inv, Category.id_comp]
-  have h := colimit.w (Discrete.functor f) (Discrete.eqToHom' (ε.apply_symm_apply (ε b)))
-  simp only [Discrete.functor_obj] at h
-  erw [← h, eqToHom_map, eqToHom_map, eqToHom_trans_assoc]
-  all_goals { simp }
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 依赖和类型.ι_reindex_hom
-  条件: (b : β)
-  证明: by
-  dsimp [Sigma.reindex]
-  simp only [HasColimit.ι_isoOfEquivalence_hom, Functor.id_obj, Discrete.functor_obj,
-    Function.comp_apply, Discrete.equivalence_functor, Discrete.equivalence_inverse,
-    Functor.comp_obj, Discrete.natIso_inv_app, Iso.refl_inv, Category.id_comp]
-  have h := colimit.w (Discrete.functor f) (Discrete.eqToHom' (ε.apply_symm_apply (ε b)))
-  simp only [Discrete.functor_obj] at h
-  erw [← h, eqToHom_map, eqToHom_map, eqToHom_trans_assoc]
-  all_goals { simp }
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Category, Category.id_comp, Discrete, Discrete.eqToHom, Discrete.equivalence_functor, Discrete.equivalence_inverse, Discrete.functor, Discrete.functor_obj, Discrete.natIso_inv_app, Function, Function.comp_apply, Functor, Functor.comp_obj, Functor.id_obj, HasColimit, Iso.refl_inv, Sigma.reindex, all_goals, apply_symm_apply, colimit
+/-
+**CategoryTheory.Limits.Sigma.** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limits`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Sigma.ι_reindex_hom (b : β) :
     Sigma.ι (f ∘ ε) b ≫ (Sigma.reindex ε f).hom = Sigma.ι f (ε b) := by
@@ -3198,42 +2733,33 @@ theorem Sigma.ι_reindex_hom (b : β) :
   all_goals { simp }
 
 @[reassoc (attr := simp)]
-/--
-theorem `Sigma.ι_reindex_inv` / 定理 `Sigma.ι_reindex_inv`
-
-English:
-theorem Sigma.ι_reindex_inv
-  given: (b : β)
-  proof: by simp [Iso.comp_inv_eq]
-
-中文:
-定理 依赖和类型.ι_reindex_inv
-  条件: (b : β)
-  证明: by simp [Iso.comp_inv_eq]
-
-Depends on / 依赖: Iso.comp_inv_eq, comp_inv_eq
+/-
+**CategoryTheory.Limits.Sigma.** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Limits`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Sigma.ι_reindex_inv (b : β) :
     Sigma.ι f (ε b) ≫ (Sigma.reindex ε f).inv = Sigma.ι (f ∘ ε) b := by simp [Iso.comp_inv_eq]
 
 variable {f} in
-/--
-Definition of `Cofan.isColimitEquivOfEquiv` / `Cofan.isColimitEquivOfEquiv` 的定义
+/-- Being a colimiting cofan is stable under equivalences in the index type. -/
+/-
+**CategoryTheory.Limits.Cofan.isColimitEquivOfEquiv** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Limits.Cofan`。
+形式化陈述：{β : Type w} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u}
+ C] →       {γ : Type w'} →         (ε : β ≃ γ) →           {f : γ → C} →       
+      (c : CategoryTheory.Limits.Cofan f) →               CategoryTheory.Limits.
+IsColimit c ≃                 CategoryTheory.Limits.IsColimit (CategoryTheory.Li
+mits.Cofan.mk c.pt fun i => c.inj (ε i))
+参数：ε : β ≃ γ；c : CategoryTheory.Limits.Cofan f；CategoryTheory.Limits.Cofan.mk c.
+pt fun i => c.inj (ε i)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cofan.isColimitEquivOfEquiv
-  signature: (c : Cofan f)
-  body: IsColimit.whiskerEquivalenceEquiv (Discrete.equivalence ε)
-
-中文:
-定义 Cofan.isColimitEquivOfEquiv
-  签名: (c : Cofan f)
-  定义体: IsColimit.whiskerEquivalenceEquiv (Discrete.equivalence ε)
-
-Depends on / 依赖: Discrete, Discrete.equivalence, IsColimit, IsColimit.whiskerEquivalenceEquiv, equivalence, whiskerEquivalenceEquiv
+--- 原说明 ---
+Being a colimiting cofan is stable under equivalences in the index type.
 -/
 def Cofan.isColimitEquivOfEquiv (c : Cofan f) :
-    IsColimit c ≃ IsColimit (Cofan.mk _ fun i : β => c.inj (ε i)) :=
+    IsColimit c ≃ IsColimit (Cofan.mk _ fun i : β ↦ c.inj (ε i)) :=
   IsColimit.whiskerEquivalenceEquiv (Discrete.equivalence ε)
 
 end
@@ -3244,48 +2770,17 @@ section
 
 variable {J : Type u₂} [Category.{v₂} J] (F : J ⥤ C)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasLimit
-  signature: F] [HasProduct F.obj] : Mono (Pi.lift (limit.π F)) where
-  body: by
-    refine limit.hom_ext fun j => ?_
-    simpa using h =≫ Pi.π _ j
-
-中文:
-实例 [有极限
-  签名: F] [HasProduct F.obj] : 单态射 (依赖函数类型.lift (limit.π F)) where
-  定义体: by
-    refine limit.hom_ext fun j => ?_
-    simpa using h =≫ Pi.π _ j
-
-Depends on / 依赖: hom_ext, limit.hom_ext
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasLimit F] [HasProduct F.obj] : Mono (Pi.lift (limit.π F)) where
   right_cancellation _ _ h := by
     refine limit.hom_ext fun j => ?_
     simpa using h =≫ Pi.π _ j
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [HasColimit
-  signature: F] [HasCoproduct F.obj] : Epi (Sigma.desc (colimit.ι F)) where
-  body: by
-    refine colimit.hom_ext fun j => ?_
-    simpa using Sigma.ι _ j ≫= h
-
-中文:
-实例 [有余极限
-  签名: F] [HasCoproduct F.obj] : 满态射 (依赖和类型.desc (colimit.ι F)) where
-  定义体: by
-    refine colimit.hom_ext fun j => ?_
-    simpa using Sigma.ι _ j ≫= h
-
-Depends on / 依赖: colimit, colimit.hom_ext, hom_ext
+/-
+**CategoryTheory.Limits.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [HasColimit F] [HasCoproduct F.obj] : Epi (Sigma.desc (colimit.ι F)) where
   left_cancellation _ _ h := by
@@ -3298,52 +2793,44 @@ section Thin
 
 variable [Quiver.IsThin C] {J : Type*} [Category* J] {K : J ⥤ C}
 
-/--
-Definition of `isLimitEquivFanOfIsThin` / `isLimitEquivFanOfIsThin` 的定义
+/-- If `K : J ⥤ C` is a diagram with `C` thin, a cone for `K` is limiting
+if and only if the cone point is the product of the components. -/
+/-
+**CategoryTheory.Limits.isLimitEquivFanOfIsThin** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits`。
+形式化陈述：isLimitEquivFanOfIsThin (c : Cone K) : IsLimit c ≃ IsLimit (Fan.mk c.pt c.
+π.app) where toFun hc
+参数：c : Cone K。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isLimitEquivFanOfIsThin
-  signature: (c : Cone K)
-  body: Fan.IsLimit.mk _ (fun s => hc.lift { pt := s.pt, π.app j := s.proj j })
-    (by subsingleton) (by subsingleton)
-  invFun h := { lift s := Fan.IsLimit.lift h s.π.app }
-
-中文:
-定义 isLimitEquivFanOfIsThin
-  签名: (c : 锥 K)
-  定义体: Fan.IsLimit.mk _ (fun s => hc.lift { pt := s.pt, π.app j := s.proj j })
-    (by subsingleton) (by subsingleton)
-  invFun h := { lift s := Fan.IsLimit.lift h s.π.app }
-
-Depends on / 依赖: Fan.IsLimit.mk, IsLimit, hc.lift, s.proj, s.pt
+--- 原说明 ---
+If `K : J ⥤ C` is a diagram with `C` thin, a cone for `K` is limiting
+if and only if the cone point is the product of the components.
 -/
 def isLimitEquivFanOfIsThin (c : Cone K) : IsLimit c ≃ IsLimit (Fan.mk c.pt c.π.app) where
-  toFun hc := Fan.IsLimit.mk _ (fun s => hc.lift { pt := s.pt, π.app j := s.proj j })
+  toFun hc := Fan.IsLimit.mk _ (fun s ↦ hc.lift { pt := s.pt, π.app j := s.proj j })
     (by subsingleton) (by subsingleton)
   invFun h := { lift s := Fan.IsLimit.lift h s.π.app }
 
-/--
-Definition of `isColimitEquivCofanOfIsThin` / `isColimitEquivCofanOfIsThin` 的定义
+/-- If `K : J ⥤ C` is a diagram with `C` thin, a cone for `K` is limiting
+if and only if the cone point is the product of the components. -/
+/-
+**CategoryTheory.Limits.isColimitEquivCofanOfIsThin** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Limits`。
+形式化陈述：isColimitEquivCofanOfIsThin (c : Cocone K) : IsColimit c ≃ IsColimit (Cofa
+n.mk c.pt c.ι.app) where toFun hc
+参数：c : Cocone K。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isColimitEquivCofanOfIsThin
-  signature: (c : Cocone K)
-  body: Cofan.IsColimit.mk _ (fun s => hc.desc { pt := s.pt, ι.app j := s.inj j })
-    (by subsingleton) (by subsingleton)
-  invFun h := { desc s := Cofan.IsColimit.desc h s.ι.app }
-
-中文:
-定义 isColimitEquivCofanOfIsThin
-  签名: (c : 余锥 K)
-  定义体: Cofan.IsColimit.mk _ (fun s => hc.desc { pt := s.pt, ι.app j := s.inj j })
-    (by subsingleton) (by subsingleton)
-  invFun h := { desc s := Cofan.IsColimit.desc h s.ι.app }
-
-Depends on / 依赖: Cofan.IsColimit.mk, IsColimit, hc.desc, s.inj, s.pt
+--- 原说明 ---
+If `K : J ⥤ C` is a diagram with `C` thin, a cone for `K` is limiting
+if and only if the cone point is the product of the components.
 -/
 def isColimitEquivCofanOfIsThin (c : Cocone K) :
     IsColimit c ≃ IsColimit (Cofan.mk c.pt c.ι.app) where
-  toFun hc := Cofan.IsColimit.mk _ (fun s => hc.desc { pt := s.pt, ι.app j := s.inj j })
+  toFun hc := Cofan.IsColimit.mk _ (fun s ↦ hc.desc { pt := s.pt, ι.app j := s.inj j })
     (by subsingleton) (by subsingleton)
   invFun h := { desc s := Cofan.IsColimit.desc h s.ι.app }
 
@@ -3351,163 +2838,132 @@ end Thin
 
 section Fubini
 
-variable {ι ι' : Type*} {X : ι -> ι' -> C}
+variable {ι ι' : Type*} {X : ι → ι' → C}
 
-/--
-Definition of `Fan.IsLimit.prod` / `Fan.IsLimit.prod` 的定义
+/-- A product over products is a product indexed by a product. -/
+/-
+**CategoryTheory.Limits.Fan.IsLimit.prod** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Limits.Fan.IsLimit`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {ι : Type
+ u_1} →       {ι' : Type u_2} →         {X : ι → ι' → C} →           (c : (i : ι
+) → CategoryTheory.Limits.Fan fun j => X i j) →             ((i : ι) → CategoryT
+heory.Limits.IsLimit (c i)) →               (c' : CategoryTheory.Limits.Fan fun 
+i => (c i).pt) →                 CategoryTheory.Limits.IsLimit c' →             
+      CategoryTheory.Limits.IsLimit                     (CategoryTheory.Limits.F
+an.mk c'.pt fun p =>                       CategoryTheory.CategoryStruct.comp (c
+'.proj p.1) ((c p.1).proj p.2))
+参数：c : (i : ι) → CategoryTheory.Limits.Fan fun j => X i j；(i : ι) → CategoryTheo
+ry.Limits.IsLimit (c i)；c' : CategoryTheory.Limits.Fan fun i => (c i).pt；Categor
+yTheory.Limits.Fan.mk c'.pt fun p =>                       CategoryTheory.Catego
+ryStruct.comp (c'.proj p.1) ((c p.1).proj p.2)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Fan.IsLimit.prod
-  signature: (c : forall i : ι, Fan (fun j : ι' => X i j)) (hc : forall i : ι, IsLimit (c i))
-  body: by
-  refine Fan.IsLimit.mk _ (fun t => ?_) ?_ fun t m hm => ?_
-  · exact Fan.IsLimit.lift hc' fun i => Fan.IsLimit.lift (hc i) fun j => t.proj (i, j)
-  · simp
-  · refine Fan.IsLimit.hom_ext hc' _ _ fun i => ?_
-    exact Fan.IsLimit.hom_ext (hc i) _ _ fun j => (by simpa using hm (i, j))
-
-中文:
-定义 Fan.是极限.乘积
-  签名: (c : 对任意 i : ι, Fan (fun j : ι' => X i j)) (hc : 对任意 i : ι, 是极限 (c i))
-  定义体: by
-  refine Fan.IsLimit.mk _ (fun t => ?_) ?_ fun t m hm => ?_
-  · exact Fan.IsLimit.lift hc' fun i => Fan.IsLimit.lift (hc i) fun j => t.proj (i, j)
-  · simp
-  · refine Fan.IsLimit.hom_ext hc' _ _ fun i => ?_
-    exact Fan.IsLimit.hom_ext (hc i) _ _ fun j => (by simpa using hm (i, j))
-
-Depends on / 依赖: Fan.IsLimit.hom_ext, Fan.IsLimit.lift, Fan.IsLimit.mk, IsLimit, hom_ext, t.proj
+--- 原说明 ---
+A product over products is a product indexed by a product.
 -/
-def Fan.IsLimit.prod (c : forall i : ι, Fan (fun j : ι' => X i j)) (hc : forall i : ι, IsLimit (c i))
-    (c' : Fan (fun i : ι => (c i).pt)) (hc' : IsLimit c') :
-    (IsLimit <| Fan.mk c'.pt fun p : ι × ι' => c'.proj _ ≫ (c p.1).proj p.2) := by
-  refine Fan.IsLimit.mk _ (fun t => ?_) ?_ fun t m hm => ?_
-  · exact Fan.IsLimit.lift hc' fun i => Fan.IsLimit.lift (hc i) fun j => t.proj (i, j)
+def Fan.IsLimit.prod (c : ∀ i : ι, Fan (fun j : ι' ↦ X i j)) (hc : ∀ i : ι, IsLimit (c i))
+    (c' : Fan (fun i : ι ↦ (c i).pt)) (hc' : IsLimit c') :
+    (IsLimit <| Fan.mk c'.pt fun p : ι × ι' ↦ c'.proj _ ≫ (c p.1).proj p.2) := by
+  refine Fan.IsLimit.mk _ (fun t ↦ ?_) ?_ fun t m hm ↦ ?_
+  · exact Fan.IsLimit.lift hc' fun i ↦ Fan.IsLimit.lift (hc i) fun j ↦ t.proj (i, j)
   · simp
-  · refine Fan.IsLimit.hom_ext hc' _ _ fun i => ?_
-    exact Fan.IsLimit.hom_ext (hc i) _ _ fun j => (by simpa using hm (i, j))
+  · refine Fan.IsLimit.hom_ext hc' _ _ fun i ↦ ?_
+    exact Fan.IsLimit.hom_ext (hc i) _ _ fun j ↦ (by simpa using hm (i, j))
 
-/--
-Definition of `Cofan.IsColimit.prod` / `Cofan.IsColimit.prod` 的定义
+/-- A coproduct over coproducts is a coproduct indexed by a product. -/
+/-
+**CategoryTheory.Limits.Cofan.IsColimit.prod** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Limits.Cofan.IsColimit`。
+形式化陈述：{C : Type u} →   [inst : CategoryTheory.Category.{v, u} C] →     {ι : Type
+ u_1} →       {ι' : Type u_2} →         {X : ι → ι' → C} →           (c : (i : ι
+) → CategoryTheory.Limits.Cofan fun j => X i j) →             ((i : ι) → Categor
+yTheory.Limits.IsColimit (c i)) →               (c' : CategoryTheory.Limits.Cofa
+n fun i => (c i).pt) →                 CategoryTheory.Limits.IsColimit c' →     
+              CategoryTheory.Limits.IsColimit                     (CategoryTheor
+y.Limits.Cofan.mk c'.pt fun p =>                       CategoryTheory.CategorySt
+ruct.comp ((c p.1).inj p.2) (c'.inj p.1))
+参数：c : (i : ι) → CategoryTheory.Limits.Cofan fun j => X i j；(i : ι) → CategoryTh
+eory.Limits.IsColimit (c i)；c' : CategoryTheory.Limits.Cofan fun i => (c i).pt；C
+ategoryTheory.Limits.Cofan.mk c'.pt fun p =>                       CategoryTheor
+y.CategoryStruct.comp ((c p.1).inj p.2) (c'.inj p.1)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cofan.IsColimit.prod
-  signature: (c : forall i : ι, Cofan (fun j : ι' => X i j)) (hc : forall i : ι, IsColimit (c i))
-  body: by
-  refine Cofan.IsColimit.mk _ (fun t => ?_) ?_ fun t m hm => ?_
-  · exact Cofan.IsColimit.desc hc' fun i => Cofan.IsColimit.desc (hc i) fun j => t.inj (i, j)
-  · simp
-  · refine Cofan.IsColimit.hom_ext hc' _ _ fun i => ?_
-    exact Cofan.IsColimit.hom_ext (hc i) _ _ fun j => (by simpa using hm (i, j))
-
-中文:
-定义 Cofan.是余极限.乘积
-  签名: (c : 对任意 i : ι, Cofan (fun j : ι' => X i j)) (hc : 对任意 i : ι, 是余极限 (c i))
-  定义体: by
-  refine Cofan.IsColimit.mk _ (fun t => ?_) ?_ fun t m hm => ?_
-  · exact Cofan.IsColimit.desc hc' fun i => Cofan.IsColimit.desc (hc i) fun j => t.inj (i, j)
-  · simp
-  · refine Cofan.IsColimit.hom_ext hc' _ _ fun i => ?_
-    exact Cofan.IsColimit.hom_ext (hc i) _ _ fun j => (by simpa using hm (i, j))
-
-Depends on / 依赖: Cofan.IsColimit.desc, Cofan.IsColimit.hom_ext, Cofan.IsColimit.mk, IsColimit, hom_ext, t.inj
+--- 原说明 ---
+A coproduct over coproducts is a coproduct indexed by a product.
 -/
-def Cofan.IsColimit.prod (c : forall i : ι, Cofan (fun j : ι' => X i j)) (hc : forall i : ι, IsColimit (c i))
-    (c' : Cofan (fun i : ι => (c i).pt)) (hc' : IsColimit c') :
-    (IsColimit <| Cofan.mk c'.pt fun p : ι × ι' => (c p.1).inj p.2 ≫ c'.inj _) := by
-  refine Cofan.IsColimit.mk _ (fun t => ?_) ?_ fun t m hm => ?_
-  · exact Cofan.IsColimit.desc hc' fun i => Cofan.IsColimit.desc (hc i) fun j => t.inj (i, j)
+def Cofan.IsColimit.prod (c : ∀ i : ι, Cofan (fun j : ι' ↦ X i j)) (hc : ∀ i : ι, IsColimit (c i))
+    (c' : Cofan (fun i : ι ↦ (c i).pt)) (hc' : IsColimit c') :
+    (IsColimit <| Cofan.mk c'.pt fun p : ι × ι' ↦ (c p.1).inj p.2 ≫ c'.inj _) := by
+  refine Cofan.IsColimit.mk _ (fun t ↦ ?_) ?_ fun t m hm ↦ ?_
+  · exact Cofan.IsColimit.desc hc' fun i ↦ Cofan.IsColimit.desc (hc i) fun j ↦ t.inj (i, j)
   · simp
-  · refine Cofan.IsColimit.hom_ext hc' _ _ fun i => ?_
-    exact Cofan.IsColimit.hom_ext (hc i) _ _ fun j => (by simpa using hm (i, j))
+  · refine Cofan.IsColimit.hom_ext hc' _ _ fun i ↦ ?_
+    exact Cofan.IsColimit.hom_ext (hc i) _ _ fun j ↦ (by simpa using hm (i, j))
 
 end Fubini
 
 variable (α) in
 /-- The functor `(f : α → C) ↦ ∏ᶜ f`. -/
 @[simps]
-/--
-Definition of `Pi.functor` / `Pi.functor` 的定义
+/-
+**CategoryTheory.Limits.Pi.functor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Lim
+its.Pi`。
+形式化陈述：(α : Type w₂) →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u
+} C] →       [CategoryTheory.Limits.HasProductsOfShape α C] → CategoryTheory.Fun
+ctor (α → C) C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Pi.functor
-  signature: [HasProductsOfShape α C]
-  body: ∏ᶜ f
-  map {f g} t := Pi.map t
-
-中文:
-定义 依赖函数类型.functor
-  签名: [HasProductsOfShape α C]
-  定义体: ∏ᶜ f
-  map {f g} t := Pi.map t
-
-Depends on / 依赖: RespectsIso, RespectsIso.postcomp, RespectsIso.precomp, postcomp, precomp
+--- 原说明 ---
+The functor `(f : α → C) ↦ ∏ᶜ f`.
 -/
-noncomputable def Pi.functor [HasProductsOfShape α C] : (α -> C) ⥤ C where
+noncomputable def Pi.functor [HasProductsOfShape α C] : (α → C) ⥤ C where
   obj f := ∏ᶜ f
   map {f g} t := Pi.map t
 
 set_option backward.defeqAttrib.useBackward true in
 /-- The natural transformation induced by `Pi.π`. -/
 @[simps]
-/--
-Definition of `Pi.functorπ` / `Pi.functorπ` 的定义
+/-
+**CategoryTheory.Limits.Pi.functor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Lim
+its.Pi`。
+形式化陈述：(α : Type w₂) →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u
+} C] →       [CategoryTheory.Limits.HasProductsOfShape α C] → CategoryTheory.Fun
+ctor (α → C) C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Pi.functorπ
-  signature: [HasProductsOfShape α C] (a : α)
-  body: Pi.π f a
-
-中文:
-定义 依赖函数类型.functorπ
-  签名: [HasProductsOfShape α C] (a : α)
-  定义体: Pi.π f a
+--- 原说明 ---
+The natural transformation induced by `Pi.π`.
 -/
 def Pi.functorπ [HasProductsOfShape α C] (a : α) :
-    Pi.functor α ⟶ Pi.eval (fun _ => C) a where
+    Pi.functor α ⟶ Pi.eval (fun _ ↦ C) a where
   app f := Pi.π f a
 
 set_option backward.defeqAttrib.useBackward true in
 variable (α) in
 /-- Up to pre-composing with an equivalence of categories, `Pi.functor` is isomorphic to `lim`. -/
 @[simps!]
-/--
-Definition of `piEquivalenceFunctorDiscreteCompLim` / `piEquivalenceFunctorDiscreteCompLim` 的定义
+/-
+**CategoryTheory.Limits.piEquivalenceFunctorDiscreteCompLim** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.Limits`。
+形式化陈述：piEquivalenceFunctorDiscreteCompLim [HasProductsOfShape α C] : (piEquivale
+nceFunctorDiscrete α C).functor ⋙ lim ≅ Pi.functor _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piEquivalenceFunctorDiscreteCompLim
-  signature: [HasProductsOfShape α C]
-  body: NatIso.ofComponents fun _ => Iso.refl _
-
-中文:
-定义 piEquivalenceFunctorDiscreteCompLim
-  签名: [HasProductsOfShape α C]
-  定义体: NatIso.ofComponents fun _ => Iso.refl _
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+Up to pre-composing with an equivalence of categories, `Pi.functor` is isomorphi
+c to `lim`.
 -/
 def piEquivalenceFunctorDiscreteCompLim [HasProductsOfShape α C] :
     (piEquivalenceFunctorDiscrete α C).functor ⋙ lim ≅ Pi.functor _ :=
-  NatIso.ofComponents fun _ => Iso.refl _
+  NatIso.ofComponents fun _ ↦ Iso.refl _
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc]
-/--
-lemma `piEquivalenceFunctorDiscreteCompLim_comp_functorπ` / 引理 `piEquivalenceFunctorDiscreteCompLim_comp_functorπ`
-
-English:
-lemma piEquivalenceFunctorDiscreteCompLim_comp_functorπ
-  given: [HasProductsOfShape α C] (a : α)
-  proof: by
-  cat_disch
-
-中文:
-引理 piEquivalenceFunctorDiscreteCompLim_comp_functorπ
-  条件: [HasProductsOfShape α C] (a : α)
-  证明: by
-  cat_disch
-
-Depends on / 依赖: Pi.functor
+/-
+**CategoryTheory.Limits.piEquivalenceFunctorDiscreteCompLim_comp_functor** 是 Mat
+hlib 中的一个引理，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma piEquivalenceFunctorDiscreteCompLim_comp_functorπ [HasProductsOfShape α C] (a : α) :
     (piEquivalenceFunctorDiscreteCompLim (C := C) α).hom ≫ Pi.functorπ a =
@@ -3519,67 +2975,66 @@ attribute [local simp] Functor.pi in
 /-- The `∏ᶜ` functor composed with the pointwise constant functor `Π i, I i ⥤ (α → C)` is isomorphic
 to the constant functor with value `∏ᶜ X`. -/
 @[simps!]
-/--
-Definition of `Pi.constCompPiIsoConst` / `Pi.constCompPiIsoConst` 的定义
+/-
+**CategoryTheory.Limits.Pi.constCompPiIsoConst** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Limits.Pi`。
+形式化陈述：{α : Type w₂} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u
+} C] →       [inst_1 : CategoryTheory.Limits.HasProductsOfShape α C] →         {
+I : α → Type u_1} →           [inst_2 : (i : α) → CategoryTheory.Category.{v_1, 
+u_1} (I i)] →             (X : α → C) →               (CategoryTheory.Functor.pi
+ fun i => (CategoryTheory.Functor.const (I i)).obj (X i)).comp                  
+ (CategoryTheory.Limits.Pi.functor α) ≅                 (CategoryTheory.Functor.
+const ((i : α) → I i)).obj (∏ᶜ X)
+参数：i : α；I i；X : α → C；CategoryTheory.Functor.pi fun i => (CategoryTheory.Functo
+r.const (I i)).obj (X i)；CategoryTheory.Limits.Pi.functor α；CategoryTheory.Funct
+or.const ((i : α) → I i)；∏ᶜ X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Pi.constCompPiIsoConst
-  signature: [HasProductsOfShape α C] {I : α -> Type*}
-  body: NatIso.ofComponents (fun _ => Iso.refl _)
-
-中文:
-定义 依赖函数类型.constCompPiIsoConst
-  签名: [HasProductsOfShape α C] {I : α -> 类型}
-  定义体: NatIso.ofComponents (fun _ => Iso.refl _)
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+The `∏ᶜ` functor composed with the pointwise constant functor `Π i, I i ⥤ (α → C
+)` is isomorphic
+to the constant functor with value `∏ᶜ X`.
 -/
-noncomputable def Pi.constCompPiIsoConst [HasProductsOfShape α C] {I : α -> Type*}
-    [forall i, Category* (I i)] (X : α -> C) :
-    Functor.pi (fun i => (Functor.const (I i)).obj (X i)) ⋙ Pi.functor α ≅
+noncomputable def Pi.constCompPiIsoConst [HasProductsOfShape α C] {I : α → Type*}
+    [∀ i, Category* (I i)] (X : α → C) :
+    Functor.pi (fun i ↦ (Functor.const (I i)).obj (X i)) ⋙ Pi.functor α ≅
       (Functor.const _).obj (∏ᶜ X) :=
-  NatIso.ofComponents (fun _ => Iso.refl _)
+  NatIso.ofComponents (fun _ ↦ Iso.refl _)
 
 variable (α) in
 /-- The functor `(f : α → C) ↦ ∐ f`. -/
 @[simps]
-/--
-Definition of `Sigma.functor` / `Sigma.functor` 的定义
+/-
+**CategoryTheory.Limits.Sigma.functor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Limits.Sigma`。
+形式化陈述：(α : Type w₂) →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u
+} C] →       [CategoryTheory.Limits.HasCoproductsOfShape α C] → CategoryTheory.F
+unctor (α → C) C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Sigma.functor
-  signature: [HasCoproductsOfShape α C]
-  body: ∐ f
-  map {f g} t := Sigma.map t
-
-中文:
-定义 依赖和类型.functor
-  签名: [HasCoproductsOfShape α C]
-  定义体: ∐ f
-  map {f g} t := Sigma.map t
+--- 原说明 ---
+The functor `(f : α → C) ↦ ∐ f`.
 -/
-noncomputable def Sigma.functor [HasCoproductsOfShape α C] : (α -> C) ⥤ C where
+noncomputable def Sigma.functor [HasCoproductsOfShape α C] : (α → C) ⥤ C where
   obj f := ∐ f
   map {f g} t := Sigma.map t
 
 set_option backward.defeqAttrib.useBackward true in
 /-- The natural transformation induced by `Sigma.ι`. -/
 @[simps]
-/--
-Definition of `Sigma.functorι` / `Sigma.functorι` 的定义
+/-
+**CategoryTheory.Limits.Sigma.functor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Limits.Sigma`。
+形式化陈述：(α : Type w₂) →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u
+} C] →       [CategoryTheory.Limits.HasCoproductsOfShape α C] → CategoryTheory.F
+unctor (α → C) C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Sigma.functorι
-  signature: [HasCoproductsOfShape α C] (a : α)
-  body: Sigma.ι f a
-
-中文:
-定义 依赖和类型.functorι
-  签名: [HasCoproductsOfShape α C] (a : α)
-  定义体: Sigma.ι f a
+--- 原说明 ---
+The natural transformation induced by `Sigma.ι`.
 -/
 def Sigma.functorι [HasCoproductsOfShape α C] (a : α) :
-    Pi.eval (fun _ => C) a ⟶ Sigma.functor α where
+    Pi.eval (fun _ ↦ C) a ⟶ Sigma.functor α where
   app f := Sigma.ι f a
 
 set_option backward.defeqAttrib.useBackward true in
@@ -3587,61 +3042,41 @@ variable (α) in
 /-- Up to pre-composing with an equivalence of categories, `Sigma.functor` is isomorphic
 to `colim`. -/
 @[simps!]
-/--
-Definition of `piEquivalenceFunctorDiscreteCompColim` / `piEquivalenceFunctorDiscreteCompColim` 的定义
+/-
+**CategoryTheory.Limits.piEquivalenceFunctorDiscreteCompColim** 是 Mathlib 中的一个定义
+，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：piEquivalenceFunctorDiscreteCompColim [HasCoproductsOfShape α C] : (piEqui
+valenceFunctorDiscrete α C).functor ⋙ colim ≅ Sigma.functor _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piEquivalenceFunctorDiscreteCompColim
-  signature: [HasCoproductsOfShape α C]
-  body: NatIso.ofComponents fun _ => Iso.refl _
-
-中文:
-定义 piEquivalenceFunctorDiscreteCompColim
-  签名: [HasCoproductsOfShape α C]
-  定义体: NatIso.ofComponents fun _ => Iso.refl _
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+Up to pre-composing with an equivalence of categories, `Sigma.functor` is isomor
+phic
+to `colim`.
 -/
 def piEquivalenceFunctorDiscreteCompColim [HasCoproductsOfShape α C] :
     (piEquivalenceFunctorDiscrete α C).functor ⋙ colim ≅ Sigma.functor _ :=
-  NatIso.ofComponents fun _ => Iso.refl _
+  NatIso.ofComponents fun _ ↦ Iso.refl _
 
 set_option backward.defeqAttrib.useBackward true in
 @[reassoc]
-/--
-lemma `piEquivalenceFunctorDiscreteCompColim_comp_functorι` / 引理 `piEquivalenceFunctorDiscreteCompColim_comp_functorι`
-
-English:
-lemma piEquivalenceFunctorDiscreteCompColim_comp_functorι
-  given: [HasCoproductsOfShape α C] (a : α)
-  proof: by
-  cat_disch
-
-中文:
-引理 piEquivalenceFunctorDiscreteCompColim_comp_functorι
-  条件: [HasCoproductsOfShape α C] (a : α)
-  证明: by
-  cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Limits.piEquivalenceFunctorDiscreteCompColim_comp_functor** 是 M
+athlib 中的一个引理，位于命名空间 `CategoryTheory.Limits`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma piEquivalenceFunctorDiscreteCompColim_comp_functorι [HasCoproductsOfShape α C] (a : α) :
     Functor.whiskerLeft _ (colim.ι <| .mk a) ≫ (piEquivalenceFunctorDiscreteCompColim α).hom =
       (piEquivalenceFunctorDiscreteCompEvaluationIso C _).hom ≫ Sigma.functorι a := by
   cat_disch
-
-/--
-lemma `piEquivalenceFunctorDiscrete_functor_comp_colim` / 引理 `piEquivalenceFunctorDiscrete_functor_comp_colim`
-
-English:
-lemma piEquivalenceFunctorDiscrete_functor_comp_colim
-  given: [HasCoproductsOfShape α C]
-  proof: rfl
-
-中文:
-引理 piEquivalenceFunctorDiscrete_functor_comp_colim
-  条件: [HasCoproductsOfShape α C]
-  证明: rfl
+/-
+**CategoryTheory.Limits.piEquivalenceFunctorDiscrete_functor_comp_colim** 是 Math
+lib 中的一个引理，位于命名空间 `CategoryTheory.Limits`。
+形式化陈述：piEquivalenceFunctorDiscrete_functor_comp_colim [HasCoproductsOfShape α C]
+ : (piEquivalenceFunctorDiscrete α C).functor ⋙ colim = Sigma.functor _
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma piEquivalenceFunctorDiscrete_functor_comp_colim [HasCoproductsOfShape α C] :
     (piEquivalenceFunctorDiscrete α C).functor ⋙ colim = Sigma.functor _ :=
@@ -3651,83 +3086,73 @@ attribute [local simp] Functor.pi in
 /-- The `∐` functor composed with the pointwise constant functor `Π i, I i ⥤ (α → C)` is isomorphic
 to the constant functor with value `∐ X`. -/
 @[simps!]
-/--
-Definition of `Sigma.constCompSigmaIsoConst` / `Sigma.constCompSigmaIsoConst` 的定义
+/-
+**CategoryTheory.Limits.Sigma.constCompSigmaIsoConst** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Limits.Sigma`。
+形式化陈述：{α : Type w₂} →   {C : Type u} →     [inst : CategoryTheory.Category.{v, u
+} C] →       [inst_1 : CategoryTheory.Limits.HasCoproductsOfShape α C] →        
+ {I : α → Type u_1} →           [inst_2 : (i : α) → CategoryTheory.Category.{v_1
+, u_1} (I i)] →             (X : α → C) →               (CategoryTheory.Functor.
+pi fun i => (CategoryTheory.Functor.const (I i)).obj (X i)).comp                
+   (CategoryTheory.Limits.Sigma.functor α) ≅                 (CategoryTheory.Fun
+ctor.const ((i : α) → I i)).obj (∐ X)
+参数：i : α；I i；X : α → C；CategoryTheory.Functor.pi fun i => (CategoryTheory.Functo
+r.const (I i)).obj (X i)；CategoryTheory.Limits.Sigma.functor α；CategoryTheory.Fu
+nctor.const ((i : α) → I i)；∐ X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Sigma.constCompSigmaIsoConst
-  signature: [HasCoproductsOfShape α C] {I : α -> Type*}
-  body: NatIso.ofComponents (fun _ => Iso.refl _)
-
-中文:
-定义 依赖和类型.constCompSigmaIsoConst
-  签名: [HasCoproductsOfShape α C] {I : α -> 类型}
-  定义体: NatIso.ofComponents (fun _ => Iso.refl _)
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+The `∐` functor composed with the pointwise constant functor `Π i, I i ⥤ (α → C)
+` is isomorphic
+to the constant functor with value `∐ X`.
 -/
-noncomputable def Sigma.constCompSigmaIsoConst [HasCoproductsOfShape α C] {I : α -> Type*}
-    [forall i, Category* (I i)] (X : α -> C) :
-    Functor.pi (fun i => (Functor.const (I i)).obj (X i)) ⋙ Sigma.functor α ≅
+noncomputable def Sigma.constCompSigmaIsoConst [HasCoproductsOfShape α C] {I : α → Type*}
+    [∀ i, Category* (I i)] (X : α → C) :
+    Functor.pi (fun i ↦ (Functor.const (I i)).obj (X i)) ⋙ Sigma.functor α ≅
       (Functor.const _).obj (∐ X) :=
-  NatIso.ofComponents (fun _ => Iso.refl _)
+  NatIso.ofComponents (fun _ ↦ Iso.refl _)
 
 /-- The functor `C ⥤ (Type w)ᵒᵖ ⥤ C` which sends `X : C` and `α : Type w` to
 the product of copies of `X` indexed by `α`. -/
 @[simps]
-/--
-Definition of `piFunctor` / `piFunctor` 的定义
+/-
+**CategoryTheory.Limits.piFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Limi
+ts`。
+形式化陈述：piFunctor [HasProducts.{w} C] : C ⥤ Type wᵒᵖ ⥤ C where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piFunctor
-  signature: [HasProducts.{w} C]
-  body: { obj α := ∏ᶜ (fun (t : α.unop) => X)
-      map f := Pi.map' f.unop (fun _ => 𝟙 _) }
-  map f := { app T := Pi.map (fun _ => f) }
-
-中文:
-定义 piFunctor
-  签名: [HasProducts.{w} C]
-  定义体: { obj α := ∏ᶜ (fun (t : α.unop) => X)
-      map f := Pi.map' f.unop (fun _ => 𝟙 _) }
-  map f := { app T := Pi.map (fun _ => f) }
-
-Depends on / 依赖: Pi.map, f.unop
+--- 原说明 ---
+The functor `C ⥤ (Type w)ᵒᵖ ⥤ C` which sends `X : C` and `α : Type w` to
+the product of copies of `X` indexed by `α`.
 -/
 def piFunctor [HasProducts.{w} C] :
     C ⥤ Type wᵒᵖ ⥤ C where
   obj X :=
-    { obj α := ∏ᶜ (fun (t : α.unop) => X)
-      map f := Pi.map' f.unop (fun _ => 𝟙 _) }
-  map f := { app T := Pi.map (fun _ => f) }
+    { obj α := ∏ᶜ (fun (t : α.unop) ↦ X)
+      map f := Pi.map' f.unop (fun _ ↦ 𝟙 _) }
+  map f := { app T := Pi.map (fun _ ↦ f) }
 
 /-- The functor `C ⥤ Type w ⥤ C` which sends `X : C` and `α : Type w` to
 the coproduct of copies of `X` indexed by `α`. -/
 @[simps]
-/--
-Definition of `sigmaFunctor` / `sigmaFunctor` 的定义
+/-
+**CategoryTheory.Limits.sigmaFunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.L
+imits`。
+形式化陈述：sigmaFunctor [HasCoproducts.{w} C] : C ⥤ Type w ⥤ C where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sigmaFunctor
-  signature: [HasCoproducts.{w} C]
-  body: { obj α := ∐ (fun (t : α) => X)
-      map f := Sigma.map' f (fun _ => 𝟙 _) }
-  map f := { app T := Sigma.map (fun _ => f) }
-
-中文:
-定义 sigmaFunctor
-  签名: [HasCoproducts.{w} C]
-  定义体: { obj α := ∐ (fun (t : α) => X)
-      map f := Sigma.map' f (fun _ => 𝟙 _) }
-  map f := { app T := Sigma.map (fun _ => f) }
-
-Depends on / 依赖: Sigma.map
+--- 原说明 ---
+The functor `C ⥤ Type w ⥤ C` which sends `X : C` and `α : Type w` to
+the coproduct of copies of `X` indexed by `α`.
 -/
 def sigmaFunctor [HasCoproducts.{w} C] :
     C ⥤ Type w ⥤ C where
   obj X :=
-    { obj α := ∐ (fun (t : α) => X)
-      map f := Sigma.map' f (fun _ => 𝟙 _) }
-  map f := { app T := Sigma.map (fun _ => f) }
+    { obj α := ∐ (fun (t : α) ↦ X)
+      map f := Sigma.map' f (fun _ ↦ 𝟙 _) }
+  map f := { app T := Sigma.map (fun _ ↦ f) }
 
 end CategoryTheory.Limits
+

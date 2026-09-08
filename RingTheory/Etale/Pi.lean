@@ -25,62 +25,43 @@ public section
 
 namespace Algebra.FormallyEtale
 
-variable {R : Type*} {I : Type*} (A : I -> Type*)
-variable [CommRing R] [forall i, CommRing (A i)] [forall i, Algebra R (A i)]
+variable {R : Type*} {I : Type*} (A : I → Type*)
+variable [CommRing R] [∀ i, CommRing (A i)] [∀ i, Algebra R (A i)]
 
-/--
-theorem `pi_iff` / 定理 `pi_iff`
-
-English:
-theorem pi_iff
-  given: [Finite I]
-  proof: by
-  simp_rw [FormallyEtale.iff_formallyUnramified_and_formallySmooth, forall_and]
-  rw [FormallyUnramified.pi_iff A]; rw [FormallySmooth.pi_iff A]
-
-中文:
-定理 pi_iff
-  条件: [有限 I]
-  证明: by
-  simp_rw [FormallyEtale.iff_formallyUnramified_and_formallySmooth, forall_and]
-  rw [FormallyUnramified.pi_iff A]; rw [FormallySmooth.pi_iff A]
-
-Depends on / 依赖: FormallyEtale, FormallyEtale.iff_formallyUnramified_and_formallySmooth, FormallySmooth, FormallySmooth.pi_iff, FormallyUnramified, FormallyUnramified.pi_iff, forall_and, iff_formallyUnramified_and_formallySmooth, pi_iff, simp_rw
+/-
+**Algebra.FormallyEtale.pi_iff** 是 Mathlib 中的一个定理，位于命名空间 `Algebra.FormallyEtale`
+。
+形式化陈述：pi_iff [Finite I] : FormallyEtale R (Π i, A i) ↔ forall i, FormallyEtale R
+ (A i)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Algebra.FormallyUnramified.pi_iff`：pi_iff : FormallyUnramified R (forall
+ i, f i) ↔ forall i, FormallyUnramified R (f i)
+· 使用定理 `Algebra.FormallySmooth.pi_iff`：pi_iff [Finite I] : FormallySmooth R (Π i
+, A i) ↔ forall i, FormallySmooth R (A i)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem pi_iff [Finite I] :
-    FormallyEtale R (Π i, A i) ↔ forall i, FormallyEtale R (A i) := by
+    FormallyEtale R (Π i, A i) ↔ ∀ i, FormallyEtale R (A i) := by
   simp_rw [FormallyEtale.iff_formallyUnramified_and_formallySmooth, forall_and]
-  rw [FormallyUnramified.pi_iff A]; rw [FormallySmooth.pi_iff A]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Finite
-  signature: I] [forall i, FormallyEtale R (A i)] : FormallyEtale R (Π i, A i)
-  body: .of_formallyUnramified_and_formallySmooth
-
-中文:
-实例 [有限
-  签名: I] [对任意 i, 形式平展 R (A i)] : 形式平展 R (Π i, A i)
-  定义体: .of_formallyUnramified_and_formallySmooth
-
-Depends on / 依赖: of_formallyUnramified_and_formallySmooth
+  rw [FormallyUnramified.pi_iff A, FormallySmooth.pi_iff A]
+/-
+**Algebra.FormallyEtale.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.FormallyEtale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Finite I] [forall i, FormallyEtale R (A i)] : FormallyEtale R (Π i, A i) :=
+instance [Finite I] [∀ i, FormallyEtale R (A i)] : FormallyEtale R (Π i, A i) :=
   .of_formallyUnramified_and_formallySmooth
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Finite
-  signature: I] [forall i, Etale R (A i)] : Etale R (Π i, A i) where
-
-中文:
-实例 [有限
-  签名: I] [对任意 i, 平展 R (A i)] : 平展 R (Π i, A i) where
+/-
+**Algebra.FormallyEtale.** 是 Mathlib 中的一个实例，位于命名空间 `Algebra.FormallyEtale`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Finite I] [forall i, Etale R (A i)] : Etale R (Π i, A i) where
+instance [Finite I] [∀ i, Etale R (A i)] : Etale R (Π i, A i) where
 
 end Algebra.FormallyEtale
+

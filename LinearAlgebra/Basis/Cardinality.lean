@@ -28,35 +28,39 @@ section Semiring
 
 variable [Semiring R] [AddCommMonoid M] [Module R M]
 
-/--
-lemma `finite_of_span_finite_eq_top_finsupp` / 引理 `finite_of_span_finite_eq_top_finsupp`
-
-English:
-lemma finite_of_span_finite_eq_top_finsupp
-  statement: [Nontrivial M] {ι : Type*} {s : Set (ι ->₀ M)}
-  proof: suffices ⋃ i in s, i.support = .univ from
-    .of_finite_univ (this ▸ hs.biUnion fun _ _ => by simp)
-  have ⟨x, hx⟩ := exists_ne (0 : M)
-  eq_univ_of_forall fun j => (top_unique (hsspan.ge.trans (span_le_supported_biUnion_support R s)) ▸
-    mem_top (x := single j x)) ((mem_support_single ..).mpr ⟨rfl, hx⟩)
-
-中文:
-引理 finite_of_span_finite_eq_top_finsupp
-  结论: [非平凡 M] {ι : 类型} {s : 集合 (ι ->₀ M)}
-  证明: suffices ⋃ i in s, i.support = .univ from
-    .of_finite_univ (this ▸ hs.biUnion fun _ _ => by simp)
-  have ⟨x, hx⟩ := exists_ne (0 : M)
-  eq_univ_of_forall fun j => (top_unique (hsspan.ge.trans (span_le_supported_biUnion_support R s)) ▸
-    mem_top (x := single j x)) ((mem_support_single ..).mpr ⟨rfl, hx⟩)
-
-Depends on / 依赖: biUnion, eq_univ_of_forall, exists_ne, hs.biUnion, hsspan, hsspan.ge.trans, i.support, mem_support_single, mem_top, of_finite_univ, single, span_le_supported_biUnion_support, support, top_unique
+/-
+**finite_of_span_finite_eq_top_finsupp** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：finite_of_span_finite_eq_top_finsupp [Nontrivial M] {ι : Type*} {s : Set (
+ι ->₀ M)} (hs : s.Finite) (hsspan : span R s = ⊤) : Finite ι
+参数：ι ->₀ M；hs : s.Finite；hsspan : span R s = ⊤。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_ne`：exists_ne [Nontrivial α] (x : α) : exists y, y != x
+· 使用定理 `Set.eq_univ_of_forall`：eq_univ_of_forall {s : Set α} : (forall x, x in s
+) -> s = univ
+· 使用定理 `Submodule.mem_top`：∀ {R : Type u_1} {M : Type u_3} [inst : Semiring R] [
+inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M] {x : M},   x ∈ ⊤
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `top_unique`：top_unique (h : ⊤ <= a) : a = ⊤
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Finsupp.span_le_supported_biUnion_support`：span_le_supported_biUnion_sup
+port (s : Set (α ->₀ M)) : span R s <= supported M R (⋃ x in s, x.support)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finsupp.mem_support_single`：mem_support_single (a a' : α) (b : M) : a in
+ (single a' b).support ↔ a = a' ∧ b != 0
+· 使用定理 `Finite.of_finite_univ`：∀ {α : Type u}, Set.univ.Finite → Finite α
+· 使用定理 `Set.Finite.biUnion`：∀ {α : Type u} {ι : Type u_1} {s : Set ι}, s.Finite 
+→ ∀ {t : ι → Set α}, (∀ i ∈ s, (t i).Finite) → (⋃ i ∈ s, t i).Finite
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 -/
-lemma finite_of_span_finite_eq_top_finsupp [Nontrivial M] {ι : Type*} {s : Set (ι ->₀ M)}
+lemma finite_of_span_finite_eq_top_finsupp [Nontrivial M] {ι : Type*} {s : Set (ι →₀ M)}
     (hs : s.Finite) (hsspan : span R s = ⊤) : Finite ι :=
-  suffices ⋃ i in s, i.support = .univ from
-    .of_finite_univ (this ▸ hs.biUnion fun _ _ => by simp)
+  suffices ⋃ i ∈ s, i.support = .univ from
+    .of_finite_univ (this ▸ hs.biUnion fun _ _ ↦ by simp)
   have ⟨x, hx⟩ := exists_ne (0 : M)
-  eq_univ_of_forall fun j => (top_unique (hsspan.ge.trans (span_le_supported_biUnion_support R s)) ▸
+  eq_univ_of_forall fun j ↦ (top_unique (hsspan.ge.trans (span_le_supported_biUnion_support R s)) ▸
     mem_top (x := single j x)) ((mem_support_single ..).mpr ⟨rfl, hx⟩)
 
 -- One might hope that a finite spanning set implies that any linearly independent set is finite.
@@ -72,30 +76,42 @@ lemma finite_of_span_finite_eq_top_finsupp [Nontrivial M] {ι : Type*} {s : Set 
 -- `Module.End R (ℕ →₀ R)` is isomorphic to `ℕ → Module.End R (ℕ →₀ R)` as a module over itself,
 -- which also clearly contains an infinite linearly independent set.
 /--
-lemma `basis_finite_of_finite_spans` / 引理 `basis_finite_of_finite_spans`
+Over any nontrivial ring, the existence of a finite spanning set implies that any basis is finite.
+-/
+/-
+**basis_finite_of_finite_spans** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：basis_finite_of_finite_spans [Nontrivial R] {s : Set M} (hs : s.Finite) (h
+sspan : span R s = ⊤) {ι : Type w} (b : Basis ι R M) : Finite ι
+参数：hs : s.Finite；hsspan : span R s = ⊤；b : Basis ι R M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `finite_of_span_finite_eq_top_finsupp`：finite_of_span_finite_eq_top_finsu
+pp [Nontrivial M] {ι : Type*} {s : Set (ι ->₀ M)} (hs : s.Finite) (hsspan : span
+ R s = ⊤) : Finite ι
+· 使用定理 `Set.Finite.image`：∀ {α : Type u} {β : Type v} {s : Set α} (f : α → β), s
+.Finite → (f '' s).Finite
+· 使用定理 `RingHomSurjective.invPair`：∀ {R₁ : Type u_1} {R₂ : Type u_2} [inst : Sem
+iring R₁] [inst_1 : Semiring R₂] {σ₁ : R₁ →+* R₂} {σ₂ : R₂ →+* R₁}   [RingHomInv
+Pair σ₁ σ₂], Ri…
+· 使用定理 `LinearEquiv.range`：∀ {R : Type u_1} {R₂ : Type u_3} {M : Type u_5} {M₂ :
+ Type u_7} [inst : Semiring R] [inst_1 : Semiring R₂]   [inst_2 : AddCommMonoid 
+M] [ins…
+· 使用定理 `Submodule.map_top`：map_top [RingHomSurjective τ₁₂] (f : M ->ₛₗ[τ₁₂] M₂) 
+: map f ⊤ = range f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.span_image`：span_image [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂
+] M₂) : span R₂ (f '' s) = map f (span R s)
 
-English:
-lemma basis_finite_of_finite_spans
-  statement: [Nontrivial R] {s : Set M} (hs : s.Finite)
-  proof: by
-  have := congr(($hsspan).map b.repr.toLinearMap)
-  rw [← span_image]; rw [Submodule.map_top]; rw [LinearEquiv.range] at this
-  exact finite_of_span_finite_eq_top_finsupp (hs.image _) this
-
-中文:
-引理 basis_finite_of_finite_spans
-  结论: [非平凡 R] {s : 集合 M} (hs : s.有限)
-  证明: by
-  have := congr(($hsspan).map b.repr.toLinearMap)
-  rw [← span_image]; rw [Submodule.map_top]; rw [LinearEquiv.range] at this
-  exact finite_of_span_finite_eq_top_finsupp (hs.image _) this
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.range, Submodule, Submodule.map_top, b.repr.toLinearMap, finite_of_span_finite_eq_top_finsupp, hs.image, hsspan, map_top, span_image, toLinearMap
+--- 原说明 ---
+Over any nontrivial ring, the existence of a finite spanning set implies that an
+y basis is finite.
 -/
 lemma basis_finite_of_finite_spans [Nontrivial R] {s : Set M} (hs : s.Finite)
     (hsspan : span R s = ⊤) {ι : Type w} (b : Basis ι R M) : Finite ι := by
   have := congr(($hsspan).map b.repr.toLinearMap)
-  rw [← span_image]; rw [Submodule.map_top]; rw [LinearEquiv.range] at this
+  rw [← span_image, Submodule.map_top, LinearEquiv.range] at this
   exact finite_of_span_finite_eq_top_finsupp (hs.image _) this
 
 end Semiring
@@ -106,91 +122,92 @@ variable [Semiring R] [AddCommMonoid M] [Nontrivial R] [Module R M]
 
 set_option backward.isDefEq.respectTransparency false in
 -- From [Les familles libres maximales d'un module ont-elles le meme cardinal?][lazarus1973]
-/--
-theorem `union_support_maximal_linearIndependent_eq_range_basis` / 定理 `union_support_maximal_linearIndependent_eq_range_basis`
+/-- Over any ring `R`, if `b` is a basis for a module `M`,
+and `s` is a maximal linearly independent set,
+then the union of the supports of `x ∈ s` (when written out in the basis `b`) is all of `b`.
+-/
+/-
+**union_support_maximal_linearIndependent_eq_range_basis** 是 Mathlib 中的一个定理，位于命名
+空间 ``。
+形式化陈述：union_support_maximal_linearIndependent_eq_range_basis {ι : Type w} (b : B
+asis ι R M) {κ : Type w'} (v : κ -> M) (ind : LinearIndependent R v) (m : ind.Ma
+ximal) : ⋃ k, ((b.repr (v k)).support : Set ι) = Set.univ
+参数：b : Basis ι R M；v : κ -> M；ind : LinearIndependent R v；m : ind.Maximal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `SemilinearEquivClass.instSemilinearMapClass`：∀ {R : Type u_1} {S : Type 
+u_6} {M : Type u_7} {M₂ : Type u_9} (F : Type u_14) [inst : Semiring R] [inst_1 
+: Semiring S]   [inst_2 : AddComm…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Finsupp.coe_finsetSum`：∀ {α : Type u_1} {ι : Type u_2} {N : Type u_10} [
+inst : AddCommMonoid N] (S : Finset ι) (f : ι → α →₀ N),   ⇑(∑ i ∈ S, f i) = ∑ i
+ ∈ S, ⇑(f i…
+· 使用定理 `Finset.sum_apply`：∀ {ι : Type u_1} {α : Type u_7} {M : α → Type u_8} [in
+st : (a : α) → AddCommMonoid (M a)] (a : α) (s : Finset ι)   (g : ι → (a : α) → 
+M a), …
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `Finset.sum_const_zero`：∀ {ι : Type u_1} {M : Type u_3} {s : Finset ι} [i
+nst : AddCommMonoid M], ∑ _x ∈ s, 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Module.Basis.repr_self`：repr_self : b.repr (b i) = Finsupp.single i 1
+· 使用定理 `Finsupp.single_eq_same`：single_eq_same : (single a b : α ->₀ M) a = b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LinearIndependent.linearIndepOn_id`：LinearIndependent.linearIndepOn_id (
+i : LinearIndependent R v) : LinearIndepOn R id (range v)
+· 使用定理 `linearIndependent_iffₛ`：linearIndependent_iffₛ : LinearIndependent R v ↔
+ forall l₁ l₂, Finsupp.linearCombination R v l₁ = Finsupp.linearCombination R v 
+l₂ -> l₁ = l…
+· 使用定理 `Finsupp.ext`：ext {f g : α ->₀ M} (h : forall a, f a = g a) : f = g
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `Finsupp.smul_single`：smul_single [Zero M] [SMulZeroClass R M] (c : R) (a
+ : α) (b : M) : c • Finsupp.single a b = Finsupp.single a (c • b)
+（共 40 条，此处仅展示前 30 条）
 
-English:
-theorem union_support_maximal_linearIndependent_eq_range_basis
-  statement: {ι : Type w} (b : Basis ι R M)
-  proof: by
-  -- If that's not the case,
-  by_contra h
-  simp only [← Ne.eq_def, ne_univ_iff_exists_notMem, mem_iUnion, not_exists_not,
-    Finsupp.mem_support_iff, Finset.mem_coe] at h
-  -- We have some basis element `b i` which is not in the support of any of the `v k`.
-  obtain ⟨i, w⟩ := h
-  have repr_eq_zero (l) : b.repr (linearCombination R v l) i = 0 := by
-    simp [linearCombination_apply, Finsupp.sum, w]
-  -- Using this, we'll construct a linearly independent family strictly larger than `v`,
-  -- by also using this `b i`.
-  let v' (o : Option κ) : M := o.elim (b i) v
-  have r : range v subseteq range v' := by rintro - ⟨k, rfl⟩; exact ⟨some k, rfl⟩
-  have r' : b i ∉ range v := fun ⟨k, p⟩ => by simpa [w] using congr(b.repr $p i)
-  have r'' : range v != range v' := (r' <| · ▸ ⟨none, rfl⟩)
-  -- The key step in the proof is checking that this strictly larger family is linearly independent.
-  have i' : LinearIndepOn R id (range v') := by
-    apply LinearIndependent.linearIndepOn_id
-    rw [linearIndependent_iffₛ]
-    intro l l' z
-    simp_rw [linearCombination_option, v', Option.elim] at z
-    change _ + linearCombination R v l.some = _ + linearCombination R v l'.some at z
-    -- We have some equality between linear combinations of `b i` and the `v k`,
-    -- and want to show the coefficients are equal.
-    ext (_ | a)
-    -- We'll first show the coefficient of `b i` is zero,
-    -- by expressing the `v k` in the basis `b`, and using that the `v k` have no `b i` term.
-    · simpa [repr_eq_zero] using congr(b.repr $z i)
-    -- All the other coefficients are also equal, because `v` is linear independent,
-    -- by comparing the coefficients in the basis `b`.
-have l₁ : l.some = l'.some := ind b.repr.injective ext fun j => by
-      obtain rfl | ne := eq_or_ne i j
-      · simp_rw [repr_eq_zero]
-      simpa [single_apply, ne] using congr(b.repr $z j)
-    exact DFunLike.congr_fun l₁ a
-  exact r'' (m (range v') i' r)
-
-中文:
-定理 union_support_maximal_linearIndependent_eq_range_basis
-  结论: {ι : 类型 w} (b : 基 ι R M)
-  证明: by
-  -- If that's not the case,
-  by_contra h
-  simp only [← Ne.eq_def, ne_univ_iff_exists_notMem, mem_iUnion, not_exists_not,
-    Finsupp.mem_support_iff, Finset.mem_coe] at h
-  -- We have some basis element `b i` which is not in the support of any of the `v k`.
-  obtain ⟨i, w⟩ := h
-  have repr_eq_zero (l) : b.repr (linearCombination R v l) i = 0 := by
-    simp [linearCombination_apply, Finsupp.sum, w]
-  -- Using this, we'll construct a linearly independent family strictly larger than `v`,
-  -- by also using this `b i`.
-  let v' (o : Option κ) : M := o.elim (b i) v
-  have r : range v subseteq range v' := by rintro - ⟨k, rfl⟩; exact ⟨some k, rfl⟩
-  have r' : b i ∉ range v := fun ⟨k, p⟩ => by simpa [w] using congr(b.repr $p i)
-  have r'' : range v != range v' := (r' <| · ▸ ⟨none, rfl⟩)
-  -- The key step in the proof is checking that this strictly larger family is linearly independent.
-  have i' : LinearIndepOn R id (range v') := by
-    apply LinearIndependent.linearIndepOn_id
-    rw [linearIndependent_iffₛ]
-    intro l l' z
-    simp_rw [linearCombination_option, v', Option.elim] at z
-    change _ + linearCombination R v l.some = _ + linearCombination R v l'.some at z
-    -- We have some equality between linear combinations of `b i` and the `v k`,
-    -- and want to show the coefficients are equal.
-    ext (_ | a)
-    -- We'll first show the coefficient of `b i` is zero,
-    -- by expressing the `v k` in the basis `b`, and using that the `v k` have no `b i` term.
-    · simpa [repr_eq_zero] using congr(b.repr $z i)
-    -- All the other coefficients are also equal, because `v` is linear independent,
-    -- by comparing the coefficients in the basis `b`.
-have l₁ : l.some = l'.some := ind b.repr.injective ext fun j => by
-      obtain rfl | ne := eq_or_ne i j
-      · simp_rw [repr_eq_zero]
-      simpa [single_apply, ne] using congr(b.repr $z j)
-    exact DFunLike.congr_fun l₁ a
-  exact r'' (m (range v') i' r)
+--- 原说明 ---
+Over any ring `R`, if `b` is a basis for a module `M`,
+and `s` is a maximal linearly independent set,
+then the union of the supports of `x ∈ s` (when written out in the basis `b`) is
+ all of `b`.
 -/
 theorem union_support_maximal_linearIndependent_eq_range_basis {ι : Type w} (b : Basis ι R M)
-    {κ : Type w'} (v : κ -> M) (ind : LinearIndependent R v) (m : ind.Maximal) :
+    {κ : Type w'} (v : κ → M) (ind : LinearIndependent R v) (m : ind.Maximal) :
     ⋃ k, ((b.repr (v k)).support : Set ι) = Set.univ := by
   -- If that's not the case,
   by_contra h
@@ -203,9 +220,9 @@ theorem union_support_maximal_linearIndependent_eq_range_basis {ι : Type w} (b 
   -- Using this, we'll construct a linearly independent family strictly larger than `v`,
   -- by also using this `b i`.
   let v' (o : Option κ) : M := o.elim (b i) v
-  have r : range v subseteq range v' := by rintro - ⟨k, rfl⟩; exact ⟨some k, rfl⟩
-  have r' : b i ∉ range v := fun ⟨k, p⟩ => by simpa [w] using congr(b.repr $p i)
-  have r'' : range v != range v' := (r' <| · ▸ ⟨none, rfl⟩)
+  have r : range v ⊆ range v' := by rintro - ⟨k, rfl⟩; exact ⟨some k, rfl⟩
+  have r' : b i ∉ range v := fun ⟨k, p⟩ ↦ by simpa [w] using congr(b.repr $p i)
+  have r'' : range v ≠ range v' := (r' <| · ▸ ⟨none, rfl⟩)
   -- The key step in the proof is checking that this strictly larger family is linearly independent.
   have i' : LinearIndepOn R id (range v') := by
     apply LinearIndependent.linearIndepOn_id
@@ -221,71 +238,85 @@ theorem union_support_maximal_linearIndependent_eq_range_basis {ι : Type w} (b 
     · simpa [repr_eq_zero] using congr(b.repr $z i)
     -- All the other coefficients are also equal, because `v` is linear independent,
     -- by comparing the coefficients in the basis `b`.
-have l₁ : l.some = l'.some := ind b.repr.injective ext fun j => by
+    have l₁ : l.some = l'.some := ind <| b.repr.injective <| ext fun j ↦ by
       obtain rfl | ne := eq_or_ne i j
       · simp_rw [repr_eq_zero]
       simpa [single_apply, ne] using congr(b.repr $z j)
     exact DFunLike.congr_fun l₁ a
   exact r'' (m (range v') i' r)
 
-/--
-theorem `infinite_basis_le_maximal_linearIndependent'` / 定理 `infinite_basis_le_maximal_linearIndependent'`
+/-- Over any ring `R`, if `b` is an infinite basis for a module `M`,
+and `s` is a maximal linearly independent set,
+then the cardinality of `b` is bounded by the cardinality of `s`.
+-/
+/-
+**infinite_basis_le_maximal_linearIndependent'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：infinite_basis_le_maximal_linearIndependent' {ι : Type w} (b : Basis ι R M
+) [Infinite ι] {κ : Type w'} (v : κ -> M) (i : LinearIndependent R v) (m : i.Max
+imal) : Cardinal.lift.{w'} #ι <= Cardinal.lift.{w} #κ
+参数：b : Basis ι R M；v : κ -> M；i : LinearIndependent R v；m : i.Maximal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Cardinal.le_range_of_union_finset_eq_univ`：le_range_of_union_finset_eq_u
+niv {α β : Type*} [Infinite β] (f : α -> Finset β) (w : ⋃ a, (f a : Set β) = Set
+.univ) : #β <= #(range f)
+· 使用定理 `union_support_maximal_linearIndependent_eq_range_basis`：union_support_ma
+ximal_linearIndependent_eq_range_basis {ι : Type w} (b : Basis ι R M) {κ : Type 
+w'} (v : κ -> M) (ind : LinearIndependent R …
+· 使用定理 `Cardinal.mk_range_le_lift`：mk_range_le_lift {α : Type u} {β : Type v} {f
+ : α -> β} : lift.{u} #(range f) <= lift.{v} #α
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Cardinal.lift_le`：lift_le {a b : Cardinal.{v}} : lift.{u} a <= lift.{u} 
+b ↔ a <= b
 
-English:
-theorem infinite_basis_le_maximal_linearIndependent'
-  statement: {ι : Type w} (b : Basis ι R M) [Infinite ι]
-  proof: by
-  let Φ := fun k : κ => (b.repr (v k)).support
-  have w₁ : #ι <= #(Set.range Φ) := by
-    apply Cardinal.le_range_of_union_finset_eq_univ
-    exact union_support_maximal_linearIndependent_eq_range_basis b v i m
-  have w₂ : Cardinal.lift.{w'} #(Set.range Φ) <= Cardinal.lift.{w} #κ := Cardinal.mk_range_le_lift
-  exact (Cardinal.lift_le.mpr w₁).trans w₂
-
-中文:
-定理 infinite_basis_le_maximal_linearIndependent'
-  结论: {ι : 类型 w} (b : 基 ι R M) [无限 ι]
-  证明: by
-  let Φ := fun k : κ => (b.repr (v k)).support
-  have w₁ : #ι <= #(Set.range Φ) := by
-    apply Cardinal.le_range_of_union_finset_eq_univ
-    exact union_support_maximal_linearIndependent_eq_range_basis b v i m
-  have w₂ : Cardinal.lift.{w'} #(Set.range Φ) <= Cardinal.lift.{w} #κ := Cardinal.mk_range_le_lift
-  exact (Cardinal.lift_le.mpr w₁).trans w₂
-
-Depends on / 依赖: Cardinal, Cardinal.le_range_of_union_finset_eq_univ, Cardinal.lift, Cardinal.lift_le.mpr, Cardinal.mk_range_le_lift, Set.range, b.repr, le_range_of_union_finset_eq_univ, lift_le, mk_range_le_lift, support, union_support_maximal_linearIndependent_eq_range_basis
+--- 原说明 ---
+Over any ring `R`, if `b` is an infinite basis for a module `M`,
+and `s` is a maximal linearly independent set,
+then the cardinality of `b` is bounded by the cardinality of `s`.
 -/
 theorem infinite_basis_le_maximal_linearIndependent' {ι : Type w} (b : Basis ι R M) [Infinite ι]
-    {κ : Type w'} (v : κ -> M) (i : LinearIndependent R v) (m : i.Maximal) :
-    Cardinal.lift.{w'} #ι <= Cardinal.lift.{w} #κ := by
+    {κ : Type w'} (v : κ → M) (i : LinearIndependent R v) (m : i.Maximal) :
+    Cardinal.lift.{w'} #ι ≤ Cardinal.lift.{w} #κ := by
   let Φ := fun k : κ => (b.repr (v k)).support
-  have w₁ : #ι <= #(Set.range Φ) := by
+  have w₁ : #ι ≤ #(Set.range Φ) := by
     apply Cardinal.le_range_of_union_finset_eq_univ
     exact union_support_maximal_linearIndependent_eq_range_basis b v i m
-  have w₂ : Cardinal.lift.{w'} #(Set.range Φ) <= Cardinal.lift.{w} #κ := Cardinal.mk_range_le_lift
+  have w₂ : Cardinal.lift.{w'} #(Set.range Φ) ≤ Cardinal.lift.{w} #κ := Cardinal.mk_range_le_lift
   exact (Cardinal.lift_le.mpr w₁).trans w₂
 
 -- (See `infinite_basis_le_maximal_linearIndependent'` for the more general version
 -- where the index types can live in different universes.)
-/--
-theorem `infinite_basis_le_maximal_linearIndependent` / 定理 `infinite_basis_le_maximal_linearIndependent`
+/-- Over any ring `R`, if `b` is an infinite basis for a module `M`,
+and `s` is a maximal linearly independent set,
+then the cardinality of `b` is bounded by the cardinality of `s`.
+-/
+/-
+**infinite_basis_le_maximal_linearIndependent** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：infinite_basis_le_maximal_linearIndependent {ι : Type w} (b : Basis ι R M)
+ [Infinite ι] {κ : Type w} (v : κ -> M) (i : LinearIndependent R v) (m : i.Maxim
+al) : #ι <= #κ
+参数：b : Basis ι R M；v : κ -> M；i : LinearIndependent R v；m : i.Maximal。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Cardinal.lift_le`：lift_le {a b : Cardinal.{v}} : lift.{u} a <= lift.{u} 
+b ↔ a <= b
+· 使用定理 `infinite_basis_le_maximal_linearIndependent'`：infinite_basis_le_maximal_
+linearIndependent' {ι : Type w} (b : Basis ι R M) [Infinite ι] {κ : Type w'} (v 
+: κ -> M) (i : LinearIndependent R…
 
-English:
-theorem infinite_basis_le_maximal_linearIndependent
-  statement: {ι : Type w} (b : Basis ι R M) [Infinite ι]
-  proof: Cardinal.lift_le.mp (infinite_basis_le_maximal_linearIndependent' b v i m)
-
-中文:
-定理 infinite_basis_le_maximal_linearIndependent
-  结论: {ι : 类型 w} (b : 基 ι R M) [无限 ι]
-  证明: Cardinal.lift_le.mp (infinite_basis_le_maximal_linearIndependent' b v i m)
-
-Depends on / 依赖: Cardinal, Cardinal.lift_le.mp, infinite_basis_le_maximal_linearIndependent, lift_le
+--- 原说明 ---
+Over any ring `R`, if `b` is an infinite basis for a module `M`,
+and `s` is a maximal linearly independent set,
+then the cardinality of `b` is bounded by the cardinality of `s`.
 -/
 theorem infinite_basis_le_maximal_linearIndependent {ι : Type w} (b : Basis ι R M) [Infinite ι]
-    {κ : Type w} (v : κ -> M) (i : LinearIndependent R v) (m : i.Maximal) : #ι <= #κ :=
+    {κ : Type w} (v : κ → M) (i : LinearIndependent R v) (m : i.Maximal) : #ι ≤ #κ :=
   Cardinal.lift_le.mp (infinite_basis_le_maximal_linearIndependent' b v i m)
 
 end Ring
 
 end Finite
+

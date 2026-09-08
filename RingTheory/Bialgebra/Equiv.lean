@@ -31,20 +31,17 @@ variable {R : Type u} {A : Type v} {B : Type w} {C : Type u₁}
 
 open TensorProduct Coalgebra Bialgebra Function
 
-/--
-Definition of `BialgEquiv` / `BialgEquiv` 的定义
+/-- An equivalence of bialgebras is an invertible bialgebra homomorphism. -/
+/-
+**BialgEquiv** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u) →   [inst : CommSemiring R] →     (A : Type v) →       (B : T
+ype w) →         [inst_1 : Semiring A] →           [inst_2 : Semiring B] →      
+       [inst_3 : Algebra R A] →               [inst_4 : Algebra R B] → [Coalgebr
+aStruct R A] → [CoalgebraStruct R B] → Type (max v w)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure BialgEquiv
-  parameters: (R : Type u) [CommSemiring R] (A : Type v) (B : Type w)
-  extends: A ≃ₗc[R] B, A ≃* B
-  (no additional axioms)
-
-中文:
-结构 Bialg等价
-  参数: (R : 类型u) [交换半环 R] (A : 类型v) (B : 类型 w)
-  继承: A ≃ₗc[R] B, A ≃* B
-  (无附加公理)
+--- 原说明 ---
+An equivalence of bialgebras is an invertible bialgebra homomorphism.
 -/
 structure BialgEquiv (R : Type u) [CommSemiring R] (A : Type v) (B : Type w)
     [Semiring A] [Semiring B] [Algebra R A] [Algebra R B]
@@ -56,20 +53,22 @@ attribute [nolint docBlame] BialgEquiv.toCoalgEquiv
 @[inherit_doc BialgEquiv]
 notation:50 A " ≃ₐc[" R "] " B => BialgEquiv R A B
 
-/--
-Definition of `BialgEquivClass` / `BialgEquivClass` 的定义
+/-- `BialgEquivClass F R A B` asserts `F` is a type of bundled bialgebra equivalences
+from `A` to `B`. -/
+/-
+**BialgEquivClass** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(F : Type u_1) →   (R : outParam (Type u_2)) →     (A : outParam (Type u_3
+)) →       (B : outParam (Type u_4)) →         [inst : CommSemiring R] →        
+   [inst_1 : Semiring A] →             [inst_2 : Semiring B] →               [in
+st_3 : Algebra R A] →                 [inst_4 : Algebra R B] → [CoalgebraStruct 
+R A] → [CoalgebraStruct R B] → [EquivLike F A B] → Prop
+参数：Type u_2；Type u_3；Type u_4。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class BialgEquivClass
-  parameters: (F : Type*) (R A B : outParam Type*) [CommSemiring R]
-  extends: CoalgEquivClass F R A B, MulEquivClass F A B
-  (no additional axioms)
-
-中文:
-类 Bialg等价类
-  参数: (F : 类型) (R A B : outParam 类型) [交换半环 R]
-  继承: 余alg等价类 F R A B, 乘法等价类 F A B
-  (无附加公理)
+--- 原说明 ---
+`BialgEquivClass F R A B` asserts `F` is a type of bundled bialgebra equivalence
+s
+from `A` to `B`.
 -/
 class BialgEquivClass (F : Type*) (R A B : outParam Type*) [CommSemiring R]
     [Semiring A] [Semiring B] [Algebra R A] [Algebra R B]
@@ -82,6 +81,10 @@ variable {F R A B : Type*} [CommSemiring R] [Semiring A] [Semiring B]
   [Algebra R A] [Algebra R B] [CoalgebraStruct R A] [CoalgebraStruct R B]
   [EquivLike F A B] [BialgEquivClass F R A B]
 
+/-
+**BialgEquivClass.** 是 Mathlib 中的一个实例，位于命名空间 `BialgEquivClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) toBialgHomClass : BialgHomClass F R A B where
   map_add := map_add
   map_smulₛₗ := map_smul
@@ -92,40 +95,47 @@ instance (priority := 100) toBialgHomClass : BialgHomClass F R A B where
 
 /-- Reinterpret an element of a type of bialgebra equivalences as a bialgebra equivalence. -/
 @[coe]
-/--
-Definition of `toBialgEquiv` / `toBialgEquiv` 的定义
+/-
+**BialgEquivClass.toBialgEquiv** 是 Mathlib 中的一个定义，位于命名空间 `BialgEquivClass`。
+形式化陈述：toBialgEquiv (f : F) : A ≃ₐc[R] B
+参数：f : F。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgEquivClass.toCoalgEquivClass`：∀ {F : Type u_1} {R : outParam (Type 
+u_2)} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R
+}   {inst_1 : Semiring …
+· 使用定理 `BialgEquivClass.toBialgHomClass`：∀ {F : Type u_1} {R : Type u_2} {A : Ty
+pe u_3} {B : Type u_4} [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 :
+ Semiring B] [inst_3 …
+· 使用定理 `BialgHom.map_mul'`：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} [inst 
+: CommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [inst_3 : Semir
+ing B] …
 
-English:
-definition toBialgEquiv
-  signature: (f : F)
-  body: { (f : A ≃ₗc[R] B), (f : A ->ₐc[R] B) with }
-
-中文:
-定义 toBialgEquiv
-  签名: (f : F)
-  定义体: { (f : A ≃ₗc[R] B), (f : A ->ₐc[R] B) with }
+--- 原说明 ---
+Reinterpret an element of a type of bialgebra equivalences as a bialgebra equiva
+lence.
 -/
 def toBialgEquiv (f : F) : A ≃ₐc[R] B :=
-  { (f : A ≃ₗc[R] B), (f : A ->ₐc[R] B) with }
+  { (f : A ≃ₗc[R] B), (f : A →ₐc[R] B) with }
 
-/--
-Instance `instCoeToBialgEquiv` / 实例 `instCoeToBialgEquiv`
+/-- Reinterpret an element of a type of bialgebra equivalences as a bialgebra equivalence. -/
+/-
+**BialgEquivClass.instCoeToBialgEquiv** 是 Mathlib 中的一个实例，位于命名空间 `BialgEquivClass
+`。
+形式化陈述：instCoeToBialgEquiv : CoeHead F (A ≃ₐc[R] B) where coe f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instCoeToBialgEquiv
-  signature: : CoeHead F (A ≃ₐc[R] B) where
-  body: toBialgEquiv f
-
-中文:
-实例 instCoeToBialgEquiv
-  签名: : CoeHead F (A ≃ₐc[R] B) where
-  定义体: toBialgEquiv f
-
-Depends on / 依赖: toBialgEquiv
+--- 原说明 ---
+Reinterpret an element of a type of bialgebra equivalences as a bialgebra equiva
+lence.
 -/
 instance instCoeToBialgEquiv : CoeHead F (A ≃ₐc[R] B) where
   coe f := toBialgEquiv f
-
+/-
+**BialgEquivClass.** 是 Mathlib 中的一个实例，位于命名空间 `BialgEquivClass`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) toAlgEquivClass : AlgEquivClass F R A B where
   map_mul := map_mul
   map_add := map_add
@@ -142,50 +152,32 @@ section
 variable [Semiring A] [Semiring B] [Algebra R A] [Algebra R B]
   [CoalgebraStruct R A] [CoalgebraStruct R B]
 
-/--
-Definition of `toBialgHom` / `toBialgHom` 的定义
+/-- The bialgebra morphism underlying a bialgebra equivalence. -/
+/-
+**BialgEquiv.toBialgHom** 是 Mathlib 中的一个定义，位于命名空间 `BialgEquiv`。
+形式化陈述：toBialgHom (f : A ≃ₐc[R] B) : A ->ₐc[R] B
+参数：f : A ≃ₐc[R] B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toBialgHom
-  signature: (f : A ≃ₐc[R] B)
-  body: { f.toCoalgEquiv with
-    map_one' := map_one f.toMulEquiv
-    map_mul' := map_mul f.toMulEquiv }
-
-中文:
-定义 toBialgHom
-  签名: (f : A ≃ₐc[R] B)
-  定义体: { f.toCoalgEquiv with
-    map_one' := map_one f.toMulEquiv
-    map_mul' := map_mul f.toMulEquiv }
-
-Depends on / 依赖: f.toCoalgEquiv, f.toMulEquiv, map_mul, map_one, toCoalgEquiv, toMulEquiv
+--- 原说明 ---
+The bialgebra morphism underlying a bialgebra equivalence.
 -/
-def toBialgHom (f : A ≃ₐc[R] B) : A ->ₐc[R] B :=
+def toBialgHom (f : A ≃ₐc[R] B) : A →ₐc[R] B :=
   { f.toCoalgEquiv with
     map_one' := map_one f.toMulEquiv
     map_mul' := map_mul f.toMulEquiv }
 
-/--
-Definition of `toAlgEquiv` / `toAlgEquiv` 的定义
+/-- The algebra equivalence underlying a bialgebra equivalence. -/
+/-
+**BialgEquiv.toAlgEquiv** 是 Mathlib 中的一个定义，位于命名空间 `BialgEquiv`。
+形式化陈述：toAlgEquiv (f : A ≃ₐc[R] B) : A ≃ₐ[R] B
+参数：f : A ≃ₐc[R] B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toAlgEquiv
-  signature: (f : A ≃ₐc[R] B)
-  body: { f.toCoalgEquiv with
-    map_mul' := map_mul f.toMulEquiv
-    map_add' := map_add f.toCoalgEquiv
-    commutes' := AlgHomClass.commutes f.toBialgHom }
-
-中文:
-定义 toAlgEquiv
-  签名: (f : A ≃ₐc[R] B)
-  定义体: { f.toCoalgEquiv with
-    map_mul' := map_mul f.toMulEquiv
-    map_add' := map_add f.toCoalgEquiv
-    commutes' := AlgHomClass.commutes f.toBialgHom }
-
-Depends on / 依赖: AlgHomClass, AlgHomClass.commutes, commutes, f.toBialgHom, f.toCoalgEquiv, f.toMulEquiv, map_add, map_mul, toBialgHom, toCoalgEquiv, toMulEquiv
+--- 原说明 ---
+The algebra equivalence underlying a bialgebra equivalence.
 -/
 def toAlgEquiv (f : A ≃ₐc[R] B) : A ≃ₐ[R] B :=
   { f.toCoalgEquiv with
@@ -193,109 +185,64 @@ def toAlgEquiv (f : A ≃ₐc[R] B) : A ≃ₐ[R] B :=
     map_add' := map_add f.toCoalgEquiv
     commutes' := AlgHomClass.commutes f.toBialgHom }
 
-/--
-Definition of `toEquiv` / `toEquiv` 的定义
+/-- The equivalence of types underlying a bialgebra equivalence. -/
+/-
+**BialgEquiv.toEquiv** 是 Mathlib 中的一个定义，位于命名空间 `BialgEquiv`。
+形式化陈述：toEquiv : (A ≃ₐc[R] B) -> A ≃ B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toEquiv
-  signature: : (A ≃ₐc[R] B) -> A ≃ B
-  body: fun f => f.toCoalgEquiv.toEquiv
-
-中文:
-定义 toEquiv
-  签名: : (A ≃ₐc[R] B) -> A ≃ B
-  定义体: fun f => f.toCoalgEquiv.toEquiv
-
-Depends on / 依赖: f.toCoalgEquiv.toEquiv, toCoalgEquiv, toEquiv
+--- 原说明 ---
+The equivalence of types underlying a bialgebra equivalence.
 -/
-def toEquiv : (A ≃ₐc[R] B) -> A ≃ B := fun f => f.toCoalgEquiv.toEquiv
-
-/--
-theorem `toEquiv_injective` / 定理 `toEquiv_injective`
-
-English:
-theorem toEquiv_injective
-  statement: Function.Injective (toEquiv : (A ≃ₐc[R] B) -> A ≃ B)
-  proof: fun ⟨_, _⟩ ⟨_, _⟩ h =>
-    (BialgEquiv.mk.injEq _ _ _ _).mpr (CoalgEquiv.toEquiv_injective h)
-
-@[simp]
-
-中文:
-定理 toEquiv_injective
-  结论: 函数.单射 (toEquiv : (A ≃ₐc[R] B) -> A ≃ B)
-  证明: fun ⟨_, _⟩ ⟨_, _⟩ h =>
-    (BialgEquiv.mk.injEq _ _ _ _).mpr (CoalgEquiv.toEquiv_injective h)
-
-@[simp]
-
-Depends on / 依赖: BialgEquiv, BialgEquiv.mk.injEq, CoalgEquiv, CoalgEquiv.toEquiv_injective, toEquiv_injective
+def toEquiv : (A ≃ₐc[R] B) → A ≃ B := fun f => f.toCoalgEquiv.toEquiv
+/-
+**BialgEquiv.toEquiv_injective** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：toEquiv_injective : Function.Injective (toEquiv : (A ≃ₐc[R] B) -> A ≃ B)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgEquiv.mk.injEq`：∀ {R : Type u} [inst : CommSemiring R] {A : Type v}
+ {B : Type w} [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R 
+A] [inst_…
+· 使用定理 `CoalgEquiv.toEquiv_injective`：toEquiv_injective : Function.Injective (to
+Equiv : (A ≃ₗc[R] B) -> A ≃ B)
 -/
-theorem toEquiv_injective : Function.Injective (toEquiv : (A ≃ₐc[R] B) -> A ≃ B) :=
+theorem toEquiv_injective : Function.Injective (toEquiv : (A ≃ₐc[R] B) → A ≃ B) :=
   fun ⟨_, _⟩ ⟨_, _⟩ h =>
     (BialgEquiv.mk.injEq _ _ _ _).mpr (CoalgEquiv.toEquiv_injective h)
 
 @[simp]
-/--
-theorem `toEquiv_inj` / 定理 `toEquiv_inj`
-
-English:
-theorem toEquiv_inj
-  given: {e₁ e₂ : A ≃ₐc[R] B}
-  statement: e₁.toEquiv = e₂.toEquiv ↔ e₁ = e₂
-  proof: toEquiv_injective.eq_iff
-
-中文:
-定理 toEquiv_inj
-  条件: {e₁ e₂ : A ≃ₐc[R] B}
-  结论: e₁.toEquiv = e₂.toEquiv ↔ e₁ = e₂
-  证明: toEquiv_injective.eq_iff
-
-Depends on / 依赖: eq_iff, toEquiv_injective, toEquiv_injective.eq_iff
+/-
+**BialgEquiv.toEquiv_inj** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：toEquiv_inj {e₁ e₂ : A ≃ₐc[R] B} : e₁.toEquiv = e₂.toEquiv ↔ e₁ = e₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `BialgEquiv.toEquiv_injective`：toEquiv_injective : Function.Injective (to
+Equiv : (A ≃ₐc[R] B) -> A ≃ B)
 -/
 theorem toEquiv_inj {e₁ e₂ : A ≃ₐc[R] B} : e₁.toEquiv = e₂.toEquiv ↔ e₁ = e₂ :=
   toEquiv_injective.eq_iff
-
-/--
-theorem `toBialgHom_injective` / 定理 `toBialgHom_injective`
-
-English:
-theorem toBialgHom_injective
-  statement: Function.Injective (toBialgHom : (A ≃ₐc[R] B) -> A ->ₐc[R] B)
-  proof: fun _ _ H => toEquiv_injective Equiv.ext BialgHom.congr_fun H
-
-中文:
-定理 toBialgHom_injective
-  结论: 函数.单射 (toBialgHom : (A ≃ₐc[R] B) -> A ->ₐc[R] B)
-  证明: fun _ _ H => toEquiv_injective Equiv.ext BialgHom.congr_fun H
-
-Depends on / 依赖: BialgHom, BialgHom.congr_fun, Equiv.ext, congr_fun, toEquiv_injective
+/-
+**BialgEquiv.toBialgHom_injective** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：toBialgHom_injective : Function.Injective (toBialgHom : (A ≃ₐc[R] B) -> A 
+->ₐc[R] B)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgEquiv.toEquiv_injective`：toEquiv_injective : Function.Injective (to
+Equiv : (A ≃ₐc[R] B) -> A ≃ B)
+· 使用定理 `Equiv.ext`：Equiv.ext {s t : WSeq α} (h : forall n, get? s n ~ get? t n) 
+: s ~ʷ t
+· 使用定理 `BialgHom.congr_fun`：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} [inst
+ : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algeb
+ra R A] …
 -/
-theorem toBialgHom_injective : Function.Injective (toBialgHom : (A ≃ₐc[R] B) -> A ->ₐc[R] B) :=
-fun _ _ H => toEquiv_injective Equiv.ext BialgHom.congr_fun H
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: EquivLike (A ≃ₐc[R] B) A B
-  body: f.toFun
-  inv := fun f => f.invFun
-  coe_injective' _ _ h _ := toBialgHom_injective (DFunLike.coe_injective h)
-  left_inv := fun f => f.left_inv
-  right_inv := fun f => f.right_inv
-
-中文:
-实例 :
-  签名: 等价状 (A ≃ₐc[R] B) A B
-  定义体: f.toFun
-  inv := fun f => f.invFun
-  coe_injective' _ _ h _ := toBialgHom_injective (DFunLike.coe_injective h)
-  left_inv := fun f => f.left_inv
-  right_inv := fun f => f.right_inv
-
-Depends on / 依赖: f.toFun
+theorem toBialgHom_injective : Function.Injective (toBialgHom : (A ≃ₐc[R] B) → A →ₐc[R] B) :=
+  fun _ _ H => toEquiv_injective <| Equiv.ext <| BialgHom.congr_fun H
+/-
+**BialgEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `BialgEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : EquivLike (A ≃ₐc[R] B) A B where
   coe f := f.toFun
@@ -303,50 +250,16 @@ instance : EquivLike (A ≃ₐc[R] B) A B where
   coe_injective' _ _ h _ := toBialgHom_injective (DFunLike.coe_injective h)
   left_inv := fun f => f.left_inv
   right_inv := fun f => f.right_inv
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: FunLike (A ≃ₐc[R] B) A B
-  body: DFunLike.coe
-  coe_injective := DFunLike.coe_injective
-
-中文:
-实例 :
-  签名: 函数状 (A ≃ₐc[R] B) A B
-  定义体: DFunLike.coe
-  coe_injective := DFunLike.coe_injective
-
-Depends on / 依赖: DFunLike, DFunLike.coe
+/-
+**BialgEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `BialgEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : FunLike (A ≃ₐc[R] B) A B where
   coe := DFunLike.coe
   coe_injective := DFunLike.coe_injective
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: BialgEquivClass (A ≃ₐc[R] B) R A B
-  body: (·.map_add')
-  map_smulₛₗ := (·.map_smul')
-  counit_comp := (·.counit_comp)
-  map_comp_comul := (·.map_comp_comul)
-  map_mul := (·.map_mul')
-
-中文:
-实例 :
-  签名: Bialg等价类 (A ≃ₐc[R] B) R A B
-  定义体: (·.map_add')
-  map_smulₛₗ := (·.map_smul')
-  counit_comp := (·.counit_comp)
-  map_comp_comul := (·.map_comp_comul)
-  map_mul := (·.map_mul')
-
-Depends on / 依赖: map_add
+/-
+**BialgEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `BialgEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : BialgEquivClass (A ≃ₐc[R] B) R A B where
   map_add := (·.map_add')
@@ -354,63 +267,40 @@ instance : BialgEquivClass (A ≃ₐc[R] B) R A B where
   counit_comp := (·.counit_comp)
   map_comp_comul := (·.map_comp_comul)
   map_mul := (·.map_mul')
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeOut (A ≃ₐc[R] B) (A ≃ₐ[R] B)
-  body: toAlgEquiv
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: CoeOut (A ≃ₐc[R] B) (A ≃ₐ[R] B)
-  定义体: toAlgEquiv
-
-@[simp, norm_cast]
-
-Depends on / 依赖: toAlgEquiv
+/-
+**BialgEquiv.** 是 Mathlib 中的一个实例，位于命名空间 `BialgEquiv`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeOut (A ≃ₐc[R] B) (A ≃ₐ[R] B) where coe := toAlgEquiv
 
 @[simp, norm_cast]
-/--
-theorem `toBialgHom_inj` / 定理 `toBialgHom_inj`
-
-English:
-theorem toBialgHom_inj
-  given: {e₁ e₂ : A ≃ₐc[R] B}
-  statement: (↑e₁ : A ->ₐc[R] B) = e₂ ↔ e₁ = e₂
-  proof: toBialgHom_injective.eq_iff
-
-中文:
-定理 toBialgHom_inj
-  条件: {e₁ e₂ : A ≃ₐc[R] B}
-  结论: (↑e₁ : A ->ₐc[R] B) = e₂ ↔ e₁ = e₂
-  证明: toBialgHom_injective.eq_iff
-
-Depends on / 依赖: eq_iff, toBialgHom_injective, toBialgHom_injective.eq_iff
+/-
+**BialgEquiv.toBialgHom_inj** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：toBialgHom_inj {e₁ e₂ : A ≃ₐc[R] B} : (↑e₁ : A ->ₐc[R] B) = e₂ ↔ e₁ = e₂
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `BialgEquiv.toBialgHom_injective`：toBialgHom_injective : Function.Injecti
+ve (toBialgHom : (A ≃ₐc[R] B) -> A ->ₐc[R] B)
 -/
-theorem toBialgHom_inj {e₁ e₂ : A ≃ₐc[R] B} : (↑e₁ : A ->ₐc[R] B) = e₂ ↔ e₁ = e₂ :=
+theorem toBialgHom_inj {e₁ e₂ : A ≃ₐc[R] B} : (↑e₁ : A →ₐc[R] B) = e₂ ↔ e₁ = e₂ :=
   toBialgHom_injective.eq_iff
-
-/--
-lemma `coe_mk` / 引理 `coe_mk`
-
-English:
-lemma coe_mk
-  given: (e : A ≃ₗc[R] B) (h)
-  statement: mk e h = e
-  proof: rfl
-
-中文:
-引理 coe_mk
-  条件: (e : A ≃ₗc[R] B) (h)
-  结论: mk e h = e
-  证明: rfl
+/-
+**BialgEquiv.coe_mk** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：∀ {R : Type u} {A : Type v} {B : Type w} [inst : CommSemiring R] [inst_1 :
+ Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A] [inst_4 : Algebra R 
+B] [inst_5 : CoalgebraStruct R A] [inst_6 : CoalgebraStruct R B]   (e : A ≃ₗc[R]
+ B) (h : ∀ (x y : A), e.toFun (x * y) = e.toFun x * e.toFun y), ↑{ toCoalgEquiv 
+:= e, map_mul' := h } = e
+参数：e : A ≃ₗc[R] B；h : ∀ (x y : A), e.toFun (x * y) = e.toFun x * e.toFun y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgEquivClass.toCoalgEquivClass`：∀ {F : Type u_1} {R : outParam (Type 
+u_2)} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R
+}   {inst_1 : Semiring …
+· 使用定理 `BialgEquiv.instBialgEquivClass`：∀ {R : Type u} {A : Type v} {B : Type w}
+ [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 :
+ Algebra R A] [inst_…
 -/
 @[simp] lemma coe_mk (e : A ≃ₗc[R] B) (h) : mk e h = e := rfl
 
@@ -424,487 +314,331 @@ variable [Semiring A] [Semiring B] [Semiring C] [Algebra R A] [Algebra R B]
 variable (e e' : A ≃ₐc[R] B)
 
 @[simp, norm_cast]
-/--
-theorem `coe_coe` / 定理 `coe_coe`
-
-English:
-theorem coe_coe
-  statement: ⇑(e : A ->ₐc[R] B) = e
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_coe
-  结论: ⇑(e : A ->ₐc[R] B) = e
-  证明: rfl
-
-@[simp]
+/-
+**BialgEquiv.coe_coe** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：coe_coe : ⇑(e : A ->ₐc[R] B) = e
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgEquivClass.toBialgHomClass`：∀ {F : Type u_1} {R : Type u_2} {A : Ty
+pe u_3} {B : Type u_4} [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 :
+ Semiring B] [inst_3 …
+· 使用定理 `BialgEquiv.instBialgEquivClass`：∀ {R : Type u} {A : Type v} {B : Type w}
+ [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 :
+ Algebra R A] [inst_…
 -/
-theorem coe_coe : ⇑(e : A ->ₐc[R] B) = e :=
+theorem coe_coe : ⇑(e : A →ₐc[R] B) = e :=
   rfl
 
 @[simp]
-/--
-theorem `toCoalgEquiv_eq_coe` / 定理 `toCoalgEquiv_eq_coe`
-
-English:
-theorem toCoalgEquiv_eq_coe
-  given: (f : A ≃ₐc[R] B)
-  statement: f.toCoalgEquiv = f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toCoalgEquiv_eq_coe
-  条件: (f : A ≃ₐc[R] B)
-  结论: f.toCoalgEquiv = f
-  证明: rfl
-
-@[simp]
+/-
+**BialgEquiv.toCoalgEquiv_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：toCoalgEquiv_eq_coe (f : A ≃ₐc[R] B) : f.toCoalgEquiv = f
+参数：f : A ≃ₐc[R] B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toCoalgEquiv_eq_coe (f : A ≃ₐc[R] B) : f.toCoalgEquiv = f :=
   rfl
 
 @[simp]
-/--
-theorem `toBialgHom_eq_coe` / 定理 `toBialgHom_eq_coe`
-
-English:
-theorem toBialgHom_eq_coe
-  given: (f : A ≃ₐc[R] B)
-  statement: f.toBialgHom = f
-  proof: rfl
-
-@[deprecated "Now a syntactic tautology" (since := "2026-04-09"), nolint synTaut]
-
-中文:
-定理 toBialgHom_eq_coe
-  条件: (f : A ≃ₐc[R] B)
-  结论: f.toBialgHom = f
-  证明: rfl
-
-@[deprecated "Now a syntactic tautology" (since := "2026-04-09"), nolint synTaut]
+/-
+**BialgEquiv.toBialgHom_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：toBialgHom_eq_coe (f : A ≃ₐc[R] B) : f.toBialgHom = f
+参数：f : A ≃ₐc[R] B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toBialgHom_eq_coe (f : A ≃ₐc[R] B) : f.toBialgHom = f :=
   rfl
 
 @[deprecated "Now a syntactic tautology" (since := "2026-04-09"), nolint synTaut]
-/--
-theorem `toAlgEquiv_eq_coe` / 定理 `toAlgEquiv_eq_coe`
-
-English:
-theorem toAlgEquiv_eq_coe
-  given: (f : A ≃ₐc[R] B)
-  statement: f.toAlgEquiv = f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toAlgEquiv_eq_coe
-  条件: (f : A ≃ₐc[R] B)
-  结论: f.toAlgEquiv = f
-  证明: rfl
-
-@[simp]
+/-
+**BialgEquiv.toAlgEquiv_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：toAlgEquiv_eq_coe (f : A ≃ₐc[R] B) : f.toAlgEquiv = f
+参数：f : A ≃ₐc[R] B。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toAlgEquiv_eq_coe (f : A ≃ₐc[R] B) : f.toAlgEquiv = f :=
   rfl
 
 @[simp]
-/--
-theorem `coe_toCoalgEquiv` / 定理 `coe_toCoalgEquiv`
-
-English:
-theorem coe_toCoalgEquiv
-  statement: ⇑(e : A ≃ₐ[R] B) = e
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_toCoalgEquiv
-  结论: ⇑(e : A ≃ₐ[R] B) = e
-  证明: rfl
-
-@[simp]
+/-
+**BialgEquiv.coe_toCoalgEquiv** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：coe_toCoalgEquiv : ⇑(e : A ≃ₐ[R] B) = e
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toCoalgEquiv : ⇑(e : A ≃ₐ[R] B) = e :=
   rfl
 
 @[simp]
-/--
-theorem `coe_toBialgHom` / 定理 `coe_toBialgHom`
-
-English:
-theorem coe_toBialgHom
-  statement: ⇑(e : A ->ₐc[R] B) = e
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_toBialgHom
-  结论: ⇑(e : A ->ₐc[R] B) = e
-  证明: rfl
-
-@[simp]
+/-
+**BialgEquiv.coe_toBialgHom** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：coe_toBialgHom : ⇑(e : A ->ₐc[R] B) = e
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgEquivClass.toBialgHomClass`：∀ {F : Type u_1} {R : Type u_2} {A : Ty
+pe u_3} {B : Type u_4} [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 :
+ Semiring B] [inst_3 …
+· 使用定理 `BialgEquiv.instBialgEquivClass`：∀ {R : Type u} {A : Type v} {B : Type w}
+ [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 :
+ Algebra R A] [inst_…
 -/
-theorem coe_toBialgHom : ⇑(e : A ->ₐc[R] B) = e :=
+theorem coe_toBialgHom : ⇑(e : A →ₐc[R] B) = e :=
   rfl
 
 @[simp]
-/--
-theorem `coe_toAlgEquiv` / 定理 `coe_toAlgEquiv`
-
-English:
-theorem coe_toAlgEquiv
-  statement: ⇑(e : A ≃ₐ[R] B) = e
-  proof: rfl
-
-中文:
-定理 coe_toAlgEquiv
-  结论: ⇑(e : A ≃ₐ[R] B) = e
-  证明: rfl
+/-
+**BialgEquiv.coe_toAlgEquiv** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：coe_toAlgEquiv : ⇑(e : A ≃ₐ[R] B) = e
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toAlgEquiv : ⇑(e : A ≃ₐ[R] B) = e :=
   rfl
-
-/--
-theorem `toCoalgEquiv_toCoalgHom` / 定理 `toCoalgEquiv_toCoalgHom`
-
-English:
-theorem toCoalgEquiv_toCoalgHom
-  statement: ((e : A ≃ₐc[R] B) : A ->ₗc[R] B) = (e : A ->ₐc[R] B)
-  proof: rfl
-
-@[deprecated "Now a syntactic equality" (since := "2026-04-30"), nolint synTaut]
-
-中文:
-定理 toCoalgEquiv_toCoalgHom
-  结论: ((e : A ≃ₐc[R] B) : A ->ₗc[R] B) = (e : A ->ₐc[R] B)
-  证明: rfl
-
-@[deprecated "Now a syntactic equality" (since := "2026-04-30"), nolint synTaut]
+/-
+**BialgEquiv.toCoalgEquiv_toCoalgHom** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：toCoalgEquiv_toCoalgHom : ((e : A ≃ₐc[R] B) : A ->ₗc[R] B) = (e : A ->ₐc[R
+] B)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CoalgEquivClass.toCoalgHomClass`：∀ {F : Type u_5} {R : outParam (Type u_
+6)} {A : outParam (Type u_7)} {B : outParam (Type u_8)} {inst : CommSemiring R} 
+  {inst_1 : AddCommMo…
+· 使用定理 `BialgEquivClass.toCoalgEquivClass`：∀ {F : Type u_1} {R : outParam (Type 
+u_2)} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R
+}   {inst_1 : Semiring …
+· 使用定理 `BialgEquiv.instBialgEquivClass`：∀ {R : Type u} {A : Type v} {B : Type w}
+ [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 :
+ Algebra R A] [inst_…
 -/
-theorem toCoalgEquiv_toCoalgHom : ((e : A ≃ₐc[R] B) : A ->ₗc[R] B) = (e : A ->ₐc[R] B) :=
+theorem toCoalgEquiv_toCoalgHom : ((e : A ≃ₐc[R] B) : A →ₗc[R] B) = (e : A →ₐc[R] B) :=
   rfl
 
 @[deprecated "Now a syntactic equality" (since := "2026-04-30"), nolint synTaut]
-/--
-theorem `toBialgHom_toAlgHom` / 定理 `toBialgHom_toAlgHom`
-
-English:
-theorem toBialgHom_toAlgHom
-  statement: ((e : A ->ₐc[R] B) : A ->ₐ[R] B) = e
-  proof: rfl
-
-中文:
-定理 toBialgHom_toAlgHom
-  结论: ((e : A ->ₐc[R] B) : A ->ₐ[R] B) = e
-  证明: rfl
+/-
+**BialgEquiv.toBialgHom_toAlgHom** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：toBialgHom_toAlgHom : ((e : A ->ₐc[R] B) : A ->ₐ[R] B) = e
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgEquivClass.toBialgHomClass`：∀ {F : Type u_1} {R : Type u_2} {A : Ty
+pe u_3} {B : Type u_4} [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 :
+ Semiring B] [inst_3 …
+· 使用定理 `BialgEquiv.instBialgEquivClass`：∀ {R : Type u} {A : Type v} {B : Type w}
+ [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 :
+ Algebra R A] [inst_…
 -/
-theorem toBialgHom_toAlgHom : ((e : A ->ₐc[R] B) : A ->ₐ[R] B) = e := rfl
+theorem toBialgHom_toAlgHom : ((e : A →ₐc[R] B) : A →ₐ[R] B) = e := rfl
 
 section
 
 variable {e e'}
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: (h : forall x, e x = e' x)
-  statement: e = e'
-  proof: DFunLike.ext _ _ h
-
-中文:
-定理 ext
-  条件: (h : 对任意 x, e x = e' x)
-  结论: e = e'
-  证明: DFunLike.ext _ _ h
-
-Depends on / 依赖: DFunLike, DFunLike.ext
+/-
+**BialgEquiv.ext** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：ext (h : forall x, e x = e' x) : e = e'
+参数：h : forall x, e x = e' x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext`：ext (f g : F) (h : forall x : α, f x = g x) : f = g
 -/
-theorem ext (h : forall x, e x = e' x) : e = e' :=
+theorem ext (h : ∀ x, e x = e' x) : e = e' :=
   DFunLike.ext _ _ h
-
-/--
-theorem `congr_arg` / 定理 `congr_arg`
-
-English:
-theorem congr_arg
-  given: {x x'}
-  statement: x = x' -> e x = e x'
-  proof: DFunLike.congr_arg e
-
-中文:
-定理 congr_arg
-  条件: {x x'}
-  结论: x = x' -> e x = e x'
-  证明: DFunLike.congr_arg e
+/-
+**BialgEquiv.congr_arg** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：∀ {R : Type u} {A : Type v} {B : Type w} [inst : CommSemiring R] [inst_1 :
+ Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A] [inst_4 : Algebra R 
+B] [inst_5 : CoalgebraStruct R A] [inst_6 : CoalgebraStruct R B]   {e : A ≃ₐc[R]
+ B} {x x' : A}, x = x' → e x = e x'
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.congr_arg`：∀ {F : Sort u_1} {α : Sort u_2} {β : Sort u_3} [i : 
+FunLike F α β] (f : F) {x y : α}, x = y → f x = f y
 -/
-protected theorem congr_arg {x x'} : x = x' -> e x = e x' :=
+protected theorem congr_arg {x x'} : x = x' → e x = e x' :=
   DFunLike.congr_arg e
-
-/--
-theorem `congr_fun` / 定理 `congr_fun`
-
-English:
-theorem congr_fun
-  given: (h : e = e') (x : A)
-  statement: e x = e' x
-  proof: DFunLike.congr_fun h x
-
-中文:
-定理 congr_fun
-  条件: (h : e = e') (x : A)
-  结论: e x = e' x
-  证明: DFunLike.congr_fun h x
+/-
+**BialgEquiv.congr_fun** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：∀ {R : Type u} {A : Type v} {B : Type w} [inst : CommSemiring R] [inst_1 :
+ Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A] [inst_4 : Algebra R 
+B] [inst_5 : CoalgebraStruct R A] [inst_6 : CoalgebraStruct R B]   {e e' : A ≃ₐc
+[R] B}, e = e' → ∀ (x : A), e x = e' x
+参数：x : A。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 -/
 protected theorem congr_fun (h : e = e') (x : A) : e x = e' x :=
   DFunLike.congr_fun h x
 
 end
 
-/--
-Definition of `Simps.apply` / `Simps.apply` 的定义
+/-- See Note [custom simps projection] -/
+/-
+**BialgEquiv.Simps.apply** 是 Mathlib 中的一个定义，位于命名空间 `BialgEquiv.Simps`。
+形式化陈述：{R : Type u} →   [inst : CommSemiring R] →     {α : Type v} →       {β : T
+ype w} →         [inst_1 : Semiring α] →           [inst_2 : Semiring β] →      
+       [inst_3 : Algebra R α] →               [inst_4 : Algebra R β] →          
+       [inst_5 : CoalgebraStruct R α] → [inst_6 : CoalgebraStruct R β] → (α ≃ₐc[
+R] β) → α → β
+参数：α ≃ₐc[R] β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.apply
-  signature: {R : Type u} [CommSemiring R] {α : Type v} {β : Type w}
-  body: f
-
-中文:
-定义 Simps.apply
-  签名: {R : 类型u} [交换半环 R] {α : 类型v} {β : 类型 w}
-  定义体: f
+--- 原说明 ---
+See Note [custom simps projection]
 -/
 def Simps.apply {R : Type u} [CommSemiring R] {α : Type v} {β : Type w}
     [Semiring α] [Semiring β] [Algebra R α]
     [Algebra R β] [CoalgebraStruct R α] [CoalgebraStruct R β]
-    (f : α ≃ₐc[R] β) : α -> β := f
+    (f : α ≃ₐc[R] β) : α → β := f
 
-/--
-Definition of `Simps.symm_apply` / `Simps.symm_apply` 的定义
+/-- See Note [custom simps projection] -/
+/-
+**BialgEquiv.Simps.symm_apply** 是 Mathlib 中的一个定义，位于命名空间 `BialgEquiv.Simps`。
+形式化陈述：{R : Type u_1} →   [inst : CommSemiring R] →     {A : Type u_2} →       {B
+ : Type u_3} →         [inst_1 : Semiring A] →           [inst_2 : Semiring B] →
+             [inst_3 : Algebra R A] →               [inst_4 : Algebra R B] →    
+             [inst_5 : CoalgebraStruct R A] → [inst_6 : CoalgebraStruct R B] → (
+A ≃ₐc[R] B) → B → A
+参数：A ≃ₐc[R] B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Simps.symm_apply
-  signature: {R : Type*} [CommSemiring R]
-  body: e.symm
-
-initialize_simps_projections BialgEquiv (toFun -> apply, invFun -> symm_apply)
-
-中文:
-定义 Simps.symm_apply
-  签名: {R : 类型} [交换半环 R]
-  定义体: e.symm
-
-initialize_simps_projections BialgEquiv (toFun -> apply, invFun -> symm_apply)
+--- 原说明 ---
+See Note [custom simps projection]
 -/
 def Simps.symm_apply {R : Type*} [CommSemiring R]
     {A : Type*} {B : Type*} [Semiring A] [Semiring B] [Algebra R A] [Algebra R B]
     [CoalgebraStruct R A] [CoalgebraStruct R B]
-    (e : A ≃ₐc[R] B) : B -> A :=
+    (e : A ≃ₐc[R] B) : B → A :=
   e.symm
 
-initialize_simps_projections BialgEquiv (toFun -> apply, invFun -> symm_apply)
+initialize_simps_projections BialgEquiv (toFun → apply, invFun → symm_apply)
 
 variable (A R) in
 /-- The identity map is a bialgebra equivalence. -/
 @[refl, simps! apply]
-/--
-Definition of `refl` / `refl` 的定义
+/-
+**BialgEquiv.refl** 是 Mathlib 中的一个定义，位于命名空间 `BialgEquiv`。
+形式化陈述：refl : A ≃ₐc[R] A
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgHom.map_mul'`：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} [inst 
+: CommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [inst_3 : Semir
+ing B] …
 
-English:
-definition refl
-  signature: : A ≃ₐc[R] A
-  body: { CoalgEquiv.refl R A, BialgHom.id R A with }
-
-@[simp]
-
-中文:
-定义 refl
-  签名: : A ≃ₐc[R] A
-  定义体: { CoalgEquiv.refl R A, BialgHom.id R A with }
-
-@[simp]
-
-Depends on / 依赖: BialgHom, BialgHom.id, CoalgEquiv, CoalgEquiv.refl
+--- 原说明 ---
+The identity map is a bialgebra equivalence.
 -/
 def refl : A ≃ₐc[R] A :=
   { CoalgEquiv.refl R A, BialgHom.id R A with }
 
 @[simp]
-/--
-theorem `refl_toCoalgEquiv` / 定理 `refl_toCoalgEquiv`
-
-English:
-theorem refl_toCoalgEquiv
-  statement: refl R A = CoalgEquiv.refl R A
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 refl_toCoalgEquiv
-  结论: refl R A = 余alg等价.refl R A
-  证明: rfl
-
-@[simp]
+/-
+**BialgEquiv.refl_toCoalgEquiv** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：refl_toCoalgEquiv : refl R A = CoalgEquiv.refl R A
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgEquivClass.toCoalgEquivClass`：∀ {F : Type u_1} {R : outParam (Type 
+u_2)} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R
+}   {inst_1 : Semiring …
+· 使用定理 `BialgEquiv.instBialgEquivClass`：∀ {R : Type u} {A : Type v} {B : Type w}
+ [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 :
+ Algebra R A] [inst_…
 -/
 theorem refl_toCoalgEquiv : refl R A = CoalgEquiv.refl R A := rfl
 
 @[simp]
-/--
-theorem `refl_toBialgHom` / 定理 `refl_toBialgHom`
-
-English:
-theorem refl_toBialgHom
-  statement: refl R A = BialgHom.id R A
-  proof: rfl
-
-中文:
-定理 refl_toBialgHom
-  结论: refl R A = Bialg态射.id R A
-  证明: rfl
+/-
+**BialgEquiv.refl_toBialgHom** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：refl_toBialgHom : refl R A = BialgHom.id R A
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgEquivClass.toBialgHomClass`：∀ {F : Type u_1} {R : Type u_2} {A : Ty
+pe u_3} {B : Type u_4} [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 :
+ Semiring B] [inst_3 …
+· 使用定理 `BialgEquiv.instBialgEquivClass`：∀ {R : Type u} {A : Type v} {B : Type w}
+ [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 :
+ Algebra R A] [inst_…
 -/
 theorem refl_toBialgHom : refl R A = BialgHom.id R A :=
   rfl
 
 /-- Bialgebra equivalences are symmetric. -/
 @[symm]
-/--
-Definition of `symm` / `symm` 的定义
+/-
+**BialgEquiv.symm** 是 Mathlib 中的一个定义，位于命名空间 `BialgEquiv`。
+形式化陈述：symm (e : A ≃ₐc[R] B) : B ≃ₐc[R] A
+参数：e : A ≃ₐc[R] B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition symm
-  signature: (e : A ≃ₐc[R] B)
-  body: { (e : A ≃ₗc[R] B).symm, (e : A ≃* B).symm with }
-
-@[simp]
-
-中文:
-定义 symm
-  签名: (e : A ≃ₐc[R] B)
-  定义体: { (e : A ≃ₗc[R] B).symm, (e : A ≃* B).symm with }
-
-@[simp]
+--- 原说明 ---
+Bialgebra equivalences are symmetric.
 -/
 def symm (e : A ≃ₐc[R] B) : B ≃ₐc[R] A :=
   { (e : A ≃ₗc[R] B).symm, (e : A ≃* B).symm with }
 
 @[simp]
-/--
-theorem `symm_toCoalgEquiv` / 定理 `symm_toCoalgEquiv`
-
-English:
-theorem symm_toCoalgEquiv
-  given: (e : A ≃ₐc[R] B)
-  proof: rfl
-
-中文:
-定理 symm_toCoalgEquiv
-  条件: (e : A ≃ₐc[R] B)
-  证明: rfl
+/-
+**BialgEquiv.symm_toCoalgEquiv** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：symm_toCoalgEquiv (e : A ≃ₐc[R] B) : e.symm = (e : A ≃ₗc[R] B).symm
+参数：e : A ≃ₐc[R] B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgEquivClass.toCoalgEquivClass`：∀ {F : Type u_1} {R : outParam (Type 
+u_2)} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R
+}   {inst_1 : Semiring …
+· 使用定理 `BialgEquiv.instBialgEquivClass`：∀ {R : Type u} {A : Type v} {B : Type w}
+ [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 :
+ Algebra R A] [inst_…
 -/
 theorem symm_toCoalgEquiv (e : A ≃ₐc[R] B) :
     e.symm = (e : A ≃ₗc[R] B).symm := rfl
-
-/--
-theorem `invFun_eq_symm` / 定理 `invFun_eq_symm`
-
-English:
-theorem invFun_eq_symm
-  statement: e.invFun = e.symm
-  proof: rfl
-
-中文:
-定理 invFun_eq_symm
-  结论: e.invFun = e.symm
-  证明: rfl
+/-
+**BialgEquiv.invFun_eq_symm** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：invFun_eq_symm : e.invFun = e.symm
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem invFun_eq_symm : e.invFun = e.symm :=
   rfl
-
-/--
-theorem `coe_toEquiv_symm` / 定理 `coe_toEquiv_symm`
-
-English:
-theorem coe_toEquiv_symm
-  statement: e.toEquiv.symm = e.symm
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_toEquiv_symm
-  结论: e.toEquiv.symm = e.symm
-  证明: rfl
-
-@[simp]
+/-
+**BialgEquiv.coe_toEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：coe_toEquiv_symm : e.toEquiv.symm = e.symm
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem coe_toEquiv_symm : e.toEquiv.symm = e.symm := rfl
 
 @[simp]
-/--
-theorem `toEquiv_symm` / 定理 `toEquiv_symm`
-
-English:
-theorem toEquiv_symm
-  statement: e.symm.toEquiv = e.toEquiv.symm
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toEquiv_symm
-  结论: e.symm.toEquiv = e.toEquiv.symm
-  证明: rfl
-
-@[simp]
+/-
+**BialgEquiv.toEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：toEquiv_symm : e.symm.toEquiv = e.toEquiv.symm
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toEquiv_symm : e.symm.toEquiv = e.toEquiv.symm :=
   rfl
 
 @[simp]
-/--
-theorem `coe_toEquiv` / 定理 `coe_toEquiv`
-
-English:
-theorem coe_toEquiv
-  statement: ⇑e.toEquiv = e
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_toEquiv
-  结论: ⇑e.toEquiv = e
-  证明: rfl
-
-@[simp]
+/-
+**BialgEquiv.coe_toEquiv** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：coe_toEquiv : ⇑e.toEquiv = e
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toEquiv : ⇑e.toEquiv = e :=
   rfl
 
 @[simp]
-/--
-theorem `coe_symm_toEquiv` / 定理 `coe_symm_toEquiv`
-
-English:
-theorem coe_symm_toEquiv
-  statement: ⇑e.toEquiv.symm = e.symm
-  proof: rfl
-
-中文:
-定理 coe_symm_toEquiv
-  结论: ⇑e.toEquiv.symm = e.symm
-  证明: rfl
+/-
+**BialgEquiv.coe_symm_toEquiv** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：coe_symm_toEquiv : ⇑e.toEquiv.symm = e.symm
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 theorem coe_symm_toEquiv : ⇑e.toEquiv.symm = e.symm :=
   rfl
@@ -913,224 +647,183 @@ variable {e₁₂ : A ≃ₐc[R] B} {e₂₃ : B ≃ₐc[R] C}
 
 /-- Bialgebra equivalences are transitive. -/
 @[trans, simps! apply]
-/--
-Definition of `trans` / `trans` 的定义
+/-
+**BialgEquiv.trans** 是 Mathlib 中的一个定义，位于命名空间 `BialgEquiv`。
+形式化陈述：trans (e₁₂ : A ≃ₐc[R] B) (e₂₃ : B ≃ₐc[R] C) : A ≃ₐc[R] C
+参数：e₁₂ : A ≃ₐc[R] B；e₂₃ : B ≃ₐc[R] C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trans
-  signature: (e₁₂ : A ≃ₐc[R] B) (e₂₃ : B ≃ₐc[R] C)
-  body: { (e₁₂ : A ≃ₗc[R] B).trans (e₂₃ : B ≃ₗc[R] C), (e₁₂ : A ≃* B).trans (e₂₃ : B ≃* C) with }
-
-@[simp]
-
-中文:
-定义 trans
-  签名: (e₁₂ : A ≃ₐc[R] B) (e₂₃ : B ≃ₐc[R] C)
-  定义体: { (e₁₂ : A ≃ₗc[R] B).trans (e₂₃ : B ≃ₗc[R] C), (e₁₂ : A ≃* B).trans (e₂₃ : B ≃* C) with }
-
-@[simp]
+--- 原说明 ---
+Bialgebra equivalences are transitive.
 -/
 def trans (e₁₂ : A ≃ₐc[R] B) (e₂₃ : B ≃ₐc[R] C) : A ≃ₐc[R] C :=
   { (e₁₂ : A ≃ₗc[R] B).trans (e₂₃ : B ≃ₗc[R] C), (e₁₂ : A ≃* B).trans (e₂₃ : B ≃* C) with }
 
 @[simp]
-/--
-theorem `trans_toCoalgEquiv` / 定理 `trans_toCoalgEquiv`
-
-English:
-theorem trans_toCoalgEquiv
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 trans_toCoalgEquiv
-  证明: rfl
-
-@[simp]
+/-
+**BialgEquiv.trans_toCoalgEquiv** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：trans_toCoalgEquiv : (e₁₂.trans e₂₃ : A ≃ₗc[R] C) = (e₁₂ : A ≃ₗc[R] B).tra
+ns (e₂₃ : B ≃ₗc[R] C)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgEquivClass.toCoalgEquivClass`：∀ {F : Type u_1} {R : outParam (Type 
+u_2)} {A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R
+}   {inst_1 : Semiring …
+· 使用定理 `BialgEquiv.instBialgEquivClass`：∀ {R : Type u} {A : Type v} {B : Type w}
+ [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 :
+ Algebra R A] [inst_…
 -/
 theorem trans_toCoalgEquiv :
     (e₁₂.trans e₂₃ : A ≃ₗc[R] C) = (e₁₂ : A ≃ₗc[R] B).trans (e₂₃ : B ≃ₗc[R] C) := rfl
 
 @[simp]
-/--
-theorem `trans_toBialgHom` / 定理 `trans_toBialgHom`
-
-English:
-theorem trans_toBialgHom
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 trans_toBialgHom
-  证明: rfl
-
-@[simp]
+/-
+**BialgEquiv.trans_toBialgHom** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：trans_toBialgHom : (e₁₂.trans e₂₃ : A ->ₐc[R] C) = (e₂₃ : B ->ₐc[R] C).com
+p e₁₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgEquivClass.toBialgHomClass`：∀ {F : Type u_1} {R : Type u_2} {A : Ty
+pe u_3} {B : Type u_4} [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 :
+ Semiring B] [inst_3 …
+· 使用定理 `BialgEquiv.instBialgEquivClass`：∀ {R : Type u} {A : Type v} {B : Type w}
+ [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 :
+ Algebra R A] [inst_…
 -/
 theorem trans_toBialgHom :
-    (e₁₂.trans e₂₃ : A ->ₐc[R] C) = (e₂₃ : B ->ₐc[R] C).comp e₁₂ := rfl
+    (e₁₂.trans e₂₃ : A →ₐc[R] C) = (e₂₃ : B →ₐc[R] C).comp e₁₂ := rfl
 
 @[simp]
-/--
-theorem `coe_toEquiv_trans` / 定理 `coe_toEquiv_trans`
-
-English:
-theorem coe_toEquiv_trans
-  statement: (e₁₂ : A ≃ B).trans e₂₃ = (e₁₂.trans e₂₃ : A ≃ C)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_toEquiv_trans
-  结论: (e₁₂ : A ≃ B).trans e₂₃ = (e₁₂.trans e₂₃ : A ≃ C)
-  证明: rfl
-
-@[simp]
+/-
+**BialgEquiv.coe_toEquiv_trans** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：coe_toEquiv_trans : (e₁₂ : A ≃ B).trans e₂₃ = (e₁₂.trans e₂₃ : A ≃ C)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 -/
 theorem coe_toEquiv_trans : (e₁₂ : A ≃ B).trans e₂₃ = (e₁₂.trans e₂₃ : A ≃ C) :=
   rfl
 
 @[simp]
-/--
-lemma `apply_symm_apply` / 引理 `apply_symm_apply`
-
-English:
-lemma apply_symm_apply
-  given: (e : A ≃ₐc[R] B)
-  statement: forall x, e (e.symm x) = x
-  proof: e.toEquiv.apply_symm_apply
+/-
+**BialgEquiv.apply_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 `BialgEquiv`。
+形式化陈述：apply_symm_apply (e : A ≃ₐc[R] B) : forall x, e (e.symm x) = x
+参数：e : A ≃ₐc[R] B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+-/
+lemma apply_symm_apply (e : A ≃ₐc[R] B) : ∀ x, e (e.symm x) = x := e.toEquiv.apply_symm_apply
 
 @[simp]
-
-中文:
-引理 apply_symm_apply
-  条件: (e : A ≃ₐc[R] B)
-  结论: 对任意 x, e (e.symm x) = x
-  证明: e.toEquiv.apply_symm_apply
-
-@[simp]
-
-Depends on / 依赖: apply_symm_apply, e.toEquiv.apply_symm_apply, toEquiv
+/-
+**BialgEquiv.symm_apply_apply** 是 Mathlib 中的一个引理，位于命名空间 `BialgEquiv`。
+形式化陈述：symm_apply_apply (e : A ≃ₐc[R] B) : forall x, e.symm (e x) = x
+参数：e : A ≃ₐc[R] B。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
 -/
-lemma apply_symm_apply (e : A ≃ₐc[R] B) : forall x, e (e.symm x) = x := e.toEquiv.apply_symm_apply
-
-@[simp]
-/--
-lemma `symm_apply_apply` / 引理 `symm_apply_apply`
-
-English:
-lemma symm_apply_apply
-  given: (e : A ≃ₐc[R] B)
-  statement: forall x, e.symm (e x) = x
-  proof: e.toEquiv.symm_apply_apply
-
-中文:
-引理 symm_apply_apply
-  条件: (e : A ≃ₐc[R] B)
-  结论: 对任意 x, e.symm (e x) = x
-  证明: e.toEquiv.symm_apply_apply
-
-Depends on / 依赖: e.toEquiv.symm_apply_apply, symm_apply_apply, toEquiv
+lemma symm_apply_apply (e : A ≃ₐc[R] B) : ∀ x, e.symm (e x) = x := e.toEquiv.symm_apply_apply
+/-
+**BialgEquiv.comp_symm** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：∀ {R : Type u} {A : Type v} {B : Type w} [inst : CommSemiring R] [inst_1 :
+ Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A] [inst_4 : Algebra R 
+B] [inst_5 : CoalgebraStruct R A] [inst_6 : CoalgebraStruct R B]   (e : A ≃ₐc[R]
+ B), (↑e).comp ↑e.symm = BialgHom.id R B
+参数：e : A ≃ₐc[R] B；↑e。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgHom.coe_toAlgHom_injective`：coe_toAlgHom_injective : Function.Injec
+tive ((↑) : (A ->ₐc[R] B) -> A ->ₐ[R] B)
+· 使用定理 `BialgEquivClass.toBialgHomClass`：∀ {F : Type u_1} {R : Type u_2} {A : Ty
+pe u_3} {B : Type u_4} [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 :
+ Semiring B] [inst_3 …
+· 使用定理 `BialgEquiv.instBialgEquivClass`：∀ {R : Type u} {A : Type v} {B : Type w}
+ [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 :
+ Algebra R A] [inst_…
+· 使用定理 `AlgEquiv.comp_symm`：comp_symm (e : A₁ ≃ₐ[R] A₂) : AlgHom.comp (e : A₁ ->
+ₐ[R] A₂) ↑e.symm = AlgHom.id R A₂
 -/
-lemma symm_apply_apply (e : A ≃ₐc[R] B) : forall x, e.symm (e x) = x := e.toEquiv.symm_apply_apply
-
-/--
-lemma `comp_symm` / 引理 `comp_symm`
-
-English:
-lemma comp_symm
-  given: (e : A ≃ₐc[R] B)
-  statement: (e : A ->ₐc[R] B).comp e.symm = .id R B
-  proof: BialgHom.coe_toAlgHom_injective e.toAlgEquiv.comp_symm
-
-中文:
-引理 comp_symm
-  条件: (e : A ≃ₐc[R] B)
-  结论: (e : A ->ₐc[R] B).comp e.symm = .id R B
-  证明: BialgHom.coe_toAlgHom_injective e.toAlgEquiv.comp_symm
--/
-@[simp] lemma comp_symm (e : A ≃ₐc[R] B) : (e : A ->ₐc[R] B).comp e.symm = .id R B :=
+@[simp] lemma comp_symm (e : A ≃ₐc[R] B) : (e : A →ₐc[R] B).comp e.symm = .id R B :=
   BialgHom.coe_toAlgHom_injective e.toAlgEquiv.comp_symm
-
-/--
-lemma `symm_comp` / 引理 `symm_comp`
-
-English:
-lemma symm_comp
-  given: (e : A ≃ₐc[R] B)
-  statement: (e.symm : B ->ₐc[R] A).comp e = .id R A
-  proof: BialgHom.coe_toAlgHom_injective e.toAlgEquiv.symm_comp
-
-中文:
-引理 symm_comp
-  条件: (e : A ≃ₐc[R] B)
-  结论: (e.symm : B ->ₐc[R] A).comp e = .id R A
-  证明: BialgHom.coe_toAlgHom_injective e.toAlgEquiv.symm_comp
+/-
+**BialgEquiv.symm_comp** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：∀ {R : Type u} {A : Type v} {B : Type w} [inst : CommSemiring R] [inst_1 :
+ Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A] [inst_4 : Algebra R 
+B] [inst_5 : CoalgebraStruct R A] [inst_6 : CoalgebraStruct R B]   (e : A ≃ₐc[R]
+ B), (↑e.symm).comp ↑e = BialgHom.id R A
+参数：e : A ≃ₐc[R] B；↑e.symm。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgHom.coe_toAlgHom_injective`：coe_toAlgHom_injective : Function.Injec
+tive ((↑) : (A ->ₐc[R] B) -> A ->ₐ[R] B)
+· 使用定理 `BialgEquivClass.toBialgHomClass`：∀ {F : Type u_1} {R : Type u_2} {A : Ty
+pe u_3} {B : Type u_4} [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 :
+ Semiring B] [inst_3 …
+· 使用定理 `BialgEquiv.instBialgEquivClass`：∀ {R : Type u} {A : Type v} {B : Type w}
+ [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 :
+ Algebra R A] [inst_…
+· 使用定理 `AlgEquiv.symm_comp`：symm_comp (e : A₁ ≃ₐ[R] A₂) : AlgHom.comp ↑e.symm (e
+ : A₁ ->ₐ[R] A₂) = AlgHom.id R A₁
 -/
-@[simp] lemma symm_comp (e : A ≃ₐc[R] B) : (e.symm : B ->ₐc[R] A).comp e = .id R A :=
+@[simp] lemma symm_comp (e : A ≃ₐc[R] B) : (e.symm : B →ₐc[R] A).comp e = .id R A :=
   BialgHom.coe_toAlgHom_injective e.toAlgEquiv.symm_comp
-
-/--
-lemma `toRingEquiv_toRingHom` / 引理 `toRingEquiv_toRingHom`
-
-English:
-lemma toRingEquiv_toRingHom
-  given: (e : A ≃ₐc[R] B)
-  statement: ((e : A ≃+* B) : A ->+* B) = e
-  proof: rfl
-
-中文:
-引理 toRingEquiv_toRingHom
-  条件: (e : A ≃ₐc[R] B)
-  结论: ((e : A ≃+* B) : A ->+* B) = e
-  证明: rfl
+/-
+**BialgEquiv.toRingEquiv_toRingHom** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：∀ {R : Type u} {A : Type v} {B : Type w} [inst : CommSemiring R] [inst_1 :
+ Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A] [inst_4 : Algebra R 
+B] [inst_5 : CoalgebraStruct R A] [inst_6 : CoalgebraStruct R B]   (e : A ≃ₐc[R]
+ B), ↑e.toAlgEquiv.toRingEquiv = ↑e
+参数：e : A ≃ₐc[R] B。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingEquivClass.toRingHomClass`：∀ {F : Type u_1} {R : Type u_4} {S : Type
+ u_5} [inst : EquivLike F R S] [inst_1 : NonAssocSemiring R]   [inst_2 : NonAsso
+cSemiring S] [h : R…
+· 使用定理 `RingEquiv.instRingEquivClass`：∀ {R : Type u_4} {S : Type u_5} [inst : Mu
+l R] [inst_1 : Mul S] [inst_2 : Add R] [inst_3 : Add S],   RingEquivClass (R ≃+*
+ S) R S
 -/
-@[simp] lemma toRingEquiv_toRingHom (e : A ≃ₐc[R] B) : ((e : A ≃+* B) : A ->+* B) = e := rfl
-/--
-lemma `toAlgEquiv_toRingHom` / 引理 `toAlgEquiv_toRingHom`
-
-English:
-lemma toAlgEquiv_toRingHom
-  given: (e : A ≃ₐc[R] B)
-  statement: ((e : A ≃ₐ[R] B) : A ->+* B) = e
-  proof: rfl
-
-中文:
-引理 toAlgEquiv_toRingHom
-  条件: (e : A ≃ₐc[R] B)
-  结论: ((e : A ≃ₐ[R] B) : A ->+* B) = e
-  证明: rfl
+@[simp] lemma toRingEquiv_toRingHom (e : A ≃ₐc[R] B) : ((e : A ≃+* B) : A →+* B) = e := rfl
+/-
+**BialgEquiv.toAlgEquiv_toRingHom** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：∀ {R : Type u} {A : Type v} {B : Type w} [inst : CommSemiring R] [inst_1 :
+ Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A] [inst_4 : Algebra R 
+B] [inst_5 : CoalgebraStruct R A] [inst_6 : CoalgebraStruct R B]   (e : A ≃ₐc[R]
+ B), ↑e.toAlgEquiv = ↑e
+参数：e : A ≃ₐc[R] B。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `AlgEquivClass.toAlgHomClass`：∀ (F : Type u_1) (R : Type u_2) (A : Type u
+_3) (B : Type u_4) [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Sem
+iring B] [inst_3 …
+· 使用定理 `AlgEquiv.instAlgEquivClass`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type u
+A₂} [inst : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [ins
+t_3 : Algebra R …
 -/
-@[simp] lemma toAlgEquiv_toRingHom (e : A ≃ₐc[R] B) : ((e : A ≃ₐ[R] B) : A ->+* B) = e := rfl
+@[simp] lemma toAlgEquiv_toRingHom (e : A ≃ₐc[R] B) : ((e : A ≃ₐ[R] B) : A →+* B) = e := rfl
 
-/--
-Definition of `ofBialgHom` / `ofBialgHom` 的定义
+/-- If a coalgebra morphism has an inverse, it is a coalgebra isomorphism. -/
+/-
+**BialgEquiv.ofBialgHom** 是 Mathlib 中的一个定义，位于命名空间 `BialgEquiv`。
+形式化陈述：ofBialgHom (f : A ->ₐc[R] B) (g : B ->ₐc[R] A) (h₁ : f.comp g = BialgHom.i
+d R B) (h₂ : g.comp f = BialgHom.id R A) : A ≃ₐc[R] B where __
+参数：f : A ->ₐc[R] B；g : B ->ₐc[R] A；h₁ : f.comp g = BialgHom.id R B；h₂ : g.comp f
+ = BialgHom.id R A。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgHom.map_mul'`：∀ {R : Type u_1} {A : Type u_2} {B : Type u_3} [inst 
+: CommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]   [inst_3 : Semir
+ing B] …
 
-English:
-definition ofBialgHom
-  signature: (f : A ->ₐc[R] B) (g : B ->ₐc[R] A) (h₁ : f.comp g = BialgHom.id R B)
-  body: f
-  toFun := f
-  invFun := g
-  left_inv := BialgHom.ext_iff.1 h₂
-  right_inv := BialgHom.ext_iff.1 h₁
-
-@[simp]
-
-中文:
-定义 ofBialgHom
-  签名: (f : A ->ₐc[R] B) (g : B ->ₐc[R] A) (h₁ : f.comp g = Bialg态射.id R B)
-  定义体: f
-  toFun := f
-  invFun := g
-  left_inv := BialgHom.ext_iff.1 h₂
-  right_inv := BialgHom.ext_iff.1 h₁
-
-@[simp]
+--- 原说明 ---
+If a coalgebra morphism has an inverse, it is a coalgebra isomorphism.
 -/
-def ofBialgHom (f : A ->ₐc[R] B) (g : B ->ₐc[R] A) (h₁ : f.comp g = BialgHom.id R B)
+def ofBialgHom (f : A →ₐc[R] B) (g : B →ₐc[R] A) (h₁ : f.comp g = BialgHom.id R B)
     (h₂ : g.comp f = BialgHom.id R A) : A ≃ₐc[R] B where
   __ := f
   toFun := f
@@ -1139,37 +832,32 @@ def ofBialgHom (f : A ->ₐc[R] B) (g : B ->ₐc[R] A) (h₁ : f.comp g = BialgH
   right_inv := BialgHom.ext_iff.1 h₁
 
 @[simp]
-/--
-theorem `coe_ofBialgHom` / 定理 `coe_ofBialgHom`
-
-English:
-theorem coe_ofBialgHom
-  given: (f : A ->ₐc[R] B) (g : B ->ₐc[R] A) (h₁ h₂)
-  proof: rfl
-
-中文:
-定理 coe_ofBialgHom
-  条件: (f : A ->ₐc[R] B) (g : B ->ₐc[R] A) (h₁ h₂)
-  证明: rfl
+/-
+**BialgEquiv.coe_ofBialgHom** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：coe_ofBialgHom (f : A ->ₐc[R] B) (g : B ->ₐc[R] A) (h₁ h₂) : ofBialgHom f 
+g h₁ h₂ = f
+参数：f : A ->ₐc[R] B；g : B ->ₐc[R] A；h₁ h₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BialgEquivClass.toBialgHomClass`：∀ {F : Type u_1} {R : Type u_2} {A : Ty
+pe u_3} {B : Type u_4} [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 :
+ Semiring B] [inst_3 …
+· 使用定理 `BialgEquiv.instBialgEquivClass`：∀ {R : Type u} {A : Type v} {B : Type w}
+ [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 :
+ Algebra R A] [inst_…
 -/
-theorem coe_ofBialgHom (f : A ->ₐc[R] B) (g : B ->ₐc[R] A) (h₁ h₂) :
+theorem coe_ofBialgHom (f : A →ₐc[R] B) (g : B →ₐc[R] A) (h₁ h₂) :
     ofBialgHom f g h₁ h₂ = f :=
   rfl
-
-/--
-theorem `ofBialgHom_symm` / 定理 `ofBialgHom_symm`
-
-English:
-theorem ofBialgHom_symm
-  given: (f : A ->ₐc[R] B) (g : B ->ₐc[R] A) (h₁ h₂)
-  proof: rfl
-
-中文:
-定理 ofBialgHom_symm
-  条件: (f : A ->ₐc[R] B) (g : B ->ₐc[R] A) (h₁ h₂)
-  证明: rfl
+/-
+**BialgEquiv.ofBialgHom_symm** 是 Mathlib 中的一个定理，位于命名空间 `BialgEquiv`。
+形式化陈述：ofBialgHom_symm (f : A ->ₐc[R] B) (g : B ->ₐc[R] A) (h₁ h₂) : (ofBialgHom 
+f g h₁ h₂).symm = ofBialgHom g f h₂ h₁
+参数：f : A ->ₐc[R] B；g : B ->ₐc[R] A；h₁ h₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofBialgHom_symm (f : A ->ₐc[R] B) (g : B ->ₐc[R] A) (h₁ h₂) :
+theorem ofBialgHom_symm (f : A →ₐc[R] B) (g : B →ₐc[R] A) (h₁ h₂) :
     (ofBialgHom f g h₁ h₂).symm = ofBialgHom g f h₂ h₁ :=
   rfl
 
@@ -1177,28 +865,23 @@ end
 
 variable [Semiring A] [Semiring B] [Bialgebra R A] [Bialgebra R B]
 
-/--
-Definition of `ofAlgEquiv` / `ofAlgEquiv` 的定义
+/-- Construct a bialgebra equiv from an algebra equiv respecting counit and comultiplication. -/
+/-
+**BialgEquiv.ofAlgEquiv** 是 Mathlib 中的一个定义，位于命名空间 `BialgEquiv`。
+形式化陈述：{R : Type u} →   {A : Type v} →     {B : Type w} →       [inst : CommSemir
+ing R] →         [inst_1 : Semiring A] →           [inst_2 : Semiring B] →      
+       [inst_3 : Bialgebra R A] →               [inst_4 : Bialgebra R B] →      
+           (f : A ≃ₐ[R] B) →                   (Bialgebra.counitAlgHom R B).comp
+ ↑f = Bialgebra.counitAlgHom R A →                     (Algebra.TensorProduct.ma
+p ↑f ↑f).comp (Bialgebra.comulAlgHom R A) =                         (Bialgebra.c
+omulAlgHom R B).comp ↑f →                       A ≃ₐc[R] B
+参数：f : A ≃ₐ[R] B；Bialgebra.counitAlgHom R B；Algebra.TensorProduct.map ↑f ↑f；Bial
+gebra.comulAlgHom R A；Bialgebra.comulAlgHom R B。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofAlgEquiv
-  signature: (f : A ≃ₐ[R] B)
-  body: f
-  map_smul' := map_smul f
-  counit_comp := congr($(counit_comp).toLinearMap)
-  map_comp_comul := congr($(map_comp_comul).toLinearMap)
-
-@[simp]
-
-中文:
-定义 ofAlgEquiv
-  签名: (f : A ≃ₐ[R] B)
-  定义体: f
-  map_smul' := map_smul f
-  counit_comp := congr($(counit_comp).toLinearMap)
-  map_comp_comul := congr($(map_comp_comul).toLinearMap)
-
-@[simp]
+--- 原说明 ---
+Construct a bialgebra equiv from an algebra equiv respecting counit and comultip
+lication.
 -/
 @[simps apply] def ofAlgEquiv (f : A ≃ₐ[R] B)
     (counit_comp : (Bialgebra.counitAlgHom R B).comp f = Bialgebra.counitAlgHom R A)
@@ -1210,63 +893,46 @@ definition ofAlgEquiv
   map_comp_comul := congr($(map_comp_comul).toLinearMap)
 
 @[simp]
-/--
-lemma `toLinearMap_ofAlgEquiv` / 引理 `toLinearMap_ofAlgEquiv`
-
-English:
-lemma toLinearMap_ofAlgEquiv
-  given: (f : A ≃ₐ[R] B) (counit_comp map_comp_comul)
-  proof: rfl
-
-中文:
-引理 toLinearMap_ofAlgEquiv
-  条件: (f : A ≃ₐ[R] B) (counit_comp map_comp_comul)
-  证明: rfl
+/-
+**BialgEquiv.toLinearMap_ofAlgEquiv** 是 Mathlib 中的一个引理，位于命名空间 `BialgEquiv`。
+形式化陈述：toLinearMap_ofAlgEquiv (f : A ≃ₐ[R] B) (counit_comp map_comp_comul) : (ofA
+lgEquiv f counit_comp map_comp_comul : A ->ₗ[R] B) = f
+参数：f : A ≃ₐ[R] B；counit_comp map_comp_comul。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.to_smulCommClass`：∀ {R : Type u_1} [inst : CommSemiring R]
+ {A : Type u_2} [inst_1 : Semiring A] [inst_2 : Algebra R A] {M : Type u_3}   [i
+nst_3 : AddCommMonoi…
 -/
 lemma toLinearMap_ofAlgEquiv (f : A ≃ₐ[R] B) (counit_comp map_comp_comul) :
-    (ofAlgEquiv f counit_comp map_comp_comul : A ->ₗ[R] B) = f := rfl
+    (ofAlgEquiv f counit_comp map_comp_comul : A →ₗ[R] B) = f := rfl
 
 set_option backward.isDefEq.respectTransparency false in
 /-- Promotes a bijective bialgebra homomorphism to a bialgebra equivalence. -/
 @[simps! apply]
-/--
-Definition of `ofBijective` / `ofBijective` 的定义
+/-
+**BialgEquiv.ofBijective** 是 Mathlib 中的一个定义，位于命名空间 `BialgEquiv`。
+形式化陈述：ofBijective (f : A ->ₐc[R] B) (hf : Bijective f) : A ≃ₐc[R] B
+参数：f : A ->ₐc[R] B；hf : Bijective f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofBijective
-  signature: (f : A ->ₐc[R] B) (hf : Bijective f)
-  body: .ofAlgEquiv (.ofBijective (f : A ->ₐ[R] B) hf) (by ext; simp) (by ext; simp)
-
-@[simp]
-
-中文:
-定义 ofBijective
-  签名: (f : A ->ₐc[R] B) (hf : 双射 f)
-  定义体: .ofAlgEquiv (.ofBijective (f : A ->ₐ[R] B) hf) (by ext; simp) (by ext; simp)
-
-@[simp]
-
-Depends on / 依赖: ofAlgEquiv, ofBijective
+--- 原说明 ---
+Promotes a bijective bialgebra homomorphism to a bialgebra equivalence.
 -/
-noncomputable def ofBijective (f : A ->ₐc[R] B) (hf : Bijective f) : A ≃ₐc[R] B :=
-  .ofAlgEquiv (.ofBijective (f : A ->ₐ[R] B) hf) (by ext; simp) (by ext; simp)
+noncomputable def ofBijective (f : A →ₐc[R] B) (hf : Bijective f) : A ≃ₐc[R] B :=
+  .ofAlgEquiv (.ofBijective (f : A →ₐ[R] B) hf) (by ext; simp) (by ext; simp)
 
 @[simp]
-/--
-lemma `coe_ofBijective` / 引理 `coe_ofBijective`
-
-English:
-lemma coe_ofBijective
-  given: (f : A ->ₐc[R] B) (hf : Bijective f)
-  statement: (ofBijective f hf : A -> B) = f
-  proof: rfl
-
-中文:
-引理 coe_ofBijective
-  条件: (f : A ->ₐc[R] B) (hf : 双射 f)
-  结论: (ofBijective f hf : A -> B) = f
-  证明: rfl
+/-
+**BialgEquiv.coe_ofBijective** 是 Mathlib 中的一个引理，位于命名空间 `BialgEquiv`。
+形式化陈述：coe_ofBijective (f : A ->ₐc[R] B) (hf : Bijective f) : (ofBijective f hf :
+ A -> B) = f
+参数：f : A ->ₐc[R] B；hf : Bijective f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_ofBijective (f : A ->ₐc[R] B) (hf : Bijective f) : (ofBijective f hf : A -> B) = f := rfl
+lemma coe_ofBijective (f : A →ₐc[R] B) (hf : Bijective f) : (ofBijective f hf : A → B) = f := rfl
 
 end BialgEquiv
+

@@ -19,48 +19,24 @@ public section
 
 open Equiv
 
-/--
-Instance `EquivFunctorUnique` / 实例 `EquivFunctorUnique`
-
-English:
-instance EquivFunctorUnique
-  signature: : EquivFunctor Unique where
-  body: Equiv.uniqueCongr e
-  map_refl' α := by simp [eq_iff_true_of_subsingleton]
-  map_trans' := by simp [eq_iff_true_of_subsingleton]
-
-中文:
-实例 EquivFunctorUnique
-  签名: : 等价函子 唯一 where
-  定义体: Equiv.uniqueCongr e
-  map_refl' α := by simp [eq_iff_true_of_subsingleton]
-  map_trans' := by simp [eq_iff_true_of_subsingleton]
-
-Depends on / 依赖: Equiv.uniqueCongr, uniqueCongr
+/-
+**EquivFunctorUnique** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：EquivFunctorUnique : EquivFunctor Unique where map e
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance EquivFunctorUnique : EquivFunctor Unique where
   map e := Equiv.uniqueCongr e
   map_refl' α := by simp [eq_iff_true_of_subsingleton]
   map_trans' := by simp [eq_iff_true_of_subsingleton]
-
-/--
-Instance `EquivFunctorPerm` / 实例 `EquivFunctorPerm`
-
-English:
-instance EquivFunctorPerm
-  signature: : EquivFunctor Perm where
-  body: (e.symm.trans p).trans e
-  map_refl' α := by ext; simp
-  map_trans' _ _ := by ext; simp
-
-中文:
-实例 EquivFunctorPerm
-  签名: : 等价函子 置换 where
-  定义体: (e.symm.trans p).trans e
-  map_refl' α := by ext; simp
-  map_trans' _ _ := by ext; simp
-
-Depends on / 依赖: e.symm.trans
+/-
+**EquivFunctorPerm** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：EquivFunctorPerm : EquivFunctor Perm where map e p
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 instance EquivFunctorPerm : EquivFunctor Perm where
   map e p := (e.symm.trans p).trans e
@@ -69,48 +45,23 @@ instance EquivFunctorPerm : EquivFunctor Perm where
 
 -- There is a classical instance of `LawfulFunctor Finset` available,
 -- but we provide this computable alternative separately.
-/--
-Instance `EquivFunctorFinset` / 实例 `EquivFunctorFinset`
-
-English:
-instance EquivFunctorFinset
-  signature: : EquivFunctor Finset where
-  body: s.map e.toEmbedding
-  map_refl' α := by ext; simp
-  map_trans' k h := by ext; simp [-trans_toEmbedding]
-
-中文:
-实例 EquivFunctorFinset
-  签名: : 等价函子 有限集 where
-  定义体: s.map e.toEmbedding
-  map_refl' α := by ext; simp
-  map_trans' k h := by ext; simp [-trans_toEmbedding]
-
-Depends on / 依赖: e.toEmbedding, s.map, toEmbedding
+/-
+**EquivFunctorFinset** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：EquivFunctorFinset : EquivFunctor Finset where map e s
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance EquivFunctorFinset : EquivFunctor Finset where
   map e s := s.map e.toEmbedding
   map_refl' α := by ext; simp
   map_trans' k h := by ext; simp [-trans_toEmbedding]
-
-/--
-Instance `EquivFunctorFintype` / 实例 `EquivFunctorFintype`
-
-English:
-instance EquivFunctorFintype
-  signature: : EquivFunctor Fintype where
-  body: Fintype.ofBijective e e.bijective
-  map_refl' α := by ext; simp [eq_iff_true_of_subsingleton]
-  map_trans' := by simp [eq_iff_true_of_subsingleton]
-
-中文:
-实例 EquivFunctorFintype
-  签名: : 等价函子 有限类型 where
-  定义体: Fintype.ofBijective e e.bijective
-  map_refl' α := by ext; simp [eq_iff_true_of_subsingleton]
-  map_trans' := by simp [eq_iff_true_of_subsingleton]
-
-Depends on / 依赖: Fintype, Fintype.ofBijective, bijective, e.bijective, ofBijective
+/-
+**EquivFunctorFintype** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：EquivFunctorFintype : EquivFunctor Fintype where map e _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
 -/
 instance EquivFunctorFintype : EquivFunctor Fintype where
   map e _ := Fintype.ofBijective e e.bijective

@@ -57,51 +57,58 @@ variable {G : Type*} [Group G]
 section leftCoset_cover_const
 
 @[to_additive]
-/--
-theorem `exists_leftTransversal_of_FiniteIndex` / 定理 `exists_leftTransversal_of_FiniteIndex`
-
-English:
-theorem exists_leftTransversal_of_FiniteIndex
-  proof: by
-  have ⟨t, ht⟩ := (D.subgroupOf H).exists_isComplement_left 1
-  have hf : t.Finite := ht.1.finite_left_iff.mpr inferInstance
-  refine ⟨hf.toFinset, hf.coe_toFinset.symm ▸ ht.1, ?_⟩
-  ext x
-  suffices (exists y in t, exists d in D, y * d = x) ↔ x in H by simpa using! this
-  constructor
-  · rintro ⟨⟨y, hy⟩, -, d, h, rfl⟩
-    exact H.mul_mem hy (hD_le_H h)
-  · intro hx
-    exact ⟨_, (ht.1.toLeftFun ⟨x, hx⟩).2, _,
-      ht.1.inv_toLeftFun_mul_mem ⟨x, hx⟩, mul_inv_cancel_left _ _⟩
-
-中文:
-定理 存在_leftTransversal_of_FiniteIndex
-  证明: by
-  have ⟨t, ht⟩ := (D.subgroupOf H).exists_isComplement_left 1
-  have hf : t.Finite := ht.1.finite_left_iff.mpr inferInstance
-  refine ⟨hf.toFinset, hf.coe_toFinset.symm ▸ ht.1, ?_⟩
-  ext x
-  suffices (exists y in t, exists d in D, y * d = x) ↔ x in H by simpa using! this
-  constructor
-  · rintro ⟨⟨y, hy⟩, -, d, h, rfl⟩
-    exact H.mul_mem hy (hD_le_H h)
-  · intro hx
-    exact ⟨_, (ht.1.toLeftFun ⟨x, hx⟩).2, _,
-      ht.1.inv_toLeftFun_mul_mem ⟨x, hx⟩, mul_inv_cancel_left _ _⟩
-
-Depends on / 依赖: D.subgroupOf, Finite, H.mul_mem, _apply, _toMatrix, coe_toFinset, exists_isComplement_left, finite_left_iff, finite_left_iff.mpr, hD_le_H, hf.coe_toFinset.symm, hf.toFinset, inv_toLeftFun_mul_mem, mul_inv_cancel_left, mul_mem, subgroupOf, t.Finite, toFinset, toLeftFun
+/-
+**Subgroup.exists_leftTransversal_of_FiniteIndex** 是 Mathlib 中的一个定理，位于命名空间 `Subg
+roup`。
+形式化陈述：exists_leftTransversal_of_FiniteIndex {D H : Subgroup G} [D.FiniteIndex] (
+hD_le_H : D <= H) : exists t : Finset H, IsComplement (t : Set H) (D.subgroupOf 
+H) ∧ ⋃ g in t, (g : G) • (D : Set G) = H
+参数：hD_le_H : D <= H。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Subgroup.exists_isComplement_left`：exists_isComplement_left (H : Subgrou
+p G) (g : G) : exists S, IsComplement S H ∧ g in S
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subgroup.IsComplement.finite_left_iff`：finite_left_iff (h : IsComplement
+ S H) : Finite S ↔ H.FiniteIndex
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.Finite.coe_toFinset`：∀ {α : Type u} {s : Set α} (hs : s.Finite), ↑hs
+.toFinset = s
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Subgroup.mul_mem`：∀ {G : Type u_1} [inst : Group G] (H : Subgroup G) {x 
+y : G}, x ∈ H → y ∈ H → x * y ∈ H
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Subgroup.IsComplement.inv_toLeftFun_mul_mem`：inv_toLeftFun_mul_mem (hS :
+ IsComplement S H) (g : G) : (toLeftFun hS g : G)⁻¹ * g in H
+· 使用定理 `mul_inv_cancel_left`：mul_inv_cancel_left (a b : G) : a * (a⁻¹ * b) = b
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
 -/
 theorem exists_leftTransversal_of_FiniteIndex
-    {D H : Subgroup G} [D.FiniteIndex] (hD_le_H : D <= H) :
-    exists t : Finset H,
+    {D H : Subgroup G} [D.FiniteIndex] (hD_le_H : D ≤ H) :
+    ∃ t : Finset H,
       IsComplement (t : Set H) (D.subgroupOf H) ∧
-        ⋃ g in t, (g : G) • (D : Set G) = H := by
+        ⋃ g ∈ t, (g : G) • (D : Set G) = H := by
   have ⟨t, ht⟩ := (D.subgroupOf H).exists_isComplement_left 1
   have hf : t.Finite := ht.1.finite_left_iff.mpr inferInstance
   refine ⟨hf.toFinset, hf.coe_toFinset.symm ▸ ht.1, ?_⟩
   ext x
-  suffices (exists y in t, exists d in D, y * d = x) ↔ x in H by simpa using! this
+  suffices (∃ y ∈ t, ∃ d ∈ D, y * d = x) ↔ x ∈ H by simpa using! this
   constructor
   · rintro ⟨⟨y, hy⟩, -, d, h, rfl⟩
     exact H.mul_mem hy (hD_le_H h)
@@ -109,163 +116,163 @@ theorem exists_leftTransversal_of_FiniteIndex
     exact ⟨_, (ht.1.toLeftFun ⟨x, hx⟩).2, _,
       ht.1.inv_toLeftFun_mul_mem ⟨x, hx⟩, mul_inv_cancel_left _ _⟩
 
-variable {ι : Type*} {s : Finset ι} {H : Subgroup G} {g : ι -> G}
+variable {ι : Type*} {s : Finset ι} {H : Subgroup G} {g : ι → G}
 
 @[to_additive]
-/--
-theorem `leftCoset_cover_const_iff_surjOn` / 定理 `leftCoset_cover_const_iff_surjOn`
-
-English:
-theorem leftCoset_cover_const_iff_surjOn
-  proof: by
-  simp [Set.eq_univ_iff_forall, mem_leftCoset_iff, Set.SurjOn,
-    QuotientGroup.forall_mk, QuotientGroup.eq]
-
-中文:
-定理 leftCoset_cover_const_iff_surjOn
-  证明: by
-  simp [Set.eq_univ_iff_forall, mem_leftCoset_iff, Set.SurjOn,
-    QuotientGroup.forall_mk, QuotientGroup.eq]
-
-Depends on / 依赖: Matrix, Matrix.mulVecLin_one, QuotientGroup, QuotientGroup.eq, QuotientGroup.forall_mk, Set.SurjOn, Set.eq_univ_iff_forall, SurjOn, eq_univ_iff_forall, forall_mk, mem_leftCoset_iff, mulVecLin_one
+/-
+**Subgroup.leftCoset_cover_const_iff_surjOn** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`
+。
+形式化陈述：leftCoset_cover_const_iff_surjOn : ⋃ i in s, g i • (H : Set G) = Set.univ 
+↔ Set.SurjOn (g · : ι -> G ⧸ H) s Set.univ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem leftCoset_cover_const_iff_surjOn :
-    ⋃ i in s, g i • (H : Set G) = Set.univ ↔ Set.SurjOn (g · : ι -> G ⧸ H) s Set.univ := by
+    ⋃ i ∈ s, g i • (H : Set G) = Set.univ ↔ Set.SurjOn (g · : ι → G ⧸ H) s Set.univ := by
   simp [Set.eq_univ_iff_forall, mem_leftCoset_iff, Set.SurjOn,
     QuotientGroup.forall_mk, QuotientGroup.eq]
 
-variable (hcovers : ⋃ i in s, g i • (H : Set G) = Set.univ)
+variable (hcovers : ⋃ i ∈ s, g i • (H : Set G) = Set.univ)
 include hcovers
 
 /-- If `H` is a subgroup of `G` and `G` is the union of a finite family of left cosets of `H`
 then `H` has finite index. -/
 @[to_additive]
-/--
-theorem `finiteIndex_of_leftCoset_cover_const` / 定理 `finiteIndex_of_leftCoset_cover_const`
+/-
+**Subgroup.finiteIndex_of_leftCoset_cover_const** 是 Mathlib 中的一个定理，位于命名空间 `Subgr
+oup`。
+形式化陈述：finiteIndex_of_leftCoset_cover_const : H.FiniteIndex
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.finite_univ_iff`：finite_univ_iff : (@univ α).Finite ↔ Finite α
+· 使用定理 `Set.Finite.of_surjOn`：∀ {α : Type u} {β : Type v} {s : Set α} {t : Set β
+} (f : α → β), Set.SurjOn f s t → s.Finite → t.Finite
+· 使用定理 `Finset.finite_toSet`：finite_toSet (s : Finset α) : (s : Set α).Finite
+· 使用定理 `Subgroup.finiteIndex_of_finite_quotient`：finiteIndex_of_finite_quotient 
+[Finite (G ⧸ H)] : FiniteIndex H
 
-English:
-theorem finiteIndex_of_leftCoset_cover_const
-  statement: H.FiniteIndex
-  proof: by
-  simp_rw [leftCoset_cover_const_iff_surjOn] at hcovers
-have := Set.finite_univ_iff.mp Set.Finite.of_surjOn _ hcovers s.finite_toSet
-  exact H.finiteIndex_of_finite_quotient
-
-@[to_additive]
-
-中文:
-定理 finiteIndex_of_leftCoset_cover_const
-  结论: H.FiniteIndex
-  证明: by
-  simp_rw [leftCoset_cover_const_iff_surjOn] at hcovers
-have := Set.finite_univ_iff.mp Set.Finite.of_surjOn _ hcovers s.finite_toSet
-  exact H.finiteIndex_of_finite_quotient
-
-@[to_additive]
-
-Depends on / 依赖: Finite, H.finiteIndex_of_finite_quotient, LinearMap, LinearMap.toMatrix, Matrix, Matrix.one_apply, Pi.single_apply, Set.Finite.of_surjOn, Set.finite_univ_iff.mp, _apply, finiteIndex_of_finite_quotient, finite_toSet, finite_univ_iff, hcovers, id_apply, leftCoset_cover_const_iff_surjOn, of_surjOn, one_apply, s.finite_toSet, simp_rw
+--- 原说明 ---
+If `H` is a subgroup of `G` and `G` is the union of a finite family of left cose
+ts of `H`
+then `H` has finite index.
 -/
 theorem finiteIndex_of_leftCoset_cover_const : H.FiniteIndex := by
   simp_rw [leftCoset_cover_const_iff_surjOn] at hcovers
-have := Set.finite_univ_iff.mp Set.Finite.of_surjOn _ hcovers s.finite_toSet
+  have := Set.finite_univ_iff.mp <| Set.Finite.of_surjOn _ hcovers s.finite_toSet
   exact H.finiteIndex_of_finite_quotient
 
 @[to_additive]
-/--
-theorem `index_le_of_leftCoset_cover_const` / 定理 `index_le_of_leftCoset_cover_const`
-
-English:
-theorem index_le_of_leftCoset_cover_const
-  statement: H.index <= s.card
-  proof: by
-  cases H.index.eq_zero_or_pos with
-  | inl h => exact h ▸ s.card.zero_le
-  | inr h =>
-    rw [leftCoset_cover_const_iff_surjOn]; rw [Set.surjOn_iff_surjective] at hcovers
-    exact (Nat.card_le_card_of_surjective _ hcovers).trans_eq (Nat.card_eq_finsetCard _)
-
-@[to_additive]
-
-中文:
-定理 index_le_of_leftCoset_cover_const
-  结论: H.index <= s.card
-  证明: by
-  cases H.index.eq_zero_or_pos with
-  | inl h => exact h ▸ s.card.zero_le
-  | inr h =>
-    rw [leftCoset_cover_const_iff_surjOn]; rw [Set.surjOn_iff_surjective] at hcovers
-    exact (Nat.card_le_card_of_surjective _ hcovers).trans_eq (Nat.card_eq_finsetCard _)
-
-@[to_additive]
-
-Depends on / 依赖: H.index.eq_zero_or_pos, LinearMap, LinearMap.toMatrix, Nat.card_eq_finsetCard, Nat.card_le_card_of_surjective, Set.surjOn_iff_surjective, card_eq_finsetCard, card_le_card_of_surjective, eq_zero_or_pos, hcovers, leftCoset_cover_const_iff_surjOn, s.card.zero_le, surjOn_iff_surjective, toMatrix, trans_eq, zero_le
+/-
+**Subgroup.index_le_of_leftCoset_cover_const** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup
+`。
+形式化陈述：index_le_of_leftCoset_cover_const : H.index <= s.card
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.eq_zero_or_pos`：∀ (n : ℕ), n = 0 ∨ n > 0
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用引理 `Nat.card_le_card_of_surjective`：card_le_card_of_surjective {α : Type u} 
+{β : Type v} [Finite α] (f : α -> β) (hf : Surjective f) : Nat.card β <= Nat.car
+d α
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.surjOn_iff_surjective`：surjOn_iff_surjective : SurjOn f s univ ↔ Sur
+jective (s.domRestrict f)
+· 使用定理 `Subgroup.leftCoset_cover_const_iff_surjOn`：leftCoset_cover_const_iff_sur
+jOn : ⋃ i in s, g i • (H : Set G) = Set.univ ↔ Set.SurjOn (g · : ι -> G ⧸ H) s S
+et.univ
+· 使用引理 `Nat.card_eq_finsetCard`：card_eq_finsetCard (s : Finset α) : Nat.card s =
+ s.card
 -/
-theorem index_le_of_leftCoset_cover_const : H.index <= s.card := by
+theorem index_le_of_leftCoset_cover_const : H.index ≤ s.card := by
   cases H.index.eq_zero_or_pos with
   | inl h => exact h ▸ s.card.zero_le
   | inr h =>
-    rw [leftCoset_cover_const_iff_surjOn]; rw [Set.surjOn_iff_surjective] at hcovers
+    rw [leftCoset_cover_const_iff_surjOn, Set.surjOn_iff_surjective] at hcovers
     exact (Nat.card_le_card_of_surjective _ hcovers).trans_eq (Nat.card_eq_finsetCard _)
 
 @[to_additive]
-/--
-theorem `pairwiseDisjoint_leftCoset_cover_const_of_index_eq` / 定理 `pairwiseDisjoint_leftCoset_cover_const_of_index_eq`
-
-English:
-theorem pairwiseDisjoint_leftCoset_cover_const_of_index_eq
-  given: (hind : H.index = s.card)
-  proof: by
-  have : Fintype (G ⧸ H) := fintypeOfIndexNeZero fun h => by
-    rw [hind]; rw [Finset.card_eq_zero] at h
-    rw [h]; rw [← Finset.set_biUnion_coe]; rw [Finset.coe_empty]; rw [Set.biUnion_empty] at hcovers
-    exact Set.empty_ne_univ hcovers
-  suffices Function.Bijective (g · : s -> G ⧸ H) by
-    intro i hi j hj h' c hi' hj' x hx
-    specialize hi' hx
-    specialize hj' hx
-    rw [mem_leftCoset_iff]; rw [SetLike.mem_coe]; rw [← QuotientGroup.eq] at hi' hj'
-    rw [ne_eq]; rw [← Subtype.mk.injEq (p := (· in (s : Set ι))) i hi j hj] at h'
-exact h' this.injective by simp only [hi', hj']
-  rw [Fintype.bijective_iff_surjective_and_card]
-  constructor
-  · rwa [leftCoset_cover_const_iff_surjOn, Set.surjOn_iff_surjective] at hcovers
-  · simp only [Fintype.card_coe, ← hind, index_eq_card, Nat.card_eq_fintype_card]
-
-中文:
-定理 pairwiseDisjoint_leftCoset_cover_const_of_index_eq
-  条件: (hind : H.index = s.card)
-  证明: by
-  have : Fintype (G ⧸ H) := fintypeOfIndexNeZero fun h => by
-    rw [hind]; rw [Finset.card_eq_zero] at h
-    rw [h]; rw [← Finset.set_biUnion_coe]; rw [Finset.coe_empty]; rw [Set.biUnion_empty] at hcovers
-    exact Set.empty_ne_univ hcovers
-  suffices Function.Bijective (g · : s -> G ⧸ H) by
-    intro i hi j hj h' c hi' hj' x hx
-    specialize hi' hx
-    specialize hj' hx
-    rw [mem_leftCoset_iff]; rw [SetLike.mem_coe]; rw [← QuotientGroup.eq] at hi' hj'
-    rw [ne_eq]; rw [← Subtype.mk.injEq (p := (· in (s : Set ι))) i hi j hj] at h'
-exact h' this.injective by simp only [hi', hj']
-  rw [Fintype.bijective_iff_surjective_and_card]
-  constructor
-  · rwa [leftCoset_cover_const_iff_surjOn, Set.surjOn_iff_surjective] at hcovers
-  · simp only [Fintype.card_coe, ← hind, index_eq_card, Nat.card_eq_fintype_card]
-
-Depends on / 依赖: Bijective, Finset, Finset.card_eq_zero, Finset.coe_empty, Finset.set_biUnion_coe, Fintype, Function, Function.Bijective, Matrix, Matrix.mulVecLin_mul, QuotientGroup, QuotientGroup.eq, Set.biUnion_empty, Set.empty_ne_univ, SetLike, SetLike.mem_coe, Subtype, Subtype.mk.injEq, biUnion_empty, card_eq_zero
+/-
+**Subgroup.pairwiseDisjoint_leftCoset_cover_const_of_index_eq** 是 Mathlib 中的一个定理
+，位于命名空间 `Subgroup`。
+形式化陈述：pairwiseDisjoint_leftCoset_cover_const_of_index_eq (hind : H.index = s.car
+d) : Set.PairwiseDisjoint s (g · • (H : Set G))
+参数：hind : H.index = s.card。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.empty_ne_univ`：empty_ne_univ [Nonempty α] : (∅ : Set α) != univ
+· 使用定理 `One.instNonempty`：∀ {α : Type u} [One α], Nonempty α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.biUnion_empty`：biUnion_empty (s : α -> Set β) : ⋃ x in (∅ : Set α), 
+s x = ∅
+· 使用定理 `Finset.coe_empty`：coe_empty : ((∅ : Finset α) : Set α) = ∅
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.set_biUnion_coe`：set_biUnion_coe (s : Finset α) (t : α -> Set β) 
+: ⋃ x in (↑s : Set α), t x = ⋃ x in s, t x
+· 使用定理 `Finset.card_eq_zero`：∀ {α : Type u_1} {s : Finset α}, s.card = 0 ↔ s = ∅
+· 使用定理 `Fintype.bijective_iff_surjective_and_card`：bijective_iff_surjective_and_
+card (f : α -> β) : Bijective f ↔ Surjective f ∧ card α = card β
+· 使用定理 `Set.surjOn_iff_surjective`：surjOn_iff_surjective : SurjOn f s univ ↔ Sur
+jective (s.domRestrict f)
+· 使用定理 `Subgroup.leftCoset_cover_const_iff_surjOn`：leftCoset_cover_const_iff_sur
+jOn : ⋃ i in s, g i • (H : Set G) = Set.univ ↔ Set.SurjOn (g · : ι -> G ⧸ H) s S
+et.univ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Fintype.card_coe`：Fintype.card_coe (s : Finset α) [Fintype s] : Fintype.
+card s = #s
+· 使用定理 `Nat.card_eq_fintype_card`：card_eq_fintype_card [Fintype α] : Nat.card α 
+= Fintype.card α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Subtype.mk.injEq`：∀ {α : Sort u} {p : α → Prop} (val : α) (property : p 
+val) (val_1 : α) (property_1 : p val_1),   (⟨val, property⟩ = ⟨val_1, property_1
+⟩) = (…
+· 使用定理 `ne_eq`：∀ {α : Sort u_1} (a b : α), (a ≠ b) = ¬a = b
+· 使用定理 `Function.Bijective.injective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β
+}, Function.Bijective f → Function.Injective f
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `QuotientGroup.eq`：∀ {α : Type u_1} [inst : Group α] {s : Subgroup α} {a 
+b : α}, ↑a = ↑b ↔ a⁻¹ * b ∈ s
+· 使用定理 `SetLike.mem_coe`：mem_coe {x : B} : x in (p : Set B) ↔ x in p
+· 使用定理 `mem_leftCoset_iff`：mem_leftCoset_iff (a : α) : x in a • s ↔ a⁻¹ * x in s
 -/
 theorem pairwiseDisjoint_leftCoset_cover_const_of_index_eq (hind : H.index = s.card) :
     Set.PairwiseDisjoint s (g · • (H : Set G)) := by
   have : Fintype (G ⧸ H) := fintypeOfIndexNeZero fun h => by
-    rw [hind]; rw [Finset.card_eq_zero] at h
-    rw [h]; rw [← Finset.set_biUnion_coe]; rw [Finset.coe_empty]; rw [Set.biUnion_empty] at hcovers
+    rw [hind, Finset.card_eq_zero] at h
+    rw [h, ← Finset.set_biUnion_coe, Finset.coe_empty, Set.biUnion_empty] at hcovers
     exact Set.empty_ne_univ hcovers
-  suffices Function.Bijective (g · : s -> G ⧸ H) by
+  suffices Function.Bijective (g · : s → G ⧸ H) by
     intro i hi j hj h' c hi' hj' x hx
     specialize hi' hx
     specialize hj' hx
-    rw [mem_leftCoset_iff]; rw [SetLike.mem_coe]; rw [← QuotientGroup.eq] at hi' hj'
-    rw [ne_eq]; rw [← Subtype.mk.injEq (p := (· in (s : Set ι))) i hi j hj] at h'
-exact h' this.injective by simp only [hi', hj']
+    rw [mem_leftCoset_iff, SetLike.mem_coe, ← QuotientGroup.eq] at hi' hj'
+    rw [ne_eq, ← Subtype.mk.injEq (p := (· ∈ (s : Set ι))) i hi j hj] at h'
+    exact h' <| this.injective <| by simp only [hi', hj']
   rw [Fintype.bijective_iff_surjective_and_card]
   constructor
   · rwa [leftCoset_cover_const_iff_surjOn, Set.surjOn_iff_surjective] at hcovers
@@ -275,185 +282,110 @@ end leftCoset_cover_const
 
 section
 
-variable {ι : Type*} {H : ι -> Subgroup G} {g : ι -> G} {s : Finset ι}
-    (hcovers : ⋃ i in s, (g i) • (H i : Set G) = Set.univ)
+variable {ι : Type*} {H : ι → Subgroup G} {g : ι → G} {s : Finset ι}
+    (hcovers : ⋃ i ∈ s, (g i) • (H i : Set G) = Set.univ)
 include hcovers
 
 -- Inductive inner part of `Subgroup.exists_finiteIndex_of_leftCoset_cover`
 @[to_additive]
-/--
-theorem `exists_finiteIndex_of_leftCoset_cover_aux` / 定理 `exists_finiteIndex_of_leftCoset_cover_aux`
-
-English:
-theorem exists_finiteIndex_of_leftCoset_cover_aux
-  statement: [DecidableEq (Subgroup G)]
-  proof: by
-  classical
-  have ⟨n, hn⟩ : exists n, n = (s.image H).card := exists_eq
-  induction n using Nat.strongRec generalizing ι with
-  | ind n ih =>
-    -- Every left coset of `H j` is contained in a finite union of
-    -- left cosets of the other subgroups `H k ≠ H j` of the covering.
-    have ⟨x, hx⟩ : exists (x : G), forall i in s, H i = H j -> (g i : G ⧸ H i) != ↑x := by
-      simpa [Set.eq_univ_iff_forall, mem_leftCoset_iff, ← QuotientGroup.eq] using hcovers'
-    replace hx : forall (y : G), y • (H j : Set G) subseteq
-        ⋃ i in s.filter (H · != H j), (y * x⁻¹ * g i) • (H i : Set G) := by
-      intro y z hz
-      simp_rw [Finset.mem_filter, Set.mem_iUnion]
-      have ⟨i, hi, hmem⟩ : exists i in s, x * (y⁻¹ * z) in g i • (H i : Set G) := by
-        simpa using Set.eq_univ_iff_forall.mp hcovers (x * (y⁻¹ * z))
-      rw [mem_leftCoset_iff]; rw [SetLike.mem_coe]; rw [← QuotientGroup.eq] at hmem
-      refine ⟨i, ⟨hi, fun hij => hx i hi hij ?_⟩, ?_⟩
-      · rwa [hmem, eq_comm, QuotientGroup.eq, hij, inv_mul_cancel_left,
-          ← SetLike.mem_coe, ← mem_leftCoset_iff]
-      · simpa [mem_leftCoset_iff, SetLike.mem_coe, QuotientGroup.eq, mul_assoc] using hmem
-    -- Thus `G` can also be covered by a finite union `U k, f k • K k` of left cosets
-    -- of the subgroups `H k ≠ H j`.
-    let κ := ↥(s.filter (H · != H j)) × Option ↥(s.filter (H · = H j))
-    let f : κ -> G
-    | ⟨k₁, some k₂⟩ => g k₂ * x⁻¹ * g k₁
-    | ⟨k₁, none⟩ => g k₁
-    let K (k : κ) : Subgroup G := H k.1.val
-    have hK' (k : κ) : K k in (s.image H).erase (H j) := by
-      have := Finset.mem_filter.mp k.1.property
-      exact Finset.mem_erase.mpr ⟨this.2, Finset.mem_image_of_mem H this.1⟩
-    have hK (k : κ) : K k != H j := ((Finset.mem_erase.mp (hK' k)).left ·)
-    replace hcovers : ⋃ k in Finset.univ, f k • (K k : Set G) = Set.univ :=
-        Set.iUnion₂_eq_univ_iff.mpr fun y => by
-      rw [← s.filter_union_filter_not_eq (H · = H j)]; rw [Finset.set_biUnion_union] at hcovers
-      cases (Set.mem_union _ _ _).mp (hcovers.superset (Set.mem_univ y)) with
-      | inl hy =>
-        have ⟨k, hk, hy⟩ := Set.mem_iUnion₂.mp hy
-have hk' : H k = H j := And.right by simpa using hk
-        have ⟨i, hi, hy⟩ := Set.mem_iUnion₂.mp (hx (g k) (hk' ▸ hy))
-        exact ⟨⟨⟨i, hi⟩, some ⟨k, hk⟩⟩, Finset.mem_univ _, hy⟩
-      | inr hy =>
-        have ⟨i, hi, hy⟩ := Set.mem_iUnion₂.mp hy
-        exact ⟨⟨⟨i, hi⟩, none⟩, Finset.mem_univ _, hy⟩
-    -- Let `H k` be one of the subgroups in this covering.
-    have ⟨k⟩ : Nonempty κ := not_isEmpty_iff.mp fun hempty => by
-      rw [Set.iUnion_of_empty] at hcovers
-      exact Set.empty_ne_univ hcovers
-    -- If `G` is the union of the cosets of `H k` in the new covering, we are done.
-    by_cases hcovers' : ⋃ i in Finset.filter (K · = K k) Finset.univ, f i • (K i : Set G) = Set.univ
-    · rw [Set.iUnion₂_congr fun i hi => by rw [(Finset.mem_filter.mp hi).right]] at hcovers'
-      exact ⟨k.1, Finset.mem_of_mem_filter k.1.1 k.1.2, hK k,
-        finiteIndex_of_leftCoset_cover_const hcovers'⟩
-    -- Otherwise, by the induction hypothesis, one of the subgroups `H k ≠ H j` has finite index.
-    have hn' : (Finset.univ.image K).card < n := hn ▸ by
-      refine ((Finset.card_le_card fun x => ?_).trans_lt <|
-        Finset.card_erase_lt_of_mem (Finset.mem_image_of_mem H hj))
-      rw [mem_image_univ_iff_mem_range]; rw [Set.mem_range]
-      exact fun ⟨k, hk⟩ => hk ▸ hK' k
-    have ⟨k', hk'⟩ := ih _ hn' hcovers k (Finset.mem_univ k) hcovers' rfl
-    exact ⟨k'.1.1, Finset.mem_of_mem_filter k'.1.1 k'.1.2, hK k', hk'.2.2⟩
-
-中文:
-定理 存在_finiteIndex_of_leftCoset_cover_aux
-  结论: [DecidableEq (子群 G)]
-  证明: by
-  classical
-  have ⟨n, hn⟩ : exists n, n = (s.image H).card := exists_eq
-  induction n using Nat.strongRec generalizing ι with
-  | ind n ih =>
-    -- Every left coset of `H j` is contained in a finite union of
-    -- left cosets of the other subgroups `H k ≠ H j` of the covering.
-    have ⟨x, hx⟩ : exists (x : G), forall i in s, H i = H j -> (g i : G ⧸ H i) != ↑x := by
-      simpa [Set.eq_univ_iff_forall, mem_leftCoset_iff, ← QuotientGroup.eq] using hcovers'
-    replace hx : forall (y : G), y • (H j : Set G) subseteq
-        ⋃ i in s.filter (H · != H j), (y * x⁻¹ * g i) • (H i : Set G) := by
-      intro y z hz
-      simp_rw [Finset.mem_filter, Set.mem_iUnion]
-      have ⟨i, hi, hmem⟩ : exists i in s, x * (y⁻¹ * z) in g i • (H i : Set G) := by
-        simpa using Set.eq_univ_iff_forall.mp hcovers (x * (y⁻¹ * z))
-      rw [mem_leftCoset_iff]; rw [SetLike.mem_coe]; rw [← QuotientGroup.eq] at hmem
-      refine ⟨i, ⟨hi, fun hij => hx i hi hij ?_⟩, ?_⟩
-      · rwa [hmem, eq_comm, QuotientGroup.eq, hij, inv_mul_cancel_left,
-          ← SetLike.mem_coe, ← mem_leftCoset_iff]
-      · simpa [mem_leftCoset_iff, SetLike.mem_coe, QuotientGroup.eq, mul_assoc] using hmem
-    -- Thus `G` can also be covered by a finite union `U k, f k • K k` of left cosets
-    -- of the subgroups `H k ≠ H j`.
-    let κ := ↥(s.filter (H · != H j)) × Option ↥(s.filter (H · = H j))
-    let f : κ -> G
-    | ⟨k₁, some k₂⟩ => g k₂ * x⁻¹ * g k₁
-    | ⟨k₁, none⟩ => g k₁
-    let K (k : κ) : Subgroup G := H k.1.val
-    have hK' (k : κ) : K k in (s.image H).erase (H j) := by
-      have := Finset.mem_filter.mp k.1.property
-      exact Finset.mem_erase.mpr ⟨this.2, Finset.mem_image_of_mem H this.1⟩
-    have hK (k : κ) : K k != H j := ((Finset.mem_erase.mp (hK' k)).left ·)
-    replace hcovers : ⋃ k in Finset.univ, f k • (K k : Set G) = Set.univ :=
-        Set.iUnion₂_eq_univ_iff.mpr fun y => by
-      rw [← s.filter_union_filter_not_eq (H · = H j)]; rw [Finset.set_biUnion_union] at hcovers
-      cases (Set.mem_union _ _ _).mp (hcovers.superset (Set.mem_univ y)) with
-      | inl hy =>
-        have ⟨k, hk, hy⟩ := Set.mem_iUnion₂.mp hy
-have hk' : H k = H j := And.right by simpa using hk
-        have ⟨i, hi, hy⟩ := Set.mem_iUnion₂.mp (hx (g k) (hk' ▸ hy))
-        exact ⟨⟨⟨i, hi⟩, some ⟨k, hk⟩⟩, Finset.mem_univ _, hy⟩
-      | inr hy =>
-        have ⟨i, hi, hy⟩ := Set.mem_iUnion₂.mp hy
-        exact ⟨⟨⟨i, hi⟩, none⟩, Finset.mem_univ _, hy⟩
-    -- Let `H k` be one of the subgroups in this covering.
-    have ⟨k⟩ : Nonempty κ := not_isEmpty_iff.mp fun hempty => by
-      rw [Set.iUnion_of_empty] at hcovers
-      exact Set.empty_ne_univ hcovers
-    -- If `G` is the union of the cosets of `H k` in the new covering, we are done.
-    by_cases hcovers' : ⋃ i in Finset.filter (K · = K k) Finset.univ, f i • (K i : Set G) = Set.univ
-    · rw [Set.iUnion₂_congr fun i hi => by rw [(Finset.mem_filter.mp hi).right]] at hcovers'
-      exact ⟨k.1, Finset.mem_of_mem_filter k.1.1 k.1.2, hK k,
-        finiteIndex_of_leftCoset_cover_const hcovers'⟩
-    -- Otherwise, by the induction hypothesis, one of the subgroups `H k ≠ H j` has finite index.
-    have hn' : (Finset.univ.image K).card < n := hn ▸ by
-      refine ((Finset.card_le_card fun x => ?_).trans_lt <|
-        Finset.card_erase_lt_of_mem (Finset.mem_image_of_mem H hj))
-      rw [mem_image_univ_iff_mem_range]; rw [Set.mem_range]
-      exact fun ⟨k, hk⟩ => hk ▸ hK' k
-    have ⟨k', hk'⟩ := ih _ hn' hcovers k (Finset.mem_univ k) hcovers' rfl
-    exact ⟨k'.1.1, Finset.mem_of_mem_filter k'.1.1 k'.1.2, hK k', hk'.2.2⟩
-
-Depends on / 依赖: End.one_eq_id, Module, Module.End.mul_eq_comp, Nat.strongRec, _mul, classical, exists_eq, generalizing, mul_eq_comp, one_eq_id, pow_succ, s.image, strongRec
+/-
+**Subgroup.exists_finiteIndex_of_leftCoset_cover_aux** 是 Mathlib 中的一个定理，位于命名空间 `
+Subgroup`。
+形式化陈述：exists_finiteIndex_of_leftCoset_cover_aux [DecidableEq (Subgroup G)] (j : 
+ι) (hj : j in s) (hcovers' : ⋃ i in s.filter (H · = H j), g i • (H i : Set G) !=
+ Set.univ) : exists i in s, H i != H j ∧ (H i).FiniteIndex
+参数：Subgroup G；j : ι；hj : j in s；hcovers' : ⋃ i in s.filter (H · = H j), g i • (H
+ i : Set G) != Set.univ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_eq`：∀ {α : Sort u_1} {a' : α}, ∃ a, a = a'
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.eq_univ_iff_forall`：eq_univ_iff_forall {s : Set α} : s = univ ↔ fora
+ll x, x in s
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `QuotientGroup.eq`：∀ {α : Type u_1} [inst : Group α] {s : Subgroup α} {a 
+b : α}, ↑a = ↑b ↔ a⁻¹ * b ∈ s
+· 使用定理 `SetLike.mem_coe`：mem_coe {x : B} : x in (p : Set B) ↔ x in p
+· 使用定理 `mem_leftCoset_iff`：mem_leftCoset_iff (a : α) : x in a • s ↔ a⁻¹ * x in s
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `inv_mul_cancel_left`：inv_mul_cancel_left (a b : G) : a⁻¹ * (a * b) = b
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `mul_inv_rev`：mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `Finset.mem_filter`：∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred
+ p] {s : Finset α} {a : α}, a ∈ Finset.filter p s ↔ a ∈ s ∧ p a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.mem_erase`：mem_erase {a b : α} {s : Finset α} : a in erase s b ↔ 
+a != b ∧ a in s
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Finset.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {a} (h : a in s) 
+: f a in s.image f
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Set.iUnion₂_eq_univ_iff`：iUnion₂_eq_univ_iff {s : forall i, κ i -> Set α
+} : ⋃ (i) (j), s i j = univ ↔ forall a, exists i j, a in s i j
+· 使用定理 `Set.mem_union`：mem_union (x : α) (a b : Set α) : x in a union b ↔ x in a
+ ∨ x in b
+· 使用定理 `Eq.superset`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preord
+er α] {a b : α}, a = b → b ⊆ a
+（共 47 条，此处仅展示前 30 条）
 -/
 theorem exists_finiteIndex_of_leftCoset_cover_aux [DecidableEq (Subgroup G)]
-    (j : ι) (hj : j in s) (hcovers' : ⋃ i in s.filter (H · = H j), g i • (H i : Set G) != Set.univ) :
-    exists i in s, H i != H j ∧ (H i).FiniteIndex := by
+    (j : ι) (hj : j ∈ s) (hcovers' : ⋃ i ∈ s.filter (H · = H j), g i • (H i : Set G) ≠ Set.univ) :
+    ∃ i ∈ s, H i ≠ H j ∧ (H i).FiniteIndex := by
   classical
-  have ⟨n, hn⟩ : exists n, n = (s.image H).card := exists_eq
+  have ⟨n, hn⟩ : ∃ n, n = (s.image H).card := exists_eq
   induction n using Nat.strongRec generalizing ι with
   | ind n ih =>
     -- Every left coset of `H j` is contained in a finite union of
     -- left cosets of the other subgroups `H k ≠ H j` of the covering.
-    have ⟨x, hx⟩ : exists (x : G), forall i in s, H i = H j -> (g i : G ⧸ H i) != ↑x := by
+    have ⟨x, hx⟩ : ∃ (x : G), ∀ i ∈ s, H i = H j → (g i : G ⧸ H i) ≠ ↑x := by
       simpa [Set.eq_univ_iff_forall, mem_leftCoset_iff, ← QuotientGroup.eq] using hcovers'
-    replace hx : forall (y : G), y • (H j : Set G) subseteq
-        ⋃ i in s.filter (H · != H j), (y * x⁻¹ * g i) • (H i : Set G) := by
+    replace hx : ∀ (y : G), y • (H j : Set G) ⊆
+        ⋃ i ∈ s.filter (H · ≠ H j), (y * x⁻¹ * g i) • (H i : Set G) := by
       intro y z hz
       simp_rw [Finset.mem_filter, Set.mem_iUnion]
-      have ⟨i, hi, hmem⟩ : exists i in s, x * (y⁻¹ * z) in g i • (H i : Set G) := by
+      have ⟨i, hi, hmem⟩ : ∃ i ∈ s, x * (y⁻¹ * z) ∈ g i • (H i : Set G) := by
         simpa using Set.eq_univ_iff_forall.mp hcovers (x * (y⁻¹ * z))
-      rw [mem_leftCoset_iff]; rw [SetLike.mem_coe]; rw [← QuotientGroup.eq] at hmem
+      rw [mem_leftCoset_iff, SetLike.mem_coe, ← QuotientGroup.eq] at hmem
       refine ⟨i, ⟨hi, fun hij => hx i hi hij ?_⟩, ?_⟩
       · rwa [hmem, eq_comm, QuotientGroup.eq, hij, inv_mul_cancel_left,
           ← SetLike.mem_coe, ← mem_leftCoset_iff]
       · simpa [mem_leftCoset_iff, SetLike.mem_coe, QuotientGroup.eq, mul_assoc] using hmem
     -- Thus `G` can also be covered by a finite union `U k, f k • K k` of left cosets
     -- of the subgroups `H k ≠ H j`.
-    let κ := ↥(s.filter (H · != H j)) × Option ↥(s.filter (H · = H j))
-    let f : κ -> G
+    let κ := ↥(s.filter (H · ≠ H j)) × Option ↥(s.filter (H · = H j))
+    let f : κ → G
     | ⟨k₁, some k₂⟩ => g k₂ * x⁻¹ * g k₁
     | ⟨k₁, none⟩ => g k₁
     let K (k : κ) : Subgroup G := H k.1.val
-    have hK' (k : κ) : K k in (s.image H).erase (H j) := by
+    have hK' (k : κ) : K k ∈ (s.image H).erase (H j) := by
       have := Finset.mem_filter.mp k.1.property
       exact Finset.mem_erase.mpr ⟨this.2, Finset.mem_image_of_mem H this.1⟩
-    have hK (k : κ) : K k != H j := ((Finset.mem_erase.mp (hK' k)).left ·)
-    replace hcovers : ⋃ k in Finset.univ, f k • (K k : Set G) = Set.univ :=
+    have hK (k : κ) : K k ≠ H j := ((Finset.mem_erase.mp (hK' k)).left ·)
+    replace hcovers : ⋃ k ∈ Finset.univ, f k • (K k : Set G) = Set.univ :=
         Set.iUnion₂_eq_univ_iff.mpr fun y => by
-      rw [← s.filter_union_filter_not_eq (H · = H j)]; rw [Finset.set_biUnion_union] at hcovers
+      rw [← s.filter_union_filter_not_eq (H · = H j), Finset.set_biUnion_union] at hcovers
       cases (Set.mem_union _ _ _).mp (hcovers.superset (Set.mem_univ y)) with
       | inl hy =>
         have ⟨k, hk, hy⟩ := Set.mem_iUnion₂.mp hy
-have hk' : H k = H j := And.right by simpa using hk
+        have hk' : H k = H j := And.right <| by simpa using hk
         have ⟨i, hi, hy⟩ := Set.mem_iUnion₂.mp (hx (g k) (hk' ▸ hy))
         exact ⟨⟨⟨i, hi⟩, some ⟨k, hk⟩⟩, Finset.mem_univ _, hy⟩
       | inr hy =>
@@ -464,7 +396,7 @@ have hk' : H k = H j := And.right by simpa using hk
       rw [Set.iUnion_of_empty] at hcovers
       exact Set.empty_ne_univ hcovers
     -- If `G` is the union of the cosets of `H k` in the new covering, we are done.
-    by_cases hcovers' : ⋃ i in Finset.filter (K · = K k) Finset.univ, f i • (K i : Set G) = Set.univ
+    by_cases hcovers' : ⋃ i ∈ Finset.filter (K · = K k) Finset.univ, f i • (K i : Set G) = Set.univ
     · rw [Set.iUnion₂_congr fun i hi => by rw [(Finset.mem_filter.mp hi).right]] at hcovers'
       exact ⟨k.1, Finset.mem_of_mem_filter k.1.1 k.1.2, hK k,
         finiteIndex_of_leftCoset_cover_const hcovers'⟩
@@ -472,7 +404,7 @@ have hk' : H k = H j := And.right by simpa using hk
     have hn' : (Finset.univ.image K).card < n := hn ▸ by
       refine ((Finset.card_le_card fun x => ?_).trans_lt <|
         Finset.card_erase_lt_of_mem (Finset.mem_image_of_mem H hj))
-      rw [mem_image_univ_iff_mem_range]; rw [Set.mem_range]
+      rw [mem_image_univ_iff_mem_range, Set.mem_range]
       exact fun ⟨k, hk⟩ => hk ▸ hK' k
     have ⟨k', hk'⟩ := ih _ hn' hcovers k (Finset.mem_univ k) hcovers' rfl
     exact ⟨k'.1.1, Finset.mem_of_mem_filter k'.1.1 k'.1.2, hK k', hk'.2.2⟩
@@ -480,50 +412,47 @@ have hk' : H k = H j := And.right by simpa using hk
 /-- Let the group `G` be the union of finitely many left cosets `g i • H i`.
 Then at least one subgroup `H i` has finite index in `G`. -/
 @[to_additive]
-/--
-theorem `exists_finiteIndex_of_leftCoset_cover` / 定理 `exists_finiteIndex_of_leftCoset_cover`
+/-
+**Subgroup.exists_finiteIndex_of_leftCoset_cover** 是 Mathlib 中的一个定理，位于命名空间 `Subg
+roup`。
+形式化陈述：exists_finiteIndex_of_leftCoset_cover : exists k in s, (H k).FiniteIndex
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用定理 `Set.empty_ne_univ`：empty_ne_univ [Nonempty α] : (∅ : Set α) != univ
+· 使用定理 `One.instNonempty`：∀ {α : Type u} [One α], Nonempty α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.biUnion_empty`：biUnion_empty (s : α -> Set β) : ⋃ x in (∅ : Set α), 
+s x = ∅
+· 使用定理 `Finset.coe_empty`：coe_empty : ((∅ : Finset α) : Set α) = ∅
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.set_biUnion_coe`：set_biUnion_coe (s : Finset α) (t : α -> Set β) 
+: ⋃ x in (↑s : Set α), t x = ⋃ x in s, t x
+· 使用定理 `Subgroup.finiteIndex_of_leftCoset_cover_const`：finiteIndex_of_leftCoset_
+cover_const : H.FiniteIndex
+· 使用引理 `Set.iUnion₂_congr`：iUnion₂_congr {s t : forall i, κ i -> Set α} (h : for
+all i j, s i j = t i j) : ⋃ (i) (j), s i j = ⋃ (i) (j), t i j
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_filter`：∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred
+ p] {s : Finset α} {a : α}, a ∈ Finset.filter p s ↔ a ∈ s ∧ p a
+· 使用定理 `Subgroup.exists_finiteIndex_of_leftCoset_cover_aux`：exists_finiteIndex_o
+f_leftCoset_cover_aux [DecidableEq (Subgroup G)] (j : ι) (hj : j in s) (hcovers'
+ : ⋃ i in s.filter (H · = H j), g i • (H…
 
-English:
-theorem exists_finiteIndex_of_leftCoset_cover
-  statement: exists k in s, (H k).FiniteIndex
-  proof: by
-  classical
-  have ⟨j, hj⟩ : s.Nonempty := by
-    by_contra! rfl
-    rw [← Finset.set_biUnion_coe]; rw [Finset.coe_empty]; rw [Set.biUnion_empty] at hcovers
-    exact Set.empty_ne_univ hcovers
-  by_cases hcovers' : ⋃ i in s.filter (H · = H j), g i • (H i : Set G) = Set.univ
-  · rw [Set.iUnion₂_congr fun i hi => by rw [(Finset.mem_filter.mp hi).right]] at hcovers'
-    exact ⟨j, hj, finiteIndex_of_leftCoset_cover_const hcovers'⟩
-  · have ⟨i, hi, _, hfi⟩ :=
-      exists_finiteIndex_of_leftCoset_cover_aux hcovers j hj hcovers'
-    exact ⟨i, hi, hfi⟩
-
-中文:
-定理 存在_finiteIndex_of_leftCoset_cover
-  结论: 存在 k in s, (H k).FiniteIndex
-  证明: by
-  classical
-  have ⟨j, hj⟩ : s.Nonempty := by
-    by_contra! rfl
-    rw [← Finset.set_biUnion_coe]; rw [Finset.coe_empty]; rw [Set.biUnion_empty] at hcovers
-    exact Set.empty_ne_univ hcovers
-  by_cases hcovers' : ⋃ i in s.filter (H · = H j), g i • (H i : Set G) = Set.univ
-  · rw [Set.iUnion₂_congr fun i hi => by rw [(Finset.mem_filter.mp hi).right]] at hcovers'
-    exact ⟨j, hj, finiteIndex_of_leftCoset_cover_const hcovers'⟩
-  · have ⟨i, hi, _, hfi⟩ :=
-      exists_finiteIndex_of_leftCoset_cover_aux hcovers j hj hcovers'
-    exact ⟨i, hi, hfi⟩
-
-Depends on / 依赖: Finset, Finset.coe_empty, Finset.mem_filter.mp, Finset.set_biUnion_coe, Matrix, Matrix.mulVecLin_submatrix, Nonempty, Set.biUnion_empty, Set.empty_ne_univ, Set.iUnion, Set.univ, biUnion_empty, classical, coe_empty, empty_ne_univ, exists_finiteIndex_of_leftCoset_cover_aux, filter, finiteIndex_of_leftCoset_cover_const, hcovers, mem_filter
+--- 原说明 ---
+Let the group `G` be the union of finitely many left cosets `g i • H i`.
+Then at least one subgroup `H i` has finite index in `G`.
 -/
-theorem exists_finiteIndex_of_leftCoset_cover : exists k in s, (H k).FiniteIndex := by
+theorem exists_finiteIndex_of_leftCoset_cover : ∃ k ∈ s, (H k).FiniteIndex := by
   classical
   have ⟨j, hj⟩ : s.Nonempty := by
     by_contra! rfl
-    rw [← Finset.set_biUnion_coe]; rw [Finset.coe_empty]; rw [Set.biUnion_empty] at hcovers
+    rw [← Finset.set_biUnion_coe, Finset.coe_empty, Set.biUnion_empty] at hcovers
     exact Set.empty_ne_univ hcovers
-  by_cases hcovers' : ⋃ i in s.filter (H · = H j), g i • (H i : Set G) = Set.univ
+  by_cases hcovers' : ⋃ i ∈ s.filter (H · = H j), g i • (H i : Set G) = Set.univ
   · rw [Set.iUnion₂_congr fun i hi => by rw [(Finset.mem_filter.mp hi).right]] at hcovers'
     exact ⟨j, hj, finiteIndex_of_leftCoset_cover_const hcovers'⟩
   · have ⟨i, hi, _, hfi⟩ :=
@@ -532,210 +461,95 @@ theorem exists_finiteIndex_of_leftCoset_cover : exists k in s, (H k).FiniteIndex
 
 -- Auxiliary to `leftCoset_cover_filter_FiniteIndex` and `one_le_sum_inv_index_of_leftCoset_cover`.
 @[to_additive]
-/--
-theorem `leftCoset_cover_filter_FiniteIndex_aux` / 定理 `leftCoset_cover_filter_FiniteIndex_aux`
-
-English:
-theorem leftCoset_cover_filter_FiniteIndex_aux
-  proof: by
-  classical
-  let D := ⨅ k in s.filter (fun i => (H i).FiniteIndex), H k
-  -- `D`, as the finite intersection of subgroups of finite index, also has finite index.
-have hD : D.FiniteIndex := finiteIndex_iInf' _ by simp
-  have hD_le {i} (hi : i in s) (hfi : (H i).FiniteIndex) : D <= H i :=
-    iInf₂_le i (Finset.mem_filter.mpr ⟨hi, hfi⟩)
-  -- Each subgroup of finite index in the covering is the union of finitely many cosets of `D`.
-  choose t ht using fun i hi hfi =>
-    exists_leftTransversal_of_FiniteIndex (H := H i) (hD_le hi hfi)
-  -- We construct a cover of `G` by the cosets of subgroups of infinite index and of `D`.
-  let κ := (i : s) × { x // x in if h : (H i.1).FiniteIndex then t i.1 i.2 h else {1} }
-  let f (k : κ) : G := g k.1 * k.2.val
-  let K (k : κ) : Subgroup G := if (H k.1).FiniteIndex then D else H k.1
-  have hcovers' : ⋃ k in Finset.univ, f k • (K k : Set G) = Set.univ := by
-    rw [← s.filter_union_filter_not_eq (fun i => (H i).FiniteIndex)] at hcovers
-    rw [← hcovers]; rw [← Finset.univ.filter_union_filter_not_eq (fun k => (H k.1).FiniteIndex)]; rw [Finset.set_biUnion_union]; rw [Finset.set_biUnion_union]
-    apply congrArg₂ (· union ·) <;> rw [Set.iUnion_sigma, Set.iUnion_subtype] <;>
-        refine Set.iUnion_congr fun i => ?_
-    · by_cases hfi : (H i).FiniteIndex <;>
-        simp [← Set.smul_set_iUnion₂, Set.iUnion_subtype, ← leftCoset_assoc, f, K, ht, hfi]
-    · by_cases hfi : (H i).FiniteIndex <;>
-        simp [Set.iUnion_subtype, f, K, hfi]
-  -- There is at least one coset of a subgroup of finite index in the original covering.
-  -- Therefore a coset of `D` occurs in the new covering.
-  have ⟨k, hkfi, hk⟩ : exists k, (H k.1.1).FiniteIndex ∧ K k = D :=
-    have ⟨j, hj, hjfi⟩ := exists_finiteIndex_of_leftCoset_cover hcovers
-    have ⟨x, hx⟩ : (t j hj hjfi).Nonempty := Finset.nonempty_coe_sort.mp
-      (ht j hj hjfi).1.leftQuotientEquiv.symm.nonempty
-    ⟨⟨⟨j, hj⟩, ⟨x, dif_pos hjfi ▸ hx⟩⟩, hjfi, if_pos hjfi⟩
-  -- Since `D` is the unique subgroup of finite index whose cosets occur in the new covering,
-  -- the cosets of the other subgroups can be omitted.
-  replace hcovers' : ⋃ i in Finset.univ.filter (K · = D), f i • (D : Set G) = Set.univ := by
-    rw [← hk]; rw [Set.iUnion₂_congr fun i hi => by rw [← (Finset.mem_filter.mp hi).2]]
-    by_contra! h
-    obtain ⟨i, -, hi⟩ :=
-      exists_finiteIndex_of_leftCoset_cover_aux hcovers' k (Finset.mem_univ k) h
-    by_cases hfi : (H i.1.1).FiniteIndex <;> simp [K, hfi, hkfi] at hi
-  -- The result follows by restoring the original cosets of subgroups of finite index
-  -- from the cosets of `D` into which they have been decomposed.
-  have hHD (i) : ¬(H i).FiniteIndex -> H i != D := fun hfi hD' => (hD' ▸ hfi) hD
-  have hdensity : ∑ i in s, ((H i).index : Rat)⁻¹ =
-      (Finset.univ.filter (K · = D)).card * (D.index : Rat)⁻¹ := by
-    rw [eq_mul_inv_iff_mul_eq₀ (Nat.cast_ne_zero.mpr hD.index_ne_zero)]; rw [Finset.sum_mul]; rw [← Finset.sum_attach]; rw [eq_comm]; rw [Finset.card_filter]; rw [Nat.cast_sum]; rw [← Finset.univ_sigma_univ]; rw [Finset.sum_sigma]; rw [Finset.sum_coe_sort_eq_attach]
-    refine Finset.sum_congr rfl fun i _ => ?_
-    by_cases hfi : (H i).FiniteIndex
-    · rw [← relIndex_mul_index (hD_le i.2 hfi), Nat.cast_mul, mul_comm,
-        mul_inv_cancel_right₀ (Nat.cast_ne_zero.mpr hfi.index_ne_zero)]
-      simpa [K, hfi] using! (ht i.1 i.2 hfi).1.card_left
-    · rw [of_not_not (FiniteIndex.mk.mt hfi), Nat.cast_zero, inv_zero, zero_mul]
-      simpa [K, hfi] using! hHD i hfi
-  refine ⟨?_, ?_, ?_⟩
-  · rw [← hcovers', Set.iUnion_sigma, Set.iUnion_subtype]
-    refine Set.iUnion_congr fun i => ?_
-    rw [Finset.mem_filter]; rw [Set.iUnion_and]
-    refine Set.iUnion_congr fun hi => ?_
-    by_cases hfi : (H i).FiniteIndex <;>
-      simp [Set.smul_set_iUnion, Set.iUnion_subtype, ← leftCoset_assoc,
-        f, K, hHD, ← (ht i hi _).2, hfi]
-  · rw [hdensity]
-    refine le_of_mul_le_mul_right ?_ (Nat.cast_pos.mpr (Nat.pos_of_ne_zero hD.index_ne_zero))
-    rw [one_mul]; rw [mul_assoc]; rw [inv_mul_cancel₀ (Nat.cast_ne_zero.mpr hD.index_ne_zero)]; rw [mul_one]; rw [Nat.cast_le]
-    exact index_le_of_leftCoset_cover_const hcovers'
-  · rw [hdensity, mul_inv_eq_one₀ (Nat.cast_ne_zero.mpr hD.index_ne_zero),
-      Nat.cast_inj, Finset.coe_filter]
-    intro h i hi j hj hij c hi' hj' x hx
-    have hdisjoint := pairwiseDisjoint_leftCoset_cover_const_of_index_eq hcovers' h.symm
-    -- We know the `f k • K k` are pairwise disjoint and need to prove that the `g i • H i` are.
-    rw [Set.mem_ofPred_eq] at hi hj
-    have hk' (i) (hi : i in s ∧ (H i).FiniteIndex) (hi' : c <= g i • (H i : Set G)) :
-        exists (k : κ), k.1.1 = i ∧ K k = D ∧ x in f k • (D : Set G) := by
-      rw [← (ht i hi.1 hi.2).2] at hi'
-      suffices exists r : H i, r in t i hi.1 hi.2 ∧ x in (g i * r) • (D : Set G) by
-        have ⟨r, hr, hxr⟩ := this
-        refine ⟨⟨⟨i, hi.1⟩, ⟨r, dif_pos hi.2 ▸ hr⟩⟩, rfl, ?_⟩
-        simpa [K, f, if_pos hi.2] using! hxr
-      simpa [Set.mem_smul_set_iff_inv_smul_mem, smul_eq_mul, mul_assoc] using! hi' hx
-    have ⟨k₁, hik₁, hk₁, hxk₁⟩ := hk' i hi hi'
-    have ⟨k₂, hjk₂, hk₂, hxk₂⟩ := hk' j hj hj'
-    rw [← Set.singleton_subset_iff] at hxk₁ hxk₂ ⊢
-    exact hdisjoint
-      (Finset.mem_filter.mpr ⟨Finset.mem_univ k₁, hk₁⟩)
-      (Finset.mem_filter.mpr ⟨Finset.mem_univ k₂, hk₂⟩)
-      (ne_of_apply_ne Sigma.fst (ne_of_apply_ne Subtype.val (hik₁ ▸ hjk₂ ▸ hij)))
-      hxk₁ hxk₂
-
-中文:
-定理 leftCoset_cover_filter_FiniteIndex_aux
-  证明: by
-  classical
-  let D := ⨅ k in s.filter (fun i => (H i).FiniteIndex), H k
-  -- `D`, as the finite intersection of subgroups of finite index, also has finite index.
-have hD : D.FiniteIndex := finiteIndex_iInf' _ by simp
-  have hD_le {i} (hi : i in s) (hfi : (H i).FiniteIndex) : D <= H i :=
-    iInf₂_le i (Finset.mem_filter.mpr ⟨hi, hfi⟩)
-  -- Each subgroup of finite index in the covering is the union of finitely many cosets of `D`.
-  choose t ht using fun i hi hfi =>
-    exists_leftTransversal_of_FiniteIndex (H := H i) (hD_le hi hfi)
-  -- We construct a cover of `G` by the cosets of subgroups of infinite index and of `D`.
-  let κ := (i : s) × { x // x in if h : (H i.1).FiniteIndex then t i.1 i.2 h else {1} }
-  let f (k : κ) : G := g k.1 * k.2.val
-  let K (k : κ) : Subgroup G := if (H k.1).FiniteIndex then D else H k.1
-  have hcovers' : ⋃ k in Finset.univ, f k • (K k : Set G) = Set.univ := by
-    rw [← s.filter_union_filter_not_eq (fun i => (H i).FiniteIndex)] at hcovers
-    rw [← hcovers]; rw [← Finset.univ.filter_union_filter_not_eq (fun k => (H k.1).FiniteIndex)]; rw [Finset.set_biUnion_union]; rw [Finset.set_biUnion_union]
-    apply congrArg₂ (· union ·) <;> rw [Set.iUnion_sigma, Set.iUnion_subtype] <;>
-        refine Set.iUnion_congr fun i => ?_
-    · by_cases hfi : (H i).FiniteIndex <;>
-        simp [← Set.smul_set_iUnion₂, Set.iUnion_subtype, ← leftCoset_assoc, f, K, ht, hfi]
-    · by_cases hfi : (H i).FiniteIndex <;>
-        simp [Set.iUnion_subtype, f, K, hfi]
-  -- There is at least one coset of a subgroup of finite index in the original covering.
-  -- Therefore a coset of `D` occurs in the new covering.
-  have ⟨k, hkfi, hk⟩ : exists k, (H k.1.1).FiniteIndex ∧ K k = D :=
-    have ⟨j, hj, hjfi⟩ := exists_finiteIndex_of_leftCoset_cover hcovers
-    have ⟨x, hx⟩ : (t j hj hjfi).Nonempty := Finset.nonempty_coe_sort.mp
-      (ht j hj hjfi).1.leftQuotientEquiv.symm.nonempty
-    ⟨⟨⟨j, hj⟩, ⟨x, dif_pos hjfi ▸ hx⟩⟩, hjfi, if_pos hjfi⟩
-  -- Since `D` is the unique subgroup of finite index whose cosets occur in the new covering,
-  -- the cosets of the other subgroups can be omitted.
-  replace hcovers' : ⋃ i in Finset.univ.filter (K · = D), f i • (D : Set G) = Set.univ := by
-    rw [← hk]; rw [Set.iUnion₂_congr fun i hi => by rw [← (Finset.mem_filter.mp hi).2]]
-    by_contra! h
-    obtain ⟨i, -, hi⟩ :=
-      exists_finiteIndex_of_leftCoset_cover_aux hcovers' k (Finset.mem_univ k) h
-    by_cases hfi : (H i.1.1).FiniteIndex <;> simp [K, hfi, hkfi] at hi
-  -- The result follows by restoring the original cosets of subgroups of finite index
-  -- from the cosets of `D` into which they have been decomposed.
-  have hHD (i) : ¬(H i).FiniteIndex -> H i != D := fun hfi hD' => (hD' ▸ hfi) hD
-  have hdensity : ∑ i in s, ((H i).index : Rat)⁻¹ =
-      (Finset.univ.filter (K · = D)).card * (D.index : Rat)⁻¹ := by
-    rw [eq_mul_inv_iff_mul_eq₀ (Nat.cast_ne_zero.mpr hD.index_ne_zero)]; rw [Finset.sum_mul]; rw [← Finset.sum_attach]; rw [eq_comm]; rw [Finset.card_filter]; rw [Nat.cast_sum]; rw [← Finset.univ_sigma_univ]; rw [Finset.sum_sigma]; rw [Finset.sum_coe_sort_eq_attach]
-    refine Finset.sum_congr rfl fun i _ => ?_
-    by_cases hfi : (H i).FiniteIndex
-    · rw [← relIndex_mul_index (hD_le i.2 hfi), Nat.cast_mul, mul_comm,
-        mul_inv_cancel_right₀ (Nat.cast_ne_zero.mpr hfi.index_ne_zero)]
-      simpa [K, hfi] using! (ht i.1 i.2 hfi).1.card_left
-    · rw [of_not_not (FiniteIndex.mk.mt hfi), Nat.cast_zero, inv_zero, zero_mul]
-      simpa [K, hfi] using! hHD i hfi
-  refine ⟨?_, ?_, ?_⟩
-  · rw [← hcovers', Set.iUnion_sigma, Set.iUnion_subtype]
-    refine Set.iUnion_congr fun i => ?_
-    rw [Finset.mem_filter]; rw [Set.iUnion_and]
-    refine Set.iUnion_congr fun hi => ?_
-    by_cases hfi : (H i).FiniteIndex <;>
-      simp [Set.smul_set_iUnion, Set.iUnion_subtype, ← leftCoset_assoc,
-        f, K, hHD, ← (ht i hi _).2, hfi]
-  · rw [hdensity]
-    refine le_of_mul_le_mul_right ?_ (Nat.cast_pos.mpr (Nat.pos_of_ne_zero hD.index_ne_zero))
-    rw [one_mul]; rw [mul_assoc]; rw [inv_mul_cancel₀ (Nat.cast_ne_zero.mpr hD.index_ne_zero)]; rw [mul_one]; rw [Nat.cast_le]
-    exact index_le_of_leftCoset_cover_const hcovers'
-  · rw [hdensity, mul_inv_eq_one₀ (Nat.cast_ne_zero.mpr hD.index_ne_zero),
-      Nat.cast_inj, Finset.coe_filter]
-    intro h i hi j hj hij c hi' hj' x hx
-    have hdisjoint := pairwiseDisjoint_leftCoset_cover_const_of_index_eq hcovers' h.symm
-    -- We know the `f k • K k` are pairwise disjoint and need to prove that the `g i • H i` are.
-    rw [Set.mem_ofPred_eq] at hi hj
-    have hk' (i) (hi : i in s ∧ (H i).FiniteIndex) (hi' : c <= g i • (H i : Set G)) :
-        exists (k : κ), k.1.1 = i ∧ K k = D ∧ x in f k • (D : Set G) := by
-      rw [← (ht i hi.1 hi.2).2] at hi'
-      suffices exists r : H i, r in t i hi.1 hi.2 ∧ x in (g i * r) • (D : Set G) by
-        have ⟨r, hr, hxr⟩ := this
-        refine ⟨⟨⟨i, hi.1⟩, ⟨r, dif_pos hi.2 ▸ hr⟩⟩, rfl, ?_⟩
-        simpa [K, f, if_pos hi.2] using! hxr
-      simpa [Set.mem_smul_set_iff_inv_smul_mem, smul_eq_mul, mul_assoc] using! hi' hx
-    have ⟨k₁, hik₁, hk₁, hxk₁⟩ := hk' i hi hi'
-    have ⟨k₂, hjk₂, hk₂, hxk₂⟩ := hk' j hj hj'
-    rw [← Set.singleton_subset_iff] at hxk₁ hxk₂ ⊢
-    exact hdisjoint
-      (Finset.mem_filter.mpr ⟨Finset.mem_univ k₁, hk₁⟩)
-      (Finset.mem_filter.mpr ⟨Finset.mem_univ k₂, hk₂⟩)
-      (ne_of_apply_ne Sigma.fst (ne_of_apply_ne Subtype.val (hik₁ ▸ hjk₂ ▸ hij)))
-      hxk₁ hxk₂
-
-Depends on / 依赖: FiniteIndex, Matrix, Matrix.mulVecLin_reindex, classical, filter, mulVecLin_reindex, s.filter
+/-
+**Subgroup.leftCoset_cover_filter_FiniteIndex_aux** 是 Mathlib 中的一个定理，位于命名空间 `Sub
+group`。
+形式化陈述：leftCoset_cover_filter_FiniteIndex_aux [DecidablePred (FiniteIndex : Subgr
+oup G -> Prop)] : (⋃ k in s.filter (fun i => (H i).FiniteIndex), g k • (H k : Se
+t G) = Set.univ) ∧ (1 <= ∑ i in s, ((H i).index : Rat)⁻¹) ∧ (∑ i in s, ((H i).in
+dex : Rat)⁻¹ = 1 -> Set.PairwiseDisjoint (s.filter (fun i => (H i).FiniteIndex))
+ (fun i => g i • (H i : Set G)))
+参数：FiniteIndex : Subgroup G -> Prop。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.finiteIndex_iInf'`：finiteIndex_iInf' {ι : Type*} {s : Finset ι}
+ (f : ι -> Subgroup G) (hs : forall i in s, (f i).FiniteIndex) : (⨅ i in s, f i)
+.FiniteIndex
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `iInf₂_le`：∀ {α : Type u_1} {ι : Sort u_4} {κ : ι → Sort u_6} [inst : Com
+pleteLattice α] {f : (i : ι) → κ i → α} (i : ι) (j : κ i),   ⨅ i, ⨅ j, f i j ≤…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.mem_filter`：∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred
+ p] {s : Finset α} {a : α}, a ∈ Finset.filter p s ↔ a ∈ s ∧ p a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.filter_union_filter_not_eq`：filter_union_filter_not_eq [forall x,
+ Decidable (¬p x)] (s : Finset α) : (s.filter p union s.filter fun a => ¬p a) = 
+s
+· 使用定理 `Finset.set_biUnion_union`：set_biUnion_union (s t : Finset α) (u : α -> S
+et β) : ⋃ x in s union t, u x = (⋃ x in s, u x) union ⋃ x in t, u x
+· 使用定理 `congrArg₂`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} (f : α → β → γ
+) {x x' : α} {y y' : β}, x = x' → y = y' → f x y = f x' y'
+· 使用定理 `Set.iUnion_sigma`：iUnion_sigma {γ : α -> Type*} (s : Sigma γ -> Set β) :
+ ⋃ ia, s ia = ⋃ i, ⋃ a, s ⟨i, a⟩
+· 使用定理 `Set.iUnion_subtype`：iUnion_subtype (p : α -> Prop) (s : { x // p x } -> 
+Set β) : ⋃ x : { x // p x }, s x = ⋃ (x) (hx : p x), s ⟨x, hx⟩
+· 使用引理 `Set.iUnion_congr`：iUnion_congr {s t : ι -> Set α} (h : forall i, s i = t
+ i) : ⋃ i, s i = ⋃ i, t i
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `Set.iUnion_true`：iUnion_true {s : True -> Set α} : iUnion s = s trivial
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+（共 119 条，此处仅展示前 30 条）
 -/
 theorem leftCoset_cover_filter_FiniteIndex_aux
-    [DecidablePred (FiniteIndex : Subgroup G -> Prop)] :
-    (⋃ k in s.filter (fun i => (H i).FiniteIndex), g k • (H k : Set G) = Set.univ) ∧
-      (1 <= ∑ i in s, ((H i).index : Rat)⁻¹) ∧
-      (∑ i in s, ((H i).index : Rat)⁻¹ = 1 -> Set.PairwiseDisjoint
-        (s.filter (fun i => (H i).FiniteIndex)) (fun i => g i • (H i : Set G))) := by
+    [DecidablePred (FiniteIndex : Subgroup G → Prop)] :
+    (⋃ k ∈ s.filter (fun i => (H i).FiniteIndex), g k • (H k : Set G) = Set.univ) ∧
+      (1 ≤ ∑ i ∈ s, ((H i).index : ℚ)⁻¹) ∧
+      (∑ i ∈ s, ((H i).index : ℚ)⁻¹ = 1 → Set.PairwiseDisjoint
+        (s.filter (fun i => (H i).FiniteIndex)) (fun i ↦ g i • (H i : Set G))) := by
   classical
-  let D := ⨅ k in s.filter (fun i => (H i).FiniteIndex), H k
+  let D := ⨅ k ∈ s.filter (fun i => (H i).FiniteIndex), H k
   -- `D`, as the finite intersection of subgroups of finite index, also has finite index.
-have hD : D.FiniteIndex := finiteIndex_iInf' _ by simp
-  have hD_le {i} (hi : i in s) (hfi : (H i).FiniteIndex) : D <= H i :=
+  have hD : D.FiniteIndex := finiteIndex_iInf' _ <| by simp
+  have hD_le {i} (hi : i ∈ s) (hfi : (H i).FiniteIndex) : D ≤ H i :=
     iInf₂_le i (Finset.mem_filter.mpr ⟨hi, hfi⟩)
   -- Each subgroup of finite index in the covering is the union of finitely many cosets of `D`.
   choose t ht using fun i hi hfi =>
     exists_leftTransversal_of_FiniteIndex (H := H i) (hD_le hi hfi)
   -- We construct a cover of `G` by the cosets of subgroups of infinite index and of `D`.
-  let κ := (i : s) × { x // x in if h : (H i.1).FiniteIndex then t i.1 i.2 h else {1} }
+  let κ := (i : s) × { x // x ∈ if h : (H i.1).FiniteIndex then t i.1 i.2 h else {1} }
   let f (k : κ) : G := g k.1 * k.2.val
   let K (k : κ) : Subgroup G := if (H k.1).FiniteIndex then D else H k.1
-  have hcovers' : ⋃ k in Finset.univ, f k • (K k : Set G) = Set.univ := by
+  have hcovers' : ⋃ k ∈ Finset.univ, f k • (K k : Set G) = Set.univ := by
     rw [← s.filter_union_filter_not_eq (fun i => (H i).FiniteIndex)] at hcovers
-    rw [← hcovers]; rw [← Finset.univ.filter_union_filter_not_eq (fun k => (H k.1).FiniteIndex)]; rw [Finset.set_biUnion_union]; rw [Finset.set_biUnion_union]
-    apply congrArg₂ (· union ·) <;> rw [Set.iUnion_sigma, Set.iUnion_subtype] <;>
+    rw [← hcovers, ← Finset.univ.filter_union_filter_not_eq (fun k => (H k.1).FiniteIndex),
+      Finset.set_biUnion_union, Finset.set_biUnion_union]
+    apply congrArg₂ (· ∪ ·) <;> rw [Set.iUnion_sigma, Set.iUnion_subtype] <;>
         refine Set.iUnion_congr fun i => ?_
     · by_cases hfi : (H i).FiniteIndex <;>
         simp [← Set.smul_set_iUnion₂, Set.iUnion_subtype, ← leftCoset_assoc, f, K, ht, hfi]
@@ -743,25 +557,27 @@ have hD : D.FiniteIndex := finiteIndex_iInf' _ by simp
         simp [Set.iUnion_subtype, f, K, hfi]
   -- There is at least one coset of a subgroup of finite index in the original covering.
   -- Therefore a coset of `D` occurs in the new covering.
-  have ⟨k, hkfi, hk⟩ : exists k, (H k.1.1).FiniteIndex ∧ K k = D :=
+  have ⟨k, hkfi, hk⟩ : ∃ k, (H k.1.1).FiniteIndex ∧ K k = D :=
     have ⟨j, hj, hjfi⟩ := exists_finiteIndex_of_leftCoset_cover hcovers
     have ⟨x, hx⟩ : (t j hj hjfi).Nonempty := Finset.nonempty_coe_sort.mp
       (ht j hj hjfi).1.leftQuotientEquiv.symm.nonempty
     ⟨⟨⟨j, hj⟩, ⟨x, dif_pos hjfi ▸ hx⟩⟩, hjfi, if_pos hjfi⟩
   -- Since `D` is the unique subgroup of finite index whose cosets occur in the new covering,
   -- the cosets of the other subgroups can be omitted.
-  replace hcovers' : ⋃ i in Finset.univ.filter (K · = D), f i • (D : Set G) = Set.univ := by
-    rw [← hk]; rw [Set.iUnion₂_congr fun i hi => by rw [← (Finset.mem_filter.mp hi).2]]
+  replace hcovers' : ⋃ i ∈ Finset.univ.filter (K · = D), f i • (D : Set G) = Set.univ := by
+    rw [← hk, Set.iUnion₂_congr fun i hi => by rw [← (Finset.mem_filter.mp hi).2]]
     by_contra! h
     obtain ⟨i, -, hi⟩ :=
       exists_finiteIndex_of_leftCoset_cover_aux hcovers' k (Finset.mem_univ k) h
     by_cases hfi : (H i.1.1).FiniteIndex <;> simp [K, hfi, hkfi] at hi
   -- The result follows by restoring the original cosets of subgroups of finite index
   -- from the cosets of `D` into which they have been decomposed.
-  have hHD (i) : ¬(H i).FiniteIndex -> H i != D := fun hfi hD' => (hD' ▸ hfi) hD
-  have hdensity : ∑ i in s, ((H i).index : Rat)⁻¹ =
-      (Finset.univ.filter (K · = D)).card * (D.index : Rat)⁻¹ := by
-    rw [eq_mul_inv_iff_mul_eq₀ (Nat.cast_ne_zero.mpr hD.index_ne_zero)]; rw [Finset.sum_mul]; rw [← Finset.sum_attach]; rw [eq_comm]; rw [Finset.card_filter]; rw [Nat.cast_sum]; rw [← Finset.univ_sigma_univ]; rw [Finset.sum_sigma]; rw [Finset.sum_coe_sort_eq_attach]
+  have hHD (i) : ¬(H i).FiniteIndex → H i ≠ D := fun hfi hD' => (hD' ▸ hfi) hD
+  have hdensity : ∑ i ∈ s, ((H i).index : ℚ)⁻¹ =
+      (Finset.univ.filter (K · = D)).card * (D.index : ℚ)⁻¹ := by
+    rw [eq_mul_inv_iff_mul_eq₀ (Nat.cast_ne_zero.mpr hD.index_ne_zero), Finset.sum_mul,
+      ← Finset.sum_attach, eq_comm, Finset.card_filter, Nat.cast_sum, ← Finset.univ_sigma_univ,
+      Finset.sum_sigma, Finset.sum_coe_sort_eq_attach]
     refine Finset.sum_congr rfl fun i _ => ?_
     by_cases hfi : (H i).FiniteIndex
     · rw [← relIndex_mul_index (hD_le i.2 hfi), Nat.cast_mul, mul_comm,
@@ -772,14 +588,15 @@ have hD : D.FiniteIndex := finiteIndex_iInf' _ by simp
   refine ⟨?_, ?_, ?_⟩
   · rw [← hcovers', Set.iUnion_sigma, Set.iUnion_subtype]
     refine Set.iUnion_congr fun i => ?_
-    rw [Finset.mem_filter]; rw [Set.iUnion_and]
+    rw [Finset.mem_filter, Set.iUnion_and]
     refine Set.iUnion_congr fun hi => ?_
     by_cases hfi : (H i).FiniteIndex <;>
       simp [Set.smul_set_iUnion, Set.iUnion_subtype, ← leftCoset_assoc,
         f, K, hHD, ← (ht i hi _).2, hfi]
   · rw [hdensity]
     refine le_of_mul_le_mul_right ?_ (Nat.cast_pos.mpr (Nat.pos_of_ne_zero hD.index_ne_zero))
-    rw [one_mul]; rw [mul_assoc]; rw [inv_mul_cancel₀ (Nat.cast_ne_zero.mpr hD.index_ne_zero)]; rw [mul_one]; rw [Nat.cast_le]
+    rw [one_mul, mul_assoc, inv_mul_cancel₀ (Nat.cast_ne_zero.mpr hD.index_ne_zero), mul_one,
+      Nat.cast_le]
     exact index_le_of_leftCoset_cover_const hcovers'
   · rw [hdensity, mul_inv_eq_one₀ (Nat.cast_ne_zero.mpr hD.index_ne_zero),
       Nat.cast_inj, Finset.coe_filter]
@@ -787,10 +604,10 @@ have hD : D.FiniteIndex := finiteIndex_iInf' _ by simp
     have hdisjoint := pairwiseDisjoint_leftCoset_cover_const_of_index_eq hcovers' h.symm
     -- We know the `f k • K k` are pairwise disjoint and need to prove that the `g i • H i` are.
     rw [Set.mem_ofPred_eq] at hi hj
-    have hk' (i) (hi : i in s ∧ (H i).FiniteIndex) (hi' : c <= g i • (H i : Set G)) :
-        exists (k : κ), k.1.1 = i ∧ K k = D ∧ x in f k • (D : Set G) := by
+    have hk' (i) (hi : i ∈ s ∧ (H i).FiniteIndex) (hi' : c ≤ g i • (H i : Set G)) :
+        ∃ (k : κ), k.1.1 = i ∧ K k = D ∧ x ∈ f k • (D : Set G) := by
       rw [← (ht i hi.1 hi.2).2] at hi'
-      suffices exists r : H i, r in t i hi.1 hi.2 ∧ x in (g i * r) • (D : Set G) by
+      suffices ∃ r : H i, r ∈ t i hi.1 hi.2 ∧ x ∈ (g i * r) • (D : Set G) by
         have ⟨r, hr, hxr⟩ := this
         refine ⟨⟨⟨i, hi.1⟩, ⟨r, dif_pos hi.2 ▸ hr⟩⟩, rfl, ?_⟩
         simpa [K, f, if_pos hi.2] using! hxr
@@ -807,132 +624,175 @@ have hD : D.FiniteIndex := finiteIndex_iInf' _ by simp
 /-- Let the group `G` be the union of finitely many left cosets `g i • H i`.
 Then the cosets of subgroups of infinite index may be omitted from the covering. -/
 @[to_additive]
-/--
-theorem `leftCoset_cover_filter_FiniteIndex` / 定理 `leftCoset_cover_filter_FiniteIndex`
+/-
+**Subgroup.leftCoset_cover_filter_FiniteIndex** 是 Mathlib 中的一个定理，位于命名空间 `Subgrou
+p`。
+形式化陈述：leftCoset_cover_filter_FiniteIndex [DecidablePred (FiniteIndex : Subgroup 
+G -> Prop)] : ⋃ k in s.filter (fun i => (H i).FiniteIndex), g k • (H k : Set G) 
+= Set.univ
+参数：FiniteIndex : Subgroup G -> Prop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subgroup.leftCoset_cover_filter_FiniteIndex_aux`：leftCoset_cover_filter_
+FiniteIndex_aux [DecidablePred (FiniteIndex : Subgroup G -> Prop)] : (⋃ k in s.f
+ilter (fun i => (H i).FiniteIndex), g…
 
-English:
-theorem leftCoset_cover_filter_FiniteIndex
-  proof: (leftCoset_cover_filter_FiniteIndex_aux hcovers).1
-
-中文:
-定理 leftCoset_cover_filter_FiniteIndex
-  证明: (leftCoset_cover_filter_FiniteIndex_aux hcovers).1
-
-Depends on / 依赖: LinearMap, LinearMap.comp_apply, Matrix, Matrix.toLin, _mul, comp_apply, hcovers, leftCoset_cover_filter_FiniteIndex_aux
+--- 原说明 ---
+Let the group `G` be the union of finitely many left cosets `g i • H i`.
+Then the cosets of subgroups of infinite index may be omitted from the covering.
 -/
 theorem leftCoset_cover_filter_FiniteIndex
-    [DecidablePred (FiniteIndex : Subgroup G -> Prop)] :
-    ⋃ k in s.filter (fun i => (H i).FiniteIndex), g k • (H k : Set G) = Set.univ :=
+    [DecidablePred (FiniteIndex : Subgroup G → Prop)] :
+    ⋃ k ∈ s.filter (fun i => (H i).FiniteIndex), g k • (H k : Set G) = Set.univ :=
   (leftCoset_cover_filter_FiniteIndex_aux hcovers).1
 
 /-- Let the group `G` be the union of finitely many left cosets `g i • H i`. Then the
 sum of the inverses of the indexes of the subgroups `H i` is greater than or equal to 1. -/
 @[to_additive one_le_sum_inv_index_of_leftCoset_cover]
-/--
-theorem `one_le_sum_inv_index_of_leftCoset_cover` / 定理 `one_le_sum_inv_index_of_leftCoset_cover`
+/-
+**Subgroup.one_le_sum_inv_index_of_leftCoset_cover** 是 Mathlib 中的一个定理，位于命名空间 `Su
+bgroup`。
+形式化陈述：one_le_sum_inv_index_of_leftCoset_cover : 1 <= ∑ i in s, ((H i).index : Ra
+t)⁻¹
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Subgroup.leftCoset_cover_filter_FiniteIndex_aux`：leftCoset_cover_filter_
+FiniteIndex_aux [DecidablePred (FiniteIndex : Subgroup G -> Prop)] : (⋃ k in s.f
+ilter (fun i => (H i).FiniteIndex), g…
 
-English:
-theorem one_le_sum_inv_index_of_leftCoset_cover
-  proof: have := Classical.decPred (FiniteIndex : Subgroup G -> Prop)
-  (leftCoset_cover_filter_FiniteIndex_aux hcovers).2.1
-
-中文:
-定理 one_le_sum_inv_index_of_leftCoset_cover
-  证明: have := Classical.decPred (FiniteIndex : Subgroup G -> Prop)
-  (leftCoset_cover_filter_FiniteIndex_aux hcovers).2.1
-
-Depends on / 依赖: Classical, Classical.decPred, FiniteIndex, LinearMap, LinearMap.toMatrix, Matrix, Matrix.toLin, Subgroup, _mul, _toLin, _toMatrix, decPred, f.comp, hcovers, leftCoset_cover_filter_FiniteIndex_aux, toMatrix
+--- 原说明 ---
+Let the group `G` be the union of finitely many left cosets `g i • H i`. Then th
+e
+sum of the inverses of the indexes of the subgroups `H i` is greater than or equ
+al to 1.
 -/
 theorem one_le_sum_inv_index_of_leftCoset_cover :
-    1 <= ∑ i in s, ((H i).index : Rat)⁻¹ :=
-  have := Classical.decPred (FiniteIndex : Subgroup G -> Prop)
+    1 ≤ ∑ i ∈ s, ((H i).index : ℚ)⁻¹ :=
+  have := Classical.decPred (FiniteIndex : Subgroup G → Prop)
   (leftCoset_cover_filter_FiniteIndex_aux hcovers).2.1
 
 /-- Let the group `G` be the union of finitely many left cosets `g i • H i`.
 If the sum of the inverses of the indexes of the subgroups `H i` is equal to 1,
 then the cosets of the subgroups of finite index are pairwise disjoint. -/
 @[to_additive]
-/--
-theorem `pairwiseDisjoint_leftCoset_cover_of_sum_inv_index_eq_one` / 定理 `pairwiseDisjoint_leftCoset_cover_of_sum_inv_index_eq_one`
+/-
+**Subgroup.pairwiseDisjoint_leftCoset_cover_of_sum_inv_index_eq_one** 是 Mathlib 
+中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：pairwiseDisjoint_leftCoset_cover_of_sum_inv_index_eq_one [DecidablePred (F
+initeIndex : Subgroup G -> Prop)] : ∑ i in s, ((H i).index : Rat)⁻¹ = 1 -> Set.P
+airwiseDisjoint (s.filter (fun i => (H i).FiniteIndex)) (fun i => g i • (H i : S
+et G))
+参数：FiniteIndex : Subgroup G -> Prop。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Subgroup.leftCoset_cover_filter_FiniteIndex_aux`：leftCoset_cover_filter_
+FiniteIndex_aux [DecidablePred (FiniteIndex : Subgroup G -> Prop)] : (⋃ k in s.f
+ilter (fun i => (H i).FiniteIndex), g…
 
-English:
-theorem pairwiseDisjoint_leftCoset_cover_of_sum_inv_index_eq_one
-  proof: (leftCoset_cover_filter_FiniteIndex_aux hcovers).2.2
-
-中文:
-定理 pairwiseDisjoint_leftCoset_cover_of_sum_inv_index_eq_one
-  证明: (leftCoset_cover_filter_FiniteIndex_aux hcovers).2.2
-
-Depends on / 依赖: LinearMap, LinearMap.toMatrix, _comp, hcovers, leftCoset_cover_filter_FiniteIndex_aux, toMatrix
+--- 原说明 ---
+Let the group `G` be the union of finitely many left cosets `g i • H i`.
+If the sum of the inverses of the indexes of the subgroups `H i` is equal to 1,
+then the cosets of the subgroups of finite index are pairwise disjoint.
 -/
 theorem pairwiseDisjoint_leftCoset_cover_of_sum_inv_index_eq_one
-    [DecidablePred (FiniteIndex : Subgroup G -> Prop)] :
-    ∑ i in s, ((H i).index : Rat)⁻¹ = 1 ->
+    [DecidablePred (FiniteIndex : Subgroup G → Prop)] :
+    ∑ i ∈ s, ((H i).index : ℚ)⁻¹ = 1 →
       Set.PairwiseDisjoint (s.filter (fun i => (H i).FiniteIndex))
-        (fun i => g i • (H i : Set G)) :=
+        (fun i ↦ g i • (H i : Set G)) :=
   (leftCoset_cover_filter_FiniteIndex_aux hcovers).2.2
 
 /-- B. H. Neumann Lemma :
 If a finite family of cosets of subgroups covers the group, then at least one
 of these subgroups has index not exceeding the number of cosets. -/
 @[to_additive]
-/--
-theorem `exists_index_le_card_of_leftCoset_cover` / 定理 `exists_index_le_card_of_leftCoset_cover`
+/-
+**Subgroup.exists_index_le_card_of_leftCoset_cover** 是 Mathlib 中的一个定理，位于命名空间 `Su
+bgroup`。
+形式化陈述：exists_index_le_card_of_leftCoset_cover : exists i in s, (H i).FiniteIndex
+ ∧ (H i).index <= s.card
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `Subgroup.one_le_sum_inv_index_of_leftCoset_cover`：one_le_sum_inv_index_o
+f_leftCoset_cover : 1 <= ∑ i in s, ((H i).index : Rat)⁻¹
+· 使用定理 `Finset.eq_empty_or_nonempty`：eq_empty_or_nonempty (s : Finset α) : s = ∅
+ ∨ s.Nonempty
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.Nonempty.card_pos`：∀ {α : Type u_1} {s : Finset α}, s.Nonempty → 
+0 < s.card
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `inv_zero`：∀ {G₀ : Type u} [inst : GroupWithZero G₀], 0⁻¹ = 0
+· 使用定理 `inv_pos`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] [inst_1 : PartialOr
+der G₀] [PosMulReflectLT G₀] {a : G₀}, 0 < a⁻¹ ↔ 0 < a
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Nat.cast_pos`：cast_pos {α} [Semiring α] [PartialOrder α] [IsOrderedRing 
+α] [Nontrivial α] {n : Nat} : (0 : α) < n ↔ 0 < n
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用引理 `inv_strictAnti₀`：inv_strictAnti₀ (hb : 0 < b) (hba : b < a) : a⁻¹ < b⁻¹
+· 使用定理 `MulPosReflectLE.toMulPosReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [MulPosReflectLE α], MulPosReflectLT α
+· 使用定理 `MulPosStrictMono.toMulPosReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [MulPosStrictMono α], MulPosReflectLE α
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Rat.instAddLeftMono`：AddLeftMono ℚ
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Push.not_and_eq`：not_and_eq : (¬ (p ∧ q)) = (p -> ¬ q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `LT.lt.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LT α], a < b → b = 
+c → a < c
+· 使用定理 `Finset.sum_lt_sum_of_nonempty`：∀ {ι : Type u_1} {M : Type u_4} [inst : A
+ddCommMonoid M] [inst_1 : Preorder M] [IsOrderedCancelAddMonoid M]   {f g : ι → 
+M} {s : Finset ι} […
+（共 40 条，此处仅展示前 30 条）
 
-English:
-theorem exists_index_le_card_of_leftCoset_cover
-  proof: by
-  by_contra! h
-  apply (one_le_sum_inv_index_of_leftCoset_cover hcovers).not_gt
-  cases s.eq_empty_or_nonempty with
-  | inl hs => simp only [hs, Finset.sum_empty, zero_lt_one]
-  | inr hs =>
-  have hs' : 0 < s.card := hs.card_pos
-  have hlt : forall i in s, ((H i).index : Rat)⁻¹ < (s.card : Rat)⁻¹ := fun i hi => by
-    cases eq_or_ne (H i).index 0 with
-    | inl hindex =>
-      rwa [hindex, Nat.cast_zero, inv_zero, inv_pos, Nat.cast_pos]
-    | inr hindex =>
-      exact inv_strictAnti₀ (by exact_mod_cast hs') (by exact_mod_cast h i hi ⟨hindex⟩)
-  apply (Finset.sum_lt_sum_of_nonempty hs hlt).trans_eq
-  rw [Finset.sum_const]; rw [nsmul_eq_mul]; rw [mul_inv_cancel₀ (Nat.cast_ne_zero.mpr hs'.ne')]
-
-中文:
-定理 存在_index_le_card_of_leftCoset_cover
-  证明: by
-  by_contra! h
-  apply (one_le_sum_inv_index_of_leftCoset_cover hcovers).not_gt
-  cases s.eq_empty_or_nonempty with
-  | inl hs => simp only [hs, Finset.sum_empty, zero_lt_one]
-  | inr hs =>
-  have hs' : 0 < s.card := hs.card_pos
-  have hlt : forall i in s, ((H i).index : Rat)⁻¹ < (s.card : Rat)⁻¹ := fun i hi => by
-    cases eq_or_ne (H i).index 0 with
-    | inl hindex =>
-      rwa [hindex, Nat.cast_zero, inv_zero, inv_pos, Nat.cast_pos]
-    | inr hindex =>
-      exact inv_strictAnti₀ (by exact_mod_cast hs') (by exact_mod_cast h i hi ⟨hindex⟩)
-  apply (Finset.sum_lt_sum_of_nonempty hs hlt).trans_eq
-  rw [Finset.sum_const]; rw [nsmul_eq_mul]; rw [mul_inv_cancel₀ (Nat.cast_ne_zero.mpr hs'.ne')]
-
-Depends on / 依赖: Finset, Finset.sum_empty, Module, Module.algebraMap_end_eq_smul_id, Nat.cast_pos, Nat.cast_zero, algebraMap_end_eq_smul_id, card_pos, cast_pos, cast_zero, eq_empty_or_nonempty, eq_or_ne, hcovers, hindex, hs.card_pos, inv_pos, inv_zero, not_gt, one_le_sum_inv_index_of_leftCoset_cover, s.card
+--- 原说明 ---
+B. H. Neumann Lemma :
+If a finite family of cosets of subgroups covers the group, then at least one
+of these subgroups has index not exceeding the number of cosets.
 -/
 theorem exists_index_le_card_of_leftCoset_cover :
-    exists i in s, (H i).FiniteIndex ∧ (H i).index <= s.card := by
+    ∃ i ∈ s, (H i).FiniteIndex ∧ (H i).index ≤ s.card := by
   by_contra! h
   apply (one_le_sum_inv_index_of_leftCoset_cover hcovers).not_gt
   cases s.eq_empty_or_nonempty with
   | inl hs => simp only [hs, Finset.sum_empty, zero_lt_one]
   | inr hs =>
   have hs' : 0 < s.card := hs.card_pos
-  have hlt : forall i in s, ((H i).index : Rat)⁻¹ < (s.card : Rat)⁻¹ := fun i hi => by
+  have hlt : ∀ i ∈ s, ((H i).index : ℚ)⁻¹ < (s.card : ℚ)⁻¹ := fun i hi ↦ by
     cases eq_or_ne (H i).index 0 with
     | inl hindex =>
       rwa [hindex, Nat.cast_zero, inv_zero, inv_pos, Nat.cast_pos]
     | inr hindex =>
       exact inv_strictAnti₀ (by exact_mod_cast hs') (by exact_mod_cast h i hi ⟨hindex⟩)
   apply (Finset.sum_lt_sum_of_nonempty hs hlt).trans_eq
-  rw [Finset.sum_const]; rw [nsmul_eq_mul]; rw [mul_inv_cancel₀ (Nat.cast_ne_zero.mpr hs'.ne')]
+  rw [Finset.sum_const, nsmul_eq_mul, mul_inv_cancel₀ (Nat.cast_ne_zero.mpr hs'.ne')]
 
 end
 
@@ -941,30 +801,34 @@ end Subgroup
 section Submodule
 
 variable {R M ι : Type*} [Ring R] [AddCommGroup M] [Module R M]
-    {p : ι -> Submodule R M} {s : Finset ι}
+    {p : ι → Submodule R M} {s : Finset ι}
 
-/--
-theorem `Submodule.exists_finiteIndex_of_cover` / 定理 `Submodule.exists_finiteIndex_of_cover`
-
-English:
-theorem Submodule.exists_finiteIndex_of_cover
-  given: (hcovers : ⋃ i in s, (p i : Set M) = Set.univ)
-  proof: have hcovers' : ⋃ i in s, (0 : M) +ᵥ ((p i).toAddSubgroup : Set M) = Set.univ := by
-    simpa only [zero_vadd] using! hcovers
-  AddSubgroup.exists_finiteIndex_of_leftCoset_cover hcovers'
-
-中文:
-定理 子模.存在_finiteIndex_of_cover
-  条件: (hcovers : ⋃ i in s, (p i : 集合 M) = 集合.univ)
-  证明: have hcovers' : ⋃ i in s, (0 : M) +ᵥ ((p i).toAddSubgroup : Set M) = Set.univ := by
-    simpa only [zero_vadd] using! hcovers
-  AddSubgroup.exists_finiteIndex_of_leftCoset_cover hcovers'
-
-Depends on / 依赖: AddSubgroup, AddSubgroup.exists_finiteIndex_of_leftCoset_cover, Set.univ, exists_finiteIndex_of_leftCoset_cover, hcovers, toAddSubgroup, zero_vadd
+/-
+**Submodule.exists_finiteIndex_of_cover** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Submodule.exists_finiteIndex_of_cover (hcovers : ⋃ i in s, (p i : Set M) =
+ Set.univ) : exists k in s, (p k).toAddSubgroup.FiniteIndex
+参数：hcovers : ⋃ i in s, (p i : Set M) = Set.univ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `zero_vadd`：∀ (M : Type u_1) {α : Type u_5} [inst : AddMonoid M] [inst_1 
+: AddAction M α] (b : α), 0 +ᵥ b = b
+· 使用定理 `AddSubgroup.exists_finiteIndex_of_leftCoset_cover`：∀ {G : Type u_1} [ins
+t : AddGroup G] {ι : Type u_2} {H : ι → AddSubgroup G} {g : ι → G} {s : Finset ι
+},   ⋃ i ∈ s, g i +ᵥ ↑(H i) = Set.univ …
 -/
-theorem Submodule.exists_finiteIndex_of_cover (hcovers : ⋃ i in s, (p i : Set M) = Set.univ) :
-    exists k in s, (p k).toAddSubgroup.FiniteIndex :=
-  have hcovers' : ⋃ i in s, (0 : M) +ᵥ ((p i).toAddSubgroup : Set M) = Set.univ := by
+theorem Submodule.exists_finiteIndex_of_cover (hcovers : ⋃ i ∈ s, (p i : Set M) = Set.univ) :
+    ∃ k ∈ s, (p k).toAddSubgroup.FiniteIndex :=
+  have hcovers' : ⋃ i ∈ s, (0 : M) +ᵥ ((p i).toAddSubgroup : Set M) = Set.univ := by
     simpa only [zero_vadd] using! hcovers
   AddSubgroup.exists_finiteIndex_of_leftCoset_cover hcovers'
 
@@ -975,14 +839,36 @@ section Subspace
 variable {k E : Type*} [DivisionRing k] [Infinite k] [AddCommGroup E] [Module k E]
     {s : Finset (Subspace k E)}
 
-/--
-theorem `Subspace.biUnion_ne_univ_of_top_notMem` / 定理 `Subspace.biUnion_ne_univ_of_top_notMem`
+/-- A vector space over an infinite field cannot be a finite union of proper subspaces. -/
+/-
+**Subspace.biUnion_ne_univ_of_top_notMem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Subspace.biUnion_ne_univ_of_top_notMem (hs : ⊤ ∉ s) : ⋃ p in s, (p : Set E
+) != Set.univ
+参数：hs : ⊤ ∉ s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Submodule.exists_finiteIndex_of_cover`：Submodule.exists_finiteIndex_of_c
+over (hcovers : ⋃ i in s, (p i : Set M) = Set.univ) : exists k in s, (p k).toAdd
+Subgroup.FiniteIndex
+· 使用定理 `AddSubgroup.finite_quotient_of_finiteIndex`：∀ {G : Type u_1} [inst : Add
+Group G] {H : AddSubgroup G} [H.FiniteIndex], Finite (G ⧸ H)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Submodule.Quotient.nontrivial_iff`：∀ {R : Type u_1} {M : Type u_2} [inst
+ : Ring R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   {p : Submodu
+le R M}, Nontrivial (M …
+· 使用定理 `ne_of_mem_of_not_mem`：∀ {α : Type u_1} {β : Type u_2} [inst : Membership
+ α β] {s : β} {a b : α}, a ∈ s → b ∉ s → a ≠ b
+· 使用定理 `Module.Free.infinite`：infinite [Infinite R] [Nontrivial M] : Infinite M
+· 使用定理 `Module.Free.of_divisionRing`：∀ (K : Type u_3) (V : Type u_4) [inst : Div
+isionRing K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V],   Module.Fr
+ee K V
+· 使用定理 `not_finite`：not_finite (α : Sort*) [Infinite α] [Finite α] : False
 
-English:
-theorem Subspace.biUnion_ne_univ_of_top_notMem
-  given: (hs : ⊤ ∉ s)
-  statement: ⋃ p in s, (p : Set E) != Set.univ
-  proof: by
+--- 原说明 ---
+A vector space over an infinite field cannot be a finite union of proper subspac
+es.
+-/
+theorem Subspace.biUnion_ne_univ_of_top_notMem (hs : ⊤ ∉ s) : ⋃ p ∈ s, (p : Set E) ≠ Set.univ := by
   intro hcovers
   have ⟨p, hp, hfi⟩ := Submodule.exists_finiteIndex_of_cover hcovers
   have : Finite (E ⧸ p) := AddSubgroup.finite_quotient_of_finiteIndex
@@ -990,77 +876,58 @@ theorem Subspace.biUnion_ne_univ_of_top_notMem
   have : Infinite (E ⧸ p) := Module.Free.infinite k (E ⧸ p)
   exact not_finite (E ⧸ p)
 
-中文:
-定理 子空间.biUnion_ne_univ_of_top_notMem
-  条件: (hs : ⊤ ∉ s)
-  结论: ⋃ p in s, (p : 集合 E) != 集合.univ
-  证明: by
-  intro hcovers
-  have ⟨p, hp, hfi⟩ := Submodule.exists_finiteIndex_of_cover hcovers
-  have : Finite (E ⧸ p) := AddSubgroup.finite_quotient_of_finiteIndex
-  have : Nontrivial (E ⧸ p) := Submodule.Quotient.nontrivial_iff.mpr (ne_of_mem_of_not_mem hp hs)
-  have : Infinite (E ⧸ p) := Module.Free.infinite k (E ⧸ p)
-  exact not_finite (E ⧸ p)
+/-- A vector space over an infinite field cannot be a finite union of proper subspaces. -/
+/-
+**Subspace.top_mem_of_biUnion_eq_univ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Subspace.top_mem_of_biUnion_eq_univ (hcovers : ⋃ p in s, (p : Set E) = Set
+.univ) : ⊤ in s
+参数：hcovers : ⋃ p in s, (p : Set E) = Set.univ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₁`：contrapose₁ {p q : Prop} : (¬ q -
+> ¬ p) -> (p -> q)
+· 使用定理 `Subspace.biUnion_ne_univ_of_top_notMem`：Subspace.biUnion_ne_univ_of_top_
+notMem (hs : ⊤ ∉ s) : ⋃ p in s, (p : Set E) != Set.univ
 
-Depends on / 依赖: AddSubgroup, AddSubgroup.finite_quotient_of_finiteIndex, Finite, Infinite, Module, Module.Free.infinite, Nontrivial, Quotient, Submodule, Submodule.Quotient.nontrivial_iff.mpr, Submodule.exists_finiteIndex_of_cover, exists_finiteIndex_of_cover, finite_quotient_of_finiteIndex, hcovers, infinite, ne_of_mem_of_not_mem, nontrivial_iff, not_finite
+--- 原说明 ---
+A vector space over an infinite field cannot be a finite union of proper subspac
+es.
 -/
-theorem Subspace.biUnion_ne_univ_of_top_notMem (hs : ⊤ ∉ s) : ⋃ p in s, (p : Set E) != Set.univ := by
-  intro hcovers
-  have ⟨p, hp, hfi⟩ := Submodule.exists_finiteIndex_of_cover hcovers
-  have : Finite (E ⧸ p) := AddSubgroup.finite_quotient_of_finiteIndex
-  have : Nontrivial (E ⧸ p) := Submodule.Quotient.nontrivial_iff.mpr (ne_of_mem_of_not_mem hp hs)
-  have : Infinite (E ⧸ p) := Module.Free.infinite k (E ⧸ p)
-  exact not_finite (E ⧸ p)
-
-/--
-theorem `Subspace.top_mem_of_biUnion_eq_univ` / 定理 `Subspace.top_mem_of_biUnion_eq_univ`
-
-English:
-theorem Subspace.top_mem_of_biUnion_eq_univ
-  given: (hcovers : ⋃ p in s, (p : Set E) = Set.univ)
-  proof: by
+theorem Subspace.top_mem_of_biUnion_eq_univ (hcovers : ⋃ p ∈ s, (p : Set E) = Set.univ) :
+    ⊤ ∈ s := by
   contrapose! hcovers
   exact Subspace.biUnion_ne_univ_of_top_notMem hcovers
-
-中文:
-定理 子空间.top_mem_of_biUnion_eq_univ
-  条件: (hcovers : ⋃ p in s, (p : 集合 E) = 集合.univ)
-  证明: by
-  contrapose! hcovers
-  exact Subspace.biUnion_ne_univ_of_top_notMem hcovers
-
-Depends on / 依赖: Matrix, Matrix.toLin, Subspace, Subspace.biUnion_ne_univ_of_top_notMem, _mul_apply, _one, biUnion_ne_univ_of_top_notMem, contrapose, hcovers, id_apply, invFun, left_inv, right_inv
+/-
+**Subspace.exists_eq_top_of_iUnion_eq_univ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Subspace.exists_eq_top_of_iUnion_eq_univ {ι} [Finite ι] {p : ι -> Subspace
+ k E} (hcovers : ⋃ i, (p i : Set E) = Set.univ) : exists i, p i = ⊤
+参数：hcovers : ⋃ i, (p i : Set E) = Set.univ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_toFinset`：mem_toFinset {s : Set α} [Fintype s] {a : α} : a in s.
+toFinset ↔ a in s
+· 使用定理 `Subspace.top_mem_of_biUnion_eq_univ`：Subspace.top_mem_of_biUnion_eq_univ
+ (hcovers : ⋃ p in s, (p : Set E) = Set.univ) : ⊤ in s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.biUnion_range`：biUnion_range {f : ι -> α} {g : α -> Set β} : ⋃ x in 
+range f, g x = ⋃ y, g (f y)
 -/
-theorem Subspace.top_mem_of_biUnion_eq_univ (hcovers : ⋃ p in s, (p : Set E) = Set.univ) :
-    ⊤ in s := by
-  contrapose! hcovers
-  exact Subspace.biUnion_ne_univ_of_top_notMem hcovers
-
-/--
-theorem `Subspace.exists_eq_top_of_iUnion_eq_univ` / 定理 `Subspace.exists_eq_top_of_iUnion_eq_univ`
-
-English:
-theorem Subspace.exists_eq_top_of_iUnion_eq_univ
-  statement: {ι} [Finite ι] {p : ι -> Subspace k E}
-  proof: by
-  have := Fintype.ofFinite (Set.range p)
-  simp_rw [← Set.biUnion_range (f := p), ← Set.mem_toFinset] at hcovers
-  apply Set.mem_toFinset.mp (Subspace.top_mem_of_biUnion_eq_univ hcovers)
-
-中文:
-定理 子空间.存在_eq_top_of_iUnion_eq_univ
-  结论: {ι} [有限 ι] {p : ι -> 子空间 k E}
-  证明: by
-  have := Fintype.ofFinite (Set.range p)
-  simp_rw [← Set.biUnion_range (f := p), ← Set.mem_toFinset] at hcovers
-  apply Set.mem_toFinset.mp (Subspace.top_mem_of_biUnion_eq_univ hcovers)
-
-Depends on / 依赖: Fintype, Fintype.ofFinite, Set.biUnion_range, Set.mem_toFinset, Set.mem_toFinset.mp, Set.range, Subspace, Subspace.top_mem_of_biUnion_eq_univ, biUnion_range, hcovers, mem_toFinset, ofFinite, simp_rw, top_mem_of_biUnion_eq_univ
--/
-theorem Subspace.exists_eq_top_of_iUnion_eq_univ {ι} [Finite ι] {p : ι -> Subspace k E}
-    (hcovers : ⋃ i, (p i : Set E) = Set.univ) : exists i, p i = ⊤ := by
+theorem Subspace.exists_eq_top_of_iUnion_eq_univ {ι} [Finite ι] {p : ι → Subspace k E}
+    (hcovers : ⋃ i, (p i : Set E) = Set.univ) : ∃ i, p i = ⊤ := by
   have := Fintype.ofFinite (Set.range p)
   simp_rw [← Set.biUnion_range (f := p), ← Set.mem_toFinset] at hcovers
   apply Set.mem_toFinset.mp (Subspace.top_mem_of_biUnion_eq_univ hcovers)
 
 end Subspace
+

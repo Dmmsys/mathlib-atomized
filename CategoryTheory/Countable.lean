@@ -24,275 +24,206 @@ noncomputable section
 
 namespace CategoryTheory
 
-/--
-Instance `discreteCountable` / 实例 `discreteCountable`
-
-English:
-instance discreteCountable
-  signature: {α : Type*} [Countable α]
-  body: Countable.of_equiv α discreteEquiv.symm
-
-中文:
-实例 discreteCountable
-  签名: {α : 类型} [可数 α]
-  定义体: Countable.of_equiv α discreteEquiv.symm
-
-Depends on / 依赖: Countable, Countable.of_equiv, discreteEquiv, discreteEquiv.symm, of_equiv
+/-
+**CategoryTheory.discreteCountable** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+形式化陈述：discreteCountable {α : Type*} [Countable α] : Countable (Discrete α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Countable.of_equiv`：Countable.of_equiv (α : Sort*) [Countable α] (e : α 
+≃ β) : Countable β
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 instance discreteCountable {α : Type*} [Countable α] : Countable (Discrete α) :=
   Countable.of_equiv α discreteEquiv.symm
 
-/--
-Definition of `CountableCategory` / `CountableCategory` 的定义
+/-- A category with countably many objects and morphisms. -/
+/-
+**CategoryTheory.CountableCategory** 是 Mathlib 中的一个类，位于命名空间 `CategoryTheory`。
+形式化陈述：CountableCategory (J : Type*) [Category* J] : Prop where countableObj : Co
+untable J
+参数：J : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class CountableCategory
-  parameters: (J : Type*) [Category* J]
-  axioms and operations (2):
-    - countableObj : Countable J  [default: by infer_instance]
-    - countableHom : forall j j' : J, Countable (j ⟶ j')  [default: by infer_instance]
-
-中文:
-类 余untable范畴
-  参数: (J : 类型) [范畴* J]
-  公理与运算 (2 个):
-    - countableObj : 可数 J  [默认: by infer_instance]
-    - countableHom : 对任意 j j' : J, 可数 (j ⟶ j')  [默认: by infer_instance]
-
-Depends on / 依赖: Countable, countableHom, infer_instance
+--- 原说明 ---
+A category with countably many objects and morphisms.
 -/
 class CountableCategory (J : Type*) [Category* J] : Prop where
   countableObj : Countable J := by infer_instance
-  countableHom : forall j j' : J, Countable (j ⟶ j') := by infer_instance
+  countableHom : ∀ j j' : J, Countable (j ⟶ j') := by infer_instance
 
 attribute [instance] CountableCategory.countableObj CountableCategory.countableHom
-
-/--
-Instance `countableCategoryDiscreteOfCountable` / 实例 `countableCategoryDiscreteOfCountable`
-
-English:
-instance countableCategoryDiscreteOfCountable
-  signature: (J : Type*) [Countable J]
-
-中文:
-实例 countableCategoryDiscreteOfCountable
-  签名: (J : 类型) [可数 J]
+/-
+**CategoryTheory.countableCategoryDiscreteOfCountable** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory`。
+形式化陈述：∀ (J : Type u_1) [Countable J], CategoryTheory.CountableCategory (Category
+Theory.Discrete J)
+参数：J : Type u_1；CategoryTheory.Discrete J。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.to_countable`：∀ {α : Sort u} [Finite α], Countable α
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
 -/
 instance countableCategoryDiscreteOfCountable (J : Type*) [Countable J] :
     CountableCategory (Discrete J) where
-
-instance {J : Type u} [Countable J] [Category* J] [Quiver.IsThin J] : CountableCategory J :=
-  CountableCategory.mk inferInstance (fun _ _ => ⟨fun _ => 0, fun _ _ _ => Subsingleton.elim _ _⟩)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CountableCategory Nat
-
-中文:
-实例 :
-  签名: 余untable范畴 自然数
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CountableCategory Nat where
+instance {J : Type u} [Countable J] [Category* J] [Quiver.IsThin J] : CountableCategory J :=
+  CountableCategory.mk inferInstance (fun _ _ ↦ ⟨fun _ ↦ 0, fun _ _ _ ↦ Subsingleton.elim _ _⟩)
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance : CountableCategory ℕ where
 
 namespace CountableCategory
 
 variable (α : Type u) [Category.{v} α] [CountableCategory α]
 
-/--
-Definition of `ObjAsType` / `ObjAsType` 的定义
+/-- A countable category `α` is equivalent to a category with objects in `Type`. -/
+/-
+**CategoryTheory.CountableCategory.ObjAsType** 是 Mathlib 中的一个缩写定义，位于命名空间 `Catego
+ryTheory.CountableCategory`。
+形式化陈述：ObjAsType : Type
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-abbreviation ObjAsType
-  signature: : Type
-  body: InducedCategory α (equivShrink.{0} α).symm
-
-中文:
-缩写 ObjAsType
-  签名: : 类型
-  定义体: InducedCategory α (equivShrink.{0} α).symm
-
-Depends on / 依赖: InducedCategory, equivShrink
+--- 原说明 ---
+A countable category `α` is equivalent to a category with objects in `Type`.
 -/
 abbrev ObjAsType : Type :=
   InducedCategory α (equivShrink.{0} α).symm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Countable (ObjAsType α)
-  body: Countable.of_equiv α (equivShrink.{0} α)
-
-中文:
-实例 :
-  签名: 可数 (ObjAsType α)
-  定义体: Countable.of_equiv α (equivShrink.{0} α)
-
-Depends on / 依赖: Countable, Countable.of_equiv, equivShrink, of_equiv
+/-
+**CategoryTheory.CountableCategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Co
+untableCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Countable (ObjAsType α) := Countable.of_equiv α (equivShrink.{0} α)
-
+/-
+**CategoryTheory.CountableCategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Co
+untableCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {i j : ObjAsType α} : Countable (i ⟶ j) :=
   Countable.of_equiv _ InducedCategory.homEquiv.symm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CountableCategory (ObjAsType α)
-
-中文:
-实例 :
-  签名: 余untable范畴 (ObjAsType α)
+/-
+**CategoryTheory.CountableCategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Co
+untableCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CountableCategory (ObjAsType α) where
 
-/--
-Definition of `objAsTypeEquiv` / `objAsTypeEquiv` 的定义
+/-- The constructed category is indeed equivalent to `α`. -/
+/-
+**CategoryTheory.CountableCategory.objAsTypeEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.CountableCategory`。
+形式化陈述：objAsTypeEquiv : ObjAsType α ≌ α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition objAsTypeEquiv
-  signature: : ObjAsType α ≌ α
-  body: (inducedFunctor (equivShrink.{0} α).symm).asEquivalence
-
-中文:
-定义 objAsTypeEquiv
-  签名: : ObjAsType α ≌ α
-  定义体: (inducedFunctor (equivShrink.{0} α).symm).asEquivalence
-
-Depends on / 依赖: asEquivalence, equivShrink, inducedFunctor
+--- 原说明 ---
+The constructed category is indeed equivalent to `α`.
 -/
 noncomputable def objAsTypeEquiv : ObjAsType α ≌ α :=
   (inducedFunctor (equivShrink.{0} α).symm).asEquivalence
 
-/--
-Definition of `HomAsType` / `HomAsType` 的定义
+/-- A countable category `α` is equivalent to a *small* category with objects in `Type`. -/
+/-
+**CategoryTheory.CountableCategory.HomAsType** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.CountableCategory`。
+形式化陈述：HomAsType
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HomAsType
-  body: ShrinkHoms (ObjAsType α)
-
-中文:
-定义 HomAsType
-  定义体: ShrinkHoms (ObjAsType α)
-
-Depends on / 依赖: ObjAsType, ShrinkHoms
+--- 原说明 ---
+A countable category `α` is equivalent to a *small* category with objects in `Ty
+pe`.
 -/
 def HomAsType := ShrinkHoms (ObjAsType α)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LocallySmall.{0} (ObjAsType α)
-  body: inferInstance
-
-中文:
-实例 :
-  签名: LocallySmall.{0} (ObjAsType α)
-  定义体: inferInstance
+/-
+**CategoryTheory.CountableCategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Co
+untableCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LocallySmall.{0} (ObjAsType α) where
   hom_small _ _ := inferInstance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SmallCategory (HomAsType α)
-  body: inferInstanceAs SmallCategory (ShrinkHoms _)
-
-中文:
-实例 :
-  签名: 小范畴 (HomAsType α)
-  定义体: inferInstanceAs SmallCategory (ShrinkHoms _)
-
-Depends on / 依赖: ShrinkHoms, SmallCategory
+/-
+**CategoryTheory.CountableCategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Co
+untableCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : SmallCategory (HomAsType α) := inferInstanceAs SmallCategory (ShrinkHoms _)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Countable (HomAsType α)
-  body: Countable.of_equiv α (equivShrink.{0} α)
-
-中文:
-实例 :
-  签名: 可数 (HomAsType α)
-  定义体: Countable.of_equiv α (equivShrink.{0} α)
-
-Depends on / 依赖: Countable, Countable.of_equiv, equivShrink, of_equiv
+instance : SmallCategory (HomAsType α) := inferInstanceAs <| SmallCategory (ShrinkHoms _)
+/-
+**CategoryTheory.CountableCategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Co
+untableCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Countable (HomAsType α) := Countable.of_equiv α (equivShrink.{0} α)
-
+/-
+**CategoryTheory.CountableCategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Co
+untableCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {i j : HomAsType α} : Countable (i ⟶ j) :=
   Countable.of_equiv ((ShrinkHoms.equivalence _).inverse.obj i ⟶
     (ShrinkHoms.equivalence _).inverse.obj j)
     (Functor.FullyFaithful.ofFullyFaithful _).homEquiv.symm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CountableCategory (HomAsType α)
-
-中文:
-实例 :
-  签名: 余untable范畴 (HomAsType α)
+/-
+**CategoryTheory.CountableCategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Co
+untableCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CountableCategory (HomAsType α) where
 
-/--
-Definition of `homAsTypeEquiv` / `homAsTypeEquiv` 的定义
+/-- The constructed category is indeed equivalent to `α`. -/
+/-
+**CategoryTheory.CountableCategory.homAsTypeEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.CountableCategory`。
+形式化陈述：homAsTypeEquiv : HomAsType α ≌ α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `CategoryTheory.CountableCategory.instLocallySmallObjAsType`：∀ (α : Type 
+u) [inst : CategoryTheory.Category.{v, u} α] [inst_1 : CategoryTheory.CountableC
+ategory α],   CategoryTheory.LocallySmall.{0, v,…
 
-English:
-definition homAsTypeEquiv
-  signature: : HomAsType α ≌ α
-  body: (ShrinkHoms.equivalence _).symm.trans (objAsTypeEquiv _)
-
-中文:
-定义 homAsTypeEquiv
-  签名: : HomAsType α ≌ α
-  定义体: (ShrinkHoms.equivalence _).symm.trans (objAsTypeEquiv _)
-
-Depends on / 依赖: ShrinkHoms, ShrinkHoms.equivalence, equivalence, objAsTypeEquiv, symm.trans
+--- 原说明 ---
+The constructed category is indeed equivalent to `α`.
 -/
 noncomputable def homAsTypeEquiv : HomAsType α ≌ α :=
   (ShrinkHoms.equivalence _).symm.trans (objAsTypeEquiv _)
 
 end CountableCategory
 
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (α : Type*) [SmallCategory α] [FinCategory α] : CountableCategory α where
 
 open Opposite
 
-/--
-Instance `countableCategoryOpposite` / 实例 `countableCategoryOpposite`
+/-- The opposite of a countable category is countable. -/
+/-
+**CategoryTheory.countableCategoryOpposite** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTh
+eory`。
+形式化陈述：countableCategoryOpposite {J : Type*} [Category* J] [CountableCategory J] 
+: CountableCategory Jᵒᵖ where countableObj
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Countable.of_equiv`：Countable.of_equiv (α : Sort*) [Countable α] (e : α 
+≃ β) : Countable β
+· 使用定理 `CategoryTheory.CountableCategory.countableObj`：∀ {J : Type u_1} {inst : 
+CategoryTheory.Category.{v_1, u_1} J} [self : CategoryTheory.CountableCategory J
+], Countable J
+· 使用定理 `CategoryTheory.CountableCategory.countableHom`：∀ {J : Type u_1} {inst : 
+CategoryTheory.Category.{v_1, u_1} J} [self : CategoryTheory.CountableCategory J
+] (j j' : J),   Countable (j ⟶ j')
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-instance countableCategoryOpposite
-  signature: {J : Type*} [Category* J] [CountableCategory J]
-  body: Countable.of_equiv _ equivToOpposite
-  countableHom j j' := Countable.of_equiv _ (opEquiv j j').symm
-
-中文:
-实例 countableCategoryOpposite
-  签名: {J : 类型} [范畴* J] [余untable范畴 J]
-  定义体: Countable.of_equiv _ equivToOpposite
-  countableHom j j' := Countable.of_equiv _ (opEquiv j j').symm
-
-Depends on / 依赖: Countable, Countable.of_equiv, equivToOpposite, of_equiv
+--- 原说明 ---
+The opposite of a countable category is countable.
 -/
 instance countableCategoryOpposite {J : Type*} [Category* J] [CountableCategory J] :
     CountableCategory Jᵒᵖ where
@@ -300,26 +231,26 @@ instance countableCategoryOpposite {J : Type*} [Category* J] [CountableCategory 
   countableHom j j' := Countable.of_equiv _ (opEquiv j j').symm
 
 attribute [local instance] uliftCategory in
-/--
-Instance `countableCategoryUlift` / 实例 `countableCategoryUlift`
+/-- Applying `ULift` to morphisms and objects of a category preserves countability. -/
+/-
+**CategoryTheory.countableCategoryUlift** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheor
+y`。
+形式化陈述：countableCategoryUlift {J : Type v} [Category.{v} J] [CountableCategory J]
+ : CountableCategory.{max w v} (ULiftHom.{w, max w v} (ULift.{w, v} J)) where co
+untableObj
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `instCountableULift`：∀ {β : Type v} [Countable β], Countable (ULift.{u, v
+} β)
+· 使用定理 `CategoryTheory.CountableCategory.countableObj`：∀ {J : Type u_1} {inst : 
+CategoryTheory.Category.{v_1, u_1} J} [self : CategoryTheory.CountableCategory J
+], Countable J
+· 使用定理 `CategoryTheory.CountableCategory.countableHom`：∀ {J : Type u_1} {inst : 
+CategoryTheory.Category.{v_1, u_1} J} [self : CategoryTheory.CountableCategory J
+] (j j' : J),   Countable (j ⟶ j')
 
-English:
-instance countableCategoryUlift
-  signature: {J : Type v} [Category.{v} J] [CountableCategory J]
-  body: instCountableULift
-  countableHom := fun i j =>
-    have : Countable ((ULiftHom.objDown i).down ⟶ (ULiftHom.objDown j).down) := inferInstance
-    instCountableULift
-
-中文:
-实例 countableCategoryUlift
-  签名: {J : 类型v} [范畴.{v} J] [余untable范畴 J]
-  定义体: instCountableULift
-  countableHom := fun i j =>
-    have : Countable ((ULiftHom.objDown i).down ⟶ (ULiftHom.objDown j).down) := inferInstance
-    instCountableULift
-
-Depends on / 依赖: instCountableULift
+--- 原说明 ---
+Applying `ULift` to morphisms and objects of a category preserves countability.
 -/
 instance countableCategoryUlift {J : Type v} [Category.{v} J] [CountableCategory J] :
     CountableCategory.{max w v} (ULiftHom.{w, max w v} (ULift.{w, v} J)) where
@@ -329,3 +260,4 @@ instance countableCategoryUlift {J : Type v} [Category.{v} J] [CountableCategory
     instCountableULift
 
 end CategoryTheory
+

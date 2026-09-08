@@ -5,7 +5,7 @@ Authors: Mario Carneiro
 -/
 module
 
-public import Mathlib.Logic.Basic -- shake: keep (Qq output dependency)
+public import Mathlib.Logic.Basic  -- shake: keep (Qq output dependency)
 public meta import Mathlib.Util.AtomM
 public meta import Qq
 public import Batteries.Tactic.Exact
@@ -89,190 +89,149 @@ open Std (TreeMap TreeSet)
 
 namespace Mathlib.Tactic.ITauto
 
-/--
-Inductive type `AndKind` / 归纳类型 `AndKind`
+/-- Different propositional constructors that are variants of "and" for the purposes of the
+/-
+**Mathlib.Tactic.ITauto.prover.** 是 Mathlib 中的一个定理，位于命名空间 `Mathlib.Tactic.ITauto
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+theorem prover. -/
+/-
+**Mathlib.Tactic.ITauto.AndKind** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic.ITau
+to`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive AndKind
-  parameters: | and | iff | eq
-
-中文:
-归纳类型 AndKind
-  参数: | and | iff | eq
+--- 原说明 ---
+Different propositional constructors that are variants of "and" for the purposes
+ of the
+theorem prover.
 -/
 inductive AndKind | and | iff | eq
   deriving Lean.ToExpr, DecidableEq
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited AndKind
-  body: ⟨AndKind.and⟩
-
-中文:
-实例 :
-  签名: 可居 AndKind
-  定义体: ⟨AndKind.and⟩
-
-Depends on / 依赖: AndKind, AndKind.and
+/-
+**Mathlib.Tactic.ITauto.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.ITauto`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited AndKind := ⟨AndKind.and⟩
 
-/--
-Inductive type `IProp` / 归纳类型 `IProp`
+/-- A reified inductive type for propositional logic. -/
+/-
+**Mathlib.Tactic.ITauto.IProp** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic.ITauto
+`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive IProp
-  parameters: : Type
-  constructors (6):
-    - var: Nat -> IProp -- propositional atoms P_i
-    - true: IProp -- ⊤
-    - false: IProp -- ⊥
-    - and': AndKind -> IProp -> IProp -> IProp -- p ∧ q, p ↔ q, p = q
-    - or: IProp -> IProp -> IProp -- p ∨ q
-    - imp: IProp -> IProp -> IProp -- p → q
-
-中文:
-归纳类型 IProp
-  参数: : 类型
-  构造子 (6 个):
-    - var: 自然数 -> IProp -- propositional atoms P_i
-    - true: IProp -- ⊤
-    - false: IProp -- ⊥
-    - and': AndKind -> IProp -> IProp -> IProp -- p ∧ q, p ↔ q, p = q
-    - or: IProp -> IProp -> IProp -- p ∨ q
-    - imp: IProp -> IProp -> IProp -- p → q
+--- 原说明 ---
+A reified inductive type for propositional logic.
 -/
 inductive IProp : Type
-  | var : Nat -> IProp -- propositional atoms P_i
-  | true : IProp -- ⊤
-  | false : IProp -- ⊥
-  | and' : AndKind -> IProp -> IProp -> IProp -- p ∧ q, p ↔ q, p = q
-  | or : IProp -> IProp -> IProp -- p ∨ q
-  | imp : IProp -> IProp -> IProp -- p → q
+  | var : Nat → IProp            -- propositional atoms P_i
+  | true : IProp                 -- ⊤
+  | false : IProp                -- ⊥
+  | and' : AndKind → IProp → IProp → IProp -- p ∧ q, p ↔ q, p = q
+  | or : IProp → IProp → IProp   -- p ∨ q
+  | imp : IProp → IProp → IProp  -- p → q
   deriving Lean.ToExpr
 
-/--
-Definition of `IProp.and` / `IProp.and` 的定义
+/-- Constructor for `p ∧ q`. -/
+/-
+**Mathlib.Tactic.ITauto.IProp.and** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.ITau
+to.IProp`。
+形式化陈述：Mathlib.Tactic.ITauto.IProp → Mathlib.Tactic.ITauto.IProp → Mathlib.Tactic
+.ITauto.IProp
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IProp.and
-  signature: : IProp -> IProp -> IProp
-  body: .and' .and
-
-中文:
-定义 IProp.and
-  签名: : IProp -> IProp -> IProp
-  定义体: .and' .and
+--- 原说明 ---
+Constructor for `p ∧ q`.
 -/
-@[match_pattern, expose] def IProp.and : IProp -> IProp -> IProp := .and' .and
+@[match_pattern, expose] def IProp.and : IProp → IProp → IProp := .and' .and
 
-/--
-Definition of `IProp.iff` / `IProp.iff` 的定义
+/-- Constructor for `p ↔ q`. -/
+/-
+**Mathlib.Tactic.ITauto.IProp.iff** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.ITau
+to.IProp`。
+形式化陈述：Mathlib.Tactic.ITauto.IProp → Mathlib.Tactic.ITauto.IProp → Mathlib.Tactic
+.ITauto.IProp
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IProp.iff
-  signature: : IProp -> IProp -> IProp
-  body: .and' .iff
-
-中文:
-定义 IProp.iff
-  签名: : IProp -> IProp -> IProp
-  定义体: .and' .iff
+--- 原说明 ---
+Constructor for `p ↔ q`.
 -/
-@[match_pattern, expose] def IProp.iff : IProp -> IProp -> IProp := .and' .iff
+@[match_pattern, expose] def IProp.iff : IProp → IProp → IProp := .and' .iff
 
-/--
-Definition of `IProp.eq` / `IProp.eq` 的定义
+/-- Constructor for `p = q`. -/
+/-
+**Mathlib.Tactic.ITauto.IProp.eq** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.ITaut
+o.IProp`。
+形式化陈述：Mathlib.Tactic.ITauto.IProp → Mathlib.Tactic.ITauto.IProp → Mathlib.Tactic
+.ITauto.IProp
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IProp.eq
-  signature: : IProp -> IProp -> IProp
-  body: .and' .eq
-
-中文:
-定义 IProp.eq
-  签名: : IProp -> IProp -> IProp
-  定义体: .and' .eq
+--- 原说明 ---
+Constructor for `p = q`.
 -/
-@[match_pattern, expose] def IProp.eq : IProp -> IProp -> IProp := .and' .eq
+@[match_pattern, expose] def IProp.eq : IProp → IProp → IProp := .and' .eq
 
-/--
-Definition of `IProp.not` / `IProp.not` 的定义
+/-- Constructor for `¬ p`. -/
+/-
+**Mathlib.Tactic.ITauto.IProp.not** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.ITau
+to.IProp`。
+形式化陈述：Mathlib.Tactic.ITauto.IProp → Mathlib.Tactic.ITauto.IProp
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IProp.not
-  signature: (a : IProp)
-  body: a.imp .false
-
-中文:
-定义 IProp.not
-  签名: (a : IProp)
-  定义体: a.imp .false
+--- 原说明 ---
+Constructor for `¬ p`.
 -/
 @[match_pattern, expose] def IProp.not (a : IProp) : IProp := a.imp .false
 
-/--
-Definition of `IProp.xor` / `IProp.xor` 的定义
+/-- Constructor for `xor p q`. -/
+/-
+**Mathlib.Tactic.ITauto.IProp.xor** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.ITau
+to.IProp`。
+形式化陈述：Mathlib.Tactic.ITauto.IProp → Mathlib.Tactic.ITauto.IProp → Mathlib.Tactic
+.ITauto.IProp
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IProp.xor
-  signature: (a b : IProp)
-  body: (a.and b.not).or (b.and a.not)
-
-中文:
-定义 IProp.xor
-  签名: (a b : IProp)
-  定义体: (a.and b.not).or (b.and a.not)
+--- 原说明 ---
+Constructor for `xor p q`.
 -/
 @[match_pattern, expose] def IProp.xor (a b : IProp) : IProp := (a.and b.not).or (b.and a.not)
+/-
+**Mathlib.Tactic.ITauto.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.ITauto`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited IProp
-  body: ⟨IProp.true⟩
-
-中文:
-实例 :
-  签名: 可居 IProp
-  定义体: ⟨IProp.true⟩
-
-Depends on / 依赖: IProp.true
+--- 原说明 ---
+Constructor for `xor p q`.
 -/
 instance : Inhabited IProp := ⟨IProp.true⟩
 
-/--
-Definition of `AndKind.sides` / `AndKind.sides` 的定义
+/-- Given the contents of an `And` variant, return the two conjuncts. -/
+/-
+**Mathlib.Tactic.ITauto.AndKind.sides** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.
+ITauto.AndKind`。
+形式化陈述：Mathlib.Tactic.ITauto.AndKind →   Mathlib.Tactic.ITauto.IProp → Mathlib.Ta
+ctic.ITauto.IProp → Mathlib.Tactic.ITauto.IProp × Mathlib.Tactic.ITauto.IProp
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AndKind.sides
-  signature: : AndKind -> IProp -> IProp -> IProp × IProp
-
-中文:
-定义 AndKind.sides
-  签名: : AndKind -> IProp -> IProp -> IProp × IProp
+--- 原说明 ---
+Given the contents of an `And` variant, return the two conjuncts.
 -/
-def AndKind.sides : AndKind -> IProp -> IProp -> IProp × IProp
+def AndKind.sides : AndKind → IProp → IProp → IProp × IProp
   | .and, A, B => (A, B)
   | _, A, B => (A.imp B, B.imp A)
 
-/--
-Definition of `IProp.format` / `IProp.format` 的定义
+/-- Debugging printer for propositions. -/
+/-
+**Mathlib.Tactic.ITauto.IProp.format** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.I
+Tauto.IProp`。
+形式化陈述：Mathlib.Tactic.ITauto.IProp → Format
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IProp.format
-  signature: : IProp -> Std.Format
-
-中文:
-定义 IProp.format
-  签名: : IProp -> Std.Format
+--- 原说明 ---
+Debugging printer for propositions.
 -/
-def IProp.format : IProp -> Std.Format
+def IProp.format : IProp → Std.Format
   | .var i => f!"v{i}"
   | .true => f!"⊤"
   | .false => f!"⊥"
@@ -280,95 +239,44 @@ def IProp.format : IProp -> Std.Format
   | .iff p q => f!"({p.format} ↔ {q.format})"
   | .eq p q => f!"({p.format} = {q.format})"
   | .or p q => f!"({p.format} ∨ {q.format})"
-  | .imp p q => f!"({p.format} -> {q.format})"
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Std.ToFormat IProp
-  body: ⟨IProp.format⟩
-
-中文:
-实例 :
-  签名: Std.ToFormat IProp
-  定义体: ⟨IProp.format⟩
-
-Depends on / 依赖: IProp.format, format
+  | .imp p q => f!"({p.format} → {q.format})"
+/-
+**Mathlib.Tactic.ITauto.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.ITauto`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Std.ToFormat IProp := ⟨IProp.format⟩
 
-/--
-Definition of `AndKind.cmp` / `AndKind.cmp` 的定义
+/-- A comparator for `AndKind`. (There should really be a derive handler for this.) -/
+/-
+**Mathlib.Tactic.ITauto.AndKind.cmp** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.IT
+auto.AndKind`。
+形式化陈述：Mathlib.Tactic.ITauto.AndKind → Mathlib.Tactic.ITauto.AndKind → Ordering
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition AndKind.cmp
-  signature: (p q : AndKind)
-  body: by
-  cases p <;> cases q
-  exacts [.eq, .lt, .lt, .gt, .eq, .lt, .gt, .gt, .eq]
-
-中文:
-定义 AndKind.cmp
-  签名: (p q : AndKind)
-  定义体: by
-  cases p <;> cases q
-  exacts [.eq, .lt, .lt, .gt, .eq, .lt, .gt, .gt, .eq]
-
-Depends on / 依赖: exacts
+--- 原说明 ---
+A comparator for `AndKind`. (There should really be a derive handler for this.)
 -/
 def AndKind.cmp (p q : AndKind) : Ordering := by
   cases p <;> cases q
   exacts [.eq, .lt, .lt, .gt, .eq, .lt, .gt, .gt, .eq]
 
-/--
-Definition of `IProp.cmp` / `IProp.cmp` 的定义
+/-- A comparator for propositions. (There should really be a derive handler for this.) -/
+/-
+**Mathlib.Tactic.ITauto.IProp.cmp** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.ITau
+to.IProp`。
+形式化陈述：Mathlib.Tactic.ITauto.IProp → Mathlib.Tactic.ITauto.IProp → Ordering
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition IProp.cmp
-  signature: (p q : IProp)
-  body: by
-  cases p <;> cases q
-  case var.var p q => exact compare p q
-  case true.true => exact .eq
-  case false.false => exact .eq
-case and'.and' ap p₁ p₂ aq q₁ q₂ => exact (ap.cmp aq).then (p₁.cmp q₁).then (p₂.cmp q₂)
-  case or.or p₁ p₂ q₁ q₂ => exact (p₁.cmp q₁).then (p₂.cmp q₂)
-  case imp.imp p₁ p₂ q₁ q₂ => exact (p₁.cmp q₁).then (p₂.cmp q₂)
-  exacts [.lt, .lt, .lt, .lt, .lt,
-          .gt, .lt, .lt, .lt, .lt,
-          .gt, .gt, .lt, .lt, .lt,
-          .gt, .gt, .gt, .lt, .lt,
-          .gt, .gt, .gt, .gt, .lt,
-          .gt, .gt, .gt, .gt, .gt]
-
-中文:
-定义 IProp.cmp
-  签名: (p q : IProp)
-  定义体: by
-  cases p <;> cases q
-  case var.var p q => exact compare p q
-  case true.true => exact .eq
-  case false.false => exact .eq
-case and'.and' ap p₁ p₂ aq q₁ q₂ => exact (ap.cmp aq).then (p₁.cmp q₁).then (p₂.cmp q₂)
-  case or.or p₁ p₂ q₁ q₂ => exact (p₁.cmp q₁).then (p₂.cmp q₂)
-  case imp.imp p₁ p₂ q₁ q₂ => exact (p₁.cmp q₁).then (p₂.cmp q₂)
-  exacts [.lt, .lt, .lt, .lt, .lt,
-          .gt, .lt, .lt, .lt, .lt,
-          .gt, .gt, .lt, .lt, .lt,
-          .gt, .gt, .gt, .lt, .lt,
-          .gt, .gt, .gt, .gt, .lt,
-          .gt, .gt, .gt, .gt, .gt]
-
-Depends on / 依赖: ap.cmp, compare, exacts, false.false, imp.imp, or.or, true.true, var.var
+--- 原说明 ---
+A comparator for propositions. (There should really be a derive handler for this
+.)
 -/
 def IProp.cmp (p q : IProp) : Ordering := by
   cases p <;> cases q
   case var.var p q => exact compare p q
   case true.true => exact .eq
   case false.false => exact .eq
-case and'.and' ap p₁ p₂ aq q₁ q₂ => exact (ap.cmp aq).then (p₁.cmp q₁).then (p₂.cmp q₂)
+  case and'.and' ap p₁ p₂ aq q₁ q₂ => exact (ap.cmp aq).then <| (p₁.cmp q₁).then (p₂.cmp q₂)
   case or.or p₁ p₂ q₁ q₂ => exact (p₁.cmp q₁).then (p₂.cmp q₂)
   case imp.imp p₁ p₂ q₁ q₂ => exact (p₁.cmp q₁).then (p₂.cmp q₂)
   exacts [.lt, .lt, .lt, .lt, .lt,
@@ -377,91 +285,28 @@ case and'.and' ap p₁ p₂ aq q₁ q₂ => exact (ap.cmp aq).then (p₁.cmp q�
           .gt, .gt, .gt, .lt, .lt,
           .gt, .gt, .gt, .gt, .lt,
           .gt, .gt, .gt, .gt, .gt]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LT IProp
-  body: ⟨fun p q => p.cmp q = .lt⟩
-
-中文:
-实例 :
-  签名: LT IProp
-  定义体: ⟨fun p q => p.cmp q = .lt⟩
-
-Depends on / 依赖: p.cmp
+/-
+**Mathlib.Tactic.ITauto.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.ITauto`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LT IProp := ⟨fun p q => p.cmp q = .lt⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: DecidableLT IProp
-  body: fun _ _ => inferInstanceAs (Decidable (_ = _))
-
-中文:
-实例 :
-  签名: DecidableLT IProp
-  定义体: fun _ _ => inferInstanceAs (Decidable (_ = _))
-
-Depends on / 依赖: Decidable
+/-
+**Mathlib.Tactic.ITauto.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.ITauto`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : DecidableLT IProp := fun _ _ => inferInstanceAs (Decidable (_ = _))
 
 open Lean (Name)
 
-/--
-Inductive type `Proof` / 归纳类型 `Proof`
+/-- A reified inductive proof type for intuitionistic propositional logic. -/
+/-
+**Mathlib.Tactic.ITauto.Proof** 是 Mathlib 中的一个归纳类型，位于命名空间 `Mathlib.Tactic.ITauto
+`。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Proof
-  constructors (19):
-    - sorry: Proof
-    - hyp: (n : Name) : Proof
-    - triv: Proof
-    - exfalso': (p : Proof) : Proof
-    - intro: (x : Name) (p : Proof) : Proof
-    - andLeft: (ak : AndKind) (p : Proof) : Proof
-    - andRight: (ak : AndKind) (p : Proof) : Proof
-    - andIntro: (ak : AndKind) (p₁ p₂ : Proof) : Proof
-    - curry: (ak : AndKind) (p : Proof) : Proof
-    - curry₂: (ak : AndKind) (p q : Proof) : Proof
-    - app': Proof -> Proof -> Proof
-    - orImpL: (p : Proof) : Proof
-    - orImpR: (p : Proof) : Proof
-    - orInL: (p : Proof) : Proof
-    - orInR: (p : Proof) : Proof
-    - orElim': (p₁ : Proof) (x : Name) (p₂ p₃ : Proof) : Proof
-    - decidableElim: (classical : Bool) (p₁ x : Name) (p₂ p₃ : Proof) : Proof
-    - em: (classical : Bool) (p : Name) : Proof
-    - impImpSimp: (x : Name) (p : Proof) : Proof
-
-中文:
-归纳类型 证明
-  构造子 (19 个):
-    - sorry: 证明
-    - hyp: (n : Name) : 证明
-    - triv: 证明
-    - exfalso': (p : 证明) : 证明
-    - intro: (x : Name) (p : 证明) : 证明
-    - andLeft: (ak : AndKind) (p : 证明) : 证明
-    - andRight: (ak : AndKind) (p : 证明) : 证明
-    - andIntro: (ak : AndKind) (p₁ p₂ : 证明) : 证明
-    - curry: (ak : AndKind) (p : 证明) : 证明
-    - curry₂: (ak : AndKind) (p q : 证明) : 证明
-    - app': 证明 -> 证明 -> 证明
-    - orImpL: (p : 证明) : 证明
-    - orImpR: (p : 证明) : 证明
-    - orInL: (p : 证明) : 证明
-    - orInR: (p : 证明) : 证明
-    - orElim': (p₁ : 证明) (x : Name) (p₂ p₃ : 证明) : 证明
-    - decidableElim: (classical : 布尔值) (p₁ x : Name) (p₂ p₃ : 证明) : 证明
-    - em: (classical : 布尔值) (p : Name) : 证明
-    - impImpSimp: (x : Name) (p : 证明) : 证明
+--- 原说明 ---
+A reified inductive proof type for intuitionistic propositional logic.
 -/
 inductive Proof
   /-- `⊢ A`, causes failure during reconstruction -/
@@ -505,7 +350,7 @@ inductive Proof
   -/
   | curry₂ (ak : AndKind) (p q : Proof) : Proof
   /-- `(p: A → B) (q: A) ⊢ B` -/
-  | app' : Proof -> Proof -> Proof
+  | app' : Proof → Proof → Proof
   /-- `(p: A ∨ B → C) ⊢ A → C` -/
   | orImpL (p : Proof) : Proof
   /-- `(p: A ∨ B → C) ⊢ B → C` -/
@@ -528,41 +373,28 @@ inductive Proof
   -/
   | impImpSimp (x : Name) (p : Proof) : Proof
   deriving Lean.ToExpr
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited Proof
-  body: ⟨Proof.triv⟩
-
-中文:
-实例 :
-  签名: 可居 证明
-  定义体: ⟨Proof.triv⟩
-
-Depends on / 依赖: Proof.triv
+/-
+**Mathlib.Tactic.ITauto.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.ITauto`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited Proof := ⟨Proof.triv⟩
 
-/--
-Definition of `Proof.format` / `Proof.format` 的定义
+/-- Debugging printer for proof objects. -/
+/-
+**Mathlib.Tactic.ITauto.Proof.format** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.I
+Tauto.Proof`。
+形式化陈述：Mathlib.Tactic.ITauto.Proof → Format
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Proof.format
-  signature: : Proof -> Std.Format
-
-中文:
-定义 证明.format
-  签名: : 证明 -> Std.Format
+--- 原说明 ---
+Debugging printer for proof objects.
 -/
-def Proof.format : Proof -> Std.Format
+def Proof.format : Proof → Std.Format
   | .sorry => "sorry"
   | .hyp i => Std.format i
   | .triv => "triv"
   | .exfalso' p => f!"(exfalso {p.format})"
-  | .intro x p => f!"(fun {x} => {p.format})"
+  | .intro x p => f!"(fun {x} ↦ {p.format})"
   | .andLeft _ p => f!"{p.format} .1"
   | .andRight _ p => f!"{p.format} .2"
   | .andIntro _ p q => f!"⟨{p.format}, {q.format}⟩"
@@ -573,73 +405,62 @@ def Proof.format : Proof -> Std.Format
   | .orImpR p => f!"(orImpR {p.format})"
   | .orInL p => f!"(Or.inl {p.format})"
   | .orInR p => f!"(Or.inr {p.format})"
-  | .orElim' p x q r => f!"({p.format}.elim (fun {x} => {q.format}) (fun {x} => {r.format})"
+  | .orElim' p x q r => f!"({p.format}.elim (fun {x} ↦ {q.format}) (fun {x} ↦ {r.format})"
   | .em false p => f!"(Decidable.em {p})"
   | .em true p => f!"(Classical.em {p})"
-  | .decidableElim _ p x q r => f!"({p}.elim (fun {x} => {q.format}) (fun {x} => {r.format})"
+  | .decidableElim _ p x q r => f!"({p}.elim (fun {x} ↦ {q.format}) (fun {x} ↦ {r.format})"
   | .impImpSimp _ p => f!"(impImpSimp {p.format})"
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Std.ToFormat Proof
-  body: ⟨Proof.format⟩
-
-中文:
-实例 :
-  签名: Std.ToFormat 证明
-  定义体: ⟨Proof.format⟩
-
-Depends on / 依赖: Proof.format, format
+/-
+**Mathlib.Tactic.ITauto.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.ITauto`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Std.ToFormat Proof := ⟨Proof.format⟩
 
-/--
-Definition of `Proof.exfalso` / `Proof.exfalso` 的定义
+/-- A variant on `Proof.exfalso'` that performs opportunistic simplification. -/
+/-
+**Mathlib.Tactic.ITauto.Proof.exfalso** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.
+ITauto.Proof`。
+形式化陈述：Mathlib.Tactic.ITauto.IProp → Mathlib.Tactic.ITauto.Proof → Mathlib.Tactic
+.ITauto.Proof
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Proof.exfalso
-  signature: : IProp -> Proof -> Proof
-
-中文:
-定义 证明.exfalso
-  签名: : IProp -> 证明 -> 证明
+--- 原说明 ---
+A variant on `Proof.exfalso'` that performs opportunistic simplification.
 -/
-def Proof.exfalso : IProp -> Proof -> Proof
+def Proof.exfalso : IProp → Proof → Proof
   | .false, p => p
   | _, p => .exfalso' p
 
-/--
-Definition of `Proof.orElim` / `Proof.orElim` 的定义
+/-- A variant on `Proof.orElim'` that performs opportunistic simplification. -/
+/-
+**Mathlib.Tactic.ITauto.Proof.orElim** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.I
+Tauto.Proof`。
+形式化陈述：Mathlib.Tactic.ITauto.Proof →   Name → Mathlib.Tactic.ITauto.Proof → Mathl
+ib.Tactic.ITauto.Proof → Mathlib.Tactic.ITauto.Proof
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Proof.orElim
-  signature: : Proof -> Name -> Proof -> Proof -> Proof
-
-中文:
-定义 证明.orElim
-  签名: : 证明 -> Name -> 证明 -> 证明 -> 证明
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, ContinuousMap
+--- 原说明 ---
+A variant on `Proof.orElim'` that performs opportunistic simplification.
 -/
-def Proof.orElim : Proof -> Name -> Proof -> Proof -> Proof
+def Proof.orElim : Proof → Name → Proof → Proof → Proof
   | .em cl p, x, q, r => .decidableElim cl p x q r
   | p, x, q, r => .orElim' p x q r
 
-/--
-Definition of `Proof.app` / `Proof.app` 的定义
+/-- A variant on `Proof.app'` that performs opportunistic simplification.
+(This doesn't do full normalization because we don't want the proof size to blow up.) -/
+/-
+**Mathlib.Tactic.ITauto.Proof.app** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.ITau
+to.Proof`。
+形式化陈述：Mathlib.Tactic.ITauto.Proof → Mathlib.Tactic.ITauto.Proof → Mathlib.Tactic
+.ITauto.Proof
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Proof.app
-  signature: : Proof -> Proof -> Proof
-
-中文:
-定义 证明.app
-  签名: : 证明 -> 证明 -> 证明
+--- 原说明 ---
+A variant on `Proof.app'` that performs opportunistic simplification.
+(This doesn't do full normalization because we don't want the proof size to blow
+ up.)
 -/
-def Proof.app : Proof -> Proof -> Proof
+def Proof.app : Proof → Proof → Proof
   | .curry ak p, q => .curry₂ ak p q
   | .curry₂ ak p q, r => p.app (q.andIntro ak r)
   | .orImpL p, q => p.app q.orInL
@@ -650,86 +471,9 @@ def Proof.app : Proof -> Proof -> Proof
 -- Note(Mario): the typechecker is disabled because it requires proofs to carry around additional
 -- props. These can be retrieved from the git history (rev 6c96d2ff7) if you want to re-enable this.
 /-
-/--
-Definition of `Proof.check` / `Proof.check` 的定义
-
-English:
-definition Proof.check
-  signature: : Lean.NameMap IProp -> Proof -> Option IProp
-  body: ak.sides A B
-    guard (ak = ak') *> pure (A'.imp $ B'.imp C)
-  | Γ, .curry₂ ak p q => do
-    let .imp (.and' ak' A B) C ← p.check Γ | none
-    let A₂ ← q.check Γ
-    let (A', B') := ak.sides A B
-    guard (ak = ak' ∧ A₂ = A') *> pure (B'.imp C)
-  | Γ, .app' p q => do
-    let .imp A B ← p.check Γ | none
-    let A' ← q.check Γ
-    guard (A = A') *> pure B
-  | Γ, .orImpL B p => do
-    let .imp (.or A B') C ← p.check Γ | none
-    guard (B = B') *> pure (A.imp C)
-  | Γ, .orImpR A p => do
-    let .imp (.or A' B) C ← p.check Γ | none
-    guard (A = A') *> pure (B.imp C)
-  | Γ, .orInL B p => do let A ← p.check Γ; pure (A.or B)
-  | Γ, .orInR A p => do let B ← p.check Γ; pure (A.or B)
-  | Γ, .orElim' p x q r => do
-    let .or A B ← p.check Γ | none
-    let C ← q.check (Γ.insert x A)
-    let C' ← r.check (Γ.insert x B)
-    guard (C = C') *> pure C
-  | _, .em _ _ A => pure (A.or A.not)
-  | Γ, .decidableElim _ A _ x p₂ p₃ => do
-    let C ← p₂.check (Γ.insert x A)
-    let C' ← p₃.check (Γ.insert x A.not)
-    guard (C = C') *> pure C
-  | Γ, .impImpSimp _ A p => do
-    let .imp (.imp A' B) C ← p.check Γ | none
-    guard (A = A') *> pure (B.imp C)
--/
-
-中文:
-定义 证明.check
-  签名: : Lean.NameMap IProp -> 证明 -> 选项类型 IProp
-  定义体: ak.sides A B
-    guard (ak = ak') *> pure (A'.imp $ B'.imp C)
-  | Γ, .curry₂ ak p q => do
-    let .imp (.and' ak' A B) C ← p.check Γ | none
-    let A₂ ← q.check Γ
-    let (A', B') := ak.sides A B
-    guard (ak = ak' ∧ A₂ = A') *> pure (B'.imp C)
-  | Γ, .app' p q => do
-    let .imp A B ← p.check Γ | none
-    let A' ← q.check Γ
-    guard (A = A') *> pure B
-  | Γ, .orImpL B p => do
-    let .imp (.or A B') C ← p.check Γ | none
-    guard (B = B') *> pure (A.imp C)
-  | Γ, .orImpR A p => do
-    let .imp (.or A' B) C ← p.check Γ | none
-    guard (A = A') *> pure (B.imp C)
-  | Γ, .orInL B p => do let A ← p.check Γ; pure (A.or B)
-  | Γ, .orInR A p => do let B ← p.check Γ; pure (A.or B)
-  | Γ, .orElim' p x q r => do
-    let .or A B ← p.check Γ | none
-    let C ← q.check (Γ.insert x A)
-    let C' ← r.check (Γ.insert x B)
-    guard (C = C') *> pure C
-  | _, .em _ _ A => pure (A.or A.not)
-  | Γ, .decidableElim _ A _ x p₂ p₃ => do
-    let C ← p₂.check (Γ.insert x A)
-    let C' ← p₃.check (Γ.insert x A.not)
-    guard (C = C') *> pure C
-  | Γ, .impImpSimp _ A p => do
-    let .imp (.imp A' B) C ← p.check Γ | none
-    guard (A = A') *> pure (B.imp C)
--/
-
-Depends on / 依赖: ak.sides
--/
-def Proof.check : Lean.NameMap IProp -> Proof -> Option IProp
+/-- A typechecker for the `Proof` type. This is not used by the tactic but can be used for
+debugging. -/
+def Proof.check : Lean.NameMap IProp → Proof → Option IProp
   | _, .sorry A => some A
   | Γ, .hyp i => Γ.find? i
   | _, triv => some .true
@@ -783,109 +527,75 @@ def Proof.check : Lean.NameMap IProp -> Proof -> Option IProp
     guard (A = A') *> pure (B.imp C)
 -/
 
-/--
-Definition of `freshName` / `freshName` 的定义
+/-- Get a new name in the pattern `h0, h1, h2, ...` -/
+/-
+**Mathlib.Tactic.ITauto.freshName** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.ITau
+to`。
+形式化陈述：StateM ℕ Name
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition freshName
-  signature: : StateM Nat Name
-  body: fun n => (Name.mkSimple s!"h{n}", n + 1)
-
-中文:
-定义 freshName
-  签名: : StateM 自然数 Name
-  定义体: fun n => (Name.mkSimple s!"h{n}", n + 1)
+--- 原说明 ---
+Get a new name in the pattern `h0, h1, h2, ...`
 -/
 @[inline] def freshName : StateM Nat Name := fun n => (Name.mkSimple s!"h{n}", n + 1)
 
-/--
-Definition of `Context` / `Context` 的定义
+/-- The context during proof search is a map from propositions to proof values. -/
+/-
+**Mathlib.Tactic.ITauto.Context** 是 Mathlib 中的一个缩写定义，位于命名空间 `Mathlib.Tactic.ITau
+to`。
+形式化陈述：Context
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Context
-  body: TreeMap IProp Proof IProp.cmp
-
-中文:
-缩写 余ntext
-  定义体: TreeMap IProp Proof IProp.cmp
-
-Depends on / 依赖: IProp.cmp, TreeMap
+--- 原说明 ---
+The context during proof search is a map from propositions to proof values.
 -/
 abbrev Context := TreeMap IProp Proof IProp.cmp
 
-/--
-Definition of `Context.format` / `Context.format` 的定义
+/-- Debug printer for the context. -/
+/-
+**Mathlib.Tactic.ITauto.Context.format** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.ITauto.Context`。
+形式化陈述：Mathlib.Tactic.ITauto.Context → Format
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Context.format
-  signature: (Γ : Context)
-  body: Γ.foldl (init := "") fun f P p => P.format ++ " := " ++ p.format ++ ",\n" ++ f
-
-中文:
-定义 余ntext.format
-  签名: (Γ : 余ntext)
-  定义体: Γ.foldl (init := "") fun f P p => P.format ++ " := " ++ p.format ++ ",\n" ++ f
-
-Depends on / 依赖: P.format, format, p.format
+--- 原说明 ---
+Debug printer for the context.
 -/
 def Context.format (Γ : Context) : Std.Format :=
   Γ.foldl (init := "") fun f P p => P.format ++ " := " ++ p.format ++ ",\n" ++ f
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Std.ToFormat Context
-  body: ⟨Context.format⟩
-
-中文:
-实例 :
-  签名: Std.ToFormat 余ntext
-  定义体: ⟨Context.format⟩
-
-Depends on / 依赖: Context, Context.format, format
+/-
+**Mathlib.Tactic.ITauto.** 是 Mathlib 中的一个实例，位于命名空间 `Mathlib.Tactic.ITauto`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Std.ToFormat Context := ⟨Context.format⟩
 
-/--
-Definition of `Context.add` / `Context.add` 的定义
+/-- Insert a proposition and its proof into the context, as in `have : A := p`. This will eagerly
+apply all level 1 rules on the spot, which are rules that don't split the goal and are validity
+preserving: specifically, we drop `⊤` and `A → ⊤` hypotheses, close the goal if we find a `⊥`
+hypothesis, split all conjunctions, and also simplify `⊥ → A` (drop), `⊤ → A` (simplify to `A`),
+`A ∧ B → C` (curry to `A → B → C`) and `A ∨ B → C` (rewrite to `(A → C) ∧ (B → C)` and split). -/
+/-
+**Mathlib.Tactic.ITauto.Context.add** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Tactic
+.ITauto.Context`。
+形式化陈述：Mathlib.Tactic.ITauto.IProp →   Mathlib.Tactic.ITauto.Proof →     Mathlib.
+Tactic.ITauto.Context →       Except (Mathlib.Tactic.ITauto.IProp → Mathlib.Tact
+ic.ITauto.Proof) Mathlib.Tactic.ITauto.Context
+参数：Mathlib.Tactic.ITauto.IProp → Mathlib.Tactic.ITauto.Proof。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Context.add
-  signature: : IProp -> Proof -> Context -> Except (IProp -> Proof) Context
-  body: ak.sides A B
-    let Γ ← Γ.add A (p.andLeft ak)
-    Γ.add B (p.andRight ak)
-  | .imp .false _, _, Γ => pure Γ
-  | .imp .true A, p, Γ => Γ.add A (p.app .triv)
-  | .imp (.and' ak A B) C, p, Γ =>
-    let (A, B) := ak.sides A B
-    Γ.add (A.imp (B.imp C)) (p.curry ak)
-  | .imp (.or A B) C, p, Γ => do
-    let Γ ← Γ.add (A.imp C) p.orImpL
-    Γ.add (B.imp C) p.orImpR
-  | .imp _ .true, _, Γ => pure Γ
-  | A, p, Γ => pure (Γ.insert A p)
-
-中文:
-定义 余ntext.add
-  签名: : IProp -> 证明 -> 余ntext -> Except (IProp -> 证明) 余ntext
-  定义体: ak.sides A B
-    let Γ ← Γ.add A (p.andLeft ak)
-    Γ.add B (p.andRight ak)
-  | .imp .false _, _, Γ => pure Γ
-  | .imp .true A, p, Γ => Γ.add A (p.app .triv)
-  | .imp (.and' ak A B) C, p, Γ =>
-    let (A, B) := ak.sides A B
-    Γ.add (A.imp (B.imp C)) (p.curry ak)
-  | .imp (.or A B) C, p, Γ => do
-    let Γ ← Γ.add (A.imp C) p.orImpL
-    Γ.add (B.imp C) p.orImpR
-  | .imp _ .true, _, Γ => pure Γ
-  | A, p, Γ => pure (Γ.insert A p)
+--- 原说明 ---
+Insert a proposition and its proof into the context, as in `have : A := p`. This
+ will eagerly
+apply all level 1 rules on the spot, which are rules that don't split the goal a
+nd are validity
+preserving: specifically, we drop `⊤` and `A → ⊤` hypotheses, close the goal if 
+we find a `⊥`
+hypothesis, split all conjunctions, and also simplify `⊥ → A` (drop), `⊤ → A` (s
+implify to `A`),
+`A ∧ B → C` (curry to `A → B → C`) and `A ∨ B → C` (rewrite to `(A → C) ∧ (B → C
+)` and split).
 -/
-partial def Context.add : IProp -> Proof -> Context -> Except (IProp -> Proof) Context
+partial def Context.add : IProp → Proof → Context → Except (IProp → Proof) Context
   | .true, _, Γ => pure Γ
   | .false, p, _ => throw fun A => .exfalso A p
   | .and' ak A B, p, Γ => do
@@ -903,131 +613,124 @@ partial def Context.add : IProp -> Proof -> Context -> Except (IProp -> Proof) C
   | .imp _ .true, _, Γ => pure Γ
   | A, p, Γ => pure (Γ.insert A p)
 
-/--
-Definition of `Context.withAdd` / `Context.withAdd` 的定义
+/-- Add `A` to the context `Γ` with proof `p`. This version of `Context.add` takes a continuation
+and a target proposition `B`, so that in the case that `⊥` is found we can skip the continuation
+and just prove `B` outright. -/
+/-
+**Mathlib.Tactic.ITauto.Context.withAdd** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tacti
+c.ITauto.Context`。
+形式化陈述：Mathlib.Tactic.ITauto.Context →   Mathlib.Tactic.ITauto.IProp →     Mathli
+b.Tactic.ITauto.Proof →       Mathlib.Tactic.ITauto.IProp →         (Mathlib.Tac
+tic.ITauto.Context → Mathlib.Tactic.ITauto.IProp → StateM ℕ (Bool × Mathlib.Tact
+ic.ITauto.Proof)) →           StateM ℕ (Bool × Mathlib.Tactic.ITauto.Proof)
+参数：Mathlib.Tactic.ITauto.Context → Mathlib.Tactic.ITauto.IProp → StateM ℕ (Bool 
+× Mathlib.Tactic.ITauto.Proof)；Bool × Mathlib.Tactic.ITauto.Proof。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Context.withAdd
-  signature: (Γ : Context) (A : IProp) (p : Proof) (B : IProp)
-  body: match Γ.add A p with
-  | .ok Γ_A => f Γ_A B
-  | .error p => pure (true, p B)
-
-中文:
-定义 余ntext.withAdd
-  签名: (Γ : 余ntext) (A : IProp) (p : 证明) (B : IProp)
-  定义体: match Γ.add A p with
-  | .ok Γ_A => f Γ_A B
-  | .error p => pure (true, p B)
+--- 原说明 ---
+Add `A` to the context `Γ` with proof `p`. This version of `Context.add` takes a
+ continuation
+and a target proposition `B`, so that in the case that `⊥` is found we can skip 
+the continuation
+and just prove `B` outright.
 -/
 @[inline] def Context.withAdd (Γ : Context) (A : IProp) (p : Proof) (B : IProp)
-    (f : Context -> IProp -> StateM Nat (Bool × Proof)) : StateM Nat (Bool × Proof) :=
+    (f : Context → IProp → StateM Nat (Bool × Proof)) : StateM Nat (Bool × Proof) :=
   match Γ.add A p with
   | .ok Γ_A => f Γ_A B
   | .error p => pure (true, p B)
 
-/--
-Definition of `mapProof` / `mapProof` 的定义
+/-- Map a function over the proof (regardless of whether the proof is successful or not). -/
+/-
+**Mathlib.Tactic.ITauto.mapProof** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.ITaut
+o`。
+形式化陈述：(Mathlib.Tactic.ITauto.Proof → Mathlib.Tactic.ITauto.Proof) →   Bool × Mat
+hlib.Tactic.ITauto.Proof → Bool × Mathlib.Tactic.ITauto.Proof
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapProof
-  signature: (f : Proof -> Proof)
-
-中文:
-定义 mapProof
-  签名: (f : 证明 -> 证明)
+--- 原说明 ---
+Map a function over the proof (regardless of whether the proof is successful or 
+not).
 -/
-def mapProof (f : Proof -> Proof) : Bool × Proof -> Bool × Proof
+def mapProof (f : Proof → Proof) : Bool × Proof → Bool × Proof
   | (b, p) => (b, f p)
 
-/--
-Definition of `isOk` / `isOk` 的定义
+/-- Convert a value-with-success to an optional value. -/
+/-
+**Mathlib.Tactic.ITauto.isOk** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.ITauto`。
+形式化陈述：(Bool × Mathlib.Tactic.ITauto.Proof) × ℕ → Option (Mathlib.Tactic.ITauto.P
+roof × ℕ)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isOk
-  signature: : (Bool × Proof) × Nat -> Option (Proof × Nat)
-
-中文:
-定义 isOk
-  签名: : (布尔值 × 证明) × 自然数 -> 选项类型 (证明 × 自然数)
-
-Depends on / 依赖: toOrderHomClass
+--- 原说明 ---
+Convert a value-with-success to an optional value.
 -/
-def isOk : (Bool × Proof) × Nat -> Option (Proof × Nat)
+def isOk : (Bool × Proof) × Nat → Option (Proof × Nat)
   | ((false, _), _) => none
   | ((true, p), n) => some (p, n)
 
-/--
-Definition of `whenOk` / `whenOk` 的定义
+/-- Skip the continuation and return a failed proof if the Boolean is false. -/
+/-
+**Mathlib.Tactic.ITauto.whenOk** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.ITauto`
+。
+形式化陈述：whenOk : Bool -> IProp -> StateM Nat (Bool × Proof) -> StateM Nat (Bool × 
+Proof) | false, _, _ => pure (false, .sorry) | true, _, f => f  mutual  /-- The 
+search phase, which deals with the level 3 rules, which are rules that are not v
+alidity preserving and so require proof search. One obvious one is the or-introd
+uction rule: we prove `A ∨ B` by proving `A` or `B`, and we might have to try on
+e and backtrack.  There are two rules dealing with implication in this category:
+ `p, p → C ⊢ B` where `p` 
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition whenOk
-  signature: : Bool -> IProp -> StateM Nat (Bool × Proof) -> StateM Nat (Bool × Proof)
-
-中文:
-定义 whenOk
-  签名: : 布尔值 -> IProp -> StateM 自然数 (布尔值 × 证明) -> StateM 自然数 (布尔值 × 证明)
+--- 原说明 ---
+Skip the continuation and return a failed proof if the Boolean is false. -/
 -/
-def whenOk : Bool -> IProp -> StateM Nat (Bool × Proof) -> StateM Nat (Bool × Proof)
+def whenOk : Bool → IProp → StateM Nat (Bool × Proof) → StateM Nat (Bool × Proof)
   | false, _, _ => pure (false, .sorry)
   | true, _, f => f
 
 mutual
 
-/--
-Definition of `search` / `search` 的定义
+/-- The search phase, which deals with the level 3 rules, which are rules that are not validity
+preserving and so require proof search. One obvious one is the or-introduction rule: we prove
+`A ∨ B` by proving `A` or `B`, and we might have to try one and backtrack.
 
-English:
-definition search
-  signature: (Γ : Context) (B : IProp)
-  body: do
-  if let some p := Γ[B]? then return (true, p)
-  fun n =>
-  let search₁ := Γ.foldl (init := none) fun r A p => do
-    if let some r := r then return r
-    let .imp A' C := A | none
-    if let some q := Γ[A']? then
-isOk Context.withAdd (Γ.erase A) C (p.app q) B prove n
-    else
-      let .imp A₁ A₂ := A' | none
-      let Γ : Context := Γ.erase A
-      let (a, n) := freshName n
-let (p₁, n) ← isOk Γ.withAdd A₁ (.hyp a) A₂ (fun Γ_A₁ A₂ =>
-        Γ_A₁.withAdd (IProp.imp A₂ C) (.impImpSimp a p) A₂ prove) n
-isOk Γ.withAdd C (p.app (.intro a p₁)) B prove n
-  if let some (r, n) := search₁ then
-    ((true, r), n)
-  else if let .or B₁ B₂ := B then
-    match (mapProof .orInL <$> prove Γ B₁) n with
-    | ((false, _), _) => (mapProof .orInR <$> prove Γ B₂) n
-    | r => r
-  else ((false, .sorry), n)
+There are two rules dealing with implication in this category: `p, p → C ⊢ B` where `p` is an
+atom (which is safe if we can find it but often requires the right search to expose the `p`
+assumption), and `(A₁ → A₂) → C ⊢ B`. We decompose the double implication into two subgoals: one to
+prove `A₁ → A₂`, which can be written `A₂ → C, A₁ ⊢ A₂` (where we used `A₁` to simplify
+`(A₁ → A₂) → C`), and one to use the consequent, `C ⊢ B`. The search here is that there are
+potentially many implications to split like this, and we have to try all of them if we want to be
+complete. -/
+/-
+**Mathlib.Tactic.ITauto.search** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Tactic.ITau
+to`。
+形式化陈述：Mathlib.Tactic.ITauto.Context → Mathlib.Tactic.ITauto.IProp → StateM ℕ (Bo
+ol × Mathlib.Tactic.ITauto.Proof)
+参数：Bool × Mathlib.Tactic.ITauto.Proof。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 search
-  签名: (Γ : 余ntext) (B : IProp)
-  定义体: do
-  if let some p := Γ[B]? then return (true, p)
-  fun n =>
-  let search₁ := Γ.foldl (init := none) fun r A p => do
-    if let some r := r then return r
-    let .imp A' C := A | none
-    if let some q := Γ[A']? then
-isOk Context.withAdd (Γ.erase A) C (p.app q) B prove n
-    else
-      let .imp A₁ A₂ := A' | none
-      let Γ : Context := Γ.erase A
-      let (a, n) := freshName n
-let (p₁, n) ← isOk Γ.withAdd A₁ (.hyp a) A₂ (fun Γ_A₁ A₂ =>
-        Γ_A₁.withAdd (IProp.imp A₂ C) (.impImpSimp a p) A₂ prove) n
-isOk Γ.withAdd C (p.app (.intro a p₁)) B prove n
-  if let some (r, n) := search₁ then
-    ((true, r), n)
-  else if let .or B₁ B₂ := B then
-    match (mapProof .orInL <$> prove Γ B₁) n with
-    | ((false, _), _) => (mapProof .orInR <$> prove Γ B₂) n
-    | r => r
-  else ((false, .sorry), n)
+--- 原说明 ---
+The search phase, which deals with the level 3 rules, which are rules that are n
+ot validity
+preserving and so require proof search. One obvious one is the or-introduction r
+ule: we prove
+`A ∨ B` by proving `A` or `B`, and we might have to try one and backtrack.
+
+There are two rules dealing with implication in this category: `p, p → C ⊢ B` wh
+ere `p` is an
+atom (which is safe if we can find it but often requires the right search to exp
+ose the `p`
+assumption), and `(A₁ → A₂) → C ⊢ B`. We decompose the double implication into t
+wo subgoals: one to
+prove `A₁ → A₂`, which can be written `A₂ → C, A₁ ⊢ A₂` (where we used `A₁` to s
+implify
+`(A₁ → A₂) → C`), and one to use the consequent, `C ⊢ B`. The search here is tha
+t there are
+potentially many implications to split like this, and we have to try all of them
+ if we want to be
+complete.
 -/
 partial def search (Γ : Context) (B : IProp) : StateM Nat (Bool × Proof) := do
   if let some p := Γ[B]? then return (true, p)
@@ -1036,14 +739,14 @@ partial def search (Γ : Context) (B : IProp) : StateM Nat (Bool × Proof) := do
     if let some r := r then return r
     let .imp A' C := A | none
     if let some q := Γ[A']? then
-isOk Context.withAdd (Γ.erase A) C (p.app q) B prove n
+      isOk <| Context.withAdd (Γ.erase A) C (p.app q) B prove n
     else
       let .imp A₁ A₂ := A' | none
       let Γ : Context := Γ.erase A
       let (a, n) := freshName n
-let (p₁, n) ← isOk Γ.withAdd A₁ (.hyp a) A₂ (fun Γ_A₁ A₂ =>
+      let (p₁, n) ← isOk <| Γ.withAdd A₁ (.hyp a) A₂ (fun Γ_A₁ A₂ =>
         Γ_A₁.withAdd (IProp.imp A₂ C) (.impImpSimp a p) A₂ prove) n
-isOk Γ.withAdd C (p.app (.intro a p₁)) B prove n
+      isOk <| Γ.withAdd C (p.app (.intro a p₁)) B prove n
   if let some (r, n) := search₁ then
     ((true, r), n)
   else if let .or B₁ B₂ := B then
@@ -1052,69 +755,61 @@ isOk Γ.withAdd C (p.app (.intro a p₁)) B prove n
     | r => r
   else ((false, .sorry), n)
 
-/--
-Definition of `prove` / `prove` 的定义
+/-- The main prover. This receives a context of proven or assumed lemmas and a target proposition,
+and returns a proof or `none` (with state for the fresh variable generator).
+The intuitionistic logic rules are separated into three groups:
 
-English:
-definition prove
-  signature: (Γ : Context) (B : IProp)
-  body: match B with
-  | .true => pure (true, .triv)
-  | .imp A B => do
-    let a ← freshName
-mapProof (.intro a) < > Γ.withAdd A (.hyp a) B prove
-  | .and' ak A B => do
-    let (A, B) := ak.sides A B
-    let (ok, p) ← prove Γ A
-mapProof (p.andIntro ak) < > whenOk ok B (prove Γ B)
-  | B =>
-    Γ.foldl
-      (init := fun found Γ => bif found then prove Γ B else search Γ B)
-      (f := fun IH A p found Γ => do
-        if let .or A₁ A₂ := A then
-          let Γ : Context := Γ.erase A
-          let a ← freshName
-          let (ok, p₁) ← Γ.withAdd A₁ (.hyp a) B fun Γ _ => IH true Γ
-mapProof (.orElim p a p₁) < >
-            whenOk ok B (Γ.withAdd A₂ (.hyp a) B fun Γ _ => IH true Γ)
-        else IH found Γ)
-      (found := false) (Γ := Γ)
+* level 1: No splitting, validity preserving: apply whenever you can.
+  Left rules in `Context.add`, right rules in `prove`
+* level 2: Splitting rules, validity preserving: apply after level 1 rules. Done in `prove`
+* level 3: Splitting rules, not validity preserving: apply only if nothing else applies.
+  Done in `search`
 
-中文:
-定义 prove
-  签名: (Γ : 余ntext) (B : IProp)
-  定义体: match B with
-  | .true => pure (true, .triv)
-  | .imp A B => do
-    let a ← freshName
-mapProof (.intro a) < > Γ.withAdd A (.hyp a) B prove
-  | .and' ak A B => do
-    let (A, B) := ak.sides A B
-    let (ok, p) ← prove Γ A
-mapProof (p.andIntro ak) < > whenOk ok B (prove Γ B)
-  | B =>
-    Γ.foldl
-      (init := fun found Γ => bif found then prove Γ B else search Γ B)
-      (f := fun IH A p found Γ => do
-        if let .or A₁ A₂ := A then
-          let Γ : Context := Γ.erase A
-          let a ← freshName
-          let (ok, p₁) ← Γ.withAdd A₁ (.hyp a) B fun Γ _ => IH true Γ
-mapProof (.orElim p a p₁) < >
-            whenOk ok B (Γ.withAdd A₂ (.hyp a) B fun Γ _ => IH true Γ)
-        else IH found Γ)
-      (found := false) (Γ := Γ)
+The level 1 rules on the right of the turnstile are `Γ ⊢ ⊤` and `Γ ⊢ A → B`, these are easy to
+handle. The rule `Γ ⊢ A ∧ B` is a level 2 rule, also handled here. If none of these apply, we try
+the level 2 rule `A ∨ B ⊢ C` by searching the context and splitting all ors we find. Finally, if
+we don't make any more progress, we go to the search phase.
+-/
+/-
+**Mathlib.Tactic.ITauto.prove** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Tactic.ITaut
+o`。
+形式化陈述：Mathlib.Tactic.ITauto.Context → Mathlib.Tactic.ITauto.IProp → StateM ℕ (Bo
+ol × Mathlib.Tactic.ITauto.Proof)
+参数：Bool × Mathlib.Tactic.ITauto.Proof。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The main prover. This receives a context of proven or assumed lemmas and a targe
+t proposition,
+and returns a proof or `none` (with state for the fresh variable generator).
+The intuitionistic logic rules are separated into three groups:
+
+* level 1: No splitting, validity preserving: apply whenever you can.
+  Left rules in `Context.add`, right rules in `prove`
+* level 2: Splitting rules, validity preserving: apply after level 1 rules. Done
+ in `prove`
+* level 3: Splitting rules, not validity preserving: apply only if nothing else 
+applies.
+  Done in `search`
+
+The level 1 rules on the right of the turnstile are `Γ ⊢ ⊤` and `Γ ⊢ A → B`, the
+se are easy to
+handle. The rule `Γ ⊢ A ∧ B` is a level 2 rule, also handled here. If none of th
+ese apply, we try
+the level 2 rule `A ∨ B ⊢ C` by searching the context and splitting all ors we f
+ind. Finally, if
+we don't make any more progress, we go to the search phase.
 -/
 partial def prove (Γ : Context) (B : IProp) : StateM Nat (Bool × Proof) :=
   match B with
   | .true => pure (true, .triv)
   | .imp A B => do
     let a ← freshName
-mapProof (.intro a) < > Γ.withAdd A (.hyp a) B prove
+    mapProof (.intro a) <$> Γ.withAdd A (.hyp a) B prove
   | .and' ak A B => do
     let (A, B) := ak.sides A B
     let (ok, p) ← prove Γ A
-mapProof (p.andIntro ak) < > whenOk ok B (prove Γ B)
+    mapProof (p.andIntro ak) <$> whenOk ok B (prove Γ B)
   | B =>
     Γ.foldl
       (init := fun found Γ => bif found then prove Γ B else search Γ B)
@@ -1123,7 +818,7 @@ mapProof (p.andIntro ak) < > whenOk ok B (prove Γ B)
           let Γ : Context := Γ.erase A
           let a ← freshName
           let (ok, p₁) ← Γ.withAdd A₁ (.hyp a) B fun Γ _ => IH true Γ
-mapProof (.orElim p a p₁) < >
+          mapProof (.orElim p a p₁) <$>
             whenOk ok B (Γ.withAdd A₂ (.hyp a) B fun Γ _ => IH true Γ)
         else IH found Γ)
       (found := false) (Γ := Γ)
@@ -1132,42 +827,18 @@ end
 
 open Lean Qq Meta
 
-/--
-Definition of `reify` / `reify` 的定义
+/-- Reify an `Expr` into a `IProp`, allocating anything non-propositional as an atom in the
+`AtomM` state. -/
+/-
+**Mathlib.Tactic.ITauto.reify** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Tactic.ITaut
+o`。
+形式化陈述：Q(Prop) → Mathlib.Tactic.AtomM Mathlib.Tactic.ITauto.IProp
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reify
-  signature: (e : Q(Prop))
-  body: match e with
-  | ~q(True) => return .true
-  | ~q(False) => return .false
-  | ~q(¬ $a) => return .not (← reify a)
-  | ~q($a ∧ $b) => return .and (← reify a) (← reify b)
-  | ~q($a ∨ $b) => return .or (← reify a) (← reify b)
-  | ~q($a ↔ $b) => return .iff (← reify a) (← reify b)
-  | ~q(Xor $a $b) => return .xor (← reify a) (← reify b)
-  | ~q(@Eq Prop $a $b) => return .eq (← reify a) (← reify b)
-  | ~q(@Ne Prop $a $b) => return .not (.eq (← reify a) (← reify b))
-  | e =>
-    if e.isArrow then return .imp (← reify e.bindingDomain!) (← reify e.bindingBody!)
-    else return .var (← AtomM.addAtom e).1
-
-中文:
-定义 reify
-  签名: (e : Q(命题))
-  定义体: match e with
-  | ~q(True) => return .true
-  | ~q(False) => return .false
-  | ~q(¬ $a) => return .not (← reify a)
-  | ~q($a ∧ $b) => return .and (← reify a) (← reify b)
-  | ~q($a ∨ $b) => return .or (← reify a) (← reify b)
-  | ~q($a ↔ $b) => return .iff (← reify a) (← reify b)
-  | ~q(Xor $a $b) => return .xor (← reify a) (← reify b)
-  | ~q(@Eq Prop $a $b) => return .eq (← reify a) (← reify b)
-  | ~q(@Ne Prop $a $b) => return .not (.eq (← reify a) (← reify b))
-  | e =>
-    if e.isArrow then return .imp (← reify e.bindingDomain!) (← reify e.bindingBody!)
-    else return .var (← AtomM.addAtom e).1
+--- 原说明 ---
+Reify an `Expr` into a `IProp`, allocating anything non-propositional as an atom
+ in the
+`AtomM` state.
 -/
 partial def reify (e : Q(Prop)) : AtomM IProp :=
   match e with
@@ -1184,292 +855,15 @@ partial def reify (e : Q(Prop)) : AtomM IProp :=
     if e.isArrow then return .imp (← reify e.bindingDomain!) (← reify e.bindingBody!)
     else return .var (← AtomM.addAtom e).1
 
-/--
-Definition of `applyProof` / `applyProof` 的定义
+/-- Once we have a proof object, we have to apply it to the goal. -/
+/-
+**Mathlib.Tactic.ITauto.applyProof** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Tactic.
+ITauto`。
+形式化陈述：MVarId → NameMap Expr → Mathlib.Tactic.ITauto.Proof → MetaM Unit
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition applyProof
-  signature: (g : MVarId) (Γ : NameMap Expr) (p : Proof)
-  body: match p with
-  | .sorry => throwError "itauto failed\n{g}"
-  | .hyp n => do g.assignIfDefEq (← liftOption (Γ.find? n))
-  | .triv => g.assignIfDefEq q(trivial)
-  | .exfalso' p => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let t ← mkFreshExprMVarQ q(False)
-    g.assignIfDefEq q(@False.elim $A $t)
-    applyProof t.mvarId! Γ p
-  | .intro x p => do
-    let (e, g) ← g.intro x; g.withContext do
-      applyProof g (Γ.insert x (.fvar e)) p
-  | .andLeft .and p => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t ← mkFreshExprMVarQ q($A ∧ $B)
-    g.assignIfDefEq q(And.left $t)
-    applyProof t.mvarId! Γ p
-  | .andLeft .iff p => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t ← mkFreshExprMVarQ q($A ↔ $B)
-    g.assignIfDefEq q(Iff.mp $t)
-    applyProof t.mvarId! Γ p
-  | .andLeft .eq p => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t ← mkFreshExprMVarQ q($A = $B)
-    g.assignIfDefEq q(cast $t)
-    applyProof t.mvarId! Γ p
-  | .andRight .and p => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t ← mkFreshExprMVarQ q($A ∧ $B)
-    g.assignIfDefEq q(And.right $t)
-    applyProof t.mvarId! Γ p
-  | .andRight .iff p => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t ← mkFreshExprMVarQ q($A ↔ $B)
-    g.assignIfDefEq q(Iff.mpr $t)
-    applyProof t.mvarId! Γ p
-  | .andRight .eq p => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t ← mkFreshExprMVarQ q($A = $B)
-    g.assignIfDefEq q(cast (Eq.symm $t))
-    applyProof t.mvarId! Γ p
-  | .andIntro .and p q => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t₁ ← mkFreshExprMVarQ q($A)
-    let t₂ ← mkFreshExprMVarQ q($B)
-    g.assignIfDefEq q(And.intro $t₁ $t₂)
-    applyProof t₁.mvarId! Γ p
-    applyProof t₂.mvarId! Γ q
-  | .andIntro .iff p q => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t₁ ← mkFreshExprMVarQ q($A -> $B)
-    let t₂ ← mkFreshExprMVarQ q($B -> $A)
-    g.assignIfDefEq q(Iff.intro $t₁ $t₂)
-    applyProof t₁.mvarId! Γ p
-    applyProof t₂.mvarId! Γ q
-  | .andIntro .eq p q => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t₁ ← mkFreshExprMVarQ q($A -> $B)
-    let t₂ ← mkFreshExprMVarQ q($B -> $A)
-    g.assignIfDefEq q(propext (Iff.intro $t₁ $t₂))
-    applyProof t₁.mvarId! Γ p
-    applyProof t₂.mvarId! Γ q
-  | .app' p q => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t₁ ← mkFreshExprMVarQ q($A -> $B)
-    let t₂ ← mkFreshExprMVarQ q($A)
-    g.assignIfDefEq q($t₁ $t₂)
-    applyProof t₁.mvarId! Γ p
-    applyProof t₂.mvarId! Γ q
-  | .orInL p => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t ← mkFreshExprMVarQ q($A)
-    g.assignIfDefEq q(@Or.inl $A $B $t)
-    applyProof t.mvarId! Γ p
-  | .orInR p => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t ← mkFreshExprMVarQ q($B)
-    g.assignIfDefEq q(@Or.inr $A $B $t)
-    applyProof t.mvarId! Γ p
-  | .orElim' p x p₁ p₂ => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let C ← mkFreshExprMVarQ q(Prop)
-    let t₁ ← mkFreshExprMVarQ q($A ∨ $B)
-    let t₂ ← mkFreshExprMVarQ q($A -> $C)
-    let t₃ ← mkFreshExprMVarQ q($B -> $C)
-    g.assignIfDefEq q(Or.elim $t₁ $t₂ $t₃)
-    applyProof t₁.mvarId! Γ p
-    let (e, t₂) ← t₂.mvarId!.intro x; t₂.withContext do
-      applyProof t₂ (Γ.insert x (.fvar e)) p₁
-    let (e, t₃) ← t₃.mvarId!.intro x; t₃.withContext do
-      applyProof t₃ (Γ.insert x (.fvar e)) p₂
-  | .em false n => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let e : Q(Decidable $A) ← liftOption (Γ.find? n)
-    let .true ← Meta.isDefEq (← Meta.inferType e) q(Decidable $A) | failure
-    g.assignIfDefEq q(@Decidable.em $A $e)
-  | .em true n => do
-    let A : Q(Prop) ← liftOption (Γ.find? n)
-    g.assignIfDefEq q(@Classical.em $A)
-  | .decidableElim false n x p₁ p₂ => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let e : Q(Decidable $A) ← liftOption (Γ.find? n)
-    let .true ← Meta.isDefEq (← Meta.inferType e) q(Decidable $A) | failure
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t₁ ← mkFreshExprMVarQ q($A -> $B)
-    let t₂ ← mkFreshExprMVarQ q(¬$A -> $B)
-    g.assignIfDefEq q(@dite $B $A $e $t₁ $t₂)
-    let (e, t₁) ← t₁.mvarId!.intro x; t₁.withContext do
-      applyProof t₁ (Γ.insert x (.fvar e)) p₁
-    let (e, t₂) ← t₂.mvarId!.intro x; t₂.withContext do
-      applyProof t₂ (Γ.insert x (.fvar e)) p₂
-  | .decidableElim true n x p₁ p₂ => do
-    let A : Q(Prop) ← liftOption (Γ.find? n)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t₁ ← mkFreshExprMVarQ q($A -> $B)
-    let t₂ ← mkFreshExprMVarQ q(¬$A -> $B)
-    g.assignIfDefEq q(@Classical.byCases $A $B $t₁ $t₂)
-    let (e, t₁) ← t₁.mvarId!.intro x; t₁.withContext do
-      applyProof t₁ (Γ.insert x (.fvar e)) p₁
-    let (e, t₂) ← t₂.mvarId!.intro x; t₂.withContext do
-      applyProof t₂ (Γ.insert x (.fvar e)) p₂
-  | .curry .. | .curry₂ .. | .orImpL .. | .orImpR .. | .impImpSimp .. => do
-    let (e, g) ← g.intro1; g.withContext do
-      applyProof g (Γ.insert e.name (.fvar e)) (p.app (.hyp e.name))
-
-中文:
-定义 applyProof
-  签名: (g : MVarId) (Γ : NameMap Expr) (p : 证明)
-  定义体: match p with
-  | .sorry => throwError "itauto failed\n{g}"
-  | .hyp n => do g.assignIfDefEq (← liftOption (Γ.find? n))
-  | .triv => g.assignIfDefEq q(trivial)
-  | .exfalso' p => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let t ← mkFreshExprMVarQ q(False)
-    g.assignIfDefEq q(@False.elim $A $t)
-    applyProof t.mvarId! Γ p
-  | .intro x p => do
-    let (e, g) ← g.intro x; g.withContext do
-      applyProof g (Γ.insert x (.fvar e)) p
-  | .andLeft .and p => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t ← mkFreshExprMVarQ q($A ∧ $B)
-    g.assignIfDefEq q(And.left $t)
-    applyProof t.mvarId! Γ p
-  | .andLeft .iff p => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t ← mkFreshExprMVarQ q($A ↔ $B)
-    g.assignIfDefEq q(Iff.mp $t)
-    applyProof t.mvarId! Γ p
-  | .andLeft .eq p => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t ← mkFreshExprMVarQ q($A = $B)
-    g.assignIfDefEq q(cast $t)
-    applyProof t.mvarId! Γ p
-  | .andRight .and p => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t ← mkFreshExprMVarQ q($A ∧ $B)
-    g.assignIfDefEq q(And.right $t)
-    applyProof t.mvarId! Γ p
-  | .andRight .iff p => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t ← mkFreshExprMVarQ q($A ↔ $B)
-    g.assignIfDefEq q(Iff.mpr $t)
-    applyProof t.mvarId! Γ p
-  | .andRight .eq p => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t ← mkFreshExprMVarQ q($A = $B)
-    g.assignIfDefEq q(cast (Eq.symm $t))
-    applyProof t.mvarId! Γ p
-  | .andIntro .and p q => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t₁ ← mkFreshExprMVarQ q($A)
-    let t₂ ← mkFreshExprMVarQ q($B)
-    g.assignIfDefEq q(And.intro $t₁ $t₂)
-    applyProof t₁.mvarId! Γ p
-    applyProof t₂.mvarId! Γ q
-  | .andIntro .iff p q => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t₁ ← mkFreshExprMVarQ q($A -> $B)
-    let t₂ ← mkFreshExprMVarQ q($B -> $A)
-    g.assignIfDefEq q(Iff.intro $t₁ $t₂)
-    applyProof t₁.mvarId! Γ p
-    applyProof t₂.mvarId! Γ q
-  | .andIntro .eq p q => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t₁ ← mkFreshExprMVarQ q($A -> $B)
-    let t₂ ← mkFreshExprMVarQ q($B -> $A)
-    g.assignIfDefEq q(propext (Iff.intro $t₁ $t₂))
-    applyProof t₁.mvarId! Γ p
-    applyProof t₂.mvarId! Γ q
-  | .app' p q => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t₁ ← mkFreshExprMVarQ q($A -> $B)
-    let t₂ ← mkFreshExprMVarQ q($A)
-    g.assignIfDefEq q($t₁ $t₂)
-    applyProof t₁.mvarId! Γ p
-    applyProof t₂.mvarId! Γ q
-  | .orInL p => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t ← mkFreshExprMVarQ q($A)
-    g.assignIfDefEq q(@Or.inl $A $B $t)
-    applyProof t.mvarId! Γ p
-  | .orInR p => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t ← mkFreshExprMVarQ q($B)
-    g.assignIfDefEq q(@Or.inr $A $B $t)
-    applyProof t.mvarId! Γ p
-  | .orElim' p x p₁ p₂ => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let C ← mkFreshExprMVarQ q(Prop)
-    let t₁ ← mkFreshExprMVarQ q($A ∨ $B)
-    let t₂ ← mkFreshExprMVarQ q($A -> $C)
-    let t₃ ← mkFreshExprMVarQ q($B -> $C)
-    g.assignIfDefEq q(Or.elim $t₁ $t₂ $t₃)
-    applyProof t₁.mvarId! Γ p
-    let (e, t₂) ← t₂.mvarId!.intro x; t₂.withContext do
-      applyProof t₂ (Γ.insert x (.fvar e)) p₁
-    let (e, t₃) ← t₃.mvarId!.intro x; t₃.withContext do
-      applyProof t₃ (Γ.insert x (.fvar e)) p₂
-  | .em false n => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let e : Q(Decidable $A) ← liftOption (Γ.find? n)
-    let .true ← Meta.isDefEq (← Meta.inferType e) q(Decidable $A) | failure
-    g.assignIfDefEq q(@Decidable.em $A $e)
-  | .em true n => do
-    let A : Q(Prop) ← liftOption (Γ.find? n)
-    g.assignIfDefEq q(@Classical.em $A)
-  | .decidableElim false n x p₁ p₂ => do
-    let A ← mkFreshExprMVarQ q(Prop)
-    let e : Q(Decidable $A) ← liftOption (Γ.find? n)
-    let .true ← Meta.isDefEq (← Meta.inferType e) q(Decidable $A) | failure
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t₁ ← mkFreshExprMVarQ q($A -> $B)
-    let t₂ ← mkFreshExprMVarQ q(¬$A -> $B)
-    g.assignIfDefEq q(@dite $B $A $e $t₁ $t₂)
-    let (e, t₁) ← t₁.mvarId!.intro x; t₁.withContext do
-      applyProof t₁ (Γ.insert x (.fvar e)) p₁
-    let (e, t₂) ← t₂.mvarId!.intro x; t₂.withContext do
-      applyProof t₂ (Γ.insert x (.fvar e)) p₂
-  | .decidableElim true n x p₁ p₂ => do
-    let A : Q(Prop) ← liftOption (Γ.find? n)
-    let B ← mkFreshExprMVarQ q(Prop)
-    let t₁ ← mkFreshExprMVarQ q($A -> $B)
-    let t₂ ← mkFreshExprMVarQ q(¬$A -> $B)
-    g.assignIfDefEq q(@Classical.byCases $A $B $t₁ $t₂)
-    let (e, t₁) ← t₁.mvarId!.intro x; t₁.withContext do
-      applyProof t₁ (Γ.insert x (.fvar e)) p₁
-    let (e, t₂) ← t₂.mvarId!.intro x; t₂.withContext do
-      applyProof t₂ (Γ.insert x (.fvar e)) p₂
-  | .curry .. | .curry₂ .. | .orImpL .. | .orImpR .. | .impImpSimp .. => do
-    let (e, g) ← g.intro1; g.withContext do
-      applyProof g (Γ.insert e.name (.fvar e)) (p.app (.hyp e.name))
+--- 原说明 ---
+Once we have a proof object, we have to apply it to the goal.
 -/
 partial def applyProof (g : MVarId) (Γ : NameMap Expr) (p : Proof) : MetaM Unit :=
   match p with
@@ -1531,23 +925,23 @@ partial def applyProof (g : MVarId) (Γ : NameMap Expr) (p : Proof) : MetaM Unit
   | .andIntro .iff p q => do
     let A ← mkFreshExprMVarQ q(Prop)
     let B ← mkFreshExprMVarQ q(Prop)
-    let t₁ ← mkFreshExprMVarQ q($A -> $B)
-    let t₂ ← mkFreshExprMVarQ q($B -> $A)
+    let t₁ ← mkFreshExprMVarQ q($A → $B)
+    let t₂ ← mkFreshExprMVarQ q($B → $A)
     g.assignIfDefEq q(Iff.intro $t₁ $t₂)
     applyProof t₁.mvarId! Γ p
     applyProof t₂.mvarId! Γ q
   | .andIntro .eq p q => do
     let A ← mkFreshExprMVarQ q(Prop)
     let B ← mkFreshExprMVarQ q(Prop)
-    let t₁ ← mkFreshExprMVarQ q($A -> $B)
-    let t₂ ← mkFreshExprMVarQ q($B -> $A)
+    let t₁ ← mkFreshExprMVarQ q($A → $B)
+    let t₂ ← mkFreshExprMVarQ q($B → $A)
     g.assignIfDefEq q(propext (Iff.intro $t₁ $t₂))
     applyProof t₁.mvarId! Γ p
     applyProof t₂.mvarId! Γ q
   | .app' p q => do
     let A ← mkFreshExprMVarQ q(Prop)
     let B ← mkFreshExprMVarQ q(Prop)
-    let t₁ ← mkFreshExprMVarQ q($A -> $B)
+    let t₁ ← mkFreshExprMVarQ q($A → $B)
     let t₂ ← mkFreshExprMVarQ q($A)
     g.assignIfDefEq q($t₁ $t₂)
     applyProof t₁.mvarId! Γ p
@@ -1569,8 +963,8 @@ partial def applyProof (g : MVarId) (Γ : NameMap Expr) (p : Proof) : MetaM Unit
     let B ← mkFreshExprMVarQ q(Prop)
     let C ← mkFreshExprMVarQ q(Prop)
     let t₁ ← mkFreshExprMVarQ q($A ∨ $B)
-    let t₂ ← mkFreshExprMVarQ q($A -> $C)
-    let t₃ ← mkFreshExprMVarQ q($B -> $C)
+    let t₂ ← mkFreshExprMVarQ q($A → $C)
+    let t₃ ← mkFreshExprMVarQ q($B → $C)
     g.assignIfDefEq q(Or.elim $t₁ $t₂ $t₃)
     applyProof t₁.mvarId! Γ p
     let (e, t₂) ← t₂.mvarId!.intro x; t₂.withContext do
@@ -1590,8 +984,8 @@ partial def applyProof (g : MVarId) (Γ : NameMap Expr) (p : Proof) : MetaM Unit
     let e : Q(Decidable $A) ← liftOption (Γ.find? n)
     let .true ← Meta.isDefEq (← Meta.inferType e) q(Decidable $A) | failure
     let B ← mkFreshExprMVarQ q(Prop)
-    let t₁ ← mkFreshExprMVarQ q($A -> $B)
-    let t₂ ← mkFreshExprMVarQ q(¬$A -> $B)
+    let t₁ ← mkFreshExprMVarQ q($A → $B)
+    let t₂ ← mkFreshExprMVarQ q(¬$A → $B)
     g.assignIfDefEq q(@dite $B $A $e $t₁ $t₂)
     let (e, t₁) ← t₁.mvarId!.intro x; t₁.withContext do
       applyProof t₁ (Γ.insert x (.fvar e)) p₁
@@ -1600,8 +994,8 @@ partial def applyProof (g : MVarId) (Γ : NameMap Expr) (p : Proof) : MetaM Unit
   | .decidableElim true n x p₁ p₂ => do
     let A : Q(Prop) ← liftOption (Γ.find? n)
     let B ← mkFreshExprMVarQ q(Prop)
-    let t₁ ← mkFreshExprMVarQ q($A -> $B)
-    let t₂ ← mkFreshExprMVarQ q(¬$A -> $B)
+    let t₁ ← mkFreshExprMVarQ q($A → $B)
+    let t₂ ← mkFreshExprMVarQ q(¬$A → $B)
     g.assignIfDefEq q(@Classical.byCases $A $B $t₁ $t₂)
     let (e, t₁) ← t₁.mvarId!.intro x; t₁.withContext do
       applyProof t₁ (Γ.insert x (.fvar e)) p₁
@@ -1611,120 +1005,32 @@ partial def applyProof (g : MVarId) (Γ : NameMap Expr) (p : Proof) : MetaM Unit
     let (e, g) ← g.intro1; g.withContext do
       applyProof g (Γ.insert e.name (.fvar e)) (p.app (.hyp e.name))
 
-/--
-Definition of `itautoCore` / `itautoCore` 的定义
+/-- A decision procedure for intuitionistic propositional logic.
 
-English:
-definition itautoCore
-  signature: (g : MVarId)
-  body: do
-  AtomM.run (← getTransparency) do
-    let mut hs := mkNameMap Expr
-    let t ← g.getType
-    let (g, t) ← if ← isProp t then pure (g, ← reify t) else pure (← g.exfalso, .false)
-    let mut Γ : Except (IProp -> Proof) ITauto.Context := .ok TreeMap.empty
-    let mut decs := TreeMap.empty
-    for ldecl in ← getLCtx do
-      if !ldecl.isImplementationDetail then
-        let e := ldecl.type
-        if ← isProp e then
-          let A ← reify e
-          let n := ldecl.fvarId.name
-          hs := hs.insert n (Expr.fvar ldecl.fvarId)
-          Γ := do (← Γ).add A (.hyp n)
-        else
-          if let .const ``Decidable _ := e.getAppFn then
-            let p : Q(Prop) := e.appArg!
-            if useDec then
-              let A ← reify p
-              decs := decs.insert A (false, Expr.fvar ldecl.fvarId)
-    let addDec (force : Bool) (decs : TreeMap IProp (Bool × Expr) IProp.cmp) (e : Q(Prop)) := do
-      let A ← reify e
-      let dec_e := q(Decidable $e)
-      let res ← trySynthInstance q(Decidable $e)
-      if !(res matches .some _) && !useClassical then
-        if force then _ ← synthInstance dec_e
-        pure decs
-      else
-        pure (decs.insert A (match res with | .some e => (false, e) | _ => (true, e)))
-    decs ← extraDec.foldlM (addDec true) decs
-    if useDec then
-      let mut decided := TreeSet.empty (cmp := compare)
-      if let .ok Γ' := Γ then
-        decided := Γ'.foldl (init := decided) fun m p _ =>
-          match p with
-          | .var i => m.insert i
-          | .not (.var i) => m.insert i
-          | _ => m
-      let ats := (← get).atoms
-      for e in ats, i in [0:ats.size] do
-        if !decided.contains i then
-          decs ← addDec false decs e
-    for (A, cl, pf) in decs do
-      let n ← mkFreshId
-      hs := hs.insert n pf
-      Γ := return (← Γ).insert (A.or A.not) (.em cl n)
-    let p : Proof :=
-      match Γ with
-      | .ok Γ => (prove Γ t 0).1.2
-      | .error p => p t
-    applyProof g hs p
+* `useDec` will add `a ∨ ¬ a` to the context for every decidable atomic proposition `a`.
+* `useClassical` will allow `a ∨ ¬ a` to be added even if the proposition is not decidable,
+  using classical logic.
+* `extraDec` will add `a ∨ ¬ a` to the context for specified (not necessarily atomic)
+  propositions `a`.
+-/
+/-
+**Mathlib.Tactic.ITauto.itautoCore** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.ITa
+uto`。
+形式化陈述：MVarId → Bool → Bool → Array Expr → MetaM Unit
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.zero_lt_one`：0 < 1
 
-中文:
-定义 itautoCore
-  签名: (g : MVarId)
-  定义体: do
-  AtomM.run (← getTransparency) do
-    let mut hs := mkNameMap Expr
-    let t ← g.getType
-    let (g, t) ← if ← isProp t then pure (g, ← reify t) else pure (← g.exfalso, .false)
-    let mut Γ : Except (IProp -> Proof) ITauto.Context := .ok TreeMap.empty
-    let mut decs := TreeMap.empty
-    for ldecl in ← getLCtx do
-      if !ldecl.isImplementationDetail then
-        let e := ldecl.type
-        if ← isProp e then
-          let A ← reify e
-          let n := ldecl.fvarId.name
-          hs := hs.insert n (Expr.fvar ldecl.fvarId)
-          Γ := do (← Γ).add A (.hyp n)
-        else
-          if let .const ``Decidable _ := e.getAppFn then
-            let p : Q(Prop) := e.appArg!
-            if useDec then
-              let A ← reify p
-              decs := decs.insert A (false, Expr.fvar ldecl.fvarId)
-    let addDec (force : Bool) (decs : TreeMap IProp (Bool × Expr) IProp.cmp) (e : Q(Prop)) := do
-      let A ← reify e
-      let dec_e := q(Decidable $e)
-      let res ← trySynthInstance q(Decidable $e)
-      if !(res matches .some _) && !useClassical then
-        if force then _ ← synthInstance dec_e
-        pure decs
-      else
-        pure (decs.insert A (match res with | .some e => (false, e) | _ => (true, e)))
-    decs ← extraDec.foldlM (addDec true) decs
-    if useDec then
-      let mut decided := TreeSet.empty (cmp := compare)
-      if let .ok Γ' := Γ then
-        decided := Γ'.foldl (init := decided) fun m p _ =>
-          match p with
-          | .var i => m.insert i
-          | .not (.var i) => m.insert i
-          | _ => m
-      let ats := (← get).atoms
-      for e in ats, i in [0:ats.size] do
-        if !decided.contains i then
-          decs ← addDec false decs e
-    for (A, cl, pf) in decs do
-      let n ← mkFreshId
-      hs := hs.insert n pf
-      Γ := return (← Γ).insert (A.or A.not) (.em cl n)
-    let p : Proof :=
-      match Γ with
-      | .ok Γ => (prove Γ t 0).1.2
-      | .error p => p t
-    applyProof g hs p
+--- 原说明 ---
+A decision procedure for intuitionistic propositional logic.
+
+* `useDec` will add `a ∨ ¬ a` to the context for every decidable atomic proposit
+ion `a`.
+* `useClassical` will allow `a ∨ ¬ a` to be added even if the proposition is not
+ decidable,
+  using classical logic.
+* `extraDec` will add `a ∨ ¬ a` to the context for specified (not necessarily at
+omic)
+  propositions `a`.
 -/
 def itautoCore (g : MVarId)
     (useDec useClassical : Bool) (extraDec : Array Expr) : MetaM Unit := do
@@ -1732,7 +1038,7 @@ def itautoCore (g : MVarId)
     let mut hs := mkNameMap Expr
     let t ← g.getType
     let (g, t) ← if ← isProp t then pure (g, ← reify t) else pure (← g.exfalso, .false)
-    let mut Γ : Except (IProp -> Proof) ITauto.Context := .ok TreeMap.empty
+    let mut Γ : Except (IProp → Proof) ITauto.Context := .ok TreeMap.empty
     let mut decs := TreeMap.empty
     for ldecl in ← getLCtx do
       if !ldecl.isImplementationDetail then
@@ -1819,9 +1125,10 @@ macro_rules
 -- add_hint_tactic itauto
 
 -- add_tactic_doc
--- { Name := "itauto"
--- category := DocCategory.tactic
--- declNames := [`tactic.interactive.itauto]
--- tags := ["logic", "propositional logic", "intuitionistic logic", "decision procedure"] }
+--   { Name := "itauto"
+--     category := DocCategory.tactic
+--     declNames := [`tactic.interactive.itauto]
+--     tags := ["logic", "propositional logic", "intuitionistic logic", "decision procedure"] }
 
 end Mathlib.Tactic.ITauto
+

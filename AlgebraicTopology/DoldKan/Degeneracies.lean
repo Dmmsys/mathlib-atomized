@@ -40,168 +40,39 @@ namespace DoldKan
 
 variable {C : Type*} [Category* C] [Preadditive C]
 
-/--
-theorem `HigherFacesVanish.comp_σ` / 定理 `HigherFacesVanish.comp_σ`
-
-English:
-theorem HigherFacesVanish.comp_σ
-  statement: {Y : C} {X : SimplicialObject C} {n b q : Nat} {φ : Y ⟶ X _⦋n + 1⦌}
-  proof: fun j hj => by
-  rw [assoc]; rw [SimplicialObject.δ_comp_σ_of_gt']; rw [Fin.pred_succ]; rw [v.comp_δ_eq_zero_assoc _ _ hj]; rw [zero_comp]
-  · intro hj'
-    simp only [hnbq, add_comm b, add_assoc, hj', Fin.val_zero, zero_add, add_le_iff_nonpos_right,
-      nonpos_iff_eq_zero, add_eq_zero, false_and, reduceCtorEq] at hj
-  · dsimp
-    rw [Fin.lt_def]; rw [Fin.val_succ]
-    linarith
-
-中文:
-定理 HigherFacesVanish.comp_σ
-  结论: {Y : C} {X : SimplicialObject C} {n b q : 自然数} {φ : Y ⟶ X _⦋n + 1⦌}
-  证明: fun j hj => by
-  rw [assoc]; rw [SimplicialObject.δ_comp_σ_of_gt']; rw [Fin.pred_succ]; rw [v.comp_δ_eq_zero_assoc _ _ hj]; rw [zero_comp]
-  · intro hj'
-    simp only [hnbq, add_comm b, add_assoc, hj', Fin.val_zero, zero_add, add_le_iff_nonpos_right,
-      nonpos_iff_eq_zero, add_eq_zero, false_and, reduceCtorEq] at hj
-  · dsimp
-    rw [Fin.lt_def]; rw [Fin.val_succ]
-    linarith
-
-Depends on / 依赖: Fin.lt_def, Fin.pred_succ, Fin.val_succ, Fin.val_zero, SimplicialObject, add_assoc, add_comm, add_eq_zero, add_le_iff_nonpos_right, false_and, lt_def, nonpos_iff_eq_zero, pred_succ, reduceCtorEq, v.comp_, val_succ, val_zero, zero_add, zero_comp
+/-
+**AlgebraicTopology.DoldKan.HigherFacesVanish.comp_** 是 Mathlib 中的一个定理，位于命名空间 `A
+lgebraicTopology.DoldKan`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem HigherFacesVanish.comp_σ {Y : C} {X : SimplicialObject C} {n b q : Nat} {φ : Y ⟶ X _⦋n + 1⦌}
+theorem HigherFacesVanish.comp_σ {Y : C} {X : SimplicialObject C} {n b q : ℕ} {φ : Y ⟶ X _⦋n + 1⦌}
     (v : HigherFacesVanish q φ) (hnbq : n + 1 = b + q) :
     HigherFacesVanish q
       (φ ≫
         X.σ ⟨b, by
           simp only [hnbq, Nat.lt_add_one_iff, le_add_iff_nonneg_right, zero_le]⟩) :=
   fun j hj => by
-  rw [assoc]; rw [SimplicialObject.δ_comp_σ_of_gt']; rw [Fin.pred_succ]; rw [v.comp_δ_eq_zero_assoc _ _ hj]; rw [zero_comp]
+  rw [assoc, SimplicialObject.δ_comp_σ_of_gt', Fin.pred_succ, v.comp_δ_eq_zero_assoc _ _ hj,
+    zero_comp]
   · intro hj'
     simp only [hnbq, add_comm b, add_assoc, hj', Fin.val_zero, zero_add, add_le_iff_nonpos_right,
       nonpos_iff_eq_zero, add_eq_zero, false_and, reduceCtorEq] at hj
   · dsimp
-    rw [Fin.lt_def]; rw [Fin.val_succ]
+    rw [Fin.lt_def, Fin.val_succ]
     linarith
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `σ_comp_P_eq_zero` / 定理 `σ_comp_P_eq_zero`
-
-English:
-theorem σ_comp_P_eq_zero
-  given: (X : SimplicialObject C) {n q : Nat} (i : Fin (n + 1)) (hi : n + 1 <= i + q)
-  proof: by
-  induction q generalizing i with
-  | zero => lia
-  | succ q hq =>
-    by_cases h : n + 1 <= (i : Nat) + q
-    · rw [P_succ, HomologicalComplex.comp_f, ← assoc, hq i h, zero_comp]
-    · replace hi : n = i + q := by lia
-      rcases n with _ | n
-      · fin_cases i
-        dsimp at h hi
-        rw [show q = 0 by lia]
-        change X.σ 0 ≫ (P 1).f 1 = 0
-        simp only [P_succ, HomologicalComplex.add_f_apply, comp_add,
-          AlternatingFaceMapComplex.obj_d_eq, Hσ,
-          HomologicalComplex.comp_f, Homotopy.nullHomotopicMap'_f (c_mk 2 1 rfl) (c_mk 1 0 rfl),
-          comp_id]
-        rw [hσ'_eq' (zero_add 0).symm]; rw [hσ'_eq' (add_zero 1).symm]
-        dsimp [P_zero]
-        rw [comp_id]; rw [Fin.sum_univ_two]; rw [Fin.sum_univ_succ]; rw [Fin.sum_univ_two]
-        simp only [Fin.val_zero, pow_zero, pow_one, pow_add, one_smul, neg_smul, Fin.val_succ,
-          Fin.val_one, mul_neg, one_mul, neg_mul, neg_neg, id_comp, add_comp, comp_add, neg_comp,
-          comp_neg, Fin.succ_zero_eq_one]
-        rw [← Fin.castSucc_one]; rw [SimplicialObject.δ_comp_σ_self]; rw [← Fin.castSucc_zero (n := 1)]; rw [SimplicialObject.δ_comp_σ_self_assoc]; rw [SimplicialObject.δ_comp_σ_succ]; rw [comp_id]; rw [← Fin.castSucc_zero (n := 2)]; rw [← Fin.succ_zero_eq_one]; rw [SimplicialObject.δ_comp_σ_of_le X
-            (show (0 : Fin 2) <= Fin.castSucc 0 by rw [Fin.castSucc_zero]),
-          ← Fin.castSucc_zero (n := 1), SimplicialObject.δ_comp_σ_self_assoc,
-          SimplicialObject.δ_comp_σ_succ_assoc]
-        simp only [add_neg_cancel, add_zero, zero_add]
-      · rw [← id_comp (X.σ i), ← (P_add_Q_f q n.succ : _ = 𝟙 (X.obj _)), add_comp, add_comp,
-          P_succ]
-        have v : HigherFacesVanish q ((P q).f n.succ ≫ X.σ i) :=
-          (HigherFacesVanish.of_P q n).comp_σ hi
-        dsimp only [AlternatingFaceMapComplex.obj_X, Nat.succ_eq_add_one, HomologicalComplex.comp_f,
-          HomologicalComplex.add_f_apply, HomologicalComplex.id_f]
-        rw [← assoc]; rw [v.comp_P_eq_self]; rw [Preadditive.comp_add]; rw [comp_id]; rw [v.comp_Hσ_eq hi]; rw [assoc]; rw [← Fin.succ_mk _ _ i.2]; rw [SimplicialObject.δ_comp_σ_succ_assoc]; rw [Fin.eta]; rw [decomposition_Q n q]; rw [sum_comp]; rw [sum_comp]; rw [Finset.sum_eq_zero]; rw [add_zero]; rw [add_neg_eq_zero]
-        intro j hj
-        simp only [Finset.mem_univ, Finset.mem_filter] at hj
-        obtain ⟨k, hk⟩ := Nat.le.dest (Nat.lt_succ_iff.mp (Fin.is_lt j))
-        rw [add_comm] at hk
-        have hi' : i = Fin.castSucc ⟨i, by lia⟩ := by
-          ext
-          simp only [Fin.castSucc_mk, Fin.eta]
-        have eq := hq j.rev.succ (by
-          simp only [← hk, Fin.rev_eq j hk.symm, Fin.succ_mk, Fin.val_mk]
-          lia)
-        rw [assoc]; rw [assoc]; rw [assoc]; rw [hi']; rw [SimplicialObject.σ_comp_σ_assoc]; rw [reassoc_of% eq]; rw [zero_comp]; rw [comp_zero]; rw [comp_zero]; rw [comp_zero]
-        simp only [Fin.rev_eq j hk.symm, Fin.le_iff_val_le_val]
-        lia
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 σ_comp_P_eq_zero
-  条件: (X : SimplicialObject C) {n q : 自然数} (i : 有限集 (n + 1)) (hi : n + 1 <= i + q)
-  证明: by
-  induction q generalizing i with
-  | zero => lia
-  | succ q hq =>
-    by_cases h : n + 1 <= (i : Nat) + q
-    · rw [P_succ, HomologicalComplex.comp_f, ← assoc, hq i h, zero_comp]
-    · replace hi : n = i + q := by lia
-      rcases n with _ | n
-      · fin_cases i
-        dsimp at h hi
-        rw [show q = 0 by lia]
-        change X.σ 0 ≫ (P 1).f 1 = 0
-        simp only [P_succ, HomologicalComplex.add_f_apply, comp_add,
-          AlternatingFaceMapComplex.obj_d_eq, Hσ,
-          HomologicalComplex.comp_f, Homotopy.nullHomotopicMap'_f (c_mk 2 1 rfl) (c_mk 1 0 rfl),
-          comp_id]
-        rw [hσ'_eq' (zero_add 0).symm]; rw [hσ'_eq' (add_zero 1).symm]
-        dsimp [P_zero]
-        rw [comp_id]; rw [Fin.sum_univ_two]; rw [Fin.sum_univ_succ]; rw [Fin.sum_univ_two]
-        simp only [Fin.val_zero, pow_zero, pow_one, pow_add, one_smul, neg_smul, Fin.val_succ,
-          Fin.val_one, mul_neg, one_mul, neg_mul, neg_neg, id_comp, add_comp, comp_add, neg_comp,
-          comp_neg, Fin.succ_zero_eq_one]
-        rw [← Fin.castSucc_one]; rw [SimplicialObject.δ_comp_σ_self]; rw [← Fin.castSucc_zero (n := 1)]; rw [SimplicialObject.δ_comp_σ_self_assoc]; rw [SimplicialObject.δ_comp_σ_succ]; rw [comp_id]; rw [← Fin.castSucc_zero (n := 2)]; rw [← Fin.succ_zero_eq_one]; rw [SimplicialObject.δ_comp_σ_of_le X
-            (show (0 : Fin 2) <= Fin.castSucc 0 by rw [Fin.castSucc_zero]),
-          ← Fin.castSucc_zero (n := 1), SimplicialObject.δ_comp_σ_self_assoc,
-          SimplicialObject.δ_comp_σ_succ_assoc]
-        simp only [add_neg_cancel, add_zero, zero_add]
-      · rw [← id_comp (X.σ i), ← (P_add_Q_f q n.succ : _ = 𝟙 (X.obj _)), add_comp, add_comp,
-          P_succ]
-        have v : HigherFacesVanish q ((P q).f n.succ ≫ X.σ i) :=
-          (HigherFacesVanish.of_P q n).comp_σ hi
-        dsimp only [AlternatingFaceMapComplex.obj_X, Nat.succ_eq_add_one, HomologicalComplex.comp_f,
-          HomologicalComplex.add_f_apply, HomologicalComplex.id_f]
-        rw [← assoc]; rw [v.comp_P_eq_self]; rw [Preadditive.comp_add]; rw [comp_id]; rw [v.comp_Hσ_eq hi]; rw [assoc]; rw [← Fin.succ_mk _ _ i.2]; rw [SimplicialObject.δ_comp_σ_succ_assoc]; rw [Fin.eta]; rw [decomposition_Q n q]; rw [sum_comp]; rw [sum_comp]; rw [Finset.sum_eq_zero]; rw [add_zero]; rw [add_neg_eq_zero]
-        intro j hj
-        simp only [Finset.mem_univ, Finset.mem_filter] at hj
-        obtain ⟨k, hk⟩ := Nat.le.dest (Nat.lt_succ_iff.mp (Fin.is_lt j))
-        rw [add_comm] at hk
-        have hi' : i = Fin.castSucc ⟨i, by lia⟩ := by
-          ext
-          simp only [Fin.castSucc_mk, Fin.eta]
-        have eq := hq j.rev.succ (by
-          simp only [← hk, Fin.rev_eq j hk.symm, Fin.succ_mk, Fin.val_mk]
-          lia)
-        rw [assoc]; rw [assoc]; rw [assoc]; rw [hi']; rw [SimplicialObject.σ_comp_σ_assoc]; rw [reassoc_of% eq]; rw [zero_comp]; rw [comp_zero]; rw [comp_zero]; rw [comp_zero]
-        simp only [Fin.rev_eq j hk.symm, Fin.le_iff_val_le_val]
-        lia
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: AlternatingFaceMapComplex, AlternatingFaceMapComplex.obj_d_eq, HomologicalComplex, HomologicalComplex.add_f_apply, HomologicalComplex.comp_f, Homotopy, Homotopy.nullHomotopicMap, P_succ, add_f_apply, c_mk, comp_add, comp_f, comp_id, fin_cases, generalizing, nullHomotopicMap, obj_d_eq, replace, zero_comp
+/-
+**AlgebraicTopology.DoldKan.** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicTopology.DoldKa
+n`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem σ_comp_P_eq_zero (X : SimplicialObject C) {n q : Nat} (i : Fin (n + 1)) (hi : n + 1 <= i + q) :
+theorem σ_comp_P_eq_zero (X : SimplicialObject C) {n q : ℕ} (i : Fin (n + 1)) (hi : n + 1 ≤ i + q) :
     dsimp% X.σ i ≫ (P q).f (n + 1) = 0 := by
   induction q generalizing i with
   | zero => lia
   | succ q hq =>
-    by_cases h : n + 1 <= (i : Nat) + q
+    by_cases h : n + 1 ≤ (i : ℕ) + q
     · rw [P_succ, HomologicalComplex.comp_f, ← assoc, hq i h, zero_comp]
     · replace hi : n = i + q := by lia
       rcases n with _ | n
@@ -213,14 +84,19 @@ theorem σ_comp_P_eq_zero (X : SimplicialObject C) {n q : Nat} (i : Fin (n + 1))
           AlternatingFaceMapComplex.obj_d_eq, Hσ,
           HomologicalComplex.comp_f, Homotopy.nullHomotopicMap'_f (c_mk 2 1 rfl) (c_mk 1 0 rfl),
           comp_id]
-        rw [hσ'_eq' (zero_add 0).symm]; rw [hσ'_eq' (add_zero 1).symm]
+        rw [hσ'_eq' (zero_add 0).symm, hσ'_eq' (add_zero 1).symm]
         dsimp [P_zero]
-        rw [comp_id]; rw [Fin.sum_univ_two]; rw [Fin.sum_univ_succ]; rw [Fin.sum_univ_two]
+        rw [comp_id, Fin.sum_univ_two,
+          Fin.sum_univ_succ, Fin.sum_univ_two]
         simp only [Fin.val_zero, pow_zero, pow_one, pow_add, one_smul, neg_smul, Fin.val_succ,
           Fin.val_one, mul_neg, one_mul, neg_mul, neg_neg, id_comp, add_comp, comp_add, neg_comp,
           comp_neg, Fin.succ_zero_eq_one]
-        rw [← Fin.castSucc_one]; rw [SimplicialObject.δ_comp_σ_self]; rw [← Fin.castSucc_zero (n := 1)]; rw [SimplicialObject.δ_comp_σ_self_assoc]; rw [SimplicialObject.δ_comp_σ_succ]; rw [comp_id]; rw [← Fin.castSucc_zero (n := 2)]; rw [← Fin.succ_zero_eq_one]; rw [SimplicialObject.δ_comp_σ_of_le X
-            (show (0 : Fin 2) <= Fin.castSucc 0 by rw [Fin.castSucc_zero]),
+        rw [← Fin.castSucc_one, SimplicialObject.δ_comp_σ_self, ← Fin.castSucc_zero (n := 1),
+          SimplicialObject.δ_comp_σ_self_assoc,
+          SimplicialObject.δ_comp_σ_succ, comp_id, ← Fin.castSucc_zero (n := 2),
+          ← Fin.succ_zero_eq_one,
+          SimplicialObject.δ_comp_σ_of_le X
+            (show (0 : Fin 2) ≤ Fin.castSucc 0 by rw [Fin.castSucc_zero]),
           ← Fin.castSucc_zero (n := 1), SimplicialObject.δ_comp_σ_self_assoc,
           SimplicialObject.δ_comp_σ_succ_assoc]
         simp only [add_neg_cancel, add_zero, zero_add]
@@ -230,7 +106,11 @@ theorem σ_comp_P_eq_zero (X : SimplicialObject C) {n q : Nat} (i : Fin (n + 1))
           (HigherFacesVanish.of_P q n).comp_σ hi
         dsimp only [AlternatingFaceMapComplex.obj_X, Nat.succ_eq_add_one, HomologicalComplex.comp_f,
           HomologicalComplex.add_f_apply, HomologicalComplex.id_f]
-        rw [← assoc]; rw [v.comp_P_eq_self]; rw [Preadditive.comp_add]; rw [comp_id]; rw [v.comp_Hσ_eq hi]; rw [assoc]; rw [← Fin.succ_mk _ _ i.2]; rw [SimplicialObject.δ_comp_σ_succ_assoc]; rw [Fin.eta]; rw [decomposition_Q n q]; rw [sum_comp]; rw [sum_comp]; rw [Finset.sum_eq_zero]; rw [add_zero]; rw [add_neg_eq_zero]
+        rw [← assoc, v.comp_P_eq_self, Preadditive.comp_add,
+          comp_id, v.comp_Hσ_eq hi, assoc, ← Fin.succ_mk _ _ i.2,
+          SimplicialObject.δ_comp_σ_succ_assoc,
+          Fin.eta, decomposition_Q n q, sum_comp, sum_comp, Finset.sum_eq_zero, add_zero,
+          add_neg_eq_zero]
         intro j hj
         simp only [Finset.mem_univ, Finset.mem_filter] at hj
         obtain ⟨k, hk⟩ := Nat.le.dest (Nat.lt_succ_iff.mp (Fin.is_lt j))
@@ -241,73 +121,65 @@ theorem σ_comp_P_eq_zero (X : SimplicialObject C) {n q : Nat} (i : Fin (n + 1))
         have eq := hq j.rev.succ (by
           simp only [← hk, Fin.rev_eq j hk.symm, Fin.succ_mk, Fin.val_mk]
           lia)
-        rw [assoc]; rw [assoc]; rw [assoc]; rw [hi']; rw [SimplicialObject.σ_comp_σ_assoc]; rw [reassoc_of% eq]; rw [zero_comp]; rw [comp_zero]; rw [comp_zero]; rw [comp_zero]
+        rw [assoc, assoc, assoc, hi',
+          SimplicialObject.σ_comp_σ_assoc, reassoc_of% eq, zero_comp, comp_zero, comp_zero,
+          comp_zero]
         simp only [Fin.rev_eq j hk.symm, Fin.le_iff_val_le_val]
         lia
 
 @[reassoc (attr := simp)]
-/--
-theorem `σ_comp_PInfty` / 定理 `σ_comp_PInfty`
-
-English:
-theorem σ_comp_PInfty
-  given: (X : SimplicialObject C) {n : Nat} (i : Fin (n + 1))
-  proof: by
-  rw [PInfty_f]; rw [σ_comp_P_eq_zero X i]
-  simp only [le_add_iff_nonneg_left, zero_le]
-
-中文:
-定理 σ_comp_PInfty
-  条件: (X : SimplicialObject C) {n : 自然数} (i : 有限集 (n + 1))
-  证明: by
-  rw [PInfty_f]; rw [σ_comp_P_eq_zero X i]
-  simp only [le_add_iff_nonneg_left, zero_le]
-
-Depends on / 依赖: PInfty_f, le_add_iff_nonneg_left, zero_le
+/-
+**AlgebraicTopology.DoldKan.** 是 Mathlib 中的一个定理，位于命名空间 `AlgebraicTopology.DoldKa
+n`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem σ_comp_PInfty (X : SimplicialObject C) {n : Nat} (i : Fin (n + 1)) :
+theorem σ_comp_PInfty (X : SimplicialObject C) {n : ℕ} (i : Fin (n + 1)) :
     dsimp% X.σ i ≫ PInfty.f (n + 1) = 0 := by
-  rw [PInfty_f]; rw [σ_comp_P_eq_zero X i]
+  rw [PInfty_f, σ_comp_P_eq_zero X i]
   simp only [le_add_iff_nonneg_left, zero_le]
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-theorem `degeneracy_comp_PInfty` / 定理 `degeneracy_comp_PInfty`
-
-English:
-theorem degeneracy_comp_PInfty
-  statement: (X : SimplicialObject C) (n : Nat) {Δ' : SimplexCategory}
-  proof: by
-  rw [SimplexCategory.mono_iff_injective] at hθ
-  cases n
-  · exfalso
-    apply hθ
-    intro x y h
-    fin_cases x
-    fin_cases y
-    rfl
-  · obtain ⟨i, α, h⟩ := SimplexCategory.eq_σ_comp_of_not_injective θ hθ
-    rw [h]; rw [op_comp]; rw [X.map_comp]; rw [assoc]; rw [← SimplicialObject.σ_def]; rw [σ_comp_PInfty]; rw [comp_zero]
-
-中文:
-定理 degeneracy_comp_PInfty
-  结论: (X : SimplicialObject C) (n : 自然数) {Δ' : 单纯形范畴}
-  证明: by
-  rw [SimplexCategory.mono_iff_injective] at hθ
-  cases n
-  · exfalso
-    apply hθ
-    intro x y h
-    fin_cases x
-    fin_cases y
-    rfl
-  · obtain ⟨i, α, h⟩ := SimplexCategory.eq_σ_comp_of_not_injective θ hθ
-    rw [h]; rw [op_comp]; rw [X.map_comp]; rw [assoc]; rw [← SimplicialObject.σ_def]; rw [σ_comp_PInfty]; rw [comp_zero]
-
-Depends on / 依赖: SimplexCategory, SimplexCategory.eq_, SimplexCategory.mono_iff_injective, SimplicialObject, X.map_comp, comp_zero, fin_cases, map_comp, mono_iff_injective, op_comp
+/-
+**AlgebraicTopology.DoldKan.degeneracy_comp_PInfty** 是 Mathlib 中的一个定理，位于命名空间 `Al
+gebraicTopology.DoldKan`。
+形式化陈述：degeneracy_comp_PInfty (X : SimplicialObject C) (n : Nat) {Δ' : SimplexCat
+egory} (θ : ⦋n⦌ ⟶ Δ') (hθ : ¬Mono θ) : dsimp% X.map θ.op ≫ PInfty.f n = 0
+参数：X : SimplicialObject C；n : Nat；θ : ⦋n⦌ ⟶ Δ'；hθ : ¬Mono θ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `Fintype.complete`：∀ {α : Type u_4} [self : Fintype α] (x : α), x ∈ Finty
+pe.elems
+· 使用定理 `Nat.le_refl`：∀ (n : ℕ), n ≤ n
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SimplexCategory.mono_iff_injective`：mono_iff_injective {n m : SimplexCat
+egory} {f : n ⟶ m} : Mono f ↔ Function.Injective f.toOrderHom
+· 使用定理 `SimplexCategory.eq_σ_comp_of_not_injective`：eq_σ_comp_of_not_injective {
+n : Nat} {Δ' : SimplexCategory} (θ : ⦋n + 1⦌ ⟶ Δ') (hθ : ¬Function.Injective θ.t
+oOrderHom) : exists (i : Fin (n …
+· 使用定理 `CategoryTheory.op_comp`：op_comp {X Y Z : C} {f : X ⟶ Y} {g : Y ⟶ Z} : (f
+ ≫ g).op = g.op ≫ f.op
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.SimplicialObject.σ_def`：σ_def {n} (i : Fin (n + 1)) : X.σ
+ i = X.map (SimplexCategory.σ i).op
+· 使用定理 `AlgebraicTopology.DoldKan.σ_comp_PInfty`：σ_comp_PInfty (X : SimplicialOb
+ject C) {n : Nat} (i : Fin (n + 1)) : dsimp% X.σ i ≫ PInfty.f (n + 1) = 0
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
 -/
-theorem degeneracy_comp_PInfty (X : SimplicialObject C) (n : Nat) {Δ' : SimplexCategory}
+theorem degeneracy_comp_PInfty (X : SimplicialObject C) (n : ℕ) {Δ' : SimplexCategory}
     (θ : ⦋n⦌ ⟶ Δ') (hθ : ¬Mono θ) : dsimp% X.map θ.op ≫ PInfty.f n = 0 := by
   rw [SimplexCategory.mono_iff_injective] at hθ
   cases n
@@ -318,116 +190,96 @@ theorem degeneracy_comp_PInfty (X : SimplicialObject C) (n : Nat) {Δ' : Simplex
     fin_cases y
     rfl
   · obtain ⟨i, α, h⟩ := SimplexCategory.eq_σ_comp_of_not_injective θ hθ
-    rw [h]; rw [op_comp]; rw [X.map_comp]; rw [assoc]; rw [← SimplicialObject.σ_def]; rw [σ_comp_PInfty]; rw [comp_zero]
+    rw [h, op_comp, X.map_comp, assoc, ← SimplicialObject.σ_def,
+      σ_comp_PInfty, comp_zero]
 
 section
 
-variable {X : SimplicialObject C} {n : Nat} {T : C}
+variable {X : SimplicialObject C} {n : ℕ} {T : C}
 
-/--
-Definition of `DegeneraciesVanish` / `DegeneraciesVanish` 的定义
+/-- If `X` is a simplicial object in a preadditive category and `f : X _⦋n⦌ ⟶ T`
+is a morphism, we say that is vanishes on degeneracies if `n = 0` or if
+maps `X.σ i ≫ f` all vanish. -/
+/-
+**AlgebraicTopology.DoldKan.DegeneraciesVanish** 是 Mathlib 中的一个定义，位于命名空间 `Algebr
+aicTopology.DoldKan`。
+形式化陈述：DegeneraciesVanish (f : X _⦋n⦌ ⟶ T) : Prop
+参数：f : X _⦋n⦌ ⟶ T。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition DegeneraciesVanish
-  signature: (f : X _⦋n⦌ ⟶ T)
-  body: match n with
-  | 0 => True
-  | n + 1 => forall (i : Fin (n + 1)), X.σ i ≫ f = 0
-
-@[simp]
-
-中文:
-定义 DegeneraciesVanish
-  签名: (f : X _⦋n⦌ ⟶ T)
-  定义体: match n with
-  | 0 => True
-  | n + 1 => forall (i : Fin (n + 1)), X.σ i ≫ f = 0
-
-@[simp]
+--- 原说明 ---
+If `X` is a simplicial object in a preadditive category and `f : X _⦋n⦌ ⟶ T`
+is a morphism, we say that is vanishes on degeneracies if `n = 0` or if
+maps `X.σ i ≫ f` all vanish.
 -/
 def DegeneraciesVanish (f : X _⦋n⦌ ⟶ T) : Prop :=
   match n with
   | 0 => True
-  | n + 1 => forall (i : Fin (n + 1)), X.σ i ≫ f = 0
+  | n + 1 => ∀ (i : Fin (n + 1)), X.σ i ≫ f = 0
 
 @[simp]
-/--
-lemma `degeneraciesVanish_zero_iff_true` / 引理 `degeneraciesVanish_zero_iff_true`
-
-English:
-lemma degeneraciesVanish_zero_iff_true
-  given: (f : X _⦋0⦌ ⟶ T)
-  proof: Iff.rfl
-
-中文:
-引理 degeneraciesVanish_zero_iff_true
-  条件: (f : X _⦋0⦌ ⟶ T)
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**AlgebraicTopology.DoldKan.degeneraciesVanish_zero_iff_true** 是 Mathlib 中的一个引理，
+位于命名空间 `AlgebraicTopology.DoldKan`。
+形式化陈述：degeneraciesVanish_zero_iff_true (f : X _⦋0⦌ ⟶ T) : DegeneraciesVanish f ↔
+ True
+参数：f : X _⦋0⦌ ⟶ T。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma degeneraciesVanish_zero_iff_true (f : X _⦋0⦌ ⟶ T) :
     DegeneraciesVanish f ↔ True := Iff.rfl
-
-/--
-lemma `degeneraciesVanish_succ_iff` / 引理 `degeneraciesVanish_succ_iff`
-
-English:
-lemma degeneraciesVanish_succ_iff
-  given: (f : X _⦋n + 1⦌ ⟶ T)
-  proof: Iff.rfl
-
-@[reassoc]
-
-中文:
-引理 degeneraciesVanish_succ_iff
-  条件: (f : X _⦋n + 1⦌ ⟶ T)
-  证明: Iff.rfl
-
-@[reassoc]
-
-Depends on / 依赖: Iff.rfl
+/-
+**AlgebraicTopology.DoldKan.degeneraciesVanish_succ_iff** 是 Mathlib 中的一个引理，位于命名空
+间 `AlgebraicTopology.DoldKan`。
+形式化陈述：degeneraciesVanish_succ_iff (f : X _⦋n + 1⦌ ⟶ T) : DegeneraciesVanish f ↔ 
+forall (i : Fin (n + 1)), X.σ i ≫ f = 0
+参数：f : X _⦋n + 1⦌ ⟶ T。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma degeneraciesVanish_succ_iff (f : X _⦋n + 1⦌ ⟶ T) :
-    DegeneraciesVanish f ↔ forall (i : Fin (n + 1)), X.σ i ≫ f = 0 := Iff.rfl
+    DegeneraciesVanish f ↔ ∀ (i : Fin (n + 1)), X.σ i ≫ f = 0 := Iff.rfl
 
 @[reassoc]
-/--
-lemma `DegeneraciesVanish.σ_comp` / 引理 `DegeneraciesVanish.σ_comp`
-
-English:
-lemma DegeneraciesVanish.σ_comp
-  statement: {f : X _⦋n + 1⦌ ⟶ T} (hf : DegeneraciesVanish f)
-  proof: hf i
-
-中文:
-引理 DegeneraciesVanish.σ_comp
-  结论: {f : X _⦋n + 1⦌ ⟶ T} (hf : DegeneraciesVanish f)
-  证明: hf i
+/-
+**AlgebraicTopology.DoldKan.DegeneraciesVanish.** 是 Mathlib 中的一个引理，位于命名空间 `Algeb
+raicTopology.DoldKan`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma DegeneraciesVanish.σ_comp {f : X _⦋n + 1⦌ ⟶ T} (hf : DegeneraciesVanish f)
     (i : Fin (n + 1)) :
     X.σ i ≫ f = 0 := hf i
 
 variable {f} in
-/--
-lemma `DegeneraciesVanish.comp` / 引理 `DegeneraciesVanish.comp`
-
-English:
-lemma DegeneraciesVanish.comp
-  proof: by
-  obtain _ | n := n
-  · simp
-  · simp [degeneraciesVanish_succ_iff, hf.σ_comp_assoc]
-
-中文:
-引理 DegeneraciesVanish.comp
-  证明: by
-  obtain _ | n := n
-  · simp
-  · simp [degeneraciesVanish_succ_iff, hf.σ_comp_assoc]
-
-Depends on / 依赖: degeneraciesVanish_succ_iff
+/-
+**AlgebraicTopology.DoldKan.DegeneraciesVanish.comp** 是 Mathlib 中的一个定理，位于命名空间 `A
+lgebraicTopology.DoldKan.DegeneraciesVanish`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : C
+ategoryTheory.Preadditive C]   {X : CategoryTheory.SimplicialObject C} {n : ℕ} {
+T : C} {f : X.obj (Opposite.op { len := n }) ⟶ T},   AlgebraicTopology.DoldKan.D
+egeneraciesVanish f →     ∀ {U : C} (g : T ⟶ U), AlgebraicTopology.DoldKan.Degen
+eraciesVanish (CategoryTheory.CategoryStruct.comp f g)
+参数：Opposite.op { len := n }；g : T ⟶ U；CategoryTheory.CategoryStruct.comp f g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicTopology.DoldKan.DegeneraciesVanish.σ_comp_assoc`：∀ {C : Type u
+_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Pread
+ditive C]   {X : CategoryTheory.SimplicialObjec…
+· 使用定理 `CategoryTheory.Limits.zero_comp`：zero_comp [HasZeroMorphisms C] {X : C} 
+{Y Z : C} {f : Y ⟶ Z} : (0 : X ⟶ Y) ≫ f = (0 : X ⟶ Z)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 lemma DegeneraciesVanish.comp
     {f : X _⦋n⦌ ⟶ T} (hf : DegeneraciesVanish f) {U : C} (g : T ⟶ U) :
@@ -438,74 +290,115 @@ lemma DegeneraciesVanish.comp
 
 set_option backward.isDefEq.respectTransparency false in
 variable (X) in
-/--
-lemma `degeneraciesVanishPInfty_f` / 引理 `degeneraciesVanishPInfty_f`
-
-English:
-lemma degeneraciesVanishPInfty_f
-  given: (n : Nat)
-  proof: by
-  obtain _ | n := n
-  · simp
-  · simp [degeneraciesVanish_succ_iff]
-
-中文:
-引理 degeneraciesVanishPInfty_f
-  条件: (n : 自然数)
-  证明: by
-  obtain _ | n := n
-  · simp
-  · simp [degeneraciesVanish_succ_iff]
-
-Depends on / 依赖: degeneraciesVanish_succ_iff
+/-
+**AlgebraicTopology.DoldKan.degeneraciesVanishPInfty_f** 是 Mathlib 中的一个引理，位于命名空间
+ `AlgebraicTopology.DoldKan`。
+形式化陈述：degeneraciesVanishPInfty_f (n : Nat) : DegeneraciesVanish ((PInfty (X
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgebraicTopology.DoldKan.σ_comp_PInfty`：σ_comp_PInfty (X : SimplicialOb
+ject C) {n : Nat} (i : Fin (n + 1)) : dsimp% X.σ i ≫ PInfty.f (n + 1) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-lemma degeneraciesVanishPInfty_f (n : Nat) :
+lemma degeneraciesVanishPInfty_f (n : ℕ) :
     DegeneraciesVanish ((PInfty (X := X)).f n) := by
   obtain _ | n := n
   · simp
   · simp [degeneraciesVanish_succ_iff]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `degeneraciesVanish_iff_QInfty_f_comp` / 引理 `degeneraciesVanish_iff_QInfty_f_comp`
-
-English:
-lemma degeneraciesVanish_iff_QInfty_f_comp
-  given: (f : X _⦋n⦌ ⟶ T)
-  proof: by
-  obtain _ | n := n
-  · simp
-  · refine ⟨fun hf => ?_, fun hf => ?_⟩
-    · simp [QInfty_f, decomposition_Q, Preadditive.sum_comp, hf.σ_comp]
-    · have := PInfty_f_add_QInfty_f (n + 1) =≫ f
-      rw [Category.id_comp] at this
-      rw [degeneraciesVanish_succ_iff]; rw [← this]
-      simp [hf]
-
-中文:
-引理 degeneraciesVanish_iff_QInfty_f_comp
-  条件: (f : X _⦋n⦌ ⟶ T)
-  证明: by
-  obtain _ | n := n
-  · simp
-  · refine ⟨fun hf => ?_, fun hf => ?_⟩
-    · simp [QInfty_f, decomposition_Q, Preadditive.sum_comp, hf.σ_comp]
-    · have := PInfty_f_add_QInfty_f (n + 1) =≫ f
-      rw [Category.id_comp] at this
-      rw [degeneraciesVanish_succ_iff]; rw [← this]
-      simp [hf]
-
-Depends on / 依赖: Category, Category.id_comp, PInfty_f_add_QInfty_f, Preadditive, Preadditive.sum_comp, QInfty_f, decomposition_Q, degeneraciesVanish_succ_iff, id_comp, sum_comp
+/-
+**AlgebraicTopology.DoldKan.degeneraciesVanish_iff_QInfty_f_comp** 是 Mathlib 中的一
+个引理，位于命名空间 `AlgebraicTopology.DoldKan`。
+形式化陈述：degeneraciesVanish_iff_QInfty_f_comp (f : X _⦋n⦌ ⟶ T) : DegeneraciesVanish
+ f ↔ QInfty.f n ≫ f = 0
+参数：f : X _⦋n⦌ ⟶ T。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `AlgebraicTopology.DoldKan.QInfty_f_0`：QInfty_f_0 : (QInfty.f 0 : X _⦋0⦌ 
+⟶ X _⦋0⦌) = 0
+· 使用定理 `CategoryTheory.Limits.zero_comp`：zero_comp [HasZeroMorphisms C] {X : C} 
+{Y Z : C} {f : Y ⟶ Z} : (0 : X ⟶ Y) ≫ f = (0 : X ⟶ Z)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `AlgebraicTopology.DoldKan.decomposition_Q`：decomposition_Q (n q : Nat) :
+ ((Q q).f (n + 1) : X _⦋n + 1⦌ ⟶ X _⦋n + 1⦌) = ∑ i : Fin (n + 1) with i.val < q,
+ (P i).f (n + 1) ≫ X.δ i.rev.su…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Finset.filter_congr`：∀ {α : Type u_1} {p q : α → Prop} [inst : Decidable
+Pred p] [inst_1 : DecidablePred q] {s : Finset α},   (∀ x ∈ s, p x ↔ q x) → Fins
+et.filter…
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Finset.filter_true`：∀ {α : Type u_1} {h : DecidablePred fun x => True} (
+s : Finset α), {x ∈ s | True} = s
+· 使用定理 `CategoryTheory.Preadditive.sum_comp`：sum_comp {P Q R : C} {J : Type*} (s
+ : Finset J) (f : J -> (P ⟶ Q)) (g : Q ⟶ R) : (∑ j in s, f j) ≫ g = ∑ j in s, f 
+j ≫ g
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `AlgebraicTopology.DoldKan.DegeneraciesVanish.σ_comp`：∀ {C : Type u_1} [i
+nst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Preadditive
+ C]   {X : CategoryTheory.SimplicialObjec…
+· 使用定理 `CategoryTheory.Limits.comp_zero`：comp_zero [HasZeroMorphisms C] {X Y : C
+} {f : X ⟶ Y} {Z : C} : f ≫ (0 : Y ⟶ Z) = (0 : X ⟶ Z)
+· 使用定理 `Finset.sum_const_zero`：∀ {ι : Type u_1} {M : Type u_3} {s : Finset ι} [i
+nst : AddCommMonoid M], ∑ _x ∈ s, 0 = 0
+· 使用定理 `CategoryTheory.eq_whisker`：eq_whisker {f g : X ⟶ Y} (w : f = g) (h : Y ⟶
+ Z) : f ≫ h = g ≫ h
+· 使用定理 `AlgebraicTopology.DoldKan.PInfty_f_add_QInfty_f`：PInfty_f_add_QInfty_f (
+n : Nat) : (PInfty.f n : X _⦋n⦌ ⟶ _) + QInfty.f n = 𝟙 _
+· 使用引理 `AlgebraicTopology.DoldKan.degeneraciesVanish_succ_iff`：degeneraciesVanis
+h_succ_iff (f : X _⦋n + 1⦌ ⟶ T) : DegeneraciesVanish f ↔ forall (i : Fin (n + 1)
+), X.σ i ≫ f = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `CategoryTheory.Preadditive.add_comp`：∀ {C : Type u} {inst : CategoryTheo
+ry.Category.{v, u} C} [self : CategoryTheory.Preadditive C] (P Q R : C)   (f f' 
+: P ⟶ Q) (g : Q ⟶ R),   C…
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `AlgebraicTopology.DoldKan.σ_comp_PInfty_assoc`：∀ {C : Type u_1} [inst : 
+CategoryTheory.Category.{v_1, u_1} C] [inst_1 : CategoryTheory.Preadditive C]   
+(X : CategoryTheory.SimplicialObjec…
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 lemma degeneraciesVanish_iff_QInfty_f_comp (f : X _⦋n⦌ ⟶ T) :
     DegeneraciesVanish f ↔ QInfty.f n ≫ f = 0 := by
   obtain _ | n := n
   · simp
-  · refine ⟨fun hf => ?_, fun hf => ?_⟩
+  · refine ⟨fun hf ↦ ?_, fun hf ↦ ?_⟩
     · simp [QInfty_f, decomposition_Q, Preadditive.sum_comp, hf.σ_comp]
     · have := PInfty_f_add_QInfty_f (n + 1) =≫ f
       rw [Category.id_comp] at this
-      rw [degeneraciesVanish_succ_iff]; rw [← this]
+      rw [degeneraciesVanish_succ_iff, ← this]
       simp [hf]
 
 end
@@ -513,3 +406,4 @@ end
 end DoldKan
 
 end AlgebraicTopology
+

@@ -32,20 +32,16 @@ namespace CategoryTheory
 
 namespace Cat
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The category of small categories has all small colimits as a reflective subcategory of the
+category of simplicial sets, which has all small colimits. -/
+/-
+**CategoryTheory.Cat.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Cat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: HasColimits Cat.{v, v}
-  body: hasColimits_of_reflective nerveFunctor
-
-中文:
-实例 :
-  签名: 有余极限 Cat.{v, v}
-  定义体: hasColimits_of_reflective nerveFunctor
-
-Depends on / 依赖: hasColimits_of_reflective, nerveFunctor
+--- 原说明 ---
+The category of small categories has all small colimits as a reflective subcateg
+ory of the
+category of simplicial sets, which has all small colimits.
 -/
 instance : HasColimits Cat.{v, v} :=
   hasColimits_of_reflective nerveFunctor
@@ -53,3 +49,4 @@ instance : HasColimits Cat.{v, v} :=
 end Cat
 
 end CategoryTheory
+

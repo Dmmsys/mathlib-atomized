@@ -46,100 +46,26 @@ set_option backward.isDefEq.respectTransparency false in
 as many commutative squares with left map `sq₁₂.ι` and right map `f₃`
 as commutative squares with left map `f₂` and right map `sq₁₃.π`. -/
 @[simps! apply_left symm_apply_right]
-/--
-Definition of `arrowHomEquiv` / `arrowHomEquiv` 的定义
+/-
+**CategoryTheory.ParametrizedAdjunction.arrowHomEquiv** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.ParametrizedAdjunction`。
+形式化陈述：arrowHomEquiv : (Arrow.mk sq₁₂.ι ⟶ Arrow.mk f₃) ≃ (Arrow.mk f₂ ⟶ Arrow.mk 
+sq₁₃.π) where toFun α
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.PullbackObjObj.isPullback`：∀ {C₁ : Type u₁} {C₂ :
+ Type u₂} {C₃ : Type u₃} [inst : CategoryTheory.Category.{v₁, u₁} C₁]   [inst_1 
+: CategoryTheory.Category.{v₂, u₂} C₂]…
+· 使用定理 `CategoryTheory.Functor.PushoutObjObj.isPushout`：∀ {C₁ : Type u₁} {C₂ : T
+ype u₂} {C₃ : Type u₃} [inst : CategoryTheory.Category.{v₁, u₁} C₁]   [inst_1 : 
+CategoryTheory.Category.{v₂, u₂} C₂]…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition arrowHomEquiv
-  signature: :
-  body: Arrow.homMk (adj₂.homEquiv (sq₁₂.inl ≫ α.left))
-      (sq₁₃.isPullback.lift
-        (adj₂.homEquiv (sq₁₂.inr ≫ α.left)) (adj₂.homEquiv α.right)
-          (by simp [← adj₂.homEquiv_naturality_one,
-              ← adj₂.homEquiv_naturality_three])) (by
-            apply sq₁₃.isPullback.hom_ext
-            · simp [← adj₂.homEquiv_naturality_two,
-                ← adj₂.homEquiv_naturality_one,
-                sq₁₂.isPushout.w_assoc]
-            · simp [← adj₂.homEquiv_naturality_two,
-                ← adj₂.homEquiv_naturality_three])
-  invFun β :=
-    Arrow.homMk
-      (sq₁₂.isPushout.desc
-        (adj₂.homEquiv.symm β.left)
-        (adj₂.homEquiv.symm (β.right ≫ sq₁₃.fst)) (by
-          have := Arrow.w β =≫ sq₁₃.fst
-          dsimp at this
-          simp only [Category.assoc, sq₁₃.π_fst] at this
-          simp only [← adj₂.homEquiv_symm_naturality_one,
-            ← adj₂.homEquiv_symm_naturality_two,
-            Arrow.mk_left, Arrow.mk_right, this]))
-      (adj₂.homEquiv.symm (β.right ≫ sq₁₃.snd)) (by
-        apply sq₁₂.isPushout.hom_ext
-        · have := Arrow.w β =≫ sq₁₃.snd
-          dsimp at this
-          simp only [Category.assoc, sq₁₃.π_snd] at this
-          simp [← adj₂.homEquiv_symm_naturality_two,
-            ← adj₂.homEquiv_symm_naturality_three, this]
-        · simp [← adj₂.homEquiv_symm_naturality_one,
-            ← adj₂.homEquiv_symm_naturality_three, sq₁₃.isPullback.w])
-  left_inv α := by
-    ext
-    · apply sq₁₂.isPushout.hom_ext <;> simp
-    · simp
-  right_inv β := by
-    ext
-    · simp
-    · apply sq₁₃.isPullback.hom_ext <;> simp
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 arrowHomEquiv
-  签名: :
-  定义体: Arrow.homMk (adj₂.homEquiv (sq₁₂.inl ≫ α.left))
-      (sq₁₃.isPullback.lift
-        (adj₂.homEquiv (sq₁₂.inr ≫ α.left)) (adj₂.homEquiv α.right)
-          (by simp [← adj₂.homEquiv_naturality_one,
-              ← adj₂.homEquiv_naturality_three])) (by
-            apply sq₁₃.isPullback.hom_ext
-            · simp [← adj₂.homEquiv_naturality_two,
-                ← adj₂.homEquiv_naturality_one,
-                sq₁₂.isPushout.w_assoc]
-            · simp [← adj₂.homEquiv_naturality_two,
-                ← adj₂.homEquiv_naturality_three])
-  invFun β :=
-    Arrow.homMk
-      (sq₁₂.isPushout.desc
-        (adj₂.homEquiv.symm β.left)
-        (adj₂.homEquiv.symm (β.right ≫ sq₁₃.fst)) (by
-          have := Arrow.w β =≫ sq₁₃.fst
-          dsimp at this
-          simp only [Category.assoc, sq₁₃.π_fst] at this
-          simp only [← adj₂.homEquiv_symm_naturality_one,
-            ← adj₂.homEquiv_symm_naturality_two,
-            Arrow.mk_left, Arrow.mk_right, this]))
-      (adj₂.homEquiv.symm (β.right ≫ sq₁₃.snd)) (by
-        apply sq₁₂.isPushout.hom_ext
-        · have := Arrow.w β =≫ sq₁₃.snd
-          dsimp at this
-          simp only [Category.assoc, sq₁₃.π_snd] at this
-          simp [← adj₂.homEquiv_symm_naturality_two,
-            ← adj₂.homEquiv_symm_naturality_three, this]
-        · simp [← adj₂.homEquiv_symm_naturality_one,
-            ← adj₂.homEquiv_symm_naturality_three, sq₁₃.isPullback.w])
-  left_inv α := by
-    ext
-    · apply sq₁₂.isPushout.hom_ext <;> simp
-    · simp
-  right_inv β := by
-    ext
-    · simp
-    · apply sq₁₃.isPullback.hom_ext <;> simp
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: Arrow.homMk, homEquiv, homEquiv.symm, homEquiv_naturality_one, homEquiv_naturality_three, homEquiv_naturality_two, hom_ext, invFun, isPullback, isPullback.hom_ext, isPullback.lift, isPushout, isPushout.desc, isPushout.w_assoc, w_assoc
+--- 原说明 ---
+Given a parametrized adjunction `F ⊣₂ G` between bifunctors, and structures
+`sq₁₂ : F.PushoutObjObj f₁ f₂` and `sq₁₃ : G.PullbackObjObj f₁ f₃`, there are
+as many commutative squares with left map `sq₁₂.ι` and right map `f₃`
+as commutative squares with left map `f₂` and right map `sq₁₃.π`.
 -/
 noncomputable def arrowHomEquiv :
     (Arrow.mk sq₁₂.ι ⟶ Arrow.mk f₃) ≃
@@ -186,92 +112,81 @@ noncomputable def arrowHomEquiv :
     · apply sq₁₃.isPullback.hom_ext <;> simp
 
 @[reassoc (attr := simp)]
-/--
-lemma `arrowHomEquiv_apply_right_fst` / 引理 `arrowHomEquiv_apply_right_fst`
-
-English:
-lemma arrowHomEquiv_apply_right_fst
-  given: (α : Arrow.mk sq₁₂.ι ⟶ Arrow.mk f₃)
-  proof: IsPullback.lift_fst _ _ _ _
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 arrowHomEquiv_apply_right_fst
-  条件: (α : 箭头.mk sq₁₂.ι ⟶ 箭头.mk f₃)
-  证明: IsPullback.lift_fst _ _ _ _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsPullback, IsPullback.lift_fst, lift_fst
+/-
+**CategoryTheory.ParametrizedAdjunction.arrowHomEquiv_apply_right_fst** 是 Mathli
+b 中的一个引理，位于命名空间 `CategoryTheory.ParametrizedAdjunction`。
+形式化陈述：arrowHomEquiv_apply_right_fst (α : Arrow.mk sq₁₂.ι ⟶ Arrow.mk f₃) : ((adj₂
+.arrowHomEquiv sq₁₂ sq₁₃) α).right ≫ sq₁₃.fst = adj₂.homEquiv (sq₁₂.inr ≫ α.left
+)
+参数：α : Arrow.mk sq₁₂.ι ⟶ Arrow.mk f₃。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsPullback.lift_fst`：lift_fst (hP : IsPullback fst snd f 
+g) {W : C} (h : W ⟶ X) (k : W ⟶ Y) (w : h ≫ f = k ≫ g) : hP.lift h k w ≫ fst = h
+· 使用定理 `CategoryTheory.Functor.PullbackObjObj.isPullback`：∀ {C₁ : Type u₁} {C₂ :
+ Type u₂} {C₃ : Type u₃} [inst : CategoryTheory.Category.{v₁, u₁} C₁]   [inst_1 
+: CategoryTheory.Category.{v₂, u₂} C₂]…
 -/
 lemma arrowHomEquiv_apply_right_fst (α : Arrow.mk sq₁₂.ι ⟶ Arrow.mk f₃) :
     ((adj₂.arrowHomEquiv sq₁₂ sq₁₃) α).right ≫ sq₁₃.fst = adj₂.homEquiv (sq₁₂.inr ≫ α.left) :=
   IsPullback.lift_fst _ _ _ _
 
 @[reassoc (attr := simp)]
-/--
-lemma `arrowHomEquiv_apply_right_snd` / 引理 `arrowHomEquiv_apply_right_snd`
-
-English:
-lemma arrowHomEquiv_apply_right_snd
-  given: (α : Arrow.mk sq₁₂.ι ⟶ Arrow.mk f₃)
-  proof: IsPullback.lift_snd _ _ _ _
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 arrowHomEquiv_apply_right_snd
-  条件: (α : 箭头.mk sq₁₂.ι ⟶ 箭头.mk f₃)
-  证明: IsPullback.lift_snd _ _ _ _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsPullback, IsPullback.lift_snd, lift_snd
+/-
+**CategoryTheory.ParametrizedAdjunction.arrowHomEquiv_apply_right_snd** 是 Mathli
+b 中的一个引理，位于命名空间 `CategoryTheory.ParametrizedAdjunction`。
+形式化陈述：arrowHomEquiv_apply_right_snd (α : Arrow.mk sq₁₂.ι ⟶ Arrow.mk f₃) : ((adj₂
+.arrowHomEquiv sq₁₂ sq₁₃) α).right ≫ sq₁₃.snd = adj₂.homEquiv α.right
+参数：α : Arrow.mk sq₁₂.ι ⟶ Arrow.mk f₃。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsPullback.lift_snd`：lift_snd (hP : IsPullback fst snd f 
+g) {W : C} (h : W ⟶ X) (k : W ⟶ Y) (w : h ≫ f = k ≫ g) : hP.lift h k w ≫ snd = k
+· 使用定理 `CategoryTheory.Functor.PullbackObjObj.isPullback`：∀ {C₁ : Type u₁} {C₂ :
+ Type u₂} {C₃ : Type u₃} [inst : CategoryTheory.Category.{v₁, u₁} C₁]   [inst_1 
+: CategoryTheory.Category.{v₂, u₂} C₂]…
 -/
 lemma arrowHomEquiv_apply_right_snd (α : Arrow.mk sq₁₂.ι ⟶ Arrow.mk f₃) :
     ((adj₂.arrowHomEquiv sq₁₂ sq₁₃) α).right ≫ sq₁₃.snd = adj₂.homEquiv α.right :=
   IsPullback.lift_snd _ _ _ _
 
 @[reassoc (attr := simp)]
-/--
-lemma `inl_arrowHomEquiv_symm_apply_left` / 引理 `inl_arrowHomEquiv_symm_apply_left`
-
-English:
-lemma inl_arrowHomEquiv_symm_apply_left
-  given: (β : Arrow.mk f₂ ⟶ Arrow.mk sq₁₃.π)
-  proof: IsPushout.inl_desc _ _ _ _
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 inl_arrowHomEquiv_symm_apply_left
-  条件: (β : 箭头.mk f₂ ⟶ 箭头.mk sq₁₃.π)
-  证明: IsPushout.inl_desc _ _ _ _
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsPushout, IsPushout.inl_desc, inl_desc
+/-
+**CategoryTheory.ParametrizedAdjunction.inl_arrowHomEquiv_symm_apply_left** 是 Ma
+thlib 中的一个引理，位于命名空间 `CategoryTheory.ParametrizedAdjunction`。
+形式化陈述：inl_arrowHomEquiv_symm_apply_left (β : Arrow.mk f₂ ⟶ Arrow.mk sq₁₃.π) : sq
+₁₂.inl ≫ ((adj₂.arrowHomEquiv sq₁₂ sq₁₃).symm β).left = adj₂.homEquiv.symm β.lef
+t
+参数：β : Arrow.mk f₂ ⟶ Arrow.mk sq₁₃.π。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsPushout.inl_desc`：inl_desc (hP : IsPushout f g inl inr)
+ {W : C} (h : X ⟶ W) (k : Y ⟶ W) (w : f ≫ h = g ≫ k) : inl ≫ hP.desc h k w = h
+· 使用定理 `CategoryTheory.Functor.PushoutObjObj.isPushout`：∀ {C₁ : Type u₁} {C₂ : T
+ype u₂} {C₃ : Type u₃} [inst : CategoryTheory.Category.{v₁, u₁} C₁]   [inst_1 : 
+CategoryTheory.Category.{v₂, u₂} C₂]…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma inl_arrowHomEquiv_symm_apply_left (β : Arrow.mk f₂ ⟶ Arrow.mk sq₁₃.π) :
     sq₁₂.inl ≫ ((adj₂.arrowHomEquiv sq₁₂ sq₁₃).symm β).left = adj₂.homEquiv.symm β.left :=
   IsPushout.inl_desc _ _ _ _
 
 @[reassoc (attr := simp)]
-/--
-lemma `inr_arrowHomEquiv_symm_apply_left` / 引理 `inr_arrowHomEquiv_symm_apply_left`
-
-English:
-lemma inr_arrowHomEquiv_symm_apply_left
-  given: (β : Arrow.mk f₂ ⟶ Arrow.mk sq₁₃.π)
-  proof: IsPushout.inr_desc _ _ _ _
-
-中文:
-引理 inr_arrowHomEquiv_symm_apply_left
-  条件: (β : 箭头.mk f₂ ⟶ 箭头.mk sq₁₃.π)
-  证明: IsPushout.inr_desc _ _ _ _
-
-Depends on / 依赖: IsPushout, IsPushout.inr_desc, WalkingCospan, WalkingCospan.left, WalkingCospan.right, fac_left, fac_right, inr_desc, isLimitAux
+/-
+**CategoryTheory.ParametrizedAdjunction.inr_arrowHomEquiv_symm_apply_left** 是 Ma
+thlib 中的一个引理，位于命名空间 `CategoryTheory.ParametrizedAdjunction`。
+形式化陈述：inr_arrowHomEquiv_symm_apply_left (β : Arrow.mk f₂ ⟶ Arrow.mk sq₁₃.π) : sq
+₁₂.inr ≫ ((adj₂.arrowHomEquiv sq₁₂ sq₁₃).symm β).left = adj₂.homEquiv.symm (β.ri
+ght ≫ sq₁₃.fst)
+参数：β : Arrow.mk f₂ ⟶ Arrow.mk sq₁₃.π。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.IsPushout.inr_desc`：inr_desc (hP : IsPushout f g inl inr)
+ {W : C} (h : X ⟶ W) (k : Y ⟶ W) (w : f ≫ h = g ≫ k) : inr ≫ hP.desc h k w = k
+· 使用定理 `CategoryTheory.Functor.PushoutObjObj.isPushout`：∀ {C₁ : Type u₁} {C₂ : T
+ype u₂} {C₃ : Type u₃} [inst : CategoryTheory.Category.{v₁, u₁} C₁]   [inst_1 : 
+CategoryTheory.Category.{v₂, u₂} C₂]…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma inr_arrowHomEquiv_symm_apply_left (β : Arrow.mk f₂ ⟶ Arrow.mk sq₁₃.π) :
     sq₁₂.inr ≫ ((adj₂.arrowHomEquiv sq₁₂ sq₁₃).symm β).left =
@@ -280,96 +195,27 @@ lemma inr_arrowHomEquiv_symm_apply_left (β : Arrow.mk f₂ ⟶ Arrow.mk sq₁�
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `liftStructEquiv` / `liftStructEquiv` 的定义
+/-- Given a parametrized adjunction `F ⊣₂ G` between bifunctors, structures
+`sq₁₂ : F.PushoutObjObj f₁ f₂` and `sq₁₃ : G.PullbackObjObj f₁ f₃`,
+there are as many liftings for the commutative square given by a
+map `α : Arrow.mk sq₁₂.ι ⟶ Arrow.mk f₃` as there are liftings
+for the square given by the corresponding map `Arrow.mk f₂ ⟶ Arrow.mk sq₁₃.π`. -/
+/-
+**CategoryTheory.ParametrizedAdjunction.liftStructEquiv** 是 Mathlib 中的一个定义，位于命名空
+间 `CategoryTheory.ParametrizedAdjunction`。
+形式化陈述：liftStructEquiv (α : Arrow.mk sq₁₂.ι ⟶ Arrow.mk f₃) : Arrow.LiftStruct α ≃
+ Arrow.LiftStruct (adj₂.arrowHomEquiv sq₁₂ sq₁₃ α) where toFun l
+参数：α : Arrow.mk sq₁₂.ι ⟶ Arrow.mk f₃。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition liftStructEquiv
-  signature: (α : Arrow.mk sq₁₂.ι ⟶ Arrow.mk f₃)
-  body: { l := adj₂.homEquiv l.l
-      fac_left := by
-        have := l.fac_left
-        dsimp at this ⊢
-        simp only [← adj₂.homEquiv_naturality_two, ← this,
-          sq₁₂.inl_ι_assoc]
-      fac_right := by
-        apply sq₁₃.isPullback.hom_ext
-        · have := l.fac_left
-          dsimp at this ⊢
-          simp only [Category.assoc, sq₁₃.π_fst, ← adj₂.homEquiv_naturality_one,
-            arrowHomEquiv_apply_right_fst, Arrow.mk_left, ← this, sq₁₂.inr_ι_assoc]
-        · have := l.fac_right
-          dsimp at this ⊢
-          simp only [Category.assoc, sq₁₃.π_snd, ← this, adj₂.homEquiv_naturality_three,
-            arrowHomEquiv_apply_right_snd, Arrow.mk_right] }
-  invFun l :=
-    { l := adj₂.homEquiv.symm l.l
-      fac_left := by
-        apply sq₁₂.isPushout.hom_ext
-        · have := l.fac_left
-          dsimp at this ⊢
-          simp only [sq₁₂.inl_ι_assoc, ← adj₂.homEquiv_symm_naturality_two,
-            this, Equiv.symm_apply_apply]
-        · have := l.fac_right =≫ sq₁₃.fst
-          dsimp at this ⊢
-          simp only [Category.assoc, sq₁₃.π_fst] at this
-          simp only [sq₁₂.inr_ι_assoc, ← adj₂.homEquiv_symm_naturality_one,
-            this, Equiv.symm_apply_apply, arrowHomEquiv_apply_right_fst, Arrow.mk_left]
-      fac_right := by
-        have := l.fac_right =≫ sq₁₃.snd
-        dsimp at this ⊢
-        simp only [Category.assoc, sq₁₃.π_snd, arrowHomEquiv_apply_right_snd,
-          Arrow.mk_right] at this
-        rw [← adj₂.homEquiv_symm_naturality_three]; rw [this]; rw [Equiv.symm_apply_apply] }
-  left_inv _ := by aesop
-  right_inv _ := by aesop
-
-include adj₂ in
-
-中文:
-定义 liftStructEquiv
-  签名: (α : 箭头.mk sq₁₂.ι ⟶ 箭头.mk f₃)
-  定义体: { l := adj₂.homEquiv l.l
-      fac_left := by
-        have := l.fac_left
-        dsimp at this ⊢
-        simp only [← adj₂.homEquiv_naturality_two, ← this,
-          sq₁₂.inl_ι_assoc]
-      fac_right := by
-        apply sq₁₃.isPullback.hom_ext
-        · have := l.fac_left
-          dsimp at this ⊢
-          simp only [Category.assoc, sq₁₃.π_fst, ← adj₂.homEquiv_naturality_one,
-            arrowHomEquiv_apply_right_fst, Arrow.mk_left, ← this, sq₁₂.inr_ι_assoc]
-        · have := l.fac_right
-          dsimp at this ⊢
-          simp only [Category.assoc, sq₁₃.π_snd, ← this, adj₂.homEquiv_naturality_three,
-            arrowHomEquiv_apply_right_snd, Arrow.mk_right] }
-  invFun l :=
-    { l := adj₂.homEquiv.symm l.l
-      fac_left := by
-        apply sq₁₂.isPushout.hom_ext
-        · have := l.fac_left
-          dsimp at this ⊢
-          simp only [sq₁₂.inl_ι_assoc, ← adj₂.homEquiv_symm_naturality_two,
-            this, Equiv.symm_apply_apply]
-        · have := l.fac_right =≫ sq₁₃.fst
-          dsimp at this ⊢
-          simp only [Category.assoc, sq₁₃.π_fst] at this
-          simp only [sq₁₂.inr_ι_assoc, ← adj₂.homEquiv_symm_naturality_one,
-            this, Equiv.symm_apply_apply, arrowHomEquiv_apply_right_fst, Arrow.mk_left]
-      fac_right := by
-        have := l.fac_right =≫ sq₁₃.snd
-        dsimp at this ⊢
-        simp only [Category.assoc, sq₁₃.π_snd, arrowHomEquiv_apply_right_snd,
-          Arrow.mk_right] at this
-        rw [← adj₂.homEquiv_symm_naturality_three]; rw [this]; rw [Equiv.symm_apply_apply] }
-  left_inv _ := by aesop
-  right_inv _ := by aesop
-
-include adj₂ in
-
-Depends on / 依赖: Arrow.mk_left, Category, Category.assoc, arrowHomEquiv, arrowHomEquiv_apply_right_fst, equalizer_ext, fac_left, fac_right, homEquiv, homEquiv_naturality_one, homEquiv_naturality_three, homEquiv_naturality_two, hom_ext, ht.hom_ext, isPullback, isPullback.hom_ext, l.fac_left, l.fac_right, mk_left
+--- 原说明 ---
+Given a parametrized adjunction `F ⊣₂ G` between bifunctors, structures
+`sq₁₂ : F.PushoutObjObj f₁ f₂` and `sq₁₃ : G.PullbackObjObj f₁ f₃`,
+there are as many liftings for the commutative square given by a
+map `α : Arrow.mk sq₁₂.ι ⟶ Arrow.mk f₃` as there are liftings
+for the square given by the corresponding map `Arrow.mk f₂ ⟶ Arrow.mk sq₁₃.π`.
 -/
 noncomputable def liftStructEquiv (α : Arrow.mk sq₁₂.ι ⟶ Arrow.mk f₃) :
     Arrow.LiftStruct α ≃ Arrow.LiftStruct (adj₂.arrowHomEquiv sq₁₂ sq₁₃ α) where
@@ -408,37 +254,26 @@ noncomputable def liftStructEquiv (α : Arrow.mk sq₁₂.ι ⟶ Arrow.mk f₃) 
         dsimp at this ⊢
         simp only [Category.assoc, sq₁₃.π_snd, arrowHomEquiv_apply_right_snd,
           Arrow.mk_right] at this
-        rw [← adj₂.homEquiv_symm_naturality_three]; rw [this]; rw [Equiv.symm_apply_apply] }
+        rw [← adj₂.homEquiv_symm_naturality_three, this,
+          Equiv.symm_apply_apply] }
   left_inv _ := by aesop
   right_inv _ := by aesop
 
 include adj₂ in
-/--
-lemma `hasLiftingProperty_iff` / 引理 `hasLiftingProperty_iff`
-
-English:
-lemma hasLiftingProperty_iff
-  proof: by
-  simp only [Arrow.hasLiftingProperty_iff]
-  constructor
-  · intro h β
-    obtain ⟨α, rfl⟩ := (adj₂.arrowHomEquiv sq₁₂ sq₁₃).surjective β
-    exact ⟨adj₂.liftStructEquiv sq₁₂ sq₁₃ α (h α).some⟩
-  · intro h α
-    exact ⟨(adj₂.liftStructEquiv sq₁₂ sq₁₃ α).symm (h _).some⟩
-
-中文:
-引理 hasLiftingProperty_iff
-  证明: by
-  simp only [Arrow.hasLiftingProperty_iff]
-  constructor
-  · intro h β
-    obtain ⟨α, rfl⟩ := (adj₂.arrowHomEquiv sq₁₂ sq₁₃).surjective β
-    exact ⟨adj₂.liftStructEquiv sq₁₂ sq₁₃ α (h α).some⟩
-  · intro h α
-    exact ⟨(adj₂.liftStructEquiv sq₁₂ sq₁₃ α).symm (h _).some⟩
-
-Depends on / 依赖: Arrow.hasLiftingProperty_iff, PullbackCone, PullbackCone.mk, arrowHomEquiv, hasLiftingProperty_iff, ht.lift, liftStructEquiv, surjective
+/-
+**CategoryTheory.ParametrizedAdjunction.hasLiftingProperty_iff** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.ParametrizedAdjunction`。
+形式化陈述：hasLiftingProperty_iff : HasLiftingProperty sq₁₂.ι f₃ ↔ HasLiftingProperty
+ f₂ sq₁₃.π
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma hasLiftingProperty_iff :
     HasLiftingProperty sq₁₂.ι f₃ ↔ HasLiftingProperty f₂ sq₁₃.π := by
@@ -453,3 +288,4 @@ lemma hasLiftingProperty_iff :
 end ParametrizedAdjunction
 
 end CategoryTheory
+

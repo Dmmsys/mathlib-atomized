@@ -30,82 +30,60 @@ universe u
 
 variable (S : LightProfinite.{u})
 
-/--
-Definition of `fintypeDiagram` / `fintypeDiagram` 的定义
+/-- The functor `ℕᵒᵖ ⥤ FintypeCat` whose limit is isomorphic to `S`. -/
+/-
+**LightProfinite.fintypeDiagram** 是 Mathlib 中的一个缩写定义，位于命名空间 `LightProfinite`。
+形式化陈述：fintypeDiagram : Natᵒᵖ ⥤ FintypeCat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation fintypeDiagram
-  signature: : Natᵒᵖ ⥤ FintypeCat
-  body: S.toLightDiagram.diagram
-
-中文:
-缩写 fintypeDiagram
-  签名: : 自然数ᵒᵖ ⥤ FintypeCat
-  定义体: S.toLightDiagram.diagram
-
-Depends on / 依赖: S.toLightDiagram.diagram, diagram, toLightDiagram
+--- 原说明 ---
+The functor `ℕᵒᵖ ⥤ FintypeCat` whose limit is isomorphic to `S`.
 -/
-abbrev fintypeDiagram : Natᵒᵖ ⥤ FintypeCat := S.toLightDiagram.diagram
+abbrev fintypeDiagram : ℕᵒᵖ ⥤ FintypeCat := S.toLightDiagram.diagram
 
-/--
-Definition of `diagram` / `diagram` 的定义
+/-- An abbreviation for `S.fintypeDiagram ⋙ FintypeCat.toProfinite`. -/
+/-
+**LightProfinite.diagram** 是 Mathlib 中的一个缩写定义，位于命名空间 `LightProfinite`。
+形式化陈述：diagram : Natᵒᵖ ⥤ LightProfinite
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation diagram
-  signature: : Natᵒᵖ ⥤ LightProfinite
-  body: S.fintypeDiagram ⋙ FintypeCat.toLightProfinite
-
-中文:
-缩写 diagram
-  签名: : 自然数ᵒᵖ ⥤ LightProfinite
-  定义体: S.fintypeDiagram ⋙ FintypeCat.toLightProfinite
-
-Depends on / 依赖: FintypeCat, FintypeCat.toLightProfinite, S.fintypeDiagram, fintypeDiagram, toLightProfinite
+--- 原说明 ---
+An abbreviation for `S.fintypeDiagram ⋙ FintypeCat.toProfinite`.
 -/
-abbrev diagram : Natᵒᵖ ⥤ LightProfinite := S.fintypeDiagram ⋙ FintypeCat.toLightProfinite
+abbrev diagram : ℕᵒᵖ ⥤ LightProfinite := S.fintypeDiagram ⋙ FintypeCat.toLightProfinite
 
 /--
-Definition of `asLimitConeAux` / `asLimitConeAux` 的定义
+A cone over `S.diagram` whose cone point is isomorphic to `S`.
+(Auxiliary definition, use `S.asLimitCone` instead.)
+-/
+/-
+**LightProfinite.asLimitConeAux** 是 Mathlib 中的一个定义，位于命名空间 `LightProfinite`。
+形式化陈述：asLimitConeAux : Cone S.diagram
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition asLimitConeAux
-  signature: : Cone S.diagram
-  body: let c : Cone (S.diagram ⋙ lightToProfinite) := S.toLightDiagram.cone
-  let hc : IsLimit c := S.toLightDiagram.isLimit
-  liftLimit hc
-
-中文:
-定义 asLimitConeAux
-  签名: : 锥 S.diagram
-  定义体: let c : Cone (S.diagram ⋙ lightToProfinite) := S.toLightDiagram.cone
-  let hc : IsLimit c := S.toLightDiagram.isLimit
-  liftLimit hc
-
-Depends on / 依赖: IsLimit, S.diagram, S.toLightDiagram.cone, S.toLightDiagram.isLimit, diagram, isLimit, liftLimit, lightToProfinite, toLightDiagram
+--- 原说明 ---
+A cone over `S.diagram` whose cone point is isomorphic to `S`.
+(Auxiliary definition, use `S.asLimitCone` instead.)
 -/
 def asLimitConeAux : Cone S.diagram :=
   let c : Cone (S.diagram ⋙ lightToProfinite) := S.toLightDiagram.cone
   let hc : IsLimit c := S.toLightDiagram.isLimit
   liftLimit hc
 
-/--
-Definition of `isoMapCone` / `isoMapCone` 的定义
+/-- An auxiliary isomorphism of cones used to prove that `S.asLimitConeAux` is a limit cone. -/
+/-
+**LightProfinite.isoMapCone** 是 Mathlib 中的一个定义，位于命名空间 `LightProfinite`。
+形式化陈述：isoMapCone : lightToProfinite.mapCone S.asLimitConeAux ≅ S.toLightDiagram.
+cone
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isoMapCone
-  signature: : lightToProfinite.mapCone S.asLimitConeAux ≅ S.toLightDiagram.cone
-  body: let c : Cone (S.diagram ⋙ lightToProfinite) := S.toLightDiagram.cone
-  let hc : IsLimit c := S.toLightDiagram.isLimit
-  liftedLimitMapsToOriginal hc
-
-中文:
-定义 isoMapCone
-  签名: : lightToProfinite.mapCone S.asLimitConeAux ≅ S.toLightDiagram.cone
-  定义体: let c : Cone (S.diagram ⋙ lightToProfinite) := S.toLightDiagram.cone
-  let hc : IsLimit c := S.toLightDiagram.isLimit
-  liftedLimitMapsToOriginal hc
-
-Depends on / 依赖: IsLimit, S.diagram, S.toLightDiagram.cone, S.toLightDiagram.isLimit, diagram, isLimit, liftedLimitMapsToOriginal, lightToProfinite, toLightDiagram
+--- 原说明 ---
+An auxiliary isomorphism of cones used to prove that `S.asLimitConeAux` is a lim
+it cone.
 -/
 def isoMapCone : lightToProfinite.mapCone S.asLimitConeAux ≅ S.toLightDiagram.cone :=
   let c : Cone (S.diagram ⋙ lightToProfinite) := S.toLightDiagram.cone
@@ -113,362 +91,280 @@ def isoMapCone : lightToProfinite.mapCone S.asLimitConeAux ≅ S.toLightDiagram.
   liftedLimitMapsToOriginal hc
 
 /--
-Definition of `asLimitAux` / `asLimitAux` 的定义
+`S.asLimitConeAux` is indeed a limit cone.
+(Auxiliary definition, use `S.asLimit` instead.)
+-/
+/-
+**LightProfinite.asLimitAux** 是 Mathlib 中的一个定义，位于命名空间 `LightProfinite`。
+形式化陈述：asLimitAux : IsLimit S.asLimitConeAux
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition asLimitAux
-  signature: : IsLimit S.asLimitConeAux
-  body: let hc : IsLimit (lightToProfinite.mapCone S.asLimitConeAux) :=
-    S.toLightDiagram.isLimit.ofIsoLimit S.isoMapCone.symm
-  isLimitOfReflects lightToProfinite hc
-
-中文:
-定义 asLimitAux
-  签名: : 是极限 S.asLimitConeAux
-  定义体: let hc : IsLimit (lightToProfinite.mapCone S.asLimitConeAux) :=
-    S.toLightDiagram.isLimit.ofIsoLimit S.isoMapCone.symm
-  isLimitOfReflects lightToProfinite hc
-
-Depends on / 依赖: IsLimit, S.asLimitConeAux, S.isoMapCone.symm, S.toLightDiagram.isLimit.ofIsoLimit, asLimitConeAux, isLimit, isLimitOfReflects, isoMapCone, lightToProfinite, lightToProfinite.mapCone, mapCone, ofIsoLimit, toLightDiagram
+--- 原说明 ---
+`S.asLimitConeAux` is indeed a limit cone.
+(Auxiliary definition, use `S.asLimit` instead.)
 -/
 def asLimitAux : IsLimit S.asLimitConeAux :=
   let hc : IsLimit (lightToProfinite.mapCone S.asLimitConeAux) :=
     S.toLightDiagram.isLimit.ofIsoLimit S.isoMapCone.symm
   isLimitOfReflects lightToProfinite hc
 
-/--
-Definition of `asLimitCone` / `asLimitCone` 的定义
+/-- A cone over `S.diagram` whose cone point is `S`. -/
+/-
+**LightProfinite.asLimitCone** 是 Mathlib 中的一个定义，位于命名空间 `LightProfinite`。
+形式化陈述：asLimitCone : Cone S.diagram where pt
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition asLimitCone
-  signature: : Cone S.diagram where
-  body: S
-  π := {
-    app := fun n => (lightToProfiniteFullyFaithful.preimageIso <|
-      (Cone.forget _).mapIso S.isoMapCone).inv ≫ S.asLimitConeAux.π.app n
-    naturality := fun _ _ _ => by simp only [Category.assoc, S.asLimitConeAux.w]; rfl }
-
-中文:
-定义 asLimitCone
-  签名: : 锥 S.diagram where
-  定义体: S
-  π := {
-    app := fun n => (lightToProfiniteFullyFaithful.preimageIso <|
-      (Cone.forget _).mapIso S.isoMapCone).inv ≫ S.asLimitConeAux.π.app n
-    naturality := fun _ _ _ => by simp only [Category.assoc, S.asLimitConeAux.w]; rfl }
+--- 原说明 ---
+A cone over `S.diagram` whose cone point is `S`.
 -/
 def asLimitCone : Cone S.diagram where
   pt := S
   π := {
-    app := fun n => (lightToProfiniteFullyFaithful.preimageIso <|
+    app := fun n ↦ (lightToProfiniteFullyFaithful.preimageIso <|
       (Cone.forget _).mapIso S.isoMapCone).inv ≫ S.asLimitConeAux.π.app n
-    naturality := fun _ _ _ => by simp only [Category.assoc, S.asLimitConeAux.w]; rfl }
+    naturality := fun _ _ _ ↦ by simp only [Category.assoc, S.asLimitConeAux.w]; rfl }
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `asLimit` / `asLimit` 的定义
+/-- `S.asLimitCone` is indeed a limit cone. -/
+/-
+**LightProfinite.asLimit** 是 Mathlib 中的一个定义，位于命名空间 `LightProfinite`。
+形式化陈述：asLimit : IsLimit S.asLimitCone
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition asLimit
-  signature: : IsLimit S.asLimitCone
-  body: S.asLimitAux.ofIsoLimit
-  Cone.ext (lightToProfiniteFullyFaithful.preimageIso <|
-    (Cone.forget _).mapIso S.isoMapCone) (fun _ => by rw [← @Iso.inv_comp_eq]; rfl)
-
-中文:
-定义 asLimit
-  签名: : 是极限 S.asLimitCone
-  定义体: S.asLimitAux.ofIsoLimit
-  Cone.ext (lightToProfiniteFullyFaithful.preimageIso <|
-    (Cone.forget _).mapIso S.isoMapCone) (fun _ => by rw [← @Iso.inv_comp_eq]; rfl)
-
-Depends on / 依赖: S.asLimitAux.ofIsoLimit, asLimitAux, ofIsoLimit
+--- 原说明 ---
+`S.asLimitCone` is indeed a limit cone.
 -/
-def asLimit : IsLimit S.asLimitCone := S.asLimitAux.ofIsoLimit
+def asLimit : IsLimit S.asLimitCone := S.asLimitAux.ofIsoLimit <|
   Cone.ext (lightToProfiniteFullyFaithful.preimageIso <|
-    (Cone.forget _).mapIso S.isoMapCone) (fun _ => by rw [← @Iso.inv_comp_eq]; rfl)
+    (Cone.forget _).mapIso S.isoMapCone) (fun _ ↦ by rw [← @Iso.inv_comp_eq]; rfl)
 
-/--
-Definition of `lim` / `lim` 的定义
+/-- A bundled version of `S.asLimitCone` and `S.asLimit`. -/
+/-
+**LightProfinite.lim** 是 Mathlib 中的一个定义，位于命名空间 `LightProfinite`。
+形式化陈述：lim : Limits.LimitCone S.diagram
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lim
-  signature: : Limits.LimitCone S.diagram
-  body: ⟨S.asLimitCone, S.asLimit⟩
-
-中文:
-定义 lim
-  签名: : Limits.极限锥 S.diagram
-  定义体: ⟨S.asLimitCone, S.asLimit⟩
-
-Depends on / 依赖: S.asLimit, S.asLimitCone, asLimit, asLimitCone
+--- 原说明 ---
+A bundled version of `S.asLimitCone` and `S.asLimit`.
 -/
 def lim : Limits.LimitCone S.diagram := ⟨S.asLimitCone, S.asLimit⟩
 
-/--
-Definition of `proj` / `proj` 的定义
+/-- The projection from `S` to the `n`th component of `S.diagram`. -/
+/-
+**LightProfinite.proj** 是 Mathlib 中的一个缩写定义，位于命名空间 `LightProfinite`。
+形式化陈述：proj (n : Nat) : S ⟶ S.diagram.obj ⟨n⟩
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation proj
-  signature: (n : Nat)
-  body: S.asLimitCone.π.app ⟨n⟩
-
-中文:
-缩写 proj
-  签名: (n : 自然数)
-  定义体: S.asLimitCone.π.app ⟨n⟩
-
-Depends on / 依赖: S.asLimitCone, asLimitCone
+--- 原说明 ---
+The projection from `S` to the `n`th component of `S.diagram`.
 -/
-abbrev proj (n : Nat) : S ⟶ S.diagram.obj ⟨n⟩ := S.asLimitCone.π.app ⟨n⟩
-
-/--
-lemma `lightToProfinite_map_proj_eq` / 引理 `lightToProfinite_map_proj_eq`
-
-English:
-lemma lightToProfinite_map_proj_eq
-  given: (n : Nat)
-  statement: lightToProfinite.map (S.proj n) =
-  proof: by
-  simp only [toCompHausLike_map]
-  let c : Cone (S.diagram ⋙ lightToProfinite) := S.toLightDiagram.cone
-  let hc : IsLimit c := S.toLightDiagram.isLimit
-  exact liftedLimitMapsToOriginal_inv_map_π hc _
-
-中文:
-引理 lightToProfinite_map_proj_eq
-  条件: (n : 自然数)
-  结论: lightToProfinite.map (S.proj n) =
-  证明: by
-  simp only [toCompHausLike_map]
-  let c : Cone (S.diagram ⋙ lightToProfinite) := S.toLightDiagram.cone
-  let hc : IsLimit c := S.toLightDiagram.isLimit
-  exact liftedLimitMapsToOriginal_inv_map_π hc _
-
-Depends on / 依赖: IsLimit, S.diagram, S.toLightDiagram.cone, S.toLightDiagram.isLimit, diagram, isLimit, lightToProfinite, toCompHausLike_map, toLightDiagram
+abbrev proj (n : ℕ) : S ⟶ S.diagram.obj ⟨n⟩ := S.asLimitCone.π.app ⟨n⟩
+/-
+**LightProfinite.lightToProfinite_map_proj_eq** 是 Mathlib 中的一个引理，位于命名空间 `LightPr
+ofinite`。
+形式化陈述：lightToProfinite_map_proj_eq (n : Nat) : lightToProfinite.map (S.proj n) =
+ (lightToProfinite.obj S).asLimitCone.π.app _
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CompHausLike.is_compact`：∀ {P : TopCat → Prop} (self : CompHausLike P), 
+CompactSpace ↑self.toTop
+· 使用定理 `CompHausLike.is_hausdorff`：∀ {P : TopCat → Prop} (self : CompHausLike P)
+, T2Space ↑self.toTop
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CompHausLike.toCompHausLike_map`：∀ {P P' : TopCat → Prop} (h : ∀ (X : Co
+mpHausLike P), P X.toTop → P' X.toTop) {X Y : CompHausLike P} (f : X ⟶ Y),   (Co
+mpHausLike.toCompHaus…
+· 使用引理 `CategoryTheory.liftedLimitMapsToOriginal_inv_map_π`：liftedLimitMapsToOri
+ginal_inv_map_π {K : J ⥤ C} {F : C ⥤ D} [CreatesLimit K F] {c : Cone (K ⋙ F)} (t
+ : IsLimit c) (j : J) : (liftedLimitMaps…
+· 使用定理 `CategoryTheory.instCountableCategoryNat`：CategoryTheory.CountableCategor
+y ℕ
 -/
-lemma lightToProfinite_map_proj_eq (n : Nat) : lightToProfinite.map (S.proj n) =
+lemma lightToProfinite_map_proj_eq (n : ℕ) : lightToProfinite.map (S.proj n) =
     (lightToProfinite.obj S).asLimitCone.π.app _ := by
   simp only [toCompHausLike_map]
   let c : Cone (S.diagram ⋙ lightToProfinite) := S.toLightDiagram.cone
   let hc : IsLimit c := S.toLightDiagram.isLimit
   exact liftedLimitMapsToOriginal_inv_map_π hc _
-
-/--
-lemma `proj_surjective` / 引理 `proj_surjective`
-
-English:
-lemma proj_surjective
-  given: (n : Nat)
-  statement: Function.Surjective (S.proj n)
-  proof: by
+/-
+**LightProfinite.proj_surjective** 是 Mathlib 中的一个引理，位于命名空间 `LightProfinite`。
+形式化陈述：proj_surjective (n : Nat) : Function.Surjective (S.proj n)
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `LightProfinite.lightToProfinite_map_proj_eq`：lightToProfinite_map_proj_e
+q (n : Nat) : lightToProfinite.map (S.proj n) = (lightToProfinite.obj S).asLimit
+Cone.π.app _
+· 使用定理 `DiscreteQuotient.proj_surjective`：proj_surjective : Function.Surjective 
+S.proj
+-/
+lemma proj_surjective (n : ℕ) : Function.Surjective (S.proj n) := by
   change Function.Surjective (lightToProfinite.map (S.proj n))
   rw [lightToProfinite_map_proj_eq]
   exact DiscreteQuotient.proj_surjective _
 
-中文:
-引理 proj_surjective
-  条件: (n : 自然数)
-  结论: 函数.满射 (S.proj n)
-  证明: by
-  change Function.Surjective (lightToProfinite.map (S.proj n))
-  rw [lightToProfinite_map_proj_eq]
-  exact DiscreteQuotient.proj_surjective _
+/-- An abbreviation for the `n`th component of `S.diagram`. -/
+/-
+**LightProfinite.component** 是 Mathlib 中的一个缩写定义，位于命名空间 `LightProfinite`。
+形式化陈述：component (n : Nat) : LightProfinite
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: DiscreteQuotient, DiscreteQuotient.proj_surjective, Function, Function.Surjective, S.proj, Surjective, lightToProfinite, lightToProfinite.map, lightToProfinite_map_proj_eq, proj_surjective
+--- 原说明 ---
+An abbreviation for the `n`th component of `S.diagram`.
 -/
-lemma proj_surjective (n : Nat) : Function.Surjective (S.proj n) := by
-  change Function.Surjective (lightToProfinite.map (S.proj n))
-  rw [lightToProfinite_map_proj_eq]
-  exact DiscreteQuotient.proj_surjective _
+abbrev component (n : ℕ) : LightProfinite := S.diagram.obj ⟨n⟩
 
-/--
-Definition of `component` / `component` 的定义
+/-- The transition map from `S_{n+1}` to `S_n` in `S.diagram`. -/
+/-
+**LightProfinite.transitionMap** 是 Mathlib 中的一个缩写定义，位于命名空间 `LightProfinite`。
+形式化陈述：transitionMap (n : Nat) : S.component (n + 1) ⟶ S.component n
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation component
-  signature: (n : Nat)
-  body: S.diagram.obj ⟨n⟩
-
-中文:
-缩写 component
-  签名: (n : 自然数)
-  定义体: S.diagram.obj ⟨n⟩
-
-Depends on / 依赖: S.diagram.obj, diagram
+--- 原说明 ---
+The transition map from `S_{n+1}` to `S_n` in `S.diagram`.
 -/
-abbrev component (n : Nat) : LightProfinite := S.diagram.obj ⟨n⟩
-
-/--
-Definition of `transitionMap` / `transitionMap` 的定义
-
-English:
-abbreviation transitionMap
-  signature: (n : Nat)
-  body: S.diagram.map ⟨homOfLE (Nat.le_succ _)⟩
-
-中文:
-缩写 transitionMap
-  签名: (n : 自然数)
-  定义体: S.diagram.map ⟨homOfLE (Nat.le_succ _)⟩
-
-Depends on / 依赖: Nat.le_succ, S.diagram.map, diagram, homOfLE, le_succ
--/
-abbrev transitionMap (n : Nat) : S.component (n + 1) ⟶ S.component n :=
+abbrev transitionMap (n : ℕ) : S.component (n + 1) ⟶ S.component n :=
   S.diagram.map ⟨homOfLE (Nat.le_succ _)⟩
 
-/--
-Definition of `transitionMapLE` / `transitionMapLE` 的定义
+/-- The transition map from `S_m` to `S_n` in `S.diagram`, when `m ≤ n`. -/
+/-
+**LightProfinite.transitionMapLE** 是 Mathlib 中的一个缩写定义，位于命名空间 `LightProfinite`。
+形式化陈述：transitionMapLE {n m : Nat} (h : n <= m) : S.component m ⟶ S.component n
+参数：h : n <= m。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation transitionMapLE
-  signature: {n m : Nat} (h : n <= m)
-  body: S.diagram.map ⟨homOfLE h⟩
-
-中文:
-缩写 transitionMapLE
-  签名: {n m : 自然数} (h : n <= m)
-  定义体: S.diagram.map ⟨homOfLE h⟩
-
-Depends on / 依赖: S.diagram.map, diagram, homOfLE
+--- 原说明 ---
+The transition map from `S_m` to `S_n` in `S.diagram`, when `m ≤ n`.
 -/
-abbrev transitionMapLE {n m : Nat} (h : n <= m) : S.component m ⟶ S.component n :=
+abbrev transitionMapLE {n m : ℕ} (h : n ≤ m) : S.component m ⟶ S.component n :=
   S.diagram.map ⟨homOfLE h⟩
-
-/--
-lemma `proj_comp_transitionMap` / 引理 `proj_comp_transitionMap`
-
-English:
-lemma proj_comp_transitionMap
-  given: (n : Nat)
-  proof: S.asLimitCone.w (homOfLE (Nat.le_succ n)).op
-
-中文:
-引理 proj_comp_transitionMap
-  条件: (n : 自然数)
-  证明: S.asLimitCone.w (homOfLE (Nat.le_succ n)).op
-
-Depends on / 依赖: Nat.le_succ, S.asLimitCone.w, asLimitCone, homOfLE, le_succ
+/-
+**LightProfinite.proj_comp_transitionMap** 是 Mathlib 中的一个引理，位于命名空间 `LightProfini
+te`。
+形式化陈述：proj_comp_transitionMap (n : Nat) : S.proj (n + 1) ≫ S.diagram.map ⟨homOfL
+E (Nat.le_succ _)⟩ = S.proj n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Cone.w`：∀ {J : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} C]   
+{F : CategoryTheor…
+· 使用定理 `Nat.le_succ`：∀ (n : ℕ), n ≤ n.succ
 -/
-lemma proj_comp_transitionMap (n : Nat) :
+lemma proj_comp_transitionMap (n : ℕ) :
     S.proj (n + 1) ≫ S.diagram.map ⟨homOfLE (Nat.le_succ _)⟩ = S.proj n :=
   S.asLimitCone.w (homOfLE (Nat.le_succ n)).op
-
-/--
-lemma `proj_comp_transitionMap'` / 引理 `proj_comp_transitionMap'`
-
-English:
-lemma proj_comp_transitionMap'
-  given: (n : Nat)
-  statement: S.transitionMap n ∘ S.proj (n + 1) = S.proj n
-  proof: by
-  rw [← S.proj_comp_transitionMap n]
-  rfl
-
-中文:
-引理 proj_comp_transitionMap'
-  条件: (n : 自然数)
-  结论: S.transitionMap n ∘ S.proj (n + 1) = S.proj n
-  证明: by
-  rw [← S.proj_comp_transitionMap n]
-  rfl
-
-Depends on / 依赖: S.proj_comp_transitionMap, proj_comp_transitionMap
+/-
+**LightProfinite.proj_comp_transitionMap'** 是 Mathlib 中的一个引理，位于命名空间 `LightProfin
+ite`。
+形式化陈述：proj_comp_transitionMap' (n : Nat) : S.transitionMap n ∘ S.proj (n + 1) = 
+S.proj n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.le_succ`：∀ (n : ℕ), n ≤ n.succ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `LightProfinite.proj_comp_transitionMap`：proj_comp_transitionMap (n : Nat
+) : S.proj (n + 1) ≫ S.diagram.map ⟨homOfLE (Nat.le_succ _)⟩ = S.proj n
 -/
-lemma proj_comp_transitionMap' (n : Nat) : S.transitionMap n ∘ S.proj (n + 1) = S.proj n := by
+lemma proj_comp_transitionMap' (n : ℕ) : S.transitionMap n ∘ S.proj (n + 1) = S.proj n := by
   rw [← S.proj_comp_transitionMap n]
   rfl
-
-/--
-lemma `proj_comp_transitionMapLE` / 引理 `proj_comp_transitionMapLE`
-
-English:
-lemma proj_comp_transitionMapLE
-  given: {n m : Nat} (h : n <= m)
-  proof: S.asLimitCone.w (homOfLE h).op
-
-中文:
-引理 proj_comp_transitionMapLE
-  条件: {n m : 自然数} (h : n <= m)
-  证明: S.asLimitCone.w (homOfLE h).op
-
-Depends on / 依赖: S.asLimitCone.w, asLimitCone, homOfLE
+/-
+**LightProfinite.proj_comp_transitionMapLE** 是 Mathlib 中的一个引理，位于命名空间 `LightProfi
+nite`。
+形式化陈述：proj_comp_transitionMapLE {n m : Nat} (h : n <= m) : S.proj m ≫ S.diagram.
+map ⟨homOfLE h⟩ = S.proj n
+参数：h : n <= m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Cone.w`：∀ {J : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} C]   
+{F : CategoryTheor…
 -/
-lemma proj_comp_transitionMapLE {n m : Nat} (h : n <= m) :
+lemma proj_comp_transitionMapLE {n m : ℕ} (h : n ≤ m) :
     S.proj m ≫ S.diagram.map ⟨homOfLE h⟩ = S.proj n :=
   S.asLimitCone.w (homOfLE h).op
-
-/--
-lemma `proj_comp_transitionMapLE'` / 引理 `proj_comp_transitionMapLE'`
-
-English:
-lemma proj_comp_transitionMapLE'
-  given: {n m : Nat} (h : n <= m)
-  proof: by
-  rw [← S.proj_comp_transitionMapLE h]
-  rfl
-
-中文:
-引理 proj_comp_transitionMapLE'
-  条件: {n m : 自然数} (h : n <= m)
-  证明: by
-  rw [← S.proj_comp_transitionMapLE h]
-  rfl
-
-Depends on / 依赖: S.proj_comp_transitionMapLE, proj_comp_transitionMapLE
+/-
+**LightProfinite.proj_comp_transitionMapLE'** 是 Mathlib 中的一个引理，位于命名空间 `LightProf
+inite`。
+形式化陈述：proj_comp_transitionMapLE' {n m : Nat} (h : n <= m) : S.transitionMapLE h 
+∘ S.proj m = S.proj n
+参数：h : n <= m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `LightProfinite.proj_comp_transitionMapLE`：proj_comp_transitionMapLE {n m
+ : Nat} (h : n <= m) : S.proj m ≫ S.diagram.map ⟨homOfLE h⟩ = S.proj n
 -/
-lemma proj_comp_transitionMapLE' {n m : Nat} (h : n <= m) :
+lemma proj_comp_transitionMapLE' {n m : ℕ} (h : n ≤ m) :
     S.transitionMapLE h ∘ S.proj m = S.proj n := by
   rw [← S.proj_comp_transitionMapLE h]
   rfl
-
-/--
-lemma `surjective_transitionMap` / 引理 `surjective_transitionMap`
-
-English:
-lemma surjective_transitionMap
-  given: (n : Nat)
-  statement: Function.Surjective (S.transitionMap n)
-  proof: by
-  apply Function.Surjective.of_comp (g := S.proj (n + 1))
-  simpa only [proj_comp_transitionMap'] using S.proj_surjective n
-
-中文:
-引理 surjective_transitionMap
-  条件: (n : 自然数)
-  结论: 函数.满射 (S.transitionMap n)
-  证明: by
-  apply Function.Surjective.of_comp (g := S.proj (n + 1))
-  simpa only [proj_comp_transitionMap'] using S.proj_surjective n
-
-Depends on / 依赖: Function, Function.Surjective.of_comp, S.proj, S.proj_surjective, Surjective, of_comp, proj_comp_transitionMap, proj_surjective
+/-
+**LightProfinite.surjective_transitionMap** 是 Mathlib 中的一个引理，位于命名空间 `LightProfin
+ite`。
+形式化陈述：surjective_transitionMap (n : Nat) : Function.Surjective (S.transitionMap 
+n)
+参数：n : Nat。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Surjective.of_comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u
+_3} {f : α → β} {g : γ → α},   Function.Surjective (f ∘ g) → Function.Surjective
+ f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `LightProfinite.proj_comp_transitionMap'`：proj_comp_transitionMap' (n : N
+at) : S.transitionMap n ∘ S.proj (n + 1) = S.proj n
+· 使用引理 `LightProfinite.proj_surjective`：proj_surjective (n : Nat) : Function.Sur
+jective (S.proj n)
 -/
-lemma surjective_transitionMap (n : Nat) : Function.Surjective (S.transitionMap n) := by
+lemma surjective_transitionMap (n : ℕ) : Function.Surjective (S.transitionMap n) := by
   apply Function.Surjective.of_comp (g := S.proj (n + 1))
   simpa only [proj_comp_transitionMap'] using S.proj_surjective n
-
-/--
-lemma `surjective_transitionMapLE` / 引理 `surjective_transitionMapLE`
-
-English:
-lemma surjective_transitionMapLE
-  given: {n m : Nat} (h : n <= m)
-  proof: by
-  apply Function.Surjective.of_comp (g := S.proj m)
-  simpa only [proj_comp_transitionMapLE'] using S.proj_surjective n
-
-中文:
-引理 surjective_transitionMapLE
-  条件: {n m : 自然数} (h : n <= m)
-  证明: by
-  apply Function.Surjective.of_comp (g := S.proj m)
-  simpa only [proj_comp_transitionMapLE'] using S.proj_surjective n
-
-Depends on / 依赖: Function, Function.Surjective.of_comp, S.proj, S.proj_surjective, Surjective, of_comp, proj_comp_transitionMapLE, proj_surjective
+/-
+**LightProfinite.surjective_transitionMapLE** 是 Mathlib 中的一个引理，位于命名空间 `LightProf
+inite`。
+形式化陈述：surjective_transitionMapLE {n m : Nat} (h : n <= m) : Function.Surjective 
+(S.transitionMapLE h)
+参数：h : n <= m。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Surjective.of_comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u
+_3} {f : α → β} {g : γ → α},   Function.Surjective (f ∘ g) → Function.Surjective
+ f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `LightProfinite.proj_comp_transitionMapLE'`：proj_comp_transitionMapLE' {n
+ m : Nat} (h : n <= m) : S.transitionMapLE h ∘ S.proj m = S.proj n
+· 使用引理 `LightProfinite.proj_surjective`：proj_surjective (n : Nat) : Function.Sur
+jective (S.proj n)
 -/
-lemma surjective_transitionMapLE {n m : Nat} (h : n <= m) :
+lemma surjective_transitionMapLE {n m : ℕ} (h : n ≤ m) :
     Function.Surjective (S.transitionMapLE h) := by
   apply Function.Surjective.of_comp (g := S.proj m)
   simpa only [proj_comp_transitionMapLE'] using S.proj_surjective n
 
 end LightProfinite
+

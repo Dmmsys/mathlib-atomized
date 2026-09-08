@@ -26,20 +26,17 @@ namespace TopCat
 
 variable {X Y Z : TopCat.{u}}
 
-/--
-Definition of `Homotopy` / `Homotopy` 的定义
+/-- A homotopy between morphisms in `TopCat` is a homotopy between
+the corresponding continuous maps. -/
+/-
+**TopCat.Homotopy** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopCat`。
+形式化陈述：Homotopy (f g : X ⟶ Y)
+参数：f g : X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Homotopy
-  signature: (f g : X ⟶ Y)
-  body: ContinuousMap.Homotopy f.hom g.hom
-
-中文:
-缩写 同伦
-  签名: (f g : X ⟶ Y)
-  定义体: ContinuousMap.Homotopy f.hom g.hom
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.Homotopy, Homotopy, f.hom, g.hom
+--- 原说明 ---
+A homotopy between morphisms in `TopCat` is a homotopy between
+the corresponding continuous maps.
 -/
 abbrev Homotopy (f g : X ⟶ Y) := ContinuousMap.Homotopy f.hom g.hom
 
@@ -47,202 +44,114 @@ namespace Homotopy
 
 variable {f₀ f₁ f₂ : X ⟶ Y} (F : Homotopy f₀ f₁) (G : Homotopy f₁ f₂)
 
-/--
-Definition of `h` / `h` 的定义
+/-- The morphism `X ⊗ I ⟶ Y` that is part of a homotopy between two morphisms in `TopCat`. -/
+/-
+**TopCat.Homotopy.h** 是 Mathlib 中的一个定义，位于命名空间 `TopCat.Homotopy`。
+形式化陈述：h (H : Homotopy f₀ f₁) : X otimes I ⟶ Y
+参数：H : Homotopy f₀ f₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition h
-  signature: (H : Homotopy f₀ f₁)
-  body: (β_ _ _).hom ≫ ofHom (H.toContinuousMap.comp (ContinuousMap.prodMap I.homeomorph (.id _)))
-
-中文:
-定义 h
-  签名: (H : 同伦 f₀ f₁)
-  定义体: (β_ _ _).hom ≫ ofHom (H.toContinuousMap.comp (ContinuousMap.prodMap I.homeomorph (.id _)))
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.prodMap, H.toContinuousMap.comp, I.homeomorph, homeomorph, prodMap, toContinuousMap
+--- 原说明 ---
+The morphism `X ⊗ I ⟶ Y` that is part of a homotopy between two morphisms in `To
+pCat`.
 -/
-def h (H : Homotopy f₀ f₁) : X otimes I ⟶ Y :=
+def h (H : Homotopy f₀ f₁) : X ⊗ I ⟶ Y :=
   (β_ _ _).hom ≫ ofHom (H.toContinuousMap.comp (ContinuousMap.prodMap I.homeomorph (.id _)))
 
 -- simps generates the wrong apply lemma
 @[simp]
-/--
-theorem `h_hom_apply` / 定理 `h_hom_apply`
-
-English:
-theorem h_hom_apply
-  given: (p : ↑(X otimes I))
-  statement: F.h p = F (I.homeomorph p.2, p.1)
-  proof: rfl
-
-@[reassoc (attr := simp)]
-
-中文:
-定理 h_hom_apply
-  条件: (p : ↑(X otimes I))
-  结论: F.h p = F (I.homeomorph p.2, p.1)
-  证明: rfl
-
-@[reassoc (attr := simp)]
+/-
+**TopCat.Homotopy.h_hom_apply** 是 Mathlib 中的一个定理，位于命名空间 `TopCat.Homotopy`。
+形式化陈述：h_hom_apply (p : ↑(X otimes I)) : F.h p = F (I.homeomorph p.2, p.1)
+参数：p : ↑(X otimes I)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem h_hom_apply (p : ↑(X otimes I)) : F.h p = F (I.homeomorph p.2, p.1) := rfl
+theorem h_hom_apply (p : ↑(X ⊗ I)) : F.h p = F (I.homeomorph p.2, p.1) := rfl
 
 @[reassoc (attr := simp)]
-/--
-lemma `ι₀_h` / 引理 `ι₀_h`
-
-English:
-lemma ι₀_h
-  statement: ι₀ ≫ F.h = f₀
-  proof: by
-  ext x
-  exact F.map_zero_left x
-
-@[reassoc (attr := simp)]
-
-中文:
-引理 ι₀_h
-  结论: ι₀ ≫ F.h = f₀
-  证明: by
-  ext x
-  exact F.map_zero_left x
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: F.map_zero_left, map_zero_left
+/-
+**TopCat.Homotopy.** 是 Mathlib 中的一个引理，位于命名空间 `TopCat.Homotopy`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι₀_h : ι₀ ≫ F.h = f₀ := by
   ext x
   exact F.map_zero_left x
 
 @[reassoc (attr := simp)]
-/--
-lemma `ι₁_h` / 引理 `ι₁_h`
-
-English:
-lemma ι₁_h
-  statement: ι₁ ≫ F.h = f₁
-  proof: by
-  ext x
-  exact F.map_one_left x
-
-中文:
-引理 ι₁_h
-  结论: ι₁ ≫ F.h = f₁
-  证明: by
-  ext x
-  exact F.map_one_left x
-
-Depends on / 依赖: F.map_one_left, map_one_left
+/-
+**TopCat.Homotopy.** 是 Mathlib 中的一个引理，位于命名空间 `TopCat.Homotopy`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι₁_h : ι₁ ≫ F.h = f₁ := by
   ext x
   exact F.map_one_left x
 
-/--
-Definition of `refl` / `refl` 的定义
+/-- The identity homotopy of a morphism `f : X ⟶ Y` in `TopCat`. -/
+/-
+**TopCat.Homotopy.refl** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopCat.Homotopy`。
+形式化陈述：refl (f : X ⟶ Y)
+参数：f : X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation refl
-  signature: (f : X ⟶ Y)
-  body: ContinuousMap.Homotopy.refl f.hom
-
-@[simp]
-
-中文:
-缩写 refl
-  签名: (f : X ⟶ Y)
-  定义体: ContinuousMap.Homotopy.refl f.hom
-
-@[simp]
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.Homotopy.refl, Homotopy, f.hom
+--- 原说明 ---
+The identity homotopy of a morphism `f : X ⟶ Y` in `TopCat`.
 -/
 abbrev refl (f : X ⟶ Y) := ContinuousMap.Homotopy.refl f.hom
 
 @[simp]
-/--
-lemma `h_refl` / 引理 `h_refl`
-
-English:
-lemma h_refl
-  statement: h (refl f₀) = fst _ _ ≫ f₀
-  proof: rfl
-
-中文:
-引理 h_refl
-  结论: h (refl f₀) = fst _ _ ≫ f₀
-  证明: rfl
+/-
+**TopCat.Homotopy.h_refl** 是 Mathlib 中的一个引理，位于命名空间 `TopCat.Homotopy`。
+形式化陈述：h_refl : h (refl f₀) = fst _ _ ≫ f₀
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma h_refl : h (refl f₀) = fst _ _ ≫ f₀ := rfl
 
-/--
-Definition of `symm` / `symm` 的定义
+/-- The reverse of a homotopy `F` in `TopCat`. -/
+/-
+**TopCat.Homotopy.symm** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopCat.Homotopy`。
+形式化陈述：symm
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation symm
-  body: ContinuousMap.Homotopy.symm F
-
-@[simp]
-
-中文:
-缩写 symm
-  定义体: ContinuousMap.Homotopy.symm F
-
-@[simp]
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.Homotopy.symm, Homotopy
+--- 原说明 ---
+The reverse of a homotopy `F` in `TopCat`.
 -/
 abbrev symm := ContinuousMap.Homotopy.symm F
 
 @[simp]
-/--
-lemma `h_symm` / 引理 `h_symm`
-
-English:
-lemma h_symm
-  statement: h F.symm = (X ◁ I.symm) ≫ F.h
-  proof: rfl
-
-中文:
-引理 h_symm
-  结论: h F.symm = (X ◁ I.symm) ≫ F.h
-  证明: rfl
+/-
+**TopCat.Homotopy.h_symm** 是 Mathlib 中的一个引理，位于命名空间 `TopCat.Homotopy`。
+形式化陈述：h_symm : h F.symm = (X ◁ I.symm) ≫ F.h
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma h_symm : h F.symm = (X ◁ I.symm) ≫ F.h := rfl
 
-/--
-Definition of `trans` / `trans` 的定义
+/-- The compositions of homotopies in `TopCat`. -/
+/-
+**TopCat.Homotopy.trans** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopCat.Homotopy`。
+形式化陈述：trans
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation trans
-  body: ContinuousMap.Homotopy.trans F G
-
-中文:
-缩写 trans
-  定义体: ContinuousMap.Homotopy.trans F G
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.Homotopy.trans, Homotopy
+--- 原说明 ---
+The compositions of homotopies in `TopCat`.
 -/
 noncomputable abbrev trans := ContinuousMap.Homotopy.trans F G
 
 /-- The homotopy between compositions of morphisms in `TopCat`. -/
 @[simps!]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**TopCat.Homotopy.comp** 是 Mathlib 中的一个缩写定义，位于命名空间 `TopCat.Homotopy`。
+形式化陈述：comp {f₀ f₁ : X ⟶ Y} {g₀ g₁ : Y ⟶ Z} (G : Homotopy g₀ g₁) (F : Homotopy f₀
+ f₁) : Homotopy (f₀ ≫ g₀) (f₁ ≫ g₁)
+参数：G : Homotopy g₀ g₁；F : Homotopy f₀ f₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation comp
-  signature: {f₀ f₁ : X ⟶ Y} {g₀ g₁ : Y ⟶ Z} (G : Homotopy g₀ g₁) (F : Homotopy f₀ f₁)
-  body: ContinuousMap.Homotopy.comp G F
-
-中文:
-缩写 comp
-  签名: {f₀ f₁ : X ⟶ Y} {g₀ g₁ : Y ⟶ Z} (G : 同伦 g₀ g₁) (F : 同伦 f₀ f₁)
-  定义体: ContinuousMap.Homotopy.comp G F
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.Homotopy.comp, Homotopy
+--- 原说明 ---
+The homotopy between compositions of morphisms in `TopCat`.
 -/
 abbrev comp {f₀ f₁ : X ⟶ Y} {g₀ g₁ : Y ⟶ Z} (G : Homotopy g₀ g₁) (F : Homotopy f₀ f₁) :
     Homotopy (f₀ ≫ g₀) (f₁ ≫ g₁) := ContinuousMap.Homotopy.comp G F
@@ -251,22 +160,28 @@ attribute [nolint simpNF] comp_apply
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `h_comp` / 引理 `h_comp`
-
-English:
-lemma h_comp
-  given: {f₀ f₁ : X ⟶ Y} {g₀ g₁ : Y ⟶ Z} (G : Homotopy g₀ g₁) (F : Homotopy f₀ f₁)
-  proof: by
-  ext
-  simp
-
-中文:
-引理 h_comp
-  条件: {f₀ f₁ : X ⟶ Y} {g₀ g₁ : Y ⟶ Z} (G : 同伦 g₀ g₁) (F : 同伦 f₀ f₁)
-  证明: by
-  ext
-  simp
+/-
+**TopCat.Homotopy.h_comp** 是 Mathlib 中的一个引理，位于命名空间 `TopCat.Homotopy`。
+形式化陈述：h_comp {f₀ f₁ : X ⟶ Y} {g₀ g₁ : Y ⟶ Z} (G : Homotopy g₀ g₁) (F : Homotopy 
+f₀ f₁) : (G.comp F).h = X ◁ lift (𝟙 I) (𝟙 I) ≫ (α_ _ _ _).inv ≫ F.h ▷ _ ≫ G.h
+参数：G : Homotopy g₀ g₁；F : Homotopy f₀ f₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `TopCat.ext`：ext {X Y : TopCat.{u}} {f g : X ⟶ Y} (w : forall x : X, f x 
+= g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `TopCat.Homotopy.comp_apply`：∀ {X Y Z : TopCat} {f₀ f₁ : X ⟶ Y} {g₀ g₁ : 
+Y ⟶ Z} (G : TopCat.Homotopy g₀ g₁) (F : TopCat.Homotopy f₀ f₁)   (x : ↑unitInter
+val × ↑X), (G.co…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Prod.mk.eta`：∀ {α : Type u_1} {β : Type u_2} {p : α × β}, (p.1, p.2) = p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma h_comp {f₀ f₁ : X ⟶ Y} {g₀ g₁ : Y ⟶ Z} (G : Homotopy g₀ g₁) (F : Homotopy f₀ f₁) :
     (G.comp F).h = X ◁ lift (𝟙 I) (𝟙 I) ≫ (α_ _ _ _).inv ≫ F.h ▷ _ ≫ G.h := by
@@ -276,3 +191,4 @@ lemma h_comp {f₀ f₁ : X ⟶ Y} {g₀ g₁ : Y ⟶ Z} (G : Homotopy g₀ g₁
 end Homotopy
 
 end TopCat
+

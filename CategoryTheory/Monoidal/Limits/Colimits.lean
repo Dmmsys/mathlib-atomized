@@ -40,39 +40,52 @@ section
 variable {F₁ : J₁ ⥤ C} {F₂ : J₂ ⥤ C} {c₁ : Cocone F₁} {c₂ : Cocone F₂}
 
 variable (c₁ c₂) in
-/--
-Definition of `Cocone.tensor₂` / `Cocone.tensor₂` 的定义
+/-- The external tensor product of two cocones. -/
+/-
+**CategoryTheory.Limits.Cocone.tensor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Limits.Cocone`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     [in
+st_1 : CategoryTheory.MonoidalCategory C] →       {J : Type u_2} →         [inst
+_2 : CategoryTheory.Category.{v_2, u_2} J] →           {F₁ F₂ : CategoryTheory.F
+unctor J C} →             CategoryTheory.Limits.Cocone F₁ →               Catego
+ryTheory.Limits.Cocone F₂ →                 CategoryTheory.Limits.Cocone (Catego
+ryTheory.MonoidalCategoryStruct.tensorObj F₁ F₂)
+参数：CategoryTheory.MonoidalCategoryStruct.tensorObj F₁ F₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Cocone.tensor₂
-  signature: :
-  body: (curriedTensor C).mapCocone₂ c₁ c₂
-
-中文:
-缩写 余锥.tensor₂
-  签名: :
-  定义体: (curriedTensor C).mapCocone₂ c₁ c₂
-
-Depends on / 依赖: curriedTensor
+--- 原说明 ---
+The external tensor product of two cocones.
 -/
 abbrev Cocone.tensor₂ :
     Cocone (externalProduct F₁ F₂) :=
   (curriedTensor C).mapCocone₂ c₁ c₂
 
-/--
-Definition of `IsColimit.tensor₂` / `IsColimit.tensor₂` 的定义
+/-- The external tensor product of colimit cocones for functors `F₁ : J₁ ⥤ C`
+and `F₂ : J₂ ⥤ C` is a colimit cocone when `PreservesColimit₂ F₁ F₂ (curriedTensor C)`
+holds. -/
+/-
+**CategoryTheory.Limits.IsColimit.tensor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Limits.IsColimit`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     [in
+st_1 : CategoryTheory.MonoidalCategory C] →       {J : Type u_2} →         [inst
+_2 : CategoryTheory.Category.{v_2, u_2} J] →           {F₁ F₂ : CategoryTheory.F
+unctor J C} →             {c₁ : CategoryTheory.Limits.Cocone F₁} →              
+ {c₂ : CategoryTheory.Limits.Cocone F₂} →                 [CategoryTheory.Limits
+.PreservesColimit₂ F₁ F₂ (CategoryTheory.MonoidalCategory.curriedTensor C)] →   
+                [CategoryTheory.IsSifted J] →                     CategoryTheory
+.Limits.IsColimit c₁ →                       CategoryTheory.Limits.IsColimit c₂ 
+→ CategoryTheory.Limits.IsColimit (c₁.tensor c₂)
+参数：CategoryTheory.MonoidalCategory.curriedTensor C；c₁.tensor c₂。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsSifted.toFinal`：∀ {C : Type u} {inst : CategoryTheory.C
+ategory.{v, u} C} [self : CategoryTheory.IsSifted C],   (CategoryTheory.Functor.
+diag C).Final
 
-English:
-definition IsColimit.tensor₂
-  signature: [PreservesColimit₂ F₁ F₂ (curriedTensor C)]
-  body: isColimitOfPreserves₂ (curriedTensor C) hc₁ hc₂
-
-中文:
-定义 是余极限.tensor₂
-  签名: [保持余limit₂ F₁ F₂ (curriedTensor C)]
-  定义体: isColimitOfPreserves₂ (curriedTensor C) hc₁ hc₂
-
-Depends on / 依赖: curriedTensor
+--- 原说明 ---
+The external tensor product of colimit cocones for functors `F₁ : J₁ ⥤ C`
+and `F₂ : J₂ ⥤ C` is a colimit cocone when `PreservesColimit₂ F₁ F₂ (curriedTens
+or C)`
+holds.
 -/
 noncomputable def IsColimit.tensor₂ [PreservesColimit₂ F₁ F₂ (curriedTensor C)]
     (hc₁ : IsColimit c₁) (hc₂ : IsColimit c₂) :
@@ -89,61 +102,64 @@ set_option backward.defeqAttrib.useBackward true in
 variable (c₁ c₂) in
 /-- The tensor product of two cocones. -/
 @[simps!]
-/--
-Definition of `Cocone.tensor` / `Cocone.tensor` 的定义
+/-
+**CategoryTheory.Limits.Cocone.tensor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Limits.Cocone`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     [in
+st_1 : CategoryTheory.MonoidalCategory C] →       {J : Type u_2} →         [inst
+_2 : CategoryTheory.Category.{v_2, u_2} J] →           {F₁ F₂ : CategoryTheory.F
+unctor J C} →             CategoryTheory.Limits.Cocone F₁ →               Catego
+ryTheory.Limits.Cocone F₂ →                 CategoryTheory.Limits.Cocone (Catego
+ryTheory.MonoidalCategoryStruct.tensorObj F₁ F₂)
+参数：CategoryTheory.MonoidalCategoryStruct.tensorObj F₁ F₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Cocone.tensor
-  signature: : Cocone (F₁ otimes F₂) where
-  body: c₁.pt otimes c₂.pt
-  ι.app j := c₁.ι.app j otimesₘ c₂.ι.app j
-
-中文:
-定义 余锥.tensor
-  签名: : 余锥 (F₁ otimes F₂) where
-  定义体: c₁.pt otimes c₂.pt
-  ι.app j := c₁.ι.app j otimesₘ c₂.ι.app j
-
-Depends on / 依赖: otimes
+--- 原说明 ---
+The tensor product of two cocones.
 -/
-def Cocone.tensor : Cocone (F₁ otimes F₂) where
-  pt := c₁.pt otimes c₂.pt
-  ι.app j := c₁.ι.app j otimesₘ c₂.ι.app j
+def Cocone.tensor : Cocone (F₁ ⊗ F₂) where
+  pt := c₁.pt ⊗ c₂.pt
+  ι.app j := c₁.ι.app j ⊗ₘ c₂.ι.app j
 
 set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 attribute [local simp] tensorHom_def in
-/--
-Definition of `IsColimit.tensor` / `IsColimit.tensor` 的定义
+/-- The tensor product of colimit cocones for functors `F₁ : J ⥤ C`
+and `F₂ : J ⥤ C` is a colimit cocone when `PreservesColimit₂ F₁ F₂ (curriedTensor C)`
+holds and `J` is sifted. -/
+/-
+**CategoryTheory.Limits.IsColimit.tensor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Limits.IsColimit`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     [in
+st_1 : CategoryTheory.MonoidalCategory C] →       {J : Type u_2} →         [inst
+_2 : CategoryTheory.Category.{v_2, u_2} J] →           {F₁ F₂ : CategoryTheory.F
+unctor J C} →             {c₁ : CategoryTheory.Limits.Cocone F₁} →              
+ {c₂ : CategoryTheory.Limits.Cocone F₂} →                 [CategoryTheory.Limits
+.PreservesColimit₂ F₁ F₂ (CategoryTheory.MonoidalCategory.curriedTensor C)] →   
+                [CategoryTheory.IsSifted J] →                     CategoryTheory
+.Limits.IsColimit c₁ →                       CategoryTheory.Limits.IsColimit c₂ 
+→ CategoryTheory.Limits.IsColimit (c₁.tensor c₂)
+参数：CategoryTheory.MonoidalCategory.curriedTensor C；c₁.tensor c₂。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.IsSifted.toFinal`：∀ {C : Type u} {inst : CategoryTheory.C
+ategory.{v, u} C} [self : CategoryTheory.IsSifted C],   (CategoryTheory.Functor.
+diag C).Final
 
-English:
-definition IsColimit.tensor
-  signature: [PreservesColimit₂ F₁ F₂ (curriedTensor C)] [IsSifted J]
-  body: by
-  refine (IsColimit.equivOfNatIsoOfIso ?_ _ _ ?_).1
-    ((Functor.Final.isColimitWhiskerEquiv (Functor.diag J) _).2 (hc₁.tensor₂ hc₂))
-  · exact NatIso.ofComponents (fun _ => Iso.refl _) (fun _ => by simp)
-  · exact Cocone.ext (Iso.refl _)
-
-中文:
-定义 是余极限.tensor
-  签名: [保持余limit₂ F₁ F₂ (curriedTensor C)] [是Sifted J]
-  定义体: by
-  refine (IsColimit.equivOfNatIsoOfIso ?_ _ _ ?_).1
-    ((Functor.Final.isColimitWhiskerEquiv (Functor.diag J) _).2 (hc₁.tensor₂ hc₂))
-  · exact NatIso.ofComponents (fun _ => Iso.refl _) (fun _ => by simp)
-  · exact Cocone.ext (Iso.refl _)
-
-Depends on / 依赖: Cocone, Cocone.ext, Functor, Functor.Final.isColimitWhiskerEquiv, Functor.diag, IsColimit, IsColimit.equivOfNatIsoOfIso, Iso.refl, NatIso, NatIso.ofComponents, equivOfNatIsoOfIso, isColimitWhiskerEquiv, ofComponents
+--- 原说明 ---
+The tensor product of colimit cocones for functors `F₁ : J ⥤ C`
+and `F₂ : J ⥤ C` is a colimit cocone when `PreservesColimit₂ F₁ F₂ (curriedTenso
+r C)`
+holds and `J` is sifted.
 -/
 noncomputable def IsColimit.tensor [PreservesColimit₂ F₁ F₂ (curriedTensor C)] [IsSifted J]
     (hc₁ : IsColimit c₁) (hc₂ : IsColimit c₂) :
     IsColimit (c₁.tensor c₂) := by
   refine (IsColimit.equivOfNatIsoOfIso ?_ _ _ ?_).1
     ((Functor.Final.isColimitWhiskerEquiv (Functor.diag J) _).2 (hc₁.tensor₂ hc₂))
-  · exact NatIso.ofComponents (fun _ => Iso.refl _) (fun _ => by simp)
+  · exact NatIso.ofComponents (fun _ ↦ Iso.refl _) (fun _ ↦ by simp)
   · exact Cocone.ext (Iso.refl _)
 
 end
 
 end CategoryTheory.Limits
+

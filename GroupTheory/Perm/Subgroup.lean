@@ -35,127 +35,109 @@ namespace Perm
 
 universe u
 
-/--
-Instance `sumCongrHom.decidableMemRange` / 实例 `sumCongrHom.decidableMemRange`
-
-English:
-instance sumCongrHom.decidableMemRange
-  signature: {α β : Type*} [DecidableEq α] [DecidableEq β] [Fintype α]
-  body: fun _ => inferInstance
-
-@[simp]
-
-中文:
-实例 sumCongrHom.decidableMemRange
-  签名: {α β : 类型} [DecidableEq α] [DecidableEq β] [有限类型 α]
-  定义体: fun _ => inferInstance
-
-@[simp]
+/-
+**Equiv.Perm.sumCongrHom.decidableMemRange** 是 Mathlib 中的一个定义，位于命名空间 `Equiv.Perm
+.sumCongrHom`。
+形式化陈述：{α : Type u_1} →   {β : Type u_2} →     [DecidableEq α] →       [Decidable
+Eq β] → [Fintype α] → [Fintype β] → DecidablePred fun x => x ∈ (Equiv.Perm.sumCo
+ngrHom α β).range
+参数：Equiv.Perm.sumCongrHom α β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance sumCongrHom.decidableMemRange {α β : Type*} [DecidableEq α] [DecidableEq β] [Fintype α]
-    [Fintype β] : DecidablePred (· in (sumCongrHom α β).range) := fun _ => inferInstance
+    [Fintype β] : DecidablePred (· ∈ (sumCongrHom α β).range) := fun _ => inferInstance
 
 @[simp]
-/--
-theorem `sumCongrHom.card_range` / 定理 `sumCongrHom.card_range`
-
-English:
-theorem sumCongrHom.card_range
-  statement: {α β : Type*} [Fintype (sumCongrHom α β).range]
-  proof: Fintype.card_eq.mpr ⟨(ofInjective (sumCongrHom α β) sumCongrHom_injective).symm⟩
-
-中文:
-定理 sumCongrHom.card_range
-  结论: {α β : 类型} [有限类型 (sumCongrHom α β).range]
-  证明: Fintype.card_eq.mpr ⟨(ofInjective (sumCongrHom α β) sumCongrHom_injective).symm⟩
-
-Depends on / 依赖: Fintype, Fintype.card_eq.mpr, card_eq, ofInjective, sumCongrHom, sumCongrHom_injective
+/-
+**Equiv.Perm.sumCongrHom.card_range** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.sumCon
+grHom`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Fintype ↥(Equiv.Perm.sumCongrHom α
+ β).range]   [inst_1 : Fintype (Equiv.Perm α × Equiv.Perm β)],   Fintype.card ↥(
+Equiv.Perm.sumCongrHom α β).range = Fintype.card (Equiv.Perm α × Equiv.Perm β)
+参数：Equiv.Perm.sumCongrHom α β；Equiv.Perm α × Equiv.Perm β；Equiv.Perm.sumCongrHom
+ α β；Equiv.Perm α × Equiv.Perm β。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Fintype.card_eq`：card_eq {α β} [_F : Fintype α] [_G : Fintype β] : card 
+α = card β ↔ Nonempty (α ≃ β)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.Perm.sumCongrHom_injective`：sumCongrHom_injective {α β : Type*} : 
+Function.Injective (sumCongrHom α β)
 -/
 theorem sumCongrHom.card_range {α β : Type*} [Fintype (sumCongrHom α β).range]
     [Fintype (Perm α × Perm β)] :
     Fintype.card (sumCongrHom α β).range = Fintype.card (Perm α × Perm β) :=
   Fintype.card_eq.mpr ⟨(ofInjective (sumCongrHom α β) sumCongrHom_injective).symm⟩
-
-/--
-Instance `sigmaCongrRightHom.decidableMemRange` / 实例 `sigmaCongrRightHom.decidableMemRange`
-
-English:
-instance sigmaCongrRightHom.decidableMemRange
-  signature: {α : Type*} {β : α -> Type*} [DecidableEq α]
-  body: fun _ => inferInstance
-
-@[simp]
-
-中文:
-实例 sigmaCongrRightHom.decidableMemRange
-  签名: {α : 类型} {β : α -> 类型} [DecidableEq α]
-  定义体: fun _ => inferInstance
-
-@[simp]
+/-
+**Equiv.Perm.sigmaCongrRightHom.decidableMemRange** 是 Mathlib 中的一个定义，位于命名空间 `Equ
+iv.Perm.sigmaCongrRightHom`。
+形式化陈述：{α : Type u_1} →   {β : α → Type u_2} →     [DecidableEq α] →       [(a : 
+α) → DecidableEq (β a)] →         [Fintype α] → [(a : α) → Fintype (β a)] → Deci
+dablePred fun x => x ∈ (Equiv.Perm.sigmaCongrRightHom β).range
+参数：a : α；β a；a : α；β a；Equiv.Perm.sigmaCongrRightHom β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance sigmaCongrRightHom.decidableMemRange {α : Type*} {β : α -> Type*} [DecidableEq α]
-    [forall a, DecidableEq (β a)] [Fintype α] [forall a, Fintype (β a)] :
-    DecidablePred (· in (sigmaCongrRightHom β).range) := fun _ => inferInstance
+instance sigmaCongrRightHom.decidableMemRange {α : Type*} {β : α → Type*} [DecidableEq α]
+    [∀ a, DecidableEq (β a)] [Fintype α] [∀ a, Fintype (β a)] :
+    DecidablePred (· ∈ (sigmaCongrRightHom β).range) := fun _ => inferInstance
 
 @[simp]
-/--
-theorem `sigmaCongrRightHom.card_range` / 定理 `sigmaCongrRightHom.card_range`
-
-English:
-theorem sigmaCongrRightHom.card_range
-  statement: {α : Type*} {β : α -> Type*}
-  proof: Fintype.card_eq.mpr ⟨(ofInjective (sigmaCongrRightHom β) sigmaCongrRightHom_injective).symm⟩
-
-中文:
-定理 sigmaCongrRightHom.card_range
-  结论: {α : 类型} {β : α -> 类型}
-  证明: Fintype.card_eq.mpr ⟨(ofInjective (sigmaCongrRightHom β) sigmaCongrRightHom_injective).symm⟩
-
-Depends on / 依赖: Fintype, Fintype.card_eq.mpr, card_eq, ofInjective, sigmaCongrRightHom, sigmaCongrRightHom_injective
+/-
+**Equiv.Perm.sigmaCongrRightHom.card_range** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm
+.sigmaCongrRightHom`。
+形式化陈述：∀ {α : Type u_1} {β : α → Type u_2} [inst : Fintype ↥(Equiv.Perm.sigmaCong
+rRightHom β).range]   [inst_1 : Fintype ((a : α) → Equiv.Perm (β a))],   Fintype
+.card ↥(Equiv.Perm.sigmaCongrRightHom β).range = Fintype.card ((a : α) → Equiv.P
+erm (β a))
+参数：Equiv.Perm.sigmaCongrRightHom β；(a : α) → Equiv.Perm (β a)；Equiv.Perm.sigmaCo
+ngrRightHom β；(a : α) → Equiv.Perm (β a)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Fintype.card_eq`：card_eq {α β} [_F : Fintype α] [_G : Fintype β] : card 
+α = card β ↔ Nonempty (α ≃ β)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.Perm.sigmaCongrRightHom_injective`：sigmaCongrRightHom_injective {α
+ : Type*} {β : α -> Type*} : Function.Injective (sigmaCongrRightHom β)
 -/
-theorem sigmaCongrRightHom.card_range {α : Type*} {β : α -> Type*}
-    [Fintype (sigmaCongrRightHom β).range] [Fintype (forall a, Perm (β a))] :
-    Fintype.card (sigmaCongrRightHom β).range = Fintype.card (forall a, Perm (β a)) :=
+theorem sigmaCongrRightHom.card_range {α : Type*} {β : α → Type*}
+    [Fintype (sigmaCongrRightHom β).range] [Fintype (∀ a, Perm (β a))] :
+    Fintype.card (sigmaCongrRightHom β).range = Fintype.card (∀ a, Perm (β a)) :=
   Fintype.card_eq.mpr ⟨(ofInjective (sigmaCongrRightHom β) sigmaCongrRightHom_injective).symm⟩
-
-/--
-Instance `subtypeCongrHom.decidableMemRange` / 实例 `subtypeCongrHom.decidableMemRange`
-
-English:
-instance subtypeCongrHom.decidableMemRange
-  signature: {α : Type*} (p : α -> Prop) [DecidablePred p]
-  body: fun _ => inferInstance
-
-@[simp]
-
-中文:
-实例 subtypeCongrHom.decidableMemRange
-  签名: {α : 类型} (p : α -> 命题) [DecidablePred p]
-  定义体: fun _ => inferInstance
-
-@[simp]
+/-
+**Equiv.Perm.subtypeCongrHom.decidableMemRange** 是 Mathlib 中的一个定义，位于命名空间 `Equiv.
+Perm.subtypeCongrHom`。
+形式化陈述：{α : Type u_1} →   (p : α → Prop) →     [inst : DecidablePred p] →       [
+Fintype (Equiv.Perm { a // p a } × Equiv.Perm { a // ¬p a })] →         [Decidab
+leEq (Equiv.Perm α)] → DecidablePred fun x => x ∈ (Equiv.Perm.subtypeCongrHom p)
+.range
+参数：p : α → Prop；Equiv.Perm { a // p a } × Equiv.Perm { a // ¬p a }；Equiv.Perm α；
+Equiv.Perm.subtypeCongrHom p。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance subtypeCongrHom.decidableMemRange {α : Type*} (p : α -> Prop) [DecidablePred p]
+instance subtypeCongrHom.decidableMemRange {α : Type*} (p : α → Prop) [DecidablePred p]
     [Fintype (Perm { a // p a } × Perm { a // ¬p a })] [DecidableEq (Perm α)] :
-    DecidablePred (· in (subtypeCongrHom p).range) := fun _ => inferInstance
+    DecidablePred (· ∈ (subtypeCongrHom p).range) := fun _ => inferInstance
 
 @[simp]
-/--
-theorem `subtypeCongrHom.card_range` / 定理 `subtypeCongrHom.card_range`
-
-English:
-theorem subtypeCongrHom.card_range
-  statement: {α : Type*} (p : α -> Prop) [DecidablePred p]
-  proof: Fintype.card_eq.mpr ⟨(ofInjective (subtypeCongrHom p) (subtypeCongrHom_injective p)).symm⟩
-
-中文:
-定理 subtypeCongrHom.card_range
-  结论: {α : 类型} (p : α -> 命题) [DecidablePred p]
-  证明: Fintype.card_eq.mpr ⟨(ofInjective (subtypeCongrHom p) (subtypeCongrHom_injective p)).symm⟩
-
-Depends on / 依赖: Fintype, Fintype.card_eq.mpr, card_eq, ofInjective, subtypeCongrHom, subtypeCongrHom_injective
+/-
+**Equiv.Perm.subtypeCongrHom.card_range** 是 Mathlib 中的一个定理，位于命名空间 `Equiv.Perm.su
+btypeCongrHom`。
+形式化陈述：∀ {α : Type u_1} (p : α → Prop) [inst : DecidablePred p] [inst_1 : Fintype
+ ↥(Equiv.Perm.subtypeCongrHom p).range]   [inst_2 : Fintype (Equiv.Perm { a // p
+ a } × Equiv.Perm { a // ¬p a })],   Fintype.card ↥(Equiv.Perm.subtypeCongrHom p
+).range = Fintype.card (Equiv.Perm { a // p a } × Equiv.Perm { a // ¬p a })
+参数：p : α → Prop；Equiv.Perm.subtypeCongrHom p；Equiv.Perm { a // p a } × Equiv.Per
+m { a // ¬p a }；Equiv.Perm.subtypeCongrHom p；Equiv.Perm { a // p a } × Equiv.Per
+m { a // ¬p a }。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Fintype.card_eq`：card_eq {α β} [_F : Fintype α] [_G : Fintype β] : card 
+α = card β ↔ Nonempty (α ≃ β)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.Perm.subtypeCongrHom_injective`：subtypeCongrHom_injective (p : α -
+> Prop) [DecidablePred p] : Function.Injective (subtypeCongrHom p)
 -/
-theorem subtypeCongrHom.card_range {α : Type*} (p : α -> Prop) [DecidablePred p]
+theorem subtypeCongrHom.card_range {α : Type*} (p : α → Prop) [DecidablePred p]
     [Fintype (subtypeCongrHom p).range] [Fintype (Perm { a // p a } × Perm { a // ¬p a })] :
     Fintype.card (subtypeCongrHom p).range =
       Fintype.card (Perm { a // p a } × Perm { a // ¬p a }) :=
@@ -165,20 +147,21 @@ theorem subtypeCongrHom.card_range {α : Type*} (p : α -> Prop) [DecidablePred 
 `G`. Note that we generalize this to an arbitrary "faithful" group action by `G`. Setting `H = G`
 recovers the usual statement of Cayley's theorem via `RightCancelMonoid.faithfulSMul` -/
 @[wikidata Q179208]
-/--
-Definition of `subgroupOfMulAction` / `subgroupOfMulAction` 的定义
+/-
+**Equiv.Perm.subgroupOfMulAction** 是 Mathlib 中的一个定义，位于命名空间 `Equiv.Perm`。
+形式化陈述：subgroupOfMulAction (G H : Type*) [Group G] [MulAction G H] [FaithfulSMul 
+G H] : G ≃* (MulAction.toPermHom G H).range
+参数：G H : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition subgroupOfMulAction
-  signature: (G H : Type*) [Group G] [MulAction G H] [FaithfulSMul G H]
-  body: MulEquiv.ofLeftInverse' _ (Classical.choose_spec MulAction.toPerm_injective.hasLeftInverse)
-
-中文:
-定义 subgroupOfMulAction
-  签名: (G H : 类型) [群 G] [乘法作用 G H] [忠实标量乘法 G H]
-  定义体: MulEquiv.ofLeftInverse' _ (Classical.choose_spec MulAction.toPerm_injective.hasLeftInverse)
-
-Depends on / 依赖: Classical, Classical.choose_spec, MulAction, MulAction.toPerm_injective.hasLeftInverse, MulEquiv, MulEquiv.ofLeftInverse, choose_spec, hasLeftInverse, ofLeftInverse, toPerm_injective
+--- 原说明 ---
+**Cayley's theorem**: Every group G is isomorphic to a subgroup of the symmetric
+ group acting on
+`G`. Note that we generalize this to an arbitrary "faithful" group action by `G`
+. Setting `H = G`
+recovers the usual statement of Cayley's theorem via `RightCancelMonoid.faithful
+SMul`
 -/
 noncomputable def subgroupOfMulAction (G H : Type*) [Group G] [MulAction G H] [FaithfulSMul G H] :
     G ≃* (MulAction.toPermHom G H).range :=
@@ -187,3 +170,4 @@ noncomputable def subgroupOfMulAction (G H : Type*) [Group G] [MulAction G H] [F
 end Perm
 
 end Equiv
+

@@ -22,73 +22,67 @@ variable {R : Type*} [PartialOrder R] [Semiring R] [IsStrictOrderedRing R]
 namespace Convexity.ConvexSpace
 
 variable (R) in
-/--
-Definition of `AffineMap` / `AffineMap` 的定义
+/-- The type of (bundled) affine maps between two convex spaces. -/
+/-
+**Convexity.ConvexSpace.AffineMap** 是 Mathlib 中的一个归纳类型，位于命名空间 `Convexity.ConvexS
+pace`。
+形式化陈述：(R : Type u_1) →   [inst : PartialOrder R] →     [inst_1 : Semiring R] →  
+     [inst_2 : IsStrictOrderedRing R] →         (X : Type u_2) → (Y : Type u_3) 
+→ [Convexity.ConvexSpace R X] → [Convexity.ConvexSpace R Y] → Type (max u_2 u_3)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure AffineMap
-  axioms and operations (2):
-    - toFun : X -> Y
-    - isAffineMap_toFun : IsAffineMap R toFun  [default: by fun_prop]
-
-中文:
-结构 仿射映射
-  公理与运算 (2 个):
-    - toFun : X -> Y
-    - isAffineMap_toFun : 是仿射映射 R toFun  [默认: by fun_prop]
+--- 原说明 ---
+The type of (bundled) affine maps between two convex spaces.
 -/
 protected structure AffineMap
     (X Y : Type*) [ConvexSpace R X] [ConvexSpace R Y] where
   /-- The underlying map of an affine map between convex spaces. -/
-  toFun : X -> Y
+  toFun : X → Y
   isAffineMap_toFun : IsAffineMap R toFun := by fun_prop
 
 namespace AffineMap
 
+/-
+**Convexity.ConvexSpace.AffineMap.** 是 Mathlib 中的一个实例，位于命名空间 `Convexity.ConvexSp
+ace.AffineMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : Type*} [ConvexSpace R X] [ConvexSpace R Y] :
     FunLike (ConvexSpace.AffineMap R X Y) X Y where
   coe := ConvexSpace.AffineMap.toFun
-  coe_injective := fun ⟨f, _⟩ ⟨g, _⟩ h => by simpa
+  coe_injective := fun ⟨f, _⟩ ⟨g, _⟩ h ↦ by simpa
 
-initialize_simps_projections ConvexSpace.AffineMap (toFun -> apply)
+initialize_simps_projections ConvexSpace.AffineMap (toFun → apply)
 
 @[ext]
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  statement: {X Y : Type*} [ConvexSpace R X] [ConvexSpace R Y]
-  proof: DFunLike.coe_injective h
-
-@[fun_prop]
-
-中文:
-引理 ext
-  结论: {X Y : 类型} [凸空间 R X] [凸空间 R Y]
-  证明: DFunLike.coe_injective h
-
-@[fun_prop]
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
+/-
+**Convexity.ConvexSpace.AffineMap.ext** 是 Mathlib 中的一个引理，位于命名空间 `Convexity.Conve
+xSpace.AffineMap`。
+形式化陈述：ext {X Y : Type*} [ConvexSpace R X] [ConvexSpace R Y] {f g : ConvexSpace.A
+ffineMap R X Y} (h : (f : X -> Y) = g) : f = g
+参数：h : (f : X -> Y) = g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.coe_injective`：∀ {F : Sort u_1} {α : outParam (Sort u_2)} {β : 
+outParam (α → Sort u_3)} [self : DFunLike F α β],   Function.Injective DFunLike.
+coe
 -/
 lemma ext {X Y : Type*} [ConvexSpace R X] [ConvexSpace R Y]
-    {f g : ConvexSpace.AffineMap R X Y} (h : (f : X -> Y) = g) : f = g :=
+    {f g : ConvexSpace.AffineMap R X Y} (h : (f : X → Y) = g) : f = g :=
   DFunLike.coe_injective h
 
 @[fun_prop]
-/--
-lemma `isAffineMap` / 引理 `isAffineMap`
-
-English:
-lemma isAffineMap
-  proof: f.isAffineMap_toFun
-
-中文:
-引理 isAffineMap
-  证明: f.isAffineMap_toFun
-
-Depends on / 依赖: f.isAffineMap_toFun, isAffineMap_toFun
+/-
+**Convexity.ConvexSpace.AffineMap.isAffineMap** 是 Mathlib 中的一个引理，位于命名空间 `Convexi
+ty.ConvexSpace.AffineMap`。
+形式化陈述：isAffineMap {X Y : Type*} [ConvexSpace R X] [ConvexSpace R Y] (f : ConvexS
+pace.AffineMap R X Y) : IsAffineMap R f
+参数：f : ConvexSpace.AffineMap R X Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Convexity.ConvexSpace.AffineMap.isAffineMap_toFun`：∀ {R : Type u_1} [ins
+t : PartialOrder R] [inst_1 : Semiring R] [inst_2 : IsStrictOrderedRing R] {X : 
+Type u_2}   {Y : Type u_3} [inst_3 : Co…
 -/
 lemma isAffineMap
     {X Y : Type*} [ConvexSpace R X] [ConvexSpace R Y]
@@ -98,20 +92,16 @@ lemma isAffineMap
 
 /-- The identity map, as a bundled affine map of convex spaces. -/
 @[simps, implicit_reducible]
-/--
-Definition of `id` / `id` 的定义
+/-
+**Convexity.ConvexSpace.AffineMap.id** 是 Mathlib 中的一个定义，位于命名空间 `Convexity.Convex
+Space.AffineMap`。
+形式化陈述：id (X : Type*) [ConvexSpace R X] : ConvexSpace.AffineMap R X X where toFun
+参数：X : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: (X : Type*) [ConvexSpace R X]
-  body: _root_.id
-
-中文:
-定义 id
-  签名: (X : 类型) [凸空间 R X]
-  定义体: _root_.id
-
-Depends on / 依赖: _root_, _root_.id
+--- 原说明 ---
+The identity map, as a bundled affine map of convex spaces.
 -/
 def id (X : Type*) [ConvexSpace R X] :
     ConvexSpace.AffineMap R X X where
@@ -119,20 +109,18 @@ def id (X : Type*) [ConvexSpace R X] :
 
 /-- The composition of bundled affine maps between convex spaces. -/
 @[simps, implicit_reducible]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**Convexity.ConvexSpace.AffineMap.comp** 是 Mathlib 中的一个定义，位于命名空间 `Convexity.Conv
+exSpace.AffineMap`。
+形式化陈述：comp {X Y Z : Type*} [ConvexSpace R X] [ConvexSpace R Y] [ConvexSpace R Z]
+ (g : ConvexSpace.AffineMap R Y Z) (f : ConvexSpace.AffineMap R X Y) : ConvexSpa
+ce.AffineMap R X Z where toFun
+参数：g : ConvexSpace.AffineMap R Y Z；f : ConvexSpace.AffineMap R X Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  body: g ∘ f
-
-@[simp]
-
-中文:
-定义 comp
-  定义体: g ∘ f
-
-@[simp]
+--- 原说明 ---
+The composition of bundled affine maps between convex spaces.
 -/
 def comp
     {X Y Z : Type*} [ConvexSpace R X] [ConvexSpace R Y] [ConvexSpace R Z]
@@ -141,20 +129,15 @@ def comp
   toFun := g ∘ f
 
 @[simp]
-/--
-lemma `coe_comp` / 引理 `coe_comp`
-
-English:
-lemma coe_comp
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_comp
-  证明: rfl
-
-@[simp]
+/-
+**Convexity.ConvexSpace.AffineMap.coe_comp** 是 Mathlib 中的一个引理，位于命名空间 `Convexity.
+ConvexSpace.AffineMap`。
+形式化陈述：coe_comp {X Y Z : Type*} [ConvexSpace R X] [ConvexSpace R Y] [ConvexSpace 
+R Z] (g : ConvexSpace.AffineMap R Y Z) (f : ConvexSpace.AffineMap R X Y) : ⇑(g.c
+omp f) = g ∘ f
+参数：g : ConvexSpace.AffineMap R Y Z；f : ConvexSpace.AffineMap R X Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_comp
     {X Y Z : Type*} [ConvexSpace R X] [ConvexSpace R Y] [ConvexSpace R Z]
@@ -162,20 +145,14 @@ lemma coe_comp
     ⇑(g.comp f) = g ∘ f := rfl
 
 @[simp]
-/--
-lemma `id_comp` / 引理 `id_comp`
-
-English:
-lemma id_comp
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 id_comp
-  证明: rfl
-
-@[simp]
+/-
+**Convexity.ConvexSpace.AffineMap.id_comp** 是 Mathlib 中的一个引理，位于命名空间 `Convexity.C
+onvexSpace.AffineMap`。
+形式化陈述：id_comp {X Y : Type*} [ConvexSpace R X] [ConvexSpace R Y] (f : ConvexSpace
+.AffineMap R X Y) : (AffineMap.id _).comp f = f
+参数：f : ConvexSpace.AffineMap R X Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma id_comp
     {X Y : Type*} [ConvexSpace R X] [ConvexSpace R Y]
@@ -183,34 +160,30 @@ lemma id_comp
     (AffineMap.id _).comp f = f := rfl
 
 @[simp]
-/--
-lemma `comp_id` / 引理 `comp_id`
-
-English:
-lemma comp_id
-  proof: rfl
-
-中文:
-引理 comp_id
-  证明: rfl
+/-
+**Convexity.ConvexSpace.AffineMap.comp_id** 是 Mathlib 中的一个引理，位于命名空间 `Convexity.C
+onvexSpace.AffineMap`。
+形式化陈述：comp_id {X Y : Type*} [ConvexSpace R X] [ConvexSpace R Y] (f : ConvexSpace
+.AffineMap R X Y) : f.comp (.id _) = f
+参数：f : ConvexSpace.AffineMap R X Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comp_id
     {X Y : Type*} [ConvexSpace R X] [ConvexSpace R Y]
     (f : ConvexSpace.AffineMap R X Y) :
     f.comp (.id _) = f := rfl
-
-/--
-lemma `assoc` / 引理 `assoc`
-
-English:
-lemma assoc
-  statement: {X Y Z T : Type*}
-  proof: rfl
-
-中文:
-引理 assoc
-  结论: {X Y Z T : 类型}
-  证明: rfl
+/-
+**Convexity.ConvexSpace.AffineMap.assoc** 是 Mathlib 中的一个引理，位于命名空间 `Convexity.Con
+vexSpace.AffineMap`。
+形式化陈述：assoc {X Y Z T : Type*} [ConvexSpace R X] [ConvexSpace R Y] [ConvexSpace R
+ Z] [ConvexSpace R T] (f₁ : ConvexSpace.AffineMap R Z T) (f₂ : ConvexSpace.Affin
+eMap R Y Z) (f₃ : ConvexSpace.AffineMap R X Y) : (f₁.comp f₂).comp f₃ = f₁.comp 
+(f₂.comp f₃)
+参数：f₁ : ConvexSpace.AffineMap R Z T；f₂ : ConvexSpace.AffineMap R Y Z；f₃ : Convex
+Space.AffineMap R X Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma assoc {X Y Z T : Type*}
     [ConvexSpace R X] [ConvexSpace R Y] [ConvexSpace R Z] [ConvexSpace R T]
@@ -221,18 +194,17 @@ lemma assoc {X Y Z T : Type*}
 
 /-- A constant map between convex spaces, as a bundled affine map. -/
 @[simps, implicit_reducible]
-/--
-Definition of `const` / `const` 的定义
+/-
+**Convexity.ConvexSpace.AffineMap.const** 是 Mathlib 中的一个定义，位于命名空间 `Convexity.Con
+vexSpace.AffineMap`。
+形式化陈述：const {X Y : Type*} [ConvexSpace R X] [ConvexSpace R Y] (y : Y) : ConvexSp
+ace.AffineMap R X Y where toFun _
+参数：y : Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition const
-  signature: {X Y : Type*} [ConvexSpace R X] [ConvexSpace R Y] (y : Y)
-  body: y
-
-中文:
-定义 const
-  签名: {X Y : 类型} [凸空间 R X] [凸空间 R Y] (y : Y)
-  定义体: y
+--- 原说明 ---
+A constant map between convex spaces, as a bundled affine map.
 -/
 def const {X Y : Type*} [ConvexSpace R X] [ConvexSpace R Y] (y : Y) :
     ConvexSpace.AffineMap R X Y where
@@ -241,3 +213,4 @@ def const {X Y : Type*} [ConvexSpace R X] [ConvexSpace R Y] (y : Y) :
 end AffineMap
 
 end Convexity.ConvexSpace
+

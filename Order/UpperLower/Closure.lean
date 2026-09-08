@@ -33,719 +33,537 @@ variable [Preorder α] [Preorder β] {s t : Set α} {x : α}
 
 /-- The greatest upper set containing a given set. -/
 @[to_dual /-- The least lower set containing a given set. -/]
-/--
-Definition of `upperClosure` / `upperClosure` 的定义
+/-
+**upperClosure** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：upperClosure (s : Set α) : UpperSet α
+参数：s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition upperClosure
-  signature: (s : Set α)
-  body: ⟨{ x | exists a in s, a <= x }, fun _ _ hle h => h.imp fun _x hx => ⟨hx.1, hx.2.trans hle⟩⟩
-
-@[to_dual (attr := simp)]
-
-中文:
-定义 upperClosure
-  签名: (s : 集合 α)
-  定义体: ⟨{ x | exists a in s, a <= x }, fun _ _ hle h => h.imp fun _x hx => ⟨hx.1, hx.2.trans hle⟩⟩
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: h.imp
+--- 原说明 ---
+The greatest upper set containing a given set.
 -/
 def upperClosure (s : Set α) : UpperSet α :=
-  ⟨{ x | exists a in s, a <= x }, fun _ _ hle h => h.imp fun _x hx => ⟨hx.1, hx.2.trans hle⟩⟩
+  ⟨{ x | ∃ a ∈ s, a ≤ x }, fun _ _ hle h => h.imp fun _x hx => ⟨hx.1, hx.2.trans hle⟩⟩
 
 @[to_dual (attr := simp)]
-/--
-theorem `mem_upperClosure` / 定理 `mem_upperClosure`
-
-English:
-theorem mem_upperClosure
-  statement: x in upperClosure s ↔ exists a in s, a <= x
-  proof: Iff.rfl
-
-中文:
-定理 mem_upperClosure
-  结论: x in upperClosure s ↔ 存在 a in s, a <= x
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**mem_upperClosure** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_upperClosure : x in upperClosure s ↔ exists a in s, a <= x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_upperClosure : x in upperClosure s ↔ exists a in s, a <= x :=
+theorem mem_upperClosure : x ∈ upperClosure s ↔ ∃ a ∈ s, a ≤ x :=
   Iff.rfl
 
 -- We do not tag this as `simp` to respect the abstraction.
 @[to_dual (attr := norm_cast)]
-/--
-theorem `coe_upperClosure` / 定理 `coe_upperClosure`
-
-English:
-theorem coe_upperClosure
-  given: (s : Set α)
-  statement: ↑(upperClosure s) = ⋃ a in s, Ici a
-  proof: by
+/-
+**coe_upperClosure** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：coe_upperClosure (s : Set α) : ↑(upperClosure s) = ⋃ a in s, Ici a
+参数：s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+-/
+theorem coe_upperClosure (s : Set α) : ↑(upperClosure s) = ⋃ a ∈ s, Ici a := by
   ext
   simp
 
 @[to_dual]
-
-中文:
-定理 coe_upperClosure
-  条件: (s : 集合 α)
-  结论: ↑(upperClosure s) = ⋃ a in s, 左闭右无界区间 a
-  证明: by
-  ext
-  simp
-
-@[to_dual]
+/-
+**instDecidablePredMemUpperClosure** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：instDecidablePredMemUpperClosure [DecidablePred (exists a in s, a <= ·)] :
+ DecidablePred (· in upperClosure s)
+参数：exists a in s, a <= ·。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_upperClosure (s : Set α) : ↑(upperClosure s) = ⋃ a in s, Ici a := by
-  ext
-  simp
+instance instDecidablePredMemUpperClosure [DecidablePred (∃ a ∈ s, a ≤ ·)] :
+    DecidablePred (· ∈ upperClosure s) := ‹DecidablePred _›
 
 @[to_dual]
-/--
-Instance `instDecidablePredMemUpperClosure` / 实例 `instDecidablePredMemUpperClosure`
-
-English:
-instance instDecidablePredMemUpperClosure
-  signature: [DecidablePred (exists a in s, a <= ·)]
-  body: ‹DecidablePred _›
-
-@[to_dual]
-
-中文:
-实例 instDecidablePredMemUpperClosure
-  签名: [DecidablePred (存在 a in s, a <= ·)]
-  定义体: ‹DecidablePred _›
-
-@[to_dual]
-
-Depends on / 依赖: DecidablePred
+/-
+**subset_upperClosure** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：subset_upperClosure : s subseteq upperClosure s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-instance instDecidablePredMemUpperClosure [DecidablePred (exists a in s, a <= ·)] :
-    DecidablePred (· in upperClosure s) := ‹DecidablePred _›
-
-@[to_dual]
-/--
-theorem `subset_upperClosure` / 定理 `subset_upperClosure`
-
-English:
-theorem subset_upperClosure
-  statement: s subseteq upperClosure s
-  proof: fun x hx => ⟨x, hx, le_rfl⟩
+theorem subset_upperClosure : s ⊆ upperClosure s := fun x hx => ⟨x, hx, le_rfl⟩
 
 @[to_dual lowerClosure_min]
-
-中文:
-定理 subset_upperClosure
-  结论: s subseteq upperClosure s
-  证明: fun x hx => ⟨x, hx, le_rfl⟩
-
-@[to_dual lowerClosure_min]
-
-Depends on / 依赖: le_rfl
+/-
+**upperClosure_min** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：upperClosure_min (h : s subseteq t) (ht : IsUpperSet t) : ↑(upperClosure s
+) subseteq t
+参数：h : s subseteq t；ht : IsUpperSet t。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem subset_upperClosure : s subseteq upperClosure s := fun x hx => ⟨x, hx, le_rfl⟩
-
-@[to_dual lowerClosure_min]
-/--
-theorem `upperClosure_min` / 定理 `upperClosure_min`
-
-English:
-theorem upperClosure_min
-  given: (h : s subseteq t) (ht : IsUpperSet t)
-  statement: ↑(upperClosure s) subseteq t
-  proof: fun _a ⟨_b, hb, hba⟩ => ht hba h hb
+theorem upperClosure_min (h : s ⊆ t) (ht : IsUpperSet t) : ↑(upperClosure s) ⊆ t :=
+  fun _a ⟨_b, hb, hba⟩ => ht hba <| h hb
 
 @[to_dual]
-
-中文:
-定理 upperClosure_min
-  条件: (h : s subseteq t) (ht : 是上集 t)
-  结论: ↑(upperClosure s) subseteq t
-  证明: fun _a ⟨_b, hb, hba⟩ => ht hba h hb
-
-@[to_dual]
--/
-theorem upperClosure_min (h : s subseteq t) (ht : IsUpperSet t) : ↑(upperClosure s) subseteq t :=
-fun _a ⟨_b, hb, hba⟩ => ht hba h hb
-
-@[to_dual]
-/--
-theorem `IsUpperSet.upperClosure` / 定理 `IsUpperSet.upperClosure`
-
-English:
-theorem IsUpperSet.upperClosure
-  given: (hs : IsUpperSet s)
-  statement: ↑(upperClosure s) = s
-  proof: (upperClosure_min Subset.rfl hs).antisymm subset_upperClosure
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 是上集.upperClosure
-  条件: (hs : 是上集 s)
-  结论: ↑(upperClosure s) = s
-  证明: (upperClosure_min Subset.rfl hs).antisymm subset_upperClosure
-
-@[to_dual (attr := simp)]
+/-
+**IsUpperSet.upperClosure** 是 Mathlib 中的一个定理，位于命名空间 `IsUpperSet`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {s : Set α}, IsUpperSet s → ↑(upperCl
+osure s) = s
+参数：upperClosure s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `upperClosure_min`：upperClosure_min (h : s subseteq t) (ht : IsUpperSet t
+) : ↑(upperClosure s) subseteq t
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
+· 使用定理 `subset_upperClosure`：subset_upperClosure : s subseteq upperClosure s
 -/
 protected theorem IsUpperSet.upperClosure (hs : IsUpperSet s) : ↑(upperClosure s) = s :=
   (upperClosure_min Subset.rfl hs).antisymm subset_upperClosure
 
 @[to_dual (attr := simp)]
-/--
-theorem `UpperSet.upperClosure` / 定理 `UpperSet.upperClosure`
-
-English:
-theorem UpperSet.upperClosure
-  given: (s : UpperSet α)
-  statement: upperClosure (s : Set α) = s
-  proof: SetLike.coe_injective s.2.upperClosure
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 上集.upperClosure
-  条件: (s : 上集 α)
-  结论: upperClosure (s : 集合 α) = s
-  证明: SetLike.coe_injective s.2.upperClosure
-
-@[to_dual (attr := simp)]
+/-
+**UpperSet.upperClosure** 是 Mathlib 中的一个定理，位于命名空间 `UpperSet`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] (s : UpperSet α), upperClosure ↑s = s
+参数：s : UpperSet α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
+· 使用定理 `IsUpperSet.upperClosure`：∀ {α : Type u_1} [inst : Preorder α] {s : Set α
+}, IsUpperSet s → ↑(upperClosure s) = s
+· 使用定理 `UpperSet.upper'`：∀ {α : Type u_1} [inst : LE α] (self : UpperSet α), IsU
+pperSet self.carrier
 -/
 protected theorem UpperSet.upperClosure (s : UpperSet α) : upperClosure (s : Set α) = s :=
   SetLike.coe_injective s.2.upperClosure
 
 @[to_dual (attr := simp)]
-/--
-theorem `upperClosure_image` / 定理 `upperClosure_image`
-
-English:
-theorem upperClosure_image
-  given: (f : α ≃o β)
-  proof: by
-  rw [← f.symm_symm]; rw [← UpperSet.symm_map]; rw [f.symm_symm]
-  ext
-  simp only [SetLike.mem_coe]
-  simp [f.le_symm_apply]
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 upperClosure_image
-  条件: (f : α ≃o β)
-  证明: by
-  rw [← f.symm_symm]; rw [← UpperSet.symm_map]; rw [f.symm_symm]
-  ext
-  simp only [SetLike.mem_coe]
-  simp [f.le_symm_apply]
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: SetLike, SetLike.mem_coe, UpperSet, UpperSet.symm_map, f.le_symm_apply, f.symm_symm, le_symm_apply, mem_coe, symm_map, symm_symm
+/-
+**upperClosure_image** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：upperClosure_image (f : α ≃o β) : upperClosure (f '' s) = UpperSet.map f (
+upperClosure s)
+参数：f : α ≃o β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OrderIso.symm_symm`：symm_symm (e : α ≃o β) : e.symm.symm = e
+· 使用定理 `UpperSet.symm_map`：symm_map (f : α ≃o β) : (map f).symm = map f.symm
+· 使用定理 `UpperSet.ext`：ext {s t : UpperSet α} : (s : Set α) = t -> s = t
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `OrderIso.le_symm_apply`：le_symm_apply (e : α ≃o β) {x : α} {y : β} : x <
+= e.symm y ↔ e x <= y
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem upperClosure_image (f : α ≃o β) :
     upperClosure (f '' s) = UpperSet.map f (upperClosure s) := by
-  rw [← f.symm_symm]; rw [← UpperSet.symm_map]; rw [f.symm_symm]
+  rw [← f.symm_symm, ← UpperSet.symm_map, f.symm_symm]
   ext
   simp only [SetLike.mem_coe]
   simp [f.le_symm_apply]
 
 @[to_dual (attr := simp)]
-/--
-theorem `UpperSet.iInf_Ici` / 定理 `UpperSet.iInf_Ici`
-
-English:
-theorem UpperSet.iInf_Ici
-  given: (s : Set α)
-  statement: ⨅ a in s, UpperSet.Ici a = upperClosure s
-  proof: by
-  ext
-  simp
-
-@[to_dual (attr := simp) le_upperClosure]
-
-中文:
-定理 上集.iInf_Ici
-  条件: (s : 集合 α)
-  结论: ⨅ a in s, 上集.左闭右无界区间 a = upperClosure s
-  证明: by
-  ext
-  simp
-
-@[to_dual (attr := simp) le_upperClosure]
+/-
+**UpperSet.iInf_Ici** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：UpperSet.iInf_Ici (s : Set α) : ⨅ a in s, UpperSet.Ici a = upperClosure s
+参数：s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UpperSet.ext`：ext {s t : UpperSet α} : (s : Set α) = t -> s = t
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `UpperSet.coe_iInf`：coe_iInf (f : ι -> UpperSet α) : (↑(⨅ i, f i) : Set α
+) = ⋃ i, f i
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem UpperSet.iInf_Ici (s : Set α) : ⨅ a in s, UpperSet.Ici a = upperClosure s := by
+theorem UpperSet.iInf_Ici (s : Set α) : ⨅ a ∈ s, UpperSet.Ici a = upperClosure s := by
   ext
   simp
 
 @[to_dual (attr := simp) le_upperClosure]
-/--
-lemma `lowerClosure_le` / 引理 `lowerClosure_le`
-
-English:
-lemma lowerClosure_le
-  given: {t : LowerSet α}
-  statement: lowerClosure s <= t ↔ s subseteq t
-  proof: ⟨fun h => subset_lowerClosure.trans LowerSet.coe_subset_coe.2 h,
-    fun h => lowerClosure_min h t.lower⟩
-
-中文:
-引理 lowerClosure_le
-  条件: {t : 下集 α}
-  结论: lowerClosure s <= t ↔ s subseteq t
-  证明: ⟨fun h => subset_lowerClosure.trans LowerSet.coe_subset_coe.2 h,
-    fun h => lowerClosure_min h t.lower⟩
-
-Depends on / 依赖: LowerSet, LowerSet.coe_subset_coe, coe_subset_coe, lowerClosure_min, subset_lowerClosure, subset_lowerClosure.trans, t.lower
+/-
+**lowerClosure_le** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：lowerClosure_le {t : LowerSet α} : lowerClosure s <= t ↔ s subseteq t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `subset_lowerClosure`：∀ {α : Type u_1} [inst : Preorder α] {s : Set α}, s
+ ⊆ ↑(lowerClosure s)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `LowerSet.coe_subset_coe`：∀ {α : Type u_1} [inst : LE α] {s t : LowerSet 
+α}, ↑s ⊆ ↑t ↔ s ≤ t
+· 使用定理 `lowerClosure_min`：∀ {α : Type u_1} [inst : Preorder α] {s t : Set α}, s 
+⊆ t → IsLowerSet t → ↑(lowerClosure s) ⊆ t
+· 使用定理 `LowerSet.lower`：∀ {α : Type u_1} [inst : LE α] (s : LowerSet α), IsLower
+Set ↑s
 -/
-lemma lowerClosure_le {t : LowerSet α} : lowerClosure s <= t ↔ s subseteq t :=
-⟨fun h => subset_lowerClosure.trans LowerSet.coe_subset_coe.2 h,
-    fun h => lowerClosure_min h t.lower⟩
-
-/--
-theorem `gc_upperClosure_coe` / 定理 `gc_upperClosure_coe`
-
-English:
-theorem gc_upperClosure_coe
-  proof: fun _s _t => le_upperClosure
-
-中文:
-定理 gc_upperClosure_coe
-  证明: fun _s _t => le_upperClosure
-
-Depends on / 依赖: le_upperClosure
+lemma lowerClosure_le {t : LowerSet α} : lowerClosure s ≤ t ↔ s ⊆ t :=
+  ⟨fun h ↦ subset_lowerClosure.trans <| LowerSet.coe_subset_coe.2 h,
+    fun h ↦ lowerClosure_min h t.lower⟩
+/-
+**gc_upperClosure_coe** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：gc_upperClosure_coe : GaloisConnection (toDual ∘ upperClosure : Set α -> (
+UpperSet α)ᵒᵈ) ((↑) ∘ ofDual)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_upperClosure`：∀ {α : Type u_1} [inst : Preorder α] {s : Set α} {t : U
+pperSet α}, t ≤ upperClosure s ↔ s ⊆ ↑t
 -/
 theorem gc_upperClosure_coe :
-    GaloisConnection (toDual ∘ upperClosure : Set α -> (UpperSet α)ᵒᵈ) ((↑) ∘ ofDual) :=
-  fun _s _t => le_upperClosure
-
-/--
-theorem `gc_lowerClosure_coe` / 定理 `gc_lowerClosure_coe`
-
-English:
-theorem gc_lowerClosure_coe
-  proof: fun _s _t => lowerClosure_le
-
-中文:
-定理 gc_lowerClosure_coe
-  证明: fun _s _t => lowerClosure_le
-
-Depends on / 依赖: lowerClosure_le
+    GaloisConnection (toDual ∘ upperClosure : Set α → (UpperSet α)ᵒᵈ) ((↑) ∘ ofDual) :=
+  fun _s _t ↦ le_upperClosure
+/-
+**gc_lowerClosure_coe** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：gc_lowerClosure_coe : GaloisConnection (lowerClosure : Set α -> LowerSet α
+) (↑)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lowerClosure_le`：lowerClosure_le {t : LowerSet α} : lowerClosure s <= t 
+↔ s subseteq t
 -/
 theorem gc_lowerClosure_coe :
-    GaloisConnection (lowerClosure : Set α -> LowerSet α) (↑) := fun _s _t => lowerClosure_le
+    GaloisConnection (lowerClosure : Set α → LowerSet α) (↑) := fun _s _t ↦ lowerClosure_le
 
-/--
-Definition of `giUpperClosureCoe` / `giUpperClosureCoe` 的定义
+/-- `upperClosure` forms a reversed Galois insertion with the coercion from upper sets to sets. -/
+/-
+**giUpperClosureCoe** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：giUpperClosureCoe : GaloisInsertion (toDual ∘ upperClosure : Set α -> (Upp
+erSet α)ᵒᵈ) ((↑) ∘ ofDual) where choice s hs
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `gc_upperClosure_coe`：gc_upperClosure_coe : GaloisConnection (toDual ∘ up
+perClosure : Set α -> (UpperSet α)ᵒᵈ) ((↑) ∘ ofDual)
 
-English:
-definition giUpperClosureCoe
-  signature: :
-  body: toDual (⟨s, fun a _b hab ha => hs ⟨a, ha, hab⟩⟩ : UpperSet α)
-  gc := gc_upperClosure_coe
-  le_l_u _ := subset_upperClosure
-choice_eq _s hs := ofDual.injective SetLike.coe_injective subset_upperClosure.antisymm hs
-
-中文:
-定义 giUpperClosureCoe
-  签名: :
-  定义体: toDual (⟨s, fun a _b hab ha => hs ⟨a, ha, hab⟩⟩ : UpperSet α)
-  gc := gc_upperClosure_coe
-  le_l_u _ := subset_upperClosure
-choice_eq _s hs := ofDual.injective SetLike.coe_injective subset_upperClosure.antisymm hs
-
-Depends on / 依赖: UpperSet, toDual
+--- 原说明 ---
+`upperClosure` forms a reversed Galois insertion with the coercion from upper se
+ts to sets.
 -/
 def giUpperClosureCoe :
-    GaloisInsertion (toDual ∘ upperClosure : Set α -> (UpperSet α)ᵒᵈ) ((↑) ∘ ofDual) where
+    GaloisInsertion (toDual ∘ upperClosure : Set α → (UpperSet α)ᵒᵈ) ((↑) ∘ ofDual) where
   choice s hs := toDual (⟨s, fun a _b hab ha => hs ⟨a, ha, hab⟩⟩ : UpperSet α)
   gc := gc_upperClosure_coe
   le_l_u _ := subset_upperClosure
-choice_eq _s hs := ofDual.injective SetLike.coe_injective subset_upperClosure.antisymm hs
+  choice_eq _s hs := ofDual.injective <| SetLike.coe_injective <| subset_upperClosure.antisymm hs
 
-/--
-Definition of `giLowerClosureCoe` / `giLowerClosureCoe` 的定义
+/-- `lowerClosure` forms a Galois insertion with the coercion from lower sets to sets. -/
+/-
+**giLowerClosureCoe** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：giLowerClosureCoe : GaloisInsertion (lowerClosure : Set α -> LowerSet α) (
+↑) where choice s hs
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `gc_lowerClosure_coe`：gc_lowerClosure_coe : GaloisConnection (lowerClosur
+e : Set α -> LowerSet α) (↑)
 
-English:
-definition giLowerClosureCoe
-  signature: : GaloisInsertion (lowerClosure : Set α -> LowerSet α) (↑) where
-  body: ⟨s, fun a _b hba ha => hs ⟨a, ha, hba⟩⟩
-  gc := gc_lowerClosure_coe
-  le_l_u _ := subset_lowerClosure
-choice_eq _s hs := SetLike.coe_injective subset_lowerClosure.antisymm hs
-
-中文:
-定义 giLowerClosureCoe
-  签名: : Galois嵌入 (lowerClosure : 集合 α -> 下集 α) (↑) where
-  定义体: ⟨s, fun a _b hba ha => hs ⟨a, ha, hba⟩⟩
-  gc := gc_lowerClosure_coe
-  le_l_u _ := subset_lowerClosure
-choice_eq _s hs := SetLike.coe_injective subset_lowerClosure.antisymm hs
+--- 原说明 ---
+`lowerClosure` forms a Galois insertion with the coercion from lower sets to set
+s.
 -/
-def giLowerClosureCoe : GaloisInsertion (lowerClosure : Set α -> LowerSet α) (↑) where
+def giLowerClosureCoe : GaloisInsertion (lowerClosure : Set α → LowerSet α) (↑) where
   choice s hs := ⟨s, fun a _b hba ha => hs ⟨a, ha, hba⟩⟩
   gc := gc_lowerClosure_coe
   le_l_u _ := subset_lowerClosure
-choice_eq _s hs := SetLike.coe_injective subset_lowerClosure.antisymm hs
-
-/--
-theorem `upperClosure_anti` / 定理 `upperClosure_anti`
-
-English:
-theorem upperClosure_anti
-  statement: Antitone (upperClosure : Set α -> UpperSet α)
-  proof: gc_upperClosure_coe.monotone_l
-
-中文:
-定理 upperClosure_anti
-  结论: 递减 (upperClosure : 集合 α -> 上集 α)
-  证明: gc_upperClosure_coe.monotone_l
-
-Depends on / 依赖: gc_upperClosure_coe, gc_upperClosure_coe.monotone_l, monotone_l
+  choice_eq _s hs := SetLike.coe_injective <| subset_lowerClosure.antisymm hs
+/-
+**upperClosure_anti** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：upperClosure_anti : Antitone (upperClosure : Set α -> UpperSet α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.monotone_l`：∀ {α : Type u} {β : Type v} [inst : Preorde
+r α] [inst_1 : Preorder β] {u : α → β} {l : β → α},   GaloisConnection l u → Mon
+otone l
+· 使用定理 `gc_upperClosure_coe`：gc_upperClosure_coe : GaloisConnection (toDual ∘ up
+perClosure : Set α -> (UpperSet α)ᵒᵈ) ((↑) ∘ ofDual)
 -/
-theorem upperClosure_anti : Antitone (upperClosure : Set α -> UpperSet α) :=
+theorem upperClosure_anti : Antitone (upperClosure : Set α → UpperSet α) :=
   gc_upperClosure_coe.monotone_l
-
-/--
-theorem `lowerClosure_mono` / 定理 `lowerClosure_mono`
-
-English:
-theorem lowerClosure_mono
-  statement: Monotone (lowerClosure : Set α -> LowerSet α)
-  proof: gc_lowerClosure_coe.monotone_l
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 lowerClosure_mono
-  结论: 递增 (lowerClosure : 集合 α -> 下集 α)
-  证明: gc_lowerClosure_coe.monotone_l
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: gc_lowerClosure_coe, gc_lowerClosure_coe.monotone_l, monotone_l
+/-
+**lowerClosure_mono** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lowerClosure_mono : Monotone (lowerClosure : Set α -> LowerSet α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.monotone_l`：∀ {α : Type u} {β : Type v} [inst : Preorde
+r α] [inst_1 : Preorder β] {u : α → β} {l : β → α},   GaloisConnection l u → Mon
+otone l
+· 使用定理 `gc_lowerClosure_coe`：gc_lowerClosure_coe : GaloisConnection (lowerClosur
+e : Set α -> LowerSet α) (↑)
 -/
-theorem lowerClosure_mono : Monotone (lowerClosure : Set α -> LowerSet α) :=
+theorem lowerClosure_mono : Monotone (lowerClosure : Set α → LowerSet α) :=
   gc_lowerClosure_coe.monotone_l
 
 @[to_dual (attr := simp)]
-/--
-theorem `upperClosure_eq_top_iff` / 定理 `upperClosure_eq_top_iff`
-
-English:
-theorem upperClosure_eq_top_iff
-  statement: upperClosure s = ⊤ ↔ s = ∅
-  proof: by
-  rw [eq_top_iff]; rw [le_upperClosure]; simp
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 upperClosure_eq_top_iff
-  结论: upperClosure s = ⊤ ↔ s = ∅
-  证明: by
-  rw [eq_top_iff]; rw [le_upperClosure]; simp
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: eq_top_iff, le_upperClosure
+/-
+**upperClosure_eq_top_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：upperClosure_eq_top_iff : upperClosure s = ⊤ ↔ s = ∅
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_top_iff`：eq_top_iff : a = ⊤ ↔ ⊤ <= a
+· 使用定理 `le_upperClosure`：∀ {α : Type u_1} [inst : Preorder α] {s : Set α} {t : U
+pperSet α}, t ≤ upperClosure s ↔ s ⊆ ↑t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem upperClosure_eq_top_iff : upperClosure s = ⊤ ↔ s = ∅ := by
-  rw [eq_top_iff]; rw [le_upperClosure]; simp
+  rw [eq_top_iff, le_upperClosure]; simp
 
 @[to_dual (attr := simp)]
-/--
-theorem `upperClosure_empty` / 定理 `upperClosure_empty`
-
-English:
-theorem upperClosure_empty
-  statement: upperClosure (∅ : Set α) = ⊤
-  proof: upperClosure_eq_top_iff.mpr rfl
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 upperClosure_empty
-  结论: upperClosure (∅ : 集合 α) = ⊤
-  证明: upperClosure_eq_top_iff.mpr rfl
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: upperClosure_eq_top_iff, upperClosure_eq_top_iff.mpr
+/-
+**upperClosure_empty** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：upperClosure_empty : upperClosure (∅ : Set α) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `upperClosure_eq_top_iff`：upperClosure_eq_top_iff : upperClosure s = ⊤ ↔ 
+s = ∅
 -/
 theorem upperClosure_empty : upperClosure (∅ : Set α) = ⊤ :=
   upperClosure_eq_top_iff.mpr rfl
 
 @[to_dual (attr := simp)]
-/--
-theorem `upperClosure_singleton` / 定理 `upperClosure_singleton`
-
-English:
-theorem upperClosure_singleton
-  given: (a : α)
-  statement: upperClosure ({a} : Set α) = UpperSet.Ici a
-  proof: by
-  ext
-  simp
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 upperClosure_singleton
-  条件: (a : α)
-  结论: upperClosure ({a} : 集合 α) = 上集.左闭右无界区间 a
-  证明: by
-  ext
-  simp
-
-@[to_dual (attr := simp)]
+/-
+**upperClosure_singleton** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：upperClosure_singleton (a : α) : upperClosure ({a} : Set α) = UpperSet.Ici
+ a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UpperSet.ext`：ext {s t : UpperSet α} : (s : Set α) = t -> s = t
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem upperClosure_singleton (a : α) : upperClosure ({a} : Set α) = UpperSet.Ici a := by
   ext
   simp
 
 @[to_dual (attr := simp)]
-/--
-theorem `upperClosure_univ` / 定理 `upperClosure_univ`
-
-English:
-theorem upperClosure_univ
-  statement: upperClosure (univ : Set α) = ⊥
-  proof: bot_unique subset_upperClosure
-
-中文:
-定理 upperClosure_univ
-  结论: upperClosure (univ : 集合 α) = ⊥
-  证明: bot_unique subset_upperClosure
-
-Depends on / 依赖: bot_unique, subset_upperClosure
+/-
+**upperClosure_univ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：upperClosure_univ : upperClosure (univ : Set α) = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `bot_unique`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a ≤ ⊥ → a = ⊥
+· 使用定理 `subset_upperClosure`：subset_upperClosure : s subseteq upperClosure s
 -/
 theorem upperClosure_univ : upperClosure (univ : Set α) = ⊥ :=
   bot_unique subset_upperClosure
-
-/--
-theorem `upperClosure_union` / 定理 `upperClosure_union`
-
-English:
-theorem upperClosure_union
-  given: (s t : Set α)
-  statement: upperClosure (s union t) = upperClosure s ⊓ upperClosure t
-  proof: (@gc_upperClosure_coe α _).l_sup
-
-@[to_dual existing (attr := simp)]
-
-中文:
-定理 upperClosure_union
-  条件: (s t : 集合 α)
-  结论: upperClosure (s union t) = upperClosure s ⊓ upperClosure t
-  证明: (@gc_upperClosure_coe α _).l_sup
-
-@[to_dual existing (attr := simp)]
-
-Depends on / 依赖: gc_upperClosure_coe, l_sup
+/-
+**upperClosure_union** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：upperClosure_union (s t : Set α) : upperClosure (s union t) = upperClosure
+ s ⊓ upperClosure t
+参数：s t : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_sup`：l_sup (gc : GaloisConnection l u) : l (a₁ ⊔ a₂) 
+= l a₁ ⊔ l a₂
+· 使用定理 `gc_upperClosure_coe`：gc_upperClosure_coe : GaloisConnection (toDual ∘ up
+perClosure : Set α -> (UpperSet α)ᵒᵈ) ((↑) ∘ ofDual)
 -/
-theorem upperClosure_union (s t : Set α) : upperClosure (s union t) = upperClosure s ⊓ upperClosure t :=
+theorem upperClosure_union (s t : Set α) : upperClosure (s ∪ t) = upperClosure s ⊓ upperClosure t :=
   (@gc_upperClosure_coe α _).l_sup
 
 @[to_dual existing (attr := simp)]
-/--
-theorem `lowerClosure_union` / 定理 `lowerClosure_union`
-
-English:
-theorem lowerClosure_union
-  given: (s t : Set α)
-  statement: lowerClosure (s union t) = lowerClosure s ⊔ lowerClosure t
-  proof: (@gc_lowerClosure_coe α _).l_sup
-
-中文:
-定理 lowerClosure_union
-  条件: (s t : 集合 α)
-  结论: lowerClosure (s union t) = lowerClosure s ⊔ lowerClosure t
-  证明: (@gc_lowerClosure_coe α _).l_sup
-
-Depends on / 依赖: gc_lowerClosure_coe, l_sup
+/-
+**lowerClosure_union** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lowerClosure_union (s t : Set α) : lowerClosure (s union t) = lowerClosure
+ s ⊔ lowerClosure t
+参数：s t : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_sup`：l_sup (gc : GaloisConnection l u) : l (a₁ ⊔ a₂) 
+= l a₁ ⊔ l a₂
+· 使用定理 `gc_lowerClosure_coe`：gc_lowerClosure_coe : GaloisConnection (lowerClosur
+e : Set α -> LowerSet α) (↑)
 -/
-theorem lowerClosure_union (s t : Set α) : lowerClosure (s union t) = lowerClosure s ⊔ lowerClosure t :=
+theorem lowerClosure_union (s t : Set α) : lowerClosure (s ∪ t) = lowerClosure s ⊔ lowerClosure t :=
   (@gc_lowerClosure_coe α _).l_sup
-
-/--
-theorem `upperClosure_iUnion` / 定理 `upperClosure_iUnion`
-
-English:
-theorem upperClosure_iUnion
-  given: (f : ι -> Set α)
-  statement: upperClosure (⋃ i, f i) = ⨅ i, upperClosure (f i)
-  proof: (@gc_upperClosure_coe α _).l_iSup
-
-@[to_dual existing (attr := simp)]
-
-中文:
-定理 upperClosure_iUnion
-  条件: (f : ι -> 集合 α)
-  结论: upperClosure (⋃ i, f i) = ⨅ i, upperClosure (f i)
-  证明: (@gc_upperClosure_coe α _).l_iSup
-
-@[to_dual existing (attr := simp)]
-
-Depends on / 依赖: gc_upperClosure_coe, l_iSup
+/-
+**upperClosure_iUnion** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：upperClosure_iUnion (f : ι -> Set α) : upperClosure (⋃ i, f i) = ⨅ i, uppe
+rClosure (f i)
+参数：f : ι -> Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_iSup`：l_iSup {f : ι -> α} : l (iSup f) = ⨆ i, l (f i)
+· 使用定理 `gc_upperClosure_coe`：gc_upperClosure_coe : GaloisConnection (toDual ∘ up
+perClosure : Set α -> (UpperSet α)ᵒᵈ) ((↑) ∘ ofDual)
 -/
-theorem upperClosure_iUnion (f : ι -> Set α) : upperClosure (⋃ i, f i) = ⨅ i, upperClosure (f i) :=
+theorem upperClosure_iUnion (f : ι → Set α) : upperClosure (⋃ i, f i) = ⨅ i, upperClosure (f i) :=
   (@gc_upperClosure_coe α _).l_iSup
 
 @[to_dual existing (attr := simp)]
-/--
-theorem `lowerClosure_iUnion` / 定理 `lowerClosure_iUnion`
-
-English:
-theorem lowerClosure_iUnion
-  given: (f : ι -> Set α)
-  statement: lowerClosure (⋃ i, f i) = ⨆ i, lowerClosure (f i)
-  proof: (@gc_lowerClosure_coe α _).l_iSup
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 lowerClosure_iUnion
-  条件: (f : ι -> 集合 α)
-  结论: lowerClosure (⋃ i, f i) = ⨆ i, lowerClosure (f i)
-  证明: (@gc_lowerClosure_coe α _).l_iSup
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: gc_lowerClosure_coe, l_iSup
+/-
+**lowerClosure_iUnion** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lowerClosure_iUnion (f : ι -> Set α) : lowerClosure (⋃ i, f i) = ⨆ i, lowe
+rClosure (f i)
+参数：f : ι -> Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_iSup`：l_iSup {f : ι -> α} : l (iSup f) = ⨆ i, l (f i)
+· 使用定理 `gc_lowerClosure_coe`：gc_lowerClosure_coe : GaloisConnection (lowerClosur
+e : Set α -> LowerSet α) (↑)
 -/
-theorem lowerClosure_iUnion (f : ι -> Set α) : lowerClosure (⋃ i, f i) = ⨆ i, lowerClosure (f i) :=
+theorem lowerClosure_iUnion (f : ι → Set α) : lowerClosure (⋃ i, f i) = ⨆ i, lowerClosure (f i) :=
   (@gc_lowerClosure_coe α _).l_iSup
 
 @[to_dual (attr := simp)]
-/--
-theorem `upperClosure_sUnion` / 定理 `upperClosure_sUnion`
-
-English:
-theorem upperClosure_sUnion
-  given: (S : Set (Set α))
-  statement: upperClosure (⋃₀ S) = ⨅ s in S, upperClosure s
-  proof: by
-  simp_rw [sUnion_eq_biUnion, upperClosure_iUnion]
-
-中文:
-定理 upperClosure_sUnion
-  条件: (S : 集合 (集合 α))
-  结论: upperClosure (⋃₀ S) = ⨅ s in S, upperClosure s
-  证明: by
-  simp_rw [sUnion_eq_biUnion, upperClosure_iUnion]
-
-Depends on / 依赖: sUnion_eq_biUnion, simp_rw, upperClosure_iUnion
+/-
+**upperClosure_sUnion** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：upperClosure_sUnion (S : Set (Set α)) : upperClosure (⋃₀ S) = ⨅ s in S, up
+perClosure s
+参数：S : Set (Set α)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.sUnion_eq_biUnion`：sUnion_eq_biUnion {s : Set (Set α)} : ⋃₀ s = ⋃ (i
+ : Set α) (_ : i in s), i
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `upperClosure_iUnion`：upperClosure_iUnion (f : ι -> Set α) : upperClosure
+ (⋃ i, f i) = ⨅ i, upperClosure (f i)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem upperClosure_sUnion (S : Set (Set α)) : upperClosure (⋃₀ S) = ⨅ s in S, upperClosure s := by
+theorem upperClosure_sUnion (S : Set (Set α)) : upperClosure (⋃₀ S) = ⨅ s ∈ S, upperClosure s := by
   simp_rw [sUnion_eq_biUnion, upperClosure_iUnion]
-
-/--
-theorem `Set.OrdConnected.upperClosure_inter_lowerClosure` / 定理 `Set.OrdConnected.upperClosure_inter_lowerClosure`
-
-English:
-theorem Set.OrdConnected.upperClosure_inter_lowerClosure
-  given: (h : s.OrdConnected)
-  proof: (subset_inter subset_upperClosure subset_lowerClosure).antisymm'
-    fun _a ⟨⟨_b, hb, hba⟩, _c, hc, hac⟩ => h.out hb hc ⟨hba, hac⟩
-
-中文:
-定理 集合.序连通.upperClosure_inter_lowerClosure
-  条件: (h : s.序连通)
-  证明: (subset_inter subset_upperClosure subset_lowerClosure).antisymm'
-    fun _a ⟨⟨_b, hb, hba⟩, _c, hc, hac⟩ => h.out hb hc ⟨hba, hac⟩
-
-Depends on / 依赖: antisymm, h.out, subset_inter, subset_lowerClosure, subset_upperClosure
+/-
+**Set.OrdConnected.upperClosure_inter_lowerClosure** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Set.OrdConnected.upperClosure_inter_lowerClosure (h : s.OrdConnected) : ↑(
+upperClosure s) inter ↑(lowerClosure s) = s
+参数：h : s.OrdConnected。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm'`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, b ≤
+ a → a ≤ b → a = b
+· 使用定理 `Set.subset_inter`：subset_inter {s t r : Set α} (rs : r subseteq s) (rt :
+ r subseteq t) : r subseteq s inter t
+· 使用定理 `subset_upperClosure`：subset_upperClosure : s subseteq upperClosure s
+· 使用定理 `subset_lowerClosure`：∀ {α : Type u_1} [inst : Preorder α] {s : Set α}, s
+ ⊆ ↑(lowerClosure s)
+· 使用定理 `Set.OrdConnected.out`：∀ {α : Type u_1} [inst : Preorder α] {s : Set α}, 
+s.OrdConnected → ∀ ⦃x : α⦄, x ∈ s → ∀ ⦃y : α⦄, y ∈ s → Set.Icc x y ⊆ s
 -/
 theorem Set.OrdConnected.upperClosure_inter_lowerClosure (h : s.OrdConnected) :
-    ↑(upperClosure s) inter ↑(lowerClosure s) = s :=
+    ↑(upperClosure s) ∩ ↑(lowerClosure s) = s :=
   (subset_inter subset_upperClosure subset_lowerClosure).antisymm'
     fun _a ⟨⟨_b, hb, hba⟩, _c, hc, hac⟩ => h.out hb hc ⟨hba, hac⟩
-
-/--
-theorem `ordConnected_iff_upperClosure_inter_lowerClosure` / 定理 `ordConnected_iff_upperClosure_inter_lowerClosure`
-
-English:
-theorem ordConnected_iff_upperClosure_inter_lowerClosure
-  proof: by
-  refine ⟨Set.OrdConnected.upperClosure_inter_lowerClosure, fun h => ?_⟩
-  rw [← h]
-  exact (UpperSet.upper _).ordConnected.inter (LowerSet.lower _).ordConnected
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 ordConnected_iff_upperClosure_inter_lowerClosure
-  证明: by
-  refine ⟨Set.OrdConnected.upperClosure_inter_lowerClosure, fun h => ?_⟩
-  rw [← h]
-  exact (UpperSet.upper _).ordConnected.inter (LowerSet.lower _).ordConnected
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: LowerSet, LowerSet.lower, OrdConnected, Set.OrdConnected.upperClosure_inter_lowerClosure, UpperSet, UpperSet.upper, ordConnected, ordConnected.inter, upperClosure_inter_lowerClosure
+/-
+**ordConnected_iff_upperClosure_inter_lowerClosure** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ordConnected_iff_upperClosure_inter_lowerClosure : s.OrdConnected ↔ ↑(uppe
+rClosure s) inter ↑(lowerClosure s) = s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.OrdConnected.upperClosure_inter_lowerClosure`：Set.OrdConnected.upper
+Closure_inter_lowerClosure (h : s.OrdConnected) : ↑(upperClosure s) inter ↑(lowe
+rClosure s) = s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.OrdConnected.inter`：∀ {α : Type u_1} [inst : Preorder α] {s t : Set 
+α}, s.OrdConnected → t.OrdConnected → (s ∩ t).OrdConnected
+· 使用定理 `IsUpperSet.ordConnected`：IsUpperSet.ordConnected (h : IsUpperSet s) : s.
+OrdConnected
+· 使用定理 `UpperSet.upper`：∀ {α : Type u_1} [inst : LE α] (s : UpperSet α), IsUpper
+Set ↑s
+· 使用定理 `IsLowerSet.ordConnected`：IsLowerSet.ordConnected (h : IsLowerSet s) : s.
+OrdConnected
+· 使用定理 `LowerSet.lower`：∀ {α : Type u_1} [inst : LE α] (s : LowerSet α), IsLower
+Set ↑s
 -/
 theorem ordConnected_iff_upperClosure_inter_lowerClosure :
-    s.OrdConnected ↔ ↑(upperClosure s) inter ↑(lowerClosure s) = s := by
+    s.OrdConnected ↔ ↑(upperClosure s) ∩ ↑(lowerClosure s) = s := by
   refine ⟨Set.OrdConnected.upperClosure_inter_lowerClosure, fun h => ?_⟩
   rw [← h]
   exact (UpperSet.upper _).ordConnected.inter (LowerSet.lower _).ordConnected
 
 @[to_dual (attr := simp)]
-/--
-theorem `lowerBounds_upperClosure` / 定理 `lowerBounds_upperClosure`
-
-English:
-theorem lowerBounds_upperClosure
-  statement: lowerBounds (upperClosure s : Set α) = lowerBounds s
-  proof: (lowerBounds_mono_set subset_upperClosure).antisymm
-    fun _a ha _b ⟨_c, hc, hcb⟩ => (ha hc).trans hcb
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 lowerBounds_upperClosure
-  结论: lowerBounds (upperClosure s : 集合 α) = lowerBounds s
-  证明: (lowerBounds_mono_set subset_upperClosure).antisymm
-    fun _a ha _b ⟨_c, hc, hcb⟩ => (ha hc).trans hcb
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: antisymm, lowerBounds_mono_set, subset_upperClosure
+/-
+**lowerBounds_upperClosure** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lowerBounds_upperClosure : lowerBounds (upperClosure s : Set α) = lowerBou
+nds s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `lowerBounds_mono_set`：∀ {α : Type u_1} [inst : Preorder α] ⦃s t : Set α⦄
+, s ⊆ t → lowerBounds t ⊆ lowerBounds s
+· 使用定理 `subset_upperClosure`：subset_upperClosure : s subseteq upperClosure s
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
 -/
 theorem lowerBounds_upperClosure : lowerBounds (upperClosure s : Set α) = lowerBounds s :=
   (lowerBounds_mono_set subset_upperClosure).antisymm
-    fun _a ha _b ⟨_c, hc, hcb⟩ => (ha hc).trans hcb
+    fun _a ha _b ⟨_c, hc, hcb⟩ ↦ (ha hc).trans hcb
 
 @[to_dual (attr := simp)]
-/--
-theorem `bddBelow_upperClosure` / 定理 `bddBelow_upperClosure`
-
-English:
-theorem bddBelow_upperClosure
-  statement: BddBelow (upperClosure s : Set α) ↔ BddBelow s
-  proof: by
-  simp_rw [BddBelow, lowerBounds_upperClosure]
-
-@[to_dual]
-protected alias ⟨BddBelow.of_upperClosure, BddBelow.upperClosure⟩ := bddBelow_upperClosure
-
-@[to_dual (attr := simp) disjoint_lowerClosure_left]
-
-中文:
-定理 bddBelow_upperClosure
-  结论: BddBelow (upperClosure s : 集合 α) ↔ BddBelow s
-  证明: by
-  simp_rw [BddBelow, lowerBounds_upperClosure]
-
-@[to_dual]
-protected alias ⟨BddBelow.of_upperClosure, BddBelow.upperClosure⟩ := bddBelow_upperClosure
-
-@[to_dual (attr := simp) disjoint_lowerClosure_left]
-
-Depends on / 依赖: BddBelow, lowerBounds_upperClosure, simp_rw
+/-
+**bddBelow_upperClosure** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：bddBelow_upperClosure : BddBelow (upperClosure s : Set α) ↔ BddBelow s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `lowerBounds_upperClosure`：lowerBounds_upperClosure : lowerBounds (upperC
+losure s : Set α) = lowerBounds s
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem bddBelow_upperClosure : BddBelow (upperClosure s : Set α) ↔ BddBelow s := by
   simp_rw [BddBelow, lowerBounds_upperClosure]
@@ -754,76 +572,57 @@ theorem bddBelow_upperClosure : BddBelow (upperClosure s : Set α) ↔ BddBelow 
 protected alias ⟨BddBelow.of_upperClosure, BddBelow.upperClosure⟩ := bddBelow_upperClosure
 
 @[to_dual (attr := simp) disjoint_lowerClosure_left]
-/--
-lemma `IsLowerSet.disjoint_upperClosure_left` / 引理 `IsLowerSet.disjoint_upperClosure_left`
-
-English:
-lemma IsLowerSet.disjoint_upperClosure_left
-  given: (ht : IsLowerSet t)
-  proof: by
-  refine ⟨Disjoint.mono_left subset_upperClosure, ?_⟩
-  simp only [disjoint_left, SetLike.mem_coe, mem_upperClosure, forall_exists_index, and_imp]
-exact fun h a b hb hba ha => h hb ht hba ha
-
-@[to_dual (attr := simp) disjoint_lowerClosure_right]
-
-中文:
-引理 是下集.disjoint_upperClosure_left
-  条件: (ht : 是下集 t)
-  证明: by
-  refine ⟨Disjoint.mono_left subset_upperClosure, ?_⟩
-  simp only [disjoint_left, SetLike.mem_coe, mem_upperClosure, forall_exists_index, and_imp]
-exact fun h a b hb hba ha => h hb ht hba ha
-
-@[to_dual (attr := simp) disjoint_lowerClosure_right]
-
-Depends on / 依赖: Disjoint, Disjoint.mono_left, SetLike, SetLike.mem_coe, and_imp, disjoint_left, forall_exists_index, mem_coe, mem_upperClosure, mono_left, subset_upperClosure
+/-
+**IsLowerSet.disjoint_upperClosure_left** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsLowerSet.disjoint_upperClosure_left (ht : IsLowerSet t) : Disjoint ↑(upp
+erClosure s) t ↔ Disjoint s t
+参数：ht : IsLowerSet t。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Disjoint.mono_left`：Disjoint.mono_left (h : a <= b) : Disjoint b c -> Di
+sjoint a c
+· 使用定理 `subset_upperClosure`：subset_upperClosure : s subseteq upperClosure s
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
 -/
 lemma IsLowerSet.disjoint_upperClosure_left (ht : IsLowerSet t) :
     Disjoint ↑(upperClosure s) t ↔ Disjoint s t := by
   refine ⟨Disjoint.mono_left subset_upperClosure, ?_⟩
   simp only [disjoint_left, SetLike.mem_coe, mem_upperClosure, forall_exists_index, and_imp]
-exact fun h a b hb hba ha => h hb ht hba ha
+  exact fun h a b hb hba ha ↦ h hb <| ht hba ha
 
 @[to_dual (attr := simp) disjoint_lowerClosure_right]
-/--
-lemma `IsLowerSet.disjoint_upperClosure_right` / 引理 `IsLowerSet.disjoint_upperClosure_right`
-
-English:
-lemma IsLowerSet.disjoint_upperClosure_right
-  given: (hs : IsLowerSet s)
-  proof: by
-  simpa only [disjoint_comm] using hs.disjoint_upperClosure_left
-
-@[to_dual (attr := simp)]
-
-中文:
-引理 是下集.disjoint_upperClosure_right
-  条件: (hs : 是下集 s)
-  证明: by
-  simpa only [disjoint_comm] using hs.disjoint_upperClosure_left
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: disjoint_comm, disjoint_upperClosure_left, hs.disjoint_upperClosure_left
+/-
+**IsLowerSet.disjoint_upperClosure_right** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsLowerSet.disjoint_upperClosure_right (hs : IsLowerSet s) : Disjoint s (u
+pperClosure t) ↔ Disjoint s t
+参数：hs : IsLowerSet s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `IsLowerSet.disjoint_upperClosure_left`：IsLowerSet.disjoint_upperClosure_
+left (ht : IsLowerSet t) : Disjoint ↑(upperClosure s) t ↔ Disjoint s t
 -/
 lemma IsLowerSet.disjoint_upperClosure_right (hs : IsLowerSet s) :
     Disjoint s (upperClosure t) ↔ Disjoint s t := by
   simpa only [disjoint_comm] using hs.disjoint_upperClosure_left
 
 @[to_dual (attr := simp)]
-/--
-lemma `upperClosure_eq` / 引理 `upperClosure_eq`
-
-English:
-lemma upperClosure_eq
-  proof: ⟨(· ▸ UpperSet.upper _), IsUpperSet.upperClosure⟩
-
-中文:
-引理 upperClosure_eq
-  证明: ⟨(· ▸ UpperSet.upper _), IsUpperSet.upperClosure⟩
-
-Depends on / 依赖: IsUpperSet, IsUpperSet.upperClosure, UpperSet, UpperSet.upper, upperClosure
+/-
+**upperClosure_eq** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：upperClosure_eq : ↑(upperClosure s) = s ↔ IsUpperSet s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UpperSet.upper`：∀ {α : Type u_1} [inst : LE α] (s : UpperSet α), IsUpper
+Set ↑s
+· 使用定理 `IsUpperSet.upperClosure`：∀ {α : Type u_1} [inst : Preorder α] {s : Set α
+}, IsUpperSet s → ↑(upperClosure s) = s
 -/
 lemma upperClosure_eq :
     ↑(upperClosure s) = s ↔ IsUpperSet s :=
@@ -834,56 +633,47 @@ end Preorder
 section PartialOrder
 variable [PartialOrder α] {s : Set α} {x : α}
 
-/--
-lemma `IsAntichain.minimal_mem_upperClosure_iff_mem` / 引理 `IsAntichain.minimal_mem_upperClosure_iff_mem`
-
-English:
-lemma IsAntichain.minimal_mem_upperClosure_iff_mem
-  given: (hs : IsAntichain (· <= ·) s)
-  proof: by
-  simp only [upperClosure]
-  refine ⟨fun h => ?_, fun h => ⟨⟨x, h, rfl.le⟩, fun b ⟨a, has, hab⟩ hbx => ?_⟩⟩
-  · obtain ⟨a, has, hax⟩ := h.prop
-    rwa [h.eq_of_ge ⟨a, has, rfl.le⟩ hax]
-  rwa [← hs.eq has h (hab.trans hbx)]
-
-中文:
-引理 IsAntichain.minimal_mem_upperClosure_iff_mem
-  条件: (hs : IsAntichain (· <= ·) s)
-  证明: by
-  simp only [upperClosure]
-  refine ⟨fun h => ?_, fun h => ⟨⟨x, h, rfl.le⟩, fun b ⟨a, has, hab⟩ hbx => ?_⟩⟩
-  · obtain ⟨a, has, hax⟩ := h.prop
-    rwa [h.eq_of_ge ⟨a, has, rfl.le⟩ hax]
-  rwa [← hs.eq has h (hab.trans hbx)]
-
-Depends on / 依赖: eq_of_ge, h.eq_of_ge, h.prop, hab.trans, hs.eq, rfl.le, upperClosure
+/-
+**IsAntichain.minimal_mem_upperClosure_iff_mem** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsAntichain.minimal_mem_upperClosure_iff_mem (hs : IsAntichain (· <= ·) s)
+ : Minimal (· in upperClosure s) x ↔ x in s
+参数：hs : IsAntichain (· <= ·) s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Minimal.prop`：Minimal.prop (h : Minimal P x) : P x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Minimal.eq_of_ge`：Minimal.eq_of_ge (hx : Minimal P x) (hy : P y) (hge : 
+y <= x) : x = y
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsAntichain.eq`：∀ {α : Type u_1} {r : α → α → Prop} {s : Set α}, IsAntic
+hain r s → ∀ {a b : α}, a ∈ s → b ∈ s → r a b → a = b
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
 -/
-lemma IsAntichain.minimal_mem_upperClosure_iff_mem (hs : IsAntichain (· <= ·) s) :
-    Minimal (· in upperClosure s) x ↔ x in s := by
+lemma IsAntichain.minimal_mem_upperClosure_iff_mem (hs : IsAntichain (· ≤ ·) s) :
+    Minimal (· ∈ upperClosure s) x ↔ x ∈ s := by
   simp only [upperClosure]
-  refine ⟨fun h => ?_, fun h => ⟨⟨x, h, rfl.le⟩, fun b ⟨a, has, hab⟩ hbx => ?_⟩⟩
+  refine ⟨fun h ↦ ?_, fun h ↦ ⟨⟨x, h, rfl.le⟩, fun b ⟨a, has, hab⟩ hbx ↦ ?_⟩⟩
   · obtain ⟨a, has, hax⟩ := h.prop
     rwa [h.eq_of_ge ⟨a, has, rfl.le⟩ hax]
   rwa [← hs.eq has h (hab.trans hbx)]
-
-/--
-lemma `IsAntichain.maximal_mem_lowerClosure_iff_mem` / 引理 `IsAntichain.maximal_mem_lowerClosure_iff_mem`
-
-English:
-lemma IsAntichain.maximal_mem_lowerClosure_iff_mem
-  given: (hs : IsAntichain (· <= ·) s)
-  proof: hs.to_dual.minimal_mem_upperClosure_iff_mem
-
-中文:
-引理 IsAntichain.maximal_mem_lowerClosure_iff_mem
-  条件: (hs : IsAntichain (· <= ·) s)
-  证明: hs.to_dual.minimal_mem_upperClosure_iff_mem
-
-Depends on / 依赖: hs.to_dual.minimal_mem_upperClosure_iff_mem, minimal_mem_upperClosure_iff_mem, to_dual
+/-
+**IsAntichain.maximal_mem_lowerClosure_iff_mem** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsAntichain.maximal_mem_lowerClosure_iff_mem (hs : IsAntichain (· <= ·) s)
+ : Maximal (· in lowerClosure s) x ↔ x in s
+参数：hs : IsAntichain (· <= ·) s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsAntichain.minimal_mem_upperClosure_iff_mem`：IsAntichain.minimal_mem_up
+perClosure_iff_mem (hs : IsAntichain (· <= ·) s) : Minimal (· in upperClosure s)
+ x ↔ x in s
+· 使用定理 `IsAntichain.to_dual`：to_dual [LE α] (hs : IsAntichain (· <= ·) s) : @IsA
+ntichain αᵒᵈ (· <= ·) s
 -/
-lemma IsAntichain.maximal_mem_lowerClosure_iff_mem (hs : IsAntichain (· <= ·) s) :
-    Maximal (· in lowerClosure s) x ↔ x in s :=
+lemma IsAntichain.maximal_mem_lowerClosure_iff_mem (hs : IsAntichain (· ≤ ·) s) :
+    Maximal (· ∈ lowerClosure s) x ↔ x ∈ s :=
   hs.to_dual.minimal_mem_upperClosure_iff_mem
 
 end PartialOrder
@@ -893,50 +683,45 @@ section LinearOrder
 variable [LinearOrder α]
 
 @[to_dual]
-/--
-lemma `upperClosure_eq_bot` / 引理 `upperClosure_eq_bot`
-
-English:
-lemma upperClosure_eq_bot
-  given: {s : Set α} (hs : ¬ BddBelow s)
-  statement: upperClosure s = ⊥
-  proof: le_bot_iff.mp fun x _ => ⟨_, (not_bddBelow_iff.mp hs x).choose_spec.imp id le_of_lt⟩
-
-@[to_dual]
-
-中文:
-引理 upperClosure_eq_bot
-  条件: {s : 集合 α} (hs : ¬ BddBelow s)
-  结论: upperClosure s = ⊥
-  证明: le_bot_iff.mp fun x _ => ⟨_, (not_bddBelow_iff.mp hs x).choose_spec.imp id le_of_lt⟩
-
-@[to_dual]
-
-Depends on / 依赖: choose_spec, choose_spec.imp, le_bot_iff, le_bot_iff.mp, le_of_lt, not_bddBelow_iff, not_bddBelow_iff.mp
+/-
+**upperClosure_eq_bot** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：upperClosure_eq_bot {s : Set α} (hs : ¬ BddBelow s) : upperClosure s = ⊥
+参数：hs : ¬ BddBelow s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `le_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a ≤ ⊥ ↔ a = ⊥
+· 使用定理 `not_bddBelow_iff`：∀ {α : Type u_4} [inst : LinearOrder α] {s : Set α}, ¬
+BddBelow s ↔ ∀ (x : α), ∃ y ∈ s, y < x
+· 使用定理 `And.imp`：∀ {a c b d : Prop}, (a → c) → (b → d) → a ∧ b → c ∧ d
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 -/
 lemma upperClosure_eq_bot {s : Set α} (hs : ¬ BddBelow s) : upperClosure s = ⊥ :=
-  le_bot_iff.mp fun x _ => ⟨_, (not_bddBelow_iff.mp hs x).choose_spec.imp id le_of_lt⟩
+  le_bot_iff.mp fun x _ ↦ ⟨_, (not_bddBelow_iff.mp hs x).choose_spec.imp id le_of_lt⟩
 
 @[to_dual]
-/--
-lemma `upperClosure_eq_bot_iff` / 引理 `upperClosure_eq_bot_iff`
-
-English:
-lemma upperClosure_eq_bot_iff
-  given: [NoMinOrder α] {s : Set α}
-  statement: upperClosure s = ⊥ ↔ ¬ BddBelow s
-  proof: ⟨fun h₁ h₂ => by simpa [h₁] using bddBelow_upperClosure.mpr h₂, upperClosure_eq_bot⟩
-
-中文:
-引理 upperClosure_eq_bot_iff
-  条件: [NoMin序 α] {s : 集合 α}
-  结论: upperClosure s = ⊥ ↔ ¬ BddBelow s
-  证明: ⟨fun h₁ h₂ => by simpa [h₁] using bddBelow_upperClosure.mpr h₂, upperClosure_eq_bot⟩
-
-Depends on / 依赖: bddBelow_upperClosure, bddBelow_upperClosure.mpr, upperClosure_eq_bot
+/-
+**upperClosure_eq_bot_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：upperClosure_eq_bot_iff [NoMinOrder α] {s : Set α} : upperClosure s = ⊥ ↔ 
+¬ BddBelow s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `instNoBotOrderOfNoMinOrder`：∀ {α : Type u_1} [inst : Preorder α] [NoMinO
+rder α], NoBotOrder α
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `bddBelow_upperClosure`：bddBelow_upperClosure : BddBelow (upperClosure s 
+: Set α) ↔ BddBelow s
+· 使用引理 `upperClosure_eq_bot`：upperClosure_eq_bot {s : Set α} (hs : ¬ BddBelow s)
+ : upperClosure s = ⊥
 -/
 lemma upperClosure_eq_bot_iff [NoMinOrder α] {s : Set α} : upperClosure s = ⊥ ↔ ¬ BddBelow s :=
-  ⟨fun h₁ h₂ => by simpa [h₁] using bddBelow_upperClosure.mpr h₂, upperClosure_eq_bot⟩
+  ⟨fun h₁ h₂ ↦ by simpa [h₁] using bddBelow_upperClosure.mpr h₂, upperClosure_eq_bot⟩
 
 end LinearOrder
 
@@ -947,22 +732,15 @@ variable [Preorder α] {s : UpperSet α} {t : Set α} {a : α}
 
 /-- The biggest upper subset of an upper set `s` disjoint from a set `t`. -/
 @[to_dual /-- The biggest lower subset of a lower set `s` disjoint from a set `t`. -/]
-/--
-Definition of `sdiff` / `sdiff` 的定义
+/-
+**UpperSet.sdiff** 是 Mathlib 中的一个定义，位于命名空间 `UpperSet`。
+形式化陈述：sdiff (s : UpperSet α) (t : Set α) : UpperSet α where carrier
+参数：s : UpperSet α；t : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sdiff
-  signature: (s : UpperSet α) (t : Set α)
-  body: s \ lowerClosure t
-  upper' := s.upper.sdiff_of_isLowerSet (lowerClosure t).lower
-
-中文:
-定义 sdiff
-  签名: (s : 上集 α) (t : 集合 α)
-  定义体: s \ lowerClosure t
-  upper' := s.upper.sdiff_of_isLowerSet (lowerClosure t).lower
-
-Depends on / 依赖: lowerClosure
+--- 原说明 ---
+The biggest upper subset of an upper set `s` disjoint from a set `t`.
 -/
 def sdiff (s : UpperSet α) (t : Set α) : UpperSet α where
   carrier := s \ lowerClosure t
@@ -970,379 +748,277 @@ def sdiff (s : UpperSet α) (t : Set α) : UpperSet α where
 
 /-- The biggest upper subset of an upper set `s` not containing an element `a`. -/
 @[to_dual /-- The biggest lower subset of a lower set `s` not containing an element `a`. -/]
-/--
-Definition of `erase` / `erase` 的定义
+/-
+**UpperSet.erase** 是 Mathlib 中的一个定义，位于命名空间 `UpperSet`。
+形式化陈述：erase (s : UpperSet α) (a : α) : UpperSet α where carrier
+参数：s : UpperSet α；a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition erase
-  signature: (s : UpperSet α) (a : α)
-  body: s \ LowerSet.Iic a
-  upper' := s.upper.sdiff_of_isLowerSet (LowerSet.Iic a).lower
-
-@[to_dual (attr := simp, norm_cast)]
-
-中文:
-定义 erase
-  签名: (s : 上集 α) (a : α)
-  定义体: s \ LowerSet.Iic a
-  upper' := s.upper.sdiff_of_isLowerSet (LowerSet.Iic a).lower
-
-@[to_dual (attr := simp, norm_cast)]
-
-Depends on / 依赖: LowerSet, LowerSet.Iic
+--- 原说明 ---
+The biggest upper subset of an upper set `s` not containing an element `a`.
 -/
 def erase (s : UpperSet α) (a : α) : UpperSet α where
   carrier := s \ LowerSet.Iic a
   upper' := s.upper.sdiff_of_isLowerSet (LowerSet.Iic a).lower
 
 @[to_dual (attr := simp, norm_cast)]
-/--
-lemma `coe_sdiff` / 引理 `coe_sdiff`
-
-English:
-lemma coe_sdiff
-  given: (s : UpperSet α) (t : Set α)
-  statement: s.sdiff t = (s : Set α) \ lowerClosure t
-  proof: rfl
-
-@[to_dual (attr := simp, norm_cast)]
-
-中文:
-引理 coe_sdiff
-  条件: (s : 上集 α) (t : 集合 α)
-  结论: s.sdiff t = (s : 集合 α) \ lowerClosure t
-  证明: rfl
-
-@[to_dual (attr := simp, norm_cast)]
+/-
+**UpperSet.coe_sdiff** 是 Mathlib 中的一个引理，位于命名空间 `UpperSet`。
+形式化陈述：coe_sdiff (s : UpperSet α) (t : Set α) : s.sdiff t = (s : Set α) \ lowerCl
+osure t
+参数：s : UpperSet α；t : Set α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_sdiff (s : UpperSet α) (t : Set α) : s.sdiff t = (s : Set α) \ lowerClosure t := rfl
 
 @[to_dual (attr := simp, norm_cast)]
-/--
-lemma `coe_erase` / 引理 `coe_erase`
-
-English:
-lemma coe_erase
-  given: (s : UpperSet α) (a : α)
-  statement: s.erase a = (s : Set α) \ LowerSet.Iic a
-  proof: rfl
-
-@[to_dual (attr := simp)]
-
-中文:
-引理 coe_erase
-  条件: (s : 上集 α) (a : α)
-  结论: s.erase a = (s : 集合 α) \ 下集.左无界右闭区间 a
-  证明: rfl
-
-@[to_dual (attr := simp)]
+/-
+**UpperSet.coe_erase** 是 Mathlib 中的一个引理，位于命名空间 `UpperSet`。
+形式化陈述：coe_erase (s : UpperSet α) (a : α) : s.erase a = (s : Set α) \ LowerSet.Ii
+c a
+参数：s : UpperSet α；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_erase (s : UpperSet α) (a : α) : s.erase a = (s : Set α) \ LowerSet.Iic a := rfl
 
 @[to_dual (attr := simp)]
-/--
-lemma `sdiff_singleton` / 引理 `sdiff_singleton`
-
-English:
-lemma sdiff_singleton
-  given: (s : UpperSet α) (a : α)
-  statement: s.sdiff {a} = s.erase a
-  proof: by
-  simp [sdiff, erase]
-
-中文:
-引理 sdiff_singleton
-  条件: (s : 上集 α) (a : α)
-  结论: s.sdiff {a} = s.erase a
-  证明: by
-  simp [sdiff, erase]
+/-
+**UpperSet.sdiff_singleton** 是 Mathlib 中的一个引理，位于命名空间 `UpperSet`。
+形式化陈述：sdiff_singleton (s : UpperSet α) (a : α) : s.sdiff {a} = s.erase a
+参数：s : UpperSet α；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `lowerClosure_singleton`：∀ {α : Type u_1} [inst : Preorder α] (a : α), lo
+werClosure {a} = LowerSet.Iic a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `UpperSet.mk.congr_simp`：∀ {α : Type u_1} [inst : LE α] (carrier carrier_
+1 : Set α) (e_carrier : carrier = carrier_1)   (upper' : IsUpperSet carrier), { 
+carrier := c…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma sdiff_singleton (s : UpperSet α) (a : α) : s.sdiff {a} = s.erase a := by
   simp [sdiff, erase]
-
-/--
-lemma `le_sdiff_left` / 引理 `le_sdiff_left`
-
-English:
-lemma le_sdiff_left
-  statement: s <= s.sdiff t
-  proof: sdiff_subset
-
-中文:
-引理 le_sdiff_left
-  结论: s <= s.sdiff t
-  证明: sdiff_subset
+/-
+**UpperSet.le_sdiff_left** 是 Mathlib 中的一个定理，位于命名空间 `UpperSet`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {s : UpperSet α} {t : Set α}, s ≤ s.s
+diff t
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.sdiff_subset`：sdiff_subset {s t : Set α} : s \ t subseteq s
 -/
-@[to_dual sdiff_le_left] lemma le_sdiff_left : s <= s.sdiff t := sdiff_subset
-/--
-lemma `le_erase` / 引理 `le_erase`
-
-English:
-lemma le_erase
-  statement: s <= s.erase a
-  proof: sdiff_subset
-
-@[to_dual (attr := simp)]
-
-中文:
-引理 le_erase
-  结论: s <= s.erase a
-  证明: sdiff_subset
-
-@[to_dual (attr := simp)]
+@[to_dual sdiff_le_left] lemma le_sdiff_left : s ≤ s.sdiff t := sdiff_subset
+/-
+**UpperSet.le_erase** 是 Mathlib 中的一个定理，位于命名空间 `UpperSet`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {s : UpperSet α} {a : α}, s ≤ s.erase
+ a
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.sdiff_subset`：sdiff_subset {s t : Set α} : s \ t subseteq s
 -/
-@[to_dual erase_le] lemma le_erase : s <= s.erase a := sdiff_subset
+@[to_dual erase_le] lemma le_erase : s ≤ s.erase a := sdiff_subset
 
 @[to_dual (attr := simp)]
-/--
-lemma `sdiff_eq_left` / 引理 `sdiff_eq_left`
-
-English:
-lemma sdiff_eq_left
-  statement: s.sdiff t = s ↔ Disjoint ↑s t
-  proof: by
-  simp [← SetLike.coe_set_eq]
-
-@[to_dual (attr := simp)]
-
-中文:
-引理 sdiff_eq_left
-  结论: s.sdiff t = s ↔ Disjoint ↑s t
-  证明: by
-  simp [← SetLike.coe_set_eq]
-
-@[to_dual (attr := simp)]
+/-
+**UpperSet.sdiff_eq_left** 是 Mathlib 中的一个定理，位于命名空间 `UpperSet`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] {s : UpperSet α} {t : Set α}, s.sdiff
+ t = s ↔ Disjoint (↑s) t
+参数：↑s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 protected lemma sdiff_eq_left : s.sdiff t = s ↔ Disjoint ↑s t := by
   simp [← SetLike.coe_set_eq]
 
 @[to_dual (attr := simp)]
-/--
-lemma `erase_eq` / 引理 `erase_eq`
-
-English:
-lemma erase_eq
-  statement: s.erase a = s ↔ a ∉ s
-  proof: by rw [← sdiff_singleton]; simp [-sdiff_singleton]
-
-@[to_dual (attr := simp) sdiff_lt_left]
-
-中文:
-引理 erase_eq
-  结论: s.erase a = s ↔ a ∉ s
-  证明: by rw [← sdiff_singleton]; simp [-sdiff_singleton]
-
-@[to_dual (attr := simp) sdiff_lt_left]
-
-Depends on / 依赖: sdiff_singleton
+/-
+**UpperSet.erase_eq** 是 Mathlib 中的一个引理，位于命名空间 `UpperSet`。
+形式化陈述：erase_eq : s.erase a = s ↔ a ∉ s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `UpperSet.sdiff_singleton`：sdiff_singleton (s : UpperSet α) (a : α) : s.s
+diff {a} = s.erase a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma erase_eq : s.erase a = s ↔ a ∉ s := by rw [← sdiff_singleton]; simp [-sdiff_singleton]
 
 @[to_dual (attr := simp) sdiff_lt_left]
-/--
-lemma `lt_sdiff_left` / 引理 `lt_sdiff_left`
-
-English:
-lemma lt_sdiff_left
-  statement: s < s.sdiff t ↔ ¬ Disjoint ↑s t
-  proof: le_sdiff_left.lt_iff_ne'.trans UpperSet.sdiff_eq_left.not
-
-@[to_dual (attr := simp) erase_lt]
-
-中文:
-引理 lt_sdiff_left
-  结论: s < s.sdiff t ↔ ¬ Disjoint ↑s t
-  证明: le_sdiff_left.lt_iff_ne'.trans UpperSet.sdiff_eq_left.not
-
-@[to_dual (attr := simp) erase_lt]
-
-Depends on / 依赖: UpperSet, UpperSet.sdiff_eq_left.not, le_sdiff_left, le_sdiff_left.lt_iff_ne, lt_iff_ne, sdiff_eq_left
+/-
+**UpperSet.lt_sdiff_left** 是 Mathlib 中的一个引理，位于命名空间 `UpperSet`。
+形式化陈述：lt_sdiff_left : s < s.sdiff t ↔ ¬ Disjoint ↑s t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `LE.le.lt_iff_ne'`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, b 
+≤ a → (b < a ↔ a ≠ b)
+· 使用定理 `UpperSet.le_sdiff_left`：∀ {α : Type u_1} [inst : Preorder α] {s : UpperS
+et α} {t : Set α}, s ≤ s.sdiff t
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `UpperSet.sdiff_eq_left`：∀ {α : Type u_1} [inst : Preorder α] {s : UpperS
+et α} {t : Set α}, s.sdiff t = s ↔ Disjoint (↑s) t
 -/
 lemma lt_sdiff_left : s < s.sdiff t ↔ ¬ Disjoint ↑s t :=
   le_sdiff_left.lt_iff_ne'.trans UpperSet.sdiff_eq_left.not
 
 @[to_dual (attr := simp) erase_lt]
-/--
-lemma `lt_erase` / 引理 `lt_erase`
-
-English:
-lemma lt_erase
-  statement: s < s.erase a ↔ a in s
-  proof: le_erase.lt_iff_ne'.trans erase_eq.not_left
-
-@[to_dual (attr := simp)]
-
-中文:
-引理 lt_erase
-  结论: s < s.erase a ↔ a in s
-  证明: le_erase.lt_iff_ne'.trans erase_eq.not_left
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: erase_eq, erase_eq.not_left, le_erase, le_erase.lt_iff_ne, lt_iff_ne, not_left
+/-
+**UpperSet.lt_erase** 是 Mathlib 中的一个引理，位于命名空间 `UpperSet`。
+形式化陈述：lt_erase : s < s.erase a ↔ a in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `LE.le.lt_iff_ne'`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, b 
+≤ a → (b < a ↔ a ≠ b)
+· 使用定理 `UpperSet.le_erase`：∀ {α : Type u_1} [inst : Preorder α] {s : UpperSet α}
+ {a : α}, s ≤ s.erase a
+· 使用定理 `Iff.not_left`：Iff.not_left (h : a ↔ ¬b) : ¬a ↔ b
+· 使用引理 `UpperSet.erase_eq`：erase_eq : s.erase a = s ↔ a ∉ s
 -/
-lemma lt_erase : s < s.erase a ↔ a in s := le_erase.lt_iff_ne'.trans erase_eq.not_left
+lemma lt_erase : s < s.erase a ↔ a ∈ s := le_erase.lt_iff_ne'.trans erase_eq.not_left
 
 @[to_dual (attr := simp)]
-/--
-lemma `sdiff_idem` / 引理 `sdiff_idem`
-
-English:
-lemma sdiff_idem
-  given: (s : UpperSet α) (t : Set α)
-  statement: (s.sdiff t).sdiff t = s.sdiff t
-  proof: SetLike.coe_injective sdiff_idem
-
-@[to_dual (attr := simp)]
-
-中文:
-引理 sdiff_idem
-  条件: (s : 上集 α) (t : 集合 α)
-  结论: (s.sdiff t).sdiff t = s.sdiff t
-  证明: SetLike.coe_injective sdiff_idem
-
-@[to_dual (attr := simp)]
+/-
+**UpperSet.sdiff_idem** 是 Mathlib 中的一个定理，位于命名空间 `UpperSet`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] (s : UpperSet α) (t : Set α), (s.sdif
+f t).sdiff t = s.sdiff t
+参数：s : UpperSet α；t : Set α；s.sdiff t。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
+· 使用定理 `sdiff_idem`：∀ {α : Type u_2} [inst : GeneralizedCoheytingAlgebra α] {a b
+ : α}, (a \ b) \ b = a \ b
 -/
 protected lemma sdiff_idem (s : UpperSet α) (t : Set α) : (s.sdiff t).sdiff t = s.sdiff t :=
   SetLike.coe_injective sdiff_idem
 
 @[to_dual (attr := simp)]
-/--
-lemma `erase_idem` / 引理 `erase_idem`
-
-English:
-lemma erase_idem
-  given: (s : UpperSet α) (a : α)
-  statement: (s.erase a).erase a = s.erase a
-  proof: SetLike.coe_injective sdiff_idem
-
-@[to_dual]
-
-中文:
-引理 erase_idem
-  条件: (s : 上集 α) (a : α)
-  结论: (s.erase a).erase a = s.erase a
-  证明: SetLike.coe_injective sdiff_idem
-
-@[to_dual]
-
-Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective, sdiff_idem
+/-
+**UpperSet.erase_idem** 是 Mathlib 中的一个引理，位于命名空间 `UpperSet`。
+形式化陈述：erase_idem (s : UpperSet α) (a : α) : (s.erase a).erase a = s.erase a
+参数：s : UpperSet α；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
+· 使用定理 `sdiff_idem`：∀ {α : Type u_2} [inst : GeneralizedCoheytingAlgebra α] {a b
+ : α}, (a \ b) \ b = a \ b
 -/
 lemma erase_idem (s : UpperSet α) (a : α) : (s.erase a).erase a = s.erase a :=
   SetLike.coe_injective sdiff_idem
 
 @[to_dual]
-/--
-lemma `sdiff_inf_upperClosure` / 引理 `sdiff_inf_upperClosure`
-
-English:
-lemma sdiff_inf_upperClosure
-  given: (hts : t subseteq s) (hst : forall b in s, forall c in t, b <= c -> b in t)
-  proof: by
-  refine ge_antisymm (le_inf le_sdiff_left <| le_upperClosure.2 hts) fun a ha => ?_
-  obtain hat | hat := em (a in t)
-  · exact subset_union_right (subset_upperClosure hat)
-  · refine subset_union_left ⟨ha, ?_⟩
-    rintro ⟨b, hb, hab⟩
-exact hat hst _ ha _ hb hab
-
-@[to_dual]
-
-中文:
-引理 sdiff_inf_upperClosure
-  条件: (hts : t subseteq s) (hst : 对任意 b in s, 对任意 c in t, b <= c -> b in t)
-  证明: by
-  refine ge_antisymm (le_inf le_sdiff_left <| le_upperClosure.2 hts) fun a ha => ?_
-  obtain hat | hat := em (a in t)
-  · exact subset_union_right (subset_upperClosure hat)
-  · refine subset_union_left ⟨ha, ?_⟩
-    rintro ⟨b, hb, hab⟩
-exact hat hst _ ha _ hb hab
-
-@[to_dual]
-
-Depends on / 依赖: ge_antisymm, le_inf, le_sdiff_left, le_upperClosure, subset_union_left, subset_union_right, subset_upperClosure
+/-
+**UpperSet.sdiff_inf_upperClosure** 是 Mathlib 中的一个引理，位于命名空间 `UpperSet`。
+形式化陈述：sdiff_inf_upperClosure (hts : t subseteq s) (hst : forall b in s, forall c
+ in t, b <= c -> b in t) : s.sdiff t ⊓ upperClosure t = s
+参数：hts : t subseteq s；hst : forall b in s, forall c in t, b <= c -> b in t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ge_antisymm`：ge_antisymm : b <= a -> a <= b -> a = b
+· 使用定理 `le_inf`：∀ {α : Type u} [inst : SemilatticeInf α] {c a b : α}, c ≤ a → c 
+≤ b → c ≤ a ⊓ b
+· 使用定理 `UpperSet.le_sdiff_left`：∀ {α : Type u_1} [inst : Preorder α] {s : UpperS
+et α} {t : Set α}, s ≤ s.sdiff t
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `le_upperClosure`：∀ {α : Type u_1} [inst : Preorder α] {s : Set α} {t : U
+pperSet α}, t ≤ upperClosure s ↔ s ⊆ ↑t
+· 使用定理 `em`：∀ (p : Prop), p ∨ ¬p
+· 使用定理 `Set.subset_union_right`：subset_union_right {s t : Set α} : t subseteq s 
+union t
+· 使用定理 `subset_upperClosure`：subset_upperClosure : s subseteq upperClosure s
+· 使用定理 `Set.subset_union_left`：subset_union_left {s t : Set α} : s subseteq s un
+ion t
 -/
-lemma sdiff_inf_upperClosure (hts : t subseteq s) (hst : forall b in s, forall c in t, b <= c -> b in t) :
+lemma sdiff_inf_upperClosure (hts : t ⊆ s) (hst : ∀ b ∈ s, ∀ c ∈ t, b ≤ c → b ∈ t) :
     s.sdiff t ⊓ upperClosure t = s := by
-  refine ge_antisymm (le_inf le_sdiff_left <| le_upperClosure.2 hts) fun a ha => ?_
-  obtain hat | hat := em (a in t)
+  refine ge_antisymm (le_inf le_sdiff_left <| le_upperClosure.2 hts) fun a ha ↦ ?_
+  obtain hat | hat := em (a ∈ t)
   · exact subset_union_right (subset_upperClosure hat)
   · refine subset_union_left ⟨ha, ?_⟩
     rintro ⟨b, hb, hab⟩
-exact hat hst _ ha _ hb hab
+    exact hat <| hst _ ha _ hb hab
 
 @[to_dual]
-/--
-lemma `upperClosure_inf_sdiff` / 引理 `upperClosure_inf_sdiff`
-
-English:
-lemma upperClosure_inf_sdiff
-  given: (hts : t subseteq s) (hst : forall b in s, forall c in t, b <= c -> b in t)
-  proof: by rw [inf_comm, sdiff_inf_upperClosure hts hst]
-
-@[to_dual]
-
-中文:
-引理 upperClosure_inf_sdiff
-  条件: (hts : t subseteq s) (hst : 对任意 b in s, 对任意 c in t, b <= c -> b in t)
-  证明: by rw [inf_comm, sdiff_inf_upperClosure hts hst]
-
-@[to_dual]
-
-Depends on / 依赖: inf_comm, sdiff_inf_upperClosure
+/-
+**UpperSet.upperClosure_inf_sdiff** 是 Mathlib 中的一个引理，位于命名空间 `UpperSet`。
+形式化陈述：upperClosure_inf_sdiff (hts : t subseteq s) (hst : forall b in s, forall c
+ in t, b <= c -> b in t) : upperClosure t ⊓ s.sdiff t = s
+参数：hts : t subseteq s；hst : forall b in s, forall c in t, b <= c -> b in t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inf_comm`：∀ {α : Type u} [inst : SemilatticeInf α] (a b : α), a ⊓ b = b 
+⊓ a
+· 使用引理 `UpperSet.sdiff_inf_upperClosure`：sdiff_inf_upperClosure (hts : t subsete
+q s) (hst : forall b in s, forall c in t, b <= c -> b in t) : s.sdiff t ⊓ upperC
+losure t = s
 -/
-lemma upperClosure_inf_sdiff (hts : t subseteq s) (hst : forall b in s, forall c in t, b <= c -> b in t) :
+lemma upperClosure_inf_sdiff (hts : t ⊆ s) (hst : ∀ b ∈ s, ∀ c ∈ t, b ≤ c → b ∈ t) :
     upperClosure t ⊓ s.sdiff t = s := by rw [inf_comm, sdiff_inf_upperClosure hts hst]
 
 @[to_dual]
-/--
-lemma `erase_inf_Ici` / 引理 `erase_inf_Ici`
-
-English:
-lemma erase_inf_Ici
-  given: (ha : a in s) (has : forall b in s, b <= a -> b = a)
-  statement: s.erase a ⊓ Ici a = s
-  proof: by
-  rw [← upperClosure_singleton]; rw [← sdiff_singleton]; rw [sdiff_inf_upperClosure] <;> simpa
-
-@[to_dual]
-
-中文:
-引理 erase_inf_Ici
-  条件: (ha : a in s) (has : 对任意 b in s, b <= a -> b = a)
-  结论: s.erase a ⊓ 左闭右无界区间 a = s
-  证明: by
-  rw [← upperClosure_singleton]; rw [← sdiff_singleton]; rw [sdiff_inf_upperClosure] <;> simpa
-
-@[to_dual]
-
-Depends on / 依赖: sdiff_inf_upperClosure, sdiff_singleton, upperClosure_singleton
+/-
+**UpperSet.erase_inf_Ici** 是 Mathlib 中的一个引理，位于命名空间 `UpperSet`。
+形式化陈述：erase_inf_Ici (ha : a in s) (has : forall b in s, b <= a -> b = a) : s.era
+se a ⊓ Ici a = s
+参数：ha : a in s；has : forall b in s, b <= a -> b = a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `upperClosure_singleton`：upperClosure_singleton (a : α) : upperClosure ({
+a} : Set α) = UpperSet.Ici a
+· 使用引理 `UpperSet.sdiff_singleton`：sdiff_singleton (s : UpperSet α) (a : α) : s.s
+diff {a} = s.erase a
+· 使用引理 `UpperSet.sdiff_inf_upperClosure`：sdiff_inf_upperClosure (hts : t subsete
+q s) (hst : forall b in s, forall c in t, b <= c -> b in t) : s.sdiff t ⊓ upperC
+losure t = s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
-lemma erase_inf_Ici (ha : a in s) (has : forall b in s, b <= a -> b = a) : s.erase a ⊓ Ici a = s := by
-  rw [← upperClosure_singleton]; rw [← sdiff_singleton]; rw [sdiff_inf_upperClosure] <;> simpa
+lemma erase_inf_Ici (ha : a ∈ s) (has : ∀ b ∈ s, b ≤ a → b = a) : s.erase a ⊓ Ici a = s := by
+  rw [← upperClosure_singleton, ← sdiff_singleton, sdiff_inf_upperClosure] <;> simpa
 
 @[to_dual]
-/--
-lemma `Ici_inf_erase` / 引理 `Ici_inf_erase`
-
-English:
-lemma Ici_inf_erase
-  given: (ha : a in s) (has : forall b in s, b <= a -> b = a)
-  statement: Ici a ⊓ s.erase a = s
-  proof: by
-  rw [inf_comm]; rw [erase_inf_Ici ha has]
-
-中文:
-引理 Ici_inf_erase
-  条件: (ha : a in s) (has : 对任意 b in s, b <= a -> b = a)
-  结论: 左闭右无界区间 a ⊓ s.erase a = s
-  证明: by
-  rw [inf_comm]; rw [erase_inf_Ici ha has]
-
-Depends on / 依赖: erase_inf_Ici, inf_comm
+/-
+**UpperSet.Ici_inf_erase** 是 Mathlib 中的一个引理，位于命名空间 `UpperSet`。
+形式化陈述：Ici_inf_erase (ha : a in s) (has : forall b in s, b <= a -> b = a) : Ici a
+ ⊓ s.erase a = s
+参数：ha : a in s；has : forall b in s, b <= a -> b = a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inf_comm`：∀ {α : Type u} [inst : SemilatticeInf α] (a b : α), a ⊓ b = b 
+⊓ a
+· 使用引理 `UpperSet.erase_inf_Ici`：erase_inf_Ici (ha : a in s) (has : forall b in s
+, b <= a -> b = a) : s.erase a ⊓ Ici a = s
 -/
-lemma Ici_inf_erase (ha : a in s) (has : forall b in s, b <= a -> b = a) : Ici a ⊓ s.erase a = s := by
-  rw [inf_comm]; rw [erase_inf_Ici ha has]
+lemma Ici_inf_erase (ha : a ∈ s) (has : ∀ b ∈ s, b ≤ a → b = a) : Ici a ⊓ s.erase a = s := by
+  rw [inf_comm, erase_inf_Ici ha has]
 
 end UpperSet
+

@@ -26,57 +26,61 @@ namespace BinaryTree
 
 variable {α : Type*}
 
-/--
-Definition of `indexOf` / `indexOf` 的定义
+/-- Finds the index of an element in the tree assuming the tree has been
+constructed according to the provided decidable order on its elements.
+If it hasn't, the result will be incorrect. If it has, but the element
+is not in the tree, returns none. -/
+/-
+**BinaryTree.indexOf** 是 Mathlib 中的一个定义，位于命名空间 `BinaryTree`。
+形式化陈述：{α : Type u_1} → (lt : α → α → Prop) → [DecidableRel lt] → α → BinaryTree 
+α → Option PosNum
+参数：lt : α → α → Prop。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition indexOf
-  signature: (lt : α -> α -> Prop) [DecidableRel lt] (x : α)
-
-中文:
-定义 indexOf
-  签名: (lt : α -> α -> 命题) [DecidableRel lt] (x : α)
+--- 原说明 ---
+Finds the index of an element in the tree assuming the tree has been
+constructed according to the provided decidable order on its elements.
+If it hasn't, the result will be incorrect. If it has, but the element
+is not in the tree, returns none.
 -/
-def indexOf (lt : α -> α -> Prop) [DecidableRel lt] (x : α) : BinaryTree α -> Option PosNum
+def indexOf (lt : α → α → Prop) [DecidableRel lt] (x : α) : BinaryTree α → Option PosNum
   | nil => none
   | node a t₁ t₂ =>
     match cmpUsing lt x a with
-| Ordering.lt => PosNum.bit0 < > indexOf lt x t₁
+    | Ordering.lt => PosNum.bit0 <$> indexOf lt x t₁
     | Ordering.eq => some PosNum.one
-| Ordering.gt => PosNum.bit1 < > indexOf lt x t₂
+    | Ordering.gt => PosNum.bit1 <$> indexOf lt x t₂
 
 /-- **Alias** of `BinaryTree.indexOf`. -/
 @[deprecated BinaryTree.indexOf (since := "2026-06-07")]
-/--
-Definition of `_root_.Tree.indexOf` / `_root_.Tree.indexOf` 的定义
+/-
+**BinaryTree._root_.Tree.indexOf** 是 Mathlib 中的一个缩写定义，位于命名空间 `BinaryTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation _root_.Tree.indexOf
-  signature: (lt : α -> α -> Prop) [DecidableRel lt] (x : α)
-  body: BinaryTree.indexOf lt x
-
-中文:
-缩写 _root_.树.indexOf
-  签名: (lt : α -> α -> 命题) [DecidableRel lt] (x : α)
-  定义体: BinaryTree.indexOf lt x
-
-Depends on / 依赖: BinaryTree, BinaryTree.indexOf, indexOf
+--- 原说明 ---
+**Alias** of `BinaryTree.indexOf`.
 -/
-abbrev _root_.Tree.indexOf (lt : α -> α -> Prop) [DecidableRel lt] (x : α) : Tree α -> Option PosNum :=
+abbrev _root_.Tree.indexOf (lt : α → α → Prop) [DecidableRel lt] (x : α) : Tree α → Option PosNum :=
   BinaryTree.indexOf lt x
 
-/--
-Definition of `get` / `get` 的定义
+/-- Retrieves an element uniquely determined by a `PosNum` from the tree,
+taking the following path to get to the element:
+- `bit0` - go to left child
+- `bit1` - go to right child
+- `PosNum.one` - retrieve from here -/
+/-
+**BinaryTree.get** 是 Mathlib 中的一个定义，位于命名空间 `BinaryTree`。
+形式化陈述：{α : Type u_1} → PosNum → BinaryTree α → Option α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition get
-  signature: : PosNum -> BinaryTree α -> Option α
-
-中文:
-定义 get
-  签名: : PosNum -> BinaryTree α -> 选项类型 α
+--- 原说明 ---
+Retrieves an element uniquely determined by a `PosNum` from the tree,
+taking the following path to get to the element:
+- `bit0` - go to left child
+- `bit1` - go to right child
+- `PosNum.one` - retrieve from here
 -/
-def get : PosNum -> BinaryTree α -> Option α
+def get : PosNum → BinaryTree α → Option α
   | _, nil => none
   | PosNum.one, node a _t₁ _t₂ => some a
   | PosNum.bit0 n, node _a t₁ _t₂ => t₁.get n
@@ -84,60 +88,43 @@ def get : PosNum -> BinaryTree α -> Option α
 
 /-- **Alias** of `BinaryTree.get`. -/
 @[deprecated BinaryTree.get (since := "2026-06-07")]
-/--
-Definition of `_root_.Tree.get` / `_root_.Tree.get` 的定义
+/-
+**BinaryTree._root_.Tree.get** 是 Mathlib 中的一个缩写定义，位于命名空间 `BinaryTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation _root_.Tree.get
-  signature: (n : PosNum) (t : Tree α)
-  body: BinaryTree.get n t
-
-中文:
-缩写 _root_.树.get
-  签名: (n : PosNum) (t : 树 α)
-  定义体: BinaryTree.get n t
-
-Depends on / 依赖: BinaryTree, BinaryTree.get
+--- 原说明 ---
+**Alias** of `BinaryTree.get`.
 -/
 abbrev _root_.Tree.get (n : PosNum) (t : Tree α) : Option α :=
   BinaryTree.get n t
 
-/--
-Definition of `getOrElse` / `getOrElse` 的定义
+/-- Retrieves an element from the tree, or the provided default value
+if the index is invalid. See `BinaryTree.get`. -/
+/-
+**BinaryTree.getOrElse** 是 Mathlib 中的一个定义，位于命名空间 `BinaryTree`。
+形式化陈述：getOrElse (n : PosNum) (t : BinaryTree α) (v : α) : α
+参数：n : PosNum；t : BinaryTree α；v : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getOrElse
-  signature: (n : PosNum) (t : BinaryTree α) (v : α)
-  body: (t.get n).getD v
-
-中文:
-定义 getOrElse
-  签名: (n : PosNum) (t : BinaryTree α) (v : α)
-  定义体: (t.get n).getD v
-
-Depends on / 依赖: t.get
+--- 原说明 ---
+Retrieves an element from the tree, or the provided default value
+if the index is invalid. See `BinaryTree.get`.
 -/
 def getOrElse (n : PosNum) (t : BinaryTree α) (v : α) : α :=
   (t.get n).getD v
 
 /-- **Alias** of `BinaryTree.getOrElse`. -/
 @[deprecated BinaryTree.getOrElse (since := "2026-06-07")]
-/--
-Definition of `_root_.Tree.getOrElse` / `_root_.Tree.getOrElse` 的定义
+/-
+**BinaryTree._root_.Tree.getOrElse** 是 Mathlib 中的一个缩写定义，位于命名空间 `BinaryTree`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation _root_.Tree.getOrElse
-  signature: (n : PosNum) (t : Tree α) (v : α)
-  body: BinaryTree.getOrElse n t v
-
-中文:
-缩写 _root_.树.getOrElse
-  签名: (n : PosNum) (t : 树 α) (v : α)
-  定义体: BinaryTree.getOrElse n t v
-
-Depends on / 依赖: BinaryTree, BinaryTree.getOrElse, getOrElse
+--- 原说明 ---
+**Alias** of `BinaryTree.getOrElse`.
 -/
 abbrev _root_.Tree.getOrElse (n : PosNum) (t : Tree α) (v : α) : α :=
   BinaryTree.getOrElse n t v
 
 end BinaryTree
+

@@ -29,42 +29,32 @@ section ContinuousMapClass
 variable {F α β : Type*} [TopologicalSpace α] [TopologicalSpace β] [FunLike F α β]
 variable [ContinuousMapClass F α β]
 
-/--
-theorem `map_continuousAt` / 定理 `map_continuousAt`
-
-English:
-theorem map_continuousAt
-  given: (f : F) (a : α)
-  statement: ContinuousAt f a
-  proof: (map_continuous f).continuousAt
-
-中文:
-定理 map_continuousAt
-  条件: (f : F) (a : α)
-  结论: ContinuousAt f a
-  证明: (map_continuous f).continuousAt
-
-Depends on / 依赖: continuousAt, map_continuous
+/-
+**map_continuousAt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_continuousAt (f : F) (a : α) : ContinuousAt f a
+参数：f : F；a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.continuousAt`：Continuous.continuousAt (h : Continuous f) : Co
+ntinuousAt f x
+· 使用定理 `ContinuousMapClass.map_continuous`：∀ {F : Type u_1} {X : outParam (Type 
+u_2)} {Y : outParam (Type u_3)} {inst : TopologicalSpace X}   {inst_1 : Topologi
+calSpace Y} {inst_2 : F…
 -/
 theorem map_continuousAt (f : F) (a : α) : ContinuousAt f a :=
   (map_continuous f).continuousAt
-
-/--
-theorem `map_continuousWithinAt` / 定理 `map_continuousWithinAt`
-
-English:
-theorem map_continuousWithinAt
-  given: (f : F) (s : Set α) (a : α)
-  statement: ContinuousWithinAt f s a
-  proof: (map_continuous f).continuousWithinAt
-
-中文:
-定理 map_continuousWithinAt
-  条件: (f : F) (s : 集合 α) (a : α)
-  结论: ContinuousWithinAt f s a
-  证明: (map_continuous f).continuousWithinAt
-
-Depends on / 依赖: continuousWithinAt, map_continuous
+/-
+**map_continuousWithinAt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_continuousWithinAt (f : F) (s : Set α) (a : α) : ContinuousWithinAt f 
+s a
+参数：f : F；s : Set α；a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.continuousWithinAt`：Continuous.continuousWithinAt (h : Contin
+uous f) : ContinuousWithinAt f s x
+· 使用定理 `ContinuousMapClass.map_continuous`：∀ {F : Type u_1} {X : outParam (Type 
+u_2)} {Y : outParam (Type u_3)} {inst : TopologicalSpace X}   {inst_1 : Topologi
+calSpace Y} {inst_2 : F…
 -/
 theorem map_continuousWithinAt (f : F) (s : Set α) (a : α) : ContinuousWithinAt f s a :=
   (map_continuous f).continuousWithinAt
@@ -81,40 +71,31 @@ variable {α β γ δ : Type*} [TopologicalSpace α] [TopologicalSpace β] [Topo
 
 variable {f g : C(α, β)}
 
-/--
-theorem `continuousAt` / 定理 `continuousAt`
+/-- Deprecated. Use `map_continuousAt` instead. -/
+/-
+**ContinuousMap.continuousAt** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : TopologicalSpace α] [inst_1 : Topo
+logicalSpace β] (f : C(α, β)) (x : α),   ContinuousAt (⇑f) x
+参数：f : C(α, β)；x : α；⇑f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_continuousAt`：map_continuousAt (f : F) (a : α) : ContinuousAt f a
 
-English:
-theorem continuousAt
-  given: (f : C(α, β)) (x : α)
-  statement: ContinuousAt f x
-  proof: map_continuousAt f x
-
-中文:
-定理 continuousAt
-  条件: (f : C(α, β)) (x : α)
-  结论: ContinuousAt f x
-  证明: map_continuousAt f x
+--- 原说明 ---
+Deprecated. Use `map_continuousAt` instead.
 -/
 protected theorem continuousAt (f : C(α, β)) (x : α) : ContinuousAt f x :=
   map_continuousAt f x
-
-/--
-theorem `map_specializes` / 定理 `map_specializes`
-
-English:
-theorem map_specializes
-  given: (f : C(α, β)) {x y : α} (h : x ⤳ y)
-  statement: f x ⤳ f y
-  proof: h.map f.2
-
-中文:
-定理 map_specializes
-  条件: (f : C(α, β)) {x y : α} (h : x ⤳ y)
-  结论: f x ⤳ f y
-  证明: h.map f.2
-
-Depends on / 依赖: h.map
+/-
+**ContinuousMap.map_specializes** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：map_specializes (f : C(α, β)) {x y : α} (h : x ⤳ y) : f x ⤳ f y
+参数：f : C(α, β)；h : x ⤳ y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Specializes.map`：Specializes.map (h : x ⤳ y) (hf : Continuous f) : f x ⤳
+ f y
+· 使用定理 `ContinuousMap.continuous_toFun`：∀ {X : Type u_1} {Y : Type u_2} [inst : 
+TopologicalSpace X] [inst_1 : TopologicalSpace Y] (self : C(X, Y)),   Continuous
+ self.toFun
 -/
 theorem map_specializes (f : C(α, β)) {x y : α} (h : x ⤳ y) : f x ⤳ f y :=
   h.map f.2
@@ -126,177 +107,110 @@ variable [DiscreteTopology α]
 The continuous functions from `α` to `β` are the same as the plain functions when `α` is discrete.
 -/
 @[simps]
-/--
-Definition of `equivFnOfDiscrete` / `equivFnOfDiscrete` 的定义
+/-
+**ContinuousMap.equivFnOfDiscrete** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：equivFnOfDiscrete : C(α, β) ≃ (α -> β)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_of_discreteTopology`：continuous_of_discreteTopology [Topologi
+calSpace β] {f : α -> β} : Continuous f
 
-English:
-definition equivFnOfDiscrete
-  signature: : C(α, β) ≃ (α -> β)
-  body: ⟨fun f => f,
-    fun f => ⟨f, continuous_of_discreteTopology⟩,
-    fun _ => by ext; rfl,
-    fun _ => by ext; rfl⟩
-
-中文:
-定义 equivFnOfDiscrete
-  签名: : C(α, β) ≃ (α -> β)
-  定义体: ⟨fun f => f,
-    fun f => ⟨f, continuous_of_discreteTopology⟩,
-    fun _ => by ext; rfl,
-    fun _ => by ext; rfl⟩
-
-Depends on / 依赖: continuous_of_discreteTopology
+--- 原说明 ---
+The continuous functions from `α` to `β` are the same as the plain functions whe
+n `α` is discrete.
 -/
-def equivFnOfDiscrete : C(α, β) ≃ (α -> β) :=
+def equivFnOfDiscrete : C(α, β) ≃ (α → β) :=
   ⟨fun f => f,
     fun f => ⟨f, continuous_of_discreteTopology⟩,
     fun _ => by ext; rfl,
     fun _ => by ext; rfl⟩
-
-/--
-lemma `coe_equivFnOfDiscrete` / 引理 `coe_equivFnOfDiscrete`
-
-English:
-lemma coe_equivFnOfDiscrete
-  statement: ⇑equivFnOfDiscrete = (DFunLike.coe : C(α, β) -> α -> β)
-  proof: rfl
-
-中文:
-引理 coe_equivFnOfDiscrete
-  结论: ⇑equivFnOfDiscrete = (依赖函数状.coe : C(α, β) -> α -> β)
-  证明: rfl
+/-
+**ContinuousMap.coe_equivFnOfDiscrete** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : TopologicalSpace α] [inst_1 : Topo
+logicalSpace β] [inst_2 : DiscreteTopology α],   ⇑ContinuousMap.equivFnOfDiscret
+e = DFunLike.coe
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-@[simp] lemma coe_equivFnOfDiscrete : ⇑equivFnOfDiscrete = (DFunLike.coe : C(α, β) -> α -> β) := rfl
-
-/--
-lemma `equivFnOfDiscrete_symm_apply` / 引理 `equivFnOfDiscrete_symm_apply`
-
-English:
-lemma equivFnOfDiscrete_symm_apply
-  given: (f : α -> β)
-  statement: equivFnOfDiscrete.symm f = f
-  proof: rfl
-
-中文:
-引理 equivFnOfDiscrete_symm_apply
-  条件: (f : α -> β)
-  结论: equivFnOfDiscrete.symm f = f
-  证明: rfl
+@[simp] lemma coe_equivFnOfDiscrete : ⇑equivFnOfDiscrete = (DFunLike.coe : C(α, β) → α → β) := rfl
+/-
+**ContinuousMap.equivFnOfDiscrete_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Continuo
+usMap`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : TopologicalSpace α] [inst_1 : Topo
+logicalSpace β] [inst_2 : DiscreteTopology α]   (f : α → β), ⇑(ContinuousMap.equ
+ivFnOfDiscrete.symm f) = f
+参数：f : α → β；ContinuousMap.equivFnOfDiscrete.symm f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
-@[simp] lemma equivFnOfDiscrete_symm_apply (f : α -> β) : equivFnOfDiscrete.symm f = f := rfl
+@[simp] lemma equivFnOfDiscrete_symm_apply (f : α → β) : equivFnOfDiscrete.symm f = f := rfl
 
 end DiscreteTopology
 
 variable (α)
 
-/--
-Definition of `id` / `id` 的定义
+/-- The identity as a continuous map. -/
+/-
+**ContinuousMap.id** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：(α : Type u_1) → [inst : TopologicalSpace α] → C(α, α)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : C(α, α) where
-  body: id
-
-@[simp, norm_cast]
-
-中文:
-定义 id
-  签名: : C(α, α) where
-  定义体: id
-
-@[simp, norm_cast]
+--- 原说明 ---
+The identity as a continuous map.
 -/
 protected def id : C(α, α) where
   toFun := id
 
 @[simp, norm_cast]
-/--
-theorem `coe_id` / 定理 `coe_id`
-
-English:
-theorem coe_id
-  statement: ⇑(ContinuousMap.id α) = id
-  proof: rfl
-
-中文:
-定理 coe_id
-  结论: ⇑(连续映射.id α) = id
-  证明: rfl
+/-
+**ContinuousMap.coe_id** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：coe_id : ⇑(ContinuousMap.id α) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_id : ⇑(ContinuousMap.id α) = id :=
   rfl
 
-/--
-Definition of `const` / `const` 的定义
+/-- The constant map as a continuous map. -/
+/-
+**ContinuousMap.const** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：const (b : β) : C(α, β) where toFun
+参数：b : β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition const
-  signature: (b : β)
-  body: fun _ : α => b
-
-@[simp]
-
-中文:
-定义 const
-  签名: (b : β)
-  定义体: fun _ : α => b
-
-@[simp]
+--- 原说明 ---
+The constant map as a continuous map.
 -/
 def const (b : β) : C(α, β) where
   toFun := fun _ : α => b
 
 @[simp]
-/--
-theorem `coe_const` / 定理 `coe_const`
-
-English:
-theorem coe_const
-  given: (b : β)
-  statement: ⇑(const α b) = Function.const α b
-  proof: rfl
-
-中文:
-定理 coe_const
-  条件: (b : β)
-  结论: ⇑(const α b) = 函数.const α b
-  证明: rfl
+/-
+**ContinuousMap.coe_const** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：coe_const (b : β) : ⇑(const α b) = Function.const α b
+参数：b : β。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_const (b : β) : ⇑(const α b) = Function.const α b :=
   rfl
 
 /-- `Function.const α b` as a bundled continuous function of `b`. -/
 @[simps -fullyApplied]
-/--
-Definition of `constPi` / `constPi` 的定义
+/-
+**ContinuousMap.constPi** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：constPi : C(β, α -> β) where toFun b
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition constPi
-  signature: : C(β, α -> β) where
-  body: Function.const α b
-
-中文:
-定义 constPi
-  签名: : C(β, α -> β) where
-  定义体: Function.const α b
-
-Depends on / 依赖: Function, Function.const
+--- 原说明 ---
+`Function.const α b` as a bundled continuous function of `b`.
 -/
-def constPi : C(β, α -> β) where
+def constPi : C(β, α → β) where
   toFun b := Function.const α b
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: β] : Inhabited C(α, β)
-  body: ⟨const α default⟩
-
-中文:
-实例 [可居
-  签名: β] : 可居 C(α, β)
-  定义体: ⟨const α default⟩
+/-
+**ContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited β] : Inhabited C(α, β) :=
   ⟨const α default⟩
@@ -304,317 +218,186 @@ instance [Inhabited β] : Inhabited C(α, β) :=
 variable {α}
 
 @[simp]
-/--
-theorem `id_apply` / 定理 `id_apply`
-
-English:
-theorem id_apply
-  given: (a : α)
-  statement: ContinuousMap.id α a = a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 id_apply
-  条件: (a : α)
-  结论: 连续映射.id α a = a
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousMap.id_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：id_apply (a : α) : ContinuousMap.id α a = a
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem id_apply (a : α) : ContinuousMap.id α a = a :=
   rfl
 
 @[simp]
-/--
-theorem `const_apply` / 定理 `const_apply`
-
-English:
-theorem const_apply
-  given: (b : β) (a : α)
-  statement: const α b a = b
-  proof: rfl
-
-中文:
-定理 const_apply
-  条件: (b : β) (a : α)
-  结论: const α b a = b
-  证明: rfl
+/-
+**ContinuousMap.const_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：const_apply (b : β) (a : α) : const α b a = b
+参数：b : β；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem const_apply (b : β) (a : α) : const α b a = b :=
   rfl
 
 /-- The composition of continuous maps, as a continuous map. -/
 @[implicit_reducible]
-/--
-Definition of `comp` / `comp` 的定义
+/-
+**ContinuousMap.comp** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：comp (f : C(β, γ)) (g : C(α, β)) : C(α, γ) where toFun
+参数：f : C(β, γ)；g : C(α, β)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comp
-  signature: (f : C(β, γ)) (g : C(α, β))
-  body: f ∘ g
-
-@[simp]
-
-中文:
-定义 comp
-  签名: (f : C(β, γ)) (g : C(α, β))
-  定义体: f ∘ g
-
-@[simp]
+--- 原说明 ---
+The composition of continuous maps, as a continuous map.
 -/
 def comp (f : C(β, γ)) (g : C(α, β)) : C(α, γ) where
   toFun := f ∘ g
 
 @[simp]
-/--
-theorem `coe_comp` / 定理 `coe_comp`
-
-English:
-theorem coe_comp
-  given: (f : C(β, γ)) (g : C(α, β))
-  statement: ⇑(comp f g) = f ∘ g
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_comp
-  条件: (f : C(β, γ)) (g : C(α, β))
-  结论: ⇑(comp f g) = f ∘ g
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousMap.coe_comp** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：coe_comp (f : C(β, γ)) (g : C(α, β)) : ⇑(comp f g) = f ∘ g
+参数：f : C(β, γ)；g : C(α, β)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_comp (f : C(β, γ)) (g : C(α, β)) : ⇑(comp f g) = f ∘ g :=
   rfl
 
 @[simp]
-/--
-theorem `comp_apply` / 定理 `comp_apply`
-
-English:
-theorem comp_apply
-  given: (f : C(β, γ)) (g : C(α, β)) (a : α)
-  statement: comp f g a = f (g a)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_apply
-  条件: (f : C(β, γ)) (g : C(α, β)) (a : α)
-  结论: comp f g a = f (g a)
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousMap.comp_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：comp_apply (f : C(β, γ)) (g : C(α, β)) (a : α) : comp f g a = f (g a)
+参数：f : C(β, γ)；g : C(α, β)；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_apply (f : C(β, γ)) (g : C(α, β)) (a : α) : comp f g a = f (g a) :=
   rfl
 
 @[simp]
-/--
-theorem `comp_assoc` / 定理 `comp_assoc`
-
-English:
-theorem comp_assoc
-  given: (f : C(γ, δ)) (g : C(β, γ)) (h : C(α, β))
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 comp_assoc
-  条件: (f : C(γ, δ)) (g : C(β, γ)) (h : C(α, β))
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousMap.comp_assoc** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：comp_assoc (f : C(γ, δ)) (g : C(β, γ)) (h : C(α, β)) : (f.comp g).comp h =
+ f.comp (g.comp h)
+参数：f : C(γ, δ)；g : C(β, γ)；h : C(α, β)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem comp_assoc (f : C(γ, δ)) (g : C(β, γ)) (h : C(α, β)) :
     (f.comp g).comp h = f.comp (g.comp h) :=
   rfl
 
 @[simp]
-/--
-theorem `id_comp` / 定理 `id_comp`
-
-English:
-theorem id_comp
-  given: (f : C(α, β))
-  statement: (ContinuousMap.id _).comp f = f
-  proof: ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 id_comp
-  条件: (f : C(α, β))
-  结论: (连续映射.id _).comp f = f
-  证明: ext fun _ => rfl
-
-@[simp]
+/-
+**ContinuousMap.id_comp** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：id_comp (f : C(α, β)) : (ContinuousMap.id _).comp f = f
+参数：f : C(α, β)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.ext`：ext {f g : C(X, Y)} (h : forall a, f a = g a) : f = g
 -/
 theorem id_comp (f : C(α, β)) : (ContinuousMap.id _).comp f = f :=
   ext fun _ => rfl
 
 @[simp]
-/--
-theorem `comp_id` / 定理 `comp_id`
-
-English:
-theorem comp_id
-  given: (f : C(α, β))
-  statement: f.comp (ContinuousMap.id _) = f
-  proof: ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 comp_id
-  条件: (f : C(α, β))
-  结论: f.comp (连续映射.id _) = f
-  证明: ext fun _ => rfl
-
-@[simp]
+/-
+**ContinuousMap.comp_id** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：comp_id (f : C(α, β)) : f.comp (ContinuousMap.id _) = f
+参数：f : C(α, β)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.ext`：ext {f g : C(X, Y)} (h : forall a, f a = g a) : f = g
 -/
 theorem comp_id (f : C(α, β)) : f.comp (ContinuousMap.id _) = f :=
   ext fun _ => rfl
 
 @[simp]
-/--
-theorem `const_comp` / 定理 `const_comp`
-
-English:
-theorem const_comp
-  given: (c : γ) (f : C(α, β))
-  statement: (const β c).comp f = const α c
-  proof: ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 const_comp
-  条件: (c : γ) (f : C(α, β))
-  结论: (const β c).comp f = const α c
-  证明: ext fun _ => rfl
-
-@[simp]
+/-
+**ContinuousMap.const_comp** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：const_comp (c : γ) (f : C(α, β)) : (const β c).comp f = const α c
+参数：c : γ；f : C(α, β)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.ext`：ext {f g : C(X, Y)} (h : forall a, f a = g a) : f = g
 -/
 theorem const_comp (c : γ) (f : C(α, β)) : (const β c).comp f = const α c :=
   ext fun _ => rfl
 
 @[simp]
-/--
-theorem `comp_const` / 定理 `comp_const`
-
-English:
-theorem comp_const
-  given: (f : C(β, γ)) (b : β)
-  statement: f.comp (const α b) = const α (f b)
-  proof: ext fun _ => rfl
-
-@[simp]
-
-中文:
-定理 comp_const
-  条件: (f : C(β, γ)) (b : β)
-  结论: f.comp (const α b) = const α (f b)
-  证明: ext fun _ => rfl
-
-@[simp]
+/-
+**ContinuousMap.comp_const** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：comp_const (f : C(β, γ)) (b : β) : f.comp (const α b) = const α (f b)
+参数：f : C(β, γ)；b : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.ext`：ext {f g : C(X, Y)} (h : forall a, f a = g a) : f = g
 -/
 theorem comp_const (f : C(β, γ)) (b : β) : f.comp (const α b) = const α (f b) :=
   ext fun _ => rfl
 
 @[simp]
-/--
-theorem `cancel_right` / 定理 `cancel_right`
-
-English:
-theorem cancel_right
-  given: {f₁ f₂ : C(β, γ)} {g : C(α, β)} (hg : Surjective g)
-  proof: ⟨fun h => ext hg.forall.2 DFunLike.ext_iff.1 h, congr_arg (ContinuousMap.comp · g)⟩
-
-@[simp]
-
-中文:
-定理 cancel_right
-  条件: {f₁ f₂ : C(β, γ)} {g : C(α, β)} (hg : 满射 g)
-  证明: ⟨fun h => ext hg.forall.2 DFunLike.ext_iff.1 h, congr_arg (ContinuousMap.comp · g)⟩
-
-@[simp]
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.comp, DFunLike, DFunLike.ext_iff, congr_arg, ext_iff, hg.forall
+/-
+**ContinuousMap.cancel_right** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：cancel_right {f₁ f₂ : C(β, γ)} {g : C(α, β)} (hg : Surjective g) : f₁.comp
+ g = f₂.comp g ↔ f₁ = f₂
+参数：β, γ；α, β；hg : Surjective g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.ext`：ext {f g : C(X, Y)} (h : forall a, f a = g a) : f = g
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.Surjective.forall`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+   Function.Surjective f → ∀ {p : β → Prop}, (∀ (y : β), p y) ↔ ∀ (x : α), p (f 
+x)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `DFunLike.ext_iff`：ext_iff {f g : F} : f = g ↔ forall x, f x = g x
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem cancel_right {f₁ f₂ : C(β, γ)} {g : C(α, β)} (hg : Surjective g) :
     f₁.comp g = f₂.comp g ↔ f₁ = f₂ :=
-⟨fun h => ext hg.forall.2 DFunLike.ext_iff.1 h, congr_arg (ContinuousMap.comp · g)⟩
+  ⟨fun h => ext <| hg.forall.2 <| DFunLike.ext_iff.1 h, congr_arg (ContinuousMap.comp · g)⟩
 
 @[simp]
-/--
-theorem `cancel_left` / 定理 `cancel_left`
-
-English:
-theorem cancel_left
-  given: {f : C(β, γ)} {g₁ g₂ : C(α, β)} (hf : Injective f)
-  proof: ⟨fun h => ext fun a => hf by rw [← comp_apply, h, comp_apply], congr_arg _⟩
-
-中文:
-定理 cancel_left
-  条件: {f : C(β, γ)} {g₁ g₂ : C(α, β)} (hf : 单射 f)
-  证明: ⟨fun h => ext fun a => hf by rw [← comp_apply, h, comp_apply], congr_arg _⟩
-
-Depends on / 依赖: comp_apply, congr_arg
+/-
+**ContinuousMap.cancel_left** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：cancel_left {f : C(β, γ)} {g₁ g₂ : C(α, β)} (hf : Injective f) : f.comp g₁
+ = f.comp g₂ ↔ g₁ = g₂
+参数：β, γ；α, β；hf : Injective f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.ext`：ext {f g : C(X, Y)} (h : forall a, f a = g a) : f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ContinuousMap.comp_apply`：comp_apply (f : C(β, γ)) (g : C(α, β)) (a : α)
+ : comp f g a = f (g a)
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem cancel_left {f : C(β, γ)} {g₁ g₂ : C(α, β)} (hf : Injective f) :
     f.comp g₁ = f.comp g₂ ↔ g₁ = g₂ :=
-⟨fun h => ext fun a => hf by rw [← comp_apply, h, comp_apply], congr_arg _⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nonempty
-  signature: α] [Nontrivial β] : Nontrivial C(α, β)
-  body: ⟨let ⟨b₁, b₂, hb⟩ := exists_pair_ne β
-⟨const _ b₁, const _ b₂, fun h => hb DFunLike.congr_fun h Classical.arbitrary α⟩⟩
-
-中文:
-实例 [非空
-  签名: α] [非平凡 β] : 非平凡 C(α, β)
-  定义体: ⟨let ⟨b₁, b₂, hb⟩ := exists_pair_ne β
-⟨const _ b₁, const _ b₂, fun h => hb DFunLike.congr_fun h Classical.arbitrary α⟩⟩
-
-Depends on / 依赖: Classical, Classical.arbitrary, DFunLike, DFunLike.congr_fun, arbitrary, congr_fun, exists_pair_ne
+  ⟨fun h => ext fun a => hf <| by rw [← comp_apply, h, comp_apply], congr_arg _⟩
+/-
+**ContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Nonempty α] [Nontrivial β] : Nontrivial C(α, β) :=
   ⟨let ⟨b₁, b₂, hb⟩ := exists_pair_ne β
-⟨const _ b₁, const _ b₂, fun h => hb DFunLike.congr_fun h Classical.arbitrary α⟩⟩
+  ⟨const _ b₁, const _ b₂, fun h => hb <| DFunLike.congr_fun h <| Classical.arbitrary α⟩⟩
 
 /-- The bijection `C(X₁, Y₁) ≃ C(X₂, Y₂)` induced by homeomorphisms
 `e : X₁ ≃ₜ X₂` and `e' : Y₁ ≃ₜ Y₂`. -/
 @[simps]
-/--
-Definition of `_root_.Homeomorph.continuousMapCongr` / `_root_.Homeomorph.continuousMapCongr` 的定义
+/-
+**ContinuousMap._root_.Homeomorph.continuousMapCongr** 是 Mathlib 中的一个定义，位于命名空间 `
+ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.Homeomorph.continuousMapCongr
-  signature: {X₁ X₂ Y₁ Y₂ : Type*}
-  body: ContinuousMap.comp ⟨_, e'.continuous⟩ (f.comp ⟨_, e.symm.continuous⟩)
-  invFun g := ContinuousMap.comp ⟨_, e'.symm.continuous⟩ (g.comp ⟨_, e.continuous⟩)
-  left_inv _ := by aesop
-  right_inv _ := by aesop
-
-中文:
-定义 _root_.同胚.continuousMapCongr
-  签名: {X₁ X₂ Y₁ Y₂ : 类型}
-  定义体: ContinuousMap.comp ⟨_, e'.continuous⟩ (f.comp ⟨_, e.symm.continuous⟩)
-  invFun g := ContinuousMap.comp ⟨_, e'.symm.continuous⟩ (g.comp ⟨_, e.continuous⟩)
-  left_inv _ := by aesop
-  right_inv _ := by aesop
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.comp, continuous, e.symm.continuous, f.comp
+--- 原说明 ---
+The bijection `C(X₁, Y₁) ≃ C(X₂, Y₂)` induced by homeomorphisms
+`e : X₁ ≃ₜ X₂` and `e' : Y₁ ≃ₜ Y₂`.
 -/
 def _root_.Homeomorph.continuousMapCongr {X₁ X₂ Y₁ Y₂ : Type*}
     [TopologicalSpace X₁] [TopologicalSpace X₂]
@@ -633,119 +416,85 @@ variable {α₁ α₂ β₁ β₂ : Type*} [TopologicalSpace α₁] [Topological
 
 /-- `Prod.fst : (x, y) ↦ x` as a bundled continuous map. -/
 @[simps -fullyApplied]
-/--
-Definition of `fst` / `fst` 的定义
+/-
+**ContinuousMap.fst** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：fst : C(α × β, α) where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fst
-  signature: : C(α × β, α) where
-  body: Prod.fst
-
-中文:
-定义 fst
-  签名: : C(α × β, α) where
-  定义体: Prod.fst
-
-Depends on / 依赖: Prod.fst
+--- 原说明 ---
+`Prod.fst : (x, y) ↦ x` as a bundled continuous map.
 -/
 def fst : C(α × β, α) where
   toFun := Prod.fst
 
 /-- `Prod.snd : (x, y) ↦ y` as a bundled continuous map. -/
 @[simps -fullyApplied]
-/--
-Definition of `snd` / `snd` 的定义
+/-
+**ContinuousMap.snd** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：snd : C(α × β, β) where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition snd
-  signature: : C(α × β, β) where
-  body: Prod.snd
-
-中文:
-定义 snd
-  签名: : C(α × β, β) where
-  定义体: Prod.snd
-
-Depends on / 依赖: Prod.snd
+--- 原说明 ---
+`Prod.snd : (x, y) ↦ y` as a bundled continuous map.
 -/
 def snd : C(α × β, β) where
   toFun := Prod.snd
 
-/--
-Definition of `prodMk` / `prodMk` 的定义
+/-- Given two continuous maps `f` and `g`, this is the continuous map `x ↦ (f x, g x)`. -/
+/-
+**ContinuousMap.prodMk** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：prodMk (f : C(α, β₁)) (g : C(α, β₂)) : C(α, β₁ × β₂) where toFun x
+参数：f : C(α, β₁)；g : C(α, β₂)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodMk
-  signature: (f : C(α, β₁)) (g : C(α, β₂))
-  body: (f x, g x)
-
-中文:
-定义 prodMk
-  签名: (f : C(α, β₁)) (g : C(α, β₂))
-  定义体: (f x, g x)
+--- 原说明 ---
+Given two continuous maps `f` and `g`, this is the continuous map `x ↦ (f x, g x
+)`.
 -/
 def prodMk (f : C(α, β₁)) (g : C(α, β₂)) : C(α, β₁ × β₂) where
   toFun x := (f x, g x)
 
 /-- Given two continuous maps `f` and `g`, this is the continuous map `(x, y) ↦ (f x, g y)`. -/
 @[simps]
-/--
-Definition of `prodMap` / `prodMap` 的定义
+/-
+**ContinuousMap.prodMap** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：prodMap (f : C(α₁, α₂)) (g : C(β₁, β₂)) : C(α₁ × β₁, α₂ × β₂) where toFun
+参数：f : C(α₁, α₂)；g : C(β₁, β₂)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodMap
-  signature: (f : C(α₁, α₂)) (g : C(β₁, β₂))
-  body: Prod.map f g
-
-@[simp]
-
-中文:
-定义 prodMap
-  签名: (f : C(α₁, α₂)) (g : C(β₁, β₂))
-  定义体: Prod.map f g
-
-@[simp]
-
-Depends on / 依赖: Prod.map
+--- 原说明 ---
+Given two continuous maps `f` and `g`, this is the continuous map `(x, y) ↦ (f x
+, g y)`.
 -/
 def prodMap (f : C(α₁, α₂)) (g : C(β₁, β₂)) : C(α₁ × β₁, α₂ × β₂) where
   toFun := Prod.map f g
 
 @[simp]
-/--
-theorem `prod_eval` / 定理 `prod_eval`
-
-English:
-theorem prod_eval
-  given: (f : C(α, β₁)) (g : C(α, β₂)) (a : α)
-  statement: (prodMk f g) a = (f a, g a)
-  proof: rfl
-
-中文:
-定理 prod_eval
-  条件: (f : C(α, β₁)) (g : C(α, β₂)) (a : α)
-  结论: (prodMk f g) a = (f a, g a)
-  证明: rfl
+/-
+**ContinuousMap.prod_eval** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：prod_eval (f : C(α, β₁)) (g : C(α, β₂)) (a : α) : (prodMk f g) a = (f a, g
+ a)
+参数：f : C(α, β₁)；g : C(α, β₂)；a : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem prod_eval (f : C(α, β₁)) (g : C(α, β₂)) (a : α) : (prodMk f g) a = (f a, g a) :=
   rfl
 
 /-- `Prod.swap` bundled as a `ContinuousMap`. -/
 @[simps!]
-/--
-Definition of `prodSwap` / `prodSwap` 的定义
+/-
+**ContinuousMap.prodSwap** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：prodSwap : C(α × β, β × α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prodSwap
-  signature: : C(α × β, β × α)
-  body: .prodMk .snd .fst
-
-中文:
-定义 prodSwap
-  签名: : C(α × β, β × α)
-  定义体: .prodMk .snd .fst
-
-Depends on / 依赖: prodMk
+--- 原说明 ---
+`Prod.swap` bundled as a `ContinuousMap`.
 -/
 def prodSwap : C(α × β, β × α) := .prodMk .snd .fst
 
@@ -753,24 +502,19 @@ end Prod
 
 section Sigma
 
-variable {I A : Type*} {X : I -> Type*} [TopologicalSpace A] [forall i, TopologicalSpace (X i)]
+variable {I A : Type*} {X : I → Type*} [TopologicalSpace A] [∀ i, TopologicalSpace (X i)]
 
 /-- `Sigma.mk i` as a bundled continuous map. -/
 @[simps apply]
-/--
-Definition of `sigmaMk` / `sigmaMk` 的定义
+/-
+**ContinuousMap.sigmaMk** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：sigmaMk (i : I) : C(X i, Σ i, X i) where toFun
+参数：i : I。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sigmaMk
-  signature: (i : I)
-  body: Sigma.mk i
-
-中文:
-定义 sigmaMk
-  签名: (i : I)
-  定义体: Sigma.mk i
-
-Depends on / 依赖: Sigma.mk
+--- 原说明 ---
+`Sigma.mk i` as a bundled continuous map.
 -/
 def sigmaMk (i : I) : C(X i, Σ i, X i) where
   toFun := Sigma.mk i
@@ -780,24 +524,19 @@ To give a continuous map out of a disjoint union, it suffices to give a continuo
 each term. This is `Sigma.uncurry` for continuous maps.
 -/
 @[simps]
-/--
-Definition of `sigma` / `sigma` 的定义
+/-
+**ContinuousMap.sigma** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：sigma (f : forall i, C(X i, A)) : C((Σ i, X i), A) where toFun ig
+参数：f : forall i, C(X i, A)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sigma
-  signature: (f : forall i, C(X i, A))
-  body: f ig.fst ig.snd
-  continuous_toFun := by continuity
-
-中文:
-定义 sigma
-  签名: (f : 对任意 i, C(X i, A))
-  定义体: f ig.fst ig.snd
-  continuous_toFun := by continuity
-
-Depends on / 依赖: ig.fst, ig.snd
+--- 原说明 ---
+To give a continuous map out of a disjoint union, it suffices to give a continuo
+us map out of
+each term. This is `Sigma.uncurry` for continuous maps.
 -/
-def sigma (f : forall i, C(X i, A)) : C((Σ i, X i), A) where
+def sigma (f : ∀ i, C(X i, A)) : C((Σ i, X i), A) where
   toFun ig := f ig.fst ig.snd
   continuous_toFun := by continuity
 
@@ -807,22 +546,18 @@ Giving a continuous map out of a disjoint union is the same as giving a continuo
 each term. This is a version of `Equiv.piCurry` for continuous maps.
 -/
 @[simps]
-/--
-Definition of `sigmaEquiv` / `sigmaEquiv` 的定义
+/-
+**ContinuousMap.sigmaEquiv** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：sigmaEquiv : (forall i, C(X i, A)) ≃ C((Σ i, X i), A) where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sigmaEquiv
-  signature: : (forall i, C(X i, A)) ≃ C((Σ i, X i), A) where
-  body: sigma
-  invFun f i := f.comp (sigmaMk i)
-
-中文:
-定义 sigmaEquiv
-  签名: : (对任意 i, C(X i, A)) ≃ C((Σ i, X i), A) where
-  定义体: sigma
-  invFun f i := f.comp (sigmaMk i)
+--- 原说明 ---
+Giving a continuous map out of a disjoint union is the same as giving a continuo
+us map out of
+each term. This is a version of `Equiv.piCurry` for continuous maps.
 -/
-def sigmaEquiv : (forall i, C(X i, A)) ≃ C((Σ i, X i), A) where
+def sigmaEquiv : (∀ i, C(X i, A)) ≃ C((Σ i, X i), A) where
   toFun := sigma
   invFun f i := f.comp (sigmaMk i)
 
@@ -830,66 +565,49 @@ end Sigma
 
 section Pi
 
-variable {I A : Type*} {X Y : I -> Type*} [TopologicalSpace A] [forall i, TopologicalSpace (X i)]
-  [forall i, TopologicalSpace (Y i)]
+variable {I A : Type*} {X Y : I → Type*} [TopologicalSpace A] [∀ i, TopologicalSpace (X i)]
+  [∀ i, TopologicalSpace (Y i)]
 
-/--
-Definition of `pi` / `pi` 的定义
+/-- Abbreviation for product of continuous maps, which is continuous -/
+/-
+**ContinuousMap.pi** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：pi (f : forall i, C(A, X i)) : C(A, forall i, X i) where toFun (a : A) (i 
+: I)
+参数：f : forall i, C(A, X i)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pi
-  signature: (f : forall i, C(A, X i))
-  body: f i a
-
-@[simp]
-
-中文:
-定义 pi
-  签名: (f : 对任意 i, C(A, X i))
-  定义体: f i a
-
-@[simp]
+--- 原说明 ---
+Abbreviation for product of continuous maps, which is continuous
 -/
-def pi (f : forall i, C(A, X i)) : C(A, forall i, X i) where
+def pi (f : ∀ i, C(A, X i)) : C(A, ∀ i, X i) where
   toFun (a : A) (i : I) := f i a
 
 @[simp]
-/--
-theorem `pi_eval` / 定理 `pi_eval`
-
-English:
-theorem pi_eval
-  given: (f : forall i, C(A, X i)) (a : A)
-  statement: (pi f) a = fun i : I => (f i) a
-  proof: rfl
-
-中文:
-定理 pi_eval
-  条件: (f : 对任意 i, C(A, X i)) (a : A)
-  结论: (pi f) a = fun i : I => (f i) a
-  证明: rfl
+/-
+**ContinuousMap.pi_eval** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：pi_eval (f : forall i, C(A, X i)) (a : A) : (pi f) a = fun i : I => (f i) 
+a
+参数：f : forall i, C(A, X i)；a : A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem pi_eval (f : forall i, C(A, X i)) (a : A) : (pi f) a = fun i : I => (f i) a :=
+theorem pi_eval (f : ∀ i, C(A, X i)) (a : A) : (pi f) a = fun i : I => (f i) a :=
   rfl
 
 /-- Evaluation at point as a bundled continuous map. -/
 @[simps -fullyApplied]
-/--
-Definition of `eval` / `eval` 的定义
+/-
+**ContinuousMap.eval** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：eval (i : I) : C(forall j, X j, X i) where toFun
+参数：i : I。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eval
-  signature: (i : I)
-  body: Function.eval i
-
-中文:
-定义 eval
-  签名: (i : I)
-  定义体: Function.eval i
-
-Depends on / 依赖: Function, Function.eval
+--- 原说明 ---
+Evaluation at point as a bundled continuous map.
 -/
-def eval (i : I) : C(forall j, X j, X i) where
+def eval (i : I) : C(∀ j, X j, X i) where
   toFun := Function.eval i
 
 variable (A X) in
@@ -898,60 +616,53 @@ Giving a continuous map out of a disjoint union is the same as giving a continuo
 each term
 -/
 @[simps]
-/--
-Definition of `piEquiv` / `piEquiv` 的定义
+/-
+**ContinuousMap.piEquiv** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：piEquiv : (forall i, C(A, X i)) ≃ C(A, forall i, X i) where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piEquiv
-  signature: : (forall i, C(A, X i)) ≃ C(A, forall i, X i) where
-  body: pi
-  invFun f i := (eval i).comp f
-
-中文:
-定义 piEquiv
-  签名: : (对任意 i, C(A, X i)) ≃ C(A, 对任意 i, X i) where
-  定义体: pi
-  invFun f i := (eval i).comp f
+--- 原说明 ---
+Giving a continuous map out of a disjoint union is the same as giving a continuo
+us map out of
+each term
 -/
-def piEquiv : (forall i, C(A, X i)) ≃ C(A, forall i, X i) where
+def piEquiv : (∀ i, C(A, X i)) ≃ C(A, ∀ i, X i) where
   toFun := pi
   invFun f i := (eval i).comp f
 
 /-- Combine a collection of bundled continuous maps `C(X i, Y i)` into a bundled continuous map
 `C(∀ i, X i, ∀ i, Y i)`. -/
 @[simps!]
-/--
-Definition of `piMap` / `piMap` 的定义
+/-
+**ContinuousMap.piMap** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：piMap (f : forall i, C(X i, Y i)) : C((i : I) -> X i, (i : I) -> Y i)
+参数：f : forall i, C(X i, Y i)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piMap
-  signature: (f : forall i, C(X i, Y i))
-  body: .pi fun i => (f i).comp (eval i)
-
-中文:
-定义 piMap
-  签名: (f : 对任意 i, C(X i, Y i))
-  定义体: .pi fun i => (f i).comp (eval i)
+--- 原说明 ---
+Combine a collection of bundled continuous maps `C(X i, Y i)` into a bundled con
+tinuous map
+`C(∀ i, X i, ∀ i, Y i)`.
 -/
-def piMap (f : forall i, C(X i, Y i)) : C((i : I) -> X i, (i : I) -> Y i) :=
-  .pi fun i => (f i).comp (eval i)
+def piMap (f : ∀ i, C(X i, Y i)) : C((i : I) → X i, (i : I) → Y i) :=
+  .pi fun i ↦ (f i).comp (eval i)
 
-/--
-Definition of `precomp` / `precomp` 的定义
+/-- "Precomposition" as a continuous map between dependent types. -/
+/-
+**ContinuousMap.precomp** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：precomp {ι : Type*} (φ : ι -> I) : C((i : I) -> X i, (i : ι) -> X (φ i))
+参数：φ : ι -> I。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Pi.continuous_precomp'`：Pi.continuous_precomp' {ι' : Type*} (φ : ι' -> ι
+) : Continuous (fun (f : (forall i, A i)) (j : ι') => f (φ j))
 
-English:
-definition precomp
-  signature: {ι : Type*} (φ : ι -> I)
-  body: ⟨_, Pi.continuous_precomp' φ⟩
-
-中文:
-定义 precomp
-  签名: {ι : 类型} (φ : ι -> I)
-  定义体: ⟨_, Pi.continuous_precomp' φ⟩
-
-Depends on / 依赖: Pi.continuous_precomp, continuous_precomp
+--- 原说明 ---
+"Precomposition" as a continuous map between dependent types.
 -/
-def precomp {ι : Type*} (φ : ι -> I) : C((i : I) -> X i, (i : ι) -> X (φ i)) :=
+def precomp {ι : Type*} (φ : ι → I) : C((i : I) → X i, (i : ι) → X (φ i)) :=
   ⟨_, Pi.continuous_precomp' φ⟩
 
 end Pi
@@ -960,133 +671,94 @@ section Restrict
 
 variable (s : Set α)
 
-/--
-Definition of `restrict` / `restrict` 的定义
+/-- The restriction of a continuous function `α → β` to a subset `s` of `α`. -/
+/-
+**ContinuousMap.restrict** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：restrict (f : C(α, β)) : C(s, β) where toFun
+参数：f : C(α, β)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrict
-  signature: (f : C(α, β))
-  body: f ∘ ((↑) : s -> α)
-
-@[simp]
-
-中文:
-定义 restrict
-  签名: (f : C(α, β))
-  定义体: f ∘ ((↑) : s -> α)
-
-@[simp]
+--- 原说明 ---
+The restriction of a continuous function `α → β` to a subset `s` of `α`.
 -/
 def restrict (f : C(α, β)) : C(s, β) where
-  toFun := f ∘ ((↑) : s -> α)
+  toFun := f ∘ ((↑) : s → α)
 
 @[simp]
-/--
-theorem `coe_restrict` / 定理 `coe_restrict`
-
-English:
-theorem coe_restrict
-  given: (f : C(α, β))
-  statement: ⇑(f.restrict s) = s.domRestrict f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_restrict
-  条件: (f : C(α, β))
-  结论: ⇑(f.restrict s) = s.domRestrict f
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousMap.coe_restrict** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：coe_restrict (f : C(α, β)) : ⇑(f.restrict s) = s.domRestrict f
+参数：f : C(α, β)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_restrict (f : C(α, β)) : ⇑(f.restrict s) = s.domRestrict f :=
   rfl
 
 @[simp]
-/--
-theorem `restrict_apply` / 定理 `restrict_apply`
-
-English:
-theorem restrict_apply
-  given: (f : C(α, β)) (s : Set α) (x : s)
-  statement: f.restrict s x = f x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 restrict_apply
-  条件: (f : C(α, β)) (s : 集合 α) (x : s)
-  结论: f.restrict s x = f x
-  证明: rfl
-
-@[simp]
+/-
+**ContinuousMap.restrict_apply** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：restrict_apply (f : C(α, β)) (s : Set α) (x : s) : f.restrict s x = f x
+参数：f : C(α, β)；s : Set α；x : s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem restrict_apply (f : C(α, β)) (s : Set α) (x : s) : f.restrict s x = f x :=
   rfl
 
 @[simp]
-/--
-theorem `restrict_apply_mk` / 定理 `restrict_apply_mk`
-
-English:
-theorem restrict_apply_mk
-  given: (f : C(α, β)) (s : Set α) (x : α) (hx : x in s)
-  proof: rfl
-
-中文:
-定理 restrict_apply_mk
-  条件: (f : C(α, β)) (s : 集合 α) (x : α) (hx : x in s)
-  证明: rfl
+/-
+**ContinuousMap.restrict_apply_mk** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：restrict_apply_mk (f : C(α, β)) (s : Set α) (x : α) (hx : x in s) : f.rest
+rict s ⟨x, hx⟩ = f x
+参数：f : C(α, β)；s : Set α；x : α；hx : x in s。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem restrict_apply_mk (f : C(α, β)) (s : Set α) (x : α) (hx : x in s) :
+theorem restrict_apply_mk (f : C(α, β)) (s : Set α) (x : α) (hx : x ∈ s) :
     f.restrict s ⟨x, hx⟩ = f x :=
   rfl
-
-/--
-theorem `injective_restrict` / 定理 `injective_restrict`
-
-English:
-theorem injective_restrict
-  given: [T2Space β] {s : Set α} (hs : Dense s)
-  proof: fun f g h =>
-DFunLike.ext' (map_continuous f).ext_on hs (map_continuous g)
-Set.domRestrict_eq_domRestrict_iff.1 congr_arg DFunLike.coe h
-
-中文:
-定理 injective_restrict
-  条件: [T2空间 β] {s : 集合 α} (hs : 稠密 s)
-  证明: fun f g h =>
-DFunLike.ext' (map_continuous f).ext_on hs (map_continuous g)
-Set.domRestrict_eq_domRestrict_iff.1 congr_arg DFunLike.coe h
+/-
+**ContinuousMap.injective_restrict** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：injective_restrict [T2Space β] {s : Set α} (hs : Dense s) : Injective (res
+trict s : C(α, β) -> C(s, β))
+参数：hs : Dense s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DFunLike.ext'`：ext' {f g : F} (h : (f : forall a : α, β a) = (g : forall
+ a : α, β a)) : f = g
+· 使用定理 `Continuous.ext_on`：Continuous.ext_on [T2Space X] {s : Set Y} (hs : Dense
+ s) {f g : Y -> X} (hf : Continuous f) (hg : Continuous g) (h : EqOn f g s) : f 
+= g
+· 使用定理 `ContinuousMapClass.map_continuous`：∀ {F : Type u_1} {X : outParam (Type 
+u_2)} {Y : outParam (Type u_3)} {inst : TopologicalSpace X}   {inst_1 : Topologi
+calSpace Y} {inst_2 : F…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.domRestrict_eq_domRestrict_iff`：domRestrict_eq_domRestrict_iff : dom
+Restrict s f₁ = domRestrict s f₂ ↔ EqOn f₁ f₂ s
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 theorem injective_restrict [T2Space β] {s : Set α} (hs : Dense s) :
-    Injective (restrict s : C(α, β) -> C(s, β)) := fun f g h =>
-DFunLike.ext' (map_continuous f).ext_on hs (map_continuous g)
-Set.domRestrict_eq_domRestrict_iff.1 congr_arg DFunLike.coe h
+    Injective (restrict s : C(α, β) → C(s, β)) := fun f g h ↦
+  DFunLike.ext' <| (map_continuous f).ext_on hs (map_continuous g) <|
+    Set.domRestrict_eq_domRestrict_iff.1 <| congr_arg DFunLike.coe h
 
 /-- The restriction of a continuous map to the preimage of a set. -/
 @[simps]
-/--
-Definition of `restrictPreimage` / `restrictPreimage` 的定义
+/-
+**ContinuousMap.restrictPreimage** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：restrictPreimage (f : C(α, β)) (s : Set β) : C(f ⁻¹' s, s)
+参数：f : C(α, β)；s : Set β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition restrictPreimage
-  signature: (f : C(α, β)) (s : Set β)
-  body: ⟨s.restrictPreimage f, continuous_iff_continuousAt.mpr fun _ =>
-    (map_continuousAt f _).restrictPreimage⟩
-
-中文:
-定义 restrictPreimage
-  签名: (f : C(α, β)) (s : 集合 β)
-  定义体: ⟨s.restrictPreimage f, continuous_iff_continuousAt.mpr fun _ =>
-    (map_continuousAt f _).restrictPreimage⟩
-
-Depends on / 依赖: continuous_iff_continuousAt, continuous_iff_continuousAt.mpr, map_continuousAt, restrictPreimage, s.restrictPreimage
+--- 原说明 ---
+The restriction of a continuous map to the preimage of a set.
 -/
 def restrictPreimage (f : C(α, β)) (s : Set β) : C(f ⁻¹' s, s) :=
-  ⟨s.restrictPreimage f, continuous_iff_continuousAt.mpr fun _ =>
+  ⟨s.restrictPreimage f, continuous_iff_continuousAt.mpr fun _ ↦
     (map_continuousAt f _).restrictPreimage⟩
 
 end Restrict
@@ -1094,168 +766,162 @@ end Restrict
 section mkD
 
 /--
-Definition of `mkD` / `mkD` 的定义
-
-English:
-definition mkD
-  signature: (f : α -> β) (default : C(α, β))
-  body: open scoped Classical in
-  if h : Continuous f then ⟨_, h⟩ else default
-
-中文:
-定义 mkD
-  签名: (f : α -> β) (default : C(α, β))
-  定义体: open scoped Classical in
-  if h : Continuous f then ⟨_, h⟩ else default
-
-Depends on / 依赖: Classical, Continuous, scoped
+Interpret `f : α → β` as an element of `C(α, β)`, falling back to the default value
+`default : C(α, β)` if `f` is not continuous.
+This is mainly intended to be used for `C(α, β)`-valued integration. For example, if a family of
+functions `f : ι → α → β` satisfies that `f i` is continuous for almost every `i`, you can write
+the `C(α, β)`-valued integral "`∫ i, f i`" as `∫ i, ContinuousMap.mkD (f i) 0`.
 -/
-noncomputable def mkD (f : α -> β) (default : C(α, β)) : C(α, β) :=
+/-
+**ContinuousMap.mkD** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：mkD (f : α -> β) (default : C(α, β)) : C(α, β)
+参数：f : α -> β；default : C(α, β)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Interpret `f : α → β` as an element of `C(α, β)`, falling back to the default va
+lue
+`default : C(α, β)` if `f` is not continuous.
+This is mainly intended to be used for `C(α, β)`-valued integration. For example
+, if a family of
+functions `f : ι → α → β` satisfies that `f i` is continuous for almost every `i
+`, you can write
+the `C(α, β)`-valued integral "`∫ i, f i`" as `∫ i, ContinuousMap.mkD (f i) 0`.
+-/
+noncomputable def mkD (f : α → β) (default : C(α, β)) : C(α, β) :=
   open scoped Classical in
   if h : Continuous f then ⟨_, h⟩ else default
-
-/--
-lemma `mkD_of_continuous` / 引理 `mkD_of_continuous`
-
-English:
-lemma mkD_of_continuous
-  given: {f : α -> β} {g : C(α, β)} (hf : Continuous f)
-  proof: by
-  simp only [mkD, hf, ↓reduceDIte]
-
-中文:
-引理 mkD_of_continuous
-  条件: {f : α -> β} {g : C(α, β)} (hf : 连续 f)
-  证明: by
-  simp only [mkD, hf, ↓reduceDIte]
-
-Depends on / 依赖: reduceDIte
+/-
+**ContinuousMap.mkD_of_continuous** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMap`。
+形式化陈述：mkD_of_continuous {f : α -> β} {g : C(α, β)} (hf : Continuous f) : mkD f g
+ = ⟨f, hf⟩
+参数：α, β；hf : Continuous f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma mkD_of_continuous {f : α -> β} {g : C(α, β)} (hf : Continuous f) :
+lemma mkD_of_continuous {f : α → β} {g : C(α, β)} (hf : Continuous f) :
     mkD f g = ⟨f, hf⟩ := by
   simp only [mkD, hf, ↓reduceDIte]
-
-/--
-lemma `mkD_of_not_continuous` / 引理 `mkD_of_not_continuous`
-
-English:
-lemma mkD_of_not_continuous
-  given: {f : α -> β} {g : C(α, β)} (hf : ¬ Continuous f)
-  proof: by
-  simp only [mkD, hf, ↓reduceDIte]
-
-中文:
-引理 mkD_of_not_continuous
-  条件: {f : α -> β} {g : C(α, β)} (hf : ¬ 连续 f)
-  证明: by
-  simp only [mkD, hf, ↓reduceDIte]
-
-Depends on / 依赖: reduceDIte
+/-
+**ContinuousMap.mkD_of_not_continuous** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMap`。
+形式化陈述：mkD_of_not_continuous {f : α -> β} {g : C(α, β)} (hf : ¬ Continuous f) : m
+kD f g = g
+参数：α, β；hf : ¬ Continuous f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma mkD_of_not_continuous {f : α -> β} {g : C(α, β)} (hf : ¬ Continuous f) :
+lemma mkD_of_not_continuous {f : α → β} {g : C(α, β)} (hf : ¬ Continuous f) :
     mkD f g = g := by
   simp only [mkD, hf, ↓reduceDIte]
-
-/--
-lemma `mkD_apply_of_continuous` / 引理 `mkD_apply_of_continuous`
-
-English:
-lemma mkD_apply_of_continuous
-  given: {f : α -> β} {g : C(α, β)} {x : α} (hf : Continuous f)
-  proof: by
-  rw [mkD_of_continuous hf]; rw [coe_mk]
-
-中文:
-引理 mkD_apply_of_continuous
-  条件: {f : α -> β} {g : C(α, β)} {x : α} (hf : 连续 f)
-  证明: by
-  rw [mkD_of_continuous hf]; rw [coe_mk]
-
-Depends on / 依赖: coe_mk, mkD_of_continuous
+/-
+**ContinuousMap.mkD_apply_of_continuous** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMap
+`。
+形式化陈述：mkD_apply_of_continuous {f : α -> β} {g : C(α, β)} {x : α} (hf : Continuou
+s f) : mkD f g x = f x
+参数：α, β；hf : Continuous f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ContinuousMap.mkD_of_continuous`：mkD_of_continuous {f : α -> β} {g : C(α
+, β)} (hf : Continuous f) : mkD f g = ⟨f, hf⟩
+· 使用定理 `ContinuousMap.coe_mk`：coe_mk (f : X -> Y) (h : Continuous f) : ⇑(⟨f, h⟩ 
+: C(X, Y)) = f
 -/
-lemma mkD_apply_of_continuous {f : α -> β} {g : C(α, β)} {x : α} (hf : Continuous f) :
+lemma mkD_apply_of_continuous {f : α → β} {g : C(α, β)} {x : α} (hf : Continuous f) :
     mkD f g x = f x := by
-  rw [mkD_of_continuous hf]; rw [coe_mk]
-
-/--
-lemma `mkD_of_continuousOn` / 引理 `mkD_of_continuousOn`
-
-English:
-lemma mkD_of_continuousOn
-  statement: {s : Set α} {f : α -> β} {g : C(s, β)}
-  proof: mkD_of_continuous hf.domRestrict
-
-中文:
-引理 mkD_of_continuousOn
-  结论: {s : 集合 α} {f : α -> β} {g : C(s, β)}
-  证明: mkD_of_continuous hf.domRestrict
-
-Depends on / 依赖: domRestrict, hf.domRestrict, mkD_of_continuous
+  rw [mkD_of_continuous hf, coe_mk]
+/-
+**ContinuousMap.mkD_of_continuousOn** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMap`。
+形式化陈述：mkD_of_continuousOn {s : Set α} {f : α -> β} {g : C(s, β)} (hf : Continuou
+sOn f s) : mkD (s.domRestrict f) g = ⟨s.domRestrict f, hf.domRestrict⟩
+参数：s, β；hf : ContinuousOn f s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContinuousMap.mkD_of_continuous`：mkD_of_continuous {f : α -> β} {g : C(α
+, β)} (hf : Continuous f) : mkD f g = ⟨f, hf⟩
+· 使用定理 `ContinuousOn.domRestrict`：∀ {α : Type u_1} {β : Type u_2} [inst : Topolo
+gicalSpace α] [inst_1 : TopologicalSpace β] {f : α → β} {s : Set α},   Continuou
+sOn f s → Cont…
 -/
-lemma mkD_of_continuousOn {s : Set α} {f : α -> β} {g : C(s, β)}
+lemma mkD_of_continuousOn {s : Set α} {f : α → β} {g : C(s, β)}
     (hf : ContinuousOn f s) :
     mkD (s.domRestrict f) g = ⟨s.domRestrict f, hf.domRestrict⟩ := mkD_of_continuous hf.domRestrict
-
-/--
-lemma `mkD_of_not_continuousOn` / 引理 `mkD_of_not_continuousOn`
-
-English:
-lemma mkD_of_not_continuousOn
-  statement: {s : Set α} {f : α -> β} {g : C(s, β)}
-  proof: by
-  rw [continuousOn_iff_continuous_domRestrict] at hf
-  exact mkD_of_not_continuous hf
-
-中文:
-引理 mkD_of_not_continuousOn
-  结论: {s : 集合 α} {f : α -> β} {g : C(s, β)}
-  证明: by
-  rw [continuousOn_iff_continuous_domRestrict] at hf
-  exact mkD_of_not_continuous hf
-
-Depends on / 依赖: continuousOn_iff_continuous_domRestrict, mkD_of_not_continuous
+/-
+**ContinuousMap.mkD_of_not_continuousOn** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMap
+`。
+形式化陈述：mkD_of_not_continuousOn {s : Set α} {f : α -> β} {g : C(s, β)} (hf : ¬ Con
+tinuousOn f s) : mkD (s.domRestrict f) g = g
+参数：s, β；hf : ¬ ContinuousOn f s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContinuousMap.mkD_of_not_continuous`：mkD_of_not_continuous {f : α -> β} 
+{g : C(α, β)} (hf : ¬ Continuous f) : mkD f g = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `continuousOn_iff_continuous_domRestrict`：continuousOn_iff_continuous_dom
+Restrict : ContinuousOn f s ↔ Continuous (s.domRestrict f)
 -/
-lemma mkD_of_not_continuousOn {s : Set α} {f : α -> β} {g : C(s, β)}
+lemma mkD_of_not_continuousOn {s : Set α} {f : α → β} {g : C(s, β)}
     (hf : ¬ ContinuousOn f s) :
     mkD (s.domRestrict f) g = g := by
   rw [continuousOn_iff_continuous_domRestrict] at hf
   exact mkD_of_not_continuous hf
-
-/--
-lemma `mkD_apply_of_continuousOn` / 引理 `mkD_apply_of_continuousOn`
-
-English:
-lemma mkD_apply_of_continuousOn
-  statement: {s : Set α} {f : α -> β} {g : C(s, β)} {x : s}
-  proof: by rw [mkD_of_continuousOn hf, coe_mk, Set.domRestrict_apply]
-
-中文:
-引理 mkD_apply_of_continuousOn
-  结论: {s : 集合 α} {f : α -> β} {g : C(s, β)} {x : s}
-  证明: by rw [mkD_of_continuousOn hf, coe_mk, Set.domRestrict_apply]
-
-Depends on / 依赖: Set.domRestrict_apply, coe_mk, domRestrict_apply, mkD_of_continuousOn
+/-
+**ContinuousMap.mkD_apply_of_continuousOn** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousM
+ap`。
+形式化陈述：mkD_apply_of_continuousOn {s : Set α} {f : α -> β} {g : C(s, β)} {x : s} (
+hf : ContinuousOn f s) : mkD (s.domRestrict f) g x = f x
+参数：s, β；hf : ContinuousOn f s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousOn.domRestrict`：∀ {α : Type u_1} {β : Type u_2} [inst : Topolo
+gicalSpace α] [inst_1 : TopologicalSpace β] {f : α → β} {s : Set α},   Continuou
+sOn f s → Cont…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ContinuousMap.mkD_of_continuousOn`：mkD_of_continuousOn {s : Set α} {f : 
+α -> β} {g : C(s, β)} (hf : ContinuousOn f s) : mkD (s.domRestrict f) g = ⟨s.dom
+Restrict f, hf.domRestr…
+· 使用定理 `ContinuousMap.coe_mk`：coe_mk (f : X -> Y) (h : Continuous f) : ⇑(⟨f, h⟩ 
+: C(X, Y)) = f
+· 使用定理 `Set.domRestrict_apply`：domRestrict_apply (f : (a : α) -> π a) (s : Set α
+) (x : s) : s.domRestrict f x = f x
 -/
-lemma mkD_apply_of_continuousOn {s : Set α} {f : α -> β} {g : C(s, β)} {x : s}
+lemma mkD_apply_of_continuousOn {s : Set α} {f : α → β} {g : C(s, β)} {x : s}
     (hf : ContinuousOn f s) :
     mkD (s.domRestrict f) g x = f x := by rw [mkD_of_continuousOn hf, coe_mk, Set.domRestrict_apply]
-
-/--
-lemma `mkD_eq_self` / 引理 `mkD_eq_self`
-
-English:
-lemma mkD_eq_self
-  given: {f g : C(α, β)}
-  statement: mkD f g = f
-  proof: mkD_of_continuous f.continuous
-
-中文:
-引理 mkD_eq_self
-  条件: {f g : C(α, β)}
-  结论: mkD f g = f
-  证明: mkD_of_continuous f.continuous
-
-Depends on / 依赖: continuous, f.continuous, mkD_of_continuous
+/-
+**ContinuousMap.mkD_eq_self** 是 Mathlib 中的一个引理，位于命名空间 `ContinuousMap`。
+形式化陈述：mkD_eq_self {f g : C(α, β)} : mkD f g = f
+参数：α, β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ContinuousMap.mkD_of_continuous`：mkD_of_continuous {f : α -> β} {g : C(α
+, β)} (hf : Continuous f) : mkD f g = ⟨f, hf⟩
+· 使用定理 `ContinuousMap.continuous`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topolo
+gicalSpace X] [inst_1 : TopologicalSpace Y] (f : C(X, Y)), Continuous ⇑f
 -/
 lemma mkD_eq_self {f g : C(α, β)} : mkD f g = f :=
   mkD_of_continuous f.continuous
@@ -1264,39 +930,30 @@ end mkD
 
 section Gluing
 
-variable {ι : Type*} (S : ι -> Set α) (φ : forall i : ι, C(S i, β))
-  (hφ : forall (i j) (x : α) (hxi : x in S i) (hxj : x in S j), φ i ⟨x, hxi⟩ = φ j ⟨x, hxj⟩)
-  (hS : forall x : α, exists i, S i in 𝓝 x)
+variable {ι : Type*} (S : ι → Set α) (φ : ∀ i : ι, C(S i, β))
+  (hφ : ∀ (i j) (x : α) (hxi : x ∈ S i) (hxj : x ∈ S j), φ i ⟨x, hxi⟩ = φ j ⟨x, hxj⟩)
+  (hS : ∀ x : α, ∃ i, S i ∈ 𝓝 x)
 
-/--
-Definition of `liftCover` / `liftCover` 的定义
+/-- A family `φ i` of continuous maps `C(S i, β)`, where the domains `S i` contain a neighbourhood
+of each point in `α` and the functions `φ i` agree pairwise on intersections, can be glued to
+construct a continuous map in `C(α, β)`. -/
+/-
+**ContinuousMap.liftCover** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：liftCover : C(α, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftCover
-  signature: : C(α, β)
-  body: haveI H : ⋃ i, S i = Set.univ :=
-    Set.iUnion_eq_univ_iff.2 fun x => (hS x).imp fun _ => mem_of_mem_nhds
-mk (Set.liftCover S (fun i => φ i) hφ H) continuous_of_cover_nhds hS fun i => by
-    rw [continuousOn_iff_continuous_domRestrict]
-    simpa +unfoldPartialApp only [Set.domRestrict, Set.liftCover_coe]
-      using map_continuous (φ i)
-
-中文:
-定义 liftCover
-  签名: : C(α, β)
-  定义体: haveI H : ⋃ i, S i = Set.univ :=
-    Set.iUnion_eq_univ_iff.2 fun x => (hS x).imp fun _ => mem_of_mem_nhds
-mk (Set.liftCover S (fun i => φ i) hφ H) continuous_of_cover_nhds hS fun i => by
-    rw [continuousOn_iff_continuous_domRestrict]
-    simpa +unfoldPartialApp only [Set.domRestrict, Set.liftCover_coe]
-      using map_continuous (φ i)
-
-Depends on / 依赖: Set.domRestrict, Set.iUnion_eq_univ_iff, Set.liftCover, Set.liftCover_coe, Set.univ, continuousOn_iff_continuous_domRestrict, continuous_of_cover_nhds, domRestrict, iUnion_eq_univ_iff, liftCover, liftCover_coe, map_continuous, mem_of_mem_nhds, unfoldPartialApp
+--- 原说明 ---
+A family `φ i` of continuous maps `C(S i, β)`, where the domains `S i` contain a
+ neighbourhood
+of each point in `α` and the functions `φ i` agree pairwise on intersections, ca
+n be glued to
+construct a continuous map in `C(α, β)`.
 -/
 noncomputable def liftCover : C(α, β) :=
   haveI H : ⋃ i, S i = Set.univ :=
-    Set.iUnion_eq_univ_iff.2 fun x => (hS x).imp fun _ => mem_of_mem_nhds
-mk (Set.liftCover S (fun i => φ i) hφ H) continuous_of_cover_nhds hS fun i => by
+    Set.iUnion_eq_univ_iff.2 fun x ↦ (hS x).imp fun _ ↦ mem_of_mem_nhds
+  mk (Set.liftCover S (fun i ↦ φ i) hφ H) <| continuous_of_cover_nhds hS fun i ↦ by
     rw [continuousOn_iff_continuous_domRestrict]
     simpa +unfoldPartialApp only [Set.domRestrict, Set.liftCover_coe]
       using map_continuous (φ i)
@@ -1304,85 +961,71 @@ mk (Set.liftCover S (fun i => φ i) hφ H) continuous_of_cover_nhds hS fun i => 
 variable {S φ hφ hS}
 
 @[simp]
-/--
-theorem `liftCover_coe` / 定理 `liftCover_coe`
-
-English:
-theorem liftCover_coe
-  given: {i : ι} (x : S i)
-  statement: liftCover S φ hφ hS x = φ i x
-  proof: by
-  rw [liftCover]; rw [coe_mk]; rw [Set.liftCover_coe _]
-
-@[simp]
-
-中文:
-定理 liftCover_coe
-  条件: {i : ι} (x : S i)
-  结论: liftCover S φ hφ hS x = φ i x
-  证明: by
-  rw [liftCover]; rw [coe_mk]; rw [Set.liftCover_coe _]
-
-@[simp]
-
-Depends on / 依赖: Set.liftCover_coe, coe_mk, liftCover, liftCover_coe
+/-
+**ContinuousMap.liftCover_coe** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：liftCover_coe {i : ι} (x : S i) : liftCover S φ hφ hS x = φ i x
+参数：x : S i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousMap.liftCover.eq_1`：∀ {α : Type u_1} {β : Type u_2} [inst : To
+pologicalSpace α] [inst_1 : TopologicalSpace β] {ι : Type u_5} (S : ι → Set α)  
+ (φ : (i : ι) → C(…
+· 使用定理 `ContinuousMap.coe_mk`：coe_mk (f : X -> Y) (h : Continuous f) : ⇑(⟨f, h⟩ 
+: C(X, Y)) = f
+· 使用定理 `Set.liftCover_coe`：liftCover_coe {i : ι} (x : S i) : liftCover S f hf hS
+ x = f i x
 -/
 theorem liftCover_coe {i : ι} (x : S i) : liftCover S φ hφ hS x = φ i x := by
-  rw [liftCover]; rw [coe_mk]; rw [Set.liftCover_coe _]
+  rw [liftCover, coe_mk, Set.liftCover_coe _]
 
 @[simp]
-/--
-theorem `liftCover_restrict` / 定理 `liftCover_restrict`
-
-English:
-theorem liftCover_restrict
-  given: {i : ι}
-  statement: (liftCover S φ hφ hS).restrict (S i) = φ i
-  proof: by
-  ext
-  simp only [restrict_apply, liftCover_coe]
-
-中文:
-定理 liftCover_restrict
-  条件: {i : ι}
-  结论: (liftCover S φ hφ hS).restrict (S i) = φ i
-  证明: by
-  ext
-  simp only [restrict_apply, liftCover_coe]
-
-Depends on / 依赖: liftCover_coe, restrict_apply
+/-
+**ContinuousMap.liftCover_restrict** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：liftCover_restrict {i : ι} : (liftCover S φ hφ hS).restrict (S i) = φ i
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.ext`：ext {f g : C(X, Y)} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ContinuousMap.liftCover_coe`：liftCover_coe {i : ι} (x : S i) : liftCover
+ S φ hφ hS x = φ i x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem liftCover_restrict {i : ι} : (liftCover S φ hφ hS).restrict (S i) = φ i := by
   ext
   simp only [restrict_apply, liftCover_coe]
 
-variable (A : Set (Set α)) (F : forall s in A, C(s, β))
-  (hF : forall (s) (hs : s in A) (t) (ht : t in A) (x : α) (hxi : x in s) (hxj : x in t),
+variable (A : Set (Set α)) (F : ∀ s ∈ A, C(s, β))
+  (hF : ∀ (s) (hs : s ∈ A) (t) (ht : t ∈ A) (x : α) (hxi : x ∈ s) (hxj : x ∈ t),
     F s hs ⟨x, hxi⟩ = F t ht ⟨x, hxj⟩)
-  (hA : forall x : α, exists i in A, i in 𝓝 x)
+  (hA : ∀ x : α, ∃ i ∈ A, i ∈ 𝓝 x)
 
-/--
-Definition of `liftCover'` / `liftCover'` 的定义
+/-- A family `F s` of continuous maps `C(s, β)`, where (1) the domains `s` are taken from a set `A`
+of sets in `α` which contain a neighbourhood of each point in `α` and (2) the functions `F s` agree
+pairwise on intersections, can be glued to construct a continuous map in `C(α, β)`. -/
+/-
+**ContinuousMap.liftCover'** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：liftCover' : C(α, β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftCover'
-  signature: : C(α, β)
-  body: let F : forall i : A, C(i, β) := fun i => F i i.prop
-  liftCover ((↑) : A -> Set α) F (fun i j => hF i i.prop j j.prop)
-    fun x => let ⟨s, hs, hsx⟩ := hA x; ⟨⟨s, hs⟩, hsx⟩
-
-中文:
-定义 liftCover'
-  签名: : C(α, β)
-  定义体: let F : forall i : A, C(i, β) := fun i => F i i.prop
-  liftCover ((↑) : A -> Set α) F (fun i j => hF i i.prop j j.prop)
-    fun x => let ⟨s, hs, hsx⟩ := hA x; ⟨⟨s, hs⟩, hsx⟩
-
-Depends on / 依赖: i.prop, j.prop, liftCover
+--- 原说明 ---
+A family `F s` of continuous maps `C(s, β)`, where (1) the domains `s` are taken
+ from a set `A`
+of sets in `α` which contain a neighbourhood of each point in `α` and (2) the fu
+nctions `F s` agree
+pairwise on intersections, can be glued to construct a continuous map in `C(α, β
+)`.
 -/
 noncomputable def liftCover' : C(α, β) :=
-  let F : forall i : A, C(i, β) := fun i => F i i.prop
-  liftCover ((↑) : A -> Set α) F (fun i j => hF i i.prop j j.prop)
+  let F : ∀ i : A, C(i, β) := fun i => F i i.prop
+  liftCover ((↑) : A → Set α) F (fun i j => hF i i.prop j j.prop)
     fun x => let ⟨s, hs, hsx⟩ := hA x; ⟨⟨s, hs⟩, hsx⟩
 
 variable {A F hF hA}
@@ -1391,72 +1034,50 @@ variable {A F hF hA}
 -- closed by `liftCover_coe x'`
 -- Might be something to do with the `let`s in the definition of `liftCover'`?
 @[simp]
-/--
-theorem `liftCover_coe'` / 定理 `liftCover_coe'`
-
-English:
-theorem liftCover_coe'
-  given: {s : Set α} {hs : s in A} (x : s)
-  statement: liftCover' A F hF hA x = F s hs x
-  proof: let x' : ((↑) : A -> Set α) ⟨s, hs⟩ := x
-  by delta liftCover'; exact ContinuousMap.liftCover_coe x'
-
-@[simp]
-
-中文:
-定理 liftCover_coe'
-  条件: {s : 集合 α} {hs : s in A} (x : s)
-  结论: liftCover' A F hF hA x = F s hs x
-  证明: let x' : ((↑) : A -> Set α) ⟨s, hs⟩ := x
-  by delta liftCover'; exact ContinuousMap.liftCover_coe x'
-
-@[simp]
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.liftCover_coe, liftCover, liftCover_coe
+/-
+**ContinuousMap.liftCover_coe'** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：liftCover_coe' {s : Set α} {hs : s in A} (x : s) : liftCover' A F hF hA x 
+= F s hs x
+参数：x : s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.liftCover_coe`：liftCover_coe {i : ι} (x : S i) : liftCover
+ S φ hφ hS x = φ i x
 -/
-theorem liftCover_coe' {s : Set α} {hs : s in A} (x : s) : liftCover' A F hF hA x = F s hs x :=
-  let x' : ((↑) : A -> Set α) ⟨s, hs⟩ := x
+theorem liftCover_coe' {s : Set α} {hs : s ∈ A} (x : s) : liftCover' A F hF hA x = F s hs x :=
+  let x' : ((↑) : A → Set α) ⟨s, hs⟩ := x
   by delta liftCover'; exact ContinuousMap.liftCover_coe x'
 
 @[simp]
-/--
-theorem `liftCover_restrict'` / 定理 `liftCover_restrict'`
-
-English:
-theorem liftCover_restrict'
-  given: {s : Set α} {hs : s in A}
-  proof: ext liftCover_coe' (hF := hF) (hA := hA)
-
-中文:
-定理 liftCover_restrict'
-  条件: {s : 集合 α} {hs : s in A}
-  证明: ext liftCover_coe' (hF := hF) (hA := hA)
-
-Depends on / 依赖: liftCover_coe
+/-
+**ContinuousMap.liftCover_restrict'** 是 Mathlib 中的一个定理，位于命名空间 `ContinuousMap`。
+形式化陈述：liftCover_restrict' {s : Set α} {hs : s in A} : (liftCover' A F hF hA).res
+trict s = F s hs
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.ext`：ext {f g : C(X, Y)} (h : forall a, f a = g a) : f = g
+· 使用定理 `ContinuousMap.liftCover_coe'`：liftCover_coe' {s : Set α} {hs : s in A} (
+x : s) : liftCover' A F hF hA x = F s hs x
 -/
-theorem liftCover_restrict' {s : Set α} {hs : s in A} :
-(liftCover' A F hF hA).restrict s = F s hs := ext liftCover_coe' (hF := hF) (hA := hA)
+theorem liftCover_restrict' {s : Set α} {hs : s ∈ A} :
+    (liftCover' A F hF hA).restrict s = F s hs := ext <| liftCover_coe' (hF := hF) (hA := hA)
 
 end Gluing
 
-/--
-Definition of `inclusion` / `inclusion` 的定义
+/-- `Set.inclusion` as a bundled continuous map. -/
+/-
+**ContinuousMap.inclusion** 是 Mathlib 中的一个定义，位于命名空间 `ContinuousMap`。
+形式化陈述：inclusion {s t : Set α} (h : s subseteq t) : C(s, t) where toFun
+参数：h : s subseteq t。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_inclusion`：continuous_inclusion {s t : Set X} (h : s subseteq
+ t) : Continuous (inclusion h)
 
-English:
-definition inclusion
-  signature: {s t : Set α} (h : s subseteq t)
-  body: Set.inclusion h
-  continuous_toFun := continuous_inclusion h
-
-中文:
-定义 inclusion
-  签名: {s t : 集合 α} (h : s subseteq t)
-  定义体: Set.inclusion h
-  continuous_toFun := continuous_inclusion h
-
-Depends on / 依赖: Set.inclusion, inclusion
+--- 原说明 ---
+`Set.inclusion` as a bundled continuous map.
 -/
-def inclusion {s t : Set α} (h : s subseteq t) : C(s, t) where
+def inclusion {s t : Set α} (h : s ⊆ t) : C(s, t) where
   toFun := Set.inclusion h
   continuous_toFun := continuous_inclusion h
 
@@ -1469,24 +1090,16 @@ variable {X Y Z : Type*} [TopologicalSpace X] [TopologicalSpace Y] [TopologicalS
 
 /-- `Setoid.quotientKerEquivOfRightInverse` as a homeomorphism. -/
 @[simps!]
-/--
-Definition of `Function.RightInverse.homeomorph` / `Function.RightInverse.homeomorph` 的定义
+/-
+**Function.RightInverse.homeomorph** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Function.RightInverse.homeomorph {f' : C(Y, X)} (hf : Function.RightInvers
+e f' f) : Quotient (Setoid.ker f) ≃ₜ Y where toEquiv
+参数：Y, X；hf : Function.RightInverse f' f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Function.RightInverse.homeomorph
-  signature: {f' : C(Y, X)} (hf : Function.RightInverse f' f)
-  body: Setoid.quotientKerEquivOfRightInverse _ _ hf
-  continuous_toFun := isQuotientMap_quot_mk.continuous_iff.mpr (map_continuous f)
-  continuous_invFun := continuous_quotient_mk'.comp (map_continuous f')
-
-中文:
-定义 函数.右逆.homeomorph
-  签名: {f' : C(Y, X)} (hf : 函数.右逆 f' f)
-  定义体: Setoid.quotientKerEquivOfRightInverse _ _ hf
-  continuous_toFun := isQuotientMap_quot_mk.continuous_iff.mpr (map_continuous f)
-  continuous_invFun := continuous_quotient_mk'.comp (map_continuous f')
-
-Depends on / 依赖: Setoid, Setoid.quotientKerEquivOfRightInverse, quotientKerEquivOfRightInverse
+--- 原说明 ---
+`Setoid.quotientKerEquivOfRightInverse` as a homeomorphism.
 -/
 def Function.RightInverse.homeomorph {f' : C(Y, X)} (hf : Function.RightInverse f' f) :
     Quotient (Setoid.ker f) ≃ₜ Y where
@@ -1501,36 +1114,18 @@ The homeomorphism from the quotient of a quotient map to its codomain. This is
 `Setoid.quotientKerEquivOfSurjective` as a homeomorphism.
 -/
 @[simps!]
-/--
-Definition of `homeomorph` / `homeomorph` 的定义
+/-
+**Topology.IsQuotientMap.homeomorph** 是 Mathlib 中的一个定义，位于命名空间 `Topology.IsQuotie
+ntMap`。
+形式化陈述：homeomorph (hf : IsQuotientMap f) : Quotient (Setoid.ker f) ≃ₜ Y where toE
+quiv
+参数：hf : IsQuotientMap f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homeomorph
-  signature: (hf : IsQuotientMap f)
-  body: Setoid.quotientKerEquivOfSurjective _ hf.surjective
-  continuous_toFun := isQuotientMap_quot_mk.continuous_iff.mpr hf.continuous
-  continuous_invFun := by
-    rw [hf.continuous_iff]
-    convert! continuous_quotient_mk'
-    ext
-    simp only [Equiv.invFun_as_coe, Function.comp_apply,
-      (Setoid.quotientKerEquivOfSurjective f hf.surjective).symm_apply_eq]
-    rfl
-
-中文:
-定义 homeomorph
-  签名: (hf : 是商映射 f)
-  定义体: Setoid.quotientKerEquivOfSurjective _ hf.surjective
-  continuous_toFun := isQuotientMap_quot_mk.continuous_iff.mpr hf.continuous
-  continuous_invFun := by
-    rw [hf.continuous_iff]
-    convert! continuous_quotient_mk'
-    ext
-    simp only [Equiv.invFun_as_coe, Function.comp_apply,
-      (Setoid.quotientKerEquivOfSurjective f hf.surjective).symm_apply_eq]
-    rfl
-
-Depends on / 依赖: Setoid, Setoid.quotientKerEquivOfSurjective, hf.surjective, quotientKerEquivOfSurjective, surjective
+--- 原说明 ---
+The homeomorphism from the quotient of a quotient map to its codomain. This is
+`Setoid.quotientKerEquivOfSurjective` as a homeomorphism.
 -/
 noncomputable def homeomorph (hf : IsQuotientMap f) : Quotient (Setoid.ker f) ≃ₜ Y where
   toEquiv := Setoid.quotientKerEquivOfSurjective _ hf.surjective
@@ -1547,28 +1142,19 @@ variable (hf : IsQuotientMap f) (g : C(X, Z)) (h : Function.FactorsThrough g f)
 
 /-- Descend a continuous map, which is constant on the fibres, along a quotient map. -/
 @[simps]
-/--
-Definition of `lift` / `lift` 的定义
+/-
+**Topology.IsQuotientMap.lift** 是 Mathlib 中的一个定义，位于命名空间 `Topology.IsQuotientMap`
+。
+形式化陈述：lift : C(Y, Z) where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: : C(Y, Z) where
-  body: ((fun i => Quotient.liftOn' i g (fun _ _ (hab : f _ = f _) => h hab)) :
-    Quotient (Setoid.ker f) -> Z) ∘ hf.homeomorph.symm
-  continuous_toFun := Continuous.comp (continuous_quot_lift _ g.2) (Homeomorph.continuous _)
-
-中文:
-定义 lift
-  签名: : C(Y, Z) where
-  定义体: ((fun i => Quotient.liftOn' i g (fun _ _ (hab : f _ = f _) => h hab)) :
-    Quotient (Setoid.ker f) -> Z) ∘ hf.homeomorph.symm
-  continuous_toFun := Continuous.comp (continuous_quot_lift _ g.2) (Homeomorph.continuous _)
-
-Depends on / 依赖: Quotient, Quotient.liftOn, liftOn
+--- 原说明 ---
+Descend a continuous map, which is constant on the fibres, along a quotient map.
 -/
 noncomputable def lift : C(Y, Z) where
-  toFun := ((fun i => Quotient.liftOn' i g (fun _ _ (hab : f _ = f _) => h hab)) :
-    Quotient (Setoid.ker f) -> Z) ∘ hf.homeomorph.symm
+  toFun := ((fun i ↦ Quotient.liftOn' i g (fun _ _ (hab : f _ = f _) ↦ h hab)) :
+    Quotient (Setoid.ker f) → Z) ∘ hf.homeomorph.symm
   continuous_toFun := Continuous.comp (continuous_quot_lift _ g.2) (Homeomorph.continuous _)
 
 /--
@@ -1576,31 +1162,49 @@ The obvious triangle induced by `IsQuotientMap.lift` commutes:
 ```
      g
   X --→ Z
-  | ↗
-f | / hf.lift g h
+  |   ↗
+f |  / hf.lift g h
   v /
   Y
 ```
 -/
 @[simp]
-/--
-theorem `lift_comp` / 定理 `lift_comp`
+/-
+**Topology.IsQuotientMap.lift_comp** 是 Mathlib 中的一个定理，位于命名空间 `Topology.IsQuotien
+tMap`。
+形式化陈述：lift_comp : (hf.lift g h).comp f = g
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.ext`：ext {f g : C(X, Y)} (h : forall a, f a = g a) : f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Quotient.mk''`：mk''_surjective : Function.Surjective (Quotient.mk'' : α 
+-> Quotient s₁)
+· 使用定理 `Topology.IsQuotientMap.lift_apply`：∀ {X : Type u_1} {Y : Type u_2} {Z : 
+Type u_3} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y]   [inst_2 : 
+TopologicalSpace Z] {f …
+· 使用定理 `Quotient.liftOn'.congr_simp`：∀ {α : Sort u_1} {φ : Sort u_4} {s₁ : Setoi
+d α} (q q_1 : Quotient s₁),   q = q_1 → ∀ (f f_1 : α → φ) (e_f : f = f_1) (h : ∀
+ (a b : α), s₁ a …
+· 使用定理 `Topology.IsQuotientMap.homeomorph_symm_apply`：∀ {X : Type u_1} {Y : Type
+ u_2} [inst : TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f : C(X, Y)}   
+(hf : Topology.IsQuotientMap ⇑f) (…
+· 使用定理 `Function.rightInverse_surjInv`：rightInverse_surjInv (hf : Surjective f) 
+: RightInverse (surjInv hf) f
 
-English:
-theorem lift_comp
-  statement: (hf.lift g h).comp f = g
-  proof: by
-  ext
-  simpa using h (Function.rightInverse_surjInv _ _)
-
-中文:
-定理 lift_comp
-  结论: (hf.lift g h).comp f = g
-  证明: by
-  ext
-  simpa using h (Function.rightInverse_surjInv _ _)
-
-Depends on / 依赖: Function, Function.rightInverse_surjInv, rightInverse_surjInv
+--- 原说明 ---
+The obvious triangle induced by `IsQuotientMap.lift` commutes:
+```
+     g
+  X --→ Z
+  |   ↗
+f |  / hf.lift g h
+  v /
+  Y
+```
 -/
 theorem lift_comp : (hf.lift g h).comp f = g := by
   ext
@@ -1608,36 +1212,20 @@ theorem lift_comp : (hf.lift g h).comp f = g := by
 
 /-- `IsQuotientMap.lift` as an equivalence. -/
 @[simps]
-/--
-Definition of `liftEquiv` / `liftEquiv` 的定义
+/-
+**Topology.IsQuotientMap.liftEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Topology.IsQuotien
+tMap`。
+形式化陈述：liftEquiv : { g : C(X, Z) // Function.FactorsThrough g f} ≃ C(Y, Z) where 
+toFun g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition liftEquiv
-  signature: : { g : C(X, Z) // Function.FactorsThrough g f} ≃ C(Y, Z) where
-  body: hf.lift g g.prop
-  invFun g := ⟨g.comp f, fun _ _ h => by simp only [ContinuousMap.comp_apply]; rw [h]⟩
-  left_inv := by intro; simp
-  right_inv := by
-    intro g
-    ext a
-    simpa using congrArg g (Function.rightInverse_surjInv hf.surjective a)
-
-中文:
-定义 liftEquiv
-  签名: : { g : C(X, Z) // 函数.FactorsThrough g f} ≃ C(Y, Z) where
-  定义体: hf.lift g g.prop
-  invFun g := ⟨g.comp f, fun _ _ h => by simp only [ContinuousMap.comp_apply]; rw [h]⟩
-  left_inv := by intro; simp
-  right_inv := by
-    intro g
-    ext a
-    simpa using congrArg g (Function.rightInverse_surjInv hf.surjective a)
-
-Depends on / 依赖: g.prop, hf.lift
+--- 原说明 ---
+`IsQuotientMap.lift` as an equivalence.
 -/
 noncomputable def liftEquiv : { g : C(X, Z) // Function.FactorsThrough g f} ≃ C(Y, Z) where
   toFun g := hf.lift g g.prop
-  invFun g := ⟨g.comp f, fun _ _ h => by simp only [ContinuousMap.comp_apply]; rw [h]⟩
+  invFun g := ⟨g.comp f, fun _ _ h ↦ by simp only [ContinuousMap.comp_apply]; rw [h]⟩
   left_inv := by intro; simp
   right_inv := by
     intro g
@@ -1652,106 +1240,90 @@ namespace Homeomorph
 variable {α β γ : Type*} [TopologicalSpace α] [TopologicalSpace β] [TopologicalSpace γ]
 variable (f : α ≃ₜ β) (g : β ≃ₜ γ)
 
-/--
-Instance `instContinuousMapClass` / 实例 `instContinuousMapClass`
-
-English:
-instance instContinuousMapClass
-  signature: : ContinuousMapClass (α ≃ₜ β) α β where
-  body: f.continuous_toFun
-
-@[simp]
-
-中文:
-实例 instContinuousMapClass
-  签名: : 连续映射类 (α ≃ₜ β) α β where
-  定义体: f.continuous_toFun
-
-@[simp]
-
-Depends on / 依赖: continuous_toFun, f.continuous_toFun
+/-
+**Homeomorph.instContinuousMapClass** 是 Mathlib 中的一个实例，位于命名空间 `Homeomorph`。
+形式化陈述：instContinuousMapClass : ContinuousMapClass (α ≃ₜ β) α β where map_continu
+ous f
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Homeomorph.continuous_toFun`：∀ {X : Type u_5} {Y : Type u_6} [inst : Top
+ologicalSpace X] [inst_1 : TopologicalSpace Y] (self : X ≃ₜ Y),   Continuous sel
+f.toFun
 -/
 instance instContinuousMapClass : ContinuousMapClass (α ≃ₜ β) α β where
   map_continuous f := f.continuous_toFun
 
 @[simp]
-/--
-theorem `coe_refl` / 定理 `coe_refl`
-
-English:
-theorem coe_refl
-  statement: (Homeomorph.refl α : C(α, α)) = ContinuousMap.id α
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_refl
-  结论: (同胚.refl α : C(α, α)) = 连续映射.id α
-  证明: rfl
-
-@[simp]
+/-
+**Homeomorph.coe_refl** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：coe_refl : (Homeomorph.refl α : C(α, α)) = ContinuousMap.id α
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_refl : (Homeomorph.refl α : C(α, α)) = ContinuousMap.id α :=
   rfl
 
 @[simp]
-/--
-theorem `coe_trans` / 定理 `coe_trans`
-
-English:
-theorem coe_trans
-  statement: (f.trans g : C(α, γ)) = (g : C(β, γ)).comp f
-  proof: rfl
-
-中文:
-定理 coe_trans
-  结论: (f.trans g : C(α, γ)) = (g : C(β, γ)).comp f
-  证明: rfl
+/-
+**Homeomorph.coe_trans** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：coe_trans : (f.trans g : C(α, γ)) = (g : C(β, γ)).comp f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_trans : (f.trans g : C(α, γ)) = (g : C(β, γ)).comp f :=
   rfl
 
 /-- Left inverse to a continuous map from a homeomorphism, mirroring `Equiv.symm_comp_self`. -/
 @[simp]
-/--
-theorem `symm_comp_toContinuousMap` / 定理 `symm_comp_toContinuousMap`
+/-
+**Homeomorph.symm_comp_toContinuousMap** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：symm_comp_toContinuousMap : (f.symm : C(β, α)).comp (f : C(α, β)) = Contin
+uousMap.id α
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Homeomorph.coe_trans`：coe_trans : (f.trans g : C(α, γ)) = (g : C(β, γ)).
+comp f
+· 使用定理 `Homeomorph.self_trans_symm`：self_trans_symm (h : X ≃ₜ Y) : h.trans h.sym
+m = Homeomorph.refl X
+· 使用定理 `Homeomorph.coe_refl`：coe_refl : (Homeomorph.refl α : C(α, α)) = Continuo
+usMap.id α
 
-English:
-theorem symm_comp_toContinuousMap
-  proof: by
-  rw [← coe_trans]; rw [self_trans_symm]; rw [coe_refl]
-
-中文:
-定理 symm_comp_toContinuousMap
-  证明: by
-  rw [← coe_trans]; rw [self_trans_symm]; rw [coe_refl]
-
-Depends on / 依赖: coe_refl, coe_trans, self_trans_symm
+--- 原说明 ---
+Left inverse to a continuous map from a homeomorphism, mirroring `Equiv.symm_com
+p_self`.
 -/
 theorem symm_comp_toContinuousMap :
     (f.symm : C(β, α)).comp (f : C(α, β)) = ContinuousMap.id α := by
-  rw [← coe_trans]; rw [self_trans_symm]; rw [coe_refl]
+  rw [← coe_trans, self_trans_symm, coe_refl]
 
 /-- Right inverse to a continuous map from a homeomorphism, mirroring `Equiv.self_comp_symm`. -/
 @[simp]
-/--
-theorem `toContinuousMap_comp_symm` / 定理 `toContinuousMap_comp_symm`
+/-
+**Homeomorph.toContinuousMap_comp_symm** 是 Mathlib 中的一个定理，位于命名空间 `Homeomorph`。
+形式化陈述：toContinuousMap_comp_symm : (f : C(α, β)).comp (f.symm : C(β, α)) = Contin
+uousMap.id β
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Homeomorph.coe_trans`：coe_trans : (f.trans g : C(α, γ)) = (g : C(β, γ)).
+comp f
+· 使用定理 `Homeomorph.symm_trans_self`：symm_trans_self (h : X ≃ₜ Y) : h.symm.trans 
+h = Homeomorph.refl Y
+· 使用定理 `Homeomorph.coe_refl`：coe_refl : (Homeomorph.refl α : C(α, α)) = Continuo
+usMap.id α
 
-English:
-theorem toContinuousMap_comp_symm
-  proof: by
-  rw [← coe_trans]; rw [symm_trans_self]; rw [coe_refl]
-
-中文:
-定理 toContinuousMap_comp_symm
-  证明: by
-  rw [← coe_trans]; rw [symm_trans_self]; rw [coe_refl]
-
-Depends on / 依赖: coe_refl, coe_trans, symm_trans_self
+--- 原说明 ---
+Right inverse to a continuous map from a homeomorphism, mirroring `Equiv.self_co
+mp_symm`.
 -/
 theorem toContinuousMap_comp_symm :
     (f : C(α, β)).comp (f.symm : C(β, α)) = ContinuousMap.id β := by
-  rw [← coe_trans]; rw [symm_trans_self]; rw [coe_refl]
+  rw [← coe_trans, symm_trans_self, coe_refl]
 
 end Homeomorph
+

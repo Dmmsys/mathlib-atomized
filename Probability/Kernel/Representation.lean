@@ -41,153 +41,21 @@ variable {X Y : Type*} {mX : MeasurableSpace X} [Nonempty Y] {mY : MeasurableSpa
 
 namespace ProbabilityTheory.Kernel
 
-/--
-lemma `exists_measurable_map_eq_unitInterval_aux` / 引理 `exists_measurable_map_eq_unitInterval_aux`
-
-English:
-lemma exists_measurable_map_eq_unitInterval_aux
-  given: (κ : Kernel X I) [IsMarkovKernel κ]
-  proof: by
-  let f := fun s (t : I) => sSup {x | (κ s).real (Icc 0 x) < t}
-  have measurable_f : Measurable (uncurry f) := by
-    refine measurable_of_Ioi fun a => ?_
-    simp only [preimage, uncurry, mem_Ioi]
-    have h_monotone s : Monotone (fun x => (κ s).real (Icc 0 x)) :=
-      fun x y hxy => measureReal_mono (by gcongr)
-    have sSup_eq_iUnion_rat : {x : X × I | a < f x.1 x.2} =
-        ⋃ (q : Rat) (hqI : ↑q in I) (_ : a < (q : Real)), {e | (κ e.1).real (Icc 0 ⟨q, hqI⟩) < e.2} := by
-      ext e
-      simp_all only [lt_sSup_iff, mem_ofPred_eq, Subtype.exists, mem_Icc, Rat.cast_nonneg,
-        mem_iUnion, exists_prop, exists_and_left, f]
-      constructor
-      · rintro ⟨y, hyI, y_mem, (hy : a.1 < y)⟩
-        obtain ⟨q, hqa, hqy⟩ := exists_rat_btwn hy
-        refine ⟨q, hqa, ⟨?_, hqy.le.trans hyI.2⟩, lt_of_lt_of_le' y_mem (h_monotone e.1 hqy.le)⟩
-        simp [← Rat.cast_nonneg (K := Real), a.2.1.trans hqa.le]
-      · intro he
-        obtain ⟨q, hqa, hqI, h⟩ := he
-        refine ⟨q, ⟨by simp [hqI.1], hqI.2⟩, h, ?_⟩
-        change a.1 < q
-        simp [hqa]
-    rw [sSup_eq_iUnion_rat]
-    refine MeasurableSet.iUnion (fun b => MeasurableSet.iUnion
-      (fun bI => MeasurableSet.iUnion (fun _ => ?_)))
-    refine measurableSet_lt ?_ measurable_snd.subtype_val
-    simp_rw [measureReal_def]
-    have hκ := κ.measurable_coe (s := Icc 0 ⟨b, bI⟩) measurableSet_Icc
-    fun_prop
-  refine ⟨f, measurable_f, fun a => (volume.map (f a)).ext_of_Iic (κ a) fun x => ?_⟩
-  have Iic_to_Icc : Iic x = Icc 0 x := by ext; simp
-  have κ_in_I : ((κ a).real (Icc 0 x)) in I := ⟨measureReal_nonneg, measureReal_le_one⟩
-  simp_rw [volume.map_apply measurable_f.of_uncurry_left measurableSet_Iic, preimage,
-    mem_Iic, Iic_to_Icc, ← ofReal_measureReal (measure_ne_top (κ a) _), ← volume_Iic ⟨_, κ_in_I⟩]
-  congr with ξ
-  constructor
-  · intro (hξ : f a ξ <= x)
-    change ξ <= (κ a).real (Icc 0 x)
-    by_cases hx : x = 1
-    · simp [hx, ← univ_eq_Icc, ξ.2.2]
-    let g := fun y => (κ a).real (Icc 0 y)
-    let nebot : NeBot (𝓝[>] x) := by
-      refine nhdsGT_neBot_of_exists_gt ?_
-      use 1
-      exact lt_of_le_of_ne x.2.2 hx
-    refine le_of_tendsto_of_tendsto (b := 𝓝[>] x) (g := g) continuousWithinAt_const ?_ ?_
-    · let h := cdf ((κ a).map Subtype.val)
-      have h_continuousWithinAt := continuousWithinAt_Ioi_iff_Ici.mpr (h.right_continuous x)
-      simp_rw [g, ← unitInterval.cdf_eq_real (κ a)]
-      exact h_continuousWithinAt.comp (Continuous.continuousWithinAt (by fun_prop)) (fun y hy => hy)
-    · refine eventually_nhdsWithin_of_forall fun y hy => ?_
-      by_contra! h
-      simp only [sSup_le_iff, f] at hξ
-      specialize hξ y h
-      grind
-  · intro (hξ : ξ <= (κ a).real (Icc 0 x))
-    simp only [sSup_le_iff, f]
-    intro c hc
-    by_contra! h
-    have h_lt : ¬ (κ a).real (Icc 0 x) <= (κ a).real (Icc 0 c) := not_le.mpr (lt_of_le_of_lt' hξ hc)
-    refine h_lt ?_
-    gcongr
-    simp
-
-中文:
-引理 存在_measurable_map_eq_unit整数erval_aux
-  条件: (κ : 核 X I) [是MarkovKernel κ]
-  证明: by
-  let f := fun s (t : I) => sSup {x | (κ s).real (Icc 0 x) < t}
-  have measurable_f : Measurable (uncurry f) := by
-    refine measurable_of_Ioi fun a => ?_
-    simp only [preimage, uncurry, mem_Ioi]
-    have h_monotone s : Monotone (fun x => (κ s).real (Icc 0 x)) :=
-      fun x y hxy => measureReal_mono (by gcongr)
-    have sSup_eq_iUnion_rat : {x : X × I | a < f x.1 x.2} =
-        ⋃ (q : Rat) (hqI : ↑q in I) (_ : a < (q : Real)), {e | (κ e.1).real (Icc 0 ⟨q, hqI⟩) < e.2} := by
-      ext e
-      simp_all only [lt_sSup_iff, mem_ofPred_eq, Subtype.exists, mem_Icc, Rat.cast_nonneg,
-        mem_iUnion, exists_prop, exists_and_left, f]
-      constructor
-      · rintro ⟨y, hyI, y_mem, (hy : a.1 < y)⟩
-        obtain ⟨q, hqa, hqy⟩ := exists_rat_btwn hy
-        refine ⟨q, hqa, ⟨?_, hqy.le.trans hyI.2⟩, lt_of_lt_of_le' y_mem (h_monotone e.1 hqy.le)⟩
-        simp [← Rat.cast_nonneg (K := Real), a.2.1.trans hqa.le]
-      · intro he
-        obtain ⟨q, hqa, hqI, h⟩ := he
-        refine ⟨q, ⟨by simp [hqI.1], hqI.2⟩, h, ?_⟩
-        change a.1 < q
-        simp [hqa]
-    rw [sSup_eq_iUnion_rat]
-    refine MeasurableSet.iUnion (fun b => MeasurableSet.iUnion
-      (fun bI => MeasurableSet.iUnion (fun _ => ?_)))
-    refine measurableSet_lt ?_ measurable_snd.subtype_val
-    simp_rw [measureReal_def]
-    have hκ := κ.measurable_coe (s := Icc 0 ⟨b, bI⟩) measurableSet_Icc
-    fun_prop
-  refine ⟨f, measurable_f, fun a => (volume.map (f a)).ext_of_Iic (κ a) fun x => ?_⟩
-  have Iic_to_Icc : Iic x = Icc 0 x := by ext; simp
-  have κ_in_I : ((κ a).real (Icc 0 x)) in I := ⟨measureReal_nonneg, measureReal_le_one⟩
-  simp_rw [volume.map_apply measurable_f.of_uncurry_left measurableSet_Iic, preimage,
-    mem_Iic, Iic_to_Icc, ← ofReal_measureReal (measure_ne_top (κ a) _), ← volume_Iic ⟨_, κ_in_I⟩]
-  congr with ξ
-  constructor
-  · intro (hξ : f a ξ <= x)
-    change ξ <= (κ a).real (Icc 0 x)
-    by_cases hx : x = 1
-    · simp [hx, ← univ_eq_Icc, ξ.2.2]
-    let g := fun y => (κ a).real (Icc 0 y)
-    let nebot : NeBot (𝓝[>] x) := by
-      refine nhdsGT_neBot_of_exists_gt ?_
-      use 1
-      exact lt_of_le_of_ne x.2.2 hx
-    refine le_of_tendsto_of_tendsto (b := 𝓝[>] x) (g := g) continuousWithinAt_const ?_ ?_
-    · let h := cdf ((κ a).map Subtype.val)
-      have h_continuousWithinAt := continuousWithinAt_Ioi_iff_Ici.mpr (h.right_continuous x)
-      simp_rw [g, ← unitInterval.cdf_eq_real (κ a)]
-      exact h_continuousWithinAt.comp (Continuous.continuousWithinAt (by fun_prop)) (fun y hy => hy)
-    · refine eventually_nhdsWithin_of_forall fun y hy => ?_
-      by_contra! h
-      simp only [sSup_le_iff, f] at hξ
-      specialize hξ y h
-      grind
-  · intro (hξ : ξ <= (κ a).real (Icc 0 x))
-    simp only [sSup_le_iff, f]
-    intro c hc
-    by_contra! h
-    have h_lt : ¬ (κ a).real (Icc 0 x) <= (κ a).real (Icc 0 c) := not_le.mpr (lt_of_le_of_lt' hξ hc)
-    refine h_lt ?_
-    gcongr
-    simp
+/-
+**ProbabilityTheory.Kernel.exists_measurable_map_eq_unitInterval_aux** 是 Mathlib
+ 中的一个引理，位于命名空间 `ProbabilityTheory.Kernel`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma exists_measurable_map_eq_unitInterval_aux (κ : Kernel X I) [IsMarkovKernel κ] :
-    exists (f : X -> I -> I), Measurable (uncurry f) ∧ forall a, volume.map (f a) = κ a := by
-  let f := fun s (t : I) => sSup {x | (κ s).real (Icc 0 x) < t}
+    ∃ (f : X → I → I), Measurable (uncurry f) ∧ ∀ a, volume.map (f a) = κ a := by
+  let f := fun s (t : I) ↦ sSup {x | (κ s).real (Icc 0 x) < t}
   have measurable_f : Measurable (uncurry f) := by
-    refine measurable_of_Ioi fun a => ?_
+    refine measurable_of_Ioi fun a ↦ ?_
     simp only [preimage, uncurry, mem_Ioi]
-    have h_monotone s : Monotone (fun x => (κ s).real (Icc 0 x)) :=
-      fun x y hxy => measureReal_mono (by gcongr)
+    have h_monotone s : Monotone (fun x ↦ (κ s).real (Icc 0 x)) :=
+      fun x y hxy ↦ measureReal_mono (by gcongr)
     have sSup_eq_iUnion_rat : {x : X × I | a < f x.1 x.2} =
-        ⋃ (q : Rat) (hqI : ↑q in I) (_ : a < (q : Real)), {e | (κ e.1).real (Icc 0 ⟨q, hqI⟩) < e.2} := by
+        ⋃ (q : ℚ) (hqI : ↑q ∈ I) (_ : a < (q : ℝ)), {e | (κ e.1).real (Icc 0 ⟨q, hqI⟩) < e.2} := by
       ext e
       simp_all only [lt_sSup_iff, mem_ofPred_eq, Subtype.exists, mem_Icc, Rat.cast_nonneg,
         mem_iUnion, exists_prop, exists_and_left, f]
@@ -195,31 +63,31 @@ private lemma exists_measurable_map_eq_unitInterval_aux (κ : Kernel X I) [IsMar
       · rintro ⟨y, hyI, y_mem, (hy : a.1 < y)⟩
         obtain ⟨q, hqa, hqy⟩ := exists_rat_btwn hy
         refine ⟨q, hqa, ⟨?_, hqy.le.trans hyI.2⟩, lt_of_lt_of_le' y_mem (h_monotone e.1 hqy.le)⟩
-        simp [← Rat.cast_nonneg (K := Real), a.2.1.trans hqa.le]
+        simp [← Rat.cast_nonneg (K := ℝ), a.2.1.trans hqa.le]
       · intro he
         obtain ⟨q, hqa, hqI, h⟩ := he
         refine ⟨q, ⟨by simp [hqI.1], hqI.2⟩, h, ?_⟩
         change a.1 < q
         simp [hqa]
     rw [sSup_eq_iUnion_rat]
-    refine MeasurableSet.iUnion (fun b => MeasurableSet.iUnion
-      (fun bI => MeasurableSet.iUnion (fun _ => ?_)))
+    refine MeasurableSet.iUnion (fun b ↦ MeasurableSet.iUnion
+      (fun bI ↦ MeasurableSet.iUnion (fun _ ↦ ?_)))
     refine measurableSet_lt ?_ measurable_snd.subtype_val
     simp_rw [measureReal_def]
     have hκ := κ.measurable_coe (s := Icc 0 ⟨b, bI⟩) measurableSet_Icc
     fun_prop
-  refine ⟨f, measurable_f, fun a => (volume.map (f a)).ext_of_Iic (κ a) fun x => ?_⟩
+  refine ⟨f, measurable_f, fun a ↦ (volume.map (f a)).ext_of_Iic (κ a) fun x ↦ ?_⟩
   have Iic_to_Icc : Iic x = Icc 0 x := by ext; simp
-  have κ_in_I : ((κ a).real (Icc 0 x)) in I := ⟨measureReal_nonneg, measureReal_le_one⟩
+  have κ_in_I : ((κ a).real (Icc 0 x)) ∈ I := ⟨measureReal_nonneg, measureReal_le_one⟩
   simp_rw [volume.map_apply measurable_f.of_uncurry_left measurableSet_Iic, preimage,
     mem_Iic, Iic_to_Icc, ← ofReal_measureReal (measure_ne_top (κ a) _), ← volume_Iic ⟨_, κ_in_I⟩]
   congr with ξ
   constructor
-  · intro (hξ : f a ξ <= x)
-    change ξ <= (κ a).real (Icc 0 x)
+  · intro (hξ : f a ξ ≤ x)
+    change ξ ≤ (κ a).real (Icc 0 x)
     by_cases hx : x = 1
     · simp [hx, ← univ_eq_Icc, ξ.2.2]
-    let g := fun y => (κ a).real (Icc 0 y)
+    let g := fun y ↦ (κ a).real (Icc 0 y)
     let nebot : NeBot (𝓝[>] x) := by
       refine nhdsGT_neBot_of_exists_gt ?_
       use 1
@@ -228,91 +96,111 @@ private lemma exists_measurable_map_eq_unitInterval_aux (κ : Kernel X I) [IsMar
     · let h := cdf ((κ a).map Subtype.val)
       have h_continuousWithinAt := continuousWithinAt_Ioi_iff_Ici.mpr (h.right_continuous x)
       simp_rw [g, ← unitInterval.cdf_eq_real (κ a)]
-      exact h_continuousWithinAt.comp (Continuous.continuousWithinAt (by fun_prop)) (fun y hy => hy)
-    · refine eventually_nhdsWithin_of_forall fun y hy => ?_
+      exact h_continuousWithinAt.comp (Continuous.continuousWithinAt (by fun_prop)) (fun y hy ↦ hy)
+    · refine eventually_nhdsWithin_of_forall fun y hy ↦ ?_
       by_contra! h
       simp only [sSup_le_iff, f] at hξ
       specialize hξ y h
       grind
-  · intro (hξ : ξ <= (κ a).real (Icc 0 x))
+  · intro (hξ : ξ ≤ (κ a).real (Icc 0 x))
     simp only [sSup_le_iff, f]
     intro c hc
     by_contra! h
-    have h_lt : ¬ (κ a).real (Icc 0 x) <= (κ a).real (Icc 0 c) := not_le.mpr (lt_of_le_of_lt' hξ hc)
+    have h_lt : ¬ (κ a).real (Icc 0 x) ≤ (κ a).real (Icc 0 c) := not_le.mpr (lt_of_le_of_lt' hξ hc)
     refine h_lt ?_
     gcongr
     simp
-
-/--
-theorem `exists_measurable_map_eq_unitInterval` / 定理 `exists_measurable_map_eq_unitInterval`
-
-English:
-theorem exists_measurable_map_eq_unitInterval
-  given: (κ : Kernel X Y) [IsMarkovKernel κ]
-  proof: by
-  let g := sigmoid ∘ embeddingReal Y
-  have hg := measurableEmbedding_sigmoid_comp_embeddingReal Y
-  have hκg : IsMarkovKernel (κ.map g) := IsMarkovKernel.map κ hg.measurable
-  have hg'κ : κ = (κ.map g).map hg.invFun := by
-    rw [← map_comp_right _ hg.measurable (by fun_prop)]; rw [LeftInverse.id hg.leftInverse_invFun]; rw [map_id]
-  obtain ⟨f', hf', hf'κ⟩ := (κ.map g).exists_measurable_map_eq_unitInterval_aux
-  refine ⟨fun a u => hg.invFun (f' a u), by fun_prop, fun a => ?_⟩
-  rw [hg'κ]; rw [map_apply _ (by fun_prop)]; rw [← hf'κ]; rw [Measure.map_map (by fun_prop) (by fun_prop)]
-  rfl
-
-中文:
-定理 存在_measurable_map_eq_unit整数erval
-  条件: (κ : 核 X Y) [是MarkovKernel κ]
-  证明: by
-  let g := sigmoid ∘ embeddingReal Y
-  have hg := measurableEmbedding_sigmoid_comp_embeddingReal Y
-  have hκg : IsMarkovKernel (κ.map g) := IsMarkovKernel.map κ hg.measurable
-  have hg'κ : κ = (κ.map g).map hg.invFun := by
-    rw [← map_comp_right _ hg.measurable (by fun_prop)]; rw [LeftInverse.id hg.leftInverse_invFun]; rw [map_id]
-  obtain ⟨f', hf', hf'κ⟩ := (κ.map g).exists_measurable_map_eq_unitInterval_aux
-  refine ⟨fun a u => hg.invFun (f' a u), by fun_prop, fun a => ?_⟩
-  rw [hg'κ]; rw [map_apply _ (by fun_prop)]; rw [← hf'κ]; rw [Measure.map_map (by fun_prop) (by fun_prop)]
-  rfl
-
-Depends on / 依赖: IsMarkovKernel, IsMarkovKernel.map, LeftInverse, LeftInverse.id, embeddingReal, exists_measurable_map_eq_unitInterval_aux, fun_prop, hg.invFun, hg.leftInverse_invFun, hg.measurable, invFun, leftInverse_invFun, map_apply, map_comp_right, map_id, measurable, measurableEmbedding_sigmoid_comp_embeddingReal, sigmoid
+/-
+**ProbabilityTheory.Kernel.exists_measurable_map_eq_unitInterval** 是 Mathlib 中的一
+个定理，位于命名空间 `ProbabilityTheory.Kernel`。
+形式化陈述：exists_measurable_map_eq_unitInterval (κ : Kernel X Y) [IsMarkovKernel κ] 
+: exists (f : X -> I -> Y), Measurable (uncurry f) ∧ forall a, volume.map (f a) 
+= κ a
+参数：κ : Kernel X Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `measurableEmbedding_sigmoid_comp_embeddingReal`：measurableEmbedding_sigm
+oid_comp_embeddingReal : MeasurableEmbedding (unitInterval.sigmoid ∘ MeasureTheo
+ry.embeddingReal α)
+· 使用定理 `ProbabilityTheory.Kernel.IsMarkovKernel.map`：∀ {α : Type u_1} {β : Type 
+u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {γ : Type u_4}   {mγ : Me
+asurableSpace γ} {f : β → γ} (κ :…
+· 使用定理 `MeasurableEmbedding.measurable`：∀ {α : Type u_1} {β : Type u_2} [inst : 
+MeasurableSpace α] [inst_1 : MeasurableSpace β] {f : α → β},   MeasurableEmbeddi
+ng f → Measurable f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `ProbabilityTheory.Kernel.map_comp_right`：map_comp_right (κ : Kernel α β)
+ {f : β -> γ} (hf : Measurable f) {g : γ -> δ} (hg : Measurable g) : κ.map (g ∘ 
+f) = (κ.map f).map g
+· 使用引理 `MeasurableEmbedding.measurable_invFun`：measurable_invFun [Nonempty α] (h
+f : MeasurableEmbedding f) : Measurable (hf.invFun : β -> α)
+· 使用定理 `Function.LeftInverse.id`：∀ {α : Sort u_1} {β : Sort u_2} {g : β → α} {f 
+: α → β}, Function.LeftInverse g f → g ∘ f = id
+· 使用引理 `MeasurableEmbedding.leftInverse_invFun`：leftInverse_invFun [Nonempty α] 
+(hf : MeasurableEmbedding f) : hf.invFun.LeftInverse f
+· 使用引理 `ProbabilityTheory.Kernel.map_id`：map_id (κ : Kernel α β) : map κ id = κ
+· 使用定理 `_private.Mathlib.Probability.Kernel.Representation.0.ProbabilityTheory.K
+ernel.exists_measurable_map_eq_unitInterval_aux`：∀ {X : Type u_1} {mX : Measurab
+leSpace X} (κ : ProbabilityTheory.Kernel X ↑unitInterval)   [ProbabilityTheory.I
+sMarkovKernel κ],   ∃ f, Meas…
+· 使用定理 `Measurable.fun_comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x :
+ MeasurableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β
+ → γ} {f …
+· 使用定理 `ProbabilityTheory.Kernel.map_apply`：map_apply (κ : Kernel α β) (hf : Mea
+surable f) (a : α) : map κ f a = (κ a).map f
+· 使用定理 `MeasureTheory.Measure.map_map`：map_map {g : β -> γ} {f : α -> β} (hg : M
+easurable g) (hf : Measurable f) : (μ.map f).map g = μ.map (g ∘ f)
+· 使用定理 `Measurable.prodMk`：Measurable.prodMk {β γ} {_ : MeasurableSpace β} {_ : 
+MeasurableSpace γ} {f : α -> β} {g : α -> γ} (hf : Measurable f) (hg : Measurabl
+e g) : …
+· 使用定理 `measurable_const`：measurable_const {_ : MeasurableSpace α} {_ : Measurab
+leSpace β} {a : α} : Measurable fun _ : β => a
+· 使用定理 `measurable_id'`：measurable_id' {_ : MeasurableSpace α} : Measurable fun 
+a : α => a
 -/
 theorem exists_measurable_map_eq_unitInterval (κ : Kernel X Y) [IsMarkovKernel κ] :
-    exists (f : X -> I -> Y), Measurable (uncurry f) ∧ forall a, volume.map (f a) = κ a := by
+    ∃ (f : X → I → Y), Measurable (uncurry f) ∧ ∀ a, volume.map (f a) = κ a := by
   let g := sigmoid ∘ embeddingReal Y
   have hg := measurableEmbedding_sigmoid_comp_embeddingReal Y
   have hκg : IsMarkovKernel (κ.map g) := IsMarkovKernel.map κ hg.measurable
   have hg'κ : κ = (κ.map g).map hg.invFun := by
-    rw [← map_comp_right _ hg.measurable (by fun_prop)]; rw [LeftInverse.id hg.leftInverse_invFun]; rw [map_id]
+    rw [← map_comp_right _ hg.measurable (by fun_prop), LeftInverse.id hg.leftInverse_invFun,
+      map_id]
   obtain ⟨f', hf', hf'κ⟩ := (κ.map g).exists_measurable_map_eq_unitInterval_aux
-  refine ⟨fun a u => hg.invFun (f' a u), by fun_prop, fun a => ?_⟩
-  rw [hg'κ]; rw [map_apply _ (by fun_prop)]; rw [← hf'κ]; rw [Measure.map_map (by fun_prop) (by fun_prop)]
+  refine ⟨fun a u ↦ hg.invFun (f' a u), by fun_prop, fun a ↦ ?_⟩
+  rw [hg'κ, map_apply _ (by fun_prop), ← hf'κ, Measure.map_map (by fun_prop) (by fun_prop)]
   rfl
 
 end ProbabilityTheory.Kernel
 
-/--
-theorem `MeasureTheory.Measure.exists_measurable_map_eq` / 定理 `MeasureTheory.Measure.exists_measurable_map_eq`
-
-English:
-theorem MeasureTheory.Measure.exists_measurable_map_eq
-  given: (μ : Measure Y) [IsProbabilityMeasure μ]
-  proof: by
-  obtain ⟨f, hf_meas, hf_map⟩ := Kernel.exists_measurable_map_eq_unitInterval (Kernel.const Unit μ)
-  specialize hf_map ()
-  exact ⟨f (), by fun_prop, by simpa⟩
-
-中文:
-定理 测度论.测度.存在_measurable_map_eq
-  条件: (μ : 测度 Y) [是概率测度 μ]
-  证明: by
-  obtain ⟨f, hf_meas, hf_map⟩ := Kernel.exists_measurable_map_eq_unitInterval (Kernel.const Unit μ)
-  specialize hf_map ()
-  exact ⟨f (), by fun_prop, by simpa⟩
-
-Depends on / 依赖: Kernel, Kernel.const, Kernel.exists_measurable_map_eq_unitInterval, exists_measurable_map_eq_unitInterval, fun_prop, hf_map, hf_meas, specialize
+/-
+**MeasureTheory.Measure.exists_measurable_map_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：MeasureTheory.Measure.exists_measurable_map_eq (μ : Measure Y) [IsProbabil
+ityMeasure μ] : exists (f : I -> Y), Measurable f ∧ volume.map f = μ
+参数：μ : Measure Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ProbabilityTheory.Kernel.exists_measurable_map_eq_unitInterval`：exists_m
+easurable_map_eq_unitInterval (κ : Kernel X Y) [IsMarkovKernel κ] : exists (f : 
+X -> I -> Y), Measurable (uncurry f) ∧ forall a, vol…
+· 使用定理 `ProbabilityTheory.Kernel.const.instIsMarkovKernel`：∀ {α : Type u_1} {β :
+ Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} {μβ : MeasureTheory
+.Measure β}   [hμβ : MeasureTheory.IsPr…
+· 使用定理 `Measurable.fun_comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {x :
+ MeasurableSpace α} {x_1 : MeasurableSpace β}   {x_2 : MeasurableSpace γ} {g : β
+ → γ} {f …
+· 使用定理 `Measurable.prodMk`：Measurable.prodMk {β γ} {_ : MeasurableSpace β} {_ : 
+MeasurableSpace γ} {f : α -> β} {g : α -> γ} (hf : Measurable f) (hg : Measurabl
+e g) : …
+· 使用定理 `measurable_const`：measurable_const {_ : MeasurableSpace α} {_ : Measurab
+leSpace β} {a : α} : Measurable fun _ : β => a
+· 使用定理 `measurable_id'`：measurable_id' {_ : MeasurableSpace α} : Measurable fun 
+a : α => a
 -/
 theorem MeasureTheory.Measure.exists_measurable_map_eq (μ : Measure Y) [IsProbabilityMeasure μ] :
-    exists (f : I -> Y), Measurable f ∧ volume.map f = μ := by
+    ∃ (f : I → Y), Measurable f ∧ volume.map f = μ := by
   obtain ⟨f, hf_meas, hf_map⟩ := Kernel.exists_measurable_map_eq_unitInterval (Kernel.const Unit μ)
   specialize hf_map ()
   exact ⟨f (), by fun_prop, by simpa⟩

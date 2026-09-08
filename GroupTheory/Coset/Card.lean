@@ -27,47 +27,35 @@ variable {α : Type*} [Group α] {s : Subgroup α}
 namespace QuotientGroup
 
 @[to_additive]
-/--
-Instance `fintype` / 实例 `fintype`
-
-English:
-instance fintype
-  signature: [Fintype α] (s : Subgroup α) [DecidableRel (leftRel s).r]
-  body: Quotient.fintype (leftRel s)
-
-@[to_additive]
-
-中文:
-实例 fintype
-  签名: [有限类型 α] (s : 子群 α) [DecidableRel (leftRel s).r]
-  定义体: Quotient.fintype (leftRel s)
-
-@[to_additive]
-
-Depends on / 依赖: Quotient, Quotient.fintype, fintype, leftRel
+/-
+**QuotientGroup.fintype** 是 Mathlib 中的一个实例，位于命名空间 `QuotientGroup`。
+形式化陈述：fintype [Fintype α] (s : Subgroup α) [DecidableRel (leftRel s).r] : Fintyp
+e (α ⧸ s)
+参数：s : Subgroup α；leftRel s。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance fintype [Fintype α] (s : Subgroup α) [DecidableRel (leftRel s).r] : Fintype (α ⧸ s) :=
   Quotient.fintype (leftRel s)
 
 @[to_additive]
+/-
+**QuotientGroup.** 是 Mathlib 中的一个实例，位于命名空间 `QuotientGroup`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) finite [Finite α] : Finite (α ⧸ s) :=
   Quotient.finite _
 
 @[to_additive]
-/--
-Instance `fintypeQuotientRightRel` / 实例 `fintypeQuotientRightRel`
-
-English:
-instance fintypeQuotientRightRel
-  signature: [Fintype (α ⧸ s)]
-  body: .ofEquiv (α ⧸ s) (QuotientGroup.quotientRightRelEquivQuotientLeftRel s).symm
-
-中文:
-实例 fintypeQuotientRightRel
-  签名: [有限类型 (α ⧸ s)]
-  定义体: .ofEquiv (α ⧸ s) (QuotientGroup.quotientRightRelEquivQuotientLeftRel s).symm
-
-Depends on / 依赖: QuotientGroup, QuotientGroup.quotientRightRelEquivQuotientLeftRel, ofEquiv, quotientRightRelEquivQuotientLeftRel
+/-
+**QuotientGroup.fintypeQuotientRightRel** 是 Mathlib 中的一个实例，位于命名空间 `QuotientGroup
+`。
+形式化陈述：fintypeQuotientRightRel [Fintype (α ⧸ s)] : Fintype (Quotient (QuotientGro
+up.rightRel s))
+参数：α ⧸ s。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 instance fintypeQuotientRightRel [Fintype (α ⧸ s)] :
     Fintype (Quotient (QuotientGroup.rightRel s)) :=
@@ -75,20 +63,17 @@ instance fintypeQuotientRightRel [Fintype (α ⧸ s)] :
 
 variable (s) in
 @[to_additive]
-/--
-lemma `card_quotient_rightRel` / 引理 `card_quotient_rightRel`
-
-English:
-lemma card_quotient_rightRel
-  given: [Fintype (α ⧸ s)]
-  proof: Fintype.ofEquiv_card (QuotientGroup.quotientRightRelEquivQuotientLeftRel s).symm
-
-中文:
-引理 card_quotient_rightRel
-  条件: [有限类型 (α ⧸ s)]
-  证明: Fintype.ofEquiv_card (QuotientGroup.quotientRightRelEquivQuotientLeftRel s).symm
-
-Depends on / 依赖: Fintype, Fintype.ofEquiv_card, QuotientGroup, QuotientGroup.quotientRightRelEquivQuotientLeftRel, ofEquiv_card, quotientRightRelEquivQuotientLeftRel
+/-
+**QuotientGroup.card_quotient_rightRel** 是 Mathlib 中的一个引理，位于命名空间 `QuotientGroup`
+。
+形式化陈述：card_quotient_rightRel [Fintype (α ⧸ s)] : Fintype.card (Quotient (Quotien
+tGroup.rightRel s)) = Fintype.card (α ⧸ s)
+参数：α ⧸ s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fintype.ofEquiv_card`：ofEquiv_card [Fintype α] (f : α ≃ β) : @card β (of
+Equiv α f) = card α
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma card_quotient_rightRel [Fintype (α ⧸ s)] :
     Fintype.card (Quotient (QuotientGroup.rightRel s)) = Fintype.card (α ⧸ s) :=
@@ -99,60 +84,73 @@ end QuotientGroup
 namespace Subgroup
 
 @[to_additive AddSubgroup.card_eq_card_quotient_mul_card_addSubgroup]
-/--
-theorem `card_eq_card_quotient_mul_card_subgroup` / 定理 `card_eq_card_quotient_mul_card_subgroup`
-
-English:
-theorem card_eq_card_quotient_mul_card_subgroup
-  given: (s : Subgroup α)
-  proof: by
-  rw [← Nat.card_prod]; exact Nat.card_congr Subgroup.groupEquivQuotientProdSubgroup
-
-@[to_additive]
-
-中文:
-定理 card_eq_card_quotient_mul_card_subgroup
-  条件: (s : 子群 α)
-  证明: by
-  rw [← Nat.card_prod]; exact Nat.card_congr Subgroup.groupEquivQuotientProdSubgroup
-
-@[to_additive]
-
-Depends on / 依赖: Nat.card_congr, Nat.card_prod, Subgroup, Subgroup.groupEquivQuotientProdSubgroup, card_congr, card_prod, groupEquivQuotientProdSubgroup
+/-
+**Subgroup.card_eq_card_quotient_mul_card_subgroup** 是 Mathlib 中的一个定理，位于命名空间 `Su
+bgroup`。
+形式化陈述：card_eq_card_quotient_mul_card_subgroup (s : Subgroup α) : Nat.card α = Na
+t.card (α ⧸ s) * Nat.card s
+参数：s : Subgroup α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.card_prod`：card_prod (α β : Type*) : Nat.card (α × β) = Nat.card α *
+ Nat.card β
+· 使用定理 `Nat.card_congr`：card_congr (f : α ≃ β) : Nat.card α = Nat.card β
 -/
 theorem card_eq_card_quotient_mul_card_subgroup (s : Subgroup α) :
     Nat.card α = Nat.card (α ⧸ s) * Nat.card s := by
   rw [← Nat.card_prod]; exact Nat.card_congr Subgroup.groupEquivQuotientProdSubgroup
 
 @[to_additive]
-/--
-lemma `card_mul_eq_card_subgroup_mul_card_quotient` / 引理 `card_mul_eq_card_subgroup_mul_card_quotient`
-
-English:
-lemma card_mul_eq_card_subgroup_mul_card_quotient
-  given: (s : Subgroup α) (t : Set α)
-  proof: by
-  rw [← Nat.card_prod]; rw [Nat.card_congr]
-  apply Equiv.trans _ (QuotientGroup.preimageMkEquivSubgroupProdSet _ _)
-  rw [QuotientGroup.preimage_image_mk]
-  convert! Equiv.refl ↑(t * s)
-  aesop (add simp [Set.mem_mul])
-
-中文:
-引理 card_mul_eq_card_subgroup_mul_card_quotient
-  条件: (s : 子群 α) (t : 集合 α)
-  证明: by
-  rw [← Nat.card_prod]; rw [Nat.card_congr]
-  apply Equiv.trans _ (QuotientGroup.preimageMkEquivSubgroupProdSet _ _)
-  rw [QuotientGroup.preimage_image_mk]
-  convert! Equiv.refl ↑(t * s)
-  aesop (add simp [Set.mem_mul])
-
-Depends on / 依赖: Equiv.refl, Equiv.trans, Nat.card_congr, Nat.card_prod, QuotientGroup, QuotientGroup.preimageMkEquivSubgroupProdSet, QuotientGroup.preimage_image_mk, Set.mem_mul, card_congr, card_prod, convert, mem_mul, preimageMkEquivSubgroupProdSet, preimage_image_mk
+/-
+**Subgroup.card_mul_eq_card_subgroup_mul_card_quotient** 是 Mathlib 中的一个引理，位于命名空间
+ `Subgroup`。
+形式化陈述：card_mul_eq_card_subgroup_mul_card_quotient (s : Subgroup α) (t : Set α) :
+ Nat.card (t * s : Set α) = Nat.card s * Nat.card (t.image (↑) : Set (α ⧸ s))
+参数：s : Subgroup α；t : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.card_prod`：card_prod (α β : Type*) : Nat.card (α × β) = Nat.card α *
+ Nat.card β
+· 使用定理 `Nat.card_congr`：card_congr (f : α ≃ β) : Nat.card α = Nat.card β
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `QuotientGroup.preimage_image_mk`：preimage_image_mk (N : Subgroup α) (s :
+ Set α) : mk ⁻¹' ((mk : α -> α ⧸ N) '' s) = ⋃ x : N, (· * (x : α)) ⁻¹' s
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `InvMemClass.inv_mem`：∀ {S : Type u_3} {G : outParam (Type u_4)} {inst : 
+Inv G} {inst_1 : SetLike S G} [self : InvMemClass S G] {s : S}   {x : G}, x ∈ s 
+→ x⁻¹ ∈ s
+· 使用定理 `SubgroupClass.toInvMemClass`：∀ {S : Type u_3} {G : outParam (Type u_4)} 
+{inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   Inv
+MemClass S G
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `mul_inv_cancel_right`：mul_inv_cancel_right (a b : G) : a * b * b⁻¹ = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
 lemma card_mul_eq_card_subgroup_mul_card_quotient (s : Subgroup α) (t : Set α) :
     Nat.card (t * s : Set α) = Nat.card s * Nat.card (t.image (↑) : Set (α ⧸ s)) := by
-  rw [← Nat.card_prod]; rw [Nat.card_congr]
+  rw [← Nat.card_prod, Nat.card_congr]
   apply Equiv.trans _ (QuotientGroup.preimageMkEquivSubgroupProdSet _ _)
   rw [QuotientGroup.preimage_image_mk]
   convert! Equiv.refl ↑(t * s)
@@ -161,138 +159,97 @@ lemma card_mul_eq_card_subgroup_mul_card_quotient (s : Subgroup α) (t : Set α)
 /-- **Lagrange's Theorem**: The order of a subgroup divides the order of its ambient group. -/
 @[to_additive (attr := wikidata Q505798) /-- **Lagrange's Theorem**: The order of an additive
 subgroup divides the order of its ambient additive group. -/]
-/--
-theorem `card_subgroup_dvd_card` / 定理 `card_subgroup_dvd_card`
-
-English:
-theorem card_subgroup_dvd_card
-  given: (s : Subgroup α)
-  statement: Nat.card s ∣ Nat.card α
-  proof: by
-  simp [card_eq_card_quotient_mul_card_subgroup s, @dvd_mul_left Nat]
-
-@[to_additive]
-
-中文:
-定理 card_subgroup_dvd_card
-  条件: (s : 子群 α)
-  结论: 自然数.card s ∣ 自然数.card α
-  证明: by
-  simp [card_eq_card_quotient_mul_card_subgroup s, @dvd_mul_left Nat]
-
-@[to_additive]
-
-Depends on / 依赖: card_eq_card_quotient_mul_card_subgroup, dvd_mul_left
+/-
+**Subgroup.card_subgroup_dvd_card** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：card_subgroup_dvd_card (s : Subgroup α) : Nat.card s ∣ Nat.card α
+参数：s : Subgroup α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.card_eq_card_quotient_mul_card_subgroup`：card_eq_card_quotient_
+mul_card_subgroup (s : Subgroup α) : Nat.card α = Nat.card (α ⧸ s) * Nat.card s
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `dvd_mul_left`：dvd_mul_left (a b : α) : a ∣ b * a
 -/
 theorem card_subgroup_dvd_card (s : Subgroup α) : Nat.card s ∣ Nat.card α := by
-  simp [card_eq_card_quotient_mul_card_subgroup s, @dvd_mul_left Nat]
+  simp [card_eq_card_quotient_mul_card_subgroup s, @dvd_mul_left ℕ]
 
 @[to_additive]
-/--
-theorem `card_quotient_dvd_card` / 定理 `card_quotient_dvd_card`
-
-English:
-theorem card_quotient_dvd_card
-  given: (s : Subgroup α)
-  statement: Nat.card (α ⧸ s) ∣ Nat.card α
-  proof: by
-  simp [card_eq_card_quotient_mul_card_subgroup s, @dvd_mul_right Nat]
-
-中文:
-定理 card_quotient_dvd_card
-  条件: (s : 子群 α)
-  结论: 自然数.card (α ⧸ s) ∣ 自然数.card α
-  证明: by
-  simp [card_eq_card_quotient_mul_card_subgroup s, @dvd_mul_right Nat]
-
-Depends on / 依赖: card_eq_card_quotient_mul_card_subgroup, dvd_mul_right
+/-
+**Subgroup.card_quotient_dvd_card** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：card_quotient_dvd_card (s : Subgroup α) : Nat.card (α ⧸ s) ∣ Nat.card α
+参数：s : Subgroup α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.card_eq_card_quotient_mul_card_subgroup`：card_eq_card_quotient_
+mul_card_subgroup (s : Subgroup α) : Nat.card α = Nat.card (α ⧸ s) * Nat.card s
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `dvd_mul_right`：dvd_mul_right (a b : α) : a ∣ a * b
 -/
 theorem card_quotient_dvd_card (s : Subgroup α) : Nat.card (α ⧸ s) ∣ Nat.card α := by
-  simp [card_eq_card_quotient_mul_card_subgroup s, @dvd_mul_right Nat]
+  simp [card_eq_card_quotient_mul_card_subgroup s, @dvd_mul_right ℕ]
 
 variable {H : Type*} [Group H]
 
 @[to_additive]
-/--
-theorem `card_dvd_of_injective` / 定理 `card_dvd_of_injective`
-
-English:
-theorem card_dvd_of_injective
-  given: (f : α ->* H) (hf : Function.Injective f)
-  proof: by
-  calc
-      Nat.card α = Nat.card (f.range : Subgroup H) := Nat.card_congr (Equiv.ofInjective f hf)
-      _ ∣ Nat.card H := card_subgroup_dvd_card _
-
-@[to_additive]
-
-中文:
-定理 card_dvd_of_injective
-  条件: (f : α ->* H) (hf : 函数.单射 f)
-  证明: by
-  calc
-      Nat.card α = Nat.card (f.range : Subgroup H) := Nat.card_congr (Equiv.ofInjective f hf)
-      _ ∣ Nat.card H := card_subgroup_dvd_card _
-
-@[to_additive]
-
-Depends on / 依赖: Equiv.ofInjective, Nat.card, Nat.card_congr, Subgroup, card_congr, card_subgroup_dvd_card, f.range, ofInjective
+/-
+**Subgroup.card_dvd_of_injective** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：card_dvd_of_injective (f : α ->* H) (hf : Function.Injective f) : Nat.card
+ α ∣ Nat.card H
+参数：f : α ->* H；hf : Function.Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.card_congr`：card_congr (f : α ≃ β) : Nat.card α = Nat.card β
+· 使用定理 `Subgroup.card_subgroup_dvd_card`：card_subgroup_dvd_card (s : Subgroup α)
+ : Nat.card s ∣ Nat.card α
 -/
-theorem card_dvd_of_injective (f : α ->* H) (hf : Function.Injective f) :
+theorem card_dvd_of_injective (f : α →* H) (hf : Function.Injective f) :
     Nat.card α ∣ Nat.card H := by
   calc
       Nat.card α = Nat.card (f.range : Subgroup H) := Nat.card_congr (Equiv.ofInjective f hf)
       _ ∣ Nat.card H := card_subgroup_dvd_card _
 
 @[to_additive]
-/--
-theorem `card_dvd_of_le` / 定理 `card_dvd_of_le`
-
-English:
-theorem card_dvd_of_le
-  given: {H K : Subgroup α} (hHK : H <= K)
-  statement: Nat.card H ∣ Nat.card K
-  proof: card_dvd_of_injective (inclusion hHK) (inclusion_injective hHK)
-
-@[to_additive]
-
-中文:
-定理 card_dvd_of_le
-  条件: {H K : 子群 α} (hHK : H <= K)
-  结论: 自然数.card H ∣ 自然数.card K
-  证明: card_dvd_of_injective (inclusion hHK) (inclusion_injective hHK)
-
-@[to_additive]
-
-Depends on / 依赖: card_dvd_of_injective, inclusion, inclusion_injective
+/-
+**Subgroup.card_dvd_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：card_dvd_of_le {H K : Subgroup α} (hHK : H <= K) : Nat.card H ∣ Nat.card K
+参数：hHK : H <= K。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.card_dvd_of_injective`：card_dvd_of_injective (f : α ->* H) (hf 
+: Function.Injective f) : Nat.card α ∣ Nat.card H
+· 使用定理 `Subgroup.inclusion_injective`：inclusion_injective {H K : Subgroup G} (h 
+: H <= K) : Function.Injective inclusion h
 -/
-theorem card_dvd_of_le {H K : Subgroup α} (hHK : H <= K) : Nat.card H ∣ Nat.card K :=
+theorem card_dvd_of_le {H K : Subgroup α} (hHK : H ≤ K) : Nat.card H ∣ Nat.card K :=
   card_dvd_of_injective (inclusion hHK) (inclusion_injective hHK)
 
 @[to_additive]
-/--
-theorem `card_comap_dvd_of_injective` / 定理 `card_comap_dvd_of_injective`
-
-English:
-theorem card_comap_dvd_of_injective
-  statement: (K : Subgroup H) (f : α ->* H)
-  proof: calc Nat.card (K.comap f) = Nat.card ((K.comap f).map f) :=
-      Nat.card_congr (equivMapOfInjective _ _ hf).toEquiv
-    _ ∣ Nat.card K := card_dvd_of_le (map_comap_le _ _)
-
-中文:
-定理 card_comap_dvd_of_injective
-  结论: (K : 子群 H) (f : α ->* H)
-  证明: calc Nat.card (K.comap f) = Nat.card ((K.comap f).map f) :=
-      Nat.card_congr (equivMapOfInjective _ _ hf).toEquiv
-    _ ∣ Nat.card K := card_dvd_of_le (map_comap_le _ _)
-
-Depends on / 依赖: K.comap, Nat.card, Nat.card_congr, card_congr, card_dvd_of_le, equivMapOfInjective, map_comap_le, toEquiv
+/-
+**Subgroup.card_comap_dvd_of_injective** 是 Mathlib 中的一个定理，位于命名空间 `Subgroup`。
+形式化陈述：card_comap_dvd_of_injective (K : Subgroup H) (f : α ->* H) (hf : Function.
+Injective f) : Nat.card (K.comap f) ∣ Nat.card K
+参数：K : Subgroup H；f : α ->* H；hf : Function.Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.card_congr`：card_congr (f : α ≃ β) : Nat.card α = Nat.card β
+· 使用定理 `Subgroup.card_dvd_of_le`：card_dvd_of_le {H K : Subgroup α} (hHK : H <= K
+) : Nat.card H ∣ Nat.card K
+· 使用定理 `Subgroup.map_comap_le`：map_comap_le (H : Subgroup N) : map f (comap f H)
+ <= H
 -/
-theorem card_comap_dvd_of_injective (K : Subgroup H) (f : α ->* H)
+theorem card_comap_dvd_of_injective (K : Subgroup H) (f : α →* H)
     (hf : Function.Injective f) : Nat.card (K.comap f) ∣ Nat.card K :=
   calc Nat.card (K.comap f) = Nat.card ((K.comap f).map f) :=
       Nat.card_congr (equivMapOfInjective _ _ hf).toEquiv
     _ ∣ Nat.card K := card_dvd_of_le (map_comap_le _ _)
 
 end Subgroup
+

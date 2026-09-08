@@ -75,75 +75,111 @@ variable (s t : Subfield K)
 
 section DerivedFromSubfieldClass
 
-/--
-theorem `list_prod_mem` / 定理 `list_prod_mem`
+/-- Product of a list of elements in a subfield is in the subfield. -/
+/-
+**Subfield.list_prod_mem** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：∀ {K : Type u} [inst : DivisionRing K] (s : Subfield K) {l : List K}, (∀ x
+ ∈ l, x ∈ s) → l.prod ∈ s
+参数：s : Subfield K；∀ x ∈ l, x ∈ s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `list_prod_mem`：list_prod_mem {l : List M} (hl : forall x in l, x in S) :
+ l.prod in S
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+· 使用定理 `SubfieldClass.toSubgroupClass`：∀ {K : Type u} [inst : DivisionRing K] (S
+ : Type u_1) [inst_1 : SetLike S K] [h : SubfieldClass S K], SubgroupClass S K
+· 使用定理 `Subfield.instSubfieldClass`：∀ {K : Type u} [inst : DivisionRing K], Subf
+ieldClass (Subfield K) K
 
-English:
-theorem list_prod_mem
-  given: {l : List K}
-  statement: (forall x in l, x in s) -> l.prod in s
-  proof: list_prod_mem
-
-中文:
-定理 list_prod_mem
-  条件: {l : 列表 K}
-  结论: (对任意 x in l, x in s) -> l.乘积 in s
-  证明: list_prod_mem
+--- 原说明 ---
+Product of a list of elements in a subfield is in the subfield.
 -/
-protected theorem list_prod_mem {l : List K} : (forall x in l, x in s) -> l.prod in s :=
+protected theorem list_prod_mem {l : List K} : (∀ x ∈ l, x ∈ s) → l.prod ∈ s :=
   list_prod_mem
 
-/--
-theorem `list_sum_mem` / 定理 `list_sum_mem`
+/-- Sum of a list of elements in a subfield is in the subfield. -/
+/-
+**Subfield.list_sum_mem** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：∀ {K : Type u} [inst : DivisionRing K] (s : Subfield K) {l : List K}, (∀ x
+ ∈ l, x ∈ s) → l.sum ∈ s
+参数：s : Subfield K；∀ x ∈ l, x ∈ s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `list_sum_mem`：∀ {M : Type u_1} {B : Type u_3} [inst : AddMonoid M] [inst
+_1 : SetLike B M] [AddSubmonoidClass B M] {S : B}   {l : List M}, (∀ x ∈ l, x ∈ 
+S)…
+· 使用定理 `AddSubgroupClass.toAddSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Ty
+pe u_4)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass
+ S G],   AddSubmonoidClass…
+· 使用定理 `SubringClass.addSubgroupClass`：∀ (S : Type u_1) (R : Type u) [inst : Set
+Like S R] [inst_1 : NonAssocRing R] [h : SubringClass S R],   AddSubgroupClass S
+ R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `Subfield.instSubfieldClass`：∀ {K : Type u} [inst : DivisionRing K], Subf
+ieldClass (Subfield K) K
 
-English:
-theorem list_sum_mem
-  given: {l : List K}
-  statement: (forall x in l, x in s) -> l.sum in s
-  proof: list_sum_mem
-
-中文:
-定理 list_sum_mem
-  条件: {l : 列表 K}
-  结论: (对任意 x in l, x in s) -> l.求和 in s
-  证明: list_sum_mem
+--- 原说明 ---
+Sum of a list of elements in a subfield is in the subfield.
 -/
-protected theorem list_sum_mem {l : List K} : (forall x in l, x in s) -> l.sum in s :=
+protected theorem list_sum_mem {l : List K} : (∀ x ∈ l, x ∈ s) → l.sum ∈ s :=
   list_sum_mem
 
-/--
-theorem `multiset_sum_mem` / 定理 `multiset_sum_mem`
+/-- Sum of a multiset of elements in a `Subfield` is in the `Subfield`. -/
+/-
+**Subfield.multiset_sum_mem** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：∀ {K : Type u} [inst : DivisionRing K] (s : Subfield K) (m : Multiset K), 
+(∀ a ∈ m, a ∈ s) → m.sum ∈ s
+参数：s : Subfield K；m : Multiset K；∀ a ∈ m, a ∈ s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `multiset_sum_mem`：∀ {B : Type u_3} {S : B} {M : Type u_4} [inst : AddCom
+mMonoid M] [inst_1 : SetLike B M] [AddSubmonoidClass B M]   (m : Multiset M), (∀
+ a ∈ m…
+· 使用定理 `AddSubgroupClass.toAddSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Ty
+pe u_4)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass
+ S G],   AddSubmonoidClass…
+· 使用定理 `SubringClass.addSubgroupClass`：∀ (S : Type u_1) (R : Type u) [inst : Set
+Like S R] [inst_1 : NonAssocRing R] [h : SubringClass S R],   AddSubgroupClass S
+ R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `Subfield.instSubfieldClass`：∀ {K : Type u} [inst : DivisionRing K], Subf
+ieldClass (Subfield K) K
 
-English:
-theorem multiset_sum_mem
-  given: (m : Multiset K)
-  statement: (forall a in m, a in s) -> m.sum in s
-  proof: multiset_sum_mem m
-
-中文:
-定理 multiset_sum_mem
-  条件: (m : Multiset K)
-  结论: (对任意 a in m, a in s) -> m.求和 in s
-  证明: multiset_sum_mem m
+--- 原说明 ---
+Sum of a multiset of elements in a `Subfield` is in the `Subfield`.
 -/
-protected theorem multiset_sum_mem (m : Multiset K) : (forall a in m, a in s) -> m.sum in s :=
+protected theorem multiset_sum_mem (m : Multiset K) : (∀ a ∈ m, a ∈ s) → m.sum ∈ s :=
   multiset_sum_mem m
 
-/--
-theorem `sum_mem` / 定理 `sum_mem`
+/-- Sum of elements in a `Subfield` indexed by a `Finset` is in the `Subfield`. -/
+/-
+**Subfield.sum_mem** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：∀ {K : Type u} [inst : DivisionRing K] (s : Subfield K) {ι : Type u_1} {t 
+: Finset ι} {f : ι → K},   (∀ c ∈ t, f c ∈ s) → ∑ i ∈ t, f i ∈ s
+参数：s : Subfield K；∀ c ∈ t, f c ∈ s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sum_mem`：∀ {B : Type u_3} {S : B} {M : Type u_4} [inst : AddCommMonoid M
+] [inst_1 : SetLike B M] [AddSubmonoidClass B M]   {ι : Type u_5} {t : Finset…
+· 使用定理 `AddSubgroupClass.toAddSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Ty
+pe u_4)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass
+ S G],   AddSubmonoidClass…
+· 使用定理 `SubringClass.addSubgroupClass`：∀ (S : Type u_1) (R : Type u) [inst : Set
+Like S R] [inst_1 : NonAssocRing R] [h : SubringClass S R],   AddSubgroupClass S
+ R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `Subfield.instSubfieldClass`：∀ {K : Type u} [inst : DivisionRing K], Subf
+ieldClass (Subfield K) K
 
-English:
-theorem sum_mem
-  given: {ι : Type*} {t : Finset ι} {f : ι -> K} (h : forall c in t, f c in s)
-  proof: sum_mem h
-
-中文:
-定理 sum_mem
-  条件: {ι : 类型} {t : 有限集 ι} {f : ι -> K} (h : 对任意 c in t, f c in s)
-  证明: sum_mem h
+--- 原说明 ---
+Sum of elements in a `Subfield` indexed by a `Finset` is in the `Subfield`.
 -/
-protected theorem sum_mem {ι : Type*} {t : Finset ι} {f : ι -> K} (h : forall c in t, f c in s) :
-    (∑ i in t, f i) in s :=
+protected theorem sum_mem {ι : Type*} {t : Finset ι} {f : ι → K} (h : ∀ c ∈ t, f c ∈ s) :
+    (∑ i ∈ t, f i) ∈ s :=
   sum_mem h
 
 end DerivedFromSubfieldClass
@@ -151,100 +187,54 @@ end DerivedFromSubfieldClass
 /-! ### top -/
 
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The subfield of `K` containing all elements of `K`. -/
+/-
+**Subfield.** 是 Mathlib 中的一个实例，位于命名空间 `Subfield`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Top (Subfield K)
-  body: ⟨{ (⊤ : Subring K) with inv_mem' := fun x _ => Subring.mem_top x }⟩
-
-中文:
-实例 :
-  签名: 顶元素 (子域 K)
-  定义体: ⟨{ (⊤ : Subring K) with inv_mem' := fun x _ => Subring.mem_top x }⟩
-
-Depends on / 依赖: Subring, Subring.mem_top, inv_mem, mem_top
+--- 原说明 ---
+The subfield of `K` containing all elements of `K`.
 -/
 instance : Top (Subfield K) :=
   ⟨{ (⊤ : Subring K) with inv_mem' := fun x _ => Subring.mem_top x }⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Subfield K)
-  body: ⟨⊤⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: 可居 (子域 K)
-  定义体: ⟨⊤⟩
-
-@[simp]
+/-
+**Subfield.** 是 Mathlib 中的一个实例，位于命名空间 `Subfield`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Subfield K) :=
   ⟨⊤⟩
 
 @[simp]
-/--
-theorem `mem_top` / 定理 `mem_top`
-
-English:
-theorem mem_top
-  given: (x : K)
-  statement: x in (⊤ : Subfield K)
-  proof: Set.mem_univ x
-
-@[simp, norm_cast]
-
-中文:
-定理 mem_top
-  条件: (x : K)
-  结论: x in (⊤ : 子域 K)
-  证明: Set.mem_univ x
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Set.mem_univ, mem_univ
+/-
+**Subfield.mem_top** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：mem_top (x : K) : x in (⊤ : Subfield K)
+参数：x : K。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
 -/
-theorem mem_top (x : K) : x in (⊤ : Subfield K) :=
+theorem mem_top (x : K) : x ∈ (⊤ : Subfield K) :=
   Set.mem_univ x
 
 @[simp, norm_cast]
-/--
-theorem `coe_top` / 定理 `coe_top`
-
-English:
-theorem coe_top
-  statement: ((⊤ : Subfield K) : Set K) = Set.univ
-  proof: rfl
-
-中文:
-定理 coe_top
-  结论: ((⊤ : 子域 K) : 集合 K) = 集合.univ
-  证明: rfl
+/-
+**Subfield.coe_top** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：coe_top : ((⊤ : Subfield K) : Set K) = Set.univ
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_top : ((⊤ : Subfield K) : Set K) = Set.univ :=
   rfl
 
-/--
-Definition of `topEquiv` / `topEquiv` 的定义
+/-- The ring equiv between the top element of `Subfield K` and `K`. -/
+/-
+**Subfield.topEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Subfield`。
+形式化陈述：topEquiv : (⊤ : Subfield K) ≃+* K
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition topEquiv
-  signature: : (⊤ : Subfield K) ≃+* K
-  body: Subsemiring.topEquiv
-
-中文:
-定义 topEquiv
-  签名: : (⊤ : 子域 K) ≃+* K
-  定义体: Subsemiring.topEquiv
-
-Depends on / 依赖: Subsemiring, Subsemiring.topEquiv, topEquiv
+--- 原说明 ---
+The ring equiv between the top element of `Subfield K` and `K`.
 -/
 def topEquiv : (⊤ : Subfield K) ≃+* K :=
   Subsemiring.topEquiv
@@ -252,132 +242,73 @@ def topEquiv : (⊤ : Subfield K) ≃+* K :=
 /-! ### comap -/
 
 
-variable (f : K ->+* L)
+variable (f : K →+* L)
 
-/--
-Definition of `comap` / `comap` 的定义
+/-- The preimage of a subfield along a ring homomorphism is a subfield. -/
+/-
+**Subfield.comap** 是 Mathlib 中的一个定义，位于命名空间 `Subfield`。
+形式化陈述：comap (s : Subfield L) : Subfield K
+参数：s : Subfield L。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition comap
-  signature: (s : Subfield L)
-  body: { s.toSubring.comap f with
-    inv_mem' := fun x hx =>
-      show f x⁻¹ in s by
-        rw [map_inv₀ f]
-        exact s.inv_mem hx }
-
-@[simp]
-
-中文:
-定义 comap
-  签名: (s : 子域 L)
-  定义体: { s.toSubring.comap f with
-    inv_mem' := fun x hx =>
-      show f x⁻¹ in s by
-        rw [map_inv₀ f]
-        exact s.inv_mem hx }
-
-@[simp]
-
-Depends on / 依赖: inv_mem, s.inv_mem, s.toSubring.comap, toSubring
+--- 原说明 ---
+The preimage of a subfield along a ring homomorphism is a subfield.
 -/
 def comap (s : Subfield L) : Subfield K :=
   { s.toSubring.comap f with
     inv_mem' := fun x hx =>
-      show f x⁻¹ in s by
+      show f x⁻¹ ∈ s by
         rw [map_inv₀ f]
         exact s.inv_mem hx }
 
 @[simp]
-/--
-theorem `coe_comap` / 定理 `coe_comap`
-
-English:
-theorem coe_comap
-  given: (s : Subfield L)
-  statement: (s.comap f : Set K) = f ⁻¹' s
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_comap
-  条件: (s : 子域 L)
-  结论: (s.comap f : 集合 K) = f ⁻¹' s
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: AddCommGroup, FiniteDimensional, Module, castSucc, i.castSucc, i.succ
+/-
+**Subfield.coe_comap** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：coe_comap (s : Subfield L) : (s.comap f : Set K) = f ⁻¹' s
+参数：s : Subfield L。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_comap (s : Subfield L) : (s.comap f : Set K) = f ⁻¹' s :=
   rfl
 
 @[simp]
-/--
-theorem `mem_comap` / 定理 `mem_comap`
-
-English:
-theorem mem_comap
-  given: {s : Subfield L} {f : K ->+* L} {x : K}
-  statement: x in s.comap f ↔ f x in s
-  proof: Iff.rfl
-
-中文:
-定理 mem_comap
-  条件: {s : 子域 L} {f : K ->+* L} {x : K}
-  结论: x in s.comap f ↔ f x in s
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Subfield.mem_comap** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：mem_comap {s : Subfield L} {f : K ->+* L} {x : K} : x in s.comap f ↔ f x i
+n s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_comap {s : Subfield L} {f : K ->+* L} {x : K} : x in s.comap f ↔ f x in s :=
+theorem mem_comap {s : Subfield L} {f : K →+* L} {x : K} : x ∈ s.comap f ↔ f x ∈ s :=
   Iff.rfl
-
-/--
-theorem `comap_comap` / 定理 `comap_comap`
-
-English:
-theorem comap_comap
-  given: (s : Subfield M) (g : L ->+* M) (f : K ->+* L)
-  proof: rfl
-
-中文:
-定理 comap_comap
-  条件: (s : 子域 M) (g : L ->+* M) (f : K ->+* L)
-  证明: rfl
+/-
+**Subfield.comap_comap** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：comap_comap (s : Subfield M) (g : L ->+* M) (f : K ->+* L) : (s.comap g).c
+omap f = s.comap (g.comp f)
+参数：s : Subfield M；g : L ->+* M；f : K ->+* L。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem comap_comap (s : Subfield M) (g : L ->+* M) (f : K ->+* L) :
+theorem comap_comap (s : Subfield M) (g : L →+* M) (f : K →+* L) :
     (s.comap g).comap f = s.comap (g.comp f) :=
   rfl
 
 /-! ### map -/
 
 
-/--
-Definition of `map` / `map` 的定义
+/-- The image of a subfield along a ring homomorphism is a subfield. -/
+/-
+**Subfield.map** 是 Mathlib 中的一个定义，位于命名空间 `Subfield`。
+形式化陈述：map (s : Subfield K) : Subfield L
+参数：s : Subfield K。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (s : Subfield K)
-  body: { s.toSubring.map f with
-    inv_mem' := by
-      rintro _ ⟨x, hx, rfl⟩
-      exact ⟨x⁻¹, s.inv_mem hx, map_inv₀ f x⟩ }
-
-@[simp, norm_cast]
-
-中文:
-定义 map
-  签名: (s : 子域 K)
-  定义体: { s.toSubring.map f with
-    inv_mem' := by
-      rintro _ ⟨x, hx, rfl⟩
-      exact ⟨x⁻¹, s.inv_mem hx, map_inv₀ f x⟩ }
-
-@[simp, norm_cast]
-
-Depends on / 依赖: inv_mem, s.inv_mem, s.toSubring.map, toSubring
+--- 原说明 ---
+The image of a subfield along a ring homomorphism is a subfield.
 -/
 def map (s : Subfield K) : Subfield L :=
   { s.toSubring.map f with
@@ -386,308 +317,230 @@ def map (s : Subfield K) : Subfield L :=
       exact ⟨x⁻¹, s.inv_mem hx, map_inv₀ f x⟩ }
 
 @[simp, norm_cast]
-/--
-theorem `coe_map` / 定理 `coe_map`
-
-English:
-theorem coe_map
-  statement: (s.map f : Set L) = f '' s
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_map
-  结论: (s.map f : 集合 L) = f '' s
-  证明: rfl
-
-@[simp]
+/-
+**Subfield.coe_map** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：coe_map : (s.map f : Set L) = f '' s
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_map : (s.map f : Set L) = f '' s :=
   rfl
 
 @[simp]
-/--
-theorem `mem_map` / 定理 `mem_map`
-
-English:
-theorem mem_map
-  given: {f : K ->+* L} {s : Subfield K} {y : L}
-  statement: y in s.map f ↔ exists x in s, f x = y
-  proof: by
-  unfold map
-  simp only [mem_mk, Subring.mem_map, mem_toSubring]
-
-中文:
-定理 mem_map
-  条件: {f : K ->+* L} {s : 子域 K} {y : L}
-  结论: y in s.map f ↔ 存在 x in s, f x = y
-  证明: by
-  unfold map
-  simp only [mem_mk, Subring.mem_map, mem_toSubring]
-
-Depends on / 依赖: Subring, Subring.mem_map, mem_map, mem_mk, mem_toSubring
+/-
+**Subfield.mem_map** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：mem_map {f : K ->+* L} {s : Subfield K} {y : L} : y in s.map f ↔ exists x 
+in s, f x = y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_map {f : K ->+* L} {s : Subfield K} {y : L} : y in s.map f ↔ exists x in s, f x = y := by
+theorem mem_map {f : K →+* L} {s : Subfield K} {y : L} : y ∈ s.map f ↔ ∃ x ∈ s, f x = y := by
   unfold map
   simp only [mem_mk, Subring.mem_map, mem_toSubring]
 
 -- Higher priority to apply before `mem_map`.
 @[simp 1100]
-/--
-theorem `map_mem_map` / 定理 `map_mem_map`
-
-English:
-theorem map_mem_map
-  given: (f : K ->+* L) {s : Subfield K} {x : K}
-  statement: f x in s.map f ↔ x in s
-  proof: calc
-    _ ↔ f x in (s.map f : Set L) := Iff.rfl
-    _ ↔ _ := by simp [Function.Injective.mem_set_image (f := f) f.injective]
-
-中文:
-定理 map_mem_map
-  条件: (f : K ->+* L) {s : 子域 K} {x : K}
-  结论: f x in s.map f ↔ x in s
-  证明: calc
-    _ ↔ f x in (s.map f : Set L) := Iff.rfl
-    _ ↔ _ := by simp [Function.Injective.mem_set_image (f := f) f.injective]
-
-Depends on / 依赖: Function, Function.Injective.mem_set_image, Iff.rfl, Injective, f.injective, injective, mem_set_image, s.map
+/-
+**Subfield.map_mem_map** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：map_mem_map (f : K ->+* L) {s : Subfield K} {x : K} : f x in s.map f ↔ x i
+n s
+参数：f : K ->+* L。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.Injective.mem_set_image`：∀ {α : Type u_1} {β : Type u_2} {f : α
+ → β}, Function.Injective f → ∀ {s : Set α} {a : α}, f a ∈ f '' s ↔ a ∈ s
+· 使用定理 `RingHom.injective`：∀ {R : Type u_2} {S : Type u_3} [inst : NonAssocRing 
+R] [IsSimpleRing R] [inst_2 : NonAssocSemiring S] [Nontrivial S]   (f : R →+* S)
+, Funct…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `DivisionRing.toNontrivial`：∀ {K : Type u_2} [self : DivisionRing K], Non
+trivial K
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem map_mem_map (f : K ->+* L) {s : Subfield K} {x : K} : f x in s.map f ↔ x in s :=
+theorem map_mem_map (f : K →+* L) {s : Subfield K} {x : K} : f x ∈ s.map f ↔ x ∈ s :=
   calc
-    _ ↔ f x in (s.map f : Set L) := Iff.rfl
+    _ ↔ f x ∈ (s.map f : Set L) := Iff.rfl
     _ ↔ _ := by simp [Function.Injective.mem_set_image (f := f) f.injective]
-
-/--
-theorem `map_map` / 定理 `map_map`
-
-English:
-theorem map_map
-  given: (g : L ->+* M) (f : K ->+* L)
-  statement: (s.map f).map g = s.map (g.comp f)
-  proof: SetLike.ext' Set.image_image _ _ _
-
-中文:
-定理 map_map
-  条件: (g : L ->+* M) (f : K ->+* L)
-  结论: (s.map f).map g = s.map (g.comp f)
-  证明: SetLike.ext' Set.image_image _ _ _
-
-Depends on / 依赖: Set.image_image, SetLike, SetLike.ext, image_image
+/-
+**Subfield.map_map** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：map_map (g : L ->+* M) (f : K ->+* L) : (s.map f).map g = s.map (g.comp f)
+参数：g : L ->+* M；f : K ->+* L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.ext'`：ext' (h : (p : Set B) = q) : p = q
+· 使用定理 `Set.image_image`：image_image (g : β -> γ) (f : α -> β) (s : Set α) : g '
+' f '' s = (fun x => g (f x)) '' s
 -/
-theorem map_map (g : L ->+* M) (f : K ->+* L) : (s.map f).map g = s.map (g.comp f) :=
-SetLike.ext' Set.image_image _ _ _
-
-/--
-theorem `map_le_iff_le_comap` / 定理 `map_le_iff_le_comap`
-
-English:
-theorem map_le_iff_le_comap
-  given: {f : K ->+* L} {s : Subfield K} {t : Subfield L}
-  proof: Set.image_subset_iff
-
-中文:
-定理 map_le_iff_le_comap
-  条件: {f : K ->+* L} {s : 子域 K} {t : 子域 L}
-  证明: Set.image_subset_iff
-
-Depends on / 依赖: Set.image_subset_iff, image_subset_iff
+theorem map_map (g : L →+* M) (f : K →+* L) : (s.map f).map g = s.map (g.comp f) :=
+  SetLike.ext' <| Set.image_image _ _ _
+/-
+**Subfield.map_le_iff_le_comap** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：map_le_iff_le_comap {f : K ->+* L} {s : Subfield K} {t : Subfield L} : s.m
+ap f <= t ↔ s <= t.comap f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.image_subset_iff`：image_subset_iff {s : Set α} {t : Set β} {f : α ->
+ β} : f '' s subseteq t ↔ s subseteq f ⁻¹' t
 -/
-theorem map_le_iff_le_comap {f : K ->+* L} {s : Subfield K} {t : Subfield L} :
-    s.map f <= t ↔ s <= t.comap f :=
+theorem map_le_iff_le_comap {f : K →+* L} {s : Subfield K} {t : Subfield L} :
+    s.map f ≤ t ↔ s ≤ t.comap f :=
   Set.image_subset_iff
-
-/--
-theorem `gc_map_comap` / 定理 `gc_map_comap`
-
-English:
-theorem gc_map_comap
-  given: (f : K ->+* L)
-  statement: GaloisConnection (map f) (comap f)
-  proof: fun _ _ =>
-  map_le_iff_le_comap
-
-中文:
-定理 gc_map_comap
-  条件: (f : K ->+* L)
-  结论: GaloisConnection (map f) (comap f)
-  证明: fun _ _ =>
-  map_le_iff_le_comap
+/-
+**Subfield.gc_map_comap** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：gc_map_comap (f : K ->+* L) : GaloisConnection (map f) (comap f)
+参数：f : K ->+* L。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subfield.map_le_iff_le_comap`：map_le_iff_le_comap {f : K ->+* L} {s : Su
+bfield K} {t : Subfield L} : s.map f <= t ↔ s <= t.comap f
 -/
-theorem gc_map_comap (f : K ->+* L) : GaloisConnection (map f) (comap f) := fun _ _ =>
+theorem gc_map_comap (f : K →+* L) : GaloisConnection (map f) (comap f) := fun _ _ =>
   map_le_iff_le_comap
 
 end Subfield
 
 namespace RingHom
 
-variable (g : L ->+* M) (f : K ->+* L)
+variable (g : L →+* M) (f : K →+* L)
 
 /-! ### range -/
 
 
-/--
-Definition of `fieldRange` / `fieldRange` 的定义
+/-- The range of a ring homomorphism, as a subfield of the target. See Note [range copy pattern]. -/
+/-
+**RingHom.fieldRange** 是 Mathlib 中的一个定义，位于命名空间 `RingHom`。
+形式化陈述：fieldRange : Subfield L
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fieldRange
-  signature: : Subfield L
-  body: ((⊤ : Subfield K).map f).copy (Set.range f) Set.image_univ.symm
-
-@[simp, norm_cast]
-
-中文:
-定义 fieldRange
-  签名: : 子域 L
-  定义体: ((⊤ : Subfield K).map f).copy (Set.range f) Set.image_univ.symm
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Set.image_univ.symm, Set.range, Subfield, image_univ
+--- 原说明 ---
+The range of a ring homomorphism, as a subfield of the target. See Note [range c
+opy pattern].
 -/
 def fieldRange : Subfield L :=
   ((⊤ : Subfield K).map f).copy (Set.range f) Set.image_univ.symm
 
 @[simp, norm_cast]
-/--
-theorem `coe_fieldRange` / 定理 `coe_fieldRange`
-
-English:
-theorem coe_fieldRange
-  statement: (f.fieldRange : Set L) = Set.range f
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_fieldRange
-  结论: (f.fieldRange : 集合 L) = 集合.range f
-  证明: rfl
-
-@[simp]
+/-
+**RingHom.coe_fieldRange** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：coe_fieldRange : (f.fieldRange : Set L) = Set.range f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_fieldRange : (f.fieldRange : Set L) = Set.range f :=
   rfl
 
 @[simp]
-/--
-theorem `mem_fieldRange` / 定理 `mem_fieldRange`
-
-English:
-theorem mem_fieldRange
-  given: {f : K ->+* L} {y : L}
-  statement: y in f.fieldRange ↔ exists x, f x = y
-  proof: Iff.rfl
-
-中文:
-定理 mem_fieldRange
-  条件: {f : K ->+* L} {y : L}
-  结论: y in f.fieldRange ↔ 存在 x, f x = y
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**RingHom.mem_fieldRange** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：mem_fieldRange {f : K ->+* L} {y : L} : y in f.fieldRange ↔ exists x, f x 
+= y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_fieldRange {f : K ->+* L} {y : L} : y in f.fieldRange ↔ exists x, f x = y :=
+theorem mem_fieldRange {f : K →+* L} {y : L} : y ∈ f.fieldRange ↔ ∃ x, f x = y :=
   Iff.rfl
-
-/--
-theorem `fieldRange_eq_map` / 定理 `fieldRange_eq_map`
-
-English:
-theorem fieldRange_eq_map
-  statement: f.fieldRange = Subfield.map f ⊤
-  proof: by
-  ext
-  simp
-
-中文:
-定理 fieldRange_eq_map
-  结论: f.fieldRange = 子域.map f ⊤
-  证明: by
-  ext
-  simp
+/-
+**RingHom.fieldRange_eq_map** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：fieldRange_eq_map : f.fieldRange = Subfield.map f ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subfield.ext`：ext {S T : Subfield K} (h : forall x, x in S ↔ x in T) : S
+ = T
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem fieldRange_eq_map : f.fieldRange = Subfield.map f ⊤ := by
   ext
   simp
-
-/--
-theorem `map_fieldRange` / 定理 `map_fieldRange`
-
-English:
-theorem map_fieldRange
-  statement: f.fieldRange.map g = (g.comp f).fieldRange
-  proof: by
-  simpa only [fieldRange_eq_map] using (⊤ : Subfield K).map_map g f
-
-中文:
-定理 map_fieldRange
-  结论: f.fieldRange.map g = (g.comp f).fieldRange
-  证明: by
-  simpa only [fieldRange_eq_map] using (⊤ : Subfield K).map_map g f
-
-Depends on / 依赖: Subfield, fieldRange_eq_map, map_map
+/-
+**RingHom.map_fieldRange** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：map_fieldRange : f.fieldRange.map g = (g.comp f).fieldRange
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RingHom.fieldRange_eq_map`：fieldRange_eq_map : f.fieldRange = Subfield.m
+ap f ⊤
+· 使用定理 `Subfield.map_map`：map_map (g : L ->+* M) (f : K ->+* L) : (s.map f).map 
+g = s.map (g.comp f)
 -/
 theorem map_fieldRange : f.fieldRange.map g = (g.comp f).fieldRange := by
   simpa only [fieldRange_eq_map] using (⊤ : Subfield K).map_map g f
-
-/--
-theorem `mem_fieldRange_self` / 定理 `mem_fieldRange_self`
-
-English:
-theorem mem_fieldRange_self
-  given: (x : K)
-  statement: f x in f.fieldRange
-  proof: exists_apply_eq_apply _ _
-
-中文:
-定理 mem_fieldRange_self
-  条件: (x : K)
-  结论: f x in f.fieldRange
-  证明: exists_apply_eq_apply _ _
-
-Depends on / 依赖: exists_apply_eq_apply
+/-
+**RingHom.mem_fieldRange_self** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：mem_fieldRange_self (x : K) : f x in f.fieldRange
+参数：x : K。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_apply_eq_apply`：∀ {α : Sort u_2} {β : Sort u_1} (f : α → β) (a' :
+ α), ∃ a, f a = f a'
 -/
-theorem mem_fieldRange_self (x : K) : f x in f.fieldRange :=
+theorem mem_fieldRange_self (x : K) : f x ∈ f.fieldRange :=
   exists_apply_eq_apply _ _
-
-/--
-theorem `fieldRange_eq_top_iff` / 定理 `fieldRange_eq_top_iff`
-
-English:
-theorem fieldRange_eq_top_iff
-  given: {f : K ->+* L}
-  proof: SetLike.ext'_iff.trans Set.range_eq_univ
-
-中文:
-定理 fieldRange_eq_top_iff
-  条件: {f : K ->+* L}
-  证明: SetLike.ext'_iff.trans Set.range_eq_univ
-
-Depends on / 依赖: Set.range_eq_univ, SetLike, SetLike.ext, _iff, _iff.trans, range_eq_univ
+/-
+**RingHom.fieldRange_eq_top_iff** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：fieldRange_eq_top_iff {f : K ->+* L} : f.fieldRange = ⊤ ↔ Function.Surject
+ive f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `SetLike.ext'_iff`：∀ {A : Type u_1} {B : Type u_2} [i : SetLike A B] {p q
+ : A}, p = q ↔ ↑p = ↑q
+· 使用定理 `Set.range_eq_univ`：range_eq_univ : range f = univ ↔ Surjective f
 -/
-theorem fieldRange_eq_top_iff {f : K ->+* L} :
+theorem fieldRange_eq_top_iff {f : K →+* L} :
     f.fieldRange = ⊤ ↔ Function.Surjective f :=
   SetLike.ext'_iff.trans Set.range_eq_univ
 
-/--
-Instance `fintypeFieldRange` / 实例 `fintypeFieldRange`
+/-- The range of a morphism of fields is a fintype, if the domain is a fintype.
 
-English:
-instance fintypeFieldRange
-  signature: [Fintype K] [DecidableEq L] (f : K ->+* L)
-  body: Set.fintypeRange f
+Note that this instance can cause a diamond with `Subtype.Fintype` if `L` is also a fintype. -/
+/-
+**RingHom.fintypeFieldRange** 是 Mathlib 中的一个实例，位于命名空间 `RingHom`。
+形式化陈述：fintypeFieldRange [Fintype K] [DecidableEq L] (f : K ->+* L) : Fintype f.f
+ieldRange
+参数：f : K ->+* L。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-实例 fintypeFieldRange
-  签名: [有限类型 K] [DecidableEq L] (f : K ->+* L)
-  定义体: Set.fintypeRange f
+--- 原说明 ---
+The range of a morphism of fields is a fintype, if the domain is a fintype.
 
-Depends on / 依赖: Set.fintypeRange, fintypeRange
+Note that this instance can cause a diamond with `Subtype.Fintype` if `L` is als
+o a fintype.
 -/
-instance fintypeFieldRange [Fintype K] [DecidableEq L] (f : K ->+* L) : Fintype f.fieldRange :=
+instance fintypeFieldRange [Fintype K] [DecidableEq L] (f : K →+* L) : Fintype f.fieldRange :=
   Set.fintypeRange f
 
 end RingHom
@@ -697,32 +550,13 @@ namespace Subfield
 /-! ### inf -/
 
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The inf of two subfields is their intersection. -/
+/-
+**Subfield.** 是 Mathlib 中的一个实例，位于命名空间 `Subfield`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Min (Subfield K)
-  body: ⟨fun s t =>
-    { s.toSubring ⊓ t.toSubring with
-      inv_mem' := fun _ hx =>
-        Subring.mem_inf.mpr
-          ⟨s.inv_mem (Subring.mem_inf.mp hx).1, t.inv_mem (Subring.mem_inf.mp hx).2⟩ }⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 最小值 (子域 K)
-  定义体: ⟨fun s t =>
-    { s.toSubring ⊓ t.toSubring with
-      inv_mem' := fun _ hx =>
-        Subring.mem_inf.mpr
-          ⟨s.inv_mem (Subring.mem_inf.mp hx).1, t.inv_mem (Subring.mem_inf.mp hx).2⟩ }⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Subring, Subring.mem_inf.mp, Subring.mem_inf.mpr, inv_mem, mem_inf, s.inv_mem, s.toSubring, t.inv_mem, t.toSubring, toSubring
+--- 原说明 ---
+The inf of two subfields is their intersection.
 -/
 instance : Min (Subfield K) :=
   ⟨fun s t =>
@@ -732,79 +566,30 @@ instance : Min (Subfield K) :=
           ⟨s.inv_mem (Subring.mem_inf.mp hx).1, t.inv_mem (Subring.mem_inf.mp hx).2⟩ }⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_inf` / 定理 `coe_inf`
-
-English:
-theorem coe_inf
-  given: (p p' : Subfield K)
-  statement: ((p ⊓ p' : Subfield K) : Set K) = p.carrier inter p'.carrier
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_inf
-  条件: (p p' : 子域 K)
-  结论: ((p ⊓ p' : 子域 K) : 集合 K) = p.carrier inter p'.carrier
-  证明: rfl
-
-@[simp]
+/-
+**Subfield.coe_inf** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：coe_inf (p p' : Subfield K) : ((p ⊓ p' : Subfield K) : Set K) = p.carrier 
+inter p'.carrier
+参数：p p' : Subfield K。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_inf (p p' : Subfield K) : ((p ⊓ p' : Subfield K) : Set K) = p.carrier inter p'.carrier :=
+theorem coe_inf (p p' : Subfield K) : ((p ⊓ p' : Subfield K) : Set K) = p.carrier ∩ p'.carrier :=
   rfl
 
 @[simp]
-/--
-theorem `mem_inf` / 定理 `mem_inf`
-
-English:
-theorem mem_inf
-  given: {p p' : Subfield K} {x : K}
-  statement: x in p ⊓ p' ↔ x in p ∧ x in p'
-  proof: Iff.rfl
-
-中文:
-定理 mem_inf
-  条件: {p p' : 子域 K} {x : K}
-  结论: x in p ⊓ p' ↔ x in p ∧ x in p'
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Subfield.mem_inf** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：mem_inf {p p' : Subfield K} {x : K} : x in p ⊓ p' ↔ x in p ∧ x in p'
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_inf {p p' : Subfield K} {x : K} : x in p ⊓ p' ↔ x in p ∧ x in p' :=
+theorem mem_inf {p p' : Subfield K} {x : K} : x ∈ p ⊓ p' ↔ x ∈ p ∧ x ∈ p' :=
   Iff.rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: InfSet (Subfield K)
-  body: ⟨fun S =>
-    { sInf (Subfield.toSubring '' S) with
-      inv_mem' := by
-        rintro x hx
-        apply Subring.mem_sInf.mpr
-        rintro _ ⟨p, p_mem, rfl⟩
-        exact p.inv_mem (Subring.mem_sInf.mp hx p.toSubring ⟨p, p_mem, rfl⟩) }⟩
-
-@[simp, norm_cast]
-
-中文:
-实例 :
-  签名: 下确界集 (子域 K)
-  定义体: ⟨fun S =>
-    { sInf (Subfield.toSubring '' S) with
-      inv_mem' := by
-        rintro x hx
-        apply Subring.mem_sInf.mpr
-        rintro _ ⟨p, p_mem, rfl⟩
-        exact p.inv_mem (Subring.mem_sInf.mp hx p.toSubring ⟨p, p_mem, rfl⟩) }⟩
-
-@[simp, norm_cast]
-
-Depends on / 依赖: Subfield, Subfield.toSubring, Subring, Subring.mem_sInf.mp, Subring.mem_sInf.mpr, inv_mem, mem_sInf, p.inv_mem, p.toSubring, p_mem, toSubring
+/-
+**Subfield.** 是 Mathlib 中的一个实例，位于命名空间 `Subfield`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : InfSet (Subfield K) :=
   ⟨fun S =>
@@ -816,193 +601,166 @@ instance : InfSet (Subfield K) :=
         exact p.inv_mem (Subring.mem_sInf.mp hx p.toSubring ⟨p, p_mem, rfl⟩) }⟩
 
 @[simp, norm_cast]
-/--
-theorem `coe_sInf` / 定理 `coe_sInf`
-
-English:
-theorem coe_sInf
-  given: (S : Set (Subfield K))
-  statement: ((sInf S : Subfield K) : Set K) = ⋂ s in S, ↑s
-  proof: show ((sInf (Subfield.toSubring '' S) : Subring K) : Set K) = ⋂ s in S, ↑s by simp
-
-@[simp]
-
-中文:
-定理 coe_sInf
-  条件: (S : 集合 (子域 K))
-  结论: ((sInf S : 子域 K) : 集合 K) = ⋂ s in S, ↑s
-  证明: show ((sInf (Subfield.toSubring '' S) : Subring K) : Set K) = ⋂ s in S, ↑s by simp
-
-@[simp]
-
-Depends on / 依赖: Subfield, Subfield.toSubring, Subring, toSubring
+/-
+**Subfield.coe_sInf** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：coe_sInf (S : Set (Subfield K)) : ((sInf S : Subfield K) : Set K) = ⋂ s in
+ S, ↑s
+参数：S : Set (Subfield K)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iInter_congr_Prop`：iInter_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iInter f₁ 
+= iInter f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iInter_exists`：iInter_exists {p : ι -> Prop} {f : Exists p -> Set α}
+ : ⋂ x, f x = ⋂ (i) (h : p i), f ⟨i, h⟩
+· 使用定理 `Set.biInter_and'`：biInter_and' (p : ι' -> Prop) (q : ι -> ι' -> Prop) (s
+ : forall x y, p y ∧ q x y -> Set α) : ⋂ (x : ι) (y : ι') (h : p y ∧ q x y), s x
+ y h =…
+· 使用定理 `Set.iInter_iInter_eq_right`：iInter_iInter_eq_right {b : β} {s : forall x
+ : β, b = x -> Set α} : ⋂ (x) (h : b = x), s x h = s b rfl
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem coe_sInf (S : Set (Subfield K)) : ((sInf S : Subfield K) : Set K) = ⋂ s in S, ↑s :=
-  show ((sInf (Subfield.toSubring '' S) : Subring K) : Set K) = ⋂ s in S, ↑s by simp
+theorem coe_sInf (S : Set (Subfield K)) : ((sInf S : Subfield K) : Set K) = ⋂ s ∈ S, ↑s :=
+  show ((sInf (Subfield.toSubring '' S) : Subring K) : Set K) = ⋂ s ∈ S, ↑s by simp
 
 @[simp]
-/--
-theorem `mem_sInf` / 定理 `mem_sInf`
-
-English:
-theorem mem_sInf
-  given: {S : Set (Subfield K)} {x : K}
-  statement: x in sInf S ↔ forall p in S, x in p
-  proof: by
+/-
+**Subfield.mem_sInf** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：mem_sInf {S : Set (Subfield K)} {x : K} : x in sInf S ↔ forall p in S, x i
+n p
+参数：Subfield K。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.ext_iff`：∀ {α : Type u} {a b : Set α}, a = b ↔ ∀ (x : α), x ∈ a ↔ x 
+∈ b
+· 使用定理 `Subfield.coe_sInf`：coe_sInf (S : Set (Subfield K)) : ((sInf S : Subfield
+ K) : Set K) = ⋂ s in S, ↑s
+-/
+theorem mem_sInf {S : Set (Subfield K)} {x : K} : x ∈ sInf S ↔ ∀ p ∈ S, x ∈ p := by
   simpa only [Set.mem_iInter] using! Set.ext_iff.1 (coe_sInf S) x
 
 @[simp, norm_cast]
-
-中文:
-定理 mem_sInf
-  条件: {S : 集合 (子域 K)} {x : K}
-  结论: x in sInf S ↔ 对任意 p in S, x in p
-  证明: by
-  simpa only [Set.mem_iInter] using! Set.ext_iff.1 (coe_sInf S) x
-
-@[simp, norm_cast]
-
-Depends on / 依赖: DivisionRing, DivisionRing.isDomain, IsDomain, Set.ext_iff, Set.mem_iInter, coe_sInf, ext_iff, isDomain, mem_iInter
+/-
+**Subfield.coe_iInf** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：coe_iInf {ι : Sort*} {S : ι -> Subfield K} : (↑(⨅ i, S i) : Set K) = ⋂ i, 
+S i
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subfield.coe_sInf`：coe_sInf (S : Set (Subfield K)) : ((sInf S : Subfield
+ K) : Set K) = ⋂ s in S, ↑s
+· 使用定理 `Set.biInter_range`：biInter_range {f : ι -> α} {g : α -> Set β} : ⋂ x in 
+range f, g x = ⋂ y, g (f y)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem mem_sInf {S : Set (Subfield K)} {x : K} : x in sInf S ↔ forall p in S, x in p := by
-  simpa only [Set.mem_iInter] using! Set.ext_iff.1 (coe_sInf S) x
-
-@[simp, norm_cast]
-/--
-theorem `coe_iInf` / 定理 `coe_iInf`
-
-English:
-theorem coe_iInf
-  given: {ι : Sort*} {S : ι -> Subfield K}
-  statement: (↑(⨅ i, S i) : Set K) = ⋂ i, S i
-  proof: by
+theorem coe_iInf {ι : Sort*} {S : ι → Subfield K} : (↑(⨅ i, S i) : Set K) = ⋂ i, S i := by
   simp only [iInf, coe_sInf, Set.biInter_range]
 
 @[simp]
-
-中文:
-定理 coe_iInf
-  条件: {ι : 类型层*} {S : ι -> 子域 K}
-  结论: (↑(⨅ i, S i) : 集合 K) = ⋂ i, S i
-  证明: by
-  simp only [iInf, coe_sInf, Set.biInter_range]
-
-@[simp]
-
-Depends on / 依赖: Set.biInter_range, biInter_range, coe_sInf
+/-
+**Subfield.mem_iInf** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：mem_iInf {ι : Sort*} {S : ι -> Subfield K} {x : K} : x in ⨅ i, S i ↔ foral
+l i, x in S i
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem coe_iInf {ι : Sort*} {S : ι -> Subfield K} : (↑(⨅ i, S i) : Set K) = ⋂ i, S i := by
-  simp only [iInf, coe_sInf, Set.biInter_range]
-
-@[simp]
-/--
-theorem `mem_iInf` / 定理 `mem_iInf`
-
-English:
-theorem mem_iInf
-  given: {ι : Sort*} {S : ι -> Subfield K} {x : K}
-  statement: x in ⨅ i, S i ↔ forall i, x in S i
-  proof: by
+theorem mem_iInf {ι : Sort*} {S : ι → Subfield K} {x : K} : x ∈ ⨅ i, S i ↔ ∀ i, x ∈ S i := by
   simp only [iInf, mem_sInf, Set.forall_mem_range]
 
 @[simp]
-
-中文:
-定理 mem_iInf
-  条件: {ι : 类型层*} {S : ι -> 子域 K} {x : K}
-  结论: x in ⨅ i, S i ↔ 对任意 i, x in S i
-  证明: by
-  simp only [iInf, mem_sInf, Set.forall_mem_range]
-
-@[simp]
-
-Depends on / 依赖: Set.forall_mem_range, forall_mem_range, mem_sInf
--/
-theorem mem_iInf {ι : Sort*} {S : ι -> Subfield K} {x : K} : x in ⨅ i, S i ↔ forall i, x in S i := by
-  simp only [iInf, mem_sInf, Set.forall_mem_range]
-
-@[simp]
-/--
-theorem `sInf_toSubring` / 定理 `sInf_toSubring`
-
-English:
-theorem sInf_toSubring
-  given: (s : Set (Subfield K))
-  proof: by
-  ext x
-  simp [mem_sInf]
-
-中文:
-定理 sInf_toSubring
-  条件: (s : 集合 (子域 K))
-  证明: by
-  ext x
-  simp [mem_sInf]
-
-Depends on / 依赖: mem_sInf
+/-
+**Subfield.sInf_toSubring** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：sInf_toSubring (s : Set (Subfield K)) : (sInf s).toSubring = ⨅ t in s, Sub
+field.toSubring t
+参数：s : Set (Subfield K)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subring.ext`：ext {S T : Subring R} (h : forall x, x in S ↔ x in T) : S =
+ T
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem sInf_toSubring (s : Set (Subfield K)) :
-    (sInf s).toSubring = ⨅ t in s, Subfield.toSubring t := by
+    (sInf s).toSubring = ⨅ t ∈ s, Subfield.toSubring t := by
   ext x
   simp [mem_sInf]
-
-/--
-theorem `isGLB_sInf` / 定理 `isGLB_sInf`
-
-English:
-theorem isGLB_sInf
-  given: (S : Set (Subfield K))
-  statement: IsGLB S (sInf S)
-  proof: by
-  have : forall {s t : Subfield K}, (s : Set K) <= t ↔ s <= t := by simp [SetLike.coe_subset_coe]
-  refine IsGLB.of_image this ?_
-  convert! isGLB_biInf (s := S) (f := SetLike.coe)
-  exact coe_sInf _
-
-中文:
-定理 isGLB_sInf
-  条件: (S : 集合 (子域 K))
-  结论: IsGLB S (sInf S)
-  证明: by
-  have : forall {s t : Subfield K}, (s : Set K) <= t ↔ s <= t := by simp [SetLike.coe_subset_coe]
-  refine IsGLB.of_image this ?_
-  convert! isGLB_biInf (s := S) (f := SetLike.coe)
-  exact coe_sInf _
-
-Depends on / 依赖: IsGLB.of_image, SetLike, SetLike.coe, SetLike.coe_subset_coe, Subfield, coe_sInf, coe_subset_coe, convert, isGLB_biInf, of_image
+/-
+**Subfield.isGLB_sInf** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：isGLB_sInf (S : Set (Subfield K)) : IsGLB S (sInf S)
+参数：S : Set (Subfield K)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `instIsConcreteLE`：∀ (A : Type u_1) (B : Type u_2) [inst : SetLike A B], 
+IsConcreteLE A B
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `IsGLB.of_image`：IsGLB.of_image [Preorder α] [Preorder β] {f : α -> β} (h
+f : forall {x y}, f x <= f y ↔ x <= y) {s : Set α} {x : α} (hx : IsGLB (f '' s) 
+(f x…
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subfield.coe_sInf`：coe_sInf (S : Set (Subfield K)) : ((sInf S : Subfield
+ K) : Set K) = ⋂ s in S, ↑s
+· 使用定理 `isGLB_biInf`：∀ {α : Type u_1} {β : Type u_2} [inst : CompleteLattice α] 
+{s : Set β} {f : β → α}, IsGLB (f '' s) (⨅ x ∈ s, f x)
 -/
 theorem isGLB_sInf (S : Set (Subfield K)) : IsGLB S (sInf S) := by
-  have : forall {s t : Subfield K}, (s : Set K) <= t ↔ s <= t := by simp [SetLike.coe_subset_coe]
+  have : ∀ {s t : Subfield K}, (s : Set K) ≤ t ↔ s ≤ t := by simp [SetLike.coe_subset_coe]
   refine IsGLB.of_image this ?_
   convert! isGLB_biInf (s := S) (f := SetLike.coe)
   exact coe_sInf _
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Subfields of a ring form a complete lattice. -/
+/-
+**Subfield.** 是 Mathlib 中的一个实例，位于命名空间 `Subfield`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: CompleteLattice (Subfield K)
-  body: { completeLatticeOfInf (Subfield K) isGLB_sInf with
-    top := ⊤
-    le_top := fun _ _ _ => trivial
-    inf := (· ⊓ ·)
-    inf_le_left := fun _ _ _ => And.left
-    inf_le_right := fun _ _ _ => And.right
-    le_inf := fun _ _ _ h₁ h₂ _ hx => ⟨h₁ hx, h₂ hx⟩ }
-
-中文:
-实例 :
-  签名: 完备格 (子域 K)
-  定义体: { completeLatticeOfInf (Subfield K) isGLB_sInf with
-    top := ⊤
-    le_top := fun _ _ _ => trivial
-    inf := (· ⊓ ·)
-    inf_le_left := fun _ _ _ => And.left
-    inf_le_right := fun _ _ _ => And.right
-    le_inf := fun _ _ _ h₁ h₂ _ hx => ⟨h₁ hx, h₂ hx⟩ }
-
-Depends on / 依赖: And.left, And.right, Subfield, completeLatticeOfInf, inf_le_left, inf_le_right, isGLB_sInf, le_inf, le_top
+--- 原说明 ---
+Subfields of a ring form a complete lattice.
 -/
 instance : CompleteLattice (Subfield K) :=
   { completeLatticeOfInf (Subfield K) isGLB_sInf with
@@ -1015,191 +773,138 @@ instance : CompleteLattice (Subfield K) :=
 
 /-! ### subfield closure of a subset -/
 
-/--
-Definition of `closure` / `closure` 的定义
+/-- The `Subfield` generated by a set. -/
+/-
+**Subfield.closure** 是 Mathlib 中的一个定义，位于命名空间 `Subfield`。
+形式化陈述：closure (s : Set K) : Subfield K
+参数：s : Set K。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition closure
-  signature: (s : Set K)
-  body: sInf {S | s subseteq S}
-
-中文:
-定义 closure
-  签名: (s : 集合 K)
-  定义体: sInf {S | s subseteq S}
-
-Depends on / 依赖: Field.toGrindField, Lean.Grind.Field, subseteq, toGrindField
+--- 原说明 ---
+The `Subfield` generated by a set.
 -/
-def closure (s : Set K) : Subfield K := sInf {S | s subseteq S}
-
-/--
-theorem `mem_closure` / 定理 `mem_closure`
-
-English:
-theorem mem_closure
-  given: {x : K} {s : Set K}
-  statement: x in closure s ↔ forall S : Subfield K, s subseteq S -> x in S
-  proof: mem_sInf
-
-中文:
-定理 mem_closure
-  条件: {x : K} {s : 集合 K}
-  结论: x in closure s ↔ 对任意 S : 子域 K, s subseteq S -> x in S
-  证明: mem_sInf
-
-Depends on / 依赖: mem_sInf
+def closure (s : Set K) : Subfield K := sInf {S | s ⊆ S}
+/-
+**Subfield.mem_closure** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：mem_closure {x : K} {s : Set K} : x in closure s ↔ forall S : Subfield K, 
+s subseteq S -> x in S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subfield.mem_sInf`：mem_sInf {S : Set (Subfield K)} {x : K} : x in sInf S
+ ↔ forall p in S, x in p
 -/
-theorem mem_closure {x : K} {s : Set K} : x in closure s ↔ forall S : Subfield K, s subseteq S -> x in S :=
+theorem mem_closure {x : K} {s : Set K} : x ∈ closure s ↔ ∀ S : Subfield K, s ⊆ S → x ∈ S :=
   mem_sInf
 
 /-- The subfield generated by a set includes the set. -/
 @[simp, aesop safe 20 (rule_sets := [SetLike])]
-/--
-theorem `subset_closure` / 定理 `subset_closure`
+/-
+**Subfield.subset_closure** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：subset_closure {s : Set K} : s subseteq closure s
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subfield.mem_closure`：mem_closure {x : K} {s : Set K} : x in closure s ↔
+ forall S : Subfield K, s subseteq S -> x in S
 
-English:
-theorem subset_closure
-  given: {s : Set K}
-  statement: s subseteq closure s
-  proof: fun _ hx => mem_closure.2 fun _ hS => hS hx
+--- 原说明 ---
+The subfield generated by a set includes the set.
+-/
+theorem subset_closure {s : Set K} : s ⊆ closure s := fun _ hx => mem_closure.2 fun _ hS => hS hx
 
 @[aesop 80% (rule_sets := [SetLike])]
-
-中文:
-定理 subset_closure
-  条件: {s : 集合 K}
-  结论: s subseteq closure s
-  证明: fun _ hx => mem_closure.2 fun _ hS => hS hx
-
-@[aesop 80% (rule_sets := [SetLike])]
-
-Depends on / 依赖: mem_closure
+/-
+**Subfield.mem_closure_of_mem** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：mem_closure_of_mem {s : Set K} {x : K} (hx : x in s) : x in closure s
+参数：hx : x in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subfield.subset_closure`：subset_closure {s : Set K} : s subseteq closure
+ s
 -/
-theorem subset_closure {s : Set K} : s subseteq closure s := fun _ hx => mem_closure.2 fun _ hS => hS hx
-
-@[aesop 80% (rule_sets := [SetLike])]
-/--
-theorem `mem_closure_of_mem` / 定理 `mem_closure_of_mem`
-
-English:
-theorem mem_closure_of_mem
-  given: {s : Set K} {x : K} (hx : x in s)
-  statement: x in closure s
-  proof: subset_closure hx
-
-中文:
-定理 mem_closure_of_mem
-  条件: {s : 集合 K} {x : K} (hx : x in s)
-  结论: x in closure s
-  证明: subset_closure hx
-
-Depends on / 依赖: subset_closure
+theorem mem_closure_of_mem {s : Set K} {x : K} (hx : x ∈ s) : x ∈ closure s := subset_closure hx
+/-
+**Subfield.subring_closure_le** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：subring_closure_le (s : Set K) : Subring.closure s <= (closure s).toSubrin
+g
+参数：s : Set K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subring.closure_le`：closure_le {s : Set R} {t : Subring R} : closure s <
+= t ↔ s subseteq t
+· 使用定理 `Subfield.subset_closure`：subset_closure {s : Set K} : s subseteq closure
+ s
 -/
-theorem mem_closure_of_mem {s : Set K} {x : K} (hx : x in s) : x in closure s := subset_closure hx
-
-/--
-theorem `subring_closure_le` / 定理 `subring_closure_le`
-
-English:
-theorem subring_closure_le
-  given: (s : Set K)
-  statement: Subring.closure s <= (closure s).toSubring
-  proof: Subring.closure_le.mpr subset_closure
-
-中文:
-定理 subring_closure_le
-  条件: (s : 集合 K)
-  结论: 子环.closure s <= (closure s).toSubring
-  证明: Subring.closure_le.mpr subset_closure
-
-Depends on / 依赖: Subring, Subring.closure_le.mpr, closure_le, subset_closure
--/
-theorem subring_closure_le (s : Set K) : Subring.closure s <= (closure s).toSubring :=
+theorem subring_closure_le (s : Set K) : Subring.closure s ≤ (closure s).toSubring :=
   Subring.closure_le.mpr subset_closure
-
-/--
-theorem `notMem_of_notMem_closure` / 定理 `notMem_of_notMem_closure`
-
-English:
-theorem notMem_of_notMem_closure
-  given: {s : Set K} {P : K} (hP : P ∉ closure s)
-  statement: P ∉ s
-  proof: fun h =>
-  hP (subset_closure h)
-
-中文:
-定理 notMem_of_notMem_closure
-  条件: {s : 集合 K} {P : K} (hP : P ∉ closure s)
-  结论: P ∉ s
-  证明: fun h =>
-  hP (subset_closure h)
-
-Depends on / 依赖: Field.isDomain, IsDomain, isDomain
+/-
+**Subfield.notMem_of_notMem_closure** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：notMem_of_notMem_closure {s : Set K} {P : K} (hP : P ∉ closure s) : P ∉ s
+参数：hP : P ∉ closure s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subfield.subset_closure`：subset_closure {s : Set K} : s subseteq closure
+ s
 -/
 theorem notMem_of_notMem_closure {s : Set K} {P : K} (hP : P ∉ closure s) : P ∉ s := fun h =>
   hP (subset_closure h)
 
 /-- A subfield `t` includes `closure s` if and only if it includes `s`. -/
 @[simp]
-/--
-theorem `closure_le` / 定理 `closure_le`
+/-
+**Subfield.closure_le** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：closure_le {s : Set K} {t : Subfield K} : closure s <= t ↔ s subseteq t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `Subfield.subset_closure`：subset_closure {s : Set K} : s subseteq closure
+ s
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Subfield.mem_closure`：mem_closure {x : K} {s : Set K} : x in closure s ↔
+ forall S : Subfield K, s subseteq S -> x in S
 
-English:
-theorem closure_le
-  given: {s : Set K} {t : Subfield K}
-  statement: closure s <= t ↔ s subseteq t
-  proof: ⟨Set.Subset.trans subset_closure, fun h _ hx => mem_closure.mp hx t h⟩
-
-中文:
-定理 closure_le
-  条件: {s : 集合 K} {t : 子域 K}
-  结论: closure s <= t ↔ s subseteq t
-  证明: ⟨Set.Subset.trans subset_closure, fun h _ hx => mem_closure.mp hx t h⟩
-
-Depends on / 依赖: Set.Subset.trans, Subset, mem_closure, mem_closure.mp, subset_closure
+--- 原说明 ---
+A subfield `t` includes `closure s` if and only if it includes `s`.
 -/
-theorem closure_le {s : Set K} {t : Subfield K} : closure s <= t ↔ s subseteq t :=
+theorem closure_le {s : Set K} {t : Subfield K} : closure s ≤ t ↔ s ⊆ t :=
   ⟨Set.Subset.trans subset_closure, fun h _ hx => mem_closure.mp hx t h⟩
 
 /-- Subfield closure of a set is monotone in its argument: if `s ⊆ t`,
 then `closure s ≤ closure t`. -/
 @[gcongr]
-/--
-theorem `closure_mono` / 定理 `closure_mono`
+/-
+**Subfield.closure_mono** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：closure_mono ⦃s t : Set K⦄ (h : s subseteq t) : closure s <= closure t
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subfield.closure_le`：closure_le {s : Set K} {t : Subfield K} : closure s
+ <= t ↔ s subseteq t
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `Subfield.subset_closure`：subset_closure {s : Set K} : s subseteq closure
+ s
 
-English:
-theorem closure_mono
-  given: ⦃s t
-  statement: Set K⦄ (h : s subseteq t) : closure s <= closure t
-  proof: closure_le.2 Set.Subset.trans h subset_closure
-
-中文:
-定理 closure_mono
-  条件: ⦃s t
-  结论: 集合 K⦄ (h : s subseteq t) : closure s <= closure t
-  证明: closure_le.2 Set.Subset.trans h subset_closure
-
-Depends on / 依赖: Set.Subset.trans, Subset, closure_le, subset_closure
+--- 原说明 ---
+Subfield closure of a set is monotone in its argument: if `s ⊆ t`,
+then `closure s ≤ closure t`.
 -/
-theorem closure_mono ⦃s t : Set K⦄ (h : s subseteq t) : closure s <= closure t :=
-closure_le.2 Set.Subset.trans h subset_closure
-
-/--
-theorem `closure_eq_of_le` / 定理 `closure_eq_of_le`
-
-English:
-theorem closure_eq_of_le
-  given: {s : Set K} {t : Subfield K} (h₁ : s subseteq t) (h₂ : t <= closure s)
-  proof: le_antisymm (closure_le.2 h₁) h₂
-
-中文:
-定理 closure_eq_of_le
-  条件: {s : 集合 K} {t : 子域 K} (h₁ : s subseteq t) (h₂ : t <= closure s)
-  证明: le_antisymm (closure_le.2 h₁) h₂
-
-Depends on / 依赖: closure_le, le_antisymm
+theorem closure_mono ⦃s t : Set K⦄ (h : s ⊆ t) : closure s ≤ closure t :=
+  closure_le.2 <| Set.Subset.trans h subset_closure
+/-
+**Subfield.closure_eq_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：closure_eq_of_le {s : Set K} {t : Subfield K} (h₁ : s subseteq t) (h₂ : t 
+<= closure s) : closure s = t
+参数：h₁ : s subseteq t；h₂ : t <= closure s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subfield.closure_le`：closure_le {s : Set K} {t : Subfield K} : closure s
+ <= t ↔ s subseteq t
 -/
-theorem closure_eq_of_le {s : Set K} {t : Subfield K} (h₁ : s subseteq t) (h₂ : t <= closure s) :
+theorem closure_eq_of_le {s : Set K} {t : Subfield K} (h₁ : s ⊆ t) (h₂ : t ≤ closure s) :
     closure s = t :=
   le_antisymm (closure_le.2 h₁) h₂
 
@@ -1207,47 +912,100 @@ theorem closure_eq_of_le {s : Set K} {t : Subfield K} (h₁ : s subseteq t) (h�
 of `s`, and is preserved under addition, negation, and multiplication, then `p` holds for all
 elements of the closure of `s`. -/
 @[elab_as_elim]
-/--
-theorem `closure_induction` / 定理 `closure_induction`
+/-
+**Subfield.closure_induction** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：closure_induction {s : Set K} {p : forall x in closure s, Prop} (mem : for
+all x hx, p x (subset_closure hx)) (one : p 1 (one_mem _)) (add : forall x y hx 
+hy, p x hx -> p y hy -> p (x + y) (add_mem hx hy)) (neg : forall x hx, p x hx ->
+ p (-x) (neg_mem hx)) (inv : forall x hx, p x hx -> p x⁻¹ (inv_mem hx)) (mul : f
+orall x y hx hy, p x hx -> p y hy -> p (x * y) (mul_mem hx hy)) {x} (h : x in cl
+osure s) : p x h
+参数：mem : forall x hx, p x (subset_closure hx)；one : p 1 (one_mem _)；add : forall
+ x y hx hy, p x hx -> p y hy -> p (x + y) (add_mem hx hy)；neg : forall x hx, p x
+ hx -> p (-x) (neg_mem hx)；inv : forall x hx, p x hx -> p x⁻¹ (inv_mem hx)；mul :
+ forall x y hx hy, p x hx -> p y hy -> p (x * y) (mul_mem hx hy)；h : x in closur
+e s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subfield.subset_closure`：subset_closure {s : Set K} : s subseteq closure
+ s
+· 使用定理 `OneMemClass.one_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+One M} {inst_1 : SetLike S M} [self : OneMemClass S M] (s : S), 1 ∈ s
+· 使用定理 `AddSubmonoidWithOneClass.toOneMemClass`：∀ {S : Type u_1} {R : outParam (
+Type u_2)} {inst : AddMonoidWithOne R} {inst_1 : SetLike S R}   [self : AddSubmo
+noidWithOneClass S R], OneMe…
+· 使用定理 `SubsemiringClass.addSubmonoidWithOneClass`：∀ (S : Type u_1) (R : Type u)
+ {x : NonAssocSemiring R} [inst : SetLike S R] [h : SubsemiringClass S R],   Add
+SubmonoidWithOneClass S R
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `Subfield.instSubfieldClass`：∀ {K : Type u} [inst : DivisionRing K], Subf
+ieldClass (Subfield K) K
+· 使用定理 `AddMemClass.add_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Add M} {inst_1 : SetLike S M} [self : AddMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `AddSubmonoidClass.toAddMemClass`：∀ {S : Type u_3} {M : outParam (Type u_
+4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass S
+ M], AddMemClass S M
+· 使用定理 `AddSubgroupClass.toAddSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Ty
+pe u_4)} {inst : SubNegMonoid G} {inst_1 : SetLike S G} [self : AddSubgroupClass
+ S G],   AddSubmonoidClass…
+· 使用定理 `SubringClass.addSubgroupClass`：∀ (S : Type u_1) (R : Type u) [inst : Set
+Like S R] [inst_1 : NonAssocRing R] [h : SubringClass S R],   AddSubgroupClass S
+ R
+· 使用定理 `NegMemClass.neg_mem`：∀ {S : Type u_3} {G : outParam (Type u_4)} {inst : 
+Neg G} {inst_1 : SetLike S G} [self : NegMemClass S G] {s : S}   {x : G}, x ∈ s 
+→ -x ∈ s
+· 使用定理 `SubringClass.toNegMemClass`：∀ {S : Type u_1} {R : outParam (Type u)} {in
+st : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   NegMemC
+lass S R
+· 使用定理 `InvMemClass.inv_mem`：∀ {S : Type u_3} {G : outParam (Type u_4)} {inst : 
+Inv G} {inst_1 : SetLike S G} [self : InvMemClass S G] {s : S}   {x : G}, x ∈ s 
+→ x⁻¹ ∈ s
+· 使用定理 `SubfieldClass.toInvMemClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Div
+isionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   InvMemClass S 
+K
+· 使用定理 `MulMemClass.mul_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst : 
+Mul M} {inst_1 : SetLike S M} [self : MulMemClass S M] {s : S}   {a b : M}, a ∈ 
+s → b ∈ s…
+· 使用定理 `SubmonoidClass.toMulMemClass`：∀ {S : Type u_3} {M : outParam (Type u_4)}
+ {inst : MulOneClass M} {inst_1 : SetLike S M} [self : SubmonoidClass S M],   Mu
+lMemClass S M
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+· 使用定理 `SubfieldClass.toSubgroupClass`：∀ {K : Type u} [inst : DivisionRing K] (S
+ : Type u_1) [inst_1 : SetLike S K] [h : SubfieldClass S K], SubgroupClass S K
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `ZeroMemClass.zero_mem`：∀ {S : Type u_3} {M : outParam (Type u_4)} {inst 
+: Zero M} {inst_1 : SetLike S M} [self : ZeroMemClass S M] (s : S),   0 ∈ s
+· 使用定理 `AddSubmonoidClass.toZeroMemClass`：∀ {S : Type u_3} {M : outParam (Type u
+_4)} {inst : AddZeroClass M} {inst_1 : SetLike S M}   [self : AddSubmonoidClass 
+S M], ZeroMemClass S M
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_neg_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a + -a = 0
+· 使用定理 `Subfield.closure_le`：closure_le {s : Set K} {t : Subfield K} : closure s
+ <= t ↔ s subseteq t
 
-English:
-theorem closure_induction
-  statement: {s : Set K} {p : forall x in closure s, Prop}
-  proof: letI : Subfield K :=
-    { carrier := {x | exists hx, p x hx}
-      mul_mem' := by rintro _ _ ⟨_, hx⟩ ⟨_, hy⟩; exact ⟨_, mul _ _ _ _ hx hy⟩
-      one_mem' := ⟨_, one⟩
-      add_mem' := by rintro _ _ ⟨_, hx⟩ ⟨_, hy⟩; exact ⟨_, add _ _ _ _ hx hy⟩
-      zero_mem' := ⟨zero_mem _, by
-        simp_rw [← @add_neg_cancel K _ 1]; exact add _ _ _ _ one (neg _ _ one)⟩
-      neg_mem' := by rintro _ ⟨_, hx⟩; exact ⟨_, neg _ _ hx⟩
-      inv_mem' := by rintro _ ⟨_, hx⟩; exact ⟨_, inv _ _ hx⟩ }
-  ((closure_le (t := this)).2 (fun x hx => ⟨_, mem x hx⟩) h).2
-
-中文:
-定理 closure_induction
-  结论: {s : 集合 K} {p : 对任意 x in closure s, 命题}
-  证明: letI : Subfield K :=
-    { carrier := {x | exists hx, p x hx}
-      mul_mem' := by rintro _ _ ⟨_, hx⟩ ⟨_, hy⟩; exact ⟨_, mul _ _ _ _ hx hy⟩
-      one_mem' := ⟨_, one⟩
-      add_mem' := by rintro _ _ ⟨_, hx⟩ ⟨_, hy⟩; exact ⟨_, add _ _ _ _ hx hy⟩
-      zero_mem' := ⟨zero_mem _, by
-        simp_rw [← @add_neg_cancel K _ 1]; exact add _ _ _ _ one (neg _ _ one)⟩
-      neg_mem' := by rintro _ ⟨_, hx⟩; exact ⟨_, neg _ _ hx⟩
-      inv_mem' := by rintro _ ⟨_, hx⟩; exact ⟨_, inv _ _ hx⟩ }
-  ((closure_le (t := this)).2 (fun x hx => ⟨_, mem x hx⟩) h).2
-
-Depends on / 依赖: Subfield, add_mem, add_neg_cancel, carrier, closure_le, inv_mem, mul_mem, neg_mem, one_mem, simp_rw, zero_mem
+--- 原说明 ---
+An induction principle for closure membership. If `p` holds for `1`, and all ele
+ments
+of `s`, and is preserved under addition, negation, and multiplication, then `p` 
+holds for all
+elements of the closure of `s`.
 -/
-theorem closure_induction {s : Set K} {p : forall x in closure s, Prop}
-    (mem : forall x hx, p x (subset_closure hx))
-    (one : p 1 (one_mem _)) (add : forall x y hx hy, p x hx -> p y hy -> p (x + y) (add_mem hx hy))
-    (neg : forall x hx, p x hx -> p (-x) (neg_mem hx)) (inv : forall x hx, p x hx -> p x⁻¹ (inv_mem hx))
-    (mul : forall x y hx hy, p x hx -> p y hy -> p (x * y) (mul_mem hx hy))
-    {x} (h : x in closure s) : p x h :=
+theorem closure_induction {s : Set K} {p : ∀ x ∈ closure s, Prop}
+    (mem : ∀ x hx, p x (subset_closure hx))
+    (one : p 1 (one_mem _)) (add : ∀ x y hx hy, p x hx → p y hy → p (x + y) (add_mem hx hy))
+    (neg : ∀ x hx, p x hx → p (-x) (neg_mem hx)) (inv : ∀ x hx, p x hx → p x⁻¹ (inv_mem hx))
+    (mul : ∀ x y hx hy, p x hx → p y hy → p (x * y) (mul_mem hx hy))
+    {x} (h : x ∈ closure s) : p x h :=
   letI : Subfield K :=
-    { carrier := {x | exists hx, p x hx}
+    { carrier := {x | ∃ hx, p x hx}
       mul_mem' := by rintro _ _ ⟨_, hx⟩ ⟨_, hy⟩; exact ⟨_, mul _ _ _ _ hx hy⟩
       one_mem' := ⟨_, one⟩
       add_mem' := by rintro _ _ ⟨_, hx⟩ ⟨_, hy⟩; exact ⟨_, add _ _ _ _ hx hy⟩
@@ -1255,27 +1013,20 @@ theorem closure_induction {s : Set K} {p : forall x in closure s, Prop}
         simp_rw [← @add_neg_cancel K _ 1]; exact add _ _ _ _ one (neg _ _ one)⟩
       neg_mem' := by rintro _ ⟨_, hx⟩; exact ⟨_, neg _ _ hx⟩
       inv_mem' := by rintro _ ⟨_, hx⟩; exact ⟨_, inv _ _ hx⟩ }
-  ((closure_le (t := this)).2 (fun x hx => ⟨_, mem x hx⟩) h).2
+  ((closure_le (t := this)).2 (fun x hx ↦ ⟨_, mem x hx⟩) h).2
 
 variable (K) in
-/--
-Definition of `gi` / `gi` 的定义
+/-- `closure` forms a Galois insertion with the coercion to set. -/
+/-
+**Subfield.gi** 是 Mathlib 中的一个定义，位于命名空间 `Subfield`。
+形式化陈述：(K : Type u) → [inst : DivisionRing K] → GaloisInsertion Subfield.closure 
+SetLike.coe
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Subfield.closure_le`：closure_le {s : Set K} {t : Subfield K} : closure s
+ <= t ↔ s subseteq t
 
-English:
-definition gi
-  signature: : GaloisInsertion (@closure K _) (↑) where
-  body: closure s
-  gc _ _ := closure_le
-  le_l_u _ := subset_closure
-  choice_eq _ _ := rfl
-
-中文:
-定义 gi
-  签名: : Galois嵌入 (@closure K _) (↑) where
-  定义体: closure s
-  gc _ _ := closure_le
-  le_l_u _ := subset_closure
-  choice_eq _ _ := rfl
+--- 原说明 ---
+`closure` forms a Galois insertion with the coercion to set.
 -/
 protected def gi : GaloisInsertion (@closure K _) (↑) where
   choice s _ := closure s
@@ -1285,403 +1036,358 @@ protected def gi : GaloisInsertion (@closure K _) (↑) where
 
 /-- Closure of a subfield `S` equals `S`. -/
 @[simp]
-/--
-theorem `closure_eq` / 定理 `closure_eq`
+/-
+**Subfield.closure_eq** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：closure_eq (s : Subfield K) : closure (s : Set K) = s
+参数：s : Subfield K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisInsertion.l_u_eq`：l_u_eq [Preorder α] [PartialOrder β] (gi : Galoi
+sInsertion l u) (b : β) : l (u b) = b
 
-English:
-theorem closure_eq
-  given: (s : Subfield K)
-  statement: closure (s : Set K) = s
-  proof: (Subfield.gi K).l_u_eq s
-
-@[simp]
-
-中文:
-定理 closure_eq
-  条件: (s : 子域 K)
-  结论: closure (s : 集合 K) = s
-  证明: (Subfield.gi K).l_u_eq s
-
-@[simp]
-
-Depends on / 依赖: Subfield, Subfield.gi, l_u_eq
+--- 原说明 ---
+Closure of a subfield `S` equals `S`.
 -/
 theorem closure_eq (s : Subfield K) : closure (s : Set K) = s :=
   (Subfield.gi K).l_u_eq s
 
 @[simp]
-/--
-theorem `closure_empty` / 定理 `closure_empty`
-
-English:
-theorem closure_empty
-  statement: closure (∅ : Set K) = ⊥
-  proof: (Subfield.gi K).gc.l_bot
-
-@[simp]
-
-中文:
-定理 closure_empty
-  结论: closure (∅ : 集合 K) = ⊥
-  证明: (Subfield.gi K).gc.l_bot
-
-@[simp]
-
-Depends on / 依赖: Subfield, Subfield.gi, gc.l_bot, l_bot
+/-
+**Subfield.closure_empty** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：closure_empty : closure (∅ : Set K) = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_bot`：∀ {α : Type u} {β : Type v} [inst : PartialOrder
+ α] [inst_1 : Preorder β] [inst_2 : OrderBot α] [inst_3 : OrderBot β]   {u : α →
+ β} {l : β →…
+· 使用定理 `GaloisInsertion.gc`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] 
+[inst_1 : Preorder β] {l : α → β} {u : β → α}   (self : GaloisInsertion l u), Ga
+loisConn…
 -/
 theorem closure_empty : closure (∅ : Set K) = ⊥ :=
   (Subfield.gi K).gc.l_bot
 
 @[simp]
-/--
-theorem `closure_univ` / 定理 `closure_univ`
-
-English:
-theorem closure_univ
-  statement: closure (Set.univ : Set K) = ⊤
-  proof: @coe_top K _ ▸ closure_eq ⊤
-
-中文:
-定理 closure_univ
-  结论: closure (集合.univ : 集合 K) = ⊤
-  证明: @coe_top K _ ▸ closure_eq ⊤
-
-Depends on / 依赖: closure_eq, coe_top
+/-
+**Subfield.closure_univ** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：closure_univ : closure (Set.univ : Set K) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subfield.closure_eq`：closure_eq (s : Subfield K) : closure (s : Set K) =
+ s
+· 使用定理 `Subfield.coe_top`：coe_top : ((⊤ : Subfield K) : Set K) = Set.univ
 -/
 theorem closure_univ : closure (Set.univ : Set K) = ⊤ :=
   @coe_top K _ ▸ closure_eq ⊤
-
-/--
-theorem `closure_union` / 定理 `closure_union`
-
-English:
-theorem closure_union
-  given: (s t : Set K)
-  statement: closure (s union t) = closure s ⊔ closure t
-  proof: (Subfield.gi K).gc.l_sup
-
-中文:
-定理 closure_union
-  条件: (s t : 集合 K)
-  结论: closure (s union t) = closure s ⊔ closure t
-  证明: (Subfield.gi K).gc.l_sup
-
-Depends on / 依赖: Subfield, Subfield.gi, gc.l_sup, l_sup
+/-
+**Subfield.closure_union** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：closure_union (s t : Set K) : closure (s union t) = closure s ⊔ closure t
+参数：s t : Set K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_sup`：l_sup (gc : GaloisConnection l u) : l (a₁ ⊔ a₂) 
+= l a₁ ⊔ l a₂
+· 使用定理 `GaloisInsertion.gc`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] 
+[inst_1 : Preorder β] {l : α → β} {u : β → α}   (self : GaloisInsertion l u), Ga
+loisConn…
 -/
-theorem closure_union (s t : Set K) : closure (s union t) = closure s ⊔ closure t :=
+theorem closure_union (s t : Set K) : closure (s ∪ t) = closure s ⊔ closure t :=
   (Subfield.gi K).gc.l_sup
-
-/--
-theorem `closure_iUnion` / 定理 `closure_iUnion`
-
-English:
-theorem closure_iUnion
-  given: {ι} (s : ι -> Set K)
-  statement: closure (⋃ i, s i) = ⨆ i, closure (s i)
-  proof: (Subfield.gi K).gc.l_iSup
-
-中文:
-定理 closure_iUnion
-  条件: {ι} (s : ι -> 集合 K)
-  结论: closure (⋃ i, s i) = ⨆ i, closure (s i)
-  证明: (Subfield.gi K).gc.l_iSup
-
-Depends on / 依赖: Subfield, Subfield.gi, gc.l_iSup, l_iSup
+/-
+**Subfield.closure_iUnion** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：closure_iUnion {ι} (s : ι -> Set K) : closure (⋃ i, s i) = ⨆ i, closure (s
+ i)
+参数：s : ι -> Set K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_iSup`：l_iSup {f : ι -> α} : l (iSup f) = ⨆ i, l (f i)
+· 使用定理 `GaloisInsertion.gc`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] 
+[inst_1 : Preorder β] {l : α → β} {u : β → α}   (self : GaloisInsertion l u), Ga
+loisConn…
 -/
-theorem closure_iUnion {ι} (s : ι -> Set K) : closure (⋃ i, s i) = ⨆ i, closure (s i) :=
+theorem closure_iUnion {ι} (s : ι → Set K) : closure (⋃ i, s i) = ⨆ i, closure (s i) :=
   (Subfield.gi K).gc.l_iSup
-
-/--
-theorem `closure_sUnion` / 定理 `closure_sUnion`
-
-English:
-theorem closure_sUnion
-  given: (s : Set (Set K))
-  statement: closure (⋃₀ s) = ⨆ t in s, closure t
-  proof: (Subfield.gi K).gc.l_sSup
-
-中文:
-定理 closure_sUnion
-  条件: (s : 集合 (集合 K))
-  结论: closure (⋃₀ s) = ⨆ t in s, closure t
-  证明: (Subfield.gi K).gc.l_sSup
-
-Depends on / 依赖: Subfield, Subfield.gi, gc.l_sSup, l_sSup
+/-
+**Subfield.closure_sUnion** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：closure_sUnion (s : Set (Set K)) : closure (⋃₀ s) = ⨆ t in s, closure t
+参数：s : Set (Set K)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_sSup`：l_sSup {s : Set α} : l (sSup s) = ⨆ a in s, l a
+· 使用定理 `GaloisInsertion.gc`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] 
+[inst_1 : Preorder β] {l : α → β} {u : β → α}   (self : GaloisInsertion l u), Ga
+loisConn…
 -/
-theorem closure_sUnion (s : Set (Set K)) : closure (⋃₀ s) = ⨆ t in s, closure t :=
+theorem closure_sUnion (s : Set (Set K)) : closure (⋃₀ s) = ⨆ t ∈ s, closure t :=
   (Subfield.gi K).gc.l_sSup
-
-/--
-theorem `map_sup` / 定理 `map_sup`
-
-English:
-theorem map_sup
-  given: (s t : Subfield K) (f : K ->+* L)
-  statement: (s ⊔ t).map f = s.map f ⊔ t.map f
-  proof: (gc_map_comap f).l_sup
-
-中文:
-定理 map_sup
-  条件: (s t : 子域 K) (f : K ->+* L)
-  结论: (s ⊔ t).map f = s.map f ⊔ t.map f
-  证明: (gc_map_comap f).l_sup
-
-Depends on / 依赖: gc_map_comap, l_sup
+/-
+**Subfield.map_sup** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：map_sup (s t : Subfield K) (f : K ->+* L) : (s ⊔ t).map f = s.map f ⊔ t.ma
+p f
+参数：s t : Subfield K；f : K ->+* L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_sup`：l_sup (gc : GaloisConnection l u) : l (a₁ ⊔ a₂) 
+= l a₁ ⊔ l a₂
+· 使用定理 `Subfield.gc_map_comap`：gc_map_comap (f : K ->+* L) : GaloisConnection (m
+ap f) (comap f)
 -/
-theorem map_sup (s t : Subfield K) (f : K ->+* L) : (s ⊔ t).map f = s.map f ⊔ t.map f :=
+theorem map_sup (s t : Subfield K) (f : K →+* L) : (s ⊔ t).map f = s.map f ⊔ t.map f :=
   (gc_map_comap f).l_sup
-
-/--
-theorem `map_iSup` / 定理 `map_iSup`
-
-English:
-theorem map_iSup
-  given: {ι : Sort*} (f : K ->+* L) (s : ι -> Subfield K)
-  proof: (gc_map_comap f).l_iSup
-
-中文:
-定理 map_iSup
-  条件: {ι : 类型层*} (f : K ->+* L) (s : ι -> 子域 K)
-  证明: (gc_map_comap f).l_iSup
-
-Depends on / 依赖: gc_map_comap, l_iSup
+/-
+**Subfield.map_iSup** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：map_iSup {ι : Sort*} (f : K ->+* L) (s : ι -> Subfield K) : (iSup s).map f
+ = ⨆ i, (s i).map f
+参数：f : K ->+* L；s : ι -> Subfield K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_iSup`：l_iSup {f : ι -> α} : l (iSup f) = ⨆ i, l (f i)
+· 使用定理 `Subfield.gc_map_comap`：gc_map_comap (f : K ->+* L) : GaloisConnection (m
+ap f) (comap f)
 -/
-theorem map_iSup {ι : Sort*} (f : K ->+* L) (s : ι -> Subfield K) :
+theorem map_iSup {ι : Sort*} (f : K →+* L) (s : ι → Subfield K) :
     (iSup s).map f = ⨆ i, (s i).map f :=
   (gc_map_comap f).l_iSup
-
-/--
-theorem `map_inf` / 定理 `map_inf`
-
-English:
-theorem map_inf
-  given: (s t : Subfield K) (f : K ->+* L)
-  statement: (s ⊓ t).map f = s.map f ⊓ t.map f
-  proof: SetLike.coe_injective (Set.image_inter f.injective)
-
-中文:
-定理 map_inf
-  条件: (s t : 子域 K) (f : K ->+* L)
-  结论: (s ⊓ t).map f = s.map f ⊓ t.map f
-  证明: SetLike.coe_injective (Set.image_inter f.injective)
-
-Depends on / 依赖: Set.image_inter, SetLike, SetLike.coe_injective, coe_injective, f.injective, image_inter, injective
+/-
+**Subfield.map_inf** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：map_inf (s t : Subfield K) (f : K ->+* L) : (s ⊓ t).map f = s.map f ⊓ t.ma
+p f
+参数：s t : Subfield K；f : K ->+* L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
+· 使用定理 `Set.image_inter`：image_inter {f : α -> β} {s t : Set α} (H : Injective f
+) : f '' (s inter t) = f '' s inter f '' t
+· 使用定理 `RingHom.injective`：∀ {R : Type u_2} {S : Type u_3} [inst : NonAssocRing 
+R] [IsSimpleRing R] [inst_2 : NonAssocSemiring S] [Nontrivial S]   (f : R →+* S)
+, Funct…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `DivisionRing.toNontrivial`：∀ {K : Type u_2} [self : DivisionRing K], Non
+trivial K
 -/
-theorem map_inf (s t : Subfield K) (f : K ->+* L) : (s ⊓ t).map f = s.map f ⊓ t.map f :=
+theorem map_inf (s t : Subfield K) (f : K →+* L) : (s ⊓ t).map f = s.map f ⊓ t.map f :=
   SetLike.coe_injective (Set.image_inter f.injective)
-
-/--
-theorem `map_iInf` / 定理 `map_iInf`
-
-English:
-theorem map_iInf
-  given: {ι : Sort*} [Nonempty ι] (f : K ->+* L) (s : ι -> Subfield K)
-  proof: by
-  apply SetLike.coe_injective
-  simpa using (Set.injOn_of_injective f.injective).image_iInter_eq (s := SetLike.coe ∘ s)
-
-中文:
-定理 map_iInf
-  条件: {ι : 类型层*} [非空 ι] (f : K ->+* L) (s : ι -> 子域 K)
-  证明: by
-  apply SetLike.coe_injective
-  simpa using (Set.injOn_of_injective f.injective).image_iInter_eq (s := SetLike.coe ∘ s)
-
-Depends on / 依赖: Set.injOn_of_injective, SetLike, SetLike.coe, SetLike.coe_injective, coe_injective, f.injective, image_iInter_eq, injOn_of_injective, injective
+/-
+**Subfield.map_iInf** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：map_iInf {ι : Sort*} [Nonempty ι] (f : K ->+* L) (s : ι -> Subfield K) : (
+iInf s).map f = ⨅ i, (s i).map f
+参数：f : K ->+* L；s : ι -> Subfield K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subfield.coe_iInf`：coe_iInf {ι : Sort*} {S : ι -> Subfield K} : (↑(⨅ i, 
+S i) : Set K) = ⋂ i, S i
+· 使用定理 `Set.InjOn.image_iInter_eq`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_5
+} [Nonempty ι] {s : ι → Set α} {f : α → β},   Set.InjOn f (⋃ i, s i) → f '' ⋂ i,
+ s i = ⋂ i, f '…
+· 使用定理 `Set.injOn_of_injective`：injOn_of_injective (h : Injective f) {s : Set α}
+ : InjOn f s
+· 使用定理 `RingHom.injective`：∀ {R : Type u_2} {S : Type u_3} [inst : NonAssocRing 
+R] [IsSimpleRing R] [inst_2 : NonAssocSemiring S] [Nontrivial S]   (f : R →+* S)
+, Funct…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `DivisionRing.toNontrivial`：∀ {K : Type u_2} [self : DivisionRing K], Non
+trivial K
 -/
-theorem map_iInf {ι : Sort*} [Nonempty ι] (f : K ->+* L) (s : ι -> Subfield K) :
+theorem map_iInf {ι : Sort*} [Nonempty ι] (f : K →+* L) (s : ι → Subfield K) :
     (iInf s).map f = ⨅ i, (s i).map f := by
   apply SetLike.coe_injective
   simpa using (Set.injOn_of_injective f.injective).image_iInter_eq (s := SetLike.coe ∘ s)
-
-/--
-theorem `comap_inf` / 定理 `comap_inf`
-
-English:
-theorem comap_inf
-  given: (s t : Subfield L) (f : K ->+* L)
-  statement: (s ⊓ t).comap f = s.comap f ⊓ t.comap f
-  proof: (gc_map_comap f).u_inf
-
-中文:
-定理 comap_inf
-  条件: (s t : 子域 L) (f : K ->+* L)
-  结论: (s ⊓ t).comap f = s.comap f ⊓ t.comap f
-  证明: (gc_map_comap f).u_inf
-
-Depends on / 依赖: gc_map_comap, u_inf
+/-
+**Subfield.comap_inf** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：comap_inf (s t : Subfield L) (f : K ->+* L) : (s ⊓ t).comap f = s.comap f 
+⊓ t.comap f
+参数：s t : Subfield L；f : K ->+* L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.u_inf`：∀ {β : Type u} {α : Type v} {b₁ b₂ : β} [inst : 
+SemilatticeInf β] [inst_1 : SemilatticeInf α] {u : β → α} {l : α → β},   GaloisC
+onnection l …
+· 使用定理 `Subfield.gc_map_comap`：gc_map_comap (f : K ->+* L) : GaloisConnection (m
+ap f) (comap f)
 -/
-theorem comap_inf (s t : Subfield L) (f : K ->+* L) : (s ⊓ t).comap f = s.comap f ⊓ t.comap f :=
+theorem comap_inf (s t : Subfield L) (f : K →+* L) : (s ⊓ t).comap f = s.comap f ⊓ t.comap f :=
   (gc_map_comap f).u_inf
-
-/--
-theorem `comap_iInf` / 定理 `comap_iInf`
-
-English:
-theorem comap_iInf
-  given: {ι : Sort*} (f : K ->+* L) (s : ι -> Subfield L)
-  proof: (gc_map_comap f).u_iInf
-
-@[simp]
-
-中文:
-定理 comap_iInf
-  条件: {ι : 类型层*} (f : K ->+* L) (s : ι -> 子域 L)
-  证明: (gc_map_comap f).u_iInf
-
-@[simp]
-
-Depends on / 依赖: gc_map_comap, u_iInf
+/-
+**Subfield.comap_iInf** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：comap_iInf {ι : Sort*} (f : K ->+* L) (s : ι -> Subfield L) : (iInf s).com
+ap f = ⨅ i, (s i).comap f
+参数：f : K ->+* L；s : ι -> Subfield L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.u_iInf`：∀ {α : Type u} {β : Type v} {ι : Sort x} [inst 
+: CompleteLattice α] [inst_1 : CompleteLattice β] {u : α → β}   {l : β → α}, Gal
+oisConnection…
+· 使用定理 `Subfield.gc_map_comap`：gc_map_comap (f : K ->+* L) : GaloisConnection (m
+ap f) (comap f)
 -/
-theorem comap_iInf {ι : Sort*} (f : K ->+* L) (s : ι -> Subfield L) :
+theorem comap_iInf {ι : Sort*} (f : K →+* L) (s : ι → Subfield L) :
     (iInf s).comap f = ⨅ i, (s i).comap f :=
   (gc_map_comap f).u_iInf
 
 @[simp]
-/--
-theorem `map_bot` / 定理 `map_bot`
-
-English:
-theorem map_bot
-  given: (f : K ->+* L)
-  statement: (⊥ : Subfield K).map f = ⊥
-  proof: (gc_map_comap f).l_bot
-
-@[simp]
-
-中文:
-定理 map_bot
-  条件: (f : K ->+* L)
-  结论: (⊥ : 子域 K).map f = ⊥
-  证明: (gc_map_comap f).l_bot
-
-@[simp]
-
-Depends on / 依赖: DivisionRing, DivisionRing.toDivisionSemiring, DivisionSemiring, gc_map_comap, l_bot, toDivisionSemiring
+/-
+**Subfield.map_bot** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：map_bot (f : K ->+* L) : (⊥ : Subfield K).map f = ⊥
+参数：f : K ->+* L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_bot`：∀ {α : Type u} {β : Type v} [inst : PartialOrder
+ α] [inst_1 : Preorder β] [inst_2 : OrderBot α] [inst_3 : OrderBot β]   {u : α →
+ β} {l : β →…
+· 使用定理 `Subfield.gc_map_comap`：gc_map_comap (f : K ->+* L) : GaloisConnection (m
+ap f) (comap f)
 -/
-theorem map_bot (f : K ->+* L) : (⊥ : Subfield K).map f = ⊥ :=
+theorem map_bot (f : K →+* L) : (⊥ : Subfield K).map f = ⊥ :=
   (gc_map_comap f).l_bot
 
 @[simp]
-/--
-theorem `comap_top` / 定理 `comap_top`
-
-English:
-theorem comap_top
-  given: (f : K ->+* L)
-  statement: (⊤ : Subfield L).comap f = ⊤
-  proof: (gc_map_comap f).u_top
-
-中文:
-定理 comap_top
-  条件: (f : K ->+* L)
-  结论: (⊤ : 子域 L).comap f = ⊤
-  证明: (gc_map_comap f).u_top
-
-Depends on / 依赖: Field.toSemifield, Semifield, gc_map_comap, toSemifield, u_top
+/-
+**Subfield.comap_top** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：comap_top (f : K ->+* L) : (⊤ : Subfield L).comap f = ⊤
+参数：f : K ->+* L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.u_top`：u_top [OrderTop β] {l : α -> β} {u : β -> α} (gc
+ : GaloisConnection l u) : u ⊤ = ⊤
+· 使用定理 `Subfield.gc_map_comap`：gc_map_comap (f : K ->+* L) : GaloisConnection (m
+ap f) (comap f)
 -/
-theorem comap_top (f : K ->+* L) : (⊤ : Subfield L).comap f = ⊤ :=
+theorem comap_top (f : K →+* L) : (⊤ : Subfield L).comap f = ⊤ :=
   (gc_map_comap f).u_top
 
-/--
-theorem `mem_iSup_of_directed` / 定理 `mem_iSup_of_directed`
+/-- The underlying set of a non-empty directed sSup of subfields is just a union of the subfields.
+  Note that this fails without the directedness assumption (the union of two subfields is
+  typically not a subfield) -/
+/-
+**Subfield.mem_iSup_of_directed** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：mem_iSup_of_directed {ι} [hι : Nonempty ι] {S : ι -> Subfield K} (hS : Dir
+ected (· <= ·) S) {x : K} : (x in ⨆ i, S i) ↔ exists i, x in S i
+参数：hS : Directed (· <= ·) S。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subring.coe_iSup_of_directed`：coe_iSup_of_directed {ι} [hι : Nonempty ι]
+ {S : ι -> Subring R} (hS : Directed (· <= ·) S) : ((⨆ i, S i : Subring R) : Set
+ R) = ⋃ i, S i
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_iUnion`：mem_iUnion {x : α} {s : ι -> Set α} : (x in ⋃ i, s i) ↔ 
+exists i, x in s i
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subfield.inv_mem`：∀ {K : Type u} [inst : DivisionRing K] (s : Subfield K
+) {x : K}, x ∈ s → x⁻¹ ∈ s
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `iSup_le`：iSup_le (h : forall i, f i <= a) : iSup f <= a
+· 使用定理 `le_iSup`：le_iSup (f : ι -> α) (i : ι) : f i <= iSup f
+· 使用定理 `Set.iUnion_subset`：iUnion_subset {s : ι -> Set α} {t : Set α} (h : foral
+l i, s i subseteq t) : ⋃ i, s i subseteq t
 
-English:
-theorem mem_iSup_of_directed
-  statement: {ι} [hι : Nonempty ι] {S : ι -> Subfield K} (hS : Directed (· <= ·) S)
-  proof: by
-  let s : Subfield K :=
-    { __ := Subring.copy _ _ (Subring.coe_iSup_of_directed hS).symm
-      inv_mem' := fun _ hx => have ⟨i, hi⟩ := Set.mem_iUnion.mp hx
-        Set.mem_iUnion.mpr ⟨i, (S i).inv_mem hi⟩ }
-  have : iSup S = s := le_antisymm
-    (iSup_le fun i => le_iSup (fun i => (S i : Set K)) i) (Set.iUnion_subset fun _ => le_iSup S _)
-  exact this ▸ Set.mem_iUnion
-
-中文:
-定理 mem_iSup_of_directed
-  结论: {ι} [hι : 非空 ι] {S : ι -> 子域 K} (hS : Directed (· <= ·) S)
-  证明: by
-  let s : Subfield K :=
-    { __ := Subring.copy _ _ (Subring.coe_iSup_of_directed hS).symm
-      inv_mem' := fun _ hx => have ⟨i, hi⟩ := Set.mem_iUnion.mp hx
-        Set.mem_iUnion.mpr ⟨i, (S i).inv_mem hi⟩ }
-  have : iSup S = s := le_antisymm
-    (iSup_le fun i => le_iSup (fun i => (S i : Set K)) i) (Set.iUnion_subset fun _ => le_iSup S _)
-  exact this ▸ Set.mem_iUnion
-
-Depends on / 依赖: DivisionSemiring, DivisionSemiring.nnqsmul, Set.iUnion_subset, Set.mem_iUnion, Set.mem_iUnion.mp, Set.mem_iUnion.mpr, Subfield, Subring, Subring.coe_iSup_of_directed, Subring.copy, coe_iSup_of_directed, iSup_le, iUnion_subset, inv_mem, le_antisymm, le_iSup, mem_iUnion, nnqsmul, smulDivisionSemiring
+--- 原说明 ---
+The underlying set of a non-empty directed sSup of subfields is just a union of 
+the subfields.
+  Note that this fails without the directedness assumption (the union of two sub
+fields is
+  typically not a subfield)
 -/
-theorem mem_iSup_of_directed {ι} [hι : Nonempty ι] {S : ι -> Subfield K} (hS : Directed (· <= ·) S)
-    {x : K} : (x in ⨆ i, S i) ↔ exists i, x in S i := by
+theorem mem_iSup_of_directed {ι} [hι : Nonempty ι] {S : ι → Subfield K} (hS : Directed (· ≤ ·) S)
+    {x : K} : (x ∈ ⨆ i, S i) ↔ ∃ i, x ∈ S i := by
   let s : Subfield K :=
     { __ := Subring.copy _ _ (Subring.coe_iSup_of_directed hS).symm
-      inv_mem' := fun _ hx => have ⟨i, hi⟩ := Set.mem_iUnion.mp hx
+      inv_mem' := fun _ hx ↦ have ⟨i, hi⟩ := Set.mem_iUnion.mp hx
         Set.mem_iUnion.mpr ⟨i, (S i).inv_mem hi⟩ }
   have : iSup S = s := le_antisymm
-    (iSup_le fun i => le_iSup (fun i => (S i : Set K)) i) (Set.iUnion_subset fun _ => le_iSup S _)
+    (iSup_le fun i ↦ le_iSup (fun i ↦ (S i : Set K)) i) (Set.iUnion_subset fun _ ↦ le_iSup S _)
   exact this ▸ Set.mem_iUnion
-
-/--
-theorem `coe_iSup_of_directed` / 定理 `coe_iSup_of_directed`
-
-English:
-theorem coe_iSup_of_directed
-  given: {ι} [hι : Nonempty ι] {S : ι -> Subfield K} (hS : Directed (· <= ·) S)
-  proof: Set.ext fun x => by simp [mem_iSup_of_directed hS]
-
-中文:
-定理 coe_iSup_of_directed
-  条件: {ι} [hι : 非空 ι] {S : ι -> 子域 K} (hS : Directed (· <= ·) S)
-  证明: Set.ext fun x => by simp [mem_iSup_of_directed hS]
-
-Depends on / 依赖: Set.ext, mem_iSup_of_directed
+/-
+**Subfield.coe_iSup_of_directed** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：coe_iSup_of_directed {ι} [hι : Nonempty ι] {S : ι -> Subfield K} (hS : Dir
+ected (· <= ·) S) : ((⨆ i, S i : Subfield K) : Set K) = ⋃ i, ↑(S i)
+参数：hS : Directed (· <= ·) S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subfield.mem_iSup_of_directed`：mem_iSup_of_directed {ι} [hι : Nonempty ι
+] {S : ι -> Subfield K} (hS : Directed (· <= ·) S) {x : K} : (x in ⨆ i, S i) ↔ e
+xists i, x in S i
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem coe_iSup_of_directed {ι} [hι : Nonempty ι] {S : ι -> Subfield K} (hS : Directed (· <= ·) S) :
+theorem coe_iSup_of_directed {ι} [hι : Nonempty ι] {S : ι → Subfield K} (hS : Directed (· ≤ ·) S) :
     ((⨆ i, S i : Subfield K) : Set K) = ⋃ i, ↑(S i) :=
   Set.ext fun x => by simp [mem_iSup_of_directed hS]
-
-/--
-theorem `mem_sSup_of_directedOn` / 定理 `mem_sSup_of_directedOn`
-
-English:
-theorem mem_sSup_of_directedOn
-  statement: {S : Set (Subfield K)} (Sne : S.Nonempty) (hS : DirectedOn (· <= ·) S)
-  proof: by
-  have : Nonempty S := Sne.to_subtype
-  simp only [sSup_eq_iSup', mem_iSup_of_directed hS.directed_val, Subtype.exists, exists_prop]
-
-中文:
-定理 mem_sSup_of_directedOn
-  结论: {S : 集合 (子域 K)} (Sne : S.非空) (hS : DirectedOn (· <= ·) S)
-  证明: by
-  have : Nonempty S := Sne.to_subtype
-  simp only [sSup_eq_iSup', mem_iSup_of_directed hS.directed_val, Subtype.exists, exists_prop]
-
-Depends on / 依赖: Nonempty, Sne.to_subtype, Subtype, Subtype.exists, directed_val, exists_prop, hS.directed_val, mem_iSup_of_directed, sSup_eq_iSup, to_subtype
+/-
+**Subfield.mem_sSup_of_directedOn** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：mem_sSup_of_directedOn {S : Set (Subfield K)} (Sne : S.Nonempty) (hS : Dir
+ectedOn (· <= ·) S) {x : K} : x in sSup S ↔ exists s in S, x in s
+参数：Subfield K；Sne : S.Nonempty；hS : DirectedOn (· <= ·) S。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Nonempty.to_subtype`：∀ {α : Type u} {s : Set α}, s.Nonempty → Nonemp
+ty ↑s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sSup_eq_iSup'`：sSup_eq_iSup' (s : Set α) : sSup s = ⨆ a : s, (a : α)
+· 使用定理 `Subfield.mem_iSup_of_directed`：mem_iSup_of_directed {ι} [hι : Nonempty ι
+] {S : ι -> Subfield K} (hS : Directed (· <= ·) S) {x : K} : (x in ⨆ i, S i) ↔ e
+xists i, x in S i
+· 使用定理 `DirectedOn.directed_val`：∀ {α : Type u_1} {r : α → α → Prop} {s : Set α}
+, DirectedOn r s → Directed r Subtype.val
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_sSup_of_directedOn {S : Set (Subfield K)} (Sne : S.Nonempty) (hS : DirectedOn (· <= ·) S)
-    {x : K} : x in sSup S ↔ exists s in S, x in s := by
+theorem mem_sSup_of_directedOn {S : Set (Subfield K)} (Sne : S.Nonempty) (hS : DirectedOn (· ≤ ·) S)
+    {x : K} : x ∈ sSup S ↔ ∃ s ∈ S, x ∈ s := by
   have : Nonempty S := Sne.to_subtype
   simp only [sSup_eq_iSup', mem_iSup_of_directed hS.directed_val, Subtype.exists, exists_prop]
-
-/--
-theorem `coe_sSup_of_directedOn` / 定理 `coe_sSup_of_directedOn`
-
-English:
-theorem coe_sSup_of_directedOn
-  statement: {S : Set (Subfield K)} (Sne : S.Nonempty)
-  proof: Set.ext fun x => by simp [mem_sSup_of_directedOn Sne hS]
-
-中文:
-定理 coe_sSup_of_directedOn
-  结论: {S : 集合 (子域 K)} (Sne : S.非空)
-  证明: Set.ext fun x => by simp [mem_sSup_of_directedOn Sne hS]
-
-Depends on / 依赖: Set.ext, mem_sSup_of_directedOn
+/-
+**Subfield.coe_sSup_of_directedOn** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：coe_sSup_of_directedOn {S : Set (Subfield K)} (Sne : S.Nonempty) (hS : Dir
+ectedOn (· <= ·) S) : (↑(sSup S) : Set K) = ⋃ s in S, ↑s
+参数：Subfield K；Sne : S.Nonempty；hS : DirectedOn (· <= ·) S。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subfield.mem_sSup_of_directedOn`：mem_sSup_of_directedOn {S : Set (Subfie
+ld K)} (Sne : S.Nonempty) (hS : DirectedOn (· <= ·) S) {x : K} : x in sSup S ↔ e
+xists s in S, x in s
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem coe_sSup_of_directedOn {S : Set (Subfield K)} (Sne : S.Nonempty)
-    (hS : DirectedOn (· <= ·) S) : (↑(sSup S) : Set K) = ⋃ s in S, ↑s :=
+    (hS : DirectedOn (· ≤ ·) S) : (↑(sSup S) : Set K) = ⋃ s ∈ S, ↑s :=
   Set.ext fun x => by simp [mem_sSup_of_directedOn Sne hS]
 
 end Subfield
@@ -1689,23 +1395,16 @@ end Subfield
 variable (L) in
 /-- A field is finitely generated if it is the closure of a finite subset. -/
 @[mk_iff fg_iff]
-/--
-Definition of `Field.FG` / `Field.FG` 的定义
+/-
+**Field.FG** 是 Mathlib 中的一个归纳类型，位于命名空间 `Field`。
+形式化陈述：(L : Type v) → [DivisionRing L] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Field.FG
-  parameters: : Prop where
-  axioms and operations (1):
-    - finitely_generated : exists S : Finset L, Subfield.closure (S : Set L) = ⊤
-
-中文:
-类 域.FG
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - finitely_generated : 存在 S : 有限集 L, 子域.closure (S : 集合 L) = ⊤
+--- 原说明 ---
+A field is finitely generated if it is the closure of a finite subset.
 -/
 protected class Field.FG : Prop where
-  finitely_generated : exists S : Finset L, Subfield.closure (S : Set L) = ⊤
+  finitely_generated : ∃ S : Finset L, Subfield.closure (S : Set L) = ⊤
 
 namespace RingHom
 
@@ -1713,266 +1412,222 @@ variable {s : Subfield K}
 
 open Subfield
 
-/--
-Definition of `rangeRestrictField` / `rangeRestrictField` 的定义
+/-- Restriction of a ring homomorphism to its range interpreted as a subfield. -/
+/-
+**RingHom.rangeRestrictField** 是 Mathlib 中的一个定义，位于命名空间 `RingHom`。
+形式化陈述：rangeRestrictField (f : K ->+* L) : K ->+* f.fieldRange
+参数：f : K ->+* L。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rangeRestrictField
-  signature: (f : K ->+* L)
-  body: f.rangeSRestrict
-
-@[simp]
-
-中文:
-定义 rangeRestrictField
-  签名: (f : K ->+* L)
-  定义体: f.rangeSRestrict
-
-@[simp]
-
-Depends on / 依赖: f.rangeSRestrict, rangeSRestrict, smulDivisionRing
+--- 原说明 ---
+Restriction of a ring homomorphism to its range interpreted as a subfield.
 -/
-def rangeRestrictField (f : K ->+* L) : K ->+* f.fieldRange :=
+def rangeRestrictField (f : K →+* L) : K →+* f.fieldRange :=
   f.rangeSRestrict
 
 @[simp]
-/--
-theorem `coe_rangeRestrictField` / 定理 `coe_rangeRestrictField`
-
-English:
-theorem coe_rangeRestrictField
-  given: (f : K ->+* L) (x : K)
-  statement: (f.rangeRestrictField x : L) = f x
-  proof: rfl
-
-中文:
-定理 coe_rangeRestrictField
-  条件: (f : K ->+* L) (x : K)
-  结论: (f.rangeRestrictField x : L) = f x
-  证明: rfl
+/-
+**RingHom.coe_rangeRestrictField** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：coe_rangeRestrictField (f : K ->+* L) (x : K) : (f.rangeRestrictField x : 
+L) = f x
+参数：f : K ->+* L；x : K。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_rangeRestrictField (f : K ->+* L) (x : K) : (f.rangeRestrictField x : L) = f x :=
+theorem coe_rangeRestrictField (f : K →+* L) (x : K) : (f.rangeRestrictField x : L) = f x :=
   rfl
-
-/--
-theorem `rangeRestrictField_bijective` / 定理 `rangeRestrictField_bijective`
-
-English:
-theorem rangeRestrictField_bijective
-  given: (f : K ->+* L)
-  statement: Function.Bijective (rangeRestrictField f)
-  proof: (Equiv.ofInjective f f.injective).bijective
-
-中文:
-定理 rangeRestrictField_bijective
-  条件: (f : K ->+* L)
-  结论: 函数.双射 (rangeRestrictField f)
-  证明: (Equiv.ofInjective f f.injective).bijective
-
-Depends on / 依赖: Equiv.ofInjective, bijective, f.injective, injective, ofInjective
+/-
+**RingHom.rangeRestrictField_bijective** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：rangeRestrictField_bijective (f : K ->+* L) : Function.Bijective (rangeRes
+trictField f)
+参数：f : K ->+* L。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.bijective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Bijec
+tive ⇑e
+· 使用定理 `RingHom.injective`：∀ {R : Type u_2} {S : Type u_3} [inst : NonAssocRing 
+R] [IsSimpleRing R] [inst_2 : NonAssocSemiring S] [Nontrivial S]   (f : R →+* S)
+, Funct…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `DivisionRing.toNontrivial`：∀ {K : Type u_2} [self : DivisionRing K], Non
+trivial K
 -/
-theorem rangeRestrictField_bijective (f : K ->+* L) : Function.Bijective (rangeRestrictField f) :=
+theorem rangeRestrictField_bijective (f : K →+* L) : Function.Bijective (rangeRestrictField f) :=
   (Equiv.ofInjective f f.injective).bijective
 
 /--
 `RingHom.rangeRestrictField` as a `RingEquiv`.
 -/
 @[simps! apply_coe]
-/--
-Definition of `rangeRestrictFieldEquiv` / `rangeRestrictFieldEquiv` 的定义
+/-
+**RingHom.rangeRestrictFieldEquiv** 是 Mathlib 中的一个定义，位于命名空间 `RingHom`。
+形式化陈述：rangeRestrictFieldEquiv (f : K ->+* L) : K ≃+* f.fieldRange
+参数：f : K ->+* L。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.rangeRestrictField_bijective`：rangeRestrictField_bijective (f : 
+K ->+* L) : Function.Bijective (rangeRestrictField f)
 
-English:
-definition rangeRestrictFieldEquiv
-  signature: (f : K ->+* L)
-  body: RingEquiv.ofBijective f.rangeRestrictField f.rangeRestrictField_bijective
-
-@[simp]
-
-中文:
-定义 rangeRestrictFieldEquiv
-  签名: (f : K ->+* L)
-  定义体: RingEquiv.ofBijective f.rangeRestrictField f.rangeRestrictField_bijective
-
-@[simp]
-
-Depends on / 依赖: RingEquiv, RingEquiv.ofBijective, f.rangeRestrictField, f.rangeRestrictField_bijective, ofBijective, rangeRestrictField, rangeRestrictField_bijective
+--- 原说明 ---
+`RingHom.rangeRestrictField` as a `RingEquiv`.
 -/
-noncomputable def rangeRestrictFieldEquiv (f : K ->+* L) : K ≃+* f.fieldRange :=
+noncomputable def rangeRestrictFieldEquiv (f : K →+* L) : K ≃+* f.fieldRange :=
   RingEquiv.ofBijective f.rangeRestrictField f.rangeRestrictField_bijective
 
 @[simp]
-/--
-theorem `rangeRestrictFieldEquiv_apply_symm_apply` / 定理 `rangeRestrictFieldEquiv_apply_symm_apply`
-
-English:
-theorem rangeRestrictFieldEquiv_apply_symm_apply
-  given: (f : K ->+* L) (x : f.fieldRange)
-  proof: by
-  rw [← rangeRestrictFieldEquiv_apply_coe]; rw [RingEquiv.apply_symm_apply]
-
-中文:
-定理 rangeRestrictFieldEquiv_apply_symm_apply
-  条件: (f : K ->+* L) (x : f.fieldRange)
-  证明: by
-  rw [← rangeRestrictFieldEquiv_apply_coe]; rw [RingEquiv.apply_symm_apply]
-
-Depends on / 依赖: RingEquiv, RingEquiv.apply_symm_apply, apply_symm_apply, rangeRestrictFieldEquiv_apply_coe
+/-
+**RingHom.rangeRestrictFieldEquiv_apply_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Ri
+ngHom`。
+形式化陈述：rangeRestrictFieldEquiv_apply_symm_apply (f : K ->+* L) (x : f.fieldRange)
+ : f (f.rangeRestrictFieldEquiv.symm x) = x
+参数：f : K ->+* L；x : f.fieldRange。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RingHom.rangeRestrictFieldEquiv_apply_coe`：∀ {K : Type u} {L : Type v} [
+inst : DivisionRing K] [inst_1 : DivisionRing L] (f : K →+* L) (a : K),   ↑(f.ra
+ngeRestrictFieldEquiv a) = f a
+· 使用定理 `RingEquiv.apply_symm_apply`：apply_symm_apply (e : R ≃+* S) : forall x, e
+ (e.symm x) = x
 -/
-theorem rangeRestrictFieldEquiv_apply_symm_apply (f : K ->+* L) (x : f.fieldRange) :
+theorem rangeRestrictFieldEquiv_apply_symm_apply (f : K →+* L) (x : f.fieldRange) :
     f (f.rangeRestrictFieldEquiv.symm x) = x := by
-  rw [← rangeRestrictFieldEquiv_apply_coe]; rw [RingEquiv.apply_symm_apply]
+  rw [← rangeRestrictFieldEquiv_apply_coe, RingEquiv.apply_symm_apply]
 
 section eqLocus
 
 variable {L : Type v} [Semiring L]
 
-/--
-Definition of `eqLocusField` / `eqLocusField` 的定义
+/-- The subfield of elements `x : R` such that `f x = g x`, i.e.,
+the equalizer of f and g as a subfield of R -/
+/-
+**RingHom.eqLocusField** 是 Mathlib 中的一个定义，位于命名空间 `RingHom`。
+形式化陈述：eqLocusField (f g : K ->+* L) : Subfield K where __
+参数：f g : K ->+* L。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eqLocusField
-  signature: (f g : K ->+* L)
-  body: (f : K ->+* L).eqLocus g
+--- 原说明 ---
+The subfield of elements `x : R` such that `f x = g x`, i.e.,
+the equalizer of f and g as a subfield of R
+-/
+def eqLocusField (f g : K →+* L) : Subfield K where
+  __ := (f : K →+* L).eqLocus g
   inv_mem' _ := eq_on_inv₀ f g
   carrier := { x | f x = g x }
 
 @[simp]
-
-中文:
-定义 eqLocusField
-  签名: (f g : K ->+* L)
-  定义体: (f : K ->+* L).eqLocus g
-  inv_mem' _ := eq_on_inv₀ f g
-  carrier := { x | f x = g x }
-
-@[simp]
-
-Depends on / 依赖: eqLocus
+/-
+**RingHom.mem_eqLocusField** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：mem_eqLocusField {f g : K ->+* L} {x : K} : x in f.eqLocusField g ↔ f x = 
+g x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-def eqLocusField (f g : K ->+* L) : Subfield K where
-  __ := (f : K ->+* L).eqLocus g
-  inv_mem' _ := eq_on_inv₀ f g
-  carrier := { x | f x = g x }
+theorem mem_eqLocusField {f g : K →+* L} {x : K} : x ∈ f.eqLocusField g ↔ f x = g x := Iff.rfl
 
-@[simp]
-/--
-theorem `mem_eqLocusField` / 定理 `mem_eqLocusField`
+/-- If two ring homomorphisms are equal on a set, then they are equal on its subfield closure. -/
+/-
+**RingHom.eqOn_field_closure** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：eqOn_field_closure {f g : K ->+* L} {s : Set K} (h : Set.EqOn f g s) : Set
+.EqOn f g (closure s)
+参数：h : Set.EqOn f g s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subfield.closure_le`：closure_le {s : Set K} {t : Subfield K} : closure s
+ <= t ↔ s subseteq t
 
-English:
-theorem mem_eqLocusField
-  given: {f g : K ->+* L} {x : K}
-  statement: x in f.eqLocusField g ↔ f x = g x
-  proof: Iff.rfl
-
-中文:
-定理 mem_eqLocusField
-  条件: {f g : K ->+* L} {x : K}
-  结论: x in f.eqLocusField g ↔ f x = g x
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+--- 原说明 ---
+If two ring homomorphisms are equal on a set, then they are equal on its subfiel
+d closure.
 -/
-theorem mem_eqLocusField {f g : K ->+* L} {x : K} : x in f.eqLocusField g ↔ f x = g x := Iff.rfl
-
-/--
-theorem `eqOn_field_closure` / 定理 `eqOn_field_closure`
-
-English:
-theorem eqOn_field_closure
-  given: {f g : K ->+* L} {s : Set K} (h : Set.EqOn f g s)
-  proof: show closure s <= f.eqLocusField g from closure_le.2 h
-
-中文:
-定理 eqOn_field_closure
-  条件: {f g : K ->+* L} {s : 集合 K} (h : 集合.EqOn f g s)
-  证明: show closure s <= f.eqLocusField g from closure_le.2 h
-
-Depends on / 依赖: closure, closure_le, eqLocusField, f.eqLocusField
--/
-theorem eqOn_field_closure {f g : K ->+* L} {s : Set K} (h : Set.EqOn f g s) :
+theorem eqOn_field_closure {f g : K →+* L} {s : Set K} (h : Set.EqOn f g s) :
     Set.EqOn f g (closure s) :=
-  show closure s <= f.eqLocusField g from closure_le.2 h
-
-/--
-theorem `eq_of_eqOn_subfield_top` / 定理 `eq_of_eqOn_subfield_top`
-
-English:
-theorem eq_of_eqOn_subfield_top
-  given: {f g : K ->+* L} (h : Set.EqOn f g (⊤ : Subfield K))
-  statement: f = g
-  proof: ext fun _ => h trivial
-
-中文:
-定理 eq_of_eqOn_subfield_top
-  条件: {f g : K ->+* L} (h : 集合.EqOn f g (⊤ : 子域 K))
-  结论: f = g
-  证明: ext fun _ => h trivial
+  show closure s ≤ f.eqLocusField g from closure_le.2 h
+/-
+**RingHom.eq_of_eqOn_subfield_top** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：eq_of_eqOn_subfield_top {f g : K ->+* L} (h : Set.EqOn f g (⊤ : Subfield K
+)) : f = g
+参数：h : Set.EqOn f g (⊤ : Subfield K)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `trivial`：True
 -/
-theorem eq_of_eqOn_subfield_top {f g : K ->+* L} (h : Set.EqOn f g (⊤ : Subfield K)) : f = g :=
+theorem eq_of_eqOn_subfield_top {f g : K →+* L} (h : Set.EqOn f g (⊤ : Subfield K)) : f = g :=
   ext fun _ => h trivial
-
-/--
-theorem `eq_of_eqOn_of_field_closure_eq_top` / 定理 `eq_of_eqOn_of_field_closure_eq_top`
-
-English:
-theorem eq_of_eqOn_of_field_closure_eq_top
-  statement: {s : Set K} (hs : closure s = ⊤) {f g : K ->+* L}
-  proof: eq_of_eqOn_subfield_top hs ▸ eqOn_field_closure h
-
-中文:
-定理 eq_of_eqOn_of_field_closure_eq_top
-  结论: {s : 集合 K} (hs : closure s = ⊤) {f g : K ->+* L}
-  证明: eq_of_eqOn_subfield_top hs ▸ eqOn_field_closure h
-
-Depends on / 依赖: eqOn_field_closure, eq_of_eqOn_subfield_top
+/-
+**RingHom.eq_of_eqOn_of_field_closure_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`
+。
+形式化陈述：eq_of_eqOn_of_field_closure_eq_top {s : Set K} (hs : closure s = ⊤) {f g :
+ K ->+* L} (h : s.EqOn f g) : f = g
+参数：hs : closure s = ⊤；h : s.EqOn f g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.eq_of_eqOn_subfield_top`：eq_of_eqOn_subfield_top {f g : K ->+* L
+} (h : Set.EqOn f g (⊤ : Subfield K)) : f = g
+· 使用定理 `RingHom.eqOn_field_closure`：eqOn_field_closure {f g : K ->+* L} {s : Set
+ K} (h : Set.EqOn f g s) : Set.EqOn f g (closure s)
 -/
-theorem eq_of_eqOn_of_field_closure_eq_top {s : Set K} (hs : closure s = ⊤) {f g : K ->+* L}
+theorem eq_of_eqOn_of_field_closure_eq_top {s : Set K} (hs : closure s = ⊤) {f g : K →+* L}
     (h : s.EqOn f g) : f = g :=
-eq_of_eqOn_subfield_top hs ▸ eqOn_field_closure h
+  eq_of_eqOn_subfield_top <| hs ▸ eqOn_field_closure h
 
 end eqLocus
 
-/--
-theorem `field_closure_preimage_le` / 定理 `field_closure_preimage_le`
-
-English:
-theorem field_closure_preimage_le
-  given: (f : K ->+* L) (s : Set L)
-  proof: closure_le.2 fun _ hx => SetLike.mem_coe.2 mem_comap.2 subset_closure hx
-
-中文:
-定理 field_closure_preimage_le
-  条件: (f : K ->+* L) (s : 集合 L)
-  证明: closure_le.2 fun _ hx => SetLike.mem_coe.2 mem_comap.2 subset_closure hx
-
-Depends on / 依赖: SetLike, SetLike.mem_coe, closure_le, mem_coe, mem_comap, subset_closure
+/-
+**RingHom.field_closure_preimage_le** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：field_closure_preimage_le (f : K ->+* L) (s : Set L) : closure (f ⁻¹' s) <
+= (closure s).comap f
+参数：f : K ->+* L；s : Set L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subfield.closure_le`：closure_le {s : Set K} {t : Subfield K} : closure s
+ <= t ↔ s subseteq t
+· 使用定理 `SetLike.mem_coe`：mem_coe {x : B} : x in (p : Set B) ↔ x in p
+· 使用定理 `Subfield.mem_comap`：mem_comap {s : Subfield L} {f : K ->+* L} {x : K} : 
+x in s.comap f ↔ f x in s
+· 使用定理 `Subfield.subset_closure`：subset_closure {s : Set K} : s subseteq closure
+ s
 -/
-theorem field_closure_preimage_le (f : K ->+* L) (s : Set L) :
-    closure (f ⁻¹' s) <= (closure s).comap f :=
-closure_le.2 fun _ hx => SetLike.mem_coe.2 mem_comap.2 subset_closure hx
+theorem field_closure_preimage_le (f : K →+* L) (s : Set L) :
+    closure (f ⁻¹' s) ≤ (closure s).comap f :=
+  closure_le.2 fun _ hx => SetLike.mem_coe.2 <| mem_comap.2 <| subset_closure hx
 
-/--
-theorem `map_field_closure` / 定理 `map_field_closure`
+/-- The image under a ring homomorphism of the subfield generated by a set equals
+the subfield generated by the image of the set. -/
+/-
+**RingHom.map_field_closure** 是 Mathlib 中的一个定理，位于命名空间 `RingHom`。
+形式化陈述：map_field_closure (f : K ->+* L) (s : Set K) : (closure s).map f = closure
+ (f '' s)
+参数：f : K ->+* L；s : Set K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_comm_of_u_comm`：l_comm_of_u_comm {X : Type*} [Preorde
+r X] {Y : Type*} [Preorder Y] {Z : Type*} [Preorder Z] {W : Type*} [PartialOrder
+ W] {lYX : X -> Y} {uXY…
+· 使用定理 `Set.image_preimage`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, GaloisC
+onnection (Set.image f) (Set.preimage f)
+· 使用定理 `Subfield.gc_map_comap`：gc_map_comap (f : K ->+* L) : GaloisConnection (m
+ap f) (comap f)
+· 使用定理 `GaloisInsertion.gc`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] 
+[inst_1 : Preorder β] {l : α → β} {u : β → α}   (self : GaloisInsertion l u), Ga
+loisConn…
 
-English:
-theorem map_field_closure
-  given: (f : K ->+* L) (s : Set K)
-  statement: (closure s).map f = closure (f '' s)
-  proof: Set.image_preimage.l_comm_of_u_comm (gc_map_comap f) (Subfield.gi L).gc (Subfield.gi K).gc
-    fun _ => rfl
-
-中文:
-定理 map_field_closure
-  条件: (f : K ->+* L) (s : 集合 K)
-  结论: (closure s).map f = closure (f '' s)
-  证明: Set.image_preimage.l_comm_of_u_comm (gc_map_comap f) (Subfield.gi L).gc (Subfield.gi K).gc
-    fun _ => rfl
-
-Depends on / 依赖: Set.image_preimage.l_comm_of_u_comm, Subfield, Subfield.gi, gc_map_comap, image_preimage, l_comm_of_u_comm
+--- 原说明 ---
+The image under a ring homomorphism of the subfield generated by a set equals
+the subfield generated by the image of the set.
 -/
-theorem map_field_closure (f : K ->+* L) (s : Set K) : (closure s).map f = closure (f '' s) :=
+theorem map_field_closure (f : K →+* L) (s : Set K) : (closure s).map f = closure (f '' s) :=
   Set.image_preimage.l_comm_of_u_comm (gc_map_comap f) (Subfield.gi L).gc (Subfield.gi K).gc
-    fun _ => rfl
+    fun _ ↦ rfl
 
 end RingHom
 
@@ -1980,48 +1635,35 @@ namespace Subfield
 
 open RingHom
 
-/--
-Definition of `inclusion` / `inclusion` 的定义
+/-- The ring homomorphism associated to an inclusion of subfields. -/
+/-
+**Subfield.inclusion** 是 Mathlib 中的一个定义，位于命名空间 `Subfield`。
+形式化陈述：inclusion {S T : Subfield K} (h : S <= T) : S ->+* T
+参数：h : S <= T。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inclusion
-  signature: {S T : Subfield K} (h : S <= T)
-  body: S.subtype.codRestrict _ fun x => h x.2
-
-@[simp]
-
-中文:
-定义 inclusion
-  签名: {S T : 子域 K} (h : S <= T)
-  定义体: S.subtype.codRestrict _ fun x => h x.2
-
-@[simp]
-
-Depends on / 依赖: S.subtype.codRestrict, codRestrict, subtype
+--- 原说明 ---
+The ring homomorphism associated to an inclusion of subfields.
 -/
-def inclusion {S T : Subfield K} (h : S <= T) : S ->+* T :=
+def inclusion {S T : Subfield K} (h : S ≤ T) : S →+* T :=
   S.subtype.codRestrict _ fun x => h x.2
 
 @[simp]
-/--
-theorem `fieldRange_subtype` / 定理 `fieldRange_subtype`
-
-English:
-theorem fieldRange_subtype
-  given: (s : Subfield K)
-  statement: s.subtype.fieldRange = s
-  proof: SetLike.ext' (coe_rangeS _).trans Subtype.range_coe
-
-中文:
-定理 fieldRange_subtype
-  条件: (s : 子域 K)
-  结论: s.subtype.fieldRange = s
-  证明: SetLike.ext' (coe_rangeS _).trans Subtype.range_coe
-
-Depends on / 依赖: SetLike, SetLike.ext, Subtype, Subtype.range_coe, coe_rangeS, range_coe
+/-
+**Subfield.fieldRange_subtype** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：fieldRange_subtype (s : Subfield K) : s.subtype.fieldRange = s
+参数：s : Subfield K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.ext'`：ext' (h : (p : Set B) = q) : p = q
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `RingHom.coe_rangeS`：∀ {R : Type u} {S : Type v} [inst : NonAssocSemiring
+ R] [inst_1 : NonAssocSemiring S] (f : R →+* S),   ↑f.rangeS = Set.range ⇑f
+· 使用定理 `Subtype.range_coe`：range_coe {s : Set α} : range ((↑) : s -> α) = s
 -/
 theorem fieldRange_subtype (s : Subfield K) : s.subtype.fieldRange = s :=
-SetLike.ext' (coe_rangeS _).trans Subtype.range_coe
+  SetLike.ext' <| (coe_rangeS _).trans Subtype.range_coe
 
 end Subfield
 
@@ -2029,24 +1671,18 @@ namespace RingEquiv
 
 variable {s t : Subfield K}
 
-/--
-Definition of `subfieldCongr` / `subfieldCongr` 的定义
+/-- Makes the identity isomorphism from a proof two subfields of a multiplicative
+    monoid are equal. -/
+/-
+**RingEquiv.subfieldCongr** 是 Mathlib 中的一个定义，位于命名空间 `RingEquiv`。
+形式化陈述：subfieldCongr (h : s = t) : s ≃+* t
+参数：h : s = t。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition subfieldCongr
-  signature: (h : s = t)
-  body: { Equiv.setCongr <| SetLike.ext'_iff.1 h with
-    map_mul' := fun _ _ => rfl
-    map_add' := fun _ _ => rfl }
-
-中文:
-定义 subfieldCongr
-  签名: (h : s = t)
-  定义体: { Equiv.setCongr <| SetLike.ext'_iff.1 h with
-    map_mul' := fun _ _ => rfl
-    map_add' := fun _ _ => rfl }
-
-Depends on / 依赖: Equiv.setCongr, Semifield, Semifield.toIsField, SetLike, SetLike.ext, _iff, isDomain, map_add, map_mul, setCongr, toIsField
+--- 原说明 ---
+Makes the identity isomorphism from a proof two subfields of a multiplicative
+    monoid are equal.
 -/
 def subfieldCongr (h : s = t) : s ≃+* t :=
   { Equiv.setCongr <| SetLike.ext'_iff.1 h with
@@ -2059,150 +1695,110 @@ namespace Subfield
 
 variable {s : Set K}
 
-/--
-theorem `closure_preimage_le` / 定理 `closure_preimage_le`
-
-English:
-theorem closure_preimage_le
-  given: (f : K ->+* L) (s : Set L)
-  statement: closure (f ⁻¹' s) <= (closure s).comap f
-  proof: closure_le.2 fun _ hx => SetLike.mem_coe.2 mem_comap.2 subset_closure hx
-
-中文:
-定理 closure_preimage_le
-  条件: (f : K ->+* L) (s : 集合 L)
-  结论: closure (f ⁻¹' s) <= (closure s).comap f
-  证明: closure_le.2 fun _ hx => SetLike.mem_coe.2 mem_comap.2 subset_closure hx
-
-Depends on / 依赖: SetLike, SetLike.mem_coe, closure_le, mem_coe, mem_comap, subset_closure
+/-
+**Subfield.closure_preimage_le** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：closure_preimage_le (f : K ->+* L) (s : Set L) : closure (f ⁻¹' s) <= (clo
+sure s).comap f
+参数：f : K ->+* L；s : Set L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subfield.closure_le`：closure_le {s : Set K} {t : Subfield K} : closure s
+ <= t ↔ s subseteq t
+· 使用定理 `SetLike.mem_coe`：mem_coe {x : B} : x in (p : Set B) ↔ x in p
+· 使用定理 `Subfield.mem_comap`：mem_comap {s : Subfield L} {f : K ->+* L} {x : K} : 
+x in s.comap f ↔ f x in s
+· 使用定理 `Subfield.subset_closure`：subset_closure {s : Set K} : s subseteq closure
+ s
 -/
-theorem closure_preimage_le (f : K ->+* L) (s : Set L) : closure (f ⁻¹' s) <= (closure s).comap f :=
-closure_le.2 fun _ hx => SetLike.mem_coe.2 mem_comap.2 subset_closure hx
+theorem closure_preimage_le (f : K →+* L) (s : Set L) : closure (f ⁻¹' s) ≤ (closure s).comap f :=
+  closure_le.2 fun _ hx => SetLike.mem_coe.2 <| mem_comap.2 <| subset_closure hx
 
 section Commutative
 
 variable {K : Type u} [Field K] (s : Subfield K)
 
-/--
-theorem `multiset_prod_mem` / 定理 `multiset_prod_mem`
+/-- Product of a multiset of elements in a subfield is in the subfield. -/
+/-
+**Subfield.multiset_prod_mem** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：∀ {K : Type u} [inst : Field K] (s : Subfield K) (m : Multiset K), (∀ a ∈ 
+m, a ∈ s) → m.prod ∈ s
+参数：s : Subfield K；m : Multiset K；∀ a ∈ m, a ∈ s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `multiset_prod_mem`：multiset_prod_mem {M} [CommMonoid M] [SetLike B M] [S
+ubmonoidClass B M] (m : Multiset M) (hm : forall a in m, a in S) : m.prod in S
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+· 使用定理 `SubfieldClass.toSubgroupClass`：∀ {K : Type u} [inst : DivisionRing K] (S
+ : Type u_1) [inst_1 : SetLike S K] [h : SubfieldClass S K], SubgroupClass S K
+· 使用定理 `Subfield.instSubfieldClass`：∀ {K : Type u} [inst : DivisionRing K], Subf
+ieldClass (Subfield K) K
 
-English:
-theorem multiset_prod_mem
-  given: (m : Multiset K)
-  statement: (forall a in m, a in s) -> m.prod in s
-  proof: multiset_prod_mem m
-
-中文:
-定理 multiset_prod_mem
-  条件: (m : Multiset K)
-  结论: (对任意 a in m, a in s) -> m.乘积 in s
-  证明: multiset_prod_mem m
+--- 原说明 ---
+Product of a multiset of elements in a subfield is in the subfield.
 -/
-protected theorem multiset_prod_mem (m : Multiset K) : (forall a in m, a in s) -> m.prod in s :=
+protected theorem multiset_prod_mem (m : Multiset K) : (∀ a ∈ m, a ∈ s) → m.prod ∈ s :=
   multiset_prod_mem m
 
-/--
-theorem `prod_mem` / 定理 `prod_mem`
+/-- Product of elements of a subfield indexed by a `Finset` is in the subfield. -/
+/-
+**Subfield.prod_mem** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：∀ {K : Type u} [inst : Field K] (s : Subfield K) {ι : Type u_1} {t : Finse
+t ι} {f : ι → K},   (∀ c ∈ t, f c ∈ s) → ∏ i ∈ t, f i ∈ s
+参数：s : Subfield K；∀ c ∈ t, f c ∈ s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `prod_mem`：prod_mem {M : Type*} [CommMonoid M] [SetLike B M] [SubmonoidCl
+ass B M] {ι : Type*} {t : Finset ι} {f : ι -> M} (h : forall c in t, f c in S)…
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+· 使用定理 `SubfieldClass.toSubgroupClass`：∀ {K : Type u} [inst : DivisionRing K] (S
+ : Type u_1) [inst_1 : SetLike S K] [h : SubfieldClass S K], SubgroupClass S K
+· 使用定理 `Subfield.instSubfieldClass`：∀ {K : Type u} [inst : DivisionRing K], Subf
+ieldClass (Subfield K) K
 
-English:
-theorem prod_mem
-  given: {ι : Type*} {t : Finset ι} {f : ι -> K} (h : forall c in t, f c in s)
-  proof: prod_mem h
-
-中文:
-定理 prod_mem
-  条件: {ι : 类型} {t : 有限集 ι} {f : ι -> K} (h : 对任意 c in t, f c in s)
-  证明: prod_mem h
+--- 原说明 ---
+Product of elements of a subfield indexed by a `Finset` is in the subfield.
 -/
-protected theorem prod_mem {ι : Type*} {t : Finset ι} {f : ι -> K} (h : forall c in t, f c in s) :
-    (∏ i in t, f i) in s :=
+protected theorem prod_mem {ι : Type*} {t : Finset ι} {f : ι → K} (h : ∀ c ∈ t, f c ∈ s) :
+    (∏ i ∈ t, f i) ∈ s :=
   prod_mem h
-
-/--
-Instance `toAlgebra` / 实例 `toAlgebra`
-
-English:
-instance toAlgebra
-  signature: : Algebra s K
-  body: inferInstance
-
-中文:
-实例 toAlgebra
-  签名: : 代数 s K
-  定义体: inferInstance
+/-
+**Subfield.toAlgebra** 是 Mathlib 中的一个实例，位于命名空间 `Subfield`。
+形式化陈述：toAlgebra : Algebra s K
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance toAlgebra : Algebra s K :=
   inferInstance
-
-/--
-theorem `algebraMap_ofSubfield` / 定理 `algebraMap_ofSubfield`
-
-English:
-theorem algebraMap_ofSubfield
-  statement: algebraMap s K = s.subtype
-  proof: rfl
-
-中文:
-定理 algebraMap_ofSubfield
-  结论: algebraMap s K = s.subtype
-  证明: rfl
+/-
+**Subfield.algebraMap_ofSubfield** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：algebraMap_ofSubfield : algebraMap s K = s.subtype
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `Subfield.instSubfieldClass`：∀ {K : Type u} [inst : DivisionRing K], Subf
+ieldClass (Subfield K) K
 -/
 theorem algebraMap_ofSubfield : algebraMap s K = s.subtype :=
   rfl
 
-/--
-Definition of `commClosure` / `commClosure` 的定义
+/-- The `Subfield` generated by a set in a field. -/
+/-
+**Subfield.commClosure** 是 Mathlib 中的一个定义，位于命名空间 `Subfield`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition commClosure
-  signature: (s : Set K)
-  body: {z : K | exists x in Subring.closure s, exists y in Subring.closure s, x / y = z}
-  zero_mem' := ⟨0, Subring.zero_mem _, 1, Subring.one_mem _, div_one _⟩
-  one_mem' := ⟨1, Subring.one_mem _, 1, Subring.one_mem _, div_one _⟩
-  neg_mem' {x} := by
-    rintro ⟨y, hy, z, hz, x_eq⟩
-    exact ⟨-y, Subring.neg_mem _ hy, z, hz, x_eq ▸ neg_div _ _⟩
-  inv_mem' x := by rintro ⟨y, hy, z, hz, x_eq⟩; exact ⟨z, hz, y, hy, x_eq ▸ (inv_div _ _).symm⟩
-  add_mem' x_mem y_mem := by
-    -- Use `id` in the next 2 `obtain`s so that assumptions stay there for the `rwa`s below
-    obtain ⟨nx, hnx, dx, hdx, rfl⟩ := id x_mem
-    obtain ⟨ny, hny, dy, hdy, rfl⟩ := id y_mem
-    by_cases hx0 : dx = 0; · rwa [hx0, div_zero, zero_add]
-    by_cases hy0 : dy = 0; · rwa [hy0, div_zero, add_zero]
-    exact
-      ⟨nx * dy + dx * ny, Subring.add_mem _ (Subring.mul_mem _ hnx hdy) (Subring.mul_mem _ hdx hny),
-        dx * dy, Subring.mul_mem _ hdx hdy, (div_add_div nx ny hx0 hy0).symm⟩
-  mul_mem' := by
-    rintro _ _ ⟨nx, hnx, dx, hdx, rfl⟩ ⟨ny, hny, dy, hdy, rfl⟩
-    exact ⟨nx * ny, Subring.mul_mem _ hnx hny, dx * dy, Subring.mul_mem _ hdx hdy,
-      (div_mul_div_comm _ _ _ _).symm⟩
-
-中文:
-定义 commClosure
-  签名: (s : 集合 K)
-  定义体: {z : K | exists x in Subring.closure s, exists y in Subring.closure s, x / y = z}
-  zero_mem' := ⟨0, Subring.zero_mem _, 1, Subring.one_mem _, div_one _⟩
-  one_mem' := ⟨1, Subring.one_mem _, 1, Subring.one_mem _, div_one _⟩
-  neg_mem' {x} := by
-    rintro ⟨y, hy, z, hz, x_eq⟩
-    exact ⟨-y, Subring.neg_mem _ hy, z, hz, x_eq ▸ neg_div _ _⟩
-  inv_mem' x := by rintro ⟨y, hy, z, hz, x_eq⟩; exact ⟨z, hz, y, hy, x_eq ▸ (inv_div _ _).symm⟩
-  add_mem' x_mem y_mem := by
-    -- Use `id` in the next 2 `obtain`s so that assumptions stay there for the `rwa`s below
-    obtain ⟨nx, hnx, dx, hdx, rfl⟩ := id x_mem
-    obtain ⟨ny, hny, dy, hdy, rfl⟩ := id y_mem
-    by_cases hx0 : dx = 0; · rwa [hx0, div_zero, zero_add]
-    by_cases hy0 : dy = 0; · rwa [hy0, div_zero, add_zero]
-    exact
-      ⟨nx * dy + dx * ny, Subring.add_mem _ (Subring.mul_mem _ hnx hdy) (Subring.mul_mem _ hdx hny),
-        dx * dy, Subring.mul_mem _ hdx hdy, (div_add_div nx ny hx0 hy0).symm⟩
-  mul_mem' := by
-    rintro _ _ ⟨nx, hnx, dx, hdx, rfl⟩ ⟨ny, hny, dy, hdy, rfl⟩
-    exact ⟨nx * ny, Subring.mul_mem _ hnx hny, dx * dy, Subring.mul_mem _ hdx hdy,
-      (div_mul_div_comm _ _ _ _).symm⟩
+--- 原说明 ---
+The `Subfield` generated by a set in a field.
 -/
 private def commClosure (s : Set K) : Subfield K where
-  carrier := {z : K | exists x in Subring.closure s, exists y in Subring.closure s, x / y = z}
+  carrier := {z : K | ∃ x ∈ Subring.closure s, ∃ y ∈ Subring.closure s, x / y = z}
   zero_mem' := ⟨0, Subring.zero_mem _, 1, Subring.one_mem _, div_one _⟩
   one_mem' := ⟨1, Subring.one_mem _, 1, Subring.one_mem _, div_one _⟩
   neg_mem' {x} := by
@@ -2222,50 +1818,30 @@ private def commClosure (s : Set K) : Subfield K where
     rintro _ _ ⟨nx, hnx, dx, hdx, rfl⟩ ⟨ny, hny, dy, hdy, rfl⟩
     exact ⟨nx * ny, Subring.mul_mem _ hnx hny, dx * dy, Subring.mul_mem _ hdx hdy,
       (div_mul_div_comm _ _ _ _).symm⟩
-
-/--
-theorem `commClosure_eq_closure` / 定理 `commClosure_eq_closure`
-
-English:
-theorem commClosure_eq_closure
-  given: {s : Set K}
-  statement: commClosure s = closure s
-  proof: le_antisymm
-    (fun _ ⟨_, hy, _, hz, eq⟩ => eq ▸ div_mem (subring_closure_le s hy) (subring_closure_le s hz))
-    (closure_le.mpr fun x hx => ⟨x, Subring.subset_closure hx, 1, Subring.one_mem _, div_one x⟩)
-
-中文:
-定理 commClosure_eq_closure
-  条件: {s : 集合 K}
-  结论: commClosure s = closure s
-  证明: le_antisymm
-    (fun _ ⟨_, hy, _, hz, eq⟩ => eq ▸ div_mem (subring_closure_le s hy) (subring_closure_le s hz))
-    (closure_le.mpr fun x hx => ⟨x, Subring.subset_closure hx, 1, Subring.one_mem _, div_one x⟩)
+/-
+**Subfield.commClosure_eq_closure** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem commClosure_eq_closure {s : Set K} : commClosure s = closure s :=
   le_antisymm
-    (fun _ ⟨_, hy, _, hz, eq⟩ => eq ▸ div_mem (subring_closure_le s hy) (subring_closure_le s hz))
-    (closure_le.mpr fun x hx => ⟨x, Subring.subset_closure hx, 1, Subring.one_mem _, div_one x⟩)
-
-/--
-theorem `mem_closure_iff` / 定理 `mem_closure_iff`
-
-English:
-theorem mem_closure_iff
-  given: {s : Set K} {x}
-  proof: by
-  rw [← commClosure_eq_closure]; rfl
-
-中文:
-定理 mem_closure_iff
-  条件: {s : 集合 K} {x}
-  证明: by
-  rw [← commClosure_eq_closure]; rfl
-
-Depends on / 依赖: commClosure_eq_closure
+    (fun _ ⟨_, hy, _, hz, eq⟩ ↦ eq ▸ div_mem (subring_closure_le s hy) (subring_closure_le s hz))
+    (closure_le.mpr fun x hx ↦ ⟨x, Subring.subset_closure hx, 1, Subring.one_mem _, div_one x⟩)
+/-
+**Subfield.mem_closure_iff** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：mem_closure_iff {s : Set K} {x} : x in closure s ↔ exists y in Subring.clo
+sure s, exists z in Subring.closure s, y / z = x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `_private.Mathlib.Algebra.Field.Subfield.Basic.0.Subfield.commClosure_eq_
+closure`：∀ {K : Type u} [inst : Field K] {s : Set K}, Subfield.commClosure✝ s = 
+Subfield.closure s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem mem_closure_iff {s : Set K} {x} :
-    x in closure s ↔ exists y in Subring.closure s, exists z in Subring.closure s, y / z = x := by
+    x ∈ closure s ↔ ∃ y ∈ Subring.closure s, ∃ z ∈ Subring.closure s, y / z = x := by
   rw [← commClosure_eq_closure]; rfl
 
 end Commutative
@@ -2274,80 +1850,71 @@ end Subfield
 
 namespace Subfield
 
-/--
-theorem `map_comap_eq` / 定理 `map_comap_eq`
-
-English:
-theorem map_comap_eq
-  given: (f : K ->+* L) (s : Subfield L)
-  statement: (s.comap f).map f = s ⊓ f.fieldRange
-  proof: SetLike.coe_injective Set.image_preimage_eq_inter_range
-
-中文:
-定理 map_comap_eq
-  条件: (f : K ->+* L) (s : 子域 L)
-  结论: (s.comap f).map f = s ⊓ f.fieldRange
-  证明: SetLike.coe_injective Set.image_preimage_eq_inter_range
-
-Depends on / 依赖: Set.image_preimage_eq_inter_range, SetLike, SetLike.coe_injective, coe_injective, image_preimage_eq_inter_range
+/-
+**Subfield.map_comap_eq** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：map_comap_eq (f : K ->+* L) (s : Subfield L) : (s.comap f).map f = s ⊓ f.f
+ieldRange
+参数：f : K ->+* L；s : Subfield L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
+· 使用定理 `Set.image_preimage_eq_inter_range`：image_preimage_eq_inter_range {f : α 
+-> β} {t : Set β} : f '' f ⁻¹' t = t inter range f
 -/
-theorem map_comap_eq (f : K ->+* L) (s : Subfield L) : (s.comap f).map f = s ⊓ f.fieldRange :=
+theorem map_comap_eq (f : K →+* L) (s : Subfield L) : (s.comap f).map f = s ⊓ f.fieldRange :=
   SetLike.coe_injective Set.image_preimage_eq_inter_range
-
-/--
-theorem `map_comap_eq_self` / 定理 `map_comap_eq_self`
-
-English:
-theorem map_comap_eq_self
-  proof: by
-  simpa only [inf_of_le_left h] using map_comap_eq f s
-
-中文:
-定理 map_comap_eq_self
-  证明: by
-  simpa only [inf_of_le_left h] using map_comap_eq f s
-
-Depends on / 依赖: inf_of_le_left, map_comap_eq
+/-
+**Subfield.map_comap_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：map_comap_eq_self {f : K ->+* L} {s : Subfield L} (h : s <= f.fieldRange) 
+: (s.comap f).map f = s
+参数：h : s <= f.fieldRange。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `inf_of_le_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ≤ 
+b → a ⊓ b = a
+· 使用定理 `Subfield.map_comap_eq`：map_comap_eq (f : K ->+* L) (s : Subfield L) : (s
+.comap f).map f = s ⊓ f.fieldRange
 -/
 theorem map_comap_eq_self
-    {f : K ->+* L} {s : Subfield L} (h : s <= f.fieldRange) : (s.comap f).map f = s := by
+    {f : K →+* L} {s : Subfield L} (h : s ≤ f.fieldRange) : (s.comap f).map f = s := by
   simpa only [inf_of_le_left h] using map_comap_eq f s
-
-/--
-theorem `map_comap_eq_self_of_surjective` / 定理 `map_comap_eq_self_of_surjective`
-
-English:
-theorem map_comap_eq_self_of_surjective
-  proof: SetLike.coe_injective (Set.image_preimage_eq _ hf)
-
-中文:
-定理 map_comap_eq_self_of_surjective
-  证明: SetLike.coe_injective (Set.image_preimage_eq _ hf)
-
-Depends on / 依赖: Set.image_preimage_eq, SetLike, SetLike.coe_injective, coe_injective, image_preimage_eq
+/-
+**Subfield.map_comap_eq_self_of_surjective** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：map_comap_eq_self_of_surjective {f : K ->+* L} (hf : Function.Surjective f
+) (s : Subfield L) : (s.comap f).map f = s
+参数：hf : Function.Surjective f；s : Subfield L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
+· 使用定理 `Set.image_preimage_eq`：image_preimage_eq {f : α -> β} (s : Set β) (h : S
+urjective f) : f '' f ⁻¹' s = s
 -/
 theorem map_comap_eq_self_of_surjective
-    {f : K ->+* L} (hf : Function.Surjective f) (s : Subfield L) : (s.comap f).map f = s :=
+    {f : K →+* L} (hf : Function.Surjective f) (s : Subfield L) : (s.comap f).map f = s :=
   SetLike.coe_injective (Set.image_preimage_eq _ hf)
-
-/--
-theorem `comap_map` / 定理 `comap_map`
-
-English:
-theorem comap_map
-  given: (f : K ->+* L) (s : Subfield K)
-  statement: (s.map f).comap f = s
-  proof: SetLike.coe_injective (Set.preimage_image_eq _ f.injective)
-
-中文:
-定理 comap_map
-  条件: (f : K ->+* L) (s : 子域 K)
-  结论: (s.map f).comap f = s
-  证明: SetLike.coe_injective (Set.preimage_image_eq _ f.injective)
-
-Depends on / 依赖: Set.preimage_image_eq, SetLike, SetLike.coe_injective, coe_injective, f.injective, injective, preimage_image_eq
+/-
+**Subfield.comap_map** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：comap_map (f : K ->+* L) (s : Subfield K) : (s.map f).comap f = s
+参数：f : K ->+* L；s : Subfield K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.coe_injective`：∀ {A : Type u_1} {B : outParam (Type u_2)} [self 
+: SetLike A B], Function.Injective SetLike.coe
+· 使用定理 `Set.preimage_image_eq`：preimage_image_eq {f : α -> β} (s : Set α) (h : I
+njective f) : f ⁻¹' f '' s = s
+· 使用定理 `RingHom.injective`：∀ {R : Type u_2} {S : Type u_3} [inst : NonAssocRing 
+R] [IsSimpleRing R] [inst_2 : NonAssocSemiring S] [Nontrivial S]   (f : R →+* S)
+, Funct…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `DivisionRing.toNontrivial`：∀ {K : Type u_2} [self : DivisionRing K], Non
+trivial K
 -/
-theorem comap_map (f : K ->+* L) (s : Subfield K) : (s.map f).comap f = s :=
+theorem comap_map (f : K →+* L) (s : Subfield K) : (s.map f).comap f = s :=
   SetLike.coe_injective (Set.preimage_image_eq _ f.injective)
 
 end Subfield
@@ -2363,239 +1930,140 @@ namespace Subfield
 
 variable {X Y}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The action by a subfield is the action by the underlying field. -/
+/-
+**Subfield.** 是 Mathlib 中的一个实例，位于命名空间 `Subfield`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [SMul
-  signature: K X] (F
-  body: inferInstanceAs (SMul F.toSubsemiring X)
-
-中文:
-实例 [标量乘法
-  签名: K X] (F
-  定义体: inferInstanceAs (SMul F.toSubsemiring X)
-
-Depends on / 依赖: F.toSubsemiring, toSubsemiring
+--- 原说明 ---
+The action by a subfield is the action by the underlying field.
 -/
 instance [SMul K X] (F : Subfield K) : SMul F X :=
   inferInstanceAs (SMul F.toSubsemiring X)
-
-/--
-theorem `smul_def` / 定理 `smul_def`
-
-English:
-theorem smul_def
-  given: [SMul K X] {F : Subfield K} (g : F) (m : X)
-  statement: g • m = (g : K) • m
-  proof: rfl
-
-中文:
-定理 smul_def
-  条件: [标量乘法 K X] {F : 子域 K} (g : F) (m : X)
-  结论: g • m = (g : K) • m
-  证明: rfl
+/-
+**Subfield.smul_def** 是 Mathlib 中的一个定理，位于命名空间 `Subfield`。
+形式化陈述：smul_def [SMul K X] {F : Subfield K} (g : F) (m : X) : g • m = (g : K) • m
+参数：g : F；m : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem smul_def [SMul K X] {F : Subfield K} (g : F) (m : X) : g • m = (g : K) • m :=
   rfl
-
-/--
-Instance `smulCommClass_left` / 实例 `smulCommClass_left`
-
-English:
-instance smulCommClass_left
-  signature: [SMul K Y] [SMul X Y] [SMulCommClass K X Y] (F : Subfield K)
-  body: inferInstanceAs (SMulCommClass F.toSubsemiring X Y)
-
-中文:
-实例 smulCommClass_left
-  签名: [标量乘法 K Y] [标量乘法 X Y] [标量交换类 K X Y] (F : 子域 K)
-  定义体: inferInstanceAs (SMulCommClass F.toSubsemiring X Y)
-
-Depends on / 依赖: F.toSubsemiring, SMulCommClass, toSubsemiring
+/-
+**Subfield.smulCommClass_left** 是 Mathlib 中的一个实例，位于命名空间 `Subfield`。
+形式化陈述：smulCommClass_left [SMul K Y] [SMul X Y] [SMulCommClass K X Y] (F : Subfie
+ld K) : SMulCommClass F X Y
+参数：F : Subfield K。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance smulCommClass_left [SMul K Y] [SMul X Y] [SMulCommClass K X Y] (F : Subfield K) :
     SMulCommClass F X Y :=
   inferInstanceAs (SMulCommClass F.toSubsemiring X Y)
-
-/--
-Instance `smulCommClass_right` / 实例 `smulCommClass_right`
-
-English:
-instance smulCommClass_right
-  signature: [SMul X Y] [SMul K Y] [SMulCommClass X K Y] (F : Subfield K)
-  body: inferInstanceAs (SMulCommClass X F.toSubsemiring Y)
-
-中文:
-实例 smulCommClass_right
-  签名: [标量乘法 X Y] [标量乘法 K Y] [标量交换类 X K Y] (F : 子域 K)
-  定义体: inferInstanceAs (SMulCommClass X F.toSubsemiring Y)
-
-Depends on / 依赖: F.toSubsemiring, SMulCommClass, toSubsemiring
+/-
+**Subfield.smulCommClass_right** 是 Mathlib 中的一个实例，位于命名空间 `Subfield`。
+形式化陈述：smulCommClass_right [SMul X Y] [SMul K Y] [SMulCommClass X K Y] (F : Subfi
+eld K) : SMulCommClass X F Y
+参数：F : Subfield K。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance smulCommClass_right [SMul X Y] [SMul K Y] [SMulCommClass X K Y] (F : Subfield K) :
     SMulCommClass X F Y :=
   inferInstanceAs (SMulCommClass X F.toSubsemiring Y)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Note that this provides `IsScalarTower F K K` which is needed by `smul_mul_assoc`. -/
+/-
+**Subfield.** 是 Mathlib 中的一个实例，位于命名空间 `Subfield`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [SMul
-  signature: X Y] [SMul K X] [SMul K Y] [IsScalarTower K X Y] (F
-  body: inferInstanceAs (IsScalarTower F.toSubsemiring X Y)
-
-中文:
-实例 [标量乘法
-  签名: X Y] [标量乘法 K X] [标量乘法 K Y] [标量塔 K X Y] (F
-  定义体: inferInstanceAs (IsScalarTower F.toSubsemiring X Y)
-
-Depends on / 依赖: F.toSubsemiring, IsScalarTower, toSubsemiring
+--- 原说明 ---
+Note that this provides `IsScalarTower F K K` which is needed by `smul_mul_assoc
+`.
 -/
 instance [SMul X Y] [SMul K X] [SMul K Y] [IsScalarTower K X Y] (F : Subfield K) :
     IsScalarTower F X Y :=
   inferInstanceAs (IsScalarTower F.toSubsemiring X Y)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [SMul
-  signature: K X] [FaithfulSMul K X] (F
-  body: inferInstanceAs (FaithfulSMul F.toSubsemiring X)
-
-中文:
-实例 [标量乘法
-  签名: K X] [忠实标量乘法 K X] (F
-  定义体: inferInstanceAs (FaithfulSMul F.toSubsemiring X)
-
-Depends on / 依赖: F.toSubsemiring, FaithfulSMul, toSubsemiring
+/-
+**Subfield.** 是 Mathlib 中的一个实例，位于命名空间 `Subfield`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [SMul K X] [FaithfulSMul K X] (F : Subfield K) : FaithfulSMul F X :=
   inferInstanceAs (FaithfulSMul F.toSubsemiring X)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The action by a subfield is the action by the underlying field. -/
+/-
+**Subfield.** 是 Mathlib 中的一个实例，位于命名空间 `Subfield`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [MulAction
-  signature: K X] (F
-  body: inferInstanceAs (MulAction F.toSubsemiring X)
-
-中文:
-实例 [乘法作用
-  签名: K X] (F
-  定义体: inferInstanceAs (MulAction F.toSubsemiring X)
-
-Depends on / 依赖: F.toSubsemiring, MulAction, toSubsemiring
+--- 原说明 ---
+The action by a subfield is the action by the underlying field.
 -/
 instance [MulAction K X] (F : Subfield K) : MulAction F X :=
   inferInstanceAs (MulAction F.toSubsemiring X)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The action by a subfield is the action by the underlying field. -/
+/-
+**Subfield.** 是 Mathlib 中的一个实例，位于命名空间 `Subfield`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [AddMonoid
-  signature: X] [DistribMulAction K X] (F
-  body: inferInstanceAs (DistribMulAction F.toSubsemiring X)
-
-中文:
-实例 [加法幺半群
-  签名: X] [分配乘法作用 K X] (F
-  定义体: inferInstanceAs (DistribMulAction F.toSubsemiring X)
-
-Depends on / 依赖: DistribMulAction, F.toSubsemiring, toSubsemiring
+--- 原说明 ---
+The action by a subfield is the action by the underlying field.
 -/
 instance [AddMonoid X] [DistribMulAction K X] (F : Subfield K) : DistribMulAction F X :=
   inferInstanceAs (DistribMulAction F.toSubsemiring X)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The action by a subfield is the action by the underlying field. -/
+/-
+**Subfield.** 是 Mathlib 中的一个实例，位于命名空间 `Subfield`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [Monoid
-  signature: X] [MulDistribMulAction K X] (F
-  body: inferInstanceAs (MulDistribMulAction F.toSubsemiring X)
-
-中文:
-实例 [幺半群
-  签名: X] [MulDistribMul作用 K X] (F
-  定义体: inferInstanceAs (MulDistribMulAction F.toSubsemiring X)
-
-Depends on / 依赖: F.toSubsemiring, MulDistribMulAction, toSubsemiring
+--- 原说明 ---
+The action by a subfield is the action by the underlying field.
 -/
 instance [Monoid X] [MulDistribMulAction K X] (F : Subfield K) : MulDistribMulAction F X :=
   inferInstanceAs (MulDistribMulAction F.toSubsemiring X)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The action by a subfield is the action by the underlying field. -/
+/-
+**Subfield.** 是 Mathlib 中的一个实例，位于命名空间 `Subfield`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [Zero
-  signature: X] [SMulWithZero K X] (F
-  body: inferInstanceAs (SMulWithZero F.toSubsemiring X)
-
-中文:
-实例 [零
-  签名: X] [带零标量乘法 K X] (F
-  定义体: inferInstanceAs (SMulWithZero F.toSubsemiring X)
-
-Depends on / 依赖: F.toSubsemiring, SMulWithZero, toSubsemiring
+--- 原说明 ---
+The action by a subfield is the action by the underlying field.
 -/
 instance [Zero X] [SMulWithZero K X] (F : Subfield K) : SMulWithZero F X :=
   inferInstanceAs (SMulWithZero F.toSubsemiring X)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The action by a subfield is the action by the underlying field. -/
+/-
+**Subfield.** 是 Mathlib 中的一个实例，位于命名空间 `Subfield`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [Zero
-  signature: X] [MulActionWithZero K X] (F
-  body: inferInstanceAs (MulActionWithZero F.toSubsemiring X)
-
-中文:
-实例 [零
-  签名: X] [带零乘法作用 K X] (F
-  定义体: inferInstanceAs (MulActionWithZero F.toSubsemiring X)
-
-Depends on / 依赖: F.toSubsemiring, MulActionWithZero, toSubsemiring
+--- 原说明 ---
+The action by a subfield is the action by the underlying field.
 -/
 instance [Zero X] [MulActionWithZero K X] (F : Subfield K) : MulActionWithZero F X :=
   inferInstanceAs (MulActionWithZero F.toSubsemiring X)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The action by a subfield is the action by the underlying field. -/
+/-
+**Subfield.** 是 Mathlib 中的一个实例，位于命名空间 `Subfield`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [AddCommMonoid
-  signature: X] [Module K X] (F
-  body: inferInstanceAs (Module F.toSubsemiring X)
-
-中文:
-实例 [加法交换幺半群
-  签名: X] [模 K X] (F
-  定义体: inferInstanceAs (Module F.toSubsemiring X)
-
-Depends on / 依赖: F.toSubsemiring, Module, toSubsemiring
+--- 原说明 ---
+The action by a subfield is the action by the underlying field.
 -/
 instance [AddCommMonoid X] [Module K X] (F : Subfield K) : Module F X :=
   inferInstanceAs (Module F.toSubsemiring X)
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The action by a subfield is the action by the underlying field. -/
+/-
+**Subfield.** 是 Mathlib 中的一个实例，位于命名空间 `Subfield`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [Semiring
-  signature: X] [MulSemiringAction K X] (F
-  body: inferInstanceAs (MulSemiringAction F.toSubsemiring X)
-
-中文:
-实例 [半环
-  签名: X] [MulSemiring作用 K X] (F
-  定义体: inferInstanceAs (MulSemiringAction F.toSubsemiring X)
-
-Depends on / 依赖: F.toSubsemiring, MulSemiringAction, toSubsemiring
+--- 原说明 ---
+The action by a subfield is the action by the underlying field.
 -/
 instance [Semiring X] [MulSemiringAction K X] (F : Subfield K) : MulSemiringAction F X :=
   inferInstanceAs (MulSemiringAction F.toSubsemiring X)
@@ -2603,3 +2071,4 @@ instance [Semiring X] [MulSemiringAction K X] (F : Subfield K) : MulSemiringActi
 end Subfield
 
 end Actions
+

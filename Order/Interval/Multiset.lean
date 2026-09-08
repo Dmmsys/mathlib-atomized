@@ -43,133 +43,129 @@ namespace Multiset
 section LocallyFiniteOrder
 variable [Preorder α] [LocallyFiniteOrder α] {a b x : α}
 
-/--
-Definition of `Icc` / `Icc` 的定义
+/-- The multiset of elements `x` such that `a ≤ x` and `x ≤ b`. Basically `Set.Icc a b` as a
+multiset. -/
+/-
+**Multiset.Icc** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：Icc (a b : α) : Multiset α
+参数：a b : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Icc
-  signature: (a b : α)
-  body: (Finset.Icc a b).val
-
-中文:
-定义 闭区间
-  签名: (a b : α)
-  定义体: (Finset.Icc a b).val
-
-Depends on / 依赖: Finset, Finset.Icc
+--- 原说明 ---
+The multiset of elements `x` such that `a ≤ x` and `x ≤ b`. Basically `Set.Icc a
+ b` as a
+multiset.
 -/
 def Icc (a b : α) : Multiset α := (Finset.Icc a b).val
 
-/--
-Definition of `Ico` / `Ico` 的定义
+/-- The multiset of elements `x` such that `a ≤ x` and `x < b`. Basically `Set.Ico a b` as a
+multiset. -/
+/-
+**Multiset.Ico** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：Ico (a b : α) : Multiset α
+参数：a b : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Ico
-  signature: (a b : α)
-  body: (Finset.Ico a b).val
-
-中文:
-定义 左闭右开区间
-  签名: (a b : α)
-  定义体: (Finset.Ico a b).val
-
-Depends on / 依赖: Finset, Finset.Ico
+--- 原说明 ---
+The multiset of elements `x` such that `a ≤ x` and `x < b`. Basically `Set.Ico a
+ b` as a
+multiset.
 -/
 def Ico (a b : α) : Multiset α := (Finset.Ico a b).val
 
-/--
-Definition of `Ioc` / `Ioc` 的定义
+/-- The multiset of elements `x` such that `a < x` and `x ≤ b`. Basically `Set.Ioc a b` as a
+multiset. -/
+/-
+**Multiset.Ioc** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：Ioc (a b : α) : Multiset α
+参数：a b : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Ioc
-  signature: (a b : α)
-  body: (Finset.Ioc a b).val
-
-中文:
-定义 左开右闭区间
-  签名: (a b : α)
-  定义体: (Finset.Ioc a b).val
-
-Depends on / 依赖: Finset, Finset.Ioc
+--- 原说明 ---
+The multiset of elements `x` such that `a < x` and `x ≤ b`. Basically `Set.Ioc a
+ b` as a
+multiset.
 -/
 def Ioc (a b : α) : Multiset α := (Finset.Ioc a b).val
 
-/--
-Definition of `Ioo` / `Ioo` 的定义
+/-- The multiset of elements `x` such that `a < x` and `x < b`. Basically `Set.Ioo a b` as a
+multiset. -/
+/-
+**Multiset.Ioo** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：Ioo (a b : α) : Multiset α
+参数：a b : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Ioo
-  signature: (a b : α)
-  body: (Finset.Ioo a b).val
-
-中文:
-定义 开区间
-  签名: (a b : α)
-  定义体: (Finset.Ioo a b).val
-
-Depends on / 依赖: Finset, Finset.Ioo
+--- 原说明 ---
+The multiset of elements `x` such that `a < x` and `x < b`. Basically `Set.Ioo a
+ b` as a
+multiset.
 -/
 def Ioo (a b : α) : Multiset α := (Finset.Ioo a b).val
-
-/--
-lemma `mem_Icc` / 引理 `mem_Icc`
-
-English:
-lemma mem_Icc
-  statement: x in Icc a b ↔ a <= x ∧ x <= b
-  proof: by rw [Icc, ← Finset.mem_def, Finset.mem_Icc]
-
-中文:
-引理 mem_Icc
-  结论: x in 闭区间 a b ↔ a <= x ∧ x <= b
-  证明: by rw [Icc, ← Finset.mem_def, Finset.mem_Icc]
+/-
+**Multiset.mem_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFiniteOrder α] {a b 
+x : α}, x ∈ Multiset.Icc a b ↔ a ≤ x ∧ x ≤ b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Icc.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Icc a b = (Finset.Icc a b).val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.mem_def`：mem_def {a : α} {s : Finset α} : a in s ↔ a in s.1
+· 使用定理 `Finset.mem_Icc`：mem_Icc : x in Icc a b ↔ a <= x ∧ x <= b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_Icc : x in Icc a b ↔ a <= x ∧ x <= b := by rw [Icc, ← Finset.mem_def, Finset.mem_Icc]
-
-/--
-lemma `mem_Ico` / 引理 `mem_Ico`
-
-English:
-lemma mem_Ico
-  statement: x in Ico a b ↔ a <= x ∧ x < b
-  proof: by rw [Ico, ← Finset.mem_def, Finset.mem_Ico]
-
-中文:
-引理 mem_Ico
-  结论: x in 左闭右开区间 a b ↔ a <= x ∧ x < b
-  证明: by rw [Ico, ← Finset.mem_def, Finset.mem_Ico]
+@[simp] lemma mem_Icc : x ∈ Icc a b ↔ a ≤ x ∧ x ≤ b := by rw [Icc, ← Finset.mem_def, Finset.mem_Icc]
+/-
+**Multiset.mem_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFiniteOrder α] {a b 
+x : α}, x ∈ Multiset.Ico a b ↔ a ≤ x ∧ x < b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ico.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Ico a b = (Finset.Ico a b).val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.mem_def`：mem_def {a : α} {s : Finset α} : a in s ↔ a in s.1
+· 使用定理 `Finset.mem_Ico`：mem_Ico : x in Ico a b ↔ a <= x ∧ x < b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_Ico : x in Ico a b ↔ a <= x ∧ x < b := by rw [Ico, ← Finset.mem_def, Finset.mem_Ico]
-
-/--
-lemma `mem_Ioc` / 引理 `mem_Ioc`
-
-English:
-lemma mem_Ioc
-  statement: x in Ioc a b ↔ a < x ∧ x <= b
-  proof: by rw [Ioc, ← Finset.mem_def, Finset.mem_Ioc]
-
-中文:
-引理 mem_Ioc
-  结论: x in 左开右闭区间 a b ↔ a < x ∧ x <= b
-  证明: by rw [Ioc, ← Finset.mem_def, Finset.mem_Ioc]
+@[simp] lemma mem_Ico : x ∈ Ico a b ↔ a ≤ x ∧ x < b := by rw [Ico, ← Finset.mem_def, Finset.mem_Ico]
+/-
+**Multiset.mem_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFiniteOrder α] {a b 
+x : α}, x ∈ Multiset.Ioc a b ↔ a < x ∧ x ≤ b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ioc.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Ioc a b = (Finset.Ioc a b).val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.mem_def`：mem_def {a : α} {s : Finset α} : a in s ↔ a in s.1
+· 使用定理 `Finset.mem_Ioc`：mem_Ioc : x in Ioc a b ↔ a < x ∧ x <= b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_Ioc : x in Ioc a b ↔ a < x ∧ x <= b := by rw [Ioc, ← Finset.mem_def, Finset.mem_Ioc]
-
-/--
-lemma `mem_Ioo` / 引理 `mem_Ioo`
-
-English:
-lemma mem_Ioo
-  statement: x in Ioo a b ↔ a < x ∧ x < b
-  proof: by rw [Ioo, ← Finset.mem_def, Finset.mem_Ioo]
-
-中文:
-引理 mem_Ioo
-  结论: x in 开区间 a b ↔ a < x ∧ x < b
-  证明: by rw [Ioo, ← Finset.mem_def, Finset.mem_Ioo]
+@[simp] lemma mem_Ioc : x ∈ Ioc a b ↔ a < x ∧ x ≤ b := by rw [Ioc, ← Finset.mem_def, Finset.mem_Ioc]
+/-
+**Multiset.mem_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFiniteOrder α] {a b 
+x : α}, x ∈ Multiset.Ioo a b ↔ a < x ∧ x < b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ioo.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Ioo a b = (Finset.Ioo a b).val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.mem_def`：mem_def {a : α} {s : Finset α} : a in s ↔ a in s.1
+· 使用定理 `Finset.mem_Ioo`：mem_Ioo : x in Ioo a b ↔ a < x ∧ x < b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_Ioo : x in Ioo a b ↔ a < x ∧ x < b := by rw [Ioo, ← Finset.mem_def, Finset.mem_Ioo]
+@[simp] lemma mem_Ioo : x ∈ Ioo a b ↔ a < x ∧ x < b := by rw [Ioo, ← Finset.mem_def, Finset.mem_Ioo]
 
 end LocallyFiniteOrder
 
@@ -177,138 +173,128 @@ section LocallyFiniteOrderTop
 
 variable [Preorder α] [LocallyFiniteOrderTop α] {a x : α}
 
-/--
-Definition of `Ici` / `Ici` 的定义
+/-- The multiset of elements `x` such that `a ≤ x`. Basically `Set.Ici a` as a multiset. -/
+/-
+**Multiset.Ici** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：Ici (a : α) : Multiset α
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Ici
-  signature: (a : α)
-  body: (Finset.Ici a).val
-
-中文:
-定义 左闭右无界区间
-  签名: (a : α)
-  定义体: (Finset.Ici a).val
-
-Depends on / 依赖: Finset, Finset.Ici
+--- 原说明 ---
+The multiset of elements `x` such that `a ≤ x`. Basically `Set.Ici a` as a multi
+set.
 -/
 def Ici (a : α) : Multiset α := (Finset.Ici a).val
 
-/--
-Definition of `Ioi` / `Ioi` 的定义
+/-- The multiset of elements `x` such that `a < x`. Basically `Set.Ioi a` as a multiset. -/
+/-
+**Multiset.Ioi** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：Ioi (a : α) : Multiset α
+参数：a : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Ioi
-  signature: (a : α)
-  body: (Finset.Ioi a).val
-
-中文:
-定义 左开右无界区间
-  签名: (a : α)
-  定义体: (Finset.Ioi a).val
-
-Depends on / 依赖: Finset, Finset.Ioi
+--- 原说明 ---
+The multiset of elements `x` such that `a < x`. Basically `Set.Ioi a` as a multi
+set.
 -/
 def Ioi (a : α) : Multiset α := (Finset.Ioi a).val
-
-/--
-lemma `mem_Ici` / 引理 `mem_Ici`
-
-English:
-lemma mem_Ici
-  statement: x in Ici a ↔ a <= x
-  proof: by rw [Ici, ← Finset.mem_def, Finset.mem_Ici]
-
-中文:
-引理 mem_Ici
-  结论: x in 左闭右无界区间 a ↔ a <= x
-  证明: by rw [Ici, ← Finset.mem_def, Finset.mem_Ici]
+/-
+**Multiset.mem_Ici** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFiniteOrderTop α] {a
+ x : α}, x ∈ Multiset.Ici a ↔ a ≤ x
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ici.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrderTop α] (a : α), Multiset.Ici a = (Finset.Ici a).val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.mem_def`：mem_def {a : α} {s : Finset α} : a in s ↔ a in s.1
+· 使用定理 `Finset.mem_Ici`：mem_Ici : x in Ici a ↔ a <= x
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_Ici : x in Ici a ↔ a <= x := by rw [Ici, ← Finset.mem_def, Finset.mem_Ici]
-
-/--
-lemma `mem_Ioi` / 引理 `mem_Ioi`
-
-English:
-lemma mem_Ioi
-  statement: x in Ioi a ↔ a < x
-  proof: by rw [Ioi, ← Finset.mem_def, Finset.mem_Ioi]
-
-中文:
-引理 mem_Ioi
-  结论: x in 左开右无界区间 a ↔ a < x
-  证明: by rw [Ioi, ← Finset.mem_def, Finset.mem_Ioi]
+@[simp] lemma mem_Ici : x ∈ Ici a ↔ a ≤ x := by rw [Ici, ← Finset.mem_def, Finset.mem_Ici]
+/-
+**Multiset.mem_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFiniteOrderTop α] {a
+ x : α}, x ∈ Multiset.Ioi a ↔ a < x
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ioi.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrderTop α] (a : α), Multiset.Ioi a = (Finset.Ioi a).val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.mem_def`：mem_def {a : α} {s : Finset α} : a in s ↔ a in s.1
+· 使用定理 `Finset.mem_Ioi`：mem_Ioi : x in Ioi a ↔ a < x
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_Ioi : x in Ioi a ↔ a < x := by rw [Ioi, ← Finset.mem_def, Finset.mem_Ioi]
+@[simp] lemma mem_Ioi : x ∈ Ioi a ↔ a < x := by rw [Ioi, ← Finset.mem_def, Finset.mem_Ioi]
 
 end LocallyFiniteOrderTop
 
 section LocallyFiniteOrderBot
 variable [Preorder α] [LocallyFiniteOrderBot α] {b x : α}
 
-/--
-Definition of `Iic` / `Iic` 的定义
+/-- The multiset of elements `x` such that `x ≤ b`. Basically `Set.Iic b` as a multiset. -/
+/-
+**Multiset.Iic** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：Iic (b : α) : Multiset α
+参数：b : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Iic
-  signature: (b : α)
-  body: (Finset.Iic b).val
-
-中文:
-定义 左无界右闭区间
-  签名: (b : α)
-  定义体: (Finset.Iic b).val
-
-Depends on / 依赖: Finset, Finset.Iic
+--- 原说明 ---
+The multiset of elements `x` such that `x ≤ b`. Basically `Set.Iic b` as a multi
+set.
 -/
 def Iic (b : α) : Multiset α := (Finset.Iic b).val
 
-/--
-Definition of `Iio` / `Iio` 的定义
+/-- The multiset of elements `x` such that `x < b`. Basically `Set.Iio b` as a multiset. -/
+/-
+**Multiset.Iio** 是 Mathlib 中的一个定义，位于命名空间 `Multiset`。
+形式化陈述：Iio (b : α) : Multiset α
+参数：b : α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Iio
-  signature: (b : α)
-  body: (Finset.Iio b).val
-
-中文:
-定义 左无界右开区间
-  签名: (b : α)
-  定义体: (Finset.Iio b).val
-
-Depends on / 依赖: Finset, Finset.Iio
+--- 原说明 ---
+The multiset of elements `x` such that `x < b`. Basically `Set.Iio b` as a multi
+set.
 -/
 def Iio (b : α) : Multiset α := (Finset.Iio b).val
-
-/--
-lemma `mem_Iic` / 引理 `mem_Iic`
-
-English:
-lemma mem_Iic
-  statement: x in Iic b ↔ x <= b
-  proof: by rw [Iic, ← Finset.mem_def, Finset.mem_Iic]
-
-中文:
-引理 mem_Iic
-  结论: x in 左无界右闭区间 b ↔ x <= b
-  证明: by rw [Iic, ← Finset.mem_def, Finset.mem_Iic]
+/-
+**Multiset.mem_Iic** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFiniteOrderBot α] {b
+ x : α}, x ∈ Multiset.Iic b ↔ x ≤ b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Iic.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrderBot α] (b : α), Multiset.Iic b = (Finset.Iic b).val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.mem_def`：mem_def {a : α} {s : Finset α} : a in s ↔ a in s.1
+· 使用定理 `Finset.mem_Iic`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrderBot α] {a x : α}, x ∈ Finset.Iic a ↔ x ≤ a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_Iic : x in Iic b ↔ x <= b := by rw [Iic, ← Finset.mem_def, Finset.mem_Iic]
-
-/--
-lemma `mem_Iio` / 引理 `mem_Iio`
-
-English:
-lemma mem_Iio
-  statement: x in Iio b ↔ x < b
-  proof: by rw [Iio, ← Finset.mem_def, Finset.mem_Iio]
-
-中文:
-引理 mem_Iio
-  结论: x in 左无界右开区间 b ↔ x < b
-  证明: by rw [Iio, ← Finset.mem_def, Finset.mem_Iio]
+@[simp] lemma mem_Iic : x ∈ Iic b ↔ x ≤ b := by rw [Iic, ← Finset.mem_def, Finset.mem_Iic]
+/-
+**Multiset.mem_Iio** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFiniteOrderBot α] {b
+ x : α}, x ∈ Multiset.Iio b ↔ x < b
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Iio.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrderBot α] (b : α), Multiset.Iio b = (Finset.Iio b).val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.mem_def`：mem_def {a : α} {s : Finset α} : a in s ↔ a in s.1
+· 使用定理 `Finset.mem_Iio`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : LocallyFi
+niteOrderBot α] {a x : α}, x ∈ Finset.Iio a ↔ x < a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-@[simp] lemma mem_Iio : x in Iio b ↔ x < b := by rw [Iio, ← Finset.mem_def, Finset.mem_Iio]
+@[simp] lemma mem_Iio : x ∈ Iio b ↔ x < b := by rw [Iio, ← Finset.mem_def, Finset.mem_Iio]
 
 end LocallyFiniteOrderBot
 
@@ -316,195 +302,111 @@ section Preorder
 
 variable [Preorder α] [LocallyFiniteOrder α] {a b c : α}
 
-/--
-theorem `nodup_Icc` / 定理 `nodup_Icc`
-
-English:
-theorem nodup_Icc
-  statement: (Icc a b).Nodup
-  proof: Finset.nodup _
-
-中文:
-定理 nodup_Icc
-  结论: (闭区间 a b).Nodup
-  证明: Finset.nodup _
-
-Depends on / 依赖: Finset, Finset.nodup
+/-
+**Multiset.nodup_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：nodup_Icc : (Icc a b).Nodup
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.nodup`：∀ {α : Type u_4} (self : Finset α), self.val.Nodup
 -/
 theorem nodup_Icc : (Icc a b).Nodup :=
   Finset.nodup _
-
-/--
-theorem `nodup_Ico` / 定理 `nodup_Ico`
-
-English:
-theorem nodup_Ico
-  statement: (Ico a b).Nodup
-  proof: Finset.nodup _
-
-中文:
-定理 nodup_Ico
-  结论: (左闭右开区间 a b).Nodup
-  证明: Finset.nodup _
-
-Depends on / 依赖: Finset, Finset.nodup
+/-
+**Multiset.nodup_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：nodup_Ico : (Ico a b).Nodup
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.nodup`：∀ {α : Type u_4} (self : Finset α), self.val.Nodup
 -/
 theorem nodup_Ico : (Ico a b).Nodup :=
   Finset.nodup _
-
-/--
-theorem `nodup_Ioc` / 定理 `nodup_Ioc`
-
-English:
-theorem nodup_Ioc
-  statement: (Ioc a b).Nodup
-  proof: Finset.nodup _
-
-中文:
-定理 nodup_Ioc
-  结论: (左开右闭区间 a b).Nodup
-  证明: Finset.nodup _
-
-Depends on / 依赖: Finset, Finset.nodup
+/-
+**Multiset.nodup_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：nodup_Ioc : (Ioc a b).Nodup
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.nodup`：∀ {α : Type u_4} (self : Finset α), self.val.Nodup
 -/
 theorem nodup_Ioc : (Ioc a b).Nodup :=
   Finset.nodup _
-
-/--
-theorem `nodup_Ioo` / 定理 `nodup_Ioo`
-
-English:
-theorem nodup_Ioo
-  statement: (Ioo a b).Nodup
-  proof: Finset.nodup _
-
-@[simp]
-
-中文:
-定理 nodup_Ioo
-  结论: (开区间 a b).Nodup
-  证明: Finset.nodup _
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.nodup
+/-
+**Multiset.nodup_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：nodup_Ioo : (Ioo a b).Nodup
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.nodup`：∀ {α : Type u_4} (self : Finset α), self.val.Nodup
 -/
 theorem nodup_Ioo : (Ioo a b).Nodup :=
   Finset.nodup _
 
 @[simp]
-/--
-theorem `Icc_eq_zero_iff` / 定理 `Icc_eq_zero_iff`
-
-English:
-theorem Icc_eq_zero_iff
-  statement: Icc a b = 0 ↔ ¬a <= b
-  proof: by
-  rw [Icc]; rw [Finset.val_eq_zero]; rw [Finset.Icc_eq_empty_iff]
-
-@[simp]
-
-中文:
-定理 Icc_eq_zero_iff
-  结论: 闭区间 a b = 0 ↔ ¬a <= b
-  证明: by
-  rw [Icc]; rw [Finset.val_eq_zero]; rw [Finset.Icc_eq_empty_iff]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.Icc_eq_empty_iff, Finset.val_eq_zero, Icc_eq_empty_iff, val_eq_zero
+/-
+**Multiset.Icc_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Icc_eq_zero_iff : Icc a b = 0 ↔ ¬a <= b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Icc.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Icc a b = (Finset.Icc a b).val
+· 使用定理 `Finset.val_eq_zero`：val_eq_zero {s : Finset α} : s.1 = 0 ↔ s = ∅
+· 使用定理 `Finset.Icc_eq_empty_iff`：Icc_eq_empty_iff : Icc a b = ∅ ↔ ¬a <= b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem Icc_eq_zero_iff : Icc a b = 0 ↔ ¬a <= b := by
-  rw [Icc]; rw [Finset.val_eq_zero]; rw [Finset.Icc_eq_empty_iff]
+theorem Icc_eq_zero_iff : Icc a b = 0 ↔ ¬a ≤ b := by
+  rw [Icc, Finset.val_eq_zero, Finset.Icc_eq_empty_iff]
 
 @[simp]
-/--
-theorem `Ico_eq_zero_iff` / 定理 `Ico_eq_zero_iff`
-
-English:
-theorem Ico_eq_zero_iff
-  statement: Ico a b = 0 ↔ ¬a < b
-  proof: by
-  rw [Ico]; rw [Finset.val_eq_zero]; rw [Finset.Ico_eq_empty_iff]
-
-@[simp]
-
-中文:
-定理 Ico_eq_zero_iff
-  结论: 左闭右开区间 a b = 0 ↔ ¬a < b
-  证明: by
-  rw [Ico]; rw [Finset.val_eq_zero]; rw [Finset.Ico_eq_empty_iff]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.Ico_eq_empty_iff, Finset.val_eq_zero, Ico_eq_empty_iff, val_eq_zero
+/-
+**Multiset.Ico_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ico_eq_zero_iff : Ico a b = 0 ↔ ¬a < b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ico.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Ico a b = (Finset.Ico a b).val
+· 使用定理 `Finset.val_eq_zero`：val_eq_zero {s : Finset α} : s.1 = 0 ↔ s = ∅
+· 使用定理 `Finset.Ico_eq_empty_iff`：Ico_eq_empty_iff : Ico a b = ∅ ↔ ¬a < b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem Ico_eq_zero_iff : Ico a b = 0 ↔ ¬a < b := by
-  rw [Ico]; rw [Finset.val_eq_zero]; rw [Finset.Ico_eq_empty_iff]
+  rw [Ico, Finset.val_eq_zero, Finset.Ico_eq_empty_iff]
 
 @[simp]
-/--
-theorem `Ioc_eq_zero_iff` / 定理 `Ioc_eq_zero_iff`
-
-English:
-theorem Ioc_eq_zero_iff
-  statement: Ioc a b = 0 ↔ ¬a < b
-  proof: by
-  rw [Ioc]; rw [Finset.val_eq_zero]; rw [Finset.Ioc_eq_empty_iff]
-
-@[simp]
-
-中文:
-定理 Ioc_eq_zero_iff
-  结论: 左开右闭区间 a b = 0 ↔ ¬a < b
-  证明: by
-  rw [Ioc]; rw [Finset.val_eq_zero]; rw [Finset.Ioc_eq_empty_iff]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.Ioc_eq_empty_iff, Finset.val_eq_zero, Ioc_eq_empty_iff, val_eq_zero
+/-
+**Multiset.Ioc_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ioc_eq_zero_iff : Ioc a b = 0 ↔ ¬a < b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ioc.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Ioc a b = (Finset.Ioc a b).val
+· 使用定理 `Finset.val_eq_zero`：val_eq_zero {s : Finset α} : s.1 = 0 ↔ s = ∅
+· 使用定理 `Finset.Ioc_eq_empty_iff`：Ioc_eq_empty_iff : Ioc a b = ∅ ↔ ¬a < b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem Ioc_eq_zero_iff : Ioc a b = 0 ↔ ¬a < b := by
-  rw [Ioc]; rw [Finset.val_eq_zero]; rw [Finset.Ioc_eq_empty_iff]
+  rw [Ioc, Finset.val_eq_zero, Finset.Ioc_eq_empty_iff]
 
 @[simp]
-/--
-theorem `Ioo_eq_zero_iff` / 定理 `Ioo_eq_zero_iff`
-
-English:
-theorem Ioo_eq_zero_iff
-  given: [DenselyOrdered α]
-  statement: Ioo a b = 0 ↔ ¬a < b
-  proof: by
-  rw [Ioo]; rw [Finset.val_eq_zero]; rw [Finset.Ioo_eq_empty_iff]
-
-alias ⟨_, Icc_eq_zero⟩ := Icc_eq_zero_iff
-
-alias ⟨_, Ico_eq_zero⟩ := Ico_eq_zero_iff
-
-alias ⟨_, Ioc_eq_zero⟩ := Ioc_eq_zero_iff
-
-@[simp]
-
-中文:
-定理 Ioo_eq_zero_iff
-  条件: [稠密序 α]
-  结论: 开区间 a b = 0 ↔ ¬a < b
-  证明: by
-  rw [Ioo]; rw [Finset.val_eq_zero]; rw [Finset.Ioo_eq_empty_iff]
-
-alias ⟨_, Icc_eq_zero⟩ := Icc_eq_zero_iff
-
-alias ⟨_, Ico_eq_zero⟩ := Ico_eq_zero_iff
-
-alias ⟨_, Ioc_eq_zero⟩ := Ioc_eq_zero_iff
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.Ioo_eq_empty_iff, Finset.val_eq_zero, Ioo_eq_empty_iff, val_eq_zero
+/-
+**Multiset.Ioo_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ioo_eq_zero_iff [DenselyOrdered α] : Ioo a b = 0 ↔ ¬a < b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ioo.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Ioo a b = (Finset.Ioo a b).val
+· 使用定理 `Finset.val_eq_zero`：val_eq_zero {s : Finset α} : s.1 = 0 ↔ s = ∅
+· 使用定理 `Finset.Ioo_eq_empty_iff`：Ioo_eq_empty_iff [DenselyOrdered α] : Ioo a b =
+ ∅ ↔ ¬a < b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem Ioo_eq_zero_iff [DenselyOrdered α] : Ioo a b = 0 ↔ ¬a < b := by
-  rw [Ioo]; rw [Finset.val_eq_zero]; rw [Finset.Ioo_eq_empty_iff]
+  rw [Ioo, Finset.val_eq_zero, Finset.Ioo_eq_empty_iff]
 
 alias ⟨_, Icc_eq_zero⟩ := Icc_eq_zero_iff
 
@@ -513,461 +415,322 @@ alias ⟨_, Ico_eq_zero⟩ := Ico_eq_zero_iff
 alias ⟨_, Ioc_eq_zero⟩ := Ioc_eq_zero_iff
 
 @[simp]
-/--
-theorem `Ioo_eq_zero` / 定理 `Ioo_eq_zero`
-
-English:
-theorem Ioo_eq_zero
-  given: (h : ¬a < b)
-  statement: Ioo a b = 0
-  proof: eq_zero_iff_forall_notMem.2 fun _x hx => h ((mem_Ioo.1 hx).1.trans (mem_Ioo.1 hx).2)
-
-@[simp]
-
-中文:
-定理 Ioo_eq_zero
-  条件: (h : ¬a < b)
-  结论: 开区间 a b = 0
-  证明: eq_zero_iff_forall_notMem.2 fun _x hx => h ((mem_Ioo.1 hx).1.trans (mem_Ioo.1 hx).2)
-
-@[simp]
-
-Depends on / 依赖: eq_zero_iff_forall_notMem, mem_Ioo
+/-
+**Multiset.Ioo_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ioo_eq_zero (h : ¬a < b) : Ioo a b = 0
+参数：h : ¬a < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Multiset.eq_zero_iff_forall_notMem`：eq_zero_iff_forall_notMem {s : Multi
+set α} : s = 0 ↔ forall a, a ∉ s
+· 使用定理 `LT.lt.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b → b
+ < c → a < c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Multiset.mem_Ioo`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locally
+FiniteOrder α] {a b x : α}, x ∈ Multiset.Ioo a b ↔ a < x ∧ x < b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 theorem Ioo_eq_zero (h : ¬a < b) : Ioo a b = 0 :=
   eq_zero_iff_forall_notMem.2 fun _x hx => h ((mem_Ioo.1 hx).1.trans (mem_Ioo.1 hx).2)
 
 @[simp]
-/--
-theorem `Icc_eq_zero_of_lt` / 定理 `Icc_eq_zero_of_lt`
-
-English:
-theorem Icc_eq_zero_of_lt
-  given: (h : b < a)
-  statement: Icc a b = 0
-  proof: Icc_eq_zero h.not_ge
-
-@[simp]
-
-中文:
-定理 Icc_eq_zero_of_lt
-  条件: (h : b < a)
-  结论: 闭区间 a b = 0
-  证明: Icc_eq_zero h.not_ge
-
-@[simp]
-
-Depends on / 依赖: Icc_eq_zero, h.not_ge, not_ge
+/-
+**Multiset.Icc_eq_zero_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Icc_eq_zero_of_lt (h : b < a) : Icc a b = 0
+参数：h : b < a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.Icc_eq_zero`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Loc
+allyFiniteOrder α] {a b : α}, ¬a ≤ b → Multiset.Icc a b = 0
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
 -/
 theorem Icc_eq_zero_of_lt (h : b < a) : Icc a b = 0 :=
   Icc_eq_zero h.not_ge
 
 @[simp]
-/--
-theorem `Ico_eq_zero_of_le` / 定理 `Ico_eq_zero_of_le`
-
-English:
-theorem Ico_eq_zero_of_le
-  given: (h : b <= a)
-  statement: Ico a b = 0
-  proof: Ico_eq_zero h.not_gt
-
-@[simp]
-
-中文:
-定理 Ico_eq_zero_of_le
-  条件: (h : b <= a)
-  结论: 左闭右开区间 a b = 0
-  证明: Ico_eq_zero h.not_gt
-
-@[simp]
-
-Depends on / 依赖: Ico_eq_zero, h.not_gt, not_gt
+/-
+**Multiset.Ico_eq_zero_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ico_eq_zero_of_le (h : b <= a) : Ico a b = 0
+参数：h : b <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.Ico_eq_zero`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Loc
+allyFiniteOrder α] {a b : α}, ¬a < b → Multiset.Ico a b = 0
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
 -/
-theorem Ico_eq_zero_of_le (h : b <= a) : Ico a b = 0 :=
+theorem Ico_eq_zero_of_le (h : b ≤ a) : Ico a b = 0 :=
   Ico_eq_zero h.not_gt
 
 @[simp]
-/--
-theorem `Ioc_eq_zero_of_le` / 定理 `Ioc_eq_zero_of_le`
-
-English:
-theorem Ioc_eq_zero_of_le
-  given: (h : b <= a)
-  statement: Ioc a b = 0
-  proof: Ioc_eq_zero h.not_gt
-
-@[simp]
-
-中文:
-定理 Ioc_eq_zero_of_le
-  条件: (h : b <= a)
-  结论: 左开右闭区间 a b = 0
-  证明: Ioc_eq_zero h.not_gt
-
-@[simp]
-
-Depends on / 依赖: Ioc_eq_zero, h.not_gt, not_gt
+/-
+**Multiset.Ioc_eq_zero_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ioc_eq_zero_of_le (h : b <= a) : Ioc a b = 0
+参数：h : b <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.Ioc_eq_zero`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Loc
+allyFiniteOrder α] {a b : α}, ¬a < b → Multiset.Ioc a b = 0
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
 -/
-theorem Ioc_eq_zero_of_le (h : b <= a) : Ioc a b = 0 :=
+theorem Ioc_eq_zero_of_le (h : b ≤ a) : Ioc a b = 0 :=
   Ioc_eq_zero h.not_gt
 
 @[simp]
-/--
-theorem `Ioo_eq_zero_of_le` / 定理 `Ioo_eq_zero_of_le`
-
-English:
-theorem Ioo_eq_zero_of_le
-  given: (h : b <= a)
-  statement: Ioo a b = 0
-  proof: Ioo_eq_zero h.not_gt
-
-中文:
-定理 Ioo_eq_zero_of_le
-  条件: (h : b <= a)
-  结论: 开区间 a b = 0
-  证明: Ioo_eq_zero h.not_gt
-
-Depends on / 依赖: Ioo_eq_zero, h.not_gt, not_gt
+/-
+**Multiset.Ioo_eq_zero_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ioo_eq_zero_of_le (h : b <= a) : Ioo a b = 0
+参数：h : b <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Multiset.Ioo_eq_zero`：Ioo_eq_zero (h : ¬a < b) : Ioo a b = 0
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
 -/
-theorem Ioo_eq_zero_of_le (h : b <= a) : Ioo a b = 0 :=
+theorem Ioo_eq_zero_of_le (h : b ≤ a) : Ioo a b = 0 :=
   Ioo_eq_zero h.not_gt
 
 variable (a)
-
-/--
-theorem `Ico_self` / 定理 `Ico_self`
-
-English:
-theorem Ico_self
-  statement: Ico a a = 0
-  proof: by rw [Ico, Finset.Ico_self, Finset.empty_val]
-
-中文:
-定理 Ico_self
-  结论: 左闭右开区间 a a = 0
-  证明: by rw [Ico, Finset.Ico_self, Finset.empty_val]
-
-Depends on / 依赖: Finset, Finset.Ico_self, Finset.empty_val, Ico_self, empty_val
+/-
+**Multiset.Ico_self** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ico_self : Ico a a = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ico.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Ico a b = (Finset.Ico a b).val
+· 使用定理 `Finset.Ico_self`：Ico_self : Ico a a = ∅
+· 使用定理 `Finset.empty_val`：empty_val : (∅ : Finset α).1 = 0
 -/
 theorem Ico_self : Ico a a = 0 := by rw [Ico, Finset.Ico_self, Finset.empty_val]
-
-/--
-theorem `Ioc_self` / 定理 `Ioc_self`
-
-English:
-theorem Ioc_self
-  statement: Ioc a a = 0
-  proof: by rw [Ioc, Finset.Ioc_self, Finset.empty_val]
-
-中文:
-定理 Ioc_self
-  结论: 左开右闭区间 a a = 0
-  证明: by rw [Ioc, Finset.Ioc_self, Finset.empty_val]
-
-Depends on / 依赖: Finset, Finset.Ioc_self, Finset.empty_val, Ioc_self, empty_val
+/-
+**Multiset.Ioc_self** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ioc_self : Ioc a a = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ioc.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Ioc a b = (Finset.Ioc a b).val
+· 使用定理 `Finset.Ioc_self`：Ioc_self : Ioc a a = ∅
+· 使用定理 `Finset.empty_val`：empty_val : (∅ : Finset α).1 = 0
 -/
 theorem Ioc_self : Ioc a a = 0 := by rw [Ioc, Finset.Ioc_self, Finset.empty_val]
-
-/--
-theorem `Ioo_self` / 定理 `Ioo_self`
-
-English:
-theorem Ioo_self
-  statement: Ioo a a = 0
-  proof: by rw [Ioo, Finset.Ioo_self, Finset.empty_val]
-
-中文:
-定理 Ioo_self
-  结论: 开区间 a a = 0
-  证明: by rw [Ioo, Finset.Ioo_self, Finset.empty_val]
-
-Depends on / 依赖: Finset, Finset.Ioo_self, Finset.empty_val, Function, Function.RightInverse.surjective, GradedRing, GradedRing.projZeroRingHom, Ioo_self, RightInverse, _apply_coe, empty_val, projZeroRingHom, surjective
+/-
+**Multiset.Ioo_self** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ioo_self : Ioo a a = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ioo.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Ioo a b = (Finset.Ioo a b).val
+· 使用定理 `Finset.Ioo_self`：Ioo_self : Ioo a a = ∅
+· 使用定理 `Finset.empty_val`：empty_val : (∅ : Finset α).1 = 0
 -/
 theorem Ioo_self : Ioo a a = 0 := by rw [Ioo, Finset.Ioo_self, Finset.empty_val]
 
 variable {a}
-
-/--
-theorem `left_mem_Icc` / 定理 `left_mem_Icc`
-
-English:
-theorem left_mem_Icc
-  statement: a in Icc a b ↔ a <= b
-  proof: Finset.left_mem_Icc
-
-中文:
-定理 left_mem_Icc
-  结论: a in 闭区间 a b ↔ a <= b
-  证明: Finset.left_mem_Icc
-
-Depends on / 依赖: Finset, Finset.left_mem_Icc, left_mem_Icc
+/-
+**Multiset.left_mem_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：left_mem_Icc : a in Icc a b ↔ a <= b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.left_mem_Icc`：left_mem_Icc : a in Icc a b ↔ a <= b
 -/
-theorem left_mem_Icc : a in Icc a b ↔ a <= b :=
+theorem left_mem_Icc : a ∈ Icc a b ↔ a ≤ b :=
   Finset.left_mem_Icc
-
-/--
-theorem `left_mem_Ico` / 定理 `left_mem_Ico`
-
-English:
-theorem left_mem_Ico
-  statement: a in Ico a b ↔ a < b
-  proof: Finset.left_mem_Ico
-
-中文:
-定理 left_mem_Ico
-  结论: a in 左闭右开区间 a b ↔ a < b
-  证明: Finset.left_mem_Ico
-
-Depends on / 依赖: Finset, Finset.left_mem_Ico, left_mem_Ico
+/-
+**Multiset.left_mem_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：left_mem_Ico : a in Ico a b ↔ a < b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.left_mem_Ico`：left_mem_Ico : a in Ico a b ↔ a < b
 -/
-theorem left_mem_Ico : a in Ico a b ↔ a < b :=
+theorem left_mem_Ico : a ∈ Ico a b ↔ a < b :=
   Finset.left_mem_Ico
-
-/--
-theorem `right_mem_Icc` / 定理 `right_mem_Icc`
-
-English:
-theorem right_mem_Icc
-  statement: b in Icc a b ↔ a <= b
-  proof: Finset.right_mem_Icc
-
-中文:
-定理 right_mem_Icc
-  结论: b in 闭区间 a b ↔ a <= b
-  证明: Finset.right_mem_Icc
-
-Depends on / 依赖: Finset, Finset.right_mem_Icc, right_mem_Icc
+/-
+**Multiset.right_mem_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：right_mem_Icc : b in Icc a b ↔ a <= b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.right_mem_Icc`：right_mem_Icc : b in Icc a b ↔ a <= b
 -/
-theorem right_mem_Icc : b in Icc a b ↔ a <= b :=
+theorem right_mem_Icc : b ∈ Icc a b ↔ a ≤ b :=
   Finset.right_mem_Icc
-
-/--
-theorem `right_mem_Ioc` / 定理 `right_mem_Ioc`
-
-English:
-theorem right_mem_Ioc
-  statement: b in Ioc a b ↔ a < b
-  proof: Finset.right_mem_Ioc
-
-中文:
-定理 right_mem_Ioc
-  结论: b in 左开右闭区间 a b ↔ a < b
-  证明: Finset.right_mem_Ioc
-
-Depends on / 依赖: Finset, Finset.right_mem_Ioc, right_mem_Ioc
+/-
+**Multiset.right_mem_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：right_mem_Ioc : b in Ioc a b ↔ a < b
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.right_mem_Ioc`：right_mem_Ioc : b in Ioc a b ↔ a < b
 -/
-theorem right_mem_Ioc : b in Ioc a b ↔ a < b :=
+theorem right_mem_Ioc : b ∈ Ioc a b ↔ a < b :=
   Finset.right_mem_Ioc
-
-/--
-theorem `left_notMem_Ioc` / 定理 `left_notMem_Ioc`
-
-English:
-theorem left_notMem_Ioc
-  statement: a ∉ Ioc a b
-  proof: Finset.left_notMem_Ioc
-
-中文:
-定理 left_notMem_Ioc
-  结论: a ∉ 左开右闭区间 a b
-  证明: Finset.left_notMem_Ioc
-
-Depends on / 依赖: Finset, Finset.left_notMem_Ioc, left_notMem_Ioc
+/-
+**Multiset.left_notMem_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：left_notMem_Ioc : a ∉ Ioc a b
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.left_notMem_Ioc`：left_notMem_Ioc : a ∉ Ioc a b
 -/
 theorem left_notMem_Ioc : a ∉ Ioc a b :=
   Finset.left_notMem_Ioc
-
-/--
-theorem `left_notMem_Ioo` / 定理 `left_notMem_Ioo`
-
-English:
-theorem left_notMem_Ioo
-  statement: a ∉ Ioo a b
-  proof: Finset.left_notMem_Ioo
-
-中文:
-定理 left_notMem_Ioo
-  结论: a ∉ 开区间 a b
-  证明: Finset.left_notMem_Ioo
-
-Depends on / 依赖: Finset, Finset.left_notMem_Ioo, left_notMem_Ioo
+/-
+**Multiset.left_notMem_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：left_notMem_Ioo : a ∉ Ioo a b
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.left_notMem_Ioo`：left_notMem_Ioo : a ∉ Ioo a b
 -/
 theorem left_notMem_Ioo : a ∉ Ioo a b :=
   Finset.left_notMem_Ioo
-
-/--
-theorem `right_notMem_Ico` / 定理 `right_notMem_Ico`
-
-English:
-theorem right_notMem_Ico
-  statement: b ∉ Ico a b
-  proof: Finset.right_notMem_Ico
-
-中文:
-定理 right_notMem_Ico
-  结论: b ∉ 左闭右开区间 a b
-  证明: Finset.right_notMem_Ico
-
-Depends on / 依赖: Finset, Finset.right_notMem_Ico, right_notMem_Ico
+/-
+**Multiset.right_notMem_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：right_notMem_Ico : b ∉ Ico a b
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.right_notMem_Ico`：right_notMem_Ico : b ∉ Ico a b
 -/
 theorem right_notMem_Ico : b ∉ Ico a b :=
   Finset.right_notMem_Ico
-
-/--
-theorem `right_notMem_Ioo` / 定理 `right_notMem_Ioo`
-
-English:
-theorem right_notMem_Ioo
-  statement: b ∉ Ioo a b
-  proof: Finset.right_notMem_Ioo
-
-中文:
-定理 right_notMem_Ioo
-  结论: b ∉ 开区间 a b
-  证明: Finset.right_notMem_Ioo
-
-Depends on / 依赖: Finset, Finset.right_notMem_Ioo, right_notMem_Ioo
+/-
+**Multiset.right_notMem_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：right_notMem_Ioo : b ∉ Ioo a b
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.right_notMem_Ioo`：right_notMem_Ioo : b ∉ Ioo a b
 -/
 theorem right_notMem_Ioo : b ∉ Ioo a b :=
   Finset.right_notMem_Ioo
-
-/--
-theorem `Ico_filter_lt_of_le_left` / 定理 `Ico_filter_lt_of_le_left`
-
-English:
-theorem Ico_filter_lt_of_le_left
-  given: [DecidablePred (· < c)] (hca : c <= a)
-  proof: by
-  rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_lt_of_le_left hca]
-  rfl
-
-中文:
-定理 Ico_filter_lt_of_le_left
-  条件: [DecidablePred (· < c)] (hca : c <= a)
-  证明: by
-  rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_lt_of_le_left hca]
-  rfl
-
-Depends on / 依赖: Finset, Finset.Ico_filter_lt_of_le_left, Finset.filter_val, Ico_filter_lt_of_le_left, filter_val
+/-
+**Multiset.Ico_filter_lt_of_le_left** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ico_filter_lt_of_le_left [DecidablePred (· < c)] (hca : c <= a) : ((Ico a 
+b).filter fun x => x < c) = ∅
+参数：· < c；hca : c <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ico.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Ico a b = (Finset.Ico a b).val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.filter_val`：∀ {α : Type u_1} (p : α → Prop) [inst : DecidablePred
+ p] (s : Finset α),   (Finset.filter p s).val = Multiset.filter p s.val
+· 使用定理 `Finset.Ico_filter_lt_of_le_left`：Ico_filter_lt_of_le_left [DecidablePred
+ (· < c)] (hca : c <= a) : {x in Ico a b | x < c} = ∅
 -/
-theorem Ico_filter_lt_of_le_left [DecidablePred (· < c)] (hca : c <= a) :
+theorem Ico_filter_lt_of_le_left [DecidablePred (· < c)] (hca : c ≤ a) :
     ((Ico a b).filter fun x => x < c) = ∅ := by
-  rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_lt_of_le_left hca]
+  rw [Ico, ← Finset.filter_val, Finset.Ico_filter_lt_of_le_left hca]
   rfl
-
-/--
-theorem `Ico_filter_lt_of_right_le` / 定理 `Ico_filter_lt_of_right_le`
-
-English:
-theorem Ico_filter_lt_of_right_le
-  given: [DecidablePred (· < c)] (hbc : b <= c)
-  proof: by
-  rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_lt_of_right_le hbc]
-
-中文:
-定理 Ico_filter_lt_of_right_le
-  条件: [DecidablePred (· < c)] (hbc : b <= c)
-  证明: by
-  rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_lt_of_right_le hbc]
-
-Depends on / 依赖: Finset, Finset.Ico_filter_lt_of_right_le, Finset.filter_val, Ico_filter_lt_of_right_le, filter_val
+/-
+**Multiset.Ico_filter_lt_of_right_le** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ico_filter_lt_of_right_le [DecidablePred (· < c)] (hbc : b <= c) : ((Ico a
+ b).filter fun x => x < c) = Ico a b
+参数：· < c；hbc : b <= c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ico.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Ico a b = (Finset.Ico a b).val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.filter_val`：∀ {α : Type u_1} (p : α → Prop) [inst : DecidablePred
+ p] (s : Finset α),   (Finset.filter p s).val = Multiset.filter p s.val
+· 使用定理 `Finset.Ico_filter_lt_of_right_le`：Ico_filter_lt_of_right_le [DecidablePr
+ed (· < c)] (hbc : b <= c) : {x in Ico a b | x < c} = Ico a b
 -/
-theorem Ico_filter_lt_of_right_le [DecidablePred (· < c)] (hbc : b <= c) :
+theorem Ico_filter_lt_of_right_le [DecidablePred (· < c)] (hbc : b ≤ c) :
     ((Ico a b).filter fun x => x < c) = Ico a b := by
-  rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_lt_of_right_le hbc]
-
-/--
-theorem `Ico_filter_lt_of_le_right` / 定理 `Ico_filter_lt_of_le_right`
-
-English:
-theorem Ico_filter_lt_of_le_right
-  given: [DecidablePred (· < c)] (hcb : c <= b)
-  proof: by
-  rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_lt_of_le_right hcb]
-  rfl
-
-中文:
-定理 Ico_filter_lt_of_le_right
-  条件: [DecidablePred (· < c)] (hcb : c <= b)
-  证明: by
-  rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_lt_of_le_right hcb]
-  rfl
-
-Depends on / 依赖: Finset, Finset.Ico_filter_lt_of_le_right, Finset.filter_val, Ico_filter_lt_of_le_right, filter_val
+  rw [Ico, ← Finset.filter_val, Finset.Ico_filter_lt_of_right_le hbc]
+/-
+**Multiset.Ico_filter_lt_of_le_right** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ico_filter_lt_of_le_right [DecidablePred (· < c)] (hcb : c <= b) : ((Ico a
+ b).filter fun x => x < c) = Ico a c
+参数：· < c；hcb : c <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ico.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Ico a b = (Finset.Ico a b).val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.filter_val`：∀ {α : Type u_1} (p : α → Prop) [inst : DecidablePred
+ p] (s : Finset α),   (Finset.filter p s).val = Multiset.filter p s.val
+· 使用定理 `Finset.Ico_filter_lt_of_le_right`：Ico_filter_lt_of_le_right [DecidablePr
+ed (· < c)] (hcb : c <= b) : {x in Ico a b | x < c} = Ico a c
 -/
-theorem Ico_filter_lt_of_le_right [DecidablePred (· < c)] (hcb : c <= b) :
+theorem Ico_filter_lt_of_le_right [DecidablePred (· < c)] (hcb : c ≤ b) :
     ((Ico a b).filter fun x => x < c) = Ico a c := by
-  rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_lt_of_le_right hcb]
+  rw [Ico, ← Finset.filter_val, Finset.Ico_filter_lt_of_le_right hcb]
   rfl
-
-/--
-theorem `Ico_filter_le_of_le_left` / 定理 `Ico_filter_le_of_le_left`
-
-English:
-theorem Ico_filter_le_of_le_left
-  given: [DecidablePred (c <= ·)] (hca : c <= a)
-  proof: by
-  rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_le_of_le_left hca]
-
-中文:
-定理 Ico_filter_le_of_le_left
-  条件: [DecidablePred (c <= ·)] (hca : c <= a)
-  证明: by
-  rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_le_of_le_left hca]
-
-Depends on / 依赖: Finset, Finset.Ico_filter_le_of_le_left, Finset.filter_val, Ico_filter_le_of_le_left, filter_val
+/-
+**Multiset.Ico_filter_le_of_le_left** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ico_filter_le_of_le_left [DecidablePred (c <= ·)] (hca : c <= a) : ((Ico a
+ b).filter fun x => c <= x) = Ico a b
+参数：c <= ·；hca : c <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ico.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Ico a b = (Finset.Ico a b).val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.filter_val`：∀ {α : Type u_1} (p : α → Prop) [inst : DecidablePred
+ p] (s : Finset α),   (Finset.filter p s).val = Multiset.filter p s.val
+· 使用定理 `Finset.Ico_filter_le_of_le_left`：Ico_filter_le_of_le_left {a b c : α} [D
+ecidablePred (c <= ·)] (hca : c <= a) : {x in Ico a b | c <= x} = Ico a b
 -/
-theorem Ico_filter_le_of_le_left [DecidablePred (c <= ·)] (hca : c <= a) :
-    ((Ico a b).filter fun x => c <= x) = Ico a b := by
-  rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_le_of_le_left hca]
-
-/--
-theorem `Ico_filter_le_of_right_le` / 定理 `Ico_filter_le_of_right_le`
-
-English:
-theorem Ico_filter_le_of_right_le
-  given: [DecidablePred (b <= ·)]
-  proof: by
-  rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_le_of_right_le]
-  rfl
-
-中文:
-定理 Ico_filter_le_of_right_le
-  条件: [DecidablePred (b <= ·)]
-  证明: by
-  rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_le_of_right_le]
-  rfl
-
-Depends on / 依赖: Finset, Finset.Ico_filter_le_of_right_le, Finset.filter_val, Ico_filter_le_of_right_le, filter_val
+theorem Ico_filter_le_of_le_left [DecidablePred (c ≤ ·)] (hca : c ≤ a) :
+    ((Ico a b).filter fun x => c ≤ x) = Ico a b := by
+  rw [Ico, ← Finset.filter_val, Finset.Ico_filter_le_of_le_left hca]
+/-
+**Multiset.Ico_filter_le_of_right_le** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ico_filter_le_of_right_le [DecidablePred (b <= ·)] : ((Ico a b).filter fun
+ x => b <= x) = ∅
+参数：b <= ·。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ico.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Ico a b = (Finset.Ico a b).val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.filter_val`：∀ {α : Type u_1} (p : α → Prop) [inst : DecidablePred
+ p] (s : Finset α),   (Finset.filter p s).val = Multiset.filter p s.val
+· 使用定理 `Finset.Ico_filter_le_of_right_le`：Ico_filter_le_of_right_le {a b : α} [D
+ecidablePred (b <= ·)] : {x in Ico a b | b <= x} = ∅
 -/
-theorem Ico_filter_le_of_right_le [DecidablePred (b <= ·)] :
-    ((Ico a b).filter fun x => b <= x) = ∅ := by
-  rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_le_of_right_le]
+theorem Ico_filter_le_of_right_le [DecidablePred (b ≤ ·)] :
+    ((Ico a b).filter fun x => b ≤ x) = ∅ := by
+  rw [Ico, ← Finset.filter_val, Finset.Ico_filter_le_of_right_le]
   rfl
-
-/--
-theorem `Ico_filter_le_of_left_le` / 定理 `Ico_filter_le_of_left_le`
-
-English:
-theorem Ico_filter_le_of_left_le
-  given: [DecidablePred (c <= ·)] (hac : a <= c)
-  proof: by
-  rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_le_of_left_le hac]
-  rfl
-
-中文:
-定理 Ico_filter_le_of_left_le
-  条件: [DecidablePred (c <= ·)] (hac : a <= c)
-  证明: by
-  rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_le_of_left_le hac]
-  rfl
-
-Depends on / 依赖: Finset, Finset.Ico_filter_le_of_left_le, Finset.filter_val, Ico_filter_le_of_left_le, filter_val
+/-
+**Multiset.Ico_filter_le_of_left_le** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ico_filter_le_of_left_le [DecidablePred (c <= ·)] (hac : a <= c) : ((Ico a
+ b).filter fun x => c <= x) = Ico c b
+参数：c <= ·；hac : a <= c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ico.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Ico a b = (Finset.Ico a b).val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.filter_val`：∀ {α : Type u_1} (p : α → Prop) [inst : DecidablePred
+ p] (s : Finset α),   (Finset.filter p s).val = Multiset.filter p s.val
+· 使用定理 `Finset.Ico_filter_le_of_left_le`：Ico_filter_le_of_left_le {a b c : α} [D
+ecidablePred (c <= ·)] (hac : a <= c) : {x in Ico a b | c <= x} = Ico c b
 -/
-theorem Ico_filter_le_of_left_le [DecidablePred (c <= ·)] (hac : a <= c) :
-    ((Ico a b).filter fun x => c <= x) = Ico c b := by
-  rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_le_of_left_le hac]
+theorem Ico_filter_le_of_left_le [DecidablePred (c ≤ ·)] (hac : a ≤ c) :
+    ((Ico a b).filter fun x => c ≤ x) = Ico c b := by
+  rw [Ico, ← Finset.filter_val, Finset.Ico_filter_le_of_left_le hac]
   rfl
 
 end Preorder
@@ -977,232 +740,169 @@ section PartialOrder
 variable [PartialOrder α] [LocallyFiniteOrder α] {a b : α}
 
 @[simp]
-/--
-theorem `Icc_self` / 定理 `Icc_self`
-
-English:
-theorem Icc_self
-  given: (a : α)
-  statement: Icc a a = {a}
-  proof: by rw [Icc, Finset.Icc_self, Finset.singleton_val]
-
-中文:
-定理 Icc_self
-  条件: (a : α)
-  结论: 闭区间 a a = {a}
-  证明: by rw [Icc, Finset.Icc_self, Finset.singleton_val]
-
-Depends on / 依赖: Finset, Finset.Icc_self, Finset.singleton_val, Icc_self, singleton_val
+/-
+**Multiset.Icc_self** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Icc_self (a : α) : Icc a a = {a}
+参数：a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Icc.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Icc a b = (Finset.Icc a b).val
+· 使用定理 `Finset.Icc_self`：Icc_self (a : α) : Icc a a = {a}
+· 使用定理 `Finset.singleton_val`：singleton_val (a : α) : ({a} : Finset α).1 = {a}
 -/
 theorem Icc_self (a : α) : Icc a a = {a} := by rw [Icc, Finset.Icc_self, Finset.singleton_val]
-
-/--
-theorem `Ico_cons_right` / 定理 `Ico_cons_right`
-
-English:
-theorem Ico_cons_right
-  given: (h : a <= b)
-  statement: b ::ₘ Ico a b = Icc a b
-  proof: by
-  classical
-    rw [Ico]; rw [← Finset.insert_val_of_notMem right_notMem_Ico]; rw [Finset.Ico_insert_right h]
-    rfl
-
-中文:
-定理 Ico_cons_right
-  条件: (h : a <= b)
-  结论: b ::ₘ 左闭右开区间 a b = 闭区间 a b
-  证明: by
-  classical
-    rw [Ico]; rw [← Finset.insert_val_of_notMem right_notMem_Ico]; rw [Finset.Ico_insert_right h]
-    rfl
-
-Depends on / 依赖: Finset, Finset.Ico_insert_right, Finset.insert_val_of_notMem, Ico_insert_right, classical, insert_val_of_notMem, right_notMem_Ico
+/-
+**Multiset.Ico_cons_right** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ico_cons_right (h : a <= b) : b ::ₘ Ico a b = Icc a b
+参数：h : a <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ico.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Ico a b = (Finset.Ico a b).val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.insert_val_of_notMem`：insert_val_of_notMem {a : α} {s : Finset α}
+ (h : a ∉ s) : (insert a s).1 = a ::ₘ s.1
+· 使用定理 `Multiset.right_notMem_Ico`：right_notMem_Ico : b ∉ Ico a b
+· 使用定理 `Finset.Ico_insert_right`：Ico_insert_right (h : a <= b) : insert b (Ico a
+ b) = Icc a b
 -/
-theorem Ico_cons_right (h : a <= b) : b ::ₘ Ico a b = Icc a b := by
+theorem Ico_cons_right (h : a ≤ b) : b ::ₘ Ico a b = Icc a b := by
   classical
-    rw [Ico]; rw [← Finset.insert_val_of_notMem right_notMem_Ico]; rw [Finset.Ico_insert_right h]
+    rw [Ico, ← Finset.insert_val_of_notMem right_notMem_Ico, Finset.Ico_insert_right h]
     rfl
-
-/--
-theorem `Ioo_cons_left` / 定理 `Ioo_cons_left`
-
-English:
-theorem Ioo_cons_left
-  given: (h : a < b)
-  statement: a ::ₘ Ioo a b = Ico a b
-  proof: by
-  classical
-    rw [Ioo]; rw [← Finset.insert_val_of_notMem left_notMem_Ioo]; rw [Finset.Ioo_insert_left h]
-    rfl
-
-中文:
-定理 Ioo_cons_left
-  条件: (h : a < b)
-  结论: a ::ₘ 开区间 a b = 左闭右开区间 a b
-  证明: by
-  classical
-    rw [Ioo]; rw [← Finset.insert_val_of_notMem left_notMem_Ioo]; rw [Finset.Ioo_insert_left h]
-    rfl
-
-Depends on / 依赖: Finset, Finset.Ioo_insert_left, Finset.insert_val_of_notMem, Ioo_insert_left, classical, insert_val_of_notMem, left_notMem_Ioo
+/-
+**Multiset.Ioo_cons_left** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ioo_cons_left (h : a < b) : a ::ₘ Ioo a b = Ico a b
+参数：h : a < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ioo.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Ioo a b = (Finset.Ioo a b).val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.insert_val_of_notMem`：insert_val_of_notMem {a : α} {s : Finset α}
+ (h : a ∉ s) : (insert a s).1 = a ::ₘ s.1
+· 使用定理 `Multiset.left_notMem_Ioo`：left_notMem_Ioo : a ∉ Ioo a b
+· 使用定理 `Finset.Ioo_insert_left`：Ioo_insert_left (h : a < b) : insert a (Ioo a b)
+ = Ico a b
 -/
 theorem Ioo_cons_left (h : a < b) : a ::ₘ Ioo a b = Ico a b := by
   classical
-    rw [Ioo]; rw [← Finset.insert_val_of_notMem left_notMem_Ioo]; rw [Finset.Ioo_insert_left h]
+    rw [Ioo, ← Finset.insert_val_of_notMem left_notMem_Ioo, Finset.Ioo_insert_left h]
     rfl
-
-/--
-theorem `Ico_disjoint_Ico` / 定理 `Ico_disjoint_Ico`
-
-English:
-theorem Ico_disjoint_Ico
-  given: {a b c d : α} (h : b <= c)
-  statement: Disjoint (Ico a b) (Ico c d)
-  proof: disjoint_left.mpr fun hab hbc => by
-    rw [mem_Ico] at hab hbc
-    exact hab.2.not_ge (h.trans hbc.1)
-
-@[simp]
-
-中文:
-定理 Ico_disjoint_Ico
-  条件: {a b c d : α} (h : b <= c)
-  结论: Disjoint (左闭右开区间 a b) (左闭右开区间 c d)
-  证明: disjoint_left.mpr fun hab hbc => by
-    rw [mem_Ico] at hab hbc
-    exact hab.2.not_ge (h.trans hbc.1)
-
-@[simp]
-
-Depends on / 依赖: disjoint_left, disjoint_left.mpr, h.trans, mem_Ico, not_ge
+/-
+**Multiset.Ico_disjoint_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ico_disjoint_Ico {a b c d : α} (h : b <= c) : Disjoint (Ico a b) (Ico c d)
+参数：h : b <= c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Multiset.disjoint_left`：disjoint_left {s t : Multiset α} : Disjoint s t 
+↔ forall {a}, a in s -> a ∉ t
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.mem_Ico`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locally
+FiniteOrder α] {a b x : α}, x ∈ Multiset.Ico a b ↔ a ≤ x ∧ x < b
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-theorem Ico_disjoint_Ico {a b c d : α} (h : b <= c) : Disjoint (Ico a b) (Ico c d) :=
+theorem Ico_disjoint_Ico {a b c d : α} (h : b ≤ c) : Disjoint (Ico a b) (Ico c d) :=
   disjoint_left.mpr fun hab hbc => by
     rw [mem_Ico] at hab hbc
     exact hab.2.not_ge (h.trans hbc.1)
 
 @[simp]
-/--
-theorem `Ico_inter_Ico_of_le` / 定理 `Ico_inter_Ico_of_le`
-
-English:
-theorem Ico_inter_Ico_of_le
-  given: [DecidableEq α] {a b c d : α} (h : b <= c)
-  statement: Ico a b inter Ico c d = 0
-  proof: Multiset.inter_eq_zero_iff_disjoint.2 Ico_disjoint_Ico h
-
-中文:
-定理 Ico_inter_Ico_of_le
-  条件: [DecidableEq α] {a b c d : α} (h : b <= c)
-  结论: 左闭右开区间 a b inter 左闭右开区间 c d = 0
-  证明: Multiset.inter_eq_zero_iff_disjoint.2 Ico_disjoint_Ico h
-
-Depends on / 依赖: Ico_disjoint_Ico, Multiset, Multiset.inter_eq_zero_iff_disjoint, inter_eq_zero_iff_disjoint
+/-
+**Multiset.Ico_inter_Ico_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ico_inter_Ico_of_le [DecidableEq α] {a b c d : α} (h : b <= c) : Ico a b i
+nter Ico c d = 0
+参数：h : b <= c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Multiset.inter_eq_zero_iff_disjoint`：inter_eq_zero_iff_disjoint [Decidab
+leEq α] {s t : Multiset α} : s inter t = 0 ↔ Disjoint s t
+· 使用定理 `Multiset.Ico_disjoint_Ico`：Ico_disjoint_Ico {a b c d : α} (h : b <= c) :
+ Disjoint (Ico a b) (Ico c d)
 -/
-theorem Ico_inter_Ico_of_le [DecidableEq α] {a b c d : α} (h : b <= c) : Ico a b inter Ico c d = 0 :=
-Multiset.inter_eq_zero_iff_disjoint.2 Ico_disjoint_Ico h
-
-/--
-theorem `Ico_filter_le_left` / 定理 `Ico_filter_le_left`
-
-English:
-theorem Ico_filter_le_left
-  given: {a b : α} [DecidablePred (· <= a)] (hab : a < b)
-  proof: by
-  rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_le_left hab]
-  rfl
-
-中文:
-定理 Ico_filter_le_left
-  条件: {a b : α} [DecidablePred (· <= a)] (hab : a < b)
-  证明: by
-  rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_le_left hab]
-  rfl
-
-Depends on / 依赖: Finset, Finset.Ico_filter_le_left, Finset.filter_val, Ico_filter_le_left, filter_val
+theorem Ico_inter_Ico_of_le [DecidableEq α] {a b c d : α} (h : b ≤ c) : Ico a b ∩ Ico c d = 0 :=
+  Multiset.inter_eq_zero_iff_disjoint.2 <| Ico_disjoint_Ico h
+/-
+**Multiset.Ico_filter_le_left** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ico_filter_le_left {a b : α} [DecidablePred (· <= a)] (hab : a < b) : ((Ic
+o a b).filter fun x => x <= a) = {a}
+参数：· <= a；hab : a < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ico.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Ico a b = (Finset.Ico a b).val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.filter_val`：∀ {α : Type u_1} (p : α → Prop) [inst : DecidablePred
+ p] (s : Finset α),   (Finset.filter p s).val = Multiset.filter p s.val
+· 使用定理 `Finset.Ico_filter_le_left`：Ico_filter_le_left {a b : α} [DecidablePred (
+· <= a)] (hab : a < b) : {x in Ico a b | x <= a} = {a}
 -/
-theorem Ico_filter_le_left {a b : α} [DecidablePred (· <= a)] (hab : a < b) :
-    ((Ico a b).filter fun x => x <= a) = {a} := by
-  rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_le_left hab]
+theorem Ico_filter_le_left {a b : α} [DecidablePred (· ≤ a)] (hab : a < b) :
+    ((Ico a b).filter fun x => x ≤ a) = {a} := by
+  rw [Ico, ← Finset.filter_val, Finset.Ico_filter_le_left hab]
   rfl
-
-/--
-theorem `card_Ico_eq_card_Icc_sub_one` / 定理 `card_Ico_eq_card_Icc_sub_one`
-
-English:
-theorem card_Ico_eq_card_Icc_sub_one
-  given: (a b : α)
-  statement: card (Ico a b) = card (Icc a b) - 1
-  proof: Finset.card_Ico_eq_card_Icc_sub_one _ _
-
-中文:
-定理 card_Ico_eq_card_Icc_sub_one
-  条件: (a b : α)
-  结论: card (左闭右开区间 a b) = card (闭区间 a b) - 1
-  证明: Finset.card_Ico_eq_card_Icc_sub_one _ _
-
-Depends on / 依赖: Finset, Finset.card_Ico_eq_card_Icc_sub_one, card_Ico_eq_card_Icc_sub_one
+/-
+**Multiset.card_Ico_eq_card_Icc_sub_one** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：card_Ico_eq_card_Icc_sub_one (a b : α) : card (Ico a b) = card (Icc a b) -
+ 1
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.card_Ico_eq_card_Icc_sub_one`：card_Ico_eq_card_Icc_sub_one (a b :
+ α) : #(Ico a b) = #(Icc a b) - 1
 -/
 theorem card_Ico_eq_card_Icc_sub_one (a b : α) : card (Ico a b) = card (Icc a b) - 1 :=
   Finset.card_Ico_eq_card_Icc_sub_one _ _
-
-/--
-theorem `card_Ioc_eq_card_Icc_sub_one` / 定理 `card_Ioc_eq_card_Icc_sub_one`
-
-English:
-theorem card_Ioc_eq_card_Icc_sub_one
-  given: (a b : α)
-  statement: card (Ioc a b) = card (Icc a b) - 1
-  proof: Finset.card_Ioc_eq_card_Icc_sub_one _ _
-
-中文:
-定理 card_Ioc_eq_card_Icc_sub_one
-  条件: (a b : α)
-  结论: card (左开右闭区间 a b) = card (闭区间 a b) - 1
-  证明: Finset.card_Ioc_eq_card_Icc_sub_one _ _
-
-Depends on / 依赖: Finset, Finset.card_Ioc_eq_card_Icc_sub_one, card_Ioc_eq_card_Icc_sub_one
+/-
+**Multiset.card_Ioc_eq_card_Icc_sub_one** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：card_Ioc_eq_card_Icc_sub_one (a b : α) : card (Ioc a b) = card (Icc a b) -
+ 1
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.card_Ioc_eq_card_Icc_sub_one`：card_Ioc_eq_card_Icc_sub_one (a b :
+ α) : #(Ioc a b) = #(Icc a b) - 1
 -/
 theorem card_Ioc_eq_card_Icc_sub_one (a b : α) : card (Ioc a b) = card (Icc a b) - 1 :=
   Finset.card_Ioc_eq_card_Icc_sub_one _ _
-
-/--
-theorem `card_Ioo_eq_card_Ico_sub_one` / 定理 `card_Ioo_eq_card_Ico_sub_one`
-
-English:
-theorem card_Ioo_eq_card_Ico_sub_one
-  given: (a b : α)
-  statement: card (Ioo a b) = card (Ico a b) - 1
-  proof: Finset.card_Ioo_eq_card_Ico_sub_one _ _
-
-中文:
-定理 card_Ioo_eq_card_Ico_sub_one
-  条件: (a b : α)
-  结论: card (开区间 a b) = card (左闭右开区间 a b) - 1
-  证明: Finset.card_Ioo_eq_card_Ico_sub_one _ _
-
-Depends on / 依赖: Finset, Finset.card_Ioo_eq_card_Ico_sub_one, card_Ioo_eq_card_Ico_sub_one
+/-
+**Multiset.card_Ioo_eq_card_Ico_sub_one** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：card_Ioo_eq_card_Ico_sub_one (a b : α) : card (Ioo a b) = card (Ico a b) -
+ 1
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.card_Ioo_eq_card_Ico_sub_one`：card_Ioo_eq_card_Ico_sub_one (a b :
+ α) : #(Ioo a b) = #(Ico a b) - 1
 -/
 theorem card_Ioo_eq_card_Ico_sub_one (a b : α) : card (Ioo a b) = card (Ico a b) - 1 :=
   Finset.card_Ioo_eq_card_Ico_sub_one _ _
-
-/--
-theorem `card_Ioo_eq_card_Icc_sub_two` / 定理 `card_Ioo_eq_card_Icc_sub_two`
-
-English:
-theorem card_Ioo_eq_card_Icc_sub_two
-  given: (a b : α)
-  statement: card (Ioo a b) = card (Icc a b) - 2
-  proof: Finset.card_Ioo_eq_card_Icc_sub_two _ _
-
-中文:
-定理 card_Ioo_eq_card_Icc_sub_two
-  条件: (a b : α)
-  结论: card (开区间 a b) = card (闭区间 a b) - 2
-  证明: Finset.card_Ioo_eq_card_Icc_sub_two _ _
-
-Depends on / 依赖: Finset, Finset.card_Ioo_eq_card_Icc_sub_two, card_Ioo_eq_card_Icc_sub_two
+/-
+**Multiset.card_Ioo_eq_card_Icc_sub_two** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：card_Ioo_eq_card_Icc_sub_two (a b : α) : card (Ioo a b) = card (Icc a b) -
+ 2
+参数：a b : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.card_Ioo_eq_card_Icc_sub_two`：card_Ioo_eq_card_Icc_sub_two (a b :
+ α) : #(Ioo a b) = #(Icc a b) - 2
 -/
 theorem card_Ioo_eq_card_Icc_sub_two (a b : α) : card (Ioo a b) = card (Icc a b) - 2 :=
   Finset.card_Ioo_eq_card_Icc_sub_two _ _
@@ -1213,173 +913,146 @@ section LinearOrder
 
 variable [LinearOrder α] [LocallyFiniteOrder α] {a b c d : α}
 
-/--
-theorem `Ico_subset_Ico_iff` / 定理 `Ico_subset_Ico_iff`
-
-English:
-theorem Ico_subset_Ico_iff
-  given: {a₁ b₁ a₂ b₂ : α} (h : a₁ < b₁)
-  proof: Finset.Ico_subset_Ico_iff h
-
-中文:
-定理 Ico_subset_Ico_iff
-  条件: {a₁ b₁ a₂ b₂ : α} (h : a₁ < b₁)
-  证明: Finset.Ico_subset_Ico_iff h
-
-Depends on / 依赖: Finset, Finset.Ico_subset_Ico_iff, Ico_subset_Ico_iff
+/-
+**Multiset.Ico_subset_Ico_iff** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ico_subset_Ico_iff {a₁ b₁ a₂ b₂ : α} (h : a₁ < b₁) : Ico a₁ b₁ subseteq Ic
+o a₂ b₂ ↔ a₂ <= a₁ ∧ b₁ <= b₂
+参数：h : a₁ < b₁。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.Ico_subset_Ico_iff`：Ico_subset_Ico_iff {a₁ b₁ a₂ b₂ : α} (h : a₁ 
+< b₁) : Ico a₁ b₁ subseteq Ico a₂ b₂ ↔ a₂ <= a₁ ∧ b₁ <= b₂
 -/
 theorem Ico_subset_Ico_iff {a₁ b₁ a₂ b₂ : α} (h : a₁ < b₁) :
-    Ico a₁ b₁ subseteq Ico a₂ b₂ ↔ a₂ <= a₁ ∧ b₁ <= b₂ :=
+    Ico a₁ b₁ ⊆ Ico a₂ b₂ ↔ a₂ ≤ a₁ ∧ b₁ ≤ b₂ :=
   Finset.Ico_subset_Ico_iff h
-
-/--
-theorem `Ico_add_Ico_eq_Ico` / 定理 `Ico_add_Ico_eq_Ico`
-
-English:
-theorem Ico_add_Ico_eq_Ico
-  given: {a b c : α} (hab : a <= b) (hbc : b <= c)
-  proof: by
-  rw [add_eq_union_iff_disjoint.2 (Ico_disjoint_Ico le_rfl)]; rw [Ico]; rw [Ico]; rw [Ico]; rw [← Finset.union_val]; rw [Finset.Ico_union_Ico_eq_Ico hab hbc]
-
-中文:
-定理 Ico_add_Ico_eq_Ico
-  条件: {a b c : α} (hab : a <= b) (hbc : b <= c)
-  证明: by
-  rw [add_eq_union_iff_disjoint.2 (Ico_disjoint_Ico le_rfl)]; rw [Ico]; rw [Ico]; rw [Ico]; rw [← Finset.union_val]; rw [Finset.Ico_union_Ico_eq_Ico hab hbc]
-
-Depends on / 依赖: Finset, Finset.Ico_union_Ico_eq_Ico, Finset.union_val, Ico_disjoint_Ico, Ico_union_Ico_eq_Ico, add_eq_union_iff_disjoint, le_rfl, union_val
+/-
+**Multiset.Ico_add_Ico_eq_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ico_add_Ico_eq_Ico {a b c : α} (hab : a <= b) (hbc : b <= c) : Ico a b + I
+co b c = Ico a c
+参数：hab : a <= b；hbc : b <= c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Multiset.add_eq_union_iff_disjoint`：add_eq_union_iff_disjoint [Decidable
+Eq α] {s t : Multiset α} : s + t = s union t ↔ Disjoint s t
+· 使用定理 `Multiset.Ico_disjoint_Ico`：Ico_disjoint_Ico {a b c d : α} (h : b <= c) :
+ Disjoint (Ico a b) (Ico c d)
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `Multiset.Ico.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Ico a b = (Finset.Ico a b).val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.union_val`：union_val (s t : Finset α) : (s union t).1 = s.1 union
+ t.1
+· 使用定理 `Finset.Ico_union_Ico_eq_Ico`：Ico_union_Ico_eq_Ico {a b c : α} (hab : a <
+= b) (hbc : b <= c) : Ico a b union Ico b c = Ico a c
 -/
-theorem Ico_add_Ico_eq_Ico {a b c : α} (hab : a <= b) (hbc : b <= c) :
+theorem Ico_add_Ico_eq_Ico {a b c : α} (hab : a ≤ b) (hbc : b ≤ c) :
     Ico a b + Ico b c = Ico a c := by
-  rw [add_eq_union_iff_disjoint.2 (Ico_disjoint_Ico le_rfl)]; rw [Ico]; rw [Ico]; rw [Ico]; rw [← Finset.union_val]; rw [Finset.Ico_union_Ico_eq_Ico hab hbc]
-
-/--
-theorem `Ico_inter_Ico` / 定理 `Ico_inter_Ico`
-
-English:
-theorem Ico_inter_Ico
-  statement: Ico a b inter Ico c d = Ico (max a c) (min b d)
-  proof: by
-  rw [Ico]; rw [Ico]; rw [Ico]; rw [← Finset.inter_val]; rw [Finset.Ico_inter_Ico]
-
-@[simp]
-
-中文:
-定理 Ico_inter_Ico
-  结论: 左闭右开区间 a b inter 左闭右开区间 c d = 左闭右开区间 (最大值 a c) (最小值 b d)
-  证明: by
-  rw [Ico]; rw [Ico]; rw [Ico]; rw [← Finset.inter_val]; rw [Finset.Ico_inter_Ico]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.Ico_inter_Ico, Finset.inter_val, Ico_inter_Ico, inter_val
+  rw [add_eq_union_iff_disjoint.2 (Ico_disjoint_Ico le_rfl), Ico, Ico, Ico, ← Finset.union_val,
+    Finset.Ico_union_Ico_eq_Ico hab hbc]
+/-
+**Multiset.Ico_inter_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ico_inter_Ico : Ico a b inter Ico c d = Ico (max a c) (min b d)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ico.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Ico a b = (Finset.Ico a b).val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.inter_val`：inter_val (s₁ s₂ : Finset α) : (s₁ inter s₂).1 = s₁.1 
+inter s₂.1
+· 使用定理 `Finset.Ico_inter_Ico`：Ico_inter_Ico {a b c d : α} : Ico a b inter Ico c 
+d = Ico (max a c) (min b d)
 -/
-theorem Ico_inter_Ico : Ico a b inter Ico c d = Ico (max a c) (min b d) := by
-  rw [Ico]; rw [Ico]; rw [Ico]; rw [← Finset.inter_val]; rw [Finset.Ico_inter_Ico]
+theorem Ico_inter_Ico : Ico a b ∩ Ico c d = Ico (max a c) (min b d) := by
+  rw [Ico, Ico, Ico, ← Finset.inter_val, Finset.Ico_inter_Ico]
 
 @[simp]
-/--
-theorem `Ico_filter_lt` / 定理 `Ico_filter_lt`
-
-English:
-theorem Ico_filter_lt
-  given: (a b c : α)
-  statement: ((Ico a b).filter fun x => x < c) = Ico a (min b c)
-  proof: by
-  rw [Ico]; rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_lt]
-
-@[simp]
-
-中文:
-定理 Ico_filter_lt
-  条件: (a b c : α)
-  结论: ((左闭右开区间 a b).filter fun x => x < c) = 左闭右开区间 a (最小值 b c)
-  证明: by
-  rw [Ico]; rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_lt]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.Ico_filter_lt, Finset.filter_val, Ico_filter_lt, filter_val
+/-
+**Multiset.Ico_filter_lt** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ico_filter_lt (a b c : α) : ((Ico a b).filter fun x => x < c) = Ico a (min
+ b c)
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ico.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Ico a b = (Finset.Ico a b).val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.filter_val`：∀ {α : Type u_1} (p : α → Prop) [inst : DecidablePred
+ p] (s : Finset α),   (Finset.filter p s).val = Multiset.filter p s.val
+· 使用定理 `Finset.Ico_filter_lt`：Ico_filter_lt (a b c : α) : {x in Ico a b | x < c}
+ = Ico a (min b c)
 -/
 theorem Ico_filter_lt (a b c : α) : ((Ico a b).filter fun x => x < c) = Ico a (min b c) := by
-  rw [Ico]; rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_lt]
+  rw [Ico, Ico, ← Finset.filter_val, Finset.Ico_filter_lt]
 
 @[simp]
-/--
-theorem `Ico_filter_le` / 定理 `Ico_filter_le`
-
-English:
-theorem Ico_filter_le
-  given: (a b c : α)
-  statement: ((Ico a b).filter fun x => c <= x) = Ico (max a c) b
-  proof: by
-  rw [Ico]; rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_le]
-
-@[simp]
-
-中文:
-定理 Ico_filter_le
-  条件: (a b c : α)
-  结论: ((左闭右开区间 a b).filter fun x => c <= x) = 左闭右开区间 (最大值 a c) b
-  证明: by
-  rw [Ico]; rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_le]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.Ico_filter_le, Finset.filter_val, Ico_filter_le, filter_val
+/-
+**Multiset.Ico_filter_le** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ico_filter_le (a b c : α) : ((Ico a b).filter fun x => c <= x) = Ico (max 
+a c) b
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ico.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Ico a b = (Finset.Ico a b).val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.filter_val`：∀ {α : Type u_1} (p : α → Prop) [inst : DecidablePred
+ p] (s : Finset α),   (Finset.filter p s).val = Multiset.filter p s.val
+· 使用定理 `Finset.Ico_filter_le`：Ico_filter_le (a b c : α) : {x in Ico a b | c <= x
+} = Ico (max a c) b
 -/
-theorem Ico_filter_le (a b c : α) : ((Ico a b).filter fun x => c <= x) = Ico (max a c) b := by
-  rw [Ico]; rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_le]
+theorem Ico_filter_le (a b c : α) : ((Ico a b).filter fun x => c ≤ x) = Ico (max a c) b := by
+  rw [Ico, Ico, ← Finset.filter_val, Finset.Ico_filter_le]
 
 @[simp]
-/--
-theorem `Ico_sub_Ico_left` / 定理 `Ico_sub_Ico_left`
-
-English:
-theorem Ico_sub_Ico_left
-  given: (a b c : α)
-  statement: Ico a b - Ico a c = Ico (max a c) b
-  proof: by
-  rw [Ico]; rw [Ico]; rw [Ico]; rw [← Finset.sdiff_val]; rw [Finset.Ico_sdiff_Ico_left]
-
-@[simp]
-
-中文:
-定理 Ico_sub_Ico_left
-  条件: (a b c : α)
-  结论: 左闭右开区间 a b - 左闭右开区间 a c = 左闭右开区间 (最大值 a c) b
-  证明: by
-  rw [Ico]; rw [Ico]; rw [Ico]; rw [← Finset.sdiff_val]; rw [Finset.Ico_sdiff_Ico_left]
-
-@[simp]
-
-Depends on / 依赖: Finset, Finset.Ico_sdiff_Ico_left, Finset.sdiff_val, Ico_sdiff_Ico_left, sdiff_val
+/-
+**Multiset.Ico_sub_Ico_left** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ico_sub_Ico_left (a b c : α) : Ico a b - Ico a c = Ico (max a c) b
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ico.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Ico a b = (Finset.Ico a b).val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sdiff_val`：sdiff_val (s₁ s₂ : Finset α) : (s₁ \ s₂).val = s₁.val 
+- s₂.val
+· 使用定理 `Finset.Ico_sdiff_Ico_left`：Ico_sdiff_Ico_left (a b c : α) : Ico a b \ Ic
+o a c = Ico (max a c) b
 -/
 theorem Ico_sub_Ico_left (a b c : α) : Ico a b - Ico a c = Ico (max a c) b := by
-  rw [Ico]; rw [Ico]; rw [Ico]; rw [← Finset.sdiff_val]; rw [Finset.Ico_sdiff_Ico_left]
+  rw [Ico, Ico, Ico, ← Finset.sdiff_val, Finset.Ico_sdiff_Ico_left]
 
 @[simp]
-/--
-theorem `Ico_sub_Ico_right` / 定理 `Ico_sub_Ico_right`
-
-English:
-theorem Ico_sub_Ico_right
-  given: (a b c : α)
-  statement: Ico a b - Ico c b = Ico a (min b c)
-  proof: by
-  rw [Ico]; rw [Ico]; rw [Ico]; rw [← Finset.sdiff_val]; rw [Finset.Ico_sdiff_Ico_right]
-
-中文:
-定理 Ico_sub_Ico_right
-  条件: (a b c : α)
-  结论: 左闭右开区间 a b - 左闭右开区间 c b = 左闭右开区间 a (最小值 b c)
-  证明: by
-  rw [Ico]; rw [Ico]; rw [Ico]; rw [← Finset.sdiff_val]; rw [Finset.Ico_sdiff_Ico_right]
-
-Depends on / 依赖: Finset, Finset.Ico_sdiff_Ico_right, Finset.sdiff_val, Ico_sdiff_Ico_right, sdiff_val
+/-
+**Multiset.Ico_sub_Ico_right** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Ico_sub_Ico_right (a b c : α) : Ico a b - Ico c b = Ico a (min b c)
+参数：a b c : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.Ico.eq_1`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : Locall
+yFiniteOrder α] (a b : α), Multiset.Ico a b = (Finset.Ico a b).val
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sdiff_val`：sdiff_val (s₁ s₂ : Finset α) : (s₁ \ s₂).val = s₁.val 
+- s₂.val
+· 使用定理 `Finset.Ico_sdiff_Ico_right`：Ico_sdiff_Ico_right (a b c : α) : Ico a b \ 
+Ico c b = Ico a (min b c)
 -/
 theorem Ico_sub_Ico_right (a b c : α) : Ico a b - Ico c b = Ico a (min b c) := by
-  rw [Ico]; rw [Ico]; rw [Ico]; rw [← Finset.sdiff_val]; rw [Finset.Ico_sdiff_Ico_right]
+  rw [Ico, Ico, Ico, ← Finset.sdiff_val, Finset.Ico_sdiff_Ico_right]
 
 end LinearOrder
 end Multiset
+

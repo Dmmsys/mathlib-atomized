@@ -27,38 +27,17 @@ namespace Idempotents
 
 variable {C : Type*} [Category* C] [IsIdempotentComplete C]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsIdempotentComplete (SimplicialObject C)
-  body: Idempotents.functor_category_isIdempotentComplete _ _
-
-中文:
-实例 :
-  签名: 是IdempotentComplete (SimplicialObject C)
-  定义体: Idempotents.functor_category_isIdempotentComplete _ _
-
-Depends on / 依赖: Idempotents, Idempotents.functor_category_isIdempotentComplete, functor_category_isIdempotentComplete
+/-
+**CategoryTheory.Idempotents.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Idempote
+nts`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsIdempotentComplete (SimplicialObject C) :=
   Idempotents.functor_category_isIdempotentComplete _ _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsIdempotentComplete (CosimplicialObject C)
-  body: Idempotents.functor_category_isIdempotentComplete _ _
-
-中文:
-实例 :
-  签名: 是IdempotentComplete (CosimplicialObject C)
-  定义体: Idempotents.functor_category_isIdempotentComplete _ _
-
-Depends on / 依赖: Idempotents, Idempotents.functor_category_isIdempotentComplete, functor_category_isIdempotentComplete
+/-
+**CategoryTheory.Idempotents.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Idempote
+nts`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsIdempotentComplete (CosimplicialObject C) :=
   Idempotents.functor_category_isIdempotentComplete _ _
@@ -66,3 +45,4 @@ instance : IsIdempotentComplete (CosimplicialObject C) :=
 end Idempotents
 
 end CategoryTheory
+

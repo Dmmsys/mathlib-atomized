@@ -45,72 +45,70 @@ namespace ofIsCofiltered
 local instance : HasColimitsOfShape Nᵒᵖ (Type w) :=
   hasColimitsOfShape_of_finallySmall _ _
 
-/--
-Definition of `fiber` / `fiber` 的定义
+/-- Given a functor `p : N ⥤ C`, this is the functor `C ⥤ Type w` which sends
+`X : C` to the colimit of types of morphisms `p.obj U ⟶ X` for `U : N`. -/
+/-
+**CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered.fiber** 是 Mathlib 中的一
+个定义，位于命名空间 `CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered`。
+形式化陈述：fiber : C ⥤ Type w
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered.instHasColimits
+OfShapeOppositeType`：∀ {N : Type u'} [inst : CategoryTheory.Category.{v', u'} N]
+ [CategoryTheory.InitiallySmall N],   CategoryTheory.Limits.HasColimitsOfShape N
+ᵒ…
 
-English:
-definition fiber
-  signature: : C ⥤ Type w
-  body: shrinkYoneda.{w} ⋙ (Functor.whiskeringLeft _ _ (Type w)).obj p.op ⋙ colim
-
-中文:
-定义 fiber
-  签名: : C ⥤ 类型 w
-  定义体: shrinkYoneda.{w} ⋙ (Functor.whiskeringLeft _ _ (Type w)).obj p.op ⋙ colim
-
-Depends on / 依赖: Functor, Functor.whiskeringLeft, p.op, shrinkYoneda, whiskeringLeft
+--- 原说明 ---
+Given a functor `p : N ⥤ C`, this is the functor `C ⥤ Type w` which sends
+`X : C` to the colimit of types of morphisms `p.obj U ⟶ X` for `U : N`.
 -/
 noncomputable def fiber : C ⥤ Type w :=
   shrinkYoneda.{w} ⋙ (Functor.whiskeringLeft _ _ (Type w)).obj p.op ⋙ colim
 
 variable {p} in
-/--
-Definition of `fiberMk` / `fiberMk` 的定义
+/-- Constructor for elements in `fiber`. -/
+/-
+**CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered.fiberMk** 是 Mathlib 中
+的一个定义，位于命名空间 `CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered`。
+形式化陈述：fiberMk {U : N} {X : C} (f : p.obj U ⟶ X) : (fiber.{w} p).obj X
+参数：f : p.obj U ⟶ X。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition fiberMk
-  signature: {U : N} {X : C} (f : p.obj U ⟶ X)
-  body: colimit.ι (p.op ⋙ shrinkYoneda.{w}.obj X) (op U)
-    (shrinkYonedaObjObjEquiv.symm f)
-
-中文:
-定义 fiberMk
-  签名: {U : N} {X : C} (f : p.obj U ⟶ X)
-  定义体: colimit.ι (p.op ⋙ shrinkYoneda.{w}.obj X) (op U)
-    (shrinkYonedaObjObjEquiv.symm f)
-
-Depends on / 依赖: colimit, p.op, shrinkYoneda, shrinkYonedaObjObjEquiv, shrinkYonedaObjObjEquiv.symm
+--- 原说明 ---
+Constructor for elements in `fiber`.
 -/
 noncomputable def fiberMk {U : N} {X : C} (f : p.obj U ⟶ X) : (fiber.{w} p).obj X :=
   colimit.ι (p.op ⋙ shrinkYoneda.{w}.obj X) (op U)
     (shrinkYonedaObjObjEquiv.symm f)
 
 variable {p} in
-/--
-lemma `fiberMk_jointly_surjective` / 引理 `fiberMk_jointly_surjective`
-
-English:
-lemma fiberMk_jointly_surjective
-  given: {X : C} (x : (fiber.{w} p).obj X)
-  proof: by
-  obtain ⟨U, f, rfl⟩ := Types.jointly_surjective_of_isColimit
-    (colimit.isColimit (p.op ⋙ shrinkYoneda.{w}.obj X)) x
-  obtain ⟨f, rfl⟩ := shrinkYonedaObjObjEquiv.symm.surjective f
-  exact ⟨U.unop, f, rfl⟩
-
-中文:
-引理 fiberMk_jointly_surjective
-  条件: {X : C} (x : (fiber.{w} p).obj X)
-  证明: by
-  obtain ⟨U, f, rfl⟩ := Types.jointly_surjective_of_isColimit
-    (colimit.isColimit (p.op ⋙ shrinkYoneda.{w}.obj X)) x
-  obtain ⟨f, rfl⟩ := shrinkYonedaObjObjEquiv.symm.surjective f
-  exact ⟨U.unop, f, rfl⟩
-
-Depends on / 依赖: Types.jointly_surjective_of_isColimit, U.unop, colimit, colimit.isColimit, isColimit, jointly_surjective_of_isColimit, p.op, shrinkYoneda, shrinkYonedaObjObjEquiv, shrinkYonedaObjObjEquiv.symm.surjective, surjective
+/-
+**CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered.fiberMk_jointly_surje
+ctive** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.GrothendieckTopology.Point.ofIsC
+ofiltered`。
+形式化陈述：fiberMk_jointly_surjective {X : C} (x : (fiber.{w} p).obj X) : exists (U :
+ N) (f : p.obj U ⟶ X), fiberMk f = x
+参数：x : (fiber.{w} p).obj X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered.instHasColimits
+OfShapeOppositeType`：∀ {N : Type u'} [inst : CategoryTheory.Category.{v', u'} N]
+ [CategoryTheory.InitiallySmall N],   CategoryTheory.Limits.HasColimitsOfShape N
+ᵒ…
+· 使用定理 `CategoryTheory.Limits.Types.jointly_surjective_of_isColimit`：jointly_sur
+jective_of_isColimit {F : J ⥤ Type u} {t : Cocone F} (h : IsColimit t) (x : t.pt
+) : exists j y, t.ι.app j y = x
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
 -/
 lemma fiberMk_jointly_surjective {X : C} (x : (fiber.{w} p).obj X) :
-    exists (U : N) (f : p.obj U ⟶ X), fiberMk f = x := by
+    ∃ (U : N) (f : p.obj U ⟶ X), fiberMk f = x := by
   obtain ⟨U, f, rfl⟩ := Types.jointly_surjective_of_isColimit
     (colimit.isColimit (p.op ⋙ shrinkYoneda.{w}.obj X)) x
   obtain ⟨f, rfl⟩ := shrinkYonedaObjObjEquiv.symm.surjective f
@@ -119,34 +117,45 @@ lemma fiberMk_jointly_surjective {X : C} (x : (fiber.{w} p).obj X) :
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 variable {p} in
-/--
-lemma `exists_of_fiberMk_eq_fiberMk` / 引理 `exists_of_fiberMk_eq_fiberMk`
-
-English:
-lemma exists_of_fiberMk_eq_fiberMk
-  statement: [IsCofiltered N]
-  proof: by
-  obtain ⟨V, g, hg⟩ :=
-    (Types.FilteredColimit.isColimit_eq_iff'
-      (colimit.isColimit (p.op ⋙ shrinkYoneda.{w}.obj X)) _ _).1 hf
-  refine ⟨V.unop, g.unop, ?_⟩
-  simpa [shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm.{w}] using hg
-
-中文:
-引理 存在_of_fiberMk_eq_fiberMk
-  结论: [是余filtered N]
-  证明: by
-  obtain ⟨V, g, hg⟩ :=
-    (Types.FilteredColimit.isColimit_eq_iff'
-      (colimit.isColimit (p.op ⋙ shrinkYoneda.{w}.obj X)) _ _).1 hf
-  refine ⟨V.unop, g.unop, ?_⟩
-  simpa [shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm.{w}] using hg
-
-Depends on / 依赖: FilteredColimit, Types.FilteredColimit.isColimit_eq_iff, V.unop, colimit, colimit.isColimit, g.unop, isColimit, isColimit_eq_iff, p.op, shrinkYoneda, shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm
+/-
+**CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered.exists_of_fiberMk_eq_
+fiberMk** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.GrothendieckTopology.Point.ofI
+sCofiltered`。
+形式化陈述：exists_of_fiberMk_eq_fiberMk [IsCofiltered N] {U : N} {X : C} {f₁ f₂ : p.o
+bj U ⟶ X} (hf : fiberMk f₁ = fiberMk f₂) : exists (V : N) (g : V ⟶ U), p.map g ≫
+ f₁ = p.map g ≫ f₂
+参数：hf : fiberMk f₁ = fiberMk f₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered.instHasColimits
+OfShapeOppositeType`：∀ {N : Type u'} [inst : CategoryTheory.Category.{v', u'} N]
+ [CategoryTheory.InitiallySmall N],   CategoryTheory.Limits.HasColimitsOfShape N
+ᵒ…
+· 使用定理 `CategoryTheory.Limits.Types.FilteredColimit.isColimit_eq_iff'`：isColimit
+_eq_iff' {t : Cocone F} (ht : IsColimit t) {i : J} (x y : F.obj i) : t.ι.app i x
+ = t.ι.app i y ↔ exists (j : _) (f : i ⟶ j), F.map …
+· 使用定理 `CategoryTheory.IsCofiltered.toIsCofilteredOrEmpty`：∀ {C : Type u} {inst 
+: CategoryTheory.Category.{v, u} C} [self : CategoryTheory.IsCofiltered C],   Ca
+tegoryTheory.IsCofilteredOrEmpty C
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm`：shrink
+Yoneda_obj_map_shrinkYonedaObjObjEquiv_symm {X : C} {Y Y' : Cᵒᵖ} (g : Y ⟶ Y') (f
+ : Y.unop ⟶ X) : (shrinkYoneda.obj _).map g (shrinkYon…
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
 -/
 lemma exists_of_fiberMk_eq_fiberMk [IsCofiltered N]
     {U : N} {X : C} {f₁ f₂ : p.obj U ⟶ X} (hf : fiberMk f₁ = fiberMk f₂) :
-    exists (V : N) (g : V ⟶ U), p.map g ≫ f₁ = p.map g ≫ f₂ := by
+    ∃ (V : N) (g : V ⟶ U), p.map g ≫ f₁ = p.map g ≫ f₂ := by
   obtain ⟨V, g, hg⟩ :=
     (Types.FilteredColimit.isColimit_eq_iff'
       (colimit.isColimit (p.op ⋙ shrinkYoneda.{w}.obj X)) _ _).1 hf
@@ -156,30 +165,37 @@ lemma exists_of_fiberMk_eq_fiberMk [IsCofiltered N]
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `fiberMk_map_comp` / 引理 `fiberMk_map_comp`
-
-English:
-lemma fiberMk_map_comp
-  given: {U V : N} (g : V ⟶ U) {X : C} (f : p.obj U ⟶ X)
-  proof: by
-  simp [fiberMk, ← dsimp% congr_hom (colimit.w (p.op ⋙ shrinkYoneda.{w}.obj X) g.op)
-        (shrinkYonedaObjObjEquiv.symm f),
-    fiber, shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm.{w}]
-
-@[simp]
-
-中文:
-引理 fiberMk_map_comp
-  条件: {U V : N} (g : V ⟶ U) {X : C} (f : p.obj U ⟶ X)
-  证明: by
-  simp [fiberMk, ← dsimp% congr_hom (colimit.w (p.op ⋙ shrinkYoneda.{w}.obj X) g.op)
-        (shrinkYonedaObjObjEquiv.symm f),
-    fiber, shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm.{w}]
-
-@[simp]
-
-Depends on / 依赖: colimit, colimit.w, congr_hom, fiberMk, g.op, p.op, shrinkYoneda, shrinkYonedaObjObjEquiv, shrinkYonedaObjObjEquiv.symm, shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm
+/-
+**CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered.fiberMk_map_comp** 是 
+Mathlib 中的一个引理，位于命名空间 `CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered`
+。
+形式化陈述：fiberMk_map_comp {U V : N} (g : V ⟶ U) {X : C} (f : p.obj U ⟶ X) : fiberMk
+.{w} (p.map g ≫ f) = fiberMk.{w} f
+参数：g : V ⟶ U；f : p.obj U ⟶ X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered.instHasColimits
+OfShapeOppositeType`：∀ {N : Type u'} [inst : CategoryTheory.Category.{v', u'} N]
+ [CategoryTheory.InitiallySmall N],   CategoryTheory.Limits.HasColimitsOfShape N
+ᵒ…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.ConcreteCategory.congr_hom`：congr_hom {X Y : C} {f g : X 
+⟶ Y} (h : f = g) (x : ToType X) : f x = g x
+· 使用定理 `CategoryTheory.Limits.colimit.w`：∀ {J : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]   
+(F : CategoryTheory.F…
+· 使用引理 `CategoryTheory.shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm`：shrink
+Yoneda_obj_map_shrinkYonedaObjObjEquiv_symm {X : C} {Y Y' : Cᵒᵖ} (g : Y ⟶ Y') (f
+ : Y.unop ⟶ X) : (shrinkYoneda.obj _).map g (shrinkYon…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma fiberMk_map_comp {U V : N} (g : V ⟶ U) {X : C} (f : p.obj U ⟶ X) :
     fiberMk.{w} (p.map g ≫ f) = fiberMk.{w} f := by
@@ -188,22 +204,24 @@ lemma fiberMk_map_comp {U V : N} (g : V ⟶ U) {X : C} (f : p.obj U ⟶ X) :
     fiber, shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm.{w}]
 
 @[simp]
-/--
-lemma `fiberMk_map` / 引理 `fiberMk_map`
-
-English:
-lemma fiberMk_map
-  given: {U V : N} (g : V ⟶ U)
-  proof: by
-  simpa using fiberMk_map_comp (p := p) g (𝟙 (p.obj U))
-
-中文:
-引理 fiberMk_map
-  条件: {U V : N} (g : V ⟶ U)
-  证明: by
-  simpa using fiberMk_map_comp (p := p) g (𝟙 (p.obj U))
-
-Depends on / 依赖: fiberMk_map_comp, p.obj
+/-
+**CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered.fiberMk_map** 是 Mathl
+ib 中的一个引理，位于命名空间 `CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered`。
+形式化陈述：fiberMk_map {U V : N} (g : V ⟶ U) : fiberMk.{w} (p.map g) = fiberMk.{w} (𝟙
+ (p.obj U))
+参数：g : V ⟶ U。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用引理 `CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered.fiberMk_map_com
+p`：fiberMk_map_comp {U V : N} (g : V ⟶ U) {X : C} (f : p.obj U ⟶ X) : fiberMk.{w
+} (p.map g ≫ f) = fiberMk.{w} f
 -/
 lemma fiberMk_map {U V : N} (g : V ⟶ U) :
     fiberMk.{w} (p.map g) = fiberMk.{w} (𝟙 (p.obj U)) := by
@@ -212,24 +230,41 @@ lemma fiberMk_map {U V : N} (g : V ⟶ U) :
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `fiber_map_fiberMk` / 引理 `fiber_map_fiberMk`
-
-English:
-lemma fiber_map_fiberMk
-  given: {U : N} {X : C} (f : p.obj U ⟶ X) {Y : C} (g : X ⟶ Y)
-  proof: (congr_hom (ι_colimMap (p.op.whiskerLeft (shrinkYoneda.{w}.map g)) (op U))
-    (shrinkYonedaObjObjEquiv.symm f)).trans (by
-      simp [fiberMk, shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm.{w}])
-
-中文:
-引理 fiber_map_fiberMk
-  条件: {U : N} {X : C} (f : p.obj U ⟶ X) {Y : C} (g : X ⟶ Y)
-  证明: (congr_hom (ι_colimMap (p.op.whiskerLeft (shrinkYoneda.{w}.map g)) (op U))
-    (shrinkYonedaObjObjEquiv.symm f)).trans (by
-      simp [fiberMk, shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm.{w}])
-
-Depends on / 依赖: congr_hom, fiberMk, p.op.whiskerLeft, shrinkYoneda, shrinkYonedaObjObjEquiv, shrinkYonedaObjObjEquiv.symm, shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm, whiskerLeft
+/-
+**CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered.fiber_map_fiberMk** 是
+ Mathlib 中的一个引理，位于命名空间 `CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered
+`。
+形式化陈述：fiber_map_fiberMk {U : N} {X : C} (f : p.obj U ⟶ X) {Y : C} (g : X ⟶ Y) : 
+(fiber p).map g (fiberMk.{w} f) = fiberMk.{w} (f ≫ g)
+参数：f : p.obj U ⟶ X；g : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered.instHasColimits
+OfShapeOppositeType`：∀ {N : Type u'} [inst : CategoryTheory.Category.{v', u'} N]
+ [CategoryTheory.InitiallySmall N],   CategoryTheory.Limits.HasColimitsOfShape N
+ᵒ…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `CategoryTheory.ConcreteCategory.congr_hom`：congr_hom {X Y : C} {f g : X 
+⟶ Y} (h : f = g) (x : ToType X) : f x = g x
+· 使用定理 `CategoryTheory.Limits.ι_colimMap`：∀ {J : Type u₁} [inst : CategoryTheory
+.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]  
+ {F G : CategoryTheory…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用引理 `CategoryTheory.shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm`：shrink
+Yoneda_map_app_shrinkYonedaObjObjEquiv_symm {X X' : C} {Y : Cᵒᵖ} (f : Y.unop ⟶ X
+) (g : X ⟶ X') : (shrinkYoneda.map g).app _ (shrinkYon…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma fiber_map_fiberMk {U : N} {X : C} (f : p.obj U ⟶ X) {Y : C} (g : X ⟶ Y) :
     (fiber p).map g (fiberMk.{w} f) = fiberMk.{w} (f ≫ g) :=
@@ -240,60 +275,26 @@ lemma fiber_map_fiberMk {U : N} {X : C} (f : p.obj U ⟶ X) {Y : C} (g : X ⟶ Y
 /-- A functor `N ⥤ (fiber p).Elements` which is initial when `N`
 is cofiltered and initially small. -/
 @[simps]
-/--
-Definition of `functor` / `functor` 的定义
+/-
+**CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered.functor** 是 Mathlib 中
+的一个定义，位于命名空间 `CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered`。
+形式化陈述：functor : N ⥤ (fiber.{w} p).Elements where obj U
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functor
-  signature: : N ⥤ (fiber.{w} p).Elements where
-  body: Functor.elementsMk _ (p.obj U) (fiberMk (𝟙 _))
-  map {U V} f := CategoryOfElements.homMk _ _ (p.map f) (by simp)
-
-中文:
-定义 functor
-  签名: : N ⥤ (fiber.{w} p).Elements where
-  定义体: Functor.elementsMk _ (p.obj U) (fiberMk (𝟙 _))
-  map {U V} f := CategoryOfElements.homMk _ _ (p.map f) (by simp)
-
-Depends on / 依赖: Functor, Functor.elementsMk, elementsMk, fiberMk, p.obj
+--- 原说明 ---
+A functor `N ⥤ (fiber p).Elements` which is initial when `N`
+is cofiltered and initially small.
 -/
 noncomputable def functor : N ⥤ (fiber.{w} p).Elements where
   obj U := Functor.elementsMk _ (p.obj U) (fiberMk (𝟙 _))
   map {U V} f := CategoryOfElements.homMk _ _ (p.map f) (by simp)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsCofiltered
-  signature: N] : (functor.{w} p).Initial
-  body: by
-  refine Functor.initial_of_exists_of_isCofiltered _ ?_ ?_
-  · rintro ⟨X, x⟩
-    obtain ⟨U, f, rfl⟩ := fiberMk_jointly_surjective x
-    exact ⟨U, f, by simp⟩
-  · rintro ⟨X, x⟩ V ⟨φ₁, hφ₁⟩ ⟨φ₂, hφ₂⟩
-    obtain ⟨U, f, rfl⟩ := fiberMk_jointly_surjective x
-    obtain ⟨W, g, hg⟩ := exists_of_fiberMk_eq_fiberMk
-      (show fiberMk.{w} φ₁ = fiberMk.{w} φ₂ by simpa using hφ₁.trans hφ₂.symm)
-    exact ⟨_, g, by cat_disch⟩
-
-中文:
-实例 [是余filtered
-  签名: N] : (functor.{w} p).初始
-  定义体: by
-  refine Functor.initial_of_exists_of_isCofiltered _ ?_ ?_
-  · rintro ⟨X, x⟩
-    obtain ⟨U, f, rfl⟩ := fiberMk_jointly_surjective x
-    exact ⟨U, f, by simp⟩
-  · rintro ⟨X, x⟩ V ⟨φ₁, hφ₁⟩ ⟨φ₂, hφ₂⟩
-    obtain ⟨U, f, rfl⟩ := fiberMk_jointly_surjective x
-    obtain ⟨W, g, hg⟩ := exists_of_fiberMk_eq_fiberMk
-      (show fiberMk.{w} φ₁ = fiberMk.{w} φ₂ by simpa using hφ₁.trans hφ₂.symm)
-    exact ⟨_, g, by cat_disch⟩
-
-Depends on / 依赖: Functor, Functor.initial_of_exists_of_isCofiltered, cat_disch, exists_of_fiberMk_eq_fiberMk, fiberMk, fiberMk_jointly_surjective, initial_of_exists_of_isCofiltered
+/-
+**CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered.** 是 Mathlib 中的一个实例，位
+于命名空间 `CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsCofiltered N] : (functor.{w} p).Initial := by
   refine Functor.initial_of_exists_of_isCofiltered _ ?_ ?_
@@ -305,40 +306,18 @@ instance [IsCofiltered N] : (functor.{w} p).Initial := by
     obtain ⟨W, g, hg⟩ := exists_of_fiberMk_eq_fiberMk
       (show fiberMk.{w} φ₁ = fiberMk.{w} φ₂ by simpa using hφ₁.trans hφ₂.symm)
     exact ⟨_, g, by cat_disch⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsCofiltered
-  signature: N] :
-  body: initiallySmall_of_initial_of_initiallySmall (functor.{w} p)
-
-中文:
-实例 [是余filtered
-  签名: N] :
-  定义体: initiallySmall_of_initial_of_initiallySmall (functor.{w} p)
-
-Depends on / 依赖: functor, initiallySmall_of_initial_of_initiallySmall
+/-
+**CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered.** 是 Mathlib 中的一个实例，位
+于命名空间 `CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsCofiltered N] :
     InitiallySmall.{w} (fiber.{w} p).Elements :=
   initiallySmall_of_initial_of_initiallySmall (functor.{w} p)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsCofiltered
-  signature: N] :
-  body: IsCofiltered.of_initial (functor.{w} p)
-
-中文:
-实例 [是余filtered
-  签名: N] :
-  定义体: IsCofiltered.of_initial (functor.{w} p)
-
-Depends on / 依赖: IsCofiltered, IsCofiltered.of_initial, functor, of_initial
+/-
+**CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered.** 是 Mathlib 中的一个实例，位
+于命名空间 `CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [IsCofiltered N] :
     IsCofiltered (ofIsCofiltered.fiber p).Elements :=
@@ -347,8 +326,8 @@ instance [IsCofiltered N] :
 end ofIsCofiltered
 
 variable [IsCofiltered N]
-  (hp : forall ⦃X : C⦄ (R : Sieve X) (_ : R in J X) ⦃U : N⦄ (f : p.obj U ⟶ X),
-    exists (Y : C) (g : Y ⟶ X) (_ : R g) (V : N) (q : V ⟶ U) (a : p.obj V ⟶ Y),
+  (hp : ∀ ⦃X : C⦄ (R : Sieve X) (_ : R ∈ J X) ⦃U : N⦄ (f : p.obj U ⟶ X),
+    ∃ (Y : C) (g : Y ⟶ X) (_ : R g) (V : N) (q : V ⟶ U) (a : p.obj V ⟶ Y),
       a ≫ g = p.map q ≫ f)
 
 open ofIsCofiltered
@@ -357,28 +336,17 @@ open ofIsCofiltered
 that are given by a functor `p : N ⥤ C` from a cofiltered and initially small
 category `N`. -/
 @[simps]
-/--
-Definition of `ofIsCofiltered` / `ofIsCofiltered` 的定义
+/-
+**CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.GrothendieckTopology.Point`。
+形式化陈述：ofIsCofiltered : Point.{w} J where fiber
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofIsCofiltered
-  signature: :
-  body: ofIsCofiltered.fiber p
-  jointly_surjective {X} R hR x := by
-    obtain ⟨U, f, rfl⟩ := fiberMk_jointly_surjective x
-    obtain ⟨Y, g, hg, V, q, a, ha⟩ := hp R hR f
-    exact ⟨Y, g, hg, fiberMk a, by simp [ha]⟩
-
-中文:
-定义 ofIsCofiltered
-  签名: :
-  定义体: ofIsCofiltered.fiber p
-  jointly_surjective {X} R hR x := by
-    obtain ⟨U, f, rfl⟩ := fiberMk_jointly_surjective x
-    obtain ⟨Y, g, hg, V, q, a, ha⟩ := hp R hR f
-    exact ⟨Y, g, hg, fiberMk a, by simp [ha]⟩
-
-Depends on / 依赖: ofIsCofiltered, ofIsCofiltered.fiber
+--- 原说明 ---
+Constructor for points of Grothendieck topologies `J : GrothendieckTopology C`
+that are given by a functor `p : N ⥤ C` from a cofiltered and initially small
+category `N`.
 -/
 noncomputable def ofIsCofiltered :
     Point.{w} J where
@@ -390,20 +358,21 @@ noncomputable def ofIsCofiltered :
 
 variable {A : Type u''} [Category.{v''} A] [HasColimitsOfSize.{w, w} A]
 
-/--
-Definition of `toPresheafFiberOfIsCofiltered` / `toPresheafFiberOfIsCofiltered` 的定义
+/-- The canonical maps `P.obj (op (p.obj U)) ⟶ (ofIsCofiltered p hp).presheafFiber.obj P`
+that are part of the colimit cocone `presheafFiberOfIsCofilteredCocone`. -/
+/-
+**CategoryTheory.GrothendieckTopology.Point.toPresheafFiberOfIsCofiltered** 是 Ma
+thlib 中的一个定义，位于命名空间 `CategoryTheory.GrothendieckTopology.Point`。
+形式化陈述：toPresheafFiberOfIsCofiltered (U : N) (P : Cᵒᵖ ⥤ A) : P.obj (op (p.obj U))
+ ⟶ (ofIsCofiltered p hp).presheafFiber.obj P
+参数：U : N；P : Cᵒᵖ ⥤ A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toPresheafFiberOfIsCofiltered
-  signature: (U : N) (P : Cᵒᵖ ⥤ A)
-  body: (ofIsCofiltered p hp).toPresheafFiber _ (fiberMk (𝟙 _)) P
-
-中文:
-定义 toPresheafFiberOfIsCofiltered
-  签名: (U : N) (P : Cᵒᵖ ⥤ A)
-  定义体: (ofIsCofiltered p hp).toPresheafFiber _ (fiberMk (𝟙 _)) P
-
-Depends on / 依赖: fiberMk, ofIsCofiltered, toPresheafFiber
+--- 原说明 ---
+The canonical maps `P.obj (op (p.obj U)) ⟶ (ofIsCofiltered p hp).presheafFiber.o
+bj P`
+that are part of the colimit cocone `presheafFiberOfIsCofilteredCocone`.
 -/
 noncomputable def toPresheafFiberOfIsCofiltered (U : N) (P : Cᵒᵖ ⥤ A) :
     P.obj (op (p.obj U)) ⟶ (ofIsCofiltered p hp).presheafFiber.obj P :=
@@ -412,22 +381,36 @@ noncomputable def toPresheafFiberOfIsCofiltered (U : N) (P : Cᵒᵖ ⥤ A) :
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `toPresheafFiberOfIsCofiltered_w` / 引理 `toPresheafFiberOfIsCofiltered_w`
-
-English:
-lemma toPresheafFiberOfIsCofiltered_w
-  given: {V U : N} (f : V ⟶ U) (P : Cᵒᵖ ⥤ A)
-  proof: by
-  simp [toPresheafFiberOfIsCofiltered]
-
-中文:
-引理 toPresheafFiberOfIsCofiltered_w
-  条件: {V U : N} (f : V ⟶ U) (P : Cᵒᵖ ⥤ A)
-  证明: by
-  simp [toPresheafFiberOfIsCofiltered]
-
-Depends on / 依赖: toPresheafFiberOfIsCofiltered
+/-
+**CategoryTheory.GrothendieckTopology.Point.toPresheafFiberOfIsCofiltered_w** 是 
+Mathlib 中的一个引理，位于命名空间 `CategoryTheory.GrothendieckTopology.Point`。
+形式化陈述：toPresheafFiberOfIsCofiltered_w {V U : N} (f : V ⟶ U) (P : Cᵒᵖ ⥤ A) : P.ma
+p (p.map f).op ≫ toPresheafFiberOfIsCofiltered p hp V P = toPresheafFiberOfIsCof
+iltered p hp U P
+参数：f : V ⟶ U；P : Cᵒᵖ ⥤ A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.GrothendieckTopology.Point.toPresheafFiber_w`：toPresheafF
+iber_w {X Y : C} (f : X ⟶ Y) (x : Φ.fiber.obj X) (P : Cᵒᵖ ⥤ A) : P.map f.op ≫ Φ.
+toPresheafFiber X x P = Φ.toPresheafFiber Y (Φ.fi…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered.fiber_map_fiber
+Mk`：fiber_map_fiberMk {U : N} {X : C} (f : p.obj U ⟶ X) {Y : C} (g : X ⟶ Y) : (f
+iber p).map g (fiberMk.{w} f) = fiberMk.{w} (f ≫ g)
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用引理 `CategoryTheory.GrothendieckTopology.Point.ofIsCofiltered.fiberMk_map`：fi
+berMk_map {U V : N} (g : V ⟶ U) : fiberMk.{w} (p.map g) = fiberMk.{w} (𝟙 (p.obj 
+U))
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma toPresheafFiberOfIsCofiltered_w {V U : N} (f : V ⟶ U) (P : Cᵒᵖ ⥤ A) :
     P.map (p.map f).op ≫ toPresheafFiberOfIsCofiltered p hp V P =
@@ -436,22 +419,25 @@ lemma toPresheafFiberOfIsCofiltered_w {V U : N} (f : V ⟶ U) (P : Cᵒᵖ ⥤ A
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-lemma `toPresheafFiberOfIsCofiltered_naturality` / 引理 `toPresheafFiberOfIsCofiltered_naturality`
-
-English:
-lemma toPresheafFiberOfIsCofiltered_naturality
-  given: {P Q : Cᵒᵖ ⥤ A} (g : P ⟶ Q) (U : N)
-  proof: by
-  simp [toPresheafFiberOfIsCofiltered]
-
-中文:
-引理 toPresheafFiberOfIsCofiltered_naturality
-  条件: {P Q : Cᵒᵖ ⥤ A} (g : P ⟶ Q) (U : N)
-  证明: by
-  simp [toPresheafFiberOfIsCofiltered]
-
-Depends on / 依赖: toPresheafFiberOfIsCofiltered
+/-
+**CategoryTheory.GrothendieckTopology.Point.toPresheafFiberOfIsCofiltered_natura
+lity** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.GrothendieckTopology.Point`。
+形式化陈述：toPresheafFiberOfIsCofiltered_naturality {P Q : Cᵒᵖ ⥤ A} (g : P ⟶ Q) (U : 
+N) : toPresheafFiberOfIsCofiltered p hp U P ≫ (ofIsCofiltered p hp).presheafFibe
+r.map g = g.app (op (p.obj U)) ≫ toPresheafFiberOfIsCofiltered p hp U Q
+参数：g : P ⟶ Q；U : N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.GrothendieckTopology.Point.toPresheafFiber_naturality`：to
+PresheafFiber_naturality {P Q : Cᵒᵖ ⥤ A} (g : P ⟶ Q) (X : C) (x : Φ.fiber.obj X)
+ : Φ.toPresheafFiber X x P ≫ Φ.presheafFiber.map g = g.app…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma toPresheafFiberOfIsCofiltered_naturality {P Q : Cᵒᵖ ⥤ A} (g : P ⟶ Q) (U : N) :
     toPresheafFiberOfIsCofiltered p hp U P ≫
@@ -464,44 +450,39 @@ set_option backward.defeqAttrib.useBackward true in
 and a functor `p : N ⥤ C` expresses the fiber of a presheaf as a colimit
 indexed indexed by `N`. -/
 @[simps]
-/--
-Definition of `presheafFiberOfIsCofilteredCocone` / `presheafFiberOfIsCofilteredCocone` 的定义
+/-
+**CategoryTheory.GrothendieckTopology.Point.presheafFiberOfIsCofilteredCocone** 
+是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.GrothendieckTopology.Point`。
+形式化陈述：presheafFiberOfIsCofilteredCocone (P : Cᵒᵖ ⥤ A) : Cocone (p.op ⋙ P) where 
+pt
+参数：P : Cᵒᵖ ⥤ A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition presheafFiberOfIsCofilteredCocone
-  signature: (P : Cᵒᵖ ⥤ A)
-  body: (ofIsCofiltered p hp).presheafFiber.obj P
-  ι.app U := toPresheafFiberOfIsCofiltered _ _ _ _
-
-中文:
-定义 presheafFiberOfIsCofilteredCocone
-  签名: (P : Cᵒᵖ ⥤ A)
-  定义体: (ofIsCofiltered p hp).presheafFiber.obj P
-  ι.app U := toPresheafFiberOfIsCofiltered _ _ _ _
-
-Depends on / 依赖: ofIsCofiltered, presheafFiber, presheafFiber.obj
+--- 原说明 ---
+The (colimit) cocone which, for a point constructed using `Point.ofIsCofiltered`
+and a functor `p : N ⥤ C` expresses the fiber of a presheaf as a colimit
+indexed indexed by `N`.
 -/
 noncomputable def presheafFiberOfIsCofilteredCocone (P : Cᵒᵖ ⥤ A) :
     Cocone (p.op ⋙ P) where
   pt := (ofIsCofiltered p hp).presheafFiber.obj P
   ι.app U := toPresheafFiberOfIsCofiltered _ _ _ _
 
-/--
-Definition of `isColimitPresheafFiberOfIsCofilteredCocone` / `isColimitPresheafFiberOfIsCofilteredCocone` 的定义
+/-- For a point constructed using `Point.ofIsCofiltered` and a functor `p : N ⥤ C`,
+the fiber of a presheaf can be computed as a colimit indexed by `N`. -/
+/-
+**CategoryTheory.GrothendieckTopology.Point.isColimitPresheafFiberOfIsCofiltered
+Cocone** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.GrothendieckTopology.Point`。
+形式化陈述：isColimitPresheafFiberOfIsCofilteredCocone (P : Cᵒᵖ ⥤ A) : IsColimit (pres
+heafFiberOfIsCofilteredCocone p hp P)
+参数：P : Cᵒᵖ ⥤ A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isColimitPresheafFiberOfIsCofilteredCocone
-  signature: (P : Cᵒᵖ ⥤ A)
-  body: (Functor.Final.isColimitWhiskerEquiv (functor.{w} p).op _).2
-    ((ofIsCofiltered p hp).isColimitPresheafFiberCocone P)
-
-中文:
-定义 isColimitPresheafFiberOfIsCofilteredCocone
-  签名: (P : Cᵒᵖ ⥤ A)
-  定义体: (Functor.Final.isColimitWhiskerEquiv (functor.{w} p).op _).2
-    ((ofIsCofiltered p hp).isColimitPresheafFiberCocone P)
-
-Depends on / 依赖: Functor, Functor.Final.isColimitWhiskerEquiv, functor, isColimitPresheafFiberCocone, isColimitWhiskerEquiv, ofIsCofiltered
+--- 原说明 ---
+For a point constructed using `Point.ofIsCofiltered` and a functor `p : N ⥤ C`,
+the fiber of a presheaf can be computed as a colimit indexed by `N`.
 -/
 noncomputable def isColimitPresheafFiberOfIsCofilteredCocone (P : Cᵒᵖ ⥤ A) :
     IsColimit (presheafFiberOfIsCofilteredCocone p hp P) :=
@@ -511,3 +492,4 @@ noncomputable def isColimitPresheafFiberOfIsCofilteredCocone (P : Cᵒᵖ ⥤ A)
 end GrothendieckTopology.Point
 
 end CategoryTheory
+

@@ -51,25 +51,23 @@ variable [NumberField K]
 set_option backward.isDefEq.respectTransparency false in
 open scoped Classical in
 /--
-Definition of `equivFinRank` / `equivFinRank` 的定义
-
-English:
-definition equivFinRank
-  signature: : Fin (rank K) ≃ {w : InfinitePlace K // w != w₀}
-  body: Fintype.equivOfCardEq by
-    rw [Fintype.card_subtype_compl]; rw [Fintype.card_ofSubsingleton]; rw [Fintype.card_fin]; rw [rank]
-
-中文:
-定义 equivFinRank
-  签名: : 有限集 (rank K) ≃ {w : InfinitePlace K // w != w₀}
-  定义体: Fintype.equivOfCardEq by
-    rw [Fintype.card_subtype_compl]; rw [Fintype.card_ofSubsingleton]; rw [Fintype.card_fin]; rw [rank]
-
-Depends on / 依赖: Fintype, Fintype.card_fin, Fintype.card_ofSubsingleton, Fintype.card_subtype_compl, Fintype.equivOfCardEq, card_fin, card_ofSubsingleton, card_subtype_compl, equivOfCardEq
+An `equiv` between `Fin (rank K)`, used to index the family of units, and `{w // w ≠ w₀}`
+the index of the `logSpace`.
 -/
-def equivFinRank : Fin (rank K) ≃ {w : InfinitePlace K // w != w₀} :=
-Fintype.equivOfCardEq by
-    rw [Fintype.card_subtype_compl]; rw [Fintype.card_ofSubsingleton]; rw [Fintype.card_fin]; rw [rank]
+/-
+**NumberField.Units.equivFinRank** 是 Mathlib 中的一个定义，位于命名空间 `NumberField.Units`。
+形式化陈述：equivFinRank : Fin (rank K) ≃ {w : InfinitePlace K // w != w₀}
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+An `equiv` between `Fin (rank K)`, used to index the family of units, and `{w //
+ w ≠ w₀}`
+the index of the `logSpace`.
+-/
+def equivFinRank : Fin (rank K) ≃ {w : InfinitePlace K // w ≠ w₀} :=
+  Fintype.equivOfCardEq <| by
+    rw [Fintype.card_subtype_compl, Fintype.card_ofSubsingleton, Fintype.card_fin, rank]
 
 section regOfFamily
 
@@ -78,129 +76,153 @@ open Matrix
 variable {K}
 
 /--
-Definition of `IsMaxRank` / `IsMaxRank` 的定义
-
-English:
-abbreviation IsMaxRank
-  signature: (u : Fin (rank K) -> (𝓞 K)ˣ)
-  body: LinearIndependent Real (fun i => logEmbedding K (Additive.ofMul (u i)))
-
-中文:
-缩写 IsMaxRank
-  签名: (u : 有限集 (rank K) -> (𝓞 K)ˣ)
-  定义体: LinearIndependent Real (fun i => logEmbedding K (Additive.ofMul (u i)))
-
-Depends on / 依赖: Additive, Additive.ofMul, LinearIndependent, logEmbedding
+A family of units is of maximal rank if its image by `logEmbedding` is linearly independent
+over `ℝ`.
 -/
-abbrev IsMaxRank (u : Fin (rank K) -> (𝓞 K)ˣ) : Prop :=
-  LinearIndependent Real (fun i => logEmbedding K (Additive.ofMul (u i)))
+/-
+**NumberField.Units.IsMaxRank** 是 Mathlib 中的一个缩写定义，位于命名空间 `NumberField.Units`。
+形式化陈述：IsMaxRank (u : Fin (rank K) -> (𝓞 K)ˣ) : Prop
+参数：u : Fin (rank K) -> (𝓞 K)ˣ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A family of units is of maximal rank if its image by `logEmbedding` is linearly 
+independent
+over `ℝ`.
+-/
+abbrev IsMaxRank (u : Fin (rank K) → (𝓞 K)ˣ) : Prop :=
+  LinearIndependent ℝ (fun i ↦ logEmbedding K (Additive.ofMul (u i)))
 
 open scoped Classical in
 /--
-Definition of `basisOfIsMaxRank` / `basisOfIsMaxRank` 的定义
-
-English:
-definition basisOfIsMaxRank
-  signature: {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u)
-  body: (basisOfPiSpaceOfLinearIndependent
-    ((linearIndependent_equiv (equivFinRank K).symm).mpr hu)).reindex (equivFinRank K).symm
-
-@[simp]
-
-中文:
-定义 basisOfIsMaxRank
-  签名: {u : 有限集 (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u)
-  定义体: (basisOfPiSpaceOfLinearIndependent
-    ((linearIndependent_equiv (equivFinRank K).symm).mpr hu)).reindex (equivFinRank K).symm
-
-@[simp]
-
-Depends on / 依赖: basisOfPiSpaceOfLinearIndependent, equivFinRank, linearIndependent_equiv, reindex
+The images by `logEmbedding` of a family of units of maximal rank form a basis of `logSpace K`.
 -/
-def basisOfIsMaxRank {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u) :
-    Basis (Fin (rank K)) Real (logSpace K) :=
+/-
+**NumberField.Units.basisOfIsMaxRank** 是 Mathlib 中的一个定义，位于命名空间 `NumberField.Unit
+s`。
+形式化陈述：basisOfIsMaxRank {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u) : Basis (
+Fin (rank K)) Real (logSpace K)
+参数：rank K；𝓞 K；hu : IsMaxRank u。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+
+--- 原说明 ---
+The images by `logEmbedding` of a family of units of maximal rank form a basis o
+f `logSpace K`.
+-/
+def basisOfIsMaxRank {u : Fin (rank K) → (𝓞 K)ˣ} (hu : IsMaxRank u) :
+    Basis (Fin (rank K)) ℝ (logSpace K) :=
   (basisOfPiSpaceOfLinearIndependent
     ((linearIndependent_equiv (equivFinRank K).symm).mpr hu)).reindex (equivFinRank K).symm
 
 @[simp]
-/--
-theorem `basisOfIsMaxRank_apply` / 定理 `basisOfIsMaxRank_apply`
-
-English:
-theorem basisOfIsMaxRank_apply
-  given: {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u) (i : Fin (rank K))
-  proof: by
-  simp [basisOfIsMaxRank, Basis.coe_reindex, Equiv.symm_symm, Function.comp_apply,
-    coe_basisOfPiSpaceOfLinearIndependent]
-
-中文:
-定理 basisOfIsMaxRank_apply
-  条件: {u : 有限集 (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u) (i : 有限集 (rank K))
-  证明: by
-  simp [basisOfIsMaxRank, Basis.coe_reindex, Equiv.symm_symm, Function.comp_apply,
-    coe_basisOfPiSpaceOfLinearIndependent]
-
-Depends on / 依赖: Basis.coe_reindex, Equiv.symm_symm, Function, Function.comp_apply, basisOfIsMaxRank, coe_basisOfPiSpaceOfLinearIndependent, coe_reindex, comp_apply, symm_symm
+/-
+**NumberField.Units.basisOfIsMaxRank_apply** 是 Mathlib 中的一个定理，位于命名空间 `NumberFiel
+d.Units`。
+形式化陈述：basisOfIsMaxRank_apply {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u) (i 
+: Fin (rank K)) : (basisOfIsMaxRank hu) i = logEmbedding K (Additive.ofMul (u i)
+)
+参数：rank K；𝓞 K；hu : IsMaxRank u；i : Fin (rank K)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Module.Basis.coe_reindex`：coe_reindex : (b.reindex e : ι' -> M) = b ∘ e.
+symm
+· 使用定理 `coe_basisOfPiSpaceOfLinearIndependent`：coe_basisOfPiSpaceOfLinearIndepen
+dent {b : ι -> (ι -> K)} (hb : LinearIndependent K b) : ⇑(basisOfPiSpaceOfLinear
+Independent hb) = b
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem basisOfIsMaxRank_apply {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u) (i : Fin (rank K)) :
+theorem basisOfIsMaxRank_apply {u : Fin (rank K) → (𝓞 K)ˣ} (hu : IsMaxRank u) (i : Fin (rank K)) :
     (basisOfIsMaxRank hu) i = logEmbedding K (Additive.ofMul (u i)) := by
   simp [basisOfIsMaxRank, Basis.coe_reindex, Equiv.symm_symm, Function.comp_apply,
     coe_basisOfPiSpaceOfLinearIndependent]
-
-/--
-theorem `span_basisOfIsMaxRank` / 定理 `span_basisOfIsMaxRank`
-
-English:
-theorem span_basisOfIsMaxRank
-  given: {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u)
-  proof: by
-  rw [Subgroup.toAddSubgroup_closure]; rw [AddMonoidHom.map_closure]; rw [← span_int_eq_addSubgroupClosure]
-  congr; ext; simp
-
-中文:
-定理 span_basisOfIsMaxRank
-  条件: {u : 有限集 (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u)
-  证明: by
-  rw [Subgroup.toAddSubgroup_closure]; rw [AddMonoidHom.map_closure]; rw [← span_int_eq_addSubgroupClosure]
-  congr; ext; simp
-
-Depends on / 依赖: AddMonoidHom, AddMonoidHom.map_closure, Subgroup, Subgroup.toAddSubgroup_closure, map_closure, span_int_eq_addSubgroupClosure, toAddSubgroup_closure
+/-
+**NumberField.Units.span_basisOfIsMaxRank** 是 Mathlib 中的一个定理，位于命名空间 `NumberField
+.Units`。
+形式化陈述：span_basisOfIsMaxRank {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u) : (s
+pan Int (Set.range (basisOfIsMaxRank hu))).toAddSubgroup = AddSubgroup.map (logE
+mbedding K) (Subgroup.closure (Set.range u)).toAddSubgroup
+参数：rank K；𝓞 K；hu : IsMaxRank u。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.toAddSubgroup_closure`：toAddSubgroup_closure (S : Set G) : (Sub
+group.closure S).toAddSubgroup = AddSubgroup.closure (Additive.toMul ⁻¹' S)
+· 使用定理 `AddMonoidHom.map_closure`：∀ {G : Type u_1} [inst : AddGroup G] {N : Type
+ u_5} [inst_1 : AddGroup N] (f : G →+ N) (s : Set G),   AddSubgroup.map f (AddSu
+bgroup.closure…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.span_int_eq_addSubgroupClosure`：span_int_eq_addSubgroupClosure
+ {M : Type*} [AddCommGroup M] (s : Set M) : (span Int s).toAddSubgroup = AddSubg
+roup.closure s
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `NumberField.Units.basisOfIsMaxRank_apply`：basisOfIsMaxRank_apply {u : Fi
+n (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u) (i : Fin (rank K)) : (basisOfIsMaxRank 
+hu) i = logEmbedding K (Additi…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem span_basisOfIsMaxRank {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u) :
-    (span Int (Set.range (basisOfIsMaxRank hu))).toAddSubgroup =
+theorem span_basisOfIsMaxRank {u : Fin (rank K) → (𝓞 K)ˣ} (hu : IsMaxRank u) :
+    (span ℤ (Set.range (basisOfIsMaxRank hu))).toAddSubgroup =
       AddSubgroup.map (logEmbedding K) (Subgroup.closure (Set.range u)).toAddSubgroup := by
-  rw [Subgroup.toAddSubgroup_closure]; rw [AddMonoidHom.map_closure]; rw [← span_int_eq_addSubgroupClosure]
+  rw [Subgroup.toAddSubgroup_closure, AddMonoidHom.map_closure, ← span_int_eq_addSubgroupClosure]
   congr; ext; simp
-
-/--
-theorem `finiteIndex_iff_sup_torsion_finiteIndex` / 定理 `finiteIndex_iff_sup_torsion_finiteIndex`
-
-English:
-theorem finiteIndex_iff_sup_torsion_finiteIndex
-  given: (s : Subgroup (𝓞 K)ˣ)
-  proof: by
-  refine ⟨fun h => Subgroup.finiteIndex_of_le le_sup_left, fun h => ?_⟩
-  rw [Subgroup.finiteIndex_iff]; rw [← Subgroup.relIndex_mul_index (le_sup_left : s <= s ⊔ torsion K)]
-  refine Nat.mul_ne_zero ?_ (Subgroup.finiteIndex_iff.mp h)
-  rw [Subgroup.relIndex_sup_left]
-  exact Subgroup.FiniteIndex.index_ne_zero
-
-中文:
-定理 finiteIndex_iff_sup_torsion_finiteIndex
-  条件: (s : 子群 (𝓞 K)ˣ)
-  证明: by
-  refine ⟨fun h => Subgroup.finiteIndex_of_le le_sup_left, fun h => ?_⟩
-  rw [Subgroup.finiteIndex_iff]; rw [← Subgroup.relIndex_mul_index (le_sup_left : s <= s ⊔ torsion K)]
-  refine Nat.mul_ne_zero ?_ (Subgroup.finiteIndex_iff.mp h)
-  rw [Subgroup.relIndex_sup_left]
-  exact Subgroup.FiniteIndex.index_ne_zero
-
-Depends on / 依赖: FiniteIndex, Nat.mul_ne_zero, Subgroup, Subgroup.FiniteIndex.index_ne_zero, Subgroup.finiteIndex_iff, Subgroup.finiteIndex_iff.mp, Subgroup.finiteIndex_of_le, Subgroup.relIndex_mul_index, Subgroup.relIndex_sup_left, finiteIndex_iff, finiteIndex_of_le, index_ne_zero, le_sup_left, mul_ne_zero, relIndex_mul_index, relIndex_sup_left, torsion
+/-
+**NumberField.Units.finiteIndex_iff_sup_torsion_finiteIndex** 是 Mathlib 中的一个定理，位
+于命名空间 `NumberField.Units`。
+形式化陈述：finiteIndex_iff_sup_torsion_finiteIndex (s : Subgroup (𝓞 K)ˣ) : s.FiniteIn
+dex ↔ (s ⊔ torsion K).FiniteIndex
+参数：s : Subgroup (𝓞 K)ˣ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.finiteIndex_of_le`：finiteIndex_of_le [FiniteIndex H] (h : H <= 
+K) : FiniteIndex K
+· 使用定理 `le_sup_left`：le_sup_left : a <= a ⊔ b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subgroup.finiteIndex_iff`：finiteIndex_iff : H.FiniteIndex ↔ H.index != 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subgroup.relIndex_mul_index`：relIndex_mul_index (h : H <= K) : H.relInde
+x K * K.index = H.index
+· 使用定理 `Nat.mul_ne_zero`：∀ {n m : ℕ}, n ≠ 0 → m ≠ 0 → n * m ≠ 0
+· 使用定理 `Subgroup.relIndex_sup_left`：relIndex_sup_left [K.Normal] : K.relIndex (K
+ ⊔ H) = K.relIndex H
+· 使用定理 `Subgroup.normal_of_isMulCommutative`：∀ {G : Type u_1} [inst : Group G] [
+IsMulCommutative G] (H : Subgroup G), H.Normal
+· 使用定理 `Subgroup.FiniteIndex.index_ne_zero`：∀ {G : Type u_1} {inst : Group G} {H
+ : Subgroup G} [self : H.FiniteIndex], H.index ≠ 0
+· 使用定理 `Subgroup.finiteIndex_of_finite`：∀ {G : Type u_1} [inst : Group G] {H : S
+ubgroup G} [Finite G], H.FiniteIndex
+· 使用定理 `NumberField.Units.instFiniteSubtypeUnitsRingOfIntegersMemSubgroupTorsion
+`：∀ (K : Type u_1) [inst : Field K] [NumberField K], Finite ↥(NumberField.Units.
+torsion K)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 -/
 theorem finiteIndex_iff_sup_torsion_finiteIndex (s : Subgroup (𝓞 K)ˣ) :
     s.FiniteIndex ↔ (s ⊔ torsion K).FiniteIndex := by
-  refine ⟨fun h => Subgroup.finiteIndex_of_le le_sup_left, fun h => ?_⟩
-  rw [Subgroup.finiteIndex_iff]; rw [← Subgroup.relIndex_mul_index (le_sup_left : s <= s ⊔ torsion K)]
+  refine ⟨fun h ↦ Subgroup.finiteIndex_of_le le_sup_left, fun h ↦ ?_⟩
+  rw [Subgroup.finiteIndex_iff, ← Subgroup.relIndex_mul_index (le_sup_left : s ≤ s ⊔ torsion K)]
   refine Nat.mul_ne_zero ?_ (Subgroup.finiteIndex_iff.mp h)
   rw [Subgroup.relIndex_sup_left]
   exact Subgroup.FiniteIndex.index_ne_zero
@@ -208,251 +230,343 @@ theorem finiteIndex_iff_sup_torsion_finiteIndex (s : Subgroup (𝓞 K)ˣ) :
 set_option backward.isDefEq.respectTransparency false in
 open Subgroup in
 /--
-theorem `isMaxRank_iff_closure_finiteIndex` / 定理 `isMaxRank_iff_closure_finiteIndex`
-
-English:
-theorem isMaxRank_iff_closure_finiteIndex
-  given: {u : Fin (rank K) -> (𝓞 K)ˣ}
-  proof: by
-  classical
-  have h₁ : (closure (Set.range u) ⊔ torsion K).index != 0 ↔
-      Finite (unitLattice K ⧸ span Int (Set.range ((logEmbeddingEquiv K) ∘ Additive.toMul.symm ∘
-        QuotientGroup.mk ∘ u))) := by
-    change _ ↔ Finite ((unitLattice K).toAddSubgroup ⧸ (span Int (Set.range _)).toAddSubgroup)
-    rw [← AddSubgroup.index_ne_zero_iff_finite]
-    have := index_map (closure (Set.range u)) (QuotientGroup.mk' (torsion K))
-    rw [QuotientGroup.ker_mk']; rw [QuotientGroup.range_mk']; rw [index_top]; rw [mul_one] at this
-    rw [← this]; rw [← index_toAddSubgroup]; rw [← AddSubgroup.index_map_equiv
-        _ (logEmbeddingEquiv K).toAddEquiv]; rw [Set.range_comp]; rw [← LinearEquiv.coe_coe]; rw [← map_span (logEmbeddingEquiv K).toLinearMap]; rw [map_toAddSubgroup]; rw [span_int_eq_addSubgroupClosure]; rw [MonoidHom.map_closure]; rw [toAddSubgroup_closure]; rw [Set.range_comp]; rw [Set.range_comp]; rw [QuotientGroup.coe_mk']; rw [← Equiv.image_symm_eq_preimage]
-    rfl
-  have h₂ : DiscreteTopology
-      (span Int (Set.range fun i => (logEmbedding K) (Additive.ofMul (u i)))) := by
-    rw [← SetLike.isDiscrete_iff_discreteTopology]
-    refine (inferInstance : DiscreteTopology (unitLattice K)).isDiscrete.mono ?_
-    rw [SetLike.coe_subset_coe]; rw [Submodule.span_le]
-    rintro _ ⟨i, rfl⟩
-    exact ⟨Additive.ofMul (u i), mem_top, rfl⟩
-  rw [finiteIndex_iff_sup_torsion_finiteIndex]; rw [finiteIndex_iff]; rw [h₁]; rw [finiteQuotient_iff]; rw [unitLattice_rank]; rw [← Set.finrank]; rw [IsMaxRank]; rw [linearIndependent_iff_card_eq_finrank_span]; rw [Real.finrank_eq_int_finrank_of_discrete h₂]; rw [Set.finrank]; rw [Set.finrank]; rw [← finrank_map_subtype_eq]; rw [map_span]; rw [← Set.range_comp']; rw [eq_comm]
-  simp
-
-中文:
-定理 isMaxRank_iff_closure_finiteIndex
-  条件: {u : 有限集 (rank K) -> (𝓞 K)ˣ}
-  证明: by
-  classical
-  have h₁ : (closure (Set.range u) ⊔ torsion K).index != 0 ↔
-      Finite (unitLattice K ⧸ span Int (Set.range ((logEmbeddingEquiv K) ∘ Additive.toMul.symm ∘
-        QuotientGroup.mk ∘ u))) := by
-    change _ ↔ Finite ((unitLattice K).toAddSubgroup ⧸ (span Int (Set.range _)).toAddSubgroup)
-    rw [← AddSubgroup.index_ne_zero_iff_finite]
-    have := index_map (closure (Set.range u)) (QuotientGroup.mk' (torsion K))
-    rw [QuotientGroup.ker_mk']; rw [QuotientGroup.range_mk']; rw [index_top]; rw [mul_one] at this
-    rw [← this]; rw [← index_toAddSubgroup]; rw [← AddSubgroup.index_map_equiv
-        _ (logEmbeddingEquiv K).toAddEquiv]; rw [Set.range_comp]; rw [← LinearEquiv.coe_coe]; rw [← map_span (logEmbeddingEquiv K).toLinearMap]; rw [map_toAddSubgroup]; rw [span_int_eq_addSubgroupClosure]; rw [MonoidHom.map_closure]; rw [toAddSubgroup_closure]; rw [Set.range_comp]; rw [Set.range_comp]; rw [QuotientGroup.coe_mk']; rw [← Equiv.image_symm_eq_preimage]
-    rfl
-  have h₂ : DiscreteTopology
-      (span Int (Set.range fun i => (logEmbedding K) (Additive.ofMul (u i)))) := by
-    rw [← SetLike.isDiscrete_iff_discreteTopology]
-    refine (inferInstance : DiscreteTopology (unitLattice K)).isDiscrete.mono ?_
-    rw [SetLike.coe_subset_coe]; rw [Submodule.span_le]
-    rintro _ ⟨i, rfl⟩
-    exact ⟨Additive.ofMul (u i), mem_top, rfl⟩
-  rw [finiteIndex_iff_sup_torsion_finiteIndex]; rw [finiteIndex_iff]; rw [h₁]; rw [finiteQuotient_iff]; rw [unitLattice_rank]; rw [← Set.finrank]; rw [IsMaxRank]; rw [linearIndependent_iff_card_eq_finrank_span]; rw [Real.finrank_eq_int_finrank_of_discrete h₂]; rw [Set.finrank]; rw [Set.finrank]; rw [← finrank_map_subtype_eq]; rw [map_span]; rw [← Set.range_comp']; rw [eq_comm]
-  simp
-
-Depends on / 依赖: AddSubgroup, AddSubgroup.index_ne_zero_iff_finite, Additive, Additive.toMul.symm, Finite, QuotientGroup, QuotientGroup.ker_mk, QuotientGroup.mk, QuotientGroup.range_mk, Set.range, classical, closure, index_map, index_ne_zero_iff_finite, index_top, ker_mk, logEmbeddingEquiv, mul_one, range_mk, toAddSubgroup
+A family of units is of maximal rank iff the index of the subgroup it generates has finite index.
 -/
-theorem isMaxRank_iff_closure_finiteIndex {u : Fin (rank K) -> (𝓞 K)ˣ} :
+/-
+**NumberField.Units.isMaxRank_iff_closure_finiteIndex** 是 Mathlib 中的一个定理，位于命名空间 
+`NumberField.Units`。
+形式化陈述：isMaxRank_iff_closure_finiteIndex {u : Fin (rank K) -> (𝓞 K)ˣ} : IsMaxRank
+ u ↔ (closure (Set.range u)).FiniteIndex
+参数：rank K；𝓞 K。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `AddSubgroup.index_ne_zero_iff_finite`：∀ {G : Type u_1} [inst : AddGroup 
+G] {H : AddSubgroup G}, H.index ≠ 0 ↔ Finite (G ⧸ H)
+· 使用定理 `Subgroup.normal_of_isMulCommutative`：∀ {G : Type u_1} [inst : Group G] [
+IsMulCommutative G] (H : Subgroup G), H.Normal
+· 使用定理 `Subgroup.index_map`：index_map (f : G ->* G') : (H.map f).index = (H ⊔ f.
+ker).index * f.range.index
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Subgroup.index_top`：index_top : (⊤ : Subgroup G).index = 1
+· 使用定理 `QuotientGroup.range_mk'`：range_mk' : (QuotientGroup.mk' N).range = ⊤
+· 使用定理 `QuotientGroup.ker_mk'`：ker_mk' : MonoidHom.ker (QuotientGroup.mk' N : G 
+->* G ⧸ N) = N
+· 使用引理 `Subgroup.index_toAddSubgroup`：index_toAddSubgroup : (Subgroup.toAddSubgr
+oup H).index = H.index
+· 使用定理 `AddEquivClass.instAddMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N 
+: Type u_5} [inst : EquivLike F M N] [inst_1 : AddZeroClass M]   [inst_2 : AddZe
+roClass N] [AddEquivClass…
+· 使用定理 `AddEquiv.instAddEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Add 
+M] [inst_1 : Add N], AddEquivClass (M ≃+ N) M N
+· 使用定理 `AddSubgroup.index_map_equiv`：∀ {G : Type u_1} {G' : Type u_2} [inst : Ad
+dGroup G] [inst_1 : AddGroup G'] (H : AddSubgroup G) (e : G ≃+ G'),   (AddSubgro
+up.map (↑e) H).in…
+· 使用定理 `Set.range_comp`：range_comp (g : α -> β) (f : ι -> α) : range (g ∘ f) = g
+ '' range f
+· 使用定理 `LinearEquiv.coe_coe`：coe_coe : ⇑(e : M ->ₛₗ[σ] M₂) = e
+· 使用定理 `Submodule.map_span`：map_span [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂
+) (s : Set M) : (span R s).map f = span R₂ (f '' s)
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用引理 `Submodule.map_toAddSubgroup`：map_toAddSubgroup (f : M ->ₗ[R] M₂) (p : Su
+bmodule R M) : (p.map f).toAddSubgroup = p.toAddSubgroup.map (f : M ->+ M₂)
+· 使用定理 `Submodule.span_int_eq_addSubgroupClosure`：span_int_eq_addSubgroupClosure
+ {M : Type*} [AddCommGroup M] (s : Set M) : (span Int s).toAddSubgroup = AddSubg
+roup.closure s
+· 使用定理 `MonoidHom.map_closure`：map_closure (f : G ->* N) (s : Set G) : (closure 
+s).map f = closure (f '' s)
+· 使用定理 `Subgroup.toAddSubgroup_closure`：toAddSubgroup_closure (S : Set G) : (Sub
+group.closure S).toAddSubgroup = AddSubgroup.closure (Additive.toMul ⁻¹' S)
+· 使用定理 `QuotientGroup.coe_mk'`：coe_mk' : (mk' N : G -> G ⧸ N) = mk
+· 使用引理 `Equiv.image_symm_eq_preimage`：image_symm_eq_preimage (e : α ≃ β) (s : Se
+t β) : e.symm '' s = e ⁻¹' s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用引理 `SetLike.isDiscrete_iff_discreteTopology`：SetLike.isDiscrete_iff_discrete
+Topology {S : Type*} [SetLike S X] {s : S} : IsDiscrete (s : Set X) ↔ DiscreteTo
+pology s
+· 使用引理 `IsDiscrete.mono`：IsDiscrete.mono {t : Set X} (hs : IsDiscrete s) (hst : 
+t subseteq s) : IsDiscrete t
+· 使用引理 `DiscreteTopology.isDiscrete`：DiscreteTopology.isDiscrete [DiscreteTopolo
+gy s] : IsDiscrete s
+· 使用定理 `NumberField.Units.instDiscrete_unitLattice`：∀ (K : Type u_1) [inst : Fie
+ld K] [inst_1 : NumberField K], DiscreteTopology ↥(NumberField.Units.unitLattice
+ K)
+（共 52 条，此处仅展示前 30 条）
+
+--- 原说明 ---
+A family of units is of maximal rank iff the index of the subgroup it generates 
+has finite index.
+-/
+theorem isMaxRank_iff_closure_finiteIndex {u : Fin (rank K) → (𝓞 K)ˣ} :
     IsMaxRank u ↔ (closure (Set.range u)).FiniteIndex := by
   classical
-  have h₁ : (closure (Set.range u) ⊔ torsion K).index != 0 ↔
-      Finite (unitLattice K ⧸ span Int (Set.range ((logEmbeddingEquiv K) ∘ Additive.toMul.symm ∘
+  have h₁ : (closure (Set.range u) ⊔ torsion K).index ≠ 0 ↔
+      Finite (unitLattice K ⧸ span ℤ (Set.range ((logEmbeddingEquiv K) ∘ Additive.toMul.symm ∘
         QuotientGroup.mk ∘ u))) := by
-    change _ ↔ Finite ((unitLattice K).toAddSubgroup ⧸ (span Int (Set.range _)).toAddSubgroup)
+    change _ ↔ Finite ((unitLattice K).toAddSubgroup ⧸ (span ℤ (Set.range _)).toAddSubgroup)
     rw [← AddSubgroup.index_ne_zero_iff_finite]
     have := index_map (closure (Set.range u)) (QuotientGroup.mk' (torsion K))
-    rw [QuotientGroup.ker_mk']; rw [QuotientGroup.range_mk']; rw [index_top]; rw [mul_one] at this
-    rw [← this]; rw [← index_toAddSubgroup]; rw [← AddSubgroup.index_map_equiv
-        _ (logEmbeddingEquiv K).toAddEquiv]; rw [Set.range_comp]; rw [← LinearEquiv.coe_coe]; rw [← map_span (logEmbeddingEquiv K).toLinearMap]; rw [map_toAddSubgroup]; rw [span_int_eq_addSubgroupClosure]; rw [MonoidHom.map_closure]; rw [toAddSubgroup_closure]; rw [Set.range_comp]; rw [Set.range_comp]; rw [QuotientGroup.coe_mk']; rw [← Equiv.image_symm_eq_preimage]
+    rw [QuotientGroup.ker_mk', QuotientGroup.range_mk', index_top, mul_one] at this
+    rw [← this, ← index_toAddSubgroup, ← AddSubgroup.index_map_equiv
+        _ (logEmbeddingEquiv K).toAddEquiv, Set.range_comp, ← LinearEquiv.coe_coe,
+      ← map_span (logEmbeddingEquiv K).toLinearMap,
+      map_toAddSubgroup, span_int_eq_addSubgroupClosure,
+      MonoidHom.map_closure, toAddSubgroup_closure, Set.range_comp, Set.range_comp,
+      QuotientGroup.coe_mk', ← Equiv.image_symm_eq_preimage]
     rfl
   have h₂ : DiscreteTopology
-      (span Int (Set.range fun i => (logEmbedding K) (Additive.ofMul (u i)))) := by
+      (span ℤ (Set.range fun i ↦ (logEmbedding K) (Additive.ofMul (u i)))) := by
     rw [← SetLike.isDiscrete_iff_discreteTopology]
     refine (inferInstance : DiscreteTopology (unitLattice K)).isDiscrete.mono ?_
-    rw [SetLike.coe_subset_coe]; rw [Submodule.span_le]
+    rw [SetLike.coe_subset_coe, Submodule.span_le]
     rintro _ ⟨i, rfl⟩
     exact ⟨Additive.ofMul (u i), mem_top, rfl⟩
-  rw [finiteIndex_iff_sup_torsion_finiteIndex]; rw [finiteIndex_iff]; rw [h₁]; rw [finiteQuotient_iff]; rw [unitLattice_rank]; rw [← Set.finrank]; rw [IsMaxRank]; rw [linearIndependent_iff_card_eq_finrank_span]; rw [Real.finrank_eq_int_finrank_of_discrete h₂]; rw [Set.finrank]; rw [Set.finrank]; rw [← finrank_map_subtype_eq]; rw [map_span]; rw [← Set.range_comp']; rw [eq_comm]
+  rw [finiteIndex_iff_sup_torsion_finiteIndex, finiteIndex_iff, h₁, finiteQuotient_iff,
+    unitLattice_rank, ← Set.finrank, IsMaxRank, linearIndependent_iff_card_eq_finrank_span,
+    Real.finrank_eq_int_finrank_of_discrete h₂, Set.finrank, Set.finrank, ← finrank_map_subtype_eq,
+    map_span, ← Set.range_comp', eq_comm]
   simp
 
 open scoped Classical in
 /--
-Definition of `regOfFamily` / `regOfFamily` 的定义
-
-English:
-definition regOfFamily
-  signature: (u : Fin (rank K) -> (𝓞 K)ˣ)
-  body: if hu : IsMaxRank u then
-    ZLattice.covolume (span Int (Set.range (basisOfIsMaxRank hu)))
-  else 0
-
-中文:
-定义 regOfFamily
-  签名: (u : 有限集 (rank K) -> (𝓞 K)ˣ)
-  定义体: if hu : IsMaxRank u then
-    ZLattice.covolume (span Int (Set.range (basisOfIsMaxRank hu)))
-  else 0
-
-Depends on / 依赖: IsMaxRank, Set.range, ZLattice, ZLattice.covolume, basisOfIsMaxRank, covolume
+The regulator of a family of units of `K`.
 -/
-def regOfFamily (u : Fin (rank K) -> (𝓞 K)ˣ) : Real :=
+/-
+**NumberField.Units.regOfFamily** 是 Mathlib 中的一个定义，位于命名空间 `NumberField.Units`。
+形式化陈述：regOfFamily (u : Fin (rank K) -> (𝓞 K)ˣ) : Real
+参数：u : Fin (rank K) -> (𝓞 K)ˣ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The regulator of a family of units of `K`.
+-/
+def regOfFamily (u : Fin (rank K) → (𝓞 K)ˣ) : ℝ :=
   if hu : IsMaxRank u then
-    ZLattice.covolume (span Int (Set.range (basisOfIsMaxRank hu)))
+    ZLattice.covolume (span ℤ (Set.range (basisOfIsMaxRank hu)))
   else 0
-
-/--
-theorem `regOfFamily_eq_zero` / 定理 `regOfFamily_eq_zero`
-
-English:
-theorem regOfFamily_eq_zero
-  given: {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : ¬ IsMaxRank u)
-  proof: by
-  rw [regOfFamily]; rw [dif_neg hu]
-
-中文:
-定理 regOfFamily_eq_zero
-  条件: {u : 有限集 (rank K) -> (𝓞 K)ˣ} (hu : ¬ IsMaxRank u)
-  证明: by
-  rw [regOfFamily]; rw [dif_neg hu]
-
-Depends on / 依赖: dif_neg, regOfFamily
+/-
+**NumberField.Units.regOfFamily_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.U
+nits`。
+形式化陈述：regOfFamily_eq_zero {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : ¬ IsMaxRank u) : re
+gOfFamily u = 0
+参数：rank K；𝓞 K；hu : ¬ IsMaxRank u。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.Units.regOfFamily.eq_1`：∀ {K : Type u_1} [inst : Field K] [i
+nst_1 : NumberField K]   (u : Fin (NumberField.Units.rank K) → (NumberField.Ring
+OfIntegers K)ˣ),   Numbe…
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
 -/
-theorem regOfFamily_eq_zero {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : ¬ IsMaxRank u) :
+theorem regOfFamily_eq_zero {u : Fin (rank K) → (𝓞 K)ˣ} (hu : ¬ IsMaxRank u) :
     regOfFamily u = 0 := by
-  rw [regOfFamily]; rw [dif_neg hu]
+  rw [regOfFamily, dif_neg hu]
 
 open scoped Classical in
-/--
-theorem `regOfFamily_of_isMaxRank` / 定理 `regOfFamily_of_isMaxRank`
-
-English:
-theorem regOfFamily_of_isMaxRank
-  given: {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u)
-  proof: by
-  rw [regOfFamily]; rw [dif_pos hu]
-
-中文:
-定理 regOfFamily_of_isMaxRank
-  条件: {u : 有限集 (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u)
-  证明: by
-  rw [regOfFamily]; rw [dif_pos hu]
-
-Depends on / 依赖: dif_pos, regOfFamily
+/-
+**NumberField.Units.regOfFamily_of_isMaxRank** 是 Mathlib 中的一个定理，位于命名空间 `NumberFi
+eld.Units`。
+形式化陈述：regOfFamily_of_isMaxRank {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u) :
+ regOfFamily u = ZLattice.covolume (span Int (Set.range (basisOfIsMaxRank hu)))
+参数：rank K；𝓞 K；hu : IsMaxRank u。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.Units.regOfFamily.eq_1`：∀ {K : Type u_1} [inst : Field K] [i
+nst_1 : NumberField K]   (u : Fin (NumberField.Units.rank K) → (NumberField.Ring
+OfIntegers K)ˣ),   Numbe…
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
 -/
-theorem regOfFamily_of_isMaxRank {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u) :
-    regOfFamily u = ZLattice.covolume (span Int (Set.range (basisOfIsMaxRank hu))) := by
-  rw [regOfFamily]; rw [dif_pos hu]
-
-/--
-theorem `regOfFamily_pos` / 定理 `regOfFamily_pos`
-
-English:
-theorem regOfFamily_pos
-  given: {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u)
-  proof: by
-  classical
-  rw [regOfFamily_of_isMaxRank hu]
-  exact ZLattice.covolume_pos _ volume
-
-中文:
-定理 regOfFamily_pos
-  条件: {u : 有限集 (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u)
-  证明: by
-  classical
-  rw [regOfFamily_of_isMaxRank hu]
-  exact ZLattice.covolume_pos _ volume
-
-Depends on / 依赖: ZLattice, ZLattice.covolume_pos, classical, covolume_pos, regOfFamily_of_isMaxRank, volume
+theorem regOfFamily_of_isMaxRank {u : Fin (rank K) → (𝓞 K)ˣ} (hu : IsMaxRank u) :
+    regOfFamily u = ZLattice.covolume (span ℤ (Set.range (basisOfIsMaxRank hu))) := by
+  rw [regOfFamily, dif_pos hu]
+/-
+**NumberField.Units.regOfFamily_pos** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.Units
+`。
+形式化陈述：regOfFamily_pos {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u) : 0 < regO
+fFamily u
+参数：rank K；𝓞 K；hu : IsMaxRank u。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.Units.regOfFamily_of_isMaxRank`：regOfFamily_of_isMaxRank {u 
+: Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u) : regOfFamily u = ZLattice.covolume
+ (span Int (Set.range (basisOfIs…
+· 使用定理 `ZLattice.covolume_pos`：covolume_pos : 0 < covolume L μ
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Subtype.countable`：∀ {α : Sort u} [Countable α] {p : α → Prop}, Countabl
+e { x // p x }
+· 使用定理 `Finite.to_countable`：∀ {α : Sort u} [Finite α], Countable α
+· 使用定理 `instSecondCountableTopologyReal`：SecondCountableTopology ℝ
+· 使用定理 `ZSpan.instDiscreteTopologySubtypeMemSubmoduleIntSpanRangeCoeBasisRealOfF
+inite`：∀ {E : Type u_1} {ι : Type u_2} [inst : NormedAddCommGroup E] [inst_1 : N
+ormedSpace ℝ E] (b : Module.Basis ι ℝ E)   [Finite ι], DiscreteTopo…
+· 使用定理 `MeasureTheory.Measure.instIsAddHaarMeasureForallVolumeOfMeasurableAddOfS
+igmaFinite`：∀ {ι : Type u_1} [inst : Fintype ι] {G : ι → Type u_4} [inst_1 : (i 
+: ι) → AddGroup (G i)]   [inst_2 : (i : ι) → MeasureTheory.MeasureSpace …
+· 使用定理 `ContinuousAdd.measurableAdd`：∀ {γ : Type u_3} [inst : TopologicalSpace γ
+] [inst_1 : MeasurableSpace γ] [BorelSpace γ] [inst_3 : Add γ]   [SeparatelyCont
+inuousAdd γ], Mea…
+· 使用定理 `instSeparatelyContinuousAddOfContinuousAdd`：∀ {M : Type u_1} [inst : Top
+ologicalSpace M] [inst_1 : Add M] [ContinuousAdd M], SeparatelyContinuousAdd M
+· 使用定理 `IsSemitopologicalSemiring.toContinuousAdd`：∀ {R : Type u_2} {inst : Topo
+logicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSemitopologic
+alSemiring R], ContinuousAdd R
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `MeasureTheory.Measure.IsAddHaarMeasure.sigmaFinite`：∀ {G : Type u_1} [in
+st : MeasurableSpace G] [inst_1 : AddGroup G] [inst_2 : TopologicalSpace G]   (μ
+ : MeasureTheory.Measure G) [μ.IsAddHaar…
+· 使用定理 `instIsAddHaarMeasureVolume`：∀ {E : Type u_3} [inst : NormedAddCommGroup 
+E] [inst_1 : InnerProductSpace ℝ E] [inst_2 : FiniteDimensional ℝ E]   [inst_3 :
+ MeasurableSpace…
+· 使用定理 `SeparableWeaklyLocallyCompactAddGroup.sigmaCompactSpace`：∀ {G : Type w} 
+[inst : TopologicalSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G]   [T
+opologicalSpace.SeparableSpace G] [WeaklyLoca…
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
+· 使用定理 `TopologicalSpace.SecondCountableTopology.to_separableSpace`：∀ {α : Type 
+u} [t : TopologicalSpace α] [SecondCountableTopology α], TopologicalSpace.Separa
+bleSpace α
+· 使用定理 `instWeaklyLocallyCompactSpaceOfLocallyCompactSpace`：∀ {X : Type u_1} [in
+st : TopologicalSpace X] [LocallyCompactSpace X], WeaklyLocallyCompactSpace X
+· 使用定理 `locallyCompact_of_proper`：∀ {α : Type u} [inst : PseudoMetricSpace α] [P
+roperSpace α], LocallyCompactSpace α
+· 使用定理 `instProperSpaceReal`：ProperSpace ℝ
 -/
-theorem regOfFamily_pos {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u) :
+theorem regOfFamily_pos {u : Fin (rank K) → (𝓞 K)ˣ} (hu : IsMaxRank u) :
     0 < regOfFamily u := by
   classical
   rw [regOfFamily_of_isMaxRank hu]
   exact ZLattice.covolume_pos _ volume
-
-/--
-theorem `regOfFamily_ne_zero` / 定理 `regOfFamily_ne_zero`
-
-English:
-theorem regOfFamily_ne_zero
-  given: {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u)
-  proof: (regOfFamily_pos hu).ne'
-
-中文:
-定理 regOfFamily_ne_zero
-  条件: {u : 有限集 (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u)
-  证明: (regOfFamily_pos hu).ne'
-
-Depends on / 依赖: regOfFamily_pos
+/-
+**NumberField.Units.regOfFamily_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.U
+nits`。
+形式化陈述：regOfFamily_ne_zero {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u) : regO
+fFamily u != 0
+参数：rank K；𝓞 K；hu : IsMaxRank u。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `NumberField.Units.regOfFamily_pos`：regOfFamily_pos {u : Fin (rank K) -> 
+(𝓞 K)ˣ} (hu : IsMaxRank u) : 0 < regOfFamily u
 -/
-theorem regOfFamily_ne_zero {u : Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u) :
-    regOfFamily u != 0 := (regOfFamily_pos hu).ne'
-
-/--
-theorem `regOfFamily_ne_zero_iff` / 定理 `regOfFamily_ne_zero_iff`
-
-English:
-theorem regOfFamily_ne_zero_iff
-  given: {u : Fin (rank K) -> (𝓞 K)ˣ}
-  proof: ⟨by simpa using (fun hu => regOfFamily_eq_zero hu).mt, fun hu => regOfFamily_ne_zero hu⟩
-
-中文:
-定理 regOfFamily_ne_zero_iff
-  条件: {u : 有限集 (rank K) -> (𝓞 K)ˣ}
-  证明: ⟨by simpa using (fun hu => regOfFamily_eq_zero hu).mt, fun hu => regOfFamily_ne_zero hu⟩
-
-Depends on / 依赖: regOfFamily_eq_zero, regOfFamily_ne_zero
+theorem regOfFamily_ne_zero {u : Fin (rank K) → (𝓞 K)ˣ} (hu : IsMaxRank u) :
+    regOfFamily u ≠ 0 := (regOfFamily_pos hu).ne'
+/-
+**NumberField.Units.regOfFamily_ne_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `NumberFie
+ld.Units`。
+形式化陈述：regOfFamily_ne_zero_iff {u : Fin (rank K) -> (𝓞 K)ˣ} : regOfFamily u != 0 
+↔ IsMaxRank u
+参数：rank K；𝓞 K。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Function.mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `NumberField.Units.regOfFamily_eq_zero`：regOfFamily_eq_zero {u : Fin (ran
+k K) -> (𝓞 K)ˣ} (hu : ¬ IsMaxRank u) : regOfFamily u = 0
+· 使用定理 `NumberField.Units.regOfFamily_ne_zero`：regOfFamily_ne_zero {u : Fin (ran
+k K) -> (𝓞 K)ˣ} (hu : IsMaxRank u) : regOfFamily u != 0
 -/
-theorem regOfFamily_ne_zero_iff {u : Fin (rank K) -> (𝓞 K)ˣ} :
-    regOfFamily u != 0 ↔ IsMaxRank u :=
-  ⟨by simpa using (fun hu => regOfFamily_eq_zero hu).mt, fun hu => regOfFamily_ne_zero hu⟩
+theorem regOfFamily_ne_zero_iff {u : Fin (rank K) → (𝓞 K)ˣ} :
+    regOfFamily u ≠ 0 ↔ IsMaxRank u :=
+  ⟨by simpa using (fun hu ↦ regOfFamily_eq_zero hu).mt, fun hu ↦ regOfFamily_ne_zero hu⟩
 
 open scoped Classical in
-/--
-theorem `regOfFamily_eq_det'` / 定理 `regOfFamily_eq_det'`
-
-English:
-theorem regOfFamily_eq_det'
-  given: (u : Fin (rank K) -> (𝓞 K)ˣ)
-  proof: by
-  by_cases hu : IsMaxRank u
-  · rw [regOfFamily_of_isMaxRank hu, ZLattice.covolume_eq_det _
-      (((basisOfIsMaxRank hu).restrictScalars Int).reindex (equivFinRank K)), Basis.coe_reindex]
-    congr 3 with i
-    simp [basisOfIsMaxRank_apply hu]
-  · rw [regOfFamily_eq_zero hu, det_eq_zero_of_not_linearIndependent_rows, abs_zero]
-    rwa [IsMaxRank, ← linearIndependent_equiv (equivFinRank K).symm] at hu
-
-中文:
-定理 regOfFamily_eq_det'
-  条件: (u : 有限集 (rank K) -> (𝓞 K)ˣ)
-  证明: by
-  by_cases hu : IsMaxRank u
-  · rw [regOfFamily_of_isMaxRank hu, ZLattice.covolume_eq_det _
-      (((basisOfIsMaxRank hu).restrictScalars Int).reindex (equivFinRank K)), Basis.coe_reindex]
-    congr 3 with i
-    simp [basisOfIsMaxRank_apply hu]
-  · rw [regOfFamily_eq_zero hu, det_eq_zero_of_not_linearIndependent_rows, abs_zero]
-    rwa [IsMaxRank, ← linearIndependent_equiv (equivFinRank K).symm] at hu
-
-Depends on / 依赖: Basis.coe_reindex, IsMaxRank, ZLattice, ZLattice.covolume_eq_det, abs_zero, basisOfIsMaxRank, basisOfIsMaxRank_apply, coe_reindex, covolume_eq_det, det_eq_zero_of_not_linearIndependent_rows, equivFinRank, linearIndependent_equiv, regOfFamily_eq_zero, regOfFamily_of_isMaxRank, reindex, restrictScalars
+/-
+**NumberField.Units.regOfFamily_eq_det'** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.U
+nits`。
+形式化陈述：regOfFamily_eq_det' (u : Fin (rank K) -> (𝓞 K)ˣ) : regOfFamily u = |(of fu
+n i => logEmbedding K (Additive.ofMul (u ((equivFinRank K).symm i)))).det|
+参数：u : Fin (rank K) -> (𝓞 K)ˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.Units.regOfFamily_of_isMaxRank`：regOfFamily_of_isMaxRank {u 
+: Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u) : regOfFamily u = ZLattice.covolume
+ (span Int (Set.range (basisOfIs…
+· 使用定理 `Int.instIsDomain`：IsDomain ℤ
+· 使用定理 `instIsTorsionFreeIntOfIsAddTorsionFree`：∀ {M : Type u_3} [inst : AddComm
+Group M] [IsAddTorsionFree M], Module.IsTorsionFree ℤ M
+· 使用定理 `instIsAddTorsionFreeOfAddLeftStrictMonoOfAddRightStrictMono`：∀ {M : Type
+ u_3} [inst : AddMonoid M] [inst_1 : LinearOrder M] [AddLeftStrictMono M] [AddRi
+ghtStrictMono M],   IsAddTorsionFree M
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `ZLattice.covolume_eq_det`：covolume_eq_det {ι : Type*} [Fintype ι] [Decid
+ableEq ι] (L : Submodule Int (ι -> Real)) [DiscreteTopology L] [IsZLattice Real 
+L] (b : Basis …
+· 使用定理 `ZSpan.instDiscreteTopologySubtypeMemSubmoduleIntSpanRangeCoeBasisRealOfF
+inite`：∀ {E : Type u_1} {ι : Type u_2} [inst : NormedAddCommGroup E] [inst_1 : N
+ormedSpace ℝ E] (b : Module.Basis ι ℝ E)   [Finite ι], DiscreteTopo…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Module.Basis.coe_reindex`：coe_reindex : (b.reindex e : ι' -> M) = b ∘ e.
+symm
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Pi.instSubsingleton`：∀ {α : Sort u} {β : α → Sort v} [∀ (a : α), Subsing
+leton (β a)], Subsingleton ((a : α) → β a)
+· 使用定理 `instSubsingletonDecidable`：∀ (p : Prop), Subsingleton (Decidable p)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+（共 40 条，此处仅展示前 30 条）
 -/
-theorem regOfFamily_eq_det' (u : Fin (rank K) -> (𝓞 K)ˣ) :
+theorem regOfFamily_eq_det' (u : Fin (rank K) → (𝓞 K)ˣ) :
     regOfFamily u =
-      |(of fun i => logEmbedding K (Additive.ofMul (u ((equivFinRank K).symm i)))).det| := by
+      |(of fun i ↦ logEmbedding K (Additive.ofMul (u ((equivFinRank K).symm i)))).det| := by
   by_cases hu : IsMaxRank u
   · rw [regOfFamily_of_isMaxRank hu, ZLattice.covolume_eq_det _
-      (((basisOfIsMaxRank hu).restrictScalars Int).reindex (equivFinRank K)), Basis.coe_reindex]
+      (((basisOfIsMaxRank hu).restrictScalars ℤ).reindex (equivFinRank K)), Basis.coe_reindex]
     congr 3 with i
     simp [basisOfIsMaxRank_apply hu]
   · rw [regOfFamily_eq_zero hu, det_eq_zero_of_not_linearIndependent_rows, abs_zero]
@@ -460,86 +574,97 @@ theorem regOfFamily_eq_det' (u : Fin (rank K) -> (𝓞 K)ˣ) :
 
 open scoped Classical in
 /--
-theorem `abs_det_eq_abs_det` / 定理 `abs_det_eq_abs_det`
-
-English:
-theorem abs_det_eq_abs_det
-  statement: (u : Fin (rank K) -> (𝓞 K)ˣ)
-  proof: by
-  -- We construct an equiv `Fin (rank K + 1) ≃ InfinitePlace K` from `e₂.symm`
-  let f : Fin (rank K + 1) ≃ InfinitePlace K :=
-    (finSuccEquiv _).trans ((Equiv.optionSubtype _).symm e₁.symm).val
-  -- And `g` corresponds to the restriction of `f⁻¹` to `{w // w ≠ w₂}`
-  let g : {w // w != w₂} ≃ Fin (rank K) :=
-    (Equiv.subtypeEquiv f.symm (fun _ => by simp [f])).trans
-      (finSuccAboveEquiv (f.symm w₂)).symm
-have h_col := congr_arg abs det_permute (g.trans e₂.symm)
-    (of fun i w : {w // w != w₂} => (mult w.val : Real) * (w.val (u (e₂ i) : K)).log)
-  rw [abs_mul]; rw [← Int.cast_abs]; rw [Equiv.Perm.sign_abs]; rw [Int.cast_one]; rw [one_mul] at h_col
-  rw [← h_col]
-have h := congr_arg abs submatrix_succAbove_det_eq_negOnePow_submatrix_succAbove_det'
-    (of fun i w => (mult (f w) : Real) * ((f w) (u i)).log) ?_ 0 (f.symm w₂)
-  · rw [← det_reindex_self e₁, ← det_reindex_self g]
-    · rw [Units.smul_def, abs_zsmul, Int.abs_negOnePow, one_smul] at h
-      convert! h
-      · ext; simp only [ne_eq, reindex_apply, submatrix_apply, of_apply, Equiv.apply_symm_apply,
-          Equiv.trans_apply, Fin.succAbove_zero, id_eq, finSuccEquiv_succ,
-          Equiv.optionSubtype_symm_apply_apply_coe, f]
-      · ext; simp only [ne_eq, Equiv.coe_trans, reindex_apply, submatrix_apply, Function.comp_apply,
-          Equiv.apply_symm_apply, id_eq, of_apply]; rfl
-  · intro _
-    simp_rw [of_apply, ← Real.log_pow]
-    rw [← Real.log_prod]; rw [Equiv.prod_comp f (fun w => (w (u _) ^ (mult w)))]; rw [prod_eq_abs_norm]; rw [Units.norm]; rw [Rat.cast_one]; rw [Real.log_one]
-exact fun _ _ => pow_ne_zero _ (map_ne_zero _).mpr (coe_ne_zero _)
-
-中文:
-定理 abs_det_eq_abs_det
-  结论: (u : 有限集 (rank K) -> (𝓞 K)ˣ)
-  证明: by
-  -- We construct an equiv `Fin (rank K + 1) ≃ InfinitePlace K` from `e₂.symm`
-  let f : Fin (rank K + 1) ≃ InfinitePlace K :=
-    (finSuccEquiv _).trans ((Equiv.optionSubtype _).symm e₁.symm).val
-  -- And `g` corresponds to the restriction of `f⁻¹` to `{w // w ≠ w₂}`
-  let g : {w // w != w₂} ≃ Fin (rank K) :=
-    (Equiv.subtypeEquiv f.symm (fun _ => by simp [f])).trans
-      (finSuccAboveEquiv (f.symm w₂)).symm
-have h_col := congr_arg abs det_permute (g.trans e₂.symm)
-    (of fun i w : {w // w != w₂} => (mult w.val : Real) * (w.val (u (e₂ i) : K)).log)
-  rw [abs_mul]; rw [← Int.cast_abs]; rw [Equiv.Perm.sign_abs]; rw [Int.cast_one]; rw [one_mul] at h_col
-  rw [← h_col]
-have h := congr_arg abs submatrix_succAbove_det_eq_negOnePow_submatrix_succAbove_det'
-    (of fun i w => (mult (f w) : Real) * ((f w) (u i)).log) ?_ 0 (f.symm w₂)
-  · rw [← det_reindex_self e₁, ← det_reindex_self g]
-    · rw [Units.smul_def, abs_zsmul, Int.abs_negOnePow, one_smul] at h
-      convert! h
-      · ext; simp only [ne_eq, reindex_apply, submatrix_apply, of_apply, Equiv.apply_symm_apply,
-          Equiv.trans_apply, Fin.succAbove_zero, id_eq, finSuccEquiv_succ,
-          Equiv.optionSubtype_symm_apply_apply_coe, f]
-      · ext; simp only [ne_eq, Equiv.coe_trans, reindex_apply, submatrix_apply, Function.comp_apply,
-          Equiv.apply_symm_apply, id_eq, of_apply]; rfl
-  · intro _
-    simp_rw [of_apply, ← Real.log_pow]
-    rw [← Real.log_prod]; rw [Equiv.prod_comp f (fun w => (w (u _) ^ (mult w)))]; rw [prod_eq_abs_norm]; rw [Units.norm]; rw [Rat.cast_one]; rw [Real.log_one]
-exact fun _ _ => pow_ne_zero _ (map_ne_zero _).mpr (coe_ne_zero _)
+Let `u : Fin (rank K) → (𝓞 K)ˣ` be a family of units and let `w₁` and `w₂` be two infinite
+places. Then, the two square matrices with entries `(mult w * log w (u i))_i` where `w ≠ w_j` for
+`j = 1, 2` have the same determinant in absolute value.
 -/
-theorem abs_det_eq_abs_det (u : Fin (rank K) -> (𝓞 K)ˣ)
-    {w₁ w₂ : InfinitePlace K} (e₁ : {w // w != w₁} ≃ Fin (rank K))
-    (e₂ : {w // w != w₂} ≃ Fin (rank K)) :
-    |(of fun i w : {w // w != w₁} => (mult w.val : Real) * (w.val (u (e₁ i) : K)).log).det| =
-    |(of fun i w : {w // w != w₂} => (mult w.val : Real) * (w.val (u (e₂ i) : K)).log).det| := by
+/-
+**NumberField.Units.abs_det_eq_abs_det** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.Un
+its`。
+形式化陈述：abs_det_eq_abs_det (u : Fin (rank K) -> (𝓞 K)ˣ) {w₁ w₂ : InfinitePlace K} 
+(e₁ : {w // w != w₁} ≃ Fin (rank K)) (e₂ : {w // w != w₂} ≃ Fin (rank K)) : |(of
+ fun i w : {w // w != w₁} => (mult w.val : Real) * (w.val (u (e₁ i) : K)).log).d
+et| = |(of fun i w : {w // w != w₂} => (mult w.val : Real) * (w.val (u (e₂ i) : 
+K)).log).det|
+参数：u : Fin (rank K) -> (𝓞 K)ˣ；e₁ : {w // w != w₁} ≃ Fin (rank K)；e₂ : {w // w !=
+ w₂} ≃ Fin (rank K)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Matrix.det_permute`：det_permute (σ : Perm n) (M : Matrix n n R) : (M.sub
+matrix σ id).det = Perm.sign σ * M.det
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Int.cast_one`：cast_one : ((1 : Int) : R) = 1
+· 使用定理 `Equiv.Perm.sign_abs`：sign_abs (f : Perm α) : |(Equiv.Perm.sign f : Int)|
+ = 1
+· 使用引理 `Int.cast_abs`：cast_abs : (↑|a| : R) = |(a : R)|
+· 使用引理 `abs_mul`：abs_mul (a b : α) : |a * b| = |a| * |b|
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Matrix.submatrix_succAbove_det_eq_negOnePow_submatrix_succAbove_det'`：su
+bmatrix_succAbove_det_eq_negOnePow_submatrix_succAbove_det' {n : Nat} (M : Matri
+x (Fin n) (Fin (n + 1)) R) (hv : forall i, ∑ j, M i j = 0)…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Real.log_prod`：log_prod {α : Type*} {s : Finset α} {f : α -> Real} (hf :
+ forall x in s, f x != 0) : log (∏ i in s, f i) = ∑ i in s, log (f i)
+· 使用引理 `pow_ne_zero`：pow_ne_zero (n : Nat) (h : a != 0) : a ^ n != 0
+· 使用定理 `isReduced_of_noZeroDivisors`：∀ {M₀ : Type u_1} [inst : MonoidWithZero M₀
+] [NoZeroDivisors M₀], IsReduced M₀
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `map_ne_zero`：map_ne_zero : f a != 0 ↔ a != 0
+· 使用定理 `NumberField.InfinitePlace.instMonoidWithZeroHomClassReal`：∀ {K : Type u_
+1} [inst : Field K], MonoidWithZeroHomClass (NumberField.InfinitePlace K) K ℝ
+· 使用定理 `NumberField.Units.coe_ne_zero`：coe_ne_zero (x : (𝓞 K)ˣ) : (x : K) != 0
+· 使用定理 `Equiv.prod_comp`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst : 
+Fintype ι] [inst_1 : Fintype κ] [inst_2 : CommMonoid M]   (e : ι ≃ κ) (g : κ → M
+), ∏ …
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+（共 45 条，此处仅展示前 30 条）
+
+--- 原说明 ---
+Let `u : Fin (rank K) → (𝓞 K)ˣ` be a family of units and let `w₁` and `w₂` be tw
+o infinite
+places. Then, the two square matrices with entries `(mult w * log w (u i))_i` wh
+ere `w ≠ w_j` for
+`j = 1, 2` have the same determinant in absolute value.
+-/
+theorem abs_det_eq_abs_det (u : Fin (rank K) → (𝓞 K)ˣ)
+    {w₁ w₂ : InfinitePlace K} (e₁ : {w // w ≠ w₁} ≃ Fin (rank K))
+    (e₂ : {w // w ≠ w₂} ≃ Fin (rank K)) :
+    |(of fun i w : {w // w ≠ w₁} ↦ (mult w.val : ℝ) * (w.val (u (e₁ i) : K)).log).det| =
+    |(of fun i w : {w // w ≠ w₂} ↦ (mult w.val : ℝ) * (w.val (u (e₂ i) : K)).log).det| := by
   -- We construct an equiv `Fin (rank K + 1) ≃ InfinitePlace K` from `e₂.symm`
   let f : Fin (rank K + 1) ≃ InfinitePlace K :=
     (finSuccEquiv _).trans ((Equiv.optionSubtype _).symm e₁.symm).val
   -- And `g` corresponds to the restriction of `f⁻¹` to `{w // w ≠ w₂}`
-  let g : {w // w != w₂} ≃ Fin (rank K) :=
-    (Equiv.subtypeEquiv f.symm (fun _ => by simp [f])).trans
+  let g : {w // w ≠ w₂} ≃ Fin (rank K) :=
+    (Equiv.subtypeEquiv f.symm (fun _ ↦ by simp [f])).trans
       (finSuccAboveEquiv (f.symm w₂)).symm
-have h_col := congr_arg abs det_permute (g.trans e₂.symm)
-    (of fun i w : {w // w != w₂} => (mult w.val : Real) * (w.val (u (e₂ i) : K)).log)
-  rw [abs_mul]; rw [← Int.cast_abs]; rw [Equiv.Perm.sign_abs]; rw [Int.cast_one]; rw [one_mul] at h_col
+  have h_col := congr_arg abs <| det_permute (g.trans e₂.symm)
+    (of fun i w : {w // w ≠ w₂} ↦ (mult w.val : ℝ) * (w.val (u (e₂ i) : K)).log)
+  rw [abs_mul, ← Int.cast_abs, Equiv.Perm.sign_abs, Int.cast_one, one_mul] at h_col
   rw [← h_col]
-have h := congr_arg abs submatrix_succAbove_det_eq_negOnePow_submatrix_succAbove_det'
-    (of fun i w => (mult (f w) : Real) * ((f w) (u i)).log) ?_ 0 (f.symm w₂)
+  have h := congr_arg abs <| submatrix_succAbove_det_eq_negOnePow_submatrix_succAbove_det'
+    (of fun i w ↦ (mult (f w) : ℝ) * ((f w) (u i)).log) ?_ 0 (f.symm w₂)
   · rw [← det_reindex_self e₁, ← det_reindex_self g]
     · rw [Units.smul_def, abs_zsmul, Int.abs_negOnePow, one_smul] at h
       convert! h
@@ -550,305 +675,403 @@ have h := congr_arg abs submatrix_succAbove_det_eq_negOnePow_submatrix_succAbove
           Equiv.apply_symm_apply, id_eq, of_apply]; rfl
   · intro _
     simp_rw [of_apply, ← Real.log_pow]
-    rw [← Real.log_prod]; rw [Equiv.prod_comp f (fun w => (w (u _) ^ (mult w)))]; rw [prod_eq_abs_norm]; rw [Units.norm]; rw [Rat.cast_one]; rw [Real.log_one]
-exact fun _ _ => pow_ne_zero _ (map_ne_zero _).mpr (coe_ne_zero _)
+    rw [← Real.log_prod, Equiv.prod_comp f (fun w ↦ (w (u _) ^ (mult w))), prod_eq_abs_norm,
+      Units.norm, Rat.cast_one, Real.log_one]
+    exact fun _ _ ↦ pow_ne_zero _ <| (map_ne_zero _).mpr (coe_ne_zero _)
 
 open scoped Classical in
 /--
-theorem `regOfFamily_eq_det` / 定理 `regOfFamily_eq_det`
-
-English:
-theorem regOfFamily_eq_det
-  statement: (u : Fin (rank K) -> (𝓞 K)ˣ) (w' : InfinitePlace K)
-  proof: by
-  simp [regOfFamily_eq_det', abs_det_eq_abs_det u e (equivFinRank K).symm, logEmbedding]
-
-中文:
-定理 regOfFamily_eq_det
-  结论: (u : 有限集 (rank K) -> (𝓞 K)ˣ) (w' : InfinitePlace K)
-  证明: by
-  simp [regOfFamily_eq_det', abs_det_eq_abs_det u e (equivFinRank K).symm, logEmbedding]
-
-Depends on / 依赖: abs_det_eq_abs_det, equivFinRank, logEmbedding, regOfFamily_eq_det
+For any infinite place `w'`, the regulator of the family `u` is equal to the absolute value of
+the determinant of the matrix with entries `(mult w * log w (u i))_i` for `w ≠ w'`.
 -/
-theorem regOfFamily_eq_det (u : Fin (rank K) -> (𝓞 K)ˣ) (w' : InfinitePlace K)
-    (e : {w // w != w'} ≃ Fin (rank K)) :
+/-
+**NumberField.Units.regOfFamily_eq_det** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.Un
+its`。
+形式化陈述：regOfFamily_eq_det (u : Fin (rank K) -> (𝓞 K)ˣ) (w' : InfinitePlace K) (e 
+: {w // w != w'} ≃ Fin (rank K)) : regOfFamily u = |(of fun i w : {w // w != w'}
+ => (mult w.val : Real) * Real.log (w.val (u (e i) : K))).det|
+参数：u : Fin (rank K) -> (𝓞 K)ˣ；w' : InfinitePlace K；e : {w // w != w'} ≃ Fin (ran
+k K)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.Units.regOfFamily_eq_det'`：regOfFamily_eq_det' (u : Fin (ran
+k K) -> (𝓞 K)ˣ) : regOfFamily u = |(of fun i => logEmbedding K (Additive.ofMul (
+u ((equivFinRank K).symm i)…
+· 使用定理 `NumberField.Units.abs_det_eq_abs_det`：abs_det_eq_abs_det (u : Fin (rank 
+K) -> (𝓞 K)ˣ) {w₁ w₂ : InfinitePlace K} (e₁ : {w // w != w₁} ≃ Fin (rank K)) (e₂
+ : {w // w != w₂} ≃ Fin (r…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+
+--- 原说明 ---
+For any infinite place `w'`, the regulator of the family `u` is equal to the abs
+olute value of
+the determinant of the matrix with entries `(mult w * log w (u i))_i` for `w ≠ w
+'`.
+-/
+theorem regOfFamily_eq_det (u : Fin (rank K) → (𝓞 K)ˣ) (w' : InfinitePlace K)
+    (e : {w // w ≠ w'} ≃ Fin (rank K)) :
     regOfFamily u =
-      |(of fun i w : {w // w != w'} => (mult w.val : Real) * Real.log (w.val (u (e i) : K))).det| := by
+      |(of fun i w : {w // w ≠ w'} ↦ (mult w.val : ℝ) * Real.log (w.val (u (e i) : K))).det| := by
   simp [regOfFamily_eq_det', abs_det_eq_abs_det u e (equivFinRank K).symm, logEmbedding]
 
 open scoped Classical in
 /--
-theorem `finrank_mul_regOfFamily_eq_det` / 定理 `finrank_mul_regOfFamily_eq_det`
-
-English:
-theorem finrank_mul_regOfFamily_eq_det
-  statement: (u : Fin (rank K) -> (𝓞 K)ˣ) (w' : InfinitePlace K)
-  proof: by
-  let f : Fin (rank K + 1) ≃ InfinitePlace K :=
-    (finSuccEquiv _).trans ((Equiv.optionSubtype _).symm e.symm).val
-  let g : {w // w != w'} ≃ Fin (rank K) :=
-    (Equiv.subtypeEquiv f.symm (fun _ => by simp [f])).trans (finSuccAboveEquiv (f.symm w')).symm
-  rw [← det_reindex_self f.symm]; rw [det_eq_sum_row_mul_submatrix_succAbove_succAbove_det _ (f.symm w')
-    (f.symm w')]; rw [abs_mul]; rw [abs_mul]; rw [abs_neg_one_pow]; rw [one_mul]
-  · simp_rw [reindex_apply, submatrix_submatrix, ← f.symm.sum_comp, f.symm_symm, submatrix_apply,
-      Function.comp_def, Equiv.apply_symm_apply, of_apply, dif_pos, ← Nat.cast_sum, sum_mult_eq,
-      Nat.abs_cast]
-    rw [regOfFamily_eq_det u w' e]; rw [← Matrix.det_reindex_self g]
-    congr with i j
-    rw [reindex_apply]; rw [submatrix_apply]; rw [submatrix_apply]; rw [of_apply]; rw [of_apply]; rw [dif_neg]
-    rfl
-  · simp_rw [Equiv.forall_congr_left f, ← f.symm.sum_comp, reindex_apply, submatrix_apply,
-      of_apply, f.symm_symm, f.apply_symm_apply, Finset.sum_dite_irrel, ne_eq,
-      EmbeddingLike.apply_eq_iff_eq]
-    intro _ h
-    rw [dif_neg h]; rw [sum_mult_mul_log]
-
-中文:
-定理 finrank_mul_regOfFamily_eq_det
-  结论: (u : 有限集 (rank K) -> (𝓞 K)ˣ) (w' : InfinitePlace K)
-  证明: by
-  let f : Fin (rank K + 1) ≃ InfinitePlace K :=
-    (finSuccEquiv _).trans ((Equiv.optionSubtype _).symm e.symm).val
-  let g : {w // w != w'} ≃ Fin (rank K) :=
-    (Equiv.subtypeEquiv f.symm (fun _ => by simp [f])).trans (finSuccAboveEquiv (f.symm w')).symm
-  rw [← det_reindex_self f.symm]; rw [det_eq_sum_row_mul_submatrix_succAbove_succAbove_det _ (f.symm w')
-    (f.symm w')]; rw [abs_mul]; rw [abs_mul]; rw [abs_neg_one_pow]; rw [one_mul]
-  · simp_rw [reindex_apply, submatrix_submatrix, ← f.symm.sum_comp, f.symm_symm, submatrix_apply,
-      Function.comp_def, Equiv.apply_symm_apply, of_apply, dif_pos, ← Nat.cast_sum, sum_mult_eq,
-      Nat.abs_cast]
-    rw [regOfFamily_eq_det u w' e]; rw [← Matrix.det_reindex_self g]
-    congr with i j
-    rw [reindex_apply]; rw [submatrix_apply]; rw [submatrix_apply]; rw [of_apply]; rw [of_apply]; rw [dif_neg]
-    rfl
-  · simp_rw [Equiv.forall_congr_left f, ← f.symm.sum_comp, reindex_apply, submatrix_apply,
-      of_apply, f.symm_symm, f.apply_symm_apply, Finset.sum_dite_irrel, ne_eq,
-      EmbeddingLike.apply_eq_iff_eq]
-    intro _ h
-    rw [dif_neg h]; rw [sum_mult_mul_log]
-
-Depends on / 依赖: Equiv.optionSubtype, Equiv.subtypeEquiv, InfinitePlace, abs_mul, abs_neg_one_pow, det_eq_sum_row_mul_submatrix_succAbove_succAbove_det, det_reindex_self, e.symm, f.sym, f.symm, f.symm.sum_comp, finSuccAboveEquiv, finSuccEquiv, one_mul, optionSubtype, reindex_apply, simp_rw, submatrix_submatrix, subtypeEquiv, sum_comp
+The degree of `K` times the regulator of the family `u` is equal to the absolute value of the
+determinant of the matrix whose columns are
+`(mult w * log w (fundSystem K i))_i, w` and the column `(mult w)_w`.
 -/
-theorem finrank_mul_regOfFamily_eq_det (u : Fin (rank K) -> (𝓞 K)ˣ) (w' : InfinitePlace K)
-    (e : {w // w != w'} ≃ Fin (rank K)) :
-    finrank Rat K * regOfFamily u =
-      |(of (fun i w : InfinitePlace K =>
-        if h : i = w' then (w.mult : Real) else w.mult * (w (u (e ⟨i, h⟩))).log)).det| := by
+/-
+**NumberField.Units.finrank_mul_regOfFamily_eq_det** 是 Mathlib 中的一个定理，位于命名空间 `Nu
+mberField.Units`。
+形式化陈述：finrank_mul_regOfFamily_eq_det (u : Fin (rank K) -> (𝓞 K)ˣ) (w' : Infinite
+Place K) (e : {w // w != w'} ≃ Fin (rank K)) : finrank Rat K * regOfFamily u = |
+(of (fun i w : InfinitePlace K => if h : i = w' then (w.mult : Real) else w.mult
+ * (w (u (e ⟨i, h⟩))).log)).det|
+参数：u : Fin (rank K) -> (𝓞 K)ˣ；w' : InfinitePlace K；e : {w // w != w'} ≃ Fin (ran
+k K)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Matrix.det_reindex_self`：det_reindex_self (e : m ≃ n) (A : Matrix m m R)
+ : det (reindex e e A) = det A
+· 使用定理 `Matrix.det_eq_sum_row_mul_submatrix_succAbove_succAbove_det`：det_eq_sum_
+row_mul_submatrix_succAbove_succAbove_det {n : Nat} (M : Matrix (Fin (n + 1)) (F
+in (n + 1)) R) (i₀ j₀ : Fin (n + 1)) (hv : forall…
+· 使用定理 `Equiv.forall_congr_left`：∀ {α : Sort u} {β : Sort v} {p : α → Prop} (e :
+ α ≃ β), (∀ (a : α), p a) ↔ ∀ (b : β), p (e.symm b)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.sum_comp`：∀ {ι : Type u_1} {κ : Type u_2} {M : Type u_3} [inst : F
+intype ι] [inst_1 : Fintype κ] [inst_2 : AddCommMonoid M]   (e : ι ≃ κ) (g : κ →
+ M),…
+· 使用定理 `Eq.mpr_not`：∀ {p q : Prop}, p = q → ¬q → ¬p
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `Finset.sum_dite_irrel`：∀ {ι : Type u_1} {M : Type u_3} [inst : AddCommMo
+noid M] (p : Prop) [inst_1 : Decidable p] (s : Finset ι)   (f : p → ι → M) (g : 
+¬p → ι → M)…
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `NumberField.Units.sum_mult_mul_log`：sum_mult_mul_log [NumberField K] (x 
+: (𝓞 K)ˣ) : ∑ w : InfinitePlace K, w.mult * Real.log (w x) = 0
+· 使用引理 `abs_mul`：abs_mul (a b : α) : |a * b| = |a| * |b|
+· 使用引理 `abs_neg_one_pow`：abs_neg_one_pow (n : Nat) : |(-1 : α) ^ n| = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Matrix.det.congr_simp`：∀ {n : Type u_2} {inst : DecidableEq n} [inst_1 :
+ DecidableEq n] [inst_2 : Fintype n] {R : Type v} [inst_3 : CommRing R]   (M M_1
+ : Matrix n…
+· 使用定理 `Matrix.submatrix_submatrix`：submatrix_submatrix {l₂ o₂ : Type*} (A : Mat
+rix m n α) (r₁ : l -> m) (c₁ : o -> n) (r₂ : l₂ -> l) (c₂ : o₂ -> o) : (A.submat
+rix r₁ c₁).subma…
+（共 43 条，此处仅展示前 30 条）
+
+--- 原说明 ---
+The degree of `K` times the regulator of the family `u` is equal to the absolute
+ value of the
+determinant of the matrix whose columns are
+`(mult w * log w (fundSystem K i))_i, w` and the column `(mult w)_w`.
+-/
+theorem finrank_mul_regOfFamily_eq_det (u : Fin (rank K) → (𝓞 K)ˣ) (w' : InfinitePlace K)
+    (e : {w // w ≠ w'} ≃ Fin (rank K)) :
+    finrank ℚ K * regOfFamily u =
+      |(of (fun i w : InfinitePlace K ↦
+        if h : i = w' then (w.mult : ℝ) else w.mult * (w (u (e ⟨i, h⟩))).log)).det| := by
   let f : Fin (rank K + 1) ≃ InfinitePlace K :=
     (finSuccEquiv _).trans ((Equiv.optionSubtype _).symm e.symm).val
-  let g : {w // w != w'} ≃ Fin (rank K) :=
-    (Equiv.subtypeEquiv f.symm (fun _ => by simp [f])).trans (finSuccAboveEquiv (f.symm w')).symm
-  rw [← det_reindex_self f.symm]; rw [det_eq_sum_row_mul_submatrix_succAbove_succAbove_det _ (f.symm w')
-    (f.symm w')]; rw [abs_mul]; rw [abs_mul]; rw [abs_neg_one_pow]; rw [one_mul]
+  let g : {w // w ≠ w'} ≃ Fin (rank K) :=
+    (Equiv.subtypeEquiv f.symm (fun _ ↦ by simp [f])).trans (finSuccAboveEquiv (f.symm w')).symm
+  rw [← det_reindex_self f.symm, det_eq_sum_row_mul_submatrix_succAbove_succAbove_det _ (f.symm w')
+    (f.symm w'), abs_mul, abs_mul, abs_neg_one_pow, one_mul]
   · simp_rw [reindex_apply, submatrix_submatrix, ← f.symm.sum_comp, f.symm_symm, submatrix_apply,
       Function.comp_def, Equiv.apply_symm_apply, of_apply, dif_pos, ← Nat.cast_sum, sum_mult_eq,
       Nat.abs_cast]
-    rw [regOfFamily_eq_det u w' e]; rw [← Matrix.det_reindex_self g]
+    rw [regOfFamily_eq_det u w' e, ← Matrix.det_reindex_self g]
     congr with i j
-    rw [reindex_apply]; rw [submatrix_apply]; rw [submatrix_apply]; rw [of_apply]; rw [of_apply]; rw [dif_neg]
+    rw [reindex_apply, submatrix_apply, submatrix_apply, of_apply, of_apply, dif_neg]
     rfl
   · simp_rw [Equiv.forall_congr_left f, ← f.symm.sum_comp, reindex_apply, submatrix_apply,
       of_apply, f.symm_symm, f.apply_symm_apply, Finset.sum_dite_irrel, ne_eq,
       EmbeddingLike.apply_eq_iff_eq]
     intro _ h
-    rw [dif_neg h]; rw [sum_mult_mul_log]
+    rw [dif_neg h, sum_mult_mul_log]
 
 end regOfFamily
 
 section regulator
 
 open scoped Classical in
-/--
-Definition of `regulator` / `regulator` 的定义
+/-- The regulator of a number field `K`. -/
+/-
+**NumberField.Units.regulator** 是 Mathlib 中的一个定义，位于命名空间 `NumberField.Units`。
+形式化陈述：regulator : Real
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition regulator
-  signature: : Real
-  body: ZLattice.covolume (unitLattice K)
-
-中文:
-定义 regulator
-  签名: : 实数
-  定义体: ZLattice.covolume (unitLattice K)
-
-Depends on / 依赖: ZLattice, ZLattice.covolume, covolume, unitLattice
+--- 原说明 ---
+The regulator of a number field `K`.
 -/
-def regulator : Real := ZLattice.covolume (unitLattice K)
-
-/--
-theorem `isMaxRank_fundSystem` / 定理 `isMaxRank_fundSystem`
-
-English:
-theorem isMaxRank_fundSystem
-  proof: by
-  classical
-  convert! ((basisUnitLattice K).ofZLatticeBasis Real (unitLattice K)).linearIndependent
-  rw [logEmbedding_fundSystem]; rw [Basis.ofZLatticeBasis_apply]
-
-中文:
-定理 isMaxRank_fundSystem
-  证明: by
-  classical
-  convert! ((basisUnitLattice K).ofZLatticeBasis Real (unitLattice K)).linearIndependent
-  rw [logEmbedding_fundSystem]; rw [Basis.ofZLatticeBasis_apply]
-
-Depends on / 依赖: Basis.ofZLatticeBasis_apply, basisUnitLattice, classical, convert, linearIndependent, logEmbedding_fundSystem, ofZLatticeBasis, ofZLatticeBasis_apply, unitLattice
+def regulator : ℝ := ZLattice.covolume (unitLattice K)
+/-
+**NumberField.Units.isMaxRank_fundSystem** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.
+Units`。
+形式化陈述：isMaxRank_fundSystem : IsMaxRank (fundSystem K)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `instProperSpaceReal`：ProperSpace ℝ
+· 使用定理 `NumberField.Units.instDiscrete_unitLattice`：∀ (K : Type u_1) [inst : Fie
+ld K] [inst_1 : NumberField K], DiscreteTopology ↥(NumberField.Units.unitLattice
+ K)
+· 使用定理 `NumberField.Units.instZLattice_unitLattice`：∀ (K : Type u_1) [inst : Fie
+ld K] [inst_1 : NumberField K], IsZLattice ℝ (NumberField.Units.unitLattice K)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.Units.logEmbedding_fundSystem`：∀ (K : Type u_1) [inst : Fiel
+d K] [inst_1 : NumberField K] (i : Fin (NumberField.Units.rank K)),   (NumberFie
+ld.Units.logEmbedding K) (Addit…
+· 使用定理 `Module.Basis.ofZLatticeBasis_apply`：ofZLatticeBasis_apply (i : ι) : b.of
+ZLatticeBasis K L i = b i
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `Module.Basis.linearIndependent`：∀ {ι : Type u_1} {R : Type u_3} {M : Typ
+e u_5} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module 
+R M] (b : Module.Bas…
 -/
 theorem isMaxRank_fundSystem :
     IsMaxRank (fundSystem K) := by
   classical
-  convert! ((basisUnitLattice K).ofZLatticeBasis Real (unitLattice K)).linearIndependent
-  rw [logEmbedding_fundSystem]; rw [Basis.ofZLatticeBasis_apply]
+  convert! ((basisUnitLattice K).ofZLatticeBasis ℝ (unitLattice K)).linearIndependent
+  rw [logEmbedding_fundSystem, Basis.ofZLatticeBasis_apply]
 
 open scoped Classical in
-/--
-theorem `basisOfIsMaxRank_fundSystem` / 定理 `basisOfIsMaxRank_fundSystem`
-
-English:
-theorem basisOfIsMaxRank_fundSystem
-  proof: by
-  ext
-  rw [Basis.ofZLatticeBasis_apply]; rw [basisOfIsMaxRank_apply]; rw [logEmbedding_fundSystem]
-
-中文:
-定理 basisOfIsMaxRank_fundSystem
-  证明: by
-  ext
-  rw [Basis.ofZLatticeBasis_apply]; rw [basisOfIsMaxRank_apply]; rw [logEmbedding_fundSystem]
-
-Depends on / 依赖: Basis.ofZLatticeBasis_apply, basisOfIsMaxRank_apply, logEmbedding_fundSystem, ofZLatticeBasis_apply
+/-
+**NumberField.Units.basisOfIsMaxRank_fundSystem** 是 Mathlib 中的一个定理，位于命名空间 `Numbe
+rField.Units`。
+形式化陈述：basisOfIsMaxRank_fundSystem : basisOfIsMaxRank (isMaxRank_fundSystem K) = 
+(basisUnitLattice K).ofZLatticeBasis Real
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Basis.eq_of_apply_eq`：eq_of_apply_eq {b₁ b₂ : Basis ι R M} : (for
+all i, b₁ i = b₂ i) -> b₁ = b₂
+· 使用定理 `NumberField.Units.isMaxRank_fundSystem`：isMaxRank_fundSystem : IsMaxRank
+ (fundSystem K)
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `instProperSpaceReal`：ProperSpace ℝ
+· 使用定理 `NumberField.Units.instDiscrete_unitLattice`：∀ (K : Type u_1) [inst : Fie
+ld K] [inst_1 : NumberField K], DiscreteTopology ↥(NumberField.Units.unitLattice
+ K)
+· 使用定理 `NumberField.Units.instZLattice_unitLattice`：∀ (K : Type u_1) [inst : Fie
+ld K] [inst_1 : NumberField K], IsZLattice ℝ (NumberField.Units.unitLattice K)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Module.Basis.ofZLatticeBasis_apply`：ofZLatticeBasis_apply (i : ι) : b.of
+ZLatticeBasis K L i = b i
+· 使用定理 `NumberField.Units.basisOfIsMaxRank_apply`：basisOfIsMaxRank_apply {u : Fi
+n (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u) (i : Fin (rank K)) : (basisOfIsMaxRank 
+hu) i = logEmbedding K (Additi…
+· 使用定理 `NumberField.Units.logEmbedding_fundSystem`：∀ (K : Type u_1) [inst : Fiel
+d K] [inst_1 : NumberField K] (i : Fin (NumberField.Units.rank K)),   (NumberFie
+ld.Units.logEmbedding K) (Addit…
 -/
 theorem basisOfIsMaxRank_fundSystem :
-    basisOfIsMaxRank (isMaxRank_fundSystem K) = (basisUnitLattice K).ofZLatticeBasis Real := by
+    basisOfIsMaxRank (isMaxRank_fundSystem K) = (basisUnitLattice K).ofZLatticeBasis ℝ := by
   ext
-  rw [Basis.ofZLatticeBasis_apply]; rw [basisOfIsMaxRank_apply]; rw [logEmbedding_fundSystem]
-
-/--
-theorem `regulator_eq_regOfFamily_fundSystem` / 定理 `regulator_eq_regOfFamily_fundSystem`
-
-English:
-theorem regulator_eq_regOfFamily_fundSystem
-  proof: by
-  classical
-  rw [regOfFamily_of_isMaxRank (isMaxRank_fundSystem K)]; rw [regulator]; rw [← (basisUnitLattice K).ofZLatticeBasis_span Real]; rw [basisOfIsMaxRank_fundSystem]
-
-中文:
-定理 regulator_eq_regOfFamily_fundSystem
-  证明: by
-  classical
-  rw [regOfFamily_of_isMaxRank (isMaxRank_fundSystem K)]; rw [regulator]; rw [← (basisUnitLattice K).ofZLatticeBasis_span Real]; rw [basisOfIsMaxRank_fundSystem]
-
-Depends on / 依赖: basisOfIsMaxRank_fundSystem, basisUnitLattice, classical, isMaxRank_fundSystem, ofZLatticeBasis_span, regOfFamily_of_isMaxRank, regulator
+  rw [Basis.ofZLatticeBasis_apply, basisOfIsMaxRank_apply, logEmbedding_fundSystem]
+/-
+**NumberField.Units.regulator_eq_regOfFamily_fundSystem** 是 Mathlib 中的一个定理，位于命名空
+间 `NumberField.Units`。
+形式化陈述：regulator_eq_regOfFamily_fundSystem : regulator K = regOfFamily (fundSyste
+m K)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.Units.isMaxRank_fundSystem`：isMaxRank_fundSystem : IsMaxRank
+ (fundSystem K)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.Units.regOfFamily_of_isMaxRank`：regOfFamily_of_isMaxRank {u 
+: Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u) : regOfFamily u = ZLattice.covolume
+ (span Int (Set.range (basisOfIs…
+· 使用定理 `NumberField.Units.regulator.eq_1`：∀ (K : Type u_1) [inst : Field K] [ins
+t_1 : NumberField K],   NumberField.Units.regulator K = ZLattice.covolume (Numbe
+rField.Units.unitLatti…
+· 使用定理 `instHasSolidNormReal`：HasSolidNorm ℝ
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `instProperSpaceReal`：ProperSpace ℝ
+· 使用定理 `NumberField.Units.instDiscrete_unitLattice`：∀ (K : Type u_1) [inst : Fie
+ld K] [inst_1 : NumberField K], DiscreteTopology ↥(NumberField.Units.unitLattice
+ K)
+· 使用定理 `NumberField.Units.instZLattice_unitLattice`：∀ (K : Type u_1) [inst : Fie
+ld K] [inst_1 : NumberField K], IsZLattice ℝ (NumberField.Units.unitLattice K)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Module.Basis.ofZLatticeBasis_span`：ofZLatticeBasis_span : span Int (Set.
+range (b.ofZLatticeBasis K)) = L
+· 使用定理 `NumberField.Units.basisOfIsMaxRank_fundSystem`：basisOfIsMaxRank_fundSyst
+em : basisOfIsMaxRank (isMaxRank_fundSystem K) = (basisUnitLattice K).ofZLattice
+Basis Real
 -/
 theorem regulator_eq_regOfFamily_fundSystem :
     regulator K = regOfFamily (fundSystem K) := by
   classical
-  rw [regOfFamily_of_isMaxRank (isMaxRank_fundSystem K)]; rw [regulator]; rw [← (basisUnitLattice K).ofZLatticeBasis_span Real]; rw [basisOfIsMaxRank_fundSystem]
-
-/--
-theorem `regulator_pos` / 定理 `regulator_pos`
-
-English:
-theorem regulator_pos
-  statement: 0 < regulator K
-  proof: regulator_eq_regOfFamily_fundSystem K ▸ regOfFamily_pos (isMaxRank_fundSystem K)
-
-中文:
-定理 regulator_pos
-  结论: 0 < regulator K
-  证明: regulator_eq_regOfFamily_fundSystem K ▸ regOfFamily_pos (isMaxRank_fundSystem K)
-
-Depends on / 依赖: isMaxRank_fundSystem, regOfFamily_pos, regulator_eq_regOfFamily_fundSystem
+  rw [regOfFamily_of_isMaxRank (isMaxRank_fundSystem K), regulator,
+    ← (basisUnitLattice K).ofZLatticeBasis_span ℝ, basisOfIsMaxRank_fundSystem]
+/-
+**NumberField.Units.regulator_pos** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.Units`。
+形式化陈述：regulator_pos : 0 < regulator K
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.Units.regOfFamily_pos`：regOfFamily_pos {u : Fin (rank K) -> 
+(𝓞 K)ˣ} (hu : IsMaxRank u) : 0 < regOfFamily u
+· 使用定理 `NumberField.Units.isMaxRank_fundSystem`：isMaxRank_fundSystem : IsMaxRank
+ (fundSystem K)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NumberField.Units.regulator_eq_regOfFamily_fundSystem`：regulator_eq_regO
+fFamily_fundSystem : regulator K = regOfFamily (fundSystem K)
 -/
 theorem regulator_pos : 0 < regulator K :=
   regulator_eq_regOfFamily_fundSystem K ▸ regOfFamily_pos (isMaxRank_fundSystem K)
-
-/--
-theorem `regulator_ne_zero` / 定理 `regulator_ne_zero`
-
-English:
-theorem regulator_ne_zero
-  statement: regulator K != 0
-  proof: (regulator_pos K).ne'
-
-中文:
-定理 regulator_ne_zero
-  结论: regulator K != 0
-  证明: (regulator_pos K).ne'
-
-Depends on / 依赖: regulator_pos
+/-
+**NumberField.Units.regulator_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.Uni
+ts`。
+形式化陈述：regulator_ne_zero : regulator K != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `NumberField.Units.regulator_pos`：regulator_pos : 0 < regulator K
 -/
-theorem regulator_ne_zero : regulator K != 0 :=
+theorem regulator_ne_zero : regulator K ≠ 0 :=
   (regulator_pos K).ne'
 
 open scoped Classical in
-/--
-theorem `regulator_eq_det'` / 定理 `regulator_eq_det'`
-
-English:
-theorem regulator_eq_det'
-  proof: by
-  rw [regulator_eq_regOfFamily_fundSystem]; rw [regOfFamily_eq_det']
-
-中文:
-定理 regulator_eq_det'
-  证明: by
-  rw [regulator_eq_regOfFamily_fundSystem]; rw [regOfFamily_eq_det']
-
-Depends on / 依赖: regOfFamily_eq_det, regulator_eq_regOfFamily_fundSystem
+/-
+**NumberField.Units.regulator_eq_det'** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.Uni
+ts`。
+形式化陈述：regulator_eq_det' : regulator K = |(Matrix.of fun i => logEmbedding K (Add
+itive.ofMul (fundSystem K ((equivFinRank K).symm i)))).det|
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.Units.regulator_eq_regOfFamily_fundSystem`：regulator_eq_regO
+fFamily_fundSystem : regulator K = regOfFamily (fundSystem K)
+· 使用定理 `NumberField.Units.regOfFamily_eq_det'`：regOfFamily_eq_det' (u : Fin (ran
+k K) -> (𝓞 K)ˣ) : regOfFamily u = |(of fun i => logEmbedding K (Additive.ofMul (
+u ((equivFinRank K).symm i)…
 -/
 theorem regulator_eq_det' :
-    regulator K = |(Matrix.of fun i =>
+    regulator K = |(Matrix.of fun i ↦
       logEmbedding K (Additive.ofMul (fundSystem K ((equivFinRank K).symm i)))).det| := by
-  rw [regulator_eq_regOfFamily_fundSystem]; rw [regOfFamily_eq_det']
+  rw [regulator_eq_regOfFamily_fundSystem, regOfFamily_eq_det']
 
 open scoped Classical in
 /--
-theorem `regulator_eq_det` / 定理 `regulator_eq_det`
-
-English:
-theorem regulator_eq_det
-  given: (w' : InfinitePlace K) (e : {w // w != w'} ≃ Fin (rank K))
-  proof: by
-  rw [regulator_eq_regOfFamily_fundSystem]; rw [regOfFamily_eq_det]
-
-中文:
-定理 regulator_eq_det
-  条件: (w' : InfinitePlace K) (e : {w // w != w'} ≃ 有限集 (rank K))
-  证明: by
-  rw [regulator_eq_regOfFamily_fundSystem]; rw [regOfFamily_eq_det]
-
-Depends on / 依赖: regOfFamily_eq_det, regulator_eq_regOfFamily_fundSystem
+For any infinite place `w'`, the regulator is equal to the absolute value of the determinant
+of the matrix with entries `(mult w * log w (fundSystem K i))_i` for `w ≠ w'`.
 -/
-theorem regulator_eq_det (w' : InfinitePlace K) (e : {w // w != w'} ≃ Fin (rank K)) :
+/-
+**NumberField.Units.regulator_eq_det** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.Unit
+s`。
+形式化陈述：regulator_eq_det (w' : InfinitePlace K) (e : {w // w != w'} ≃ Fin (rank K)
+) : regulator K = |(Matrix.of fun i w : {w // w != w'} => (mult w.val : Real) * 
+Real.log (w.val (fundSystem K (e i) : K))).det|
+参数：w' : InfinitePlace K；e : {w // w != w'} ≃ Fin (rank K)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.Units.regulator_eq_regOfFamily_fundSystem`：regulator_eq_regO
+fFamily_fundSystem : regulator K = regOfFamily (fundSystem K)
+· 使用定理 `NumberField.Units.regOfFamily_eq_det`：regOfFamily_eq_det (u : Fin (rank 
+K) -> (𝓞 K)ˣ) (w' : InfinitePlace K) (e : {w // w != w'} ≃ Fin (rank K)) : regOf
+Family u = |(of fun i w : …
+
+--- 原说明 ---
+For any infinite place `w'`, the regulator is equal to the absolute value of the
+ determinant
+of the matrix with entries `(mult w * log w (fundSystem K i))_i` for `w ≠ w'`.
+-/
+theorem regulator_eq_det (w' : InfinitePlace K) (e : {w // w ≠ w'} ≃ Fin (rank K)) :
     regulator K =
-      |(Matrix.of fun i w : {w // w != w'} => (mult w.val : Real) *
+      |(Matrix.of fun i w : {w // w ≠ w'} ↦ (mult w.val : ℝ) *
         Real.log (w.val (fundSystem K (e i) : K))).det| := by
-  rw [regulator_eq_regOfFamily_fundSystem]; rw [regOfFamily_eq_det]
+  rw [regulator_eq_regOfFamily_fundSystem, regOfFamily_eq_det]
 
 open scoped Classical in
 /--
-theorem `finrank_mul_regulator_eq_det` / 定理 `finrank_mul_regulator_eq_det`
-
-English:
-theorem finrank_mul_regulator_eq_det
-  given: (w' : InfinitePlace K) (e : {w // w != w'} ≃ Fin (rank K))
-  proof: by
-  rw [regulator_eq_regOfFamily_fundSystem]; rw [finrank_mul_regOfFamily_eq_det]
-
-中文:
-定理 finrank_mul_regulator_eq_det
-  条件: (w' : InfinitePlace K) (e : {w // w != w'} ≃ 有限集 (rank K))
-  证明: by
-  rw [regulator_eq_regOfFamily_fundSystem]; rw [finrank_mul_regOfFamily_eq_det]
-
-Depends on / 依赖: finrank_mul_regOfFamily_eq_det, regulator_eq_regOfFamily_fundSystem
+The degree of `K` times the regulator of `K` is equal to the absolute value of the determinant of
+the matrix whose columns are `(mult w * log w (fundSystem K i))_i, w` and the column `(mult w)_w`.
 -/
-theorem finrank_mul_regulator_eq_det (w' : InfinitePlace K) (e : {w // w != w'} ≃ Fin (rank K)) :
-    finrank Rat K * regulator K =
-      |(Matrix.of (fun i w : InfinitePlace K =>
-        if h : i = w' then (w.mult : Real) else w.mult * (w (fundSystem K (e ⟨i, h⟩))).log)).det| := by
-  rw [regulator_eq_regOfFamily_fundSystem]; rw [finrank_mul_regOfFamily_eq_det]
+/-
+**NumberField.Units.finrank_mul_regulator_eq_det** 是 Mathlib 中的一个定理，位于命名空间 `Numb
+erField.Units`。
+形式化陈述：finrank_mul_regulator_eq_det (w' : InfinitePlace K) (e : {w // w != w'} ≃ 
+Fin (rank K)) : finrank Rat K * regulator K = |(Matrix.of (fun i w : InfinitePla
+ce K => if h : i = w' then (w.mult : Real) else w.mult * (w (fundSystem K (e ⟨i,
+ h⟩))).log)).det|
+参数：w' : InfinitePlace K；e : {w // w != w'} ≃ Fin (rank K)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.Units.regulator_eq_regOfFamily_fundSystem`：regulator_eq_regO
+fFamily_fundSystem : regulator K = regOfFamily (fundSystem K)
+· 使用定理 `NumberField.Units.finrank_mul_regOfFamily_eq_det`：finrank_mul_regOfFamil
+y_eq_det (u : Fin (rank K) -> (𝓞 K)ˣ) (w' : InfinitePlace K) (e : {w // w != w'}
+ ≃ Fin (rank K)) : finrank Rat K * reg…
+
+--- 原说明 ---
+The degree of `K` times the regulator of `K` is equal to the absolute value of t
+he determinant of
+the matrix whose columns are `(mult w * log w (fundSystem K i))_i, w` and the co
+lumn `(mult w)_w`.
+-/
+theorem finrank_mul_regulator_eq_det (w' : InfinitePlace K) (e : {w // w ≠ w'} ≃ Fin (rank K)) :
+    finrank ℚ K * regulator K =
+      |(Matrix.of (fun i w : InfinitePlace K ↦
+        if h : i = w' then (w.mult : ℝ) else w.mult * (w (fundSystem K (e ⟨i, h⟩))).log)).det| := by
+  rw [regulator_eq_regOfFamily_fundSystem, finrank_mul_regOfFamily_eq_det]
 
 end regulator
 
@@ -859,89 +1082,157 @@ open ZLattice
 variable {K}
 
 /--
-theorem `regOfFamily_div_regOfFamily` / 定理 `regOfFamily_div_regOfFamily`
-
-English:
-theorem regOfFamily_div_regOfFamily
-  statement: {u v : Fin (rank K) -> (𝓞 K)ˣ} (hv : IsMaxRank v)
-  proof: by
-  classical
-  by_cases hu : IsMaxRank u
-  · have : span Int (Set.range (basisOfIsMaxRank hu)) <= span Int (Set.range (basisOfIsMaxRank hv)) := by
-      rw [← toAddSubgroup_le]; rw [span_basisOfIsMaxRank hu]; rw [span_basisOfIsMaxRank hv]; rw [← map_logEmbedding_sup_torsion (Subgroup.closure (Set.range u)).toAddSubgroup]; rw [← map_logEmbedding_sup_torsion (Subgroup.closure (Set.range v)).toAddSubgroup]; rw [← SupHomClass.map_sup]; rw [← SupHomClass.map_sup]
-exact AddSubgroup.map_mono (OrderIso.le_iff_le Subgroup.toAddSubgroup).mpr h
-    rw [regOfFamily_of_isMaxRank hu]; rw [regOfFamily_of_isMaxRank hv]; rw [covolume_div_covolume_eq_relIndex _ _ this]; rw [span_basisOfIsMaxRank hu]; rw [span_basisOfIsMaxRank hv]; rw [AddSubgroup.relIndex_map_map]; rw [logEmbedding_ker]; rw [← OrderIso.map_sup]; rw [← OrderIso.map_sup]; rw [← Subgroup.relIndex_toAddSubgroup]
-  · rw [regOfFamily_eq_zero hu, zero_div, eq_comm, Nat.cast_eq_zero]
-    have : (Subgroup.closure (Set.range v) ⊔ torsion K).index != 0 := by
-      rw [← Subgroup.finiteIndex_iff]; rw [← finiteIndex_iff_sup_torsion_finiteIndex]
-      exact isMaxRank_iff_closure_finiteIndex.mp hv
-    rwa [← mul_eq_zero_iff_right this, Subgroup.relIndex_mul_index h,
-      ← Subgroup.not_finiteIndex_iff, ← finiteIndex_iff_sup_torsion_finiteIndex,
-      ← isMaxRank_iff_closure_finiteIndex.not]
-
-中文:
-定理 regOfFamily_div_regOfFamily
-  结论: {u v : 有限集 (rank K) -> (𝓞 K)ˣ} (hv : IsMaxRank v)
-  证明: by
-  classical
-  by_cases hu : IsMaxRank u
-  · have : span Int (Set.range (basisOfIsMaxRank hu)) <= span Int (Set.range (basisOfIsMaxRank hv)) := by
-      rw [← toAddSubgroup_le]; rw [span_basisOfIsMaxRank hu]; rw [span_basisOfIsMaxRank hv]; rw [← map_logEmbedding_sup_torsion (Subgroup.closure (Set.range u)).toAddSubgroup]; rw [← map_logEmbedding_sup_torsion (Subgroup.closure (Set.range v)).toAddSubgroup]; rw [← SupHomClass.map_sup]; rw [← SupHomClass.map_sup]
-exact AddSubgroup.map_mono (OrderIso.le_iff_le Subgroup.toAddSubgroup).mpr h
-    rw [regOfFamily_of_isMaxRank hu]; rw [regOfFamily_of_isMaxRank hv]; rw [covolume_div_covolume_eq_relIndex _ _ this]; rw [span_basisOfIsMaxRank hu]; rw [span_basisOfIsMaxRank hv]; rw [AddSubgroup.relIndex_map_map]; rw [logEmbedding_ker]; rw [← OrderIso.map_sup]; rw [← OrderIso.map_sup]; rw [← Subgroup.relIndex_toAddSubgroup]
-  · rw [regOfFamily_eq_zero hu, zero_div, eq_comm, Nat.cast_eq_zero]
-    have : (Subgroup.closure (Set.range v) ⊔ torsion K).index != 0 := by
-      rw [← Subgroup.finiteIndex_iff]; rw [← finiteIndex_iff_sup_torsion_finiteIndex]
-      exact isMaxRank_iff_closure_finiteIndex.mp hv
-    rwa [← mul_eq_zero_iff_right this, Subgroup.relIndex_mul_index h,
-      ← Subgroup.not_finiteIndex_iff, ← finiteIndex_iff_sup_torsion_finiteIndex,
-      ← isMaxRank_iff_closure_finiteIndex.not]
-
-Depends on / 依赖: AddSubgroup, AddSubgroup.map_mono, IsMaxRank, OrderIso, OrderIso.le_iff_le, Set.range, Subgroup, Subgroup.closure, SupHomClass, SupHomClass.map_sup, basisOfIsMaxRank, classical, closure, le_iff_le, map_logEmbedding_sup_torsion, map_mono, map_sup, span_basisOfIsMaxRank, toAddSubgroup, toAddSubgroup_le
+Let `u` and `v` be two families of units. Assume that the subgroup `U` generated by `u` and
+`torsion K` is contained in the subgroup `V` generated by `v` and `torsion K`. Then the ratio
+`regOfFamily u / regOfFamily v` is equal to the index of `U` inside `V`.
 -/
-theorem regOfFamily_div_regOfFamily {u v : Fin (rank K) -> (𝓞 K)ˣ} (hv : IsMaxRank v)
-    (h : Subgroup.closure (Set.range u) ⊔ torsion K <= Subgroup.closure (Set.range v) ⊔ torsion K) :
+/-
+**NumberField.Units.regOfFamily_div_regOfFamily** 是 Mathlib 中的一个定理，位于命名空间 `Numbe
+rField.Units`。
+形式化陈述：regOfFamily_div_regOfFamily {u v : Fin (rank K) -> (𝓞 K)ˣ} (hv : IsMaxRank
+ v) (h : Subgroup.closure (Set.range u) ⊔ torsion K <= Subgroup.closure (Set.ran
+ge v) ⊔ torsion K) : regOfFamily u / regOfFamily v = (Subgroup.closure (Set.rang
+e u) ⊔ (torsion K)).relIndex (Subgroup.closure (Set.range v) ⊔ (torsion K))
+参数：rank K；𝓞 K；hv : IsMaxRank v；h : Subgroup.closure (Set.range u) ⊔ torsion K <=
+ Subgroup.closure (Set.range v) ⊔ torsion K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Submodule.toAddSubgroup_le`：toAddSubgroup_le : p.toAddSubgroup <= p'.toA
+ddSubgroup ↔ p <= p'
+· 使用定理 `NumberField.Units.span_basisOfIsMaxRank`：span_basisOfIsMaxRank {u : Fin 
+(rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u) : (span Int (Set.range (basisOfIsMaxRank 
+hu))).toAddSubgroup = AddSubg…
+· 使用定理 `NumberField.Units.dirichletUnitTheorem.map_logEmbedding_sup_torsion`：map
+_logEmbedding_sup_torsion (s : AddSubgroup (Additive (𝓞 K)ˣ)) : (s ⊔ (torsion K)
+.toAddSubgroup).map (logEmbedding K) = s.map (logEmbeddin…
+· 使用定理 `SupHomClass.map_sup`：∀ {F : Type u_6} {α : Type u_7} {β : Type u_8} {ins
+t : Max α} {inst_1 : Max β} {inst_2 : FunLike F α β}   [self : SupHomClass F α β
+] (f : F)…
+· 使用定理 `SupBotHomClass.toSupHomClass`：∀ {F : Type u_6} {α : Type u_7} {β : Type 
+u_8} {inst : Max α} {inst_1 : Max β} {inst_2 : Bot α} {inst_3 : Bot β}   {inst_4
+ : FunLike F α β} …
+· 使用定理 `sSupHomClass.toSupBotHomClass`：∀ {F : Type u_1} {α : Type u_2} {β : Type
+ u_3} [inst : FunLike F α β] [inst_1 : CompleteLattice α]   [inst_2 : CompleteLa
+ttice β] [sSupHomCl…
+· 使用定理 `CompleteLatticeHomClass.tosSupHomClass`：∀ {F : Type u_8} {α : Type u_9} 
+{β : Type u_10} {inst : CompleteLattice α} {inst_1 : CompleteLattice β}   {inst_
+2 : FunLike F α β} [self : C…
+· 使用定理 `OrderIsoClass.toCompleteLatticeHomClass`：∀ {F : Type u_1} {α : Type u_2}
+ {β : Type u_3} [inst : EquivLike F α β] [inst_1 : CompleteLattice α]   [inst_2 
+: CompleteLattice β] [OrderIs…
+· 使用定理 `OrderIso.instOrderIsoClass`：∀ {α : Type u_2} {β : Type u_3} [inst : LE α
+] [inst_1 : LE β], OrderIsoClass (α ≃o β) α β
+· 使用定理 `AddSubgroup.map_mono`：∀ {G : Type u_1} [inst : AddGroup G] {N : Type u_5
+} [inst_1 : AddGroup N] {f : G →+ N} {K K' : AddSubgroup G},   K ≤ K' → AddSubgr
+oup.map f …
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `OrderIso.le_iff_le`：le_iff_le (e : α ≃o β) {x y : α} : e x <= e y ↔ x <=
+ y
+· 使用定理 `NumberField.Units.regOfFamily_of_isMaxRank`：regOfFamily_of_isMaxRank {u 
+: Fin (rank K) -> (𝓞 K)ˣ} (hu : IsMaxRank u) : regOfFamily u = ZLattice.covolume
+ (span Int (Set.range (basisOfIs…
+· 使用定理 `ZLattice.covolume_div_covolume_eq_relIndex`：covolume_div_covolume_eq_rel
+Index {ι : Type*} [Fintype ι] (L₁ L₂ : Submodule Int (ι -> Real)) [DiscreteTopol
+ogy L₁] [IsZLattice Real L₁] [Di…
+· 使用定理 `ZSpan.instDiscreteTopologySubtypeMemSubmoduleIntSpanRangeCoeBasisRealOfF
+inite`：∀ {E : Type u_1} {ι : Type u_2} [inst : NormedAddCommGroup E] [inst_1 : N
+ormedSpace ℝ E] (b : Module.Basis ι ℝ E)   [Finite ι], DiscreteTopo…
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `AddSubgroup.relIndex_map_map`：∀ {G : Type u_1} {G' : Type u_2} [inst : A
+ddGroup G] [inst_1 : AddGroup G'] (f : G →+ G') (H K : AddSubgroup G),   (AddSub
+group.map f H).rel…
+· 使用定理 `NumberField.Units.dirichletUnitTheorem.logEmbedding_ker`：logEmbedding_ke
+r : (logEmbedding K).ker = (torsion K).toAddSubgroup
+· 使用定理 `OrderIso.map_sup`：∀ {α : Type u_2} {β : Type u_3} [inst : SemilatticeSup
+ α] [inst_1 : SemilatticeSup β] (f : α ≃o β) (x y : α),   f (x ⊔ y) = f x ⊔ f y
+· 使用引理 `Subgroup.relIndex_toAddSubgroup`：relIndex_toAddSubgroup : (Subgroup.toAd
+dSubgroup H).relIndex (Subgroup.toAddSubgroup K) = H.relIndex K
+· 使用定理 `NumberField.Units.regOfFamily_eq_zero`：regOfFamily_eq_zero {u : Fin (ran
+k K) -> (𝓞 K)ˣ} (hu : ¬ IsMaxRank u) : regOfFamily u = 0
+· 使用定理 `zero_div`：zero_div (a : G₀) : 0 / a = 0
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Nat.cast_eq_zero`：cast_eq_zero {n : Nat} : (n : R) = 0 ↔ n = 0
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Subgroup.finiteIndex_iff`：finiteIndex_iff : H.FiniteIndex ↔ H.index != 0
+· 使用定理 `NumberField.Units.finiteIndex_iff_sup_torsion_finiteIndex`：finiteIndex_i
+ff_sup_torsion_finiteIndex (s : Subgroup (𝓞 K)ˣ) : s.FiniteIndex ↔ (s ⊔ torsion 
+K).FiniteIndex
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+（共 37 条，此处仅展示前 30 条）
+
+--- 原说明 ---
+Let `u` and `v` be two families of units. Assume that the subgroup `U` generated
+ by `u` and
+`torsion K` is contained in the subgroup `V` generated by `v` and `torsion K`. T
+hen the ratio
+`regOfFamily u / regOfFamily v` is equal to the index of `U` inside `V`.
+-/
+theorem regOfFamily_div_regOfFamily {u v : Fin (rank K) → (𝓞 K)ˣ} (hv : IsMaxRank v)
+    (h : Subgroup.closure (Set.range u) ⊔ torsion K ≤ Subgroup.closure (Set.range v) ⊔ torsion K) :
     regOfFamily u / regOfFamily v = (Subgroup.closure (Set.range u) ⊔ (torsion K)).relIndex
       (Subgroup.closure (Set.range v) ⊔ (torsion K)) := by
   classical
   by_cases hu : IsMaxRank u
-  · have : span Int (Set.range (basisOfIsMaxRank hu)) <= span Int (Set.range (basisOfIsMaxRank hv)) := by
-      rw [← toAddSubgroup_le]; rw [span_basisOfIsMaxRank hu]; rw [span_basisOfIsMaxRank hv]; rw [← map_logEmbedding_sup_torsion (Subgroup.closure (Set.range u)).toAddSubgroup]; rw [← map_logEmbedding_sup_torsion (Subgroup.closure (Set.range v)).toAddSubgroup]; rw [← SupHomClass.map_sup]; rw [← SupHomClass.map_sup]
-exact AddSubgroup.map_mono (OrderIso.le_iff_le Subgroup.toAddSubgroup).mpr h
-    rw [regOfFamily_of_isMaxRank hu]; rw [regOfFamily_of_isMaxRank hv]; rw [covolume_div_covolume_eq_relIndex _ _ this]; rw [span_basisOfIsMaxRank hu]; rw [span_basisOfIsMaxRank hv]; rw [AddSubgroup.relIndex_map_map]; rw [logEmbedding_ker]; rw [← OrderIso.map_sup]; rw [← OrderIso.map_sup]; rw [← Subgroup.relIndex_toAddSubgroup]
+  · have : span ℤ (Set.range (basisOfIsMaxRank hu)) ≤ span ℤ (Set.range (basisOfIsMaxRank hv)) := by
+      rw [← toAddSubgroup_le, span_basisOfIsMaxRank hu, span_basisOfIsMaxRank hv,
+        ← map_logEmbedding_sup_torsion (Subgroup.closure (Set.range u)).toAddSubgroup,
+        ← map_logEmbedding_sup_torsion (Subgroup.closure (Set.range v)).toAddSubgroup,
+        ← SupHomClass.map_sup, ← SupHomClass.map_sup]
+      exact AddSubgroup.map_mono <| (OrderIso.le_iff_le Subgroup.toAddSubgroup).mpr h
+    rw [regOfFamily_of_isMaxRank hu, regOfFamily_of_isMaxRank hv,
+      covolume_div_covolume_eq_relIndex _ _ this, span_basisOfIsMaxRank hu,
+      span_basisOfIsMaxRank hv, AddSubgroup.relIndex_map_map, logEmbedding_ker,
+      ← OrderIso.map_sup, ← OrderIso.map_sup, ← Subgroup.relIndex_toAddSubgroup]
   · rw [regOfFamily_eq_zero hu, zero_div, eq_comm, Nat.cast_eq_zero]
-    have : (Subgroup.closure (Set.range v) ⊔ torsion K).index != 0 := by
-      rw [← Subgroup.finiteIndex_iff]; rw [← finiteIndex_iff_sup_torsion_finiteIndex]
+    have : (Subgroup.closure (Set.range v) ⊔ torsion K).index ≠ 0 := by
+      rw [← Subgroup.finiteIndex_iff, ← finiteIndex_iff_sup_torsion_finiteIndex]
       exact isMaxRank_iff_closure_finiteIndex.mp hv
     rwa [← mul_eq_zero_iff_right this, Subgroup.relIndex_mul_index h,
       ← Subgroup.not_finiteIndex_iff, ← finiteIndex_iff_sup_torsion_finiteIndex,
       ← isMaxRank_iff_closure_finiteIndex.not]
 
 /--
-theorem `regOfFamily_div_regulator` / 定理 `regOfFamily_div_regulator`
-
-English:
-theorem regOfFamily_div_regulator
-  given: (u : Fin (rank K) -> (𝓞 K)ˣ)
-  proof: by
-  rw [regulator_eq_regOfFamily_fundSystem]; rw [regOfFamily_div_regOfFamily (isMaxRank_fundSystem K)
-    (by simp only [closure_fundSystem_sup_torsion_eq_top]; rw [le_top]),
-    closure_fundSystem_sup_torsion_eq_top, Subgroup.relIndex_top_right]
-
-中文:
-定理 regOfFamily_div_regulator
-  条件: (u : 有限集 (rank K) -> (𝓞 K)ˣ)
-  证明: by
-  rw [regulator_eq_regOfFamily_fundSystem]; rw [regOfFamily_div_regOfFamily (isMaxRank_fundSystem K)
-    (by simp only [closure_fundSystem_sup_torsion_eq_top]; rw [le_top]),
-    closure_fundSystem_sup_torsion_eq_top, Subgroup.relIndex_top_right]
-
-Depends on / 依赖: Subgroup, Subgroup.relIndex_top_right, closure_fundSystem_sup_torsion_eq_top, isMaxRank_fundSystem, le_top, regOfFamily_div_regOfFamily, regulator_eq_regOfFamily_fundSystem, relIndex_top_right
+Let `u` be a family of units. Then the ratio `regOfFamily u / regulator K` is equal to the index
+of the subgroup generated by `u` and `torsion K` inside the group of units of `K`.
 -/
-theorem regOfFamily_div_regulator (u : Fin (rank K) -> (𝓞 K)ˣ) :
+/-
+**NumberField.Units.regOfFamily_div_regulator** 是 Mathlib 中的一个定理，位于命名空间 `NumberF
+ield.Units`。
+形式化陈述：regOfFamily_div_regulator (u : Fin (rank K) -> (𝓞 K)ˣ) : regOfFamily u / r
+egulator K = (Subgroup.closure (Set.range u) ⊔ (torsion K)).index
+参数：u : Fin (rank K) -> (𝓞 K)ˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.Units.regulator_eq_regOfFamily_fundSystem`：regulator_eq_regO
+fFamily_fundSystem : regulator K = regOfFamily (fundSystem K)
+· 使用定理 `NumberField.Units.regOfFamily_div_regOfFamily`：regOfFamily_div_regOfFami
+ly {u v : Fin (rank K) -> (𝓞 K)ˣ} (hv : IsMaxRank v) (h : Subgroup.closure (Set.
+range u) ⊔ torsion K <= Subgroup.cl…
+· 使用定理 `NumberField.Units.isMaxRank_fundSystem`：isMaxRank_fundSystem : IsMaxRank
+ (fundSystem K)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `NumberField.Units.closure_fundSystem_sup_torsion_eq_top`：∀ (K : Type u_1
+) [inst : Field K] [inst_1 : NumberField K],   Subgroup.closure (Set.range (Numb
+erField.Units.fundSystem K)) ⊔ NumberField.Un…
+· 使用定理 `Subgroup.relIndex_top_right`：relIndex_top_right : H.relIndex ⊤ = H.index
+
+--- 原说明 ---
+Let `u` be a family of units. Then the ratio `regOfFamily u / regulator K` is eq
+ual to the index
+of the subgroup generated by `u` and `torsion K` inside the group of units of `K
+`.
+-/
+theorem regOfFamily_div_regulator (u : Fin (rank K) → (𝓞 K)ˣ) :
     regOfFamily u / regulator K = (Subgroup.closure (Set.range u) ⊔ (torsion K)).index := by
-  rw [regulator_eq_regOfFamily_fundSystem]; rw [regOfFamily_div_regOfFamily (isMaxRank_fundSystem K)
-    (by simp only [closure_fundSystem_sup_torsion_eq_top]; rw [le_top]),
+  rw [regulator_eq_regOfFamily_fundSystem, regOfFamily_div_regOfFamily (isMaxRank_fundSystem K)
+    (by simp only [closure_fundSystem_sup_torsion_eq_top, le_top]),
     closure_fundSystem_sup_torsion_eq_top, Subgroup.relIndex_top_right]
 
 end index
@@ -949,3 +1240,4 @@ end index
 end Units
 
 end NumberField
+

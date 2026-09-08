@@ -21,409 +21,296 @@ The fact that this functor is an equivalence will be recorded in a separate file
 @[expose] public section
 open CategoryTheory
 
-/--
-Definition of `FreeSimplexQuiver` / `FreeSimplexQuiver` 的定义
+/-- The objects of the free simplex quiver are the natural numbers. -/
+/-
+**FreeSimplexQuiver** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：FreeSimplexQuiver
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FreeSimplexQuiver
-  body: Nat
-
-中文:
-定义 FreeSimplexQuiver
-  定义体: Nat
+--- 原说明 ---
+The objects of the free simplex quiver are the natural numbers.
 -/
-def FreeSimplexQuiver := Nat
+def FreeSimplexQuiver := ℕ
 
-/--
-Definition of `FreeSimplexQuiver.mk` / `FreeSimplexQuiver.mk` 的定义
+/-- Making an object of `FreeSimplexQuiver` out of a natural number. -/
+/-
+**FreeSimplexQuiver.mk** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：FreeSimplexQuiver.mk (n : Nat) : FreeSimplexQuiver
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FreeSimplexQuiver.mk
-  signature: (n : Nat)
-  body: n
-
-中文:
-定义 FreeSimplexQuiver.mk
-  签名: (n : 自然数)
-  定义体: n
+--- 原说明 ---
+Making an object of `FreeSimplexQuiver` out of a natural number.
 -/
-def FreeSimplexQuiver.mk (n : Nat) : FreeSimplexQuiver := n
+def FreeSimplexQuiver.mk (n : ℕ) : FreeSimplexQuiver := n
 
-/--
-Definition of `FreeSimplexQuiver.len` / `FreeSimplexQuiver.len` 的定义
+/-- Getting back the natural number from the objects. -/
+/-
+**FreeSimplexQuiver.len** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：FreeSimplexQuiver.len (x : FreeSimplexQuiver) : Nat
+参数：x : FreeSimplexQuiver。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition FreeSimplexQuiver.len
-  signature: (x : FreeSimplexQuiver)
-  body: x
-
-中文:
-定义 FreeSimplexQuiver.len
-  签名: (x : FreeSimplexQuiver)
-  定义体: x
+--- 原说明 ---
+Getting back the natural number from the objects.
 -/
-def FreeSimplexQuiver.len (x : FreeSimplexQuiver) : Nat := x
+def FreeSimplexQuiver.len (x : FreeSimplexQuiver) : ℕ := x
 
 namespace FreeSimplexQuiver
 
-/--
-Inductive type `Hom` / 归纳类型 `Hom`
+/-- A morphism in `FreeSimplexQuiver` is either a face map (`δ`) or a degeneracy map (`σ`). -/
+/-
+**FreeSimplexQuiver.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `FreeSimplexQuiver`。
+形式化陈述：FreeSimplexQuiver → FreeSimplexQuiver → Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive Hom
-  parameters: : FreeSimplexQuiver -> FreeSimplexQuiver -> Type
-  constructors (2):
-    - δ: {n : Nat} (i : Fin (n + 2)) : Hom (.mk n) (.mk (n + 1))
-    - σ: {n : Nat} (i : Fin (n + 1)) : Hom (.mk (n + 1)) (.mk n)
-
-中文:
-归纳类型 态射
-  参数: : FreeSimplexQuiver -> FreeSimplexQuiver -> 类型
-  构造子 (2 个):
-    - δ: {n : 自然数} (i : 有限集 (n + 2)) : 态射 (.mk n) (.mk (n + 1))
-    - σ: {n : 自然数} (i : 有限集 (n + 1)) : 态射 (.mk (n + 1)) (.mk n)
+--- 原说明 ---
+A morphism in `FreeSimplexQuiver` is either a face map (`δ`) or a degeneracy map
+ (`σ`).
 -/
-inductive Hom : FreeSimplexQuiver -> FreeSimplexQuiver -> Type
-  | δ {n : Nat} (i : Fin (n + 2)) : Hom (.mk n) (.mk (n + 1))
-  | σ {n : Nat} (i : Fin (n + 1)) : Hom (.mk (n + 1)) (.mk n)
-
-/--
-Instance `quiv` / 实例 `quiv`
-
-English:
-instance quiv
-  signature: : Quiver FreeSimplexQuiver where
-  body: FreeSimplexQuiver.Hom
-
-中文:
-实例 quiv
-  签名: : 箭图 FreeSimplexQuiver where
-  定义体: FreeSimplexQuiver.Hom
-
-Depends on / 依赖: FreeSimplexQuiver, FreeSimplexQuiver.Hom
+inductive Hom : FreeSimplexQuiver → FreeSimplexQuiver → Type
+  | δ {n : ℕ} (i : Fin (n + 2)) : Hom (.mk n) (.mk (n + 1))
+  | σ {n : ℕ} (i : Fin (n + 1)) : Hom (.mk (n + 1)) (.mk n)
+/-
+**FreeSimplexQuiver.quiv** 是 Mathlib 中的一个实例，位于命名空间 `FreeSimplexQuiver`。
+形式化陈述：quiv : Quiver FreeSimplexQuiver where Hom
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance quiv : Quiver FreeSimplexQuiver where
   Hom := FreeSimplexQuiver.Hom
 
-/--
-Definition of `δ` / `δ` 的定义
+/-- `FreeSimplexQuiver.δ i` represents the `i`-th face map `.mk n ⟶ .mk (n + 1)`. -/
+/-
+**FreeSimplexQuiver.** 是 Mathlib 中的一个缩写定义，位于命名空间 `FreeSimplexQuiver`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation δ
-  signature: {n : Nat} (i : Fin (n + 2))
-  body: FreeSimplexQuiver.Hom.δ i
-
-中文:
-缩写 δ
-  签名: {n : 自然数} (i : 有限集 (n + 2))
-  定义体: FreeSimplexQuiver.Hom.δ i
-
-Depends on / 依赖: FreeSimplexQuiver, FreeSimplexQuiver.Hom
+--- 原说明 ---
+`FreeSimplexQuiver.δ i` represents the `i`-th face map `.mk n ⟶ .mk (n + 1)`.
 -/
-abbrev δ {n : Nat} (i : Fin (n + 2)) : FreeSimplexQuiver.mk n ⟶ .mk (n + 1) :=
+abbrev δ {n : ℕ} (i : Fin (n + 2)) : FreeSimplexQuiver.mk n ⟶ .mk (n + 1) :=
   FreeSimplexQuiver.Hom.δ i
 
-/--
-Definition of `σ` / `σ` 的定义
+/-- `FreeSimplexQuiver.σ i` represents `i`-th degeneracy map `.mk (n + 1) ⟶ .mk n`. -/
+/-
+**FreeSimplexQuiver.** 是 Mathlib 中的一个缩写定义，位于命名空间 `FreeSimplexQuiver`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation σ
-  signature: {n : Nat} (i : Fin (n + 1))
-  body: FreeSimplexQuiver.Hom.σ i
-
-中文:
-缩写 σ
-  签名: {n : 自然数} (i : 有限集 (n + 1))
-  定义体: FreeSimplexQuiver.Hom.σ i
-
-Depends on / 依赖: FreeSimplexQuiver, FreeSimplexQuiver.Hom
+--- 原说明 ---
+`FreeSimplexQuiver.σ i` represents `i`-th degeneracy map `.mk (n + 1) ⟶ .mk n`.
 -/
-abbrev σ {n : Nat} (i : Fin (n + 1)) : FreeSimplexQuiver.mk (n + 1) ⟶ .mk n :=
+abbrev σ {n : ℕ} (i : Fin (n + 1)) : FreeSimplexQuiver.mk (n + 1) ⟶ .mk n :=
   FreeSimplexQuiver.Hom.σ i
 
-/--
-Inductive type `homRel` / 归纳类型 `homRel`
+/-- `FreeSimplexQuiver.homRel` is the relation on morphisms freely generated on the
+five simplicial identities. -/
+/-
+**FreeSimplexQuiver.homRel** 是 Mathlib 中的一个归纳类型，位于命名空间 `FreeSimplexQuiver`。
+形式化陈述：HomRel (CategoryTheory.Paths FreeSimplexQuiver)
+参数：CategoryTheory.Paths FreeSimplexQuiver。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive homRel
-  parameters: : HomRel (Paths FreeSimplexQuiver)
-  constructors (6):
-    - δ_comp_δ: {n : Nat} {i j : Fin (n + 2)} (H : i <= j) : homRel ((Paths.of FreeSimplexQuiver).map (δ i) ≫ (Paths.of FreeSimplexQuiver).map (δ j.succ)) ((Paths.of FreeSimplexQuiver).map (δ j) ≫ (Paths.of FreeSimplexQuiver).map (δ i.castSucc))
-    - δ_comp_σ_of_le: {n : Nat} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : i <= j.castSucc) : homRel ((Paths.of FreeSimplexQuiver).map (δ i.castSucc) ≫ (Paths.of FreeSimplexQuiver).map (σ j.succ)) ((Paths.of FreeSimplexQuiver).map (σ j) ≫ (Paths.of FreeSimplexQuiver).map (δ i))
-    - δ_comp_σ_self: {n : Nat} {i : Fin (n + 1)} : homRel ((Paths.of FreeSimplexQuiver).map (δ i.castSucc) ≫ (Paths.of FreeSimplexQuiver).map (σ i)) (𝟙 _)
-    - δ_comp_σ_succ: {n : Nat} {i : Fin (n + 1)} : homRel ((Paths.of FreeSimplexQuiver).map (δ i.succ) ≫ (Paths.of FreeSimplexQuiver).map (σ i)) (𝟙 _)
-    - δ_comp_σ_of_gt: {n : Nat} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : j.castSucc < i) : homRel ((Paths.of FreeSimplexQuiver).map (δ i.succ) ≫ (Paths.of FreeSimplexQuiver).map (σ j.castSucc)) ((Paths.of FreeSimplexQuiver).map (σ j) ≫ (Paths.of FreeSimplexQuiver).map (δ i))
-    - σ_comp_σ: {n : Nat} {i j : Fin (n + 1)} (H : i <= j) : homRel ((Paths.of FreeSimplexQuiver).map (σ i.castSucc) ≫ (Paths.of FreeSimplexQuiver).map (σ j)) ((Paths.of FreeSimplexQuiver).map (σ j.succ) ≫ (Paths.of FreeSimplexQuiver).map (σ i))
-
-中文:
-归纳类型 homRel
-  参数: : HomRel (Paths FreeSimplexQuiver)
-  构造子 (6 个):
-    - δ_comp_δ: {n : 自然数} {i j : 有限集 (n + 2)} (H : i <= j) : homRel ((Paths.of FreeSimplexQuiver).map (δ i) ≫ (Paths.of FreeSimplexQuiver).map (δ j.succ)) ((Paths.of FreeSimplexQuiver).map (δ j) ≫ (Paths.of FreeSimplexQuiver).map (δ i.castSucc))
-    - δ_comp_σ_of_le: {n : 自然数} {i : 有限集 (n + 2)} {j : 有限集 (n + 1)} (H : i <= j.castSucc) : homRel ((Paths.of FreeSimplexQuiver).map (δ i.castSucc) ≫ (Paths.of FreeSimplexQuiver).map (σ j.succ)) ((Paths.of FreeSimplexQuiver).map (σ j) ≫ (Paths.of FreeSimplexQuiver).map (δ i))
-    - δ_comp_σ_self: {n : 自然数} {i : 有限集 (n + 1)} : homRel ((Paths.of FreeSimplexQuiver).map (δ i.castSucc) ≫ (Paths.of FreeSimplexQuiver).map (σ i)) (𝟙 _)
-    - δ_comp_σ_succ: {n : 自然数} {i : 有限集 (n + 1)} : homRel ((Paths.of FreeSimplexQuiver).map (δ i.succ) ≫ (Paths.of FreeSimplexQuiver).map (σ i)) (𝟙 _)
-    - δ_comp_σ_of_gt: {n : 自然数} {i : 有限集 (n + 2)} {j : 有限集 (n + 1)} (H : j.castSucc < i) : homRel ((Paths.of FreeSimplexQuiver).map (δ i.succ) ≫ (Paths.of FreeSimplexQuiver).map (σ j.castSucc)) ((Paths.of FreeSimplexQuiver).map (σ j) ≫ (Paths.of FreeSimplexQuiver).map (δ i))
-    - σ_comp_σ: {n : 自然数} {i j : 有限集 (n + 1)} (H : i <= j) : homRel ((Paths.of FreeSimplexQuiver).map (σ i.castSucc) ≫ (Paths.of FreeSimplexQuiver).map (σ j)) ((Paths.of FreeSimplexQuiver).map (σ j.succ) ≫ (Paths.of FreeSimplexQuiver).map (σ i))
+--- 原说明 ---
+`FreeSimplexQuiver.homRel` is the relation on morphisms freely generated on the
+five simplicial identities.
 -/
 inductive homRel : HomRel (Paths FreeSimplexQuiver)
-  | δ_comp_δ {n : Nat} {i j : Fin (n + 2)} (H : i <= j) : homRel
+  | δ_comp_δ {n : ℕ} {i j : Fin (n + 2)} (H : i ≤ j) : homRel
     ((Paths.of FreeSimplexQuiver).map (δ i) ≫ (Paths.of FreeSimplexQuiver).map (δ j.succ))
     ((Paths.of FreeSimplexQuiver).map (δ j) ≫ (Paths.of FreeSimplexQuiver).map (δ i.castSucc))
-  | δ_comp_σ_of_le {n : Nat} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : i <= j.castSucc) : homRel
+  | δ_comp_σ_of_le {n : ℕ} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : i ≤ j.castSucc) : homRel
     ((Paths.of FreeSimplexQuiver).map (δ i.castSucc) ≫ (Paths.of FreeSimplexQuiver).map (σ j.succ))
     ((Paths.of FreeSimplexQuiver).map (σ j) ≫ (Paths.of FreeSimplexQuiver).map (δ i))
-  | δ_comp_σ_self {n : Nat} {i : Fin (n + 1)} : homRel
+  | δ_comp_σ_self {n : ℕ} {i : Fin (n + 1)} : homRel
     ((Paths.of FreeSimplexQuiver).map (δ i.castSucc) ≫ (Paths.of FreeSimplexQuiver).map (σ i)) (𝟙 _)
-  | δ_comp_σ_succ {n : Nat} {i : Fin (n + 1)} : homRel
+  | δ_comp_σ_succ {n : ℕ} {i : Fin (n + 1)} : homRel
     ((Paths.of FreeSimplexQuiver).map (δ i.succ) ≫ (Paths.of FreeSimplexQuiver).map (σ i)) (𝟙 _)
-  | δ_comp_σ_of_gt {n : Nat} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : j.castSucc < i) : homRel
+  | δ_comp_σ_of_gt {n : ℕ} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : j.castSucc < i) : homRel
     ((Paths.of FreeSimplexQuiver).map (δ i.succ) ≫ (Paths.of FreeSimplexQuiver).map (σ j.castSucc))
     ((Paths.of FreeSimplexQuiver).map (σ j) ≫ (Paths.of FreeSimplexQuiver).map (δ i))
-  | σ_comp_σ {n : Nat} {i j : Fin (n + 1)} (H : i <= j) : homRel
+  | σ_comp_σ {n : ℕ} {i j : Fin (n + 1)} (H : i ≤ j) : homRel
     ((Paths.of FreeSimplexQuiver).map (σ i.castSucc) ≫ (Paths.of FreeSimplexQuiver).map (σ j))
     ((Paths.of FreeSimplexQuiver).map (σ j.succ) ≫ (Paths.of FreeSimplexQuiver).map (σ i))
 
 end FreeSimplexQuiver
 
-/--
-Definition of `SimplexCategoryGenRel` / `SimplexCategoryGenRel` 的定义
+/-- SimplexCategory is the category presented by generators and relation by the simplicial
+identities. -/
+/-
+**SimplexCategoryGenRel** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：SimplexCategoryGenRel
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SimplexCategoryGenRel
-  body: Quotient FreeSimplexQuiver.homRel
-  deriving Category
-
-中文:
-定义 SimplexCategoryGenRel
-  定义体: Quotient FreeSimplexQuiver.homRel
-  deriving Category
-
-Depends on / 依赖: FreeSimplexQuiver, FreeSimplexQuiver.homRel, Quotient, homRel
+--- 原说明 ---
+SimplexCategory is the category presented by generators and relation by the simp
+licial
+identities.
 -/
 def SimplexCategoryGenRel := Quotient FreeSimplexQuiver.homRel
   deriving Category
 
-/--
-Definition of `SimplexCategoryGenRel.mk` / `SimplexCategoryGenRel.mk` 的定义
+/-- `SimplexCategoryGenRel.mk` is the main constructor for objects of `SimplexCategoryGenRel`. -/
+/-
+**SimplexCategoryGenRel.mk** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：SimplexCategoryGenRel.mk (n : Nat) : SimplexCategoryGenRel where as
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition SimplexCategoryGenRel.mk
-  signature: (n : Nat)
-  body: (Paths.of FreeSimplexQuiver).obj n
-
-中文:
-定义 SimplexCategoryGenRel.mk
-  签名: (n : 自然数)
-  定义体: (Paths.of FreeSimplexQuiver).obj n
-
-Depends on / 依赖: FreeSimplexQuiver, Paths.of
+--- 原说明 ---
+`SimplexCategoryGenRel.mk` is the main constructor for objects of `SimplexCatego
+ryGenRel`.
 -/
-def SimplexCategoryGenRel.mk (n : Nat) : SimplexCategoryGenRel where
+def SimplexCategoryGenRel.mk (n : ℕ) : SimplexCategoryGenRel where
   as := (Paths.of FreeSimplexQuiver).obj n
 
 namespace SimplexCategoryGenRel
 
-/--
-Definition of `δ` / `δ` 的定义
+/-- `SimplexCategoryGenRel.δ i` is the `i`-th face map `.mk n ⟶ .mk (n + 1)`. -/
+/-
+**SimplexCategoryGenRel.** 是 Mathlib 中的一个缩写定义，位于命名空间 `SimplexCategoryGenRel`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation δ
-  signature: {n : Nat} (i : Fin (n + 2))
-  body: (Quotient.functor FreeSimplexQuiver.homRel).map (Paths.of FreeSimplexQuiver).map (.δ i)
-
-中文:
-缩写 δ
-  签名: {n : 自然数} (i : 有限集 (n + 2))
-  定义体: (Quotient.functor FreeSimplexQuiver.homRel).map (Paths.of FreeSimplexQuiver).map (.δ i)
-
-Depends on / 依赖: FreeSimplexQuiver, FreeSimplexQuiver.homRel, Paths.of, Quotient, Quotient.functor, functor, homRel
+--- 原说明 ---
+`SimplexCategoryGenRel.δ i` is the `i`-th face map `.mk n ⟶ .mk (n + 1)`.
 -/
-abbrev δ {n : Nat} (i : Fin (n + 2)) : mk n ⟶ mk (n + 1) :=
-(Quotient.functor FreeSimplexQuiver.homRel).map (Paths.of FreeSimplexQuiver).map (.δ i)
+abbrev δ {n : ℕ} (i : Fin (n + 2)) : mk n ⟶ mk (n + 1) :=
+  (Quotient.functor FreeSimplexQuiver.homRel).map <| (Paths.of FreeSimplexQuiver).map (.δ i)
 
-/--
-Definition of `σ` / `σ` 的定义
+/-- `SimplexCategoryGenRel.σ i` is the `i`-th degeneracy map `.mk (n + 1) ⟶ .mk n`. -/
+/-
+**SimplexCategoryGenRel.** 是 Mathlib 中的一个缩写定义，位于命名空间 `SimplexCategoryGenRel`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation σ
-  signature: {n : Nat} (i : Fin (n + 1))
-  body: (Quotient.functor FreeSimplexQuiver.homRel).map (Paths.of FreeSimplexQuiver).map (.σ i)
-
-中文:
-缩写 σ
-  签名: {n : 自然数} (i : 有限集 (n + 1))
-  定义体: (Quotient.functor FreeSimplexQuiver.homRel).map (Paths.of FreeSimplexQuiver).map (.σ i)
-
-Depends on / 依赖: FreeSimplexQuiver, FreeSimplexQuiver.homRel, Paths.of, Quotient, Quotient.functor, functor, homRel
+--- 原说明 ---
+`SimplexCategoryGenRel.σ i` is the `i`-th degeneracy map `.mk (n + 1) ⟶ .mk n`.
 -/
-abbrev σ {n : Nat} (i : Fin (n + 1)) : mk (n + 1) ⟶ mk n :=
-(Quotient.functor FreeSimplexQuiver.homRel).map (Paths.of FreeSimplexQuiver).map (.σ i)
+abbrev σ {n : ℕ} (i : Fin (n + 1)) : mk (n + 1) ⟶ mk n :=
+  (Quotient.functor FreeSimplexQuiver.homRel).map <| (Paths.of FreeSimplexQuiver).map (.σ i)
 
-/--
-Definition of `len` / `len` 的定义
+/-- The length of an object of `SimplexCategoryGenRel`. -/
+/-
+**SimplexCategoryGenRel.len** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCategoryGenRel`。
+形式化陈述：len (x : SimplexCategoryGenRel) : Nat
+参数：x : SimplexCategoryGenRel。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition len
-  signature: (x : SimplexCategoryGenRel)
-  body: by rcases x with ⟨n⟩; exact n
+--- 原说明 ---
+The length of an object of `SimplexCategoryGenRel`.
+-/
+def len (x : SimplexCategoryGenRel) : ℕ := by rcases x with ⟨n⟩; exact n
 
 @[simp]
-
-中文:
-定义 len
-  签名: (x : SimplexCategoryGenRel)
-  定义体: by rcases x with ⟨n⟩; exact n
-
-@[simp]
+/-
+**SimplexCategoryGenRel.mk_len** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategoryGenRel`
+。
+形式化陈述：mk_len (n : Nat) : len (mk n) = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def len (x : SimplexCategoryGenRel) : Nat := by rcases x with ⟨n⟩; exact n
-
-@[simp]
-/--
-lemma `mk_len` / 引理 `mk_len`
-
-English:
-lemma mk_len
-  given: (n : Nat)
-  statement: len (mk n) = n
-  proof: rfl
-
-中文:
-引理 mk_len
-  条件: (n : 自然数)
-  结论: len (mk n) = n
-  证明: rfl
--/
-lemma mk_len (n : Nat) : len (mk n) = n := rfl
+lemma mk_len (n : ℕ) : len (mk n) = n := rfl
 
 section InductionPrinciples
 
-/--
-Inductive type `faces` / 归纳类型 `faces`
+/-- A morphism is called a face if it is a `δ i` for some `i : Fin (n + 2)`. -/
+/-
+**SimplexCategoryGenRel.faces** 是 Mathlib 中的一个归纳类型，位于命名空间 `SimplexCategoryGenRel
+`。
+形式化陈述：CategoryTheory.MorphismProperty SimplexCategoryGenRel
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive faces
-  parameters: : MorphismProperty SimplexCategoryGenRel
-  constructors (1):
-    - δ: {n : Nat} (i : Fin (n + 2)) : faces (δ i)
-
-中文:
-归纳类型 faces
-  参数: : MorphismProperty SimplexCategoryGenRel
-  构造子 (1 个):
-    - δ: {n : 自然数} (i : 有限集 (n + 2)) : faces (δ i)
+--- 原说明 ---
+A morphism is called a face if it is a `δ i` for some `i : Fin (n + 2)`.
 -/
 inductive faces : MorphismProperty SimplexCategoryGenRel
-  | δ {n : Nat} (i : Fin (n + 2)) : faces (δ i)
+  | δ {n : ℕ} (i : Fin (n + 2)) : faces (δ i)
 
-/--
-Inductive type `degeneracies` / 归纳类型 `degeneracies`
+/-- A morphism is called a degeneracy if it is a `σ i` for some `i : Fin (n + 1)`. -/
+/-
+**SimplexCategoryGenRel.degeneracies** 是 Mathlib 中的一个归纳类型，位于命名空间 `SimplexCategor
+yGenRel`。
+形式化陈述：CategoryTheory.MorphismProperty SimplexCategoryGenRel
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive degeneracies
-  parameters: : MorphismProperty SimplexCategoryGenRel
-  constructors (1):
-    - σ: {n : Nat} (i : Fin (n + 1)) : degeneracies (σ i)
-
-中文:
-归纳类型 degeneracies
-  参数: : MorphismProperty SimplexCategoryGenRel
-  构造子 (1 个):
-    - σ: {n : 自然数} (i : 有限集 (n + 1)) : degeneracies (σ i)
+--- 原说明 ---
+A morphism is called a degeneracy if it is a `σ i` for some `i : Fin (n + 1)`.
 -/
 inductive degeneracies : MorphismProperty SimplexCategoryGenRel
-  | σ {n : Nat} (i : Fin (n + 1)) : degeneracies (σ i)
+  | σ {n : ℕ} (i : Fin (n + 1)) : degeneracies (σ i)
 
-/--
-Definition of `generators` / `generators` 的定义
+/-- A morphism is a generator if it is either a face or a degeneracy. -/
+/-
+**SimplexCategoryGenRel.generators** 是 Mathlib 中的一个缩写定义，位于命名空间 `SimplexCategoryG
+enRel`。
+形式化陈述：generators
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation generators
-  body: faces ⊔ degeneracies
-
-中文:
-缩写 generators
-  定义体: faces ⊔ degeneracies
-
-Depends on / 依赖: degeneracies
+--- 原说明 ---
+A morphism is a generator if it is either a face or a degeneracy.
 -/
 abbrev generators := faces ⊔ degeneracies
 
 namespace generators
 
-/--
-lemma `δ` / 引理 `δ`
-
-English:
-lemma δ
-  given: {n : Nat} (i : Fin (n + 2))
-  statement: generators (δ i)
-  proof: le_sup_left (a := faces) _ (.δ i)
-
-中文:
-引理 δ
-  条件: {n : 自然数} (i : 有限集 (n + 2))
-  结论: generators (δ i)
-  证明: le_sup_left (a := faces) _ (.δ i)
-
-Depends on / 依赖: le_sup_left
+/-
+**SimplexCategoryGenRel.generators.** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategoryGe
+nRel.generators`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma δ {n : Nat} (i : Fin (n + 2)) : generators (δ i) := le_sup_left (a := faces) _ (.δ i)
-
-/--
-lemma `σ` / 引理 `σ`
-
-English:
-lemma σ
-  given: {n : Nat} (i : Fin (n + 1))
-  statement: generators (σ i)
-  proof: le_sup_right (a := faces) _ (.σ i)
-
-中文:
-引理 σ
-  条件: {n : 自然数} (i : 有限集 (n + 1))
-  结论: generators (σ i)
-  证明: le_sup_right (a := faces) _ (.σ i)
-
-Depends on / 依赖: le_sup_right
+lemma δ {n : ℕ} (i : Fin (n + 2)) : generators (δ i) := le_sup_left (a := faces) _ (.δ i)
+/-
+**SimplexCategoryGenRel.generators.** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategoryGe
+nRel.generators`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma σ {n : Nat} (i : Fin (n + 1)) : generators (σ i) := le_sup_right (a := faces) _ (.σ i)
+lemma σ {n : ℕ} (i : Fin (n + 1)) : generators (σ i) := le_sup_right (a := faces) _ (.σ i)
 
 end generators
 
-/--
-lemma `multiplicativeClosure_isGenerator_eq_top` / 引理 `multiplicativeClosure_isGenerator_eq_top`
+/-- A property is true for every morphism iff it holds for generators and is multiplicative. -/
+/-
+**SimplexCategoryGenRel.multiplicativeClosure_isGenerator_eq_top** 是 Mathlib 中的一
+个引理，位于命名空间 `SimplexCategoryGenRel`。
+形式化陈述：multiplicativeClosure_isGenerator_eq_top : generators.multiplicativeClosur
+e = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Quotient.induction`：∀ {C : Type u_1} [inst : CategoryTheo
+ry.Category.{v_1, u_1} C] (r : HomRel C)   {P : {a b : CategoryTheory.Quotient r
+} → (a ⟶ b) → Prop},   …
+· 使用引理 `CategoryTheory.Paths.induction`：induction (P : forall {a b : Paths V}, (
+a ⟶ b) -> Prop) (id : forall {v : V}, P (𝟙 ((of V).obj v))) (comp : forall {u v 
+w : V} (p : (of V).o…
+· 使用引理 `CategoryTheory.MorphismProperty.id_mem`：id_mem (W : MorphismProperty C) 
+[W.ContainsIdentities] (X : C) : W (𝟙 X)
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.toContainsIdentities`：∀
+ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {W : CategoryTheory.Morp
+hismProperty C}   [self : W.IsMultiplicative], W.ContainsId…
+· 使用定理 `CategoryTheory.MorphismProperty.instIsMultiplicativeMultiplicativeClosur
+e`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (W : CategoryTheory.
+MorphismProperty C),   W.multiplicativeClosure.IsMultiplicative
+· 使用引理 `CategoryTheory.MorphismProperty.comp_mem`：comp_mem (W : MorphismProperty
+ C) [W.IsStableUnderComposition] {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) (hf : W f) 
+(hg : W g) : W (f ≫ g)
+· 使用定理 `CategoryTheory.MorphismProperty.IsMultiplicative.toIsStableUnderComposit
+ion`：∀ {C : Type u} {inst : CategoryTheory.Category.{v, u} C} {W : CategoryTheor
+y.MorphismProperty C}   [self : W.IsMultiplicative], W.IsStableUn…
+· 使用引理 `SimplexCategoryGenRel.generators.δ`：δ {n : Nat} (i : Fin (n + 2)) : gene
+rators (δ i)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用引理 `SimplexCategoryGenRel.generators.σ`：σ {n : Nat} (i : Fin (n + 1)) : gene
+rators (σ i)
 
-English:
-lemma multiplicativeClosure_isGenerator_eq_top
-  statement: generators.multiplicativeClosure = ⊤
-  proof: by
-  apply le_antisymm (by simp)
-  rintro x y f -
-  induction f using CategoryTheory.Quotient.induction with | _ f
-  induction f using Paths.induction with
-  | id => exact generators.multiplicativeClosure.id_mem _
-  | comp _ k h =>
-    cases k
-· exact generators.multiplicativeClosure.comp_mem _ _ h .of _ .δ _
-· exact generators.multiplicativeClosure.comp_mem _ _ h .of _ .σ _
-
-中文:
-引理 multiplicativeClosure_isGenerator_eq_top
-  结论: generators.multiplicativeClosure = ⊤
-  证明: by
-  apply le_antisymm (by simp)
-  rintro x y f -
-  induction f using CategoryTheory.Quotient.induction with | _ f
-  induction f using Paths.induction with
-  | id => exact generators.multiplicativeClosure.id_mem _
-  | comp _ k h =>
-    cases k
-· exact generators.multiplicativeClosure.comp_mem _ _ h .of _ .δ _
-· exact generators.multiplicativeClosure.comp_mem _ _ h .of _ .σ _
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Quotient.induction, Paths.induction, Quotient, comp_mem, generators, generators.multiplicativeClosure.comp_mem, generators.multiplicativeClosure.id_mem, id_mem, le_antisymm, multiplicativeClosure
+--- 原说明 ---
+A property is true for every morphism iff it holds for generators and is multipl
+icative.
 -/
 lemma multiplicativeClosure_isGenerator_eq_top : generators.multiplicativeClosure = ⊤ := by
   apply le_antisymm (by simp)
@@ -433,63 +320,48 @@ lemma multiplicativeClosure_isGenerator_eq_top : generators.multiplicativeClosur
   | id => exact generators.multiplicativeClosure.id_mem _
   | comp _ k h =>
     cases k
-· exact generators.multiplicativeClosure.comp_mem _ _ h .of _ .δ _
-· exact generators.multiplicativeClosure.comp_mem _ _ h .of _ .σ _
+    · exact generators.multiplicativeClosure.comp_mem _ _ h <| .of _ <| .δ _
+    · exact generators.multiplicativeClosure.comp_mem _ _ h <| .of _ <| .σ _
 
 /-- An unrolled version of the induction principle obtained in the previous lemma. -/
 @[elab_as_elim, cases_eliminator, induction_eliminator]
-/--
-lemma `hom_induction` / 引理 `hom_induction`
+/-
+**SimplexCategoryGenRel.hom_induction** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategory
+GenRel`。
+形式化陈述：hom_induction (P : MorphismProperty SimplexCategoryGenRel) (id : forall {n
+ : Nat}, P (𝟙 (mk n))) (comp_δ : forall {n m : Nat} (u : mk n ⟶ mk m) (i : Fin (
+m + 2)), P u -> P (u ≫ δ i)) (comp_σ : forall {n m : Nat} (u : mk n ⟶ mk (m + 1)
+) (i : Fin (m + 1)), P u -> P (u ≫ σ i)) {a b : SimplexCategoryGenRel} (f : a ⟶ 
+b) : P f
+参数：P : MorphismProperty SimplexCategoryGenRel；id : forall {n : Nat}, P (𝟙 (mk n)
+)；comp_δ : forall {n m : Nat} (u : mk n ⟶ mk m) (i : Fin (m + 2)), P u -> P (u ≫
+ δ i)；comp_σ : forall {n m : Nat} (u : mk n ⟶ mk (m + 1)) (i : Fin (m + 1)), P u
+ -> P (u ≫ σ i)；f : a ⟶ b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `top_le_iff`：top_le_iff : ⊤ <= a ↔ a = ⊤
+· 使用引理 `SimplexCategoryGenRel.multiplicativeClosure_isGenerator_eq_top`：multipli
+cativeClosure_isGenerator_eq_top : generators.multiplicativeClosure = ⊤
+· 使用引理 `CategoryTheory.MorphismProperty.top_apply`：top_apply {X Y : C} (f : X ⟶ 
+Y) : (⊤ : MorphismProperty C) f
 
-English:
-lemma hom_induction
-  statement: (P : MorphismProperty SimplexCategoryGenRel)
-  proof: by
-  suffices generators.multiplicativeClosure <= P by
-    rw [multiplicativeClosure_isGenerator_eq_top]; rw [top_le_iff] at this
-    rw [this]
-    apply MorphismProperty.top_apply
-  intro _ _ f hf
-  induction hf with
-  | of f h =>
-    rcases h with ⟨⟨i⟩⟩ | ⟨⟨i⟩⟩
-    · simpa using! (comp_δ (𝟙 _) i id)
-    · simpa using! (comp_σ (𝟙 _) i id)
-  | id n => exact id
-  | comp_of f g hf hg hrec =>
-    rcases hg with ⟨⟨i⟩⟩ | ⟨⟨i⟩⟩
-    · simpa using! (comp_δ f i hrec)
-    · simpa using! (comp_σ f i hrec)
-
-中文:
-引理 hom_induction
-  结论: (P : MorphismProperty SimplexCategoryGenRel)
-  证明: by
-  suffices generators.multiplicativeClosure <= P by
-    rw [multiplicativeClosure_isGenerator_eq_top]; rw [top_le_iff] at this
-    rw [this]
-    apply MorphismProperty.top_apply
-  intro _ _ f hf
-  induction hf with
-  | of f h =>
-    rcases h with ⟨⟨i⟩⟩ | ⟨⟨i⟩⟩
-    · simpa using! (comp_δ (𝟙 _) i id)
-    · simpa using! (comp_σ (𝟙 _) i id)
-  | id n => exact id
-  | comp_of f g hf hg hrec =>
-    rcases hg with ⟨⟨i⟩⟩ | ⟨⟨i⟩⟩
-    · simpa using! (comp_δ f i hrec)
-    · simpa using! (comp_σ f i hrec)
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.top_apply, comp_of, generators, generators.multiplicativeClosure, multiplicativeClosure, multiplicativeClosure_isGenerator_eq_top, top_apply, top_le_iff
+--- 原说明 ---
+An unrolled version of the induction principle obtained in the previous lemma.
 -/
 lemma hom_induction (P : MorphismProperty SimplexCategoryGenRel)
-    (id : forall {n : Nat}, P (𝟙 (mk n)))
-    (comp_δ : forall {n m : Nat} (u : mk n ⟶ mk m) (i : Fin (m + 2)), P u -> P (u ≫ δ i))
-    (comp_σ : forall {n m : Nat} (u : mk n ⟶ mk (m + 1)) (i : Fin (m + 1)), P u -> P (u ≫ σ i))
+    (id : ∀ {n : ℕ}, P (𝟙 (mk n)))
+    (comp_δ : ∀ {n m : ℕ} (u : mk n ⟶ mk m) (i : Fin (m + 2)), P u → P (u ≫ δ i))
+    (comp_σ : ∀ {n m : ℕ} (u : mk n ⟶ mk (m + 1)) (i : Fin (m + 1)), P u → P (u ≫ σ i))
     {a b : SimplexCategoryGenRel} (f : a ⟶ b) : P f := by
-  suffices generators.multiplicativeClosure <= P by
-    rw [multiplicativeClosure_isGenerator_eq_top]; rw [top_le_iff] at this
+  suffices generators.multiplicativeClosure ≤ P by
+    rw [multiplicativeClosure_isGenerator_eq_top, top_le_iff] at this
     rw [this]
     apply MorphismProperty.top_apply
   intro _ _ f hf
@@ -504,60 +376,53 @@ lemma hom_induction (P : MorphismProperty SimplexCategoryGenRel)
     · simpa using! (comp_δ f i hrec)
     · simpa using! (comp_σ f i hrec)
 
-/--
-lemma `hom_induction'` / 引理 `hom_induction'`
+/-- An induction principle for reasoning about morphisms in SimplexCategoryGenRel, where we compose
+with generators on the right. -/
+/-
+**SimplexCategoryGenRel.hom_induction'** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategor
+yGenRel`。
+形式化陈述：hom_induction' (P : MorphismProperty SimplexCategoryGenRel) (id : forall {
+n : Nat}, P (𝟙 (mk n))) (δ_comp : forall {n m : Nat} (u : mk (m + 1) ⟶ mk n) (i 
+: Fin (m + 2)), P u -> P (δ i ≫ u)) (σ_comp : forall {n m : Nat} (u : mk m ⟶ mk 
+n) (i : Fin (m + 1)), P u -> P (σ i ≫ u)) {a b : SimplexCategoryGenRel} (f : a ⟶
+ b) : P f
+参数：P : MorphismProperty SimplexCategoryGenRel；id : forall {n : Nat}, P (𝟙 (mk n)
+)；δ_comp : forall {n m : Nat} (u : mk (m + 1) ⟶ mk n) (i : Fin (m + 2)), P u -> 
+P (δ i ≫ u)；σ_comp : forall {n m : Nat} (u : mk m ⟶ mk n) (i : Fin (m + 1)), P u
+ -> P (σ i ≫ u)；f : a ⟶ b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `top_le_iff`：top_le_iff : ⊤ <= a ↔ a = ⊤
+· 使用引理 `SimplexCategoryGenRel.multiplicativeClosure_isGenerator_eq_top`：multipli
+cativeClosure_isGenerator_eq_top : generators.multiplicativeClosure = ⊤
+· 使用引理 `CategoryTheory.MorphismProperty.multiplicativeClosure_eq_multiplicativeC
+losure'`：multiplicativeClosure_eq_multiplicativeClosure' : W.multiplicativeClosu
+re = W.multiplicativeClosure'
+· 使用引理 `CategoryTheory.MorphismProperty.top_apply`：top_apply {X Y : C} (f : X ⟶ 
+Y) : (⊤ : MorphismProperty C) f
 
-English:
-lemma hom_induction'
-  statement: (P : MorphismProperty SimplexCategoryGenRel)
-  proof: by
-  suffices generators.multiplicativeClosure' <= P by
-    rw [← MorphismProperty.multiplicativeClosure_eq_multiplicativeClosure']; rw [multiplicativeClosure_isGenerator_eq_top]; rw [top_le_iff] at this
-    rw [this]
-    apply MorphismProperty.top_apply
-  intro _ _ f hf
-  induction hf with
-  | of f h =>
-    rcases h with ⟨⟨i⟩⟩ | ⟨⟨i⟩⟩
-    · simpa using! (δ_comp (𝟙 _) i id)
-    · simpa using! (σ_comp (𝟙 _) i id)
-  | id n => exact id
-  | of_comp f g hf hg hrec =>
-    rcases hf with ⟨⟨i⟩⟩ | ⟨⟨i⟩⟩
-    · simpa using! (δ_comp g i hrec)
-    · simpa using! (σ_comp g i hrec)
-
-中文:
-引理 hom_induction'
-  结论: (P : MorphismProperty SimplexCategoryGenRel)
-  证明: by
-  suffices generators.multiplicativeClosure' <= P by
-    rw [← MorphismProperty.multiplicativeClosure_eq_multiplicativeClosure']; rw [multiplicativeClosure_isGenerator_eq_top]; rw [top_le_iff] at this
-    rw [this]
-    apply MorphismProperty.top_apply
-  intro _ _ f hf
-  induction hf with
-  | of f h =>
-    rcases h with ⟨⟨i⟩⟩ | ⟨⟨i⟩⟩
-    · simpa using! (δ_comp (𝟙 _) i id)
-    · simpa using! (σ_comp (𝟙 _) i id)
-  | id n => exact id
-  | of_comp f g hf hg hrec =>
-    rcases hf with ⟨⟨i⟩⟩ | ⟨⟨i⟩⟩
-    · simpa using! (δ_comp g i hrec)
-    · simpa using! (σ_comp g i hrec)
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.multiplicativeClosure_eq_multiplicativeClosure, MorphismProperty.top_apply, generators, generators.multiplicativeClosure, multiplicativeClosure, multiplicativeClosure_eq_multiplicativeClosure, multiplicativeClosure_isGenerator_eq_top, of_comp, top_apply, top_le_iff
+--- 原说明 ---
+An induction principle for reasoning about morphisms in SimplexCategoryGenRel, w
+here we compose
+with generators on the right.
 -/
 lemma hom_induction' (P : MorphismProperty SimplexCategoryGenRel)
-    (id : forall {n : Nat}, P (𝟙 (mk n)))
-    (δ_comp : forall {n m : Nat} (u : mk (m + 1) ⟶ mk n)
-      (i : Fin (m + 2)), P u -> P (δ i ≫ u))
-    (σ_comp : forall {n m : Nat} (u : mk m ⟶ mk n)
-      (i : Fin (m + 1)), P u -> P (σ i ≫ u)) {a b : SimplexCategoryGenRel} (f : a ⟶ b) :
+    (id : ∀ {n : ℕ}, P (𝟙 (mk n)))
+    (δ_comp : ∀ {n m : ℕ} (u : mk (m + 1) ⟶ mk n)
+      (i : Fin (m + 2)), P u → P (δ i ≫ u))
+    (σ_comp : ∀ {n m : ℕ} (u : mk m ⟶ mk n)
+      (i : Fin (m + 1)), P u → P (σ i ≫ u)) {a b : SimplexCategoryGenRel} (f : a ⟶ b) :
     P f := by
-  suffices generators.multiplicativeClosure' <= P by
-    rw [← MorphismProperty.multiplicativeClosure_eq_multiplicativeClosure']; rw [multiplicativeClosure_isGenerator_eq_top]; rw [top_le_iff] at this
+  suffices generators.multiplicativeClosure' ≤ P by
+    rw [← MorphismProperty.multiplicativeClosure_eq_multiplicativeClosure',
+      multiplicativeClosure_isGenerator_eq_top, top_le_iff] at this
     rw [this]
     apply MorphismProperty.top_apply
   intro _ _ f hf
@@ -575,55 +440,36 @@ lemma hom_induction' (P : MorphismProperty SimplexCategoryGenRel)
 /-- An induction principle for reasoning about objects in `SimplexCategoryGenRel`. This should be
 used instead of identifying an object with `mk` of its `len`. -/
 @[elab_as_elim, cases_eliminator]
-/--
-Definition of `rec` / `rec` 的定义
+/-
+**SimplexCategoryGenRel.rec** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCategoryGenRel`。
+形式化陈述：{P : SimplexCategoryGenRel → Sort u_1} → ((n : ℕ) → P (SimplexCategoryGenR
+el.mk n)) → (x : SimplexCategoryGenRel) → P x
+参数：(n : ℕ) → P (SimplexCategoryGenRel.mk n)；x : SimplexCategoryGenRel。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rec
-  signature: {P : SimplexCategoryGenRel -> Sort*}
-  body: by
-  intro x
-  exact H x.len
-
-中文:
-定义 rec
-  签名: {P : SimplexCategoryGenRel -> 类型层*}
-  定义体: by
-  intro x
-  exact H x.len
+--- 原说明 ---
+An induction principle for reasoning about objects in `SimplexCategoryGenRel`. T
+his should be
+used instead of identifying an object with `mk` of its `len`.
 -/
-protected def rec {P : SimplexCategoryGenRel -> Sort*}
-    (H : forall n : Nat, P (.mk n)) :
-    forall x : SimplexCategoryGenRel, P x := by
+protected def rec {P : SimplexCategoryGenRel → Sort*}
+    (H : ∀ n : ℕ, P (.mk n)) :
+    ∀ x : SimplexCategoryGenRel, P x := by
   intro x
   exact H x.len
 
 /-- A basic `ext` lemma for objects of `SimplexCategoryGenRel`. -/
 @[ext]
-/--
-lemma `ext` / 引理 `ext`
+/-
+**SimplexCategoryGenRel.ext** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategoryGenRel`。
+形式化陈述：ext {x y : SimplexCategoryGenRel} (h : x.len = y.len) : x = y
+参数：h : x.len = y.len。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-lemma ext
-  given: {x y : SimplexCategoryGenRel} (h : x.len = y.len)
-  statement: x = y
-  proof: by
-  cases x
-  cases y
-  simp only [mk_len] at h
-  congr
-
-中文:
-引理 ext
-  条件: {x y : SimplexCategoryGenRel} (h : x.len = y.len)
-  结论: x = y
-  证明: by
-  cases x
-  cases y
-  simp only [mk_len] at h
-  congr
-
-Depends on / 依赖: mk_len
+--- 原说明 ---
+A basic `ext` lemma for objects of `SimplexCategoryGenRel`.
 -/
 lemma ext {x y : SimplexCategoryGenRel} (h : x.len = y.len) : x = y := by
   cases x
@@ -636,86 +482,29 @@ end InductionPrinciples
 section SimplicialIdentities
 
 @[reassoc]
-/--
-theorem `δ_comp_δ` / 定理 `δ_comp_δ`
-
-English:
-theorem δ_comp_δ
-  given: {n} {i j : Fin (n + 2)} (H : i <= j)
-  proof: by
-  apply CategoryTheory.Quotient.sound
-  exact FreeSimplexQuiver.homRel.δ_comp_δ H
-
-@[reassoc]
-
-中文:
-定理 δ_comp_δ
-  条件: {n} {i j : 有限集 (n + 2)} (H : i <= j)
-  证明: by
-  apply CategoryTheory.Quotient.sound
-  exact FreeSimplexQuiver.homRel.δ_comp_δ H
-
-@[reassoc]
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Quotient.sound, FreeSimplexQuiver, FreeSimplexQuiver.homRel, Quotient, homRel
+/-
+**SimplexCategoryGenRel.** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategoryGenRel`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem δ_comp_δ {n} {i j : Fin (n + 2)} (H : i <= j) :
+theorem δ_comp_δ {n} {i j : Fin (n + 2)} (H : i ≤ j) :
     δ i ≫ δ j.succ = δ j ≫ δ i.castSucc := by
   apply CategoryTheory.Quotient.sound
   exact FreeSimplexQuiver.homRel.δ_comp_δ H
 
 @[reassoc]
-/--
-theorem `δ_comp_σ_of_le` / 定理 `δ_comp_σ_of_le`
-
-English:
-theorem δ_comp_σ_of_le
-  given: {n} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : i <= j.castSucc)
-  proof: by
-  apply CategoryTheory.Quotient.sound
-  exact FreeSimplexQuiver.homRel.δ_comp_σ_of_le H
-
-@[reassoc]
-
-中文:
-定理 δ_comp_σ_of_le
-  条件: {n} {i : 有限集 (n + 2)} {j : 有限集 (n + 1)} (H : i <= j.castSucc)
-  证明: by
-  apply CategoryTheory.Quotient.sound
-  exact FreeSimplexQuiver.homRel.δ_comp_σ_of_le H
-
-@[reassoc]
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Quotient.sound, FreeSimplexQuiver, FreeSimplexQuiver.homRel, Quotient, homRel
+/-
+**SimplexCategoryGenRel.** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategoryGenRel`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem δ_comp_σ_of_le {n} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : i <= j.castSucc) :
+theorem δ_comp_σ_of_le {n} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : i ≤ j.castSucc) :
     δ i.castSucc ≫ σ j.succ = σ j ≫ δ i := by
   apply CategoryTheory.Quotient.sound
   exact FreeSimplexQuiver.homRel.δ_comp_σ_of_le H
 
 @[reassoc]
-/--
-theorem `δ_comp_σ_self` / 定理 `δ_comp_σ_self`
-
-English:
-theorem δ_comp_σ_self
-  given: {n} {i : Fin (n + 1)}
-  proof: by
-  apply CategoryTheory.Quotient.sound
-  exact FreeSimplexQuiver.homRel.δ_comp_σ_self
-
-@[reassoc]
-
-中文:
-定理 δ_comp_σ_self
-  条件: {n} {i : 有限集 (n + 1)}
-  证明: by
-  apply CategoryTheory.Quotient.sound
-  exact FreeSimplexQuiver.homRel.δ_comp_σ_self
-
-@[reassoc]
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Quotient.sound, FreeSimplexQuiver, FreeSimplexQuiver.homRel, Quotient, homRel
+/-
+**SimplexCategoryGenRel.** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategoryGenRel`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem δ_comp_σ_self {n} {i : Fin (n + 1)} :
     δ i.castSucc ≫ σ i = 𝟙 (mk n) := by
@@ -723,58 +512,18 @@ theorem δ_comp_σ_self {n} {i : Fin (n + 1)} :
   exact FreeSimplexQuiver.homRel.δ_comp_σ_self
 
 @[reassoc]
-/--
-theorem `δ_comp_σ_succ` / 定理 `δ_comp_σ_succ`
-
-English:
-theorem δ_comp_σ_succ
-  given: {n} {i : Fin (n + 1)}
-  statement: δ i.succ ≫ σ i = 𝟙 (mk n)
-  proof: by
-  apply CategoryTheory.Quotient.sound
-  exact FreeSimplexQuiver.homRel.δ_comp_σ_succ
-
-@[reassoc]
-
-中文:
-定理 δ_comp_σ_succ
-  条件: {n} {i : 有限集 (n + 1)}
-  结论: δ i.succ ≫ σ i = 𝟙 (mk n)
-  证明: by
-  apply CategoryTheory.Quotient.sound
-  exact FreeSimplexQuiver.homRel.δ_comp_σ_succ
-
-@[reassoc]
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Quotient.sound, FreeSimplexQuiver, FreeSimplexQuiver.homRel, Quotient, homRel
+/-
+**SimplexCategoryGenRel.** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategoryGenRel`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem δ_comp_σ_succ {n} {i : Fin (n + 1)} : δ i.succ ≫ σ i = 𝟙 (mk n) := by
   apply CategoryTheory.Quotient.sound
   exact FreeSimplexQuiver.homRel.δ_comp_σ_succ
 
 @[reassoc]
-/--
-theorem `δ_comp_σ_of_gt` / 定理 `δ_comp_σ_of_gt`
-
-English:
-theorem δ_comp_σ_of_gt
-  given: {n} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : j.castSucc < i)
-  proof: by
-  apply CategoryTheory.Quotient.sound
-  exact FreeSimplexQuiver.homRel.δ_comp_σ_of_gt H
-
-@[reassoc]
-
-中文:
-定理 δ_comp_σ_of_gt
-  条件: {n} {i : 有限集 (n + 2)} {j : 有限集 (n + 1)} (H : j.castSucc < i)
-  证明: by
-  apply CategoryTheory.Quotient.sound
-  exact FreeSimplexQuiver.homRel.δ_comp_σ_of_gt H
-
-@[reassoc]
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Quotient.sound, FreeSimplexQuiver, FreeSimplexQuiver.homRel, Quotient, homRel
+/-
+**SimplexCategoryGenRel.** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategoryGenRel`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem δ_comp_σ_of_gt {n} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : j.castSucc < i) :
     δ i.succ ≫ σ j.castSucc = σ j ≫ δ i := by
@@ -782,108 +531,54 @@ theorem δ_comp_σ_of_gt {n} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : j.castSucc
   exact FreeSimplexQuiver.homRel.δ_comp_σ_of_gt H
 
 @[reassoc]
-/--
-theorem `σ_comp_σ` / 定理 `σ_comp_σ`
-
-English:
-theorem σ_comp_σ
-  given: {n} {i j : Fin (n + 1)} (H : i <= j)
-  proof: by
-  apply CategoryTheory.Quotient.sound
-  exact FreeSimplexQuiver.homRel.σ_comp_σ H
-
-中文:
-定理 σ_comp_σ
-  条件: {n} {i j : 有限集 (n + 1)} (H : i <= j)
-  证明: by
-  apply CategoryTheory.Quotient.sound
-  exact FreeSimplexQuiver.homRel.σ_comp_σ H
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Quotient.sound, FreeSimplexQuiver, FreeSimplexQuiver.homRel, Quotient, homRel
+/-
+**SimplexCategoryGenRel.** 是 Mathlib 中的一个定理，位于命名空间 `SimplexCategoryGenRel`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem σ_comp_σ {n} {i j : Fin (n + 1)} (H : i <= j) :
+theorem σ_comp_σ {n} {i j : Fin (n + 1)} (H : i ≤ j) :
     σ i.castSucc ≫ σ j = σ j.succ ≫ σ i := by
   apply CategoryTheory.Quotient.sound
   exact FreeSimplexQuiver.homRel.σ_comp_σ H
 
-/--
-lemma `δ_comp_δ_nat` / 引理 `δ_comp_δ_nat`
+/-- A version of δ_comp_δ with indices in ℕ satisfying relevant inequalities. -/
+/-
+**SimplexCategoryGenRel.** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategoryGenRel`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma δ_comp_δ_nat
-  given: {n} (i j : Nat) (hi : i < n + 2) (hj : j < n + 2) (H : i <= j)
-  proof: δ_comp_δ (n := n) (i := ⟨i, by lia⟩) (j := ⟨j, by lia⟩) (by simpa)
-
-中文:
-引理 δ_comp_δ_nat
-  条件: {n} (i j : 自然数) (hi : i < n + 2) (hj : j < n + 2) (H : i <= j)
-  证明: δ_comp_δ (n := n) (i := ⟨i, by lia⟩) (j := ⟨j, by lia⟩) (by simpa)
+--- 原说明 ---
+A version of δ_comp_δ with indices in ℕ satisfying relevant inequalities.
 -/
-lemma δ_comp_δ_nat {n} (i j : Nat) (hi : i < n + 2) (hj : j < n + 2) (H : i <= j) :
+lemma δ_comp_δ_nat {n} (i j : ℕ) (hi : i < n + 2) (hj : j < n + 2) (H : i ≤ j) :
     δ ⟨i, hi⟩ ≫ δ ⟨j + 1, by lia⟩ = δ ⟨j, hj⟩ ≫ δ ⟨i, by lia⟩ :=
   δ_comp_δ (n := n) (i := ⟨i, by lia⟩) (j := ⟨j, by lia⟩) (by simpa)
 
-/--
-lemma `σ_comp_σ_nat` / 引理 `σ_comp_σ_nat`
+/-- A version of σ_comp_σ with indices in ℕ satisfying relevant inequalities. -/
+/-
+**SimplexCategoryGenRel.** 是 Mathlib 中的一个引理，位于命名空间 `SimplexCategoryGenRel`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma σ_comp_σ_nat
-  given: {n} (i j : Nat) (hi : i < n + 1) (hj : j < n + 1) (H : i <= j)
-  proof: σ_comp_σ (n := n) (i := ⟨i, by lia⟩) (j := ⟨j, by lia⟩) (by simpa)
-
-中文:
-引理 σ_comp_σ_nat
-  条件: {n} (i j : 自然数) (hi : i < n + 1) (hj : j < n + 1) (H : i <= j)
-  证明: σ_comp_σ (n := n) (i := ⟨i, by lia⟩) (j := ⟨j, by lia⟩) (by simpa)
+--- 原说明 ---
+A version of σ_comp_σ with indices in ℕ satisfying relevant inequalities.
 -/
-lemma σ_comp_σ_nat {n} (i j : Nat) (hi : i < n + 1) (hj : j < n + 1) (H : i <= j) :
+lemma σ_comp_σ_nat {n} (i j : ℕ) (hi : i < n + 1) (hj : j < n + 1) (H : i ≤ j) :
     σ ⟨i, by lia⟩ ≫ σ ⟨j, hj⟩ = σ ⟨j + 1, by lia⟩ ≫ σ ⟨i, hi⟩ :=
   σ_comp_σ (n := n) (i := ⟨i, by lia⟩) (j := ⟨j, by lia⟩) (by simpa)
 
 end SimplicialIdentities
 
-/--
-Definition of `toSimplexCategory` / `toSimplexCategory` 的定义
+/-- The canonical functor from `SimplexCategoryGenRel` to SimplexCategory, which exists as the
+simplicial identities hold in `SimplexCategory`. -/
+/-
+**SimplexCategoryGenRel.toSimplexCategory** 是 Mathlib 中的一个定义，位于命名空间 `SimplexCate
+goryGenRel`。
+形式化陈述：toSimplexCategory : SimplexCategoryGenRel ⥤ SimplexCategory
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toSimplexCategory
-  signature: : SimplexCategoryGenRel ⥤ SimplexCategory
-  body: CategoryTheory.Quotient.lift _
-    (Paths.lift
-      { obj := .mk
-        map f := match f with
-          | FreeSimplexQuiver.Hom.δ i => SimplexCategory.δ i
-          | FreeSimplexQuiver.Hom.σ i => SimplexCategory.σ i })
-    (fun _ _ _ _ h => match h with
-      | .δ_comp_δ H => SimplexCategory.δ_comp_δ H
-      | .δ_comp_σ_of_le H => SimplexCategory.δ_comp_σ_of_le H
-      | .δ_comp_σ_self => SimplexCategory.δ_comp_σ_self
-      | .δ_comp_σ_succ => SimplexCategory.δ_comp_σ_succ
-      | .δ_comp_σ_of_gt H => SimplexCategory.δ_comp_σ_of_gt H
-      | .σ_comp_σ H => SimplexCategory.σ_comp_σ H)
-
-@[simp]
-
-中文:
-定义 toSimplexCategory
-  签名: : SimplexCategoryGenRel ⥤ 单纯形范畴
-  定义体: CategoryTheory.Quotient.lift _
-    (Paths.lift
-      { obj := .mk
-        map f := match f with
-          | FreeSimplexQuiver.Hom.δ i => SimplexCategory.δ i
-          | FreeSimplexQuiver.Hom.σ i => SimplexCategory.σ i })
-    (fun _ _ _ _ h => match h with
-      | .δ_comp_δ H => SimplexCategory.δ_comp_δ H
-      | .δ_comp_σ_of_le H => SimplexCategory.δ_comp_σ_of_le H
-      | .δ_comp_σ_self => SimplexCategory.δ_comp_σ_self
-      | .δ_comp_σ_succ => SimplexCategory.δ_comp_σ_succ
-      | .δ_comp_σ_of_gt H => SimplexCategory.δ_comp_σ_of_gt H
-      | .σ_comp_σ H => SimplexCategory.σ_comp_σ H)
-
-@[simp]
-
-Depends on / 依赖: CategoryTheory, CategoryTheory.Quotient.lift, FreeSimplexQuiver, FreeSimplexQuiver.Hom, Paths.lift, Quotient, SimplexCatego, SimplexCategory
+--- 原说明 ---
+The canonical functor from `SimplexCategoryGenRel` to SimplexCategory, which exi
+sts as the
+simplicial identities hold in `SimplexCategory`.
 -/
 def toSimplexCategory : SimplexCategoryGenRel ⥤ SimplexCategory :=
   CategoryTheory.Quotient.lift _
@@ -892,7 +587,7 @@ def toSimplexCategory : SimplexCategoryGenRel ⥤ SimplexCategory :=
         map f := match f with
           | FreeSimplexQuiver.Hom.δ i => SimplexCategory.δ i
           | FreeSimplexQuiver.Hom.σ i => SimplexCategory.σ i })
-    (fun _ _ _ _ h => match h with
+    (fun _ _ _ _ h ↦ match h with
       | .δ_comp_δ H => SimplexCategory.δ_comp_δ H
       | .δ_comp_σ_of_le H => SimplexCategory.δ_comp_σ_of_le H
       | .δ_comp_σ_self => SimplexCategory.δ_comp_σ_self
@@ -901,86 +596,45 @@ def toSimplexCategory : SimplexCategoryGenRel ⥤ SimplexCategory :=
       | .σ_comp_σ H => SimplexCategory.σ_comp_σ H)
 
 @[simp]
-/--
-lemma `toSimplexCategory_obj_mk` / 引理 `toSimplexCategory_obj_mk`
-
-English:
-lemma toSimplexCategory_obj_mk
-  given: (n : Nat)
-  statement: toSimplexCategory.obj (mk n) = .mk n
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toSimplexCategory_obj_mk
-  条件: (n : 自然数)
-  结论: toSimplexCategory.obj (mk n) = .mk n
-  证明: rfl
-
-@[simp]
+/-
+**SimplexCategoryGenRel.toSimplexCategory_obj_mk** 是 Mathlib 中的一个引理，位于命名空间 `Simp
+lexCategoryGenRel`。
+形式化陈述：toSimplexCategory_obj_mk (n : Nat) : toSimplexCategory.obj (mk n) = .mk n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma toSimplexCategory_obj_mk (n : Nat) : toSimplexCategory.obj (mk n) = .mk n := rfl
+lemma toSimplexCategory_obj_mk (n : ℕ) : toSimplexCategory.obj (mk n) = .mk n := rfl
 
 @[simp]
-/--
-lemma `toSimplexCategory_map_δ` / 引理 `toSimplexCategory_map_δ`
-
-English:
-lemma toSimplexCategory_map_δ
-  given: {n : Nat} (i : Fin (n + 2))
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toSimplexCategory_map_δ
-  条件: {n : 自然数} (i : 有限集 (n + 2))
-  证明: rfl
-
-@[simp]
+/-
+**SimplexCategoryGenRel.toSimplexCategory_map_** 是 Mathlib 中的一个引理，位于命名空间 `Simple
+xCategoryGenRel`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma toSimplexCategory_map_δ {n : Nat} (i : Fin (n + 2)) :
+lemma toSimplexCategory_map_δ {n : ℕ} (i : Fin (n + 2)) :
     toSimplexCategory.map (δ i) = SimplexCategory.δ i := rfl
 
 @[simp]
-/--
-lemma `toSimplexCategory_map_σ` / 引理 `toSimplexCategory_map_σ`
-
-English:
-lemma toSimplexCategory_map_σ
-  given: {n : Nat} (i : Fin (n + 1))
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 toSimplexCategory_map_σ
-  条件: {n : 自然数} (i : 有限集 (n + 1))
-  证明: rfl
-
-@[simp]
+/-
+**SimplexCategoryGenRel.toSimplexCategory_map_** 是 Mathlib 中的一个引理，位于命名空间 `Simple
+xCategoryGenRel`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma toSimplexCategory_map_σ {n : Nat} (i : Fin (n + 1)) :
+lemma toSimplexCategory_map_σ {n : ℕ} (i : Fin (n + 1)) :
     toSimplexCategory.map (σ i) = SimplexCategory.σ i := rfl
 
 @[simp]
-/--
-lemma `toSimplexCategory_len` / 引理 `toSimplexCategory_len`
-
-English:
-lemma toSimplexCategory_len
-  given: {x : SimplexCategoryGenRel}
-  statement: (toSimplexCategory.obj x).len = x.len
-  proof: rfl
-
-中文:
-引理 toSimplexCategory_len
-  条件: {x : SimplexCategoryGenRel}
-  结论: (toSimplexCategory.obj x).len = x.len
-  证明: rfl
+/-
+**SimplexCategoryGenRel.toSimplexCategory_len** 是 Mathlib 中的一个引理，位于命名空间 `Simplex
+CategoryGenRel`。
+形式化陈述：toSimplexCategory_len {x : SimplexCategoryGenRel} : (toSimplexCategory.obj
+ x).len = x.len
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma toSimplexCategory_len {x : SimplexCategoryGenRel} : (toSimplexCategory.obj x).len = x.len :=
   rfl
 
 end SimplexCategoryGenRel
+

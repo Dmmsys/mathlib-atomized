@@ -42,26 +42,25 @@ variable {X Y : Scheme.{u}} (f : X ⟶ Y)
 /-- A morphism of schemes `f : X ⟶ Y` is locally of finite presentation if for each affine `U ⊆ Y`
 and `V ⊆ f ⁻¹' U`, The induced map `Γ(Y, U) ⟶ Γ(X, V)` is of finite presentation. -/
 @[mk_iff]
-/--
-Definition of `LocallyOfFinitePresentation` / `LocallyOfFinitePresentation` 的定义
+/-
+**AlgebraicGeometry.LocallyOfFinitePresentation** 是 Mathlib 中的一个类，位于命名空间 `Algebr
+aicGeometry`。
+形式化陈述：LocallyOfFinitePresentation (f : X ⟶ Y) : Prop where finitePresentation_ap
+pLE (f) : forall {U : Y.Opens} (_ : IsAffineOpen U) {V : X.Opens} (_ : IsAffineO
+pen V) (e : V <= f ⁻¹ᵁ U), (f.appLE U V e).hom.FinitePresentation  alias Scheme.
+Hom.finitePresentation_appLE
+参数：f : X ⟶ Y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class LocallyOfFinitePresentation
-  parameters: (f : X ⟶ Y)
-  axioms and operations (1):
-    - finitePresentation_appLE((f)) : forall {U : Y.Opens} (_ : IsAffineOpen U) {V : X.Opens} (_ : IsAffineOpen V) (e : V <= f ⁻¹ᵁ U), (f.appLE U V e).hom.FinitePresentation
-
-中文:
-类 局部有限呈现
-  参数: (f : X ⟶ Y)
-  公理与运算 (1 个):
-    - finitePresentation_appLE((f)) : 对任意 {U : Y.Opens} (_ : 是仿射开集 U) {V : X.Opens} (_ : 是仿射开集 V) (e : V <= f ⁻¹ᵁ U), (f.appLE U V e).hom.有限呈现
-
-Depends on / 依赖: LocallyOfFinitePresentation, LocallyOfFinitePresentation.finitePresentation_appLE, finitePresentation_appLE
+--- 原说明 ---
+A morphism of schemes `f : X ⟶ Y` is locally of finite presentation if for each 
+affine `U ⊆ Y`
+and `V ⊆ f ⁻¹' U`, The induced map `Γ(Y, U) ⟶ Γ(X, V)` is of finite presentation
+.
 -/
 class LocallyOfFinitePresentation (f : X ⟶ Y) : Prop where
   finitePresentation_appLE (f) :
-    forall {U : Y.Opens} (_ : IsAffineOpen U) {V : X.Opens} (_ : IsAffineOpen V) (e : V <= f ⁻¹ᵁ U),
+    ∀ {U : Y.Opens} (_ : IsAffineOpen U) {V : X.Opens} (_ : IsAffineOpen V) (e : V ≤ f ⁻¹ᵁ U),
       (f.appLE U V e).hom.FinitePresentation
 
 alias Scheme.Hom.finitePresentation_appLE := LocallyOfFinitePresentation.finitePresentation_appLE
@@ -69,164 +68,149 @@ alias Scheme.Hom.finitePresentation_appLE := LocallyOfFinitePresentation.finiteP
 @[deprecated (since := "2026-01-20")]
 alias LocallyOfFinitePresentation.finitePresentation_of_affine_subset :=
   Scheme.Hom.finitePresentation_appLE
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasRingHomProperty @LocallyOfFinitePresentation RingHom.FinitePresentation
-  body: RingHom.finitePresentation_isLocal
-  eq_affineLocally' := by
-    ext X Y f
-    rw [locallyOfFinitePresentation_iff]; rw [affineLocally_iff_forall_isAffineOpen]
-
-中文:
-实例 :
-  签名: 有RingHomProperty @局部有限呈现 环态射.有限呈现
-  定义体: RingHom.finitePresentation_isLocal
-  eq_affineLocally' := by
-    ext X Y f
-    rw [locallyOfFinitePresentation_iff]; rw [affineLocally_iff_forall_isAffineOpen]
-
-Depends on / 依赖: RingHom, RingHom.finitePresentation_isLocal, finitePresentation_isLocal
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasRingHomProperty @LocallyOfFinitePresentation RingHom.FinitePresentation where
   isLocal_ringHomProperty := RingHom.finitePresentation_isLocal
   eq_affineLocally' := by
     ext X Y f
-    rw [locallyOfFinitePresentation_iff]; rw [affineLocally_iff_forall_isAffineOpen]
-
+    rw [locallyOfFinitePresentation_iff, affineLocally_iff_forall_isAffineOpen]
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 900) locallyOfFinitePresentation_of_isOpenImmersion [IsOpenImmersion f] :
     LocallyOfFinitePresentation f :=
   HasRingHomProperty.of_isOpenImmersion
     RingHom.finitePresentation_holdsForLocalizationAway.containsIdentities
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MorphismProperty.IsStableUnderComposition @LocallyOfFinitePresentation
-  body: HasRingHomProperty.stableUnderComposition RingHom.finitePresentation_stableUnderComposition
-
-@[simp]
-
-中文:
-实例 :
-  签名: MorphismProperty.是StableUnderComposition @局部有限呈现
-  定义体: HasRingHomProperty.stableUnderComposition RingHom.finitePresentation_stableUnderComposition
-
-@[simp]
-
-Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.stableUnderComposition, RingHom, RingHom.finitePresentation_stableUnderComposition, finitePresentation_stableUnderComposition, stableUnderComposition
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MorphismProperty.IsStableUnderComposition @LocallyOfFinitePresentation :=
   HasRingHomProperty.stableUnderComposition RingHom.finitePresentation_stableUnderComposition
 
 @[simp]
-/--
-lemma `LocallyOfFinitePresentation.SpecMap_iff` / 引理 `LocallyOfFinitePresentation.SpecMap_iff`
-
-English:
-lemma LocallyOfFinitePresentation.SpecMap_iff
-  given: {R S : CommRingCat.{u}} (f : R ⟶ S)
-  proof: HasRingHomProperty.Spec_iff
-
-中文:
-引理 局部有限呈现.SpecMap_iff
-  条件: {R S : 交换环范畴.{u}} (f : R ⟶ S)
-  证明: HasRingHomProperty.Spec_iff
-
-Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.Spec_iff, Spec_iff
+/-
+**AlgebraicGeometry.LocallyOfFinitePresentation.SpecMap_iff** 是 Mathlib 中的一个定理，位
+于命名空间 `AlgebraicGeometry.LocallyOfFinitePresentation`。
+形式化陈述：∀ {R S : CommRingCat} (f : R ⟶ S),   AlgebraicGeometry.LocallyOfFinitePres
+entation (AlgebraicGeometry.Spec.map f) ↔     (CommRingCat.Hom.hom f).FinitePres
+entation
+参数：f : R ⟶ S；AlgebraicGeometry.Spec.map f；CommRingCat.Hom.hom f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.HasRingHomProperty.Spec_iff`：Spec_iff {R S : CommRingC
+at.{u}} {φ : R ⟶ S} : P (Spec.map φ) ↔ Q φ.hom
+· 使用定理 `AlgebraicGeometry.instHasRingHomPropertyLocallyOfFinitePresentationFinit
+ePresentation`：AlgebraicGeometry.HasRingHomProperty @AlgebraicGeometry.LocallyOf
+FinitePresentation   fun {R S} [CommRing R] [CommRing S] => RingHom.FiniteP…
 -/
 lemma LocallyOfFinitePresentation.SpecMap_iff {R S : CommRingCat.{u}} (f : R ⟶ S) :
     LocallyOfFinitePresentation (Spec.map f) ↔ f.hom.FinitePresentation :=
   HasRingHomProperty.Spec_iff
-
-/--
-lemma `Scheme.Hom.finitePresentation_appTop` / 引理 `Scheme.Hom.finitePresentation_appTop`
-
-English:
-lemma Scheme.Hom.finitePresentation_appTop
-  statement: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsAffine X] [IsAffine Y]
-  proof: HasRingHomProperty.appTop (P := @LocallyOfFinitePresentation) _ inferInstance
-
-中文:
-引理 概形.态射.finitePresentation_appTop
-  结论: {X Y : 概形.{u}} (f : X ⟶ Y) [是仿射 X] [是仿射 Y]
-  证明: HasRingHomProperty.appTop (P := @LocallyOfFinitePresentation) _ inferInstance
-
-Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.appTop, LocallyOfFinitePresentation, appTop
+/-
+**AlgebraicGeometry.Scheme.Hom.finitePresentation_appTop** 是 Mathlib 中的一个定理，位于命名
+空间 `AlgebraicGeometry.Scheme.Hom`。
+形式化陈述：∀ {X Y : AlgebraicGeometry.Scheme} (f : X ⟶ Y) [AlgebraicGeometry.IsAffine
+ X] [AlgebraicGeometry.IsAffine Y]   [AlgebraicGeometry.LocallyOfFinitePresentat
+ion f],   (CommRingCat.Hom.hom (AlgebraicGeometry.Scheme.Hom.appTop f)).FinitePr
+esentation
+参数：f : X ⟶ Y；CommRingCat.Hom.hom (AlgebraicGeometry.Scheme.Hom.appTop f)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgebraicGeometry.HasRingHomProperty.appTop`：appTop (H : P f) [IsAffine 
+X] [IsAffine Y] : Q f.appTop.hom
+· 使用定理 `AlgebraicGeometry.instHasRingHomPropertyLocallyOfFinitePresentationFinit
+ePresentation`：AlgebraicGeometry.HasRingHomProperty @AlgebraicGeometry.LocallyOf
+FinitePresentation   fun {R S} [CommRing R] [CommRing S] => RingHom.FiniteP…
 -/
 lemma Scheme.Hom.finitePresentation_appTop {X Y : Scheme.{u}} (f : X ⟶ Y) [IsAffine X] [IsAffine Y]
     [LocallyOfFinitePresentation f] :
     f.appTop.hom.FinitePresentation :=
   HasRingHomProperty.appTop (P := @LocallyOfFinitePresentation) _ inferInstance
-
-/--
-Instance `locallyOfFinitePresentation_comp` / 实例 `locallyOfFinitePresentation_comp`
-
-English:
-instance locallyOfFinitePresentation_comp
-  signature: {X Y Z : Scheme.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
-  body: MorphismProperty.comp_mem _ f g hf hg
-
-中文:
-实例 locallyOfFinitePresentation_comp
-  签名: {X Y Z : 概形.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
-  定义体: MorphismProperty.comp_mem _ f g hf hg
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.comp_mem, comp_mem
+/-
+**AlgebraicGeometry.locallyOfFinitePresentation_comp** 是 Mathlib 中的一个实例，位于命名空间 `
+AlgebraicGeometry`。
+形式化陈述：locallyOfFinitePresentation_comp {X Y Z : Scheme.{u}} (f : X ⟶ Y) (g : Y ⟶
+ Z) [hf : LocallyOfFinitePresentation f] [hg : LocallyOfFinitePresentation g] : 
+LocallyOfFinitePresentation (f ≫ g)
+参数：f : X ⟶ Y；g : Y ⟶ Z。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.MorphismProperty.comp_mem`：comp_mem (W : MorphismProperty
+ C) [W.IsStableUnderComposition] {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) (hf : W f) 
+(hg : W g) : W (f ≫ g)
+· 使用定理 `AlgebraicGeometry.instIsStableUnderCompositionSchemeLocallyOfFinitePrese
+ntation`：CategoryTheory.MorphismProperty.IsStableUnderComposition @AlgebraicGeom
+etry.LocallyOfFinitePresentation
 -/
 instance locallyOfFinitePresentation_comp {X Y Z : Scheme.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
     [hf : LocallyOfFinitePresentation f] [hg : LocallyOfFinitePresentation g] :
     LocallyOfFinitePresentation (f ≫ g) :=
   MorphismProperty.comp_mem _ f g hf hg
-
-/--
-Instance `locallyOfFinitePresentation_isStableUnderBaseChange` / 实例 `locallyOfFinitePresentation_isStableUnderBaseChange`
-
-English:
-instance locallyOfFinitePresentation_isStableUnderBaseChange
-  signature: :
-  body: HasRingHomProperty.isStableUnderBaseChange RingHom.finitePresentation_isStableUnderBaseChange
-
-中文:
-实例 locallyOfFinitePresentation_isStableUnderBaseChange
-  签名: :
-  定义体: HasRingHomProperty.isStableUnderBaseChange RingHom.finitePresentation_isStableUnderBaseChange
-
-Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.isStableUnderBaseChange, RingHom, RingHom.finitePresentation_isStableUnderBaseChange, finitePresentation_isStableUnderBaseChange, isStableUnderBaseChange
+/-
+**AlgebraicGeometry.locallyOfFinitePresentation_isStableUnderBaseChange** 是 Math
+lib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+形式化陈述：locallyOfFinitePresentation_isStableUnderBaseChange : MorphismProperty.IsS
+tableUnderBaseChange @LocallyOfFinitePresentation
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `AlgebraicGeometry.HasRingHomProperty.isStableUnderBaseChange`：isStableUn
+derBaseChange (hP : RingHom.IsStableUnderBaseChange Q) : P.IsStableUnderBaseChan
+ge
+· 使用定理 `AlgebraicGeometry.instHasRingHomPropertyLocallyOfFinitePresentationFinit
+ePresentation`：AlgebraicGeometry.HasRingHomProperty @AlgebraicGeometry.LocallyOf
+FinitePresentation   fun {R S} [CommRing R] [CommRing S] => RingHom.FiniteP…
+· 使用定理 `RingHom.finitePresentation_isStableUnderBaseChange`：finitePresentation_i
+sStableUnderBaseChange : IsStableUnderBaseChange @FinitePresentation
 -/
 instance locallyOfFinitePresentation_isStableUnderBaseChange :
     MorphismProperty.IsStableUnderBaseChange @LocallyOfFinitePresentation :=
   HasRingHomProperty.isStableUnderBaseChange RingHom.finitePresentation_isStableUnderBaseChange
 
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y Z : Scheme.{u}} (f : X ⟶ Z) (g : Y ⟶ Z) [LocallyOfFinitePresentation g] :
     LocallyOfFinitePresentation (Limits.pullback.fst f g) :=
   MorphismProperty.pullback_fst _ _ inferInstance
 
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y Z : Scheme.{u}} (f : X ⟶ Z) (g : Y ⟶ Z) [LocallyOfFinitePresentation f] :
     LocallyOfFinitePresentation (Limits.pullback.snd f g) :=
   MorphismProperty.pullback_snd _ _ inferInstance
 
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (f : X ⟶ Y) (V : Y.Opens) [LocallyOfFinitePresentation f] :
     LocallyOfFinitePresentation (f ∣_ V) :=
   IsZariskiLocalAtTarget.restrict ‹_› V
-
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (f : X ⟶ Y) (U : X.Opens) (V : Y.Opens) (e) [LocallyOfFinitePresentation f] :
     LocallyOfFinitePresentation (f.resLE V U e) := by
   delta Scheme.Hom.resLE; infer_instance
-
+/-
+**AlgebraicGeometry.** 是 Mathlib 中的一个实例，位于命名空间 `AlgebraicGeometry`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : Scheme.{u}} (f : X ⟶ Y) [hf : LocallyOfFinitePresentation f] :
     LocallyOfFiniteType f := by
   rw [HasRingHomProperty.eq_affineLocally @LocallyOfFinitePresentation] at hf
   rw [HasRingHomProperty.eq_affineLocally @LocallyOfFiniteType]
-  refine affineLocally_le (fun hf => ?_) f hf
+  refine affineLocally_le (fun hf ↦ ?_) f hf
   exact RingHom.FiniteType.of_finitePresentation hf
 
 set_option backward.defeqAttrib.useBackward true in
@@ -239,8 +223,8 @@ nonrec lemma Scheme.Hom.isLocallyConstructible_image (f : X ⟶ Y)
     [hf : LocallyOfFinitePresentation f] [QuasiCompact f]
     {s : Set X} (hs : IsLocallyConstructible s) :
     IsLocallyConstructible (f '' s) := by
-  wlog hY : exists R, Y = Spec R
-  · refine .of_isOpenCover Y.affineCover.isOpenCover_opensRange fun i => ?_
+  wlog hY : ∃ R, Y = Spec R
+  · refine .of_isOpenCover Y.affineCover.isOpenCover_opensRange fun i ↦ ?_
     have inst : LocallyOfFinitePresentation (Y.affineCover.pullbackHom f i) :=
       MorphismProperty.pullback_snd _ _ inferInstance
     have inst : QuasiCompact (Y.affineCover.pullbackHom f i) :=
@@ -253,21 +237,24 @@ nonrec lemma Scheme.Hom.isLocallyConstructible_image (f : X ⟶ Y)
     refine .trans ?_
       ((Scheme.homeoOfIso (Y.affineCover.f i).isoOpensRange).image_eq_preimage_symm _)
     apply Set.image_injective.mpr Subtype.val_injective
-    rw [Set.image_preimage_eq_inter_range]; rw [← Set.image_comp]; rw [← Set.image_comp]; rw [Subtype.range_coe_subtype]; rw [Set.ofPred_mem_eq]
+    rw [Set.image_preimage_eq_inter_range, ← Set.image_comp, ← Set.image_comp,
+      Subtype.range_coe_subtype, Set.ofPred_mem_eq]
     change _ = (Y.affineCover.pullbackHom f i ≫
       (Y.affineCover.f i).isoOpensRange.hom ≫ Opens.ι _).base.hom '' _
-    rw [Scheme.Hom.isoOpensRange_hom_ι]; rw [Cover.pullbackHom_map]; rw [Scheme.Hom.comp_base]; rw [TopCat.hom_comp]; rw [ContinuousMap.coe_comp]; rw [Set.image_comp]; rw [Set.image_preimage_eq_inter_range]
+    rw [Scheme.Hom.isoOpensRange_hom_ι, Cover.pullbackHom_map, Scheme.Hom.comp_base,
+      TopCat.hom_comp, ContinuousMap.coe_comp, Set.image_comp, Set.image_preimage_eq_inter_range]
     simp [IsOpenImmersion.range_pullbackFst, Set.image_inter_preimage]
   obtain ⟨R, rfl⟩ := hY
-  wlog hX : exists S, X = Spec S
+  wlog hX : ∃ S, X = Spec S
   · have inst : CompactSpace X := HasAffineProperty.iff_of_isAffine.mp ‹QuasiCompact f›
     let 𝒰 := X.affineCover.finiteSubcover
-    rw [← 𝒰.isOpenCover_opensRange.iUnion_inter s]; rw [Set.image_iUnion]
-    refine .iUnion fun i => ?_
+    rw [← 𝒰.isOpenCover_opensRange.iUnion_inter s, Set.image_iUnion]
+    refine .iUnion fun i ↦ ?_
     have inst : QuasiCompact (𝒰.f i ≫ f) :=
       HasAffineProperty.iff_of_isAffine.mpr (inferInstanceAs (CompactSpace (Spec _)))
     convert! this (hs.preimage_of_isOpenEmbedding (𝒰.f i).isOpenEmbedding) _ (𝒰.f i ≫ f) ⟨_, rfl⟩
-    rw [Scheme.Hom.comp_base]; rw [← TopCat.Hom.hom]; rw [← TopCat.Hom.hom]; rw [TopCat.hom_comp]; rw [ContinuousMap.coe_comp]; rw [Set.image_comp]; rw [Set.image_preimage_eq_inter_range]; rw [coe_opensRange]
+    rw [Scheme.Hom.comp_base, ← TopCat.Hom.hom, ← TopCat.Hom.hom, TopCat.hom_comp,
+      ContinuousMap.coe_comp, Set.image_comp, Set.image_preimage_eq_inter_range, coe_opensRange]
   obtain ⟨S, rfl⟩ := hX
   obtain ⟨φ, rfl⟩ := Spec.map_surjective f
   rw [HasRingHomProperty.Spec_iff (P := @LocallyOfFinitePresentation)] at hf
@@ -276,24 +263,30 @@ nonrec lemma Scheme.Hom.isLocallyConstructible_image (f : X ⟶ Y)
 /-- **Chevalley's Theorem**: The image of a constructible set under a
 morphism of finite presentation into a qcqs scheme is constructible. -/
 @[stacks 054J]
-/--
-lemma `Scheme.Hom.isConstructible_image` / 引理 `Scheme.Hom.isConstructible_image`
+/-
+**AlgebraicGeometry.Scheme.Hom.isConstructible_image** 是 Mathlib 中的一个定理，位于命名空间 `
+AlgebraicGeometry.Scheme.Hom`。
+形式化陈述：∀ {X Y : AlgebraicGeometry.Scheme} (f : X ⟶ Y) [AlgebraicGeometry.LocallyO
+fFinitePresentation f]   [AlgebraicGeometry.QuasiCompact f] [CompactSpace ↥Y] [Q
+uasiSeparatedSpace ↥Y] {s : Set ↥X},   Topology.IsConstructible s → Topology.IsC
+onstructible (⇑f '' s)
+参数：f : X ⟶ Y；⇑f '' s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsLocallyConstructible.isConstructible`：∀ {X : Type u_2} [inst 
+: TopologicalSpace X] {s : Set X} [PrespectralSpace X] [QuasiSeparatedSpace X] [
+CompactSpace X],   Topology.IsLocally…
+· 使用定理 `AlgebraicGeometry.instPrespectralSpaceCarrierCarrierCommRingCat`：∀ {X : 
+AlgebraicGeometry.Scheme}, PrespectralSpace ↥X
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.isLocallyConstructible_image`：∀ {X Y : Alge
+braicGeometry.Scheme} (f : X ⟶ Y) [hf : AlgebraicGeometry.LocallyOfFinitePresent
+ation f]   [AlgebraicGeometry.QuasiCompact f] {…
+· 使用定理 `Topology.IsConstructible.isLocallyConstructible`：∀ {X : Type u_2} [inst 
+: TopologicalSpace X] {s : Set X}, Topology.IsConstructible s → Topology.IsLocal
+lyConstructible s
 
-English:
-lemma Scheme.Hom.isConstructible_image
-  statement: (f : X ⟶ Y)
-  proof: (f.isLocallyConstructible_image hs.isLocallyConstructible).isConstructible
-
-@[stacks 054I]
-
-中文:
-引理 概形.态射.isConstructible_image
-  结论: (f : X ⟶ Y)
-  证明: (f.isLocallyConstructible_image hs.isLocallyConstructible).isConstructible
-
-@[stacks 054I]
-
-Depends on / 依赖: f.isLocallyConstructible_image, hs.isLocallyConstructible, isConstructible, isLocallyConstructible, isLocallyConstructible_image
+--- 原说明 ---
+**Chevalley's Theorem**: The image of a constructible set under a
+morphism of finite presentation into a qcqs scheme is constructible.
 -/
 lemma Scheme.Hom.isConstructible_image (f : X ⟶ Y)
     [LocallyOfFinitePresentation f] [QuasiCompact f] [CompactSpace Y] [QuasiSeparatedSpace Y]
@@ -302,35 +295,38 @@ lemma Scheme.Hom.isConstructible_image (f : X ⟶ Y)
   (f.isLocallyConstructible_image hs.isLocallyConstructible).isConstructible
 
 @[stacks 054I]
-/--
-lemma `Scheme.Hom.isConstructible_preimage` / 引理 `Scheme.Hom.isConstructible_preimage`
-
-English:
-lemma Scheme.Hom.isConstructible_preimage
-  given: (f : X ⟶ Y) {s : Set Y} (hs : IsConstructible s)
-  proof: hs.preimage f.continuous fun t ht ht' => IsRetrocompact_iff_isSpectralMap_subtypeVal.mpr
-    (quasiCompact_iff_isSpectralMap.mp
-    (MorphismProperty.of_isPullback (P := @QuasiCompact)
-    (isPullback_morphismRestrict f ⟨t, ht⟩)
-    (quasiCompact_iff_isSpectralMap.mpr (IsRetrocompact_iff_isSpectralMap_subtypeVal.mp ht'))))
-
-中文:
-引理 概形.态射.isConstructible_preimage
-  条件: (f : X ⟶ Y) {s : 集合 Y} (hs : IsConstructible s)
-  证明: hs.preimage f.continuous fun t ht ht' => IsRetrocompact_iff_isSpectralMap_subtypeVal.mpr
-    (quasiCompact_iff_isSpectralMap.mp
-    (MorphismProperty.of_isPullback (P := @QuasiCompact)
-    (isPullback_morphismRestrict f ⟨t, ht⟩)
-    (quasiCompact_iff_isSpectralMap.mpr (IsRetrocompact_iff_isSpectralMap_subtypeVal.mp ht'))))
-
-Depends on / 依赖: IsRetrocompact_iff_isSpectralMap_subtypeVal, IsRetrocompact_iff_isSpectralMap_subtypeVal.mp, IsRetrocompact_iff_isSpectralMap_subtypeVal.mpr, MorphismProperty, MorphismProperty.of_isPullback, QuasiCompact, continuous, f.continuous, hs.preimage, isPullback_morphismRestrict, of_isPullback, preimage, quasiCompact_iff_isSpectralMap, quasiCompact_iff_isSpectralMap.mp, quasiCompact_iff_isSpectralMap.mpr
+/-
+**AlgebraicGeometry.Scheme.Hom.isConstructible_preimage** 是 Mathlib 中的一个定理，位于命名空
+间 `AlgebraicGeometry.Scheme.Hom`。
+形式化陈述：∀ {X Y : AlgebraicGeometry.Scheme} (f : X ⟶ Y) {s : Set ↥Y},   Topology.Is
+Constructible s → Topology.IsConstructible (⇑f ⁻¹' s)
+参数：f : X ⟶ Y；⇑f ⁻¹' s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsConstructible.preimage`：∀ {X : Type u_2} {Y : Type u_3} [inst
+ : TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f : X → Y} {s : Set Y},   
+Continuous f →     (∀ (…
+· 使用定理 `AlgebraicGeometry.Scheme.Hom.continuous`：∀ {X Y : AlgebraicGeometry.Sche
+me} (f : X ⟶ Y), Continuous ⇑f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `IsRetrocompact_iff_isSpectralMap_subtypeVal`：IsRetrocompact_iff_isSpectr
+alMap_subtypeVal : IsRetrocompact s ↔ IsSpectralMap (Subtype.val : s -> X)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `AlgebraicGeometry.quasiCompact_iff_isSpectralMap`：quasiCompact_iff_isSpe
+ctralMap : QuasiCompact f ↔ IsSpectralMap f
+· 使用定理 `CategoryTheory.MorphismProperty.of_isPullback`：∀ {C : Type u} {inst : Ca
+tegoryTheory.Category.{v, u} C} {P : CategoryTheory.MorphismProperty C}   [self 
+: P.IsStableUnderBaseChange] {X Y Y…
+· 使用定理 `AlgebraicGeometry.isPullback_morphismRestrict`：isPullback_morphismRestri
+ct {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) : IsPullback (f ∣_ U) (f ⁻¹ᵁ U).
+ι U.ι f
 -/
 lemma Scheme.Hom.isConstructible_preimage (f : X ⟶ Y) {s : Set Y} (hs : IsConstructible s) :
     IsConstructible (f ⁻¹' s) :=
-  hs.preimage f.continuous fun t ht ht' => IsRetrocompact_iff_isSpectralMap_subtypeVal.mpr
+  hs.preimage f.continuous fun t ht ht' ↦ IsRetrocompact_iff_isSpectralMap_subtypeVal.mpr
     (quasiCompact_iff_isSpectralMap.mp
     (MorphismProperty.of_isPullback (P := @QuasiCompact)
     (isPullback_morphismRestrict f ⟨t, ht⟩)
     (quasiCompact_iff_isSpectralMap.mpr (IsRetrocompact_iff_isSpectralMap_subtypeVal.mp ht'))))
 
 end AlgebraicGeometry
+

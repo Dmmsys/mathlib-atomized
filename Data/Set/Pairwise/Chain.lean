@@ -18,85 +18,52 @@ public section
 
 open Set
 
-variable {α β : Type*} {c : Set (Set α)} {r : α -> α -> Prop}
-variable (hc : IsChain (· subseteq ·) c)
+variable {α β : Type*} {c : Set (Set α)} {r : α → α → Prop}
+variable (hc : IsChain (· ⊆ ·) c)
 
 namespace IsChain
 
 include hc
 
-/--
-lemma `pairwise_iUnion₂` / 引理 `pairwise_iUnion₂`
-
-English:
-lemma pairwise_iUnion₂
-  statement: (⋃ s in c, s).Pairwise r ↔ forall s in c, s.Pairwise r
-  proof: pairwise_iUnion₂_iff hc.directedOn
-
-中文:
-引理 pairwise_iUnion₂
-  结论: (⋃ s in c, s).两两 r ↔ 对任意 s in c, s.两两 r
-  证明: pairwise_iUnion₂_iff hc.directedOn
-
-Depends on / 依赖: directedOn, hc.directedOn
+/-
+**IsChain.pairwise_iUnion** 是 Mathlib 中的一个引理，位于命名空间 `IsChain`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma pairwise_iUnion₂ : (⋃ s in c, s).Pairwise r ↔ forall s in c, s.Pairwise r :=
+lemma pairwise_iUnion₂ : (⋃ s ∈ c, s).Pairwise r ↔ ∀ s ∈ c, s.Pairwise r :=
   pairwise_iUnion₂_iff hc.directedOn
-
-/--
-lemma `pairwiseDisjoint_iUnion₂` / 引理 `pairwiseDisjoint_iUnion₂`
-
-English:
-lemma pairwiseDisjoint_iUnion₂
-  given: [PartialOrder β] [OrderBot β] (f : α -> β)
-  proof: hc.pairwise_iUnion₂
-
-中文:
-引理 pairwiseDisjoint_iUnion₂
-  条件: [偏序 β] [有底序 β] (f : α -> β)
-  证明: hc.pairwise_iUnion₂
-
-Depends on / 依赖: hc.pairwise_iUnion
+/-
+**IsChain.pairwiseDisjoint_iUnion** 是 Mathlib 中的一个引理，位于命名空间 `IsChain`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma pairwiseDisjoint_iUnion₂ [PartialOrder β] [OrderBot β] (f : α -> β) :
-    (⋃ s in c, s).PairwiseDisjoint f ↔ forall s in c, s.PairwiseDisjoint f :=
+lemma pairwiseDisjoint_iUnion₂ [PartialOrder β] [OrderBot β] (f : α → β) :
+    (⋃ s ∈ c, s).PairwiseDisjoint f ↔ ∀ s ∈ c, s.PairwiseDisjoint f :=
   hc.pairwise_iUnion₂
-
-/--
-lemma `pairwise_sUnion` / 引理 `pairwise_sUnion`
-
-English:
-lemma pairwise_sUnion
-  statement: (⋃₀ c).Pairwise r ↔ forall s in c, s.Pairwise r
-  proof: Set.pairwise_sUnion hc.directedOn
-
-中文:
-引理 pairwise_sUnion
-  结论: (⋃₀ c).两两 r ↔ 对任意 s in c, s.两两 r
-  证明: Set.pairwise_sUnion hc.directedOn
-
-Depends on / 依赖: Set.pairwise_sUnion, directedOn, hc.directedOn, pairwise_sUnion
+/-
+**IsChain.pairwise_sUnion** 是 Mathlib 中的一个引理，位于命名空间 `IsChain`。
+形式化陈述：pairwise_sUnion : (⋃₀ c).Pairwise r ↔ forall s in c, s.Pairwise r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.pairwise_sUnion`：pairwise_sUnion {r : α -> α -> Prop} {s : Set (Set 
+α)} (hd : DirectedOn (· subseteq ·) s) : (⋃₀ s).Pairwise r ↔ forall a in s, Set.
+Pairwise …
+· 使用定理 `IsChain.directedOn`：IsChain.directedOn (H : IsChain r s) : DirectedOn r 
+s
 -/
-lemma pairwise_sUnion : (⋃₀ c).Pairwise r ↔ forall s in c, s.Pairwise r :=
+lemma pairwise_sUnion : (⋃₀ c).Pairwise r ↔ ∀ s ∈ c, s.Pairwise r :=
   Set.pairwise_sUnion hc.directedOn
-
-/--
-lemma `pairwiseDisjoint_sUnion` / 引理 `pairwiseDisjoint_sUnion`
-
-English:
-lemma pairwiseDisjoint_sUnion
-  given: [PartialOrder β] [OrderBot β] (f : α -> β)
-  proof: hc.pairwise_sUnion
-
-中文:
-引理 pairwiseDisjoint_sUnion
-  条件: [偏序 β] [有底序 β] (f : α -> β)
-  证明: hc.pairwise_sUnion
-
-Depends on / 依赖: hc.pairwise_sUnion, pairwise_sUnion
+/-
+**IsChain.pairwiseDisjoint_sUnion** 是 Mathlib 中的一个引理，位于命名空间 `IsChain`。
+形式化陈述：pairwiseDisjoint_sUnion [PartialOrder β] [OrderBot β] (f : α -> β) : (⋃₀ c
+).PairwiseDisjoint f ↔ forall s in c, s.PairwiseDisjoint f
+参数：f : α -> β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsChain.pairwise_sUnion`：pairwise_sUnion : (⋃₀ c).Pairwise r ↔ forall s 
+in c, s.Pairwise r
 -/
-lemma pairwiseDisjoint_sUnion [PartialOrder β] [OrderBot β] (f : α -> β) :
-    (⋃₀ c).PairwiseDisjoint f ↔ forall s in c, s.PairwiseDisjoint f :=
+lemma pairwiseDisjoint_sUnion [PartialOrder β] [OrderBot β] (f : α → β) :
+    (⋃₀ c).PairwiseDisjoint f ↔ ∀ s ∈ c, s.PairwiseDisjoint f :=
   hc.pairwise_sUnion
 
 end IsChain
+

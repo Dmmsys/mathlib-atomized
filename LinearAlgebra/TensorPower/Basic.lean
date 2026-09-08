@@ -33,20 +33,21 @@ tensor powers. Elsewhere, using `1` and `*` on `GradedMonoid` should be preferre
 
 open scoped TensorProduct
 
-/--
-Definition of `TensorPower` / `TensorPower` 的定义
+/-- Homogeneous tensor powers $M^{\otimes n}$. `⨂[R]^n M` is a shorthand for
+`⨂[R] (i : Fin n), M`. -/
+/-
+**TensorPower** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：TensorPower (R : Type*) (n : Nat) (M : Type*) [CommSemiring R] [AddCommMon
+oid M] [Module R M] : Type _
+参数：R : Type*；n : Nat；M : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation TensorPower
-  signature: (R : Type*) (n : Nat) (M : Type*) [CommSemiring R] [AddCommMonoid M]
-  body: ⨂[R] _ : Fin n, M
-
-中文:
-缩写 TensorPower
-  签名: (R : 类型) (n : 自然数) (M : 类型) [交换半环 R] [加法交换幺半群 M]
-  定义体: ⨂[R] _ : Fin n, M
+--- 原说明 ---
+Homogeneous tensor powers $M^{\otimes n}$. `⨂[R]^n M` is a shorthand for
+`⨂[R] (i : Fin n), M`.
 -/
-abbrev TensorPower (R : Type*) (n : Nat) (M : Type*) [CommSemiring R] [AddCommMonoid M]
+abbrev TensorPower (R : Type*) (n : ℕ) (M : Type*) [CommSemiring R] [AddCommMonoid M]
     [Module R M] : Type _ :=
   ⨂[R] _ : Fin n, M
 
@@ -60,21 +61,36 @@ set_option backward.isDefEq.respectTransparency false in
 /-- Two dependent pairs of tensor products are equal if their index is equal and the contents
 are equal after a canonical reindexing. -/
 @[ext (iff := false)]
-/--
-theorem `gradedMonoid_eq_of_reindex_cast` / 定理 `gradedMonoid_eq_of_reindex_cast`
+/-
+**PiTensorProduct.gradedMonoid_eq_of_reindex_cast** 是 Mathlib 中的一个定理，位于命名空间 `PiT
+ensorProduct`。
+形式化陈述：∀ {R : Type u_1} {M : Type u_2} [inst : CommSemiring R] [inst_1 : AddCommM
+onoid M] [inst_2 : _root_.Module R M]   {ιι : Type u_3} {ι : ιι → Type u_4} {a b
+ : GradedMonoid fun ii => PiTensorProduct R fun x => M} (h : a.fst = b.fst),   (
+PiTensorProduct.reindex R (fun x => M) (Equiv.cast ⋯)) a.snd = b.snd → a = b
+参数：h : a.fst = b.fst；PiTensorProduct.reindex R (fun x => M) (Equiv.cast ⋯)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PiTensorProduct.reindex_refl`：reindex_refl : reindex R s (Equiv.refl ι) 
+= LinearEquiv.refl R _
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem gradedMonoid_eq_of_reindex_cast
-  given: {ιι : Type*} {ι : ιι -> Type*}
-
-中文:
-定理 gradedMonoid_eq_of_reindex_cast
-  条件: {ιι : 类型} {ι : ιι -> 类型}
+--- 原说明 ---
+Two dependent pairs of tensor products are equal if their index is equal and the
+ contents
+are equal after a canonical reindexing.
 -/
-theorem gradedMonoid_eq_of_reindex_cast {ιι : Type*} {ι : ιι -> Type*} :
-    forall {a b : GradedMonoid fun ii => ⨂[R] _ : ι ii, M} (h : a.fst = b.fst),
-      reindex R (fun _ => M) (Equiv.cast <| congr_arg ι h) a.snd = b.snd -> a = b
-  | ⟨ai, a⟩, ⟨bi, b⟩ => fun (hi : ai = bi) (h : reindex R (fun _ => M) _ a = b) => by
+theorem gradedMonoid_eq_of_reindex_cast {ιι : Type*} {ι : ιι → Type*} :
+    ∀ {a b : GradedMonoid fun ii => ⨂[R] _ : ι ii, M} (h : a.fst = b.fst),
+      reindex R (fun _ ↦ M) (Equiv.cast <| congr_arg ι h) a.snd = b.snd → a = b
+  | ⟨ai, a⟩, ⟨bi, b⟩ => fun (hi : ai = bi) (h : reindex R (fun _ ↦ M) _ a = b) => by
     subst hi
     simp_all
 
@@ -86,230 +102,154 @@ open scoped TensorProduct DirectSum
 
 open PiTensorProduct
 
-/--
-Instance `gOne` / 实例 `gOne`
+/-- As a graded monoid, `⨂[R]^i M` has a `1 : ⨂[R]^0 M`. -/
+/-
+**TensorPower.gOne** 是 Mathlib 中的一个实例，位于命名空间 `TensorPower`。
+形式化陈述：gOne : GradedMonoid.GOne fun i => ⨂[R]^i M where one
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance gOne
-  signature: : GradedMonoid.GOne fun i => ⨂[R]^i M where one
-  body: tprod R @Fin.elim0 M
-
-local notation "ₜ1" => @GradedMonoid.GOne.one Nat (fun i => ⨂[R]^i M) _ _
-
-中文:
-实例 gOne
-  签名: : 分次幺半群.GOne fun i => ⨂[R]^i M where one
-  定义体: tprod R @Fin.elim0 M
-
-local notation "ₜ1" => @GradedMonoid.GOne.one Nat (fun i => ⨂[R]^i M) _ _
-
-Depends on / 依赖: Fin.elim0
+--- 原说明 ---
+As a graded monoid, `⨂[R]^i M` has a `1 : ⨂[R]^0 M`.
 -/
-instance gOne : GradedMonoid.GOne fun i => ⨂[R]^i M where one := tprod R @Fin.elim0 M
+instance gOne : GradedMonoid.GOne fun i => ⨂[R]^i M where one := tprod R <| @Fin.elim0 M
 
-local notation "ₜ1" => @GradedMonoid.GOne.one Nat (fun i => ⨂[R]^i M) _ _
-
-/--
-theorem `gOne_def` / 定理 `gOne_def`
-
-English:
-theorem gOne_def
-  statement: ₜ1 = tprod R (@Fin.elim0 M)
-  proof: rfl
-
-中文:
-定理 gOne_def
-  结论: ₜ1 = tprod R (@有限集.elim0 M)
-  证明: rfl
+local notation "ₜ1" => @GradedMonoid.GOne.one ℕ (fun i => ⨂[R]^i M) _ _
+/-
+**TensorPower.gOne_def** 是 Mathlib 中的一个定理，位于命名空间 `TensorPower`。
+形式化陈述：gOne_def : ₜ1 = tprod R (@Fin.elim0 M)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem gOne_def : ₜ1 = tprod R (@Fin.elim0 M) :=
   rfl
 
-/--
-Definition of `mulEquiv` / `mulEquiv` 的定义
+/-- A variant of `PiTensorProduct.tmulEquiv` with the result indexed by `Fin (n + m)`. -/
+/-
+**TensorPower.mulEquiv** 是 Mathlib 中的一个定义，位于命名空间 `TensorPower`。
+形式化陈述：mulEquiv {n m : Nat} : ⨂[R]^n M otimes[R] (⨂[R]^m) M ≃ₗ[R] (⨂[R]^(n + m)) 
+M
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mulEquiv
-  signature: {n m : Nat}
-  body: (tmulEquiv R M).trans (reindex R (fun _ => M) finSumFinEquiv)
-
-中文:
-定义 mulEquiv
-  签名: {n m : 自然数}
-  定义体: (tmulEquiv R M).trans (reindex R (fun _ => M) finSumFinEquiv)
-
-Depends on / 依赖: finSumFinEquiv, reindex, tmulEquiv
+--- 原说明 ---
+A variant of `PiTensorProduct.tmulEquiv` with the result indexed by `Fin (n + m)
+`.
 -/
-def mulEquiv {n m : Nat} : ⨂[R]^n M otimes[R] (⨂[R]^m) M ≃ₗ[R] (⨂[R]^(n + m)) M :=
-  (tmulEquiv R M).trans (reindex R (fun _ => M) finSumFinEquiv)
+def mulEquiv {n m : ℕ} : ⨂[R]^n M ⊗[R] (⨂[R]^m) M ≃ₗ[R] (⨂[R]^(n + m)) M :=
+  (tmulEquiv R M).trans (reindex R (fun _ ↦ M) finSumFinEquiv)
 
-/--
-Instance `gMul` / 实例 `gMul`
+/-- As a graded monoid, `⨂[R]^i M` has a `(*) : ⨂[R]^i M → ⨂[R]^j M → ⨂[R]^(i + j) M`. -/
+/-
+**TensorPower.gMul** 是 Mathlib 中的一个实例，位于命名空间 `TensorPower`。
+形式化陈述：gMul : GradedMonoid.GMul fun i => ⨂[R]^i M where mul {i j} a b
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance gMul
-  signature: : GradedMonoid.GMul fun i => ⨂[R]^i M where
-  body: (TensorProduct.mk R _ _).compr₂ (↑(mulEquiv : _ ≃ₗ[R] (⨂[R]^(i + j)) M)) a b
-
-local infixl:70 " ₜ* " => @GradedMonoid.GMul.mul Nat (fun i => ⨂[R]^i M) _ _ _ _
-
-中文:
-实例 gMul
-  签名: : 分次幺半群.GMul fun i => ⨂[R]^i M where
-  定义体: (TensorProduct.mk R _ _).compr₂ (↑(mulEquiv : _ ≃ₗ[R] (⨂[R]^(i + j)) M)) a b
-
-local infixl:70 " ₜ* " => @GradedMonoid.GMul.mul Nat (fun i => ⨂[R]^i M) _ _ _ _
-
-Depends on / 依赖: TensorProduct, TensorProduct.mk, mulEquiv
+--- 原说明 ---
+As a graded monoid, `⨂[R]^i M` has a `(*) : ⨂[R]^i M → ⨂[R]^j M → ⨂[R]^(i + j) M
+`.
 -/
 instance gMul : GradedMonoid.GMul fun i => ⨂[R]^i M where
   mul {i j} a b :=
     (TensorProduct.mk R _ _).compr₂ (↑(mulEquiv : _ ≃ₗ[R] (⨂[R]^(i + j)) M)) a b
 
-local infixl:70 " ₜ* " => @GradedMonoid.GMul.mul Nat (fun i => ⨂[R]^i M) _ _ _ _
-
-/--
-theorem `gMul_def` / 定理 `gMul_def`
-
-English:
-theorem gMul_def
-  given: {i j} (a : ⨂[R]^i M) (b : (⨂[R]^j) M)
-  proof: rfl
-
-中文:
-定理 gMul_def
-  条件: {i j} (a : ⨂[R]^i M) (b : (⨂[R]^j) M)
-  证明: rfl
+local infixl:70 " ₜ* " => @GradedMonoid.GMul.mul ℕ (fun i => ⨂[R]^i M) _ _ _ _
+/-
+**TensorPower.gMul_def** 是 Mathlib 中的一个定理，位于命名空间 `TensorPower`。
+形式化陈述：gMul_def {i j} (a : ⨂[R]^i M) (b : (⨂[R]^j) M) : a ₜ* b = @mulEquiv R M _ 
+_ _ i j (a otimesₜ b)
+参数：a : ⨂[R]^i M；b : (⨂[R]^j) M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem gMul_def {i j} (a : ⨂[R]^i M) (b : (⨂[R]^j) M) :
-    a ₜ* b = @mulEquiv R M _ _ _ i j (a otimesₜ b) :=
+    a ₜ* b = @mulEquiv R M _ _ _ i j (a ⊗ₜ b) :=
   rfl
-
-/--
-theorem `gMul_eq_coe_linearMap` / 定理 `gMul_eq_coe_linearMap`
-
-English:
-theorem gMul_eq_coe_linearMap
-  given: {i j} (a : ⨂[R]^i M) (b : (⨂[R]^j) M)
-  proof: rfl
-
-中文:
-定理 gMul_eq_coe_linearMap
-  条件: {i j} (a : ⨂[R]^i M) (b : (⨂[R]^j) M)
-  证明: rfl
+/-
+**TensorPower.gMul_eq_coe_linearMap** 是 Mathlib 中的一个定理，位于命名空间 `TensorPower`。
+形式化陈述：gMul_eq_coe_linearMap {i j} (a : ⨂[R]^i M) (b : (⨂[R]^j) M) : a ₜ* b = ((T
+ensorProduct.mk R _ _).compr₂ ↑(mulEquiv : _ ≃ₗ[R] (⨂[R]^(i + j)) M) : ⨂[R]^i M 
+->ₗ[R] (⨂[R]^j) M ->ₗ[R] (⨂[R]^(i + j)) M) a b
+参数：a : ⨂[R]^i M；b : (⨂[R]^j) M。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem gMul_eq_coe_linearMap {i j} (a : ⨂[R]^i M) (b : (⨂[R]^j) M) :
     a ₜ* b = ((TensorProduct.mk R _ _).compr₂ ↑(mulEquiv : _ ≃ₗ[R] (⨂[R]^(i + j)) M) :
-      ⨂[R]^i M ->ₗ[R] (⨂[R]^j) M ->ₗ[R] (⨂[R]^(i + j)) M) a b :=
+      ⨂[R]^i M →ₗ[R] (⨂[R]^j) M →ₗ[R] (⨂[R]^(i + j)) M) a b :=
   rfl
 
 variable (R M)
 
-/--
-Definition of `cast` / `cast` 的定义
+/-- Cast between "equal" tensor powers. -/
+/-
+**TensorPower.cast** 是 Mathlib 中的一个定义，位于命名空间 `TensorPower`。
+形式化陈述：cast {i j} (h : i = j) : ⨂[R]^i M ≃ₗ[R] (⨂[R]^j) M
+参数：h : i = j。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cast
-  signature: {i j} (h : i = j)
-  body: reindex R (fun _ => M) (finCongr h)
-
-中文:
-定义 cast
-  签名: {i j} (h : i = j)
-  定义体: reindex R (fun _ => M) (finCongr h)
-
-Depends on / 依赖: finCongr, reindex
+--- 原说明 ---
+Cast between "equal" tensor powers.
 -/
-def cast {i j} (h : i = j) : ⨂[R]^i M ≃ₗ[R] (⨂[R]^j) M := reindex R (fun _ => M) (finCongr h)
-
-/--
-theorem `cast_tprod` / 定理 `cast_tprod`
-
-English:
-theorem cast_tprod
-  given: {i j} (h : i = j) (a : Fin i -> M)
-  proof: reindex_tprod _ _
-
-@[simp]
-
-中文:
-定理 cast_tprod
-  条件: {i j} (h : i = j) (a : 有限集 i -> M)
-  证明: reindex_tprod _ _
-
-@[simp]
-
-Depends on / 依赖: reindex_tprod
+def cast {i j} (h : i = j) : ⨂[R]^i M ≃ₗ[R] (⨂[R]^j) M := reindex R (fun _ ↦ M) (finCongr h)
+/-
+**TensorPower.cast_tprod** 是 Mathlib 中的一个定理，位于命名空间 `TensorPower`。
+形式化陈述：cast_tprod {i j} (h : i = j) (a : Fin i -> M) : cast R M h (tprod R a) = t
+prod R (a ∘ Fin.cast h.symm)
+参数：h : i = j；a : Fin i -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PiTensorProduct.reindex_tprod`：reindex_tprod (e : ι ≃ ι₂) (f : Π i, s i)
+ : reindex R s e (tprod R f) = tprod R fun i => f (e.symm i)
 -/
-theorem cast_tprod {i j} (h : i = j) (a : Fin i -> M) :
+theorem cast_tprod {i j} (h : i = j) (a : Fin i → M) :
     cast R M h (tprod R a) = tprod R (a ∘ Fin.cast h.symm) :=
   reindex_tprod _ _
 
 @[simp]
-/--
-theorem `cast_refl` / 定理 `cast_refl`
-
-English:
-theorem cast_refl
-  given: {i} (h : i = i)
-  statement: cast R M h = LinearEquiv.refl _ _
-  proof: (congr_arg (reindex R fun _ => M) <| finCongr_refl h).trans reindex_refl
-
-@[simp]
-
-中文:
-定理 cast_refl
-  条件: {i} (h : i = i)
-  结论: cast R M h = 线性等价.refl _ _
-  证明: (congr_arg (reindex R fun _ => M) <| finCongr_refl h).trans reindex_refl
-
-@[simp]
-
-Depends on / 依赖: congr_arg, finCongr_refl, reindex, reindex_refl
+/-
+**TensorPower.cast_refl** 是 Mathlib 中的一个定理，位于命名空间 `TensorPower`。
+形式化陈述：cast_refl {i} (h : i = i) : cast R M h = LinearEquiv.refl _ _
+参数：h : i = i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `finCongr_refl`：∀ {n : ℕ} (h : optParam (n = n) ⋯), finCongr h = Equiv.re
+fl (Fin n)
+· 使用定理 `PiTensorProduct.reindex_refl`：reindex_refl : reindex R s (Equiv.refl ι) 
+= LinearEquiv.refl R _
 -/
 theorem cast_refl {i} (h : i = i) : cast R M h = LinearEquiv.refl _ _ :=
-  (congr_arg (reindex R fun _ => M) <| finCongr_refl h).trans reindex_refl
+  (congr_arg (reindex R fun _ ↦ M) <| finCongr_refl h).trans reindex_refl
 
 @[simp]
-/--
-theorem `cast_symm` / 定理 `cast_symm`
-
-English:
-theorem cast_symm
-  given: {i j} (h : i = j)
-  statement: (cast R M h).symm = cast R M h.symm
-  proof: reindex_symm _
-
-@[simp]
-
-中文:
-定理 cast_symm
-  条件: {i j} (h : i = j)
-  结论: (cast R M h).symm = cast R M h.symm
-  证明: reindex_symm _
-
-@[simp]
-
-Depends on / 依赖: reindex_symm
+/-
+**TensorPower.cast_symm** 是 Mathlib 中的一个定理，位于命名空间 `TensorPower`。
+形式化陈述：cast_symm {i j} (h : i = j) : (cast R M h).symm = cast R M h.symm
+参数：h : i = j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PiTensorProduct.reindex_symm`：reindex_symm (e : ι ≃ ι₂) : (reindex R (fu
+n _ => M) e).symm = reindex R (fun _ => M) e.symm
 -/
 theorem cast_symm {i j} (h : i = j) : (cast R M h).symm = cast R M h.symm :=
   reindex_symm _
 
 @[simp]
-/--
-theorem `cast_trans` / 定理 `cast_trans`
-
-English:
-theorem cast_trans
-  given: {i j k} (h : i = j) (h' : j = k)
-  proof: reindex_trans _ _
-
-中文:
-定理 cast_trans
-  条件: {i j k} (h : i = j) (h' : j = k)
-  证明: reindex_trans _ _
-
-Depends on / 依赖: reindex_trans
+/-
+**TensorPower.cast_trans** 是 Mathlib 中的一个定理，位于命名空间 `TensorPower`。
+形式化陈述：cast_trans {i j k} (h : i = j) (h' : j = k) : (cast R M h).trans (cast R M
+ h') = cast R M (h.trans h')
+参数：h : i = j；h' : j = k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PiTensorProduct.reindex_trans`：reindex_trans (e : ι ≃ ι₂) (e' : ι₂ ≃ ι₃)
+ : (reindex R s e).trans (reindex R _ e') = reindex R s (e.trans e')
 -/
 theorem cast_trans {i j k} (h : i = j) (h' : j = k) :
     (cast R M h).trans (cast R M h') = cast R M (h.trans h') :=
@@ -318,77 +258,59 @@ theorem cast_trans {i j k} (h : i = j) (h' : j = k) :
 variable {R M}
 
 @[simp]
-/--
-theorem `cast_cast` / 定理 `cast_cast`
-
-English:
-theorem cast_cast
-  given: {i j k} (h : i = j) (h' : j = k) (a : ⨂[R]^i M)
-  proof: reindex_reindex _ _ _
-
-@[ext (iff := false)]
-
-中文:
-定理 cast_cast
-  条件: {i j k} (h : i = j) (h' : j = k) (a : ⨂[R]^i M)
-  证明: reindex_reindex _ _ _
-
-@[ext (iff := false)]
-
-Depends on / 依赖: reindex_reindex
+/-
+**TensorPower.cast_cast** 是 Mathlib 中的一个定理，位于命名空间 `TensorPower`。
+形式化陈述：cast_cast {i j k} (h : i = j) (h' : j = k) (a : ⨂[R]^i M) : cast R M h' (c
+ast R M h a) = cast R M (h.trans h') a
+参数：h : i = j；h' : j = k；a : ⨂[R]^i M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PiTensorProduct.reindex_reindex`：reindex_reindex (e : ι ≃ ι₂) (e' : ι₂ ≃
+ ι₃) (x : ⨂[R] i, s i) : reindex R _ e' (reindex R s e x) = reindex R s (e.trans
+ e') x
 -/
 theorem cast_cast {i j k} (h : i = j) (h' : j = k) (a : ⨂[R]^i M) :
     cast R M h' (cast R M h a) = cast R M (h.trans h') a :=
   reindex_reindex _ _ _
 
 @[ext (iff := false)]
-/--
-theorem `gradedMonoid_eq_of_cast` / 定理 `gradedMonoid_eq_of_cast`
-
-English:
-theorem gradedMonoid_eq_of_cast
-  statement: {a b : GradedMonoid fun n => ⨂[R] _ : Fin n, M} (h : a.fst = b.fst)
-  proof: by
-  refine gradedMonoid_eq_of_reindex_cast h ?_
-  rw [cast] at h2
-  rw [← finCongr_eq_equivCast]; rw [← h2]
-
-中文:
-定理 gradedMonoid_eq_of_cast
-  结论: {a b : 分次幺半群 fun n => ⨂[R] _ : 有限集 n, M} (h : a.fst = b.fst)
-  证明: by
-  refine gradedMonoid_eq_of_reindex_cast h ?_
-  rw [cast] at h2
-  rw [← finCongr_eq_equivCast]; rw [← h2]
-
-Depends on / 依赖: finCongr_eq_equivCast, gradedMonoid_eq_of_reindex_cast
+/-
+**TensorPower.gradedMonoid_eq_of_cast** 是 Mathlib 中的一个定理，位于命名空间 `TensorPower`。
+形式化陈述：gradedMonoid_eq_of_cast {a b : GradedMonoid fun n => ⨂[R] _ : Fin n, M} (h
+ : a.fst = b.fst) (h2 : cast R M h a.snd = b.snd) : a = b
+参数：h : a.fst = b.fst；h2 : cast R M h a.snd = b.snd。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PiTensorProduct.gradedMonoid_eq_of_reindex_cast`：∀ {R : Type u_1} {M : T
+ype u_2} [inst : CommSemiring R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Mod
+ule R M]   {ιι : Type u_3} {ι : ιι → …
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `finCongr_eq_equivCast`：∀ {n m : ℕ} (h : n = m), finCongr h = Equiv.cast 
+⋯
+· 使用定理 `TensorPower.cast.eq_1`：∀ (R : Type u_1) (M : Type u_2) [inst : CommSemir
+ing R] [inst_1 : AddCommMonoid M] [inst_2 : _root_.Module R M]   {i j : ℕ} (h : 
+i = j), Ten…
 -/
 theorem gradedMonoid_eq_of_cast {a b : GradedMonoid fun n => ⨂[R] _ : Fin n, M} (h : a.fst = b.fst)
     (h2 : cast R M h a.snd = b.snd) : a = b := by
   refine gradedMonoid_eq_of_reindex_cast h ?_
   rw [cast] at h2
-  rw [← finCongr_eq_equivCast]; rw [← h2]
-
-/--
-theorem `cast_eq_cast` / 定理 `cast_eq_cast`
-
-English:
-theorem cast_eq_cast
-  given: {i j} (h : i = j)
-  proof: by
-  subst h
-  rw [cast_refl]
-  rfl
-
-中文:
-定理 cast_eq_cast
-  条件: {i j} (h : i = j)
-  证明: by
-  subst h
-  rw [cast_refl]
-  rfl
-
-Depends on / 依赖: cast_refl
+  rw [← finCongr_eq_equivCast, ← h2]
+/-
+**TensorPower.cast_eq_cast** 是 Mathlib 中的一个定理，位于命名空间 `TensorPower`。
+形式化陈述：cast_eq_cast {i j} (h : i = j) : ⇑(cast R M h) = _root_.cast (congrArg (fu
+n i => ⨂[R]^i M) h)
+参数：h : i = j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `TensorPower.cast_refl`：cast_refl {i} (h : i = i) : cast R M h = LinearEq
+uiv.refl _ _
 -/
 theorem cast_eq_cast {i j} (h : i = j) :
     ⇑(cast R M h) = _root_.cast (congrArg (fun i => ⨂[R]^i M) h) := by
@@ -398,36 +320,41 @@ theorem cast_eq_cast {i j} (h : i = j) :
 
 set_option backward.isDefEq.respectTransparency false in
 variable (R) in
-/--
-theorem `tprod_mul_tprod` / 定理 `tprod_mul_tprod`
-
-English:
-theorem tprod_mul_tprod
-  given: {na nb} (a : Fin na -> M) (b : Fin nb -> M)
-  proof: by
-  dsimp [gMul_def, mulEquiv]
-  rw [tmulEquiv_apply R M a b]
-  refine (reindex_tprod _ _).trans ?_
-  congr 1
-  dsimp only [Fin.append, finSumFinEquiv, Equiv.coe_fn_symm_mk]
-  apply funext
-  apply Fin.addCases <;> simp
-
-中文:
-定理 tprod_mul_tprod
-  条件: {na nb} (a : 有限集 na -> M) (b : 有限集 nb -> M)
-  证明: by
-  dsimp [gMul_def, mulEquiv]
-  rw [tmulEquiv_apply R M a b]
-  refine (reindex_tprod _ _).trans ?_
-  congr 1
-  dsimp only [Fin.append, finSumFinEquiv, Equiv.coe_fn_symm_mk]
-  apply funext
-  apply Fin.addCases <;> simp
-
-Depends on / 依赖: Equiv.coe_fn_symm_mk, Fin.addCases, Fin.append, addCases, append, coe_fn_symm_mk, finSumFinEquiv, gMul_def, mulEquiv, reindex_tprod, tmulEquiv_apply
+/-
+**TensorPower.tprod_mul_tprod** 是 Mathlib 中的一个定理，位于命名空间 `TensorPower`。
+形式化陈述：tprod_mul_tprod {na nb} (a : Fin na -> M) (b : Fin nb -> M) : tprod R a ₜ*
+ tprod R b = tprod R (Fin.append a b)
+参数：a : Fin na -> M；b : Fin nb -> M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `PiTensorProduct.tmulEquiv_apply`：tmulEquiv_apply (a : ι -> M) (b : ι₂ ->
+ M) : tmulEquiv R M ((⨂ₜ[R] i, a i) otimesₜ[R] (⨂ₜ[R] i, b i)) = ⨂ₜ[R] i, Sum.el
+im a b i
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `PiTensorProduct.reindex_tprod`：reindex_tprod (e : ι ≃ ι₂) (f : Π i, s i)
+ : reindex R s e (tprod R f) = tprod R fun i => f (e.symm i)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Fin.addCases_left`：∀ {m n : ℕ} {motive : Fin (m + n) → Sort u_1} {left :
+ (i : Fin m) → motive (Fin.castAdd n i)}   {right : (i : Fin n) → motive (Fin.na
+tAdd m …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Fin.addCases_right`：∀ {m n : ℕ} {motive : Fin (m + n) → Sort u_1} {left 
+: (i : Fin m) → motive (Fin.castAdd n i)}   {right : (i : Fin n) → motive (Fin.n
+atAdd m …
 -/
-theorem tprod_mul_tprod {na nb} (a : Fin na -> M) (b : Fin nb -> M) :
+theorem tprod_mul_tprod {na nb} (a : Fin na → M) (b : Fin nb → M) :
     tprod R a ₜ* tprod R b = tprod R (Fin.append a b) := by
   dsimp [gMul_def, mulEquiv]
   rw [tmulEquiv_apply R M a b]
@@ -436,164 +363,215 @@ theorem tprod_mul_tprod {na nb} (a : Fin na -> M) (b : Fin nb -> M) :
   dsimp only [Fin.append, finSumFinEquiv, Equiv.coe_fn_symm_mk]
   apply funext
   apply Fin.addCases <;> simp
-
-/--
-theorem `one_mul` / 定理 `one_mul`
-
-English:
-theorem one_mul
-  given: {n} (a : ⨂[R]^n M)
-  statement: cast R M (zero_add n) (ₜ1 ₜ* a) = a
-  proof: by
-  rw [gMul_def]; rw [gOne_def]
-  induction a using PiTensorProduct.induction_on with
-  | smul_tprod r a =>
-    rw [TensorProduct.tmul_smul]; rw [map_smul]; rw [map_smul]; rw [← gMul_def]; rw [tprod_mul_tprod]; rw [cast_tprod]
-    congr 2 with i
-    rw [Fin.elim0_append]
-    refine congr_arg a (Fin.ext ?_)
-    simp
-  | add x y hx hy =>
-    rw [TensorProduct.tmul_add]; rw [map_add]; rw [map_add]; rw [hx]; rw [hy]
-
-中文:
-定理 one_mul
-  条件: {n} (a : ⨂[R]^n M)
-  结论: cast R M (zero_add n) (ₜ1 ₜ* a) = a
-  证明: by
-  rw [gMul_def]; rw [gOne_def]
-  induction a using PiTensorProduct.induction_on with
-  | smul_tprod r a =>
-    rw [TensorProduct.tmul_smul]; rw [map_smul]; rw [map_smul]; rw [← gMul_def]; rw [tprod_mul_tprod]; rw [cast_tprod]
-    congr 2 with i
-    rw [Fin.elim0_append]
-    refine congr_arg a (Fin.ext ?_)
-    simp
-  | add x y hx hy =>
-    rw [TensorProduct.tmul_add]; rw [map_add]; rw [map_add]; rw [hx]; rw [hy]
-
-Depends on / 依赖: Fin.elim0_append, Fin.ext, PiTensorProduct, PiTensorProduct.induction_on, TensorProduct, TensorProduct.tmul_add, TensorProduct.tmul_smul, cast_tprod, congr_arg, elim0_append, gMul_def, gOne_def, induction_on, map_add, map_smul, smul_tprod, tmul_add, tmul_smul, tprod_mul_tprod
+/-
+**TensorPower.one_mul** 是 Mathlib 中的一个定理，位于命名空间 `TensorPower`。
+形式化陈述：one_mul {n} (a : ⨂[R]^n M) : cast R M (zero_add n) (ₜ1 ₜ* a) = a
+参数：a : ⨂[R]^n M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `TensorPower.gMul_def`：gMul_def {i j} (a : ⨂[R]^i M) (b : (⨂[R]^j) M) : a
+ ₜ* b = @mulEquiv R M _ _ _ i j (a otimesₜ b)
+· 使用定理 `TensorPower.gOne_def`：gOne_def : ₜ1 = tprod R (@Fin.elim0 M)
+· 使用定理 `PiTensorProduct.induction_on`：∀ {ι : Type u_1} {R : Type u_4} [inst : Co
+mmSemiring R] {s : ι → Type u_7} [inst_1 : (i : ι) → AddCommMonoid (s i)]   [ins
+t_2 : (i : ι) → _r…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `PiTensorProduct.instSMulCommClass`：∀ {ι : Type u_1} {R : Type u_4} [inst
+ : CommSemiring R] {s : ι → Type u_7} [inst_1 : (i : ι) → AddCommMonoid (s i)]  
+ [inst_2 : (i : ι) → _r…
+· 使用定理 `TensorProduct.tmul_smul`：tmul_smul [DistribMulAction R' N] [CompatibleSM
+ul R R' M N] (r : R') (x : M) (y : N) : x otimesₜ (r • y) = r • x otimesₜ[R] y
+· 使用定理 `TensorProduct.CompatibleSMul.isScalarTower`：∀ {R : Type u_1} {R' : Type 
+u_4} [inst : CommSemiring R] [inst_1 : Monoid R'] {M : Type u_7} {N : Type u_8} 
+  [inst_2 : AddCommMonoid M] [in…
+· 使用定理 `PiTensorProduct.instIsScalarTower`：∀ {ι : Type u_1} {R : Type u_4} [inst
+ : CommSemiring R] {s : ι → Type u_7} [inst_1 : (i : ι) → AddCommMonoid (s i)]  
+ [inst_2 : (i : ι) → _r…
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `SemilinearEquivClass.instSemilinearMapClass`：∀ {R : Type u_1} {S : Type 
+u_6} {M : Type u_7} {M₂ : Type u_9} (F : Type u_14) [inst : Semiring R] [inst_1 
+: Semiring S]   [inst_2 : AddComm…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `TensorPower.tprod_mul_tprod`：tprod_mul_tprod {na nb} (a : Fin na -> M) (
+b : Fin nb -> M) : tprod R a ₜ* tprod R b = tprod R (Fin.append a b)
+· 使用定理 `TensorPower.cast_tprod`：cast_tprod {i j} (h : i = j) (a : Fin i -> M) : 
+cast R M h (tprod R a) = tprod R (a ∘ Fin.cast h.symm)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Nat.zero_add`：∀ (n : ℕ), 0 + n = n
+· 使用定理 `Fin.elim0_append`：elim0_append (v : Fin n -> α) : append Fin.elim0 v = v
+ ∘ Fin.cast (Nat.zero_add _)
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Fin.ext`：∀ {n : ℕ} {a b : Fin n}, ↑a = ↑b → a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `TensorProduct.tmul_add`：tmul_add (m : M) (n₁ n₂ : N) : m otimesₜ (n₁ + n
+₂) = m otimesₜ n₁ + m otimesₜ[R] n₂
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
 -/
 theorem one_mul {n} (a : ⨂[R]^n M) : cast R M (zero_add n) (ₜ1 ₜ* a) = a := by
-  rw [gMul_def]; rw [gOne_def]
+  rw [gMul_def, gOne_def]
   induction a using PiTensorProduct.induction_on with
   | smul_tprod r a =>
-    rw [TensorProduct.tmul_smul]; rw [map_smul]; rw [map_smul]; rw [← gMul_def]; rw [tprod_mul_tprod]; rw [cast_tprod]
+    rw [TensorProduct.tmul_smul, map_smul, map_smul, ← gMul_def, tprod_mul_tprod, cast_tprod]
     congr 2 with i
     rw [Fin.elim0_append]
     refine congr_arg a (Fin.ext ?_)
     simp
   | add x y hx hy =>
-    rw [TensorProduct.tmul_add]; rw [map_add]; rw [map_add]; rw [hx]; rw [hy]
-
-/--
-theorem `mul_one` / 定理 `mul_one`
-
-English:
-theorem mul_one
-  given: {n} (a : ⨂[R]^n M)
-  statement: cast R M (add_zero _) (a ₜ* ₜ1) = a
-  proof: by
-  rw [gMul_def]; rw [gOne_def]
-  induction a using PiTensorProduct.induction_on with
-  | smul_tprod r a =>
-    rw [← TensorProduct.smul_tmul']; rw [map_smul]; rw [map_smul]; rw [← gMul_def]; rw [tprod_mul_tprod R a _]; rw [cast_tprod]
-    simp
-  | add x y hx hy =>
-    rw [TensorProduct.add_tmul]; rw [map_add]; rw [map_add]; rw [hx]; rw [hy]
-
-中文:
-定理 mul_one
-  条件: {n} (a : ⨂[R]^n M)
-  结论: cast R M (add_zero _) (a ₜ* ₜ1) = a
-  证明: by
-  rw [gMul_def]; rw [gOne_def]
-  induction a using PiTensorProduct.induction_on with
-  | smul_tprod r a =>
-    rw [← TensorProduct.smul_tmul']; rw [map_smul]; rw [map_smul]; rw [← gMul_def]; rw [tprod_mul_tprod R a _]; rw [cast_tprod]
-    simp
-  | add x y hx hy =>
-    rw [TensorProduct.add_tmul]; rw [map_add]; rw [map_add]; rw [hx]; rw [hy]
-
-Depends on / 依赖: PiTensorProduct, PiTensorProduct.induction_on, TensorProduct, TensorProduct.add_tmul, TensorProduct.smul_tmul, add_tmul, cast_tprod, gMul_def, gOne_def, induction_on, map_add, map_smul, smul_tmul, smul_tprod, tprod_mul_tprod
+    rw [TensorProduct.tmul_add, map_add, map_add, hx, hy]
+/-
+**TensorPower.mul_one** 是 Mathlib 中的一个定理，位于命名空间 `TensorPower`。
+形式化陈述：mul_one {n} (a : ⨂[R]^n M) : cast R M (add_zero _) (a ₜ* ₜ1) = a
+参数：a : ⨂[R]^n M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `TensorPower.gMul_def`：gMul_def {i j} (a : ⨂[R]^i M) (b : (⨂[R]^j) M) : a
+ ₜ* b = @mulEquiv R M _ _ _ i j (a otimesₜ b)
+· 使用定理 `TensorPower.gOne_def`：gOne_def : ₜ1 = tprod R (@Fin.elim0 M)
+· 使用定理 `PiTensorProduct.induction_on`：∀ {ι : Type u_1} {R : Type u_4} [inst : Co
+mmSemiring R] {s : ι → Type u_7} [inst_1 : (i : ι) → AddCommMonoid (s i)]   [ins
+t_2 : (i : ι) → _r…
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `PiTensorProduct.instSMulCommClass`：∀ {ι : Type u_1} {R : Type u_4} [inst
+ : CommSemiring R] {s : ι → Type u_7} [inst_1 : (i : ι) → AddCommMonoid (s i)]  
+ [inst_2 : (i : ι) → _r…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `TensorProduct.smul_tmul'`：smul_tmul' (r : R') (m : M) (n : N) : r • m ot
+imesₜ[R] n = (r • m) otimesₜ n
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `SemilinearEquivClass.instSemilinearMapClass`：∀ {R : Type u_1} {S : Type 
+u_6} {M : Type u_7} {M₂ : Type u_9} (F : Type u_14) [inst : Semiring R] [inst_1 
+: Semiring S]   [inst_2 : AddComm…
+· 使用定理 `LinearEquiv.instSemilinearEquivClass`：∀ {R : Type u_1} {S : Type u_6} {M
+ : Type u_7} {M₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2
+ : AddCommMonoid M] [inst_…
+· 使用定理 `TensorPower.tprod_mul_tprod`：tprod_mul_tprod {na nb} (a : Fin na -> M) (
+b : Fin nb -> M) : tprod R a ₜ* tprod R b = tprod R (Fin.append a b)
+· 使用定理 `TensorPower.cast_tprod`：cast_tprod {i j} (h : i = j) (a : Fin i -> M) : 
+cast R M h (tprod R a) = tprod R (a ∘ Fin.cast h.symm)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.add_zero`：∀ (n : ℕ), n + 0 = n
+· 使用定理 `Fin.append_elim0`：append_elim0 (u : Fin m -> α) : append u Fin.elim0 = u
+ ∘ Fin.cast (Nat.add_zero _)
+· 使用定理 `Fin.cast_refl`：∀ (n : ℕ) (h : n = n), Fin.cast h = id
+· 使用定理 `CompTriple.comp_eq`：∀ {M : Type u_1} {N : Type u_2} {P : Type u_3} {φ : 
+M → N} {ψ : N → P} {χ : outParam (M → P)} [self : CompTriple φ ψ χ],   ψ ∘ φ = χ
+· 使用定理 `CompTriple.instIsIdId`：∀ {M : Type u_1}, CompTriple.IsId id
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `TensorProduct.add_tmul`：add_tmul (m₁ m₂ : M) (n : N) : (m₁ + m₂) otimesₜ
+ n = m₁ otimesₜ n + m₂ otimesₜ[R] n
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
 -/
 theorem mul_one {n} (a : ⨂[R]^n M) : cast R M (add_zero _) (a ₜ* ₜ1) = a := by
-  rw [gMul_def]; rw [gOne_def]
+  rw [gMul_def, gOne_def]
   induction a using PiTensorProduct.induction_on with
   | smul_tprod r a =>
-    rw [← TensorProduct.smul_tmul']; rw [map_smul]; rw [map_smul]; rw [← gMul_def]; rw [tprod_mul_tprod R a _]; rw [cast_tprod]
+    rw [← TensorProduct.smul_tmul', map_smul, map_smul, ← gMul_def, tprod_mul_tprod R a _,
+      cast_tprod]
     simp
   | add x y hx hy =>
-    rw [TensorProduct.add_tmul]; rw [map_add]; rw [map_add]; rw [hx]; rw [hy]
-
-/--
-theorem `mul_assoc` / 定理 `mul_assoc`
-
-English:
-theorem mul_assoc
-  given: {na nb nc} (a : (⨂[R]^na) M) (b : (⨂[R]^nb) M) (c : (⨂[R]^nc) M)
-  proof: by
-  let mul : forall n m : Nat, ⨂[R]^n M ->ₗ[R] (⨂[R]^m) M ->ₗ[R] (⨂[R]^(n + m)) M := fun n m =>
-    (TensorProduct.mk R _ _).compr₂ ↑(mulEquiv : _ ≃ₗ[R] (⨂[R]^(n + m)) M)
-  -- replace `a`, `b`, `c` with `tprod R a`, `tprod R b`, `tprod R c`
-  let e : (⨂[R]^(na + nb + nc)) M ≃ₗ[R] (⨂[R]^(na + (nb + nc))) M := cast R M (add_assoc _ _ _)
-  let lhs : (⨂[R]^na) M ->ₗ[R] (⨂[R]^nb) M ->ₗ[R] (⨂[R]^nc) M ->ₗ[R] (⨂[R]^(na + (nb + nc))) M :=
-    (LinearMap.llcomp R _ _ _ ((mul _ nc).compr₂ e.toLinearMap)).comp (mul na nb)
-  have lhs_eq : forall a b c, lhs a b c = e (a ₜ* b ₜ* c) := fun _ _ _ => rfl
-  let rhs : (⨂[R]^na) M ->ₗ[R] (⨂[R]^nb) M ->ₗ[R] (⨂[R]^nc) M ->ₗ[R] (⨂[R]^(na + (nb + nc))) M :=
-    (LinearMap.llcomp R _ _ _ (LinearMap.lflip (R := R)).toLinearMap <|
-        (LinearMap.llcomp R _ _ _ (mul na _).flip).comp (mul nb nc)).flip
-  have rhs_eq : forall a b c, rhs a b c = a ₜ* (b ₜ* c) := fun _ _ _ => rfl
-  suffices lhs = rhs from
-    LinearMap.congr_fun (LinearMap.congr_fun (LinearMap.congr_fun this a) b) c
-  ext a b c
-  -- clean up
-  simp only [e, LinearMap.compMultilinearMap_apply, lhs_eq, rhs_eq, tprod_mul_tprod, cast_tprod]
-  congr 1 with j
-  rw [Fin.append_assoc]
-  refine congr_arg (Fin.append a (Fin.append b c)) (Fin.ext ?_)
-  rw [Fin.val_cast]; rw [Fin.val_cast]
-
-中文:
-定理 mul_assoc
-  条件: {na nb nc} (a : (⨂[R]^na) M) (b : (⨂[R]^nb) M) (c : (⨂[R]^nc) M)
-  证明: by
-  let mul : forall n m : Nat, ⨂[R]^n M ->ₗ[R] (⨂[R]^m) M ->ₗ[R] (⨂[R]^(n + m)) M := fun n m =>
-    (TensorProduct.mk R _ _).compr₂ ↑(mulEquiv : _ ≃ₗ[R] (⨂[R]^(n + m)) M)
-  -- replace `a`, `b`, `c` with `tprod R a`, `tprod R b`, `tprod R c`
-  let e : (⨂[R]^(na + nb + nc)) M ≃ₗ[R] (⨂[R]^(na + (nb + nc))) M := cast R M (add_assoc _ _ _)
-  let lhs : (⨂[R]^na) M ->ₗ[R] (⨂[R]^nb) M ->ₗ[R] (⨂[R]^nc) M ->ₗ[R] (⨂[R]^(na + (nb + nc))) M :=
-    (LinearMap.llcomp R _ _ _ ((mul _ nc).compr₂ e.toLinearMap)).comp (mul na nb)
-  have lhs_eq : forall a b c, lhs a b c = e (a ₜ* b ₜ* c) := fun _ _ _ => rfl
-  let rhs : (⨂[R]^na) M ->ₗ[R] (⨂[R]^nb) M ->ₗ[R] (⨂[R]^nc) M ->ₗ[R] (⨂[R]^(na + (nb + nc))) M :=
-    (LinearMap.llcomp R _ _ _ (LinearMap.lflip (R := R)).toLinearMap <|
-        (LinearMap.llcomp R _ _ _ (mul na _).flip).comp (mul nb nc)).flip
-  have rhs_eq : forall a b c, rhs a b c = a ₜ* (b ₜ* c) := fun _ _ _ => rfl
-  suffices lhs = rhs from
-    LinearMap.congr_fun (LinearMap.congr_fun (LinearMap.congr_fun this a) b) c
-  ext a b c
-  -- clean up
-  simp only [e, LinearMap.compMultilinearMap_apply, lhs_eq, rhs_eq, tprod_mul_tprod, cast_tprod]
-  congr 1 with j
-  rw [Fin.append_assoc]
-  refine congr_arg (Fin.append a (Fin.append b c)) (Fin.ext ?_)
-  rw [Fin.val_cast]; rw [Fin.val_cast]
-
-Depends on / 依赖: TensorProduct, TensorProduct.mk, mulEquiv
+    rw [TensorProduct.add_tmul, map_add, map_add, hx, hy]
+/-
+**TensorPower.mul_assoc** 是 Mathlib 中的一个定理，位于命名空间 `TensorPower`。
+形式化陈述：mul_assoc {na nb nc} (a : (⨂[R]^na) M) (b : (⨂[R]^nb) M) (c : (⨂[R]^nc) M)
+ : cast R M (add_assoc _ _ _) (a ₜ* b ₜ* c) = a ₜ* (b ₜ* c)
+参数：a : (⨂[R]^na) M；b : (⨂[R]^nb) M；c : (⨂[R]^nc) M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PiTensorProduct.instSMulCommClass`：∀ {ι : Type u_1} {R : Type u_4} [inst
+ : CommSemiring R] {s : ι → Type u_7} [inst_1 : (i : ι) → AddCommMonoid (s i)]  
+ [inst_2 : (i : ι) → _r…
+· 使用定理 `PiTensorProduct.instIsScalarTower`：∀ {ι : Type u_1} {R : Type u_4} [inst
+ : CommSemiring R] {s : ι → Type u_7} [inst_1 : (i : ι) → AddCommMonoid (s i)]  
+ [inst_2 : (i : ι) → _r…
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `LinearMap.instSMulCommClass`：∀ {R : Type u_1} {R₂ : Type u_3} {S : Type 
+u_5} {T : Type u_7} {M : Type u_8} {M₂ : Type u_10} [inst : Semiring R]   [inst_
+1 : Semiring R₂] …
+· 使用引理 `SMulCommClass.symm`：SMulCommClass.symm (M N α : Type*) [SMul M α] [SMul 
+N α] [SMulCommClass M N α] : SMulCommClass N M α where smul_comm a' a b
+· 使用定理 `PiTensorProduct.ext`：ext {φ₁ φ₂ : (⨂[R] i, s i) ->ₗ[R] E} (H : φ₁.compMu
+ltilinearMap (tprod R) = φ₂.compMultilinearMap (tprod R)) : φ₁ = φ₂
+· 使用定理 `MultilinearMap.ext`：ext {f f' : MultilinearMap R M₁ M₂} (H : forall x, f
+ x = f' x) : f = f'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `TensorPower.tprod_mul_tprod`：tprod_mul_tprod {na nb} (a : Fin na -> M) (
+b : Fin nb -> M) : tprod R a ₜ* tprod R b = tprod R (Fin.append a b)
+· 使用定理 `TensorPower.cast_tprod`：cast_tprod {i j} (h : i = j) (a : Fin i -> M) : 
+cast R M h (tprod R a) = tprod R (a ∘ Fin.cast h.symm)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `heq_of_eq`：∀ {α : Sort u_1} {a a' : α}, a = a' → a ≍ a'
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Nat.add_assoc`：∀ (n m k : ℕ), n + m + k = n + (m + k)
+· 使用定理 `Fin.append_assoc`：append_assoc {p : Nat} (a : Fin m -> α) (b : Fin n -> 
+α) (c : Fin p -> α) : append (append a b) c = append a (append b c) ∘ Fin.cast (
+Nat.ad…
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Fin.ext`：∀ {n : ℕ} {a b : Fin n}, ↑a = ↑b → a = b
+· 使用定理 `Fin.val_cast`：∀ {n m : ℕ} (h : n = m) (i : Fin n), ↑(Fin.cast h i) = ↑i
+· 使用定理 `LinearMap.congr_fun`：∀ {R : Type u_1} {S : Type u_5} {M : Type u_8} {M₃ 
+: Type u_11} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid
+ M] [inst…
 -/
 theorem mul_assoc {na nb nc} (a : (⨂[R]^na) M) (b : (⨂[R]^nb) M) (c : (⨂[R]^nc) M) :
     cast R M (add_assoc _ _ _) (a ₜ* b ₜ* c) = a ₜ* (b ₜ* c) := by
-  let mul : forall n m : Nat, ⨂[R]^n M ->ₗ[R] (⨂[R]^m) M ->ₗ[R] (⨂[R]^(n + m)) M := fun n m =>
+  let mul : ∀ n m : ℕ, ⨂[R]^n M →ₗ[R] (⨂[R]^m) M →ₗ[R] (⨂[R]^(n + m)) M := fun n m =>
     (TensorProduct.mk R _ _).compr₂ ↑(mulEquiv : _ ≃ₗ[R] (⨂[R]^(n + m)) M)
   -- replace `a`, `b`, `c` with `tprod R a`, `tprod R b`, `tprod R c`
   let e : (⨂[R]^(na + nb + nc)) M ≃ₗ[R] (⨂[R]^(na + (nb + nc))) M := cast R M (add_assoc _ _ _)
-  let lhs : (⨂[R]^na) M ->ₗ[R] (⨂[R]^nb) M ->ₗ[R] (⨂[R]^nc) M ->ₗ[R] (⨂[R]^(na + (nb + nc))) M :=
+  let lhs : (⨂[R]^na) M →ₗ[R] (⨂[R]^nb) M →ₗ[R] (⨂[R]^nc) M →ₗ[R] (⨂[R]^(na + (nb + nc))) M :=
     (LinearMap.llcomp R _ _ _ ((mul _ nc).compr₂ e.toLinearMap)).comp (mul na nb)
-  have lhs_eq : forall a b c, lhs a b c = e (a ₜ* b ₜ* c) := fun _ _ _ => rfl
-  let rhs : (⨂[R]^na) M ->ₗ[R] (⨂[R]^nb) M ->ₗ[R] (⨂[R]^nc) M ->ₗ[R] (⨂[R]^(na + (nb + nc))) M :=
+  have lhs_eq : ∀ a b c, lhs a b c = e (a ₜ* b ₜ* c) := fun _ _ _ => rfl
+  let rhs : (⨂[R]^na) M →ₗ[R] (⨂[R]^nb) M →ₗ[R] (⨂[R]^nc) M →ₗ[R] (⨂[R]^(na + (nb + nc))) M :=
     (LinearMap.llcomp R _ _ _ (LinearMap.lflip (R := R)).toLinearMap <|
         (LinearMap.llcomp R _ _ _ (mul na _).flip).comp (mul nb nc)).flip
-  have rhs_eq : forall a b c, rhs a b c = a ₜ* (b ₜ* c) := fun _ _ _ => rfl
+  have rhs_eq : ∀ a b c, rhs a b c = a ₜ* (b ₜ* c) := fun _ _ _ => rfl
   suffices lhs = rhs from
     LinearMap.congr_fun (LinearMap.congr_fun (LinearMap.congr_fun this a) b) c
   ext a b c
@@ -602,29 +580,14 @@ theorem mul_assoc {na nb nc} (a : (⨂[R]^na) M) (b : (⨂[R]^nb) M) (c : (⨂[R
   congr 1 with j
   rw [Fin.append_assoc]
   refine congr_arg (Fin.append a (Fin.append b c)) (Fin.ext ?_)
-  rw [Fin.val_cast]; rw [Fin.val_cast]
+  rw [Fin.val_cast, Fin.val_cast]
 
 -- for now we just use the default for the `gnpow` field as it's easier.
-/--
-Instance `gmonoid` / 实例 `gmonoid`
-
-English:
-instance gmonoid
-  signature: : GradedMonoid.GMonoid fun i => ⨂[R]^i M
-  body: { TensorPower.gMul, TensorPower.gOne with
-    one_mul := fun _ => gradedMonoid_eq_of_cast (zero_add _) (one_mul _)
-    mul_one := fun _ => gradedMonoid_eq_of_cast (add_zero _) (mul_one _)
-    mul_assoc := fun _ _ _ => gradedMonoid_eq_of_cast (add_assoc _ _ _) (mul_assoc _ _ _) }
-
-中文:
-实例 gmonoid
-  签名: : 分次幺半群.G幺半群 fun i => ⨂[R]^i M
-  定义体: { TensorPower.gMul, TensorPower.gOne with
-    one_mul := fun _ => gradedMonoid_eq_of_cast (zero_add _) (one_mul _)
-    mul_one := fun _ => gradedMonoid_eq_of_cast (add_zero _) (mul_one _)
-    mul_assoc := fun _ _ _ => gradedMonoid_eq_of_cast (add_assoc _ _ _) (mul_assoc _ _ _) }
-
-Depends on / 依赖: TensorPower, TensorPower.gMul, TensorPower.gOne, add_assoc, add_zero, gradedMonoid_eq_of_cast, mul_assoc, mul_one, one_mul, zero_add
+/-
+**TensorPower.gmonoid** 是 Mathlib 中的一个实例，位于命名空间 `TensorPower`。
+形式化陈述：gmonoid : GradedMonoid.GMonoid fun i => ⨂[R]^i M
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance gmonoid : GradedMonoid.GMonoid fun i => ⨂[R]^i M :=
   { TensorPower.gMul, TensorPower.gOne with
@@ -632,160 +595,60 @@ instance gmonoid : GradedMonoid.GMonoid fun i => ⨂[R]^i M :=
     mul_one := fun _ => gradedMonoid_eq_of_cast (add_zero _) (mul_one _)
     mul_assoc := fun _ _ _ => gradedMonoid_eq_of_cast (add_assoc _ _ _) (mul_assoc _ _ _) }
 
-/--
-Definition of `algebraMap₀` / `algebraMap₀` 的定义
+/-- The canonical map from `R` to `⨂[R]^0 M` corresponding to the `algebraMap` of the tensor
+algebra. -/
+/-
+**TensorPower.algebraMap** 是 Mathlib 中的一个定义，位于命名空间 `TensorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition algebraMap₀
-  signature: : R ≃ₗ[R] (⨂[R]^0) M
-  body: LinearEquiv.symm isEmptyEquiv (Fin 0)
-
-中文:
-定义 algebraMap₀
-  签名: : R ≃ₗ[R] (⨂[R]^0) M
-  定义体: LinearEquiv.symm isEmptyEquiv (Fin 0)
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.symm, infer_instance, isEmptyEquiv, totalVariation
+--- 原说明 ---
+The canonical map from `R` to `⨂[R]^0 M` corresponding to the `algebraMap` of th
+e tensor
+algebra.
 -/
 def algebraMap₀ : R ≃ₗ[R] (⨂[R]^0) M :=
-LinearEquiv.symm isEmptyEquiv (Fin 0)
-
-/--
-theorem `algebraMap₀_eq_smul_one` / 定理 `algebraMap₀_eq_smul_one`
-
-English:
-theorem algebraMap₀_eq_smul_one
-  given: (r : R)
-  statement: (algebraMap₀ r : (⨂[R]^0) M) = r • ₜ1
-  proof: by
-  simp [algebraMap₀]; congr
-
-中文:
-定理 algebraMap₀_eq_smul_one
-  条件: (r : R)
-  结论: (algebraMap₀ r : (⨂[R]^0) M) = r • ₜ1
-  证明: by
-  simp [algebraMap₀]; congr
+  LinearEquiv.symm <| isEmptyEquiv (Fin 0)
+/-
+**TensorPower.algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `TensorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algebraMap₀_eq_smul_one (r : R) : (algebraMap₀ r : (⨂[R]^0) M) = r • ₜ1 := by
   simp [algebraMap₀]; congr
-
-/--
-theorem `algebraMap₀_one` / 定理 `algebraMap₀_one`
-
-English:
-theorem algebraMap₀_one
-  statement: (algebraMap₀ 1 : (⨂[R]^0) M) = ₜ1
-  proof: (algebraMap₀_eq_smul_one 1).trans (one_smul _ _)
-
-中文:
-定理 algebraMap₀_one
-  结论: (algebraMap₀ 1 : (⨂[R]^0) M) = ₜ1
-  证明: (algebraMap₀_eq_smul_one 1).trans (one_smul _ _)
-
-Depends on / 依赖: one_smul
+/-
+**TensorPower.algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `TensorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algebraMap₀_one : (algebraMap₀ 1 : (⨂[R]^0) M) = ₜ1 :=
   (algebraMap₀_eq_smul_one 1).trans (one_smul _ _)
-
-/--
-theorem `algebraMap₀_mul` / 定理 `algebraMap₀_mul`
-
-English:
-theorem algebraMap₀_mul
-  given: {n} (r : R) (a : ⨂[R]^n M)
-  proof: by
-  rw [gMul_eq_coe_linearMap]; rw [algebraMap₀_eq_smul_one]; rw [LinearMap.map_smul₂]; rw [map_smul]; rw [← gMul_eq_coe_linearMap]; rw [one_mul]
-
-中文:
-定理 algebraMap₀_mul
-  条件: {n} (r : R) (a : ⨂[R]^n M)
-  证明: by
-  rw [gMul_eq_coe_linearMap]; rw [algebraMap₀_eq_smul_one]; rw [LinearMap.map_smul₂]; rw [map_smul]; rw [← gMul_eq_coe_linearMap]; rw [one_mul]
-
-Depends on / 依赖: LinearMap, LinearMap.map_smul, gMul_eq_coe_linearMap, map_smul, one_mul
+/-
+**TensorPower.algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `TensorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algebraMap₀_mul {n} (r : R) (a : ⨂[R]^n M) :
     cast R M (zero_add _) (algebraMap₀ r ₜ* a) = r • a := by
-  rw [gMul_eq_coe_linearMap]; rw [algebraMap₀_eq_smul_one]; rw [LinearMap.map_smul₂]; rw [map_smul]; rw [← gMul_eq_coe_linearMap]; rw [one_mul]
-
-/--
-theorem `mul_algebraMap₀` / 定理 `mul_algebraMap₀`
-
-English:
-theorem mul_algebraMap₀
-  given: {n} (r : R) (a : ⨂[R]^n M)
-  proof: by
-  rw [gMul_eq_coe_linearMap]; rw [algebraMap₀_eq_smul_one]; rw [map_smul]; rw [map_smul]; rw [← gMul_eq_coe_linearMap]; rw [mul_one]
-
-中文:
-定理 mul_algebraMap₀
-  条件: {n} (r : R) (a : ⨂[R]^n M)
-  证明: by
-  rw [gMul_eq_coe_linearMap]; rw [algebraMap₀_eq_smul_one]; rw [map_smul]; rw [map_smul]; rw [← gMul_eq_coe_linearMap]; rw [mul_one]
-
-Depends on / 依赖: gMul_eq_coe_linearMap, map_smul, mul_one
+  rw [gMul_eq_coe_linearMap, algebraMap₀_eq_smul_one, LinearMap.map_smul₂, map_smul,
+    ← gMul_eq_coe_linearMap, one_mul]
+/-
+**TensorPower.mul_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `TensorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mul_algebraMap₀ {n} (r : R) (a : ⨂[R]^n M) :
     cast R M (add_zero _) (a ₜ* algebraMap₀ r) = r • a := by
-  rw [gMul_eq_coe_linearMap]; rw [algebraMap₀_eq_smul_one]; rw [map_smul]; rw [map_smul]; rw [← gMul_eq_coe_linearMap]; rw [mul_one]
-
-/--
-theorem `algebraMap₀_mul_algebraMap₀` / 定理 `algebraMap₀_mul_algebraMap₀`
-
-English:
-theorem algebraMap₀_mul_algebraMap₀
-  given: (r s : R)
-  proof: by
-  rw [← smul_eq_mul]; rw [map_smul]
-  exact algebraMap₀_mul r (@algebraMap₀ R M _ _ _ s)
-
-中文:
-定理 algebraMap₀_mul_algebraMap₀
-  条件: (r s : R)
-  证明: by
-  rw [← smul_eq_mul]; rw [map_smul]
-  exact algebraMap₀_mul r (@algebraMap₀ R M _ _ _ s)
-
-Depends on / 依赖: map_smul, smul_eq_mul
+  rw [gMul_eq_coe_linearMap, algebraMap₀_eq_smul_one, map_smul, map_smul, ← gMul_eq_coe_linearMap,
+    mul_one]
+/-
+**TensorPower.algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `TensorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algebraMap₀_mul_algebraMap₀ (r s : R) :
     cast R M (add_zero _) (algebraMap₀ r ₜ* algebraMap₀ s) = algebraMap₀ (r * s) := by
-  rw [← smul_eq_mul]; rw [map_smul]
+  rw [← smul_eq_mul, map_smul]
   exact algebraMap₀_mul r (@algebraMap₀ R M _ _ _ s)
-
-/--
-Instance `gsemiring` / 实例 `gsemiring`
-
-English:
-instance gsemiring
-  signature: : DirectSum.GSemiring fun i => ⨂[R]^i M
-  body: { TensorPower.gmonoid with
-    mul_zero := fun _ => map_zero _
-    zero_mul := fun _ => LinearMap.map_zero₂ _ _
-    mul_add := fun _ _ _ => map_add _ _ _
-    add_mul := fun _ _ _ => LinearMap.map_add₂ _ _ _ _
-    natCast := fun n => algebraMap₀ (n : R)
-    natCast_zero := by simp only [Nat.cast_zero, map_zero]
-    natCast_succ := fun n => by simp only [Nat.cast_succ, map_add, algebraMap₀_one] }
-
-example : Semiring (⨁ n : Nat, ⨂[R]^n M) := by infer_instance
-
-中文:
-实例 gsemiring
-  签名: : 直和.GSemiring fun i => ⨂[R]^i M
-  定义体: { TensorPower.gmonoid with
-    mul_zero := fun _ => map_zero _
-    zero_mul := fun _ => LinearMap.map_zero₂ _ _
-    mul_add := fun _ _ _ => map_add _ _ _
-    add_mul := fun _ _ _ => LinearMap.map_add₂ _ _ _ _
-    natCast := fun n => algebraMap₀ (n : R)
-    natCast_zero := by simp only [Nat.cast_zero, map_zero]
-    natCast_succ := fun n => by simp only [Nat.cast_succ, map_add, algebraMap₀_one] }
-
-example : Semiring (⨁ n : Nat, ⨂[R]^n M) := by infer_instance
-
-Depends on / 依赖: LinearMap, LinearMap.map_add, LinearMap.map_zero, Nat.cast_succ, Nat.cast_zero, TensorPower, TensorPower.gmonoid, add_mul, cast_succ, cast_zero, gmonoid, map_add, map_zero, mul_add, mul_zero, natCast, natCast_succ, natCast_zero, zero_mul
+/-
+**TensorPower.gsemiring** 是 Mathlib 中的一个实例，位于命名空间 `TensorPower`。
+形式化陈述：gsemiring : DirectSum.GSemiring fun i => ⨂[R]^i M
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance gsemiring : DirectSum.GSemiring fun i => ⨂[R]^i M :=
   { TensorPower.gmonoid with
@@ -796,50 +659,29 @@ instance gsemiring : DirectSum.GSemiring fun i => ⨂[R]^i M :=
     natCast := fun n => algebraMap₀ (n : R)
     natCast_zero := by simp only [Nat.cast_zero, map_zero]
     natCast_succ := fun n => by simp only [Nat.cast_succ, map_add, algebraMap₀_one] }
-
-example : Semiring (⨁ n : Nat, ⨂[R]^n M) := by infer_instance
+/-
+**TensorPower.** 是 Mathlib 中的一个示例，位于命名空间 `TensorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example : Semiring (⨁ n : ℕ, ⨂[R]^n M) := by infer_instance
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Instance `galgebra` / 实例 `galgebra`
+/-- The tensor powers form a graded algebra.
 
-English:
-instance galgebra
-  signature: : DirectSum.GAlgebra R fun i => ⨂[R]^i M where
-  body: (algebraMap₀ : R ≃ₗ[R] (⨂[R]^0) M).toLinearMap.toAddMonoidHom
-  map_one := algebraMap₀_one
-  map_mul r s := gradedMonoid_eq_of_cast rfl (by
-    rw [← LinearEquiv.eq_symm_apply]
-    have := algebraMap₀_mul_algebraMap₀ (M := M) r s
-    exact this.symm)
-  commutes r x := gradedMonoid_eq_of_cast (add_comm _ _) (by
-    have := (algebraMap₀_mul r x.snd).trans (mul_algebraMap₀ r x.snd).symm
-    rw [← LinearEquiv.eq_symm_apply]; rw [cast_symm]
-    rw [← LinearEquiv.eq_symm_apply]; rw [cast_symm]; rw [cast_cast] at this
-    exact this)
-  smul_def r x := gradedMonoid_eq_of_cast (zero_add x.fst).symm (by
-    rw [← LinearEquiv.eq_symm_apply]; rw [cast_symm]
-    exact (algebraMap₀_mul r x.snd).symm)
+Note that this instance implies `Algebra R (⨁ n : ℕ, ⨂[R]^n M)` via `DirectSum.Algebra`. -/
+/-
+**TensorPower.galgebra** 是 Mathlib 中的一个实例，位于命名空间 `TensorPower`。
+形式化陈述：galgebra : DirectSum.GAlgebra R fun i => ⨂[R]^i M where toFun
+该定义给出了一等式。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `TensorPower.algebraMap₀_one`：algebraMap₀_one : (algebraMap₀ 1 : (⨂[R]^0)
+ M) = ₜ1
 
-中文:
-实例 galgebra
-  签名: : 直和.G代数 R fun i => ⨂[R]^i M where
-  定义体: (algebraMap₀ : R ≃ₗ[R] (⨂[R]^0) M).toLinearMap.toAddMonoidHom
-  map_one := algebraMap₀_one
-  map_mul r s := gradedMonoid_eq_of_cast rfl (by
-    rw [← LinearEquiv.eq_symm_apply]
-    have := algebraMap₀_mul_algebraMap₀ (M := M) r s
-    exact this.symm)
-  commutes r x := gradedMonoid_eq_of_cast (add_comm _ _) (by
-    have := (algebraMap₀_mul r x.snd).trans (mul_algebraMap₀ r x.snd).symm
-    rw [← LinearEquiv.eq_symm_apply]; rw [cast_symm]
-    rw [← LinearEquiv.eq_symm_apply]; rw [cast_symm]; rw [cast_cast] at this
-    exact this)
-  smul_def r x := gradedMonoid_eq_of_cast (zero_add x.fst).symm (by
-    rw [← LinearEquiv.eq_symm_apply]; rw [cast_symm]
-    exact (algebraMap₀_mul r x.snd).symm)
+--- 原说明 ---
+The tensor powers form a graded algebra.
 
-Depends on / 依赖: toAddMonoidHom, toLinearMap, toLinearMap.toAddMonoidHom
+Note that this instance implies `Algebra R (⨁ n : ℕ, ⨂[R]^n M)` via `DirectSum.A
+lgebra`.
 -/
 instance galgebra : DirectSum.GAlgebra R fun i => ⨂[R]^i M where
   toFun := (algebraMap₀ : R ≃ₗ[R] (⨂[R]^0) M).toLinearMap.toAddMonoidHom
@@ -850,34 +692,27 @@ instance galgebra : DirectSum.GAlgebra R fun i => ⨂[R]^i M where
     exact this.symm)
   commutes r x := gradedMonoid_eq_of_cast (add_comm _ _) (by
     have := (algebraMap₀_mul r x.snd).trans (mul_algebraMap₀ r x.snd).symm
-    rw [← LinearEquiv.eq_symm_apply]; rw [cast_symm]
-    rw [← LinearEquiv.eq_symm_apply]; rw [cast_symm]; rw [cast_cast] at this
+    rw [← LinearEquiv.eq_symm_apply, cast_symm]
+    rw [← LinearEquiv.eq_symm_apply, cast_symm, cast_cast] at this
     exact this)
   smul_def r x := gradedMonoid_eq_of_cast (zero_add x.fst).symm (by
-    rw [← LinearEquiv.eq_symm_apply]; rw [cast_symm]
+    rw [← LinearEquiv.eq_symm_apply, cast_symm]
     exact (algebraMap₀_mul r x.snd).symm)
-
-/--
-theorem `galgebra_toFun_def` / 定理 `galgebra_toFun_def`
-
-English:
-theorem galgebra_toFun_def
-  given: (r : R)
-  proof: rfl
-
-example : Algebra R (⨁ n : Nat, ⨂[R]^n M) := by infer_instance
-
-中文:
-定理 galgebra_toFun_def
-  条件: (r : R)
-  证明: rfl
-
-example : Algebra R (⨁ n : Nat, ⨂[R]^n M) := by infer_instance
+/-
+**TensorPower.galgebra_toFun_def** 是 Mathlib 中的一个定理，位于命名空间 `TensorPower`。
+形式化陈述：galgebra_toFun_def (r : R) : DirectSum.GAlgebra.toFun (A
+参数：r : R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem galgebra_toFun_def (r : R) :
-    DirectSum.GAlgebra.toFun (A := fun i => ⨂[R]^i M) r = algebraMap₀ r :=
+    DirectSum.GAlgebra.toFun (A := fun i ↦ ⨂[R]^i M) r = algebraMap₀ r :=
   rfl
-
-example : Algebra R (⨁ n : Nat, ⨂[R]^n M) := by infer_instance
+/-
+**TensorPower.** 是 Mathlib 中的一个示例，位于命名空间 `TensorPower`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+example : Algebra R (⨁ n : ℕ, ⨂[R]^n M) := by infer_instance
 
 end TensorPower
+

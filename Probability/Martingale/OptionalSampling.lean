@@ -42,89 +42,119 @@ namespace MeasureTheory
 namespace Martingale
 
 variable {Ω E : Type*} {m : MeasurableSpace Ω} {μ : Measure Ω} [NormedAddCommGroup E]
-  [NormedSpace Real E] [CompleteSpace E]
+  [NormedSpace ℝ E] [CompleteSpace E]
 
 section FirstCountableTopology
 
 variable {ι : Type*} [LinearOrder ι] [TopologicalSpace ι] [OrderTopology ι]
-  [FirstCountableTopology ι] {ℱ : Filtration ι m} [SigmaFiniteFiltration μ ℱ] {τ σ : Ω -> WithTop ι}
-  {f : ι -> Ω -> E} {i n : ι}
+  [FirstCountableTopology ι] {ℱ : Filtration ι m} [SigmaFiniteFiltration μ ℱ] {τ σ : Ω → WithTop ι}
+  {f : ι → Ω → E} {i n : ι}
 
-/--
-theorem `condExp_stopping_time_ae_eq_restrict_eq_const` / 定理 `condExp_stopping_time_ae_eq_restrict_eq_const`
-
-English:
-theorem condExp_stopping_time_ae_eq_restrict_eq_const
-  statement: (h : Martingale f ℱ μ)
-  proof: by
-  refine Filter.EventuallyEq.trans ?_ (ae_restrict_of_ae (h.condExp_ae_eq hin))
-  refine condExp_ae_eq_restrict_of_measurableSpace_eq_on hτ.measurableSpace_le (ℱ.le i)
-    (hτ.measurableSet_eq' i) fun t => ?_
-  rw [Set.inter_comm _ t]; rw [IsStoppingTime.measurableSet_inter_eq_iff]
-
-中文:
-定理 condExp_stopping_time_ae_eq_restrict_eq_const
-  结论: (h : 鞅 f ℱ μ)
-  证明: by
-  refine Filter.EventuallyEq.trans ?_ (ae_restrict_of_ae (h.condExp_ae_eq hin))
-  refine condExp_ae_eq_restrict_of_measurableSpace_eq_on hτ.measurableSpace_le (ℱ.le i)
-    (hτ.measurableSet_eq' i) fun t => ?_
-  rw [Set.inter_comm _ t]; rw [IsStoppingTime.measurableSet_inter_eq_iff]
-
-Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq.trans, IsStoppingTime, IsStoppingTime.measurableSet_inter_eq_iff, Set.inter_comm, ae_restrict_of_ae, condExp_ae_eq, condExp_ae_eq_restrict_of_measurableSpace_eq_on, h.condExp_ae_eq, inter_comm, measurableSet_eq, measurableSet_inter_eq_iff, measurableSpace_le
+/-
+**MeasureTheory.Martingale.condExp_stopping_time_ae_eq_restrict_eq_const** 是 Mat
+hlib 中的一个定理，位于命名空间 `MeasureTheory.Martingale`。
+形式化陈述：condExp_stopping_time_ae_eq_restrict_eq_const (h : Martingale f ℱ μ) (hτ :
+ IsStoppingTime ℱ τ) [SigmaFinite (μ.trim hτ.measurableSpace_le)] (hin : i <= n)
+ : μ[f n | hτ.measurableSpace] =ᵐ[μ.restrict {x | τ x = i}] f i
+参数：h : Martingale f ℱ μ；hτ : IsStoppingTime ℱ τ；μ.trim hτ.measurableSpace_le；hin
+ : i <= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsStoppingTime.measurableSpace_le`：measurableSpace_le (hτ 
+: IsStoppingTime f τ) : hτ.measurableSpace <= m
+· 使用定理 `Filter.EventuallyEq.trans`：∀ {α : Type u} {β : Type v} {l : Filter α} {f
+ g h : α → β}, f =ᶠ[l] g → g =ᶠ[l] h → f =ᶠ[l] h
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.condExp_ae_eq_restrict_of_measurableSpace_eq_on`：condExp_a
+e_eq_restrict_of_measurableSpace_eq_on {m m₂ m0 : MeasurableSpace α} {μ : Measur
+e α} (hm : m <= m0) (hm₂ : m₂ <= m0) [SigmaFinite (…
+· 使用定理 `MeasureTheory.Filtration.le`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Measur
+ableSpace Ω} [inst : Preorder ι] (f : MeasureTheory.Filtration ι m) (i : ι),   ↑
+f i ≤ m
+· 使用定理 `MeasureTheory.IsStoppingTime.measurableSet_eq'`：∀ {Ω : Type u_1} {ι : Ty
+pe u_3} {m : MeasurableSpace Ω} [inst : LinearOrder ι] {f : MeasureTheory.Filtra
+tion ι m}   {τ : Ω → WithTop ι} [ins…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
+· 使用定理 `MeasureTheory.IsStoppingTime.measurableSet_inter_eq_iff`：measurableSet_i
+nter_eq_iff (hτ : IsStoppingTime f τ) (s : Set Ω) (i : ι) : MeasurableSet[hτ.mea
+surableSpace] (s inter {ω | τ ω = i}) ↔ Measu…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `MeasureTheory.ae_restrict_of_ae`：ae_restrict_of_ae {s : Set α} {p : α ->
+ Prop} (h : forallᵐ x ∂μ, p x) : forallᵐ x ∂μ.restrict s, p x
+· 使用定理 `MeasureTheory.Martingale.condExp_ae_eq`：condExp_ae_eq (hf : Martingale f
+ ℱ μ) {i j : ι} (hij : i <= j) : μ[f j | ℱ i] =ᵐ[μ] f i
 -/
 theorem condExp_stopping_time_ae_eq_restrict_eq_const (h : Martingale f ℱ μ)
-    (hτ : IsStoppingTime ℱ τ) [SigmaFinite (μ.trim hτ.measurableSpace_le)] (hin : i <= n) :
+    (hτ : IsStoppingTime ℱ τ) [SigmaFinite (μ.trim hτ.measurableSpace_le)] (hin : i ≤ n) :
     μ[f n | hτ.measurableSpace] =ᵐ[μ.restrict {x | τ x = i}] f i := by
   refine Filter.EventuallyEq.trans ?_ (ae_restrict_of_ae (h.condExp_ae_eq hin))
   refine condExp_ae_eq_restrict_of_measurableSpace_eq_on hτ.measurableSpace_le (ℱ.le i)
     (hτ.measurableSet_eq' i) fun t => ?_
-  rw [Set.inter_comm _ t]; rw [IsStoppingTime.measurableSet_inter_eq_iff]
-
-/--
-theorem `condExp_stopping_time_ae_eq_restrict_eq_const_of_le_const` / 定理 `condExp_stopping_time_ae_eq_restrict_eq_const_of_le_const`
-
-English:
-theorem condExp_stopping_time_ae_eq_restrict_eq_const_of_le_const
-  statement: (h : Martingale f ℱ μ)
-  proof: by
-  by_cases hin : i <= n
-  · refine Filter.EventuallyEq.trans ?_ (ae_restrict_of_ae (h.condExp_ae_eq hin))
-    refine condExp_ae_eq_restrict_of_measurableSpace_eq_on (hτ.measurableSpace_le_of_le hτ_le)
-      (ℱ.le i) (hτ.measurableSet_eq' i) fun t => ?_
-    rw [Set.inter_comm _ t]; rw [IsStoppingTime.measurableSet_inter_eq_iff]
-  · suffices {x : Ω | τ x = i} = ∅ by simp [this]; norm_cast
-    ext1 x
-    simp only [Set.mem_ofPred_eq, Set.mem_empty_iff_false, iff_false]
-    contrapose hin
-    exact_mod_cast hin ▸ hτ_le x
-
-中文:
-定理 condExp_stopping_time_ae_eq_restrict_eq_const_of_le_const
-  结论: (h : 鞅 f ℱ μ)
-  证明: by
-  by_cases hin : i <= n
-  · refine Filter.EventuallyEq.trans ?_ (ae_restrict_of_ae (h.condExp_ae_eq hin))
-    refine condExp_ae_eq_restrict_of_measurableSpace_eq_on (hτ.measurableSpace_le_of_le hτ_le)
-      (ℱ.le i) (hτ.measurableSet_eq' i) fun t => ?_
-    rw [Set.inter_comm _ t]; rw [IsStoppingTime.measurableSet_inter_eq_iff]
-  · suffices {x : Ω | τ x = i} = ∅ by simp [this]; norm_cast
-    ext1 x
-    simp only [Set.mem_ofPred_eq, Set.mem_empty_iff_false, iff_false]
-    contrapose hin
-    exact_mod_cast hin ▸ hτ_le x
-
-Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq.trans, IsStoppingTime, IsStoppingTime.measurableSet_inter_eq_iff, Set.inter_comm, Set.mem_empty_iff_false, Set.mem_ofPred_eq, ae_restrict_of_ae, condExp_ae_eq, condExp_ae_eq_restrict_of_measurableSpace_eq_on, contrapose, h.condExp_ae_eq, iff_false, inter_comm, measurableSet_eq, measurableSet_inter_eq_iff, measurableSpace_le_of_le, mem_empty_iff_false, mem_ofPred_eq
+  rw [Set.inter_comm _ t, IsStoppingTime.measurableSet_inter_eq_iff]
+/-
+**MeasureTheory.Martingale.condExp_stopping_time_ae_eq_restrict_eq_const_of_le_c
+onst** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Martingale`。
+形式化陈述：condExp_stopping_time_ae_eq_restrict_eq_const_of_le_const (h : Martingale 
+f ℱ μ) (hτ : IsStoppingTime ℱ τ) (hτ_le : forall x, τ x <= n) [SigmaFinite (μ.tr
+im (hτ.measurableSpace_le_of_le hτ_le))] (i : ι) : μ[f n | hτ.measurableSpace] =
+ᵐ[μ.restrict {x | τ x = i}] f i
+参数：h : Martingale f ℱ μ；hτ : IsStoppingTime ℱ τ；hτ_le : forall x, τ x <= n；μ.tri
+m (hτ.measurableSpace_le_of_le hτ_le)；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsStoppingTime.measurableSpace_le_of_le`：measurableSpace_l
+e_of_le (hτ : IsStoppingTime f τ) {n : ι} (hτ_le : forall ω, τ ω <= n) : hτ.meas
+urableSpace <= m
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Filter.EventuallyEq.trans`：∀ {α : Type u} {β : Type v} {l : Filter α} {f
+ g h : α → β}, f =ᶠ[l] g → g =ᶠ[l] h → f =ᶠ[l] h
+· 使用定理 `MeasureTheory.condExp_ae_eq_restrict_of_measurableSpace_eq_on`：condExp_a
+e_eq_restrict_of_measurableSpace_eq_on {m m₂ m0 : MeasurableSpace α} {μ : Measur
+e α} (hm : m <= m0) (hm₂ : m₂ <= m0) [SigmaFinite (…
+· 使用定理 `MeasureTheory.Filtration.le`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Measur
+ableSpace Ω} [inst : Preorder ι] (f : MeasureTheory.Filtration ι m) (i : ι),   ↑
+f i ≤ m
+· 使用定理 `MeasureTheory.IsStoppingTime.measurableSet_eq'`：∀ {Ω : Type u_1} {ι : Ty
+pe u_3} {m : MeasurableSpace Ω} [inst : LinearOrder ι] {f : MeasureTheory.Filtra
+tion ι m}   {τ : Ω → WithTop ι} [ins…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
+· 使用定理 `MeasureTheory.IsStoppingTime.measurableSet_inter_eq_iff`：measurableSet_i
+nter_eq_iff (hτ : IsStoppingTime f τ) (s : Set Ω) (i : ι) : MeasurableSet[hτ.mea
+surableSpace] (s inter {ω | τ ω = i}) ↔ Measu…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `MeasureTheory.ae_restrict_of_ae`：ae_restrict_of_ae {s : Set α} {p : α ->
+ Prop} (h : forallᵐ x ∂μ, p x) : forallᵐ x ∂μ.restrict s, p x
+· 使用定理 `MeasureTheory.Martingale.condExp_ae_eq`：condExp_ae_eq (hf : Martingale f
+ ℱ μ) {i j : ι} (hij : i <= j) : μ[f j | ℱ i] =ᵐ[μ] f i
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_false`：∀ (p : Prop), (p ↔ False) = ¬p
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₄`：contrapose₄ {p q : Prop} : (q -> 
+p) -> (¬ p -> ¬ q)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MeasureTheory.ae.congr_simp`：∀ {α : Type u_1} {F : Type u_3} [inst : Fun
+Like F (Set α) ENNReal] [inst_1 : MeasureTheory.OuterMeasureClass F α]   (μ μ_1 
+: F), μ = μ_1 → M…
+· 使用定理 `MeasureTheory.Measure.restrict_empty`：restrict_empty : μ.restrict ∅ = 0
+· 使用定理 `MeasureTheory.ae_zero`：ae_zero {_m0 : MeasurableSpace α} : ae (0 : Measu
+re α) = ⊥
 -/
 theorem condExp_stopping_time_ae_eq_restrict_eq_const_of_le_const (h : Martingale f ℱ μ)
-    (hτ : IsStoppingTime ℱ τ) (hτ_le : forall x, τ x <= n)
+    (hτ : IsStoppingTime ℱ τ) (hτ_le : ∀ x, τ x ≤ n)
     [SigmaFinite (μ.trim (hτ.measurableSpace_le_of_le hτ_le))] (i : ι) :
     μ[f n | hτ.measurableSpace] =ᵐ[μ.restrict {x | τ x = i}] f i := by
-  by_cases hin : i <= n
+  by_cases hin : i ≤ n
   · refine Filter.EventuallyEq.trans ?_ (ae_restrict_of_ae (h.condExp_ae_eq hin))
     refine condExp_ae_eq_restrict_of_measurableSpace_eq_on (hτ.measurableSpace_le_of_le hτ_le)
       (ℱ.le i) (hτ.measurableSet_eq' i) fun t => ?_
-    rw [Set.inter_comm _ t]; rw [IsStoppingTime.measurableSet_inter_eq_iff]
+    rw [Set.inter_comm _ t, IsStoppingTime.measurableSet_inter_eq_iff]
   · suffices {x : Ω | τ x = i} = ∅ by simp [this]; norm_cast
     ext1 x
     simp only [Set.mem_ofPred_eq, Set.mem_empty_iff_false, iff_false]
@@ -132,103 +162,137 @@ theorem condExp_stopping_time_ae_eq_restrict_eq_const_of_le_const (h : Martingal
     exact_mod_cast hin ▸ hτ_le x
 
 variable [Nonempty ι]
-
-/--
-theorem `stoppedValue_ae_eq_restrict_eq` / 定理 `stoppedValue_ae_eq_restrict_eq`
-
-English:
-theorem stoppedValue_ae_eq_restrict_eq
-  statement: (h : Martingale f ℱ μ) (hτ : IsStoppingTime ℱ τ)
-  proof: by
-  refine Filter.EventuallyEq.trans ?_
-    (condExp_stopping_time_ae_eq_restrict_eq_const_of_le_const h hτ hτ_le i).symm
-  rw [Filter.EventuallyEq]; rw [ae_restrict_iff' (ℱ.le _ _ (hτ.measurableSet_eq i))]
-  refine Filter.Eventually.of_forall fun x hx => ?_
-  rw [Set.mem_ofPred_eq] at hx
-  simp [stoppedValue, hx]
-
-中文:
-定理 stoppedValue_ae_eq_restrict_eq
-  结论: (h : 鞅 f ℱ μ) (hτ : IsStoppingTime ℱ τ)
-  证明: by
-  refine Filter.EventuallyEq.trans ?_
-    (condExp_stopping_time_ae_eq_restrict_eq_const_of_le_const h hτ hτ_le i).symm
-  rw [Filter.EventuallyEq]; rw [ae_restrict_iff' (ℱ.le _ _ (hτ.measurableSet_eq i))]
-  refine Filter.Eventually.of_forall fun x hx => ?_
-  rw [Set.mem_ofPred_eq] at hx
-  simp [stoppedValue, hx]
-
-Depends on / 依赖: Eventually, EventuallyEq, Filter, Filter.Eventually.of_forall, Filter.EventuallyEq, Filter.EventuallyEq.trans, Set.mem_ofPred_eq, ae_restrict_iff, condExp_stopping_time_ae_eq_restrict_eq_const_of_le_const, measurableSet_eq, mem_ofPred_eq, of_forall, stoppedValue
+/-
+**MeasureTheory.Martingale.stoppedValue_ae_eq_restrict_eq** 是 Mathlib 中的一个定理，位于命
+名空间 `MeasureTheory.Martingale`。
+形式化陈述：stoppedValue_ae_eq_restrict_eq (h : Martingale f ℱ μ) (hτ : IsStoppingTime
+ ℱ τ) (hτ_le : forall x, τ x <= n) [SigmaFinite (μ.trim (hτ.measurableSpace_le_o
+f_le hτ_le))] (i : ι) : stoppedValue f τ =ᵐ[μ.restrict {x | τ x = i}] μ[f n | hτ
+.measurableSpace]
+参数：h : Martingale f ℱ μ；hτ : IsStoppingTime ℱ τ；hτ_le : forall x, τ x <= n；μ.tri
+m (hτ.measurableSpace_le_of_le hτ_le)；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsStoppingTime.measurableSpace_le_of_le`：measurableSpace_l
+e_of_le (hτ : IsStoppingTime f τ) {n : ι} (hτ_le : forall ω, τ ω <= n) : hτ.meas
+urableSpace <= m
+· 使用定理 `Filter.EventuallyEq.trans`：∀ {α : Type u} {β : Type v} {l : Filter α} {f
+ g h : α → β}, f =ᶠ[l] g → g =ᶠ[l] h → f =ᶠ[l] h
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.EventuallyEq.eq_1`：∀ {α : Type u_1} {β : Type u_2} (l : Filter α)
+ (f g : α → β), (f =ᶠ[l] g) = ∀ᶠ (x : α) in l, f x = g x
+· 使用定理 `MeasureTheory.ae_restrict_iff'`：ae_restrict_iff'₀ {p : α -> Prop} (hs : 
+NullMeasurableSet s μ) : (forallᵐ x ∂μ.restrict s, p x) ↔ forallᵐ x ∂μ, x in s -
+> p x
+· 使用定理 `MeasureTheory.Filtration.le`：∀ {Ω : Type u_1} {ι : Type u_2} {m : Measur
+ableSpace Ω} [inst : Preorder ι] (f : MeasureTheory.Filtration ι m) (i : ι),   ↑
+f i ≤ m
+· 使用定理 `MeasureTheory.IsStoppingTime.measurableSet_eq`：∀ {Ω : Type u_1} {ι : Typ
+e u_3} {m : MeasurableSpace Ω} [inst : LinearOrder ι] {f : MeasureTheory.Filtrat
+ion ι m}   {τ : Ω → WithTop ι} [ins…
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `WithTop.untopA.congr_simp`：∀ {α : Type u_1} [inst : Nonempty α] (a a_1 :
+ WithTop α), a = a_1 → a.untopA = a_1.untopA
+· 使用定理 `Set.mem_ofPred_eq`：mem_ofPred_eq {x : α} {p : α -> Prop} : (x in {y | p 
+y}) = p x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
+· 使用定理 `MeasureTheory.Martingale.condExp_stopping_time_ae_eq_restrict_eq_const_o
+f_le_const`：condExp_stopping_time_ae_eq_restrict_eq_const_of_le_const (h : Marti
+ngale f ℱ μ) (hτ : IsStoppingTime ℱ τ) (hτ_le : forall x, τ x <= n) [Sig…
 -/
 theorem stoppedValue_ae_eq_restrict_eq (h : Martingale f ℱ μ) (hτ : IsStoppingTime ℱ τ)
-    (hτ_le : forall x, τ x <= n) [SigmaFinite (μ.trim (hτ.measurableSpace_le_of_le hτ_le))] (i : ι) :
+    (hτ_le : ∀ x, τ x ≤ n) [SigmaFinite (μ.trim (hτ.measurableSpace_le_of_le hτ_le))] (i : ι) :
     stoppedValue f τ =ᵐ[μ.restrict {x | τ x = i}] μ[f n | hτ.measurableSpace] := by
   refine Filter.EventuallyEq.trans ?_
     (condExp_stopping_time_ae_eq_restrict_eq_const_of_le_const h hτ hτ_le i).symm
-  rw [Filter.EventuallyEq]; rw [ae_restrict_iff' (ℱ.le _ _ (hτ.measurableSet_eq i))]
+  rw [Filter.EventuallyEq, ae_restrict_iff' (ℱ.le _ _ (hτ.measurableSet_eq i))]
   refine Filter.Eventually.of_forall fun x hx => ?_
   rw [Set.mem_ofPred_eq] at hx
   simp [stoppedValue, hx]
 
-/--
-theorem `stoppedValue_ae_eq_condExp_of_le_const_of_countable_range` / 定理 `stoppedValue_ae_eq_condExp_of_le_const_of_countable_range`
+/-- The value of a martingale `f` at a stopping time `τ` bounded by `n` is the conditional
+expectation of `f n` with respect to the σ-algebra generated by `τ`. -/
+/-
+**MeasureTheory.Martingale.stoppedValue_ae_eq_condExp_of_le_const_of_countable_r
+ange** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Martingale`。
+形式化陈述：stoppedValue_ae_eq_condExp_of_le_const_of_countable_range (h : Martingale 
+f ℱ μ) (hτ : IsStoppingTime ℱ τ) (hτ_le : forall x, τ x <= n) (h_countable_range
+ : (Set.range τ).Countable) [SigmaFinite (μ.trim (hτ.measurableSpace_le_of_le hτ
+_le))] : stoppedValue f τ =ᵐ[μ] μ[f n | hτ.measurableSpace]
+参数：h : Martingale f ℱ μ；hτ : IsStoppingTime ℱ τ；hτ_le : forall x, τ x <= n；h_cou
+ntable_range : (Set.range τ).Countable；μ.trim (hτ.measurableSpace_le_of_le hτ_le
+)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsStoppingTime.measurableSpace_le_of_le`：measurableSpace_l
+e_of_le (hτ : IsStoppingTime f τ) {n : ι} (hτ_le : forall ω, τ ω <= n) : hτ.meas
+urableSpace <= m
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iUnion_congr_Prop`：iUnion_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iUnion f₁ 
+= iUnion f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Set.iUnion_exists`：iUnion_exists {p : ι -> Prop} {f : Exists p -> Set α}
+ : ⋃ x, f x = ⋃ (i) (h : p i), f ⟨i, h⟩
+· 使用定理 `Set.iUnion_iUnion_eq'`：iUnion_iUnion_eq' {f : ι -> α} {g : α -> Set β} :
+ ⋃ (x) (y) (_ : f y = x), g x = ⋃ y, g (f y)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MeasureTheory.Measure.restrict_univ`：restrict_univ : μ.restrict univ = μ
+· 使用定理 `MeasureTheory.ae_eq_restrict_biUnion_iff`：ae_eq_restrict_biUnion_iff (s 
+: ι -> Set α) {t : Set ι} (ht : t.Countable) (f g : α -> δ) : f =ᵐ[μ.restrict (⋃
+ i in t, s i)] g ↔ forall i in…
+· 使用定理 `CanLift.prf`：∀ {α : Sort u_1} {β : Sort u_2} {coe : outParam (β → α)} {c
+ond : outParam (α → Prop)} [self : CanLift α β coe cond]   (x : α), cond x → ∃ y
+,…
+· 使用定理 `WithTop.canLift`：∀ {α : Type u_1}, CanLift (WithTop α) α WithTop.some fu
+n r => r ≠ ⊤
+· 使用定理 `MeasureTheory.ae.congr_simp`：∀ {α : Type u_1} {F : Type u_3} [inst : Fun
+Like F (Set α) ENNReal] [inst_1 : MeasureTheory.OuterMeasureClass F α]   (μ μ_1 
+: F), μ = μ_1 → M…
+· 使用定理 `MeasureTheory.Martingale.stoppedValue_ae_eq_restrict_eq`：stoppedValue_ae
+_eq_restrict_eq (h : Martingale f ℱ μ) (hτ : IsStoppingTime ℱ τ) (hτ_le : forall
+ x, τ x <= n) [SigmaFinite (μ.trim (hτ.measur…
 
-English:
-theorem stoppedValue_ae_eq_condExp_of_le_const_of_countable_range
-  statement: (h : Martingale f ℱ μ)
-  proof: by
-  have : Set.univ = ⋃ i in Set.range τ, {x | τ x = i} := by
-    ext1 x
-    simp only [Set.mem_univ, Set.mem_range, Set.iUnion_exists, Set.iUnion_iUnion_eq',
-      Set.mem_iUnion, Set.mem_ofPred_eq, exists_apply_eq_apply']
-  nth_rw 1 [← @Measure.restrict_univ Ω _ μ]
-  rw [this]; rw [ae_eq_restrict_biUnion_iff _ h_countable_range]
-  intro i hi
-  have h_top : i != ⊤ := fun h => by
-    simp only [h, Set.mem_range] at hi
-    obtain ⟨ω, hω⟩ := hi
-    specialize hτ_le ω
-    simp [hω] at hτ_le
-  lift i to ι using h_top with i
-  exact stoppedValue_ae_eq_restrict_eq h _ hτ_le i
-
-omit [FirstCountableTopology ι] in
-
-中文:
-定理 stoppedValue_ae_eq_condExp_of_le_const_of_countable_range
-  结论: (h : 鞅 f ℱ μ)
-  证明: by
-  have : Set.univ = ⋃ i in Set.range τ, {x | τ x = i} := by
-    ext1 x
-    simp only [Set.mem_univ, Set.mem_range, Set.iUnion_exists, Set.iUnion_iUnion_eq',
-      Set.mem_iUnion, Set.mem_ofPred_eq, exists_apply_eq_apply']
-  nth_rw 1 [← @Measure.restrict_univ Ω _ μ]
-  rw [this]; rw [ae_eq_restrict_biUnion_iff _ h_countable_range]
-  intro i hi
-  have h_top : i != ⊤ := fun h => by
-    simp only [h, Set.mem_range] at hi
-    obtain ⟨ω, hω⟩ := hi
-    specialize hτ_le ω
-    simp [hω] at hτ_le
-  lift i to ι using h_top with i
-  exact stoppedValue_ae_eq_restrict_eq h _ hτ_le i
-
-omit [FirstCountableTopology ι] in
-
-Depends on / 依赖: Measure, Measure.restrict_univ, Set.iUnion_exists, Set.iUnion_iUnion_eq, Set.mem_iUnion, Set.mem_ofPred_eq, Set.mem_range, Set.mem_univ, Set.range, Set.univ, ae_eq_restrict_biUnion_iff, exists_apply_eq_apply, h_countable_range, h_top, iUnion_exists, iUnion_iUnion_eq, mem_iUnion, mem_ofPred_eq, mem_range, mem_univ
+--- 原说明 ---
+The value of a martingale `f` at a stopping time `τ` bounded by `n` is the condi
+tional
+expectation of `f n` with respect to the σ-algebra generated by `τ`.
 -/
 theorem stoppedValue_ae_eq_condExp_of_le_const_of_countable_range (h : Martingale f ℱ μ)
-    (hτ : IsStoppingTime ℱ τ) (hτ_le : forall x, τ x <= n) (h_countable_range : (Set.range τ).Countable)
+    (hτ : IsStoppingTime ℱ τ) (hτ_le : ∀ x, τ x ≤ n) (h_countable_range : (Set.range τ).Countable)
     [SigmaFinite (μ.trim (hτ.measurableSpace_le_of_le hτ_le))] :
     stoppedValue f τ =ᵐ[μ] μ[f n | hτ.measurableSpace] := by
-  have : Set.univ = ⋃ i in Set.range τ, {x | τ x = i} := by
+  have : Set.univ = ⋃ i ∈ Set.range τ, {x | τ x = i} := by
     ext1 x
     simp only [Set.mem_univ, Set.mem_range, Set.iUnion_exists, Set.iUnion_iUnion_eq',
       Set.mem_iUnion, Set.mem_ofPred_eq, exists_apply_eq_apply']
   nth_rw 1 [← @Measure.restrict_univ Ω _ μ]
-  rw [this]; rw [ae_eq_restrict_biUnion_iff _ h_countable_range]
+  rw [this, ae_eq_restrict_biUnion_iff _ h_countable_range]
   intro i hi
-  have h_top : i != ⊤ := fun h => by
+  have h_top : i ≠ ⊤ := fun h ↦ by
     simp only [h, Set.mem_range] at hi
     obtain ⟨ω, hω⟩ := hi
     specialize hτ_le ω
@@ -237,68 +301,98 @@ theorem stoppedValue_ae_eq_condExp_of_le_const_of_countable_range (h : Martingal
   exact stoppedValue_ae_eq_restrict_eq h _ hτ_le i
 
 omit [FirstCountableTopology ι] in
-/--
-theorem `stoppedValue_ae_eq_condExp_of_le_const` / 定理 `stoppedValue_ae_eq_condExp_of_le_const`
+/-- The value of a martingale `f` at a stopping time `τ` bounded by `n` is the conditional
+expectation of `f n` with respect to the σ-algebra generated by `τ`. -/
+/-
+**MeasureTheory.Martingale.stoppedValue_ae_eq_condExp_of_le_const** 是 Mathlib 中的
+一个定理，位于命名空间 `MeasureTheory.Martingale`。
+形式化陈述：stoppedValue_ae_eq_condExp_of_le_const [Countable ι] (h : Martingale f ℱ μ
+) (hτ : IsStoppingTime ℱ τ) (hτ_le : forall x, τ x <= n) [SigmaFinite (μ.trim (h
+τ.measurableSpace_le_of_le hτ_le))] : stoppedValue f τ =ᵐ[μ] μ[f n | hτ.measurab
+leSpace]
+参数：h : Martingale f ℱ μ；hτ : IsStoppingTime ℱ τ；hτ_le : forall x, τ x <= n；μ.tri
+m (hτ.measurableSpace_le_of_le hτ_le)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsStoppingTime.measurableSpace_le_of_le`：measurableSpace_l
+e_of_le (hτ : IsStoppingTime f τ) {n : ι} (hτ_le : forall ω, τ ω <= n) : hτ.meas
+urableSpace <= m
+· 使用定理 `MeasureTheory.Martingale.stoppedValue_ae_eq_condExp_of_le_const_of_count
+able_range`：stoppedValue_ae_eq_condExp_of_le_const_of_countable_range (h : Marti
+ngale f ℱ μ) (hτ : IsStoppingTime ℱ τ) (hτ_le : forall x, τ x <= n) (h_c…
+· 使用定理 `TopologicalSpace.SecondCountableTopology.to_firstCountableTopology`：∀ (α
+ : Type u) [t : TopologicalSpace α] [SecondCountableTopology α], FirstCountableT
+opology α
+· 使用定理 `instSecondCountableTopologyOfOrderTopologyOfCountable`：∀ {α : Type u} [t
+s : TopologicalSpace α] [inst : Preorder α] [OrderTopology α] [Countable α], Sec
+ondCountableTopology α
+· 使用定理 `Set.to_countable`：to_countable (s : Set α) [Countable s] : s.Countable
+· 使用定理 `SetCoe.countable`：∀ {α : Type u} [Countable α] (s : Set α), Countable ↑s
 
-English:
-theorem stoppedValue_ae_eq_condExp_of_le_const
-  statement: [Countable ι] (h : Martingale f ℱ μ)
-  proof: h.stoppedValue_ae_eq_condExp_of_le_const_of_countable_range hτ hτ_le (Set.to_countable _)
-
-中文:
-定理 stoppedValue_ae_eq_condExp_of_le_const
-  结论: [可数 ι] (h : 鞅 f ℱ μ)
-  证明: h.stoppedValue_ae_eq_condExp_of_le_const_of_countable_range hτ hτ_le (Set.to_countable _)
-
-Depends on / 依赖: Set.to_countable, h.stoppedValue_ae_eq_condExp_of_le_const_of_countable_range, stoppedValue_ae_eq_condExp_of_le_const_of_countable_range, to_countable
+--- 原说明 ---
+The value of a martingale `f` at a stopping time `τ` bounded by `n` is the condi
+tional
+expectation of `f n` with respect to the σ-algebra generated by `τ`.
 -/
 theorem stoppedValue_ae_eq_condExp_of_le_const [Countable ι] (h : Martingale f ℱ μ)
-    (hτ : IsStoppingTime ℱ τ) (hτ_le : forall x, τ x <= n)
+    (hτ : IsStoppingTime ℱ τ) (hτ_le : ∀ x, τ x ≤ n)
     [SigmaFinite (μ.trim (hτ.measurableSpace_le_of_le hτ_le))] :
     stoppedValue f τ =ᵐ[μ] μ[f n | hτ.measurableSpace] :=
   h.stoppedValue_ae_eq_condExp_of_le_const_of_countable_range hτ hτ_le (Set.to_countable _)
 
-/--
-theorem `stoppedValue_ae_eq_condExp_of_le_of_countable_range` / 定理 `stoppedValue_ae_eq_condExp_of_le_of_countable_range`
+/-- If `τ` and `σ` are two stopping times with `σ ≤ τ` and `τ` is bounded, then the value of a
+martingale `f` at `σ` is the conditional expectation of its value at `τ` with respect to the
+σ-algebra generated by `σ`. -/
+/-
+**MeasureTheory.Martingale.stoppedValue_ae_eq_condExp_of_le_of_countable_range**
+ 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Martingale`。
+形式化陈述：stoppedValue_ae_eq_condExp_of_le_of_countable_range (h : Martingale f ℱ μ)
+ (hτ : IsStoppingTime ℱ τ) (hσ : IsStoppingTime ℱ σ) (hσ_le_τ : σ <= τ) (hτ_le :
+ forall x, τ x <= n) (hτ_countable_range : (Set.range τ).Countable) (hσ_countabl
+e_range : (Set.range σ).Countable) [SigmaFinite (μ.trim (hσ.measurableSpace_le_o
+f_le fun x => (hσ_le_τ x).trans (hτ_le x)))] : stoppedValue f σ =ᵐ[μ] μ[stoppedV
+alue f τ | hσ.measurableSpace]
+参数：h : Martingale f ℱ μ；hτ : IsStoppingTime ℱ τ；hσ : IsStoppingTime ℱ σ；hσ_le_τ 
+: σ <= τ；hτ_le : forall x, τ x <= n；hτ_countable_range : (Set.range τ).Countable
+；hσ_countable_range : (Set.range σ).Countable；μ.trim (hσ.measurableSpace_le_of_l
+e fun x => (hσ_le_τ x).trans (hτ_le x))。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsStoppingTime.measurableSpace_le_of_le`：measurableSpace_l
+e_of_le (hτ : IsStoppingTime f τ) {n : ι} (hτ_le : forall ω, τ ω <= n) : hτ.meas
+urableSpace <= m
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `MeasureTheory.sigmaFiniteTrim_mono`：sigmaFiniteTrim_mono {m m₂ m0 : Meas
+urableSpace α} {μ : Measure α} (hm : m <= m0) (hm₂ : m₂ <= m) [SigmaFinite (μ.tr
+im (hm₂.trans hm))] : Si…
+· 使用定理 `MeasureTheory.IsStoppingTime.measurableSpace_mono`：measurableSpace_mono 
+(hτ : IsStoppingTime f τ) (hπ : IsStoppingTime f π) (hle : τ <= π) : hτ.measurab
+leSpace <= hπ.measurableSpace
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.condExp_congr_ae`：condExp_congr_ae (h : f =ᵐ[μ] g) : μ[f |
+ m] =ᵐ[μ] μ[g | m]
+· 使用定理 `MeasureTheory.Martingale.stoppedValue_ae_eq_condExp_of_le_const_of_count
+able_range`：stoppedValue_ae_eq_condExp_of_le_const_of_countable_range (h : Marti
+ngale f ℱ μ) (hτ : IsStoppingTime ℱ τ) (hτ_le : forall x, τ x <= n) (h_c…
+· 使用定理 `Filter.EventuallyEq.trans`：∀ {α : Type u} {β : Type v} {l : Filter α} {f
+ g h : α → β}, f =ᶠ[l] g → g =ᶠ[l] h → f =ᶠ[l] h
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
+· 使用定理 `MeasureTheory.condExp_condExp_of_le`：condExp_condExp_of_le {m₁ m₂ m₀ : M
+easurableSpace α} {μ : Measure α} (hm₁₂ : m₁ <= m₂) (hm₂ : m₂ <= m₀) [SigmaFinit
+e (μ.trim hm₂)] : μ[μ[f |…
 
-English:
-theorem stoppedValue_ae_eq_condExp_of_le_of_countable_range
-  statement: (h : Martingale f ℱ μ)
-  proof: by
-  have : SigmaFinite (μ.trim (hτ.measurableSpace_le_of_le hτ_le)) :=
-    sigmaFiniteTrim_mono _ (IsStoppingTime.measurableSpace_mono hσ hτ hσ_le_τ)
-  have : μ[stoppedValue f τ | hσ.measurableSpace] =ᵐ[μ]
-      μ[μ[f n | hτ.measurableSpace] | hσ.measurableSpace] := condExp_congr_ae
-    (h.stoppedValue_ae_eq_condExp_of_le_const_of_countable_range hτ hτ_le hτ_countable_range)
-  refine (Filter.EventuallyEq.trans ?_
-    (condExp_condExp_of_le ?_ (hτ.measurableSpace_le_of_le hτ_le)).symm).trans this.symm
-  · exact h.stoppedValue_ae_eq_condExp_of_le_const_of_countable_range hσ
-      (fun x => (hσ_le_τ x).trans (hτ_le x)) hσ_countable_range
-  · exact hσ.measurableSpace_mono hτ hσ_le_τ
-
-omit [FirstCountableTopology ι] in
-
-中文:
-定理 stoppedValue_ae_eq_condExp_of_le_of_countable_range
-  结论: (h : 鞅 f ℱ μ)
-  证明: by
-  have : SigmaFinite (μ.trim (hτ.measurableSpace_le_of_le hτ_le)) :=
-    sigmaFiniteTrim_mono _ (IsStoppingTime.measurableSpace_mono hσ hτ hσ_le_τ)
-  have : μ[stoppedValue f τ | hσ.measurableSpace] =ᵐ[μ]
-      μ[μ[f n | hτ.measurableSpace] | hσ.measurableSpace] := condExp_congr_ae
-    (h.stoppedValue_ae_eq_condExp_of_le_const_of_countable_range hτ hτ_le hτ_countable_range)
-  refine (Filter.EventuallyEq.trans ?_
-    (condExp_condExp_of_le ?_ (hτ.measurableSpace_le_of_le hτ_le)).symm).trans this.symm
-  · exact h.stoppedValue_ae_eq_condExp_of_le_const_of_countable_range hσ
-      (fun x => (hσ_le_τ x).trans (hτ_le x)) hσ_countable_range
-  · exact hσ.measurableSpace_mono hτ hσ_le_τ
-
-omit [FirstCountableTopology ι] in
-
-Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq.trans, IsStoppingTime, IsStoppingTime.measurableSpace_mono, SigmaFinite, condExp_condExp_of_le, condExp_congr_ae, h.stopped, h.stoppedValue_ae_eq_condExp_of_le_const_of_countable_range, measurableSpace, measurableSpace_le_of_le, measurableSpace_mono, sigmaFiniteTrim_mono, stopped, stoppedValue, stoppedValue_ae_eq_condExp_of_le_const_of_countable_range, this.symm
+--- 原说明 ---
+If `τ` and `σ` are two stopping times with `σ ≤ τ` and `τ` is bounded, then the 
+value of a
+martingale `f` at `σ` is the conditional expectation of its value at `τ` with re
+spect to the
+σ-algebra generated by `σ`.
 -/
 theorem stoppedValue_ae_eq_condExp_of_le_of_countable_range (h : Martingale f ℱ μ)
-    (hτ : IsStoppingTime ℱ τ) (hσ : IsStoppingTime ℱ σ) (hσ_le_τ : σ <= τ) (hτ_le : forall x, τ x <= n)
+    (hτ : IsStoppingTime ℱ τ) (hσ : IsStoppingTime ℱ σ) (hσ_le_τ : σ ≤ τ) (hτ_le : ∀ x, τ x ≤ n)
     (hτ_countable_range : (Set.range τ).Countable) (hσ_countable_range : (Set.range σ).Countable)
     [SigmaFinite (μ.trim (hσ.measurableSpace_le_of_le fun x => (hσ_le_τ x).trans (hτ_le x)))] :
     stoppedValue f σ =ᵐ[μ] μ[stoppedValue f τ | hσ.measurableSpace] := by
@@ -314,25 +408,43 @@ theorem stoppedValue_ae_eq_condExp_of_le_of_countable_range (h : Martingale f �
   · exact hσ.measurableSpace_mono hτ hσ_le_τ
 
 omit [FirstCountableTopology ι] in
-/--
-theorem `stoppedValue_ae_eq_condExp_of_le` / 定理 `stoppedValue_ae_eq_condExp_of_le`
+/-- If `τ` and `σ` are two stopping times with `σ ≤ τ` and `τ` is bounded, then the value of a
+martingale `f` at `σ` is the conditional expectation of its value at `τ` with respect to the
+σ-algebra generated by `σ`. -/
+/-
+**MeasureTheory.Martingale.stoppedValue_ae_eq_condExp_of_le** 是 Mathlib 中的一个定理，位
+于命名空间 `MeasureTheory.Martingale`。
+形式化陈述：stoppedValue_ae_eq_condExp_of_le [Countable ι] (h : Martingale f ℱ μ) (hτ 
+: IsStoppingTime ℱ τ) (hσ : IsStoppingTime ℱ σ) (hσ_le_τ : σ <= τ) (hτ_le : fora
+ll x, τ x <= n) [SigmaFinite (μ.trim hσ.measurableSpace_le)] : stoppedValue f σ 
+=ᵐ[μ] μ[stoppedValue f τ | hσ.measurableSpace]
+参数：h : Martingale f ℱ μ；hτ : IsStoppingTime ℱ τ；hσ : IsStoppingTime ℱ σ；hσ_le_τ 
+: σ <= τ；hτ_le : forall x, τ x <= n；μ.trim hσ.measurableSpace_le。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsStoppingTime.measurableSpace_le`：measurableSpace_le (hτ 
+: IsStoppingTime f τ) : hτ.measurableSpace <= m
+· 使用定理 `MeasureTheory.Martingale.stoppedValue_ae_eq_condExp_of_le_of_countable_r
+ange`：stoppedValue_ae_eq_condExp_of_le_of_countable_range (h : Martingale f ℱ μ)
+ (hτ : IsStoppingTime ℱ τ) (hσ : IsStoppingTime ℱ σ) (hσ_le_τ : σ …
+· 使用定理 `TopologicalSpace.SecondCountableTopology.to_firstCountableTopology`：∀ (α
+ : Type u) [t : TopologicalSpace α] [SecondCountableTopology α], FirstCountableT
+opology α
+· 使用定理 `instSecondCountableTopologyOfOrderTopologyOfCountable`：∀ {α : Type u} [t
+s : TopologicalSpace α] [inst : Preorder α] [OrderTopology α] [Countable α], Sec
+ondCountableTopology α
+· 使用定理 `Set.to_countable`：to_countable (s : Set α) [Countable s] : s.Countable
+· 使用定理 `SetCoe.countable`：∀ {α : Type u} [Countable α] (s : Set α), Countable ↑s
 
-English:
-theorem stoppedValue_ae_eq_condExp_of_le
-  statement: [Countable ι] (h : Martingale f ℱ μ)
-  proof: h.stoppedValue_ae_eq_condExp_of_le_of_countable_range hτ hσ hσ_le_τ hτ_le (Set.to_countable _)
-    (Set.to_countable _)
-
-中文:
-定理 stoppedValue_ae_eq_condExp_of_le
-  结论: [可数 ι] (h : 鞅 f ℱ μ)
-  证明: h.stoppedValue_ae_eq_condExp_of_le_of_countable_range hτ hσ hσ_le_τ hτ_le (Set.to_countable _)
-    (Set.to_countable _)
-
-Depends on / 依赖: Set.to_countable, h.stoppedValue_ae_eq_condExp_of_le_of_countable_range, stoppedValue_ae_eq_condExp_of_le_of_countable_range, to_countable
+--- 原说明 ---
+If `τ` and `σ` are two stopping times with `σ ≤ τ` and `τ` is bounded, then the 
+value of a
+martingale `f` at `σ` is the conditional expectation of its value at `τ` with re
+spect to the
+σ-algebra generated by `σ`.
 -/
 theorem stoppedValue_ae_eq_condExp_of_le [Countable ι] (h : Martingale f ℱ μ)
-    (hτ : IsStoppingTime ℱ τ) (hσ : IsStoppingTime ℱ σ) (hσ_le_τ : σ <= τ) (hτ_le : forall x, τ x <= n)
+    (hτ : IsStoppingTime ℱ τ) (hσ : IsStoppingTime ℱ σ) (hσ_le_τ : σ ≤ τ) (hτ_le : ∀ x, τ x ≤ n)
     [SigmaFinite (μ.trim hσ.measurableSpace_le)] :
     stoppedValue f σ =ᵐ[μ] μ[stoppedValue f τ | hσ.measurableSpace] :=
   h.stoppedValue_ae_eq_condExp_of_le_of_countable_range hτ hσ hσ_le_τ hτ_le (Set.to_countable _)
@@ -350,90 +462,116 @@ and is a measurable space with the Borel σ-algebra. -/
 
 variable {ι : Type*} [LinearOrder ι] [LocallyFiniteOrder ι] [OrderBot ι] [TopologicalSpace ι]
   [DiscreteTopology ι] [MeasurableSpace ι] [BorelSpace ι] [MeasurableSpace E] [BorelSpace E]
-  [SecondCountableTopology E] {ℱ : Filtration ι m} {τ σ : Ω -> WithTop ι} {f : ι -> Ω -> E} {i : ι}
+  [SecondCountableTopology E] {ℱ : Filtration ι m} {τ σ : Ω → WithTop ι} {f : ι → Ω → E} {i : ι}
 
-/--
-theorem `condExp_stoppedValue_stopping_time_ae_eq_restrict_le` / 定理 `condExp_stoppedValue_stopping_time_ae_eq_restrict_le`
-
-English:
-theorem condExp_stoppedValue_stopping_time_ae_eq_restrict_le
-  statement: (h : Martingale f ℱ μ)
-  proof: by
-  rw [ae_eq_restrict_iff_indicator_ae_eq
-    (hτ.measurableSpace_le _ (hτ.measurableSet_le_stopping_time hσ))]
-  refine (condExp_indicator (integrable_stoppedValue ι hτ h.integrable hτ_le)
-    (hτ.measurableSet_stopping_time_le hσ)).symm.trans ?_
-  have h_int :
-      Integrable ({ω : Ω | τ ω <= σ ω}.indicator (stoppedValue (fun n : ι => f n) τ)) μ := by
-    refine (integrable_stoppedValue ι hτ h.integrable hτ_le).indicator ?_
-    exact hτ.measurableSpace_le _ (hτ.measurableSet_le_stopping_time hσ)
-  have h_meas : AEStronglyMeasurable[hσ.measurableSpace]
-      ({ω : Ω | τ ω <= σ ω}.indicator (stoppedValue (fun n : ι => f n) τ)) μ := by
-    refine StronglyMeasurable.aestronglyMeasurable ?_
-    refine StronglyMeasurable.stronglyMeasurable_of_measurableSpace_le_on
-      (hτ.measurableSet_le_stopping_time hσ) ?_ ?_ ?_
-    · intro t ht
-      rw [Set.inter_comm _ t] at ht ⊢
-      rw [hτ.measurableSet_inter_le_iff hσ]; rw [IsStoppingTime.measurableSet_min_iff hτ hσ] at ht
-      exact ht.2
-    · refine StronglyMeasurable.indicator ?_ (hτ.measurableSet_le_stopping_time hσ)
-      refine Measurable.stronglyMeasurable ?_
-      exact measurable_stoppedValue h.stronglyAdapted.isStronglyProgressive_of_discrete hτ
-    · intro x hx
-      simp only [hx, Set.indicator_of_notMem, not_false_iff]
-  exact condExp_of_aestronglyMeasurable' hσ.measurableSpace_le h_meas h_int
-
-中文:
-定理 condExp_stoppedValue_stopping_time_ae_eq_restrict_le
-  结论: (h : 鞅 f ℱ μ)
-  证明: by
-  rw [ae_eq_restrict_iff_indicator_ae_eq
-    (hτ.measurableSpace_le _ (hτ.measurableSet_le_stopping_time hσ))]
-  refine (condExp_indicator (integrable_stoppedValue ι hτ h.integrable hτ_le)
-    (hτ.measurableSet_stopping_time_le hσ)).symm.trans ?_
-  have h_int :
-      Integrable ({ω : Ω | τ ω <= σ ω}.indicator (stoppedValue (fun n : ι => f n) τ)) μ := by
-    refine (integrable_stoppedValue ι hτ h.integrable hτ_le).indicator ?_
-    exact hτ.measurableSpace_le _ (hτ.measurableSet_le_stopping_time hσ)
-  have h_meas : AEStronglyMeasurable[hσ.measurableSpace]
-      ({ω : Ω | τ ω <= σ ω}.indicator (stoppedValue (fun n : ι => f n) τ)) μ := by
-    refine StronglyMeasurable.aestronglyMeasurable ?_
-    refine StronglyMeasurable.stronglyMeasurable_of_measurableSpace_le_on
-      (hτ.measurableSet_le_stopping_time hσ) ?_ ?_ ?_
-    · intro t ht
-      rw [Set.inter_comm _ t] at ht ⊢
-      rw [hτ.measurableSet_inter_le_iff hσ]; rw [IsStoppingTime.measurableSet_min_iff hτ hσ] at ht
-      exact ht.2
-    · refine StronglyMeasurable.indicator ?_ (hτ.measurableSet_le_stopping_time hσ)
-      refine Measurable.stronglyMeasurable ?_
-      exact measurable_stoppedValue h.stronglyAdapted.isStronglyProgressive_of_discrete hτ
-    · intro x hx
-      simp only [hx, Set.indicator_of_notMem, not_false_iff]
-  exact condExp_of_aestronglyMeasurable' hσ.measurableSpace_le h_meas h_int
-
-Depends on / 依赖: AEStrong, Integrable, ae_eq_restrict_iff_indicator_ae_eq, condExp_indicator, h.integrable, h_int, h_meas, indicator, integrable, integrable_stoppedValue, measurableSet_le_stopping_time, measurableSet_stopping_time_le, measurableSpace_le, stoppedValue, symm.trans
+/-
+**MeasureTheory.Martingale.condExp_stoppedValue_stopping_time_ae_eq_restrict_le*
+* 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory.Martingale`。
+形式化陈述：condExp_stoppedValue_stopping_time_ae_eq_restrict_le (h : Martingale f ℱ μ
+) (hτ : IsStoppingTime ℱ τ) (hσ : IsStoppingTime ℱ σ) [SigmaFinite (μ.trim hσ.me
+asurableSpace_le)] (hτ_le : forall x, τ x <= i) : μ[stoppedValue f τ | hσ.measur
+ableSpace] =ᵐ[μ.restrict {x : Ω | τ x <= σ x}] stoppedValue f τ
+参数：h : Martingale f ℱ μ；hτ : IsStoppingTime ℱ τ；hσ : IsStoppingTime ℱ σ；μ.trim h
+σ.measurableSpace_le；hτ_le : forall x, τ x <= i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsStoppingTime.measurableSpace_le`：measurableSpace_le (hτ 
+: IsStoppingTime f τ) : hτ.measurableSpace <= m
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `bot_nonempty`：∀ (α : Type u_1) [Bot α], Nonempty α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ae_eq_restrict_iff_indicator_ae_eq`：ae_eq_restrict_iff_indicator_ae_eq {
+g : α -> β} (hs : MeasurableSet s) : f =ᵐ[μ.restrict s] g ↔ s.indicator f =ᵐ[μ] 
+s.indicator g
+· 使用定理 `MeasureTheory.IsStoppingTime.measurableSet_le_stopping_time`：measurableS
+et_le_stopping_time [TopologicalSpace ι] [SecondCountableTopology ι] [OrderTopol
+ogy ι] (hτ : IsStoppingTime f τ) (hπ : IsStopping…
+· 使用定理 `PolishSpace.toSecondCountableTopology`：∀ {α : Type u_3} {h : Topological
+Space α} [self : PolishSpace α], SecondCountableTopology α
+· 使用定理 `instPolishSpaceOfSeparableSpaceOfIsCompletelyMetrizableSpace`：∀ {α : Typ
+e u_1} [inst : TopologicalSpace α] [TopologicalSpace.SeparableSpace α]   [Topolo
+gicalSpace.IsCompletelyMetrizableSpace α], PolishS…
+· 使用定理 `TopologicalSpace.Countable.to_separableSpace`：∀ {α : Type u} [t : Topolo
+gicalSpace α] [Countable α], TopologicalSpace.SeparableSpace α
+· 使用定理 `Countable.of_linearOrder_locallyFiniteOrder`：∀ {ι : Type u_1} [inst : Li
+nearOrder ι] [LocallyFiniteOrder ι], Countable ι
+· 使用定理 `TopologicalSpace.IsCompletelyMetrizableSpace.discrete`：∀ {X : Type u_1} 
+[inst : TopologicalSpace X] [DiscreteTopology X], TopologicalSpace.IsCompletelyM
+etrizableSpace X
+· 使用定理 `Filter.EventuallyEq.trans`：∀ {α : Type u} {β : Type v} {l : Filter α} {f
+ g h : α → β}, f =ᶠ[l] g → g =ᶠ[l] h → f =ᶠ[l] h
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
+· 使用定理 `MeasureTheory.condExp_indicator`：condExp_indicator (hf_int : Integrable 
+f μ) (hs : MeasurableSet[m] s) : μ[s.indicator f | m] =ᵐ[μ] s.indicator (μ[f | m
+])
+· 使用定理 `MeasureTheory.integrable_stoppedValue`：integrable_stoppedValue [LocallyF
+initeOrderBot ι] (hτ : IsStoppingTime ℱ τ) (hu : forall n, Integrable (u n) μ) {
+N : ι} (hbdd : forall ω, τ …
+· 使用定理 `MeasureTheory.Martingale.integrable`：∀ {Ω : Type u_1} {E : Type u_2} {ι 
+: Type u_3} [inst : Preorder ι] {m0 : MeasurableSpace Ω}   {μ : MeasureTheory.Me
+asure Ω} [inst_1 : Normed…
+· 使用定理 `MeasureTheory.IsStoppingTime.measurableSet_stopping_time_le`：measurableS
+et_stopping_time_le [TopologicalSpace ι] [SecondCountableTopology ι] [OrderTopol
+ogy ι] (hτ : IsStoppingTime f τ) (hπ : IsStopping…
+· 使用定理 `MeasureTheory.Integrable.indicator`：∀ {α : Type u_1} {ε' : Type u_4} {mα
+ : MeasurableSpace α} {s : Set α} {μ : MeasureTheory.Measure α}   [inst : Topolo
+gicalSpace ε'] [inst_1 :…
+· 使用定理 `MeasureTheory.StronglyMeasurable.aestronglyMeasurable`：∀ {α : Type u_1} 
+{β : Type u_2} [inst : TopologicalSpace β] {m m₀ : MeasurableSpace α} {μ : Measu
+reTheory.Measure α}   {f : α → β}, MeasureT…
+· 使用定理 `MeasureTheory.StronglyMeasurable.stronglyMeasurable_of_measurableSpace_l
+e_on`：stronglyMeasurable_of_measurableSpace_le_on {α E} {m m₂ : MeasurableSpace 
+α} [TopologicalSpace E] [Zero E] {s : Set α} {f : α -> E} (hs_m : …
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `MeasureTheory.IsStoppingTime.min`：∀ {Ω : Type u_1} {ι : Type u_3} {m : M
+easurableSpace Ω} [inst : LinearOrder ι] {f : MeasureTheory.Filtration ι m}   {τ
+ π : Ω → WithTop ι},  …
+· 使用定理 `MeasureTheory.IsStoppingTime.measurableSet_min_iff`：measurableSet_min_if
+f (hτ : IsStoppingTime f τ) (hπ : IsStoppingTime f π) (s : Set Ω) : MeasurableSe
+t[(hτ.min hπ).measurableSpace] s ↔ Measu…
+· 使用定理 `MeasureTheory.IsStoppingTime.measurableSet_inter_le_iff`：measurableSet_i
+nter_le_iff [TopologicalSpace ι] [SecondCountableTopology ι] [OrderTopology ι] (
+hτ : IsStoppingTime f τ) (hπ : IsStoppingTime…
+· 使用定理 `MeasureTheory.StronglyMeasurable.indicator`：∀ {α : Type u_1} {β : Type u
+_2} {f : α → β} {x : MeasurableSpace α} [inst : TopologicalSpace β] [inst_1 : Ze
+ro β],   MeasureTheory.StronglyM…
+· 使用定理 `Measurable.stronglyMeasurable`：∀ {α : Type u_1} {β : Type u_2} {f : α → 
+β} {mα : MeasurableSpace α} [inst : MeasurableSpace β]   [inst_1 : TopologicalSp
+ace β] [Topological…
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `MeasureTheory.measurable_stoppedValue`：measurable_stoppedValue [PseudoMe
+trizableSpace β] [MeasurableSpace β] [BorelSpace β] (hf_prog : IsStronglyProgres
+sive f u) (hτ : IsStoppingT…
+（共 39 条，此处仅展示前 30 条）
 -/
 theorem condExp_stoppedValue_stopping_time_ae_eq_restrict_le (h : Martingale f ℱ μ)
     (hτ : IsStoppingTime ℱ τ) (hσ : IsStoppingTime ℱ σ) [SigmaFinite (μ.trim hσ.measurableSpace_le)]
-    (hτ_le : forall x, τ x <= i) :
-    μ[stoppedValue f τ | hσ.measurableSpace] =ᵐ[μ.restrict {x : Ω | τ x <= σ x}]
+    (hτ_le : ∀ x, τ x ≤ i) :
+    μ[stoppedValue f τ | hσ.measurableSpace] =ᵐ[μ.restrict {x : Ω | τ x ≤ σ x}]
       stoppedValue f τ := by
   rw [ae_eq_restrict_iff_indicator_ae_eq
     (hτ.measurableSpace_le _ (hτ.measurableSet_le_stopping_time hσ))]
   refine (condExp_indicator (integrable_stoppedValue ι hτ h.integrable hτ_le)
     (hτ.measurableSet_stopping_time_le hσ)).symm.trans ?_
   have h_int :
-      Integrable ({ω : Ω | τ ω <= σ ω}.indicator (stoppedValue (fun n : ι => f n) τ)) μ := by
+      Integrable ({ω : Ω | τ ω ≤ σ ω}.indicator (stoppedValue (fun n : ι => f n) τ)) μ := by
     refine (integrable_stoppedValue ι hτ h.integrable hτ_le).indicator ?_
     exact hτ.measurableSpace_le _ (hτ.measurableSet_le_stopping_time hσ)
   have h_meas : AEStronglyMeasurable[hσ.measurableSpace]
-      ({ω : Ω | τ ω <= σ ω}.indicator (stoppedValue (fun n : ι => f n) τ)) μ := by
+      ({ω : Ω | τ ω ≤ σ ω}.indicator (stoppedValue (fun n : ι => f n) τ)) μ := by
     refine StronglyMeasurable.aestronglyMeasurable ?_
     refine StronglyMeasurable.stronglyMeasurable_of_measurableSpace_le_on
       (hτ.measurableSet_le_stopping_time hσ) ?_ ?_ ?_
     · intro t ht
       rw [Set.inter_comm _ t] at ht ⊢
-      rw [hτ.measurableSet_inter_le_iff hσ]; rw [IsStoppingTime.measurableSet_min_iff hτ hσ] at ht
+      rw [hτ.measurableSet_inter_le_iff hσ, IsStoppingTime.measurableSet_min_iff hτ hσ] at ht
       exact ht.2
     · refine StronglyMeasurable.indicator ?_ (hτ.measurableSet_le_stopping_time hσ)
       refine Measurable.stronglyMeasurable ?_
@@ -442,79 +580,119 @@ theorem condExp_stoppedValue_stopping_time_ae_eq_restrict_le (h : Martingale f �
       simp only [hx, Set.indicator_of_notMem, not_false_iff]
   exact condExp_of_aestronglyMeasurable' hσ.measurableSpace_le h_meas h_int
 
-/--
-theorem `stoppedValue_min_ae_eq_condExp` / 定理 `stoppedValue_min_ae_eq_condExp`
+/-- **Optional Sampling theorem**. If `τ` is a bounded stopping time and `σ` is another stopping
+time, then the value of a martingale `f` at the stopping time `min τ σ` is almost everywhere equal
+to the conditional expectation of `f` stopped at `τ` with respect to the σ-algebra generated
+by `σ`. -/
+/-
+**MeasureTheory.Martingale.stoppedValue_min_ae_eq_condExp** 是 Mathlib 中的一个定理，位于命
+名空间 `MeasureTheory.Martingale`。
+形式化陈述：stoppedValue_min_ae_eq_condExp [SigmaFiniteFiltration μ ℱ] (h : Martingale
+ f ℱ μ) (hτ : IsStoppingTime ℱ τ) (hσ : IsStoppingTime ℱ σ) {n : ι} (hτ_le : for
+all x, τ x <= n) [h_sf_min : SigmaFinite (μ.trim (hτ.min hσ).measurableSpace_le)
+] : (stoppedValue f fun x => min (σ x) (τ x)) =ᵐ[μ] μ[stoppedValue f τ | hσ.meas
+urableSpace]
+参数：h : Martingale f ℱ μ；hτ : IsStoppingTime ℱ τ；hσ : IsStoppingTime ℱ σ；hτ_le : 
+forall x, τ x <= n；μ.trim (hτ.min hσ).measurableSpace_le。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsStoppingTime.min`：∀ {Ω : Type u_1} {ι : Type u_3} {m : M
+easurableSpace Ω} [inst : LinearOrder ι] {f : MeasureTheory.Filtration ι m}   {τ
+ π : Ω → WithTop ι},  …
+· 使用定理 `MeasureTheory.IsStoppingTime.measurableSpace_le`：measurableSpace_le (hτ 
+: IsStoppingTime f τ) : hτ.measurableSpace <= m
+· 使用定理 `Filter.EventuallyEq.trans`：∀ {α : Type u} {β : Type v} {l : Filter α} {f
+ g h : α → β}, f =ᶠ[l] g → g =ᶠ[l] h → f =ᶠ[l] h
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `bot_nonempty`：∀ (α : Type u_1) [Bot α], Nonempty α
+· 使用定理 `MeasureTheory.Martingale.stoppedValue_ae_eq_condExp_of_le`：stoppedValue_
+ae_eq_condExp_of_le [Countable ι] (h : Martingale f ℱ μ) (hτ : IsStoppingTime ℱ 
+τ) (hσ : IsStoppingTime ℱ σ) (hσ_le_τ : σ <= τ)…
+· 使用定理 `Countable.of_linearOrder_locallyFiniteOrder`：∀ {ι : Type u_1} [inst : Li
+nearOrder ι] [LocallyFiniteOrder ι], Countable ι
+· 使用引理 `min_le_right`：min_le_right (a b : α) : min a b <= b
+· 使用定理 `MeasureTheory.ae_of_ae_restrict_of_ae_restrict_compl`：ae_of_ae_restrict_
+of_ae_restrict_compl (t : Set α) {p : α -> Prop} (ht : forallᵐ x ∂μ.restrict t, 
+p x) (htc : forallᵐ x ∂μ.restrict tᶜ, p x)…
+· 使用定理 `MeasureTheory.condExp_min_stopping_time_ae_eq_restrict_le`：condExp_min_s
+topping_time_ae_eq_restrict_le [SecondCountableTopology ι] (hτ : IsStoppingTime 
+ℱ τ) (hσ : IsStoppingTime ℱ σ) [SigmaFinite (μ.…
+· 使用定理 `PolishSpace.toSecondCountableTopology`：∀ {α : Type u_3} {h : Topological
+Space α} [self : PolishSpace α], SecondCountableTopology α
+· 使用定理 `instPolishSpaceOfSeparableSpaceOfIsCompletelyMetrizableSpace`：∀ {α : Typ
+e u_1} [inst : TopologicalSpace α] [TopologicalSpace.SeparableSpace α]   [Topolo
+gicalSpace.IsCompletelyMetrizableSpace α], PolishS…
+· 使用定理 `TopologicalSpace.Countable.to_separableSpace`：∀ {α : Type u} [t : Topolo
+gicalSpace α] [Countable α], TopologicalSpace.SeparableSpace α
+· 使用定理 `TopologicalSpace.IsCompletelyMetrizableSpace.discrete`：∀ {X : Type u_1} 
+[inst : TopologicalSpace X] [DiscreteTopology X], TopologicalSpace.IsCompletelyM
+etrizableSpace X
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.IsStoppingTime.measurableSpace_min`：measurableSpace_min (h
+τ : IsStoppingTime f τ) (hπ : IsStoppingTime f π) : (hτ.min hπ).measurableSpace 
+= hτ.measurableSpace ⊓ hπ.measurableSp…
+· 使用定理 `inf_comm`：∀ {α : Type u} [inst : SemilatticeInf α] (a b : α), a ⊓ b = b 
+⊓ a
+· 使用定理 `Filter.EventuallyEq.refl`：∀ {α : Type u} {β : Type v} (l : Filter α) (f 
+: α → β), f =ᶠ[l] f
+· 使用定理 `MeasureTheory.condExp_of_stronglyMeasurable`：condExp_of_stronglyMeasurab
+le (hm : m <= m₀) [hμm : SigmaFinite (μ.trim hm)] {f : α -> E} (hf : StronglyMea
+surable[m] f) (hfi : Integrable f…
+· 使用定理 `Measurable.stronglyMeasurable`：∀ {α : Type u_1} {β : Type u_2} {f : α → 
+β} {mα : MeasurableSpace α} [inst : MeasurableSpace β]   [inst_1 : TopologicalSp
+ace β] [Topological…
+· 使用定理 `PseudoEMetricSpace.pseudoMetrizableSpace`：∀ {α : Type u_2} [inst : Pseud
+oEMetricSpace α], TopologicalSpace.PseudoMetrizableSpace α
+· 使用定理 `BorelSpace.opensMeasurable`：∀ {α : Type u_6} [inst : TopologicalSpace α]
+ [inst_1 : MeasurableSpace α] [BorelSpace α], OpensMeasurableSpace α
+· 使用定理 `MeasureTheory.measurable_stoppedValue`：measurable_stoppedValue [PseudoMe
+trizableSpace β] [MeasurableSpace β] [BorelSpace β] (hf_prog : IsStronglyProgres
+sive f u) (hτ : IsStoppingT…
+· 使用定理 `MeasureTheory.StronglyAdapted.isStronglyProgressive_of_discrete`：∀ {Ω : 
+Type u_1} {ι : Type u_2} {m : MeasurableSpace Ω} [inst : Preorder ι] {f : Measur
+eTheory.Filtration ι m}   {β : Type u_3} [inst_1 : To…
+· 使用定理 `MeasureTheory.Martingale.stronglyAdapted`：∀ {Ω : Type u_1} {E : Type u_2
+} {ι : Type u_3} [inst : Preorder ι] {m0 : MeasurableSpace Ω}   {μ : MeasureTheo
+ry.Measure Ω} [inst_1 : Normed…
+· 使用定理 `MeasureTheory.integrable_stoppedValue`：integrable_stoppedValue [LocallyF
+initeOrderBot ι] (hτ : IsStoppingTime ℱ τ) (hu : forall n, Integrable (u n) μ) {
+N : ι} (hbdd : forall ω, τ …
+· 使用定理 `MeasureTheory.Martingale.integrable`：∀ {Ω : Type u_1} {E : Type u_2} {ι 
+: Type u_3} [inst : Preorder ι] {m0 : MeasurableSpace Ω}   {μ : MeasureTheory.Me
+asure Ω} [inst_1 : Normed…
+· 使用定理 `Filter.EventuallyEq.symm`：∀ {α : Type u} {β : Type v} {f g : α → β} {l :
+ Filter α}, f =ᶠ[l] g → g =ᶠ[l] f
+· 使用定理 `MeasureTheory.Martingale.condExp_stoppedValue_stopping_time_ae_eq_restri
+ct_le`：condExp_stoppedValue_stopping_time_ae_eq_restrict_le (h : Martingale f ℱ 
+μ) (hτ : IsStoppingTime ℱ τ) (hσ : IsStoppingTime ℱ σ) [SigmaFinite…
+· 使用定理 `MeasureTheory.ae_restrict_iff'`：ae_restrict_iff'₀ {p : α -> Prop} (hs : 
+NullMeasurableSet s μ) : (forallᵐ x ∂μ.restrict s, p x) ↔ forallᵐ x ∂μ, x in s -
+> p x
+（共 37 条，此处仅展示前 30 条）
 
-English:
-theorem stoppedValue_min_ae_eq_condExp
-  statement: [SigmaFiniteFiltration μ ℱ] (h : Martingale f ℱ μ)
-  proof: by
-  refine
-    (h.stoppedValue_ae_eq_condExp_of_le hτ (hσ.min hτ) (fun x => min_le_right _ _) hτ_le).trans ?_
-  refine ae_of_ae_restrict_of_ae_restrict_compl {x | σ x <= τ x} ?_ ?_
-  · exact condExp_min_stopping_time_ae_eq_restrict_le hσ hτ
-  · suffices μ[stoppedValue f τ | (hσ.min hτ).measurableSpace] =ᵐ[μ.restrict {x | τ x <= σ x}]
-        μ[stoppedValue f τ | hσ.measurableSpace] by
-      rw [ae_restrict_iff' (hσ.measurableSpace_le _ (hσ.measurableSet_le_stopping_time hτ).compl)]
-      rw [Filter.EventuallyEq]; rw [ae_restrict_iff'] at this
-      swap; · exact hτ.measurableSpace_le _ (hτ.measurableSet_le_stopping_time hσ)
-      filter_upwards [this] with x hx hx_mem
-      simp only [Set.mem_compl_iff, Set.mem_ofPred_eq, not_le] at hx_mem
-      exact hx hx_mem.le
-    apply Filter.EventuallyEq.trans _ ((condExp_min_stopping_time_ae_eq_restrict_le hτ hσ).trans _)
-    · exact stoppedValue f τ
-    · rw [IsStoppingTime.measurableSpace_min hσ hτ,
-        IsStoppingTime.measurableSpace_min hτ hσ, inf_comm]
-    · have h1 : μ[stoppedValue f τ | hτ.measurableSpace] = stoppedValue f τ := by
-        apply condExp_of_stronglyMeasurable hτ.measurableSpace_le
-· exact Measurable.stronglyMeasurable
-            measurable_stoppedValue h.stronglyAdapted.isStronglyProgressive_of_discrete hτ
-        · exact integrable_stoppedValue ι hτ h.integrable hτ_le
-      rw [h1]
-      exact (condExp_stoppedValue_stopping_time_ae_eq_restrict_le h hτ hσ hτ_le).symm
-
-中文:
-定理 stoppedValue_min_ae_eq_condExp
-  结论: [σ有限滤子 μ ℱ] (h : 鞅 f ℱ μ)
-  证明: by
-  refine
-    (h.stoppedValue_ae_eq_condExp_of_le hτ (hσ.min hτ) (fun x => min_le_right _ _) hτ_le).trans ?_
-  refine ae_of_ae_restrict_of_ae_restrict_compl {x | σ x <= τ x} ?_ ?_
-  · exact condExp_min_stopping_time_ae_eq_restrict_le hσ hτ
-  · suffices μ[stoppedValue f τ | (hσ.min hτ).measurableSpace] =ᵐ[μ.restrict {x | τ x <= σ x}]
-        μ[stoppedValue f τ | hσ.measurableSpace] by
-      rw [ae_restrict_iff' (hσ.measurableSpace_le _ (hσ.measurableSet_le_stopping_time hτ).compl)]
-      rw [Filter.EventuallyEq]; rw [ae_restrict_iff'] at this
-      swap; · exact hτ.measurableSpace_le _ (hτ.measurableSet_le_stopping_time hσ)
-      filter_upwards [this] with x hx hx_mem
-      simp only [Set.mem_compl_iff, Set.mem_ofPred_eq, not_le] at hx_mem
-      exact hx hx_mem.le
-    apply Filter.EventuallyEq.trans _ ((condExp_min_stopping_time_ae_eq_restrict_le hτ hσ).trans _)
-    · exact stoppedValue f τ
-    · rw [IsStoppingTime.measurableSpace_min hσ hτ,
-        IsStoppingTime.measurableSpace_min hτ hσ, inf_comm]
-    · have h1 : μ[stoppedValue f τ | hτ.measurableSpace] = stoppedValue f τ := by
-        apply condExp_of_stronglyMeasurable hτ.measurableSpace_le
-· exact Measurable.stronglyMeasurable
-            measurable_stoppedValue h.stronglyAdapted.isStronglyProgressive_of_discrete hτ
-        · exact integrable_stoppedValue ι hτ h.integrable hτ_le
-      rw [h1]
-      exact (condExp_stoppedValue_stopping_time_ae_eq_restrict_le h hτ hσ hτ_le).symm
-
-Depends on / 依赖: EventuallyEq, Filter, Filter.EventuallyEq, ae_of_ae_restrict_of_ae_restrict_compl, ae_restr, ae_restrict_iff, condExp_min_stopping_time_ae_eq_restrict_le, h.stoppedValue_ae_eq_condExp_of_le, measurableSet_le_stopping_time, measurableSpace, measurableSpace_le, min_le_right, restrict, stoppedValue, stoppedValue_ae_eq_condExp_of_le
+--- 原说明 ---
+**Optional Sampling theorem**. If `τ` is a bounded stopping time and `σ` is anot
+her stopping
+time, then the value of a martingale `f` at the stopping time `min τ σ` is almos
+t everywhere equal
+to the conditional expectation of `f` stopped at `τ` with respect to the σ-algeb
+ra generated
+by `σ`.
 -/
 theorem stoppedValue_min_ae_eq_condExp [SigmaFiniteFiltration μ ℱ] (h : Martingale f ℱ μ)
-    (hτ : IsStoppingTime ℱ τ) (hσ : IsStoppingTime ℱ σ) {n : ι} (hτ_le : forall x, τ x <= n)
+    (hτ : IsStoppingTime ℱ τ) (hσ : IsStoppingTime ℱ σ) {n : ι} (hτ_le : ∀ x, τ x ≤ n)
     [h_sf_min : SigmaFinite (μ.trim (hτ.min hσ).measurableSpace_le)] :
     (stoppedValue f fun x => min (σ x) (τ x)) =ᵐ[μ] μ[stoppedValue f τ | hσ.measurableSpace] := by
   refine
     (h.stoppedValue_ae_eq_condExp_of_le hτ (hσ.min hτ) (fun x => min_le_right _ _) hτ_le).trans ?_
-  refine ae_of_ae_restrict_of_ae_restrict_compl {x | σ x <= τ x} ?_ ?_
+  refine ae_of_ae_restrict_of_ae_restrict_compl {x | σ x ≤ τ x} ?_ ?_
   · exact condExp_min_stopping_time_ae_eq_restrict_le hσ hτ
-  · suffices μ[stoppedValue f τ | (hσ.min hτ).measurableSpace] =ᵐ[μ.restrict {x | τ x <= σ x}]
+  · suffices μ[stoppedValue f τ | (hσ.min hτ).measurableSpace] =ᵐ[μ.restrict {x | τ x ≤ σ x}]
         μ[stoppedValue f τ | hσ.measurableSpace] by
       rw [ae_restrict_iff' (hσ.measurableSpace_le _ (hσ.measurableSet_le_stopping_time hτ).compl)]
-      rw [Filter.EventuallyEq]; rw [ae_restrict_iff'] at this
+      rw [Filter.EventuallyEq, ae_restrict_iff'] at this
       swap; · exact hτ.measurableSpace_le _ (hτ.measurableSet_le_stopping_time hσ)
       filter_upwards [this] with x hx hx_mem
       simp only [Set.mem_compl_iff, Set.mem_ofPred_eq, not_le] at hx_mem
@@ -525,7 +703,7 @@ theorem stoppedValue_min_ae_eq_condExp [SigmaFiniteFiltration μ ℱ] (h : Marti
         IsStoppingTime.measurableSpace_min hτ hσ, inf_comm]
     · have h1 : μ[stoppedValue f τ | hτ.measurableSpace] = stoppedValue f τ := by
         apply condExp_of_stronglyMeasurable hτ.measurableSpace_le
-· exact Measurable.stronglyMeasurable
+        · exact Measurable.stronglyMeasurable <|
             measurable_stoppedValue h.stronglyAdapted.isStronglyProgressive_of_discrete hτ
         · exact integrable_stoppedValue ι hτ h.integrable hτ_le
       rw [h1]
@@ -536,3 +714,4 @@ end SubsetOfNat
 end Martingale
 
 end MeasureTheory
+

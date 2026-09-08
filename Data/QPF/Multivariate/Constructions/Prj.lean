@@ -22,144 +22,98 @@ namespace MvQPF
 
 open MvFunctor
 
-variable {n : Nat} (i : Fin2 n)
+variable {n : ℕ} (i : Fin2 n)
 
-/--
-Definition of `Prj` / `Prj` 的定义
+/-- The projection `i` functor -/
+/-
+**MvQPF.Prj** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF`。
+形式化陈述：Prj (v : TypeVec.{u} n) : Type u
+参数：v : TypeVec.{u} n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Prj
-  signature: (v : TypeVec.{u} n)
-  body: v i
-
-中文:
-定义 Prj
-  签名: (v : TypeVec.{u} n)
-  定义体: v i
+--- 原说明 ---
+The projection `i` functor
 -/
 def Prj (v : TypeVec.{u} n) : Type u := v i
-
-/--
-Instance `Prj.inhabited` / 实例 `Prj.inhabited`
-
-English:
-instance Prj.inhabited
-  signature: {v : TypeVec.{u} n} [Inhabited (v i)]
-  body: ⟨(default : v i)⟩
-
-中文:
-实例 Prj.inhabited
-  签名: {v : TypeVec.{u} n} [可居 (v i)]
-  定义体: ⟨(default : v i)⟩
+/-
+**MvQPF.Prj.inhabited** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF.Prj`。
+形式化陈述：{n : ℕ} → (i : Fin2 n) → {v : TypeVec.{u} n} → [Inhabited (v i)] → Inhabit
+ed (MvQPF.Prj i v)
+参数：i : Fin2 n；v i；MvQPF.Prj i v。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Prj.inhabited {v : TypeVec.{u} n} [Inhabited (v i)] : Inhabited (Prj i v) :=
   ⟨(default : v i)⟩
 
-/--
-Definition of `Prj.map` / `Prj.map` 的定义
+/-- `map` on functor `Prj i` -/
+/-
+**MvQPF.Prj.map** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF.Prj`。
+形式化陈述：{n : ℕ} → (i : Fin2 n) → ⦃α : TypeVec.{u_1} n⦄ → ⦃β : TypeVec.{u_2} n⦄ → α
+.Arrow β → MvQPF.Prj i α → MvQPF.Prj i β
+参数：i : Fin2 n。
+该定义给出了一个带前提的构造。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Prj.map
-  signature: ⦃α β
-  body: f _
-
-中文:
-定义 Prj.map
-  签名: ⦃α β
-  定义体: f _
+--- 原说明 ---
+`map` on functor `Prj i`
 -/
-def Prj.map ⦃α β : TypeVec n⦄ (f : α ⟹ β) : Prj i α -> Prj i β := f _
-
-/--
-Instance `Prj.mvfunctor` / 实例 `Prj.mvfunctor`
-
-English:
-instance Prj.mvfunctor
-  signature: : MvFunctor (Prj i) where map
-  body: @Prj.map _ i
-
-中文:
-实例 Prj.mvfunctor
-  签名: : Mv函子 (Prj i) where map
-  定义体: @Prj.map _ i
-
-Depends on / 依赖: Prj.map
+def Prj.map ⦃α β : TypeVec n⦄ (f : α ⟹ β) : Prj i α → Prj i β := f _
+/-
+**MvQPF.Prj.mvfunctor** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF.Prj`。
+形式化陈述：{n : ℕ} → (i : Fin2 n) → MvFunctor (MvQPF.Prj i)
+参数：i : Fin2 n；MvQPF.Prj i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Prj.mvfunctor : MvFunctor (Prj i) where map := @Prj.map _ i
 
-/--
-Definition of `Prj.P` / `Prj.P` 的定义
+/-- Polynomial representation of the projection functor -/
+/-
+**MvQPF.Prj.P** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF.Prj`。
+形式化陈述：{n : ℕ} → Fin2 n → MvPFunctor.{u} n
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Prj.P
-  signature: : MvPFunctor.{u} n where
-  body: PUnit
-B _ j := ULift PLift i = j
-
-中文:
-定义 Prj.P
-  签名: : MvP函子.{u} n where
-  定义体: PUnit
-B _ j := ULift PLift i = j
+--- 原说明 ---
+Polynomial representation of the projection functor
 -/
 def Prj.P : MvPFunctor.{u} n where
   A := PUnit
-B _ j := ULift PLift i = j
+  B _ j := ULift <| PLift <| i = j
 
-/--
-Definition of `Prj.abs` / `Prj.abs` 的定义
+/-- Abstraction function of the `QPF` instance -/
+/-
+**MvQPF.Prj.abs** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF.Prj`。
+形式化陈述：{n : ℕ} → (i : Fin2 n) → ⦃α : TypeVec.{u_1} n⦄ → ↑(MvQPF.Prj.P i) α → MvQP
+F.Prj i α
+参数：i : Fin2 n。
+该定义给出了一个带前提的构造。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Prj.abs
-  signature: ⦃α
-
-中文:
-定义 Prj.abs
-  签名: ⦃α
+--- 原说明 ---
+Abstraction function of the `QPF` instance
 -/
-def Prj.abs ⦃α : TypeVec n⦄ : Prj.P i α -> Prj i α
+def Prj.abs ⦃α : TypeVec n⦄ : Prj.P i α → Prj i α
   | ⟨_x, f⟩ => f _ ⟨⟨rfl⟩⟩
 
-/--
-Definition of `Prj.repr` / `Prj.repr` 的定义
+/-- Representation function of the `QPF` instance -/
+/-
+**MvQPF.Prj.repr** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF.Prj`。
+形式化陈述：{n : ℕ} → (i : Fin2 n) → ⦃α : TypeVec.{u_1} n⦄ → MvQPF.Prj i α → ↑(MvQPF.P
+rj.P i) α
+参数：i : Fin2 n。
+该定义给出了一个带前提的构造。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Prj.repr
-  signature: ⦃α
-  body: fun x : α i =>
-  ⟨⟨⟩, fun j ⟨⟨h⟩⟩ => (h.rec x : α j)⟩
-
-中文:
-定义 Prj.repr
-  签名: ⦃α
-  定义体: fun x : α i =>
-  ⟨⟨⟩, fun j ⟨⟨h⟩⟩ => (h.rec x : α j)⟩
+--- 原说明 ---
+Representation function of the `QPF` instance
 -/
-def Prj.repr ⦃α : TypeVec n⦄ : Prj i α -> Prj.P i α := fun x : α i =>
+def Prj.repr ⦃α : TypeVec n⦄ : Prj i α → Prj.P i α := fun x : α i =>
   ⟨⟨⟩, fun j ⟨⟨h⟩⟩ => (h.rec x : α j)⟩
-
-/--
-Instance `Prj.mvqpf` / 实例 `Prj.mvqpf`
-
-English:
-instance Prj.mvqpf
-  signature: : MvQPF (Prj i) where
-  body: Prj.P i
-  abs := @Prj.abs _ i
-  repr := @Prj.repr _ i
-  abs_repr := by intros; rfl
-  abs_map := by intro α β f P; cases P; rfl
-
-中文:
-实例 Prj.mvqpf
-  签名: : MvQPF (Prj i) where
-  定义体: Prj.P i
-  abs := @Prj.abs _ i
-  repr := @Prj.repr _ i
-  abs_repr := by intros; rfl
-  abs_map := by intro α β f P; cases P; rfl
-
-Depends on / 依赖: Prj.P
+/-
+**MvQPF.Prj.mvqpf** 是 Mathlib 中的一个定义，位于命名空间 `MvQPF.Prj`。
+形式化陈述：{n : ℕ} → (i : Fin2 n) → MvQPF (MvQPF.Prj i)
+参数：i : Fin2 n；MvQPF.Prj i。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Prj.mvqpf : MvQPF (Prj i) where
   P := Prj.P i
@@ -169,3 +123,4 @@ instance Prj.mvqpf : MvQPF (Prj i) where
   abs_map := by intro α β f P; cases P; rfl
 
 end MvQPF
+

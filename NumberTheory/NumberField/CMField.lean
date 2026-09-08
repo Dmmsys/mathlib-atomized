@@ -65,21 +65,18 @@ namespace NumberField
 section maximalRealSubfield
 
 /--
-Definition of `IsCMField` / `IsCMField` 的定义
+A field `K` is `CM` if `K` is a totally complex quadratic extension of its maximal
+real subfield `K⁺`.
+-/
+/-
+**NumberField.IsCMField** 是 Mathlib 中的一个归纳类型，位于命名空间 `NumberField`。
+形式化陈述：(K : Type u_1) → [inst : Field K] → [CharZero K] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsCMField
-  parameters: (K : Type*) [Field K] [CharZero K]
-  axioms and operations (2):
-    - [to_isTotallyComplex : IsTotallyComplex K]
-    - [is_quadratic : IsQuadraticExtension (maximalRealSubfield K) K]
-
-中文:
-类 是CMField
-  参数: (K : 类型) [域 K] [特征零 K]
-  公理与运算 (2 个):
-    - [to_isTotallyComplex : 是TotallyComplex K]
-    - [is_quadratic : 是QuadraticExtension (maximal实数Subfield K) K]
+--- 原说明 ---
+A field `K` is `CM` if `K` is a totally complex quadratic extension of its maxim
+al
+real subfield `K⁺`.
 -/
 class IsCMField (K : Type*) [Field K] [CharZero K] : Prop where
   [to_isTotallyComplex : IsTotallyComplex K]
@@ -93,207 +90,284 @@ variable (K : Type*) [Field K] [CharZero K] [IsCMField K]
 
 local notation3 "K⁺" => maximalRealSubfield K
 
-/--
-Instance `isQuadraticExtension` / 实例 `isQuadraticExtension`
-
-English:
-instance isQuadraticExtension
-  signature: : IsQuadraticExtension K⁺ K
-  body: IsCMField.is_quadratic
-
-中文:
-实例 isQuadraticExtension
-  签名: : 是QuadraticExtension K⁺ K
-  定义体: IsCMField.is_quadratic
-
-Depends on / 依赖: IsCMField, IsCMField.is_quadratic, is_quadratic
+/-
+**NumberField.IsCMField.isQuadraticExtension** 是 Mathlib 中的一个实例，位于命名空间 `NumberFi
+eld.IsCMField`。
+形式化陈述：isQuadraticExtension : IsQuadraticExtension K⁺ K
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.IsCMField.is_quadratic`：∀ {K : Type u_1} {inst : Field K} {i
+nst_1 : CharZero K} [self : NumberField.IsCMField K],   Algebra.IsQuadraticExten
+sion (↥(NumberField.maxi…
 -/
 instance isQuadraticExtension : IsQuadraticExtension K⁺ K :=
   IsCMField.is_quadratic
-
-/--
-Instance `isTotallyComplex` / 实例 `isTotallyComplex`
-
-English:
-instance isTotallyComplex
-  signature: : IsTotallyComplex K
-  body: IsCMField.to_isTotallyComplex
-
-中文:
-实例 isTotallyComplex
-  签名: : 是TotallyComplex K
-  定义体: IsCMField.to_isTotallyComplex
-
-Depends on / 依赖: IsCMField, IsCMField.to_isTotallyComplex, to_isTotallyComplex
+/-
+**NumberField.IsCMField.isTotallyComplex** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.
+IsCMField`。
+形式化陈述：isTotallyComplex : IsTotallyComplex K
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.IsCMField.to_isTotallyComplex`：∀ {K : Type u_1} {inst : Fiel
+d K} {inst_1 : CharZero K} [self : NumberField.IsCMField K], NumberField.IsTotal
+lyComplex K
 -/
 instance isTotallyComplex : IsTotallyComplex K :=
   IsCMField.to_isTotallyComplex
-
-/--
-theorem `card_infinitePlace_eq_card_infinitePlace` / 定理 `card_infinitePlace_eq_card_infinitePlace`
-
-English:
-theorem card_infinitePlace_eq_card_infinitePlace
-  given: [NumberField K]
-  proof: by
-  rw [card_eq_nrRealPlaces_add_nrComplexPlaces]; rw [card_eq_nrRealPlaces_add_nrComplexPlaces]; rw [IsTotallyComplex.nrRealPlaces_eq_zero K]; rw [IsTotallyReal.nrComplexPlaces_eq_zero]; rw [zero_add]; rw [add_zero]; rw [← IsTotallyReal.finrank]; rw [← Nat.mul_left_cancel_iff zero_lt_two]; rw [← IsTotallyComplex.finrank]; rw [← Module.finrank_mul_finrank Rat K⁺ K]; rw [mul_comm]; rw [IsQuadraticExtension.finrank_eq_two _ K]
-
-中文:
-定理 card_infinitePlace_eq_card_infinitePlace
-  条件: [数域 K]
-  证明: by
-  rw [card_eq_nrRealPlaces_add_nrComplexPlaces]; rw [card_eq_nrRealPlaces_add_nrComplexPlaces]; rw [IsTotallyComplex.nrRealPlaces_eq_zero K]; rw [IsTotallyReal.nrComplexPlaces_eq_zero]; rw [zero_add]; rw [add_zero]; rw [← IsTotallyReal.finrank]; rw [← Nat.mul_left_cancel_iff zero_lt_two]; rw [← IsTotallyComplex.finrank]; rw [← Module.finrank_mul_finrank Rat K⁺ K]; rw [mul_comm]; rw [IsQuadraticExtension.finrank_eq_two _ K]
-
-Depends on / 依赖: IsQuadraticExtension, IsQuadraticExtension.finrank_eq_two, IsTotallyComplex, IsTotallyComplex.finrank, IsTotallyComplex.nrRealPlaces_eq_zero, IsTotallyReal, IsTotallyReal.finrank, IsTotallyReal.nrComplexPlaces_eq_zero, Module, Module.finrank_mul_finrank, Nat.mul_left_cancel_iff, add_zero, card_eq_nrRealPlaces_add_nrComplexPlaces, finrank, finrank_eq_two, finrank_mul_finrank, mul_comm, mul_left_cancel_iff, nrComplexPlaces_eq_zero, nrRealPlaces_eq_zero
+/-
+**NumberField.IsCMField.card_infinitePlace_eq_card_infinitePlace** 是 Mathlib 中的一
+个定理，位于命名空间 `NumberField.IsCMField`。
+形式化陈述：card_infinitePlace_eq_card_infinitePlace [NumberField K] : Fintype.card (I
+nfinitePlace K⁺) = Fintype.card (InfinitePlace K)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.InfinitePlace.card_eq_nrRealPlaces_add_nrComplexPlaces`：card
+_eq_nrRealPlaces_add_nrComplexPlaces : Fintype.card (InfinitePlace K) = nrRealPl
+aces K + nrComplexPlaces K
+· 使用定理 `NumberField.IsTotallyComplex.nrRealPlaces_eq_zero`：∀ (K : Type u_2) [ins
+t : Field K] [inst_1 : NumberField K] [h : NumberField.IsTotallyComplex K],   Nu
+mberField.InfinitePlace.nrRealPlaces K …
+· 使用定理 `NumberField.IsTotallyReal.nrComplexPlaces_eq_zero`：∀ (K : Type u_2) [ins
+t : Field K] [inst_1 : NumberField K] [h : NumberField.IsTotallyReal K],   Numbe
+rField.InfinitePlace.nrComplexPlaces K …
+· 使用定理 `Algebra.IsSeparable.of_integral`：∀ (F : Type u_1) [inst : Field F] (K : 
+Type u_2) [inst_1 : Ring K] [inst_2 : Algebra F K] [IsDomain K]   [Algebra.IsInt
+egral F K] [CharZero …
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `NumberField.to_finiteDimensional`：∀ {K : Type u_1} {inst : Field K} [sel
+f : NumberField K], FiniteDimensional ℚ K
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NumberField.IsTotallyReal.finrank`：∀ (K : Type u_2) [inst : Field K] [in
+st_1 : NumberField K] [h : NumberField.IsTotallyReal K],   Module.finrank ℚ K = 
+NumberField.InfinitePla…
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Nat.mul_left_cancel_iff`：∀ {n : ℕ}, 0 < n → ∀ {m k : ℕ}, n * m = n * k ↔
+ m = k
+· 使用定理 `zero_lt_two`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : Part
+ialOrder α] [ZeroLEOneClass α] [NeZero 1] [AddLeftMono α],   0 < 2
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `NumberField.IsTotallyComplex.finrank`：∀ (K : Type u_2) [inst : Field K] 
+[inst_1 : NumberField K] [h : NumberField.IsTotallyComplex K],   Module.finrank 
+ℚ K = 2 * NumberField.Infi…
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `Subfield.instSubfieldClass`：∀ {K : Type u} [inst : DivisionRing K], Subf
+ieldClass (Subfield K) K
+· 使用定理 `Module.finrank_mul_finrank`：Module.finrank_mul_finrank : finrank F K * f
+inrank K A = finrank F A
+· 使用定理 `commRing_strongRankCondition`：∀ (R : Type u_1) [inst : CommRing R] [Nont
+rivial R], StrongRankCondition R
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `instIsPrincipalIdealRingOfIsSemisimpleRing`：∀ {R : Type u_2} [inst : Rin
+g R] [IsSemisimpleRing R], IsPrincipalIdealRing R
+· 使用定理 `instIsSemisimpleModuleOfIsSimpleModule`：∀ (R : Type u_2) [inst : Ring R]
+ (M : Type u_4) [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   [IsSimp
+leModule R M], IsSemisimpleM…
+· 使用定理 `instIsSimpleModule`：∀ (R : Type u_5) [inst : DivisionRing R], IsSimpleMo
+dule R R
+· 使用定理 `instIsTorsionFreeOfIsDomainOfNoZeroSMulDivisors`：∀ {R : Type u_1} {M : T
+ype u_2} [inst : Semiring R] [IsDomain R] [inst_2 : AddCommGroup M] [inst_3 : _r
+oot_.Module R M]   [NoZeroSMulDivisor…
+· 使用定理 `GroupWithZero.toNoZeroSMulDivisors`：∀ {R : Type u_1} {M : Type u_2} [ins
+t : GroupWithZero R] [inst_1 : AddMonoid M] [inst_2 : DistribMulAction R M],   N
+oZeroSMulDivisors R M
+（共 33 条，此处仅展示前 30 条）
 -/
 theorem card_infinitePlace_eq_card_infinitePlace [NumberField K] :
     Fintype.card (InfinitePlace K⁺) = Fintype.card (InfinitePlace K) := by
-  rw [card_eq_nrRealPlaces_add_nrComplexPlaces]; rw [card_eq_nrRealPlaces_add_nrComplexPlaces]; rw [IsTotallyComplex.nrRealPlaces_eq_zero K]; rw [IsTotallyReal.nrComplexPlaces_eq_zero]; rw [zero_add]; rw [add_zero]; rw [← IsTotallyReal.finrank]; rw [← Nat.mul_left_cancel_iff zero_lt_two]; rw [← IsTotallyComplex.finrank]; rw [← Module.finrank_mul_finrank Rat K⁺ K]; rw [mul_comm]; rw [IsQuadraticExtension.finrank_eq_two _ K]
+  rw [card_eq_nrRealPlaces_add_nrComplexPlaces, card_eq_nrRealPlaces_add_nrComplexPlaces,
+    IsTotallyComplex.nrRealPlaces_eq_zero K, IsTotallyReal.nrComplexPlaces_eq_zero, zero_add,
+    add_zero, ← IsTotallyReal.finrank, ← Nat.mul_left_cancel_iff zero_lt_two,
+    ← IsTotallyComplex.finrank, ← Module.finrank_mul_finrank ℚ K⁺ K, mul_comm,
+    IsQuadraticExtension.finrank_eq_two _ K]
 
 /--
-Definition of `equivInfinitePlace` / `equivInfinitePlace` 的定义
+The equiv between the infinite places of `K` and the infinite places of `K⁺` induced by the
+restriction to `K⁺`, see `equivInfinitePlace_apply`.
+-/
+/-
+**NumberField.IsCMField.equivInfinitePlace** 是 Mathlib 中的一个定义，位于命名空间 `NumberFiel
+d.IsCMField`。
+形式化陈述：equivInfinitePlace [NumberField K] : InfinitePlace K ≃ InfinitePlace K⁺
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivInfinitePlace
-  signature: [NumberField K]
-  body: Equiv.ofBijective (fun w => w.comap (algebraMap K⁺ K))
-    (Fintype.bijective_iff_surjective_and_card _).mpr
-      ⟨comap_surjective, (card_infinitePlace_eq_card_infinitePlace K).symm⟩
-
-@[simp]
-
-中文:
-定义 equivInfinitePlace
-  签名: [数域 K]
-  定义体: Equiv.ofBijective (fun w => w.comap (algebraMap K⁺ K))
-    (Fintype.bijective_iff_surjective_and_card _).mpr
-      ⟨comap_surjective, (card_infinitePlace_eq_card_infinitePlace K).symm⟩
-
-@[simp]
-
-Depends on / 依赖: Equiv.ofBijective, Fintype, Fintype.bijective_iff_surjective_and_card, algebraMap, bijective_iff_surjective_and_card, card_infinitePlace_eq_card_infinitePlace, comap_surjective, ofBijective, w.comap
+--- 原说明 ---
+The equiv between the infinite places of `K` and the infinite places of `K⁺` ind
+uced by the
+restriction to `K⁺`, see `equivInfinitePlace_apply`.
 -/
 noncomputable def equivInfinitePlace [NumberField K] : InfinitePlace K ≃ InfinitePlace K⁺ :=
-Equiv.ofBijective (fun w => w.comap (algebraMap K⁺ K))
+  Equiv.ofBijective (fun w ↦ w.comap (algebraMap K⁺ K)) <|
     (Fintype.bijective_iff_surjective_and_card _).mpr
       ⟨comap_surjective, (card_infinitePlace_eq_card_infinitePlace K).symm⟩
 
 @[simp]
-/--
-theorem `equivInfinitePlace_apply` / 定理 `equivInfinitePlace_apply`
-
-English:
-theorem equivInfinitePlace_apply
-  given: [NumberField K] (w : InfinitePlace K)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 equivInfinitePlace_apply
-  条件: [数域 K] (w : InfinitePlace K)
-  证明: rfl
-
-@[simp]
+/-
+**NumberField.IsCMField.equivInfinitePlace_apply** 是 Mathlib 中的一个定理，位于命名空间 `Numb
+erField.IsCMField`。
+形式化陈述：equivInfinitePlace_apply [NumberField K] (w : InfinitePlace K) : equivInfi
+nitePlace K w = w.comap (algebraMap K⁺ K)
+参数：w : InfinitePlace K。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem equivInfinitePlace_apply [NumberField K] (w : InfinitePlace K) :
     equivInfinitePlace K w = w.comap (algebraMap K⁺ K) := rfl
 
 @[simp]
-/--
-theorem `equivInfinitePlace_symm_apply` / 定理 `equivInfinitePlace_symm_apply`
-
-English:
-theorem equivInfinitePlace_symm_apply
-  given: [NumberField K] (w : InfinitePlace K⁺) (x : K⁺)
-  proof: by
-  rw [← comap_apply]; rw [← equivInfinitePlace_apply]; rw [Equiv.apply_symm_apply]
-
-中文:
-定理 equivInfinitePlace_symm_apply
-  条件: [数域 K] (w : InfinitePlace K⁺) (x : K⁺)
-  证明: by
-  rw [← comap_apply]; rw [← equivInfinitePlace_apply]; rw [Equiv.apply_symm_apply]
-
-Depends on / 依赖: Equiv.apply_symm_apply, apply_symm_apply, comap_apply, equivInfinitePlace_apply
+/-
+**NumberField.IsCMField.equivInfinitePlace_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 
+`NumberField.IsCMField`。
+形式化陈述：equivInfinitePlace_symm_apply [NumberField K] (w : InfinitePlace K⁺) (x : 
+K⁺) : (equivInfinitePlace K).symm w (algebraMap K⁺ K x) = w x
+参数：w : InfinitePlace K⁺；x : K⁺。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `Subfield.instSubfieldClass`：∀ {K : Type u} [inst : DivisionRing K], Subf
+ieldClass (Subfield K) K
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `NumberField.InfinitePlace.comap_apply`：comap_apply (w : InfinitePlace K)
+ (f : k ->+* K) (x : k) : w.comap f x = w (f x)
+· 使用定理 `NumberField.IsCMField.equivInfinitePlace_apply`：equivInfinitePlace_apply
+ [NumberField K] (w : InfinitePlace K) : equivInfinitePlace K w = w.comap (algeb
+raMap K⁺ K)
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
 -/
 theorem equivInfinitePlace_symm_apply [NumberField K] (w : InfinitePlace K⁺) (x : K⁺) :
     (equivInfinitePlace K).symm w (algebraMap K⁺ K x) = w x := by
-  rw [← comap_apply]; rw [← equivInfinitePlace_apply]; rw [Equiv.apply_symm_apply]
-
-/--
-theorem `units_rank_eq_units_rank` / 定理 `units_rank_eq_units_rank`
-
-English:
-theorem units_rank_eq_units_rank
-  given: [NumberField K]
-  proof: by
-  rw [Units.rank]; rw [Units.rank]; rw [card_infinitePlace_eq_card_infinitePlace K]
-
-中文:
-定理 units_rank_eq_units_rank
-  条件: [数域 K]
-  证明: by
-  rw [Units.rank]; rw [Units.rank]; rw [card_infinitePlace_eq_card_infinitePlace K]
-
-Depends on / 依赖: Units.rank, card_infinitePlace_eq_card_infinitePlace
+  rw [← comap_apply, ← equivInfinitePlace_apply, Equiv.apply_symm_apply]
+/-
+**NumberField.IsCMField.units_rank_eq_units_rank** 是 Mathlib 中的一个定理，位于命名空间 `Numb
+erField.IsCMField`。
+形式化陈述：units_rank_eq_units_rank [NumberField K] : Units.rank K⁺ = Units.rank K
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.Units.rank.eq_1`：∀ (K : Type u_1) [inst : Field K] [inst_1 :
+ NumberField K],   NumberField.Units.rank K = Fintype.card (NumberField.Infinite
+Place K) - 1
+· 使用定理 `NumberField.IsCMField.card_infinitePlace_eq_card_infinitePlace`：card_inf
+initePlace_eq_card_infinitePlace [NumberField K] : Fintype.card (InfinitePlace K
+⁺) = Fintype.card (InfinitePlace K)
 -/
 theorem units_rank_eq_units_rank [NumberField K] :
     Units.rank K⁺ = Units.rank K := by
-  rw [Units.rank]; rw [Units.rank]; rw [card_infinitePlace_eq_card_infinitePlace K]
+  rw [Units.rank, Units.rank, card_infinitePlace_eq_card_infinitePlace K]
 
 section complexConj
 
-/--
-theorem `exists_isConj` / 定理 `exists_isConj`
-
-English:
-theorem exists_isConj
-  given: [Algebra.IsAlgebraic Rat K] (φ : K ->+* Complex)
-  proof: exists_isConj_of_isRamified
-    isRamified_iff.mpr ⟨IsTotallyComplex.isComplex _, IsTotallyReal.isReal _⟩
-
-中文:
-定理 存在_isConj
-  条件: [代数.是代数 有理数 K] (φ : K ->+* 复形)
-  证明: exists_isConj_of_isRamified
-    isRamified_iff.mpr ⟨IsTotallyComplex.isComplex _, IsTotallyReal.isReal _⟩
-
-Depends on / 依赖: IsTotallyComplex, IsTotallyComplex.isComplex, IsTotallyReal, IsTotallyReal.isReal, exists_isConj_of_isRamified, isComplex, isRamified_iff, isRamified_iff.mpr, isReal
+/-
+**NumberField.IsCMField.exists_isConj** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.IsC
+MField`。
+形式化陈述：exists_isConj [Algebra.IsAlgebraic Rat K] (φ : K ->+* Complex) : exists σ 
+: K ≃ₐ[K⁺] K, IsConj φ σ
+参数：φ : K ->+* Complex。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `NumberField.InfinitePlace.exists_isConj_of_isRamified`：exists_isConj_of_
+isRamified [IsGalois k K] {φ : K ->+* Complex} (h : IsRamified k (mk φ)) : exist
+s σ : Gal(K/k), ComplexEmbedding.IsConj φ σ
+· 使用定理 `Algebra.IsQuadraticExtension.isGalois`：∀ (F : Type u_1) (K : Type u_2) [
+inst : Field F] [inst_1 : Field K] [inst_2 : Algebra F K]   [Algebra.IsQuadratic
+Extension F K] [Algebra.IsS…
+· 使用定理 `Normal.toIsAlgebraic`：∀ {F : Type u_1} {K : Type u_2} {inst : Field F} {
+inst_1 : Field K} {inst_2 : Algebra F K} [self : Normal F K],   Algebra.IsAlgebr
+aic F K
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `NumberField.InfinitePlace.isRamified_iff`：isRamified_iff : w.IsRamified 
+k ↔ w.IsComplex ∧ (w.comap (algebraMap k K)).IsReal
+· 使用定理 `NumberField.IsTotallyComplex.isComplex`：∀ {K : Type u_1} {inst : Field K
+} [self : NumberField.IsTotallyComplex K] (v : NumberField.InfinitePlace K), v.I
+sComplex
+· 使用定理 `NumberField.IsTotallyReal.isReal`：∀ {K : Type u_1} {inst : Field K} [sel
+f : NumberField.IsTotallyReal K] (v : NumberField.InfinitePlace K), v.IsReal
 -/
-theorem exists_isConj [Algebra.IsAlgebraic Rat K] (φ : K ->+* Complex) :
-    exists σ : K ≃ₐ[K⁺] K, IsConj φ σ :=
-exists_isConj_of_isRamified
+theorem exists_isConj [Algebra.IsAlgebraic ℚ K] (φ : K →+* ℂ) :
+    ∃ σ : K ≃ₐ[K⁺] K, IsConj φ σ :=
+  exists_isConj_of_isRamified <|
     isRamified_iff.mpr ⟨IsTotallyComplex.isComplex _, IsTotallyReal.isReal _⟩
 
 /--
-theorem `isConj_eq_isConj` / 定理 `isConj_eq_isConj`
-
-English:
-theorem isConj_eq_isConj
-  statement: {φ ψ : K ->+* Complex} {σ τ : K ≃ₐ[K⁺] K}
-  proof: by
-  have : Nat.card (K ≃ₐ[K⁺] K) = 2 :=
-    (IsQuadraticExtension.finrank_eq_two K⁺ K) ▸ IsGalois.card_aut_eq_finrank K⁺ K
-  rw [Nat.card_eq_two_iff' 1] at this
-  exact ExistsUnique.unique this
-    ((isConj_ne_one_iff hφ).mpr <| IsTotallyComplex.complexEmbedding_not_isReal φ)
-    ((isConj_ne_one_iff hψ).mpr <| IsTotallyComplex.complexEmbedding_not_isReal ψ)
-
-中文:
-定理 isConj_eq_isConj
-  结论: {φ ψ : K ->+* 复形} {σ τ : K ≃ₐ[K⁺] K}
-  证明: by
-  have : Nat.card (K ≃ₐ[K⁺] K) = 2 :=
-    (IsQuadraticExtension.finrank_eq_two K⁺ K) ▸ IsGalois.card_aut_eq_finrank K⁺ K
-  rw [Nat.card_eq_two_iff' 1] at this
-  exact ExistsUnique.unique this
-    ((isConj_ne_one_iff hφ).mpr <| IsTotallyComplex.complexEmbedding_not_isReal φ)
-    ((isConj_ne_one_iff hψ).mpr <| IsTotallyComplex.complexEmbedding_not_isReal ψ)
-
-Depends on / 依赖: ExistsUnique, ExistsUnique.unique, IsGalois, IsGalois.card_aut_eq_finrank, IsQuadraticExtension, IsQuadraticExtension.finrank_eq_two, IsTotallyComplex, IsTotallyComplex.complexEmbedding_not_isReal, Nat.card, Nat.card_eq_two_iff, card_aut_eq_finrank, card_eq_two_iff, complexEmbedding_not_isReal, finrank_eq_two, isConj_ne_one_iff, unique
+All the conjugations of a CM-field over its maximal real subfield are the same.
 -/
-theorem isConj_eq_isConj {φ ψ : K ->+* Complex} {σ τ : K ≃ₐ[K⁺] K}
+/-
+**NumberField.IsCMField.isConj_eq_isConj** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.
+IsCMField`。
+形式化陈述：isConj_eq_isConj {φ ψ : K ->+* Complex} {σ τ : K ≃ₐ[K⁺] K} (hφ : IsConj φ 
+σ) (hψ : IsConj ψ τ) : σ = τ
+参数：hφ : IsConj φ σ；hψ : IsConj ψ τ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `Subfield.instSubfieldClass`：∀ {K : Type u} [inst : DivisionRing K], Subf
+ieldClass (Subfield K) K
+· 使用定理 `IsGalois.card_aut_eq_finrank`：card_aut_eq_finrank [FiniteDimensional F E
+] [IsGalois F E] : Nat.card Gal(E/F) = finrank F E
+· 使用定理 `Algebra.instFiniteOfIsQuadraticExtension`：∀ (R : Type u_2) (S : Type u_3
+) [inst : CommSemiring R] [inst_1 : StrongRankCondition R] [inst_2 : Semiring S]
+   [inst_3 : Algebra R S] [Alg…
+· 使用定理 `commRing_strongRankCondition`：∀ (R : Type u_1) [inst : CommRing R] [Nont
+rivial R], StrongRankCondition R
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `Algebra.IsQuadraticExtension.isGalois`：∀ (F : Type u_1) (K : Type u_2) [
+inst : Field F] [inst_1 : Field K] [inst_2 : Algebra F K]   [Algebra.IsQuadratic
+Extension F K] [Algebra.IsS…
+· 使用定理 `Normal.toIsAlgebraic`：∀ {F : Type u_1} {K : Type u_2} {inst : Field F} {
+inst_1 : Field K} {inst_2 : Algebra F K} [self : Normal F K],   Algebra.IsAlgebr
+aic F K
+· 使用定理 `Algebra.IsQuadraticExtension.finrank_eq_two`：∀ (R : Type u_2) (S : Type 
+u_3) [inst : CommSemiring R] [inst_1 : StrongRankCondition R] [inst_2 : Semiring
+ S]   [inst_3 : Algebra R S] [Alg…
+· 使用定理 `ExistsUnique.unique`：ExistsUnique.unique {p : α -> Prop} (h : exists! x,
+ p x) {y₁ y₂ : α} (py₁ : p y₁) (py₂ : p y₂) : y₁ = y₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.card_eq_two_iff'`：card_eq_two_iff' (x : α) : Nat.card α = 2 ↔ exists
+! y, y != x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `NumberField.ComplexEmbedding.isConj_ne_one_iff`：isConj_ne_one_iff (hσ : 
+IsConj φ σ) : σ != 1 ↔ ¬ IsReal φ
+· 使用定理 `NumberField.IsTotallyComplex.complexEmbedding_not_isReal`：∀ {K : Type u_
+2} [inst : Field K] [NumberField.IsTotallyComplex K] (φ : K →+* ℂ), ¬NumberField
+.ComplexEmbedding.IsReal φ
+
+--- 原说明 ---
+All the conjugations of a CM-field over its maximal real subfield are the same.
+-/
+theorem isConj_eq_isConj {φ ψ : K →+* ℂ} {σ τ : K ≃ₐ[K⁺] K}
     (hφ : IsConj φ σ) (hψ : IsConj ψ τ) : σ = τ := by
   have : Nat.card (K ≃ₐ[K⁺] K) = 2 :=
     (IsQuadraticExtension.finrank_eq_two K⁺ K) ▸ IsGalois.card_aut_eq_finrank K⁺ K
@@ -302,252 +376,377 @@ theorem isConj_eq_isConj {φ ψ : K ->+* Complex} {σ τ : K ≃ₐ[K⁺] K}
     ((isConj_ne_one_iff hφ).mpr <| IsTotallyComplex.complexEmbedding_not_isReal φ)
     ((isConj_ne_one_iff hψ).mpr <| IsTotallyComplex.complexEmbedding_not_isReal ψ)
 
-variable [Algebra.IsIntegral Rat K]
+variable [Algebra.IsIntegral ℚ K]
 
 /--
-Definition of `complexConj` / `complexConj` 的定义
+The complex conjugation of the CM-field `K`.
+-/
+/-
+**NumberField.IsCMField.complexConj** 是 Mathlib 中的一个定义，位于命名空间 `NumberField.IsCMF
+ield`。
+形式化陈述：complexConj : K ≃ₐ[K⁺] K
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition complexConj
-  signature: : K ≃ₐ[K⁺] K
-  body: (exists_isConj K (Classical.choice (inferInstance : Nonempty _))).choose
-
-中文:
-定义 complexConj
-  签名: : K ≃ₐ[K⁺] K
-  定义体: (exists_isConj K (Classical.choice (inferInstance : Nonempty _))).choose
-
-Depends on / 依赖: Classical, Classical.choice, Nonempty, choice, exists_isConj
+--- 原说明 ---
+The complex conjugation of the CM-field `K`.
 -/
 noncomputable def complexConj : K ≃ₐ[K⁺] K :=
   (exists_isConj K (Classical.choice (inferInstance : Nonempty _))).choose
 
 /--
-theorem `isConj_complexConj` / 定理 `isConj_complexConj`
-
-English:
-theorem isConj_complexConj
-  given: (φ : K ->+* Complex)
-  statement: IsConj φ (complexConj K)
-  proof: by
-  obtain ⟨σ, hσ⟩ := exists_isConj _ φ
-  have := (exists_isConj K (Classical.choice (inferInstance : Nonempty (K ->+* Complex)))).choose_spec
-  rwa [isConj_eq_isConj K hσ this] at hσ
-
-@[simp]
-
-中文:
-定理 isConj_complexConj
-  条件: (φ : K ->+* 复形)
-  结论: IsConj φ (complexConj K)
-  证明: by
-  obtain ⟨σ, hσ⟩ := exists_isConj _ φ
-  have := (exists_isConj K (Classical.choice (inferInstance : Nonempty (K ->+* Complex)))).choose_spec
-  rwa [isConj_eq_isConj K hσ this] at hσ
-
-@[simp]
-
-Depends on / 依赖: Classical, Classical.choice, Nonempty, choice, choose_spec, exists_isConj, isConj_eq_isConj
+The complex conjugation is the conjugation of any complex embedding of a CM-field.
 -/
-theorem isConj_complexConj (φ : K ->+* Complex) : IsConj φ (complexConj K) := by
+/-
+**NumberField.IsCMField.isConj_complexConj** 是 Mathlib 中的一个定理，位于命名空间 `NumberFiel
+d.IsCMField`。
+形式化陈述：isConj_complexConj (φ : K ->+* Complex) : IsConj φ (complexConj K)
+参数：φ : K ->+* Complex。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `Subfield.instSubfieldClass`：∀ {K : Type u} [inst : DivisionRing K], Subf
+ieldClass (Subfield K) K
+· 使用定理 `NumberField.IsCMField.exists_isConj`：exists_isConj [Algebra.IsAlgebraic 
+Rat K] (φ : K ->+* Complex) : exists σ : K ≃ₐ[K⁺] K, IsConj φ σ
+· 使用定理 `Algebra.IsSeparable.of_integral`：∀ (F : Type u_1) [inst : Field F] (K : 
+Type u_2) [inst_1 : Ring K] [inst_2 : Algebra F K] [IsDomain K]   [Algebra.IsInt
+egral F K] [CharZero …
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `NumberField.Embeddings.instNonemptyRingHomOfIsAlgebraicRatOfIsAlgClosed`
+：∀ (K : Type u_1) [inst : Field K] (A : Type u_2) [inst_1 : Field A] [CharZero A
+] [inst_3 : CharZero K]   [Algebra.IsAlgebraic ℚ K] [IsAlgClo…
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.IsCMField.isConj_eq_isConj`：isConj_eq_isConj {φ ψ : K ->+* C
+omplex} {σ τ : K ≃ₐ[K⁺] K} (hφ : IsConj φ σ) (hψ : IsConj ψ τ) : σ = τ
+
+--- 原说明 ---
+The complex conjugation is the conjugation of any complex embedding of a CM-fiel
+d.
+-/
+theorem isConj_complexConj (φ : K →+* ℂ) : IsConj φ (complexConj K) := by
   obtain ⟨σ, hσ⟩ := exists_isConj _ φ
-  have := (exists_isConj K (Classical.choice (inferInstance : Nonempty (K ->+* Complex)))).choose_spec
+  have := (exists_isConj K (Classical.choice (inferInstance : Nonempty (K →+* ℂ)))).choose_spec
   rwa [isConj_eq_isConj K hσ this] at hσ
 
 @[simp]
-/--
-theorem `complexEmbedding_complexConj` / 定理 `complexEmbedding_complexConj`
-
-English:
-theorem complexEmbedding_complexConj
-  given: (φ : K ->+* Complex) (x : K)
-  proof: by
-  rw [IsConj.eq (isConj_complexConj K φ)]; rw [RCLike.star_def]
-
-@[simp]
-
-中文:
-定理 complexEmbedding_complexConj
-  条件: (φ : K ->+* 复形) (x : K)
-  证明: by
-  rw [IsConj.eq (isConj_complexConj K φ)]; rw [RCLike.star_def]
-
-@[simp]
-
-Depends on / 依赖: IsConj, IsConj.eq, RCLike, RCLike.star_def, isConj_complexConj, star_def
+/-
+**NumberField.IsCMField.complexEmbedding_complexConj** 是 Mathlib 中的一个定理，位于命名空间 `
+NumberField.IsCMField`。
+形式化陈述：complexEmbedding_complexConj (φ : K ->+* Complex) (x : K) : φ (complexConj
+ K x) = conj (φ x)
+参数：φ : K ->+* Complex；x : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `Subfield.instSubfieldClass`：∀ {K : Type u} [inst : DivisionRing K], Subf
+ieldClass (Subfield K) K
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.ComplexEmbedding.IsConj.eq`：∀ {K : Type u_1} [inst : Field K
+] {k : Type u_2} [inst_1 : Field k] [inst_2 : Algebra k K] {φ : K →+* ℂ} {σ : Ga
+l(K/k)},   NumberField.Compl…
+· 使用定理 `NumberField.IsCMField.isConj_complexConj`：isConj_complexConj (φ : K ->+*
+ Complex) : IsConj φ (complexConj K)
+· 使用定理 `RCLike.star_def`：star_def : (Star.star : K -> K) = conj
 -/
-theorem complexEmbedding_complexConj (φ : K ->+* Complex) (x : K) :
+theorem complexEmbedding_complexConj (φ : K →+* ℂ) (x : K) :
     φ (complexConj K x) = conj (φ x) := by
-  rw [IsConj.eq (isConj_complexConj K φ)]; rw [RCLike.star_def]
+  rw [IsConj.eq (isConj_complexConj K φ), RCLike.star_def]
 
 @[simp]
-/--
-theorem `infinitePlace_complexConj` / 定理 `infinitePlace_complexConj`
-
-English:
-theorem infinitePlace_complexConj
-  given: (w : InfinitePlace K) (x : K)
-  proof: by
-  rw [← norm_embedding_eq]; rw [complexEmbedding_complexConj]; rw [Complex.norm_conj]; rw [norm_embedding_eq]
-
-@[simp]
-
-中文:
-定理 infinitePlace_complexConj
-  条件: (w : InfinitePlace K) (x : K)
-  证明: by
-  rw [← norm_embedding_eq]; rw [complexEmbedding_complexConj]; rw [Complex.norm_conj]; rw [norm_embedding_eq]
-
-@[simp]
-
-Depends on / 依赖: Complex.norm_conj, complexEmbedding_complexConj, norm_conj, norm_embedding_eq
+/-
+**NumberField.IsCMField.infinitePlace_complexConj** 是 Mathlib 中的一个定理，位于命名空间 `Num
+berField.IsCMField`。
+形式化陈述：infinitePlace_complexConj (w : InfinitePlace K) (x : K) : w (complexConj K
+ x) = w x
+参数：w : InfinitePlace K；x : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `Subfield.instSubfieldClass`：∀ {K : Type u} [inst : DivisionRing K], Subf
+ieldClass (Subfield K) K
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NumberField.InfinitePlace.norm_embedding_eq`：norm_embedding_eq (w : Infi
+nitePlace K) (x : K) : ‖(embedding w) x‖ = w x
+· 使用定理 `NumberField.IsCMField.complexEmbedding_complexConj`：complexEmbedding_com
+plexConj (φ : K ->+* Complex) (x : K) : φ (complexConj K x) = conj (φ x)
+· 使用定理 `Complex.norm_conj`：norm_conj (z : Complex) : ‖conj z‖ = ‖z‖
 -/
 theorem infinitePlace_complexConj (w : InfinitePlace K) (x : K) :
     w (complexConj K x) = w x := by
-  rw [← norm_embedding_eq]; rw [complexEmbedding_complexConj]; rw [Complex.norm_conj]; rw [norm_embedding_eq]
+  rw [← norm_embedding_eq, complexEmbedding_complexConj, Complex.norm_conj, norm_embedding_eq]
 
 @[simp]
-/--
-theorem `complexConj_apply_apply` / 定理 `complexConj_apply_apply`
-
-English:
-theorem complexConj_apply_apply
-  given: (x : K)
-  proof: by
-  let φ : K ->+* Complex := Classical.choice (inferInstance : Nonempty _)
-  exact isConj_apply_apply (isConj_complexConj K φ) x
-
-中文:
-定理 complexConj_apply_apply
-  条件: (x : K)
-  证明: by
-  let φ : K ->+* Complex := Classical.choice (inferInstance : Nonempty _)
-  exact isConj_apply_apply (isConj_complexConj K φ) x
-
-Depends on / 依赖: Classical, Classical.choice, Nonempty, choice, isConj_apply_apply, isConj_complexConj
+/-
+**NumberField.IsCMField.complexConj_apply_apply** 是 Mathlib 中的一个定理，位于命名空间 `Numbe
+rField.IsCMField`。
+形式化陈述：complexConj_apply_apply (x : K) : complexConj K (complexConj K x) = x
+参数：x : K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.Embeddings.instNonemptyRingHomOfIsAlgebraicRatOfIsAlgClosed`
+：∀ (K : Type u_1) [inst : Field K] (A : Type u_2) [inst_1 : Field A] [CharZero A
+] [inst_3 : CharZero K]   [Algebra.IsAlgebraic ℚ K] [IsAlgClo…
+· 使用定理 `Algebra.IsSeparable.of_integral`：∀ (F : Type u_1) [inst : Field F] (K : 
+Type u_2) [inst_1 : Ring K] [inst_2 : Algebra F K] [IsDomain K]   [Algebra.IsInt
+egral F K] [CharZero …
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用引理 `NumberField.ComplexEmbedding.isConj_apply_apply`：isConj_apply_apply (hσ 
+: IsConj φ σ) (x : K) : σ (σ x) = x
+· 使用定理 `NumberField.IsCMField.isConj_complexConj`：isConj_complexConj (φ : K ->+*
+ Complex) : IsConj φ (complexConj K)
 -/
 theorem complexConj_apply_apply (x : K) :
     complexConj K (complexConj K x) = x := by
-  let φ : K ->+* Complex := Classical.choice (inferInstance : Nonempty _)
+  let φ : K →+* ℂ := Classical.choice (inferInstance : Nonempty _)
   exact isConj_apply_apply (isConj_complexConj K φ) x
-
-/--
-theorem `complexConj_ne_one` / 定理 `complexConj_ne_one`
-
-English:
-theorem complexConj_ne_one
-  proof: (isConj_ne_one_iff
-    (exists_isConj K (Classical.choice (inferInstance : Nonempty _))).choose_spec).mpr <|
-      IsTotallyComplex.complexEmbedding_not_isReal _
-
-@[simp]
-
-中文:
-定理 complexConj_ne_one
-  证明: (isConj_ne_one_iff
-    (exists_isConj K (Classical.choice (inferInstance : Nonempty _))).choose_spec).mpr <|
-      IsTotallyComplex.complexEmbedding_not_isReal _
-
-@[simp]
-
-Depends on / 依赖: Classical, Classical.choice, IsTotallyComplex, IsTotallyComplex.complexEmbedding_not_isReal, Nonempty, choice, choose_spec, complexEmbedding_not_isReal, exists_isConj, isConj_ne_one_iff
+/-
+**NumberField.IsCMField.complexConj_ne_one** 是 Mathlib 中的一个定理，位于命名空间 `NumberFiel
+d.IsCMField`。
+形式化陈述：complexConj_ne_one : complexConj K != (1 : K ≃ₐ[K⁺] K)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `Subfield.instSubfieldClass`：∀ {K : Type u} [inst : DivisionRing K], Subf
+ieldClass (Subfield K) K
+· 使用定理 `NumberField.Embeddings.instNonemptyRingHomOfIsAlgebraicRatOfIsAlgClosed`
+：∀ (K : Type u_1) [inst : Field K] (A : Type u_2) [inst_1 : Field A] [CharZero A
+] [inst_3 : CharZero K]   [Algebra.IsAlgebraic ℚ K] [IsAlgClo…
+· 使用定理 `Algebra.IsSeparable.of_integral`：∀ (F : Type u_1) [inst : Field F] (K : 
+Type u_2) [inst_1 : Ring K] [inst_2 : Algebra F K] [IsDomain K]   [Algebra.IsInt
+egral F K] [CharZero …
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `NumberField.IsCMField.exists_isConj`：exists_isConj [Algebra.IsAlgebraic 
+Rat K] (φ : K ->+* Complex) : exists σ : K ≃ₐ[K⁺] K, IsConj φ σ
+· 使用引理 `NumberField.ComplexEmbedding.isConj_ne_one_iff`：isConj_ne_one_iff (hσ : 
+IsConj φ σ) : σ != 1 ↔ ¬ IsReal φ
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
+· 使用定理 `NumberField.IsTotallyComplex.complexEmbedding_not_isReal`：∀ {K : Type u_
+2} [inst : Field K] [NumberField.IsTotallyComplex K] (φ : K →+* ℂ), ¬NumberField
+.ComplexEmbedding.IsReal φ
 -/
 theorem complexConj_ne_one :
-    complexConj K != (1 : K ≃ₐ[K⁺] K) :=
+    complexConj K ≠ (1 : K ≃ₐ[K⁺] K) :=
   (isConj_ne_one_iff
     (exists_isConj K (Classical.choice (inferInstance : Nonempty _))).choose_spec).mpr <|
       IsTotallyComplex.complexEmbedding_not_isReal _
 
 @[simp]
-/--
-theorem `complexConj_apply_eq_self` / 定理 `complexConj_apply_eq_self`
-
-English:
-theorem complexConj_apply_eq_self
-  given: (x : K⁺)
-  statement: complexConj K x = x
-  proof: AlgEquiv.commutes _ x
-
-中文:
-定理 complexConj_apply_eq_self
-  条件: (x : K⁺)
-  结论: complexConj K x = x
-  证明: AlgEquiv.commutes _ x
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.commutes, commutes
+/-
+**NumberField.IsCMField.complexConj_apply_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `Num
+berField.IsCMField`。
+形式化陈述：complexConj_apply_eq_self (x : K⁺) : complexConj K x = x
+参数：x : K⁺。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.commutes`：commutes : forall r : R, e (algebraMap R A₁ r) = alge
+braMap R A₂ r
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `Subfield.instSubfieldClass`：∀ {K : Type u} [inst : DivisionRing K], Subf
+ieldClass (Subfield K) K
 -/
 theorem complexConj_apply_eq_self (x : K⁺) : complexConj K x = x := AlgEquiv.commutes _ x
 
 /--
-theorem `orderOf_complexConj` / 定理 `orderOf_complexConj`
+The complex conjugation is an automorphism of degree `2`.
+-/
+/-
+**NumberField.IsCMField.orderOf_complexConj** 是 Mathlib 中的一个定理，位于命名空间 `NumberFie
+ld.IsCMField`。
+形式化陈述：orderOf_complexConj : orderOf (complexConj K) = 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `Subfield.instSubfieldClass`：∀ {K : Type u} [inst : DivisionRing K], Subf
+ieldClass (Subfield K) K
+· 使用定理 `orderOf_eq_prime_iff`：orderOf_eq_prime_iff : orderOf x = p ↔ x ^ p = 1 ∧
+ x != 1
+· 使用定理 `AlgEquiv.ext`：ext {f g : A₁ ≃ₐ[R] A₂} (h : forall a, f a = g a) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `AlgEquiv.coe_pow`：∀ {R : Type uR} {A₁ : Type uA₁} [inst : CommSemiring R
+] [inst_1 : Semiring A₁] [inst_2 : Algebra R A₁] (e : A₁ ≃ₐ[R] A₁)   (n : ℕ), ⇑(
+e ^ n)…
+· 使用定理 `Function.iterate_one`：iterate_one : f^[1] = f
+· 使用定理 `NumberField.IsCMField.complexConj_apply_apply`：complexConj_apply_apply (
+x : K) : complexConj K (complexConj K x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `NumberField.IsCMField.complexConj_ne_one`：complexConj_ne_one : complexCo
+nj K != (1 : K ≃ₐ[K⁺] K)
 
-English:
-theorem orderOf_complexConj
-  proof: orderOf_eq_prime_iff.mpr ⟨by ext; simp, complexConj_ne_one K⟩
-
-中文:
-定理 orderOf_complexConj
-  证明: orderOf_eq_prime_iff.mpr ⟨by ext; simp, complexConj_ne_one K⟩
-
-Depends on / 依赖: complexConj_ne_one, orderOf_eq_prime_iff, orderOf_eq_prime_iff.mpr
+--- 原说明 ---
+The complex conjugation is an automorphism of degree `2`.
 -/
 theorem orderOf_complexConj :
     orderOf (complexConj K) = 2 :=
   orderOf_eq_prime_iff.mpr ⟨by ext; simp, complexConj_ne_one K⟩
 
 /--
-theorem `zpowers_complexConj_eq_top` / 定理 `zpowers_complexConj_eq_top`
+The complex conjugation generates the Galois group of `K/K⁺`.
+-/
+/-
+**NumberField.IsCMField.zpowers_complexConj_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `Nu
+mberField.IsCMField`。
+形式化陈述：zpowers_complexConj_eq_top : Subgroup.zpowers (complexConj K) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.eq_top_of_card_eq`：eq_top_of_card_eq [Finite H] (h : Nat.card H
+ = Nat.card G) : H = ⊤
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `Subfield.instSubfieldClass`：∀ {K : Type u} [inst : DivisionRing K], Subf
+ieldClass (Subfield K) K
+· 使用定理 `Subgroup.instFiniteSubtypeMem`：∀ {G : Type u_1} [inst : Group G] (K : Su
+bgroup G) [Finite G], Finite ↥K
+· 使用定理 `Finite.algEquiv`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA₂} [inst :
+ CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [inst_3 : Algeb
+ra R …
+· 使用定理 `instFiniteAlgHomOfFinite`：∀ (R : Type u_1) [inst : CommSemiring R] (K : 
+Type u_2) [inst_1 : Field K] [inst_2 : Algebra R K] (S : Type u_3)   [inst_3 : S
+emiring S] [in…
+· 使用定理 `Algebra.instFiniteOfIsQuadraticExtension`：∀ (R : Type u_2) (S : Type u_3
+) [inst : CommSemiring R] [inst_1 : StrongRankCondition R] [inst_2 : Semiring S]
+   [inst_3 : Algebra R S] [Alg…
+· 使用定理 `commRing_strongRankCondition`：∀ (R : Type u_1) [inst : CommRing R] [Nont
+rivial R], StrongRankCondition R
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.card_zpowers`：Nat.card_zpowers : Nat.card (zpowers a) = orderOf a
+· 使用定理 `NumberField.IsCMField.orderOf_complexConj`：orderOf_complexConj : orderOf
+ (complexConj K) = 2
+· 使用定理 `IsGalois.card_aut_eq_finrank`：card_aut_eq_finrank [FiniteDimensional F E
+] [IsGalois F E] : Nat.card Gal(E/F) = finrank F E
+· 使用定理 `Algebra.IsQuadraticExtension.isGalois`：∀ (F : Type u_1) (K : Type u_2) [
+inst : Field F] [inst_1 : Field K] [inst_2 : Algebra F K]   [Algebra.IsQuadratic
+Extension F K] [Algebra.IsS…
+· 使用定理 `Normal.toIsAlgebraic`：∀ {F : Type u_1} {K : Type u_2} {inst : Field F} {
+inst_1 : Field K} {inst_2 : Algebra F K} [self : Normal F K],   Algebra.IsAlgebr
+aic F K
+· 使用定理 `Algebra.IsQuadraticExtension.finrank_eq_two`：∀ (R : Type u_2) (S : Type 
+u_3) [inst : CommSemiring R] [inst_1 : StrongRankCondition R] [inst_2 : Semiring
+ S]   [inst_3 : Algebra R S] [Alg…
 
-English:
-theorem zpowers_complexConj_eq_top
-  proof: by
-  refine Subgroup.eq_top_of_card_eq _ ?_
-  rw [Nat.card_zpowers]; rw [orderOf_complexConj]; rw [IsGalois.card_aut_eq_finrank]; rw [IsQuadraticExtension.finrank_eq_two]
-
-中文:
-定理 zpowers_complexConj_eq_top
-  证明: by
-  refine Subgroup.eq_top_of_card_eq _ ?_
-  rw [Nat.card_zpowers]; rw [orderOf_complexConj]; rw [IsGalois.card_aut_eq_finrank]; rw [IsQuadraticExtension.finrank_eq_two]
-
-Depends on / 依赖: IsGalois, IsGalois.card_aut_eq_finrank, IsQuadraticExtension, IsQuadraticExtension.finrank_eq_two, Nat.card_zpowers, Subgroup, Subgroup.eq_top_of_card_eq, card_aut_eq_finrank, card_zpowers, eq_top_of_card_eq, finrank_eq_two, orderOf_complexConj
+--- 原说明 ---
+The complex conjugation generates the Galois group of `K/K⁺`.
 -/
 theorem zpowers_complexConj_eq_top :
     Subgroup.zpowers (complexConj K) = ⊤ := by
   refine Subgroup.eq_top_of_card_eq _ ?_
-  rw [Nat.card_zpowers]; rw [orderOf_complexConj]; rw [IsGalois.card_aut_eq_finrank]; rw [IsQuadraticExtension.finrank_eq_two]
+  rw [Nat.card_zpowers, orderOf_complexConj, IsGalois.card_aut_eq_finrank,
+    IsQuadraticExtension.finrank_eq_two]
 
 /--
 An element of `K` is fixed by the complex conjugation iff it lies in `K⁺`.
 -/
 @[simp]
-/--
-theorem `complexConj_eq_self_iff` / 定理 `complexConj_eq_self_iff`
+/-
+**NumberField.IsCMField.complexConj_eq_self_iff** 是 Mathlib 中的一个定理，位于命名空间 `Numbe
+rField.IsCMField`。
+形式化陈述：complexConj_eq_self_iff (x : K) : complexConj K x = x ↔ x in K⁺
+参数：x : K。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `Subfield.instSubfieldClass`：∀ {K : Type u} [inst : DivisionRing K], Subf
+ieldClass (Subfield K) K
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.IsCMField.zpowers_complexConj_eq_top`：zpowers_complexConj_eq
+_top : Subgroup.zpowers (complexConj K) = ⊤
+· 使用定理 `Subgroup.forall_mem_zpowers`：forall_mem_zpowers {x : G} {p : G -> Prop} 
+: (forall g in zpowers x, p g) ↔ forall m : Int, p (x ^ m)
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `MulAction.mem_fixedBy_zpowers_iff_mem_fixedBy`：mem_fixedBy_zpowers_iff_m
+em_fixedBy {g : G} {a : α} : (forall j : Int, a in fixedBy α (g ^ j)) ↔ a in fix
+edBy α g
+· 使用定理 `IsGalois.fixedField_top`：∀ {F : Type u_1} [inst : Field F] {E : Type u_2
+} [inst_1 : Field E] [inst_2 : Algebra F E] [IsGalois F E]   [FiniteDimensional 
+F E], Interme…
+· 使用定理 `Algebra.IsQuadraticExtension.isGalois`：∀ (F : Type u_1) (K : Type u_2) [
+inst : Field F] [inst_1 : Field K] [inst_2 : Algebra F K]   [Algebra.IsQuadratic
+Extension F K] [Algebra.IsS…
+· 使用定理 `Normal.toIsAlgebraic`：∀ {F : Type u_1} {K : Type u_2} {inst : Field F} {
+inst_1 : Field K} {inst_2 : Algebra F K} [self : Normal F K],   Algebra.IsAlgebr
+aic F K
+· 使用定理 `Algebra.instFiniteOfIsQuadraticExtension`：∀ (R : Type u_2) (S : Type u_3
+) [inst : CommSemiring R] [inst_1 : StrongRankCondition R] [inst_2 : Semiring S]
+   [inst_3 : Algebra R S] [Alg…
+· 使用定理 `commRing_strongRankCondition`：∀ (R : Type u_1) [inst : CommRing R] [Nont
+rivial R], StrongRankCondition R
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `IntermediateField.mem_bot`：mem_bot {x : E} : x in (⊥ : IntermediateField
+ F E) ↔ x in Set.range (algebraMap F E)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `IntermediateField.mem_fixedField_iff`：∀ {F : Type u_1} [inst : Field F] 
+{E : Type u_2} [inst_1 : Field E] [inst_2 : Algebra F E] (H : Subgroup Gal(E/F))
+   (x : E), x ∈ Intermedia…
 
-English:
-theorem complexConj_eq_self_iff
-  given: (x : K)
-  proof: by
-  convert! (IntermediateField.mem_fixedField_iff (⊤ : Subgroup (K ≃ₐ[K⁺] K)) x).symm using 1
-  · rw [← zpowers_complexConj_eq_top, Subgroup.forall_mem_zpowers]
-    exact (MulAction.mem_fixedBy_zpowers_iff_mem_fixedBy (g := (complexConj K))).symm
-  · rw [IsGalois.fixedField_top, IntermediateField.mem_bot]
-    aesop
-
-中文:
-定理 complexConj_eq_self_iff
-  条件: (x : K)
-  证明: by
-  convert! (IntermediateField.mem_fixedField_iff (⊤ : Subgroup (K ≃ₐ[K⁺] K)) x).symm using 1
-  · rw [← zpowers_complexConj_eq_top, Subgroup.forall_mem_zpowers]
-    exact (MulAction.mem_fixedBy_zpowers_iff_mem_fixedBy (g := (complexConj K))).symm
-  · rw [IsGalois.fixedField_top, IntermediateField.mem_bot]
-    aesop
-
-Depends on / 依赖: IntermediateField, IntermediateField.mem_bot, IntermediateField.mem_fixedField_iff, IsGalois, IsGalois.fixedField_top, MulAction, MulAction.mem_fixedBy_zpowers_iff_mem_fixedBy, Subgroup, Subgroup.forall_mem_zpowers, complexConj, convert, fixedField_top, forall_mem_zpowers, mem_bot, mem_fixedBy_zpowers_iff_mem_fixedBy, mem_fixedField_iff, zpowers_complexConj_eq_top
+--- 原说明 ---
+An element of `K` is fixed by the complex conjugation iff it lies in `K⁺`.
 -/
 theorem complexConj_eq_self_iff (x : K) :
-    complexConj K x = x ↔ x in K⁺ := by
+    complexConj K x = x ↔ x ∈ K⁺ := by
   convert! (IntermediateField.mem_fixedField_iff (⊤ : Subgroup (K ≃ₐ[K⁺] K)) x).symm using 1
   · rw [← zpowers_complexConj_eq_top, Subgroup.forall_mem_zpowers]
     exact (MulAction.mem_fixedBy_zpowers_iff_mem_fixedBy (g := (complexConj K))).symm
@@ -555,106 +754,139 @@ theorem complexConj_eq_self_iff (x : K) :
     aesop
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `RingOfIntegers.complexConj_eq_self_iff` / 定理 `RingOfIntegers.complexConj_eq_self_iff`
-
-English:
-theorem RingOfIntegers.complexConj_eq_self_iff
-  given: (x : 𝓞 K)
-  proof: by
-  rw [complexConj_eq_self_iff]
-  refine ⟨fun h => ?_, fun ⟨y, hy⟩ => ?_⟩
-  · have : IsIntegral Int (⟨x, h⟩ : K⁺) :=
-      (isIntegral_algebraMap_iff (FaithfulSMul.algebraMap_injective K⁺ K)).mp x.isIntegral_coe
-    refine ⟨⟨⟨x, h⟩, this⟩, ?_⟩
-    rw [IsScalarTower.algebraMap_apply (𝓞 K⁺) K⁺]; rw [RingOfIntegers.map_mk]
-    rfl
-  · rw [← hy, IsScalarTower.algebraMap_apply (𝓞 K⁺) K⁺]
-    exact SetLike.coe_mem _
-
-中文:
-定理 RingOf整数egers.complexConj_eq_self_iff
-  条件: (x : 𝓞 K)
-  证明: by
-  rw [complexConj_eq_self_iff]
-  refine ⟨fun h => ?_, fun ⟨y, hy⟩ => ?_⟩
-  · have : IsIntegral Int (⟨x, h⟩ : K⁺) :=
-      (isIntegral_algebraMap_iff (FaithfulSMul.algebraMap_injective K⁺ K)).mp x.isIntegral_coe
-    refine ⟨⟨⟨x, h⟩, this⟩, ?_⟩
-    rw [IsScalarTower.algebraMap_apply (𝓞 K⁺) K⁺]; rw [RingOfIntegers.map_mk]
-    rfl
-  · rw [← hy, IsScalarTower.algebraMap_apply (𝓞 K⁺) K⁺]
-    exact SetLike.coe_mem _
+/-
+**NumberField.IsCMField.RingOfIntegers.complexConj_eq_self_iff** 是 Mathlib 中的一个定
+理，位于命名空间 `NumberField.IsCMField.RingOfIntegers`。
+形式化陈述：∀ (K : Type u_1) [inst : Field K] [inst_1 : CharZero K] [inst_2 : NumberFi
+eld.IsCMField K]   [inst_3 : Algebra.IsIntegral ℚ K] (x : NumberField.RingOfInte
+gers K),   (NumberField.IsCMField.complexConj K) ↑x = ↑x ↔     ∃ y, (algebraMap 
+(NumberField.RingOfIntegers ↥(NumberField.maximalRealSubfield K)) K) y = ↑x
+参数：K : Type u_1；x : NumberField.RingOfIntegers K；NumberField.IsCMField.complexCo
+nj K；algebraMap (NumberField.RingOfIntegers ↥(NumberField.maximalRealSubfield K)
+) K。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `Subfield.instSubfieldClass`：∀ {K : Type u} [inst : DivisionRing K], Subf
+ieldClass (Subfield K) K
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.IsCMField.complexConj_eq_self_iff`：complexConj_eq_self_iff (
+x : K) : complexConj K x = x ↔ x in K⁺
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `isIntegral_algebraMap_iff`：isIntegral_algebraMap_iff [Algebra A B] [IsSc
+alarTower R A B] {x : A} (hAB : Function.Injective (algebraMap A B)) : IsIntegra
+l R (algebraMap…
+· 使用引理 `FaithfulSMul.algebraMap_injective`：algebraMap_injective : Injective (alg
+ebraMap R A)
+· 使用定理 `Subfield.instFaithfulSMulSubtypeMem`：∀ {K : Type u} [inst : DivisionRing
+ K] {X : Type u_1} [inst_1 : SMul K X] [FaithfulSMul K X] (F : Subfield K),   Fa
+ithfulSMul (↥F) X
+· 使用定理 `instFaithfulSMul_1`：∀ (R : Type u_1) (A : Type u_2) [inst : CommRing R] 
+[inst_1 : Semiring A] [inst_2 : Algebra R A] [IsSimpleRing R]   [Nontrivial A], 
+Faithful…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `NumberField.RingOfIntegers.isIntegral_coe`：isIntegral_coe (x : 𝓞 K) : Is
+Integral Int (algebraMap _ K x)
+· 使用定理 `IsScalarTower.algebraMap_apply`：algebraMap_apply (x : R) : algebraMap R 
+A x = algebraMap S A (algebraMap R S x)
+· 使用定理 `NumberField.RingOfIntegers.instIsScalarTower`：∀ (K : Type u_1) [inst : F
+ield K] {L : Type u_3} [inst_1 : Ring L] [inst_2 : Algebra K L],   IsScalarTower
+ (NumberField.RingOfIntegers K) K …
+· 使用定理 `NumberField.RingOfIntegers.map_mk`：∀ {K : Type u_1} [inst : Field K] (x 
+: K) (hx : x ∈ integralClosure ℤ K),   (algebraMap (NumberField.RingOfIntegers K
+) K) ⟨x, hx⟩ = x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SetLike.coe_mem`：coe_mem (x : p) : (x : B) in p
 -/
 protected theorem RingOfIntegers.complexConj_eq_self_iff (x : 𝓞 K) :
-    complexConj K x = x ↔ exists y : 𝓞 K⁺, algebraMap (𝓞 K⁺) K y = x := by
+    complexConj K x = x ↔ ∃ y : 𝓞 K⁺, algebraMap (𝓞 K⁺) K y = x := by
   rw [complexConj_eq_self_iff]
-  refine ⟨fun h => ?_, fun ⟨y, hy⟩ => ?_⟩
-  · have : IsIntegral Int (⟨x, h⟩ : K⁺) :=
+  refine ⟨fun h ↦ ?_, fun ⟨y, hy⟩ ↦ ?_⟩
+  · have : IsIntegral ℤ (⟨x, h⟩ : K⁺) :=
       (isIntegral_algebraMap_iff (FaithfulSMul.algebraMap_injective K⁺ K)).mp x.isIntegral_coe
     refine ⟨⟨⟨x, h⟩, this⟩, ?_⟩
-    rw [IsScalarTower.algebraMap_apply (𝓞 K⁺) K⁺]; rw [RingOfIntegers.map_mk]
+    rw [IsScalarTower.algebraMap_apply (𝓞 K⁺) K⁺, RingOfIntegers.map_mk]
     rfl
   · rw [← hy, IsScalarTower.algebraMap_apply (𝓞 K⁺) K⁺]
     exact SetLike.coe_mem _
-
-/--
-theorem `Units.complexConj_eq_self_iff` / 定理 `Units.complexConj_eq_self_iff`
-
-English:
-theorem Units.complexConj_eq_self_iff
-  given: (u : (𝓞 K)ˣ)
-  proof: by
-  rw [RingOfIntegers.complexConj_eq_self_iff]; rw [Units.coe_coe]
-  refine ⟨fun ⟨y, hy⟩ => ?_, fun ⟨v, hv⟩ => ⟨v, by rw [hv]⟩⟩
-  have : IsUnit y := by
-    apply IsUnit.of_map (algebraMap (𝓞 K⁺) (𝓞 K))
-    rw [show algebraMap (𝓞 K⁺) (𝓞 K) y = u by exact RingOfIntegers.ext hy]
-    exact u.isUnit
-  exact ⟨this.unit, by simp [hy]⟩
-
-中文:
-定理 单位群.complexConj_eq_self_iff
-  条件: (u : (𝓞 K)ˣ)
-  证明: by
-  rw [RingOfIntegers.complexConj_eq_self_iff]; rw [Units.coe_coe]
-  refine ⟨fun ⟨y, hy⟩ => ?_, fun ⟨v, hv⟩ => ⟨v, by rw [hv]⟩⟩
-  have : IsUnit y := by
-    apply IsUnit.of_map (algebraMap (𝓞 K⁺) (𝓞 K))
-    rw [show algebraMap (𝓞 K⁺) (𝓞 K) y = u by exact RingOfIntegers.ext hy]
-    exact u.isUnit
-  exact ⟨this.unit, by simp [hy]⟩
+/-
+**NumberField.IsCMField.Units.complexConj_eq_self_iff** 是 Mathlib 中的一个定理，位于命名空间 
+`NumberField.IsCMField.Units`。
+形式化陈述：∀ (K : Type u_1) [inst : Field K] [inst_1 : CharZero K] [inst_2 : NumberFi
+eld.IsCMField K]   [inst_3 : Algebra.IsIntegral ℚ K] (u : (NumberField.RingOfInt
+egers K)ˣ),   (NumberField.IsCMField.complexConj K) ((algebraMap (NumberField.Ri
+ngOfIntegers K) K) ↑u) =       (algebraMap (NumberField.RingOfIntegers K) K) ↑u 
+↔     ∃ v,       (algebraMap (NumberField.RingOfIntegers ↥(NumberField.maximalRe
+alSubfield K)) K) ↑v =         (algebraMap (NumberField.RingOfIntegers K) K) ↑u
+参数：K : Type u_1；u : (NumberField.RingOfIntegers K)ˣ；NumberField.IsCMField.comple
+xConj K；(algebraMap (NumberField.RingOfIntegers K) K) ↑u；algebraMap (NumberField
+.RingOfIntegers K) K；algebraMap (NumberField.RingOfIntegers ↥(NumberField.maxima
+lRealSubfield K)) K；algebraMap (NumberField.RingOfIntegers K) K。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `Subfield.instSubfieldClass`：∀ {K : Type u} [inst : DivisionRing K], Subf
+ieldClass (Subfield K) K
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.IsCMField.RingOfIntegers.complexConj_eq_self_iff`：∀ (K : Typ
+e u_1) [inst : Field K] [inst_1 : CharZero K] [inst_2 : NumberField.IsCMField K]
+   [inst_3 : Algebra.IsIntegral ℚ K] (x : NumberFi…
+· 使用定理 `NumberField.Units.coe_coe`：coe_coe (u : (𝓞 K)ˣ) : ((u : 𝓞 K) : K) = (u :
+ K)
+· 使用定理 `IsUnit.of_map`：IsUnit.of_map (f : F) [IsLocalHom f] (a : R) (h : IsUnit 
+(f a)) : IsUnit a
+· 使用定理 `Module.IsTorsionFree.to_faithfulSMul`：∀ {R : Type u_1} {A : Type u_2} [i
+nst : CommRing R] [inst_1 : Ring A] [inst_2 : Algebra R A] [IsCancelMulZero R]  
+ [Nontrivial A] [Module.Is…
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `NumberField.instIsDomainRingOfIntegers`：∀ (K : Type u_1) [inst : Field K
+], IsDomain (NumberField.RingOfIntegers K)
+· 使用定理 `NumberField.instNontrivialRingOfIntegers`：∀ (K : Type u_1) [inst : Field
+ K], Nontrivial (NumberField.RingOfIntegers K)
+· 使用定理 `NumberField.RingOfIntegers.instIsTorsionFree_1`：∀ (K : Type u_4) (L : Ty
+pe u_5) [inst : Field K] [inst_1 : Field L] [inst_2 : Algebra K L],   Module.IsT
+orsionFree (NumberField.RingOfIntege…
+· 使用定理 `NumberField.RingOfIntegers.ext`：∀ {K : Type u_1} [inst : Field K] {x y :
+ NumberField.RingOfIntegers K}, ↑x = ↑y → x = y
+· 使用定理 `Units.isUnit`：∀ {M : Type u_1} [inst : Monoid M] (u : Mˣ), IsUnit ↑u
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 protected theorem Units.complexConj_eq_self_iff (u : (𝓞 K)ˣ) :
-    complexConj K u = u ↔ exists v : (𝓞 K⁺)ˣ, algebraMap (𝓞 K⁺) K v = u := by
-  rw [RingOfIntegers.complexConj_eq_self_iff]; rw [Units.coe_coe]
-  refine ⟨fun ⟨y, hy⟩ => ?_, fun ⟨v, hv⟩ => ⟨v, by rw [hv]⟩⟩
+    complexConj K u = u ↔ ∃ v : (𝓞 K⁺)ˣ, algebraMap (𝓞 K⁺) K v = u := by
+  rw [RingOfIntegers.complexConj_eq_self_iff, Units.coe_coe]
+  refine ⟨fun ⟨y, hy⟩ ↦ ?_, fun ⟨v, hv⟩ ↦ ⟨v, by rw [hv]⟩⟩
   have : IsUnit y := by
     apply IsUnit.of_map (algebraMap (𝓞 K⁺) (𝓞 K))
     rw [show algebraMap (𝓞 K⁺) (𝓞 K) y = u by exact RingOfIntegers.ext hy]
     exact u.isUnit
   exact ⟨this.unit, by simp [hy]⟩
-
-/--
-Instance `starRing` / 实例 `starRing`
-
-English:
-instance starRing
-  signature: : StarRing K where
-  body: complexConj K
-  star_involutive _ := complexConj_apply_apply _ _
-  star_mul _ _ := by rw [map_mul, mul_comm]
-  star_add _ _ := by rw [map_add]
-
-中文:
-实例 starRing
-  签名: : 对合环 K where
-  定义体: complexConj K
-  star_involutive _ := complexConj_apply_apply _ _
-  star_mul _ _ := by rw [map_mul, mul_comm]
-  star_add _ _ := by rw [map_add]
-
-Depends on / 依赖: complexConj
+/-
+**NumberField.IsCMField.starRing** 是 Mathlib 中的一个实例，位于命名空间 `NumberField.IsCMFiel
+d`。
+形式化陈述：starRing : StarRing K where star
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.IsCMField.complexConj_apply_apply`：complexConj_apply_apply (
+x : K) : complexConj K (complexConj K x) = x
 -/
 noncomputable instance starRing : StarRing K where
   star := complexConj K
@@ -663,76 +895,71 @@ noncomputable instance starRing : StarRing K where
   star_add _ _ := by rw [map_add]
 
 /--
-Definition of `ringOfIntegersComplexConj` / `ringOfIntegersComplexConj` 的定义
+A variant of the complex conjugation defined as an `AlgEquiv` on the ring of integers.
+-/
+/-
+**NumberField.IsCMField.ringOfIntegersComplexConj** 是 Mathlib 中的一个缩写定义，位于命名空间 `N
+umberField.IsCMField`。
+形式化陈述：ringOfIntegersComplexConj : (𝓞 K) ≃ₐ[𝓞 K⁺] (𝓞 K)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ringOfIntegersComplexConj
-  signature: : (𝓞 K) ≃ₐ[𝓞 K⁺] (𝓞 K)
-  body: RingOfIntegers.mapAlgEquiv (complexConj K)
-
-@[simp]
-
-中文:
-缩写 ringOf整数egersComplexConj
-  签名: : (𝓞 K) ≃ₐ[𝓞 K⁺] (𝓞 K)
-  定义体: RingOfIntegers.mapAlgEquiv (complexConj K)
-
-@[simp]
-
-Depends on / 依赖: RingOfIntegers, RingOfIntegers.mapAlgEquiv, complexConj, mapAlgEquiv
+--- 原说明 ---
+A variant of the complex conjugation defined as an `AlgEquiv` on the ring of int
+egers.
 -/
 noncomputable abbrev ringOfIntegersComplexConj : (𝓞 K) ≃ₐ[𝓞 K⁺] (𝓞 K) :=
   RingOfIntegers.mapAlgEquiv (complexConj K)
 
 @[simp]
-/--
-theorem `coe_ringOfIntegersComplexConj` / 定理 `coe_ringOfIntegersComplexConj`
-
-English:
-theorem coe_ringOfIntegersComplexConj
-  given: (x : 𝓞 K)
-  proof: rfl
-
-中文:
-定理 coe_ringOf整数egersComplexConj
-  条件: (x : 𝓞 K)
-  证明: rfl
+/-
+**NumberField.IsCMField.coe_ringOfIntegersComplexConj** 是 Mathlib 中的一个定理，位于命名空间 
+`NumberField.IsCMField`。
+形式化陈述：coe_ringOfIntegersComplexConj (x : 𝓞 K) : (ringOfIntegersComplexConj K x :
+ K) = complexConj K x
+参数：x : 𝓞 K。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_ringOfIntegersComplexConj (x : 𝓞 K) :
     (ringOfIntegersComplexConj K x : K) = complexConj K x := rfl
-
-/--
-theorem `ringOfIntegersComplexConj_eq_self_iff` / 定理 `ringOfIntegersComplexConj_eq_self_iff`
-
-English:
-theorem ringOfIntegersComplexConj_eq_self_iff
-  given: (x : 𝓞 K)
-  proof: by
-  refine ⟨fun h => ?_, ?_⟩
-  · rw [RingOfIntegers.ext_iff, coe_ringOfIntegersComplexConj,
-      RingOfIntegers.complexConj_eq_self_iff] at h
-    obtain ⟨y, hy⟩ := h
-    exact ⟨y, RingOfIntegers.ext_iff.mpr hy⟩
-  · rintro ⟨y, rfl⟩
-    simp
-
-中文:
-定理 ringOf整数egersComplexConj_eq_self_iff
-  条件: (x : 𝓞 K)
-  证明: by
-  refine ⟨fun h => ?_, ?_⟩
-  · rw [RingOfIntegers.ext_iff, coe_ringOfIntegersComplexConj,
-      RingOfIntegers.complexConj_eq_self_iff] at h
-    obtain ⟨y, hy⟩ := h
-    exact ⟨y, RingOfIntegers.ext_iff.mpr hy⟩
-  · rintro ⟨y, rfl⟩
-    simp
-
-Depends on / 依赖: RingOfIntegers, RingOfIntegers.complexConj_eq_self_iff, RingOfIntegers.ext_iff, RingOfIntegers.ext_iff.mpr, coe_ringOfIntegersComplexConj, complexConj_eq_self_iff, ext_iff
+/-
+**NumberField.IsCMField.ringOfIntegersComplexConj_eq_self_iff** 是 Mathlib 中的一个定理
+，位于命名空间 `NumberField.IsCMField`。
+形式化陈述：ringOfIntegersComplexConj_eq_self_iff (x : 𝓞 K) : ringOfIntegersComplexCon
+j K x = x ↔ x in Set.range (algebraMap (𝓞 K⁺) (𝓞 K))
+参数：x : 𝓞 K。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `Subfield.instSubfieldClass`：∀ {K : Type u} [inst : DivisionRing K], Subf
+ieldClass (Subfield K) K
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.IsCMField.RingOfIntegers.complexConj_eq_self_iff`：∀ (K : Typ
+e u_1) [inst : Field K] [inst_1 : CharZero K] [inst_2 : NumberField.IsCMField K]
+   [inst_3 : Algebra.IsIntegral ℚ K] (x : NumberFi…
+· 使用定理 `NumberField.IsCMField.coe_ringOfIntegersComplexConj`：coe_ringOfIntegersC
+omplexConj (x : 𝓞 K) : (ringOfIntegersComplexConj K x : K) = complexConj K x
+· 使用定理 `NumberField.RingOfIntegers.ext_iff`：∀ {K : Type u_1} [inst : Field K] {x
+ y : NumberField.RingOfIntegers K}, x = y ↔ ↑x = ↑y
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `AlgEquiv.commutes`：commutes : forall r : R, e (algebraMap R A₁ r) = alge
+braMap R A₂ r
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem ringOfIntegersComplexConj_eq_self_iff (x : 𝓞 K) :
-    ringOfIntegersComplexConj K x = x ↔ x in Set.range (algebraMap (𝓞 K⁺) (𝓞 K)) := by
-  refine ⟨fun h => ?_, ?_⟩
+    ringOfIntegersComplexConj K x = x ↔ x ∈ Set.range (algebraMap (𝓞 K⁺) (𝓞 K)) := by
+  refine ⟨fun h ↦ ?_, ?_⟩
   · rw [RingOfIntegers.ext_iff, coe_ringOfIntegersComplexConj,
       RingOfIntegers.complexConj_eq_self_iff] at h
     obtain ⟨y, hy⟩ := h
@@ -747,91 +974,93 @@ section units
 open NumberField.Units
 
 /--
-Definition of `unitsComplexConj` / `unitsComplexConj` 的定义
+The complex conjugation as an isomorphism of the units of `K`. -/
+/-
+**NumberField.IsCMField.unitsComplexConj** 是 Mathlib 中的一个缩写定义，位于命名空间 `NumberFiel
+d.IsCMField`。
+形式化陈述：unitsComplexConj [Algebra.IsIntegral Rat K] : (𝓞 K)ˣ ≃* (𝓞 K)ˣ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation unitsComplexConj
-  signature: [Algebra.IsIntegral Rat K]
-  body: Units.mapEquiv RingOfIntegers.mapRingEquiv (complexConj K).toRingEquiv
-
-中文:
-缩写 unitsComplexConj
-  签名: [代数.是整 有理数 K]
-  定义体: Units.mapEquiv RingOfIntegers.mapRingEquiv (complexConj K).toRingEquiv
-
-Depends on / 依赖: RingOfIntegers, RingOfIntegers.mapRingEquiv, Units.mapEquiv, complexConj, mapEquiv, mapRingEquiv, toRingEquiv
+--- 原说明 ---
+The complex conjugation as an isomorphism of the units of `K`.
 -/
-noncomputable abbrev unitsComplexConj [Algebra.IsIntegral Rat K] : (𝓞 K)ˣ ≃* (𝓞 K)ˣ :=
-Units.mapEquiv RingOfIntegers.mapRingEquiv (complexConj K).toRingEquiv
+noncomputable abbrev unitsComplexConj [Algebra.IsIntegral ℚ K] : (𝓞 K)ˣ ≃* (𝓞 K)ˣ :=
+  Units.mapEquiv <| RingOfIntegers.mapRingEquiv (complexConj K).toRingEquiv
 
 /--
-Definition of `realUnits` / `realUnits` 的定义
+The subgroup of `(𝓞 K)ˣ` generated by the units of `K⁺`. These units are exactly the units fixed
+by the complex conjugation, see `IsCMField.unitsComplexConj_eq_self_iff`.
+-/
+/-
+**NumberField.IsCMField.realUnits** 是 Mathlib 中的一个定义，位于命名空间 `NumberField.IsCMFie
+ld`。
+形式化陈述：realUnits : Subgroup (𝓞 K)ˣ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition realUnits
-  signature: : Subgroup (𝓞 K)ˣ
-  body: (Units.map (algebraMap (𝓞 K⁺) (𝓞 K)).toMonoidHom).range
-
-omit [IsCMField K] [CharZero K] in
-
-中文:
-定义 realUnits
-  签名: : 子群 (𝓞 K)ˣ
-  定义体: (Units.map (algebraMap (𝓞 K⁺) (𝓞 K)).toMonoidHom).range
-
-omit [IsCMField K] [CharZero K] in
-
-Depends on / 依赖: Units.map, algebraMap, toMonoidHom
+--- 原说明 ---
+The subgroup of `(𝓞 K)ˣ` generated by the units of `K⁺`. These units are exactly
+ the units fixed
+by the complex conjugation, see `IsCMField.unitsComplexConj_eq_self_iff`.
 -/
 def realUnits : Subgroup (𝓞 K)ˣ := (Units.map (algebraMap (𝓞 K⁺) (𝓞 K)).toMonoidHom).range
 
 omit [IsCMField K] [CharZero K] in
-/--
-theorem `mem_realUnits_iff` / 定理 `mem_realUnits_iff`
-
-English:
-theorem mem_realUnits_iff
-  given: (u : (𝓞 K)ˣ)
-  proof: by
-  simp [realUnits, MonoidHom.mem_range, RingHom.toMonoidHom_eq_coe, Units.ext_iff]
-
-中文:
-定理 mem_realUnits_iff
-  条件: (u : (𝓞 K)ˣ)
-  证明: by
-  simp [realUnits, MonoidHom.mem_range, RingHom.toMonoidHom_eq_coe, Units.ext_iff]
-
-Depends on / 依赖: MonoidHom, MonoidHom.mem_range, RingHom, RingHom.toMonoidHom_eq_coe, Units.ext_iff, ext_iff, mem_range, realUnits, toMonoidHom_eq_coe
+/-
+**NumberField.IsCMField.mem_realUnits_iff** 是 Mathlib 中的一个定理，位于命名空间 `NumberField
+.IsCMField`。
+形式化陈述：mem_realUnits_iff (u : (𝓞 K)ˣ) : u in realUnits K ↔ exists v : (𝓞 K⁺)ˣ, al
+gebraMap (𝓞 K⁺) (𝓞 K) v = u
+参数：u : (𝓞 K)ˣ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem mem_realUnits_iff (u : (𝓞 K)ˣ) :
-    u in realUnits K ↔ exists v : (𝓞 K⁺)ˣ, algebraMap (𝓞 K⁺) (𝓞 K) v = u := by
+    u ∈ realUnits K ↔ ∃ v : (𝓞 K⁺)ˣ, algebraMap (𝓞 K⁺) (𝓞 K) v = u := by
   simp [realUnits, MonoidHom.mem_range, RingHom.toMonoidHom_eq_coe, Units.ext_iff]
-
-/--
-theorem `unitsComplexConj_eq_self_iff` / 定理 `unitsComplexConj_eq_self_iff`
-
-English:
-theorem unitsComplexConj_eq_self_iff
-  given: [Algebra.IsIntegral Rat K] (u : (𝓞 K)ˣ)
-  proof: by
-  simp_rw [Units.ext_iff, mem_realUnits_iff, RingOfIntegers.ext_iff, Units.coe_mapEquiv,
-    RingEquiv.coe_toMulEquiv, RingOfIntegers.mapRingEquiv_apply,
-    AlgEquiv.coe_ringEquiv, Units.complexConj_eq_self_iff,
-    IsScalarTower.algebraMap_apply (𝓞 K⁺) (𝓞 K) K]
-
-中文:
-定理 unitsComplexConj_eq_self_iff
-  条件: [代数.是整 有理数 K] (u : (𝓞 K)ˣ)
-  证明: by
-  simp_rw [Units.ext_iff, mem_realUnits_iff, RingOfIntegers.ext_iff, Units.coe_mapEquiv,
-    RingEquiv.coe_toMulEquiv, RingOfIntegers.mapRingEquiv_apply,
-    AlgEquiv.coe_ringEquiv, Units.complexConj_eq_self_iff,
-    IsScalarTower.algebraMap_apply (𝓞 K⁺) (𝓞 K) K]
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.coe_ringEquiv, IsScalarTower, IsScalarTower.algebraMap_apply, RingEquiv, RingEquiv.coe_toMulEquiv, RingOfIntegers, RingOfIntegers.ext_iff, RingOfIntegers.mapRingEquiv_apply, Units.coe_mapEquiv, Units.complexConj_eq_self_iff, Units.ext_iff, algebraMap_apply, coe_mapEquiv, coe_ringEquiv, coe_toMulEquiv, complexConj_eq_self_iff, ext_iff, mapRingEquiv_apply, mem_realUnits_iff
+/-
+**NumberField.IsCMField.unitsComplexConj_eq_self_iff** 是 Mathlib 中的一个定理，位于命名空间 `
+NumberField.IsCMField`。
+形式化陈述：unitsComplexConj_eq_self_iff [Algebra.IsIntegral Rat K] (u : (𝓞 K)ˣ) : uni
+tsComplexConj K u = u ↔ u in realUnits K
+参数：u : (𝓞 K)ˣ。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `IsScalarTower.algebraMap_apply`：algebraMap_apply (x : R) : algebraMap R 
+A x = algebraMap S A (algebraMap R S x)
+· 使用定理 `NumberField.RingOfIntegers.instIsScalarTower_1`：∀ (K : Type u_4) (L : Ty
+pe u_5) [inst : Field K] [inst_1 : Field L] [inst_2 : Algebra K L],   IsScalarTo
+wer (NumberField.RingOfIntegers K) (…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem unitsComplexConj_eq_self_iff [Algebra.IsIntegral Rat K] (u : (𝓞 K)ˣ) :
-    unitsComplexConj K u = u ↔ u in realUnits K := by
+theorem unitsComplexConj_eq_self_iff [Algebra.IsIntegral ℚ K] (u : (𝓞 K)ˣ) :
+    unitsComplexConj K u = u ↔ u ∈ realUnits K := by
   simp_rw [Units.ext_iff, mem_realUnits_iff, RingOfIntegers.ext_iff, Units.coe_mapEquiv,
     RingEquiv.coe_toMulEquiv, RingOfIntegers.mapRingEquiv_apply,
     AlgEquiv.coe_ringEquiv, Units.complexConj_eq_self_iff,
@@ -844,54 +1073,113 @@ The image of a root of unity by the complex conjugation is its inverse.
 This is the version of `Complex.conj_rootsOfUnity` for CM-fields.
 -/
 @[simp]
-/--
-theorem `complexConj_torsion` / 定理 `complexConj_torsion`
+/-
+**NumberField.IsCMField.complexConj_torsion** 是 Mathlib 中的一个定理，位于命名空间 `NumberFie
+ld.IsCMField`。
+形式化陈述：complexConj_torsion (ζ : torsion K) : complexConj K (ζ.val : K) = (ζ.val :
+ K)⁻¹
+参数：ζ : torsion K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.Embeddings.instNonemptyRingHom`：∀ (K : Type u_1) [inst : Fie
+ld K] (A : Type u_2) [inst_1 : Field A] [CharZero A] [NumberField K] [IsAlgClose
+d A],   Nonempty (K →+* A)
+· 使用定理 `RingHom.injective`：∀ {R : Type u_2} {S : Type u_3} [inst : NonAssocRing 
+R] [IsSimpleRing R] [inst_2 : NonAssocSemiring S] [Nontrivial S]   (f : R →+* S)
+, Funct…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `Complex.instNontrivial`：Nontrivial ℂ
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `Subfield.instSubfieldClass`：∀ {K : Type u} [inst : DivisionRing K], Subf
+ieldClass (Subfield K) K
+· 使用定理 `Algebra.IsAlgebraic.isIntegral`：∀ {K : Type u} {A : Type v} [inst : Fiel
+d K] [inst_1 : Ring A] [inst_2 : Algebra K A] [Algebra.IsAlgebraic K A],   Algeb
+ra.IsIntegral K A
+· 使用定理 `Algebra.IsSeparable.of_integral`：∀ (F : Type u_1) [inst : Field F] (K : 
+Type u_2) [inst_1 : Ring K] [inst_2 : Algebra F K] [IsDomain K]   [Algebra.IsInt
+egral F K] [CharZero …
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `NumberField.to_finiteDimensional`：∀ {K : Type u_1} {inst : Field K} [sel
+f : NumberField K], FiniteDimensional ℚ K
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.IsCMField.complexEmbedding_complexConj`：complexEmbedding_com
+plexConj (φ : K ->+* Complex) (x : K) : φ (complexConj K x) = conj (φ x)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NumberField.Units.complexEmbedding_apply`：∀ {K : Type u_1} [inst : Field
+ K] (φ : K →+* ℂ) (u : (NumberField.RingOfIntegers K)ˣ),   ↑((NumberField.Units.
+complexEmbedding φ) u) = φ ((a…
+· 使用定理 `Complex.conj_rootsOfUnity`：Complex.conj_rootsOfUnity {ζ : Complexˣ} {n :
+ Nat} [NeZero n] (hζ : ζ in rootsOfUnity n Complex) : (starRingEnd Complex) ζ = 
+ζ⁻¹
+· 使用定理 `NumberField.Units.instNeZeroNatTorsionOrder`：∀ (K : Type u_1) [inst : Fi
+eld K] [NumberField K], NeZero (NumberField.Units.torsionOrder K)
+· 使用定理 `Subgroup.apply_coe_mem_map`：apply_coe_mem_map (f : G ->* N) (K : Subgrou
+p G) (x : K) : f x in K.map f
+· 使用定理 `NumberField.Units.map_complexEmbedding_torsion`：map_complexEmbedding_tor
+sion (φ : K ->+* Complex) : (torsion K).map (Units.complexEmbedding φ) = rootsOf
+Unity (torsionOrder K) Complex
+· 使用定理 `Units.val_inv_eq_inv_val`：∀ {α : Type u} [inst : DivisionMonoid α] (u : 
+αˣ), ↑u⁻¹ = (↑u)⁻¹
+· 使用定理 `map_inv₀`：map_inv₀ : f a⁻¹ = (f a)⁻¹
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 
-English:
-theorem complexConj_torsion
-  given: (ζ : torsion K)
-  proof: by
-  let φ : K ->+* Complex := Classical.choice (inferInstance : Nonempty _)
-  apply φ.injective
-  rw [complexEmbedding_complexConj]; rw [← Units.complexEmbedding_apply]; rw [Complex.conj_rootsOfUnity (n := torsionOrder K)]; rw [Units.val_inv_eq_inv_val]; rw [Units.complexEmbedding_apply]; rw [map_inv₀]
-  exact map_complexEmbedding_torsion K φ ▸ Subgroup.apply_coe_mem_map _ _ _
-
-中文:
-定理 complexConj_torsion
-  条件: (ζ : torsion K)
-  证明: by
-  let φ : K ->+* Complex := Classical.choice (inferInstance : Nonempty _)
-  apply φ.injective
-  rw [complexEmbedding_complexConj]; rw [← Units.complexEmbedding_apply]; rw [Complex.conj_rootsOfUnity (n := torsionOrder K)]; rw [Units.val_inv_eq_inv_val]; rw [Units.complexEmbedding_apply]; rw [map_inv₀]
-  exact map_complexEmbedding_torsion K φ ▸ Subgroup.apply_coe_mem_map _ _ _
-
-Depends on / 依赖: Classical, Classical.choice, Complex.conj_rootsOfUnity, Nonempty, Subgroup, Subgroup.apply_coe_mem_map, Units.complexEmbedding_apply, Units.val_inv_eq_inv_val, apply_coe_mem_map, choice, complexEmbedding_apply, complexEmbedding_complexConj, conj_rootsOfUnity, injective, map_complexEmbedding_torsion, torsionOrder, val_inv_eq_inv_val
+--- 原说明 ---
+The image of a root of unity by the complex conjugation is its inverse.
+This is the version of `Complex.conj_rootsOfUnity` for CM-fields.
 -/
 theorem complexConj_torsion (ζ : torsion K) :
     complexConj K (ζ.val : K) = (ζ.val : K)⁻¹ := by
-  let φ : K ->+* Complex := Classical.choice (inferInstance : Nonempty _)
+  let φ : K →+* ℂ := Classical.choice (inferInstance : Nonempty _)
   apply φ.injective
-  rw [complexEmbedding_complexConj]; rw [← Units.complexEmbedding_apply]; rw [Complex.conj_rootsOfUnity (n := torsionOrder K)]; rw [Units.val_inv_eq_inv_val]; rw [Units.complexEmbedding_apply]; rw [map_inv₀]
+  rw [complexEmbedding_complexConj, ← Units.complexEmbedding_apply,
+    Complex.conj_rootsOfUnity (n := torsionOrder K), Units.val_inv_eq_inv_val,
+    Units.complexEmbedding_apply, map_inv₀]
   exact map_complexEmbedding_torsion K φ ▸ Subgroup.apply_coe_mem_map _ _ _
-
-/--
-theorem `unitsComplexConj_torsion` / 定理 `unitsComplexConj_torsion`
-
-English:
-theorem unitsComplexConj_torsion
-  given: (ζ : torsion K)
-  proof: by
-  apply coe_injective
-  simp
-
-中文:
-定理 unitsComplexConj_torsion
-  条件: (ζ : torsion K)
-  证明: by
-  apply coe_injective
-  simp
-
-Depends on / 依赖: coe_injective
+/-
+**NumberField.IsCMField.unitsComplexConj_torsion** 是 Mathlib 中的一个定理，位于命名空间 `Numb
+erField.IsCMField`。
+形式化陈述：unitsComplexConj_torsion (ζ : torsion K) : unitsComplexConj K ζ = ζ⁻¹
+参数：ζ : torsion K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.Units.coe_injective`：coe_injective : Function.Injective ((↑)
+ : (𝓞 K)ˣ -> K)
+· 使用定理 `Algebra.IsAlgebraic.isIntegral`：∀ {K : Type u} {A : Type v} [inst : Fiel
+d K] [inst_1 : Ring A] [inst_2 : Algebra K A] [Algebra.IsAlgebraic K A],   Algeb
+ra.IsIntegral K A
+· 使用定理 `Algebra.IsSeparable.of_integral`：∀ (F : Type u_1) [inst : Field F] (K : 
+Type u_2) [inst_1 : Ring K] [inst_2 : Algebra F K] [IsDomain K]   [Algebra.IsInt
+egral F K] [CharZero …
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `NumberField.to_finiteDimensional`：∀ {K : Type u_1} {inst : Field K} [sel
+f : NumberField K], FiniteDimensional ℚ K
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.IsCMField.complexConj_torsion`：complexConj_torsion (ζ : tors
+ion K) : complexConj K (ζ.val : K) = (ζ.val : K)⁻¹
+· 使用定理 `map_units_inv`：∀ {M : Type u} [inst : Monoid M] {α : Type u_1} [inst_1 :
+ DivisionMonoid α] {F : Type u_2} [inst_2 : FunLike F M α]   [MonoidHomClass F M
+ α]…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem unitsComplexConj_torsion (ζ : torsion K) :
     unitsComplexConj K ζ = ζ⁻¹ := by
@@ -899,426 +1187,600 @@ theorem unitsComplexConj_torsion (ζ : torsion K) :
   simp
 
 /--
-Definition of `unitsMulComplexConjInv` / `unitsMulComplexConjInv` 的定义
-
-English:
-definition unitsMulComplexConjInv
-  signature: : (𝓞 K)ˣ ->* torsion K where
-  body: fun u => ⟨u * (unitsComplexConj K u)⁻¹, (mem_torsion K).mpr fun _ => by simp⟩
-  map_one' := by simp
-  map_mul' := by
-    intro _ _
-    rw [MulMemClass.mk_mul_mk]; rw [Subtype.mk_eq_mk]
-    apply coe_injective
-    simp only [map_mul, mul_inv_rev, Units.val_mul, map_units_inv]
-    ring
-
-中文:
-定义 unitsMulComplexConjInv
-  签名: : (𝓞 K)ˣ ->* torsion K where
-  定义体: fun u => ⟨u * (unitsComplexConj K u)⁻¹, (mem_torsion K).mpr fun _ => by simp⟩
-  map_one' := by simp
-  map_mul' := by
-    intro _ _
-    rw [MulMemClass.mk_mul_mk]; rw [Subtype.mk_eq_mk]
-    apply coe_injective
-    simp only [map_mul, mul_inv_rev, Units.val_mul, map_units_inv]
-    ring
-
-Depends on / 依赖: mem_torsion, unitsComplexConj
+The map `(𝓞 K)ˣ →* torsion K` defined by `u ↦ u * (conj u)⁻¹`.
 -/
-noncomputable def unitsMulComplexConjInv : (𝓞 K)ˣ ->* torsion K where
-  toFun := fun u => ⟨u * (unitsComplexConj K u)⁻¹, (mem_torsion K).mpr fun _ => by simp⟩
+/-
+**NumberField.IsCMField.unitsMulComplexConjInv** 是 Mathlib 中的一个定义，位于命名空间 `Number
+Field.IsCMField`。
+形式化陈述：unitsMulComplexConjInv : (𝓞 K)ˣ ->* torsion K where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The map `(𝓞 K)ˣ →* torsion K` defined by `u ↦ u * (conj u)⁻¹`.
+-/
+noncomputable def unitsMulComplexConjInv : (𝓞 K)ˣ →* torsion K where
+  toFun := fun u ↦ ⟨u * (unitsComplexConj K u)⁻¹, (mem_torsion K).mpr fun _ ↦ by simp⟩
   map_one' := by simp
   map_mul' := by
     intro _ _
-    rw [MulMemClass.mk_mul_mk]; rw [Subtype.mk_eq_mk]
+    rw [MulMemClass.mk_mul_mk, Subtype.mk_eq_mk]
     apply coe_injective
     simp only [map_mul, mul_inv_rev, Units.val_mul, map_units_inv]
     ring
-
-/--
-theorem `unitsMulComplexConjInv_apply` / 定理 `unitsMulComplexConjInv_apply`
-
-English:
-theorem unitsMulComplexConjInv_apply
-  given: (u : (𝓞 K)ˣ)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 unitsMulComplexConjInv_apply
-  条件: (u : (𝓞 K)ˣ)
-  证明: rfl
-
-@[simp]
+/-
+**NumberField.IsCMField.unitsMulComplexConjInv_apply** 是 Mathlib 中的一个定理，位于命名空间 `
+NumberField.IsCMField`。
+形式化陈述：unitsMulComplexConjInv_apply (u : (𝓞 K)ˣ) : unitsMulComplexConjInv K u = u
+ * (unitsComplexConj K u)⁻¹
+参数：u : (𝓞 K)ˣ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem unitsMulComplexConjInv_apply (u : (𝓞 K)ˣ) :
     unitsMulComplexConjInv K u = u * (unitsComplexConj K u)⁻¹ := rfl
 
 @[simp]
-/--
-theorem `unitsMulComplexConjInv_apply_torsion` / 定理 `unitsMulComplexConjInv_apply_torsion`
-
-English:
-theorem unitsMulComplexConjInv_apply_torsion
-  given: (ζ : torsion K)
-  proof: Subtype.ext by simp [unitsMulComplexConjInv_apply, unitsComplexConj_torsion, pow_two]
-
-中文:
-定理 unitsMulComplexConjInv_apply_torsion
-  条件: (ζ : torsion K)
-  证明: Subtype.ext by simp [unitsMulComplexConjInv_apply, unitsComplexConj_torsion, pow_two]
-
-Depends on / 依赖: Subtype, Subtype.ext, pow_two, unitsComplexConj_torsion, unitsMulComplexConjInv_apply
+/-
+**NumberField.IsCMField.unitsMulComplexConjInv_apply_torsion** 是 Mathlib 中的一个定理，
+位于命名空间 `NumberField.IsCMField`。
+形式化陈述：unitsMulComplexConjInv_apply_torsion (ζ : torsion K) : unitsMulComplexConj
+Inv K ζ = ζ ^ 2
+参数：ζ : torsion K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Algebra.IsAlgebraic.isIntegral`：∀ {K : Type u} {A : Type v} [inst : Fiel
+d K] [inst_1 : Ring A] [inst_2 : Algebra K A] [Algebra.IsAlgebraic K A],   Algeb
+ra.IsIntegral K A
+· 使用定理 `Algebra.IsSeparable.of_integral`：∀ (F : Type u_1) [inst : Field F] (K : 
+Type u_2) [inst_1 : Ring K] [inst_2 : Algebra F K] [IsDomain K]   [Algebra.IsInt
+egral F K] [CharZero …
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `NumberField.to_finiteDimensional`：∀ {K : Type u_1} {inst : Field K} [sel
+f : NumberField K], FiniteDimensional ℚ K
+· 使用定理 `NumberField.IsCMField.unitsComplexConj_torsion`：unitsComplexConj_torsion
+ (ζ : torsion K) : unitsComplexConj K ζ = ζ⁻¹
+· 使用定理 `inv_inv`：inv_inv (a : G) : a⁻¹⁻¹ = a
+· 使用定理 `pow_two`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem unitsMulComplexConjInv_apply_torsion (ζ : torsion K) :
     unitsMulComplexConjInv K ζ = ζ ^ 2 :=
-Subtype.ext by simp [unitsMulComplexConjInv_apply, unitsComplexConj_torsion, pow_two]
+  Subtype.ext <| by simp [unitsMulComplexConjInv_apply, unitsComplexConj_torsion, pow_two]
 
 /--
-theorem `map_unitsMulComplexConjInv_torsion` / 定理 `map_unitsMulComplexConjInv_torsion`
+The action of `unitsMulComplexConjInv` of the torsion is the same as the 2-power map.
+-/
+/-
+**NumberField.IsCMField.map_unitsMulComplexConjInv_torsion** 是 Mathlib 中的一个定理，位于
+命名空间 `NumberField.IsCMField`。
+形式化陈述：map_unitsMulComplexConjInv_torsion : Subgroup.map (unitsMulComplexConjInv 
+K) (torsion K) = (powMonoidHom 2).range
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SubgroupClass.toSubmonoidClass`：∀ {S : Type u_3} {G : outParam (Type u_4
+)} {inst : DivInvMonoid G} {inst_1 : SetLike S G} [self : SubgroupClass S G],   
+SubmonoidClass S G
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MonoidHom.domRestrict_range`：domRestrict_range (f : G ->* N) : (f.domRes
+trict K).range = K.map f
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `MonoidHom.ext`：MonoidHom.ext [MulOne M] [MulOne N] ⦃f g : M ->* N⦄ (h : 
+forall x, f x = g x) : f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `NumberField.IsCMField.unitsMulComplexConjInv_apply_torsion`：unitsMulComp
+lexConjInv_apply_torsion (ζ : torsion K) : unitsMulComplexConjInv K ζ = ζ ^ 2
+· 使用定理 `powMonoidHom_apply`：∀ {α : Type u_1} [inst : CommMonoid α] (n : ℕ) (x : 
+α), (powMonoidHom n) x = x ^ n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem map_unitsMulComplexConjInv_torsion
-  proof: by
-  rw [← MonoidHom.domRestrict_range]
-  exact congr_arg (MonoidHom.range ·) (MonoidHom.ext fun ζ => by simp)
-
-中文:
-定理 map_unitsMulComplexConjInv_torsion
-  证明: by
-  rw [← MonoidHom.domRestrict_range]
-  exact congr_arg (MonoidHom.range ·) (MonoidHom.ext fun ζ => by simp)
-
-Depends on / 依赖: MonoidHom, MonoidHom.domRestrict_range, MonoidHom.ext, MonoidHom.range, congr_arg, domRestrict_range
+--- 原说明 ---
+The action of `unitsMulComplexConjInv` of the torsion is the same as the 2-power
+ map.
 -/
 theorem map_unitsMulComplexConjInv_torsion :
     Subgroup.map (unitsMulComplexConjInv K) (torsion K) = (powMonoidHom 2).range := by
   rw [← MonoidHom.domRestrict_range]
-  exact congr_arg (MonoidHom.range ·) (MonoidHom.ext fun ζ => by simp)
+  exact congr_arg (MonoidHom.range ·) (MonoidHom.ext fun ζ ↦ by simp)
 
 /--
-theorem `unitsMulComplexConjInv_ker` / 定理 `unitsMulComplexConjInv_ker`
+The kernel of `unitsMulComplexConjInv` is the subgroup of real units.
+-/
+/-
+**NumberField.IsCMField.unitsMulComplexConjInv_ker** 是 Mathlib 中的一个定理，位于命名空间 `Nu
+mberField.IsCMField`。
+形式化陈述：unitsMulComplexConjInv_ker : (unitsMulComplexConjInv K).ker = realUnits K
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subgroup.ext`：ext {H K : Subgroup G} (h : forall x, x in H ↔ x in K) : H
+ = K
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonoidHom.mem_ker`：mem_ker {f : G ->* M} {x : G} : x in f.ker ↔ f x = 1
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
+· 使用定理 `Algebra.IsAlgebraic.isIntegral`：∀ {K : Type u} {A : Type v} [inst : Fiel
+d K] [inst_1 : Ring A] [inst_2 : Algebra K A] [Algebra.IsAlgebraic K A],   Algeb
+ra.IsIntegral K A
+· 使用定理 `Algebra.IsSeparable.of_integral`：∀ (F : Type u_1) [inst : Field F] (K : 
+Type u_2) [inst_1 : Ring K] [inst_2 : Algebra F K] [IsDomain K]   [Algebra.IsInt
+egral F K] [CharZero …
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `NumberField.to_finiteDimensional`：∀ {K : Type u_1} {inst : Field K} [sel
+f : NumberField K], FiniteDimensional ℚ K
+· 使用定理 `NumberField.IsCMField.unitsMulComplexConjInv_apply`：unitsMulComplexConjI
+nv_apply (u : (𝓞 K)ˣ) : unitsMulComplexConjInv K u = u * (unitsComplexConj K u)⁻
+¹
+· 使用定理 `Subgroup.instSubgroupClass`：∀ {G : Type u_1} [inst : Group G], SubgroupC
+lass (Subgroup G) G
+· 使用定理 `OneMemClass.coe_one`：coe_one : ((1 : S') : M₁) = 1
+· 使用定理 `mul_inv_eq_one`：mul_inv_eq_one : a * b⁻¹ = 1 ↔ a = b
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `NumberField.IsCMField.unitsComplexConj_eq_self_iff`：unitsComplexConj_eq_
+self_iff [Algebra.IsIntegral Rat K] (u : (𝓞 K)ˣ) : unitsComplexConj K u = u ↔ u 
+in realUnits K
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-theorem unitsMulComplexConjInv_ker
-  proof: by
-  ext
-  rw [MonoidHom.mem_ker]; rw [Subtype.ext_iff]; rw [unitsMulComplexConjInv_apply]; rw [OneMemClass.coe_one]; rw [mul_inv_eq_one]; rw [eq_comm]; rw [unitsComplexConj_eq_self_iff]
-
-中文:
-定理 unitsMulComplexConjInv_ker
-  证明: by
-  ext
-  rw [MonoidHom.mem_ker]; rw [Subtype.ext_iff]; rw [unitsMulComplexConjInv_apply]; rw [OneMemClass.coe_one]; rw [mul_inv_eq_one]; rw [eq_comm]; rw [unitsComplexConj_eq_self_iff]
-
-Depends on / 依赖: MonoidHom, MonoidHom.mem_ker, OneMemClass, OneMemClass.coe_one, Subtype, Subtype.ext_iff, coe_one, eq_comm, ext_iff, mem_ker, mul_inv_eq_one, unitsComplexConj_eq_self_iff, unitsMulComplexConjInv_apply
+--- 原说明 ---
+The kernel of `unitsMulComplexConjInv` is the subgroup of real units.
 -/
 theorem unitsMulComplexConjInv_ker :
     (unitsMulComplexConjInv K).ker = realUnits K := by
   ext
-  rw [MonoidHom.mem_ker]; rw [Subtype.ext_iff]; rw [unitsMulComplexConjInv_apply]; rw [OneMemClass.coe_one]; rw [mul_inv_eq_one]; rw [eq_comm]; rw [unitsComplexConj_eq_self_iff]
+  rw [MonoidHom.mem_ker, Subtype.ext_iff, unitsMulComplexConjInv_apply, OneMemClass.coe_one,
+    mul_inv_eq_one, eq_comm, unitsComplexConj_eq_self_iff]
 
 /--
-theorem `index_unitsMulComplexConjInv_range_dvd` / 定理 `index_unitsMulComplexConjInv_range_dvd`
+The index of the image of `unitsMulComplexConjInv` divides `2`.
+-/
+/-
+**NumberField.IsCMField.index_unitsMulComplexConjInv_range_dvd** 是 Mathlib 中的一个定
+理，位于命名空间 `NumberField.IsCMField`。
+形式化陈述：index_unitsMulComplexConjInv_range_dvd : (unitsMulComplexConjInv K).range.
+index ∣ 2
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsCyclic.index_powMonoidHom_range`：IsCyclic.index_powMonoidHom_range [Co
+mmGroup G] [IsCyclic G] [Finite G] (d : Nat) : (powMonoidHom d : G ->* G).range.
+index = (Nat.card G).gc…
+· 使用定理 `NumberField.Units.instIsCyclicSubtypeUnitsRingOfIntegersMemSubgroupTorsi
+on`：∀ (K : Type u_1) [inst : Field K] [NumberField K], IsCyclic ↥(NumberField.Un
+its.torsion K)
+· 使用定理 `NumberField.Units.instFiniteSubtypeUnitsRingOfIntegersMemSubgroupTorsion
+`：∀ (K : Type u_1) [inst : Field K] [NumberField K], Finite ↥(NumberField.Units.
+torsion K)
+· 使用定理 `Nat.gcd_eq_right_iff_dvd`：∀ {n m : ℕ}, n.gcd m = m ↔ m ∣ n
+· 使用定理 `Even.two_dvd`：∀ {α : Type u_2} [inst : Semiring α] {a : α}, Even a → 2 ∣
+ a
+· 使用定理 `NumberField.Units.even_torsionOrder`：even_torsionOrder : Even (torsionOr
+der K)
+· 使用定理 `Subgroup.index_dvd_of_le`：index_dvd_of_le (h : H <= K) : K.index ∣ H.ind
+ex
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subtype.ext_iff`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, a
+1 = a2 ↔ ↑a1 = ↑a2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `NumberField.IsCMField.unitsMulComplexConjInv_apply_torsion`：unitsMulComp
+lexConjInv_apply_torsion (ζ : torsion K) : unitsMulComplexConjInv K ζ = ζ ^ 2
+· 使用定理 `pow_two`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
+· 使用定理 `powMonoidHom_apply`：∀ {α : Type u_1} [inst : CommMonoid α] (n : ℕ) (x : 
+α), (powMonoidHom n) x = x ^ n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem index_unitsMulComplexConjInv_range_dvd
-  proof: by
-  suffices (powMonoidHom 2 : _ ->* torsion K).range.index = 2 by
-    refine this ▸ Subgroup.index_dvd_of_le ?_
-    rintro _ ⟨ζ, _, rfl⟩
-    exact ⟨ζ, Subtype.ext_iff.mpr (by simp [pow_two])⟩
-  rw [IsCyclic.index_powMonoidHom_range]; rw [Nat.gcd_eq_right_iff_dvd]
-exact Even.two_dvd even_torsionOrder K
-
-中文:
-定理 index_unitsMulComplexConjInv_range_dvd
-  证明: by
-  suffices (powMonoidHom 2 : _ ->* torsion K).range.index = 2 by
-    refine this ▸ Subgroup.index_dvd_of_le ?_
-    rintro _ ⟨ζ, _, rfl⟩
-    exact ⟨ζ, Subtype.ext_iff.mpr (by simp [pow_two])⟩
-  rw [IsCyclic.index_powMonoidHom_range]; rw [Nat.gcd_eq_right_iff_dvd]
-exact Even.two_dvd even_torsionOrder K
-
-Depends on / 依赖: Even.two_dvd, IsCyclic, IsCyclic.index_powMonoidHom_range, Nat.gcd_eq_right_iff_dvd, Subgroup, Subgroup.index_dvd_of_le, Subtype, Subtype.ext_iff.mpr, even_torsionOrder, ext_iff, gcd_eq_right_iff_dvd, index_dvd_of_le, index_powMonoidHom_range, powMonoidHom, pow_two, range.index, torsion, two_dvd
+--- 原说明 ---
+The index of the image of `unitsMulComplexConjInv` divides `2`.
 -/
 theorem index_unitsMulComplexConjInv_range_dvd :
     (unitsMulComplexConjInv K).range.index ∣ 2 := by
-  suffices (powMonoidHom 2 : _ ->* torsion K).range.index = 2 by
+  suffices (powMonoidHom 2 : _ →* torsion K).range.index = 2 by
     refine this ▸ Subgroup.index_dvd_of_le ?_
     rintro _ ⟨ζ, _, rfl⟩
     exact ⟨ζ, Subtype.ext_iff.mpr (by simp [pow_two])⟩
-  rw [IsCyclic.index_powMonoidHom_range]; rw [Nat.gcd_eq_right_iff_dvd]
-exact Even.two_dvd even_torsionOrder K
+  rw [IsCyclic.index_powMonoidHom_range, Nat.gcd_eq_right_iff_dvd]
+  exact Even.two_dvd <| even_torsionOrder K
 
 /--
-Definition of `indexRealUnits` / `indexRealUnits` 的定义
-
-English:
-abbreviation indexRealUnits
-  signature: : Nat
-  body: (realUnits K ⊔ torsion K).index
-
-中文:
-缩写 index实数Units
-  签名: : 自然数
-  定义体: (realUnits K ⊔ torsion K).index
-
-Depends on / 依赖: realUnits, torsion
+The index of the subgroup of `(𝓞 K)ˣ` generated by the real units and the roots of unity. This
+index is equal to `1` or `2`, see `indexRealUnits_eq_one_or_two` and `indexRealUnits_eq_two_iff`.
 -/
-noncomputable abbrev indexRealUnits : Nat := (realUnits K ⊔ torsion K).index
+/-
+**NumberField.IsCMField.indexRealUnits** 是 Mathlib 中的一个缩写定义，位于命名空间 `NumberField.
+IsCMField`。
+形式化陈述：indexRealUnits : Nat
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-/--
-theorem `indexRealUnits_mul_eq` / 定理 `indexRealUnits_mul_eq`
-
-English:
-theorem indexRealUnits_mul_eq
-  proof: by
-  rw [indexRealUnits]; rw [sup_comm]
-  convert! (Subgroup.index_map (torsion K) (unitsMulComplexConjInv K)).symm
-  · rw [unitsMulComplexConjInv_ker]
-  · rw [map_unitsMulComplexConjInv_torsion, IsCyclic.index_powMonoidHom_range, Nat.gcd_eq_right]
-    exact even_iff_two_dvd.mp (even_torsionOrder K)
-
-中文:
-定理 index实数Units_mul_eq
-  证明: by
-  rw [indexRealUnits]; rw [sup_comm]
-  convert! (Subgroup.index_map (torsion K) (unitsMulComplexConjInv K)).symm
-  · rw [unitsMulComplexConjInv_ker]
-  · rw [map_unitsMulComplexConjInv_torsion, IsCyclic.index_powMonoidHom_range, Nat.gcd_eq_right]
-    exact even_iff_two_dvd.mp (even_torsionOrder K)
-
-Depends on / 依赖: IsCyclic, IsCyclic.index_powMonoidHom_range, Nat.gcd_eq_right, Subgroup, Subgroup.index_map, convert, even_iff_two_dvd, even_iff_two_dvd.mp, even_torsionOrder, gcd_eq_right, indexRealUnits, index_map, index_powMonoidHom_range, map_unitsMulComplexConjInv_torsion, sup_comm, torsion, unitsMulComplexConjInv, unitsMulComplexConjInv_ker
+--- 原说明 ---
+The index of the subgroup of `(𝓞 K)ˣ` generated by the real units and the roots 
+of unity. This
+index is equal to `1` or `2`, see `indexRealUnits_eq_one_or_two` and `indexRealU
+nits_eq_two_iff`.
+-/
+noncomputable abbrev indexRealUnits : ℕ := (realUnits K ⊔ torsion K).index
+/-
+**NumberField.IsCMField.indexRealUnits_mul_eq** 是 Mathlib 中的一个定理，位于命名空间 `NumberF
+ield.IsCMField`。
+形式化陈述：indexRealUnits_mul_eq : indexRealUnits K * (unitsMulComplexConjInv K).rang
+e.index = 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.IsCMField.indexRealUnits.eq_1`：∀ (K : Type u_1) [inst : Fiel
+d K],   NumberField.IsCMField.indexRealUnits K = (NumberField.IsCMField.realUnit
+s K ⊔ NumberField.Units.torsion…
+· 使用定理 `sup_comm`：sup_comm (a b : α) : a ⊔ b = b ⊔ a
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NumberField.IsCMField.unitsMulComplexConjInv_ker`：unitsMulComplexConjInv
+_ker : (unitsMulComplexConjInv K).ker = realUnits K
+· 使用定理 `NumberField.IsCMField.map_unitsMulComplexConjInv_torsion`：map_unitsMulCo
+mplexConjInv_torsion : Subgroup.map (unitsMulComplexConjInv K) (torsion K) = (po
+wMonoidHom 2).range
+· 使用定理 `IsCyclic.index_powMonoidHom_range`：IsCyclic.index_powMonoidHom_range [Co
+mmGroup G] [IsCyclic G] [Finite G] (d : Nat) : (powMonoidHom d : G ->* G).range.
+index = (Nat.card G).gc…
+· 使用定理 `NumberField.Units.instIsCyclicSubtypeUnitsRingOfIntegersMemSubgroupTorsi
+on`：∀ (K : Type u_1) [inst : Field K] [NumberField K], IsCyclic ↥(NumberField.Un
+its.torsion K)
+· 使用定理 `NumberField.Units.instFiniteSubtypeUnitsRingOfIntegersMemSubgroupTorsion
+`：∀ (K : Type u_1) [inst : Field K] [NumberField K], Finite ↥(NumberField.Units.
+torsion K)
+· 使用定理 `Nat.gcd_eq_right`：∀ {m n : ℕ}, n ∣ m → m.gcd n = n
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用引理 `even_iff_two_dvd`：even_iff_two_dvd : Even a ↔ 2 ∣ a
+· 使用定理 `NumberField.Units.even_torsionOrder`：even_torsionOrder : Even (torsionOr
+der K)
+· 使用定理 `Subgroup.index_map`：index_map (f : G ->* G') : (H.map f).index = (H ⊔ f.
+ker).index * f.range.index
 -/
 theorem indexRealUnits_mul_eq :
     indexRealUnits K * (unitsMulComplexConjInv K).range.index = 2 := by
-  rw [indexRealUnits]; rw [sup_comm]
+  rw [indexRealUnits, sup_comm]
   convert! (Subgroup.index_map (torsion K) (unitsMulComplexConjInv K)).symm
   · rw [unitsMulComplexConjInv_ker]
   · rw [map_unitsMulComplexConjInv_torsion, IsCyclic.index_powMonoidHom_range, Nat.gcd_eq_right]
     exact even_iff_two_dvd.mp (even_torsionOrder K)
 
 /--
-theorem `indexRealUnits_eq_one_or_two` / 定理 `indexRealUnits_eq_one_or_two`
+The index of the subgroup of `(𝓞 K)ˣ` generated by the real units and the roots of unity is
+equal to `1` or `2` (see `NumberField.IsCMField.indexRealUnits_eq_two_iff` for the computation
+of this index).
+-/
+/-
+**NumberField.IsCMField.indexRealUnits_eq_one_or_two** 是 Mathlib 中的一个定理，位于命名空间 `
+NumberField.IsCMField`。
+形式化陈述：indexRealUnits_eq_one_or_two : indexRealUnits K = 1 ∨ indexRealUnits K = 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.IsCMField.indexRealUnits_mul_eq`：indexRealUnits_mul_eq : ind
+exRealUnits K * (unitsMulComplexConjInv K).range.index = 2
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.dvd_prime`：dvd_prime {p m : Nat} (pp : Prime p) : m ∣ p ↔ m = 1 ∨ m 
+= p
+· 使用定理 `Nat.prime_two`：prime_two : Prime 2
+· 使用定理 `NumberField.IsCMField.index_unitsMulComplexConjInv_range_dvd`：index_unit
+sMulComplexConjInv_range_dvd : (unitsMulComplexConjInv K).range.index ∣ 2
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Nat.mul_eq_right`：∀ {b a : ℕ}, b ≠ 0 → (a * b = b ↔ a = 1)
+· 使用引理 `two_ne_zero`：two_ne_zero [OfNat α 2] [NeZero (2 : α)] : (2 : α) != 0
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 
-English:
-theorem indexRealUnits_eq_one_or_two
-  proof: by
-  have h₁ := indexRealUnits_mul_eq K
-obtain h₂ | h₂ := (Nat.dvd_prime Nat.prime_two).mp index_unitsMulComplexConjInv_range_dvd K
-· exact Or.inr by rwa [h₂, mul_one] at h₁
-· exact Or.inl by rwa [h₂, Nat.mul_eq_right two_ne_zero] at h₁
-
-中文:
-定理 index实数Units_eq_one_or_two
-  证明: by
-  have h₁ := indexRealUnits_mul_eq K
-obtain h₂ | h₂ := (Nat.dvd_prime Nat.prime_two).mp index_unitsMulComplexConjInv_range_dvd K
-· exact Or.inr by rwa [h₂, mul_one] at h₁
-· exact Or.inl by rwa [h₂, Nat.mul_eq_right two_ne_zero] at h₁
-
-Depends on / 依赖: Nat.dvd_prime, Nat.mul_eq_right, Nat.prime_two, Or.inl, Or.inr, dvd_prime, indexRealUnits_mul_eq, index_unitsMulComplexConjInv_range_dvd, mul_eq_right, mul_one, prime_two, two_ne_zero
+--- 原说明 ---
+The index of the subgroup of `(𝓞 K)ˣ` generated by the real units and the roots 
+of unity is
+equal to `1` or `2` (see `NumberField.IsCMField.indexRealUnits_eq_two_iff` for t
+he computation
+of this index).
 -/
 theorem indexRealUnits_eq_one_or_two :
     indexRealUnits K = 1 ∨ indexRealUnits K = 2 := by
   have h₁ := indexRealUnits_mul_eq K
-obtain h₂ | h₂ := (Nat.dvd_prime Nat.prime_two).mp index_unitsMulComplexConjInv_range_dvd K
-· exact Or.inr by rwa [h₂, mul_one] at h₁
-· exact Or.inl by rwa [h₂, Nat.mul_eq_right two_ne_zero] at h₁
+  obtain h₂ | h₂ := (Nat.dvd_prime Nat.prime_two).mp <| index_unitsMulComplexConjInv_range_dvd K
+  · exact Or.inr <| by rwa [h₂, mul_one] at h₁
+  · exact Or.inl <| by rwa [h₂, Nat.mul_eq_right two_ne_zero] at h₁
 
 /--
-theorem `indexRealUnits_eq_two_iff` / 定理 `indexRealUnits_eq_two_iff`
+The index of the subgroup of `(𝓞 K)ˣ` generated by the real units and the roots of unity is equal
+to `2` iff there exists a unit whose image by `unitsMulComplexConjInv` generates the torsion
+subgroup of `K`.
+-/
+/-
+**NumberField.IsCMField.indexRealUnits_eq_two_iff** 是 Mathlib 中的一个定理，位于命名空间 `Num
+berField.IsCMField`。
+形式化陈述：indexRealUnits_eq_two_iff : indexRealUnits K = 2 ↔ exists u : (𝓞 K)ˣ, Subg
+roup.zpowers (unitsMulComplexConjInv K u) = ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Subgroup.index_eq_one`：index_eq_one : H.index = 1 ↔ H = ⊤
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `top_le_iff`：top_le_iff : ⊤ <= a ↔ a = ⊤
+· 使用定理 `le_of_eq_of_le`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a = b → b ≤ 
+c → a ≤ c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MonoidHom.map_zpowers`：MonoidHom.map_zpowers (f : G ->* N) (x : G) : (Su
+bgroup.zpowers x).map f = Subgroup.zpowers (f x)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subgroup.map_le_range`：map_le_range (H : Subgroup G) : map f H <= f.rang
+e
+· 使用定理 `exists_zpow_surjective`：exists_zpow_surjective (G : Type*) [Pow G Int] [
+IsCyclic G] : exists g : G, Function.Surjective (g ^ · : Int -> G)
+· 使用定理 `NumberField.Units.instIsCyclicSubtypeUnitsRingOfIntegersMemSubgroupTorsi
+on`：∀ (K : Type u_1) [inst : Field K] [NumberField K], IsCyclic ↥(NumberField.Un
+its.torsion K)
+· 使用定理 `MonoidHom.range_eq_top`：range_eq_top {N} [Group N] {f : G ->* N} : f.ran
+ge = (⊤ : Subgroup N) ↔ Function.Surjective f
+· 使用定理 `Subgroup.eq_top_iff'`：eq_top_iff' : H = ⊤ ↔ forall x : G, x in H
+· 使用定理 `NumberField.IsCMField.indexRealUnits_mul_eq`：indexRealUnits_mul_eq : ind
+exRealUnits K * (unitsMulComplexConjInv K).range.index = 2
+· 使用定理 `Nat.mul_eq_left`：∀ {a b : ℕ}, a ≠ 0 → (a * b = a ↔ b = 1)
+· 使用引理 `two_ne_zero`：two_ne_zero [OfNat α 2] [NeZero (2 : α)] : (2 : α) != 0
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 
-English:
-theorem indexRealUnits_eq_two_iff
-  proof: by
-  suffices (exists u : (𝓞 K)ˣ, Subgroup.zpowers (unitsMulComplexConjInv K u) = ⊤) ↔
-      (unitsMulComplexConjInv K).range.index = 1 by
-    rw [this]
-    have h_eq := indexRealUnits_mul_eq K
-    refine ⟨fun h => ?_, fun h => ?_⟩
-    · rwa [h, Nat.mul_eq_left two_ne_zero] at h_eq
-    · rwa [h, mul_one] at h_eq
-  refine ⟨fun ⟨u, hu⟩ => Subgroup.index_eq_one.mpr (top_le_iff.mp ?_), fun h => ?_⟩
-  · refine le_of_eq_of_le ?_ ((Subgroup.zpowers u).map_le_range (unitsMulComplexConjInv K))
-    rw [MonoidHom.map_zpowers]; rw [← hu]
-  · obtain ⟨ζ, hζ⟩ := exists_zpow_surjective (torsion K)
-    rw [Subgroup.index_eq_one]; rw [MonoidHom.range_eq_top] at h
-    obtain ⟨u, rfl⟩ := h ζ
-    exact ⟨u, (Subgroup.eq_top_iff' _).mpr hζ⟩
-
-中文:
-定理 index实数Units_eq_two_iff
-  证明: by
-  suffices (exists u : (𝓞 K)ˣ, Subgroup.zpowers (unitsMulComplexConjInv K u) = ⊤) ↔
-      (unitsMulComplexConjInv K).range.index = 1 by
-    rw [this]
-    have h_eq := indexRealUnits_mul_eq K
-    refine ⟨fun h => ?_, fun h => ?_⟩
-    · rwa [h, Nat.mul_eq_left two_ne_zero] at h_eq
-    · rwa [h, mul_one] at h_eq
-  refine ⟨fun ⟨u, hu⟩ => Subgroup.index_eq_one.mpr (top_le_iff.mp ?_), fun h => ?_⟩
-  · refine le_of_eq_of_le ?_ ((Subgroup.zpowers u).map_le_range (unitsMulComplexConjInv K))
-    rw [MonoidHom.map_zpowers]; rw [← hu]
-  · obtain ⟨ζ, hζ⟩ := exists_zpow_surjective (torsion K)
-    rw [Subgroup.index_eq_one]; rw [MonoidHom.range_eq_top] at h
-    obtain ⟨u, rfl⟩ := h ζ
-    exact ⟨u, (Subgroup.eq_top_iff' _).mpr hζ⟩
-
-Depends on / 依赖: MonoidHom, MonoidHom.map_zpowers, Nat.mul_eq_left, Subgroup, Subgroup.index_eq_one.mpr, Subgroup.zpowers, h_eq, indexRealUnits_mul_eq, index_eq_one, le_of_eq_of_le, map_le_range, map_zpowers, mul_eq_left, mul_one, range.index, top_le_iff, top_le_iff.mp, two_ne_zero, unitsMulComplexConjInv, zpowers
+--- 原说明 ---
+The index of the subgroup of `(𝓞 K)ˣ` generated by the real units and the roots 
+of unity is equal
+to `2` iff there exists a unit whose image by `unitsMulComplexConjInv` generates
+ the torsion
+subgroup of `K`.
 -/
 theorem indexRealUnits_eq_two_iff :
     indexRealUnits K = 2 ↔
-      exists u : (𝓞 K)ˣ, Subgroup.zpowers (unitsMulComplexConjInv K u) = ⊤ := by
-  suffices (exists u : (𝓞 K)ˣ, Subgroup.zpowers (unitsMulComplexConjInv K u) = ⊤) ↔
+      ∃ u : (𝓞 K)ˣ, Subgroup.zpowers (unitsMulComplexConjInv K u) = ⊤ := by
+  suffices (∃ u : (𝓞 K)ˣ, Subgroup.zpowers (unitsMulComplexConjInv K u) = ⊤) ↔
       (unitsMulComplexConjInv K).range.index = 1 by
     rw [this]
     have h_eq := indexRealUnits_mul_eq K
-    refine ⟨fun h => ?_, fun h => ?_⟩
+    refine ⟨fun h ↦ ?_, fun h ↦ ?_⟩
     · rwa [h, Nat.mul_eq_left two_ne_zero] at h_eq
     · rwa [h, mul_one] at h_eq
-  refine ⟨fun ⟨u, hu⟩ => Subgroup.index_eq_one.mpr (top_le_iff.mp ?_), fun h => ?_⟩
+  refine ⟨fun ⟨u, hu⟩ ↦ Subgroup.index_eq_one.mpr (top_le_iff.mp ?_), fun h ↦ ?_⟩
   · refine le_of_eq_of_le ?_ ((Subgroup.zpowers u).map_le_range (unitsMulComplexConjInv K))
-    rw [MonoidHom.map_zpowers]; rw [← hu]
+    rw [MonoidHom.map_zpowers, ← hu]
   · obtain ⟨ζ, hζ⟩ := exists_zpow_surjective (torsion K)
-    rw [Subgroup.index_eq_one]; rw [MonoidHom.range_eq_top] at h
+    rw [Subgroup.index_eq_one, MonoidHom.range_eq_top] at h
     obtain ⟨u, rfl⟩ := h ζ
     exact ⟨u, (Subgroup.eq_top_iff' _).mpr hζ⟩
 
 /--
-Definition of `realFundSystem` / `realFundSystem` 的定义
+The fundamental system of units of `K⁺` as a family of `(𝓞 K)ˣ`.
+-/
+/-
+**NumberField.IsCMField.realFundSystem** 是 Mathlib 中的一个定义，位于命名空间 `NumberField.Is
+CMField`。
+形式化陈述：realFundSystem (i : Fin (rank K)) : (𝓞 K)ˣ
+参数：i : Fin (rank K)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition realFundSystem
-  signature: (i : Fin (rank K))
-  body: (Units.map (algebraMap (𝓞 K⁺) (𝓞 K)).toMonoidHom)
-    (fundSystem K⁺ (finCongr (units_rank_eq_units_rank K).symm i))
-
-中文:
-定义 realFundSystem
-  签名: (i : 有限集 (rank K))
-  定义体: (Units.map (algebraMap (𝓞 K⁺) (𝓞 K)).toMonoidHom)
-    (fundSystem K⁺ (finCongr (units_rank_eq_units_rank K).symm i))
-
-Depends on / 依赖: Units.map, algebraMap, finCongr, fundSystem, toMonoidHom, units_rank_eq_units_rank
+--- 原说明 ---
+The fundamental system of units of `K⁺` as a family of `(𝓞 K)ˣ`.
 -/
 noncomputable def realFundSystem (i : Fin (rank K)) : (𝓞 K)ˣ :=
   (Units.map (algebraMap (𝓞 K⁺) (𝓞 K)).toMonoidHom)
     (fundSystem K⁺ (finCongr (units_rank_eq_units_rank K).symm i))
-
-/--
-theorem `closure_realFundSystem_sup_torsion` / 定理 `closure_realFundSystem_sup_torsion`
-
-English:
-theorem closure_realFundSystem_sup_torsion
-  proof: by
-  have : Subgroup.map (Units.map (algebraMap (𝓞 K⁺) (𝓞 K))) (torsion K⁺) <= torsion K := by
-    rintro _ ⟨x, hx, rfl⟩
-    exact MonoidHom.isOfFinOrder _ hx
-  rw [realUnits]; rw [MonoidHom.range_eq_map]; rw [← closure_fundSystem_sup_torsion_eq_top]; rw [Subgroup.map_sup]; rw [sup_assoc]; rw [RingHom.toMonoidHom_eq_coe]; rw [sup_eq_right.mpr this]; rw [MonoidHom.map_closure]
-  congr; ext
-  simp [realFundSystem, Equiv.exists_congr_left (finCongr (units_rank_eq_units_rank K).symm)]
-
-中文:
-定理 closure_realFundSystem_sup_torsion
-  证明: by
-  have : Subgroup.map (Units.map (algebraMap (𝓞 K⁺) (𝓞 K))) (torsion K⁺) <= torsion K := by
-    rintro _ ⟨x, hx, rfl⟩
-    exact MonoidHom.isOfFinOrder _ hx
-  rw [realUnits]; rw [MonoidHom.range_eq_map]; rw [← closure_fundSystem_sup_torsion_eq_top]; rw [Subgroup.map_sup]; rw [sup_assoc]; rw [RingHom.toMonoidHom_eq_coe]; rw [sup_eq_right.mpr this]; rw [MonoidHom.map_closure]
-  congr; ext
-  simp [realFundSystem, Equiv.exists_congr_left (finCongr (units_rank_eq_units_rank K).symm)]
-
-Depends on / 依赖: Equiv.exists_congr_left, MonoidHom, MonoidHom.isOfFinOrder, MonoidHom.map_closure, MonoidHom.range_eq_map, RingHom, RingHom.toMonoidHom_eq_coe, Subgroup, Subgroup.map, Subgroup.map_sup, Units.map, algebraMap, closure_fundSystem_sup_torsion_eq_top, exists_congr_left, finCongr, isOfFinOrder, map_closure, map_sup, range_eq_map, realFundSystem
+/-
+**NumberField.IsCMField.closure_realFundSystem_sup_torsion** 是 Mathlib 中的一个定理，位于
+命名空间 `NumberField.IsCMField`。
+形式化陈述：closure_realFundSystem_sup_torsion : Subgroup.closure (Set.range (realFund
+System K)) ⊔ torsion K = realUnits K ⊔ torsion K
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `MonoidHom.isOfFinOrder`：MonoidHom.isOfFinOrder [Monoid H] (f : G ->* H) 
+{x : G} (h : IsOfFinOrder x) : IsOfFinOrder f x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.IsCMField.realUnits.eq_1`：∀ (K : Type u_1) [inst : Field K],
+   NumberField.IsCMField.realUnits K =     (Units.map         ↑(algebraMap (Numb
+erField.RingOfIntegers ↥(N…
+· 使用定理 `MonoidHom.range_eq_map`：range_eq_map (f : G ->* N) : f.range = (⊤ : Subg
+roup G).map f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NumberField.Units.closure_fundSystem_sup_torsion_eq_top`：∀ (K : Type u_1
+) [inst : Field K] [inst_1 : NumberField K],   Subgroup.closure (Set.range (Numb
+erField.Units.fundSystem K)) ⊔ NumberField.Un…
+· 使用定理 `Subgroup.map_sup`：map_sup (H K : Subgroup G) (f : G ->* N) : (H ⊔ K).map
+ f = H.map f ⊔ K.map f
+· 使用定理 `sup_assoc`：sup_assoc (a b c : α) : a ⊔ b ⊔ c = a ⊔ (b ⊔ c)
+· 使用定理 `RingHom.toMonoidHom_eq_coe`：toMonoidHom_eq_coe (f : α ->+* β) : f.toMono
+idHom = f
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `sup_eq_right`：sup_eq_right : a ⊔ b = b ↔ a <= b
+· 使用定理 `MonoidHom.map_closure`：map_closure (f : G ->* N) (s : Set G) : (closure 
+s).map f = closure (f '' s)
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `NumberField.IsCMField.units_rank_eq_units_rank`：units_rank_eq_units_rank
+ [NumberField K] : Units.rank K⁺ = Units.rank K
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `finCongr_apply`：∀ {n m : ℕ} (eq : n = m) (i : Fin n), (finCongr eq) i = 
+Fin.cast eq i
+· 使用定理 `Equiv.exists_congr_left`：∀ {α : Sort u} {β : Sort v} {p : α → Prop} (e :
+ α ≃ β), (∃ a, p a) ↔ ∃ b, p (e.symm b)
+· 使用定理 `Fin.cast.congr_simp`：∀ {n m : ℕ} (eq : n = m) (i i_1 : Fin n), i = i_1 →
+ Fin.cast eq i = Fin.cast eq i_1
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem closure_realFundSystem_sup_torsion :
     Subgroup.closure (Set.range (realFundSystem K)) ⊔ torsion K = realUnits K ⊔ torsion K := by
-  have : Subgroup.map (Units.map (algebraMap (𝓞 K⁺) (𝓞 K))) (torsion K⁺) <= torsion K := by
+  have : Subgroup.map (Units.map (algebraMap (𝓞 K⁺) (𝓞 K))) (torsion K⁺) ≤ torsion K := by
     rintro _ ⟨x, hx, rfl⟩
     exact MonoidHom.isOfFinOrder _ hx
-  rw [realUnits]; rw [MonoidHom.range_eq_map]; rw [← closure_fundSystem_sup_torsion_eq_top]; rw [Subgroup.map_sup]; rw [sup_assoc]; rw [RingHom.toMonoidHom_eq_coe]; rw [sup_eq_right.mpr this]; rw [MonoidHom.map_closure]
+  rw [realUnits, MonoidHom.range_eq_map, ← closure_fundSystem_sup_torsion_eq_top, Subgroup.map_sup,
+    sup_assoc, RingHom.toMonoidHom_eq_coe, sup_eq_right.mpr this, MonoidHom.map_closure]
   congr; ext
   simp [realFundSystem, Equiv.exists_congr_left (finCongr (units_rank_eq_units_rank K).symm)]
 
 open dirichletUnitTheorem in
-/--
-theorem `regOfFamily_realFunSystem` / 定理 `regOfFamily_realFunSystem`
-
-English:
-theorem regOfFamily_realFunSystem
-  proof: by
-  classical
-  let W₀ := (equivInfinitePlace K).symm w₀
-  let f : {w : InfinitePlace K // w != W₀} ≃ {w : InfinitePlace K⁺ // w != w₀} :=
-    (equivInfinitePlace K).subtypeEquiv fun w => by rw [not_iff_not, Equiv.eq_symm_apply]
-  let g := ((finCongr (units_rank_eq_units_rank K).symm).trans (equivFinRank K⁺)).trans f.symm
-  rw [show (2 : Real) ^ rank K = |∏ w : {w : InfinitePlace K⁺ // w != w₀}]; rw [2| by
-    rw [Finset.prod_const]; rw [abs_pow]; rw [abs_of_pos zero_lt_two]; rw [← units_rank_eq_units_rank K]; rw [rank]
-    simp]
-  rw [regulator_eq_regOfFamily_fundSystem]; rw [regOfFamily_eq_det _ W₀ g.symm]; rw [regOfFamily_eq_det']; rw [← abs_mul]; rw [← Matrix.det_mul_column]; rw [← Matrix.det_reindex_self f]; rw [Matrix.reindex_apply]
-  congr; ext i w
-  rw [Matrix.submatrix_apply]; rw [Matrix.of_apply]; rw [Matrix.of_apply]; rw [show f.symm w = (equivInfinitePlace K).symm w.1 by rfl]; rw [show algebraMap (𝓞 K) K _ = algebraMap K⁺ K _ by rfl]; rw [equivInfinitePlace_symm_apply]
-  simp [f, g]
-
-中文:
-定理 regOfFamily_realFunSystem
-  证明: by
-  classical
-  let W₀ := (equivInfinitePlace K).symm w₀
-  let f : {w : InfinitePlace K // w != W₀} ≃ {w : InfinitePlace K⁺ // w != w₀} :=
-    (equivInfinitePlace K).subtypeEquiv fun w => by rw [not_iff_not, Equiv.eq_symm_apply]
-  let g := ((finCongr (units_rank_eq_units_rank K).symm).trans (equivFinRank K⁺)).trans f.symm
-  rw [show (2 : Real) ^ rank K = |∏ w : {w : InfinitePlace K⁺ // w != w₀}]; rw [2| by
-    rw [Finset.prod_const]; rw [abs_pow]; rw [abs_of_pos zero_lt_two]; rw [← units_rank_eq_units_rank K]; rw [rank]
-    simp]
-  rw [regulator_eq_regOfFamily_fundSystem]; rw [regOfFamily_eq_det _ W₀ g.symm]; rw [regOfFamily_eq_det']; rw [← abs_mul]; rw [← Matrix.det_mul_column]; rw [← Matrix.det_reindex_self f]; rw [Matrix.reindex_apply]
-  congr; ext i w
-  rw [Matrix.submatrix_apply]; rw [Matrix.of_apply]; rw [Matrix.of_apply]; rw [show f.symm w = (equivInfinitePlace K).symm w.1 by rfl]; rw [show algebraMap (𝓞 K) K _ = algebraMap K⁺ K _ by rfl]; rw [equivInfinitePlace_symm_apply]
-  simp [f, g]
-
-Depends on / 依赖: Equiv.eq_symm_apply, Finset, Finset.prod_const, InfinitePlace, abs_of_pos, abs_pow, classical, eq_symm_apply, equivFinRank, equivInfinitePlace, f.symm, finCongr, not_iff_not, prod_const, subtypeEquiv, units_rank_eq_units_rank, zero_lt_two
+/-
+**NumberField.IsCMField.regOfFamily_realFunSystem** 是 Mathlib 中的一个定理，位于命名空间 `Num
+berField.IsCMField`。
+形式化陈述：regOfFamily_realFunSystem : regOfFamily (realFundSystem K) = 2 ^ rank K * 
+regulator K⁺
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `not_iff_not`：not_iff_not : (¬a ↔ ¬b) ↔ (a ↔ b)
+· 使用定理 `Equiv.eq_symm_apply`：eq_symm_apply {α β} (e : α ≃ β) {x y} : y = e.symm 
+x ↔ e y = x
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NumberField.IsCMField.units_rank_eq_units_rank`：units_rank_eq_units_rank
+ [NumberField K] : Units.rank K⁺ = Units.rank K
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Finset.prod_const`：prod_const (b : M) : ∏ _x in s, b = b ^ #s
+· 使用引理 `abs_pow`：abs_pow (a : α) (n : Nat) : |a ^ n| = |a| ^ n
+· 使用定理 `abs_of_pos`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] {a
+ : α} [AddLeftMono α], 0 < a → |a| = a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `zero_lt_two`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : Part
+ialOrder α] [ZeroLEOneClass α] [NeZero 1] [AddLeftMono α],   0 < 2
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `NumberField.Units.rank.eq_1`：∀ (K : Type u_1) [inst : Field K] [inst_1 :
+ NumberField K],   NumberField.Units.rank K = Fintype.card (NumberField.Infinite
+Place K) - 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Fintype.card_subtype_compl`：Fintype.card_subtype_compl [Fintype α] (p : 
+α -> Prop) [Fintype { x // p x }] [Fintype { x // ¬p x }] : Fintype.card { x // 
+¬p x } = Fintype…
+· 使用定理 `Fintype.card_unique`：card_unique [Unique α] [h : Fintype α] : Fintype.ca
+rd α = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `NumberField.Units.regulator_eq_regOfFamily_fundSystem`：regulator_eq_regO
+fFamily_fundSystem : regulator K = regOfFamily (fundSystem K)
+· 使用定理 `NumberField.Units.regOfFamily_eq_det`：regOfFamily_eq_det (u : Fin (rank 
+K) -> (𝓞 K)ˣ) (w' : InfinitePlace K) (e : {w // w != w'} ≃ Fin (rank K)) : regOf
+Family u = |(of fun i w : …
+· 使用定理 `NumberField.Units.regOfFamily_eq_det'`：regOfFamily_eq_det' (u : Fin (ran
+k K) -> (𝓞 K)ˣ) : regOfFamily u = |(of fun i => logEmbedding K (Additive.ofMul (
+u ((equivFinRank K).symm i)…
+· 使用引理 `abs_mul`：abs_mul (a b : α) : |a * b| = |a| * |b|
+· 使用定理 `Matrix.det_mul_column`：det_mul_column (v : n -> R) (A : Matrix n n R) : 
+det (of fun i j => v i * A i j) = (∏ i, v i) * det A
+· 使用定理 `Matrix.det_reindex_self`：det_reindex_self (e : m ≃ n) (A : Matrix m m R)
+ : det (reindex e e A) = det A
+· 使用定理 `Matrix.reindex_apply`：reindex_apply (eₘ : m ≃ l) (eₙ : n ≃ o) (M : Matri
+x m n α) : reindex eₘ eₙ M = M.submatrix eₘ.symm eₙ.symm
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+（共 53 条，此处仅展示前 30 条）
 -/
 theorem regOfFamily_realFunSystem :
     regOfFamily (realFundSystem K) = 2 ^ rank K * regulator K⁺ := by
   classical
   let W₀ := (equivInfinitePlace K).symm w₀
-  let f : {w : InfinitePlace K // w != W₀} ≃ {w : InfinitePlace K⁺ // w != w₀} :=
-    (equivInfinitePlace K).subtypeEquiv fun w => by rw [not_iff_not, Equiv.eq_symm_apply]
+  let f : {w : InfinitePlace K // w ≠ W₀} ≃ {w : InfinitePlace K⁺ // w ≠ w₀} :=
+    (equivInfinitePlace K).subtypeEquiv fun w ↦ by rw [not_iff_not, Equiv.eq_symm_apply]
   let g := ((finCongr (units_rank_eq_units_rank K).symm).trans (equivFinRank K⁺)).trans f.symm
-  rw [show (2 : Real) ^ rank K = |∏ w : {w : InfinitePlace K⁺ // w != w₀}]; rw [2| by
-    rw [Finset.prod_const]; rw [abs_pow]; rw [abs_of_pos zero_lt_two]; rw [← units_rank_eq_units_rank K]; rw [rank]
+  rw [show (2 : ℝ) ^ rank K = |∏ w : {w : InfinitePlace K⁺ // w ≠ w₀}, 2| by
+    rw [Finset.prod_const, abs_pow, abs_of_pos zero_lt_two, ← units_rank_eq_units_rank K, rank]
     simp]
-  rw [regulator_eq_regOfFamily_fundSystem]; rw [regOfFamily_eq_det _ W₀ g.symm]; rw [regOfFamily_eq_det']; rw [← abs_mul]; rw [← Matrix.det_mul_column]; rw [← Matrix.det_reindex_self f]; rw [Matrix.reindex_apply]
+  rw [regulator_eq_regOfFamily_fundSystem, regOfFamily_eq_det _ W₀ g.symm, regOfFamily_eq_det',
+    ← abs_mul, ← Matrix.det_mul_column, ← Matrix.det_reindex_self f, Matrix.reindex_apply]
   congr; ext i w
-  rw [Matrix.submatrix_apply]; rw [Matrix.of_apply]; rw [Matrix.of_apply]; rw [show f.symm w = (equivInfinitePlace K).symm w.1 by rfl]; rw [show algebraMap (𝓞 K) K _ = algebraMap K⁺ K _ by rfl]; rw [equivInfinitePlace_symm_apply]
+  rw [Matrix.submatrix_apply, Matrix.of_apply, Matrix.of_apply,
+    show f.symm w = (equivInfinitePlace K).symm w.1 by rfl,
+    show algebraMap (𝓞 K) K _ = algebraMap K⁺ K _ by rfl, equivInfinitePlace_symm_apply]
   simp [f, g]
-
-/--
-theorem `regulator_div_regulator_eq_two_pow_mul_indexRealUnits_inv` / 定理 `regulator_div_regulator_eq_two_pow_mul_indexRealUnits_inv`
-
-English:
-theorem regulator_div_regulator_eq_two_pow_mul_indexRealUnits_inv
-  proof: by
-  rw [indexRealUnits]; rw [← closure_realFundSystem_sup_torsion]; rw [← regOfFamily_div_regulator
-    (realFundSystem K)]; rw [regOfFamily_realFunSystem]; rw [inv_div]; rw [← mul_div_assoc]; rw [mul_div_mul_comm]; rw [div_self (by positivity)]; rw [one_mul]
-
-中文:
-定理 regulator_div_regulator_eq_two_pow_mul_index实数Units_inv
-  证明: by
-  rw [indexRealUnits]; rw [← closure_realFundSystem_sup_torsion]; rw [← regOfFamily_div_regulator
-    (realFundSystem K)]; rw [regOfFamily_realFunSystem]; rw [inv_div]; rw [← mul_div_assoc]; rw [mul_div_mul_comm]; rw [div_self (by positivity)]; rw [one_mul]
-
-Depends on / 依赖: closure_realFundSystem_sup_torsion, div_self, indexRealUnits, inv_div, mul_div_assoc, mul_div_mul_comm, one_mul, realFundSystem, regOfFamily_div_regulator, regOfFamily_realFunSystem
+/-
+**NumberField.IsCMField.regulator_div_regulator_eq_two_pow_mul_indexRealUnits_in
+v** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.IsCMField`。
+形式化陈述：regulator_div_regulator_eq_two_pow_mul_indexRealUnits_inv : regulator K / 
+regulator K⁺ = 2 ^ rank K * (indexRealUnits K : Real)⁻¹
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.IsCMField.indexRealUnits.eq_1`：∀ (K : Type u_1) [inst : Fiel
+d K],   NumberField.IsCMField.indexRealUnits K = (NumberField.IsCMField.realUnit
+s K ⊔ NumberField.Units.torsion…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NumberField.IsCMField.closure_realFundSystem_sup_torsion`：closure_realFu
+ndSystem_sup_torsion : Subgroup.closure (Set.range (realFundSystem K)) ⊔ torsion
+ K = realUnits K ⊔ torsion K
+· 使用定理 `NumberField.Units.regOfFamily_div_regulator`：regOfFamily_div_regulator (
+u : Fin (rank K) -> (𝓞 K)ˣ) : regOfFamily u / regulator K = (Subgroup.closure (S
+et.range u) ⊔ (torsion K)).index
+· 使用定理 `NumberField.IsCMField.regOfFamily_realFunSystem`：regOfFamily_realFunSyst
+em : regOfFamily (realFundSystem K) = 2 ^ rank K * regulator K⁺
+· 使用定理 `inv_div`：inv_div : (a / b)⁻¹ = b / a
+· 使用定理 `mul_div_assoc`：mul_div_assoc (a b c : G) : a * b / c = a * (b / c)
+· 使用定理 `mul_div_mul_comm`：mul_div_mul_comm : a * b / (c * d) = a / c * (b / d)
+· 使用定理 `div_self`：∀ {G₀ : Type u_3} [inst : GroupWithZero G₀] {a : G₀}, a ≠ 0 → 
+a / a = 1
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `pow_pos`：∀ {M₀ : Type u_2} [inst : MonoidWithZero M₀] [inst_1 : PartialO
+rder M₀] {a : M₀} [PosMulStrictMono M₀]   [ZeroLEOneClass M₀], 0 < a → ∀ (n :…
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `IsStrictOrderedRing.toZeroLEOneClass`：∀ {R : Type u_1} {inst : Semiring 
+R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], ZeroLEOneClass R
+· 使用引理 `Mathlib.Meta.Positivity.pos_of_isNat`：pos_of_isNat {n : Nat} [Semiring A
+] [PartialOrder A] [IsOrderedRing A] [Nontrivial A] (h : NormNum.IsNat e n) (w :
+ Nat.ble 1 n = true) : 0 <…
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用引理 `Mathlib.Meta.NormNum.instAtLeastTwo`：instAtLeastTwo (n : Nat) : Nat.AtLe
+astTwo (n + 2)
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
 -/
 theorem regulator_div_regulator_eq_two_pow_mul_indexRealUnits_inv :
-    regulator K / regulator K⁺ = 2 ^ rank K * (indexRealUnits K : Real)⁻¹ := by
-  rw [indexRealUnits]; rw [← closure_realFundSystem_sup_torsion]; rw [← regOfFamily_div_regulator
-    (realFundSystem K)]; rw [regOfFamily_realFunSystem]; rw [inv_div]; rw [← mul_div_assoc]; rw [mul_div_mul_comm]; rw [div_self (by positivity)]; rw [one_mul]
+    regulator K / regulator K⁺ = 2 ^ rank K * (indexRealUnits K : ℝ)⁻¹ := by
+  rw [indexRealUnits, ← closure_realFundSystem_sup_torsion, ← regOfFamily_div_regulator
+    (realFundSystem K), regOfFamily_realFunSystem, inv_div, ← mul_div_assoc, mul_div_mul_comm,
+    div_self (by positivity), one_mul]
 
 end units
 
@@ -1328,57 +1790,72 @@ end maximalRealSubfield
 
 namespace CMExtension
 
-variable (F K : Type*) [Field F] [IsTotallyReal F] [Field K] [CharZero K] [Algebra.IsIntegral Rat K]
+variable (F K : Type*) [Field F] [IsTotallyReal F] [Field K] [CharZero K] [Algebra.IsIntegral ℚ K]
   [IsTotallyComplex K] [Algebra F K] [IsQuadraticExtension F K]
 
-/--
-theorem `eq_maximalRealSubfield` / 定理 `eq_maximalRealSubfield`
-
-English:
-theorem eq_maximalRealSubfield
-  given: (E : Subfield K) [IsTotallyReal E] [IsQuadraticExtension E K]
-  proof: by
-  refine le_antisymm (IsTotallyReal.le_maximalRealSubfield E) ?_
-  by_contra! h
-  have h' : E ⊔ (maximalRealSubfield K) = ⊤ := by
-    let L : IntermediateField E K := (E ⊔ (maximalRealSubfield K)).toIntermediateField
-      (fun x => (le_sup_left (a := E)) x.prop)
-    have := ((IntermediateField.isSimpleOrder_of_finrank_prime E K
-      (IsQuadraticExtension.finrank_eq_two E K ▸ Nat.prime_two)).eq_bot_or_eq_top L).resolve_left ?_
-    · simpa [L] using congr_arg IntermediateField.toSubfield this
-    · contrapose h
-      rw [← SetLike.coe_set_eq]; rw [Subfield.coe_toIntermediateField] at h
-      rw [← sup_eq_left]; rw [← SetLike.coe_set_eq]; rw [h]; rw [IntermediateField.coe_bot]
-      aesop
-  have : Algebra.IsAlgebraic (maximalRealSubfield K) K :=
-    Algebra.IsAlgebraic.tower_top (K := Rat) (maximalRealSubfield K)
-  have : IsTotallyReal K := (h' ▸ isTotallyReal_sup).ofRingEquiv Subring.topEquiv
-  obtain w : InfinitePlace K := Classical.choice (inferInstance : Nonempty _)
-  exact (not_isReal_iff_isComplex.mpr (IsTotallyComplex.isComplex w)) (IsTotallyReal.isReal w)
-
-中文:
-定理 eq_maximal实数Subfield
-  条件: (E : 子域 K) [是Totally实数 E] [是QuadraticExtension E K]
-  证明: by
-  refine le_antisymm (IsTotallyReal.le_maximalRealSubfield E) ?_
-  by_contra! h
-  have h' : E ⊔ (maximalRealSubfield K) = ⊤ := by
-    let L : IntermediateField E K := (E ⊔ (maximalRealSubfield K)).toIntermediateField
-      (fun x => (le_sup_left (a := E)) x.prop)
-    have := ((IntermediateField.isSimpleOrder_of_finrank_prime E K
-      (IsQuadraticExtension.finrank_eq_two E K ▸ Nat.prime_two)).eq_bot_or_eq_top L).resolve_left ?_
-    · simpa [L] using congr_arg IntermediateField.toSubfield this
-    · contrapose h
-      rw [← SetLike.coe_set_eq]; rw [Subfield.coe_toIntermediateField] at h
-      rw [← sup_eq_left]; rw [← SetLike.coe_set_eq]; rw [h]; rw [IntermediateField.coe_bot]
-      aesop
-  have : Algebra.IsAlgebraic (maximalRealSubfield K) K :=
-    Algebra.IsAlgebraic.tower_top (K := Rat) (maximalRealSubfield K)
-  have : IsTotallyReal K := (h' ▸ isTotallyReal_sup).ofRingEquiv Subring.topEquiv
-  obtain w : InfinitePlace K := Classical.choice (inferInstance : Nonempty _)
-  exact (not_isReal_iff_isComplex.mpr (IsTotallyComplex.isComplex w)) (IsTotallyReal.isReal w)
-
-Depends on / 依赖: IntermediateField, IntermediateField.isSimpleOrder_of_finrank_prime, IntermediateField.toSubfield, IsQuadraticExtension, IsQuadraticExtension.finrank_eq_two, IsTotallyReal, IsTotallyReal.le_maximalRealSubfield, Nat.prime_two, SetLike, congr_arg, contrapose, eq_bot_or_eq_top, finrank_eq_two, isSimpleOrder_of_finrank_prime, le_antisymm, le_maximalRealSubfield, le_sup_left, maximalRealSubfield, prime_two, resolve_left
+/-
+**NumberField.CMExtension.eq_maximalRealSubfield** 是 Mathlib 中的一个定理，位于命名空间 `Numb
+erField.CMExtension`。
+形式化陈述：eq_maximalRealSubfield (E : Subfield K) [IsTotallyReal E] [IsQuadraticExte
+nsion E K] : E = maximalRealSubfield K
+参数：E : Subfield K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `Subfield.instSubfieldClass`：∀ {K : Type u} [inst : DivisionRing K], Subf
+ieldClass (Subfield K) K
+· 使用定理 `commRing_strongRankCondition`：∀ (R : Type u_1) [inst : CommRing R] [Nont
+rivial R], StrongRankCondition R
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `NumberField.IsTotallyReal.le_maximalRealSubfield`：∀ {K : Type u_2} [inst
+ : Field K] (E : Subfield K) [NumberField.IsTotallyReal ↥E], E ≤ NumberField.max
+imalRealSubfield K
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `le_sup_left`：le_sup_left : a <= a ⊔ b
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
+· 使用定理 `Or.resolve_left`：∀ {a b : Prop}, a ∨ b → ¬a → b
+· 使用定理 `IsSimpleOrder.eq_bot_or_eq_top`：∀ {α : Type u_4} {inst : LE α} {inst_1 :
+ BoundedOrder α} [self : IsSimpleOrder α] (a : α), a = ⊥ ∨ a = ⊤
+· 使用定理 `IntermediateField.isSimpleOrder_of_finrank_prime`：isSimpleOrder_of_finra
+nk_prime (hp : Nat.Prime (Module.finrank F E)) : IsSimpleOrder (IntermediateFiel
+d F E)
+· 使用定理 `Nat.prime_two`：prime_two : Prime 2
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Algebra.IsQuadraticExtension.finrank_eq_two`：∀ (R : Type u_2) (S : Type 
+u_3) [inst : CommSemiring R] [inst_1 : StrongRankCondition R] [inst_2 : Semiring
+ S]   [inst_3 : Algebra R S] [Alg…
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₄`：contrapose₄ {p q : Prop} : (q -> 
+p) -> (¬ p -> ¬ q)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sup_eq_left`：sup_eq_left : a ⊔ b = a ↔ b <= a
+· 使用定理 `SetLike.coe_set_eq`：coe_set_eq : (p : Set B) = q ↔ p = q
+· 使用定理 `Subfield.coe_toIntermediateField`：Subfield.coe_toIntermediateField (S : 
+Subfield L) (algebra_map_mem : forall x, (algebraMap K L) x in S) : ((S.toInterm
+ediateField algebra_ma…
+· 使用定理 `IntermediateField.coe_bot`：coe_bot : ↑(⊥ : IntermediateField F E) = Set.
+range (algebraMap F E)
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Algebra.IsAlgebraic.tower_top`：Algebra.IsAlgebraic.tower_top [Algebra.Is
+Algebraic K A] : Algebra.IsAlgebraic L A
+· 使用定理 `Algebra.IsSeparable.of_integral`：∀ (F : Type u_1) [inst : Field F] (K : 
+Type u_2) [inst_1 : Ring K] [inst_2 : Algebra F K] [IsDomain K]   [Algebra.IsInt
+egral F K] [CharZero …
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+（共 37 条，此处仅展示前 30 条）
 -/
 theorem eq_maximalRealSubfield (E : Subfield K) [IsTotallyReal E] [IsQuadraticExtension E K] :
     E = maximalRealSubfield K := by
@@ -1386,50 +1863,33 @@ theorem eq_maximalRealSubfield (E : Subfield K) [IsTotallyReal E] [IsQuadraticEx
   by_contra! h
   have h' : E ⊔ (maximalRealSubfield K) = ⊤ := by
     let L : IntermediateField E K := (E ⊔ (maximalRealSubfield K)).toIntermediateField
-      (fun x => (le_sup_left (a := E)) x.prop)
+      (fun x ↦ (le_sup_left (a := E)) x.prop)
     have := ((IntermediateField.isSimpleOrder_of_finrank_prime E K
       (IsQuadraticExtension.finrank_eq_two E K ▸ Nat.prime_two)).eq_bot_or_eq_top L).resolve_left ?_
     · simpa [L] using congr_arg IntermediateField.toSubfield this
     · contrapose h
-      rw [← SetLike.coe_set_eq]; rw [Subfield.coe_toIntermediateField] at h
-      rw [← sup_eq_left]; rw [← SetLike.coe_set_eq]; rw [h]; rw [IntermediateField.coe_bot]
+      rw [← SetLike.coe_set_eq, Subfield.coe_toIntermediateField] at h
+      rw [← sup_eq_left, ← SetLike.coe_set_eq, h, IntermediateField.coe_bot]
       aesop
   have : Algebra.IsAlgebraic (maximalRealSubfield K) K :=
-    Algebra.IsAlgebraic.tower_top (K := Rat) (maximalRealSubfield K)
+    Algebra.IsAlgebraic.tower_top (K := ℚ) (maximalRealSubfield K)
   have : IsTotallyReal K := (h' ▸ isTotallyReal_sup).ofRingEquiv Subring.topEquiv
   obtain w : InfinitePlace K := Classical.choice (inferInstance : Nonempty _)
   exact (not_isReal_iff_isComplex.mpr (IsTotallyComplex.isComplex w)) (IsTotallyReal.isReal w)
 
 /--
-Definition of `equivMaximalRealSubfield` / `equivMaximalRealSubfield` 的定义
+Any field `F` such that `K/F` is a CM-extension is isomorphic to the maximal real subfield of `K`.
+-/
+/-
+**NumberField.CMExtension.equivMaximalRealSubfield** 是 Mathlib 中的一个定义，位于命名空间 `Nu
+mberField.CMExtension`。
+形式化陈述：equivMaximalRealSubfield : F ≃+* maximalRealSubfield K
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition equivMaximalRealSubfield
-  signature: :
-  body: (algebraMap F K).rangeRestrictFieldEquiv.trans (RingEquiv.subfieldCongr (by
-    have := IsTotallyReal.ofRingEquiv (algebraMap F K).rangeRestrictFieldEquiv
-    have : IsQuadraticExtension (algebraMap F K).fieldRange K :=
-    { finrank_eq_two' :=
-        (IsQuadraticExtension.finrank_eq_two F K) ▸ Algebra.finrank_eq_of_equiv_equiv
-          (algebraMap F K).rangeRestrictFieldEquiv.symm (RingEquiv.refl K) (by ext; simp; rfl) }
-    exact eq_maximalRealSubfield K (algebraMap F K).fieldRange))
-
-@[simp]
-
-中文:
-定义 equivMaximal实数Subfield
-  签名: :
-  定义体: (algebraMap F K).rangeRestrictFieldEquiv.trans (RingEquiv.subfieldCongr (by
-    have := IsTotallyReal.ofRingEquiv (algebraMap F K).rangeRestrictFieldEquiv
-    have : IsQuadraticExtension (algebraMap F K).fieldRange K :=
-    { finrank_eq_two' :=
-        (IsQuadraticExtension.finrank_eq_two F K) ▸ Algebra.finrank_eq_of_equiv_equiv
-          (algebraMap F K).rangeRestrictFieldEquiv.symm (RingEquiv.refl K) (by ext; simp; rfl) }
-    exact eq_maximalRealSubfield K (algebraMap F K).fieldRange))
-
-@[simp]
-
-Depends on / 依赖: Algebra, Algebra.finrank_eq_of_equiv_equiv, IsQuadraticExtension, IsQuadraticExtension.finrank_eq_two, IsTotallyReal, IsTotallyReal.ofRingEquiv, RingEquiv, RingEquiv.refl, RingEquiv.subfieldCongr, algebraMap, eq_maximalRealSubfield, fieldRange, finrank_eq_of_equiv_equiv, finrank_eq_two, ofRingEquiv, rangeRestrictFieldEquiv, rangeRestrictFieldEquiv.symm, rangeRestrictFieldEquiv.trans, subfieldCongr
+--- 原说明 ---
+Any field `F` such that `K/F` is a CM-extension is isomorphic to the maximal rea
+l subfield of `K`.
 -/
 noncomputable def equivMaximalRealSubfield :
     F ≃+* maximalRealSubfield K :=
@@ -1442,43 +1902,45 @@ noncomputable def equivMaximalRealSubfield :
     exact eq_maximalRealSubfield K (algebraMap F K).fieldRange))
 
 @[simp]
-/--
-theorem `equivMaximalRealSubfield_apply` / 定理 `equivMaximalRealSubfield_apply`
-
-English:
-theorem equivMaximalRealSubfield_apply
-  given: (x : F)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 equivMaximal实数Subfield_apply
-  条件: (x : F)
-  证明: rfl
-
-@[simp]
+/-
+**NumberField.CMExtension.equivMaximalRealSubfield_apply** 是 Mathlib 中的一个定理，位于命名
+空间 `NumberField.CMExtension`。
+形式化陈述：equivMaximalRealSubfield_apply (x : F) : equivMaximalRealSubfield F K x = 
+algebraMap F K x
+参数：x : F。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `commRing_strongRankCondition`：∀ (R : Type u_1) [inst : CommRing R] [Nont
+rivial R], StrongRankCondition R
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
 -/
 theorem equivMaximalRealSubfield_apply (x : F) :
     equivMaximalRealSubfield F K x = algebraMap F K x := rfl
 
 @[simp]
-/--
-theorem `algebraMap_equivMaximalRealSubfield_symm_apply` / 定理 `algebraMap_equivMaximalRealSubfield_symm_apply`
-
-English:
-theorem algebraMap_equivMaximalRealSubfield_symm_apply
-  given: (x : maximalRealSubfield K)
-  proof: by
-  simpa using! (equivMaximalRealSubfield_apply F K ((equivMaximalRealSubfield F K).symm x)).symm
-
-中文:
-定理 algebraMap_equivMaximal实数Subfield_symm_apply
-  条件: (x : maximal实数Subfield K)
-  证明: by
-  simpa using! (equivMaximalRealSubfield_apply F K ((equivMaximalRealSubfield F K).symm x)).symm
-
-Depends on / 依赖: equivMaximalRealSubfield, equivMaximalRealSubfield_apply
+/-
+**NumberField.CMExtension.algebraMap_equivMaximalRealSubfield_symm_apply** 是 Mat
+hlib 中的一个定理，位于命名空间 `NumberField.CMExtension`。
+形式化陈述：algebraMap_equivMaximalRealSubfield_symm_apply (x : maximalRealSubfield K)
+ : algebraMap F K ((CMExtension.equivMaximalRealSubfield F K).symm x) = algebraM
+ap (maximalRealSubfield K) K x
+参数：x : maximalRealSubfield K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `commRing_strongRankCondition`：∀ (R : Type u_1) [inst : CommRing R] [Nont
+rivial R], StrongRankCondition R
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `RingEquiv.apply_symm_apply`：apply_symm_apply (e : R ≃+* S) : forall x, e
+ (e.symm x) = x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `NumberField.CMExtension.equivMaximalRealSubfield_apply`：equivMaximalReal
+Subfield_apply (x : F) : equivMaximalRealSubfield F K x = algebraMap F K x
 -/
 theorem algebraMap_equivMaximalRealSubfield_symm_apply (x : maximalRealSubfield K) :
     algebraMap F K ((CMExtension.equivMaximalRealSubfield F K).symm x) =
@@ -1489,24 +1951,60 @@ end CMExtension
 
 namespace IsCMField
 
-variable (F K : Type*) [Field F] [IsTotallyReal F] [Field K] [CharZero K] [Algebra.IsIntegral Rat K]
+variable (F K : Type*) [Field F] [IsTotallyReal F] [Field K] [CharZero K] [Algebra.IsIntegral ℚ K]
   [IsTotallyComplex K] [Algebra F K] [IsQuadraticExtension F K]
 
 include F in
 /--
-theorem `ofCMExtension` / 定理 `ofCMExtension`
+If `K/F` is a CM-extension then `K` is a CM-field.
+-/
+/-
+**NumberField.IsCMField.ofCMExtension** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.IsC
+MField`。
+形式化陈述：ofCMExtension : IsCMField K where is_quadratic
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `commRing_strongRankCondition`：∀ (R : Type u_1) [inst : CommRing R] [Nont
+rivial R], StrongRankCondition R
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `Subfield.instSubfieldClass`：∀ {K : Type u} [inst : DivisionRing K], Subf
+ieldClass (Subfield K) K
+· 使用定理 `Module.Free.of_divisionRing`：∀ (K : Type u_3) (V : Type u_4) [inst : Div
+isionRing K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V],   Module.Fr
+ee K V
+· 使用定理 `Algebra.finrank_eq_of_equiv_equiv`：finrank_eq_of_equiv_equiv {R₀ S₀ : Ty
+pe*} [CommSemiring R₀] [Semiring S₀] [Algebra R₀ S₀] {R₁ S₁ : Type*} [CommSemiri
+ng R₁] [Semiring S₁] [A…
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `NumberField.CMExtension.algebraMap_equivMaximalRealSubfield_symm_apply`：
+algebraMap_equivMaximalRealSubfield_symm_apply (x : maximalRealSubfield K) : alg
+ebraMap F K ((CMExtension.equivMaximalRealSubfield F K).symm…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `RingHomCompTriple.comp_eq`：∀ {R₁ : Type u_1} {R₂ : Type u_2} {R₃ : Type 
+u_3} {inst : Semiring R₁} {inst_1 : Semiring R₂} {inst_2 : Semiring R₃}   {σ₁₂ :
+ R₁ →+* R₂} {σ₂…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Algebra.IsQuadraticExtension.finrank_eq_two`：∀ (R : Type u_2) (S : Type 
+u_3) [inst : CommSemiring R] [inst_1 : StrongRankCondition R] [inst_2 : Semiring
+ S]   [inst_3 : Algebra R S] [Alg…
 
-English:
-theorem ofCMExtension
-  proof: ⟨(IsQuadraticExtension.finrank_eq_two F K) ▸ finrank_eq_of_equiv_equiv
-      (CMExtension.equivMaximalRealSubfield F K).symm (RingEquiv.refl K) (by ext; simp)⟩
-
-中文:
-定理 ofCMExtension
-  证明: ⟨(IsQuadraticExtension.finrank_eq_two F K) ▸ finrank_eq_of_equiv_equiv
-      (CMExtension.equivMaximalRealSubfield F K).symm (RingEquiv.refl K) (by ext; simp)⟩
-
-Depends on / 依赖: IsQuadraticExtension, IsQuadraticExtension.finrank_eq_two, finrank_eq_of_equiv_equiv, finrank_eq_two
+--- 原说明 ---
+If `K/F` is a CM-extension then `K` is a CM-field.
 -/
 theorem ofCMExtension :
     IsCMField K where
@@ -1515,116 +2013,179 @@ theorem ofCMExtension :
 
 open IntermediateField in
 /--
-theorem `of_forall_isConj` / 定理 `of_forall_isConj`
-
-English:
-theorem of_forall_isConj
-  statement: [IsGalois Rat K] {σ : Gal(K/Rat)}
-  proof: by
-  let φ : K ->+* Complex := Classical.choice (inferInstance : Nonempty _)
-  have hσ' : Nat.card (Subgroup.zpowers σ) = 2 := by
-    rw [Nat.card_zpowers]; rw [orderOf_isConj_two_of_ne_one (hσ φ)]
-exact (isConj_ne_one_iff (hσ φ)).mpr IsTotallyComplex.complexEmbedding_not_isReal φ
-  have : Finite (Subgroup.zpowers σ) := Nat.finite_of_card_ne_zero (by positivity)
-  let L := (FixedPoints.intermediateField (Subgroup.zpowers σ) : IntermediateField Rat K)
-  have : IsTotallyReal L := ⟨fun w => by
-    obtain ⟨W, rfl⟩ := w.comap_surjective (K := K)
-    dsimp only
-    rw [← mk_embedding W]; rw [comap_mk]; rw [isReal_mk_iff]
-    exact ComplexEmbedding.IsConj.isReal_comp
-     (σ := IsGaloisGroup.mulEquivAlgEquiv (Subgroup.zpowers σ) L K ⟨σ, Subgroup.mem_zpowers σ⟩)
-      (hσ W.embedding)⟩
-  have : IsQuadraticExtension L K := ⟨by
-    rw [IsGaloisGroup.finrank_fixedPoints_eq_card_subgroup]; rw [hσ']⟩
-  exact IsCMField.ofCMExtension L K
-
-中文:
-定理 of_对任意_isConj
-  结论: [是Galois 有理数 K] {σ : Gal(K/有理数)}
-  证明: by
-  let φ : K ->+* Complex := Classical.choice (inferInstance : Nonempty _)
-  have hσ' : Nat.card (Subgroup.zpowers σ) = 2 := by
-    rw [Nat.card_zpowers]; rw [orderOf_isConj_two_of_ne_one (hσ φ)]
-exact (isConj_ne_one_iff (hσ φ)).mpr IsTotallyComplex.complexEmbedding_not_isReal φ
-  have : Finite (Subgroup.zpowers σ) := Nat.finite_of_card_ne_zero (by positivity)
-  let L := (FixedPoints.intermediateField (Subgroup.zpowers σ) : IntermediateField Rat K)
-  have : IsTotallyReal L := ⟨fun w => by
-    obtain ⟨W, rfl⟩ := w.comap_surjective (K := K)
-    dsimp only
-    rw [← mk_embedding W]; rw [comap_mk]; rw [isReal_mk_iff]
-    exact ComplexEmbedding.IsConj.isReal_comp
-     (σ := IsGaloisGroup.mulEquivAlgEquiv (Subgroup.zpowers σ) L K ⟨σ, Subgroup.mem_zpowers σ⟩)
-      (hσ W.embedding)⟩
-  have : IsQuadraticExtension L K := ⟨by
-    rw [IsGaloisGroup.finrank_fixedPoints_eq_card_subgroup]; rw [hσ']⟩
-  exact IsCMField.ofCMExtension L K
-
-Depends on / 依赖: Classical, Classical.choice, Finite, FixedPoints, FixedPoints.intermediateField, IntermediateField, IsTotallyComplex, IsTotallyComplex.complexEmbedding_not_isReal, IsTotallyReal, Nat.card, Nat.card_zpowers, Nat.finite_of_card_ne_zero, Nonempty, Subgroup, Subgroup.zpowers, card_zpowers, choice, complexEmbedding_not_isReal, finite_of_card_ne_zero, intermediateField
+A totally complex field that has a unique complex conjugation is CM.
 -/
-theorem of_forall_isConj [IsGalois Rat K] {σ : Gal(K/Rat)}
-    (hσ : forall φ : K ->+* Complex, IsConj φ σ) : IsCMField K := by
-  let φ : K ->+* Complex := Classical.choice (inferInstance : Nonempty _)
+/-
+**NumberField.IsCMField.of_forall_isConj** 是 Mathlib 中的一个定理，位于命名空间 `NumberField.
+IsCMField`。
+形式化陈述：of_forall_isConj [IsGalois Rat K] {σ : Gal(K/Rat)} (hσ : forall φ : K ->+*
+ Complex, IsConj φ σ) : IsCMField K
+参数：K/Rat；hσ : forall φ : K ->+* Complex, IsConj φ σ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.Embeddings.instNonemptyRingHomOfIsAlgebraicRatOfIsAlgClosed`
+：∀ (K : Type u_1) [inst : Field K] (A : Type u_2) [inst_1 : Field A] [CharZero A
+] [inst_3 : CharZero K]   [Algebra.IsAlgebraic ℚ K] [IsAlgClo…
+· 使用定理 `IsGalois.to_isSeparable`：∀ {F : Type u_1} {inst : Field F} {E : Type u_2
+} {inst_1 : Field E} {inst_2 : Algebra F E} [self : IsGalois F E],   Algebra.IsS
+eparable F E
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.card_zpowers`：Nat.card_zpowers : Nat.card (zpowers a) = orderOf a
+· 使用引理 `NumberField.ComplexEmbedding.orderOf_isConj_two_of_ne_one`：orderOf_isCon
+j_two_of_ne_one (hσ : IsConj φ σ) (hσ' : σ != 1) : orderOf σ = 2
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `NumberField.ComplexEmbedding.isConj_ne_one_iff`：isConj_ne_one_iff (hσ : 
+IsConj φ σ) : σ != 1 ↔ ¬ IsReal φ
+· 使用定理 `NumberField.IsTotallyComplex.complexEmbedding_not_isReal`：∀ {K : Type u_
+2} [inst : Field K] [NumberField.IsTotallyComplex K] (φ : K →+* ℂ), ¬NumberField
+.ComplexEmbedding.IsReal φ
+· 使用定理 `Nat.finite_of_card_ne_zero`：finite_of_card_ne_zero (h : Nat.card α != 0)
+ : Finite α
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `lt_of_lt_of_eq`：∀ {α : Type u_1} {a b c : α} [inst : LT α], a < b → b = 
+c → a < c
+· 使用引理 `Mathlib.Meta.Positivity.pos_of_isNat`：pos_of_isNat {n : Nat} [Semiring A
+] [PartialOrder A] [IsOrderedRing A] [Nontrivial A] (h : NormNum.IsNat e n) (w :
+ Nat.ble 1 n = true) : 0 <…
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `NumberField.InfinitePlace.comap_surjective`：comap_surjective [Algebra k 
+K] [Algebra.IsAlgebraic k K] : Function.Surjective (comap · (algebraMap k K))
+· 使用定理 `NumberField.InfinitePlace.mk_embedding`：mk_embedding (w : InfinitePlace 
+K) : mk (embedding w) = w
+· 使用引理 `NumberField.InfinitePlace.comap_mk`：comap_mk (φ : K ->+* Complex) (f : k
+ ->+* K) : (mk φ).comap f = mk (φ.comp f)
+· 使用引理 `NumberField.InfinitePlace.isReal_mk_iff`：isReal_mk_iff {φ : K ->+* Compl
+ex} : IsReal (mk φ) ↔ ComplexEmbedding.IsReal φ
+· 使用定理 `NumberField.ComplexEmbedding.IsConj.isReal_comp`：∀ {K : Type u_1} [inst 
+: Field K] {k : Type u_2} [inst_1 : Field k] [inst_2 : Algebra k K] {φ : K →+* ℂ
+} {σ : Gal(K/k)},   NumberField.Compl…
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `IntermediateField.instFaithfulSMulSubtypeMem`：∀ {K : Type u_1} {L : Type
+ u_2} [inst : Field K] [inst_1 : Field L] [inst_2 : Algebra K L] {X : Type u_4} 
+  [inst_3 : SMul L X] [FaithfulSMu…
+· 使用定理 `instFaithfulSMul_1`：∀ (R : Type u_1) (A : Type u_2) [inst : CommRing R] 
+[inst_1 : Semiring A] [inst_2 : Algebra R A] [IsSimpleRing R]   [Nontrivial A], 
+Faithful…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `Subgroup.mem_zpowers`：mem_zpowers (g : G) : g in zpowers g
+· 使用定理 `SubringClass.toSubsemiringClass`：∀ {S : Type u_1} {R : outParam (Type u)
+} {inst : NonAssocRing R} {inst_1 : SetLike S R} [self : SubringClass S R],   Su
+bsemiringClass S R
+· 使用定理 `SubfieldClass.toSubringClass`：∀ {S : Type u_1} {K : Type u_2} {inst : Di
+visionRing K} {inst_1 : SetLike S K} [self : SubfieldClass S K],   SubringClass 
+S K
+· 使用定理 `IntermediateField.instSubfieldClass`：∀ {K : Type u_1} {L : Type u_2} [in
+st : Field K] [inst_1 : Field L] [inst_2 : Algebra K L],   SubfieldClass (Interm
+ediateField K L) L
+（共 35 条，此处仅展示前 30 条）
+
+--- 原说明 ---
+A totally complex field that has a unique complex conjugation is CM.
+-/
+theorem of_forall_isConj [IsGalois ℚ K] {σ : Gal(K/ℚ)}
+    (hσ : ∀ φ : K →+* ℂ, IsConj φ σ) : IsCMField K := by
+  let φ : K →+* ℂ := Classical.choice (inferInstance : Nonempty _)
   have hσ' : Nat.card (Subgroup.zpowers σ) = 2 := by
-    rw [Nat.card_zpowers]; rw [orderOf_isConj_two_of_ne_one (hσ φ)]
-exact (isConj_ne_one_iff (hσ φ)).mpr IsTotallyComplex.complexEmbedding_not_isReal φ
+    rw [Nat.card_zpowers, orderOf_isConj_two_of_ne_one (hσ φ)]
+    exact (isConj_ne_one_iff (hσ φ)).mpr <| IsTotallyComplex.complexEmbedding_not_isReal φ
   have : Finite (Subgroup.zpowers σ) := Nat.finite_of_card_ne_zero (by positivity)
-  let L := (FixedPoints.intermediateField (Subgroup.zpowers σ) : IntermediateField Rat K)
-  have : IsTotallyReal L := ⟨fun w => by
+  let L := (FixedPoints.intermediateField (Subgroup.zpowers σ) : IntermediateField ℚ K)
+  have : IsTotallyReal L := ⟨fun w ↦ by
     obtain ⟨W, rfl⟩ := w.comap_surjective (K := K)
     dsimp only
-    rw [← mk_embedding W]; rw [comap_mk]; rw [isReal_mk_iff]
+    rw [← mk_embedding W, comap_mk, isReal_mk_iff]
     exact ComplexEmbedding.IsConj.isReal_comp
      (σ := IsGaloisGroup.mulEquivAlgEquiv (Subgroup.zpowers σ) L K ⟨σ, Subgroup.mem_zpowers σ⟩)
       (hσ W.embedding)⟩
   have : IsQuadraticExtension L K := ⟨by
-    rw [IsGaloisGroup.finrank_fixedPoints_eq_card_subgroup]; rw [hσ']⟩
+    rw [IsGaloisGroup.finrank_fixedPoints_eq_card_subgroup, hσ']⟩
   exact IsCMField.ofCMExtension L K
 
 open scoped IsMulCommutative in
 /--
-Instance `of_isAbelianGalois` / 实例 `of_isAbelianGalois`
-
-English:
-instance of_isAbelianGalois
-  signature: [IsAbelianGalois Rat K]
-  body: by
-  let φ : K ->+* Complex := Classical.choice (inferInstance : Nonempty _)
-  obtain ⟨σ, hσ₁⟩ : exists σ : Gal(K/Rat), ComplexEmbedding.IsConj φ σ :=
-exists_isConj_of_isRamified
-      isRamified_iff.mpr ⟨IsTotallyComplex.isComplex _, IsTotallyReal.isReal _⟩
-  have hσ₂ : forall (φ : K ->+* Complex), ComplexEmbedding.IsConj φ σ := by
-    intro ψ
-    obtain ⟨ν, rfl⟩ := exists_comp_symm_eq_of_comp_eq (k := Rat) φ ψ (by ext; simp)
-    rw [show σ = ν.symm⁻¹ * σ * ν.symm by simp]
-    exact hσ₁.comp _
-  exact IsCMField.of_forall_isConj K hσ₂
-
-中文:
-实例 of_isAbelianGalois
-  签名: [是AbelianGalois 有理数 K]
-  定义体: by
-  let φ : K ->+* Complex := Classical.choice (inferInstance : Nonempty _)
-  obtain ⟨σ, hσ₁⟩ : exists σ : Gal(K/Rat), ComplexEmbedding.IsConj φ σ :=
-exists_isConj_of_isRamified
-      isRamified_iff.mpr ⟨IsTotallyComplex.isComplex _, IsTotallyReal.isReal _⟩
-  have hσ₂ : forall (φ : K ->+* Complex), ComplexEmbedding.IsConj φ σ := by
-    intro ψ
-    obtain ⟨ν, rfl⟩ := exists_comp_symm_eq_of_comp_eq (k := Rat) φ ψ (by ext; simp)
-    rw [show σ = ν.symm⁻¹ * σ * ν.symm by simp]
-    exact hσ₁.comp _
-  exact IsCMField.of_forall_isConj K hσ₂
-
-Depends on / 依赖: Classical, Classical.choice, ComplexEmbedding, ComplexEmbedding.IsConj, IsCMField, IsCMField.of_forall_is, IsConj, IsTotallyComplex, IsTotallyComplex.isComplex, IsTotallyReal, IsTotallyReal.isReal, Nonempty, choice, exists_comp_symm_eq_of_comp_eq, exists_isConj_of_isRamified, isComplex, isRamified_iff, isRamified_iff.mpr, isReal, of_forall_is
+A totally complex abelian extension of `ℚ` is CM.
 -/
-instance of_isAbelianGalois [IsAbelianGalois Rat K] :
+/-
+**NumberField.IsCMField.of_isAbelianGalois** 是 Mathlib 中的一个实例，位于命名空间 `NumberFiel
+d.IsCMField`。
+形式化陈述：of_isAbelianGalois [IsAbelianGalois Rat K] : IsCMField K
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.Embeddings.instNonemptyRingHomOfIsAlgebraicRatOfIsAlgClosed`
+：∀ (K : Type u_1) [inst : Field K] (A : Type u_2) [inst_1 : Field A] [CharZero A
+] [inst_3 : CharZero K]   [Algebra.IsAlgebraic ℚ K] [IsAlgClo…
+· 使用定理 `IsGalois.to_isSeparable`：∀ {F : Type u_1} {inst : Field F} {E : Type u_2
+} {inst_1 : Field E} {inst_2 : Algebra F E} [self : IsGalois F E],   Algebra.IsS
+eparable F E
+· 使用定理 `IsAbelianGalois.toIsGalois`：∀ {K : Type u_4} {L : Type u_5} {inst : Fiel
+d K} {inst_1 : Field L} {inst_2 : Algebra K L} [self : IsAbelianGalois K L],   I
+sGalois K L
+· 使用引理 `NumberField.InfinitePlace.exists_isConj_of_isRamified`：exists_isConj_of_
+isRamified [IsGalois k K] {φ : K ->+* Complex} (h : IsRamified k (mk φ)) : exist
+s σ : Gal(K/k), ComplexEmbedding.IsConj φ σ
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `NumberField.InfinitePlace.isRamified_iff`：isRamified_iff : w.IsRamified 
+k ↔ w.IsComplex ∧ (w.comap (algebraMap k K)).IsReal
+· 使用定理 `NumberField.IsTotallyComplex.isComplex`：∀ {K : Type u_1} {inst : Field K
+} [self : NumberField.IsTotallyComplex K] (v : NumberField.InfinitePlace K), v.I
+sComplex
+· 使用定理 `NumberField.IsTotallyReal.isReal`：∀ {K : Type u_1} {inst : Field K} [sel
+f : NumberField.IsTotallyReal K] (v : NumberField.InfinitePlace K), v.IsReal
+· 使用定理 `NumberField.instIsTotallyRealRat`：NumberField.IsTotallyReal ℚ
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `AlgEquivClass.toAlgHomClass`：∀ (F : Type u_1) (R : Type u_2) (A : Type u
+_3) (B : Type u_4) [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Sem
+iring B] [inst_3 …
+· 使用定理 `AlgEquiv.instAlgEquivClass`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type u
+A₂} [inst : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [ins
+t_3 : Algebra R …
+· 使用引理 `NumberField.ComplexEmbedding.exists_comp_symm_eq_of_comp_eq`：exists_comp
+_symm_eq_of_comp_eq [Algebra k K] [IsGalois k K] (φ ψ : K ->+* Complex) (h : φ.c
+omp (algebraMap k K) = ψ.comp (algebraMap k K)) :…
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_ratCast`：∀ {F : Type u_1} {α : Type u_3} [inst : DivisionRing α] [ins
+t_1 : FunLike F ℚ α] [RingHomClass F ℚ α] (f : F) (q : ℚ),   f q = ↑q
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `IsAbelianGalois.toIsMulCommutative`：∀ {K : Type u_4} {L : Type u_5} {ins
+t : Field K} {inst_1 : Field L} {inst_2 : Algebra K L} [self : IsAbelianGalois K
+ L],   IsMulCommutative …
+· 使用定理 `inv_mul_cancel_comm`：∀ {G : Type u_1} [inst : CommGroup G] (a b : G), a⁻
+¹ * b * a = b
+· 使用定理 `NumberField.ComplexEmbedding.IsConj.comp`：∀ {K : Type u_1} [inst : Field
+ K] {k : Type u_2} [inst_1 : Field k] [inst_2 : Algebra k K] {φ : K →+* ℂ} {σ : 
+Gal(K/k)},   NumberField.Compl…
+· 使用定理 `NumberField.IsCMField.of_forall_isConj`：of_forall_isConj [IsGalois Rat K
+] {σ : Gal(K/Rat)} (hσ : forall φ : K ->+* Complex, IsConj φ σ) : IsCMField K
+
+--- 原说明 ---
+A totally complex abelian extension of `ℚ` is CM.
+-/
+instance of_isAbelianGalois [IsAbelianGalois ℚ K] :
     IsCMField K := by
-  let φ : K ->+* Complex := Classical.choice (inferInstance : Nonempty _)
-  obtain ⟨σ, hσ₁⟩ : exists σ : Gal(K/Rat), ComplexEmbedding.IsConj φ σ :=
-exists_isConj_of_isRamified
+  let φ : K →+* ℂ := Classical.choice (inferInstance : Nonempty _)
+  obtain ⟨σ, hσ₁⟩ : ∃ σ : Gal(K/ℚ), ComplexEmbedding.IsConj φ σ :=
+    exists_isConj_of_isRamified <|
       isRamified_iff.mpr ⟨IsTotallyComplex.isComplex _, IsTotallyReal.isReal _⟩
-  have hσ₂ : forall (φ : K ->+* Complex), ComplexEmbedding.IsConj φ σ := by
+  have hσ₂ : ∀ (φ : K →+* ℂ), ComplexEmbedding.IsConj φ σ := by
     intro ψ
-    obtain ⟨ν, rfl⟩ := exists_comp_symm_eq_of_comp_eq (k := Rat) φ ψ (by ext; simp)
+    obtain ⟨ν, rfl⟩ := exists_comp_symm_eq_of_comp_eq (k := ℚ) φ ψ (by ext; simp)
     rw [show σ = ν.symm⁻¹ * σ * ν.symm by simp]
     exact hσ₁.comp _
   exact IsCMField.of_forall_isConj K hσ₂
@@ -1636,70 +2197,62 @@ variable (K : Type*) [Field K] [CharZero K]
 
 open IntermediateField in
 /--
-theorem `isCMField` / 定理 `isCMField`
-
-English:
-theorem isCMField
-  given: {S : Set Nat} (hS : exists n in S, 2 < n) [IsCyclotomicExtension S Rat K]
-  proof: by
-  have : Algebra.IsIntegral Rat K := integral S Rat K
-  obtain ⟨n, hn₁, hn₂⟩ := hS
-  have : NeZero n := ⟨by positivity⟩
-  obtain ⟨ζ, hζ⟩ := exists_isPrimitiveRoot Rat K hn₁ (by grind)
-  have : IsTotallyComplex K := by
-    have : IsCyclotomicExtension {n} Rat Rat⟮ζ⟯ := hζ.intermediateField_adjoin_isCyclotomicExtension Rat
-    have : IsTotallyComplex Rat⟮ζ⟯ := isTotallyComplex Rat⟮ζ⟯ hn₂
-    exact isTotallyComplex_of_algebra Rat⟮ζ⟯ K
-  have := isAbelianGalois S Rat K
-  exact IsCMField.of_isAbelianGalois K
-
-中文:
-定理 isCMField
-  条件: {S : 集合 自然数} (hS : 存在 n in S, 2 < n) [是CyclotomicExtension S 有理数 K]
-  证明: by
-  have : Algebra.IsIntegral Rat K := integral S Rat K
-  obtain ⟨n, hn₁, hn₂⟩ := hS
-  have : NeZero n := ⟨by positivity⟩
-  obtain ⟨ζ, hζ⟩ := exists_isPrimitiveRoot Rat K hn₁ (by grind)
-  have : IsTotallyComplex K := by
-    have : IsCyclotomicExtension {n} Rat Rat⟮ζ⟯ := hζ.intermediateField_adjoin_isCyclotomicExtension Rat
-    have : IsTotallyComplex Rat⟮ζ⟯ := isTotallyComplex Rat⟮ζ⟯ hn₂
-    exact isTotallyComplex_of_algebra Rat⟮ζ⟯ K
-  have := isAbelianGalois S Rat K
-  exact IsCMField.of_isAbelianGalois K
-
-Depends on / 依赖: Algebra, Algebra.IsIntegral, IsCMField, IsCMField.of_isAbelianGalois, IsCyclotomicExtension, IsIntegral, IsTotallyComplex, NeZero, exists_isPrimitiveRoot, integral, intermediateField_adjoin_isCyclotomicExtension, isAbelianGalois, isTotallyComplex, isTotallyComplex_of_algebra, of_isAbelianGalois
+A nontrivial cyclotomic extension of `ℚ` is CM.
 -/
-theorem isCMField {S : Set Nat} (hS : exists n in S, 2 < n) [IsCyclotomicExtension S Rat K] :
+/-
+**IsCyclotomicExtension.Rat.isCMField** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomicExt
+ension.Rat`。
+形式化陈述：∀ (K : Type u_1) [inst : Field K] [inst_1 : CharZero K] {S : Set ℕ},   (∃ 
+n ∈ S, 2 < n) → ∀ [IsCyclotomicExtension S ℚ K], NumberField.IsCMField K
+参数：K : Type u_1；∃ n ∈ S, 2 < n。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsCyclotomicExtension.integral`：integral [IsCyclotomicExtension S A B] :
+ Algebra.IsIntegral A B
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用引理 `lt_trans`：lt_trans : a < b -> b < c -> a < c
+· 使用引理 `Mathlib.Meta.Positivity.pos_of_isNat`：pos_of_isNat {n : Nat} [Semiring A
+] [PartialOrder A] [IsOrderedRing A] [Nontrivial A] (h : NormNum.IsNat e n) (w :
+ Nat.ble 1 n = true) : 0 <…
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `IsCyclotomicExtension.exists_isPrimitiveRoot`：∀ {S : Set ℕ} (A : Type u)
+ (B : Type v) {inst : CommRing A} {inst_1 : CommRing B} {inst_2 : Algebra A B}  
+ [self : IsCyclotomicExtension S A…
+· 使用定理 `IsPrimitiveRoot.intermediateField_adjoin_isCyclotomicExtension`：∀ (K : T
+ype w) {L : Type z} [inst : Field K] [inst_1 : Field L] [inst_2 : Algebra K L] [
+Algebra.IsIntegral K L] {n : ℕ}   [NeZero n] {ζ : L}…
+· 使用定理 `IsCyclotomicExtension.Rat.isTotallyComplex`：isTotallyComplex [IsCyclotom
+icExtension {n} Rat K] (hn : 2 < n) : IsTotallyComplex K
+· 使用定理 `NumberField.isTotallyComplex_of_algebra`：isTotallyComplex_of_algebra [Is
+TotallyComplex F] : IsTotallyComplex K where isComplex _
+· 使用定理 `IsCyclotomicExtension.isAbelianGalois`：isAbelianGalois [IsCyclotomicExte
+nsion S K L] : IsAbelianGalois K L where __
+
+--- 原说明 ---
+A nontrivial cyclotomic extension of `ℚ` is CM.
+-/
+theorem isCMField {S : Set ℕ} (hS : ∃ n ∈ S, 2 < n) [IsCyclotomicExtension S ℚ K] :
     IsCMField K := by
-  have : Algebra.IsIntegral Rat K := integral S Rat K
+  have : Algebra.IsIntegral ℚ K := integral S ℚ K
   obtain ⟨n, hn₁, hn₂⟩ := hS
   have : NeZero n := ⟨by positivity⟩
-  obtain ⟨ζ, hζ⟩ := exists_isPrimitiveRoot Rat K hn₁ (by grind)
+  obtain ⟨ζ, hζ⟩ := exists_isPrimitiveRoot ℚ K hn₁ (by grind)
   have : IsTotallyComplex K := by
-    have : IsCyclotomicExtension {n} Rat Rat⟮ζ⟯ := hζ.intermediateField_adjoin_isCyclotomicExtension Rat
-    have : IsTotallyComplex Rat⟮ζ⟯ := isTotallyComplex Rat⟮ζ⟯ hn₂
-    exact isTotallyComplex_of_algebra Rat⟮ζ⟯ K
-  have := isAbelianGalois S Rat K
+    have : IsCyclotomicExtension {n} ℚ ℚ⟮ζ⟯ := hζ.intermediateField_adjoin_isCyclotomicExtension ℚ
+    have : IsTotallyComplex ℚ⟮ζ⟯ := isTotallyComplex ℚ⟮ζ⟯ hn₂
+    exact isTotallyComplex_of_algebra ℚ⟮ζ⟯ K
+  have := isAbelianGalois S ℚ K
   exact IsCMField.of_isAbelianGalois K
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [IsCyclotomicExtension
-  signature: ⊤ Rat K] :
-  body: isCMField K (S := ⊤) ⟨3, trivial, Nat.lt_succ_self 2⟩
-
-中文:
-实例 [是CyclotomicExtension
-  签名: ⊤ 有理数 K] :
-  定义体: isCMField K (S := ⊤) ⟨3, trivial, Nat.lt_succ_self 2⟩
-
-Depends on / 依赖: Nat.lt_succ_self, isCMField, lt_succ_self
+/-
+**IsCyclotomicExtension.Rat.** 是 Mathlib 中的一个实例，位于命名空间 `IsCyclotomicExtension.Ra
+t`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [IsCyclotomicExtension ⊤ Rat K] :
+instance [IsCyclotomicExtension ⊤ ℚ K] :
     IsCMField K :=
   isCMField K (S := ⊤) ⟨3, trivial, Nat.lt_succ_self 2⟩
 
 end IsCyclotomicExtension.Rat
+

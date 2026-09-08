@@ -30,620 +30,619 @@ open Function Set Filter
 variable {𝕜 E : Type*} [NontriviallyNormedField 𝕜] [NormedAddCommGroup E] [NormedSpace 𝕜 E]
 
 open scoped Classical in
-/--
-Definition of `dslope` / `dslope` 的定义
+/-- `dslope f a b` is defined as `slope f a b = (b - a)⁻¹ • (f b - f a)` for `a ≠ b` and
+`deriv f a` for `a = b`. -/
+/-
+**dslope** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：dslope (f : 𝕜 -> E) (a : 𝕜) : 𝕜 -> E
+参数：f : 𝕜 -> E；a : 𝕜。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition dslope
-  signature: (f : 𝕜 -> E) (a : 𝕜)
-  body: update (slope f a) a (deriv f a)
-
-@[simp]
-
-中文:
-定义 dslope
-  签名: (f : 𝕜 -> E) (a : 𝕜)
-  定义体: update (slope f a) a (deriv f a)
-
-@[simp]
-
-Depends on / 依赖: update
+--- 原说明 ---
+`dslope f a b` is defined as `slope f a b = (b - a)⁻¹ • (f b - f a)` for `a ≠ b`
+ and
+`deriv f a` for `a = b`.
 -/
-noncomputable def dslope (f : 𝕜 -> E) (a : 𝕜) : 𝕜 -> E :=
+noncomputable def dslope (f : 𝕜 → E) (a : 𝕜) : 𝕜 → E :=
   update (slope f a) a (deriv f a)
 
 @[simp]
-/--
-theorem `dslope_same` / 定理 `dslope_same`
-
-English:
-theorem dslope_same
-  given: (f : 𝕜 -> E) (a : 𝕜)
-  statement: dslope f a a = deriv f a
-  proof: by
-  classical
-  exact update_self ..
-
-中文:
-定理 dslope_same
-  条件: (f : 𝕜 -> E) (a : 𝕜)
-  结论: dslope f a a = deriv f a
-  证明: by
-  classical
-  exact update_self ..
-
-Depends on / 依赖: classical, update_self
+/-
+**dslope_same** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dslope_same (f : 𝕜 -> E) (a : 𝕜) : dslope f a a = deriv f a
+参数：f : 𝕜 -> E；a : 𝕜。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.update_self`：update_self (a : α) (v : β a) (f : forall a, β a) 
+: update f a v a = v
 -/
-theorem dslope_same (f : 𝕜 -> E) (a : 𝕜) : dslope f a a = deriv f a := by
+theorem dslope_same (f : 𝕜 → E) (a : 𝕜) : dslope f a a = deriv f a := by
   classical
   exact update_self ..
 
-variable {f : 𝕜 -> E} {a b : 𝕜} {s : Set 𝕜}
-
-/--
-theorem `dslope_of_ne` / 定理 `dslope_of_ne`
-
-English:
-theorem dslope_of_ne
-  given: (f : 𝕜 -> E) (h : b != a)
-  statement: dslope f a b = slope f a b
-  proof: by
-  classical
-  exact update_of_ne h ..
-
-中文:
-定理 dslope_of_ne
-  条件: (f : 𝕜 -> E) (h : b != a)
-  结论: dslope f a b = slope f a b
-  证明: by
-  classical
-  exact update_of_ne h ..
-
-Depends on / 依赖: classical, update_of_ne
+variable {f : 𝕜 → E} {a b : 𝕜} {s : Set 𝕜}
+/-
+**dslope_of_ne** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dslope_of_ne (f : 𝕜 -> E) (h : b != a) : dslope f a b = slope f a b
+参数：f : 𝕜 -> E；h : b != a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.update_of_ne`：update_of_ne {a a' : α} (h : a != a') (v : β a') 
+(f : forall a, β a) : update f a' v a = f a
 -/
-theorem dslope_of_ne (f : 𝕜 -> E) (h : b != a) : dslope f a b = slope f a b := by
+theorem dslope_of_ne (f : 𝕜 → E) (h : b ≠ a) : dslope f a b = slope f a b := by
   classical
   exact update_of_ne h ..
-
-/--
-theorem `ContinuousLinearMap.dslope_comp` / 定理 `ContinuousLinearMap.dslope_comp`
-
-English:
-theorem ContinuousLinearMap.dslope_comp
-  statement: {F : Type*} [NormedAddCommGroup F] [NormedSpace 𝕜 F]
-  proof: by
-  rcases eq_or_ne b a with (rfl | hne)
-  · simp only [dslope_same]
-    exact (f.hasFDerivAt.comp_hasDerivAt b (H rfl).hasDerivAt).deriv
-  · simpa only [dslope_of_ne _ hne] using! f.toLinearMap.slope_comp g a b
-
-中文:
-定理 连续线性映射.dslope_comp
-  结论: {F : 类型} [赋范交换加群 F] [赋范空间 𝕜 F]
-  证明: by
-  rcases eq_or_ne b a with (rfl | hne)
-  · simp only [dslope_same]
-    exact (f.hasFDerivAt.comp_hasDerivAt b (H rfl).hasDerivAt).deriv
-  · simpa only [dslope_of_ne _ hne] using! f.toLinearMap.slope_comp g a b
-
-Depends on / 依赖: comp_hasDerivAt, dslope_of_ne, dslope_same, eq_or_ne, f.hasFDerivAt.comp_hasDerivAt, f.toLinearMap.slope_comp, hasDerivAt, hasFDerivAt, slope_comp, toLinearMap
+/-
+**ContinuousLinearMap.dslope_comp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousLinearMap.dslope_comp {F : Type*} [NormedAddCommGroup F] [Normed
+Space 𝕜 F] (f : E ->L[𝕜] F) (g : 𝕜 -> E) (a b : 𝕜) (H : a = b -> DifferentiableA
+t 𝕜 g a) : dslope (f ∘ g) a b = f (dslope g a b)
+参数：f : E ->L[𝕜] F；g : 𝕜 -> E；a b : 𝕜；H : a = b -> DifferentiableAt 𝕜 g a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dslope_same`：dslope_same (f : 𝕜 -> E) (a : 𝕜) : dslope f a a = deriv f a
+· 使用定理 `HasDerivAt.deriv`：HasDerivAt.deriv (h : HasDerivAt f f' x) : deriv f x =
+ f'
+· 使用定理 `HasFDerivAt.comp_hasDerivAt`：HasFDerivAt.comp_hasDerivAt (hl : HasFDeriv
+At l l' (f x)) (hf : HasDerivAt f f' x) : HasDerivAt (l ∘ f) (l' f') x
+· 使用定理 `ContinuousLinearMap.hasFDerivAt`：∀ {𝕜 : Type u_1} [inst : NontriviallyNo
+rmedField 𝕜] {E : Type u_2} [inst_1 : AddCommGroup E]   [inst_2 : _root_.Module 
+𝕜 E] [inst_3 : Topolo…
+· 使用定理 `DifferentiableAt.hasDerivAt`：DifferentiableAt.hasDerivAt (h : Differenti
+ableAt 𝕜 f x) : HasDerivAt f (deriv f x) x
+· 使用定理 `dslope_of_ne`：dslope_of_ne (f : 𝕜 -> E) (h : b != a) : dslope f a b = sl
+ope f a b
+· 使用定理 `LinearMap.slope_comp`：LinearMap.slope_comp {F : Type*} [AddCommGroup F] 
+[Module k F] (f : E ->ₗ[k] F) (g : k -> E) (a b : k) : slope (f ∘ g) a b = f (sl
+ope g a b)
 -/
 theorem ContinuousLinearMap.dslope_comp {F : Type*} [NormedAddCommGroup F] [NormedSpace 𝕜 F]
-    (f : E ->L[𝕜] F) (g : 𝕜 -> E) (a b : 𝕜) (H : a = b -> DifferentiableAt 𝕜 g a) :
+    (f : E →L[𝕜] F) (g : 𝕜 → E) (a b : 𝕜) (H : a = b → DifferentiableAt 𝕜 g a) :
     dslope (f ∘ g) a b = f (dslope g a b) := by
   rcases eq_or_ne b a with (rfl | hne)
   · simp only [dslope_same]
     exact (f.hasFDerivAt.comp_hasDerivAt b (H rfl).hasDerivAt).deriv
   · simpa only [dslope_of_ne _ hne] using! f.toLinearMap.slope_comp g a b
-
-/--
-theorem `eqOn_dslope_slope` / 定理 `eqOn_dslope_slope`
-
-English:
-theorem eqOn_dslope_slope
-  given: (f : 𝕜 -> E) (a : 𝕜)
-  statement: EqOn (dslope f a) (slope f a) {a}ᶜ
-  proof: fun _ =>
-  dslope_of_ne f
-
-中文:
-定理 eqOn_dslope_slope
-  条件: (f : 𝕜 -> E) (a : 𝕜)
-  结论: EqOn (dslope f a) (slope f a) {a}ᶜ
-  证明: fun _ =>
-  dslope_of_ne f
+/-
+**eqOn_dslope_slope** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：eqOn_dslope_slope (f : 𝕜 -> E) (a : 𝕜) : EqOn (dslope f a) (slope f a) {a}
+ᶜ
+参数：f : 𝕜 -> E；a : 𝕜。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dslope_of_ne`：dslope_of_ne (f : 𝕜 -> E) (h : b != a) : dslope f a b = sl
+ope f a b
 -/
-theorem eqOn_dslope_slope (f : 𝕜 -> E) (a : 𝕜) : EqOn (dslope f a) (slope f a) {a}ᶜ := fun _ =>
+theorem eqOn_dslope_slope (f : 𝕜 → E) (a : 𝕜) : EqOn (dslope f a) (slope f a) {a}ᶜ := fun _ =>
   dslope_of_ne f
-
-/--
-theorem `dslope_eventuallyEq_slope_of_ne` / 定理 `dslope_eventuallyEq_slope_of_ne`
-
-English:
-theorem dslope_eventuallyEq_slope_of_ne
-  given: (f : 𝕜 -> E) (h : b != a)
-  statement: dslope f a =ᶠ[𝓝 b] slope f a
-  proof: (eqOn_dslope_slope f a).eventuallyEq_of_mem (isOpen_ne.mem_nhds h)
-
-中文:
-定理 dslope_eventuallyEq_slope_of_ne
-  条件: (f : 𝕜 -> E) (h : b != a)
-  结论: dslope f a =ᶠ[𝓝 b] slope f a
-  证明: (eqOn_dslope_slope f a).eventuallyEq_of_mem (isOpen_ne.mem_nhds h)
-
-Depends on / 依赖: eqOn_dslope_slope, eventuallyEq_of_mem, isOpen_ne, isOpen_ne.mem_nhds, mem_nhds
+/-
+**dslope_eventuallyEq_slope_of_ne** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dslope_eventuallyEq_slope_of_ne (f : 𝕜 -> E) (h : b != a) : dslope f a =ᶠ[
+𝓝 b] slope f a
+参数：f : 𝕜 -> E；h : b != a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.EqOn.eventuallyEq_of_mem`：Set.EqOn.eventuallyEq_of_mem {α β} {s : Se
+t α} {l : Filter α} {f g : α -> β} (h : EqOn f g s) (hl : s in l) : f =ᶠ[l] g
+· 使用定理 `eqOn_dslope_slope`：eqOn_dslope_slope (f : 𝕜 -> E) (a : 𝕜) : EqOn (dslope
+ f a) (slope f a) {a}ᶜ
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
+· 使用定理 `isOpen_ne`：isOpen_ne [T1Space X] {x : X} : IsOpen { y | y != x }
+· 使用定理 `T2Space.t1Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T2Space X
+], T1Space X
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
 -/
-theorem dslope_eventuallyEq_slope_of_ne (f : 𝕜 -> E) (h : b != a) : dslope f a =ᶠ[𝓝 b] slope f a :=
+theorem dslope_eventuallyEq_slope_of_ne (f : 𝕜 → E) (h : b ≠ a) : dslope f a =ᶠ[𝓝 b] slope f a :=
   (eqOn_dslope_slope f a).eventuallyEq_of_mem (isOpen_ne.mem_nhds h)
-
-/--
-theorem `dslope_eventuallyEq_slope_nhdsNE` / 定理 `dslope_eventuallyEq_slope_nhdsNE`
-
-English:
-theorem dslope_eventuallyEq_slope_nhdsNE
-  given: (f : 𝕜 -> E)
-  statement: dslope f a =ᶠ[𝓝[!=] a] slope f a
-  proof: (eqOn_dslope_slope f a).eventuallyEq_of_mem self_mem_nhdsWithin
-
-@[simp]
-
-中文:
-定理 dslope_eventuallyEq_slope_nhdsNE
-  条件: (f : 𝕜 -> E)
-  结论: dslope f a =ᶠ[𝓝[!=] a] slope f a
-  证明: (eqOn_dslope_slope f a).eventuallyEq_of_mem self_mem_nhdsWithin
-
-@[simp]
-
-Depends on / 依赖: eqOn_dslope_slope, eventuallyEq_of_mem, self_mem_nhdsWithin
+/-
+**dslope_eventuallyEq_slope_nhdsNE** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dslope_eventuallyEq_slope_nhdsNE (f : 𝕜 -> E) : dslope f a =ᶠ[𝓝[!=] a] slo
+pe f a
+参数：f : 𝕜 -> E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.EqOn.eventuallyEq_of_mem`：Set.EqOn.eventuallyEq_of_mem {α β} {s : Se
+t α} {l : Filter α} {f g : α -> β} (h : EqOn f g s) (hl : s in l) : f =ᶠ[l] g
+· 使用定理 `eqOn_dslope_slope`：eqOn_dslope_slope (f : 𝕜 -> E) (a : 𝕜) : EqOn (dslope
+ f a) (slope f a) {a}ᶜ
+· 使用定理 `self_mem_nhdsWithin`：self_mem_nhdsWithin {a : α} {s : Set α} : s in 𝓝[s]
+ a
 -/
-theorem dslope_eventuallyEq_slope_nhdsNE (f : 𝕜 -> E) : dslope f a =ᶠ[𝓝[!=] a] slope f a :=
+theorem dslope_eventuallyEq_slope_nhdsNE (f : 𝕜 → E) : dslope f a =ᶠ[𝓝[≠] a] slope f a :=
   (eqOn_dslope_slope f a).eventuallyEq_of_mem self_mem_nhdsWithin
 
 @[simp]
-/--
-theorem `sub_smul_dslope` / 定理 `sub_smul_dslope`
-
-English:
-theorem sub_smul_dslope
-  given: (f : 𝕜 -> E) (a b : 𝕜)
-  statement: (b - a) • dslope f a b = f b - f a
-  proof: by
-  rcases eq_or_ne b a with (rfl | hne) <;> simp [dslope_of_ne, *]
-
-中文:
-定理 sub_smul_dslope
-  条件: (f : 𝕜 -> E) (a b : 𝕜)
-  结论: (b - a) • dslope f a b = f b - f a
-  证明: by
-  rcases eq_or_ne b a with (rfl | hne) <;> simp [dslope_of_ne, *]
-
-Depends on / 依赖: dslope_of_ne, eq_or_ne
+/-
+**sub_smul_dslope** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：sub_smul_dslope (f : 𝕜 -> E) (a b : 𝕜) : (b - a) • dslope f a b = f b - f 
+a
+参数：f : 𝕜 -> E；a b : 𝕜。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
+· 使用定理 `dslope_same`：dslope_same (f : 𝕜 -> E) (a : 𝕜) : dslope f a a = deriv f a
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dslope_of_ne`：dslope_of_ne (f : 𝕜 -> E) (h : b != a) : dslope f a b = sl
+ope f a b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `sub_smul_slope`：sub_smul_slope (f : k -> PE) (a b : k) : (b - a) • slope
+ f a b = f b -ᵥ f a
 -/
-theorem sub_smul_dslope (f : 𝕜 -> E) (a b : 𝕜) : (b - a) • dslope f a b = f b - f a := by
+theorem sub_smul_dslope (f : 𝕜 → E) (a b : 𝕜) : (b - a) • dslope f a b = f b - f a := by
   rcases eq_or_ne b a with (rfl | hne) <;> simp [dslope_of_ne, *]
-
-/--
-theorem `dslope_sub_smul_of_ne` / 定理 `dslope_sub_smul_of_ne`
-
-English:
-theorem dslope_sub_smul_of_ne
-  given: (f : 𝕜 -> E) (h : b != a)
-  proof: by
-  rw [dslope_of_ne _ h]; rw [slope_sub_smul _ h.symm]
-
-中文:
-定理 dslope_sub_smul_of_ne
-  条件: (f : 𝕜 -> E) (h : b != a)
-  证明: by
-  rw [dslope_of_ne _ h]; rw [slope_sub_smul _ h.symm]
-
-Depends on / 依赖: dslope_of_ne, h.symm, slope_sub_smul
+/-
+**dslope_sub_smul_of_ne** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dslope_sub_smul_of_ne (f : 𝕜 -> E) (h : b != a) : dslope (fun x => (x - a)
+ • f x) a b = f b
+参数：f : 𝕜 -> E；h : b != a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dslope_of_ne`：dslope_of_ne (f : 𝕜 -> E) (h : b != a) : dslope f a b = sl
+ope f a b
+· 使用定理 `slope_sub_smul`：slope_sub_smul (f : k -> E) {a b : k} (h : a != b) : slo
+pe (fun x => (x - a) • f x) a b = f b
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
 -/
-theorem dslope_sub_smul_of_ne (f : 𝕜 -> E) (h : b != a) :
+theorem dslope_sub_smul_of_ne (f : 𝕜 → E) (h : b ≠ a) :
     dslope (fun x => (x - a) • f x) a b = f b := by
-  rw [dslope_of_ne _ h]; rw [slope_sub_smul _ h.symm]
-
-/--
-theorem `eqOn_dslope_sub_smul` / 定理 `eqOn_dslope_sub_smul`
-
-English:
-theorem eqOn_dslope_sub_smul
-  given: (f : 𝕜 -> E) (a : 𝕜)
-  proof: fun _ => dslope_sub_smul_of_ne f
-
-中文:
-定理 eqOn_dslope_sub_smul
-  条件: (f : 𝕜 -> E) (a : 𝕜)
-  证明: fun _ => dslope_sub_smul_of_ne f
-
-Depends on / 依赖: dslope_sub_smul_of_ne
+  rw [dslope_of_ne _ h, slope_sub_smul _ h.symm]
+/-
+**eqOn_dslope_sub_smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：eqOn_dslope_sub_smul (f : 𝕜 -> E) (a : 𝕜) : EqOn (dslope (fun x => (x - a)
+ • f x) a) f {a}ᶜ
+参数：f : 𝕜 -> E；a : 𝕜。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `dslope_sub_smul_of_ne`：dslope_sub_smul_of_ne (f : 𝕜 -> E) (h : b != a) :
+ dslope (fun x => (x - a) • f x) a b = f b
 -/
-theorem eqOn_dslope_sub_smul (f : 𝕜 -> E) (a : 𝕜) :
+theorem eqOn_dslope_sub_smul (f : 𝕜 → E) (a : 𝕜) :
     EqOn (dslope (fun x => (x - a) • f x) a) f {a}ᶜ := fun _ => dslope_sub_smul_of_ne f
-
-/--
-theorem `dslope_sub_smul` / 定理 `dslope_sub_smul`
-
-English:
-theorem dslope_sub_smul
-  given: [DecidableEq 𝕜] (f : 𝕜 -> E) (a : 𝕜)
-  proof: eq_update_iff.2 ⟨dslope_same _ _, eqOn_dslope_sub_smul f a⟩
-
-@[simp]
-
-中文:
-定理 dslope_sub_smul
-  条件: [DecidableEq 𝕜] (f : 𝕜 -> E) (a : 𝕜)
-  证明: eq_update_iff.2 ⟨dslope_same _ _, eqOn_dslope_sub_smul f a⟩
-
-@[simp]
-
-Depends on / 依赖: dslope_same, eqOn_dslope_sub_smul, eq_update_iff
+/-
+**dslope_sub_smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：dslope_sub_smul [DecidableEq 𝕜] (f : 𝕜 -> E) (a : 𝕜) : dslope (fun x => (x
+ - a) • f x) a = update f a (deriv (fun x => (x - a) • f x) a)
+参数：f : 𝕜 -> E；a : 𝕜。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.eq_update_iff`：eq_update_iff {a : α} {b : β a} {f g : forall a,
+ β a} : g = update f a b ↔ g a = b ∧ forall x != a, g x = f x
+· 使用定理 `dslope_same`：dslope_same (f : 𝕜 -> E) (a : 𝕜) : dslope f a a = deriv f a
+· 使用定理 `eqOn_dslope_sub_smul`：eqOn_dslope_sub_smul (f : 𝕜 -> E) (a : 𝕜) : EqOn (
+dslope (fun x => (x - a) • f x) a) f {a}ᶜ
 -/
-theorem dslope_sub_smul [DecidableEq 𝕜] (f : 𝕜 -> E) (a : 𝕜) :
+theorem dslope_sub_smul [DecidableEq 𝕜] (f : 𝕜 → E) (a : 𝕜) :
     dslope (fun x => (x - a) • f x) a = update f a (deriv (fun x => (x - a) • f x) a) :=
   eq_update_iff.2 ⟨dslope_same _ _, eqOn_dslope_sub_smul f a⟩
 
 @[simp]
-/--
-theorem `continuousAt_dslope_same` / 定理 `continuousAt_dslope_same`
-
-English:
-theorem continuousAt_dslope_same
-  statement: ContinuousAt (dslope f a) a ↔ DifferentiableAt 𝕜 f a
-  proof: by
-  simp only [dslope, continuousAt_update_same, ← hasDerivAt_deriv_iff, hasDerivAt_iff_tendsto_slope]
-
-中文:
-定理 continuousAt_dslope_same
-  结论: ContinuousAt (dslope f a) a ↔ DifferentiableAt 𝕜 f a
-  证明: by
-  simp only [dslope, continuousAt_update_same, ← hasDerivAt_deriv_iff, hasDerivAt_iff_tendsto_slope]
-
-Depends on / 依赖: continuousAt_update_same, dslope, hasDerivAt_deriv_iff, hasDerivAt_iff_tendsto_slope
+/-
+**continuousAt_dslope_same** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuousAt_dslope_same : ContinuousAt (dslope f a) a ↔ DifferentiableAt 
+𝕜 f a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem continuousAt_dslope_same : ContinuousAt (dslope f a) a ↔ DifferentiableAt 𝕜 f a := by
   simp only [dslope, continuousAt_update_same, ← hasDerivAt_deriv_iff, hasDerivAt_iff_tendsto_slope]
-
-/--
-theorem `ContinuousWithinAt.of_dslope` / 定理 `ContinuousWithinAt.of_dslope`
-
-English:
-theorem ContinuousWithinAt.of_dslope
-  given: (h : ContinuousWithinAt (dslope f a) s b)
-  proof: by
-  have : ContinuousWithinAt (fun x => (x - a) • dslope f a x + f a) s b :=
-    ((continuousWithinAt_id.sub continuousWithinAt_const).smul h).add continuousWithinAt_const
-  simpa only [sub_smul_dslope, sub_add_cancel] using this
-
-中文:
-定理 ContinuousWithinAt.of_dslope
-  条件: (h : ContinuousWithinAt (dslope f a) s b)
-  证明: by
-  have : ContinuousWithinAt (fun x => (x - a) • dslope f a x + f a) s b :=
-    ((continuousWithinAt_id.sub continuousWithinAt_const).smul h).add continuousWithinAt_const
-  simpa only [sub_smul_dslope, sub_add_cancel] using this
-
-Depends on / 依赖: ContinuousWithinAt, continuousWithinAt_const, continuousWithinAt_id, continuousWithinAt_id.sub, dslope, sub_add_cancel, sub_smul_dslope
+/-
+**ContinuousWithinAt.of_dslope** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousWithinAt.of_dslope (h : ContinuousWithinAt (dslope f a) s b) : C
+ontinuousWithinAt f s b
+参数：h : ContinuousWithinAt (dslope f a) s b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousWithinAt.add`：∀ {M : Type u_1} [inst : TopologicalSpace M] [in
+st_1 : Add M] [ContinuousAdd M] {X : Type u_2}   [inst_3 : TopologicalSpace X] {
+f g : X → M}…
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `ContinuousWithinAt.smul`：ContinuousWithinAt.smul (hf : ContinuousWithinA
+t f s b) (hg : ContinuousWithinAt g s b) : ContinuousWithinAt (f • g) s b
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `ContinuousWithinAt.sub`：∀ {G : Type u_1} {X : Type u_3} [inst : Topologi
+calSpace X] [inst_1 : TopologicalSpace G] [inst_2 : Sub G]   [ContinuousSub G] {
+f g : X → G}…
+· 使用定理 `IsTopologicalAddGroup.to_continuousSub`：∀ {G : Type u} [inst : Topologic
+alSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G], ContinuousSub G
+· 使用定理 `continuousWithinAt_id`：continuousWithinAt_id {s : Set α} {x : α} : Conti
+nuousWithinAt id s x
+· 使用定理 `continuousWithinAt_const`：continuousWithinAt_const {b : β} {s : Set α} {
+x : α} : ContinuousWithinAt (fun _ : α => b) s x
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `sub_smul_dslope`：sub_smul_dslope (f : 𝕜 -> E) (a b : 𝕜) : (b - a) • dslo
+pe f a b = f b - f a
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
 -/
 theorem ContinuousWithinAt.of_dslope (h : ContinuousWithinAt (dslope f a) s b) :
     ContinuousWithinAt f s b := by
   have : ContinuousWithinAt (fun x => (x - a) • dslope f a x + f a) s b :=
     ((continuousWithinAt_id.sub continuousWithinAt_const).smul h).add continuousWithinAt_const
   simpa only [sub_smul_dslope, sub_add_cancel] using this
-
-/--
-theorem `ContinuousAt.of_dslope` / 定理 `ContinuousAt.of_dslope`
-
-English:
-theorem ContinuousAt.of_dslope
-  given: (h : ContinuousAt (dslope f a) b)
-  statement: ContinuousAt f b
-  proof: (continuousWithinAt_univ _ _).1 h.continuousWithinAt.of_dslope
-
-中文:
-定理 ContinuousAt.of_dslope
-  条件: (h : ContinuousAt (dslope f a) b)
-  结论: ContinuousAt f b
-  证明: (continuousWithinAt_univ _ _).1 h.continuousWithinAt.of_dslope
-
-Depends on / 依赖: continuousWithinAt, continuousWithinAt_univ, h.continuousWithinAt.of_dslope, of_dslope
+/-
+**ContinuousAt.of_dslope** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousAt.of_dslope (h : ContinuousAt (dslope f a) b) : ContinuousAt f 
+b
+参数：h : ContinuousAt (dslope f a) b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `continuousWithinAt_univ`：continuousWithinAt_univ (f : α -> β) (x : α) : 
+ContinuousWithinAt f Set.univ x ↔ ContinuousAt f x
+· 使用定理 `ContinuousWithinAt.of_dslope`：ContinuousWithinAt.of_dslope (h : Continuo
+usWithinAt (dslope f a) s b) : ContinuousWithinAt f s b
+· 使用定理 `ContinuousAt.continuousWithinAt`：ContinuousAt.continuousWithinAt (h : Co
+ntinuousAt f x) : ContinuousWithinAt f s x
 -/
 theorem ContinuousAt.of_dslope (h : ContinuousAt (dslope f a) b) : ContinuousAt f b :=
   (continuousWithinAt_univ _ _).1 h.continuousWithinAt.of_dslope
-
-/--
-theorem `ContinuousOn.of_dslope` / 定理 `ContinuousOn.of_dslope`
-
-English:
-theorem ContinuousOn.of_dslope
-  given: (h : ContinuousOn (dslope f a) s)
-  statement: ContinuousOn f s
-  proof: fun x hx =>
-  (h x hx).of_dslope
-
-中文:
-定理 ContinuousOn.of_dslope
-  条件: (h : ContinuousOn (dslope f a) s)
-  结论: ContinuousOn f s
-  证明: fun x hx =>
-  (h x hx).of_dslope
+/-
+**ContinuousOn.of_dslope** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ContinuousOn.of_dslope (h : ContinuousOn (dslope f a) s) : ContinuousOn f 
+s
+参数：h : ContinuousOn (dslope f a) s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousWithinAt.of_dslope`：ContinuousWithinAt.of_dslope (h : Continuo
+usWithinAt (dslope f a) s b) : ContinuousWithinAt f s b
 -/
 theorem ContinuousOn.of_dslope (h : ContinuousOn (dslope f a) s) : ContinuousOn f s := fun x hx =>
   (h x hx).of_dslope
-
-/--
-theorem `continuousWithinAt_dslope_of_ne` / 定理 `continuousWithinAt_dslope_of_ne`
-
-English:
-theorem continuousWithinAt_dslope_of_ne
-  given: (h : b != a)
-  proof: by
-  refine ⟨ContinuousWithinAt.of_dslope, fun hc => ?_⟩
-  classical
-  simp only [dslope, continuousWithinAt_update_of_ne h]
-  exact ((continuousWithinAt_id.sub continuousWithinAt_const).inv₀ (sub_ne_zero.2 h)).smul
-    (hc.sub continuousWithinAt_const)
-
-中文:
-定理 continuousWithinAt_dslope_of_ne
-  条件: (h : b != a)
-  证明: by
-  refine ⟨ContinuousWithinAt.of_dslope, fun hc => ?_⟩
-  classical
-  simp only [dslope, continuousWithinAt_update_of_ne h]
-  exact ((continuousWithinAt_id.sub continuousWithinAt_const).inv₀ (sub_ne_zero.2 h)).smul
-    (hc.sub continuousWithinAt_const)
-
-Depends on / 依赖: ContinuousWithinAt, ContinuousWithinAt.of_dslope, classical, continuousWithinAt_const, continuousWithinAt_id, continuousWithinAt_id.sub, continuousWithinAt_update_of_ne, dslope, hc.sub, of_dslope, sub_ne_zero
+/-
+**continuousWithinAt_dslope_of_ne** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuousWithinAt_dslope_of_ne (h : b != a) : ContinuousWithinAt (dslope 
+f a) s b ↔ ContinuousWithinAt f s b
+参数：h : b != a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousWithinAt.of_dslope`：ContinuousWithinAt.of_dslope (h : Continuo
+usWithinAt (dslope f a) s b) : ContinuousWithinAt f s b
+· 使用定理 `continuousWithinAt_update_of_ne`：continuousWithinAt_update_of_ne [T1Spac
+e X] [DecidableEq X] [TopologicalSpace Y] {f : X -> Y} {s : Set X} {x x' : X} {y
+ : Y} (hne : x' != x)…
+· 使用定理 `T2Space.t1Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T2Space X
+], T1Space X
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `ContinuousWithinAt.smul`：ContinuousWithinAt.smul (hf : ContinuousWithinA
+t f s b) (hg : ContinuousWithinAt g s b) : ContinuousWithinAt (f • g) s b
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
+· 使用定理 `ContinuousWithinAt.inv₀`：∀ {α : Type u_1} {G₀ : Type u_3} [inst : Zero G
+₀] [inst_1 : Inv G₀] [inst_2 : TopologicalSpace G₀] [ContinuousInv₀ G₀]   {f : α
+ → G₀} {s : S…
+· 使用定理 `IsTopologicalDivisionRing.toContinuousInv₀`：∀ {K : Type u_1} {inst : Div
+isionRing K} {inst_1 : TopologicalSpace K} [self : IsTopologicalDivisionRing K],
+   ContinuousInv₀ K
+· 使用定理 `NormedDivisionRing.to_isTopologicalDivisionRing`：∀ {α : Type u_1} [inst 
+: NormedDivisionRing α], IsTopologicalDivisionRing α
+· 使用定理 `ContinuousWithinAt.sub`：∀ {G : Type u_1} {X : Type u_3} [inst : Topologi
+calSpace X] [inst_1 : TopologicalSpace G] [inst_2 : Sub G]   [ContinuousSub G] {
+f g : X → G}…
+· 使用定理 `IsTopologicalAddGroup.to_continuousSub`：∀ {G : Type u} [inst : Topologic
+alSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G], ContinuousSub G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `continuousWithinAt_id`：continuousWithinAt_id {s : Set α} {x : α} : Conti
+nuousWithinAt id s x
+· 使用定理 `continuousWithinAt_const`：continuousWithinAt_const {b : β} {s : Set α} {
+x : α} : ContinuousWithinAt (fun _ : α => b) s x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `sub_ne_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b ≠ 0 ↔
+ a ≠ b
 -/
-theorem continuousWithinAt_dslope_of_ne (h : b != a) :
+theorem continuousWithinAt_dslope_of_ne (h : b ≠ a) :
     ContinuousWithinAt (dslope f a) s b ↔ ContinuousWithinAt f s b := by
   refine ⟨ContinuousWithinAt.of_dslope, fun hc => ?_⟩
   classical
   simp only [dslope, continuousWithinAt_update_of_ne h]
   exact ((continuousWithinAt_id.sub continuousWithinAt_const).inv₀ (sub_ne_zero.2 h)).smul
     (hc.sub continuousWithinAt_const)
-
-/--
-theorem `continuousAt_dslope_of_ne` / 定理 `continuousAt_dslope_of_ne`
-
-English:
-theorem continuousAt_dslope_of_ne
-  given: (h : b != a)
-  statement: ContinuousAt (dslope f a) b ↔ ContinuousAt f b
-  proof: by
-  simp only [← continuousWithinAt_univ, continuousWithinAt_dslope_of_ne h]
-
-中文:
-定理 continuousAt_dslope_of_ne
-  条件: (h : b != a)
-  结论: ContinuousAt (dslope f a) b ↔ ContinuousAt f b
-  证明: by
-  simp only [← continuousWithinAt_univ, continuousWithinAt_dslope_of_ne h]
-
-Depends on / 依赖: continuousWithinAt_dslope_of_ne, continuousWithinAt_univ
+/-
+**continuousAt_dslope_of_ne** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuousAt_dslope_of_ne (h : b != a) : ContinuousAt (dslope f a) b ↔ Con
+tinuousAt f b
+参数：h : b != a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `continuousWithinAt_dslope_of_ne`：continuousWithinAt_dslope_of_ne (h : b 
+!= a) : ContinuousWithinAt (dslope f a) s b ↔ ContinuousWithinAt f s b
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem continuousAt_dslope_of_ne (h : b != a) : ContinuousAt (dslope f a) b ↔ ContinuousAt f b := by
+theorem continuousAt_dslope_of_ne (h : b ≠ a) : ContinuousAt (dslope f a) b ↔ ContinuousAt f b := by
   simp only [← continuousWithinAt_univ, continuousWithinAt_dslope_of_ne h]
-
-/--
-theorem `continuousOn_dslope` / 定理 `continuousOn_dslope`
-
-English:
-theorem continuousOn_dslope
-  given: (h : s in 𝓝 a)
-  proof: by
-refine ⟨fun hc => ⟨hc.of_dslope, continuousAt_dslope_same.1 hc.continuousAt h⟩, ?_⟩
-  rintro ⟨hc, hd⟩ x hx
-  rcases eq_or_ne x a with (rfl | hne)
-  exacts [(continuousAt_dslope_same.2 hd).continuousWithinAt,
-    (continuousWithinAt_dslope_of_ne hne).2 (hc x hx)]
-
-中文:
-定理 continuousOn_dslope
-  条件: (h : s in 𝓝 a)
-  证明: by
-refine ⟨fun hc => ⟨hc.of_dslope, continuousAt_dslope_same.1 hc.continuousAt h⟩, ?_⟩
-  rintro ⟨hc, hd⟩ x hx
-  rcases eq_or_ne x a with (rfl | hne)
-  exacts [(continuousAt_dslope_same.2 hd).continuousWithinAt,
-    (continuousWithinAt_dslope_of_ne hne).2 (hc x hx)]
-
-Depends on / 依赖: continuousAt, continuousAt_dslope_same, continuousWithinAt, continuousWithinAt_dslope_of_ne, eq_or_ne, exacts, hc.continuousAt, hc.of_dslope, of_dslope
+/-
+**continuousOn_dslope** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：continuousOn_dslope (h : s in 𝓝 a) : ContinuousOn (dslope f a) s ↔ Continu
+ousOn f s ∧ DifferentiableAt 𝕜 f a
+参数：h : s in 𝓝 a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousOn.of_dslope`：ContinuousOn.of_dslope (h : ContinuousOn (dslope
+ f a) s) : ContinuousOn f s
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `continuousAt_dslope_same`：continuousAt_dslope_same : ContinuousAt (dslop
+e f a) a ↔ DifferentiableAt 𝕜 f a
+· 使用定理 `ContinuousOn.continuousAt`：ContinuousOn.continuousAt (h : ContinuousOn f
+ s) (hx : s in 𝓝 x) : ContinuousAt f x
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `ContinuousAt.continuousWithinAt`：ContinuousAt.continuousWithinAt (h : Co
+ntinuousAt f x) : ContinuousWithinAt f s x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `continuousWithinAt_dslope_of_ne`：continuousWithinAt_dslope_of_ne (h : b 
+!= a) : ContinuousWithinAt (dslope f a) s b ↔ ContinuousWithinAt f s b
 -/
-theorem continuousOn_dslope (h : s in 𝓝 a) :
+theorem continuousOn_dslope (h : s ∈ 𝓝 a) :
     ContinuousOn (dslope f a) s ↔ ContinuousOn f s ∧ DifferentiableAt 𝕜 f a := by
-refine ⟨fun hc => ⟨hc.of_dslope, continuousAt_dslope_same.1 hc.continuousAt h⟩, ?_⟩
+  refine ⟨fun hc => ⟨hc.of_dslope, continuousAt_dslope_same.1 <| hc.continuousAt h⟩, ?_⟩
   rintro ⟨hc, hd⟩ x hx
   rcases eq_or_ne x a with (rfl | hne)
   exacts [(continuousAt_dslope_same.2 hd).continuousWithinAt,
     (continuousWithinAt_dslope_of_ne hne).2 (hc x hx)]
-
-/--
-theorem `DifferentiableWithinAt.of_dslope` / 定理 `DifferentiableWithinAt.of_dslope`
-
-English:
-theorem DifferentiableWithinAt.of_dslope
-  given: (h : DifferentiableWithinAt 𝕜 (dslope f a) s b)
-  proof: by
-  simpa only [id, sub_smul_dslope f a, sub_add_cancel] using
-    ((differentiableWithinAt_id.sub_const a).fun_smul h).add_const (f a)
-
-中文:
-定理 DifferentiableWithinAt.of_dslope
-  条件: (h : DifferentiableWithinAt 𝕜 (dslope f a) s b)
-  证明: by
-  simpa only [id, sub_smul_dslope f a, sub_add_cancel] using
-    ((differentiableWithinAt_id.sub_const a).fun_smul h).add_const (f a)
-
-Depends on / 依赖: add_const, differentiableWithinAt_id, differentiableWithinAt_id.sub_const, fun_smul, sub_add_cancel, sub_const, sub_smul_dslope
+/-
+**DifferentiableWithinAt.of_dslope** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableWithinAt.of_dslope (h : DifferentiableWithinAt 𝕜 (dslope f a
+) s b) : DifferentiableWithinAt 𝕜 f s b
+参数：h : DifferentiableWithinAt 𝕜 (dslope f a) s b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `sub_smul_dslope`：sub_smul_dslope (f : 𝕜 -> E) (a b : 𝕜) : (b - a) • dslo
+pe f a b = f b - f a
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
+· 使用定理 `DifferentiableWithinAt.add_const`：∀ {𝕜 : Type u_1} [inst : NontriviallyN
+ormedField 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedS
+pace 𝕜 E] {F : Type u_…
+· 使用定理 `DifferentiableWithinAt.fun_smul`：∀ {𝕜 : Type u_1} [inst : NontriviallyNo
+rmedField 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSp
+ace 𝕜 E] {F : Type u_…
+· 使用定理 `DifferentiableWithinAt.sub_const`：DifferentiableWithinAt.sub_const (hf :
+ DifferentiableWithinAt 𝕜 f s x) (c : F) : DifferentiableWithinAt 𝕜 (fun y => f 
+y - c) s x
+· 使用定理 `differentiableWithinAt_id`：differentiableWithinAt_id : DifferentiableWit
+hinAt 𝕜 id s x
 -/
 theorem DifferentiableWithinAt.of_dslope (h : DifferentiableWithinAt 𝕜 (dslope f a) s b) :
     DifferentiableWithinAt 𝕜 f s b := by
   simpa only [id, sub_smul_dslope f a, sub_add_cancel] using
     ((differentiableWithinAt_id.sub_const a).fun_smul h).add_const (f a)
-
-/--
-theorem `DifferentiableAt.of_dslope` / 定理 `DifferentiableAt.of_dslope`
-
-English:
-theorem DifferentiableAt.of_dslope
-  given: (h : DifferentiableAt 𝕜 (dslope f a) b)
-  proof: differentiableWithinAt_univ.1 h.differentiableWithinAt.of_dslope
-
-中文:
-定理 DifferentiableAt.of_dslope
-  条件: (h : DifferentiableAt 𝕜 (dslope f a) b)
-  证明: differentiableWithinAt_univ.1 h.differentiableWithinAt.of_dslope
-
-Depends on / 依赖: differentiableWithinAt, differentiableWithinAt_univ, h.differentiableWithinAt.of_dslope, of_dslope
+/-
+**DifferentiableAt.of_dslope** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableAt.of_dslope (h : DifferentiableAt 𝕜 (dslope f a) b) : Diffe
+rentiableAt 𝕜 f b
+参数：h : DifferentiableAt 𝕜 (dslope f a) b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `differentiableWithinAt_univ`：differentiableWithinAt_univ : Differentiabl
+eWithinAt 𝕜 f univ x ↔ DifferentiableAt 𝕜 f x
+· 使用定理 `DifferentiableWithinAt.of_dslope`：DifferentiableWithinAt.of_dslope (h : 
+DifferentiableWithinAt 𝕜 (dslope f a) s b) : DifferentiableWithinAt 𝕜 f s b
+· 使用定理 `DifferentiableAt.differentiableWithinAt`：DifferentiableAt.differentiable
+WithinAt (h : DifferentiableAt 𝕜 f x) : DifferentiableWithinAt 𝕜 f s x
 -/
 theorem DifferentiableAt.of_dslope (h : DifferentiableAt 𝕜 (dslope f a) b) :
     DifferentiableAt 𝕜 f b :=
   differentiableWithinAt_univ.1 h.differentiableWithinAt.of_dslope
-
-/--
-theorem `DifferentiableOn.of_dslope` / 定理 `DifferentiableOn.of_dslope`
-
-English:
-theorem DifferentiableOn.of_dslope
-  given: (h : DifferentiableOn 𝕜 (dslope f a) s)
-  proof: fun x hx => (h x hx).of_dslope
-
-中文:
-定理 DifferentiableOn.of_dslope
-  条件: (h : DifferentiableOn 𝕜 (dslope f a) s)
-  证明: fun x hx => (h x hx).of_dslope
-
-Depends on / 依赖: of_dslope
+/-
+**DifferentiableOn.of_dslope** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：DifferentiableOn.of_dslope (h : DifferentiableOn 𝕜 (dslope f a) s) : Diffe
+rentiableOn 𝕜 f s
+参数：h : DifferentiableOn 𝕜 (dslope f a) s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DifferentiableWithinAt.of_dslope`：DifferentiableWithinAt.of_dslope (h : 
+DifferentiableWithinAt 𝕜 (dslope f a) s b) : DifferentiableWithinAt 𝕜 f s b
 -/
 theorem DifferentiableOn.of_dslope (h : DifferentiableOn 𝕜 (dslope f a) s) :
     DifferentiableOn 𝕜 f s := fun x hx => (h x hx).of_dslope
-
-/--
-theorem `differentiableWithinAt_dslope_of_ne` / 定理 `differentiableWithinAt_dslope_of_ne`
-
-English:
-theorem differentiableWithinAt_dslope_of_ne
-  given: (h : b != a)
-  proof: by
-  refine ⟨DifferentiableWithinAt.of_dslope, fun hd => ?_⟩
-  refine (((differentiableWithinAt_id.sub_const a).inv (sub_ne_zero.2 h)).smul
-    (hd.sub_const (f a))).congr_of_eventuallyEq ?_ (dslope_of_ne _ h)
-  refine (eqOn_dslope_slope _ _).eventuallyEq_of_mem ?_
-  exact mem_nhdsWithin_of_mem_nhds (isOpen_ne.mem_nhds h)
-
-中文:
-定理 differentiableWithinAt_dslope_of_ne
-  条件: (h : b != a)
-  证明: by
-  refine ⟨DifferentiableWithinAt.of_dslope, fun hd => ?_⟩
-  refine (((differentiableWithinAt_id.sub_const a).inv (sub_ne_zero.2 h)).smul
-    (hd.sub_const (f a))).congr_of_eventuallyEq ?_ (dslope_of_ne _ h)
-  refine (eqOn_dslope_slope _ _).eventuallyEq_of_mem ?_
-  exact mem_nhdsWithin_of_mem_nhds (isOpen_ne.mem_nhds h)
-
-Depends on / 依赖: DifferentiableWithinAt, DifferentiableWithinAt.of_dslope, congr_of_eventuallyEq, differentiableWithinAt_id, differentiableWithinAt_id.sub_const, dslope_of_ne, eqOn_dslope_slope, eventuallyEq_of_mem, hd.sub_const, isOpen_ne, isOpen_ne.mem_nhds, mem_nhds, mem_nhdsWithin_of_mem_nhds, of_dslope, sub_const, sub_ne_zero
+/-
+**differentiableWithinAt_dslope_of_ne** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：differentiableWithinAt_dslope_of_ne (h : b != a) : DifferentiableWithinAt 
+𝕜 (dslope f a) s b ↔ DifferentiableWithinAt 𝕜 f s b
+参数：h : b != a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `DifferentiableWithinAt.of_dslope`：DifferentiableWithinAt.of_dslope (h : 
+DifferentiableWithinAt 𝕜 (dslope f a) s b) : DifferentiableWithinAt 𝕜 f s b
+· 使用定理 `DifferentiableWithinAt.congr_of_eventuallyEq`：DifferentiableWithinAt.con
+gr_of_eventuallyEq (h : DifferentiableWithinAt 𝕜 f s x) (h₁ : f₁ =ᶠ[𝓝[s] x] f) (
+hx : f₁ x = f x) : DifferentiableW…
+· 使用定理 `DifferentiableWithinAt.smul`：DifferentiableWithinAt.smul (hc : Different
+iableWithinAt 𝕜 c s x) (hf : DifferentiableWithinAt 𝕜 f s x) : DifferentiableWit
+hinAt 𝕜 (c • f) s…
+· 使用定理 `DifferentiableWithinAt.inv`：DifferentiableWithinAt.inv (hf : Differentia
+bleWithinAt 𝕜 h S z) (hz : h z != 0) : DifferentiableWithinAt 𝕜 (h⁻¹) S z
+· 使用定理 `DifferentiableWithinAt.sub_const`：DifferentiableWithinAt.sub_const (hf :
+ DifferentiableWithinAt 𝕜 f s x) (c : F) : DifferentiableWithinAt 𝕜 (fun y => f 
+y - c) s x
+· 使用定理 `differentiableWithinAt_id`：differentiableWithinAt_id : DifferentiableWit
+hinAt 𝕜 id s x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `sub_ne_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b ≠ 0 ↔
+ a ≠ b
+· 使用定理 `Set.EqOn.eventuallyEq_of_mem`：Set.EqOn.eventuallyEq_of_mem {α β} {s : Se
+t α} {l : Filter α} {f g : α -> β} (h : EqOn f g s) (hl : s in l) : f =ᶠ[l] g
+· 使用定理 `eqOn_dslope_slope`：eqOn_dslope_slope (f : 𝕜 -> E) (a : 𝕜) : EqOn (dslope
+ f a) (slope f a) {a}ᶜ
+· 使用定理 `mem_nhdsWithin_of_mem_nhds`：mem_nhdsWithin_of_mem_nhds {s t : Set α} {a 
+: α} (h : s in 𝓝 a) : s in 𝓝[t] a
+· 使用定理 `IsOpen.mem_nhds`：IsOpen.mem_nhds (hs : IsOpen s) (hx : x in s) : s in 𝓝 
+x
+· 使用定理 `isOpen_ne`：isOpen_ne [T1Space X] {x : X} : IsOpen { y | y != x }
+· 使用定理 `T2Space.t1Space`：∀ {X : Type u_1} [inst : TopologicalSpace X] [T2Space X
+], T1Space X
+· 使用定理 `TopologicalSpace.t2Space_of_metrizableSpace`：∀ {X : Type u_2} [inst : To
+pologicalSpace X] [TopologicalSpace.MetrizableSpace X], T2Space X
+· 使用定理 `EMetricSpace.metrizableSpace`：∀ {α : Type u_2} [inst : EMetricSpace α], 
+TopologicalSpace.MetrizableSpace α
+· 使用定理 `dslope_of_ne`：dslope_of_ne (f : 𝕜 -> E) (h : b != a) : dslope f a b = sl
+ope f a b
 -/
-theorem differentiableWithinAt_dslope_of_ne (h : b != a) :
+theorem differentiableWithinAt_dslope_of_ne (h : b ≠ a) :
     DifferentiableWithinAt 𝕜 (dslope f a) s b ↔ DifferentiableWithinAt 𝕜 f s b := by
   refine ⟨DifferentiableWithinAt.of_dslope, fun hd => ?_⟩
   refine (((differentiableWithinAt_id.sub_const a).inv (sub_ne_zero.2 h)).smul
     (hd.sub_const (f a))).congr_of_eventuallyEq ?_ (dslope_of_ne _ h)
   refine (eqOn_dslope_slope _ _).eventuallyEq_of_mem ?_
   exact mem_nhdsWithin_of_mem_nhds (isOpen_ne.mem_nhds h)
-
-/--
-theorem `differentiableOn_dslope_of_notMem` / 定理 `differentiableOn_dslope_of_notMem`
-
-English:
-theorem differentiableOn_dslope_of_notMem
-  given: (h : a ∉ s)
-  proof: forall_congr' fun _ =>
-forall_congr' fun hx => differentiableWithinAt_dslope_of_ne ne_of_mem_of_not_mem hx h
-
-中文:
-定理 differentiableOn_dslope_of_notMem
-  条件: (h : a ∉ s)
-  证明: forall_congr' fun _ =>
-forall_congr' fun hx => differentiableWithinAt_dslope_of_ne ne_of_mem_of_not_mem hx h
-
-Depends on / 依赖: differentiableWithinAt_dslope_of_ne, forall_congr, ne_of_mem_of_not_mem
+/-
+**differentiableOn_dslope_of_notMem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：differentiableOn_dslope_of_notMem (h : a ∉ s) : DifferentiableOn 𝕜 (dslope
+ f a) s ↔ DifferentiableOn 𝕜 f s
+参数：h : a ∉ s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用定理 `differentiableWithinAt_dslope_of_ne`：differentiableWithinAt_dslope_of_ne
+ (h : b != a) : DifferentiableWithinAt 𝕜 (dslope f a) s b ↔ DifferentiableWithin
+At 𝕜 f s b
+· 使用定理 `ne_of_mem_of_not_mem`：∀ {α : Type u_1} {β : Type u_2} [inst : Membership
+ α β] {s : β} {a b : α}, a ∈ s → b ∉ s → a ≠ b
 -/
 theorem differentiableOn_dslope_of_notMem (h : a ∉ s) :
     DifferentiableOn 𝕜 (dslope f a) s ↔ DifferentiableOn 𝕜 f s :=
   forall_congr' fun _ =>
-forall_congr' fun hx => differentiableWithinAt_dslope_of_ne ne_of_mem_of_not_mem hx h
-
-/--
-theorem `differentiableAt_dslope_of_ne` / 定理 `differentiableAt_dslope_of_ne`
-
-English:
-theorem differentiableAt_dslope_of_ne
-  given: (h : b != a)
-  proof: by
-  simp only [← differentiableWithinAt_univ, differentiableWithinAt_dslope_of_ne h]
-
-中文:
-定理 differentiableAt_dslope_of_ne
-  条件: (h : b != a)
-  证明: by
-  simp only [← differentiableWithinAt_univ, differentiableWithinAt_dslope_of_ne h]
-
-Depends on / 依赖: differentiableWithinAt_dslope_of_ne, differentiableWithinAt_univ
+    forall_congr' fun hx => differentiableWithinAt_dslope_of_ne <| ne_of_mem_of_not_mem hx h
+/-
+**differentiableAt_dslope_of_ne** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：differentiableAt_dslope_of_ne (h : b != a) : DifferentiableAt 𝕜 (dslope f 
+a) b ↔ DifferentiableAt 𝕜 f b
+参数：h : b != a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `differentiableWithinAt_dslope_of_ne`：differentiableWithinAt_dslope_of_ne
+ (h : b != a) : DifferentiableWithinAt 𝕜 (dslope f a) s b ↔ DifferentiableWithin
+At 𝕜 f s b
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem differentiableAt_dslope_of_ne (h : b != a) :
+theorem differentiableAt_dslope_of_ne (h : b ≠ a) :
     DifferentiableAt 𝕜 (dslope f a) b ↔ DifferentiableAt 𝕜 f b := by
   simp only [← differentiableWithinAt_univ, differentiableWithinAt_dslope_of_ne h]
-
-/--
-lemma `sub_smul_dslope_of_zero` / 引理 `sub_smul_dslope_of_zero`
-
-English:
-lemma sub_smul_dslope_of_zero
-  given: {f : 𝕜 -> E} {a : 𝕜} (hf : f a = 0) (b : 𝕜)
-  proof: by
-  simp [hf]
-
-中文:
-引理 sub_smul_dslope_of_zero
-  条件: {f : 𝕜 -> E} {a : 𝕜} (hf : f a = 0) (b : 𝕜)
-  证明: by
-  simp [hf]
+/-
+**sub_smul_dslope_of_zero** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：sub_smul_dslope_of_zero {f : 𝕜 -> E} {a : 𝕜} (hf : f a = 0) (b : 𝕜) : (b -
+ a) • dslope f a b = f b
+参数：hf : f a = 0；b : 𝕜。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_smul_dslope`：sub_smul_dslope (f : 𝕜 -> E) (a b : 𝕜) : (b - a) • dslo
+pe f a b = f b - f a
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma sub_smul_dslope_of_zero {f : 𝕜 -> E} {a : 𝕜} (hf : f a = 0) (b : 𝕜) :
+lemma sub_smul_dslope_of_zero {f : 𝕜 → E} {a : 𝕜} (hf : f a = 0) (b : 𝕜) :
     (b - a) • dslope f a b = f b := by
   simp [hf]
-
-/--
-lemma `pow_sub_smul_iterate_dslope_of_zero` / 引理 `pow_sub_smul_iterate_dslope_of_zero`
-
-English:
-lemma pow_sub_smul_iterate_dslope_of_zero
-  statement: {f : 𝕜 -> E} {a : 𝕜} (n : Nat)
-  proof: by
-  induction n generalizing f with
-  | zero => simp
-  | succ n ih =>
-    rw [Function.iterate_succ_apply']; rw [pow_succ]; rw [mul_smul]; rw [sub_smul_dslope_of_zero (hf n n.lt_succ_self)]; rw [ih (by grind)]
-
-中文:
-引理 pow_sub_smul_iterate_dslope_of_zero
-  结论: {f : 𝕜 -> E} {a : 𝕜} (n : 自然数)
-  证明: by
-  induction n generalizing f with
-  | zero => simp
-  | succ n ih =>
-    rw [Function.iterate_succ_apply']; rw [pow_succ]; rw [mul_smul]; rw [sub_smul_dslope_of_zero (hf n n.lt_succ_self)]; rw [ih (by grind)]
-
-Depends on / 依赖: Function, Function.iterate_succ_apply, generalizing, iterate_succ_apply, lt_succ_self, mul_smul, n.lt_succ_self, pow_succ, sub_smul_dslope_of_zero
+/-
+**pow_sub_smul_iterate_dslope_of_zero** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：pow_sub_smul_iterate_dslope_of_zero {f : 𝕜 -> E} {a : 𝕜} (n : Nat) (hf : f
+orall k < n, (Function.swap dslope a)^[k] f a = 0) (b : 𝕜) : (b - a) ^ n • (Func
+tion.swap dslope a)^[n] f b = f b
+参数：n : Nat；hf : forall k < n, (Function.swap dslope a)^[k] f a = 0；b : 𝕜。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Function.iterate_succ_apply'`：iterate_succ_apply' (n : Nat) (x : α) : f^
+[n.succ] x = f (f^[n] x)
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `SemigroupAction.mul_smul`：∀ {α : Type u_9} {β : Type u_10} {inst : Semig
+roup α} [self : SemigroupAction α β] (x y : α) (b : β),   (x * y) • b = x • y • 
+b
+· 使用引理 `sub_smul_dslope_of_zero`：sub_smul_dslope_of_zero {f : 𝕜 -> E} {a : 𝕜} (h
+f : f a = 0) (b : 𝕜) : (b - a) • dslope f a b = f b
+· 使用定理 `Nat.lt_succ_self`：∀ (n : ℕ), n < n.succ
 -/
-lemma pow_sub_smul_iterate_dslope_of_zero {f : 𝕜 -> E} {a : 𝕜} (n : Nat)
-    (hf : forall k < n, (Function.swap dslope a)^[k] f a = 0) (b : 𝕜) :
+lemma pow_sub_smul_iterate_dslope_of_zero {f : 𝕜 → E} {a : 𝕜} (n : ℕ)
+    (hf : ∀ k < n, (Function.swap dslope a)^[k] f a = 0) (b : 𝕜) :
     (b - a) ^ n • (Function.swap dslope a)^[n] f b = f b := by
   induction n generalizing f with
   | zero => simp
   | succ n ih =>
-    rw [Function.iterate_succ_apply']; rw [pow_succ]; rw [mul_smul]; rw [sub_smul_dslope_of_zero (hf n n.lt_succ_self)]; rw [ih (by grind)]
+    rw [Function.iterate_succ_apply', pow_succ, mul_smul,
+      sub_smul_dslope_of_zero (hf n n.lt_succ_self), ih (by grind)]

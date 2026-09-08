@@ -28,43 +28,26 @@ section
 
 universe u
 
-variable (m : Type u -> Type u) [_root_.Monad m] [LawfulMonad m]
+variable (m : Type u → Type u) [_root_.Monad m] [LawfulMonad m]
 
 /-- A lawful `Control.Monad` gives a category theory `Monad` on the category of types.
 -/
 @[simps! obj map η_app μ_app]
-/--
-Definition of `ofTypeMonad` / `ofTypeMonad` 的定义
+/-
+**CategoryTheory.ofTypeMonad** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：ofTypeMonad : Monad (Type u) where toFunctor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofTypeMonad
-  signature: : Monad (Type u) where
-  body: ofTypeFunctor m
-  η := ⟨fun X => ↾(@pure m _ X), fun _ _ f => by
-    ext x; exact (LawfulApplicative.map_pure f x).symm⟩
-  μ := ⟨fun X => ↾(@joinM m _ X), fun _ _ _ => by ext _; exact joinM_map_map _ _⟩
-  assoc _ := by ext; exact joinM_map_joinM _
-  left_unit _ := by ext; exact joinM_pure _
-  right_unit _ := by ext; exact joinM_map_pure _
-
-中文:
-定义 ofTypeMonad
-  签名: : 单子 (类型u) where
-  定义体: ofTypeFunctor m
-  η := ⟨fun X => ↾(@pure m _ X), fun _ _ f => by
-    ext x; exact (LawfulApplicative.map_pure f x).symm⟩
-  μ := ⟨fun X => ↾(@joinM m _ X), fun _ _ _ => by ext _; exact joinM_map_map _ _⟩
-  assoc _ := by ext; exact joinM_map_joinM _
-  left_unit _ := by ext; exact joinM_pure _
-  right_unit _ := by ext; exact joinM_map_pure _
-
-Depends on / 依赖: ofTypeFunctor
+--- 原说明 ---
+A lawful `Control.Monad` gives a category theory `Monad` on the category of type
+s.
 -/
 def ofTypeMonad : Monad (Type u) where
   toFunctor := ofTypeFunctor m
-  η := ⟨fun X => ↾(@pure m _ X), fun _ _ f => by
+  η := ⟨fun X ↦ ↾(@pure m _ X), fun _ _ f => by
     ext x; exact (LawfulApplicative.map_pure f x).symm⟩
-  μ := ⟨fun X => ↾(@joinM m _ X), fun _ _ _ => by ext _; exact joinM_map_map _ _⟩
+  μ := ⟨fun X ↦ ↾(@joinM m _ X), fun _ _ _ => by ext _; exact joinM_map_map _ _⟩
   assoc _ := by ext; exact joinM_map_joinM _
   left_unit _ := by ext; exact joinM_pure _
   right_unit _ := by ext; exact joinM_map_pure _
@@ -75,64 +58,18 @@ set_option backward.isDefEq.respectTransparency false in
 category-theoretic version, provided the monad is lawful.
 -/
 @[simps]
-/--
-Definition of `kleisliCatEquivKleisli` / `kleisliCatEquivKleisli` 的定义
+/-
+**CategoryTheory.kleisliCatEquivKleisli** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y`。
+形式化陈述：kleisliCatEquivKleisli : KleisliCat m ≌ Kleisli (ofTypeMonad m) where func
+tor
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition kleisliCatEquivKleisli
-  signature: : KleisliCat m ≌ Kleisli (ofTypeMonad m) where
-  body: { obj X := Kleisli.mk _ X
-      map f := ⟨↾f⟩
-      map_id := fun _ => rfl
-      map_comp := fun f g => by
-        ext
-        simp [joinM]
-        rfl }
-  inverse :=
-    { obj X := X.of
-      map f x := f.of x
-      map_id := fun _ => rfl
-      map_comp := fun f g => by
-        dsimp
-        ext t
-        simp [joinM]
-        rfl }
-  unitIso := by
-    refine NatIso.ofComponents (fun X => Iso.refl X) fun f => ?_
-    change f >=> pure = pure >=> f
-    simp [functor_norm]
-  counitIso := NatIso.ofComponents fun X => Iso.refl X
-
-@[deprecated (since := "2026-04-16")] alias eq := kleisliCatEquivKleisli
-
-中文:
-定义 kleisliCatEquivKleisli
-  签名: : KleisliCat m ≌ Kleisli (ofTypeMonad m) where
-  定义体: { obj X := Kleisli.mk _ X
-      map f := ⟨↾f⟩
-      map_id := fun _ => rfl
-      map_comp := fun f g => by
-        ext
-        simp [joinM]
-        rfl }
-  inverse :=
-    { obj X := X.of
-      map f x := f.of x
-      map_id := fun _ => rfl
-      map_comp := fun f g => by
-        dsimp
-        ext t
-        simp [joinM]
-        rfl }
-  unitIso := by
-    refine NatIso.ofComponents (fun X => Iso.refl X) fun f => ?_
-    change f >=> pure = pure >=> f
-    simp [functor_norm]
-  counitIso := NatIso.ofComponents fun X => Iso.refl X
-
-@[deprecated (since := "2026-04-16")] alias eq := kleisliCatEquivKleisli
-
-Depends on / 依赖: Iso.refl, Kleisli, Kleisli.mk, NatIso, NatIso.ofComponents, X.of, counitIso, f.of, functor_norm, inverse, map_comp, map_id, ofComponents, unitIso
+--- 原说明 ---
+The `Kleisli` category of a `Control.Monad` is equivalent to the `Kleisli` categ
+ory of its
+category-theoretic version, provided the monad is lawful.
 -/
 def kleisliCatEquivKleisli : KleisliCat m ≌ Kleisli (ofTypeMonad m) where
   functor :=
@@ -163,3 +100,4 @@ def kleisliCatEquivKleisli : KleisliCat m ≌ Kleisli (ofTypeMonad m) where
 end
 
 end CategoryTheory
+

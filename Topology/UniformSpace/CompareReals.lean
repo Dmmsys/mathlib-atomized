@@ -56,71 +56,69 @@ real numbers, completion, uniform spaces
 
 open Set Function Filter CauSeq UniformSpace
 
-/--
-theorem `Rat.uniformSpace_eq` / 定理 `Rat.uniformSpace_eq`
+/-- The metric space uniform structure on ℚ (which presupposes the existence
+of real numbers) agrees with the one coming directly from (abs : ℚ → ℚ). -/
+/-
+**Rat.uniformSpace_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Rat.uniformSpace_eq : (AbsoluteValue.abs : AbsoluteValue Rat Rat).uniformS
+pace = PseudoMetricSpace.toUniformSpace
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformSpace.ext`：∀ {α : Type ua} {u₁ u₂ : UniformSpace α}, uniformity α
+ = uniformity α → u₁ = u₂
+· 使用定理 `Filter.ext`：∀ {α : Type u_1} {f g : Filter α}, (∀ (s : Set α), s ∈ f ↔ s
+ ∈ g) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.HasBasis.mem_iff`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter α} 
+{p : ι → Prop} {s : ι → Set α} {t : Set α},   l.HasBasis p s → (t ∈ l ↔ ∃ i, p i
+ ∧ s i ⊆ t)
+· 使用定理 `AbsoluteValue.hasBasis_uniformity`：hasBasis_uniformity : 𝓤[abv.uniformSp
+ace].HasBasis ((0 : 𝕜) < ·) fun ε => { p : R × R | abv (p.2 - p.1) < ε }
+· 使用定理 `Metric.uniformity_basis_dist_rat`：uniformity_basis_dist_rat : (𝓤 α).HasB
+asis (fun r : Rat => 0 < r) fun r => { p : α × α | dist p.1 p.2 < r }
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `AbsoluteValue.abs_apply`：∀ {S : Type u_6} [inst : Ring S] [inst_1 : Line
+arOrder S] [inst_2 : IsStrictOrderedRing S] (a : S),   AbsoluteValue.abs a = |a|
+· 使用定理 `abs_sub_comm`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] 
+(a b : α), |a - b| = |b - a|
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem Rat.uniformSpace_eq
-  proof: by
-  ext s
-  rw [(AbsoluteValue.hasBasis_uniformity _).mem_iff]; rw [Metric.uniformity_basis_dist_rat.mem_iff]
-  simp only [Rat.dist_eq, AbsoluteValue.abs_apply, ← Rat.cast_sub, ← Rat.cast_abs, Rat.cast_lt,
-    _root_.abs_sub_comm]
-
-中文:
-定理 有理数.uniformSpace_eq
-  证明: by
-  ext s
-  rw [(AbsoluteValue.hasBasis_uniformity _).mem_iff]; rw [Metric.uniformity_basis_dist_rat.mem_iff]
-  simp only [Rat.dist_eq, AbsoluteValue.abs_apply, ← Rat.cast_sub, ← Rat.cast_abs, Rat.cast_lt,
-    _root_.abs_sub_comm]
-
-Depends on / 依赖: AbsoluteValue, AbsoluteValue.abs_apply, AbsoluteValue.hasBasis_uniformity, Metric, Metric.uniformity_basis_dist_rat.mem_iff, Rat.cast_abs, Rat.cast_lt, Rat.cast_sub, Rat.dist_eq, _root_, _root_.abs_sub_comm, abs_apply, abs_sub_comm, cast_abs, cast_lt, cast_sub, dist_eq, hasBasis_uniformity, mem_iff, uniformity_basis_dist_rat
+--- 原说明 ---
+The metric space uniform structure on ℚ (which presupposes the existence
+of real numbers) agrees with the one coming directly from (abs : ℚ → ℚ).
 -/
 theorem Rat.uniformSpace_eq :
-    (AbsoluteValue.abs : AbsoluteValue Rat Rat).uniformSpace = PseudoMetricSpace.toUniformSpace := by
+    (AbsoluteValue.abs : AbsoluteValue ℚ ℚ).uniformSpace = PseudoMetricSpace.toUniformSpace := by
   ext s
-  rw [(AbsoluteValue.hasBasis_uniformity _).mem_iff]; rw [Metric.uniformity_basis_dist_rat.mem_iff]
+  rw [(AbsoluteValue.hasBasis_uniformity _).mem_iff, Metric.uniformity_basis_dist_rat.mem_iff]
   simp only [Rat.dist_eq, AbsoluteValue.abs_apply, ← Rat.cast_sub, ← Rat.cast_abs, Rat.cast_lt,
     _root_.abs_sub_comm]
 
-/--
-Definition of `rationalCauSeqPkg` / `rationalCauSeqPkg` 的定义
+/-- Cauchy reals packaged as a completion of ℚ using the absolute value route. -/
+/-
+**rationalCauSeqPkg** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：rationalCauSeqPkg : @AbstractCompletion Rat (@AbsoluteValue.abs Rat _).uni
+formSpace
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rationalCauSeqPkg
-  signature: : @AbstractCompletion Rat (@AbsoluteValue.abs Rat _).uniformSpace
-  body: @AbstractCompletion.mk
-    (space := Real)
-    (coe := ((↑) : Rat -> Real))
-    (uniformStruct := by infer_instance)
-    (complete := by infer_instance)
-    (separation := by infer_instance)
-    (isUniformInducing := by
-      rw [Rat.uniformSpace_eq]
-      exact Rat.isUniformEmbedding_coe_real.isUniformInducing)
-    (dense := Rat.isDenseEmbedding_coe_real.dense)
-
-中文:
-定义 rationalCauSeqPkg
-  签名: : @AbstractCompletion 有理数 (@绝对值.abs 有理数 _).uniformSpace
-  定义体: @AbstractCompletion.mk
-    (space := Real)
-    (coe := ((↑) : Rat -> Real))
-    (uniformStruct := by infer_instance)
-    (complete := by infer_instance)
-    (separation := by infer_instance)
-    (isUniformInducing := by
-      rw [Rat.uniformSpace_eq]
-      exact Rat.isUniformEmbedding_coe_real.isUniformInducing)
-    (dense := Rat.isDenseEmbedding_coe_real.dense)
-
-Depends on / 依赖: AbstractCompletion, AbstractCompletion.mk, Rat.isDenseEmbedding_coe_real.dense, Rat.isUniformEmbedding_coe_real.isUniformInducing, Rat.uniformSpace_eq, complete, infer_instance, isDenseEmbedding_coe_real, isUniformEmbedding_coe_real, isUniformInducing, separation, uniformSpace_eq, uniformStruct
+--- 原说明 ---
+Cauchy reals packaged as a completion of ℚ using the absolute value route.
 -/
-def rationalCauSeqPkg : @AbstractCompletion Rat (@AbsoluteValue.abs Rat _).uniformSpace :=
+def rationalCauSeqPkg : @AbstractCompletion ℚ <| (@AbsoluteValue.abs ℚ _).uniformSpace :=
   @AbstractCompletion.mk
-    (space := Real)
-    (coe := ((↑) : Rat -> Real))
+    (space := ℝ)
+    (coe := ((↑) : ℚ → ℝ))
     (uniformStruct := by infer_instance)
     (complete := by infer_instance)
     (separation := by infer_instance)
@@ -131,146 +129,99 @@ def rationalCauSeqPkg : @AbstractCompletion Rat (@AbsoluteValue.abs Rat _).unifo
 
 namespace CompareReals
 
-/--
-Definition of `Q` / `Q` 的定义
+/-- Type wrapper around ℚ to make sure the absolute value uniform space instance is picked up
+instead of the metric space one. We proved in `Rat.uniformSpace_eq` that they are equal,
+but they are not definitionaly equal, so it would confuse the type class system (and probably
+also human readers). -/
+/-
+**CompareReals.Q** 是 Mathlib 中的一个定义，位于命名空间 `CompareReals`。
+形式化陈述：Q
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Q
-  body: Rat deriving CommRing, Inhabited
-
-中文:
-定义 Q
-  定义体: Rat deriving CommRing, Inhabited
-
-Depends on / 依赖: CommRing, Inhabited, deriving
+--- 原说明 ---
+Type wrapper around ℚ to make sure the absolute value uniform space instance is 
+picked up
+instead of the metric space one. We proved in `Rat.uniformSpace_eq` that they ar
+e equal,
+but they are not definitionaly equal, so it would confuse the type class system 
+(and probably
+also human readers).
 -/
 def Q :=
-  Rat deriving CommRing, Inhabited
-
-/--
-Instance `uniformSpace` / 实例 `uniformSpace`
-
-English:
-instance uniformSpace
-  signature: : UniformSpace Q
-  body: fast_instance% (@AbsoluteValue.abs Rat _).uniformSpace
-
-中文:
-实例 uniformSpace
-  签名: : 一致空间 Q
-  定义体: fast_instance% (@AbsoluteValue.abs Rat _).uniformSpace
-
-Depends on / 依赖: AbsoluteValue, AbsoluteValue.abs, fast_instance, uniformSpace
+  ℚ deriving CommRing, Inhabited
+/-
+**CompareReals.uniformSpace** 是 Mathlib 中的一个实例，位于命名空间 `CompareReals`。
+形式化陈述：uniformSpace : UniformSpace Q
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance uniformSpace : UniformSpace Q :=
-  fast_instance% (@AbsoluteValue.abs Rat _).uniformSpace
+  fast_instance% (@AbsoluteValue.abs ℚ _).uniformSpace
 
-/--
-Definition of `BourbakiReal` / `BourbakiReal` 的定义
+/-- Real numbers constructed as in Bourbaki. -/
+/-
+**CompareReals.Bourbaki** 是 Mathlib 中的一个定义，位于命名空间 `CompareReals`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition BourbakiReal
-  signature: : Type
-  body: Completion Q deriving Inhabited
-
-中文:
-定义 Bourbaki实数
-  签名: : 类型
-  定义体: Completion Q deriving Inhabited
-
-Depends on / 依赖: Completion, Inhabited, deriving
+--- 原说明 ---
+Real numbers constructed as in Bourbaki.
 -/
-def BourbakiReal : Type :=
+def Bourbakiℝ : Type :=
   Completion Q deriving Inhabited
-
-/--
-Instance `Bourbaki.uniformSpace` / 实例 `Bourbaki.uniformSpace`
-
-English:
-instance Bourbaki.uniformSpace
-  signature: : UniformSpace BourbakiReal
-  body: fast_instance% Completion.uniformSpace Q
-
-中文:
-实例 Bourbaki.uniformSpace
-  签名: : 一致空间 Bourbaki实数
-  定义体: fast_instance% Completion.uniformSpace Q
-
-Depends on / 依赖: Completion, Completion.uniformSpace, fast_instance, uniformSpace
+/-
+**CompareReals.Bourbaki.uniformSpace** 是 Mathlib 中的一个定义，位于命名空间 `CompareReals.Bou
+rbaki`。
+形式化陈述：UniformSpace CompareReals.Bourbakiℝ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance Bourbaki.uniformSpace : UniformSpace BourbakiReal :=
+instance Bourbaki.uniformSpace : UniformSpace Bourbakiℝ :=
   fast_instance% Completion.uniformSpace Q
 
-/--
-Definition of `bourbakiPkg` / `bourbakiPkg` 的定义
+/-- Bourbaki reals packaged as a completion of Q using the general theory. -/
+/-
+**CompareReals.bourbakiPkg** 是 Mathlib 中的一个定义，位于命名空间 `CompareReals`。
+形式化陈述：bourbakiPkg : AbstractCompletion Q
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bourbakiPkg
-  signature: : AbstractCompletion Q
-  body: Completion.cPkg
-
-中文:
-定义 bourbakiPkg
-  签名: : AbstractCompletion Q
-  定义体: Completion.cPkg
-
-Depends on / 依赖: Completion, Completion.cPkg
+--- 原说明 ---
+Bourbaki reals packaged as a completion of Q using the general theory.
 -/
 def bourbakiPkg : AbstractCompletion Q :=
   Completion.cPkg
 
-/--
-Definition of `compareEquiv` / `compareEquiv` 的定义
+/-- The uniform bijection between Bourbaki and Cauchy reals. -/
+/-
+**CompareReals.compareEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CompareReals`。
+形式化陈述：compareEquiv : BourbakiReal ≃ᵤ Real
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compareEquiv
-  signature: : BourbakiReal ≃ᵤ Real
-  body: bourbakiPkg.compareEquiv rationalCauSeqPkg
-
-中文:
-定义 compareEquiv
-  签名: : Bourbaki实数 ≃ᵤ 实数
-  定义体: bourbakiPkg.compareEquiv rationalCauSeqPkg
-
-Depends on / 依赖: bourbakiPkg, bourbakiPkg.compareEquiv, compareEquiv, rationalCauSeqPkg
+--- 原说明 ---
+The uniform bijection between Bourbaki and Cauchy reals.
 -/
-noncomputable def compareEquiv : BourbakiReal ≃ᵤ Real :=
+noncomputable def compareEquiv : Bourbakiℝ ≃ᵤ ℝ :=
   bourbakiPkg.compareEquiv rationalCauSeqPkg
-
-/--
-theorem `compare_uc` / 定理 `compare_uc`
-
-English:
-theorem compare_uc
-  statement: UniformContinuous compareEquiv
-  proof: bourbakiPkg.uniformContinuous_compareEquiv rationalCauSeqPkg
-
-中文:
-定理 compare_uc
-  结论: 一致连续 compareEquiv
-  证明: bourbakiPkg.uniformContinuous_compareEquiv rationalCauSeqPkg
-
-Depends on / 依赖: bourbakiPkg, bourbakiPkg.uniformContinuous_compareEquiv, rationalCauSeqPkg, uniformContinuous_compareEquiv
+/-
+**CompareReals.compare_uc** 是 Mathlib 中的一个定理，位于命名空间 `CompareReals`。
+形式化陈述：compare_uc : UniformContinuous compareEquiv
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AbstractCompletion.uniformContinuous_compareEquiv`：uniformContinuous_com
+pareEquiv : UniformContinuous (pkg.compareEquiv pkg')
 -/
 theorem compare_uc : UniformContinuous compareEquiv :=
   bourbakiPkg.uniformContinuous_compareEquiv rationalCauSeqPkg
-
-/--
-theorem `compare_uc_symm` / 定理 `compare_uc_symm`
-
-English:
-theorem compare_uc_symm
-  statement: UniformContinuous compareEquiv.symm
-  proof: bourbakiPkg.uniformContinuous_compareEquiv_symm rationalCauSeqPkg
-
-中文:
-定理 compare_uc_symm
-  结论: 一致连续 compareEquiv.symm
-  证明: bourbakiPkg.uniformContinuous_compareEquiv_symm rationalCauSeqPkg
-
-Depends on / 依赖: bourbakiPkg, bourbakiPkg.uniformContinuous_compareEquiv_symm, rationalCauSeqPkg, uniformContinuous_compareEquiv_symm
+/-
+**CompareReals.compare_uc_symm** 是 Mathlib 中的一个定理，位于命名空间 `CompareReals`。
+形式化陈述：compare_uc_symm : UniformContinuous compareEquiv.symm
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AbstractCompletion.uniformContinuous_compareEquiv_symm`：uniformContinuou
+s_compareEquiv_symm : UniformContinuous (pkg.compareEquiv pkg').symm
 -/
 theorem compare_uc_symm : UniformContinuous compareEquiv.symm :=
   bourbakiPkg.uniformContinuous_compareEquiv_symm rationalCauSeqPkg
 
 end CompareReals
+

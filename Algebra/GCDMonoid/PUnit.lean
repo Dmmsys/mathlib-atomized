@@ -20,44 +20,9 @@ public section
 namespace PUnit
 
 -- This is too high-powered and should be split off also
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: StrongNormalizedGCDMonoid PUnit
-  body: unit
-  lcm _ _ := unit
-  normUnit _ := 1
-  normUnit_zero := rfl
-  normUnit_mul := by subsingleton
-  normUnit_coe_units := by subsingleton
-  gcd_dvd_left _ _ := ⟨unit, by subsingleton⟩
-  gcd_dvd_right _ _ := ⟨unit, by subsingleton⟩
-  dvd_gcd {_ _} _ _ _ := ⟨unit, by subsingleton⟩
-  gcd_mul_lcm _ _ := ⟨1, by subsingleton⟩
-  lcm_zero_left := by subsingleton
-  lcm_zero_right := by subsingleton
-  normalize_gcd := by subsingleton
-  normalize_lcm := by subsingleton
-
-中文:
-实例 :
-  签名: StrongNormalizedGCD幺半群 命题单元
-  定义体: unit
-  lcm _ _ := unit
-  normUnit _ := 1
-  normUnit_zero := rfl
-  normUnit_mul := by subsingleton
-  normUnit_coe_units := by subsingleton
-  gcd_dvd_left _ _ := ⟨unit, by subsingleton⟩
-  gcd_dvd_right _ _ := ⟨unit, by subsingleton⟩
-  dvd_gcd {_ _} _ _ _ := ⟨unit, by subsingleton⟩
-  gcd_mul_lcm _ _ := ⟨1, by subsingleton⟩
-  lcm_zero_left := by subsingleton
-  lcm_zero_right := by subsingleton
-  normalize_gcd := by subsingleton
-  normalize_lcm := by subsingleton
+/-
+**PUnit.** 是 Mathlib 中的一个实例，位于命名空间 `PUnit`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : StrongNormalizedGCDMonoid PUnit where
   gcd _ _ := unit
@@ -74,89 +39,43 @@ instance : StrongNormalizedGCDMonoid PUnit where
   lcm_zero_right := by subsingleton
   normalize_gcd := by subsingleton
   normalize_lcm := by subsingleton
-
-/--
-Instance `normalizedGCDMonoid` / 实例 `normalizedGCDMonoid`
-
-English:
-instance normalizedGCDMonoid
-  signature: : NormalizedGCDMonoid PUnit
-  body: inferInstance
-
-@[simp]
-
-中文:
-实例 normalizedGCDMonoid
-  签名: : 正规化最大公约数幺半群 命题单元
-  定义体: inferInstance
-
-@[simp]
+/-
+**PUnit.normalizedGCDMonoid** 是 Mathlib 中的一个实例，位于命名空间 `PUnit`。
+形式化陈述：normalizedGCDMonoid : NormalizedGCDMonoid PUnit
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance normalizedGCDMonoid : NormalizedGCDMonoid PUnit := inferInstance
 
 @[simp]
-/--
-theorem `gcd_eq` / 定理 `gcd_eq`
-
-English:
-theorem gcd_eq
-  given: {x y : PUnit}
-  statement: gcd x y = unit
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 gcd_eq
-  条件: {x y : 命题单元}
-  结论: 最大公约数 x y = unit
-  证明: rfl
-
-@[simp]
+/-
+**PUnit.gcd_eq** 是 Mathlib 中的一个定理，位于命名空间 `PUnit`。
+形式化陈述：gcd_eq {x y : PUnit} : gcd x y = unit
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem gcd_eq {x y : PUnit} : gcd x y = unit :=
   rfl
 
 @[simp]
-/--
-theorem `lcm_eq` / 定理 `lcm_eq`
-
-English:
-theorem lcm_eq
-  given: {x y : PUnit}
-  statement: lcm x y = unit
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 lcm_eq
-  条件: {x y : 命题单元}
-  结论: 最小公倍数 x y = unit
-  证明: rfl
-
-@[simp]
+/-
+**PUnit.lcm_eq** 是 Mathlib 中的一个定理，位于命名空间 `PUnit`。
+形式化陈述：lcm_eq {x y : PUnit} : lcm x y = unit
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem lcm_eq {x y : PUnit} : lcm x y = unit :=
   rfl
 
 @[simp]
-/--
-theorem `norm_unit_eq` / 定理 `norm_unit_eq`
-
-English:
-theorem norm_unit_eq
-  given: {x : PUnit}
-  statement: normUnit x = 1
-  proof: rfl
-
-中文:
-定理 norm_unit_eq
-  条件: {x : 命题单元}
-  结论: normUnit x = 1
-  证明: rfl
+/-
+**PUnit.norm_unit_eq** 是 Mathlib 中的一个定理，位于命名空间 `PUnit`。
+形式化陈述：norm_unit_eq {x : PUnit} : normUnit x = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem norm_unit_eq {x : PUnit} : normUnit x = 1 :=
   rfl
 
 end PUnit
+

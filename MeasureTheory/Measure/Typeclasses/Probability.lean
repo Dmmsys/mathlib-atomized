@@ -27,134 +27,110 @@ variable {α β : Type*} {m0 : MeasurableSpace α} [MeasurableSpace β] {μ : Me
 
 section IsZeroOrProbabilityMeasure
 
-/--
-Definition of `IsZeroOrProbabilityMeasure` / `IsZeroOrProbabilityMeasure` 的定义
+/-- A measure `μ` is zero or a probability measure if `μ univ = 0` or `μ univ = 1`. This class
+of measures appears naturally when conditioning on events, and many results which are true for
+probability measures hold more generally over this class. -/
+/-
+**MeasureTheory.IsZeroOrProbabilityMeasure** 是 Mathlib 中的一个归纳类型，位于命名空间 `MeasureT
+heory`。
+形式化陈述：{α : Type u_1} → {m0 : MeasurableSpace α} → MeasureTheory.Measure α → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsZeroOrProbabilityMeasure
-  parameters: (μ : Measure α)
-  axioms and operations (1):
-    - measure_univ : μ univ = 0 ∨ μ univ = 1
-
-中文:
-类 是ZeroOrProbabilityMeasure
-  参数: (μ : 测度 α)
-  公理与运算 (1 个):
-    - measure_univ : μ univ = 0 ∨ μ univ = 1
+--- 原说明 ---
+A measure `μ` is zero or a probability measure if `μ univ = 0` or `μ univ = 1`. 
+This class
+of measures appears naturally when conditioning on events, and many results whic
+h are true for
+probability measures hold more generally over this class.
 -/
 class IsZeroOrProbabilityMeasure (μ : Measure α) : Prop where
   measure_univ : μ univ = 0 ∨ μ univ = 1
-
-/--
-lemma `isZeroOrProbabilityMeasure_iff` / 引理 `isZeroOrProbabilityMeasure_iff`
-
-English:
-lemma isZeroOrProbabilityMeasure_iff
-  statement: IsZeroOrProbabilityMeasure μ ↔ μ univ = 0 ∨ μ univ = 1
-  proof: ⟨fun _ => IsZeroOrProbabilityMeasure.measure_univ, IsZeroOrProbabilityMeasure.mk⟩
-
-中文:
-引理 isZeroOrProbabilityMeasure_iff
-  结论: 是ZeroOrProbabilityMeasure μ ↔ μ univ = 0 ∨ μ univ = 1
-  证明: ⟨fun _ => IsZeroOrProbabilityMeasure.measure_univ, IsZeroOrProbabilityMeasure.mk⟩
-
-Depends on / 依赖: IsZeroOrProbabilityMeasure, IsZeroOrProbabilityMeasure.measure_univ, IsZeroOrProbabilityMeasure.mk, measure_univ
+/-
+**MeasureTheory.isZeroOrProbabilityMeasure_iff** 是 Mathlib 中的一个引理，位于命名空间 `Measur
+eTheory`。
+形式化陈述：isZeroOrProbabilityMeasure_iff : IsZeroOrProbabilityMeasure μ ↔ μ univ = 0
+ ∨ μ univ = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsZeroOrProbabilityMeasure.measure_univ`：∀ {α : Type u_1} 
+{m0 : MeasurableSpace α} {μ : MeasureTheory.Measure α}   [self : MeasureTheory.I
+sZeroOrProbabilityMeasure μ], μ Set.univ = …
 -/
 lemma isZeroOrProbabilityMeasure_iff : IsZeroOrProbabilityMeasure μ ↔ μ univ = 0 ∨ μ univ = 1 :=
-  ⟨fun _ => IsZeroOrProbabilityMeasure.measure_univ, IsZeroOrProbabilityMeasure.mk⟩
-
-/--
-lemma `prob_le_one` / 引理 `prob_le_one`
-
-English:
-lemma prob_le_one
-  given: {μ : Measure α} [IsZeroOrProbabilityMeasure μ] {s : Set α}
-  statement: μ s <= 1
-  proof: by
-  apply (measure_mono (subset_univ _)).trans
-  rcases IsZeroOrProbabilityMeasure.measure_univ (μ := μ) with h | h <;> simp [h]
-
-@[simp]
-
-中文:
-引理 prob_le_one
-  条件: {μ : 测度 α} [是ZeroOrProbabilityMeasure μ] {s : 集合 α}
-  结论: μ s <= 1
-  证明: by
-  apply (measure_mono (subset_univ _)).trans
-  rcases IsZeroOrProbabilityMeasure.measure_univ (μ := μ) with h | h <;> simp [h]
-
-@[simp]
-
-Depends on / 依赖: IsZeroOrProbabilityMeasure, IsZeroOrProbabilityMeasure.measure_univ, measure_mono, measure_univ, subset_univ
+  ⟨fun _ ↦ IsZeroOrProbabilityMeasure.measure_univ, IsZeroOrProbabilityMeasure.mk⟩
+/-
+**MeasureTheory.prob_le_one** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory`。
+形式化陈述：prob_le_one {μ : Measure α} [IsZeroOrProbabilityMeasure μ] {s : Set α} : μ
+ s <= 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `MeasureTheory.measure_mono`：measure_mono (h : s subseteq t) : μ s <= μ t
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Set.subset_univ`：subset_univ (s : Set α) : s subseteq univ
+· 使用定理 `MeasureTheory.IsZeroOrProbabilityMeasure.measure_univ`：∀ {α : Type u_1} 
+{m0 : MeasurableSpace α} {μ : MeasureTheory.Measure α}   [self : MeasureTheory.I
+sZeroOrProbabilityMeasure μ], μ Set.univ = …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
 -/
-lemma prob_le_one {μ : Measure α} [IsZeroOrProbabilityMeasure μ] {s : Set α} : μ s <= 1 := by
+lemma prob_le_one {μ : Measure α} [IsZeroOrProbabilityMeasure μ] {s : Set α} : μ s ≤ 1 := by
   apply (measure_mono (subset_univ _)).trans
   rcases IsZeroOrProbabilityMeasure.measure_univ (μ := μ) with h | h <;> simp [h]
 
 @[simp]
-/--
-lemma `measureReal_le_one` / 引理 `measureReal_le_one`
-
-English:
-lemma measureReal_le_one
-  given: {μ : Measure α} [IsZeroOrProbabilityMeasure μ] {s : Set α}
-  proof: ENNReal.toReal_le_of_le_ofReal zero_le_one (ENNReal.ofReal_one.symm ▸ prob_le_one)
-
-@[simp]
-
-中文:
-引理 measure实数_le_one
-  条件: {μ : 测度 α} [是ZeroOrProbabilityMeasure μ] {s : 集合 α}
-  证明: ENNReal.toReal_le_of_le_ofReal zero_le_one (ENNReal.ofReal_one.symm ▸ prob_le_one)
-
-@[simp]
-
-Depends on / 依赖: ENNReal, ENNReal.ofReal_one.symm, ENNReal.toReal_le_of_le_ofReal, ofReal_one, prob_le_one, toReal_le_of_le_ofReal, zero_le_one
+/-
+**MeasureTheory.measureReal_le_one** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory`。
+形式化陈述：measureReal_le_one {μ : Measure α} [IsZeroOrProbabilityMeasure μ] {s : Set
+ α} : μ.real s <= 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ENNReal.toReal_le_of_le_ofReal`：toReal_le_of_le_ofReal {a : Real>=0∞} {b
+ : Real} (hb : 0 <= b) (h : a <= ENNReal.ofReal b) : ENNReal.toReal a <= b
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
+· 使用引理 `MeasureTheory.prob_le_one`：prob_le_one {μ : Measure α} [IsZeroOrProbabil
+ityMeasure μ] {s : Set α} : μ s <= 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ENNReal.ofReal_one`：ENNReal.ofReal 1 = 1
 -/
 lemma measureReal_le_one {μ : Measure α} [IsZeroOrProbabilityMeasure μ] {s : Set α} :
-    μ.real s <= 1 :=
+    μ.real s ≤ 1 :=
   ENNReal.toReal_le_of_le_ofReal zero_le_one (ENNReal.ofReal_one.symm ▸ prob_le_one)
 
 @[simp]
-/--
-theorem `one_le_prob_iff` / 定理 `one_le_prob_iff`
-
-English:
-theorem one_le_prob_iff
-  given: {μ : Measure α} [IsZeroOrProbabilityMeasure μ]
-  statement: 1 <= μ s ↔ μ s = 1
-  proof: ⟨fun h => le_antisymm prob_le_one h, fun h => h ▸ le_refl _⟩
-
-中文:
-定理 one_le_prob_iff
-  条件: {μ : 测度 α} [是ZeroOrProbabilityMeasure μ]
-  结论: 1 <= μ s ↔ μ s = 1
-  证明: ⟨fun h => le_antisymm prob_le_one h, fun h => h ▸ le_refl _⟩
-
-Depends on / 依赖: le_antisymm, le_refl, prob_le_one
+/-
+**MeasureTheory.one_le_prob_iff** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：one_le_prob_iff {μ : Measure α} [IsZeroOrProbabilityMeasure μ] : 1 <= μ s 
+↔ μ s = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `MeasureTheory.prob_le_one`：prob_le_one {μ : Measure α} [IsZeroOrProbabil
+ityMeasure μ] {s : Set α} : μ s <= 1
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-theorem one_le_prob_iff {μ : Measure α} [IsZeroOrProbabilityMeasure μ] : 1 <= μ s ↔ μ s = 1 :=
+theorem one_le_prob_iff {μ : Measure α} [IsZeroOrProbabilityMeasure μ] : 1 ≤ μ s ↔ μ s = 1 :=
   ⟨fun h => le_antisymm prob_le_one h, fun h => h ▸ le_refl _⟩
-
+/-
+**MeasureTheory.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) IsZeroOrProbabilityMeasure.toIsFiniteMeasure (μ : Measure α)
     [IsZeroOrProbabilityMeasure μ] : IsFiniteMeasure μ :=
   ⟨prob_le_one.trans_lt one_lt_top⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsZeroOrProbabilityMeasure (0 : Measure α)
-  body: ⟨Or.inl rfl⟩
-
-中文:
-实例 :
-  签名: 是ZeroOrProbabilityMeasure (0 : 测度 α)
-  定义体: ⟨Or.inl rfl⟩
-
-Depends on / 依赖: Or.inl
+/-
+**MeasureTheory.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsZeroOrProbabilityMeasure (0 : Measure α) :=
   ⟨Or.inl rfl⟩
@@ -163,20 +139,15 @@ end IsZeroOrProbabilityMeasure
 
 section IsProbabilityMeasure
 
-/--
-Definition of `IsProbabilityMeasure` / `IsProbabilityMeasure` 的定义
+/-- A measure `μ` is called a probability measure if `μ univ = 1`. -/
+/-
+**MeasureTheory.IsProbabilityMeasure** 是 Mathlib 中的一个归纳类型，位于命名空间 `MeasureTheory`
+。
+形式化陈述：{α : Type u_1} → {m0 : MeasurableSpace α} → MeasureTheory.Measure α → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsProbabilityMeasure
-  parameters: (μ : Measure α)
-  axioms and operations (1):
-    - measure_univ : μ univ = 1
-
-中文:
-类 是概率测度
-  参数: (μ : 测度 α)
-  公理与运算 (1 个):
-    - measure_univ : μ univ = 1
+--- 原说明 ---
+A measure `μ` is called a probability measure if `μ univ = 1`.
 -/
 class IsProbabilityMeasure (μ : Measure α) : Prop where
   measure_univ : μ univ = 1
@@ -184,608 +155,630 @@ class IsProbabilityMeasure (μ : Measure α) : Prop where
 export MeasureTheory.IsProbabilityMeasure (measure_univ)
 
 attribute [simp] IsProbabilityMeasure.measure_univ
-
-/--
-lemma `isProbabilityMeasure_iff` / 引理 `isProbabilityMeasure_iff`
-
-English:
-lemma isProbabilityMeasure_iff
-  statement: IsProbabilityMeasure μ ↔ μ univ = 1
-  proof: ⟨fun _ => measure_univ, IsProbabilityMeasure.mk⟩
-
-中文:
-引理 isProbabilityMeasure_iff
-  结论: 是概率测度 μ ↔ μ univ = 1
-  证明: ⟨fun _ => measure_univ, IsProbabilityMeasure.mk⟩
-
-Depends on / 依赖: IsProbabilityMeasure, IsProbabilityMeasure.mk, measure_univ
+/-
+**MeasureTheory.isProbabilityMeasure_iff** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheor
+y`。
+形式化陈述：isProbabilityMeasure_iff : IsProbabilityMeasure μ ↔ μ univ = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsProbabilityMeasure.measure_univ`：∀ {α : Type u_1} {m0 : 
+MeasurableSpace α} {μ : MeasureTheory.Measure α} [self : MeasureTheory.IsProbabi
+lityMeasure μ],   μ Set.univ = 1
 -/
 lemma isProbabilityMeasure_iff : IsProbabilityMeasure μ ↔ μ univ = 1 :=
-  ⟨fun _ => measure_univ, IsProbabilityMeasure.mk⟩
-
+  ⟨fun _ ↦ measure_univ, IsProbabilityMeasure.mk⟩
+/-
+**MeasureTheory.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) (μ : Measure α) [IsProbabilityMeasure μ] :
     IsZeroOrProbabilityMeasure μ :=
   ⟨Or.inr measure_univ⟩
-
-/--
-theorem `nonempty_of_isProbabilityMeasure` / 定理 `nonempty_of_isProbabilityMeasure`
-
-English:
-theorem nonempty_of_isProbabilityMeasure
-  given: (μ : Measure α) [IsProbabilityMeasure μ]
-  statement: Nonempty α
-  proof: by
-  by_contra! maybe_empty
-  have : μ Set.univ = 0 := by
-    rw [Set.univ_eq_empty_iff.mpr maybe_empty]; rw [measure_empty]
-  simp at this
-
-中文:
-定理 nonempty_of_isProbabilityMeasure
-  条件: (μ : 测度 α) [是概率测度 μ]
-  结论: 非空 α
-  证明: by
-  by_contra! maybe_empty
-  have : μ Set.univ = 0 := by
-    rw [Set.univ_eq_empty_iff.mpr maybe_empty]; rw [measure_empty]
-  simp at this
-
-Depends on / 依赖: Set.univ, Set.univ_eq_empty_iff.mpr, maybe_empty, measure_empty, univ_eq_empty_iff
+/-
+**MeasureTheory.nonempty_of_isProbabilityMeasure** 是 Mathlib 中的一个定理，位于命名空间 `Meas
+ureTheory`。
+形式化陈述：nonempty_of_isProbabilityMeasure (μ : Measure α) [IsProbabilityMeasure μ] 
+: Nonempty α
+参数：μ : Measure α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.univ_eq_empty_iff`：univ_eq_empty_iff : (univ : Set α) = ∅ ↔ IsEmpty 
+α
+· 使用定理 `MeasureTheory.measure_empty`：measure_empty : μ ∅ = 0
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MeasureTheory.IsProbabilityMeasure.measure_univ`：∀ {α : Type u_1} {m0 : 
+MeasurableSpace α} {μ : MeasureTheory.Measure α} [self : MeasureTheory.IsProbabi
+lityMeasure μ],   μ Set.univ = 1
+· 使用定理 `ENNReal.instCharZero`：CharZero ENNReal
 -/
 theorem nonempty_of_isProbabilityMeasure (μ : Measure α) [IsProbabilityMeasure μ] : Nonempty α := by
   by_contra! maybe_empty
   have : μ Set.univ = 0 := by
-    rw [Set.univ_eq_empty_iff.mpr maybe_empty]; rw [measure_empty]
+    rw [Set.univ_eq_empty_iff.mpr maybe_empty, measure_empty]
   simp at this
-
-/--
-theorem `IsProbabilityMeasure.ne_zero` / 定理 `IsProbabilityMeasure.ne_zero`
-
-English:
-theorem IsProbabilityMeasure.ne_zero
-  given: (μ : Measure α) [IsProbabilityMeasure μ]
-  statement: μ != 0
-  proof: mt measure_univ_eq_zero.2 by simp [measure_univ]
-
-中文:
-定理 是概率测度.ne_zero
-  条件: (μ : 测度 α) [是概率测度 μ]
-  结论: μ != 0
-  证明: mt measure_univ_eq_zero.2 by simp [measure_univ]
-
-Depends on / 依赖: measure_univ, measure_univ_eq_zero
+/-
+**MeasureTheory.IsProbabilityMeasure.ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `MeasureT
+heory.IsProbabilityMeasure`。
+形式化陈述：∀ {α : Type u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [M
+easureTheory.IsProbabilityMeasure μ], μ ≠ 0
+参数：μ : MeasureTheory.Measure α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MeasureTheory.Measure.measure_univ_eq_zero`：measure_univ_eq_zero : μ uni
+v = 0 ↔ μ = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MeasureTheory.IsProbabilityMeasure.measure_univ`：∀ {α : Type u_1} {m0 : 
+MeasurableSpace α} {μ : MeasureTheory.Measure α} [self : MeasureTheory.IsProbabi
+lityMeasure μ],   μ Set.univ = 1
+· 使用定理 `ENNReal.instCharZero`：CharZero ENNReal
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-theorem IsProbabilityMeasure.ne_zero (μ : Measure α) [IsProbabilityMeasure μ] : μ != 0 :=
-mt measure_univ_eq_zero.2 by simp [measure_univ]
-
+theorem IsProbabilityMeasure.ne_zero (μ : Measure α) [IsProbabilityMeasure μ] : μ ≠ 0 :=
+  mt measure_univ_eq_zero.2 <| by simp [measure_univ]
+/-
+**MeasureTheory.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 100) IsProbabilityMeasure.neZero (μ : Measure α) [IsProbabilityMeasure μ] :
     NeZero μ := ⟨IsProbabilityMeasure.ne_zero μ⟩
-
-/--
-theorem `IsProbabilityMeasure.ae_neBot` / 定理 `IsProbabilityMeasure.ae_neBot`
-
-English:
-theorem IsProbabilityMeasure.ae_neBot
-  given: [IsProbabilityMeasure μ]
-  statement: NeBot (ae μ)
-  proof: inferInstance
-
-中文:
-定理 是概率测度.ae_neBot
-  条件: [是概率测度 μ]
-  结论: NeBot (ae μ)
-  证明: inferInstance
+/-
+**MeasureTheory.IsProbabilityMeasure.ae_neBot** 是 Mathlib 中的一个定理，位于命名空间 `Measure
+Theory.IsProbabilityMeasure`。
+形式化陈述：∀ {α : Type u_1} {m0 : MeasurableSpace α} {μ : MeasureTheory.Measure α} [M
+easureTheory.IsProbabilityMeasure μ],   (MeasureTheory.ae μ).NeBot
+参数：MeasureTheory.ae μ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.Measure.ae.neBot`：∀ {α : Type u_1} {m0 : MeasurableSpace α
+} {μ : MeasureTheory.Measure α} [NeZero μ], (MeasureTheory.ae μ).NeBot
+· 使用定理 `MeasureTheory.IsProbabilityMeasure.neZero`：∀ {α : Type u_1} {m0 : Measur
+ableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsProbabilityMeasure μ
+], NeZero μ
 -/
 theorem IsProbabilityMeasure.ae_neBot [IsProbabilityMeasure μ] : NeBot (ae μ) := inferInstance
-
-/--
-theorem `prob_add_prob_compl` / 定理 `prob_add_prob_compl`
-
-English:
-theorem prob_add_prob_compl
-  given: [IsProbabilityMeasure μ] (h : MeasurableSet s)
-  statement: μ s + μ sᶜ = 1
-  proof: (measure_add_measure_compl h).trans measure_univ
-
-中文:
-定理 prob_add_prob_compl
-  条件: [是概率测度 μ] (h : 可测集 s)
-  结论: μ s + μ sᶜ = 1
-  证明: (measure_add_measure_compl h).trans measure_univ
-
-Depends on / 依赖: measure_add_measure_compl, measure_univ
+/-
+**MeasureTheory.prob_add_prob_compl** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：prob_add_prob_compl [IsProbabilityMeasure μ] (h : MeasurableSet s) : μ s +
+ μ sᶜ = 1
+参数：h : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MeasureTheory.measure_add_measure_compl`：measure_add_measure_compl (h : 
+MeasurableSet s) : μ s + μ sᶜ = μ univ
+· 使用定理 `MeasureTheory.IsProbabilityMeasure.measure_univ`：∀ {α : Type u_1} {m0 : 
+MeasurableSpace α} {μ : MeasureTheory.Measure α} [self : MeasureTheory.IsProbabi
+lityMeasure μ],   μ Set.univ = 1
 -/
 theorem prob_add_prob_compl [IsProbabilityMeasure μ] (h : MeasurableSet s) : μ s + μ sᶜ = 1 :=
   (measure_add_measure_compl h).trans measure_univ
-
-/--
-lemma `probReal_add_probReal_compl` / 引理 `probReal_add_probReal_compl`
-
-English:
-lemma probReal_add_probReal_compl
-  given: [IsProbabilityMeasure μ] (h : MeasurableSet s)
-  proof: by
-  simpa [Measure.real, ENNReal.toReal_add] using congr($(prob_add_prob_compl (μ := μ) h).toReal)
-
-中文:
-引理 prob实数_add_prob实数_compl
-  条件: [是概率测度 μ] (h : 可测集 s)
-  证明: by
-  simpa [Measure.real, ENNReal.toReal_add] using congr($(prob_add_prob_compl (μ := μ) h).toReal)
-
-Depends on / 依赖: ENNReal, ENNReal.toReal_add, Measure, Measure.real, prob_add_prob_compl, toReal, toReal_add
+/-
+**MeasureTheory.probReal_add_probReal_compl** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTh
+eory`。
+形式化陈述：probReal_add_probReal_compl [IsProbabilityMeasure μ] (h : MeasurableSet s)
+ : μ.real s + μ.real sᶜ = 1
+参数：h : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ENNReal.toReal_add`：toReal_add (ha : a != ∞) (hb : b != ∞) : (a + b).toR
+eal = a.toReal + b.toReal
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MeasureTheory.IsZeroOrProbabilityMeasure.toIsFiniteMeasure`：∀ {α : Type 
+u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsZer
+oOrProbabilityMeasure μ],   MeasureTheory.IsFini…
+· 使用定理 `MeasureTheory.instIsZeroOrProbabilityMeasureOfIsProbabilityMeasure`：∀ {α
+ : Type u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheo
+ry.IsProbabilityMeasure μ],   MeasureTheory.IsZeroOrProb…
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `MeasureTheory.prob_add_prob_compl`：prob_add_prob_compl [IsProbabilityMea
+sure μ] (h : MeasurableSet s) : μ s + μ sᶜ = 1
 -/
 lemma probReal_add_probReal_compl [IsProbabilityMeasure μ] (h : MeasurableSet s) :
     μ.real s + μ.real sᶜ = 1 := by
   simpa [Measure.real, ENNReal.toReal_add] using congr($(prob_add_prob_compl (μ := μ) h).toReal)
-
-/--
-Instance `isProbabilityMeasureSMul` / 实例 `isProbabilityMeasureSMul`
-
-English:
-instance isProbabilityMeasureSMul
-  signature: [IsFiniteMeasure μ] [NeZero μ]
-  body: ⟨ENNReal.inv_mul_cancel (NeZero.ne (μ univ)) (measure_ne_top _ _)⟩
-
-中文:
-实例 isProbabilityMeasureSMul
-  签名: [是有限测度 μ] [NeZero μ]
-  定义体: ⟨ENNReal.inv_mul_cancel (NeZero.ne (μ univ)) (measure_ne_top _ _)⟩
-
-Depends on / 依赖: ENNReal, ENNReal.inv_mul_cancel, NeZero, NeZero.ne, inv_mul_cancel, measure_ne_top
+/-
+**MeasureTheory.isProbabilityMeasureSMul** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheor
+y`。
+形式化陈述：isProbabilityMeasureSMul [IsFiniteMeasure μ] [NeZero μ] : IsProbabilityMea
+sure ((μ univ)⁻¹ • μ)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `ENNReal.inv_mul_cancel`：∀ {a : ENNReal}, a ≠ 0 → a ≠ ⊤ → a⁻¹ * a = 1
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
+· 使用定理 `MeasureTheory.Measure.instNeZeroENNRealCoeSetUniv`：∀ {α : Type u_1} {m0 
+: MeasurableSpace α} {μ : MeasureTheory.Measure α} [NeZero μ], NeZero (μ Set.uni
+v)
+· 使用定理 `MeasureTheory.measure_ne_top`：measure_ne_top (μ : Measure α) [IsFiniteMe
+asure μ] (s : Set α) : μ s != ∞
 -/
 instance isProbabilityMeasureSMul [IsFiniteMeasure μ] [NeZero μ] :
     IsProbabilityMeasure ((μ univ)⁻¹ • μ) :=
   ⟨ENNReal.inv_mul_cancel (NeZero.ne (μ univ)) (measure_ne_top _ _)⟩
-
-/--
-Instance `isProbabilityMeasure_dite` / 实例 `isProbabilityMeasure_dite`
-
-English:
-instance isProbabilityMeasure_dite
-  signature: {p : Prop} [Decidable p] {μ : p -> Measure α}
-  body: by split <;> infer_instance
-
-中文:
-实例 isProbabilityMeasure_dite
-  签名: {p : 命题} [可判定 p] {μ : p -> 测度 α}
-  定义体: by split <;> infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**MeasureTheory.isProbabilityMeasure_dite** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheo
+ry`。
+形式化陈述：isProbabilityMeasure_dite {p : Prop} [Decidable p] {μ : p -> Measure α} {ν
+ : ¬ p -> Measure α} [forall h, IsProbabilityMeasure (μ h)] [forall h, IsProbabi
+lityMeasure (ν h)] : IsProbabilityMeasure (dite p μ ν)
+参数：μ h；ν h。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
 -/
-instance isProbabilityMeasure_dite {p : Prop} [Decidable p] {μ : p -> Measure α}
-    {ν : ¬ p -> Measure α} [forall h, IsProbabilityMeasure (μ h)] [forall h, IsProbabilityMeasure (ν h)] :
+instance isProbabilityMeasure_dite {p : Prop} [Decidable p] {μ : p → Measure α}
+    {ν : ¬ p → Measure α} [∀ h, IsProbabilityMeasure (μ h)] [∀ h, IsProbabilityMeasure (ν h)] :
     IsProbabilityMeasure (dite p μ ν) := by split <;> infer_instance
-
-/--
-Instance `isProbabilityMeasure_ite` / 实例 `isProbabilityMeasure_ite`
-
-English:
-instance isProbabilityMeasure_ite
-  signature: {p : Prop} [Decidable p] {μ ν : Measure α}
-  body: by split <;> infer_instance
-
-中文:
-实例 isProbabilityMeasure_ite
-  签名: {p : 命题} [可判定 p] {μ ν : 测度 α}
-  定义体: by split <;> infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**MeasureTheory.isProbabilityMeasure_ite** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheor
+y`。
+形式化陈述：isProbabilityMeasure_ite {p : Prop} [Decidable p] {μ ν : Measure α} [IsPro
+babilityMeasure μ] [IsProbabilityMeasure ν] : IsProbabilityMeasure (ite p μ ν)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
 instance isProbabilityMeasure_ite {p : Prop} [Decidable p] {μ ν : Measure α}
     [IsProbabilityMeasure μ] [IsProbabilityMeasure ν] :
     IsProbabilityMeasure (ite p μ ν) := by split <;> infer_instance
 
 open unitInterval in
+/-
+**MeasureTheory.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {μ ν : Measure α} [IsProbabilityMeasure μ] [IsProbabilityMeasure ν] {p : I} :
     IsProbabilityMeasure (toNNReal p • μ + toNNReal (σ p) • ν) where
   measure_univ := by simp [← ENNReal.coe_add]
 
-variable [IsProbabilityMeasure μ] {p : α -> Prop} {f : β -> α}
-
-/--
-lemma `probReal_univ` / 引理 `probReal_univ`
-
-English:
-lemma probReal_univ
-  statement: μ.real univ = 1
-  proof: by simp [Measure.real]
-
-中文:
-引理 prob实数_univ
-  结论: μ.real univ = 1
-  证明: by simp [Measure.real]
+variable [IsProbabilityMeasure μ] {p : α → Prop} {f : β → α}
+/-
+**MeasureTheory.probReal_univ** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：∀ {α : Type u_1} {m0 : MeasurableSpace α} {μ : MeasureTheory.Measure α} [M
+easureTheory.IsProbabilityMeasure μ],   μ.real Set.univ = 1
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.IsProbabilityMeasure.measure_univ`：∀ {α : Type u_1} {m0 : 
+MeasurableSpace α} {μ : MeasureTheory.Measure α} [self : MeasureTheory.IsProbabi
+lityMeasure μ],   μ Set.univ = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 @[simp] lemma probReal_univ : μ.real univ = 1 := by simp [Measure.real]
-
-/--
-lemma `isProbabilityMeasure_iff_real` / 引理 `isProbabilityMeasure_iff_real`
-
-English:
-lemma isProbabilityMeasure_iff_real
-  given: {μ : Measure α}
-  proof: by
-  refine ⟨fun h => probReal_univ, fun h => ⟨(ENNReal.toReal_eq_one_iff (μ univ)).mp h⟩⟩
-
-中文:
-引理 isProbabilityMeasure_iff_real
-  条件: {μ : 测度 α}
-  证明: by
-  refine ⟨fun h => probReal_univ, fun h => ⟨(ENNReal.toReal_eq_one_iff (μ univ)).mp h⟩⟩
-
-Depends on / 依赖: ENNReal, ENNReal.toReal_eq_one_iff, probReal_univ, toReal_eq_one_iff
+/-
+**MeasureTheory.isProbabilityMeasure_iff_real** 是 Mathlib 中的一个引理，位于命名空间 `Measure
+Theory`。
+形式化陈述：isProbabilityMeasure_iff_real {μ : Measure α} : IsProbabilityMeasure μ ↔ μ
+.real univ = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.probReal_univ`：∀ {α : Type u_1} {m0 : MeasurableSpace α} {
+μ : MeasureTheory.Measure α} [MeasureTheory.IsProbabilityMeasure μ],   μ.real Se
+t.univ = 1
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `ENNReal.toReal_eq_one_iff`：toReal_eq_one_iff (x : Real>=0∞) : x.toReal =
+ 1 ↔ x = 1
 -/
 lemma isProbabilityMeasure_iff_real {μ : Measure α} :
     IsProbabilityMeasure μ ↔ μ.real univ = 1 := by
-  refine ⟨fun h => probReal_univ, fun h => ⟨(ENNReal.toReal_eq_one_iff (μ univ)).mp h⟩⟩
-
-/--
-theorem `Measure.isProbabilityMeasure_map` / 定理 `Measure.isProbabilityMeasure_map`
-
-English:
-theorem Measure.isProbabilityMeasure_map
-  given: {f : α -> β} (hf : AEMeasurable f μ)
-  proof: ⟨by simp [map_apply_of_aemeasurable, hf]⟩
-
-中文:
-定理 测度.isProbabilityMeasure_map
-  条件: {f : α -> β} (hf : 几乎处处可测 f μ)
-  证明: ⟨by simp [map_apply_of_aemeasurable, hf]⟩
-
-Depends on / 依赖: map_apply_of_aemeasurable
+  refine ⟨fun h ↦ probReal_univ, fun h ↦ ⟨(ENNReal.toReal_eq_one_iff (μ univ)).mp h⟩⟩
+/-
+**MeasureTheory.Measure.isProbabilityMeasure_map** 是 Mathlib 中的一个定理，位于命名空间 `Meas
+ureTheory.Measure`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {m0 : MeasurableSpace α} [inst : Measurabl
+eSpace β] {μ : MeasureTheory.Measure α}   [MeasureTheory.IsProbabilityMeasure μ]
+ {f : α → β},   AEMeasurable f μ → MeasureTheory.IsProbabilityMeasure (MeasureTh
+eory.Measure.map f μ)
+参数：MeasureTheory.Measure.map f μ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.map_apply_of_aemeasurable`：map_apply_of_aemeasurab
+le (hf : AEMeasurable f μ) {s : Set β} (hs : MeasurableSet s) : μ.map f s = μ (f
+ ⁻¹' s)
+· 使用定理 `MeasureTheory.IsProbabilityMeasure.measure_univ`：∀ {α : Type u_1} {m0 : 
+MeasurableSpace α} {μ : MeasureTheory.Measure α} [self : MeasureTheory.IsProbabi
+lityMeasure μ],   μ Set.univ = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem Measure.isProbabilityMeasure_map {f : α -> β} (hf : AEMeasurable f μ) :
+theorem Measure.isProbabilityMeasure_map {f : α → β} (hf : AEMeasurable f μ) :
     IsProbabilityMeasure (map f μ) :=
   ⟨by simp [map_apply_of_aemeasurable, hf]⟩
-
-/--
-theorem `Measure.isProbabilityMeasure_of_map` / 定理 `Measure.isProbabilityMeasure_of_map`
-
-English:
-theorem Measure.isProbabilityMeasure_of_map
-  statement: {μ : Measure α} (f : α -> β)
-  proof: by
-    have hf : AEMeasurable f μ := AEMeasurable.of_map_ne_zero (IsProbabilityMeasure.ne_zero _)
-    rw [← Set.preimage_univ (f := f)]; rw [← map_apply_of_aemeasurable hf .univ]
-    exact IsProbabilityMeasure.measure_univ
-
-中文:
-定理 测度.isProbabilityMeasure_of_map
-  结论: {μ : 测度 α} (f : α -> β)
-  证明: by
-    have hf : AEMeasurable f μ := AEMeasurable.of_map_ne_zero (IsProbabilityMeasure.ne_zero _)
-    rw [← Set.preimage_univ (f := f)]; rw [← map_apply_of_aemeasurable hf .univ]
-    exact IsProbabilityMeasure.measure_univ
-
-Depends on / 依赖: AEMeasurable, AEMeasurable.of_map_ne_zero, IsProbabilityMeasure, IsProbabilityMeasure.measure_univ, IsProbabilityMeasure.ne_zero, Set.preimage_univ, map_apply_of_aemeasurable, measure_univ, ne_zero, of_map_ne_zero, preimage_univ
+/-
+**MeasureTheory.Measure.isProbabilityMeasure_of_map** 是 Mathlib 中的一个定理，位于命名空间 `M
+easureTheory.Measure`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {m0 : MeasurableSpace α} [inst : Measurabl
+eSpace β] {μ : MeasureTheory.Measure α}   (f : α → β) [MeasureTheory.IsProbabili
+tyMeasure (MeasureTheory.Measure.map f μ)], MeasureTheory.IsProbabilityMeasure μ
+参数：f : α → β；MeasureTheory.Measure.map f μ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AEMeasurable.of_map_ne_zero`：∀ {α : Type u_1} {β : Type u_2} {mα : Measu
+rableSpace α} {mβ : MeasurableSpace β} {f : α → β}   {μ : MeasureTheory.Measure 
+α}, MeasureTheory…
+· 使用定理 `MeasureTheory.IsProbabilityMeasure.ne_zero`：∀ {α : Type u_1} {m0 : Measu
+rableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsProbabilityMeasure 
+μ], μ ≠ 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.preimage_univ`：preimage_univ : f ⁻¹' univ = univ
+· 使用定理 `MeasureTheory.Measure.map_apply_of_aemeasurable`：map_apply_of_aemeasurab
+le (hf : AEMeasurable f μ) {s : Set β} (hs : MeasurableSet s) : μ.map f s = μ (f
+ ⁻¹' s)
+· 使用定理 `MeasurableSet.univ`：∀ {α : Type u_1} {m : MeasurableSpace α}, Measurable
+Set Set.univ
+· 使用定理 `MeasureTheory.IsProbabilityMeasure.measure_univ`：∀ {α : Type u_1} {m0 : 
+MeasurableSpace α} {μ : MeasureTheory.Measure α} [self : MeasureTheory.IsProbabi
+lityMeasure μ],   μ Set.univ = 1
 -/
-theorem Measure.isProbabilityMeasure_of_map {μ : Measure α} (f : α -> β)
+theorem Measure.isProbabilityMeasure_of_map {μ : Measure α} (f : α → β)
     [IsProbabilityMeasure (μ.map f)] : IsProbabilityMeasure μ where
   measure_univ := by
     have hf : AEMeasurable f μ := AEMeasurable.of_map_ne_zero (IsProbabilityMeasure.ne_zero _)
-    rw [← Set.preimage_univ (f := f)]; rw [← map_apply_of_aemeasurable hf .univ]
+    rw [← Set.preimage_univ (f := f), ← map_apply_of_aemeasurable hf .univ]
     exact IsProbabilityMeasure.measure_univ
-
-/--
-theorem `Measure.isProbabilityMeasure_map_iff` / 定理 `Measure.isProbabilityMeasure_map_iff`
-
-English:
-theorem Measure.isProbabilityMeasure_map_iff
-  statement: {μ : Measure α} {f : α -> β}
-  proof: ⟨fun _ => isProbabilityMeasure_of_map f, fun _ => isProbabilityMeasure_map hf⟩
-
-中文:
-定理 测度.isProbabilityMeasure_map_iff
-  结论: {μ : 测度 α} {f : α -> β}
-  证明: ⟨fun _ => isProbabilityMeasure_of_map f, fun _ => isProbabilityMeasure_map hf⟩
-
-Depends on / 依赖: isProbabilityMeasure_map, isProbabilityMeasure_of_map
+/-
+**MeasureTheory.Measure.isProbabilityMeasure_map_iff** 是 Mathlib 中的一个定理，位于命名空间 `
+MeasureTheory.Measure`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {m0 : MeasurableSpace α} [inst : Measurabl
+eSpace β] {μ : MeasureTheory.Measure α}   {f : α → β},   AEMeasurable f μ →     
+(MeasureTheory.IsProbabilityMeasure (MeasureTheory.Measure.map f μ) ↔ MeasureThe
+ory.IsProbabilityMeasure μ)
+参数：MeasureTheory.IsProbabilityMeasure (MeasureTheory.Measure.map f μ) ↔ MeasureT
+heory.IsProbabilityMeasure μ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.isProbabilityMeasure_of_map`：∀ {α : Type u_1} {β :
+ Type u_2} {m0 : MeasurableSpace α} [inst : MeasurableSpace β] {μ : MeasureTheor
+y.Measure α}   (f : α → β) [MeasureTheo…
+· 使用定理 `MeasureTheory.Measure.isProbabilityMeasure_map`：∀ {α : Type u_1} {β : Ty
+pe u_2} {m0 : MeasurableSpace α} [inst : MeasurableSpace β] {μ : MeasureTheory.M
+easure α}   [MeasureTheory.IsProbabi…
 -/
-theorem Measure.isProbabilityMeasure_map_iff {μ : Measure α} {f : α -> β}
+theorem Measure.isProbabilityMeasure_map_iff {μ : Measure α} {f : α → β}
     (hf : AEMeasurable f μ) : IsProbabilityMeasure (μ.map f) ↔ IsProbabilityMeasure μ :=
-  ⟨fun _ => isProbabilityMeasure_of_map f, fun _ => isProbabilityMeasure_map hf⟩
-
-/--
-Instance `IsProbabilityMeasure_comap_equiv` / 实例 `IsProbabilityMeasure_comap_equiv`
-
-English:
-instance IsProbabilityMeasure_comap_equiv
-  signature: (f : β ≃ᵐ α)
-  body: by
-  rw [← MeasurableEquiv.map_symm]; exact isProbabilityMeasure_map f.symm.measurable.aemeasurable
-
-中文:
-实例 IsProbabilityMeasure_comap_equiv
-  签名: (f : β ≃ᵐ α)
-  定义体: by
-  rw [← MeasurableEquiv.map_symm]; exact isProbabilityMeasure_map f.symm.measurable.aemeasurable
-
-Depends on / 依赖: MeasurableEquiv, MeasurableEquiv.map_symm, aemeasurable, f.symm.measurable.aemeasurable, isProbabilityMeasure_map, map_symm, measurable
+  ⟨fun _ ↦ isProbabilityMeasure_of_map f, fun _ ↦ isProbabilityMeasure_map hf⟩
+/-
+**MeasureTheory.IsProbabilityMeasure_comap_equiv** 是 Mathlib 中的一个实例，位于命名空间 `Meas
+ureTheory`。
+形式化陈述：IsProbabilityMeasure_comap_equiv (f : β ≃ᵐ α) : IsProbabilityMeasure (μ.co
+map f)
+参数：f : β ≃ᵐ α。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `MeasurableEquiv.map_symm`：map_symm {μ : Measure α} (e : β ≃ᵐ α) : μ.map 
+e.symm = μ.comap e
+· 使用定理 `MeasureTheory.Measure.isProbabilityMeasure_map`：∀ {α : Type u_1} {β : Ty
+pe u_2} {m0 : MeasurableSpace α} [inst : MeasurableSpace β] {μ : MeasureTheory.M
+easure α}   [MeasureTheory.IsProbabi…
+· 使用定理 `Measurable.aemeasurable`：Measurable.aemeasurable (h : Measurable f) : AE
+Measurable f μ
+· 使用定理 `MeasurableEquiv.measurable`：∀ {α : Type u_1} {β : Type u_2} [inst : Meas
+urableSpace α] [inst_1 : MeasurableSpace β] (e : α ≃ᵐ β), Measurable ⇑e
 -/
 instance IsProbabilityMeasure_comap_equiv (f : β ≃ᵐ α) : IsProbabilityMeasure (μ.comap f) := by
   rw [← MeasurableEquiv.map_symm]; exact isProbabilityMeasure_map f.symm.measurable.aemeasurable
 
-/--
-lemma `prob_compl_eq_one_sub₀` / 引理 `prob_compl_eq_one_sub₀`
+/-- Note that this is not quite as useful as it looks because the measure takes values in `ℝ≥0∞`.
+Thus the subtraction appearing is the truncated subtraction of `ℝ≥0∞`, rather than the
+better-behaved subtraction of `ℝ`. -/
+/-
+**MeasureTheory.prob_compl_eq_one_sub** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：prob_compl_eq_one_sub (hs : MeasurableSet s) : μ sᶜ = 1 - μ s
+参数：hs : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MeasureTheory.prob_compl_eq_one_sub₀`：prob_compl_eq_one_sub₀ (h : NullMe
+asurableSet s μ) : μ sᶜ = 1 - μ s
+· 使用定理 `MeasurableSet.nullMeasurableSet`：∀ {α : Type u_2} {m0 : MeasurableSpace 
+α} {μ : MeasureTheory.Measure α} {s : Set α},   MeasurableSet s → MeasureTheory.
+NullMeasurableSet s μ
 
-English:
-lemma prob_compl_eq_one_sub₀
-  given: (h : NullMeasurableSet s μ)
-  statement: μ sᶜ = 1 - μ s
-  proof: by
-  rw [measure_compl₀ h (measure_ne_top _ _)]; rw [measure_univ]
-
-中文:
-引理 prob_compl_eq_one_sub₀
-  条件: (h : NullMeasurableSet s μ)
-  结论: μ sᶜ = 1 - μ s
-  证明: by
-  rw [measure_compl₀ h (measure_ne_top _ _)]; rw [measure_univ]
-
-Depends on / 依赖: measure_ne_top, measure_univ
+--- 原说明 ---
+Note that this is not quite as useful as it looks because the measure takes valu
+es in `ℝ≥0∞`.
+Thus the subtraction appearing is the truncated subtraction of `ℝ≥0∞`, rather th
+an the
+better-behaved subtraction of `ℝ`.
 -/
 lemma prob_compl_eq_one_sub₀ (h : NullMeasurableSet s μ) : μ sᶜ = 1 - μ s := by
-  rw [measure_compl₀ h (measure_ne_top _ _)]; rw [measure_univ]
+  rw [measure_compl₀ h (measure_ne_top _ _), measure_univ]
 
-/--
-theorem `prob_compl_eq_one_sub` / 定理 `prob_compl_eq_one_sub`
+/-- Note that this is not quite as useful as it looks because the measure takes values in `ℝ≥0∞`.
+Thus the subtraction appearing is the truncated subtraction of `ℝ≥0∞`, rather than the
+better-behaved subtraction of `ℝ`. -/
+/-
+**MeasureTheory.prob_compl_eq_one_sub** 是 Mathlib 中的一个定理，位于命名空间 `MeasureTheory`。
+形式化陈述：prob_compl_eq_one_sub (hs : MeasurableSet s) : μ sᶜ = 1 - μ s
+参数：hs : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MeasureTheory.prob_compl_eq_one_sub₀`：prob_compl_eq_one_sub₀ (h : NullMe
+asurableSet s μ) : μ sᶜ = 1 - μ s
+· 使用定理 `MeasurableSet.nullMeasurableSet`：∀ {α : Type u_2} {m0 : MeasurableSpace 
+α} {μ : MeasureTheory.Measure α} {s : Set α},   MeasurableSet s → MeasureTheory.
+NullMeasurableSet s μ
 
-English:
-theorem prob_compl_eq_one_sub
-  given: (hs : MeasurableSet s)
-  statement: μ sᶜ = 1 - μ s
-  proof: prob_compl_eq_one_sub₀ hs.nullMeasurableSet
-
-中文:
-定理 prob_compl_eq_one_sub
-  条件: (hs : 可测集 s)
-  结论: μ sᶜ = 1 - μ s
-  证明: prob_compl_eq_one_sub₀ hs.nullMeasurableSet
-
-Depends on / 依赖: hs.nullMeasurableSet, nullMeasurableSet
+--- 原说明 ---
+Note that this is not quite as useful as it looks because the measure takes valu
+es in `ℝ≥0∞`.
+Thus the subtraction appearing is the truncated subtraction of `ℝ≥0∞`, rather th
+an the
+better-behaved subtraction of `ℝ`.
 -/
 theorem prob_compl_eq_one_sub (hs : MeasurableSet s) : μ sᶜ = 1 - μ s :=
   prob_compl_eq_one_sub₀ hs.nullMeasurableSet
-
-/--
-lemma `prob_compl_eq_zero_iff₀` / 引理 `prob_compl_eq_zero_iff₀`
-
-English:
-lemma prob_compl_eq_zero_iff₀
-  given: (hs : NullMeasurableSet s μ)
-  statement: μ sᶜ = 0 ↔ μ s = 1
-  proof: by
-  rw [prob_compl_eq_one_sub₀ hs]; rw [tsub_eq_zero_iff_le]; rw [one_le_prob_iff]
-
-中文:
-引理 prob_compl_eq_zero_iff₀
-  条件: (hs : NullMeasurableSet s μ)
-  结论: μ sᶜ = 0 ↔ μ s = 1
-  证明: by
-  rw [prob_compl_eq_one_sub₀ hs]; rw [tsub_eq_zero_iff_le]; rw [one_le_prob_iff]
+/-
+**MeasureTheory.prob_compl_eq_zero_iff** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory`
+。
+形式化陈述：prob_compl_eq_zero_iff (hs : MeasurableSet s) : μ sᶜ = 0 ↔ μ s = 1
+参数：hs : MeasurableSet s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma prob_compl_eq_zero_iff₀ (hs : NullMeasurableSet s μ) : μ sᶜ = 0 ↔ μ s = 1 := by
-  rw [prob_compl_eq_one_sub₀ hs]; rw [tsub_eq_zero_iff_le]; rw [one_le_prob_iff]
-
-/--
-lemma `prob_compl_eq_zero_iff` / 引理 `prob_compl_eq_zero_iff`
-
-English:
-lemma prob_compl_eq_zero_iff
-  given: (hs : MeasurableSet s)
-  statement: μ sᶜ = 0 ↔ μ s = 1
-  proof: by
-  simp [hs]
-
-中文:
-引理 prob_compl_eq_zero_iff
-  条件: (hs : 可测集 s)
-  结论: μ sᶜ = 0 ↔ μ s = 1
-  证明: by
-  simp [hs]
+  rw [prob_compl_eq_one_sub₀ hs, tsub_eq_zero_iff_le, one_le_prob_iff]
+/-
+**MeasureTheory.prob_compl_eq_zero_iff** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory`
+。
+形式化陈述：prob_compl_eq_zero_iff (hs : MeasurableSet s) : μ sᶜ = 0 ↔ μ s = 1
+参数：hs : MeasurableSet s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma prob_compl_eq_zero_iff (hs : MeasurableSet s) : μ sᶜ = 0 ↔ μ s = 1 := by
   simp [hs]
-
-/--
-lemma `prob_compl_eq_one_iff₀` / 引理 `prob_compl_eq_one_iff₀`
-
-English:
-lemma prob_compl_eq_one_iff₀
-  given: (hs : NullMeasurableSet s μ)
-  statement: μ sᶜ = 1 ↔ μ s = 0
-  proof: by
-  rw [← prob_compl_eq_zero_iff₀ hs.compl]; rw [compl_compl]
-
-中文:
-引理 prob_compl_eq_one_iff₀
-  条件: (hs : NullMeasurableSet s μ)
-  结论: μ sᶜ = 1 ↔ μ s = 0
-  证明: by
-  rw [← prob_compl_eq_zero_iff₀ hs.compl]; rw [compl_compl]
+/-
+**MeasureTheory.prob_compl_eq_one_iff** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory`。
+形式化陈述：prob_compl_eq_one_iff (hs : MeasurableSet s) : μ sᶜ = 1 ↔ μ s = 0
+参数：hs : MeasurableSet s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 @[simp] lemma prob_compl_eq_one_iff₀ (hs : NullMeasurableSet s μ) : μ sᶜ = 1 ↔ μ s = 0 := by
-  rw [← prob_compl_eq_zero_iff₀ hs.compl]; rw [compl_compl]
-
-/--
-lemma `prob_compl_eq_one_iff` / 引理 `prob_compl_eq_one_iff`
-
-English:
-lemma prob_compl_eq_one_iff
-  given: (hs : MeasurableSet s)
-  statement: μ sᶜ = 1 ↔ μ s = 0
-  proof: by
-  simp [hs]
-
-中文:
-引理 prob_compl_eq_one_iff
-  条件: (hs : 可测集 s)
-  结论: μ sᶜ = 1 ↔ μ s = 0
-  证明: by
-  simp [hs]
+  rw [← prob_compl_eq_zero_iff₀ hs.compl, compl_compl]
+/-
+**MeasureTheory.prob_compl_eq_one_iff** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory`。
+形式化陈述：prob_compl_eq_one_iff (hs : MeasurableSet s) : μ sᶜ = 1 ↔ μ s = 0
+参数：hs : MeasurableSet s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma prob_compl_eq_one_iff (hs : MeasurableSet s) : μ sᶜ = 1 ↔ μ s = 0 := by
   simp [hs]
-
-/--
-lemma `mem_ae_iff_prob_eq_one₀` / 引理 `mem_ae_iff_prob_eq_one₀`
-
-English:
-lemma mem_ae_iff_prob_eq_one₀
-  given: (hs : NullMeasurableSet s μ)
-  statement: s in ae μ ↔ μ s = 1
-  proof: mem_ae_iff.trans prob_compl_eq_zero_iff₀ hs
-
-中文:
-引理 mem_ae_iff_prob_eq_one₀
-  条件: (hs : NullMeasurableSet s μ)
-  结论: s in ae μ ↔ μ s = 1
-  证明: mem_ae_iff.trans prob_compl_eq_zero_iff₀ hs
-
-Depends on / 依赖: mem_ae_iff, mem_ae_iff.trans
+/-
+**MeasureTheory.mem_ae_iff_prob_eq_one** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory`
+。
+形式化陈述：mem_ae_iff_prob_eq_one (hs : MeasurableSet s) : s in ae μ ↔ μ s = 1
+参数：hs : MeasurableSet s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.mem_ae_iff`：mem_ae_iff {s : Set α} : s in ae μ ↔ μ sᶜ = 0
+· 使用引理 `MeasureTheory.prob_compl_eq_zero_iff`：prob_compl_eq_zero_iff (hs : Measu
+rableSet s) : μ sᶜ = 0 ↔ μ s = 1
 -/
-lemma mem_ae_iff_prob_eq_one₀ (hs : NullMeasurableSet s μ) : s in ae μ ↔ μ s = 1 :=
-mem_ae_iff.trans prob_compl_eq_zero_iff₀ hs
-
-/--
-lemma `mem_ae_iff_prob_eq_one` / 引理 `mem_ae_iff_prob_eq_one`
-
-English:
-lemma mem_ae_iff_prob_eq_one
-  given: (hs : MeasurableSet s)
-  statement: s in ae μ ↔ μ s = 1
-  proof: mem_ae_iff.trans prob_compl_eq_zero_iff hs
-
-中文:
-引理 mem_ae_iff_prob_eq_one
-  条件: (hs : 可测集 s)
-  结论: s in ae μ ↔ μ s = 1
-  证明: mem_ae_iff.trans prob_compl_eq_zero_iff hs
-
-Depends on / 依赖: mem_ae_iff, mem_ae_iff.trans, prob_compl_eq_zero_iff
+lemma mem_ae_iff_prob_eq_one₀ (hs : NullMeasurableSet s μ) : s ∈ ae μ ↔ μ s = 1 :=
+  mem_ae_iff.trans <| prob_compl_eq_zero_iff₀ hs
+/-
+**MeasureTheory.mem_ae_iff_prob_eq_one** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory`
+。
+形式化陈述：mem_ae_iff_prob_eq_one (hs : MeasurableSet s) : s in ae μ ↔ μ s = 1
+参数：hs : MeasurableSet s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `MeasureTheory.mem_ae_iff`：mem_ae_iff {s : Set α} : s in ae μ ↔ μ sᶜ = 0
+· 使用引理 `MeasureTheory.prob_compl_eq_zero_iff`：prob_compl_eq_zero_iff (hs : Measu
+rableSet s) : μ sᶜ = 0 ↔ μ s = 1
 -/
-lemma mem_ae_iff_prob_eq_one (hs : MeasurableSet s) : s in ae μ ↔ μ s = 1 :=
-mem_ae_iff.trans prob_compl_eq_zero_iff hs
-
-/--
-lemma `ae_iff_prob_eq_one` / 引理 `ae_iff_prob_eq_one`
-
-English:
-lemma ae_iff_prob_eq_one
-  given: (hp : Measurable p)
-  statement: (forallᵐ a ∂μ, p a) ↔ μ {a | p a} = 1
-  proof: mem_ae_iff_prob_eq_one hp.setOf
-
-中文:
-引理 ae_iff_prob_eq_one
-  条件: (hp : 可测 p)
-  结论: (对任意ᵐ a ∂μ, p a) ↔ μ {a | p a} = 1
-  证明: mem_ae_iff_prob_eq_one hp.setOf
-
-Depends on / 依赖: hp.setOf, mem_ae_iff_prob_eq_one
+lemma mem_ae_iff_prob_eq_one (hs : MeasurableSet s) : s ∈ ae μ ↔ μ s = 1 :=
+  mem_ae_iff.trans <| prob_compl_eq_zero_iff hs
+/-
+**MeasureTheory.ae_iff_prob_eq_one** 是 Mathlib 中的一个引理，位于命名空间 `MeasureTheory`。
+形式化陈述：ae_iff_prob_eq_one (hp : Measurable p) : (forallᵐ a ∂μ, p a) ↔ μ {a | p a}
+ = 1
+参数：hp : Measurable p。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MeasureTheory.mem_ae_iff_prob_eq_one`：mem_ae_iff_prob_eq_one (hs : Measu
+rableSet s) : s in ae μ ↔ μ s = 1
+· 使用定理 `Measurable.setOf`：∀ {α : Type u_1} [inst : MeasurableSpace α] {p : α → P
+rop}, Measurable p → MeasurableSet {a | p a}
 -/
-lemma ae_iff_prob_eq_one (hp : Measurable p) : (forallᵐ a ∂μ, p a) ↔ μ {a | p a} = 1 :=
+lemma ae_iff_prob_eq_one (hp : Measurable p) : (∀ᵐ a ∂μ, p a) ↔ μ {a | p a} = 1 :=
   mem_ae_iff_prob_eq_one hp.setOf
-
-/--
-lemma `isProbabilityMeasure_comap` / 引理 `isProbabilityMeasure_comap`
-
-English:
-lemma isProbabilityMeasure_comap
-  statement: (hf : Injective f) (hf' : forallᵐ a ∂μ, a in range f)
-  proof: by
-    rw [comap_apply _ hf hf'' _ MeasurableSet.univ]; rw [← mem_ae_iff_prob_eq_one (hf'' _ MeasurableSet.univ)]
-    simpa
-
-中文:
-引理 isProbabilityMeasure_comap
-  结论: (hf : 单射 f) (hf' : 对任意ᵐ a ∂μ, a in range f)
-  证明: by
-    rw [comap_apply _ hf hf'' _ MeasurableSet.univ]; rw [← mem_ae_iff_prob_eq_one (hf'' _ MeasurableSet.univ)]
-    simpa
-
-Depends on / 依赖: MeasurableSet, MeasurableSet.univ, comap_apply, mem_ae_iff_prob_eq_one
+/-
+**MeasureTheory.isProbabilityMeasure_comap** 是 Mathlib 中的一个引理，位于命名空间 `MeasureThe
+ory`。
+形式化陈述：isProbabilityMeasure_comap (hf : Injective f) (hf' : forallᵐ a ∂μ, a in ra
+nge f) (hf'' : forall s, MeasurableSet s -> MeasurableSet (f '' s)) : IsProbabil
+ityMeasure (μ.comap f) where measure_univ
+参数：hf : Injective f；hf' : forallᵐ a ∂μ, a in range f；hf'' : forall s, Measurable
+Set s -> MeasurableSet (f '' s)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.Measure.comap_apply`：comap_apply (f : α -> β) (hfi : Injec
+tive f) (hf : forall s, MeasurableSet s -> MeasurableSet (f '' s)) (μ : Measure 
+β) (hs : MeasurableSet …
+· 使用定理 `MeasurableSet.univ`：∀ {α : Type u_1} {m : MeasurableSpace α}, Measurable
+Set Set.univ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `MeasureTheory.mem_ae_iff_prob_eq_one`：mem_ae_iff_prob_eq_one (hs : Measu
+rableSet s) : s in ae μ ↔ μ s = 1
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
 -/
-lemma isProbabilityMeasure_comap (hf : Injective f) (hf' : forallᵐ a ∂μ, a in range f)
-    (hf'' : forall s, MeasurableSet s -> MeasurableSet (f '' s)) :
+lemma isProbabilityMeasure_comap (hf : Injective f) (hf' : ∀ᵐ a ∂μ, a ∈ range f)
+    (hf'' : ∀ s, MeasurableSet s → MeasurableSet (f '' s)) :
     IsProbabilityMeasure (μ.comap f) where
   measure_univ := by
-    rw [comap_apply _ hf hf'' _ MeasurableSet.univ]; rw [← mem_ae_iff_prob_eq_one (hf'' _ MeasurableSet.univ)]
+    rw [comap_apply _ hf hf'' _ MeasurableSet.univ,
+      ← mem_ae_iff_prob_eq_one (hf'' _ MeasurableSet.univ)]
     simpa
-
-/--
-lemma `_root_.MeasurableEmbedding.isProbabilityMeasure_comap` / 引理 `_root_.MeasurableEmbedding.isProbabilityMeasure_comap`
-
-English:
-lemma _root_.MeasurableEmbedding.isProbabilityMeasure_comap
-  statement: (hf : MeasurableEmbedding f)
-  proof: isProbabilityMeasure_comap hf.injective hf' hf.measurableSet_image'
-
-中文:
-引理 _root_.可测嵌入.isProbabilityMeasure_comap
-  结论: (hf : 可测嵌入 f)
-  证明: isProbabilityMeasure_comap hf.injective hf' hf.measurableSet_image'
+/-
+**MeasureTheory._root_.MeasurableEmbedding.isProbabilityMeasure_comap** 是 Mathli
+b 中的一个引理，位于命名空间 `MeasureTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected lemma _root_.MeasurableEmbedding.isProbabilityMeasure_comap (hf : MeasurableEmbedding f)
-    (hf' : forallᵐ a ∂μ, a in range f) : IsProbabilityMeasure (μ.comap f) :=
+    (hf' : ∀ᵐ a ∂μ, a ∈ range f) : IsProbabilityMeasure (μ.comap f) :=
   isProbabilityMeasure_comap hf.injective hf' hf.measurableSet_image'
-
-/--
-Instance `isProbabilityMeasure_map_up` / 实例 `isProbabilityMeasure_map_up`
-
-English:
-instance isProbabilityMeasure_map_up
-  signature: :
-  body: isProbabilityMeasure_map measurable_up.aemeasurable
-
-中文:
-实例 isProbabilityMeasure_map_up
-  签名: :
-  定义体: isProbabilityMeasure_map measurable_up.aemeasurable
-
-Depends on / 依赖: aemeasurable, isProbabilityMeasure_map, measurable_up, measurable_up.aemeasurable
+/-
+**MeasureTheory.isProbabilityMeasure_map_up** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTh
+eory`。
+形式化陈述：isProbabilityMeasure_map_up : IsProbabilityMeasure (μ.map ULift.up)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.isProbabilityMeasure_map`：∀ {α : Type u_1} {β : Ty
+pe u_2} {m0 : MeasurableSpace α} [inst : MeasurableSpace β] {μ : MeasureTheory.M
+easure α}   [MeasureTheory.IsProbabi…
+· 使用定理 `Measurable.aemeasurable`：Measurable.aemeasurable (h : Measurable f) : AE
+Measurable f μ
+· 使用引理 `measurable_up`：measurable_up : Measurable (ULift.up : α -> ULift α)
 -/
 instance isProbabilityMeasure_map_up :
     IsProbabilityMeasure (μ.map ULift.up) := isProbabilityMeasure_map measurable_up.aemeasurable
-
-/--
-Instance `isProbabilityMeasure_comap_down` / 实例 `isProbabilityMeasure_comap_down`
-
-English:
-instance isProbabilityMeasure_comap_down
-  signature: : IsProbabilityMeasure (μ.comap ULift.down)
-  body: MeasurableEquiv.ulift.measurableEmbedding.isProbabilityMeasure_comap ae_of_all _ by
-    simp [Function.Surjective.range_eq <| EquivLike.surjective _]
-
-中文:
-实例 isProbabilityMeasure_comap_down
-  签名: : 是概率测度 (μ.comap 类型层提升.down)
-  定义体: MeasurableEquiv.ulift.measurableEmbedding.isProbabilityMeasure_comap ae_of_all _ by
-    simp [Function.Surjective.range_eq <| EquivLike.surjective _]
-
-Depends on / 依赖: EquivLike, EquivLike.surjective, Function, Function.Surjective.range_eq, MeasurableEquiv, MeasurableEquiv.ulift.measurableEmbedding.isProbabilityMeasure_comap, Surjective, ae_of_all, isProbabilityMeasure_comap, measurableEmbedding, range_eq, surjective
+/-
+**MeasureTheory.isProbabilityMeasure_comap_down** 是 Mathlib 中的一个实例，位于命名空间 `Measu
+reTheory`。
+形式化陈述：isProbabilityMeasure_comap_down : IsProbabilityMeasure (μ.comap ULift.down
+)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasurableEmbedding.isProbabilityMeasure_comap`：∀ {α : Type u_1} {β : Ty
+pe u_2} {m0 : MeasurableSpace α} [inst : MeasurableSpace β] {μ : MeasureTheory.M
+easure α}   [MeasureTheory.IsProbabi…
+· 使用定理 `MeasurableEquiv.measurableEmbedding`：∀ {α : Type u_1} {β : Type u_2} [in
+st : MeasurableSpace α] [inst_1 : MeasurableSpace β] (e : α ≃ᵐ β),   MeasurableE
+mbedding ⇑e
+· 使用定理 `MeasureTheory.ae_of_all`：ae_of_all {p : α -> Prop} (μ : F) : (forall a, 
+p a) -> forallᵐ a ∂μ, p a
+· 使用定理 `MeasureTheory.Measure.instOuterMeasureClass`：∀ {α : Type u_1} [inst : Me
+asurableSpace α], MeasureTheory.OuterMeasureClass (MeasureTheory.Measure α) α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.Surjective.range_eq`：∀ {α : Type u_1} {ι : Sort u_4} {f : ι → α
+}, Function.Surjective f → Set.range f = Set.univ
+· 使用定理 `EquivLike.surjective`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4} [in
+st : EquivLike E α β] (e : E), Function.Surjective ⇑e
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 instance isProbabilityMeasure_comap_down : IsProbabilityMeasure (μ.comap ULift.down) :=
-MeasurableEquiv.ulift.measurableEmbedding.isProbabilityMeasure_comap ae_of_all _ by
+  MeasurableEquiv.ulift.measurableEmbedding.isProbabilityMeasure_comap <| ae_of_all _ <| by
     simp [Function.Surjective.range_eq <| EquivLike.surjective _]
-
-/--
-lemma `Measure.eq_of_le_of_isProbabilityMeasure` / 引理 `Measure.eq_of_le_of_isProbabilityMeasure`
-
-English:
-lemma Measure.eq_of_le_of_isProbabilityMeasure
-  statement: {μ ν : Measure α}
-  proof: eq_of_le_of_measure_univ_eq hμν (by simp)
-
-中文:
-引理 测度.eq_of_le_of_isProbabilityMeasure
-  结论: {μ ν : 测度 α}
-  证明: eq_of_le_of_measure_univ_eq hμν (by simp)
-
-Depends on / 依赖: eq_of_le_of_measure_univ_eq
+/-
+**MeasureTheory.Measure.eq_of_le_of_isProbabilityMeasure** 是 Mathlib 中的一个定理，位于命名
+空间 `MeasureTheory.Measure`。
+形式化陈述：∀ {α : Type u_1} {m0 : MeasurableSpace α} {μ ν : MeasureTheory.Measure α} 
+[MeasureTheory.IsProbabilityMeasure μ]   [MeasureTheory.IsProbabilityMeasure ν],
+ μ ≤ ν → μ = ν
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.Measure.eq_of_le_of_measure_univ_eq`：∀ {α : Type u_1} {m0 
+: MeasurableSpace α} {μ ν : MeasureTheory.Measure α} [MeasureTheory.IsFiniteMeas
+ure μ],   μ ≤ ν → μ Set.univ = ν Set.un…
+· 使用定理 `MeasureTheory.IsZeroOrProbabilityMeasure.toIsFiniteMeasure`：∀ {α : Type 
+u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheory.IsZer
+oOrProbabilityMeasure μ],   MeasureTheory.IsFini…
+· 使用定理 `MeasureTheory.instIsZeroOrProbabilityMeasureOfIsProbabilityMeasure`：∀ {α
+ : Type u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheo
+ry.IsProbabilityMeasure μ],   MeasureTheory.IsZeroOrProb…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.IsProbabilityMeasure.measure_univ`：∀ {α : Type u_1} {m0 : 
+MeasurableSpace α} {μ : MeasureTheory.Measure α} [self : MeasureTheory.IsProbabi
+lityMeasure μ],   μ Set.univ = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma Measure.eq_of_le_of_isProbabilityMeasure {μ ν : Measure α}
-    [IsProbabilityMeasure μ] [IsProbabilityMeasure ν] (hμν : μ <= ν) : μ = ν :=
+    [IsProbabilityMeasure μ] [IsProbabilityMeasure ν] (hμν : μ ≤ ν) : μ = ν :=
   eq_of_le_of_measure_univ_eq hμν (by simp)
 
 end IsProbabilityMeasure
@@ -794,32 +787,32 @@ section IsZeroOrProbabilityMeasure
 
 -- TODO: should infer_instance be considered normalising?
 set_option linter.flexible false in
-/--
-Instance `isZeroOrProbabilityMeasureSMul` / 实例 `isZeroOrProbabilityMeasureSMul`
-
-English:
-instance isZeroOrProbabilityMeasureSMul
-  signature: :
-  body: by
-  rcases eq_zero_or_neZero μ with rfl | h
-  · simp; infer_instance
-  rcases eq_top_or_lt_top (μ univ) with h | h
-  · simp [h]; infer_instance
-  have : IsFiniteMeasure μ := ⟨h⟩
-  infer_instance
-
-中文:
-实例 isZeroOrProbabilityMeasureSMul
-  签名: :
-  定义体: by
-  rcases eq_zero_or_neZero μ with rfl | h
-  · simp; infer_instance
-  rcases eq_top_or_lt_top (μ univ) with h | h
-  · simp [h]; infer_instance
-  have : IsFiniteMeasure μ := ⟨h⟩
-  infer_instance
-
-Depends on / 依赖: IsFiniteMeasure, eq_top_or_lt_top, eq_zero_or_neZero, infer_instance
+/-
+**MeasureTheory.isZeroOrProbabilityMeasureSMul** 是 Mathlib 中的一个实例，位于命名空间 `Measur
+eTheory`。
+形式化陈述：isZeroOrProbabilityMeasureSMul : IsZeroOrProbabilityMeasure ((μ univ)⁻¹ • 
+μ)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `eq_zero_or_neZero`：eq_zero_or_neZero (a : R) : a = 0 ∨ NeZero a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ENNReal.inv_zero`：0⁻¹ = ⊤
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `MeasureTheory.instIsZeroOrProbabilityMeasureOfNatMeasure`：∀ {α : Type u_
+1} {m0 : MeasurableSpace α}, MeasureTheory.IsZeroOrProbabilityMeasure 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `eq_top_or_lt_top`：eq_top_or_lt_top (a : α) : a = ⊤ ∨ a < ⊤
+· 使用定理 `ENNReal.inv_top`：⊤⁻¹ = 0
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `MeasureTheory.instIsZeroOrProbabilityMeasureOfIsProbabilityMeasure`：∀ {α
+ : Type u_1} {m0 : MeasurableSpace α} (μ : MeasureTheory.Measure α) [MeasureTheo
+ry.IsProbabilityMeasure μ],   MeasureTheory.IsZeroOrProb…
 -/
 instance isZeroOrProbabilityMeasureSMul :
     IsZeroOrProbabilityMeasure ((μ univ)⁻¹ • μ) := by
@@ -830,68 +823,64 @@ instance isZeroOrProbabilityMeasureSMul :
   have : IsFiniteMeasure μ := ⟨h⟩
   infer_instance
 
-variable [IsZeroOrProbabilityMeasure μ] {p : α -> Prop} {f : β -> α}
+variable [IsZeroOrProbabilityMeasure μ] {p : α → Prop} {f : β → α}
 
 variable (μ) in
-/--
-lemma `eq_zero_or_isProbabilityMeasure` / 引理 `eq_zero_or_isProbabilityMeasure`
-
-English:
-lemma eq_zero_or_isProbabilityMeasure
-  statement: μ = 0 ∨ IsProbabilityMeasure μ
-  proof: by
-  rcases IsZeroOrProbabilityMeasure.measure_univ (μ := μ) with h | h
-  · apply Or.inl (measure_univ_eq_zero.mp h)
-  · exact Or.inr ⟨h⟩
-
-中文:
-引理 eq_zero_or_isProbabilityMeasure
-  结论: μ = 0 ∨ 是概率测度 μ
-  证明: by
-  rcases IsZeroOrProbabilityMeasure.measure_univ (μ := μ) with h | h
-  · apply Or.inl (measure_univ_eq_zero.mp h)
-  · exact Or.inr ⟨h⟩
-
-Depends on / 依赖: IsZeroOrProbabilityMeasure, IsZeroOrProbabilityMeasure.measure_univ, Or.inl, Or.inr, measure_univ, measure_univ_eq_zero, measure_univ_eq_zero.mp
+/-
+**MeasureTheory.eq_zero_or_isProbabilityMeasure** 是 Mathlib 中的一个引理，位于命名空间 `Measu
+reTheory`。
+形式化陈述：eq_zero_or_isProbabilityMeasure : μ = 0 ∨ IsProbabilityMeasure μ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MeasureTheory.IsZeroOrProbabilityMeasure.measure_univ`：∀ {α : Type u_1} 
+{m0 : MeasurableSpace α} {μ : MeasureTheory.Measure α}   [self : MeasureTheory.I
+sZeroOrProbabilityMeasure μ], μ Set.univ = …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `MeasureTheory.Measure.measure_univ_eq_zero`：measure_univ_eq_zero : μ uni
+v = 0 ↔ μ = 0
 -/
 lemma eq_zero_or_isProbabilityMeasure : μ = 0 ∨ IsProbabilityMeasure μ := by
   rcases IsZeroOrProbabilityMeasure.measure_univ (μ := μ) with h | h
   · apply Or.inl (measure_univ_eq_zero.mp h)
   · exact Or.inr ⟨h⟩
-
-instance {f : α -> β} : IsZeroOrProbabilityMeasure (map f μ) := by
+/-
+**MeasureTheory.** 是 Mathlib 中的一个实例，位于命名空间 `MeasureTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance {f : α → β} : IsZeroOrProbabilityMeasure (map f μ) := by
   by_cases hf : AEMeasurable f μ
   · simpa [isZeroOrProbabilityMeasure_iff, hf] using IsZeroOrProbabilityMeasure.measure_univ
   · simp [isZeroOrProbabilityMeasure_iff, hf]
-
-/--
-lemma `prob_compl_lt_one_sub_of_lt_prob` / 引理 `prob_compl_lt_one_sub_of_lt_prob`
-
-English:
-lemma prob_compl_lt_one_sub_of_lt_prob
-  given: {p : Real>=0∞} (hμs : p < μ s) (s_mble : MeasurableSet s)
-  proof: by
-  rcases eq_zero_or_isProbabilityMeasure μ with rfl | h
-  · simp at hμs
-  · rw [prob_compl_eq_one_sub s_mble]
-    apply ENNReal.sub_lt_of_sub_lt prob_le_one (Or.inl one_ne_top)
-    convert! hμs
-    exact ENNReal.sub_sub_cancel one_ne_top (lt_of_lt_of_le hμs prob_le_one).le
-
-中文:
-引理 prob_compl_lt_one_sub_of_lt_prob
-  条件: {p : 实数>=0∞} (hμs : p < μ s) (s_mble : 可测集 s)
-  证明: by
-  rcases eq_zero_or_isProbabilityMeasure μ with rfl | h
-  · simp at hμs
-  · rw [prob_compl_eq_one_sub s_mble]
-    apply ENNReal.sub_lt_of_sub_lt prob_le_one (Or.inl one_ne_top)
-    convert! hμs
-    exact ENNReal.sub_sub_cancel one_ne_top (lt_of_lt_of_le hμs prob_le_one).le
-
-Depends on / 依赖: ENNReal, ENNReal.sub_lt_of_sub_lt, ENNReal.sub_sub_cancel, Or.inl, convert, eq_zero_or_isProbabilityMeasure, lt_of_lt_of_le, one_ne_top, prob_compl_eq_one_sub, prob_le_one, s_mble, sub_lt_of_sub_lt, sub_sub_cancel
+/-
+**MeasureTheory.prob_compl_lt_one_sub_of_lt_prob** 是 Mathlib 中的一个引理，位于命名空间 `Meas
+ureTheory`。
+形式化陈述：prob_compl_lt_one_sub_of_lt_prob {p : Real>=0∞} (hμs : p < μ s) (s_mble : 
+MeasurableSet s) : μ sᶜ < 1 - p
+参数：hμs : p < μ s；s_mble : MeasurableSet s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MeasureTheory.eq_zero_or_isProbabilityMeasure`：eq_zero_or_isProbabilityM
+easure : μ = 0 ∨ IsProbabilityMeasure μ
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.prob_compl_eq_one_sub`：prob_compl_eq_one_sub (hs : Measura
+bleSet s) : μ sᶜ = 1 - μ s
+· 使用定理 `ENNReal.sub_lt_of_sub_lt`：sub_lt_of_sub_lt (h₂ : c <= a) (h₃ : a != ∞ ∨ 
+b != ∞) (h₁ : a - b < c) : a - c < b
+· 使用引理 `MeasureTheory.prob_le_one`：prob_le_one {μ : Measure α} [IsZeroOrProbabil
+ityMeasure μ] {s : Set α} : μ s <= 1
+· 使用定理 `ENNReal.one_ne_top`：1 ≠ ⊤
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `ENNReal.sub_sub_cancel`：sub_sub_cancel (h : a != ∞) (h2 : b <= a) : a - 
+(a - b) = b
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用引理 `lt_of_lt_of_le`：lt_of_lt_of_le (hab : a < b) (hbc : b <= c) : a < c
 -/
-lemma prob_compl_lt_one_sub_of_lt_prob {p : Real>=0∞} (hμs : p < μ s) (s_mble : MeasurableSet s) :
+lemma prob_compl_lt_one_sub_of_lt_prob {p : ℝ≥0∞} (hμs : p < μ s) (s_mble : MeasurableSet s) :
     μ sᶜ < 1 - p := by
   rcases eq_zero_or_isProbabilityMeasure μ with rfl | h
   · simp at hμs
@@ -899,55 +888,68 @@ lemma prob_compl_lt_one_sub_of_lt_prob {p : Real>=0∞} (hμs : p < μ s) (s_mbl
     apply ENNReal.sub_lt_of_sub_lt prob_le_one (Or.inl one_ne_top)
     convert! hμs
     exact ENNReal.sub_sub_cancel one_ne_top (lt_of_lt_of_le hμs prob_le_one).le
-
-/--
-lemma `prob_compl_le_one_sub_of_le_prob` / 引理 `prob_compl_le_one_sub_of_le_prob`
-
-English:
-lemma prob_compl_le_one_sub_of_le_prob
-  given: {p : Real>=0∞} (hμs : p <= μ s) (s_mble : MeasurableSet s)
-  proof: by
-  rcases eq_zero_or_isProbabilityMeasure μ with rfl | h
-  · simp
-  · simpa [prob_compl_eq_one_sub s_mble] using tsub_le_tsub_left hμs 1
-
-@[simp]
-
-中文:
-引理 prob_compl_le_one_sub_of_le_prob
-  条件: {p : 实数>=0∞} (hμs : p <= μ s) (s_mble : 可测集 s)
-  证明: by
-  rcases eq_zero_or_isProbabilityMeasure μ with rfl | h
-  · simp
-  · simpa [prob_compl_eq_one_sub s_mble] using tsub_le_tsub_left hμs 1
-
-@[simp]
-
-Depends on / 依赖: eq_zero_or_isProbabilityMeasure, prob_compl_eq_one_sub, s_mble, tsub_le_tsub_left
+/-
+**MeasureTheory.prob_compl_le_one_sub_of_le_prob** 是 Mathlib 中的一个引理，位于命名空间 `Meas
+ureTheory`。
+形式化陈述：prob_compl_le_one_sub_of_le_prob {p : Real>=0∞} (hμs : p <= μ s) (s_mble :
+ MeasurableSet s) : μ sᶜ <= 1 - p
+参数：hμs : p <= μ s；s_mble : MeasurableSet s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `MeasureTheory.eq_zero_or_isProbabilityMeasure`：eq_zero_or_isProbabilityM
+easure : μ = 0 ∨ IsProbabilityMeasure μ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instIsBotZeroClass`：∀ {α : Type u} [inst : AddZeroClass α] [inst_1 : LE 
+α] [CanonicallyOrderedAdd α], IsBotZeroClass α
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.prob_compl_eq_one_sub`：prob_compl_eq_one_sub (hs : Measura
+bleSet s) : μ sᶜ = 1 - μ s
+· 使用定理 `ENNReal.instOrderedSub`：OrderedSub ENNReal
+· 使用定理 `tsub_le_tsub_left`：tsub_le_tsub_left (h : a <= b) (c : α) : c - b <= c -
+ a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `ENNReal.instIsOrderedAddMonoid`：IsOrderedAddMonoid ENNReal
 -/
-lemma prob_compl_le_one_sub_of_le_prob {p : Real>=0∞} (hμs : p <= μ s) (s_mble : MeasurableSet s) :
-    μ sᶜ <= 1 - p := by
+lemma prob_compl_le_one_sub_of_le_prob {p : ℝ≥0∞} (hμs : p ≤ μ s) (s_mble : MeasurableSet s) :
+    μ sᶜ ≤ 1 - p := by
   rcases eq_zero_or_isProbabilityMeasure μ with rfl | h
   · simp
   · simpa [prob_compl_eq_one_sub s_mble] using tsub_le_tsub_left hμs 1
 
 @[simp]
-/--
-lemma `inv_measure_univ_smul_eq_self` / 引理 `inv_measure_univ_smul_eq_self`
-
-English:
-lemma inv_measure_univ_smul_eq_self
-  statement: (μ univ)⁻¹ • μ = μ
-  proof: by
-  rcases eq_zero_or_isProbabilityMeasure μ with h | h <;> simp [h]
-
-中文:
-引理 inv_measure_univ_smul_eq_self
-  结论: (μ univ)⁻¹ • μ = μ
-  证明: by
-  rcases eq_zero_or_isProbabilityMeasure μ with h | h <;> simp [h]
-
-Depends on / 依赖: eq_zero_or_isProbabilityMeasure
+/-
+**MeasureTheory.inv_measure_univ_smul_eq_self** 是 Mathlib 中的一个引理，位于命名空间 `Measure
+Theory`。
+形式化陈述：inv_measure_univ_smul_eq_self : (μ univ)⁻¹ • μ = μ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用引理 `MeasureTheory.eq_zero_or_isProbabilityMeasure`：eq_zero_or_isProbabilityM
+easure : μ = 0 ∨ IsProbabilityMeasure μ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ENNReal.inv_zero`：0⁻¹ = ⊤
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MeasureTheory.IsProbabilityMeasure.measure_univ`：∀ {α : Type u_1} {m0 : 
+MeasurableSpace α} {μ : MeasureTheory.Measure α} [self : MeasureTheory.IsProbabi
+lityMeasure μ],   μ Set.univ = 1
+· 使用定理 `inv_one`：inv_one : (1 : G)⁻¹ = 1
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
 -/
 lemma inv_measure_univ_smul_eq_self : (μ univ)⁻¹ • μ = μ := by
   rcases eq_zero_or_isProbabilityMeasure μ with h | h <;> simp [h]
@@ -955,3 +957,4 @@ lemma inv_measure_univ_smul_eq_self : (μ univ)⁻¹ • μ = μ := by
 end IsZeroOrProbabilityMeasure
 
 end MeasureTheory
+

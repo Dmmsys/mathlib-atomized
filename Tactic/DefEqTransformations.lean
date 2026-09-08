@@ -23,57 +23,16 @@ namespace Mathlib.Tactic
 open Lean Meta Elab Elab.Tactic
 
 /--
-Definition of `_root_.Lean.MVarId.changeLocalDecl'` / `_root_.Lean.MVarId.changeLocalDecl'` 的定义
+This is `Lean.MVarId.changeLocalDecl` but makes sure to preserve local variable order.
+-/
+/-
+**Mathlib.Tactic._root_.Lean.MVarId.changeLocalDecl'** 是 Mathlib 中的一个定义，位于命名空间 `
+Mathlib.Tactic`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.Lean.MVarId.changeLocalDecl'
-  signature: (mvarId : MVarId) (fvarId : FVarId) (typeNew : Expr)
-  body: do
-  mvarId.checkNotAssigned `changeLocalDecl
-  let lctx := (← mvarId.getDecl).lctx
-  let some decl := lctx.find? fvarId | throwTacticEx `changeLocalDecl mvarId m!"\
-    local variable {Expr.fvar fvarId} is not present in local context{mvarId}"
-  let toRevert := lctx.foldl (init := #[]) fun arr decl' =>
-    if decl.index <= decl'.index then arr.push decl'.fvarId else arr
-  let (_, mvarId) ← mvarId.withReverted toRevert fun mvarId fvars => mvarId.withContext do
-    let check (typeOld : Expr) : MetaM Unit := do
-      if checkDefEq then
-        unless ← isDefEq typeNew typeOld do
-          throwTacticEx `changeLocalDecl mvarId
-            m!"given type{indentExpr typeNew}\nis not definitionally equal to{indentExpr typeOld}"
-    let finalize (targetNew : Expr) := do
-      return ((), fvars.map some, ← mvarId.replaceTargetDefEq targetNew)
-    match ← mvarId.getType with
-    | .forallE n d b bi => do check d; finalize (.forallE n typeNew b bi)
-    | .letE n t v b ndep => do check t; finalize (.letE n typeNew v b ndep)
-    | _ => throwTacticEx `changeLocalDecl mvarId "unexpected auxiliary target"
-  return mvarId
-
-中文:
-定义 _root_.Lean.MVarId.changeLocalDecl'
-  签名: (mvarId : MVarId) (fvarId : FVarId) (typeNew : Expr)
-  定义体: do
-  mvarId.checkNotAssigned `changeLocalDecl
-  let lctx := (← mvarId.getDecl).lctx
-  let some decl := lctx.find? fvarId | throwTacticEx `changeLocalDecl mvarId m!"\
-    local variable {Expr.fvar fvarId} is not present in local context{mvarId}"
-  let toRevert := lctx.foldl (init := #[]) fun arr decl' =>
-    if decl.index <= decl'.index then arr.push decl'.fvarId else arr
-  let (_, mvarId) ← mvarId.withReverted toRevert fun mvarId fvars => mvarId.withContext do
-    let check (typeOld : Expr) : MetaM Unit := do
-      if checkDefEq then
-        unless ← isDefEq typeNew typeOld do
-          throwTacticEx `changeLocalDecl mvarId
-            m!"given type{indentExpr typeNew}\nis not definitionally equal to{indentExpr typeOld}"
-    let finalize (targetNew : Expr) := do
-      return ((), fvars.map some, ← mvarId.replaceTargetDefEq targetNew)
-    match ← mvarId.getType with
-    | .forallE n d b bi => do check d; finalize (.forallE n typeNew b bi)
-    | .letE n t v b ndep => do check t; finalize (.letE n typeNew v b ndep)
-    | _ => throwTacticEx `changeLocalDecl mvarId "unexpected auxiliary target"
-  return mvarId
-
-Depends on / 依赖: MVarId
+--- 原说明 ---
+This is `Lean.MVarId.changeLocalDecl` but makes sure to preserve local variable 
+order.
 -/
 def _root_.Lean.MVarId.changeLocalDecl' (mvarId : MVarId) (fvarId : FVarId) (typeNew : Expr)
     (checkDefEq := true) : MetaM MVarId := do
@@ -82,7 +41,7 @@ def _root_.Lean.MVarId.changeLocalDecl' (mvarId : MVarId) (fvarId : FVarId) (typ
   let some decl := lctx.find? fvarId | throwTacticEx `changeLocalDecl mvarId m!"\
     local variable {Expr.fvar fvarId} is not present in local context{mvarId}"
   let toRevert := lctx.foldl (init := #[]) fun arr decl' =>
-    if decl.index <= decl'.index then arr.push decl'.fvarId else arr
+    if decl.index ≤ decl'.index then arr.push decl'.fvarId else arr
   let (_, mvarId) ← mvarId.withReverted toRevert fun mvarId fvars => mvarId.withContext do
     let check (typeOld : Expr) : MetaM Unit := do
       if checkDefEq then
@@ -97,44 +56,35 @@ def _root_.Lean.MVarId.changeLocalDecl' (mvarId : MVarId) (fvarId : FVarId) (typ
     | _ => throwTacticEx `changeLocalDecl mvarId "unexpected auxiliary target"
   return mvarId
 
-/--
-Definition of `runDefEqTactic` / `runDefEqTactic` 的定义
+/-- For the main goal, use `m` to transform the types of locations specified by `loc?`.
+If `loc?` is none, then transforms the type of target. `m` is provided with an expression
+with instantiated metavariables as well as, if the location is a local hypothesis, the fvar.
 
-English:
-definition runDefEqTactic
-  signature: (m : Option FVarId -> Expr -> MetaM Expr)
-  body: withMainContext do
-  withLocation (expandOptLocation (Lean.mkOptionalNode loc?))
-    (atLocal := fun h => liftMetaTactic1 fun mvarId => do
-      let ty ← h.getType
-      let ty' ← m h (← instantiateMVars ty)
-      if Expr.equal ty ty' then
-        return mvarId
-      else
-        mvarId.changeLocalDecl' (checkDefEq := checkDefEq) h ty')
-    (atTarget := liftMetaTactic1 fun mvarId => do
-      let ty ← instantiateMVars (← mvarId.getType)
-      mvarId.change (checkDefEq := checkDefEq) (← m none ty))
-    (failed := fun _ => throwError "{tacticName} failed")
+`m` *must* transform expressions to defeq expressions.
+If `checkDefEq = true` (the default) then `runDefEqTactic` will throw an error
+if the resulting expression is not definitionally equal to the original expression. -/
+/-
+**Mathlib.Tactic.runDefEqTactic** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：runDefEqTactic (m : Option FVarId -> Expr -> MetaM Expr) (loc? : Option (T
+Syntax ``Parser.Tactic.location)) (tacticName : String) (checkDefEq : Bool
+参数：m : Option FVarId -> Expr -> MetaM Expr；loc? : Option (TSyntax ``Parser.Tacti
+c.location)；tacticName : String。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 runDefEqTactic
-  签名: (m : 选项类型 FVarId -> Expr -> MetaM Expr)
-  定义体: withMainContext do
-  withLocation (expandOptLocation (Lean.mkOptionalNode loc?))
-    (atLocal := fun h => liftMetaTactic1 fun mvarId => do
-      let ty ← h.getType
-      let ty' ← m h (← instantiateMVars ty)
-      if Expr.equal ty ty' then
-        return mvarId
-      else
-        mvarId.changeLocalDecl' (checkDefEq := checkDefEq) h ty')
-    (atTarget := liftMetaTactic1 fun mvarId => do
-      let ty ← instantiateMVars (← mvarId.getType)
-      mvarId.change (checkDefEq := checkDefEq) (← m none ty))
-    (failed := fun _ => throwError "{tacticName} failed")
+--- 原说明 ---
+For the main goal, use `m` to transform the types of locations specified by `loc
+?`.
+If `loc?` is none, then transforms the type of target. `m` is provided with an e
+xpression
+with instantiated metavariables as well as, if the location is a local hypothesi
+s, the fvar.
+
+`m` *must* transform expressions to defeq expressions.
+If `checkDefEq = true` (the default) then `runDefEqTactic` will throw an error
+if the resulting expression is not definitionally equal to the original expressi
+on.
 -/
-def runDefEqTactic (m : Option FVarId -> Expr -> MetaM Expr)
+def runDefEqTactic (m : Option FVarId → Expr → MetaM Expr)
     (loc? : Option (TSyntax ``Parser.Tactic.location))
     (tacticName : String)
     (checkDefEq : Bool := true) :
@@ -152,25 +102,19 @@ def runDefEqTactic (m : Option FVarId -> Expr -> MetaM Expr)
       mvarId.change (checkDefEq := checkDefEq) (← m none ty))
     (failed := fun _ => throwError "{tacticName} failed")
 
-/--
-Definition of `runDefEqConvTactic` / `runDefEqConvTactic` 的定义
+/-- Like `Mathlib.Tactic.runDefEqTactic` but for `conv` mode. -/
+/-
+**Mathlib.Tactic.runDefEqConvTactic** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：runDefEqConvTactic (m : Expr -> MetaM Expr) : TacticM Unit
+参数：m : Expr -> MetaM Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition runDefEqConvTactic
-  signature: (m : Expr -> MetaM Expr)
-  body: withMainContext do
-Conv.changeLhs ← m (← instantiateMVars <| ← Conv.getLhs)
-
-中文:
-定义 runDefEqConvTactic
-  签名: (m : Expr -> MetaM Expr)
-  定义体: withMainContext do
-Conv.changeLhs ← m (← instantiateMVars <| ← Conv.getLhs)
-
-Depends on / 依赖: withMainContext
+--- 原说明 ---
+Like `Mathlib.Tactic.runDefEqTactic` but for `conv` mode.
 -/
-def runDefEqConvTactic (m : Expr -> MetaM Expr) : TacticM Unit := withMainContext do
-Conv.changeLhs ← m (← instantiateMVars <| ← Conv.getLhs)
+def runDefEqConvTactic (m : Expr → MetaM Expr) : TacticM Unit := withMainContext do
+  Conv.changeLhs <| ← m (← instantiateMVars <| ← Conv.getLhs)
 
 
 /-! ### `whnf` -/
@@ -217,40 +161,17 @@ elab "reduce" loc?:(ppSpace Parser.Tactic.location)? : tactic =>
 
 /-! ### `unfold_let` -/
 
-/--
-Definition of `unfoldFVars` / `unfoldFVars` 的定义
+/-- Unfold all the fvars from `fvars` in `e` that have local definitions (are "let-bound"). -/
+/-
+**Mathlib.Tactic.unfoldFVars** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：unfoldFVars (fvars : Array FVarId) (e : Expr) : MetaM Expr
+参数：fvars : Array FVarId；e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unfoldFVars
-  signature: (fvars : Array FVarId) (e : Expr)
-  body: do
-  transform (usedLetOnly := true) e fun node => do
-    match node with
-    | .fvar fvarId =>
-      if fvars.contains fvarId then
-        if let some val ← fvarId.getValue? then
-          return .visit (← instantiateMVars val)
-        else
-          return .continue
-      else
-        return .continue
-    | _ => return .continue
-
-中文:
-定义 unfoldFVars
-  签名: (fvars : 数组 FVarId) (e : Expr)
-  定义体: do
-  transform (usedLetOnly := true) e fun node => do
-    match node with
-    | .fvar fvarId =>
-      if fvars.contains fvarId then
-        if let some val ← fvarId.getValue? then
-          return .visit (← instantiateMVars val)
-        else
-          return .continue
-      else
-        return .continue
-    | _ => return .continue
+--- 原说明 ---
+Unfold all the fvars from `fvars` in `e` that have local definitions (are "let-b
+ound").
 -/
 def unfoldFVars (fvars : Array FVarId) (e : Expr) : MetaM Expr := do
   transform (usedLetOnly := true) e fun node => do
@@ -267,48 +188,17 @@ def unfoldFVars (fvars : Array FVarId) (e : Expr) : MetaM Expr := do
 
 /-! ### `refold_let` -/
 
-/--
-Definition of `refoldFVars` / `refoldFVars` 的定义
+/-- For each fvar, looks for its body in `e` and replaces it with the fvar. -/
+/-
+**Mathlib.Tactic.refoldFVars** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：refoldFVars (fvars : Array FVarId) (loc? : Option FVarId) (e : Expr) : Met
+aM Expr
+参数：fvars : Array FVarId；loc? : Option FVarId；e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition refoldFVars
-  signature: (fvars : Array FVarId) (loc? : Option FVarId) (e : Expr)
-  body: do
-  -- Filter the fvars, only taking those that are from earlier in the local context.
-  let fvars ←
-    if let some loc := loc? then
-      let locIndex := (← loc.getDecl).index
-      fvars.filterM fun fvar => do
-        let some decl ← fvar.findDecl? | return false
-        return decl.index < locIndex
-    else
-      pure fvars
-  let mut e := e
-  for fvar in fvars do
-    let some val ← fvar.getValue?
-      | throwError "local variable {Expr.fvar fvar} has no value to refold"
-    e := (← kabstract e val).instantiate1 (Expr.fvar fvar)
-  return e
-
-中文:
-定义 refoldFVars
-  签名: (fvars : 数组 FVarId) (loc? : 选项类型 FVarId) (e : Expr)
-  定义体: do
-  -- Filter the fvars, only taking those that are from earlier in the local context.
-  let fvars ←
-    if let some loc := loc? then
-      let locIndex := (← loc.getDecl).index
-      fvars.filterM fun fvar => do
-        let some decl ← fvar.findDecl? | return false
-        return decl.index < locIndex
-    else
-      pure fvars
-  let mut e := e
-  for fvar in fvars do
-    let some val ← fvar.getValue?
-      | throwError "local variable {Expr.fvar fvar} has no value to refold"
-    e := (← kabstract e val).instantiate1 (Expr.fvar fvar)
-  return e
+--- 原说明 ---
+For each fvar, looks for its body in `e` and replaces it with the fvar.
 -/
 def refoldFVars (fvars : Array FVarId) (loc? : Option FVarId) (e : Expr) : MetaM Expr := do
   -- Filter the fvars, only taking those that are from earlier in the local context.
@@ -350,28 +240,16 @@ elab_rules : conv
 
 /-! ### `unfold_projs` -/
 
-/--
-Definition of `unfoldProjs` / `unfoldProjs` 的定义
+/-- Recursively unfold all the projection applications for class instances. -/
+/-
+**Mathlib.Tactic.unfoldProjs** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：unfoldProjs (e : Expr) : MetaM Expr
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unfoldProjs
-  signature: (e : Expr)
-  body: do
-  transform e fun node => do
-    if let some node' ← unfoldProjInst? node then
-      return .visit (← instantiateMVars node')
-    else
-      return .continue
-
-中文:
-定义 unfoldProjs
-  签名: (e : Expr)
-  定义体: do
-  transform e fun node => do
-    if let some node' ← unfoldProjInst? node then
-      return .visit (← instantiateMVars node')
-    else
-      return .continue
+--- 原说明 ---
+Recursively unfold all the projection applications for class instances.
 -/
 def unfoldProjs (e : Expr) : MetaM Expr := do
   transform e fun node => do
@@ -393,26 +271,16 @@ elab "unfold_projs" : conv => runDefEqConvTactic unfoldProjs
 
 /-! ### `eta_reduce` -/
 
-/--
-Definition of `etaReduceAll` / `etaReduceAll` 的定义
+/-- Eta reduce everything -/
+/-
+**Mathlib.Tactic.etaReduceAll** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：etaReduceAll (e : Expr) : MetaM Expr
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition etaReduceAll
-  signature: (e : Expr)
-  body: do
-  transform e fun node =>
-    match node.etaExpandedStrict? with
-    | some e' => return .visit e'
-    | none => return .continue
-
-中文:
-定义 etaReduceAll
-  签名: (e : Expr)
-  定义体: do
-  transform e fun node =>
-    match node.etaExpandedStrict? with
-    | some e' => return .visit e'
-    | none => return .continue
+--- 原说明 ---
+Eta reduce everything
 -/
 def etaReduceAll (e : Expr) : MetaM Expr := do
   transform e fun node =>
@@ -435,30 +303,18 @@ elab "eta_reduce" : conv => runDefEqConvTactic etaReduceAll
 
 /-! ### `eta_expand` -/
 
-/--
-Definition of `etaExpandAll` / `etaExpandAll` 的定义
+/-- Eta expand every sub-expression in the given expression.
 
-English:
-definition etaExpandAll
-  signature: (e : Expr)
-  body: do
-  if e.isLambda then
-    expandSubterms e
-  else
-    forallTelescopeReducing (← inferType e) fun xs _ => do
-      let e := mkAppN (e.instantiate xs) xs
-      mkLambdaFVars xs (← expandSubterms e)
+As a side-effect, beta reduces any pre-existing instances of eta expanded terms. -/
+/-
+**Mathlib.Tactic.etaExpandAll** 是 Mathlib 中的一个不透明定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：Expr → MetaM Expr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 etaExpandAll
-  签名: (e : Expr)
-  定义体: do
-  if e.isLambda then
-    expandSubterms e
-  else
-    forallTelescopeReducing (← inferType e) fun xs _ => do
-      let e := mkAppN (e.instantiate xs) xs
-      mkLambdaFVars xs (← expandSubterms e)
+--- 原说明 ---
+Eta expand every sub-expression in the given expression.
+
+As a side-effect, beta reduces any pre-existing instances of eta expanded terms.
 -/
 partial def etaExpandAll (e : Expr) : MetaM Expr := do
   if e.isLambda then
@@ -484,7 +340,7 @@ where
       (← etaExpandAll t)
       (← etaExpandAll v)
       (← withLetDecl n t v (nondep := ndep) fun x =>
-(·.abstract #[x]) < > etaExpandAll (b.instantiate1 x))
+        (·.abstract #[x]) <$> etaExpandAll (b.instantiate1 x))
       ndep
   | e@(.app ..) =>
     let f := e.getAppFn
@@ -520,34 +376,21 @@ elab "eta_expand" : conv => runDefEqConvTactic etaExpandAll
 
 /-! ### `eta_struct` -/
 
-/--
-Definition of `getProjectedExpr` / `getProjectedExpr` 的定义
+/-- Given an expression that's either a native projection or a registered projection
+function, gives (1) the name of the structure type, (2) the index of the projection, and
+(3) the object being projected. -/
+/-
+**Mathlib.Tactic.getProjectedExpr** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：getProjectedExpr (e : Expr) : MetaM (Option (Name × Nat × Expr))
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition getProjectedExpr
-  signature: (e : Expr)
-  body: do
-  if let .proj S i x := e then
-    return (S, i, x)
-  if let .const fn _ := e.getAppFn then
-    if let some info ← getProjectionFnInfo? fn then
-      if e.getAppNumArgs == info.numParams + 1 then
-        if let some (ConstantInfo.ctorInfo fVal) := (← getEnv).find? info.ctorName then
-          return (fVal.induct, info.i, e.appArg!)
-  return none
-
-中文:
-定义 getProjectedExpr
-  签名: (e : Expr)
-  定义体: do
-  if let .proj S i x := e then
-    return (S, i, x)
-  if let .const fn _ := e.getAppFn then
-    if let some info ← getProjectionFnInfo? fn then
-      if e.getAppNumArgs == info.numParams + 1 then
-        if let some (ConstantInfo.ctorInfo fVal) := (← getEnv).find? info.ctorName then
-          return (fVal.induct, info.i, e.appArg!)
-  return none
+--- 原说明 ---
+Given an expression that's either a native projection or a registered projection
+function, gives (1) the name of the structure type, (2) the index of the project
+ion, and
+(3) the object being projected.
 -/
 def getProjectedExpr (e : Expr) : MetaM (Option (Name × Nat × Expr)) := do
   if let .proj S i x := e then
@@ -559,46 +402,32 @@ def getProjectedExpr (e : Expr) : MetaM (Option (Name × Nat × Expr)) := do
           return (fVal.induct, info.i, e.appArg!)
   return none
 
-/--
-Definition of `etaStruct?` / `etaStruct?` 的定义
+/-- Checks if the expression is of the form `S.mk x.1 ... x.n` with `n` nonzero
+and `S.mk` a structure constructor and returns `x`.
+Each projection `x.i` can be either a native projection or from a projection function.
 
-English:
-definition etaStruct?
-  signature: (e : Expr) (tryWhnfR : Bool := true)
-  body: do
-  let .const f _ := e.getAppFn | return none
-  let some (ConstantInfo.ctorInfo fVal) := (← getEnv).find? f | return none
-  unless 0 < fVal.numFields && e.getAppNumArgs == fVal.numParams + fVal.numFields do return none
-  unless isStructure (← getEnv) fVal.induct do return none
-  let args := e.getAppArgs
-  let mut x? ← findProj fVal args pure
-  if tryWhnfR then
-    if let .undef := x? then
-      x? ← findProj fVal args whnfR
-  if let .some x := x? then
-    -- Rely on eta for structures to make the check:
-    if ← isDefEq x e then
-      return x
-  return none
+`tryWhnfR` controls whether to try applying `whnfR` to arguments when none of them
+are obviously projections.
 
-中文:
-定义 etaStruct?
-  签名: (e : Expr) (tryWhnfR : 布尔值 := true)
-  定义体: do
-  let .const f _ := e.getAppFn | return none
-  let some (ConstantInfo.ctorInfo fVal) := (← getEnv).find? f | return none
-  unless 0 < fVal.numFields && e.getAppNumArgs == fVal.numParams + fVal.numFields do return none
-  unless isStructure (← getEnv) fVal.induct do return none
-  let args := e.getAppArgs
-  let mut x? ← findProj fVal args pure
-  if tryWhnfR then
-    if let .undef := x? then
-      x? ← findProj fVal args whnfR
-  if let .some x := x? then
-    -- Rely on eta for structures to make the check:
-    if ← isDefEq x e then
-      return x
-  return none
+Once an obviously correct projection is found, relies on the structure eta rule in `isDefEq`. -/
+/-
+**Mathlib.Tactic.etaStruct** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：etaStruct? (e : Expr) (tryWhnfR : Bool
+参数：e : Expr。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Checks if the expression is of the form `S.mk x.1 ... x.n` with `n` nonzero
+and `S.mk` a structure constructor and returns `x`.
+Each projection `x.i` can be either a native projection or from a projection fun
+ction.
+
+`tryWhnfR` controls whether to try applying `whnfR` to arguments when none of th
+em
+are obviously projections.
+
+Once an obviously correct projection is found, relies on the structure eta rule 
+in `isDefEq`.
 -/
 def etaStruct? (e : Expr) (tryWhnfR : Bool := true) : MetaM (Option Expr) := do
   let .const f _ := e.getAppFn | return none
@@ -619,7 +448,7 @@ where
   /-- Check to see if there's an argument at some index `i`
   such that it's the `i`th projection of a some expression.
   Returns the expression. -/
-  findProj (fVal : ConstructorVal) (args : Array Expr) (m : Expr -> MetaM Expr) :
+  findProj (fVal : ConstructorVal) (args : Array Expr) (m : Expr → MetaM Expr) :
       MetaM (LOption Expr) := do
     for i in [0 : fVal.numFields] do
       let arg ← m args[fVal.numParams + i]!
@@ -631,28 +460,18 @@ where
         return .none
     return .undef
 
-/--
-Definition of `etaStructAll` / `etaStructAll` 的定义
+/-- Finds all occurrences of expressions of the form `S.mk x.1 ... x.n` where `S.mk`
+is a structure constructor and replaces them by `x`. -/
+/-
+**Mathlib.Tactic.etaStructAll** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic`。
+形式化陈述：etaStructAll (e : Expr) : MetaM Expr
+参数：e : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition etaStructAll
-  signature: (e : Expr)
-  body: transform e fun node => do
-    if let some node' ← etaStruct? node then
-      return .visit node'
-    else
-      return .continue
-
-中文:
-定义 etaStructAll
-  签名: (e : Expr)
-  定义体: transform e fun node => do
-    if let some node' ← etaStruct? node then
-      return .visit node'
-    else
-      return .continue
-
-Depends on / 依赖: continue, etaStruct, return, transform
+--- 原说明 ---
+Finds all occurrences of expressions of the form `S.mk x.1 ... x.n` where `S.mk`
+is a structure constructor and replaces them by `x`.
 -/
 def etaStructAll (e : Expr) : MetaM Expr :=
   transform e fun node => do
@@ -678,3 +497,4 @@ elab (name := etaStructStx) "eta_struct" loc?:(ppSpace Parser.Tactic.location)? 
 elab "eta_struct" : conv => runDefEqConvTactic etaStructAll
 
 end Mathlib.Tactic
+

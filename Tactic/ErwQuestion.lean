@@ -43,85 +43,24 @@ local macro_rules
   | `(term| verbose $e) => `(term| modify (·.push fun _ => $e))
 
 /--
-Definition of `logDiffs` / `logDiffs` 的定义
+Check if two expressions are different at reducible transparency.
+Attempt to log an info message for the first subexpressions which are different
+(but agree at default transparency).
 
-English:
-definition logDiffs
-  signature: (tk : Syntax) (e₁ e₂ : Expr)
-  body: do
-  withOptions (fun opts => opts.setBool `pp.analyze true) do
-  if ← withReducible (isDefEq e₁ e₂) then
-    verbose m!"{checkEmoji} at reducible transparency,\
-      {indentD e₁}\nand{indentD e₂}\nare defeq."
-    -- They agree at reducible transparency, we're done.
-    return false
-  else
-    verbose m!"{crossEmoji} at reducible transparency,\
-      {indentD e₁}\nand{indentD e₂}\nare not defeq."
-    if ← isDefEq e₁ e₂ then
-      match e₁, e₂ with
-      | Expr.app f₁ a₁, Expr.app f₂ a₂ =>
-        if ← logDiffs tk a₁ a₂ then
-          return true
-        else
-          if ← logDiffs tk f₁ f₂ then
-            return true
-          else
-            logInfoAt tk m!"{crossEmoji} at reducible transparency,\
-              {indentD e₁}\nand{indentD e₂}\nare not defeq, but they are at default transparency."
-            return true
-      | Expr.const _ _, Expr.const _ _ =>
-        logInfoAt tk m!"{crossEmoji} at reducible transparency,\
-          {indentD e₁}\nand{indentD e₂}\nare not defeq, but they are at default transparency."
-        return true
-      | _, _ =>
-        verbose
-          m!"{crossEmoji}{indentD e₁}\nand{indentD e₂}\nare not both applications or constants."
-        return false
-    else
-        verbose
-          m!"{crossEmoji}{indentD e₁}\nand{indentD e₂}\nare not defeq at default transparency."
-      return false
-
-中文:
-定义 logDiffs
-  签名: (tk : Syntax) (e₁ e₂ : Expr)
-  定义体: do
-  withOptions (fun opts => opts.setBool `pp.analyze true) do
-  if ← withReducible (isDefEq e₁ e₂) then
-    verbose m!"{checkEmoji} at reducible transparency,\
-      {indentD e₁}\nand{indentD e₂}\nare defeq."
-    -- They agree at reducible transparency, we're done.
-    return false
-  else
-    verbose m!"{crossEmoji} at reducible transparency,\
-      {indentD e₁}\nand{indentD e₂}\nare not defeq."
-    if ← isDefEq e₁ e₂ then
-      match e₁, e₂ with
-      | Expr.app f₁ a₁, Expr.app f₂ a₂ =>
-        if ← logDiffs tk a₁ a₂ then
-          return true
-        else
-          if ← logDiffs tk f₁ f₂ then
-            return true
-          else
-            logInfoAt tk m!"{crossEmoji} at reducible transparency,\
-              {indentD e₁}\nand{indentD e₂}\nare not defeq, but they are at default transparency."
-            return true
-      | Expr.const _ _, Expr.const _ _ =>
-        logInfoAt tk m!"{crossEmoji} at reducible transparency,\
-          {indentD e₁}\nand{indentD e₂}\nare not defeq, but they are at default transparency."
-        return true
-      | _, _ =>
-        verbose
-          m!"{crossEmoji}{indentD e₁}\nand{indentD e₂}\nare not both applications or constants."
-        return false
-    else
-        verbose
-          m!"{crossEmoji}{indentD e₁}\nand{indentD e₂}\nare not defeq at default transparency."
-      return false
+Also returns an array of messages for the `verbose` report.
 -/
-def logDiffs (tk : Syntax) (e₁ e₂ : Expr) : StateT (Array (Unit -> MessageData)) MetaM Bool := do
+/-
+**Mathlib.Tactic.Erw.logDiffs** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Erw`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Check if two expressions are different at reducible transparency.
+Attempt to log an info message for the first subexpressions which are different
+(but agree at default transparency).
+
+Also returns an array of messages for the `verbose` report.
+-/
+def logDiffs (tk : Syntax) (e₁ e₂ : Expr) : StateT (Array (Unit → MessageData)) MetaM Bool := do
   withOptions (fun opts => opts.setBool `pp.analyze true) do
   if ← withReducible (isDefEq e₁ e₂) then
     verbose m!"{checkEmoji} at reducible transparency,\
@@ -157,35 +96,21 @@ def logDiffs (tk : Syntax) (e₁ e₂ : Expr) : StateT (Array (Unit -> MessageDa
       return false
 
 /--
-Definition of `extractRewriteEq` / `extractRewriteEq` 的定义
+Checks that the input `Expr` represents a proof produced by `(e)rw` and returns the types of the
+LHS of the equality being written (one from the target, the other from the lemma used).
+These will be defeq, but not necessarily reducibly so.
+-/
+/-
+**Mathlib.Tactic.Erw.extractRewriteEq** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.
+Erw`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition extractRewriteEq
-  signature: (e : Expr)
-  body: do
-  let (``Eq.mpr, #[_, _, e, _]) := e.getAppFnArgs |
-    throwError "Unexpected term produced by `erw`, head is not an `Eq.mpr`."
-  let (``id, #[ty, e]) := e.getAppFnArgs |
-    throwError "Unexpected term produced by `erw`, not of the form: `Eq.mpr (id _) _`."
-  let some (_, tgt, _) := ty.eq? |
-    throwError "Unexpected term produced by `erw`, type hint is not an equality."
-  let some (_, inferred, _) := (← inferType e).eq? |
-    throwError "Unexpected term produced by `erw`, inferred type is not an equality."
-  return (tgt, inferred)
-
-中文:
-定义 extractRewriteEq
-  签名: (e : Expr)
-  定义体: do
-  let (``Eq.mpr, #[_, _, e, _]) := e.getAppFnArgs |
-    throwError "Unexpected term produced by `erw`, head is not an `Eq.mpr`."
-  let (``id, #[ty, e]) := e.getAppFnArgs |
-    throwError "Unexpected term produced by `erw`, not of the form: `Eq.mpr (id _) _`."
-  let some (_, tgt, _) := ty.eq? |
-    throwError "Unexpected term produced by `erw`, type hint is not an equality."
-  let some (_, inferred, _) := (← inferType e).eq? |
-    throwError "Unexpected term produced by `erw`, inferred type is not an equality."
-  return (tgt, inferred)
+--- 原说明 ---
+Checks that the input `Expr` represents a proof produced by `(e)rw` and returns 
+the types of the
+LHS of the equality being written (one from the target, the other from the lemma
+ used).
+These will be defeq, but not necessarily reducibly so.
 -/
 def extractRewriteEq (e : Expr) : MetaM (Expr × Expr) := do
   let (``Eq.mpr, #[_, _, e, _]) := e.getAppFnArgs |
@@ -199,99 +124,21 @@ def extractRewriteEq (e : Expr) : MetaM (Expr × Expr) := do
   return (tgt, inferred)
 
 /--
-Definition of `extractRewriteHypEq` / `extractRewriteHypEq` 的定义
+Checks that the input `Expr` represents a proof produced by `(e)rw at` and returns the type of the
+LHS of the equality (from the lemma used).
+This will be defeq to the hypothesis being written, but not necessarily reducibly so.
+-/
+/-
+**Mathlib.Tactic.Erw.extractRewriteHypEq** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tact
+ic.Erw`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition extractRewriteHypEq
-  signature: (e : Expr)
-  body: do
-  let (.anonymous, .mk (e :: _)) := e.getAppFnArgs |
-    throwError "Unexpected term produced by `erw at`, head is not an mvar applied to a proof."
-  let (``Eq.mp, #[_, _, e, _]) := e.getAppFnArgs |
-    throwError "Unexpected term produced by `erw at`, head is not an `Eq.mp`."
-  let some (_, inferred, _) := (← inferType e).eq? |
-    throwError "Unexpected term produced by `erw at`, inferred type is not an equality."
-  return inferred
-
-elab_rules : tactic
-  | `(tactic| erw?%$tk $rs $(loc)?) => withMainContext do
-    logInfoAt rs "Debugging `erw?`"
-    let verbose := (← getOptions).get `tactic.erw?.verbose (defVal := false)
-    let cfg := { transparency := .default } -- Default transparency turns `rw` into `erw`.
-    -- Follow the implementation of `rw`, using `withRWRulesSeq` followed by
-    -- `rewriteLocalDecl` or `rewriteTarget`.
-    let loc := expandOptLocation (mkOptionalNode loc)
-    withRWRulesSeq tk rs fun symm term => do
-      withLocation loc
-        (fun loc => do
-          let g ← getMainGoal
-          rewriteLocalDecl term symm loc cfg
-          let decl ← loc.getDecl
-          let e := (← instantiateMVars (.mvar g)).headBeta
-          let inferred ← withRef tk do extractRewriteHypEq e
-          let (_, msgs) ← (logDiffs tk decl.type inferred).run #[]
-          if verbose then
-logInfoAt tk .joinSep
-              (m!"Expression appearing in {decl.toExpr}:{indentD decl.type}" ::
-                m!"Expression from `erw`: {inferred}" :: msgs.toList.map (· ())) "\n\n")
-        (do
-          let g ← getMainGoal
-          rewriteTarget term symm cfg
-          evalTactic (←`(tactic| try with_reducible rfl))
-          let e := (← instantiateMVars (.mvar g)).headBeta
-          let (tgt, inferred) ← withRef tk do extractRewriteEq e
-          let (_, msgs) ← (logDiffs tk tgt inferred).run #[]
-          if verbose then
-logInfoAt tk .joinSep
-              (m!"Expression appearing in target:{indentD tgt}" ::
-                m!"Expression from `erw`: {inferred}" :: msgs.toList.map (· ())) "\n\n")
-        (throwTacticEx `rewrite · "did not find instance of the pattern in the current goal")
-
-中文:
-定义 extractRewriteHypEq
-  签名: (e : Expr)
-  定义体: do
-  let (.anonymous, .mk (e :: _)) := e.getAppFnArgs |
-    throwError "Unexpected term produced by `erw at`, head is not an mvar applied to a proof."
-  let (``Eq.mp, #[_, _, e, _]) := e.getAppFnArgs |
-    throwError "Unexpected term produced by `erw at`, head is not an `Eq.mp`."
-  let some (_, inferred, _) := (← inferType e).eq? |
-    throwError "Unexpected term produced by `erw at`, inferred type is not an equality."
-  return inferred
-
-elab_rules : tactic
-  | `(tactic| erw?%$tk $rs $(loc)?) => withMainContext do
-    logInfoAt rs "Debugging `erw?`"
-    let verbose := (← getOptions).get `tactic.erw?.verbose (defVal := false)
-    let cfg := { transparency := .default } -- Default transparency turns `rw` into `erw`.
-    -- Follow the implementation of `rw`, using `withRWRulesSeq` followed by
-    -- `rewriteLocalDecl` or `rewriteTarget`.
-    let loc := expandOptLocation (mkOptionalNode loc)
-    withRWRulesSeq tk rs fun symm term => do
-      withLocation loc
-        (fun loc => do
-          let g ← getMainGoal
-          rewriteLocalDecl term symm loc cfg
-          let decl ← loc.getDecl
-          let e := (← instantiateMVars (.mvar g)).headBeta
-          let inferred ← withRef tk do extractRewriteHypEq e
-          let (_, msgs) ← (logDiffs tk decl.type inferred).run #[]
-          if verbose then
-logInfoAt tk .joinSep
-              (m!"Expression appearing in {decl.toExpr}:{indentD decl.type}" ::
-                m!"Expression from `erw`: {inferred}" :: msgs.toList.map (· ())) "\n\n")
-        (do
-          let g ← getMainGoal
-          rewriteTarget term symm cfg
-          evalTactic (←`(tactic| try with_reducible rfl))
-          let e := (← instantiateMVars (.mvar g)).headBeta
-          let (tgt, inferred) ← withRef tk do extractRewriteEq e
-          let (_, msgs) ← (logDiffs tk tgt inferred).run #[]
-          if verbose then
-logInfoAt tk .joinSep
-              (m!"Expression appearing in target:{indentD tgt}" ::
-                m!"Expression from `erw`: {inferred}" :: msgs.toList.map (· ())) "\n\n")
-        (throwTacticEx `rewrite · "did not find instance of the pattern in the current goal")
+--- 原说明 ---
+Checks that the input `Expr` represents a proof produced by `(e)rw at` and retur
+ns the type of the
+LHS of the equality (from the lemma used).
+This will be defeq to the hypothesis being written, but not necessarily reducibl
+y so.
 -/
 def extractRewriteHypEq (e : Expr) : MetaM Expr := do
   let (.anonymous, .mk (e :: _)) := e.getAppFnArgs |
@@ -320,7 +167,7 @@ elab_rules : tactic
           let inferred ← withRef tk do extractRewriteHypEq e
           let (_, msgs) ← (logDiffs tk decl.type inferred).run #[]
           if verbose then
-logInfoAt tk .joinSep
+            logInfoAt tk <| .joinSep
               (m!"Expression appearing in {decl.toExpr}:{indentD decl.type}" ::
                 m!"Expression from `erw`: {inferred}" :: msgs.toList.map (· ())) "\n\n")
         (do
@@ -331,9 +178,10 @@ logInfoAt tk .joinSep
           let (tgt, inferred) ← withRef tk do extractRewriteEq e
           let (_, msgs) ← (logDiffs tk tgt inferred).run #[]
           if verbose then
-logInfoAt tk .joinSep
+            logInfoAt tk <| .joinSep
               (m!"Expression appearing in target:{indentD tgt}" ::
                 m!"Expression from `erw`: {inferred}" :: msgs.toList.map (· ())) "\n\n")
         (throwTacticEx `rewrite · "did not find instance of the pattern in the current goal")
 
 end Mathlib.Tactic.Erw?
+

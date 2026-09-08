@@ -44,202 +44,260 @@ variable {Θ 𝓧 𝓨 : Type*} {mΘ : MeasurableSpace Θ} {m𝓧 : MeasurableSp
 /-- The average risk of an estimator `κ` on an estimation task with loss `ℓ` and
 data generating kernel `P` with respect to a prior `π`. -/
 noncomputable
-/--
-Definition of `avgRisk` / `avgRisk` 的定义
-
-English:
-definition avgRisk
-  signature: {m𝓨 : MeasurableSpace 𝓨}
-  body: ∫⁻ θ, ∫⁻ y, ℓ θ y ∂((κ ∘ₖ P) θ) ∂π
-
-中文:
-定义 avgRisk
-  签名: {m𝓨 : 可测空间 𝓨}
-  定义体: ∫⁻ θ, ∫⁻ y, ℓ θ y ∂((κ ∘ₖ P) θ) ∂π
+/-
+**ProbabilityTheory.avgRisk** 是 Mathlib 中的一个定义，位于命名空间 `ProbabilityTheory`。
+形式化陈述：avgRisk {m𝓨 : MeasurableSpace 𝓨} (ℓ : Θ -> 𝓨 -> Real>=0∞) (P : Kernel Θ 𝓧)
+ (κ : Kernel 𝓧 𝓨) (π : Measure Θ) : Real>=0∞
+参数：ℓ : Θ -> 𝓨 -> Real>=0∞；P : Kernel Θ 𝓧；κ : Kernel 𝓧 𝓨；π : Measure Θ。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def avgRisk {m𝓨 : MeasurableSpace 𝓨}
-    (ℓ : Θ -> 𝓨 -> Real>=0∞) (P : Kernel Θ 𝓧) (κ : Kernel 𝓧 𝓨) (π : Measure Θ) : Real>=0∞ :=
+    (ℓ : Θ → 𝓨 → ℝ≥0∞) (P : Kernel Θ 𝓧) (κ : Kernel 𝓧 𝓨) (π : Measure Θ) : ℝ≥0∞ :=
   ∫⁻ θ, ∫⁻ y, ℓ θ y ∂((κ ∘ₖ P) θ) ∂π
 
 /-- The Bayes risk with respect to a prior `π`, defined as the infimum of the average risks of all
 estimators. -/
 noncomputable
-/--
-Definition of `bayesRisk` / `bayesRisk` 的定义
-
-English:
-definition bayesRisk
-  signature: [MeasurableSpace 𝓨] (ℓ : Θ -> 𝓨 -> Real>=0∞) (P : Kernel Θ 𝓧) (π : Measure Θ)
-  body: ⨅ (κ : Kernel 𝓧 𝓨) (_ : IsMarkovKernel κ), avgRisk ℓ P κ π
-
-中文:
-定义 bayesRisk
-  签名: [可测空间 𝓨] (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : 核 Θ 𝓧) (π : 测度 Θ)
-  定义体: ⨅ (κ : Kernel 𝓧 𝓨) (_ : IsMarkovKernel κ), avgRisk ℓ P κ π
-
-Depends on / 依赖: IsMarkovKernel, Kernel, avgRisk
+/-
+**ProbabilityTheory.bayesRisk** 是 Mathlib 中的一个定义，位于命名空间 `ProbabilityTheory`。
+形式化陈述：bayesRisk [MeasurableSpace 𝓨] (ℓ : Θ -> 𝓨 -> Real>=0∞) (P : Kernel Θ 𝓧) (π
+ : Measure Θ) : Real>=0∞
+参数：ℓ : Θ -> 𝓨 -> Real>=0∞；P : Kernel Θ 𝓧；π : Measure Θ。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def bayesRisk [MeasurableSpace 𝓨] (ℓ : Θ -> 𝓨 -> Real>=0∞) (P : Kernel Θ 𝓧) (π : Measure Θ) : Real>=0∞ :=
+def bayesRisk [MeasurableSpace 𝓨] (ℓ : Θ → 𝓨 → ℝ≥0∞) (P : Kernel Θ 𝓧) (π : Measure Θ) : ℝ≥0∞ :=
   ⨅ (κ : Kernel 𝓧 𝓨) (_ : IsMarkovKernel κ), avgRisk ℓ P κ π
 
 /-- The minimax risk, defined as the infimum over estimators of the maximal risk of
 the estimator. -/
 noncomputable
-/--
-Definition of `minimaxRisk` / `minimaxRisk` 的定义
-
-English:
-definition minimaxRisk
-  signature: [MeasurableSpace 𝓨] (ℓ : Θ -> 𝓨 -> Real>=0∞) (P : Kernel Θ 𝓧)
-  body: ⨅ (κ : Kernel 𝓧 𝓨) (_ : IsMarkovKernel κ), ⨆ θ, ∫⁻ y, ℓ θ y ∂((κ ∘ₖ P) θ)
-
-中文:
-定义 minimaxRisk
-  签名: [可测空间 𝓨] (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : 核 Θ 𝓧)
-  定义体: ⨅ (κ : Kernel 𝓧 𝓨) (_ : IsMarkovKernel κ), ⨆ θ, ∫⁻ y, ℓ θ y ∂((κ ∘ₖ P) θ)
-
-Depends on / 依赖: IsMarkovKernel, Kernel
+/-
+**ProbabilityTheory.minimaxRisk** 是 Mathlib 中的一个定义，位于命名空间 `ProbabilityTheory`。
+形式化陈述：minimaxRisk [MeasurableSpace 𝓨] (ℓ : Θ -> 𝓨 -> Real>=0∞) (P : Kernel Θ 𝓧) 
+: Real>=0∞
+参数：ℓ : Θ -> 𝓨 -> Real>=0∞；P : Kernel Θ 𝓧。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def minimaxRisk [MeasurableSpace 𝓨] (ℓ : Θ -> 𝓨 -> Real>=0∞) (P : Kernel Θ 𝓧) : Real>=0∞ :=
+def minimaxRisk [MeasurableSpace 𝓨] (ℓ : Θ → 𝓨 → ℝ≥0∞) (P : Kernel Θ 𝓧) : ℝ≥0∞ :=
   ⨅ (κ : Kernel 𝓧 𝓨) (_ : IsMarkovKernel κ), ⨆ θ, ∫⁻ y, ℓ θ y ∂((κ ∘ₖ P) θ)
 
 variable {m𝓨 : MeasurableSpace 𝓨}
-  {ℓ : Θ -> 𝓨 -> Real>=0∞} {P : Kernel Θ 𝓧} {κ : Kernel 𝓧 𝓨} {π : Measure Θ}
+  {ℓ : Θ → 𝓨 → ℝ≥0∞} {P : Kernel Θ 𝓧} {κ : Kernel 𝓧 𝓨} {π : Measure Θ}
 
 section Zero
 
 @[simp]
-/--
-lemma `avgRisk_zero_left` / 引理 `avgRisk_zero_left`
-
-English:
-lemma avgRisk_zero_left
-  given: (ℓ : Θ -> 𝓨 -> Real>=0∞) (κ : Kernel 𝓧 𝓨) (π : Measure Θ)
-  proof: by simp [avgRisk]
-
-@[simp]
-
-中文:
-引理 avgRisk_zero_left
-  条件: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (κ : 核 𝓧 𝓨) (π : 测度 Θ)
-  证明: by simp [avgRisk]
-
-@[simp]
-
-Depends on / 依赖: avgRisk
+/-
+**ProbabilityTheory.avgRisk_zero_left** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheo
+ry`。
+形式化陈述：avgRisk_zero_left (ℓ : Θ -> 𝓨 -> Real>=0∞) (κ : Kernel 𝓧 𝓨) (π : Measure Θ
+) : avgRisk ℓ (0 : Kernel Θ 𝓧) κ π = 0
+参数：ℓ : Θ -> 𝓨 -> Real>=0∞；κ : Kernel 𝓧 𝓨；π : Measure Θ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ProbabilityTheory.Kernel.comp_zero`：∀ {α : Type u_1} {β : Type u_2} {γ :
+ Type u_3} {mα : MeasurableSpace α} {mβ : MeasurableSpace β}   {mγ : MeasurableS
+pace γ} (κ : Probability…
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `ProbabilityTheory.Kernel.instIsZeroApplyMeasure`：∀ {α : Type u_1} {β : T
+ype u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β},   IsZeroApply (Proba
+bilityTheory.Kernel α β) α (MeasureTh…
+· 使用定理 `MeasureTheory.lintegral_zero_measure`：lintegral_zero_measure {m : Measur
+ableSpace α} (f : α -> Real>=0∞) : ∫⁻ a, f a ∂(0 : Measure α) = 0
+· 使用定理 `MeasureTheory.lintegral_const`：lintegral_const (c : Real>=0∞) : ∫⁻ _, c 
+∂μ = c * μ univ
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma avgRisk_zero_left (ℓ : Θ -> 𝓨 -> Real>=0∞) (κ : Kernel 𝓧 𝓨) (π : Measure Θ) :
+lemma avgRisk_zero_left (ℓ : Θ → 𝓨 → ℝ≥0∞) (κ : Kernel 𝓧 𝓨) (π : Measure Θ) :
     avgRisk ℓ (0 : Kernel Θ 𝓧) κ π = 0 := by simp [avgRisk]
 
 @[simp]
-/--
-lemma `avgRisk_zero_right` / 引理 `avgRisk_zero_right`
-
-English:
-lemma avgRisk_zero_right
-  given: (ℓ : Θ -> 𝓨 -> Real>=0∞) (P : Kernel Θ 𝓧) (π : Measure Θ)
-  proof: by simp [avgRisk]
-
-@[simp]
-
-中文:
-引理 avgRisk_zero_right
-  条件: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : 核 Θ 𝓧) (π : 测度 Θ)
-  证明: by simp [avgRisk]
-
-@[simp]
-
-Depends on / 依赖: avgRisk
+/-
+**ProbabilityTheory.avgRisk_zero_right** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityThe
+ory`。
+形式化陈述：avgRisk_zero_right (ℓ : Θ -> 𝓨 -> Real>=0∞) (P : Kernel Θ 𝓧) (π : Measure 
+Θ) : avgRisk ℓ P (0 : Kernel 𝓧 𝓨) π = 0
+参数：ℓ : Θ -> 𝓨 -> Real>=0∞；P : Kernel Θ 𝓧；π : Measure Θ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `ProbabilityTheory.Kernel.zero_comp`：∀ {α : Type u_1} {β : Type u_2} {γ :
+ Type u_3} {mα : MeasurableSpace α} {mβ : MeasurableSpace β}   {mγ : MeasurableS
+pace γ} (κ : Probability…
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `ProbabilityTheory.Kernel.instIsZeroApplyMeasure`：∀ {α : Type u_1} {β : T
+ype u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β},   IsZeroApply (Proba
+bilityTheory.Kernel α β) α (MeasureTh…
+· 使用定理 `MeasureTheory.lintegral_zero_measure`：lintegral_zero_measure {m : Measur
+ableSpace α} (f : α -> Real>=0∞) : ∫⁻ a, f a ∂(0 : Measure α) = 0
+· 使用定理 `MeasureTheory.lintegral_const`：lintegral_const (c : Real>=0∞) : ∫⁻ _, c 
+∂μ = c * μ univ
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma avgRisk_zero_right (ℓ : Θ -> 𝓨 -> Real>=0∞) (P : Kernel Θ 𝓧) (π : Measure Θ) :
+lemma avgRisk_zero_right (ℓ : Θ → 𝓨 → ℝ≥0∞) (P : Kernel Θ 𝓧) (π : Measure Θ) :
     avgRisk ℓ P (0 : Kernel 𝓧 𝓨) π = 0 := by simp [avgRisk]
 
 @[simp]
-/--
-lemma `avgRisk_zero_prior` / 引理 `avgRisk_zero_prior`
-
-English:
-lemma avgRisk_zero_prior
-  given: (ℓ : Θ -> 𝓨 -> Real>=0∞) (P : Kernel Θ 𝓧) (κ : Kernel 𝓧 𝓨)
-  proof: by simp [avgRisk]
-
-@[simp]
-
-中文:
-引理 avgRisk_zero_prior
-  条件: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : 核 Θ 𝓧) (κ : 核 𝓧 𝓨)
-  证明: by simp [avgRisk]
-
-@[simp]
-
-Depends on / 依赖: avgRisk
+/-
+**ProbabilityTheory.avgRisk_zero_prior** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityThe
+ory`。
+形式化陈述：avgRisk_zero_prior (ℓ : Θ -> 𝓨 -> Real>=0∞) (P : Kernel Θ 𝓧) (κ : Kernel 𝓧
+ 𝓨) : avgRisk ℓ P κ 0 = 0
+参数：ℓ : Θ -> 𝓨 -> Real>=0∞；P : Kernel Θ 𝓧；κ : Kernel 𝓧 𝓨。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.lintegral_zero_measure`：lintegral_zero_measure {m : Measur
+ableSpace α} (f : α -> Real>=0∞) : ∫⁻ a, f a ∂(0 : Measure α) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma avgRisk_zero_prior (ℓ : Θ -> 𝓨 -> Real>=0∞) (P : Kernel Θ 𝓧) (κ : Kernel 𝓧 𝓨) :
+lemma avgRisk_zero_prior (ℓ : Θ → 𝓨 → ℝ≥0∞) (P : Kernel Θ 𝓧) (κ : Kernel 𝓧 𝓨) :
     avgRisk ℓ P κ 0 = 0 := by simp [avgRisk]
 
 @[simp]
-/--
-lemma `bayesRisk_zero_left` / 引理 `bayesRisk_zero_left`
-
-English:
-lemma bayesRisk_zero_left
-  given: [Nonempty 𝓨] (ℓ : Θ -> 𝓨 -> Real>=0∞) (π : Measure Θ)
-  proof: by simp [bayesRisk, iInf_subtype']
-
-@[simp]
-
-中文:
-引理 bayesRisk_zero_left
-  条件: [非空 𝓨] (ℓ : Θ -> 𝓨 -> 实数>=0∞) (π : 测度 Θ)
-  证明: by simp [bayesRisk, iInf_subtype']
-
-@[simp]
-
-Depends on / 依赖: bayesRisk, iInf_subtype
+/-
+**ProbabilityTheory.bayesRisk_zero_left** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTh
+eory`。
+形式化陈述：bayesRisk_zero_left [Nonempty 𝓨] (ℓ : Θ -> 𝓨 -> Real>=0∞) (π : Measure Θ) 
+: bayesRisk ℓ (0 : Kernel Θ 𝓧) π = 0
+参数：ℓ : Θ -> 𝓨 -> Real>=0∞；π : Measure Θ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用引理 `ProbabilityTheory.avgRisk_zero_left`：avgRisk_zero_left (ℓ : Θ -> 𝓨 -> Re
+al>=0∞) (κ : Kernel 𝓧 𝓨) (π : Measure Θ) : avgRisk ℓ (0 : Kernel Θ 𝓧) κ π = 0
+· 使用定理 `iInf_subtype'`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α
+] {p : ι → Prop} {f : (i : ι) → p i → α},   ⨅ i, ⨅ (h : p i), f i h = ⨅ x, f ↑x 
+⋯
+· 使用定理 `ciInf_const`：∀ {α : Type u_1} {ι : Sort u_4} [inst : ConditionallyComple
+tePartialOrderInf α] [hι : Nonempty ι] {a : α}, ⨅ x, a = a
+· 使用定理 `ProbabilityTheory.Kernel.instNonemptySubtypeIsMarkovKernel`：∀ {α : Type 
+u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} [Nonempty 
+β],   Nonempty { κ // ProbabilityTheory.IsMarkov…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma bayesRisk_zero_left [Nonempty 𝓨] (ℓ : Θ -> 𝓨 -> Real>=0∞) (π : Measure Θ) :
+lemma bayesRisk_zero_left [Nonempty 𝓨] (ℓ : Θ → 𝓨 → ℝ≥0∞) (π : Measure Θ) :
     bayesRisk ℓ (0 : Kernel Θ 𝓧) π = 0 := by simp [bayesRisk, iInf_subtype']
 
 @[simp]
-/--
-lemma `bayesRisk_zero_right` / 引理 `bayesRisk_zero_right`
-
-English:
-lemma bayesRisk_zero_right
-  given: [Nonempty 𝓨] (ℓ : Θ -> 𝓨 -> Real>=0∞) (P : Kernel Θ 𝓧)
-  proof: by simp [bayesRisk, iInf_subtype']
-
-@[simp]
-
-中文:
-引理 bayesRisk_zero_right
-  条件: [非空 𝓨] (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : 核 Θ 𝓧)
-  证明: by simp [bayesRisk, iInf_subtype']
-
-@[simp]
-
-Depends on / 依赖: bayesRisk, iInf_subtype
+/-
+**ProbabilityTheory.bayesRisk_zero_right** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityT
+heory`。
+形式化陈述：bayesRisk_zero_right [Nonempty 𝓨] (ℓ : Θ -> 𝓨 -> Real>=0∞) (P : Kernel Θ 𝓧
+) : bayesRisk ℓ P (0 : Measure Θ) = 0
+参数：ℓ : Θ -> 𝓨 -> Real>=0∞；P : Kernel Θ 𝓧。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用引理 `ProbabilityTheory.avgRisk_zero_prior`：avgRisk_zero_prior (ℓ : Θ -> 𝓨 -> 
+Real>=0∞) (P : Kernel Θ 𝓧) (κ : Kernel 𝓧 𝓨) : avgRisk ℓ P κ 0 = 0
+· 使用定理 `iInf_subtype'`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α
+] {p : ι → Prop} {f : (i : ι) → p i → α},   ⨅ i, ⨅ (h : p i), f i h = ⨅ x, f ↑x 
+⋯
+· 使用定理 `ciInf_const`：∀ {α : Type u_1} {ι : Sort u_4} [inst : ConditionallyComple
+tePartialOrderInf α] [hι : Nonempty ι] {a : α}, ⨅ x, a = a
+· 使用定理 `ProbabilityTheory.Kernel.instNonemptySubtypeIsMarkovKernel`：∀ {α : Type 
+u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} [Nonempty 
+β],   Nonempty { κ // ProbabilityTheory.IsMarkov…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma bayesRisk_zero_right [Nonempty 𝓨] (ℓ : Θ -> 𝓨 -> Real>=0∞) (P : Kernel Θ 𝓧) :
+lemma bayesRisk_zero_right [Nonempty 𝓨] (ℓ : Θ → 𝓨 → ℝ≥0∞) (P : Kernel Θ 𝓧) :
     bayesRisk ℓ P (0 : Measure Θ) = 0 := by simp [bayesRisk, iInf_subtype']
 
 @[simp]
-/--
-lemma `minimaxRisk_zero` / 引理 `minimaxRisk_zero`
-
-English:
-lemma minimaxRisk_zero
-  given: [Nonempty 𝓨] (ℓ : Θ -> 𝓨 -> Real>=0∞)
-  proof: by simp [minimaxRisk, iInf_subtype']
-
-中文:
-引理 minimaxRisk_zero
-  条件: [非空 𝓨] (ℓ : Θ -> 𝓨 -> 实数>=0∞)
-  证明: by simp [minimaxRisk, iInf_subtype']
-
-Depends on / 依赖: iInf_subtype, minimaxRisk
+/-
+**ProbabilityTheory.minimaxRisk_zero** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTheor
+y`。
+形式化陈述：minimaxRisk_zero [Nonempty 𝓨] (ℓ : Θ -> 𝓨 -> Real>=0∞) : minimaxRisk ℓ (0 
+: Kernel Θ 𝓧) = 0
+参数：ℓ : Θ -> 𝓨 -> Real>=0∞。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `ProbabilityTheory.Kernel.comp_zero`：∀ {α : Type u_1} {β : Type u_2} {γ :
+ Type u_3} {mα : MeasurableSpace α} {mβ : MeasurableSpace β}   {mγ : MeasurableS
+pace γ} (κ : Probability…
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `ProbabilityTheory.Kernel.instIsZeroApplyMeasure`：∀ {α : Type u_1} {β : T
+ype u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β},   IsZeroApply (Proba
+bilityTheory.Kernel α β) α (MeasureTh…
+· 使用定理 `MeasureTheory.lintegral_zero_measure`：lintegral_zero_measure {m : Measur
+ableSpace α} (f : α -> Real>=0∞) : ∫⁻ a, f a ∂(0 : Measure α) = 0
+· 使用定理 `ENNReal.iSup_zero`：∀ {ι : Sort u_1}, ⨆ x, 0 = 0
+· 使用定理 `iInf_subtype'`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α
+] {p : ι → Prop} {f : (i : ι) → p i → α},   ⨅ i, ⨅ (h : p i), f i h = ⨅ x, f ↑x 
+⋯
+· 使用定理 `ciInf_const`：∀ {α : Type u_1} {ι : Sort u_4} [inst : ConditionallyComple
+tePartialOrderInf α] [hι : Nonempty ι] {a : α}, ⨅ x, a = a
+· 使用定理 `ProbabilityTheory.Kernel.instNonemptySubtypeIsMarkovKernel`：∀ {α : Type 
+u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} [Nonempty 
+β],   Nonempty { κ // ProbabilityTheory.IsMarkov…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma minimaxRisk_zero [Nonempty 𝓨] (ℓ : Θ -> 𝓨 -> Real>=0∞) :
+lemma minimaxRisk_zero [Nonempty 𝓨] (ℓ : Θ → 𝓨 → ℝ≥0∞) :
     minimaxRisk ℓ (0 : Kernel Θ 𝓧) = 0 := by simp [minimaxRisk, iInf_subtype']
 
 end Zero
@@ -247,259 +305,302 @@ end Zero
 section Empty
 
 @[simp]
-/--
-lemma `avgRisk_of_isEmpty` / 引理 `avgRisk_of_isEmpty`
-
-English:
-lemma avgRisk_of_isEmpty
-  given: [IsEmpty 𝓧]
-  statement: avgRisk ℓ P κ π = 0
-  proof: by
-  simp [Subsingleton.elim P 0]
-
-@[simp]
-
-中文:
-引理 avgRisk_of_isEmpty
-  条件: [是空 𝓧]
-  结论: avgRisk ℓ P κ π = 0
-  证明: by
-  simp [Subsingleton.elim P 0]
-
-@[simp]
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim
+/-
+**ProbabilityTheory.avgRisk_of_isEmpty** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityThe
+ory`。
+形式化陈述：avgRisk_of_isEmpty [IsEmpty 𝓧] : avgRisk ℓ P κ π = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `ProbabilityTheory.Kernel.instSubsingletonOfIsEmpty`：∀ {α : Type u_1} {β 
+: Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} [IsEmpty β],   Sub
+singleton (ProbabilityTheory.Kernel α β)
+· 使用引理 `ProbabilityTheory.avgRisk_zero_left`：avgRisk_zero_left (ℓ : Θ -> 𝓨 -> Re
+al>=0∞) (κ : Kernel 𝓧 𝓨) (π : Measure Θ) : avgRisk ℓ (0 : Kernel Θ 𝓧) κ π = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma avgRisk_of_isEmpty [IsEmpty 𝓧] : avgRisk ℓ P κ π = 0 := by
   simp [Subsingleton.elim P 0]
 
 @[simp]
-/--
-lemma `avgRisk_of_isEmpty'` / 引理 `avgRisk_of_isEmpty'`
-
-English:
-lemma avgRisk_of_isEmpty'
-  given: [IsEmpty 𝓨]
-  statement: avgRisk ℓ P κ π = 0
-  proof: by
-  simp [Subsingleton.elim κ 0]
-
-@[simp]
-
-中文:
-引理 avgRisk_of_isEmpty'
-  条件: [是空 𝓨]
-  结论: avgRisk ℓ P κ π = 0
-  证明: by
-  simp [Subsingleton.elim κ 0]
-
-@[simp]
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim
+/-
+**ProbabilityTheory.avgRisk_of_isEmpty'** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityTh
+eory`。
+形式化陈述：avgRisk_of_isEmpty' [IsEmpty 𝓨] : avgRisk ℓ P κ π = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `ProbabilityTheory.Kernel.instSubsingletonOfIsEmpty`：∀ {α : Type u_1} {β 
+: Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} [IsEmpty β],   Sub
+singleton (ProbabilityTheory.Kernel α β)
+· 使用引理 `ProbabilityTheory.avgRisk_zero_right`：avgRisk_zero_right (ℓ : Θ -> 𝓨 -> 
+Real>=0∞) (P : Kernel Θ 𝓧) (π : Measure Θ) : avgRisk ℓ P (0 : Kernel 𝓧 𝓨) π = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma avgRisk_of_isEmpty' [IsEmpty 𝓨] : avgRisk ℓ P κ π = 0 := by
   simp [Subsingleton.elim κ 0]
 
 @[simp]
-/--
-lemma `avgRisk_of_isEmpty''` / 引理 `avgRisk_of_isEmpty''`
-
-English:
-lemma avgRisk_of_isEmpty''
-  given: [IsEmpty Θ]
-  statement: avgRisk ℓ P κ π = 0
-  proof: by
-  simp [avgRisk]
-
-@[simp]
-
-中文:
-引理 avgRisk_of_isEmpty''
-  条件: [是空 Θ]
-  结论: avgRisk ℓ P κ π = 0
-  证明: by
-  simp [avgRisk]
-
-@[simp]
-
-Depends on / 依赖: avgRisk
+/-
+**ProbabilityTheory.avgRisk_of_isEmpty''** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityT
+heory`。
+形式化陈述：avgRisk_of_isEmpty'' [IsEmpty Θ] : avgRisk ℓ P κ π = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MeasureTheory.lintegral_of_isEmpty`：lintegral_of_isEmpty {α} [Measurable
+Space α] [IsEmpty α] (μ : Measure α) (f : α -> Real>=0∞) : ∫⁻ x, f x ∂μ = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma avgRisk_of_isEmpty'' [IsEmpty Θ] : avgRisk ℓ P κ π = 0 := by
   simp [avgRisk]
 
 @[simp]
-/--
-lemma `bayesRisk_of_isEmpty` / 引理 `bayesRisk_of_isEmpty`
-
-English:
-lemma bayesRisk_of_isEmpty
-  given: [IsEmpty 𝓧]
-  statement: bayesRisk ℓ P π = 0
-  proof: by
-  simp [bayesRisk]
-
-@[simp]
-
-中文:
-引理 bayesRisk_of_isEmpty
-  条件: [是空 𝓧]
-  结论: bayesRisk ℓ P π = 0
-  证明: by
-  simp [bayesRisk]
-
-@[simp]
-
-Depends on / 依赖: bayesRisk
+/-
+**ProbabilityTheory.bayesRisk_of_isEmpty** 是 Mathlib 中的一个引理，位于命名空间 `ProbabilityT
+heory`。
+形式化陈述：bayesRisk_of_isEmpty [IsEmpty 𝓧] : bayesRisk ℓ P π = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用引理 `ProbabilityTheory.avgRisk_of_isEmpty`：avgRisk_of_isEmpty [IsEmpty 𝓧] : a
+vgRisk ℓ P κ π = 0
+· 使用定理 `iInf_pos`：∀ {α : Type u_1} [inst : CompleteLattice α] {p : Prop} {f : p 
+→ α} (hp : p), ⨅ (h : p), f h = f hp
+· 使用定理 `ProbabilityTheory.Kernel.instIsMarkovKernelOfIsEmpty`：∀ {α : Type u_1} {
+β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} [IsEmpty α]   (κ
+ : ProbabilityTheory.Kernel α β), Probabil…
+· 使用定理 `ciInf_const`：∀ {α : Type u_1} {ι : Sort u_4} [inst : ConditionallyComple
+tePartialOrderInf α] [hι : Nonempty ι] {a : α}, ⨅ x, a = a
+· 使用定理 `bot_nonempty`：∀ (α : Type u_1) [Bot α], Nonempty α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma bayesRisk_of_isEmpty [IsEmpty 𝓧] : bayesRisk ℓ P π = 0 := by
   simp [bayesRisk]
 
 @[simp]
-/--
-lemma `bayesRisk_of_isEmpty'` / 引理 `bayesRisk_of_isEmpty'`
-
-English:
-lemma bayesRisk_of_isEmpty'
-  given: [Nonempty 𝓧] [IsEmpty 𝓨]
-  proof: by
-  have : IsEmpty (Subtype (@IsMarkovKernel 𝓧 𝓨 m𝓧 m𝓨)) := by
-    simp only [isEmpty_subtype]
-    exact fun κ => Subsingleton.elim κ 0 ▸ Kernel.not_isMarkovKernel_zero
-  simp [bayesRisk, iInf_subtype']
-
-@[simp]
-
-中文:
-引理 bayesRisk_of_isEmpty'
-  条件: [非空 𝓧] [是空 𝓨]
-  证明: by
-  have : IsEmpty (Subtype (@IsMarkovKernel 𝓧 𝓨 m𝓧 m𝓨)) := by
-    simp only [isEmpty_subtype]
-    exact fun κ => Subsingleton.elim κ 0 ▸ Kernel.not_isMarkovKernel_zero
-  simp [bayesRisk, iInf_subtype']
-
-@[simp]
-
-Depends on / 依赖: IsEmpty, IsMarkovKernel, Kernel, Kernel.not_isMarkovKernel_zero, Subsingleton, Subsingleton.elim, Subtype, bayesRisk, iInf_subtype, isEmpty_subtype, not_isMarkovKernel_zero
+/-
+**ProbabilityTheory.bayesRisk_of_isEmpty'** 是 Mathlib 中的一个引理，位于命名空间 `Probability
+Theory`。
+形式化陈述：bayesRisk_of_isEmpty' [Nonempty 𝓧] [IsEmpty 𝓨] : bayesRisk ℓ P π = ∞
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ProbabilityTheory.Kernel.not_isMarkovKernel_zero`：not_isMarkovKernel_zer
+o [Nonempty α] : ¬ IsMarkovKernel (0 : Kernel α β)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `ProbabilityTheory.Kernel.instSubsingletonOfIsEmpty`：∀ {α : Type u_1} {β 
+: Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} [IsEmpty β],   Sub
+singleton (ProbabilityTheory.Kernel α β)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用引理 `ProbabilityTheory.avgRisk_of_isEmpty'`：avgRisk_of_isEmpty' [IsEmpty 𝓨] :
+ avgRisk ℓ P κ π = 0
+· 使用定理 `iInf_subtype'`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α
+] {p : ι → Prop} {f : (i : ι) → p i → α},   ⨅ i, ⨅ (h : p i), f i h = ⨅ x, f ↑x 
+⋯
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
 lemma bayesRisk_of_isEmpty' [Nonempty 𝓧] [IsEmpty 𝓨] :
     bayesRisk ℓ P π = ∞ := by
   have : IsEmpty (Subtype (@IsMarkovKernel 𝓧 𝓨 m𝓧 m𝓨)) := by
     simp only [isEmpty_subtype]
-    exact fun κ => Subsingleton.elim κ 0 ▸ Kernel.not_isMarkovKernel_zero
+    exact fun κ ↦ Subsingleton.elim κ 0 ▸ Kernel.not_isMarkovKernel_zero
   simp [bayesRisk, iInf_subtype']
 
 @[simp]
-/--
-lemma `bayesRisk_of_isEmpty''` / 引理 `bayesRisk_of_isEmpty''`
-
-English:
-lemma bayesRisk_of_isEmpty''
-  given: [IsEmpty Θ] [Nonempty 𝓨]
-  proof: by
-  simp [bayesRisk, iInf_subtype']
-
-@[simp]
-
-中文:
-引理 bayesRisk_of_isEmpty''
-  条件: [是空 Θ] [非空 𝓨]
-  证明: by
-  simp [bayesRisk, iInf_subtype']
-
-@[simp]
-
-Depends on / 依赖: bayesRisk, iInf_subtype
+/-
+**ProbabilityTheory.bayesRisk_of_isEmpty''** 是 Mathlib 中的一个引理，位于命名空间 `Probabilit
+yTheory`。
+形式化陈述：bayesRisk_of_isEmpty'' [IsEmpty Θ] [Nonempty 𝓨] : bayesRisk ℓ P π = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用引理 `ProbabilityTheory.avgRisk_of_isEmpty''`：avgRisk_of_isEmpty'' [IsEmpty Θ]
+ : avgRisk ℓ P κ π = 0
+· 使用定理 `iInf_subtype'`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α
+] {p : ι → Prop} {f : (i : ι) → p i → α},   ⨅ i, ⨅ (h : p i), f i h = ⨅ x, f ↑x 
+⋯
+· 使用定理 `ciInf_const`：∀ {α : Type u_1} {ι : Sort u_4} [inst : ConditionallyComple
+tePartialOrderInf α] [hι : Nonempty ι] {a : α}, ⨅ x, a = a
+· 使用定理 `ProbabilityTheory.Kernel.instNonemptySubtypeIsMarkovKernel`：∀ {α : Type 
+u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} [Nonempty 
+β],   Nonempty { κ // ProbabilityTheory.IsMarkov…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma bayesRisk_of_isEmpty'' [IsEmpty Θ] [Nonempty 𝓨] :
     bayesRisk ℓ P π = 0 := by
   simp [bayesRisk, iInf_subtype']
 
 @[simp]
-/--
-lemma `minimaxRisk_of_isEmpty` / 引理 `minimaxRisk_of_isEmpty`
-
-English:
-lemma minimaxRisk_of_isEmpty
-  given: [IsEmpty 𝓧]
-  statement: minimaxRisk ℓ P = 0
-  proof: by
-  simp [minimaxRisk, Subsingleton.elim P 0]
-
-@[simp]
-
-中文:
-引理 minimaxRisk_of_isEmpty
-  条件: [是空 𝓧]
-  结论: minimaxRisk ℓ P = 0
-  证明: by
-  simp [minimaxRisk, Subsingleton.elim P 0]
-
-@[simp]
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim, minimaxRisk
+/-
+**ProbabilityTheory.minimaxRisk_of_isEmpty** 是 Mathlib 中的一个引理，位于命名空间 `Probabilit
+yTheory`。
+形式化陈述：minimaxRisk_of_isEmpty [IsEmpty 𝓧] : minimaxRisk ℓ P = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `ProbabilityTheory.Kernel.instSubsingletonOfIsEmpty`：∀ {α : Type u_1} {β 
+: Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} [IsEmpty β],   Sub
+singleton (ProbabilityTheory.Kernel α β)
+· 使用定理 `ProbabilityTheory.Kernel.comp_zero`：∀ {α : Type u_1} {β : Type u_2} {γ :
+ Type u_3} {mα : MeasurableSpace α} {mβ : MeasurableSpace β}   {mγ : MeasurableS
+pace γ} (κ : Probability…
+· 使用定理 `zero_apply`：∀ {F : Type u_1} {α : outParam (Type u_2)} {β : outParam (Ty
+pe u_3)} {inst : FunLike F α β} {inst_1 : Zero β}   {inst_2 : Zero F} [self : Is
+…
+· 使用定理 `ProbabilityTheory.Kernel.instIsZeroApplyMeasure`：∀ {α : Type u_1} {β : T
+ype u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β},   IsZeroApply (Proba
+bilityTheory.Kernel α β) α (MeasureTh…
+· 使用定理 `MeasureTheory.lintegral_zero_measure`：lintegral_zero_measure {m : Measur
+ableSpace α} (f : α -> Real>=0∞) : ∫⁻ a, f a ∂(0 : Measure α) = 0
+· 使用定理 `ENNReal.iSup_zero`：∀ {ι : Sort u_1}, ⨆ x, 0 = 0
+· 使用定理 `iInf_pos`：∀ {α : Type u_1} [inst : CompleteLattice α] {p : Prop} {f : p 
+→ α} (hp : p), ⨅ (h : p), f h = f hp
+· 使用定理 `ProbabilityTheory.Kernel.instIsMarkovKernelOfIsEmpty`：∀ {α : Type u_1} {
+β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} [IsEmpty α]   (κ
+ : ProbabilityTheory.Kernel α β), Probabil…
+· 使用定理 `ciInf_const`：∀ {α : Type u_1} {ι : Sort u_4} [inst : ConditionallyComple
+tePartialOrderInf α] [hι : Nonempty ι] {a : α}, ⨅ x, a = a
+· 使用定理 `bot_nonempty`：∀ (α : Type u_1) [Bot α], Nonempty α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma minimaxRisk_of_isEmpty [IsEmpty 𝓧] : minimaxRisk ℓ P = 0 := by
   simp [minimaxRisk, Subsingleton.elim P 0]
 
 @[simp]
-/--
-lemma `minimaxRisk_of_isEmpty'` / 引理 `minimaxRisk_of_isEmpty'`
-
-English:
-lemma minimaxRisk_of_isEmpty'
-  given: [Nonempty 𝓧] [IsEmpty 𝓨]
-  statement: minimaxRisk ℓ P = ∞
-  proof: by
-  have : IsEmpty (Subtype (@IsMarkovKernel 𝓧 𝓨 m𝓧 m𝓨)) := by
-    simp only [isEmpty_subtype]
-    exact fun κ => Subsingleton.elim κ 0 ▸ Kernel.not_isMarkovKernel_zero
-  simp [minimaxRisk, iInf_subtype']
-
-@[simp]
-
-中文:
-引理 minimaxRisk_of_isEmpty'
-  条件: [非空 𝓧] [是空 𝓨]
-  结论: minimaxRisk ℓ P = ∞
-  证明: by
-  have : IsEmpty (Subtype (@IsMarkovKernel 𝓧 𝓨 m𝓧 m𝓨)) := by
-    simp only [isEmpty_subtype]
-    exact fun κ => Subsingleton.elim κ 0 ▸ Kernel.not_isMarkovKernel_zero
-  simp [minimaxRisk, iInf_subtype']
-
-@[simp]
-
-Depends on / 依赖: IsEmpty, IsMarkovKernel, Kernel, Kernel.not_isMarkovKernel_zero, NonUnitalSubsemiringClass, NonUnitalSubsemiringClass.mulMemClass, Subsingleton, Subsingleton.elim, Subtype, iInf_subtype, isEmpty_subtype, minimaxRisk, mulMemClass, not_isMarkovKernel_zero
+/-
+**ProbabilityTheory.minimaxRisk_of_isEmpty'** 是 Mathlib 中的一个引理，位于命名空间 `Probabili
+tyTheory`。
+形式化陈述：minimaxRisk_of_isEmpty' [Nonempty 𝓧] [IsEmpty 𝓨] : minimaxRisk ℓ P = ∞
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ProbabilityTheory.Kernel.not_isMarkovKernel_zero`：not_isMarkovKernel_zer
+o [Nonempty α] : ¬ IsMarkovKernel (0 : Kernel α β)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `ProbabilityTheory.Kernel.instSubsingletonOfIsEmpty`：∀ {α : Type u_1} {β 
+: Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} [IsEmpty β],   Sub
+singleton (ProbabilityTheory.Kernel α β)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `MeasureTheory.lintegral_of_isEmpty`：lintegral_of_isEmpty {α} [Measurable
+Space α] [IsEmpty α] (μ : Measure α) (f : α -> Real>=0∞) : ∫⁻ x, f x ∂μ = 0
+· 使用定理 `ENNReal.iSup_zero`：∀ {ι : Sort u_1}, ⨆ x, 0 = 0
+· 使用定理 `iInf_subtype'`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α
+] {p : ι → Prop} {f : (i : ι) → p i → α},   ⨅ i, ⨅ (h : p i), f i h = ⨅ x, f ↑x 
+⋯
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
 lemma minimaxRisk_of_isEmpty' [Nonempty 𝓧] [IsEmpty 𝓨] : minimaxRisk ℓ P = ∞ := by
   have : IsEmpty (Subtype (@IsMarkovKernel 𝓧 𝓨 m𝓧 m𝓨)) := by
     simp only [isEmpty_subtype]
-    exact fun κ => Subsingleton.elim κ 0 ▸ Kernel.not_isMarkovKernel_zero
+    exact fun κ ↦ Subsingleton.elim κ 0 ▸ Kernel.not_isMarkovKernel_zero
   simp [minimaxRisk, iInf_subtype']
 
 @[simp]
-/--
-lemma `minimaxRisk_of_isEmpty''` / 引理 `minimaxRisk_of_isEmpty''`
-
-English:
-lemma minimaxRisk_of_isEmpty''
-  given: [Nonempty 𝓨] [IsEmpty Θ]
-  statement: minimaxRisk ℓ P = 0
-  proof: by
-  simp [minimaxRisk, iInf_subtype']
-
-中文:
-引理 minimaxRisk_of_isEmpty''
-  条件: [非空 𝓨] [是空 Θ]
-  结论: minimaxRisk ℓ P = 0
-  证明: by
-  simp [minimaxRisk, iInf_subtype']
-
-Depends on / 依赖: iInf_subtype, minimaxRisk, toNonUnitalNonAssocSemiring
+/-
+**ProbabilityTheory.minimaxRisk_of_isEmpty''** 是 Mathlib 中的一个引理，位于命名空间 `Probabil
+ityTheory`。
+形式化陈述：minimaxRisk_of_isEmpty'' [Nonempty 𝓨] [IsEmpty Θ] : minimaxRisk ℓ P = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iInf_congr_Prop`：∀ {α : Type u_1} [inst : InfSet α] {p q : Prop} {f₁ : p
+ → α} {f₂ : q → α} (pq : p ↔ q),   (∀ (x : q), f₁ ⋯ = f₂ x) → iInf f₁ = iInf f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `ciSup_of_empty`：ciSup_of_empty [IsEmpty ι] (f : ι -> α) : ⨆ i, f i = ⊥
+· 使用定理 `bot_eq_zero'`：∀ {α : Type u} [inst : AddMonoid α] [inst_1 : LinearOrder 
+α] [CanonicallyOrderedAdd α] [inst_3 : OrderBot α], ⊥ = 0
+· 使用定理 `ENNReal.instCanonicallyOrderedAdd`：CanonicallyOrderedAdd ENNReal
+· 使用定理 `iInf_subtype'`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α
+] {p : ι → Prop} {f : (i : ι) → p i → α},   ⨅ i, ⨅ (h : p i), f i h = ⨅ x, f ↑x 
+⋯
+· 使用定理 `ciInf_const`：∀ {α : Type u_1} {ι : Sort u_4} [inst : ConditionallyComple
+tePartialOrderInf α] [hι : Nonempty ι] {a : α}, ⨅ x, a = a
+· 使用定理 `ProbabilityTheory.Kernel.instNonemptySubtypeIsMarkovKernel`：∀ {α : Type 
+u_1} {β : Type u_2} {mα : MeasurableSpace α} {mβ : MeasurableSpace β} [Nonempty 
+β],   Nonempty { κ // ProbabilityTheory.IsMarkov…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma minimaxRisk_of_isEmpty'' [Nonempty 𝓨] [IsEmpty Θ] : minimaxRisk ℓ P = 0 := by
   simp [minimaxRisk, iInf_subtype']
 end Empty
 
 end ProbabilityTheory
+

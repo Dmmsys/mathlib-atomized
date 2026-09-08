@@ -54,99 +54,52 @@ variable {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] {x y z : X} {ι
 
 /-! ### Paths -/
 
-/--
-Definition of `Path` / `Path` 的定义
+/-- Continuous path connecting two points `x` and `y` in a topological space -/
+/-
+**Path** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{X : Type u_1} → [TopologicalSpace X] → X → X → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Path
-  parameters: (x y : X)
-  extends: C(I, X)
-  axioms and operations (2):
-    - source' : toFun 0 = x
-    - target' : toFun 1 = y
-
-中文:
-结构 道路
-  参数: (x y : X)
-  继承: C(I, X)
-  公理与运算 (2 个):
-    - source' : toFun 0 = x
-    - target' : toFun 1 = y
+--- 原说明 ---
+Continuous path connecting two points `x` and `y` in a topological space
 -/
 structure Path (x y : X) extends C(I, X) where
   /-- The start point of a `Path`. -/
   source' : toFun 0 = x
   /-- The end point of a `Path`. -/
   target' : toFun 1 = y
-
-/--
-Instance `Path.instFunLike` / 实例 `Path.instFunLike`
-
-English:
-instance Path.instFunLike
-  signature: : FunLike (Path x y) I X where
-  body: ⇑γ.toContinuousMap
-  coe_injective γ₁ γ₂ h := by
-    simp only [DFunLike.coe_fn_eq] at h
-    cases γ₁; cases γ₂; congr
-
-中文:
-实例 道路.instFunLike
-  签名: : 函数状 (道路 x y) I X where
-  定义体: ⇑γ.toContinuousMap
-  coe_injective γ₁ γ₂ h := by
-    simp only [DFunLike.coe_fn_eq] at h
-    cases γ₁; cases γ₂; congr
-
-Depends on / 依赖: toContinuousMap
+/-
+**Path.instFunLike** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Path.instFunLike : FunLike (Path x y) I X where coe γ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Path.instFunLike : FunLike (Path x y) I X where
   coe γ := ⇑γ.toContinuousMap
   coe_injective γ₁ γ₂ h := by
     simp only [DFunLike.coe_fn_eq] at h
     cases γ₁; cases γ₂; congr
-
-/--
-Instance `Path.continuousMapClass` / 实例 `Path.continuousMapClass`
-
-English:
-instance Path.continuousMapClass
-  signature: : ContinuousMapClass (Path x y) I X where
-  body: show Continuous γ.toContinuousMap by fun_prop
-
-@[ext, grind ext]
-
-中文:
-实例 道路.continuousMapClass
-  签名: : 连续映射类 (道路 x y) I X where
-  定义体: show Continuous γ.toContinuousMap by fun_prop
-
-@[ext, grind ext]
-
-Depends on / 依赖: Continuous, fun_prop, toContinuousMap
+/-
+**Path.continuousMapClass** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Path.continuousMapClass : ContinuousMapClass (Path x y) I X where map_cont
+inuous γ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMapClass.map_continuous`：∀ {F : Type u_1} {X : outParam (Type 
+u_2)} {Y : outParam (Type u_3)} {inst : TopologicalSpace X}   {inst_1 : Topologi
+calSpace Y} {inst_2 : F…
 -/
 instance Path.continuousMapClass : ContinuousMapClass (Path x y) I X where
   map_continuous γ := show Continuous γ.toContinuousMap by fun_prop
 
 @[ext, grind ext]
-/--
-theorem `Path.ext` / 定理 `Path.ext`
-
-English:
-theorem Path.ext
-  statement: forall {γ₁ γ₂ : Path x y}, (γ₁ : I -> X) = γ₂ -> γ₁ = γ₂
-  proof: by
-  rintro ⟨⟨x, h11⟩, h12, h13⟩ ⟨⟨x, h21⟩, h22, h23⟩ rfl
-  rfl
-
-中文:
-定理 道路.ext
-  结论: 对任意 {γ₁ γ₂ : 道路 x y}, (γ₁ : I -> X) = γ₂ -> γ₁ = γ₂
-  证明: by
-  rintro ⟨⟨x, h11⟩, h12, h13⟩ ⟨⟨x, h21⟩, h22, h23⟩ rfl
-  rfl
+/-
+**Path.ext** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} {γ₁ γ₂ : Path x y},
+ ⇑γ₁ = ⇑γ₂ → γ₁ = γ₂
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem Path.ext : forall {γ₁ γ₂ : Path x y}, (γ₁ : I -> X) = γ₂ -> γ₁ = γ₂ := by
+protected theorem Path.ext : ∀ {γ₁ γ₂ : Path x y}, (γ₁ : I → X) = γ₂ → γ₁ = γ₂ := by
   rintro ⟨⟨x, h11⟩, h12, h13⟩ ⟨⟨x, h21⟩, h22, h23⟩ rfl
   rfl
 
@@ -154,255 +107,169 @@ namespace Path
 
 /-- A path constructed from a continuous map `f` has the same underlying function. -/
 @[simp]
-/--
-theorem `coe_mk'` / 定理 `coe_mk'`
+/-
+**Path.coe_mk'** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：coe_mk' (f : C(I, X)) (h₁ h₂) : ⇑(mk f h₁ h₂ : Path x y) = f
+参数：f : C(I, X)；h₁ h₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem coe_mk'
-  given: (f : C(I, X)) (h₁ h₂)
-  statement: ⇑(mk f h₁ h₂ : Path x y) = f
-  proof: rfl
-
-中文:
-定理 coe_mk'
-  条件: (f : C(I, X)) (h₁ h₂)
-  结论: ⇑(mk f h₁ h₂ : 道路 x y) = f
-  证明: rfl
+--- 原说明 ---
+A path constructed from a continuous map `f` has the same underlying function.
 -/
 theorem coe_mk' (f : C(I, X)) (h₁ h₂) : ⇑(mk f h₁ h₂ : Path x y) = f := rfl
-
-/--
-theorem `coe_mk_mk` / 定理 `coe_mk_mk`
-
-English:
-theorem coe_mk_mk
-  given: (f : I -> X) (h₁) (h₂ : f 0 = x) (h₃ : f 1 = y)
-  proof: rfl
-
-中文:
-定理 coe_mk_mk
-  条件: (f : I -> X) (h₁) (h₂ : f 0 = x) (h₃ : f 1 = y)
-  证明: rfl
+/-
+**Path.coe_mk_mk** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：coe_mk_mk (f : I -> X) (h₁) (h₂ : f 0 = x) (h₃ : f 1 = y) : ⇑(mk ⟨f, h₁⟩ h
+₂ h₃ : Path x y) = f
+参数：f : I -> X；h₁；h₂ : f 0 = x；h₃ : f 1 = y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_mk_mk (f : I -> X) (h₁) (h₂ : f 0 = x) (h₃ : f 1 = y) :
+theorem coe_mk_mk (f : I → X) (h₁) (h₂ : f 0 = x) (h₃ : f 1 = y) :
     ⇑(mk ⟨f, h₁⟩ h₂ h₃ : Path x y) = f :=
   rfl
 
 variable (γ : Path x y)
 
 @[continuity]
-/--
-theorem `continuous` / 定理 `continuous`
-
-English:
-theorem continuous
-  statement: Continuous γ
-  proof: γ.continuous_toFun
-
-@[simp, grind =]
-
-中文:
-定理 continuous
-  结论: 连续 γ
-  证明: γ.continuous_toFun
-
-@[simp, grind =]
+/-
+**Path.continuous** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} (γ : Path x y), Con
+tinuous ⇑γ
+参数：γ : Path x y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.continuous_toFun`：∀ {X : Type u_1} {Y : Type u_2} [inst : 
+TopologicalSpace X] [inst_1 : TopologicalSpace Y] (self : C(X, Y)),   Continuous
+ self.toFun
 -/
 protected theorem continuous : Continuous γ :=
   γ.continuous_toFun
 
 @[simp, grind =]
-/--
-theorem `source` / 定理 `source`
-
-English:
-theorem source
-  statement: γ 0 = x
-  proof: γ.source'
-
-@[simp, grind =]
-
-中文:
-定理 source
-  结论: γ 0 = x
-  证明: γ.source'
-
-@[simp, grind =]
+/-
+**Path.source** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} (γ : Path x y), γ 0
+ = x
+参数：γ : Path x y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.source'`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} (se
+lf : Path x y), self.toFun 0 = x
 -/
 protected theorem source : γ 0 = x :=
   γ.source'
 
 @[simp, grind =]
-/--
-theorem `target` / 定理 `target`
-
-English:
-theorem target
-  statement: γ 1 = y
-  proof: γ.target'
-
-中文:
-定理 target
-  结论: γ 1 = y
-  证明: γ.target'
+/-
+**Path.target** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} (γ : Path x y), γ 1
+ = y
+参数：γ : Path x y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.target'`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} (se
+lf : Path x y), self.toFun 1 = y
 -/
 protected theorem target : γ 1 = y :=
   γ.target'
 
-/--
-Definition of `simps.apply` / `simps.apply` 的定义
+/-- See Note [custom simps projection]. We need to specify this projection explicitly in this case,
+because it is a composition of multiple projections. -/
+/-
+**Path.simps.apply** 是 Mathlib 中的一个定义，位于命名空间 `Path.simps`。
+形式化陈述：{X : Type u_1} → [inst : TopologicalSpace X] → {x y : X} → Path x y → ↑uni
+tInterval → X
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition simps.apply
-  signature: : I -> X
-  body: γ
-
-initialize_simps_projections Path (toFun -> simps.apply, -toContinuousMap)
-
-@[simp]
-
-中文:
-定义 simps.apply
-  签名: : I -> X
-  定义体: γ
-
-initialize_simps_projections Path (toFun -> simps.apply, -toContinuousMap)
-
-@[simp]
+--- 原说明 ---
+See Note [custom simps projection]. We need to specify this projection explicitl
+y in this case,
+because it is a composition of multiple projections.
 -/
-def simps.apply : I -> X :=
+def simps.apply : I → X :=
   γ
 
-initialize_simps_projections Path (toFun -> simps.apply, -toContinuousMap)
+initialize_simps_projections Path (toFun → simps.apply, -toContinuousMap)
 
 @[simp]
-/--
-theorem `coe_toContinuousMap` / 定理 `coe_toContinuousMap`
-
-English:
-theorem coe_toContinuousMap
-  statement: ⇑γ.toContinuousMap = γ
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_toContinuousMap
-  结论: ⇑γ.toContinuousMap = γ
-  证明: rfl
-
-@[simp]
+/-
+**Path.coe_toContinuousMap** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：coe_toContinuousMap : ⇑γ.toContinuousMap = γ
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toContinuousMap : ⇑γ.toContinuousMap = γ :=
   rfl
 
 @[simp]
-/--
-theorem `range_coe` / 定理 `range_coe`
-
-English:
-theorem range_coe
-  statement: range ((↑) : Path x y -> C(I, X)) = {f | f 0 = x ∧ f 1 = y}
-  proof: Subset.antisymm (range_subset_iff.mpr fun γ => ⟨γ.source, γ.target⟩) fun f ⟨hf₀, hf₁⟩ =>
-    ⟨⟨f, hf₀, hf₁⟩, rfl⟩
-
-中文:
-定理 range_coe
-  结论: range ((↑) : 道路 x y -> C(I, X)) = {f | f 0 = x ∧ f 1 = y}
-  证明: Subset.antisymm (range_subset_iff.mpr fun γ => ⟨γ.source, γ.target⟩) fun f ⟨hf₀, hf₁⟩ =>
-    ⟨⟨f, hf₀, hf₁⟩, rfl⟩
-
-Depends on / 依赖: Subset, Subset.antisymm, antisymm, range_subset_iff, range_subset_iff.mpr, source, target
+/-
+**Path.range_coe** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：range_coe : range ((↑) : Path x y -> C(I, X)) = {f | f 0 = x ∧ f 1 = y}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.antisymm`：∀ {α : Type u} {a b : Set α}, a ⊆ b → b ⊆ a → a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.range_subset_iff`：range_subset_iff : range f subseteq s ↔ forall y, 
+f y in s
+· 使用定理 `Path.source`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} (γ :
+ Path x y), γ 0 = x
+· 使用定理 `Path.target`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} (γ :
+ Path x y), γ 1 = y
 -/
-theorem range_coe : range ((↑) : Path x y -> C(I, X)) = {f | f 0 = x ∧ f 1 = y} :=
-  Subset.antisymm (range_subset_iff.mpr fun γ => ⟨γ.source, γ.target⟩) fun f ⟨hf₀, hf₁⟩ =>
+theorem range_coe : range ((↑) : Path x y → C(I, X)) = {f | f 0 = x ∧ f 1 = y} :=
+  Subset.antisymm (range_subset_iff.mpr fun γ ↦ ⟨γ.source, γ.target⟩) fun f ⟨hf₀, hf₁⟩ ↦
     ⟨⟨f, hf₀, hf₁⟩, rfl⟩
 
-/--
-Instance `instHasUncurryPath` / 实例 `instHasUncurryPath`
+/-- Any function `φ : Π (a : α), Path (x a) (y a)` can be seen as a function `α × I → X`. -/
+/-
+**Path.instHasUncurryPath** 是 Mathlib 中的一个实例，位于命名空间 `Path`。
+形式化陈述：instHasUncurryPath {α : Type*} {x y : α -> X} : HasUncurry (forall a : α, 
+Path (x a) (y a)) (α × I) X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instHasUncurryPath
-  signature: {α : Type*} {x y : α -> X}
-  body: ⟨fun φ p => φ p.1 p.2⟩
-
-@[simp high, grind! .]
-
-中文:
-实例 instHasUncurryPath
-  签名: {α : 类型} {x y : α -> X}
-  定义体: ⟨fun φ p => φ p.1 p.2⟩
-
-@[simp high, grind! .]
+--- 原说明 ---
+Any function `φ : Π (a : α), Path (x a) (y a)` can be seen as a function `α × I 
+→ X`.
 -/
-instance instHasUncurryPath {α : Type*} {x y : α -> X} :
-    HasUncurry (forall a : α, Path (x a) (y a)) (α × I) X :=
+instance instHasUncurryPath {α : Type*} {x y : α → X} :
+    HasUncurry (∀ a : α, Path (x a) (y a)) (α × I) X :=
   ⟨fun φ p => φ p.1 p.2⟩
 
 @[simp high, grind! .]
-/--
-lemma `source_mem_range` / 引理 `source_mem_range`
-
-English:
-lemma source_mem_range
-  given: (γ : Path x y)
-  statement: x in range ⇑γ
-  proof: ⟨0, Path.source γ⟩
-
-@[simp high, grind! .]
-
-中文:
-引理 source_mem_range
-  条件: (γ : 道路 x y)
-  结论: x in range ⇑γ
-  证明: ⟨0, Path.source γ⟩
-
-@[simp high, grind! .]
-
-Depends on / 依赖: Path.source, source
+/-
+**Path.source_mem_range** 是 Mathlib 中的一个引理，位于命名空间 `Path`。
+形式化陈述：source_mem_range (γ : Path x y) : x in range ⇑γ
+参数：γ : Path x y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.source`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} (γ :
+ Path x y), γ 0 = x
 -/
-lemma source_mem_range (γ : Path x y) : x in range ⇑γ :=
+lemma source_mem_range (γ : Path x y) : x ∈ range ⇑γ :=
   ⟨0, Path.source γ⟩
 
 @[simp high, grind! .]
-/--
-lemma `target_mem_range` / 引理 `target_mem_range`
-
-English:
-lemma target_mem_range
-  given: (γ : Path x y)
-  statement: y in range ⇑γ
-  proof: ⟨1, Path.target γ⟩
-
-中文:
-引理 target_mem_range
-  条件: (γ : 道路 x y)
-  结论: y in range ⇑γ
-  证明: ⟨1, Path.target γ⟩
-
-Depends on / 依赖: Path.target, target
+/-
+**Path.target_mem_range** 是 Mathlib 中的一个引理，位于命名空间 `Path`。
+形式化陈述：target_mem_range (γ : Path x y) : y in range ⇑γ
+参数：γ : Path x y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.target`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} (γ :
+ Path x y), γ 1 = y
 -/
-lemma target_mem_range (γ : Path x y) : y in range ⇑γ :=
+lemma target_mem_range (γ : Path x y) : y ∈ range ⇑γ :=
   ⟨1, Path.target γ⟩
 
 /-- The path 0 ⟶ 1 in `I` -/
 @[simps!]
-/--
-Definition of `id` / `id` 的定义
+/-
+**Path.id** 是 Mathlib 中的一个定义，位于命名空间 `Path`。
+形式化陈述：Path 0 1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition id
-  signature: : Path (0 : I) 1 where
-  body: .id _
-  source' := rfl
-  target' := rfl
-
-中文:
-定义 id
-  签名: : 道路 (0 : I) 1 where
-  定义体: .id _
-  source' := rfl
-  target' := rfl
+--- 原说明 ---
+The path 0 ⟶ 1 in `I`
 -/
 protected def id : Path (0 : I) 1 where
   toContinuousMap := .id _
@@ -411,26 +278,15 @@ protected def id : Path (0 : I) 1 where
 
 /-- The constant path from a point to itself -/
 @[refl, simps! (attr := grind =)]
-/--
-Definition of `refl` / `refl` 的定义
+/-
+**Path.refl** 是 Mathlib 中的一个定义，位于命名空间 `Path`。
+形式化陈述：refl (x : X) : Path x x where toContinuousMap
+参数：x : X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition refl
-  signature: (x : X)
-  body: .const I x
-  source' := rfl
-  target' := rfl
-
-@[simp]
-
-中文:
-定义 refl
-  签名: (x : X)
-  定义体: .const I x
-  source' := rfl
-  target' := rfl
-
-@[simp]
+--- 原说明 ---
+The constant path from a point to itself
 -/
 def refl (x : X) : Path x x where
   toContinuousMap := .const I x
@@ -438,49 +294,29 @@ def refl (x : X) : Path x x where
   target' := rfl
 
 @[simp]
-/--
-theorem `refl_range` / 定理 `refl_range`
-
-English:
-theorem refl_range
-  given: {a : X}
-  statement: range (Path.refl a) = {a}
-  proof: range_const
-
-中文:
-定理 refl_range
-  条件: {a : X}
-  结论: range (道路.refl a) = {a}
-  证明: range_const
-
-Depends on / 依赖: range_const
+/-
+**Path.refl_range** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：refl_range {a : X} : range (Path.refl a) = {a}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.range_const`：range_const : forall [Nonempty ι] {c : α}, (range fun _
+ : ι => c) = {c}
+· 使用定理 `Nontrivial.to_nonempty`：∀ {α : Type u_1} [Nontrivial α], Nonempty α
+· 使用定理 `unitInterval.instNontrivialElemReal`：Nontrivial ↑unitInterval
 -/
 theorem refl_range {a : X} : range (Path.refl a) = {a} := range_const
 
 /-- The reverse of a path from `x` to `y`, as a path from `y` to `x` -/
 @[symm, simps (attr := grind =)]
-/--
-Definition of `symm` / `symm` 的定义
+/-
+**Path.symm** 是 Mathlib 中的一个定义，位于命名空间 `Path`。
+形式化陈述：symm (γ : Path x y) : Path y x where toFun
+参数：γ : Path x y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition symm
-  signature: (γ : Path x y)
-  body: γ ∘ σ
-  continuous_toFun := by fun_prop
-  source' := by simp
-  target' := by simp
-
-@[simp]
-
-中文:
-定义 symm
-  签名: (γ : 道路 x y)
-  定义体: γ ∘ σ
-  continuous_toFun := by fun_prop
-  source' := by simp
-  target' := by simp
-
-@[simp]
+--- 原说明 ---
+The reverse of a path from `x` to `y`, as a path from `y` to `x`
 -/
 def symm (γ : Path x y) : Path y x where
   toFun := γ ∘ σ
@@ -489,84 +325,50 @@ def symm (γ : Path x y) : Path y x where
   target' := by simp
 
 @[simp]
-/--
-theorem `symm_symm` / 定理 `symm_symm`
-
-English:
-theorem symm_symm
-  given: (γ : Path x y)
-  statement: γ.symm.symm = γ
-  proof: by grind
-
-中文:
-定理 symm_symm
-  条件: (γ : 道路 x y)
-  结论: γ.symm.symm = γ
-  证明: by grind
+/-
+**Path.symm_symm** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：symm_symm (γ : Path x y) : γ.symm.symm = γ
+参数：γ : Path x y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_symm (γ : Path x y) : γ.symm.symm = γ := by grind
-
-/--
-theorem `symm_bijective` / 定理 `symm_bijective`
-
-English:
-theorem symm_bijective
-  statement: Function.Bijective (Path.symm : Path x y -> Path y x)
-  proof: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
-
-@[simp]
-
-中文:
-定理 symm_bijective
-  结论: 函数.双射 (道路.symm : 道路 x y -> 道路 y x)
-  证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
-
-@[simp]
-
-Depends on / 依赖: Function, Function.bijective_iff_has_inverse.mpr, bijective_iff_has_inverse, symm_symm
+/-
+**Path.symm_bijective** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：symm_bijective : Function.Bijective (Path.symm : Path x y -> Path y x)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Function.bijective_iff_has_inverse`：bijective_iff_has_inverse : Bijectiv
+e f ↔ exists g, LeftInverse g f ∧ RightInverse g f
+· 使用定理 `Path.symm_symm`：symm_symm (γ : Path x y) : γ.symm.symm = γ
 -/
-theorem symm_bijective : Function.Bijective (Path.symm : Path x y -> Path y x) :=
+theorem symm_bijective : Function.Bijective (Path.symm : Path x y → Path y x) :=
   Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 @[simp]
-/--
-theorem `refl_symm` / 定理 `refl_symm`
-
-English:
-theorem refl_symm
-  given: {a : X}
-  statement: (Path.refl a).symm = Path.refl a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 refl_symm
-  条件: {a : X}
-  结论: (道路.refl a).symm = 道路.refl a
-  证明: rfl
-
-@[simp]
+/-
+**Path.refl_symm** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：refl_symm {a : X} : (Path.refl a).symm = Path.refl a
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem refl_symm {a : X} : (Path.refl a).symm = Path.refl a := rfl
 
 @[simp]
-/--
-theorem `symm_range` / 定理 `symm_range`
-
-English:
-theorem symm_range
-  given: {a b : X} (γ : Path a b)
-  statement: range γ.symm = range γ
-  proof: symm_involutive.surjective.range_comp γ
-
-中文:
-定理 symm_range
-  条件: {a b : X} (γ : 道路 a b)
-  结论: range γ.symm = range γ
-  证明: symm_involutive.surjective.range_comp γ
-
-Depends on / 依赖: range_comp, surjective, symm_involutive, symm_involutive.surjective.range_comp
+/-
+**Path.symm_range** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：symm_range {a b : X} (γ : Path a b) : range γ.symm = range γ
+参数：γ : Path a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Surjective.range_comp`：∀ {α : Type u_1} {ι : Sort u_3} {ι' : So
+rt u_4} {f : ι → ι'},   Function.Surjective f → ∀ (g : ι' → α), Set.range (g ∘ f
+) = Set.range g
+· 使用定理 `Function.Involutive.surjective`：∀ {α : Sort u} {f : α → α}, Function.Inv
+olutive f → Function.Surjective f
+· 使用定理 `unitInterval.symm_involutive`：symm_involutive : Function.Involutive (sym
+m : I -> I)
 -/
 theorem symm_range {a b : X} (γ : Path a b) : range γ.symm = range γ :=
   symm_involutive.surjective.range_comp γ
@@ -576,458 +378,361 @@ theorem symm_range {a b : X} (γ : Path a b) : range γ.symm = range γ :=
 
 open ContinuousMap
 
-/--
-Instance `instTopologicalSpace` / 实例 `instTopologicalSpace`
+/-- The following instance defines the topology on the path space to be induced from the
+compact-open topology on the space `C(I,X)` of continuous maps from `I` to `X`.
+-/
+/-
+**Path.instTopologicalSpace** 是 Mathlib 中的一个实例，位于命名空间 `Path`。
+形式化陈述：instTopologicalSpace : TopologicalSpace (Path x y)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instTopologicalSpace
-  signature: : TopologicalSpace (Path x y)
-  body: TopologicalSpace.induced ((↑) : _ -> C(I, X)) ContinuousMap.compactOpen
-
-中文:
-实例 instTopologicalSpace
-  签名: : 拓扑空间 (道路 x y)
-  定义体: TopologicalSpace.induced ((↑) : _ -> C(I, X)) ContinuousMap.compactOpen
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.compactOpen, TopologicalSpace, TopologicalSpace.induced, compactOpen, induced
+--- 原说明 ---
+The following instance defines the topology on the path space to be induced from
+ the
+compact-open topology on the space `C(I,X)` of continuous maps from `I` to `X`.
 -/
 instance instTopologicalSpace : TopologicalSpace (Path x y) :=
-  TopologicalSpace.induced ((↑) : _ -> C(I, X)) ContinuousMap.compactOpen
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ContinuousEval (Path x y) I X
-  body: .of_continuous_forget continuous_induced_dom
-
-中文:
-实例 :
-  签名: 余ntinuousEval (道路 x y) I X
-  定义体: .of_continuous_forget continuous_induced_dom
-
-Depends on / 依赖: continuous_induced_dom, of_continuous_forget
+  TopologicalSpace.induced ((↑) : _ → C(I, X)) ContinuousMap.compactOpen
+/-
+**Path.** 是 Mathlib 中的一个实例，位于命名空间 `Path`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ContinuousEval (Path x y) I X := .of_continuous_forget continuous_induced_dom
-
-/--
-theorem `continuous_uncurry_iff` / 定理 `continuous_uncurry_iff`
-
-English:
-theorem continuous_uncurry_iff
-  given: {Y} [TopologicalSpace Y] {g : Y -> Path x y}
-  proof: Iff.symm continuous_induced_rng.trans
-    ⟨fun h => continuous_uncurry_of_continuous ⟨_, h⟩,
-    continuous_of_continuous_uncurry (fun (y : Y) => ContinuousMap.mk (g y))⟩
-
-中文:
-定理 continuous_uncurry_iff
-  条件: {Y} [拓扑空间 Y] {g : Y -> 道路 x y}
-  证明: Iff.symm continuous_induced_rng.trans
-    ⟨fun h => continuous_uncurry_of_continuous ⟨_, h⟩,
-    continuous_of_continuous_uncurry (fun (y : Y) => ContinuousMap.mk (g y))⟩
-
-Depends on / 依赖: ContinuousMap, ContinuousMap.mk, Iff.symm, continuous_induced_rng, continuous_induced_rng.trans, continuous_of_continuous_uncurry, continuous_uncurry_of_continuous
+/-
+**Path.continuous_uncurry_iff** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：continuous_uncurry_iff {Y} [TopologicalSpace Y] {g : Y -> Path x y} : Cont
+inuous ↿g ↔ Continuous g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `continuous_induced_rng`：continuous_induced_rng {g : γ -> α} {t₂ : Topolo
+gicalSpace β} {t₁ : TopologicalSpace γ} : Continuous[t₁, induced f t₂] g ↔ Conti
+nuous[t₁, t₂…
+· 使用定理 `ContinuousMap.continuous_uncurry_of_continuous`：continuous_uncurry_of_co
+ntinuous [LocallyCompactSpace Y] (f : C(X, C(Y, Z))) : Continuous (Function.uncu
+rry fun x y => f x y)
+· 使用定理 `locallyCompact_of_proper`：∀ {α : Type u} [inst : PseudoMetricSpace α] [P
+roperSpace α], LocallyCompactSpace α
+· 使用定理 `proper_of_compact`：∀ {α : Type u} [inst : PseudoMetricSpace α] [CompactS
+pace α], ProperSpace α
+· 使用定理 `ConditionallyCompleteLinearOrder.toCompactIccSpace`：∀ (α : Type u_2) [in
+st : ConditionallyCompleteLinearOrder α] [inst_1 : TopologicalSpace α] [OrderTop
+ology α],   CompactIccSpace α
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `ContinuousMap.continuous_of_continuous_uncurry`：continuous_of_continuous
+_uncurry (f : X -> C(Y, Z)) (h : Continuous (Function.uncurry fun x y => f x y))
+ : Continuous f
+· 使用定理 `ContinuousMapClass.map_continuous`：∀ {F : Type u_1} {X : outParam (Type 
+u_2)} {Y : outParam (Type u_3)} {inst : TopologicalSpace X}   {inst_1 : Topologi
+calSpace Y} {inst_2 : F…
 -/
-theorem continuous_uncurry_iff {Y} [TopologicalSpace Y] {g : Y -> Path x y} :
+theorem continuous_uncurry_iff {Y} [TopologicalSpace Y] {g : Y → Path x y} :
     Continuous ↿g ↔ Continuous g :=
-Iff.symm continuous_induced_rng.trans
+  Iff.symm <| continuous_induced_rng.trans
     ⟨fun h => continuous_uncurry_of_continuous ⟨_, h⟩,
-    continuous_of_continuous_uncurry (fun (y : Y) => ContinuousMap.mk (g y))⟩
+    continuous_of_continuous_uncurry (fun (y : Y) ↦ ContinuousMap.mk (g y))⟩
 
-/--
-Definition of `extend` / `extend` 的定义
+/-- A continuous map extending a path to `ℝ`, constant before `0` and after `1`. -/
+/-
+**Path.extend** 是 Mathlib 中的一个定义，位于命名空间 `Path`。
+形式化陈述：extend : C(Real, X) where toFun
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition extend
-  signature: : C(Real, X) where
-  body: IccExtend zero_le_one γ
-
-中文:
-定义 extend
-  签名: : C(实数, X) where
-  定义体: IccExtend zero_le_one γ
-
-Depends on / 依赖: IccExtend, zero_le_one
+--- 原说明 ---
+A continuous map extending a path to `ℝ`, constant before `0` and after `1`.
 -/
-def extend : C(Real, X) where
+def extend : C(ℝ, X) where
   toFun := IccExtend zero_le_one γ
 
 /-- See Note [continuity lemma statement]. -/
 @[continuity, fun_prop]
-/--
-theorem `_root_.Continuous.pathExtend` / 定理 `_root_.Continuous.pathExtend`
+/-
+**Path._root_.Continuous.pathExtend** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.Continuous.pathExtend
-  statement: {γ : Y -> Path x y} {f : Y -> Real} (hγ : Continuous ↿γ)
-  proof: Continuous.IccExtend hγ hf
-
-中文:
-定理 _root_.连续.pathExtend
-  结论: {γ : Y -> 道路 x y} {f : Y -> 实数} (hγ : 连续 ↿γ)
-  证明: Continuous.IccExtend hγ hf
-
-Depends on / 依赖: Continuous, Continuous.IccExtend, IccExtend
+--- 原说明 ---
+See Note [continuity lemma statement].
 -/
-theorem _root_.Continuous.pathExtend {γ : Y -> Path x y} {f : Y -> Real} (hγ : Continuous ↿γ)
+theorem _root_.Continuous.pathExtend {γ : Y → Path x y} {f : Y → ℝ} (hγ : Continuous ↿γ)
     (hf : Continuous f) : Continuous fun t => (γ t).extend (f t) :=
   Continuous.IccExtend hγ hf
 
-/--
-theorem `continuous_extend` / 定理 `continuous_extend`
+/-- A useful special case of `Continuous.path_extend`. -/
+/-
+**Path.continuous_extend** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：continuous_extend : Continuous γ.extend
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.Icc_extend'`：∀ {α : Type u_1} {β : Type u_2} [inst : LinearOr
+der α] {a b : α} {h : a ≤ b} [inst_1 : TopologicalSpace α]   [OrderTopology α] [
+inst_3 : Top…
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `Path.continuous`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} 
+(γ : Path x y), Continuous ⇑γ
 
-English:
-theorem continuous_extend
-  statement: Continuous γ.extend
-  proof: γ.continuous.Icc_extend'
-
-中文:
-定理 continuous_extend
-  结论: 连续 γ.extend
-  证明: γ.continuous.Icc_extend'
-
-Depends on / 依赖: Icc_extend, continuous, continuous.Icc_extend
+--- 原说明 ---
+A useful special case of `Continuous.path_extend`.
 -/
 theorem continuous_extend : Continuous γ.extend :=
   γ.continuous.Icc_extend'
-
-/--
-theorem `_root_.Filter.Tendsto.pathExtend` / 定理 `_root_.Filter.Tendsto.pathExtend`
-
-English:
-theorem _root_.Filter.Tendsto.pathExtend
-  proof: Filter.Tendsto.IccExtend _ hγ
-
-中文:
-定理 _root_.滤子.收敛.pathExtend
-  证明: Filter.Tendsto.IccExtend _ hγ
-
-Depends on / 依赖: Filter, Filter.Tendsto.IccExtend, IccExtend, Tendsto
+/-
+**Path._root_.Filter.Tendsto.pathExtend** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.Filter.Tendsto.pathExtend
-    {l r : Y -> X} {y : Y} {l₁ : Filter Real} {l₂ : Filter X} {γ : forall y, Path (l y) (r y)}
+    {l r : Y → X} {y : Y} {l₁ : Filter ℝ} {l₂ : Filter X} {γ : ∀ y, Path (l y) (r y)}
     (hγ : Tendsto ↿γ (𝓝 y ×ˢ l₁.map (projIcc 0 1 zero_le_one)) l₂) :
     Tendsto (↿fun x => ⇑(γ x).extend) (𝓝 y ×ˢ l₁) l₂ :=
   Filter.Tendsto.IccExtend _ hγ
-
-/--
-theorem `_root_.ContinuousAt.pathExtend` / 定理 `_root_.ContinuousAt.pathExtend`
-
-English:
-theorem _root_.ContinuousAt.pathExtend
-  statement: {g : Y -> Real} {l r : Y -> X} (γ : forall y, Path (l y) (r y))
-  proof: hγ.IccExtend (fun x => γ x) hg
-
-@[simp, grind =]
-
-中文:
-定理 _root_.ContinuousAt.pathExtend
-  结论: {g : Y -> 实数} {l r : Y -> X} (γ : 对任意 y, 道路 (l y) (r y))
-  证明: hγ.IccExtend (fun x => γ x) hg
-
-@[simp, grind =]
-
-Depends on / 依赖: IccExtend
+/-
+**Path._root_.ContinuousAt.pathExtend** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.ContinuousAt.pathExtend {g : Y -> Real} {l r : Y -> X} (γ : forall y, Path (l y) (r y))
+theorem _root_.ContinuousAt.pathExtend {g : Y → ℝ} {l r : Y → X} (γ : ∀ y, Path (l y) (r y))
     {y : Y} (hγ : ContinuousAt ↿γ (y, projIcc 0 1 zero_le_one (g y))) (hg : ContinuousAt g y) :
     ContinuousAt (fun i => (γ i).extend (g i)) y :=
   hγ.IccExtend (fun x => γ x) hg
 
 @[simp, grind =]
-/--
-theorem `extend_apply` / 定理 `extend_apply`
-
-English:
-theorem extend_apply
-  statement: {a b : X} (γ : Path a b) {t : Real}
-  proof: IccExtend_of_mem _ γ ht
-
-中文:
-定理 extend_apply
-  结论: {a b : X} (γ : 道路 a b) {t : 实数}
-  证明: IccExtend_of_mem _ γ ht
-
-Depends on / 依赖: IccExtend_of_mem
+/-
+**Path.extend_apply** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：extend_apply {a b : X} (γ : Path a b) {t : Real} (ht : t in (Icc 0 1 : Set
+ Real)) : γ.extend t = γ ⟨t, ht⟩
+参数：γ : Path a b；ht : t in (Icc 0 1 : Set Real)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.IccExtend_of_mem`：IccExtend_of_mem (f : Icc a b -> β) (hx : x in Icc
+ a b) : IccExtend h f x = f ⟨x, hx⟩
 -/
-theorem extend_apply {a b : X} (γ : Path a b) {t : Real}
-    (ht : t in (Icc 0 1 : Set Real)) : γ.extend t = γ ⟨t, ht⟩ :=
+theorem extend_apply {a b : X} (γ : Path a b) {t : ℝ}
+    (ht : t ∈ (Icc 0 1 : Set ℝ)) : γ.extend t = γ ⟨t, ht⟩ :=
   IccExtend_of_mem _ γ ht
-
-/--
-theorem `extend_zero` / 定理 `extend_zero`
-
-English:
-theorem extend_zero
-  statement: γ.extend 0 = x
-  proof: by simp
-
-中文:
-定理 extend_zero
-  结论: γ.extend 0 = x
-  证明: by simp
+/-
+**Path.extend_zero** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：extend_zero : γ.extend 0 = x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `Path.extend_apply`：extend_apply {a b : X} (γ : Path a b) {t : Real} (ht 
+: t in (Icc 0 1 : Set Real)) : γ.extend t = γ ⟨t, ht⟩
+· 使用定理 `Path.source`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} (γ :
+ Path x y), γ 0 = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem extend_zero : γ.extend 0 = x := by simp
-
-/--
-theorem `extend_one` / 定理 `extend_one`
-
-English:
-theorem extend_one
-  statement: γ.extend 1 = y
-  proof: by simp
-
-中文:
-定理 extend_one
-  结论: γ.extend 1 = y
-  证明: by simp
+/-
+**Path.extend_one** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：extend_one : γ.extend 1 = y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `Path.extend_apply`：extend_apply {a b : X} (γ : Path a b) {t : Real} (ht 
+: t in (Icc 0 1 : Set Real)) : γ.extend t = γ ⟨t, ht⟩
+· 使用定理 `Path.target`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} (γ :
+ Path x y), γ 1 = y
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem extend_one : γ.extend 1 = y := by simp
-
-/--
-theorem `extend_extends'` / 定理 `extend_extends'`
-
-English:
-theorem extend_extends'
-  given: {a b : X} (γ : Path a b) (t : (Icc 0 1 : Set Real))
-  statement: γ.extend t = γ t
-  proof: IccExtend_val _ γ t
-
-@[simp]
-
-中文:
-定理 extend_extends'
-  条件: {a b : X} (γ : 道路 a b) (t : (闭区间 0 1 : 集合 实数))
-  结论: γ.extend t = γ t
-  证明: IccExtend_val _ γ t
-
-@[simp]
-
-Depends on / 依赖: IccExtend_val
+/-
+**Path.extend_extends'** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：extend_extends' {a b : X} (γ : Path a b) (t : (Icc 0 1 : Set Real)) : γ.ex
+tend t = γ t
+参数：γ : Path a b；t : (Icc 0 1 : Set Real)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.IccExtend_val`：IccExtend_val (f : Icc a b -> β) (x : Icc a b) : IccE
+xtend h f x = f x
 -/
-theorem extend_extends' {a b : X} (γ : Path a b) (t : (Icc 0 1 : Set Real)) : γ.extend t = γ t :=
+theorem extend_extends' {a b : X} (γ : Path a b) (t : (Icc 0 1 : Set ℝ)) : γ.extend t = γ t :=
   IccExtend_val _ γ t
 
 @[simp]
-/--
-theorem `extend_range` / 定理 `extend_range`
-
-English:
-theorem extend_range
-  given: {a b : X} (γ : Path a b)
-  proof: IccExtend_range _ γ
-
-中文:
-定理 extend_range
-  条件: {a b : X} (γ : 道路 a b)
-  证明: IccExtend_range _ γ
-
-Depends on / 依赖: IccExtend_range
+/-
+**Path.extend_range** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：extend_range {a b : X} (γ : Path a b) : range γ.extend = range γ
+参数：γ : Path a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.IccExtend_range`：IccExtend_range (f : Icc a b -> β) : range (IccExte
+nd h f) = range f
 -/
 theorem extend_range {a b : X} (γ : Path a b) :
     range γ.extend = range γ :=
   IccExtend_range _ γ
-
-/--
-theorem `image_extend_of_subset` / 定理 `image_extend_of_subset`
-
-English:
-theorem image_extend_of_subset
-  given: (γ : Path x y) {s : Set Real} (h : I subseteq s)
-  proof: (γ.extend_range ▸ image_subset_range _ _).antisymm range_subset_iff.mpr fun t =>
-    ⟨t, h t.2, extend_extends' _ _⟩
-
-中文:
-定理 image_extend_of_subset
-  条件: (γ : 道路 x y) {s : 集合 实数} (h : I subseteq s)
-  证明: (γ.extend_range ▸ image_subset_range _ _).antisymm range_subset_iff.mpr fun t =>
-    ⟨t, h t.2, extend_extends' _ _⟩
-
-Depends on / 依赖: antisymm, extend_extends, extend_range, image_subset_range, range_subset_iff, range_subset_iff.mpr
+/-
+**Path.image_extend_of_subset** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：image_extend_of_subset (γ : Path x y) {s : Set Real} (h : I subseteq s) : 
+γ.extend '' s = range γ
+参数：γ : Path x y；h : I subseteq s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Set.image_subset_range`：image_subset_range (f : α -> β) (s) : f '' s sub
+seteq range f
+· 使用定理 `Path.extend_range`：extend_range {a b : X} (γ : Path a b) : range γ.exten
+d = range γ
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.range_subset_iff`：range_subset_iff : range f subseteq s ↔ forall y, 
+f y in s
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Path.extend_extends'`：extend_extends' {a b : X} (γ : Path a b) (t : (Icc
+ 0 1 : Set Real)) : γ.extend t = γ t
 -/
-theorem image_extend_of_subset (γ : Path x y) {s : Set Real} (h : I subseteq s) :
+theorem image_extend_of_subset (γ : Path x y) {s : Set ℝ} (h : I ⊆ s) :
     γ.extend '' s = range γ :=
-(γ.extend_range ▸ image_subset_range _ _).antisymm range_subset_iff.mpr fun t =>
+  (γ.extend_range ▸ image_subset_range _ _).antisymm <| range_subset_iff.mpr <| fun t ↦
     ⟨t, h t.2, extend_extends' _ _⟩
-
-/--
-theorem `extend_of_le_zero` / 定理 `extend_of_le_zero`
-
-English:
-theorem extend_of_le_zero
-  statement: {a b : X} (γ : Path a b) {t : Real}
-  proof: (IccExtend_of_le_left _ _ ht).trans γ.source
-
-中文:
-定理 extend_of_le_zero
-  结论: {a b : X} (γ : 道路 a b) {t : 实数}
-  证明: (IccExtend_of_le_left _ _ ht).trans γ.source
-
-Depends on / 依赖: IccExtend_of_le_left, source
+/-
+**Path.extend_of_le_zero** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：extend_of_le_zero {a b : X} (γ : Path a b) {t : Real} (ht : t <= 0) : γ.ex
+tend t = a
+参数：γ : Path a b；ht : t <= 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.left_mem_Icc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ Se
+t.Icc a b ↔ a ≤ b
+· 使用定理 `Set.IccExtend_of_le_left`：IccExtend_of_le_left (f : Icc a b -> β) (hx : 
+x <= a) : IccExtend h f x = f ⟨a, left_mem_Icc.2 h⟩
+· 使用定理 `Path.source`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} (γ :
+ Path x y), γ 0 = x
 -/
-theorem extend_of_le_zero {a b : X} (γ : Path a b) {t : Real}
-    (ht : t <= 0) : γ.extend t = a :=
+theorem extend_of_le_zero {a b : X} (γ : Path a b) {t : ℝ}
+    (ht : t ≤ 0) : γ.extend t = a :=
   (IccExtend_of_le_left _ _ ht).trans γ.source
-
-/--
-theorem `extend_of_one_le` / 定理 `extend_of_one_le`
-
-English:
-theorem extend_of_one_le
-  statement: {a b : X} (γ : Path a b) {t : Real}
-  proof: (IccExtend_of_right_le _ _ ht).trans γ.target
-
-@[simp]
-
-中文:
-定理 extend_of_one_le
-  结论: {a b : X} (γ : 道路 a b) {t : 实数}
-  证明: (IccExtend_of_right_le _ _ ht).trans γ.target
-
-@[simp]
-
-Depends on / 依赖: IccExtend_of_right_le, target
+/-
+**Path.extend_of_one_le** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：extend_of_one_le {a b : X} (γ : Path a b) {t : Real} (ht : 1 <= t) : γ.ext
+end t = b
+参数：γ : Path a b；ht : 1 <= t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.right_mem_Icc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ S
+et.Icc b a ↔ b ≤ a
+· 使用定理 `Set.IccExtend_of_right_le`：IccExtend_of_right_le (f : Icc a b -> β) (hx 
+: b <= x) : IccExtend h f x = f ⟨b, right_mem_Icc.2 h⟩
+· 使用定理 `Path.target`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} (γ :
+ Path x y), γ 1 = y
 -/
-theorem extend_of_one_le {a b : X} (γ : Path a b) {t : Real}
-    (ht : 1 <= t) : γ.extend t = b :=
+theorem extend_of_one_le {a b : X} (γ : Path a b) {t : ℝ}
+    (ht : 1 ≤ t) : γ.extend t = b :=
   (IccExtend_of_right_le _ _ ht).trans γ.target
 
 @[simp]
-/--
-theorem `refl_extend` / 定理 `refl_extend`
-
-English:
-theorem refl_extend
-  given: {a : X}
-  statement: (Path.refl a).extend = .const Real a
-  proof: rfl
-
-中文:
-定理 refl_extend
-  条件: {a : X}
-  结论: (道路.refl a).extend = .const 实数 a
-  证明: rfl
+/-
+**Path.refl_extend** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：refl_extend {a : X} : (Path.refl a).extend = .const Real a
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem refl_extend {a : X} : (Path.refl a).extend = .const Real a :=
+theorem refl_extend {a : X} : (Path.refl a).extend = .const ℝ a :=
   rfl
-
-/--
-theorem `extend_symm_apply` / 定理 `extend_symm_apply`
-
-English:
-theorem extend_symm_apply
-  given: (γ : Path x y) (t : Real)
-  statement: γ.symm.extend t = γ.extend (1 - t)
-  proof: congrArg γ symm_projIcc _
-
-@[simp]
-
-中文:
-定理 extend_symm_apply
-  条件: (γ : 道路 x y) (t : 实数)
-  结论: γ.symm.extend t = γ.extend (1 - t)
-  证明: congrArg γ symm_projIcc _
-
-@[simp]
-
-Depends on / 依赖: symm_projIcc
+/-
+**Path.extend_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：extend_symm_apply (γ : Path x y) (t : Real) : γ.symm.extend t = γ.extend (
+1 - t)
+参数：γ : Path x y；t : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `unitInterval.symm_projIcc`：symm_projIcc (x : Real) : symm (projIcc 0 1 z
+ero_le_one x) = projIcc 0 1 zero_le_one (1 - x)
 -/
-theorem extend_symm_apply (γ : Path x y) (t : Real) : γ.symm.extend t = γ.extend (1 - t) :=
-congrArg γ symm_projIcc _
+theorem extend_symm_apply (γ : Path x y) (t : ℝ) : γ.symm.extend t = γ.extend (1 - t) :=
+  congrArg γ <| symm_projIcc _
 
 @[simp]
-/--
-theorem `extend_symm` / 定理 `extend_symm`
-
-English:
-theorem extend_symm
-  given: (γ : Path x y)
-  statement: γ.symm.extend = (γ.extend <| 1 - ·)
-  proof: funext γ.extend_symm_apply
-
-中文:
-定理 extend_symm
-  条件: (γ : 道路 x y)
-  结论: γ.symm.extend = (γ.extend <| 1 - ·)
-  证明: funext γ.extend_symm_apply
-
-Depends on / 依赖: extend_symm_apply
+/-
+**Path.extend_symm** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：extend_symm (γ : Path x y) : γ.symm.extend = (γ.extend <| 1 - ·)
+参数：γ : Path x y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Path.extend_symm_apply`：extend_symm_apply (γ : Path x y) (t : Real) : γ.
+symm.extend t = γ.extend (1 - t)
 -/
 theorem extend_symm (γ : Path x y) : γ.symm.extend = (γ.extend <| 1 - ·) :=
   funext γ.extend_symm_apply
 
-/--
-Definition of `ofLine` / `ofLine` 的定义
+/-- The path obtained from a map defined on `ℝ` by restriction to the unit interval. -/
+/-
+**Path.ofLine** 是 Mathlib 中的一个定义，位于命名空间 `Path`。
+形式化陈述：ofLine {f : Real -> X} (hf : ContinuousOn f I) (h₀ : f 0 = x) (h₁ : f 1 = 
+y) : Path x y where toFun
+参数：hf : ContinuousOn f I；h₀ : f 0 = x；h₁ : f 1 = y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofLine
-  signature: {f : Real -> X} (hf : ContinuousOn f I) (h₀ : f 0 = x) (h₁ : f 1 = y)
-  body: f ∘ ((↑) : unitInterval -> Real)
-  continuous_toFun := hf.comp_continuous continuous_subtype_val Subtype.prop
-  source' := h₀
-  target' := h₁
-
-中文:
-定义 ofLine
-  签名: {f : 实数 -> X} (hf : ContinuousOn f I) (h₀ : f 0 = x) (h₁ : f 1 = y)
-  定义体: f ∘ ((↑) : unitInterval -> Real)
-  continuous_toFun := hf.comp_continuous continuous_subtype_val Subtype.prop
-  source' := h₀
-  target' := h₁
-
-Depends on / 依赖: unitInterval
+--- 原说明 ---
+The path obtained from a map defined on `ℝ` by restriction to the unit interval.
 -/
-def ofLine {f : Real -> X} (hf : ContinuousOn f I) (h₀ : f 0 = x) (h₁ : f 1 = y) : Path x y where
-  toFun := f ∘ ((↑) : unitInterval -> Real)
+def ofLine {f : ℝ → X} (hf : ContinuousOn f I) (h₀ : f 0 = x) (h₁ : f 1 = y) : Path x y where
+  toFun := f ∘ ((↑) : unitInterval → ℝ)
   continuous_toFun := hf.comp_continuous continuous_subtype_val Subtype.prop
   source' := h₀
   target' := h₁
-
-/--
-theorem `ofLine_mem` / 定理 `ofLine_mem`
-
-English:
-theorem ofLine_mem
-  given: {f : Real -> X} (hf : ContinuousOn f I) (h₀ : f 0 = x) (h₁ : f 1 = y)
-  proof: fun ⟨t, t_in⟩ => ⟨t, t_in, rfl⟩
-
-@[simp]
-
-中文:
-定理 ofLine_mem
-  条件: {f : 实数 -> X} (hf : ContinuousOn f I) (h₀ : f 0 = x) (h₁ : f 1 = y)
-  证明: fun ⟨t, t_in⟩ => ⟨t, t_in, rfl⟩
-
-@[simp]
-
-Depends on / 依赖: t_in
+/-
+**Path.ofLine_mem** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：ofLine_mem {f : Real -> X} (hf : ContinuousOn f I) (h₀ : f 0 = x) (h₁ : f 
+1 = y) : forall t, ofLine hf h₀ h₁ t in f '' I
+参数：hf : ContinuousOn f I；h₀ : f 0 = x；h₁ : f 1 = y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofLine_mem {f : Real -> X} (hf : ContinuousOn f I) (h₀ : f 0 = x) (h₁ : f 1 = y) :
-    forall t, ofLine hf h₀ h₁ t in f '' I := fun ⟨t, t_in⟩ => ⟨t, t_in, rfl⟩
+theorem ofLine_mem {f : ℝ → X} (hf : ContinuousOn f I) (h₀ : f 0 = x) (h₁ : f 1 = y) :
+    ∀ t, ofLine hf h₀ h₁ t ∈ f '' I := fun ⟨t, t_in⟩ => ⟨t, t_in, rfl⟩
 
 @[simp]
-/--
-theorem `ofLine_extend` / 定理 `ofLine_extend`
-
-English:
-theorem ofLine_extend
-  given: (γ : Path x y)
-  statement: ofLine (by fun_prop) (extend_zero γ) (extend_one γ) = γ
-  proof: by
-  ext t
-  simp [ofLine]
-
-中文:
-定理 ofLine_extend
-  条件: (γ : 道路 x y)
-  结论: ofLine (by fun_prop) (extend_zero γ) (extend_one γ) = γ
-  证明: by
-  ext t
-  simp [ofLine]
-
-Depends on / 依赖: ofLine
+/-
+**Path.ofLine_extend** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：ofLine_extend (γ : Path x y) : ofLine (by fun_prop) (extend_zero γ) (exten
+d_one γ) = γ
+参数：γ : Path x y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.ext`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} {γ₁ γ₂ 
+: Path x y}, ⇑γ₁ = ⇑γ₂ → γ₁ = γ₂
+· 使用定理 `Path.extend_zero`：extend_zero : γ.extend 0 = x
+· 使用定理 `Path.extend_one`：extend_one : γ.extend 1 = y
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Path.extend_apply`：extend_apply {a b : X} (γ : Path a b) {t : Real} (ht 
+: t in (Icc 0 1 : Set Real)) : γ.extend t = γ ⟨t, ht⟩
+· 使用定理 `Subtype.coe_eta`：coe_eta (a : { a // p a }) (h : p a) : mk (↑a) h = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem ofLine_extend (γ : Path x y) : ofLine (by fun_prop) (extend_zero γ) (extend_one γ) = γ := by
   ext t
@@ -1038,41 +743,20 @@ attribute [local simp] Iic_def
 /-- Concatenation of two paths from `x` to `y` and from `y` to `z`, putting the first
 path on `[0, 1/2]` and the second one on `[1/2, 1]`. -/
 @[trans]
-/--
-Definition of `trans` / `trans` 的定义
+/-
+**Path.trans** 是 Mathlib 中的一个定义，位于命名空间 `Path`。
+形式化陈述：trans (γ : Path x y) (γ' : Path y z) : Path x z where toFun
+参数：γ : Path x y；γ' : Path y z。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition trans
-  signature: (γ : Path x y) (γ' : Path y z)
-  body: (fun t : Real => if t <= 1 / 2 then γ.extend (2 * t) else γ'.extend (2 * t - 1)) ∘ (↑)
-  continuous_toFun := by
-    refine
-      (Continuous.if_le ?_ ?_ continuous_id continuous_const (by simp)).comp
-        continuous_subtype_val <;>
-    fun_prop
-  source' := by simp
-  target' := by norm_num
-
-@[grind =]
-
-中文:
-定义 trans
-  签名: (γ : 道路 x y) (γ' : 道路 y z)
-  定义体: (fun t : Real => if t <= 1 / 2 then γ.extend (2 * t) else γ'.extend (2 * t - 1)) ∘ (↑)
-  continuous_toFun := by
-    refine
-      (Continuous.if_le ?_ ?_ continuous_id continuous_const (by simp)).comp
-        continuous_subtype_val <;>
-    fun_prop
-  source' := by simp
-  target' := by norm_num
-
-@[grind =]
-
-Depends on / 依赖: extend
+--- 原说明 ---
+Concatenation of two paths from `x` to `y` and from `y` to `z`, putting the firs
+t
+path on `[0, 1/2]` and the second one on `[1/2, 1]`.
 -/
 def trans (γ : Path x y) (γ' : Path y z) : Path x z where
-  toFun := (fun t : Real => if t <= 1 / 2 then γ.extend (2 * t) else γ'.extend (2 * t - 1)) ∘ (↑)
+  toFun := (fun t : ℝ => if t ≤ 1 / 2 then γ.extend (2 * t) else γ'.extend (2 * t - 1)) ∘ (↑)
   continuous_toFun := by
     refine
       (Continuous.if_le ?_ ?_ continuous_id continuous_const (by simp)).comp
@@ -1082,78 +766,122 @@ def trans (γ : Path x y) (γ' : Path y z) : Path x z where
   target' := by norm_num
 
 @[grind =]
-/--
-theorem `trans_apply` / 定理 `trans_apply`
-
-English:
-theorem trans_apply
-  given: (γ : Path x y) (γ' : Path y z) (t : I)
-  proof: show ite _ _ _ = _ by split_ifs <;> rw [extend_apply]
-
-@[simp]
-
-中文:
-定理 trans_apply
-  条件: (γ : 道路 x y) (γ' : 道路 y z) (t : I)
-  证明: show ite _ _ _ = _ by split_ifs <;> rw [extend_apply]
-
-@[simp]
-
-Depends on / 依赖: extend_apply, split_ifs
+/-
+**Path.trans_apply** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：trans_apply (γ : Path x y) (γ' : Path y z) (t : I) : (γ.trans γ') t = if h
+ : (t : Real) <= 1 / 2 then γ ⟨2 * t, (mul_pos_mem_iff zero_lt_two).2 ⟨t.2.1, h⟩
+⟩ else γ' ⟨2 * t - 1, two_mul_sub_one_mem_iff.2 ⟨(not_le.1 h).le, t.2.2⟩⟩
+参数：γ : Path x y；γ' : Path y z；t : I。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `unitInterval.mul_pos_mem_iff`：mul_pos_mem_iff {a t : Real} (ha : 0 < a) 
+: a * t in I ↔ t in Set.Icc (0 : Real) (1 / a)
+· 使用定理 `zero_lt_two`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : Part
+ialOrder α] [ZeroLEOneClass α] [NeZero 1] [AddLeftMono α],   0 < 2
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `unitInterval.two_mul_sub_one_mem_iff`：two_mul_sub_one_mem_iff {t : Real}
+ : 2 * t - 1 in I ↔ t in Set.Icc (1 / 2 : Real) 1
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `Path.extend_apply`：extend_apply {a b : X} (γ : Path a b) {t : Real} (ht 
+: t in (Icc 0 1 : Set Real)) : γ.extend t = γ ⟨t, ht⟩
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
 -/
 theorem trans_apply (γ : Path x y) (γ' : Path y z) (t : I) :
     (γ.trans γ') t =
-      if h : (t : Real) <= 1 / 2 then γ ⟨2 * t, (mul_pos_mem_iff zero_lt_two).2 ⟨t.2.1, h⟩⟩
+      if h : (t : ℝ) ≤ 1 / 2 then γ ⟨2 * t, (mul_pos_mem_iff zero_lt_two).2 ⟨t.2.1, h⟩⟩
       else γ' ⟨2 * t - 1, two_mul_sub_one_mem_iff.2 ⟨(not_le.1 h).le, t.2.2⟩⟩ :=
   show ite _ _ _ = _ by split_ifs <;> rw [extend_apply]
 
 @[simp]
-/--
-theorem `trans_symm` / 定理 `trans_symm`
-
-English:
-theorem trans_symm
-  given: (γ : Path x y) (γ' : Path y z)
-  statement: (γ.trans γ').symm = γ'.symm.trans γ.symm
-  proof: by
-  ext t
-  simp only [trans_apply, symm_apply, Function.comp_apply]
-  split_ifs with h h₁ h₂ <;> rw [coe_symm_eq] at h
-  · have ht : (t : Real) = 1 / 2 := by linarith
-    norm_num [ht]
-  · refine congr_arg _ (Subtype.ext ?_)
-    norm_num [sub_sub_eq_add_sub, mul_sub]
-  · refine congr_arg _ (Subtype.ext ?_)
-    simp only [coe_symm_eq]
-    ring
-  · exfalso
-    linarith
-
-中文:
-定理 trans_symm
-  条件: (γ : 道路 x y) (γ' : 道路 y z)
-  结论: (γ.trans γ').symm = γ'.symm.trans γ.symm
-  证明: by
-  ext t
-  simp only [trans_apply, symm_apply, Function.comp_apply]
-  split_ifs with h h₁ h₂ <;> rw [coe_symm_eq] at h
-  · have ht : (t : Real) = 1 / 2 := by linarith
-    norm_num [ht]
-  · refine congr_arg _ (Subtype.ext ?_)
-    norm_num [sub_sub_eq_add_sub, mul_sub]
-  · refine congr_arg _ (Subtype.ext ?_)
-    simp only [coe_symm_eq]
-    ring
-  · exfalso
-    linarith
-
-Depends on / 依赖: Function, Function.comp_apply, Subtype, Subtype.ext, coe_symm_eq, comp_apply, congr_arg, mul_sub, split_ifs, sub_sub_eq_add_sub, symm_apply, trans_apply
+/-
+**Path.trans_symm** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：trans_symm (γ : Path x y) (γ' : Path y z) : (γ.trans γ').symm = γ'.symm.tr
+ans γ.symm
+参数：γ : Path x y；γ' : Path y z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.ext`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} {γ₁ γ₂ 
+: Path x y}, ⇑γ₁ = ⇑γ₂ → γ₁ = γ₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `unitInterval.mul_pos_mem_iff`：mul_pos_mem_iff {a t : Real} (ha : 0 < a) 
+: a * t in I ↔ t in Set.Icc (0 : Real) (1 / a)
+· 使用定理 `zero_lt_two`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : Part
+ialOrder α] [ZeroLEOneClass α] [NeZero 1] [AddLeftMono α],   0 < 2
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `unitInterval.two_mul_sub_one_mem_iff`：two_mul_sub_one_mem_iff {t : Real}
+ : 2 * t - 1 in I ↔ t in Set.Icc (1 / 2 : Real) 1
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Eq.mpr_prop`：∀ {p q : Prop}, p = q → q → p
+· 使用定理 `Eq.mpr_not`：∀ {p q : Prop}, p = q → ¬q → ¬p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Path.symm_apply`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} 
+(γ : Path x y) (a : ↑unitInterval),   γ.symm a = (⇑γ ∘ unitInterval.symm) a
+· 使用定理 `Path.trans_apply`：trans_apply (γ : Path x y) (γ' : Path y z) (t : I) : (
+γ.trans γ') t = if h : (t : Real) <= 1 / 2 then γ ⟨2 * t, (mul_pos_mem_iff zero_
+lt_two…
+· 使用定理 `dite_congr`：∀ {b c : Prop} {α : Sort u_1} {x : Decidable b} [inst : Deci
+dable c] {x_1 : b → α} {u : c → α} {y : ¬b → α} {v : ¬c → α}   (h₁ : b = c), (∀ 
+…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用引理 `Mathlib.Tactic.Linarith.eq_of_not_lt_of_not_gt`：eq_of_not_lt_of_not_gt {
+α} [LinearOrder α] (a b : α) (h1 : ¬ a < b) (h2 : ¬ b < a) : a = b
+· 使用定理 `Not.intro`：∀ {a : Prop}, (a → False) → ¬a
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用引理 `Mathlib.Meta.NormNum.instAtLeastTwo`：instAtLeastTwo (n : Nat) : Nat.AtLe
+astTwo (n + 2)
+（共 103 条，此处仅展示前 30 条）
 -/
 theorem trans_symm (γ : Path x y) (γ' : Path y z) : (γ.trans γ').symm = γ'.symm.trans γ.symm := by
   ext t
   simp only [trans_apply, symm_apply, Function.comp_apply]
   split_ifs with h h₁ h₂ <;> rw [coe_symm_eq] at h
-  · have ht : (t : Real) = 1 / 2 := by linarith
+  · have ht : (t : ℝ) = 1 / 2 := by linarith
     norm_num [ht]
   · refine congr_arg _ (Subtype.ext ?_)
     norm_num [sub_sub_eq_add_sub, mul_sub]
@@ -1162,385 +890,472 @@ theorem trans_symm (γ : Path x y) (γ' : Path y z) : (γ.trans γ').symm = γ'.
     ring
   · exfalso
     linarith
-
-/--
-theorem `extend_trans_of_le_half` / 定理 `extend_trans_of_le_half`
-
-English:
-theorem extend_trans_of_le_half
-  given: (γ₁ : Path x y) (γ₂ : Path y z) {t : Real} (ht : t <= 1 / 2)
-  proof: by
-  obtain _ | ht₀ := le_total t 0
-  · repeat rw [extend_of_le_zero _ (by linarith)]
-  · rwa [extend_apply _ ⟨ht₀, by linarith⟩, trans_apply, dif_pos, extend_apply]
-
-中文:
-定理 extend_trans_of_le_half
-  条件: (γ₁ : 道路 x y) (γ₂ : 道路 y z) {t : 实数} (ht : t <= 1 / 2)
-  证明: by
-  obtain _ | ht₀ := le_total t 0
-  · repeat rw [extend_of_le_zero _ (by linarith)]
-  · rwa [extend_apply _ ⟨ht₀, by linarith⟩, trans_apply, dif_pos, extend_apply]
-
-Depends on / 依赖: dif_pos, extend_apply, extend_of_le_zero, le_total, repeat, trans_apply
+/-
+**Path.extend_trans_of_le_half** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：extend_trans_of_le_half (γ₁ : Path x y) (γ₂ : Path y z) {t : Real} (ht : t
+ <= 1 / 2) : (γ₁.trans γ₂).extend t = γ₁.extend (2 * t)
+参数：γ₁ : Path x y；γ₂ : Path y z；ht : t <= 1 / 2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Path.extend_of_le_zero`：extend_of_le_zero {a b : X} (γ : Path a b) {t : 
+Real} (ht : t <= 0) : γ.extend t = a
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.cast_zero`：∀ {R : Type u_1} [inst : CommSemiring R] 
+{a : R}, Mathlib.Meta.NormNum.IsNat a 0 → a = 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_pf`：∀ {R : Type u_2} [inst : CommRing R] 
+{a b c d : R}, -b = c → a + c = d → a - b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_mul`：∀ {R : Type u_2} [inst : CommRing R]
+ (a₁ : R) (a₂ : ℕ) {a₃ b : R}, -a₃ = b → -(a₁ ^ a₂ * a₃) = a₁ ^ a₂ * b
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_overlap_zero`：∀ {R : Type u_1} [in
+st : CommSemiring R] {a₁ a₂ b₁ b₂ c : R},   Mathlib.Meta.NormNum.IsNat (a₁ + b₁)
+ 0 → a₂ + b₂ = c → a₁ + a₂ + (b₁ + b₂) =…
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_overlap_pf_zero`：∀ {R : Type u_1} [inst :
+ CommSemiring R] {a b : R} (x : R) (e : ℕ),   Mathlib.Meta.NormNum.IsNat (a + b)
+ 0 → Mathlib.Meta.NormNum.IsNat (x ^…
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_isNat`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsInt a (Int.ofNat n) → Mathlib.Meta.NormN
+um.IsNat a n
+· 使用定理 `Mathlib.Meta.NormNum.isInt_add`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α → α} {a b : α} {a' b' c : ℤ},   f = HAdd.hAdd →     Mathlib.Meta.NormNum.IsI
+nt a a' →       Math…
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.of_raw`：∀ (α : Type u_1) [inst : Ring α] (n :
+ ℤ), Mathlib.Meta.NormNum.IsInt n.rawCast n
+（共 83 条，此处仅展示前 30 条）
 -/
-theorem extend_trans_of_le_half (γ₁ : Path x y) (γ₂ : Path y z) {t : Real} (ht : t <= 1 / 2) :
+theorem extend_trans_of_le_half (γ₁ : Path x y) (γ₂ : Path y z) {t : ℝ} (ht : t ≤ 1 / 2) :
     (γ₁.trans γ₂).extend t = γ₁.extend (2 * t) := by
   obtain _ | ht₀ := le_total t 0
   · repeat rw [extend_of_le_zero _ (by linarith)]
   · rwa [extend_apply _ ⟨ht₀, by linarith⟩, trans_apply, dif_pos, extend_apply]
-
-/--
-theorem `extend_trans_of_half_le` / 定理 `extend_trans_of_half_le`
-
-English:
-theorem extend_trans_of_half_le
-  given: (γ₁ : Path x y) (γ₂ : Path y z) {t : Real} (ht : 1 / 2 <= t)
-  proof: by
-  conv_lhs => rw [← sub_sub_cancel 1 t]
-  rw [← extend_symm_apply]; rw [trans_symm]; rw [extend_trans_of_le_half _ _ (by linarith)]; rw [extend_symm_apply]
-  congr 1
-  linarith
-
-@[simp]
-
-中文:
-定理 extend_trans_of_half_le
-  条件: (γ₁ : 道路 x y) (γ₂ : 道路 y z) {t : 实数} (ht : 1 / 2 <= t)
-  证明: by
-  conv_lhs => rw [← sub_sub_cancel 1 t]
-  rw [← extend_symm_apply]; rw [trans_symm]; rw [extend_trans_of_le_half _ _ (by linarith)]; rw [extend_symm_apply]
-  congr 1
-  linarith
-
-@[simp]
-
-Depends on / 依赖: conv_lhs, extend_symm_apply, extend_trans_of_le_half, sub_sub_cancel, trans_symm
+/-
+**Path.extend_trans_of_half_le** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：extend_trans_of_half_le (γ₁ : Path x y) (γ₂ : Path y z) {t : Real} (ht : 1
+ / 2 <= t) : (γ₁.trans γ₂).extend t = γ₂.extend (2 * t - 1)
+参数：γ₁ : Path x y；γ₂ : Path y z；ht : 1 / 2 <= t。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G), a - 
+(a - b) = b
+· 使用定理 `Path.extend_symm_apply`：extend_symm_apply (γ : Path x y) (t : Real) : γ.
+symm.extend t = γ.extend (1 - t)
+· 使用定理 `Path.trans_symm`：trans_symm (γ : Path x y) (γ' : Path y z) : (γ.trans γ'
+).symm = γ'.symm.trans γ.symm
+· 使用定理 `Path.extend_trans_of_le_half`：extend_trans_of_le_half (γ₁ : Path x y) (γ
+₂ : Path y z) {t : Real} (ht : t <= 1 / 2) : (γ₁.trans γ₂).extend t = γ₁.extend 
+(2 * t)
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用引理 `Mathlib.Meta.NormNum.instAtLeastTwo`：instAtLeastTwo (n : Nat) : Nat.AtLe
+astTwo (n + 2)
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.cast_pos`：∀ {R : Type u_1} [inst : CommSemiring R] {
+a : R} {n : ℕ}, Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast + 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_pf`：∀ {R : Type u_2} [inst : CommRing R] 
+{a b c d : R}, -b = c → a + c = d → a - b = d
+（共 70 条，此处仅展示前 30 条）
 -/
-theorem extend_trans_of_half_le (γ₁ : Path x y) (γ₂ : Path y z) {t : Real} (ht : 1 / 2 <= t) :
+theorem extend_trans_of_half_le (γ₁ : Path x y) (γ₂ : Path y z) {t : ℝ} (ht : 1 / 2 ≤ t) :
     (γ₁.trans γ₂).extend t = γ₂.extend (2 * t - 1) := by
   conv_lhs => rw [← sub_sub_cancel 1 t]
-  rw [← extend_symm_apply]; rw [trans_symm]; rw [extend_trans_of_le_half _ _ (by linarith)]; rw [extend_symm_apply]
+  rw [← extend_symm_apply, trans_symm, extend_trans_of_le_half _ _ (by linarith), extend_symm_apply]
   congr 1
   linarith
 
 @[simp]
-/--
-theorem `refl_trans_refl` / 定理 `refl_trans_refl`
-
-English:
-theorem refl_trans_refl
-  given: {a : X}
-  proof: by
-  ext
-  simp [Path.trans]
-
-中文:
-定理 refl_trans_refl
-  条件: {a : X}
-  证明: by
-  ext
-  simp [Path.trans]
-
-Depends on / 依赖: Path.trans
+/-
+**Path.refl_trans_refl** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：refl_trans_refl {a : X} : (Path.refl a).trans (Path.refl a) = Path.refl a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.ext`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} {γ₁ γ₂ 
+: Path x y}, ⇑γ₁ = ⇑γ₂ → γ₁ = γ₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ite.congr_simp`：∀ {α : Sort u} (c c_1 : Prop),   c = c_1 →     ∀ {h : De
+cidable c} [h_1 : Decidable c_1] (t t_1 : α),       t = t_1 → ∀ (e e_1 : α), e =
+ e_1…
+· 使用定理 `one_div`：one_div (a : G) : 1 / a = a⁻¹
+· 使用定理 `ite_self`：∀ {α : Sort u} {c : Prop} {d : Decidable c} (a : α), (if c the
+n a else a) = a
+· 使用定理 `ContinuousMap.mk.congr_simp`：∀ {X : Type u_1} {Y : Type u_2} [inst : Top
+ologicalSpace X] [inst_1 : TopologicalSpace Y] (toFun toFun_1 : X → Y)   (e_toFu
+n : toFun = toFun…
+· 使用定理 `Path.mk.congr_simp`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : 
+X} (toContinuousMap toContinuousMap_1 : C(↑unitInterval, X))   (e_toContinuousMa
+p : toCo…
+· 使用定理 `Path.refl_apply`：∀ {X : Type u_1} [inst : TopologicalSpace X] (x : X) (x
+_1 : ↑unitInterval), (Path.refl x) x_1 = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem refl_trans_refl {a : X} :
     (Path.refl a).trans (Path.refl a) = Path.refl a := by
   ext
   simp [Path.trans]
-
-/--
-theorem `trans_range` / 定理 `trans_range`
-
-English:
-theorem trans_range
-  given: {a b c : X} (γ₁ : Path a b) (γ₂ : Path b c)
-  proof: by
-  rw [← extend_range]; rw [← image_univ]; rw [← Iic_union_Ici (a := 1 / 2)]; rw [image_union]; rw [EqOn.image_eq fun t ht => extend_trans_of_le_half _ _ (mem_Iic.1 ht)]; rw [EqOn.image_eq fun t ht => extend_trans_of_half_le _ _ (mem_Ici.1 ht)]; rw [← image_image γ₁.extend]; rw [← image_image (γ₂.extend <| · - 1)]; rw [← image_image γ₂.extend]
-  norm_num [image_mul_left_Ici, image_mul_left_Iic,
-    image_extend_of_subset, Icc_subset_Iic_self, Icc_subset_Ici_self]
-
-中文:
-定理 trans_range
-  条件: {a b c : X} (γ₁ : 道路 a b) (γ₂ : 道路 b c)
-  证明: by
-  rw [← extend_range]; rw [← image_univ]; rw [← Iic_union_Ici (a := 1 / 2)]; rw [image_union]; rw [EqOn.image_eq fun t ht => extend_trans_of_le_half _ _ (mem_Iic.1 ht)]; rw [EqOn.image_eq fun t ht => extend_trans_of_half_le _ _ (mem_Ici.1 ht)]; rw [← image_image γ₁.extend]; rw [← image_image (γ₂.extend <| · - 1)]; rw [← image_image γ₂.extend]
-  norm_num [image_mul_left_Ici, image_mul_left_Iic,
-    image_extend_of_subset, Icc_subset_Iic_self, Icc_subset_Ici_self]
-
-Depends on / 依赖: EqOn.image_eq, Icc_subset_Ici_self, Icc_subset_Iic_self, Iic_union_Ici, extend, extend_range, extend_trans_of_half_le, extend_trans_of_le_half, image_eq, image_extend_of_subset, image_image, image_mul_left_Ici, image_mul_left_Iic, image_union, image_univ, mem_Ici, mem_Iic
+/-
+**Path.trans_range** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：trans_range {a b c : X} (γ₁ : Path a b) (γ₂ : Path b c) : range (γ₁.trans 
+γ₂) = range γ₁ union range γ₂
+参数：γ₁ : Path a b；γ₂ : Path b c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Path.extend_range`：extend_range {a b : X} (γ : Path a b) : range γ.exten
+d = range γ
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Set.Iic_union_Ici`：Iic_union_Ici : Iic a union Ici a = univ
+· 使用定理 `Set.image_union`：image_union (f : α -> β) (s t : Set α) : f '' (s union 
+t) = f '' s union f '' t
+· 使用定理 `Set.EqOn.image_eq`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f₁ f₂ : 
+α → β}, Set.EqOn f₁ f₂ s → f₁ '' s = f₂ '' s
+· 使用定理 `Path.extend_trans_of_le_half`：extend_trans_of_le_half (γ₁ : Path x y) (γ
+₂ : Path y z) {t : Real} (ht : t <= 1 / 2) : (γ₁.trans γ₂).extend t = γ₁.extend 
+(2 * t)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_Iic`：∀ {α : Type u_1} [inst : Preorder α] {b x : α}, x ∈ Set.Iic
+ b ↔ x ≤ b
+· 使用定理 `Path.extend_trans_of_half_le`：extend_trans_of_half_le (γ₁ : Path x y) (γ
+₂ : Path y z) {t : Real} (ht : 1 / 2 <= t) : (γ₁.trans γ₂).extend t = γ₂.extend 
+(2 * t - 1)
+· 使用定理 `Set.mem_Ici`：∀ {α : Type u_1} [inst : Preorder α] {b x : α}, x ∈ Set.Ici
+ b ↔ b ≤ x
+· 使用定理 `Set.image_image`：image_image (g : β -> γ) (f : α -> β) (s : Set α) : g '
+' f '' s = (fun x => g (f x)) '' s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `Mathlib.Meta.NormNum.instAtLeastTwo`：instAtLeastTwo (n : Nat) : Nat.AtLe
+astTwo (n + 2)
+· 使用定理 `Mathlib.Meta.NormNum.IsNNRat.to_eq`：∀ {α : Type u_1} [inst : DivisionSem
+iring α] {n d : ℕ} {a n' d' : α},   Mathlib.Meta.NormNum.IsNNRat a n d → ↑n = n'
+ → ↑d = d' → a = n' / d'
+· 使用定理 `Mathlib.Meta.NormNum.isNNRat_div`：∀ {α : Type u} [inst : DivisionSemirin
+g α] {a b : α} {cn cd : ℕ},   Mathlib.Meta.NormNum.IsNNRat (a * b⁻¹) cn cd → Mat
+hlib.Meta.NormNum.IsNN…
+· 使用定理 `Mathlib.Meta.NormNum.isNNRat_mul`：isNNRat_mul {α} [Semiring α] {f : α ->
+ α -> α} {a b : α} {na nb nc : Nat} {da db dc k : Nat} : f = HMul.hMul -> IsNNRa
+t a na da -> IsNNRat b…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isNNRat`：∀ {α : Type u_1} [inst : Semiring
+ α] {a : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsN
+NRat a n 1
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Mathlib.Meta.NormNum.isNNRat_inv_pos`：isNNRat_inv_pos {α} [DivisionSemir
+ing α] [CharZero α] {a : α} {n d : Nat} : IsNNRat a (Nat.succ n) d -> IsNNRat a⁻
+¹ d (Nat.succ n)
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Set.image_mul_left_Iic`：image_mul_left_Iic (h : 0 < a) (b : G₀) : (a * ·
+) '' Iic b = Iic (a * b)
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+（共 44 条，此处仅展示前 30 条）
 -/
 theorem trans_range {a b c : X} (γ₁ : Path a b) (γ₂ : Path b c) :
-    range (γ₁.trans γ₂) = range γ₁ union range γ₂ := by
-  rw [← extend_range]; rw [← image_univ]; rw [← Iic_union_Ici (a := 1 / 2)]; rw [image_union]; rw [EqOn.image_eq fun t ht => extend_trans_of_le_half _ _ (mem_Iic.1 ht)]; rw [EqOn.image_eq fun t ht => extend_trans_of_half_le _ _ (mem_Ici.1 ht)]; rw [← image_image γ₁.extend]; rw [← image_image (γ₂.extend <| · - 1)]; rw [← image_image γ₂.extend]
+    range (γ₁.trans γ₂) = range γ₁ ∪ range γ₂ := by
+  rw [← extend_range, ← image_univ, ← Iic_union_Ici (a := 1 / 2), image_union,
+    EqOn.image_eq fun t ht ↦ extend_trans_of_le_half _ _ (mem_Iic.1 ht),
+    EqOn.image_eq fun t ht ↦ extend_trans_of_half_le _ _ (mem_Ici.1 ht),
+    ← image_image γ₁.extend, ← image_image (γ₂.extend <| · - 1), ← image_image γ₂.extend]
   norm_num [image_mul_left_Ici, image_mul_left_Iic,
     image_extend_of_subset, Icc_subset_Iic_self, Icc_subset_Ici_self]
 
-/--
-Definition of `map'` / `map'` 的定义
+/-- Image of a path from `x` to `y` by a map which is continuous on the path. -/
+/-
+**Path.map'** 是 Mathlib 中的一个定义，位于命名空间 `Path`。
+形式化陈述：map' (γ : Path x y) {f : X -> Y} (h : ContinuousOn f (range γ)) : Path (f 
+x) (f y) where toFun
+参数：γ : Path x y；h : ContinuousOn f (range γ)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map'
-  signature: (γ : Path x y) {f : X -> Y} (h : ContinuousOn f (range γ))
-  body: f ∘ γ
-  continuous_toFun := h.comp_continuous γ.continuous (fun x => mem_range_self x)
-  source' := by simp
-  target' := by simp
-
-中文:
-定义 map'
-  签名: (γ : 道路 x y) {f : X -> Y} (h : ContinuousOn f (range γ))
-  定义体: f ∘ γ
-  continuous_toFun := h.comp_continuous γ.continuous (fun x => mem_range_self x)
-  source' := by simp
-  target' := by simp
+--- 原说明 ---
+Image of a path from `x` to `y` by a map which is continuous on the path.
 -/
-def map' (γ : Path x y) {f : X -> Y} (h : ContinuousOn f (range γ)) : Path (f x) (f y) where
+def map' (γ : Path x y) {f : X → Y} (h : ContinuousOn f (range γ)) : Path (f x) (f y) where
   toFun := f ∘ γ
-  continuous_toFun := h.comp_continuous γ.continuous (fun x => mem_range_self x)
+  continuous_toFun := h.comp_continuous γ.continuous (fun x ↦ mem_range_self x)
   source' := by simp
   target' := by simp
 
-/--
-Definition of `map` / `map` 的定义
+/-- Image of a path from `x` to `y` by a continuous map -/
+/-
+**Path.map** 是 Mathlib 中的一个定义，位于命名空间 `Path`。
+形式化陈述：map (γ : Path x y) {f : X -> Y} (h : Continuous f) : Path (f x) (f y)
+参数：γ : Path x y；h : Continuous f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (γ : Path x y) {f : X -> Y} (h : Continuous f)
-  body: γ.map' h.continuousOn
-
-@[simp, grind =]
-
-中文:
-定义 map
-  签名: (γ : 道路 x y) {f : X -> Y} (h : 连续 f)
-  定义体: γ.map' h.continuousOn
-
-@[simp, grind =]
-
-Depends on / 依赖: continuousOn, h.continuousOn
+--- 原说明 ---
+Image of a path from `x` to `y` by a continuous map
 -/
-def map (γ : Path x y) {f : X -> Y} (h : Continuous f) :
+def map (γ : Path x y) {f : X → Y} (h : Continuous f) :
     Path (f x) (f y) := γ.map' h.continuousOn
 
 @[simp, grind =]
-/--
-theorem `map_coe` / 定理 `map_coe`
-
-English:
-theorem map_coe
-  given: (γ : Path x y) {f : X -> Y} (h : Continuous f)
-  proof: by
-  ext t
-  rfl
-
-@[simp]
-
-中文:
-定理 map_coe
-  条件: (γ : 道路 x y) {f : X -> Y} (h : 连续 f)
-  证明: by
-  ext t
-  rfl
-
-@[simp]
+/-
+**Path.map_coe** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：map_coe (γ : Path x y) {f : X -> Y} (h : Continuous f) : (γ.map h : I -> Y
+) = f ∘ γ
+参数：γ : Path x y；h : Continuous f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-theorem map_coe (γ : Path x y) {f : X -> Y} (h : Continuous f) :
-    (γ.map h : I -> Y) = f ∘ γ := by
+theorem map_coe (γ : Path x y) {f : X → Y} (h : Continuous f) :
+    (γ.map h : I → Y) = f ∘ γ := by
   ext t
   rfl
 
 @[simp]
-/--
-theorem `map_symm` / 定理 `map_symm`
-
-English:
-theorem map_symm
-  given: (γ : Path x y) {f : X -> Y} (h : Continuous f)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 map_symm
-  条件: (γ : 道路 x y) {f : X -> Y} (h : 连续 f)
-  证明: rfl
-
-@[simp]
+/-
+**Path.map_symm** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：map_symm (γ : Path x y) {f : X -> Y} (h : Continuous f) : (γ.map h).symm =
+ γ.symm.map h
+参数：γ : Path x y；h : Continuous f。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_symm (γ : Path x y) {f : X -> Y} (h : Continuous f) :
+theorem map_symm (γ : Path x y) {f : X → Y} (h : Continuous f) :
     (γ.map h).symm = γ.symm.map h :=
   rfl
 
 @[simp]
-/--
-theorem `map_trans` / 定理 `map_trans`
-
-English:
-theorem map_trans
-  statement: (γ : Path x y) (γ' : Path y z) {f : X -> Y}
-  proof: by
-  ext t
-  rw [trans_apply]; rw [map_coe]; rw [Function.comp_apply]; rw [trans_apply]; rw [map_coe]; rw [map_coe]
-  grind
-
-@[simp]
-
-中文:
-定理 map_trans
-  结论: (γ : 道路 x y) (γ' : 道路 y z) {f : X -> Y}
-  证明: by
-  ext t
-  rw [trans_apply]; rw [map_coe]; rw [Function.comp_apply]; rw [trans_apply]; rw [map_coe]; rw [map_coe]
-  grind
-
-@[simp]
-
-Depends on / 依赖: Function, Function.comp_apply, comp_apply, map_coe, trans_apply
+/-
+**Path.map_trans** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：map_trans (γ : Path x y) (γ' : Path y z) {f : X -> Y} (h : Continuous f) :
+ (γ.trans γ').map h = (γ.map h).trans (γ'.map h)
+参数：γ : Path x y；γ' : Path y z；h : Continuous f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.ext`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} {γ₁ γ₂ 
+: Path x y}, ⇑γ₁ = ⇑γ₂ → γ₁ = γ₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `unitInterval.mul_pos_mem_iff`：mul_pos_mem_iff {a t : Real} (ha : 0 < a) 
+: a * t in I ↔ t in Set.Icc (0 : Real) (1 / a)
+· 使用定理 `zero_lt_two`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : Part
+ialOrder α] [ZeroLEOneClass α] [NeZero 1] [AddLeftMono α],   0 < 2
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `unitInterval.two_mul_sub_one_mem_iff`：two_mul_sub_one_mem_iff {t : Real}
+ : 2 * t - 1 in I ↔ t in Set.Icc (1 / 2 : Real) 1
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Path.trans_apply`：trans_apply (γ : Path x y) (γ' : Path y z) (t : I) : (
+γ.trans γ') t = if h : (t : Real) <= 1 / 2 then γ ⟨2 * t, (mul_pos_mem_iff zero_
+lt_two…
+· 使用定理 `Path.map_coe`：map_coe (γ : Path x y) {f : X -> Y} (h : Continuous f) : (
+γ.map h : I -> Y) = f ∘ γ
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
 -/
-theorem map_trans (γ : Path x y) (γ' : Path y z) {f : X -> Y}
+theorem map_trans (γ : Path x y) (γ' : Path y z) {f : X → Y}
     (h : Continuous f) : (γ.trans γ').map h = (γ.map h).trans (γ'.map h) := by
   ext t
-  rw [trans_apply]; rw [map_coe]; rw [Function.comp_apply]; rw [trans_apply]; rw [map_coe]; rw [map_coe]
+  rw [trans_apply, map_coe, Function.comp_apply, trans_apply, map_coe, map_coe]
   grind
 
 @[simp]
-/--
-theorem `map_id` / 定理 `map_id`
-
-English:
-theorem map_id
-  given: (γ : Path x y)
-  statement: γ.map continuous_id = γ
-  proof: by
-  ext
-  rfl
-
-@[simp]
-
-中文:
-定理 map_id
-  条件: (γ : 道路 x y)
-  结论: γ.map continuous_id = γ
-  证明: by
-  ext
-  rfl
-
-@[simp]
+/-
+**Path.map_id** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：map_id (γ : Path x y) : γ.map continuous_id = γ
+参数：γ : Path x y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.ext`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} {γ₁ γ₂ 
+: Path x y}, ⇑γ₁ = ⇑γ₂ → γ₁ = γ₂
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 theorem map_id (γ : Path x y) : γ.map continuous_id = γ := by
   ext
   rfl
 
 @[simp]
-/--
-theorem `map_map` / 定理 `map_map`
-
-English:
-theorem map_map
-  statement: (γ : Path x y) {Z : Type*} [TopologicalSpace Z]
-  proof: by
-  ext
-  rfl
-
-中文:
-定理 map_map
-  结论: (γ : 道路 x y) {Z : 类型} [拓扑空间 Z]
-  证明: by
-  ext
-  rfl
+/-
+**Path.map_map** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：map_map (γ : Path x y) {Z : Type*} [TopologicalSpace Z] {f : X -> Y} (hf :
+ Continuous f) {g : Y -> Z} (hg : Continuous g) : (γ.map hf).map hg = γ.map (hg.
+comp hf)
+参数：γ : Path x y；hf : Continuous f；hg : Continuous g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.ext`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} {γ₁ γ₂ 
+: Path x y}, ⇑γ₁ = ⇑γ₂ → γ₁ = γ₂
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 theorem map_map (γ : Path x y) {Z : Type*} [TopologicalSpace Z]
-    {f : X -> Y} (hf : Continuous f) {g : Y -> Z} (hg : Continuous g) :
+    {f : X → Y} (hf : Continuous f) {g : Y → Z} (hg : Continuous g) :
     (γ.map hf).map hg = γ.map (hg.comp hf) := by
   ext
   rfl
 
-/--
-Definition of `cast` / `cast` 的定义
+/-- Casting a path from `x` to `y` to a path from `x'` to `y'` when `x' = x` and `y' = y` -/
+/-
+**Path.cast** 是 Mathlib 中的一个定义，位于命名空间 `Quiver`。
+形式化陈述：Path.cast {u v u' v' : U} (hu : u = u') (hv : v = v') (p : Path u v) : Pat
+h u' v'
+参数：hu : u = u'；hv : v = v'；p : Path u v。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.continuous`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} 
+(γ : Path x y), Continuous ⇑γ
 
-English:
-definition cast
-  signature: (γ : Path x y) {x' y'} (hx : x' = x) (hy : y' = y)
-  body: γ
-  continuous_toFun := γ.continuous
-  source' := by simp [hx]
-  target' := by simp [hy]
-
-中文:
-定义 cast
-  签名: (γ : 道路 x y) {x' y'} (hx : x' = x) (hy : y' = y)
-  定义体: γ
-  continuous_toFun := γ.continuous
-  source' := by simp [hx]
-  target' := by simp [hy]
+--- 原说明 ---
+Casting a path from `x` to `y` to a path from `x'` to `y'` when `x' = x` and `y'
+ = y`
 -/
 def cast (γ : Path x y) {x' y'} (hx : x' = x) (hy : y' = y) : Path x' y' where
   toFun := γ
   continuous_toFun := γ.continuous
   source' := by simp [hx]
   target' := by simp [hy]
-
-/--
-theorem `cast_rfl_rfl` / 定理 `cast_rfl_rfl`
-
-English:
-theorem cast_rfl_rfl
-  given: (γ : Path x y)
-  statement: γ.cast rfl rfl = γ
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cast_rfl_rfl
-  条件: (γ : 道路 x y)
-  结论: γ.cast rfl rfl = γ
-  证明: rfl
-
-@[simp]
+/-
+**Path.cast_rfl_rfl** 是 Mathlib 中的一个定理，位于命名空间 `Quiver`。
+形式化陈述：Path.cast_rfl_rfl {u v : U} (p : Path u v) : p.cast rfl rfl = p
+参数：p : Path u v。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] theorem cast_rfl_rfl (γ : Path x y) : γ.cast rfl rfl = γ := rfl
 
 @[simp]
-/--
-theorem `cast_symm` / 定理 `cast_symm`
-
-English:
-theorem cast_symm
-  given: {a₁ a₂ b₁ b₂ : X} (γ : Path a₂ b₂) (ha : a₁ = a₂) (hb : b₁ = b₂)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cast_symm
-  条件: {a₁ a₂ b₁ b₂ : X} (γ : 道路 a₂ b₂) (ha : a₁ = a₂) (hb : b₁ = b₂)
-  证明: rfl
-
-@[simp]
+/-
+**Path.cast_symm** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：cast_symm {a₁ a₂ b₁ b₂ : X} (γ : Path a₂ b₂) (ha : a₁ = a₂) (hb : b₁ = b₂)
+ : (γ.symm).cast hb ha = (γ.cast ha hb).symm
+参数：γ : Path a₂ b₂；ha : a₁ = a₂；hb : b₁ = b₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cast_symm {a₁ a₂ b₁ b₂ : X} (γ : Path a₂ b₂) (ha : a₁ = a₂) (hb : b₁ = b₂) :
     (γ.symm).cast hb ha = (γ.cast ha hb).symm :=
   rfl
 
 @[simp]
-/--
-theorem `cast_trans` / 定理 `cast_trans`
-
-English:
-theorem cast_trans
-  statement: {a₁ a₂ b₁ b₂ c₁ c₂ : X} (γ : Path a₂ b₂)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 cast_trans
-  结论: {a₁ a₂ b₁ b₂ c₁ c₂ : X} (γ : 道路 a₂ b₂)
-  证明: rfl
-
-@[simp]
+/-
+**Path.cast_trans** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：cast_trans {a₁ a₂ b₁ b₂ c₁ c₂ : X} (γ : Path a₂ b₂) (γ' : Path b₂ c₂) (ha 
+: a₁ = a₂) (hb : b₁ = b₂) (hc : c₁ = c₂) : (γ.trans γ').cast ha hc = (γ.cast ha 
+hb).trans (γ'.cast hb hc)
+参数：γ : Path a₂ b₂；γ' : Path b₂ c₂；ha : a₁ = a₂；hb : b₁ = b₂；hc : c₁ = c₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem cast_trans {a₁ a₂ b₁ b₂ c₁ c₂ : X} (γ : Path a₂ b₂)
     (γ' : Path b₂ c₂) (ha : a₁ = a₂) (hb : b₁ = b₂) (hc : c₁ = c₂) :
@@ -1548,286 +1363,242 @@ theorem cast_trans {a₁ a₂ b₁ b₂ c₁ c₂ : X} (γ : Path a₂ b₂)
   rfl
 
 @[simp]
-/--
-theorem `extend_cast` / 定理 `extend_cast`
-
-English:
-theorem extend_cast
-  given: {x' y'} (γ : Path x y) (hx : x' = x) (hy : y' = y)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 extend_cast
-  条件: {x' y'} (γ : 道路 x y) (hx : x' = x) (hy : y' = y)
-  证明: rfl
-
-@[simp]
+/-
+**Path.extend_cast** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：extend_cast {x' y'} (γ : Path x y) (hx : x' = x) (hy : y' = y) : (γ.cast h
+x hy).extend = γ.extend
+参数：γ : Path x y；hx : x' = x；hy : y' = y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem extend_cast {x' y'} (γ : Path x y) (hx : x' = x) (hy : y' = y) :
     (γ.cast hx hy).extend = γ.extend := rfl
 
 @[simp]
-/--
-theorem `cast_coe` / 定理 `cast_coe`
-
-English:
-theorem cast_coe
-  given: (γ : Path x y) {x' y'} (hx : x' = x) (hy : y' = y)
-  statement: (γ.cast hx hy : I -> X) = γ
-  proof: rfl
-
-中文:
-定理 cast_coe
-  条件: (γ : 道路 x y) {x' y'} (hx : x' = x) (hy : y' = y)
-  结论: (γ.cast hx hy : I -> X) = γ
-  证明: rfl
+/-
+**Path.cast_coe** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：cast_coe (γ : Path x y) {x' y'} (hx : x' = x) (hy : y' = y) : (γ.cast hx h
+y : I -> X) = γ
+参数：γ : Path x y；hx : x' = x；hy : y' = y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem cast_coe (γ : Path x y) {x' y'} (hx : x' = x) (hy : y' = y) : (γ.cast hx hy : I -> X) = γ :=
+theorem cast_coe (γ : Path x y) {x' y'} (hx : x' = x) (hy : y' = y) : (γ.cast hx hy : I → X) = γ :=
   rfl
-
-/--
-lemma `bijective_cast` / 引理 `bijective_cast`
-
-English:
-lemma bijective_cast
-  given: {x' y' : X} (hx : x' = x) (hy : y' = y)
-  statement: Bijective (Path.cast · hx hy)
-  proof: by
-  subst_vars; exact bijective_id
-
-@[congr]
-
-中文:
-引理 bijective_cast
-  条件: {x' y' : X} (hx : x' = x) (hy : y' = y)
-  结论: 双射 (道路.cast · hx hy)
-  证明: by
-  subst_vars; exact bijective_id
-
-@[congr]
-
-Depends on / 依赖: bijective_id
+/-
+**Path.bijective_cast** 是 Mathlib 中的一个引理，位于命名空间 `Path`。
+形式化陈述：bijective_cast {x' y' : X} (hx : x' = x) (hy : y' = y) : Bijective (Path.c
+ast · hx hy)
+参数：hx : x' = x；hy : y' = y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.bijective_id`：bijective_id : Bijective (@id α)
 -/
 lemma bijective_cast {x' y' : X} (hx : x' = x) (hy : y' = y) : Bijective (Path.cast · hx hy) := by
   subst_vars; exact bijective_id
 
 @[congr]
-/--
-lemma `exists_congr` / 引理 `exists_congr`
-
-English:
-lemma exists_congr
-  statement: {x₁ x₂ y₁ y₂ : X} {p : Path x₁ y₁ -> Prop}
-  proof: .surjective.exists bijective_cast hx hy
-
-@[continuity, fun_prop]
-
-中文:
-引理 存在_congr
-  结论: {x₁ x₂ y₁ y₂ : X} {p : 道路 x₁ y₁ -> 命题}
-  证明: .surjective.exists bijective_cast hx hy
-
-@[continuity, fun_prop]
-
-Depends on / 依赖: bijective_cast, surjective, surjective.exists
+/-
+**Path.exists_congr** 是 Mathlib 中的一个引理，位于命名空间 `Path`。
+形式化陈述：exists_congr {x₁ x₂ y₁ y₂ : X} {p : Path x₁ y₁ -> Prop} (hx : x₁ = x₂) (hy
+ : y₁ = y₂) : (exists γ, p γ) ↔ (exists (γ : Path x₂ y₂), p (γ.cast hx hy))
+参数：hx : x₁ = x₂；hy : y₁ = y₂。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Surjective.exists`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β},
+ Function.Surjective f → ∀ {p : β → Prop}, (∃ y, p y) ↔ ∃ x, p (f x)
+· 使用定理 `Function.Bijective.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → 
+β}, Function.Bijective f → Function.Surjective f
+· 使用引理 `Path.bijective_cast`：bijective_cast {x' y' : X} (hx : x' = x) (hy : y' =
+ y) : Bijective (Path.cast · hx hy)
 -/
-lemma exists_congr {x₁ x₂ y₁ y₂ : X} {p : Path x₁ y₁ -> Prop}
+lemma exists_congr {x₁ x₂ y₁ y₂ : X} {p : Path x₁ y₁ → Prop}
     (hx : x₁ = x₂) (hy : y₁ = y₂) :
-    (exists γ, p γ) ↔ (exists (γ : Path x₂ y₂), p (γ.cast hx hy)) :=
-.surjective.exists bijective_cast hx hy
+    (∃ γ, p γ) ↔ (∃ (γ : Path x₂ y₂), p (γ.cast hx hy)) :=
+  bijective_cast hx hy |>.surjective.exists
 
 @[continuity, fun_prop]
-/--
-theorem `symm_continuous_family` / 定理 `symm_continuous_family`
-
-English:
-theorem symm_continuous_family
-  statement: {ι : Type*} [TopologicalSpace ι]
-  proof: h.comp (continuous_id.prodMap continuous_symm)
-
-@[continuity]
-
-中文:
-定理 symm_continuous_family
-  结论: {ι : 类型} [拓扑空间 ι]
-  证明: h.comp (continuous_id.prodMap continuous_symm)
-
-@[continuity]
-
-Depends on / 依赖: continuous_id, continuous_id.prodMap, continuous_symm, h.comp, prodMap
+/-
+**Path.symm_continuous_family** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：symm_continuous_family {ι : Type*} [TopologicalSpace ι] {a b : ι -> X} (γ 
+: forall t : ι, Path (a t) (b t)) (h : Continuous ↿γ) : Continuous ↿fun t => (γ 
+t).symm
+参数：γ : forall t : ι, Path (a t) (b t)；h : Continuous ↿γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用定理 `Continuous.prodMap`：Continuous.prodMap {f : Z -> X} {g : W -> Y} (hf : C
+ontinuous f) (hg : Continuous g) : Continuous (Prod.map f g)
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
+· 使用定理 `unitInterval.continuous_symm`：continuous_symm : Continuous σ
 -/
 theorem symm_continuous_family {ι : Type*} [TopologicalSpace ι]
-    {a b : ι -> X} (γ : forall t : ι, Path (a t) (b t)) (h : Continuous ↿γ) :
+    {a b : ι → X} (γ : ∀ t : ι, Path (a t) (b t)) (h : Continuous ↿γ) :
     Continuous ↿fun t => (γ t).symm :=
   h.comp (continuous_id.prodMap continuous_symm)
 
 @[continuity]
-/--
-theorem `continuous_symm` / 定理 `continuous_symm`
-
-English:
-theorem continuous_symm
-  statement: Continuous (symm : Path x y -> Path y x)
-  proof: continuous_uncurry_iff.mp symm_continuous_family _ (by fun_prop)
-
-@[continuity]
-
-中文:
-定理 continuous_symm
-  结论: 连续 (symm : 道路 x y -> 道路 y x)
-  证明: continuous_uncurry_iff.mp symm_continuous_family _ (by fun_prop)
-
-@[continuity]
-
-Depends on / 依赖: continuous_uncurry_iff, continuous_uncurry_iff.mp, fun_prop, symm_continuous_family
+/-
+**Path.continuous_symm** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：continuous_symm : Continuous (symm : Path x y -> Path y x)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Path.continuous_uncurry_iff`：continuous_uncurry_iff {Y} [TopologicalSpac
+e Y] {g : Y -> Path x y} : Continuous ↿g ↔ Continuous g
+· 使用定理 `Path.symm_continuous_family`：symm_continuous_family {ι : Type*} [Topolog
+icalSpace ι] {a b : ι -> X} (γ : forall t : ι, Path (a t) (b t)) (h : Continuous
+ ↿γ) : Continuous…
+· 使用定理 `Continuous.eval`：∀ {F : Type u_1} {X : Type u_2} {Y : Type u_3} {Z : Typ
+e u_4} [inst : FunLike F X Y] [inst_1 : TopologicalSpace F]   [inst_2 : Topologi
+calSp…
+· 使用定理 `Path.instContinuousEvalElemRealUnitInterval`：∀ {X : Type u_1} [inst : To
+pologicalSpace X] {x y : X}, ContinuousEval (Path x y) (↑unitInterval) X
+· 使用定理 `Continuous.fst`：Continuous.fst {f : X -> Y × Z} (hf : Continuous f) : Co
+ntinuous fun x : X => (f x).1
+· 使用定理 `continuous_id'`：continuous_id' : Continuous (fun (x : X) => x)
+· 使用定理 `Continuous.snd`：Continuous.snd {f : X -> Y × Z} (hf : Continuous f) : Co
+ntinuous fun x : X => (f x).2
 -/
-theorem continuous_symm : Continuous (symm : Path x y -> Path y x) :=
-continuous_uncurry_iff.mp symm_continuous_family _ (by fun_prop)
+theorem continuous_symm : Continuous (symm : Path x y → Path y x) :=
+  continuous_uncurry_iff.mp <| symm_continuous_family _ (by fun_prop)
 
 @[continuity]
-/--
-theorem `continuous_uncurry_extend_of_continuous_family` / 定理 `continuous_uncurry_extend_of_continuous_family`
-
-English:
-theorem continuous_uncurry_extend_of_continuous_family
-  statement: {ι : Type*} [TopologicalSpace ι]
-  proof: by
-  apply h.comp (continuous_id.prodMap continuous_projIcc)
-  exact zero_le_one
-
-@[continuity]
-
-中文:
-定理 continuous_uncurry_extend_of_continuous_family
-  结论: {ι : 类型} [拓扑空间 ι]
-  证明: by
-  apply h.comp (continuous_id.prodMap continuous_projIcc)
-  exact zero_le_one
-
-@[continuity]
-
-Depends on / 依赖: continuous_id, continuous_id.prodMap, continuous_projIcc, h.comp, prodMap, zero_le_one
+/-
+**Path.continuous_uncurry_extend_of_continuous_family** 是 Mathlib 中的一个定理，位于命名空间 
+`Path`。
+形式化陈述：continuous_uncurry_extend_of_continuous_family {ι : Type*} [TopologicalSpa
+ce ι] {a b : ι -> X} (γ : forall t : ι, Path (a t) (b t)) (h : Continuous ↿γ) : 
+Continuous ↿fun t => ⇑(γ t).extend
+参数：γ : forall t : ι, Path (a t) (b t)；h : Continuous ↿γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
+· 使用定理 `Continuous.prodMap`：Continuous.prodMap {f : Z -> X} {g : W -> Y} (hf : C
+ontinuous f) (hg : Continuous g) : Continuous (Prod.map f g)
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
+· 使用定理 `continuous_projIcc`：continuous_projIcc : Continuous (projIcc a b h)
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
 -/
 theorem continuous_uncurry_extend_of_continuous_family {ι : Type*} [TopologicalSpace ι]
-    {a b : ι -> X} (γ : forall t : ι, Path (a t) (b t)) (h : Continuous ↿γ) :
+    {a b : ι → X} (γ : ∀ t : ι, Path (a t) (b t)) (h : Continuous ↿γ) :
     Continuous ↿fun t => ⇑(γ t).extend := by
   apply h.comp (continuous_id.prodMap continuous_projIcc)
   exact zero_le_one
 
 @[continuity]
-/--
-theorem `trans_continuous_family` / 定理 `trans_continuous_family`
-
-English:
-theorem trans_continuous_family
-  statement: {ι : Type*} [TopologicalSpace ι]
-  proof: by
-  have h₁' := Path.continuous_uncurry_extend_of_continuous_family γ₁ h₁
-  have h₂' := Path.continuous_uncurry_extend_of_continuous_family γ₂ h₂
-  simp only [HasUncurry.uncurry, Path.trans]
-  refine Continuous.if_le ?_ ?_ (continuous_subtype_val.comp continuous_snd) continuous_const ?_
-  · change
-      Continuous ((fun p : ι × Real => (γ₁ p.1).extend p.2) ∘ Prod.map id (fun x => 2 * x : I -> Real))
-    exact h₁'.comp (by fun_prop)
-  · change
-      Continuous ((fun p : ι × Real => (γ₂ p.1).extend p.2) ∘ Prod.map id (fun x => 2 * x - 1 : I -> Real))
-    exact h₂'.comp (by fun_prop)
-  · rintro st hst
-    simp [hst]
-
-@[continuity, fun_prop]
-
-中文:
-定理 trans_continuous_family
-  结论: {ι : 类型} [拓扑空间 ι]
-  证明: by
-  have h₁' := Path.continuous_uncurry_extend_of_continuous_family γ₁ h₁
-  have h₂' := Path.continuous_uncurry_extend_of_continuous_family γ₂ h₂
-  simp only [HasUncurry.uncurry, Path.trans]
-  refine Continuous.if_le ?_ ?_ (continuous_subtype_val.comp continuous_snd) continuous_const ?_
-  · change
-      Continuous ((fun p : ι × Real => (γ₁ p.1).extend p.2) ∘ Prod.map id (fun x => 2 * x : I -> Real))
-    exact h₁'.comp (by fun_prop)
-  · change
-      Continuous ((fun p : ι × Real => (γ₂ p.1).extend p.2) ∘ Prod.map id (fun x => 2 * x - 1 : I -> Real))
-    exact h₂'.comp (by fun_prop)
-  · rintro st hst
-    simp [hst]
-
-@[continuity, fun_prop]
-
-Depends on / 依赖: Continuous, Continuous.if_le, HasUncurry, HasUncurry.uncurry, Path.continuous_uncurry_extend_of_continuous_family, Path.trans, Prod.map, continuous_const, continuous_snd, continuous_subtype_val, continuous_subtype_val.comp, continuous_uncurry_extend_of_continuous_family, extend, fun_prop, if_le, uncurry
+/-
+**Path.trans_continuous_family** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：trans_continuous_family {ι : Type*} [TopologicalSpace ι] {a b c : ι -> X} 
+(γ₁ : forall t : ι, Path (a t) (b t)) (h₁ : Continuous ↿γ₁) (γ₂ : forall t : ι, 
+Path (b t) (c t)) (h₂ : Continuous ↿γ₂) : Continuous ↿fun t => (γ₁ t).trans (γ₂ 
+t)
+参数：γ₁ : forall t : ι, Path (a t) (b t)；h₁ : Continuous ↿γ₁；γ₂ : forall t : ι, Pa
+th (b t) (c t)；h₂ : Continuous ↿γ₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.continuous_uncurry_extend_of_continuous_family`：continuous_uncurry_
+extend_of_continuous_family {ι : Type*} [TopologicalSpace ι] {a b : ι -> X} (γ :
+ forall t : ι, Path (a t) (b t)) (h : Con…
+· 使用定理 `Continuous.if_le`：Continuous.if_le [TopologicalSpace γ] [forall x, Decid
+able (f x <= g x)] {f' g' : β -> γ} (hf' : Continuous f') (hg' : Continuous g') 
+(hf : …
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Continuous.prodMap`：Continuous.prodMap {f : Z -> X} {g : W -> Y} (hf : C
+ontinuous f) (hg : Continuous g) : Continuous (Prod.map f g)
+· 使用定理 `continuous_id'`：continuous_id' : Continuous (fun (x : X) => x)
+· 使用定理 `Continuous.const_mul`：Continuous.const_mul (hf : Continuous f) (b : M) :
+ Continuous (b * f ·)
+· 使用定理 `IsSemitopologicalSemiring.toSeparatelyContinuousMul`：∀ {R : Type u_2} {i
+nst : TopologicalSpace R} {inst_1 : NonUnitalNonAssocSemiring R}   [self : IsSem
+itopologicalSemiring R], SeparatelyContin…
+· 使用定理 `IsSemitopologicalRing.toIsSemitopologicalSemiring`：∀ {R : Type u_2} {ins
+t : TopologicalSpace R} {inst_1 : NonUnitalNonAssocRing R} [self : IsSemitopolog
+icalRing R],   IsSemitopologicalSemirin…
+· 使用定理 `IsTopologicalRing.toIsSemitopologicalRing`：∀ (R : Type u_2) [inst : Topo
+logicalSpace R] [inst_1 : NonUnitalNonAssocRing R] [IsTopologicalRing R],   IsSe
+mitopologicalRing R
+· 使用定理 `instIsTopologicalRingReal`：IsTopologicalRing ℝ
+· 使用定理 `continuous_subtype_val`：continuous_subtype_val : Continuous (@Subtype.va
+l X p)
+· 使用定理 `Continuous.fun_sub`：∀ {G : Type u_1} {X : Type u_3} [inst : TopologicalS
+pace X] [inst_1 : TopologicalSpace G] [inst_2 : Sub G]   [ContinuousSub G] {f g 
+: X → G}…
+· 使用定理 `IsTopologicalAddGroup.to_continuousSub`：∀ {G : Type u} [inst : Topologic
+alSpace G] [inst_1 : AddGroup G] [IsTopologicalAddGroup G], ContinuousSub G
+· 使用定理 `instIsTopologicalAddGroupReal`：IsTopologicalAddGroup ℝ
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
+· 使用定理 `continuous_snd`：continuous_snd (f : X → Y × Z) (hf : Continuous f) : Con
+tinuous (fun x ↦ (f x).snd)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `one_div`：one_div (a : G) : 1 / a = a⁻¹
+· 使用引理 `mul_inv_cancel₀`：mul_inv_cancel₀ (h : a != 0) : a * a⁻¹ = 1
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Path.extend_apply`：extend_apply {a b : X} (γ : Path a b) {t : Real} (ht 
+: t in (Icc 0 1 : Set Real)) : γ.extend t = γ ⟨t, ht⟩
+（共 35 条，此处仅展示前 30 条）
 -/
 theorem trans_continuous_family {ι : Type*} [TopologicalSpace ι]
-    {a b c : ι -> X} (γ₁ : forall t : ι, Path (a t) (b t)) (h₁ : Continuous ↿γ₁)
-    (γ₂ : forall t : ι, Path (b t) (c t)) (h₂ : Continuous ↿γ₂) :
+    {a b c : ι → X} (γ₁ : ∀ t : ι, Path (a t) (b t)) (h₁ : Continuous ↿γ₁)
+    (γ₂ : ∀ t : ι, Path (b t) (c t)) (h₂ : Continuous ↿γ₂) :
     Continuous ↿fun t => (γ₁ t).trans (γ₂ t) := by
   have h₁' := Path.continuous_uncurry_extend_of_continuous_family γ₁ h₁
   have h₂' := Path.continuous_uncurry_extend_of_continuous_family γ₂ h₂
   simp only [HasUncurry.uncurry, Path.trans]
   refine Continuous.if_le ?_ ?_ (continuous_subtype_val.comp continuous_snd) continuous_const ?_
   · change
-      Continuous ((fun p : ι × Real => (γ₁ p.1).extend p.2) ∘ Prod.map id (fun x => 2 * x : I -> Real))
+      Continuous ((fun p : ι × ℝ => (γ₁ p.1).extend p.2) ∘ Prod.map id (fun x => 2 * x : I → ℝ))
     exact h₁'.comp (by fun_prop)
   · change
-      Continuous ((fun p : ι × Real => (γ₂ p.1).extend p.2) ∘ Prod.map id (fun x => 2 * x - 1 : I -> Real))
+      Continuous ((fun p : ι × ℝ => (γ₂ p.1).extend p.2) ∘ Prod.map id (fun x => 2 * x - 1 : I → ℝ))
     exact h₂'.comp (by fun_prop)
   · rintro st hst
     simp [hst]
 
 @[continuity, fun_prop]
-/--
-theorem `_root_.Continuous.path_trans` / 定理 `_root_.Continuous.path_trans`
-
-English:
-theorem _root_.Continuous.path_trans
-  given: {f : Y -> Path x y} {g : Y -> Path y z}
-  proof: by
-  intro hf hg
-  apply continuous_uncurry_iff.mp
-  exact trans_continuous_family _ (continuous_uncurry_iff.mpr hf) _ (continuous_uncurry_iff.mpr hg)
-
-@[continuity, fun_prop]
-
-中文:
-定理 _root_.连续.path_trans
-  条件: {f : Y -> 道路 x y} {g : Y -> 道路 y z}
-  证明: by
-  intro hf hg
-  apply continuous_uncurry_iff.mp
-  exact trans_continuous_family _ (continuous_uncurry_iff.mpr hf) _ (continuous_uncurry_iff.mpr hg)
-
-@[continuity, fun_prop]
-
-Depends on / 依赖: continuous_uncurry_iff, continuous_uncurry_iff.mp, continuous_uncurry_iff.mpr, trans_continuous_family
+/-
+**Path._root_.Continuous.path_trans** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Continuous.path_trans {f : Y -> Path x y} {g : Y -> Path y z} :
-    Continuous f -> Continuous g -> Continuous fun t => (f t).trans (g t) := by
+theorem _root_.Continuous.path_trans {f : Y → Path x y} {g : Y → Path y z} :
+    Continuous f → Continuous g → Continuous fun t => (f t).trans (g t) := by
   intro hf hg
   apply continuous_uncurry_iff.mp
   exact trans_continuous_family _ (continuous_uncurry_iff.mpr hf) _ (continuous_uncurry_iff.mpr hg)
 
 @[continuity, fun_prop]
-/--
-theorem `continuous_trans` / 定理 `continuous_trans`
-
-English:
-theorem continuous_trans
-  given: {x y z : X}
-  statement: Continuous fun ρ : Path x y × Path y z => ρ.1.trans ρ.2
-  proof: by
-  fun_prop
-
-中文:
-定理 continuous_trans
-  条件: {x y z : X}
-  结论: 连续 fun ρ : 道路 x y × 道路 y z => ρ.1.trans ρ.2
-  证明: by
-  fun_prop
-
-Depends on / 依赖: fun_prop
+/-
+**Path.continuous_trans** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：continuous_trans {x y z : X} : Continuous fun ρ : Path x y × Path y z => ρ
+.1.trans ρ.2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.path_trans`：∀ {X : Type u_1} {Y : Type u_2} [inst : Topologic
+alSpace X] [inst_1 : TopologicalSpace Y] {x y z : X} {f : Y → Path x y}   {g : Y
+ → Path y z…
+· 使用定理 `Continuous.fst`：Continuous.fst {f : X -> Y × Z} (hf : Continuous f) : Co
+ntinuous fun x : X => (f x).1
+· 使用定理 `continuous_id'`：continuous_id' : Continuous (fun (x : X) => x)
+· 使用定理 `Continuous.snd`：Continuous.snd {f : X -> Y × Z} (hf : Continuous f) : Co
+ntinuous fun x : X => (f x).2
 -/
 theorem continuous_trans {x y z : X} : Continuous fun ρ : Path x y × Path y z => ρ.1.trans ρ.2 := by
   fun_prop
@@ -1838,26 +1609,20 @@ section Prod
 
 variable {a₁ a₂ a₃ : X} {b₁ b₂ b₃ : Y}
 
-/--
-Definition of `prod` / `prod` 的定义
+/-- Given a path in `X` and a path in `Y`, we can take their pointwise product to get a path in
+`X × Y`. -/
+/-
+**Path.prod** 是 Mathlib 中的一个定义，位于命名空间 `Path`。
+形式化陈述：{X : Type u_1} →   {Y : Type u_2} →     [inst : TopologicalSpace X] →     
+  [inst_1 : TopologicalSpace Y] → {a₁ a₂ : X} → {b₁ b₂ : Y} → Path a₁ a₂ → Path 
+b₁ b₂ → Path (a₁, b₁) (a₂, b₂)
+参数：a₁, b₁；a₂, b₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prod
-  signature: (γ₁ : Path a₁ a₂) (γ₂ : Path b₁ b₂)
-  body: ContinuousMap.prodMk γ₁.toContinuousMap γ₂.toContinuousMap
-  source' := by simp
-  target' := by simp
-
-@[simp, grind =]
-
-中文:
-定义 乘积
-  签名: (γ₁ : 道路 a₁ a₂) (γ₂ : 道路 b₁ b₂)
-  定义体: ContinuousMap.prodMk γ₁.toContinuousMap γ₂.toContinuousMap
-  source' := by simp
-  target' := by simp
-
-@[simp, grind =]
+--- 原说明 ---
+Given a path in `X` and a path in `Y`, we can take their pointwise product to ge
+t a path in
+`X × Y`.
 -/
 protected def prod (γ₁ : Path a₁ a₂) (γ₂ : Path b₁ b₂) : Path (a₁, b₁) (a₂, b₂) where
   toContinuousMap := ContinuousMap.prodMk γ₁.toContinuousMap γ₂.toContinuousMap
@@ -1865,37 +1630,30 @@ protected def prod (γ₁ : Path a₁ a₂) (γ₂ : Path b₁ b₂) : Path (a�
   target' := by simp
 
 @[simp, grind =]
-/--
-theorem `prod_coe` / 定理 `prod_coe`
-
-English:
-theorem prod_coe
-  given: (γ₁ : Path a₁ a₂) (γ₂ : Path b₁ b₂)
-  proof: rfl
-
-中文:
-定理 prod_coe
-  条件: (γ₁ : 道路 a₁ a₂) (γ₂ : 道路 b₁ b₂)
-  证明: rfl
+/-
+**Path.prod_coe** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：prod_coe (γ₁ : Path a₁ a₂) (γ₂ : Path b₁ b₂) : ⇑(γ₁.prod γ₂) = fun t => (γ
+₁ t, γ₂ t)
+参数：γ₁ : Path a₁ a₂；γ₂ : Path b₁ b₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem prod_coe (γ₁ : Path a₁ a₂) (γ₂ : Path b₁ b₂) :
     ⇑(γ₁.prod γ₂) = fun t => (γ₁ t, γ₂ t) :=
   rfl
 
-/--
-theorem `trans_prod_eq_prod_trans` / 定理 `trans_prod_eq_prod_trans`
+/-- Path composition commutes with products -/
+/-
+**Path.trans_prod_eq_prod_trans** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：trans_prod_eq_prod_trans (γ₁ : Path a₁ a₂) (δ₁ : Path a₂ a₃) (γ₂ : Path b₁
+ b₂) (δ₂ : Path b₂ b₃) : (γ₁.prod γ₂).trans (δ₁.prod δ₂) = (γ₁.trans δ₁).prod (γ
+₂.trans δ₂)
+参数：γ₁ : Path a₁ a₂；δ₁ : Path a₂ a₃；γ₂ : Path b₁ b₂；δ₂ : Path b₂ b₃。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem trans_prod_eq_prod_trans
-  statement: (γ₁ : Path a₁ a₂) (δ₁ : Path a₂ a₃) (γ₂ : Path b₁ b₂)
-  proof: by
-  grind
-
-中文:
-定理 trans_prod_eq_prod_trans
-  结论: (γ₁ : 道路 a₁ a₂) (δ₁ : 道路 a₂ a₃) (γ₂ : 道路 b₁ b₂)
-  证明: by
-  grind
+--- 原说明 ---
+Path composition commutes with products
 -/
 theorem trans_prod_eq_prod_trans (γ₁ : Path a₁ a₂) (δ₁ : Path a₂ a₃) (γ₂ : Path b₁ b₂)
     (δ₂ : Path b₂ b₃) : (γ₁.prod γ₂).trans (δ₁.prod δ₂) = (γ₁.trans δ₁).prod (γ₂.trans δ₂) := by
@@ -1905,81 +1663,68 @@ end Prod
 
 section Pi
 
-variable {χ : ι -> Type*} [forall i, TopologicalSpace (χ i)] {as bs cs : forall i, χ i}
+variable {χ : ι → Type*} [∀ i, TopologicalSpace (χ i)] {as bs cs : ∀ i, χ i}
 
-/--
-Definition of `pi` / `pi` 的定义
+/-- Given a family of paths, one in each Xᵢ, we take their pointwise product to get a path in
+Π i, Xᵢ. -/
+/-
+**Path.pi** 是 Mathlib 中的一个定义，位于命名空间 `Path`。
+形式化陈述：{ι : Type u_3} →   {χ : ι → Type u_4} →     [inst : (i : ι) → TopologicalS
+pace (χ i)] → {as bs : (i : ι) → χ i} → ((i : ι) → Path (as i) (bs i)) → Path as
+ bs
+参数：i : ι；χ i；i : ι；(i : ι) → Path (as i) (bs i)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pi
-  signature: (γ : forall i, Path (as i) (bs i))
-  body: ContinuousMap.pi fun i => (γ i).toContinuousMap
-  source' := by simp
-  target' := by simp
-
-@[simp, grind =]
-
-中文:
-定义 pi
-  签名: (γ : 对任意 i, 道路 (as i) (bs i))
-  定义体: ContinuousMap.pi fun i => (γ i).toContinuousMap
-  source' := by simp
-  target' := by simp
-
-@[simp, grind =]
+--- 原说明 ---
+Given a family of paths, one in each Xᵢ, we take their pointwise product to get 
+a path in
+Π i, Xᵢ.
 -/
-protected def pi (γ : forall i, Path (as i) (bs i)) : Path as bs where
+protected def pi (γ : ∀ i, Path (as i) (bs i)) : Path as bs where
   toContinuousMap := ContinuousMap.pi fun i => (γ i).toContinuousMap
   source' := by simp
   target' := by simp
 
 @[simp, grind =]
-/--
-theorem `pi_coe` / 定理 `pi_coe`
-
-English:
-theorem pi_coe
-  given: (γ : forall i, Path (as i) (bs i))
-  statement: ⇑(Path.pi γ) = fun t i => γ i t
-  proof: rfl
-
-中文:
-定理 pi_coe
-  条件: (γ : 对任意 i, 道路 (as i) (bs i))
-  结论: ⇑(道路.pi γ) = fun t i => γ i t
-  证明: rfl
+/-
+**Path.pi_coe** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：pi_coe (γ : forall i, Path (as i) (bs i)) : ⇑(Path.pi γ) = fun t i => γ i 
+t
+参数：γ : forall i, Path (as i) (bs i)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem pi_coe (γ : forall i, Path (as i) (bs i)) : ⇑(Path.pi γ) = fun t i => γ i t :=
+theorem pi_coe (γ : ∀ i, Path (as i) (bs i)) : ⇑(Path.pi γ) = fun t i => γ i t :=
   rfl
 
-/--
-theorem `trans_pi_eq_pi_trans` / 定理 `trans_pi_eq_pi_trans`
+/-- Path composition commutes with products -/
+/-
+**Path.trans_pi_eq_pi_trans** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：trans_pi_eq_pi_trans (γ₀ : forall i, Path (as i) (bs i)) (γ₁ : forall i, P
+ath (bs i) (cs i)) : (Path.pi γ₀).trans (Path.pi γ₁) = Path.pi fun i => (γ₀ i).t
+rans (γ₁ i)
+参数：γ₀ : forall i, Path (as i) (bs i)；γ₁ : forall i, Path (bs i) (cs i)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.ext`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} {γ₁ γ₂ 
+: Path x y}, ⇑γ₁ = ⇑γ₂ → γ₁ = γ₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
 
-English:
-theorem trans_pi_eq_pi_trans
-  given: (γ₀ : forall i, Path (as i) (bs i)) (γ₁ : forall i, Path (bs i) (cs i))
-  proof: by
-  ext t i
-  unfold Path.trans
-  simp only [Path.coe_mk_mk, Function.comp_apply, pi_coe]
-  split_ifs
-  · rfl
-  · rfl
-
-中文:
-定理 trans_pi_eq_pi_trans
-  条件: (γ₀ : 对任意 i, 道路 (as i) (bs i)) (γ₁ : 对任意 i, 道路 (bs i) (cs i))
-  证明: by
-  ext t i
-  unfold Path.trans
-  simp only [Path.coe_mk_mk, Function.comp_apply, pi_coe]
-  split_ifs
-  · rfl
-  · rfl
-
-Depends on / 依赖: Function, Function.comp_apply, Path.coe_mk_mk, Path.trans, coe_mk_mk, comp_apply, pi_coe, split_ifs
+--- 原说明 ---
+Path composition commutes with products
 -/
-theorem trans_pi_eq_pi_trans (γ₀ : forall i, Path (as i) (bs i)) (γ₁ : forall i, Path (bs i) (cs i)) :
+theorem trans_pi_eq_pi_trans (γ₀ : ∀ i, Path (as i) (bs i)) (γ₁ : ∀ i, Path (bs i) (cs i)) :
     (Path.pi γ₀).trans (Path.pi γ₁) = Path.pi fun i => (γ₀ i).trans (γ₁ i) := by
   ext t i
   unfold Path.trans
@@ -1995,18 +1740,17 @@ end Pi
 
 /-- Pointwise multiplication of paths in a topological group. -/
 @[to_additive (attr := simps!) /-- Pointwise addition of paths in a topological additive group. -/]
-/--
-Definition of `mul` / `mul` 的定义
+/-
+**Path.mul** 是 Mathlib 中的一个定义，位于命名空间 `Path`。
+形式化陈述：{X : Type u_1} →   [inst : TopologicalSpace X] →     [inst_1 : Mul X] → [C
+ontinuousMul X] → {a₁ b₁ a₂ b₂ : X} → Path a₁ b₁ → Path a₂ b₂ → Path (a₁ * a₂) (
+b₁ * b₂)
+参数：a₁ * a₂；b₁ * b₂。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_mul`：continuous_mul : Continuous fun p : M × M => p.1 * p.2
 
-English:
-definition mul
-  signature: [Mul X] [ContinuousMul X] {a₁ b₁ a₂ b₂ : X} (γ₁ : Path a₁ b₁) (γ₂ : Path a₂ b₂)
-  body: (γ₁.prod γ₂).map continuous_mul
-
-中文:
-定义 mul
-  签名: [乘法 X] [连续乘法 X] {a₁ b₁ a₂ b₂ : X} (γ₁ : 道路 a₁ b₁) (γ₂ : 道路 a₂ b₂)
-  定义体: (γ₁.prod γ₂).map continuous_mul
+--- 原说明 ---
+Pointwise multiplication of paths in a topological group.
 -/
 protected def mul [Mul X] [ContinuousMul X] {a₁ b₁ a₂ b₂ : X} (γ₁ : Path a₁ b₁) (γ₂ : Path a₂ b₂) :
     Path (a₁ * a₂) (b₁ * b₂) :=
@@ -2014,20 +1758,17 @@ protected def mul [Mul X] [ContinuousMul X] {a₁ b₁ a₂ b₂ : X} (γ₁ : P
 
 /-- Pointwise inversion of paths in a topological group. -/
 @[to_additive (attr := simps!) /-- Pointwise negation of paths in a topological group. -/]
-/--
-Definition of `inv` / `inv` 的定义
+/-
+**Path.inv** 是 Mathlib 中的一个定义，位于命名空间 `Path`。
+形式化陈述：inv {a b : X} [Inv X] [ContinuousInv X] (γ : Path a b) : Path a⁻¹ b⁻¹
+参数：γ : Path a b。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousInv.continuous_inv`：∀ {G : Type u} {inst : TopologicalSpace G}
+ {inst_1 : Inv G} [self : ContinuousInv G], Continuous fun a => a⁻¹
 
-English:
-definition inv
-  signature: {a b : X} [Inv X] [ContinuousInv X] (γ : Path a b)
-  body: γ.map continuous_inv
-
-中文:
-定义 inv
-  签名: {a b : X} [取逆 X] [连续取逆 X] (γ : 道路 a b)
-  定义体: γ.map continuous_inv
-
-Depends on / 依赖: continuous_inv
+--- 原说明 ---
+Pointwise inversion of paths in a topological group.
 -/
 def inv {a b : X} [Inv X] [ContinuousInv X] (γ : Path a b) :
     Path a⁻¹ b⁻¹ :=
@@ -2036,58 +1777,22 @@ def inv {a b : X} [Inv X] [ContinuousInv X] (γ : Path a b) :
 /-! #### Truncating a path -/
 
 
-/--
-Definition of `truncate` / `truncate` 的定义
+/-- `γ.truncate t₀ t₁` is the path which follows the path `γ` on the time interval `[t₀, t₁]`
+and stays still otherwise. -/
+/-
+**Path.truncate** 是 Mathlib 中的一个定义，位于命名空间 `Path`。
+形式化陈述：truncate {X : Type*} [TopologicalSpace X] {a b : X} (γ : Path a b) (t₀ t₁ 
+: Real) : Path (γ.extend <| min t₀ t₁) (γ.extend t₁) where toFun s
+参数：γ : Path a b；t₀ t₁ : Real。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition truncate
-  signature: {X : Type*} [TopologicalSpace X] {a b : X} (γ : Path a b) (t₀ t₁ : Real)
-  body: γ.extend (min (max s t₀) t₁)
-  continuous_toFun := γ.continuous_extend.comp (by fun_prop)
-  source' := by
-    simp only [min_def, max_def']
-    split_ifs with h₁ h₂ h₃ h₄
-    · simp [γ.extend_of_le_zero h₁]
-    · congr
-      linarith
-    · have h₄ : t₁ <= 0 := le_of_lt (by simpa using h₂)
-      simp [γ.extend_of_le_zero h₄, γ.extend_of_le_zero h₁]
-    all_goals rfl
-  target' := by
-    simp only [min_def, max_def']
-    split_ifs with h₁ h₂ h₃
-    · simp [γ.extend_of_one_le h₂]
-    · rfl
-    · have h₄ : 1 <= t₀ := le_of_lt (by simpa using h₁)
-      simp [γ.extend_of_one_le h₄, γ.extend_of_one_le (h₄.trans h₃)]
-    · rfl
-
-中文:
-定义 truncate
-  签名: {X : 类型} [拓扑空间 X] {a b : X} (γ : 道路 a b) (t₀ t₁ : 实数)
-  定义体: γ.extend (min (max s t₀) t₁)
-  continuous_toFun := γ.continuous_extend.comp (by fun_prop)
-  source' := by
-    simp only [min_def, max_def']
-    split_ifs with h₁ h₂ h₃ h₄
-    · simp [γ.extend_of_le_zero h₁]
-    · congr
-      linarith
-    · have h₄ : t₁ <= 0 := le_of_lt (by simpa using h₂)
-      simp [γ.extend_of_le_zero h₄, γ.extend_of_le_zero h₁]
-    all_goals rfl
-  target' := by
-    simp only [min_def, max_def']
-    split_ifs with h₁ h₂ h₃
-    · simp [γ.extend_of_one_le h₂]
-    · rfl
-    · have h₄ : 1 <= t₀ := le_of_lt (by simpa using h₁)
-      simp [γ.extend_of_one_le h₄, γ.extend_of_one_le (h₄.trans h₃)]
-    · rfl
-
-Depends on / 依赖: extend
+--- 原说明 ---
+`γ.truncate t₀ t₁` is the path which follows the path `γ` on the time interval `
+[t₀, t₁]`
+and stays still otherwise.
 -/
-def truncate {X : Type*} [TopologicalSpace X] {a b : X} (γ : Path a b) (t₀ t₁ : Real) :
+def truncate {X : Type*} [TopologicalSpace X] {a b : X} (γ : Path a b) (t₀ t₁ : ℝ) :
     Path (γ.extend <| min t₀ t₁) (γ.extend t₁) where
   toFun s := γ.extend (min (max s t₀) t₁)
   continuous_toFun := γ.continuous_extend.comp (by fun_prop)
@@ -2097,7 +1802,7 @@ def truncate {X : Type*} [TopologicalSpace X] {a b : X} (γ : Path a b) (t₀ t�
     · simp [γ.extend_of_le_zero h₁]
     · congr
       linarith
-    · have h₄ : t₁ <= 0 := le_of_lt (by simpa using h₂)
+    · have h₄ : t₁ ≤ 0 := le_of_lt (by simpa using h₂)
       simp [γ.extend_of_le_zero h₄, γ.extend_of_le_zero h₁]
     all_goals rfl
   target' := by
@@ -2105,54 +1810,44 @@ def truncate {X : Type*} [TopologicalSpace X] {a b : X} (γ : Path a b) (t₀ t�
     split_ifs with h₁ h₂ h₃
     · simp [γ.extend_of_one_le h₂]
     · rfl
-    · have h₄ : 1 <= t₀ := le_of_lt (by simpa using h₁)
+    · have h₄ : 1 ≤ t₀ := le_of_lt (by simpa using h₁)
       simp [γ.extend_of_one_le h₄, γ.extend_of_one_le (h₄.trans h₃)]
     · rfl
 
-/--
-Definition of `truncateOfLE` / `truncateOfLE` 的定义
+/-- `γ.truncateOfLE t₀ t₁ h`, where `h : t₀ ≤ t₁` is `γ.truncate t₀ t₁`
+casted as a path from `γ.extend t₀` to `γ.extend t₁`. -/
+/-
+**Path.truncateOfLE** 是 Mathlib 中的一个定义，位于命名空间 `Path`。
+形式化陈述：truncateOfLE {X : Type*} [TopologicalSpace X] {a b : X} (γ : Path a b) {t₀
+ t₁ : Real} (h : t₀ <= t₁) : Path (γ.extend t₀) (γ.extend t₁)
+参数：γ : Path a b；h : t₀ <= t₁。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition truncateOfLE
-  signature: {X : Type*} [TopologicalSpace X] {a b : X} (γ : Path a b) {t₀ t₁ : Real}
-  body: (γ.truncate t₀ t₁).cast (by rw [min_eq_left h]) rfl
-
-中文:
-定义 truncateOfLE
-  签名: {X : 类型} [拓扑空间 X] {a b : X} (γ : 道路 a b) {t₀ t₁ : 实数}
-  定义体: (γ.truncate t₀ t₁).cast (by rw [min_eq_left h]) rfl
-
-Depends on / 依赖: min_eq_left, truncate
+--- 原说明 ---
+`γ.truncateOfLE t₀ t₁ h`, where `h : t₀ ≤ t₁` is `γ.truncate t₀ t₁`
+casted as a path from `γ.extend t₀` to `γ.extend t₁`.
 -/
-def truncateOfLE {X : Type*} [TopologicalSpace X] {a b : X} (γ : Path a b) {t₀ t₁ : Real}
-    (h : t₀ <= t₁) : Path (γ.extend t₀) (γ.extend t₁) :=
+def truncateOfLE {X : Type*} [TopologicalSpace X] {a b : X} (γ : Path a b) {t₀ t₁ : ℝ}
+    (h : t₀ ≤ t₁) : Path (γ.extend t₀) (γ.extend t₁) :=
   (γ.truncate t₀ t₁).cast (by rw [min_eq_left h]) rfl
-
-/--
-theorem `truncate_range` / 定理 `truncate_range`
-
-English:
-theorem truncate_range
-  given: {a b : X} (γ : Path a b) {t₀ t₁ : Real}
-  proof: by
-  rw [← γ.extend_range]
-  simp only [range_subset_iff, SetCoe.forall]
-  intro x _hx
-  simp only [DFunLike.coe, Path.truncate, mem_range_self]
-
-中文:
-定理 truncate_range
-  条件: {a b : X} (γ : 道路 a b) {t₀ t₁ : 实数}
-  证明: by
-  rw [← γ.extend_range]
-  simp only [range_subset_iff, SetCoe.forall]
-  intro x _hx
-  simp only [DFunLike.coe, Path.truncate, mem_range_self]
-
-Depends on / 依赖: DFunLike, DFunLike.coe, Path.truncate, SetCoe, SetCoe.forall, extend_range, mem_range_self, range_subset_iff, truncate
+/-
+**Path.truncate_range** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：truncate_range {a b : X} (γ : Path a b) {t₀ t₁ : Real} : range (γ.truncate
+ t₀ t₁) subseteq range γ
+参数：γ : Path a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Path.extend_range`：extend_range {a b : X} (γ : Path a b) : range γ.exten
+d = range γ
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 -/
-theorem truncate_range {a b : X} (γ : Path a b) {t₀ t₁ : Real} :
-    range (γ.truncate t₀ t₁) subseteq range γ := by
+theorem truncate_range {a b : X} (γ : Path a b) {t₀ t₁ : ℝ} :
+    range (γ.truncate t₀ t₁) ⊆ range γ := by
   rw [← γ.extend_range]
   simp only [range_subset_iff, SetCoe.forall]
   intro x _hx
@@ -2161,193 +1856,194 @@ theorem truncate_range {a b : X} (γ : Path a b) {t₀ t₁ : Real} :
 /-- For a path `γ`, `γ.truncate` gives a "continuous family of paths", by which we mean
 the uncurried function which maps `(t₀, t₁, s)` to `γ.truncate t₀ t₁ s` is continuous. -/
 @[continuity]
-/--
-theorem `truncate_continuous_family` / 定理 `truncate_continuous_family`
+/-
+**Path.truncate_continuous_family** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：truncate_continuous_family {a b : X} (γ : Path a b) : Continuous (fun x =>
+ γ.truncate x.1 x.2.1 x.2.2 : Real × Real × I -> X)
+参数：γ : Path a b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用定理 `Path.continuous_extend`：continuous_extend : Continuous γ.extend
+· 使用定理 `Continuous.min`：∀ {α : Type u} {β : Type v} [inst : TopologicalSpace α] 
+[inst_1 : LinearOrder α] [OrderClosedTopology α] {f g : β → α}   [inst_3 : Topol
+ogic…
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `Continuous.max`：∀ {α : Type u} {β : Type v} [inst : TopologicalSpace α] 
+[inst_1 : LinearOrder α] [OrderClosedTopology α] {f g : β → α}   [inst_3 : Topol
+ogic…
+· 使用定理 `continuous_subtype_val`：continuous_subtype_val : Continuous (@Subtype.va
+l X p)
+· 使用定理 `continuous_snd`：continuous_snd (f : X → Y × Z) (hf : Continuous f) : Con
+tinuous (fun x ↦ (f x).snd)
+· 使用定理 `continuous_fst`：continuous_fst (f : X → Y × Z) (hf : Continuous f) : Con
+tinuous (fun x ↦ (f x).fst)
 
-English:
-theorem truncate_continuous_family
-  given: {a b : X} (γ : Path a b)
-  proof: γ.continuous_extend.comp
-    (((continuous_subtype_val.comp (continuous_snd.comp continuous_snd)).max continuous_fst).min
-      (continuous_fst.comp continuous_snd))
-
-@[continuity]
-
-中文:
-定理 truncate_continuous_family
-  条件: {a b : X} (γ : 道路 a b)
-  证明: γ.continuous_extend.comp
-    (((continuous_subtype_val.comp (continuous_snd.comp continuous_snd)).max continuous_fst).min
-      (continuous_fst.comp continuous_snd))
-
-@[continuity]
-
-Depends on / 依赖: continuous_extend, continuous_extend.comp, continuous_fst, continuous_fst.comp, continuous_snd, continuous_snd.comp, continuous_subtype_val, continuous_subtype_val.comp
+--- 原说明 ---
+For a path `γ`, `γ.truncate` gives a "continuous family of paths", by which we m
+ean
+the uncurried function which maps `(t₀, t₁, s)` to `γ.truncate t₀ t₁ s` is conti
+nuous.
 -/
 theorem truncate_continuous_family {a b : X} (γ : Path a b) :
-    Continuous (fun x => γ.truncate x.1 x.2.1 x.2.2 : Real × Real × I -> X) :=
+    Continuous (fun x => γ.truncate x.1 x.2.1 x.2.2 : ℝ × ℝ × I → X) :=
   γ.continuous_extend.comp
     (((continuous_subtype_val.comp (continuous_snd.comp continuous_snd)).max continuous_fst).min
       (continuous_fst.comp continuous_snd))
 
 @[continuity]
-/--
-theorem `truncate_const_continuous_family` / 定理 `truncate_const_continuous_family`
-
-English:
-theorem truncate_const_continuous_family
-  statement: {a b : X} (γ : Path a b)
-  proof: by
-  have key : Continuous (fun x => (t, x) : Real × I -> Real × Real × I) := by fun_prop
-  exact γ.truncate_continuous_family.comp key
-
-@[simp]
-
-中文:
-定理 truncate_const_continuous_family
-  结论: {a b : X} (γ : 道路 a b)
-  证明: by
-  have key : Continuous (fun x => (t, x) : Real × I -> Real × Real × I) := by fun_prop
-  exact γ.truncate_continuous_family.comp key
-
-@[simp]
-
-Depends on / 依赖: Continuous, fun_prop, truncate_continuous_family, truncate_continuous_family.comp
+/-
+**Path.truncate_const_continuous_family** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：truncate_const_continuous_family {a b : X} (γ : Path a b) (t : Real) : Con
+tinuous ↿(γ.truncate t)
+参数：γ : Path a b；t : Real。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.prodMk`：Continuous.prodMk {f : Z -> X} {g : Z -> Y} (hf : Con
+tinuous f) (hg : Continuous g) : Continuous fun x => (f x, g x)
+· 使用定理 `continuous_const`：continuous_const (y : Y) : Continuous (fun x ↦ y)
+· 使用定理 `continuous_id'`：continuous_id' : Continuous (fun (x : X) => x)
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用定理 `Path.truncate_continuous_family`：truncate_continuous_family {a b : X} (γ
+ : Path a b) : Continuous (fun x => γ.truncate x.1 x.2.1 x.2.2 : Real × Real × I
+ -> X)
 -/
 theorem truncate_const_continuous_family {a b : X} (γ : Path a b)
-    (t : Real) : Continuous ↿(γ.truncate t) := by
-  have key : Continuous (fun x => (t, x) : Real × I -> Real × Real × I) := by fun_prop
+    (t : ℝ) : Continuous ↿(γ.truncate t) := by
+  have key : Continuous (fun x => (t, x) : ℝ × I → ℝ × ℝ × I) := by fun_prop
   exact γ.truncate_continuous_family.comp key
 
 @[simp]
-/--
-theorem `truncate_self` / 定理 `truncate_self`
-
-English:
-theorem truncate_self
-  given: {a b : X} (γ : Path a b) (t : Real)
-  proof: by
-  ext x
-  by_cases hx : x <= t <;> simp [truncate]
-
-中文:
-定理 truncate_self
-  条件: {a b : X} (γ : 道路 a b) (t : 实数)
-  证明: by
-  ext x
-  by_cases hx : x <= t <;> simp [truncate]
-
-Depends on / 依赖: truncate
+/-
+**Path.truncate_self** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：truncate_self {a b : X} (γ : Path a b) (t : Real) : γ.truncate t t = (Path
+.refl <| γ.extend t).cast (by rw [min_self]) rfl
+参数：γ : Path a b；t : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.ext`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} {γ₁ γ₂ 
+: Path x y}, ⇑γ₁ = ⇑γ₂ → γ₁ = γ₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `inf_of_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, b ≤
+ a → a ⊓ b = b
+· 使用定理 `ContinuousMap.mk.congr_simp`：∀ {X : Type u_1} {Y : Type u_2} [inst : Top
+ologicalSpace X] [inst_1 : TopologicalSpace Y] (toFun toFun_1 : X → Y)   (e_toFu
+n : toFun = toFun…
+· 使用定理 `Path.mk.congr_simp`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : 
+X} (toContinuousMap toContinuousMap_1 : C(↑unitInterval, X))   (e_toContinuousMa
+p : toCo…
+· 使用定理 `Path.refl_apply`：∀ {X : Type u_1} [inst : TopologicalSpace X] (x : X) (x
+_1 : ↑unitInterval), (Path.refl x) x_1 = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem truncate_self {a b : X} (γ : Path a b) (t : Real) :
+theorem truncate_self {a b : X} (γ : Path a b) (t : ℝ) :
     γ.truncate t t = (Path.refl <| γ.extend t).cast (by rw [min_self]) rfl := by
   ext x
-  by_cases hx : x <= t <;> simp [truncate]
-
-/--
-theorem `truncate_zero_zero` / 定理 `truncate_zero_zero`
-
-English:
-theorem truncate_zero_zero
-  given: {a b : X} (γ : Path a b)
-  proof: by
-  convert! γ.truncate_self 0
-
-中文:
-定理 truncate_zero_zero
-  条件: {a b : X} (γ : 道路 a b)
-  证明: by
-  convert! γ.truncate_self 0
-
-Depends on / 依赖: convert, truncate_self
+  by_cases hx : x ≤ t <;> simp [truncate]
+/-
+**Path.truncate_zero_zero** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：truncate_zero_zero {a b : X} (γ : Path a b) : γ.truncate 0 0 = (Path.refl 
+a).cast (by rw [min_self, γ.extend_zero]) γ.extend_zero
+参数：γ : Path a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.extend_zero`：extend_zero : γ.extend 0 = x
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Path.truncate_self`：truncate_self {a b : X} (γ : Path a b) (t : Real) : 
+γ.truncate t t = (Path.refl <| γ.extend t).cast (by rw [min_self]) rfl
 -/
 theorem truncate_zero_zero {a b : X} (γ : Path a b) :
     γ.truncate 0 0 = (Path.refl a).cast (by rw [min_self, γ.extend_zero]) γ.extend_zero := by
   convert! γ.truncate_self 0
-
-/--
-theorem `truncate_one_one` / 定理 `truncate_one_one`
-
-English:
-theorem truncate_one_one
-  given: {a b : X} (γ : Path a b)
-  proof: by
-  convert! γ.truncate_self 1
-
-@[simp]
-
-中文:
-定理 truncate_one_one
-  条件: {a b : X} (γ : 道路 a b)
-  证明: by
-  convert! γ.truncate_self 1
-
-@[simp]
-
-Depends on / 依赖: convert, truncate_self
+/-
+**Path.truncate_one_one** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：truncate_one_one {a b : X} (γ : Path a b) : γ.truncate 1 1 = (Path.refl b)
+.cast (by rw [min_self, γ.extend_one]) γ.extend_one
+参数：γ : Path a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.extend_one`：extend_one : γ.extend 1 = y
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Path.truncate_self`：truncate_self {a b : X} (γ : Path a b) (t : Real) : 
+γ.truncate t t = (Path.refl <| γ.extend t).cast (by rw [min_self]) rfl
 -/
 theorem truncate_one_one {a b : X} (γ : Path a b) :
     γ.truncate 1 1 = (Path.refl b).cast (by rw [min_self, γ.extend_one]) γ.extend_one := by
   convert! γ.truncate_self 1
 
 @[simp]
-/--
-theorem `truncate_zero_one` / 定理 `truncate_zero_one`
-
-English:
-theorem truncate_zero_one
-  given: {a b : X} (γ : Path a b)
-  proof: by
-  ext x
-  rw [cast_coe]
-  have : ↑x in (Icc 0 1 : Set Real) := x.2
-  rw [truncate]; rw [coe_mk_mk]; rw [max_eq_left this.1]; rw [min_eq_left this.2]; rw [extend_extends']
-
-中文:
-定理 truncate_zero_one
-  条件: {a b : X} (γ : 道路 a b)
-  证明: by
-  ext x
-  rw [cast_coe]
-  have : ↑x in (Icc 0 1 : Set Real) := x.2
-  rw [truncate]; rw [coe_mk_mk]; rw [max_eq_left this.1]; rw [min_eq_left this.2]; rw [extend_extends']
-
-Depends on / 依赖: cast_coe, coe_mk_mk, extend_extends, max_eq_left, min_eq_left, truncate
+/-
+**Path.truncate_zero_one** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：truncate_zero_one {a b : X} (γ : Path a b) : γ.truncate 0 1 = γ.cast (by s
+imp) (by simp)
+参数：γ : Path a b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.ext`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} {γ₁ γ₂ 
+: Path x y}, ⇑γ₁ = ⇑γ₂ → γ₁ = γ₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Path.cast_coe`：cast_coe (γ : Path x y) {x' y'} (hx : x' = x) (hy : y' = 
+y) : (γ.cast hx hy : I -> X) = γ
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Path.truncate.eq_1`：∀ {X : Type u_4} [inst : TopologicalSpace X] {a b : 
+X} (γ : Path a b) (t₀ t₁ : ℝ),   γ.truncate t₀ t₁ =     { toFun := fun s => γ.ex
+tend (mi…
+· 使用定理 `Path.coe_mk_mk`：coe_mk_mk (f : I -> X) (h₁) (h₂ : f 0 = x) (h₃ : f 1 = y
+) : ⇑(mk ⟨f, h₁⟩ h₂ h₃ : Path x y) = f
+· 使用定理 `max_eq_left`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, b ≤ a → 
+max a b = a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `min_eq_left`：min_eq_left (h : a <= b) : min a b = a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Path.extend_extends'`：extend_extends' {a b : X} (γ : Path a b) (t : (Icc
+ 0 1 : Set Real)) : γ.extend t = γ t
 -/
 theorem truncate_zero_one {a b : X} (γ : Path a b) :
     γ.truncate 0 1 = γ.cast (by simp) (by simp) := by
   ext x
   rw [cast_coe]
-  have : ↑x in (Icc 0 1 : Set Real) := x.2
-  rw [truncate]; rw [coe_mk_mk]; rw [max_eq_left this.1]; rw [min_eq_left this.2]; rw [extend_extends']
+  have : ↑x ∈ (Icc 0 1 : Set ℝ) := x.2
+  rw [truncate, coe_mk_mk, max_eq_left this.1, min_eq_left this.2, extend_extends']
 
 /-! #### Reparametrising a path -/
 
 
-/--
-Definition of `reparam` / `reparam` 的定义
-
-English:
-definition reparam
-  signature: (γ : Path x y) (f : I -> I) (hfcont : Continuous f) (hf₀ : f 0 = 0) (hf₁ : f 1 = 1)
-  body: γ ∘ f
-  continuous_toFun := by fun_prop
-  source' := by simp [hf₀]
-  target' := by simp [hf₁]
-
-@[simp]
-
-中文:
-定义 reparam
-  签名: (γ : 道路 x y) (f : I -> I) (hfcont : 连续 f) (hf₀ : f 0 = 0) (hf₁ : f 1 = 1)
-  定义体: γ ∘ f
-  continuous_toFun := by fun_prop
-  source' := by simp [hf₀]
-  target' := by simp [hf₁]
-
-@[simp]
+/-- Given a path `γ` and a function `f : I → I` where `f 0 = 0` and `f 1 = 1`, `γ.reparam f` is the
+path defined by `γ ∘ f`.
 -/
-def reparam (γ : Path x y) (f : I -> I) (hfcont : Continuous f) (hf₀ : f 0 = 0) (hf₁ : f 1 = 1) :
+/-
+**Path.reparam** 是 Mathlib 中的一个定义，位于命名空间 `Path`。
+形式化陈述：reparam (γ : Path x y) (f : I -> I) (hfcont : Continuous f) (hf₀ : f 0 = 0
+) (hf₁ : f 1 = 1) : Path x y where toFun
+参数：γ : Path x y；f : I -> I；hfcont : Continuous f；hf₀ : f 0 = 0；hf₁ : f 1 = 1。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Given a path `γ` and a function `f : I → I` where `f 0 = 0` and `f 1 = 1`, `γ.re
+param f` is the
+path defined by `γ ∘ f`.
+-/
+def reparam (γ : Path x y) (f : I → I) (hfcont : Continuous f) (hf₀ : f 0 = 0) (hf₁ : f 1 = 1) :
     Path x y where
   toFun := γ ∘ f
   continuous_toFun := by fun_prop
@@ -2355,122 +2051,129 @@ def reparam (γ : Path x y) (f : I -> I) (hfcont : Continuous f) (hf₀ : f 0 = 
   target' := by simp [hf₁]
 
 @[simp]
-/--
-theorem `coe_reparam` / 定理 `coe_reparam`
-
-English:
-theorem coe_reparam
-  statement: (γ : Path x y) {f : I -> I} (hfcont : Continuous f) (hf₀ : f 0 = 0)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_reparam
-  结论: (γ : 道路 x y) {f : I -> I} (hfcont : 连续 f) (hf₀ : f 0 = 0)
-  证明: rfl
-
-@[simp]
+/-
+**Path.coe_reparam** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：coe_reparam (γ : Path x y) {f : I -> I} (hfcont : Continuous f) (hf₀ : f 0
+ = 0) (hf₁ : f 1 = 1) : ⇑(γ.reparam f hfcont hf₀ hf₁) = γ ∘ f
+参数：γ : Path x y；hfcont : Continuous f；hf₀ : f 0 = 0；hf₁ : f 1 = 1。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_reparam (γ : Path x y) {f : I -> I} (hfcont : Continuous f) (hf₀ : f 0 = 0)
+theorem coe_reparam (γ : Path x y) {f : I → I} (hfcont : Continuous f) (hf₀ : f 0 = 0)
     (hf₁ : f 1 = 1) : ⇑(γ.reparam f hfcont hf₀ hf₁) = γ ∘ f :=
   rfl
 
 @[simp]
-/--
-theorem `reparam_id` / 定理 `reparam_id`
-
-English:
-theorem reparam_id
-  given: (γ : Path x y)
-  statement: γ.reparam id continuous_id rfl rfl = γ
-  proof: by
-  ext
-  rfl
-
-中文:
-定理 reparam_id
-  条件: (γ : 道路 x y)
-  结论: γ.reparam id continuous_id rfl rfl = γ
-  证明: by
-  ext
-  rfl
+/-
+**Path.reparam_id** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：reparam_id (γ : Path x y) : γ.reparam id continuous_id rfl rfl = γ
+参数：γ : Path x y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.ext`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} {γ₁ γ₂ 
+: Path x y}, ⇑γ₁ = ⇑γ₂ → γ₁ = γ₂
+· 使用定理 `continuous_id`：continuous_id : Continuous (fun x ↦ x)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 theorem reparam_id (γ : Path x y) : γ.reparam id continuous_id rfl rfl = γ := by
   ext
   rfl
-
-/--
-theorem `range_reparam` / 定理 `range_reparam`
-
-English:
-theorem range_reparam
-  statement: (γ : Path x y) {f : I -> I} (hfcont : Continuous f) (hf₀ : f 0 = 0)
-  proof: by
-  change range (γ ∘ f) = range γ
-  have : range f = univ := by
-    rw [range_eq_univ]
-    intro t
-    have h₁ : Continuous (Set.IccExtend (zero_le_one' Real) f) := by fun_prop
-    have := intermediate_value_Icc (zero_le_one' Real) h₁.continuousOn
-    · rw [IccExtend_left, IccExtend_right, Icc.mk_zero, Icc.mk_one, hf₀, hf₁] at this
-      rcases this t.2 with ⟨w, hw₁, hw₂⟩
-      rw [IccExtend_of_mem _ _ hw₁] at hw₂
-      exact ⟨_, hw₂⟩
-  rw [range_comp]; rw [this]; rw [image_univ]
-
-中文:
-定理 range_reparam
-  结论: (γ : 道路 x y) {f : I -> I} (hfcont : 连续 f) (hf₀ : f 0 = 0)
-  证明: by
-  change range (γ ∘ f) = range γ
-  have : range f = univ := by
-    rw [range_eq_univ]
-    intro t
-    have h₁ : Continuous (Set.IccExtend (zero_le_one' Real) f) := by fun_prop
-    have := intermediate_value_Icc (zero_le_one' Real) h₁.continuousOn
-    · rw [IccExtend_left, IccExtend_right, Icc.mk_zero, Icc.mk_one, hf₀, hf₁] at this
-      rcases this t.2 with ⟨w, hw₁, hw₂⟩
-      rw [IccExtend_of_mem _ _ hw₁] at hw₂
-      exact ⟨_, hw₂⟩
-  rw [range_comp]; rw [this]; rw [image_univ]
-
-Depends on / 依赖: Continuous, Icc.mk_one, Icc.mk_zero, IccExtend, IccExtend_left, IccExtend_of_mem, IccExtend_right, Set.IccExtend, continuousOn, fun_prop, image_univ, intermediate_value_Icc, mk_one, mk_zero, range_comp, range_eq_univ, zero_le_one
+/-
+**Path.range_reparam** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：range_reparam (γ : Path x y) {f : I -> I} (hfcont : Continuous f) (hf₀ : f
+ 0 = 0) (hf₁ : f 1 = 1) : range (γ.reparam f hfcont hf₀ hf₁) = range γ
+参数：γ : Path x y；hfcont : Continuous f；hf₀ : f 0 = 0；hf₁ : f 1 = 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.range_eq_univ`：range_eq_univ : range f = univ ↔ Surjective f
+· 使用引理 `zero_le_one'`：zero_le_one' (α) [Zero α] [One α] [LE α] [ZeroLEOneClass α
+] : (0 : α) <= 1
+· 使用定理 `Continuous.Icc_extend'`：∀ {α : Type u_1} {β : Type u_2} [inst : LinearOr
+der α] {a b : α} {h : a ≤ b} [inst_1 : TopologicalSpace α]   [OrderTopology α] [
+inst_3 : Top…
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `intermediate_value_Icc`：intermediate_value_Icc {a b : α} (hab : a <= b) 
+{f : α -> δ} (hf : ContinuousOn f (Icc a b)) : Icc (f a) (f b) subseteq f '' Icc
+ a b
+· 使用定理 `LinearOrderedSemiField.toDenselyOrdered`：∀ {α : Type u_2} [inst : Semifi
+eld α] [inst_1 : PartialOrder α] [PosMulReflectLT α] [IsStrictOrderedRing α],   
+DenselyOrdered α
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Subtype.instOrderClosedTopology`：∀ {α : Type u} [inst : TopologicalSpace
+ α] [inst_1 : Preorder α] [t : OrderClosedTopology α] {p : α → Prop},   OrderClo
+sedTopology (Subtype …
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `Continuous.continuousOn`：Continuous.continuousOn (h : Continuous f) : Co
+ntinuousOn f s
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.right_mem_Icc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ S
+et.Icc b a ↔ b ≤ a
+· 使用定理 `Set.Icc.mk_one`：mk_one (h : (1 : R) in Icc (0 : R) 1) : (⟨1, h⟩ : Icc (0
+ : R) 1) = 1
+· 使用定理 `Set.left_mem_Icc`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ∈ Se
+t.Icc a b ↔ a ≤ b
+· 使用定理 `Set.Icc.mk_zero`：mk_zero (h : (0 : R) in Icc (0 : R) 1) : (⟨0, h⟩ : Icc 
+(0 : R) 1) = 0
+· 使用定理 `Set.IccExtend_right`：IccExtend_right (f : Icc a b -> β) : IccExtend h f 
+b = f ⟨b, right_mem_Icc.2 h⟩
+· 使用定理 `Set.IccExtend_left`：IccExtend_left (f : Icc a b -> β) : IccExtend h f a 
+= f ⟨a, left_mem_Icc.2 h⟩
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `Set.IccExtend_of_mem`：IccExtend_of_mem (f : Icc a b -> β) (hx : x in Icc
+ a b) : IccExtend h f x = f ⟨x, hx⟩
+· 使用定理 `Set.range_comp`：range_comp (g : α -> β) (f : ι -> α) : range (g ∘ f) = g
+ '' range f
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
 -/
-theorem range_reparam (γ : Path x y) {f : I -> I} (hfcont : Continuous f) (hf₀ : f 0 = 0)
+theorem range_reparam (γ : Path x y) {f : I → I} (hfcont : Continuous f) (hf₀ : f 0 = 0)
     (hf₁ : f 1 = 1) : range (γ.reparam f hfcont hf₀ hf₁) = range γ := by
   change range (γ ∘ f) = range γ
   have : range f = univ := by
     rw [range_eq_univ]
     intro t
-    have h₁ : Continuous (Set.IccExtend (zero_le_one' Real) f) := by fun_prop
-    have := intermediate_value_Icc (zero_le_one' Real) h₁.continuousOn
+    have h₁ : Continuous (Set.IccExtend (zero_le_one' ℝ) f) := by fun_prop
+    have := intermediate_value_Icc (zero_le_one' ℝ) h₁.continuousOn
     · rw [IccExtend_left, IccExtend_right, Icc.mk_zero, Icc.mk_one, hf₀, hf₁] at this
       rcases this t.2 with ⟨w, hw₁, hw₂⟩
       rw [IccExtend_of_mem _ _ hw₁] at hw₂
       exact ⟨_, hw₂⟩
-  rw [range_comp]; rw [this]; rw [image_univ]
-
-/--
-theorem `refl_reparam` / 定理 `refl_reparam`
-
-English:
-theorem refl_reparam
-  given: {f : I -> I} (hfcont : Continuous f) (hf₀ : f 0 = 0) (hf₁ : f 1 = 1)
-  proof: by
-  ext
-  simp
-
-中文:
-定理 refl_reparam
-  条件: {f : I -> I} (hfcont : 连续 f) (hf₀ : f 0 = 0) (hf₁ : f 1 = 1)
-  证明: by
-  ext
-  simp
+  rw [range_comp, this, image_univ]
+/-
+**Path.refl_reparam** 是 Mathlib 中的一个定理，位于命名空间 `Path`。
+形式化陈述：refl_reparam {f : I -> I} (hfcont : Continuous f) (hf₀ : f 0 = 0) (hf₁ : f
+ 1 = 1) : (refl x).reparam f hfcont hf₀ hf₁ = refl x
+参数：hfcont : Continuous f；hf₀ : f 0 = 0；hf₁ : f 1 = 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Path.ext`：∀ {X : Type u_1} [inst : TopologicalSpace X] {x y : X} {γ₁ γ₂ 
+: Path x y}, ⇑γ₁ = ⇑γ₂ → γ₁ = γ₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Path.refl_apply`：∀ {X : Type u_1} [inst : TopologicalSpace X] (x : X) (x
+_1 : ↑unitInterval), (Path.refl x) x_1 = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem refl_reparam {f : I -> I} (hfcont : Continuous f) (hf₀ : f 0 = 0) (hf₁ : f 1 = 1) :
+theorem refl_reparam {f : I → I} (hfcont : Continuous f) (hf₀ : f 0 = 0) (hf₁ : f 1 = 1) :
     (refl x).reparam f hfcont hf₀ hf₁ = refl x := by
   ext
   simp
 
 end Path
+

@@ -34,358 +34,280 @@ namespace Nat
 
 section LinearOrderedSemiring
 
-variable [Semiring R] [LinearOrder R] [FloorSemiring R] {a b : R} {n : Nat}
+variable [Semiring R] [LinearOrder R] [FloorSemiring R] {a b : R} {n : ℕ}
 
 section floor
 
-/--
-theorem `floor_lt` / 定理 `floor_lt`
-
-English:
-theorem floor_lt
-  given: (ha : 0 <= a)
-  statement: ⌊a⌋₊ < n ↔ a < n
-  proof: lt_iff_lt_of_le_iff_le le_floor_iff ha
-
-中文:
-定理 floor_lt
-  条件: (ha : 0 <= a)
-  结论: ⌊a⌋₊ < n ↔ a < n
-  证明: lt_iff_lt_of_le_iff_le le_floor_iff ha
-
-Depends on / 依赖: le_floor_iff, lt_iff_lt_of_le_iff_le
+/-
+**Nat.floor_lt** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_lt (ha : 0 <= a) : ⌊a⌋₊ < n ↔ a < n
+参数：ha : 0 <= a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_iff_lt_of_le_iff_le`：lt_iff_lt_of_le_iff_le {β} [LinearOrder α] [Line
+arOrder β] {a b : α} {c d : β} (H : a <= b ↔ c <= d) : b < a ↔ d < c
+· 使用定理 `Nat.le_floor_iff`：le_floor_iff (ha : 0 <= a) : n <= ⌊a⌋₊ ↔ (n : α) <= a
 -/
-theorem floor_lt (ha : 0 <= a) : ⌊a⌋₊ < n ↔ a < n :=
-lt_iff_lt_of_le_iff_le le_floor_iff ha
-
-/--
-theorem `floor_lt_one` / 定理 `floor_lt_one`
-
-English:
-theorem floor_lt_one
-  given: (ha : 0 <= a)
-  statement: ⌊a⌋₊ < 1 ↔ a < 1
-  proof: (floor_lt ha).trans by rw [Nat.cast_one]
-
-中文:
-定理 floor_lt_one
-  条件: (ha : 0 <= a)
-  结论: ⌊a⌋₊ < 1 ↔ a < 1
-  证明: (floor_lt ha).trans by rw [Nat.cast_one]
-
-Depends on / 依赖: Nat.cast_one, cast_one, floor_lt
+theorem floor_lt (ha : 0 ≤ a) : ⌊a⌋₊ < n ↔ a < n :=
+  lt_iff_lt_of_le_iff_le <| le_floor_iff ha
+/-
+**Nat.floor_lt_one** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_lt_one (ha : 0 <= a) : ⌊a⌋₊ < 1 ↔ a < 1
+参数：ha : 0 <= a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Nat.floor_lt`：floor_lt (ha : 0 <= a) : ⌊a⌋₊ < n ↔ a < n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem floor_lt_one (ha : 0 <= a) : ⌊a⌋₊ < 1 ↔ a < 1 :=
-(floor_lt ha).trans by rw [Nat.cast_one]
-
-/--
-theorem `floor_le` / 定理 `floor_le`
-
-English:
-theorem floor_le
-  given: (ha : 0 <= a)
-  statement: (⌊a⌋₊ : R) <= a
-  proof: (le_floor_iff ha).1 le_rfl
-
-中文:
-定理 floor_le
-  条件: (ha : 0 <= a)
-  结论: (⌊a⌋₊ : R) <= a
-  证明: (le_floor_iff ha).1 le_rfl
-
-Depends on / 依赖: le_floor_iff, le_rfl
+theorem floor_lt_one (ha : 0 ≤ a) : ⌊a⌋₊ < 1 ↔ a < 1 :=
+  (floor_lt ha).trans <| by rw [Nat.cast_one]
+/-
+**Nat.floor_le** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_le (ha : 0 <= a) : (⌊a⌋₊ : R) <= a
+参数：ha : 0 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.le_floor_iff`：le_floor_iff (ha : 0 <= a) : n <= ⌊a⌋₊ ↔ (n : α) <= a
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem floor_le (ha : 0 <= a) : (⌊a⌋₊ : R) <= a :=
+theorem floor_le (ha : 0 ≤ a) : (⌊a⌋₊ : R) ≤ a :=
   (le_floor_iff ha).1 le_rfl
-
-/--
-theorem `floor_eq_iff` / 定理 `floor_eq_iff`
-
-English:
-theorem floor_eq_iff
-  given: (ha : 0 <= a)
-  statement: ⌊a⌋₊ = n ↔ ↑n <= a ∧ a < ↑n + 1
-  proof: by
-  rw [← le_floor_iff ha]; rw [← Nat.cast_one]; rw [← Nat.cast_add]; rw [← floor_lt ha]; rw [Nat.lt_add_one_iff]; rw [le_antisymm_iff]; rw [and_comm]
-
-中文:
-定理 floor_eq_iff
-  条件: (ha : 0 <= a)
-  结论: ⌊a⌋₊ = n ↔ ↑n <= a ∧ a < ↑n + 1
-  证明: by
-  rw [← le_floor_iff ha]; rw [← Nat.cast_one]; rw [← Nat.cast_add]; rw [← floor_lt ha]; rw [Nat.lt_add_one_iff]; rw [le_antisymm_iff]; rw [and_comm]
-
-Depends on / 依赖: Nat.cast_add, Nat.cast_one, Nat.lt_add_one_iff, and_comm, cast_add, cast_one, floor_lt, le_antisymm_iff, le_floor_iff, lt_add_one_iff
+/-
+**Nat.floor_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_eq_iff (ha : 0 <= a) : ⌊a⌋₊ = n ↔ ↑n <= a ∧ a < ↑n + 1
+参数：ha : 0 <= a。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.le_floor_iff`：le_floor_iff (ha : 0 <= a) : n <= ⌊a⌋₊ ↔ (n : α) <= a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `Nat.floor_lt`：floor_lt (ha : 0 <= a) : ⌊a⌋₊ < n ↔ a < n
+· 使用定理 `Nat.lt_add_one_iff`：∀ {m n : ℕ}, m < n + 1 ↔ m ≤ n
+· 使用引理 `le_antisymm_iff`：le_antisymm_iff : a = b ↔ a <= b ∧ b <= a
+· 使用定理 `and_comm`：∀ {a b : Prop}, a ∧ b ↔ b ∧ a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem floor_eq_iff (ha : 0 <= a) : ⌊a⌋₊ = n ↔ ↑n <= a ∧ a < ↑n + 1 := by
-  rw [← le_floor_iff ha]; rw [← Nat.cast_one]; rw [← Nat.cast_add]; rw [← floor_lt ha]; rw [Nat.lt_add_one_iff]; rw [le_antisymm_iff]; rw [and_comm]
-
-/--
-theorem `lt_of_floor_lt` / 定理 `lt_of_floor_lt`
-
-English:
-theorem lt_of_floor_lt
-  given: (h : ⌊a⌋₊ < n)
-  statement: a < n
-  proof: lt_of_not_ge fun h' => (le_floor h').not_gt h
-
-中文:
-定理 lt_of_floor_lt
-  条件: (h : ⌊a⌋₊ < n)
-  结论: a < n
-  证明: lt_of_not_ge fun h' => (le_floor h').not_gt h
-
-Depends on / 依赖: le_floor, lt_of_not_ge, not_gt
+theorem floor_eq_iff (ha : 0 ≤ a) : ⌊a⌋₊ = n ↔ ↑n ≤ a ∧ a < ↑n + 1 := by
+  rw [← le_floor_iff ha, ← Nat.cast_one, ← Nat.cast_add, ← floor_lt ha, Nat.lt_add_one_iff,
+    le_antisymm_iff, and_comm]
+/-
+**Nat.lt_of_floor_lt** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：lt_of_floor_lt (h : ⌊a⌋₊ < n) : a < n
+参数：h : ⌊a⌋₊ < n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `lt_of_not_ge`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬b ≤ a 
+→ a < b
+· 使用定理 `LE.le.not_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `Nat.le_floor`：le_floor (h : (n : α) <= a) : n <= ⌊a⌋₊
 -/
 theorem lt_of_floor_lt (h : ⌊a⌋₊ < n) : a < n :=
   lt_of_not_ge fun h' => (le_floor h').not_gt h
-
-/--
-theorem `lt_one_of_floor_lt_one` / 定理 `lt_one_of_floor_lt_one`
-
-English:
-theorem lt_one_of_floor_lt_one
-  given: (h : ⌊a⌋₊ < 1)
-  statement: a < 1
-  proof: mod_cast lt_of_floor_lt h
-
-中文:
-定理 lt_one_of_floor_lt_one
-  条件: (h : ⌊a⌋₊ < 1)
-  结论: a < 1
-  证明: mod_cast lt_of_floor_lt h
-
-Depends on / 依赖: lt_of_floor_lt, mod_cast
+/-
+**Nat.lt_one_of_floor_lt_one** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：lt_one_of_floor_lt_one (h : ⌊a⌋₊ < 1) : a < 1
+参数：h : ⌊a⌋₊ < 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.lt_of_floor_lt`：lt_of_floor_lt (h : ⌊a⌋₊ < n) : a < n
 -/
 theorem lt_one_of_floor_lt_one (h : ⌊a⌋₊ < 1) : a < 1 := mod_cast lt_of_floor_lt h
-
-/--
-theorem `lt_succ_floor` / 定理 `lt_succ_floor`
-
-English:
-theorem lt_succ_floor
-  given: (a : R)
-  statement: a < ⌊a⌋₊.succ
-  proof: lt_of_floor_lt Nat.lt_succ_self _
-
-@[bound]
-
-中文:
-定理 lt_succ_floor
-  条件: (a : R)
-  结论: a < ⌊a⌋₊.succ
-  证明: lt_of_floor_lt Nat.lt_succ_self _
-
-@[bound]
-
-Depends on / 依赖: Nat.lt_succ_self, lt_of_floor_lt, lt_succ_self
+/-
+**Nat.lt_succ_floor** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：lt_succ_floor (a : R) : a < ⌊a⌋₊.succ
+参数：a : R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.lt_of_floor_lt`：lt_of_floor_lt (h : ⌊a⌋₊ < n) : a < n
+· 使用定理 `Nat.lt_succ_self`：∀ (n : ℕ), n < n.succ
 -/
 theorem lt_succ_floor (a : R) : a < ⌊a⌋₊.succ :=
-lt_of_floor_lt Nat.lt_succ_self _
+  lt_of_floor_lt <| Nat.lt_succ_self _
 
 @[bound]
-/--
-theorem `lt_floor_add_one` / 定理 `lt_floor_add_one`
-
-English:
-theorem lt_floor_add_one
-  given: (a : R)
-  statement: a < ⌊a⌋₊ + 1
-  proof: by simpa using lt_succ_floor a
-
-中文:
-定理 lt_floor_add_one
-  条件: (a : R)
-  结论: a < ⌊a⌋₊ + 1
-  证明: by simpa using lt_succ_floor a
-
-Depends on / 依赖: lt_succ_floor
+/-
+**Nat.lt_floor_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：lt_floor_add_one (a : R) : a < ⌊a⌋₊ + 1
+参数：a : R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Nat.lt_succ_floor`：lt_succ_floor (a : R) : a < ⌊a⌋₊.succ
 -/
 theorem lt_floor_add_one (a : R) : a < ⌊a⌋₊ + 1 := by simpa using lt_succ_floor a
 
 variable [IsStrictOrderedRing R]
 
 @[simp]
-/--
-theorem `floor_natCast` / 定理 `floor_natCast`
-
-English:
-theorem floor_natCast
-  given: (n : Nat)
-  statement: ⌊(n : R)⌋₊ = n
-  proof: eq_of_forall_le_iff fun a => by
-    rw [le_floor_iff]; rw [Nat.cast_le]
-    exact n.cast_nonneg
-
-@[simp]
-
-中文:
-定理 floor_natCast
-  条件: (n : 自然数)
-  结论: ⌊(n : R)⌋₊ = n
-  证明: eq_of_forall_le_iff fun a => by
-    rw [le_floor_iff]; rw [Nat.cast_le]
-    exact n.cast_nonneg
-
-@[simp]
-
-Depends on / 依赖: Nat.cast_le, cast_le, cast_nonneg, eq_of_forall_le_iff, le_floor_iff, n.cast_nonneg
+/-
+**Nat.floor_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_natCast (n : Nat) : ⌊(n : R)⌋₊ = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `eq_of_forall_le_iff`：eq_of_forall_le_iff (H : forall c, c <= a ↔ c <= b)
+ : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.le_floor_iff`：le_floor_iff (ha : 0 <= a) : n <= ⌊a⌋₊ ↔ (n : α) <= a
+· 使用定理 `Nat.cast_nonneg`：cast_nonneg {α} [Semiring α] [PartialOrder α] [IsOrdere
+dRing α] (n : Nat) : 0 <= (n : α)
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `Nat.cast_le`：cast_le : (m : α) <= n ↔ m <= n
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `FloorSemiring.instZeroLEOneClass`：∀ {α : Type u_2} [inst : Semiring α] [
+inst_1 : PartialOrder α] [FloorSemiring α], ZeroLEOneClass α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem floor_natCast (n : Nat) : ⌊(n : R)⌋₊ = n :=
+theorem floor_natCast (n : ℕ) : ⌊(n : R)⌋₊ = n :=
   eq_of_forall_le_iff fun a => by
-    rw [le_floor_iff]; rw [Nat.cast_le]
+    rw [le_floor_iff, Nat.cast_le]
     exact n.cast_nonneg
 
 @[simp]
-/--
-theorem `floor_zero` / 定理 `floor_zero`
-
-English:
-theorem floor_zero
-  statement: ⌊(0 : R)⌋₊ = 0
-  proof: by rw [← Nat.cast_zero, floor_natCast]
-
-@[simp]
-
-中文:
-定理 floor_zero
-  结论: ⌊(0 : R)⌋₊ = 0
-  证明: by rw [← Nat.cast_zero, floor_natCast]
-
-@[simp]
-
-Depends on / 依赖: Nat.cast_zero, cast_zero, floor_natCast
+/-
+**Nat.floor_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_zero : ⌊(0 : R)⌋₊ = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Nat.floor_natCast`：floor_natCast (n : Nat) : ⌊(n : R)⌋₊ = n
 -/
 theorem floor_zero : ⌊(0 : R)⌋₊ = 0 := by rw [← Nat.cast_zero, floor_natCast]
 
 @[simp]
-/--
-theorem `floor_one` / 定理 `floor_one`
-
-English:
-theorem floor_one
-  statement: ⌊(1 : R)⌋₊ = 1
-  proof: by rw [← Nat.cast_one, floor_natCast]
-
-@[simp]
-
-中文:
-定理 floor_one
-  结论: ⌊(1 : R)⌋₊ = 1
-  证明: by rw [← Nat.cast_one, floor_natCast]
-
-@[simp]
-
-Depends on / 依赖: Nat.cast_one, cast_one, floor_natCast
+/-
+**Nat.floor_one** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_one : ⌊(1 : R)⌋₊ = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Nat.floor_natCast`：floor_natCast (n : Nat) : ⌊(n : R)⌋₊ = n
 -/
 theorem floor_one : ⌊(1 : R)⌋₊ = 1 := by rw [← Nat.cast_one, floor_natCast]
 
 @[simp]
-/--
-theorem `floor_ofNat` / 定理 `floor_ofNat`
-
-English:
-theorem floor_ofNat
-  given: (n : Nat) [n.AtLeastTwo]
-  statement: ⌊(ofNat(n) : R)⌋₊ = ofNat(n)
-  proof: Nat.floor_natCast _
-
-中文:
-定理 floor_of自然数
-  条件: (n : 自然数) [n.AtLeastTwo]
-  结论: ⌊(of自然数(n) : R)⌋₊ = of自然数(n)
-  证明: Nat.floor_natCast _
-
-Depends on / 依赖: Nat.floor_natCast, floor_natCast
+/-
+**Nat.floor_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_ofNat (n : Nat) [n.AtLeastTwo] : ⌊(ofNat(n) : R)⌋₊ = ofNat(n)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.floor_natCast`：floor_natCast (n : Nat) : ⌊(n : R)⌋₊ = n
 -/
-theorem floor_ofNat (n : Nat) [n.AtLeastTwo] : ⌊(ofNat(n) : R)⌋₊ = ofNat(n) :=
+theorem floor_ofNat (n : ℕ) [n.AtLeastTwo] : ⌊(ofNat(n) : R)⌋₊ = ofNat(n) :=
   Nat.floor_natCast _
-
-/--
-theorem `floor_of_nonpos` / 定理 `floor_of_nonpos`
-
-English:
-theorem floor_of_nonpos
-  given: (ha : a <= 0)
-  statement: ⌊a⌋₊ = 0
-  proof: ha.lt_or_eq.elim FloorSemiring.floor_of_neg by
+/-
+**Nat.floor_of_nonpos** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_of_nonpos (ha : a <= 0) : ⌊a⌋₊ = 0
+参数：ha : a <= 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `LE.le.lt_or_eq`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a < b ∨ a = b
+· 使用定理 `FloorSemiring.floor_of_neg`：∀ {α : Type u_4} {inst : Semiring α} {inst_1
+ : PartialOrder α} [self : FloorSemiring α] {a : α},   a < 0 → FloorSemiring.flo
+or a = 0
+· 使用定理 `Nat.floor_zero`：floor_zero : ⌊(0 : R)⌋₊ = 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+-/
+theorem floor_of_nonpos (ha : a ≤ 0) : ⌊a⌋₊ = 0 :=
+  ha.lt_or_eq.elim FloorSemiring.floor_of_neg <| by
     rintro rfl
     exact floor_zero
 
 @[gcongr]
-
-中文:
-定理 floor_of_nonpos
-  条件: (ha : a <= 0)
-  结论: ⌊a⌋₊ = 0
-  证明: ha.lt_or_eq.elim FloorSemiring.floor_of_neg by
-    rintro rfl
-    exact floor_zero
-
-@[gcongr]
-
-Depends on / 依赖: FloorSemiring, FloorSemiring.floor_of_neg, floor_of_neg, floor_zero, ha.lt_or_eq.elim, lt_or_eq
+/-
+**Nat.floor_mono** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_mono : Monotone (floor : R -> Nat)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.floor_of_nonpos`：floor_of_nonpos (ha : a <= 0) : ⌊a⌋₊ = 0
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
+· 使用定理 `Nat.le_floor`：le_floor (h : (n : α) <= a) : n <= ⌊a⌋₊
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Nat.floor_le`：floor_le (ha : 0 <= a) : (⌊a⌋₊ : R) <= a
 -/
-theorem floor_of_nonpos (ha : a <= 0) : ⌊a⌋₊ = 0 :=
-ha.lt_or_eq.elim FloorSemiring.floor_of_neg by
-    rintro rfl
-    exact floor_zero
-
-@[gcongr]
-/--
-theorem `floor_mono` / 定理 `floor_mono`
-
-English:
-theorem floor_mono
-  statement: Monotone (floor : R -> Nat)
-  proof: fun a b h => by
+theorem floor_mono : Monotone (floor : R → ℕ) := fun a b h => by
   obtain ha | ha := le_total a 0
   · rw [floor_of_nonpos ha]
     exact Nat.zero_le _
   · exact le_floor ((floor_le ha).trans h)
-
-中文:
-定理 floor_mono
-  结论: 递增 (floor : R -> 自然数)
-  证明: fun a b h => by
-  obtain ha | ha := le_total a 0
-  · rw [floor_of_nonpos ha]
-    exact Nat.zero_le _
-  · exact le_floor ((floor_le ha).trans h)
-
-Depends on / 依赖: Nat.zero_le, floor_le, floor_of_nonpos, le_floor, le_total, zero_le
+/-
+**Nat.floor_le_floor** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ {R : Type u_1} [inst : Semiring R] [inst_1 : LinearOrder R] [inst_2 : Fl
+oorSemiring R] {a b : R}   [IsStrictOrderedRing R], a ≤ b → ⌊a⌋₊ ≤ ⌊b⌋₊
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.floor_mono`：floor_mono : Monotone (floor : R -> Nat)
 -/
-theorem floor_mono : Monotone (floor : R -> Nat) := fun a b h => by
-  obtain ha | ha := le_total a 0
-  · rw [floor_of_nonpos ha]
-    exact Nat.zero_le _
-  · exact le_floor ((floor_le ha).trans h)
-
-/--
-lemma `floor_le_floor` / 引理 `floor_le_floor`
-
-English:
-lemma floor_le_floor
-  given: (hab : a <= b)
-  statement: ⌊a⌋₊ <= ⌊b⌋₊
-  proof: floor_mono hab
-
-中文:
-引理 floor_le_floor
-  条件: (hab : a <= b)
-  结论: ⌊a⌋₊ <= ⌊b⌋₊
-  证明: floor_mono hab
+@[bound] lemma floor_le_floor (hab : a ≤ b) : ⌊a⌋₊ ≤ ⌊b⌋₊ := floor_mono hab
+/-
+**Nat.le_floor_iff'** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：le_floor_iff' (hn : n != 0) : n <= ⌊a⌋₊ ↔ (n : R) <= a
+参数：hn : n != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.floor_of_nonpos`：floor_of_nonpos (ha : a <= 0) : ⌊a⌋₊ = 0
+· 使用定理 `iff_of_false`：∀ {a b : Prop}, ¬a → ¬b → (a ↔ b)
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用定理 `Nat.pos_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → 0 < n
+· 使用定理 `not_le_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.cast_pos`：cast_pos {α} [Semiring α] [PartialOrder α] [IsOrderedRing 
+α] [Nontrivial α] {n : Nat} : (0 : α) < n ↔ 0 < n
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `instNontrivialOfCharZero`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [
+CharZero α], Nontrivial α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Nat.le_floor_iff`：le_floor_iff (ha : 0 <= a) : n <= ⌊a⌋₊ ↔ (n : α) <= a
 -/
-@[bound] lemma floor_le_floor (hab : a <= b) : ⌊a⌋₊ <= ⌊b⌋₊ := floor_mono hab
-
-/--
-theorem `le_floor_iff'` / 定理 `le_floor_iff'`
-
-English:
-theorem le_floor_iff'
-  given: (hn : n != 0)
-  statement: n <= ⌊a⌋₊ ↔ (n : R) <= a
-  proof: by
+theorem le_floor_iff' (hn : n ≠ 0) : n ≤ ⌊a⌋₊ ↔ (n : R) ≤ a := by
   obtain ha | ha := le_total a 0
   · rw [floor_of_nonpos ha]
     exact
@@ -394,360 +316,313 @@ theorem le_floor_iff'
   · exact le_floor_iff ha
 
 @[simp]
-
-中文:
-定理 le_floor_iff'
-  条件: (hn : n != 0)
-  结论: n <= ⌊a⌋₊ ↔ (n : R) <= a
-  证明: by
-  obtain ha | ha := le_total a 0
-  · rw [floor_of_nonpos ha]
-    exact
-      iff_of_false (Nat.pos_of_ne_zero hn).not_ge
-        (not_le_of_gt <| ha.trans_lt <| cast_pos.2 <| Nat.pos_of_ne_zero hn)
-  · exact le_floor_iff ha
-
-@[simp]
-
-Depends on / 依赖: Nat.pos_of_ne_zero, cast_pos, floor_of_nonpos, ha.trans_lt, iff_of_false, le_floor_iff, le_total, not_ge, not_le_of_gt, pos_of_ne_zero, trans_lt
+/-
+**Nat.one_le_floor_iff** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：one_le_floor_iff (x : R) : 1 <= ⌊x⌋₊ ↔ 1 <= x
+参数：x : R。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.le_floor_iff'`：le_floor_iff' (hn : n != 0) : n <= ⌊a⌋₊ ↔ (n : R) <= 
+a
+· 使用定理 `one_ne_zero`：∀ {α : Type u_2} [inst : Zero α] [inst_1 : One α] [NeZero 1
+], 1 ≠ 0
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
 -/
-theorem le_floor_iff' (hn : n != 0) : n <= ⌊a⌋₊ ↔ (n : R) <= a := by
-  obtain ha | ha := le_total a 0
-  · rw [floor_of_nonpos ha]
-    exact
-      iff_of_false (Nat.pos_of_ne_zero hn).not_ge
-        (not_le_of_gt <| ha.trans_lt <| cast_pos.2 <| Nat.pos_of_ne_zero hn)
-  · exact le_floor_iff ha
-
-@[simp]
-/--
-theorem `one_le_floor_iff` / 定理 `one_le_floor_iff`
-
-English:
-theorem one_le_floor_iff
-  given: (x : R)
-  statement: 1 <= ⌊x⌋₊ ↔ 1 <= x
-  proof: mod_cast le_floor_iff' one_ne_zero
-
-中文:
-定理 one_le_floor_iff
-  条件: (x : R)
-  结论: 1 <= ⌊x⌋₊ ↔ 1 <= x
-  证明: mod_cast le_floor_iff' one_ne_zero
-
-Depends on / 依赖: le_floor_iff, mod_cast, one_ne_zero
--/
-theorem one_le_floor_iff (x : R) : 1 <= ⌊x⌋₊ ↔ 1 <= x :=
+theorem one_le_floor_iff (x : R) : 1 ≤ ⌊x⌋₊ ↔ 1 ≤ x :=
   mod_cast le_floor_iff' one_ne_zero
-
-/--
-theorem `floor_lt'` / 定理 `floor_lt'`
-
-English:
-theorem floor_lt'
-  given: (hn : n != 0)
-  statement: ⌊a⌋₊ < n ↔ a < n
-  proof: lt_iff_lt_of_le_iff_le le_floor_iff' hn
-
-中文:
-定理 floor_lt'
-  条件: (hn : n != 0)
-  结论: ⌊a⌋₊ < n ↔ a < n
-  证明: lt_iff_lt_of_le_iff_le le_floor_iff' hn
-
-Depends on / 依赖: le_floor_iff, lt_iff_lt_of_le_iff_le
+/-
+**Nat.floor_lt'** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_lt' (hn : n != 0) : ⌊a⌋₊ < n ↔ a < n
+参数：hn : n != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_iff_lt_of_le_iff_le`：lt_iff_lt_of_le_iff_le {β} [LinearOrder α] [Line
+arOrder β] {a b : α} {c d : β} (H : a <= b ↔ c <= d) : b < a ↔ d < c
+· 使用定理 `Nat.le_floor_iff'`：le_floor_iff' (hn : n != 0) : n <= ⌊a⌋₊ ↔ (n : R) <= 
+a
 -/
-theorem floor_lt' (hn : n != 0) : ⌊a⌋₊ < n ↔ a < n :=
-lt_iff_lt_of_le_iff_le le_floor_iff' hn
-
-/--
-theorem `floor_pos` / 定理 `floor_pos`
-
-English:
-theorem floor_pos
-  statement: 0 < ⌊a⌋₊ ↔ 1 <= a
-  proof: by
-  rw [Nat.lt_iff_add_one_le]; rw [zero_add]; rw [le_floor_iff' Nat.one_ne_zero]; rw [cast_one]
-
-中文:
-定理 floor_pos
-  结论: 0 < ⌊a⌋₊ ↔ 1 <= a
-  证明: by
-  rw [Nat.lt_iff_add_one_le]; rw [zero_add]; rw [le_floor_iff' Nat.one_ne_zero]; rw [cast_one]
-
-Depends on / 依赖: Nat.lt_iff_add_one_le, Nat.one_ne_zero, cast_one, le_floor_iff, lt_iff_add_one_le, one_ne_zero, zero_add
+theorem floor_lt' (hn : n ≠ 0) : ⌊a⌋₊ < n ↔ a < n :=
+  lt_iff_lt_of_le_iff_le <| le_floor_iff' hn
+/-
+**Nat.floor_pos** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_pos : 0 < ⌊a⌋₊ ↔ 1 <= a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.lt_iff_add_one_le`：∀ {m n : ℕ}, m < n ↔ m + 1 ≤ n
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Nat.le_floor_iff'`：le_floor_iff' (hn : n != 0) : n <= ⌊a⌋₊ ↔ (n : R) <= 
+a
+· 使用定理 `Nat.one_ne_zero`：1 ≠ 0
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem floor_pos : 0 < ⌊a⌋₊ ↔ 1 <= a := by
-  rw [Nat.lt_iff_add_one_le]; rw [zero_add]; rw [le_floor_iff' Nat.one_ne_zero]; rw [cast_one]
-
-/--
-theorem `pos_of_floor_pos` / 定理 `pos_of_floor_pos`
-
-English:
-theorem pos_of_floor_pos
-  given: (h : 0 < ⌊a⌋₊)
-  statement: 0 < a
-  proof: (le_or_gt a 0).resolve_left fun ha => lt_irrefl 0 by rwa [floor_of_nonpos ha] at h
-
-中文:
-定理 pos_of_floor_pos
-  条件: (h : 0 < ⌊a⌋₊)
-  结论: 0 < a
-  证明: (le_or_gt a 0).resolve_left fun ha => lt_irrefl 0 by rwa [floor_of_nonpos ha] at h
-
-Depends on / 依赖: floor_of_nonpos, le_or_gt, lt_irrefl, resolve_left
+theorem floor_pos : 0 < ⌊a⌋₊ ↔ 1 ≤ a := by
+  rw [Nat.lt_iff_add_one_le, zero_add, le_floor_iff' Nat.one_ne_zero, cast_one]
+/-
+**Nat.pos_of_floor_pos** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：pos_of_floor_pos (h : 0 < ⌊a⌋₊) : 0 < a
+参数：h : 0 < ⌊a⌋₊。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.resolve_left`：∀ {a b : Prop}, a ∨ b → ¬a → b
+· 使用定理 `le_or_gt`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b <
+ a
+· 使用引理 `lt_irrefl`：lt_irrefl (a : α) : ¬a < a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.floor_of_nonpos`：floor_of_nonpos (ha : a <= 0) : ⌊a⌋₊ = 0
 -/
 theorem pos_of_floor_pos (h : 0 < ⌊a⌋₊) : 0 < a :=
-(le_or_gt a 0).resolve_left fun ha => lt_irrefl 0 by rwa [floor_of_nonpos ha] at h
-
-/--
-theorem `lt_of_lt_floor` / 定理 `lt_of_lt_floor`
-
-English:
-theorem lt_of_lt_floor
-  given: (h : n < ⌊a⌋₊)
-  statement: ↑n < a
-  proof: (Nat.cast_lt.2 h).trans_le floor_le (pos_of_floor_pos <| (Nat.zero_le n).trans_lt h).le
-
-中文:
-定理 lt_of_lt_floor
-  条件: (h : n < ⌊a⌋₊)
-  结论: ↑n < a
-  证明: (Nat.cast_lt.2 h).trans_le floor_le (pos_of_floor_pos <| (Nat.zero_le n).trans_lt h).le
-
-Depends on / 依赖: Nat.cast_lt, Nat.zero_le, cast_lt, floor_le, pos_of_floor_pos, trans_le, trans_lt, zero_le
+  (le_or_gt a 0).resolve_left fun ha => lt_irrefl 0 <| by rwa [floor_of_nonpos ha] at h
+/-
+**Nat.lt_of_lt_floor** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：lt_of_lt_floor (h : n < ⌊a⌋₊) : ↑n < a
+参数：h : n < ⌊a⌋₊。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.cast_lt`：cast_lt : (m : α) < n ↔ m < n
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `FloorSemiring.instZeroLEOneClass`：∀ {α : Type u_2} [inst : Semiring α] [
+inst_1 : PartialOrder α] [FloorSemiring α], ZeroLEOneClass α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Nat.floor_le`：floor_le (ha : 0 <= a) : (⌊a⌋₊ : R) <= a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Nat.pos_of_floor_pos`：pos_of_floor_pos (h : 0 < ⌊a⌋₊) : 0 < a
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
 -/
 theorem lt_of_lt_floor (h : n < ⌊a⌋₊) : ↑n < a :=
-(Nat.cast_lt.2 h).trans_le floor_le (pos_of_floor_pos <| (Nat.zero_le n).trans_lt h).le
-
-/--
-theorem `floor_le_of_le` / 定理 `floor_le_of_le`
-
-English:
-theorem floor_le_of_le
-  given: (h : a <= n)
-  statement: ⌊a⌋₊ <= n
-  proof: le_imp_le_iff_lt_imp_lt.2 lt_of_lt_floor h
-
-中文:
-定理 floor_le_of_le
-  条件: (h : a <= n)
-  结论: ⌊a⌋₊ <= n
-  证明: le_imp_le_iff_lt_imp_lt.2 lt_of_lt_floor h
-
-Depends on / 依赖: le_imp_le_iff_lt_imp_lt, lt_of_lt_floor
+  (Nat.cast_lt.2 h).trans_le <| floor_le (pos_of_floor_pos <| (Nat.zero_le n).trans_lt h).le
+/-
+**Nat.floor_le_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_le_of_le (h : a <= n) : ⌊a⌋₊ <= n
+参数：h : a <= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `le_imp_le_iff_lt_imp_lt`：le_imp_le_iff_lt_imp_lt {β} [LinearOrder α] [Li
+nearOrder β] {a b : α} {c d : β} : a <= b -> c <= d ↔ d < c -> b < a
+· 使用定理 `Nat.lt_of_lt_floor`：lt_of_lt_floor (h : n < ⌊a⌋₊) : ↑n < a
 -/
-theorem floor_le_of_le (h : a <= n) : ⌊a⌋₊ <= n :=
+theorem floor_le_of_le (h : a ≤ n) : ⌊a⌋₊ ≤ n :=
   le_imp_le_iff_lt_imp_lt.2 lt_of_lt_floor h
-
-/--
-theorem `floor_le_one_of_le_one` / 定理 `floor_le_one_of_le_one`
-
-English:
-theorem floor_le_one_of_le_one
-  given: (h : a <= 1)
-  statement: ⌊a⌋₊ <= 1
-  proof: floor_le_of_le h.trans_eq Nat.cast_one.symm
-
-@[simp]
-
-中文:
-定理 floor_le_one_of_le_one
-  条件: (h : a <= 1)
-  结论: ⌊a⌋₊ <= 1
-  证明: floor_le_of_le h.trans_eq Nat.cast_one.symm
-
-@[simp]
-
-Depends on / 依赖: Nat.cast_one.symm, cast_one, floor_le_of_le, h.trans_eq, trans_eq
+/-
+**Nat.floor_le_one_of_le_one** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_le_one_of_le_one (h : a <= 1) : ⌊a⌋₊ <= 1
+参数：h : a <= 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.floor_le_of_le`：floor_le_of_le (h : a <= n) : ⌊a⌋₊ <= n
+· 使用定理 `LE.le.trans_eq`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a ≤ b → b = 
+c → a ≤ c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
 -/
-theorem floor_le_one_of_le_one (h : a <= 1) : ⌊a⌋₊ <= 1 :=
-floor_le_of_le h.trans_eq Nat.cast_one.symm
+theorem floor_le_one_of_le_one (h : a ≤ 1) : ⌊a⌋₊ ≤ 1 :=
+  floor_le_of_le <| h.trans_eq <| Nat.cast_one.symm
 
 @[simp]
-/--
-theorem `floor_eq_zero` / 定理 `floor_eq_zero`
-
-English:
-theorem floor_eq_zero
-  statement: ⌊a⌋₊ = 0 ↔ a < 1
-  proof: by
-  rw [← lt_one_iff]; rw [← @cast_one R]
-  exact floor_lt' Nat.one_ne_zero
-
-中文:
-定理 floor_eq_zero
-  结论: ⌊a⌋₊ = 0 ↔ a < 1
-  证明: by
-  rw [← lt_one_iff]; rw [← @cast_one R]
-  exact floor_lt' Nat.one_ne_zero
-
-Depends on / 依赖: Nat.one_ne_zero, cast_one, e.symm, floor_lt, lt_one_iff, one_ne_zero
+/-
+**Nat.floor_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_eq_zero : ⌊a⌋₊ = 0 ↔ a < 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.lt_one_iff`：∀ {n : ℕ}, n < 1 ↔ n = 0
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Nat.floor_lt'`：floor_lt' (hn : n != 0) : ⌊a⌋₊ < n ↔ a < n
+· 使用定理 `Nat.one_ne_zero`：1 ≠ 0
 -/
 theorem floor_eq_zero : ⌊a⌋₊ = 0 ↔ a < 1 := by
-  rw [← lt_one_iff]; rw [← @cast_one R]
+  rw [← lt_one_iff, ← @cast_one R]
   exact floor_lt' Nat.one_ne_zero
-
-/--
-theorem `floor_eq_iff'` / 定理 `floor_eq_iff'`
-
-English:
-theorem floor_eq_iff'
-  given: (hn : n != 0)
-  statement: ⌊a⌋₊ = n ↔ ↑n <= a ∧ a < ↑n + 1
-  proof: by
-  rw [← le_floor_iff' hn]; rw [← Nat.cast_one]; rw [← Nat.cast_add]; rw [← floor_lt' (Nat.add_one_ne_zero n)]; rw [Nat.lt_add_one_iff]; rw [le_antisymm_iff]; rw [and_comm]
-
-中文:
-定理 floor_eq_iff'
-  条件: (hn : n != 0)
-  结论: ⌊a⌋₊ = n ↔ ↑n <= a ∧ a < ↑n + 1
-  证明: by
-  rw [← le_floor_iff' hn]; rw [← Nat.cast_one]; rw [← Nat.cast_add]; rw [← floor_lt' (Nat.add_one_ne_zero n)]; rw [Nat.lt_add_one_iff]; rw [le_antisymm_iff]; rw [and_comm]
-
-Depends on / 依赖: Nat.add_one_ne_zero, Nat.cast_add, Nat.cast_one, Nat.lt_add_one_iff, add_one_ne_zero, and_comm, cast_add, cast_one, floor_lt, le_antisymm_iff, le_floor_iff, lt_add_one_iff
+/-
+**Nat.floor_eq_iff'** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_eq_iff' (hn : n != 0) : ⌊a⌋₊ = n ↔ ↑n <= a ∧ a < ↑n + 1
+参数：hn : n != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.le_floor_iff'`：le_floor_iff' (hn : n != 0) : n <= ⌊a⌋₊ ↔ (n : R) <= 
+a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `Nat.floor_lt'`：floor_lt' (hn : n != 0) : ⌊a⌋₊ < n ↔ a < n
+· 使用定理 `Nat.add_one_ne_zero`：∀ (n : ℕ), n + 1 ≠ 0
+· 使用定理 `Nat.lt_add_one_iff`：∀ {m n : ℕ}, m < n + 1 ↔ m ≤ n
+· 使用引理 `le_antisymm_iff`：le_antisymm_iff : a = b ↔ a <= b ∧ b <= a
+· 使用定理 `and_comm`：∀ {a b : Prop}, a ∧ b ↔ b ∧ a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem floor_eq_iff' (hn : n != 0) : ⌊a⌋₊ = n ↔ ↑n <= a ∧ a < ↑n + 1 := by
-  rw [← le_floor_iff' hn]; rw [← Nat.cast_one]; rw [← Nat.cast_add]; rw [← floor_lt' (Nat.add_one_ne_zero n)]; rw [Nat.lt_add_one_iff]; rw [le_antisymm_iff]; rw [and_comm]
-
-/--
-theorem `floor_eq_on_Ico` / 定理 `floor_eq_on_Ico`
-
-English:
-theorem floor_eq_on_Ico
-  given: (n : Nat)
-  statement: forall a in (Set.Ico n (n + 1) : Set R), ⌊a⌋₊ = n
-  proof: fun _ ⟨h₀, h₁⟩ =>
-  (floor_eq_iff <| n.cast_nonneg.trans h₀).mpr ⟨h₀, h₁⟩
-
-中文:
-定理 floor_eq_on_Ico
-  条件: (n : 自然数)
-  结论: 对任意 a in (集合.左闭右开区间 n (n + 1) : 集合 R), ⌊a⌋₊ = n
-  证明: fun _ ⟨h₀, h₁⟩ =>
-  (floor_eq_iff <| n.cast_nonneg.trans h₀).mpr ⟨h₀, h₁⟩
+theorem floor_eq_iff' (hn : n ≠ 0) : ⌊a⌋₊ = n ↔ ↑n ≤ a ∧ a < ↑n + 1 := by
+  rw [← le_floor_iff' hn, ← Nat.cast_one, ← Nat.cast_add, ← floor_lt' (Nat.add_one_ne_zero n),
+    Nat.lt_add_one_iff, le_antisymm_iff, and_comm]
+/-
+**Nat.floor_eq_on_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_eq_on_Ico (n : Nat) : forall a in (Set.Ico n (n + 1) : Set R), ⌊a⌋₊ 
+= n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.floor_eq_iff`：floor_eq_iff (ha : 0 <= a) : ⌊a⌋₊ = n ↔ ↑n <= a ∧ a < 
+↑n + 1
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Nat.cast_nonneg`：cast_nonneg {α} [Semiring α] [PartialOrder α] [IsOrdere
+dRing α] (n : Nat) : 0 <= (n : α)
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
 -/
-theorem floor_eq_on_Ico (n : Nat) : forall a in (Set.Ico n (n + 1) : Set R), ⌊a⌋₊ = n := fun _ ⟨h₀, h₁⟩ =>
+theorem floor_eq_on_Ico (n : ℕ) : ∀ a ∈ (Set.Ico n (n + 1) : Set R), ⌊a⌋₊ = n := fun _ ⟨h₀, h₁⟩ =>
   (floor_eq_iff <| n.cast_nonneg.trans h₀).mpr ⟨h₀, h₁⟩
-
-/--
-theorem `floor_eq_on_Ico'` / 定理 `floor_eq_on_Ico'`
-
-English:
-theorem floor_eq_on_Ico'
-  given: (n : Nat)
-  proof: fun x hx => mod_cast floor_eq_on_Ico n x hx
-
-@[simp]
-
-中文:
-定理 floor_eq_on_Ico'
-  条件: (n : 自然数)
-  证明: fun x hx => mod_cast floor_eq_on_Ico n x hx
-
-@[simp]
-
-Depends on / 依赖: floor_eq_on_Ico, mod_cast
+/-
+**Nat.floor_eq_on_Ico'** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_eq_on_Ico' (n : Nat) : forall a in (Set.Ico n (n + 1) : Set R), (⌊a⌋
+₊ : R) = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Nat.floor_eq_on_Ico`：floor_eq_on_Ico (n : Nat) : forall a in (Set.Ico n 
+(n + 1) : Set R), ⌊a⌋₊ = n
 -/
-theorem floor_eq_on_Ico' (n : Nat) :
-    forall a in (Set.Ico n (n + 1) : Set R), (⌊a⌋₊ : R) = n :=
+theorem floor_eq_on_Ico' (n : ℕ) :
+    ∀ a ∈ (Set.Ico n (n + 1) : Set R), (⌊a⌋₊ : R) = n :=
   fun x hx => mod_cast floor_eq_on_Ico n x hx
 
 @[simp]
-/--
-theorem `preimage_floor_zero` / 定理 `preimage_floor_zero`
-
-English:
-theorem preimage_floor_zero
-  statement: (floor : R -> Nat) ⁻¹' {0} = Iio 1
-  proof: ext fun _ => floor_eq_zero
-
-中文:
-定理 preimage_floor_zero
-  结论: (floor : R -> 自然数) ⁻¹' {0} = 左无界右开区间 1
-  证明: ext fun _ => floor_eq_zero
-
-Depends on / 依赖: floor_eq_zero
+/-
+**Nat.preimage_floor_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：preimage_floor_zero : (floor : R -> Nat) ⁻¹' {0} = Iio 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Nat.floor_eq_zero`：floor_eq_zero : ⌊a⌋₊ = 0 ↔ a < 1
 -/
-theorem preimage_floor_zero : (floor : R -> Nat) ⁻¹' {0} = Iio 1 :=
+theorem preimage_floor_zero : (floor : R → ℕ) ⁻¹' {0} = Iio 1 :=
   ext fun _ => floor_eq_zero
-
-/--
-theorem `preimage_floor_of_ne_zero` / 定理 `preimage_floor_of_ne_zero`
-
-English:
-theorem preimage_floor_of_ne_zero
-  given: {n : Nat} (hn : n != 0)
-  proof: ext fun _ => floor_eq_iff' hn
-
-中文:
-定理 preimage_floor_of_ne_zero
-  条件: {n : 自然数} (hn : n != 0)
-  证明: ext fun _ => floor_eq_iff' hn
-
-Depends on / 依赖: floor_eq_iff
+/-
+**Nat.preimage_floor_of_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：preimage_floor_of_ne_zero {n : Nat} (hn : n != 0) : (floor : R -> Nat) ⁻¹'
+ {n} = Ico (n : R) (n + 1)
+参数：hn : n != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Nat.floor_eq_iff'`：floor_eq_iff' (hn : n != 0) : ⌊a⌋₊ = n ↔ ↑n <= a ∧ a 
+< ↑n + 1
 -/
-theorem preimage_floor_of_ne_zero {n : Nat} (hn : n != 0) :
-    (floor : R -> Nat) ⁻¹' {n} = Ico (n : R) (n + 1) :=
+theorem preimage_floor_of_ne_zero {n : ℕ} (hn : n ≠ 0) :
+    (floor : R → ℕ) ⁻¹' {n} = Ico (n : R) (n + 1) :=
   ext fun _ => floor_eq_iff' hn
-
-/--
-theorem `mul_cast_floor_div_cancel` / 定理 `mul_cast_floor_div_cancel`
-
-English:
-theorem mul_cast_floor_div_cancel
-  given: {n : Nat} (hn : n != 0) (a : R)
-  statement: ⌊a * n⌋₊ / n = ⌊a⌋₊
-  proof: by
-  rcases le_total a 0 with ha | ha
-  · rw [floor_of_nonpos, floor_of_nonpos ha]
-    · simp
-    apply mul_nonpos_of_nonpos_of_nonneg ha n.cast_nonneg
-  refine eq_of_forall_le_iff fun m => ?_
-  rw [le_div_iff_mul_le (zero_lt_of_ne_zero hn)]; rw [le_floor_iff (mul_nonneg ha (cast_nonneg' n))]; rw [le_floor_iff ha]; rw [cast_mul]; rw [mul_le_mul_iff_of_pos_right (cast_pos'.mpr (zero_lt_of_ne_zero hn))]
-
-中文:
-定理 mul_cast_floor_div_cancel
-  条件: {n : 自然数} (hn : n != 0) (a : R)
-  结论: ⌊a * n⌋₊ / n = ⌊a⌋₊
-  证明: by
-  rcases le_total a 0 with ha | ha
-  · rw [floor_of_nonpos, floor_of_nonpos ha]
-    · simp
-    apply mul_nonpos_of_nonpos_of_nonneg ha n.cast_nonneg
-  refine eq_of_forall_le_iff fun m => ?_
-  rw [le_div_iff_mul_le (zero_lt_of_ne_zero hn)]; rw [le_floor_iff (mul_nonneg ha (cast_nonneg' n))]; rw [le_floor_iff ha]; rw [cast_mul]; rw [mul_le_mul_iff_of_pos_right (cast_pos'.mpr (zero_lt_of_ne_zero hn))]
-
-Depends on / 依赖: cast_mul, cast_nonneg, cast_pos, eq_of_forall_le_iff, floor_of_nonpos, le_div_iff_mul_le, le_floor_iff, le_total, mul_le_mul_iff_of_pos_right, mul_nonneg, mul_nonpos_of_nonpos_of_nonneg, n.cast_nonneg, zero_lt_of_ne_zero
+/-
+**Nat.mul_cast_floor_div_cancel** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：mul_cast_floor_div_cancel {n : Nat} (hn : n != 0) (a : R) : ⌊a * n⌋₊ / n =
+ ⌊a⌋₊
+参数：hn : n != 0；a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.floor_of_nonpos`：floor_of_nonpos (ha : a <= 0) : ⌊a⌋₊ = 0
+· 使用定理 `mul_nonpos_of_nonpos_of_nonneg`：mul_nonpos_of_nonpos_of_nonneg [MulPosMo
+no α] (ha : a <= 0) (hb : 0 <= b) : a * b <= 0
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `Nat.cast_nonneg`：cast_nonneg {α} [Semiring α] [PartialOrder α] [IsOrdere
+dRing α] (n : Nat) : 0 <= (n : α)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.zero_div`：∀ (b : ℕ), 0 / b = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `eq_of_forall_le_iff`：eq_of_forall_le_iff (H : forall c, c <= a ↔ c <= b)
+ : a = b
+· 使用定理 `Nat.le_div_iff_mul_le`：∀ {k x y : ℕ}, 0 < k → (x ≤ y / k ↔ x * k ≤ y)
+· 使用定理 `Nat.zero_lt_of_ne_zero`：∀ {a : ℕ}, a ≠ 0 → 0 < a
+· 使用定理 `Nat.le_floor_iff`：le_floor_iff (ha : 0 <= a) : n <= ⌊a⌋₊ ↔ (n : α) <= a
+· 使用定理 `mul_nonneg`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 :
+ Preorder α] [PosMulMono α], 0 ≤ a → 0 ≤ b → 0 ≤ a * b
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `Nat.cast_nonneg'`：cast_nonneg' (n : Nat) : 0 <= (n : α)
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `FloorSemiring.instZeroLEOneClass`：∀ {α : Type u_2} [inst : Semiring α] [
+inst_1 : PartialOrder α] [FloorSemiring α], ZeroLEOneClass α
+· 使用定理 `Nat.cast_mul`：∀ {α : Type u_1} [inst : NonAssocSemiring α] (m n : ℕ), ↑(
+m * n) = ↑m * ↑n
+· 使用定理 `mul_le_mul_iff_of_pos_right`：∀ {α : Type u_1} [inst : Mul α] [inst_1 : Z
+ero α] [inst_2 : Preorder α] {a b c : α} [MulPosMono α] [MulPosReflectLE α],   0
+ < a → (b * a ≤ c…
+· 使用定理 `MulPosStrictMono.toMulPosReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [MulPosStrictMono α], MulPosReflectLE α
+· 使用定理 `IsStrictOrderedRing.toMulPosStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], MulPosStrictMono 
+R
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.cast_pos'`：cast_pos' {n : Nat} : (0 : α) < n ↔ 0 < n
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mul_cast_floor_div_cancel {n : Nat} (hn : n != 0) (a : R) : ⌊a * n⌋₊ / n = ⌊a⌋₊ := by
+theorem mul_cast_floor_div_cancel {n : ℕ} (hn : n ≠ 0) (a : R) : ⌊a * n⌋₊ / n = ⌊a⌋₊ := by
   rcases le_total a 0 with ha | ha
   · rw [floor_of_nonpos, floor_of_nonpos ha]
     · simp
     apply mul_nonpos_of_nonpos_of_nonneg ha n.cast_nonneg
-  refine eq_of_forall_le_iff fun m => ?_
-  rw [le_div_iff_mul_le (zero_lt_of_ne_zero hn)]; rw [le_floor_iff (mul_nonneg ha (cast_nonneg' n))]; rw [le_floor_iff ha]; rw [cast_mul]; rw [mul_le_mul_iff_of_pos_right (cast_pos'.mpr (zero_lt_of_ne_zero hn))]
-
-/--
-theorem `cast_mul_floor_div_cancel` / 定理 `cast_mul_floor_div_cancel`
-
-English:
-theorem cast_mul_floor_div_cancel
-  given: {n : Nat} (hn : n != 0) (a : R)
-  proof: by
-  rw [Nat.cast_comm]; rw [mul_cast_floor_div_cancel hn]
-
-中文:
-定理 cast_mul_floor_div_cancel
-  条件: {n : 自然数} (hn : n != 0) (a : R)
-  证明: by
-  rw [Nat.cast_comm]; rw [mul_cast_floor_div_cancel hn]
-
-Depends on / 依赖: Nat.cast_comm, cast_comm, mul_cast_floor_div_cancel
+  refine eq_of_forall_le_iff fun m ↦ ?_
+  rw [le_div_iff_mul_le (zero_lt_of_ne_zero hn), le_floor_iff (mul_nonneg ha (cast_nonneg' n)),
+    le_floor_iff ha, cast_mul, mul_le_mul_iff_of_pos_right (cast_pos'.mpr (zero_lt_of_ne_zero hn))]
+/-
+**Nat.cast_mul_floor_div_cancel** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：cast_mul_floor_div_cancel {n : Nat} (hn : n != 0) (a : R) : ⌊n * a⌋₊ / n =
+ ⌊a⌋₊
+参数：hn : n != 0；a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_comm`：cast_comm (n : Nat) (x : α) : (n : α) * x = x * n
+· 使用定理 `Nat.mul_cast_floor_div_cancel`：mul_cast_floor_div_cancel {n : Nat} (hn :
+ n != 0) (a : R) : ⌊a * n⌋₊ / n = ⌊a⌋₊
 -/
-theorem cast_mul_floor_div_cancel {n : Nat} (hn : n != 0) (a : R) :
+theorem cast_mul_floor_div_cancel {n : ℕ} (hn : n ≠ 0) (a : R) :
     ⌊n * a⌋₊ / n = ⌊a⌋₊ := by
-  rw [Nat.cast_comm]; rw [mul_cast_floor_div_cancel hn]
+  rw [Nat.cast_comm, mul_cast_floor_div_cancel hn]
 
 end floor
 
@@ -755,254 +630,202 @@ end floor
 
 section ceil
 
-/--
-theorem `add_one_le_ceil_iff` / 定理 `add_one_le_ceil_iff`
-
-English:
-theorem add_one_le_ceil_iff
-  statement: n + 1 <= ⌈a⌉₊ ↔ (n : R) < a
-  proof: by
-  rw [← Nat.lt_ceil]; rw [Nat.add_one_le_iff]
+/-
+**Nat.add_one_le_ceil_iff** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：add_one_le_ceil_iff : n + 1 <= ⌈a⌉₊ ↔ (n : R) < a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.lt_ceil`：lt_ceil : n < ⌈a⌉₊ ↔ (n : α) < a
+· 使用定理 `Nat.add_one_le_iff`：∀ {n m : ℕ}, n + 1 ≤ m ↔ n < m
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+-/
+theorem add_one_le_ceil_iff : n + 1 ≤ ⌈a⌉₊ ↔ (n : R) < a := by
+  rw [← Nat.lt_ceil, Nat.add_one_le_iff]
 
 @[simp]
-
-中文:
-定理 add_one_le_ceil_iff
-  结论: n + 1 <= ⌈a⌉₊ ↔ (n : R) < a
-  证明: by
-  rw [← Nat.lt_ceil]; rw [Nat.add_one_le_iff]
-
-@[simp]
-
-Depends on / 依赖: Nat.add_one_le_iff, Nat.lt_ceil, add_one_le_iff, lt_ceil
+/-
+**Nat.one_le_ceil_iff** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：one_le_ceil_iff : 1 <= ⌈a⌉₊ ↔ 0 < a
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Nat.add_one_le_ceil_iff`：add_one_le_ceil_iff : n + 1 <= ⌈a⌉₊ ↔ (n : R) <
+ a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem add_one_le_ceil_iff : n + 1 <= ⌈a⌉₊ ↔ (n : R) < a := by
-  rw [← Nat.lt_ceil]; rw [Nat.add_one_le_iff]
-
-@[simp]
-/--
-theorem `one_le_ceil_iff` / 定理 `one_le_ceil_iff`
-
-English:
-theorem one_le_ceil_iff
-  statement: 1 <= ⌈a⌉₊ ↔ 0 < a
-  proof: by
-  rw [← zero_add 1]; rw [Nat.add_one_le_ceil_iff]; rw [Nat.cast_zero]
+theorem one_le_ceil_iff : 1 ≤ ⌈a⌉₊ ↔ 0 < a := by
+  rw [← zero_add 1, Nat.add_one_le_ceil_iff, Nat.cast_zero]
 
 @[bound]
-
-中文:
-定理 one_le_ceil_iff
-  结论: 1 <= ⌈a⌉₊ ↔ 0 < a
-  证明: by
-  rw [← zero_add 1]; rw [Nat.add_one_le_ceil_iff]; rw [Nat.cast_zero]
-
-@[bound]
-
-Depends on / 依赖: Nat.add_one_le_ceil_iff, Nat.cast_zero, add_one_le_ceil_iff, cast_zero, zero_add
+/-
+**Nat.le_ceil** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：le_ceil (a : R) : a <= ⌈a⌉₊
+参数：a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.ceil_le`：ceil_le : ⌈a⌉₊ <= n ↔ a <= n
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem one_le_ceil_iff : 1 <= ⌈a⌉₊ ↔ 0 < a := by
-  rw [← zero_add 1]; rw [Nat.add_one_le_ceil_iff]; rw [Nat.cast_zero]
-
-@[bound]
-/--
-theorem `le_ceil` / 定理 `le_ceil`
-
-English:
-theorem le_ceil
-  given: (a : R)
-  statement: a <= ⌈a⌉₊
-  proof: ceil_le.1 le_rfl
-
-中文:
-定理 le_ceil
-  条件: (a : R)
-  结论: a <= ⌈a⌉₊
-  证明: ceil_le.1 le_rfl
-
-Depends on / 依赖: ceil_le, le_rfl
--/
-theorem le_ceil (a : R) : a <= ⌈a⌉₊ :=
+theorem le_ceil (a : R) : a ≤ ⌈a⌉₊ :=
   ceil_le.1 le_rfl
-
-/--
-theorem `ceil_mono` / 定理 `ceil_mono`
-
-English:
-theorem ceil_mono
-  statement: Monotone (ceil : R -> Nat)
-  proof: gc_ceil_coe.monotone_l
-
-中文:
-定理 ceil_mono
-  结论: 递增 (ceil : R -> 自然数)
-  证明: gc_ceil_coe.monotone_l
-
-Depends on / 依赖: gc_ceil_coe, gc_ceil_coe.monotone_l, monotone_l
+/-
+**Nat.ceil_mono** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ceil_mono : Monotone (ceil : R -> Nat)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.monotone_l`：∀ {α : Type u} {β : Type v} [inst : Preorde
+r α] [inst_1 : Preorder β] {u : α → β} {l : β → α},   GaloisConnection l u → Mon
+otone l
+· 使用定理 `Nat.gc_ceil_coe`：gc_ceil_coe : GaloisConnection (ceil : α -> Nat) (↑)
 -/
-theorem ceil_mono : Monotone (ceil : R -> Nat) :=
+theorem ceil_mono : Monotone (ceil : R → ℕ) :=
   gc_ceil_coe.monotone_l
-
-/--
-lemma `ceil_le_ceil` / 引理 `ceil_le_ceil`
-
-English:
-lemma ceil_le_ceil
-  given: (hab : a <= b)
-  statement: ⌈a⌉₊ <= ⌈b⌉₊
-  proof: ceil_mono hab
-
-@[simp]
-
-中文:
-引理 ceil_le_ceil
-  条件: (hab : a <= b)
-  结论: ⌈a⌉₊ <= ⌈b⌉₊
-  证明: ceil_mono hab
-
-@[simp]
+/-
+**Nat.ceil_le_ceil** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ {R : Type u_1} [inst : Semiring R] [inst_1 : LinearOrder R] [inst_2 : Fl
+oorSemiring R] {a b : R}, a ≤ b → ⌈a⌉₊ ≤ ⌈b⌉₊
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.ceil_mono`：ceil_mono : Monotone (ceil : R -> Nat)
 -/
-@[gcongr, bound] lemma ceil_le_ceil (hab : a <= b) : ⌈a⌉₊ <= ⌈b⌉₊ := ceil_mono hab
+@[gcongr, bound] lemma ceil_le_ceil (hab : a ≤ b) : ⌈a⌉₊ ≤ ⌈b⌉₊ := ceil_mono hab
 
 @[simp]
-/--
-theorem `ceil_eq_zero` / 定理 `ceil_eq_zero`
-
-English:
-theorem ceil_eq_zero
-  statement: ⌈a⌉₊ = 0 ↔ a <= 0
-  proof: by rw [← Nat.le_zero, ceil_le, Nat.cast_zero]
-
-中文:
-定理 ceil_eq_zero
-  结论: ⌈a⌉₊ = 0 ↔ a <= 0
-  证明: by rw [← Nat.le_zero, ceil_le, Nat.cast_zero]
-
-Depends on / 依赖: Nat.cast_zero, Nat.le_zero, cast_zero, ceil_le, le_zero
+/-
+**Nat.ceil_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ceil_eq_zero : ⌈a⌉₊ = 0 ↔ a <= 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.le_zero`：∀ {i : ℕ}, i ≤ 0 ↔ i = 0
+· 使用定理 `Nat.ceil_le`：ceil_le : ⌈a⌉₊ <= n ↔ a <= n
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem ceil_eq_zero : ⌈a⌉₊ = 0 ↔ a <= 0 := by rw [← Nat.le_zero, ceil_le, Nat.cast_zero]
-
-/--
-theorem `ceil_eq_iff` / 定理 `ceil_eq_iff`
-
-English:
-theorem ceil_eq_iff
-  given: (hn : n != 0)
-  statement: ⌈a⌉₊ = n ↔ ↑(n - 1) < a ∧ a <= n
-  proof: by
-  rw [← ceil_le]; rw [← not_le]; rw [← ceil_le]; rw [not_le]; rw [tsub_lt_iff_right (Nat.add_one_le_iff.2 (pos_iff_ne_zero.2 hn))]; rw [Nat.lt_add_one_iff]; rw [le_antisymm_iff]; rw [and_comm]
-
-@[simp]
-
-中文:
-定理 ceil_eq_iff
-  条件: (hn : n != 0)
-  结论: ⌈a⌉₊ = n ↔ ↑(n - 1) < a ∧ a <= n
-  证明: by
-  rw [← ceil_le]; rw [← not_le]; rw [← ceil_le]; rw [not_le]; rw [tsub_lt_iff_right (Nat.add_one_le_iff.2 (pos_iff_ne_zero.2 hn))]; rw [Nat.lt_add_one_iff]; rw [le_antisymm_iff]; rw [and_comm]
-
-@[simp]
-
-Depends on / 依赖: Nat.add_one_le_iff, Nat.lt_add_one_iff, add_one_le_iff, and_comm, ceil_le, le_antisymm_iff, lt_add_one_iff, not_le, pos_iff_ne_zero, tsub_lt_iff_right
+theorem ceil_eq_zero : ⌈a⌉₊ = 0 ↔ a ≤ 0 := by rw [← Nat.le_zero, ceil_le, Nat.cast_zero]
+/-
+**Nat.ceil_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ceil_eq_iff (hn : n != 0) : ⌈a⌉₊ = n ↔ ↑(n - 1) < a ∧ a <= n
+参数：hn : n != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.ceil_le`：ceil_le : ⌈a⌉₊ <= n ↔ a <= n
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `tsub_lt_iff_right`：tsub_lt_iff_right (hbc : b <= a) : a - b < c ↔ a < c 
++ b
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.add_one_le_iff`：∀ {n m : ℕ}, n + 1 ≤ m ↔ n < m
+· 使用定理 `pos_iff_ne_zero`：∀ {α : Type u_1} {a : α} [inst : PartialOrder α] [inst_
+1 : Zero α] [IsBotZeroClass α], 0 < a ↔ a ≠ 0
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Nat.lt_add_one_iff`：∀ {m n : ℕ}, m < n + 1 ↔ m ≤ n
+· 使用引理 `le_antisymm_iff`：le_antisymm_iff : a = b ↔ a <= b ∧ b <= a
+· 使用定理 `and_comm`：∀ {a b : Prop}, a ∧ b ↔ b ∧ a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem ceil_eq_iff (hn : n != 0) : ⌈a⌉₊ = n ↔ ↑(n - 1) < a ∧ a <= n := by
-  rw [← ceil_le]; rw [← not_le]; rw [← ceil_le]; rw [not_le]; rw [tsub_lt_iff_right (Nat.add_one_le_iff.2 (pos_iff_ne_zero.2 hn))]; rw [Nat.lt_add_one_iff]; rw [le_antisymm_iff]; rw [and_comm]
+theorem ceil_eq_iff (hn : n ≠ 0) : ⌈a⌉₊ = n ↔ ↑(n - 1) < a ∧ a ≤ n := by
+  rw [← ceil_le, ← not_le, ← ceil_le, not_le,
+    tsub_lt_iff_right (Nat.add_one_le_iff.2 (pos_iff_ne_zero.2 hn)), Nat.lt_add_one_iff,
+    le_antisymm_iff, and_comm]
 
 @[simp]
-/--
-theorem `preimage_ceil_zero` / 定理 `preimage_ceil_zero`
-
-English:
-theorem preimage_ceil_zero
-  statement: (Nat.ceil : R -> Nat) ⁻¹' {0} = Iic 0
-  proof: ext fun _ => ceil_eq_zero
-
-中文:
-定理 preimage_ceil_zero
-  结论: (自然数.ceil : R -> 自然数) ⁻¹' {0} = 左无界右闭区间 0
-  证明: ext fun _ => ceil_eq_zero
-
-Depends on / 依赖: ceil_eq_zero
+/-
+**Nat.preimage_ceil_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：preimage_ceil_zero : (Nat.ceil : R -> Nat) ⁻¹' {0} = Iic 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Nat.ceil_eq_zero`：ceil_eq_zero : ⌈a⌉₊ = 0 ↔ a <= 0
 -/
-theorem preimage_ceil_zero : (Nat.ceil : R -> Nat) ⁻¹' {0} = Iic 0 :=
+theorem preimage_ceil_zero : (Nat.ceil : R → ℕ) ⁻¹' {0} = Iic 0 :=
   ext fun _ => ceil_eq_zero
-
-/--
-theorem `preimage_ceil_of_ne_zero` / 定理 `preimage_ceil_of_ne_zero`
-
-English:
-theorem preimage_ceil_of_ne_zero
-  given: (hn : n != 0)
-  statement: (Nat.ceil : R -> Nat) ⁻¹' {n} = Ioc (↑(n - 1) : R) n
-  proof: ext fun _ => ceil_eq_iff hn
-
-@[bound]
-
-中文:
-定理 preimage_ceil_of_ne_zero
-  条件: (hn : n != 0)
-  结论: (自然数.ceil : R -> 自然数) ⁻¹' {n} = 左开右闭区间 (↑(n - 1) : R) n
-  证明: ext fun _ => ceil_eq_iff hn
-
-@[bound]
-
-Depends on / 依赖: ceil_eq_iff
+/-
+**Nat.preimage_ceil_of_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：preimage_ceil_of_ne_zero (hn : n != 0) : (Nat.ceil : R -> Nat) ⁻¹' {n} = I
+oc (↑(n - 1) : R) n
+参数：hn : n != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Nat.ceil_eq_iff`：ceil_eq_iff (hn : n != 0) : ⌈a⌉₊ = n ↔ ↑(n - 1) < a ∧ a
+ <= n
 -/
-theorem preimage_ceil_of_ne_zero (hn : n != 0) : (Nat.ceil : R -> Nat) ⁻¹' {n} = Ioc (↑(n - 1) : R) n :=
+theorem preimage_ceil_of_ne_zero (hn : n ≠ 0) : (Nat.ceil : R → ℕ) ⁻¹' {n} = Ioc (↑(n - 1) : R) n :=
   ext fun _ => ceil_eq_iff hn
 
 @[bound]
-/--
-theorem `ceil_le_floor_add_one` / 定理 `ceil_le_floor_add_one`
-
-English:
-theorem ceil_le_floor_add_one
-  given: (a : R)
-  statement: ⌈a⌉₊ <= ⌊a⌋₊ + 1
-  proof: by
-  rw [ceil_le]; rw [Nat.cast_add]; rw [Nat.cast_one]
-  exact (lt_floor_add_one a).le
-
-@[simp]
-
-中文:
-定理 ceil_le_floor_add_one
-  条件: (a : R)
-  结论: ⌈a⌉₊ <= ⌊a⌋₊ + 1
-  证明: by
-  rw [ceil_le]; rw [Nat.cast_add]; rw [Nat.cast_one]
-  exact (lt_floor_add_one a).le
-
-@[simp]
-
-Depends on / 依赖: Nat.cast_add, Nat.cast_one, cast_add, cast_one, ceil_le, lt_floor_add_one
+/-
+**Nat.ceil_le_floor_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ceil_le_floor_add_one (a : R) : ⌈a⌉₊ <= ⌊a⌋₊ + 1
+参数：a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.ceil_le`：ceil_le : ⌈a⌉₊ <= n ↔ a <= n
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Nat.lt_floor_add_one`：lt_floor_add_one (a : R) : a < ⌊a⌋₊ + 1
 -/
-theorem ceil_le_floor_add_one (a : R) : ⌈a⌉₊ <= ⌊a⌋₊ + 1 := by
-  rw [ceil_le]; rw [Nat.cast_add]; rw [Nat.cast_one]
+theorem ceil_le_floor_add_one (a : R) : ⌈a⌉₊ ≤ ⌊a⌋₊ + 1 := by
+  rw [ceil_le, Nat.cast_add, Nat.cast_one]
   exact (lt_floor_add_one a).le
 
 @[simp]
-/--
-theorem `ceil_intCast` / 定理 `ceil_intCast`
-
-English:
-theorem ceil_intCast
-  statement: {R : Type*} [Ring R] [LinearOrder R] [IsOrderedRing R]
-  proof: eq_of_forall_ge_iff fun a => by
-    simp only [ceil_le, Int.toNat_le]
-    norm_cast
-
-中文:
-定理 ceil_intCast
-  结论: {R : 类型} [环 R] [线性序 R] [是Ordered环 R]
-  证明: eq_of_forall_ge_iff fun a => by
-    simp only [ceil_le, Int.toNat_le]
-    norm_cast
-
-Depends on / 依赖: Int.toNat_le, ceil_le, eq_of_forall_ge_iff, toNat_le
+/-
+**Nat.ceil_intCast** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ceil_intCast {R : Type*} [Ring R] [LinearOrder R] [IsOrderedRing R] [Floor
+Semiring R] (z : Int) : ⌈(z : R)⌉₊ = z.toNat
+参数：z : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_forall_ge_iff`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α},
+ (∀ (c : α), a ≤ c ↔ b ≤ c) → a = b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `FloorSemiring.instZeroLEOneClass`：∀ {α : Type u_2} [inst : Semiring α] [
+inst_1 : PartialOrder α] [FloorSemiring α], ZeroLEOneClass α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem ceil_intCast {R : Type*} [Ring R] [LinearOrder R] [IsOrderedRing R]
-    [FloorSemiring R] (z : Int) :
+    [FloorSemiring R] (z : ℤ) :
     ⌈(z : R)⌉₊ = z.toNat :=
   eq_of_forall_ge_iff fun a => by
     simp only [ceil_le, Int.toNat_le]
@@ -1011,194 +834,174 @@ theorem ceil_intCast {R : Type*} [Ring R] [LinearOrder R] [IsOrderedRing R]
 variable [IsStrictOrderedRing R]
 
 @[simp]
-/--
-theorem `ceil_natCast` / 定理 `ceil_natCast`
-
-English:
-theorem ceil_natCast
-  given: (n : Nat)
-  statement: ⌈(n : R)⌉₊ = n
-  proof: eq_of_forall_ge_iff fun a => by rw [ceil_le, cast_le]
-
-@[simp]
-
-中文:
-定理 ceil_natCast
-  条件: (n : 自然数)
-  结论: ⌈(n : R)⌉₊ = n
-  证明: eq_of_forall_ge_iff fun a => by rw [ceil_le, cast_le]
-
-@[simp]
-
-Depends on / 依赖: cast_le, ceil_le, eq_of_forall_ge_iff
+/-
+**Nat.ceil_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ceil_natCast (n : Nat) : ⌈(n : R)⌉₊ = n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_forall_ge_iff`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α},
+ (∀ (c : α), a ≤ c ↔ b ≤ c) → a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.ceil_le`：ceil_le : ⌈a⌉₊ <= n ↔ a <= n
+· 使用定理 `Nat.cast_le`：cast_le : (m : α) <= n ↔ m <= n
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `FloorSemiring.instZeroLEOneClass`：∀ {α : Type u_2} [inst : Semiring α] [
+inst_1 : PartialOrder α] [FloorSemiring α], ZeroLEOneClass α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem ceil_natCast (n : Nat) : ⌈(n : R)⌉₊ = n :=
+theorem ceil_natCast (n : ℕ) : ⌈(n : R)⌉₊ = n :=
   eq_of_forall_ge_iff fun a => by rw [ceil_le, cast_le]
 
 @[simp]
-/--
-theorem `ceil_zero` / 定理 `ceil_zero`
-
-English:
-theorem ceil_zero
-  statement: ⌈(0 : R)⌉₊ = 0
-  proof: by rw [← Nat.cast_zero, ceil_natCast]
-
-@[simp]
-
-中文:
-定理 ceil_zero
-  结论: ⌈(0 : R)⌉₊ = 0
-  证明: by rw [← Nat.cast_zero, ceil_natCast]
-
-@[simp]
-
-Depends on / 依赖: Nat.cast_zero, cast_zero, ceil_natCast
+/-
+**Nat.ceil_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ceil_zero : ⌈(0 : R)⌉₊ = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `Nat.ceil_natCast`：ceil_natCast (n : Nat) : ⌈(n : R)⌉₊ = n
 -/
 theorem ceil_zero : ⌈(0 : R)⌉₊ = 0 := by rw [← Nat.cast_zero, ceil_natCast]
 
 @[simp]
-/--
-theorem `ceil_one` / 定理 `ceil_one`
-
-English:
-theorem ceil_one
-  statement: ⌈(1 : R)⌉₊ = 1
-  proof: by rw [← Nat.cast_one, ceil_natCast]
-
-@[simp]
-
-中文:
-定理 ceil_one
-  结论: ⌈(1 : R)⌉₊ = 1
-  证明: by rw [← Nat.cast_one, ceil_natCast]
-
-@[simp]
-
-Depends on / 依赖: Nat.cast_one, cast_one, ceil_natCast
+/-
+**Nat.ceil_one** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ceil_one : ⌈(1 : R)⌉₊ = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Nat.ceil_natCast`：ceil_natCast (n : Nat) : ⌈(n : R)⌉₊ = n
 -/
 theorem ceil_one : ⌈(1 : R)⌉₊ = 1 := by rw [← Nat.cast_one, ceil_natCast]
 
 @[simp]
-/--
-theorem `ceil_ofNat` / 定理 `ceil_ofNat`
-
-English:
-theorem ceil_ofNat
-  given: (n : Nat) [n.AtLeastTwo]
-  statement: ⌈(ofNat(n) : R)⌉₊ = ofNat(n)
-  proof: ceil_natCast n
-
-中文:
-定理 ceil_of自然数
-  条件: (n : 自然数) [n.AtLeastTwo]
-  结论: ⌈(of自然数(n) : R)⌉₊ = of自然数(n)
-  证明: ceil_natCast n
-
-Depends on / 依赖: ceil_natCast
+/-
+**Nat.ceil_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ceil_ofNat (n : Nat) [n.AtLeastTwo] : ⌈(ofNat(n) : R)⌉₊ = ofNat(n)
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.ceil_natCast`：ceil_natCast (n : Nat) : ⌈(n : R)⌉₊ = n
 -/
-theorem ceil_ofNat (n : Nat) [n.AtLeastTwo] : ⌈(ofNat(n) : R)⌉₊ = ofNat(n) := ceil_natCast n
-
-/--
-theorem `lt_of_ceil_lt` / 定理 `lt_of_ceil_lt`
-
-English:
-theorem lt_of_ceil_lt
-  given: (h : ⌈a⌉₊ < n)
-  statement: a < n
-  proof: (le_ceil a).trans_lt (Nat.cast_lt.2 h)
-
-中文:
-定理 lt_of_ceil_lt
-  条件: (h : ⌈a⌉₊ < n)
-  结论: a < n
-  证明: (le_ceil a).trans_lt (Nat.cast_lt.2 h)
-
-Depends on / 依赖: Nat.cast_lt, cast_lt, le_ceil, trans_lt
+theorem ceil_ofNat (n : ℕ) [n.AtLeastTwo] : ⌈(ofNat(n) : R)⌉₊ = ofNat(n) := ceil_natCast n
+/-
+**Nat.lt_of_ceil_lt** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：lt_of_ceil_lt (h : ⌈a⌉₊ < n) : a < n
+参数：h : ⌈a⌉₊ < n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Nat.le_ceil`：le_ceil (a : R) : a <= ⌈a⌉₊
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.cast_lt`：cast_lt : (m : α) < n ↔ m < n
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `FloorSemiring.instZeroLEOneClass`：∀ {α : Type u_2} [inst : Semiring α] [
+inst_1 : PartialOrder α] [FloorSemiring α], ZeroLEOneClass α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
 -/
 theorem lt_of_ceil_lt (h : ⌈a⌉₊ < n) : a < n :=
   (le_ceil a).trans_lt (Nat.cast_lt.2 h)
-
-/--
-theorem `le_of_ceil_le` / 定理 `le_of_ceil_le`
-
-English:
-theorem le_of_ceil_le
-  given: (h : ⌈a⌉₊ <= n)
-  statement: a <= n
-  proof: (le_ceil a).trans (Nat.cast_le.2 h)
-
-@[bound]
-
-中文:
-定理 le_of_ceil_le
-  条件: (h : ⌈a⌉₊ <= n)
-  结论: a <= n
-  证明: (le_ceil a).trans (Nat.cast_le.2 h)
-
-@[bound]
-
-Depends on / 依赖: Nat.cast_le, cast_le, le_ceil
+/-
+**Nat.le_of_ceil_le** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：le_of_ceil_le (h : ⌈a⌉₊ <= n) : a <= n
+参数：h : ⌈a⌉₊ <= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Nat.le_ceil`：le_ceil (a : R) : a <= ⌈a⌉₊
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.cast_le`：cast_le : (m : α) <= n ↔ m <= n
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `FloorSemiring.instZeroLEOneClass`：∀ {α : Type u_2} [inst : Semiring α] [
+inst_1 : PartialOrder α] [FloorSemiring α], ZeroLEOneClass α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
 -/
-theorem le_of_ceil_le (h : ⌈a⌉₊ <= n) : a <= n :=
+theorem le_of_ceil_le (h : ⌈a⌉₊ ≤ n) : a ≤ n :=
   (le_ceil a).trans (Nat.cast_le.2 h)
 
 @[bound]
-/--
-theorem `floor_le_ceil` / 定理 `floor_le_ceil`
-
-English:
-theorem floor_le_ceil
-  given: (a : R)
-  statement: ⌊a⌋₊ <= ⌈a⌉₊
-  proof: by
-  obtain ha | ha := le_total a 0
-  · rw [floor_of_nonpos ha]
-    exact Nat.zero_le _
-  · exact cast_le.1 ((floor_le ha).trans <| le_ceil _)
-
-中文:
-定理 floor_le_ceil
-  条件: (a : R)
-  结论: ⌊a⌋₊ <= ⌈a⌉₊
-  证明: by
-  obtain ha | ha := le_total a 0
-  · rw [floor_of_nonpos ha]
-    exact Nat.zero_le _
-  · exact cast_le.1 ((floor_le ha).trans <| le_ceil _)
-
-Depends on / 依赖: Nat.zero_le, cast_le, floor_le, floor_of_nonpos, le_ceil, le_total, zero_le
+/-
+**Nat.floor_le_ceil** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_le_ceil (a : R) : ⌊a⌋₊ <= ⌈a⌉₊
+参数：a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.floor_of_nonpos`：floor_of_nonpos (ha : a <= 0) : ⌊a⌋₊ = 0
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.cast_le`：cast_le : (m : α) <= n ↔ m <= n
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `FloorSemiring.instZeroLEOneClass`：∀ {α : Type u_2} [inst : Semiring α] [
+inst_1 : PartialOrder α] [FloorSemiring α], ZeroLEOneClass α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Nat.floor_le`：floor_le (ha : 0 <= a) : (⌊a⌋₊ : R) <= a
+· 使用定理 `Nat.le_ceil`：le_ceil (a : R) : a <= ⌈a⌉₊
 -/
-theorem floor_le_ceil (a : R) : ⌊a⌋₊ <= ⌈a⌉₊ := by
+theorem floor_le_ceil (a : R) : ⌊a⌋₊ ≤ ⌈a⌉₊ := by
   obtain ha | ha := le_total a 0
   · rw [floor_of_nonpos ha]
     exact Nat.zero_le _
   · exact cast_le.1 ((floor_le ha).trans <| le_ceil _)
-
-/--
-theorem `floor_lt_ceil_of_lt_of_pos` / 定理 `floor_lt_ceil_of_lt_of_pos`
-
-English:
-theorem floor_lt_ceil_of_lt_of_pos
-  given: {a b : R} (h : a < b) (h' : 0 < b)
-  statement: ⌊a⌋₊ < ⌈b⌉₊
-  proof: by
-  rcases le_or_gt 0 a with (ha | ha)
-  · rw [floor_lt ha]
-    exact h.trans_le (le_ceil _)
-  · rwa [floor_of_nonpos ha.le, lt_ceil, Nat.cast_zero]
-
-中文:
-定理 floor_lt_ceil_of_lt_of_pos
-  条件: {a b : R} (h : a < b) (h' : 0 < b)
-  结论: ⌊a⌋₊ < ⌈b⌉₊
-  证明: by
-  rcases le_or_gt 0 a with (ha | ha)
-  · rw [floor_lt ha]
-    exact h.trans_le (le_ceil _)
-  · rwa [floor_of_nonpos ha.le, lt_ceil, Nat.cast_zero]
-
-Depends on / 依赖: Nat.cast_zero, cast_zero, floor_lt, floor_of_nonpos, h.trans_le, ha.le, le_ceil, le_or_gt, lt_ceil, trans_le
+/-
+**Nat.floor_lt_ceil_of_lt_of_pos** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_lt_ceil_of_lt_of_pos {a b : R} (h : a < b) (h' : 0 < b) : ⌊a⌋₊ < ⌈b⌉
+₊
+参数：h : a < b；h' : 0 < b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_or_gt`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b <
+ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.floor_lt`：floor_lt (ha : 0 <= a) : ⌊a⌋₊ < n ↔ a < n
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Nat.le_ceil`：le_ceil (a : R) : a <= ⌈a⌉₊
+· 使用定理 `Nat.floor_of_nonpos`：floor_of_nonpos (ha : a <= 0) : ⌊a⌋₊ = 0
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Nat.lt_ceil`：lt_ceil : n < ⌈a⌉₊ ↔ (n : α) < a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
 -/
 theorem floor_lt_ceil_of_lt_of_pos {a b : R} (h : a < b) (h' : 0 < b) : ⌊a⌋₊ < ⌈b⌉₊ := by
   rcases le_or_gt 0 a with (ha | ha)
@@ -1211,375 +1014,347 @@ end ceil
 /-! #### Intervals -/
 
 @[simp]
-/--
-theorem `preimage_Ioo` / 定理 `preimage_Ioo`
+/-
+**Nat.preimage_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：preimage_Ioo {a b : R} (ha : 0 <= a) : (Nat.cast : Nat -> R) ⁻¹' Set.Ioo a
+ b = Set.Ioo ⌊a⌋₊ ⌈b⌉₊
+参数：ha : 0 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem preimage_Ioo
-  given: {a b : R} (ha : 0 <= a)
-  proof: by
+--- 原说明 ---
+#### Intervals
+-/
+theorem preimage_Ioo {a b : R} (ha : 0 ≤ a) :
+    (Nat.cast : ℕ → R) ⁻¹' Set.Ioo a b = Set.Ioo ⌊a⌋₊ ⌈b⌉₊ := by
   ext
   simp [floor_lt, lt_ceil, ha]
 
 @[simp]
-
-中文:
-定理 preimage_Ioo
-  条件: {a b : R} (ha : 0 <= a)
-  证明: by
-  ext
-  simp [floor_lt, lt_ceil, ha]
-
-@[simp]
-
-Depends on / 依赖: floor_lt, lt_ceil
+/-
+**Nat.preimage_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：preimage_Ico {a b : R} : (Nat.cast : Nat -> R) ⁻¹' Set.Ico a b = Set.Ico ⌈
+a⌉₊ ⌈b⌉₊
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem preimage_Ioo {a b : R} (ha : 0 <= a) :
-    (Nat.cast : Nat -> R) ⁻¹' Set.Ioo a b = Set.Ioo ⌊a⌋₊ ⌈b⌉₊ := by
-  ext
-  simp [floor_lt, lt_ceil, ha]
-
-@[simp]
-/--
-theorem `preimage_Ico` / 定理 `preimage_Ico`
-
-English:
-theorem preimage_Ico
-  given: {a b : R}
-  statement: (Nat.cast : Nat -> R) ⁻¹' Set.Ico a b = Set.Ico ⌈a⌉₊ ⌈b⌉₊
-  proof: by
+theorem preimage_Ico {a b : R} : (Nat.cast : ℕ → R) ⁻¹' Set.Ico a b = Set.Ico ⌈a⌉₊ ⌈b⌉₊ := by
   ext
   simp [ceil_le, lt_ceil]
 
 @[simp]
-
-中文:
-定理 preimage_Ico
-  条件: {a b : R}
-  结论: (自然数.cast : 自然数 -> R) ⁻¹' 集合.左闭右开区间 a b = 集合.左闭右开区间 ⌈a⌉₊ ⌈b⌉₊
-  证明: by
-  ext
-  simp [ceil_le, lt_ceil]
-
-@[simp]
-
-Depends on / 依赖: ceil_le, lt_ceil
+/-
+**Nat.preimage_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：preimage_Ioc {a b : R} (ha : 0 <= a) (hb : 0 <= b) : (Nat.cast : Nat -> R)
+ ⁻¹' Set.Ioc a b = Set.Ioc ⌊a⌋₊ ⌊b⌋₊
+参数：ha : 0 <= a；hb : 0 <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem preimage_Ico {a b : R} : (Nat.cast : Nat -> R) ⁻¹' Set.Ico a b = Set.Ico ⌈a⌉₊ ⌈b⌉₊ := by
-  ext
-  simp [ceil_le, lt_ceil]
-
-@[simp]
-/--
-theorem `preimage_Ioc` / 定理 `preimage_Ioc`
-
-English:
-theorem preimage_Ioc
-  given: {a b : R} (ha : 0 <= a) (hb : 0 <= b)
-  proof: by
+theorem preimage_Ioc {a b : R} (ha : 0 ≤ a) (hb : 0 ≤ b) :
+    (Nat.cast : ℕ → R) ⁻¹' Set.Ioc a b = Set.Ioc ⌊a⌋₊ ⌊b⌋₊ := by
   ext
   simp [floor_lt, le_floor_iff, hb, ha]
 
 @[simp]
-
-中文:
-定理 preimage_Ioc
-  条件: {a b : R} (ha : 0 <= a) (hb : 0 <= b)
-  证明: by
-  ext
-  simp [floor_lt, le_floor_iff, hb, ha]
-
-@[simp]
-
-Depends on / 依赖: floor_lt, le_floor_iff
+/-
+**Nat.preimage_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：preimage_Icc {a b : R} (hb : 0 <= b) : (Nat.cast : Nat -> R) ⁻¹' Set.Icc a
+ b = Set.Icc ⌈a⌉₊ ⌊b⌋₊
+参数：hb : 0 <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem preimage_Ioc {a b : R} (ha : 0 <= a) (hb : 0 <= b) :
-    (Nat.cast : Nat -> R) ⁻¹' Set.Ioc a b = Set.Ioc ⌊a⌋₊ ⌊b⌋₊ := by
-  ext
-  simp [floor_lt, le_floor_iff, hb, ha]
-
-@[simp]
-/--
-theorem `preimage_Icc` / 定理 `preimage_Icc`
-
-English:
-theorem preimage_Icc
-  given: {a b : R} (hb : 0 <= b)
-  proof: by
+theorem preimage_Icc {a b : R} (hb : 0 ≤ b) :
+    (Nat.cast : ℕ → R) ⁻¹' Set.Icc a b = Set.Icc ⌈a⌉₊ ⌊b⌋₊ := by
   ext
   simp [ceil_le, hb, le_floor_iff]
 
 @[simp]
-
-中文:
-定理 preimage_Icc
-  条件: {a b : R} (hb : 0 <= b)
-  证明: by
-  ext
-  simp [ceil_le, hb, le_floor_iff]
-
-@[simp]
-
-Depends on / 依赖: ceil_le, le_floor_iff
+/-
+**Nat.preimage_Ioi** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：preimage_Ioi {a : R} (ha : 0 <= a) : (Nat.cast : Nat -> R) ⁻¹' Set.Ioi a =
+ Set.Ioi ⌊a⌋₊
+参数：ha : 0 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem preimage_Icc {a b : R} (hb : 0 <= b) :
-    (Nat.cast : Nat -> R) ⁻¹' Set.Icc a b = Set.Icc ⌈a⌉₊ ⌊b⌋₊ := by
-  ext
-  simp [ceil_le, hb, le_floor_iff]
-
-@[simp]
-/--
-theorem `preimage_Ioi` / 定理 `preimage_Ioi`
-
-English:
-theorem preimage_Ioi
-  given: {a : R} (ha : 0 <= a)
-  statement: (Nat.cast : Nat -> R) ⁻¹' Set.Ioi a = Set.Ioi ⌊a⌋₊
-  proof: by
+theorem preimage_Ioi {a : R} (ha : 0 ≤ a) : (Nat.cast : ℕ → R) ⁻¹' Set.Ioi a = Set.Ioi ⌊a⌋₊ := by
   ext
   simp [floor_lt, ha]
 
 @[simp]
-
-中文:
-定理 preimage_Ioi
-  条件: {a : R} (ha : 0 <= a)
-  结论: (自然数.cast : 自然数 -> R) ⁻¹' 集合.左开右无界区间 a = 集合.左开右无界区间 ⌊a⌋₊
-  证明: by
-  ext
-  simp [floor_lt, ha]
-
-@[simp]
-
-Depends on / 依赖: floor_lt
+/-
+**Nat.preimage_Ici** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：preimage_Ici {a : R} : (Nat.cast : Nat -> R) ⁻¹' Set.Ici a = Set.Ici ⌈a⌉₊
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem preimage_Ioi {a : R} (ha : 0 <= a) : (Nat.cast : Nat -> R) ⁻¹' Set.Ioi a = Set.Ioi ⌊a⌋₊ := by
-  ext
-  simp [floor_lt, ha]
-
-@[simp]
-/--
-theorem `preimage_Ici` / 定理 `preimage_Ici`
-
-English:
-theorem preimage_Ici
-  given: {a : R}
-  statement: (Nat.cast : Nat -> R) ⁻¹' Set.Ici a = Set.Ici ⌈a⌉₊
-  proof: by
+theorem preimage_Ici {a : R} : (Nat.cast : ℕ → R) ⁻¹' Set.Ici a = Set.Ici ⌈a⌉₊ := by
   ext
   simp [ceil_le]
 
 @[simp]
-
-中文:
-定理 preimage_Ici
-  条件: {a : R}
-  结论: (自然数.cast : 自然数 -> R) ⁻¹' 集合.左闭右无界区间 a = 集合.左闭右无界区间 ⌈a⌉₊
-  证明: by
-  ext
-  simp [ceil_le]
-
-@[simp]
-
-Depends on / 依赖: ceil_le
+/-
+**Nat.preimage_Iio** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：preimage_Iio {a : R} : (Nat.cast : Nat -> R) ⁻¹' Set.Iio a = Set.Iio ⌈a⌉₊
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem preimage_Ici {a : R} : (Nat.cast : Nat -> R) ⁻¹' Set.Ici a = Set.Ici ⌈a⌉₊ := by
-  ext
-  simp [ceil_le]
-
-@[simp]
-/--
-theorem `preimage_Iio` / 定理 `preimage_Iio`
-
-English:
-theorem preimage_Iio
-  given: {a : R}
-  statement: (Nat.cast : Nat -> R) ⁻¹' Set.Iio a = Set.Iio ⌈a⌉₊
-  proof: by
+theorem preimage_Iio {a : R} : (Nat.cast : ℕ → R) ⁻¹' Set.Iio a = Set.Iio ⌈a⌉₊ := by
   ext
   simp [lt_ceil]
 
 @[simp]
-
-中文:
-定理 preimage_Iio
-  条件: {a : R}
-  结论: (自然数.cast : 自然数 -> R) ⁻¹' 集合.左无界右开区间 a = 集合.左无界右开区间 ⌈a⌉₊
-  证明: by
-  ext
-  simp [lt_ceil]
-
-@[simp]
-
-Depends on / 依赖: lt_ceil
+/-
+**Nat.preimage_Iic** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：preimage_Iic {a : R} (ha : 0 <= a) : (Nat.cast : Nat -> R) ⁻¹' Set.Iic a =
+ Set.Iic ⌊a⌋₊
+参数：ha : 0 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem preimage_Iio {a : R} : (Nat.cast : Nat -> R) ⁻¹' Set.Iio a = Set.Iio ⌈a⌉₊ := by
-  ext
-  simp [lt_ceil]
-
-@[simp]
-/--
-theorem `preimage_Iic` / 定理 `preimage_Iic`
-
-English:
-theorem preimage_Iic
-  given: {a : R} (ha : 0 <= a)
-  statement: (Nat.cast : Nat -> R) ⁻¹' Set.Iic a = Set.Iic ⌊a⌋₊
-  proof: by
+theorem preimage_Iic {a : R} (ha : 0 ≤ a) : (Nat.cast : ℕ → R) ⁻¹' Set.Iic a = Set.Iic ⌊a⌋₊ := by
   ext
   simp [le_floor_iff, ha]
 
 @[push]
-
-中文:
-定理 preimage_Iic
-  条件: {a : R} (ha : 0 <= a)
-  结论: (自然数.cast : 自然数 -> R) ⁻¹' 集合.左无界右闭区间 a = 集合.左无界右闭区间 ⌊a⌋₊
-  证明: by
-  ext
-  simp [le_floor_iff, ha]
-
-@[push]
-
-Depends on / 依赖: le_floor_iff
+/-
+**Nat.floor_add_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_add_natCast [IsStrictOrderedRing R] (ha : 0 <= a) (n : Nat) : ⌊a + n
+⌋₊ = ⌊a⌋₊ + n
+参数：ha : 0 <= a；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `eq_of_forall_le_iff`：eq_of_forall_le_iff (H : forall c, c <= a ↔ c <= b)
+ : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.le_floor_iff`：le_floor_iff (ha : 0 <= a) : n <= ⌊a⌋₊ ↔ (n : α) <= a
+· 使用定理 `add_nonneg`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1 : Preorder 
+α] [AddLeftMono α] {a b : α}, 0 ≤ a → 0 ≤ b → 0 ≤ a + b
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `Nat.cast_nonneg`：cast_nonneg {α} [Semiring α] [PartialOrder α] [IsOrdere
+dRing α] (n : Nat) : 0 <= (n : α)
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `ExistsAddOfLE.exists_add_of_le`：∀ {α : Type u} {inst : Add α} {inst_1 : 
+LE α} [self : ExistsAddOfLE α] {a b : α}, a ≤ b → ∃ c, b = a + c
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `add_le_add_iff_right`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LE α] [A
+ddRightMono α] [AddRightReflectLE α] (a : α) {b c : α},   b + a ≤ c + a ↔ b ≤ c
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsRightCancelAdd.addRightReflectLE_of_addRightReflectLT`：∀ (N : Type u_2
+) [inst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightReflect
+LT N],   AddRightReflectLE N
+· 使用定理 `IsCancelAdd.toIsRightCancelAdd`：∀ {G : Type u} {inst : Add G} [self : Is
+CancelAdd G], IsRightCancelAdd G
+· 使用定理 `IsOrderedCancelAddMonoid.toIsCancelAdd`：∀ {α : Type u_1} [inst : AddComm
+Monoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], IsCancelAdd α
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_left_comm`：∀ {G : Type u_3} [inst : AddCommSemigroup G] (a b c : G),
+ a + (b + c) = b + (a + c)
+· 使用定理 `iff_of_true`：∀ {a b : Prop}, a → b → (a ↔ b)
+· 使用定理 `le_add_of_nonneg_right`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1
+ : LE α] [AddLeftMono α] {a b : α}, 0 ≤ b → a ≤ a + b
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `le_self_add`：∀ {α : Type u} [inst : Add α] [inst_1 : LE α] [CanonicallyO
+rderedAdd α] {a b : α}, a ≤ a + b
 -/
-theorem preimage_Iic {a : R} (ha : 0 <= a) : (Nat.cast : Nat -> R) ⁻¹' Set.Iic a = Set.Iic ⌊a⌋₊ := by
-  ext
-  simp [le_floor_iff, ha]
-
-@[push]
-/--
-theorem `floor_add_natCast` / 定理 `floor_add_natCast`
-
-English:
-theorem floor_add_natCast
-  given: [IsStrictOrderedRing R] (ha : 0 <= a) (n : Nat)
-  statement: ⌊a + n⌋₊ = ⌊a⌋₊ + n
-  proof: eq_of_forall_le_iff fun b => by
-    rw [le_floor_iff (add_nonneg ha n.cast_nonneg)]
-    obtain hb | hb := le_total n b
-    · obtain ⟨d, rfl⟩ := exists_add_of_le hb
-      rw [Nat.cast_add]; rw [add_comm n]; rw [add_comm (n : R)]; rw [add_le_add_iff_right]; rw [add_le_add_iff_right]; rw [le_floor_iff ha]
-    · obtain ⟨d, rfl⟩ := exists_add_of_le hb
-      rw [Nat.cast_add]; rw [add_left_comm _ b]; rw [add_left_comm _ (b : R)]
-      refine iff_of_true ?_ le_self_add
-exact le_add_of_nonneg_right ha.trans le_add_of_nonneg_right d.cast_nonneg
-
-中文:
-定理 floor_add_natCast
-  条件: [是StrictOrdered环 R] (ha : 0 <= a) (n : 自然数)
-  结论: ⌊a + n⌋₊ = ⌊a⌋₊ + n
-  证明: eq_of_forall_le_iff fun b => by
-    rw [le_floor_iff (add_nonneg ha n.cast_nonneg)]
-    obtain hb | hb := le_total n b
-    · obtain ⟨d, rfl⟩ := exists_add_of_le hb
-      rw [Nat.cast_add]; rw [add_comm n]; rw [add_comm (n : R)]; rw [add_le_add_iff_right]; rw [add_le_add_iff_right]; rw [le_floor_iff ha]
-    · obtain ⟨d, rfl⟩ := exists_add_of_le hb
-      rw [Nat.cast_add]; rw [add_left_comm _ b]; rw [add_left_comm _ (b : R)]
-      refine iff_of_true ?_ le_self_add
-exact le_add_of_nonneg_right ha.trans le_add_of_nonneg_right d.cast_nonneg
-
-Depends on / 依赖: Nat.cast_add, add_comm, add_le_add_iff_right, add_left_comm, add_nonneg, cast_add, cast_nonneg, d.cast, eq_of_forall_le_iff, exists_add_of_le, ha.trans, iff_of_true, le_add_of_nonneg_right, le_floor_iff, le_self_add, le_total, n.cast_nonneg
--/
-theorem floor_add_natCast [IsStrictOrderedRing R] (ha : 0 <= a) (n : Nat) : ⌊a + n⌋₊ = ⌊a⌋₊ + n :=
+theorem floor_add_natCast [IsStrictOrderedRing R] (ha : 0 ≤ a) (n : ℕ) : ⌊a + n⌋₊ = ⌊a⌋₊ + n :=
   eq_of_forall_le_iff fun b => by
     rw [le_floor_iff (add_nonneg ha n.cast_nonneg)]
     obtain hb | hb := le_total n b
     · obtain ⟨d, rfl⟩ := exists_add_of_le hb
-      rw [Nat.cast_add]; rw [add_comm n]; rw [add_comm (n : R)]; rw [add_le_add_iff_right]; rw [add_le_add_iff_right]; rw [le_floor_iff ha]
+      rw [Nat.cast_add, add_comm n, add_comm (n : R), add_le_add_iff_right, add_le_add_iff_right,
+        le_floor_iff ha]
     · obtain ⟨d, rfl⟩ := exists_add_of_le hb
-      rw [Nat.cast_add]; rw [add_left_comm _ b]; rw [add_left_comm _ (b : R)]
+      rw [Nat.cast_add, add_left_comm _ b, add_left_comm _ (b : R)]
       refine iff_of_true ?_ le_self_add
-exact le_add_of_nonneg_right ha.trans le_add_of_nonneg_right d.cast_nonneg
+      exact le_add_of_nonneg_right <| ha.trans <| le_add_of_nonneg_right d.cast_nonneg
 
 variable [IsStrictOrderedRing R]
 
 @[push]
-/--
-theorem `floor_add_one` / 定理 `floor_add_one`
-
-English:
-theorem floor_add_one
-  given: (ha : 0 <= a)
-  statement: ⌊a + 1⌋₊ = ⌊a⌋₊ + 1
-  proof: by
-  rw [← cast_one]; rw [floor_add_natCast ha 1]
-
-@[push]
-
-中文:
-定理 floor_add_one
-  条件: (ha : 0 <= a)
-  结论: ⌊a + 1⌋₊ = ⌊a⌋₊ + 1
-  证明: by
-  rw [← cast_one]; rw [floor_add_natCast ha 1]
-
-@[push]
-
-Depends on / 依赖: cast_one, floor_add_natCast
+/-
+**Nat.floor_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_add_one (ha : 0 <= a) : ⌊a + 1⌋₊ = ⌊a⌋₊ + 1
+参数：ha : 0 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Nat.floor_add_natCast`：floor_add_natCast [IsStrictOrderedRing R] (ha : 0
+ <= a) (n : Nat) : ⌊a + n⌋₊ = ⌊a⌋₊ + n
 -/
-theorem floor_add_one (ha : 0 <= a) : ⌊a + 1⌋₊ = ⌊a⌋₊ + 1 := by
-  rw [← cast_one]; rw [floor_add_natCast ha 1]
+theorem floor_add_one (ha : 0 ≤ a) : ⌊a + 1⌋₊ = ⌊a⌋₊ + 1 := by
+  rw [← cast_one, floor_add_natCast ha 1]
 
 @[push]
-/--
-theorem `floor_add_ofNat` / 定理 `floor_add_ofNat`
-
-English:
-theorem floor_add_ofNat
-  given: (ha : 0 <= a) (n : Nat) [n.AtLeastTwo]
-  proof: floor_add_natCast ha n
-
-@[simp]
-
-中文:
-定理 floor_add_of自然数
-  条件: (ha : 0 <= a) (n : 自然数) [n.AtLeastTwo]
-  证明: floor_add_natCast ha n
-
-@[simp]
-
-Depends on / 依赖: floor_add_natCast
+/-
+**Nat.floor_add_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_add_ofNat (ha : 0 <= a) (n : Nat) [n.AtLeastTwo] : ⌊a + ofNat(n)⌋₊ =
+ ⌊a⌋₊ + ofNat(n)
+参数：ha : 0 <= a；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.floor_add_natCast`：floor_add_natCast [IsStrictOrderedRing R] (ha : 0
+ <= a) (n : Nat) : ⌊a + n⌋₊ = ⌊a⌋₊ + n
 -/
-theorem floor_add_ofNat (ha : 0 <= a) (n : Nat) [n.AtLeastTwo] :
+theorem floor_add_ofNat (ha : 0 ≤ a) (n : ℕ) [n.AtLeastTwo] :
     ⌊a + ofNat(n)⌋₊ = ⌊a⌋₊ + ofNat(n) :=
   floor_add_natCast ha n
 
 @[simp]
-/--
-theorem `floor_sub_natCast` / 定理 `floor_sub_natCast`
-
-English:
-theorem floor_sub_natCast
-  given: [Sub R] [OrderedSub R] [ExistsAddOfLE R] (a : R) (n : Nat)
-  proof: by
-  obtain ha | ha := le_total a 0
-  · rw [floor_of_nonpos ha, floor_of_nonpos (tsub_nonpos_of_le (ha.trans n.cast_nonneg)), zero_tsub]
-  rcases le_total a n with h | h
-  · rw [floor_of_nonpos (tsub_nonpos_of_le h), eq_comm, tsub_eq_zero_iff_le]
-    exact Nat.cast_le.1 ((Nat.floor_le ha).trans h)
-  · rw [eq_tsub_iff_add_eq_of_le (le_floor h), ← floor_add_natCast _, tsub_add_cancel_of_le h]
-    exact le_tsub_of_add_le_left ((add_zero _).trans_le h)
-
-@[simp]
-
-中文:
-定理 floor_sub_natCast
-  条件: [减法 R] [OrderedSub R] [ExistsAddOfLE R] (a : R) (n : 自然数)
-  证明: by
-  obtain ha | ha := le_total a 0
-  · rw [floor_of_nonpos ha, floor_of_nonpos (tsub_nonpos_of_le (ha.trans n.cast_nonneg)), zero_tsub]
-  rcases le_total a n with h | h
-  · rw [floor_of_nonpos (tsub_nonpos_of_le h), eq_comm, tsub_eq_zero_iff_le]
-    exact Nat.cast_le.1 ((Nat.floor_le ha).trans h)
-  · rw [eq_tsub_iff_add_eq_of_le (le_floor h), ← floor_add_natCast _, tsub_add_cancel_of_le h]
-    exact le_tsub_of_add_le_left ((add_zero _).trans_le h)
-
-@[simp]
-
-Depends on / 依赖: Nat.cast_le, Nat.floor_le, add_zero, cast_le, cast_nonneg, eq_comm, eq_tsub_iff_add_eq_of_le, floor_add_natCast, floor_le, floor_of_nonpos, ha.trans, le_floor, le_total, le_tsub_of_add_le_left, n.cast_nonneg, trans_le, tsub_add_cancel_of_le, tsub_eq_zero_iff_le, tsub_nonpos_of_le, zero_tsub
+/-
+**Nat.floor_sub_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_sub_natCast [Sub R] [OrderedSub R] [ExistsAddOfLE R] (a : R) (n : Na
+t) : ⌊a - n⌋₊ = ⌊a⌋₊ - n
+参数：a : R；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.floor_of_nonpos`：floor_of_nonpos (ha : a <= 0) : ⌊a⌋₊ = 0
+· 使用定理 `tsub_nonpos_of_le`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : AddCom
+mMonoid α] [inst_2 : Sub α] [OrderedSub α] {a b : α},   a ≤ b → a - b ≤ 0
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Nat.cast_nonneg`：cast_nonneg {α} [Semiring α] [PartialOrder α] [IsOrdere
+dRing α] (n : Nat) : 0 <= (n : α)
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `zero_tsub`：zero_tsub (a : α) : 0 - a = 0
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `tsub_eq_zero_iff_le`：tsub_eq_zero_iff_le : a - b = 0 ↔ a <= b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.cast_le`：cast_le : (m : α) <= n ↔ m <= n
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `FloorSemiring.instZeroLEOneClass`：∀ {α : Type u_2} [inst : Semiring α] [
+inst_1 : PartialOrder α] [FloorSemiring α], ZeroLEOneClass α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Nat.floor_le`：floor_le (ha : 0 <= a) : (⌊a⌋₊ : R) <= a
+· 使用定理 `eq_tsub_iff_add_eq_of_le`：eq_tsub_iff_add_eq_of_le (h : c <= b) : a = b 
+- c ↔ a + c = b
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `Nat.le_floor`：le_floor (h : (n : α) <= a) : n <= ⌊a⌋₊
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.floor_add_natCast`：floor_add_natCast [IsStrictOrderedRing R] (ha : 0
+ <= a) (n : Nat) : ⌊a + n⌋₊ = ⌊a⌋₊ + n
+· 使用定理 `le_tsub_of_add_le_left`：le_tsub_of_add_le_left (h : a + b <= c) : b <= c
+ - a
+· 使用定理 `IsCancelAdd.toIsLeftCancelAdd`：∀ {G : Type u} {inst : Add G} [self : IsC
+ancelAdd G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedCancelAddMonoid.toIsCancelAdd`：∀ {α : Type u_1} [inst : AddComm
+Monoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], IsCancelAdd α
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `Eq.trans_le`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a = b → b ≤ c →
+ a ≤ c
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+（共 31 条，此处仅展示前 30 条）
 -/
-theorem floor_sub_natCast [Sub R] [OrderedSub R] [ExistsAddOfLE R] (a : R) (n : Nat) :
+theorem floor_sub_natCast [Sub R] [OrderedSub R] [ExistsAddOfLE R] (a : R) (n : ℕ) :
     ⌊a - n⌋₊ = ⌊a⌋₊ - n := by
   obtain ha | ha := le_total a 0
   · rw [floor_of_nonpos ha, floor_of_nonpos (tsub_nonpos_of_le (ha.trans n.cast_nonneg)), zero_tsub]
@@ -1590,251 +1365,276 @@ theorem floor_sub_natCast [Sub R] [OrderedSub R] [ExistsAddOfLE R] (a : R) (n : 
     exact le_tsub_of_add_le_left ((add_zero _).trans_le h)
 
 @[simp]
-/--
-theorem `floor_sub_one` / 定理 `floor_sub_one`
-
-English:
-theorem floor_sub_one
-  given: [Sub R] [OrderedSub R] [ExistsAddOfLE R] (a : R)
-  statement: ⌊a - 1⌋₊ = ⌊a⌋₊ - 1
-  proof: mod_cast floor_sub_natCast a 1
-
-@[simp]
-
-中文:
-定理 floor_sub_one
-  条件: [减法 R] [OrderedSub R] [ExistsAddOfLE R] (a : R)
-  结论: ⌊a - 1⌋₊ = ⌊a⌋₊ - 1
-  证明: mod_cast floor_sub_natCast a 1
-
-@[simp]
-
-Depends on / 依赖: floor_sub_natCast, mod_cast
+/-
+**Nat.floor_sub_one** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_sub_one [Sub R] [OrderedSub R] [ExistsAddOfLE R] (a : R) : ⌊a - 1⌋₊ 
+= ⌊a⌋₊ - 1
+参数：a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.floor_sub_natCast`：floor_sub_natCast [Sub R] [OrderedSub R] [ExistsA
+ddOfLE R] (a : R) (n : Nat) : ⌊a - n⌋₊ = ⌊a⌋₊ - n
 -/
 theorem floor_sub_one [Sub R] [OrderedSub R] [ExistsAddOfLE R] (a : R) : ⌊a - 1⌋₊ = ⌊a⌋₊ - 1 :=
   mod_cast floor_sub_natCast a 1
 
 @[simp]
-/--
-theorem `floor_sub_ofNat` / 定理 `floor_sub_ofNat`
-
-English:
-theorem floor_sub_ofNat
-  given: [Sub R] [OrderedSub R] [ExistsAddOfLE R] (a : R) (n : Nat) [n.AtLeastTwo]
-  proof: floor_sub_natCast a n
-
-中文:
-定理 floor_sub_of自然数
-  条件: [减法 R] [OrderedSub R] [ExistsAddOfLE R] (a : R) (n : 自然数) [n.AtLeastTwo]
-  证明: floor_sub_natCast a n
-
-Depends on / 依赖: floor_sub_natCast
+/-
+**Nat.floor_sub_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_sub_ofNat [Sub R] [OrderedSub R] [ExistsAddOfLE R] (a : R) (n : Nat)
+ [n.AtLeastTwo] : ⌊a - ofNat(n)⌋₊ = ⌊a⌋₊ - ofNat(n)
+参数：a : R；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.floor_sub_natCast`：floor_sub_natCast [Sub R] [OrderedSub R] [ExistsA
+ddOfLE R] (a : R) (n : Nat) : ⌊a - n⌋₊ = ⌊a⌋₊ - n
 -/
-theorem floor_sub_ofNat [Sub R] [OrderedSub R] [ExistsAddOfLE R] (a : R) (n : Nat) [n.AtLeastTwo] :
+theorem floor_sub_ofNat [Sub R] [OrderedSub R] [ExistsAddOfLE R] (a : R) (n : ℕ) [n.AtLeastTwo] :
     ⌊a - ofNat(n)⌋₊ = ⌊a⌋₊ - ofNat(n) :=
   floor_sub_natCast a n
-
-/--
-theorem `ceil_add_natCast` / 定理 `ceil_add_natCast`
-
-English:
-theorem ceil_add_natCast
-  given: (ha : 0 <= a) (n : Nat)
-  statement: ⌈a + n⌉₊ = ⌈a⌉₊ + n
-  proof: eq_of_forall_ge_iff fun b => by
-    contrapose!
-    rw [lt_ceil]
-    obtain hb | hb := le_or_gt n b
-    · obtain ⟨d, rfl⟩ := exists_add_of_le hb
-      rw [Nat.cast_add]; rw [add_comm n]; rw [add_comm (n : R)]; rw [add_lt_add_iff_right]; rw [add_lt_add_iff_right]; rw [lt_ceil]
-    · exact iff_of_true (lt_add_of_nonneg_of_lt ha <| cast_lt.2 hb) (Nat.lt_add_left _ hb)
-
-中文:
-定理 ceil_add_natCast
-  条件: (ha : 0 <= a) (n : 自然数)
-  结论: ⌈a + n⌉₊ = ⌈a⌉₊ + n
-  证明: eq_of_forall_ge_iff fun b => by
-    contrapose!
-    rw [lt_ceil]
-    obtain hb | hb := le_or_gt n b
-    · obtain ⟨d, rfl⟩ := exists_add_of_le hb
-      rw [Nat.cast_add]; rw [add_comm n]; rw [add_comm (n : R)]; rw [add_lt_add_iff_right]; rw [add_lt_add_iff_right]; rw [lt_ceil]
-    · exact iff_of_true (lt_add_of_nonneg_of_lt ha <| cast_lt.2 hb) (Nat.lt_add_left _ hb)
-
-Depends on / 依赖: Nat.cast_add, Nat.lt_add_left, add_comm, add_lt_add_iff_right, cast_add, cast_lt, contrapose, eq_of_forall_ge_iff, exists_add_of_le, iff_of_true, le_or_gt, lt_add_left, lt_add_of_nonneg_of_lt, lt_ceil
+/-
+**Nat.ceil_add_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ceil_add_natCast (ha : 0 <= a) (n : Nat) : ⌈a + n⌉₊ = ⌈a⌉₊ + n
+参数：ha : 0 <= a；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_forall_ge_iff`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α},
+ (∀ (c : α), a ≤ c ↔ b ≤ c) → a = b
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose_iff₁`：contrapose_iff₁ {p q : Prop} 
+: (¬ p ↔ ¬ q) -> (p ↔ q)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.lt_ceil`：lt_ceil : n < ⌈a⌉₊ ↔ (n : α) < a
+· 使用定理 `le_or_gt`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b <
+ a
+· 使用定理 `ExistsAddOfLE.exists_add_of_le`：∀ {α : Type u} {inst : Add α} {inst_1 : 
+LE α} [self : ExistsAddOfLE α] {a b : α}, a ≤ b → ∃ c, b = a + c
+· 使用定理 `CanonicallyOrderedAdd.toExistsAddOfLE`：∀ {α : Type u_1} {inst : Add α} {
+inst_1 : LE α} [self : CanonicallyOrderedAdd α], ExistsAddOfLE α
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `add_lt_add_iff_right`：∀ {α : Type u_1} [inst : Add α] [inst_1 : LT α] [A
+ddRightStrictMono α] [AddRightReflectLT α] (a : α) {b c : α},   b + a < c + a ↔ 
+b < c
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `IsCancelAdd.toIsLeftCancelAdd`：∀ {G : Type u} {inst : Add G} [self : IsC
+ancelAdd G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedCancelAddMonoid.toIsCancelAdd`：∀ {α : Type u_1} [inst : AddComm
+Monoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], IsCancelAdd α
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `iff_of_true`：∀ {a b : Prop}, a → b → (a ↔ b)
+· 使用定理 `lt_add_of_nonneg_of_lt`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1
+ : Preorder α] [AddRightMono α] {a b c : α}, 0 ≤ a → b < c → b < a + c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.cast_lt`：cast_lt : (m : α) < n ↔ m < n
+（共 33 条，此处仅展示前 30 条）
 -/
-theorem ceil_add_natCast (ha : 0 <= a) (n : Nat) : ⌈a + n⌉₊ = ⌈a⌉₊ + n :=
+theorem ceil_add_natCast (ha : 0 ≤ a) (n : ℕ) : ⌈a + n⌉₊ = ⌈a⌉₊ + n :=
   eq_of_forall_ge_iff fun b => by
     contrapose!
     rw [lt_ceil]
     obtain hb | hb := le_or_gt n b
     · obtain ⟨d, rfl⟩ := exists_add_of_le hb
-      rw [Nat.cast_add]; rw [add_comm n]; rw [add_comm (n : R)]; rw [add_lt_add_iff_right]; rw [add_lt_add_iff_right]; rw [lt_ceil]
+      rw [Nat.cast_add, add_comm n, add_comm (n : R), add_lt_add_iff_right, add_lt_add_iff_right,
+        lt_ceil]
     · exact iff_of_true (lt_add_of_nonneg_of_lt ha <| cast_lt.2 hb) (Nat.lt_add_left _ hb)
-
-/--
-theorem `ceil_add_one` / 定理 `ceil_add_one`
-
-English:
-theorem ceil_add_one
-  given: (ha : 0 <= a)
-  statement: ⌈a + 1⌉₊ = ⌈a⌉₊ + 1
-  proof: by
-  rw [cast_one.symm]; rw [ceil_add_natCast ha 1]
-
-中文:
-定理 ceil_add_one
-  条件: (ha : 0 <= a)
-  结论: ⌈a + 1⌉₊ = ⌈a⌉₊ + 1
-  证明: by
-  rw [cast_one.symm]; rw [ceil_add_natCast ha 1]
-
-Depends on / 依赖: cast_one, cast_one.symm, ceil_add_natCast
+/-
+**Nat.ceil_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ceil_add_one (ha : 0 <= a) : ⌈a + 1⌉₊ = ⌈a⌉₊ + 1
+参数：ha : 0 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Nat.ceil_add_natCast`：ceil_add_natCast (ha : 0 <= a) (n : Nat) : ⌈a + n⌉
+₊ = ⌈a⌉₊ + n
 -/
-theorem ceil_add_one (ha : 0 <= a) : ⌈a + 1⌉₊ = ⌈a⌉₊ + 1 := by
-  rw [cast_one.symm]; rw [ceil_add_natCast ha 1]
-
-/--
-theorem `ceil_add_ofNat` / 定理 `ceil_add_ofNat`
-
-English:
-theorem ceil_add_ofNat
-  given: (ha : 0 <= a) (n : Nat) [n.AtLeastTwo]
-  proof: ceil_add_natCast ha n
-
-@[bound]
-
-中文:
-定理 ceil_add_of自然数
-  条件: (ha : 0 <= a) (n : 自然数) [n.AtLeastTwo]
-  证明: ceil_add_natCast ha n
-
-@[bound]
-
-Depends on / 依赖: ceil_add_natCast
+theorem ceil_add_one (ha : 0 ≤ a) : ⌈a + 1⌉₊ = ⌈a⌉₊ + 1 := by
+  rw [cast_one.symm, ceil_add_natCast ha 1]
+/-
+**Nat.ceil_add_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ceil_add_ofNat (ha : 0 <= a) (n : Nat) [n.AtLeastTwo] : ⌈a + ofNat(n)⌉₊ = 
+⌈a⌉₊ + ofNat(n)
+参数：ha : 0 <= a；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.ceil_add_natCast`：ceil_add_natCast (ha : 0 <= a) (n : Nat) : ⌈a + n⌉
+₊ = ⌈a⌉₊ + n
 -/
-theorem ceil_add_ofNat (ha : 0 <= a) (n : Nat) [n.AtLeastTwo] :
+theorem ceil_add_ofNat (ha : 0 ≤ a) (n : ℕ) [n.AtLeastTwo] :
     ⌈a + ofNat(n)⌉₊ = ⌈a⌉₊ + ofNat(n) :=
   ceil_add_natCast ha n
 
 @[bound]
-/--
-theorem `ceil_lt_add_one` / 定理 `ceil_lt_add_one`
-
-English:
-theorem ceil_lt_add_one
-  given: (ha : 0 <= a)
-  statement: (⌈a⌉₊ : R) < a + 1
-  proof: lt_ceil.1 (Nat.lt_succ_self _).trans_le (ceil_add_one ha).ge
-
-@[bound]
-
-中文:
-定理 ceil_lt_add_one
-  条件: (ha : 0 <= a)
-  结论: (⌈a⌉₊ : R) < a + 1
-  证明: lt_ceil.1 (Nat.lt_succ_self _).trans_le (ceil_add_one ha).ge
-
-@[bound]
-
-Depends on / 依赖: Nat.lt_succ_self, ceil_add_one, lt_ceil, lt_succ_self, trans_le
+/-
+**Nat.ceil_lt_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ceil_lt_add_one (ha : 0 <= a) : (⌈a⌉₊ : R) < a + 1
+参数：ha : 0 <= a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.lt_ceil`：lt_ceil : n < ⌈a⌉₊ ↔ (n : α) < a
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Nat.lt_succ_self`：∀ (n : ℕ), n < n.succ
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Nat.ceil_add_one`：ceil_add_one (ha : 0 <= a) : ⌈a + 1⌉₊ = ⌈a⌉₊ + 1
 -/
-theorem ceil_lt_add_one (ha : 0 <= a) : (⌈a⌉₊ : R) < a + 1 :=
-lt_ceil.1 (Nat.lt_succ_self _).trans_le (ceil_add_one ha).ge
+theorem ceil_lt_add_one (ha : 0 ≤ a) : (⌈a⌉₊ : R) < a + 1 :=
+  lt_ceil.1 <| (Nat.lt_succ_self _).trans_le (ceil_add_one ha).ge
 
 @[bound]
-/--
-theorem `ceil_add_le` / 定理 `ceil_add_le`
-
-English:
-theorem ceil_add_le
-  given: (a b : R)
-  statement: ⌈a + b⌉₊ <= ⌈a⌉₊ + ⌈b⌉₊
-  proof: by
-  rw [ceil_le]; rw [Nat.cast_add]
-  gcongr <;> apply le_ceil
-
-中文:
-定理 ceil_add_le
-  条件: (a b : R)
-  结论: ⌈a + b⌉₊ <= ⌈a⌉₊ + ⌈b⌉₊
-  证明: by
-  rw [ceil_le]; rw [Nat.cast_add]
-  gcongr <;> apply le_ceil
-
-Depends on / 依赖: Nat.cast_add, cast_add, ceil_le, le_ceil
+/-
+**Nat.ceil_add_le** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ceil_add_le (a b : R) : ⌈a + b⌉₊ <= ⌈a⌉₊ + ⌈b⌉₊
+参数：a b : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.ceil_le`：ceil_le : ⌈a⌉₊ <= n ↔ a <= n
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `Nat.le_ceil`：le_ceil (a : R) : a <= ⌈a⌉₊
 -/
-theorem ceil_add_le (a b : R) : ⌈a + b⌉₊ <= ⌈a⌉₊ + ⌈b⌉₊ := by
-  rw [ceil_le]; rw [Nat.cast_add]
+theorem ceil_add_le (a b : R) : ⌈a + b⌉₊ ≤ ⌈a⌉₊ + ⌈b⌉₊ := by
+  rw [ceil_le, Nat.cast_add]
   gcongr <;> apply le_ceil
 
 variable [Sub R] [OrderedSub R] [ExistsAddOfLE R]
-
-/--
-lemma `ceil_sub_natCast` / 引理 `ceil_sub_natCast`
-
-English:
-lemma ceil_sub_natCast
-  given: (a : R) (n : Nat)
-  statement: ⌈a - n⌉₊ = ⌈a⌉₊ - n
-  proof: by
-  obtain han | hna := le_total a n
-  · rwa [ceil_eq_zero.2 (tsub_nonpos_of_le han), eq_comm, tsub_eq_zero_iff_le, Nat.ceil_le]
-  · refine eq_tsub_of_add_eq ?_
-    rw [← ceil_add_natCast]; rw [tsub_add_cancel_of_le hna]
-    exact le_tsub_of_add_le_left ((add_zero _).trans_le hna)
-
-中文:
-引理 ceil_sub_natCast
-  条件: (a : R) (n : 自然数)
-  结论: ⌈a - n⌉₊ = ⌈a⌉₊ - n
-  证明: by
-  obtain han | hna := le_total a n
-  · rwa [ceil_eq_zero.2 (tsub_nonpos_of_le han), eq_comm, tsub_eq_zero_iff_le, Nat.ceil_le]
-  · refine eq_tsub_of_add_eq ?_
-    rw [← ceil_add_natCast]; rw [tsub_add_cancel_of_le hna]
-    exact le_tsub_of_add_le_left ((add_zero _).trans_le hna)
+/-
+**Nat.ceil_sub_natCast** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ {R : Type u_1} [inst : Semiring R] [inst_1 : LinearOrder R] [inst_2 : Fl
+oorSemiring R] [IsStrictOrderedRing R]   [inst_4 : Sub R] [OrderedSub R] [Exists
+AddOfLE R] (a : R) (n : ℕ), ⌈a - ↑n⌉₊ = ⌈a⌉₊ - n
+参数：a : R；n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_total`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a ≤ b ∨ b ≤
+ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.ceil_eq_zero`：ceil_eq_zero : ⌈a⌉₊ = 0 ↔ a <= 0
+· 使用定理 `tsub_nonpos_of_le`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : AddCom
+mMonoid α] [inst_2 : Sub α] [OrderedSub α] {a b : α},   a ≤ b → a - b ≤ 0
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `tsub_eq_zero_iff_le`：tsub_eq_zero_iff_le : a - b = 0 ↔ a <= b
+· 使用定理 `Nat.ceil_le`：ceil_le : ⌈a⌉₊ <= n ↔ a <= n
+· 使用定理 `eq_tsub_of_add_eq`：eq_tsub_of_add_eq (h : a + c = b) : a = b - c
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.ceil_add_natCast`：ceil_add_natCast (ha : 0 <= a) (n : Nat) : ⌈a + n⌉
+₊ = ⌈a⌉₊ + n
+· 使用定理 `le_tsub_of_add_le_left`：le_tsub_of_add_le_left (h : a + b <= c) : b <= c
+ - a
+· 使用定理 `IsCancelAdd.toIsLeftCancelAdd`：∀ {G : Type u} {inst : Add G} [self : IsC
+ancelAdd G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedCancelAddMonoid.toIsCancelAdd`：∀ {α : Type u_1} [inst : AddComm
+Monoid α] [inst_1 : PartialOrder α] [IsOrderedCancelAddMonoid α], IsCancelAdd α
+· 使用定理 `IsStrictOrderedRing.toIsOrderedCancelAddMonoid`：∀ {R : Type u_1} {inst :
+ Semiring R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R],   IsOrder
+edCancelAddMonoid R
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `Eq.trans_le`：∀ {α : Type u_1} {a b c : α} [inst : LE α], a = b → b ≤ c →
+ a ≤ c
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `tsub_add_cancel_of_le`：tsub_add_cancel_of_le (h : a <= b) : b - a + a = 
+b
 -/
-@[simp] lemma ceil_sub_natCast (a : R) (n : Nat) : ⌈a - n⌉₊ = ⌈a⌉₊ - n := by
+@[simp] lemma ceil_sub_natCast (a : R) (n : ℕ) : ⌈a - n⌉₊ = ⌈a⌉₊ - n := by
   obtain han | hna := le_total a n
   · rwa [ceil_eq_zero.2 (tsub_nonpos_of_le han), eq_comm, tsub_eq_zero_iff_le, Nat.ceil_le]
   · refine eq_tsub_of_add_eq ?_
-    rw [← ceil_add_natCast]; rw [tsub_add_cancel_of_le hna]
+    rw [← ceil_add_natCast, tsub_add_cancel_of_le hna]
     exact le_tsub_of_add_le_left ((add_zero _).trans_le hna)
-
-/--
-lemma `ceil_sub_one` / 引理 `ceil_sub_one`
-
-English:
-lemma ceil_sub_one
-  given: (a : R)
-  statement: ⌈a - 1⌉₊ = ⌈a⌉₊ - 1
-  proof: by simpa using ceil_sub_natCast a 1
-
-中文:
-引理 ceil_sub_one
-  条件: (a : R)
-  结论: ⌈a - 1⌉₊ = ⌈a⌉₊ - 1
-  证明: by simpa using ceil_sub_natCast a 1
+/-
+**Nat.ceil_sub_one** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ {R : Type u_1} [inst : Semiring R] [inst_1 : LinearOrder R] [inst_2 : Fl
+oorSemiring R] [IsStrictOrderedRing R]   [inst_4 : Sub R] [OrderedSub R] [Exists
+AddOfLE R] (a : R), ⌈a - 1⌉₊ = ⌈a⌉₊ - 1
+参数：a : R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Nat.ceil_sub_natCast`：∀ {R : Type u_1} [inst : Semiring R] [inst_1 : Lin
+earOrder R] [inst_2 : FloorSemiring R] [IsStrictOrderedRing R]   [inst_4 : Sub R
+] [Ordered…
 -/
 @[simp] lemma ceil_sub_one (a : R) : ⌈a - 1⌉₊ = ⌈a⌉₊ - 1 := by simpa using ceil_sub_natCast a 1
-
-/--
-lemma `ceil_sub_ofNat` / 引理 `ceil_sub_ofNat`
-
-English:
-lemma ceil_sub_ofNat
-  given: (a : R) (n : Nat) [n.AtLeastTwo]
-  statement: ⌈a - ofNat(n)⌉₊ = ⌈a⌉₊ - ofNat(n)
-  proof: ceil_sub_natCast a n
-
-中文:
-引理 ceil_sub_of自然数
-  条件: (a : R) (n : 自然数) [n.AtLeastTwo]
-  结论: ⌈a - of自然数(n)⌉₊ = ⌈a⌉₊ - of自然数(n)
-  证明: ceil_sub_natCast a n
+/-
+**Nat.ceil_sub_ofNat** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ {R : Type u_1} [inst : Semiring R] [inst_1 : LinearOrder R] [inst_2 : Fl
+oorSemiring R] [IsStrictOrderedRing R]   [inst_4 : Sub R] [OrderedSub R] [Exists
+AddOfLE R] (a : R) (n : ℕ) [inst_7 : n.AtLeastTwo],   ⌈a - OfNat.ofNat n⌉₊ = ⌈a⌉
+₊ - OfNat.ofNat n
+参数：a : R；n : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.ceil_sub_natCast`：∀ {R : Type u_1} [inst : Semiring R] [inst_1 : Lin
+earOrder R] [inst_2 : FloorSemiring R] [IsStrictOrderedRing R]   [inst_4 : Sub R
+] [Ordered…
 -/
-@[simp] lemma ceil_sub_ofNat (a : R) (n : Nat) [n.AtLeastTwo] : ⌈a - ofNat(n)⌉₊ = ⌈a⌉₊ - ofNat(n) :=
+@[simp] lemma ceil_sub_ofNat (a : R) (n : ℕ) [n.AtLeastTwo] : ⌈a - ofNat(n)⌉₊ = ⌈a⌉₊ - ofNat(n) :=
   ceil_sub_natCast a n
 
 end LinearOrderedSemiring
@@ -1844,160 +1644,190 @@ section LinearOrderedRing
 variable [Ring R] [LinearOrder R] [IsStrictOrderedRing R] [FloorSemiring R]
 
 @[bound]
-/--
-theorem `sub_one_lt_floor` / 定理 `sub_one_lt_floor`
-
-English:
-theorem sub_one_lt_floor
-  given: (a : R)
-  statement: a - 1 < ⌊a⌋₊
-  proof: sub_lt_iff_lt_add.2 lt_floor_add_one a
-
-中文:
-定理 sub_one_lt_floor
-  条件: (a : R)
-  结论: a - 1 < ⌊a⌋₊
-  证明: sub_lt_iff_lt_add.2 lt_floor_add_one a
-
-Depends on / 依赖: lt_floor_add_one, sub_lt_iff_lt_add
+/-
+**Nat.sub_one_lt_floor** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：sub_one_lt_floor (a : R) : a - 1 < ⌊a⌋₊
+参数：a : R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `sub_lt_iff_lt_add`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LT α] [A
+ddRightStrictMono α] {a b c : α}, a - c < b ↔ a < b + c
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `Nat.lt_floor_add_one`：lt_floor_add_one (a : R) : a < ⌊a⌋₊ + 1
 -/
 theorem sub_one_lt_floor (a : R) : a - 1 < ⌊a⌋₊ :=
-sub_lt_iff_lt_add.2 lt_floor_add_one a
-
-/--
-lemma `self_sub_floor_lt_one` / 引理 `self_sub_floor_lt_one`
-
-English:
-lemma self_sub_floor_lt_one
-  given: (a : R)
-  statement: a - ⌊a⌋₊ < 1
-  proof: sub_lt_iff_lt_add'.mpr lt_floor_add_one a
-
-中文:
-引理 self_sub_floor_lt_one
-  条件: (a : R)
-  结论: a - ⌊a⌋₊ < 1
-  证明: sub_lt_iff_lt_add'.mpr lt_floor_add_one a
-
-Depends on / 依赖: lt_floor_add_one, sub_lt_iff_lt_add
+  sub_lt_iff_lt_add.2 <| lt_floor_add_one a
+/-
+**Nat.self_sub_floor_lt_one** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：self_sub_floor_lt_one (a : R) : a - ⌊a⌋₊ < 1
+参数：a : R。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `sub_lt_iff_lt_add'`：∀ {α : Type u} [inst : AddCommGroup α] [inst_1 : LT 
+α] [AddLeftStrictMono α] {a b c : α}, a - b < c ↔ a < b + c
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `Nat.lt_floor_add_one`：lt_floor_add_one (a : R) : a < ⌊a⌋₊ + 1
 -/
 lemma self_sub_floor_lt_one (a : R) : a - ⌊a⌋₊ < 1 :=
-sub_lt_iff_lt_add'.mpr lt_floor_add_one a
-
-/--
-lemma `zero_le_self_sub_floor` / 引理 `zero_le_self_sub_floor`
-
-English:
-lemma zero_le_self_sub_floor
-  given: {a : R} (ha : 0 <= a)
-  statement: 0 <= a - ⌊a⌋₊
-  proof: sub_nonneg.mpr Nat.floor_le ha
-
-中文:
-引理 zero_le_self_sub_floor
-  条件: {a : R} (ha : 0 <= a)
-  结论: 0 <= a - ⌊a⌋₊
-  证明: sub_nonneg.mpr Nat.floor_le ha
-
-Depends on / 依赖: Nat.floor_le, floor_le, sub_nonneg, sub_nonneg.mpr
+  sub_lt_iff_lt_add'.mpr <| lt_floor_add_one a
+/-
+**Nat.zero_le_self_sub_floor** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：zero_le_self_sub_floor {a : R} (ha : 0 <= a) : 0 <= a - ⌊a⌋₊
+参数：ha : 0 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `sub_nonneg`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [AddRight
+Mono α] {a b : α}, 0 ≤ a - b ↔ b ≤ a
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `Nat.floor_le`：floor_le (ha : 0 <= a) : (⌊a⌋₊ : R) <= a
 -/
-lemma zero_le_self_sub_floor {a : R} (ha : 0 <= a) : 0 <= a - ⌊a⌋₊ :=
-sub_nonneg.mpr Nat.floor_le ha
-
-/--
-lemma `abs_sub_floor_le` / 引理 `abs_sub_floor_le`
-
-English:
-lemma abs_sub_floor_le
-  given: {a : R} (ha : 0 <= a)
-  statement: |a - ⌊a⌋₊| <= 1
-  proof: by
+lemma zero_le_self_sub_floor {a : R} (ha : 0 ≤ a) : 0 ≤ a - ⌊a⌋₊ :=
+  sub_nonneg.mpr <| Nat.floor_le ha
+/-
+**Nat.abs_sub_floor_le** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：abs_sub_floor_le {a : R} (ha : 0 <= a) : |a - ⌊a⌋₊| <= 1
+参数：ha : 0 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `abs_le`：∀ {G : Type u_1} [inst : AddCommGroup G] [inst_1 : LinearOrder G
+] [IsOrderedAddMonoid G] {a b : G},   |a| ≤ b ↔ -b ≤ a ∧ a ≤ b
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Nat.floor_le`：floor_le (ha : 0 <= a) : (⌊a⌋₊ : R) <= a
+· 使用定理 `le_add_of_nonneg_right`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1
+ : LE α] [AddLeftMono α] {a b : α}, 0 ≤ b → a ≤ a + b
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
+· 使用定理 `FloorSemiring.instZeroLEOneClass`：∀ {α : Type u_2} [inst : Semiring α] [
+inst_1 : PartialOrder α] [FloorSemiring α], ZeroLEOneClass α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `AddGroup.toOrderedSub`：∀ {α : Type u_1} [inst : AddGroup α] [inst_1 : LE
+ α] [AddRightMono α], OrderedSub α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Nat.lt_floor_add_one`：lt_floor_add_one (a : R) : a < ⌊a⌋₊ + 1
+-/
+lemma abs_sub_floor_le {a : R} (ha : 0 ≤ a) : |a - ⌊a⌋₊| ≤ 1 := by
   refine abs_le.mpr ⟨?_, ?_⟩
   · simpa using (floor_le ha).trans (le_add_of_nonneg_right zero_le_one)
   · simpa [add_comm] using (lt_floor_add_one a).le
-
-中文:
-引理 abs_sub_floor_le
-  条件: {a : R} (ha : 0 <= a)
-  结论: |a - ⌊a⌋₊| <= 1
-  证明: by
-  refine abs_le.mpr ⟨?_, ?_⟩
-  · simpa using (floor_le ha).trans (le_add_of_nonneg_right zero_le_one)
-  · simpa [add_comm] using (lt_floor_add_one a).le
-
-Depends on / 依赖: abs_le, abs_le.mpr, add_comm, floor_le, le_add_of_nonneg_right, lt_floor_add_one, zero_le_one
+/-
+**Nat.abs_floor_sub_le** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：abs_floor_sub_le {a : R} (ha : 0 <= a) : |⌊a⌋₊ - a| <= 1
+参数：ha : 0 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Nat.abs_sub_floor_le`：abs_sub_floor_le {a : R} (ha : 0 <= a) : |a - ⌊a⌋₊
+| <= 1
+· 使用定理 `abs_sub_comm`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] 
+(a b : α), |a - b| = |b - a|
 -/
-lemma abs_sub_floor_le {a : R} (ha : 0 <= a) : |a - ⌊a⌋₊| <= 1 := by
-  refine abs_le.mpr ⟨?_, ?_⟩
-  · simpa using (floor_le ha).trans (le_add_of_nonneg_right zero_le_one)
-  · simpa [add_comm] using (lt_floor_add_one a).le
-
-/--
-lemma `abs_floor_sub_le` / 引理 `abs_floor_sub_le`
-
-English:
-lemma abs_floor_sub_le
-  given: {a : R} (ha : 0 <= a)
-  statement: |⌊a⌋₊ - a| <= 1
-  proof: abs_sub_comm a ⌊a⌋₊ ▸ abs_sub_floor_le ha
-
-中文:
-引理 abs_floor_sub_le
-  条件: {a : R} (ha : 0 <= a)
-  结论: |⌊a⌋₊ - a| <= 1
-  证明: abs_sub_comm a ⌊a⌋₊ ▸ abs_sub_floor_le ha
-
-Depends on / 依赖: abs_sub_comm, abs_sub_floor_le
--/
-lemma abs_floor_sub_le {a : R} (ha : 0 <= a) : |⌊a⌋₊ - a| <= 1 :=
+lemma abs_floor_sub_le {a : R} (ha : 0 ≤ a) : |⌊a⌋₊ - a| ≤ 1 :=
   abs_sub_comm a ⌊a⌋₊ ▸ abs_sub_floor_le ha
-
-/--
-lemma `abs_sub_ceil_le` / 引理 `abs_sub_ceil_le`
-
-English:
-lemma abs_sub_ceil_le
-  given: {a : R} (ha : 0 <= a)
-  statement: |a - ⌈a⌉₊| <= 1
-  proof: by
-  refine abs_le.mpr ⟨?_, ?_⟩
-  · simpa using (ceil_lt_add_one ha).le
-  · simpa using (le_ceil a).trans (le_add_of_nonneg_left zero_le_one)
-
-中文:
-引理 abs_sub_ceil_le
-  条件: {a : R} (ha : 0 <= a)
-  结论: |a - ⌈a⌉₊| <= 1
-  证明: by
-  refine abs_le.mpr ⟨?_, ?_⟩
-  · simpa using (ceil_lt_add_one ha).le
-  · simpa using (le_ceil a).trans (le_add_of_nonneg_left zero_le_one)
-
-Depends on / 依赖: abs_le, abs_le.mpr, ceil_lt_add_one, le_add_of_nonneg_left, le_ceil, zero_le_one
+/-
+**Nat.abs_sub_ceil_le** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：abs_sub_ceil_le {a : R} (ha : 0 <= a) : |a - ⌈a⌉₊| <= 1
+参数：ha : 0 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `abs_le`：∀ {G : Type u_1} [inst : AddCommGroup G] [inst_1 : LinearOrder G
+] [IsOrderedAddMonoid G] {a b : G},   |a| ≤ b ↔ -b ≤ a ∧ a ≤ b
+· 使用定理 `IsOrderedRing.toIsOrderedAddMonoid`：∀ {R : Type u_1} {inst : Semiring R}
+ {inst_1 : PartialOrder R} [self : IsOrderedRing R], IsOrderedAddMonoid R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Nat.ceil_lt_add_one`：ceil_lt_add_one (ha : 0 <= a) : (⌈a⌉₊ : R) < a + 1
+· 使用定理 `AddGroup.toOrderedSub`：∀ {α : Type u_1} [inst : AddGroup α] [inst_1 : LE
+ α] [AddRightMono α], OrderedSub α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Nat.le_ceil`：le_ceil (a : R) : a <= ⌈a⌉₊
+· 使用定理 `le_add_of_nonneg_left`：∀ {α : Type u_1} [inst : AddZeroClass α] [inst_1 
+: LE α] [AddRightMono α] {a b : α}, 0 ≤ b → a ≤ b + a
+· 使用定理 `zero_le_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ LE α] [ZeroLEOneClass α], 0 ≤ 1
+· 使用定理 `FloorSemiring.instZeroLEOneClass`：∀ {α : Type u_2} [inst : Semiring α] [
+inst_1 : PartialOrder α] [FloorSemiring α], ZeroLEOneClass α
 -/
-lemma abs_sub_ceil_le {a : R} (ha : 0 <= a) : |a - ⌈a⌉₊| <= 1 := by
+lemma abs_sub_ceil_le {a : R} (ha : 0 ≤ a) : |a - ⌈a⌉₊| ≤ 1 := by
   refine abs_le.mpr ⟨?_, ?_⟩
   · simpa using (ceil_lt_add_one ha).le
   · simpa using (le_ceil a).trans (le_add_of_nonneg_left zero_le_one)
-
-/--
-lemma `abs_ceil_sub_le` / 引理 `abs_ceil_sub_le`
-
-English:
-lemma abs_ceil_sub_le
-  given: {a : R} (ha : 0 <= a)
-  statement: |⌈a⌉₊ - a| <= 1
-  proof: abs_sub_comm a ⌈a⌉₊ ▸ abs_sub_ceil_le ha
-
-中文:
-引理 abs_ceil_sub_le
-  条件: {a : R} (ha : 0 <= a)
-  结论: |⌈a⌉₊ - a| <= 1
-  证明: abs_sub_comm a ⌈a⌉₊ ▸ abs_sub_ceil_le ha
-
-Depends on / 依赖: abs_sub_ceil_le, abs_sub_comm
+/-
+**Nat.abs_ceil_sub_le** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：abs_ceil_sub_le {a : R} (ha : 0 <= a) : |⌈a⌉₊ - a| <= 1
+参数：ha : 0 <= a。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Nat.abs_sub_ceil_le`：abs_sub_ceil_le {a : R} (ha : 0 <= a) : |a - ⌈a⌉₊| 
+<= 1
+· 使用定理 `abs_sub_comm`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] 
+(a b : α), |a - b| = |b - a|
 -/
-lemma abs_ceil_sub_le {a : R} (ha : 0 <= a) : |⌈a⌉₊ - a| <= 1 :=
+lemma abs_ceil_sub_le {a : R} (ha : 0 ≤ a) : |⌈a⌉₊ - a| ≤ 1 :=
   abs_sub_comm a ⌈a⌉₊ ▸ abs_sub_ceil_le ha
 
 end LinearOrderedRing
@@ -2005,135 +1835,134 @@ end LinearOrderedRing
 variable [Semiring R] [LinearOrder R] [FloorSemiring R] {a : R}
 variable {S : Type*} [Semiring S] [LinearOrder S] [FloorSemiring S] {b : S}
 
-/--
-theorem `floor_congr` / 定理 `floor_congr`
-
-English:
-theorem floor_congr
-  statement: [IsStrictOrderedRing R] [IsStrictOrderedRing S]
-  proof: by
-  have h₀ : 0 <= a ↔ 0 <= b := by simpa only [cast_zero] using h 0
-  obtain ha | ha := lt_or_ge a 0
-  · rw [floor_of_nonpos ha.le, floor_of_nonpos (le_of_not_ge <| h₀.not.mp ha.not_ge)]
-  exact (le_floor <| (h _).1 <| floor_le ha).antisymm (le_floor <| (h _).2 <| floor_le <| h₀.1 ha)
-
-中文:
-定理 floor_congr
-  结论: [是StrictOrdered环 R] [是StrictOrdered环 S]
-  证明: by
-  have h₀ : 0 <= a ↔ 0 <= b := by simpa only [cast_zero] using h 0
-  obtain ha | ha := lt_or_ge a 0
-  · rw [floor_of_nonpos ha.le, floor_of_nonpos (le_of_not_ge <| h₀.not.mp ha.not_ge)]
-  exact (le_floor <| (h _).1 <| floor_le ha).antisymm (le_floor <| (h _).2 <| floor_le <| h₀.1 ha)
-
-Depends on / 依赖: antisymm, cast_zero, floor_le, floor_of_nonpos, ha.le, ha.not_ge, le_floor, le_of_not_ge, lt_or_ge, not.mp, not_ge
+/-
+**Nat.floor_congr** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：floor_congr [IsStrictOrderedRing R] [IsStrictOrderedRing S] (h : forall n 
+: Nat, (n : R) <= a ↔ (n : S) <= b) : ⌊a⌋₊ = ⌊b⌋₊
+参数：h : forall n : Nat, (n : R) <= a ↔ (n : S) <= b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `lt_or_ge`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a < b ∨ b ≤
+ a
+· 使用定理 `Nat.floor_of_nonpos`：floor_of_nonpos (ha : a <= 0) : ⌊a⌋₊ = 0
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `le_of_not_ge`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b 
+→ b ≤ a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Nat.le_floor`：le_floor (h : (n : α) <= a) : n <= ⌊a⌋₊
+· 使用定理 `Nat.floor_le`：floor_le (ha : 0 <= a) : (⌊a⌋₊ : R) <= a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 -/
 theorem floor_congr [IsStrictOrderedRing R] [IsStrictOrderedRing S]
-    (h : forall n : Nat, (n : R) <= a ↔ (n : S) <= b) : ⌊a⌋₊ = ⌊b⌋₊ := by
-  have h₀ : 0 <= a ↔ 0 <= b := by simpa only [cast_zero] using h 0
+    (h : ∀ n : ℕ, (n : R) ≤ a ↔ (n : S) ≤ b) : ⌊a⌋₊ = ⌊b⌋₊ := by
+  have h₀ : 0 ≤ a ↔ 0 ≤ b := by simpa only [cast_zero] using h 0
   obtain ha | ha := lt_or_ge a 0
   · rw [floor_of_nonpos ha.le, floor_of_nonpos (le_of_not_ge <| h₀.not.mp ha.not_ge)]
   exact (le_floor <| (h _).1 <| floor_le ha).antisymm (le_floor <| (h _).2 <| floor_le <| h₀.1 ha)
-
-/--
-theorem `ceil_congr` / 定理 `ceil_congr`
-
-English:
-theorem ceil_congr
-  given: (h : forall n : Nat, a <= n ↔ b <= n)
-  statement: ⌈a⌉₊ = ⌈b⌉₊
-  proof: (ceil_le.2 <| (h _).2 <| le_ceil _).antisymm ceil_le.2 (h _).1 le_ceil _
-
-中文:
-定理 ceil_congr
-  条件: (h : 对任意 n : 自然数, a <= n ↔ b <= n)
-  结论: ⌈a⌉₊ = ⌈b⌉₊
-  证明: (ceil_le.2 <| (h _).2 <| le_ceil _).antisymm ceil_le.2 (h _).1 le_ceil _
-
-Depends on / 依赖: antisymm, ceil_le, le_ceil
+/-
+**Nat.ceil_congr** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ceil_congr (h : forall n : Nat, a <= n ↔ b <= n) : ⌈a⌉₊ = ⌈b⌉₊
+参数：h : forall n : Nat, a <= n ↔ b <= n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.ceil_le`：ceil_le : ⌈a⌉₊ <= n ↔ a <= n
+· 使用定理 `Nat.le_ceil`：le_ceil (a : R) : a <= ⌈a⌉₊
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
 -/
-theorem ceil_congr (h : forall n : Nat, a <= n ↔ b <= n) : ⌈a⌉₊ = ⌈b⌉₊ :=
-(ceil_le.2 <| (h _).2 <| le_ceil _).antisymm ceil_le.2 (h _).1 le_ceil _
+theorem ceil_congr (h : ∀ n : ℕ, a ≤ n ↔ b ≤ n) : ⌈a⌉₊ = ⌈b⌉₊ :=
+  (ceil_le.2 <| (h _).2 <| le_ceil _).antisymm <| ceil_le.2 <| (h _).1 <| le_ceil _
 
 variable {F : Type*} [FunLike F R S] [RingHomClass F R S]
-
-/--
-theorem `map_floor` / 定理 `map_floor`
-
-English:
-theorem map_floor
-  statement: [IsStrictOrderedRing R] [IsStrictOrderedRing S]
-  proof: floor_congr fun n => by rw [← map_natCast f, hf.le_iff_le]
-
-中文:
-定理 map_floor
-  结论: [是StrictOrdered环 R] [是StrictOrdered环 S]
-  证明: floor_congr fun n => by rw [← map_natCast f, hf.le_iff_le]
-
-Depends on / 依赖: floor_congr, hf.le_iff_le, le_iff_le, map_natCast
+/-
+**Nat.map_floor** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：map_floor [IsStrictOrderedRing R] [IsStrictOrderedRing S] (f : F) (hf : St
+rictMono f) (a : R) : ⌊f a⌋₊ = ⌊a⌋₊
+参数：f : F；hf : StrictMono f；a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.floor_congr`：floor_congr [IsStrictOrderedRing R] [IsStrictOrderedRin
+g S] (h : forall n : Nat, (n : R) <= a ↔ (n : S) <= b) : ⌊a⌋₊ = ⌊b⌋₊
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
+· 使用定理 `StrictMono.le_iff_le`：StrictMono.le_iff_le (hf : StrictMono f) {a b : α}
+ : f a <= f b ↔ a <= b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem map_floor [IsStrictOrderedRing R] [IsStrictOrderedRing S]
     (f : F) (hf : StrictMono f) (a : R) : ⌊f a⌋₊ = ⌊a⌋₊ :=
   floor_congr fun n => by rw [← map_natCast f, hf.le_iff_le]
-
-/--
-theorem `map_ceil` / 定理 `map_ceil`
-
-English:
-theorem map_ceil
-  given: (f : F) (hf : StrictMono f) (a : R)
-  statement: ⌈f a⌉₊ = ⌈a⌉₊
-  proof: ceil_congr fun n => by rw [← map_natCast f, hf.le_iff_le]
-
-中文:
-定理 map_ceil
-  条件: (f : F) (hf : 严格递增 f) (a : R)
-  结论: ⌈f a⌉₊ = ⌈a⌉₊
-  证明: ceil_congr fun n => by rw [← map_natCast f, hf.le_iff_le]
-
-Depends on / 依赖: ceil_congr, hf.le_iff_le, le_iff_le, map_natCast
+/-
+**Nat.map_ceil** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：map_ceil (f : F) (hf : StrictMono f) (a : R) : ⌈f a⌉₊ = ⌈a⌉₊
+参数：f : F；hf : StrictMono f；a : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.ceil_congr`：ceil_congr (h : forall n : Nat, a <= n ↔ b <= n) : ⌈a⌉₊ 
+= ⌈b⌉₊
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `map_natCast`：map_natCast [FunLike F R S] [RingHomClass F R S] (f : F) : 
+forall n : Nat, f (n : R) = n
+· 使用定理 `StrictMono.le_iff_le`：StrictMono.le_iff_le (hf : StrictMono f) {a b : α}
+ : f a <= f b ↔ a <= b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem map_ceil (f : F) (hf : StrictMono f) (a : R) : ⌈f a⌉₊ = ⌈a⌉₊ :=
   ceil_congr fun n => by rw [← map_natCast f, hf.le_iff_le]
 
 end Nat
 
-/--
-theorem `subsingleton_floorSemiring` / 定理 `subsingleton_floorSemiring`
+/-- There exists at most one `FloorSemiring` structure on a linear ordered semiring. -/
+/-
+**subsingleton_floorSemiring** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：subsingleton_floorSemiring {R} [Semiring R] [LinearOrder R] : Subsingleton
+ (FloorSemiring R)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `GaloisConnection.l_unique`：∀ {α : Type u} {β : Type v} [inst : PartialOr
+der α] [inst_1 : Preorder β] {u : α → β} {l : β → α},   GaloisConnection l u →  
+   ∀ {u' : α → …
+· 使用定理 `FloorSemiring.gc_ceil`：∀ {α : Type u_4} {inst : Semiring α} {inst_1 : Pa
+rtialOrder α} [self : FloorSemiring α],   GaloisConnection FloorSemiring.ceil Na
+t.cast
+· 使用定理 `lt_or_ge`：∀ {α : Type u_1} [inst : LinearOrder α] (a b : α), a < b ∨ b ≤
+ a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `FloorSemiring.floor_of_neg`：∀ {α : Type u_4} {inst : Semiring α} {inst_1
+ : PartialOrder α} [self : FloorSemiring α] {a : α},   a < 0 → FloorSemiring.flo
+or a = 0
+· 使用引理 `eq_of_forall_le_iff`：eq_of_forall_le_iff (H : forall c, c <= a ↔ c <= b)
+ : a = b
+· 使用定理 `FloorSemiring.gc_floor`：∀ {α : Type u_4} {inst : Semiring α} {inst_1 : P
+artialOrder α} [self : FloorSemiring α] {a : α} {n : ℕ},   0 ≤ a → (n ≤ FloorSem
+iring.floor …
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem subsingleton_floorSemiring
-  given: {R} [Semiring R] [LinearOrder R]
-  proof: by
-  refine ⟨fun H₁ H₂ => ?_⟩
-  have : H₁.ceil = H₂.ceil := funext fun a => (H₁.gc_ceil.l_unique H₂.gc_ceil) fun n => rfl
-  have : H₁.floor = H₂.floor := by
-    ext a
-    rcases lt_or_ge a 0 with h | h
-    · rw [H₁.floor_of_neg, H₂.floor_of_neg] <;> exact h
-    · refine eq_of_forall_le_iff fun n => ?_
-      rw [H₁.gc_floor]; rw [H₂.gc_floor] <;> exact h
-  cases H₁
-  cases H₂
-  congr
-
-中文:
-定理 subsingleton_floorSemiring
-  条件: {R} [半环 R] [线性序 R]
-  证明: by
-  refine ⟨fun H₁ H₂ => ?_⟩
-  have : H₁.ceil = H₂.ceil := funext fun a => (H₁.gc_ceil.l_unique H₂.gc_ceil) fun n => rfl
-  have : H₁.floor = H₂.floor := by
-    ext a
-    rcases lt_or_ge a 0 with h | h
-    · rw [H₁.floor_of_neg, H₂.floor_of_neg] <;> exact h
-    · refine eq_of_forall_le_iff fun n => ?_
-      rw [H₁.gc_floor]; rw [H₂.gc_floor] <;> exact h
-  cases H₁
-  cases H₂
-  congr
-
-Depends on / 依赖: eq_of_forall_le_iff, floor_of_neg, gc_ceil, gc_ceil.l_unique, gc_floor, l_unique, lt_or_ge
+--- 原说明 ---
+There exists at most one `FloorSemiring` structure on a linear ordered semiring.
 -/
 theorem subsingleton_floorSemiring {R} [Semiring R] [LinearOrder R] :
     Subsingleton (FloorSemiring R) := by
@@ -2144,7 +1973,7 @@ theorem subsingleton_floorSemiring {R} [Semiring R] [LinearOrder R] :
     rcases lt_or_ge a 0 with h | h
     · rw [H₁.floor_of_neg, H₂.floor_of_neg] <;> exact h
     · refine eq_of_forall_le_iff fun n => ?_
-      rw [H₁.gc_floor]; rw [H₂.gc_floor] <;> exact h
+      rw [H₁.gc_floor, H₂.gc_floor] <;> exact h
   cases H₁
   cases H₂
   congr

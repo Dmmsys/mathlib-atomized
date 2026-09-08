@@ -38,62 +38,52 @@ Artinian, artinian, Artinian ring, Artinian module, artinian ring, artinian modu
 
 public section
 
-/--
-Definition of `IsArtinian` / `IsArtinian` 的定义
+/-- `IsArtinian R M` is the proposition that `M` is an Artinian `R`-module,
+implemented as the well-foundedness of submodule inclusion. -/
+/-
+**IsArtinian** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：IsArtinian (R M) [Semiring R] [AddCommMonoid M] [Module R M] : Prop
+参数：R M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsArtinian
-  signature: (R M) [Semiring R] [AddCommMonoid M] [Module R M]
-  body: WellFoundedLT (Submodule R M)
-
-中文:
-缩写 是Artin
-  签名: (R M) [半环 R] [加法交换幺半群 M] [模 R M]
-  定义体: WellFoundedLT (Submodule R M)
-
-Depends on / 依赖: Submodule, WellFoundedLT
+--- 原说明 ---
+`IsArtinian R M` is the proposition that `M` is an Artinian `R`-module,
+implemented as the well-foundedness of submodule inclusion.
 -/
 abbrev IsArtinian (R M) [Semiring R] [AddCommMonoid M] [Module R M] : Prop :=
   WellFoundedLT (Submodule R M)
-
-/--
-theorem `isArtinian_iff` / 定理 `isArtinian_iff`
-
-English:
-theorem isArtinian_iff
-  given: (R M) [Semiring R] [AddCommMonoid M] [Module R M]
-  statement: IsArtinian R M ↔
-  proof: isWellFounded_iff _ _
-
-中文:
-定理 isArtinian_iff
-  条件: (R M) [半环 R] [加法交换幺半群 M] [模 R M]
-  结论: 是Artin R M ↔
-  证明: isWellFounded_iff _ _
-
-Depends on / 依赖: isWellFounded_iff
+/-
+**isArtinian_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isArtinian_iff (R M) [Semiring R] [AddCommMonoid M] [Module R M] : IsArtin
+ian R M ↔ WellFounded (· < · : Submodule R M -> Submodule R M -> Prop)
+参数：R M。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isWellFounded_iff`：∀ (α : Type u) (r : α → α → Prop), IsWellFounded α r 
+↔ WellFounded r
 -/
 theorem isArtinian_iff (R M) [Semiring R] [AddCommMonoid M] [Module R M] : IsArtinian R M ↔
-    WellFounded (· < · : Submodule R M -> Submodule R M -> Prop) :=
+    WellFounded (· < · : Submodule R M → Submodule R M → Prop) :=
   isWellFounded_iff _ _
 
-/--
-theorem `IsArtinian.induction` / 定理 `IsArtinian.induction`
+/-- If `∀ I > J, P I` implies `P J`, then `P` holds for all submodules. -/
+/-
+**IsArtinian.induction** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：IsArtinian.induction {R M} [Semiring R] [AddCommMonoid M] [Module R M] [Is
+Artinian R M] {P : Submodule R M -> Prop} (hgt : forall I, (forall J < I, P J) -
+> P I) (I : Submodule R M) : P I
+参数：hgt : forall I, (forall J < I, P J) -> P I；I : Submodule R M。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WellFoundedLT.induction`：induction {motive : α -> Prop} (a : α) (ind : f
+orall x, (forall y, y < x -> motive y) -> motive x) : motive a
 
-English:
-theorem IsArtinian.induction
-  statement: {R M} [Semiring R] [AddCommMonoid M] [Module R M] [IsArtinian R M]
-  proof: WellFoundedLT.induction I hgt
-
-中文:
-定理 是Artin.induction
-  结论: {R M} [半环 R] [加法交换幺半群 M] [模 R M] [是Artin R M]
-  证明: WellFoundedLT.induction I hgt
-
-Depends on / 依赖: WellFoundedLT, WellFoundedLT.induction
+--- 原说明 ---
+If `∀ I > J, P I` implies `P J`, then `P` holds for all submodules.
 -/
 theorem IsArtinian.induction {R M} [Semiring R] [AddCommMonoid M] [Module R M] [IsArtinian R M]
-    {P : Submodule R M -> Prop} (hgt : forall I, (forall J < I, P J) -> P I) (I : Submodule R M) : P I :=
+    {P : Submodule R M → Prop} (hgt : ∀ I, (∀ J < I, P J) → P I) (I : Submodule R M) : P I :=
   WellFoundedLT.induction I hgt
 
 -- See `Mathlib/RingTheory/Artinian/Ring.lean`
@@ -107,39 +97,29 @@ convenience in the commutative case. For a right Artinian ring, use `IsArtinian 
 For equivalent definitions, see `Mathlib/RingTheory/Artinian/Ring.lean`.
 -/
 @[stacks 00J5]
-/--
-Definition of `IsArtinianRing` / `IsArtinianRing` 的定义
+/-
+**IsArtinianRing** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：IsArtinianRing (R) [Semiring R]
+参数：R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsArtinianRing
-  signature: (R) [Semiring R]
-  body: IsArtinian R R
+--- 原说明 ---
+A ring is Artinian if it is Artinian as a module over itself.
 
-中文:
-缩写 是Artin环
-  签名: (R) [半环 R]
-  定义体: IsArtinian R R
+Strictly speaking, this should be called `IsLeftArtinianRing` but we omit the `L
+eft` for
+convenience in the commutative case. For a right Artinian ring, use `IsArtinian 
+Rᵐᵒᵖ R`.
 
-Depends on / 依赖: IsArtinian
+For equivalent definitions, see `Mathlib/RingTheory/Artinian/Ring.lean`.
 -/
 abbrev IsArtinianRing (R) [Semiring R] :=
   IsArtinian R R
-
-/--
-theorem `isArtinianRing_iff` / 定理 `isArtinianRing_iff`
-
-English:
-theorem isArtinianRing_iff
-  given: {R} [Semiring R]
-  statement: IsArtinianRing R ↔ IsArtinian R R
-  proof: Iff.rfl
-
-中文:
-定理 isArtinianRing_iff
-  条件: {R} [半环 R]
-  结论: 是Artin环 R ↔ 是Artin R R
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**isArtinianRing_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isArtinianRing_iff {R} [Semiring R] : IsArtinianRing R ↔ IsArtinian R R
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem isArtinianRing_iff {R} [Semiring R] : IsArtinianRing R ↔ IsArtinian R R := Iff.rfl

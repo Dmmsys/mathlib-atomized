@@ -30,84 +30,48 @@ public abbrev FoldDeclErrorRef := IO.Ref (List MessageData)
 
 /-- Run `act env name constInfo`, catching potential errors. -/
 @[inline]
-/--
-Definition of `visitConst` / `visitConst` 的定义
+/-
+**Lean.Meta.visitConst** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta`。
+形式化陈述：visitConst (modName : Name) (errorRef : FoldDeclErrorRef) (act : α -> Name
+ -> ConstantInfo -> MetaM α) (a : α) (name : Name) (constInfo : ConstantInfo) : 
+MetaM α
+参数：modName : Name；errorRef : FoldDeclErrorRef；act : α -> Name -> ConstantInfo ->
+ MetaM α；a : α；name : Name；constInfo : ConstantInfo。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition visitConst
-  signature: (modName : Name) (errorRef : FoldDeclErrorRef)
-  body: do
-  try
-    act a name constInfo
-  catch e =>
-    let msg := m!"Processing failure with {name} in {modName}:\n {e.toMessageData}"
-    errorRef.modify (msg :: ·)
-    return a
-
-中文:
-定义 visitConst
-  签名: (modName : Name) (errorRef : FoldDeclErrorRef)
-  定义体: do
-  try
-    act a name constInfo
-  catch e =>
-    let msg := m!"Processing failure with {name} in {modName}:\n {e.toMessageData}"
-    errorRef.modify (msg :: ·)
-    return a
+--- 原说明 ---
+Run `act env name constInfo`, catching potential errors.
 -/
 def visitConst (modName : Name) (errorRef : FoldDeclErrorRef)
-    (act : α -> Name -> ConstantInfo -> MetaM α)
+    (act : α → Name → ConstantInfo → MetaM α)
     (a : α) (name : Name) (constInfo : ConstantInfo) : MetaM α := do
   try
     act a name constInfo
   catch e =>
-    let msg := m!"Processing failure with {name} in {modName}:\n {e.toMessageData}"
+    let msg := m!"Processing failure with {name} in {modName}:\n  {e.toMessageData}"
     errorRef.modify (msg :: ·)
     return a
 
 /-- Loop through all constants in modules with module index from `start` to `stop - 1`. -/
 @[specialize]
-/--
-Definition of `foldModules` / `foldModules` 的定义
+/-
+**Lean.Meta.foldModules** 是 Mathlib 中的一个定义，位于命名空间 `Lean.Meta`。
+形式化陈述：foldModules (ngen : NameGenerator) (errorRef : FoldDeclErrorRef) (env : En
+vironment) (init : α) (act : α -> Name -> ConstantInfo -> MetaM α) (mctx : Meta.
+Context) (cctx : Core.Context) (start stop : Nat) : EIO Exception α
+参数：ngen : NameGenerator；errorRef : FoldDeclErrorRef；env : Environment；init : α；a
+ct : α -> Name -> ConstantInfo -> MetaM α；mctx : Meta.Context；cctx : Core.Contex
+t；start stop : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition foldModules
-  signature: (ngen : NameGenerator) (errorRef : FoldDeclErrorRef)
-  body: do
-  let cctx := { cctx with initHeartbeats := ← IO.getNumHeartbeats }
-  let go : MetaM α := do
-    let mut a := init
-    for i in start...stop do
-      Core.checkInterrupted
-      let modName := env.header.moduleNames[i]!
-      let { constNames, constants, .. } := env.header.moduleData[i]!
-      for h : i in *...constNames.size do
-        let name := constNames[i]
-        let constInfo := constants[i]!
-        a ← visitConst modName errorRef act a name constInfo
-    return a
-.run' cctx { env, ngen } go.run' mctx {}
-
-中文:
-定义 foldModules
-  签名: (ngen : NameGenerator) (errorRef : FoldDeclErrorRef)
-  定义体: do
-  let cctx := { cctx with initHeartbeats := ← IO.getNumHeartbeats }
-  let go : MetaM α := do
-    let mut a := init
-    for i in start...stop do
-      Core.checkInterrupted
-      let modName := env.header.moduleNames[i]!
-      let { constNames, constants, .. } := env.header.moduleData[i]!
-      for h : i in *...constNames.size do
-        let name := constNames[i]
-        let constInfo := constants[i]!
-        a ← visitConst modName errorRef act a name constInfo
-    return a
-.run' cctx { env, ngen } go.run' mctx {}
+--- 原说明 ---
+Loop through all constants in modules with module index from `start` to `stop - 
+1`.
 -/
 def foldModules (ngen : NameGenerator) (errorRef : FoldDeclErrorRef)
-    (env : Environment) (init : α) (act : α -> Name -> ConstantInfo -> MetaM α)
+    (env : Environment) (init : α) (act : α → Name → ConstantInfo → MetaM α)
     (mctx : Meta.Context) (cctx : Core.Context)
     (start stop : Nat) : EIO Exception α := do
   let cctx := { cctx with initHeartbeats := ← IO.getNumHeartbeats }
@@ -122,7 +86,7 @@ def foldModules (ngen : NameGenerator) (errorRef : FoldDeclErrorRef)
         let constInfo := constants[i]!
         a ← visitConst modName errorRef act a name constInfo
     return a
-.run' cctx { env, ngen } go.run' mctx {}
+  go.run' mctx {} |>.run' cctx { env, ngen }
 
 /-- Fold through all imported constants using `act`.
 This uses parallelism, with each thread independently folding over a subset of modules.
@@ -130,7 +94,7 @@ The array of tasks is returned, so this function typically returns before all ta
 The results can then be combined using `Array.foldl`. -/
 @[specialize]
 public def foldImportedDecls (init : α) (cfg : Config)
-    (act : α -> Name -> ConstantInfo -> MetaM α) (constantsPerTask : Nat := 5000) :
+    (act : α → Name → ConstantInfo → MetaM α) (constantsPerTask : Nat := 5000) :
     CoreM (Array (Task (Except Exception α)) × FoldDeclErrorRef) := do
   let env ← getEnv
   let numModules := env.header.moduleData.size
@@ -159,7 +123,7 @@ public def foldImportedDecls (init : α) (cfg : Config)
 /-- Fold through all constants of the current file using `act`. -/
 @[specialize]
 public def foldCurrFileDecls (init : α) (cfg : Config)
-    (act : α -> Name -> ConstantInfo -> MetaM α) : CoreM (α × FoldDeclErrorRef) := do
+    (act : α → Name → ConstantInfo → MetaM α) : CoreM (α × FoldDeclErrorRef) := do
   let env ← getEnv
   let modName := env.header.mainModule
   let errorRef ← IO.mkRef {}
@@ -167,7 +131,8 @@ public def foldCurrFileDecls (init : α) (cfg : Config)
   setNGen parentNGen
   let go : MetaM α := env.constants.map₂.foldlM (visitConst modName errorRef act) init
   let result ← go.run' { keyedConfig := cfg.toConfigWithKey } {}
-.run' (← read) { env, ngen := childNGen }
+    |>.run' (← read) { env, ngen := childNGen }
   return (result, errorRef)
 
 end Lean.Meta
+

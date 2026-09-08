@@ -21,446 +21,316 @@ collection of theorems is to show the equivalence of the different approaches.
 
 @[expose] public section
 
-/--
-Inductive type `PosNum` / 归纳类型 `PosNum`
+/-- The type of positive binary numbers.
 
-English:
-inductive PosNum
-  parameters: : Type
-  constructors (3):
-    - one: PosNum
-    - bit1: PosNum -> PosNum
-    - bit0: PosNum -> PosNum
+```
+13 = 1101(base 2) = bit1 (bit0 (bit1 one))
+``` -/
+/-
+**PosNum** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-归纳类型 PosNum
-  参数: : 类型
-  构造子 (3 个):
-    - one: PosNum
-    - bit1: PosNum -> PosNum
-    - bit0: PosNum -> PosNum
+--- 原说明 ---
+The type of positive binary numbers.
+
+```
+13 = 1101(base 2) = bit1 (bit0 (bit1 one))
+```
 -/
 inductive PosNum : Type
   | one : PosNum
-  | bit1 : PosNum -> PosNum
-  | bit0 : PosNum -> PosNum
+  | bit1 : PosNum → PosNum
+  | bit0 : PosNum → PosNum
   deriving DecidableEq
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: One PosNum
-  body: ⟨PosNum.one⟩
-
-中文:
-实例 :
-  签名: 幺 PosNum
-  定义体: ⟨PosNum.one⟩
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : One PosNum :=
   ⟨PosNum.one⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited PosNum
-  body: ⟨1⟩
-
-中文:
-实例 :
-  签名: 可居 PosNum
-  定义体: ⟨1⟩
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited PosNum :=
   ⟨1⟩
 
-/--
-Inductive type `Num` / 归纳类型 `Num`
+/-- The type of nonnegative binary numbers, using `PosNum`.
 
-English:
-inductive Num
-  parameters: : Type
-  constructors (2):
-    - zero: Num
-    - pos: PosNum -> Num
+```
+13 = 1101(base 2) = pos (bit1 (bit0 (bit1 one)))
+``` -/
+/-
+**Num** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-归纳类型 Num
-  参数: : 类型
-  构造子 (2 个):
-    - zero: Num
-    - pos: PosNum -> Num
+--- 原说明 ---
+The type of nonnegative binary numbers, using `PosNum`.
+
+```
+13 = 1101(base 2) = pos (bit1 (bit0 (bit1 one)))
+```
 -/
 inductive Num : Type
   | zero : Num
-  | pos : PosNum -> Num
+  | pos : PosNum → Num
   deriving DecidableEq
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Zero Num
-  body: ⟨Num.zero⟩
-
-中文:
-实例 :
-  签名: 零 Num
-  定义体: ⟨Num.zero⟩
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Zero Num :=
   ⟨Num.zero⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: One Num
-  body: ⟨Num.pos 1⟩
-
-中文:
-实例 :
-  签名: 幺 Num
-  定义体: ⟨Num.pos 1⟩
-
-Depends on / 依赖: Num.pos
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : One Num :=
   ⟨Num.pos 1⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited Num
-  body: ⟨0⟩
-
-中文:
-实例 :
-  签名: 可居 Num
-  定义体: ⟨0⟩
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited Num :=
   ⟨0⟩
 
-/--
-Inductive type `ZNum` / 归纳类型 `ZNum`
+/-- Representation of integers using trichotomy around zero.
 
-English:
-inductive ZNum
-  parameters: : Type
-  constructors (3):
-    - zero: ZNum
-    - pos: PosNum -> ZNum
-    - neg: PosNum -> ZNum
+```
+13 = 1101(base 2) = pos (bit1 (bit0 (bit1 one)))
+-13 = -1101(base 2) = neg (bit1 (bit0 (bit1 one)))
+``` -/
+/-
+**ZNum** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-归纳类型 ZNum
-  参数: : 类型
-  构造子 (3 个):
-    - zero: ZNum
-    - pos: PosNum -> ZNum
-    - neg: PosNum -> ZNum
+--- 原说明 ---
+Representation of integers using trichotomy around zero.
+
+```
+13 = 1101(base 2) = pos (bit1 (bit0 (bit1 one)))
+-13 = -1101(base 2) = neg (bit1 (bit0 (bit1 one)))
+```
 -/
 inductive ZNum : Type
   | zero : ZNum
-  | pos : PosNum -> ZNum
-  | neg : PosNum -> ZNum
+  | pos : PosNum → ZNum
+  | neg : PosNum → ZNum
   deriving DecidableEq
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Zero ZNum
-  body: ⟨ZNum.zero⟩
-
-中文:
-实例 :
-  签名: 零 ZNum
-  定义体: ⟨ZNum.zero⟩
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Zero ZNum :=
   ⟨ZNum.zero⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: One ZNum
-  body: ⟨ZNum.pos 1⟩
-
-中文:
-实例 :
-  签名: 幺 ZNum
-  定义体: ⟨ZNum.pos 1⟩
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : One ZNum :=
   ⟨ZNum.pos 1⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited ZNum
-  body: ⟨0⟩
-
-中文:
-实例 :
-  签名: 可居 ZNum
-  定义体: ⟨0⟩
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited ZNum :=
   ⟨0⟩
 
 namespace PosNum
 
-/--
-Definition of `bit` / `bit` 的定义
+/-- `bit b n` appends the bit `b` to the end of `n`, where `bit tt x = x1` and `bit ff x = x0`. -/
+/-
+**PosNum.bit** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：bit (b : Bool) : PosNum -> PosNum
+参数：b : Bool。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bit
-  signature: (b : Bool)
-  body: cond b bit1 bit0
-
-中文:
-定义 bit
-  签名: (b : 布尔值)
-  定义体: cond b bit1 bit0
+--- 原说明 ---
+`bit b n` appends the bit `b` to the end of `n`, where `bit tt x = x1` and `bit 
+ff x = x0`.
 -/
-def bit (b : Bool) : PosNum -> PosNum :=
+def bit (b : Bool) : PosNum → PosNum :=
   cond b bit1 bit0
 
-/--
-Definition of `succ` / `succ` 的定义
+/-- The successor of a `PosNum`. -/
+/-
+**PosNum.succ** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：PosNum → PosNum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition succ
-  signature: : PosNum -> PosNum
-
-中文:
-定义 succ
-  签名: : PosNum -> PosNum
+--- 原说明 ---
+The successor of a `PosNum`.
 -/
-def succ : PosNum -> PosNum
+def succ : PosNum → PosNum
   | 1 => bit0 one
   | bit1 n => bit0 (succ n)
   | bit0 n => bit1 n
 
-/--
-Definition of `isOne` / `isOne` 的定义
+/-- Returns a Boolean for whether the `PosNum` is `one`. -/
+/-
+**PosNum.isOne** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：PosNum → Bool
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isOne
-  signature: : PosNum -> Bool
-
-中文:
-定义 isOne
-  签名: : PosNum -> 布尔值
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.apply_symm_apply, algebraMap_apply, algebraMap_extendRightEquiv, apply_symm_apply
+--- 原说明 ---
+Returns a Boolean for whether the `PosNum` is `one`.
 -/
-def isOne : PosNum -> Bool
+def isOne : PosNum → Bool
   | 1 => true
   | _ => false
 
-/--
-Definition of `add` / `add` 的定义
+/-- Addition of two `PosNum`s. -/
+/-
+**PosNum.add** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：PosNum → PosNum → PosNum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition add
-  signature: : PosNum -> PosNum -> PosNum
-
-中文:
-定义 add
-  签名: : PosNum -> PosNum -> PosNum
+--- 原说明 ---
+Addition of two `PosNum`s.
 -/
-protected def add : PosNum -> PosNum -> PosNum
+protected def add : PosNum → PosNum → PosNum
   | 1, b => succ b
   | a, 1 => succ a
   | bit0 a, bit0 b => bit0 (PosNum.add a b)
   | bit1 a, bit1 b => bit0 (succ (PosNum.add a b))
   | bit0 a, bit1 b => bit1 (PosNum.add a b)
   | bit1 a, bit0 b => bit1 (PosNum.add a b)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Add PosNum
-  body: ⟨PosNum.add⟩
-
-中文:
-实例 :
-  签名: 加法 PosNum
-  定义体: ⟨PosNum.add⟩
-
-Depends on / 依赖: PosNum, PosNum.add
+/-
+**PosNum.** 是 Mathlib 中的一个实例，位于命名空间 `PosNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Add PosNum :=
   ⟨PosNum.add⟩
 
-/--
-Definition of `pred'` / `pred'` 的定义
+/-- The predecessor of a `PosNum` as a `Num`. -/
+/-
+**PosNum.pred'** 是 Mathlib 中的一个定理，位于命名空间 `PosNum`。
+形式化陈述：pred'_to_nat : forall n, (pred' n : Nat) = Nat.pred n | 1 => rfl | bit0 n 
+=> have : Nat.succ ↑(pred' n) = ↑n
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pred'
-  signature: : PosNum -> Num
-
-中文:
-定义 pred'
-  签名: : PosNum -> Num
+--- 原说明 ---
+The predecessor of a `PosNum` as a `Num`.
 -/
-def pred' : PosNum -> Num
+def pred' : PosNum → Num
   | 1 => 0
   | bit0 n => Num.pos (Num.casesOn (pred' n) 1 bit1)
   | bit1 n => Num.pos (bit0 n)
 
-/--
-Definition of `pred` / `pred` 的定义
+/-- The predecessor of a `PosNum` as a `PosNum`. This means that `pred 1 = 1`. -/
+/-
+**PosNum.pred** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：pred (a : PosNum) : PosNum
+参数：a : PosNum。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PosNum.pred'`：pred'_to_nat : forall n, (pred' n : Nat) = Nat.pred n | 1 
+=> rfl | bit0 n => have : Nat.succ ↑(pred' n) = ↑n
 
-English:
-definition pred
-  signature: (a : PosNum)
-  body: Num.casesOn (pred' a) 1 id
-
-中文:
-定义 pred
-  签名: (a : PosNum)
-  定义体: Num.casesOn (pred' a) 1 id
-
-Depends on / 依赖: Num.casesOn, casesOn
+--- 原说明 ---
+The predecessor of a `PosNum` as a `PosNum`. This means that `pred 1 = 1`.
 -/
 def pred (a : PosNum) : PosNum :=
   Num.casesOn (pred' a) 1 id
 
-/--
-Definition of `size` / `size` 的定义
+/-- The number of bits of a `PosNum`, as a `PosNum`. -/
+/-
+**PosNum.size** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：PosNum → PosNum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition size
-  signature: : PosNum -> PosNum
-
-中文:
-定义 size
-  签名: : PosNum -> PosNum
+--- 原说明 ---
+The number of bits of a `PosNum`, as a `PosNum`.
 -/
-def size : PosNum -> PosNum
+def size : PosNum → PosNum
   | 1 => 1
   | bit0 n => succ (size n)
   | bit1 n => succ (size n)
 
-/--
-Definition of `natSize` / `natSize` 的定义
+/-- The number of bits of a `PosNum`, as a `Nat`. -/
+/-
+**PosNum.natSize** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：PosNum → ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition natSize
-  signature: : PosNum -> Nat
-
-中文:
-定义 natSize
-  签名: : PosNum -> 自然数
+--- 原说明 ---
+The number of bits of a `PosNum`, as a `Nat`.
 -/
-def natSize : PosNum -> Nat
+def natSize : PosNum → Nat
   | 1 => 1
   | bit0 n => Nat.succ (natSize n)
   | bit1 n => Nat.succ (natSize n)
 
-/--
-Definition of `mul` / `mul` 的定义
+/-- Multiplication of two `PosNum`s. -/
+/-
+**PosNum.mul** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：PosNum → PosNum → PosNum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mul
-  signature: (a : PosNum)
-
-中文:
-定义 mul
-  签名: (a : PosNum)
+--- 原说明 ---
+Multiplication of two `PosNum`s.
 -/
-protected def mul (a : PosNum) : PosNum -> PosNum
+protected def mul (a : PosNum) : PosNum → PosNum
   | 1 => a
   | bit0 b => bit0 (PosNum.mul a b)
   | bit1 b => bit0 (PosNum.mul a b) + a
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mul PosNum
-  body: ⟨PosNum.mul⟩
-
-中文:
-实例 :
-  签名: 乘法 PosNum
-  定义体: ⟨PosNum.mul⟩
-
-Depends on / 依赖: PosNum, PosNum.mul
+/-
+**PosNum.** 是 Mathlib 中的一个实例，位于命名空间 `PosNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mul PosNum :=
   ⟨PosNum.mul⟩
 
-/--
-Definition of `ofNatSucc` / `ofNatSucc` 的定义
+/-- `ofNatSucc n` is the `PosNum` corresponding to `n + 1`. -/
+/-
+**PosNum.ofNatSucc** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：ℕ → PosNum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofNatSucc
-  signature: : Nat -> PosNum
-
-中文:
-定义 of自然数Succ
-  签名: : 自然数 -> PosNum
+--- 原说明 ---
+`ofNatSucc n` is the `PosNum` corresponding to `n + 1`.
 -/
-def ofNatSucc : Nat -> PosNum
+def ofNatSucc : ℕ → PosNum
   | 0 => 1
   | Nat.succ n => succ (ofNatSucc n)
 
-/--
-Definition of `ofNat` / `ofNat` 的定义
+/-- `ofNat n` is the `PosNum` corresponding to `n`, except for `ofNat 0 = 1`. -/
+/-
+**PosNum.ofNat** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：ofNat (n : Nat) : PosNum
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofNat
-  signature: (n : Nat)
-  body: ofNatSucc (Nat.pred n)
-
-中文:
-定义 of自然数
-  签名: (n : 自然数)
-  定义体: ofNatSucc (Nat.pred n)
-
-Depends on / 依赖: Nat.pred, ofNatSucc
+--- 原说明 ---
+`ofNat n` is the `PosNum` corresponding to `n`, except for `ofNat 0 = 1`.
 -/
-def ofNat (n : Nat) : PosNum :=
+def ofNat (n : ℕ) : PosNum :=
   ofNatSucc (Nat.pred n)
-
-instance (priority := low) {n : Nat} : OfNat PosNum (n + 1) where
+/-
+**PosNum.** 是 Mathlib 中的一个实例，位于命名空间 `PosNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (priority := low) {n : ℕ} : OfNat PosNum (n + 1) where
   ofNat := ofNat (n + 1)
 
 open Ordering
 
-/--
-Definition of `cmp` / `cmp` 的定义
+/-- Ordering of `PosNum`s. -/
+/-
+**PosNum.cmp** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：PosNum → PosNum → Ordering
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cmp
-  signature: : PosNum -> PosNum -> Ordering
-
-中文:
-定义 cmp
-  签名: : PosNum -> PosNum -> Ordering
+--- 原说明 ---
+Ordering of `PosNum`s.
 -/
-def cmp : PosNum -> PosNum -> Ordering
+def cmp : PosNum → PosNum → Ordering
   | 1, 1 => eq
   | _, 1 => gt
   | 1, _ => lt
@@ -468,65 +338,29 @@ def cmp : PosNum -> PosNum -> Ordering
   | bit0 a, bit1 b => Ordering.casesOn (cmp a b) lt lt gt
   | bit1 a, bit0 b => Ordering.casesOn (cmp a b) lt gt gt
   | bit1 a, bit1 b => cmp a b
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LT PosNum
-  body: ⟨fun a b => cmp a b = Ordering.lt⟩
-
-中文:
-实例 :
-  签名: LT PosNum
-  定义体: ⟨fun a b => cmp a b = Ordering.lt⟩
-
-Depends on / 依赖: Ordering, Ordering.lt
+/-
+**PosNum.** 是 Mathlib 中的一个实例，位于命名空间 `PosNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LT PosNum :=
   ⟨fun a b => cmp a b = Ordering.lt⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LE PosNum
-  body: ⟨fun a b => ¬b < a⟩
-
-中文:
-实例 :
-  签名: LE PosNum
-  定义体: ⟨fun a b => ¬b < a⟩
+/-
+**PosNum.** 是 Mathlib 中的一个实例，位于命名空间 `PosNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LE PosNum :=
   ⟨fun a b => ¬b < a⟩
-
-/--
-Instance `decidableLT` / 实例 `decidableLT`
-
-English:
-instance decidableLT
-  signature: : DecidableLT PosNum
-
-中文:
-实例 decidableLT
-  签名: : DecidableLT PosNum
+/-
+**PosNum.decidableLT** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：DecidableLT PosNum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance decidableLT : DecidableLT PosNum
   | a, b => by dsimp [LT.lt]; infer_instance
-
-/--
-Instance `decidableLE` / 实例 `decidableLE`
-
-English:
-instance decidableLE
-  signature: : DecidableLE PosNum
-
-中文:
-实例 decidableLE
-  签名: : DecidableLE PosNum
+/-
+**PosNum.decidableLE** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：DecidableLE PosNum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance decidableLE : DecidableLE PosNum
   | a, b => by dsimp [LE.le]; infer_instance
@@ -539,78 +373,60 @@ variable {α : Type*} [One α] [Add α]
 
 /-- `castPosNum` casts a `PosNum` into any type which has `1` and `+`. -/
 @[coe]
-/--
-Definition of `castPosNum` / `castPosNum` 的定义
+/-
+**castPosNum** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：{α : Type u_1} → [One α] → [Add α] → PosNum → α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition castPosNum
-  signature: : PosNum -> α
-
-中文:
-定义 castPosNum
-  签名: : PosNum -> α
+--- 原说明 ---
+`castPosNum` casts a `PosNum` into any type which has `1` and `+`.
 -/
-def castPosNum : PosNum -> α
+def castPosNum : PosNum → α
   | 1 => 1
   | PosNum.bit0 a => castPosNum a + castPosNum a
   | PosNum.bit1 a => castPosNum a + castPosNum a + 1
 
 /-- `castNum` casts a `Num` into any type which has `0`, `1` and `+`. -/
 @[coe]
-/--
-Definition of `castNum` / `castNum` 的定义
+/-
+**castNum** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：{α : Type u_1} → [One α] → [Add α] → [Zero α] → Num → α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition castNum
-  signature: [Zero α]
-
-中文:
-定义 castNum
-  签名: [零 α]
+--- 原说明 ---
+`castNum` casts a `Num` into any type which has `0`, `1` and `+`.
 -/
-def castNum [Zero α] : Num -> α
+def castNum [Zero α] : Num → α
   | 0 => 0
   | Num.pos p => castPosNum p
 
 -- see Note [coercion into rings]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 900) posNumCoe : CoeHTCT PosNum α :=
   ⟨castPosNum⟩
 
 -- see Note [coercion into rings]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 900) numNatCoe [Zero α] : CoeHTCT Num α :=
   ⟨castNum⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Repr PosNum
-  body: ⟨fun n _ => repr (n : Nat)⟩
-
-中文:
-实例 :
-  签名: Repr PosNum
-  定义体: ⟨fun n _ => repr (n : Nat)⟩
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Repr PosNum :=
-  ⟨fun n _ => repr (n : Nat)⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Repr Num
-  body: ⟨fun n _ => repr (n : Nat)⟩
-
-中文:
-实例 :
-  签名: Repr Num
-  定义体: ⟨fun n _ => repr (n : Nat)⟩
+  ⟨fun n _ => repr (n : ℕ)⟩
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Repr Num :=
-  ⟨fun n _ => repr (n : Nat)⟩
+  ⟨fun n _ => repr (n : ℕ)⟩
 
 end
 
@@ -618,310 +434,222 @@ namespace Num
 
 open PosNum
 
-/--
-Definition of `succ'` / `succ'` 的定义
+/-- The successor of a `Num` as a `PosNum`. -/
+/-
+**Num.succ'** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：Num → PosNum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition succ'
-  signature: : Num -> PosNum
-
-中文:
-定义 succ'
-  签名: : Num -> PosNum
+--- 原说明 ---
+The successor of a `Num` as a `PosNum`.
 -/
-def succ' : Num -> PosNum
+def succ' : Num → PosNum
   | 0 => 1
   | pos p => succ p
 
-/--
-Definition of `succ` / `succ` 的定义
+/-- The successor of a `Num` as a `Num`. -/
+/-
+**Num.succ** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：succ (n : Num) : Num
+参数：n : Num。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition succ
-  signature: (n : Num)
-  body: pos (succ' n)
-
-中文:
-定义 succ
-  签名: (n : Num)
-  定义体: pos (succ' n)
+--- 原说明 ---
+The successor of a `Num` as a `Num`.
 -/
 def succ (n : Num) : Num :=
   pos (succ' n)
 
-/--
-Definition of `add` / `add` 的定义
+/-- Addition of two `Num`s. -/
+/-
+**Num.add** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：Num → Num → Num
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition add
-  signature: : Num -> Num -> Num
-
-中文:
-定义 add
-  签名: : Num -> Num -> Num
+--- 原说明 ---
+Addition of two `Num`s.
 -/
-protected def add : Num -> Num -> Num
+protected def add : Num → Num → Num
   | 0, a => a
   | b, 0 => b
   | pos a, pos b => pos (a + b)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Add Num
-  body: ⟨Num.add⟩
-
-中文:
-实例 :
-  签名: 加法 Num
-  定义体: ⟨Num.add⟩
-
-Depends on / 依赖: Num.add
+/-
+**Num.** 是 Mathlib 中的一个实例，位于命名空间 `Num`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Add Num :=
   ⟨Num.add⟩
 
-/--
-Definition of `bit0` / `bit0` 的定义
+/-- `bit0 n` appends a `0` to the end of `n`, where `bit0 n = n0`. -/
+/-
+**Num.bit0** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：Num → Num
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bit0
-  signature: : Num -> Num
-
-中文:
-定义 bit0
-  签名: : Num -> Num
+--- 原说明 ---
+`bit0 n` appends a `0` to the end of `n`, where `bit0 n = n0`.
 -/
-protected def bit0 : Num -> Num
+protected def bit0 : Num → Num
   | 0 => 0
   | pos n => pos (PosNum.bit0 n)
 
-/--
-Definition of `bit1` / `bit1` 的定义
+/-- `bit1 n` appends a `1` to the end of `n`, where `bit1 n = n1`. -/
+/-
+**Num.bit1** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：Num → Num
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bit1
-  signature: : Num -> Num
-
-中文:
-定义 bit1
-  签名: : Num -> Num
+--- 原说明 ---
+`bit1 n` appends a `1` to the end of `n`, where `bit1 n = n1`.
 -/
-protected def bit1 : Num -> Num
+protected def bit1 : Num → Num
   | 0 => 1
   | pos n => pos (PosNum.bit1 n)
 
-/--
-Definition of `bit` / `bit` 的定义
+/-- `bit b n` appends the bit `b` to the end of `n`, where `bit tt x = x1` and `bit ff x = x0`. -/
+/-
+**Num.bit** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：bit (b : Bool) : Num -> Num
+参数：b : Bool。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bit
-  signature: (b : Bool)
-  body: cond b Num.bit1 Num.bit0
-
-中文:
-定义 bit
-  签名: (b : 布尔值)
-  定义体: cond b Num.bit1 Num.bit0
-
-Depends on / 依赖: Num.bit0, Num.bit1
+--- 原说明 ---
+`bit b n` appends the bit `b` to the end of `n`, where `bit tt x = x1` and `bit 
+ff x = x0`.
 -/
-def bit (b : Bool) : Num -> Num :=
+def bit (b : Bool) : Num → Num :=
   cond b Num.bit1 Num.bit0
 
-/--
-Definition of `size` / `size` 的定义
+/-- The number of bits required to represent a `Num`, as a `Num`. `size 0` is defined to be `0`. -/
+/-
+**Num.size** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：Num → Num
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition size
-  signature: : Num -> Num
-
-中文:
-定义 size
-  签名: : Num -> Num
+--- 原说明 ---
+The number of bits required to represent a `Num`, as a `Num`. `size 0` is define
+d to be `0`.
 -/
-def size : Num -> Num
+def size : Num → Num
   | 0 => 0
   | pos n => pos (PosNum.size n)
 
-/--
-Definition of `natSize` / `natSize` 的定义
+/-- The number of bits required to represent a `Num`, as a `Nat`. `size 0` is defined to be `0`. -/
+/-
+**Num.natSize** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：Num → ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition natSize
-  signature: : Num -> Nat
-
-中文:
-定义 natSize
-  签名: : Num -> 自然数
+--- 原说明 ---
+The number of bits required to represent a `Num`, as a `Nat`. `size 0` is define
+d to be `0`.
 -/
-def natSize : Num -> Nat
+def natSize : Num → Nat
   | 0 => 0
   | pos n => PosNum.natSize n
 
-/--
-Definition of `mul` / `mul` 的定义
+/-- Multiplication of two `Num`s. -/
+/-
+**Num.mul** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：Num → Num → Num
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mul
-  signature: : Num -> Num -> Num
-
-中文:
-定义 mul
-  签名: : Num -> Num -> Num
+--- 原说明 ---
+Multiplication of two `Num`s.
 -/
-protected def mul : Num -> Num -> Num
+protected def mul : Num → Num → Num
   | 0, _ => 0
   | _, 0 => 0
   | pos a, pos b => pos (a * b)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mul Num
-  body: ⟨Num.mul⟩
-
-中文:
-实例 :
-  签名: 乘法 Num
-  定义体: ⟨Num.mul⟩
-
-Depends on / 依赖: Num.mul
+/-
+**Num.** 是 Mathlib 中的一个实例，位于命名空间 `Num`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mul Num :=
   ⟨Num.mul⟩
 
 open Ordering
 
-/--
-Definition of `cmp` / `cmp` 的定义
+/-- Ordering of `Num`s. -/
+/-
+**Num.cmp** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：Num → Num → Ordering
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cmp
-  signature: : Num -> Num -> Ordering
-
-中文:
-定义 cmp
-  签名: : Num -> Num -> Ordering
+--- 原说明 ---
+Ordering of `Num`s.
 -/
-def cmp : Num -> Num -> Ordering
+def cmp : Num → Num → Ordering
   | 0, 0 => eq
   | _, 0 => gt
   | 0, _ => lt
   | pos a, pos b => PosNum.cmp a b
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LT Num
-  body: ⟨fun a b => cmp a b = Ordering.lt⟩
-
-中文:
-实例 :
-  签名: LT Num
-  定义体: ⟨fun a b => cmp a b = Ordering.lt⟩
-
-Depends on / 依赖: Ordering, Ordering.lt
+/-
+**Num.** 是 Mathlib 中的一个实例，位于命名空间 `Num`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LT Num :=
   ⟨fun a b => cmp a b = Ordering.lt⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LE Num
-  body: ⟨fun a b => ¬b < a⟩
-
-中文:
-实例 :
-  签名: LE Num
-  定义体: ⟨fun a b => ¬b < a⟩
+/-
+**Num.** 是 Mathlib 中的一个实例，位于命名空间 `Num`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LE Num :=
   ⟨fun a b => ¬b < a⟩
-
-/--
-Instance `decidableLT` / 实例 `decidableLT`
-
-English:
-instance decidableLT
-  signature: : DecidableLT Num
-
-中文:
-实例 decidableLT
-  签名: : DecidableLT Num
+/-
+**Num.decidableLT** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：DecidableLT Num
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance decidableLT : DecidableLT Num
   | a, b => by dsimp [LT.lt]; infer_instance
-
-/--
-Instance `decidableLE` / 实例 `decidableLE`
-
-English:
-instance decidableLE
-  signature: : DecidableLE Num
-
-中文:
-实例 decidableLE
-  签名: : DecidableLE Num
+/-
+**Num.decidableLE** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：DecidableLE Num
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance decidableLE : DecidableLE Num
   | a, b => by dsimp [LE.le]; infer_instance
 
-/--
-Definition of `toZNum` / `toZNum` 的定义
+/-- Converts a `Num` to a `ZNum`. -/
+/-
+**Num.toZNum** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：Num → ZNum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toZNum
-  signature: : Num -> ZNum
-
-中文:
-定义 toZNum
-  签名: : Num -> ZNum
+--- 原说明 ---
+Converts a `Num` to a `ZNum`.
 -/
-def toZNum : Num -> ZNum
+def toZNum : Num → ZNum
   | 0 => 0
   | pos a => ZNum.pos a
 
-/--
-Definition of `toZNumNeg` / `toZNumNeg` 的定义
+/-- Converts `x : Num` to `-x : ZNum`. -/
+/-
+**Num.toZNumNeg** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：Num → ZNum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toZNumNeg
-  signature: : Num -> ZNum
-
-中文:
-定义 toZNumNeg
-  签名: : Num -> ZNum
+--- 原说明 ---
+Converts `x : Num` to `-x : ZNum`.
 -/
-def toZNumNeg : Num -> ZNum
+def toZNumNeg : Num → ZNum
   | 0 => 0
   | pos a => ZNum.neg a
 
-/--
-Definition of `ofNat'` / `ofNat'` 的定义
+/-- Converts a `Nat` to a `Num`. -/
+/-
+**Num.ofNat'** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：ofNat' : Nat -> Num
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofNat'
-  signature: : Nat -> Num
-  body: Nat.binaryRec 0 (fun b _ => cond b Num.bit1 Num.bit0)
-
-中文:
-定义 of自然数'
-  签名: : 自然数 -> Num
-  定义体: Nat.binaryRec 0 (fun b _ => cond b Num.bit1 Num.bit0)
-
-Depends on / 依赖: Nat.binaryRec, Num.bit0, Num.bit1, binaryRec
+--- 原说明 ---
+Converts a `Nat` to a `Num`.
 -/
-def ofNat' : Nat -> Num :=
+def ofNat' : ℕ → Num :=
   Nat.binaryRec 0 (fun b _ => cond b Num.bit1 Num.bit0)
 
 end Num
@@ -930,146 +658,128 @@ namespace ZNum
 
 open PosNum
 
-/--
-Definition of `zNeg` / `zNeg` 的定义
+/-- The negation of a `ZNum`. -/
+/-
+**ZNum.zNeg** 是 Mathlib 中的一个定义，位于命名空间 `ZNum`。
+形式化陈述：ZNum → ZNum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition zNeg
-  signature: : ZNum -> ZNum
-
-中文:
-定义 zNeg
-  签名: : ZNum -> ZNum
+--- 原说明 ---
+The negation of a `ZNum`.
 -/
-def zNeg : ZNum -> ZNum
+def zNeg : ZNum → ZNum
   | 0 => 0
   | pos a => neg a
   | neg a => pos a
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Neg ZNum
-  body: ⟨zNeg⟩
-
-中文:
-实例 :
-  签名: 取负 ZNum
-  定义体: ⟨zNeg⟩
+/-
+**ZNum.** 是 Mathlib 中的一个实例，位于命名空间 `ZNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Neg ZNum :=
   ⟨zNeg⟩
 
-/--
-Definition of `abs` / `abs` 的定义
+/-- The absolute value of a `ZNum` as a `Num`. -/
+/-
+**ZNum.abs** 是 Mathlib 中的一个定义，位于命名空间 `ZNum`。
+形式化陈述：ZNum → Num
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition abs
-  signature: : ZNum -> Num
-
-中文:
-定义 abs
-  签名: : ZNum -> Num
+--- 原说明 ---
+The absolute value of a `ZNum` as a `Num`.
 -/
-def abs : ZNum -> Num
+def abs : ZNum → Num
   | 0 => 0
   | pos a => Num.pos a
   | neg a => Num.pos a
 
-/--
-Definition of `succ` / `succ` 的定义
+/-- The successor of a `ZNum`. -/
+/-
+**ZNum.succ** 是 Mathlib 中的一个定义，位于命名空间 `ZNum`。
+形式化陈述：ZNum → ZNum
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PosNum.pred'`：pred'_to_nat : forall n, (pred' n : Nat) = Nat.pred n | 1 
+=> rfl | bit0 n => have : Nat.succ ↑(pred' n) = ↑n
 
-English:
-definition succ
-  signature: : ZNum -> ZNum
-
-中文:
-定义 succ
-  签名: : ZNum -> ZNum
+--- 原说明 ---
+The successor of a `ZNum`.
 -/
-def succ : ZNum -> ZNum
+def succ : ZNum → ZNum
   | 0 => 1
   | pos a => pos (PosNum.succ a)
   | neg a => (PosNum.pred' a).toZNumNeg
 
-/--
-Definition of `pred` / `pred` 的定义
+/-- The predecessor of a `ZNum`. -/
+/-
+**ZNum.pred** 是 Mathlib 中的一个定义，位于命名空间 `ZNum`。
+形式化陈述：ZNum → ZNum
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PosNum.pred'`：pred'_to_nat : forall n, (pred' n : Nat) = Nat.pred n | 1 
+=> rfl | bit0 n => have : Nat.succ ↑(pred' n) = ↑n
 
-English:
-definition pred
-  signature: : ZNum -> ZNum
-
-中文:
-定义 pred
-  签名: : ZNum -> ZNum
+--- 原说明 ---
+The predecessor of a `ZNum`.
 -/
-def pred : ZNum -> ZNum
+def pred : ZNum → ZNum
   | 0 => neg 1
   | pos a => (PosNum.pred' a).toZNum
   | neg a => neg (PosNum.succ a)
 
-/--
-Definition of `bit0` / `bit0` 的定义
+/-- `bit0 n` appends a `0` to the end of `n`, where `bit0 n = n0`. -/
+/-
+**ZNum.bit0** 是 Mathlib 中的一个定义，位于命名空间 `ZNum`。
+形式化陈述：ZNum → ZNum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bit0
-  signature: : ZNum -> ZNum
-
-中文:
-定义 bit0
-  签名: : ZNum -> ZNum
+--- 原说明 ---
+`bit0 n` appends a `0` to the end of `n`, where `bit0 n = n0`.
 -/
-protected def bit0 : ZNum -> ZNum
+protected def bit0 : ZNum → ZNum
   | 0 => 0
   | pos n => pos (PosNum.bit0 n)
   | neg n => neg (PosNum.bit0 n)
 
-/--
-Definition of `bit1` / `bit1` 的定义
+/-- `bit1 x` appends a `1` to the end of `x`, mapping `x` to `2 * x + 1`. -/
+/-
+**ZNum.bit1** 是 Mathlib 中的一个定义，位于命名空间 `ZNum`。
+形式化陈述：ZNum → ZNum
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PosNum.pred'`：pred'_to_nat : forall n, (pred' n : Nat) = Nat.pred n | 1 
+=> rfl | bit0 n => have : Nat.succ ↑(pred' n) = ↑n
 
-English:
-definition bit1
-  signature: : ZNum -> ZNum
-
-中文:
-定义 bit1
-  签名: : ZNum -> ZNum
+--- 原说明 ---
+`bit1 x` appends a `1` to the end of `x`, mapping `x` to `2 * x + 1`.
 -/
-protected def bit1 : ZNum -> ZNum
+protected def bit1 : ZNum → ZNum
   | 0 => 1
   | pos n => pos (PosNum.bit1 n)
   | neg n => neg (Num.casesOn (pred' n) 1 PosNum.bit1)
 
-/--
-Definition of `bitm1` / `bitm1` 的定义
+/-- `bitm1 x` appends a `1` to the end of `x`, mapping `x` to `2 * x - 1`. -/
+/-
+**ZNum.bitm1** 是 Mathlib 中的一个定义，位于命名空间 `ZNum`。
+形式化陈述：ZNum → ZNum
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PosNum.pred'`：pred'_to_nat : forall n, (pred' n : Nat) = Nat.pred n | 1 
+=> rfl | bit0 n => have : Nat.succ ↑(pred' n) = ↑n
 
-English:
-definition bitm1
-  signature: : ZNum -> ZNum
-
-中文:
-定义 bitm1
-  签名: : ZNum -> ZNum
+--- 原说明 ---
+`bitm1 x` appends a `1` to the end of `x`, mapping `x` to `2 * x - 1`.
 -/
-protected def bitm1 : ZNum -> ZNum
+protected def bitm1 : ZNum → ZNum
   | 0 => neg 1
   | pos n => pos (Num.casesOn (pred' n) 1 PosNum.bit1)
   | neg n => neg (PosNum.bit1 n)
 
-/--
-Definition of `ofInt'` / `ofInt'` 的定义
+/-- Converts an `Int` to a `ZNum`. -/
+/-
+**ZNum.ofInt'** 是 Mathlib 中的一个定义，位于命名空间 `ZNum`。
+形式化陈述：ℤ → ZNum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofInt'
-  signature: : Int -> ZNum
-
-中文:
-定义 of整数'
-  签名: : 整数 -> ZNum
+--- 原说明 ---
+Converts an `Int` to a `ZNum`.
 -/
-def ofInt' : Int -> ZNum
+def ofInt' : ℤ → ZNum
   | Int.ofNat n => Num.toZNum (Num.ofNat' n)
   | Int.negSucc n => Num.toZNumNeg (Num.ofNat' (n + 1))
 
@@ -1079,18 +789,18 @@ namespace PosNum
 
 open ZNum
 
-/--
-Definition of `sub'` / `sub'` 的定义
+/-- Subtraction of two `PosNum`s, producing a `ZNum`. -/
+/-
+**PosNum.sub'** 是 Mathlib 中的一个定理，位于命名空间 `PosNum`。
+形式化陈述：sub'_one (a : PosNum) : sub' a 1 = (pred' a).toZNum
+参数：a : PosNum。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sub'
-  signature: : PosNum -> PosNum -> ZNum
-
-中文:
-定义 sub'
-  签名: : PosNum -> PosNum -> ZNum
+--- 原说明 ---
+Subtraction of two `PosNum`s, producing a `ZNum`.
 -/
-def sub' : PosNum -> PosNum -> ZNum
+def sub' : PosNum → PosNum → ZNum
   | a, 1 => (pred' a).toZNum
   | 1, b => (pred' b).toZNumNeg
   | bit0 a, bit0 b => (sub' a b).bit0
@@ -1098,74 +808,55 @@ def sub' : PosNum -> PosNum -> ZNum
   | bit1 a, bit0 b => (sub' a b).bit1
   | bit1 a, bit1 b => (sub' a b).bit0
 
-/--
-Definition of `ofZNum'` / `ofZNum'` 的定义
+/-- Converts a `ZNum` to `Option PosNum`, where it is `some` if the `ZNum` was positive and `none`
+  otherwise. -/
+/-
+**PosNum.ofZNum'** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：ZNum → Option PosNum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofZNum'
-  signature: : ZNum -> Option PosNum
-
-中文:
-定义 ofZNum'
-  签名: : ZNum -> 选项类型 PosNum
+--- 原说明 ---
+Converts a `ZNum` to `Option PosNum`, where it is `some` if the `ZNum` was posit
+ive and `none`
+  otherwise.
 -/
-def ofZNum' : ZNum -> Option PosNum
+def ofZNum' : ZNum → Option PosNum
   | ZNum.pos p => some p
   | _ => none
 
-/--
-Definition of `ofZNum` / `ofZNum` 的定义
+/-- Converts a `ZNum` to a `PosNum`, mapping all out of range values to `1`. -/
+/-
+**PosNum.ofZNum** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：ofZNum : ZNum -> PosNum | ZNum.pos p => p | _ => 1  /-- Subtraction of `Po
+sNum`s, where if `a < b`, then `a - b = 1`. -/ protected def sub (a b : PosNum) 
+: PosNum
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofZNum
-  signature: : ZNum -> PosNum
-
-中文:
-定义 ofZNum
-  签名: : ZNum -> PosNum
-
-Depends on / 依赖: ZNum.pos
+--- 原说明 ---
+Converts a `ZNum` to a `PosNum`, mapping all out of range values to `1`.
 -/
-def ofZNum : ZNum -> PosNum
+def ofZNum : ZNum → PosNum
   | ZNum.pos p => p
   | _ => 1
 
-/--
-Definition of `sub` / `sub` 的定义
+/-- Subtraction of `PosNum`s, where if `a < b`, then `a - b = 1`. -/
+/-
+**PosNum.sub** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：PosNum → PosNum → PosNum
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PosNum.sub'`：sub'_one (a : PosNum) : sub' a 1 = (pred' a).toZNum
 
-English:
-definition sub
-  signature: (a b : PosNum)
-  body: match sub' a b with
-  | ZNum.pos p => p
-  | _ => 1
-
-中文:
-定义 sub
-  签名: (a b : PosNum)
-  定义体: match sub' a b with
-  | ZNum.pos p => p
-  | _ => 1
+--- 原说明 ---
+Subtraction of `PosNum`s, where if `a < b`, then `a - b = 1`.
 -/
 protected def sub (a b : PosNum) : PosNum :=
   match sub' a b with
   | ZNum.pos p => p
   | _ => 1
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Sub PosNum
-  body: ⟨PosNum.sub⟩
-
-中文:
-实例 :
-  签名: 减法 PosNum
-  定义体: ⟨PosNum.sub⟩
-
-Depends on / 依赖: PosNum, PosNum.sub
+/-
+**PosNum.** 是 Mathlib 中的一个实例，位于命名空间 `PosNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Sub PosNum :=
   ⟨PosNum.sub⟩
@@ -1174,149 +865,122 @@ end PosNum
 
 namespace Num
 
-/--
-Definition of `ppred` / `ppred` 的定义
+/-- The predecessor of a `Num` as an `Option Num`, where `ppred 0 = none` -/
+/-
+**Num.ppred** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：Num → Option Num
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PosNum.pred'`：pred'_to_nat : forall n, (pred' n : Nat) = Nat.pred n | 1 
+=> rfl | bit0 n => have : Nat.succ ↑(pred' n) = ↑n
 
-English:
-definition ppred
-  signature: : Num -> Option Num
-
-中文:
-定义 ppred
-  签名: : Num -> 选项类型 Num
+--- 原说明 ---
+The predecessor of a `Num` as an `Option Num`, where `ppred 0 = none`
 -/
-def ppred : Num -> Option Num
+def ppred : Num → Option Num
   | 0 => none
   | pos p => some p.pred'
 
-/--
-Definition of `pred` / `pred` 的定义
+/-- The predecessor of a `Num` as a `Num`, where `pred 0 = 0`. -/
+/-
+**Num.pred** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：Num → Num
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PosNum.pred'`：pred'_to_nat : forall n, (pred' n : Nat) = Nat.pred n | 1 
+=> rfl | bit0 n => have : Nat.succ ↑(pred' n) = ↑n
 
-English:
-definition pred
-  signature: : Num -> Num
-
-中文:
-定义 pred
-  签名: : Num -> Num
+--- 原说明 ---
+The predecessor of a `Num` as a `Num`, where `pred 0 = 0`.
 -/
-def pred : Num -> Num
+def pred : Num → Num
   | 0 => 0
   | pos p => p.pred'
 
-/--
-Definition of `div2` / `div2` 的定义
+/-- Divides a `Num` by `2` -/
+/-
+**Num.div2** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：Num → Num
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition div2
-  signature: : Num -> Num
-
-中文:
-定义 div2
-  签名: : Num -> Num
+--- 原说明 ---
+Divides a `Num` by `2`
 -/
-def div2 : Num -> Num
+def div2 : Num → Num
   | 0 => 0
   | 1 => 0
   | pos (PosNum.bit0 p) => pos p
   | pos (PosNum.bit1 p) => pos p
 
-/--
-Definition of `ofZNum'` / `ofZNum'` 的定义
+/-- Converts a `ZNum` to an `Option Num`, where `ofZNum' p = none` if `p < 0`. -/
+/-
+**Num.ofZNum'** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：ZNum → Option Num
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofZNum'
-  signature: : ZNum -> Option Num
-
-中文:
-定义 ofZNum'
-  签名: : ZNum -> 选项类型 Num
+--- 原说明 ---
+Converts a `ZNum` to an `Option Num`, where `ofZNum' p = none` if `p < 0`.
 -/
-def ofZNum' : ZNum -> Option Num
+def ofZNum' : ZNum → Option Num
   | 0 => some 0
   | ZNum.pos p => some (pos p)
   | ZNum.neg _ => none
 
-/--
-Definition of `ofZNum` / `ofZNum` 的定义
+/-- Converts a `ZNum` to an `Option Num`, where `ofZNum p = 0` if `p < 0`. -/
+/-
+**Num.ofZNum** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：ZNum → Num
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofZNum
-  signature: : ZNum -> Num
-
-中文:
-定义 ofZNum
-  签名: : ZNum -> Num
+--- 原说明 ---
+Converts a `ZNum` to an `Option Num`, where `ofZNum p = 0` if `p < 0`.
 -/
-def ofZNum : ZNum -> Num
+def ofZNum : ZNum → Num
   | ZNum.pos p => pos p
   | _ => 0
 
-/--
-Definition of `sub'` / `sub'` 的定义
+/-- Subtraction of two `Num`s, producing a `ZNum`. -/
+/-
+**Num.sub'** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：Num → Num → ZNum
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PosNum.sub'`：sub'_one (a : PosNum) : sub' a 1 = (pred' a).toZNum
 
-English:
-definition sub'
-  signature: : Num -> Num -> ZNum
-
-中文:
-定义 sub'
-  签名: : Num -> Num -> ZNum
+--- 原说明 ---
+Subtraction of two `Num`s, producing a `ZNum`.
 -/
-def sub' : Num -> Num -> ZNum
+def sub' : Num → Num → ZNum
   | 0, 0 => 0
   | pos a, 0 => ZNum.pos a
   | 0, pos b => ZNum.neg b
   | pos a, pos b => a.sub' b
 
-/--
-Definition of `psub` / `psub` 的定义
+/-- Subtraction of two `Num`s, producing an `Option Num`. -/
+/-
+**Num.psub** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：psub (a b : Num) : Option Num
+参数：a b : Num。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition psub
-  signature: (a b : Num)
-  body: ofZNum' (sub' a b)
-
-中文:
-定义 psub
-  签名: (a b : Num)
-  定义体: ofZNum' (sub' a b)
-
-Depends on / 依赖: ofZNum
+--- 原说明 ---
+Subtraction of two `Num`s, producing an `Option Num`.
 -/
 def psub (a b : Num) : Option Num :=
   ofZNum' (sub' a b)
 
-/--
-Definition of `sub` / `sub` 的定义
+/-- Subtraction of two `Num`s, where if `a < b`, `a - b = 0`. -/
+/-
+**Num.sub** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：Num → Num → Num
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sub
-  signature: (a b : Num)
-  body: ofZNum (sub' a b)
-
-中文:
-定义 sub
-  签名: (a b : Num)
-  定义体: ofZNum (sub' a b)
+--- 原说明 ---
+Subtraction of two `Num`s, where if `a < b`, `a - b = 0`.
 -/
 protected def sub (a b : Num) : Num :=
   ofZNum (sub' a b)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Sub Num
-  body: ⟨Num.sub⟩
-
-中文:
-实例 :
-  签名: 减法 Num
-  定义体: ⟨Num.sub⟩
-
-Depends on / 依赖: Num.sub
+/-
+**Num.** 是 Mathlib 中的一个实例，位于命名空间 `Num`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Sub Num :=
   ⟨Num.sub⟩
@@ -1327,94 +991,65 @@ namespace ZNum
 
 open PosNum
 
-/--
-Definition of `add` / `add` 的定义
+/-- Addition of `ZNum`s. -/
+/-
+**ZNum.add** 是 Mathlib 中的一个定义，位于命名空间 `ZNum`。
+形式化陈述：ZNum → ZNum → ZNum
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PosNum.sub'`：sub'_one (a : PosNum) : sub' a 1 = (pred' a).toZNum
 
-English:
-definition add
-  signature: : ZNum -> ZNum -> ZNum
-
-中文:
-定义 add
-  签名: : ZNum -> ZNum -> ZNum
+--- 原说明 ---
+Addition of `ZNum`s.
 -/
-protected def add : ZNum -> ZNum -> ZNum
+protected def add : ZNum → ZNum → ZNum
   | 0, a => a
   | b, 0 => b
   | pos a, pos b => pos (a + b)
   | pos a, neg b => sub' a b
   | neg a, pos b => sub' b a
   | neg a, neg b => neg (a + b)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Add ZNum
-  body: ⟨ZNum.add⟩
-
-中文:
-实例 :
-  签名: 加法 ZNum
-  定义体: ⟨ZNum.add⟩
-
-Depends on / 依赖: ZNum.add
+/-
+**ZNum.** 是 Mathlib 中的一个实例，位于命名空间 `ZNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Add ZNum :=
   ⟨ZNum.add⟩
 
-/--
-Definition of `mul` / `mul` 的定义
+/-- Multiplication of `ZNum`s. -/
+/-
+**ZNum.mul** 是 Mathlib 中的一个定义，位于命名空间 `ZNum`。
+形式化陈述：ZNum → ZNum → ZNum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mul
-  signature: : ZNum -> ZNum -> ZNum
-
-中文:
-定义 mul
-  签名: : ZNum -> ZNum -> ZNum
+--- 原说明 ---
+Multiplication of `ZNum`s.
 -/
-protected def mul : ZNum -> ZNum -> ZNum
+protected def mul : ZNum → ZNum → ZNum
   | 0, _ => 0
   | _, 0 => 0
   | pos a, pos b => pos (a * b)
   | pos a, neg b => neg (a * b)
   | neg a, pos b => neg (a * b)
   | neg a, neg b => pos (a * b)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mul ZNum
-  body: ⟨ZNum.mul⟩
-
-中文:
-实例 :
-  签名: 乘法 ZNum
-  定义体: ⟨ZNum.mul⟩
-
-Depends on / 依赖: ZNum.mul
+/-
+**ZNum.** 是 Mathlib 中的一个实例，位于命名空间 `ZNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mul ZNum :=
   ⟨ZNum.mul⟩
 
 open Ordering
 
-/--
-Definition of `cmp` / `cmp` 的定义
+/-- Ordering on `ZNum`s. -/
+/-
+**ZNum.cmp** 是 Mathlib 中的一个定义，位于命名空间 `ZNum`。
+形式化陈述：ZNum → ZNum → Ordering
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cmp
-  signature: : ZNum -> ZNum -> Ordering
-
-中文:
-定义 cmp
-  签名: : ZNum -> ZNum -> Ordering
+--- 原说明 ---
+Ordering on `ZNum`s.
 -/
-def cmp : ZNum -> ZNum -> Ordering
+def cmp : ZNum → ZNum → Ordering
   | 0, 0 => eq
   | pos a, pos b => PosNum.cmp a b
   | neg a, neg b => PosNum.cmp b a
@@ -1422,131 +1057,67 @@ def cmp : ZNum -> ZNum -> Ordering
   | neg _, _ => lt
   | _, pos _ => lt
   | _, neg _ => gt
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LT ZNum
-  body: ⟨fun a b => cmp a b = Ordering.lt⟩
-
-中文:
-实例 :
-  签名: LT ZNum
-  定义体: ⟨fun a b => cmp a b = Ordering.lt⟩
-
-Depends on / 依赖: Ordering, Ordering.lt
+/-
+**ZNum.** 是 Mathlib 中的一个实例，位于命名空间 `ZNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LT ZNum :=
   ⟨fun a b => cmp a b = Ordering.lt⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LE ZNum
-  body: ⟨fun a b => ¬b < a⟩
-
-中文:
-实例 :
-  签名: LE ZNum
-  定义体: ⟨fun a b => ¬b < a⟩
+/-
+**ZNum.** 是 Mathlib 中的一个实例，位于命名空间 `ZNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LE ZNum :=
   ⟨fun a b => ¬b < a⟩
-
-/--
-Instance `decidableLT` / 实例 `decidableLT`
-
-English:
-instance decidableLT
-  signature: : DecidableLT ZNum
-  body: inferInstanceAs DecidableRel fun a b => cmp a b = Ordering.lt
-
-中文:
-实例 decidableLT
-  签名: : DecidableLT ZNum
-  定义体: inferInstanceAs DecidableRel fun a b => cmp a b = Ordering.lt
-
-Depends on / 依赖: DecidableRel, Ordering, Ordering.lt
+/-
+**ZNum.decidableLT** 是 Mathlib 中的一个实例，位于命名空间 `ZNum`。
+形式化陈述：decidableLT : DecidableLT ZNum
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance decidableLT : DecidableLT ZNum :=
-inferInstanceAs DecidableRel fun a b => cmp a b = Ordering.lt
-
-/--
-Instance `decidableLE` / 实例 `decidableLE`
-
-English:
-instance decidableLE
-  signature: : DecidableLE ZNum
-  body: inferInstanceAs DecidableRel fun a b => ¬b < a
-
-中文:
-实例 decidableLE
-  签名: : DecidableLE ZNum
-  定义体: inferInstanceAs DecidableRel fun a b => ¬b < a
-
-Depends on / 依赖: DecidableRel
+  inferInstanceAs <| DecidableRel fun a b => cmp a b = Ordering.lt
+/-
+**ZNum.decidableLE** 是 Mathlib 中的一个实例，位于命名空间 `ZNum`。
+形式化陈述：decidableLE : DecidableLE ZNum
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance decidableLE : DecidableLE ZNum :=
-inferInstanceAs DecidableRel fun a b => ¬b < a
+  inferInstanceAs <| DecidableRel fun a b => ¬b < a
 
 end ZNum
 
 namespace PosNum
 
-/--
-Definition of `divModAux` / `divModAux` 的定义
+/-- Auxiliary definition for `PosNum.divMod`. -/
+/-
+**PosNum.divModAux** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：divModAux (d : PosNum) (q r : Num) : Num × Num
+参数：d : PosNum；q r : Num。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition divModAux
-  signature: (d : PosNum) (q r : Num)
-  body: match Num.ofZNum' (Num.sub' r (Num.pos d)) with
-  | some r' => (Num.bit1 q, r')
-  | none => (Num.bit0 q, r)
-
-中文:
-定义 divModAux
-  签名: (d : PosNum) (q r : Num)
-  定义体: match Num.ofZNum' (Num.sub' r (Num.pos d)) with
-  | some r' => (Num.bit1 q, r')
-  | none => (Num.bit0 q, r)
-
-Depends on / 依赖: Num.bit0, Num.bit1, Num.ofZNum, Num.pos, Num.sub, ofZNum
+--- 原说明 ---
+Auxiliary definition for `PosNum.divMod`.
 -/
 def divModAux (d : PosNum) (q r : Num) : Num × Num :=
   match Num.ofZNum' (Num.sub' r (Num.pos d)) with
   | some r' => (Num.bit1 q, r')
   | none => (Num.bit0 q, r)
 
-/--
-Definition of `divMod` / `divMod` 的定义
+/-- `divMod x y = (y / x, y % x)`. -/
+/-
+**PosNum.divMod** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：divMod (d : PosNum) : PosNum -> Num × Num | bit0 n => let (q, r₁)
+参数：d : PosNum。
+该定义给出了一等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition divMod
-  signature: (d : PosNum)
-  body: divMod d n
-    divModAux d q (Num.bit0 r₁)
-  | bit1 n =>
-    let (q, r₁) := divMod d n
-    divModAux d q (Num.bit1 r₁)
-  | 1 => divModAux d 0 1
-
-中文:
-定义 divMod
-  签名: (d : PosNum)
-  定义体: divMod d n
-    divModAux d q (Num.bit0 r₁)
-  | bit1 n =>
-    let (q, r₁) := divMod d n
-    divModAux d q (Num.bit1 r₁)
-  | 1 => divModAux d 0 1
-
-Depends on / 依赖: divMod
+--- 原说明 ---
+`divMod x y = (y / x, y % x)`.
 -/
-def divMod (d : PosNum) : PosNum -> Num × Num
+def divMod (d : PosNum) : PosNum → Num × Num
   | bit0 n =>
     let (q, r₁) := divMod d n
     divModAux d q (Num.bit0 r₁)
@@ -1555,82 +1126,56 @@ def divMod (d : PosNum) : PosNum -> Num × Num
     divModAux d q (Num.bit1 r₁)
   | 1 => divModAux d 0 1
 
-/--
-Definition of `div'` / `div'` 的定义
+/-- Division of `PosNum` -/
+/-
+**PosNum.div'** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：div' (n d : PosNum) : Num
+参数：n d : PosNum。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition div'
-  signature: (n d : PosNum)
-  body: (divMod d n).1
-
-中文:
-定义 div'
-  签名: (n d : PosNum)
-  定义体: (divMod d n).1
-
-Depends on / 依赖: divMod
+--- 原说明 ---
+Division of `PosNum`
 -/
 def div' (n d : PosNum) : Num :=
   (divMod d n).1
 
-/--
-Definition of `mod'` / `mod'` 的定义
+/-- Modulus of `PosNum`s. -/
+/-
+**PosNum.mod'** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+形式化陈述：mod' (n d : PosNum) : Num
+参数：n d : PosNum。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mod'
-  signature: (n d : PosNum)
-  body: (divMod d n).2
-
-中文:
-定义 mod'
-  签名: (n d : PosNum)
-  定义体: (divMod d n).2
-
-Depends on / 依赖: divMod
+--- 原说明 ---
+Modulus of `PosNum`s.
 -/
 def mod' (n d : PosNum) : Num :=
   (divMod d n).2
 
-/--
-Definition of `sqrtAux1` / `sqrtAux1` 的定义
+/-- Auxiliary definition for `sqrtAux`. -/
+/-
+**PosNum.sqrtAux1** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sqrtAux1
-  signature: (b : PosNum) (r n : Num)
-  body: match Num.ofZNum' (n.sub' (r + Num.pos b)) with
-  | some n' => (r.div2 + Num.pos b, n')
-  | none => (r.div2, n)
-
-中文:
-定义 sqrtAux1
-  签名: (b : PosNum) (r n : Num)
-  定义体: match Num.ofZNum' (n.sub' (r + Num.pos b)) with
-  | some n' => (r.div2 + Num.pos b, n')
-  | none => (r.div2, n)
+--- 原说明 ---
+Auxiliary definition for `sqrtAux`.
 -/
 private def sqrtAux1 (b : PosNum) (r n : Num) : Num × Num :=
   match Num.ofZNum' (n.sub' (r + Num.pos b)) with
   | some n' => (r.div2 + Num.pos b, n')
   | none => (r.div2, n)
 
-/--
-Definition of `sqrtAux` / `sqrtAux` 的定义
+/-- Auxiliary definition for a `sqrt` function which is not currently implemented. -/
+/-
+**PosNum.sqrtAux** 是 Mathlib 中的一个定义，位于命名空间 `PosNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sqrtAux
-  signature: : PosNum -> Num -> Num -> Num
-  body: sqrtAux1 b r n; sqrtAux b' r' n'
-  | b@(bit1 b') => fun r n => let (r', n') := sqrtAux1 b r n; sqrtAux b' r' n'
-  | 1 => fun r n => (sqrtAux1 1 r n).1
-
-中文:
-定义 sqrtAux
-  签名: : PosNum -> Num -> Num -> Num
-  定义体: sqrtAux1 b r n; sqrtAux b' r' n'
-  | b@(bit1 b') => fun r n => let (r', n') := sqrtAux1 b r n; sqrtAux b' r' n'
-  | 1 => fun r n => (sqrtAux1 1 r n).1
+--- 原说明 ---
+Auxiliary definition for a `sqrt` function which is not currently implemented.
 -/
-private def sqrtAux : PosNum -> Num -> Num -> Num
+private def sqrtAux : PosNum → Num → Num → Num
   | b@(bit0 b') => fun r n => let (r', n') := sqrtAux1 b r n; sqrtAux b' r' n'
   | b@(bit1 b') => fun r n => let (r', n') := sqrtAux1 b r n; sqrtAux b' r' n'
   | 1 => fun r n => (sqrtAux1 1 r n).1
@@ -1639,124 +1184,90 @@ end PosNum
 
 namespace Num
 
-/--
-Definition of `div` / `div` 的定义
+/-- Division of `Num`s, where `x / 0 = 0`. -/
+/-
+**Num.div** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：Num → Num → Num
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition div
-  signature: : Num -> Num -> Num
-
-中文:
-定义 div
-  签名: : Num -> Num -> Num
+--- 原说明 ---
+Division of `Num`s, where `x / 0 = 0`.
 -/
-def div : Num -> Num -> Num
+def div : Num → Num → Num
   | 0, _ => 0
   | _, 0 => 0
   | pos n, pos d => PosNum.div' n d
 
-/--
-Definition of `mod` / `mod` 的定义
+/-- Modulus of `Num`s. -/
+/-
+**Num.mod** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：Num → Num → Num
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mod
-  signature: : Num -> Num -> Num
-
-中文:
-定义 mod
-  签名: : Num -> Num -> Num
+--- 原说明 ---
+Modulus of `Num`s.
 -/
-def mod : Num -> Num -> Num
+def mod : Num → Num → Num
   | 0, _ => 0
   | n, 0 => n
   | pos n, pos d => PosNum.mod' n d
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Div Num
-  body: ⟨Num.div⟩
-
-中文:
-实例 :
-  签名: 除法 Num
-  定义体: ⟨Num.div⟩
-
-Depends on / 依赖: Num.div
+/-
+**Num.** 是 Mathlib 中的一个实例，位于命名空间 `Num`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Div Num :=
   ⟨Num.div⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mod Num
-  body: ⟨Num.mod⟩
-
-中文:
-实例 :
-  签名: 取模 Num
-  定义体: ⟨Num.mod⟩
-
-Depends on / 依赖: Num.mod
+/-
+**Num.** 是 Mathlib 中的一个实例，位于命名空间 `Num`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mod Num :=
   ⟨Num.mod⟩
 
-/--
-Definition of `gcdAux` / `gcdAux` 的定义
+/-- Auxiliary definition for `Num.gcd`. -/
+/-
+**Num.gcdAux** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：ℕ → Num → Num → Num
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition gcdAux
-  signature: : Nat -> Num -> Num -> Num
-
-中文:
-定义 gcdAux
-  签名: : 自然数 -> Num -> Num -> Num
+--- 原说明 ---
+Auxiliary definition for `Num.gcd`.
 -/
-def gcdAux : Nat -> Num -> Num -> Num
+def gcdAux : Nat → Num → Num → Num
   | 0, _, b => b
   | Nat.succ _, 0, b => b
   | Nat.succ n, a, b => gcdAux n (b % a) a
 
-/--
-Definition of `gcd` / `gcd` 的定义
+/-- Greatest Common Divisor (GCD) of two `Num`s. -/
+/-
+**Num.gcd** 是 Mathlib 中的一个定义，位于命名空间 `Num`。
+形式化陈述：gcd (a b : Num) : Num
+参数：a b : Num。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition gcd
-  signature: (a b : Num)
-  body: if a <= b then gcdAux (a.natSize + b.natSize) a b else gcdAux (b.natSize + a.natSize) b a
-
-中文:
-定义 最大公约数
-  签名: (a b : Num)
-  定义体: if a <= b then gcdAux (a.natSize + b.natSize) a b else gcdAux (b.natSize + a.natSize) b a
-
-Depends on / 依赖: a.natSize, b.natSize, gcdAux, natSize
+--- 原说明 ---
+Greatest Common Divisor (GCD) of two `Num`s.
 -/
 def gcd (a b : Num) : Num :=
-  if a <= b then gcdAux (a.natSize + b.natSize) a b else gcdAux (b.natSize + a.natSize) b a
+  if a ≤ b then gcdAux (a.natSize + b.natSize) a b else gcdAux (b.natSize + a.natSize) b a
 
 end Num
 
 namespace ZNum
 
-/--
-Definition of `div` / `div` 的定义
+/-- Division of `ZNum`, where `x / 0 = 0`. -/
+/-
+**ZNum.div** 是 Mathlib 中的一个定义，位于命名空间 `ZNum`。
+形式化陈述：ZNum → ZNum → ZNum
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PosNum.pred'`：pred'_to_nat : forall n, (pred' n : Nat) = Nat.pred n | 1 
+=> rfl | bit0 n => have : Nat.succ ↑(pred' n) = ↑n
 
-English:
-definition div
-  signature: : ZNum -> ZNum -> ZNum
-
-中文:
-定义 div
-  签名: : ZNum -> ZNum -> ZNum
+--- 原说明 ---
+Division of `ZNum`, where `x / 0 = 0`.
 -/
-def div : ZNum -> ZNum -> ZNum
+def div : ZNum → ZNum → ZNum
   | 0, _ => 0
   | _, 0 => 0
   | pos n, pos d => Num.toZNum (PosNum.div' n d)
@@ -1764,72 +1275,44 @@ def div : ZNum -> ZNum -> ZNum
   | neg n, pos d => neg (PosNum.pred' n / Num.pos d).succ'
   | neg n, neg d => pos (PosNum.pred' n / Num.pos d).succ'
 
-/--
-Definition of `mod` / `mod` 的定义
+/-- Modulus of `ZNum`s. -/
+/-
+**ZNum.mod** 是 Mathlib 中的一个定义，位于命名空间 `ZNum`。
+形式化陈述：ZNum → ZNum → ZNum
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `PosNum.pred'`：pred'_to_nat : forall n, (pred' n : Nat) = Nat.pred n | 1 
+=> rfl | bit0 n => have : Nat.succ ↑(pred' n) = ↑n
 
-English:
-definition mod
-  signature: : ZNum -> ZNum -> ZNum
-
-中文:
-定义 mod
-  签名: : ZNum -> ZNum -> ZNum
+--- 原说明 ---
+Modulus of `ZNum`s.
 -/
-def mod : ZNum -> ZNum -> ZNum
+def mod : ZNum → ZNum → ZNum
   | 0, _ => 0
   | pos n, d => Num.toZNum (Num.pos n % d.abs)
   | neg n, d => d.abs.sub' (PosNum.pred' n % d.abs).succ
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Div ZNum
-  body: ⟨ZNum.div⟩
-
-中文:
-实例 :
-  签名: 除法 ZNum
-  定义体: ⟨ZNum.div⟩
-
-Depends on / 依赖: ZNum.div
+/-
+**ZNum.** 是 Mathlib 中的一个实例，位于命名空间 `ZNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Div ZNum :=
   ⟨ZNum.div⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Mod ZNum
-  body: ⟨ZNum.mod⟩
-
-中文:
-实例 :
-  签名: 取模 ZNum
-  定义体: ⟨ZNum.mod⟩
-
-Depends on / 依赖: ZNum.mod
+/-
+**ZNum.** 是 Mathlib 中的一个实例，位于命名空间 `ZNum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Mod ZNum :=
   ⟨ZNum.mod⟩
 
-/--
-Definition of `gcd` / `gcd` 的定义
+/-- Greatest Common Divisor (GCD) of two `ZNum`s. -/
+/-
+**ZNum.gcd** 是 Mathlib 中的一个定义，位于命名空间 `ZNum`。
+形式化陈述：gcd (a b : ZNum) : Num
+参数：a b : ZNum。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition gcd
-  signature: (a b : ZNum)
-  body: a.abs.gcd b.abs
-
-中文:
-定义 最大公约数
-  签名: (a b : ZNum)
-  定义体: a.abs.gcd b.abs
-
-Depends on / 依赖: a.abs.gcd, b.abs
+--- 原说明 ---
+Greatest Common Divisor (GCD) of two `ZNum`s.
 -/
 def gcd (a b : ZNum) : Num :=
   a.abs.gcd b.abs
@@ -1841,40 +1324,32 @@ variable {α : Type*} [Zero α] [One α] [Add α] [Neg α]
 
 /-- `castZNum` casts a `ZNum` into any type which has `0`, `1`, `+` and `neg` -/
 @[coe]
-/--
-Definition of `castZNum` / `castZNum` 的定义
+/-
+**castZNum** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：{α : Type u_1} → [Zero α] → [One α] → [Add α] → [Neg α] → ZNum → α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition castZNum
-  signature: : ZNum -> α
-
-中文:
-定义 castZNum
-  签名: : ZNum -> α
+--- 原说明 ---
+`castZNum` casts a `ZNum` into any type which has `0`, `1`, `+` and `neg`
 -/
-def castZNum : ZNum -> α
+def castZNum : ZNum → α
   | 0 => 0
   | ZNum.pos p => p
   | ZNum.neg p => -p
 
 -- see Note [coercion into rings]
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (priority := 900) znumCoe : CoeHTCT ZNum α :=
   ⟨castZNum⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Repr ZNum
-  body: ⟨fun n _ => repr (n : Int)⟩
-
-中文:
-实例 :
-  签名: Repr ZNum
-  定义体: ⟨fun n _ => repr (n : Int)⟩
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Repr ZNum :=
-  ⟨fun n _ => repr (n : Int)⟩
+  ⟨fun n _ => repr (n : ℤ)⟩
 
 end
+

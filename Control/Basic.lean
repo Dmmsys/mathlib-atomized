@@ -31,35 +31,36 @@ end Functor
 
 section Applicative
 
-variable {F : Type u -> Type v} [Applicative F]
+variable {F : Type u → Type v} [Applicative F]
 
-/--
-Definition of `zipWithM` / `zipWithM` 的定义
+/-- A generalization of `List.zipWith` which combines list elements with an `Applicative`. -/
+/-
+**zipWithM** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：{F : Type u → Type v} → [Applicative F] → {α₁ α₂ φ : Type u} → (α₁ → α₂ → 
+F φ) → List α₁ → List α₂ → F (List φ)
+参数：α₁ → α₂ → F φ；List φ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition zipWithM
-  signature: {α₁ α₂ φ : Type u} (f : α₁ -> α₂ -> F φ)
-
-中文:
-定义 zipWithM
-  签名: {α₁ α₂ φ : 类型u} (f : α₁ -> α₂ -> F φ)
+--- 原说明 ---
+A generalization of `List.zipWith` which combines list elements with an `Applica
+tive`.
 -/
-def zipWithM {α₁ α₂ φ : Type u} (f : α₁ -> α₂ -> F φ) : forall (_ : List α₁) (_ : List α₂), F (List φ)
-| x :: xs, y :: ys => (· :: ·) < > f x y <*> zipWithM f xs ys
+def zipWithM {α₁ α₂ φ : Type u} (f : α₁ → α₂ → F φ) : ∀ (_ : List α₁) (_ : List α₂), F (List φ)
+  | x :: xs, y :: ys => (· :: ·) <$> f x y <*> zipWithM f xs ys
   | _, _ => pure []
 
-/--
-Definition of `zipWithM'` / `zipWithM'` 的定义
+/-- Like `zipWithM` but evaluates the result as it traverses the lists using `*>`. -/
+/-
+**zipWithM'** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：{α β γ : Type u} → {F : Type u → Type v} → [Applicative F] → (α → β → F γ)
+ → List α → List β → F PUnit.{u + 1}
+参数：α → β → F γ。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition zipWithM'
-  signature: (f : α -> β -> F γ)
-
-中文:
-定义 zipWithM'
-  签名: (f : α -> β -> F γ)
+--- 原说明 ---
+Like `zipWithM` but evaluates the result as it traverses the lists using `*>`.
 -/
-def zipWithM' (f : α -> β -> F γ) : List α -> List β -> F PUnit
+def zipWithM' (f : α → β → F γ) : List α → List β → F PUnit
   | x :: xs, y :: ys => f x y *> zipWithM' f xs ys
   | [], _ => pure PUnit.unit
   | _, [] => pure PUnit.unit
@@ -67,222 +68,221 @@ def zipWithM' (f : α -> β -> F γ) : List α -> List β -> F PUnit
 variable [LawfulApplicative F]
 
 @[simp]
-/--
-theorem `pure_id'_seq` / 定理 `pure_id'_seq`
-
-English:
-theorem pure_id'_seq
-  given: (x : F α)
-  statement: (pure fun x => x) <*> x = x
-  proof: pure_id_seq x
-
-@[functor_norm]
-
-中文:
-定理 pure_id'_seq
-  条件: (x : F α)
-  结论: (pure fun x => x) <*> x = x
-  证明: pure_id_seq x
-
-@[functor_norm]
-
-Depends on / 依赖: pure_id_seq
+/-
+**pure_id'_seq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type u} {F : Type u → Type v} [inst : Applicative F] [LawfulApplica
+tive F] (x : F α), (pure fun x => x) <*> x = x
+参数：x : F α；pure fun x => x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `pure_id_seq`：∀ {f : Type u_1 → Type u_2} {α : Type u_1} [inst : Applicat
+ive f] [LawfulApplicative f] (x : f α), pure id <*> x = x
 -/
 theorem pure_id'_seq (x : F α) : (pure fun x => x) <*> x = x :=
   pure_id_seq x
 
 @[functor_norm]
-/--
-theorem `seq_map_assoc` / 定理 `seq_map_assoc`
-
-English:
-theorem seq_map_assoc
-  given: (x : F (α -> β)) (f : γ -> α) (y : F γ)
-  proof: by
-  simp only [← pure_seq]
-  simp only [seq_assoc, seq_pure, ← comp_map]
-  simp [pure_seq]
-  rfl
-
-@[functor_norm]
-
-中文:
-定理 seq_map_assoc
-  条件: (x : F (α -> β)) (f : γ -> α) (y : F γ)
-  证明: by
-  simp only [← pure_seq]
-  simp only [seq_assoc, seq_pure, ← comp_map]
-  simp [pure_seq]
-  rfl
-
-@[functor_norm]
-
-Depends on / 依赖: comp_map, pure_seq, seq_assoc, seq_pure
+/-
+**seq_map_assoc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：seq_map_assoc (x : F (α -> β)) (f : γ -> α) (y : F γ) : x <*> f < > y = (·
+ ∘ f) < > x <*> y
+参数：x : F (α -> β)；f : γ -> α；y : F γ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `LawfulApplicative.seq_assoc`：∀ {f : Type u → Type v} {inst : Applicative
+ f} [self : LawfulApplicative f] {α β γ : Type u} (x : f α) (g : f (α → β))   (h
+ : f (β → γ)), h …
+· 使用定理 `LawfulApplicative.seq_pure`：∀ {f : Type u → Type v} {inst : Applicative 
+f} [self : LawfulApplicative f] {α β : Type u} (g : f (α → β)) (x : α),   g <*> 
+pure x = (fun h …
+· 使用定理 `LawfulApplicative.toLawfulFunctor`：∀ {f : Type u → Type v} {inst : Appli
+cative f} [self : LawfulApplicative f], LawfulFunctor f
+· 使用定理 `LawfulApplicative.pure_seq`：∀ {f : Type u → Type v} {inst : Applicative 
+f} [self : LawfulApplicative f] {α β : Type u} (g : α → β) (x : f α),   pure g <
+*> x = g <$> x
 -/
-theorem seq_map_assoc (x : F (α -> β)) (f : γ -> α) (y : F γ) :
-x <*> f < > y = (· ∘ f) < > x <*> y := by
+theorem seq_map_assoc (x : F (α → β)) (f : γ → α) (y : F γ) :
+    x <*> f <$> y = (· ∘ f) <$> x <*> y := by
   simp only [← pure_seq]
   simp only [seq_assoc, seq_pure, ← comp_map]
   simp [pure_seq]
   rfl
 
 @[functor_norm]
-/--
-theorem `map_seq` / 定理 `map_seq`
-
-English:
-theorem map_seq
-  given: (f : β -> γ) (x : F (α -> β)) (y : F α)
-  proof: by
-  simp only [← pure_seq]; simp [seq_assoc]
-
-中文:
-定理 map_seq
-  条件: (f : β -> γ) (x : F (α -> β)) (y : F α)
-  证明: by
-  simp only [← pure_seq]; simp [seq_assoc]
-
-Depends on / 依赖: pure_seq, seq_assoc
+/-
+**map_seq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：map_seq (f : β -> γ) (x : F (α -> β)) (y : F α) : f < > (x <*> y) = (f ∘ ·
+) < > x <*> y
+参数：f : β -> γ；x : F (α -> β)；y : F α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `LawfulApplicative.seq_assoc`：∀ {f : Type u → Type v} {inst : Applicative
+ f} [self : LawfulApplicative f] {α β γ : Type u} (x : f α) (g : f (α → β))   (h
+ : f (β → γ)), h …
+· 使用定理 `LawfulApplicative.map_pure`：∀ {f : Type u → Type v} {inst : Applicative 
+f} [self : LawfulApplicative f] {α β : Type u} (g : α → β) (x : α),   g <$> pure
+ x = pure (g x)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem map_seq (f : β -> γ) (x : F (α -> β)) (y : F α) :
-f < > (x <*> y) = (f ∘ ·) < > x <*> y := by
+theorem map_seq (f : β → γ) (x : F (α → β)) (y : F α) :
+    f <$> (x <*> y) = (f ∘ ·) <$> x <*> y := by
   simp only [← pure_seq]; simp [seq_assoc]
 
 end Applicative
 
 section Monad
 
-variable {m : Type u -> Type v} [Monad m] [LawfulMonad m]
+variable {m : Type u → Type v} [Monad m] [LawfulMonad m]
 
-/--
-theorem `seq_bind_eq` / 定理 `seq_bind_eq`
-
-English:
-theorem seq_bind_eq
-  given: (x : m α) {g : β -> m γ} {f : α -> β}
-  proof: show bind (f <$> x) g = bind x (g ∘ f) by
-    simp [Function.comp_def]
-
-中文:
-定理 seq_bind_eq
-  条件: (x : m α) {g : β -> m γ} {f : α -> β}
-  证明: show bind (f <$> x) g = bind x (g ∘ f) by
-    simp [Function.comp_def]
-
-Depends on / 依赖: Function, Function.comp_def, comp_def
+/-
+**seq_bind_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：seq_bind_eq (x : m α) {g : β -> m γ} {f : α -> β} : f < > x >>= g = x >>= 
+g ∘ f
+参数：x : m α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `bind_map_left`：∀ {m : Type u_1 → Type u_2} {α β γ : Type u_1} [inst : Mo
+nad m] [LawfulMonad m] (f : α → β) (x : m α) (g : β → m γ),   (do       let b ← 
+f <…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem seq_bind_eq (x : m α) {g : β -> m γ} {f : α -> β} :
-f < > x >>= g = x >>= g ∘ f :=
+theorem seq_bind_eq (x : m α) {g : β → m γ} {f : α → β} :
+    f <$> x >>= g = x >>= g ∘ f :=
   show bind (f <$> x) g = bind x (g ∘ f) by
     simp [Function.comp_def]
 -- order of implicits and `Seq.seq` has a lazily evaluated second argument using `Unit`
 
 @[functor_norm]
-/--
-theorem `fish_pure` / 定理 `fish_pure`
-
-English:
-theorem fish_pure
-  given: {α β} (f : α -> m β)
-  statement: f >=> pure = f
-  proof: by
-  simp +unfoldPartialApp only [(· >=> ·), functor_norm]
-
-@[functor_norm]
-
-中文:
-定理 fish_pure
-  条件: {α β} (f : α -> m β)
-  结论: f >=> pure = f
-  证明: by
-  simp +unfoldPartialApp only [(· >=> ·), functor_norm]
-
-@[functor_norm]
-
-Depends on / 依赖: functor_norm, unfoldPartialApp
+/-
+**fish_pure** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：fish_pure {α β} (f : α -> m β) : f >=> pure = f
+参数：f : α -> m β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `bind_pure`：∀ {m : Type u_1 → Type u_2} {α : Type u_1} [inst : Monad m] [
+LawfulMonad m] (x : m α), x >>= pure = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem fish_pure {α β} (f : α -> m β) : f >=> pure = f := by
+theorem fish_pure {α β} (f : α → m β) : f >=> pure = f := by
   simp +unfoldPartialApp only [(· >=> ·), functor_norm]
 
 @[functor_norm]
-/--
-theorem `fish_pipe` / 定理 `fish_pipe`
-
-English:
-theorem fish_pipe
-  given: {α β} (f : α -> m β)
-  statement: pure >=> f = f
-  proof: by
-  simp +unfoldPartialApp only [(· >=> ·), functor_norm]
-
-中文:
-定理 fish_pipe
-  条件: {α β} (f : α -> m β)
-  结论: pure >=> f = f
-  证明: by
-  simp +unfoldPartialApp only [(· >=> ·), functor_norm]
-
-Depends on / 依赖: functor_norm, unfoldPartialApp
+/-
+**fish_pipe** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：fish_pipe {α β} (f : α -> m β) : pure >=> f = f
+参数：f : α -> m β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `LawfulMonad.pure_bind`：∀ {m : Type u → Type v} {inst : Monad m} [self : 
+LawfulMonad m] {α β : Type u} (x : α) (f : α → m β), pure x >>= f = f x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem fish_pipe {α β} (f : α -> m β) : pure >=> f = f := by
+theorem fish_pipe {α β} (f : α → m β) : pure >=> f = f := by
   simp +unfoldPartialApp only [(· >=> ·), functor_norm]
 
 -- note: in Lean 3 `>=>` is left-associative, but in Lean 4 it is right-associative.
 @[functor_norm]
-/--
-theorem `fish_assoc` / 定理 `fish_assoc`
-
-English:
-theorem fish_assoc
-  given: {α β γ φ} (f : α -> m β) (g : β -> m γ) (h : γ -> m φ)
-  proof: by
-  simp +unfoldPartialApp only [(· >=> ·), functor_norm]
-
-中文:
-定理 fish_assoc
-  条件: {α β γ φ} (f : α -> m β) (g : β -> m γ) (h : γ -> m φ)
-  证明: by
-  simp +unfoldPartialApp only [(· >=> ·), functor_norm]
-
-Depends on / 依赖: functor_norm, unfoldPartialApp
+/-
+**fish_assoc** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：fish_assoc {α β γ φ} (f : α -> m β) (g : β -> m γ) (h : γ -> m φ) : (f >=>
+ g) >=> h = f >=> g >=> h
+参数：f : α -> m β；g : β -> m γ；h : γ -> m φ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `LawfulMonad.bind_assoc`：∀ {m : Type u → Type v} {inst : Monad m} [self :
+ LawfulMonad m] {α β γ : Type u} (x : m α) (f : α → m β) (g : β → m γ),   x >>= 
+f >>= g = x …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem fish_assoc {α β γ φ} (f : α -> m β) (g : β -> m γ) (h : γ -> m φ) :
+theorem fish_assoc {α β γ φ} (f : α → m β) (g : β → m γ) (h : γ → m φ) :
     (f >=> g) >=> h = f >=> g >=> h := by
   simp +unfoldPartialApp only [(· >=> ·), functor_norm]
 
 variable {β' γ' : Type v}
-variable {m' : Type v -> Type w} [Monad m']
+variable {m' : Type v → Type w} [Monad m']
 
-/--
-Definition of `List.mapAccumRM` / `List.mapAccumRM` 的定义
+/-- Takes a value `β` and `List α` and accumulates pairs according to a monadic function `f`.
+Accumulation occurs from the right (i.e., starting from the tail of the list). -/
+/-
+**List.mapAccumRM** 是 Mathlib 中的一个定义，位于命名空间 `List`。
+形式化陈述：{α : Type u} →   {β' γ' : Type v} → {m' : Type v → Type w} → [Monad m'] → 
+(α → β' → m' (β' × γ')) → β' → List α → m' (β' × List γ')
+参数：α → β' → m' (β' × γ')；β' × List γ'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition List.mapAccumRM
-  signature: (f : α -> β' -> m' (β' × γ'))
-
-中文:
-定义 列表.mapAccumRM
-  签名: (f : α -> β' -> m' (β' × γ'))
+--- 原说明 ---
+Takes a value `β` and `List α` and accumulates pairs according to a monadic func
+tion `f`.
+Accumulation occurs from the right (i.e., starting from the tail of the list).
 -/
-def List.mapAccumRM (f : α -> β' -> m' (β' × γ')) : β' -> List α -> m' (β' × List γ')
+def List.mapAccumRM (f : α → β' → m' (β' × γ')) : β' → List α → m' (β' × List γ')
   | a, [] => pure (a, [])
   | a, x :: xs => do
     let (a', ys) ← List.mapAccumRM f a xs
     let (a'', y) ← f x a'
     pure (a'', y :: ys)
 
-/--
-Definition of `List.mapAccumLM` / `List.mapAccumLM` 的定义
+/-- Takes a value `β` and `List α` and accumulates pairs according to a monadic function `f`.
+Accumulation occurs from the left (i.e., starting from the head of the list). -/
+/-
+**List.mapAccumLM** 是 Mathlib 中的一个定义，位于命名空间 `List`。
+形式化陈述：{α : Type u} →   {β' γ' : Type v} → {m' : Type v → Type w} → [Monad m'] → 
+(β' → α → m' (β' × γ')) → β' → List α → m' (β' × List γ')
+参数：β' → α → m' (β' × γ')；β' × List γ'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition List.mapAccumLM
-  signature: (f : β' -> α -> m' (β' × γ'))
-
-中文:
-定义 列表.mapAccumLM
-  签名: (f : β' -> α -> m' (β' × γ'))
+--- 原说明 ---
+Takes a value `β` and `List α` and accumulates pairs according to a monadic func
+tion `f`.
+Accumulation occurs from the left (i.e., starting from the head of the list).
 -/
-def List.mapAccumLM (f : β' -> α -> m' (β' × γ')) : β' -> List α -> m' (β' × List γ')
+def List.mapAccumLM (f : β' → α → m' (β' × γ')) : β' → List α → m' (β' × List γ')
   | a, [] => pure (a, [])
   | a, x :: xs => do
     let (a', y) ← f a x
@@ -293,99 +293,98 @@ end Monad
 
 section
 
-variable {m : Type u -> Type u} [Monad m] [LawfulMonad m]
+variable {m : Type u → Type u} [Monad m] [LawfulMonad m]
 
-/--
-theorem `joinM_map_map` / 定理 `joinM_map_map`
-
-English:
-theorem joinM_map_map
-  given: {α β : Type u} (f : α -> β) (a : m (m α))
-  proof: by
-  simp only [joinM, id, ← bind_pure_comp, bind_assoc, pure_bind]
-
-中文:
-定理 joinM_map_map
-  条件: {α β : 类型u} (f : α -> β) (a : m (m α))
-  证明: by
-  simp only [joinM, id, ← bind_pure_comp, bind_assoc, pure_bind]
-
-Depends on / 依赖: bind_assoc, bind_pure_comp, pure_bind
+/-
+**joinM_map_map** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：joinM_map_map {α β : Type u} (f : α -> β) (a : m (m α)) : joinM (Functor.m
+ap f <$> a) = f < > joinM a
+参数：f : α -> β；a : m (m α)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `LawfulMonad.bind_assoc`：∀ {m : Type u → Type v} {inst : Monad m} [self :
+ LawfulMonad m] {α β γ : Type u} (x : m α) (f : α → m β) (g : β → m γ),   x >>= 
+f >>= g = x …
+· 使用定理 `LawfulMonad.pure_bind`：∀ {m : Type u → Type v} {inst : Monad m} [self : 
+LawfulMonad m] {α β : Type u} (x : α) (f : α → m β), pure x >>= f = f x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem joinM_map_map {α β : Type u} (f : α -> β) (a : m (m α)) :
-joinM (Functor.map f <$> a) = f < > joinM a := by
+theorem joinM_map_map {α β : Type u} (f : α → β) (a : m (m α)) :
+    joinM (Functor.map f <$> a) = f <$> joinM a := by
   simp only [joinM, id, ← bind_pure_comp, bind_assoc, pure_bind]
-
-/--
-theorem `joinM_map_joinM` / 定理 `joinM_map_joinM`
-
-English:
-theorem joinM_map_joinM
-  given: {α : Type u} (a : m (m (m α)))
-  statement: joinM (joinM <$> a) = joinM (joinM a)
-  proof: by
-  simp only [joinM, id, ← bind_pure_comp, bind_assoc, pure_bind]
-
-@[simp]
-
-中文:
-定理 joinM_map_joinM
-  条件: {α : 类型u} (a : m (m (m α)))
-  结论: joinM (joinM <$> a) = joinM (joinM a)
-  证明: by
-  simp only [joinM, id, ← bind_pure_comp, bind_assoc, pure_bind]
-
-@[simp]
-
-Depends on / 依赖: bind_assoc, bind_pure_comp, pure_bind
+/-
+**joinM_map_joinM** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：joinM_map_joinM {α : Type u} (a : m (m (m α))) : joinM (joinM <$> a) = joi
+nM (joinM a)
+参数：a : m (m (m α))。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `LawfulMonad.bind_assoc`：∀ {m : Type u → Type v} {inst : Monad m} [self :
+ LawfulMonad m] {α β γ : Type u} (x : m α) (f : α → m β) (g : β → m γ),   x >>= 
+f >>= g = x …
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `LawfulMonad.pure_bind`：∀ {m : Type u → Type v} {inst : Monad m} [self : 
+LawfulMonad m] {α β : Type u} (x : α) (f : α → m β), pure x >>= f = f x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem joinM_map_joinM {α : Type u} (a : m (m (m α))) : joinM (joinM <$> a) = joinM (joinM a) := by
   simp only [joinM, id, ← bind_pure_comp, bind_assoc, pure_bind]
 
 @[simp]
-/--
-theorem `joinM_map_pure` / 定理 `joinM_map_pure`
-
-English:
-theorem joinM_map_pure
-  given: {α : Type u} (a : m α)
-  statement: joinM (pure <$> a) = a
-  proof: by
-  simp only [joinM, id, ← bind_pure_comp, bind_assoc, pure_bind, bind_pure]
-
-@[simp]
-
-中文:
-定理 joinM_map_pure
-  条件: {α : 类型u} (a : m α)
-  结论: joinM (pure <$> a) = a
-  证明: by
-  simp only [joinM, id, ← bind_pure_comp, bind_assoc, pure_bind, bind_pure]
-
-@[simp]
-
-Depends on / 依赖: bind_assoc, bind_pure, bind_pure_comp, pure_bind
+/-
+**joinM_map_pure** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：joinM_map_pure {α : Type u} (a : m α) : joinM (pure <$> a) = a
+参数：a : m α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LawfulMonad.bind_assoc`：∀ {m : Type u → Type v} {inst : Monad m} [self :
+ LawfulMonad m] {α β γ : Type u} (x : m α) (f : α → m β) (g : β → m γ),   x >>= 
+f >>= g = x …
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `LawfulMonad.pure_bind`：∀ {m : Type u → Type v} {inst : Monad m} [self : 
+LawfulMonad m] {α β : Type u} (x : α) (f : α → m β), pure x >>= f = f x
+· 使用定理 `bind_pure`：∀ {m : Type u_1 → Type u_2} {α : Type u_1} [inst : Monad m] [
+LawfulMonad m] (x : m α), x >>= pure = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem joinM_map_pure {α : Type u} (a : m α) : joinM (pure <$> a) = a := by
   simp only [joinM, id, ← bind_pure_comp, bind_assoc, pure_bind, bind_pure]
 
 @[simp]
-/--
-theorem `joinM_pure` / 定理 `joinM_pure`
-
-English:
-theorem joinM_pure
-  given: {α : Type u} (a : m α)
-  statement: joinM (pure a) = a
-  proof: LawfulMonad.pure_bind a id
-
-中文:
-定理 joinM_pure
-  条件: {α : 类型u} (a : m α)
-  结论: joinM (pure a) = a
-  证明: LawfulMonad.pure_bind a id
-
-Depends on / 依赖: LawfulMonad, LawfulMonad.pure_bind, pure_bind
+/-
+**joinM_pure** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：joinM_pure {α : Type u} (a : m α) : joinM (pure a) = a
+参数：a : m α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LawfulMonad.pure_bind`：∀ {m : Type u → Type v} {inst : Monad m} [self : 
+LawfulMonad m] {α β : Type u} (x : α) (f : α → m β), pure x >>= f = f x
 -/
 theorem joinM_pure {α : Type u} (a : m α) : joinM (pure a) = a :=
   LawfulMonad.pure_bind a id
@@ -394,104 +393,84 @@ end
 
 section Alternative
 
-variable {F : Type -> Type v} [Alternative F]
+variable {F : Type → Type v} [Alternative F]
 
 -- [todo] add notation for `Functor.mapConst` and port `Functor.mapConstRev`
-/--
-Definition of `succeeds` / `succeeds` 的定义
+/-- Returns `pure true` if the computation succeeds and `pure false` otherwise. -/
+/-
+**succeeds** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：succeeds {α} (x : F α) : F Bool
+参数：x : F α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition succeeds
-  signature: {α} (x : F α)
-  body: Functor.mapConst true x > pure false
-
-中文:
-定义 succeeds
-  签名: {α} (x : F α)
-  定义体: Functor.mapConst true x > pure false
-
-Depends on / 依赖: Functor, Functor.mapConst, mapConst
+--- 原说明 ---
+Returns `pure true` if the computation succeeds and `pure false` otherwise.
 -/
 def succeeds {α} (x : F α) : F Bool :=
-Functor.mapConst true x > pure false
+  Functor.mapConst true x <|> pure false
 
-/--
-Definition of `tryM` / `tryM` 的定义
+/-- Attempts to perform the computation, but fails silently if it doesn't succeed. -/
+/-
+**tryM** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：tryM {α} (x : F α) : F Unit
+参数：x : F α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tryM
-  signature: {α} (x : F α)
-  body: Functor.mapConst () x > pure ()
-
-中文:
-定义 tryM
-  签名: {α} (x : F α)
-  定义体: Functor.mapConst () x > pure ()
-
-Depends on / 依赖: Functor, Functor.mapConst, mapConst
+--- 原说明 ---
+Attempts to perform the computation, but fails silently if it doesn't succeed.
 -/
 def tryM {α} (x : F α) : F Unit :=
-Functor.mapConst () x > pure ()
+  Functor.mapConst () x <|> pure ()
 
-/--
-Definition of `try?` / `try?` 的定义
+/-- Attempts to perform the computation, and returns `none` if it doesn't succeed. -/
+/-
+**try** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：try? {α} (x : F α) : F (Option α)
+参数：x : F α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition try?
-  signature: {α} (x : F α)
-  body: some < > x > pure none
-
-@[simp]
-
-中文:
-定义 try?
-  签名: {α} (x : F α)
-  定义体: some < > x > pure none
-
-@[simp]
+--- 原说明 ---
+Attempts to perform the computation, and returns `none` if it doesn't succeed.
 -/
 def try? {α} (x : F α) : F (Option α) :=
-some < > x > pure none
+  some <$> x <|> pure none
 
 @[simp]
-/--
-theorem `guard_true` / 定理 `guard_true`
-
-English:
-theorem guard_true
-  given: {h : Decidable True}
-  statement: @guard F _ True h = pure ()
-  proof: by simp [guard]
-
-@[simp]
-
-中文:
-定理 guard_true
-  条件: {h : 可判定 真}
-  结论: @guard F _ 真 h = pure ()
-  证明: by simp [guard]
-
-@[simp]
+/-
+**guard_true** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：guard_true {h : Decidable True} : @guard F _ True h = pure ()
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem guard_true {h : Decidable True} : @guard F _ True h = pure () := by simp [guard]
 
 @[simp]
-/--
-theorem `guard_false` / 定理 `guard_false`
-
-English:
-theorem guard_false
-  given: {h : Decidable False}
-  statement: @guard F _ False h = failure
-  proof: by
-  simp [guard]
-
-中文:
-定理 guard_false
-  条件: {h : 可判定 假}
-  结论: @guard F _ 假 h = failure
-  证明: by
-  simp [guard]
+/-
+**guard_false** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：guard_false {h : Decidable False} : @guard F _ False h = failure
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem guard_false {h : Decidable False} : @guard F _ False h = failure := by
   simp [guard]
@@ -502,117 +481,37 @@ namespace Sum
 
 variable {e : Type v}
 
-/--
-Definition of `bind` / `bind` 的定义
+/-- The monadic `bind` operation for `Sum`. -/
+/-
+**Sum.bind** 是 Mathlib 中的一个定义，位于命名空间 `Sum`。
+形式化陈述：{e : Type v} → {α : Type u_1} → {β : Type u_2} → e ⊕ α → (α → e ⊕ β) → e ⊕
+ β
+参数：α → e ⊕ β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition bind
-  signature: {α β}
-
-中文:
-定义 bind
-  签名: {α β}
+--- 原说明 ---
+The monadic `bind` operation for `Sum`.
 -/
-protected def bind {α β} : e oplus α -> (α -> e oplus β) -> e oplus β
+protected def bind {α β} : e ⊕ α → (α → e ⊕ β) → e ⊕ β
   | inl x, _ => inl x
   | inr x, f => f x
 -- incorrectly marked as a bad translation by mathport, so we do not mark with `ₓ`.
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Monad (Sum.{v, u} e)
-  body: @Sum.inr e
-  bind := @Sum.bind e
-
-中文:
-实例 :
-  签名: 单子 (和.{v, u} e)
-  定义体: @Sum.inr e
-  bind := @Sum.bind e
-
-Depends on / 依赖: Sum.inr
+/-
+**Sum.** 是 Mathlib 中的一个实例，位于命名空间 `Sum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Monad (Sum.{v, u} e) where
   pure := @Sum.inr e
   bind := @Sum.bind e
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LawfulFunctor (Sum.{v, u} e)
-  body: by
-  constructor <;> intros <;> (try casesm Sum _ _) <;> rfl
-
-中文:
-实例 :
-  签名: Lawful函子 (和.{v, u} e)
-  定义体: by
-  constructor <;> intros <;> (try casesm Sum _ _) <;> rfl
-
-Depends on / 依赖: Int.log, casesm, intros
+/-
+**Sum.** 是 Mathlib 中的一个实例，位于命名空间 `Sum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LawfulFunctor (Sum.{v, u} e) := by
   constructor <;> intros <;> (try casesm Sum _ _) <;> rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LawfulMonad (Sum.{v, u} e)
-  body: by
-    intros
-    casesm Sum _ _ <;> casesm Sum _ _ <;> rfl
-  seqLeft_eq := by
-    intros
-    casesm Sum _ _ <;> rfl
-  pure_seq := by
-    intros
-    rfl
-  bind_assoc := by
-    intros
-    casesm Sum _ _ <;> rfl
-  pure_bind := by
-    intros
-    rfl
-  bind_pure_comp := by
-    intros
-    casesm Sum _ _ <;> rfl
-  bind_map := by
-    intros
-    casesm Sum _ _ <;> rfl
-
-中文:
-实例 :
-  签名: 合法单子 (和.{v, u} e)
-  定义体: by
-    intros
-    casesm Sum _ _ <;> casesm Sum _ _ <;> rfl
-  seqLeft_eq := by
-    intros
-    casesm Sum _ _ <;> rfl
-  pure_seq := by
-    intros
-    rfl
-  bind_assoc := by
-    intros
-    casesm Sum _ _ <;> rfl
-  pure_bind := by
-    intros
-    rfl
-  bind_pure_comp := by
-    intros
-    casesm Sum _ _ <;> rfl
-  bind_map := by
-    intros
-    casesm Sum _ _ <;> rfl
-
-Depends on / 依赖: bind_assoc, bind_map, bind_pure_comp, casesm, intros, pure_bind, pure_seq, seqLeft_eq
+/-
+**Sum.** 是 Mathlib 中的一个实例，位于命名空间 `Sum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LawfulMonad (Sum.{v, u} e) where
   seqRight_eq := by
@@ -639,65 +538,60 @@ instance : LawfulMonad (Sum.{v, u} e) where
 
 end Sum
 
-/--
-Definition of `CommApplicative` / `CommApplicative` 的定义
+/-- A `CommApplicative` functor `m` is a (lawful) applicative functor which behaves identically on
+`α × β` and `β × α`, so computations can occur in either order. -/
+/-
+**CommApplicative** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(m : Type u → Type v) → [Applicative m] → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class CommApplicative
-  parameters: (m : Type u -> Type v) [Applicative m]
-  extends: LawfulApplicative m
-  axioms and operations (1):
-    - commutative_prod : forall {α β} (a : m α) (b : m β),
-
-中文:
-类 交换适用
-  参数: (m : 类型u -> 类型v) [适用 m]
-  继承: 合法适用 m
-  公理与运算 (1 个):
-    - commutative_prod : 对任意 {α β} (a : m α) (b : m β),
+--- 原说明 ---
+A `CommApplicative` functor `m` is a (lawful) applicative functor which behaves 
+identically on
+`α × β` and `β × α`, so computations can occur in either order.
 -/
-class CommApplicative (m : Type u -> Type v) [Applicative m] : Prop extends LawfulApplicative m where
+class CommApplicative (m : Type u → Type v) [Applicative m] : Prop extends LawfulApplicative m where
   /-- Computations performed first on `a : α` and then on `b : β` are equal to those performed in
   the reverse order. -/
-  commutative_prod : forall {α β} (a : m α) (b : m β),
-Prod.mk < > a <*> b = (fun (b : β) a => (a, b)) < > b <*> a
+  commutative_prod : ∀ {α β} (a : m α) (b : m β),
+    Prod.mk <$> a <*> b = (fun (b : β) a => (a, b)) <$> b <*> a
 
 open Functor
-
-/--
-theorem `CommApplicative.commutative_map` / 定理 `CommApplicative.commutative_map`
-
-English:
-theorem CommApplicative.commutative_map
-  statement: {m : Type u -> Type v} [h : Applicative m]
-  proof: calc
-f < > a <*> b = (fun p : α × β => f p.1 p.2) < > (Prod.mk <$> a <*> b) := by
-      simp only [map_seq, map_map, Function.comp_def]
-_ = (fun b a => f a b) < > b <*> a := by
-      rw [@CommApplicative.commutative_prod m h]
-      simp [map_seq, map_map]
-      rfl
-
-中文:
-定理 交换适用.commutative_map
-  结论: {m : 类型u -> 类型v} [h : 适用 m]
-  证明: calc
-f < > a <*> b = (fun p : α × β => f p.1 p.2) < > (Prod.mk <$> a <*> b) := by
-      simp only [map_seq, map_map, Function.comp_def]
-_ = (fun b a => f a b) < > b <*> a := by
-      rw [@CommApplicative.commutative_prod m h]
-      simp [map_seq, map_map]
-      rfl
-
-Depends on / 依赖: CommApplicative, CommApplicative.commutative_prod, Function, Function.comp_def, Prod.mk, commutative_prod, comp_def, map_map, map_seq
+/-
+**CommApplicative.commutative_map** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：CommApplicative.commutative_map {m : Type u -> Type v} [h : Applicative m]
+ [CommApplicative m] {α β γ} (a : m α) (b : m β) {f : α -> β -> γ} : f < > a <*>
+ b = flip f < > b <*> a
+参数：a : m α；b : m β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_seq`：map_seq (f : β -> γ) (x : F (α -> β)) (y : F α) : f < > (x <*> 
+y) = (f ∘ ·) < > x <*> y
+· 使用定理 `CommApplicative.toLawfulApplicative`：∀ {m : Type u → Type v} {inst : App
+licative m} [self : CommApplicative m], LawfulApplicative m
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Functor.map_map`：∀ {f : Type u_1 → Type u_2} {α β γ : Type u_1} [inst : 
+Functor f] [LawfulFunctor f] (m : α → β) (g : β → γ) (x : f α),   g <$> m <$> x 
+= (fu…
+· 使用定理 `LawfulApplicative.toLawfulFunctor`：∀ {f : Type u → Type v} {inst : Appli
+cative f} [self : LawfulApplicative f], LawfulFunctor f
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CommApplicative.commutative_prod`：∀ {m : Type u → Type v} {inst : Applic
+ative m} [self : CommApplicative m] {α β : Type u} (a : m α) (b : m β),   Prod.m
+k <$> a <*> b = (fun b…
 -/
-theorem CommApplicative.commutative_map {m : Type u -> Type v} [h : Applicative m]
-    [CommApplicative m] {α β γ} (a : m α) (b : m β) {f : α -> β -> γ} :
-f < > a <*> b = flip f < > b <*> a :=
+theorem CommApplicative.commutative_map {m : Type u → Type v} [h : Applicative m]
+    [CommApplicative m] {α β γ} (a : m α) (b : m β) {f : α → β → γ} :
+    f <$> a <*> b = flip f <$> b <*> a :=
   calc
-f < > a <*> b = (fun p : α × β => f p.1 p.2) < > (Prod.mk <$> a <*> b) := by
+    f <$> a <*> b = (fun p : α × β => f p.1 p.2) <$> (Prod.mk <$> a <*> b) := by
       simp only [map_seq, map_map, Function.comp_def]
-_ = (fun b a => f a b) < > b <*> a := by
+    _ = (fun b a => f a b) <$> b <*> a := by
       rw [@CommApplicative.commutative_prod m h]
       simp [map_seq, map_map]
       rfl

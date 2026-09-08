@@ -36,18 +36,11 @@ open Batteries.Tactic
 
 namespace Mathlib.Tactic.Find
 
-/--
-Definition of `matchHyps` / `matchHyps` 的定义
-
-English:
-definition matchHyps
-  signature: : List Expr -> List Expr -> List Expr -> MetaM Bool
-
-中文:
-定义 matchHyps
-  签名: : 列表 Expr -> 列表 Expr -> 列表 Expr -> MetaM 布尔值
+/-
+**Mathlib.Tactic.Find.matchHyps** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Find`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private partial def matchHyps : List Expr -> List Expr -> List Expr -> MetaM Bool
+private partial def matchHyps : List Expr → List Expr → List Expr → MetaM Bool
   | p::ps, oldHyps, h::newHyps => do
     let pt ← inferType p
     let t ← inferType h
@@ -55,109 +48,38 @@ private partial def matchHyps : List Expr -> List Expr -> List Expr -> MetaM Boo
       matchHyps ps [] (oldHyps ++ newHyps)
     else
       matchHyps (p::ps) (h::oldHyps) newHyps
-  | [], _, _ => pure true
+  | [], _, _    => pure true
   | _::_, _, [] => pure false
 
 -- from Lean.Server.Completion
-/--
-Definition of `isBlackListed` / `isBlackListed` 的定义
-
-English:
-definition isBlackListed
-  signature: (declName : Name)
-  body: do
-  let env ← getEnv
-pure declName.isInternal
-   || isAuxRecursor env declName
-   || isNoConfusion env declName
- isRec declName
- isMatcher declName
-
-中文:
-定义 isBlackListed
-  签名: (declName : Name)
-  定义体: do
-  let env ← getEnv
-pure declName.isInternal
-   || isAuxRecursor env declName
-   || isNoConfusion env declName
- isRec declName
- isMatcher declName
+/-
+**Mathlib.Tactic.Find.isBlackListed** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Fi
+nd`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private def isBlackListed (declName : Name) : MetaM Bool := do
   let env ← getEnv
-pure declName.isInternal
+  pure <| declName.isInternal
    || isAuxRecursor env declName
    || isNoConfusion env declName
- isRec declName
- isMatcher declName
+  <||> isRec declName
+  <||> isMatcher declName
 
 initialize findDeclsPerHead : DeclCache (Std.HashMap HeadIndex (Array Name)) ←
-  DeclCache.mk "#find: init cache" failure {} fun _ c headMap => do
+  DeclCache.mk "#find: init cache" failure {} fun _ c headMap ↦ do
     if (← isBlackListed c.name) then
       return headMap
     -- TODO: this should perhaps use `forallTelescopeReducing` instead,
     -- to avoid leaking metavariables.
     let (_, _, ty) ← forallMetaTelescopeReducing c.type
     let head := ty.toHeadIndex
-pure headMap.insert head (headMap.getD head #[] |>.push c.name)
-
-/--
-Definition of `findType` / `findType` 的定义
-
-English:
-definition findType
-  signature: (t : Expr)
-  body: withReducible do
-  let t ← instantiateMVars t
-  let head := (← forallMetaTelescopeReducing t).2.2.toHeadIndex
-  let pat ← abstractMVars t
-
-  let env ← getEnv
-  let mut numFound := 0
-  for n in (← findDeclsPerHead.get).getD head #[] do
-.get! let c := env.find? n
-    let cTy := c.instantiateTypeLevelParams (← mkFreshLevelMVars c.numLevelParams)
-    let found ← forallTelescopeReducing cTy fun cParams cTy' => do
-      let pat := pat.expr.instantiateLevelParamsArray pat.paramNames
-        (← mkFreshLevelMVars pat.numMVars).toArray
-      let (_, _, pat) ← lambdaMetaTelescope pat
-      let (patParams, _, pat) ← forallMetaTelescopeReducing pat
-      isDefEq cTy' pat <&&> matchHyps patParams.toList [] cParams.toList
-    if found then
-      numFound := numFound + 1
-      if numFound > 20 then
-        logInfo m!"maximum number of search results reached"
-        break
-      logInfo m!"{n}: {cTy}"
-
-中文:
-定义 findType
-  签名: (t : Expr)
-  定义体: withReducible do
-  let t ← instantiateMVars t
-  let head := (← forallMetaTelescopeReducing t).2.2.toHeadIndex
-  let pat ← abstractMVars t
-
-  let env ← getEnv
-  let mut numFound := 0
-  for n in (← findDeclsPerHead.get).getD head #[] do
-.get! let c := env.find? n
-    let cTy := c.instantiateTypeLevelParams (← mkFreshLevelMVars c.numLevelParams)
-    let found ← forallTelescopeReducing cTy fun cParams cTy' => do
-      let pat := pat.expr.instantiateLevelParamsArray pat.paramNames
-        (← mkFreshLevelMVars pat.numMVars).toArray
-      let (_, _, pat) ← lambdaMetaTelescope pat
-      let (patParams, _, pat) ← forallMetaTelescopeReducing pat
-      isDefEq cTy' pat <&&> matchHyps patParams.toList [] cParams.toList
-    if found then
-      numFound := numFound + 1
-      if numFound > 20 then
-        logInfo m!"maximum number of search results reached"
-        break
-      logInfo m!"{n}: {cTy}"
-
-Depends on / 依赖: withReducible
+    pure <| headMap.insert head (headMap.getD head #[] |>.push c.name)
+/-
+**Mathlib.Tactic.Find.findType** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Find`。
+形式化陈述：findType (t : Expr) : TermElabM Unit
+参数：t : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def findType (t : Expr) : TermElabM Unit := withReducible do
   let t ← instantiateMVars t
@@ -167,9 +89,9 @@ def findType (t : Expr) : TermElabM Unit := withReducible do
   let env ← getEnv
   let mut numFound := 0
   for n in (← findDeclsPerHead.get).getD head #[] do
-.get! let c := env.find? n
+    let c := env.find? n |>.get!
     let cTy := c.instantiateTypeLevelParams (← mkFreshLevelMVars c.numLevelParams)
-    let found ← forallTelescopeReducing cTy fun cParams cTy' => do
+    let found ← forallTelescopeReducing cTy fun cParams cTy' ↦ do
       let pat := pat.expr.instantiateLevelParamsArray pat.paramNames
         (← mkFreshLevelMVars pat.numMVars).toArray
       let (_, _, pat) ← lambdaMetaTelescope pat
@@ -259,3 +181,4 @@ elab "#find " t:term : tactic => do
   findType t
 
 end Mathlib.Tactic.Find
+

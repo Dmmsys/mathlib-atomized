@@ -34,93 +34,70 @@ variable {C : Type u} [Category.{v} C] [HasFiniteProducts C]
   (U : FormalCoproduct.{w} C) {T : C} (hT : IsTerminal T)
 
 set_option backward.defeqAttrib.useBackward true in
-instance (n : Nat) :
+/-
+**CategoryTheory.Limits.FormalCoproduct.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.Limits.FormalCoproduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+instance (n : ℕ) :
     HasWidePullback (Arrow.mk ((isTerminalIncl T hT).from U)).right
-      (fun (_ : Fin (n + 1)) => (Arrow.mk ((isTerminalIncl T hT).from U)).left)
-      fun _ => (Arrow.mk ((isTerminalIncl T hT).from U)).hom := by
+      (fun (_ : Fin (n + 1)) ↦ (Arrow.mk ((isTerminalIncl T hT).from U)).left)
+      fun _ ↦ (Arrow.mk ((isTerminalIncl T hT).from U)).hom := by
   dsimp
-  have : HasProduct fun (x : Fin (n + 1)) => U := ⟨⟨_, U.isLimitPowerFan (Fin (n + 1))⟩⟩
+  have : HasProduct fun (x : Fin (n + 1)) ↦ U := ⟨⟨_, U.isLimitPowerFan (Fin (n + 1))⟩⟩
   exact hasWidePullback_of_isTerminal _ (isTerminalIncl _ hT)
-
+/-
+**CategoryTheory.Limits.FormalCoproduct.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheo
+ry.Limits.FormalCoproduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (n : SimplexCategory) :
     HasLimit (WidePullbackShape.wideCospan ((incl C).obj T) _
-      fun (_ : ToType n) => (isTerminalIncl T hT).from U) :=
-  ⟨⟨_, WidePullbackCone.isLimitOfFan _ (U.isLimitPowerFan _)
+      fun (_ : ToType n) ↦ (isTerminalIncl T hT).from U) :=
+  ⟨⟨_, WidePullbackCone.isLimitOfFan  _ (U.isLimitPowerFan _)
     (isTerminalIncl T hT)⟩⟩
 
-/--
-Definition of `cechIsoCechNerveApp` / `cechIsoCechNerveApp` 的定义
+/-- Auxiliary definition for `cechIsoCechNerve`. -/
+/-
+**CategoryTheory.Limits.FormalCoproduct.cechIsoCechNerveApp** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.Limits.FormalCoproduct`。
+形式化陈述：cechIsoCechNerveApp (n : SimplexCategoryᵒᵖ) : U.cech.obj n ≅ (Arrow.cechNe
+rve (Arrow.mk ((isTerminalIncl _ hT).from U))).obj n
+参数：n : SimplexCategoryᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cechIsoCechNerveApp
-  signature: (n : SimplexCategoryᵒᵖ)
-  body: IsLimit.conePointUniqueUpToIso (WidePullbackCone.isLimitOfFan
-    (arrows := fun _ => (isTerminalIncl _ hT).from U)
-    (U.isLimitPowerFan (ToType n.unop)) (isTerminalIncl _ hT)) (limit.isLimit _)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 cechIsoCechNerveApp
-  签名: (n : SimplexCategoryᵒᵖ)
-  定义体: IsLimit.conePointUniqueUpToIso (WidePullbackCone.isLimitOfFan
-    (arrows := fun _ => (isTerminalIncl _ hT).from U)
-    (U.isLimitPowerFan (ToType n.unop)) (isTerminalIncl _ hT)) (limit.isLimit _)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso, ToType, U.isLimitPowerFan, WidePullbackCone, WidePullbackCone.isLimitOfFan, arrows, conePointUniqueUpToIso, isLimit, isLimitOfFan, isLimitPowerFan, isTerminalIncl, limit.isLimit, n.unop
+--- 原说明 ---
+Auxiliary definition for `cechIsoCechNerve`.
 -/
 noncomputable def cechIsoCechNerveApp (n : SimplexCategoryᵒᵖ) :
     U.cech.obj n ≅ (Arrow.cechNerve (Arrow.mk ((isTerminalIncl _ hT).from U))).obj n :=
   IsLimit.conePointUniqueUpToIso (WidePullbackCone.isLimitOfFan
-    (arrows := fun _ => (isTerminalIncl _ hT).from U)
+    (arrows := fun _ ↦ (isTerminalIncl _ hT).from U)
     (U.isLimitPowerFan (ToType n.unop)) (isTerminalIncl _ hT)) (limit.isLimit _)
 
 @[reassoc (attr := simp)]
-/--
-lemma `cechIsoCechNerveApp_hom_π` / 引理 `cechIsoCechNerveApp_hom_π`
-
-English:
-lemma cechIsoCechNerveApp_hom_π
-  given: (n : SimplexCategoryᵒᵖ) (i : ToType n.unop)
-  proof: IsLimit.conePointUniqueUpToIso_hom_comp _ _ _
-
-中文:
-引理 cechIsoCechNerveApp_hom_π
-  条件: (n : SimplexCategoryᵒᵖ) (i : ToType n.unop)
-  证明: IsLimit.conePointUniqueUpToIso_hom_comp _ _ _
-
-Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso_hom_comp, Localization, Localization.inverts, conePointUniqueUpToIso_hom_comp, inverts, z.hs
+/-
+**CategoryTheory.Limits.FormalCoproduct.cechIsoCechNerveApp_hom_** 是 Mathlib 中的一
+个引理，位于命名空间 `CategoryTheory.Limits.FormalCoproduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma cechIsoCechNerveApp_hom_π (n : SimplexCategoryᵒᵖ) (i : ToType n.unop) :
     (U.cechIsoCechNerveApp hT n).hom ≫
-      WidePullback.π (fun _ => (isTerminalIncl T hT).from U) i = U.powerπ i :=
+      WidePullback.π (fun _ ↦ (isTerminalIncl T hT).from U) i = U.powerπ i :=
   IsLimit.conePointUniqueUpToIso_hom_comp _ _ _
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[reassoc (attr := simp)]
-/--
-lemma `cechIsoCechNerveApp_inv_π` / 引理 `cechIsoCechNerveApp_inv_π`
-
-English:
-lemma cechIsoCechNerveApp_inv_π
-  given: (n : SimplexCategoryᵒᵖ) (i : ToType n.unop)
-  proof: by
-  rw [← U.cechIsoCechNerveApp_hom_π hT]; rw [Iso.inv_hom_id_assoc]
-
-中文:
-引理 cechIsoCechNerveApp_inv_π
-  条件: (n : SimplexCategoryᵒᵖ) (i : ToType n.unop)
-  证明: by
-  rw [← U.cechIsoCechNerveApp_hom_π hT]; rw [Iso.inv_hom_id_assoc]
-
-Depends on / 依赖: Iso.inv_hom_id_assoc, U.cechIsoCechNerveApp_hom_, inv_hom_id_assoc
+/-
+**CategoryTheory.Limits.FormalCoproduct.cechIsoCechNerveApp_inv_** 是 Mathlib 中的一
+个引理，位于命名空间 `CategoryTheory.Limits.FormalCoproduct`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma cechIsoCechNerveApp_inv_π (n : SimplexCategoryᵒᵖ) (i : ToType n.unop) :
     (U.cechIsoCechNerveApp hT n).inv ≫ U.powerπ i =
-      WidePullback.π (fun _ => (isTerminalIncl T hT).from U) i := by
-  rw [← U.cechIsoCechNerveApp_hom_π hT]; rw [Iso.inv_hom_id_assoc]
+      WidePullback.π (fun _ ↦ (isTerminalIncl T hT).from U) i := by
+  rw [← U.cechIsoCechNerveApp_hom_π hT, Iso.inv_hom_id_assoc]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
@@ -128,50 +105,48 @@ set_option backward.isDefEq.respectTransparency false in
 to the general `Arrow.cechNerve` construction applied to the morphism
 to the terminal object. -/
 @[simps! hom_app inv_app]
-/--
-Definition of `cechIsoCechNerve` / `cechIsoCechNerve` 的定义
+/-
+**CategoryTheory.Limits.FormalCoproduct.cechIsoCechNerve** 是 Mathlib 中的一个定义，位于命名
+空间 `CategoryTheory.Limits.FormalCoproduct`。
+形式化陈述：cechIsoCechNerve : U.cech ≅ Arrow.cechNerve (Arrow.mk ((isTerminalIncl _ h
+T).from U))
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.FormalCoproduct.instHasWidePullbackFinHAddNatOfNat
+RightMkFromIsTerminalInclLeftHom`：∀ {C : Type u} [inst : CategoryTheory.Category
+.{v, u} C] [CategoryTheory.Limits.HasFiniteProducts C]   (U : CategoryTheory.Lim
+its.FormalCopr…
 
-English:
-definition cechIsoCechNerve
-  signature: :
-  body: NatIso.ofComponents (fun _ => cechIsoCechNerveApp _ _ _)
-    (fun f => WidePullback.hom_ext _ _ _ (by simp) ((isTerminalIncl _ hT).hom_ext _ _))
-
-中文:
-定义 cechIsoCechNerve
-  签名: :
-  定义体: NatIso.ofComponents (fun _ => cechIsoCechNerveApp _ _ _)
-    (fun f => WidePullback.hom_ext _ _ _ (by simp) ((isTerminalIncl _ hT).hom_ext _ _))
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, WidePullback, WidePullback.hom_ext, cechIsoCechNerveApp, hom_ext, isTerminalIncl, ofComponents
+--- 原说明 ---
+The Cech construction for `FormalCoproduct` is isomorphic
+to the general `Arrow.cechNerve` construction applied to the morphism
+to the terminal object.
 -/
 noncomputable def cechIsoCechNerve :
     U.cech ≅ Arrow.cechNerve (Arrow.mk ((isTerminalIncl _ hT).from U)) :=
-  NatIso.ofComponents (fun _ => cechIsoCechNerveApp _ _ _)
-    (fun f => WidePullback.hom_ext _ _ _ (by simp) ((isTerminalIncl _ hT).hom_ext _ _))
+  NatIso.ofComponents (fun _ ↦ cechIsoCechNerveApp _ _ _)
+    (fun f ↦ WidePullback.hom_ext _ _ _ (by simp) ((isTerminalIncl _ hT).hom_ext _ _))
 
 /-- The Cech construction for `FormalCoproduct` is isomorphic
 to the general `Arrow.augmentedCechNerve` construction applied to the morphism
 to the terminal object. -/
 @[simps! hom_left inv_left hom_right inv_left]
-/--
-Definition of `cechIsoAugmentedCechNerve` / `cechIsoAugmentedCechNerve` 的定义
+/-
+**CategoryTheory.Limits.FormalCoproduct.cechIsoAugmentedCechNerve** 是 Mathlib 中的
+一个定义，位于命名空间 `CategoryTheory.Limits.FormalCoproduct`。
+形式化陈述：cechIsoAugmentedCechNerve : U.cech.augmentOfIsTerminal (isTerminalIncl _ h
+T) ≅ Arrow.augmentedCechNerve (Arrow.mk ((isTerminalIncl _ hT).from U))
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.FormalCoproduct.instHasWidePullbackFinHAddNatOfNat
+RightMkFromIsTerminalInclLeftHom`：∀ {C : Type u} [inst : CategoryTheory.Category
+.{v, u} C] [CategoryTheory.Limits.HasFiniteProducts C]   (U : CategoryTheory.Lim
+its.FormalCopr…
 
-English:
-definition cechIsoAugmentedCechNerve
-  signature: :
-  body: Comma.isoMk (U.cechIsoCechNerve hT) (Iso.refl _) (by
-    ext : 1
-    apply (isTerminalIncl _ hT).hom_ext)
-
-中文:
-定义 cechIsoAugmentedCechNerve
-  签名: :
-  定义体: Comma.isoMk (U.cechIsoCechNerve hT) (Iso.refl _) (by
-    ext : 1
-    apply (isTerminalIncl _ hT).hom_ext)
-
-Depends on / 依赖: Comma.isoMk, Iso.refl, U.cechIsoCechNerve, cechIsoCechNerve, hom_ext, isTerminalIncl
+--- 原说明 ---
+The Cech construction for `FormalCoproduct` is isomorphic
+to the general `Arrow.augmentedCechNerve` construction applied to the morphism
+to the terminal object.
 -/
 noncomputable def cechIsoAugmentedCechNerve :
     U.cech.augmentOfIsTerminal (isTerminalIncl _ hT) ≅
@@ -181,24 +156,24 @@ noncomputable def cechIsoAugmentedCechNerve :
     apply (isTerminalIncl _ hT).hom_ext)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `extraDegeneracyCech` / `extraDegeneracyCech` 的定义
+/-- The Cech object of `U : FormalCoproduct C` has an extra degeneracy
+when there is a morphism `T ⟶ U.obj i₀` from the terminal object. -/
+/-
+**CategoryTheory.Limits.FormalCoproduct.extraDegeneracyCech** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.Limits.FormalCoproduct`。
+形式化陈述：extraDegeneracyCech {i₀ : U.I} (d : T ⟶ U.obj i₀) : (U.cech.augmentOfIsTer
+minal (isTerminalIncl _ hT)).ExtraDegeneracy
+参数：d : T ⟶ U.obj i₀。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.FormalCoproduct.instHasWidePullbackFinHAddNatOfNat
+RightMkFromIsTerminalInclLeftHom`：∀ {C : Type u} [inst : CategoryTheory.Category
+.{v, u} C] [CategoryTheory.Limits.HasFiniteProducts C]   (U : CategoryTheory.Lim
+its.FormalCopr…
 
-English:
-definition extraDegeneracyCech
-  signature: {i₀ : U.I} (d : T ⟶ U.obj i₀)
-  body: .ofIso (U.cechIsoAugmentedCechNerve hT).symm
-    (Arrow.AugmentedCechNerve.extraDegeneracy _
-      { section_ := Hom.fromIncl i₀ d })
-
-中文:
-定义 extraDegeneracyCech
-  签名: {i₀ : U.I} (d : T ⟶ U.obj i₀)
-  定义体: .ofIso (U.cechIsoAugmentedCechNerve hT).symm
-    (Arrow.AugmentedCechNerve.extraDegeneracy _
-      { section_ := Hom.fromIncl i₀ d })
-
-Depends on / 依赖: Arrow.AugmentedCechNerve.extraDegeneracy, AugmentedCechNerve, Hom.fromIncl, U.cechIsoAugmentedCechNerve, cechIsoAugmentedCechNerve, extraDegeneracy, fromIncl, section_
+--- 原说明 ---
+The Cech object of `U : FormalCoproduct C` has an extra degeneracy
+when there is a morphism `T ⟶ U.obj i₀` from the terminal object.
 -/
 noncomputable def extraDegeneracyCech {i₀ : U.I} (d : T ⟶ U.obj i₀) :
     (U.cech.augmentOfIsTerminal (isTerminalIncl _ hT)).ExtraDegeneracy :=
@@ -207,3 +182,4 @@ noncomputable def extraDegeneracyCech {i₀ : U.I} (d : T ⟶ U.obj i₀) :
       { section_ := Hom.fromIncl i₀ d })
 
 end CategoryTheory.Limits.FormalCoproduct
+

@@ -37,27 +37,26 @@ namespace PreGaloisCategory
 
 open Limits CategoryTheory.Functor
 
+/-
+**CategoryTheory.PreGaloisCategory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Pr
+eGaloisCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 noncomputable instance {G : Type v} [Group G] [Finite G] :
     PreservesColimitsOfShape (SingleObj G) FintypeCat.incl.{w} := by
   choose G' hg hf e using Finite.exists_type_univ_nonempty_mulEquiv G
   exact Limits.preservesColimitsOfShape_of_equiv (Classical.choice e).toSingleObjEquiv.symm _
 
-/--
-Definition of `IsGalois` / `IsGalois` 的定义
+/-- A connected object `X` of `C` is Galois if the quotient `X / Aut X` is terminal. -/
+/-
+**CategoryTheory.PreGaloisCategory.IsGalois** 是 Mathlib 中的一个归纳类型，位于命名空间 `Categor
+yTheory.PreGaloisCategory`。
+形式化陈述：{C : Type u₁} → [inst : CategoryTheory.Category.{u₂, u₁} C] → [CategoryThe
+ory.GaloisCategory C] → C → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsGalois
-  parameters: {C : Type u₁} [Category.{u₂, u₁} C] [GaloisCategory C] (X : C)
-  extends: IsConnected X
-  axioms and operations (1):
-    - quotientByAutTerminal : Nonempty (IsTerminal <| colimit <| SingleObj.functor <| Aut.toEnd X)
-
-中文:
-类 是Galois
-  参数: {C : 类型u₁} [范畴.{u₂, u₁} C] [Galois范畴 C] (X : C)
-  继承: 是连通 X
-  公理与运算 (1 个):
-    - quotientByAutTerminal : 非空 (是终止 <| colimit <| SingleObj.functor <| Aut.toEnd X)
+--- 原说明 ---
+A connected object `X` of `C` is Galois if the quotient `X / Aut X` is terminal.
 -/
 class IsGalois {C : Type u₁} [Category.{u₂, u₁} C] [GaloisCategory C] (X : C) : Prop
     extends IsConnected X where
@@ -65,32 +64,18 @@ class IsGalois {C : Type u₁} [Category.{u₂, u₁} C] [GaloisCategory C] (X :
 
 variable {C : Type u₁} [Category.{u₂, u₁} C]
 
-/--
-Instance `autMulFiber` / 实例 `autMulFiber`
+/-- The natural action of `Aut X` on `F.obj X`. -/
+/-
+**CategoryTheory.PreGaloisCategory.autMulFiber** 是 Mathlib 中的一个实例，位于命名空间 `Catego
+ryTheory.PreGaloisCategory`。
+形式化陈述：autMulFiber (F : C ⥤ FintypeCat.{w}) (X : C) : MulAction (Aut X) (F.obj X)
+ where smul σ a
+参数：F : C ⥤ FintypeCat.{w}；X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance autMulFiber
-  signature: (F : C ⥤ FintypeCat.{w}) (X : C)
-  body: F.map σ.hom a
-  one_smul a := by
-    change F.map (𝟙 X) a = a
-    simp only [map_id, FintypeCat.id_apply]
-  mul_smul g h a := by
-    change F.map (h.hom ≫ g.hom) a = (F.map h.hom ≫ F.map g.hom) a
-    simp only [map_comp, FintypeCat.comp_apply]
-
-中文:
-实例 autMulFiber
-  签名: (F : C ⥤ FintypeCat.{w}) (X : C)
-  定义体: F.map σ.hom a
-  one_smul a := by
-    change F.map (𝟙 X) a = a
-    simp only [map_id, FintypeCat.id_apply]
-  mul_smul g h a := by
-    change F.map (h.hom ≫ g.hom) a = (F.map h.hom ≫ F.map g.hom) a
-    simp only [map_comp, FintypeCat.comp_apply]
-
-Depends on / 依赖: F.map
+--- 原说明 ---
+The natural action of `Aut X` on `F.obj X`.
 -/
 instance autMulFiber (F : C ⥤ FintypeCat.{w}) (X : C) : MulAction (Aut X) (F.obj X) where
   smul σ a := F.map σ.hom a
@@ -103,34 +88,27 @@ instance autMulFiber (F : C ⥤ FintypeCat.{w}) (X : C) : MulAction (Aut X) (F.o
 
 variable [GaloisCategory C] (F : C ⥤ FintypeCat.{w}) [FiberFunctor F]
 
-/--
-Definition of `quotientByAutTerminalEquivUniqueQuotient` / `quotientByAutTerminalEquivUniqueQuotient` 的定义
+/-- For a connected object `X` of `C`, the quotient `X / Aut X` is terminal if and only if
+the quotient `F.obj X / Aut X` has exactly one element. -/
+/-
+**CategoryTheory.PreGaloisCategory.quotientByAutTerminalEquivUniqueQuotient** 是 
+Mathlib 中的一个定义，位于命名空间 `CategoryTheory.PreGaloisCategory`。
+形式化陈述：quotientByAutTerminalEquivUniqueQuotient (X : C) [IsConnected X] : IsTermi
+nal (colimit <| SingleObj.functor <| Aut.toEnd X) ≃ Unique (MulAction.orbitRel.Q
+uotient (Aut X) (F.obj X))
+参数：X : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.GaloisCategory.toPreGaloisCategory`：∀ {C : Type u₁} {inst
+ : CategoryTheory.Category.{u₂, u₁} C} [self : CategoryTheory.GaloisCategory C],
+   CategoryTheory.PreGaloisCategory C
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition quotientByAutTerminalEquivUniqueQuotient
-  body: by
-  let J : SingleObj (Aut X) ⥤ C := SingleObj.functor (Aut.toEnd X)
-  let e : (F ⋙ FintypeCat.incl).obj (colimit J) ≅ _ :=
-    preservesColimitIso (F ⋙ FintypeCat.incl) J ≪≫
-    (Equiv.toIso <| SingleObj.Types.colimitEquivQuotient (J ⋙ F ⋙ FintypeCat.incl))
-  apply Equiv.trans
-  · apply (IsTerminal.isTerminalIffObj (F ⋙ FintypeCat.incl) _).trans
-      (isLimitEmptyConeEquiv _ (asEmptyCone _) (asEmptyCone _) e)
-  exact Types.isTerminalEquivUnique _
-
-中文:
-定义 quotientByAutTerminalEquivUniqueQuotient
-  定义体: by
-  let J : SingleObj (Aut X) ⥤ C := SingleObj.functor (Aut.toEnd X)
-  let e : (F ⋙ FintypeCat.incl).obj (colimit J) ≅ _ :=
-    preservesColimitIso (F ⋙ FintypeCat.incl) J ≪≫
-    (Equiv.toIso <| SingleObj.Types.colimitEquivQuotient (J ⋙ F ⋙ FintypeCat.incl))
-  apply Equiv.trans
-  · apply (IsTerminal.isTerminalIffObj (F ⋙ FintypeCat.incl) _).trans
-      (isLimitEmptyConeEquiv _ (asEmptyCone _) (asEmptyCone _) e)
-  exact Types.isTerminalEquivUnique _
-
-Depends on / 依赖: Aut.toEnd, Equiv.toIso, Equiv.trans, FintypeCat, FintypeCat.incl, IsTerminal, IsTerminal.isTerminalIffObj, SingleObj, SingleObj.Types.colimitEquivQuotient, SingleObj.functor, Types.isTerminalEquivUnique, asEmptyCone, colimit, colimitEquivQuotient, functor, isLimitEmptyConeEquiv, isTerminalEquivUnique, isTerminalIffObj, preservesColimitIso
+--- 原说明 ---
+For a connected object `X` of `C`, the quotient `X / Aut X` is terminal if and o
+nly if
+the quotient `F.obj X / Aut X` has exactly one element.
 -/
 noncomputable def quotientByAutTerminalEquivUniqueQuotient
     (X : C) [IsConnected X] :
@@ -144,234 +122,273 @@ noncomputable def quotientByAutTerminalEquivUniqueQuotient
   · apply (IsTerminal.isTerminalIffObj (F ⋙ FintypeCat.incl) _).trans
       (isLimitEmptyConeEquiv _ (asEmptyCone _) (asEmptyCone _) e)
   exact Types.isTerminalEquivUnique _
-
-/--
-lemma `isGalois_iff_aux` / 引理 `isGalois_iff_aux`
-
-English:
-lemma isGalois_iff_aux
-  given: (X : C) [IsConnected X]
-  proof: ⟨fun h => h.quotientByAutTerminal, fun h => ⟨h⟩⟩
-
-中文:
-引理 isGalois_iff_aux
-  条件: (X : C) [是连通 X]
-  证明: ⟨fun h => h.quotientByAutTerminal, fun h => ⟨h⟩⟩
-
-Depends on / 依赖: Nonempty, Nonempty.intro, h.quotientByAutTerminal, quotientByAutTerminal
+/-
+**CategoryTheory.PreGaloisCategory.isGalois_iff_aux** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.PreGaloisCategory`。
+形式化陈述：isGalois_iff_aux (X : C) [IsConnected X] : IsGalois X ↔ Nonempty (IsTermin
+al <| colimit <| SingleObj.functor <| Aut.toEnd X)
+参数：X : C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.PreGaloisCategory.instHasColimitsOfShapeSingleObjOfFinite
+`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{u₂, u₁} C] [CategoryTheory.Pr
+eGaloisCategory C] {G : Type u_1}   [inst_2 : Group G] [Finite…
+· 使用定理 `CategoryTheory.GaloisCategory.toPreGaloisCategory`：∀ {C : Type u₁} {inst
+ : CategoryTheory.Category.{u₂, u₁} C} [self : CategoryTheory.GaloisCategory C],
+   CategoryTheory.PreGaloisCategory C
+· 使用定理 `CategoryTheory.PreGaloisCategory.instFiniteAutOfIsConnected`：∀ {C : Type
+ u₁} [inst : CategoryTheory.Category.{u₂, u₁} C] [CategoryTheory.GaloisCategory 
+C] (A : C)   [CategoryTheory.PreGaloisCategory.Is…
+· 使用定理 `CategoryTheory.PreGaloisCategory.IsGalois.quotientByAutTerminal`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{u₂, u₁} C} {inst_1 : CategoryTheory.Ga
+loisCategory C} {X : C}   [self : CategoryTheory.PreG…
 -/
 lemma isGalois_iff_aux (X : C) [IsConnected X] :
     IsGalois X ↔ Nonempty (IsTerminal <| colimit <| SingleObj.functor <| Aut.toEnd X) :=
-  ⟨fun h => h.quotientByAutTerminal, fun h => ⟨h⟩⟩
+  ⟨fun h ↦ h.quotientByAutTerminal, fun h ↦ ⟨h⟩⟩
 
-/--
-theorem `isGalois_iff_pretransitive` / 定理 `isGalois_iff_pretransitive`
+/-- Given a fiber functor `F` and a connected object `X` of `C`. Then `X` is Galois if and only if
+the natural action of `Aut X` on `F.obj X` is transitive. -/
+/-
+**CategoryTheory.PreGaloisCategory.isGalois_iff_pretransitive** 是 Mathlib 中的一个定理
+，位于命名空间 `CategoryTheory.PreGaloisCategory`。
+形式化陈述：isGalois_iff_pretransitive (X : C) [IsConnected X] : IsGalois X ↔ MulActio
+n.IsPretransitive (Aut X) (F.obj X)
+参数：X : C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.GaloisCategory.toPreGaloisCategory`：∀ {C : Type u₁} {inst
+ : CategoryTheory.Category.{u₂, u₁} C} [self : CategoryTheory.GaloisCategory C],
+   CategoryTheory.PreGaloisCategory C
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.PreGaloisCategory.instHasColimitsOfShapeSingleObjOfFinite
+`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{u₂, u₁} C] [CategoryTheory.Pr
+eGaloisCategory C] {G : Type u_1}   [inst_2 : Group G] [Finite…
+· 使用定理 `CategoryTheory.PreGaloisCategory.instFiniteAutOfIsConnected`：∀ {C : Type
+ u₁} [inst : CategoryTheory.Category.{u₂, u₁} C] [CategoryTheory.GaloisCategory 
+C] (A : C)   [CategoryTheory.PreGaloisCategory.Is…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.PreGaloisCategory.isGalois_iff_aux`：isGalois_iff_aux (X :
+ C) [IsConnected X] : IsGalois X ↔ Nonempty (IsTerminal <| colimit <| SingleObj.
+functor <| Aut.toEnd X)
+· 使用定理 `Equiv.nonempty_congr`：nonempty_congr (e : α ≃ β) : Nonempty α ↔ Nonempty
+ β
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `MulAction.pretransitive_iff_unique_quotient_of_nonempty`：pretransitive_i
+ff_unique_quotient_of_nonempty [Nonempty α] : IsPretransitive G α ↔ Nonempty (Un
+ique <| orbitRel.Quotient G α)
 
-English:
-theorem isGalois_iff_pretransitive
-  given: (X : C) [IsConnected X]
-  proof: by
-  rw [isGalois_iff_aux]; rw [Equiv.nonempty_congr <| quotientByAutTerminalEquivUniqueQuotient F X]
-  exact (MulAction.pretransitive_iff_unique_quotient_of_nonempty (Aut X) (F.obj X)).symm
-
-中文:
-定理 isGalois_iff_pretransitive
-  条件: (X : C) [是连通 X]
-  证明: by
-  rw [isGalois_iff_aux]; rw [Equiv.nonempty_congr <| quotientByAutTerminalEquivUniqueQuotient F X]
-  exact (MulAction.pretransitive_iff_unique_quotient_of_nonempty (Aut X) (F.obj X)).symm
-
-Depends on / 依赖: Equiv.nonempty_congr, F.obj, MulAction, MulAction.pretransitive_iff_unique_quotient_of_nonempty, isGalois_iff_aux, nonempty_congr, pretransitive_iff_unique_quotient_of_nonempty, quotientByAutTerminalEquivUniqueQuotient
+--- 原说明 ---
+Given a fiber functor `F` and a connected object `X` of `C`. Then `X` is Galois 
+if and only if
+the natural action of `Aut X` on `F.obj X` is transitive.
 -/
 theorem isGalois_iff_pretransitive (X : C) [IsConnected X] :
     IsGalois X ↔ MulAction.IsPretransitive (Aut X) (F.obj X) := by
-  rw [isGalois_iff_aux]; rw [Equiv.nonempty_congr <| quotientByAutTerminalEquivUniqueQuotient F X]
+  rw [isGalois_iff_aux, Equiv.nonempty_congr <| quotientByAutTerminalEquivUniqueQuotient F X]
   exact (MulAction.pretransitive_iff_unique_quotient_of_nonempty (Aut X) (F.obj X)).symm
 
-/--
-Definition of `isTerminalQuotientOfIsGalois` / `isTerminalQuotientOfIsGalois` 的定义
+/-- If `X` is Galois, the quotient `X / Aut X` is terminal. -/
+/-
+**CategoryTheory.PreGaloisCategory.isTerminalQuotientOfIsGalois** 是 Mathlib 中的一个
+定义，位于命名空间 `CategoryTheory.PreGaloisCategory`。
+形式化陈述：isTerminalQuotientOfIsGalois (X : C) [IsGalois X] : IsTerminal colimit Sin
+gleObj.functor Aut.toEnd X
+参数：X : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.PreGaloisCategory.IsGalois.quotientByAutTerminal`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{u₂, u₁} C} {inst_1 : CategoryTheory.Ga
+loisCategory C} {X : C}   [self : CategoryTheory.PreG…
 
-English:
-definition isTerminalQuotientOfIsGalois
-  signature: (X : C) [IsGalois X]
-  body: Nonempty.some IsGalois.quotientByAutTerminal
-
-中文:
-定义 isTerminalQuotientOfIsGalois
-  签名: (X : C) [是Galois X]
-  定义体: Nonempty.some IsGalois.quotientByAutTerminal
-
-Depends on / 依赖: IsGalois, IsGalois.quotientByAutTerminal, Nonempty, Nonempty.intro, Nonempty.some, quotientByAutTerminal
+--- 原说明 ---
+If `X` is Galois, the quotient `X / Aut X` is terminal.
 -/
 noncomputable def isTerminalQuotientOfIsGalois (X : C) [IsGalois X] :
-IsTerminal colimit SingleObj.functor Aut.toEnd X :=
+    IsTerminal <| colimit <| SingleObj.functor <| Aut.toEnd X :=
   Nonempty.some IsGalois.quotientByAutTerminal
 
-/--
-Instance `isPretransitive_of_isGalois` / 实例 `isPretransitive_of_isGalois`
+/-- If `X` is Galois, then the action of `Aut X` on `F.obj X` is
+transitive for every fiber functor `F`. -/
+/-
+**CategoryTheory.PreGaloisCategory.isPretransitive_of_isGalois** 是 Mathlib 中的一个实
+例，位于命名空间 `CategoryTheory.PreGaloisCategory`。
+形式化陈述：isPretransitive_of_isGalois (X : C) [IsGalois X] : MulAction.IsPretransiti
+ve (Aut X) (F.obj X)
+参数：X : C。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.GaloisCategory.toPreGaloisCategory`：∀ {C : Type u₁} {inst
+ : CategoryTheory.Category.{u₂, u₁} C} [self : CategoryTheory.GaloisCategory C],
+   CategoryTheory.PreGaloisCategory C
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.PreGaloisCategory.isGalois_iff_pretransitive`：isGalois_if
+f_pretransitive (X : C) [IsConnected X] : IsGalois X ↔ MulAction.IsPretransitive
+ (Aut X) (F.obj X)
+· 使用定理 `CategoryTheory.PreGaloisCategory.IsGalois.toIsConnected`：∀ {C : Type u₁}
+ {inst : CategoryTheory.Category.{u₂, u₁} C} {inst_1 : CategoryTheory.GaloisCate
+gory C} {X : C}   [self : CategoryTheory.PreG…
 
-English:
-instance isPretransitive_of_isGalois
-  signature: (X : C) [IsGalois X]
-  body: by
-  rw [← isGalois_iff_pretransitive]
-  infer_instance
-
-中文:
-实例 isPretransitive_of_isGalois
-  签名: (X : C) [是Galois X]
-  定义体: by
-  rw [← isGalois_iff_pretransitive]
-  infer_instance
-
-Depends on / 依赖: infer_instance, isGalois_iff_pretransitive
+--- 原说明 ---
+If `X` is Galois, then the action of `Aut X` on `F.obj X` is
+transitive for every fiber functor `F`.
 -/
 instance isPretransitive_of_isGalois (X : C) [IsGalois X] :
     MulAction.IsPretransitive (Aut X) (F.obj X) := by
   rw [← isGalois_iff_pretransitive]
   infer_instance
-
-/--
-lemma `stabilizer_normal_of_isGalois` / 引理 `stabilizer_normal_of_isGalois`
-
-English:
-lemma stabilizer_normal_of_isGalois
-  given: (X : C) [IsGalois X] (x : F.obj X)
-  proof: by
-    rw [MulAction.mem_stabilizer_iff]
-    change g • n • (g⁻¹ • x) = x
-    have : exists (φ : Aut X), F.map φ.hom x = g⁻¹ • x :=
-      MulAction.IsPretransitive.exists_smul_eq x (g⁻¹ • x)
-    obtain ⟨φ, h⟩ := this
-    rw [← h]; rw [mulAction_naturality]; rw [ninstab]; rw [h]
-    simp
-
-中文:
-引理 stabilizer_normal_of_isGalois
-  条件: (X : C) [是Galois X] (x : F.obj X)
-  证明: by
-    rw [MulAction.mem_stabilizer_iff]
-    change g • n • (g⁻¹ • x) = x
-    have : exists (φ : Aut X), F.map φ.hom x = g⁻¹ • x :=
-      MulAction.IsPretransitive.exists_smul_eq x (g⁻¹ • x)
-    obtain ⟨φ, h⟩ := this
-    rw [← h]; rw [mulAction_naturality]; rw [ninstab]; rw [h]
-    simp
-
-Depends on / 依赖: F.map, IsPretransitive, MulAction, MulAction.IsPretransitive.exists_smul_eq, MulAction.mem_stabilizer_iff, exists_smul_eq, mem_stabilizer_iff, mulAction_naturality, ninstab
+/-
+**CategoryTheory.PreGaloisCategory.stabilizer_normal_of_isGalois** 是 Mathlib 中的一
+个引理，位于命名空间 `CategoryTheory.PreGaloisCategory`。
+形式化陈述：stabilizer_normal_of_isGalois (X : C) [IsGalois X] (x : F.obj X) : Subgrou
+p.Normal (MulAction.stabilizer (Aut F) x) where conj_mem n ninstab g
+参数：X : C；x : F.obj X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.GaloisCategory.toPreGaloisCategory`：∀ {C : Type u₁} {inst
+ : CategoryTheory.Category.{u₂, u₁} C} [self : CategoryTheory.GaloisCategory C],
+   CategoryTheory.PreGaloisCategory C
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulAction.mem_stabilizer_iff`：mem_stabilizer_iff {a : α} {g : G} : g in 
+stabilizer G a ↔ g • a = a
+· 使用定理 `MulAction.IsPretransitive.exists_smul_eq`：∀ {M : Type u_5} {α : Type u_6
+} {inst : SMul M α} [self : MulAction.IsPretransitive M α] (x y : α), ∃ g, g • x
+ = y
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.PreGaloisCategory.mulAction_naturality`：mulAction_natural
+ity {X Y : C} (σ : Aut F) (f : X ⟶ Y) (x : F.obj X) : σ • F.map f x = F.map f (σ
+ • x)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `smul_inv_smul`：smul_inv_smul (g : G) (a : α) : g • g⁻¹ • a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma stabilizer_normal_of_isGalois (X : C) [IsGalois X] (x : F.obj X) :
     Subgroup.Normal (MulAction.stabilizer (Aut F) x) where
   conj_mem n ninstab g := by
     rw [MulAction.mem_stabilizer_iff]
     change g • n • (g⁻¹ • x) = x
-    have : exists (φ : Aut X), F.map φ.hom x = g⁻¹ • x :=
+    have : ∃ (φ : Aut X), F.map φ.hom x = g⁻¹ • x :=
       MulAction.IsPretransitive.exists_smul_eq x (g⁻¹ • x)
     obtain ⟨φ, h⟩ := this
-    rw [← h]; rw [mulAction_naturality]; rw [ninstab]; rw [h]
+    rw [← h, mulAction_naturality, ninstab, h]
     simp
-
-/--
-theorem `evaluation_aut_surjective_of_isGalois` / 定理 `evaluation_aut_surjective_of_isGalois`
-
-English:
-theorem evaluation_aut_surjective_of_isGalois
-  given: (A : C) [IsGalois A] (a : F.obj A)
-  proof: MulAction.IsPretransitive.exists_smul_eq a
-
-中文:
-定理 evaluation_aut_surjective_of_isGalois
-  条件: (A : C) [是Galois A] (a : F.obj A)
-  证明: MulAction.IsPretransitive.exists_smul_eq a
-
-Depends on / 依赖: IsPretransitive, MulAction, MulAction.IsPretransitive.exists_smul_eq, exists_smul_eq
+/-
+**CategoryTheory.PreGaloisCategory.evaluation_aut_surjective_of_isGalois** 是 Mat
+hlib 中的一个定理，位于命名空间 `CategoryTheory.PreGaloisCategory`。
+形式化陈述：evaluation_aut_surjective_of_isGalois (A : C) [IsGalois A] (a : F.obj A) :
+ Function.Surjective (fun f : Aut A => F.map f.hom a)
+参数：A : C；a : F.obj A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.GaloisCategory.toPreGaloisCategory`：∀ {C : Type u₁} {inst
+ : CategoryTheory.Category.{u₂, u₁} C} [self : CategoryTheory.GaloisCategory C],
+   CategoryTheory.PreGaloisCategory C
+· 使用定理 `MulAction.IsPretransitive.exists_smul_eq`：∀ {M : Type u_5} {α : Type u_6
+} {inst : SMul M α} [self : MulAction.IsPretransitive M α] (x y : α), ∃ g, g • x
+ = y
 -/
 theorem evaluation_aut_surjective_of_isGalois (A : C) [IsGalois A] (a : F.obj A) :
-    Function.Surjective (fun f : Aut A => F.map f.hom a) :=
+    Function.Surjective (fun f : Aut A ↦ F.map f.hom a) :=
   MulAction.IsPretransitive.exists_smul_eq a
-
-/--
-theorem `evaluation_aut_bijective_of_isGalois` / 定理 `evaluation_aut_bijective_of_isGalois`
-
-English:
-theorem evaluation_aut_bijective_of_isGalois
-  given: (A : C) [IsGalois A] (a : F.obj A)
-  proof: ⟨evaluation_aut_injective_of_isConnected F A a, evaluation_aut_surjective_of_isGalois F A a⟩
-
-中文:
-定理 evaluation_aut_bijective_of_isGalois
-  条件: (A : C) [是Galois A] (a : F.obj A)
-  证明: ⟨evaluation_aut_injective_of_isConnected F A a, evaluation_aut_surjective_of_isGalois F A a⟩
-
-Depends on / 依赖: evaluation_aut_injective_of_isConnected, evaluation_aut_surjective_of_isGalois
+/-
+**CategoryTheory.PreGaloisCategory.evaluation_aut_bijective_of_isGalois** 是 Math
+lib 中的一个定理，位于命名空间 `CategoryTheory.PreGaloisCategory`。
+形式化陈述：evaluation_aut_bijective_of_isGalois (A : C) [IsGalois A] (a : F.obj A) : 
+Function.Bijective (fun f : Aut A => F.map f.hom a)
+参数：A : C；a : F.obj A。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.GaloisCategory.toPreGaloisCategory`：∀ {C : Type u₁} {inst
+ : CategoryTheory.Category.{u₂, u₁} C} [self : CategoryTheory.GaloisCategory C],
+   CategoryTheory.PreGaloisCategory C
+· 使用引理 `CategoryTheory.PreGaloisCategory.evaluation_aut_injective_of_isConnected
+`：evaluation_aut_injective_of_isConnected (A : C) [IsConnected A] (a : F.obj A) 
+: Function.Injective (fun f : Aut A => F.map (f.hom) a)
+· 使用定理 `CategoryTheory.PreGaloisCategory.IsGalois.toIsConnected`：∀ {C : Type u₁}
+ {inst : CategoryTheory.Category.{u₂, u₁} C} {inst_1 : CategoryTheory.GaloisCate
+gory C} {X : C}   [self : CategoryTheory.PreG…
+· 使用定理 `CategoryTheory.PreGaloisCategory.evaluation_aut_surjective_of_isGalois`：
+evaluation_aut_surjective_of_isGalois (A : C) [IsGalois A] (a : F.obj A) : Funct
+ion.Surjective (fun f : Aut A => F.map f.hom a)
 -/
 theorem evaluation_aut_bijective_of_isGalois (A : C) [IsGalois A] (a : F.obj A) :
-    Function.Bijective (fun f : Aut A => F.map f.hom a) :=
+    Function.Bijective (fun f : Aut A ↦ F.map f.hom a) :=
   ⟨evaluation_aut_injective_of_isConnected F A a, evaluation_aut_surjective_of_isGalois F A a⟩
 
-/--
-Definition of `evaluationEquivOfIsGalois` / `evaluationEquivOfIsGalois` 的定义
+/-- For Galois `A` and a point `a` of the fiber of `A`, the evaluation at `A` as an equivalence. -/
+/-
+**CategoryTheory.PreGaloisCategory.evaluationEquivOfIsGalois** 是 Mathlib 中的一个定义，
+位于命名空间 `CategoryTheory.PreGaloisCategory`。
+形式化陈述：evaluationEquivOfIsGalois (A : C) [IsGalois A] (a : F.obj A) : Aut A ≃ F.o
+bj A
+参数：A : C；a : F.obj A。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.GaloisCategory.toPreGaloisCategory`：∀ {C : Type u₁} {inst
+ : CategoryTheory.Category.{u₂, u₁} C} [self : CategoryTheory.GaloisCategory C],
+   CategoryTheory.PreGaloisCategory C
+· 使用定理 `CategoryTheory.PreGaloisCategory.evaluation_aut_bijective_of_isGalois`：e
+valuation_aut_bijective_of_isGalois (A : C) [IsGalois A] (a : F.obj A) : Functio
+n.Bijective (fun f : Aut A => F.map f.hom a)
 
-English:
-definition evaluationEquivOfIsGalois
-  signature: (A : C) [IsGalois A] (a : F.obj A)
-  body: Equiv.ofBijective _ (evaluation_aut_bijective_of_isGalois F A a)
-
-@[simp]
-
-中文:
-定义 evaluationEquivOfIsGalois
-  签名: (A : C) [是Galois A] (a : F.obj A)
-  定义体: Equiv.ofBijective _ (evaluation_aut_bijective_of_isGalois F A a)
-
-@[simp]
-
-Depends on / 依赖: Equiv.ofBijective, evaluation_aut_bijective_of_isGalois, ofBijective
+--- 原说明 ---
+For Galois `A` and a point `a` of the fiber of `A`, the evaluation at `A` as an 
+equivalence.
 -/
 noncomputable def evaluationEquivOfIsGalois (A : C) [IsGalois A] (a : F.obj A) : Aut A ≃ F.obj A :=
   Equiv.ofBijective _ (evaluation_aut_bijective_of_isGalois F A a)
 
 @[simp]
-/--
-lemma `evaluationEquivOfIsGalois_apply` / 引理 `evaluationEquivOfIsGalois_apply`
-
-English:
-lemma evaluationEquivOfIsGalois_apply
-  given: (A : C) [IsGalois A] (a : F.obj A) (φ : Aut A)
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 evaluationEquivOfIsGalois_apply
-  条件: (A : C) [是Galois A] (a : F.obj A) (φ : Aut A)
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.PreGaloisCategory.evaluationEquivOfIsGalois_apply** 是 Mathlib 中
+的一个引理，位于命名空间 `CategoryTheory.PreGaloisCategory`。
+形式化陈述：evaluationEquivOfIsGalois_apply (A : C) [IsGalois A] (a : F.obj A) (φ : Au
+t A) : evaluationEquivOfIsGalois F A a φ = F.map φ.hom a
+参数：A : C；a : F.obj A；φ : Aut A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.GaloisCategory.toPreGaloisCategory`：∀ {C : Type u₁} {inst
+ : CategoryTheory.Category.{u₂, u₁} C} [self : CategoryTheory.GaloisCategory C],
+   CategoryTheory.PreGaloisCategory C
 -/
 lemma evaluationEquivOfIsGalois_apply (A : C) [IsGalois A] (a : F.obj A) (φ : Aut A) :
     evaluationEquivOfIsGalois F A a φ = F.map φ.hom a :=
   rfl
 
 @[simp]
-/--
-lemma `evaluationEquivOfIsGalois_symm_fiber` / 引理 `evaluationEquivOfIsGalois_symm_fiber`
-
-English:
-lemma evaluationEquivOfIsGalois_symm_fiber
-  given: (A : C) [IsGalois A] (a b : F.obj A)
-  proof: by
-  change (evaluationEquivOfIsGalois F A a) _ = _
-  simp
-
-中文:
-引理 evaluationEquivOfIsGalois_symm_fiber
-  条件: (A : C) [是Galois A] (a b : F.obj A)
-  证明: by
-  change (evaluationEquivOfIsGalois F A a) _ = _
-  simp
-
-Depends on / 依赖: evaluationEquivOfIsGalois
+/-
+**CategoryTheory.PreGaloisCategory.evaluationEquivOfIsGalois_symm_fiber** 是 Math
+lib 中的一个引理，位于命名空间 `CategoryTheory.PreGaloisCategory`。
+形式化陈述：evaluationEquivOfIsGalois_symm_fiber (A : C) [IsGalois A] (a b : F.obj A) 
+: F.map ((evaluationEquivOfIsGalois F A a).symm b).hom a = b
+参数：A : C；a b : F.obj A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.GaloisCategory.toPreGaloisCategory`：∀ {C : Type u₁} {inst
+ : CategoryTheory.Category.{u₂, u₁} C} [self : CategoryTheory.GaloisCategory C],
+   CategoryTheory.PreGaloisCategory C
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma evaluationEquivOfIsGalois_symm_fiber (A : C) [IsGalois A] (a b : F.obj A) :
     F.map ((evaluationEquivOfIsGalois F A a).symm b).hom a = b := by
@@ -380,41 +397,63 @@ lemma evaluationEquivOfIsGalois_symm_fiber (A : C) [IsGalois A] (a b : F.obj A) 
 
 section AutMap
 
-/--
-lemma `exists_autMap` / 引理 `exists_autMap`
+/-- For a morphism from a connected object `A` to a Galois object `B` and an automorphism
+of `A`, there exists a unique automorphism of `B` making the canonical diagram commute. -/
+/-
+**CategoryTheory.PreGaloisCategory.exists_autMap** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.PreGaloisCategory`。
+形式化陈述：exists_autMap {A B : C} (f : A ⟶ B) [IsConnected A] [IsGalois B] (σ : Aut 
+A) : exists! (τ : Aut B), f ≫ τ.hom = σ.hom ≫ f
+参数：f : A ⟶ B；σ : Aut A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.GaloisCategory.toPreGaloisCategory`：∀ {C : Type u₁} {inst
+ : CategoryTheory.Category.{u₂, u₁} C} [self : CategoryTheory.GaloisCategory C],
+   CategoryTheory.PreGaloisCategory C
+· 使用定理 `CategoryTheory.PreGaloisCategory.instFiberFunctorGetFiberFunctor`：∀ (C :
+ Type u₁) [inst : CategoryTheory.Category.{u₂, u₁} C] [inst_1 : CategoryTheory.G
+aloisCategory C],   CategoryTheory.PreGaloisCategory.F…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用引理 `CategoryTheory.PreGaloisCategory.evaluation_injective_of_isConnected`：ev
+aluation_injective_of_isConnected (A X : C) [IsConnected A] (a : F.obj A) : Func
+tion.Injective (fun (f : A ⟶ X) => F.map f a)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用引理 `CategoryTheory.PreGaloisCategory.evaluationEquivOfIsGalois_symm_fiber`：e
+valuationEquivOfIsGalois_symm_fiber (A : C) [IsGalois A] (a b : F.obj A) : F.map
+ ((evaluationEquivOfIsGalois F A a).symm b).hom a = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.PreGaloisCategory.evaluation_aut_injective_of_isConnected
+`：evaluation_aut_injective_of_isConnected (A : C) [IsConnected A] (a : F.obj A) 
+: Function.Injective (fun f : Aut A => F.map (f.hom) a)
+· 使用定理 `CategoryTheory.PreGaloisCategory.IsGalois.toIsConnected`：∀ {C : Type u₁}
+ {inst : CategoryTheory.Category.{u₂, u₁} C} {inst_1 : CategoryTheory.GaloisCate
+gory C} {X : C}   [self : CategoryTheory.PreG…
+· 使用定理 `CategoryTheory.ConcreteCategory.congr_hom`：congr_hom {X Y : C} {f g : X 
+⟶ Y} (h : f = g) (x : ToType X) : f x = g x
+· 使用定理 `CategoryTheory.Functor.congr_map`：congr_map (F : C ⥤ D) {X Y : C} {f g :
+ X ⟶ Y} (h : f = g) : F.map f = F.map g
 
-English:
-lemma exists_autMap
-  given: {A B : C} (f : A ⟶ B) [IsConnected A] [IsGalois B] (σ : Aut A)
-  proof: by
-  let F := GaloisCategory.getFiberFunctor C
-  obtain ⟨a⟩ := nonempty_fiber_of_isConnected F A
-  refine ⟨?_, ?_, ?_⟩
-  · exact (evaluationEquivOfIsGalois F B (F.map f a)).symm (F.map (σ.hom ≫ f) a)
-  · apply evaluation_injective_of_isConnected F A B a
-    simp
-  · intro τ hτ
-    apply evaluation_aut_injective_of_isConnected F B (F.map f a)
-    simpa using ConcreteCategory.congr_hom (F.congr_map hτ) a
-
-中文:
-引理 存在_autMap
-  条件: {A B : C} (f : A ⟶ B) [是连通 A] [是Galois B] (σ : Aut A)
-  证明: by
-  let F := GaloisCategory.getFiberFunctor C
-  obtain ⟨a⟩ := nonempty_fiber_of_isConnected F A
-  refine ⟨?_, ?_, ?_⟩
-  · exact (evaluationEquivOfIsGalois F B (F.map f a)).symm (F.map (σ.hom ≫ f) a)
-  · apply evaluation_injective_of_isConnected F A B a
-    simp
-  · intro τ hτ
-    apply evaluation_aut_injective_of_isConnected F B (F.map f a)
-    simpa using ConcreteCategory.congr_hom (F.congr_map hτ) a
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, F.congr_map, F.map, GaloisCategory, GaloisCategory.getFiberFunctor, congr_hom, congr_map, evaluationEquivOfIsGalois, evaluation_aut_injective_of_isConnected, evaluation_injective_of_isConnected, getFiberFunctor, nonempty_fiber_of_isConnected
+--- 原说明 ---
+For a morphism from a connected object `A` to a Galois object `B` and an automor
+phism
+of `A`, there exists a unique automorphism of `B` making the canonical diagram c
+ommute.
 -/
 lemma exists_autMap {A B : C} (f : A ⟶ B) [IsConnected A] [IsGalois B] (σ : Aut A) :
-    exists! (τ : Aut B), f ≫ τ.hom = σ.hom ≫ f := by
+    ∃! (τ : Aut B), f ≫ τ.hom = σ.hom ≫ f := by
   let F := GaloisCategory.getFiberFunctor C
   obtain ⟨a⟩ := nonempty_fiber_of_isConnected F A
   refine ⟨?_, ?_, ?_⟩
@@ -425,94 +464,104 @@ lemma exists_autMap {A B : C} (f : A ⟶ B) [IsConnected A] [IsGalois B] (σ : A
     apply evaluation_aut_injective_of_isConnected F B (F.map f a)
     simpa using ConcreteCategory.congr_hom (F.congr_map hτ) a
 
-/--
-Definition of `autMap` / `autMap` 的定义
+/-- A morphism from a connected object to a Galois object induces a map on automorphism
+groups. This is a group homomorphism (see `autMapHom`). -/
+/-
+**CategoryTheory.PreGaloisCategory.autMap** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.PreGaloisCategory`。
+形式化陈述：autMap {A B : C} [IsConnected A] [IsGalois B] (f : A ⟶ B) (σ : Aut A) : Au
+t B
+参数：f : A ⟶ B；σ : Aut A。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.PreGaloisCategory.exists_autMap`：exists_autMap {A B : C} 
+(f : A ⟶ B) [IsConnected A] [IsGalois B] (σ : Aut A) : exists! (τ : Aut B), f ≫ 
+τ.hom = σ.hom ≫ f
 
-English:
-definition autMap
-  signature: {A B : C} [IsConnected A] [IsGalois B] (f : A ⟶ B) (σ : Aut A)
-  body: (exists_autMap f σ).choose
-
-@[simp]
-
-中文:
-定义 autMap
-  签名: {A B : C} [是连通 A] [是Galois B] (f : A ⟶ B) (σ : Aut A)
-  定义体: (exists_autMap f σ).choose
-
-@[simp]
-
-Depends on / 依赖: exists_autMap
+--- 原说明 ---
+A morphism from a connected object to a Galois object induces a map on automorph
+ism
+groups. This is a group homomorphism (see `autMapHom`).
 -/
 noncomputable def autMap {A B : C} [IsConnected A] [IsGalois B] (f : A ⟶ B) (σ : Aut A) :
     Aut B :=
   (exists_autMap f σ).choose
 
 @[simp]
-/--
-lemma `comp_autMap` / 引理 `comp_autMap`
-
-English:
-lemma comp_autMap
-  given: {A B : C} [IsConnected A] [IsGalois B] (f : A ⟶ B) (σ : Aut A)
-  proof: (exists_autMap f σ).choose_spec.left
-
-@[simp]
-
-中文:
-引理 comp_autMap
-  条件: {A B : C} [是连通 A] [是Galois B] (f : A ⟶ B) (σ : Aut A)
-  证明: (exists_autMap f σ).choose_spec.left
-
-@[simp]
-
-Depends on / 依赖: choose_spec, choose_spec.left, exists_autMap
+/-
+**CategoryTheory.PreGaloisCategory.comp_autMap** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.PreGaloisCategory`。
+形式化陈述：comp_autMap {A B : C} [IsConnected A] [IsGalois B] (f : A ⟶ B) (σ : Aut A)
+ : f ≫ (autMap f σ).hom = σ.hom ≫ f
+参数：f : A ⟶ B；σ : Aut A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用引理 `CategoryTheory.PreGaloisCategory.exists_autMap`：exists_autMap {A B : C} 
+(f : A ⟶ B) [IsConnected A] [IsGalois B] (σ : Aut A) : exists! (τ : Aut B), f ≫ 
+τ.hom = σ.hom ≫ f
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 -/
 lemma comp_autMap {A B : C} [IsConnected A] [IsGalois B] (f : A ⟶ B) (σ : Aut A) :
     f ≫ (autMap f σ).hom = σ.hom ≫ f :=
   (exists_autMap f σ).choose_spec.left
 
 @[simp]
-/--
-lemma `comp_autMap_apply` / 引理 `comp_autMap_apply`
-
-English:
-lemma comp_autMap_apply
-  statement: (F : C ⥤ FintypeCat.{w}) {A B : C} [IsConnected A] [IsGalois B]
-  proof: by
-  simpa [-comp_autMap] using ConcreteCategory.congr_hom (F.congr_map (comp_autMap f σ)) a
-
-中文:
-引理 comp_autMap_apply
-  结论: (F : C ⥤ FintypeCat.{w}) {A B : C} [是连通 A] [是Galois B]
-  证明: by
-  simpa [-comp_autMap] using ConcreteCategory.congr_hom (F.congr_map (comp_autMap f σ)) a
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, F.congr_map, comp_autMap, congr_hom, congr_map
+/-
+**CategoryTheory.PreGaloisCategory.comp_autMap_apply** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.PreGaloisCategory`。
+形式化陈述：comp_autMap_apply (F : C ⥤ FintypeCat.{w}) {A B : C} [IsConnected A] [IsGa
+lois B] (f : A ⟶ B) (σ : Aut A) (a : F.obj A) : F.map (autMap f σ).hom (F.map f 
+a) = F.map f (F.map σ.hom a)
+参数：F : C ⥤ FintypeCat.{w}；f : A ⟶ B；σ : Aut A；a : F.obj A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用定理 `CategoryTheory.ConcreteCategory.congr_hom`：congr_hom {X Y : C} {f g : X 
+⟶ Y} (h : f = g) (x : ToType X) : f x = g x
+· 使用定理 `CategoryTheory.Functor.congr_map`：congr_map (F : C ⥤ D) {X Y : C} {f g :
+ X ⟶ Y} (h : f = g) : F.map f = F.map g
+· 使用引理 `CategoryTheory.PreGaloisCategory.comp_autMap`：comp_autMap {A B : C} [IsC
+onnected A] [IsGalois B] (f : A ⟶ B) (σ : Aut A) : f ≫ (autMap f σ).hom = σ.hom 
+≫ f
 -/
 lemma comp_autMap_apply (F : C ⥤ FintypeCat.{w}) {A B : C} [IsConnected A] [IsGalois B]
     (f : A ⟶ B) (σ : Aut A) (a : F.obj A) :
     F.map (autMap f σ).hom (F.map f a) = F.map f (F.map σ.hom a) := by
   simpa [-comp_autMap] using ConcreteCategory.congr_hom (F.congr_map (comp_autMap f σ)) a
 
-/--
-lemma `autMap_unique` / 引理 `autMap_unique`
+/-- `autMap` is uniquely characterized by making the canonical diagram commute. -/
+/-
+**CategoryTheory.PreGaloisCategory.autMap_unique** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.PreGaloisCategory`。
+形式化陈述：autMap_unique {A B : C} [IsConnected A] [IsGalois B] (f : A ⟶ B) (σ : Aut 
+A) (τ : Aut B) (h : f ≫ τ.hom = σ.hom ≫ f) : autMap f σ = τ
+参数：f : A ⟶ B；σ : Aut A；τ : Aut B；h : f ≫ τ.hom = σ.hom ≫ f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.PreGaloisCategory.exists_autMap`：exists_autMap {A B : C} 
+(f : A ⟶ B) [IsConnected A] [IsGalois B] (σ : Aut A) : exists! (τ : Aut B), f ≫ 
+τ.hom = σ.hom ≫ f
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 
-English:
-lemma autMap_unique
-  statement: {A B : C} [IsConnected A] [IsGalois B] (f : A ⟶ B) (σ : Aut A)
-  proof: ((exists_autMap f σ).choose_spec.right τ h).symm
-
-@[simp]
-
-中文:
-引理 autMap_unique
-  结论: {A B : C} [是连通 A] [是Galois B] (f : A ⟶ B) (σ : Aut A)
-  证明: ((exists_autMap f σ).choose_spec.right τ h).symm
-
-@[simp]
-
-Depends on / 依赖: choose_spec, choose_spec.right, exists_autMap
+--- 原说明 ---
+`autMap` is uniquely characterized by making the canonical diagram commute.
 -/
 lemma autMap_unique {A B : C} [IsConnected A] [IsGalois B] (f : A ⟶ B) (σ : Aut A)
     (τ : Aut B) (h : f ≫ τ.hom = σ.hom ≫ f) :
@@ -520,88 +569,116 @@ lemma autMap_unique {A B : C} [IsConnected A] [IsGalois B] (f : A ⟶ B) (σ : A
   ((exists_autMap f σ).choose_spec.right τ h).symm
 
 @[simp]
-/--
-lemma `autMap_id` / 引理 `autMap_id`
-
-English:
-lemma autMap_id
-  given: {A : C} [IsGalois A]
-  statement: autMap (𝟙 A) = id
-  proof: funext fun σ => autMap_unique (𝟙 A) σ _ (by simp)
-
-@[simp]
-
-中文:
-引理 autMap_id
-  条件: {A : C} [是Galois A]
-  结论: autMap (𝟙 A) = id
-  证明: funext fun σ => autMap_unique (𝟙 A) σ _ (by simp)
-
-@[simp]
-
-Depends on / 依赖: autMap_unique
+/-
+**CategoryTheory.PreGaloisCategory.autMap_id** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.PreGaloisCategory`。
+形式化陈述：autMap_id {A : C} [IsGalois A] : autMap (𝟙 A) = id
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.PreGaloisCategory.IsGalois.toIsConnected`：∀ {C : Type u₁}
+ {inst : CategoryTheory.Category.{u₂, u₁} C} {inst_1 : CategoryTheory.GaloisCate
+gory C} {X : C}   [self : CategoryTheory.PreG…
+· 使用引理 `CategoryTheory.PreGaloisCategory.autMap_unique`：autMap_unique {A B : C} 
+[IsConnected A] [IsGalois B] (f : A ⟶ B) (σ : Aut A) (τ : Aut B) (h : f ≫ τ.hom 
+= σ.hom ≫ f) : autMap f σ = τ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma autMap_id {A : C} [IsGalois A] : autMap (𝟙 A) = id :=
-  funext fun σ => autMap_unique (𝟙 A) σ _ (by simp)
+  funext fun σ ↦ autMap_unique (𝟙 A) σ _ (by simp)
 
 @[simp]
-/--
-lemma `autMap_comp` / 引理 `autMap_comp`
-
-English:
-lemma autMap_comp
-  statement: {X Y Z : C} [IsConnected X] [IsGalois Y] [IsGalois Z] (f : X ⟶ Y)
-  proof: by
-  refine funext fun σ => autMap_unique _ σ _ ?_
-  rw [Function.comp_apply]; rw [Category.assoc]; rw [comp_autMap]; rw [← Category.assoc]
-  simp
-
-中文:
-引理 autMap_comp
-  结论: {X Y Z : C} [是连通 X] [是Galois Y] [是Galois Z] (f : X ⟶ Y)
-  证明: by
-  refine funext fun σ => autMap_unique _ σ _ ?_
-  rw [Function.comp_apply]; rw [Category.assoc]; rw [comp_autMap]; rw [← Category.assoc]
-  simp
-
-Depends on / 依赖: Category, Category.assoc, Function, Function.comp_apply, autMap_unique, comp_apply, comp_autMap
+/-
+**CategoryTheory.PreGaloisCategory.autMap_comp** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.PreGaloisCategory`。
+形式化陈述：autMap_comp {X Y Z : C} [IsConnected X] [IsGalois Y] [IsGalois Z] (f : X ⟶
+ Y) (g : Y ⟶ Z) : autMap (f ≫ g) = autMap g ∘ autMap f
+参数：f : X ⟶ Y；g : Y ⟶ Z。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.PreGaloisCategory.IsGalois.toIsConnected`：∀ {C : Type u₁}
+ {inst : CategoryTheory.Category.{u₂, u₁} C} {inst_1 : CategoryTheory.GaloisCate
+gory C} {X : C}   [self : CategoryTheory.PreG…
+· 使用引理 `CategoryTheory.PreGaloisCategory.autMap_unique`：autMap_unique {A B : C} 
+[IsConnected A] [IsGalois B] (f : A ⟶ B) (σ : Aut A) (τ : Aut B) (h : f ≫ τ.hom 
+= σ.hom ≫ f) : autMap f σ = τ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.PreGaloisCategory.comp_autMap`：comp_autMap {A B : C} [IsC
+onnected A] [IsGalois B] (f : A ⟶ B) (σ : Aut A) : f ≫ (autMap f σ).hom = σ.hom 
+≫ f
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma autMap_comp {X Y Z : C} [IsConnected X] [IsGalois Y] [IsGalois Z] (f : X ⟶ Y)
     (g : Y ⟶ Z) : autMap (f ≫ g) = autMap g ∘ autMap f := by
-  refine funext fun σ => autMap_unique _ σ _ ?_
-  rw [Function.comp_apply]; rw [Category.assoc]; rw [comp_autMap]; rw [← Category.assoc]
+  refine funext fun σ ↦ autMap_unique _ σ _ ?_
+  rw [Function.comp_apply, Category.assoc, comp_autMap, ← Category.assoc]
   simp
 
-/--
-lemma `autMap_surjective_of_isGalois` / 引理 `autMap_surjective_of_isGalois`
+/-- `autMap` is surjective, if the source is also Galois. -/
+/-
+**CategoryTheory.PreGaloisCategory.autMap_surjective_of_isGalois** 是 Mathlib 中的一
+个引理，位于命名空间 `CategoryTheory.PreGaloisCategory`。
+形式化陈述：autMap_surjective_of_isGalois {A B : C} [IsGalois A] [IsGalois B] (f : A ⟶
+ B) : Function.Surjective (autMap f)
+参数：f : A ⟶ B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.PreGaloisCategory.IsGalois.toIsConnected`：∀ {C : Type u₁}
+ {inst : CategoryTheory.Category.{u₂, u₁} C} {inst_1 : CategoryTheory.GaloisCate
+gory C} {X : C}   [self : CategoryTheory.PreG…
+· 使用定理 `CategoryTheory.GaloisCategory.toPreGaloisCategory`：∀ {C : Type u₁} {inst
+ : CategoryTheory.Category.{u₂, u₁} C} [self : CategoryTheory.GaloisCategory C],
+   CategoryTheory.PreGaloisCategory C
+· 使用定理 `CategoryTheory.PreGaloisCategory.instFiberFunctorGetFiberFunctor`：∀ (C :
+ Type u₁) [inst : CategoryTheory.Category.{u₂, u₁} C] [inst_1 : CategoryTheory.G
+aloisCategory C],   CategoryTheory.PreGaloisCategory.F…
+· 使用引理 `CategoryTheory.PreGaloisCategory.surjective_of_nonempty_fiber_of_isConne
+cted`：surjective_of_nonempty_fiber_of_isConnected {X A : C} [Nonempty (F.obj X)]
+ [IsConnected A] (f : X ⟶ A) : Function.Surjective (F.map f)
+· 使用引理 `MulAction.exists_smul_eq`：exists_smul_eq (x y : α) : exists m : M, m • x
+ = y
+· 使用引理 `CategoryTheory.PreGaloisCategory.evaluation_aut_injective_of_isConnected
+`：evaluation_aut_injective_of_isConnected (A : C) [IsConnected A] (a : F.obj A) 
+: Function.Injective (fun f : Aut A => F.map (f.hom) a)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.PreGaloisCategory.comp_autMap_apply`：comp_autMap_apply (F
+ : C ⥤ FintypeCat.{w}) {A B : C} [IsConnected A] [IsGalois B] (f : A ⟶ B) (σ : A
+ut A) (a : F.obj A) : F.map (autMap f σ)…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma autMap_surjective_of_isGalois
-  given: {A B : C} [IsGalois A] [IsGalois B] (f : A ⟶ B)
-  proof: by
-  intro σ
-  let F := GaloisCategory.getFiberFunctor C
-  obtain ⟨a⟩ := nonempty_fiber_of_isConnected F A
-  obtain ⟨a', ha'⟩ := surjective_of_nonempty_fiber_of_isConnected F f (F.map σ.hom (F.map f a))
-  obtain ⟨τ, (hτ : F.map τ.hom a = a')⟩ := MulAction.exists_smul_eq (Aut A) a a'
-  use τ
-  apply evaluation_aut_injective_of_isConnected F B (F.map f a)
-  simp [hτ, ha']
-
-中文:
-引理 autMap_surjective_of_isGalois
-  条件: {A B : C} [是Galois A] [是Galois B] (f : A ⟶ B)
-  证明: by
-  intro σ
-  let F := GaloisCategory.getFiberFunctor C
-  obtain ⟨a⟩ := nonempty_fiber_of_isConnected F A
-  obtain ⟨a', ha'⟩ := surjective_of_nonempty_fiber_of_isConnected F f (F.map σ.hom (F.map f a))
-  obtain ⟨τ, (hτ : F.map τ.hom a = a')⟩ := MulAction.exists_smul_eq (Aut A) a a'
-  use τ
-  apply evaluation_aut_injective_of_isConnected F B (F.map f a)
-  simp [hτ, ha']
-
-Depends on / 依赖: F.map, GaloisCategory, GaloisCategory.getFiberFunctor, MulAction, MulAction.exists_smul_eq, evaluation_aut_injective_of_isConnected, exists_smul_eq, getFiberFunctor, nonempty_fiber_of_isConnected, surjective_of_nonempty_fiber_of_isConnected
+--- 原说明 ---
+`autMap` is surjective, if the source is also Galois.
 -/
 lemma autMap_surjective_of_isGalois {A B : C} [IsGalois A] [IsGalois B] (f : A ⟶ B) :
     Function.Surjective (autMap f) := by
@@ -616,28 +693,44 @@ lemma autMap_surjective_of_isGalois {A B : C} [IsGalois A] [IsGalois B] (f : A �
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `autMap_apply_mul` / 引理 `autMap_apply_mul`
-
-English:
-lemma autMap_apply_mul
-  given: {A B : C} [IsConnected A] [IsGalois B] (f : A ⟶ B) (σ τ : Aut A)
-  proof: by
-  let F := GaloisCategory.getFiberFunctor C
-  obtain ⟨a⟩ := nonempty_fiber_of_isConnected F A
-  apply evaluation_aut_injective_of_isConnected F (B : C) (F.map f a)
-  simp [Aut.Aut_mul_def]
-
-中文:
-引理 autMap_apply_mul
-  条件: {A B : C} [是连通 A] [是Galois B] (f : A ⟶ B) (σ τ : Aut A)
-  证明: by
-  let F := GaloisCategory.getFiberFunctor C
-  obtain ⟨a⟩ := nonempty_fiber_of_isConnected F A
-  apply evaluation_aut_injective_of_isConnected F (B : C) (F.map f a)
-  simp [Aut.Aut_mul_def]
-
-Depends on / 依赖: Aut.Aut_mul_def, Aut_mul_def, F.map, GaloisCategory, GaloisCategory.getFiberFunctor, evaluation_aut_injective_of_isConnected, getFiberFunctor, nonempty_fiber_of_isConnected
+/-
+**CategoryTheory.PreGaloisCategory.autMap_apply_mul** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.PreGaloisCategory`。
+形式化陈述：autMap_apply_mul {A B : C} [IsConnected A] [IsGalois B] (f : A ⟶ B) (σ τ :
+ Aut A) : autMap f (σ * τ) = autMap f σ * autMap f τ
+参数：f : A ⟶ B；σ τ : Aut A。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.GaloisCategory.toPreGaloisCategory`：∀ {C : Type u₁} {inst
+ : CategoryTheory.Category.{u₂, u₁} C} [self : CategoryTheory.GaloisCategory C],
+   CategoryTheory.PreGaloisCategory C
+· 使用定理 `CategoryTheory.PreGaloisCategory.instFiberFunctorGetFiberFunctor`：∀ (C :
+ Type u₁) [inst : CategoryTheory.Category.{u₂, u₁} C] [inst_1 : CategoryTheory.G
+aloisCategory C],   CategoryTheory.PreGaloisCategory.F…
+· 使用引理 `CategoryTheory.PreGaloisCategory.evaluation_aut_injective_of_isConnected
+`：evaluation_aut_injective_of_isConnected (A : C) [IsConnected A] (a : F.obj A) 
+: Function.Injective (fun f : Aut A => F.map (f.hom) a)
+· 使用定理 `CategoryTheory.PreGaloisCategory.IsGalois.toIsConnected`：∀ {C : Type u₁}
+ {inst : CategoryTheory.Category.{u₂, u₁} C} {inst_1 : CategoryTheory.GaloisCate
+gory C} {X : C}   [self : CategoryTheory.PreG…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.PreGaloisCategory.comp_autMap_apply`：comp_autMap_apply (F
+ : C ⥤ FintypeCat.{w}) {A B : C} [IsConnected A] [IsGalois B] (f : A ⟶ B) (σ : A
+ut A) (a : F.obj A) : F.map (autMap f σ)…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma autMap_apply_mul {A B : C} [IsConnected A] [IsGalois B] (f : A ⟶ B) (σ τ : Aut A) :
     autMap f (σ * τ) = autMap f σ * autMap f τ := by
@@ -648,23 +741,23 @@ lemma autMap_apply_mul {A B : C} [IsConnected A] [IsGalois B] (f : A ⟶ B) (σ 
 
 /-- `MonoidHom` version of `autMap`. -/
 @[simps!]
-/--
-Definition of `autMapHom` / `autMapHom` 的定义
+/-
+**CategoryTheory.PreGaloisCategory.autMapHom** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.PreGaloisCategory`。
+形式化陈述：autMapHom {A B : C} [IsConnected A] [IsGalois B] (f : A ⟶ B) : Aut A ->* A
+ut B
+参数：f : A ⟶ B。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.PreGaloisCategory.autMap_apply_mul`：autMap_apply_mul {A B
+ : C} [IsConnected A] [IsGalois B] (f : A ⟶ B) (σ τ : Aut A) : autMap f (σ * τ) 
+= autMap f σ * autMap f τ
 
-English:
-definition autMapHom
-  signature: {A B : C} [IsConnected A] [IsGalois B] (f : A ⟶ B)
-  body: MonoidHom.mk' (autMap f) (autMap_apply_mul f)
-
-中文:
-定义 autMapHom
-  签名: {A B : C} [是连通 A] [是Galois B] (f : A ⟶ B)
-  定义体: MonoidHom.mk' (autMap f) (autMap_apply_mul f)
-
-Depends on / 依赖: MonoidHom, MonoidHom.mk, autMap, autMap_apply_mul
+--- 原说明 ---
+`MonoidHom` version of `autMap`.
 -/
 noncomputable def autMapHom {A B : C} [IsConnected A] [IsGalois B] (f : A ⟶ B) :
-     Aut A ->* Aut B :=
+     Aut A →* Aut B :=
   MonoidHom.mk' (autMap f) (autMap_apply_mul f)
 
 end AutMap
@@ -672,3 +765,4 @@ end AutMap
 end PreGaloisCategory
 
 end CategoryTheory
+

@@ -33,12 +33,22 @@ variable {C : Type*} [Category C] [ModelCategory C]
 
 namespace CofibrantObject
 
+/-
+**HomotopicalAlgebra.CofibrantObject.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlge
+bra.CofibrantObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X : C} (R : (localizerMorphism C).LeftResolution X) :
     WeakEquivalence R.w := by
   simpa only [weakEquivalence_iff] using R.hw
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
+/-
+**HomotopicalAlgebra.CofibrantObject.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlge
+bra.CofibrantObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : C) : IsConnected ((localizerMorphism C).LeftResolution X) := by
   let R₀ : (localizerMorphism C).LeftResolution X :=
     { X₁ := mk (HoCat.resolutionObj X)
@@ -48,56 +58,27 @@ instance (X : C) : IsConnected ((localizerMorphism C).LeftResolution X) := by
     have sq : CommSq (initial.to _) (initial.to _) R₀.w R.w := ⟨by simp⟩
     exact ⟨Zigzag.of_hom { f := homMk (sq.lift) }⟩
   have : Nonempty ((localizerMorphism C).LeftResolution X) := ⟨R₀⟩
-  exact zigzag_isConnected (fun R₁ R₂ => (hR₀ R₁).some.trans (hR₀ R₂).some.symm)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (localizerMorphism C).arrow.HasLeftResolutions
-  body: fun f => ⟨{
-    X₁ := Arrow.mk (homMk (HoCat.resolutionMap f.hom))
-    w := Arrow.homMk (HoCat.pResolutionObj f.left) (HoCat.pResolutionObj f.right)
-      (HoCat.resolutionMap_fac f.hom).symm
-    hw := ⟨mem_weakEquivalences (HoCat.pResolutionObj f.left),
-      mem_weakEquivalences (HoCat.pResolutionObj f.right)⟩ }⟩
-
-中文:
-实例 :
-  签名: (localizerMorphism C).arrow.HasLeftResolutions
-  定义体: fun f => ⟨{
-    X₁ := Arrow.mk (homMk (HoCat.resolutionMap f.hom))
-    w := Arrow.homMk (HoCat.pResolutionObj f.left) (HoCat.pResolutionObj f.right)
-      (HoCat.resolutionMap_fac f.hom).symm
-    hw := ⟨mem_weakEquivalences (HoCat.pResolutionObj f.left),
-      mem_weakEquivalences (HoCat.pResolutionObj f.right)⟩ }⟩
-
-Depends on / 依赖: Arrow.homMk, Arrow.mk, HoCat.pResolutionObj, HoCat.resolutionMap, HoCat.resolutionMap_fac, f.hom, f.left, f.right, mem_weakEquivalences, pResolutionObj, resolutionMap, resolutionMap_fac
+  exact zigzag_isConnected (fun R₁ R₂ ↦ (hR₀ R₁).some.trans (hR₀ R₂).some.symm)
+/-
+**HomotopicalAlgebra.CofibrantObject.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlge
+bra.CofibrantObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (localizerMorphism C).arrow.HasLeftResolutions :=
-  fun f => ⟨{
+  fun f ↦ ⟨{
     X₁ := Arrow.mk (homMk (HoCat.resolutionMap f.hom))
     w := Arrow.homMk (HoCat.pResolutionObj f.left) (HoCat.pResolutionObj f.right)
       (HoCat.resolutionMap_fac f.hom).symm
     hw := ⟨mem_weakEquivalences (HoCat.pResolutionObj f.left),
       mem_weakEquivalences (HoCat.pResolutionObj f.right)⟩ }⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (localizerMorphism C).IsLeftDerivabilityStructure
-  body: .mk' _
-
-中文:
-实例 :
-  签名: (localizerMorphism C).是LeftDerivabilityStructure
-  定义体: .mk' _
+/-
+**HomotopicalAlgebra.CofibrantObject.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlge
+bra.CofibrantObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (localizerMorphism C).IsLeftDerivabilityStructure := .mk' _
 
 end CofibrantObject
 
 end HomotopicalAlgebra
+

@@ -10,7 +10,7 @@ public import Mathlib.Tactic.Ring
 public import Mathlib.Tactic.Linarith
 public import Mathlib.Algebra.Order.Group.Nat
 public import Mathlib.Algebra.Ring.Defs
-import all Init.Data.Repr -- for exposing `toDigitsCore`
+import all Init.Data.Repr  -- for exposing `toDigitsCore`
 
 /-!
 # Digits of a natural number
@@ -35,359 +35,368 @@ assert_not_exists Finset
 
 namespace Nat
 
-variable {n : Nat}
+variable {n : ℕ}
 
-/--
-Definition of `digitsAux0` / `digitsAux0` 的定义
+/-- (Impl.) An auxiliary definition for `digits`, to help get the desired definitional unfolding. -/
+/-
+**Nat.digitsAux0** 是 Mathlib 中的一个定义，位于命名空间 `Nat`。
+形式化陈述：ℕ → List ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition digitsAux0
-  signature: : Nat -> List Nat
-
-中文:
-定义 digitsAux0
-  签名: : 自然数 -> 列表 自然数
+--- 原说明 ---
+(Impl.) An auxiliary definition for `digits`, to help get the desired definition
+al unfolding.
 -/
-def digitsAux0 : Nat -> List Nat
+def digitsAux0 : ℕ → List ℕ
   | 0 => []
   | n + 1 => [n+1]
 
-/--
-Definition of `digitsAux1` / `digitsAux1` 的定义
+/-- (Impl.) An auxiliary definition for `digits`, to help get the desired definitional unfolding. -/
+/-
+**Nat.digitsAux1** 是 Mathlib 中的一个定义，位于命名空间 `Nat`。
+形式化陈述：digitsAux1 (n : Nat) : List Nat
+参数：n : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition digitsAux1
-  signature: (n : Nat)
-  body: List.replicate n 1
-
-中文:
-定义 digitsAux1
-  签名: (n : 自然数)
-  定义体: List.replicate n 1
-
-Depends on / 依赖: List.replicate, replicate
+--- 原说明 ---
+(Impl.) An auxiliary definition for `digits`, to help get the desired definition
+al unfolding.
 -/
-def digitsAux1 (n : Nat) : List Nat :=
+def digitsAux1 (n : ℕ) : List ℕ :=
   List.replicate n 1
 
-/--
-Definition of `digitsAux` / `digitsAux` 的定义
+/-- (Impl.) An auxiliary definition for `digits`, to help get the desired definitional unfolding. -/
+/-
+**Nat.digitsAux** 是 Mathlib 中的一个定义，位于命名空间 `Nat`。
+形式化陈述：(b : ℕ) → 2 ≤ b → ℕ → List ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition digitsAux
-  signature: (b : Nat) (h : 2 <= b)
-
-中文:
-定义 digitsAux
-  签名: (b : 自然数) (h : 2 <= b)
+--- 原说明 ---
+(Impl.) An auxiliary definition for `digits`, to help get the desired definition
+al unfolding.
 -/
-@[semireducible] def digitsAux (b : Nat) (h : 2 <= b) : Nat -> List Nat
+@[semireducible] def digitsAux (b : ℕ) (h : 2 ≤ b) : ℕ → List ℕ
   | 0 => []
   | n + 1 =>
     ((n + 1) % b) :: digitsAux b h ((n + 1) / b)
 decreasing_by exact Nat.div_lt_self (Nat.succ_pos _) h
 
 @[simp]
-/--
-theorem `digitsAux_zero` / 定理 `digitsAux_zero`
-
-English:
-theorem digitsAux_zero
-  given: (b : Nat) (h : 2 <= b)
-  statement: digitsAux b h 0 = []
-  proof: rfl
-
-中文:
-定理 digitsAux_zero
-  条件: (b : 自然数) (h : 2 <= b)
-  结论: digitsAux b h 0 = []
-  证明: rfl
+/-
+**Nat.digitsAux_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：digitsAux_zero (b : Nat) (h : 2 <= b) : digitsAux b h 0 = []
+参数：b : Nat；h : 2 <= b。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem digitsAux_zero (b : Nat) (h : 2 <= b) : digitsAux b h 0 = [] := rfl
-
-/--
-theorem `digitsAux_def` / 定理 `digitsAux_def`
-
-English:
-theorem digitsAux_def
-  given: (b : Nat) (h : 2 <= b) (n : Nat) (w : 0 < n)
-  proof: by
-  cases n
-  · cases w
-  · rw [digitsAux]
-
-中文:
-定理 digitsAux_def
-  条件: (b : 自然数) (h : 2 <= b) (n : 自然数) (w : 0 < n)
-  证明: by
-  cases n
-  · cases w
-  · rw [digitsAux]
-
-Depends on / 依赖: digitsAux
+theorem digitsAux_zero (b : ℕ) (h : 2 ≤ b) : digitsAux b h 0 = [] := rfl
+/-
+**Nat.digitsAux_def** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：digitsAux_def (b : Nat) (h : 2 <= b) (n : Nat) (w : 0 < n) : digitsAux b h
+ n = (n % b) :: digitsAux b h (n / b)
+参数：b : Nat；h : 2 <= b；n : Nat；w : 0 < n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.digitsAux.eq_2`：∀ (b : ℕ) (h : 2 ≤ b) (n : ℕ), b.digitsAux h n.succ 
+= (n + 1) % b :: b.digitsAux h ((n + 1) / b)
 -/
-theorem digitsAux_def (b : Nat) (h : 2 <= b) (n : Nat) (w : 0 < n) :
+theorem digitsAux_def (b : ℕ) (h : 2 ≤ b) (n : ℕ) (w : 0 < n) :
     digitsAux b h n = (n % b) :: digitsAux b h (n / b) := by
   cases n
   · cases w
   · rw [digitsAux]
 
-/--
-Definition of `digits` / `digits` 的定义
+/-- `digits b n` gives the digits, in little-endian order,
+of a natural number `n` in a specified base `b`.
 
-English:
-definition digits
-  signature: : Nat -> Nat -> List Nat
+In any base, we have `ofDigits b L = L.foldr (fun x y ↦ x + b * y) 0`.
+* For any `2 ≤ b`, we have `l < b` for any `l ∈ digits b n`,
+  and the last digit is not zero.
+  This uniquely specifies the behaviour of `digits b`.
+* For `b = 1`, we define `digits 1 n = List.replicate n 1`.
+* For `b = 0`, we define `digits 0 n = [n]`, except `digits 0 0 = []`.
 
-中文:
-定义 digits
-  签名: : 自然数 -> 自然数 -> 列表 自然数
+Note this differs from the existing `Nat.toDigits` in core, which is used for printing numerals.
+In particular, `Nat.toDigits b 0 = ['0']`, while `digits b 0 = []`.
 -/
-def digits : Nat -> Nat -> List Nat
+/-
+**Nat.digits** 是 Mathlib 中的一个定义，位于命名空间 `Nat`。
+形式化陈述：ℕ → ℕ → List ℕ
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`digits b n` gives the digits, in little-endian order,
+of a natural number `n` in a specified base `b`.
+
+In any base, we have `ofDigits b L = L.foldr (fun x y ↦ x + b * y) 0`.
+* For any `2 ≤ b`, we have `l < b` for any `l ∈ digits b n`,
+  and the last digit is not zero.
+  This uniquely specifies the behaviour of `digits b`.
+* For `b = 1`, we define `digits 1 n = List.replicate n 1`.
+* For `b = 0`, we define `digits 0 n = [n]`, except `digits 0 0 = []`.
+
+Note this differs from the existing `Nat.toDigits` in core, which is used for pr
+inting numerals.
+In particular, `Nat.toDigits b 0 = ['0']`, while `digits b 0 = []`.
+-/
+def digits : ℕ → ℕ → List ℕ
   | 0 => digitsAux0
   | 1 => digitsAux1
   | b + 2 => digitsAux (b + 2) (by simp)
 
 @[simp]
-/--
-theorem `digits_zero` / 定理 `digits_zero`
-
-English:
-theorem digits_zero
-  given: (b : Nat)
-  statement: digits b 0 = []
-  proof: by
-  rcases b with (_ | ⟨_ | ⟨_⟩⟩) <;> simp [digits, digitsAux0, digitsAux1]
-
-中文:
-定理 digits_zero
-  条件: (b : 自然数)
-  结论: digits b 0 = []
-  证明: by
-  rcases b with (_ | ⟨_ | ⟨_⟩⟩) <;> simp [digits, digitsAux0, digitsAux1]
-
-Depends on / 依赖: digits, digitsAux0, digitsAux1
+/-
+**Nat.digits_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：digits_zero (b : Nat) : digits b 0 = []
+参数：b : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem digits_zero (b : Nat) : digits b 0 = [] := by
+theorem digits_zero (b : ℕ) : digits b 0 = [] := by
   rcases b with (_ | ⟨_ | ⟨_⟩⟩) <;> simp [digits, digitsAux0, digitsAux1]
-
-/--
-theorem `digits_zero_zero` / 定理 `digits_zero_zero`
-
-English:
-theorem digits_zero_zero
-  statement: digits 0 0 = []
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 digits_zero_zero
-  结论: digits 0 0 = []
-  证明: rfl
-
-@[simp]
+/-
+**Nat.digits_zero_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：digits_zero_zero : digits 0 0 = []
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem digits_zero_zero : digits 0 0 = [] :=
   rfl
 
 @[simp]
-/--
-theorem `digits_zero_succ` / 定理 `digits_zero_succ`
-
-English:
-theorem digits_zero_succ
-  given: (n : Nat)
-  statement: digits 0 n.succ = [n+1]
-  proof: rfl
-
-中文:
-定理 digits_zero_succ
-  条件: (n : 自然数)
-  结论: digits 0 n.succ = [n+1]
-  证明: rfl
+/-
+**Nat.digits_zero_succ** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：digits_zero_succ (n : Nat) : digits 0 n.succ = [n+1]
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem digits_zero_succ (n : Nat) : digits 0 n.succ = [n+1] :=
+theorem digits_zero_succ (n : ℕ) : digits 0 n.succ = [n+1] :=
   rfl
-
-/--
-theorem `digits_zero_succ'` / 定理 `digits_zero_succ'`
-
-English:
-theorem digits_zero_succ'
-  statement: forall {n : Nat}, n != 0 -> digits 0 n = [n]
-
-中文:
-定理 digits_zero_succ'
-  结论: 对任意 {n : 自然数}, n != 0 -> digits 0 n = [n]
+/-
+**Nat.digits_zero_succ'** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ {n : ℕ}, n ≠ 0 → Nat.digits 0 n = [n]
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem digits_zero_succ' : forall {n : Nat}, n != 0 -> digits 0 n = [n]
+theorem digits_zero_succ' : ∀ {n : ℕ}, n ≠ 0 → digits 0 n = [n]
   | 0, h => (h rfl).elim
   | _ + 1, _ => rfl
 
 @[simp]
-/--
-theorem `digits_one` / 定理 `digits_one`
-
-English:
-theorem digits_one
-  given: (n : Nat)
-  statement: digits 1 n = List.replicate n 1
-  proof: rfl
-
-中文:
-定理 digits_one
-  条件: (n : 自然数)
-  结论: digits 1 n = 列表.replicate n 1
-  证明: rfl
+/-
+**Nat.digits_one** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：digits_one (n : Nat) : digits 1 n = List.replicate n 1
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem digits_one (n : Nat) : digits 1 n = List.replicate n 1 :=
+theorem digits_one (n : ℕ) : digits 1 n = List.replicate n 1 :=
   rfl
 
 -- no `@[simp]`: dsimp can prove this
-/--
-theorem `digits_one_succ` / 定理 `digits_one_succ`
-
-English:
-theorem digits_one_succ
-  given: (n : Nat)
-  statement: digits 1 (n + 1) = 1 :: digits 1 n
-  proof: rfl
-
-中文:
-定理 digits_one_succ
-  条件: (n : 自然数)
-  结论: digits 1 (n + 1) = 1 :: digits 1 n
-  证明: rfl
+/-
+**Nat.digits_one_succ** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：digits_one_succ (n : Nat) : digits 1 (n + 1) = 1 :: digits 1 n
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem digits_one_succ (n : Nat) : digits 1 (n + 1) = 1 :: digits 1 n :=
+theorem digits_one_succ (n : ℕ) : digits 1 (n + 1) = 1 :: digits 1 n :=
   rfl
-
-/--
-theorem `digits_add_two_add_one` / 定理 `digits_add_two_add_one`
-
-English:
-theorem digits_add_two_add_one
-  given: (b n : Nat)
-  proof: by
-  simp [digits, digitsAux_def]
-
-@[simp]
-
-中文:
-定理 digits_add_two_add_one
-  条件: (b n : 自然数)
-  证明: by
-  simp [digits, digitsAux_def]
-
-@[simp]
-
-Depends on / 依赖: digits, digitsAux_def
+/-
+**Nat.digits_add_two_add_one** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：digits_add_two_add_one (b n : Nat) : digits (b + 2) (n + 1) = ((n + 1) % (
+b + 2)) :: digits (b + 2) ((n + 1) / (b + 2))
+参数：b n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.digitsAux_def`：digitsAux_def (b : Nat) (h : 2 <= b) (n : Nat) (w : 0
+ < n) : digitsAux b h n = (n % b) :: digitsAux b h (n / b)
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem digits_add_two_add_one (b n : Nat) :
+theorem digits_add_two_add_one (b n : ℕ) :
     digits (b + 2) (n + 1) = ((n + 1) % (b + 2)) :: digits (b + 2) ((n + 1) / (b + 2)) := by
   simp [digits, digitsAux_def]
 
 @[simp]
-/--
-lemma `digits_of_two_le_of_pos` / 引理 `digits_of_two_le_of_pos`
-
-English:
-lemma digits_of_two_le_of_pos
-  given: {b : Nat} (hb : 2 <= b) (hn : 0 < n)
-  proof: by
-  rw [Nat.eq_add_of_sub_eq hb rfl]; rw [Nat.eq_add_of_sub_eq hn rfl]; rw [Nat.digits_add_two_add_one]
-
-中文:
-引理 digits_of_two_le_of_pos
-  条件: {b : 自然数} (hb : 2 <= b) (hn : 0 < n)
-  证明: by
-  rw [Nat.eq_add_of_sub_eq hb rfl]; rw [Nat.eq_add_of_sub_eq hn rfl]; rw [Nat.digits_add_two_add_one]
-
-Depends on / 依赖: Nat.digits_add_two_add_one, Nat.eq_add_of_sub_eq, digits_add_two_add_one, eq_add_of_sub_eq
+/-
+**Nat.digits_of_two_le_of_pos** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：digits_of_two_le_of_pos {b : Nat} (hb : 2 <= b) (hn : 0 < n) : Nat.digits 
+b n = n % b :: Nat.digits b (n / b)
+参数：hb : 2 <= b；hn : 0 < n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.eq_add_of_sub_eq`：∀ {a b c : ℕ}, b ≤ a → a - b = c → a = c + b
+· 使用定理 `Nat.digits_add_two_add_one`：digits_add_two_add_one (b n : Nat) : digits 
+(b + 2) (n + 1) = ((n + 1) % (b + 2)) :: digits (b + 2) ((n + 1) / (b + 2))
 -/
-lemma digits_of_two_le_of_pos {b : Nat} (hb : 2 <= b) (hn : 0 < n) :
+lemma digits_of_two_le_of_pos {b : ℕ} (hb : 2 ≤ b) (hn : 0 < n) :
     Nat.digits b n = n % b :: Nat.digits b (n / b) := by
-  rw [Nat.eq_add_of_sub_eq hb rfl]; rw [Nat.eq_add_of_sub_eq hn rfl]; rw [Nat.digits_add_two_add_one]
-
-/--
-theorem `digits_def'` / 定理 `digits_def'`
-
-English:
-theorem digits_def'
-
-中文:
-定理 digits_def'
+  rw [Nat.eq_add_of_sub_eq hb rfl, Nat.eq_add_of_sub_eq hn rfl, Nat.digits_add_two_add_one]
+/-
+**Nat.digits_def'** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ {b : ℕ}, 1 < b → ∀ {n : ℕ}, 0 < n → b.digits n = n % b :: b.digits (n / 
+b)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_decide_eq_true`：∀ {p : Prop} [inst : Decidable p], decide p = true → 
+p
+· 使用定理 `Nat.digitsAux_def`：digitsAux_def (b : Nat) (h : 2 <= b) (n : Nat) (w : 0
+ < n) : digitsAux b h n = (n % b) :: digitsAux b h (n / b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsRightCancelAdd.addRightReflectLE_of_addRightReflectLT`：∀ (N : Type u_2
+) [inst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightReflect
+LT N],   AddRightReflectLE N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
 -/
 theorem digits_def' :
-    forall {b : Nat} (_ : 1 < b) {n : Nat} (_ : 0 < n), digits b n = (n % b) :: digits b (n / b)
+    ∀ {b : ℕ} (_ : 1 < b) {n : ℕ} (_ : 0 < n), digits b n = (n % b) :: digits b (n / b)
   | 0, h => absurd h (by decide)
   | 1, h => absurd h (by decide)
   | b + 2, _ => digitsAux_def _ (by simp) _
 
 @[simp]
-/--
-theorem `digits_of_lt` / 定理 `digits_of_lt`
-
-English:
-theorem digits_of_lt
-  given: (b x : Nat) (hx : x != 0) (hxb : x < b)
-  statement: digits b x = [x]
-  proof: by
-  rcases exists_eq_succ_of_ne_zero hx with ⟨x, rfl⟩
-  rcases Nat.exists_eq_add_of_le' ((Nat.le_add_left 1 x).trans_lt hxb) with ⟨b, rfl⟩
-  rw [digits_add_two_add_one]; rw [div_eq_of_lt hxb]; rw [digits_zero]; rw [mod_eq_of_lt hxb]
-
-中文:
-定理 digits_of_lt
-  条件: (b x : 自然数) (hx : x != 0) (hxb : x < b)
-  结论: digits b x = [x]
-  证明: by
-  rcases exists_eq_succ_of_ne_zero hx with ⟨x, rfl⟩
-  rcases Nat.exists_eq_add_of_le' ((Nat.le_add_left 1 x).trans_lt hxb) with ⟨b, rfl⟩
-  rw [digits_add_two_add_one]; rw [div_eq_of_lt hxb]; rw [digits_zero]; rw [mod_eq_of_lt hxb]
-
-Depends on / 依赖: Nat.exists_eq_add_of_le, Nat.le_add_left, digits_add_two_add_one, digits_zero, div_eq_of_lt, exists_eq_add_of_le, exists_eq_succ_of_ne_zero, le_add_left, mod_eq_of_lt, trans_lt
+/-
+**Nat.digits_of_lt** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：digits_of_lt (b x : Nat) (hx : x != 0) (hxb : x < b) : digits b x = [x]
+参数：b x : Nat；hx : x != 0；hxb : x < b。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.exists_eq_succ_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → ∃ k, n = k.succ
+· 使用定理 `Nat.exists_eq_add_of_le'`：∀ {m n : ℕ}, m ≤ n → ∃ k, n = k + m
+· 使用定理 `LE.le.trans_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b 
+→ b < c → a < c
+· 使用定理 `Nat.le_add_left`：∀ (n m : ℕ), n ≤ m + n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.digits_add_two_add_one`：digits_add_two_add_one (b n : Nat) : digits 
+(b + 2) (n + 1) = ((n + 1) % (b + 2)) :: digits (b + 2) ((n + 1) / (b + 2))
+· 使用定理 `Nat.div_eq_of_lt`：∀ {a b : ℕ}, a < b → a / b = 0
+· 使用定理 `Nat.digits_zero`：digits_zero (b : Nat) : digits b 0 = []
+· 使用定理 `Nat.mod_eq_of_lt`：∀ {a b : ℕ}, a < b → a % b = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem digits_of_lt (b x : Nat) (hx : x != 0) (hxb : x < b) : digits b x = [x] := by
+theorem digits_of_lt (b x : ℕ) (hx : x ≠ 0) (hxb : x < b) : digits b x = [x] := by
   rcases exists_eq_succ_of_ne_zero hx with ⟨x, rfl⟩
   rcases Nat.exists_eq_add_of_le' ((Nat.le_add_left 1 x).trans_lt hxb) with ⟨b, rfl⟩
-  rw [digits_add_two_add_one]; rw [div_eq_of_lt hxb]; rw [digits_zero]; rw [mod_eq_of_lt hxb]
-
-/--
-theorem `digits_add` / 定理 `digits_add`
-
-English:
-theorem digits_add
-  given: (b : Nat) (h : 1 < b) (x y : Nat) (hxb : x < b) (hxy : x != 0 ∨ y != 0)
-  proof: by
-  rcases Nat.exists_eq_add_of_le' h with ⟨b, rfl : _ = _ + 2⟩
-  cases y
-  · simp [hxb, hxy.resolve_right (absurd rfl)]
-  dsimp [digits]
-  rw [digitsAux_def]
-  · congr
-    · simp [Nat.add_mod, mod_eq_of_lt hxb]
-    · simp [add_mul_div_left, div_eq_of_lt hxb]
-  · apply Nat.succ_pos
-
-中文:
-定理 digits_add
-  条件: (b : 自然数) (h : 1 < b) (x y : 自然数) (hxb : x < b) (hxy : x != 0 ∨ y != 0)
-  证明: by
-  rcases Nat.exists_eq_add_of_le' h with ⟨b, rfl : _ = _ + 2⟩
-  cases y
-  · simp [hxb, hxy.resolve_right (absurd rfl)]
-  dsimp [digits]
-  rw [digitsAux_def]
-  · congr
-    · simp [Nat.add_mod, mod_eq_of_lt hxb]
-    · simp [add_mul_div_left, div_eq_of_lt hxb]
-  · apply Nat.succ_pos
-
-Depends on / 依赖: Nat.add_mod, Nat.exists_eq_add_of_le, Nat.succ_pos, absurd, add_mod, add_mul_div_left, digits, digitsAux_def, div_eq_of_lt, exists_eq_add_of_le, hxy.resolve_right, mod_eq_of_lt, resolve_right, succ_pos
+  rw [digits_add_two_add_one, div_eq_of_lt hxb, digits_zero, mod_eq_of_lt hxb]
+/-
+**Nat.digits_add** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：digits_add (b : Nat) (h : 1 < b) (x y : Nat) (hxb : x < b) (hxy : x != 0 ∨
+ y != 0) : digits b (x + b * y) = x :: digits b y
+参数：b : Nat；h : 1 < b；x y : Nat；hxb : x < b；hxy : x != 0 ∨ y != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.exists_eq_add_of_le'`：∀ {m n : ℕ}, m ≤ n → ∃ k, n = k + m
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Nat.digits_of_lt`：digits_of_lt (b x : Nat) (hx : x != 0) (hxb : x < b) :
+ digits b x = [x]
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Or.resolve_right`：∀ {a b : Prop}, a ∨ b → ¬b → a
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Nat.digits_zero`：digits_zero (b : Nat) : digits b 0 = []
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.digitsAux_def`：digitsAux_def (b : Nat) (h : 2 <= b) (n : Nat) (w : 0
+ < n) : digitsAux b h n = (n % b) :: digitsAux b h (n / b)
+· 使用定理 `Nat.succ_pos`：∀ (n : ℕ), 0 < n.succ
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.add_mod`：∀ (a b n : ℕ), (a + b) % n = (a % n + b % n) % n
+· 使用定理 `Nat.mod_eq_of_lt`：∀ {a b : ℕ}, a < b → a % b = a
+· 使用定理 `Nat.mul_mod_right`：∀ (m n : ℕ), m * n % m = 0
+· 使用定理 `Nat.add_mul_div_left`：∀ (x z : ℕ) {y : ℕ}, 0 < y → (x + y * z) / y = x /
+ y + z
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+（共 35 条，此处仅展示前 30 条）
 -/
-theorem digits_add (b : Nat) (h : 1 < b) (x y : Nat) (hxb : x < b) (hxy : x != 0 ∨ y != 0) :
+theorem digits_add (b : ℕ) (h : 1 < b) (x y : ℕ) (hxb : x < b) (hxy : x ≠ 0 ∨ y ≠ 0) :
     digits b (x + b * y) = x :: digits b y := by
   rcases Nat.exists_eq_add_of_le' h with ⟨b, rfl : _ = _ + 2⟩
   cases y
@@ -402,358 +411,370 @@ theorem digits_add (b : Nat) (h : 1 < b) (x y : Nat) (hxb : x < b) (hxy : x != 0
 -- If we had a function converting a list into a polynomial,
 -- and appropriate lemmas about that function,
 -- we could rewrite this in terms of that.
-/--
-Definition of `ofDigits` / `ofDigits` 的定义
-
-English:
-definition ofDigits
-  signature: {α : Type*} [Semiring α] (b : α)
-
-中文:
-定义 ofDigits
-  签名: {α : 类型} [半环 α] (b : α)
+/-- `ofDigits b L` takes a list `L` of natural numbers, and interprets them
+as a number in semiring, as the little-endian digits in base `b`.
 -/
-def ofDigits {α : Type*} [Semiring α] (b : α) : List Nat -> α
+/-
+**Nat.ofDigits** 是 Mathlib 中的一个定义，位于命名空间 `Nat`。
+形式化陈述：{α : Type u_1} → [Semiring α] → α → List ℕ → α
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`ofDigits b L` takes a list `L` of natural numbers, and interprets them
+as a number in semiring, as the little-endian digits in base `b`.
+-/
+def ofDigits {α : Type*} [Semiring α] (b : α) : List ℕ → α
   | [] => 0
   | h :: t => h + b * ofDigits b t
-
-/--
-theorem `ofDigits_eq_foldr` / 定理 `ofDigits_eq_foldr`
-
-English:
-theorem ofDigits_eq_foldr
-  given: {α : Type*} [Semiring α] (b : α) (L : List Nat)
-  proof: by
-  induction L with
-  | nil => rfl
-  | cons d L ih => dsimp [ofDigits]; rw [ih]
-
-@[simp]
-
-中文:
-定理 ofDigits_eq_foldr
-  条件: {α : 类型} [半环 α] (b : α) (L : 列表 自然数)
-  证明: by
-  induction L with
-  | nil => rfl
-  | cons d L ih => dsimp [ofDigits]; rw [ih]
-
-@[simp]
-
-Depends on / 依赖: ofDigits
+/-
+**Nat.ofDigits_eq_foldr** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ofDigits_eq_foldr {α : Type*} [Semiring α] (b : α) (L : List Nat) : ofDigi
+ts b L = List.foldr (fun x y => ↑x + b * y) 0 L
+参数：b : α；L : List Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-theorem ofDigits_eq_foldr {α : Type*} [Semiring α] (b : α) (L : List Nat) :
+theorem ofDigits_eq_foldr {α : Type*} [Semiring α] (b : α) (L : List ℕ) :
     ofDigits b L = List.foldr (fun x y => ↑x + b * y) 0 L := by
   induction L with
   | nil => rfl
   | cons d L ih => dsimp [ofDigits]; rw [ih]
 
 @[simp]
-/--
-theorem `ofDigits_nil` / 定理 `ofDigits_nil`
-
-English:
-theorem ofDigits_nil
-  given: {b : Nat}
-  statement: ofDigits b [] = 0
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 ofDigits_nil
-  条件: {b : 自然数}
-  结论: ofDigits b [] = 0
-  证明: rfl
-
-@[simp]
+/-
+**Nat.ofDigits_nil** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ofDigits_nil {b : Nat} : ofDigits b [] = 0
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofDigits_nil {b : Nat} : ofDigits b [] = 0 := rfl
+theorem ofDigits_nil {b : ℕ} : ofDigits b [] = 0 := rfl
 
 @[simp]
-/--
-theorem `ofDigits_singleton` / 定理 `ofDigits_singleton`
-
-English:
-theorem ofDigits_singleton
-  given: {b n : Nat}
-  statement: ofDigits b [n] = n
-  proof: by simp [ofDigits]
-
-@[simp]
-
-中文:
-定理 ofDigits_singleton
-  条件: {b n : 自然数}
-  结论: ofDigits b [n] = n
-  证明: by simp [ofDigits]
-
-@[simp]
-
-Depends on / 依赖: ofDigits
+/-
+**Nat.ofDigits_singleton** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ofDigits_singleton {b n : Nat} : ofDigits b [n] = n
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ofDigits_singleton {b n : Nat} : ofDigits b [n] = n := by simp [ofDigits]
+theorem ofDigits_singleton {b n : ℕ} : ofDigits b [n] = n := by simp [ofDigits]
 
 @[simp]
-/--
-theorem `ofDigits_one_cons` / 定理 `ofDigits_one_cons`
-
-English:
-theorem ofDigits_one_cons
-  given: {α : Type*} [Semiring α] (h : Nat) (L : List Nat)
-  proof: by simp [ofDigits]
-
-中文:
-定理 ofDigits_one_cons
-  条件: {α : 类型} [半环 α] (h : 自然数) (L : 列表 自然数)
-  证明: by simp [ofDigits]
-
-Depends on / 依赖: ofDigits
+/-
+**Nat.ofDigits_one_cons** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ofDigits_one_cons {α : Type*} [Semiring α] (h : Nat) (L : List Nat) : ofDi
+gits (1 : α) (h :: L) = h + ofDigits 1 L
+参数：h : Nat；L : List Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ofDigits_one_cons {α : Type*} [Semiring α] (h : Nat) (L : List Nat) :
+theorem ofDigits_one_cons {α : Type*} [Semiring α] (h : ℕ) (L : List ℕ) :
     ofDigits (1 : α) (h :: L) = h + ofDigits 1 L := by simp [ofDigits]
-
-/--
-theorem `ofDigits_cons` / 定理 `ofDigits_cons`
-
-English:
-theorem ofDigits_cons
-  given: {b hd} {tl : List Nat}
-  proof: rfl
-
-中文:
-定理 ofDigits_cons
-  条件: {b hd} {tl : 列表 自然数}
-  证明: rfl
+/-
+**Nat.ofDigits_cons** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ofDigits_cons {b hd} {tl : List Nat} : ofDigits b (hd :: tl) = hd + b * of
+Digits b tl
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem ofDigits_cons {b hd} {tl : List Nat} :
+theorem ofDigits_cons {b hd} {tl : List ℕ} :
     ofDigits b (hd :: tl) = hd + b * ofDigits b tl := rfl
-
-/--
-theorem `ofDigits_append` / 定理 `ofDigits_append`
-
-English:
-theorem ofDigits_append
-  given: {b : Nat} {l1 l2 : List Nat}
-  proof: by
-  induction l1 with
-  | nil => simp [ofDigits]
-  | cons hd tl IH =>
-    rw [ofDigits]; rw [List.cons_append]; rw [ofDigits]; rw [IH]; rw [List.length_cons]; rw [pow_succ']
-    ring
-
-@[simp]
-
-中文:
-定理 ofDigits_append
-  条件: {b : 自然数} {l1 l2 : 列表 自然数}
-  证明: by
-  induction l1 with
-  | nil => simp [ofDigits]
-  | cons hd tl IH =>
-    rw [ofDigits]; rw [List.cons_append]; rw [ofDigits]; rw [IH]; rw [List.length_cons]; rw [pow_succ']
-    ring
-
-@[simp]
-
-Depends on / 依赖: List.cons_append, List.length_cons, cons_append, length_cons, ofDigits, pow_succ
+/-
+**Nat.ofDigits_append** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ofDigits_append {b : Nat} {l1 l2 : List Nat} : ofDigits b (l1 ++ l2) = ofD
+igits b l1 + b ^ l1.length * ofDigits b l2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Nat.ofDigits.eq_2`：∀ {α : Type u_1} [inst : Semiring α] (b : α) (h : ℕ) 
+(t : List ℕ), Nat.ofDigits b (h :: t) = ↑h + b * Nat.ofDigits b t
+· 使用定理 `List.cons_append`：∀ {α : Type u} {a : α} {as bs : List α}, a :: as ++ bs
+ = a :: (as ++ bs)
+· 使用定理 `List.length_cons`：∀ {α : Type u} {a : α} {as : List α}, (a :: as).length
+ = as.length + 1
+· 使用定理 `Nat.pow_succ'`：∀ {m n : ℕ}, m ^ n.succ = m * m ^ n
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.pow_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' c : R} {b b' : ℕ}, a = a' → b = b' → a' ^ b' = c → a ^ b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.pow_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a c₁ c₂ : R} {b₁ b₂ : ℕ} {d : R},   a ^ b₁ = c₁ → a ^ b₂ = c₂ → c₁ * c₂ = 
+d → a ^ (b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.single_pow`：∀ {R : Type u_1} [inst : CommSemi
+ring R] {a c : R} {b : ℕ}, a ^ b = c → (a + 0) ^ b = c + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pow_mul`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₂ c₂ : R} {ea₁ b c₁ : ℕ} {xa₁ c₃ d : R},   ea₁ * b = c₁ → a₂ ^ b = c₂
+ → xa₁ ^ c₁ * Nat.rawCast 1 …
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.one_pow`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a : R} (b : ℕ), Mathlib.Meta.NormNum.IsNat a 1 → a ^ b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.pow_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R) {e : R}, Nat.rawCast 1 = e → a ^ 0 = e + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+（共 36 条，此处仅展示前 30 条）
 -/
-theorem ofDigits_append {b : Nat} {l1 l2 : List Nat} :
+theorem ofDigits_append {b : ℕ} {l1 l2 : List ℕ} :
     ofDigits b (l1 ++ l2) = ofDigits b l1 + b ^ l1.length * ofDigits b l2 := by
   induction l1 with
   | nil => simp [ofDigits]
   | cons hd tl IH =>
-    rw [ofDigits]; rw [List.cons_append]; rw [ofDigits]; rw [IH]; rw [List.length_cons]; rw [pow_succ']
+    rw [ofDigits, List.cons_append, ofDigits, IH, List.length_cons, pow_succ']
     ring
 
 @[simp]
-/--
-theorem `ofDigits_append_zero` / 定理 `ofDigits_append_zero`
-
-English:
-theorem ofDigits_append_zero
-  given: {b : Nat} (l : List Nat)
-  proof: by
-  rw [ofDigits_append]; rw [ofDigits_singleton]; rw [mul_zero]; rw [add_zero]
-
-@[simp]
-
-中文:
-定理 ofDigits_append_zero
-  条件: {b : 自然数} (l : 列表 自然数)
-  证明: by
-  rw [ofDigits_append]; rw [ofDigits_singleton]; rw [mul_zero]; rw [add_zero]
-
-@[simp]
-
-Depends on / 依赖: add_zero, mul_zero, ofDigits_append, ofDigits_singleton
+/-
+**Nat.ofDigits_append_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ofDigits_append_zero {b : Nat} (l : List Nat) : ofDigits b (l ++ [0]) = of
+Digits b l
+参数：l : List Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.ofDigits_append`：ofDigits_append {b : Nat} {l1 l2 : List Nat} : ofDi
+gits b (l1 ++ l2) = ofDigits b l1 + b ^ l1.length * ofDigits b l2
+· 使用定理 `Nat.ofDigits_singleton`：ofDigits_singleton {b n : Nat} : ofDigits b [n] 
+= n
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 -/
-theorem ofDigits_append_zero {b : Nat} (l : List Nat) :
+theorem ofDigits_append_zero {b : ℕ} (l : List ℕ) :
     ofDigits b (l ++ [0]) = ofDigits b l := by
-  rw [ofDigits_append]; rw [ofDigits_singleton]; rw [mul_zero]; rw [add_zero]
+  rw [ofDigits_append, ofDigits_singleton, mul_zero, add_zero]
 
 @[simp]
-/--
-theorem `ofDigits_replicate_zero` / 定理 `ofDigits_replicate_zero`
-
-English:
-theorem ofDigits_replicate_zero
-  given: {b k : Nat}
-  statement: ofDigits b (List.replicate k 0) = 0
-  proof: by
-  induction k with
-  | zero => rfl
-  | succ k ih => simp [List.replicate, ofDigits_cons, ih]
-
-@[simp]
-
-中文:
-定理 ofDigits_replicate_zero
-  条件: {b k : 自然数}
-  结论: ofDigits b (列表.replicate k 0) = 0
-  证明: by
-  induction k with
-  | zero => rfl
-  | succ k ih => simp [List.replicate, ofDigits_cons, ih]
-
-@[simp]
-
-Depends on / 依赖: List.replicate, ofDigits_cons, replicate
+/-
+**Nat.ofDigits_replicate_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ofDigits_replicate_zero {b k : Nat} : ofDigits b (List.replicate k 0) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ofDigits_replicate_zero {b k : Nat} : ofDigits b (List.replicate k 0) = 0 := by
+theorem ofDigits_replicate_zero {b k : ℕ} : ofDigits b (List.replicate k 0) = 0 := by
   induction k with
   | zero => rfl
   | succ k ih => simp [List.replicate, ofDigits_cons, ih]
 
 @[simp]
-/--
-theorem `ofDigits_append_replicate_zero` / 定理 `ofDigits_append_replicate_zero`
-
-English:
-theorem ofDigits_append_replicate_zero
-  given: {b k : Nat} (l : List Nat)
-  proof: by
-  rw [ofDigits_append]
-  simp
-
-中文:
-定理 ofDigits_append_replicate_zero
-  条件: {b k : 自然数} (l : 列表 自然数)
-  证明: by
-  rw [ofDigits_append]
-  simp
-
-Depends on / 依赖: ofDigits_append
+/-
+**Nat.ofDigits_append_replicate_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ofDigits_append_replicate_zero {b k : Nat} (l : List Nat) : ofDigits b (l 
+++ List.replicate k 0) = ofDigits b l
+参数：l : List Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.ofDigits_append`：ofDigits_append {b : Nat} {l1 l2 : List Nat} : ofDi
+gits b (l1 ++ l2) = ofDigits b l1 + b ^ l1.length * ofDigits b l2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.ofDigits_replicate_zero`：ofDigits_replicate_zero {b k : Nat} : ofDig
+its b (List.replicate k 0) = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ofDigits_append_replicate_zero {b k : Nat} (l : List Nat) :
+theorem ofDigits_append_replicate_zero {b k : ℕ} (l : List ℕ) :
     ofDigits b (l ++ List.replicate k 0) = ofDigits b l := by
   rw [ofDigits_append]
   simp
-
-/--
-theorem `ofDigits_reverse_cons` / 定理 `ofDigits_reverse_cons`
-
-English:
-theorem ofDigits_reverse_cons
-  given: {b : Nat} (l : List Nat) (d : Nat)
-  proof: by
-  simp only [List.reverse_cons]
-  rw [ofDigits_append]
-  simp
-
-中文:
-定理 ofDigits_reverse_cons
-  条件: {b : 自然数} (l : 列表 自然数) (d : 自然数)
-  证明: by
-  simp only [List.reverse_cons]
-  rw [ofDigits_append]
-  simp
-
-Depends on / 依赖: List.reverse_cons, ofDigits_append, reverse_cons
+/-
+**Nat.ofDigits_reverse_cons** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ofDigits_reverse_cons {b : Nat} (l : List Nat) (d : Nat) : ofDigits b (d :
+: l).reverse = ofDigits b l.reverse + b ^ l.length * d
+参数：l : List Nat；d : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.reverse_cons`：∀ {α : Type u} {a : α} {as : List α}, (a :: as).rever
+se = as.reverse ++ [a]
+· 使用定理 `Nat.ofDigits_append`：ofDigits_append {b : Nat} {l1 l2 : List Nat} : ofDi
+gits b (l1 ++ l2) = ofDigits b l1 + b ^ l1.length * ofDigits b l2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `List.length_reverse`：∀ {α : Type u_1} {as : List α}, as.reverse.length =
+ as.length
+· 使用定理 `Nat.ofDigits_singleton`：ofDigits_singleton {b n : Nat} : ofDigits b [n] 
+= n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ofDigits_reverse_cons {b : Nat} (l : List Nat) (d : Nat) :
+theorem ofDigits_reverse_cons {b : ℕ} (l : List ℕ) (d : ℕ) :
     ofDigits b (d :: l).reverse = ofDigits b l.reverse + b ^ l.length * d := by
   simp only [List.reverse_cons]
   rw [ofDigits_append]
   simp
-
-/--
-theorem `ofDigits_reverse_zero_cons` / 定理 `ofDigits_reverse_zero_cons`
-
-English:
-theorem ofDigits_reverse_zero_cons
-  given: {b : Nat} (l : List Nat)
-  proof: by
-  simp only [List.reverse_cons, ofDigits_append_zero]
-
-@[norm_cast]
-
-中文:
-定理 ofDigits_reverse_zero_cons
-  条件: {b : 自然数} (l : 列表 自然数)
-  证明: by
-  simp only [List.reverse_cons, ofDigits_append_zero]
-
-@[norm_cast]
-
-Depends on / 依赖: List.reverse_cons, ofDigits_append_zero, reverse_cons
+/-
+**Nat.ofDigits_reverse_zero_cons** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ofDigits_reverse_zero_cons {b : Nat} (l : List Nat) : ofDigits b (0 :: l).
+reverse = ofDigits b l.reverse
+参数：l : List Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.reverse_cons`：∀ {α : Type u} {a : α} {as : List α}, (a :: as).rever
+se = as.reverse ++ [a]
+· 使用定理 `Nat.ofDigits_append_zero`：ofDigits_append_zero {b : Nat} (l : List Nat) 
+: ofDigits b (l ++ [0]) = ofDigits b l
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ofDigits_reverse_zero_cons {b : Nat} (l : List Nat) :
+theorem ofDigits_reverse_zero_cons {b : ℕ} (l : List ℕ) :
     ofDigits b (0 :: l).reverse = ofDigits b l.reverse := by
   simp only [List.reverse_cons, ofDigits_append_zero]
 
 @[norm_cast]
-/--
-theorem `coe_ofDigits` / 定理 `coe_ofDigits`
-
-English:
-theorem coe_ofDigits
-  given: (α : Type*) [Semiring α] (b : Nat) (L : List Nat)
-  proof: by
-  induction L with
-  | nil => simp [ofDigits]
-  | cons d L ih => dsimp [ofDigits]; push_cast; rw [ih]
-
-中文:
-定理 coe_ofDigits
-  条件: (α : 类型) [半环 α] (b : 自然数) (L : 列表 自然数)
-  证明: by
-  induction L with
-  | nil => simp [ofDigits]
-  | cons d L ih => dsimp [ofDigits]; push_cast; rw [ih]
-
-Depends on / 依赖: ofDigits
+/-
+**Nat.coe_ofDigits** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：coe_ofDigits (α : Type*) [Semiring α] (b : Nat) (L : List Nat) : ((ofDigit
+s b L : Nat) : α) = ofDigits (b : α) L
+参数：α : Type*；b : Nat；L : List Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `Nat.cast_mul`：∀ {α : Type u_1} [inst : NonAssocSemiring α] (m n : ℕ), ↑(
+m * n) = ↑m * ↑n
 -/
-theorem coe_ofDigits (α : Type*) [Semiring α] (b : Nat) (L : List Nat) :
-    ((ofDigits b L : Nat) : α) = ofDigits (b : α) L := by
+theorem coe_ofDigits (α : Type*) [Semiring α] (b : ℕ) (L : List ℕ) :
+    ((ofDigits b L : ℕ) : α) = ofDigits (b : α) L := by
   induction L with
   | nil => simp [ofDigits]
   | cons d L ih => dsimp [ofDigits]; push_cast; rw [ih]
-
-/--
-theorem `digits_zero_of_eq_zero` / 定理 `digits_zero_of_eq_zero`
-
-English:
-theorem digits_zero_of_eq_zero
-  given: {b : Nat} (h : b != 0)
-
-中文:
-定理 digits_zero_of_eq_zero
-  条件: {b : 自然数} (h : b != 0)
+/-
+**Nat.digits_zero_of_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：∀ {b : ℕ}, b ≠ 0 → ∀ {L : List ℕ}, Nat.ofDigits b L = 0 → ∀ l ∈ L, l = 0
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem digits_zero_of_eq_zero {b : Nat} (h : b != 0) :
-    forall {L : List Nat} (_ : ofDigits b L = 0), forall l in L, l = 0
+theorem digits_zero_of_eq_zero {b : ℕ} (h : b ≠ 0) :
+    ∀ {L : List ℕ} (_ : ofDigits b L = 0), ∀ l ∈ L, l = 0
   | _ :: _, h0, _, List.Mem.head .. => Nat.eq_zero_of_add_eq_zero_right h0
   | _ :: _, h0, _, List.Mem.tail _ hL =>
     digits_zero_of_eq_zero h (mul_right_injective₀ h (Nat.eq_zero_of_add_eq_zero_left h0)) _ hL
-
-/--
-theorem `digits_ofDigits` / 定理 `digits_ofDigits`
-
-English:
-theorem digits_ofDigits
-  statement: (b : Nat) (h : 1 < b) (L : List Nat) (w₁ : forall l in L, l < b)
-  proof: by
+/-
+**Nat.digits_ofDigits** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：digits_ofDigits (b : Nat) (h : 1 < b) (L : List Nat) (w₁ : forall l in L, 
+l < b) (w₂ : forall h : L != [], L.getLast h != 0) : digits b (ofDigits b L) = L
+参数：b : Nat；h : 1 < b；L : List Nat；w₁ : forall l in L, l < b；w₂ : forall h : L !=
+ [], L.getLast h != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.digits_zero`：digits_zero (b : Nat) : digits b 0 = []
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_false'`：∀ {p : Prop}, (p → False) → p = False
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `Nat.digits_add`：digits_add (b : Nat) (h : 1 < b) (x y : Nat) (hxb : x < 
+b) (hxy : x != 0 ∨ y != 0) : digits b (x + b * y) = x :: digits b y
+· 使用定理 `List.mem_cons_self`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ a :: l
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₄`：contrapose₄ {p q : Prop} : (q -> 
+p) -> (¬ p -> ¬ q)
+· 使用定理 `Nat.digits_zero_of_eq_zero`：∀ {b : ℕ}, b ≠ 0 → ∀ {L : List ℕ}, Nat.ofDig
+its b L = 0 → ∀ l ∈ L, l = 0
+· 使用定理 `LT.lt.ne_bot`：∀ {α : Type u} [inst : Preorder α] [inst_1 : OrderBot α] {
+a b : α}, b < a → a ≠ ⊥
+· 使用定理 `List.cons_ne_nil`：∀ {α : Type u_1} (a : α) (l : List α), a :: l ≠ []
+· 使用定理 `List.getLast_cons`：∀ {α : Type u_1} {a : α} {l : List α} (h : l ≠ []), (
+a :: l).getLast ⋯ = l.getLast h
+· 使用定理 `List.getLast_mem`：∀ {α : Type u_1} {l : List α} (h : l ≠ []), l.getLast 
+h ∈ l
+· 使用定理 `List.mem_cons_of_mem`：∀ {α : Type u_1} (y : α) {a : α} {l : List α}, a ∈
+ l → a ∈ y :: l
+-/
+theorem digits_ofDigits (b : ℕ) (h : 1 < b) (L : List ℕ) (w₁ : ∀ l ∈ L, l < b)
+    (w₂ : ∀ h : L ≠ [], L.getLast h ≠ 0) : digits b (ofDigits b L) = L := by
   induction L with
   | nil => simp
   | cons d L ih =>
@@ -777,71 +798,34 @@ theorem digits_ofDigits
         refine digits_zero_of_eq_zero h.ne_bot w₂ _ ?_
         rw [List.getLast_cons h']
         exact List.getLast_mem h'
-
-中文:
-定理 digits_ofDigits
-  结论: (b : 自然数) (h : 1 < b) (L : 列表 自然数) (w₁ : 对任意 l in L, l < b)
-  证明: by
-  induction L with
-  | nil => simp
-  | cons d L ih =>
-    dsimp [ofDigits]
-    replace w₂ := w₂ (by simp)
-    rw [digits_add b h]
-    · rw [ih]
-      · intro l m
-        apply w₁
-        exact List.mem_cons_of_mem _ m
-      · intro h
-        rw [List.getLast_cons h] at w₂
-        convert! w₂
-    · exact w₁ d List.mem_cons_self
-    · by_cases h' : L = []
-      · rcases h' with rfl
-        left
-        simpa using w₂
-      · right
-        contrapose w₂
-        refine digits_zero_of_eq_zero h.ne_bot w₂ _ ?_
-        rw [List.getLast_cons h']
-        exact List.getLast_mem h'
-
-Depends on / 依赖: List.getLast_cons, List.getLast_mem, List.mem_cons_of_mem, List.mem_cons_self, contrapose, convert, digits_add, digits_zero_of_eq_zero, getLast_cons, getLast_mem, h.ne_bot, mem_cons_of_mem, mem_cons_self, ne_bot, ofDigits, replace
+/-
+**Nat.ofDigits_digits** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ofDigits_digits (b n : Nat) : ofDigits b (digits b n) = n
+参数：b n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.ofDigits_singleton`：ofDigits_singleton {b n : Nat} : ofDigits b [n] 
+= n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Nat.zero_add`：∀ (n : ℕ), 0 + n = n
+· 使用定理 `Nat.ofDigits_one_cons`：ofDigits_one_cons {α : Type*} [Semiring α] (h : N
+at) (L : List Nat) : ofDigits (1 : α) (h :: L) = h + ofDigits 1 L
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Nat.digits_zero`：digits_zero (b : Nat) : digits b 0 = []
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.digits_add_two_add_one`：digits_add_two_add_one (b n : Nat) : digits 
+(b + 2) (n + 1) = ((n + 1) % (b + 2)) :: digits (b + 2) ((n + 1) / (b + 2))
+· 使用引理 `Nat.div_lt_self'`：div_lt_self' (a b : Nat) : (a + 1) / (b + 2) < a + 1
+· 使用定理 `Nat.mod_add_div`：∀ (m k : ℕ), m % k + k * (m / k) = m
 -/
-theorem digits_ofDigits (b : Nat) (h : 1 < b) (L : List Nat) (w₁ : forall l in L, l < b)
-    (w₂ : forall h : L != [], L.getLast h != 0) : digits b (ofDigits b L) = L := by
-  induction L with
-  | nil => simp
-  | cons d L ih =>
-    dsimp [ofDigits]
-    replace w₂ := w₂ (by simp)
-    rw [digits_add b h]
-    · rw [ih]
-      · intro l m
-        apply w₁
-        exact List.mem_cons_of_mem _ m
-      · intro h
-        rw [List.getLast_cons h] at w₂
-        convert! w₂
-    · exact w₁ d List.mem_cons_self
-    · by_cases h' : L = []
-      · rcases h' with rfl
-        left
-        simpa using w₂
-      · right
-        contrapose w₂
-        refine digits_zero_of_eq_zero h.ne_bot w₂ _ ?_
-        rw [List.getLast_cons h']
-        exact List.getLast_mem h'
-
-/--
-theorem `ofDigits_digits` / 定理 `ofDigits_digits`
-
-English:
-theorem ofDigits_digits
-  given: (b n : Nat)
-  statement: ofDigits b (digits b n) = n
-  proof: by
+theorem ofDigits_digits (b n : ℕ) : ofDigits b (digits b n) = n := by
   rcases b with - | b
   · rcases n with - | n
     · rfl
@@ -860,91 +844,58 @@ theorem ofDigits_digits
         dsimp [ofDigits]
         rw [h _ (Nat.div_lt_self' _ b)]
         rw [Nat.mod_add_div]
-
-中文:
-定理 ofDigits_digits
-  条件: (b n : 自然数)
-  结论: ofDigits b (digits b n) = n
-  证明: by
-  rcases b with - | b
-  · rcases n with - | n
-    · rfl
-    · simp
-  · rcases b with - | b
-    · induction n with
-      | zero => rfl
-      | succ n ih =>
-        rw [Nat.zero_add] at ih ⊢
-        simp only [ih, add_comm 1, ofDigits_one_cons, Nat.cast_id, digits_one_succ]
-    · induction n using Nat.strongRecOn with | ind n h => ?_
-      cases n
-      · rw [digits_zero]
-        rfl
-      · simp only [digits_add_two_add_one]
-        dsimp [ofDigits]
-        rw [h _ (Nat.div_lt_self' _ b)]
-        rw [Nat.mod_add_div]
-
-Depends on / 依赖: Nat.cast_id, Nat.div_lt_self, Nat.mod_add_div, Nat.strongRecOn, Nat.zero_add, add_comm, cast_id, digits_add_two_add_one, digits_one_succ, digits_zero, div_lt_self, mod_add_div, ofDigits, ofDigits_one_cons, strongRecOn, zero_add
+/-
+**Nat.ofDigits_one** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ofDigits_one (L : List Nat) : ofDigits 1 L = L.sum
+参数：L : List Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem ofDigits_digits (b n : Nat) : ofDigits b (digits b n) = n := by
-  rcases b with - | b
-  · rcases n with - | n
-    · rfl
-    · simp
-  · rcases b with - | b
-    · induction n with
-      | zero => rfl
-      | succ n ih =>
-        rw [Nat.zero_add] at ih ⊢
-        simp only [ih, add_comm 1, ofDigits_one_cons, Nat.cast_id, digits_one_succ]
-    · induction n using Nat.strongRecOn with | ind n h => ?_
-      cases n
-      · rw [digits_zero]
-        rfl
-      · simp only [digits_add_two_add_one]
-        dsimp [ofDigits]
-        rw [h _ (Nat.div_lt_self' _ b)]
-        rw [Nat.mod_add_div]
-
-/--
-theorem `ofDigits_one` / 定理 `ofDigits_one`
-
-English:
-theorem ofDigits_one
-  given: (L : List Nat)
-  statement: ofDigits 1 L = L.sum
-  proof: by
+theorem ofDigits_one (L : List ℕ) : ofDigits 1 L = L.sum := by
   induction L with
   | nil => rfl
   | cons _ _ ih => simp [ofDigits, List.sum_cons, ih]
 
-中文:
-定理 ofDigits_one
-  条件: (L : 列表 自然数)
-  结论: ofDigits 1 L = L.求和
-  证明: by
-  induction L with
-  | nil => rfl
-  | cons _ _ ih => simp [ofDigits, List.sum_cons, ih]
+/-!
+### Properties
 
-Depends on / 依赖: List.sum_cons, ofDigits, sum_cons
+This section contains various lemmas of properties relating to `digits` and `ofDigits`.
 -/
-theorem ofDigits_one (L : List Nat) : ofDigits 1 L = L.sum := by
-  induction L with
-  | nil => rfl
-  | cons _ _ ih => simp [ofDigits, List.sum_cons, ih]
 
 
+/-
+**Nat.digits_eq_nil_iff_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：digits_eq_nil_iff_eq_zero {b n : Nat} : digits b n = [] ↔ n = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.ofDigits_digits`：ofDigits_digits (b n : Nat) : ofDigits b (digits b 
+n) = n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.digits_zero`：digits_zero (b : Nat) : digits b 0 = []
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-/--
-theorem `digits_eq_nil_iff_eq_zero` / 定理 `digits_eq_nil_iff_eq_zero`
+--- 原说明 ---
+### Properties
 
-English:
-theorem digits_eq_nil_iff_eq_zero
-  given: {b n : Nat}
-  statement: digits b n = [] ↔ n = 0
-  proof: by
+This section contains various lemmas of properties relating to `digits` and `ofD
+igits`.
+-/
+theorem digits_eq_nil_iff_eq_zero {b n : ℕ} : digits b n = [] ↔ n = 0 := by
   constructor
   · intro h
     have : ofDigits b (digits b n) = ofDigits b [] := by rw [h]
@@ -952,227 +903,203 @@ theorem digits_eq_nil_iff_eq_zero
     rw [ofDigits_digits]
   · rintro rfl
     simp
-
-中文:
-定理 digits_eq_nil_iff_eq_zero
-  条件: {b n : 自然数}
-  结论: digits b n = [] ↔ n = 0
-  证明: by
-  constructor
-  · intro h
-    have : ofDigits b (digits b n) = ofDigits b [] := by rw [h]
-    convert! this
-    rw [ofDigits_digits]
-  · rintro rfl
-    simp
-
-Depends on / 依赖: convert, digits, ofDigits, ofDigits_digits
+/-
+**Nat.digits_ne_nil_iff_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：digits_ne_nil_iff_ne_zero {b n : Nat} : digits b n != [] ↔ n != 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `not_congr`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Nat.digits_eq_nil_iff_eq_zero`：digits_eq_nil_iff_eq_zero {b n : Nat} : d
+igits b n = [] ↔ n = 0
 -/
-theorem digits_eq_nil_iff_eq_zero {b n : Nat} : digits b n = [] ↔ n = 0 := by
-  constructor
-  · intro h
-    have : ofDigits b (digits b n) = ofDigits b [] := by rw [h]
-    convert! this
-    rw [ofDigits_digits]
-  · rintro rfl
-    simp
-
-/--
-theorem `digits_ne_nil_iff_ne_zero` / 定理 `digits_ne_nil_iff_ne_zero`
-
-English:
-theorem digits_ne_nil_iff_ne_zero
-  given: {b n : Nat}
-  statement: digits b n != [] ↔ n != 0
-  proof: not_congr digits_eq_nil_iff_eq_zero
-
-中文:
-定理 digits_ne_nil_iff_ne_zero
-  条件: {b n : 自然数}
-  结论: digits b n != [] ↔ n != 0
-  证明: not_congr digits_eq_nil_iff_eq_zero
-
-Depends on / 依赖: digits_eq_nil_iff_eq_zero, not_congr
--/
-theorem digits_ne_nil_iff_ne_zero {b n : Nat} : digits b n != [] ↔ n != 0 :=
+theorem digits_ne_nil_iff_ne_zero {b n : ℕ} : digits b n ≠ [] ↔ n ≠ 0 :=
   not_congr digits_eq_nil_iff_eq_zero
-
-/--
-theorem `digits_eq_cons_digits_div` / 定理 `digits_eq_cons_digits_div`
-
-English:
-theorem digits_eq_cons_digits_div
-  given: {b n : Nat} (h : 1 < b) (w : n != 0)
-  proof: digits_def' h (Nat.pos_of_ne_zero w)
-
-中文:
-定理 digits_eq_cons_digits_div
-  条件: {b n : 自然数} (h : 1 < b) (w : n != 0)
-  证明: digits_def' h (Nat.pos_of_ne_zero w)
-
-Depends on / 依赖: Nat.pos_of_ne_zero, digits_def, pos_of_ne_zero
+/-
+**Nat.digits_eq_cons_digits_div** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：digits_eq_cons_digits_div {b n : Nat} (h : 1 < b) (w : n != 0) : digits b 
+n = (n % b) :: digits b (n / b)
+参数：h : 1 < b；w : n != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.digits_def'`：∀ {b : ℕ}, 1 < b → ∀ {n : ℕ}, 0 < n → b.digits n = n % 
+b :: b.digits (n / b)
+· 使用定理 `Nat.pos_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → 0 < n
 -/
-theorem digits_eq_cons_digits_div {b n : Nat} (h : 1 < b) (w : n != 0) :
+theorem digits_eq_cons_digits_div {b n : ℕ} (h : 1 < b) (w : n ≠ 0) :
     digits b n = (n % b) :: digits b (n / b) :=
   digits_def' h (Nat.pos_of_ne_zero w)
-
-/--
-theorem `digits_getLast` / 定理 `digits_getLast`
-
-English:
-theorem digits_getLast
-  given: {b : Nat} (m : Nat) (h : 1 < b) (p q)
-  proof: by
-  by_cases hm : m = 0
-  · simp [hm]
-  simp only [digits_eq_cons_digits_div h hm]
-  rw [List.getLast_cons]
-
-中文:
-定理 digits_getLast
-  条件: {b : 自然数} (m : 自然数) (h : 1 < b) (p q)
-  证明: by
-  by_cases hm : m = 0
-  · simp [hm]
-  simp only [digits_eq_cons_digits_div h hm]
-  rw [List.getLast_cons]
-
-Depends on / 依赖: List.getLast_cons, digits_eq_cons_digits_div, getLast_cons
+/-
+**Nat.digits_getLast** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：digits_getLast {b : Nat} (m : Nat) (h : 1 < b) (p q) : (digits b m).getLas
+t p = (digits b (m / b)).getLast q
+参数：m : Nat；h : 1 < b；p q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.digits_zero`：digits_zero (b : Nat) : digits b 0 = []
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.zero_div`：∀ (b : ℕ), 0 / b = 0
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `List.getLast.congr_simp`：∀ {α : Type u} (as as_1 : List α) (e_as : as = 
+as_1) (a : as ≠ []), as.getLast a = as_1.getLast ⋯
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Nat.digits_eq_cons_digits_div`：digits_eq_cons_digits_div {b n : Nat} (h 
+: 1 < b) (w : n != 0) : digits b n = (n % b) :: digits b (n / b)
+· 使用定理 `List.cons_ne_nil`：∀ {α : Type u_1} (a : α) (l : List α), a :: l ≠ []
+· 使用定理 `List.getLast_cons`：∀ {α : Type u_1} {a : α} {l : List α} (h : l ≠ []), (
+a :: l).getLast ⋯ = l.getLast h
 -/
-theorem digits_getLast {b : Nat} (m : Nat) (h : 1 < b) (p q) :
+theorem digits_getLast {b : ℕ} (m : ℕ) (h : 1 < b) (p q) :
     (digits b m).getLast p = (digits b (m / b)).getLast q := by
   by_cases hm : m = 0
   · simp [hm]
   simp only [digits_eq_cons_digits_div h hm]
   rw [List.getLast_cons]
-
-/--
-theorem `digits.injective` / 定理 `digits.injective`
-
-English:
-theorem digits.injective
-  given: (b : Nat)
-  statement: Function.Injective b.digits
-  proof: Function.LeftInverse.injective (ofDigits_digits b)
-
-@[simp]
-
-中文:
-定理 digits.injective
-  条件: (b : 自然数)
-  结论: 函数.单射 b.digits
-  证明: Function.LeftInverse.injective (ofDigits_digits b)
-
-@[simp]
-
-Depends on / 依赖: Function, Function.LeftInverse.injective, LeftInverse, injective, ofDigits_digits
+/-
+**Nat.digits.injective** 是 Mathlib 中的一个定理，位于命名空间 `Nat.digits`。
+形式化陈述：∀ (b : ℕ), Function.Injective b.digits
+参数：b : ℕ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.LeftInverse.injective`：∀ {α : Sort u_1} {β : Sort u_2} {g : β →
+ α} {f : α → β}, Function.LeftInverse g f → Function.Injective f
+· 使用定理 `Nat.ofDigits_digits`：ofDigits_digits (b n : Nat) : ofDigits b (digits b 
+n) = n
 -/
-theorem digits.injective (b : Nat) : Function.Injective b.digits :=
+theorem digits.injective (b : ℕ) : Function.Injective b.digits :=
   Function.LeftInverse.injective (ofDigits_digits b)
 
 @[simp]
-/--
-theorem `digits_inj_iff` / 定理 `digits_inj_iff`
-
-English:
-theorem digits_inj_iff
-  given: {b n m : Nat}
-  statement: b.digits n = b.digits m ↔ n = m
-  proof: (digits.injective b).eq_iff
-
-中文:
-定理 digits_inj_iff
-  条件: {b n m : 自然数}
-  结论: b.digits n = b.digits m ↔ n = m
-  证明: (digits.injective b).eq_iff
-
-Depends on / 依赖: digits, digits.injective, eq_iff, injective
+/-
+**Nat.digits_inj_iff** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：digits_inj_iff {b n m : Nat} : b.digits n = b.digits m ↔ n = m
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Nat.digits.injective`：∀ (b : ℕ), Function.Injective b.digits
 -/
-theorem digits_inj_iff {b n m : Nat} : b.digits n = b.digits m ↔ n = m :=
+theorem digits_inj_iff {b n m : ℕ} : b.digits n = b.digits m ↔ n = m :=
   (digits.injective b).eq_iff
-
-/--
-theorem `mul_ofDigits` / 定理 `mul_ofDigits`
-
-English:
-theorem mul_ofDigits
-  given: (n : Nat) {b : Nat} {l : List Nat}
-  proof: by
-  induction l with
-  | nil => rfl
-  | cons hd tl ih =>
-    rw [List.map_cons]; rw [ofDigits_cons]; rw [ofDigits_cons]; rw [← ih]
-    ring
-
-中文:
-定理 mul_ofDigits
-  条件: (n : 自然数) {b : 自然数} {l : 列表 自然数}
-  证明: by
-  induction l with
-  | nil => rfl
-  | cons hd tl ih =>
-    rw [List.map_cons]; rw [ofDigits_cons]; rw [ofDigits_cons]; rw [← ih]
-    ring
-
-Depends on / 依赖: List.map_cons, map_cons, ofDigits_cons
+/-
+**Nat.mul_ofDigits** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：mul_ofDigits (n : Nat) {b : Nat} {l : List Nat} : n * ofDigits b l = ofDig
+its b (l.map (n * ·))
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `List.map_cons`：∀ {α : Type u} {β : Type v} {f : α → β} {a : α} {l : List
+ α}, List.map f (a :: l) = f a :: List.map f l
+· 使用定理 `Nat.ofDigits_cons`：ofDigits_cons {b hd} {tl : List Nat} : ofDigits b (hd
+ :: tl) = hd + b * ofDigits b tl
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_left`：∀ {R : Type u_1} [inst : CommSem
+iring R] {a₃ b c : R} (a₁ : R) (a₂ : ℕ), a₃ * b = c → a₁ ^ a₂ * a₃ * b = a₁ ^ a₂
+ * c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_lt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a₂ b c : R} (a₁ : R), a₂ + b = c → a₁ + a₂ + b = a₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
 -/
-theorem mul_ofDigits (n : Nat) {b : Nat} {l : List Nat} :
+theorem mul_ofDigits (n : ℕ) {b : ℕ} {l : List ℕ} :
     n * ofDigits b l = ofDigits b (l.map (n * ·)) := by
   induction l with
   | nil => rfl
   | cons hd tl ih =>
-    rw [List.map_cons]; rw [ofDigits_cons]; rw [ofDigits_cons]; rw [← ih]
+    rw [List.map_cons, ofDigits_cons, ofDigits_cons, ← ih]
     ring
-
-/--
-lemma `ofDigits_inj_of_len_eq` / 引理 `ofDigits_inj_of_len_eq`
-
-English:
-lemma ofDigits_inj_of_len_eq
-  statement: {b : Nat} (hb : 1 < b) {L1 L2 : List Nat}
-  proof: by
-  induction L1 generalizing L2 with
-  | nil =>
-    simp only [List.length_nil] at len
-    exact (List.length_eq_zero_iff.mp len.symm).symm
-  | cons D L ih => ?_
-  obtain ⟨d, l, rfl⟩ := List.exists_cons_of_length_eq_add_one len.symm
-  simp only [List.length_cons, add_left_inj] at len
-  simp only [ofDigits_cons] at h
-  have eqd : D = d := by
-    have H : (D + b * ofDigits b L) % b = (d + b * ofDigits b l) % b := by rw [h]
-    simpa [mod_eq_of_lt (w2 d List.mem_cons_self),
-      mod_eq_of_lt (w1 D List.mem_cons_self)] using H
-  simp only [eqd, add_right_inj, mul_left_cancel_iff_of_pos (zero_lt_of_lt hb)] at h
-  have := ih len (fun a ha => w1 a <| List.mem_cons_of_mem D ha)
-    (fun a ha => w2 a <| List.mem_cons_of_mem d ha) h
-  rw [eqd]; rw [this]
-
-中文:
-引理 ofDigits_inj_of_len_eq
-  结论: {b : 自然数} (hb : 1 < b) {L1 L2 : 列表 自然数}
-  证明: by
-  induction L1 generalizing L2 with
-  | nil =>
-    simp only [List.length_nil] at len
-    exact (List.length_eq_zero_iff.mp len.symm).symm
-  | cons D L ih => ?_
-  obtain ⟨d, l, rfl⟩ := List.exists_cons_of_length_eq_add_one len.symm
-  simp only [List.length_cons, add_left_inj] at len
-  simp only [ofDigits_cons] at h
-  have eqd : D = d := by
-    have H : (D + b * ofDigits b L) % b = (d + b * ofDigits b l) % b := by rw [h]
-    simpa [mod_eq_of_lt (w2 d List.mem_cons_self),
-      mod_eq_of_lt (w1 D List.mem_cons_self)] using H
-  simp only [eqd, add_right_inj, mul_left_cancel_iff_of_pos (zero_lt_of_lt hb)] at h
-  have := ih len (fun a ha => w1 a <| List.mem_cons_of_mem D ha)
-    (fun a ha => w2 a <| List.mem_cons_of_mem d ha) h
-  rw [eqd]; rw [this]
-
-Depends on / 依赖: List.exists_cons_of_length_eq_add_one, List.length_cons, List.length_eq_zero_iff.mp, List.length_nil, List.mem_cons_self, add_left_inj, exists_cons_of_length_eq_add_one, generalizing, len.symm, length_cons, length_eq_zero_iff, length_nil, mem_cons_self, mod_eq_of_lt, ofDigits, ofDigits_cons
+/-
+**Nat.ofDigits_inj_of_len_eq** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：ofDigits_inj_of_len_eq {b : Nat} (hb : 1 < b) {L1 L2 : List Nat} (len : L1
+.length = L2.length) (w1 : forall l in L1, l < b) (w2 : forall l in L2, l < b) (
+h : ofDigits b L1 = ofDigits b L2) : L1 = L2
+参数：hb : 1 < b；len : L1.length = L2.length；w1 : forall l in L1, l < b；w2 : forall
+ l in L2, l < b；h : ofDigits b L1 = ofDigits b L2。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.length_eq_zero_iff`：∀ {α : Type u_1} {l : List α}, l.length = 0 ↔ l
+ = []
+· 使用定理 `List.exists_cons_of_length_eq_add_one`：∀ {α : Type u_1} {n : ℕ} {l : Lis
+t α}, l.length = n + 1 → ∃ h t, l = h :: t
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.add_mul_mod_self_left`：∀ (x y z : ℕ), (x + y * z) % y = x % y
+· 使用定理 `Nat.mod_eq_of_lt`：∀ {a b : ℕ}, a < b → a % b = a
+· 使用定理 `List.mem_cons_self`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ a :: l
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `List.mem_cons_of_mem`：∀ {α : Type u_1} (y : α) {a : α} {l : List α}, a ∈
+ l → a ∈ y :: l
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `mul_left_cancel_iff_of_pos`：mul_left_cancel_iff_of_pos [PosMulReflectLE 
+α] (a0 : 0 < a) : a * b = a * c ↔ b = c
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `LinearOrderedCommMonoidWithZero.toPosMulStrictMono`：∀ {α : Type u_3} [se
+lf : LinearOrderedCommMonoidWithZero α], PosMulStrictMono α
+· 使用定理 `Nat.zero_lt_of_lt`：∀ {a b : ℕ}, a < b → 0 < b
 -/
-lemma ofDigits_inj_of_len_eq {b : Nat} (hb : 1 < b) {L1 L2 : List Nat}
-    (len : L1.length = L2.length) (w1 : forall l in L1, l < b) (w2 : forall l in L2, l < b)
+lemma ofDigits_inj_of_len_eq {b : ℕ} (hb : 1 < b) {L1 L2 : List ℕ}
+    (len : L1.length = L2.length) (w1 : ∀ l ∈ L1, l < b) (w2 : ∀ l ∈ L2, l < b)
     (h : ofDigits b L1 = ofDigits b L2) : L1 = L2 := by
   induction L1 generalizing L2 with
   | nil =>
@@ -1187,46 +1114,63 @@ lemma ofDigits_inj_of_len_eq {b : Nat} (hb : 1 < b) {L1 L2 : List Nat}
     simpa [mod_eq_of_lt (w2 d List.mem_cons_self),
       mod_eq_of_lt (w1 D List.mem_cons_self)] using H
   simp only [eqd, add_right_inj, mul_left_cancel_iff_of_pos (zero_lt_of_lt hb)] at h
-  have := ih len (fun a ha => w1 a <| List.mem_cons_of_mem D ha)
-    (fun a ha => w2 a <| List.mem_cons_of_mem d ha) h
-  rw [eqd]; rw [this]
+  have := ih len (fun a ha ↦ w1 a <| List.mem_cons_of_mem D ha)
+    (fun a ha ↦ w2 a <| List.mem_cons_of_mem d ha) h
+  rw [eqd, this]
 
-/--
-theorem `ofDigits_add_ofDigits_eq_ofDigits_zipWith_of_length_eq` / 定理 `ofDigits_add_ofDigits_eq_ofDigits_zipWith_of_length_eq`
+/-- The addition of ofDigits of two lists is equal to ofDigits of digit-wise addition of them -/
+/-
+**Nat.ofDigits_add_ofDigits_eq_ofDigits_zipWith_of_length_eq** 是 Mathlib 中的一个定理，
+位于命名空间 `Nat`。
+形式化陈述：ofDigits_add_ofDigits_eq_ofDigits_zipWith_of_length_eq {b : Nat} {l1 l2 : 
+List Nat} (h : l1.length = l2.length) : ofDigits b l1 + ofDigits b l2 = ofDigits
+ b (l1.zipWith (· + ·) l2)
+参数：h : l1.length = l2.length。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `List.zipWith_self`：∀ {α : Type u_1} {δ : Type u_2} {f : α → α → δ} {l : 
+List α}, List.zipWith f l l = List.map (fun a => f a a) l
+· 使用定理 `List.map_nil`：∀ {α : Type u} {β : Type v} {f : α → β}, List.map f [] = [
+]
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `Lean.Data.AC.Context.eq_of_norm`：∀ {α : Sort u_1} (ctx : Data.AC.Context
+ α) (a b : Data.AC.Expr),   (Data.AC.norm ctx a == Data.AC.norm ctx b) = true → 
+Data.AC.eval α ctx a …
+· 使用定理 `Nat.instAssociativeHMul`：Std.Associative fun x1 x2 => x1 * x2
+· 使用定理 `Nat.instCommutativeHMul`：Std.Commutative fun x1 x2 => x1 * x2
+· 使用定理 `Nat.instAssociativeHAdd`：Std.Associative fun x1 x2 => x1 + x2
+· 使用定理 `Nat.instCommutativeHAdd`：Std.Commutative fun x1 x2 => x1 + x2
 
-English:
-theorem ofDigits_add_ofDigits_eq_ofDigits_zipWith_of_length_eq
-  statement: {b : Nat} {l1 l2 : List Nat}
-  proof: by
-  induction l1 generalizing l2 with
-  | nil => simp_all [eq_comm, List.length_eq_zero_iff, ofDigits]
-  | cons hd₁ tl₁ ih₁ =>
-    induction l2 generalizing tl₁ with
-    | nil => simp_all
-    | cons hd₂ tl₂ ih₂ =>
-      simp_all only [List.length_cons, ofDigits_cons, add_left_inj,
-        eq_comm, List.zipWith_cons_cons]
-      rw [← ih₁ h.symm]; rw [mul_add]
-      ac_rfl
-
-中文:
-定理 ofDigits_add_ofDigits_eq_ofDigits_zipWith_of_length_eq
-  结论: {b : 自然数} {l1 l2 : 列表 自然数}
-  证明: by
-  induction l1 generalizing l2 with
-  | nil => simp_all [eq_comm, List.length_eq_zero_iff, ofDigits]
-  | cons hd₁ tl₁ ih₁ =>
-    induction l2 generalizing tl₁ with
-    | nil => simp_all
-    | cons hd₂ tl₂ ih₂ =>
-      simp_all only [List.length_cons, ofDigits_cons, add_left_inj,
-        eq_comm, List.zipWith_cons_cons]
-      rw [← ih₁ h.symm]; rw [mul_add]
-      ac_rfl
-
-Depends on / 依赖: List.length_cons, List.length_eq_zero_iff, List.zipWith_cons_cons, add_left_inj, eq_comm, generalizing, h.symm, length_cons, length_eq_zero_iff, mul_add, ofDigits, ofDigits_cons, zipWith_cons_cons
+--- 原说明 ---
+The addition of ofDigits of two lists is equal to ofDigits of digit-wise additio
+n of them
 -/
-theorem ofDigits_add_ofDigits_eq_ofDigits_zipWith_of_length_eq {b : Nat} {l1 l2 : List Nat}
+theorem ofDigits_add_ofDigits_eq_ofDigits_zipWith_of_length_eq {b : ℕ} {l1 l2 : List ℕ}
     (h : l1.length = l2.length) :
     ofDigits b l1 + ofDigits b l2 = ofDigits b (l1.zipWith (· + ·) l2) := by
   induction l1 generalizing l2 with
@@ -1237,17 +1181,82 @@ theorem ofDigits_add_ofDigits_eq_ofDigits_zipWith_of_length_eq {b : Nat} {l1 l2 
     | cons hd₂ tl₂ ih₂ =>
       simp_all only [List.length_cons, ofDigits_cons, add_left_inj,
         eq_comm, List.zipWith_cons_cons]
-      rw [← ih₁ h.symm]; rw [mul_add]
+      rw [← ih₁ h.symm, mul_add]
       ac_rfl
 
-/--
-theorem `digits_lt_base'` / 定理 `digits_lt_base'`
+/-- The digits in the base b+2 expansion of n are all less than b+2 -/
+/-
+**Nat.digits_lt_base'** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：digits_lt_base' {b m : Nat} : forall {d}, d in digits (b + 2) m -> d < b +
+ 2
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.digits_zero`：digits_zero (b : Nat) : digits b 0 = []
+· 使用定理 `noConfusion_of_Nat`：∀ {α : Sort u} (f : α → ℕ) {a b : α}, a = b → Bool.r
+ec False True ((f a).beq (f b))
+· 使用定理 `Nat.digits_add_two_add_one`：digits_add_two_add_one (b n : Nat) : digits 
+(b + 2) (n + 1) = ((n + 1) % (b + 2)) :: digits (b + 2) ((n + 1) / (b + 2))
+· 使用定理 `Nat.mod_lt`：∀ (x : ℕ) {y : ℕ}, 0 < y → x % y < y
+· 使用定理 `lt_of_not_ge`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬b ≤ a 
+→ a < b
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.cast_pos`：∀ {R : Type u_1} [inst : CommSemiring R] {
+a : R} {n : ℕ}, Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast + 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b : R}, a = a' → -a' = b → -a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Meta.NormNum.isInt_mul`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α → α} {a b : α} {a' b' c : ℤ},   f = HMul.hMul →     Mathlib.Meta.NormNum.IsI
+nt a a' →       Math…
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.of_raw`：∀ (α : Type u_1) [inst : Ring α] (n :
+ ℤ), Mathlib.Meta.NormNum.IsInt n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+（共 56 条，此处仅展示前 30 条）
 
-English:
-theorem digits_lt_base'
-  given: {b m : Nat}
-  statement: forall {d}, d in digits (b + 2) m -> d < b + 2
-  proof: by
+--- 原说明 ---
+The digits in the base b+2 expansion of n are all less than b+2
+-/
+theorem digits_lt_base' {b m : ℕ} : ∀ {d}, d ∈ digits (b + 2) m → d < b + 2 := by
   induction m using Nat.strongRecOn with | ind n IH => ?_
   intro d hd
   rcases n with - | n
@@ -1261,345 +1270,360 @@ theorem digits_lt_base'
     · apply Nat.div_lt_self <;> lia
     · assumption
 
-中文:
-定理 digits_lt_base'
-  条件: {b m : 自然数}
-  结论: 对任意 {d}, d in digits (b + 2) m -> d < b + 2
-  证明: by
-  induction m using Nat.strongRecOn with | ind n IH => ?_
-  intro d hd
-  rcases n with - | n
-  · rw [digits_zero] at hd
-    cases hd
-  -- base b+2 expansion of 0 has no digits
-  rw [digits_add_two_add_one] at hd
-  cases hd
-  · exact n.succ.mod_lt (by linarith)
-  · apply IH ((n + 1) / (b + 2))
-    · apply Nat.div_lt_self <;> lia
-    · assumption
+/-- The digits in the base b expansion of n are all less than b, if b ≥ 2 -/
+/-
+**Nat.digits_lt_base** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：digits_lt_base {b m d : Nat} (hb : 1 < b) (hd : d in digits b m) : d < b
+参数：hb : 1 < b；hd : d in digits b m。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Nat.digits_lt_base'`：digits_lt_base' {b m : Nat} : forall {d}, d in digi
+ts (b + 2) m -> d < b + 2
 
-Depends on / 依赖: Nat.strongRecOn, digits_zero, strongRecOn
+--- 原说明 ---
+The digits in the base b expansion of n are all less than b, if b ≥ 2
 -/
-theorem digits_lt_base' {b m : Nat} : forall {d}, d in digits (b + 2) m -> d < b + 2 := by
-  induction m using Nat.strongRecOn with | ind n IH => ?_
-  intro d hd
-  rcases n with - | n
-  · rw [digits_zero] at hd
-    cases hd
-  -- base b+2 expansion of 0 has no digits
-  rw [digits_add_two_add_one] at hd
-  cases hd
-  · exact n.succ.mod_lt (by linarith)
-  · apply IH ((n + 1) / (b + 2))
-    · apply Nat.div_lt_self <;> lia
-    · assumption
-
-/--
-theorem `digits_lt_base` / 定理 `digits_lt_base`
-
-English:
-theorem digits_lt_base
-  given: {b m d : Nat} (hb : 1 < b) (hd : d in digits b m)
-  statement: d < b
-  proof: by
+theorem digits_lt_base {b m d : ℕ} (hb : 1 < b) (hd : d ∈ digits b m) : d < b := by
   rcases b with (_ | _ | b) <;> simp_all [@digits_lt_base' _ m d]
 
-中文:
-定理 digits_lt_base
-  条件: {b m d : 自然数} (hb : 1 < b) (hd : d in digits b m)
-  结论: d < b
-  证明: by
-  rcases b with (_ | _ | b) <;> simp_all [@digits_lt_base' _ m d]
+/-- an n-digit number in base b + 2 is less than (b + 2)^n -/
+/-
+**Nat.ofDigits_lt_base_pow_length'** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ofDigits_lt_base_pow_length' {b : Nat} {l : List Nat} (hl : forall x in l,
+ x < b + 2) : ofDigits (b + 2) l < (b + 2) ^ l.length
+参数：hl : forall x in l, x < b + 2。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Nat.ofDigits.eq_2`：∀ {α : Type u_1} [inst : Semiring α] (b : α) (h : ℕ) 
+(t : List ℕ), Nat.ofDigits b (h :: t) = ↑h + b * Nat.ofDigits b t
+· 使用定理 `List.length_cons`：∀ {α : Type u} {a : α} {as : List α}, (a :: as).length
+ = as.length + 1
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `mul_le_mul`：∀ {α : Type u_1} [inst : Mul α] [inst_1 : Zero α] [inst_2 : 
+Preorder α] {a b c d : α} [PosMulMono α] [MulPosMono α],   a ≤ b → c ≤ d → 0 ≤ c
+…
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `List.mem_cons_of_mem`：∀ {α : Type u_1} (y : α) {a : α} {l : List α}, a ∈
+ l → a ∈ y :: l
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `Nat.zero_le`：∀ (n : ℕ), 0 ≤ n
+· 使用定理 `List.mem_cons_self`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ a :: l
+· 使用定理 `lt_of_not_ge`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬b ≤ a 
+→ a < b
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b : R}, a = a' → -a' = b → -a = b
+· 使用定理 `Mathlib.Tactic.Ring.cast_pos`：∀ {R : Type u_1} [inst : CommSemiring R] {
+a : R} {n : ℕ}, Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast + 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+（共 72 条，此处仅展示前 30 条）
 
-Depends on / 依赖: digits_lt_base
+--- 原说明 ---
+an n-digit number in base b + 2 is less than (b + 2)^n
 -/
-theorem digits_lt_base {b m d : Nat} (hb : 1 < b) (hd : d in digits b m) : d < b := by
-  rcases b with (_ | _ | b) <;> simp_all [@digits_lt_base' _ m d]
-
-/--
-theorem `ofDigits_lt_base_pow_length'` / 定理 `ofDigits_lt_base_pow_length'`
-
-English:
-theorem ofDigits_lt_base_pow_length'
-  given: {b : Nat} {l : List Nat} (hl : forall x in l, x < b + 2)
-  proof: by
-  induction l with
-  | nil => simp [ofDigits]
-  | cons hd tl IH =>
-    rw [ofDigits]; rw [List.length_cons]; rw [pow_succ]
-    have : (ofDigits (b + 2) tl + 1) * (b + 2) <= (b + 2) ^ tl.length * (b + 2) :=
-      mul_le_mul (IH fun x hx => hl _ (List.mem_cons_of_mem _ hx)) (by rfl) (by simp only [zero_le])
-        (Nat.zero_le _)
-    suffices ↑hd < b + 2 by linarith
-    exact hl hd List.mem_cons_self
-
-中文:
-定理 ofDigits_lt_base_pow_length'
-  条件: {b : 自然数} {l : 列表 自然数} (hl : 对任意 x in l, x < b + 2)
-  证明: by
-  induction l with
-  | nil => simp [ofDigits]
-  | cons hd tl IH =>
-    rw [ofDigits]; rw [List.length_cons]; rw [pow_succ]
-    have : (ofDigits (b + 2) tl + 1) * (b + 2) <= (b + 2) ^ tl.length * (b + 2) :=
-      mul_le_mul (IH fun x hx => hl _ (List.mem_cons_of_mem _ hx)) (by rfl) (by simp only [zero_le])
-        (Nat.zero_le _)
-    suffices ↑hd < b + 2 by linarith
-    exact hl hd List.mem_cons_self
-
-Depends on / 依赖: List.length_cons, List.mem_cons_of_mem, List.mem_cons_self, Nat.zero_le, length, length_cons, mem_cons_of_mem, mem_cons_self, mul_le_mul, ofDigits, pow_succ, tl.length, zero_le
--/
-theorem ofDigits_lt_base_pow_length' {b : Nat} {l : List Nat} (hl : forall x in l, x < b + 2) :
+theorem ofDigits_lt_base_pow_length' {b : ℕ} {l : List ℕ} (hl : ∀ x ∈ l, x < b + 2) :
     ofDigits (b + 2) l < (b + 2) ^ l.length := by
   induction l with
   | nil => simp [ofDigits]
   | cons hd tl IH =>
-    rw [ofDigits]; rw [List.length_cons]; rw [pow_succ]
-    have : (ofDigits (b + 2) tl + 1) * (b + 2) <= (b + 2) ^ tl.length * (b + 2) :=
+    rw [ofDigits, List.length_cons, pow_succ]
+    have : (ofDigits (b + 2) tl + 1) * (b + 2) ≤ (b + 2) ^ tl.length * (b + 2) :=
       mul_le_mul (IH fun x hx => hl _ (List.mem_cons_of_mem _ hx)) (by rfl) (by simp only [zero_le])
         (Nat.zero_le _)
     suffices ↑hd < b + 2 by linarith
     exact hl hd List.mem_cons_self
 
-/--
-theorem `ofDigits_lt_base_pow_length` / 定理 `ofDigits_lt_base_pow_length`
+/-- an n-digit number in base b is less than b^n if b > 1 -/
+/-
+**Nat.ofDigits_lt_base_pow_length** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ofDigits_lt_base_pow_length {b : Nat} {l : List Nat} (hb : 1 < b) (hl : fo
+rall x in l, x < b) : ofDigits b l < b ^ l.length
+参数：hb : 1 < b；hl : forall x in l, x < b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 
-English:
-theorem ofDigits_lt_base_pow_length
-  given: {b : Nat} {l : List Nat} (hb : 1 < b) (hl : forall x in l, x < b)
-  proof: by
-  rcases b with (_ | _ | b) <;> simp_all [ofDigits_lt_base_pow_length']
-
-中文:
-定理 ofDigits_lt_base_pow_length
-  条件: {b : 自然数} {l : 列表 自然数} (hb : 1 < b) (hl : 对任意 x in l, x < b)
-  证明: by
-  rcases b with (_ | _ | b) <;> simp_all [ofDigits_lt_base_pow_length']
-
-Depends on / 依赖: ofDigits_lt_base_pow_length
+--- 原说明 ---
+an n-digit number in base b is less than b^n if b > 1
 -/
-theorem ofDigits_lt_base_pow_length {b : Nat} {l : List Nat} (hb : 1 < b) (hl : forall x in l, x < b) :
+theorem ofDigits_lt_base_pow_length {b : ℕ} {l : List ℕ} (hb : 1 < b) (hl : ∀ x ∈ l, x < b) :
     ofDigits b l < b ^ l.length := by
   rcases b with (_ | _ | b) <;> simp_all [ofDigits_lt_base_pow_length']
 
-/--
-theorem `lt_base_pow_length_digits'` / 定理 `lt_base_pow_length_digits'`
+/-- Any number m is less than (b+2)^(number of digits in the base b + 2 representation of m) -/
+/-
+**Nat.lt_base_pow_length_digits'** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：lt_base_pow_length_digits' {b m : Nat} : m < (b + 2) ^ (digits (b + 2) m).
+length
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.ofDigits_digits`：ofDigits_digits (b n : Nat) : ofDigits b (digits b 
+n) = n
+· 使用定理 `Nat.ofDigits_lt_base_pow_length'`：ofDigits_lt_base_pow_length' {b : Nat}
+ {l : List Nat} (hl : forall x in l, x < b + 2) : ofDigits (b + 2) l < (b + 2) ^
+ l.length
+· 使用定理 `Nat.digits_lt_base'`：digits_lt_base' {b m : Nat} : forall {d}, d in digi
+ts (b + 2) m -> d < b + 2
 
-English:
-theorem lt_base_pow_length_digits'
-  given: {b m : Nat}
-  statement: m < (b + 2) ^ (digits (b + 2) m).length
-  proof: by
+--- 原说明 ---
+Any number m is less than (b+2)^(number of digits in the base b + 2 representati
+on of m)
+-/
+theorem lt_base_pow_length_digits' {b m : ℕ} : m < (b + 2) ^ (digits (b + 2) m).length := by
   convert! @ofDigits_lt_base_pow_length' b (digits (b + 2) m) fun _ => digits_lt_base'
   rw [ofDigits_digits (b + 2) m]
 
-中文:
-定理 lt_base_pow_length_digits'
-  条件: {b m : 自然数}
-  结论: m < (b + 2) ^ (digits (b + 2) m).length
-  证明: by
-  convert! @ofDigits_lt_base_pow_length' b (digits (b + 2) m) fun _ => digits_lt_base'
-  rw [ofDigits_digits (b + 2) m]
+/-- Any number m is less than b^(number of digits in the base b representation of m) -/
+/-
+**Nat.lt_base_pow_length_digits** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：lt_base_pow_length_digits {b m : Nat} (hb : 1 < b) : m < b ^ (digits b m).
+length
+参数：hb : 1 < b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 
-Depends on / 依赖: convert, digits, digits_lt_base, ofDigits_digits, ofDigits_lt_base_pow_length
+--- 原说明 ---
+Any number m is less than b^(number of digits in the base b representation of m)
 -/
-theorem lt_base_pow_length_digits' {b m : Nat} : m < (b + 2) ^ (digits (b + 2) m).length := by
-  convert! @ofDigits_lt_base_pow_length' b (digits (b + 2) m) fun _ => digits_lt_base'
-  rw [ofDigits_digits (b + 2) m]
-
-/--
-theorem `lt_base_pow_length_digits` / 定理 `lt_base_pow_length_digits`
-
-English:
-theorem lt_base_pow_length_digits
-  given: {b m : Nat} (hb : 1 < b)
-  statement: m < b ^ (digits b m).length
-  proof: by
+theorem lt_base_pow_length_digits {b m : ℕ} (hb : 1 < b) : m < b ^ (digits b m).length := by
   rcases b with (_ | _ | b) <;> simp_all [lt_base_pow_length_digits']
-
-中文:
-定理 lt_base_pow_length_digits
-  条件: {b m : 自然数} (hb : 1 < b)
-  结论: m < b ^ (digits b m).length
-  证明: by
-  rcases b with (_ | _ | b) <;> simp_all [lt_base_pow_length_digits']
-
-Depends on / 依赖: lt_base_pow_length_digits
+/-
+**Nat.digits_base_mul** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：digits_base_mul {b m : Nat} (hb : 1 < b) (hm : 0 < m) : b.digits (b * m) =
+ 0 :: b.digits m
+参数：hb : 1 < b；hm : 0 < m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.digits_def'`：∀ {b : ℕ}, 1 < b → ∀ {n : ℕ}, 0 < n → b.digits n = n % 
+b :: b.digits (n / b)
+· 使用定理 `mul_pos`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 : Pr
+eorder α] [PosMulStrictMono α], 0 < a → 0 < b → 0 < a * b
+· 使用定理 `LinearOrderedCommMonoidWithZero.toPosMulStrictMono`：∀ {α : Type u_3} [se
+lf : LinearOrderedCommMonoidWithZero α], PosMulStrictMono α
+· 使用引理 `lt_trans`：lt_trans : a < b -> b < c -> a < c
+· 使用引理 `Mathlib.Meta.Positivity.pos_of_isNat`：pos_of_isNat {n : Nat} [Semiring A
+] [PartialOrder A] [IsOrderedRing A] [Nontrivial A] (h : NormNum.IsNat e n) (w :
+ Nat.ble 1 n = true) : 0 <…
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.mul_mod_right`：∀ (m n : ℕ), m * n % m = 0
+· 使用定理 `Nat.mul_div_right`：∀ (n : ℕ) {m : ℕ}, 0 < m → m * n / m = n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem lt_base_pow_length_digits {b m : Nat} (hb : 1 < b) : m < b ^ (digits b m).length := by
-  rcases b with (_ | _ | b) <;> simp_all [lt_base_pow_length_digits']
-
-/--
-theorem `digits_base_mul` / 定理 `digits_base_mul`
-
-English:
-theorem digits_base_mul
-  given: {b m : Nat} (hb : 1 < b) (hm : 0 < m)
-  proof: by
-  rw [digits_def' hb (by positivity)]
-  simp [mul_div_right m (by positivity)]
-
-中文:
-定理 digits_base_mul
-  条件: {b m : 自然数} (hb : 1 < b) (hm : 0 < m)
-  证明: by
-  rw [digits_def' hb (by positivity)]
-  simp [mul_div_right m (by positivity)]
-
-Depends on / 依赖: digits_def, mul_div_right
--/
-theorem digits_base_mul {b m : Nat} (hb : 1 < b) (hm : 0 < m) :
+theorem digits_base_mul {b m : ℕ} (hb : 1 < b) (hm : 0 < m) :
     b.digits (b * m) = 0 :: b.digits m := by
   rw [digits_def' hb (by positivity)]
   simp [mul_div_right m (by positivity)]
-
-/--
-theorem `digits_base_pow_mul` / 定理 `digits_base_pow_mul`
-
-English:
-theorem digits_base_pow_mul
-  given: {b k m : Nat} (hb : 1 < b) (hm : 0 < m)
-  proof: by
-  induction k generalizing m with
-  | zero => simp
-  | succ k ih =>
-    rw [pow_succ']; rw [mul_assoc]; rw [digits_base_mul hb (by positivity)]; rw [ih hm]; rw [List.replicate_succ]; rw [List.cons_append]
-
-中文:
-定理 digits_base_pow_mul
-  条件: {b k m : 自然数} (hb : 1 < b) (hm : 0 < m)
-  证明: by
-  induction k generalizing m with
-  | zero => simp
-  | succ k ih =>
-    rw [pow_succ']; rw [mul_assoc]; rw [digits_base_mul hb (by positivity)]; rw [ih hm]; rw [List.replicate_succ]; rw [List.cons_append]
-
-Depends on / 依赖: List.cons_append, List.replicate_succ, cons_append, digits_base_mul, generalizing, mul_assoc, pow_succ, replicate_succ
+/-
+**Nat.digits_base_pow_mul** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：digits_base_pow_mul {b k m : Nat} (hb : 1 < b) (hm : 0 < m) : digits b (b 
+^ k * m) = List.replicate k 0 ++ digits b m
+参数：hb : 1 < b；hm : 0 < m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Nat.pow_succ'`：∀ {m n : ℕ}, m ^ n.succ = m * m ^ n
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Nat.digits_base_mul`：digits_base_mul {b m : Nat} (hb : 1 < b) (hm : 0 < 
+m) : b.digits (b * m) = 0 :: b.digits m
+· 使用定理 `mul_pos`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 : Pr
+eorder α] [PosMulStrictMono α], 0 < a → 0 < b → 0 < a * b
+· 使用定理 `LinearOrderedCommMonoidWithZero.toPosMulStrictMono`：∀ {α : Type u_3} [se
+lf : LinearOrderedCommMonoidWithZero α], PosMulStrictMono α
+· 使用定理 `pow_pos`：∀ {M₀ : Type u_2} [inst : MonoidWithZero M₀] [inst_1 : PartialO
+rder M₀] {a : M₀} [PosMulStrictMono M₀]   [ZeroLEOneClass M₀], 0 < a → ∀ (n :…
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `IsStrictOrderedRing.toZeroLEOneClass`：∀ {R : Type u_1} {inst : Semiring 
+R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], ZeroLEOneClass R
+· 使用引理 `lt_trans`：lt_trans : a < b -> b < c -> a < c
+· 使用引理 `Mathlib.Meta.Positivity.pos_of_isNat`：pos_of_isNat {n : Nat} [Semiring A
+] [PartialOrder A] [IsOrderedRing A] [Nontrivial A] (h : NormNum.IsNat e n) (w :
+ Nat.ble 1 n = true) : 0 <…
+· 使用定理 `IsStrictOrderedRing.toIsOrderedRing`：∀ {R : Type u} [inst : Semiring R] 
+[inst_1 : PartialOrder R] [IsStrictOrderedRing R], IsOrderedRing R
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `List.replicate_succ`：∀ {α : Type u} {a : α} {n : ℕ}, List.replicate (n +
+ 1) a = a :: List.replicate n a
+· 使用定理 `List.cons_append`：∀ {α : Type u} {a : α} {as bs : List α}, a :: as ++ bs
+ = a :: (as ++ bs)
 -/
-theorem digits_base_pow_mul {b k m : Nat} (hb : 1 < b) (hm : 0 < m) :
+theorem digits_base_pow_mul {b k m : ℕ} (hb : 1 < b) (hm : 0 < m) :
     digits b (b ^ k * m) = List.replicate k 0 ++ digits b m := by
   induction k generalizing m with
   | zero => simp
   | succ k ih =>
-    rw [pow_succ']; rw [mul_assoc]; rw [digits_base_mul hb (by positivity)]; rw [ih hm]; rw [List.replicate_succ]; rw [List.cons_append]
-
-/--
-theorem `ofDigits_digits_append_digits` / 定理 `ofDigits_digits_append_digits`
-
-English:
-theorem ofDigits_digits_append_digits
-  given: {b m n : Nat}
-  proof: by
-  rw [ofDigits_append]; rw [ofDigits_digits]; rw [ofDigits_digits]
-
-@[gcongr, mono]
-
-中文:
-定理 ofDigits_digits_append_digits
-  条件: {b m n : 自然数}
-  证明: by
-  rw [ofDigits_append]; rw [ofDigits_digits]; rw [ofDigits_digits]
-
-@[gcongr, mono]
-
-Depends on / 依赖: ofDigits_append, ofDigits_digits
+    rw [pow_succ', mul_assoc, digits_base_mul hb (by positivity), ih hm, List.replicate_succ,
+      List.cons_append]
+/-
+**Nat.ofDigits_digits_append_digits** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ofDigits_digits_append_digits {b m n : Nat} : ofDigits b (digits b n ++ di
+gits b m) = n + b ^ (digits b n).length * m
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.ofDigits_append`：ofDigits_append {b : Nat} {l1 l2 : List Nat} : ofDi
+gits b (l1 ++ l2) = ofDigits b l1 + b ^ l1.length * ofDigits b l2
+· 使用定理 `Nat.ofDigits_digits`：ofDigits_digits (b n : Nat) : ofDigits b (digits b 
+n) = n
 -/
-theorem ofDigits_digits_append_digits {b m n : Nat} :
+theorem ofDigits_digits_append_digits {b m n : ℕ} :
     ofDigits b (digits b n ++ digits b m) = n + b ^ (digits b n).length * m := by
-  rw [ofDigits_append]; rw [ofDigits_digits]; rw [ofDigits_digits]
+  rw [ofDigits_append, ofDigits_digits, ofDigits_digits]
 
 @[gcongr, mono]
-/--
-theorem `ofDigits_monotone` / 定理 `ofDigits_monotone`
-
-English:
-theorem ofDigits_monotone
-  given: {p q : Nat} (L : List Nat) (h : p <= q)
-  statement: ofDigits p L <= ofDigits q L
-  proof: by
-  induction L with
-  | nil => rfl
-  | cons _ _ hi =>
-    simp only [ofDigits, cast_id, add_le_add_iff_left]
-    exact Nat.mul_le_mul h hi
-
-中文:
-定理 ofDigits_monotone
-  条件: {p q : 自然数} (L : 列表 自然数) (h : p <= q)
-  结论: ofDigits p L <= ofDigits q L
-  证明: by
-  induction L with
-  | nil => rfl
-  | cons _ _ hi =>
-    simp only [ofDigits, cast_id, add_le_add_iff_left]
-    exact Nat.mul_le_mul h hi
-
-Depends on / 依赖: Nat.mul_le_mul, add_le_add_iff_left, cast_id, mul_le_mul, ofDigits
+/-
+**Nat.ofDigits_monotone** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：ofDigits_monotone {p q : Nat} (L : List Nat) (h : p <= q) : ofDigits p L <
+= ofDigits q L
+参数：L : List Nat；h : p <= q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `Nat.mul_le_mul`：∀ {n₁ m₁ n₂ m₂ : ℕ}, n₁ ≤ n₂ → m₁ ≤ m₂ → n₁ * m₁ ≤ n₂ * 
+m₂
 -/
-theorem ofDigits_monotone {p q : Nat} (L : List Nat) (h : p <= q) : ofDigits p L <= ofDigits q L := by
+theorem ofDigits_monotone {p q : ℕ} (L : List ℕ) (h : p ≤ q) : ofDigits p L ≤ ofDigits q L := by
   induction L with
   | nil => rfl
   | cons _ _ hi =>
     simp only [ofDigits, cast_id, add_le_add_iff_left]
     exact Nat.mul_le_mul h hi
-
-/--
-theorem `sum_le_ofDigits` / 定理 `sum_le_ofDigits`
-
-English:
-theorem sum_le_ofDigits
-  given: {p : Nat} (L : List Nat) (h : 1 <= p)
-  statement: L.sum <= ofDigits p L
-  proof: (ofDigits_one L).symm ▸ ofDigits_monotone L h
-
-中文:
-定理 sum_le_ofDigits
-  条件: {p : 自然数} (L : 列表 自然数) (h : 1 <= p)
-  结论: L.求和 <= ofDigits p L
-  证明: (ofDigits_one L).symm ▸ ofDigits_monotone L h
-
-Depends on / 依赖: ofDigits_monotone, ofDigits_one
+/-
+**Nat.sum_le_ofDigits** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：sum_le_ofDigits {p : Nat} (L : List Nat) (h : 1 <= p) : L.sum <= ofDigits 
+p L
+参数：L : List Nat；h : 1 <= p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.ofDigits_monotone`：ofDigits_monotone {p q : Nat} (L : List Nat) (h :
+ p <= q) : ofDigits p L <= ofDigits q L
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.ofDigits_one`：ofDigits_one (L : List Nat) : ofDigits 1 L = L.sum
 -/
-theorem sum_le_ofDigits {p : Nat} (L : List Nat) (h : 1 <= p) : L.sum <= ofDigits p L :=
+theorem sum_le_ofDigits {p : ℕ} (L : List ℕ) (h : 1 ≤ p) : L.sum ≤ ofDigits p L :=
   (ofDigits_one L).symm ▸ ofDigits_monotone L h
-
-/--
-theorem `digit_sum_le` / 定理 `digit_sum_le`
-
-English:
-theorem digit_sum_le
-  given: (p n : Nat)
-  statement: List.sum (digits p n) <= n
-  proof: by
-  induction n with
-  | zero => exact digits_zero _ ▸ Nat.le_refl (List.sum [])
-  | succ n =>
-    induction p with
-    | zero => rw [digits_zero_succ, List.sum_cons, List.sum_nil, add_zero]
-    | succ p =>
-      nth_rw 2 [← ofDigits_digits p.succ (n + 1)]
-      rw [← ofDigits_one <| digits p.succ n.succ]
-exact ofDigits_monotone (digits p.succ n.succ) Nat.succ_pos p
-
-中文:
-定理 digit_sum_le
-  条件: (p n : 自然数)
-  结论: 列表.求和 (digits p n) <= n
-  证明: by
-  induction n with
-  | zero => exact digits_zero _ ▸ Nat.le_refl (List.sum [])
-  | succ n =>
-    induction p with
-    | zero => rw [digits_zero_succ, List.sum_cons, List.sum_nil, add_zero]
-    | succ p =>
-      nth_rw 2 [← ofDigits_digits p.succ (n + 1)]
-      rw [← ofDigits_one <| digits p.succ n.succ]
-exact ofDigits_monotone (digits p.succ n.succ) Nat.succ_pos p
-
-Depends on / 依赖: List.sum, List.sum_cons, List.sum_nil, Nat.le_refl, Nat.succ_pos, add_zero, digits, digits_zero, digits_zero_succ, le_refl, n.succ, nth_rw, ofDigits_digits, ofDigits_monotone, ofDigits_one, p.succ, succ_pos, sum_cons, sum_nil
+/-
+**Nat.digit_sum_le** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：digit_sum_le (p n : Nat) : List.sum (digits p n) <= n
+参数：p n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.le_refl`：∀ (n : ℕ), n ≤ n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.digits_zero`：digits_zero (b : Nat) : digits b 0 = []
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.digits_zero_succ`：digits_zero_succ (n : Nat) : digits 0 n.succ = [n+
+1]
+· 使用定理 `List.sum_cons`：∀ {α : Type u} [inst : Add α] [inst_1 : Zero α] {a : α} {
+l : List α}, (a :: l).sum = a + l.sum
+· 使用定理 `List.sum_nil`：∀ {α : Type u} [inst : Add α] [inst_1 : Zero α], [].sum = 
+0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `Nat.ofDigits_digits`：ofDigits_digits (b n : Nat) : ofDigits b (digits b 
+n) = n
+· 使用定理 `Nat.ofDigits_one`：ofDigits_one (L : List Nat) : ofDigits 1 L = L.sum
+· 使用定理 `Nat.ofDigits_monotone`：ofDigits_monotone {p q : Nat} (L : List Nat) (h :
+ p <= q) : ofDigits p L <= ofDigits q L
+· 使用定理 `Nat.succ_pos`：∀ (n : ℕ), 0 < n.succ
 -/
-theorem digit_sum_le (p n : Nat) : List.sum (digits p n) <= n := by
+theorem digit_sum_le (p n : ℕ) : List.sum (digits p n) ≤ n := by
   induction n with
   | zero => exact digits_zero _ ▸ Nat.le_refl (List.sum [])
   | succ n =>
@@ -1608,142 +1632,176 @@ theorem digit_sum_le (p n : Nat) : List.sum (digits p n) <= n := by
     | succ p =>
       nth_rw 2 [← ofDigits_digits p.succ (n + 1)]
       rw [← ofDigits_one <| digits p.succ n.succ]
-exact ofDigits_monotone (digits p.succ n.succ) Nat.succ_pos p
+      exact ofDigits_monotone (digits p.succ n.succ) <| Nat.succ_pos p
 
-/--
-lemma `ofDigits_div_eq_ofDigits_tail` / 引理 `ofDigits_div_eq_ofDigits_tail`
-
-English:
-lemma ofDigits_div_eq_ofDigits_tail
-  statement: {p : Nat} (hpos : 0 < p) (digits : List Nat)
-  proof: by
-  induction digits with
-  | nil => simp [ofDigits]
-  | cons hd tl =>
-    refine Eq.trans (add_mul_div_left hd _ hpos) ?_
-    rw [Nat.div_eq_of_lt <| w₁ _ List.mem_cons_self]; rw [zero_add]; rw [List.tail_cons]
-
-中文:
-引理 ofDigits_div_eq_ofDigits_tail
-  结论: {p : 自然数} (hpos : 0 < p) (digits : 列表 自然数)
-  证明: by
-  induction digits with
-  | nil => simp [ofDigits]
-  | cons hd tl =>
-    refine Eq.trans (add_mul_div_left hd _ hpos) ?_
-    rw [Nat.div_eq_of_lt <| w₁ _ List.mem_cons_self]; rw [zero_add]; rw [List.tail_cons]
-
-Depends on / 依赖: Eq.trans, List.mem_cons_self, List.tail_cons, Nat.div_eq_of_lt, add_mul_div_left, digits, div_eq_of_lt, mem_cons_self, ofDigits, tail_cons, zero_add
+/-- Interpreting as a base `p` number and dividing by `p` is the same as interpreting the tail.
 -/
-lemma ofDigits_div_eq_ofDigits_tail {p : Nat} (hpos : 0 < p) (digits : List Nat)
-    (w₁ : forall l in digits, l < p) : ofDigits p digits / p = ofDigits p digits.tail := by
+/-
+**Nat.ofDigits_div_eq_ofDigits_tail** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：ofDigits_div_eq_ofDigits_tail {p : Nat} (hpos : 0 < p) (digits : List Nat)
+ (w₁ : forall l in digits, l < p) : ofDigits p digits / p = ofDigits p digits.ta
+il
+参数：hpos : 0 < p；digits : List Nat；w₁ : forall l in digits, l < p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.zero_div`：∀ (b : ℕ), 0 / b = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Nat.add_mul_div_left`：∀ (x z : ℕ) {y : ℕ}, 0 < y → (x + y * z) / y = x /
+ y + z
+· 使用定理 `Nat.div_eq_of_lt`：∀ {a b : ℕ}, a < b → a / b = 0
+· 使用定理 `List.mem_cons_self`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ a :: l
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `List.tail_cons`：∀ {α : Type u} {a : α} {as : List α}, (a :: as).tail = a
+s
+
+--- 原说明 ---
+Interpreting as a base `p` number and dividing by `p` is the same as interpretin
+g the tail.
+-/
+lemma ofDigits_div_eq_ofDigits_tail {p : ℕ} (hpos : 0 < p) (digits : List ℕ)
+    (w₁ : ∀ l ∈ digits, l < p) : ofDigits p digits / p = ofDigits p digits.tail := by
   induction digits with
   | nil => simp [ofDigits]
   | cons hd tl =>
     refine Eq.trans (add_mul_div_left hd _ hpos) ?_
-    rw [Nat.div_eq_of_lt <| w₁ _ List.mem_cons_self]; rw [zero_add]; rw [List.tail_cons]
+    rw [Nat.div_eq_of_lt <| w₁ _ List.mem_cons_self, zero_add, List.tail_cons]
 
-/--
-lemma `ofDigits_div_pow_eq_ofDigits_drop` / 引理 `ofDigits_div_pow_eq_ofDigits_drop`
+/-- Interpreting as a base `p` number and dividing by `p^i` is the same as dropping `i`.
+-/
+/-
+**Nat.ofDigits_div_pow_eq_ofDigits_drop** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：ofDigits_div_pow_eq_ofDigits_drop {p : Nat} (i : Nat) (hpos : 0 < p) (digi
+ts : List Nat) (w₁ : forall l in digits, l < p) : ofDigits p digits / p ^ i = of
+Digits p (digits.drop i)
+参数：i : Nat；hpos : 0 < p；digits : List Nat；w₁ : forall l in digits, l < p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Nat.div_one`：∀ (n : ℕ), n / 1 = n
+· 使用定理 `List.drop_zero`：∀ {α : Type u} {l : List α}, List.drop 0 l = l
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Nat.pow_succ`：∀ (n m : ℕ), n ^ m.succ = n ^ m * n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.div_div_eq_div_mul`：∀ (m n k : ℕ), m / n / k = m / (n * k)
+· 使用引理 `Nat.ofDigits_div_eq_ofDigits_tail`：ofDigits_div_eq_ofDigits_tail {p : Na
+t} (hpos : 0 < p) (digits : List Nat) (w₁ : forall l in digits, l < p) : ofDigit
+s p digits / p = ofDigi…
+· 使用定理 `List.mem_of_mem_drop`：∀ {α : Type u_1} {a : α} {i : ℕ} {l : List α}, a ∈
+ List.drop i l → a ∈ l
+· 使用定理 `List.drop_one`：∀ {α : Type u_1} {l : List α}, List.drop 1 l = l.tail
+· 使用定理 `List.drop_drop`：∀ {α : Type u_1} {i j : ℕ} {l : List α}, List.drop i (Li
+st.drop j l) = List.drop (j + i) l
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
 
-English:
+--- 原说明 ---
+Interpreting as a base `p` number and dividing by `p^i` is the same as dropping 
+`i`.
+-/
 lemma ofDigits_div_pow_eq_ofDigits_drop
-  proof: by
-  induction i with
-  | zero => simp
-  | succ i hi =>
-    rw [Nat.pow_succ]; rw [← Nat.div_div_eq_div_mul]; rw [hi]; rw [ofDigits_div_eq_ofDigits_tail hpos
-(List.drop i digits) fun x hx => w₁ x List.mem_of_mem_drop hx]; rw [← List.drop_one]; rw [List.drop_drop]; rw [add_comm]
-
-中文:
-引理 ofDigits_div_pow_eq_ofDigits_drop
-  证明: by
-  induction i with
-  | zero => simp
-  | succ i hi =>
-    rw [Nat.pow_succ]; rw [← Nat.div_div_eq_div_mul]; rw [hi]; rw [ofDigits_div_eq_ofDigits_tail hpos
-(List.drop i digits) fun x hx => w₁ x List.mem_of_mem_drop hx]; rw [← List.drop_one]; rw [List.drop_drop]; rw [add_comm]
-
-Depends on / 依赖: List.drop, List.drop_drop, List.drop_one, List.mem_of_mem_drop, Nat.div_div_eq_div_mul, Nat.pow_succ, add_comm, digits, div_div_eq_div_mul, drop_drop, drop_one, mem_of_mem_drop, ofDigits_div_eq_ofDigits_tail, pow_succ
--/
-lemma ofDigits_div_pow_eq_ofDigits_drop
-    {p : Nat} (i : Nat) (hpos : 0 < p) (digits : List Nat) (w₁ : forall l in digits, l < p) :
+    {p : ℕ} (i : ℕ) (hpos : 0 < p) (digits : List ℕ) (w₁ : ∀ l ∈ digits, l < p) :
     ofDigits p digits / p ^ i = ofDigits p (digits.drop i) := by
   induction i with
   | zero => simp
   | succ i hi =>
-    rw [Nat.pow_succ]; rw [← Nat.div_div_eq_div_mul]; rw [hi]; rw [ofDigits_div_eq_ofDigits_tail hpos
-(List.drop i digits) fun x hx => w₁ x List.mem_of_mem_drop hx]; rw [← List.drop_one]; rw [List.drop_drop]; rw [add_comm]
+    rw [Nat.pow_succ, ← Nat.div_div_eq_div_mul, hi, ofDigits_div_eq_ofDigits_tail hpos
+      (List.drop i digits) fun x hx ↦ w₁ x <| List.mem_of_mem_drop hx, ← List.drop_one,
+      List.drop_drop, add_comm]
 
-/--
-lemma `self_div_pow_eq_ofDigits_drop` / 引理 `self_div_pow_eq_ofDigits_drop`
-
-English:
-lemma self_div_pow_eq_ofDigits_drop
-  given: {p : Nat} (i n : Nat) (h : 2 <= p)
-  proof: by
-  convert!
-    ofDigits_div_pow_eq_ofDigits_drop i (zero_lt_of_lt h) (p.digits n)
-      (fun l hl => digits_lt_base h hl)
-  exact (ofDigits_digits p n).symm
-
-中文:
-引理 self_div_pow_eq_ofDigits_drop
-  条件: {p : 自然数} (i n : 自然数) (h : 2 <= p)
-  证明: by
-  convert!
-    ofDigits_div_pow_eq_ofDigits_drop i (zero_lt_of_lt h) (p.digits n)
-      (fun l hl => digits_lt_base h hl)
-  exact (ofDigits_digits p n).symm
-
-Depends on / 依赖: convert, digits, digits_lt_base, ofDigits_digits, ofDigits_div_pow_eq_ofDigits_drop, p.digits, zero_lt_of_lt
+/-- Dividing `n` by `p^i` is like truncating the first `i` digits of `n` in base `p`.
 -/
-lemma self_div_pow_eq_ofDigits_drop {p : Nat} (i n : Nat) (h : 2 <= p) :
+/-
+**Nat.self_div_pow_eq_ofDigits_drop** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：self_div_pow_eq_ofDigits_drop {p : Nat} (i n : Nat) (h : 2 <= p) : n / p ^
+ i = ofDigits p ((p.digits n).drop i)
+参数：i n : Nat；h : 2 <= p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.ofDigits_digits`：ofDigits_digits (b n : Nat) : ofDigits b (digits b 
+n) = n
+· 使用引理 `Nat.ofDigits_div_pow_eq_ofDigits_drop`：ofDigits_div_pow_eq_ofDigits_drop
+ {p : Nat} (i : Nat) (hpos : 0 < p) (digits : List Nat) (w₁ : forall l in digits
+, l < p) : ofDigits p digit…
+· 使用定理 `Nat.zero_lt_of_lt`：∀ {a b : ℕ}, a < b → 0 < b
+· 使用定理 `Nat.digits_lt_base`：digits_lt_base {b m d : Nat} (hb : 1 < b) (hd : d in
+ digits b m) : d < b
+
+--- 原说明 ---
+Dividing `n` by `p^i` is like truncating the first `i` digits of `n` in base `p`
+.
+-/
+lemma self_div_pow_eq_ofDigits_drop {p : ℕ} (i n : ℕ) (h : 2 ≤ p) :
     n / p ^ i = ofDigits p ((p.digits n).drop i) := by
   convert!
     ofDigits_div_pow_eq_ofDigits_drop i (zero_lt_of_lt h) (p.digits n)
-      (fun l hl => digits_lt_base h hl)
+      (fun l hl ↦ digits_lt_base h hl)
   exact (ofDigits_digits p n).symm
 
-/--
-lemma `ofDigits_mod_pow_eq_ofDigits_take` / 引理 `ofDigits_mod_pow_eq_ofDigits_take`
+/-- Interpreting as a base `p` number and modulo `p^i` is the same as taking the first `i` digits.
+-/
+/-
+**Nat.ofDigits_mod_pow_eq_ofDigits_take** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：ofDigits_mod_pow_eq_ofDigits_take {p : Nat} (i : Nat) (hpos : 0 < p) (digi
+ts : List Nat) (w₁ : forall l in digits, l < p) : ofDigits p digits % p ^ i = of
+Digits p (digits.take i)
+参数：i : Nat；hpos : 0 < p；digits : List Nat；w₁ : forall l in digits, l < p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Nat.mod_one`：∀ (x : ℕ), x % 1 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `List.take_nil`：∀ {α : Type u} {i : ℕ}, List.take i [] = []
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `List.take_succ_cons`：∀ {α : Type u} {a : α} {as : List α} {i : ℕ}, List.
+take (i + 1) (a :: as) = a :: List.take i as
+· 使用定理 `Nat.ofDigits_cons`：ofDigits_cons {b hd} {tl : List Nat} : ofDigits b (hd
+ :: tl) = hd + b * ofDigits b tl
+· 使用定理 `List.mem_cons_of_mem`：∀ {α : Type u_1} (y : α) {a : α} {l : List α}, a ∈
+ l → a ∈ y :: l
+· 使用定理 `Nat.add_mod`：∀ (a b n : ℕ), (a + b) % n = (a % n + b % n) % n
+· 使用定理 `Nat.mod_eq_of_lt`：∀ {a b : ℕ}, a < b → a % b = a
+· 使用引理 `lt_of_lt_of_le`：lt_of_lt_of_le (hab : a < b) (hbc : b <= c) : a < c
+· 使用定理 `List.mem_cons_self`：∀ {α : Type u_1} {a : α} {l : List α}, a ∈ a :: l
+· 使用定理 `Nat.le_pow`：∀ {a b : ℕ}, 0 < b → a ≤ a ^ b
+· 使用定理 `Nat.add_one_pos`：∀ (n : ℕ), 0 < n + 1
+· 使用定理 `Nat.pow_succ'`：∀ {m n : ℕ}, m ^ n.succ = m * m ^ n
+· 使用定理 `Nat.mul_mod_mul_left`：∀ (z x y : ℕ), z * x % (z * y) = z * (x % y)
+· 使用定理 `Nat.add_lt_of_lt_sub`：∀ {a b c : ℕ}, a < c - b → a + b < c
+· 使用定理 `Nat.mul_sub`：∀ (n m k : ℕ), n * (m - k) = n * m - n * k
+· 使用定理 `Nat.le_mul_of_pos_right`：∀ {m : ℕ} (n : ℕ), 0 < m → n ≤ n * m
+· 使用定理 `Nat.sub_pos_of_lt`：∀ {m n : ℕ}, m < n → 0 < n - m
+· 使用定理 `Nat.mod_lt`：∀ (x : ℕ) {y : ℕ}, 0 < y → x % y < y
+· 使用定理 `pow_pos`：∀ {M₀ : Type u_2} [inst : MonoidWithZero M₀] [inst_1 : PartialO
+rder M₀] {a : M₀} [PosMulStrictMono M₀]   [ZeroLEOneClass M₀], 0 < a → ∀ (n :…
+· 使用定理 `LinearOrderedCommMonoidWithZero.toPosMulStrictMono`：∀ {α : Type u_3} [se
+lf : LinearOrderedCommMonoidWithZero α], PosMulStrictMono α
 
-English:
-lemma ofDigits_mod_pow_eq_ofDigits_take
-  proof: by
-  induction i generalizing digits with
-  | zero => simp [mod_one]
-  | succ i ih =>
-    cases digits with
-    | nil => simp
-    | cons hd tl =>
-      rw [List.take_succ_cons]; rw [ofDigits_cons]; rw [ofDigits_cons]; rw [← ih _ fun x hx => w₁ x List.mem_cons_of_mem hd hx]; rw [add_mod]; rw [mod_eq_of_lt lt_of_lt_of_le (w₁ hd List.mem_cons_self) (le_pow <| add_one_pos i)]; rw [pow_succ']; rw [mul_mod_mul_left]; rw [mod_eq_of_lt]
-      apply add_lt_of_lt_sub
-      apply lt_of_lt_of_le (b := p)
-      · exact w₁ hd List.mem_cons_self
-      · rw [← Nat.mul_sub]
-exact Nat.le_mul_of_pos_right _ Nat.sub_pos_of_lt mod_lt _ pow_pos hpos i
-
-中文:
-引理 ofDigits_mod_pow_eq_ofDigits_take
-  证明: by
-  induction i generalizing digits with
-  | zero => simp [mod_one]
-  | succ i ih =>
-    cases digits with
-    | nil => simp
-    | cons hd tl =>
-      rw [List.take_succ_cons]; rw [ofDigits_cons]; rw [ofDigits_cons]; rw [← ih _ fun x hx => w₁ x List.mem_cons_of_mem hd hx]; rw [add_mod]; rw [mod_eq_of_lt lt_of_lt_of_le (w₁ hd List.mem_cons_self) (le_pow <| add_one_pos i)]; rw [pow_succ']; rw [mul_mod_mul_left]; rw [mod_eq_of_lt]
-      apply add_lt_of_lt_sub
-      apply lt_of_lt_of_le (b := p)
-      · exact w₁ hd List.mem_cons_self
-      · rw [← Nat.mul_sub]
-exact Nat.le_mul_of_pos_right _ Nat.sub_pos_of_lt mod_lt _ pow_pos hpos i
-
-Depends on / 依赖: List.mem_cons_of_mem, List.mem_cons_self, List.take_succ_cons, add_lt_of_lt_sub, add_mod, add_one_pos, digits, generalizing, le_pow, lt_of_lt_of_le, mem_cons_of_mem, mem_cons_self, mod_eq_of_lt, mod_one, mul_mod_mul_left, ofDigits_cons, pow_succ, take_succ_cons
+--- 原说明 ---
+Interpreting as a base `p` number and modulo `p^i` is the same as taking the fir
+st `i` digits.
 -/
 lemma ofDigits_mod_pow_eq_ofDigits_take
-    {p : Nat} (i : Nat) (hpos : 0 < p) (digits : List Nat) (w₁ : forall l in digits, l < p) :
+    {p : ℕ} (i : ℕ) (hpos : 0 < p) (digits : List ℕ) (w₁ : ∀ l ∈ digits, l < p) :
     ofDigits p digits % p ^ i = ofDigits p (digits.take i) := by
   induction i generalizing digits with
   | zero => simp [mod_one]
@@ -1751,198 +1809,192 @@ lemma ofDigits_mod_pow_eq_ofDigits_take
     cases digits with
     | nil => simp
     | cons hd tl =>
-      rw [List.take_succ_cons]; rw [ofDigits_cons]; rw [ofDigits_cons]; rw [← ih _ fun x hx => w₁ x List.mem_cons_of_mem hd hx]; rw [add_mod]; rw [mod_eq_of_lt lt_of_lt_of_le (w₁ hd List.mem_cons_self) (le_pow <| add_one_pos i)]; rw [pow_succ']; rw [mul_mod_mul_left]; rw [mod_eq_of_lt]
+      rw [List.take_succ_cons, ofDigits_cons, ofDigits_cons,
+        ← ih _ fun x hx ↦ w₁ x <| List.mem_cons_of_mem hd hx, add_mod,
+        mod_eq_of_lt <| lt_of_lt_of_le (w₁ hd List.mem_cons_self) (le_pow <| add_one_pos i),
+        pow_succ', mul_mod_mul_left, mod_eq_of_lt]
       apply add_lt_of_lt_sub
       apply lt_of_lt_of_le (b := p)
       · exact w₁ hd List.mem_cons_self
       · rw [← Nat.mul_sub]
-exact Nat.le_mul_of_pos_right _ Nat.sub_pos_of_lt mod_lt _ pow_pos hpos i
+        exact Nat.le_mul_of_pos_right _ <| Nat.sub_pos_of_lt <| mod_lt _ <| pow_pos hpos i
 
-/--
-lemma `self_mod_pow_eq_ofDigits_take` / 引理 `self_mod_pow_eq_ofDigits_take`
-
-English:
-lemma self_mod_pow_eq_ofDigits_take
-  given: {p : Nat} (i n : Nat) (h : 2 <= p)
-  proof: by
-  convert!
-    ofDigits_mod_pow_eq_ofDigits_take i (zero_lt_of_lt h) (p.digits n)
-      (fun l hl => digits_lt_base h hl)
-  exact (ofDigits_digits p n).symm
-
-中文:
-引理 self_mod_pow_eq_ofDigits_take
-  条件: {p : 自然数} (i n : 自然数) (h : 2 <= p)
-  证明: by
-  convert!
-    ofDigits_mod_pow_eq_ofDigits_take i (zero_lt_of_lt h) (p.digits n)
-      (fun l hl => digits_lt_base h hl)
-  exact (ofDigits_digits p n).symm
-
-Depends on / 依赖: convert, digits, digits_lt_base, ofDigits_digits, ofDigits_mod_pow_eq_ofDigits_take, p.digits, zero_lt_of_lt
+/-- `n` modulo `p^i` is like taking the least significant `i` digits of `n` in base `p`.
 -/
-lemma self_mod_pow_eq_ofDigits_take {p : Nat} (i n : Nat) (h : 2 <= p) :
+/-
+**Nat.self_mod_pow_eq_ofDigits_take** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：self_mod_pow_eq_ofDigits_take {p : Nat} (i n : Nat) (h : 2 <= p) : n % p ^
+ i = ofDigits p ((p.digits n).take i)
+参数：i n : Nat；h : 2 <= p。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.ofDigits_digits`：ofDigits_digits (b n : Nat) : ofDigits b (digits b 
+n) = n
+· 使用引理 `Nat.ofDigits_mod_pow_eq_ofDigits_take`：ofDigits_mod_pow_eq_ofDigits_take
+ {p : Nat} (i : Nat) (hpos : 0 < p) (digits : List Nat) (w₁ : forall l in digits
+, l < p) : ofDigits p digit…
+· 使用定理 `Nat.zero_lt_of_lt`：∀ {a b : ℕ}, a < b → 0 < b
+· 使用定理 `Nat.digits_lt_base`：digits_lt_base {b m d : Nat} (hb : 1 < b) (hd : d in
+ digits b m) : d < b
+
+--- 原说明 ---
+`n` modulo `p^i` is like taking the least significant `i` digits of `n` in base 
+`p`.
+-/
+lemma self_mod_pow_eq_ofDigits_take {p : ℕ} (i n : ℕ) (h : 2 ≤ p) :
     n % p ^ i = ofDigits p ((p.digits n).take i) := by
   convert!
     ofDigits_mod_pow_eq_ofDigits_take i (zero_lt_of_lt h) (p.digits n)
-      (fun l hl => digits_lt_base h hl)
+      (fun l hl ↦ digits_lt_base h hl)
   exact (ofDigits_digits p n).symm
 
+/-! ### `Nat.toDigits` length -/
 
-/--
-lemma `toDigitsCore_lens_eq_aux` / 引理 `toDigitsCore_lens_eq_aux`
+/-
+**Nat.toDigitsCore_lens_eq_aux** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：toDigitsCore_lens_eq_aux (b f : Nat) : forall (n : Nat) (l1 l2 : List Char
+), l1.length = l2.length -> (Nat.toDigitsCore b f n l1).length = (Nat.toDigitsCo
+re b f n l2).length
+参数：b f : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_true`：∀ {α : Sort u_1} {x : Decidable True} (t e : α), (if True then 
+t else e) = t
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `if_false`：∀ {α : Sort u_1} {x : Decidable False} (t e : α), (if False th
+en t else e) = e
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `trivial`：True
 
-English:
-lemma toDigitsCore_lens_eq_aux
-  given: (b f : Nat)
-  proof: by
-  induction f with (simp only [Nat.toDigitsCore]; intro n l1 l2 hlen)
-  | zero => assumption
-  | succ f ih =>
-    if hx : n / b = 0 then
-      simp only [hx, if_true, List.length, congrArg (fun l => l + 1) hlen]
-    else
-      simp only [hx, if_false]
-      specialize ih (n / b) (Nat.digitChar (n % b) :: l1) (Nat.digitChar (n % b) :: l2)
-      simp only [List.length, congrArg (fun l => l + 1) hlen] at ih
-      exact ih trivial
-
-中文:
-引理 toDigitsCore_lens_eq_aux
-  条件: (b f : 自然数)
-  证明: by
-  induction f with (simp only [Nat.toDigitsCore]; intro n l1 l2 hlen)
-  | zero => assumption
-  | succ f ih =>
-    if hx : n / b = 0 then
-      simp only [hx, if_true, List.length, congrArg (fun l => l + 1) hlen]
-    else
-      simp only [hx, if_false]
-      specialize ih (n / b) (Nat.digitChar (n % b) :: l1) (Nat.digitChar (n % b) :: l2)
-      simp only [List.length, congrArg (fun l => l + 1) hlen] at ih
-      exact ih trivial
-
-Depends on / 依赖: List.length, Nat.digitChar, Nat.toDigitsCore, digitChar, if_false, if_true, length, specialize, toDigitsCore
+--- 原说明 ---
+### `Nat.toDigits` length
 -/
 lemma toDigitsCore_lens_eq_aux (b f : Nat) :
-    forall (n : Nat) (l1 l2 : List Char), l1.length = l2.length ->
+    ∀ (n : Nat) (l1 l2 : List Char), l1.length = l2.length →
     (Nat.toDigitsCore b f n l1).length = (Nat.toDigitsCore b f n l2).length := by
   induction f with (simp only [Nat.toDigitsCore]; intro n l1 l2 hlen)
   | zero => assumption
   | succ f ih =>
     if hx : n / b = 0 then
-      simp only [hx, if_true, List.length, congrArg (fun l => l + 1) hlen]
+      simp only [hx, if_true, List.length, congrArg (fun l ↦ l + 1) hlen]
     else
       simp only [hx, if_false]
       specialize ih (n / b) (Nat.digitChar (n % b) :: l1) (Nat.digitChar (n % b) :: l2)
-      simp only [List.length, congrArg (fun l => l + 1) hlen] at ih
+      simp only [List.length, congrArg (fun l ↦ l + 1) hlen] at ih
       exact ih trivial
-
-/--
-lemma `toDigitsCore_lens_eq` / 引理 `toDigitsCore_lens_eq`
-
-English:
-lemma toDigitsCore_lens_eq
-  given: (b f : Nat)
-  statement: forall (n : Nat) (c : Char) (tl : List Char),
-  proof: by
-  induction f with (intro n c tl; simp only [Nat.toDigitsCore, List.length])
-  | succ f ih =>
-    grind
-
-中文:
-引理 toDigitsCore_lens_eq
-  条件: (b f : 自然数)
-  结论: 对任意 (n : 自然数) (c : Char) (tl : 列表 Char),
-  证明: by
-  induction f with (intro n c tl; simp only [Nat.toDigitsCore, List.length])
-  | succ f ih =>
-    grind
-
-Depends on / 依赖: List.length, Nat.toDigitsCore, length, toDigitsCore
+/-
+**Nat.toDigitsCore_lens_eq** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：toDigitsCore_lens_eq (b f : Nat) : forall (n : Nat) (c : Char) (tl : List 
+Char), (Nat.toDigitsCore b f n (c :: tl)).length = (Nat.toDigitsCore b f n tl).l
+ength + 1
+参数：b f : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma toDigitsCore_lens_eq (b f : Nat) : forall (n : Nat) (c : Char) (tl : List Char),
+lemma toDigitsCore_lens_eq (b f : Nat) : ∀ (n : Nat) (c : Char) (tl : List Char),
     (Nat.toDigitsCore b f n (c :: tl)).length = (Nat.toDigitsCore b f n tl).length + 1 := by
   induction f with (intro n c tl; simp only [Nat.toDigitsCore, List.length])
   | succ f ih =>
     grind
-
-/--
-lemma `nat_repr_len_aux` / 引理 `nat_repr_len_aux`
-
-English:
-lemma nat_repr_len_aux
-  given: (n b e : Nat) (h_b_pos : 0 < b)
-  statement: n < b ^ e.succ -> n / b < b ^ e
-  proof: by
-  simp only [Nat.pow_succ]
-  exact (@Nat.div_lt_iff_lt_mul b n (b ^ e) h_b_pos).mpr
-
-中文:
-引理 nat_repr_len_aux
-  条件: (n b e : 自然数) (h_b_pos : 0 < b)
-  结论: n < b ^ e.succ -> n / b < b ^ e
-  证明: by
-  simp only [Nat.pow_succ]
-  exact (@Nat.div_lt_iff_lt_mul b n (b ^ e) h_b_pos).mpr
-
-Depends on / 依赖: Nat.div_lt_iff_lt_mul, Nat.pow_succ, div_lt_iff_lt_mul, h_b_pos, pow_succ
+/-
+**Nat.nat_repr_len_aux** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：nat_repr_len_aux (n b e : Nat) (h_b_pos : 0 < b) : n < b ^ e.succ -> n / b
+ < b ^ e
+参数：n b e : Nat；h_b_pos : 0 < b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.div_lt_iff_lt_mul`：∀ {k x y : ℕ}, 0 < k → (x / k < y ↔ x < y * k)
 -/
-lemma nat_repr_len_aux (n b e : Nat) (h_b_pos : 0 < b) : n < b ^ e.succ -> n / b < b ^ e := by
+lemma nat_repr_len_aux (n b e : Nat) (h_b_pos : 0 < b) : n < b ^ e.succ → n / b < b ^ e := by
   simp only [Nat.pow_succ]
   exact (@Nat.div_lt_iff_lt_mul b n (b ^ e) h_b_pos).mpr
 
-/--
-lemma `toDigitsCore_length` / 引理 `toDigitsCore_length`
+/-- The String representation produced by toDigitsCore has the proper length relative to
+the number of digits in `n < e` for some base `b`. Since this works with any base,
+it can be used for binary, decimal, and hex. -/
+/-
+**Nat.toDigitsCore_length** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：toDigitsCore_length (b f n e : Nat) (h_e_pos : 0 < e) (hlt : n < b ^ e) : 
+(Nat.toDigitsCore b f n []).length <= e
+参数：b f n e : Nat；h_e_pos : 0 < e；hlt : n < b ^ e。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.lt_irrefl`：∀ (n : ℕ), ¬n < n
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.div_eq_of_lt`：∀ {a b : ℕ}, a < b → a / b = 0
+· 使用引理 `pow_one`：pow_one (a : M) : a ^ 1 = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsRightCancelAdd.addRightReflectLE_of_addRightReflectLT`：∀ (N : Type u_2
+) [inst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightReflect
+LT N],   AddRightReflectLE N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `contravariant_swap_add_of_contravariant_add`：∀ (N : Type u_2) (r : N → N
+ → Prop) [inst : AddCommSemigroup N] [ContravariantClass N N (fun x1 x2 => x1 + 
+x2) r],   ContravariantClass N N …
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用引理 `Nat.toDigitsCore_lens_eq`：toDigitsCore_lens_eq (b f : Nat) : forall (n :
+ Nat) (c : Char) (tl : List Char), (Nat.toDigitsCore b f n (c :: tl)).length = (
+Nat.toDigitsCo…
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Nat.add_one_pos`：∀ (n : ℕ), 0 < n + 1
+· 使用定理 `Nat.div_lt_of_lt_mul`：∀ {m n k : ℕ}, m < n * k → m / n < k
+· 使用定理 `Nat.pow_add_one'`：∀ {m n : ℕ}, m ^ (n + 1) = m * m ^ n
 
-English:
-lemma toDigitsCore_length
-  given: (b f n e : Nat) (h_e_pos : 0 < e) (hlt : n < b ^ e)
-  proof: by
-  induction f generalizing n e hlt h_e_pos with
-  | zero => simp only [toDigitsCore, List.length, zero_le]
-  | succ f ih =>
-    simp only [toDigitsCore]
-    cases e with
-    | zero => exact False.elim (Nat.lt_irrefl 0 h_e_pos)
-    | succ e =>
-      cases e with
-      | zero =>
-        rw [zero_add]; rw [pow_one] at hlt
-        simp [Nat.div_eq_of_lt hlt]
-      | succ e =>
-        specialize ih (n / b) _ (add_one_pos e) (Nat.div_lt_of_lt_mul <| by rwa [← pow_add_one'])
-        split_ifs
-        · simp
-        · simp only [toDigitsCore_lens_eq b f (n / b) (Nat.digitChar <| n % b),
-            Nat.succ_le_succ_iff, ih]
-
-中文:
-引理 toDigitsCore_length
-  条件: (b f n e : 自然数) (h_e_pos : 0 < e) (hlt : n < b ^ e)
-  证明: by
-  induction f generalizing n e hlt h_e_pos with
-  | zero => simp only [toDigitsCore, List.length, zero_le]
-  | succ f ih =>
-    simp only [toDigitsCore]
-    cases e with
-    | zero => exact False.elim (Nat.lt_irrefl 0 h_e_pos)
-    | succ e =>
-      cases e with
-      | zero =>
-        rw [zero_add]; rw [pow_one] at hlt
-        simp [Nat.div_eq_of_lt hlt]
-      | succ e =>
-        specialize ih (n / b) _ (add_one_pos e) (Nat.div_lt_of_lt_mul <| by rwa [← pow_add_one'])
-        split_ifs
-        · simp
-        · simp only [toDigitsCore_lens_eq b f (n / b) (Nat.digitChar <| n % b),
-            Nat.succ_le_succ_iff, ih]
-
-Depends on / 依赖: False.elim, List.length, Nat.digitChar, Nat.div_eq_of_lt, Nat.div_lt_of_lt_mul, Nat.lt_irrefl, add_one_pos, digitChar, div_eq_of_lt, div_lt_of_lt_mul, generalizing, h_e_pos, length, lt_irrefl, pow_add_one, pow_one, specialize, split_ifs, toDigitsCore, toDigitsCore_lens_eq
+--- 原说明 ---
+The String representation produced by toDigitsCore has the proper length relativ
+e to
+the number of digits in `n < e` for some base `b`. Since this works with any bas
+e,
+it can be used for binary, decimal, and hex.
 -/
 lemma toDigitsCore_length (b f n e : Nat) (h_e_pos : 0 < e) (hlt : n < b ^ e) :
-    (Nat.toDigitsCore b f n []).length <= e := by
+    (Nat.toDigitsCore b f n []).length ≤ e := by
   induction f generalizing n e hlt h_e_pos with
   | zero => simp only [toDigitsCore, List.length, zero_le]
   | succ f ih =>
@@ -1952,7 +2004,7 @@ lemma toDigitsCore_length (b f n e : Nat) (h_e_pos : 0 < e) (hlt : n < b ^ e) :
     | succ e =>
       cases e with
       | zero =>
-        rw [zero_add]; rw [pow_one] at hlt
+        rw [zero_add, pow_one] at hlt
         simp [Nat.div_eq_of_lt hlt]
       | succ e =>
         specialize ih (n / b) _ (add_one_pos e) (Nat.div_lt_of_lt_mul <| by rwa [← pow_add_one'])
@@ -1961,46 +2013,60 @@ lemma toDigitsCore_length (b f n e : Nat) (h_e_pos : 0 < e) (hlt : n < b ^ e) :
         · simp only [toDigitsCore_lens_eq b f (n / b) (Nat.digitChar <| n % b),
             Nat.succ_le_succ_iff, ih]
 
-/--
-lemma `toDigits_length` / 引理 `toDigits_length`
+/-- The core implementation of `Nat.toDigits` returns a String with length less than or equal to the
+number of digits in the base-`b` number (represented by `e`). For example, the string
+representation of any number less than `b ^ 3` has a length less than or equal to 3. -/
+/-
+**Nat.toDigits_length** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：toDigits_length (b n e : Nat) : 0 < e -> n < b ^ e -> (Nat.toDigits b n).l
+ength <= e
+参数：b n e : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Nat.toDigitsCore_length`：toDigitsCore_length (b f n e : Nat) (h_e_pos : 
+0 < e) (hlt : n < b ^ e) : (Nat.toDigitsCore b f n []).length <= e
 
-English:
-lemma toDigits_length
-  given: (b n e : Nat)
-  statement: 0 < e -> n < b ^ e -> (Nat.toDigits b n).length <= e
-  proof: toDigitsCore_length _ _ _ _
-
-中文:
-引理 toDigits_length
-  条件: (b n e : 自然数)
-  结论: 0 < e -> n < b ^ e -> (自然数.toDigits b n).length <= e
-  证明: toDigitsCore_length _ _ _ _
-
-Depends on / 依赖: toDigitsCore_length
+--- 原说明 ---
+The core implementation of `Nat.toDigits` returns a String with length less than
+ or equal to the
+number of digits in the base-`b` number (represented by `e`). For example, the s
+tring
+representation of any number less than `b ^ 3` has a length less than or equal t
+o 3.
 -/
-lemma toDigits_length (b n e : Nat) : 0 < e -> n < b ^ e -> (Nat.toDigits b n).length <= e :=
+lemma toDigits_length (b n e : Nat) : 0 < e → n < b ^ e → (Nat.toDigits b n).length ≤ e :=
   toDigitsCore_length _ _ _ _
 
-/--
-lemma `repr_length` / 引理 `repr_length`
+/-- The core implementation of `Nat.repr` returns a String with length less than or equal to the
+number of digits in the decimal number (represented by `e`). For example, the decimal string
+representation of any number less than 1000 (10 ^ 3) has a length less than or equal to 3. -/
+/-
+**Nat.repr_length** 是 Mathlib 中的一个引理，位于命名空间 `Nat`。
+形式化陈述：repr_length (n e : Nat) : 0 < e -> n < 10 ^ e -> (Nat.repr n).length <= e
+参数：n e : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `String.length_ofList`：∀ {l : List Char}, (String.ofList l).length = l.le
+ngth
+· 使用引理 `Nat.toDigits_length`：toDigits_length (b n e : Nat) : 0 < e -> n < b ^ e 
+-> (Nat.toDigits b n).length <= e
 
-English:
-lemma repr_length
-  given: (n e : Nat)
-  statement: 0 < e -> n < 10 ^ e -> (Nat.repr n).length <= e
-  proof: by
-  simpa [Nat.repr] using toDigits_length _ _ _
-
-中文:
-引理 repr_length
-  条件: (n e : 自然数)
-  结论: 0 < e -> n < 10 ^ e -> (自然数.repr n).length <= e
-  证明: by
-  simpa [Nat.repr] using toDigits_length _ _ _
-
-Depends on / 依赖: Nat.repr, toDigits_length
+--- 原说明 ---
+The core implementation of `Nat.repr` returns a String with length less than or 
+equal to the
+number of digits in the decimal number (represented by `e`). For example, the de
+cimal string
+representation of any number less than 1000 (10 ^ 3) has a length less than or e
+qual to 3.
 -/
-lemma repr_length (n e : Nat) : 0 < e -> n < 10 ^ e -> (Nat.repr n).length <= e := by
+lemma repr_length (n e : Nat) : 0 < e → n < 10 ^ e → (Nat.repr n).length ≤ e := by
   simpa [Nat.repr] using toDigits_length _ _ _
 
 end Nat
+

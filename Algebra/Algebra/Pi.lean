@@ -32,75 +32,40 @@ variable (ι : Type*)
 variable {R : Type*}
 
 -- The family of types already equipped with instances
-variable (A : ι -> Type*)
-variable [CommSemiring R] [forall i, Semiring (A i)] [forall i, Algebra R (A i)]
+variable (A : ι → Type*)
+variable [CommSemiring R] [∀ i, Semiring (A i)] [∀ i, Algebra R (A i)]
 
-/--
-Instance `algebra` / 实例 `algebra`
-
-English:
-instance algebra
-  signature: : Algebra R (Π i, A i) where
-  body: RingHom.pi fun i => algebraMap R (A i)
-  commutes' := fun a f => by ext; simp [Algebra.commutes]
-  smul_def' := fun a f => by ext; simp [Algebra.smul_def]
-
-@[push ←]
-
-中文:
-实例 algebra
-  签名: : 代数 R (Π i, A i) where
-  定义体: RingHom.pi fun i => algebraMap R (A i)
-  commutes' := fun a f => by ext; simp [Algebra.commutes]
-  smul_def' := fun a f => by ext; simp [Algebra.smul_def]
-
-@[push ←]
-
-Depends on / 依赖: RingHom, RingHom.pi, algebraMap
+/-
+**Pi.algebra** 是 Mathlib 中的一个实例，位于命名空间 `Pi`。
+形式化陈述：algebra : Algebra R (Π i, A i) where algebraMap
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance algebra : Algebra R (Π i, A i) where
-  algebraMap := RingHom.pi fun i => algebraMap R (A i)
-  commutes' := fun a f => by ext; simp [Algebra.commutes]
-  smul_def' := fun a f => by ext; simp [Algebra.smul_def]
+  algebraMap := RingHom.pi fun i ↦ algebraMap R (A i)
+  commutes' := fun a f ↦ by ext; simp [Algebra.commutes]
+  smul_def' := fun a f ↦ by ext; simp [Algebra.smul_def]
 
 @[push ←]
-/--
-theorem `algebraMap_def` / 定理 `algebraMap_def`
-
-English:
-theorem algebraMap_def
-  given: (a : R)
-  statement: algebraMap R (Π i, A i) a = fun i => algebraMap R (A i) a
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 algebraMap_def
-  条件: (a : R)
-  结论: algebraMap R (Π i, A i) a = fun i => algebraMap R (A i) a
-  证明: rfl
-
-@[simp]
+/-
+**Pi.algebraMap_def** 是 Mathlib 中的一个定理，位于命名空间 `Pi`。
+形式化陈述：algebraMap_def (a : R) : algebraMap R (Π i, A i) a = fun i => algebraMap R
+ (A i) a
+参数：a : R。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem algebraMap_def (a : R) : algebraMap R (Π i, A i) a = fun i => algebraMap R (A i) a :=
+theorem algebraMap_def (a : R) : algebraMap R (Π i, A i) a = fun i ↦ algebraMap R (A i) a :=
   rfl
 
 @[simp]
-/--
-theorem `algebraMap_apply` / 定理 `algebraMap_apply`
-
-English:
-theorem algebraMap_apply
-  given: (a : R) (i : ι)
-  statement: algebraMap R (Π i, A i) a i = algebraMap R (A i) a
-  proof: rfl
-
-中文:
-定理 algebraMap_apply
-  条件: (a : R) (i : ι)
-  结论: algebraMap R (Π i, A i) a i = algebraMap R (A i) a
-  证明: rfl
+/-
+**Pi.algebraMap_apply** 是 Mathlib 中的一个定理，位于命名空间 `Pi`。
+形式化陈述：algebraMap_apply (a : R) (i : ι) : algebraMap R (Π i, A i) a i = algebraMa
+p R (A i) a
+参数：a : R；i : ι。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algebraMap_apply (a : R) (i : ι) : algebraMap R (Π i, A i) a i = algebraMap R (A i) a :=
   rfl
@@ -111,176 +76,120 @@ variable {A} in
 /-- A family of algebra homomorphisms `g i : B →ₐ[R] A i` defines an algebra homomorphism
 `AlgHom.pi g : B →ₐ[R] Π i, A i` given by `AlgHom.pi g x i = g i x`. -/
 @[simps!]
-/--
-Definition of `_root_.AlgHom.pi` / `_root_.AlgHom.pi` 的定义
+/-
+**Pi._root_.AlgHom.pi** 是 Mathlib 中的一个定义，位于命名空间 `Pi`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition _root_.AlgHom.pi
-  signature: {B : Type*} [Semiring B] [Algebra R B] (g : Π i, B ->ₐ[R] A i)
-  body: RingHom.pi fun i => (g i).toRingHom
-  commutes' r := by ext; simp
-
-中文:
-定义 _root_.代数态射.pi
-  签名: {B : 类型} [半环 B] [代数 R B] (g : Π i, B ->ₐ[R] A i)
-  定义体: RingHom.pi fun i => (g i).toRingHom
-  commutes' r := by ext; simp
-
-Depends on / 依赖: RingHom, RingHom.pi, toRingHom
+--- 原说明 ---
+A family of algebra homomorphisms `g i : B →ₐ[R] A i` defines an algebra homomor
+phism
+`AlgHom.pi g : B →ₐ[R] Π i, A i` given by `AlgHom.pi g x i = g i x`.
 -/
-def _root_.AlgHom.pi {B : Type*} [Semiring B] [Algebra R B] (g : Π i, B ->ₐ[R] A i) :
-    B ->ₐ[R] Π i, A i where
-  __ := RingHom.pi fun i => (g i).toRingHom
+def _root_.AlgHom.pi {B : Type*} [Semiring B] [Algebra R B] (g : Π i, B →ₐ[R] A i) :
+    B →ₐ[R] Π i, A i where
+  __ := RingHom.pi fun i ↦ (g i).toRingHom
   commutes' r := by ext; simp
 
 variable {A} in
-/--
-theorem `_root_.AlgHom.pi_comp` / 定理 `_root_.AlgHom.pi_comp`
+/-- `AlgHom.pi` commutes with composition. -/
+/-
+**Pi._root_.AlgHom.pi_comp** 是 Mathlib 中的一个定理，位于命名空间 `Pi`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem _root_.AlgHom.pi_comp
-  statement: {B C : Type*} [Semiring B] [Algebra R B] [Semiring C] [Algebra R C]
-  proof: rfl
-
-中文:
-定理 _root_.代数态射.pi_comp
-  结论: {B C : 类型} [半环 B] [代数 R B] [半环 C] [代数 R C]
-  证明: rfl
+--- 原说明 ---
+`AlgHom.pi` commutes with composition.
 -/
 theorem _root_.AlgHom.pi_comp {B C : Type*} [Semiring B] [Algebra R B] [Semiring C] [Algebra R C]
-    (g : forall i, C ->ₐ[R] A i) (h : B ->ₐ[R] C) :
-    (AlgHom.pi g).comp h = AlgHom.pi (fun i => (g i).comp h) := rfl
+    (g : ∀ i, C →ₐ[R] A i) (h : B →ₐ[R] C) :
+    (AlgHom.pi g).comp h = AlgHom.pi (fun i ↦ (g i).comp h) := rfl
 
 variable (R)
 
 /-- Use `AlgHom.pi` instead. -/
 @[deprecated AlgHom.pi (since := "2026-05-30")]
-/--
-Definition of `algHom` / `algHom` 的定义
+/-
+**Pi.algHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `Pi`。
+形式化陈述：algHom {B : Type*} [Semiring B] [Algebra R B] (g : Π i, B ->ₐ[R] A i) : B 
+->ₐ[R] Π i, A i
+参数：g : Π i, B ->ₐ[R] A i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation algHom
-  signature: {B : Type*} [Semiring B] [Algebra R B] (g : Π i, B ->ₐ[R] A i)
-  body: .pi g
-
-中文:
-缩写 algHom
-  签名: {B : 类型} [半环 B] [代数 R B] (g : Π i, B ->ₐ[R] A i)
-  定义体: .pi g
+--- 原说明 ---
+Use `AlgHom.pi` instead.
 -/
-abbrev algHom {B : Type*} [Semiring B] [Algebra R B] (g : Π i, B ->ₐ[R] A i) : B ->ₐ[R] Π i, A i :=
+abbrev algHom {B : Type*} [Semiring B] [Algebra R B] (g : Π i, B →ₐ[R] A i) : B →ₐ[R] Π i, A i :=
   .pi g
 
 /-- Use `AlgHom.pi_apply` instead. -/
 @[deprecated AlgHom.pi_apply (since := "2026-05-30")]
-/--
-theorem `algHom_apply` / 定理 `algHom_apply`
+/-
+**Pi.algHom_apply** 是 Mathlib 中的一个定理，位于命名空间 `Pi`。
+形式化陈述：algHom_apply {B : Type*} [Semiring B] [Algebra R B] (g : Π i, B ->ₐ[R] A i
+) (x : B) (i : ι) : Pi.algHom R A g x i = g i x
+参数：g : Π i, B ->ₐ[R] A i；x : B；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.pi_apply`：∀ {ι : Type u_1} {R : Type u_2} {A : ι → Type u_3} [ins
+t : CommSemiring R] [inst_1 : (i : ι) → Semiring (A i)]   [inst_2 : (i : ι) → Al
+gebra…
 
-English:
-theorem algHom_apply
-  statement: {B : Type*} [Semiring B] [Algebra R B]
-  proof: AlgHom.pi_apply g x i
-
-@[deprecated AlgHom.pi_comp (since := "2026-05-30")]
-
-中文:
-定理 algHom_apply
-  结论: {B : 类型} [半环 B] [代数 R B]
-  证明: AlgHom.pi_apply g x i
-
-@[deprecated AlgHom.pi_comp (since := "2026-05-30")]
-
-Depends on / 依赖: AlgHom, AlgHom.pi_apply, pi_apply
+--- 原说明 ---
+Use `AlgHom.pi_apply` instead.
 -/
 theorem algHom_apply {B : Type*} [Semiring B] [Algebra R B]
-    (g : Π i, B ->ₐ[R] A i) (x : B) (i : ι) : Pi.algHom R A g x i = g i x :=
+    (g : Π i, B →ₐ[R] A i) (x : B) (i : ι) : Pi.algHom R A g x i = g i x :=
   AlgHom.pi_apply g x i
 
 @[deprecated AlgHom.pi_comp (since := "2026-05-30")]
-/--
-theorem `algHom_comp` / 定理 `algHom_comp`
-
-English:
-theorem algHom_comp
-  statement: {B C : Type*} [Semiring B] [Algebra R B] [Semiring C] [Algebra R C]
-  proof: rfl
-
-中文:
-定理 algHom_comp
-  结论: {B C : 类型} [半环 B] [代数 R B] [半环 C] [代数 R C]
-  证明: rfl
+/-
+**Pi.algHom_comp** 是 Mathlib 中的一个定理，位于命名空间 `Pi`。
+形式化陈述：algHom_comp {B C : Type*} [Semiring B] [Algebra R B] [Semiring C] [Algebra
+ R C] (g : forall i, C ->ₐ[R] A i) (h : B ->ₐ[R] C) : (algHom R A g).comp h = al
+gHom R A (fun i => (g i).comp h)
+参数：g : forall i, C ->ₐ[R] A i；h : B ->ₐ[R] C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem algHom_comp {B C : Type*} [Semiring B] [Algebra R B] [Semiring C] [Algebra R C]
-    (g : forall i, C ->ₐ[R] A i) (h : B ->ₐ[R] C) :
-    (algHom R A g).comp h = algHom R A (fun i => (g i).comp h) := rfl
+    (g : ∀ i, C →ₐ[R] A i) (h : B →ₐ[R] C) :
+    (algHom R A g).comp h = algHom R A (fun i ↦ (g i).comp h) := rfl
 
 /-- `Function.eval` as an `AlgHom`. The name matches `Pi.evalRingHom`, `Pi.evalMonoidHom`,
 etc. -/
 @[simps]
-/--
-Definition of `evalAlgHom` / `evalAlgHom` 的定义
+/-
+**Pi.evalAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `Pi`。
+形式化陈述：evalAlgHom (i : ι) : (Π i, A i) ->ₐ[R] A i
+参数：i : ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition evalAlgHom
-  signature: (i : ι)
-  body: { Pi.evalRingHom A i with
-    toFun := fun f => f i
-    commutes' := fun _ => rfl }
-
-中文:
-定义 evalAlgHom
-  签名: (i : ι)
-  定义体: { Pi.evalRingHom A i with
-    toFun := fun f => f i
-    commutes' := fun _ => rfl }
-
-Depends on / 依赖: Pi.evalRingHom, commutes, evalRingHom
+--- 原说明 ---
+`Function.eval` as an `AlgHom`. The name matches `Pi.evalRingHom`, `Pi.evalMonoi
+dHom`,
+etc.
 -/
-def evalAlgHom (i : ι) : (Π i, A i) ->ₐ[R] A i :=
+def evalAlgHom (i : ι) : (Π i, A i) →ₐ[R] A i :=
   { Pi.evalRingHom A i with
-    toFun := fun f => f i
-    commutes' := fun _ => rfl }
-
-/--
-lemma `coe_evalAlgHom` / 引理 `coe_evalAlgHom`
-
-English:
-lemma coe_evalAlgHom
-  given: (i : ι)
-  statement: evalAlgHom R A i = evalRingHom A i
-  proof: rfl
-
-@[simp]
-
-中文:
-引理 coe_evalAlgHom
-  条件: (i : ι)
-  结论: evalAlgHom R A i = evalRingHom A i
-  证明: rfl
-
-@[simp]
+    toFun := fun f ↦ f i
+    commutes' := fun _ ↦ rfl }
+/-
+**Pi.coe_evalAlgHom** 是 Mathlib 中的一个引理，位于命名空间 `Pi`。
+形式化陈述：coe_evalAlgHom (i : ι) : evalAlgHom R A i = evalRingHom A i
+参数：i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
 -/
 lemma coe_evalAlgHom (i : ι) : evalAlgHom R A i = evalRingHom A i := rfl
 
 @[simp]
-/--
-theorem `_root_.AlgHom.pi_evalAlgHom` / 定理 `_root_.AlgHom.pi_evalAlgHom`
-
-English:
-theorem _root_.AlgHom.pi_evalAlgHom
-  statement: AlgHom.pi (evalAlgHom R A) = AlgHom.id R (Π i, A i)
-  proof: rfl
-
-@[deprecated (since := "2026-06-03")]
-alias algHom_evalAlgHom := _root_.AlgHom.pi_evalAlgHom
-
-中文:
-定理 _root_.代数态射.pi_evalAlgHom
-  结论: 代数态射.pi (evalAlgHom R A) = 代数态射.id R (Π i, A i)
-  证明: rfl
-
-@[deprecated (since := "2026-06-03")]
-alias algHom_evalAlgHom := _root_.AlgHom.pi_evalAlgHom
+/-
+**Pi._root_.AlgHom.pi_evalAlgHom** 是 Mathlib 中的一个定理，位于命名空间 `Pi`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.AlgHom.pi_evalAlgHom : AlgHom.pi (evalAlgHom R A) = AlgHom.id R (Π i, A i) :=
   rfl
@@ -288,36 +197,19 @@ theorem _root_.AlgHom.pi_evalAlgHom : AlgHom.pi (evalAlgHom R A) = AlgHom.id R (
 @[deprecated (since := "2026-06-03")]
 alias algHom_evalAlgHom := _root_.AlgHom.pi_evalAlgHom
 
-variable (S : ι -> Type*) [forall i, CommSemiring (S i)]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [forall
-  signature: i, Algebra (S i) (A i)] : Algebra (Π i, S i) (Π i, A i) where
-  body: RingHom.pi fun _ => (algebraMap _ _).comp (Pi.evalRingHom S _)
-  commutes' _ _ := funext fun _ => Algebra.commutes _ _
-  smul_def' _ _ := funext fun _ => Algebra.smul_def _ _
-
-example : Pi.instAlgebraForall S S = Algebra.id _ := rfl
-
-中文:
-实例 [对任意
-  签名: i, 代数 (S i) (A i)] : 代数 (Π i, S i) (Π i, A i) where
-  定义体: RingHom.pi fun _ => (algebraMap _ _).comp (Pi.evalRingHom S _)
-  commutes' _ _ := funext fun _ => Algebra.commutes _ _
-  smul_def' _ _ := funext fun _ => Algebra.smul_def _ _
-
-example : Pi.instAlgebraForall S S = Algebra.id _ := rfl
-
-Depends on / 依赖: Pi.evalRingHom, RingHom, RingHom.pi, algebraMap, evalRingHom
+variable (S : ι → Type*) [∀ i, CommSemiring (S i)]
+/-
+**Pi.** 是 Mathlib 中的一个实例，位于命名空间 `Pi`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [forall i, Algebra (S i) (A i)] : Algebra (Π i, S i) (Π i, A i) where
-  algebraMap := RingHom.pi fun _ => (algebraMap _ _).comp (Pi.evalRingHom S _)
-  commutes' _ _ := funext fun _ => Algebra.commutes _ _
-  smul_def' _ _ := funext fun _ => Algebra.smul_def _ _
-
+instance [∀ i, Algebra (S i) (A i)] : Algebra (Π i, S i) (Π i, A i) where
+  algebraMap := RingHom.pi fun _ ↦ (algebraMap _ _).comp (Pi.evalRingHom S _)
+  commutes' _ _ := funext fun _ ↦ Algebra.commutes _ _
+  smul_def' _ _ := funext fun _ ↦ Algebra.smul_def _ _
+/-
+**Pi.** 是 Mathlib 中的一个示例，位于命名空间 `Pi`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : Pi.instAlgebraForall S S = Algebra.id _ := rfl
 
 variable (A B : Type*) [Semiring B] [Algebra R B]
@@ -325,91 +217,68 @@ variable (A B : Type*) [Semiring B] [Algebra R B]
 /-- `Function.const` as an `AlgHom`. The name matches `Pi.constRingHom`, `Pi.constMonoidHom`,
 etc. -/
 @[simps]
-/--
-Definition of `constAlgHom` / `constAlgHom` 的定义
+/-
+**Pi.constAlgHom** 是 Mathlib 中的一个定义，位于命名空间 `Pi`。
+形式化陈述：constAlgHom : B ->ₐ[R] A -> B
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition constAlgHom
-  signature: : B ->ₐ[R] A -> B
-  body: { Pi.constRingHom A B with
-    toFun := Function.const _
-    commutes' := fun _ => rfl }
-
-中文:
-定义 constAlgHom
-  签名: : B ->ₐ[R] A -> B
-  定义体: { Pi.constRingHom A B with
-    toFun := Function.const _
-    commutes' := fun _ => rfl }
-
-Depends on / 依赖: Function, Function.const, Pi.constRingHom, commutes, constRingHom
+--- 原说明 ---
+`Function.const` as an `AlgHom`. The name matches `Pi.constRingHom`, `Pi.constMo
+noidHom`,
+etc.
 -/
-def constAlgHom : B ->ₐ[R] A -> B :=
+def constAlgHom : B →ₐ[R] A → B :=
   { Pi.constRingHom A B with
     toFun := Function.const _
-    commutes' := fun _ => rfl }
+    commutes' := fun _ ↦ rfl }
 
 /-- When `R` is commutative and permits an `algebraMap`, `Pi.constRingHom` is equal to that
 map. -/
 @[simp]
-/--
-theorem `constRingHom_eq_algebraMap` / 定理 `constRingHom_eq_algebraMap`
+/-
+**Pi.constRingHom_eq_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `Pi`。
+形式化陈述：constRingHom_eq_algebraMap : constRingHom A R = algebraMap R (A -> R)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem constRingHom_eq_algebraMap
-  statement: constRingHom A R = algebraMap R (A -> R)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 constRingHom_eq_algebraMap
-  结论: constRingHom A R = algebraMap R (A -> R)
-  证明: rfl
-
-@[simp]
+--- 原说明 ---
+When `R` is commutative and permits an `algebraMap`, `Pi.constRingHom` is equal 
+to that
+map.
 -/
-theorem constRingHom_eq_algebraMap : constRingHom A R = algebraMap R (A -> R) :=
+theorem constRingHom_eq_algebraMap : constRingHom A R = algebraMap R (A → R) :=
   rfl
 
 @[simp]
-/--
-theorem `constAlgHom_eq_algebra_ofId` / 定理 `constAlgHom_eq_algebra_ofId`
-
-English:
-theorem constAlgHom_eq_algebra_ofId
-  statement: constAlgHom R A R = Algebra.ofId R (A -> R)
-  proof: rfl
-
-中文:
-定理 constAlgHom_eq_algebra_ofId
-  结论: constAlgHom R A R = 代数.ofId R (A -> R)
-  证明: rfl
-
-Depends on / 依赖: vadd_add_assoc
+/-
+**Pi.constAlgHom_eq_algebra_ofId** 是 Mathlib 中的一个定理，位于命名空间 `Pi`。
+形式化陈述：constAlgHom_eq_algebra_ofId : constAlgHom R A R = Algebra.ofId R (A -> R)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem constAlgHom_eq_algebra_ofId : constAlgHom R A R = Algebra.ofId R (A -> R) :=
+theorem constAlgHom_eq_algebra_ofId : constAlgHom R A R = Algebra.ofId R (A → R) :=
   rfl
 
 end Pi
 
-/--
-Instance `Function.algebra` / 实例 `Function.algebra`
+/-- A special case of `Pi.algebra` for non-dependent types. Lean struggles to elaborate
+definitions elsewhere in the library without this. -/
+/-
+**Function.algebra** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Function.algebra {R : Type*} (ι : Type*) (A : Type*) [CommSemiring R] [Sem
+iring A] [Algebra R A] : Algebra R (ι -> A)
+参数：ι : Type*；A : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Function.algebra
-  signature: {R : Type*} (ι : Type*) (A : Type*) [CommSemiring R] [Semiring A]
-  body: Pi.algebra _ _
-
-中文:
-实例 函数.algebra
-  签名: {R : 类型} (ι : 类型) (A : 类型) [交换半环 R] [半环 A]
-  定义体: Pi.algebra _ _
-
-Depends on / 依赖: Pi.algebra, algebra
+--- 原说明 ---
+A special case of `Pi.algebra` for non-dependent types. Lean struggles to elabor
+ate
+definitions elsewhere in the library without this.
 -/
 instance Function.algebra {R : Type*} (ι : Type*) (A : Type*) [CommSemiring R] [Semiring A]
-    [Algebra R A] : Algebra R (ι -> A) :=
+    [Algebra R A] : Algebra R (ι → A) :=
   Pi.algebra _ _
 
 namespace AlgHom
@@ -421,33 +290,24 @@ variable [Algebra R A] [Algebra R B]
 /-- `R`-algebra homomorphism between the function spaces `ι → A` and `ι → B`, induced by an
 `R`-algebra homomorphism `f` between `A` and `B`. -/
 @[simps]
-/--
-Definition of `compLeft` / `compLeft` 的定义
+/-
+**AlgHom.compLeft** 是 Mathlib 中的一个定义，位于命名空间 `AlgHom`。
+形式化陈述：{R : Type u_1} →   {A : Type u_2} →     {B : Type u_3} →       [inst : Com
+mSemiring R] →         [inst_1 : Semiring A] →           [inst_2 : Semiring B] →
+             [inst_3 : Algebra R A] → [inst_4 : Algebra R B] → (A →ₐ[R] B) → (ι 
+: Type u_4) → (ι → A) →ₐ[R] ι → B
+参数：A →ₐ[R] B；ι : Type u_4；ι → A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compLeft
-  signature: (f : A ->ₐ[R] B) (ι : Type*)
-  body: { f.toRingHom.compLeft ι with
-    toFun := fun h => f ∘ h
-    commutes' := fun c => by
-      ext
-      exact f.commutes' c }
-
-中文:
-定义 compLeft
-  签名: (f : A ->ₐ[R] B) (ι : 类型)
-  定义体: { f.toRingHom.compLeft ι with
-    toFun := fun h => f ∘ h
-    commutes' := fun c => by
-      ext
-      exact f.commutes' c }
-
-Depends on / 依赖: DFunLike, DFunLike.coe_injective.addAction, addAction, coe_injective, coe_vadd
+--- 原说明 ---
+`R`-algebra homomorphism between the function spaces `ι → A` and `ι → B`, induce
+d by an
+`R`-algebra homomorphism `f` between `A` and `B`.
 -/
-protected def compLeft (f : A ->ₐ[R] B) (ι : Type*) : (ι -> A) ->ₐ[R] ι -> B :=
+protected def compLeft (f : A →ₐ[R] B) (ι : Type*) : (ι → A) →ₐ[R] ι → B :=
   { f.toRingHom.compLeft ι with
-    toFun := fun h => f ∘ h
-    commutes' := fun c => by
+    toFun := fun h ↦ f ∘ h
+    commutes' := fun c ↦ by
       ext
       exact f.commutes' c }
 
@@ -455,9 +315,9 @@ end AlgHom
 
 namespace AlgEquiv
 
-variable {α β R ι : Type*} {A₁ A₂ A₃ : ι -> Type*}
-variable [CommSemiring R] [forall i, Semiring (A₁ i)] [forall i, Semiring (A₂ i)] [forall i, Semiring (A₃ i)]
-variable [forall i, Algebra R (A₁ i)] [forall i, Algebra R (A₂ i)] [forall i, Algebra R (A₃ i)]
+variable {α β R ι : Type*} {A₁ A₂ A₃ : ι → Type*}
+variable [CommSemiring R] [∀ i, Semiring (A₁ i)] [∀ i, Semiring (A₂ i)] [∀ i, Semiring (A₃ i)]
+variable [∀ i, Algebra R (A₁ i)] [∀ i, Algebra R (A₂ i)] [∀ i, Algebra R (A₃ i)]
 
 /-- A family of algebra equivalences `∀ i, (A₁ i ≃ₐ A₂ i)` generates a
 multiplicative equivalence between `Π i, A₁ i` and `Π i, A₂ i`.
@@ -466,120 +326,81 @@ This is the `AlgEquiv` version of `Equiv.piCongrRight`, and the dependent versio
 `AlgEquiv.arrowCongr`.
 -/
 @[simps apply]
-/--
-Definition of `piCongrRight` / `piCongrRight` 的定义
+/-
+**AlgEquiv.piCongrRight** 是 Mathlib 中的一个定义，位于命名空间 `AlgEquiv`。
+形式化陈述：piCongrRight (e : forall i, A₁ i ≃ₐ[R] A₂ i) : (Π i, A₁ i) ≃ₐ[R] Π i, A₂ i
+参数：e : forall i, A₁ i ≃ₐ[R] A₂ i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piCongrRight
-  signature: (e : forall i, A₁ i ≃ₐ[R] A₂ i)
-  body: { @RingEquiv.piCongrRight ι A₁ A₂ _ _ fun i => (e i).toRingEquiv with
-    toFun := fun x j => e j (x j)
-    invFun := fun x j => (e j).symm (x j)
-    commutes' := fun r => by
-      ext i
-      simp }
+--- 原说明 ---
+A family of algebra equivalences `∀ i, (A₁ i ≃ₐ A₂ i)` generates a
+multiplicative equivalence between `Π i, A₁ i` and `Π i, A₂ i`.
 
-@[simp]
-
-中文:
-定义 piCongrRight
-  签名: (e : 对任意 i, A₁ i ≃ₐ[R] A₂ i)
-  定义体: { @RingEquiv.piCongrRight ι A₁ A₂ _ _ fun i => (e i).toRingEquiv with
-    toFun := fun x j => e j (x j)
-    invFun := fun x j => (e j).symm (x j)
-    commutes' := fun r => by
-      ext i
-      simp }
-
-@[simp]
-
-Depends on / 依赖: RingEquiv, RingEquiv.piCongrRight, commutes, invFun, piCongrRight, toRingEquiv
+This is the `AlgEquiv` version of `Equiv.piCongrRight`, and the dependent versio
+n of
+`AlgEquiv.arrowCongr`.
 -/
-def piCongrRight (e : forall i, A₁ i ≃ₐ[R] A₂ i) : (Π i, A₁ i) ≃ₐ[R] Π i, A₂ i :=
-  { @RingEquiv.piCongrRight ι A₁ A₂ _ _ fun i => (e i).toRingEquiv with
-    toFun := fun x j => e j (x j)
-    invFun := fun x j => (e j).symm (x j)
-    commutes' := fun r => by
+def piCongrRight (e : ∀ i, A₁ i ≃ₐ[R] A₂ i) : (Π i, A₁ i) ≃ₐ[R] Π i, A₂ i :=
+  { @RingEquiv.piCongrRight ι A₁ A₂ _ _ fun i ↦ (e i).toRingEquiv with
+    toFun := fun x j ↦ e j (x j)
+    invFun := fun x j ↦ (e j).symm (x j)
+    commutes' := fun r ↦ by
       ext i
       simp }
 
 @[simp]
-/--
-theorem `piCongrRight_refl` / 定理 `piCongrRight_refl`
-
-English:
-theorem piCongrRight_refl
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 piCongrRight_refl
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.piCongrRight_refl** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：piCongrRight_refl : (piCongrRight fun i => (AlgEquiv.refl : A₁ i ≃ₐ[R] A₁ 
+i)) = AlgEquiv.refl
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem piCongrRight_refl :
-    (piCongrRight fun i => (AlgEquiv.refl : A₁ i ≃ₐ[R] A₁ i)) = AlgEquiv.refl :=
+    (piCongrRight fun i ↦ (AlgEquiv.refl : A₁ i ≃ₐ[R] A₁ i)) = AlgEquiv.refl :=
   rfl
 
 @[simp]
-/--
-theorem `piCongrRight_symm` / 定理 `piCongrRight_symm`
-
-English:
-theorem piCongrRight_symm
-  given: (e : forall i, A₁ i ≃ₐ[R] A₂ i)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 piCongrRight_symm
-  条件: (e : 对任意 i, A₁ i ≃ₐ[R] A₂ i)
-  证明: rfl
-
-@[simp]
+/-
+**AlgEquiv.piCongrRight_symm** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：piCongrRight_symm (e : forall i, A₁ i ≃ₐ[R] A₂ i) : (piCongrRight e).symm 
+= piCongrRight fun i => (e i).symm
+参数：e : forall i, A₁ i ≃ₐ[R] A₂ i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem piCongrRight_symm (e : forall i, A₁ i ≃ₐ[R] A₂ i) :
-    (piCongrRight e).symm = piCongrRight fun i => (e i).symm :=
+theorem piCongrRight_symm (e : ∀ i, A₁ i ≃ₐ[R] A₂ i) :
+    (piCongrRight e).symm = piCongrRight fun i ↦ (e i).symm :=
   rfl
 
 @[simp]
-/--
-theorem `piCongrRight_trans` / 定理 `piCongrRight_trans`
-
-English:
-theorem piCongrRight_trans
-  given: (e₁ : forall i, A₁ i ≃ₐ[R] A₂ i) (e₂ : forall i, A₂ i ≃ₐ[R] A₃ i)
-  proof: rfl
-
-中文:
-定理 piCongrRight_trans
-  条件: (e₁ : 对任意 i, A₁ i ≃ₐ[R] A₂ i) (e₂ : 对任意 i, A₂ i ≃ₐ[R] A₃ i)
-  证明: rfl
+/-
+**AlgEquiv.piCongrRight_trans** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：piCongrRight_trans (e₁ : forall i, A₁ i ≃ₐ[R] A₂ i) (e₂ : forall i, A₂ i ≃
+ₐ[R] A₃ i) : (piCongrRight e₁).trans (piCongrRight e₂) = piCongrRight fun i => (
+e₁ i).trans (e₂ i)
+参数：e₁ : forall i, A₁ i ≃ₐ[R] A₂ i；e₂ : forall i, A₂ i ≃ₐ[R] A₃ i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem piCongrRight_trans (e₁ : forall i, A₁ i ≃ₐ[R] A₂ i) (e₂ : forall i, A₂ i ≃ₐ[R] A₃ i) :
-    (piCongrRight e₁).trans (piCongrRight e₂) = piCongrRight fun i => (e₁ i).trans (e₂ i) :=
+theorem piCongrRight_trans (e₁ : ∀ i, A₁ i ≃ₐ[R] A₂ i) (e₂ : ∀ i, A₂ i ≃ₐ[R] A₃ i) :
+    (piCongrRight e₁).trans (piCongrRight e₂) = piCongrRight fun i ↦ (e₁ i).trans (e₂ i) :=
   rfl
 
 variable (R A₁) in
-/--
-Definition of `piMulOpposite` / `piMulOpposite` 的定义
+/-- The opposite of a direct product is isomorphic to the direct product of the opposites as
+algebras. -/
+/-
+**AlgEquiv.piMulOpposite** 是 Mathlib 中的一个定义，位于命名空间 `AlgEquiv`。
+形式化陈述：piMulOpposite : (Π i, A₁ i)ᵐᵒᵖ ≃ₐ[R] Π i, (A₁ i)ᵐᵒᵖ where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition piMulOpposite
-  signature: : (Π i, A₁ i)ᵐᵒᵖ ≃ₐ[R] Π i, (A₁ i)ᵐᵒᵖ where
-  body: RingEquiv.piMulOpposite A₁
-  commutes' _ := rfl
-
-中文:
-定义 piMulOpposite
-  签名: : (Π i, A₁ i)ᵐᵒᵖ ≃ₐ[R] Π i, (A₁ i)ᵐᵒᵖ where
-  定义体: RingEquiv.piMulOpposite A₁
-  commutes' _ := rfl
-
-Depends on / 依赖: RingEquiv, RingEquiv.piMulOpposite, piMulOpposite
+--- 原说明 ---
+The opposite of a direct product is isomorphic to the direct product of the oppo
+sites as
+algebras.
 -/
 def piMulOpposite : (Π i, A₁ i)ᵐᵒᵖ ≃ₐ[R] Π i, (A₁ i)ᵐᵒᵖ where
   __ := RingEquiv.piMulOpposite A₁
@@ -587,21 +408,23 @@ def piMulOpposite : (Π i, A₁ i)ᵐᵒᵖ ≃ₐ[R] Π i, (A₁ i)ᵐᵒᵖ wh
 
 variable (R A₁) in
 /--
-Definition of `piCongrLeft'` / `piCongrLeft'` 的定义
+Transport dependent functions through an equivalence of the base space.
 
-English:
-definition piCongrLeft'
-  signature: {ι' : Type*} (e : ι ≃ ι')
-  body: RingEquiv.piCongrLeft' A₁ e
-  commutes' _ := rfl
+This is `Equiv.piCongrLeft'` as an `AlgEquiv`.
+-/
+/-
+**AlgEquiv.piCongrLeft'** 是 Mathlib 中的一个定义，位于命名空间 `AlgEquiv`。
+形式化陈述：piCongrLeft' {ι' : Type*} (e : ι ≃ ι') : (Π i, A₁ i) ≃ₐ[R] Π i, A₁ (e.symm
+ i) where __
+参数：e : ι ≃ ι'。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-中文:
-定义 piCongrLeft'
-  签名: {ι' : 类型} (e : ι ≃ ι')
-  定义体: RingEquiv.piCongrLeft' A₁ e
-  commutes' _ := rfl
+--- 原说明 ---
+Transport dependent functions through an equivalence of the base space.
 
-Depends on / 依赖: RingEquiv, RingEquiv.piCongrLeft, piCongrLeft
+This is `Equiv.piCongrLeft'` as an `AlgEquiv`.
 -/
 def piCongrLeft' {ι' : Type*} (e : ι ≃ ι') : (Π i, A₁ i) ≃ₐ[R] Π i, A₁ (e.symm i) where
   __ := RingEquiv.piCongrLeft' A₁ e
@@ -609,91 +432,83 @@ def piCongrLeft' {ι' : Type*} (e : ι ≃ ι') : (Π i, A₁ i) ≃ₐ[R] Π i,
 
 -- Priority `low` to ensure generic `map_{add, mul, zero, one}` lemmas are applied first
 @[simp low]
-/--
-lemma `piCongrLeft'_apply` / 引理 `piCongrLeft'_apply`
-
-English:
-lemma piCongrLeft'_apply
-  given: {ι' : Type*} (e : ι ≃ ι') (x : (Π i, A₁ i))
-  proof: rfl
-
-中文:
-引理 piCongrLeft'_apply
-  条件: {ι' : 类型} (e : ι ≃ ι') (x : (Π i, A₁ i))
-  证明: rfl
+/-
+**AlgEquiv.piCongrLeft'_apply** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：∀ {R : Type u_3} {ι : Type u_4} {A₁ : ι → Type u_5} [inst : CommSemiring R
+] [inst_1 : (i : ι) → Semiring (A₁ i)]   [inst_2 : (i : ι) → Algebra R (A₁ i)] {
+ι' : Type u_8} (e : ι ≃ ι') (x : (i : ι) → A₁ i),   (AlgEquiv.piCongrLeft' R A₁ 
+e) x = (Equiv.piCongrLeft' A₁ e) x
+参数：i : ι；A₁ i；i : ι；A₁ i；e : ι ≃ ι'；x : (i : ι) → A₁ i；AlgEquiv.piCongrLeft' R A
+₁ e；Equiv.piCongrLeft' A₁ e。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma piCongrLeft'_apply {ι' : Type*} (e : ι ≃ ι') (x : (Π i, A₁ i)) :
     piCongrLeft' R A₁ e x = Equiv.piCongrLeft' _ _ x := rfl
 
 -- Priority `low` to ensure generic `map_{add, mul, zero, one}` lemmas are applied first
 @[simp low]
-/--
-lemma `piCongrLeft'_symm_apply` / 引理 `piCongrLeft'_symm_apply`
-
-English:
-lemma piCongrLeft'_symm_apply
-  given: {ι' : Type*} (e : ι ≃ ι') (x : Π i, A₁ (e.symm i))
-  proof: rfl
-
-中文:
-引理 piCongrLeft'_symm_apply
-  条件: {ι' : 类型} (e : ι ≃ ι') (x : Π i, A₁ (e.symm i))
-  证明: rfl
+/-
+**AlgEquiv.piCongrLeft'_symm_apply** 是 Mathlib 中的一个定理，位于命名空间 `AlgEquiv`。
+形式化陈述：∀ {R : Type u_3} {ι : Type u_4} {A₁ : ι → Type u_5} [inst : CommSemiring R
+] [inst_1 : (i : ι) → Semiring (A₁ i)]   [inst_2 : (i : ι) → Algebra R (A₁ i)] {
+ι' : Type u_8} (e : ι ≃ ι') (x : (i : ι') → A₁ (e.symm i)),   (AlgEquiv.piCongrL
+eft' R A₁ e).symm x = (Equiv.piCongrLeft' A₁ e).symm x
+参数：i : ι；A₁ i；i : ι；A₁ i；e : ι ≃ ι'；x : (i : ι') → A₁ (e.symm i)；AlgEquiv.piCong
+rLeft' R A₁ e；Equiv.piCongrLeft' A₁ e。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 lemma piCongrLeft'_symm_apply {ι' : Type*} (e : ι ≃ ι') (x : Π i, A₁ (e.symm i)) :
     (piCongrLeft' R A₁ e).symm x = (Equiv.piCongrLeft' _ _).symm x := rfl
 
 variable (R A₁) in
 /--
-Definition of `piCongrLeft` / `piCongrLeft` 的定义
+Transport dependent functions through an equivalence of the base space, expressed as
+"simplification".
 
-English:
-definition piCongrLeft
-  signature: {ι' : Type*} (e : ι' ≃ ι)
-  body: (AlgEquiv.piCongrLeft' R A₁ e.symm).symm
+This is `Equiv.piCongrLeft` as an `AlgEquiv`.
+-/
+/-
+**AlgEquiv.piCongrLeft** 是 Mathlib 中的一个定义，位于命名空间 `AlgEquiv`。
+形式化陈述：piCongrLeft {ι' : Type*} (e : ι' ≃ ι) : (Π i, A₁ (e i)) ≃ₐ[R] Π i, A₁ i
+参数：e : ι' ≃ ι。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-中文:
-定义 piCongrLeft
-  签名: {ι' : 类型} (e : ι' ≃ ι)
-  定义体: (AlgEquiv.piCongrLeft' R A₁ e.symm).symm
+--- 原说明 ---
+Transport dependent functions through an equivalence of the base space, expresse
+d as
+"simplification".
 
-Depends on / 依赖: AlgEquiv, AlgEquiv.piCongrLeft, e.symm, piCongrLeft
+This is `Equiv.piCongrLeft` as an `AlgEquiv`.
 -/
 def piCongrLeft {ι' : Type*} (e : ι' ≃ ι) : (Π i, A₁ (e i)) ≃ₐ[R] Π i, A₁ i :=
   (AlgEquiv.piCongrLeft' R A₁ e.symm).symm
 
 -- Priority `low` to ensure generic `map_{add, mul, zero, one}` lemmas are applied first
 @[simp low]
-/--
-lemma `piCongrLeft_apply` / 引理 `piCongrLeft_apply`
-
-English:
-lemma piCongrLeft_apply
-  given: {ι' : Type*} (e : ι' ≃ ι) (x : Π i, A₁ (e i))
-  proof: rfl
-
-中文:
-引理 piCongrLeft_apply
-  条件: {ι' : 类型} (e : ι' ≃ ι) (x : Π i, A₁ (e i))
-  证明: rfl
+/-
+**AlgEquiv.piCongrLeft_apply** 是 Mathlib 中的一个引理，位于命名空间 `AlgEquiv`。
+形式化陈述：piCongrLeft_apply {ι' : Type*} (e : ι' ≃ ι) (x : Π i, A₁ (e i)) : piCongrL
+eft R A₁ e x = Equiv.piCongrLeft _ _ x
+参数：e : ι' ≃ ι；x : Π i, A₁ (e i)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma piCongrLeft_apply {ι' : Type*} (e : ι' ≃ ι) (x : Π i, A₁ (e i)) :
     piCongrLeft R A₁ e x = Equiv.piCongrLeft _ _ x := rfl
 
 -- Priority `low` to ensure generic `map_{add, mul, zero, one}` lemmas are applied first
 @[simp low]
-/--
-lemma `piCongrLeft_symm_apply` / 引理 `piCongrLeft_symm_apply`
-
-English:
-lemma piCongrLeft_symm_apply
-  given: {ι' : Type*} (e : ι' ≃ ι) (x : Π i, A₁ i)
-  proof: rfl
-
-中文:
-引理 piCongrLeft_symm_apply
-  条件: {ι' : 类型} (e : ι' ≃ ι) (x : Π i, A₁ i)
-  证明: rfl
+/-
+**AlgEquiv.piCongrLeft_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 `AlgEquiv`。
+形式化陈述：piCongrLeft_symm_apply {ι' : Type*} (e : ι' ≃ ι) (x : Π i, A₁ i) : (piCong
+rLeft R A₁ e).symm x = (Equiv.piCongrLeft _ _).symm x
+参数：e : ι' ≃ ι；x : Π i, A₁ i。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma piCongrLeft_symm_apply {ι' : Type*} (e : ι' ≃ ι) (x : Π i, A₁ i) :
     (piCongrLeft R A₁ e).symm x = (Equiv.piCongrLeft _ _).symm x := rfl
@@ -703,118 +518,84 @@ section
 variable (S : Type*) [Semiring S] [Algebra R S]
 
 variable (ι R) in
-/--
-Definition of `funUnique` / `funUnique` 的定义
+/-- If `ι` has a unique element, then `ι → S` is isomorphic to `S` as an `R`-algebra. -/
+/-
+**AlgEquiv.funUnique** 是 Mathlib 中的一个定义，位于命名空间 `AlgEquiv`。
+形式化陈述：funUnique [Unique ι] : (ι -> S) ≃ₐ[R] S
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition funUnique
-  signature: [Unique ι]
-  body: .ofRingEquiv (f := .piUnique (fun i : ι => S)) (by simp)
-
-中文:
-定义 funUnique
-  签名: [唯一 ι]
-  定义体: .ofRingEquiv (f := .piUnique (fun i : ι => S)) (by simp)
-
-Depends on / 依赖: ofRingEquiv, piUnique
+--- 原说明 ---
+If `ι` has a unique element, then `ι → S` is isomorphic to `S` as an `R`-algebra
+.
 -/
-def funUnique [Unique ι] : (ι -> S) ≃ₐ[R] S :=
-  .ofRingEquiv (f := .piUnique (fun i : ι => S)) (by simp)
+def funUnique [Unique ι] : (ι → S) ≃ₐ[R] S :=
+  .ofRingEquiv (f := .piUnique (fun i : ι ↦ S)) (by simp)
 
 -- Priority `low` to ensure generic `map_{add, mul, zero, one}` lemmas are applied first
 @[simp low]
-/--
-lemma `funUnique_apply` / 引理 `funUnique_apply`
-
-English:
-lemma funUnique_apply
-  given: [Unique ι] (x : ι -> S)
-  statement: funUnique R ι S x = Equiv.funUnique ι S x
-  proof: rfl
-
-中文:
-引理 funUnique_apply
-  条件: [唯一 ι] (x : ι -> S)
-  结论: funUnique R ι S x = 等价.funUnique ι S x
-  证明: rfl
-
-Depends on / 依赖: f.toEquiv, toEquiv
+/-
+**AlgEquiv.funUnique_apply** 是 Mathlib 中的一个引理，位于命名空间 `AlgEquiv`。
+形式化陈述：funUnique_apply [Unique ι] (x : ι -> S) : funUnique R ι S x = Equiv.funUni
+que ι S x
+参数：x : ι -> S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma funUnique_apply [Unique ι] (x : ι -> S) : funUnique R ι S x = Equiv.funUnique ι S x := rfl
+lemma funUnique_apply [Unique ι] (x : ι → S) : funUnique R ι S x = Equiv.funUnique ι S x := rfl
 
 -- Priority `low` to ensure generic `map_{add, mul, zero, one}` lemmas are applied first
 @[simp low]
-/--
-lemma `funUnique_symm_apply` / 引理 `funUnique_symm_apply`
-
-English:
-lemma funUnique_symm_apply
-  given: [Unique ι] (x : S)
-  proof: rfl
-
-中文:
-引理 funUnique_symm_apply
-  条件: [唯一 ι] (x : S)
-  证明: rfl
-
-Depends on / 依赖: f.map_add_const, map_add_const
+/-
+**AlgEquiv.funUnique_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 `AlgEquiv`。
+形式化陈述：funUnique_symm_apply [Unique ι] (x : S) : (funUnique R ι S).symm x = (Equi
+v.funUnique ι S).symm x
+参数：x : S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma funUnique_symm_apply [Unique ι] (x : S) :
     (funUnique R ι S).symm x = (Equiv.funUnique ι S).symm x := rfl
 
 variable (α β R) in
-/--
-Definition of `sumArrowEquivProdArrow` / `sumArrowEquivProdArrow` 的定义
+/-- `Equiv.sumArrowEquivProdArrow` as an algebra equivalence. -/
+/-
+**AlgEquiv.sumArrowEquivProdArrow** 是 Mathlib 中的一个定义，位于命名空间 `AlgEquiv`。
+形式化陈述：sumArrowEquivProdArrow : (α oplus β -> S) ≃ₐ[R] (α -> S) × (β -> S)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sumArrowEquivProdArrow
-  signature: : (α oplus β -> S) ≃ₐ[R] (α -> S) × (β -> S)
-  body: .ofRingEquiv (f := .sumArrowEquivProdArrow α β S) (by intro; ext <;> simp)
-
-中文:
-定义 sumArrowEquivProdArrow
-  签名: : (α oplus β -> S) ≃ₐ[R] (α -> S) × (β -> S)
-  定义体: .ofRingEquiv (f := .sumArrowEquivProdArrow α β S) (by intro; ext <;> simp)
-
-Depends on / 依赖: ofRingEquiv, sumArrowEquivProdArrow
+--- 原说明 ---
+`Equiv.sumArrowEquivProdArrow` as an algebra equivalence.
 -/
-def sumArrowEquivProdArrow : (α oplus β -> S) ≃ₐ[R] (α -> S) × (β -> S) :=
+def sumArrowEquivProdArrow : (α ⊕ β → S) ≃ₐ[R] (α → S) × (β → S) :=
   .ofRingEquiv (f := .sumArrowEquivProdArrow α β S) (by intro; ext <;> simp)
 
 -- Priority `low` to ensure generic `map_{add, mul, zero, one}` lemmas are applied first
 @[simp low]
-/--
-lemma `sumArrowEquivProdArrow_apply` / 引理 `sumArrowEquivProdArrow_apply`
-
-English:
-lemma sumArrowEquivProdArrow_apply
-  given: (x : α oplus β -> S)
-  proof: rfl
-
-中文:
-引理 sumArrowEquivProdArrow_apply
-  条件: (x : α oplus β -> S)
-  证明: rfl
+/-
+**AlgEquiv.sumArrowEquivProdArrow_apply** 是 Mathlib 中的一个引理，位于命名空间 `AlgEquiv`。
+形式化陈述：sumArrowEquivProdArrow_apply (x : α oplus β -> S) : sumArrowEquivProdArrow
+ α β R S x = Equiv.sumArrowEquivProdArrow α β S x
+参数：x : α oplus β -> S。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma sumArrowEquivProdArrow_apply (x : α oplus β -> S) :
+lemma sumArrowEquivProdArrow_apply (x : α ⊕ β → S) :
     sumArrowEquivProdArrow α β R S x = Equiv.sumArrowEquivProdArrow α β S x := rfl
 
 -- Priority `low` to ensure generic `map_{add, mul, zero, one}` lemmas are applied first
 @[simp low]
-/--
-lemma `sumArrowEquivProdArrow_symm_apply_inr` / 引理 `sumArrowEquivProdArrow_symm_apply_inr`
-
-English:
-lemma sumArrowEquivProdArrow_symm_apply_inr
-  given: (x : (α -> S) × (β -> S))
-  proof: rfl
-
-中文:
-引理 sumArrowEquivProdArrow_symm_apply_inr
-  条件: (x : (α -> S) × (β -> S))
-  证明: rfl
+/-
+**AlgEquiv.sumArrowEquivProdArrow_symm_apply_inr** 是 Mathlib 中的一个引理，位于命名空间 `AlgE
+quiv`。
+形式化陈述：sumArrowEquivProdArrow_symm_apply_inr (x : (α -> S) × (β -> S)) : (sumArro
+wEquivProdArrow α β R S).symm x = (Equiv.sumArrowEquivProdArrow α β S).symm x
+参数：x : (α -> S) × (β -> S)。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma sumArrowEquivProdArrow_symm_apply_inr (x : (α -> S) × (β -> S)) :
+lemma sumArrowEquivProdArrow_symm_apply_inr (x : (α → S) × (β → S)) :
     (sumArrowEquivProdArrow α β R S).symm x = (Equiv.sumArrowEquivProdArrow α β S).symm x :=
   rfl
 
@@ -822,25 +603,18 @@ end
 
 end AlgEquiv
 
-/--
-Definition of `Pi.algebraMap` / `Pi.algebraMap` 的定义
+/-- Apply an algebra map component-wise along a vector. -/
+/-
+**Pi.algebraMap** 是 Mathlib 中的一个定义，位于命名空间 `Pi`。
+形式化陈述：(ι : Type u_1) →   (R : Type u_2) →     (A : Type u_3) → [inst : CommSemir
+ing R] → [inst_1 : Semiring A] → [inst_2 : Algebra R A] → (ι → R) →ₗ[R] ι → A
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Pi.algebraMap
-  signature: (ι R A : Type*) [CommSemiring R] [Semiring A] [Algebra R A]
-  body: algebraMap R A ∘ v
-  map_add' v w := by simp
-  map_smul' t v := by ext; simp [Algebra.smul_def]
-
-中文:
-定义 依赖函数类型.algebraMap
-  签名: (ι R A : 类型) [交换半环 R] [半环 A] [代数 R A]
-  定义体: algebraMap R A ∘ v
-  map_add' v w := by simp
-  map_smul' t v := by ext; simp [Algebra.smul_def]
+--- 原说明 ---
+Apply an algebra map component-wise along a vector.
 -/
 protected def Pi.algebraMap (ι R A : Type*) [CommSemiring R] [Semiring A] [Algebra R A] :
-    (ι -> R) ->ₗ[R] (ι -> A) where
+    (ι → R) →ₗ[R] (ι → A) where
   toFun v := algebraMap R A ∘ v
   map_add' v w := by simp
   map_smul' t v := by ext; simp [Algebra.smul_def]

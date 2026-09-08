@@ -50,42 +50,33 @@ section pt_definition
 
 variable (L : Type*) [CompleteLattice L]
 
-/--
-Definition of `PT` / `PT` 的定义
+/-- The type of points of a complete lattice `L`, where a *point* of a complete lattice is,
+by definition, a frame homomorphism from `L` to `Prop`. -/
+/-
+**Locale.PT** 是 Mathlib 中的一个缩写定义，位于命名空间 `Locale`。
+形式化陈述：PT
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation PT
-  body: FrameHom L Prop
-
-中文:
-缩写 PT
-  定义体: FrameHom L Prop
-
-Depends on / 依赖: FrameHom
+--- 原说明 ---
+The type of points of a complete lattice `L`, where a *point* of a complete latt
+ice is,
+by definition, a frame homomorphism from `L` to `Prop`.
 -/
 abbrev PT := FrameHom L Prop
 
 /-- The frame homomorphism from a complete lattice `L` to the complete lattice of sets of
 points of `L`. -/
 @[simps]
-/--
-Definition of `openOfElementHom` / `openOfElementHom` 的定义
+/-
+**Locale.openOfElementHom** 是 Mathlib 中的一个定义，位于命名空间 `Locale`。
+形式化陈述：openOfElementHom : FrameHom L (Set (PT L)) where toFun u
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition openOfElementHom
-  signature: : FrameHom L (Set (PT L)) where
-  body: {x | x u}
-  map_inf' a b := by simp [Set.ofPred_and]
-  map_top' := by simp
-  map_sSup' S := by ext; simp [Prop.exists_iff]
-
-中文:
-定义 openOfElementHom
-  签名: : 框架态射 L (集合 (PT L)) where
-  定义体: {x | x u}
-  map_inf' a b := by simp [Set.ofPred_and]
-  map_top' := by simp
-  map_sSup' S := by ext; simp [Prop.exists_iff]
+--- 原说明 ---
+The frame homomorphism from a complete lattice `L` to the complete lattice of se
+ts of
+points of `L`.
 -/
 def openOfElementHom : FrameHom L (Set (PT L)) where
   toFun u := {x | x u}
@@ -95,33 +86,18 @@ def openOfElementHom : FrameHom L (Set (PT L)) where
 
 namespace PT
 
-/--
-Instance `instTopologicalSpace` / 实例 `instTopologicalSpace`
+/-- The topology on the set of points of the complete lattice `L`. -/
+/-
+**Locale.PT.instTopologicalSpace** 是 Mathlib 中的一个实例，位于命名空间 `Locale.PT`。
+形式化陈述：instTopologicalSpace : TopologicalSpace (PT L) where IsOpen s
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instTopologicalSpace
-  signature: : TopologicalSpace (PT L) where
-  body: exists u, {x | x u} = s
-  isOpen_univ := ⟨⊤, by simp⟩
-  isOpen_inter := by rintro s t ⟨u, rfl⟩ ⟨v, rfl⟩; use u ⊓ v; simp_rw [map_inf]; rfl
-  isOpen_sUnion S hS := by
-    choose f hf using hS
-    use ⨆ t, ⨆ ht, f t ht
-    simp_rw [map_iSup, iSup_Prop_eq, ofPred_exists, hf, sUnion_eq_biUnion]
-
-中文:
-实例 instTopologicalSpace
-  签名: : 拓扑空间 (PT L) where
-  定义体: exists u, {x | x u} = s
-  isOpen_univ := ⟨⊤, by simp⟩
-  isOpen_inter := by rintro s t ⟨u, rfl⟩ ⟨v, rfl⟩; use u ⊓ v; simp_rw [map_inf]; rfl
-  isOpen_sUnion S hS := by
-    choose f hf using hS
-    use ⨆ t, ⨆ ht, f t ht
-    simp_rw [map_iSup, iSup_Prop_eq, ofPred_exists, hf, sUnion_eq_biUnion]
+--- 原说明 ---
+The topology on the set of points of the complete lattice `L`.
 -/
 instance instTopologicalSpace : TopologicalSpace (PT L) where
-  IsOpen s := exists u, {x | x u} = s
+  IsOpen s := ∃ u, {x | x u} = s
   isOpen_univ := ⟨⊤, by simp⟩
   isOpen_inter := by rintro s t ⟨u, rfl⟩ ⟨v, rfl⟩; use u ⊓ v; simp_rw [map_inf]; rfl
   isOpen_sUnion S hS := by
@@ -129,50 +105,44 @@ instance instTopologicalSpace : TopologicalSpace (PT L) where
     use ⨆ t, ⨆ ht, f t ht
     simp_rw [map_iSup, iSup_Prop_eq, ofPred_exists, hf, sUnion_eq_biUnion]
 
-/--
-lemma `isOpen_iff` / 引理 `isOpen_iff`
+/-- Characterization of when a subset of the space of points is open. -/
+/-
+**Locale.PT.isOpen_iff** 是 Mathlib 中的一个引理，位于命名空间 `Locale.PT`。
+形式化陈述：isOpen_iff (U : Set (PT L)) : IsOpen U ↔ exists u : L, {x | x u} = U
+参数：U : Set (PT L)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 
-English:
-lemma isOpen_iff
-  given: (U : Set (PT L))
-  statement: IsOpen U ↔ exists u : L, {x | x u} = U
-  proof: Iff.rfl
-
-中文:
-引理 isOpen_iff
-  条件: (U : 集合 (PT L))
-  结论: 是开集 U ↔ 存在 u : L, {x | x u} = U
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+--- 原说明 ---
+Characterization of when a subset of the space of points is open.
 -/
-lemma isOpen_iff (U : Set (PT L)) : IsOpen U ↔ exists u : L, {x | x u} = U := Iff.rfl
+lemma isOpen_iff (U : Set (PT L)) : IsOpen U ↔ ∃ u : L, {x | x u} = U := Iff.rfl
 
 end PT
 
-/--
-Definition of `pt` / `pt` 的定义
+/-- The covariant functor `pt` from the category of locales to the category of
+topological spaces, which sends a locale `L` to the topological space `PT L` of homomorphisms
+from `L` to `Prop` and a locale homomorphism `f` to a continuous function between the spaces
+of points. -/
+/-
+**Locale.pt** 是 Mathlib 中的一个定义，位于命名空间 `Locale`。
+形式化陈述：pt : Locale ⥤ TopCat where obj L
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition pt
-  signature: : Locale ⥤ TopCat where
-  body: .of (PT L.unop)
-  map f := TopCat.ofHom ⟨fun p => p.comp f.unop.hom,
-continuous_def.2 by rintro s ⟨u, rfl⟩; use f.unop u; rfl⟩
-
-中文:
-定义 pt
-  签名: : 景 ⥤ 顶元素范畴 where
-  定义体: .of (PT L.unop)
-  map f := TopCat.ofHom ⟨fun p => p.comp f.unop.hom,
-continuous_def.2 by rintro s ⟨u, rfl⟩; use f.unop u; rfl⟩
-
-Depends on / 依赖: L.unop
+--- 原说明 ---
+The covariant functor `pt` from the category of locales to the category of
+topological spaces, which sends a locale `L` to the topological space `PT L` of 
+homomorphisms
+from `L` to `Prop` and a locale homomorphism `f` to a continuous function betwee
+n the spaces
+of points.
 -/
 def pt : Locale ⥤ TopCat where
   obj L := .of (PT L.unop)
-  map f := TopCat.ofHom ⟨fun p => p.comp f.unop.hom,
-continuous_def.2 by rintro s ⟨u, rfl⟩; use f.unop u; rfl⟩
+  map f := TopCat.ofHom ⟨fun p ↦ p.comp f.unop.hom,
+    continuous_def.2 <| by rintro s ⟨u, rfl⟩; use f.unop u; rfl⟩
 
 end pt_definition
 
@@ -183,51 +153,33 @@ variable (X : Type*) [TopologicalSpace X] (L : Locale)
 /-- The unit of the adjunction between locales and topological spaces, which associates with
 a point `x` of the space `X` a point of the locale of opens of `X`. -/
 @[simps]
-/--
-Definition of `localePointOfSpacePoint` / `localePointOfSpacePoint` 的定义
+/-
+**Locale.localePointOfSpacePoint** 是 Mathlib 中的一个定义，位于命名空间 `Locale`。
+形式化陈述：localePointOfSpacePoint (x : X) : PT (Opens X) where toFun
+参数：x : X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition localePointOfSpacePoint
-  signature: (x : X)
-  body: (x in ·)
-  map_inf' _ _ := rfl
-  map_top' := rfl
-  map_sSup' S := by simp [Prop.exists_iff]
-
-中文:
-定义 localePointOfSpacePoint
-  签名: (x : X)
-  定义体: (x in ·)
-  map_inf' _ _ := rfl
-  map_top' := rfl
-  map_sSup' S := by simp [Prop.exists_iff]
+--- 原说明 ---
+The unit of the adjunction between locales and topological spaces, which associa
+tes with
+a point `x` of the space `X` a point of the locale of opens of `X`.
 -/
 def localePointOfSpacePoint (x : X) : PT (Opens X) where
-  toFun := (x in ·)
+  toFun := (x ∈ ·)
   map_inf' _ _ := rfl
   map_top' := rfl
   map_sSup' S := by simp [Prop.exists_iff]
 
-/--
-Definition of `counitAppCont` / `counitAppCont` 的定义
+/-- The counit is a frame homomorphism. -/
+/-
+**Locale.counitAppCont** 是 Mathlib 中的一个定义，位于命名空间 `Locale`。
+形式化陈述：counitAppCont : FrameHom L (Opens <| PT L) where toFun u
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition counitAppCont
-  signature: : FrameHom L (Opens <| PT L) where
-  body: ⟨openOfElementHom L u, u, rfl⟩
-  map_inf' a b := by simp
-  map_top' := by simp
-  map_sSup' S := by ext; simp
-
-中文:
-定义 counitAppCont
-  签名: : 框架态射 L (Opens <| PT L) where
-  定义体: ⟨openOfElementHom L u, u, rfl⟩
-  map_inf' a b := by simp
-  map_top' := by simp
-  map_sSup' S := by ext; simp
-
-Depends on / 依赖: openOfElementHom
+--- 原说明 ---
+The counit is a frame homomorphism.
 -/
 def counitAppCont : FrameHom L (Opens <| PT L) where
   toFun u := ⟨openOfElementHom L u, u, rfl⟩
@@ -235,30 +187,22 @@ def counitAppCont : FrameHom L (Opens <| PT L) where
   map_top' := by simp
   map_sSup' S := by ext; simp
 
-/--
-Definition of `adjunctionTopToLocalePT` / `adjunctionTopToLocalePT` 的定义
+/-- The forgetful functor `topToLocale` is left adjoint to the functor `pt`. -/
+/-
+**Locale.adjunctionTopToLocalePT** 是 Mathlib 中的一个定义，位于命名空间 `Locale`。
+形式化陈述：adjunctionTopToLocalePT : topToLocale ⊣ pt where unit
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition adjunctionTopToLocalePT
-  signature: : topToLocale ⊣ pt where
-  body: { app := fun X => TopCat.ofHom ⟨localePointOfSpacePoint X, continuous_def.2 <|
-        by rintro _ ⟨u, rfl⟩; simpa using! u.2⟩ }
-  counit := { app := fun L => ⟨Frm.ofHom (counitAppCont L)⟩ }
-
-中文:
-定义 adjunctionTopToLocalePT
-  签名: : topToLocale ⊣ pt where
-  定义体: { app := fun X => TopCat.ofHom ⟨localePointOfSpacePoint X, continuous_def.2 <|
-        by rintro _ ⟨u, rfl⟩; simpa using! u.2⟩ }
-  counit := { app := fun L => ⟨Frm.ofHom (counitAppCont L)⟩ }
-
-Depends on / 依赖: TopCat, TopCat.ofHom, continuous_def, localePointOfSpacePoint
+--- 原说明 ---
+The forgetful functor `topToLocale` is left adjoint to the functor `pt`.
 -/
 def adjunctionTopToLocalePT : topToLocale ⊣ pt where
-  unit := { app := fun X => TopCat.ofHom ⟨localePointOfSpacePoint X, continuous_def.2 <|
+  unit := { app := fun X ↦ TopCat.ofHom ⟨localePointOfSpacePoint X, continuous_def.2 <|
         by rintro _ ⟨u, rfl⟩; simpa using! u.2⟩ }
-  counit := { app := fun L => ⟨Frm.ofHom (counitAppCont L)⟩ }
+  counit := { app := fun L ↦ ⟨Frm.ofHom (counitAppCont L)⟩ }
 
 end locale_top_adjunction
 
 end Locale
+

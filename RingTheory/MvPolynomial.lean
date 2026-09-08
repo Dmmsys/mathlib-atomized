@@ -32,148 +32,138 @@ namespace MvPolynomial
 
 variable (σ : Type u) (K : Type v)
 
-/--
-theorem `quotient_mk_comp_C_injective` / 定理 `quotient_mk_comp_C_injective`
-
-English:
-theorem quotient_mk_comp_C_injective
-  given: [Field K] (I : Ideal (MvPolynomial σ K)) (hI : I != ⊤)
-  proof: by
-  refine (injective_iff_map_eq_zero _).2 fun x hx => ?_
-  rw [RingHom.comp_apply]; rw [Ideal.Quotient.eq_zero_iff_mem] at hx
-  refine _root_.by_contradiction fun hx0 => absurd (I.eq_top_iff_one.2 ?_) hI
-  have := I.mul_mem_left (MvPolynomial.C x⁻¹) hx
-  rwa [← MvPolynomial.C.map_mul, inv_mul_cancel₀ hx0, MvPolynomial.C_1] at this
-
-中文:
-定理 quotient_mk_comp_C_injective
-  条件: [域 K] (I : 理想 (多元多项式 σ K)) (hI : I != ⊤)
-  证明: by
-  refine (injective_iff_map_eq_zero _).2 fun x hx => ?_
-  rw [RingHom.comp_apply]; rw [Ideal.Quotient.eq_zero_iff_mem] at hx
-  refine _root_.by_contradiction fun hx0 => absurd (I.eq_top_iff_one.2 ?_) hI
-  have := I.mul_mem_left (MvPolynomial.C x⁻¹) hx
-  rwa [← MvPolynomial.C.map_mul, inv_mul_cancel₀ hx0, MvPolynomial.C_1] at this
-
-Depends on / 依赖: I.eq_top_iff_one, I.mul_mem_left, Ideal.Quotient.eq_zero_iff_mem, MvPolynomial, MvPolynomial.C, MvPolynomial.C.map_mul, MvPolynomial.C_1, Quotient, RingHom, RingHom.comp_apply, _root_, _root_.by_contradiction, absurd, by_contradiction, comp_apply, eq_top_iff_one, eq_zero_iff_mem, injective_iff_map_eq_zero, map_mul, mul_mem_left
+/-
+**MvPolynomial.quotient_mk_comp_C_injective** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynom
+ial`。
+形式化陈述：quotient_mk_comp_C_injective [Field K] (I : Ideal (MvPolynomial σ K)) (hI 
+: I != ⊤) : Function.Injective ((Ideal.Quotient.mk I).comp MvPolynomial.C)
+参数：I : Ideal (MvPolynomial σ K)；hI : I != ⊤。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `injective_iff_map_eq_zero`：∀ {F : Type u_7} {G : Type u_8} {H : Type u_9
+} [inst : AddGroup G] [inst_1 : AddZeroClass H] [inst_2 : FunLike F G H]   [AddM
+onoidHomClass F…
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `by_contradiction`：by_contradiction {p : Prop} : (¬p -> False) -> p
+· 使用定理 `Ideal.eq_top_iff_one`：eq_top_iff_one : I = ⊤ ↔ (1 : α) in I
+· 使用定理 `Ideal.mul_mem_left`：mul_mem_left : b in I -> a * b in I
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.Quotient.eq_zero_iff_mem`：eq_zero_iff_mem : mk I a = 0 ↔ a in I
+· 使用定理 `RingHom.comp_apply`：comp_apply (hnp : β ->+* γ) (hmn : α ->+* β) (x : α)
+ : (hnp.comp hmn : α -> γ) x = hnp (hmn x)
+· 使用定理 `MvPolynomial.C_1`：C_1 : C 1 = (1 : MvPolynomial σ R)
+· 使用定理 `inv_mul_cancel₀`：inv_mul_cancel₀ (h : a != 0) : a⁻¹ * a = 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `RingHom.map_mul`：∀ {α : Type u_2} {β : Type u_3} {x : NonAssocSemiring α
+} {x_1 : NonAssocSemiring β} (f : α →+* β) (a b : α),   f (a * b) = f a * f b
 -/
-theorem quotient_mk_comp_C_injective [Field K] (I : Ideal (MvPolynomial σ K)) (hI : I != ⊤) :
+theorem quotient_mk_comp_C_injective [Field K] (I : Ideal (MvPolynomial σ K)) (hI : I ≠ ⊤) :
     Function.Injective ((Ideal.Quotient.mk I).comp MvPolynomial.C) := by
   refine (injective_iff_map_eq_zero _).2 fun x hx => ?_
-  rw [RingHom.comp_apply]; rw [Ideal.Quotient.eq_zero_iff_mem] at hx
+  rw [RingHom.comp_apply, Ideal.Quotient.eq_zero_iff_mem] at hx
   refine _root_.by_contradiction fun hx0 => absurd (I.eq_top_iff_one.2 ?_) hI
   have := I.mul_mem_left (MvPolynomial.C x⁻¹) hx
   rwa [← MvPolynomial.C.map_mul, inv_mul_cancel₀ hx0, MvPolynomial.C_1] at this
 
 variable {σ K} [CommRing K] [Nontrivial K]
 open Cardinal
-
-/--
-theorem `rank_eq_lift` / 定理 `rank_eq_lift`
-
-English:
-theorem rank_eq_lift
-  statement: Module.rank K (MvPolynomial σ K) = lift.{v} #(σ ->₀ Nat)
-  proof: by
-  rw [← Cardinal.lift_inj]; rw [← (basisMonomials σ K).mk_eq_rank]; rw [lift_lift]; rw [lift_umax.{u]; rw [v}]
-
-中文:
-定理 rank_eq_lift
-  结论: 模.rank K (多元多项式 σ K) = lift.{v} #(σ ->₀ 自然数)
-  证明: by
-  rw [← Cardinal.lift_inj]; rw [← (basisMonomials σ K).mk_eq_rank]; rw [lift_lift]; rw [lift_umax.{u]; rw [v}]
-
-Depends on / 依赖: Cardinal, Cardinal.lift_inj, basisMonomials, lift_inj, lift_lift, lift_umax, mk_eq_rank
+/-
+**MvPolynomial.rank_eq_lift** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：rank_eq_lift : Module.rank K (MvPolynomial σ K) = lift.{v} #(σ ->₀ Nat)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.lift_inj`：lift_inj {a b : Cardinal.{u}} : lift.{v, u} a = lift.
+{v, u} b ↔ a = b
+· 使用定理 `Module.Basis.mk_eq_rank`：mk_eq_rank (v : Basis ι R M) : Cardinal.lift.{v
+} #ι = Cardinal.lift.{w} (Module.rank R M)
+· 使用定理 `commRing_strongRankCondition`：∀ (R : Type u_1) [inst : CommRing R] [Nont
+rivial R], StrongRankCondition R
+· 使用定理 `Cardinal.lift_lift`：lift_lift.{u_1} (a : Cardinal.{u_1}) : lift.{w} (lif
+t.{v} a) = lift.{max v w} a
+· 使用定理 `Cardinal.lift_umax`：lift_umax : lift.{max u v, u} = lift.{v, u}
 -/
-theorem rank_eq_lift : Module.rank K (MvPolynomial σ K) = lift.{v} #(σ ->₀ Nat) := by
-  rw [← Cardinal.lift_inj]; rw [← (basisMonomials σ K).mk_eq_rank]; rw [lift_lift]; rw [lift_umax.{u]; rw [v}]
-
-/--
-theorem `rank_eq` / 定理 `rank_eq`
-
-English:
-theorem rank_eq
-  given: {σ : Type v}
-  statement: Module.rank K (MvPolynomial σ K) = #(σ ->₀ Nat)
-  proof: by
-  rw [← Cardinal.lift_inj]; rw [← (basisMonomials σ K).mk_eq_rank]
-
-中文:
-定理 rank_eq
-  条件: {σ : 类型v}
-  结论: 模.rank K (多元多项式 σ K) = #(σ ->₀ 自然数)
-  证明: by
-  rw [← Cardinal.lift_inj]; rw [← (basisMonomials σ K).mk_eq_rank]
-
-Depends on / 依赖: Cardinal, Cardinal.lift_inj, basisMonomials, lift_inj, mk_eq_rank
+theorem rank_eq_lift : Module.rank K (MvPolynomial σ K) = lift.{v} #(σ →₀ ℕ) := by
+  rw [← Cardinal.lift_inj, ← (basisMonomials σ K).mk_eq_rank, lift_lift, lift_umax.{u, v}]
+/-
+**MvPolynomial.rank_eq** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：rank_eq {σ : Type v} : Module.rank K (MvPolynomial σ K) = #(σ ->₀ Nat)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Cardinal.lift_inj`：lift_inj {a b : Cardinal.{u}} : lift.{v, u} a = lift.
+{v, u} b ↔ a = b
+· 使用定理 `Module.Basis.mk_eq_rank`：mk_eq_rank (v : Basis ι R M) : Cardinal.lift.{v
+} #ι = Cardinal.lift.{w} (Module.rank R M)
+· 使用定理 `commRing_strongRankCondition`：∀ (R : Type u_1) [inst : CommRing R] [Nont
+rivial R], StrongRankCondition R
 -/
-theorem rank_eq {σ : Type v} : Module.rank K (MvPolynomial σ K) = #(σ ->₀ Nat) := by
-  rw [← Cardinal.lift_inj]; rw [← (basisMonomials σ K).mk_eq_rank]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Module K (MvPolynomial σ K)
-  body: inferInstanceAs Module K (AddMonoidAlgebra K (σ ->₀ Nat))
-
-中文:
-实例 :
-  签名: 模 K (多元多项式 σ K)
-  定义体: inferInstanceAs Module K (AddMonoidAlgebra K (σ ->₀ Nat))
-
-Depends on / 依赖: AddMonoidAlgebra, Module
+theorem rank_eq {σ : Type v} : Module.rank K (MvPolynomial σ K) = #(σ →₀ ℕ) := by
+  rw [← Cardinal.lift_inj, ← (basisMonomials σ K).mk_eq_rank]
+/-
+**MvPolynomial.** 是 Mathlib 中的一个实例，位于命名空间 `MvPolynomial`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Module K (MvPolynomial σ K) :=
-inferInstanceAs Module K (AddMonoidAlgebra K (σ ->₀ Nat))
-
-/--
-theorem `finrank_eq_zero` / 定理 `finrank_eq_zero`
-
-English:
-theorem finrank_eq_zero
-  given: [Nonempty σ]
-  statement: Module.finrank K (MvPolynomial σ K) = 0
-  proof: (basisMonomials σ K).linearIndependent.finrank_eq_zero_of_infinite
-
-omit [Nontrivial K] in
-
-中文:
-定理 finrank_eq_zero
-  条件: [非空 σ]
-  结论: 模.finrank K (多元多项式 σ K) = 0
-  证明: (basisMonomials σ K).linearIndependent.finrank_eq_zero_of_infinite
-
-omit [Nontrivial K] in
-
-Depends on / 依赖: basisMonomials, finrank_eq_zero_of_infinite, linearIndependent, linearIndependent.finrank_eq_zero_of_infinite
+  inferInstanceAs <| Module K (AddMonoidAlgebra K (σ →₀ ℕ))
+/-
+**MvPolynomial.finrank_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：finrank_eq_zero [Nonempty σ] : Module.finrank K (MvPolynomial σ K) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `LinearIndependent.finrank_eq_zero_of_infinite`：LinearIndependent.finrank
+_eq_zero_of_infinite {ι} [Infinite ι] {v : ι -> M} (hv : LinearIndependent R v) 
+: finrank R M = 0
+· 使用定理 `instInfiniteNat`：Infinite ℕ
+· 使用定理 `Module.Basis.linearIndependent`：∀ {ι : Type u_1} {R : Type u_3} {M : Typ
+e u_5} [inst : Semiring R] [inst_1 : AddCommMonoid M]   [inst_2 : _root_.Module 
+R M] (b : Module.Bas…
 -/
 theorem finrank_eq_zero [Nonempty σ] : Module.finrank K (MvPolynomial σ K) = 0 :=
   (basisMonomials σ K).linearIndependent.finrank_eq_zero_of_infinite
 
 omit [Nontrivial K] in
-/--
-theorem `finrank_eq_one` / 定理 `finrank_eq_one`
-
-English:
-theorem finrank_eq_one
-  given: [IsEmpty σ]
-  statement: Module.finrank K (MvPolynomial σ K) = 1
-  proof: Module.rank_eq_one_iff_finrank_eq_one.mp by
-    cases subsingleton_or_nontrivial K <;> simp [rank_eq_lift]
-
-中文:
-定理 finrank_eq_one
-  条件: [是空 σ]
-  结论: 模.finrank K (多元多项式 σ K) = 1
-  证明: Module.rank_eq_one_iff_finrank_eq_one.mp by
-    cases subsingleton_or_nontrivial K <;> simp [rank_eq_lift]
-
-Depends on / 依赖: Module, Module.rank_eq_one_iff_finrank_eq_one.mp, rank_eq_lift, rank_eq_one_iff_finrank_eq_one, subsingleton_or_nontrivial
+/-
+**MvPolynomial.finrank_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：finrank_eq_one [IsEmpty σ] : Module.finrank K (MvPolynomial σ K) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Module.rank_eq_one_iff_finrank_eq_one`：rank_eq_one_iff_finrank_eq_one : 
+Module.rank R M = 1 ↔ finrank R M = 1
+· 使用定理 `subsingleton_or_nontrivial`：subsingleton_or_nontrivial (α : Type*) : Sub
+singleton α ∨ Nontrivial α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `rank_subsingleton`：rank_subsingleton [Subsingleton R] : Module.rank R M 
+= 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MvPolynomial.rank_eq_lift`：rank_eq_lift : Module.rank K (MvPolynomial σ 
+K) = lift.{v} #(σ ->₀ Nat)
+· 使用定理 `Cardinal.mk_fintype`：mk_fintype (α : Type u) [h : Fintype α] : #α = Fint
+ype.card α
+· 使用定理 `Fintype.card_unique`：card_unique [Unique α] [h : Fintype α] : Fintype.ca
+rd α = 1
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Cardinal.lift_one`：lift_one : lift 1 = 1
 -/
 theorem finrank_eq_one [IsEmpty σ] : Module.finrank K (MvPolynomial σ K) = 1 :=
-Module.rank_eq_one_iff_finrank_eq_one.mp by
+  Module.rank_eq_one_iff_finrank_eq_one.mp <| by
     cases subsingleton_or_nontrivial K <;> simp [rank_eq_lift]
 
 end MvPolynomial
+

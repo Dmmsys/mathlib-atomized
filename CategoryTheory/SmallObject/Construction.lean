@@ -17,11 +17,11 @@ we define a functor
 `SmallObject.functor f : Arrow S ⥤ Arrow S` which sends
 an object given by arrow `πX : X ⟶ S` to the pushout `functorObj f πX`:
 ```
-∐ functorObjSrcFamily f πX ⟶ X
+∐ functorObjSrcFamily f πX ⟶       X
 
-            | |
-            | |
-            v v
+            |                      |
+            |                      |
+            v                      v
 
 ∐ functorObjTgtFamily f πX ⟶ functorObj f πX
 ```
@@ -30,9 +30,9 @@ indexed by a type `FunctorObjIndex f πX` which parametrizes the
 diagrams of the form
 ```
 A i ⟶ X
- | |
- | |
- v v
+ |    |
+ |    |
+ v    v
 B i ⟶ S
 ```
 
@@ -57,34 +57,27 @@ open Category Limits HomotopicalAlgebra
 
 namespace SmallObject
 
-variable {C : Type u} [Category.{v} C] {I : Type w} {A B : I -> C} (f : forall i, A i ⟶ B i)
+variable {C : Type u} [Category.{v} C] {I : Type w} {A B : I → C} (f : ∀ i, A i ⟶ B i)
 
 section
 
 variable {S X : C} (πX : X ⟶ S)
 
-/--
-Definition of `FunctorObjIndex` / `FunctorObjIndex` 的定义
+/-- Given a family of morphisms `f i : A i ⟶ B i` and a morphism `πX : X ⟶ S`,
+this type parametrizes the commutative squares with a morphism `f i` on the left
+and `πX` on the right. -/
+/-
+**CategoryTheory.SmallObject.FunctorObjIndex** 是 Mathlib 中的一个结构，位于命名空间 `Category
+Theory.SmallObject`。
+形式化陈述：FunctorObjIndex where /-- an element in the index type -/ i : I /-- the to
+p morphism in the square -/ t : A i ⟶ X /-- the bottom morphism in the square -/
+ b : B i ⟶ S w : t ≫ πX = f i ≫ b  attribute [reassoc (attr
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure FunctorObjIndex
-  parameters: where
-  axioms and operations (4):
-    - i : I
-    - t : A i ⟶ X
-    - b : B i ⟶ S
-    - w : t ≫ πX = f i ≫ b
-
-中文:
-结构 FunctorObjIndex
-  参数: where
-  公理与运算 (4 个):
-    - i : I
-    - t : A i ⟶ X
-    - b : B i ⟶ S
-    - w : t ≫ πX = f i ≫ b
-
-Depends on / 依赖: FunctorObjIndex, FunctorObjIndex.w
+--- 原说明 ---
+Given a family of morphisms `f i : A i ⟶ B i` and a morphism `πX : X ⟶ S`,
+this type parametrizes the commutative squares with a morphism `f i` on the left
+and `πX` on the right.
 -/
 structure FunctorObjIndex where
   /-- an element in the index type -/
@@ -99,84 +92,76 @@ attribute [reassoc (attr := simp)] FunctorObjIndex.w
 
 variable [HasColimitsOfShape (Discrete (FunctorObjIndex f πX)) C]
 
-/--
-Definition of `functorObjSrcFamily` / `functorObjSrcFamily` 的定义
+/-- The family of objects `A x.i` parametrized by `x : FunctorObjIndex f πX`. -/
+/-
+**CategoryTheory.SmallObject.functorObjSrcFamily** 是 Mathlib 中的一个缩写定义，位于命名空间 `Ca
+tegoryTheory.SmallObject`。
+形式化陈述：functorObjSrcFamily (x : FunctorObjIndex f πX) : C
+参数：x : FunctorObjIndex f πX。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation functorObjSrcFamily
-  signature: (x : FunctorObjIndex f πX)
-  body: A x.i
-
-中文:
-缩写 functorObjSrcFamily
-  签名: (x : FunctorObjIndex f πX)
-  定义体: A x.i
+--- 原说明 ---
+The family of objects `A x.i` parametrized by `x : FunctorObjIndex f πX`.
 -/
 abbrev functorObjSrcFamily (x : FunctorObjIndex f πX) : C := A x.i
 
-/--
-Definition of `functorObjTgtFamily` / `functorObjTgtFamily` 的定义
+/-- The family of objects `B x.i` parametrized by `x : FunctorObjIndex f πX`. -/
+/-
+**CategoryTheory.SmallObject.functorObjTgtFamily** 是 Mathlib 中的一个缩写定义，位于命名空间 `Ca
+tegoryTheory.SmallObject`。
+形式化陈述：functorObjTgtFamily (x : FunctorObjIndex f πX) : C
+参数：x : FunctorObjIndex f πX。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation functorObjTgtFamily
-  signature: (x : FunctorObjIndex f πX)
-  body: B x.i
-
-中文:
-缩写 functorObjTgtFamily
-  签名: (x : FunctorObjIndex f πX)
-  定义体: B x.i
+--- 原说明 ---
+The family of objects `B x.i` parametrized by `x : FunctorObjIndex f πX`.
 -/
 abbrev functorObjTgtFamily (x : FunctorObjIndex f πX) : C := B x.i
 
-/--
-Definition of `functorObjLeftFamily` / `functorObjLeftFamily` 的定义
+/-- The family of the morphisms `f x.i : A x.i ⟶ B x.i`
+parametrized by `x : FunctorObjIndex f πX`. -/
+/-
+**CategoryTheory.SmallObject.functorObjLeftFamily** 是 Mathlib 中的一个缩写定义，位于命名空间 `C
+ategoryTheory.SmallObject`。
+形式化陈述：functorObjLeftFamily (x : FunctorObjIndex f πX) : functorObjSrcFamily f πX
+ x ⟶ functorObjTgtFamily f πX x
+参数：x : FunctorObjIndex f πX。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation functorObjLeftFamily
-  signature: (x : FunctorObjIndex f πX)
-  body: f x.i
-
-中文:
-缩写 functorObjLeftFamily
-  签名: (x : FunctorObjIndex f πX)
-  定义体: f x.i
+--- 原说明 ---
+The family of the morphisms `f x.i : A x.i ⟶ B x.i`
+parametrized by `x : FunctorObjIndex f πX`.
 -/
 abbrev functorObjLeftFamily (x : FunctorObjIndex f πX) :
     functorObjSrcFamily f πX x ⟶ functorObjTgtFamily f πX x := f x.i
 
-/--
-Definition of `functorObjTop` / `functorObjTop` 的定义
+/-- The top morphism in the pushout square in the definition of `pushoutObj f πX`. -/
+/-
+**CategoryTheory.SmallObject.functorObjTop** 是 Mathlib 中的一个缩写定义，位于命名空间 `Category
+Theory.SmallObject`。
+形式化陈述：functorObjTop : ∐ functorObjSrcFamily f πX ⟶ X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation functorObjTop
-  signature: : ∐ functorObjSrcFamily f πX ⟶ X
-  body: Limits.Sigma.desc (fun x => x.t)
-
-中文:
-缩写 functorObjTop
-  签名: : ∐ functorObjSrcFamily f πX ⟶ X
-  定义体: Limits.Sigma.desc (fun x => x.t)
-
-Depends on / 依赖: Limits, Limits.Sigma.desc
+--- 原说明 ---
+The top morphism in the pushout square in the definition of `pushoutObj f πX`.
 -/
 noncomputable abbrev functorObjTop : ∐ functorObjSrcFamily f πX ⟶ X :=
   Limits.Sigma.desc (fun x => x.t)
 
-/--
-Definition of `functorObjLeft` / `functorObjLeft` 的定义
+/-- The left morphism in the pushout square in the definition of `pushoutObj f πX`. -/
+/-
+**CategoryTheory.SmallObject.functorObjLeft** 是 Mathlib 中的一个缩写定义，位于命名空间 `Categor
+yTheory.SmallObject`。
+形式化陈述：functorObjLeft : ∐ functorObjSrcFamily f πX ⟶ ∐ functorObjTgtFamily f πX
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation functorObjLeft
-  signature: :
-  body: Limits.Sigma.map (functorObjLeftFamily f πX)
-
-中文:
-缩写 functorObjLeft
-  签名: :
-  定义体: Limits.Sigma.map (functorObjLeftFamily f πX)
-
-Depends on / 依赖: Limits, Limits.Sigma.map, functorObjLeftFamily
+--- 原说明 ---
+The left morphism in the pushout square in the definition of `pushoutObj f πX`.
 -/
 noncomputable abbrev functorObjLeft :
     ∐ functorObjSrcFamily f πX ⟶ ∐ functorObjTgtFamily f πX :=
@@ -184,92 +169,76 @@ noncomputable abbrev functorObjLeft :
 
 variable [HasPushout (functorObjTop f πX) (functorObjLeft f πX)]
 
-/--
-Definition of `functorObj` / `functorObj` 的定义
+/-- The functor `SmallObject.functor f : Arrow C ⥤ Arrow C` that is part of
+the small object argument for a family of morphisms `f`, on an object given
+as a morphism `πX : X ⟶ S`. -/
+/-
+**CategoryTheory.SmallObject.functorObj** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryThe
+ory.SmallObject`。
+形式化陈述：functorObj : C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation functorObj
-  signature: : C
-  body: pushout (functorObjTop f πX) (functorObjLeft f πX)
-
-中文:
-缩写 functorObj
-  签名: : C
-  定义体: pushout (functorObjTop f πX) (functorObjLeft f πX)
-
-Depends on / 依赖: functorObjLeft, functorObjTop, pushout
+--- 原说明 ---
+The functor `SmallObject.functor f : Arrow C ⥤ Arrow C` that is part of
+the small object argument for a family of morphisms `f`, on an object given
+as a morphism `πX : X ⟶ S`.
 -/
 noncomputable abbrev functorObj : C :=
   pushout (functorObjTop f πX) (functorObjLeft f πX)
 
-/--
-Definition of `ιFunctorObj` / `ιFunctorObj` 的定义
+/-- The canonical morphism `X ⟶ functorObj f πX`. -/
+/-
+**CategoryTheory.SmallObject.** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.SmallO
+bject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ιFunctorObj
-  signature: : X ⟶ functorObj f πX
-  body: pushout.inl _ _
-
-中文:
-缩写 ιFunctorObj
-  签名: : X ⟶ functorObj f πX
-  定义体: pushout.inl _ _
-
-Depends on / 依赖: pushout, pushout.inl
+--- 原说明 ---
+The canonical morphism `X ⟶ functorObj f πX`.
 -/
 noncomputable abbrev ιFunctorObj : X ⟶ functorObj f πX := pushout.inl _ _
 
-/--
-Definition of `ρFunctorObj` / `ρFunctorObj` 的定义
+/-- The canonical morphism `∐ (functorObjTgtFamily f πX) ⟶ functorObj f πX`. -/
+/-
+**CategoryTheory.SmallObject.** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.SmallO
+bject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ρFunctorObj
-  signature: : ∐ functorObjTgtFamily f πX ⟶ functorObj f πX
-  body: pushout.inr _ _
-
-@[reassoc]
-
-中文:
-缩写 ρFunctorObj
-  签名: : ∐ functorObjTgtFamily f πX ⟶ functorObj f πX
-  定义体: pushout.inr _ _
-
-@[reassoc]
-
-Depends on / 依赖: pushout, pushout.inr
+--- 原说明 ---
+The canonical morphism `∐ (functorObjTgtFamily f πX) ⟶ functorObj f πX`.
 -/
 noncomputable abbrev ρFunctorObj : ∐ functorObjTgtFamily f πX ⟶ functorObj f πX := pushout.inr _ _
 
 @[reassoc]
-/--
-lemma `functorObj_comm` / 引理 `functorObj_comm`
-
-English:
-lemma functorObj_comm
-  proof: pushout.condition
-
-中文:
-引理 functorObj_comm
-  证明: pushout.condition
-
-Depends on / 依赖: condition, pushout, pushout.condition
+/-
+**CategoryTheory.SmallObject.functorObj_comm** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.SmallObject`。
+形式化陈述：functorObj_comm : functorObjTop f πX ≫ ιFunctorObj f πX = functorObjLeft f
+ πX ≫ ρFunctorObj f πX
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.pushout.condition`：∀ {C : Type u} [inst : Category
+Theory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z}   [inst_1 : Catego
+ryTheory.Limits.HasPushout f …
 -/
 lemma functorObj_comm :
     functorObjTop f πX ≫ ιFunctorObj f πX = functorObjLeft f πX ≫ ρFunctorObj f πX :=
   pushout.condition
-
-/--
-lemma `functorObj_isPushout` / 引理 `functorObj_isPushout`
-
-English:
-lemma functorObj_isPushout
-  proof: IsPushout.of_hasPushout _ _
-
-中文:
-引理 functorObj_isPushout
-  证明: IsPushout.of_hasPushout _ _
-
-Depends on / 依赖: IsPushout, IsPushout.of_hasPushout, of_hasPushout
+/-
+**CategoryTheory.SmallObject.functorObj_isPushout** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.SmallObject`。
+形式化陈述：functorObj_isPushout : IsPushout (functorObjTop f πX) (functorObjLeft f πX
+) (ιFunctorObj f πX) (ρFunctorObj f πX)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.IsPushout.of_hasPushout`：of_hasPushout (f : Z ⟶ X) (g : Z
+ ⟶ Y) [HasPushout f g] : IsPushout f g (pushout.inl f g) (pushout.inr f g)
 -/
 lemma functorObj_isPushout :
     IsPushout (functorObjTop f πX) (functorObjLeft f πX) (ιFunctorObj f πX) (ρFunctorObj f πX) :=
@@ -277,99 +246,92 @@ lemma functorObj_isPushout :
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `FunctorObjIndex.comm` / 引理 `FunctorObjIndex.comm`
-
-English:
-lemma FunctorObjIndex.comm
-  given: (x : FunctorObjIndex f πX)
-  proof: by
-  simpa using (Sigma.ι (functorObjSrcFamily f πX) x ≫= functorObj_comm f πX).symm
-
-中文:
-引理 FunctorObjIndex.comm
-  条件: (x : FunctorObjIndex f πX)
-  证明: by
-  simpa using (Sigma.ι (functorObjSrcFamily f πX) x ≫= functorObj_comm f πX).symm
-
-Depends on / 依赖: functorObjSrcFamily, functorObj_comm
+/-
+**CategoryTheory.SmallObject.FunctorObjIndex.comm** 是 Mathlib 中的一个定理，位于命名空间 `Cat
+egoryTheory.SmallObject.FunctorObjIndex`。
+形式化陈述：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {I : Type w} {A B
+ : I → C} (f : (i : I) → A i ⟶ B i) {S X : C}   (πX : X ⟶ S)   [inst_1 :     Cat
+egoryTheory.Limits.HasColimitsOfShape (CategoryTheory.Discrete (CategoryTheory.S
+mallObject.FunctorObjIndex f πX))       C]   [inst_2 :     CategoryTheory.Limits
+.HasPushout (CategoryTheory.SmallObject.functorObjTop f πX)       (CategoryTheor
+y.SmallObject.functorObjLeft f πX)]   (x : CategoryTheory.SmallObject.FunctorObj
+Index f πX),   CategoryTheory.CategoryStruct.comp (f x.i)       (CategoryTheory.
+CategoryStruct.comp         (CategoryTheory.Limits.Sigma.ι (CategoryTheory.Small
+Object.functorObjTgtFamily f πX) x)         (CategoryTheory.SmallObject.ρFunctor
+Obj f πX)) =     CategoryTheory.CategoryStruct.comp x.t (CategoryTheory.SmallObj
+ect.ιFunctorObj f πX)
+参数：f : (i : I) → A i ⟶ B i；πX : X ⟶ S；CategoryTheory.Discrete (CategoryTheory.Sm
+allObject.FunctorObjIndex f πX)；CategoryTheory.SmallObject.functorObjTop f πX；Ca
+tegoryTheory.SmallObject.functorObjLeft f πX；x : CategoryTheory.SmallObject.Func
+torObjIndex f πX；f x.i；CategoryTheory.CategoryStruct.comp         (CategoryTheor
+y.Limits.Sigma.ι (CategoryTheory.SmallObject.functorObjTgtFamily f πX) x)       
+  (CategoryTheory.SmallObject.ρFunctorObj f πX)；CategoryTheory.SmallObject.ιFunc
+torObj f πX。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.Sigma.ι_map_assoc`：∀ {β : Type w} {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {f g : β → C}   [inst_1 : CategoryTheory.
+Limits.HasCoproduct f] [inst_…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_desc_assoc`：∀ {J : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{
+v, u} C]   {F : CategoryTheory.F…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.whisker_eq`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {X Y Z : C} {f g : Y ⟶ X} (h : Z ⟶ Y),   f = g → CategoryTheory.Cate
+goryStruct.comp…
+· 使用引理 `CategoryTheory.SmallObject.functorObj_comm`：functorObj_comm : functorObj
+Top f πX ≫ ιFunctorObj f πX = functorObjLeft f πX ≫ ρFunctorObj f πX
 -/
 lemma FunctorObjIndex.comm (x : FunctorObjIndex f πX) :
     f x.i ≫ Sigma.ι (functorObjTgtFamily f πX) x ≫ ρFunctorObj f πX = x.t ≫ ιFunctorObj f πX := by
   simpa using (Sigma.ι (functorObjSrcFamily f πX) x ≫= functorObj_comm f πX).symm
 
-/--
-Definition of `π'FunctorObj` / `π'FunctorObj` 的定义
+/-- The canonical projection on the base object. -/
+/-
+**CategoryTheory.SmallObject.** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory.SmallO
+bject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation π'FunctorObj
-  signature: : ∐ functorObjTgtFamily f πX ⟶ S
-  body: Sigma.desc (fun x => x.b)
-
-中文:
-缩写 π'FunctorObj
-  签名: : ∐ functorObjTgtFamily f πX ⟶ S
-  定义体: Sigma.desc (fun x => x.b)
-
-Depends on / 依赖: Sigma.desc
+--- 原说明 ---
+The canonical projection on the base object.
 -/
 noncomputable abbrev π'FunctorObj : ∐ functorObjTgtFamily f πX ⟶ S := Sigma.desc (fun x => x.b)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `πFunctorObj` / `πFunctorObj` 的定义
+/-- The canonical projection on the base object. -/
+/-
+**CategoryTheory.SmallObject.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.SmallObj
+ect`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition πFunctorObj
-  signature: : functorObj f πX ⟶ S
-  body: pushout.desc πX (π'FunctorObj f πX) (by ext; simp [π'FunctorObj])
-
-中文:
-定义 πFunctorObj
-  签名: : functorObj f πX ⟶ S
-  定义体: pushout.desc πX (π'FunctorObj f πX) (by ext; simp [π'FunctorObj])
-
-Depends on / 依赖: FunctorObj, pushout, pushout.desc
+--- 原说明 ---
+The canonical projection on the base object.
 -/
 noncomputable def πFunctorObj : functorObj f πX ⟶ S :=
   pushout.desc πX (π'FunctorObj f πX) (by ext; simp [π'FunctorObj])
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `ρFunctorObj_π` / 引理 `ρFunctorObj_π`
-
-English:
-lemma ρFunctorObj_π
-  statement: ρFunctorObj f πX ≫ πFunctorObj f πX = π'FunctorObj f πX
-  proof: by
-  simp [πFunctorObj]
-
-中文:
-引理 ρFunctorObj_π
-  结论: ρFunctorObj f πX ≫ πFunctorObj f πX = π'FunctorObj f πX
-  证明: by
-  simp [πFunctorObj]
+/-
+**CategoryTheory.SmallObject.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.SmallObj
+ect`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ρFunctorObj_π : ρFunctorObj f πX ≫ πFunctorObj f πX = π'FunctorObj f πX := by
   simp [πFunctorObj]
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `ιFunctorObj_πFunctorObj` / 引理 `ιFunctorObj_πFunctorObj`
-
-English:
-lemma ιFunctorObj_πFunctorObj
-  statement: ιFunctorObj f πX ≫ πFunctorObj f πX = πX
-  proof: by
-  simp [ιFunctorObj, πFunctorObj]
-
-中文:
-引理 ιFunctorObj_πFunctorObj
-  结论: ιFunctorObj f πX ≫ πFunctorObj f πX = πX
-  证明: by
-  simp [ιFunctorObj, πFunctorObj]
+/-
+**CategoryTheory.SmallObject.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.SmallObj
+ect`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ιFunctorObj_πFunctorObj : ιFunctorObj f πX ≫ πFunctorObj f πX = πX := by
   simp [ιFunctorObj, πFunctorObj]
@@ -378,38 +340,14 @@ set_option backward.defeqAttrib.useBackward true in
 /-- The morphism `ιFunctorObj f πX : X ⟶ functorObj f πX` is obtained by
 attaching `f`-cells. -/
 @[simps]
-/--
-Definition of `attachCellsιFunctorObj` / `attachCellsιFunctorObj` 的定义
+/-
+**CategoryTheory.SmallObject.attachCells** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.SmallObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition attachCellsιFunctorObj
-  signature: :
-  body: FunctorObjIndex f πX
-  π x := x.i
-  isColimit₁ := coproductIsCoproduct _
-  isColimit₂ := coproductIsCoproduct _
-  m := functorObjLeft f πX
-  g₁ := functorObjTop f πX
-  g₂ := ρFunctorObj f πX
-  isPushout := IsPushout.of_hasPushout (functorObjTop f πX) (functorObjLeft f πX)
-  cofan₁ := _
-  cofan₂ := _
-
-中文:
-定义 attachCellsιFunctorObj
-  签名: :
-  定义体: FunctorObjIndex f πX
-  π x := x.i
-  isColimit₁ := coproductIsCoproduct _
-  isColimit₂ := coproductIsCoproduct _
-  m := functorObjLeft f πX
-  g₁ := functorObjTop f πX
-  g₂ := ρFunctorObj f πX
-  isPushout := IsPushout.of_hasPushout (functorObjTop f πX) (functorObjLeft f πX)
-  cofan₁ := _
-  cofan₂ := _
-
-Depends on / 依赖: FunctorObjIndex
+--- 原说明 ---
+The morphism `ιFunctorObj f πX : X ⟶ functorObj f πX` is obtained by
+attaching `f`-cells.
 -/
 noncomputable def attachCellsιFunctorObj :
     AttachCells.{max v w} f (ιFunctorObj f πX) where
@@ -428,42 +366,10 @@ section Small
 
 variable [LocallySmall.{t} C] [Small.{t} I]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Small.{t} (FunctorObjIndex f πX)
-  body: by
-  let φ (x : FunctorObjIndex f πX) :
-    Σ (i : Shrink.{t} I),
-      Shrink.{t} ((A ((equivShrink _).symm i) ⟶ X) ×
-        (B ((equivShrink _).symm i) ⟶ S)) :=
-        ⟨equivShrink _ x.i, equivShrink _
-          ⟨eqToHom (by simp) ≫ x.t, eqToHom (by simp) ≫ x.b⟩⟩
-  have hφ : Function.Injective φ := by
-    rintro ⟨i₁, t₁, b₁, _⟩ ⟨i₂, t₂, b₂, _⟩ h
-    obtain rfl : i₁ = i₂ := by simpa [φ] using congr_arg Sigma.fst h
-    simpa [cancel_epi, φ] using h
-  exact small_of_injective hφ
-
-中文:
-实例 :
-  签名: Small.{t} (FunctorObjIndex f πX)
-  定义体: by
-  let φ (x : FunctorObjIndex f πX) :
-    Σ (i : Shrink.{t} I),
-      Shrink.{t} ((A ((equivShrink _).symm i) ⟶ X) ×
-        (B ((equivShrink _).symm i) ⟶ S)) :=
-        ⟨equivShrink _ x.i, equivShrink _
-          ⟨eqToHom (by simp) ≫ x.t, eqToHom (by simp) ≫ x.b⟩⟩
-  have hφ : Function.Injective φ := by
-    rintro ⟨i₁, t₁, b₁, _⟩ ⟨i₂, t₂, b₂, _⟩ h
-    obtain rfl : i₁ = i₂ := by simpa [φ] using congr_arg Sigma.fst h
-    simpa [cancel_epi, φ] using h
-  exact small_of_injective hφ
-
-Depends on / 依赖: DecidableRel, Function, Function.Injective, FunctorObjIndex, H.Adj, Injective, Shrink, Sigma.fst, cancel_epi, congr_arg, eqToHom, equivShrink, small_of_injective
+/-
+**CategoryTheory.SmallObject.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.SmallObj
+ect`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Small.{t} (FunctorObjIndex f πX) := by
   let φ (x : FunctorObjIndex f πX) :
@@ -479,43 +385,29 @@ instance : Small.{t} (FunctorObjIndex f πX) := by
   exact small_of_injective hφ
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Small.{t} (attachCellsιFunctorObj f πX).ι
-  body: by
-  dsimp
-  infer_instance
-
-中文:
-实例 :
-  签名: Small.{t} (attachCellsιFunctorObj f πX).ι
-  定义体: by
-  dsimp
-  infer_instance
-
-Depends on / 依赖: infer_instance
+/-
+**CategoryTheory.SmallObject.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.SmallObj
+ect`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Small.{t} (attachCellsιFunctorObj f πX).ι := by
   dsimp
   infer_instance
 
-/--
-Definition of `attachCellsιFunctorObjOfSmall` / `attachCellsιFunctorObjOfSmall` 的定义
+/-- The morphism `ιFunctorObj f πX : X ⟶ functorObj f πX` is obtained by
+attaching `f`-cells, and the index type can be chosen to be in `Type t`
+if the category is `t`-locally small and the index type for `f`
+is `t`-small. -/
+/-
+**CategoryTheory.SmallObject.attachCells** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.SmallObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition attachCellsιFunctorObjOfSmall
-  signature: :
-  body: (attachCellsιFunctorObj f πX).reindex (equivShrink.{t} _).symm
-
-中文:
-定义 attachCellsιFunctorObjOfSmall
-  签名: :
-  定义体: (attachCellsιFunctorObj f πX).reindex (equivShrink.{t} _).symm
-
-Depends on / 依赖: equivShrink, reindex
+--- 原说明 ---
+The morphism `ιFunctorObj f πX : X ⟶ functorObj f πX` is obtained by
+attaching `f`-cells, and the index type can be chosen to be in `Type t`
+if the category is `t`-locally small and the index type for `f`
+is `t`-small.
 -/
 noncomputable def attachCellsιFunctorObjOfSmall :
     AttachCells.{t} f (ιFunctorObj f πX) :=
@@ -530,22 +422,19 @@ variable {S T X Y : C} {πX : X ⟶ S} {πY : Y ⟶ T} (τ : Arrow.mk πX ⟶ Ar
   [HasColimitsOfShape (Discrete (FunctorObjIndex f πY)) C]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `functorMapSrc` / `functorMapSrc` 的定义
+/-- The canonical morphism `∐ (functorObjSrcFamily f πX) ⟶ ∐ (functorObjSrcFamily f πY)`
+induced by a morphism `Arrow.mk πX ⟶ Arrow.mk πY`. -/
+/-
+**CategoryTheory.SmallObject.functorMapSrc** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.SmallObject`。
+形式化陈述：functorMapSrc : ∐ (functorObjSrcFamily f πX) ⟶ ∐ functorObjSrcFamily f πY
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorMapSrc
-  signature: :
-  body: Sigma.map' (fun x => FunctorObjIndex.mk x.i (x.t ≫ τ.left) (x.b ≫ τ.right) (by simp))
-    (fun _ => 𝟙 _)
-
-中文:
-定义 functorMapSrc
-  签名: :
-  定义体: Sigma.map' (fun x => FunctorObjIndex.mk x.i (x.t ≫ τ.left) (x.b ≫ τ.right) (by simp))
-    (fun _ => 𝟙 _)
-
-Depends on / 依赖: FunctorObjIndex, FunctorObjIndex.mk, Sigma.map
+--- 原说明 ---
+The canonical morphism `∐ (functorObjSrcFamily f πX) ⟶ ∐ (functorObjSrcFamily f 
+πY)`
+induced by a morphism `Arrow.mk πX ⟶ Arrow.mk πY`.
 -/
 noncomputable def functorMapSrc :
     ∐ (functorObjSrcFamily f πX) ⟶ ∐ functorObjSrcFamily f πY :=
@@ -555,22 +444,10 @@ noncomputable def functorMapSrc :
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `ι_functorMapSrc` / 引理 `ι_functorMapSrc`
-
-English:
-lemma ι_functorMapSrc
-  statement: (i : I) (t : A i ⟶ X) (b : B i ⟶ S) (w : t ≫ πX = f i ≫ b)
-  proof: by
-  subst hb' ht'
-  simp [functorMapSrc]
-
-中文:
-引理 ι_functorMapSrc
-  结论: (i : I) (t : A i ⟶ X) (b : B i ⟶ S) (w : t ≫ πX = f i ≫ b)
-  证明: by
-  subst hb' ht'
-  simp [functorMapSrc]
+/-
+**CategoryTheory.SmallObject.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.SmallObj
+ect`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι_functorMapSrc (i : I) (t : A i ⟶ X) (b : B i ⟶ S) (w : t ≫ πX = f i ≫ b)
     (b' : B i ⟶ T) (hb' : b ≫ τ.right = b')
@@ -580,26 +457,41 @@ lemma ι_functorMapSrc (i : I) (t : A i ⟶ X) (b : B i ⟶ S) (w : t ≫ πX = 
         (FunctorObjIndex.mk i t' b' (by
           have := τ.w
           dsimp at this
-          rw [← hb']; rw [← reassoc_of% w]; rw [← ht']; rw [assoc]; rw [this])) := by
+          rw [← hb', ← reassoc_of% w, ← ht', assoc, this])) := by
   subst hb' ht'
   simp [functorMapSrc]
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `functorMapSrc_functorObjTop` / 引理 `functorMapSrc_functorObjTop`
-
-English:
-lemma functorMapSrc_functorObjTop
-  proof: by
-  ext ⟨i, t, b, w⟩
-  simp [ι_functorMapSrc_assoc f τ i t b w _ rfl]
-
-中文:
-引理 functorMapSrc_functorObjTop
-  证明: by
-  ext ⟨i, t, b, w⟩
-  simp [ι_functorMapSrc_assoc f τ i t b w _ rfl]
+/-
+**CategoryTheory.SmallObject.functorMapSrc_functorObjTop** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.SmallObject`。
+形式化陈述：functorMapSrc_functorObjTop : functorMapSrc f τ ≫ functorObjTop f πY = fun
+ctorObjTop f πX ≫ τ.left
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Sigma.hom_ext`：∀ {β : Type w} {C : Type u} [inst :
+ CategoryTheory.Category.{v, u} C] {f : β → C}   [inst_1 : CategoryTheory.Limits
+.HasCoproduct f] {X : C} …
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.SmallObject.ι_functorMapSrc_assoc`：∀ {C : Type u} [inst :
+ CategoryTheory.Category.{v, u} C] {I : Type w} {A B : I → C} (f : (i : I) → A i
+ ⟶ B i)   {S T X Y : C} {πX : X ⟶ S} {…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_desc`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} 
+C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Limits.colimit.ι_desc_assoc`：∀ {J : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{
+v, u} C]   {F : CategoryTheory.F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma functorMapSrc_functorObjTop :
     functorMapSrc f τ ≫ functorObjTop f πY = functorObjTop f πX ≫ τ.left := by
@@ -607,22 +499,18 @@ lemma functorMapSrc_functorObjTop :
   simp [ι_functorMapSrc_assoc f τ i t b w _ rfl]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `functorMapTgt` / `functorMapTgt` 的定义
+/-- The canonical morphism `∐ functorObjTgtFamily f πX ⟶ ∐ functorObjTgtFamily f πY`
+induced by a morphism `Arrow.mk πX ⟶ Arrow.mk πY`. -/
+/-
+**CategoryTheory.SmallObject.functorMapTgt** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.SmallObject`。
+形式化陈述：functorMapTgt : ∐ functorObjTgtFamily f πX ⟶ ∐ functorObjTgtFamily f πY
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functorMapTgt
-  signature: :
-  body: Sigma.map' (fun x => FunctorObjIndex.mk x.i (x.t ≫ τ.left) (x.b ≫ τ.right) (by simp))
-    (fun _ => 𝟙 _)
-
-中文:
-定义 functorMapTgt
-  签名: :
-  定义体: Sigma.map' (fun x => FunctorObjIndex.mk x.i (x.t ≫ τ.left) (x.b ≫ τ.right) (by simp))
-    (fun _ => 𝟙 _)
-
-Depends on / 依赖: FunctorObjIndex, FunctorObjIndex.mk, Sigma.map
+--- 原说明 ---
+The canonical morphism `∐ functorObjTgtFamily f πX ⟶ ∐ functorObjTgtFamily f πY`
+induced by a morphism `Arrow.mk πX ⟶ Arrow.mk πY`.
 -/
 noncomputable def functorMapTgt :
     ∐ functorObjTgtFamily f πX ⟶ ∐ functorObjTgtFamily f πY :=
@@ -632,22 +520,10 @@ noncomputable def functorMapTgt :
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `ι_functorMapTgt` / 引理 `ι_functorMapTgt`
-
-English:
-lemma ι_functorMapTgt
-  statement: (i : I) (t : A i ⟶ X) (b : B i ⟶ S) (w : t ≫ πX = f i ≫ b)
-  proof: by
-  subst hb' ht'
-  simp [functorMapTgt]
-
-中文:
-引理 ι_functorMapTgt
-  结论: (i : I) (t : A i ⟶ X) (b : B i ⟶ S) (w : t ≫ πX = f i ≫ b)
-  证明: by
-  subst hb' ht'
-  simp [functorMapTgt]
+/-
+**CategoryTheory.SmallObject.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.SmallObj
+ect`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι_functorMapTgt (i : I) (t : A i ⟶ X) (b : B i ⟶ S) (w : t ≫ πX = f i ≫ b)
     (b' : B i ⟶ T) (hb' : b ≫ τ.right = b')
@@ -657,24 +533,41 @@ lemma ι_functorMapTgt (i : I) (t : A i ⟶ X) (b : B i ⟶ S) (w : t ≫ πX = 
         (FunctorObjIndex.mk i t' b' (by
           have := τ.w
           dsimp at this
-          rw [← hb']; rw [← reassoc_of% w]; rw [← ht']; rw [assoc]; rw [this])) := by
+          rw [← hb', ← reassoc_of% w, ← ht', assoc, this])) := by
   subst hb' ht'
   simp [functorMapTgt]
-
-/--
-lemma `functorMap_comm` / 引理 `functorMap_comm`
-
-English:
-lemma functorMap_comm
-  proof: by
-  ext ⟨i, t, b, w⟩
-  simp [ι_functorMapTgt f τ i t b w _ rfl, ι_functorMapSrc_assoc f τ i t b w _ rfl]
-
-中文:
-引理 functorMap_comm
-  证明: by
-  ext ⟨i, t, b, w⟩
-  simp [ι_functorMapTgt f τ i t b w _ rfl, ι_functorMapSrc_assoc f τ i t b w _ rfl]
+/-
+**CategoryTheory.SmallObject.functorMap_comm** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.SmallObject`。
+形式化陈述：functorMap_comm : functorObjLeft f πX ≫ functorMapTgt f τ = functorMapSrc 
+f τ ≫ functorObjLeft f πY
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Sigma.hom_ext`：∀ {β : Type w} {C : Type u} [inst :
+ CategoryTheory.Category.{v, u} C] {f : β → C}   [inst_1 : CategoryTheory.Limits
+.HasCoproduct f] {X : C} …
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.Sigma.ι_map_assoc`：∀ {β : Type w} {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {f g : β → C}   [inst_1 : CategoryTheory.
+Limits.HasCoproduct f] [inst_…
+· 使用引理 `CategoryTheory.SmallObject.ι_functorMapTgt`：ι_functorMapTgt (i : I) (t :
+ A i ⟶ X) (b : B i ⟶ S) (w : t ≫ πX = f i ≫ b) (b' : B i ⟶ T) (hb' : b ≫ τ.right
+ = b') (t' : A i ⟶ Y) (ht' : t ≫…
+· 使用定理 `CategoryTheory.SmallObject.ι_functorMapSrc_assoc`：∀ {C : Type u} [inst :
+ CategoryTheory.Category.{v, u} C] {I : Type w} {A B : I → C} (f : (i : I) → A i
+ ⟶ B i)   {S T X Y : C} {πX : X ⟶ S} {…
+· 使用定理 `CategoryTheory.Limits.Sigma.ι_map`：∀ {β : Type w} {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] {f g : β → C}   [inst_1 : CategoryTheory.Limits
+.HasCoproduct f] [inst_…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma functorMap_comm :
     functorObjLeft f πX ≫ functorMapTgt f τ =
@@ -686,22 +579,20 @@ variable [HasPushout (functorObjTop f πX) (functorObjLeft f πX)]
   [HasPushout (functorObjTop f πY) (functorObjLeft f πY)]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `functorMap` / `functorMap` 的定义
+/-- The functor `SmallObject.functor f S : Arrow S ⥤ Arrow S` that is part of
+the small object argument for a family of morphisms `f`, on morphisms. -/
+/-
+**CategoryTheory.SmallObject.functorMap** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.SmallObject`。
+形式化陈述：functorMap : functorObj f πX ⟶ functorObj f πY
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.SmallObject.functorMap_comm`：functorMap_comm : functorObj
+Left f πX ≫ functorMapTgt f τ = functorMapSrc f τ ≫ functorObjLeft f πY
 
-English:
-definition functorMap
-  signature: : functorObj f πX ⟶ functorObj f πY
-  body: pushout.map _ _ _ _ τ.left (functorMapTgt f τ) (functorMapSrc f τ) (by simp)
-    (functorMap_comm f τ)
-
-中文:
-定义 functorMap
-  签名: : functorObj f πX ⟶ functorObj f πY
-  定义体: pushout.map _ _ _ _ τ.left (functorMapTgt f τ) (functorMapSrc f τ) (by simp)
-    (functorMap_comm f τ)
-
-Depends on / 依赖: functorMapSrc, functorMapTgt, functorMap_comm, pushout, pushout.map
+--- 原说明 ---
+The functor `SmallObject.functor f S : Arrow S ⥤ Arrow S` that is part of
+the small object argument for a family of morphisms `f`, on morphisms.
 -/
 noncomputable def functorMap : functorObj f πX ⟶ functorObj f πY :=
   pushout.map _ _ _ _ τ.left (functorMapTgt f τ) (functorMapSrc f τ) (by simp)
@@ -709,26 +600,10 @@ noncomputable def functorMap : functorObj f πX ⟶ functorObj f πY :=
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `functorMap_π` / 引理 `functorMap_π`
-
-English:
-lemma functorMap_π
-  statement: functorMap f τ ≫ πFunctorObj f πY = πFunctorObj f πX ≫ τ.right
-  proof: by
-  ext ⟨i, t, b, w⟩
-  · simp [functorMap]
-  · simp [functorMap, ι_functorMapTgt_assoc f τ i t b w _ rfl]
-
-中文:
-引理 functorMap_π
-  结论: functorMap f τ ≫ πFunctorObj f πY = πFunctorObj f πX ≫ τ.right
-  证明: by
-  ext ⟨i, t, b, w⟩
-  · simp [functorMap]
-  · simp [functorMap, ι_functorMapTgt_assoc f τ i t b w _ rfl]
-
-Depends on / 依赖: functorMap
+/-
+**CategoryTheory.SmallObject.functorMap_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.SmallObject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma functorMap_π : functorMap f τ ≫ πFunctorObj f πY = πFunctorObj f πX ≫ τ.right := by
   ext ⟨i, t, b, w⟩
@@ -739,28 +614,44 @@ set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 variable (X) in
 @[simp]
-/--
-lemma `functorMap_id` / 引理 `functorMap_id`
-
-English:
-lemma functorMap_id
-  statement: functorMap f (𝟙 (Arrow.mk πX)) = 𝟙 _
-  proof: by
-  ext ⟨i, t, b, w⟩
-  · simp [functorMap]
-  · simp [functorMap,
-      ι_functorMapTgt_assoc f (𝟙 (Arrow.mk πX)) i t b w b (by simp) t (by simp)]
-
-中文:
-引理 functorMap_id
-  结论: functorMap f (𝟙 (箭头.mk πX)) = 𝟙 _
-  证明: by
-  ext ⟨i, t, b, w⟩
-  · simp [functorMap]
-  · simp [functorMap,
-      ι_functorMapTgt_assoc f (𝟙 (Arrow.mk πX)) i t b w b (by simp) t (by simp)]
-
-Depends on / 依赖: Arrow.mk, functorMap
+/-
+**CategoryTheory.SmallObject.functorMap_id** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTh
+eory.SmallObject`。
+形式化陈述：functorMap_id : functorMap f (𝟙 (Arrow.mk πX)) = 𝟙 _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasColimitOfHasColimitsOfShape`：∀ {C : Type u}
+ [inst : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheor
+y.Category.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.pushout.hom_ext`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z}   [inst_1 : Category
+Theory.Limits.HasPushout f …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.SmallObject.functorMap_comm`：functorMap_comm : functorObj
+Left f πX ≫ functorMapTgt f τ = functorMapSrc f τ ≫ functorObjLeft f πY
+· 使用定理 `CategoryTheory.Limits.colimit.ι_desc`：∀ {J : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} 
+C]   {F : CategoryTheory.F…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Limits.Sigma.hom_ext`：∀ {β : Type w} {C : Type u} [inst :
+ CategoryTheory.Category.{v, u} C] {f : β → C}   [inst_1 : CategoryTheory.Limits
+.HasCoproduct f] {X : C} …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.SmallObject.ι_functorMapTgt_assoc`：∀ {C : Type u} [inst :
+ CategoryTheory.Category.{v, u} C] {I : Type w} {A B : I → C} (f : (i : I) → A i
+ ⟶ B i)   {S T X Y : C} {πX : X ⟶ S} {…
 -/
 lemma functorMap_id : functorMap f (𝟙 (Arrow.mk πX)) = 𝟙 _ := by
   ext ⟨i, t, b, w⟩
@@ -770,86 +661,49 @@ lemma functorMap_id : functorMap f (𝟙 (Arrow.mk πX)) = 𝟙 _ := by
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `ιFunctorObj_naturality` / 引理 `ιFunctorObj_naturality`
-
-English:
-lemma ιFunctorObj_naturality
-  proof: by
-  simp [ιFunctorObj, functorMap]
-
-中文:
-引理 ιFunctorObj_naturality
-  证明: by
-  simp [ιFunctorObj, functorMap]
-
-Depends on / 依赖: functorMap
+/-
+**CategoryTheory.SmallObject.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.SmallObj
+ect`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ιFunctorObj_naturality :
     ιFunctorObj f πX ≫ functorMap f τ = τ.left ≫ ιFunctorObj f πY := by
   simp [ιFunctorObj, functorMap]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `ιFunctorObj_extension` / 引理 `ιFunctorObj_extension`
-
-English:
-lemma ιFunctorObj_extension
-  statement: {i : I} (t : A i ⟶ X) (b : B i ⟶ S)
-  proof: ⟨Sigma.ι (functorObjTgtFamily f πX) (FunctorObjIndex.mk i t b sq.w) ≫
-    ρFunctorObj f πX, (FunctorObjIndex.mk i t b _).comm, by simp⟩
-
-中文:
-引理 ιFunctorObj_extension
-  结论: {i : I} (t : A i ⟶ X) (b : B i ⟶ S)
-  证明: ⟨Sigma.ι (functorObjTgtFamily f πX) (FunctorObjIndex.mk i t b sq.w) ≫
-    ρFunctorObj f πX, (FunctorObjIndex.mk i t b _).comm, by simp⟩
-
-Depends on / 依赖: FunctorObjIndex, FunctorObjIndex.mk, functorObjTgtFamily, sq.w
+/-
+**CategoryTheory.SmallObject.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.SmallObj
+ect`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ιFunctorObj_extension {i : I} (t : A i ⟶ X) (b : B i ⟶ S)
     (sq : CommSq t (f i) πX b) :
-    exists (l : B i ⟶ functorObj f πX), f i ≫ l = t ≫ ιFunctorObj f πX ∧
+    ∃ (l : B i ⟶ functorObj f πX), f i ≫ l = t ≫ ιFunctorObj f πX ∧
       l ≫ πFunctorObj f πX = b :=
   ⟨Sigma.ι (functorObjTgtFamily f πX) (FunctorObjIndex.mk i t b sq.w) ≫
     ρFunctorObj f πX, (FunctorObjIndex.mk i t b _).comm, by simp⟩
 
-/--
-lemma `ιFunctorObj_extension'` / 引理 `ιFunctorObj_extension'`
+/-- Variant of `ιFunctorObj_extension` where the diagram involving `functorObj f πX`
+is replaced by an isomorphic diagram. -/
+/-
+**CategoryTheory.SmallObject.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.SmallObj
+ect`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma ιFunctorObj_extension'
-  statement: {X' S' Z' : C} (πX' : X' ⟶ S') (ι' : X' ⟶ Z') (πZ' : Z' ⟶ S')
-  proof: by
-  obtain ⟨l, hl₁, hl₂⟩ :=
-    ιFunctorObj_extension f (πX := πX) (i := i) (t ≫ eX.hom) (b ≫ eS.hom) ⟨by
-      rw [assoc]; rw [← ιFunctorObj_πFunctorObj f πX]; rw [← reassoc_of% commι]; rw [← commπ]; rw [reassoc_of% fac']; rw [reassoc_of% fac]⟩
-  refine ⟨l ≫ eZ.inv, ?_, ?_⟩
-  · rw [reassoc_of% hl₁, ← reassoc_of% commι, eZ.hom_inv_id, comp_id]
-  · rw [← cancel_mono eS.hom, assoc, assoc, commπ, eZ.inv_hom_id_assoc, hl₂]
-
-中文:
-引理 ιFunctorObj_extension'
-  结论: {X' S' Z' : C} (πX' : X' ⟶ S') (ι' : X' ⟶ Z') (πZ' : Z' ⟶ S')
-  证明: by
-  obtain ⟨l, hl₁, hl₂⟩ :=
-    ιFunctorObj_extension f (πX := πX) (i := i) (t ≫ eX.hom) (b ≫ eS.hom) ⟨by
-      rw [assoc]; rw [← ιFunctorObj_πFunctorObj f πX]; rw [← reassoc_of% commι]; rw [← commπ]; rw [reassoc_of% fac']; rw [reassoc_of% fac]⟩
-  refine ⟨l ≫ eZ.inv, ?_, ?_⟩
-  · rw [reassoc_of% hl₁, ← reassoc_of% commι, eZ.hom_inv_id, comp_id]
-  · rw [← cancel_mono eS.hom, assoc, assoc, commπ, eZ.inv_hom_id_assoc, hl₂]
-
-Depends on / 依赖: cancel_mono, comp_id, eS.hom, eX.hom, eZ.hom_inv_id, eZ.inv, eZ.inv_hom_id_assoc, hom_inv_id, inv_hom_id_assoc, reassoc_of
+--- 原说明 ---
+Variant of `ιFunctorObj_extension` where the diagram involving `functorObj f πX`
+is replaced by an isomorphic diagram.
 -/
 lemma ιFunctorObj_extension' {X' S' Z' : C} (πX' : X' ⟶ S') (ι' : X' ⟶ Z') (πZ' : Z' ⟶ S')
     (fac' : ι' ≫ πZ' = πX') (eX : X' ≅ X) (eS : S' ≅ S) (eZ : Z' ≅ functorObj f πX)
     (commι : ι' ≫ eZ.hom = eX.hom ≫ ιFunctorObj f πX)
     (commπ : πZ' ≫ eS.hom = eZ.hom ≫ πFunctorObj f πX)
     {i : I} (t : A i ⟶ X') (b : B i ⟶ S') (fac : t ≫ πX' = f i ≫ b) :
-    exists (l : B i ⟶ Z'), f i ≫ l = t ≫ ι' ∧ l ≫ πZ' = b := by
+    ∃ (l : B i ⟶ Z'), f i ≫ l = t ≫ ι' ∧ l ≫ πZ' = b := by
   obtain ⟨l, hl₁, hl₂⟩ :=
     ιFunctorObj_extension f (πX := πX) (i := i) (t ≫ eX.hom) (b ≫ eS.hom) ⟨by
-      rw [assoc]; rw [← ιFunctorObj_πFunctorObj f πX]; rw [← reassoc_of% commι]; rw [← commπ]; rw [reassoc_of% fac']; rw [reassoc_of% fac]⟩
+      rw [assoc, ← ιFunctorObj_πFunctorObj f πX, ← reassoc_of% commι, ← commπ,
+        reassoc_of% fac', reassoc_of% fac]⟩
   refine ⟨l ≫ eZ.inv, ?_, ?_⟩
   · rw [reassoc_of% hl₁, ← reassoc_of% commι, eZ.hom_inv_id, comp_id]
   · rw [← cancel_mono eS.hom, assoc, assoc, commπ, eZ.inv_hom_id_assoc, hl₂]
@@ -857,7 +711,7 @@ lemma ιFunctorObj_extension' {X' S' Z' : C} (πX' : X' ⟶ S') (ι' : X' ⟶ Z'
 end
 
 variable [HasPushouts C]
-  [forall {X S : C} (πX : X ⟶ S), HasColimitsOfShape (Discrete (FunctorObjIndex f πX)) C]
+  [∀ {X S : C} (πX : X ⟶ S), HasColimitsOfShape (Discrete (FunctorObjIndex f πX)) C]
 
 set_option backward.isDefEq.respectTransparency false in
 set_option backward.defeqAttrib.useBackward true in
@@ -865,54 +719,17 @@ set_option backward.defeqAttrib.useBackward true in
 object argument to a family of morphisms `f i : A i ⟶ B i`, see the introduction
 of the file `Mathlib/CategoryTheory/SmallObject/Construction.lean` -/
 @[simps! obj map]
-/--
-Definition of `functor` / `functor` 的定义
+/-
+**CategoryTheory.SmallObject.functor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.S
+mallObject`。
+形式化陈述：functor : Arrow C ⥤ Arrow C where obj π
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition functor
-  signature: : Arrow C ⥤ Arrow C where
-  body: Arrow.mk (πFunctorObj f π.hom)
-  map {π₁ π₂} τ := Arrow.homMk (functorMap f τ) τ.right
-  map_id g := by
-    ext
-    · apply functorMap_id
-    · dsimp
-  map_comp {π₁ π₂ π₃} τ τ' := by
-    ext
-    · dsimp
-      simp only [functorMap, Arrow.comp_left, Arrow.mk_left]
-      ext ⟨i, t, b, w⟩
-      · simp
-      · simp [ι_functorMapTgt_assoc f τ i t b w _ rfl _ rfl,
-          ι_functorMapTgt_assoc f (τ ≫ τ') i t b w _ rfl _ rfl,
-          ι_functorMapTgt_assoc f τ' i (t ≫ τ.left) (b ≫ τ.right)
-            (by simp [reassoc_of% w]) (b ≫ τ.right ≫ τ'.right) (by simp)
-            (t ≫ (τ ≫ τ').left) (by simp)]
-    · dsimp
-
-中文:
-定义 functor
-  签名: : 箭头 C ⥤ 箭头 C where
-  定义体: Arrow.mk (πFunctorObj f π.hom)
-  map {π₁ π₂} τ := Arrow.homMk (functorMap f τ) τ.right
-  map_id g := by
-    ext
-    · apply functorMap_id
-    · dsimp
-  map_comp {π₁ π₂ π₃} τ τ' := by
-    ext
-    · dsimp
-      simp only [functorMap, Arrow.comp_left, Arrow.mk_left]
-      ext ⟨i, t, b, w⟩
-      · simp
-      · simp [ι_functorMapTgt_assoc f τ i t b w _ rfl _ rfl,
-          ι_functorMapTgt_assoc f (τ ≫ τ') i t b w _ rfl _ rfl,
-          ι_functorMapTgt_assoc f τ' i (t ≫ τ.left) (b ≫ τ.right)
-            (by simp [reassoc_of% w]) (b ≫ τ.right ≫ τ'.right) (by simp)
-            (t ≫ (τ ≫ τ').left) (by simp)]
-    · dsimp
-
-Depends on / 依赖: Arrow.mk
+--- 原说明 ---
+The functor `Arrow C ⥤ Arrow C` that is constructed in order to apply the small
+object argument to a family of morphisms `f i : A i ⟶ B i`, see the introduction
+of the file `Mathlib/CategoryTheory/SmallObject/Construction.lean`
 -/
 noncomputable def functor : Arrow C ⥤ Arrow C where
   obj π := Arrow.mk (πFunctorObj f π.hom)
@@ -938,20 +755,13 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- The canonical natural transformation `𝟭 (Arrow C) ⟶ functor f`. -/
 @[simps app]
-/--
-Definition of `ε` / `ε` 的定义
+/-
+**CategoryTheory.SmallObject.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.SmallObj
+ect`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ε
-  signature: : 𝟭 (Arrow C) ⟶ functor f where
-  body: Arrow.homMk (ιFunctorObj f π.hom) (𝟙 _)
-
-中文:
-定义 ε
-  签名: : 𝟭 (箭头 C) ⟶ functor f where
-  定义体: Arrow.homMk (ιFunctorObj f π.hom) (𝟙 _)
-
-Depends on / 依赖: Arrow.homMk
+--- 原说明 ---
+The canonical natural transformation `𝟭 (Arrow C) ⟶ functor f`.
 -/
 noncomputable def ε : 𝟭 (Arrow C) ⟶ functor f where
   app π := Arrow.homMk (ιFunctorObj f π.hom) (𝟙 _)
@@ -961,3 +771,4 @@ end
 end SmallObject
 
 end CategoryTheory
+

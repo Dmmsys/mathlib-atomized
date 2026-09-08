@@ -43,32 +43,17 @@ public def coconeN : Cocone X.functorN where
 
 namespace isColimitCoconeN
 
-/--
-lemma `multicoequalizerDiagram` / 引理 `multicoequalizerDiagram`
-
-English:
-lemma multicoequalizerDiagram
-  proof: by
-    rw [Subcomplex.eq_top_iff_contains_nonDegenerate]
-    intro n x hx
-    simp only [Subfunctor.iSup_obj, Set.mem_iUnion]
-    exact ⟨N.mk x hx, Subcomplex.mem_ofSimplex_obj _⟩
-  eq_inf _ _ := rfl
-
-中文:
-引理 multicoequalizerDiagram
-  证明: by
-    rw [Subcomplex.eq_top_iff_contains_nonDegenerate]
-    intro n x hx
-    simp only [Subfunctor.iSup_obj, Set.mem_iUnion]
-    exact ⟨N.mk x hx, Subcomplex.mem_ofSimplex_obj _⟩
-  eq_inf _ _ := rfl
-
-Depends on / 依赖: N.mk, Set.mem_iUnion, Subcomplex, Subcomplex.eq_top_iff_contains_nonDegenerate, Subcomplex.mem_ofSimplex_obj, Subfunctor, Subfunctor.iSup_obj, eq_inf, eq_top_iff_contains_nonDegenerate, iSup_obj, mem_iUnion, mem_ofSimplex_obj
+/-
+**SSet.isColimitCoconeN.multicoequalizerDiagram** 是 Mathlib 中的一个引理，位于命名空间 `SSet.
+isColimitCoconeN`。
+形式化陈述：multicoequalizerDiagram : Subcomplex.MulticoequalizerDiagram ⊤ (fun (x : X
+.N) => x.subcomplex) (fun x y => x.subcomplex ⊓ y.subcomplex) where iSup_eq
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma multicoequalizerDiagram :
-    Subcomplex.MulticoequalizerDiagram ⊤ (fun (x : X.N) => x.subcomplex)
-      (fun x y => x.subcomplex ⊓ y.subcomplex) where
+    Subcomplex.MulticoequalizerDiagram ⊤ (fun (x : X.N) ↦ x.subcomplex)
+      (fun x y ↦ x.subcomplex ⊓ y.subcomplex) where
   iSup_eq := by
     rw [Subcomplex.eq_top_iff_contains_nonDegenerate]
     intro n x hx
@@ -80,60 +65,25 @@ variable {X}
 
 set_option backward.isDefEq.respectTransparency false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `desc` / `desc` 的定义
+/-- Auxiliary definition for `SSet.isColimitCoconeN`. -/
+/-
+**SSet.isColimitCoconeN.desc** 是 Mathlib 中的一个缩写定义，位于命名空间 `SSet.isColimitCoconeN`
+。
+形式化陈述：desc (s : Cocone X.functorN) : X ⟶ s.pt
+参数：s : Cocone X.functorN。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation desc
-  signature: (s : Cocone X.functorN)
-  body: (Subcomplex.topIso X).inv ≫
-    Multicofork.IsColimit.desc (multicoequalizerDiagram X).isColimit (fun x => s.ι.app x)
-      (fun (x, y) => by
-        dsimp
-        rw [← Subfunctor.equalizer_eq_iff]
-        have H (u : X.N) (t : X.N) (h : t.simplex in u.subcomplex.obj _) :
-            (s.ι.app u).app _ ⟨t.simplex, h⟩ =
-            (s.ι.app t).app _ ⟨t.simplex, Subcomplex.mem_ofSimplex_obj _⟩ :=
-          ConcreteCategory.congr_hom
-            (NatTrans.congr_app (s.w (homOfLE (by
-              rwa [N.le_iff, Subcomplex.ofSimplex_le_iff]))) _)
-            ⟨t.simplex, Subcomplex.mem_ofSimplex_obj _⟩
-        refine le_antisymm (Subfunctor.equalizer_le _ _) ?_
-        rw [Subcomplex.le_iff_contains_nonDegenerate]
-        intro n z hz
-        exact (Subfunctor.mem_equalizer_iff (x := ⟨_, hz⟩) ..).mpr
-          ((H x (N.mk _ z.prop) hz.1).trans (H y (N.mk _ z.prop) hz.2).symm))
-
-中文:
-缩写 desc
-  签名: (s : 余锥 X.functorN)
-  定义体: (Subcomplex.topIso X).inv ≫
-    Multicofork.IsColimit.desc (multicoequalizerDiagram X).isColimit (fun x => s.ι.app x)
-      (fun (x, y) => by
-        dsimp
-        rw [← Subfunctor.equalizer_eq_iff]
-        have H (u : X.N) (t : X.N) (h : t.simplex in u.subcomplex.obj _) :
-            (s.ι.app u).app _ ⟨t.simplex, h⟩ =
-            (s.ι.app t).app _ ⟨t.simplex, Subcomplex.mem_ofSimplex_obj _⟩ :=
-          ConcreteCategory.congr_hom
-            (NatTrans.congr_app (s.w (homOfLE (by
-              rwa [N.le_iff, Subcomplex.ofSimplex_le_iff]))) _)
-            ⟨t.simplex, Subcomplex.mem_ofSimplex_obj _⟩
-        refine le_antisymm (Subfunctor.equalizer_le _ _) ?_
-        rw [Subcomplex.le_iff_contains_nonDegenerate]
-        intro n z hz
-        exact (Subfunctor.mem_equalizer_iff (x := ⟨_, hz⟩) ..).mpr
-          ((H x (N.mk _ z.prop) hz.1).trans (H y (N.mk _ z.prop) hz.2).symm))
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, IsColimit, Multicofork, Multicofork.IsColimit.desc, N.le_iff, NatTrans, NatTrans.congr_app, Subcomplex, Subcomplex.mem_ofSimplex_obj, Subcomplex.ofSimplex_le_iff, Subcomplex.topIso, Subfunctor, Subfunctor.equalizer_eq_iff, congr_app, congr_hom, equalizer_eq_iff, homOfLE, isColimit, le_iff
+--- 原说明 ---
+Auxiliary definition for `SSet.isColimitCoconeN`.
 -/
 noncomputable abbrev desc (s : Cocone X.functorN) : X ⟶ s.pt :=
   (Subcomplex.topIso X).inv ≫
-    Multicofork.IsColimit.desc (multicoequalizerDiagram X).isColimit (fun x => s.ι.app x)
-      (fun (x, y) => by
+    Multicofork.IsColimit.desc (multicoequalizerDiagram X).isColimit (fun x ↦ s.ι.app x)
+      (fun (x, y) ↦ by
         dsimp
         rw [← Subfunctor.equalizer_eq_iff]
-        have H (u : X.N) (t : X.N) (h : t.simplex in u.subcomplex.obj _) :
+        have H (u : X.N) (t : X.N) (h : t.simplex ∈ u.subcomplex.obj _) :
             (s.ι.app u).app _ ⟨t.simplex, h⟩ =
             (s.ι.app t).app _ ⟨t.simplex, Subcomplex.mem_ofSimplex_obj _⟩ :=
           ConcreteCategory.congr_hom
@@ -148,28 +98,13 @@ noncomputable abbrev desc (s : Cocone X.functorN) : X ⟶ s.pt :=
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `fac` / 引理 `fac`
-
-English:
-lemma fac
-  given: (s : Cocone X.functorN) (x : X.N)
-  proof: by
-  have : x.subcomplex.ι ≫ (Subcomplex.topIso X).inv =
-    ((multicoequalizerDiagram X).multicofork.map Subcomplex.toSSetFunctor).π x := rfl
-  rw [reassoc_of% this]
-  apply Multicofork.IsColimit.fac
-
-中文:
-引理 fac
-  条件: (s : 余锥 X.functorN) (x : X.N)
-  证明: by
-  have : x.subcomplex.ι ≫ (Subcomplex.topIso X).inv =
-    ((multicoequalizerDiagram X).multicofork.map Subcomplex.toSSetFunctor).π x := rfl
-  rw [reassoc_of% this]
-  apply Multicofork.IsColimit.fac
-
-Depends on / 依赖: IsColimit, Multicofork, Multicofork.IsColimit.fac, Subcomplex, Subcomplex.toSSetFunctor, Subcomplex.topIso, multicoequalizerDiagram, multicofork, multicofork.map, reassoc_of, subcomplex, toSSetFunctor, topIso, x.subcomplex
+/-
+**SSet.isColimitCoconeN.fac** 是 Mathlib 中的一个引理，位于命名空间 `SSet.isColimitCoconeN`。
+形式化陈述：fac (s : Cocone X.functorN) (x : X.N) : x.subcomplex.ι ≫ desc s = s.ι.app 
+x
+参数：s : Cocone X.functorN；x : X.N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma fac (s : Cocone X.functorN) (x : X.N) :
     x.subcomplex.ι ≫ desc s = s.ι.app x := by
@@ -190,6 +125,7 @@ public noncomputable def isColimitCoconeN : IsColimit X.coconeN where
   uniq s m hm := by
     rw [← cancel_epi (Subcomplex.topIso X).hom]
     exact Multicofork.IsColimit.hom_ext (multicoequalizerDiagram X).isColimit
-      (fun x => (hm _).trans (fac s x).symm)
+      (fun x ↦ (hm _).trans (fac s x).symm)
 
 end SSet
+

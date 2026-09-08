@@ -81,26 +81,12 @@ namespace GrpCat
 -/
 @[to_additive
   /-- The universe lift functor for additive groups is fully faithful. -/]
-/--
-Definition of `uliftFunctorFullyFaithful` / `uliftFunctorFullyFaithful` 的定义
-
-English:
-definition uliftFunctorFullyFaithful
-  signature: : uliftFunctor.{u, v}.FullyFaithful where
-  body: GrpCat.ofHom (MulEquiv.ulift.toMonoidHom.comp
-    (f.hom.comp MulEquiv.ulift.symm.toMonoidHom))
-  map_preimage _ := rfl
-  preimage_map _ := rfl
-
-中文:
-定义 uliftFunctorFullyFaithful
-  签名: : uliftFunctor.{u, v}.满忠实 where
-  定义体: GrpCat.ofHom (MulEquiv.ulift.toMonoidHom.comp
-    (f.hom.comp MulEquiv.ulift.symm.toMonoidHom))
-  map_preimage _ := rfl
-  preimage_map _ := rfl
-
-Depends on / 依赖: GrpCat, GrpCat.ofHom, MulEquiv, MulEquiv.ulift.toMonoidHom.comp, toMonoidHom
+/-
+**GrpCat.uliftFunctorFullyFaithful** 是 Mathlib 中的一个定义，位于命名空间 `GrpCat`。
+形式化陈述：uliftFunctorFullyFaithful : uliftFunctor.{u, v}.FullyFaithful where preima
+ge f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def uliftFunctorFullyFaithful : uliftFunctor.{u, v}.FullyFaithful where
   preimage f := GrpCat.ofHom (MulEquiv.ulift.toMonoidHom.comp
@@ -112,20 +98,9 @@ def uliftFunctorFullyFaithful : uliftFunctor.{u, v}.FullyFaithful where
 -/
 @[to_additive
   /-- The universe lift functor for additive groups is faithful. -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: uliftFunctor.{u, v}.Faithful
-  body: uliftFunctorFullyFaithful.faithful
-
-中文:
-实例 :
-  签名: uliftFunctor.{u, v}.忠实
-  定义体: uliftFunctorFullyFaithful.faithful
-
-Depends on / 依赖: faithful, uliftFunctorFullyFaithful, uliftFunctorFullyFaithful.faithful
+/-
+**GrpCat.** 是 Mathlib 中的一个实例，位于命名空间 `GrpCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : uliftFunctor.{u, v}.Faithful := uliftFunctorFullyFaithful.faithful
 
@@ -134,65 +109,44 @@ instance : uliftFunctor.{u, v}.Faithful := uliftFunctorFullyFaithful.faithful
 -/
 @[to_additive
   /-- The universe lift functor for additive groups is full. -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: uliftFunctor.{u, v}.Full
-  body: uliftFunctorFullyFaithful.full
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: uliftFunctor.{u, v}.满
-  定义体: uliftFunctorFullyFaithful.full
-
-@[to_additive]
-
-Depends on / 依赖: uliftFunctorFullyFaithful, uliftFunctorFullyFaithful.full
+/-
+**GrpCat.** 是 Mathlib 中的一个实例，位于命名空间 `GrpCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : uliftFunctor.{u, v}.Full := uliftFunctorFullyFaithful.full
 
 @[to_additive]
-/--
-Instance `uliftFunctor_preservesLimit` / 实例 `uliftFunctor_preservesLimit`
-
-English:
-instance uliftFunctor_preservesLimit
-  signature: {J : Type w} [Category.{w'} J]
-  body: ⟨isLimitOfReflects (forget GrpCat)
-    isLimitOfPreserves CategoryTheory.uliftFunctor.{v} (isLimitOfPreserves (forget GrpCat) lc)⟩
-
-@[to_additive]
-
-中文:
-实例 uliftFunctor_preservesLimit
-  签名: {J : 类型 w} [范畴.{w'} J]
-  定义体: ⟨isLimitOfReflects (forget GrpCat)
-    isLimitOfPreserves CategoryTheory.uliftFunctor.{v} (isLimitOfPreserves (forget GrpCat) lc)⟩
-
-@[to_additive]
-
-Depends on / 依赖: GrpCat, forget, isLimitOfReflects
+/-
+**GrpCat.uliftFunctor_preservesLimit** 是 Mathlib 中的一个实例，位于命名空间 `GrpCat`。
+形式化陈述：uliftFunctor_preservesLimit {J : Type w} [Category.{w'} J] (K : J ⥤ GrpCat
+.{u}) : PreservesLimit K uliftFunctor.{v, u} where preserves lc
+参数：K : J ⥤ GrpCat.{u}。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.PreservesLimitsOfShape.preservesLimit`：∀ {C : Type
+ u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Categor
+yTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesLimitsOfSize.preservesLimitsOfShape`：∀ {C
+ : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : 
+CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.Types.instPreservesLimitsOfSizeUliftFunctor`：Categ
+oryTheory.Limits.PreservesLimitsOfSize.{w', w, u, max u v, u + 1, max (u + 1) (v
+ + 1)}   CategoryTheory.uliftFunctor.{v, u}
+· 使用定理 `CategoryTheory.CreatesLimit.toReflectsLimit`：∀ {C : Type u₁} {inst : Cat
+egoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category
+.{v₂, u₂} D}   {J : Type w} {inst…
 -/
 noncomputable instance uliftFunctor_preservesLimit {J : Type w} [Category.{w'} J]
     (K : J ⥤ GrpCat.{u}) : PreservesLimit K uliftFunctor.{v, u} where
-preserves lc := ⟨isLimitOfReflects (forget GrpCat)
+  preserves lc := ⟨isLimitOfReflects (forget GrpCat) <|
     isLimitOfPreserves CategoryTheory.uliftFunctor.{v} (isLimitOfPreserves (forget GrpCat) lc)⟩
 
 @[to_additive]
-/--
-Instance `uliftFunctor_preservesLimitsOfShape` / 实例 `uliftFunctor_preservesLimitsOfShape`
-
-English:
-instance uliftFunctor_preservesLimitsOfShape
-  signature: {J : Type w} [Category.{w'} J]
-
-中文:
-实例 uliftFunctor_preservesLimitsOfShape
-  签名: {J : 类型 w} [范畴.{w'} J]
+/-
+**GrpCat.uliftFunctor_preservesLimitsOfShape** 是 Mathlib 中的一个定理，位于命名空间 `GrpCat`。
+形式化陈述：∀ {J : Type w} [inst : CategoryTheory.Category.{w', w} J],   CategoryTheor
+y.Limits.PreservesLimitsOfShape J GrpCat.uliftFunctor
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance uliftFunctor_preservesLimitsOfShape {J : Type w} [Category.{w'} J] :
     PreservesLimitsOfShape J uliftFunctor.{v, u} where
@@ -202,16 +156,15 @@ The universe lift for groups preserves limits of arbitrary size.
 -/
 @[to_additive
   /-- The universe lift functor for additive groups preserves limits of arbitrary size. -/]
-/--
-Instance `uliftFunctor_preservesLimitsOfSize` / 实例 `uliftFunctor_preservesLimitsOfSize`
-
-English:
-instance uliftFunctor_preservesLimitsOfSize
-  signature: :
-
-中文:
-实例 uliftFunctor_preservesLimitsOfSize
-  签名: :
+/-
+**GrpCat.uliftFunctor_preservesLimitsOfSize** 是 Mathlib 中的一个定理，位于命名空间 `GrpCat`。
+形式化陈述：CategoryTheory.Limits.PreservesLimitsOfSize.{w', w, u, max u v, u + 1, max
+ (u + 1) (v + 1)} GrpCat.uliftFunctor
+参数：u + 1；v + 1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GrpCat.uliftFunctor_preservesLimitsOfShape`：∀ {J : Type w} [inst : Categ
+oryTheory.Category.{w', w} J],   CategoryTheory.Limits.PreservesLimitsOfShape J 
+GrpCat.uliftFunctor
 -/
 noncomputable instance uliftFunctor_preservesLimitsOfSize :
     PreservesLimitsOfSize.{w', w} uliftFunctor.{v, u} where
@@ -221,23 +174,12 @@ The universe lift functor on `GrpCat.{u}` creates `u`-small limits.
 -/
 @[to_additive
   /-- The universe lift functor on `AddGrpCat.{u}` creates `u`-small limits. -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CreatesLimitsOfSize.{w, u} uliftFunctor.{v, u}
-  body: { CreatesLimit := fun {_} => createsLimitOfFullyFaithfulOfPreserves }
-
-中文:
-实例 :
-  签名: CreatesLimitsOfSize.{w, u} uliftFunctor.{v, u}
-  定义体: { CreatesLimit := fun {_} => createsLimitOfFullyFaithfulOfPreserves }
-
-Depends on / 依赖: CreatesLimit, createsLimitOfFullyFaithfulOfPreserves
+/-
+**GrpCat.** 是 Mathlib 中的一个实例，位于命名空间 `GrpCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : CreatesLimitsOfSize.{w, u} uliftFunctor.{v, u} where
-  CreatesLimitsOfShape := { CreatesLimit := fun {_} => createsLimitOfFullyFaithfulOfPreserves }
+  CreatesLimitsOfShape := { CreatesLimit := fun {_} ↦ createsLimitOfFullyFaithfulOfPreserves }
 
 end GrpCat
 
@@ -247,26 +189,12 @@ namespace CommGrpCat
 -/
 @[to_additive
   /-- The universe lift functor for commutative additive groups is fully faithful. -/]
-/--
-Definition of `uliftFunctorFullyFaithful` / `uliftFunctorFullyFaithful` 的定义
-
-English:
-definition uliftFunctorFullyFaithful
-  signature: : uliftFunctor.{u, v}.FullyFaithful where
-  body: CommGrpCat.ofHom (MulEquiv.ulift.toMonoidHom.comp
-    (f.hom.comp MulEquiv.ulift.symm.toMonoidHom))
-  map_preimage _ := rfl
-  preimage_map _ := rfl
-
-中文:
-定义 uliftFunctorFullyFaithful
-  签名: : uliftFunctor.{u, v}.满忠实 where
-  定义体: CommGrpCat.ofHom (MulEquiv.ulift.toMonoidHom.comp
-    (f.hom.comp MulEquiv.ulift.symm.toMonoidHom))
-  map_preimage _ := rfl
-  preimage_map _ := rfl
-
-Depends on / 依赖: CommGrpCat, CommGrpCat.ofHom, MulEquiv, MulEquiv.ulift.toMonoidHom.comp, ofClass, toMonoidHom
+/-
+**CommGrpCat.uliftFunctorFullyFaithful** 是 Mathlib 中的一个定义，位于命名空间 `CommGrpCat`。
+形式化陈述：uliftFunctorFullyFaithful : uliftFunctor.{u, v}.FullyFaithful where preima
+ge f
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def uliftFunctorFullyFaithful : uliftFunctor.{u, v}.FullyFaithful where
   preimage f := CommGrpCat.ofHom (MulEquiv.ulift.toMonoidHom.comp
@@ -277,85 +205,54 @@ def uliftFunctorFullyFaithful : uliftFunctor.{u, v}.FullyFaithful where
 /-- The universe lift functor for commutative groups is faithful. -/
 @[to_additive
   /-- The universe lift functor for commutative additive groups is faithful. -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: uliftFunctor.{u, v}.Faithful
-  body: uliftFunctorFullyFaithful.faithful
-
-中文:
-实例 :
-  签名: uliftFunctor.{u, v}.忠实
-  定义体: uliftFunctorFullyFaithful.faithful
-
-Depends on / 依赖: faithful, uliftFunctorFullyFaithful, uliftFunctorFullyFaithful.faithful
+/-
+**CommGrpCat.** 是 Mathlib 中的一个实例，位于命名空间 `CommGrpCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : uliftFunctor.{u, v}.Faithful := uliftFunctorFullyFaithful.faithful
 
 /-- The universe lift functor for commutative groups is full. -/
 @[to_additive
   /-- The universe lift functor for commutative additive groups is full. -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: uliftFunctor.{u, v}.Full
-  body: uliftFunctorFullyFaithful.full
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: uliftFunctor.{u, v}.满
-  定义体: uliftFunctorFullyFaithful.full
-
-@[to_additive]
-
-Depends on / 依赖: uliftFunctorFullyFaithful, uliftFunctorFullyFaithful.full
+/-
+**CommGrpCat.** 是 Mathlib 中的一个实例，位于命名空间 `CommGrpCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : uliftFunctor.{u, v}.Full := uliftFunctorFullyFaithful.full
 
 @[to_additive]
-/--
-Instance `uliftFunctor_preservesLimit` / 实例 `uliftFunctor_preservesLimit`
-
-English:
-instance uliftFunctor_preservesLimit
-  signature: {J : Type w} [Category.{w'} J]
-  body: ⟨isLimitOfReflects (forget CommGrpCat)
-    isLimitOfPreserves CategoryTheory.uliftFunctor.{v} (isLimitOfPreserves (forget CommGrpCat) lc)⟩
-
-@[to_additive]
-
-中文:
-实例 uliftFunctor_preservesLimit
-  签名: {J : 类型 w} [范畴.{w'} J]
-  定义体: ⟨isLimitOfReflects (forget CommGrpCat)
-    isLimitOfPreserves CategoryTheory.uliftFunctor.{v} (isLimitOfPreserves (forget CommGrpCat) lc)⟩
-
-@[to_additive]
-
-Depends on / 依赖: CommGrpCat, forget, isLimitOfReflects
+/-
+**CommGrpCat.uliftFunctor_preservesLimit** 是 Mathlib 中的一个实例，位于命名空间 `CommGrpCat`。
+形式化陈述：uliftFunctor_preservesLimit {J : Type w} [Category.{w'} J] (K : J ⥤ CommGr
+pCat.{u}) : PreservesLimit K uliftFunctor.{v, u} where preserves lc
+参数：K : J ⥤ CommGrpCat.{u}。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.PreservesLimitsOfShape.preservesLimit`：∀ {C : Type
+ u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Categor
+yTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.PreservesLimitsOfSize.preservesLimitsOfShape`：∀ {C
+ : Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : 
+CategoryTheory.Category.{v₂, u₂} D}   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.Types.instPreservesLimitsOfSizeUliftFunctor`：Categ
+oryTheory.Limits.PreservesLimitsOfSize.{w', w, u, max u v, u + 1, max (u + 1) (v
+ + 1)}   CategoryTheory.uliftFunctor.{v, u}
+· 使用定理 `CategoryTheory.CreatesLimit.toReflectsLimit`：∀ {C : Type u₁} {inst : Cat
+egoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : CategoryTheory.Category
+.{v₂, u₂} D}   {J : Type w} {inst…
 -/
 noncomputable instance uliftFunctor_preservesLimit {J : Type w} [Category.{w'} J]
     (K : J ⥤ CommGrpCat.{u}) : PreservesLimit K uliftFunctor.{v, u} where
-preserves lc := ⟨isLimitOfReflects (forget CommGrpCat)
+  preserves lc := ⟨isLimitOfReflects (forget CommGrpCat) <|
     isLimitOfPreserves CategoryTheory.uliftFunctor.{v} (isLimitOfPreserves (forget CommGrpCat) lc)⟩
 
 @[to_additive]
-/--
-Instance `uliftFunctor_preservesLimitsOfShape` / 实例 `uliftFunctor_preservesLimitsOfShape`
-
-English:
-instance uliftFunctor_preservesLimitsOfShape
-  signature: {J : Type w} [Category.{w'} J]
-
-中文:
-实例 uliftFunctor_preservesLimitsOfShape
-  签名: {J : 类型 w} [范畴.{w'} J]
+/-
+**CommGrpCat.uliftFunctor_preservesLimitsOfShape** 是 Mathlib 中的一个定理，位于命名空间 `Comm
+GrpCat`。
+形式化陈述：∀ {J : Type w} [inst : CategoryTheory.Category.{w', w} J],   CategoryTheor
+y.Limits.PreservesLimitsOfShape J CommGrpCat.uliftFunctor
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance uliftFunctor_preservesLimitsOfShape {J : Type w} [Category.{w'} J] :
     PreservesLimitsOfShape J uliftFunctor.{v, u} where
@@ -365,16 +262,16 @@ The universe lift for commutative groups preserves limits of arbitrary size.
 -/
 @[to_additive /-- The universe lift functor for commutative additive groups preserves limits of
   arbitrary size. -/]
-/--
-Instance `uliftFunctor_preservesLimitsOfSize` / 实例 `uliftFunctor_preservesLimitsOfSize`
-
-English:
-instance uliftFunctor_preservesLimitsOfSize
-  signature: :
-
-中文:
-实例 uliftFunctor_preservesLimitsOfSize
-  签名: :
+/-
+**CommGrpCat.uliftFunctor_preservesLimitsOfSize** 是 Mathlib 中的一个定理，位于命名空间 `CommG
+rpCat`。
+形式化陈述：CategoryTheory.Limits.PreservesLimitsOfSize.{w', w, u, max u v, u + 1, max
+ (u + 1) (v + 1)} CommGrpCat.uliftFunctor
+参数：u + 1；v + 1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CommGrpCat.uliftFunctor_preservesLimitsOfShape`：∀ {J : Type w} [inst : C
+ategoryTheory.Category.{w', w} J],   CategoryTheory.Limits.PreservesLimitsOfShap
+e J CommGrpCat.uliftFunctor
 -/
 noncomputable instance uliftFunctor_preservesLimitsOfSize :
     PreservesLimitsOfSize.{w', w} uliftFunctor.{v, u} where
@@ -384,94 +281,68 @@ The universe lift functor on `CommGrpCat.{u}` creates `u`-small limits.
 -/
 @[to_additive
   /-- The universe lift functor on `AddCommGrpCat.{u}` creates `u`-small limits. -/]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CreatesLimitsOfSize.{w, u} uliftFunctor.{v, u}
-  body: { CreatesLimit := fun {_} => createsLimitOfFullyFaithfulOfPreserves }
-
-中文:
-实例 :
-  签名: CreatesLimitsOfSize.{w, u} uliftFunctor.{v, u}
-  定义体: { CreatesLimit := fun {_} => createsLimitOfFullyFaithfulOfPreserves }
-
-Depends on / 依赖: AlgCat, ConcreteCategory, ConcreteCategory.hom, CreatesLimit, createsLimitOfFullyFaithfulOfPreserves
+/-
+**CommGrpCat.** 是 Mathlib 中的一个实例，位于命名空间 `CommGrpCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : CreatesLimitsOfSize.{w, u} uliftFunctor.{v, u} where
-  CreatesLimitsOfShape := { CreatesLimit := fun {_} => createsLimitOfFullyFaithfulOfPreserves }
+  CreatesLimitsOfShape := { CreatesLimit := fun {_} ↦ createsLimitOfFullyFaithfulOfPreserves }
 
 end CommGrpCat
 
 namespace AddCommGrpCat
 
-/--
-Instance `uliftFunctor_additive` / 实例 `uliftFunctor_additive`
+/-- The universe lift for commutative additive groups is additive.
+-/
+/-
+**AddCommGrpCat.uliftFunctor_additive** 是 Mathlib 中的一个定理，位于命名空间 `AddCommGrpCat`。
+形式化陈述：AddCommGrpCat.uliftFunctor.Additive
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance uliftFunctor_additive
-  signature: :
-
-中文:
-实例 uliftFunctor_additive
-  签名: :
+--- 原说明 ---
+The universe lift for commutative additive groups is additive.
 -/
 instance uliftFunctor_additive :
     AddCommGrpCat.uliftFunctor.{u, v}.Additive where
 
 open Colimits in
 /--
-Instance `_anonymous_` / 实例 `_anonymous_`
+The functor `uliftFunctor : AddCommGrpCat.{u} ⥤ AddCommGrpCat.{max u v}` preserves colimits
+of arbitrary size.
+-/
+/-
+**AddCommGrpCat.** 是 Mathlib 中的一个实例，位于命名空间 `AddCommGrpCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: PreservesColimitsOfSize.{w', w} uliftFunctor.{v, u}
-  body: { preservesColimit := fun {F} =>
-    { preserves := fun {c} hc => by
-        classical
-        rw [isColimit_iff_bijective_desc]; rw [← Function.Bijective.of_comp_iff _
-          (quotQuotUliftAddEquiv F).bijective]; rw [← AddEquiv.coe_toAddMonoidHom]; rw [← AddMonoidHom.coe_comp]; rw [Quot.desc_quotQuotUliftAddEquiv]
-        exact ULift.up_bijective.comp ((isColimit_iff_bijective_desc c).mp (Nonempty.intro hc)) } }
-
-中文:
-实例 :
-  签名: 保持余limitsOfSize.{w', w} uliftFunctor.{v, u}
-  定义体: { preservesColimit := fun {F} =>
-    { preserves := fun {c} hc => by
-        classical
-        rw [isColimit_iff_bijective_desc]; rw [← Function.Bijective.of_comp_iff _
-          (quotQuotUliftAddEquiv F).bijective]; rw [← AddEquiv.coe_toAddMonoidHom]; rw [← AddMonoidHom.coe_comp]; rw [Quot.desc_quotQuotUliftAddEquiv]
-        exact ULift.up_bijective.comp ((isColimit_iff_bijective_desc c).mp (Nonempty.intro hc)) } }
-
-Depends on / 依赖: AddEquiv, AddEquiv.coe_toAddMonoidHom, AddMonoidHom, AddMonoidHom.coe_comp, Bijective, Function, Function.Bijective.of_comp_iff, Nonempty, Nonempty.intro, Quot.desc_quotQuotUliftAddEquiv, ULift.up_bijective.comp, bijective, classical, coe_comp, coe_toAddMonoidHom, desc_quotQuotUliftAddEquiv, f.hom, isColimit_iff_bijective_desc, of_comp_iff, preserves
+--- 原说明 ---
+The functor `uliftFunctor : AddCommGrpCat.{u} ⥤ AddCommGrpCat.{max u v}` preserv
+es colimits
+of arbitrary size.
 -/
 noncomputable instance : PreservesColimitsOfSize.{w', w} uliftFunctor.{v, u} where
   preservesColimitsOfShape {J _} :=
-  { preservesColimit := fun {F} =>
-    { preserves := fun {c} hc => by
+  { preservesColimit := fun {F} ↦
+    { preserves := fun {c} hc ↦ by
         classical
-        rw [isColimit_iff_bijective_desc]; rw [← Function.Bijective.of_comp_iff _
-          (quotQuotUliftAddEquiv F).bijective]; rw [← AddEquiv.coe_toAddMonoidHom]; rw [← AddMonoidHom.coe_comp]; rw [Quot.desc_quotQuotUliftAddEquiv]
+        rw [isColimit_iff_bijective_desc, ← Function.Bijective.of_comp_iff _
+          (quotQuotUliftAddEquiv F).bijective, ← AddEquiv.coe_toAddMonoidHom,
+          ← AddMonoidHom.coe_comp, Quot.desc_quotQuotUliftAddEquiv]
         exact ULift.up_bijective.comp ((isColimit_iff_bijective_desc c).mp (Nonempty.intro hc)) } }
 
 /--
-Instance `_anonymous_` / 实例 `_anonymous_`
+The functor `uliftFunctor : AddCommGrpCat.{u} ⥤ AddCommGrpCat.{max u v}` creates `u`-small colimits.
+-/
+/-
+**AddCommGrpCat.** 是 Mathlib 中的一个实例，位于命名空间 `AddCommGrpCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: CreatesColimitsOfSize.{w, u} uliftFunctor.{v, u}
-  body: { CreatesColimit := fun {_} => createsColimitOfReflectsIsomorphismsOfPreserves }
-
-中文:
-实例 :
-  签名: CreatesColimitsOfSize.{w, u} uliftFunctor.{v, u}
-  定义体: { CreatesColimit := fun {_} => createsColimitOfReflectsIsomorphismsOfPreserves }
-
-Depends on / 依赖: CreatesColimit, createsColimitOfReflectsIsomorphismsOfPreserves
+--- 原说明 ---
+The functor `uliftFunctor : AddCommGrpCat.{u} ⥤ AddCommGrpCat.{max u v}` creates
+ `u`-small colimits.
 -/
 noncomputable instance : CreatesColimitsOfSize.{w, u} uliftFunctor.{v, u} where
   CreatesColimitsOfShape :=
-    { CreatesColimit := fun {_} => createsColimitOfReflectsIsomorphismsOfPreserves }
+    { CreatesColimit := fun {_} ↦ createsColimitOfReflectsIsomorphismsOfPreserves }
 
 end AddCommGrpCat
+

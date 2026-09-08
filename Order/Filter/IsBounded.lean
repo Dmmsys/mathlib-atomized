@@ -28,824 +28,668 @@ namespace Filter
 
 section Relation
 
-variable {r : α -> α -> Prop} {f g : Filter α}
+variable {r : α → α → Prop} {f g : Filter α}
 
-/--
-theorem `isBounded_iff` / 定理 `isBounded_iff`
+/-- `f` is eventually bounded if and only if, there exists an admissible set on which it is
+bounded. -/
+/-
+**Filter.isBounded_iff** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：isBounded_iff : f.IsBounded r ↔ exists s in f.sets, exists b, s subseteq {
+ x | r x b }
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Subset.refl`：∀ {α : Type u} (a : Set α), a ⊆ a
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
 
-English:
-theorem isBounded_iff
-  statement: f.IsBounded r ↔ exists s in f.sets, exists b, s subseteq { x | r x b }
-  proof: Iff.intro (fun ⟨b, hb⟩ => ⟨{ a | r a b }, hb, b, Subset.refl _⟩) fun ⟨_, hs, b, hb⟩ =>
-    ⟨b, mem_of_superset hs hb⟩
-
-中文:
-定理 isBounded_iff
-  结论: f.IsBounded r ↔ 存在 s in f.sets, 存在 b, s subseteq { x | r x b }
-  证明: Iff.intro (fun ⟨b, hb⟩ => ⟨{ a | r a b }, hb, b, Subset.refl _⟩) fun ⟨_, hs, b, hb⟩ =>
-    ⟨b, mem_of_superset hs hb⟩
-
-Depends on / 依赖: Iff.intro, Subset, Subset.refl, mem_of_superset
+--- 原说明 ---
+`f` is eventually bounded if and only if, there exists an admissible set on whic
+h it is
+bounded.
 -/
-theorem isBounded_iff : f.IsBounded r ↔ exists s in f.sets, exists b, s subseteq { x | r x b } :=
+theorem isBounded_iff : f.IsBounded r ↔ ∃ s ∈ f.sets, ∃ b, s ⊆ { x | r x b } :=
   Iff.intro (fun ⟨b, hb⟩ => ⟨{ a | r a b }, hb, b, Subset.refl _⟩) fun ⟨_, hs, b, hb⟩ =>
     ⟨b, mem_of_superset hs hb⟩
 
-/--
-theorem `isBoundedUnder_of` / 定理 `isBoundedUnder_of`
+/-- A bounded function `u` is in particular eventually bounded. -/
+/-
+**Filter.isBoundedUnder_of** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {r : α → α → Prop} {f : Filter β} {u : β →
+ α},   (∃ b, ∀ (x : β), r (u x) b) → Filter.IsBoundedUnder r f u
+参数：∃ b, ∀ (x : β), r (u x) b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
 
-English:
-theorem isBoundedUnder_of
-  given: {f : Filter β} {u : β -> α}
-  statement: (exists b, forall x, r (u x) b) -> f.IsBoundedUnder r u
-
-中文:
-定理 isBoundedUnder_of
-  条件: {f : 滤子 β} {u : β -> α}
-  结论: (存在 b, 对任意 x, r (u x) b) -> f.IsBoundedUnder r u
+--- 原说明 ---
+A bounded function `u` is in particular eventually bounded.
 -/
-theorem isBoundedUnder_of {f : Filter β} {u : β -> α} : (exists b, forall x, r (u x) b) -> f.IsBoundedUnder r u
-  | ⟨b, hb⟩ => ⟨b, show forallᶠ x in f, r (u x) b from Eventually.of_forall hb⟩
-
-/--
-theorem `isBounded_bot` / 定理 `isBounded_bot`
-
-English:
-theorem isBounded_bot
-  statement: IsBounded r ⊥ ↔ Nonempty α
-  proof: by simp [IsBounded, exists_true_iff_nonempty]
-
-中文:
-定理 isBounded_bot
-  结论: IsBounded r ⊥ ↔ 非空 α
-  证明: by simp [IsBounded, exists_true_iff_nonempty]
-
-Depends on / 依赖: IsBounded, exists_true_iff_nonempty
+theorem isBoundedUnder_of {f : Filter β} {u : β → α} : (∃ b, ∀ x, r (u x) b) → f.IsBoundedUnder r u
+  | ⟨b, hb⟩ => ⟨b, show ∀ᶠ x in f, r (u x) b from Eventually.of_forall hb⟩
+/-
+**Filter.isBounded_bot** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：isBounded_bot : IsBounded r ⊥ ↔ Nonempty α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem isBounded_bot : IsBounded r ⊥ ↔ Nonempty α := by simp [IsBounded, exists_true_iff_nonempty]
-
-/--
-theorem `isBounded_top` / 定理 `isBounded_top`
-
-English:
-theorem isBounded_top
-  statement: IsBounded r ⊤ ↔ exists t, forall x, r x t
-  proof: by simp [IsBounded]
-
-中文:
-定理 isBounded_top
-  结论: IsBounded r ⊤ ↔ 存在 t, 对任意 x, r x t
-  证明: by simp [IsBounded]
-
-Depends on / 依赖: IsBounded
+/-
+**Filter.isBounded_top** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：isBounded_top : IsBounded r ⊤ ↔ exists t, forall x, r x t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem isBounded_top : IsBounded r ⊤ ↔ exists t, forall x, r x t := by simp [IsBounded]
-
-/--
-theorem `isBounded_principal` / 定理 `isBounded_principal`
-
-English:
-theorem isBounded_principal
-  given: (s : Set α)
-  statement: IsBounded r (𝓟 s) ↔ exists t, forall x in s, r x t
-  proof: by
-  simp [IsBounded]
-
-中文:
-定理 isBounded_principal
-  条件: (s : 集合 α)
-  结论: IsBounded r (𝓟 s) ↔ 存在 t, 对任意 x in s, r x t
-  证明: by
-  simp [IsBounded]
-
-Depends on / 依赖: IsBounded
+theorem isBounded_top : IsBounded r ⊤ ↔ ∃ t, ∀ x, r x t := by simp [IsBounded]
+/-
+**Filter.isBounded_principal** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：isBounded_principal (s : Set α) : IsBounded r (𝓟 s) ↔ exists t, forall x i
+n s, r x t
+参数：s : Set α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem isBounded_principal (s : Set α) : IsBounded r (𝓟 s) ↔ exists t, forall x in s, r x t := by
+theorem isBounded_principal (s : Set α) : IsBounded r (𝓟 s) ↔ ∃ t, ∀ x ∈ s, r x t := by
   simp [IsBounded]
-
-/--
-theorem `isBounded_sup` / 定理 `isBounded_sup`
-
-English:
-theorem isBounded_sup
-  given: [IsTrans α r] [IsDirected α r]
-  proof: directed_of r b₁ b₂
-    ⟨b, eventually_sup.mpr
-      ⟨h₁.mono fun _ h => _root_.trans h rb₁b, h₂.mono fun _ h => _root_.trans h rb₂b⟩⟩
-
-中文:
-定理 isBounded_sup
-  条件: [是Trans α r] [是Directed α r]
-  证明: directed_of r b₁ b₂
-    ⟨b, eventually_sup.mpr
-      ⟨h₁.mono fun _ h => _root_.trans h rb₁b, h₂.mono fun _ h => _root_.trans h rb₂b⟩⟩
-
-Depends on / 依赖: directed_of
+/-
+**Filter.isBounded_sup** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：isBounded_sup [IsTrans α r] [IsDirected α r] : IsBounded r f -> IsBounded 
+r g -> IsBounded r (f ⊔ g) | ⟨b₁, h₁⟩, ⟨b₂, h₂⟩ => let ⟨b, rb₁b, rb₂b⟩
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `directed_of`：directed_of (r : α -> α -> Prop) [IsDirected α r] (a b : α)
+ : exists c, r a c ∧ r b c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.eventually_sup`：eventually_sup {p : α -> Prop} {f g : Filter α} :
+ (forallᶠ x in f ⊔ g, p x) ↔ (forallᶠ x in f, p x) ∧ forallᶠ x in g, p x
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用引理 `trans`：trans [IsTrans α r] : a ≺ b -> b ≺ c -> a ≺ c
 -/
 theorem isBounded_sup [IsTrans α r] [IsDirected α r] :
-    IsBounded r f -> IsBounded r g -> IsBounded r (f ⊔ g)
+    IsBounded r f → IsBounded r g → IsBounded r (f ⊔ g)
   | ⟨b₁, h₁⟩, ⟨b₂, h₂⟩ =>
     let ⟨b, rb₁b, rb₂b⟩ := directed_of r b₁ b₂
     ⟨b, eventually_sup.mpr
       ⟨h₁.mono fun _ h => _root_.trans h rb₁b, h₂.mono fun _ h => _root_.trans h rb₂b⟩⟩
-
-/--
-theorem `IsBounded.mono` / 定理 `IsBounded.mono`
-
-English:
-theorem IsBounded.mono
-  given: (h : f <= g)
-  statement: IsBounded r g -> IsBounded r f
-
-中文:
-定理 IsBounded.mono
-  条件: (h : f <= g)
-  结论: IsBounded r g -> IsBounded r f
+/-
+**Filter.IsBounded.mono** 是 Mathlib 中的一个定理，位于命名空间 `Filter.IsBounded`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} {f g : Filter α}, f ≤ g → Filter.IsBou
+nded r g → Filter.IsBounded r f
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem IsBounded.mono (h : f <= g) : IsBounded r g -> IsBounded r f
+theorem IsBounded.mono (h : f ≤ g) : IsBounded r g → IsBounded r f
   | ⟨b, hb⟩ => ⟨b, h hb⟩
-
-/--
-theorem `IsBoundedUnder.mono` / 定理 `IsBoundedUnder.mono`
-
-English:
-theorem IsBoundedUnder.mono
-  given: {f g : Filter β} {u : β -> α} (h : f <= g)
-  proof: fun hg => IsBounded.mono (map_mono h) hg
-
-@[to_dual mono_ge]
-
-中文:
-定理 IsBoundedUnder.mono
-  条件: {f g : 滤子 β} {u : β -> α} (h : f <= g)
-  证明: fun hg => IsBounded.mono (map_mono h) hg
-
-@[to_dual mono_ge]
-
-Depends on / 依赖: IsBounded, IsBounded.mono, map_mono
+/-
+**Filter.IsBoundedUnder.mono** 是 Mathlib 中的一个定理，位于命名空间 `Filter.IsBoundedUnder`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {r : α → α → Prop} {f g : Filter β} {u : β
+ → α},   f ≤ g → Filter.IsBoundedUnder r g u → Filter.IsBoundedUnder r f u
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.IsBounded.mono`：∀ {α : Type u_1} {r : α → α → Prop} {f g : Filter
+ α}, f ≤ g → Filter.IsBounded r g → Filter.IsBounded r f
+· 使用定理 `Filter.map_mono`：map_mono : Monotone (map m)
 -/
-theorem IsBoundedUnder.mono {f g : Filter β} {u : β -> α} (h : f <= g) :
-    g.IsBoundedUnder r u -> f.IsBoundedUnder r u := fun hg => IsBounded.mono (map_mono h) hg
+theorem IsBoundedUnder.mono {f g : Filter β} {u : β → α} (h : f ≤ g) :
+    g.IsBoundedUnder r u → f.IsBoundedUnder r u := fun hg => IsBounded.mono (map_mono h) hg
 
 @[to_dual mono_ge]
-/--
-theorem `IsBoundedUnder.mono_le` / 定理 `IsBoundedUnder.mono_le`
-
-English:
-theorem IsBoundedUnder.mono_le
-  statement: [Preorder β] {l : Filter α} {u v : α -> β}
-  proof: by
-  apply hu.imp
-exact fun b hb => (eventually_map.1 hb).mp hv.mono fun x => le_trans
-
-中文:
-定理 IsBoundedUnder.mono_le
-  结论: [预序 β] {l : 滤子 α} {u v : α -> β}
-  证明: by
-  apply hu.imp
-exact fun b hb => (eventually_map.1 hb).mp hv.mono fun x => le_trans
-
-Depends on / 依赖: eventually_map, hu.imp, hv.mono, le_trans
+/-
+**Filter.IsBoundedUnder.mono_le** 是 Mathlib 中的一个定理，位于命名空间 `Filter.IsBoundedUnder
+`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Preorder β] {l : Filter α} {u v : 
+α → β},   Filter.IsBoundedUnder (fun x1 x2 => x1 ≤ x2) l u → v ≤ᶠ[l] u → Filter.
+IsBoundedUnder (fun x1 x2 => x1 ≤ x2) l v
+参数：fun x1 x2 => x1 ≤ x2；fun x1 x2 => x1 ≤ x2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Exists.imp`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a → q a) → 
+(∃ a, p a) → ∃ a, q a
+· 使用定理 `Filter.Eventually.mp`：∀ {α : Type u} {p q : α → Prop} {f : Filter α},   
+(∀ᶠ (x : α) in f, p x) → (∀ᶠ (x : α) in f, p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.eventually_map`：eventually_map {P : β -> Prop} : (forallᶠ b in ma
+p m f, P b) ↔ forallᶠ a in f, P (m a)
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
 -/
-theorem IsBoundedUnder.mono_le [Preorder β] {l : Filter α} {u v : α -> β}
-    (hu : IsBoundedUnder (· <= ·) l u) (hv : v <=ᶠ[l] u) : IsBoundedUnder (· <= ·) l v := by
+theorem IsBoundedUnder.mono_le [Preorder β] {l : Filter α} {u v : α → β}
+    (hu : IsBoundedUnder (· ≤ ·) l u) (hv : v ≤ᶠ[l] u) : IsBoundedUnder (· ≤ ·) l v := by
   apply hu.imp
-exact fun b hb => (eventually_map.1 hb).mp hv.mono fun x => le_trans
-
-/--
-theorem `isBoundedUnder_const` / 定理 `isBoundedUnder_const`
-
-English:
-theorem isBoundedUnder_const
-  given: [Std.Refl r] {l : Filter β} {a : α}
-  statement: IsBoundedUnder r l fun _ => a
-  proof: ⟨a, eventually_map.2 Eventually.of_forall fun _ => refl _⟩
-
-中文:
-定理 isBoundedUnder_const
-  条件: [Std.Refl r] {l : 滤子 β} {a : α}
-  结论: IsBoundedUnder r l fun _ => a
-  证明: ⟨a, eventually_map.2 Eventually.of_forall fun _ => refl _⟩
-
-Depends on / 依赖: Eventually, Eventually.of_forall, eventually_map, of_forall
+  exact fun b hb => (eventually_map.1 hb).mp <| hv.mono fun x => le_trans
+/-
+**Filter.isBoundedUnder_const** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：isBoundedUnder_const [Std.Refl r] {l : Filter β} {a : α} : IsBoundedUnder 
+r l fun _ => a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.eventually_map`：eventually_map {P : β -> Prop} : (forallᶠ b in ma
+p m f, P b) ↔ forallᶠ a in f, P (m a)
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
+· 使用引理 `refl`：refl [Std.Refl r] (a : α) : a ≺ a
 -/
 theorem isBoundedUnder_const [Std.Refl r] {l : Filter β} {a : α} : IsBoundedUnder r l fun _ => a :=
-⟨a, eventually_map.2 Eventually.of_forall fun _ => refl _⟩
-
-/--
-theorem `IsBounded.isBoundedUnder` / 定理 `IsBounded.isBoundedUnder`
-
-English:
-theorem IsBounded.isBoundedUnder
-  statement: {q : β -> β -> Prop} {u : α -> β}
-
-中文:
-定理 IsBounded.isBoundedUnder
-  结论: {q : β -> β -> 命题} {u : α -> β}
+  ⟨a, eventually_map.2 <| Eventually.of_forall fun _ => refl _⟩
+/-
+**Filter.IsBounded.isBoundedUnder** 是 Mathlib 中的一个定理，位于命名空间 `Filter.IsBounded`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {r : α → α → Prop} {f : Filter α} {q : β →
+ β → Prop} {u : α → β},   (∀ (a₀ a₁ : α), r a₀ a₁ → q (u a₀) (u a₁)) → Filter.Is
+Bounded r f → Filter.IsBoundedUnder q f u
+参数：∀ (a₀ a₁ : α), r a₀ a₁ → q (u a₀) (u a₁)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
 -/
-theorem IsBounded.isBoundedUnder {q : β -> β -> Prop} {u : α -> β}
-    (hu : forall a₀ a₁, r a₀ a₁ -> q (u a₀) (u a₁)) : f.IsBounded r -> f.IsBoundedUnder q u
-  | ⟨b, h⟩ => ⟨u b, show forallᶠ x in f, q (u x) (u b) from h.mono fun x => hu x b⟩
-
-/--
-theorem `IsBoundedUnder.comp` / 定理 `IsBoundedUnder.comp`
-
-English:
-theorem IsBoundedUnder.comp
-  statement: {l : Filter γ} {q : β -> β -> Prop} {u : γ -> α} {v : α -> β}
-
-中文:
-定理 IsBoundedUnder.comp
-  结论: {l : 滤子 γ} {q : β -> β -> 命题} {u : γ -> α} {v : α -> β}
+theorem IsBounded.isBoundedUnder {q : β → β → Prop} {u : α → β}
+    (hu : ∀ a₀ a₁, r a₀ a₁ → q (u a₀) (u a₁)) : f.IsBounded r → f.IsBoundedUnder q u
+  | ⟨b, h⟩ => ⟨u b, show ∀ᶠ x in f, q (u x) (u b) from h.mono fun x => hu x b⟩
+/-
+**Filter.IsBoundedUnder.comp** 是 Mathlib 中的一个定理，位于命名空间 `Filter.IsBoundedUnder`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {r : α → α → Prop} {l : Fil
+ter γ} {q : β → β → Prop} {u : γ → α}   {v : α → β},   (∀ (a₀ a₁ : α), r a₀ a₁ →
+ q (v a₀) (v a₁)) → Filter.IsBoundedUnder r l u → Filter.IsBoundedUnder q l (v ∘
+ u)
+参数：∀ (a₀ a₁ : α), r a₀ a₁ → q (v a₀) (v a₁)；v ∘ u。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
 -/
-theorem IsBoundedUnder.comp {l : Filter γ} {q : β -> β -> Prop} {u : γ -> α} {v : α -> β}
-    (hv : forall a₀ a₁, r a₀ a₁ -> q (v a₀) (v a₁)) : l.IsBoundedUnder r u -> l.IsBoundedUnder q (v ∘ u)
-  | ⟨a, h⟩ => ⟨v a, show forallᶠ x in map u l, q (v x) (v a) from h.mono fun x => hv x a⟩
-
-/--
-lemma `isBoundedUnder_map_iff` / 引理 `isBoundedUnder_map_iff`
-
-English:
-lemma isBoundedUnder_map_iff
-  statement: {ι κ X : Type*} {r : X -> X -> Prop} {f : ι -> X} {φ : κ -> ι}
-  proof: Iff.rfl
-
-中文:
-引理 isBoundedUnder_map_iff
-  结论: {ι κ X : 类型} {r : X -> X -> 命题} {f : ι -> X} {φ : κ -> ι}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+theorem IsBoundedUnder.comp {l : Filter γ} {q : β → β → Prop} {u : γ → α} {v : α → β}
+    (hv : ∀ a₀ a₁, r a₀ a₁ → q (v a₀) (v a₁)) : l.IsBoundedUnder r u → l.IsBoundedUnder q (v ∘ u)
+  | ⟨a, h⟩ => ⟨v a, show ∀ᶠ x in map u l, q (v x) (v a) from h.mono fun x => hv x a⟩
+/-
+**Filter.isBoundedUnder_map_iff** 是 Mathlib 中的一个引理，位于命名空间 `Filter`。
+形式化陈述：isBoundedUnder_map_iff {ι κ X : Type*} {r : X -> X -> Prop} {f : ι -> X} {
+φ : κ -> ι} {𝓕 : Filter κ} : (map φ 𝓕).IsBoundedUnder r f ↔ 𝓕.IsBoundedUnder r (
+f ∘ φ)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma isBoundedUnder_map_iff {ι κ X : Type*} {r : X -> X -> Prop} {f : ι -> X} {φ : κ -> ι}
+lemma isBoundedUnder_map_iff {ι κ X : Type*} {r : X → X → Prop} {f : ι → X} {φ : κ → ι}
     {𝓕 : Filter κ} :
     (map φ 𝓕).IsBoundedUnder r f ↔ 𝓕.IsBoundedUnder r (f ∘ φ) :=
   Iff.rfl
-
-/--
-lemma `Tendsto.isBoundedUnder_comp` / 引理 `Tendsto.isBoundedUnder_comp`
-
-English:
-lemma Tendsto.isBoundedUnder_comp
-  statement: {ι κ X : Type*} {r : X -> X -> Prop} {f : ι -> X} {φ : κ -> ι}
-  proof: isBoundedUnder_map_iff.mp (𝓕_bounded.mono φ_tendsto)
-
-中文:
-引理 收敛.isBoundedUnder_comp
-  结论: {ι κ X : 类型} {r : X -> X -> 命题} {f : ι -> X} {φ : κ -> ι}
-  证明: isBoundedUnder_map_iff.mp (𝓕_bounded.mono φ_tendsto)
-
-Depends on / 依赖: _bounded.mono, isBoundedUnder_map_iff, isBoundedUnder_map_iff.mp
+/-
+**Filter.Tendsto.isBoundedUnder_comp** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Tendsto`。
+形式化陈述：∀ {ι : Type u_5} {κ : Type u_6} {X : Type u_7} {r : X → X → Prop} {f : ι →
+ X} {φ : κ → ι} {𝓕 : Filter ι} {𝓖 : Filter κ},   Filter.Tendsto φ 𝓖 𝓕 → Filter.I
+sBoundedUnder r 𝓕 f → Filter.IsBoundedUnder r 𝓖 (f ∘ φ)
+参数：f ∘ φ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Filter.isBoundedUnder_map_iff`：isBoundedUnder_map_iff {ι κ X : Type*} {r
+ : X -> X -> Prop} {f : ι -> X} {φ : κ -> ι} {𝓕 : Filter κ} : (map φ 𝓕).IsBounde
+dUnder r f ↔ 𝓕.IsBo…
+· 使用定理 `Filter.IsBoundedUnder.mono`：∀ {α : Type u_1} {β : Type u_2} {r : α → α →
+ Prop} {f g : Filter β} {u : β → α},   f ≤ g → Filter.IsBoundedUnder r g u → Fil
+ter.IsBoundedUnd…
 -/
-lemma Tendsto.isBoundedUnder_comp {ι κ X : Type*} {r : X -> X -> Prop} {f : ι -> X} {φ : κ -> ι}
+lemma Tendsto.isBoundedUnder_comp {ι κ X : Type*} {r : X → X → Prop} {f : ι → X} {φ : κ → ι}
     {𝓕 : Filter ι} {𝓖 : Filter κ} (φ_tendsto : Tendsto φ 𝓖 𝓕) (𝓕_bounded : 𝓕.IsBoundedUnder r f) :
     𝓖.IsBoundedUnder r (f ∘ φ) :=
   isBoundedUnder_map_iff.mp (𝓕_bounded.mono φ_tendsto)
 
 section Preorder
-variable [Preorder α] {f : Filter β} {u : β -> α} {s : Set β}
+variable [Preorder α] {f : Filter β} {u : β → α} {s : Set β}
 
 @[to_dual eventually_ge]
-/--
-lemma `IsBoundedUnder.eventually_le` / 引理 `IsBoundedUnder.eventually_le`
-
-English:
-lemma IsBoundedUnder.eventually_le
-  given: (h : IsBoundedUnder (· <= ·) f u)
-  proof: by
-  tauto
-
-@[to_dual isBoundedUnder_of_eventually_ge]
-
-中文:
-引理 IsBoundedUnder.eventually_le
-  条件: (h : IsBoundedUnder (· <= ·) f u)
-  证明: by
-  tauto
-
-@[to_dual isBoundedUnder_of_eventually_ge]
+/-
+**Filter.IsBoundedUnder.eventually_le** 是 Mathlib 中的一个定理，位于命名空间 `Filter.IsBounde
+dUnder`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Preorder α] {f : Filter β} {u : β 
+→ α},   Filter.IsBoundedUnder (fun x1 x2 => x1 ≤ x2) f u → ∃ a, ∀ᶠ (x : β) in f,
+ u x ≤ a
+参数：fun x1 x2 => x1 ≤ x2；x : β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma IsBoundedUnder.eventually_le (h : IsBoundedUnder (· <= ·) f u) :
-    exists a, forallᶠ x in f, u x <= a := by
+lemma IsBoundedUnder.eventually_le (h : IsBoundedUnder (· ≤ ·) f u) :
+    ∃ a, ∀ᶠ x in f, u x ≤ a := by
   tauto
 
 @[to_dual isBoundedUnder_of_eventually_ge]
-/--
-lemma `isBoundedUnder_of_eventually_le` / 引理 `isBoundedUnder_of_eventually_le`
-
-English:
-lemma isBoundedUnder_of_eventually_le
-  given: {a : α} (h : forallᶠ x in f, u x <= a)
-  proof: ⟨a, h⟩
-
-@[to_dual]
-
-中文:
-引理 isBoundedUnder_of_eventually_le
-  条件: {a : α} (h : 对任意ᶠ x in f, u x <= a)
-  证明: ⟨a, h⟩
-
-@[to_dual]
+/-
+**Filter.isBoundedUnder_of_eventually_le** 是 Mathlib 中的一个引理，位于命名空间 `Filter`。
+形式化陈述：isBoundedUnder_of_eventually_le {a : α} (h : forallᶠ x in f, u x <= a) : I
+sBoundedUnder (· <= ·) f u
+参数：h : forallᶠ x in f, u x <= a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma isBoundedUnder_of_eventually_le {a : α} (h : forallᶠ x in f, u x <= a) :
-    IsBoundedUnder (· <= ·) f u := ⟨a, h⟩
+lemma isBoundedUnder_of_eventually_le {a : α} (h : ∀ᶠ x in f, u x ≤ a) :
+    IsBoundedUnder (· ≤ ·) f u := ⟨a, h⟩
 
 @[to_dual]
-/--
-lemma `isBoundedUnder_iff_eventually_bddAbove` / 引理 `isBoundedUnder_iff_eventually_bddAbove`
-
-English:
-lemma isBoundedUnder_iff_eventually_bddAbove
-  proof: by
-  constructor
-  · rintro ⟨b, hb⟩
-    exact ⟨{a | u a <= b}, ⟨b, by rintro _ ⟨a, ha, rfl⟩; exact ha⟩, hb⟩
-  · rintro ⟨s, ⟨b, hb⟩, hs⟩
-exact ⟨b, hs.mono by simpa [upperBounds] using hb⟩
-
-@[to_dual]
-
-中文:
-引理 isBoundedUnder_iff_eventually_bddAbove
-  证明: by
-  constructor
-  · rintro ⟨b, hb⟩
-    exact ⟨{a | u a <= b}, ⟨b, by rintro _ ⟨a, ha, rfl⟩; exact ha⟩, hb⟩
-  · rintro ⟨s, ⟨b, hb⟩, hs⟩
-exact ⟨b, hs.mono by simpa [upperBounds] using hb⟩
-
-@[to_dual]
-
-Depends on / 依赖: hs.mono, upperBounds
+/-
+**Filter.isBoundedUnder_iff_eventually_bddAbove** 是 Mathlib 中的一个引理，位于命名空间 `Filte
+r`。
+形式化陈述：isBoundedUnder_iff_eventually_bddAbove : f.IsBoundedUnder (· <= ·) u ↔ exi
+sts s, BddAbove (u '' s) ∧ forallᶠ x in f, x in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
 -/
 lemma isBoundedUnder_iff_eventually_bddAbove :
-    f.IsBoundedUnder (· <= ·) u ↔ exists s, BddAbove (u '' s) ∧ forallᶠ x in f, x in s := by
+    f.IsBoundedUnder (· ≤ ·) u ↔ ∃ s, BddAbove (u '' s) ∧ ∀ᶠ x in f, x ∈ s := by
   constructor
   · rintro ⟨b, hb⟩
-    exact ⟨{a | u a <= b}, ⟨b, by rintro _ ⟨a, ha, rfl⟩; exact ha⟩, hb⟩
+    exact ⟨{a | u a ≤ b}, ⟨b, by rintro _ ⟨a, ha, rfl⟩; exact ha⟩, hb⟩
   · rintro ⟨s, ⟨b, hb⟩, hs⟩
-exact ⟨b, hs.mono by simpa [upperBounds] using hb⟩
+    exact ⟨b, hs.mono <| by simpa [upperBounds] using hb⟩
 
 @[to_dual]
-/--
-lemma `_root_.BddAbove.isBoundedUnder` / 引理 `_root_.BddAbove.isBoundedUnder`
-
-English:
-lemma _root_.BddAbove.isBoundedUnder
-  given: (hs : s in f) (hu : BddAbove (u '' s))
-  proof: isBoundedUnder_iff_eventually_bddAbove.2 ⟨_, hu, hs⟩
-
-中文:
-引理 _root_.BddAbove.isBoundedUnder
-  条件: (hs : s in f) (hu : BddAbove (u '' s))
-  证明: isBoundedUnder_iff_eventually_bddAbove.2 ⟨_, hu, hs⟩
-
-Depends on / 依赖: isBoundedUnder_iff_eventually_bddAbove
+/-
+**Filter._root_.BddAbove.isBoundedUnder** 是 Mathlib 中的一个引理，位于命名空间 `Filter`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma _root_.BddAbove.isBoundedUnder (hs : s in f) (hu : BddAbove (u '' s)) :
-    f.IsBoundedUnder (· <= ·) u := isBoundedUnder_iff_eventually_bddAbove.2 ⟨_, hu, hs⟩
+lemma _root_.BddAbove.isBoundedUnder (hs : s ∈ f) (hu : BddAbove (u '' s)) :
+    f.IsBoundedUnder (· ≤ ·) u := isBoundedUnder_iff_eventually_bddAbove.2 ⟨_, hu, hs⟩
 
 /-- A bounded above function `u` is in particular eventually bounded above. -/
 @[to_dual /-- A bounded below function `u` is in particular eventually bounded below. -/]
-/--
-lemma `_root_.BddAbove.isBoundedUnder_of_range` / 引理 `_root_.BddAbove.isBoundedUnder_of_range`
+/-
+**Filter._root_.BddAbove.isBoundedUnder_of_range** 是 Mathlib 中的一个引理，位于命名空间 `Filt
+er`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma _root_.BddAbove.isBoundedUnder_of_range
-  given: (hu : BddAbove (Set.range u))
-  proof: BddAbove.isBoundedUnder (s := univ) f.univ_mem (by simpa)
-
-@[to_dual ge_of_finite]
-
-中文:
-引理 _root_.BddAbove.isBoundedUnder_of_range
-  条件: (hu : BddAbove (集合.range u))
-  证明: BddAbove.isBoundedUnder (s := univ) f.univ_mem (by simpa)
-
-@[to_dual ge_of_finite]
-
-Depends on / 依赖: BddAbove, BddAbove.isBoundedUnder, f.univ_mem, isBoundedUnder, univ_mem
+--- 原说明 ---
+A bounded above function `u` is in particular eventually bounded above.
 -/
 lemma _root_.BddAbove.isBoundedUnder_of_range (hu : BddAbove (Set.range u)) :
-    f.IsBoundedUnder (· <= ·) u := BddAbove.isBoundedUnder (s := univ) f.univ_mem (by simpa)
+    f.IsBoundedUnder (· ≤ ·) u := BddAbove.isBoundedUnder (s := univ) f.univ_mem (by simpa)
 
 @[to_dual ge_of_finite]
-/--
-lemma `IsBoundedUnder.le_of_finite` / 引理 `IsBoundedUnder.le_of_finite`
-
-English:
-lemma IsBoundedUnder.le_of_finite
-  statement: [Nonempty α] [IsDirectedOrder α] [Finite β]
-  proof: (Set.toFinite _).bddAbove.isBoundedUnder_of_range
-
-中文:
-引理 IsBoundedUnder.le_of_finite
-  结论: [非空 α] [IsDirectedOrder α] [有限 β]
-  证明: (Set.toFinite _).bddAbove.isBoundedUnder_of_range
-
-Depends on / 依赖: Set.toFinite, bddAbove, bddAbove.isBoundedUnder_of_range, isBoundedUnder_of_range, toFinite
+/-
+**Filter.IsBoundedUnder.le_of_finite** 是 Mathlib 中的一个定理，位于命名空间 `Filter.IsBounded
+Under`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Preorder α] [Nonempty α] [IsDirect
+edOrder α] [Finite β] {f : Filter β}   {u : β → α}, Filter.IsBoundedUnder (fun x
+1 x2 => x1 ≤ x2) f u
+参数：fun x1 x2 => x1 ≤ x2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `BddAbove.isBoundedUnder_of_range`：∀ {α : Type u_1} {β : Type u_2} [inst 
+: Preorder α] {f : Filter β} {u : β → α},   BddAbove (Set.range u) → Filter.IsBo
+undedUnder (fun x1 x2 …
+· 使用定理 `Set.Finite.bddAbove`：∀ {α : Type u} [inst : Preorder α] [IsDirectedOrder
+ α] [Nonempty α] {s : Set α}, s.Finite → BddAbove s
+· 使用定理 `Set.toFinite`：toFinite (s : Set α) [Finite s] : s.Finite
 -/
 lemma IsBoundedUnder.le_of_finite [Nonempty α] [IsDirectedOrder α] [Finite β]
-    {f : Filter β} {u : β -> α} : IsBoundedUnder (· <= ·) f u :=
+    {f : Filter β} {u : β → α} : IsBoundedUnder (· ≤ ·) f u :=
   (Set.toFinite _).bddAbove.isBoundedUnder_of_range
 
 end Preorder
 
 @[to_dual isBoundedUnder_ge_comp]
-/--
-theorem `_root_.Monotone.isBoundedUnder_le_comp` / 定理 `_root_.Monotone.isBoundedUnder_le_comp`
-
-English:
-theorem _root_.Monotone.isBoundedUnder_le_comp
-  statement: [Preorder α] [Preorder β] {l : Filter γ} {u : γ -> α}
-  proof: hl.comp hv
-
-@[to_dual isBoundedUnder_ge_comp]
-
-中文:
-定理 _root_.递增.isBoundedUnder_le_comp
-  结论: [预序 α] [预序 β] {l : 滤子 γ} {u : γ -> α}
-  证明: hl.comp hv
-
-@[to_dual isBoundedUnder_ge_comp]
-
-Depends on / 依赖: hl.comp
+/-
+**Filter._root_.Monotone.isBoundedUnder_le_comp** 是 Mathlib 中的一个定理，位于命名空间 `Filte
+r`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Monotone.isBoundedUnder_le_comp [Preorder α] [Preorder β] {l : Filter γ} {u : γ -> α}
-    {v : α -> β} (hv : Monotone v) (hl : l.IsBoundedUnder (· <= ·) u) :
-    l.IsBoundedUnder (· <= ·) (v ∘ u) :=
+theorem _root_.Monotone.isBoundedUnder_le_comp [Preorder α] [Preorder β] {l : Filter γ} {u : γ → α}
+    {v : α → β} (hv : Monotone v) (hl : l.IsBoundedUnder (· ≤ ·) u) :
+    l.IsBoundedUnder (· ≤ ·) (v ∘ u) :=
   hl.comp hv
 
 @[to_dual isBoundedUnder_ge_comp]
-/--
-theorem `_root_.Antitone.isBoundedUnder_le_comp` / 定理 `_root_.Antitone.isBoundedUnder_le_comp`
-
-English:
-theorem _root_.Antitone.isBoundedUnder_le_comp
-  statement: [Preorder α] [Preorder β] {l : Filter γ} {u : γ -> α}
-  proof: hl.comp (swap hv)
-
-@[to_dual]
-
-中文:
-定理 _root_.递减.isBoundedUnder_le_comp
-  结论: [预序 α] [预序 β] {l : 滤子 γ} {u : γ -> α}
-  证明: hl.comp (swap hv)
-
-@[to_dual]
-
-Depends on / 依赖: hl.comp
+/-
+**Filter._root_.Antitone.isBoundedUnder_le_comp** 是 Mathlib 中的一个定理，位于命名空间 `Filte
+r`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.Antitone.isBoundedUnder_le_comp [Preorder α] [Preorder β] {l : Filter γ} {u : γ -> α}
-    {v : α -> β} (hv : Antitone v) (hl : l.IsBoundedUnder (fun x1 x2 => x2 <= x1) u) :
-    l.IsBoundedUnder (· <= ·) (v ∘ u) :=
+theorem _root_.Antitone.isBoundedUnder_le_comp [Preorder α] [Preorder β] {l : Filter γ} {u : γ → α}
+    {v : α → β} (hv : Antitone v) (hl : l.IsBoundedUnder (fun x1 x2 ↦ x2 ≤ x1) u) :
+    l.IsBoundedUnder (· ≤ ·) (v ∘ u) :=
   hl.comp (swap hv)
 
 @[to_dual]
-/--
-theorem `not_isBoundedUnder_of_tendsto_atTop` / 定理 `not_isBoundedUnder_of_tendsto_atTop`
-
-English:
-theorem not_isBoundedUnder_of_tendsto_atTop
-  statement: [Preorder β] [NoMaxOrder β] {f : α -> β} {l : Filter α}
-  proof: by
+/-
+**Filter.not_isBoundedUnder_of_tendsto_atTop** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：not_isBoundedUnder_of_tendsto_atTop [Preorder β] [NoMaxOrder β] {f : α -> 
+β} {l : Filter α} [l.NeBot] (hf : Tendsto f l atTop) : ¬IsBoundedUnder (· <= ·) 
+l f
+参数：hf : Tendsto f l atTop。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NoMaxOrder.exists_gt`：∀ {α : Type u_3} {inst : LT α} [self : NoMaxOrder 
+α] (a : α), ∃ b, a < b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.tendsto_atTop`：tendsto_atTop [Preorder β] {m : α -> β} {f : Filte
+r α} : Tendsto m f atTop ↔ forall b, forallᶠ a in f, b <= m a
+· 使用定理 `Set.eq_empty_of_subset_empty`：eq_empty_of_subset_empty {s : Set α} : s s
+ubseteq ∅ -> s = ∅
+· 使用定理 `not_le_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Set.Nonempty.ne_empty`：∀ {α : Type u} {s : Set α}, s.Nonempty → s ≠ ∅
+· 使用定理 `Filter.nonempty_of_mem`：nonempty_of_mem {f : Filter α} [hf : NeBot f] {s
+ : Set α} (hs : s in f) : s.Nonempty
+· 使用定理 `Filter.Eventually.and`：∀ {α : Type u} {p q : α → Prop} {f : Filter α},  
+ Filter.Eventually p f → Filter.Eventually q f → ∀ᶠ (x : α) in f, p x ∧ q x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.eventually_map`：eventually_map {P : β -> Prop} : (forallᶠ b in ma
+p m f, P b) ↔ forallᶠ a in f, P (m a)
+-/
+theorem not_isBoundedUnder_of_tendsto_atTop [Preorder β] [NoMaxOrder β] {f : α → β} {l : Filter α}
+    [l.NeBot] (hf : Tendsto f l atTop) : ¬IsBoundedUnder (· ≤ ·) l f := by
   rintro ⟨b, hb⟩
   rw [eventually_map] at hb
   obtain ⟨b', h⟩ := exists_gt b
   have hb' := (tendsto_atTop.mp hf) b'
-  have : { x : α | f x <= b } inter { x : α | b' <= f x } = ∅ :=
+  have : { x : α | f x ≤ b } ∩ { x : α | b' ≤ f x } = ∅ :=
     eq_empty_of_subset_empty fun x hx => (not_le_of_gt h) (le_trans hx.2 hx.1)
   exact (nonempty_of_mem (hb.and hb')).ne_empty this
 
 @[to_dual]
-
-中文:
-定理 not_isBoundedUnder_of_tendsto_atTop
-  结论: [预序 β] [NoMax序 β] {f : α -> β} {l : 滤子 α}
-  证明: by
-  rintro ⟨b, hb⟩
-  rw [eventually_map] at hb
-  obtain ⟨b', h⟩ := exists_gt b
-  have hb' := (tendsto_atTop.mp hf) b'
-  have : { x : α | f x <= b } inter { x : α | b' <= f x } = ∅ :=
-    eq_empty_of_subset_empty fun x hx => (not_le_of_gt h) (le_trans hx.2 hx.1)
-  exact (nonempty_of_mem (hb.and hb')).ne_empty this
-
-@[to_dual]
-
-Depends on / 依赖: eq_empty_of_subset_empty, eventually_map, exists_gt, hb.and, le_trans, ne_empty, nonempty_of_mem, not_le_of_gt, tendsto_atTop, tendsto_atTop.mp
+/-
+**Filter.IsBoundedUnder.bddAbove_range_of_cofinite** 是 Mathlib 中的一个定理，位于命名空间 `Fi
+lter.IsBoundedUnder`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Preorder β] [IsDirectedOrder β] {f
+ : α → β},   Filter.IsBoundedUnder (fun x1 x2 => x1 ≤ x2) Filter.cofinite f → Bd
+dAbove (Set.range f)
+参数：fun x1 x2 => x1 ≤ x2；Set.range f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.image_univ`：image_univ {f : α -> β} : f '' univ = range f
+· 使用定理 `Set.union_compl_self`：union_compl_self (s : Set α) : s union sᶜ = univ
+· 使用定理 `Set.image_union`：image_union (f : α -> β) (s t : Set α) : f '' (s union 
+t) = f '' s union f '' t
+· 使用定理 `bddAbove_union`：bddAbove_union [IsDirectedOrder α] {s t : Set α} : BddAb
+ove (s union t) ↔ BddAbove s ∧ BddAbove t
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.forall_mem_image`：forall_mem_image {f : α -> β} {s : Set α} {p : β -
+> Prop} : (forall y in f '' s, p y) ↔ forall ⦃x⦄, x in s -> p (f x)
+· 使用定理 `Set.Finite.bddAbove`：∀ {α : Type u} [inst : Preorder α] [IsDirectedOrder
+ α] [Nonempty α] {s : Set α}, s.Finite → BddAbove s
+· 使用定理 `Set.Finite.image`：∀ {α : Type u} {β : Type v} {s : Set α} (f : α → β), s
+.Finite → (f '' s).Finite
 -/
-theorem not_isBoundedUnder_of_tendsto_atTop [Preorder β] [NoMaxOrder β] {f : α -> β} {l : Filter α}
-    [l.NeBot] (hf : Tendsto f l atTop) : ¬IsBoundedUnder (· <= ·) l f := by
-  rintro ⟨b, hb⟩
-  rw [eventually_map] at hb
-  obtain ⟨b', h⟩ := exists_gt b
-  have hb' := (tendsto_atTop.mp hf) b'
-  have : { x : α | f x <= b } inter { x : α | b' <= f x } = ∅ :=
-    eq_empty_of_subset_empty fun x hx => (not_le_of_gt h) (le_trans hx.2 hx.1)
-  exact (nonempty_of_mem (hb.and hb')).ne_empty this
-
-@[to_dual]
-/--
-theorem `IsBoundedUnder.bddAbove_range_of_cofinite` / 定理 `IsBoundedUnder.bddAbove_range_of_cofinite`
-
-English:
-theorem IsBoundedUnder.bddAbove_range_of_cofinite
-  statement: [Preorder β] [IsDirectedOrder β] {f : α -> β}
-  proof: by
+theorem IsBoundedUnder.bddAbove_range_of_cofinite [Preorder β] [IsDirectedOrder β] {f : α → β}
+    (hf : IsBoundedUnder (· ≤ ·) cofinite f) : BddAbove (range f) := by
   rcases hf with ⟨b, hb⟩
   have : Nonempty β := ⟨b⟩
-  rw [← image_univ]; rw [← union_compl_self { x | f x <= b }]; rw [image_union]; rw [bddAbove_union]
+  rw [← image_univ, ← union_compl_self { x | f x ≤ b }, image_union, bddAbove_union]
   exact ⟨⟨b, forall_mem_image.2 fun x => id⟩, (hb.image f).bddAbove⟩
 
 @[to_dual]
-
-中文:
-定理 IsBoundedUnder.bddAbove_range_of_cofinite
-  结论: [预序 β] [IsDirectedOrder β] {f : α -> β}
-  证明: by
-  rcases hf with ⟨b, hb⟩
-  have : Nonempty β := ⟨b⟩
-  rw [← image_univ]; rw [← union_compl_self { x | f x <= b }]; rw [image_union]; rw [bddAbove_union]
-  exact ⟨⟨b, forall_mem_image.2 fun x => id⟩, (hb.image f).bddAbove⟩
-
-@[to_dual]
-
-Depends on / 依赖: Nonempty, bddAbove, bddAbove_union, forall_mem_image, hb.image, image_union, image_univ, union_compl_self
+/-
+**Filter.IsBoundedUnder.bddAbove_range** 是 Mathlib 中的一个定理，位于命名空间 `Filter.IsBound
+edUnder`。
+形式化陈述：∀ {β : Type u_2} [inst : Preorder β] [IsDirectedOrder β] {f : ℕ → β},   Fi
+lter.IsBoundedUnder (fun x1 x2 => x1 ≤ x2) Filter.atTop f → BddAbove (Set.range 
+f)
+参数：fun x1 x2 => x1 ≤ x2；Set.range f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.IsBoundedUnder.bddAbove_range_of_cofinite`：∀ {α : Type u_1} {β : 
+Type u_2} [inst : Preorder β] [IsDirectedOrder β] {f : α → β},   Filter.IsBounde
+dUnder (fun x1 x2 => x1 ≤ x2) Filter.c…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.cofinite_eq_atTop`：Nat.cofinite_eq_atTop : @cofinite Nat = atTop
 -/
-theorem IsBoundedUnder.bddAbove_range_of_cofinite [Preorder β] [IsDirectedOrder β] {f : α -> β}
-    (hf : IsBoundedUnder (· <= ·) cofinite f) : BddAbove (range f) := by
-  rcases hf with ⟨b, hb⟩
-  have : Nonempty β := ⟨b⟩
-  rw [← image_univ]; rw [← union_compl_self { x | f x <= b }]; rw [image_union]; rw [bddAbove_union]
-  exact ⟨⟨b, forall_mem_image.2 fun x => id⟩, (hb.image f).bddAbove⟩
-
-@[to_dual]
-/--
-theorem `IsBoundedUnder.bddAbove_range` / 定理 `IsBoundedUnder.bddAbove_range`
-
-English:
-theorem IsBoundedUnder.bddAbove_range
-  statement: [Preorder β] [IsDirectedOrder β] {f : Nat -> β}
-  proof: by
+theorem IsBoundedUnder.bddAbove_range [Preorder β] [IsDirectedOrder β] {f : ℕ → β}
+    (hf : IsBoundedUnder (· ≤ ·) atTop f) : BddAbove (range f) := by
   rw [← Nat.cofinite_eq_atTop] at hf
   exact hf.bddAbove_range_of_cofinite
 
-中文:
-定理 IsBoundedUnder.bddAbove_range
-  结论: [预序 β] [IsDirectedOrder β] {f : 自然数 -> β}
-  证明: by
-  rw [← Nat.cofinite_eq_atTop] at hf
-  exact hf.bddAbove_range_of_cofinite
+/-- To check that a filter is frequently bounded, it suffices to have a witness
+which bounds `f` at some point for every admissible set.
 
-Depends on / 依赖: Nat.cofinite_eq_atTop, bddAbove_range_of_cofinite, cofinite_eq_atTop, hf.bddAbove_range_of_cofinite
+This is only an implication, as the other direction is wrong for the trivial filter. -/
+/-
+**Filter.IsCobounded.mk** 是 Mathlib 中的一个定理，位于命名空间 `Filter.IsCobounded`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} {f : Filter α} [IsTrans α r] (a : α), 
+  (∀ s ∈ f, ∃ x ∈ s, r a x) → Filter.IsCobounded r f
+参数：a : α；∀ s ∈ f, ∃ x ∈ s, r a x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `trans`：trans [IsTrans α r] : a ≺ b -> b ≺ c -> a ≺ c
+
+--- 原说明 ---
+To check that a filter is frequently bounded, it suffices to have a witness
+which bounds `f` at some point for every admissible set.
+
+This is only an implication, as the other direction is wrong for the trivial fil
+ter.
 -/
-theorem IsBoundedUnder.bddAbove_range [Preorder β] [IsDirectedOrder β] {f : Nat -> β}
-    (hf : IsBoundedUnder (· <= ·) atTop f) : BddAbove (range f) := by
-  rw [← Nat.cofinite_eq_atTop] at hf
-  exact hf.bddAbove_range_of_cofinite
-
-/--
-theorem `IsCobounded.mk` / 定理 `IsCobounded.mk`
-
-English:
-theorem IsCobounded.mk
-  given: [IsTrans α r] (a : α) (h : forall s in f, exists x in s, r a x)
-  statement: f.IsCobounded r
-  proof: ⟨a, fun _ s =>
-    let ⟨_, h₁, h₂⟩ := h _ s
-    _root_.trans h₂ h₁⟩
-
-中文:
-定理 IsCobounded.mk
-  条件: [是Trans α r] (a : α) (h : 对任意 s in f, 存在 x in s, r a x)
-  结论: f.IsCobounded r
-  证明: ⟨a, fun _ s =>
-    let ⟨_, h₁, h₂⟩ := h _ s
-    _root_.trans h₂ h₁⟩
-
-Depends on / 依赖: _root_, _root_.trans
--/
-theorem IsCobounded.mk [IsTrans α r] (a : α) (h : forall s in f, exists x in s, r a x) : f.IsCobounded r :=
+theorem IsCobounded.mk [IsTrans α r] (a : α) (h : ∀ s ∈ f, ∃ x ∈ s, r a x) : f.IsCobounded r :=
   ⟨a, fun _ s =>
     let ⟨_, h₁, h₂⟩ := h _ s
     _root_.trans h₂ h₁⟩
 
-/--
-theorem `IsBounded.isCobounded_flip` / 定理 `IsBounded.isCobounded_flip`
+/-- A filter which is eventually bounded is in particular frequently bounded (in the opposite
+direction). At least if the filter is not trivial. -/
+/-
+**Filter.IsBounded.isCobounded_flip** 是 Mathlib 中的一个定理，位于命名空间 `Filter.IsBounded`
+。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} {f : Filter α} [IsTrans α r] [f.NeBot]
+,   Filter.IsBounded r f → Filter.IsCobounded (flip r) f
+参数：flip r。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.exists`：∀ {α : Type u} {p : α → Prop} {f : Filter α} [
+f.NeBot], (∀ᶠ (x : α) in f, p x) → ∃ x, p x
+· 使用定理 `Filter.Eventually.and`：∀ {α : Type u} {p q : α → Prop} {f : Filter α},  
+ Filter.Eventually p f → Filter.Eventually q f → ∀ᶠ (x : α) in f, p x ∧ q x
+· 使用引理 `trans`：trans [IsTrans α r] : a ≺ b -> b ≺ c -> a ≺ c
 
-English:
-theorem IsBounded.isCobounded_flip
-  given: [IsTrans α r] [NeBot f]
-  statement: f.IsBounded r -> f.IsCobounded (flip r)
-  proof: (ha.and hb).exists
-      show r b a from _root_.trans rbx rxa⟩
-
-@[to_dual isCobounded_ge]
-
-中文:
-定理 IsBounded.isCobounded_flip
-  条件: [是Trans α r] [NeBot f]
-  结论: f.IsBounded r -> f.IsCobounded (flip r)
-  证明: (ha.and hb).exists
-      show r b a from _root_.trans rbx rxa⟩
-
-@[to_dual isCobounded_ge]
-
-Depends on / 依赖: ha.and
+--- 原说明 ---
+A filter which is eventually bounded is in particular frequently bounded (in the
+ opposite
+direction). At least if the filter is not trivial.
 -/
-theorem IsBounded.isCobounded_flip [IsTrans α r] [NeBot f] : f.IsBounded r -> f.IsCobounded (flip r)
+theorem IsBounded.isCobounded_flip [IsTrans α r] [NeBot f] : f.IsBounded r → f.IsCobounded (flip r)
   | ⟨a, ha⟩ =>
     ⟨a, fun b hb =>
       let ⟨_, rxa, rbx⟩ := (ha.and hb).exists
       show r b a from _root_.trans rbx rxa⟩
 
 @[to_dual isCobounded_ge]
-/--
-theorem `IsBounded.isCobounded_le` / 定理 `IsBounded.isCobounded_le`
-
-English:
-theorem IsBounded.isCobounded_le
-  given: [Preorder α] [NeBot f] (h : f.IsBounded (fun x1 x2 => x2 <= x1))
-  proof: h.isCobounded_flip
-
-中文:
-定理 IsBounded.isCobounded_le
-  条件: [预序 α] [NeBot f] (h : f.IsBounded (fun x1 x2 => x2 <= x1))
-  证明: h.isCobounded_flip
-
-Depends on / 依赖: h.isCobounded_flip, isCobounded_flip
+/-
+**Filter.IsBounded.isCobounded_le** 是 Mathlib 中的一个定理，位于命名空间 `Filter.IsBounded`。
+形式化陈述：∀ {α : Type u_1} {f : Filter α} [inst : Preorder α] [f.NeBot],   Filter.Is
+Bounded (fun x1 x2 => x2 ≤ x1) f → Filter.IsCobounded (fun x1 x2 => x1 ≤ x2) f
+参数：fun x1 x2 => x2 ≤ x1；fun x1 x2 => x1 ≤ x2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.IsBounded.isCobounded_flip`：∀ {α : Type u_1} {r : α → α → Prop} {
+f : Filter α} [IsTrans α r] [f.NeBot],   Filter.IsBounded r f → Filter.IsCobound
+ed (flip r) f
+· 使用定理 `instIsTransGe`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x2 ≤ x1
 -/
-theorem IsBounded.isCobounded_le [Preorder α] [NeBot f] (h : f.IsBounded (fun x1 x2 => x2 <= x1)) :
-    f.IsCobounded (· <= ·) :=
+theorem IsBounded.isCobounded_le [Preorder α] [NeBot f] (h : f.IsBounded (fun x1 x2 ↦ x2 ≤ x1)) :
+    f.IsCobounded (· ≤ ·) :=
   h.isCobounded_flip
-
-/--
-theorem `IsBoundedUnder.isCoboundedUnder_flip` / 定理 `IsBoundedUnder.isCoboundedUnder_flip`
-
-English:
-theorem IsBoundedUnder.isCoboundedUnder_flip
-  statement: {u : γ -> α} {l : Filter γ} [IsTrans α r] [NeBot l]
-  proof: h.isCobounded_flip
-
-@[to_dual isCoboundedUnder_ge]
-
-中文:
-定理 IsBoundedUnder.isCoboundedUnder_flip
-  结论: {u : γ -> α} {l : 滤子 γ} [是Trans α r] [NeBot l]
-  证明: h.isCobounded_flip
-
-@[to_dual isCoboundedUnder_ge]
-
-Depends on / 依赖: Algebra, Algebra.IsPushout.isAlgebraic, IsPushout, h.isCobounded_flip, isAlgebraic, isCobounded_flip
+/-
+**Filter.IsBoundedUnder.isCoboundedUnder_flip** 是 Mathlib 中的一个定理，位于命名空间 `Filter.
+IsBoundedUnder`。
+形式化陈述：∀ {α : Type u_1} {γ : Type u_3} {r : α → α → Prop} {u : γ → α} {l : Filter
+ γ} [IsTrans α r] [l.NeBot],   Filter.IsBoundedUnder r l u → Filter.IsCoboundedU
+nder (flip r) l u
+参数：flip r。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.IsBounded.isCobounded_flip`：∀ {α : Type u_1} {r : α → α → Prop} {
+f : Filter α} [IsTrans α r] [f.NeBot],   Filter.IsBounded r f → Filter.IsCobound
+ed (flip r) f
 -/
-theorem IsBoundedUnder.isCoboundedUnder_flip {u : γ -> α} {l : Filter γ} [IsTrans α r] [NeBot l]
+theorem IsBoundedUnder.isCoboundedUnder_flip {u : γ → α} {l : Filter γ} [IsTrans α r] [NeBot l]
     (h : l.IsBoundedUnder r u) : l.IsCoboundedUnder (flip r) u :=
   h.isCobounded_flip
 
 @[to_dual isCoboundedUnder_ge]
-/--
-theorem `IsBoundedUnder.isCoboundedUnder_le` / 定理 `IsBoundedUnder.isCoboundedUnder_le`
-
-English:
-theorem IsBoundedUnder.isCoboundedUnder_le
-  statement: {u : γ -> α} {l : Filter γ} [Preorder α] [NeBot l]
-  proof: h.isCoboundedUnder_flip
-
-@[to_dual isCoboundedUnder_ge_of_eventually_le]
-
-中文:
-定理 IsBoundedUnder.isCoboundedUnder_le
-  结论: {u : γ -> α} {l : 滤子 γ} [预序 α] [NeBot l]
-  证明: h.isCoboundedUnder_flip
-
-@[to_dual isCoboundedUnder_ge_of_eventually_le]
-
-Depends on / 依赖: Algebra, Algebra.isAlgebraic_of_not_injective, Function, Function.Injective, Injective, MvPolynomial, MvPolynomial.map_injective_iff, algebraMap, h.isCoboundedUnder_flip, h.noZeroDivisors, infer_instance, isAlgebraic_of_not_injective, isCoboundedUnder_flip, map_injective_iff, map_mul, map_zero, noZeroDivisors
+/-
+**Filter.IsBoundedUnder.isCoboundedUnder_le** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Is
+BoundedUnder`。
+形式化陈述：∀ {α : Type u_1} {γ : Type u_3} {u : γ → α} {l : Filter γ} [inst : Preorde
+r α] [l.NeBot],   Filter.IsBoundedUnder (fun x1 x2 => x2 ≤ x1) l u → Filter.IsCo
+boundedUnder (fun x1 x2 => x1 ≤ x2) l u
+参数：fun x1 x2 => x2 ≤ x1；fun x1 x2 => x1 ≤ x2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.IsBoundedUnder.isCoboundedUnder_flip`：∀ {α : Type u_1} {γ : Type 
+u_3} {r : α → α → Prop} {u : γ → α} {l : Filter γ} [IsTrans α r] [l.NeBot],   Fi
+lter.IsBoundedUnder r l u → Filte…
+· 使用定理 `instIsTransGe`：∀ {α : Type u} [inst : Preorder α], IsTrans α fun x1 x2 =
+> x2 ≤ x1
 -/
-theorem IsBoundedUnder.isCoboundedUnder_le {u : γ -> α} {l : Filter γ} [Preorder α] [NeBot l]
-    (h : l.IsBoundedUnder (fun x1 x2 => x2 <= x1) u) : l.IsCoboundedUnder (· <= ·) u :=
+theorem IsBoundedUnder.isCoboundedUnder_le {u : γ → α} {l : Filter γ} [Preorder α] [NeBot l]
+    (h : l.IsBoundedUnder (fun x1 x2 ↦ x2 ≤ x1) u) : l.IsCoboundedUnder (· ≤ ·) u :=
   h.isCoboundedUnder_flip
 
 @[to_dual isCoboundedUnder_ge_of_eventually_le]
-/--
-lemma `isCoboundedUnder_le_of_eventually_le` / 引理 `isCoboundedUnder_le_of_eventually_le`
-
-English:
-lemma isCoboundedUnder_le_of_eventually_le
-  statement: [Preorder α] (l : Filter ι) [NeBot l] {f : ι -> α} {x : α}
-  proof: IsBoundedUnder.isCoboundedUnder_le ⟨x, hf⟩
-
-@[to_dual isCoboundedUnder_ge_of_le]
-
-中文:
-引理 isCoboundedUnder_le_of_eventually_le
-  结论: [预序 α] (l : 滤子 ι) [NeBot l] {f : ι -> α} {x : α}
-  证明: IsBoundedUnder.isCoboundedUnder_le ⟨x, hf⟩
-
-@[to_dual isCoboundedUnder_ge_of_le]
-
-Depends on / 依赖: IsBoundedUnder, IsBoundedUnder.isCoboundedUnder_le, isCoboundedUnder_le
+/-
+**Filter.isCoboundedUnder_le_of_eventually_le** 是 Mathlib 中的一个引理，位于命名空间 `Filter`
+。
+形式化陈述：isCoboundedUnder_le_of_eventually_le [Preorder α] (l : Filter ι) [NeBot l]
+ {f : ι -> α} {x : α} (hf : forallᶠ i in l, x <= f i) : IsCoboundedUnder (· <= ·
+) l f
+参数：l : Filter ι；hf : forallᶠ i in l, x <= f i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.IsBoundedUnder.isCoboundedUnder_le`：∀ {α : Type u_1} {γ : Type u_
+3} {u : γ → α} {l : Filter γ} [inst : Preorder α] [l.NeBot],   Filter.IsBoundedU
+nder (fun x1 x2 => x2 ≤ x1) l u…
 -/
-lemma isCoboundedUnder_le_of_eventually_le [Preorder α] (l : Filter ι) [NeBot l] {f : ι -> α} {x : α}
-    (hf : forallᶠ i in l, x <= f i) :
-    IsCoboundedUnder (· <= ·) l f :=
+lemma isCoboundedUnder_le_of_eventually_le [Preorder α] (l : Filter ι) [NeBot l] {f : ι → α} {x : α}
+    (hf : ∀ᶠ i in l, x ≤ f i) :
+    IsCoboundedUnder (· ≤ ·) l f :=
   IsBoundedUnder.isCoboundedUnder_le ⟨x, hf⟩
 
 @[to_dual isCoboundedUnder_ge_of_le]
-/--
-lemma `isCoboundedUnder_le_of_le` / 引理 `isCoboundedUnder_le_of_le`
-
-English:
-lemma isCoboundedUnder_le_of_le
-  statement: [Preorder α] (l : Filter ι) [NeBot l] {f : ι -> α} {x : α}
-  proof: isCoboundedUnder_le_of_eventually_le l (Eventually.of_forall hf)
-
-中文:
-引理 isCoboundedUnder_le_of_le
-  结论: [预序 α] (l : 滤子 ι) [NeBot l] {f : ι -> α} {x : α}
-  证明: isCoboundedUnder_le_of_eventually_le l (Eventually.of_forall hf)
-
-Depends on / 依赖: Eventually, Eventually.of_forall, isCoboundedUnder_le_of_eventually_le, of_forall
+/-
+**Filter.isCoboundedUnder_le_of_le** 是 Mathlib 中的一个引理，位于命名空间 `Filter`。
+形式化陈述：isCoboundedUnder_le_of_le [Preorder α] (l : Filter ι) [NeBot l] {f : ι -> 
+α} {x : α} (hf : forall i, x <= f i) : IsCoboundedUnder (· <= ·) l f
+参数：l : Filter ι；hf : forall i, x <= f i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Filter.isCoboundedUnder_le_of_eventually_le`：isCoboundedUnder_le_of_even
+tually_le [Preorder α] (l : Filter ι) [NeBot l] {f : ι -> α} {x : α} (hf : foral
+lᶠ i in l, x <= f i) : IsCobounde…
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
 -/
-lemma isCoboundedUnder_le_of_le [Preorder α] (l : Filter ι) [NeBot l] {f : ι -> α} {x : α}
-    (hf : forall i, x <= f i) :
-    IsCoboundedUnder (· <= ·) l f :=
+lemma isCoboundedUnder_le_of_le [Preorder α] (l : Filter ι) [NeBot l] {f : ι → α} {x : α}
+    (hf : ∀ i, x ≤ f i) :
+    IsCoboundedUnder (· ≤ ·) l f :=
   isCoboundedUnder_le_of_eventually_le l (Eventually.of_forall hf)
-
-
-/--
-theorem `isCobounded_bot` / 定理 `isCobounded_bot`
-
-English:
-theorem isCobounded_bot
-  statement: IsCobounded r ⊥ ↔ exists b, forall x, r b x
-  proof: by simp [IsCobounded]
-
-中文:
-定理 isCobounded_bot
-  结论: IsCobounded r ⊥ ↔ 存在 b, 对任意 x, r b x
-  证明: by simp [IsCobounded]
-
-Depends on / 依赖: IsCobounded
+/-
+**Filter.isCobounded_bot** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：isCobounded_bot : IsCobounded r ⊥ ↔ exists b, forall x, r b x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem isCobounded_bot : IsCobounded r ⊥ ↔ exists b, forall x, r b x := by simp [IsCobounded]
-
-/--
-theorem `isCobounded_top` / 定理 `isCobounded_top`
-
-English:
-theorem isCobounded_top
-  statement: IsCobounded r ⊤ ↔ Nonempty α
-  proof: by
-  simp +contextual [IsCobounded,
-    exists_true_iff_nonempty]
-
-中文:
-定理 isCobounded_top
-  结论: IsCobounded r ⊤ ↔ 非空 α
-  证明: by
-  simp +contextual [IsCobounded,
-    exists_true_iff_nonempty]
-
-Depends on / 依赖: Algebra, Algebra.IsPushout.comp_iff, IsCobounded, IsPushout, MvPolynomial, comp_iff, contextual, exists_true_iff_nonempty
+theorem isCobounded_bot : IsCobounded r ⊥ ↔ ∃ b, ∀ x, r b x := by simp [IsCobounded]
+/-
+**Filter.isCobounded_top** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：isCobounded_top : IsCobounded r ⊤ ↔ Nonempty α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem isCobounded_top : IsCobounded r ⊤ ↔ Nonempty α := by
   simp +contextual [IsCobounded,
     exists_true_iff_nonempty]
-
-/--
-theorem `isCobounded_principal` / 定理 `isCobounded_principal`
-
-English:
-theorem isCobounded_principal
-  given: (s : Set α)
-  proof: by simp [IsCobounded]
-
-中文:
-定理 isCobounded_principal
-  条件: (s : 集合 α)
-  证明: by simp [IsCobounded]
-
-Depends on / 依赖: IsCobounded
+/-
+**Filter.isCobounded_principal** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：isCobounded_principal (s : Set α) : (𝓟 s).IsCobounded r ↔ exists b, forall
+ a, (forall x in s, r x a) -> r b a
+参数：s : Set α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem isCobounded_principal (s : Set α) :
-    (𝓟 s).IsCobounded r ↔ exists b, forall a, (forall x in s, r x a) -> r b a := by simp [IsCobounded]
-
-/--
-theorem `IsCobounded.mono` / 定理 `IsCobounded.mono`
-
-English:
-theorem IsCobounded.mono
-  given: (h : f <= g)
-  statement: f.IsCobounded r -> g.IsCobounded r
-
-中文:
-定理 IsCobounded.mono
-  条件: (h : f <= g)
-  结论: f.IsCobounded r -> g.IsCobounded r
+    (𝓟 s).IsCobounded r ↔ ∃ b, ∀ a, (∀ x ∈ s, r x a) → r b a := by simp [IsCobounded]
+/-
+**Filter.IsCobounded.mono** 是 Mathlib 中的一个定理，位于命名空间 `Filter.IsCobounded`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} {f g : Filter α}, f ≤ g → Filter.IsCob
+ounded r f → Filter.IsCobounded r g
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem IsCobounded.mono (h : f <= g) : f.IsCobounded r -> g.IsCobounded r
+theorem IsCobounded.mono (h : f ≤ g) : f.IsCobounded r → g.IsCobounded r
   | ⟨b, hb⟩ => ⟨b, fun a ha => hb a (h ha)⟩
 
 /-- For nontrivial filters in linear orders, coboundedness for `≤` implies frequent boundedness
@@ -853,126 +697,103 @@ from below. -/
 @[to_dual frequently_le
 /-- For nontrivial filters in linear orders, coboundedness for `≥` implies frequent boundedness
 from above. -/]
-/--
-lemma `IsCobounded.frequently_ge` / 引理 `IsCobounded.frequently_ge`
-
-English:
-lemma IsCobounded.frequently_ge
-  given: [LinearOrder α] [NeBot f] (cobdd : IsCobounded (· <= ·) f)
-  proof: by
-  obtain ⟨t, ht⟩ := cobdd
-  rcases isBot_or_exists_lt t with tbot | ⟨t', ht'⟩
-  · exact ⟨t, .of_forall fun r => tbot r⟩
-  refine ⟨t', fun ev => ?_⟩
-  specialize ht t' (by filter_upwards [ev] with _ h using (not_le.mp h).le)
-  exact not_lt_of_ge ht ht'
-
-中文:
-引理 IsCobounded.frequently_ge
-  条件: [线性序 α] [NeBot f] (cobdd : IsCobounded (· <= ·) f)
-  证明: by
-  obtain ⟨t, ht⟩ := cobdd
-  rcases isBot_or_exists_lt t with tbot | ⟨t', ht'⟩
-  · exact ⟨t, .of_forall fun r => tbot r⟩
-  refine ⟨t', fun ev => ?_⟩
-  specialize ht t' (by filter_upwards [ev] with _ h using (not_le.mp h).le)
-  exact not_lt_of_ge ht ht'
-
-Depends on / 依赖: filter_upwards, isBot_or_exists_lt, not_le, not_le.mp, not_lt_of_ge, of_forall, specialize
+/-
+**Filter.IsCobounded.frequently_ge** 是 Mathlib 中的一个定理，位于命名空间 `Filter.IsCobounded
+`。
+形式化陈述：∀ {α : Type u_1} {f : Filter α} [inst : LinearOrder α] [f.NeBot],   Filter
+.IsCobounded (fun x1 x2 => x1 ≤ x2) f → ∃ l, ∃ᶠ (x : α) in f, l ≤ x
+参数：fun x1 x2 => x1 ≤ x2；x : α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isBot_or_exists_lt`：∀ {α : Type u_1} [inst : Preorder α] [IsCodirectedOr
+der α] (a : α), IsBot a ∨ ∃ b, b < a
+· 使用定理 `SemilatticeInf.instIsCodirectedOrder`：∀ {α : Type u_1} [inst : Semilatti
+ceInf α], IsCodirectedOrder α
+· 使用定理 `Filter.Frequently.of_forall`：∀ {α : Type u} {f : Filter α} [f.NeBot] {p 
+: α → Prop}, (∀ (x : α), p x) → ∃ᶠ (x : α) in f, p x
+· 使用定理 `not_lt_of_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
 -/
-lemma IsCobounded.frequently_ge [LinearOrder α] [NeBot f] (cobdd : IsCobounded (· <= ·) f) :
-    exists l, existsᶠ x in f, l <= x := by
+lemma IsCobounded.frequently_ge [LinearOrder α] [NeBot f] (cobdd : IsCobounded (· ≤ ·) f) :
+    ∃ l, ∃ᶠ x in f, l ≤ x := by
   obtain ⟨t, ht⟩ := cobdd
   rcases isBot_or_exists_lt t with tbot | ⟨t', ht'⟩
-  · exact ⟨t, .of_forall fun r => tbot r⟩
-  refine ⟨t', fun ev => ?_⟩
+  · exact ⟨t, .of_forall fun r ↦ tbot r⟩
+  refine ⟨t', fun ev ↦ ?_⟩
   specialize ht t' (by filter_upwards [ev] with _ h using (not_le.mp h).le)
   exact not_lt_of_ge ht ht'
 
 /-- In linear orders, frequent boundedness from below implies coboundedness for `≤`. -/
 @[to_dual of_frequently_le
 /-- In linear orders, frequent boundedness from above implies coboundedness for `≥`. -/]
-/--
-lemma `IsCobounded.of_frequently_ge` / 引理 `IsCobounded.of_frequently_ge`
-
-English:
-lemma IsCobounded.of_frequently_ge
-  given: [LinearOrder α] {l : α} (freq_ge : existsᶠ x in f, l <= x)
-  proof: by
-  rcases isBot_or_exists_lt l with lbot | ⟨l', hl'⟩
-  · exact ⟨l, fun x _ => lbot x⟩
-  refine ⟨l', fun u hu => ?_⟩
-  obtain ⟨w, l_le_w, w_le_u⟩ := (freq_ge.and_eventually hu).exists
-  exact hl'.le.trans (l_le_w.trans w_le_u)
-
-@[to_dual frequently_le]
-
-中文:
-引理 IsCobounded.of_frequently_ge
-  条件: [线性序 α] {l : α} (freq_ge : 存在ᶠ x in f, l <= x)
-  证明: by
-  rcases isBot_or_exists_lt l with lbot | ⟨l', hl'⟩
-  · exact ⟨l, fun x _ => lbot x⟩
-  refine ⟨l', fun u hu => ?_⟩
-  obtain ⟨w, l_le_w, w_le_u⟩ := (freq_ge.and_eventually hu).exists
-  exact hl'.le.trans (l_le_w.trans w_le_u)
-
-@[to_dual frequently_le]
-
-Depends on / 依赖: and_eventually, freq_ge, freq_ge.and_eventually, isBot_or_exists_lt, l_le_w, l_le_w.trans, le.trans, w_le_u
+/-
+**Filter.IsCobounded.of_frequently_ge** 是 Mathlib 中的一个定理，位于命名空间 `Filter.IsCoboun
+ded`。
+形式化陈述：∀ {α : Type u_1} {f : Filter α} [inst : LinearOrder α] {l : α},   (∃ᶠ (x :
+ α) in f, l ≤ x) → Filter.IsCobounded (fun x1 x2 => x1 ≤ x2) f
+参数：∃ᶠ (x : α) in f, l ≤ x；fun x1 x2 => x1 ≤ x2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isBot_or_exists_lt`：∀ {α : Type u_1} [inst : Preorder α] [IsCodirectedOr
+der α] (a : α), IsBot a ∨ ∃ b, b < a
+· 使用定理 `SemilatticeInf.instIsCodirectedOrder`：∀ {α : Type u_1} [inst : Semilatti
+ceInf α], IsCodirectedOrder α
+· 使用定理 `Filter.Frequently.exists`：∀ {α : Type u} {p : α → Prop} {f : Filter α}, 
+(∃ᶠ (x : α) in f, p x) → ∃ x, p x
+· 使用定理 `Filter.Frequently.and_eventually`：∀ {α : Type u} {p q : α → Prop} {f : F
+ilter α},   (∃ᶠ (x : α) in f, p x) → (∀ᶠ (x : α) in f, q x) → ∃ᶠ (x : α) in f, p
+ x ∧ q x
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
-lemma IsCobounded.of_frequently_ge [LinearOrder α] {l : α} (freq_ge : existsᶠ x in f, l <= x) :
-    IsCobounded (· <= ·) f := by
+lemma IsCobounded.of_frequently_ge [LinearOrder α] {l : α} (freq_ge : ∃ᶠ x in f, l ≤ x) :
+    IsCobounded (· ≤ ·) f := by
   rcases isBot_or_exists_lt l with lbot | ⟨l', hl'⟩
-  · exact ⟨l, fun x _ => lbot x⟩
-  refine ⟨l', fun u hu => ?_⟩
+  · exact ⟨l, fun x _ ↦ lbot x⟩
+  refine ⟨l', fun u hu ↦ ?_⟩
   obtain ⟨w, l_le_w, w_le_u⟩ := (freq_ge.and_eventually hu).exists
   exact hl'.le.trans (l_le_w.trans w_le_u)
 
 @[to_dual frequently_le]
-/--
-lemma `IsCoboundedUnder.frequently_ge` / 引理 `IsCoboundedUnder.frequently_ge`
-
-English:
-lemma IsCoboundedUnder.frequently_ge
-  statement: [LinearOrder α] {f : Filter ι} [NeBot f] {u : ι -> α}
-  proof: IsCobounded.frequently_ge h
-
-@[to_dual of_frequently_le]
-
-中文:
-引理 IsCoboundedUnder.frequently_ge
-  结论: [线性序 α] {f : 滤子 ι} [NeBot f] {u : ι -> α}
-  证明: IsCobounded.frequently_ge h
-
-@[to_dual of_frequently_le]
-
-Depends on / 依赖: IsCobounded, IsCobounded.frequently_ge, frequently_ge
+/-
+**Filter.IsCoboundedUnder.frequently_ge** 是 Mathlib 中的一个定理，位于命名空间 `Filter.IsCobo
+undedUnder`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_4} [inst : LinearOrder α] {f : Filter ι} [f.N
+eBot] {u : ι → α},   Filter.IsCoboundedUnder (fun x1 x2 => x1 ≤ x2) f u → ∃ a, ∃
+ᶠ (x : ι) in f, a ≤ u x
+参数：fun x1 x2 => x1 ≤ x2；x : ι。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.IsCobounded.frequently_ge`：∀ {α : Type u_1} {f : Filter α} [inst 
+: LinearOrder α] [f.NeBot],   Filter.IsCobounded (fun x1 x2 => x1 ≤ x2) f → ∃ l,
+ ∃ᶠ (x : α) in f, l ≤ …
 -/
-lemma IsCoboundedUnder.frequently_ge [LinearOrder α] {f : Filter ι} [NeBot f] {u : ι -> α}
-    (h : IsCoboundedUnder (· <= ·) f u) :
-    exists a, existsᶠ x in f, a <= u x :=
+lemma IsCoboundedUnder.frequently_ge [LinearOrder α] {f : Filter ι} [NeBot f] {u : ι → α}
+    (h : IsCoboundedUnder (· ≤ ·) f u) :
+    ∃ a, ∃ᶠ x in f, a ≤ u x :=
   IsCobounded.frequently_ge h
 
 @[to_dual of_frequently_le]
-/--
-lemma `IsCoboundedUnder.of_frequently_ge` / 引理 `IsCoboundedUnder.of_frequently_ge`
-
-English:
-lemma IsCoboundedUnder.of_frequently_ge
-  statement: [LinearOrder α] {f : Filter ι} {u : ι -> α}
-  proof: IsCobounded.of_frequently_ge freq_ge
-
-中文:
-引理 IsCoboundedUnder.of_frequently_ge
-  结论: [线性序 α] {f : 滤子 ι} {u : ι -> α}
-  证明: IsCobounded.of_frequently_ge freq_ge
-
-Depends on / 依赖: IsCobounded, IsCobounded.of_frequently_ge, freq_ge, of_frequently_ge
+/-
+**Filter.IsCoboundedUnder.of_frequently_ge** 是 Mathlib 中的一个定理，位于命名空间 `Filter.IsC
+oboundedUnder`。
+形式化陈述：∀ {α : Type u_1} {ι : Type u_4} [inst : LinearOrder α] {f : Filter ι} {u :
+ ι → α} {a : α},   (∃ᶠ (x : ι) in f, a ≤ u x) → Filter.IsCoboundedUnder (fun x1 
+x2 => x1 ≤ x2) f u
+参数：∃ᶠ (x : ι) in f, a ≤ u x；fun x1 x2 => x1 ≤ x2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.IsCobounded.of_frequently_ge`：∀ {α : Type u_1} {f : Filter α} [in
+st : LinearOrder α] {l : α},   (∃ᶠ (x : α) in f, l ≤ x) → Filter.IsCobounded (fu
+n x1 x2 => x1 ≤ x2) f
 -/
-lemma IsCoboundedUnder.of_frequently_ge [LinearOrder α] {f : Filter ι} {u : ι -> α}
-    {a : α} (freq_ge : existsᶠ x in f, a <= u x) :
-    IsCoboundedUnder (· <= ·) f u :=
+lemma IsCoboundedUnder.of_frequently_ge [LinearOrder α] {f : Filter ι} {u : ι → α}
+    {a : α} (freq_ge : ∃ᶠ x in f, a ≤ u x) :
+    IsCoboundedUnder (· ≤ ·) f u :=
   IsCobounded.of_frequently_ge freq_ge
 
 end Relation
@@ -984,40 +805,42 @@ open Filter Set
 variable {α : Type*} {f : Filter α}
 variable {R : Type*}
 
-/--
-lemma `isBoundedUnder_sum` / 引理 `isBoundedUnder_sum`
-
-English:
-lemma isBoundedUnder_sum
-  statement: {κ : Type*} [AddCommMonoid R] {r : R -> R -> Prop}
-  proof: by
-  induction s using Finset.cons_induction
-  case empty =>
-    rw [Finset.sum_empty]
-    exact ⟨0, by simp_all only [eventually_map, Pi.zero_apply, eventually_true]⟩
-  case cons k₀ s k₀_notin_s ih =>
-    simp only [Finset.forall_mem_cons] at *
-    simpa only [Finset.sum_cons] using hr _ _ h.1 (ih h.2)
-
-中文:
-引理 isBoundedUnder_sum
-  结论: {κ : 类型} [加法交换幺半群 R] {r : R -> R -> 命题}
-  证明: by
-  induction s using Finset.cons_induction
-  case empty =>
-    rw [Finset.sum_empty]
-    exact ⟨0, by simp_all only [eventually_map, Pi.zero_apply, eventually_true]⟩
-  case cons k₀ s k₀_notin_s ih =>
-    simp only [Finset.forall_mem_cons] at *
-    simpa only [Finset.sum_cons] using hr _ _ h.1 (ih h.2)
-
-Depends on / 依赖: Finset, Finset.cons_induction, Finset.forall_mem_cons, Finset.sum_cons, Finset.sum_empty, Pi.zero_apply, cons_induction, eventually_map, eventually_true, forall_mem_cons, sum_cons, sum_empty, zero_apply
+/-
+**Filter.isBoundedUnder_sum** 是 Mathlib 中的一个引理，位于命名空间 `Filter`。
+形式化陈述：isBoundedUnder_sum {κ : Type*} [AddCommMonoid R] {r : R -> R -> Prop} (hr 
+: forall (v₁ v₂ : α -> R), f.IsBoundedUnder r v₁ -> f.IsBoundedUnder r v₂ -> f.I
+sBoundedUnder r (v₁ + v₂)) (hr₀ : r 0 0) {u : κ -> α -> R} (s : Finset κ) (h : f
+orall k in s, f.IsBoundedUnder r (u k)) : f.IsBoundedUnder r (∑ k in s, u k)
+参数：hr : forall (v₁ v₂ : α -> R), f.IsBoundedUnder r v₁ -> f.IsBoundedUnder r v₂ 
+-> f.IsBoundedUnder r (v₁ + v₂)；hr₀ : r 0 0；s : Finset κ；h : forall k in s, f.Is
+BoundedUnder r (u k)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.cons_induction`：∀ {α : Type u_3} {motive : Finset α → Prop},   mo
+tive ∅ → (∀ (a : α) (s : Finset α) (h : a ∉ s), motive s → motive (Finset.cons a
+ s h)) → ∀ …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_empty`：∀ {ι : Type u_1} {M : Type u_3} {f : ι → M} [inst : Ad
+dCommMonoid M], ∑ x ∈ ∅, f x = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Finset.sum_cons`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι} 
+[inst : AddCommMonoid M] {f : ι → M} (h : a ∉ s),   ∑ x ∈ Finset.cons a s h, f x
+ = f …
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-lemma isBoundedUnder_sum {κ : Type*} [AddCommMonoid R] {r : R -> R -> Prop}
-    (hr : forall (v₁ v₂ : α -> R), f.IsBoundedUnder r v₁ -> f.IsBoundedUnder r v₂
-      -> f.IsBoundedUnder r (v₁ + v₂)) (hr₀ : r 0 0)
-    {u : κ -> α -> R} (s : Finset κ) (h : forall k in s, f.IsBoundedUnder r (u k)) :
-    f.IsBoundedUnder r (∑ k in s, u k) := by
+lemma isBoundedUnder_sum {κ : Type*} [AddCommMonoid R] {r : R → R → Prop}
+    (hr : ∀ (v₁ v₂ : α → R), f.IsBoundedUnder r v₁ → f.IsBoundedUnder r v₂
+      → f.IsBoundedUnder r (v₁ + v₂)) (hr₀ : r 0 0)
+    {u : κ → α → R} (s : Finset κ) (h : ∀ k ∈ s, f.IsBoundedUnder r (u k)) :
+    f.IsBoundedUnder r (∑ k ∈ s, u k) := by
   induction s using Finset.cons_induction
   case empty =>
     rw [Finset.sum_empty]
@@ -1029,38 +852,24 @@ lemma isBoundedUnder_sum {κ : Type*} [AddCommMonoid R] {r : R -> R -> Prop}
 variable [Preorder R]
 
 @[to_dual isBoundedUnder_ge_add]
-/--
-lemma `isBoundedUnder_le_add` / 引理 `isBoundedUnder_le_add`
-
-English:
-lemma isBoundedUnder_le_add
-  statement: [Add R] [AddLeftMono R] [AddRightMono R]
-  proof: by
-  obtain ⟨U, hU⟩ := u_bdd_le
-  obtain ⟨V, hV⟩ := v_bdd_le
-  use U + V
-  simp only [eventually_map, Pi.add_apply] at hU hV ⊢
-  filter_upwards [hU, hV] with a hu hv using add_le_add hu hv
-
-@[to_dual isBoundedUnder_ge_sum]
-
-中文:
-引理 isBoundedUnder_le_add
-  结论: [加法 R] [AddLeftMono R] [AddRightMono R]
-  证明: by
-  obtain ⟨U, hU⟩ := u_bdd_le
-  obtain ⟨V, hV⟩ := v_bdd_le
-  use U + V
-  simp only [eventually_map, Pi.add_apply] at hU hV ⊢
-  filter_upwards [hU, hV] with a hu hv using add_le_add hu hv
-
-@[to_dual isBoundedUnder_ge_sum]
-
-Depends on / 依赖: Pi.add_apply, add_apply, add_le_add, eventually_map, filter_upwards, u_bdd_le, v_bdd_le
+/-
+**Filter.isBoundedUnder_le_add** 是 Mathlib 中的一个引理，位于命名空间 `Filter`。
+形式化陈述：isBoundedUnder_le_add [Add R] [AddLeftMono R] [AddRightMono R] {u v : α ->
+ R} (u_bdd_le : f.IsBoundedUnder (· <= ·) u) (v_bdd_le : f.IsBoundedUnder (· <= 
+·) v) : f.IsBoundedUnder (· <= ·) (u + v)
+参数：u_bdd_le : f.IsBoundedUnder (· <= ·) u；v_bdd_le : f.IsBoundedUnder (· <= ·) v
+。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
 -/
 lemma isBoundedUnder_le_add [Add R] [AddLeftMono R] [AddRightMono R]
-    {u v : α -> R} (u_bdd_le : f.IsBoundedUnder (· <= ·) u) (v_bdd_le : f.IsBoundedUnder (· <= ·) v) :
-    f.IsBoundedUnder (· <= ·) (u + v) := by
+    {u v : α → R} (u_bdd_le : f.IsBoundedUnder (· ≤ ·) u) (v_bdd_le : f.IsBoundedUnder (· ≤ ·) v) :
+    f.IsBoundedUnder (· ≤ ·) (u + v) := by
   obtain ⟨U, hU⟩ := u_bdd_le
   obtain ⟨V, hV⟩ := v_bdd_le
   use U + V
@@ -1068,25 +877,26 @@ lemma isBoundedUnder_le_add [Add R] [AddLeftMono R] [AddRightMono R]
   filter_upwards [hU, hV] with a hu hv using add_le_add hu hv
 
 @[to_dual isBoundedUnder_ge_sum]
-/--
-lemma `isBoundedUnder_le_sum` / 引理 `isBoundedUnder_le_sum`
-
-English:
-lemma isBoundedUnder_le_sum
-  statement: {κ : Type*} [AddCommMonoid R] [AddLeftMono R] [AddRightMono R]
-  proof: fun h => isBoundedUnder_sum (fun _ _ => isBoundedUnder_le_add) le_rfl s h
-
-中文:
-引理 isBoundedUnder_le_sum
-  结论: {κ : 类型} [加法交换幺半群 R] [AddLeftMono R] [AddRightMono R]
-  证明: fun h => isBoundedUnder_sum (fun _ _ => isBoundedUnder_le_add) le_rfl s h
-
-Depends on / 依赖: isBoundedUnder_le_add, isBoundedUnder_sum, le_rfl
+/-
+**Filter.isBoundedUnder_le_sum** 是 Mathlib 中的一个引理，位于命名空间 `Filter`。
+形式化陈述：isBoundedUnder_le_sum {κ : Type*} [AddCommMonoid R] [AddLeftMono R] [AddRi
+ghtMono R] {u : κ -> α -> R} (s : Finset κ) : (forall k in s, f.IsBoundedUnder (
+· <= ·) (u k)) -> f.IsBoundedUnder (· <= ·) (∑ k in s, u k)
+参数：s : Finset κ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Filter.isBoundedUnder_sum`：isBoundedUnder_sum {κ : Type*} [AddCommMonoid
+ R] {r : R -> R -> Prop} (hr : forall (v₁ v₂ : α -> R), f.IsBoundedUnder r v₁ ->
+ f.IsBoundedUnd…
+· 使用引理 `Filter.isBoundedUnder_le_add`：isBoundedUnder_le_add [Add R] [AddLeftMono
+ R] [AddRightMono R] {u v : α -> R} (u_bdd_le : f.IsBoundedUnder (· <= ·) u) (v_
+bdd_le : f.IsBound…
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
 lemma isBoundedUnder_le_sum {κ : Type*} [AddCommMonoid R] [AddLeftMono R] [AddRightMono R]
-    {u : κ -> α -> R} (s : Finset κ) :
-    (forall k in s, f.IsBoundedUnder (· <= ·) (u k)) -> f.IsBoundedUnder (· <= ·) (∑ k in s, u k) :=
-  fun h => isBoundedUnder_sum (fun _ _ => isBoundedUnder_le_add) le_rfl s h
+    {u : κ → α → R} (s : Finset κ) :
+    (∀ k ∈ s, f.IsBoundedUnder (· ≤ ·) (u k)) → f.IsBoundedUnder (· ≤ ·) (∑ k ∈ s, u k) :=
+  fun h ↦ isBoundedUnder_sum (fun _ _ ↦ isBoundedUnder_le_add) le_rfl s h
 
 end add_and_sum
 
@@ -1094,122 +904,130 @@ section add_and_sum
 
 variable {α R : Type*} [LinearOrder R] [Add R] {f : Filter α} [f.NeBot]
   [AddLeftMono R] [AddRightMono R]
-  {u v : α -> R}
+  {u v : α → R}
 
 @[to_dual isCoboundedUnder_ge_add]
-/--
-lemma `isCoboundedUnder_le_add` / 引理 `isCoboundedUnder_le_add`
-
-English:
-lemma isCoboundedUnder_le_add
-  statement: (hu : f.IsBoundedUnder (fun x1 x2 => x2 <= x1) u)
-  proof: by
-  obtain ⟨U, hU⟩ := hu.eventually_ge
-  obtain ⟨V, hV⟩ := hv.frequently_ge
-  apply IsCoboundedUnder.of_frequently_ge (a := U + V)
-  exact (hV.and_eventually hU).mono fun x hx => add_le_add hx.2 hx.1
-
-中文:
-引理 isCoboundedUnder_le_add
-  结论: (hu : f.IsBoundedUnder (fun x1 x2 => x2 <= x1) u)
-  证明: by
-  obtain ⟨U, hU⟩ := hu.eventually_ge
-  obtain ⟨V, hV⟩ := hv.frequently_ge
-  apply IsCoboundedUnder.of_frequently_ge (a := U + V)
-  exact (hV.and_eventually hU).mono fun x hx => add_le_add hx.2 hx.1
-
-Depends on / 依赖: IsCoboundedUnder, IsCoboundedUnder.of_frequently_ge, add_le_add, and_eventually, eventually_ge, frequently_ge, hV.and_eventually, hu.eventually_ge, hv.frequently_ge, of_frequently_ge
+/-
+**Filter.isCoboundedUnder_le_add** 是 Mathlib 中的一个引理，位于命名空间 `Filter`。
+形式化陈述：isCoboundedUnder_le_add (hu : f.IsBoundedUnder (fun x1 x2 => x2 <= x1) u) 
+(hv : f.IsCoboundedUnder (· <= ·) v) : f.IsCoboundedUnder (· <= ·) (u + v)
+参数：hu : f.IsBoundedUnder (fun x1 x2 => x2 <= x1) u；hv : f.IsCoboundedUnder (· <=
+ ·) v。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.IsBoundedUnder.eventually_ge`：∀ {α : Type u_1} {β : Type u_2} [in
+st : Preorder α] {f : Filter β} {u : β → α},   Filter.IsBoundedUnder (fun x1 x2 
+=> x2 ≤ x1) f u → ∃ a, ∀ᶠ…
+· 使用定理 `Filter.IsCoboundedUnder.frequently_ge`：∀ {α : Type u_1} {ι : Type u_4} [
+inst : LinearOrder α] {f : Filter ι} [f.NeBot] {u : ι → α},   Filter.IsCobounded
+Under (fun x1 x2 => x1 ≤ x2…
+· 使用定理 `Filter.IsCoboundedUnder.of_frequently_ge`：∀ {α : Type u_1} {ι : Type u_4
+} [inst : LinearOrder α] {f : Filter ι} {u : ι → α} {a : α},   (∃ᶠ (x : ι) in f,
+ a ≤ u x) → Filter.IsCobounded…
+· 使用定理 `Filter.Frequently.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∃ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∃ᶠ (x : α) in f, q x
+· 使用定理 `Filter.Frequently.and_eventually`：∀ {α : Type u} {p q : α → Prop} {f : F
+ilter α},   (∃ᶠ (x : α) in f, p x) → (∀ᶠ (x : α) in f, q x) → ∃ᶠ (x : α) in f, p
+ x ∧ q x
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
 -/
-lemma isCoboundedUnder_le_add (hu : f.IsBoundedUnder (fun x1 x2 => x2 <= x1) u)
-    (hv : f.IsCoboundedUnder (· <= ·) v) :
-    f.IsCoboundedUnder (· <= ·) (u + v) := by
+lemma isCoboundedUnder_le_add (hu : f.IsBoundedUnder (fun x1 x2 ↦ x2 ≤ x1) u)
+    (hv : f.IsCoboundedUnder (· ≤ ·) v) :
+    f.IsCoboundedUnder (· ≤ ·) (u + v) := by
   obtain ⟨U, hU⟩ := hu.eventually_ge
   obtain ⟨V, hV⟩ := hv.frequently_ge
   apply IsCoboundedUnder.of_frequently_ge (a := U + V)
-  exact (hV.and_eventually hU).mono fun x hx => add_le_add hx.2 hx.1
+  exact (hV.and_eventually hU).mono fun x hx ↦ add_le_add hx.2 hx.1
 
 end add_and_sum
 
 section mul
 
-/--
-lemma `isBoundedUnder_le_mul_of_nonneg` / 引理 `isBoundedUnder_le_mul_of_nonneg`
-
-English:
-lemma isBoundedUnder_le_mul_of_nonneg
-  statement: [Preorder α] [Mul α] [Zero α] [PosMulMono α]
-  proof: by
-  obtain ⟨U, hU⟩ := h₂.eventually_le
-  obtain ⟨V, hV⟩ := h₄.eventually_le
-  refine isBoundedUnder_of_eventually_le (a := U * V) ?_
-  filter_upwards [hU, hV, h₃] with x x_U x_V v_0
-  have U_0 : 0 <= U := by
-    obtain ⟨y, y_0, y_U⟩ := (h₁.and_eventually hU).exists
-    exact y_0.trans y_U
-  exact (mul_le_mul_of_nonneg_right x_U v_0).trans (mul_le_mul_of_nonneg_left x_V U_0)
-
-中文:
-引理 isBoundedUnder_le_mul_of_nonneg
-  结论: [预序 α] [乘法 α] [零 α] [正乘递增 α]
-  证明: by
-  obtain ⟨U, hU⟩ := h₂.eventually_le
-  obtain ⟨V, hV⟩ := h₄.eventually_le
-  refine isBoundedUnder_of_eventually_le (a := U * V) ?_
-  filter_upwards [hU, hV, h₃] with x x_U x_V v_0
-  have U_0 : 0 <= U := by
-    obtain ⟨y, y_0, y_U⟩ := (h₁.and_eventually hU).exists
-    exact y_0.trans y_U
-  exact (mul_le_mul_of_nonneg_right x_U v_0).trans (mul_le_mul_of_nonneg_left x_V U_0)
-
-Depends on / 依赖: and_eventually, eventually_le, filter_upwards, isBoundedUnder_of_eventually_le, mul_le_mul_of_nonneg_left, mul_le_mul_of_nonneg_right, y_0.trans
+/-
+**Filter.isBoundedUnder_le_mul_of_nonneg** 是 Mathlib 中的一个引理，位于命名空间 `Filter`。
+形式化陈述：isBoundedUnder_le_mul_of_nonneg [Preorder α] [Mul α] [Zero α] [PosMulMono 
+α] [MulPosMono α] {f : Filter ι} {u v : ι -> α} (h₁ : existsᶠ x in f, 0 <= u x) 
+(h₂ : IsBoundedUnder (· <= ·) f u) (h₃ : 0 <=ᶠ[f] v) (h₄ : IsBoundedUnder (· <= 
+·) f v) : IsBoundedUnder (· <= ·) f (u * v)
+参数：h₁ : existsᶠ x in f, 0 <= u x；h₂ : IsBoundedUnder (· <= ·) f u；h₃ : 0 <=ᶠ[f] 
+v；h₄ : IsBoundedUnder (· <= ·) f v。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.IsBoundedUnder.eventually_le`：∀ {α : Type u_1} {β : Type u_2} [in
+st : Preorder α] {f : Filter β} {u : β → α},   Filter.IsBoundedUnder (fun x1 x2 
+=> x1 ≤ x2) f u → ∃ a, ∀ᶠ…
+· 使用引理 `Filter.isBoundedUnder_of_eventually_le`：isBoundedUnder_of_eventually_le 
+{a : α} (h : forallᶠ x in f, u x <= a) : IsBoundedUnder (· <= ·) f u
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `Filter.Frequently.exists`：∀ {α : Type u} {p : α → Prop} {f : Filter α}, 
+(∃ᶠ (x : α) in f, p x) → ∃ x, p x
+· 使用定理 `Filter.Frequently.and_eventually`：∀ {α : Type u} {p q : α → Prop} {f : F
+ilter α},   (∃ᶠ (x : α) in f, p x) → (∀ᶠ (x : α) in f, q x) → ∃ᶠ (x : α) in f, p
+ x ∧ q x
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `mul_le_mul_of_nonneg_right`：mul_le_mul_of_nonneg_right [MulPosMono α] (h
+bc : b <= c) (ha : 0 <= a) : b * a <= c * a
+· 使用定理 `mul_le_mul_of_nonneg_left`：mul_le_mul_of_nonneg_left [PosMulMono α] (hbc
+ : b <= c) (ha : 0 <= a) : a * b <= a * c
 -/
 lemma isBoundedUnder_le_mul_of_nonneg [Preorder α] [Mul α] [Zero α] [PosMulMono α]
-    [MulPosMono α] {f : Filter ι} {u v : ι -> α} (h₁ : existsᶠ x in f, 0 <= u x)
-    (h₂ : IsBoundedUnder (· <= ·) f u) (h₃ : 0 <=ᶠ[f] v)
-    (h₄ : IsBoundedUnder (· <= ·) f v) :
-    IsBoundedUnder (· <= ·) f (u * v) := by
+    [MulPosMono α] {f : Filter ι} {u v : ι → α} (h₁ : ∃ᶠ x in f, 0 ≤ u x)
+    (h₂ : IsBoundedUnder (· ≤ ·) f u) (h₃ : 0 ≤ᶠ[f] v)
+    (h₄ : IsBoundedUnder (· ≤ ·) f v) :
+    IsBoundedUnder (· ≤ ·) f (u * v) := by
   obtain ⟨U, hU⟩ := h₂.eventually_le
   obtain ⟨V, hV⟩ := h₄.eventually_le
   refine isBoundedUnder_of_eventually_le (a := U * V) ?_
   filter_upwards [hU, hV, h₃] with x x_U x_V v_0
-  have U_0 : 0 <= U := by
+  have U_0 : 0 ≤ U := by
     obtain ⟨y, y_0, y_U⟩ := (h₁.and_eventually hU).exists
     exact y_0.trans y_U
   exact (mul_le_mul_of_nonneg_right x_U v_0).trans (mul_le_mul_of_nonneg_left x_V U_0)
-
-/--
-lemma `isCoboundedUnder_ge_mul_of_nonneg` / 引理 `isCoboundedUnder_ge_mul_of_nonneg`
-
-English:
-lemma isCoboundedUnder_ge_mul_of_nonneg
-  statement: [LinearOrder α] [Mul α] [Zero α] [PosMulMono α]
-  proof: by
-  obtain ⟨U, hU⟩ := h₂.eventually_le
-  obtain ⟨V, hV⟩ := h₄.frequently_le
-  refine IsCoboundedUnder.of_frequently_le (a := U * V) ?_
-  apply (hV.and_eventually (hU.and (h₁.and h₃))).mono
-  intro x ⟨x_V, x_U, u_0, v_0⟩
-  exact (mul_le_mul_of_nonneg_right x_U v_0).trans (mul_le_mul_of_nonneg_left x_V (u_0.trans x_U))
-
-中文:
-引理 isCoboundedUnder_ge_mul_of_nonneg
-  结论: [线性序 α] [乘法 α] [零 α] [正乘递增 α]
-  证明: by
-  obtain ⟨U, hU⟩ := h₂.eventually_le
-  obtain ⟨V, hV⟩ := h₄.frequently_le
-  refine IsCoboundedUnder.of_frequently_le (a := U * V) ?_
-  apply (hV.and_eventually (hU.and (h₁.and h₃))).mono
-  intro x ⟨x_V, x_U, u_0, v_0⟩
-  exact (mul_le_mul_of_nonneg_right x_U v_0).trans (mul_le_mul_of_nonneg_left x_V (u_0.trans x_U))
-
-Depends on / 依赖: IsCoboundedUnder, IsCoboundedUnder.of_frequently_le, and_eventually, eventually_le, frequently_le, hU.and, hV.and_eventually, mul_le_mul_of_nonneg_left, mul_le_mul_of_nonneg_right, of_frequently_le, u_0.trans
+/-
+**Filter.isCoboundedUnder_ge_mul_of_nonneg** 是 Mathlib 中的一个引理，位于命名空间 `Filter`。
+形式化陈述：isCoboundedUnder_ge_mul_of_nonneg [LinearOrder α] [Mul α] [Zero α] [PosMul
+Mono α] [MulPosMono α] {f : Filter ι} [f.NeBot] {u v : ι -> α} (h₁ : 0 <=ᶠ[f] u)
+ (h₂ : IsBoundedUnder (· <= ·) f u) (h₃ : 0 <=ᶠ[f] v) (h₄ : IsCoboundedUnder (fu
+n x1 x2 => x2 <= x1) f v) : IsCoboundedUnder (fun x1 x2 => x2 <= x1) f (u * v)
+参数：h₁ : 0 <=ᶠ[f] u；h₂ : IsBoundedUnder (· <= ·) f u；h₃ : 0 <=ᶠ[f] v；h₄ : IsCobou
+ndedUnder (fun x1 x2 => x2 <= x1) f v。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.IsBoundedUnder.eventually_le`：∀ {α : Type u_1} {β : Type u_2} [in
+st : Preorder α] {f : Filter β} {u : β → α},   Filter.IsBoundedUnder (fun x1 x2 
+=> x1 ≤ x2) f u → ∃ a, ∀ᶠ…
+· 使用定理 `Filter.IsCoboundedUnder.frequently_le`：∀ {α : Type u_1} {ι : Type u_4} [
+inst : LinearOrder α] {f : Filter ι} [f.NeBot] {u : ι → α},   Filter.IsCobounded
+Under (fun x1 x2 => x2 ≤ x1…
+· 使用定理 `Filter.IsCoboundedUnder.of_frequently_le`：∀ {α : Type u_1} {ι : Type u_4
+} [inst : LinearOrder α] {f : Filter ι} {u : ι → α} {a : α},   (∃ᶠ (x : ι) in f,
+ u x ≤ a) → Filter.IsCobounded…
+· 使用定理 `Filter.Frequently.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∃ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∃ᶠ (x : α) in f, q x
+· 使用定理 `Filter.Frequently.and_eventually`：∀ {α : Type u} {p q : α → Prop} {f : F
+ilter α},   (∃ᶠ (x : α) in f, p x) → (∀ᶠ (x : α) in f, q x) → ∃ᶠ (x : α) in f, p
+ x ∧ q x
+· 使用定理 `Filter.Eventually.and`：∀ {α : Type u} {p q : α → Prop} {f : Filter α},  
+ Filter.Eventually p f → Filter.Eventually q f → ∀ᶠ (x : α) in f, p x ∧ q x
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `mul_le_mul_of_nonneg_right`：mul_le_mul_of_nonneg_right [MulPosMono α] (h
+bc : b <= c) (ha : 0 <= a) : b * a <= c * a
+· 使用定理 `mul_le_mul_of_nonneg_left`：mul_le_mul_of_nonneg_left [PosMulMono α] (hbc
+ : b <= c) (ha : 0 <= a) : a * b <= a * c
 -/
 lemma isCoboundedUnder_ge_mul_of_nonneg [LinearOrder α] [Mul α] [Zero α] [PosMulMono α]
-    [MulPosMono α] {f : Filter ι} [f.NeBot] {u v : ι -> α} (h₁ : 0 <=ᶠ[f] u)
-    (h₂ : IsBoundedUnder (· <= ·) f u)
-    (h₃ : 0 <=ᶠ[f] v)
-    (h₄ : IsCoboundedUnder (fun x1 x2 => x2 <= x1) f v) :
-    IsCoboundedUnder (fun x1 x2 => x2 <= x1) f (u * v) := by
+    [MulPosMono α] {f : Filter ι} [f.NeBot] {u v : ι → α} (h₁ : 0 ≤ᶠ[f] u)
+    (h₂ : IsBoundedUnder (· ≤ ·) f u)
+    (h₃ : 0 ≤ᶠ[f] v)
+    (h₄ : IsCoboundedUnder (fun x1 x2 ↦ x2 ≤ x1) f v) :
+    IsCoboundedUnder (fun x1 x2 ↦ x2 ≤ x1) f (u * v) := by
   obtain ⟨U, hU⟩ := h₂.eventually_le
   obtain ⟨V, hV⟩ := h₄.frequently_le
   refine IsCoboundedUnder.of_frequently_le (a := U * V) ?_
@@ -1220,290 +1038,227 @@ lemma isCoboundedUnder_ge_mul_of_nonneg [LinearOrder α] [Mul α] [Zero α] [Pos
 end mul
 
 section Nonempty
-variable [Preorder α] [Nonempty α] {f : Filter β} {u : β -> α}
+variable [Preorder α] [Nonempty α] {f : Filter β} {u : β → α}
 
 @[to_dual isBounded_ge_atTop]
-/--
-theorem `isBounded_le_atBot` / 定理 `isBounded_le_atBot`
-
-English:
-theorem isBounded_le_atBot
-  statement: (atBot : Filter α).IsBounded (· <= ·)
-  proof: ‹Nonempty α›.elim fun a => ⟨a, eventually_le_atBot _⟩
-
-@[to_dual isBoundedUnder_ge_atTop]
-
-中文:
-定理 isBounded_le_atBot
-  结论: (atBot : 滤子 α).IsBounded (· <= ·)
-  证明: ‹Nonempty α›.elim fun a => ⟨a, eventually_le_atBot _⟩
-
-@[to_dual isBoundedUnder_ge_atTop]
-
-Depends on / 依赖: Nonempty, eventually_le_atBot
+/-
+**Filter.isBounded_le_atBot** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：isBounded_le_atBot : (atBot : Filter α).IsBounded (· <= ·)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nonempty.elim`：∀ {α : Sort u} {p : Prop}, Nonempty α → (∀ (a : α), p) → 
+p
+· 使用定理 `Filter.eventually_le_atBot`：∀ {α : Type u_3} [inst : Preorder α] (a : α)
+, ∀ᶠ (x : α) in Filter.atBot, x ≤ a
 -/
-theorem isBounded_le_atBot : (atBot : Filter α).IsBounded (· <= ·) :=
+theorem isBounded_le_atBot : (atBot : Filter α).IsBounded (· ≤ ·) :=
   ‹Nonempty α›.elim fun a => ⟨a, eventually_le_atBot _⟩
 
 @[to_dual isBoundedUnder_ge_atTop]
-/--
-theorem `Tendsto.isBoundedUnder_le_atBot` / 定理 `Tendsto.isBoundedUnder_le_atBot`
-
-English:
-theorem Tendsto.isBoundedUnder_le_atBot
-  given: (h : Tendsto u f atBot)
-  statement: f.IsBoundedUnder (· <= ·) u
-  proof: isBounded_le_atBot.mono h
-
-@[to_dual]
-
-中文:
-定理 收敛.isBoundedUnder_le_atBot
-  条件: (h : 收敛 u f atBot)
-  结论: f.IsBoundedUnder (· <= ·) u
-  证明: isBounded_le_atBot.mono h
-
-@[to_dual]
-
-Depends on / 依赖: isBounded_le_atBot, isBounded_le_atBot.mono
+/-
+**Filter.Tendsto.isBoundedUnder_le_atBot** 是 Mathlib 中的一个定理，位于命名空间 `Filter.Tends
+to`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : Preorder α] [Nonempty α] {f : Filt
+er β} {u : β → α},   Filter.Tendsto u f Filter.atBot → Filter.IsBoundedUnder (fu
+n x1 x2 => x1 ≤ x2) f u
+参数：fun x1 x2 => x1 ≤ x2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.IsBounded.mono`：∀ {α : Type u_1} {r : α → α → Prop} {f g : Filter
+ α}, f ≤ g → Filter.IsBounded r g → Filter.IsBounded r f
+· 使用定理 `Filter.isBounded_le_atBot`：isBounded_le_atBot : (atBot : Filter α).IsBou
+nded (· <= ·)
 -/
-theorem Tendsto.isBoundedUnder_le_atBot (h : Tendsto u f atBot) : f.IsBoundedUnder (· <= ·) u :=
+theorem Tendsto.isBoundedUnder_le_atBot (h : Tendsto u f atBot) : f.IsBoundedUnder (· ≤ ·) u :=
   isBounded_le_atBot.mono h
 
 @[to_dual]
-/--
-theorem `bddAbove_range_of_tendsto_atTop_atBot` / 定理 `bddAbove_range_of_tendsto_atTop_atBot`
-
-English:
-theorem bddAbove_range_of_tendsto_atTop_atBot
-  statement: [IsDirectedOrder α] {u : Nat -> α}
-  proof: hx.isBoundedUnder_le_atBot.bddAbove_range
-
-中文:
-定理 bddAbove_range_of_tendsto_atTop_atBot
-  结论: [IsDirectedOrder α] {u : 自然数 -> α}
-  证明: hx.isBoundedUnder_le_atBot.bddAbove_range
-
-Depends on / 依赖: bddAbove_range, hx.isBoundedUnder_le_atBot.bddAbove_range, isBoundedUnder_le_atBot
+/-
+**Filter.bddAbove_range_of_tendsto_atTop_atBot** 是 Mathlib 中的一个定理，位于命名空间 `Filter
+`。
+形式化陈述：bddAbove_range_of_tendsto_atTop_atBot [IsDirectedOrder α] {u : Nat -> α} (
+hx : Tendsto u atTop atBot) : BddAbove (Set.range u)
+参数：hx : Tendsto u atTop atBot。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.IsBoundedUnder.bddAbove_range`：∀ {β : Type u_2} [inst : Preorder 
+β] [IsDirectedOrder β] {f : ℕ → β},   Filter.IsBoundedUnder (fun x1 x2 => x1 ≤ x
+2) Filter.atTop f → BddAbo…
+· 使用定理 `Filter.Tendsto.isBoundedUnder_le_atBot`：∀ {α : Type u_1} {β : Type u_2} 
+[inst : Preorder α] [Nonempty α] {f : Filter β} {u : β → α},   Filter.Tendsto u 
+f Filter.atBot → Filter.IsBo…
 -/
-theorem bddAbove_range_of_tendsto_atTop_atBot [IsDirectedOrder α] {u : Nat -> α}
+theorem bddAbove_range_of_tendsto_atTop_atBot [IsDirectedOrder α] {u : ℕ → α}
     (hx : Tendsto u atTop atBot) : BddAbove (Set.range u) :=
   hx.isBoundedUnder_le_atBot.bddAbove_range
-
-/--
-theorem `bddBelow_range_of_tendsto_atTop_atTop` / 定理 `bddBelow_range_of_tendsto_atTop_atTop`
-
-English:
-theorem bddBelow_range_of_tendsto_atTop_atTop
-  statement: [IsCodirectedOrder α] {u : Nat -> α}
-  proof: hx.isBoundedUnder_ge_atTop.bddBelow_range
-
-中文:
-定理 bddBelow_range_of_tendsto_atTop_atTop
-  结论: [IsCodirectedOrder α] {u : 自然数 -> α}
-  证明: hx.isBoundedUnder_ge_atTop.bddBelow_range
-
-Depends on / 依赖: bddBelow_range, hx.isBoundedUnder_ge_atTop.bddBelow_range, isBoundedUnder_ge_atTop
+/-
+**Filter.bddBelow_range_of_tendsto_atTop_atTop** 是 Mathlib 中的一个定理，位于命名空间 `Filter
+`。
+形式化陈述：bddBelow_range_of_tendsto_atTop_atTop [IsCodirectedOrder α] {u : Nat -> α}
+ (hx : Tendsto u atTop atTop) : BddBelow (Set.range u)
+参数：hx : Tendsto u atTop atTop。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.IsBoundedUnder.bddBelow_range`：∀ {β : Type u_2} [inst : Preorder 
+β] [IsCodirectedOrder β] {f : ℕ → β},   Filter.IsBoundedUnder (fun x1 x2 => x2 ≤
+ x1) Filter.atTop f → BddB…
+· 使用定理 `Filter.Tendsto.isBoundedUnder_ge_atTop`：∀ {α : Type u_1} {β : Type u_2} 
+[inst : Preorder α] [Nonempty α] {f : Filter β} {u : β → α},   Filter.Tendsto u 
+f Filter.atTop → Filter.IsBo…
 -/
-theorem bddBelow_range_of_tendsto_atTop_atTop [IsCodirectedOrder α] {u : Nat -> α}
+theorem bddBelow_range_of_tendsto_atTop_atTop [IsCodirectedOrder α] {u : ℕ → α}
     (hx : Tendsto u atTop atTop) : BddBelow (Set.range u) :=
   hx.isBoundedUnder_ge_atTop.bddBelow_range
 
 end Nonempty
 
 @[to_dual isCobounded_ge_of_top]
-/--
-theorem `isCobounded_le_of_bot` / 定理 `isCobounded_le_of_bot`
-
-English:
-theorem isCobounded_le_of_bot
-  given: [LE α] [OrderBot α] {f : Filter α}
-  statement: f.IsCobounded (· <= ·)
-  proof: ⟨⊥, fun _ _ => bot_le⟩
-
-@[to_dual isBounded_ge_of_bot]
-
-中文:
-定理 isCobounded_le_of_bot
-  条件: [LE α] [有底序 α] {f : 滤子 α}
-  结论: f.IsCobounded (· <= ·)
-  证明: ⟨⊥, fun _ _ => bot_le⟩
-
-@[to_dual isBounded_ge_of_bot]
-
-Depends on / 依赖: bot_le
+/-
+**Filter.isCobounded_le_of_bot** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：isCobounded_le_of_bot [LE α] [OrderBot α] {f : Filter α} : f.IsCobounded (
+· <= ·)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `bot_le`：∀ {α : Type u} [inst : LE α] [inst_1 : OrderBot α] {a : α}, ⊥ ≤ 
+a
 -/
-theorem isCobounded_le_of_bot [LE α] [OrderBot α] {f : Filter α} : f.IsCobounded (· <= ·) :=
+theorem isCobounded_le_of_bot [LE α] [OrderBot α] {f : Filter α} : f.IsCobounded (· ≤ ·) :=
   ⟨⊥, fun _ _ => bot_le⟩
 
 @[to_dual isBounded_ge_of_bot]
-/--
-theorem `isBounded_le_of_top` / 定理 `isBounded_le_of_top`
-
-English:
-theorem isBounded_le_of_top
-  given: [LE α] [OrderTop α] {f : Filter α}
-  statement: f.IsBounded (· <= ·)
-  proof: ⟨⊤, Eventually.of_forall fun _ => le_top⟩
-
-@[to_dual (attr := simp) isBoundedUnder_ge_comp]
-
-中文:
-定理 isBounded_le_of_top
-  条件: [LE α] [有顶序 α] {f : 滤子 α}
-  结论: f.IsBounded (· <= ·)
-  证明: ⟨⊤, Eventually.of_forall fun _ => le_top⟩
-
-@[to_dual (attr := simp) isBoundedUnder_ge_comp]
-
-Depends on / 依赖: Eventually, Eventually.of_forall, le_top, of_forall
+/-
+**Filter.isBounded_le_of_top** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：isBounded_le_of_top [LE α] [OrderTop α] {f : Filter α} : f.IsBounded (· <=
+ ·)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
+· 使用定理 `le_top`：le_top : a <= ⊤
 -/
-theorem isBounded_le_of_top [LE α] [OrderTop α] {f : Filter α} : f.IsBounded (· <= ·) :=
+theorem isBounded_le_of_top [LE α] [OrderTop α] {f : Filter α} : f.IsBounded (· ≤ ·) :=
   ⟨⊤, Eventually.of_forall fun _ => le_top⟩
 
 @[to_dual (attr := simp) isBoundedUnder_ge_comp]
-/--
-theorem `_root_.OrderIso.isBoundedUnder_le_comp` / 定理 `_root_.OrderIso.isBoundedUnder_le_comp`
-
-English:
-theorem _root_.OrderIso.isBoundedUnder_le_comp
-  statement: [LE α] [LE β] (e : α ≃o β) {l : Filter γ}
-  proof: (Function.Surjective.exists e.surjective).trans
-    exists_congr fun a => by simp only [eventually_map, e.le_iff_le]
-
-中文:
-定理 _root_.OrderIso.isBoundedUnder_le_comp
-  结论: [LE α] [LE β] (e : α ≃o β) {l : 滤子 γ}
-  证明: (Function.Surjective.exists e.surjective).trans
-    exists_congr fun a => by simp only [eventually_map, e.le_iff_le]
-
-Depends on / 依赖: Function, Function.Surjective.exists, Surjective, e.le_iff_le, e.surjective, eventually_map, exists_congr, le_iff_le, surjective
+/-
+**Filter._root_.OrderIso.isBoundedUnder_le_comp** 是 Mathlib 中的一个定理，位于命名空间 `Filte
+r`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.OrderIso.isBoundedUnder_le_comp [LE α] [LE β] (e : α ≃o β) {l : Filter γ}
-    {u : γ -> α} : (IsBoundedUnder (· <= ·) l fun x => e (u x)) ↔ IsBoundedUnder (· <= ·) l u :=
-(Function.Surjective.exists e.surjective).trans
+    {u : γ → α} : (IsBoundedUnder (· ≤ ·) l fun x => e (u x)) ↔ IsBoundedUnder (· ≤ ·) l u :=
+  (Function.Surjective.exists e.surjective).trans <|
     exists_congr fun a => by simp only [eventually_map, e.le_iff_le]
 
 -- TODO: use `to_dual` in combination with `to_additive`
 @[to_additive (attr := simp)]
-/--
-theorem `isBoundedUnder_le_inv` / 定理 `isBoundedUnder_le_inv`
-
-English:
-theorem isBoundedUnder_le_inv
-  statement: [CommGroup α] [Preorder α] [IsOrderedMonoid α]
-  proof: (OrderIso.inv α).isBoundedUnder_ge_comp
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 isBoundedUnder_le_inv
-  结论: [交换群 α] [预序 α] [是Ordered幺半群 α]
-  证明: (OrderIso.inv α).isBoundedUnder_ge_comp
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: OrderIso, OrderIso.inv, isBoundedUnder_ge_comp
+/-
+**Filter.isBoundedUnder_le_inv** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：isBoundedUnder_le_inv [CommGroup α] [Preorder α] [IsOrderedMonoid α] {l : 
+Filter β} {u : β -> α} : (IsBoundedUnder (· <= ·) l fun x => (u x)⁻¹) ↔ IsBounde
+dUnder (· >= ·) l u
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.isBoundedUnder_ge_comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Ty
+pe u_3} [inst : LE α] [inst_1 : LE β] (e : α ≃o β) {l : Filter γ} {u : γ → α},  
+ (Filter.IsBoundedUnd…
+· 使用定理 `IsOrderedMonoid.toMulLeftMono`：∀ {α : Type u_1} [inst : CommMonoid α] [i
+nst_1 : Preorder α] [IsOrderedMonoid α], MulLeftMono α
 -/
 theorem isBoundedUnder_le_inv [CommGroup α] [Preorder α] [IsOrderedMonoid α]
-    {l : Filter β} {u : β -> α} :
-    (IsBoundedUnder (· <= ·) l fun x => (u x)⁻¹) ↔ IsBoundedUnder (· >= ·) l u :=
+    {l : Filter β} {u : β → α} :
+    (IsBoundedUnder (· ≤ ·) l fun x => (u x)⁻¹) ↔ IsBoundedUnder (· ≥ ·) l u :=
   (OrderIso.inv α).isBoundedUnder_ge_comp
 
 @[to_additive (attr := simp)]
-/--
-theorem `isBoundedUnder_ge_inv` / 定理 `isBoundedUnder_ge_inv`
-
-English:
-theorem isBoundedUnder_ge_inv
-  statement: [CommGroup α] [Preorder α] [IsOrderedMonoid α]
-  proof: (OrderIso.inv α).isBoundedUnder_le_comp
-
-@[to_dual]
-
-中文:
-定理 isBoundedUnder_ge_inv
-  结论: [交换群 α] [预序 α] [是Ordered幺半群 α]
-  证明: (OrderIso.inv α).isBoundedUnder_le_comp
-
-@[to_dual]
-
-Depends on / 依赖: OrderIso, OrderIso.inv, isBoundedUnder_le_comp
+/-
+**Filter.isBoundedUnder_ge_inv** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：isBoundedUnder_ge_inv [CommGroup α] [Preorder α] [IsOrderedMonoid α] {l : 
+Filter β} {u : β -> α} : (IsBoundedUnder (· >= ·) l fun x => (u x)⁻¹) ↔ IsBounde
+dUnder (· <= ·) l u
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderIso.isBoundedUnder_le_comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Ty
+pe u_3} [inst : LE α] [inst_1 : LE β] (e : α ≃o β) {l : Filter γ} {u : γ → α},  
+ (Filter.IsBoundedUnd…
+· 使用定理 `IsOrderedMonoid.toMulLeftMono`：∀ {α : Type u_1} [inst : CommMonoid α] [i
+nst_1 : Preorder α] [IsOrderedMonoid α], MulLeftMono α
 -/
 theorem isBoundedUnder_ge_inv [CommGroup α] [Preorder α] [IsOrderedMonoid α]
-    {l : Filter β} {u : β -> α} :
-    (IsBoundedUnder (· >= ·) l fun x => (u x)⁻¹) ↔ IsBoundedUnder (· <= ·) l u :=
+    {l : Filter β} {u : β → α} :
+    (IsBoundedUnder (· ≥ ·) l fun x => (u x)⁻¹) ↔ IsBoundedUnder (· ≤ ·) l u :=
   (OrderIso.inv α).isBoundedUnder_le_comp
 
 @[to_dual]
-/--
-theorem `IsBoundedUnder.sup` / 定理 `IsBoundedUnder.sup`
-
-English:
-theorem IsBoundedUnder.sup
-  given: [SemilatticeSup α] {f : Filter β} {u v : β -> α}
-
-中文:
-定理 IsBoundedUnder.上确界
-  条件: [SemilatticeSup α] {f : 滤子 β} {u v : β -> α}
+/-
+**Filter.IsBoundedUnder.sup** 是 Mathlib 中的一个定理，位于命名空间 `Filter.IsBoundedUnder`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : SemilatticeSup α] {f : Filter β} {
+u v : β → α},   Filter.IsBoundedUnder (fun x1 x2 => x1 ≤ x2) f u →     Filter.Is
+BoundedUnder (fun x1 x2 => x1 ≤ x2) f v → Filter.IsBoundedUnder (fun x1 x2 => x1
+ ≤ x2) f fun a => u a ⊔ v a
+参数：fun x1 x2 => x1 ≤ x2；fun x1 x2 => x1 ≤ x2；fun x1 x2 => x1 ≤ x2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `sup_le_sup`：sup_le_sup (h₁ : a <= b) (h₂ : c <= d) : a ⊔ c <= b ⊔ d
 -/
-theorem IsBoundedUnder.sup [SemilatticeSup α] {f : Filter β} {u v : β -> α} :
-    f.IsBoundedUnder (· <= ·) u ->
-      f.IsBoundedUnder (· <= ·) v -> f.IsBoundedUnder (· <= ·) fun a => u a ⊔ v a
-  | ⟨bu, (hu : forallᶠ x in f, u x <= bu)⟩, ⟨bv, (hv : forallᶠ x in f, v x <= bv)⟩ =>
-    ⟨bu ⊔ bv, show forallᶠ x in f, u x ⊔ v x <= bu ⊔ bv
+theorem IsBoundedUnder.sup [SemilatticeSup α] {f : Filter β} {u v : β → α} :
+    f.IsBoundedUnder (· ≤ ·) u →
+      f.IsBoundedUnder (· ≤ ·) v → f.IsBoundedUnder (· ≤ ·) fun a => u a ⊔ v a
+  | ⟨bu, (hu : ∀ᶠ x in f, u x ≤ bu)⟩, ⟨bv, (hv : ∀ᶠ x in f, v x ≤ bv)⟩ =>
+    ⟨bu ⊔ bv, show ∀ᶠ x in f, u x ⊔ v x ≤ bu ⊔ bv
       by filter_upwards [hu, hv] with _ using sup_le_sup⟩
 
 @[to_dual (attr := simp) isBoundedUnder_ge_inf]
-/--
-theorem `isBoundedUnder_le_sup` / 定理 `isBoundedUnder_le_sup`
-
-English:
-theorem isBoundedUnder_le_sup
-  given: [SemilatticeSup α] {f : Filter β} {u v : β -> α}
-  proof: ⟨fun h =>
-⟨h.mono_le Eventually.of_forall fun _ => le_sup_left,
-h.mono_le Eventually.of_forall fun _ => le_sup_right⟩,
-    fun h => h.1.sup h.2⟩
-
-中文:
-定理 isBoundedUnder_le_sup
-  条件: [SemilatticeSup α] {f : 滤子 β} {u v : β -> α}
-  证明: ⟨fun h =>
-⟨h.mono_le Eventually.of_forall fun _ => le_sup_left,
-h.mono_le Eventually.of_forall fun _ => le_sup_right⟩,
-    fun h => h.1.sup h.2⟩
-
-Depends on / 依赖: Eventually, Eventually.of_forall, h.mono_le, le_sup_left, le_sup_right, mono_le, of_forall
+/-
+**Filter.isBoundedUnder_le_sup** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：isBoundedUnder_le_sup [SemilatticeSup α] {f : Filter β} {u v : β -> α} : (
+f.IsBoundedUnder (· <= ·) fun a => u a ⊔ v a) ↔ f.IsBoundedUnder (· <= ·) u ∧ f.
+IsBoundedUnder (· <= ·) v
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.IsBoundedUnder.mono_le`：∀ {α : Type u_1} {β : Type u_2} [inst : P
+reorder β] {l : Filter α} {u v : α → β},   Filter.IsBoundedUnder (fun x1 x2 => x
+1 ≤ x2) l u → v ≤ᶠ[…
+· 使用定理 `Filter.Eventually.of_forall`：∀ {α : Type u} {p : α → Prop} {f : Filter α
+}, (∀ (x : α), p x) → ∀ᶠ (x : α) in f, p x
+· 使用定理 `le_sup_left`：le_sup_left : a <= a ⊔ b
+· 使用定理 `le_sup_right`：le_sup_right : b <= a ⊔ b
+· 使用定理 `Filter.IsBoundedUnder.sup`：∀ {α : Type u_1} {β : Type u_2} [inst : Semil
+atticeSup α] {f : Filter β} {u v : β → α},   Filter.IsBoundedUnder (fun x1 x2 =>
+ x1 ≤ x2) f u →…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem isBoundedUnder_le_sup [SemilatticeSup α] {f : Filter β} {u v : β -> α} :
-    (f.IsBoundedUnder (· <= ·) fun a => u a ⊔ v a) ↔
-      f.IsBoundedUnder (· <= ·) u ∧ f.IsBoundedUnder (· <= ·) v :=
+theorem isBoundedUnder_le_sup [SemilatticeSup α] {f : Filter β} {u v : β → α} :
+    (f.IsBoundedUnder (· ≤ ·) fun a => u a ⊔ v a) ↔
+      f.IsBoundedUnder (· ≤ ·) u ∧ f.IsBoundedUnder (· ≤ ·) v :=
   ⟨fun h =>
-⟨h.mono_le Eventually.of_forall fun _ => le_sup_left,
-h.mono_le Eventually.of_forall fun _ => le_sup_right⟩,
+    ⟨h.mono_le <| Eventually.of_forall fun _ => le_sup_left,
+      h.mono_le <| Eventually.of_forall fun _ => le_sup_right⟩,
     fun h => h.1.sup h.2⟩
-
-/--
-theorem `isBoundedUnder_le_abs` / 定理 `isBoundedUnder_le_abs`
-
-English:
-theorem isBoundedUnder_le_abs
-  statement: [AddCommGroup α] [LinearOrder α] [IsOrderedAddMonoid α]
-  proof: isBoundedUnder_le_sup.trans and_congr Iff.rfl isBoundedUnder_le_neg
-
-中文:
-定理 isBoundedUnder_le_abs
-  结论: [加法交换群 α] [线性序 α] [是OrderedAdd幺半群 α]
-  证明: isBoundedUnder_le_sup.trans and_congr Iff.rfl isBoundedUnder_le_neg
-
-Depends on / 依赖: Iff.rfl, and_congr, isBoundedUnder_le_neg, isBoundedUnder_le_sup, isBoundedUnder_le_sup.trans
+/-
+**Filter.isBoundedUnder_le_abs** 是 Mathlib 中的一个定理，位于命名空间 `Filter`。
+形式化陈述：isBoundedUnder_le_abs [AddCommGroup α] [LinearOrder α] [IsOrderedAddMonoid
+ α] {f : Filter β} {u : β -> α} : (f.IsBoundedUnder (· <= ·) fun a => |u a|) ↔ f
+.IsBoundedUnder (· <= ·) u ∧ f.IsBoundedUnder (fun x1 x2 => x2 <= x1) u
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Filter.isBoundedUnder_le_sup`：isBoundedUnder_le_sup [SemilatticeSup α] {
+f : Filter β} {u v : β -> α} : (f.IsBoundedUnder (· <= ·) fun a => u a ⊔ v a) ↔ 
+f.IsBoundedUnder (…
+· 使用定理 `and_congr`：∀ {a c b d : Prop}, (a ↔ c) → (b ↔ d) → (a ∧ b ↔ c ∧ d)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `Filter.isBoundedUnder_le_neg`：∀ {α : Type u_1} {β : Type u_2} [inst : Ad
+dCommGroup α] [inst_1 : Preorder α] [IsOrderedAddMonoid α] {l : Filter β}   {u :
+ β → α},   (Filter…
 -/
 theorem isBoundedUnder_le_abs [AddCommGroup α] [LinearOrder α] [IsOrderedAddMonoid α]
-    {f : Filter β} {u : β -> α} :
-    (f.IsBoundedUnder (· <= ·) fun a => |u a|) ↔
-      f.IsBoundedUnder (· <= ·) u ∧ f.IsBoundedUnder (fun x1 x2 => x2 <= x1) u :=
-isBoundedUnder_le_sup.trans and_congr Iff.rfl isBoundedUnder_le_neg
+    {f : Filter β} {u : β → α} :
+    (f.IsBoundedUnder (· ≤ ·) fun a => |u a|) ↔
+      f.IsBoundedUnder (· ≤ ·) u ∧ f.IsBoundedUnder (fun x1 x2 ↦ x2 ≤ x1) u :=
+  isBoundedUnder_le_sup.trans <| and_congr Iff.rfl isBoundedUnder_le_neg
 
 /-- Filters are automatically bounded or cobounded in complete lattices. To use the same statements
 in complete and conditionally complete lattices but let automation fill automatically the
@@ -1524,235 +1279,217 @@ open Filter
 section Order
 
 @[to_dual isBoundedUnder_ge_comp_iff]
-/--
-theorem `Monotone.isBoundedUnder_le_comp_iff` / 定理 `Monotone.isBoundedUnder_le_comp_iff`
-
-English:
-theorem Monotone.isBoundedUnder_le_comp_iff
-  statement: [Nonempty β] [LinearOrder β] [Preorder γ] [NoMaxOrder γ]
-  proof: by
-  refine ⟨?_, fun h => h.isBoundedUnder (α := β) hg⟩
-  rintro ⟨c, hc⟩; rw [eventually_map] at hc
-  obtain ⟨b, hb⟩ : exists b, forall a >= b, c < g a := eventually_atTop.1 (hg'.eventually_gt_atTop c)
-  exact ⟨b, hc.mono fun x hx => not_lt.1 fun h => (hb _ h.le).not_ge hx⟩
-
-@[to_dual isBoundedUnder_ge_comp_iff]
-
-中文:
-定理 递增.isBoundedUnder_le_comp_iff
-  结论: [非空 β] [线性序 β] [预序 γ] [NoMax序 γ]
-  证明: by
-  refine ⟨?_, fun h => h.isBoundedUnder (α := β) hg⟩
-  rintro ⟨c, hc⟩; rw [eventually_map] at hc
-  obtain ⟨b, hb⟩ : exists b, forall a >= b, c < g a := eventually_atTop.1 (hg'.eventually_gt_atTop c)
-  exact ⟨b, hc.mono fun x hx => not_lt.1 fun h => (hb _ h.le).not_ge hx⟩
-
-@[to_dual isBoundedUnder_ge_comp_iff]
-
-Depends on / 依赖: eventually_atTop, eventually_gt_atTop, eventually_map, h.isBoundedUnder, h.le, hc.mono, isBoundedUnder, not_ge, not_lt
+/-
+**Monotone.isBoundedUnder_le_comp_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Monotone.isBoundedUnder_le_comp_iff [Nonempty β] [LinearOrder β] [Preorder
+ γ] [NoMaxOrder γ] {g : β -> γ} {f : α -> β} {l : Filter α} (hg : Monotone g) (h
+g' : Tendsto g atTop atTop) : IsBoundedUnder (· <= ·) l (g ∘ f) ↔ IsBoundedUnder
+ (· <= ·) l f
+参数：hg : Monotone g；hg' : Tendsto g atTop atTop。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Filter.eventually_atTop`：eventually_atTop : (forallᶠ x in atTop, p x) ↔ 
+exists a, forall b, a <= b -> p b
+· 使用定理 `SemilatticeSup.instIsDirectedOrder`：∀ {α : Type u_1} [inst : Semilattice
+Sup α], IsDirectedOrder α
+· 使用定理 `Filter.Tendsto.eventually_gt_atTop`：∀ {α : Type u_3} {β : Type u_4} [ins
+t : Preorder β] [NoTopOrder β] {f : α → β} {l : Filter α},   Filter.Tendsto f l 
+Filter.atTop → ∀ (c : β)…
+· 使用定理 `instNoTopOrderOfNoMaxOrder`：∀ {α : Type u_1} [inst : Preorder α] [NoMaxO
+rder α], NoTopOrder α
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.eventually_map`：eventually_map {P : β -> Prop} : (forallᶠ b in ma
+p m f, P b) ↔ forallᶠ a in f, P (m a)
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
+· 使用定理 `LT.lt.not_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → ¬b
+ ≤ a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Filter.IsBounded.isBoundedUnder`：∀ {α : Type u_1} {β : Type u_2} {r : α 
+→ α → Prop} {f : Filter α} {q : β → β → Prop} {u : α → β},   (∀ (a₀ a₁ : α), r a
+₀ a₁ → q (u a₀) (u a₁…
 -/
 theorem Monotone.isBoundedUnder_le_comp_iff [Nonempty β] [LinearOrder β] [Preorder γ] [NoMaxOrder γ]
-    {g : β -> γ} {f : α -> β} {l : Filter α} (hg : Monotone g) (hg' : Tendsto g atTop atTop) :
-    IsBoundedUnder (· <= ·) l (g ∘ f) ↔ IsBoundedUnder (· <= ·) l f := by
+    {g : β → γ} {f : α → β} {l : Filter α} (hg : Monotone g) (hg' : Tendsto g atTop atTop) :
+    IsBoundedUnder (· ≤ ·) l (g ∘ f) ↔ IsBoundedUnder (· ≤ ·) l f := by
   refine ⟨?_, fun h => h.isBoundedUnder (α := β) hg⟩
   rintro ⟨c, hc⟩; rw [eventually_map] at hc
-  obtain ⟨b, hb⟩ : exists b, forall a >= b, c < g a := eventually_atTop.1 (hg'.eventually_gt_atTop c)
+  obtain ⟨b, hb⟩ : ∃ b, ∀ a ≥ b, c < g a := eventually_atTop.1 (hg'.eventually_gt_atTop c)
   exact ⟨b, hc.mono fun x hx => not_lt.1 fun h => (hb _ h.le).not_ge hx⟩
 
 @[to_dual isBoundedUnder_ge_comp_iff]
-/--
-theorem `Antitone.isBoundedUnder_le_comp_iff` / 定理 `Antitone.isBoundedUnder_le_comp_iff`
-
-English:
-theorem Antitone.isBoundedUnder_le_comp_iff
-  statement: [Nonempty β] [LinearOrder β] [Preorder γ] [NoMaxOrder γ]
-  proof: hg.dual_right.isBoundedUnder_ge_comp_iff hg'
-
-中文:
-定理 递减.isBoundedUnder_le_comp_iff
-  结论: [非空 β] [线性序 β] [预序 γ] [NoMax序 γ]
-  证明: hg.dual_right.isBoundedUnder_ge_comp_iff hg'
-
-Depends on / 依赖: dual_right, hg.dual_right.isBoundedUnder_ge_comp_iff, isBoundedUnder_ge_comp_iff
+/-
+**Antitone.isBoundedUnder_le_comp_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Antitone.isBoundedUnder_le_comp_iff [Nonempty β] [LinearOrder β] [Preorder
+ γ] [NoMaxOrder γ] {g : β -> γ} {f : α -> β} {l : Filter α} (hg : Antitone g) (h
+g' : Tendsto g atBot atTop) : IsBoundedUnder (· <= ·) l (g ∘ f) ↔ IsBoundedUnder
+ (fun x1 x2 => x2 <= x1) l f
+参数：hg : Antitone g；hg' : Tendsto g atBot atTop。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.isBoundedUnder_ge_comp_iff`：∀ {α : Type u_1} {β : Type u_2} {γ 
+: Type u_3} [Nonempty β] [inst : LinearOrder β] [inst_1 : Preorder γ] [NoMinOrde
+r γ]   {g : β → γ} {f : α…
+· 使用定理 `Antitone.dual_right`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [in
+st_1 : Preorder β] {f : α → β},   Antitone f → Monotone (⇑OrderDual.toDual ∘ f)
 -/
 theorem Antitone.isBoundedUnder_le_comp_iff [Nonempty β] [LinearOrder β] [Preorder γ] [NoMaxOrder γ]
-    {g : β -> γ} {f : α -> β} {l : Filter α} (hg : Antitone g) (hg' : Tendsto g atBot atTop) :
-    IsBoundedUnder (· <= ·) l (g ∘ f) ↔ IsBoundedUnder (fun x1 x2 => x2 <= x1) l f :=
+    {g : β → γ} {f : α → β} {l : Filter α} (hg : Antitone g) (hg' : Tendsto g atBot atTop) :
+    IsBoundedUnder (· ≤ ·) l (g ∘ f) ↔ IsBoundedUnder (fun x1 x2 ↦ x2 ≤ x1) l f :=
   hg.dual_right.isBoundedUnder_ge_comp_iff hg'
 
 end Order
 
 section MinMax
 
-/--
-theorem `isCoboundedUnder_le_max` / 定理 `isCoboundedUnder_le_max`
-
-English:
-theorem isCoboundedUnder_le_max
-  statement: [LinearOrder β] {f : Filter α} {u v : α -> β}
-  proof: by
-  rcases h with (h' | h') <;>
-  · rcases h' with ⟨b, hb⟩
-    use b
-    intro c hc
-    apply hb c
-    rw [eventually_map] at hc ⊢
-    refine hc.mono (fun _ => ?_)
-    simp +contextual only [implies_true, max_le_iff]
-
-中文:
-定理 isCoboundedUnder_le_max
-  结论: [线性序 β] {f : 滤子 α} {u v : α -> β}
-  证明: by
-  rcases h with (h' | h') <;>
-  · rcases h' with ⟨b, hb⟩
-    use b
-    intro c hc
-    apply hb c
-    rw [eventually_map] at hc ⊢
-    refine hc.mono (fun _ => ?_)
-    simp +contextual only [implies_true, max_le_iff]
-
-Depends on / 依赖: contextual, eventually_map, hc.mono, implies_true, max_le_iff
+/-
+**isCoboundedUnder_le_max** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isCoboundedUnder_le_max [LinearOrder β] {f : Filter α} {u v : α -> β} (h :
+ f.IsCoboundedUnder (· <= ·) u ∨ f.IsCoboundedUnder (· <= ·) v) : f.IsCoboundedU
+nder (· <= ·) (fun a => max (u a) (v a))
+参数：h : f.IsCoboundedUnder (· <= ·) u ∨ f.IsCoboundedUnder (· <= ·) v。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.eventually_map`：eventually_map {P : β -> Prop} : (forallᶠ b in ma
+p m f, P b) ↔ forallᶠ a in f, P (m a)
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
-theorem isCoboundedUnder_le_max [LinearOrder β] {f : Filter α} {u v : α -> β}
-    (h : f.IsCoboundedUnder (· <= ·) u ∨ f.IsCoboundedUnder (· <= ·) v) :
-    f.IsCoboundedUnder (· <= ·) (fun a => max (u a) (v a)) := by
+theorem isCoboundedUnder_le_max [LinearOrder β] {f : Filter α} {u v : α → β}
+    (h : f.IsCoboundedUnder (· ≤ ·) u ∨ f.IsCoboundedUnder (· ≤ ·) v) :
+    f.IsCoboundedUnder (· ≤ ·) (fun a ↦ max (u a) (v a)) := by
   rcases h with (h' | h') <;>
   · rcases h' with ⟨b, hb⟩
     use b
     intro c hc
     apply hb c
     rw [eventually_map] at hc ⊢
-    refine hc.mono (fun _ => ?_)
+    refine hc.mono (fun _ ↦ ?_)
     simp +contextual only [implies_true, max_le_iff]
 
 open Finset
 
 @[to_dual isBoundedUnder_ge_finset_inf']
-/--
-theorem `isBoundedUnder_le_finset_sup'` / 定理 `isBoundedUnder_le_finset_sup'`
-
-English:
-theorem isBoundedUnder_le_finset_sup'
-  statement: [LinearOrder β] [Nonempty β] {f : Filter α} {F : ι -> α -> β}
-  proof: by
+/-
+**isBoundedUnder_le_finset_sup'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isBoundedUnder_le_finset_sup' [LinearOrder β] [Nonempty β] {f : Filter α} 
+{F : ι -> α -> β} {s : Finset ι} (hs : s.Nonempty) (h : forall i in s, f.IsBound
+edUnder (· <= ·) (F i)) : f.IsBoundedUnder (· <= ·) (fun a => sup' s hs (fun i =
+> F i a))
+参数：hs : s.Nonempty；h : forall i in s, f.IsBoundedUnder (· <= ·) (F i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.sup'`：sup'_one [SemilatticeSup β] (f : α -> β) : sup' 1 one_nonem
+pty f = f 1
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Filter.eventually_all_finset`：∀ {α : Type u} {ι : Type u_2} (I : Finset 
+ι) {l : Filter α} {p : ι → α → Prop},   (∀ᶠ (x : α) in l, ∀ i ∈ I, p i x) ↔ ∀ i 
+∈ I, ∀ᶠ (x : α) in…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Finset.le_sup'`：le_sup' {b : β} (h : b in s) : f b <= s.sup' ⟨b, h⟩ f
+· 使用定理 `Function.sometimes_spec`：sometimes_spec {p : Prop} {α} [Nonempty α] (P :
+ α -> Prop) (f : p -> α) (a : p) (h : P (f a)) : P (sometimes f)
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
+-/
+theorem isBoundedUnder_le_finset_sup' [LinearOrder β] [Nonempty β] {f : Filter α} {F : ι → α → β}
+    {s : Finset ι} (hs : s.Nonempty) (h : ∀ i ∈ s, f.IsBoundedUnder (· ≤ ·) (F i)) :
+    f.IsBoundedUnder (· ≤ ·) (fun a ↦ sup' s hs (fun i ↦ F i a)) := by
   choose! m hm using h
   use sup' s hs m
   simp only [eventually_map] at hm ⊢
   rw [← eventually_all_finset s] at hm
-  refine hm.mono fun a h => ?_
+  refine hm.mono fun a h ↦ ?_
   simp only [sup'_le_iff]
-  exact fun i i_s => le_trans (h i i_s) (le_sup' m i_s)
+  exact fun i i_s ↦ le_trans (h i i_s) (le_sup' m i_s)
 
 @[to_dual isCoboundedUnder_ge_finset_inf']
-
-中文:
-定理 isBoundedUnder_le_finset_sup'
-  结论: [线性序 β] [非空 β] {f : 滤子 α} {F : ι -> α -> β}
-  证明: by
-  choose! m hm using h
-  use sup' s hs m
-  simp only [eventually_map] at hm ⊢
-  rw [← eventually_all_finset s] at hm
-  refine hm.mono fun a h => ?_
-  simp only [sup'_le_iff]
-  exact fun i i_s => le_trans (h i i_s) (le_sup' m i_s)
-
-@[to_dual isCoboundedUnder_ge_finset_inf']
-
-Depends on / 依赖: _le_iff, eventually_all_finset, eventually_map, hm.mono, le_sup, le_trans
+/-
+**isCoboundedUnder_le_finset_sup'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isCoboundedUnder_le_finset_sup' [LinearOrder β] {f : Filter α} {F : ι -> α
+ -> β} {s : Finset ι} (hs : s.Nonempty) (h : exists i in s, f.IsCoboundedUnder (
+· <= ·) (F i)) : f.IsCoboundedUnder (· <= ·) (fun a => sup' s hs (fun i => F i a
+))
+参数：hs : s.Nonempty；h : exists i in s, f.IsCoboundedUnder (· <= ·) (F i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Finset.sup'`：sup'_one [SemilatticeSup β] (f : α -> β) : sup' 1 one_nonem
+pty f = f 1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.eventually_map`：eventually_map {P : β -> Prop} : (forallᶠ b in ma
+p m f, P b) ↔ forallᶠ a in f, P (m a)
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
 -/
-theorem isBoundedUnder_le_finset_sup' [LinearOrder β] [Nonempty β] {f : Filter α} {F : ι -> α -> β}
-    {s : Finset ι} (hs : s.Nonempty) (h : forall i in s, f.IsBoundedUnder (· <= ·) (F i)) :
-    f.IsBoundedUnder (· <= ·) (fun a => sup' s hs (fun i => F i a)) := by
-  choose! m hm using h
-  use sup' s hs m
-  simp only [eventually_map] at hm ⊢
-  rw [← eventually_all_finset s] at hm
-  refine hm.mono fun a h => ?_
-  simp only [sup'_le_iff]
-  exact fun i i_s => le_trans (h i i_s) (le_sup' m i_s)
-
-@[to_dual isCoboundedUnder_ge_finset_inf']
-/--
-theorem `isCoboundedUnder_le_finset_sup'` / 定理 `isCoboundedUnder_le_finset_sup'`
-
-English:
-theorem isCoboundedUnder_le_finset_sup'
-  statement: [LinearOrder β] {f : Filter α} {F : ι -> α -> β}
-  proof: by
+theorem isCoboundedUnder_le_finset_sup' [LinearOrder β] {f : Filter α} {F : ι → α → β}
+    {s : Finset ι} (hs : s.Nonempty) (h : ∃ i ∈ s, f.IsCoboundedUnder (· ≤ ·) (F i)) :
+    f.IsCoboundedUnder (· ≤ ·) (fun a ↦ sup' s hs (fun i ↦ F i a)) := by
   rcases h with ⟨i, i_s, b, hb⟩
   use b
-  refine fun c hc => hb c ?_
+  refine fun c hc ↦ hb c ?_
   rw [eventually_map] at hc ⊢
-  refine hc.mono fun a h => ?_
+  refine hc.mono fun a h ↦ ?_
   simp only [sup'_le_iff] at h ⊢
   exact h i i_s
 
 @[to_dual isBoundedUnder_ge_finset_inf]
-
-中文:
-定理 isCoboundedUnder_le_finset_sup'
-  结论: [线性序 β] {f : 滤子 α} {F : ι -> α -> β}
-  证明: by
-  rcases h with ⟨i, i_s, b, hb⟩
-  use b
-  refine fun c hc => hb c ?_
-  rw [eventually_map] at hc ⊢
-  refine hc.mono fun a h => ?_
-  simp only [sup'_le_iff] at h ⊢
-  exact h i i_s
-
-@[to_dual isBoundedUnder_ge_finset_inf]
-
-Depends on / 依赖: _le_iff, eventually_map, hc.mono
+/-
+**isBoundedUnder_le_finset_sup** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isBoundedUnder_le_finset_sup [LinearOrder β] [OrderBot β] {f : Filter α} {
+F : ι -> α -> β} {s : Finset ι} (h : forall i in s, f.IsBoundedUnder (· <= ·) (F
+ i)) : f.IsBoundedUnder (· <= ·) (fun a => sup s (fun i => F i a))
+参数：h : forall i in s, f.IsBoundedUnder (· <= ·) (F i)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Eventually.mono`：∀ {α : Type u} {p q : α → Prop} {f : Filter α}, 
+(∀ᶠ (x : α) in f, p x) → (∀ (x : α), p x → q x) → ∀ᶠ (x : α) in f, q x
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Filter.eventually_all_finset`：∀ {α : Type u} {ι : Type u_2} (I : Finset 
+ι) {l : Filter α} {p : ι → α → Prop},   (∀ᶠ (x : α) in l, ∀ i ∈ I, p i x) ↔ ∀ i 
+∈ I, ∀ᶠ (x : α) in…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Finset.sup_mono_fun`：sup_mono_fun {g : β -> α} (h : forall b in s, f b <
+= g b) : s.sup f <= s.sup g
+· 使用定理 `bot_nonempty`：∀ (α : Type u_1) [Bot α], Nonempty α
+· 使用定理 `Function.sometimes_spec`：sometimes_spec {p : Prop} {α} [Nonempty α] (P :
+ α -> Prop) (f : p -> α) (a : p) (h : P (f a)) : P (sometimes f)
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
-theorem isCoboundedUnder_le_finset_sup' [LinearOrder β] {f : Filter α} {F : ι -> α -> β}
-    {s : Finset ι} (hs : s.Nonempty) (h : exists i in s, f.IsCoboundedUnder (· <= ·) (F i)) :
-    f.IsCoboundedUnder (· <= ·) (fun a => sup' s hs (fun i => F i a)) := by
-  rcases h with ⟨i, i_s, b, hb⟩
-  use b
-  refine fun c hc => hb c ?_
-  rw [eventually_map] at hc ⊢
-  refine hc.mono fun a h => ?_
-  simp only [sup'_le_iff] at h ⊢
-  exact h i i_s
-
-@[to_dual isBoundedUnder_ge_finset_inf]
-/--
-theorem `isBoundedUnder_le_finset_sup` / 定理 `isBoundedUnder_le_finset_sup`
-
-English:
-theorem isBoundedUnder_le_finset_sup
-  statement: [LinearOrder β] [OrderBot β] {f : Filter α} {F : ι -> α -> β}
-  proof: by
+theorem isBoundedUnder_le_finset_sup [LinearOrder β] [OrderBot β] {f : Filter α} {F : ι → α → β}
+    {s : Finset ι} (h : ∀ i ∈ s, f.IsBoundedUnder (· ≤ ·) (F i)) :
+    f.IsBoundedUnder (· ≤ ·) (fun a ↦ sup s (fun i ↦ F i a)) := by
   choose! m hm using h
   use sup s m
   simp only [eventually_map] at hm ⊢
   rw [← eventually_all_finset s] at hm
-  exact hm.mono fun _ h => sup_mono_fun h
-
-中文:
-定理 isBoundedUnder_le_finset_sup
-  结论: [线性序 β] [有底序 β] {f : 滤子 α} {F : ι -> α -> β}
-  证明: by
-  choose! m hm using h
-  use sup s m
-  simp only [eventually_map] at hm ⊢
-  rw [← eventually_all_finset s] at hm
-  exact hm.mono fun _ h => sup_mono_fun h
-
-Depends on / 依赖: eventually_all_finset, eventually_map, hm.mono, sup_mono_fun
--/
-theorem isBoundedUnder_le_finset_sup [LinearOrder β] [OrderBot β] {f : Filter α} {F : ι -> α -> β}
-    {s : Finset ι} (h : forall i in s, f.IsBoundedUnder (· <= ·) (F i)) :
-    f.IsBoundedUnder (· <= ·) (fun a => sup s (fun i => F i a)) := by
-  choose! m hm using h
-  use sup s m
-  simp only [eventually_map] at hm ⊢
-  rw [← eventually_all_finset s] at hm
-  exact hm.mono fun _ h => sup_mono_fun h
+  exact hm.mono fun _ h ↦ sup_mono_fun h
 
 end MinMax
 
@@ -1761,123 +1498,105 @@ section FrequentlyBounded
 variable {R S : Type*} {F : Filter R} [LinearOrder R] [LinearOrder S]
 
 @[to_dual frequently_le_map_of_frequently_le]
-/--
-lemma `Monotone.frequently_ge_map_of_frequently_ge` / 引理 `Monotone.frequently_ge_map_of_frequently_ge`
-
-English:
-lemma Monotone.frequently_ge_map_of_frequently_ge
-  statement: {f : R -> S} (f_incr : Monotone f)
-  proof: by
-  refine fun ev => freq_ge ?_
-  simp only [not_le] at ev freq_ge ⊢
-  filter_upwards [ev] with z hz
-  by_contra con
-exact lt_irrefl (f l) lt_of_le_of_lt (f_incr <| not_lt.mp con) hz
-
-@[to_dual frequently_ge_map_of_frequently_le]
-
-中文:
-引理 递增.frequently_ge_map_of_frequently_ge
-  结论: {f : R -> S} (f_incr : 递增 f)
-  证明: by
-  refine fun ev => freq_ge ?_
-  simp only [not_le] at ev freq_ge ⊢
-  filter_upwards [ev] with z hz
-  by_contra con
-exact lt_irrefl (f l) lt_of_le_of_lt (f_incr <| not_lt.mp con) hz
-
-@[to_dual frequently_ge_map_of_frequently_le]
-
-Depends on / 依赖: f_incr, filter_upwards, freq_ge, lt_irrefl, lt_of_le_of_lt, not_le, not_lt, not_lt.mp
+/-
+**Monotone.frequently_ge_map_of_frequently_ge** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Monotone.frequently_ge_map_of_frequently_ge {f : R -> S} (f_incr : Monoton
+e f) {l : R} (freq_ge : existsᶠ x in F, l <= x) : existsᶠ x' in F.map f, f l <= 
+x'
+参数：f_incr : Monotone f；freq_ge : existsᶠ x in F, l <= x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `Decidable.byContradiction`：∀ {p : Prop} [dec : Decidable p], (¬p → False
+) → p
+· 使用引理 `lt_irrefl`：lt_irrefl (a : α) : ¬a < a
+· 使用引理 `lt_of_le_of_lt`：lt_of_le_of_lt (hab : a <= b) (hbc : b < c) : a < c
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `not_lt`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a < b ↔ b ≤ 
+a
 -/
-lemma Monotone.frequently_ge_map_of_frequently_ge {f : R -> S} (f_incr : Monotone f)
-    {l : R} (freq_ge : existsᶠ x in F, l <= x) :
-    existsᶠ x' in F.map f, f l <= x' := by
-  refine fun ev => freq_ge ?_
+lemma Monotone.frequently_ge_map_of_frequently_ge {f : R → S} (f_incr : Monotone f)
+    {l : R} (freq_ge : ∃ᶠ x in F, l ≤ x) :
+    ∃ᶠ x' in F.map f, f l ≤ x' := by
+  refine fun ev ↦ freq_ge ?_
   simp only [not_le] at ev freq_ge ⊢
   filter_upwards [ev] with z hz
   by_contra con
-exact lt_irrefl (f l) lt_of_le_of_lt (f_incr <| not_lt.mp con) hz
+  exact lt_irrefl (f l) <| lt_of_le_of_lt (f_incr <| not_lt.mp con) hz
 
 @[to_dual frequently_ge_map_of_frequently_le]
-/--
-lemma `Antitone.frequently_le_map_of_frequently_ge` / 引理 `Antitone.frequently_le_map_of_frequently_ge`
-
-English:
-lemma Antitone.frequently_le_map_of_frequently_ge
-  statement: {f : R -> S} (f_decr : Antitone f)
-  proof: Monotone.frequently_ge_map_of_frequently_ge (S := Sᵒᵈ) f_decr frbdd
-
-@[to_dual isCoboundedUnder_ge_of_isCobounded]
-
-中文:
-引理 递减.frequently_le_map_of_frequently_ge
-  结论: {f : R -> S} (f_decr : 递减 f)
-  证明: Monotone.frequently_ge_map_of_frequently_ge (S := Sᵒᵈ) f_decr frbdd
-
-@[to_dual isCoboundedUnder_ge_of_isCobounded]
-
-Depends on / 依赖: Monotone, Monotone.frequently_ge_map_of_frequently_ge, f_decr, frequently_ge_map_of_frequently_ge
+/-
+**Antitone.frequently_le_map_of_frequently_ge** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Antitone.frequently_le_map_of_frequently_ge {f : R -> S} (f_decr : Antiton
+e f) {l : R} (frbdd : existsᶠ x in F, l <= x) : existsᶠ y in F.map f, y <= f l
+参数：f_decr : Antitone f；frbdd : existsᶠ x in F, l <= x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Monotone.frequently_ge_map_of_frequently_ge`：Monotone.frequently_ge_map_
+of_frequently_ge {f : R -> S} (f_incr : Monotone f) {l : R} (freq_ge : existsᶠ x
+ in F, l <= x) : existsᶠ x' in F.…
 -/
-lemma Antitone.frequently_le_map_of_frequently_ge {f : R -> S} (f_decr : Antitone f)
-    {l : R} (frbdd : existsᶠ x in F, l <= x) :
-    existsᶠ y in F.map f, y <= f l :=
+lemma Antitone.frequently_le_map_of_frequently_ge {f : R → S} (f_decr : Antitone f)
+    {l : R} (frbdd : ∃ᶠ x in F, l ≤ x) :
+    ∃ᶠ y in F.map f, y ≤ f l :=
   Monotone.frequently_ge_map_of_frequently_ge (S := Sᵒᵈ) f_decr frbdd
 
 @[to_dual isCoboundedUnder_ge_of_isCobounded]
-/--
-lemma `Monotone.isCoboundedUnder_le_of_isCobounded` / 引理 `Monotone.isCoboundedUnder_le_of_isCobounded`
-
-English:
-lemma Monotone.isCoboundedUnder_le_of_isCobounded
-  statement: {f : R -> S} (f_incr : Monotone f)
-  proof: by
-  obtain ⟨l, hl⟩ := IsCobounded.frequently_ge cobdd
-exact IsCobounded.of_frequently_ge f_incr.frequently_ge_map_of_frequently_ge hl
-
-@[to_dual isCoboundedUnder_ge_of_isCobounded]
-
-中文:
-引理 递增.isCoboundedUnder_le_of_isCobounded
-  结论: {f : R -> S} (f_incr : 递增 f)
-  证明: by
-  obtain ⟨l, hl⟩ := IsCobounded.frequently_ge cobdd
-exact IsCobounded.of_frequently_ge f_incr.frequently_ge_map_of_frequently_ge hl
-
-@[to_dual isCoboundedUnder_ge_of_isCobounded]
-
-Depends on / 依赖: IsCobounded, IsCobounded.frequently_ge, IsCobounded.of_frequently_ge, f_incr, f_incr.frequently_ge_map_of_frequently_ge, frequently_ge, frequently_ge_map_of_frequently_ge, of_frequently_ge
+/-
+**Monotone.isCoboundedUnder_le_of_isCobounded** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Monotone.isCoboundedUnder_le_of_isCobounded {f : R -> S} (f_incr : Monoton
+e f) [NeBot F] (cobdd : IsCobounded (· <= ·) F) : F.IsCoboundedUnder (· <= ·) f
+参数：f_incr : Monotone f；cobdd : IsCobounded (· <= ·) F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.IsCobounded.frequently_ge`：∀ {α : Type u_1} {f : Filter α} [inst 
+: LinearOrder α] [f.NeBot],   Filter.IsCobounded (fun x1 x2 => x1 ≤ x2) f → ∃ l,
+ ∃ᶠ (x : α) in f, l ≤ …
+· 使用定理 `Filter.IsCobounded.of_frequently_ge`：∀ {α : Type u_1} {f : Filter α} [in
+st : LinearOrder α] {l : α},   (∃ᶠ (x : α) in f, l ≤ x) → Filter.IsCobounded (fu
+n x1 x2 => x1 ≤ x2) f
+· 使用引理 `Monotone.frequently_ge_map_of_frequently_ge`：Monotone.frequently_ge_map_
+of_frequently_ge {f : R -> S} (f_incr : Monotone f) {l : R} (freq_ge : existsᶠ x
+ in F, l <= x) : existsᶠ x' in F.…
 -/
-lemma Monotone.isCoboundedUnder_le_of_isCobounded {f : R -> S} (f_incr : Monotone f)
-    [NeBot F] (cobdd : IsCobounded (· <= ·) F) :
-    F.IsCoboundedUnder (· <= ·) f := by
+lemma Monotone.isCoboundedUnder_le_of_isCobounded {f : R → S} (f_incr : Monotone f)
+    [NeBot F] (cobdd : IsCobounded (· ≤ ·) F) :
+    F.IsCoboundedUnder (· ≤ ·) f := by
   obtain ⟨l, hl⟩ := IsCobounded.frequently_ge cobdd
-exact IsCobounded.of_frequently_ge f_incr.frequently_ge_map_of_frequently_ge hl
+  exact IsCobounded.of_frequently_ge <| f_incr.frequently_ge_map_of_frequently_ge hl
 
 @[to_dual isCoboundedUnder_ge_of_isCobounded]
-/--
-lemma `Antitone.isCoboundedUnder_le_of_isCobounded` / 引理 `Antitone.isCoboundedUnder_le_of_isCobounded`
-
-English:
-lemma Antitone.isCoboundedUnder_le_of_isCobounded
-  statement: {f : R -> S} (f_decr : Antitone f)
-  proof: by
-  obtain ⟨l, hl⟩ := IsCobounded.frequently_le cobdd
-exact IsCobounded.of_frequently_ge f_decr.frequently_ge_map_of_frequently_le hl
-
-中文:
-引理 递减.isCoboundedUnder_le_of_isCobounded
-  结论: {f : R -> S} (f_decr : 递减 f)
-  证明: by
-  obtain ⟨l, hl⟩ := IsCobounded.frequently_le cobdd
-exact IsCobounded.of_frequently_ge f_decr.frequently_ge_map_of_frequently_le hl
-
-Depends on / 依赖: IsCobounded, IsCobounded.frequently_le, IsCobounded.of_frequently_ge, f_decr, f_decr.frequently_ge_map_of_frequently_le, frequently_ge_map_of_frequently_le, frequently_le, of_frequently_ge
+/-
+**Antitone.isCoboundedUnder_le_of_isCobounded** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Antitone.isCoboundedUnder_le_of_isCobounded {f : R -> S} (f_decr : Antiton
+e f) [NeBot F] (cobdd : IsCobounded (fun x1 x2 => x2 <= x1) F) : F.IsCoboundedUn
+der (· <= ·) f
+参数：f_decr : Antitone f；cobdd : IsCobounded (fun x1 x2 => x2 <= x1) F。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.IsCobounded.frequently_le`：∀ {α : Type u_1} {f : Filter α} [inst 
+: LinearOrder α] [f.NeBot],   Filter.IsCobounded (fun x1 x2 => x2 ≤ x1) f → ∃ l,
+ ∃ᶠ (x : α) in f, x ≤ …
+· 使用定理 `Filter.IsCobounded.of_frequently_ge`：∀ {α : Type u_1} {f : Filter α} [in
+st : LinearOrder α] {l : α},   (∃ᶠ (x : α) in f, l ≤ x) → Filter.IsCobounded (fu
+n x1 x2 => x1 ≤ x2) f
+· 使用定理 `Antitone.frequently_ge_map_of_frequently_le`：∀ {R : Type u_5} {S : Type 
+u_6} {F : Filter R} [inst : LinearOrder R] [inst_1 : LinearOrder S] {f : R → S},
+   Antitone f → ∀ {l : R}, (∃ᶠ (x…
 -/
-lemma Antitone.isCoboundedUnder_le_of_isCobounded {f : R -> S} (f_decr : Antitone f)
-    [NeBot F] (cobdd : IsCobounded (fun x1 x2 => x2 <= x1) F) :
-    F.IsCoboundedUnder (· <= ·) f := by
+lemma Antitone.isCoboundedUnder_le_of_isCobounded {f : R → S} (f_decr : Antitone f)
+    [NeBot F] (cobdd : IsCobounded (fun x1 x2 ↦ x2 ≤ x1) F) :
+    F.IsCoboundedUnder (· ≤ ·) f := by
   obtain ⟨l, hl⟩ := IsCobounded.frequently_le cobdd
-exact IsCobounded.of_frequently_ge f_decr.frequently_ge_map_of_frequently_le hl
+  exact IsCobounded.of_frequently_ge <| f_decr.frequently_ge_map_of_frequently_le hl
 
 end FrequentlyBounded
+

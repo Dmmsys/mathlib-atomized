@@ -51,23 +51,19 @@ variable (C : Type u) [Category.{v} C] [EnrichedOrdinaryCategory V C]
 
 variable {C} in
 /--
-Definition of `HasConicalLimit` / `HasConicalLimit` 的定义
+`HasConicalLimit F` represents the mere existence of a conical limit for `F`.
+-/
+/-
+**CategoryTheory.Enriched.HasConicalLimit** 是 Mathlib 中的一个类，位于命名空间 `CategoryTheo
+ry.Enriched`。
+形式化陈述：HasConicalLimit (F : J ⥤ C) : Prop extends HasLimit F where preservesLimit
+_eCoyoneda (X : C) : PreservesLimit F (eCoyoneda V X)
+参数：F : J ⥤ C。
+继承自：HasLimit F。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasConicalLimit
-  parameters: (F : J ⥤ C)
-  extends: HasLimit F
-  axioms and operations (1):
-    - preservesLimit_eCoyoneda((X : C)) : PreservesLimit F (eCoyoneda V X)  [default: by infer_instance]
-
-中文:
-类 有余nicalLimit
-  参数: (F : J ⥤ C)
-  继承: 有极限 F
-  公理与运算 (1 个):
-    - preservesLimit_eCoyoneda((X : C)) : 保持极限 F (eCoyoneda V X)  [默认: by infer_instance]
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+`HasConicalLimit F` represents the mere existence of a conical limit for `F`.
 -/
 class HasConicalLimit (F : J ⥤ C) : Prop extends HasLimit F where
   preservesLimit_eCoyoneda (X : C) : PreservesLimit F (eCoyoneda V X) := by infer_instance
@@ -76,25 +72,22 @@ attribute [instance] HasConicalLimit.preservesLimit_eCoyoneda
 
 variable (J) in
 /--
-Definition of `HasConicalLimitsOfShape` / `HasConicalLimitsOfShape` 的定义
+`C` has conical limits of shape `J` if there exists a conical limit for every functor `F : J ⥤ C`.
+-/
+/-
+**CategoryTheory.Enriched.HasConicalLimitsOfShape** 是 Mathlib 中的一个类，位于命名空间 `Cate
+goryTheory.Enriched`。
+形式化陈述：HasConicalLimitsOfShape : Prop where /-- All functors `F : J ⥤ C` from `J`
+ have limits. -/ hasConicalLimit : forall F : J ⥤ C, HasConicalLimit V F
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class HasConicalLimitsOfShape
-  parameters: : Prop where
-  axioms and operations (1):
-    - hasConicalLimit : forall F : J ⥤ C, HasConicalLimit V F  [default: by infer_instance]
-
-中文:
-类 有余nicalLimitsOfShape
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - hasConicalLimit : 对任意 F : J ⥤ C, 有余nicalLimit V F  [默认: by infer_instance]
-
-Depends on / 依赖: infer_instance
+--- 原说明 ---
+`C` has conical limits of shape `J` if there exists a conical limit for every fu
+nctor `F : J ⥤ C`.
 -/
 class HasConicalLimitsOfShape : Prop where
   /-- All functors `F : J ⥤ C` from `J` have limits. -/
-  hasConicalLimit : forall F : J ⥤ C, HasConicalLimit V F := by infer_instance
+  hasConicalLimit : ∀ F : J ⥤ C, HasConicalLimit V F := by infer_instance
 
 attribute [instance] HasConicalLimitsOfShape.hasConicalLimit
 
@@ -106,44 +99,34 @@ if it has conical limits of every shape `J : Type u₁` with `[Category.{v₁} J
 -- https://github.com/leanprover/lean4/pull/12423, the shape universes `v₁, u₁` would default
 -- to universe output parameters. See Note [universe output parameters and typeclass caching].
 @[univ_out_params, pp_with_univ]
-/--
-Definition of `HasConicalLimitsOfSize` / `HasConicalLimitsOfSize` 的定义
-
-English:
-class HasConicalLimitsOfSize
-  parameters: : Prop where
-  axioms and operations (1):
-    - hasConicalLimitsOfShape : forall (J : Type u₁) [Category.{v₁} J], HasConicalLimitsOfShape J V C  [default: by infer_instance]
-
-中文:
-类 有余nicalLimitsOfSize
-  参数: : 命题 where
-  公理与运算 (1 个):
-    - hasConicalLimitsOfShape : 对任意 (J : 类型u₁) [范畴.{v₁} J], 有余nicalLimitsOfShape J V C  [默认: by infer_instance]
-
-Depends on / 依赖: infer_instance
+/-
+**CategoryTheory.Enriched.HasConicalLimitsOfSize** 是 Mathlib 中的一个类，位于命名空间 `Categ
+oryTheory.Enriched`。
+形式化陈述：HasConicalLimitsOfSize : Prop where /-- All functors `F : J ⥤ C` from all 
+small `J` have conical limits -/ hasConicalLimitsOfShape : forall (J : Type u₁) 
+[Category.{v₁} J], HasConicalLimitsOfShape J V C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 class HasConicalLimitsOfSize : Prop where
   /-- All functors `F : J ⥤ C` from all small `J` have conical limits -/
-  hasConicalLimitsOfShape : forall (J : Type u₁) [Category.{v₁} J], HasConicalLimitsOfShape J V C := by
+  hasConicalLimitsOfShape : ∀ (J : Type u₁) [Category.{v₁} J], HasConicalLimitsOfShape J V C := by
     infer_instance
 
 attribute [instance] HasConicalLimitsOfSize.hasConicalLimitsOfShape
 
-/--
-Definition of `HasConicalLimits` / `HasConicalLimits` 的定义
+/-- `C` has all (small) conical limits if it has limits of every shape that is as big as its
+hom-sets. -/
+/-
+**CategoryTheory.Enriched.HasConicalLimits** 是 Mathlib 中的一个缩写定义，位于命名空间 `Category
+Theory.Enriched`。
+形式化陈述：HasConicalLimits : Prop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HasConicalLimits
-  signature: : Prop
-  body: HasConicalLimitsOfSize.{v, v} V C
-
-中文:
-缩写 HasConicalLimits
-  签名: : 命题
-  定义体: HasConicalLimitsOfSize.{v, v} V C
-
-Depends on / 依赖: HasConicalLimitsOfSize
+--- 原说明 ---
+`C` has all (small) conical limits if it has limits of every shape that is as bi
+g as its
+hom-sets.
 -/
 abbrev HasConicalLimits : Prop := HasConicalLimitsOfSize.{v, v} V C
 
@@ -156,62 +139,105 @@ variable (V : Type u') [Category.{v'} V] [MonoidalCategory V]
 variable {C : Type u} [Category.{v} C] [EnrichedOrdinaryCategory V C]
 
 /-- ensure existence of a conical limit implies existence of a limit -/
+/-
+**CategoryTheory.Enriched.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Enriched`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+ensure existence of a conical limit implies existence of a limit
+-/
 example (F : J ⥤ C) [HasConicalLimit V F] : HasLimit F := inferInstance
 
-/--
-lemma `HasConicalLimit.of_iso` / 引理 `HasConicalLimit.of_iso`
+/-- If a functor `F` has a conical limit, so does any naturally isomorphic functor. -/
+/-
+**CategoryTheory.Enriched.HasConicalLimit.of_iso** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Enriched.HasConicalLimit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] (V : Type u') 
+[inst_1 : CategoryTheory.Category.{v', u'} V]   [inst_2 : CategoryTheory.Monoida
+lCategory V] {C : Type u} [inst_3 : CategoryTheory.Category.{v, u} C]   [inst_4 
+: CategoryTheory.EnrichedOrdinaryCategory V C] {F G : CategoryTheory.Functor J C
+}   [CategoryTheory.Enriched.HasConicalLimit V F] (e : F ≅ G), CategoryTheory.En
+riched.HasConicalLimit V G
+参数：V : Type u'；e : F ≅ G。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.hasLimit_of_iso`：hasLimit_of_iso {F G : J ⥤ C} [Ha
+sLimit F] (α : F ≅ G) : HasLimit G
+· 使用定理 `CategoryTheory.Enriched.HasConicalLimit.toHasLimit`：∀ {J : Type u₁} {ins
+t : CategoryTheory.Category.{v₁, u₁} J} {V : outParam (Type u')}   {inst_1 : Cat
+egoryTheory.Category.{v', u'} V} {inst_2…
+· 使用引理 `CategoryTheory.Limits.preservesLimit_of_iso_diagram`：preservesLimit_of_i
+so_diagram {K₁ K₂ : J ⥤ C} (F : C ⥤ D) (h : K₁ ≅ K₂) [PreservesLimit K₁ F] : Pre
+servesLimit K₂ F where preserves {c} t
+· 使用定理 `CategoryTheory.Enriched.HasConicalLimit.preservesLimit_eCoyoneda`：∀ {J :
+ Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} J} {V : outParam (Type u')}  
+ {inst_1 : CategoryTheory.Category.{v', u'} V} {inst_2…
 
-English:
-lemma HasConicalLimit.of_iso
-  given: {F G : J ⥤ C} [HasConicalLimit V F] (e : F ≅ G)
-  proof: hasLimit_of_iso e
-  preservesLimit_eCoyoneda X := preservesLimit_of_iso_diagram (eCoyoneda V X) e
-
-中文:
-引理 有余nicalLimit.of_iso
-  条件: {F G : J ⥤ C} [有余nicalLimit V F] (e : F ≅ G)
-  证明: hasLimit_of_iso e
-  preservesLimit_eCoyoneda X := preservesLimit_of_iso_diagram (eCoyoneda V X) e
-
-Depends on / 依赖: hasLimit_of_iso
+--- 原说明 ---
+If a functor `F` has a conical limit, so does any naturally isomorphic functor.
 -/
 lemma HasConicalLimit.of_iso {F G : J ⥤ C} [HasConicalLimit V F] (e : F ≅ G) :
     HasConicalLimit V G where
   toHasLimit := hasLimit_of_iso e
   preservesLimit_eCoyoneda X := preservesLimit_of_iso_diagram (eCoyoneda V X) e
-
-/--
-Instance `HasConicalLimit.of_equiv` / 实例 `HasConicalLimit.of_equiv`
-
-English:
-instance HasConicalLimit.of_equiv
-  signature: (F : J ⥤ C) [HasConicalLimit V F]
-
-中文:
-实例 有余nicalLimit.of_equiv
-  签名: (F : J ⥤ C) [有余nicalLimit V F]
-
-Depends on / 依赖: Discrete, Discrete.opposite, opposite, preservesColimitsOfShape_of_equiv
+/-
+**CategoryTheory.Enriched.HasConicalLimit.of_equiv** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Enriched.HasConicalLimit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {J' : Type u₂}
+   [inst_1 : CategoryTheory.Category.{v₂, u₂} J'] (V : Type u') [inst_2 : Catego
+ryTheory.Category.{v', u'} V]   [inst_3 : CategoryTheory.MonoidalCategory V] {C 
+: Type u} [inst_4 : CategoryTheory.Category.{v, u} C]   [inst_5 : CategoryTheory
+.EnrichedOrdinaryCategory V C] (F : CategoryTheory.Functor J C)   [CategoryTheor
+y.Enriched.HasConicalLimit V F] (G : CategoryTheory.Functor J' J) [G.IsEquivalen
+ce],   CategoryTheory.Enriched.HasConicalLimit V (G.comp F)
+参数：V : Type u'；F : CategoryTheory.Functor J C；G : CategoryTheory.Functor J' J；G.
+comp F。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.Initial.comp_hasLimit`：∀ {C : Type u₁} [inst : Ca
+tegoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categor
+y.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.initial_of_isLeftAdjoint`：∀ {C : Type u₁} [inst :
+ CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cate
+gory.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.isLeftAdjoint_of_isEquivalence`：∀ {C : Type u₁} [
+inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheor
+y.Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Enriched.HasConicalLimit.toHasLimit`：∀ {J : Type u₁} {ins
+t : CategoryTheory.Category.{v₁, u₁} J} {V : outParam (Type u')}   {inst_1 : Cat
+egoryTheory.Category.{v', u'} V} {inst_2…
+· 使用定理 `CategoryTheory.Functor.Initial.comp_preservesLimit`：∀ {C : Type u₁} [ins
+t : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.C
+ategory.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Enriched.HasConicalLimit.preservesLimit_eCoyoneda`：∀ {J :
+ Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} J} {V : outParam (Type u')}  
+ {inst_1 : CategoryTheory.Category.{v', u'} V} {inst_2…
 -/
 instance HasConicalLimit.of_equiv (F : J ⥤ C) [HasConicalLimit V F]
     (G : J' ⥤ J) [G.IsEquivalence] : HasConicalLimit V (G ⋙ F) where
 
-/--
-lemma `HasConicalLimit.of_equiv_comp` / 引理 `HasConicalLimit.of_equiv_comp`
+/-- If a `G ⋙ F` has a limit, and `G` is an equivalence, we can construct a limit of `F`. -/
+/-
+**CategoryTheory.Enriched.HasConicalLimit.of_equiv_comp** 是 Mathlib 中的一个定理，位于命名空
+间 `CategoryTheory.Enriched.HasConicalLimit`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {J' : Type u₂}
+   [inst_1 : CategoryTheory.Category.{v₂, u₂} J'] (V : Type u') [inst_2 : Catego
+ryTheory.Category.{v', u'} V]   [inst_3 : CategoryTheory.MonoidalCategory V] {C 
+: Type u} [inst_4 : CategoryTheory.Category.{v, u} C]   [inst_5 : CategoryTheory
+.EnrichedOrdinaryCategory V C] (F : CategoryTheory.Functor J C)   (G : CategoryT
+heory.Functor J' J) [G.IsEquivalence] [CategoryTheory.Enriched.HasConicalLimit V
+ (G.comp F)],   CategoryTheory.Enriched.HasConicalLimit V F
+参数：V : Type u'；F : CategoryTheory.Functor J C；G : CategoryTheory.Functor J' J；G.
+comp F。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Enriched.HasConicalLimit.of_iso`：∀ {J : Type u₁} [inst : 
+CategoryTheory.Category.{v₁, u₁} J] (V : Type u') [inst_1 : CategoryTheory.Categ
+ory.{v', u'} V]   [inst_2 : Category…
+· 使用定理 `CategoryTheory.Enriched.HasConicalLimit.of_equiv`：∀ {J : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} J] {J' : Type u₂}   [inst_1 : CategoryTheory.
+Category.{v₂, u₂} J'] (V : Type u') [i…
 
-English:
-lemma HasConicalLimit.of_equiv_comp
-  statement: (F : J ⥤ C) (G : J' ⥤ J) [G.IsEquivalence]
-  proof: have e : G.inv ⋙ G ⋙ F ≅ F := G.asEquivalence.invFunIdAssoc F
-  HasConicalLimit.of_iso V e
-
-中文:
-引理 有余nicalLimit.of_equiv_comp
-  结论: (F : J ⥤ C) (G : J' ⥤ J) [G.是等价]
-  证明: have e : G.inv ⋙ G ⋙ F ≅ F := G.asEquivalence.invFunIdAssoc F
-  HasConicalLimit.of_iso V e
-
-Depends on / 依赖: G.asEquivalence.invFunIdAssoc, G.inv, HasConicalLimit, HasConicalLimit.of_iso, asEquivalence, invFunIdAssoc, of_iso
+--- 原说明 ---
+If a `G ⋙ F` has a limit, and `G` is an equivalence, we can construct a limit of
+ `F`.
 -/
 lemma HasConicalLimit.of_equiv_comp (F : J ⥤ C) (G : J' ⥤ J) [G.IsEquivalence]
     [HasConicalLimit V (G ⋙ F)] : HasConicalLimit V F :=
@@ -221,56 +247,92 @@ lemma HasConicalLimit.of_equiv_comp (F : J ⥤ C) (G : J' ⥤ J) [G.IsEquivalenc
 variable (C)
 
 variable (J) in
-/--
-Instance `HasConicalLimitsOfShape.hasLimitsOfShape` / 实例 `HasConicalLimitsOfShape.hasLimitsOfShape`
+/-- existence of conical limits (of shape) implies existence of limits (of shape) -/
+/-
+**CategoryTheory.Enriched.HasConicalLimitsOfShape.hasLimitsOfShape** 是 Mathlib 中
+的一个定理，位于命名空间 `CategoryTheory.Enriched.HasConicalLimitsOfShape`。
+形式化陈述：∀ (J : Type u₁) [inst : CategoryTheory.Category.{v₁, u₁} J] (V : Type u') 
+[inst_1 : CategoryTheory.Category.{v', u'} V]   [inst_2 : CategoryTheory.Monoida
+lCategory V] (C : Type u) [inst_3 : CategoryTheory.Category.{v, u} C]   [inst_4 
+: CategoryTheory.EnrichedOrdinaryCategory V C] [CategoryTheory.Enriched.HasConic
+alLimitsOfShape J V C],   CategoryTheory.Limits.HasLimitsOfShape J C
+参数：J : Type u₁；V : Type u'；C : Type u。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Enriched.HasConicalLimit.toHasLimit`：∀ {J : Type u₁} {ins
+t : CategoryTheory.Category.{v₁, u₁} J} {V : outParam (Type u')}   {inst_1 : Cat
+egoryTheory.Category.{v', u'} V} {inst_2…
+· 使用定理 `CategoryTheory.Enriched.HasConicalLimitsOfShape.hasConicalLimit`：∀ {J : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} J} {V : outParam (Type u')}   
+{inst_1 : CategoryTheory.Category.{v', u'} V} {inst_2…
 
-English:
-instance HasConicalLimitsOfShape.hasLimitsOfShape
-  signature: [HasConicalLimitsOfShape J V C]
-
-中文:
-实例 有余nicalLimitsOfShape.hasLimitsOfShape
-  签名: [有余nicalLimitsOfShape J V C]
+--- 原说明 ---
+existence of conical limits (of shape) implies existence of limits (of shape)
 -/
 instance HasConicalLimitsOfShape.hasLimitsOfShape [HasConicalLimitsOfShape J V C] :
     HasLimitsOfShape J C where
 
-/--
-lemma `HasConicalLimitsOfShape.of_equiv` / 引理 `HasConicalLimitsOfShape.of_equiv`
+/-- We can transport conical limits of shape `J'` along an equivalence `J' ≌ J`. -/
+/-
+**CategoryTheory.Enriched.HasConicalLimitsOfShape.of_equiv** 是 Mathlib 中的一个定理，位于
+命名空间 `CategoryTheory.Enriched.HasConicalLimitsOfShape`。
+形式化陈述：∀ {J : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} J] {J' : Type u₂}
+   [inst_1 : CategoryTheory.Category.{v₂, u₂} J'] (V : Type u') [inst_2 : Catego
+ryTheory.Category.{v', u'} V]   [inst_3 : CategoryTheory.MonoidalCategory V] (C 
+: Type u) [inst_4 : CategoryTheory.Category.{v, u} C]   [inst_5 : CategoryTheory
+.EnrichedOrdinaryCategory V C] [CategoryTheory.Enriched.HasConicalLimitsOfShape 
+J' V C]   (G : CategoryTheory.Functor J' J) [G.IsEquivalence], CategoryTheory.En
+riched.HasConicalLimitsOfShape J V C
+参数：V : Type u'；C : Type u；G : CategoryTheory.Functor J' J。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Enriched.HasConicalLimit.of_equiv_comp`：∀ {J : Type u₁} [
+inst : CategoryTheory.Category.{v₁, u₁} J] {J' : Type u₂}   [inst_1 : CategoryTh
+eory.Category.{v₂, u₂} J'] (V : Type u') [i…
+· 使用定理 `CategoryTheory.Enriched.HasConicalLimitsOfShape.hasConicalLimit`：∀ {J : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} J} {V : outParam (Type u')}   
+{inst_1 : CategoryTheory.Category.{v', u'} V} {inst_2…
 
-English:
-lemma HasConicalLimitsOfShape.of_equiv
-  statement: [HasConicalLimitsOfShape J' V C]
-  proof: HasConicalLimit.of_equiv_comp V F G
-
-中文:
-引理 有余nicalLimitsOfShape.of_equiv
-  结论: [有余nicalLimitsOfShape J' V C]
-  证明: HasConicalLimit.of_equiv_comp V F G
-
-Depends on / 依赖: HasConicalLimit, HasConicalLimit.of_equiv_comp, of_equiv_comp
+--- 原说明 ---
+We can transport conical limits of shape `J'` along an equivalence `J' ≌ J`.
 -/
 lemma HasConicalLimitsOfShape.of_equiv [HasConicalLimitsOfShape J' V C]
     (G : J' ⥤ J) [G.IsEquivalence] : HasConicalLimitsOfShape J V C where
   hasConicalLimit F := HasConicalLimit.of_equiv_comp V F G
 
-/--
-Instance `HasConicalLimitsOfSize.hasLimitsOfSize` / 实例 `HasConicalLimitsOfSize.hasLimitsOfSize`
+/-- existence of conical limits (of size) implies existence of limits (of size) -/
+/-
+**CategoryTheory.Enriched.HasConicalLimitsOfSize.hasLimitsOfSize** 是 Mathlib 中的一
+个定理，位于命名空间 `CategoryTheory.Enriched.HasConicalLimitsOfSize`。
+形式化陈述：∀ (V : Type u') [inst : CategoryTheory.Category.{v', u'} V] [inst_1 : Cate
+goryTheory.MonoidalCategory V] (C : Type u)   [inst_2 : CategoryTheory.Category.
+{v, u} C] [inst_3 : CategoryTheory.EnrichedOrdinaryCategory V C]   [CategoryTheo
+ry.Enriched.HasConicalLimitsOfSize.{v₁, u₁, v', v, u, u'} V C],   CategoryTheory
+.Limits.HasLimitsOfSize.{v₁, u₁, v, u} C
+参数：V : Type u'；C : Type u。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Enriched.HasConicalLimitsOfShape.hasLimitsOfShape`：∀ (J :
+ Type u₁) [inst : CategoryTheory.Category.{v₁, u₁} J] (V : Type u') [inst_1 : Ca
+tegoryTheory.Category.{v', u'} V]   [inst_2 : Category…
+· 使用定理 `CategoryTheory.Enriched.HasConicalLimitsOfSize.hasConicalLimitsOfShape`：
+∀ {V : outParam (Type u')} {inst : CategoryTheory.Category.{v', u'} V} {inst_1 :
+ CategoryTheory.MonoidalCategory V}   {C : Type u} {inst_2 :…
 
-English:
-instance HasConicalLimitsOfSize.hasLimitsOfSize
-  signature: [HasConicalLimitsOfSize.{v₁, u₁} V C]
-
-中文:
-实例 有余nicalLimitsOfSize.hasLimitsOfSize
-  签名: [有余nicalLimitsOfSize.{v₁, u₁} V C]
+--- 原说明 ---
+existence of conical limits (of size) implies existence of limits (of size)
 -/
 instance HasConicalLimitsOfSize.hasLimitsOfSize [HasConicalLimitsOfSize.{v₁, u₁} V C] :
     HasLimitsOfSize.{v₁, u₁} C where
 
 /-- ensure existence of (small) conical limits implies existence of (small) limits -/
+/-
+**CategoryTheory.Enriched.** 是 Mathlib 中的一个示例，位于命名空间 `CategoryTheory.Enriched`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+ensure existence of (small) conical limits implies existence of (small) limits
+-/
 example [HasConicalLimits V C] : HasLimits C := inferInstance
 
 end Results
 
 end CategoryTheory.Enriched
+

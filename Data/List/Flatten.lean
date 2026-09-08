@@ -24,169 +24,157 @@ variable {α β : Type*}
 namespace List
 
 @[gcongr]
-/--
-theorem `Sublist.flatten` / 定理 `Sublist.flatten`
-
-English:
-theorem Sublist.flatten
-  given: {l₁ l₂ : List (List α)} (h : l₁ <+ l₂)
-  proof: by
-  induction h with grind
-
-@[gcongr]
-
-中文:
-定理 子表.flatten
-  条件: {l₁ l₂ : 列表 (列表 α)} (h : l₁ <+ l₂)
-  证明: by
-  induction h with grind
-
-@[gcongr]
+/-
+**List.Sublist.flatten** 是 Mathlib 中的一个定理，位于命名空间 `List.Sublist`。
+形式化陈述：∀ {α : Type u_1} {l₁ l₂ : List (List α)}, l₁.Sublist l₂ → l₁.flatten.Subli
+st l₂.flatten
+参数：List α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 protected theorem Sublist.flatten {l₁ l₂ : List (List α)} (h : l₁ <+ l₂) :
     l₁.flatten <+ l₂.flatten := by
   induction h with grind
 
 @[gcongr]
-/--
-theorem `Sublist.flatMap` / 定理 `Sublist.flatMap`
-
-English:
-theorem Sublist.flatMap
-  given: {l₁ l₂ : List α} (h : l₁ <+ l₂) (f : α -> List β)
-  proof: (h.map f).flatten
-
-中文:
-定理 子表.flatMap
-  条件: {l₁ l₂ : 列表 α} (h : l₁ <+ l₂) (f : α -> 列表 β)
-  证明: (h.map f).flatten
+/-
+**List.Sublist.flatMap** 是 Mathlib 中的一个定理，位于命名空间 `List.Sublist`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} {l₁ l₂ : List α},   l₁.Sublist l₂ → ∀ (f :
+ α → List β), (List.flatMap f l₁).Sublist (List.flatMap f l₂)
+参数：f : α → List β；List.flatMap f l₁；List.flatMap f l₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Sublist.flatten`：∀ {α : Type u_1} {l₁ l₂ : List (List α)}, l₁.Subli
+st l₂ → l₁.flatten.Sublist l₂.flatten
+· 使用定理 `List.Sublist.map`：∀ {α : Type u_1} {β : Type u_2} (f : α → β) {l₁ l₂ : L
+ist α}, l₁.Sublist l₂ → (List.map f l₁).Sublist (List.map f l₂)
 -/
-protected theorem Sublist.flatMap {l₁ l₂ : List α} (h : l₁ <+ l₂) (f : α -> List β) :
+protected theorem Sublist.flatMap {l₁ l₂ : List α} (h : l₁ <+ l₂) (f : α → List β) :
     l₁.flatMap f <+ l₂.flatMap f :=
   (h.map f).flatten
-
-/--
-theorem `Sublist.flatMap_right` / 定理 `Sublist.flatMap_right`
-
-English:
-theorem Sublist.flatMap_right
-  given: (l : List α) {f g : α -> List β} (h : forall a in l, f a <+ g a)
-  proof: by
-  induction l with grind
-
-中文:
-定理 子表.flatMap_right
-  条件: (l : 列表 α) {f g : α -> 列表 β} (h : 对任意 a in l, f a <+ g a)
-  证明: by
-  induction l with grind
+/-
+**List.Sublist.flatMap_right** 是 Mathlib 中的一个定理，位于命名空间 `List.Sublist`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} (l : List α) {f g : α → List β},   (∀ a ∈ 
+l, (f a).Sublist (g a)) → (List.flatMap f l).Sublist (List.flatMap g l)
+参数：l : List α；∀ a ∈ l, (f a).Sublist (g a)；List.flatMap f l；List.flatMap g l。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-protected theorem Sublist.flatMap_right (l : List α) {f g : α -> List β} (h : forall a in l, f a <+ g a) :
+protected theorem Sublist.flatMap_right (l : List α) {f g : α → List β} (h : ∀ a ∈ l, f a <+ g a) :
     l.flatMap f <+ l.flatMap g := by
   induction l with grind
 
-/--
-theorem `drop_take_succ_eq_cons_getElem` / 定理 `drop_take_succ_eq_cons_getElem`
+/-- Taking only the first `i+1` elements in a list, and then dropping the first `i` ones, one is
+left with a list of length `1` made of the `i`-th element of the original list. -/
+/-
+**List.drop_take_succ_eq_cons_getElem** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：drop_take_succ_eq_cons_getElem (L : List α) (i : Nat) (h : i < L.length) :
+ (L.take (i + 1)).drop i = [L[i]]
+参数：L : List α；i : Nat；h : i < L.length。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem drop_take_succ_eq_cons_getElem
-  given: (L : List α) (i : Nat) (h : i < L.length)
-  proof: by
-  induction L generalizing i with grind
-
-中文:
-定理 drop_take_succ_eq_cons_getElem
-  条件: (L : 列表 α) (i : 自然数) (h : i < L.length)
-  证明: by
-  induction L generalizing i with grind
-
-Depends on / 依赖: generalizing
+--- 原说明 ---
+Taking only the first `i+1` elements in a list, and then dropping the first `i` 
+ones, one is
+left with a list of length `1` made of the `i`-th element of the original list.
 -/
 theorem drop_take_succ_eq_cons_getElem (L : List α) (i : Nat) (h : i < L.length) :
     (L.take (i + 1)).drop i = [L[i]] := by
   induction L generalizing i with grind
 
-/--
-theorem `append_flatten_map_append` / 定理 `append_flatten_map_append`
+/-- We can rebracket `x ++ (l₁ ++ x) ++ (l₂ ++ x) ++ ... ++ (lₙ ++ x)` to
+`(x ++ l₁) ++ (x ++ l₂) ++ ... ++ (x ++ lₙ) ++ x` where `L = [l₁, l₂, ..., lₙ]`. -/
+/-
+**List.append_flatten_map_append** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：append_flatten_map_append (L : List (List α)) (x : List α) : x ++ (L.map (
+· ++ x)).flatten = (L.map (x ++ ·)).flatten ++ x
+参数：L : List (List α)；x : List α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem append_flatten_map_append
-  given: (L : List (List α)) (x : List α)
-  proof: by
-  induction L with grind
-
-中文:
-定理 append_flatten_map_append
-  条件: (L : 列表 (列表 α)) (x : 列表 α)
-  证明: by
-  induction L with grind
+--- 原说明 ---
+We can rebracket `x ++ (l₁ ++ x) ++ (l₂ ++ x) ++ ... ++ (lₙ ++ x)` to
+`(x ++ l₁) ++ (x ++ l₂) ++ ... ++ (x ++ lₙ) ++ x` where `L = [l₁, l₂, ..., lₙ]`.
 -/
 theorem append_flatten_map_append (L : List (List α)) (x : List α) :
     x ++ (L.map (· ++ x)).flatten = (L.map (x ++ ·)).flatten ++ x := by
   induction L with grind
 
-/--
-theorem `head_head_eq_head_flatten` / 定理 `head_head_eq_head_flatten`
+/-- See also `head_flatten_eq_head_head`, which switches around the proof obligations. -/
+/-
+**List.head_head_eq_head_flatten** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：head_head_eq_head_flatten {l : List (List α)} (hl : l != []) (hl' : l.head
+ hl != []) : (l.head hl).head hl' = l.flatten.head (flatten_ne_nil_iff.2 ⟨_, hea
+d_mem hl, hl'⟩)
+参数：List α；hl : l != []；hl' : l.head hl != []。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.head`：head?_flatten_replicate {n : Nat} (h : n != 0) (l : List α) :
+ (List.replicate n l).flatten.head? = l.head?
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.flatten_ne_nil_iff`：∀ {α : Type u_1} {xss : List (List α)}, xss.fla
+tten ≠ [] ↔ ∃ xs ∈ xss, xs ≠ []
+· 使用定理 `List.head_mem`：∀ {α : Type u_1} {l : List α} (h : l ≠ []), l.head h ∈ l
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem head_head_eq_head_flatten
-  given: {l : List (List α)} (hl : l != []) (hl' : l.head hl != [])
-  proof: by
-  cases l with grind
-
-中文:
-定理 head_head_eq_head_flatten
-  条件: {l : 列表 (列表 α)} (hl : l != []) (hl' : l.head hl != [])
-  证明: by
-  cases l with grind
+--- 原说明 ---
+See also `head_flatten_eq_head_head`, which switches around the proof obligation
+s.
 -/
-theorem head_head_eq_head_flatten {l : List (List α)} (hl : l != []) (hl' : l.head hl != []) :
+theorem head_head_eq_head_flatten {l : List (List α)} (hl : l ≠ []) (hl' : l.head hl ≠ []) :
     (l.head hl).head hl' = l.flatten.head (flatten_ne_nil_iff.2 ⟨_, head_mem hl, hl'⟩) := by
   cases l with grind
 
-/--
-theorem `head_flatten_eq_head_head` / 定理 `head_flatten_eq_head_head`
+/-- See also `head_head_eq_head_flatten`, which switches around the proof obligations. -/
+/-
+**List.head_flatten_eq_head_head** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：head_flatten_eq_head_head {l : List (List α)} (hl : l.flatten != []) (hl' 
+: l.head (by grind) != []) : l.flatten.head hl = (l.head (by grind)).head hl'
+参数：List α；hl : l.flatten != []；hl' : l.head (by grind) != []。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.head`：head?_flatten_replicate {n : Nat} (h : n != 0) (l : List α) :
+ (List.replicate n l).flatten.head? = l.head?
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.flatten_ne_nil_iff`：∀ {α : Type u_1} {xss : List (List α)}, xss.fla
+tten ≠ [] ↔ ∃ xs ∈ xss, xs ≠ []
+· 使用定理 `List.head_mem`：∀ {α : Type u_1} {l : List α} (h : l ≠ []), l.head h ∈ l
+· 使用定理 `List.head_head_eq_head_flatten`：head_head_eq_head_flatten {l : List (Lis
+t α)} (hl : l != []) (hl' : l.head hl != []) : (l.head hl).head hl' = l.flatten.
+head (flatten_ne_nil…
 
-English:
-theorem head_flatten_eq_head_head
-  statement: {l : List (List α)} (hl : l.flatten != [])
-  proof: (head_head_eq_head_flatten ..).symm
-
-中文:
-定理 head_flatten_eq_head_head
-  结论: {l : 列表 (列表 α)} (hl : l.flatten != [])
-  证明: (head_head_eq_head_flatten ..).symm
-
-Depends on / 依赖: head_head_eq_head_flatten
+--- 原说明 ---
+See also `head_head_eq_head_flatten`, which switches around the proof obligation
+s.
 -/
-theorem head_flatten_eq_head_head {l : List (List α)} (hl : l.flatten != [])
-    (hl' : l.head (by grind) != []) : l.flatten.head hl = (l.head (by grind)).head hl' :=
+theorem head_flatten_eq_head_head {l : List (List α)} (hl : l.flatten ≠ [])
+    (hl' : l.head (by grind) ≠ []) : l.flatten.head hl = (l.head (by grind)).head hl' :=
   (head_head_eq_head_flatten ..).symm
 
-/--
-theorem `getLast_getLast_eq_getLast_flatten` / 定理 `getLast_getLast_eq_getLast_flatten`
+/-- See also `getLast_flatten_eq_getLast_getLast`, which switches around the proof obligations. -/
+/-
+**List.getLast_getLast_eq_getLast_flatten** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：getLast_getLast_eq_getLast_flatten {l : List (List α)} (hl : l != []) (hl'
+ : l.getLast hl != []) : (l.getLast hl).getLast hl' = l.flatten.getLast (flatten
+_ne_nil_iff.2 ⟨_, getLast_mem hl, hl'⟩)
+参数：List α；hl : l != []；hl' : l.getLast hl != []。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `List.eq_nil_or_concat`：∀ {α : Type u_1} (l : List α), l = [] ∨ ∃ l' b, l
+ = l'.concat b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.flatten_ne_nil_iff`：∀ {α : Type u_1} {xss : List (List α)}, xss.fla
+tten ≠ [] ↔ ∃ xs ∈ xss, xs ≠ []
+· 使用定理 `List.getLast_mem`：∀ {α : Type u_1} {l : List α} (h : l ≠ []), l.getLast 
+h ∈ l
 
-English:
-theorem getLast_getLast_eq_getLast_flatten
-  statement: {l : List (List α)}
-  proof: by
-  cases eq_nil_or_concat l with grind
-
-@[deprecated (since := "2026-01-31")]
-alias getLast_flatten_of_getLast_ne_nil := getLast_getLast_eq_getLast_flatten
-
-中文:
-定理 getLast_getLast_eq_getLast_flatten
-  结论: {l : 列表 (列表 α)}
-  证明: by
-  cases eq_nil_or_concat l with grind
-
-@[deprecated (since := "2026-01-31")]
-alias getLast_flatten_of_getLast_ne_nil := getLast_getLast_eq_getLast_flatten
-
-Depends on / 依赖: eq_nil_or_concat
+--- 原说明 ---
+See also `getLast_flatten_eq_getLast_getLast`, which switches around the proof o
+bligations.
 -/
 theorem getLast_getLast_eq_getLast_flatten {l : List (List α)}
-    (hl : l != []) (hl' : l.getLast hl != []) :
+    (hl : l ≠ []) (hl' : l.getLast hl ≠ []) :
     (l.getLast hl).getLast hl' =
       l.flatten.getLast (flatten_ne_nil_iff.2 ⟨_, getLast_mem hl, hl'⟩) := by
   cases eq_nil_or_concat l with grind
@@ -194,29 +182,33 @@ theorem getLast_getLast_eq_getLast_flatten {l : List (List α)}
 @[deprecated (since := "2026-01-31")]
 alias getLast_flatten_of_getLast_ne_nil := getLast_getLast_eq_getLast_flatten
 
-/--
-theorem `getLast_flatten_eq_getLast_getLast` / 定理 `getLast_flatten_eq_getLast_getLast`
+/-- See also `getLast_getLast_eq_getLast_flatten`, which switches around the proof obligations. -/
+/-
+**List.getLast_flatten_eq_getLast_getLast** 是 Mathlib 中的一个定理，位于命名空间 `List`。
+形式化陈述：getLast_flatten_eq_getLast_getLast {l : List (List α)} (hl : l.flatten != 
+[]) (hl' : l.getLast (by grind) != []) : l.flatten.getLast hl = (l.getLast (by g
+rind)).getLast hl'
+参数：List α；hl : l.flatten != []；hl' : l.getLast (by grind) != []。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.getLast`：getLast?_flatten_replicate {n : Nat} (h : n != 0) (l : Lis
+t α) : (List.replicate n l).flatten.getLast? = l.getLast?
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `List.flatten_ne_nil_iff`：∀ {α : Type u_1} {xss : List (List α)}, xss.fla
+tten ≠ [] ↔ ∃ xs ∈ xss, xs ≠ []
+· 使用定理 `List.getLast_mem`：∀ {α : Type u_1} {l : List α} (h : l ≠ []), l.getLast 
+h ∈ l
+· 使用定理 `List.getLast_getLast_eq_getLast_flatten`：getLast_getLast_eq_getLast_flat
+ten {l : List (List α)} (hl : l != []) (hl' : l.getLast hl != []) : (l.getLast h
+l).getLast hl' = l.flatten.ge…
 
-English:
-theorem getLast_flatten_eq_getLast_getLast
-  statement: {l : List (List α)}
-  proof: (getLast_getLast_eq_getLast_flatten ..).symm
-
-@[deprecated (since := "2026-01-31")]
-alias getLast_flatten_of_flatten_ne_nil := getLast_flatten_eq_getLast_getLast
-
-中文:
-定理 getLast_flatten_eq_getLast_getLast
-  结论: {l : 列表 (列表 α)}
-  证明: (getLast_getLast_eq_getLast_flatten ..).symm
-
-@[deprecated (since := "2026-01-31")]
-alias getLast_flatten_of_flatten_ne_nil := getLast_flatten_eq_getLast_getLast
-
-Depends on / 依赖: getLast_getLast_eq_getLast_flatten
+--- 原说明 ---
+See also `getLast_getLast_eq_getLast_flatten`, which switches around the proof o
+bligations.
 -/
 theorem getLast_flatten_eq_getLast_getLast {l : List (List α)}
-    (hl : l.flatten != []) (hl' : l.getLast (by grind) != []) :
+    (hl : l.flatten ≠ []) (hl' : l.getLast (by grind) ≠ []) :
     l.flatten.getLast hl = (l.getLast (by grind)).getLast hl' :=
   (getLast_getLast_eq_getLast_flatten ..).symm
 
@@ -224,3 +216,4 @@ theorem getLast_flatten_eq_getLast_getLast {l : List (List α)}
 alias getLast_flatten_of_flatten_ne_nil := getLast_flatten_eq_getLast_getLast
 
 end List
+

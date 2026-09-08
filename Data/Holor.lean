@@ -40,688 +40,542 @@ universe u
 
 open List
 
-/--
-Definition of `HolorIndex` / `HolorIndex` 的定义
+/-- `HolorIndex ds` is the type of valid index tuples used to identify an entry of a holor
+of dimensions `ds`. -/
+/-
+**HolorIndex** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：HolorIndex (ds : List Nat) : Type
+参数：ds : List Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition HolorIndex
-  signature: (ds : List Nat)
-  body: { is : List Nat // Forall₂ (· < ·) is ds }
-
-中文:
-定义 HolorIndex
-  签名: (ds : 列表 自然数)
-  定义体: { is : List Nat // Forall₂ (· < ·) is ds }
+--- 原说明 ---
+`HolorIndex ds` is the type of valid index tuples used to identify an entry of a
+ holor
+of dimensions `ds`.
 -/
-def HolorIndex (ds : List Nat) : Type :=
-  { is : List Nat // Forall₂ (· < ·) is ds }
+def HolorIndex (ds : List ℕ) : Type :=
+  { is : List ℕ // Forall₂ (· < ·) is ds }
 
 namespace HolorIndex
 
-variable {ds₁ ds₂ ds₃ : List Nat}
+variable {ds₁ ds₂ ds₃ : List ℕ}
 
-/--
-Definition of `take` / `take` 的定义
+/-- Take the first elements of a `HolorIndex`. -/
+/-
+**HolorIndex.take** 是 Mathlib 中的一个定义，位于命名空间 `HolorIndex`。
+形式化陈述：{ds₂ ds₁ : List ℕ} → HolorIndex (ds₁ ++ ds₂) → HolorIndex ds₁
+参数：ds₁ ++ ds₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition take
-  signature: : forall {ds₁ : List Nat}, HolorIndex (ds₁ ++ ds₂) -> HolorIndex ds₁
-
-中文:
-定义 take
-  签名: : 对任意 {ds₁ : 列表 自然数}, HolorIndex (ds₁ ++ ds₂) -> HolorIndex ds₁
+--- 原说明 ---
+Take the first elements of a `HolorIndex`.
 -/
-def take : forall {ds₁ : List Nat}, HolorIndex (ds₁ ++ ds₂) -> HolorIndex ds₁
+def take : ∀ {ds₁ : List ℕ}, HolorIndex (ds₁ ++ ds₂) → HolorIndex ds₁
   | ds, is => ⟨List.take (length ds) is.1, forall₂_take_append is.1 ds ds₂ is.2⟩
 
-/--
-Definition of `drop` / `drop` 的定义
+/-- Drop the first elements of a `HolorIndex`. -/
+/-
+**HolorIndex.drop** 是 Mathlib 中的一个定义，位于命名空间 `HolorIndex`。
+形式化陈述：{ds₂ ds₁ : List ℕ} → HolorIndex (ds₁ ++ ds₂) → HolorIndex ds₂
+参数：ds₁ ++ ds₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition drop
-  signature: : forall {ds₁ : List Nat}, HolorIndex (ds₁ ++ ds₂) -> HolorIndex ds₂
-
-中文:
-定义 drop
-  签名: : 对任意 {ds₁ : 列表 自然数}, HolorIndex (ds₁ ++ ds₂) -> HolorIndex ds₂
+--- 原说明 ---
+Drop the first elements of a `HolorIndex`.
 -/
-def drop : forall {ds₁ : List Nat}, HolorIndex (ds₁ ++ ds₂) -> HolorIndex ds₂
+def drop : ∀ {ds₁ : List ℕ}, HolorIndex (ds₁ ++ ds₂) → HolorIndex ds₂
   | ds, is => ⟨List.drop (length ds) is.1, forall₂_drop_append is.1 ds ds₂ is.2⟩
-
-/--
-theorem `cast_type` / 定理 `cast_type`
-
-English:
-theorem cast_type
-  given: (is : List Nat) (eq : ds₁ = ds₂) (h : Forall₂ (· < ·) is ds₁)
-  proof: by subst eq; rfl
-
-中文:
-定理 cast_type
-  条件: (is : 列表 自然数) (eq : ds₁ = ds₂) (h : Forall₂ (· < ·) is ds₁)
-  证明: by subst eq; rfl
-
-Depends on / 依赖: Set.ext
+/-
+**HolorIndex.cast_type** 是 Mathlib 中的一个定理，位于命名空间 `HolorIndex`。
+形式化陈述：cast_type (is : List Nat) (eq : ds₁ = ds₂) (h : Forall₂ (· < ·) is ds₁) : 
+(cast (congr_arg HolorIndex eq) ⟨is, h⟩).val = is
+参数：is : List Nat；eq : ds₁ = ds₂；h : Forall₂ (· < ·) is ds₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
-theorem cast_type (is : List Nat) (eq : ds₁ = ds₂) (h : Forall₂ (· < ·) is ds₁) :
+theorem cast_type (is : List ℕ) (eq : ds₁ = ds₂) (h : Forall₂ (· < ·) is ds₁) :
     (cast (congr_arg HolorIndex eq) ⟨is, h⟩).val = is := by subst eq; rfl
 
-/--
-Definition of `assocRight` / `assocRight` 的定义
+/-- Right associator for `HolorIndex` -/
+/-
+**HolorIndex.assocRight** 是 Mathlib 中的一个定义，位于命名空间 `HolorIndex`。
+形式化陈述：assocRight : HolorIndex (ds₁ ++ ds₂ ++ ds₃) -> HolorIndex (ds₁ ++ (ds₂ ++ 
+ds₃))
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition assocRight
-  signature: : HolorIndex (ds₁ ++ ds₂ ++ ds₃) -> HolorIndex (ds₁ ++ (ds₂ ++ ds₃))
-  body: cast (congr_arg HolorIndex (append_assoc ds₁ ds₂ ds₃))
-
-中文:
-定义 assocRight
-  签名: : HolorIndex (ds₁ ++ ds₂ ++ ds₃) -> HolorIndex (ds₁ ++ (ds₂ ++ ds₃))
-  定义体: cast (congr_arg HolorIndex (append_assoc ds₁ ds₂ ds₃))
-
-Depends on / 依赖: HolorIndex, Subset, Subset.antisymm, antisymm, append_assoc, congr_arg, e.subset, e.symm.subset, subset
+--- 原说明 ---
+Right associator for `HolorIndex`
 -/
-def assocRight : HolorIndex (ds₁ ++ ds₂ ++ ds₃) -> HolorIndex (ds₁ ++ (ds₂ ++ ds₃)) :=
+def assocRight : HolorIndex (ds₁ ++ ds₂ ++ ds₃) → HolorIndex (ds₁ ++ (ds₂ ++ ds₃)) :=
   cast (congr_arg HolorIndex (append_assoc ds₁ ds₂ ds₃))
 
-/--
-Definition of `assocLeft` / `assocLeft` 的定义
+/-- Left associator for `HolorIndex` -/
+/-
+**HolorIndex.assocLeft** 是 Mathlib 中的一个定义，位于命名空间 `HolorIndex`。
+形式化陈述：assocLeft : HolorIndex (ds₁ ++ (ds₂ ++ ds₃)) -> HolorIndex (ds₁ ++ ds₂ ++ 
+ds₃)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition assocLeft
-  signature: : HolorIndex (ds₁ ++ (ds₂ ++ ds₃)) -> HolorIndex (ds₁ ++ ds₂ ++ ds₃)
-  body: cast (congr_arg HolorIndex (append_assoc ds₁ ds₂ ds₃).symm)
-
-中文:
-定义 assocLeft
-  签名: : HolorIndex (ds₁ ++ (ds₂ ++ ds₃)) -> HolorIndex (ds₁ ++ ds₂ ++ ds₃)
-  定义体: cast (congr_arg HolorIndex (append_assoc ds₁ ds₂ ds₃).symm)
-
-Depends on / 依赖: HolorIndex, append_assoc, congr_arg
+--- 原说明 ---
+Left associator for `HolorIndex`
 -/
-def assocLeft : HolorIndex (ds₁ ++ (ds₂ ++ ds₃)) -> HolorIndex (ds₁ ++ ds₂ ++ ds₃) :=
+def assocLeft : HolorIndex (ds₁ ++ (ds₂ ++ ds₃)) → HolorIndex (ds₁ ++ ds₂ ++ ds₃) :=
   cast (congr_arg HolorIndex (append_assoc ds₁ ds₂ ds₃).symm)
-
-/--
-theorem `take_take` / 定理 `take_take`
-
-English:
-theorem take_take
-  statement: forall t : HolorIndex (ds₁ ++ ds₂ ++ ds₃), t.assocRight.take = t.take.take
-
-中文:
-定理 take_take
-  结论: 对任意 t : HolorIndex (ds₁ ++ ds₂ ++ ds₃), t.assocRight.take = t.take.take
+/-
+**HolorIndex.take_take** 是 Mathlib 中的一个定理，位于命名空间 `HolorIndex`。
+形式化陈述：∀ {ds₁ ds₂ ds₃ : List ℕ} (t : HolorIndex (ds₁ ++ ds₂ ++ ds₃)), t.assocRigh
+t.take = t.take.take
+参数：t : HolorIndex (ds₁ ++ ds₂ ++ ds₃)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HolorIndex.cast_type`：cast_type (is : List Nat) (eq : ds₁ = ds₂) (h : Fo
+rall₂ (· < ·) is ds₁) : (cast (congr_arg HolorIndex eq) ⟨is, h⟩).val = is
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `List.append_assoc`：∀ {α : Type u} (as bs cs : List α), as ++ bs ++ cs = 
+as ++ (bs ++ cs)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `List.length_append`：∀ {α : Type u} {as bs : List α}, (as ++ bs).length =
+ as.length + bs.length
+· 使用定理 `List.take_take`：∀ {α : Type u_1} {i j : ℕ} {l : List α}, List.take i (Li
+st.take j l) = List.take (min i j) l
+· 使用定理 `inf_of_le_left`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ≤ 
+b → a ⊓ b = a
 -/
-theorem take_take : forall t : HolorIndex (ds₁ ++ ds₂ ++ ds₃), t.assocRight.take = t.take.take
+theorem take_take : ∀ t : HolorIndex (ds₁ ++ ds₂ ++ ds₃), t.assocRight.take = t.take.take
   | ⟨is, h⟩ =>
-Subtype.ext by
+    Subtype.ext <| by
       simp [assocRight, take, cast_type, List.take_take, Nat.le_add_right]
-
-/--
-theorem `drop_take` / 定理 `drop_take`
-
-English:
-theorem drop_take
-  statement: forall t : HolorIndex (ds₁ ++ ds₂ ++ ds₃), t.assocRight.drop.take = t.take.drop
-
-中文:
-定理 drop_take
-  结论: 对任意 t : HolorIndex (ds₁ ++ ds₂ ++ ds₃), t.assocRight.drop.take = t.take.drop
+/-
+**HolorIndex.drop_take** 是 Mathlib 中的一个定理，位于命名空间 `HolorIndex`。
+形式化陈述：∀ {ds₁ ds₂ ds₃ : List ℕ} (t : HolorIndex (ds₁ ++ ds₂ ++ ds₃)), t.assocRigh
+t.drop.take = t.take.drop
+参数：t : HolorIndex (ds₁ ++ ds₂ ++ ds₃)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HolorIndex.cast_type`：cast_type (is : List Nat) (eq : ds₁ = ds₂) (h : Fo
+rall₂ (· < ·) is ds₁) : (cast (congr_arg HolorIndex eq) ⟨is, h⟩).val = is
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `List.append_assoc`：∀ {α : Type u} (as bs cs : List α), as ++ bs ++ cs = 
+as ++ (bs ++ cs)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `List.length_append`：∀ {α : Type u} {as bs : List α}, (as ++ bs).length =
+ as.length + bs.length
+· 使用定理 `List.drop_take`：∀ {α : Type u_1} {i j : ℕ} {l : List α}, List.drop i (Li
+st.take j l) = List.take (j - i) (List.drop i l)
+· 使用定理 `Nat.add_sub_cancel_left`：∀ (n m : ℕ), n + m - n = m
 -/
-theorem drop_take : forall t : HolorIndex (ds₁ ++ ds₂ ++ ds₃), t.assocRight.drop.take = t.take.drop
+theorem drop_take : ∀ t : HolorIndex (ds₁ ++ ds₂ ++ ds₃), t.assocRight.drop.take = t.take.drop
   | ⟨is, h⟩ => Subtype.ext (by simp [assocRight, take, drop, cast_type, List.drop_take])
-
-/--
-theorem `drop_drop` / 定理 `drop_drop`
-
-English:
-theorem drop_drop
-  statement: forall t : HolorIndex (ds₁ ++ ds₂ ++ ds₃), t.assocRight.drop.drop = t.drop
-
-中文:
-定理 drop_drop
-  结论: 对任意 t : HolorIndex (ds₁ ++ ds₂ ++ ds₃), t.assocRight.drop.drop = t.drop
+/-
+**HolorIndex.drop_drop** 是 Mathlib 中的一个定理，位于命名空间 `HolorIndex`。
+形式化陈述：∀ {ds₁ ds₂ ds₃ : List ℕ} (t : HolorIndex (ds₁ ++ ds₂ ++ ds₃)), t.assocRigh
+t.drop.drop = t.drop
+参数：t : HolorIndex (ds₁ ++ ds₂ ++ ds₃)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HolorIndex.cast_type`：cast_type (is : List Nat) (eq : ds₁ = ds₂) (h : Fo
+rall₂ (· < ·) is ds₁) : (cast (congr_arg HolorIndex eq) ⟨is, h⟩).val = is
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `List.append_assoc`：∀ {α : Type u} (as bs cs : List α), as ++ bs ++ cs = 
+as ++ (bs ++ cs)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `List.drop_drop`：∀ {α : Type u_1} {i j : ℕ} {l : List α}, List.drop i (Li
+st.drop j l) = List.drop (j + i) l
+· 使用定理 `List.length_append`：∀ {α : Type u} {as bs : List α}, (as ++ bs).length =
+ as.length + bs.length
 -/
-theorem drop_drop : forall t : HolorIndex (ds₁ ++ ds₂ ++ ds₃), t.assocRight.drop.drop = t.drop
+theorem drop_drop : ∀ t : HolorIndex (ds₁ ++ ds₂ ++ ds₃), t.assocRight.drop.drop = t.drop
   | ⟨is, h⟩ => Subtype.ext (by simp [assocRight, drop, cast_type, List.drop_drop])
 
 end HolorIndex
 
-/--
-Definition of `Holor` / `Holor` 的定义
+/-- Holor (indexed collections of tensor coefficients) -/
+/-
+**Holor** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Holor (α : Type u) (ds : List Nat)
+参数：α : Type u；ds : List Nat。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Holor
-  signature: (α : Type u) (ds : List Nat)
-  body: HolorIndex ds -> α
-
-中文:
-定义 Holor
-  签名: (α : 类型u) (ds : 列表 自然数)
-  定义体: HolorIndex ds -> α
-
-Depends on / 依赖: HolorIndex
+--- 原说明 ---
+Holor (indexed collections of tensor coefficients)
 -/
-def Holor (α : Type u) (ds : List Nat) :=
-  HolorIndex ds -> α
+def Holor (α : Type u) (ds : List ℕ) :=
+  HolorIndex ds → α
 
 namespace Holor
 
-variable {α : Type} {d : Nat} {ds : List Nat} {ds₁ : List Nat} {ds₂ : List Nat} {ds₃ : List Nat}
+variable {α : Type} {d : ℕ} {ds : List ℕ} {ds₁ : List ℕ} {ds₂ : List ℕ} {ds₃ : List ℕ}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: α] : Inhabited (Holor α ds)
-  body: ⟨fun _ => default⟩
-
-中文:
-实例 [可居
-  签名: α] : 可居 (Holor α ds)
-  定义体: ⟨fun _ => default⟩
+/-
+**Holor.** 是 Mathlib 中的一个实例，位于命名空间 `Holor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited α] : Inhabited (Holor α ds) :=
   ⟨fun _ => default⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Zero
-  signature: α] : Zero (Holor α ds)
-  body: ⟨fun _ => 0⟩
-
-中文:
-实例 [零
-  签名: α] : 零 (Holor α ds)
-  定义体: ⟨fun _ => 0⟩
+/-
+**Holor.** 是 Mathlib 中的一个实例，位于命名空间 `Holor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Zero α] : Zero (Holor α ds) :=
   ⟨fun _ => 0⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Add
-  signature: α] : Add (Holor α ds)
-  body: ⟨fun x y t => x t + y t⟩
-
-中文:
-实例 [加法
-  签名: α] : 加法 (Holor α ds)
-  定义体: ⟨fun x y t => x t + y t⟩
+/-
+**Holor.** 是 Mathlib 中的一个实例，位于命名空间 `Holor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Add α] : Add (Holor α ds) :=
   ⟨fun x y t => x t + y t⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Neg
-  signature: α] : Neg (Holor α ds)
-  body: ⟨fun a t => -a t⟩
-
-中文:
-实例 [取负
-  签名: α] : 取负 (Holor α ds)
-  定义体: ⟨fun a t => -a t⟩
+/-
+**Holor.** 是 Mathlib 中的一个实例，位于命名空间 `Holor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Neg α] : Neg (Holor α ds) :=
   ⟨fun a t => -a t⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddSemigroup
-  signature: α] : AddSemigroup (Holor α ds)
-  body: inferInstanceAs AddSemigroup (HolorIndex ds -> α)
-
-中文:
-实例 [加法半群
-  签名: α] : 加法半群 (Holor α ds)
-  定义体: inferInstanceAs AddSemigroup (HolorIndex ds -> α)
-
-Depends on / 依赖: AddSemigroup, HolorIndex
+/-
+**Holor.** 是 Mathlib 中的一个实例，位于命名空间 `Holor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddSemigroup α] : AddSemigroup (Holor α ds) :=
-inferInstanceAs AddSemigroup (HolorIndex ds -> α)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCommSemigroup
-  signature: α] : AddCommSemigroup (Holor α ds)
-  body: inferInstanceAs AddCommSemigroup (HolorIndex ds -> α)
-
-中文:
-实例 [加法交换半群
-  签名: α] : 加法交换半群 (Holor α ds)
-  定义体: inferInstanceAs AddCommSemigroup (HolorIndex ds -> α)
-
-Depends on / 依赖: AddCommSemigroup, HolorIndex
+  inferInstanceAs <| AddSemigroup (HolorIndex ds → α)
+/-
+**Holor.** 是 Mathlib 中的一个实例，位于命名空间 `Holor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddCommSemigroup α] : AddCommSemigroup (Holor α ds) :=
-inferInstanceAs AddCommSemigroup (HolorIndex ds -> α)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddMonoid
-  signature: α] : AddMonoid (Holor α ds)
-  body: inferInstanceAs AddMonoid (HolorIndex ds -> α)
-
-中文:
-实例 [加法幺半群
-  签名: α] : 加法幺半群 (Holor α ds)
-  定义体: inferInstanceAs AddMonoid (HolorIndex ds -> α)
-
-Depends on / 依赖: AddMonoid, HolorIndex
+  inferInstanceAs <| AddCommSemigroup (HolorIndex ds → α)
+/-
+**Holor.** 是 Mathlib 中的一个实例，位于命名空间 `Holor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddMonoid α] : AddMonoid (Holor α ds) :=
-inferInstanceAs AddMonoid (HolorIndex ds -> α)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCommMonoid
-  signature: α] : AddCommMonoid (Holor α ds)
-  body: inferInstanceAs AddCommMonoid (HolorIndex ds -> α)
-
-中文:
-实例 [加法交换幺半群
-  签名: α] : 加法交换幺半群 (Holor α ds)
-  定义体: inferInstanceAs AddCommMonoid (HolorIndex ds -> α)
-
-Depends on / 依赖: AddCommMonoid, HolorIndex
+  inferInstanceAs <| AddMonoid (HolorIndex ds → α)
+/-
+**Holor.** 是 Mathlib 中的一个实例，位于命名空间 `Holor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddCommMonoid α] : AddCommMonoid (Holor α ds) :=
-inferInstanceAs AddCommMonoid (HolorIndex ds -> α)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddGroup
-  signature: α] : AddGroup (Holor α ds)
-  body: inferInstanceAs AddGroup (HolorIndex ds -> α)
-
-中文:
-实例 [加法群
-  签名: α] : 加法群 (Holor α ds)
-  定义体: inferInstanceAs AddGroup (HolorIndex ds -> α)
-
-Depends on / 依赖: AddGroup, HolorIndex
+  inferInstanceAs <| AddCommMonoid (HolorIndex ds → α)
+/-
+**Holor.** 是 Mathlib 中的一个实例，位于命名空间 `Holor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddGroup α] : AddGroup (Holor α ds) :=
-inferInstanceAs AddGroup (HolorIndex ds -> α)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [AddCommGroup
-  signature: α] : AddCommGroup (Holor α ds)
-  body: inferInstanceAs AddCommGroup (HolorIndex ds -> α)
-
-中文:
-实例 [加法交换群
-  签名: α] : 加法交换群 (Holor α ds)
-  定义体: inferInstanceAs AddCommGroup (HolorIndex ds -> α)
-
-Depends on / 依赖: AddCommGroup, HolorIndex
+  inferInstanceAs <| AddGroup (HolorIndex ds → α)
+/-
+**Holor.** 是 Mathlib 中的一个实例，位于命名空间 `Holor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [AddCommGroup α] : AddCommGroup (Holor α ds) :=
-inferInstanceAs AddCommGroup (HolorIndex ds -> α)
+  inferInstanceAs <| AddCommGroup (HolorIndex ds → α)
 
 -- scalar product
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Mul
-  signature: α] : SMul α (Holor α ds)
-  body: ⟨fun a x => fun t => a * x t⟩
-
-中文:
-实例 [乘法
-  签名: α] : 标量乘法 α (Holor α ds)
-  定义体: ⟨fun a x => fun t => a * x t⟩
+/-
+**Holor.** 是 Mathlib 中的一个实例，位于命名空间 `Holor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Mul α] : SMul α (Holor α ds) :=
   ⟨fun a x => fun t => a * x t⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Semiring
-  signature: α] : Module α (Holor α ds)
-  body: inferInstanceAs Module α (HolorIndex ds -> α)
-
-中文:
-实例 [半环
-  签名: α] : 模 α (Holor α ds)
-  定义体: inferInstanceAs Module α (HolorIndex ds -> α)
-
-Depends on / 依赖: HolorIndex, Module
+/-
+**Holor.** 是 Mathlib 中的一个实例，位于命名空间 `Holor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Semiring α] : Module α (Holor α ds) :=
-inferInstanceAs Module α (HolorIndex ds -> α)
+  inferInstanceAs <| Module α (HolorIndex ds → α)
 
-/--
-Definition of `mul` / `mul` 的定义
+/-- The tensor product of two holors. -/
+/-
+**Holor.mul** 是 Mathlib 中的一个定义，位于命名空间 `Holor`。
+形式化陈述：mul [Mul α] (x : Holor α ds₁) (y : Holor α ds₂) : Holor α (ds₁ ++ ds₂)
+参数：x : Holor α ds₁；y : Holor α ds₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mul
-  signature: [Mul α] (x : Holor α ds₁) (y : Holor α ds₂)
-  body: fun t =>
-  x t.take * y t.drop
-
-local infixl:70 " otimes " => mul
-
-中文:
-定义 mul
-  签名: [乘法 α] (x : Holor α ds₁) (y : Holor α ds₂)
-  定义体: fun t =>
-  x t.take * y t.drop
-
-local infixl:70 " otimes " => mul
+--- 原说明 ---
+The tensor product of two holors.
 -/
 def mul [Mul α] (x : Holor α ds₁) (y : Holor α ds₂) : Holor α (ds₁ ++ ds₂) := fun t =>
   x t.take * y t.drop
 
-local infixl:70 " otimes " => mul
-
-/--
-theorem `cast_type` / 定理 `cast_type`
-
-English:
-theorem cast_type
-  given: (eq : ds₁ = ds₂) (a : Holor α ds₁)
-  proof: by
-  subst eq; rfl
-
-中文:
-定理 cast_type
-  条件: (eq : ds₁ = ds₂) (a : Holor α ds₁)
-  证明: by
-  subst eq; rfl
+local infixl:70 " ⊗ " => mul
+/-
+**Holor.cast_type** 是 Mathlib 中的一个定理，位于命名空间 `Holor`。
+形式化陈述：cast_type (eq : ds₁ = ds₂) (a : Holor α ds₁) : cast (congr_arg (Holor α) e
+q) a = fun t => a (cast (congr_arg HolorIndex eq.symm) t)
+参数：eq : ds₁ = ds₂；a : Holor α ds₁。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem cast_type (eq : ds₁ = ds₂) (a : Holor α ds₁) :
     cast (congr_arg (Holor α) eq) a = fun t => a (cast (congr_arg HolorIndex eq.symm) t) := by
   subst eq; rfl
 
-/--
-Definition of `assocRight` / `assocRight` 的定义
+/-- Right associator for `Holor` -/
+/-
+**Holor.assocRight** 是 Mathlib 中的一个定义，位于命名空间 `Holor`。
+形式化陈述：assocRight : Holor α (ds₁ ++ ds₂ ++ ds₃) -> Holor α (ds₁ ++ (ds₂ ++ ds₃))
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition assocRight
-  signature: : Holor α (ds₁ ++ ds₂ ++ ds₃) -> Holor α (ds₁ ++ (ds₂ ++ ds₃))
-  body: cast (congr_arg (Holor α) (append_assoc ds₁ ds₂ ds₃))
-
-中文:
-定义 assocRight
-  签名: : Holor α (ds₁ ++ ds₂ ++ ds₃) -> Holor α (ds₁ ++ (ds₂ ++ ds₃))
-  定义体: cast (congr_arg (Holor α) (append_assoc ds₁ ds₂ ds₃))
-
-Depends on / 依赖: append_assoc, congr_arg
+--- 原说明 ---
+Right associator for `Holor`
 -/
-def assocRight : Holor α (ds₁ ++ ds₂ ++ ds₃) -> Holor α (ds₁ ++ (ds₂ ++ ds₃)) :=
+def assocRight : Holor α (ds₁ ++ ds₂ ++ ds₃) → Holor α (ds₁ ++ (ds₂ ++ ds₃)) :=
   cast (congr_arg (Holor α) (append_assoc ds₁ ds₂ ds₃))
 
-/--
-Definition of `assocLeft` / `assocLeft` 的定义
+/-- Left associator for `Holor` -/
+/-
+**Holor.assocLeft** 是 Mathlib 中的一个定义，位于命名空间 `Holor`。
+形式化陈述：assocLeft : Holor α (ds₁ ++ (ds₂ ++ ds₃)) -> Holor α (ds₁ ++ ds₂ ++ ds₃)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition assocLeft
-  signature: : Holor α (ds₁ ++ (ds₂ ++ ds₃)) -> Holor α (ds₁ ++ ds₂ ++ ds₃)
-  body: cast (congr_arg (Holor α) (append_assoc ds₁ ds₂ ds₃).symm)
-
-中文:
-定义 assocLeft
-  签名: : Holor α (ds₁ ++ (ds₂ ++ ds₃)) -> Holor α (ds₁ ++ ds₂ ++ ds₃)
-  定义体: cast (congr_arg (Holor α) (append_assoc ds₁ ds₂ ds₃).symm)
-
-Depends on / 依赖: Or.inl, append_assoc, congr_arg, hs.imp
+--- 原说明 ---
+Left associator for `Holor`
 -/
-def assocLeft : Holor α (ds₁ ++ (ds₂ ++ ds₃)) -> Holor α (ds₁ ++ ds₂ ++ ds₃) :=
+def assocLeft : Holor α (ds₁ ++ (ds₂ ++ ds₃)) → Holor α (ds₁ ++ ds₂ ++ ds₃) :=
   cast (congr_arg (Holor α) (append_assoc ds₁ ds₂ ds₃).symm)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `mul_assoc0` / 定理 `mul_assoc0`
-
-English:
-theorem mul_assoc0
-  given: [Semigroup α] (x : Holor α ds₁) (y : Holor α ds₂) (z : Holor α ds₃)
-  proof: funext fun t : HolorIndex (ds₁ ++ ds₂ ++ ds₃) => by
-    rw [assocLeft]
-    unfold mul
-    rw [mul_assoc]; rw [← HolorIndex.take_take]; rw [← HolorIndex.drop_take]; rw [← HolorIndex.drop_drop]; rw [cast_type]
-    · rfl
-    rw [append_assoc]
-
-中文:
-定理 mul_assoc0
-  条件: [半群 α] (x : Holor α ds₁) (y : Holor α ds₂) (z : Holor α ds₃)
-  证明: funext fun t : HolorIndex (ds₁ ++ ds₂ ++ ds₃) => by
-    rw [assocLeft]
-    unfold mul
-    rw [mul_assoc]; rw [← HolorIndex.take_take]; rw [← HolorIndex.drop_take]; rw [← HolorIndex.drop_drop]; rw [cast_type]
-    · rfl
-    rw [append_assoc]
-
-Depends on / 依赖: HolorIndex, HolorIndex.drop_drop, HolorIndex.drop_take, HolorIndex.take_take, Or.inr, append_assoc, assocLeft, cast_type, drop_drop, drop_take, ht.imp, mul_assoc, take_take
+/-
+**Holor.mul_assoc0** 是 Mathlib 中的一个定理，位于命名空间 `Holor`。
+形式化陈述：mul_assoc0 [Semigroup α] (x : Holor α ds₁) (y : Holor α ds₂) (z : Holor α 
+ds₃) : x otimes y otimes z = (x otimes (y otimes z)).assocLeft
+参数：x : Holor α ds₁；y : Holor α ds₂；z : Holor α ds₃。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Holor.assocLeft.eq_1`：∀ {α : Type} {ds₁ ds₂ ds₃ : List ℕ}, Holor.assocLe
+ft = cast ⋯
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `HolorIndex.take_take`：∀ {ds₁ ds₂ ds₃ : List ℕ} (t : HolorIndex (ds₁ ++ d
+s₂ ++ ds₃)), t.assocRight.take = t.take.take
+· 使用定理 `HolorIndex.drop_take`：∀ {ds₁ ds₂ ds₃ : List ℕ} (t : HolorIndex (ds₁ ++ d
+s₂ ++ ds₃)), t.assocRight.drop.take = t.take.drop
+· 使用定理 `HolorIndex.drop_drop`：∀ {ds₁ ds₂ ds₃ : List ℕ} (t : HolorIndex (ds₁ ++ d
+s₂ ++ ds₃)), t.assocRight.drop.drop = t.drop
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `List.append_assoc`：∀ {α : Type u} (as bs cs : List α), as ++ bs ++ cs = 
+as ++ (bs ++ cs)
+· 使用定理 `Holor.cast_type`：cast_type (eq : ds₁ = ds₂) (a : Holor α ds₁) : cast (co
+ngr_arg (Holor α) eq) a = fun t => a (cast (congr_arg HolorIndex eq.symm) t)
 -/
 theorem mul_assoc0 [Semigroup α] (x : Holor α ds₁) (y : Holor α ds₂) (z : Holor α ds₃) :
-    x otimes y otimes z = (x otimes (y otimes z)).assocLeft :=
+    x ⊗ y ⊗ z = (x ⊗ (y ⊗ z)).assocLeft :=
   funext fun t : HolorIndex (ds₁ ++ ds₂ ++ ds₃) => by
     rw [assocLeft]
     unfold mul
-    rw [mul_assoc]; rw [← HolorIndex.take_take]; rw [← HolorIndex.drop_take]; rw [← HolorIndex.drop_drop]; rw [cast_type]
+    rw [mul_assoc, ← HolorIndex.take_take, ← HolorIndex.drop_take, ← HolorIndex.drop_drop,
+      cast_type]
     · rfl
     rw [append_assoc]
-
-/--
-theorem `mul_assoc` / 定理 `mul_assoc`
-
-English:
-theorem mul_assoc
-  given: [Semigroup α] (x : Holor α ds₁) (y : Holor α ds₂) (z : Holor α ds₃)
-  proof: by simp [cast_heq, mul_assoc0, assocLeft]
-
-中文:
-定理 mul_assoc
-  条件: [半群 α] (x : Holor α ds₁) (y : Holor α ds₂) (z : Holor α ds₃)
-  证明: by simp [cast_heq, mul_assoc0, assocLeft]
-
-Depends on / 依赖: assocLeft, cast_heq, mul_assoc0
+/-
+**Holor.mul_assoc** 是 Mathlib 中的一个定理，位于命名空间 `Holor`。
+形式化陈述：mul_assoc [Semigroup α] (x : Holor α ds₁) (y : Holor α ds₂) (z : Holor α d
+s₃) : mul (mul x y) z ≍ mul x (mul y z)
+参数：x : Holor α ds₁；y : Holor α ds₂；z : Holor α ds₃。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Holor.mul_assoc0`：mul_assoc0 [Semigroup α] (x : Holor α ds₁) (y : Holor 
+α ds₂) (z : Holor α ds₃) : x otimes y otimes z = (x otimes (y otimes z)).assocLe
+ft
 -/
 theorem mul_assoc [Semigroup α] (x : Holor α ds₁) (y : Holor α ds₂) (z : Holor α ds₃) :
     mul (mul x y) z ≍ mul x (mul y z) := by simp [cast_heq, mul_assoc0, assocLeft]
-
-/--
-theorem `mul_left_distrib` / 定理 `mul_left_distrib`
-
-English:
-theorem mul_left_distrib
-  given: [Distrib α] (x : Holor α ds₁) (y : Holor α ds₂) (z : Holor α ds₂)
-  proof: funext fun t => left_distrib (x t.take) (y t.drop) (z t.drop)
-
-中文:
-定理 mul_left_distrib
-  条件: [Distrib α] (x : Holor α ds₁) (y : Holor α ds₂) (z : Holor α ds₂)
-  证明: funext fun t => left_distrib (x t.take) (y t.drop) (z t.drop)
-
-Depends on / 依赖: left_distrib, t.drop, t.take
+/-
+**Holor.mul_left_distrib** 是 Mathlib 中的一个定理，位于命名空间 `Holor`。
+形式化陈述：mul_left_distrib [Distrib α] (x : Holor α ds₁) (y : Holor α ds₂) (z : Holo
+r α ds₂) : x otimes (y + z) = x otimes y + x otimes z
+参数：x : Holor α ds₁；y : Holor α ds₂；z : Holor α ds₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `left_distrib`：left_distrib [Mul R] [Add R] [LeftDistribClass R] (a b c :
+ R) : a * (b + c) = a * b + a * c
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
 -/
 theorem mul_left_distrib [Distrib α] (x : Holor α ds₁) (y : Holor α ds₂) (z : Holor α ds₂) :
-    x otimes (y + z) = x otimes y + x otimes z := funext fun t => left_distrib (x t.take) (y t.drop) (z t.drop)
-
-/--
-theorem `mul_right_distrib` / 定理 `mul_right_distrib`
-
-English:
-theorem mul_right_distrib
-  given: [Distrib α] (x : Holor α ds₁) (y : Holor α ds₁) (z : Holor α ds₂)
-  proof: funext fun t => add_mul (x t.take) (y t.take) (z t.drop)
-
-@[simp]
-nonrec theorem zero_mul {α : Type} [MulZeroClass α] (x : Holor α ds₂) : (0 : Holor α ds₁) otimes x = 0 :=
-  funext fun t => zero_mul (x (HolorIndex.drop t))
-
-@[simp]
-nonrec theorem mul_zero {α : Type} [MulZeroClass α] (x : Holor α ds₁) : x otimes (0 : Holor α ds₂) = 0 :=
-  funext fun t => mul_zero (x (HolorIndex.take t))
-
-中文:
-定理 mul_right_distrib
-  条件: [Distrib α] (x : Holor α ds₁) (y : Holor α ds₁) (z : Holor α ds₂)
-  证明: funext fun t => add_mul (x t.take) (y t.take) (z t.drop)
-
-@[simp]
-nonrec theorem zero_mul {α : Type} [MulZeroClass α] (x : Holor α ds₂) : (0 : Holor α ds₁) otimes x = 0 :=
-  funext fun t => zero_mul (x (HolorIndex.drop t))
-
-@[simp]
-nonrec theorem mul_zero {α : Type} [MulZeroClass α] (x : Holor α ds₁) : x otimes (0 : Holor α ds₂) = 0 :=
-  funext fun t => mul_zero (x (HolorIndex.take t))
-
-Depends on / 依赖: add_mul, t.drop, t.take
+    x ⊗ (y + z) = x ⊗ y + x ⊗ z := funext fun t => left_distrib (x t.take) (y t.drop) (z t.drop)
+/-
+**Holor.mul_right_distrib** 是 Mathlib 中的一个定理，位于命名空间 `Holor`。
+形式化陈述：mul_right_distrib [Distrib α] (x : Holor α ds₁) (y : Holor α ds₁) (z : Hol
+or α ds₂) : (x + y) otimes z = x otimes z + y otimes z
+参数：x : Holor α ds₁；y : Holor α ds₁；z : Holor α ds₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `add_mul`：add_mul {d : R} (_ : (a₁ : R) * b = c₁) (_ : a₂ * b = c₂) (_ : 
+c₁ + c₂ = d) : (a₁ + a₂) * b = d
+· 使用定理 `Distrib.rightDistribClass`：∀ (R : Type u_1) [inst : Distrib R], RightDis
+tribClass R
 -/
 theorem mul_right_distrib [Distrib α] (x : Holor α ds₁) (y : Holor α ds₁) (z : Holor α ds₂) :
-    (x + y) otimes z = x otimes z + y otimes z := funext fun t => add_mul (x t.take) (y t.take) (z t.drop)
+    (x + y) ⊗ z = x ⊗ z + y ⊗ z := funext fun t => add_mul (x t.take) (y t.take) (z t.drop)
 
 @[simp]
-nonrec theorem zero_mul {α : Type} [MulZeroClass α] (x : Holor α ds₂) : (0 : Holor α ds₁) otimes x = 0 :=
+nonrec theorem zero_mul {α : Type} [MulZeroClass α] (x : Holor α ds₂) : (0 : Holor α ds₁) ⊗ x = 0 :=
   funext fun t => zero_mul (x (HolorIndex.drop t))
 
 @[simp]
-nonrec theorem mul_zero {α : Type} [MulZeroClass α] (x : Holor α ds₁) : x otimes (0 : Holor α ds₂) = 0 :=
+nonrec theorem mul_zero {α : Type} [MulZeroClass α] (x : Holor α ds₁) : x ⊗ (0 : Holor α ds₂) = 0 :=
   funext fun t => mul_zero (x (HolorIndex.take t))
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `mul_scalar_mul` / 定理 `mul_scalar_mul`
-
-English:
-theorem mul_scalar_mul
-  given: [Mul α] (x : Holor α []) (y : Holor α ds)
-  proof: by
-  simp +unfoldPartialApp [mul, SMul.smul, HolorIndex.take, HolorIndex.drop,
-    HSMul.hSMul]
-
-中文:
-定理 mul_scalar_mul
-  条件: [乘法 α] (x : Holor α []) (y : Holor α ds)
-  证明: by
-  simp +unfoldPartialApp [mul, SMul.smul, HolorIndex.take, HolorIndex.drop,
-    HSMul.hSMul]
-
-Depends on / 依赖: HSMul.hSMul, HolorIndex, HolorIndex.drop, HolorIndex.take, SMul.smul, unfoldPartialApp
+/-
+**Holor.mul_scalar_mul** 是 Mathlib 中的一个定理，位于命名空间 `Holor`。
+形式化陈述：mul_scalar_mul [Mul α] (x : Holor α []) (y : Holor α ds) : x otimes y = x 
+⟨[], Forall₂.nil⟩ • y
+参数：x : Holor α []；y : Holor α ds。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `List.drop_zero`：∀ {α : Type u} {l : List α}, List.drop 0 l = l
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `Subtype.coe_eta`：coe_eta (a : { a // p a }) (h : p a) : mk (↑a) h = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem mul_scalar_mul [Mul α] (x : Holor α []) (y : Holor α ds) :
-    x otimes y = x ⟨[], Forall₂.nil⟩ • y := by
+    x ⊗ y = x ⟨[], Forall₂.nil⟩ • y := by
   simp +unfoldPartialApp [mul, SMul.smul, HolorIndex.take, HolorIndex.drop,
     HSMul.hSMul]
 
 -- holor slices
-/--
-Definition of `slice` / `slice` 的定义
+/-- A slice is a subholor consisting of all entries with initial index i. -/
+/-
+**Holor.slice** 是 Mathlib 中的一个定义，位于命名空间 `Holor`。
+形式化陈述：slice (x : Holor α (d :: ds)) (i : Nat) (h : i < d) : Holor α ds
+参数：x : Holor α (d :: ds)；i : Nat；h : i < d。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition slice
-  signature: (x : Holor α (d :: ds)) (i : Nat) (h : i < d)
-  body: fun is : HolorIndex ds =>
+--- 原说明 ---
+A slice is a subholor consisting of all entries with initial index i.
+-/
+def slice (x : Holor α (d :: ds)) (i : ℕ) (h : i < d) : Holor α ds := fun is : HolorIndex ds =>
   x ⟨i :: is.1, Forall₂.cons h is.2⟩
 
-中文:
-定义 slice
-  签名: (x : Holor α (d :: ds)) (i : 自然数) (h : i < d)
-  定义体: fun is : HolorIndex ds =>
-  x ⟨i :: is.1, Forall₂.cons h is.2⟩
+/-- The 1-dimensional "unit" holor with 1 in the `j`th position. -/
+/-
+**Holor.unitVec** 是 Mathlib 中的一个定义，位于命名空间 `Holor`。
+形式化陈述：unitVec [Monoid α] [AddMonoid α] (d : Nat) (j : Nat) : Holor α [d]
+参数：d : Nat；j : Nat。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-Depends on / 依赖: HolorIndex
+--- 原说明 ---
+The 1-dimensional "unit" holor with 1 in the `j`th position.
 -/
-def slice (x : Holor α (d :: ds)) (i : Nat) (h : i < d) : Holor α ds := fun is : HolorIndex ds =>
-  x ⟨i :: is.1, Forall₂.cons h is.2⟩
-
-/--
-Definition of `unitVec` / `unitVec` 的定义
-
-English:
-definition unitVec
-  signature: [Monoid α] [AddMonoid α] (d : Nat) (j : Nat)
-  body: fun ti =>
+def unitVec [Monoid α] [AddMonoid α] (d : ℕ) (j : ℕ) : Holor α [d] := fun ti =>
   if ti.1 = [j] then 1 else 0
-
-中文:
-定义 unitVec
-  签名: [幺半群 α] [加法幺半群 α] (d : 自然数) (j : 自然数)
-  定义体: fun ti =>
-  if ti.1 = [j] then 1 else 0
+/-
+**Holor.holor_index_cons_decomp** 是 Mathlib 中的一个定理，位于命名空间 `Holor`。
+形式化陈述：∀ {d : ℕ} {ds : List ℕ} (p : HolorIndex (d :: ds) → Prop) (t : HolorIndex 
+(d :: ds)),   (∀ (i : ℕ) (is : List ℕ) (h : ↑t = i :: is), p ⟨i :: is, ⋯⟩) → p t
+参数：p : HolorIndex (d :: ds) → Prop；t : HolorIndex (d :: ds)；∀ (i : ℕ) (is : List
+ ℕ) (h : ↑t = i :: is), p ⟨i :: is, ⋯⟩。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.forall₂_nil_left_iff`：forall₂_nil_left_iff {l} : Forall₂ R nil l ↔ 
+l = nil
+· 使用定理 `List.cons_ne_nil`：∀ {α : Type u_1} (a : α) (l : List α), a :: l ≠ []
 -/
-def unitVec [Monoid α] [AddMonoid α] (d : Nat) (j : Nat) : Holor α [d] := fun ti =>
-  if ti.1 = [j] then 1 else 0
-
-/--
-theorem `holor_index_cons_decomp` / 定理 `holor_index_cons_decomp`
-
-English:
-theorem holor_index_cons_decomp
-  given: (p : HolorIndex (d :: ds) -> Prop)
-
-中文:
-定理 holor_index_cons_decomp
-  条件: (p : HolorIndex (d :: ds) -> 命题)
--/
-theorem holor_index_cons_decomp (p : HolorIndex (d :: ds) -> Prop) :
-    forall t : HolorIndex (d :: ds),
-      (forall i is, forall h : t.1 = i :: is, p ⟨i :: is, by rw [← h]; exact t.2⟩) -> p t
+theorem holor_index_cons_decomp (p : HolorIndex (d :: ds) → Prop) :
+    ∀ t : HolorIndex (d :: ds),
+      (∀ i is, ∀ h : t.1 = i :: is, p ⟨i :: is, by rw [← h]; exact t.2⟩) → p t
   | ⟨[], hforall₂⟩, _ => absurd (forall₂_nil_left_iff.1 hforall₂) (cons_ne_nil d ds)
   | ⟨i :: is, _⟩, hp => hp i is rfl
 
-/--
-theorem `slice_eq` / 定理 `slice_eq`
+/-- Two holors are equal if all their slices are equal. -/
+/-
+**Holor.slice_eq** 是 Mathlib 中的一个定理，位于命名空间 `Holor`。
+形式化陈述：slice_eq (x : Holor α (d :: ds)) (y : Holor α (d :: ds)) (h : slice x = sl
+ice y) : x = y
+参数：x : Holor α (d :: ds)；y : Holor α (d :: ds)；h : slice x = slice y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Holor.holor_index_cons_decomp`：∀ {d : ℕ} {ds : List ℕ} (p : HolorIndex (
+d :: ds) → Prop) (t : HolorIndex (d :: ds)),   (∀ (i : ℕ) (is : List ℕ) (h : ↑t 
+= i :: is), p ⟨i ::…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `List.forall₂_cons`：∀ {α : Type u_1} {β : Type u_2} {R : α → β → Prop} {a
+ : α} {b : β} {l₁ : List α} {l₂ : List β},   List.Forall₂ R (a :: l₁) (b :: l₂) 
+↔ R a b…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
 
-English:
-theorem slice_eq
-  given: (x : Holor α (d :: ds)) (y : Holor α (d :: ds)) (h : slice x = slice y)
-  statement: x = y
-  proof: funext fun t : HolorIndex (d :: ds) =>
-    holor_index_cons_decomp (fun t => x t = y t) t fun i is hiis =>
-      have hiisdds : Forall₂ (· < ·) (i :: is) (d :: ds) := by rw [← hiis]; exact t.2
-      have hid : i < d := (forall₂_cons.1 hiisdds).1
-      have hisds : Forall₂ (· < ·) is ds := (forall₂_cons.1 hiisdds).2
-      calc
-        x ⟨i :: is, _⟩ = slice x i hid ⟨is, hisds⟩ := congr_arg x (Subtype.ext rfl)
-        _ = slice y i hid ⟨is, hisds⟩ := by rw [h]
-        _ = y ⟨i :: is, _⟩ := congr_arg y (Subtype.ext rfl)
-
-中文:
-定理 slice_eq
-  条件: (x : Holor α (d :: ds)) (y : Holor α (d :: ds)) (h : slice x = slice y)
-  结论: x = y
-  证明: funext fun t : HolorIndex (d :: ds) =>
-    holor_index_cons_decomp (fun t => x t = y t) t fun i is hiis =>
-      have hiisdds : Forall₂ (· < ·) (i :: is) (d :: ds) := by rw [← hiis]; exact t.2
-      have hid : i < d := (forall₂_cons.1 hiisdds).1
-      have hisds : Forall₂ (· < ·) is ds := (forall₂_cons.1 hiisdds).2
-      calc
-        x ⟨i :: is, _⟩ = slice x i hid ⟨is, hisds⟩ := congr_arg x (Subtype.ext rfl)
-        _ = slice y i hid ⟨is, hisds⟩ := by rw [h]
-        _ = y ⟨i :: is, _⟩ := congr_arg y (Subtype.ext rfl)
-
-Depends on / 依赖: HolorIndex, Subtype, Subtype.ext, congr_arg, hiisdds, holor_index_cons_decomp, nonempty_subtype
+--- 原说明 ---
+Two holors are equal if all their slices are equal.
 -/
 theorem slice_eq (x : Holor α (d :: ds)) (y : Holor α (d :: ds)) (h : slice x = slice y) : x = y :=
   funext fun t : HolorIndex (d :: ds) =>
@@ -735,147 +589,163 @@ theorem slice_eq (x : Holor α (d :: ds)) (y : Holor α (d :: ds)) (h : slice x 
         _ = y ⟨i :: is, _⟩ := congr_arg y (Subtype.ext rfl)
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `slice_unitVec_mul` / 定理 `slice_unitVec_mul`
-
-English:
-theorem slice_unitVec_mul
-  given: [Semiring α] {i : Nat} {j : Nat} (hid : i < d) (x : Holor α ds)
-  proof: funext fun t : HolorIndex ds =>
-    if h : i = j then by simp [slice, mul, HolorIndex.take, unitVec, HolorIndex.drop, h]
-    else by simp [slice, mul, HolorIndex.take, unitVec, HolorIndex.drop, h]; rfl
-
-中文:
-定理 slice_unitVec_mul
-  条件: [半环 α] {i : 自然数} {j : 自然数} (hid : i < d) (x : Holor α ds)
-  证明: funext fun t : HolorIndex ds =>
-    if h : i = j then by simp [slice, mul, HolorIndex.take, unitVec, HolorIndex.drop, h]
-    else by simp [slice, mul, HolorIndex.take, unitVec, HolorIndex.drop, h]; rfl
-
-Depends on / 依赖: HolorIndex, HolorIndex.drop, HolorIndex.take, unitVec
+/-
+**Holor.slice_unitVec_mul** 是 Mathlib 中的一个定理，位于命名空间 `Holor`。
+形式化陈述：slice_unitVec_mul [Semiring α] {i : Nat} {j : Nat} (hid : i < d) (x : Holo
+r α ds) : slice (unitVec d j otimes x) i hid = if i = j then x else 0
+参数：hid : i < d；x : Holor α ds。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Subtype.mk.congr_simp`：∀ {α : Sort u} {p : α → Prop} (val val_1 : α) (e_
+val : val = val_1) (property : p val), ⟨val, property⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `List.drop_succ_cons`：∀ {α : Type u} {a : α} {l : List α} {i : ℕ}, List.d
+rop (i + 1) (a :: l) = List.drop i l
+· 使用定理 `List.drop_zero`：∀ {α : Type u} {l : List α}, List.drop 0 l = l
+· 使用定理 `Subtype.coe_eta`：coe_eta (a : { a // p a }) (h : p a) : mk (↑a) h = a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `List.cons.injEq`：∀ {α : Type u} (head : α) (tail : List α) (head_1 : α) 
+(tail_1 : List α),   (head :: tail = head_1 :: tail_1) = (head = head_1 ∧ tail =
+ tail…
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
 -/
-theorem slice_unitVec_mul [Semiring α] {i : Nat} {j : Nat} (hid : i < d) (x : Holor α ds) :
-    slice (unitVec d j otimes x) i hid = if i = j then x else 0 :=
+theorem slice_unitVec_mul [Semiring α] {i : ℕ} {j : ℕ} (hid : i < d) (x : Holor α ds) :
+    slice (unitVec d j ⊗ x) i hid = if i = j then x else 0 :=
   funext fun t : HolorIndex ds =>
     if h : i = j then by simp [slice, mul, HolorIndex.take, unitVec, HolorIndex.drop, h]
     else by simp [slice, mul, HolorIndex.take, unitVec, HolorIndex.drop, h]; rfl
-
-/--
-theorem `slice_add` / 定理 `slice_add`
-
-English:
-theorem slice_add
-  given: [Add α] (i : Nat) (hid : i < d) (x : Holor α (d :: ds)) (y : Holor α (d :: ds))
-  proof: funext fun t => by simp [slice, (· + ·), Add.add]
-
-中文:
-定理 slice_add
-  条件: [加法 α] (i : 自然数) (hid : i < d) (x : Holor α (d :: ds)) (y : Holor α (d :: ds))
-  证明: funext fun t => by simp [slice, (· + ·), Add.add]
-
-Depends on / 依赖: Add.add
+/-
+**Holor.slice_add** 是 Mathlib 中的一个定理，位于命名空间 `Holor`。
+形式化陈述：slice_add [Add α] (i : Nat) (hid : i < d) (x : Holor α (d :: ds)) (y : Hol
+or α (d :: ds)) : slice x i hid + slice y i hid = slice (x + y) i hid
+参数：i : Nat；hid : i < d；x : Holor α (d :: ds)；y : Holor α (d :: ds)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem slice_add [Add α] (i : Nat) (hid : i < d) (x : Holor α (d :: ds)) (y : Holor α (d :: ds)) :
+theorem slice_add [Add α] (i : ℕ) (hid : i < d) (x : Holor α (d :: ds)) (y : Holor α (d :: ds)) :
     slice x i hid + slice y i hid = slice (x + y) i hid :=
   funext fun t => by simp [slice, (· + ·), Add.add]
-
-/--
-theorem `slice_zero` / 定理 `slice_zero`
-
-English:
-theorem slice_zero
-  given: [Zero α] (i : Nat) (hid : i < d)
-  statement: slice (0 : Holor α (d :: ds)) i hid = 0
-  proof: rfl
-
-中文:
-定理 slice_zero
-  条件: [零 α] (i : 自然数) (hid : i < d)
-  结论: slice (0 : Holor α (d :: ds)) i hid = 0
-  证明: rfl
+/-
+**Holor.slice_zero** 是 Mathlib 中的一个定理，位于命名空间 `Holor`。
+形式化陈述：slice_zero [Zero α] (i : Nat) (hid : i < d) : slice (0 : Holor α (d :: ds)
+) i hid = 0
+参数：i : Nat；hid : i < d。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem slice_zero [Zero α] (i : Nat) (hid : i < d) : slice (0 : Holor α (d :: ds)) i hid = 0 :=
+theorem slice_zero [Zero α] (i : ℕ) (hid : i < d) : slice (0 : Holor α (d :: ds)) i hid = 0 :=
   rfl
-
-/--
-theorem `slice_sum` / 定理 `slice_sum`
-
-English:
-theorem slice_sum
-  statement: [AddCommMonoid α] {β : Type} (i : Nat) (hid : i < d) (s : Finset β)
-  proof: by
-  let := Classical.decEq β
-  refine Finset.induction_on s ?_ ?_
-  · simp [slice_zero]
-  · intro _ _ h_not_in ih
-    rw [Finset.sum_insert h_not_in]; rw [ih]; rw [slice_add]; rw [Finset.sum_insert h_not_in]
-
-中文:
-定理 slice_sum
-  结论: [加法交换幺半群 α] {β : 类型} (i : 自然数) (hid : i < d) (s : 有限集 β)
-  证明: by
-  let := Classical.decEq β
-  refine Finset.induction_on s ?_ ?_
-  · simp [slice_zero]
-  · intro _ _ h_not_in ih
-    rw [Finset.sum_insert h_not_in]; rw [ih]; rw [slice_add]; rw [Finset.sum_insert h_not_in]
-
-Depends on / 依赖: Classical, Classical.decEq, Finset, Finset.induction_on, Finset.sum_insert, h_not_in, induction_on, slice_add, slice_zero, sum_insert
+/-
+**Holor.slice_sum** 是 Mathlib 中的一个定理，位于命名空间 `Holor`。
+形式化陈述：slice_sum [AddCommMonoid α] {β : Type} (i : Nat) (hid : i < d) (s : Finset
+ β) (f : β -> Holor α (d :: ds)) : (∑ x in s, slice (f x) i hid) = slice (∑ x in
+ s, f x) i hid
+参数：i : Nat；hid : i < d；s : Finset β；f : β -> Holor α (d :: ds)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.induction_on`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst :
+ DecidableEq α] (s : Finset α),   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → 
+motive s …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sum_insert`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι
+} [inst : AddCommMonoid M] {f : ι → M} [inst_1 : DecidableEq ι],   a ∉ s → ∑ x ∈
+ insert…
+· 使用定理 `Holor.slice_add`：slice_add [Add α] (i : Nat) (hid : i < d) (x : Holor α 
+(d :: ds)) (y : Holor α (d :: ds)) : slice x i hid + slice y i hid = slice (x + 
+y) i …
 -/
-theorem slice_sum [AddCommMonoid α] {β : Type} (i : Nat) (hid : i < d) (s : Finset β)
-    (f : β -> Holor α (d :: ds)) : (∑ x in s, slice (f x) i hid) = slice (∑ x in s, f x) i hid := by
+theorem slice_sum [AddCommMonoid α] {β : Type} (i : ℕ) (hid : i < d) (s : Finset β)
+    (f : β → Holor α (d :: ds)) : (∑ x ∈ s, slice (f x) i hid) = slice (∑ x ∈ s, f x) i hid := by
   let := Classical.decEq β
   refine Finset.induction_on s ?_ ?_
   · simp [slice_zero]
   · intro _ _ h_not_in ih
-    rw [Finset.sum_insert h_not_in]; rw [ih]; rw [slice_add]; rw [Finset.sum_insert h_not_in]
+    rw [Finset.sum_insert h_not_in, ih, slice_add, Finset.sum_insert h_not_in]
 
 set_option backward.isDefEq.respectTransparency false in
 /-- The original holor can be recovered from its slices by multiplying with unit vectors and
 summing up. -/
 @[simp]
-/--
-theorem `sum_unitVec_mul_slice` / 定理 `sum_unitVec_mul_slice`
+/-
+**Holor.sum_unitVec_mul_slice** 是 Mathlib 中的一个定理，位于命名空间 `Holor`。
+形式化陈述：sum_unitVec_mul_slice [Semiring α] (x : Holor α (d :: ds)) : (∑ i in (Fins
+et.range d).attach, unitVec d i otimes slice x i (Nat.succ_le_of_lt (Finset.mem_
+range.1 i.prop))) = x
+参数：x : Holor α (d :: ds)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Holor.slice_eq`：slice_eq (x : Holor α (d :: ds)) (y : Holor α (d :: ds))
+ (h : slice x = slice y) : x = y
+· 使用定理 `Nat.succ_le_of_lt`：∀ {n m : ℕ}, n < m → n.succ ≤ m
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_range`：mem_range : m in range n ↔ m < n
+· 使用定理 `Subtype.prop`：prop (x : Subtype p) : p x
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Holor.slice_sum`：slice_sum [AddCommMonoid α] {β : Type} (i : Nat) (hid :
+ i < d) (s : Finset β) (f : β -> Holor α (d :: ds)) : (∑ x in s, slice (f x) i h
+id) =…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `Holor.slice_unitVec_mul`：slice_unitVec_mul [Semiring α] {i : Nat} {j : N
+at} (hid : i < d) (x : Holor α ds) : slice (unitVec d j otimes x) i hid = if i =
+ j then x els…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Finset.sum_eq_single`：∀ {ι : Type u_1} {M : Type u_4} [inst : AddCommMon
+oid M] {s : Finset ι} {f : ι → M} (a : ι),   (∀ b ∈ s, b ≠ a → f b = 0) → (a ∉ s
+ → f a = 0…
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `ite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α)
+, c = False → (if c then a else b) = b
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Finset.mem_attach`：mem_attach (s : Finset α) : forall x, x in s.attach
+· 使用定理 `ite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} (a b : α),
+ c = True → (if c then a else b) = a
 
-English:
-theorem sum_unitVec_mul_slice
-  given: [Semiring α] (x : Holor α (d :: ds))
-  proof: by
-  apply slice_eq _ _ _
-  ext i hid
-  rw [← slice_sum]
-  simp only [slice_unitVec_mul hid]
-  rw [Finset.sum_eq_single (Subtype.mk i <| Finset.mem_range.2 hid)]
-  · simp
-  · intro (b : { x // x in Finset.range d }) (_ : b in (Finset.range d).attach) (hbi : b != ⟨i, _⟩)
-    have hbi' : i != b := by simpa only [Ne, Subtype.ext_iff, Subtype.coe_mk] using hbi.symm
-    simp [hbi']
-  · intro (hid' : Subtype.mk i _ ∉ Finset.attach (Finset.range d))
-    exfalso
-    exact absurd (Finset.mem_attach _ _) hid'
-
-中文:
-定理 sum_unitVec_mul_slice
-  条件: [半环 α] (x : Holor α (d :: ds))
-  证明: by
-  apply slice_eq _ _ _
-  ext i hid
-  rw [← slice_sum]
-  simp only [slice_unitVec_mul hid]
-  rw [Finset.sum_eq_single (Subtype.mk i <| Finset.mem_range.2 hid)]
-  · simp
-  · intro (b : { x // x in Finset.range d }) (_ : b in (Finset.range d).attach) (hbi : b != ⟨i, _⟩)
-    have hbi' : i != b := by simpa only [Ne, Subtype.ext_iff, Subtype.coe_mk] using hbi.symm
-    simp [hbi']
-  · intro (hid' : Subtype.mk i _ ∉ Finset.attach (Finset.range d))
-    exfalso
-    exact absurd (Finset.mem_attach _ _) hid'
-
-Depends on / 依赖: Finset, Finset.attach, Finset.mem_attach, Finset.mem_range, Finset.range, Finset.sum_eq_single, Subtype, Subtype.coe_mk, Subtype.ext_iff, Subtype.mk, absurd, attach, coe_mk, ext_iff, hbi.symm, mem_attach, mem_range, slice_eq, slice_sum, slice_unitVec_mul
+--- 原说明 ---
+The original holor can be recovered from its slices by multiplying with unit vec
+tors and
+summing up.
 -/
 theorem sum_unitVec_mul_slice [Semiring α] (x : Holor α (d :: ds)) :
-    (∑ i in (Finset.range d).attach,
-        unitVec d i otimes slice x i (Nat.succ_le_of_lt (Finset.mem_range.1 i.prop))) =
+    (∑ i ∈ (Finset.range d).attach,
+        unitVec d i ⊗ slice x i (Nat.succ_le_of_lt (Finset.mem_range.1 i.prop))) =
       x := by
   apply slice_eq _ _ _
   ext i hid
@@ -883,121 +753,108 @@ theorem sum_unitVec_mul_slice [Semiring α] (x : Holor α (d :: ds)) :
   simp only [slice_unitVec_mul hid]
   rw [Finset.sum_eq_single (Subtype.mk i <| Finset.mem_range.2 hid)]
   · simp
-  · intro (b : { x // x in Finset.range d }) (_ : b in (Finset.range d).attach) (hbi : b != ⟨i, _⟩)
-    have hbi' : i != b := by simpa only [Ne, Subtype.ext_iff, Subtype.coe_mk] using hbi.symm
+  · intro (b : { x // x ∈ Finset.range d }) (_ : b ∈ (Finset.range d).attach) (hbi : b ≠ ⟨i, _⟩)
+    have hbi' : i ≠ b := by simpa only [Ne, Subtype.ext_iff, Subtype.coe_mk] using hbi.symm
     simp [hbi']
   · intro (hid' : Subtype.mk i _ ∉ Finset.attach (Finset.range d))
     exfalso
     exact absurd (Finset.mem_attach _ _) hid'
 
 -- CP rank
-/--
-Inductive type `CPRankMax1` / 归纳类型 `CPRankMax1`
+/-- `CPRankMax1 x` means `x` has CP rank at most 1, that is,
+  it is the tensor product of 1-dimensional holors. -/
+/-
+**Holor.CPRankMax1** 是 Mathlib 中的一个归纳类型，位于命名空间 `Holor`。
+形式化陈述：{α : Type} → [Mul α] → {ds : List ℕ} → Holor α ds → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive CPRankMax1
-  parameters: [Mul α]
-  constructors (2):
-    - nil: (x : Holor α []) : CPRankMax1 x
-    - cons: {d : Nat} {ds : List Nat} (x : Holor α [d]) (y : Holor α ds) : CPRankMax1 y -> CPRankMax1 (x otimes y)
-
-中文:
-归纳类型 CPRankMax1
-  参数: [乘法 α]
-  构造子 (2 个):
-    - nil: (x : Holor α []) : CPRankMax1 x
-    - cons: {d : 自然数} {ds : 列表 自然数} (x : Holor α [d]) (y : Holor α ds) : CPRankMax1 y -> CPRankMax1 (x otimes y)
+--- 原说明 ---
+`CPRankMax1 x` means `x` has CP rank at most 1, that is,
+  it is the tensor product of 1-dimensional holors.
 -/
-inductive CPRankMax1 [Mul α] : forall {ds}, Holor α ds -> Prop
+inductive CPRankMax1 [Mul α] : ∀ {ds}, Holor α ds → Prop
   | nil (x : Holor α []) : CPRankMax1 x
-  | cons {d : Nat} {ds : List Nat} (x : Holor α [d]) (y : Holor α ds) :
-    CPRankMax1 y -> CPRankMax1 (x otimes y)
+  | cons {d : ℕ} {ds : List ℕ} (x : Holor α [d]) (y : Holor α ds) :
+    CPRankMax1 y → CPRankMax1 (x ⊗ y)
 
-/--
-Inductive type `CPRankMax` / 归纳类型 `CPRankMax`
+/-- `CPRankMax N x` means `x` has CP rank at most `N`, that is,
+  it can be written as the sum of N holors of rank at most 1. -/
+/-
+**Holor.CPRankMax** 是 Mathlib 中的一个归纳类型，位于命名空间 `Holor`。
+形式化陈述：{α : Type} → [Mul α] → [AddMonoid α] → ℕ → {ds : List ℕ} → Holor α ds → Pr
+op
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive CPRankMax
-  parameters: [Mul α] [AddMonoid α]
-  constructors (2):
-    - zero: {ds : List Nat} : CPRankMax 0 (0 : Holor α ds)
-    - succ: (n : Nat) {ds : List Nat} (x : Holor α ds) (y : Holor α ds) : CPRankMax1 x -> CPRankMax n y -> CPRankMax (n + 1) (x + y)
-
-中文:
-归纳类型 CPRankMax
-  参数: [乘法 α] [加法幺半群 α]
-  构造子 (2 个):
-    - zero: {ds : 列表 自然数} : CPRankMax 0 (0 : Holor α ds)
-    - succ: (n : 自然数) {ds : 列表 自然数} (x : Holor α ds) (y : Holor α ds) : CPRankMax1 x -> CPRankMax n y -> CPRankMax (n + 1) (x + y)
+--- 原说明 ---
+`CPRankMax N x` means `x` has CP rank at most `N`, that is,
+  it can be written as the sum of N holors of rank at most 1.
 -/
-inductive CPRankMax [Mul α] [AddMonoid α] : Nat -> forall {ds}, Holor α ds -> Prop
-  | zero {ds : List Nat} : CPRankMax 0 (0 : Holor α ds)
-  | succ (n : Nat) {ds : List Nat} (x : Holor α ds) (y : Holor α ds) :
-    CPRankMax1 x -> CPRankMax n y -> CPRankMax (n + 1) (x + y)
-
-/--
-theorem `cprankMax_nil` / 定理 `cprankMax_nil`
-
-English:
-theorem cprankMax_nil
-  given: [Mul α] [AddMonoid α] (x : Holor α nil)
-  statement: CPRankMax 1 x
-  proof: by
-  have h := CPRankMax.succ 0 x 0 (CPRankMax1.nil x) CPRankMax.zero
-  rwa [add_zero x, zero_add] at h
-
-中文:
-定理 cprankMax_nil
-  条件: [乘法 α] [加法幺半群 α] (x : Holor α nil)
-  结论: CPRankMax 1 x
-  证明: by
-  have h := CPRankMax.succ 0 x 0 (CPRankMax1.nil x) CPRankMax.zero
-  rwa [add_zero x, zero_add] at h
-
-Depends on / 依赖: CPRankMax, CPRankMax.succ, CPRankMax.zero, CPRankMax1, CPRankMax1.nil, add_zero, zero_add
+inductive CPRankMax [Mul α] [AddMonoid α] : ℕ → ∀ {ds}, Holor α ds → Prop
+  | zero {ds : List ℕ} : CPRankMax 0 (0 : Holor α ds)
+  | succ (n : ℕ) {ds : List ℕ} (x : Holor α ds) (y : Holor α ds) :
+    CPRankMax1 x → CPRankMax n y → CPRankMax (n + 1) (x + y)
+/-
+**Holor.cprankMax_nil** 是 Mathlib 中的一个定理，位于命名空间 `Holor`。
+形式化陈述：cprankMax_nil [Mul α] [AddMonoid α] (x : Holor α nil) : CPRankMax 1 x
+参数：x : Holor α nil。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
 -/
 theorem cprankMax_nil [Mul α] [AddMonoid α] (x : Holor α nil) : CPRankMax 1 x := by
   have h := CPRankMax.succ 0 x 0 (CPRankMax1.nil x) CPRankMax.zero
   rwa [add_zero x, zero_add] at h
-
-/--
-theorem `cprankMax_1` / 定理 `cprankMax_1`
-
-English:
-theorem cprankMax_1
-  given: [Mul α] [AddMonoid α] {x : Holor α ds} (h : CPRankMax1 x)
-  proof: by
-  have h' := CPRankMax.succ 0 x 0 h CPRankMax.zero
-  rwa [zero_add, add_zero] at h'
-
-中文:
-定理 cprankMax_1
-  条件: [乘法 α] [加法幺半群 α] {x : Holor α ds} (h : CPRankMax1 x)
-  证明: by
-  have h' := CPRankMax.succ 0 x 0 h CPRankMax.zero
-  rwa [zero_add, add_zero] at h'
-
-Depends on / 依赖: CPRankMax, CPRankMax.succ, CPRankMax.zero, add_zero, zero_add
+/-
+**Holor.cprankMax_1** 是 Mathlib 中的一个定理，位于命名空间 `Holor`。
+形式化陈述：cprankMax_1 [Mul α] [AddMonoid α] {x : Holor α ds} (h : CPRankMax1 x) : CP
+RankMax 1 x
+参数：h : CPRankMax1 x。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
 -/
 theorem cprankMax_1 [Mul α] [AddMonoid α] {x : Holor α ds} (h : CPRankMax1 x) :
     CPRankMax 1 x := by
   have h' := CPRankMax.succ 0 x 0 h CPRankMax.zero
   rwa [zero_add, add_zero] at h'
-
-/--
-theorem `cprankMax_add` / 定理 `cprankMax_add`
-
-English:
-theorem cprankMax_add
-  given: [Mul α] [AddMonoid α]
-
-中文:
-定理 cprankMax_add
-  条件: [乘法 α] [加法幺半群 α]
+/-
+**Holor.cprankMax_add** 是 Mathlib 中的一个定理，位于命名空间 `Holor`。
+形式化陈述：∀ {α : Type} {ds : List ℕ} [inst : Mul α] [inst_1 : AddMonoid α] {m n : ℕ}
+ {x y : Holor α ds},   Holor.CPRankMax m x → Holor.CPRankMax n y → Holor.CPRankM
+ax (m + n) (x + y)
+参数：m + n；x + y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Holor.CPRankMax.brecOn`：∀ {α : Type} [inst : Mul α] [inst_1 : AddMonoid 
+α]   {motive : (a : ℕ) → {ds : List ℕ} → (a_1 : Holor α ds) → Holor.CPRankMax a 
+a_1 → Prop} …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `add_left_comm`：∀ {G : Type u_3} [inst : AddCommSemigroup G] (a b c : G),
+ a + (b + c) = b + (a + c)
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
 theorem cprankMax_add [Mul α] [AddMonoid α] :
-    forall {m : Nat} {n : Nat} {x : Holor α ds} {y : Holor α ds},
-      CPRankMax m x -> CPRankMax n y -> CPRankMax (m + n) (x + y)
+    ∀ {m : ℕ} {n : ℕ} {x : Holor α ds} {y : Holor α ds},
+      CPRankMax m x → CPRankMax n y → CPRankMax (m + n) (x + y)
   | 0, n, x, y, hx, hy => by
     match hx with
     | CPRankMax.zero => simp only [zero_add, hy]
@@ -1009,19 +866,33 @@ theorem cprankMax_add [Mul α] [AddMonoid α] :
     · exact cprankMax_add hx₂ hy
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `cprankMax_mul` / 定理 `cprankMax_mul`
-
-English:
-theorem cprankMax_mul
-  given: [NonUnitalNonAssocSemiring α]
-
-中文:
-定理 cprankMax_mul
-  条件: [非幺非结合半环 α]
+/-
+**Holor.cprankMax_mul** 是 Mathlib 中的一个定理，位于命名空间 `Holor`。
+形式化陈述：∀ {α : Type} {d : ℕ} {ds : List ℕ} [inst : NonUnitalNonAssocSemiring α] (n
+ : ℕ) (x : Holor α [d]) (y : Holor α ds),   Holor.CPRankMax n y → Holor.CPRankMa
+x n (x.mul y)
+参数：n : ℕ；x : Holor α [d]；y : Holor α ds；x.mul y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Holor.CPRankMax.brecOn`：∀ {α : Type} [inst : Mul α] [inst_1 : AddMonoid 
+α]   {motive : (a : ℕ) → {ds : List ℕ} → (a_1 : Holor α ds) → Holor.CPRankMax a 
+a_1 → Prop} …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Holor.mul_zero`：∀ {ds₁ ds₂ : List ℕ} {α : Type} [inst : MulZeroClass α] 
+(x : Holor α ds₁), x.mul 0 = 0
+· 使用定理 `Holor.mul_left_distrib`：mul_left_distrib [Distrib α] (x : Holor α ds₁) (
+y : Holor α ds₂) (z : Holor α ds₂) : x otimes (y + z) = x otimes y + x otimes z
+· 使用定理 `Nat.add_comm`：∀ (n m : ℕ), n + m = m + n
+· 使用定理 `Holor.cprankMax_add`：∀ {α : Type} {ds : List ℕ} [inst : Mul α] [inst_1 :
+ AddMonoid α] {m n : ℕ} {x y : Holor α ds},   Holor.CPRankMax m x → Holor.CPRank
+Max n y →…
+· 使用定理 `Holor.cprankMax_1`：cprankMax_1 [Mul α] [AddMonoid α] {x : Holor α ds} (h
+ : CPRankMax1 x) : CPRankMax 1 x
 -/
 theorem cprankMax_mul [NonUnitalNonAssocSemiring α] :
-    forall (n : Nat) (x : Holor α [d]) (y : Holor α ds), CPRankMax n y -> CPRankMax n (x otimes y)
+    ∀ (n : ℕ) (x : Holor α [d]) (y : Holor α ds), CPRankMax n y → CPRankMax n (x ⊗ y)
   | 0, x, _, CPRankMax.zero => by simp [mul_zero x, CPRankMax.zero]
   | n + 1, x, _, CPRankMax.succ _ y₁ y₂ hy₁ hy₂ => by
     rw [mul_left_distrib]
@@ -1029,40 +900,50 @@ theorem cprankMax_mul [NonUnitalNonAssocSemiring α] :
     apply cprankMax_add
     · exact cprankMax_1 (CPRankMax1.cons _ _ hy₁)
     · exact cprankMax_mul _ x y₂ hy₂
-
-/--
-theorem `cprankMax_sum` / 定理 `cprankMax_sum`
-
-English:
-theorem cprankMax_sum
-  statement: [NonUnitalNonAssocSemiring α] {β} {n : Nat} (s : Finset β)
-  proof: letI := Classical.decEq β
-  Finset.induction_on s (by simp [CPRankMax.zero])
-    (by
-      intro x s (h_x_notin_s : x ∉ s) ih h_cprank
-      simp only [Finset.sum_insert h_x_notin_s, Finset.card_insert_of_notMem h_x_notin_s]
-      rw [Nat.right_distrib]
-      simp only [Nat.one_mul, Nat.add_comm]
-      have ih' : CPRankMax (Finset.card s * n) (∑ x in s, f x) := by grind
-      exact cprankMax_add (h_cprank x (Finset.mem_insert_self x s)) ih')
-
-中文:
-定理 cprankMax_sum
-  结论: [非幺非结合半环 α] {β} {n : 自然数} (s : 有限集 β)
-  证明: letI := Classical.decEq β
-  Finset.induction_on s (by simp [CPRankMax.zero])
-    (by
-      intro x s (h_x_notin_s : x ∉ s) ih h_cprank
-      simp only [Finset.sum_insert h_x_notin_s, Finset.card_insert_of_notMem h_x_notin_s]
-      rw [Nat.right_distrib]
-      simp only [Nat.one_mul, Nat.add_comm]
-      have ih' : CPRankMax (Finset.card s * n) (∑ x in s, f x) := by grind
-      exact cprankMax_add (h_cprank x (Finset.mem_insert_self x s)) ih')
-
-Depends on / 依赖: CPRankMax, CPRankMax.zero, Classical, Classical.decEq, Finset, Finset.card, Finset.card_insert_of_notMem, Finset.induction_on, Finset.mem_insert_self, Finset.sum_insert, Nat.add_comm, Nat.one_mul, Nat.right_distrib, add_comm, card_insert_of_notMem, cprankMax_add, h_cprank, h_x_notin_s, induction_on, mem_insert_self
+/-
+**Holor.cprankMax_sum** 是 Mathlib 中的一个定理，位于命名空间 `Holor`。
+形式化陈述：cprankMax_sum [NonUnitalNonAssocSemiring α] {β} {n : Nat} (s : Finset β) (
+f : β -> Holor α ds) : (forall x in s, CPRankMax n (f x)) -> CPRankMax (s.card *
+ n) (∑ x in s, f x)
+参数：s : Finset β；f : β -> Holor α ds。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.induction_on`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst :
+ DecidableEq α] (s : Finset α),   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → 
+motive s …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.zero_mul`：∀ (n : ℕ), 0 * n = 0
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Finset.card_insert_of_notMem`：card_insert_of_notMem (h : a ∉ s) : #(inse
+rt a s) = #s + 1
+· 使用定理 `Finset.sum_insert`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι
+} [inst : AddCommMonoid M] {f : ι → M} [inst_1 : DecidableEq ι],   a ∉ s → ∑ x ∈
+ insert…
+· 使用定理 `Nat.right_distrib`：∀ (n m k : ℕ), (n + m) * k = n * k + m * k
+· 使用定理 `Nat.one_mul`：∀ (n : ℕ), 1 * n = n
+· 使用定理 `Nat.add_comm`：∀ (n m : ℕ), n + m = m + n
+· 使用定理 `Holor.cprankMax_add`：∀ {α : Type} {ds : List ℕ} [inst : Mul α] [inst_1 :
+ AddMonoid α] {m n : ℕ} {x y : Holor α ds},   Holor.CPRankMax m x → Holor.CPRank
+Max n y →…
+· 使用定理 `Finset.mem_insert_self`：mem_insert_self (a : α) (s : Finset α) : a in in
+sert a s
 -/
-theorem cprankMax_sum [NonUnitalNonAssocSemiring α] {β} {n : Nat} (s : Finset β)
-    (f : β -> Holor α ds) : (forall x in s, CPRankMax n (f x)) -> CPRankMax (s.card * n) (∑ x in s, f x) :=
+theorem cprankMax_sum [NonUnitalNonAssocSemiring α] {β} {n : ℕ} (s : Finset β)
+    (f : β → Holor α ds) : (∀ x ∈ s, CPRankMax n (f x)) → CPRankMax (s.card * n) (∑ x ∈ s, f x) :=
   letI := Classical.decEq β
   Finset.induction_on s (by simp [CPRankMax.zero])
     (by
@@ -1070,121 +951,71 @@ theorem cprankMax_sum [NonUnitalNonAssocSemiring α] {β} {n : Nat} (s : Finset 
       simp only [Finset.sum_insert h_x_notin_s, Finset.card_insert_of_notMem h_x_notin_s]
       rw [Nat.right_distrib]
       simp only [Nat.one_mul, Nat.add_comm]
-      have ih' : CPRankMax (Finset.card s * n) (∑ x in s, f x) := by grind
+      have ih' : CPRankMax (Finset.card s * n) (∑ x ∈ s, f x) := by grind
       exact cprankMax_add (h_cprank x (Finset.mem_insert_self x s)) ih')
-
-/--
-theorem `cprankMax_upper_bound` / 定理 `cprankMax_upper_bound`
-
-English:
-theorem cprankMax_upper_bound
-  given: [Semiring α]
-  statement: forall {ds}, forall x : Holor α ds, CPRankMax ds.prod x
-  proof: fun i => cprankMax_mul _ _ _ (cprankMax_upper_bound (slice x i.1 (mem_range.1 i.2)))
-    have h_dds_prod : (List.cons d ds).prod = Finset.card (Finset.range d) * prod ds := by
-      simp [Finset.card_range]
-    have :
-      CPRankMax (Finset.card (Finset.attach (Finset.range d)) * prod ds)
-        (∑ i in Finset.attach (Finset.range d),
-          unitVec d i.val otimes slice x i.val (mem_range.1 i.2)) :=
-      cprankMax_sum (Finset.range d).attach _ fun i _ => h_summands i
-    have h_cprankMax_sum :
-      CPRankMax (Finset.card (Finset.range d) * prod ds)
-        (∑ i in Finset.attach (Finset.range d),
-          unitVec d i.val otimes slice x i.val (mem_range.1 i.2)) := by rwa [Finset.card_attach] at this
-    rw [← sum_unitVec_mul_slice x]
-    rw [h_dds_prod]
-    exact h_cprankMax_sum
-
-中文:
-定理 cprankMax_upper_bound
-  条件: [半环 α]
-  结论: 对任意 {ds}, 对任意 x : Holor α ds, CPRankMax ds.乘积 x
-  证明: fun i => cprankMax_mul _ _ _ (cprankMax_upper_bound (slice x i.1 (mem_range.1 i.2)))
-    have h_dds_prod : (List.cons d ds).prod = Finset.card (Finset.range d) * prod ds := by
-      simp [Finset.card_range]
-    have :
-      CPRankMax (Finset.card (Finset.attach (Finset.range d)) * prod ds)
-        (∑ i in Finset.attach (Finset.range d),
-          unitVec d i.val otimes slice x i.val (mem_range.1 i.2)) :=
-      cprankMax_sum (Finset.range d).attach _ fun i _ => h_summands i
-    have h_cprankMax_sum :
-      CPRankMax (Finset.card (Finset.range d) * prod ds)
-        (∑ i in Finset.attach (Finset.range d),
-          unitVec d i.val otimes slice x i.val (mem_range.1 i.2)) := by rwa [Finset.card_attach] at this
-    rw [← sum_unitVec_mul_slice x]
-    rw [h_dds_prod]
-    exact h_cprankMax_sum
-
-Depends on / 依赖: CPRankMax, Finset, Finset.attach, Finset.card, Finset.card_range, Finset.range, List.cons, attach, card_range, cprankMax_mul, cprankMax_sum, cprankMax_upper_bound, h_cprankMax_sum, h_dds_prod, h_summands, i.val, mem_range, otimes, unitVec
+/-
+**Holor.cprankMax_upper_bound** 是 Mathlib 中的一个定理，位于命名空间 `Holor`。
+形式化陈述：cprankMax_upper_bound [Semiring α] : forall {ds}, forall x : Holor α ds, C
+PRankMax ds.prod x | [], x => cprankMax_nil x | d :: ds, x => by have h_summands
+ : forall i : { x // x in Finset.range d }, CPRankMax ds.prod (unitVec d i.1 oti
+mes slice x i.1 (mem_range.1 i.2))
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem cprankMax_upper_bound [Semiring α] : forall {ds}, forall x : Holor α ds, CPRankMax ds.prod x
+theorem cprankMax_upper_bound [Semiring α] : ∀ {ds}, ∀ x : Holor α ds, CPRankMax ds.prod x
   | [], x => cprankMax_nil x
   | d :: ds, x => by
     have h_summands :
-      forall i : { x // x in Finset.range d },
-        CPRankMax ds.prod (unitVec d i.1 otimes slice x i.1 (mem_range.1 i.2)) :=
+      ∀ i : { x // x ∈ Finset.range d },
+        CPRankMax ds.prod (unitVec d i.1 ⊗ slice x i.1 (mem_range.1 i.2)) :=
       fun i => cprankMax_mul _ _ _ (cprankMax_upper_bound (slice x i.1 (mem_range.1 i.2)))
     have h_dds_prod : (List.cons d ds).prod = Finset.card (Finset.range d) * prod ds := by
       simp [Finset.card_range]
     have :
       CPRankMax (Finset.card (Finset.attach (Finset.range d)) * prod ds)
-        (∑ i in Finset.attach (Finset.range d),
-          unitVec d i.val otimes slice x i.val (mem_range.1 i.2)) :=
+        (∑ i ∈ Finset.attach (Finset.range d),
+          unitVec d i.val ⊗ slice x i.val (mem_range.1 i.2)) :=
       cprankMax_sum (Finset.range d).attach _ fun i _ => h_summands i
     have h_cprankMax_sum :
       CPRankMax (Finset.card (Finset.range d) * prod ds)
-        (∑ i in Finset.attach (Finset.range d),
-          unitVec d i.val otimes slice x i.val (mem_range.1 i.2)) := by rwa [Finset.card_attach] at this
+        (∑ i ∈ Finset.attach (Finset.range d),
+          unitVec d i.val ⊗ slice x i.val (mem_range.1 i.2)) := by rwa [Finset.card_attach] at this
     rw [← sum_unitVec_mul_slice x]
     rw [h_dds_prod]
     exact h_cprankMax_sum
 
-/--
-Definition of `cprank` / `cprank` 的定义
+/-- The CP rank of a holor `x`: the smallest N such that
+  `x` can be written as the sum of N holors of rank at most 1. -/
+/-
+**Holor.cprank** 是 Mathlib 中的一个定义，位于命名空间 `Holor`。
+形式化陈述：cprank [Ring α] (x : Holor α ds) : Nat
+参数：x : Holor α ds。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cprank
-  signature: [Ring α] (x : Holor α ds)
-  body: @Nat.find (fun n => CPRankMax n x) (Classical.decPred _) ⟨ds.prod, cprankMax_upper_bound x⟩
-
-中文:
-定义 cprank
-  签名: [环 α] (x : Holor α ds)
-  定义体: @Nat.find (fun n => CPRankMax n x) (Classical.decPred _) ⟨ds.prod, cprankMax_upper_bound x⟩
-
-Depends on / 依赖: CPRankMax, Classical, Classical.decPred, Nat.find, cprankMax_upper_bound, decPred, ds.prod
+--- 原说明 ---
+The CP rank of a holor `x`: the smallest N such that
+  `x` can be written as the sum of N holors of rank at most 1.
 -/
 noncomputable def cprank [Ring α] (x : Holor α ds) : Nat :=
   @Nat.find (fun n => CPRankMax n x) (Classical.decPred _) ⟨ds.prod, cprankMax_upper_bound x⟩
-
-/--
-theorem `cprank_upper_bound` / 定理 `cprank_upper_bound`
-
-English:
-theorem cprank_upper_bound
-  given: [Ring α]
-  statement: forall {ds}, forall x : Holor α ds, cprank x <= ds.prod
-  proof: fun {ds} x =>
-  letI := Classical.decPred fun n : Nat => CPRankMax n x
-  Nat.find_min' ⟨ds.prod, show (fun n => CPRankMax n x) ds.prod from cprankMax_upper_bound x⟩
-    (cprankMax_upper_bound x)
-
-中文:
-定理 cprank_upper_bound
-  条件: [环 α]
-  结论: 对任意 {ds}, 对任意 x : Holor α ds, cprank x <= ds.乘积
-  证明: fun {ds} x =>
-  letI := Classical.decPred fun n : Nat => CPRankMax n x
-  Nat.find_min' ⟨ds.prod, show (fun n => CPRankMax n x) ds.prod from cprankMax_upper_bound x⟩
-    (cprankMax_upper_bound x)
-
-Depends on / 依赖: CPRankMax, Classical, Classical.decPred, Nat.find_min, cprankMax_upper_bound, decPred, ds.prod, find_min
+/-
+**Holor.cprank_upper_bound** 是 Mathlib 中的一个定理，位于命名空间 `Holor`。
+形式化陈述：cprank_upper_bound [Ring α] : forall {ds}, forall x : Holor α ds, cprank x
+ <= ds.prod
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.find_min'`：∀ {p : ℕ → Prop} [inst : DecidablePred p] (H : ∃ n, p n) 
+{m : ℕ}, p m → Nat.find H ≤ m
+· 使用定理 `Holor.cprankMax_upper_bound`：cprankMax_upper_bound [Semiring α] : forall
+ {ds}, forall x : Holor α ds, CPRankMax ds.prod x | [], x => cprankMax_nil x | d
+ :: ds, x => by h…
 -/
-theorem cprank_upper_bound [Ring α] : forall {ds}, forall x : Holor α ds, cprank x <= ds.prod :=
+theorem cprank_upper_bound [Ring α] : ∀ {ds}, ∀ x : Holor α ds, cprank x ≤ ds.prod :=
   fun {ds} x =>
-  letI := Classical.decPred fun n : Nat => CPRankMax n x
+  letI := Classical.decPred fun n : ℕ => CPRankMax n x
   Nat.find_min' ⟨ds.prod, show (fun n => CPRankMax n x) ds.prod from cprankMax_upper_bound x⟩
     (cprankMax_upper_bound x)
 
 end Holor
+

@@ -42,123 +42,113 @@ section
 variable (X Y : C)
 variable (M)
 
-/--
-Definition of `HasSmallLocalizedShiftedHom` / `HasSmallLocalizedShiftedHom` 的定义
+/-- Given objects `X` and `Y` in a category `C`, this is the property that
+all the types of morphisms from `X⟦a⟧` to `Y⟦b⟧` are `w`-small
+in the localized category with respect to a class of morphisms `W`. -/
+/-
+**CategoryTheory.Localization.HasSmallLocalizedShiftedHom** 是 Mathlib 中的一个缩写定义，位
+于命名空间 `CategoryTheory.Localization`。
+形式化陈述：HasSmallLocalizedShiftedHom : Prop
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HasSmallLocalizedShiftedHom
-  signature: : Prop
-  body: forall (a b : M), HasSmallLocalizedHom.{w} W (X⟦a⟧) (Y⟦b⟧)
-
-中文:
-缩写 HasSmallLocalizedShiftedHom
-  签名: : 命题
-  定义体: forall (a b : M), HasSmallLocalizedHom.{w} W (X⟦a⟧) (Y⟦b⟧)
-
-Depends on / 依赖: HasSmallLocalizedHom
+--- 原说明 ---
+Given objects `X` and `Y` in a category `C`, this is the property that
+all the types of morphisms from `X⟦a⟧` to `Y⟦b⟧` are `w`-small
+in the localized category with respect to a class of morphisms `W`.
 -/
 abbrev HasSmallLocalizedShiftedHom : Prop :=
-  forall (a b : M), HasSmallLocalizedHom.{w} W (X⟦a⟧) (Y⟦b⟧)
+  ∀ (a b : M), HasSmallLocalizedHom.{w} W (X⟦a⟧) (Y⟦b⟧)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `hasSmallLocalizedShiftedHom_iff` / 引理 `hasSmallLocalizedShiftedHom_iff`
-
-English:
-lemma hasSmallLocalizedShiftedHom_iff
-  proof: by
-  dsimp [HasSmallLocalizedShiftedHom]
-  have eq := fun (a b : M) => small_congr.{w}
-    (Iso.homCongr ((L.commShiftIso a).app X) ((L.commShiftIso b).app Y))
-  dsimp at eq
-  simp only [hasSmallLocalizedHom_iff _ L, eq]
-
-中文:
-引理 hasSmallLocalizedShiftedHom_iff
-  证明: by
-  dsimp [HasSmallLocalizedShiftedHom]
-  have eq := fun (a b : M) => small_congr.{w}
-    (Iso.homCongr ((L.commShiftIso a).app X) ((L.commShiftIso b).app Y))
-  dsimp at eq
-  simp only [hasSmallLocalizedHom_iff _ L, eq]
-
-Depends on / 依赖: HasSmallLocalizedShiftedHom, Iso.homCongr, L.commShiftIso, commShiftIso, hasSmallLocalizedHom_iff, homCongr, small_congr
+/-
+**CategoryTheory.Localization.hasSmallLocalizedShiftedHom_iff** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.Localization`。
+形式化陈述：hasSmallLocalizedShiftedHom_iff (L : C ⥤ D) [L.IsLocalization W] [L.CommSh
+ift M] (X Y : C) : HasSmallLocalizedShiftedHom.{w} W M X Y ↔ forall (a b : M), S
+mall.{w} ((L.obj X)⟦a⟧ ⟶ (L.obj Y)⟦b⟧)
+参数：L : C ⥤ D；X Y : C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `small_congr`：small_congr {α : Type*} {β : Type*} (e : α ≃ β) : Small.{w}
+ α ↔ Small.{w} β
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用引理 `CategoryTheory.Localization.hasSmallLocalizedHom_iff`：hasSmallLocalizedH
+om_iff : HasSmallLocalizedHom.{w} W X Y ↔ Small.{w} (L.obj X ⟶ L.obj Y)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma hasSmallLocalizedShiftedHom_iff
     (L : C ⥤ D) [L.IsLocalization W] [L.CommShift M] (X Y : C) :
     HasSmallLocalizedShiftedHom.{w} W M X Y ↔
-      forall (a b : M), Small.{w} ((L.obj X)⟦a⟧ ⟶ (L.obj Y)⟦b⟧) := by
+      ∀ (a b : M), Small.{w} ((L.obj X)⟦a⟧ ⟶ (L.obj Y)⟦b⟧) := by
   dsimp [HasSmallLocalizedShiftedHom]
-  have eq := fun (a b : M) => small_congr.{w}
+  have eq := fun (a b : M) ↦ small_congr.{w}
     (Iso.homCongr ((L.commShiftIso a).app X) ((L.commShiftIso b).app Y))
   dsimp at eq
   simp only [hasSmallLocalizedHom_iff _ L, eq]
 
 variable {Y} in
-/--
-lemma `hasSmallLocalizedShiftedHom_iff_target` / 引理 `hasSmallLocalizedShiftedHom_iff_target`
-
-English:
-lemma hasSmallLocalizedShiftedHom_iff_target
-  statement: [W.IsCompatibleWithShift M]
-  proof: forall_congr' (fun a => forall_congr' (fun b =>
-    hasSmallLocalizedHom_iff_target W (X⟦a⟧) (f⟦b⟧') (W.shift hf b)))
-
-中文:
-引理 hasSmallLocalizedShiftedHom_iff_target
-  结论: [W.是余mpatibleWithShift M]
-  证明: forall_congr' (fun a => forall_congr' (fun b =>
-    hasSmallLocalizedHom_iff_target W (X⟦a⟧) (f⟦b⟧') (W.shift hf b)))
-
-Depends on / 依赖: W.shift, forall_congr, hasSmallLocalizedHom_iff_target
+/-
+**CategoryTheory.Localization.hasSmallLocalizedShiftedHom_iff_target** 是 Mathlib
+ 中的一个引理，位于命名空间 `CategoryTheory.Localization`。
+形式化陈述：hasSmallLocalizedShiftedHom_iff_target [W.IsCompatibleWithShift M] {Y' : C
+} (f : Y ⟶ Y') (hf : W f) : HasSmallLocalizedShiftedHom.{w} W M X Y ↔ HasSmallLo
+calizedShiftedHom.{w} W M X Y'
+参数：f : Y ⟶ Y'；hf : W f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用引理 `CategoryTheory.Localization.hasSmallLocalizedHom_iff_target`：hasSmallLoc
+alizedHom_iff_target {Y Y' : C} (f : Y ⟶ Y') (hf : W f) : HasSmallLocalizedHom.{
+w} W X Y ↔ HasSmallLocalizedHom.{w} W X Y'
+· 使用引理 `CategoryTheory.MorphismProperty.shift`：shift {X Y : C} {f : X ⟶ Y} (hf :
+ W f) (a : A) : W (f⟦a⟧')
 -/
 lemma hasSmallLocalizedShiftedHom_iff_target [W.IsCompatibleWithShift M]
     {Y' : C} (f : Y ⟶ Y') (hf : W f) :
     HasSmallLocalizedShiftedHom.{w} W M X Y ↔ HasSmallLocalizedShiftedHom.{w} W M X Y' :=
-  forall_congr' (fun a => forall_congr' (fun b =>
+  forall_congr' (fun a ↦ forall_congr' (fun b ↦
     hasSmallLocalizedHom_iff_target W (X⟦a⟧) (f⟦b⟧') (W.shift hf b)))
 
 variable {X} in
-/--
-lemma `hasSmallLocalizedShiftedHom_iff_source` / 引理 `hasSmallLocalizedShiftedHom_iff_source`
-
-English:
-lemma hasSmallLocalizedShiftedHom_iff_source
-  statement: [W.IsCompatibleWithShift M]
-  proof: forall_congr' (fun a => forall_congr' (fun b =>
-    hasSmallLocalizedHom_iff_source W (f⟦a⟧') (W.shift hf a) (Y⟦b⟧)))
-
-中文:
-引理 hasSmallLocalizedShiftedHom_iff_source
-  结论: [W.是余mpatibleWithShift M]
-  证明: forall_congr' (fun a => forall_congr' (fun b =>
-    hasSmallLocalizedHom_iff_source W (f⟦a⟧') (W.shift hf a) (Y⟦b⟧)))
-
-Depends on / 依赖: W.shift, forall_congr, hasSmallLocalizedHom_iff_source
+/-
+**CategoryTheory.Localization.hasSmallLocalizedShiftedHom_iff_source** 是 Mathlib
+ 中的一个引理，位于命名空间 `CategoryTheory.Localization`。
+形式化陈述：hasSmallLocalizedShiftedHom_iff_source [W.IsCompatibleWithShift M] {X' : C
+} (f : X ⟶ X') (hf : W f) (Y : C) : HasSmallLocalizedShiftedHom.{w} W M X Y ↔ Ha
+sSmallLocalizedShiftedHom.{w} W M X' Y
+参数：f : X ⟶ X'；hf : W f；Y : C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr'`：∀ {α : Sort u_1} {p q : α → Prop}, (∀ (a : α), p a ↔ q a)
+ → ((∀ (a : α), p a) ↔ ∀ (a : α), q a)
+· 使用引理 `CategoryTheory.Localization.hasSmallLocalizedHom_iff_source`：hasSmallLoc
+alizedHom_iff_source {X' : C} (f : X ⟶ X') (hf : W f) (Y : C) : HasSmallLocalize
+dHom.{w} W X Y ↔ HasSmallLocalizedHom.{w} W X' Y
+· 使用引理 `CategoryTheory.MorphismProperty.shift`：shift {X Y : C} {f : X ⟶ Y} (hf :
+ W f) (a : A) : W (f⟦a⟧')
 -/
 lemma hasSmallLocalizedShiftedHom_iff_source [W.IsCompatibleWithShift M]
     {X' : C} (f : X ⟶ X') (hf : W f) (Y : C) :
     HasSmallLocalizedShiftedHom.{w} W M X Y ↔ HasSmallLocalizedShiftedHom.{w} W M X' Y :=
-  forall_congr' (fun a => forall_congr' (fun b =>
+  forall_congr' (fun a ↦ forall_congr' (fun b ↦
     hasSmallLocalizedHom_iff_source W (f⟦a⟧') (W.shift hf a) (Y⟦b⟧)))
 
 variable [HasSmallLocalizedShiftedHom.{w} W M X Y]
 
 include M in
-/--
-lemma `hasSmallLocalizedHom_of_hasSmallLocalizedShiftedHom₀` / 引理 `hasSmallLocalizedHom_of_hasSmallLocalizedShiftedHom₀`
-
-English:
-lemma hasSmallLocalizedHom_of_hasSmallLocalizedShiftedHom₀
-  proof: (hasSmallLocalizedHom_iff_of_isos W
-    ((shiftFunctorZero C M).app X) ((shiftFunctorZero C M).app Y)).1 inferInstance
-
-中文:
-引理 hasSmallLocalizedHom_of_hasSmallLocalizedShiftedHom₀
-  证明: (hasSmallLocalizedHom_iff_of_isos W
-    ((shiftFunctorZero C M).app X) ((shiftFunctorZero C M).app Y)).1 inferInstance
-
-Depends on / 依赖: hasSmallLocalizedHom_iff_of_isos, shiftFunctorZero
+/-
+**CategoryTheory.Localization.hasSmallLocalizedHom_of_hasSmallLocalizedShiftedHo
+m** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.Localization`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hasSmallLocalizedHom_of_hasSmallLocalizedShiftedHom₀ :
     HasSmallLocalizedHom.{w} W X Y :=
@@ -166,19 +156,35 @@ lemma hasSmallLocalizedHom_of_hasSmallLocalizedShiftedHom₀ :
     ((shiftFunctorZero C M).app X) ((shiftFunctorZero C M).app Y)).1 inferInstance
 
 variable {M}
-
+/-
+**CategoryTheory.Localization.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Localiz
+ation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (m : M) : HasSmallLocalizedHom.{w} W X (Y⟦m⟧) :=
   (hasSmallLocalizedHom_iff_of_isos W
     ((shiftFunctorZero C M).app X) (Iso.refl (Y⟦m⟧))).1 inferInstance
-
+/-
+**CategoryTheory.Localization.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Localiz
+ation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (m : M) : HasSmallLocalizedHom.{w} W (X⟦m⟧) Y :=
   (hasSmallLocalizedHom_iff_of_isos W
     (Iso.refl (X⟦m⟧)) ((shiftFunctorZero C M).app Y)).1 inferInstance
-
+/-
+**CategoryTheory.Localization.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Localiz
+ation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (m m' n : M) : HasSmallLocalizedHom.{w} W (X⟦m⟧⟦m'⟧) (Y⟦n⟧) :=
   (hasSmallLocalizedHom_iff_of_isos W
     ((shiftFunctorAdd C m m').app X) (Iso.refl (Y⟦n⟧))).1 inferInstance
-
+/-
+**CategoryTheory.Localization.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Localiz
+ation`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (m n n' : M) : HasSmallLocalizedHom.{w} W (X⟦m⟧) (Y⟦n⟧⟦n'⟧) :=
   (hasSmallLocalizedHom_iff_of_isos W
     (Iso.refl (X⟦m⟧)) ((shiftFunctorAdd C n n').app Y)).1 inferInstance
@@ -192,38 +198,31 @@ variable [W.IsCompatibleWithShift M] (L : C ⥤ D) [L.IsLocalization W] [L.CommS
   {X Y : C} [HasSmallLocalizedHom.{w} W X Y]
   (f : SmallHom.{w} W X Y) (a : M) [HasSmallLocalizedHom.{w} W (X⟦a⟧) (Y⟦a⟧)]
 
-/--
-Definition of `shift` / `shift` 的定义
+/-- Given `f : SmallHom W X Y` and `a : M`, this is the element
+in `SmallHom W (X⟦a⟧) (Y⟦a⟧)` obtained by shifting by `a`. -/
+/-
+**CategoryTheory.Localization.SmallHom.shift** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Localization.SmallHom`。
+形式化陈述：shift : SmallHom.{w} W (X⟦a⟧) (Y⟦a⟧)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition shift
-  signature: : SmallHom.{w} W (X⟦a⟧) (Y⟦a⟧)
-  body: (W.shiftLocalizerMorphism a).smallHomMap f
-
-中文:
-定义 shift
-  签名: : SmallHom.{w} W (X⟦a⟧) (Y⟦a⟧)
-  定义体: (W.shiftLocalizerMorphism a).smallHomMap f
-
-Depends on / 依赖: W.shiftLocalizerMorphism, shiftLocalizerMorphism, smallHomMap
+--- 原说明 ---
+Given `f : SmallHom W X Y` and `a : M`, this is the element
+in `SmallHom W (X⟦a⟧) (Y⟦a⟧)` obtained by shifting by `a`.
 -/
 noncomputable def shift : SmallHom.{w} W (X⟦a⟧) (Y⟦a⟧) :=
   (W.shiftLocalizerMorphism a).smallHomMap f
-
-/--
-lemma `equiv_shift` / 引理 `equiv_shift`
-
-English:
-lemma equiv_shift
-  statement: equiv W L (f.shift a) =
-  proof: (W.shiftLocalizerMorphism a).equiv_smallHomMap _ _ _ (L.commShiftIso a) f
-
-中文:
-引理 equiv_shift
-  结论: equiv W L (f.shift a) =
-  证明: (W.shiftLocalizerMorphism a).equiv_smallHomMap _ _ _ (L.commShiftIso a) f
-
-Depends on / 依赖: L.commShiftIso, W.shiftLocalizerMorphism, commShiftIso, equiv_smallHomMap, shiftLocalizerMorphism
+/-
+**CategoryTheory.Localization.SmallHom.equiv_shift** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.Localization.SmallHom`。
+形式化陈述：equiv_shift : equiv W L (f.shift a) = (L.commShiftIso a).hom.app X ≫ (equi
+v W L f)⟦a⟧' ≫ (L.commShiftIso a).inv.app Y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.LocalizerMorphism.equiv_smallHomMap`：equiv_smallHomMap (G
+ : D₁ ⥤ D₂) (e : Φ.functor ⋙ L₂ ≅ L₁ ⋙ G) (f : SmallHom.{w} W₁ X Y) : (SmallHom.
+equiv W₂ L₂) (Φ.smallHomMap f) = e.hom.a…
 -/
 lemma equiv_shift : equiv W L (f.shift a) =
     (L.commShiftIso a).hom.app X ≫ (equiv W L f)⟦a⟧' ≫ (L.commShiftIso a).inv.app Y :=
@@ -231,20 +230,25 @@ lemma equiv_shift : equiv W L (f.shift a) =
 
 end SmallHom
 
-/--
-Definition of `SmallShiftedHom` / `SmallShiftedHom` 的定义
+/-- The type of morphisms from `X` to `Y⟦m⟧` in the localized category
+with respect to `W : MorphismProperty C` that is shrunk to `Type w`
+when `HasSmallLocalizedShiftedHom.{w} W X Y` holds. -/
+/-
+**CategoryTheory.Localization.SmallShiftedHom** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Localization`。
+形式化陈述：SmallShiftedHom (X Y : C) [HasSmallLocalizedShiftedHom.{w} W M X Y] (m : M
+) : Type w
+参数：X Y : C；m : M。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Localization.instHasSmallLocalizedHomObjShiftFunctor`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (W : CategoryTheory.Mor
+phismProperty C) {M : Type w'}   [inst_1 : AddMonoid M] […
 
-English:
-definition SmallShiftedHom
-  signature: (X Y : C) [HasSmallLocalizedShiftedHom.{w} W M X Y] (m : M)
-  body: SmallHom W X (Y⟦m⟧)
-
-中文:
-定义 SmallShiftedHom
-  签名: (X Y : C) [HasSmallLocalizedShiftedHom.{w} W M X Y] (m : M)
-  定义体: SmallHom W X (Y⟦m⟧)
-
-Depends on / 依赖: SmallHom
+--- 原说明 ---
+The type of morphisms from `X` to `Y⟦m⟧` in the localized category
+with respect to `W : MorphismProperty C` that is shrunk to `Type w`
+when `HasSmallLocalizedShiftedHom.{w} W X Y` holds.
 -/
 def SmallShiftedHom (X Y : C) [HasSmallLocalizedShiftedHom.{w} W M X Y] (m : M) : Type w :=
   SmallHom W X (Y⟦m⟧)
@@ -255,20 +259,21 @@ section
 
 variable [W.IsCompatibleWithShift M] {X Y Z : C}
 
-/--
-Definition of `mk` / `mk` 的定义
+/-- Constructor for `SmallShiftedHom`. -/
+/-
+**CategoryTheory.Localization.SmallShiftedHom.mk** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Localization.SmallShiftedHom`。
+形式化陈述：mk {m : M} [HasSmallLocalizedShiftedHom.{w} W M X Y] (f : ShiftedHom X Y m
+) : SmallShiftedHom.{w} W X Y m
+参数：f : ShiftedHom X Y m。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Localization.instHasSmallLocalizedHomObjShiftFunctor`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (W : CategoryTheory.Mor
+phismProperty C) {M : Type w'}   [inst_1 : AddMonoid M] […
 
-English:
-definition mk
-  signature: {m : M} [HasSmallLocalizedShiftedHom.{w} W M X Y] (f : ShiftedHom X Y m)
-  body: SmallHom.mk _ f
-
-中文:
-定义 mk
-  签名: {m : M} [HasSmallLocalizedShiftedHom.{w} W M X Y] (f : ShiftedHom X Y m)
-  定义体: SmallHom.mk _ f
-
-Depends on / 依赖: Category, SmallHom, SmallHom.mk, cat_disch, inv.app, shiftFunctor, shiftFunctorAdd, t.Category
+--- 原说明 ---
+Constructor for `SmallShiftedHom`.
 -/
 noncomputable def mk {m : M} [HasSmallLocalizedShiftedHom.{w} W M X Y] (f : ShiftedHom X Y m) :
     SmallShiftedHom.{w} W X Y m :=
@@ -276,20 +281,32 @@ noncomputable def mk {m : M} [HasSmallLocalizedShiftedHom.{w} W M X Y] (f : Shif
 
 variable {W}
 
-/--
-Definition of `shift` / `shift` 的定义
+/-- Given `f : SmallShiftedHom.{w} W X Y a`, this is the element in
+`SmallHom.{w} W (X⟦n⟧) (Y⟦a'⟧)` that is obtained by shifting by `n`
+when `a + n = a'`. -/
+/-
+**CategoryTheory.Localization.SmallShiftedHom.shift** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Localization.SmallShiftedHom`。
+形式化陈述：shift {a : M} [HasSmallLocalizedShiftedHom.{w} W M X Y] [HasSmallLocalized
+ShiftedHom.{w} W M Y Y] (f : SmallShiftedHom.{w} W X Y a) (n a' : M) (h : a + n 
+= a') : SmallHom.{w} W (X⟦n⟧) (Y⟦a'⟧)
+参数：f : SmallShiftedHom.{w} W X Y a；n a' : M；h : a + n = a'。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Localization.instHasSmallLocalizedHomObjShiftFunctor_3`：∀
+ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (W : CategoryTheory.M
+orphismProperty C) {M : Type w'}   [inst_1 : AddMonoid M] […
+· 使用定理 `CategoryTheory.Localization.instHasSmallLocalizedHomObjShiftFunctor_2`：∀
+ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (W : CategoryTheory.M
+orphismProperty C) {M : Type w'}   [inst_1 : AddMonoid M] […
+· 使用定理 `CategoryTheory.Localization.instHasSmallLocalizedHomObjShiftFunctor`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (W : CategoryTheory.Mor
+phismProperty C) {M : Type w'}   [inst_1 : AddMonoid M] […
 
-English:
-definition shift
-  signature: {a : M} [HasSmallLocalizedShiftedHom.{w} W M X Y]
-  body: (SmallHom.shift f n).comp (SmallHom.mk W ((shiftFunctorAdd' C a n a' h).inv.app Y))
-
-中文:
-定义 shift
-  签名: {a : M} [HasSmallLocalizedShiftedHom.{w} W M X Y]
-  定义体: (SmallHom.shift f n).comp (SmallHom.mk W ((shiftFunctorAdd' C a n a' h).inv.app Y))
-
-Depends on / 依赖: SmallHom, SmallHom.mk, SmallHom.shift, inv.app, shiftFunctorAdd
+--- 原说明 ---
+Given `f : SmallShiftedHom.{w} W X Y a`, this is the element in
+`SmallHom.{w} W (X⟦n⟧) (Y⟦a'⟧)` that is obtained by shifting by `n`
+when `a + n = a'`.
 -/
 noncomputable def shift {a : M} [HasSmallLocalizedShiftedHom.{w} W M X Y]
     [HasSmallLocalizedShiftedHom.{w} W M Y Y]
@@ -297,20 +314,24 @@ noncomputable def shift {a : M} [HasSmallLocalizedShiftedHom.{w} W M X Y]
     SmallHom.{w} W (X⟦n⟧) (Y⟦a'⟧) :=
   (SmallHom.shift f n).comp (SmallHom.mk W ((shiftFunctorAdd' C a n a' h).inv.app Y))
 
-/--
-Definition of `comp` / `comp` 的定义
+/-- The composition on `SmallShiftedHom W`. -/
+/-
+**CategoryTheory.Localization.SmallShiftedHom.comp** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.Localization.SmallShiftedHom`。
+形式化陈述：comp {a b c : M} [HasSmallLocalizedShiftedHom.{w} W M X Y] [HasSmallLocali
+zedShiftedHom.{w} W M Y Z] [HasSmallLocalizedShiftedHom.{w} W M X Z] [HasSmallLo
+calizedShiftedHom.{w} W M Z Z] (f : SmallShiftedHom.{w} W X Y a) (g : SmallShift
+edHom.{w} W Y Z b) (h : b + a = c) : SmallShiftedHom.{w} W X Z c
+参数：f : SmallShiftedHom.{w} W X Y a；g : SmallShiftedHom.{w} W Y Z b；h : b + a = c
+。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Localization.instHasSmallLocalizedHomObjShiftFunctor`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (W : CategoryTheory.Mor
+phismProperty C) {M : Type w'}   [inst_1 : AddMonoid M] […
 
-English:
-definition comp
-  signature: {a b c : M} [HasSmallLocalizedShiftedHom.{w} W M X Y]
-  body: SmallHom.comp f (g.shift a c h)
-
-中文:
-定义 comp
-  签名: {a b c : M} [HasSmallLocalizedShiftedHom.{w} W M X Y]
-  定义体: SmallHom.comp f (g.shift a c h)
-
-Depends on / 依赖: SmallHom, SmallHom.comp, g.shift
+--- 原说明 ---
+The composition on `SmallShiftedHom W`.
 -/
 noncomputable def comp {a b c : M} [HasSmallLocalizedShiftedHom.{w} W M X Y]
     [HasSmallLocalizedShiftedHom.{w} W M Y Z] [HasSmallLocalizedShiftedHom.{w} W M X Z]
@@ -320,42 +341,46 @@ noncomputable def comp {a b c : M} [HasSmallLocalizedShiftedHom.{w} W M X Y]
   SmallHom.comp f (g.shift a c h)
 
 variable (W) in
-/--
-Definition of `mk₀` / `mk₀` 的定义
+/-- The canonical map `(X ⟶ Y) → SmallShiftedHom.{w} W X Y m₀` when `m₀ = 0` and
+`[HasSmallLocalizedShiftedHom.{w} W M X Y]` holds. -/
+/-
+**CategoryTheory.Localization.SmallShiftedHom.mk** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Localization.SmallShiftedHom`。
+形式化陈述：mk {m : M} [HasSmallLocalizedShiftedHom.{w} W M X Y] (f : ShiftedHom X Y m
+) : SmallShiftedHom.{w} W X Y m
+参数：f : ShiftedHom X Y m。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Localization.instHasSmallLocalizedHomObjShiftFunctor`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (W : CategoryTheory.Mor
+phismProperty C) {M : Type w'}   [inst_1 : AddMonoid M] […
 
-English:
-definition mk₀
-  signature: [HasSmallLocalizedShiftedHom.{w} W M X Y]
-  body: SmallShiftedHom.mk _ (ShiftedHom.mk₀ _ hm₀ f)
-
-中文:
-定义 mk₀
-  签名: [HasSmallLocalizedShiftedHom.{w} W M X Y]
-  定义体: SmallShiftedHom.mk _ (ShiftedHom.mk₀ _ hm₀ f)
-
-Depends on / 依赖: ShiftedHom, ShiftedHom.mk, SmallShiftedHom, SmallShiftedHom.mk
+--- 原说明 ---
+The canonical map `(X ⟶ Y) → SmallShiftedHom.{w} W X Y m₀` when `m₀ = 0` and
+`[HasSmallLocalizedShiftedHom.{w} W M X Y]` holds.
 -/
 noncomputable def mk₀ [HasSmallLocalizedShiftedHom.{w} W M X Y]
     (m₀ : M) (hm₀ : m₀ = 0) (f : X ⟶ Y) :
     SmallShiftedHom.{w} W X Y m₀ :=
   SmallShiftedHom.mk _ (ShiftedHom.mk₀ _ hm₀ f)
 
-/--
-Definition of `mk₀Inv` / `mk₀Inv` 的定义
+/-- The formal inverse in `SmallShiftedHom.{w} W Y X m₀` of a morphism `f : Y ⟶ X`
+such that `W f`. -/
+/-
+**CategoryTheory.Localization.SmallShiftedHom.mk** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Localization.SmallShiftedHom`。
+形式化陈述：mk {m : M} [HasSmallLocalizedShiftedHom.{w} W M X Y] (f : ShiftedHom X Y m
+) : SmallShiftedHom.{w} W X Y m
+参数：f : ShiftedHom X Y m。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Localization.instHasSmallLocalizedHomObjShiftFunctor`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (W : CategoryTheory.Mor
+phismProperty C) {M : Type w'}   [inst_1 : AddMonoid M] […
 
-English:
-definition mk₀Inv
-  signature: [HasSmallLocalizedShiftedHom.{w} W M Y X] [W.RespectsIso]
-  body: SmallHom.mkInv ((shiftFunctorZero' C m₀ hm₀).hom.app X ≫ f)
-    (MorphismProperty.RespectsIso.precomp _ _ _ hf)
-
-中文:
-定义 mk₀Inv
-  签名: [HasSmallLocalizedShiftedHom.{w} W M Y X] [W.RespectsIso]
-  定义体: SmallHom.mkInv ((shiftFunctorZero' C m₀ hm₀).hom.app X ≫ f)
-    (MorphismProperty.RespectsIso.precomp _ _ _ hf)
-
-Depends on / 依赖: MorphismProperty, MorphismProperty.RespectsIso.precomp, RespectsIso, SmallHom, SmallHom.mkInv, hom.app, precomp, shiftFunctorZero
+--- 原说明 ---
+The formal inverse in `SmallShiftedHom.{w} W Y X m₀` of a morphism `f : Y ⟶ X`
+such that `W f`.
 -/
 noncomputable def mk₀Inv [HasSmallLocalizedShiftedHom.{w} W M Y X] [W.RespectsIso]
     (m₀ : M) (hm₀ : m₀ = 0) (f : X ⟶ Y) (hf : W f) :
@@ -370,37 +395,43 @@ section
 variable (L : C ⥤ D) [L.IsLocalization W] [L.CommShift M]
   {X Y Z T : C}
 
-/--
-Definition of `equiv` / `equiv` 的定义
+/-- The bijection `SmallShiftedHom.{w} W X Y m ≃ ShiftedHom (L.obj X) (L.obj Y) m`
+for all `m : M`, and `X` and `Y` in `C` when `L : C ⥤ D` is a localization functor for
+`W : MorphismProperty C` such that the category `D` is equipped with a shift by `M`
+and `L` commutes with the shifts. -/
+/-
+**CategoryTheory.Localization.SmallShiftedHom.equiv** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Localization.SmallShiftedHom`。
+形式化陈述：equiv [HasSmallLocalizedShiftedHom.{w} W M X Y] {m : M} : SmallShiftedHom.
+{w} W X Y m ≃ ShiftedHom (L.obj X) (L.obj Y) m
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `CategoryTheory.Localization.instHasSmallLocalizedHomObjShiftFunctor`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (W : CategoryTheory.Mor
+phismProperty C) {M : Type w'}   [inst_1 : AddMonoid M] […
 
-English:
-definition equiv
-  signature: [HasSmallLocalizedShiftedHom.{w} W M X Y] {m : M}
-  body: (SmallHom.equiv W L).trans ((L.commShiftIso m).app Y).homToEquiv
-
-中文:
-定义 equiv
-  签名: [HasSmallLocalizedShiftedHom.{w} W M X Y] {m : M}
-  定义体: (SmallHom.equiv W L).trans ((L.commShiftIso m).app Y).homToEquiv
-
-Depends on / 依赖: L.commShiftIso, SmallHom, SmallHom.equiv, commShiftIso, homToEquiv
+--- 原说明 ---
+The bijection `SmallShiftedHom.{w} W X Y m ≃ ShiftedHom (L.obj X) (L.obj Y) m`
+for all `m : M`, and `X` and `Y` in `C` when `L : C ⥤ D` is a localization funct
+or for
+`W : MorphismProperty C` such that the category `D` is equipped with a shift by 
+`M`
+and `L` commutes with the shifts.
 -/
 noncomputable def equiv [HasSmallLocalizedShiftedHom.{w} W M X Y] {m : M} :
     SmallShiftedHom.{w} W X Y m ≃ ShiftedHom (L.obj X) (L.obj Y) m :=
   (SmallHom.equiv W L).trans ((L.commShiftIso m).app Y).homToEquiv
-
-/--
-lemma `equiv_apply` / 引理 `equiv_apply`
-
-English:
-lemma equiv_apply
-  statement: [HasSmallLocalizedShiftedHom.{w} W M X Y] {m : M}
-  proof: rfl
-
-中文:
-引理 equiv_apply
-  结论: [HasSmallLocalizedShiftedHom.{w} W M X Y] {m : M}
-  证明: rfl
+/-
+**CategoryTheory.Localization.SmallShiftedHom.equiv_apply** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.Localization.SmallShiftedHom`。
+形式化陈述：equiv_apply [HasSmallLocalizedShiftedHom.{w} W M X Y] {m : M} (f : SmallSh
+iftedHom.{w} W X Y m) : equiv W L f = (SmallHom.equiv W L) f ≫ ((L.commShiftIso 
+m).app Y).hom
+参数：f : SmallShiftedHom.{w} W X Y m。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma equiv_apply [HasSmallLocalizedShiftedHom.{w} W M X Y] {m : M}
     (f : SmallShiftedHom.{w} W X Y m) :
@@ -412,26 +443,64 @@ variable [W.IsCompatibleWithShift M]
 
 set_option backward.isDefEq.respectTransparency false in
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `equiv_shift'` / 引理 `equiv_shift'`
-
-English:
-lemma equiv_shift'
-  statement: {a : M} [HasSmallLocalizedShiftedHom.{w} W M X Y]
-  proof: by
-  simp only [shift, SmallHom.equiv_comp, SmallHom.equiv_shift, SmallHom.equiv_mk, assoc,
-    L.commShiftIso_add' h, Functor.CommShift.isoAdd'_inv_app, Iso.inv_hom_id_app_assoc,
-    ← Functor.map_comp_assoc, Iso.hom_inv_id_app, Functor.comp_obj, comp_id]
-
-中文:
-引理 equiv_shift'
-  结论: {a : M} [HasSmallLocalizedShiftedHom.{w} W M X Y]
-  证明: by
-  simp only [shift, SmallHom.equiv_comp, SmallHom.equiv_shift, SmallHom.equiv_mk, assoc,
-    L.commShiftIso_add' h, Functor.CommShift.isoAdd'_inv_app, Iso.inv_hom_id_app_assoc,
-    ← Functor.map_comp_assoc, Iso.hom_inv_id_app, Functor.comp_obj, comp_id]
-
-Depends on / 依赖: CommShift, Functor, Functor.CommShift.isoAdd, Functor.comp_obj, Functor.map_comp_assoc, Iso.hom_inv_id_app, Iso.inv_hom_id_app_assoc, L.commShiftIso_add, SmallHom, SmallHom.equiv_comp, SmallHom.equiv_mk, SmallHom.equiv_shift, _inv_app, commShiftIso_add, comp_id, comp_obj, equiv_comp, equiv_mk, equiv_shift, hom_inv_id_app
+/-
+**CategoryTheory.Localization.SmallShiftedHom.equiv_shift'** 是 Mathlib 中的一个引理，位于
+命名空间 `CategoryTheory.Localization.SmallShiftedHom`。
+形式化陈述：equiv_shift' {a : M} [HasSmallLocalizedShiftedHom.{w} W M X Y] [HasSmallLo
+calizedShiftedHom.{w} W M Y Y] (f : SmallShiftedHom.{w} W X Y a) (n a' : M) (h :
+ a + n = a') : SmallHom.equiv W L (f.shift n a' h) = (L.commShiftIso n).hom.app 
+X ≫ (SmallHom.equiv W L f)⟦n⟧' ≫ ((L.commShiftIso a).hom.app Y)⟦n⟧' ≫ (shiftFunc
+torAdd' D a n a' h).inv.app (L.obj Y) ≫ (L.commShiftIso a').inv.app Y
+参数：f : SmallShiftedHom.{w} W X Y a；n a' : M；h : a + n = a'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Localization.instHasSmallLocalizedHomObjShiftFunctor`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (W : CategoryTheory.Mor
+phismProperty C) {M : Type w'}   [inst_1 : AddMonoid M] […
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Localization.instHasSmallLocalizedHomObjShiftFunctor_3`：∀
+ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (W : CategoryTheory.M
+orphismProperty C) {M : Type w'}   [inst_1 : AddMonoid M] […
+· 使用定理 `CategoryTheory.Localization.instHasSmallLocalizedHomObjShiftFunctor_2`：∀
+ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (W : CategoryTheory.M
+orphismProperty C) {M : Type w'}   [inst_1 : AddMonoid M] […
+· 使用引理 `CategoryTheory.Localization.SmallHom.equiv_comp`：equiv_comp (L : C ⥤ D) 
+[L.IsLocalization W] {X Y Z : C} [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocal
+izedHom.{w} W Y Z] [HasSmallLocalized…
+· 使用引理 `CategoryTheory.Localization.SmallHom.equiv_shift`：equiv_shift : equiv W 
+L (f.shift a) = (L.commShiftIso a).hom.app X ≫ (equiv W L f)⟦a⟧' ≫ (L.commShiftI
+so a).inv.app Y
+· 使用引理 `CategoryTheory.Localization.SmallHom.equiv_mk`：equiv_mk (L : C ⥤ D) [L.I
+sLocalization W] {X Y : C} [HasSmallLocalizedHom.{w} W X Y] (f : X ⟶ Y) : equiv.
+{w} W L (mk W f) = L.map f
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `CategoryTheory.Functor.commShiftIso_add'`：commShiftIso_add' {a b c : A} 
+(h : a + b = c) : F.commShiftIso c = CommShift.isoAdd' h (F.commShiftIso a) (F.c
+ommShiftIso b)
+· 使用定理 `CategoryTheory.Functor.CommShift.isoAdd'_inv_app`：∀ {C : Type u_1} {D : 
+Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1 : CategoryTheo
+ry.Category.{v_2, u_2} D] {F : Categor…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F G : CategoryThe…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma equiv_shift' {a : M} [HasSmallLocalizedShiftedHom.{w} W M X Y]
     [HasSmallLocalizedShiftedHom.{w} W M Y Y]
@@ -445,28 +514,44 @@ lemma equiv_shift' {a : M} [HasSmallLocalizedShiftedHom.{w} W M X Y]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `equiv_shift` / 引理 `equiv_shift`
-
-English:
-lemma equiv_shift
-  statement: {a : M} [HasSmallLocalizedShiftedHom.{w} W M X Y]
-  proof: by
-  dsimp [equiv]
-  erw [equiv_shift']
-  simp only [Functor.comp_obj, assoc, Iso.inv_hom_id_app, comp_id, Functor.map_comp]
-  rfl
-
-中文:
-引理 equiv_shift
-  结论: {a : M} [HasSmallLocalizedShiftedHom.{w} W M X Y]
-  证明: by
-  dsimp [equiv]
-  erw [equiv_shift']
-  simp only [Functor.comp_obj, assoc, Iso.inv_hom_id_app, comp_id, Functor.map_comp]
-  rfl
-
-Depends on / 依赖: Functor, Functor.comp_obj, Functor.map_comp, Iso.inv_hom_id_app, comp_id, comp_obj, equiv_shift, injection, inv_hom_id_app, map_comp
+/-
+**CategoryTheory.Localization.SmallShiftedHom.equiv_shift** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.Localization.SmallShiftedHom`。
+形式化陈述：equiv_shift {a : M} [HasSmallLocalizedShiftedHom.{w} W M X Y] [HasSmallLoc
+alizedShiftedHom.{w} W M Y Y] (f : SmallShiftedHom.{w} W X Y a) (n a' : M) (h : 
+a + n = a') : equiv W L (f.shift n a' h) = (L.commShiftIso n).hom.app X ≫ (equiv
+ W L f)⟦n⟧' ≫ (shiftFunctorAdd' D a n a' h).inv.app (L.obj Y)
+参数：f : SmallShiftedHom.{w} W X Y a；n a' : M；h : a + n = a'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Localization.instHasSmallLocalizedHomObjShiftFunctor_2`：∀
+ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (W : CategoryTheory.M
+orphismProperty C) {M : Type w'}   [inst_1 : AddMonoid M] […
+· 使用定理 `CategoryTheory.Localization.instHasSmallLocalizedHomObjShiftFunctor`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (W : CategoryTheory.Mor
+phismProperty C) {M : Type w'}   [inst_1 : AddMonoid M] […
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Localization.SmallShiftedHom.equiv_shift'`：equiv_shift' {
+a : M} [HasSmallLocalizedShiftedHom.{w} W M X Y] [HasSmallLocalizedShiftedHom.{w
+} W M Y Y] (f : SmallShiftedHom.{w} W X Y a) (…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
 -/
 lemma equiv_shift {a : M} [HasSmallLocalizedShiftedHom.{w} W M X Y]
     [HasSmallLocalizedShiftedHom.{w} W M Y Y]
@@ -480,30 +565,46 @@ lemma equiv_shift {a : M} [HasSmallLocalizedShiftedHom.{w} W M X Y]
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `equiv_comp` / 引理 `equiv_comp`
-
-English:
-lemma equiv_comp
-  statement: [HasSmallLocalizedShiftedHom.{w} W M X Y]
-  proof: by
-  dsimp [comp, equiv, ShiftedHom.comp]
-  erw [SmallHom.equiv_comp]
-  simp only [equiv_shift', Functor.comp_obj, assoc, Iso.inv_hom_id_app,
-    comp_id, Functor.map_comp]
-  rfl
-
-中文:
-引理 equiv_comp
-  结论: [HasSmallLocalizedShiftedHom.{w} W M X Y]
-  证明: by
-  dsimp [comp, equiv, ShiftedHom.comp]
-  erw [SmallHom.equiv_comp]
-  simp only [equiv_shift', Functor.comp_obj, assoc, Iso.inv_hom_id_app,
-    comp_id, Functor.map_comp]
-  rfl
-
-Depends on / 依赖: Functor, Functor.comp_obj, Functor.map_comp, Iso.inv_hom_id_app, ShiftedHom, ShiftedHom.comp, SmallHom, SmallHom.equiv_comp, comp_id, comp_obj, equiv_comp, equiv_shift, inv_hom_id_app, map_comp
+/-
+**CategoryTheory.Localization.SmallShiftedHom.equiv_comp** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Localization.SmallShiftedHom`。
+形式化陈述：equiv_comp [HasSmallLocalizedShiftedHom.{w} W M X Y] [HasSmallLocalizedShi
+ftedHom.{w} W M Y Z] [HasSmallLocalizedShiftedHom.{w} W M X Z] [HasSmallLocalize
+dShiftedHom.{w} W M Z Z] {a b c : M} (f : SmallShiftedHom.{w} W X Y a) (g : Smal
+lShiftedHom.{w} W Y Z b) (h : b + a = c) : equiv W L (f.comp g h) = (equiv W L f
+).comp (equiv W L g) h
+参数：f : SmallShiftedHom.{w} W X Y a；g : SmallShiftedHom.{w} W Y Z b；h : b + a = c
+。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Localization.instHasSmallLocalizedHomObjShiftFunctor`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (W : CategoryTheory.Mor
+phismProperty C) {M : Type w'}   [inst_1 : AddMonoid M] […
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Localization.SmallHom.equiv_comp`：equiv_comp (L : C ⥤ D) 
+[L.IsLocalization W] {X Y Z : C} [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocal
+izedHom.{w} W Y Z] [HasSmallLocalized…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `CategoryTheory.Localization.SmallShiftedHom.equiv_shift'`：equiv_shift' {
+a : M} [HasSmallLocalizedShiftedHom.{w} W M X Y] [HasSmallLocalizedShiftedHom.{w
+} W M Y Y] (f : SmallShiftedHom.{w} W X Y a) (…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
 -/
 lemma equiv_comp [HasSmallLocalizedShiftedHom.{w} W M X Y]
     [HasSmallLocalizedShiftedHom.{w} W M Y Z] [HasSmallLocalizedShiftedHom.{w} W M X Z]
@@ -520,22 +621,41 @@ end
 
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `equiv_mk` / 引理 `equiv_mk`
-
-English:
-lemma equiv_mk
-  given: [HasSmallLocalizedShiftedHom.{w} W M X Y] {m : M} (f : ShiftedHom X Y m)
-  proof: ((L.commShiftIso m).app Y).homToEquiv.symm.injective
-    ((Equiv.symm_apply_apply ..).trans (by simp [ShiftedHom.map, mk]))
-
-中文:
-引理 equiv_mk
-  条件: [HasSmallLocalizedShiftedHom.{w} W M X Y] {m : M} (f : ShiftedHom X Y m)
-  证明: ((L.commShiftIso m).app Y).homToEquiv.symm.injective
-    ((Equiv.symm_apply_apply ..).trans (by simp [ShiftedHom.map, mk]))
-
-Depends on / 依赖: Equiv.symm_apply_apply, L.commShiftIso, ShiftedHom, ShiftedHom.map, commShiftIso, homToEquiv, homToEquiv.symm.injective, injective, symm_apply_apply
+/-
+**CategoryTheory.Localization.SmallShiftedHom.equiv_mk** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.Localization.SmallShiftedHom`。
+形式化陈述：equiv_mk [HasSmallLocalizedShiftedHom.{w} W M X Y] {m : M} (f : ShiftedHom
+ X Y m) : equiv W L (.mk _ f) = f.map L
+参数：f : ShiftedHom X Y m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Localization.instHasSmallLocalizedHomObjShiftFunctor`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (W : CategoryTheory.Mor
+phismProperty C) {M : Type w'}   [inst_1 : AddMonoid M] […
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Localization.SmallHom.equiv_mk`：equiv_mk (L : C ⥤ D) [L.I
+sLocalization W] {X Y : C} [HasSmallLocalizedHom.{w} W X Y] (f : X ⟶ Y) : equiv.
+{w} W L (mk W f) = L.map f
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma equiv_mk [HasSmallLocalizedShiftedHom.{w} W M X Y] {m : M} (f : ShiftedHom X Y m) :
     equiv W L (.mk _ f) = f.map L :=
@@ -545,32 +665,41 @@ lemma equiv_mk [HasSmallLocalizedShiftedHom.{w} W M X Y] {m : M} (f : ShiftedHom
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-lemma `equiv_mk₀` / 引理 `equiv_mk₀`
-
-English:
-lemma equiv_mk₀
-  statement: [HasSmallLocalizedShiftedHom.{w} W M X Y]
-  proof: by
-  subst hm₀
-  dsimp [equiv, mk₀]
-  erw [SmallHom.equiv_mk, Functor.map_comp]
-  dsimp [equiv, mk₀, ShiftedHom.mk₀, shiftFunctorZero']
-  simp only [comp_id, L.commShiftIso_zero, Functor.CommShift.isoZero_hom_app, assoc,
-    ← Functor.map_comp_assoc, Iso.inv_hom_id_app, Functor.id_obj, Functor.map_id, id_comp]
-
-中文:
-引理 equiv_mk₀
-  结论: [HasSmallLocalizedShiftedHom.{w} W M X Y]
-  证明: by
-  subst hm₀
-  dsimp [equiv, mk₀]
-  erw [SmallHom.equiv_mk, Functor.map_comp]
-  dsimp [equiv, mk₀, ShiftedHom.mk₀, shiftFunctorZero']
-  simp only [comp_id, L.commShiftIso_zero, Functor.CommShift.isoZero_hom_app, assoc,
-    ← Functor.map_comp_assoc, Iso.inv_hom_id_app, Functor.id_obj, Functor.map_id, id_comp]
-
-Depends on / 依赖: CommShift, Functor, Functor.CommShift.isoZero_hom_app, Functor.id_obj, Functor.map_comp, Functor.map_comp_assoc, Functor.map_id, Iso.inv_hom_id_app, L.commShiftIso_zero, ShiftedHom, ShiftedHom.mk, SmallHom, SmallHom.equiv_mk, commShiftIso_zero, comp_id, equiv_mk, id_comp, id_obj, inv_hom_id_app, isoZero_hom_app
+/-
+**CategoryTheory.Localization.SmallShiftedHom.equiv_mk** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.Localization.SmallShiftedHom`。
+形式化陈述：equiv_mk [HasSmallLocalizedShiftedHom.{w} W M X Y] {m : M} (f : ShiftedHom
+ X Y m) : equiv W L (.mk _ f) = f.map L
+参数：f : ShiftedHom X Y m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Localization.instHasSmallLocalizedHomObjShiftFunctor`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (W : CategoryTheory.Mor
+phismProperty C) {M : Type w'}   [inst_1 : AddMonoid M] […
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Localization.SmallHom.equiv_mk`：equiv_mk (L : C ⥤ D) [L.I
+sLocalization W] {X Y : C} [HasSmallLocalizedHom.{w} W X Y] (f : X ⟶ Y) : equiv.
+{w} W L (mk W f) = L.map f
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma equiv_mk₀ [HasSmallLocalizedShiftedHom.{w} W M X Y]
     (m₀ : M) (hm₀ : m₀ = 0) (f : X ⟶ Y) :
@@ -585,30 +714,41 @@ lemma equiv_mk₀ [HasSmallLocalizedShiftedHom.{w} W M X Y]
 
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `equiv_mk₀Inv` / 引理 `equiv_mk₀Inv`
-
-English:
-lemma equiv_mk₀Inv
-  statement: [HasSmallLocalizedShiftedHom.{w} W M Y X] [W.RespectsIso]
-  proof: by
-  have hf' : W ((shiftFunctorZero' C m₀ hm₀).hom.app X ≫ f) :=
-    MorphismProperty.RespectsIso.precomp _ _ _ hf
-  refine (SmallHom.equiv_mkInv L _ hf' =≫ _).trans ?_
-  rw [← cancel_epi (isoOfHom L W _ hf').hom]; rw [Iso.hom_inv_id_assoc]
-  simp [ShiftedHom.mk₀, Functor.commShiftIso_zero' _ _ m₀ hm₀]
-
-中文:
-引理 equiv_mk₀Inv
-  结论: [HasSmallLocalizedShiftedHom.{w} W M Y X] [W.RespectsIso]
-  证明: by
-  have hf' : W ((shiftFunctorZero' C m₀ hm₀).hom.app X ≫ f) :=
-    MorphismProperty.RespectsIso.precomp _ _ _ hf
-  refine (SmallHom.equiv_mkInv L _ hf' =≫ _).trans ?_
-  rw [← cancel_epi (isoOfHom L W _ hf').hom]; rw [Iso.hom_inv_id_assoc]
-  simp [ShiftedHom.mk₀, Functor.commShiftIso_zero' _ _ m₀ hm₀]
-
-Depends on / 依赖: Functor, Functor.commShiftIso_zero, Iso.hom_inv_id_assoc, MorphismProperty, MorphismProperty.RespectsIso.precomp, RespectsIso, ShiftedHom, ShiftedHom.mk, SmallHom, SmallHom.equiv_mkInv, cancel_epi, commShiftIso_zero, equiv_mkInv, hom.app, hom_inv_id_assoc, isoOfHom, precomp, shiftFunctorZero
+/-
+**CategoryTheory.Localization.SmallShiftedHom.equiv_mk** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.Localization.SmallShiftedHom`。
+形式化陈述：equiv_mk [HasSmallLocalizedShiftedHom.{w} W M X Y] {m : M} (f : ShiftedHom
+ X Y m) : equiv W L (.mk _ f) = f.map L
+参数：f : ShiftedHom X Y m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Localization.instHasSmallLocalizedHomObjShiftFunctor`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (W : CategoryTheory.Mor
+phismProperty C) {M : Type w'}   [inst_1 : AddMonoid M] […
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Localization.SmallHom.equiv_mk`：equiv_mk (L : C ⥤ D) [L.I
+sLocalization W] {X Y : C} [HasSmallLocalizedHom.{w} W X Y] (f : X ⟶ Y) : equiv.
+{w} W L (mk W f) = L.map f
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma equiv_mk₀Inv [HasSmallLocalizedShiftedHom.{w} W M Y X] [W.RespectsIso]
     (m₀ : M) (hm₀ : m₀ = 0) (f : X ⟶ Y) (hf : W f) :
@@ -617,7 +757,7 @@ lemma equiv_mk₀Inv [HasSmallLocalizedShiftedHom.{w} W M Y X] [W.RespectsIso]
   have hf' : W ((shiftFunctorZero' C m₀ hm₀).hom.app X ≫ f) :=
     MorphismProperty.RespectsIso.precomp _ _ _ hf
   refine (SmallHom.equiv_mkInv L _ hf' =≫ _).trans ?_
-  rw [← cancel_epi (isoOfHom L W _ hf').hom]; rw [Iso.hom_inv_id_assoc]
+  rw [← cancel_epi (isoOfHom L W _ hf').hom, Iso.hom_inv_id_assoc]
   simp [ShiftedHom.mk₀, Functor.commShiftIso_zero' _ _ m₀ hm₀]
 
 end
@@ -626,24 +766,37 @@ section
 
 variable [W.IsCompatibleWithShift M]
 
-/--
-lemma `comp_assoc` / 引理 `comp_assoc`
-
-English:
-lemma comp_assoc
-  statement: {X Y Z T : C} {a₁ a₂ a₃ a₁₂ a₂₃ a : M}
-  proof: by
-  apply (equiv W W.Q).injective
-  simp only [equiv_comp, ShiftedHom.comp_assoc _ _ _ h₁₂ h₂₃ h]
-
-中文:
-引理 comp_assoc
-  结论: {X Y Z T : C} {a₁ a₂ a₃ a₁₂ a₂₃ a : M}
-  证明: by
-  apply (equiv W W.Q).injective
-  simp only [equiv_comp, ShiftedHom.comp_assoc _ _ _ h₁₂ h₂₃ h]
-
-Depends on / 依赖: ShiftedHom, ShiftedHom.comp_assoc, comp_assoc, equiv_comp, injective
+/-
+**CategoryTheory.Localization.SmallShiftedHom.comp_assoc** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.Localization.SmallShiftedHom`。
+形式化陈述：comp_assoc {X Y Z T : C} {a₁ a₂ a₃ a₁₂ a₂₃ a : M} [HasSmallLocalizedShifte
+dHom.{w} W M X Y] [HasSmallLocalizedShiftedHom.{w} W M X Z] [HasSmallLocalizedSh
+iftedHom.{w} W M X T] [HasSmallLocalizedShiftedHom.{w} W M Y Z] [HasSmallLocaliz
+edShiftedHom.{w} W M Y T] [HasSmallLocalizedShiftedHom.{w} W M Z T] [HasSmallLoc
+alizedShiftedHom.{w} W M Z Z] [HasSmallLocalizedShiftedHom.{w} W M T T] (α : Sma
+llShiftedHom.{w} W X Y a₁) (β : SmallShiftedHom.{w} W Y Z a₂) (γ : SmallShiftedH
+om.{w} W Z T a₃) (h₁₂ : a₂
+参数：α : SmallShiftedHom.{w} W X Y a₁；β : SmallShiftedHom.{w} W Y Z a₂；γ : SmallSh
+iftedHom.{w} W Z T a₃。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Localization.SmallShiftedHom.equiv_comp`：equiv_comp [HasS
+mallLocalizedShiftedHom.{w} W M X Y] [HasSmallLocalizedShiftedHom.{w} W M Y Z] [
+HasSmallLocalizedShiftedHom.{w} W M X Z] [Ha…
+· 使用定理 `CategoryTheory.ShiftedHom.comp.congr_simp`：∀ {C : Type u_1} [inst : Cate
+goryTheory.Category.{v_1, u_1} C] {M : Type u_4} [inst_1 : AddMonoid M]   [inst_
+2 : CategoryTheory.HasShift C M…
+· 使用引理 `CategoryTheory.ShiftedHom.comp_assoc`：comp_assoc {a₁ a₂ a₃ a₁₂ a₂₃ a : M
+} (α : ShiftedHom X Y a₁) (β : ShiftedHom Y Z a₂) (γ : ShiftedHom Z T a₃) (h₁₂ :
+ a₂ + a₁ = a₁₂) (h₂₃ : a₃ …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma comp_assoc {X Y Z T : C} {a₁ a₂ a₃ a₁₂ a₂₃ a : M}
     [HasSmallLocalizedShiftedHom.{w} W M X Y] [HasSmallLocalizedShiftedHom.{w} W M X Z]
@@ -662,20 +815,17 @@ end
 
 variable {W} in
 @[simp]
-/--
-lemma `mk₀_comp_mk₀Inv` / 引理 `mk₀_comp_mk₀Inv`
-
-English:
-lemma mk₀_comp_mk₀Inv
-  statement: {X Y : C} [HasSmallLocalizedShiftedHom.{w} W M X Y]
-  proof: (equiv W W.Q).injective (by simp [equiv_comp])
-
-中文:
-引理 mk₀_comp_mk₀Inv
-  结论: {X Y : C} [HasSmallLocalizedShiftedHom.{w} W M X Y]
-  证明: (equiv W W.Q).injective (by simp [equiv_comp])
-
-Depends on / 依赖: equiv_comp, injective
+/-
+**CategoryTheory.Localization.SmallShiftedHom.mk** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Localization.SmallShiftedHom`。
+形式化陈述：mk {m : M} [HasSmallLocalizedShiftedHom.{w} W M X Y] (f : ShiftedHom X Y m
+) : SmallShiftedHom.{w} W X Y m
+参数：f : ShiftedHom X Y m。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Localization.instHasSmallLocalizedHomObjShiftFunctor`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (W : CategoryTheory.Mor
+phismProperty C) {M : Type w'}   [inst_1 : AddMonoid M] […
 -/
 lemma mk₀_comp_mk₀Inv {X Y : C} [HasSmallLocalizedShiftedHom.{w} W M X Y]
     [HasSmallLocalizedShiftedHom.{w} W M Y Y]
@@ -687,20 +837,17 @@ lemma mk₀_comp_mk₀Inv {X Y : C} [HasSmallLocalizedShiftedHom.{w} W M X Y]
 
 variable {W} in
 @[simp]
-/--
-lemma `mk₀Inv_comp_mk₀` / 引理 `mk₀Inv_comp_mk₀`
-
-English:
-lemma mk₀Inv_comp_mk₀
-  statement: {X Y : C} [HasSmallLocalizedShiftedHom.{w} W M X Y]
-  proof: (equiv W W.Q).injective (by simp [equiv_comp])
-
-中文:
-引理 mk₀Inv_comp_mk₀
-  结论: {X Y : C} [HasSmallLocalizedShiftedHom.{w} W M X Y]
-  证明: (equiv W W.Q).injective (by simp [equiv_comp])
-
-Depends on / 依赖: equiv_comp, injective
+/-
+**CategoryTheory.Localization.SmallShiftedHom.mk** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Localization.SmallShiftedHom`。
+形式化陈述：mk {m : M} [HasSmallLocalizedShiftedHom.{w} W M X Y] (f : ShiftedHom X Y m
+) : SmallShiftedHom.{w} W X Y m
+参数：f : ShiftedHom X Y m。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Localization.instHasSmallLocalizedHomObjShiftFunctor`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (W : CategoryTheory.Mor
+phismProperty C) {M : Type w'}   [inst_1 : AddMonoid M] […
 -/
 lemma mk₀Inv_comp_mk₀ {X Y : C} [HasSmallLocalizedShiftedHom.{w} W M X Y]
     [HasSmallLocalizedShiftedHom.{w} W M X X]
@@ -712,20 +859,10 @@ lemma mk₀Inv_comp_mk₀ {X Y : C} [HasSmallLocalizedShiftedHom.{w} W M X Y]
 
 variable {W} in
 @[simp]
-/--
-lemma `comp_mk₀_id` / 引理 `comp_mk₀_id`
-
-English:
-lemma comp_mk₀_id
-  statement: {X Y : C} [HasSmallLocalizedShiftedHom.{w} W M X Y]
-  proof: (equiv W W.Q).injective (by simp [equiv_comp])
-
-中文:
-引理 comp_mk₀_id
-  结论: {X Y : C} [HasSmallLocalizedShiftedHom.{w} W M X Y]
-  证明: (equiv W W.Q).injective (by simp [equiv_comp])
-
-Depends on / 依赖: equiv_comp, injective
+/-
+**CategoryTheory.Localization.SmallShiftedHom.comp_mk** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Localization.SmallShiftedHom`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma comp_mk₀_id {X Y : C} [HasSmallLocalizedShiftedHom.{w} W M X Y]
     [HasSmallLocalizedShiftedHom.{w} W M Y Y]
@@ -736,20 +873,17 @@ lemma comp_mk₀_id {X Y : C} [HasSmallLocalizedShiftedHom.{w} W M X Y]
 
 variable {W} in
 @[simp]
-/--
-lemma `mk₀_id_comp` / 引理 `mk₀_id_comp`
-
-English:
-lemma mk₀_id_comp
-  statement: {X Y : C} [HasSmallLocalizedShiftedHom.{w} W M X Y]
-  proof: (equiv W W.Q).injective (by simp [equiv_comp])
-
-中文:
-引理 mk₀_id_comp
-  结论: {X Y : C} [HasSmallLocalizedShiftedHom.{w} W M X Y]
-  证明: (equiv W W.Q).injective (by simp [equiv_comp])
-
-Depends on / 依赖: equiv_comp, injective
+/-
+**CategoryTheory.Localization.SmallShiftedHom.mk** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.Localization.SmallShiftedHom`。
+形式化陈述：mk {m : M} [HasSmallLocalizedShiftedHom.{w} W M X Y] (f : ShiftedHom X Y m
+) : SmallShiftedHom.{w} W X Y m
+参数：f : ShiftedHom X Y m。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Localization.instHasSmallLocalizedHomObjShiftFunctor`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (W : CategoryTheory.Mor
+phismProperty C) {M : Type w'}   [inst_1 : AddMonoid M] […
 -/
 lemma mk₀_id_comp {X Y : C} [HasSmallLocalizedShiftedHom.{w} W M X Y]
     [HasSmallLocalizedShiftedHom.{w} W M X X]
@@ -763,26 +897,22 @@ variable {W} in
 /-- The postcomposition on the types `SmallShiftedHom W` with a morphism
 which satisfies `W` is a bijection. -/
 @[simps!]
-/--
-Definition of `postcompEquiv` / `postcompEquiv` 的定义
+/-
+**CategoryTheory.Localization.SmallShiftedHom.postcompEquiv** 是 Mathlib 中的一个定义，位
+于命名空间 `CategoryTheory.Localization.SmallShiftedHom`。
+形式化陈述：postcompEquiv {X Y Z : C} [W.RespectsIso] [W.IsCompatibleWithShift M] [Has
+SmallLocalizedShiftedHom.{w} W M X Y] [HasSmallLocalizedShiftedHom.{w} W M Y Z] 
+[HasSmallLocalizedShiftedHom.{w} W M X Z] [HasSmallLocalizedShiftedHom.{w} W M Z
+ Y] [HasSmallLocalizedShiftedHom.{w} W M Y Y] [HasSmallLocalizedShiftedHom.{w} W
+ M Z Z] (f : Y ⟶ Z) (hf : W f) {a : M} : SmallShiftedHom.{w} W X Y a ≃ SmallShif
+tedHom.{w} W X Z a where toFun α
+参数：f : Y ⟶ Z；hf : W f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition postcompEquiv
-  signature: {X Y Z : C}
-  body: α.comp (mk₀ _ _ rfl f) (zero_add _)
-  invFun β := β.comp (mk₀Inv _ rfl _ hf) (zero_add _)
-  left_inv α := by simp [comp_assoc]
-  right_inv β := by simp [comp_assoc]
-
-中文:
-定义 postcompEquiv
-  签名: {X Y Z : C}
-  定义体: α.comp (mk₀ _ _ rfl f) (zero_add _)
-  invFun β := β.comp (mk₀Inv _ rfl _ hf) (zero_add _)
-  left_inv α := by simp [comp_assoc]
-  right_inv β := by simp [comp_assoc]
-
-Depends on / 依赖: zero_add
+--- 原说明 ---
+The postcomposition on the types `SmallShiftedHom W` with a morphism
+which satisfies `W` is a bijection.
 -/
 noncomputable def postcompEquiv {X Y Z : C}
     [W.RespectsIso] [W.IsCompatibleWithShift M]
@@ -803,26 +933,22 @@ variable {W} in
 /-- The precomposition on the types `SmallShiftedHom W` with a morphism
 which satisfies `W` is a bijection. -/
 @[simps!]
-/--
-Definition of `precompEquiv` / `precompEquiv` 的定义
+/-
+**CategoryTheory.Localization.SmallShiftedHom.precompEquiv** 是 Mathlib 中的一个定义，位于
+命名空间 `CategoryTheory.Localization.SmallShiftedHom`。
+形式化陈述：precompEquiv {X Y Z : C} [W.RespectsIso] [W.IsCompatibleWithShift M] [HasS
+mallLocalizedShiftedHom.{w} W M X X] [HasSmallLocalizedShiftedHom.{w} W M Y Y] [
+HasSmallLocalizedShiftedHom.{w} W M X Y] [HasSmallLocalizedShiftedHom.{w} W M Y 
+X] [HasSmallLocalizedShiftedHom.{w} W M Y Z] [HasSmallLocalizedShiftedHom.{w} W 
+M X Z] [HasSmallLocalizedShiftedHom.{w} W M Z Z] (f : X ⟶ Y) (hf : W f) {a : M} 
+: SmallShiftedHom.{w} W Y Z a ≃ SmallShiftedHom.{w} W X Z a where toFun α
+参数：f : X ⟶ Y；hf : W f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition precompEquiv
-  signature: {X Y Z : C}
-  body: (mk₀ _ _ rfl f).comp α (add_zero _)
-  invFun β := (mk₀Inv _ rfl _ hf).comp β (add_zero _)
-  left_inv α := by simp [← comp_assoc]
-  right_inv β := by simp [← comp_assoc]
-
-中文:
-定义 precompEquiv
-  签名: {X Y Z : C}
-  定义体: (mk₀ _ _ rfl f).comp α (add_zero _)
-  invFun β := (mk₀Inv _ rfl _ hf).comp β (add_zero _)
-  left_inv α := by simp [← comp_assoc]
-  right_inv β := by simp [← comp_assoc]
-
-Depends on / 依赖: add_zero
+--- 原说明 ---
+The precomposition on the types `SmallShiftedHom W` with a morphism
+which satisfies `W` is a bijection.
 -/
 noncomputable def precompEquiv {X Y Z : C}
     [W.RespectsIso] [W.IsCompatibleWithShift M]
@@ -844,20 +970,23 @@ section ChangeOfUniverse
 
 variable {W}
 
-/--
-Definition of `chgUniv` / `chgUniv` 的定义
+/-- Up to an equivalence, the type `SmallShiftedHom.{w} W X Y m` does
+not depend on the universe `w`. -/
+/-
+**CategoryTheory.Localization.SmallShiftedHom.chgUniv** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Localization.SmallShiftedHom`。
+形式化陈述：chgUniv {X Y : C} {m : M} [HasSmallLocalizedShiftedHom.{w} W M X Y] [HasSm
+allLocalizedShiftedHom.{w''} W M X Y] : SmallShiftedHom.{w} W X Y m ≃ SmallShift
+edHom.{w''} W X Y m
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Localization.instHasSmallLocalizedHomObjShiftFunctor`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (W : CategoryTheory.Mor
+phismProperty C) {M : Type w'}   [inst_1 : AddMonoid M] […
 
-English:
-definition chgUniv
-  signature: {X Y : C} {m : M}
-  body: SmallHom.chgUniv
-
-中文:
-定义 chgUniv
-  签名: {X Y : C} {m : M}
-  定义体: SmallHom.chgUniv
-
-Depends on / 依赖: SmallHom, SmallHom.chgUniv, chgUniv
+--- 原说明 ---
+Up to an equivalence, the type `SmallShiftedHom.{w} W X Y m` does
+not depend on the universe `w`.
 -/
 noncomputable def chgUniv {X Y : C} {m : M}
     [HasSmallLocalizedShiftedHom.{w} W M X Y]
@@ -866,26 +995,22 @@ noncomputable def chgUniv {X Y : C} {m : M}
   SmallHom.chgUniv
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `equiv_chgUniv` / 引理 `equiv_chgUniv`
-
-English:
-lemma equiv_chgUniv
-  statement: (L : C ⥤ D) [L.IsLocalization W] [L.CommShift M] {X Y : C} {m : M}
-  proof: by
-  dsimp [equiv]
-  congr
-  apply SmallHom.equiv_chgUniv
-
-中文:
-引理 equiv_chgUniv
-  结论: (L : C ⥤ D) [L.是Localization W] [L.交换Shift M] {X Y : C} {m : M}
-  证明: by
-  dsimp [equiv]
-  congr
-  apply SmallHom.equiv_chgUniv
-
-Depends on / 依赖: SmallHom, SmallHom.equiv_chgUniv, equiv_chgUniv
+/-
+**CategoryTheory.Localization.SmallShiftedHom.equiv_chgUniv** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.Localization.SmallShiftedHom`。
+形式化陈述：equiv_chgUniv (L : C ⥤ D) [L.IsLocalization W] [L.CommShift M] {X Y : C} {
+m : M} [HasSmallLocalizedShiftedHom.{w} W M X Y] [HasSmallLocalizedShiftedHom.{w
+''} W M X Y] (e : SmallShiftedHom.{w} W X Y m) : equiv W L (chgUniv.{w''} e) = e
+quiv W L e
+参数：L : C ⥤ D；e : SmallShiftedHom.{w} W X Y m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Localization.instHasSmallLocalizedHomObjShiftFunctor`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (W : CategoryTheory.Mor
+phismProperty C) {M : Type w'}   [inst_1 : AddMonoid M] […
+· 使用引理 `CategoryTheory.Localization.SmallHom.equiv_chgUniv`：equiv_chgUniv (L : C
+ ⥤ D) [L.IsLocalization W] {X Y : C} [HasSmallLocalizedHom.{w} W X Y] [HasSmallL
+ocalizedHom.{w''} W X Y] (e : SmallHom.{…
 -/
 lemma equiv_chgUniv (L : C ⥤ D) [L.IsLocalization W] [L.CommShift M] {X Y : C} {m : M}
     [HasSmallLocalizedShiftedHom.{w} W M X Y]
@@ -920,22 +1045,24 @@ variable {C₁ : Type u₁} [Category.{v₁} C₁] {C₂ : Type u₂} [Category.
   (eX : Φ.functor.obj X₁ ≅ X₂) (eY : Φ.functor.obj Y₁ ≅ Y₂)
   (eZ : Φ.functor.obj Z₁ ≅ Z₂)
 
-/--
-Definition of `smallShiftedHomMap` / `smallShiftedHomMap` 的定义
+/-- The action of a localizer morphism `Φ` on `SmallShiftedHom`. -/
+/-
+**CategoryTheory.LocalizerMorphism.smallShiftedHomMap** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.LocalizerMorphism`。
+形式化陈述：smallShiftedHomMap {m : M} (f : SmallShiftedHom.{w} W₁ X₁ Y₁ m) : SmallShi
+ftedHom.{w''} W₂ X₂ Y₂ m
+参数：f : SmallShiftedHom.{w} W₁ X₁ Y₁ m。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Localization.hasSmallLocalizedHom_of_hasSmallLocalizedShi
+ftedHom₀`：hasSmallLocalizedHom_of_hasSmallLocalizedShiftedHom₀ : HasSmallLocaliz
+edHom.{w} W X Y
+· 使用定理 `CategoryTheory.Localization.instHasSmallLocalizedHomObjShiftFunctor`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (W : CategoryTheory.Mor
+phismProperty C) {M : Type w'}   [inst_1 : AddMonoid M] […
 
-English:
-definition smallShiftedHomMap
-  signature: {m : M} (f : SmallShiftedHom.{w} W₁ X₁ Y₁ m)
-  body: have := hasSmallLocalizedHom_of_hasSmallLocalizedShiftedHom₀.{w''} W₂ M X₂ X₂
-  Φ.smallHomMap' eX ((Φ.functor.commShiftIso m).app Y₁ ≪≫ (shiftFunctor _ _).mapIso eY) f
-
-中文:
-定义 smallShiftedHomMap
-  签名: {m : M} (f : SmallShiftedHom.{w} W₁ X₁ Y₁ m)
-  定义体: have := hasSmallLocalizedHom_of_hasSmallLocalizedShiftedHom₀.{w''} W₂ M X₂ X₂
-  Φ.smallHomMap' eX ((Φ.functor.commShiftIso m).app Y₁ ≪≫ (shiftFunctor _ _).mapIso eY) f
-
-Depends on / 依赖: commShiftIso, functor, functor.commShiftIso, mapIso, shiftFunctor, smallHomMap
+--- 原说明 ---
+The action of a localizer morphism `Φ` on `SmallShiftedHom`.
 -/
 noncomputable def smallShiftedHomMap {m : M} (f : SmallShiftedHom.{w} W₁ X₁ Y₁ m) :
       SmallShiftedHom.{w''} W₂ X₂ Y₂ m :=
@@ -943,44 +1070,87 @@ noncomputable def smallShiftedHomMap {m : M} (f : SmallShiftedHom.{w} W₁ X₁ 
   Φ.smallHomMap' eX ((Φ.functor.commShiftIso m).app Y₁ ≪≫ (shiftFunctor _ _).mapIso eY) f
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `equiv_smallShiftedHomMap` / 引理 `equiv_smallShiftedHomMap`
-
-English:
-lemma equiv_smallShiftedHomMap
-  statement: (G : D₁ ⥤ D₂) [G.CommShift M]
-  proof: by
-  have := hasSmallLocalizedHom_of_hasSmallLocalizedShiftedHom₀.{w''} W₂ M X₂ X₂
-  apply ((L₂.commShiftIso m).app Y₂).homToEquiv.symm.injective
-  simp only [Functor.comp_obj, SmallShiftedHom.equiv_apply, Iso.app_hom,
-    Iso.homToEquiv_symm_apply, Iso.app_inv, assoc, Iso.hom_inv_id_app, comp_id]
-  refine (Φ.equiv_smallHomMap' L₁ L₂ _ _ G e f).trans ?_
-  simp only [Functor.comp_obj, NatTrans.app_shift,
-    Functor.commShiftIso_comp_hom_app, Functor.commShiftIso_comp_inv_app, assoc,
-    Iso.trans_hom, Iso.app_hom, Functor.mapIso_hom, Functor.map_comp, ShiftedHom.map,
-    ShiftedHom.comp_mk₀, ShiftedHom.mk₀_comp,
-    Functor.commShiftIso_inv_naturality]
-  nth_rw 2 [← Functor.map_comp_assoc]
-  simp
-
-中文:
-引理 equiv_smallShiftedHomMap
-  结论: (G : D₁ ⥤ D₂) [G.交换Shift M]
-  证明: by
-  have := hasSmallLocalizedHom_of_hasSmallLocalizedShiftedHom₀.{w''} W₂ M X₂ X₂
-  apply ((L₂.commShiftIso m).app Y₂).homToEquiv.symm.injective
-  simp only [Functor.comp_obj, SmallShiftedHom.equiv_apply, Iso.app_hom,
-    Iso.homToEquiv_symm_apply, Iso.app_inv, assoc, Iso.hom_inv_id_app, comp_id]
-  refine (Φ.equiv_smallHomMap' L₁ L₂ _ _ G e f).trans ?_
-  simp only [Functor.comp_obj, NatTrans.app_shift,
-    Functor.commShiftIso_comp_hom_app, Functor.commShiftIso_comp_inv_app, assoc,
-    Iso.trans_hom, Iso.app_hom, Functor.mapIso_hom, Functor.map_comp, ShiftedHom.map,
-    ShiftedHom.comp_mk₀, ShiftedHom.mk₀_comp,
-    Functor.commShiftIso_inv_naturality]
-  nth_rw 2 [← Functor.map_comp_assoc]
-  simp
-
-Depends on / 依赖: Functor, Functor.commShiftIso_comp_hom_app, Functor.commShiftIso_comp_inv_app, Functor.comp_obj, Iso.app_hom, Iso.app_inv, Iso.homToEquiv_symm_apply, Iso.hom_inv_id_app, Iso.trans_hom, NatTrans, NatTrans.app_shift, SmallShiftedHom, SmallShiftedHom.equiv_apply, app_hom, app_inv, app_shift, commShiftIso, commShiftIso_comp_hom_app, commShiftIso_comp_inv_app, comp_id
+/-
+**CategoryTheory.LocalizerMorphism.equiv_smallShiftedHomMap** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：equiv_smallShiftedHomMap (G : D₁ ⥤ D₂) [G.CommShift M] (e : Φ.functor ⋙ L₂
+ ≅ L₁ ⋙ G) [NatTrans.CommShift e.hom M] {m : M} (f : SmallShiftedHom.{w} W₁ X₁ Y
+₁ m) : SmallShiftedHom.equiv W₂ L₂ (Φ.smallShiftedHomMap eX eY f) = (ShiftedHom.
+mk₀ 0 rfl (L₂.map eX.inv ≫ e.hom.app _)).comp (((SmallShiftedHom.equiv W₁ L₁ f).
+map G).comp ((ShiftedHom.mk₀ 0 rfl (e.inv.app _ ≫ L₂.map eY.hom))) (zero_add m))
+ (add_zero m)
+参数：G : D₁ ⥤ D₂；e : Φ.functor ⋙ L₂ ≅ L₁ ⋙ G；f : SmallShiftedHom.{w} W₁ X₁ Y₁ m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Localization.hasSmallLocalizedHom_of_hasSmallLocalizedShi
+ftedHom₀`：hasSmallLocalizedHom_of_hasSmallLocalizedShiftedHom₀ : HasSmallLocaliz
+edHom.{w} W X Y
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `CategoryTheory.Localization.instHasSmallLocalizedHomObjShiftFunctor`：∀ {
+C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] (W : CategoryTheory.Mor
+phismProperty C) {M : Type w'}   [inst_1 : AddMonoid M] […
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用引理 `CategoryTheory.LocalizerMorphism.equiv_smallHomMap'`：equiv_smallHomMap' 
+(G : D₁ ⥤ D₂) (e : Φ.functor ⋙ L₂ ≅ L₁ ⋙ G) (f : SmallHom.{w} W₁ X Y) : SmallHom
+.equiv W₂ L₂ (Φ.smallHomMap' eX eY f) = L…
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `CategoryTheory.NatTrans.app_shift`：app_shift (a : A) (X : C) : τ.app (X⟦
+a⟧) = (F₁.commShiftIso a).hom.app X ≫ (τ.app X)⟦a⟧' ≫ (F₂.commShiftIso a).inv.ap
+p X
+· 使用定理 `CategoryTheory.Functor.commShiftIso_comp_hom_app`：∀ {C : Type u_1} {D : 
+Type u_2} {E : Type u_3} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1
+ : CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `CategoryTheory.Functor.commShiftIso_comp_inv_app`：∀ {C : Type u_1} {D : 
+Type u_2} {E : Type u_3} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1
+ : CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.ShiftedHom.comp.congr_simp`：∀ {C : Type u_1} [inst : Cate
+goryTheory.Category.{v_1, u_1} C] {M : Type u_4} [inst_1 : AddMonoid M]   [inst_
+2 : CategoryTheory.HasShift C M…
+· 使用引理 `CategoryTheory.ShiftedHom.comp_mk₀`：comp_mk₀ {a : M} (f : ShiftedHom X Y
+ a) (m₀ : M) (hm₀ : m₀ = 0) (g : Y ⟶ Z) : f.comp (mk₀ m₀ hm₀ g) (by rw [hm₀, zer
+o_add]) = f ≫ g⟦a⟧'
+· 使用引理 `CategoryTheory.ShiftedHom.mk₀_comp`：mk₀_comp (m₀ : M) (hm₀ : m₀ = 0) (f 
+: X ⟶ Y) {a : M} (g : ShiftedHom Y Z a) : (mk₀ m₀ hm₀ f).comp g (by rw [hm₀, add
+_zero]) = f ≫ g
+· 使用引理 `CategoryTheory.Functor.commShiftIso_inv_naturality`：commShiftIso_inv_nat
+urality {X Y : C} (f : X ⟶ Y) (a : A) : dsimp% (F.map f)⟦a⟧' ≫ (F.commShiftIso a
+).inv.app Y = (F.commShiftIso a).inv.app…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp_assoc`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v_1, u₁} C] {D : Type u₂}   [inst_1 : CategoryTheory.Category.{v
+_2, u₂} D] (F : CategoryThe…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma equiv_smallShiftedHomMap (G : D₁ ⥤ D₂) [G.CommShift M]
     (e : Φ.functor ⋙ L₂ ≅ L₁ ⋙ G) [NatTrans.CommShift e.hom M]
@@ -1007,38 +1177,88 @@ variable [W₁.IsCompatibleWithShift M] [W₂.IsCompatibleWithShift M]
 
 set_option backward.defeqAttrib.useBackward true in
 @[simp]
-/--
-lemma `smallShiftedHomMap_mk` / 引理 `smallShiftedHomMap_mk`
-
-English:
-lemma smallShiftedHomMap_mk
-  given: {m : M} (f : ShiftedHom X₁ Y₁ m)
-  proof: by
-  apply (SmallShiftedHom.equiv W₂ W₂.Q).injective
-  let e := CatCommSq.iso Φ.functor W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q)
-  simp only [Φ.equiv_smallShiftedHomMap W₁.Q W₂.Q _ _ (Φ.localizedFunctor W₁.Q W₂.Q) e,
-    Functor.comp_obj, ShiftedHom.map, SmallShiftedHom.equiv_mk, Functor.map_comp, assoc,
-    ShiftedHom.comp_mk₀, NatTrans.shift_app, Functor.commShiftIso_comp_inv_app,
-    Functor.commShiftIso_comp_hom_app, Iso.hom_inv_id_app_assoc, ShiftedHom.mk₀_comp,
-    Functor.commShiftIso_hom_naturality]
-  nth_rw 2 [← Functor.map_comp_assoc]
-  simp [reassoc_of% (NatIso.naturality_2 e f)]
-
-中文:
-引理 smallShiftedHomMap_mk
-  条件: {m : M} (f : ShiftedHom X₁ Y₁ m)
-  证明: by
-  apply (SmallShiftedHom.equiv W₂ W₂.Q).injective
-  let e := CatCommSq.iso Φ.functor W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q)
-  simp only [Φ.equiv_smallShiftedHomMap W₁.Q W₂.Q _ _ (Φ.localizedFunctor W₁.Q W₂.Q) e,
-    Functor.comp_obj, ShiftedHom.map, SmallShiftedHom.equiv_mk, Functor.map_comp, assoc,
-    ShiftedHom.comp_mk₀, NatTrans.shift_app, Functor.commShiftIso_comp_inv_app,
-    Functor.commShiftIso_comp_hom_app, Iso.hom_inv_id_app_assoc, ShiftedHom.mk₀_comp,
-    Functor.commShiftIso_hom_naturality]
-  nth_rw 2 [← Functor.map_comp_assoc]
-  simp [reassoc_of% (NatIso.naturality_2 e f)]
-
-Depends on / 依赖: CatCommSq, CatCommSq.iso, Functor, Functor.commShiftIso_comp_hom_app, Functor.commShiftIso_comp_inv_app, Functor.commShiftIso_hom_naturality, Functor.comp_obj, Functor.map_comp, Iso.hom_inv_id_app_assoc, NatTrans, NatTrans.shift_app, ShiftedHom, ShiftedHom.comp_mk, ShiftedHom.map, ShiftedHom.mk, SmallShiftedHom, SmallShiftedHom.equiv, SmallShiftedHom.equiv_mk, commShiftIso_comp_hom_app, commShiftIso_comp_inv_app
+/-
+**CategoryTheory.LocalizerMorphism.smallShiftedHomMap_mk** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：smallShiftedHomMap_mk {m : M} (f : ShiftedHom X₁ Y₁ m) : Φ.smallShiftedHom
+Map eX eY (.mk _ f) = .mk _ ((ShiftedHom.mk₀ _ rfl eX.inv).comp ((f.map Φ.functo
+r).comp (.mk₀ _ rfl eY.hom) (zero_add m)) (add_zero _))
+参数：f : ShiftedHom X₁ Y₁ m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `CategoryTheory.LocalizerMorphism.equiv_smallShiftedHomMap`：equiv_smallSh
+iftedHomMap (G : D₁ ⥤ D₂) [G.CommShift M] (e : Φ.functor ⋙ L₂ ≅ L₁ ⋙ G) [NatTran
+s.CommShift e.hom M] {m : M} (f : SmallShiftedH…
+· 使用定理 `CategoryTheory.LocalizerMorphism.instCommShiftLocalizationHomFunctorIsoF
+unctorQLocalizedFunctor`：∀ {C₁ : Type u_1} {C₂ : Type u_2} [inst : CategoryTheor
+y.Category.{v_1, u_1} C₁]   [inst_1 : CategoryTheory.Category.{v_2, u_2} C₂] {W₁
+ : Ca…
+· 使用定理 `CategoryTheory.ShiftedHom.comp.congr_simp`：∀ {C : Type u_1} [inst : Cate
+goryTheory.Category.{v_1, u_1} C] {M : Type u_4} [inst_1 : AddMonoid M]   [inst_
+2 : CategoryTheory.HasShift C M…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `CategoryTheory.Localization.SmallShiftedHom.equiv_mk`：equiv_mk [HasSmall
+LocalizedShiftedHom.{w} W M X Y] {m : M} (f : ShiftedHom X Y m) : equiv W L (.mk
+ _ f) = f.map L
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.ShiftedHom.comp_mk₀`：comp_mk₀ {a : M} (f : ShiftedHom X Y
+ a) (m₀ : M) (hm₀ : m₀ = 0) (g : Y ⟶ Z) : f.comp (mk₀ m₀ hm₀ g) (by rw [hm₀, zer
+o_add]) = f ≫ g⟦a⟧'
+· 使用引理 `CategoryTheory.NatTrans.shift_app`：shift_app (a : A) (X : C) : (τ.app X)
+⟦a⟧' = (F₁.commShiftIso a).inv.app X ≫ τ.app (X⟦a⟧) ≫ (F₂.commShiftIso a).hom.ap
+p X
+· 使用定理 `CategoryTheory.Functor.commShiftIso_comp_inv_app`：∀ {C : Type u_1} {D : 
+Type u_2} {E : Type u_3} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1
+ : CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `CategoryTheory.Functor.commShiftIso_comp_hom_app`：∀ {C : Type u_1} {D : 
+Type u_2} {E : Type u_3} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1
+ : CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F G : CategoryThe…
+· 使用引理 `CategoryTheory.ShiftedHom.mk₀_comp`：mk₀_comp (m₀ : M) (hm₀ : m₀ = 0) (f 
+: X ⟶ Y) {a : M} (g : ShiftedHom Y Z a) : (mk₀ m₀ hm₀ f).comp g (by rw [hm₀, add
+_zero]) = f ≫ g
+· 使用引理 `CategoryTheory.Functor.commShiftIso_hom_naturality`：commShiftIso_hom_nat
+urality {X Y : C} (f : X ⟶ Y) (a : A) : dsimp% F.map (f⟦a⟧') ≫ (F.commShiftIso a
+).hom.app Y = (F.commShiftIso a).hom.app…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp_assoc`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v_1, u₁} C] {D : Type u₂}   [inst_1 : CategoryTheory.Category.{v
+_2, u₂} D] (F : CategoryThe…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用定理 `CategoryTheory.NatIso.naturality_2`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma smallShiftedHomMap_mk {m : M} (f : ShiftedHom X₁ Y₁ m) :
     Φ.smallShiftedHomMap eX eY (.mk _ f) =
@@ -1053,23 +1273,88 @@ lemma smallShiftedHomMap_mk {m : M} (f : ShiftedHom X₁ Y₁ m) :
     Functor.commShiftIso_hom_naturality]
   nth_rw 2 [← Functor.map_comp_assoc]
   simp [reassoc_of% (NatIso.naturality_2 e f)]
-
-/--
-lemma `smallShiftedHomMap_mk₀` / 引理 `smallShiftedHomMap_mk₀`
-
-English:
-lemma smallShiftedHomMap_mk₀
-  given: (m₀ : M) (hm₀ : m₀ = 0) (f : X₁ ⟶ Y₁)
-  proof: by
-  simp [SmallShiftedHom.mk₀]
-
-中文:
-引理 smallShiftedHomMap_mk₀
-  条件: (m₀ : M) (hm₀ : m₀ = 0) (f : X₁ ⟶ Y₁)
-  证明: by
-  simp [SmallShiftedHom.mk₀]
-
-Depends on / 依赖: SmallShiftedHom, SmallShiftedHom.mk
+/-
+**CategoryTheory.LocalizerMorphism.smallShiftedHomMap_mk** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：smallShiftedHomMap_mk {m : M} (f : ShiftedHom X₁ Y₁ m) : Φ.smallShiftedHom
+Map eX eY (.mk _ f) = .mk _ ((ShiftedHom.mk₀ _ rfl eX.inv).comp ((f.map Φ.functo
+r).comp (.mk₀ _ rfl eY.hom) (zero_add m)) (add_zero _))
+参数：f : ShiftedHom X₁ Y₁ m。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `CategoryTheory.LocalizerMorphism.equiv_smallShiftedHomMap`：equiv_smallSh
+iftedHomMap (G : D₁ ⥤ D₂) [G.CommShift M] (e : Φ.functor ⋙ L₂ ≅ L₁ ⋙ G) [NatTran
+s.CommShift e.hom M] {m : M} (f : SmallShiftedH…
+· 使用定理 `CategoryTheory.LocalizerMorphism.instCommShiftLocalizationHomFunctorIsoF
+unctorQLocalizedFunctor`：∀ {C₁ : Type u_1} {C₂ : Type u_2} [inst : CategoryTheor
+y.Category.{v_1, u_1} C₁]   [inst_1 : CategoryTheory.Category.{v_2, u_2} C₂] {W₁
+ : Ca…
+· 使用定理 `CategoryTheory.ShiftedHom.comp.congr_simp`：∀ {C : Type u_1} [inst : Cate
+goryTheory.Category.{v_1, u_1} C] {M : Type u_4} [inst_1 : AddMonoid M]   [inst_
+2 : CategoryTheory.HasShift C M…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `CategoryTheory.Localization.SmallShiftedHom.equiv_mk`：equiv_mk [HasSmall
+LocalizedShiftedHom.{w} W M X Y] {m : M} (f : ShiftedHom X Y m) : equiv W L (.mk
+ _ f) = f.map L
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.ShiftedHom.comp_mk₀`：comp_mk₀ {a : M} (f : ShiftedHom X Y
+ a) (m₀ : M) (hm₀ : m₀ = 0) (g : Y ⟶ Z) : f.comp (mk₀ m₀ hm₀ g) (by rw [hm₀, zer
+o_add]) = f ≫ g⟦a⟧'
+· 使用引理 `CategoryTheory.NatTrans.shift_app`：shift_app (a : A) (X : C) : (τ.app X)
+⟦a⟧' = (F₁.commShiftIso a).inv.app X ≫ τ.app (X⟦a⟧) ≫ (F₂.commShiftIso a).hom.ap
+p X
+· 使用定理 `CategoryTheory.Functor.commShiftIso_comp_inv_app`：∀ {C : Type u_1} {D : 
+Type u_2} {E : Type u_3} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1
+ : CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `CategoryTheory.Functor.commShiftIso_comp_hom_app`：∀ {C : Type u_1} {D : 
+Type u_2} {E : Type u_3} [inst : CategoryTheory.Category.{v_1, u_1} C]   [inst_1
+ : CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app_assoc`：∀ {C : Type u₁} [inst : Categor
+yTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂
+, u₂} D]   {F G : CategoryThe…
+· 使用引理 `CategoryTheory.ShiftedHom.mk₀_comp`：mk₀_comp (m₀ : M) (hm₀ : m₀ = 0) (f 
+: X ⟶ Y) {a : M} (g : ShiftedHom Y Z a) : (mk₀ m₀ hm₀ f).comp g (by rw [hm₀, add
+_zero]) = f ≫ g
+· 使用引理 `CategoryTheory.Functor.commShiftIso_hom_naturality`：commShiftIso_hom_nat
+urality {X Y : C} (f : X ⟶ Y) (a : A) : dsimp% F.map (f⟦a⟧') ≫ (F.commShiftIso a
+).hom.app Y = (F.commShiftIso a).hom.app…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Functor.map_comp_assoc`：∀ {C : Type u₁} [inst : CategoryT
+heory.Category.{v_1, u₁} C] {D : Type u₂}   [inst_1 : CategoryTheory.Category.{v
+_2, u₂} D] (F : CategoryThe…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用定理 `CategoryTheory.Functor.map_id`：∀ {C : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]  
+ (self : CategoryTh…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用定理 `CategoryTheory.NatIso.naturality_2`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂}
+ D]   {F G : CategoryThe…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma smallShiftedHomMap_mk₀ (m₀ : M) (hm₀ : m₀ = 0) (f : X₁ ⟶ Y₁) :
     Φ.smallShiftedHomMap eX eY (.mk₀ _ _ hm₀ f) =
@@ -1077,30 +1362,73 @@ lemma smallShiftedHomMap_mk₀ (m₀ : M) (hm₀ : m₀ = 0) (f : X₁ ⟶ Y₁)
   simp [SmallShiftedHom.mk₀]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `smallShiftedHomMap_comp` / 引理 `smallShiftedHomMap_comp`
-
-English:
-lemma smallShiftedHomMap_comp
-  proof: by
-  apply (SmallShiftedHom.equiv W₂ W₂.Q).injective
-  let e := CatCommSq.iso Φ.functor W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q)
-  simp only [Φ.equiv_smallShiftedHomMap W₁.Q W₂.Q _ _ (Φ.localizedFunctor W₁.Q W₂.Q) e,
-    SmallShiftedHom.equiv_comp, ShiftedHom.map_comp]
-  rw [ShiftedHom.comp_assoc _ _ _ _ (zero_add b) (by simpa)]; rw [ShiftedHom.comp_assoc _ _ _ _ h (by simpa)]; rw [ShiftedHom.comp_assoc _ _ _ _ (add_zero b) (by simpa)]; rw [← ShiftedHom.comp_assoc _ _ _ (add_zero 0) (add_zero b) (by simp)]; rw [ShiftedHom.mk₀_comp_mk₀]
-  simp
-
-中文:
-引理 smallShiftedHomMap_comp
-  证明: by
-  apply (SmallShiftedHom.equiv W₂ W₂.Q).injective
-  let e := CatCommSq.iso Φ.functor W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q)
-  simp only [Φ.equiv_smallShiftedHomMap W₁.Q W₂.Q _ _ (Φ.localizedFunctor W₁.Q W₂.Q) e,
-    SmallShiftedHom.equiv_comp, ShiftedHom.map_comp]
-  rw [ShiftedHom.comp_assoc _ _ _ _ (zero_add b) (by simpa)]; rw [ShiftedHom.comp_assoc _ _ _ _ h (by simpa)]; rw [ShiftedHom.comp_assoc _ _ _ _ (add_zero b) (by simpa)]; rw [← ShiftedHom.comp_assoc _ _ _ (add_zero 0) (add_zero b) (by simp)]; rw [ShiftedHom.mk₀_comp_mk₀]
-  simp
-
-Depends on / 依赖: CatCommSq, CatCommSq.iso, ShiftedHom, ShiftedHom.comp_assoc, ShiftedHom.map_comp, SmallShiftedHom, SmallShiftedHom.equiv, SmallShiftedHom.equiv_comp, add_zero, comp_assoc, equiv_comp, equiv_smallShiftedHomMap, functor, injective, localizedFunctor, map_comp, zero_add
+/-
+**CategoryTheory.LocalizerMorphism.smallShiftedHomMap_comp** 是 Mathlib 中的一个引理，位于
+命名空间 `CategoryTheory.LocalizerMorphism`。
+形式化陈述：smallShiftedHomMap_comp [HasSmallLocalizedShiftedHom.{w} W₁ M Y₁ Z₁] [HasS
+mallLocalizedShiftedHom.{w''} W₂ M Z₂ Z₂] [HasSmallLocalizedShiftedHom.{w''} W₂ 
+M Y₂ Z₂] [HasSmallLocalizedShiftedHom.{w} W₁ M X₁ Z₁] [HasSmallLocalizedShiftedH
+om.{w} W₁ M Z₁ Z₁] [HasSmallLocalizedShiftedHom.{w''} W₂ M X₂ Z₂] {a b c : M} (f
+ : SmallShiftedHom.{w} W₁ X₁ Y₁ a) (g : SmallShiftedHom.{w} W₁ Y₁ Z₁ b) (h : b +
+ a = c) : Φ.smallShiftedHomMap eX eZ (f.comp g h) = (Φ.smallShiftedHomMap eX eY 
+f).comp (Φ.smallShiftedHom
+参数：f : SmallShiftedHom.{w} W₁ X₁ Y₁ a；g : SmallShiftedHom.{w} W₁ Y₁ Z₁ b；h : b +
+ a = c。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `CategoryTheory.LocalizerMorphism.equiv_smallShiftedHomMap`：equiv_smallSh
+iftedHomMap (G : D₁ ⥤ D₂) [G.CommShift M] (e : Φ.functor ⋙ L₂ ≅ L₁ ⋙ G) [NatTran
+s.CommShift e.hom M] {m : M} (f : SmallShiftedH…
+· 使用定理 `CategoryTheory.LocalizerMorphism.instCommShiftLocalizationHomFunctorIsoF
+unctorQLocalizedFunctor`：∀ {C₁ : Type u_1} {C₂ : Type u_2} [inst : CategoryTheor
+y.Category.{v_1, u_1} C₁]   [inst_1 : CategoryTheory.Category.{v_2, u_2} C₂] {W₁
+ : Ca…
+· 使用定理 `CategoryTheory.ShiftedHom.comp.congr_simp`：∀ {C : Type u_1} [inst : Cate
+goryTheory.Category.{v_1, u_1} C] {M : Type u_4} [inst_1 : AddMonoid M]   [inst_
+2 : CategoryTheory.HasShift C M…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `CategoryTheory.Localization.SmallShiftedHom.equiv_comp`：equiv_comp [HasS
+mallLocalizedShiftedHom.{w} W M X Y] [HasSmallLocalizedShiftedHom.{w} W M Y Z] [
+HasSmallLocalizedShiftedHom.{w} W M X Z] [Ha…
+· 使用引理 `CategoryTheory.ShiftedHom.map_comp`：map_comp {a b c : M} (f : ShiftedHom
+ X Y a) (g : ShiftedHom Y Z b) (h : b + a = c) (F : C ⥤ D) [F.CommShift M] : (f.
+comp g h).map F = (f.map…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `CategoryTheory.ShiftedHom.comp_assoc`：comp_assoc {a₁ a₂ a₃ a₁₂ a₂₃ a : M
+} (α : ShiftedHom X Y a₁) (β : ShiftedHom Y Z a₂) (γ : ShiftedHom Z T a₃) (h₁₂ :
+ a₂ + a₁ = a₁₂) (h₂₃ : a₃ …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.ShiftedHom.mk₀_comp_mk₀`：mk₀_comp_mk₀ (f : X ⟶ Y) (g : Y 
+⟶ Z) {a b c : M} (h : b + a = c) (ha : a = 0) (hb : b = 0) : (mk₀ a ha f).comp (
+mk₀ b hb g) h = mk₀ c (by rw…
+· 使用定理 `CategoryTheory.ShiftedHom.mk₀.congr_simp`：∀ {C : Type u_1} [inst : Categ
+oryTheory.Category.{v_1, u_1} C] {M : Type u_4} [inst_1 : AddMonoid M]   [inst_2
+ : CategoryTheory.HasShift C M…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Iso.map_hom_inv_id_assoc`：∀ {C : Type u} [inst : Category
+Theory.Category.{v, u} C] {D : Type u_1} [inst_1 : CategoryTheory.Category.{v_1,
+ u_1} D]   {X Y : C} (e : X ≅…
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_app`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} 
+D]   {F G : CategoryThe…
+· 使用引理 `CategoryTheory.ShiftedHom.mk₀_id_comp`：mk₀_id_comp (m₀ : M) (hm₀ : m₀ = 
+0) {a : M} (f : ShiftedHom X Y a) : (mk₀ m₀ hm₀ (𝟙 X)).comp f (by rw [hm₀, add_z
+ero]) = f
 -/
 lemma smallShiftedHomMap_comp
     [HasSmallLocalizedShiftedHom.{w} W₁ M Y₁ Z₁] [HasSmallLocalizedShiftedHom.{w''} W₂ M Z₂ Z₂]
@@ -1114,9 +1442,14 @@ lemma smallShiftedHomMap_comp
   let e := CatCommSq.iso Φ.functor W₁.Q W₂.Q (Φ.localizedFunctor W₁.Q W₂.Q)
   simp only [Φ.equiv_smallShiftedHomMap W₁.Q W₂.Q _ _ (Φ.localizedFunctor W₁.Q W₂.Q) e,
     SmallShiftedHom.equiv_comp, ShiftedHom.map_comp]
-  rw [ShiftedHom.comp_assoc _ _ _ _ (zero_add b) (by simpa)]; rw [ShiftedHom.comp_assoc _ _ _ _ h (by simpa)]; rw [ShiftedHom.comp_assoc _ _ _ _ (add_zero b) (by simpa)]; rw [← ShiftedHom.comp_assoc _ _ _ (add_zero 0) (add_zero b) (by simp)]; rw [ShiftedHom.mk₀_comp_mk₀]
+  rw [ShiftedHom.comp_assoc _ _ _ _ (zero_add b) (by simpa),
+    ShiftedHom.comp_assoc _ _ _ _ h (by simpa),
+    ShiftedHom.comp_assoc _ _ _ _ (add_zero b) (by simpa),
+    ← ShiftedHom.comp_assoc _ _ _ (add_zero 0) (add_zero b) (by simp),
+    ShiftedHom.mk₀_comp_mk₀]
   simp
 
 end LocalizerMorphism
 
 end CategoryTheory
+

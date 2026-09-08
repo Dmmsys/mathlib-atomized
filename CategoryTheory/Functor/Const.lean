@@ -33,22 +33,16 @@ variable {C : Type u₂} [Category.{v₂} C]
 /-- The functor sending `X : C` to the constant functor `J ⥤ C` sending everything to `X`.
 -/
 @[simps, implicit_reducible]
-/--
-Definition of `const` / `const` 的定义
+/-
+**CategoryTheory.Functor.const** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Functor
+`。
+形式化陈述：const : C ⥤ J ⥤ C where obj X
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition const
-  signature: : C ⥤ J ⥤ C where
-  body: { obj := fun _ => X
-      map := fun _ => 𝟙 X }
-  map {X Y} f := { app := fun _ => f }
-
-中文:
-定义 const
-  签名: : C ⥤ J ⥤ C where
-  定义体: { obj := fun _ => X
-      map := fun _ => 𝟙 X }
-  map {X Y} f := { app := fun _ => f }
+--- 原说明 ---
+The functor sending `X : C` to the constant functor `J ⥤ C` sending everything t
+o `X`.
 -/
 def const : C ⥤ J ⥤ C where
   obj X :=
@@ -70,40 +64,41 @@ set_option backward.defeqAttrib.useBackward true in
 is (naturally isomorphic to) the opposite of the constant functor `J ⥤ C` sending everything to `X`.
 -/
 @[simps]
-/--
-Definition of `opObjOp` / `opObjOp` 的定义
+/-
+**CategoryTheory.Functor.const.opObjOp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.Functor.const`。
+形式化陈述：opObjOp (X : C) : (const Jᵒᵖ).obj (op X) ≅ ((const J).obj X).op where hom
+参数：X : C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition opObjOp
-  signature: (X : C)
-  body: { app := fun _ => 𝟙 _ }
-  inv := { app := fun _ => 𝟙 _ }
-
-中文:
-定义 opObjOp
-  签名: (X : C)
-  定义体: { app := fun _ => 𝟙 _ }
-  inv := { app := fun _ => 𝟙 _ }
+--- 原说明 ---
+The constant functor `Jᵒᵖ ⥤ Cᵒᵖ` sending everything to `op X`
+is (naturally isomorphic to) the opposite of the constant functor `J ⥤ C` sendin
+g everything to `X`.
 -/
 def opObjOp (X : C) : (const Jᵒᵖ).obj (op X) ≅ ((const J).obj X).op where
   hom := { app := fun _ => 𝟙 _ }
   inv := { app := fun _ => 𝟙 _ }
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `opObjUnop` / `opObjUnop` 的定义
+/-- The constant functor `Jᵒᵖ ⥤ C` sending everything to `unop X`
+is (naturally isomorphic to) the opposite of
+the constant functor `J ⥤ Cᵒᵖ` sending everything to `X`.
+-/
+/-
+**CategoryTheory.Functor.const.opObjUnop** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Functor.const`。
+形式化陈述：opObjUnop (X : Cᵒᵖ) : (const Jᵒᵖ).obj (unop X) ≅ ((const J).obj X).leftOp 
+where hom
+参数：X : Cᵒᵖ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition opObjUnop
-  signature: (X : Cᵒᵖ)
-  body: { app := fun _ => 𝟙 _ }
-  inv := { app := fun _ => 𝟙 _ }
-
-中文:
-定义 opObjUnop
-  签名: (X : Cᵒᵖ)
-  定义体: { app := fun _ => 𝟙 _ }
-  inv := { app := fun _ => 𝟙 _ }
+--- 原说明 ---
+The constant functor `Jᵒᵖ ⥤ C` sending everything to `unop X`
+is (naturally isomorphic to) the opposite of
+the constant functor `J ⥤ Cᵒᵖ` sending everything to `X`.
 -/
 def opObjUnop (X : Cᵒᵖ) : (const Jᵒᵖ).obj (unop X) ≅ ((const J).obj X).leftOp where
   hom := { app := fun _ => 𝟙 _ }
@@ -111,64 +106,40 @@ def opObjUnop (X : Cᵒᵖ) : (const Jᵒᵖ).obj (unop X) ≅ ((const J).obj X)
 
 -- Lean needs some help with universes here.
 @[simp]
-/--
-theorem `opObjUnop_hom_app` / 定理 `opObjUnop_hom_app`
-
-English:
-theorem opObjUnop_hom_app
-  given: (X : Cᵒᵖ) (j : Jᵒᵖ)
-  statement: (opObjUnop.{v₁, v₂} X).hom.app j = 𝟙 _
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 opObjUnop_hom_app
-  条件: (X : Cᵒᵖ) (j : Jᵒᵖ)
-  结论: (opObjUnop.{v₁, v₂} X).hom.app j = 𝟙 _
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Functor.const.opObjUnop_hom_app** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Functor.const`。
+形式化陈述：opObjUnop_hom_app (X : Cᵒᵖ) (j : Jᵒᵖ) : (opObjUnop.{v₁, v₂} X).hom.app j =
+ 𝟙 _
+参数：X : Cᵒᵖ；j : Jᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem opObjUnop_hom_app (X : Cᵒᵖ) (j : Jᵒᵖ) : (opObjUnop.{v₁, v₂} X).hom.app j = 𝟙 _ :=
   rfl
 
 @[simp]
-/--
-theorem `opObjUnop_inv_app` / 定理 `opObjUnop_inv_app`
-
-English:
-theorem opObjUnop_inv_app
-  given: (X : Cᵒᵖ) (j : Jᵒᵖ)
-  statement: (opObjUnop.{v₁, v₂} X).inv.app j = 𝟙 _
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 opObjUnop_inv_app
-  条件: (X : Cᵒᵖ) (j : Jᵒᵖ)
-  结论: (opObjUnop.{v₁, v₂} X).inv.app j = 𝟙 _
-  证明: rfl
-
-@[simp]
+/-
+**CategoryTheory.Functor.const.opObjUnop_inv_app** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Functor.const`。
+形式化陈述：opObjUnop_inv_app (X : Cᵒᵖ) (j : Jᵒᵖ) : (opObjUnop.{v₁, v₂} X).inv.app j =
+ 𝟙 _
+参数：X : Cᵒᵖ；j : Jᵒᵖ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem opObjUnop_inv_app (X : Cᵒᵖ) (j : Jᵒᵖ) : (opObjUnop.{v₁, v₂} X).inv.app j = 𝟙 _ :=
   rfl
 
 @[simp]
-/--
-theorem `unop_functor_op_obj_map` / 定理 `unop_functor_op_obj_map`
-
-English:
-theorem unop_functor_op_obj_map
-  given: (X : Cᵒᵖ) {j₁ j₂ : J} (f : j₁ ⟶ j₂)
-  proof: rfl
-
-中文:
-定理 unop_functor_op_obj_map
-  条件: (X : Cᵒᵖ) {j₁ j₂ : J} (f : j₁ ⟶ j₂)
-  证明: rfl
+/-
+**CategoryTheory.Functor.const.unop_functor_op_obj_map** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Functor.const`。
+形式化陈述：unop_functor_op_obj_map (X : Cᵒᵖ) {j₁ j₂ : J} (f : j₁ ⟶ j₂) : (unop ((Func
+tor.op (const J)).obj X)).map f = 𝟙 (unop X)
+参数：X : Cᵒᵖ；f : j₁ ⟶ j₂。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem unop_functor_op_obj_map (X : Cᵒᵖ) {j₁ j₂ : J} (f : j₁ ⟶ j₂) :
     (unop ((Functor.op (const J)).obj X)).map f = 𝟙 (unop X) :=
@@ -185,39 +156,31 @@ set_option backward.defeqAttrib.useBackward true in
   (the equality requires `F.map (𝟙 _) = 𝟙 _`). A natural isomorphism is
   more convenient than an equality between functors (compare id_to_iso). -/
 @[simps]
-/--
-Definition of `constComp` / `constComp` 的定义
+/-
+**CategoryTheory.Functor.constComp** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Fun
+ctor`。
+形式化陈述：constComp (X : C) (F : C ⥤ D) : (const J).obj X ⋙ F ≅ (const J).obj (F.obj
+ X) where hom
+参数：X : C；F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition constComp
-  signature: (X : C) (F : C ⥤ D)
-  body: { app := fun _ => 𝟙 _ }
-  inv := { app := fun _ => 𝟙 _ }
-
-中文:
-定义 constComp
-  签名: (X : C) (F : C ⥤ D)
-  定义体: { app := fun _ => 𝟙 _ }
-  inv := { app := fun _ => 𝟙 _ }
+--- 原说明 ---
+These are actually equal, of course, but not definitionally equal
+  (the equality requires `F.map (𝟙 _) = 𝟙 _`). A natural isomorphism is
+  more convenient than an equality between functors (compare id_to_iso).
 -/
 def constComp (X : C) (F : C ⥤ D) : (const J).obj X ⋙ F ≅ (const J).obj (F.obj X) where
   hom := { app := fun _ => 𝟙 _ }
   inv := { app := fun _ => 𝟙 _ }
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- If `J` is nonempty, then the constant functor over `J` is faithful. -/
+/-
+**CategoryTheory.Functor.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [Nonempty
-  signature: J] : Faithful (const J
-  body: NatTrans.congr_app e (Classical.arbitrary J)
-
-中文:
-实例 [非空
-  签名: J] : 忠实 (const J
-  定义体: NatTrans.congr_app e (Classical.arbitrary J)
-
-Depends on / 依赖: Classical, Classical.arbitrary, NatTrans, NatTrans.congr_app, arbitrary, congr_app
+--- 原说明 ---
+If `J` is nonempty, then the constant functor over `J` is faithful.
 -/
 instance [Nonempty J] : Faithful (const J : C ⥤ J ⥤ C) where
   map_injective e := NatTrans.congr_app e (Classical.arbitrary J)
@@ -227,24 +190,18 @@ set_option backward.defeqAttrib.useBackward true in
 /-- The canonical isomorphism
 `F ⋙ Functor.const J ≅ Functor.const F ⋙ (whiskeringRight J _ _).obj L`. -/
 @[simps!]
-/--
-Definition of `compConstIso` / `compConstIso` 的定义
+/-
+**CategoryTheory.Functor.compConstIso** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Functor`。
+形式化陈述：compConstIso (F : C ⥤ D) : F ⋙ Functor.const J ≅ Functor.const J ⋙ (whiske
+ringRight J C D).obj F
+参数：F : C ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compConstIso
-  signature: (F : C ⥤ D)
-  body: NatIso.ofComponents
-    (fun X => NatIso.ofComponents (fun _ => Iso.refl _) (by simp))
-    (by cat_disch)
-
-中文:
-定义 compConstIso
-  签名: (F : C ⥤ D)
-  定义体: NatIso.ofComponents
-    (fun X => NatIso.ofComponents (fun _ => Iso.refl _) (by simp))
-    (by cat_disch)
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, cat_disch, ofComponents
+--- 原说明 ---
+The canonical isomorphism
+`F ⋙ Functor.const J ≅ Functor.const F ⋙ (whiskeringRight J _ _).obj L`.
 -/
 def compConstIso (F : C ⥤ D) :
     F ⋙ Functor.const J ≅ Functor.const J ⋙ (whiskeringRight J C D).obj F :=
@@ -257,20 +214,18 @@ set_option backward.defeqAttrib.useBackward true in
 /-- The canonical isomorphism
 `const D ⋙ (whiskeringLeft J _ _).obj F ≅ const J` -/
 @[simps!]
-/--
-Definition of `constCompWhiskeringLeftIso` / `constCompWhiskeringLeftIso` 的定义
+/-
+**CategoryTheory.Functor.constCompWhiskeringLeftIso** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.Functor`。
+形式化陈述：constCompWhiskeringLeftIso (F : J ⥤ D) : const D ⋙ (whiskeringLeft J D C).
+obj F ≅ const J
+参数：F : J ⥤ D。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition constCompWhiskeringLeftIso
-  signature: (F : J ⥤ D)
-  body: NatIso.ofComponents fun X => NatIso.ofComponents fun Y => Iso.refl _
-
-中文:
-定义 constCompWhiskeringLeftIso
-  签名: (F : J ⥤ D)
-  定义体: NatIso.ofComponents fun X => NatIso.ofComponents fun Y => Iso.refl _
-
-Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
+--- 原说明 ---
+The canonical isomorphism
+`const D ⋙ (whiskeringLeft J _ _).obj F ≅ const J`
 -/
 def constCompWhiskeringLeftIso (F : J ⥤ D) :
     const D ⋙ (whiskeringLeft J D C).obj F ≅ const J :=
@@ -279,3 +234,4 @@ def constCompWhiskeringLeftIso (F : J ⥤ D) :
 end
 
 end CategoryTheory.Functor
+

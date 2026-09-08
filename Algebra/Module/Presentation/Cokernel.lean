@@ -40,73 +40,73 @@ namespace Presentation
 
 section Cokernel
 
-variable (pres₂ : Presentation.{w₂₀, w₂₁} A M₂) (f : M₁ ->ₗ[A] M₂)
-  {ι : Type w₁} (g₁ : ι -> M₁)
+variable (pres₂ : Presentation.{w₂₀, w₂₁} A M₂) (f : M₁ →ₗ[A] M₂)
+  {ι : Type w₁} (g₁ : ι → M₁)
 
-/--
-Definition of `CokernelData` / `CokernelData` 的定义
+/-- Given a linear map `f : M₁ →ₗ[A] M₂`, a presentation of `M₂` and a choice
+of generators of `M₁`, this structure specifies a lifting of the image by `f`
+of each generator of `M₁` as a linear combination of the generators of `M₂`. -/
+/-
+**Module.Presentation.CokernelData** 是 Mathlib 中的一个归纳类型，位于命名空间 `Module.Presentat
+ion`。
+形式化陈述：{A : Type u} →   [inst : Ring A] →     {M₁ : Type v₁} →       {M₂ : Type v
+₂} →         [inst_1 : AddCommGroup M₁] →           [inst_2 : _root_.Module A M₁
+] →             [inst_3 : AddCommGroup M₂] →               [inst_4 : _root_.Modu
+le A M₂] →                 Module.Presentation A M₂ → (M₁ →ₗ[A] M₂) → {ι : Type 
+w₁} → (ι → M₁) → Type (max (max u w₁) w₂₀)
+参数：M₁ →ₗ[A] M₂；ι → M₁；max (max u w₁) w₂₀。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure CokernelData
-  parameters: where
-  axioms and operations (2):
-    - lift((i : ι)) : pres₂.G ->₀ A
-    - π_lift((i : ι)) : pres₂.π (lift i) = f (g₁ i)
-
-中文:
-结构 余kernelData
-  参数: where
-  公理与运算 (2 个):
-    - lift((i : ι)) : pres₂.G ->₀ A
-    - π_lift((i : ι)) : pres₂.π (lift i) = f (g₁ i)
+--- 原说明 ---
+Given a linear map `f : M₁ →ₗ[A] M₂`, a presentation of `M₂` and a choice
+of generators of `M₁`, this structure specifies a lifting of the image by `f`
+of each generator of `M₁` as a linear combination of the generators of `M₂`.
 -/
 structure CokernelData where
   /-- a lifting of `f (g₁ i)` in `pres₂.G →₀ A` -/
-  lift (i : ι) : pres₂.G ->₀ A
+  lift (i : ι) : pres₂.G →₀ A
   π_lift (i : ι) : pres₂.π (lift i) = f (g₁ i)
 
 /-- Constructor for `Presentation.CokernelData` in case we have a chosen set-theoretic
 section of the projection `(pres₂.G →₀ A) → M₂`. -/
 @[simps]
-/--
-Definition of `CokernelData.ofSection` / `CokernelData.ofSection` 的定义
+/-
+**Module.Presentation.CokernelData.ofSection** 是 Mathlib 中的一个定义，位于命名空间 `Module.P
+resentation.CokernelData`。
+形式化陈述：{A : Type u} →   [inst : Ring A] →     {M₁ : Type v₁} →       {M₂ : Type v
+₂} →         [inst_1 : AddCommGroup M₁] →           [inst_2 : _root_.Module A M₁
+] →             [inst_3 : AddCommGroup M₂] →               [inst_4 : _root_.Modu
+le A M₂] →                 (pres₂ : Module.Presentation A M₂) →                 
+  (f : M₁ →ₗ[A] M₂) →                     {ι : Type w₁} →                       
+(g₁ : ι → M₁) →                         (s : M₂ → pres₂.G →₀ A) → (∀ (m₂ : M₂), 
+pres₂.π (s m₂) = m₂) → pres₂.CokernelData f g₁
+参数：pres₂ : Module.Presentation A M₂；f : M₁ →ₗ[A] M₂；g₁ : ι → M₁；s : M₂ → pres₂.G
+ →₀ A；∀ (m₂ : M₂), pres₂.π (s m₂) = m₂。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition CokernelData.ofSection
-  signature: (s : M₂ -> (pres₂.G ->₀ A))
-  body: s (f (g₁ i))
-  π_lift i := by simp [hs]
-
-中文:
-定义 余kernelData.ofSection
-  签名: (s : M₂ -> (pres₂.G ->₀ A))
-  定义体: s (f (g₁ i))
-  π_lift i := by simp [hs]
+--- 原说明 ---
+Constructor for `Presentation.CokernelData` in case we have a chosen set-theoret
+ic
+section of the projection `(pres₂.G →₀ A) → M₂`.
 -/
-def CokernelData.ofSection (s : M₂ -> (pres₂.G ->₀ A))
-    (hs : forall (m₂ : M₂), pres₂.π (s m₂) = m₂) :
+def CokernelData.ofSection (s : M₂ → (pres₂.G →₀ A))
+    (hs : ∀ (m₂ : M₂), pres₂.π (s m₂) = m₂) :
     pres₂.CokernelData f g₁ where
   lift i := s (f (g₁ i))
   π_lift i := by simp [hs]
-
-/--
-Instance `nonempty_cokernelData` / 实例 `nonempty_cokernelData`
-
-English:
-instance nonempty_cokernelData
-  signature: :
-  body: by
-  obtain ⟨s, hs⟩ := pres₂.surjective_π.hasRightInverse
-  exact ⟨CokernelData.ofSection _ _ _ s hs⟩
-
-中文:
-实例 nonempty_cokernelData
-  签名: :
-  定义体: by
-  obtain ⟨s, hs⟩ := pres₂.surjective_π.hasRightInverse
-  exact ⟨CokernelData.ofSection _ _ _ s hs⟩
-
-Depends on / 依赖: CokernelData, CokernelData.ofSection, hasRightInverse, ofSection
+/-
+**Module.Presentation.nonempty_cokernelData** 是 Mathlib 中的一个实例，位于命名空间 `Module.Pr
+esentation`。
+形式化陈述：nonempty_cokernelData : Nonempty (pres₂.CokernelData f g₁)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Surjective.hasRightInverse`：∀ {α : Sort u} {β : Sort v} {f : α 
+→ β}, Function.Surjective f → Function.HasRightInverse f
+· 使用引理 `Module.Relations.Solution.IsPresentation.surjective_π`：surjective_π : Fu
+nction.Surjective solution.π
+· 使用定理 `Module.Presentation.toIsPresentation`：∀ {A : Type u} [inst : Ring A] {M 
+: Type v} [inst_1 : AddCommGroup M] [inst_2 : _root_.Module A M]   (self : Modul
+e.Presentation A M), self.…
 -/
 instance nonempty_cokernelData :
     Nonempty (pres₂.CokernelData f g₁) := by
@@ -120,26 +120,19 @@ of `f : M₁ →ₗ[A] M₂`. It consists of a generator for each generator of `
 there are two types of relations: one for each relation in the presentation in `M₂`,
 and one for each generator of `M₁`. -/
 @[simps]
-/--
-Definition of `cokernelRelations` / `cokernelRelations` 的定义
+/-
+**Module.Presentation.cokernelRelations** 是 Mathlib 中的一个定义，位于命名空间 `Module.Presen
+tation`。
+形式化陈述：cokernelRelations : Relations A where G
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cokernelRelations
-  signature: : Relations A where
-  body: pres₂.G
-  R := Sum pres₂.R ι
-  relation
-    | .inl r => pres₂.relation r
-    | .inr i => data.lift i
-
-中文:
-定义 cokernelRelations
-  签名: : 关系 A where
-  定义体: pres₂.G
-  R := Sum pres₂.R ι
-  relation
-    | .inl r => pres₂.relation r
-    | .inr i => data.lift i
+--- 原说明 ---
+The shape of the presentation by generators and relations of the cokernel
+of `f : M₁ →ₗ[A] M₂`. It consists of a generator for each generator of `M₂`, and
+there are two types of relations: one for each relation in the presentation in `
+M₂`,
+and one for each generator of `M₁`.
 -/
 def cokernelRelations : Relations A where
   G := pres₂.G
@@ -151,36 +144,17 @@ def cokernelRelations : Relations A where
 /-- The obvious solution in `M₂ ⧸ LinearMap.range f` to the equations in
 `pres₂.cokernelRelations data`. -/
 @[simps]
-/--
-Definition of `cokernelSolution` / `cokernelSolution` 的定义
+/-
+**Module.Presentation.cokernelSolution** 是 Mathlib 中的一个定义，位于命名空间 `Module.Present
+ation`。
+形式化陈述：cokernelSolution : (pres₂.cokernelRelations data).Solution (M₂ ⧸ LinearMap
+.range f) where var g
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cokernelSolution
-  signature: :
-  body: Submodule.mkQ _ (pres₂.var g)
-  linearCombination_var_relation := by
-    intro x
-    erw [← Finsupp.apply_linearCombination]
-    obtain (r | i) := x
-    · erw [pres₂.linearCombination_var_relation]
-      dsimp
-    · erw [data.π_lift]
-      simp
-
-中文:
-定义 cokernelSolution
-  签名: :
-  定义体: Submodule.mkQ _ (pres₂.var g)
-  linearCombination_var_relation := by
-    intro x
-    erw [← Finsupp.apply_linearCombination]
-    obtain (r | i) := x
-    · erw [pres₂.linearCombination_var_relation]
-      dsimp
-    · erw [data.π_lift]
-      simp
-
-Depends on / 依赖: Submodule, Submodule.mkQ
+--- 原说明 ---
+The obvious solution in `M₂ ⧸ LinearMap.range f` to the equations in
+`pres₂.cokernelRelations data`.
 -/
 def cokernelSolution :
     (pres₂.cokernelRelations data).Solution (M₂ ⧸ LinearMap.range f) where
@@ -199,50 +173,20 @@ variable (hg₁ : Submodule.span A (Set.range g₁) = ⊤)
 namespace cokernelSolution
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `isPresentationCore` / `isPresentationCore` 的定义
+/-- The cokernel can be defined by generators and relations. -/
+/-
+**Module.Presentation.cokernelSolution.isPresentationCore** 是 Mathlib 中的一个定义，位于命
+名空间 `Module.Presentation.cokernelSolution`。
+形式化陈述：isPresentationCore : Relations.Solution.IsPresentationCore.{w} (pres₂.coke
+rnelSolution data) where desc s
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Presentation.toIsPresentation`：∀ {A : Type u} [inst : Ring A] {M 
+: Type v} [inst_1 : AddCommGroup M] [inst_2 : _root_.Module A M]   (self : Modul
+e.Presentation A M), self.…
 
-English:
-definition isPresentationCore
-  signature: :
-  body: (LinearMap.range f).liftQ (pres₂.desc
-    { var := s.var
-      linearCombination_var_relation :=
-        fun r => s.linearCombination_var_relation (.inl r) }) (by
-          rw [LinearMap.range_eq_map]; rw [← hg₁]; rw [Submodule.map_span]; rw [Submodule.span_le]; rw [Set.image_subset_iff]
-          rintro _ ⟨i, rfl⟩
-          rw [Set.mem_preimage]; rw [SetLike.mem_coe]; rw [LinearMap.mem_ker]; rw [← data.π_lift]; rw [Relations.Solution.IsPresentation.π_desc_apply]
-          exact s.linearCombination_var_relation (.inr i))
-  postcomp_desc s := by aesop
-  postcomp_injective h := by
-    ext : 1
-    apply pres₂.toIsPresentation.postcomp_injective
-    ext g
-    exact Relations.Solution.congr_var h g
-
-include hg₁ in
-
-中文:
-定义 isPresentationCore
-  签名: :
-  定义体: (LinearMap.range f).liftQ (pres₂.desc
-    { var := s.var
-      linearCombination_var_relation :=
-        fun r => s.linearCombination_var_relation (.inl r) }) (by
-          rw [LinearMap.range_eq_map]; rw [← hg₁]; rw [Submodule.map_span]; rw [Submodule.span_le]; rw [Set.image_subset_iff]
-          rintro _ ⟨i, rfl⟩
-          rw [Set.mem_preimage]; rw [SetLike.mem_coe]; rw [LinearMap.mem_ker]; rw [← data.π_lift]; rw [Relations.Solution.IsPresentation.π_desc_apply]
-          exact s.linearCombination_var_relation (.inr i))
-  postcomp_desc s := by aesop
-  postcomp_injective h := by
-    ext : 1
-    apply pres₂.toIsPresentation.postcomp_injective
-    ext g
-    exact Relations.Solution.congr_var h g
-
-include hg₁ in
-
-Depends on / 依赖: LinearMap, LinearMap.range
+--- 原说明 ---
+The cokernel can be defined by generators and relations.
 -/
 noncomputable def isPresentationCore :
     Relations.Solution.IsPresentationCore.{w}
@@ -250,10 +194,12 @@ noncomputable def isPresentationCore :
   desc s := (LinearMap.range f).liftQ (pres₂.desc
     { var := s.var
       linearCombination_var_relation :=
-        fun r => s.linearCombination_var_relation (.inl r) }) (by
-          rw [LinearMap.range_eq_map]; rw [← hg₁]; rw [Submodule.map_span]; rw [Submodule.span_le]; rw [Set.image_subset_iff]
+        fun r ↦ s.linearCombination_var_relation (.inl r) }) (by
+          rw [LinearMap.range_eq_map, ← hg₁, Submodule.map_span, Submodule.span_le,
+            Set.image_subset_iff]
           rintro _ ⟨i, rfl⟩
-          rw [Set.mem_preimage]; rw [SetLike.mem_coe]; rw [LinearMap.mem_ker]; rw [← data.π_lift]; rw [Relations.Solution.IsPresentation.π_desc_apply]
+          rw [Set.mem_preimage, SetLike.mem_coe, LinearMap.mem_ker, ← data.π_lift,
+            Relations.Solution.IsPresentation.π_desc_apply]
           exact s.linearCombination_var_relation (.inr i))
   postcomp_desc s := by aesop
   postcomp_injective h := by
@@ -263,20 +209,15 @@ noncomputable def isPresentationCore :
     exact Relations.Solution.congr_var h g
 
 include hg₁ in
-/--
-lemma `isPresentation` / 引理 `isPresentation`
-
-English:
-lemma isPresentation
-  statement: (pres₂.cokernelSolution data).IsPresentation
-  proof: (isPresentationCore pres₂ data hg₁).isPresentation
-
-中文:
-引理 isPresentation
-  结论: (pres₂.cokernelSolution data).是呈现
-  证明: (isPresentationCore pres₂ data hg₁).isPresentation
-
-Depends on / 依赖: isPresentation, isPresentationCore
+/-
+**Module.Presentation.cokernelSolution.isPresentation** 是 Mathlib 中的一个引理，位于命名空间 
+`Module.Presentation.cokernelSolution`。
+形式化陈述：isPresentation : (pres₂.cokernelSolution data).IsPresentation
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Module.Relations.Solution.IsPresentationCore.isPresentation`：isPresentat
+ion {solution : relations.Solution M} (h : IsPresentationCore.{max u v w₀} solut
+ion) : solution.IsPresentation where bijective
 -/
 lemma isPresentation : (pres₂.cokernelSolution data).IsPresentation :=
   (isPresentationCore pres₂ data hg₁).isPresentation
@@ -287,20 +228,20 @@ end cokernelSolution
 from a presentation `pres₂` of `M₂`, a choice of generators `g₁ : ι → M₁` of `M₁`,
 and an additional data in `pres₂.CokernelData f g₁`. -/
 @[simps!]
-/--
-Definition of `cokernel` / `cokernel` 的定义
+/-
+**Module.Presentation.cokernel** 是 Mathlib 中的一个定义，位于命名空间 `Module.Presentation`。
+形式化陈述：cokernel : Presentation A (M₂ ⧸ LinearMap.range f)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `Module.Presentation.cokernelSolution.isPresentation`：isPresentation : (p
+res₂.cokernelSolution data).IsPresentation
 
-English:
-definition cokernel
-  signature: : Presentation A (M₂ ⧸ LinearMap.range f)
-  body: ofIsPresentation (cokernelSolution.isPresentation pres₂ data hg₁)
-
-中文:
-定义 cokernel
-  签名: : 呈现 A (M₂ ⧸ 线性映射.range f)
-  定义体: ofIsPresentation (cokernelSolution.isPresentation pres₂ data hg₁)
-
-Depends on / 依赖: cokernelSolution, cokernelSolution.isPresentation, isPresentation, ofIsPresentation
+--- 原说明 ---
+The presentation of the cokernel of a linear map `f : M₁ →ₗ[A] M₂` that is obtai
+ned
+from a presentation `pres₂` of `M₂`, a choice of generators `g₁ : ι → M₁` of `M₁
+`,
+and an additional data in `pres₂.CokernelData f g₁`.
 -/
 def cokernel : Presentation A (M₂ ⧸ LinearMap.range f) :=
   ofIsPresentation (cokernelSolution.isPresentation pres₂ data hg₁)
@@ -314,23 +255,28 @@ set_option backward.isDefEq.respectTransparency.types false in
 of `M₃` that is obtained from a presentation `pres₂` of `M₂`, a choice of generators
 `g₁ : ι → M₁` of `M₁`, and an additional data in a `Presentation.CokernelData` structure. -/
 @[simps!]
-/--
-Definition of `ofExact` / `ofExact` 的定义
+/-
+**Module.Presentation.ofExact** 是 Mathlib 中的一个定义，位于命名空间 `Module.Presentation`。
+形式化陈述：ofExact {f : M₁ ->ₗ[A] M₂} {g : M₂ ->ₗ[A] M₃} (pres₂ : Presentation.{w₂₀, 
+w₂₁} A M₂) {ι : Type w₁} {g₁ : ι -> M₁} (data : pres₂.CokernelData f g₁) (hfg : 
+Function.Exact f g) (hg : Function.Surjective g) (hg₁ : Submodule.span A (Set.ra
+nge g₁) = ⊤) : Presentation A M₃
+参数：pres₂ : Presentation.{w₂₀, w₂₁} A M₂；data : pres₂.CokernelData f g₁；hfg : Fun
+ction.Exact f g；hg : Function.Surjective g；hg₁ : Submodule.span A (Set.range g₁)
+ = ⊤。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofExact
-  signature: {f : M₁ ->ₗ[A] M₂} {g : M₂ ->ₗ[A] M₃}
-  body: (pres₂.cokernel data hg₁).ofLinearEquiv (hfg.linearEquivOfSurjective hg)
-
-中文:
-定义 ofExact
-  签名: {f : M₁ ->ₗ[A] M₂} {g : M₂ ->ₗ[A] M₃}
-  定义体: (pres₂.cokernel data hg₁).ofLinearEquiv (hfg.linearEquivOfSurjective hg)
-
-Depends on / 依赖: cokernel, hfg.linearEquivOfSurjective, linearEquivOfSurjective, ofLinearEquiv
+--- 原说明 ---
+Given an exact sequence of `A`-modules `M₁ → M₂ → M₃ → 0`, this is the presentat
+ion
+of `M₃` that is obtained from a presentation `pres₂` of `M₂`, a choice of genera
+tors
+`g₁ : ι → M₁` of `M₁`, and an additional data in a `Presentation.CokernelData` s
+tructure.
 -/
-noncomputable def ofExact {f : M₁ ->ₗ[A] M₂} {g : M₂ ->ₗ[A] M₃}
-    (pres₂ : Presentation.{w₂₀, w₂₁} A M₂) {ι : Type w₁} {g₁ : ι -> M₁}
+noncomputable def ofExact {f : M₁ →ₗ[A] M₂} {g : M₂ →ₗ[A] M₃}
+    (pres₂ : Presentation.{w₂₀, w₂₁} A M₂) {ι : Type w₁} {g₁ : ι → M₁}
     (data : pres₂.CokernelData f g₁)
     (hfg : Function.Exact f g) (hg : Function.Surjective g)
     (hg₁ : Submodule.span A (Set.range g₁) = ⊤) :
@@ -340,3 +286,4 @@ noncomputable def ofExact {f : M₁ ->ₗ[A] M₂} {g : M₂ ->ₗ[A] M₃}
 end Presentation
 
 end Module
+

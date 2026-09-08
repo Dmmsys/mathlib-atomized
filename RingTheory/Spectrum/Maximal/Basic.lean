@@ -25,130 +25,98 @@ namespace MaximalSpectrum
 
 /-- The prime spectrum is in bijection with the set of prime ideals. -/
 @[simps]
-/--
-Definition of `equivSubtype` / `equivSubtype` 的定义
+/-
+**MaximalSpectrum.equivSubtype** 是 Mathlib 中的一个定义，位于命名空间 `MaximalSpectrum`。
+形式化陈述：equivSubtype : MaximalSpectrum R ≃ {I : Ideal R // I.IsMaximal} where toFu
+n I
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `MaximalSpectrum.isMaximal`：∀ {R : Type u_1} [inst : CommSemiring R] (sel
+f : MaximalSpectrum R), self.asIdeal.IsMaximal
 
-English:
-definition equivSubtype
-  signature: : MaximalSpectrum R ≃ {I : Ideal R // I.IsMaximal} where
-  body: ⟨I.asIdeal, I.2⟩
-  invFun I := ⟨I, I.2⟩
-
-中文:
-定义 equivSubtype
-  签名: : 极大谱 R ≃ {I : 理想 R // I.是极大} where
-  定义体: ⟨I.asIdeal, I.2⟩
-  invFun I := ⟨I, I.2⟩
-
-Depends on / 依赖: I.asIdeal, asIdeal
+--- 原说明 ---
+The prime spectrum is in bijection with the set of prime ideals.
 -/
 def equivSubtype : MaximalSpectrum R ≃ {I : Ideal R // I.IsMaximal} where
   toFun I := ⟨I.asIdeal, I.2⟩
   invFun I := ⟨I, I.2⟩
-
-/--
-theorem `range_asIdeal` / 定理 `range_asIdeal`
-
-English:
-theorem range_asIdeal
-  statement: Set.range MaximalSpectrum.asIdeal = {J : Ideal R | J.IsMaximal}
-  proof: Set.ext fun J =>
-⟨fun hJ => let ⟨j, hj⟩ := Set.mem_range.mp hJ; Set.mem_ofPred.mpr hj ▸ j.isMaximal,
-      fun hJ => Set.mem_range.mpr ⟨⟨J, Set.mem_ofPred.mp hJ⟩, rfl⟩⟩
-
-中文:
-定理 range_asIdeal
-  结论: 集合.range 极大谱.asIdeal = {J : 理想 R | J.是极大}
-  证明: Set.ext fun J =>
-⟨fun hJ => let ⟨j, hj⟩ := Set.mem_range.mp hJ; Set.mem_ofPred.mpr hj ▸ j.isMaximal,
-      fun hJ => Set.mem_range.mpr ⟨⟨J, Set.mem_ofPred.mp hJ⟩, rfl⟩⟩
-
-Depends on / 依赖: Set.ext, Set.mem_ofPred.mp, Set.mem_ofPred.mpr, Set.mem_range.mp, Set.mem_range.mpr, isMaximal, j.isMaximal, mem_ofPred, mem_range
+/-
+**MaximalSpectrum.range_asIdeal** 是 Mathlib 中的一个定理，位于命名空间 `MaximalSpectrum`。
+形式化陈述：range_asIdeal : Set.range MaximalSpectrum.asIdeal = {J : Ideal R | J.IsMax
+imal}
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.mem_range`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} {x : α}, x ∈ Se
+t.range f ↔ ∃ y, f y = x
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.mem_ofPred`：mem_ofPred {a : α} {p : α -> Prop} : a in { x | p x } ↔ 
+p a
+· 使用定理 `MaximalSpectrum.isMaximal`：∀ {R : Type u_1} [inst : CommSemiring R] (sel
+f : MaximalSpectrum R), self.asIdeal.IsMaximal
 -/
 theorem range_asIdeal : Set.range MaximalSpectrum.asIdeal = {J : Ideal R | J.IsMaximal} :=
-  Set.ext fun J =>
-⟨fun hJ => let ⟨j, hj⟩ := Set.mem_range.mp hJ; Set.mem_ofPred.mpr hj ▸ j.isMaximal,
-      fun hJ => Set.mem_range.mpr ⟨⟨J, Set.mem_ofPred.mp hJ⟩, rfl⟩⟩
+  Set.ext fun J ↦
+    ⟨fun hJ ↦ let ⟨j, hj⟩ := Set.mem_range.mp hJ; Set.mem_ofPred.mpr <| hj ▸ j.isMaximal,
+      fun hJ ↦ Set.mem_range.mpr ⟨⟨J, Set.mem_ofPred.mp hJ⟩, rfl⟩⟩
 
 variable {R}
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nontrivial
-  signature: R] : Nonempty MaximalSpectrum R
-  body: let ⟨I, hI⟩ := Ideal.exists_maximal R
-  ⟨⟨I, hI⟩⟩
-
-中文:
-实例 [非平凡
-  签名: R] : 非空 极大谱 R
-  定义体: let ⟨I, hI⟩ := Ideal.exists_maximal R
-  ⟨⟨I, hI⟩⟩
-
-Depends on / 依赖: Ideal.exists_maximal, exists_maximal
+/-
+**MaximalSpectrum.** 是 Mathlib 中的一个实例，位于命名空间 `MaximalSpectrum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [Nontrivial R] : Nonempty MaximalSpectrum R :=
+instance [Nontrivial R] : Nonempty <| MaximalSpectrum R :=
   let ⟨I, hI⟩ := Ideal.exists_maximal R
   ⟨⟨I, hI⟩⟩
 
-/--
-Definition of `toPrimeSpectrum` / `toPrimeSpectrum` 的定义
+/-- The natural inclusion from the maximal spectrum to the prime spectrum. -/
+/-
+**MaximalSpectrum.toPrimeSpectrum** 是 Mathlib 中的一个定义，位于命名空间 `MaximalSpectrum`。
+形式化陈述：toPrimeSpectrum (x : MaximalSpectrum R) : PrimeSpectrum R
+参数：x : MaximalSpectrum R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toPrimeSpectrum
-  signature: (x : MaximalSpectrum R)
-  body: ⟨x.asIdeal, x.isMaximal.isPrime⟩
-
-中文:
-定义 toPrimeSpectrum
-  签名: (x : 极大谱 R)
-  定义体: ⟨x.asIdeal, x.isMaximal.isPrime⟩
-
-Depends on / 依赖: asIdeal, isMaximal, isPrime, x.asIdeal, x.isMaximal.isPrime
+--- 原说明 ---
+The natural inclusion from the maximal spectrum to the prime spectrum.
 -/
 def toPrimeSpectrum (x : MaximalSpectrum R) : PrimeSpectrum R :=
   ⟨x.asIdeal, x.isMaximal.isPrime⟩
-
-/--
-theorem `toPrimeSpectrum_injective` / 定理 `toPrimeSpectrum_injective`
-
-English:
-theorem toPrimeSpectrum_injective
-  statement: (@toPrimeSpectrum R _).Injective
-  proof: fun ⟨_, _⟩ ⟨_, _⟩ h => by
-  simpa only [MaximalSpectrum.mk.injEq] using! PrimeSpectrum.ext_iff.mp h
-
-中文:
-定理 toPrimeSpectrum_injective
-  结论: (@toPrimeSpectrum R _).单射
-  证明: fun ⟨_, _⟩ ⟨_, _⟩ h => by
-  simpa only [MaximalSpectrum.mk.injEq] using! PrimeSpectrum.ext_iff.mp h
-
-Depends on / 依赖: MaximalSpectrum, MaximalSpectrum.mk.injEq, PrimeSpectrum, PrimeSpectrum.ext_iff.mp, ext_iff
+/-
+**MaximalSpectrum.toPrimeSpectrum_injective** 是 Mathlib 中的一个定理，位于命名空间 `MaximalSp
+ectrum`。
+形式化陈述：toPrimeSpectrum_injective : (@toPrimeSpectrum R _).Injective
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MaximalSpectrum.mk.injEq`：∀ {R : Type u_1} [inst : CommSemiring R] (asId
+eal : Ideal R) (isMaximal : asIdeal.IsMaximal) (asIdeal_1 : Ideal R)   (isMaxima
+l_1 : asIdeal_…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `PrimeSpectrum.ext_iff`：∀ {R : Type u_1} {inst : CommSemiring R} {x y : P
+rimeSpectrum R}, x = y ↔ x.asIdeal = y.asIdeal
 -/
 theorem toPrimeSpectrum_injective : (@toPrimeSpectrum R _).Injective := fun ⟨_, _⟩ ⟨_, _⟩ h => by
   simpa only [MaximalSpectrum.mk.injEq] using! PrimeSpectrum.ext_iff.mp h
-
-/--
-theorem `isCoprime_of_ne` / 定理 `isCoprime_of_ne`
-
-English:
-theorem isCoprime_of_ne
-  given: {I J : MaximalSpectrum R} (h : I != J)
-  statement: IsCoprime I.1 J.1
-  proof: Ideal.isCoprime_iff_sup_eq.mpr I.2.coprime_of_ne J.2 mt MaximalSpectrum.ext h
-
-中文:
-定理 isCoprime_of_ne
-  条件: {I J : 极大谱 R} (h : I != J)
-  结论: IsCoprime I.1 J.1
-  证明: Ideal.isCoprime_iff_sup_eq.mpr I.2.coprime_of_ne J.2 mt MaximalSpectrum.ext h
-
-Depends on / 依赖: Ideal.isCoprime_iff_sup_eq.mpr, MaximalSpectrum, MaximalSpectrum.ext, coprime_of_ne, isCoprime_iff_sup_eq
+/-
+**MaximalSpectrum.isCoprime_of_ne** 是 Mathlib 中的一个定理，位于命名空间 `MaximalSpectrum`。
+形式化陈述：isCoprime_of_ne {I J : MaximalSpectrum R} (h : I != J) : IsCoprime I.1 J.1
+参数：h : I != J。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Ideal.isCoprime_iff_sup_eq`：isCoprime_iff_sup_eq : IsCoprime I J ↔ I ⊔ J
+ = ⊤
+· 使用定理 `Ideal.IsMaximal.coprime_of_ne`：∀ {α : Type u} [inst : Semiring α] {M M' 
+: Ideal α}, M.IsMaximal → M'.IsMaximal → M ≠ M' → M ⊔ M' = ⊤
+· 使用定理 `MaximalSpectrum.isMaximal`：∀ {R : Type u_1} [inst : CommSemiring R] (sel
+f : MaximalSpectrum R), self.asIdeal.IsMaximal
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `MaximalSpectrum.ext`：∀ {R : Type u_1} {inst : CommSemiring R} {x y : Max
+imalSpectrum R}, x.asIdeal = y.asIdeal → x = y
 -/
-theorem isCoprime_of_ne {I J : MaximalSpectrum R} (h : I != J) : IsCoprime I.1 J.1 :=
-Ideal.isCoprime_iff_sup_eq.mpr I.2.coprime_of_ne J.2 mt MaximalSpectrum.ext h
+theorem isCoprime_of_ne {I J : MaximalSpectrum R} (h : I ≠ J) : IsCoprime I.1 J.1 :=
+  Ideal.isCoprime_iff_sup_eq.mpr <| I.2.coprime_of_ne J.2 <| mt MaximalSpectrum.ext h
 
 end MaximalSpectrum
+

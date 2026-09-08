@@ -24,57 +24,30 @@ namespace BoundedContinuousFunction
 
 variable [TopologicalSpace α]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalCStarAlgebra
-  signature: A] : NonUnitalCStarAlgebra (α ->ᵇ A) where
-
-中文:
-实例 [非幺CStar代数
-  签名: A] : 非幺CStar代数 (α ->ᵇ A) where
+/-
+**BoundedContinuousFunction.** 是 Mathlib 中的一个实例，位于命名空间 `BoundedContinuousFunctio
+n`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [NonUnitalCStarAlgebra A] : NonUnitalCStarAlgebra (α ->ᵇ A) where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalCommCStarAlgebra
-  signature: A] : NonUnitalCommCStarAlgebra (α ->ᵇ A) where
-
-中文:
-实例 [非幺交换CStar代数
-  签名: A] : 非幺交换CStar代数 (α ->ᵇ A) where
+instance [NonUnitalCStarAlgebra A] : NonUnitalCStarAlgebra (α →ᵇ A) where
+/-
+**BoundedContinuousFunction.** 是 Mathlib 中的一个实例，位于命名空间 `BoundedContinuousFunctio
+n`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [NonUnitalCommCStarAlgebra A] : NonUnitalCommCStarAlgebra (α ->ᵇ A) where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CStarAlgebra
-  signature: A] : CStarAlgebra (α ->ᵇ A) where
-
-中文:
-实例 [CStar代数
-  签名: A] : CStar代数 (α ->ᵇ A) where
+instance [NonUnitalCommCStarAlgebra A] : NonUnitalCommCStarAlgebra (α →ᵇ A) where
+/-
+**BoundedContinuousFunction.** 是 Mathlib 中的一个实例，位于命名空间 `BoundedContinuousFunctio
+n`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [CStarAlgebra A] : CStarAlgebra (α ->ᵇ A) where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CommCStarAlgebra
-  signature: A] : CommCStarAlgebra (α ->ᵇ A) where
-
-中文:
-实例 [交换CStar代数
-  签名: A] : 交换CStar代数 (α ->ᵇ A) where
+instance [CStarAlgebra A] : CStarAlgebra (α →ᵇ A) where
+/-
+**BoundedContinuousFunction.** 是 Mathlib 中的一个实例，位于命名空间 `BoundedContinuousFunctio
+n`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [CommCStarAlgebra A] : CommCStarAlgebra (α ->ᵇ A) where
+instance [CommCStarAlgebra A] : CommCStarAlgebra (α →ᵇ A) where
 
 end BoundedContinuousFunction
 
@@ -82,55 +55,24 @@ namespace ContinuousMap
 
 variable [TopologicalSpace α] [CompactSpace α]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalCStarAlgebra
-  signature: A] : NonUnitalCStarAlgebra C(α, A) where
-
-中文:
-实例 [非幺CStar代数
-  签名: A] : 非幺CStar代数 C(α, A) where
+/-
+**ContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalCStarAlgebra A] : NonUnitalCStarAlgebra C(α, A) where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [NonUnitalCommCStarAlgebra
-  signature: A] : NonUnitalCommCStarAlgebra C(α, A) where
-
-中文:
-实例 [非幺交换CStar代数
-  签名: A] : 非幺交换CStar代数 C(α, A) where
+/-
+**ContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [NonUnitalCommCStarAlgebra A] : NonUnitalCommCStarAlgebra C(α, A) where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CStarAlgebra
-  signature: A] : CStarAlgebra C(α, A) where
-
-中文:
-实例 [CStar代数
-  签名: A] : CStar代数 C(α, A) where
+/-
+**ContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CStarAlgebra A] : CStarAlgebra C(α, A) where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [CommCStarAlgebra
-  signature: A] : CommCStarAlgebra C(α, A) where
-
-中文:
-实例 [交换CStar代数
-  签名: A] : 交换CStar代数 C(α, A) where
+/-
+**ContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `ContinuousMap`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [CommCStarAlgebra A] : CommCStarAlgebra C(α, A) where
 
@@ -140,31 +82,19 @@ namespace ZeroAtInftyContinuousMap
 
 open ZeroAtInfty
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [TopologicalSpace
-  signature: α] [NonUnitalCStarAlgebra A] : NonUnitalCStarAlgebra C₀(α, A) where
-
-中文:
-实例 [拓扑空间
-  签名: α] [非幺CStar代数 A] : 非幺CStar代数 C₀(α, A) where
+/-
+**ZeroAtInftyContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtInftyContinuousMap`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [TopologicalSpace α] [NonUnitalCStarAlgebra A] : NonUnitalCStarAlgebra C₀(α, A) where
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [TopologicalSpace
-  signature: α] [NonUnitalCommCStarAlgebra A] :
-
-中文:
-实例 [拓扑空间
-  签名: α] [非幺交换CStar代数 A] :
+/-
+**ZeroAtInftyContinuousMap.** 是 Mathlib 中的一个实例，位于命名空间 `ZeroAtInftyContinuousMap`
+。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [TopologicalSpace α] [NonUnitalCommCStarAlgebra A] :
     NonUnitalCommCStarAlgebra C₀(α, A) where
 
 end ZeroAtInftyContinuousMap
+

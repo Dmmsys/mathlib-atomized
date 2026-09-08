@@ -36,30 +36,18 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- Given a bifunctor `F : C₁ ⥤ C₂ ⥤ C₃` and types `I` and `J`, this is the obvious
 functor `GradedObject I C₁ ⥤ GradedObject J C₂ ⥤ GradedObject (I × J) C₃`. -/
 @[simps]
-/--
-Definition of `mapBifunctor` / `mapBifunctor` 的定义
+/-
+**CategoryTheory.GradedObject.mapBifunctor** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.GradedObject`。
+形式化陈述：mapBifunctor (I J : Type*) : GradedObject I C₁ ⥤ GradedObject J C₂ ⥤ Grade
+dObject (I × J) C₃ where obj X
+参数：I J : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapBifunctor
-  signature: (I J : Type*)
-  body: set_option backward.isDefEq.respectTransparency.types false in
-    { obj := fun Y ij => (F.obj (X ij.1)).obj (Y ij.2)
-      map := fun φ ij => (F.obj (X ij.1)).map (φ ij.2) }
-  map φ :=
-    set_option backward.isDefEq.respectTransparency.types false in
-    { app := fun Y ij => (F.map (φ ij.1)).app (Y ij.2) }
-
-中文:
-定义 mapBifunctor
-  签名: (I J : 类型)
-  定义体: set_option backward.isDefEq.respectTransparency.types false in
-    { obj := fun Y ij => (F.obj (X ij.1)).obj (Y ij.2)
-      map := fun φ ij => (F.obj (X ij.1)).map (φ ij.2) }
-  map φ :=
-    set_option backward.isDefEq.respectTransparency.types false in
-    { app := fun Y ij => (F.map (φ ij.1)).app (Y ij.2) }
-
-Depends on / 依赖: F.map, F.obj, HasColimit, HasColimit.mk, backward, backward.isDefEq.respectTransparency.types, cocone, initial, initial.to, isColimit, isDefEq, respectTransparency, set_option
+--- 原说明 ---
+Given a bifunctor `F : C₁ ⥤ C₂ ⥤ C₃` and types `I` and `J`, this is the obvious
+functor `GradedObject I C₁ ⥤ GradedObject J C₂ ⥤ GradedObject (I × J) C₃`.
 -/
 def mapBifunctor (I J : Type*) :
     GradedObject I C₁ ⥤ GradedObject J C₂ ⥤ GradedObject (I × J) C₃ where
@@ -73,39 +61,41 @@ def mapBifunctor (I J : Type*) :
 
 section
 
-variable {I J K : Type*} (p : I × J -> K)
+variable {I J K : Type*} (p : I × J → K)
 
-/--
-Definition of `mapBifunctorMapObj` / `mapBifunctorMapObj` 的定义
+/-- Given a bifunctor `F : C₁ ⥤ C₂ ⥤ C₃`, graded objects `X : GradedObject I C₁` and
+`Y : GradedObject J C₂` and a map `p : I × J → K`, this is the `K`-graded object sending
+`k` to the coproduct of `(F.obj (X i)).obj (Y j)` for `p ⟨i, j⟩ = k`. -/
+/-
+**CategoryTheory.GradedObject.mapBifunctorMapObj** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.GradedObject`。
+形式化陈述：mapBifunctorMapObj (X : GradedObject I C₁) (Y : GradedObject J C₂) [HasMap
+ (((mapBifunctor F I J).obj X).obj Y) p] : GradedObject K C₃
+参数：X : GradedObject I C₁；Y : GradedObject J C₂；((mapBifunctor F I J).obj X).obj 
+Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapBifunctorMapObj
-  signature: (X : GradedObject I C₁) (Y : GradedObject J C₂)
-  body: (((mapBifunctor F I J).obj X).obj Y).mapObj p
-
-中文:
-定义 mapBifunctorMapObj
-  签名: (X : GradedObject I C₁) (Y : GradedObject J C₂)
-  定义体: (((mapBifunctor F I J).obj X).obj Y).mapObj p
-
-Depends on / 依赖: mapBifunctor, mapObj
+--- 原说明 ---
+Given a bifunctor `F : C₁ ⥤ C₂ ⥤ C₃`, graded objects `X : GradedObject I C₁` and
+`Y : GradedObject J C₂` and a map `p : I × J → K`, this is the `K`-graded object
+ sending
+`k` to the coproduct of `(F.obj (X i)).obj (Y j)` for `p ⟨i, j⟩ = k`.
 -/
 noncomputable def mapBifunctorMapObj (X : GradedObject I C₁) (Y : GradedObject J C₂)
     [HasMap (((mapBifunctor F I J).obj X).obj Y) p] : GradedObject K C₃ :=
   (((mapBifunctor F I J).obj X).obj Y).mapObj p
 
-/--
-Definition of `ιMapBifunctorMapObj` / `ιMapBifunctorMapObj` 的定义
+/-- The inclusion of `(F.obj (X i)).obj (Y j)` in `mapBifunctorMapObj F p X Y k`
+when `i + j = k`. -/
+/-
+**CategoryTheory.GradedObject.** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.GradedO
+bject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ιMapBifunctorMapObj
-  body: (((mapBifunctor F I J).obj X).obj Y).ιMapObj p ⟨i, j⟩ k h
-
-中文:
-定义 ιMapBifunctorMapObj
-  定义体: (((mapBifunctor F I J).obj X).obj Y).ιMapObj p ⟨i, j⟩ k h
-
-Depends on / 依赖: mapBifunctor
+--- 原说明 ---
+The inclusion of `(F.obj (X i)).obj (Y j)` in `mapBifunctorMapObj F p X Y k`
+when `i + j = k`.
 -/
 noncomputable def ιMapBifunctorMapObj
     (X : GradedObject I C₁) (Y : GradedObject J C₂)
@@ -114,22 +104,24 @@ noncomputable def ιMapBifunctorMapObj
     (F.obj (X i)).obj (Y j) ⟶ mapBifunctorMapObj F p X Y k :=
   (((mapBifunctor F I J).obj X).obj Y).ιMapObj p ⟨i, j⟩ k h
 
-/--
-Definition of `mapBifunctorMapMap` / `mapBifunctorMapMap` 的定义
+/-- The maps `mapBifunctorMapObj F p X₁ Y₁ ⟶ mapBifunctorMapObj F p X₂ Y₂` which express
+the functoriality of `mapBifunctorMapObj`, see `mapBifunctorMap`. -/
+/-
+**CategoryTheory.GradedObject.mapBifunctorMapMap** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.GradedObject`。
+形式化陈述：mapBifunctorMapMap {X₁ X₂ : GradedObject I C₁} (f : X₁ ⟶ X₂) {Y₁ Y₂ : Grad
+edObject J C₂} (g : Y₁ ⟶ Y₂) [HasMap (((mapBifunctor F I J).obj X₁).obj Y₁) p] [
+HasMap (((mapBifunctor F I J).obj X₂).obj Y₂) p] : mapBifunctorMapObj F p X₁ Y₁ 
+⟶ mapBifunctorMapObj F p X₂ Y₂
+参数：f : X₁ ⟶ X₂；g : Y₁ ⟶ Y₂；((mapBifunctor F I J).obj X₁).obj Y₁；((mapBifunctor F
+ I J).obj X₂).obj Y₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapBifunctorMapMap
-  signature: {X₁ X₂ : GradedObject I C₁} (f : X₁ ⟶ X₂)
-  body: GradedObject.mapMap (((mapBifunctor F I J).map f).app Y₁ ≫
-    ((mapBifunctor F I J).obj X₂).map g) p
-
-中文:
-定义 mapBifunctorMapMap
-  签名: {X₁ X₂ : GradedObject I C₁} (f : X₁ ⟶ X₂)
-  定义体: GradedObject.mapMap (((mapBifunctor F I J).map f).app Y₁ ≫
-    ((mapBifunctor F I J).obj X₂).map g) p
-
-Depends on / 依赖: GradedObject, GradedObject.mapMap, HasInitial, InitialMonoClass, initial, initial.mono_from, mapBifunctor, mapMap, mono_from
+--- 原说明 ---
+The maps `mapBifunctorMapObj F p X₁ Y₁ ⟶ mapBifunctorMapObj F p X₂ Y₂` which exp
+ress
+the functoriality of `mapBifunctorMapObj`, see `mapBifunctorMap`.
 -/
 noncomputable def mapBifunctorMapMap {X₁ X₂ : GradedObject I C₁} (f : X₁ ⟶ X₂)
     {Y₁ Y₂ : GradedObject J C₂} (g : Y₁ ⟶ Y₂)
@@ -141,26 +133,10 @@ noncomputable def mapBifunctorMapMap {X₁ X₂ : GradedObject I C₁} (f : X₁
 
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc (attr := simp)]
-/--
-lemma `ι_mapBifunctorMapMap` / 引理 `ι_mapBifunctorMapMap`
-
-English:
-lemma ι_mapBifunctorMapMap
-  statement: {X₁ X₂ : GradedObject I C₁} (f : X₁ ⟶ X₂)
-  proof: by
-  simp [ιMapBifunctorMapObj, mapBifunctorMapMap]
-
-@[ext]
-
-中文:
-引理 ι_mapBifunctorMapMap
-  结论: {X₁ X₂ : GradedObject I C₁} (f : X₁ ⟶ X₂)
-  证明: by
-  simp [ιMapBifunctorMapObj, mapBifunctorMapMap]
-
-@[ext]
-
-Depends on / 依赖: mapBifunctorMapMap
+/-
+**CategoryTheory.GradedObject.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.GradedO
+bject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι_mapBifunctorMapMap {X₁ X₂ : GradedObject I C₁} (f : X₁ ⟶ X₂)
     {Y₁ Y₂ : GradedObject J C₂} (g : Y₁ ⟶ Y₂)
@@ -173,31 +149,27 @@ lemma ι_mapBifunctorMapMap {X₁ X₂ : GradedObject I C₁} (f : X₁ ⟶ X₂
   simp [ιMapBifunctorMapObj, mapBifunctorMapMap]
 
 @[ext]
-/--
-lemma `mapBifunctorMapObj_ext` / 引理 `mapBifunctorMapObj_ext`
-
-English:
-lemma mapBifunctorMapObj_ext
-  statement: {X : GradedObject I C₁} {Y : GradedObject J C₂} {A : C₃} {k : K}
-  proof: by
-  apply mapObj_ext
-  rintro ⟨i, j⟩ hij
-  exact h i j hij
-
-中文:
-引理 mapBifunctorMapObj_ext
-  结论: {X : GradedObject I C₁} {Y : GradedObject J C₂} {A : C₃} {k : K}
-  证明: by
-  apply mapObj_ext
-  rintro ⟨i, j⟩ hij
-  exact h i j hij
-
-Depends on / 依赖: mapObj_ext
+/-
+**CategoryTheory.GradedObject.mapBifunctorMapObj_ext** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.GradedObject`。
+形式化陈述：mapBifunctorMapObj_ext {X : GradedObject I C₁} {Y : GradedObject J C₂} {A 
+: C₃} {k : K} [HasMap (((mapBifunctor F I J).obj X).obj Y) p] {f g : mapBifuncto
+rMapObj F p X Y k ⟶ A} (h : forall (i : I) (j : J) (hij : p ⟨i, j⟩ = k), ιMapBif
+unctorMapObj F p X Y i j k hij ≫ f = ιMapBifunctorMapObj F p X Y i j k hij ≫ g) 
+: f = g
+参数：((mapBifunctor F I J).obj X).obj Y；h : forall (i : I) (j : J) (hij : p ⟨i, j⟩
+ = k), ιMapBifunctorMapObj F p X Y i j k hij ≫ f = ιMapBifunctorMapObj F p X Y i
+ j k hij ≫ g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.GradedObject.mapObj_ext`：mapObj_ext {A : C} {j : J} (f g 
+: X.mapObj p j ⟶ A) (hfg : forall (i : I) (hij : p i = j), X.ιMapObj p i j hij ≫
+ f = X.ιMapObj p i j hij ≫ g…
 -/
 lemma mapBifunctorMapObj_ext {X : GradedObject I C₁} {Y : GradedObject J C₂} {A : C₃} {k : K}
     [HasMap (((mapBifunctor F I J).obj X).obj Y) p]
     {f g : mapBifunctorMapObj F p X Y k ⟶ A}
-    (h : forall (i : I) (j : J) (hij : p ⟨i, j⟩ = k),
+    (h : ∀ (i : I) (j : J) (hij : p ⟨i, j⟩ = k),
       ιMapBifunctorMapObj F p X Y i j k hij ≫ f = ιMapBifunctorMapObj F p X Y i j k hij ≫ g) :
     f = g := by
   apply mapObj_ext
@@ -205,49 +177,38 @@ lemma mapBifunctorMapObj_ext {X : GradedObject I C₁} {Y : GradedObject J C₂}
   exact h i j hij
 
 variable {F p} in
-/--
-Definition of `mapBifunctorMapObjDesc` / `mapBifunctorMapObjDesc` 的定义
+/-- Constructor for morphisms from `mapBifunctorMapObj F p X Y k`. -/
+/-
+**CategoryTheory.GradedObject.mapBifunctorMapObjDesc** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.GradedObject`。
+形式化陈述：mapBifunctorMapObjDesc {X : GradedObject I C₁} {Y : GradedObject J C₂} {A 
+: C₃} {k : K} [HasMap (((mapBifunctor F I J).obj X).obj Y) p] (f : forall (i : I
+) (j : J) (_ : p ⟨i, j⟩ = k), (F.obj (X i)).obj (Y j) ⟶ A) : mapBifunctorMapObj 
+F p X Y k ⟶ A
+参数：((mapBifunctor F I J).obj X).obj Y；f : forall (i : I) (j : J) (_ : p ⟨i, j⟩ =
+ k), (F.obj (X i)).obj (Y j) ⟶ A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapBifunctorMapObjDesc
-  body: descMapObj _ _ (fun ⟨i, j⟩ hij => f i j hij)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 mapBifunctorMapObjDesc
-  定义体: descMapObj _ _ (fun ⟨i, j⟩ hij => f i j hij)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: descMapObj
+--- 原说明 ---
+Constructor for morphisms from `mapBifunctorMapObj F p X Y k`.
 -/
 noncomputable def mapBifunctorMapObjDesc
     {X : GradedObject I C₁} {Y : GradedObject J C₂} {A : C₃} {k : K}
     [HasMap (((mapBifunctor F I J).obj X).obj Y) p]
-    (f : forall (i : I) (j : J) (_ : p ⟨i, j⟩ = k), (F.obj (X i)).obj (Y j) ⟶ A) :
+    (f : ∀ (i : I) (j : J) (_ : p ⟨i, j⟩ = k), (F.obj (X i)).obj (Y j) ⟶ A) :
     mapBifunctorMapObj F p X Y k ⟶ A :=
   descMapObj _ _ (fun ⟨i, j⟩ hij => f i j hij)
 
 @[reassoc (attr := simp)]
-/--
-lemma `ι_mapBifunctorMapObjDesc` / 引理 `ι_mapBifunctorMapObjDesc`
-
-English:
-lemma ι_mapBifunctorMapObjDesc
-  statement: {X : GradedObject I C₁} {Y : GradedObject J C₂} {A : C₃} {k : K}
-  proof: by
-  apply ι_descMapObj
-
-中文:
-引理 ι_mapBifunctorMapObjDesc
-  结论: {X : GradedObject I C₁} {Y : GradedObject J C₂} {A : C₃} {k : K}
-  证明: by
-  apply ι_descMapObj
+/-
+**CategoryTheory.GradedObject.** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.GradedO
+bject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ι_mapBifunctorMapObjDesc {X : GradedObject I C₁} {Y : GradedObject J C₂} {A : C₃} {k : K}
     [HasMap (((mapBifunctor F I J).obj X).obj Y) p]
-    (f : forall (i : I) (j : J) (_ : p ⟨i, j⟩ = k), (F.obj (X i)).obj (Y j) ⟶ A)
+    (f : ∀ (i : I) (j : J) (_ : p ⟨i, j⟩ = k), (F.obj (X i)).obj (Y j) ⟶ A)
     (i : I) (j : J) (hij : p ⟨i, j⟩ = k) :
     ιMapBifunctorMapObj F p X Y i j k hij ≫ mapBifunctorMapObjDesc f = f i j hij := by
   apply ι_descMapObj
@@ -262,26 +223,18 @@ set_option backward.isDefEq.respectTransparency.types false in
 /-- The isomorphism `mapBifunctorMapObj F p X₁ Y₁ ≅ mapBifunctorMapObj F p X₂ Y₂`
 induced by isomorphisms `X₁ ≅ X₂` and `Y₁ ≅ Y₂`. -/
 @[simps]
-/--
-Definition of `mapBifunctorMapMapIso` / `mapBifunctorMapMapIso` 的定义
+/-
+**CategoryTheory.GradedObject.mapBifunctorMapMapIso** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.GradedObject`。
+形式化陈述：mapBifunctorMapMapIso (e : X₁ ≅ X₂) (e' : Y₁ ≅ Y₂) : mapBifunctorMapObj F 
+p X₁ Y₁ ≅ mapBifunctorMapObj F p X₂ Y₂ where hom
+参数：e : X₁ ≅ X₂；e' : Y₁ ≅ Y₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapBifunctorMapMapIso
-  signature: (e : X₁ ≅ X₂) (e' : Y₁ ≅ Y₂)
-  body: mapBifunctorMapMap F p e.hom e'.hom
-  inv := mapBifunctorMapMap F p e.inv e'.inv
-  hom_inv_id := by ext; simp
-  inv_hom_id := by ext; simp
-
-中文:
-定义 mapBifunctorMapMapIso
-  签名: (e : X₁ ≅ X₂) (e' : Y₁ ≅ Y₂)
-  定义体: mapBifunctorMapMap F p e.hom e'.hom
-  inv := mapBifunctorMapMap F p e.inv e'.inv
-  hom_inv_id := by ext; simp
-  inv_hom_id := by ext; simp
-
-Depends on / 依赖: e.hom, mapBifunctorMapMap
+--- 原说明 ---
+The isomorphism `mapBifunctorMapObj F p X₁ Y₁ ≅ mapBifunctorMapObj F p X₂ Y₂`
+induced by isomorphisms `X₁ ≅ X₂` and `Y₁ ≅ Y₂`.
 -/
 noncomputable def mapBifunctorMapMapIso (e : X₁ ≅ X₂) (e' : Y₁ ≅ Y₂) :
     mapBifunctorMapObj F p X₁ Y₁ ≅ mapBifunctorMapObj F p X₂ Y₂ where
@@ -289,10 +242,14 @@ noncomputable def mapBifunctorMapMapIso (e : X₁ ≅ X₂) (e' : Y₁ ≅ Y₂)
   inv := mapBifunctorMapMap F p e.inv e'.inv
   hom_inv_id := by ext; simp
   inv_hom_id := by ext; simp
-
+/-
+**CategoryTheory.GradedObject.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.GradedO
+bject`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (f : X₁ ⟶ X₂) (g : Y₁ ⟶ Y₂) [IsIso f] [IsIso g] :
     IsIso (mapBifunctorMapMap F p f g) :=
-inferInstanceAs IsIso (mapBifunctorMapMapIso F p (asIso f) (asIso g)).hom
+  inferInstanceAs <| IsIso (mapBifunctorMapMapIso F p (asIso f) (asIso g)).hom
 
 end
 
@@ -304,36 +261,23 @@ functor `GradedObject I C₁ ⥤ GradedObject J C₂ ⥤ GradedObject K C₃` se
 `X : GradedObject I C₁` and `Y : GradedObject J C₂` to the `K`-graded object sending
 `k` to the coproduct of `(F.obj (X i)).obj (Y j)` for `p ⟨i, j⟩ = k`. -/
 @[simps]
-/--
-Definition of `mapBifunctorMap` / `mapBifunctorMap` 的定义
+/-
+**CategoryTheory.GradedObject.mapBifunctorMap** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.GradedObject`。
+形式化陈述：mapBifunctorMap [forall X Y, HasMap (((mapBifunctor F I J).obj X).obj Y) p
+] : GradedObject I C₁ ⥤ GradedObject J C₂ ⥤ GradedObject K C₃ where obj X
+参数：((mapBifunctor F I J).obj X).obj Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapBifunctorMap
-  signature: [forall X Y, HasMap (((mapBifunctor F I J).obj X).obj Y) p]
-  body: { obj := fun Y => mapBifunctorMapObj F p X Y
-      map := fun ψ => mapBifunctorMapMap F p (𝟙 X) ψ }
-  map {X₁ X₂} φ :=
-    { app := fun Y => mapBifunctorMapMap F p φ (𝟙 Y)
-      naturality := fun {Y₁ Y₂} ψ => by
-        dsimp
-        simp only [Functor.map_id, NatTrans.id_app, id_comp, comp_id,
-          ← mapMap_comp, NatTrans.naturality] }
-
-中文:
-定义 mapBifunctorMap
-  签名: [对任意 X Y, HasMap (((mapBifunctor F I J).obj X).obj Y) p]
-  定义体: { obj := fun Y => mapBifunctorMapObj F p X Y
-      map := fun ψ => mapBifunctorMapMap F p (𝟙 X) ψ }
-  map {X₁ X₂} φ :=
-    { app := fun Y => mapBifunctorMapMap F p φ (𝟙 Y)
-      naturality := fun {Y₁ Y₂} ψ => by
-        dsimp
-        simp only [Functor.map_id, NatTrans.id_app, id_comp, comp_id,
-          ← mapMap_comp, NatTrans.naturality] }
-
-Depends on / 依赖: Functor, Functor.map_id, NatTrans, NatTrans.id_app, NatTrans.naturality, comp_id, id_app, id_comp, mapBifunctorMapMap, mapBifunctorMapObj, mapMap_comp, map_id, naturality
+--- 原说明 ---
+Given a bifunctor `F : C₁ ⥤ C₂ ⥤ C₃` and a map `p : I × J → K`, this is the
+functor `GradedObject I C₁ ⥤ GradedObject J C₂ ⥤ GradedObject K C₃` sending
+`X : GradedObject I C₁` and `Y : GradedObject J C₂` to the `K`-graded object sen
+ding
+`k` to the coproduct of `(F.obj (X i)).obj (Y j)` for `p ⟨i, j⟩ = k`.
 -/
-noncomputable def mapBifunctorMap [forall X Y, HasMap (((mapBifunctor F I J).obj X).obj Y) p] :
+noncomputable def mapBifunctorMap [∀ X Y, HasMap (((mapBifunctor F I J).obj X).obj Y) p] :
     GradedObject I C₁ ⥤ GradedObject J C₂ ⥤ GradedObject K C₃ where
   obj X :=
     { obj := fun Y => mapBifunctorMapObj F p X Y
@@ -350,3 +294,4 @@ end
 end GradedObject
 
 end CategoryTheory
+

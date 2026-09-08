@@ -45,14 +45,14 @@ open Function OrderDual Set
 
 universe u v w x
 
-variable {α : Type u} {β : Type v} {γ : Type w} {ι : Sort x} {κ : ι -> Sort*} {a₁ a₂ : α}
+variable {α : Type u} {β : Type v} {γ : Type w} {ι : Sort x} {κ : ι → Sort*} {a₁ a₂ : α}
   {b₁ b₂ : β}
 
 namespace GaloisConnection
 
 section
 
-variable [Preorder α] [Preorder β] {l : α -> β} {u : β -> α}
+variable [Preorder α] [Preorder β] {l : α → β} {u : β → α}
 
 variable (gc : GaloisConnection l u)
 include gc
@@ -60,243 +60,203 @@ include gc
 to_dual_name_hint U L
 
 @[to_dual]
-/--
-theorem `upperBounds_l_image` / 定理 `upperBounds_l_image`
-
-English:
-theorem upperBounds_l_image
-  given: (s : Set α)
-  proof: Set.ext fun b => by simp [upperBounds, gc _ _]
-
-@[to_dual]
-
-中文:
-定理 upperBounds_l_image
-  条件: (s : 集合 α)
-  证明: Set.ext fun b => by simp [upperBounds, gc _ _]
-
-@[to_dual]
-
-Depends on / 依赖: Set.ext, upperBounds
+/-
+**GaloisConnection.upperBounds_l_image** 是 Mathlib 中的一个定理，位于命名空间 `GaloisConnecti
+on`。
+形式化陈述：upperBounds_l_image (s : Set α) : upperBounds (l '' s) = u ⁻¹' upperBounds
+ s
+参数：s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem upperBounds_l_image (s : Set α) :
     upperBounds (l '' s) = u ⁻¹' upperBounds s :=
   Set.ext fun b => by simp [upperBounds, gc _ _]
 
 @[to_dual]
-/--
-theorem `bddAbove_l_image` / 定理 `bddAbove_l_image`
-
-English:
-theorem bddAbove_l_image
-  given: {s : Set α}
-  statement: BddAbove (l '' s) ↔ BddAbove s
-  proof: ⟨fun ⟨x, hx⟩ => ⟨u x, by rwa [gc.upperBounds_l_image] at hx⟩, gc.monotone_l.map_bddAbove⟩
-
-@[to_dual]
-
-中文:
-定理 bddAbove_l_image
-  条件: {s : 集合 α}
-  结论: BddAbove (l '' s) ↔ BddAbove s
-  证明: ⟨fun ⟨x, hx⟩ => ⟨u x, by rwa [gc.upperBounds_l_image] at hx⟩, gc.monotone_l.map_bddAbove⟩
-
-@[to_dual]
-
-Depends on / 依赖: gc.monotone_l.map_bddAbove, gc.upperBounds_l_image, map_bddAbove, monotone_l, upperBounds_l_image
+/-
+**GaloisConnection.bddAbove_l_image** 是 Mathlib 中的一个定理，位于命名空间 `GaloisConnection`
+。
+形式化陈述：bddAbove_l_image {s : Set α} : BddAbove (l '' s) ↔ BddAbove s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `GaloisConnection.upperBounds_l_image`：upperBounds_l_image (s : Set α) : 
+upperBounds (l '' s) = u ⁻¹' upperBounds s
+· 使用定理 `Monotone.map_bddAbove`：∀ {α : Type u} {β : Type v} [inst : Preorder α] [
+inst_1 : Preorder β] {f : α → β},   Monotone f → ∀ {s : Set α}, BddAbove s → Bdd
+Above (f ''…
+· 使用定理 `GaloisConnection.monotone_l`：∀ {α : Type u} {β : Type v} [inst : Preorde
+r α] [inst_1 : Preorder β] {u : α → β} {l : β → α},   GaloisConnection l u → Mon
+otone l
 -/
 theorem bddAbove_l_image {s : Set α} : BddAbove (l '' s) ↔ BddAbove s :=
   ⟨fun ⟨x, hx⟩ => ⟨u x, by rwa [gc.upperBounds_l_image] at hx⟩, gc.monotone_l.map_bddAbove⟩
 
 @[to_dual]
-/--
-theorem `isLUB_l_image` / 定理 `isLUB_l_image`
-
-English:
-theorem isLUB_l_image
-  given: {s : Set α} {a : α} (h : IsLUB s a)
-  statement: IsLUB (l '' s) (l a)
-  proof: ⟨gc.monotone_l.mem_upperBounds_image h.left, fun b hb =>
-gc.l_le h.right by rwa [gc.upperBounds_l_image] at hb⟩
-
-@[to_dual]
-
-中文:
-定理 isLUB_l_image
-  条件: {s : 集合 α} {a : α} (h : IsLUB s a)
-  结论: IsLUB (l '' s) (l a)
-  证明: ⟨gc.monotone_l.mem_upperBounds_image h.left, fun b hb =>
-gc.l_le h.right by rwa [gc.upperBounds_l_image] at hb⟩
-
-@[to_dual]
-
-Depends on / 依赖: gc.l_le, gc.monotone_l.mem_upperBounds_image, gc.upperBounds_l_image, h.left, h.right, l_le, mem_upperBounds_image, monotone_l, upperBounds_l_image
+/-
+**GaloisConnection.isLUB_l_image** 是 Mathlib 中的一个定理，位于命名空间 `GaloisConnection`。
+形式化陈述：isLUB_l_image {s : Set α} {a : α} (h : IsLUB s a) : IsLUB (l '' s) (l a)
+参数：h : IsLUB s a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Monotone.mem_upperBounds_image`：mem_upperBounds_image (Ha : a in upperBo
+unds s) : f a in upperBounds (f '' s)
+· 使用定理 `GaloisConnection.monotone_l`：∀ {α : Type u} {β : Type v} [inst : Preorde
+r α] [inst_1 : Preorder β] {u : α → β} {l : β → α},   GaloisConnection l u → Mon
+otone l
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `GaloisConnection.l_le`：l_le {a : α} {b : β} : a <= u b -> l a <= b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `GaloisConnection.upperBounds_l_image`：upperBounds_l_image (s : Set α) : 
+upperBounds (l '' s) = u ⁻¹' upperBounds s
 -/
 theorem isLUB_l_image {s : Set α} {a : α} (h : IsLUB s a) : IsLUB (l '' s) (l a) :=
   ⟨gc.monotone_l.mem_upperBounds_image h.left, fun b hb =>
-gc.l_le h.right by rwa [gc.upperBounds_l_image] at hb⟩
+    gc.l_le <| h.right <| by rwa [gc.upperBounds_l_image] at hb⟩
 
 @[to_dual]
-/--
-theorem `isLeast_l` / 定理 `isLeast_l`
-
-English:
-theorem isLeast_l
-  given: {a : α}
-  statement: IsLeast { b | a <= u b } (l a)
-  proof: ⟨gc.le_u_l _, fun _ hb => gc.l_le hb⟩
-
-@[to_dual]
-
-中文:
-定理 isLeast_l
-  条件: {a : α}
-  结论: IsLeast { b | a <= u b } (l a)
-  证明: ⟨gc.le_u_l _, fun _ hb => gc.l_le hb⟩
-
-@[to_dual]
-
-Depends on / 依赖: gc.l_le, gc.le_u_l, l_le, le_u_l
+/-
+**GaloisConnection.isLeast_l** 是 Mathlib 中的一个定理，位于命名空间 `GaloisConnection`。
+形式化陈述：isLeast_l {a : α} : IsLeast { b | a <= u b } (l a)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.le_u_l`：le_u_l (a) : a <= u (l a)
+· 使用定理 `GaloisConnection.l_le`：l_le {a : α} {b : β} : a <= u b -> l a <= b
 -/
-theorem isLeast_l {a : α} : IsLeast { b | a <= u b } (l a) :=
+theorem isLeast_l {a : α} : IsLeast { b | a ≤ u b } (l a) :=
   ⟨gc.le_u_l _, fun _ hb => gc.l_le hb⟩
 
 @[to_dual]
-/--
-theorem `isGLB_l` / 定理 `isGLB_l`
-
-English:
-theorem isGLB_l
-  given: {a : α}
-  statement: IsGLB { b | a <= u b } (l a)
-  proof: gc.isLeast_l.isGLB
-
-中文:
-定理 isGLB_l
-  条件: {a : α}
-  结论: IsGLB { b | a <= u b } (l a)
-  证明: gc.isLeast_l.isGLB
-
-Depends on / 依赖: gc.isLeast_l.isGLB, isLeast_l
+/-
+**GaloisConnection.isGLB_l** 是 Mathlib 中的一个定理，位于命名空间 `GaloisConnection`。
+形式化陈述：isGLB_l {a : α} : IsGLB { b | a <= u b } (l a)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLeast.isGLB`：IsLeast.isGLB (h : IsLeast s a) : IsGLB s a
+· 使用定理 `GaloisConnection.isLeast_l`：isLeast_l {a : α} : IsLeast { b | a <= u b }
+ (l a)
 -/
-theorem isGLB_l {a : α} : IsGLB { b | a <= u b } (l a) :=
+theorem isGLB_l {a : α} : IsGLB { b | a ≤ u b } (l a) :=
   gc.isLeast_l.isGLB
 
 end
 
 section SemilatticeSup
 
-variable [SemilatticeSup α] [SemilatticeSup β] {l : α -> β} {u : β -> α}
+variable [SemilatticeSup α] [SemilatticeSup β] {l : α → β} {u : β → α}
 
-@[to_dual (rename := α ↔ β, a₁ -> b₁, a₂ -> b₂)]
-/--
-theorem `l_sup` / 定理 `l_sup`
-
-English:
-theorem l_sup
-  given: (gc : GaloisConnection l u)
-  statement: l (a₁ ⊔ a₂) = l a₁ ⊔ l a₂
-  proof: (gc.isLUB_l_image isLUB_pair).unique by simp only [image_pair, isLUB_pair]
-
-中文:
-定理 l_sup
-  条件: (gc : GaloisConnection l u)
-  结论: l (a₁ ⊔ a₂) = l a₁ ⊔ l a₂
-  证明: (gc.isLUB_l_image isLUB_pair).unique by simp only [image_pair, isLUB_pair]
-
-Depends on / 依赖: gc.isLUB_l_image, image_pair, isLUB_l_image, isLUB_pair, unique
+@[to_dual (rename := α ↔ β, a₁ → b₁, a₂ → b₂)]
+/-
+**GaloisConnection.l_sup** 是 Mathlib 中的一个定理，位于命名空间 `GaloisConnection`。
+形式化陈述：l_sup (gc : GaloisConnection l u) : l (a₁ ⊔ a₂) = l a₁ ⊔ l a₂
+参数：gc : GaloisConnection l u。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLUB.unique`：IsLUB.unique (Ha : IsLUB s a) (Hb : IsLUB s b) : a = b
+· 使用定理 `GaloisConnection.isLUB_l_image`：isLUB_l_image {s : Set α} {a : α} (h : I
+sLUB s a) : IsLUB (l '' s) (l a)
+· 使用定理 `isLUB_pair`：isLUB_pair [SemilatticeSup γ] {a b : γ} : IsLUB {a, b} (a ⊔ 
+b)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.image_pair`：image_pair (f : α -> β) (a b : α) : f '' {a, b} = {f a, 
+f b}
 -/
 theorem l_sup (gc : GaloisConnection l u) : l (a₁ ⊔ a₂) = l a₁ ⊔ l a₂ :=
-(gc.isLUB_l_image isLUB_pair).unique by simp only [image_pair, isLUB_pair]
+  (gc.isLUB_l_image isLUB_pair).unique <| by simp only [image_pair, isLUB_pair]
 
 end SemilatticeSup
 
 section CompleteLattice
 
-variable [CompleteLattice α] [CompleteLattice β] {l : α -> β} {u : β -> α} (gc : GaloisConnection l u)
+variable [CompleteLattice α] [CompleteLattice β] {l : α → β} {u : β → α} (gc : GaloisConnection l u)
 include gc
 
 @[to_dual]
-/--
-theorem `l_iSup` / 定理 `l_iSup`
-
-English:
-theorem l_iSup
-  given: {f : ι -> α}
-  statement: l (iSup f) = ⨆ i, l (f i)
-  proof: Eq.symm
-IsLUB.iSup_eq
-      show IsLUB (range (l ∘ f)) (l (iSup f)) by
-        rw [range_comp]; rw [← sSup_range]; exact gc.isLUB_l_image (isLUB_sSup _)
-
-@[to_dual]
-
-中文:
-定理 l_iSup
-  条件: {f : ι -> α}
-  结论: l (iSup f) = ⨆ i, l (f i)
-  证明: Eq.symm
-IsLUB.iSup_eq
-      show IsLUB (range (l ∘ f)) (l (iSup f)) by
-        rw [range_comp]; rw [← sSup_range]; exact gc.isLUB_l_image (isLUB_sSup _)
-
-@[to_dual]
-
-Depends on / 依赖: Eq.symm, IsLUB.iSup_eq, gc.isLUB_l_image, iSup_eq, isLUB_l_image, isLUB_sSup, range_comp, sSup_range
+/-
+**GaloisConnection.l_iSup** 是 Mathlib 中的一个定理，位于命名空间 `GaloisConnection`。
+形式化陈述：l_iSup {f : ι -> α} : l (iSup f) = ⨆ i, l (f i)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsLUB.iSup_eq`：IsLUB.iSup_eq (h : IsLUB (range f) a) : ⨆ j, f j = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.range_comp`：range_comp (g : α -> β) (f : ι -> α) : range (g ∘ f) = g
+ '' range f
+· 使用定理 `sSup_range`：sSup_range : sSup (range f) = iSup f
+· 使用定理 `GaloisConnection.isLUB_l_image`：isLUB_l_image {s : Set α} {a : α} (h : I
+sLUB s a) : IsLUB (l '' s) (l a)
+· 使用定理 `isLUB_sSup`：isLUB_sSup (s : Set α) : IsLUB s (sSup s)
 -/
-theorem l_iSup {f : ι -> α} : l (iSup f) = ⨆ i, l (f i) :=
-Eq.symm
-IsLUB.iSup_eq
+theorem l_iSup {f : ι → α} : l (iSup f) = ⨆ i, l (f i) :=
+  Eq.symm <|
+    IsLUB.iSup_eq <|
       show IsLUB (range (l ∘ f)) (l (iSup f)) by
-        rw [range_comp]; rw [← sSup_range]; exact gc.isLUB_l_image (isLUB_sSup _)
+        rw [range_comp, ← sSup_range]; exact gc.isLUB_l_image (isLUB_sSup _)
 
 @[to_dual]
-/--
-theorem `l_iSup₂` / 定理 `l_iSup₂`
-
-English:
-theorem l_iSup₂
-  given: {f : forall i, κ i -> α}
-  proof: by
-  simp_rw [gc.l_iSup]
-
-@[to_dual]
-
-中文:
-定理 l_iSup₂
-  条件: {f : 对任意 i, κ i -> α}
-  证明: by
-  simp_rw [gc.l_iSup]
-
-@[to_dual]
-
-Depends on / 依赖: gc.l_iSup, l_iSup, simp_rw
+/-
+**GaloisConnection.l_iSup** 是 Mathlib 中的一个定理，位于命名空间 `GaloisConnection`。
+形式化陈述：l_iSup {f : ι -> α} : l (iSup f) = ⨆ i, l (f i)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsLUB.iSup_eq`：IsLUB.iSup_eq (h : IsLUB (range f) a) : ⨆ j, f j = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Set.range_comp`：range_comp (g : α -> β) (f : ι -> α) : range (g ∘ f) = g
+ '' range f
+· 使用定理 `sSup_range`：sSup_range : sSup (range f) = iSup f
+· 使用定理 `GaloisConnection.isLUB_l_image`：isLUB_l_image {s : Set α} {a : α} (h : I
+sLUB s a) : IsLUB (l '' s) (l a)
+· 使用定理 `isLUB_sSup`：isLUB_sSup (s : Set α) : IsLUB s (sSup s)
 -/
-theorem l_iSup₂ {f : forall i, κ i -> α} :
+theorem l_iSup₂ {f : ∀ i, κ i → α} :
     l (⨆ (i) (j), f i j) = ⨆ (i) (j), l (f i j) := by
   simp_rw [gc.l_iSup]
 
 @[to_dual]
-/--
-theorem `l_sSup` / 定理 `l_sSup`
-
-English:
-theorem l_sSup
-  given: {s : Set α}
-  statement: l (sSup s) = ⨆ a in s, l a
-  proof: by
-  simp only [sSup_eq_iSup, gc.l_iSup]
-
-中文:
-定理 l_sSup
-  条件: {s : 集合 α}
-  结论: l (sSup s) = ⨆ a in s, l a
-  证明: by
-  simp only [sSup_eq_iSup, gc.l_iSup]
-
-Depends on / 依赖: gc.l_iSup, l_iSup, sSup_eq_iSup
+/-
+**GaloisConnection.l_sSup** 是 Mathlib 中的一个定理，位于命名空间 `GaloisConnection`。
+形式化陈述：l_sSup {s : Set α} : l (sSup s) = ⨆ a in s, l a
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sSup_eq_iSup`：sSup_eq_iSup {s : Set α} : sSup s = ⨆ a in s, a
+· 使用定理 `GaloisConnection.l_iSup`：l_iSup {f : ι -> α} : l (iSup f) = ⨆ i, l (f i)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem l_sSup {s : Set α} : l (sSup s) = ⨆ a in s, l a := by
+theorem l_sSup {s : Set α} : l (sSup s) = ⨆ a ∈ s, l a := by
   simp only [sSup_eq_iSup, gc.l_iSup]
 
 end CompleteLattice
@@ -304,28 +264,25 @@ end CompleteLattice
 -- Constructing Galois connections
 section Constructions
 
-/--
-theorem `compl` / 定理 `compl`
-
-English:
-theorem compl
-  statement: [BooleanAlgebra α] [BooleanAlgebra β] {l : α -> β} {u : β -> α}
-  proof: fun a b => by
-  dsimp
-  rw [le_compl_iff_le_compl]; rw [gc]; rw [compl_le_iff_compl_le]
-
-中文:
-定理 compl
-  结论: [布尔代数 α] [布尔代数 β] {l : α -> β} {u : β -> α}
-  证明: fun a b => by
-  dsimp
-  rw [le_compl_iff_le_compl]; rw [gc]; rw [compl_le_iff_compl_le]
+/-
+**GaloisConnection.compl** 是 Mathlib 中的一个定理，位于命名空间 `GaloisConnection`。
+形式化陈述：∀ {α : Type u} {β : Type v} [inst : BooleanAlgebra α] [inst_1 : BooleanAlg
+ebra β] {l : α → β} {u : β → α},   GaloisConnection l u → GaloisConnection (comp
+l ∘ u ∘ compl) (compl ∘ l ∘ compl)
+参数：compl ∘ u ∘ compl；compl ∘ l ∘ compl。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `le_compl_iff_le_compl`：∀ {α : Type u_2} [inst : HeytingAlgebra α] {a b :
+ α}, a ≤ bᶜ ↔ b ≤ aᶜ
+· 使用定理 `compl_le_iff_compl_le`：compl_le_iff_compl_le : xᶜ <= y ↔ yᶜ <= x
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-protected theorem compl [BooleanAlgebra α] [BooleanAlgebra β] {l : α -> β} {u : β -> α}
+protected theorem compl [BooleanAlgebra α] [BooleanAlgebra β] {l : α → β} {u : β → α}
     (gc : GaloisConnection l u) :
-    GaloisConnection (compl ∘ u ∘ compl) (compl ∘ l ∘ compl) := fun a b => by
+    GaloisConnection (compl ∘ u ∘ compl) (compl ∘ l ∘ compl) := fun a b ↦ by
   dsimp
-  rw [le_compl_iff_le_compl]; rw [gc]; rw [compl_le_iff_compl_le]
+  rw [le_compl_iff_le_compl, gc, compl_le_iff_compl_le]
 
 end Constructions
 
@@ -338,37 +295,36 @@ section image2
 section LUB_GLB
 
 variable [Preorder α] [Preorder β] [Preorder γ] {s : Set α}
-  {t : Set β} {l u : α -> β -> γ} {l₁ u₁ : β -> γ -> α} {l₂ u₂ : α -> γ -> β}
+  {t : Set β} {l u : α → β → γ} {l₁ u₁ : β → γ → α} {l₂ u₂ : α → γ → β}
   {a₀ : α} {b₀ : β} {c₀ : γ}
 
 @[to_dual]
-/--
-theorem `isLUB_image2_of_isLUB_isLUB` / 定理 `isLUB_image2_of_isLUB_isLUB`
-
-English:
-theorem isLUB_image2_of_isLUB_isLUB
-  statement: (h₁ : forall b, GaloisConnection (swap l b) (u₁ b))
-  proof: by
-  simp_rw [isLUB_iff_le_iff, mem_upperBounds] at ha₀ hb₀
-  simp_rw [isLUB_iff_le_iff, mem_upperBounds, forall_mem_image2, (h₂ _).le_iff_le,
-    ← hb₀, ← (h₂ _).le_iff_le, (h₁ _).le_iff_le, ← ha₀, forall_true_iff]
-
-@[to_dual]
-
-中文:
-定理 isLUB_image2_of_isLUB_isLUB
-  结论: (h₁ : 对任意 b, GaloisConnection (swap l b) (u₁ b))
-  证明: by
-  simp_rw [isLUB_iff_le_iff, mem_upperBounds] at ha₀ hb₀
-  simp_rw [isLUB_iff_le_iff, mem_upperBounds, forall_mem_image2, (h₂ _).le_iff_le,
-    ← hb₀, ← (h₂ _).le_iff_le, (h₁ _).le_iff_le, ← ha₀, forall_true_iff]
-
-@[to_dual]
-
-Depends on / 依赖: forall_mem_image2, forall_true_iff, isLUB_iff_le_iff, le_iff_le, mem_upperBounds, simp_rw
+/-
+**isLUB_image2_of_isLUB_isLUB** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isLUB_image2_of_isLUB_isLUB (h₁ : forall b, GaloisConnection (swap l b) (u
+₁ b)) (h₂ : forall a, GaloisConnection (l a) (u₂ a)) (ha₀ : IsLUB s a₀) (hb₀ : I
+sLUB t b₀) : IsLUB (image2 l s t) (l a₀ b₀)
+参数：h₁ : forall b, GaloisConnection (swap l b) (u₁ b)；h₂ : forall a, GaloisConnec
+tion (l a) (u₂ a)；ha₀ : IsLUB s a₀；hb₀ : IsLUB t b₀。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `GaloisConnection.le_iff_le`：le_iff_le {a : α} {b : β} : l a <= b ↔ a <= 
+u b
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 -/
-theorem isLUB_image2_of_isLUB_isLUB (h₁ : forall b, GaloisConnection (swap l b) (u₁ b))
-    (h₂ : forall a, GaloisConnection (l a) (u₂ a))
+theorem isLUB_image2_of_isLUB_isLUB (h₁ : ∀ b, GaloisConnection (swap l b) (u₁ b))
+    (h₂ : ∀ a, GaloisConnection (l a) (u₂ a))
     (ha₀ : IsLUB s a₀) (hb₀ : IsLUB t b₀) :
     IsLUB (image2 l s t) (l a₀ b₀) := by
   simp_rw [isLUB_iff_le_iff, mem_upperBounds] at ha₀ hb₀
@@ -376,75 +332,62 @@ theorem isLUB_image2_of_isLUB_isLUB (h₁ : forall b, GaloisConnection (swap l b
     ← hb₀, ← (h₂ _).le_iff_le, (h₁ _).le_iff_le, ← ha₀, forall_true_iff]
 
 @[to_dual]
-/--
-theorem `isLUB_image2_of_isLUB_isGLB` / 定理 `isLUB_image2_of_isLUB_isGLB`
-
-English:
-theorem isLUB_image2_of_isLUB_isGLB
-  statement: (h₁ : forall b, GaloisConnection (swap l b) (u₁ b))
-  proof: isLUB_image2_of_isLUB_isLUB (β := βᵒᵈ) h₁ h₂ ha₀ hb₀
-
-@[to_dual]
-
-中文:
-定理 isLUB_image2_of_isLUB_isGLB
-  结论: (h₁ : 对任意 b, GaloisConnection (swap l b) (u₁ b))
-  证明: isLUB_image2_of_isLUB_isLUB (β := βᵒᵈ) h₁ h₂ ha₀ hb₀
-
-@[to_dual]
-
-Depends on / 依赖: isLUB_image2_of_isLUB_isLUB
+/-
+**isLUB_image2_of_isLUB_isGLB** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isLUB_image2_of_isLUB_isGLB (h₁ : forall b, GaloisConnection (swap l b) (u
+₁ b)) (h₂ : forall a, GaloisConnection (l a ∘ ofDual) (toDual ∘ u₂ a)) (ha₀ : Is
+LUB s a₀) (hb₀ : IsGLB t b₀) : IsLUB (image2 l s t) (l a₀ b₀)
+参数：h₁ : forall b, GaloisConnection (swap l b) (u₁ b)；h₂ : forall a, GaloisConnec
+tion (l a ∘ ofDual) (toDual ∘ u₂ a)；ha₀ : IsLUB s a₀；hb₀ : IsGLB t b₀。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isLUB_image2_of_isLUB_isLUB`：isLUB_image2_of_isLUB_isLUB (h₁ : forall b,
+ GaloisConnection (swap l b) (u₁ b)) (h₂ : forall a, GaloisConnection (l a) (u₂ 
+a)) (ha₀ : IsLUB …
 -/
-theorem isLUB_image2_of_isLUB_isGLB (h₁ : forall b, GaloisConnection (swap l b) (u₁ b))
-    (h₂ : forall a, GaloisConnection (l a ∘ ofDual) (toDual ∘ u₂ a))
+theorem isLUB_image2_of_isLUB_isGLB (h₁ : ∀ b, GaloisConnection (swap l b) (u₁ b))
+    (h₂ : ∀ a, GaloisConnection (l a ∘ ofDual) (toDual ∘ u₂ a))
     (ha₀ : IsLUB s a₀) (hb₀ : IsGLB t b₀) :
     IsLUB (image2 l s t) (l a₀ b₀) :=
   isLUB_image2_of_isLUB_isLUB (β := βᵒᵈ) h₁ h₂ ha₀ hb₀
 
 @[to_dual]
-/--
-theorem `isLUB_image2_of_isGLB_isLUB` / 定理 `isLUB_image2_of_isGLB_isLUB`
-
-English:
-theorem isLUB_image2_of_isGLB_isLUB
-  statement: (h₁ : forall b, GaloisConnection (swap l b ∘ ofDual) (toDual ∘ u₁ b))
-  proof: isLUB_image2_of_isLUB_isLUB (α := αᵒᵈ) h₁ h₂ ha₀ hb₀
-
-@[to_dual]
-
-中文:
-定理 isLUB_image2_of_isGLB_isLUB
-  结论: (h₁ : 对任意 b, GaloisConnection (swap l b ∘ ofDual) (toDual ∘ u₁ b))
-  证明: isLUB_image2_of_isLUB_isLUB (α := αᵒᵈ) h₁ h₂ ha₀ hb₀
-
-@[to_dual]
-
-Depends on / 依赖: isLUB_image2_of_isLUB_isLUB
+/-
+**isLUB_image2_of_isGLB_isLUB** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isLUB_image2_of_isGLB_isLUB (h₁ : forall b, GaloisConnection (swap l b ∘ o
+fDual) (toDual ∘ u₁ b)) (h₂ : forall a, GaloisConnection (l a) (u₂ a)) (ha₀ : Is
+GLB s a₀) (hb₀ : IsLUB t b₀) : IsLUB (image2 l s t) (l a₀ b₀)
+参数：h₁ : forall b, GaloisConnection (swap l b ∘ ofDual) (toDual ∘ u₁ b)；h₂ : fora
+ll a, GaloisConnection (l a) (u₂ a)；ha₀ : IsGLB s a₀；hb₀ : IsLUB t b₀。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isLUB_image2_of_isLUB_isLUB`：isLUB_image2_of_isLUB_isLUB (h₁ : forall b,
+ GaloisConnection (swap l b) (u₁ b)) (h₂ : forall a, GaloisConnection (l a) (u₂ 
+a)) (ha₀ : IsLUB …
 -/
-theorem isLUB_image2_of_isGLB_isLUB (h₁ : forall b, GaloisConnection (swap l b ∘ ofDual) (toDual ∘ u₁ b))
-    (h₂ : forall a, GaloisConnection (l a) (u₂ a))
+theorem isLUB_image2_of_isGLB_isLUB (h₁ : ∀ b, GaloisConnection (swap l b ∘ ofDual) (toDual ∘ u₁ b))
+    (h₂ : ∀ a, GaloisConnection (l a) (u₂ a))
     (ha₀ : IsGLB s a₀) (hb₀ : IsLUB t b₀) :
     IsLUB (image2 l s t) (l a₀ b₀) :=
   isLUB_image2_of_isLUB_isLUB (α := αᵒᵈ) h₁ h₂ ha₀ hb₀
 
 @[to_dual]
-/--
-theorem `isLUB_image2_of_isGLB_isGLB` / 定理 `isLUB_image2_of_isGLB_isGLB`
-
-English:
-theorem isLUB_image2_of_isGLB_isGLB
-  statement: (h₁ : forall b, GaloisConnection (swap l b ∘ ofDual) (toDual ∘ u₁ b))
-  proof: isLUB_image2_of_isLUB_isLUB (α := αᵒᵈ) (β := βᵒᵈ) h₁ h₂ ha₀ hb₀
-
-中文:
-定理 isLUB_image2_of_isGLB_isGLB
-  结论: (h₁ : 对任意 b, GaloisConnection (swap l b ∘ ofDual) (toDual ∘ u₁ b))
-  证明: isLUB_image2_of_isLUB_isLUB (α := αᵒᵈ) (β := βᵒᵈ) h₁ h₂ ha₀ hb₀
-
-Depends on / 依赖: isLUB_image2_of_isLUB_isLUB
+/-
+**isLUB_image2_of_isGLB_isGLB** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isLUB_image2_of_isGLB_isGLB (h₁ : forall b, GaloisConnection (swap l b ∘ o
+fDual) (toDual ∘ u₁ b)) (h₂ : forall a, GaloisConnection (l a ∘ ofDual) (toDual 
+∘ u₂ a)) (ha₀ : IsGLB s a₀) (hb₀ : IsGLB t b₀) : IsLUB (image2 l s t) (l a₀ b₀)
+参数：h₁ : forall b, GaloisConnection (swap l b ∘ ofDual) (toDual ∘ u₁ b)；h₂ : fora
+ll a, GaloisConnection (l a ∘ ofDual) (toDual ∘ u₂ a)；ha₀ : IsGLB s a₀；hb₀ : IsG
+LB t b₀。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isLUB_image2_of_isLUB_isLUB`：isLUB_image2_of_isLUB_isLUB (h₁ : forall b,
+ GaloisConnection (swap l b) (u₁ b)) (h₂ : forall a, GaloisConnection (l a) (u₂ 
+a)) (ha₀ : IsLUB …
 -/
-theorem isLUB_image2_of_isGLB_isGLB (h₁ : forall b, GaloisConnection (swap l b ∘ ofDual) (toDual ∘ u₁ b))
-    (h₂ : forall a, GaloisConnection (l a ∘ ofDual) (toDual ∘ u₂ a))
+theorem isLUB_image2_of_isGLB_isGLB (h₁ : ∀ b, GaloisConnection (swap l b ∘ ofDual) (toDual ∘ u₁ b))
+    (h₂ : ∀ a, GaloisConnection (l a ∘ ofDual) (toDual ∘ u₂ a))
     (ha₀ : IsGLB s a₀) (hb₀ : IsGLB t b₀) :
     IsLUB (image2 l s t) (l a₀ b₀) :=
   isLUB_image2_of_isLUB_isLUB (α := αᵒᵈ) (β := βᵒᵈ) h₁ h₂ ha₀ hb₀
@@ -454,99 +397,82 @@ end LUB_GLB
 section CompleteLattice
 
 variable [CompleteLattice α] [CompleteLattice β] [CompleteLattice γ] {s : Set α}
-  {t : Set β} {l u : α -> β -> γ} {l₁ u₁ : β -> γ -> α} {l₂ u₂ : α -> γ -> β}
+  {t : Set β} {l u : α → β → γ} {l₁ u₁ : β → γ → α} {l₂ u₂ : α → γ → β}
 
 @[to_dual]
-/--
-theorem `sSup_image2_eq_sSup_sSup` / 定理 `sSup_image2_eq_sSup_sSup`
-
-English:
-theorem sSup_image2_eq_sSup_sSup
-  statement: (h₁ : forall b, GaloisConnection (swap l b) (u₁ b))
-  proof: (isLUB_image2_of_isLUB_isLUB h₁ h₂ (isLUB_sSup _) (isLUB_sSup _)).sSup_eq
-
-@[to_dual]
-
-中文:
-定理 sSup_image2_eq_sSup_sSup
-  结论: (h₁ : 对任意 b, GaloisConnection (swap l b) (u₁ b))
-  证明: (isLUB_image2_of_isLUB_isLUB h₁ h₂ (isLUB_sSup _) (isLUB_sSup _)).sSup_eq
-
-@[to_dual]
-
-Depends on / 依赖: isLUB_image2_of_isLUB_isLUB, isLUB_sSup, sSup_eq
+/-
+**sSup_image2_eq_sSup_sSup** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：sSup_image2_eq_sSup_sSup (h₁ : forall b, GaloisConnection (swap l b) (u₁ b
+)) (h₂ : forall a, GaloisConnection (l a) (u₂ a)) : sSup (image2 l s t) = l (sSu
+p s) (sSup t)
+参数：h₁ : forall b, GaloisConnection (swap l b) (u₁ b)；h₂ : forall a, GaloisConnec
+tion (l a) (u₂ a)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsLUB.sSup_eq`：∀ {α : Type u_1} [inst : CompleteSemilatticeSup α] {s : S
+et α} {a : α}, IsLUB s a → sSup s = a
+· 使用定理 `isLUB_image2_of_isLUB_isLUB`：isLUB_image2_of_isLUB_isLUB (h₁ : forall b,
+ GaloisConnection (swap l b) (u₁ b)) (h₂ : forall a, GaloisConnection (l a) (u₂ 
+a)) (ha₀ : IsLUB …
+· 使用定理 `isLUB_sSup`：isLUB_sSup (s : Set α) : IsLUB s (sSup s)
 -/
-theorem sSup_image2_eq_sSup_sSup (h₁ : forall b, GaloisConnection (swap l b) (u₁ b))
-    (h₂ : forall a, GaloisConnection (l a) (u₂ a)) : sSup (image2 l s t) = l (sSup s) (sSup t) :=
+theorem sSup_image2_eq_sSup_sSup (h₁ : ∀ b, GaloisConnection (swap l b) (u₁ b))
+    (h₂ : ∀ a, GaloisConnection (l a) (u₂ a)) : sSup (image2 l s t) = l (sSup s) (sSup t) :=
   (isLUB_image2_of_isLUB_isLUB h₁ h₂ (isLUB_sSup _) (isLUB_sSup _)).sSup_eq
 
 @[to_dual]
-/--
-theorem `sSup_image2_eq_sSup_sInf` / 定理 `sSup_image2_eq_sSup_sInf`
-
-English:
-theorem sSup_image2_eq_sSup_sInf
-  statement: (h₁ : forall b, GaloisConnection (swap l b) (u₁ b))
-  proof: sSup_image2_eq_sSup_sSup (β := βᵒᵈ) h₁ h₂
-
-@[to_dual]
-
-中文:
-定理 sSup_image2_eq_sSup_sInf
-  结论: (h₁ : 对任意 b, GaloisConnection (swap l b) (u₁ b))
-  证明: sSup_image2_eq_sSup_sSup (β := βᵒᵈ) h₁ h₂
-
-@[to_dual]
-
-Depends on / 依赖: sSup_image2_eq_sSup_sSup
+/-
+**sSup_image2_eq_sSup_sInf** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：sSup_image2_eq_sSup_sInf (h₁ : forall b, GaloisConnection (swap l b) (u₁ b
+)) (h₂ : forall a, GaloisConnection (l a ∘ ofDual) (toDual ∘ u₂ a)) : sSup (imag
+e2 l s t) = l (sSup s) (sInf t)
+参数：h₁ : forall b, GaloisConnection (swap l b) (u₁ b)；h₂ : forall a, GaloisConnec
+tion (l a ∘ ofDual) (toDual ∘ u₂ a)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sSup_image2_eq_sSup_sSup`：sSup_image2_eq_sSup_sSup (h₁ : forall b, Galoi
+sConnection (swap l b) (u₁ b)) (h₂ : forall a, GaloisConnection (l a) (u₂ a)) : 
+sSup (image2 l…
 -/
-theorem sSup_image2_eq_sSup_sInf (h₁ : forall b, GaloisConnection (swap l b) (u₁ b))
-    (h₂ : forall a, GaloisConnection (l a ∘ ofDual) (toDual ∘ u₂ a)) :
+theorem sSup_image2_eq_sSup_sInf (h₁ : ∀ b, GaloisConnection (swap l b) (u₁ b))
+    (h₂ : ∀ a, GaloisConnection (l a ∘ ofDual) (toDual ∘ u₂ a)) :
     sSup (image2 l s t) = l (sSup s) (sInf t) :=
   sSup_image2_eq_sSup_sSup (β := βᵒᵈ) h₁ h₂
 
 @[to_dual]
-/--
-theorem `sSup_image2_eq_sInf_sSup` / 定理 `sSup_image2_eq_sInf_sSup`
-
-English:
-theorem sSup_image2_eq_sInf_sSup
-  statement: (h₁ : forall b, GaloisConnection (swap l b ∘ ofDual) (toDual ∘ u₁ b))
-  proof: sSup_image2_eq_sSup_sSup (α := αᵒᵈ) h₁ h₂
-
-@[to_dual]
-
-中文:
-定理 sSup_image2_eq_sInf_sSup
-  结论: (h₁ : 对任意 b, GaloisConnection (swap l b ∘ ofDual) (toDual ∘ u₁ b))
-  证明: sSup_image2_eq_sSup_sSup (α := αᵒᵈ) h₁ h₂
-
-@[to_dual]
-
-Depends on / 依赖: sSup_image2_eq_sSup_sSup
+/-
+**sSup_image2_eq_sInf_sSup** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：sSup_image2_eq_sInf_sSup (h₁ : forall b, GaloisConnection (swap l b ∘ ofDu
+al) (toDual ∘ u₁ b)) (h₂ : forall a, GaloisConnection (l a) (u₂ a)) : sSup (imag
+e2 l s t) = l (sInf s) (sSup t)
+参数：h₁ : forall b, GaloisConnection (swap l b ∘ ofDual) (toDual ∘ u₁ b)；h₂ : fora
+ll a, GaloisConnection (l a) (u₂ a)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sSup_image2_eq_sSup_sSup`：sSup_image2_eq_sSup_sSup (h₁ : forall b, Galoi
+sConnection (swap l b) (u₁ b)) (h₂ : forall a, GaloisConnection (l a) (u₂ a)) : 
+sSup (image2 l…
 -/
-theorem sSup_image2_eq_sInf_sSup (h₁ : forall b, GaloisConnection (swap l b ∘ ofDual) (toDual ∘ u₁ b))
-    (h₂ : forall a, GaloisConnection (l a) (u₂ a)) : sSup (image2 l s t) = l (sInf s) (sSup t) :=
+theorem sSup_image2_eq_sInf_sSup (h₁ : ∀ b, GaloisConnection (swap l b ∘ ofDual) (toDual ∘ u₁ b))
+    (h₂ : ∀ a, GaloisConnection (l a) (u₂ a)) : sSup (image2 l s t) = l (sInf s) (sSup t) :=
   sSup_image2_eq_sSup_sSup (α := αᵒᵈ) h₁ h₂
 
 @[to_dual]
-/--
-theorem `sSup_image2_eq_sInf_sInf` / 定理 `sSup_image2_eq_sInf_sInf`
-
-English:
-theorem sSup_image2_eq_sInf_sInf
-  statement: (h₁ : forall b, GaloisConnection (swap l b ∘ ofDual) (toDual ∘ u₁ b))
-  proof: sSup_image2_eq_sSup_sSup (α := αᵒᵈ) (β := βᵒᵈ) h₁ h₂
-
-中文:
-定理 sSup_image2_eq_sInf_sInf
-  结论: (h₁ : 对任意 b, GaloisConnection (swap l b ∘ ofDual) (toDual ∘ u₁ b))
-  证明: sSup_image2_eq_sSup_sSup (α := αᵒᵈ) (β := βᵒᵈ) h₁ h₂
-
-Depends on / 依赖: sSup_image2_eq_sSup_sSup
+/-
+**sSup_image2_eq_sInf_sInf** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：sSup_image2_eq_sInf_sInf (h₁ : forall b, GaloisConnection (swap l b ∘ ofDu
+al) (toDual ∘ u₁ b)) (h₂ : forall a, GaloisConnection (l a ∘ ofDual) (toDual ∘ u
+₂ a)) : sSup (image2 l s t) = l (sInf s) (sInf t)
+参数：h₁ : forall b, GaloisConnection (swap l b ∘ ofDual) (toDual ∘ u₁ b)；h₂ : fora
+ll a, GaloisConnection (l a ∘ ofDual) (toDual ∘ u₂ a)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sSup_image2_eq_sSup_sSup`：sSup_image2_eq_sSup_sSup (h₁ : forall b, Galoi
+sConnection (swap l b) (u₁ b)) (h₂ : forall a, GaloisConnection (l a) (u₂ a)) : 
+sSup (image2 l…
 -/
-theorem sSup_image2_eq_sInf_sInf (h₁ : forall b, GaloisConnection (swap l b ∘ ofDual) (toDual ∘ u₁ b))
-    (h₂ : forall a, GaloisConnection (l a ∘ ofDual) (toDual ∘ u₂ a)) :
+theorem sSup_image2_eq_sInf_sInf (h₁ : ∀ b, GaloisConnection (swap l b ∘ ofDual) (toDual ∘ u₁ b))
+    (h₂ : ∀ a, GaloisConnection (l a ∘ ofDual) (toDual ∘ u₂ a)) :
     sSup (image2 l s t) = l (sInf s) (sInf t) :=
   sSup_image2_eq_sSup_sSup (α := αᵒᵈ) (β := βᵒᵈ) h₁ h₂
 
@@ -562,44 +488,34 @@ variable [Preorder α] [Preorder β]
 
 /-- Makes a Galois connection from an order-preserving bijection. -/
 @[to_dual none]
-/--
-lemma `to_galoisConnection` / 引理 `to_galoisConnection`
+/-
+**OrderIso.to_galoisConnection** 是 Mathlib 中的一个引理，位于命名空间 `OrderIso`。
+形式化陈述：to_galoisConnection (e : α ≃o β) : GaloisConnection e e.symm
+参数：e : α ≃o β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `OrderIso.le_symm_apply`：le_symm_apply (e : α ≃o β) {x : α} {y : β} : x <
+= e.symm y ↔ e x <= y
 
-English:
-lemma to_galoisConnection
-  given: (e : α ≃o β)
-  statement: GaloisConnection e e.symm
-  proof: fun _ _ => e.le_symm_apply.symm
-
-中文:
-引理 to_galoisConnection
-  条件: (e : α ≃o β)
-  结论: GaloisConnection e e.symm
-  证明: fun _ _ => e.le_symm_apply.symm
-
-Depends on / 依赖: e.le_symm_apply.symm, le_symm_apply
+--- 原说明 ---
+Makes a Galois connection from an order-preserving bijection.
 -/
 lemma to_galoisConnection (e : α ≃o β) : GaloisConnection e e.symm :=
   fun _ _ => e.le_symm_apply.symm
 
-/--
-Definition of `toGaloisInsertion` / `toGaloisInsertion` 的定义
+/-- Makes a Galois insertion from an order-preserving bijection. -/
+/-
+**OrderIso.toGaloisInsertion** 是 Mathlib 中的一个定义，位于命名空间 `OrderIso`。
+形式化陈述：{α : Type u} → {β : Type v} → [inst : Preorder α] → [inst_1 : Preorder β] 
+→ (e : α ≃o β) → GaloisInsertion ⇑e ⇑e.symm
+参数：e : α ≃o β。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `OrderIso.to_galoisConnection`：to_galoisConnection (e : α ≃o β) : GaloisC
+onnection e e.symm
 
-English:
-definition toGaloisInsertion
-  signature: (e : α ≃o β)
-  body: e b
-  gc := e.to_galoisConnection
-  le_l_u g := le_of_eq (e.right_inv g).symm
-  choice_eq _ _ := rfl
-
-中文:
-定义 toGaloisInsertion
-  签名: (e : α ≃o β)
-  定义体: e b
-  gc := e.to_galoisConnection
-  le_l_u g := le_of_eq (e.right_inv g).symm
-  choice_eq _ _ := rfl
+--- 原说明 ---
+Makes a Galois insertion from an order-preserving bijection.
 -/
 protected def toGaloisInsertion (e : α ≃o β) : GaloisInsertion e e.symm where
   choice b _ := e b
@@ -607,28 +523,18 @@ protected def toGaloisInsertion (e : α ≃o β) : GaloisInsertion e e.symm wher
   le_l_u g := le_of_eq (e.right_inv g).symm
   choice_eq _ _ := rfl
 
-/--
-Definition of `toGaloisCoinsertion` / `toGaloisCoinsertion` 的定义
+/-- Makes a Galois coinsertion from an order-preserving bijection. -/
+/-
+**OrderIso.toGaloisCoinsertion** 是 Mathlib 中的一个定义，位于命名空间 `OrderIso`。
+形式化陈述：{α : Type u} → {β : Type v} → [inst : Preorder α] → [inst_1 : Preorder β] 
+→ (e : α ≃o β) → GaloisCoinsertion ⇑e ⇑e.symm
+参数：e : α ≃o β。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `OrderIso.to_galoisConnection`：to_galoisConnection (e : α ≃o β) : GaloisC
+onnection e e.symm
 
-English:
-definition toGaloisCoinsertion
-  signature: (e : α ≃o β)
-  body: e.symm b
-  gc := e.to_galoisConnection
-  u_l_le g := le_of_eq (e.left_inv g)
-  choice_eq _ _ := rfl
-
-@[to_dual (attr := simp)]
-
-中文:
-定义 toGaloisCoinsertion
-  签名: (e : α ≃o β)
-  定义体: e.symm b
-  gc := e.to_galoisConnection
-  u_l_le g := le_of_eq (e.left_inv g)
-  choice_eq _ _ := rfl
-
-@[to_dual (attr := simp)]
+--- 原说明 ---
+Makes a Galois coinsertion from an order-preserving bijection.
 -/
 protected def toGaloisCoinsertion (e : α ≃o β) : GaloisCoinsertion e e.symm where
   choice b _ := e.symm b
@@ -637,104 +543,87 @@ protected def toGaloisCoinsertion (e : α ≃o β) : GaloisCoinsertion e e.symm 
   choice_eq _ _ := rfl
 
 @[to_dual (attr := simp)]
-/--
-theorem `bddAbove_image` / 定理 `bddAbove_image`
-
-English:
-theorem bddAbove_image
-  given: (e : α ≃o β) {s : Set α}
-  statement: BddAbove (e '' s) ↔ BddAbove s
-  proof: e.to_galoisConnection.bddAbove_l_image
-
-@[to_dual (attr := simp)]
-
-中文:
-定理 bddAbove_image
-  条件: (e : α ≃o β) {s : 集合 α}
-  结论: BddAbove (e '' s) ↔ BddAbove s
-  证明: e.to_galoisConnection.bddAbove_l_image
-
-@[to_dual (attr := simp)]
-
-Depends on / 依赖: bddAbove_l_image, e.to_galoisConnection.bddAbove_l_image, to_galoisConnection
+/-
+**OrderIso.bddAbove_image** 是 Mathlib 中的一个定理，位于命名空间 `OrderIso`。
+形式化陈述：bddAbove_image (e : α ≃o β) {s : Set α} : BddAbove (e '' s) ↔ BddAbove s
+参数：e : α ≃o β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.bddAbove_l_image`：bddAbove_l_image {s : Set α} : BddAbo
+ve (l '' s) ↔ BddAbove s
+· 使用引理 `OrderIso.to_galoisConnection`：to_galoisConnection (e : α ≃o β) : GaloisC
+onnection e e.symm
 -/
 theorem bddAbove_image (e : α ≃o β) {s : Set α} : BddAbove (e '' s) ↔ BddAbove s :=
   e.to_galoisConnection.bddAbove_l_image
 
 @[to_dual (attr := simp)]
-/--
-theorem `bddAbove_preimage` / 定理 `bddAbove_preimage`
-
-English:
-theorem bddAbove_preimage
-  given: (e : α ≃o β) {s : Set β}
-  statement: BddAbove (e ⁻¹' s) ↔ BddAbove s
-  proof: by
-  rw [← e.bddAbove_image]; rw [e.image_preimage]
-
-中文:
-定理 bddAbove_preimage
-  条件: (e : α ≃o β) {s : 集合 β}
-  结论: BddAbove (e ⁻¹' s) ↔ BddAbove s
-  证明: by
-  rw [← e.bddAbove_image]; rw [e.image_preimage]
-
-Depends on / 依赖: bddAbove_image, e.bddAbove_image, e.image_preimage, image_preimage
+/-
+**OrderIso.bddAbove_preimage** 是 Mathlib 中的一个定理，位于命名空间 `OrderIso`。
+形式化陈述：bddAbove_preimage (e : α ≃o β) {s : Set β} : BddAbove (e ⁻¹' s) ↔ BddAbove
+ s
+参数：e : α ≃o β。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `OrderIso.bddAbove_image`：bddAbove_image (e : α ≃o β) {s : Set α} : BddAb
+ove (e '' s) ↔ BddAbove s
+· 使用定理 `OrderIso.image_preimage`：image_preimage (e : α ≃o β) (s : Set β) : e '' 
+e ⁻¹' s = s
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem bddAbove_preimage (e : α ≃o β) {s : Set β} : BddAbove (e ⁻¹' s) ↔ BddAbove s := by
-  rw [← e.bddAbove_image]; rw [e.image_preimage]
+  rw [← e.bddAbove_image, e.image_preimage]
 
 end OrderIso
 
 namespace Nat
 
-/--
-theorem `galoisConnection_mul_div` / 定理 `galoisConnection_mul_div`
-
-English:
-theorem galoisConnection_mul_div
-  given: {k : Nat} (h : 0 < k)
-  proof: fun _ _ => (le_div_iff_mul_le h).symm
-
-中文:
-定理 galoisConnection_mul_div
-  条件: {k : 自然数} (h : 0 < k)
-  证明: fun _ _ => (le_div_iff_mul_le h).symm
-
-Depends on / 依赖: le_div_iff_mul_le
+/-
+**Nat.galoisConnection_mul_div** 是 Mathlib 中的一个定理，位于命名空间 `Nat`。
+形式化陈述：galoisConnection_mul_div {k : Nat} (h : 0 < k) : GaloisConnection (fun n =
+> n * k) fun n => n / k
+参数：h : 0 < k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `Nat.le_div_iff_mul_le`：∀ {k x y : ℕ}, 0 < k → (x ≤ y / k ↔ x * k ≤ y)
 -/
-theorem galoisConnection_mul_div {k : Nat} (h : 0 < k) :
+theorem galoisConnection_mul_div {k : ℕ} (h : 0 < k) :
     GaloisConnection (fun n => n * k) fun n => n / k := fun _ _ => (le_div_iff_mul_le h).symm
 
 end Nat
 
 namespace GaloisInsertion
 
-variable {l : α -> β} {u : β -> α}
+variable {l : α → β} {u : β → α}
 
 @[to_dual]
-/--
-theorem `l_sup_u` / 定理 `l_sup_u`
-
-English:
-theorem l_sup_u
-  given: [SemilatticeSup α] [SemilatticeSup β] (gi : GaloisInsertion l u) (a b : β)
-  proof: calc
-    l (u a ⊔ u b) = l (u a) ⊔ l (u b) := gi.gc.l_sup
-    _ = a ⊔ b := by simp only [gi.l_u_eq]
-
-@[to_dual]
-
-中文:
-定理 l_sup_u
-  条件: [SemilatticeSup α] [SemilatticeSup β] (gi : Galois嵌入 l u) (a b : β)
-  证明: calc
-    l (u a ⊔ u b) = l (u a) ⊔ l (u b) := gi.gc.l_sup
-    _ = a ⊔ b := by simp only [gi.l_u_eq]
-
-@[to_dual]
-
-Depends on / 依赖: gi.gc.l_sup, gi.l_u_eq, l_sup, l_u_eq
+/-
+**GaloisInsertion.l_sup_u** 是 Mathlib 中的一个定理，位于命名空间 `GaloisInsertion`。
+形式化陈述：l_sup_u [SemilatticeSup α] [SemilatticeSup β] (gi : GaloisInsertion l u) (
+a b : β) : l (u a ⊔ u b) = a ⊔ b
+参数：gi : GaloisInsertion l u；a b : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_sup`：l_sup (gc : GaloisConnection l u) : l (a₁ ⊔ a₂) 
+= l a₁ ⊔ l a₂
+· 使用定理 `GaloisInsertion.gc`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] 
+[inst_1 : Preorder β] {l : α → β} {u : β → α}   (self : GaloisInsertion l u), Ga
+loisConn…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `GaloisInsertion.l_u_eq`：l_u_eq [Preorder α] [PartialOrder β] (gi : Galoi
+sInsertion l u) (b : β) : l (u b) = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem l_sup_u [SemilatticeSup α] [SemilatticeSup β] (gi : GaloisInsertion l u) (a b : β) :
     l (u a ⊔ u b) = a ⊔ b :=
@@ -743,107 +632,104 @@ theorem l_sup_u [SemilatticeSup α] [SemilatticeSup β] (gi : GaloisInsertion l 
     _ = a ⊔ b := by simp only [gi.l_u_eq]
 
 @[to_dual]
-/--
-theorem `l_iSup_u` / 定理 `l_iSup_u`
-
-English:
-theorem l_iSup_u
-  statement: [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l u) {ι : Sort x}
-  proof: calc
-    l (⨆ i : ι, u (f i)) = ⨆ i : ι, l (u (f i)) := gi.gc.l_iSup
-_ = ⨆ i : ι, f i := congr_arg _ funext fun i => gi.l_u_eq (f i)
-
-@[to_dual]
-
-中文:
-定理 l_iSup_u
-  结论: [完备格 α] [完备格 β] (gi : Galois嵌入 l u) {ι : 类型层 x}
-  证明: calc
-    l (⨆ i : ι, u (f i)) = ⨆ i : ι, l (u (f i)) := gi.gc.l_iSup
-_ = ⨆ i : ι, f i := congr_arg _ funext fun i => gi.l_u_eq (f i)
-
-@[to_dual]
-
-Depends on / 依赖: congr_arg, gi.gc.l_iSup, gi.l_u_eq, l_iSup, l_u_eq
+/-
+**GaloisInsertion.l_iSup_u** 是 Mathlib 中的一个定理，位于命名空间 `GaloisInsertion`。
+形式化陈述：l_iSup_u [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l u
+) {ι : Sort x} (f : ι -> β) : l (⨆ i, u (f i)) = ⨆ i, f i
+参数：gi : GaloisInsertion l u；f : ι -> β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_iSup`：l_iSup {f : ι -> α} : l (iSup f) = ⨆ i, l (f i)
+· 使用定理 `GaloisInsertion.gc`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] 
+[inst_1 : Preorder β] {l : α → β} {u : β → α}   (self : GaloisInsertion l u), Ga
+loisConn…
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `GaloisInsertion.l_u_eq`：l_u_eq [Preorder α] [PartialOrder β] (gi : Galoi
+sInsertion l u) (b : β) : l (u b) = b
 -/
 theorem l_iSup_u [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l u) {ι : Sort x}
-    (f : ι -> β) : l (⨆ i, u (f i)) = ⨆ i, f i :=
+    (f : ι → β) : l (⨆ i, u (f i)) = ⨆ i, f i :=
   calc
     l (⨆ i : ι, u (f i)) = ⨆ i : ι, l (u (f i)) := gi.gc.l_iSup
-_ = ⨆ i : ι, f i := congr_arg _ funext fun i => gi.l_u_eq (f i)
+    _ = ⨆ i : ι, f i := congr_arg _ <| funext fun i => gi.l_u_eq (f i)
 
 @[to_dual]
-/--
-theorem `l_biSup_u` / 定理 `l_biSup_u`
-
-English:
-theorem l_biSup_u
-  statement: [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l u) {ι : Sort x}
-  proof: by
-  simp only [iSup_subtype', gi.l_iSup_u]
-
-@[to_dual]
-
-中文:
-定理 l_biSup_u
-  结论: [完备格 α] [完备格 β] (gi : Galois嵌入 l u) {ι : 类型层 x}
-  证明: by
-  simp only [iSup_subtype', gi.l_iSup_u]
-
-@[to_dual]
-
-Depends on / 依赖: gi.l_iSup_u, iSup_subtype, l_iSup_u
+/-
+**GaloisInsertion.l_biSup_u** 是 Mathlib 中的一个定理，位于命名空间 `GaloisInsertion`。
+形式化陈述：l_biSup_u [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l 
+u) {ι : Sort x} {p : ι -> Prop} (f : forall i, p i -> β) : l (⨆ (i) (hi), u (f i
+ hi)) = ⨆ (i) (hi), f i hi
+参数：gi : GaloisInsertion l u；f : forall i, p i -> β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iSup_subtype'`：iSup_subtype' {p : ι -> Prop} {f : forall i, p i -> α} : 
+⨆ (i) (h), f i h = ⨆ x : Subtype p, f x x.property
+· 使用定理 `GaloisInsertion.l_iSup_u`：l_iSup_u [CompleteLattice α] [CompleteLattice 
+β] (gi : GaloisInsertion l u) {ι : Sort x} (f : ι -> β) : l (⨆ i, u (f i)) = ⨆ i
+, f i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem l_biSup_u [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l u) {ι : Sort x}
-    {p : ι -> Prop} (f : forall i, p i -> β) : l (⨆ (i) (hi), u (f i hi)) = ⨆ (i) (hi), f i hi := by
+    {p : ι → Prop} (f : ∀ i, p i → β) : l (⨆ (i) (hi), u (f i hi)) = ⨆ (i) (hi), f i hi := by
   simp only [iSup_subtype', gi.l_iSup_u]
 
 @[to_dual]
-/--
-theorem `l_sSup_u_image` / 定理 `l_sSup_u_image`
-
-English:
-theorem l_sSup_u_image
-  statement: [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l u)
-  proof: by rw [sSup_image, gi.l_biSup_u, sSup_eq_iSup]
-
-@[to_dual]
-
-中文:
-定理 l_sSup_u_image
-  结论: [完备格 α] [完备格 β] (gi : Galois嵌入 l u)
-  证明: by rw [sSup_image, gi.l_biSup_u, sSup_eq_iSup]
-
-@[to_dual]
-
-Depends on / 依赖: gi.l_biSup_u, l_biSup_u, sSup_eq_iSup, sSup_image
+/-
+**GaloisInsertion.l_sSup_u_image** 是 Mathlib 中的一个定理，位于命名空间 `GaloisInsertion`。
+形式化陈述：l_sSup_u_image [CompleteLattice α] [CompleteLattice β] (gi : GaloisInserti
+on l u) (s : Set β) : l (sSup (u '' s)) = sSup s
+参数：gi : GaloisInsertion l u；s : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sSup_image`：sSup_image {s : Set β} {f : β -> α} : sSup (f '' s) = ⨆ a in
+ s, f a
+· 使用定理 `GaloisInsertion.l_biSup_u`：l_biSup_u [CompleteLattice α] [CompleteLattic
+e β] (gi : GaloisInsertion l u) {ι : Sort x} {p : ι -> Prop} (f : forall i, p i 
+-> β) : l (⨆ (i…
+· 使用定理 `sSup_eq_iSup`：sSup_eq_iSup {s : Set α} : sSup s = ⨆ a in s, a
 -/
 theorem l_sSup_u_image [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l u)
     (s : Set β) : l (sSup (u '' s)) = sSup s := by rw [sSup_image, gi.l_biSup_u, sSup_eq_iSup]
 
 @[to_dual]
-/--
-theorem `l_inf_u` / 定理 `l_inf_u`
-
-English:
-theorem l_inf_u
-  given: [SemilatticeInf α] [SemilatticeInf β] (gi : GaloisInsertion l u) (a b : β)
-  proof: calc
-    l (u a ⊓ u b) = l (u (a ⊓ b)) := congr_arg l gi.gc.u_inf.symm
-    _ = a ⊓ b := by simp only [gi.l_u_eq]
-
-@[to_dual]
-
-中文:
-定理 l_inf_u
-  条件: [SemilatticeInf α] [SemilatticeInf β] (gi : Galois嵌入 l u) (a b : β)
-  证明: calc
-    l (u a ⊓ u b) = l (u (a ⊓ b)) := congr_arg l gi.gc.u_inf.symm
-    _ = a ⊓ b := by simp only [gi.l_u_eq]
-
-@[to_dual]
-
-Depends on / 依赖: congr_arg, gi.gc.u_inf.symm, gi.l_u_eq, l_u_eq, u_inf
+/-
+**GaloisInsertion.l_inf_u** 是 Mathlib 中的一个定理，位于命名空间 `GaloisInsertion`。
+形式化陈述：l_inf_u [SemilatticeInf α] [SemilatticeInf β] (gi : GaloisInsertion l u) (
+a b : β) : l (u a ⊓ u b) = a ⊓ b
+参数：gi : GaloisInsertion l u；a b : β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `GaloisConnection.u_inf`：∀ {β : Type u} {α : Type v} {b₁ b₂ : β} [inst : 
+SemilatticeInf β] [inst_1 : SemilatticeInf α] {u : β → α} {l : α → β},   GaloisC
+onnection l …
+· 使用定理 `GaloisInsertion.gc`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] 
+[inst_1 : Preorder β] {l : α → β} {u : β → α}   (self : GaloisInsertion l u), Ga
+loisConn…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `GaloisInsertion.l_u_eq`：l_u_eq [Preorder α] [PartialOrder β] (gi : Galoi
+sInsertion l u) (b : β) : l (u b) = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem l_inf_u [SemilatticeInf α] [SemilatticeInf β] (gi : GaloisInsertion l u) (a b : β) :
     l (u a ⊓ u b) = a ⊓ b :=
@@ -852,202 +738,206 @@ theorem l_inf_u [SemilatticeInf α] [SemilatticeInf β] (gi : GaloisInsertion l 
     _ = a ⊓ b := by simp only [gi.l_u_eq]
 
 @[to_dual]
-/--
-theorem `l_iInf_u` / 定理 `l_iInf_u`
-
-English:
-theorem l_iInf_u
-  statement: [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l u) {ι : Sort x}
-  proof: calc
-    l (⨅ i : ι, u (f i)) = l (u (⨅ i : ι, f i)) := congr_arg l gi.gc.u_iInf.symm
-    _ = ⨅ i : ι, f i := gi.l_u_eq _
-
-@[to_dual]
-
-中文:
-定理 l_iInf_u
-  结论: [完备格 α] [完备格 β] (gi : Galois嵌入 l u) {ι : 类型层 x}
-  证明: calc
-    l (⨅ i : ι, u (f i)) = l (u (⨅ i : ι, f i)) := congr_arg l gi.gc.u_iInf.symm
-    _ = ⨅ i : ι, f i := gi.l_u_eq _
-
-@[to_dual]
-
-Depends on / 依赖: congr_arg, gi.gc.u_iInf.symm, gi.l_u_eq, l_u_eq, u_iInf
+/-
+**GaloisInsertion.l_iInf_u** 是 Mathlib 中的一个定理，位于命名空间 `GaloisInsertion`。
+形式化陈述：l_iInf_u [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l u
+) {ι : Sort x} (f : ι -> β) : l (⨅ i, u (f i)) = ⨅ i, f i
+参数：gi : GaloisInsertion l u；f : ι -> β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `GaloisConnection.u_iInf`：∀ {α : Type u} {β : Type v} {ι : Sort x} [inst 
+: CompleteLattice α] [inst_1 : CompleteLattice β] {u : α → β}   {l : β → α}, Gal
+oisConnection…
+· 使用定理 `GaloisInsertion.gc`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] 
+[inst_1 : Preorder β] {l : α → β} {u : β → α}   (self : GaloisInsertion l u), Ga
+loisConn…
+· 使用定理 `GaloisInsertion.l_u_eq`：l_u_eq [Preorder α] [PartialOrder β] (gi : Galoi
+sInsertion l u) (b : β) : l (u b) = b
 -/
 theorem l_iInf_u [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l u) {ι : Sort x}
-    (f : ι -> β) : l (⨅ i, u (f i)) = ⨅ i, f i :=
+    (f : ι → β) : l (⨅ i, u (f i)) = ⨅ i, f i :=
   calc
     l (⨅ i : ι, u (f i)) = l (u (⨅ i : ι, f i)) := congr_arg l gi.gc.u_iInf.symm
     _ = ⨅ i : ι, f i := gi.l_u_eq _
 
 @[to_dual]
-/--
-theorem `l_biInf_u` / 定理 `l_biInf_u`
-
-English:
-theorem l_biInf_u
-  statement: [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l u) {ι : Sort x}
-  proof: by
-  simp only [iInf_subtype', gi.l_iInf_u]
-
-@[to_dual]
-
-中文:
-定理 l_biInf_u
-  结论: [完备格 α] [完备格 β] (gi : Galois嵌入 l u) {ι : 类型层 x}
-  证明: by
-  simp only [iInf_subtype', gi.l_iInf_u]
-
-@[to_dual]
-
-Depends on / 依赖: gi.l_iInf_u, iInf_subtype, l_iInf_u
+/-
+**GaloisInsertion.l_biInf_u** 是 Mathlib 中的一个定理，位于命名空间 `GaloisInsertion`。
+形式化陈述：l_biInf_u [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l 
+u) {ι : Sort x} {p : ι -> Prop} (f : forall (i) (_ : p i), β) : l (⨅ (i) (hi), u
+ (f i hi)) = ⨅ (i) (hi), f i hi
+参数：gi : GaloisInsertion l u；f : forall (i) (_ : p i), β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iInf_subtype'`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α
+] {p : ι → Prop} {f : (i : ι) → p i → α},   ⨅ i, ⨅ (h : p i), f i h = ⨅ x, f ↑x 
+⋯
+· 使用定理 `GaloisInsertion.l_iInf_u`：l_iInf_u [CompleteLattice α] [CompleteLattice 
+β] (gi : GaloisInsertion l u) {ι : Sort x} (f : ι -> β) : l (⨅ i, u (f i)) = ⨅ i
+, f i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem l_biInf_u [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l u) {ι : Sort x}
-    {p : ι -> Prop} (f : forall (i) (_ : p i), β) : l (⨅ (i) (hi), u (f i hi)) = ⨅ (i) (hi), f i hi := by
+    {p : ι → Prop} (f : ∀ (i) (_ : p i), β) : l (⨅ (i) (hi), u (f i hi)) = ⨅ (i) (hi), f i hi := by
   simp only [iInf_subtype', gi.l_iInf_u]
 
 @[to_dual]
-/--
-theorem `l_sInf_u_image` / 定理 `l_sInf_u_image`
-
-English:
-theorem l_sInf_u_image
-  statement: [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l u)
-  proof: by rw [sInf_image, gi.l_biInf_u, sInf_eq_iInf]
-
-@[to_dual]
-
-中文:
-定理 l_sInf_u_image
-  结论: [完备格 α] [完备格 β] (gi : Galois嵌入 l u)
-  证明: by rw [sInf_image, gi.l_biInf_u, sInf_eq_iInf]
-
-@[to_dual]
-
-Depends on / 依赖: gi.l_biInf_u, l_biInf_u, sInf_eq_iInf, sInf_image
+/-
+**GaloisInsertion.l_sInf_u_image** 是 Mathlib 中的一个定理，位于命名空间 `GaloisInsertion`。
+形式化陈述：l_sInf_u_image [CompleteLattice α] [CompleteLattice β] (gi : GaloisInserti
+on l u) (s : Set β) : l (sInf (u '' s)) = sInf s
+参数：gi : GaloisInsertion l u；s : Set β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sInf_image`：∀ {α : Type u_1} {β : Type u_2} [inst : CompleteLattice α] {
+s : Set β} {f : β → α}, sInf (f '' s) = ⨅ a ∈ s, f a
+· 使用定理 `GaloisInsertion.l_biInf_u`：l_biInf_u [CompleteLattice α] [CompleteLattic
+e β] (gi : GaloisInsertion l u) {ι : Sort x} {p : ι -> Prop} (f : forall (i) (_ 
+: p i), β) : l …
+· 使用定理 `sInf_eq_iInf`：∀ {α : Type u_1} [inst : CompleteLattice α] {s : Set α}, s
+Inf s = ⨅ a ∈ s, a
 -/
 theorem l_sInf_u_image [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l u)
     (s : Set β) : l (sInf (u '' s)) = sInf s := by rw [sInf_image, gi.l_biInf_u, sInf_eq_iInf]
 
 @[to_dual]
-/--
-theorem `l_iInf_of_u_l_eq_self` / 定理 `l_iInf_of_u_l_eq_self`
-
-English:
-theorem l_iInf_of_u_l_eq_self
-  statement: [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l u)
-  proof: calc
-    l (⨅ i, f i) = l (⨅ i : ι, u (l (f i))) := by simp [hf]
-    _ = ⨅ i, l (f i) := gi.l_iInf_u _
-
-@[to_dual]
-
-中文:
-定理 l_iInf_of_u_l_eq_self
-  结论: [完备格 α] [完备格 β] (gi : Galois嵌入 l u)
-  证明: calc
-    l (⨅ i, f i) = l (⨅ i : ι, u (l (f i))) := by simp [hf]
-    _ = ⨅ i, l (f i) := gi.l_iInf_u _
-
-@[to_dual]
-
-Depends on / 依赖: gi.l_iInf_u, l_iInf_u
+/-
+**GaloisInsertion.l_iInf_of_u_l_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `GaloisInserti
+on`。
+形式化陈述：l_iInf_of_u_l_eq_self [CompleteLattice α] [CompleteLattice β] (gi : Galois
+Insertion l u) {ι : Sort x} (f : ι -> α) (hf : forall i, u (l (f i)) = f i) : l 
+(⨅ i, f i) = ⨅ i, l (f i)
+参数：gi : GaloisInsertion l u；f : ι -> α；hf : forall i, u (l (f i)) = f i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `GaloisInsertion.l_iInf_u`：l_iInf_u [CompleteLattice α] [CompleteLattice 
+β] (gi : GaloisInsertion l u) {ι : Sort x} (f : ι -> β) : l (⨅ i, u (f i)) = ⨅ i
+, f i
 -/
 theorem l_iInf_of_u_l_eq_self [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l u)
-    {ι : Sort x} (f : ι -> α) (hf : forall i, u (l (f i)) = f i) : l (⨅ i, f i) = ⨅ i, l (f i) :=
+    {ι : Sort x} (f : ι → α) (hf : ∀ i, u (l (f i)) = f i) : l (⨅ i, f i) = ⨅ i, l (f i) :=
   calc
     l (⨅ i, f i) = l (⨅ i : ι, u (l (f i))) := by simp [hf]
     _ = ⨅ i, l (f i) := gi.l_iInf_u _
 
 @[to_dual]
-/--
-theorem `l_biInf_of_u_l_eq_self` / 定理 `l_biInf_of_u_l_eq_self`
-
-English:
-theorem l_biInf_of_u_l_eq_self
-  statement: [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l u)
-  proof: by
-  rw [iInf_subtype']; rw [iInf_subtype']
-  exact gi.l_iInf_of_u_l_eq_self _ fun _ => hf _ _
-
-@[deprecated (since := "2026-04-10")] alias l_iInf_of_ul_eq_self := l_iInf_of_u_l_eq_self
-@[deprecated (since := "2026-04-10")] alias l_biInf_of_ul_eq_self := l_biInf_of_u_l_eq_self
-
-@[to_dual]
-
-中文:
-定理 l_biInf_of_u_l_eq_self
-  结论: [完备格 α] [完备格 β] (gi : Galois嵌入 l u)
-  证明: by
-  rw [iInf_subtype']; rw [iInf_subtype']
-  exact gi.l_iInf_of_u_l_eq_self _ fun _ => hf _ _
-
-@[deprecated (since := "2026-04-10")] alias l_iInf_of_ul_eq_self := l_iInf_of_u_l_eq_self
-@[deprecated (since := "2026-04-10")] alias l_biInf_of_ul_eq_self := l_biInf_of_u_l_eq_self
-
-@[to_dual]
-
-Depends on / 依赖: gi.l_iInf_of_u_l_eq_self, iInf_subtype, l_iInf_of_u_l_eq_self
+/-
+**GaloisInsertion.l_biInf_of_u_l_eq_self** 是 Mathlib 中的一个定理，位于命名空间 `GaloisInsert
+ion`。
+形式化陈述：l_biInf_of_u_l_eq_self [CompleteLattice α] [CompleteLattice β] (gi : Galoi
+sInsertion l u) {ι : Sort x} {p : ι -> Prop} (f : forall (i) (_ : p i), α) (hf :
+ forall i hi, u (l (f i hi)) = f i hi) : l (⨅ (i) (hi), f i hi) = ⨅ (i) (hi), l 
+(f i hi)
+参数：gi : GaloisInsertion l u；f : forall (i) (_ : p i), α；hf : forall i hi, u (l (
+f i hi)) = f i hi。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.property`：∀ {α : Sort u} {p : α → Prop} (self : Subtype p), p ↑s
+elf
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iInf_subtype'`：∀ {α : Type u_1} {ι : Sort u_4} [inst : CompleteLattice α
+] {p : ι → Prop} {f : (i : ι) → p i → α},   ⨅ i, ⨅ (h : p i), f i h = ⨅ x, f ↑x 
+⋯
+· 使用定理 `GaloisInsertion.l_iInf_of_u_l_eq_self`：l_iInf_of_u_l_eq_self [CompleteLa
+ttice α] [CompleteLattice β] (gi : GaloisInsertion l u) {ι : Sort x} (f : ι -> α
+) (hf : forall i, u (l (f i…
 -/
 theorem l_biInf_of_u_l_eq_self [CompleteLattice α] [CompleteLattice β] (gi : GaloisInsertion l u)
-    {ι : Sort x} {p : ι -> Prop} (f : forall (i) (_ : p i), α) (hf : forall i hi, u (l (f i hi)) = f i hi) :
+    {ι : Sort x} {p : ι → Prop} (f : ∀ (i) (_ : p i), α) (hf : ∀ i hi, u (l (f i hi)) = f i hi) :
     l (⨅ (i) (hi), f i hi) = ⨅ (i) (hi), l (f i hi) := by
-  rw [iInf_subtype']; rw [iInf_subtype']
+  rw [iInf_subtype', iInf_subtype']
   exact gi.l_iInf_of_u_l_eq_self _ fun _ => hf _ _
 
 @[deprecated (since := "2026-04-10")] alias l_iInf_of_ul_eq_self := l_iInf_of_u_l_eq_self
 @[deprecated (since := "2026-04-10")] alias l_biInf_of_ul_eq_self := l_biInf_of_u_l_eq_self
 
 @[to_dual]
-/--
-theorem `isLUB_of_u_image` / 定理 `isLUB_of_u_image`
-
-English:
-theorem isLUB_of_u_image
-  statement: [Preorder α] [Preorder β] (gi : GaloisInsertion l u) {s : Set β} {a : α}
-  proof: ⟨fun x hx => (gi.le_l_u x).trans gi.gc.monotone_l hs.1 mem_image_of_mem _ hx, fun _ hx =>
-gi.gc.l_le hs.2 gi.gc.monotone_u.mem_upperBounds_image hx⟩
-
-@[to_dual]
-
-中文:
-定理 isLUB_of_u_image
-  结论: [预序 α] [预序 β] (gi : Galois嵌入 l u) {s : 集合 β} {a : α}
-  证明: ⟨fun x hx => (gi.le_l_u x).trans gi.gc.monotone_l hs.1 mem_image_of_mem _ hx, fun _ hx =>
-gi.gc.l_le hs.2 gi.gc.monotone_u.mem_upperBounds_image hx⟩
-
-@[to_dual]
-
-Depends on / 依赖: gi.gc.l_le, gi.gc.monotone_l, gi.gc.monotone_u.mem_upperBounds_image, gi.le_l_u, l_le, le_l_u, mem_image_of_mem, mem_upperBounds_image, monotone_l, monotone_u
+/-
+**GaloisInsertion.isLUB_of_u_image** 是 Mathlib 中的一个定理，位于命名空间 `GaloisInsertion`。
+形式化陈述：isLUB_of_u_image [Preorder α] [Preorder β] (gi : GaloisInsertion l u) {s :
+ Set β} {a : α} (hs : IsLUB (u '' s) a) : IsLUB s (l a)
+参数：gi : GaloisInsertion l u；hs : IsLUB (u '' s) a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `GaloisInsertion.le_l_u`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder
+ α] [inst_1 : Preorder β] {l : α → β} {u : β → α}   (self : GaloisInsertion l u)
+ (x : β), x …
+· 使用定理 `GaloisConnection.monotone_l`：∀ {α : Type u} {β : Type v} [inst : Preorde
+r α] [inst_1 : Preorder β] {u : α → β} {l : β → α},   GaloisConnection l u → Mon
+otone l
+· 使用定理 `GaloisInsertion.gc`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] 
+[inst_1 : Preorder β] {l : α → β} {u : β → α}   (self : GaloisInsertion l u), Ga
+loisConn…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
+· 使用定理 `GaloisConnection.l_le`：l_le {a : α} {b : β} : a <= u b -> l a <= b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Monotone.mem_upperBounds_image`：mem_upperBounds_image (Ha : a in upperBo
+unds s) : f a in upperBounds (f '' s)
+· 使用定理 `GaloisConnection.monotone_u`：monotone_u : Monotone u
 -/
 theorem isLUB_of_u_image [Preorder α] [Preorder β] (gi : GaloisInsertion l u) {s : Set β} {a : α}
     (hs : IsLUB (u '' s) a) : IsLUB s (l a) :=
-⟨fun x hx => (gi.le_l_u x).trans gi.gc.monotone_l hs.1 mem_image_of_mem _ hx, fun _ hx =>
-gi.gc.l_le hs.2 gi.gc.monotone_u.mem_upperBounds_image hx⟩
+  ⟨fun x hx => (gi.le_l_u x).trans <| gi.gc.monotone_l <| hs.1 <| mem_image_of_mem _ hx, fun _ hx =>
+    gi.gc.l_le <| hs.2 <| gi.gc.monotone_u.mem_upperBounds_image hx⟩
 
 @[to_dual]
-/--
-theorem `isGLB_of_u_image` / 定理 `isGLB_of_u_image`
-
-English:
-theorem isGLB_of_u_image
-  statement: [Preorder α] [Preorder β] (gi : GaloisInsertion l u) {s : Set β} {a : α}
-  proof: ⟨fun _ hx => gi.gc.l_le hs.1 mem_image_of_mem _ hx, fun x hx =>
-(gi.le_l_u x).trans gi.gc.monotone_l hs.2 gi.gc.monotone_u.mem_lowerBounds_image hx⟩
-
-中文:
-定理 isGLB_of_u_image
-  结论: [预序 α] [预序 β] (gi : Galois嵌入 l u) {s : 集合 β} {a : α}
-  证明: ⟨fun _ hx => gi.gc.l_le hs.1 mem_image_of_mem _ hx, fun x hx =>
-(gi.le_l_u x).trans gi.gc.monotone_l hs.2 gi.gc.monotone_u.mem_lowerBounds_image hx⟩
-
-Depends on / 依赖: gi.gc.l_le, gi.gc.monotone_l, gi.gc.monotone_u.mem_lowerBounds_image, gi.le_l_u, l_le, le_l_u, mem_image_of_mem, mem_lowerBounds_image, monotone_l, monotone_u
+/-
+**GaloisInsertion.isGLB_of_u_image** 是 Mathlib 中的一个定理，位于命名空间 `GaloisInsertion`。
+形式化陈述：isGLB_of_u_image [Preorder α] [Preorder β] (gi : GaloisInsertion l u) {s :
+ Set β} {a : α} (hs : IsGLB (u '' s) a) : IsGLB s (l a)
+参数：gi : GaloisInsertion l u；hs : IsGLB (u '' s) a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GaloisConnection.l_le`：l_le {a : α} {b : β} : a <= u b -> l a <= b
+· 使用定理 `GaloisInsertion.gc`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] 
+[inst_1 : Preorder β] {l : α → β} {u : β → α}   (self : GaloisInsertion l u), Ga
+loisConn…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `GaloisInsertion.le_l_u`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder
+ α] [inst_1 : Preorder β] {l : α → β} {u : β → α}   (self : GaloisInsertion l u)
+ (x : β), x …
+· 使用定理 `GaloisConnection.monotone_l`：∀ {α : Type u} {β : Type v} [inst : Preorde
+r α] [inst_1 : Preorder β] {u : α → β} {l : β → α},   GaloisConnection l u → Mon
+otone l
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Monotone.mem_lowerBounds_image`：∀ {α : Type u} {β : Type v} [inst : Preo
+rder α] [inst_1 : Preorder β] {f : α → β},   Monotone f → ∀ {a : α} {s : Set α},
+ a ∈ lowerBounds s →…
+· 使用定理 `GaloisConnection.monotone_u`：monotone_u : Monotone u
 -/
 theorem isGLB_of_u_image [Preorder α] [Preorder β] (gi : GaloisInsertion l u) {s : Set β} {a : α}
     (hs : IsGLB (u '' s) a) : IsGLB s (l a) :=
-⟨fun _ hx => gi.gc.l_le hs.1 mem_image_of_mem _ hx, fun x hx =>
-(gi.le_l_u x).trans gi.gc.monotone_l hs.2 gi.gc.monotone_u.mem_lowerBounds_image hx⟩
+  ⟨fun _ hx => gi.gc.l_le <| hs.1 <| mem_image_of_mem _ hx, fun x hx =>
+    (gi.le_l_u x).trans <| gi.gc.monotone_l <| hs.2 <| gi.gc.monotone_u.mem_lowerBounds_image hx⟩
 
 section lift
 
@@ -1056,83 +946,45 @@ variable [PartialOrder β]
 -- See note [reducible non-instances]
 /-- Lift the suprema along a Galois insertion -/
 @[to_dual /-- Lift the infima along a Galois coinsertion -/]
-/--
-Definition of `liftSemilatticeSup` / `liftSemilatticeSup` 的定义
+/-
+**GaloisInsertion.liftSemilatticeSup** 是 Mathlib 中的一个缩写定义，位于命名空间 `GaloisInsertio
+n`。
+形式化陈述：liftSemilatticeSup [SemilatticeSup α] (gi : GaloisInsertion l u) : Semilat
+ticeSup β
+参数：gi : GaloisInsertion l u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation liftSemilatticeSup
-  signature: [SemilatticeSup α] (gi : GaloisInsertion l u)
-  body: { ‹PartialOrder β› with
-    sup := fun a b => l (u a ⊔ u b)
-le_sup_left := fun a _ => (gi.le_l_u a).trans gi.gc.monotone_l le_sup_left
-le_sup_right := fun _ b => (gi.le_l_u b).trans gi.gc.monotone_l le_sup_right
-    sup_le := fun _ _ _ hac hbc =>
-gi.gc.l_le sup_le (gi.gc.monotone_u hac) (gi.gc.monotone_u hbc) }
-
-中文:
-缩写 liftSemilatticeSup
-  签名: [SemilatticeSup α] (gi : Galois嵌入 l u)
-  定义体: { ‹PartialOrder β› with
-    sup := fun a b => l (u a ⊔ u b)
-le_sup_left := fun a _ => (gi.le_l_u a).trans gi.gc.monotone_l le_sup_left
-le_sup_right := fun _ b => (gi.le_l_u b).trans gi.gc.monotone_l le_sup_right
-    sup_le := fun _ _ _ hac hbc =>
-gi.gc.l_le sup_le (gi.gc.monotone_u hac) (gi.gc.monotone_u hbc) }
-
-Depends on / 依赖: PartialOrder, gi.gc.l_le, gi.gc.monotone_l, gi.gc.monotone_u, gi.le_l_u, l_le, le_l_u, le_sup_left, le_sup_right, monotone_l, monotone_u, sup_le
+--- 原说明 ---
+Lift the suprema along a Galois insertion
 -/
 abbrev liftSemilatticeSup [SemilatticeSup α] (gi : GaloisInsertion l u) : SemilatticeSup β :=
   { ‹PartialOrder β› with
     sup := fun a b => l (u a ⊔ u b)
-le_sup_left := fun a _ => (gi.le_l_u a).trans gi.gc.monotone_l le_sup_left
-le_sup_right := fun _ b => (gi.le_l_u b).trans gi.gc.monotone_l le_sup_right
+    le_sup_left := fun a _ => (gi.le_l_u a).trans <| gi.gc.monotone_l <| le_sup_left
+    le_sup_right := fun _ b => (gi.le_l_u b).trans <| gi.gc.monotone_l <| le_sup_right
     sup_le := fun _ _ _ hac hbc =>
-gi.gc.l_le sup_le (gi.gc.monotone_u hac) (gi.gc.monotone_u hbc) }
+      gi.gc.l_le <| sup_le (gi.gc.monotone_u hac) (gi.gc.monotone_u hbc) }
 
 -- See note [reducible non-instances]
 /-- Lift the infima along a Galois insertion -/
 @[to_dual /-- Lift the suprema along a Galois coinsertion -/]
-/--
-Definition of `liftSemilatticeInf` / `liftSemilatticeInf` 的定义
+/-
+**GaloisInsertion.liftSemilatticeInf** 是 Mathlib 中的一个缩写定义，位于命名空间 `GaloisInsertio
+n`。
+形式化陈述：liftSemilatticeInf [SemilatticeInf α] (gi : GaloisInsertion l u) : Semilat
+ticeInf β
+参数：gi : GaloisInsertion l u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation liftSemilatticeInf
-  signature: [SemilatticeInf α] (gi : GaloisInsertion l u)
-  body: { ‹PartialOrder β› with
-    inf := fun a b =>
-gi.choice (u a ⊓ u b)
-        le_inf (gi.gc.monotone_u <| gi.gc.l_le <| inf_le_left)
-          (gi.gc.monotone_u <| gi.gc.l_le <| inf_le_right)
-    inf_le_left := by simp only [gi.choice_eq]; exact fun a b => gi.gc.l_le inf_le_left
-    inf_le_right := by simp only [gi.choice_eq]; exact fun a b => gi.gc.l_le inf_le_right
-    le_inf := by
-      simp only [gi.choice_eq]
-      exact fun a b c hac hbc =>
-(gi.le_l_u a).trans
-gi.gc.monotone_l le_inf (gi.gc.monotone_u hac) (gi.gc.monotone_u hbc) }
-
-中文:
-缩写 liftSemilatticeInf
-  签名: [SemilatticeInf α] (gi : Galois嵌入 l u)
-  定义体: { ‹PartialOrder β› with
-    inf := fun a b =>
-gi.choice (u a ⊓ u b)
-        le_inf (gi.gc.monotone_u <| gi.gc.l_le <| inf_le_left)
-          (gi.gc.monotone_u <| gi.gc.l_le <| inf_le_right)
-    inf_le_left := by simp only [gi.choice_eq]; exact fun a b => gi.gc.l_le inf_le_left
-    inf_le_right := by simp only [gi.choice_eq]; exact fun a b => gi.gc.l_le inf_le_right
-    le_inf := by
-      simp only [gi.choice_eq]
-      exact fun a b c hac hbc =>
-(gi.le_l_u a).trans
-gi.gc.monotone_l le_inf (gi.gc.monotone_u hac) (gi.gc.monotone_u hbc) }
-
-Depends on / 依赖: PartialOrder, choice, choice_eq, gi.choice, gi.choice_eq, gi.gc.l_le, gi.gc.monotone_l, gi.gc.monotone_u, gi.le_l_u, inf_le_left, inf_le_right, l_le, le_inf, le_l_u, monotone_l, monotone_u
+--- 原说明 ---
+Lift the infima along a Galois insertion
 -/
 abbrev liftSemilatticeInf [SemilatticeInf α] (gi : GaloisInsertion l u) : SemilatticeInf β :=
   { ‹PartialOrder β› with
     inf := fun a b =>
-gi.choice (u a ⊓ u b)
+      gi.choice (u a ⊓ u b) <|
         le_inf (gi.gc.monotone_u <| gi.gc.l_le <| inf_le_left)
           (gi.gc.monotone_u <| gi.gc.l_le <| inf_le_right)
     inf_le_left := by simp only [gi.choice_eq]; exact fun a b => gi.gc.l_le inf_le_left
@@ -1140,24 +992,26 @@ gi.choice (u a ⊓ u b)
     le_inf := by
       simp only [gi.choice_eq]
       exact fun a b c hac hbc =>
-(gi.le_l_u a).trans
-gi.gc.monotone_l le_inf (gi.gc.monotone_u hac) (gi.gc.monotone_u hbc) }
+        (gi.le_l_u a).trans <|
+          gi.gc.monotone_l <| le_inf (gi.gc.monotone_u hac) (gi.gc.monotone_u hbc) }
 
 -- See note [reducible non-instances]
-/--
-Definition of `liftLattice` / `liftLattice` 的定义
+/-- Lift the suprema and infima along a Galois insertion -/
+/-
+**GaloisInsertion.liftLattice** 是 Mathlib 中的一个缩写定义，位于命名空间 `GaloisInsertion`。
+形式化陈述：liftLattice [Lattice α] (gi : GaloisInsertion l u) : Lattice β
+参数：gi : GaloisInsertion l u。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SemilatticeInf.inf_le_left`：∀ {α : Type u} [self : SemilatticeInf α] (a 
+b : α), SemilatticeInf.inf a b ≤ a
+· 使用定理 `SemilatticeInf.inf_le_right`：∀ {α : Type u} [self : SemilatticeInf α] (a
+ b : α), SemilatticeInf.inf a b ≤ b
+· 使用定理 `SemilatticeInf.le_inf`：∀ {α : Type u} [self : SemilatticeInf α] (a b c :
+ α), a ≤ b → a ≤ c → a ≤ SemilatticeInf.inf b c
 
-English:
-abbreviation liftLattice
-  signature: [Lattice α] (gi : GaloisInsertion l u)
-  body: { gi.liftSemilatticeSup, gi.liftSemilatticeInf with }
-
-中文:
-缩写 liftLattice
-  签名: [格 α] (gi : Galois嵌入 l u)
-  定义体: { gi.liftSemilatticeSup, gi.liftSemilatticeInf with }
-
-Depends on / 依赖: gi.liftSemilatticeInf, gi.liftSemilatticeSup, liftSemilatticeInf, liftSemilatticeSup
+--- 原说明 ---
+Lift the suprema and infima along a Galois insertion
 -/
 abbrev liftLattice [Lattice α] (gi : GaloisInsertion l u) : Lattice β :=
   { gi.liftSemilatticeSup, gi.liftSemilatticeInf with }
@@ -1165,20 +1019,13 @@ abbrev liftLattice [Lattice α] (gi : GaloisInsertion l u) : Lattice β :=
 -- See note [reducible non-instances]
 /-- Lift the suprema and infima along a Galois coinsertion -/
 @[to_dual existing]
-/--
-Definition of `_root_.GaloisCoinsertion.liftLattice` / `_root_.GaloisCoinsertion.liftLattice` 的定义
+/-
+**GaloisInsertion._root_.GaloisCoinsertion.liftLattice** 是 Mathlib 中的一个缩写定义，位于命名
+空间 `GaloisInsertion`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation _root_.GaloisCoinsertion.liftLattice
-  signature: [Lattice α] (gi : GaloisCoinsertion u l)
-  body: { gi.liftSemilatticeSup, gi.liftSemilatticeInf with }
-
-中文:
-缩写 _root_.Galois余嵌入.liftLattice
-  签名: [格 α] (gi : Galois余嵌入 u l)
-  定义体: { gi.liftSemilatticeSup, gi.liftSemilatticeInf with }
-
-Depends on / 依赖: gi.liftSemilatticeInf, gi.liftSemilatticeSup, liftSemilatticeInf, liftSemilatticeSup
+--- 原说明 ---
+Lift the suprema and infima along a Galois coinsertion
 -/
 abbrev _root_.GaloisCoinsertion.liftLattice [Lattice α] (gi : GaloisCoinsertion u l) : Lattice β :=
   { gi.liftSemilatticeSup, gi.liftSemilatticeInf with }
@@ -1186,48 +1033,37 @@ abbrev _root_.GaloisCoinsertion.liftLattice [Lattice α] (gi : GaloisCoinsertion
 -- See note [reducible non-instances]
 /-- Lift the top along a Galois insertion -/
 @[to_dual /-- Lift the bot along a Galois coinsertion -/]
-/--
-Definition of `liftOrderTop` / `liftOrderTop` 的定义
+/-
+**GaloisInsertion.liftOrderTop** 是 Mathlib 中的一个缩写定义，位于命名空间 `GaloisInsertion`。
+形式化陈述：liftOrderTop [Preorder α] [OrderTop α] (gi : GaloisInsertion l u) : OrderT
+op β where top
+参数：gi : GaloisInsertion l u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation liftOrderTop
-  signature: [Preorder α] [OrderTop α] (gi : GaloisInsertion l u)
-  body: gi.choice ⊤ le_top
-  le_top := by
-    simp only [gi.choice_eq]; exact fun b => (gi.le_l_u b).trans (gi.gc.monotone_l le_top)
-
-中文:
-缩写 liftOrderTop
-  签名: [预序 α] [有顶序 α] (gi : Galois嵌入 l u)
-  定义体: gi.choice ⊤ le_top
-  le_top := by
-    simp only [gi.choice_eq]; exact fun b => (gi.le_l_u b).trans (gi.gc.monotone_l le_top)
-
-Depends on / 依赖: choice, gi.choice, le_top
+--- 原说明 ---
+Lift the top along a Galois insertion
 -/
 abbrev liftOrderTop [Preorder α] [OrderTop α] (gi : GaloisInsertion l u) :
     OrderTop β where
-top := gi.choice ⊤ le_top
+  top := gi.choice ⊤ <| le_top
   le_top := by
     simp only [gi.choice_eq]; exact fun b => (gi.le_l_u b).trans (gi.gc.monotone_l le_top)
 
 -- See note [reducible non-instances]
 /-- Lift the top, bottom, suprema, and infima along a Galois insertion -/
 @[to_dual /-- Lift the top, bottom, suprema, and infima along a Galois coinsertion -/]
-/--
-Definition of `liftBoundedOrder` / `liftBoundedOrder` 的定义
+/-
+**GaloisInsertion.liftBoundedOrder** 是 Mathlib 中的一个缩写定义，位于命名空间 `GaloisInsertion`
+。
+形式化陈述：liftBoundedOrder [Preorder α] [BoundedOrder α] (gi : GaloisInsertion l u) 
+: BoundedOrder β
+参数：gi : GaloisInsertion l u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation liftBoundedOrder
-  signature: [Preorder α] [BoundedOrder α] (gi : GaloisInsertion l u)
-  body: { gi.liftOrderTop, gi.gc.liftOrderBot with }
-
-中文:
-缩写 liftBoundedOrder
-  签名: [预序 α] [有界序 α] (gi : Galois嵌入 l u)
-  定义体: { gi.liftOrderTop, gi.gc.liftOrderBot with }
-
-Depends on / 依赖: gi.gc.liftOrderBot, gi.liftOrderTop, liftOrderBot, liftOrderTop
+--- 原说明 ---
+Lift the top, bottom, suprema, and infima along a Galois insertion
 -/
 abbrev liftBoundedOrder [Preorder α] [BoundedOrder α] (gi : GaloisInsertion l u) : BoundedOrder β :=
   { gi.liftOrderTop, gi.gc.liftOrderBot with }
@@ -1235,46 +1071,25 @@ abbrev liftBoundedOrder [Preorder α] [BoundedOrder α] (gi : GaloisInsertion l 
 -- See note [reducible non-instances]
 /-- Lift all suprema and infima along a Galois insertion -/
 @[to_dual /-- Lift all suprema and infima along a Galois coinsertion -/]
-/--
-Definition of `liftCompleteLattice` / `liftCompleteLattice` 的定义
+/-
+**GaloisInsertion.liftCompleteLattice** 是 Mathlib 中的一个缩写定义，位于命名空间 `GaloisInserti
+on`。
+形式化陈述：liftCompleteLattice [CompleteLattice α] (gi : GaloisInsertion l u) : Compl
+eteLattice β
+参数：gi : GaloisInsertion l u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation liftCompleteLattice
-  signature: [CompleteLattice α] (gi : GaloisInsertion l u)
-  body: { gi.liftBoundedOrder, gi.liftLattice with
-    sSup := fun s => l (sSup (u '' s))
-    isLUB_sSup _ := gi.isLUB_of_u_image (isLUB_sSup _)
-    sInf := fun s =>
-gi.choice (sInf (u '' s))
-(isGLB_sInf _).2
-          gi.gc.monotone_u.mem_lowerBounds_image (gi.isGLB_of_u_image <| isGLB_sInf _).1
-    isGLB_sInf _ := by
-      rw [gi.choice_eq]
-      exact gi.isGLB_of_u_image (isGLB_sInf _) }
-
-中文:
-缩写 liftCompleteLattice
-  签名: [完备格 α] (gi : Galois嵌入 l u)
-  定义体: { gi.liftBoundedOrder, gi.liftLattice with
-    sSup := fun s => l (sSup (u '' s))
-    isLUB_sSup _ := gi.isLUB_of_u_image (isLUB_sSup _)
-    sInf := fun s =>
-gi.choice (sInf (u '' s))
-(isGLB_sInf _).2
-          gi.gc.monotone_u.mem_lowerBounds_image (gi.isGLB_of_u_image <| isGLB_sInf _).1
-    isGLB_sInf _ := by
-      rw [gi.choice_eq]
-      exact gi.isGLB_of_u_image (isGLB_sInf _) }
-
-Depends on / 依赖: choice, choice_eq, gi.choice, gi.choice_eq, gi.gc.monotone_u.mem_lowerBounds_image, gi.isGLB_of_u_image, gi.isLUB_of_u_image, gi.liftBoundedOrder, gi.liftLattice, isGLB_of_u_image, isGLB_sInf, isLUB_of_u_image, isLUB_sSup, liftBoundedOrder, liftLattice, mem_lowerBounds_image, monotone_u
+--- 原说明 ---
+Lift all suprema and infima along a Galois insertion
 -/
 abbrev liftCompleteLattice [CompleteLattice α] (gi : GaloisInsertion l u) : CompleteLattice β :=
   { gi.liftBoundedOrder, gi.liftLattice with
     sSup := fun s => l (sSup (u '' s))
     isLUB_sSup _ := gi.isLUB_of_u_image (isLUB_sSup _)
     sInf := fun s =>
-gi.choice (sInf (u '' s))
-(isGLB_sInf _).2
+      gi.choice (sInf (u '' s)) <|
+        (isGLB_sInf _).2 <|
           gi.gc.monotone_u.mem_lowerBounds_image (gi.isGLB_of_u_image <| isGLB_sInf _).1
     isGLB_sInf _ := by
       rw [gi.choice_eq]
@@ -1291,96 +1106,76 @@ namespace GaloisCoinsertion
 
 end GaloisCoinsertion
 
-/--
-theorem `gc_sSup_Iic` / 定理 `gc_sSup_Iic`
+/-- `sSup` and `Iic` form a Galois connection. -/
+/-
+**gc_sSup_Iic** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：gc_sSup_Iic [CompleteSemilatticeSup α] : GaloisConnection (sSup : Set α ->
+ α) (Iic : α -> Set α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `sSup_le_iff`：sSup_le_iff : sSup s <= a ↔ forall b in s, b <= a
 
-English:
-theorem gc_sSup_Iic
-  given: [CompleteSemilatticeSup α]
-  proof: fun _ _ => sSup_le_iff
-
-中文:
-定理 gc_sSup_Iic
-  条件: [余mpleteSemilatticeSup α]
-  证明: fun _ _ => sSup_le_iff
-
-Depends on / 依赖: sSup_le_iff
+--- 原说明 ---
+`sSup` and `Iic` form a Galois connection.
 -/
 theorem gc_sSup_Iic [CompleteSemilatticeSup α] :
-    GaloisConnection (sSup : Set α -> α) (Iic : α -> Set α) :=
-  fun _ _ => sSup_le_iff
+    GaloisConnection (sSup : Set α → α) (Iic : α → Set α) :=
+  fun _ _ ↦ sSup_le_iff
 
-/--
-theorem `gc_Ici_sInf` / 定理 `gc_Ici_sInf`
+/-- `toDual ∘ Ici` and `sInf ∘ ofDual` form a Galois connection. -/
+/-
+**gc_Ici_sInf** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：gc_Ici_sInf [CompleteSemilatticeInf α] : GaloisConnection (toDual ∘ Ici : 
+α -> (Set α)ᵒᵈ) (sInf ∘ ofDual : (Set α)ᵒᵈ -> α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用定理 `le_sInf_iff`：∀ {α : Type u_1} [inst : CompleteSemilatticeInf α] {s : Set
+ α} {a : α}, a ≤ sInf s ↔ ∀ b ∈ s, a ≤ b
 
-English:
-theorem gc_Ici_sInf
-  given: [CompleteSemilatticeInf α]
-  proof: fun _ _ => le_sInf_iff.symm
-
-中文:
-定理 gc_Ici_sInf
-  条件: [余mpleteSemilatticeInf α]
-  证明: fun _ _ => le_sInf_iff.symm
-
-Depends on / 依赖: le_sInf_iff, le_sInf_iff.symm
+--- 原说明 ---
+`toDual ∘ Ici` and `sInf ∘ ofDual` form a Galois connection.
 -/
 theorem gc_Ici_sInf [CompleteSemilatticeInf α] :
-    GaloisConnection (toDual ∘ Ici : α -> (Set α)ᵒᵈ) (sInf ∘ ofDual : (Set α)ᵒᵈ -> α) :=
-  fun _ _ => le_sInf_iff.symm
+    GaloisConnection (toDual ∘ Ici : α → (Set α)ᵒᵈ) (sInf ∘ ofDual : (Set α)ᵒᵈ → α) :=
+  fun _ _ ↦ le_sInf_iff.symm
 
-/--
-Definition of `giSSupIic` / `giSSupIic` 的定义
+/-- `sSup` and `Iic` form a Galois insertion. -/
+/-
+**giSSupIic** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：giSSupIic [CompleteSemilatticeSup α] : GaloisInsertion (sSup : Set α -> α)
+ (Iic : α -> Set α)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `gc_sSup_Iic`：gc_sSup_Iic [CompleteSemilatticeSup α] : GaloisConnection (
+sSup : Set α -> α) (Iic : α -> Set α)
 
-English:
-definition giSSupIic
-  signature: [CompleteSemilatticeSup α]
-  body: gc_sSup_Iic.toGaloisInsertion fun _ => le_sSup le_rfl
-
-@[deprecated (since := "2026-07-18")]
-alias gi_sSup_Iic := giSSupIic
-
-中文:
-定义 giSSupIic
-  签名: [余mpleteSemilatticeSup α]
-  定义体: gc_sSup_Iic.toGaloisInsertion fun _ => le_sSup le_rfl
-
-@[deprecated (since := "2026-07-18")]
-alias gi_sSup_Iic := giSSupIic
-
-Depends on / 依赖: gc_sSup_Iic, gc_sSup_Iic.toGaloisInsertion, le_rfl, le_sSup, toGaloisInsertion
+--- 原说明 ---
+`sSup` and `Iic` form a Galois insertion.
 -/
 def giSSupIic [CompleteSemilatticeSup α] :
-    GaloisInsertion (sSup : Set α -> α) (Iic : α -> Set α) :=
-  gc_sSup_Iic.toGaloisInsertion fun _ => le_sSup le_rfl
+    GaloisInsertion (sSup : Set α → α) (Iic : α → Set α) :=
+  gc_sSup_Iic.toGaloisInsertion fun _ ↦ le_sSup le_rfl
 
 @[deprecated (since := "2026-07-18")]
 alias gi_sSup_Iic := giSSupIic
 
-/--
-Definition of `gciIciSInf` / `gciIciSInf` 的定义
+/-- `toDual ∘ Ici` and `sInf ∘ ofDual` form a Galois coinsertion. -/
+/-
+**gciIciSInf** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：gciIciSInf [CompleteSemilatticeInf α] : GaloisCoinsertion (toDual ∘ Ici : 
+α -> (Set α)ᵒᵈ) (sInf ∘ ofDual : (Set α)ᵒᵈ -> α)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `gc_Ici_sInf`：gc_Ici_sInf [CompleteSemilatticeInf α] : GaloisConnection (
+toDual ∘ Ici : α -> (Set α)ᵒᵈ) (sInf ∘ ofDual : (Set α)ᵒᵈ -> α)
 
-English:
-definition gciIciSInf
-  signature: [CompleteSemilatticeInf α]
-  body: gc_Ici_sInf.toGaloisCoinsertion fun _ => sInf_le le_rfl
-
-@[deprecated (since := "2026-07-18")]
-alias gci_Ici_sInf := gciIciSInf
-
-中文:
-定义 gciIciSInf
-  签名: [余mpleteSemilatticeInf α]
-  定义体: gc_Ici_sInf.toGaloisCoinsertion fun _ => sInf_le le_rfl
-
-@[deprecated (since := "2026-07-18")]
-alias gci_Ici_sInf := gciIciSInf
-
-Depends on / 依赖: gc_Ici_sInf, gc_Ici_sInf.toGaloisCoinsertion, le_rfl, sInf_le, toGaloisCoinsertion
+--- 原说明 ---
+`toDual ∘ Ici` and `sInf ∘ ofDual` form a Galois coinsertion.
 -/
 def gciIciSInf [CompleteSemilatticeInf α] :
-    GaloisCoinsertion (toDual ∘ Ici : α -> (Set α)ᵒᵈ) (sInf ∘ ofDual : (Set α)ᵒᵈ -> α) :=
-  gc_Ici_sInf.toGaloisCoinsertion fun _ => sInf_le le_rfl
+    GaloisCoinsertion (toDual ∘ Ici : α → (Set α)ᵒᵈ) (sInf ∘ ofDual : (Set α)ᵒᵈ → α) :=
+  gc_Ici_sInf.toGaloisCoinsertion fun _ ↦ sInf_le le_rfl
 
 @[deprecated (since := "2026-07-18")]
 alias gci_Ici_sInf := gciIciSInf
@@ -1390,30 +1185,17 @@ coercion form a Galois insertion. -/
 @[to_dual giUntopDTop
 /-- If `α` is a partial order with top element, then `WithTop.untop' ⊥` and
 coercion form a Galois insertion. -/]
-/--
-Definition of `WithBot.giUnbotDBot` / `WithBot.giUnbotDBot` 的定义
-
-English:
-definition WithBot.giUnbotDBot
-  signature: [Preorder α] [OrderBot α]
-  body: WithBot.unbotD_le_iff (fun _ => bot_le)
-  le_l_u _ := le_rfl
-  choice o _ := o.unbotD ⊥
-  choice_eq _ _ := rfl
-
-中文:
-定义 WithBot.giUnbotDBot
-  签名: [预序 α] [有底序 α]
-  定义体: WithBot.unbotD_le_iff (fun _ => bot_le)
-  le_l_u _ := le_rfl
-  choice o _ := o.unbotD ⊥
-  choice_eq _ _ := rfl
-
-Depends on / 依赖: WithBot, WithBot.unbotD_le_iff, bot_le, unbotD_le_iff
+/-
+**WithBot.giUnbotDBot** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：WithBot.giUnbotDBot [Preorder α] [OrderBot α] : GaloisInsertion (WithBot.u
+nbotD ⊥) (some : α -> WithBot α) where gc _ _
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
 def WithBot.giUnbotDBot [Preorder α] [OrderBot α] :
-    GaloisInsertion (WithBot.unbotD ⊥) (some : α -> WithBot α) where
-  gc _ _ := WithBot.unbotD_le_iff (fun _ => bot_le)
+    GaloisInsertion (WithBot.unbotD ⊥) (some : α → WithBot α) where
+  gc _ _ := WithBot.unbotD_le_iff (fun _ ↦ bot_le)
   le_l_u _ := le_rfl
   choice o _ := o.unbotD ⊥
   choice_eq _ _ := rfl

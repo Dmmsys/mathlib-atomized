@@ -120,129 +120,127 @@ variable {α : Type ua} {β : Type ub} {γ : Type uc} {δ : Type ud} {ι : Sort*
 
 open scoped SetRel
 
-/--
-lemma `SetRel.mem_filter_prod_comm` / 引理 `SetRel.mem_filter_prod_comm`
-
-English:
-lemma SetRel.mem_filter_prod_comm
-  given: (R : SetRel α α) {f g : Filter α} [R.IsSymm]
-  proof: by
-  rw [← R.inv_eq_self]; rw [SetRel.inv]; rw [← mem_map]; rw [← prod_comm]; rw [← SetRel.inv]; rw [R.inv_eq_self]
-
-中文:
-引理 SetRel.mem_filter_prod_comm
-  条件: (R : SetRel α α) {f g : 滤子 α} [R.是Symm]
-  证明: by
-  rw [← R.inv_eq_self]; rw [SetRel.inv]; rw [← mem_map]; rw [← prod_comm]; rw [← SetRel.inv]; rw [R.inv_eq_self]
-
-Depends on / 依赖: R.inv_eq_self, SetRel, SetRel.inv, inv_eq_self, mem_map, prod_comm
+/-
+**SetRel.mem_filter_prod_comm** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：SetRel.mem_filter_prod_comm (R : SetRel α α) {f g : Filter α} [R.IsSymm] :
+ R in f ×ˢ g ↔ R in g ×ˢ f
+参数：R : SetRel α α。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `SetRel.inv_eq_self`：∀ {α : Type u_1} (R : SetRel α α) [R.IsSymm], R.inv 
+= R
+· 使用定理 `SetRel.inv.eq_1`：∀ {α : Type u_1} {β : Type u_2} (R : SetRel α β), R.inv
+ = Prod.swap ⁻¹' R
+· 使用定理 `Filter.mem_map`：mem_map : t in map m f ↔ m ⁻¹' t in f
+· 使用定理 `Filter.prod_comm`：prod_comm : f ×ˢ g = map Prod.swap (g ×ˢ f)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma SetRel.mem_filter_prod_comm (R : SetRel α α) {f g : Filter α} [R.IsSymm] :
-    R in f ×ˢ g ↔ R in g ×ˢ f := by
-  rw [← R.inv_eq_self]; rw [SetRel.inv]; rw [← mem_map]; rw [← prod_comm]; rw [← SetRel.inv]; rw [R.inv_eq_self]
+    R ∈ f ×ˢ g ↔ R ∈ g ×ˢ f := by
+  rw [← R.inv_eq_self, SetRel.inv, ← mem_map, ← prod_comm, ← SetRel.inv, R.inv_eq_self]
 
-/--
-Definition of `UniformSpace.Core` / `UniformSpace.Core` 的定义
+/-- This core description of a uniform space is outside of the type class hierarchy. It is useful
+  for constructions of uniform spaces, when the topology is derived from the uniform space. -/
+/-
+**UniformSpace.Core** 是 Mathlib 中的一个结构，位于命名空间 ``。
+形式化陈述：UniformSpace.Core (α : Type u) where /-- The uniformity filter. Once `Unif
+ormSpace` is defined, `𝓤 α` (`_root_.uniformity`) becomes the normal form. -/ un
+iformity : Filter (α × α) /-- Every set in the uniformity filter includes the di
+agonal. -/ refl : 𝓟 SetRel.id <= uniformity /-- If `s ∈ uniformity`, then `Prod.
+swap ⁻¹' s ∈ uniformity`. -/ symm : Tendsto Prod.swap uniformity uniformity /-- 
+For every set `u ∈ uniformity`, there exists `v ∈ uniformity` such that `v ○ v ⊆
+ u`. -/ comp : (uniformity
+参数：α : Type u；`_root_.uniformity`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure UniformSpace.Core
-  parameters: (α : Type u)
-  axioms and operations (4):
-    - uniformity : Filter (α × α)
-    - refl : 𝓟 SetRel.id <= uniformity
-    - symm : Tendsto Prod.swap uniformity uniformity
-    - comp : (uniformity.lift' fun s => s ○ s) <= uniformity
-
-中文:
-结构 一致空间.核
-  参数: (α : 类型u)
-  公理与运算 (4 个):
-    - uniformity : 滤子 (α × α)
-    - refl : 𝓟 SetRel.id <= uniformity
-    - symm : 收敛 积类型.swap uniformity uniformity
-    - comp : (uniformity.lift' fun s => s ○ s) <= uniformity
-
-Depends on / 依赖: _sets, c.comp, mem_lift, monotone_id, monotone_id.relComp, relComp
+--- 原说明 ---
+This core description of a uniform space is outside of the type class hierarchy.
+ It is useful
+  for constructions of uniform spaces, when the topology is derived from the uni
+form space.
 -/
 structure UniformSpace.Core (α : Type u) where
   /-- The uniformity filter. Once `UniformSpace` is defined, `𝓤 α` (`_root_.uniformity`) becomes the
   normal form. -/
   uniformity : Filter (α × α)
   /-- Every set in the uniformity filter includes the diagonal. -/
-  refl : 𝓟 SetRel.id <= uniformity
+  refl : 𝓟 SetRel.id ≤ uniformity
   /-- If `s ∈ uniformity`, then `Prod.swap ⁻¹' s ∈ uniformity`. -/
   symm : Tendsto Prod.swap uniformity uniformity
   /-- For every set `u ∈ uniformity`, there exists `v ∈ uniformity` such that `v ○ v ⊆ u`. -/
-  comp : (uniformity.lift' fun s => s ○ s) <= uniformity
-
-/--
-theorem `UniformSpace.Core.comp_mem_uniformity_sets` / 定理 `UniformSpace.Core.comp_mem_uniformity_sets`
-
-English:
-theorem UniformSpace.Core.comp_mem_uniformity_sets
-  statement: {c : Core α} {s : SetRel α α}
-  proof: (mem_lift'_sets <| monotone_id.relComp monotone_id).mp c.comp hs
-
-中文:
-定理 一致空间.核.comp_mem_uniformity_sets
-  结论: {c : 核 α} {s : SetRel α α}
-  证明: (mem_lift'_sets <| monotone_id.relComp monotone_id).mp c.comp hs
+  comp : (uniformity.lift' fun s => s ○ s) ≤ uniformity
+/-
+**UniformSpace.Core.comp_mem_uniformity_sets** 是 Mathlib 中的一个定理，位于命名空间 `UniformS
+pace.Core`。
+形式化陈述：∀ {α : Type ua} {c : UniformSpace.Core α} {s : SetRel α α}, s ∈ c.uniformi
+ty → ∃ t ∈ c.uniformity, SetRel.comp t t ⊆ s
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.lift'`：lift'_top (h : Set α -> Set β) : (⊤ : Filter α).lift' h = 
+𝓟 (h univ)
+· 使用定理 `Filter.mem_lift'_sets`：∀ {α : Type u_1} {β : Type u_2} {f : Filter α} {h
+ : Set α → Set β},   Monotone h → ∀ {s : Set β}, s ∈ f.lift' h ↔ ∃ t ∈ f, h t ⊆ 
+s
+· 使用定理 `Monotone.relComp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {ι : Ty
+pe u_6} [inst : Preorder ι] {f : ι → SetRel α β}   {g : ι → SetRel β γ}, Monoton
+e f → …
+· 使用定理 `monotone_id`：monotone_id [Preorder α] : Monotone (id : α -> α)
+· 使用定理 `UniformSpace.Core.comp`：∀ {α : Type u} (self : UniformSpace.Core α), (se
+lf.uniformity.lift' fun s => SetRel.comp s s) ≤ self.uniformity
 -/
 protected theorem UniformSpace.Core.comp_mem_uniformity_sets {c : Core α} {s : SetRel α α}
-    (hs : s in c.uniformity) : exists t in c.uniformity, t ○ t subseteq s :=
-(mem_lift'_sets <| monotone_id.relComp monotone_id).mp c.comp hs
+    (hs : s ∈ c.uniformity) : ∃ t ∈ c.uniformity, t ○ t ⊆ s :=
+  (mem_lift'_sets <| monotone_id.relComp monotone_id).mp <| c.comp hs
 
-/--
-Definition of `UniformSpace.Core.mk'` / `UniformSpace.Core.mk'` 的定义
+/-- An alternative constructor for `UniformSpace.Core`. This version unfolds various
+`Filter`-related definitions. -/
+/-
+**UniformSpace.Core.mk'** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：UniformSpace.Core.mk' {α : Type u} (U : Filter (α × α)) (refl : forall r i
+n U, forall (x), (x, x) in r) (symm : forall r in U, Prod.swap ⁻¹' r in U) (comp
+ : forall r in U, exists t in U, t ○ t subseteq r) : UniformSpace.Core α where u
+niformity
+参数：U : Filter (α × α)；refl : forall r in U, forall (x), (x, x) in r；symm : foral
+l r in U, Prod.swap ⁻¹' r in U；comp : forall r in U, exists t in U, t ○ t subset
+eq r。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition UniformSpace.Core.mk'
-  signature: {α : Type u} (U : Filter (α × α)) (refl : forall r in U, forall (x), (x, x) in r)
-  body: U
-  refl _r ru := SetRel.id_subset_iff.2 ⟨refl _ ru⟩
-  symm
-  comp _r ru := let ⟨_s, hs, hsr⟩ := comp _ ru; mem_of_superset (mem_lift' hs) hsr
-
-中文:
-定义 一致空间.核.mk'
-  签名: {α : 类型u} (U : 滤子 (α × α)) (refl : 对任意 r in U, 对任意 (x), (x, x) in r)
-  定义体: U
-  refl _r ru := SetRel.id_subset_iff.2 ⟨refl _ ru⟩
-  symm
-  comp _r ru := let ⟨_s, hs, hsr⟩ := comp _ ru; mem_of_superset (mem_lift' hs) hsr
+--- 原说明 ---
+An alternative constructor for `UniformSpace.Core`. This version unfolds various
+`Filter`-related definitions.
 -/
-def UniformSpace.Core.mk' {α : Type u} (U : Filter (α × α)) (refl : forall r in U, forall (x), (x, x) in r)
-    (symm : forall r in U, Prod.swap ⁻¹' r in U) (comp : forall r in U, exists t in U, t ○ t subseteq r) :
+def UniformSpace.Core.mk' {α : Type u} (U : Filter (α × α)) (refl : ∀ r ∈ U, ∀ (x), (x, x) ∈ r)
+    (symm : ∀ r ∈ U, Prod.swap ⁻¹' r ∈ U) (comp : ∀ r ∈ U, ∃ t ∈ U, t ○ t ⊆ r) :
     UniformSpace.Core α where
   uniformity := U
   refl _r ru := SetRel.id_subset_iff.2 ⟨refl _ ru⟩
   symm
   comp _r ru := let ⟨_s, hs, hsr⟩ := comp _ ru; mem_of_superset (mem_lift' hs) hsr
 
-/--
-Definition of `UniformSpace.Core.mkOfBasis` / `UniformSpace.Core.mkOfBasis` 的定义
+/-- Defining a `UniformSpace.Core` from a filter basis satisfying some uniformity-like axioms. -/
+/-
+**UniformSpace.Core.mkOfBasis** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：UniformSpace.Core.mkOfBasis {α : Type u} (B : FilterBasis (α × α)) (refl :
+ forall r in B, forall (x), (x, x) in r) (symm : forall r in B, exists t in B, t
+ subseteq Prod.swap ⁻¹' r) (comp : forall r in B, exists t in B, t ○ t subseteq 
+r) : UniformSpace.Core α where uniformity
+参数：B : FilterBasis (α × α)；refl : forall r in B, forall (x), (x, x) in r；symm : 
+forall r in B, exists t in B, t subseteq Prod.swap ⁻¹' r；comp : forall r in B, e
+xists t in B, t ○ t subseteq r。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition UniformSpace.Core.mkOfBasis
-  signature: {α : Type u} (B : FilterBasis (α × α))
-  body: B.filter
-  refl := B.hasBasis.ge_iff.mpr fun _r ru => SetRel.id_subset_iff.2 ⟨refl _ ru⟩
-  symm := (B.hasBasis.tendsto_iff B.hasBasis).mpr symm
-  comp := ((B.hasBasis.lift' (monotone_id.relComp monotone_id)).le_basis_iff B.hasBasis).2 comp
-
-中文:
-定义 一致空间.核.mkOfBasis
-  签名: {α : 类型u} (B : 滤子基 (α × α))
-  定义体: B.filter
-  refl := B.hasBasis.ge_iff.mpr fun _r ru => SetRel.id_subset_iff.2 ⟨refl _ ru⟩
-  symm := (B.hasBasis.tendsto_iff B.hasBasis).mpr symm
-  comp := ((B.hasBasis.lift' (monotone_id.relComp monotone_id)).le_basis_iff B.hasBasis).2 comp
-
-Depends on / 依赖: B.filter, filter
+--- 原说明 ---
+Defining a `UniformSpace.Core` from a filter basis satisfying some uniformity-li
+ke axioms.
 -/
 def UniformSpace.Core.mkOfBasis {α : Type u} (B : FilterBasis (α × α))
-    (refl : forall r in B, forall (x), (x, x) in r) (symm : forall r in B, exists t in B, t subseteq Prod.swap ⁻¹' r)
-    (comp : forall r in B, exists t in B, t ○ t subseteq r) : UniformSpace.Core α where
+    (refl : ∀ r ∈ B, ∀ (x), (x, x) ∈ r) (symm : ∀ r ∈ B, ∃ t ∈ B, t ⊆ Prod.swap ⁻¹' r)
+    (comp : ∀ r ∈ B, ∃ t ∈ B, t ○ t ⊆ r) : UniformSpace.Core α where
   uniformity := B.filter
   refl := B.hasBasis.ge_iff.mpr fun _r ru => SetRel.id_subset_iff.2 ⟨refl _ ru⟩
   symm := (B.hasBasis.tendsto_iff B.hasBasis).mpr symm
@@ -250,71 +248,61 @@ def UniformSpace.Core.mkOfBasis {α : Type u} (B : FilterBasis (α × α))
 
 /-- A uniform space generates a topological space -/
 @[instance_reducible]
-/--
-Definition of `UniformSpace.Core.toTopologicalSpace` / `UniformSpace.Core.toTopologicalSpace` 的定义
+/-
+**UniformSpace.Core.toTopologicalSpace** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：UniformSpace.Core.toTopologicalSpace {α : Type u} (u : UniformSpace.Core α
+) : TopologicalSpace α
+参数：u : UniformSpace.Core α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition UniformSpace.Core.toTopologicalSpace
-  signature: {α : Type u} (u : UniformSpace.Core α)
-  body: .mkOfNhds fun x => .comap (Prod.mk x) u.uniformity
-
-中文:
-定义 一致空间.核.toTopologicalSpace
-  签名: {α : 类型u} (u : 一致空间.核 α)
-  定义体: .mkOfNhds fun x => .comap (Prod.mk x) u.uniformity
-
-Depends on / 依赖: Prod.mk, mkOfNhds, u.uniformity, uniformity
+--- 原说明 ---
+A uniform space generates a topological space
 -/
 def UniformSpace.Core.toTopologicalSpace {α : Type u} (u : UniformSpace.Core α) :
     TopologicalSpace α :=
-  .mkOfNhds fun x => .comap (Prod.mk x) u.uniformity
-
-/--
-theorem `UniformSpace.Core.ext` / 定理 `UniformSpace.Core.ext`
-
-English:
-theorem UniformSpace.Core.ext
-
-中文:
-定理 一致空间.核.ext
+  .mkOfNhds fun x ↦ .comap (Prod.mk x) u.uniformity
+/-
+**UniformSpace.Core.ext** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpace.Core`。
+形式化陈述：∀ {α : Type ua} {u₁ u₂ : UniformSpace.Core α}, u₁.uniformity = u₂.uniformi
+ty → u₁ = u₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.lift'`：lift'_top (h : Set α -> Set β) : (⊤ : Filter α).lift' h = 
+𝓟 (h univ)
 -/
 theorem UniformSpace.Core.ext :
-    forall {u₁ u₂ : UniformSpace.Core α}, u₁.uniformity = u₂.uniformity -> u₁ = u₂
+    ∀ {u₁ u₂ : UniformSpace.Core α}, u₁.uniformity = u₂.uniformity → u₁ = u₂
   | ⟨_, _, _, _⟩, ⟨_, _, _, _⟩, rfl => rfl
-
-/--
-theorem `UniformSpace.Core.nhds_toTopologicalSpace` / 定理 `UniformSpace.Core.nhds_toTopologicalSpace`
-
-English:
-theorem UniformSpace.Core.nhds_toTopologicalSpace
-  given: {α : Type u} (u : Core α) (x : α)
-  proof: by
-  apply TopologicalSpace.nhds_mkOfNhds_of_hasBasis (fun _ => (basis_sets _).comap _)
-  · exact fun a U hU => u.refl hU rfl
-  · intro a U hU
-    rcases u.comp_mem_uniformity_sets hU with ⟨V, hV, hVU⟩
-    filter_upwards [preimage_mem_comap hV] with b hb
-    filter_upwards [preimage_mem_comap hV] with c hc
-    exact hVU ⟨b, hb, hc⟩
-
-中文:
-定理 一致空间.核.nhds_toTopologicalSpace
-  条件: {α : 类型u} (u : 核 α) (x : α)
-  证明: by
-  apply TopologicalSpace.nhds_mkOfNhds_of_hasBasis (fun _ => (basis_sets _).comap _)
-  · exact fun a U hU => u.refl hU rfl
-  · intro a U hU
-    rcases u.comp_mem_uniformity_sets hU with ⟨V, hV, hVU⟩
-    filter_upwards [preimage_mem_comap hV] with b hb
-    filter_upwards [preimage_mem_comap hV] with c hc
-    exact hVU ⟨b, hb, hc⟩
-
-Depends on / 依赖: TopologicalSpace, TopologicalSpace.nhds_mkOfNhds_of_hasBasis, basis_sets, comp_mem_uniformity_sets, filter_upwards, nhds_mkOfNhds_of_hasBasis, preimage_mem_comap, u.comp_mem_uniformity_sets, u.refl
+/-
+**UniformSpace.Core.nhds_toTopologicalSpace** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：UniformSpace.Core.nhds_toTopologicalSpace {α : Type u} (u : Core α) (x : α
+) : @nhds α u.toTopologicalSpace x = comap (Prod.mk x) u.uniformity
+参数：u : Core α；x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.nhds_mkOfNhds_of_hasBasis`：nhds_mkOfNhds_of_hasBasis {n
+ : α -> Filter α} {ι : α -> Sort*} {p : forall a, ι a -> Prop} {s : forall a, ι 
+a -> Set α} (hb : forall a, (n a…
+· 使用定理 `Filter.HasBasis.comap`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} {l
+ : Filter α} {p : ι → Prop} {s : ι → Set α} (f : β → α),   l.HasBasis p s → (Fil
+ter.comap f…
+· 使用定理 `Filter.basis_sets`：basis_sets (l : Filter α) : l.HasBasis (fun s : Set α
+ => s in l) id
+· 使用定理 `UniformSpace.Core.refl`：∀ {α : Type u} (self : UniformSpace.Core α), Fil
+ter.principal SetRel.id ≤ self.uniformity
+· 使用定理 `UniformSpace.Core.comp_mem_uniformity_sets`：∀ {α : Type ua} {c : Uniform
+Space.Core α} {s : SetRel α α}, s ∈ c.uniformity → ∃ t ∈ c.uniformity, SetRel.co
+mp t t ⊆ s
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.preimage_mem_comap`：preimage_mem_comap (ht : t in g) : m ⁻¹' t in
+ comap m g
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
 -/
 theorem UniformSpace.Core.nhds_toTopologicalSpace {α : Type u} (u : Core α) (x : α) :
     @nhds α u.toTopologicalSpace x = comap (Prod.mk x) u.uniformity := by
-  apply TopologicalSpace.nhds_mkOfNhds_of_hasBasis (fun _ => (basis_sets _).comap _)
-  · exact fun a U hU => u.refl hU rfl
+  apply TopologicalSpace.nhds_mkOfNhds_of_hasBasis (fun _ ↦ (basis_sets _).comap _)
+  · exact fun a U hU ↦ u.refl hU rfl
   · intro a U hU
     rcases u.comp_mem_uniformity_sets hU with ⟨V, hV, hVU⟩
     filter_upwards [preimage_mem_comap hV] with b hb
@@ -331,28 +319,23 @@ theorem UniformSpace.Core.nhds_toTopologicalSpace {α : Type u} (u : Core α) (x
   A metric space has a natural uniformity, and a uniform space has a natural topology.
   A topological group also has a natural uniformity, even when it is not metrizable. -/
 @[wikidata Q652446]
-/--
-Definition of `UniformSpace` / `UniformSpace` 的定义
+/-
+**UniformSpace** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class UniformSpace
-  parameters: (α : Type u)
-  extends: TopologicalSpace α
-  axioms and operations (4):
-    - uniformity : Filter (α × α)
-    - symm : Tendsto Prod.swap uniformity uniformity
-    - comp : (uniformity.lift' fun s => s ○ s) <= uniformity
-    - nhds_eq_comap_uniformity((x : α)) : 𝓝 x = comap (Prod.mk x) uniformity
+--- 原说明 ---
+A uniform space is a generalization of the "uniform" topological aspects of a
+  metric space. It consists of a filter on `α × α` called the "uniformity", whic
+h
+  satisfies properties analogous to the reflexivity, symmetry, and triangle prop
+erties
+  of a metric.
 
-中文:
-类 一致空间
-  参数: (α : 类型u)
-  继承: 拓扑空间 α
-  公理与运算 (4 个):
-    - uniformity : 滤子 (α × α)
-    - symm : 收敛 积类型.swap uniformity uniformity
-    - comp : (uniformity.lift' fun s => s ○ s) <= uniformity
-    - nhds_eq_comap_uniformity((x : α)) : 𝓝 x = comap (积类型.mk x) uniformity
+  A metric space has a natural uniformity, and a uniform space has a natural top
+ology.
+  A topological group also has a natural uniformity, even when it is not metriza
+ble.
 -/
 class UniformSpace (α : Type u) extends TopologicalSpace α where
   /-- The uniformity filter. -/
@@ -360,25 +343,27 @@ class UniformSpace (α : Type u) extends TopologicalSpace α where
   /-- If `s ∈ uniformity`, then `Prod.swap ⁻¹' s ∈ uniformity`. -/
   protected symm : Tendsto Prod.swap uniformity uniformity
   /-- For every set `u ∈ uniformity`, there exists `v ∈ uniformity` such that `v ○ v ⊆ u`. -/
-  protected comp : (uniformity.lift' fun s => s ○ s) <= uniformity
+  protected comp : (uniformity.lift' fun s => s ○ s) ≤ uniformity
   /-- The uniformity agrees with the topology: the neighborhoods filter of each point `x`
   is equal to `Filter.comap (Prod.mk x) (𝓤 α)`. -/
   protected nhds_eq_comap_uniformity (x : α) : 𝓝 x = comap (Prod.mk x) uniformity
 
-/--
-Definition of `uniformity` / `uniformity` 的定义
+/-- The uniformity is a filter on α × α (inferred from an ambient uniform space
+/-
+**on** 是 Mathlib 中的一个结构，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+  structure on α). -/
+/-
+**uniformity** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：uniformity (α : Type u) [UniformSpace α] : Filter (α × α)
+参数：α : Type u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition uniformity
-  signature: (α : Type u) [UniformSpace α]
-  body: @UniformSpace.uniformity α _
-
-中文:
-定义 uniformity
-  签名: (α : 类型u) [一致空间 α]
-  定义体: @UniformSpace.uniformity α _
-
-Depends on / 依赖: UniformSpace, UniformSpace.uniformity, uniformity
+--- 原说明 ---
+The uniformity is a filter on α × α (inferred from an ambient uniform space
+  structure on α).
 -/
 def uniformity (α : Type u) [UniformSpace α] : Filter (α × α) :=
   @UniformSpace.uniformity α _
@@ -391,22 +376,24 @@ scoped[Uniformity] notation "𝓤" => uniformity
 
 open scoped Uniformity
 
-/--
-Definition of `UniformSpace.ofCoreEq` / `UniformSpace.ofCoreEq` 的定义
+/-- Construct a `UniformSpace` from a `u : UniformSpace.Core` and a `TopologicalSpace` structure
+that is equal to `u.toTopologicalSpace`. -/
+/-
+**UniformSpace.ofCoreEq** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：UniformSpace.ofCoreEq {α : Type u} (u : UniformSpace.Core α) (t : Topologi
+calSpace α) (h : t = u.toTopologicalSpace) : UniformSpace α where __
+参数：u : UniformSpace.Core α；t : TopologicalSpace α；h : t = u.toTopologicalSpace。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformSpace.Core.symm`：∀ {α : Type u} (self : UniformSpace.Core α), Fil
+ter.Tendsto Prod.swap self.uniformity self.uniformity
+· 使用定理 `UniformSpace.Core.comp`：∀ {α : Type u} (self : UniformSpace.Core α), (se
+lf.uniformity.lift' fun s => SetRel.comp s s) ≤ self.uniformity
 
-English:
-abbreviation UniformSpace.ofCoreEq
-  signature: {α : Type u} (u : UniformSpace.Core α) (t : TopologicalSpace α)
-  body: u
-  toTopologicalSpace := t
-  nhds_eq_comap_uniformity x := by rw [h, u.nhds_toTopologicalSpace]
-
-中文:
-缩写 一致空间.ofCoreEq
-  签名: {α : 类型u} (u : 一致空间.核 α) (t : 拓扑空间 α)
-  定义体: u
-  toTopologicalSpace := t
-  nhds_eq_comap_uniformity x := by rw [h, u.nhds_toTopologicalSpace]
+--- 原说明 ---
+Construct a `UniformSpace` from a `u : UniformSpace.Core` and a `TopologicalSpac
+e` structure
+that is equal to `u.toTopologicalSpace`.
 -/
 abbrev UniformSpace.ofCoreEq {α : Type u} (u : UniformSpace.Core α) (t : TopologicalSpace α)
     (h : t = u.toTopologicalSpace) : UniformSpace α where
@@ -414,206 +401,163 @@ abbrev UniformSpace.ofCoreEq {α : Type u} (u : UniformSpace.Core α) (t : Topol
   toTopologicalSpace := t
   nhds_eq_comap_uniformity x := by rw [h, u.nhds_toTopologicalSpace]
 
-/--
-Definition of `UniformSpace.ofCore` / `UniformSpace.ofCore` 的定义
+/-- Construct a `UniformSpace` from a `UniformSpace.Core`. -/
+/-
+**UniformSpace.ofCore** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：UniformSpace.ofCore {α : Type u} (u : UniformSpace.Core α) : UniformSpace 
+α
+参数：u : UniformSpace.Core α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation UniformSpace.ofCore
-  signature: {α : Type u} (u : UniformSpace.Core α)
-  body: .ofCoreEq u _ rfl
-
-中文:
-缩写 一致空间.ofCore
-  签名: {α : 类型u} (u : 一致空间.核 α)
-  定义体: .ofCoreEq u _ rfl
-
-Depends on / 依赖: ofCoreEq
+--- 原说明 ---
+Construct a `UniformSpace` from a `UniformSpace.Core`.
 -/
 abbrev UniformSpace.ofCore {α : Type u} (u : UniformSpace.Core α) : UniformSpace α :=
   .ofCoreEq u _ rfl
 
-/--
-Definition of `UniformSpace.toCore` / `UniformSpace.toCore` 的定义
+/-- Construct a `UniformSpace.Core` from a `UniformSpace`. -/
+/-
+**UniformSpace.toCore** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：UniformSpace.toCore (u : UniformSpace α) : UniformSpace.Core α where __
+参数：u : UniformSpace α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformSpace.symm`：∀ {α : Type u} [self : UniformSpace α], Filter.Tendst
+o Prod.swap UniformSpace.uniformity UniformSpace.uniformity
+· 使用定理 `UniformSpace.comp`：∀ {α : Type u} [self : UniformSpace α],   (UniformSpa
+ce.uniformity.lift' fun s => SetRel.comp s s) ≤ UniformSpace.uniformity
 
-English:
-abbreviation UniformSpace.toCore
-  signature: (u : UniformSpace α)
-  body: u
-  refl := by
-    rintro U hU ⟨x, y⟩ (rfl : x = y)
-    have : Prod.mk x ⁻¹' U in 𝓝 x := by
-      rw [UniformSpace.nhds_eq_comap_uniformity]
-      exact preimage_mem_comap hU
-    convert! mem_of_mem_nhds this
-
-中文:
-缩写 一致空间.toCore
-  签名: (u : 一致空间 α)
-  定义体: u
-  refl := by
-    rintro U hU ⟨x, y⟩ (rfl : x = y)
-    have : Prod.mk x ⁻¹' U in 𝓝 x := by
-      rw [UniformSpace.nhds_eq_comap_uniformity]
-      exact preimage_mem_comap hU
-    convert! mem_of_mem_nhds this
+--- 原说明 ---
+Construct a `UniformSpace.Core` from a `UniformSpace`.
 -/
 abbrev UniformSpace.toCore (u : UniformSpace α) : UniformSpace.Core α where
   __ := u
   refl := by
     rintro U hU ⟨x, y⟩ (rfl : x = y)
-    have : Prod.mk x ⁻¹' U in 𝓝 x := by
+    have : Prod.mk x ⁻¹' U ∈ 𝓝 x := by
       rw [UniformSpace.nhds_eq_comap_uniformity]
       exact preimage_mem_comap hU
     convert! mem_of_mem_nhds this
-
-/--
-theorem `UniformSpace.toCore_toTopologicalSpace` / 定理 `UniformSpace.toCore_toTopologicalSpace`
-
-English:
-theorem UniformSpace.toCore_toTopologicalSpace
-  given: (u : UniformSpace α)
-  proof: TopologicalSpace.ext_nhds fun a => by
-    rw [u.nhds_eq_comap_uniformity]; rw [u.toCore.nhds_toTopologicalSpace]
-
-中文:
-定理 一致空间.toCore_toTopologicalSpace
-  条件: (u : 一致空间 α)
-  证明: TopologicalSpace.ext_nhds fun a => by
-    rw [u.nhds_eq_comap_uniformity]; rw [u.toCore.nhds_toTopologicalSpace]
-
-Depends on / 依赖: TopologicalSpace, TopologicalSpace.ext_nhds, ext_nhds, nhds_eq_comap_uniformity, nhds_toTopologicalSpace, toCore, u.nhds_eq_comap_uniformity, u.toCore.nhds_toTopologicalSpace
+/-
+**UniformSpace.toCore_toTopologicalSpace** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：UniformSpace.toCore_toTopologicalSpace (u : UniformSpace α) : u.toCore.toT
+opologicalSpace = u.toTopologicalSpace
+参数：u : UniformSpace α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.ext_nhds`：∀ {X : Type u_2} {t t' : TopologicalSpace X},
+ (∀ (x : X), nhds x = nhds x) → t = t'
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UniformSpace.nhds_eq_comap_uniformity`：∀ {α : Type u} [self : UniformSpa
+ce α] (x : α), nhds x = Filter.comap (Prod.mk x) UniformSpace.uniformity
+· 使用定理 `UniformSpace.Core.nhds_toTopologicalSpace`：UniformSpace.Core.nhds_toTopo
+logicalSpace {α : Type u} (u : Core α) (x : α) : @nhds α u.toTopologicalSpace x 
+= comap (Prod.mk x) u.uniformit…
 -/
 theorem UniformSpace.toCore_toTopologicalSpace (u : UniformSpace α) :
     u.toCore.toTopologicalSpace = u.toTopologicalSpace :=
-  TopologicalSpace.ext_nhds fun a => by
-    rw [u.nhds_eq_comap_uniformity]; rw [u.toCore.nhds_toTopologicalSpace]
-
-/--
-lemma `UniformSpace.mem_uniformity_ofCore_iff` / 引理 `UniformSpace.mem_uniformity_ofCore_iff`
-
-English:
-lemma UniformSpace.mem_uniformity_ofCore_iff
-  given: {u : UniformSpace.Core α} {s : SetRel α α}
-  proof: Iff.rfl
-
-@[ext (iff := false)]
-
-中文:
-引理 一致空间.mem_uniformity_ofCore_iff
-  条件: {u : 一致空间.核 α} {s : SetRel α α}
-  证明: Iff.rfl
-
-@[ext (iff := false)]
-
-Depends on / 依赖: Iff.rfl
+  TopologicalSpace.ext_nhds fun a ↦ by
+    rw [u.nhds_eq_comap_uniformity, u.toCore.nhds_toTopologicalSpace]
+/-
+**UniformSpace.mem_uniformity_ofCore_iff** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：UniformSpace.mem_uniformity_ofCore_iff {u : UniformSpace.Core α} {s : SetR
+el α α} : s in 𝓤[.ofCore u] ↔ s in u.uniformity
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma UniformSpace.mem_uniformity_ofCore_iff {u : UniformSpace.Core α} {s : SetRel α α} :
-    s in 𝓤[.ofCore u] ↔ s in u.uniformity :=
+    s ∈ 𝓤[.ofCore u] ↔ s ∈ u.uniformity :=
   Iff.rfl
 
 @[ext (iff := false)]
-/--
-theorem `UniformSpace.ext` / 定理 `UniformSpace.ext`
-
-English:
-theorem UniformSpace.ext
-  given: {u₁ u₂ : UniformSpace α} (h : 𝓤[u₁] = 𝓤[u₂])
-  statement: u₁ = u₂
-  proof: by
-  have : u₁.toTopologicalSpace = u₂.toTopologicalSpace := TopologicalSpace.ext_nhds fun x => by
-    rw [u₁.nhds_eq_comap_uniformity]; rw [u₂.nhds_eq_comap_uniformity]
-    exact congr_arg (comap _) h
-  cases u₁; cases u₂; congr
-
-中文:
-定理 一致空间.ext
-  条件: {u₁ u₂ : 一致空间 α} (h : 𝓤[u₁] = 𝓤[u₂])
-  结论: u₁ = u₂
-  证明: by
-  have : u₁.toTopologicalSpace = u₂.toTopologicalSpace := TopologicalSpace.ext_nhds fun x => by
-    rw [u₁.nhds_eq_comap_uniformity]; rw [u₂.nhds_eq_comap_uniformity]
-    exact congr_arg (comap _) h
-  cases u₁; cases u₂; congr
+/-
+**UniformSpace.ext** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpace`。
+形式化陈述：∀ {α : Type ua} {u₁ u₂ : UniformSpace α}, uniformity α = uniformity α → u₁
+ = u₂
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `TopologicalSpace.ext_nhds`：∀ {X : Type u_2} {t t' : TopologicalSpace X},
+ (∀ (x : X), nhds x = nhds x) → t = t'
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UniformSpace.nhds_eq_comap_uniformity`：∀ {α : Type u} [self : UniformSpa
+ce α] (x : α), nhds x = Filter.comap (Prod.mk x) UniformSpace.uniformity
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `Filter.lift'`：lift'_top (h : Set α -> Set β) : (⊤ : Filter α).lift' h = 
+𝓟 (h univ)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 protected theorem UniformSpace.ext {u₁ u₂ : UniformSpace α} (h : 𝓤[u₁] = 𝓤[u₂]) : u₁ = u₂ := by
-  have : u₁.toTopologicalSpace = u₂.toTopologicalSpace := TopologicalSpace.ext_nhds fun x => by
-    rw [u₁.nhds_eq_comap_uniformity]; rw [u₂.nhds_eq_comap_uniformity]
+  have : u₁.toTopologicalSpace = u₂.toTopologicalSpace := TopologicalSpace.ext_nhds fun x ↦ by
+    rw [u₁.nhds_eq_comap_uniformity, u₂.nhds_eq_comap_uniformity]
     exact congr_arg (comap _) h
   cases u₁; cases u₂; congr
-
-/--
-theorem `UniformSpace.ext_iff` / 定理 `UniformSpace.ext_iff`
-
-English:
-theorem UniformSpace.ext_iff
-  given: {u₁ u₂ : UniformSpace α}
-  proof: ⟨fun h _ => h ▸ Iff.rfl, fun h => by ext; exact h _⟩
-
-中文:
-定理 一致空间.ext_iff
-  条件: {u₁ u₂ : 一致空间 α}
-  证明: ⟨fun h _ => h ▸ Iff.rfl, fun h => by ext; exact h _⟩
+/-
+**UniformSpace.ext_iff** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpace`。
+形式化陈述：∀ {α : Type ua} {u₁ u₂ : UniformSpace α}, u₁ = u₂ ↔ ∀ (s : Set (α × α)), s
+ ∈ uniformity α ↔ s ∈ uniformity α
+参数：s : Set (α × α)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+· 使用定理 `UniformSpace.ext`：∀ {α : Type ua} {u₁ u₂ : UniformSpace α}, uniformity α
+ = uniformity α → u₁ = u₂
+· 使用定理 `Filter.ext`：∀ {α : Type u_1} {f g : Filter α}, (∀ (s : Set α), s ∈ f ↔ s
+ ∈ g) → f = g
 -/
 protected theorem UniformSpace.ext_iff {u₁ u₂ : UniformSpace α} :
-    u₁ = u₂ ↔ forall s, s in 𝓤[u₁] ↔ s in 𝓤[u₂] :=
+    u₁ = u₂ ↔ ∀ s, s ∈ 𝓤[u₁] ↔ s ∈ 𝓤[u₂] :=
   ⟨fun h _ => h ▸ Iff.rfl, fun h => by ext; exact h _⟩
-
-/--
-theorem `UniformSpace.ofCoreEq_toCore` / 定理 `UniformSpace.ofCoreEq_toCore`
-
-English:
-theorem UniformSpace.ofCoreEq_toCore
-  statement: (u : UniformSpace α) (t : TopologicalSpace α)
-  proof: UniformSpace.ext rfl
-
-中文:
-定理 一致空间.ofCoreEq_toCore
-  结论: (u : 一致空间 α) (t : 拓扑空间 α)
-  证明: UniformSpace.ext rfl
-
-Depends on / 依赖: UniformSpace, UniformSpace.ext
+/-
+**UniformSpace.ofCoreEq_toCore** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：UniformSpace.ofCoreEq_toCore (u : UniformSpace α) (t : TopologicalSpace α)
+ (h : t = u.toCore.toTopologicalSpace) : .ofCoreEq u.toCore t h = u
+参数：u : UniformSpace α；t : TopologicalSpace α；h : t = u.toCore.toTopologicalSpace
+。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformSpace.ext`：∀ {α : Type ua} {u₁ u₂ : UniformSpace α}, uniformity α
+ = uniformity α → u₁ = u₂
 -/
 theorem UniformSpace.ofCoreEq_toCore (u : UniformSpace α) (t : TopologicalSpace α)
     (h : t = u.toCore.toTopologicalSpace) : .ofCoreEq u.toCore t h = u :=
   UniformSpace.ext rfl
 
-/--
-Definition of `UniformSpace.replaceTopology` / `UniformSpace.replaceTopology` 的定义
+/-- Replace topology in a `UniformSpace` instance with a propositionally (but possibly not
+definitionally) equal one. -/
+/-
+**UniformSpace.replaceTopology** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：UniformSpace.replaceTopology {α : Type*} [i : TopologicalSpace α] (u : Uni
+formSpace α) (h : i = u.toTopologicalSpace) : UniformSpace α where __
+参数：u : UniformSpace α；h : i = u.toTopologicalSpace。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformSpace.symm`：∀ {α : Type u} [self : UniformSpace α], Filter.Tendst
+o Prod.swap UniformSpace.uniformity UniformSpace.uniformity
+· 使用定理 `UniformSpace.comp`：∀ {α : Type u} [self : UniformSpace α],   (UniformSpa
+ce.uniformity.lift' fun s => SetRel.comp s s) ≤ UniformSpace.uniformity
 
-English:
-abbreviation UniformSpace.replaceTopology
-  signature: {α : Type*} [i : TopologicalSpace α] (u : UniformSpace α)
-  body: u
-  toTopologicalSpace := i
-  nhds_eq_comap_uniformity x := by rw [h, u.nhds_eq_comap_uniformity]
-
-中文:
-缩写 一致空间.replaceTopology
-  签名: {α : 类型} [i : 拓扑空间 α] (u : 一致空间 α)
-  定义体: u
-  toTopologicalSpace := i
-  nhds_eq_comap_uniformity x := by rw [h, u.nhds_eq_comap_uniformity]
+--- 原说明 ---
+Replace topology in a `UniformSpace` instance with a propositionally (but possib
+ly not
+definitionally) equal one.
 -/
 abbrev UniformSpace.replaceTopology {α : Type*} [i : TopologicalSpace α] (u : UniformSpace α)
     (h : i = u.toTopologicalSpace) : UniformSpace α where
   __ := u
   toTopologicalSpace := i
   nhds_eq_comap_uniformity x := by rw [h, u.nhds_eq_comap_uniformity]
-
-/--
-theorem `UniformSpace.replaceTopology_eq` / 定理 `UniformSpace.replaceTopology_eq`
-
-English:
-theorem UniformSpace.replaceTopology_eq
-  statement: {α : Type*} [i : TopologicalSpace α] (u : UniformSpace α)
-  proof: UniformSpace.ext rfl
-
-中文:
-定理 一致空间.replaceTopology_eq
-  结论: {α : 类型} [i : 拓扑空间 α] (u : 一致空间 α)
-  证明: UniformSpace.ext rfl
-
-Depends on / 依赖: UniformSpace, UniformSpace.ext
+/-
+**UniformSpace.replaceTopology_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：UniformSpace.replaceTopology_eq {α : Type*} [i : TopologicalSpace α] (u : 
+UniformSpace α) (h : i = u.toTopologicalSpace) : u.replaceTopology h = u
+参数：u : UniformSpace α；h : i = u.toTopologicalSpace。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformSpace.ext`：∀ {α : Type ua} {u₁ u₂ : UniformSpace α}, uniformity α
+ = uniformity α → u₁ = u₂
 -/
 theorem UniformSpace.replaceTopology_eq {α : Type*} [i : TopologicalSpace α] (u : UniformSpace α)
     (h : i = u.toTopologicalSpace) : u.replaceTopology h = u :=
@@ -623,687 +567,562 @@ section UniformSpace
 
 variable [UniformSpace α]
 
-/--
-theorem `nhds_eq_comap_uniformity` / 定理 `nhds_eq_comap_uniformity`
-
-English:
-theorem nhds_eq_comap_uniformity
-  given: {x : α}
-  statement: 𝓝 x = (𝓤 α).comap (Prod.mk x)
-  proof: UniformSpace.nhds_eq_comap_uniformity x
-
-中文:
-定理 nhds_eq_comap_uniformity
-  条件: {x : α}
-  结论: 𝓝 x = (𝓤 α).comap (积类型.mk x)
-  证明: UniformSpace.nhds_eq_comap_uniformity x
-
-Depends on / 依赖: UniformSpace, UniformSpace.nhds_eq_comap_uniformity, nhds_eq_comap_uniformity
+/-
+**nhds_eq_comap_uniformity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nhds_eq_comap_uniformity {x : α} : 𝓝 x = (𝓤 α).comap (Prod.mk x)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformSpace.nhds_eq_comap_uniformity`：∀ {α : Type u} [self : UniformSpa
+ce α] (x : α), nhds x = Filter.comap (Prod.mk x) UniformSpace.uniformity
 -/
 theorem nhds_eq_comap_uniformity {x : α} : 𝓝 x = (𝓤 α).comap (Prod.mk x) :=
   UniformSpace.nhds_eq_comap_uniformity x
-
-/--
-theorem `isOpen_uniformity` / 定理 `isOpen_uniformity`
-
-English:
-theorem isOpen_uniformity
-  given: {s : Set α}
-  proof: by
-  simp only [isOpen_iff_mem_nhds, nhds_eq_comap_uniformity, mem_comap_prodMk]
-
-中文:
-定理 isOpen_uniformity
-  条件: {s : 集合 α}
-  证明: by
-  simp only [isOpen_iff_mem_nhds, nhds_eq_comap_uniformity, mem_comap_prodMk]
-
-Depends on / 依赖: isOpen_iff_mem_nhds, mem_comap_prodMk, nhds_eq_comap_uniformity
+/-
+**isOpen_uniformity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isOpen_uniformity {s : Set α} : IsOpen s ↔ forall x in s, { p : α × α | p.
+1 = x -> p.2 in s } in 𝓤 α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `nhds_eq_comap_uniformity`：nhds_eq_comap_uniformity {x : α} : 𝓝 x = (𝓤 α)
+.comap (Prod.mk x)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem isOpen_uniformity {s : Set α} :
-    IsOpen s ↔ forall x in s, { p : α × α | p.1 = x -> p.2 in s } in 𝓤 α := by
+    IsOpen s ↔ ∀ x ∈ s, { p : α × α | p.1 = x → p.2 ∈ s } ∈ 𝓤 α := by
   simp only [isOpen_iff_mem_nhds, nhds_eq_comap_uniformity, mem_comap_prodMk]
-
-/--
-theorem `refl_le_uniformity` / 定理 `refl_le_uniformity`
-
-English:
-theorem refl_le_uniformity
-  statement: 𝓟 SetRel.id <= 𝓤 α
-  proof: (@UniformSpace.toCore α _).refl
-
-中文:
-定理 refl_le_uniformity
-  结论: 𝓟 SetRel.id <= 𝓤 α
-  证明: (@UniformSpace.toCore α _).refl
-
-Depends on / 依赖: UniformSpace, UniformSpace.toCore, toCore
+/-
+**refl_le_uniformity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：refl_le_uniformity : 𝓟 SetRel.id <= 𝓤 α
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformSpace.Core.refl`：∀ {α : Type u} (self : UniformSpace.Core α), Fil
+ter.principal SetRel.id ≤ self.uniformity
 -/
-theorem refl_le_uniformity : 𝓟 SetRel.id <= 𝓤 α :=
+theorem refl_le_uniformity : 𝓟 SetRel.id ≤ 𝓤 α :=
   (@UniformSpace.toCore α _).refl
-
-/--
-Instance `uniformity.neBot` / 实例 `uniformity.neBot`
-
-English:
-instance uniformity.neBot
-  signature: [Nonempty α]
-  body: diagonal_nonempty.principal_neBot.mono refl_le_uniformity
-
-中文:
-实例 uniformity.neBot
-  签名: [非空 α]
-  定义体: diagonal_nonempty.principal_neBot.mono refl_le_uniformity
-
-Depends on / 依赖: diagonal_nonempty, diagonal_nonempty.principal_neBot.mono, principal_neBot, refl_le_uniformity
+/-
+**uniformity.neBot** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：uniformity.neBot [Nonempty α] : NeBot (𝓤 α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.NeBot.mono`：∀ {α : Type u} {f g : Filter α}, f.NeBot → f ≤ g → g.
+NeBot
+· 使用定理 `Set.Nonempty.principal_neBot`：∀ {α : Type u} {s : Set α}, s.Nonempty → (
+Filter.principal s).NeBot
+· 使用引理 `Set.diagonal_nonempty`：diagonal_nonempty [Nonempty α] : (diagonal α).Non
+empty
+· 使用定理 `refl_le_uniformity`：refl_le_uniformity : 𝓟 SetRel.id <= 𝓤 α
 -/
 instance uniformity.neBot [Nonempty α] : NeBot (𝓤 α) :=
   diagonal_nonempty.principal_neBot.mono refl_le_uniformity
-
-/--
-theorem `refl_mem_uniformity` / 定理 `refl_mem_uniformity`
-
-English:
-theorem refl_mem_uniformity
-  given: {x : α} {s : SetRel α α} (h : s in 𝓤 α)
-  statement: (x, x) in s
-  proof: refl_le_uniformity h rfl
-
-中文:
-定理 refl_mem_uniformity
-  条件: {x : α} {s : SetRel α α} (h : s in 𝓤 α)
-  结论: (x, x) in s
-  证明: refl_le_uniformity h rfl
-
-Depends on / 依赖: refl_le_uniformity
+/-
+**refl_mem_uniformity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：refl_mem_uniformity {x : α} {s : SetRel α α} (h : s in 𝓤 α) : (x, x) in s
+参数：h : s in 𝓤 α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `refl_le_uniformity`：refl_le_uniformity : 𝓟 SetRel.id <= 𝓤 α
 -/
-theorem refl_mem_uniformity {x : α} {s : SetRel α α} (h : s in 𝓤 α) : (x, x) in s :=
+theorem refl_mem_uniformity {x : α} {s : SetRel α α} (h : s ∈ 𝓤 α) : (x, x) ∈ s :=
   refl_le_uniformity h rfl
-
-/--
-theorem `isRefl_of_mem_uniformity` / 定理 `isRefl_of_mem_uniformity`
-
-English:
-theorem isRefl_of_mem_uniformity
-  given: {s : SetRel α α} (h : s in 𝓤 α)
-  statement: s.IsRefl
-  proof: ⟨fun _ => refl_mem_uniformity h⟩
-
-中文:
-定理 isRefl_of_mem_uniformity
-  条件: {s : SetRel α α} (h : s in 𝓤 α)
-  结论: s.IsRefl
-  证明: ⟨fun _ => refl_mem_uniformity h⟩
-
-Depends on / 依赖: refl_mem_uniformity
+/-
+**isRefl_of_mem_uniformity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isRefl_of_mem_uniformity {s : SetRel α α} (h : s in 𝓤 α) : s.IsRefl
+参数：h : s in 𝓤 α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `refl_mem_uniformity`：refl_mem_uniformity {x : α} {s : SetRel α α} (h : s
+ in 𝓤 α) : (x, x) in s
 -/
-theorem isRefl_of_mem_uniformity {s : SetRel α α} (h : s in 𝓤 α) : s.IsRefl :=
+theorem isRefl_of_mem_uniformity {s : SetRel α α} (h : s ∈ 𝓤 α) : s.IsRefl :=
   ⟨fun _ => refl_mem_uniformity h⟩
-
-/--
-theorem `mem_uniformity_of_eq` / 定理 `mem_uniformity_of_eq`
-
-English:
-theorem mem_uniformity_of_eq
-  given: {x y : α} {s : SetRel α α} (h : s in 𝓤 α) (hx : x = y)
-  statement: (x, y) in s
-  proof: refl_le_uniformity h hx
-
-中文:
-定理 mem_uniformity_of_eq
-  条件: {x y : α} {s : SetRel α α} (h : s in 𝓤 α) (hx : x = y)
-  结论: (x, y) in s
-  证明: refl_le_uniformity h hx
-
-Depends on / 依赖: refl_le_uniformity
+/-
+**mem_uniformity_of_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_uniformity_of_eq {x y : α} {s : SetRel α α} (h : s in 𝓤 α) (hx : x = y
+) : (x, y) in s
+参数：h : s in 𝓤 α；hx : x = y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `refl_le_uniformity`：refl_le_uniformity : 𝓟 SetRel.id <= 𝓤 α
 -/
-theorem mem_uniformity_of_eq {x y : α} {s : SetRel α α} (h : s in 𝓤 α) (hx : x = y) : (x, y) in s :=
+theorem mem_uniformity_of_eq {x y : α} {s : SetRel α α} (h : s ∈ 𝓤 α) (hx : x = y) : (x, y) ∈ s :=
   refl_le_uniformity h hx
-
-/--
-theorem `symm_le_uniformity` / 定理 `symm_le_uniformity`
-
-English:
-theorem symm_le_uniformity
-  statement: map (@Prod.swap α α) (𝓤 _) <= 𝓤 _
-  proof: UniformSpace.symm
-
-中文:
-定理 symm_le_uniformity
-  结论: map (@积类型.swap α α) (𝓤 _) <= 𝓤 _
-  证明: UniformSpace.symm
-
-Depends on / 依赖: UniformSpace, UniformSpace.symm
+/-
+**symm_le_uniformity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：symm_le_uniformity : map (@Prod.swap α α) (𝓤 _) <= 𝓤 _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformSpace.symm`：∀ {α : Type u} [self : UniformSpace α], Filter.Tendst
+o Prod.swap UniformSpace.uniformity UniformSpace.uniformity
 -/
-theorem symm_le_uniformity : map (@Prod.swap α α) (𝓤 _) <= 𝓤 _ :=
+theorem symm_le_uniformity : map (@Prod.swap α α) (𝓤 _) ≤ 𝓤 _ :=
   UniformSpace.symm
-
-/--
-theorem `comp_le_uniformity` / 定理 `comp_le_uniformity`
-
-English:
-theorem comp_le_uniformity
-  statement: ((𝓤 α).lift' fun s : SetRel α α => s ○ s) <= 𝓤 α
-  proof: UniformSpace.comp
-
-中文:
-定理 comp_le_uniformity
-  结论: ((𝓤 α).lift' fun s : SetRel α α => s ○ s) <= 𝓤 α
-  证明: UniformSpace.comp
-
-Depends on / 依赖: UniformSpace, UniformSpace.comp
+/-
+**comp_le_uniformity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：comp_le_uniformity : ((𝓤 α).lift' fun s : SetRel α α => s ○ s) <= 𝓤 α
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformSpace.comp`：∀ {α : Type u} [self : UniformSpace α],   (UniformSpa
+ce.uniformity.lift' fun s => SetRel.comp s s) ≤ UniformSpace.uniformity
 -/
-theorem comp_le_uniformity : ((𝓤 α).lift' fun s : SetRel α α => s ○ s) <= 𝓤 α :=
+theorem comp_le_uniformity : ((𝓤 α).lift' fun s : SetRel α α => s ○ s) ≤ 𝓤 α :=
   UniformSpace.comp
-
-/--
-theorem `lift'_comp_uniformity` / 定理 `lift'_comp_uniformity`
-
-English:
-theorem lift'_comp_uniformity
-  statement: ((𝓤 α).lift' fun s : SetRel α α => s ○ s) = 𝓤 α
-  proof: comp_le_uniformity.antisymm le_lift'.2 fun _s hs => mem_of_superset hs
-    have := isRefl_of_mem_uniformity hs; SetRel.left_subset_comp
-
-中文:
-定理 lift'_comp_uniformity
-  结论: ((𝓤 α).lift' fun s : SetRel α α => s ○ s) = 𝓤 α
-  证明: comp_le_uniformity.antisymm le_lift'.2 fun _s hs => mem_of_superset hs
-    have := isRefl_of_mem_uniformity hs; SetRel.left_subset_comp
+/-
+**lift'_comp_uniformity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {α : Type ua} [inst : UniformSpace α], ((uniformity α).lift' fun s => s.
+comp s) = uniformity α
+参数：(uniformity α).lift' fun s => s.comp s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.antisymm`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → b ≤ a → a = b
+· 使用定理 `Filter.lift'`：lift'_top (h : Set α -> Set β) : (⊤ : Filter α).lift' h = 
+𝓟 (h univ)
+· 使用定理 `comp_le_uniformity`：comp_le_uniformity : ((𝓤 α).lift' fun s : SetRel α α
+ => s ○ s) <= 𝓤 α
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.le_lift'`：le_lift' {f : Filter α} {h : Set α -> Set β} {g : Filte
+r β} : g <= f.lift' h ↔ forall s in f, h s in g
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
+· 使用定理 `isRefl_of_mem_uniformity`：isRefl_of_mem_uniformity {s : SetRel α α} (h :
+ s in 𝓤 α) : s.IsRefl
+· 使用引理 `SetRel.left_subset_comp`：left_subset_comp {R : SetRel α β} [S.IsRefl] : 
+R subseteq R ○ S
 -/
 theorem lift'_comp_uniformity : ((𝓤 α).lift' fun s : SetRel α α => s ○ s) = 𝓤 α :=
-comp_le_uniformity.antisymm le_lift'.2 fun _s hs => mem_of_superset hs
+  comp_le_uniformity.antisymm <| le_lift'.2 fun _s hs ↦ mem_of_superset hs <|
     have := isRefl_of_mem_uniformity hs; SetRel.left_subset_comp
-
-/--
-theorem `tendsto_swap_uniformity` / 定理 `tendsto_swap_uniformity`
-
-English:
-theorem tendsto_swap_uniformity
-  statement: Tendsto (@Prod.swap α α) (𝓤 α) (𝓤 α)
-  proof: symm_le_uniformity
-
-中文:
-定理 tendsto_swap_uniformity
-  结论: 收敛 (@积类型.swap α α) (𝓤 α) (𝓤 α)
-  证明: symm_le_uniformity
-
-Depends on / 依赖: symm_le_uniformity
+/-
+**tendsto_swap_uniformity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tendsto_swap_uniformity : Tendsto (@Prod.swap α α) (𝓤 α) (𝓤 α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `symm_le_uniformity`：symm_le_uniformity : map (@Prod.swap α α) (𝓤 _) <= 𝓤
+ _
 -/
 theorem tendsto_swap_uniformity : Tendsto (@Prod.swap α α) (𝓤 α) (𝓤 α) :=
   symm_le_uniformity
-
-/--
-theorem `comp_mem_uniformity_sets` / 定理 `comp_mem_uniformity_sets`
-
-English:
-theorem comp_mem_uniformity_sets
-  given: {s : SetRel α α} (hs : s in 𝓤 α)
-  statement: exists t in 𝓤 α, t ○ t subseteq s
-  proof: (mem_lift'_sets <| monotone_id.relComp monotone_id).mp comp_le_uniformity hs
-
-中文:
-定理 comp_mem_uniformity_sets
-  条件: {s : SetRel α α} (hs : s in 𝓤 α)
-  结论: 存在 t in 𝓤 α, t ○ t subseteq s
-  证明: (mem_lift'_sets <| monotone_id.relComp monotone_id).mp comp_le_uniformity hs
-
-Depends on / 依赖: _sets, comp_le_uniformity, mem_lift, monotone_id, monotone_id.relComp, relComp
+/-
+**comp_mem_uniformity_sets** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：comp_mem_uniformity_sets {s : SetRel α α} (hs : s in 𝓤 α) : exists t in 𝓤 
+α, t ○ t subseteq s
+参数：hs : s in 𝓤 α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.lift'`：lift'_top (h : Set α -> Set β) : (⊤ : Filter α).lift' h = 
+𝓟 (h univ)
+· 使用定理 `Filter.mem_lift'_sets`：∀ {α : Type u_1} {β : Type u_2} {f : Filter α} {h
+ : Set α → Set β},   Monotone h → ∀ {s : Set β}, s ∈ f.lift' h ↔ ∃ t ∈ f, h t ⊆ 
+s
+· 使用定理 `Monotone.relComp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {ι : Ty
+pe u_6} [inst : Preorder ι] {f : ι → SetRel α β}   {g : ι → SetRel β γ}, Monoton
+e f → …
+· 使用定理 `monotone_id`：monotone_id [Preorder α] : Monotone (id : α -> α)
+· 使用定理 `comp_le_uniformity`：comp_le_uniformity : ((𝓤 α).lift' fun s : SetRel α α
+ => s ○ s) <= 𝓤 α
 -/
-theorem comp_mem_uniformity_sets {s : SetRel α α} (hs : s in 𝓤 α) : exists t in 𝓤 α, t ○ t subseteq s :=
-(mem_lift'_sets <| monotone_id.relComp monotone_id).mp comp_le_uniformity hs
+theorem comp_mem_uniformity_sets {s : SetRel α α} (hs : s ∈ 𝓤 α) : ∃ t ∈ 𝓤 α, t ○ t ⊆ s :=
+  (mem_lift'_sets <| monotone_id.relComp monotone_id).mp <| comp_le_uniformity hs
 
-/--
-theorem `Filter.Tendsto.uniformity_trans` / 定理 `Filter.Tendsto.uniformity_trans`
+/-- Relation `fun f g ↦ Tendsto (fun x ↦ (f x, g x)) l (𝓤 α)` is transitive. -/
+/-
+**Filter.Tendsto.uniformity_trans** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Filter.Tendsto.uniformity_trans {l : Filter β} {f₁ f₂ f₃ : β -> α} (h₁₂ : 
+Tendsto (fun x => (f₁ x, f₂ x)) l (𝓤 α)) (h₂₃ : Tendsto (fun x => (f₂ x, f₃ x)) 
+l (𝓤 α)) : Tendsto (fun x => (f₁ x, f₃ x)) l (𝓤 α)
+参数：h₁₂ : Tendsto (fun x => (f₁ x, f₂ x)) l (𝓤 α)；h₂₃ : Tendsto (fun x => (f₂ x, 
+f₃ x)) l (𝓤 α)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Filter.lift'`：lift'_top (h : Set α -> Set β) : (⊤ : Filter α).lift' h = 
+𝓟 (h univ)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.le_lift'`：le_lift' {f : Filter α} {h : Set α -> Set β} {g : Filte
+r β} : g <= f.lift' h ↔ forall s in f, h s in g
+· 使用定理 `Filter.mem_map`：mem_map : t in map m f ↔ m ⁻¹' t in f
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `comp_le_uniformity`：comp_le_uniformity : ((𝓤 α).lift' fun s : SetRel α α
+ => s ○ s) <= 𝓤 α
 
-English:
-theorem Filter.Tendsto.uniformity_trans
-  statement: {l : Filter β} {f₁ f₂ f₃ : β -> α}
-  proof: by
-  refine le_trans (le_lift'.2 fun s hs => mem_map.2 ?_) comp_le_uniformity
-  filter_upwards [mem_map.1 (h₁₂ hs), mem_map.1 (h₂₃ hs)] with x hx₁₂ hx₂₃ using ⟨_, hx₁₂, hx₂₃⟩
-
-中文:
-定理 滤子.收敛.uniformity_trans
-  结论: {l : 滤子 β} {f₁ f₂ f₃ : β -> α}
-  证明: by
-  refine le_trans (le_lift'.2 fun s hs => mem_map.2 ?_) comp_le_uniformity
-  filter_upwards [mem_map.1 (h₁₂ hs), mem_map.1 (h₂₃ hs)] with x hx₁₂ hx₂₃ using ⟨_, hx₁₂, hx₂₃⟩
-
-Depends on / 依赖: comp_le_uniformity, filter_upwards, le_lift, le_trans, mem_map
+--- 原说明 ---
+Relation `fun f g ↦ Tendsto (fun x ↦ (f x, g x)) l (𝓤 α)` is transitive.
 -/
-theorem Filter.Tendsto.uniformity_trans {l : Filter β} {f₁ f₂ f₃ : β -> α}
+theorem Filter.Tendsto.uniformity_trans {l : Filter β} {f₁ f₂ f₃ : β → α}
     (h₁₂ : Tendsto (fun x => (f₁ x, f₂ x)) l (𝓤 α))
     (h₂₃ : Tendsto (fun x => (f₂ x, f₃ x)) l (𝓤 α)) : Tendsto (fun x => (f₁ x, f₃ x)) l (𝓤 α) := by
   refine le_trans (le_lift'.2 fun s hs => mem_map.2 ?_) comp_le_uniformity
   filter_upwards [mem_map.1 (h₁₂ hs), mem_map.1 (h₂₃ hs)] with x hx₁₂ hx₂₃ using ⟨_, hx₁₂, hx₂₃⟩
 
-/--
-theorem `Filter.Tendsto.uniformity_symm` / 定理 `Filter.Tendsto.uniformity_symm`
+/-- Relation `fun f g ↦ Tendsto (fun x ↦ (f x, g x)) l (𝓤 α)` is symmetric. -/
+/-
+**Filter.Tendsto.uniformity_symm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Filter.Tendsto.uniformity_symm {l : Filter β} {f : β -> α × α} (h : Tendst
+o f l (𝓤 α)) : Tendsto (fun x => ((f x).2, (f x).1)) l (𝓤 α)
+参数：h : Tendsto f l (𝓤 α)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.comp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {f :
+ α → β} {g : β → γ} {x : Filter α} {y : Filter β} {z : Filter γ},   Filter.Tends
+to g y z …
+· 使用定理 `tendsto_swap_uniformity`：tendsto_swap_uniformity : Tendsto (@Prod.swap α
+ α) (𝓤 α) (𝓤 α)
 
-English:
-theorem Filter.Tendsto.uniformity_symm
-  given: {l : Filter β} {f : β -> α × α} (h : Tendsto f l (𝓤 α))
-  proof: tendsto_swap_uniformity.comp h
-
-中文:
-定理 滤子.收敛.uniformity_symm
-  条件: {l : 滤子 β} {f : β -> α × α} (h : 收敛 f l (𝓤 α))
-  证明: tendsto_swap_uniformity.comp h
-
-Depends on / 依赖: tendsto_swap_uniformity, tendsto_swap_uniformity.comp
+--- 原说明 ---
+Relation `fun f g ↦ Tendsto (fun x ↦ (f x, g x)) l (𝓤 α)` is symmetric.
 -/
-theorem Filter.Tendsto.uniformity_symm {l : Filter β} {f : β -> α × α} (h : Tendsto f l (𝓤 α)) :
+theorem Filter.Tendsto.uniformity_symm {l : Filter β} {f : β → α × α} (h : Tendsto f l (𝓤 α)) :
     Tendsto (fun x => ((f x).2, (f x).1)) l (𝓤 α) :=
   tendsto_swap_uniformity.comp h
 
-/--
-theorem `tendsto_diag_uniformity` / 定理 `tendsto_diag_uniformity`
+/-- Relation `fun f g ↦ Tendsto (fun x ↦ (f x, g x)) l (𝓤 α)` is reflexive. -/
+/-
+**tendsto_diag_uniformity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tendsto_diag_uniformity (f : β -> α) (l : Filter β) : Tendsto (fun x => (f
+ x, f x)) l (𝓤 α)
+参数：f : β -> α；l : Filter β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.mem_map`：mem_map : t in map m f ↔ m ⁻¹' t in f
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `refl_mem_uniformity`：refl_mem_uniformity {x : α} {s : SetRel α α} (h : s
+ in 𝓤 α) : (x, x) in s
 
-English:
-theorem tendsto_diag_uniformity
-  given: (f : β -> α) (l : Filter β)
-  proof: fun _s hs =>
-mem_map.2 univ_mem' fun _ => refl_mem_uniformity hs
-
-中文:
-定理 tendsto_diag_uniformity
-  条件: (f : β -> α) (l : 滤子 β)
-  证明: fun _s hs =>
-mem_map.2 univ_mem' fun _ => refl_mem_uniformity hs
+--- 原说明 ---
+Relation `fun f g ↦ Tendsto (fun x ↦ (f x, g x)) l (𝓤 α)` is reflexive.
 -/
-theorem tendsto_diag_uniformity (f : β -> α) (l : Filter β) :
+theorem tendsto_diag_uniformity (f : β → α) (l : Filter β) :
     Tendsto (fun x => (f x, f x)) l (𝓤 α) := fun _s hs =>
-mem_map.2 univ_mem' fun _ => refl_mem_uniformity hs
-
-/--
-theorem `tendsto_const_uniformity` / 定理 `tendsto_const_uniformity`
-
-English:
-theorem tendsto_const_uniformity
-  given: {a : α} {f : Filter β}
-  statement: Tendsto (fun _ => (a, a)) f (𝓤 α)
-  proof: tendsto_diag_uniformity (fun _ => a) f
-
-中文:
-定理 tendsto_const_uniformity
-  条件: {a : α} {f : 滤子 β}
-  结论: 收敛 (fun _ => (a, a)) f (𝓤 α)
-  证明: tendsto_diag_uniformity (fun _ => a) f
-
-Depends on / 依赖: tendsto_diag_uniformity
+  mem_map.2 <| univ_mem' fun _ => refl_mem_uniformity hs
+/-
+**tendsto_const_uniformity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tendsto_const_uniformity {a : α} {f : Filter β} : Tendsto (fun _ => (a, a)
+) f (𝓤 α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `tendsto_diag_uniformity`：tendsto_diag_uniformity (f : β -> α) (l : Filte
+r β) : Tendsto (fun x => (f x, f x)) l (𝓤 α)
 -/
 theorem tendsto_const_uniformity {a : α} {f : Filter β} : Tendsto (fun _ => (a, a)) f (𝓤 α) :=
   tendsto_diag_uniformity (fun _ => a) f
-
-/--
-theorem `symm_of_uniformity` / 定理 `symm_of_uniformity`
-
-English:
-theorem symm_of_uniformity
-  given: {s : SetRel α α} (hs : s in 𝓤 α)
-  proof: have : preimage Prod.swap s in 𝓤 α := symm_le_uniformity hs
-  ⟨s inter preimage Prod.swap s, inter_mem hs this, ⟨fun _ _ ⟨h₁, h₂⟩ => ⟨h₂, h₁⟩⟩, inter_subset_left⟩
-
-中文:
-定理 symm_of_uniformity
-  条件: {s : SetRel α α} (hs : s in 𝓤 α)
-  证明: have : preimage Prod.swap s in 𝓤 α := symm_le_uniformity hs
-  ⟨s inter preimage Prod.swap s, inter_mem hs this, ⟨fun _ _ ⟨h₁, h₂⟩ => ⟨h₂, h₁⟩⟩, inter_subset_left⟩
-
-Depends on / 依赖: Prod.swap, inter_mem, inter_subset_left, preimage, symm_le_uniformity
+/-
+**symm_of_uniformity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：symm_of_uniformity {s : SetRel α α} (hs : s in 𝓤 α) : exists t in 𝓤 α, Set
+Rel.IsSymm t ∧ t subseteq s
+参数：hs : s in 𝓤 α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `symm_le_uniformity`：symm_le_uniformity : map (@Prod.swap α α) (𝓤 _) <= 𝓤
+ _
+· 使用定理 `Filter.inter_mem`：inter_mem (hs : s in f) (ht : t in f) : s inter t in f
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
 -/
-theorem symm_of_uniformity {s : SetRel α α} (hs : s in 𝓤 α) :
-    exists t in 𝓤 α, SetRel.IsSymm t ∧ t subseteq s :=
-  have : preimage Prod.swap s in 𝓤 α := symm_le_uniformity hs
-  ⟨s inter preimage Prod.swap s, inter_mem hs this, ⟨fun _ _ ⟨h₁, h₂⟩ => ⟨h₂, h₁⟩⟩, inter_subset_left⟩
-
-/--
-theorem `comp_symm_of_uniformity` / 定理 `comp_symm_of_uniformity`
-
-English:
-theorem comp_symm_of_uniformity
-  given: {s : SetRel α α} (hs : s in 𝓤 α)
-  proof: let ⟨_t, ht₁, ht₂⟩ := comp_mem_uniformity_sets hs
-  let ⟨t', ht', _, ht'₂⟩ := symm_of_uniformity ht₁
-  ⟨t', ht', SetRel.symm _, Subset.trans (monotone_id.relComp monotone_id ht'₂) ht₂⟩
-
-中文:
-定理 comp_symm_of_uniformity
-  条件: {s : SetRel α α} (hs : s in 𝓤 α)
-  证明: let ⟨_t, ht₁, ht₂⟩ := comp_mem_uniformity_sets hs
-  let ⟨t', ht', _, ht'₂⟩ := symm_of_uniformity ht₁
-  ⟨t', ht', SetRel.symm _, Subset.trans (monotone_id.relComp monotone_id ht'₂) ht₂⟩
-
-Depends on / 依赖: SetRel, SetRel.symm, Subset, Subset.trans, comp_mem_uniformity_sets, monotone_id, monotone_id.relComp, relComp, symm_of_uniformity
+theorem symm_of_uniformity {s : SetRel α α} (hs : s ∈ 𝓤 α) :
+    ∃ t ∈ 𝓤 α, SetRel.IsSymm t ∧ t ⊆ s :=
+  have : preimage Prod.swap s ∈ 𝓤 α := symm_le_uniformity hs
+  ⟨s ∩ preimage Prod.swap s, inter_mem hs this, ⟨fun _ _ ⟨h₁, h₂⟩ => ⟨h₂, h₁⟩⟩, inter_subset_left⟩
+/-
+**comp_symm_of_uniformity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：comp_symm_of_uniformity {s : SetRel α α} (hs : s in 𝓤 α) : exists t in 𝓤 α
+, (forall {a b}, (a, b) in t -> (b, a) in t) ∧ t ○ t subseteq s
+参数：hs : s in 𝓤 α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `comp_mem_uniformity_sets`：comp_mem_uniformity_sets {s : SetRel α α} (hs 
+: s in 𝓤 α) : exists t in 𝓤 α, t ○ t subseteq s
+· 使用定理 `symm_of_uniformity`：symm_of_uniformity {s : SetRel α α} (hs : s in 𝓤 α) 
+: exists t in 𝓤 α, SetRel.IsSymm t ∧ t subseteq s
+· 使用定理 `SetRel.symm`：∀ {α : Type u_1} (R : SetRel α α) {a b : α} [R.IsSymm], (a,
+ b) ∈ R → (b, a) ∈ R
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `Monotone.relComp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {ι : Ty
+pe u_6} [inst : Preorder ι] {f : ι → SetRel α β}   {g : ι → SetRel β γ}, Monoton
+e f → …
+· 使用定理 `monotone_id`：monotone_id [Preorder α] : Monotone (id : α -> α)
 -/
-theorem comp_symm_of_uniformity {s : SetRel α α} (hs : s in 𝓤 α) :
-    exists t in 𝓤 α, (forall {a b}, (a, b) in t -> (b, a) in t) ∧ t ○ t subseteq s :=
+theorem comp_symm_of_uniformity {s : SetRel α α} (hs : s ∈ 𝓤 α) :
+    ∃ t ∈ 𝓤 α, (∀ {a b}, (a, b) ∈ t → (b, a) ∈ t) ∧ t ○ t ⊆ s :=
   let ⟨_t, ht₁, ht₂⟩ := comp_mem_uniformity_sets hs
   let ⟨t', ht', _, ht'₂⟩ := symm_of_uniformity ht₁
   ⟨t', ht', SetRel.symm _, Subset.trans (monotone_id.relComp monotone_id ht'₂) ht₂⟩
-
-/--
-theorem `uniformity_le_symm` / 定理 `uniformity_le_symm`
-
-English:
-theorem uniformity_le_symm
-  statement: 𝓤 α <= map Prod.swap (𝓤 α)
-  proof: by
-  rw [map_swap_eq_comap_swap]; exact tendsto_swap_uniformity.le_comap
-
-中文:
-定理 uniformity_le_symm
-  结论: 𝓤 α <= map 积类型.swap (𝓤 α)
-  证明: by
-  rw [map_swap_eq_comap_swap]; exact tendsto_swap_uniformity.le_comap
-
-Depends on / 依赖: le_comap, map_swap_eq_comap_swap, tendsto_swap_uniformity, tendsto_swap_uniformity.le_comap
+/-
+**uniformity_le_symm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：uniformity_le_symm : 𝓤 α <= map Prod.swap (𝓤 α)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.map_swap_eq_comap_swap`：map_swap_eq_comap_swap {f : Filter (α × β
+)} : map Prod.swap f = comap Prod.swap f
+· 使用定理 `Filter.Tendsto.le_comap`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {l₁
+ : Filter α} {l₂ : Filter β},   Filter.Tendsto f l₁ l₂ → l₁ ≤ Filter.comap f l₂
+· 使用定理 `tendsto_swap_uniformity`：tendsto_swap_uniformity : Tendsto (@Prod.swap α
+ α) (𝓤 α) (𝓤 α)
 -/
-theorem uniformity_le_symm : 𝓤 α <= map Prod.swap (𝓤 α) := by
+theorem uniformity_le_symm : 𝓤 α ≤ map Prod.swap (𝓤 α) := by
   rw [map_swap_eq_comap_swap]; exact tendsto_swap_uniformity.le_comap
-
-/--
-theorem `uniformity_eq_symm` / 定理 `uniformity_eq_symm`
-
-English:
-theorem uniformity_eq_symm
-  statement: 𝓤 α = map Prod.swap (𝓤 α)
-  proof: le_antisymm uniformity_le_symm symm_le_uniformity
-
-@[simp]
-
-中文:
-定理 uniformity_eq_symm
-  结论: 𝓤 α = map 积类型.swap (𝓤 α)
-  证明: le_antisymm uniformity_le_symm symm_le_uniformity
-
-@[simp]
-
-Depends on / 依赖: le_antisymm, symm_le_uniformity, uniformity_le_symm
+/-
+**uniformity_eq_symm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：uniformity_eq_symm : 𝓤 α = map Prod.swap (𝓤 α)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `uniformity_le_symm`：uniformity_le_symm : 𝓤 α <= map Prod.swap (𝓤 α)
+· 使用定理 `symm_le_uniformity`：symm_le_uniformity : map (@Prod.swap α α) (𝓤 _) <= 𝓤
+ _
 -/
 theorem uniformity_eq_symm : 𝓤 α = map Prod.swap (𝓤 α) :=
   le_antisymm uniformity_le_symm symm_le_uniformity
 
 @[simp]
-/--
-theorem `comap_swap_uniformity` / 定理 `comap_swap_uniformity`
-
-English:
-theorem comap_swap_uniformity
-  statement: comap (@Prod.swap α α) (𝓤 α) = 𝓤 α
-  proof: (congr_arg _ uniformity_eq_symm).trans comap_map Prod.swap_injective
-
-中文:
-定理 comap_swap_uniformity
-  结论: comap (@积类型.swap α α) (𝓤 α) = 𝓤 α
-  证明: (congr_arg _ uniformity_eq_symm).trans comap_map Prod.swap_injective
-
-Depends on / 依赖: Prod.swap_injective, comap_map, congr_arg, swap_injective, uniformity_eq_symm
+/-
+**comap_swap_uniformity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：comap_swap_uniformity : comap (@Prod.swap α α) (𝓤 α) = 𝓤 α
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `uniformity_eq_symm`：uniformity_eq_symm : 𝓤 α = map Prod.swap (𝓤 α)
+· 使用定理 `Filter.comap_map`：comap_map {f : Filter α} {m : α -> β} (h : Injective m
+) : comap m (map m f) = f
+· 使用定理 `Prod.swap_injective`：swap_injective : Function.Injective (@swap α β)
 -/
 theorem comap_swap_uniformity : comap (@Prod.swap α α) (𝓤 α) = 𝓤 α :=
-(congr_arg _ uniformity_eq_symm).trans comap_map Prod.swap_injective
-
-/--
-theorem `symmetrize_mem_uniformity` / 定理 `symmetrize_mem_uniformity`
-
-English:
-theorem symmetrize_mem_uniformity
-  given: {V : SetRel α α} (h : V in 𝓤 α)
-  statement: SetRel.symmetrize V in 𝓤 α
-  proof: by
-  apply (𝓤 α).inter_sets h
-  rw [← comap_swap_uniformity]
-  exact preimage_mem_comap h
-
-中文:
-定理 symmetrize_mem_uniformity
-  条件: {V : SetRel α α} (h : V in 𝓤 α)
-  结论: SetRel.symmetrize V in 𝓤 α
-  证明: by
-  apply (𝓤 α).inter_sets h
-  rw [← comap_swap_uniformity]
-  exact preimage_mem_comap h
-
-Depends on / 依赖: comap_swap_uniformity, inter_sets, preimage_mem_comap
+  (congr_arg _ uniformity_eq_symm).trans <| comap_map Prod.swap_injective
+/-
+**symmetrize_mem_uniformity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：symmetrize_mem_uniformity {V : SetRel α α} (h : V in 𝓤 α) : SetRel.symmetr
+ize V in 𝓤 α
+参数：h : V in 𝓤 α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.inter_sets`：∀ {α : Type u_1} (self : Filter α) {x y : Set α}, x ∈
+ self.sets → y ∈ self.sets → x ∩ y ∈ self.sets
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `comap_swap_uniformity`：comap_swap_uniformity : comap (@Prod.swap α α) (𝓤
+ α) = 𝓤 α
+· 使用定理 `Filter.preimage_mem_comap`：preimage_mem_comap (ht : t in g) : m ⁻¹' t in
+ comap m g
 -/
-theorem symmetrize_mem_uniformity {V : SetRel α α} (h : V in 𝓤 α) : SetRel.symmetrize V in 𝓤 α := by
+theorem symmetrize_mem_uniformity {V : SetRel α α} (h : V ∈ 𝓤 α) : SetRel.symmetrize V ∈ 𝓤 α := by
   apply (𝓤 α).inter_sets h
   rw [← comap_swap_uniformity]
   exact preimage_mem_comap h
 
-/--
-theorem `UniformSpace.hasBasis_symmetric` / 定理 `UniformSpace.hasBasis_symmetric`
+/-- Symmetric entourages form a basis of `𝓤 α` -/
+/-
+**UniformSpace.hasBasis_symmetric** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：UniformSpace.hasBasis_symmetric : (𝓤 α).HasBasis (fun s : SetRel α α => s 
+in 𝓤 α ∧ SetRel.IsSymm s) id
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.hasBasis_self`：hasBasis_self {l : Filter α} {P : Set α -> Prop} :
+ HasBasis l (fun s => s in l ∧ P s) id ↔ forall t in l, exists r in l, P r ∧ r s
+ubseteq t
+· 使用定理 `symmetrize_mem_uniformity`：symmetrize_mem_uniformity {V : SetRel α α} (h
+ : V in 𝓤 α) : SetRel.symmetrize V in 𝓤 α
+· 使用引理 `SetRel.symmetrize_subset_self`：symmetrize_subset_self : R.symmetrize sub
+seteq R
 
-English:
-theorem UniformSpace.hasBasis_symmetric
-  proof: hasBasis_self.2 fun t t_in =>
-    ⟨SetRel.symmetrize t, symmetrize_mem_uniformity t_in, inferInstance,
-      SetRel.symmetrize_subset_self⟩
-
-中文:
-定理 一致空间.hasBasis_symmetric
-  证明: hasBasis_self.2 fun t t_in =>
-    ⟨SetRel.symmetrize t, symmetrize_mem_uniformity t_in, inferInstance,
-      SetRel.symmetrize_subset_self⟩
-
-Depends on / 依赖: SetRel, SetRel.symmetrize, SetRel.symmetrize_subset_self, hasBasis_self, symmetrize, symmetrize_mem_uniformity, symmetrize_subset_self, t_in
+--- 原说明 ---
+Symmetric entourages form a basis of `𝓤 α`
 -/
 theorem UniformSpace.hasBasis_symmetric :
-    (𝓤 α).HasBasis (fun s : SetRel α α => s in 𝓤 α ∧ SetRel.IsSymm s) id :=
+    (𝓤 α).HasBasis (fun s : SetRel α α => s ∈ 𝓤 α ∧ SetRel.IsSymm s) id :=
   hasBasis_self.2 fun t t_in =>
     ⟨SetRel.symmetrize t, symmetrize_mem_uniformity t_in, inferInstance,
       SetRel.symmetrize_subset_self⟩
-
-/--
-theorem `uniformity_lift_le_swap` / 定理 `uniformity_lift_le_swap`
-
-English:
-theorem uniformity_lift_le_swap
-  statement: {g : SetRel α α -> Filter β} {f : Filter β} (hg : Monotone g)
-  proof: calc
-    (𝓤 α).lift g <= (Filter.map (@Prod.swap α α) <| 𝓤 α).lift g :=
-      lift_mono uniformity_le_symm le_rfl
-    _ <= _ := by rw [map_lift_eq2 hg, image_swap_eq_preimage_swap]; exact h
-
-中文:
-定理 uniformity_lift_le_swap
-  结论: {g : SetRel α α -> 滤子 β} {f : 滤子 β} (hg : 递增 g)
-  证明: calc
-    (𝓤 α).lift g <= (Filter.map (@Prod.swap α α) <| 𝓤 α).lift g :=
-      lift_mono uniformity_le_symm le_rfl
-    _ <= _ := by rw [map_lift_eq2 hg, image_swap_eq_preimage_swap]; exact h
-
-Depends on / 依赖: Filter, Filter.map, Prod.swap, image_swap_eq_preimage_swap, le_rfl, lift_mono, map_lift_eq2, uniformity_le_symm
+/-
+**uniformity_lift_le_swap** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：uniformity_lift_le_swap {g : SetRel α α -> Filter β} {f : Filter β} (hg : 
+Monotone g) (h : ((𝓤 α).lift fun s => g (preimage Prod.swap s)) <= f) : (𝓤 α).li
+ft g <= f
+参数：hg : Monotone g；h : ((𝓤 α).lift fun s => g (preimage Prod.swap s)) <= f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.lift_mono`：lift_mono (hf : f₁ <= f₂) (hg : g₁ <= g₂) : f₁.lift g₁
+ <= f₂.lift g₂
+· 使用定理 `uniformity_le_symm`：uniformity_le_symm : 𝓤 α <= map Prod.swap (𝓤 α)
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.map_lift_eq2`：map_lift_eq2 {g : Set β -> Filter γ} {m : α -> β} (
+hg : Monotone g) : (map m f).lift g = f.lift (g ∘ image m)
+· 使用定理 `Set.image_swap_eq_preimage_swap`：image_swap_eq_preimage_swap : image (@P
+rod.swap α β) = preimage Prod.swap
 -/
-theorem uniformity_lift_le_swap {g : SetRel α α -> Filter β} {f : Filter β} (hg : Monotone g)
-    (h : ((𝓤 α).lift fun s => g (preimage Prod.swap s)) <= f) : (𝓤 α).lift g <= f :=
+theorem uniformity_lift_le_swap {g : SetRel α α → Filter β} {f : Filter β} (hg : Monotone g)
+    (h : ((𝓤 α).lift fun s => g (preimage Prod.swap s)) ≤ f) : (𝓤 α).lift g ≤ f :=
   calc
-    (𝓤 α).lift g <= (Filter.map (@Prod.swap α α) <| 𝓤 α).lift g :=
+    (𝓤 α).lift g ≤ (Filter.map (@Prod.swap α α) <| 𝓤 α).lift g :=
       lift_mono uniformity_le_symm le_rfl
-    _ <= _ := by rw [map_lift_eq2 hg, image_swap_eq_preimage_swap]; exact h
-
-/--
-theorem `uniformity_lift_le_comp` / 定理 `uniformity_lift_le_comp`
-
-English:
-theorem uniformity_lift_le_comp
-  given: {f : SetRel α α -> Filter β} (h : Monotone f)
-  proof: calc
-    ((𝓤 α).lift fun s => f (s ○ s)) = ((𝓤 α).lift' fun s : SetRel α α => s ○ s).lift f := by
-      rw [lift_lift'_assoc]
-      · exact monotone_id.relComp monotone_id
-      · exact h
-    _ <= (𝓤 α).lift f := lift_mono comp_le_uniformity le_rfl
-
-中文:
-定理 uniformity_lift_le_comp
-  条件: {f : SetRel α α -> 滤子 β} (h : 递增 f)
-  证明: calc
-    ((𝓤 α).lift fun s => f (s ○ s)) = ((𝓤 α).lift' fun s : SetRel α α => s ○ s).lift f := by
-      rw [lift_lift'_assoc]
-      · exact monotone_id.relComp monotone_id
-      · exact h
-    _ <= (𝓤 α).lift f := lift_mono comp_le_uniformity le_rfl
-
-Depends on / 依赖: SetRel, _assoc, comp_le_uniformity, le_rfl, lift_lift, lift_mono, monotone_id, monotone_id.relComp, relComp
+    _ ≤ _ := by rw [map_lift_eq2 hg, image_swap_eq_preimage_swap]; exact h
+/-
+**uniformity_lift_le_comp** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：uniformity_lift_le_comp {f : SetRel α α -> Filter β} (h : Monotone f) : ((
+𝓤 α).lift fun s => f (s ○ s)) <= (𝓤 α).lift f
+参数：h : Monotone f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.lift'`：lift'_top (h : Set α -> Set β) : (⊤ : Filter α).lift' h = 
+𝓟 (h univ)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.lift_lift'_assoc`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} 
+{f : Filter α} {g : Set α → Set β} {h : Set β → Filter γ},   Monotone g → Monoto
+ne h → (f.lif…
+· 使用定理 `Monotone.relComp`：∀ {α : Type u_1} {β : Type u_2} {γ : Type u_3} {ι : Ty
+pe u_6} [inst : Preorder ι] {f : ι → SetRel α β}   {g : ι → SetRel β γ}, Monoton
+e f → …
+· 使用定理 `monotone_id`：monotone_id [Preorder α] : Monotone (id : α -> α)
+· 使用定理 `Filter.lift_mono`：lift_mono (hf : f₁ <= f₂) (hg : g₁ <= g₂) : f₁.lift g₁
+ <= f₂.lift g₂
+· 使用定理 `comp_le_uniformity`：comp_le_uniformity : ((𝓤 α).lift' fun s : SetRel α α
+ => s ○ s) <= 𝓤 α
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem uniformity_lift_le_comp {f : SetRel α α -> Filter β} (h : Monotone f) :
-    ((𝓤 α).lift fun s => f (s ○ s)) <= (𝓤 α).lift f :=
+theorem uniformity_lift_le_comp {f : SetRel α α → Filter β} (h : Monotone f) :
+    ((𝓤 α).lift fun s => f (s ○ s)) ≤ (𝓤 α).lift f :=
   calc
     ((𝓤 α).lift fun s => f (s ○ s)) = ((𝓤 α).lift' fun s : SetRel α α => s ○ s).lift f := by
       rw [lift_lift'_assoc]
       · exact monotone_id.relComp monotone_id
       · exact h
-    _ <= (𝓤 α).lift f := lift_mono comp_le_uniformity le_rfl
-
-/--
-theorem `comp3_mem_uniformity` / 定理 `comp3_mem_uniformity`
-
-English:
-theorem comp3_mem_uniformity
-  given: {s : SetRel α α} (hs : s in 𝓤 α)
-  statement: exists t in 𝓤 α, t ○ (t ○ t) subseteq s
-  proof: let ⟨_t', ht', ht's⟩ := comp_mem_uniformity_sets hs
-  let ⟨t, ht, htt'⟩ := comp_mem_uniformity_sets ht'
-  have := isRefl_of_mem_uniformity ht
-  ⟨t, ht, (SetRel.comp_subset_comp (SetRel.left_subset_comp.trans htt') htt').trans ht's⟩
-
-中文:
-定理 comp3_mem_uniformity
-  条件: {s : SetRel α α} (hs : s in 𝓤 α)
-  结论: 存在 t in 𝓤 α, t ○ (t ○ t) subseteq s
-  证明: let ⟨_t', ht', ht's⟩ := comp_mem_uniformity_sets hs
-  let ⟨t, ht, htt'⟩ := comp_mem_uniformity_sets ht'
-  have := isRefl_of_mem_uniformity ht
-  ⟨t, ht, (SetRel.comp_subset_comp (SetRel.left_subset_comp.trans htt') htt').trans ht's⟩
-
-Depends on / 依赖: SetRel, SetRel.comp_subset_comp, SetRel.left_subset_comp.trans, comp_mem_uniformity_sets, comp_subset_comp, isRefl_of_mem_uniformity, left_subset_comp
+    _ ≤ (𝓤 α).lift f := lift_mono comp_le_uniformity le_rfl
+/-
+**comp3_mem_uniformity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：comp3_mem_uniformity {s : SetRel α α} (hs : s in 𝓤 α) : exists t in 𝓤 α, t
+ ○ (t ○ t) subseteq s
+参数：hs : s in 𝓤 α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `comp_mem_uniformity_sets`：comp_mem_uniformity_sets {s : SetRel α α} (hs 
+: s in 𝓤 α) : exists t in 𝓤 α, t ○ t subseteq s
+· 使用定理 `isRefl_of_mem_uniformity`：isRefl_of_mem_uniformity {s : SetRel α α} (h :
+ s in 𝓤 α) : s.IsRefl
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用引理 `SetRel.comp_subset_comp`：comp_subset_comp {S₁ S₂ : SetRel β γ} (hR : R₁ 
+subseteq R₂) (hS : S₁ subseteq S₂) : R₁ ○ S₁ subseteq R₂ ○ S₂
+· 使用引理 `SetRel.left_subset_comp`：left_subset_comp {R : SetRel α β} [S.IsRefl] : 
+R subseteq R ○ S
 -/
-theorem comp3_mem_uniformity {s : SetRel α α} (hs : s in 𝓤 α) : exists t in 𝓤 α, t ○ (t ○ t) subseteq s :=
+theorem comp3_mem_uniformity {s : SetRel α α} (hs : s ∈ 𝓤 α) : ∃ t ∈ 𝓤 α, t ○ (t ○ t) ⊆ s :=
   let ⟨_t', ht', ht's⟩ := comp_mem_uniformity_sets hs
   let ⟨t, ht, htt'⟩ := comp_mem_uniformity_sets ht'
   have := isRefl_of_mem_uniformity ht
   ⟨t, ht, (SetRel.comp_subset_comp (SetRel.left_subset_comp.trans htt') htt').trans ht's⟩
 
-/--
-theorem `comp_le_uniformity3` / 定理 `comp_le_uniformity3`
+/-- See also `comp3_mem_uniformity`. -/
+/-
+**comp_le_uniformity3** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：comp_le_uniformity3 : ((𝓤 α).lift' fun s : SetRel α α => s ○ (s ○ s)) <= 𝓤
+ α
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.lift'`：lift'_top (h : Set α -> Set β) : (⊤ : Filter α).lift' h = 
+𝓟 (h univ)
+· 使用定理 `comp3_mem_uniformity`：comp3_mem_uniformity {s : SetRel α α} (hs : s in 𝓤
+ α) : exists t in 𝓤 α, t ○ (t ○ t) subseteq s
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
+· 使用定理 `Filter.mem_lift'`：mem_lift' {t : Set α} (ht : t in f) : h t in f.lift' h
 
-English:
-theorem comp_le_uniformity3
-  statement: ((𝓤 α).lift' fun s : SetRel α α => s ○ (s ○ s)) <= 𝓤 α
-  proof: fun _ h =>
+--- 原说明 ---
+See also `comp3_mem_uniformity`.
+-/
+theorem comp_le_uniformity3 : ((𝓤 α).lift' fun s : SetRel α α => s ○ (s ○ s)) ≤ 𝓤 α := fun _ h =>
   let ⟨_t, htU, ht⟩ := comp3_mem_uniformity h
   mem_of_superset (mem_lift' htU) ht
 
-中文:
-定理 comp_le_uniformity3
-  结论: ((𝓤 α).lift' fun s : SetRel α α => s ○ (s ○ s)) <= 𝓤 α
-  证明: fun _ h =>
-  let ⟨_t, htU, ht⟩ := comp3_mem_uniformity h
-  mem_of_superset (mem_lift' htU) ht
+/-- See also `comp_open_symm_mem_uniformity_sets`. -/
+/-
+**comp_symm_mem_uniformity_sets** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：comp_symm_mem_uniformity_sets {s : SetRel α α} (hs : s in 𝓤 α) : exists t 
+in 𝓤 α, SetRel.IsSymm t ∧ t ○ t subseteq s
+参数：hs : s in 𝓤 α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `comp_mem_uniformity_sets`：comp_mem_uniformity_sets {s : SetRel α α} (hs 
+: s in 𝓤 α) : exists t in 𝓤 α, t ○ t subseteq s
+· 使用定理 `symmetrize_mem_uniformity`：symmetrize_mem_uniformity {V : SetRel α α} (h
+ : V in 𝓤 α) : SetRel.symmetrize V in 𝓤 α
+· 使用引理 `SetRel.symmetrize_subset_self`：symmetrize_subset_self : R.symmetrize sub
+seteq R
+· 使用引理 `SetRel.comp_subset_comp`：comp_subset_comp {S₁ S₂ : SetRel β γ} (hR : R₁ 
+subseteq R₂) (hS : S₁ subseteq S₂) : R₁ ○ S₁ subseteq R₂ ○ S₂
+
+--- 原说明 ---
+See also `comp_open_symm_mem_uniformity_sets`.
 -/
-theorem comp_le_uniformity3 : ((𝓤 α).lift' fun s : SetRel α α => s ○ (s ○ s)) <= 𝓤 α := fun _ h =>
-  let ⟨_t, htU, ht⟩ := comp3_mem_uniformity h
-  mem_of_superset (mem_lift' htU) ht
-
-/--
-theorem `comp_symm_mem_uniformity_sets` / 定理 `comp_symm_mem_uniformity_sets`
-
-English:
-theorem comp_symm_mem_uniformity_sets
-  given: {s : SetRel α α} (hs : s in 𝓤 α)
-  proof: by
-  obtain ⟨w, w_in, w_sub⟩ : exists w in 𝓤 α, w ○ w subseteq s := comp_mem_uniformity_sets hs
+theorem comp_symm_mem_uniformity_sets {s : SetRel α α} (hs : s ∈ 𝓤 α) :
+    ∃ t ∈ 𝓤 α, SetRel.IsSymm t ∧ t ○ t ⊆ s := by
+  obtain ⟨w, w_in, w_sub⟩ : ∃ w ∈ 𝓤 α, w ○ w ⊆ s := comp_mem_uniformity_sets hs
   use SetRel.symmetrize w, symmetrize_mem_uniformity w_in, inferInstance
-  have : SetRel.symmetrize w subseteq w := SetRel.symmetrize_subset_self
+  have : SetRel.symmetrize w ⊆ w := SetRel.symmetrize_subset_self
   calc SetRel.symmetrize w ○ SetRel.symmetrize w
-    _ subseteq w ○ w := by gcongr
-    _ subseteq s := w_sub
-
-中文:
-定理 comp_symm_mem_uniformity_sets
-  条件: {s : SetRel α α} (hs : s in 𝓤 α)
-  证明: by
-  obtain ⟨w, w_in, w_sub⟩ : exists w in 𝓤 α, w ○ w subseteq s := comp_mem_uniformity_sets hs
-  use SetRel.symmetrize w, symmetrize_mem_uniformity w_in, inferInstance
-  have : SetRel.symmetrize w subseteq w := SetRel.symmetrize_subset_self
-  calc SetRel.symmetrize w ○ SetRel.symmetrize w
-    _ subseteq w ○ w := by gcongr
-    _ subseteq s := w_sub
-
-Depends on / 依赖: SetRel, SetRel.symmetrize, SetRel.symmetrize_subset_self, comp_mem_uniformity_sets, subseteq, symmetrize, symmetrize_mem_uniformity, symmetrize_subset_self, w_in, w_sub
+    _ ⊆ w ○ w := by gcongr
+    _ ⊆ s := w_sub
+/-
+**subset_comp_self_of_mem_uniformity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：subset_comp_self_of_mem_uniformity {s : SetRel α α} (h : s in 𝓤 α) : s sub
+seteq s ○ s
+参数：h : s in 𝓤 α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isRefl_of_mem_uniformity`：isRefl_of_mem_uniformity {s : SetRel α α} (h :
+ s in 𝓤 α) : s.IsRefl
+· 使用引理 `SetRel.left_subset_comp`：left_subset_comp {R : SetRel α β} [S.IsRefl] : 
+R subseteq R ○ S
 -/
-theorem comp_symm_mem_uniformity_sets {s : SetRel α α} (hs : s in 𝓤 α) :
-    exists t in 𝓤 α, SetRel.IsSymm t ∧ t ○ t subseteq s := by
-  obtain ⟨w, w_in, w_sub⟩ : exists w in 𝓤 α, w ○ w subseteq s := comp_mem_uniformity_sets hs
-  use SetRel.symmetrize w, symmetrize_mem_uniformity w_in, inferInstance
-  have : SetRel.symmetrize w subseteq w := SetRel.symmetrize_subset_self
-  calc SetRel.symmetrize w ○ SetRel.symmetrize w
-    _ subseteq w ○ w := by gcongr
-    _ subseteq s := w_sub
-
-/--
-theorem `subset_comp_self_of_mem_uniformity` / 定理 `subset_comp_self_of_mem_uniformity`
-
-English:
-theorem subset_comp_self_of_mem_uniformity
-  given: {s : SetRel α α} (h : s in 𝓤 α)
-  statement: s subseteq s ○ s
-  proof: have := isRefl_of_mem_uniformity h; SetRel.left_subset_comp
-
-中文:
-定理 subset_comp_self_of_mem_uniformity
-  条件: {s : SetRel α α} (h : s in 𝓤 α)
-  结论: s subseteq s ○ s
-  证明: have := isRefl_of_mem_uniformity h; SetRel.left_subset_comp
-
-Depends on / 依赖: SetRel, SetRel.left_subset_comp, isRefl_of_mem_uniformity, left_subset_comp
--/
-theorem subset_comp_self_of_mem_uniformity {s : SetRel α α} (h : s in 𝓤 α) : s subseteq s ○ s :=
+theorem subset_comp_self_of_mem_uniformity {s : SetRel α α} (h : s ∈ 𝓤 α) : s ⊆ s ○ s :=
   have := isRefl_of_mem_uniformity h; SetRel.left_subset_comp
-
-/--
-theorem `comp_comp_symm_mem_uniformity_sets` / 定理 `comp_comp_symm_mem_uniformity_sets`
-
-English:
-theorem comp_comp_symm_mem_uniformity_sets
-  given: {s : SetRel α α} (hs : s in 𝓤 α)
-  proof: by
-  rcases comp_symm_mem_uniformity_sets hs with ⟨w, w_in, _, w_sub⟩
-  rcases comp_symm_mem_uniformity_sets w_in with ⟨t, t_in, t_symm, t_sub⟩
-  use t, t_in, t_symm
-  have : t subseteq t ○ t := subset_comp_self_of_mem_uniformity t_in
-  calc
-    t ○ t ○ t subseteq w ○ (t ○ t) := by gcongr
-    _ subseteq w ○ w := by gcongr
-    _ subseteq s := w_sub
-
-中文:
-定理 comp_comp_symm_mem_uniformity_sets
-  条件: {s : SetRel α α} (hs : s in 𝓤 α)
-  证明: by
-  rcases comp_symm_mem_uniformity_sets hs with ⟨w, w_in, _, w_sub⟩
-  rcases comp_symm_mem_uniformity_sets w_in with ⟨t, t_in, t_symm, t_sub⟩
-  use t, t_in, t_symm
-  have : t subseteq t ○ t := subset_comp_self_of_mem_uniformity t_in
-  calc
-    t ○ t ○ t subseteq w ○ (t ○ t) := by gcongr
-    _ subseteq w ○ w := by gcongr
-    _ subseteq s := w_sub
-
-Depends on / 依赖: comp_symm_mem_uniformity_sets, subset_comp_self_of_mem_uniformity, subseteq, t_in, t_sub, t_symm, w_in, w_sub
+/-
+**comp_comp_symm_mem_uniformity_sets** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：comp_comp_symm_mem_uniformity_sets {s : SetRel α α} (hs : s in 𝓤 α) : exis
+ts t in 𝓤 α, SetRel.IsSymm t ∧ t ○ t ○ t subseteq s
+参数：hs : s in 𝓤 α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `comp_symm_mem_uniformity_sets`：comp_symm_mem_uniformity_sets {s : SetRel
+ α α} (hs : s in 𝓤 α) : exists t in 𝓤 α, SetRel.IsSymm t ∧ t ○ t subseteq s
+· 使用定理 `subset_comp_self_of_mem_uniformity`：subset_comp_self_of_mem_uniformity {
+s : SetRel α α} (h : s in 𝓤 α) : s subseteq s ○ s
+· 使用引理 `SetRel.comp_subset_comp`：comp_subset_comp {S₁ S₂ : SetRel β γ} (hR : R₁ 
+subseteq R₂) (hS : S₁ subseteq S₂) : R₁ ○ S₁ subseteq R₂ ○ S₂
+· 使用引理 `SetRel.comp_subset_comp_right`：comp_subset_comp_right {S₁ S₂ : SetRel β 
+γ} (hS : S₁ subseteq S₂) : R ○ S₁ subseteq R ○ S₂
 -/
-theorem comp_comp_symm_mem_uniformity_sets {s : SetRel α α} (hs : s in 𝓤 α) :
-    exists t in 𝓤 α, SetRel.IsSymm t ∧ t ○ t ○ t subseteq s := by
+theorem comp_comp_symm_mem_uniformity_sets {s : SetRel α α} (hs : s ∈ 𝓤 α) :
+    ∃ t ∈ 𝓤 α, SetRel.IsSymm t ∧ t ○ t ○ t ⊆ s := by
   rcases comp_symm_mem_uniformity_sets hs with ⟨w, w_in, _, w_sub⟩
   rcases comp_symm_mem_uniformity_sets w_in with ⟨t, t_in, t_symm, t_sub⟩
   use t, t_in, t_symm
-  have : t subseteq t ○ t := subset_comp_self_of_mem_uniformity t_in
+  have : t ⊆ t ○ t := subset_comp_self_of_mem_uniformity t_in
   calc
-    t ○ t ○ t subseteq w ○ (t ○ t) := by gcongr
-    _ subseteq w ○ w := by gcongr
-    _ subseteq s := w_sub
+    t ○ t ○ t ⊆ w ○ (t ○ t) := by gcongr
+    _ ⊆ w ○ w := by gcongr
+    _ ⊆ s := w_sub
 
 /-!
 ### Balls in uniform spaces
@@ -1311,283 +1130,185 @@ theorem comp_comp_symm_mem_uniformity_sets {s : SetRel α α} (hs : s in 𝓤 α
 
 namespace UniformSpace
 
-/--
-Definition of `ball` / `ball` 的定义
+/-- The ball around `(x : β)` with respect to `(V : Set (β × β))`. Intended to be
+used for `V ∈ 𝓤 β`, but this is not needed for the definition. Recovers the
+notions of metric space ball when `V = {p | dist p.1 p.2 < r }`. -/
+/-
+**UniformSpace.ball** 是 Mathlib 中的一个定义，位于命名空间 `UniformSpace`。
+形式化陈述：ball (x : β) (V : Set (β × β)) : Set β
+参数：x : β；V : Set (β × β)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ball
-  signature: (x : β) (V : Set (β × β))
-  body: Prod.mk x ⁻¹' V
-
-中文:
-定义 ball
-  签名: (x : β) (V : 集合 (β × β))
-  定义体: Prod.mk x ⁻¹' V
-
-Depends on / 依赖: Prod.mk
+--- 原说明 ---
+The ball around `(x : β)` with respect to `(V : Set (β × β))`. Intended to be
+used for `V ∈ 𝓤 β`, but this is not needed for the definition. Recovers the
+notions of metric space ball when `V = {p | dist p.1 p.2 < r }`.
 -/
 def ball (x : β) (V : Set (β × β)) : Set β := Prod.mk x ⁻¹' V
 
 open UniformSpace (ball)
-
-/--
-lemma `mem_ball_self` / 引理 `mem_ball_self`
-
-English:
-lemma mem_ball_self
-  given: (x : α) {V : SetRel α α}
-  statement: V in 𝓤 α -> x in ball x V
-  proof: refl_mem_uniformity
-
-中文:
-引理 mem_ball_self
-  条件: (x : α) {V : SetRel α α}
-  结论: V in 𝓤 α -> x in ball x V
-  证明: refl_mem_uniformity
-
-Depends on / 依赖: refl_mem_uniformity
+/-
+**UniformSpace.mem_ball_self** 是 Mathlib 中的一个引理，位于命名空间 `UniformSpace`。
+形式化陈述：mem_ball_self (x : α) {V : SetRel α α} : V in 𝓤 α -> x in ball x V
+参数：x : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `refl_mem_uniformity`：refl_mem_uniformity {x : α} {s : SetRel α α} (h : s
+ in 𝓤 α) : (x, x) in s
 -/
-lemma mem_ball_self (x : α) {V : SetRel α α} : V in 𝓤 α -> x in ball x V := refl_mem_uniformity
+lemma mem_ball_self (x : α) {V : SetRel α α} : V ∈ 𝓤 α → x ∈ ball x V := refl_mem_uniformity
 
-/--
-theorem `mem_ball_comp` / 定理 `mem_ball_comp`
+/-- The triangle inequality for `UniformSpace.ball` -/
+/-
+**UniformSpace.mem_ball_comp** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpace`。
+形式化陈述：mem_ball_comp {V W : Set (β × β)} {x y z} (h : y in ball x V) (h' : z in b
+all y W) : z in ball x (V ○ W)
+参数：β × β；h : y in ball x V；h' : z in ball y W。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `SetRel.prodMk_mem_comp`：prodMk_mem_comp (hab : a ~[R] b) (hbc : b ~[S] c
+) : a ~[R ○ S] c
 
-English:
-theorem mem_ball_comp
-  given: {V W : Set (β × β)} {x y z} (h : y in ball x V) (h' : z in ball y W)
-  proof: SetRel.prodMk_mem_comp h h'
-
-中文:
-定理 mem_ball_comp
-  条件: {V W : 集合 (β × β)} {x y z} (h : y in ball x V) (h' : z in ball y W)
-  证明: SetRel.prodMk_mem_comp h h'
-
-Depends on / 依赖: SetRel, SetRel.prodMk_mem_comp, prodMk_mem_comp
+--- 原说明 ---
+The triangle inequality for `UniformSpace.ball`
 -/
-theorem mem_ball_comp {V W : Set (β × β)} {x y z} (h : y in ball x V) (h' : z in ball y W) :
-    z in ball x (V ○ W) :=
+theorem mem_ball_comp {V W : Set (β × β)} {x y z} (h : y ∈ ball x V) (h' : z ∈ ball y W) :
+    z ∈ ball x (V ○ W) :=
   SetRel.prodMk_mem_comp h h'
-
-/--
-theorem `ball_subset_of_comp_subset` / 定理 `ball_subset_of_comp_subset`
-
-English:
-theorem ball_subset_of_comp_subset
-  given: {V W : Set (β × β)} {x y} (h : x in ball y W) (h' : W ○ W subseteq V)
-  proof: fun _z z_in => h' (mem_ball_comp h z_in)
-
-中文:
-定理 ball_subset_of_comp_subset
-  条件: {V W : 集合 (β × β)} {x y} (h : x in ball y W) (h' : W ○ W subseteq V)
-  证明: fun _z z_in => h' (mem_ball_comp h z_in)
-
-Depends on / 依赖: mem_ball_comp, z_in
+/-
+**UniformSpace.ball_subset_of_comp_subset** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpac
+e`。
+形式化陈述：ball_subset_of_comp_subset {V W : Set (β × β)} {x y} (h : x in ball y W) (
+h' : W ○ W subseteq V) : ball x W subseteq ball y V
+参数：β × β；h : x in ball y W；h' : W ○ W subseteq V。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformSpace.mem_ball_comp`：mem_ball_comp {V W : Set (β × β)} {x y z} (h
+ : y in ball x V) (h' : z in ball y W) : z in ball x (V ○ W)
 -/
-theorem ball_subset_of_comp_subset {V W : Set (β × β)} {x y} (h : x in ball y W) (h' : W ○ W subseteq V) :
-    ball x W subseteq ball y V := fun _z z_in => h' (mem_ball_comp h z_in)
-
-/--
-theorem `ball_mono` / 定理 `ball_mono`
-
-English:
-theorem ball_mono
-  given: {V W : Set (β × β)} (h : V subseteq W) (x : β)
-  statement: ball x V subseteq ball x W
-  proof: preimage_mono h
-
-中文:
-定理 ball_mono
-  条件: {V W : 集合 (β × β)} (h : V subseteq W) (x : β)
-  结论: ball x V subseteq ball x W
-  证明: preimage_mono h
-
-Depends on / 依赖: preimage_mono
+theorem ball_subset_of_comp_subset {V W : Set (β × β)} {x y} (h : x ∈ ball y W) (h' : W ○ W ⊆ V) :
+    ball x W ⊆ ball y V := fun _z z_in => h' (mem_ball_comp h z_in)
+/-
+**UniformSpace.ball_mono** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpace`。
+形式化陈述：ball_mono {V W : Set (β × β)} (h : V subseteq W) (x : β) : ball x V subset
+eq ball x W
+参数：β × β；h : V subseteq W；x : β。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.preimage_mono`：preimage_mono {s t : Set β} (h : s subseteq t) : f ⁻¹
+' s subseteq f ⁻¹' t
 -/
-theorem ball_mono {V W : Set (β × β)} (h : V subseteq W) (x : β) : ball x V subseteq ball x W :=
+theorem ball_mono {V W : Set (β × β)} (h : V ⊆ W) (x : β) : ball x V ⊆ ball x W :=
   preimage_mono h
-
-/--
-theorem `ball_inter` / 定理 `ball_inter`
-
-English:
-theorem ball_inter
-  given: (x : β) (V W : Set (β × β))
-  statement: ball x (V inter W) = ball x V inter ball x W
-  proof: preimage_inter
-
-中文:
-定理 ball_inter
-  条件: (x : β) (V W : 集合 (β × β))
-  结论: ball x (V inter W) = ball x V inter ball x W
-  证明: preimage_inter
-
-Depends on / 依赖: preimage_inter
+/-
+**UniformSpace.ball_inter** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpace`。
+形式化陈述：ball_inter (x : β) (V W : Set (β × β)) : ball x (V inter W) = ball x V int
+er ball x W
+参数：x : β；V W : Set (β × β)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.preimage_inter`：preimage_inter {s t : Set β} : f ⁻¹' (s inter t) = f
+ ⁻¹' s inter f ⁻¹' t
 -/
-theorem ball_inter (x : β) (V W : Set (β × β)) : ball x (V inter W) = ball x V inter ball x W :=
+theorem ball_inter (x : β) (V W : Set (β × β)) : ball x (V ∩ W) = ball x V ∩ ball x W :=
   preimage_inter
-
-/--
-theorem `ball_inter_left` / 定理 `ball_inter_left`
-
-English:
-theorem ball_inter_left
-  given: (x : β) (V W : Set (β × β))
-  statement: ball x (V inter W) subseteq ball x V
-  proof: ball_mono inter_subset_left x
-
-中文:
-定理 ball_inter_left
-  条件: (x : β) (V W : 集合 (β × β))
-  结论: ball x (V inter W) subseteq ball x V
-  证明: ball_mono inter_subset_left x
-
-Depends on / 依赖: ball_mono, inter_subset_left
+/-
+**UniformSpace.ball_inter_left** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpace`。
+形式化陈述：ball_inter_left (x : β) (V W : Set (β × β)) : ball x (V inter W) subseteq 
+ball x V
+参数：x : β；V W : Set (β × β)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformSpace.ball_mono`：ball_mono {V W : Set (β × β)} (h : V subseteq W)
+ (x : β) : ball x V subseteq ball x W
+· 使用定理 `Set.inter_subset_left`：inter_subset_left {s t : Set α} : s inter t subse
+teq s
 -/
-theorem ball_inter_left (x : β) (V W : Set (β × β)) : ball x (V inter W) subseteq ball x V :=
+theorem ball_inter_left (x : β) (V W : Set (β × β)) : ball x (V ∩ W) ⊆ ball x V :=
   ball_mono inter_subset_left x
-
-/--
-theorem `ball_inter_right` / 定理 `ball_inter_right`
-
-English:
-theorem ball_inter_right
-  given: (x : β) (V W : Set (β × β))
-  statement: ball x (V inter W) subseteq ball x W
-  proof: ball_mono inter_subset_right x
-
-中文:
-定理 ball_inter_right
-  条件: (x : β) (V W : 集合 (β × β))
-  结论: ball x (V inter W) subseteq ball x W
-  证明: ball_mono inter_subset_right x
-
-Depends on / 依赖: ball_mono, inter_subset_right
+/-
+**UniformSpace.ball_inter_right** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpace`。
+形式化陈述：ball_inter_right (x : β) (V W : Set (β × β)) : ball x (V inter W) subseteq
+ ball x W
+参数：x : β；V W : Set (β × β)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformSpace.ball_mono`：ball_mono {V W : Set (β × β)} (h : V subseteq W)
+ (x : β) : ball x V subseteq ball x W
+· 使用定理 `Set.inter_subset_right`：inter_subset_right {s t : Set α} : s inter t sub
+seteq t
 -/
-theorem ball_inter_right (x : β) (V W : Set (β × β)) : ball x (V inter W) subseteq ball x W :=
+theorem ball_inter_right (x : β) (V W : Set (β × β)) : ball x (V ∩ W) ⊆ ball x W :=
   ball_mono inter_subset_right x
-
-/--
-theorem `ball_iInter` / 定理 `ball_iInter`
-
-English:
-theorem ball_iInter
-  given: {x : β} {V : ι -> Set (β × β)}
-  statement: ball x (⋂ i, V i) = ⋂ i, ball x (V i)
-  proof: preimage_iInter
-
-中文:
-定理 ball_i整数er
-  条件: {x : β} {V : ι -> 集合 (β × β)}
-  结论: ball x (⋂ i, V i) = ⋂ i, ball x (V i)
-  证明: preimage_iInter
-
-Depends on / 依赖: preimage_iInter
+/-
+**UniformSpace.ball_iInter** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpace`。
+形式化陈述：ball_iInter {x : β} {V : ι -> Set (β × β)} : ball x (⋂ i, V i) = ⋂ i, ball
+ x (V i)
+参数：β × β。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.preimage_iInter`：preimage_iInter {f : α -> β} {s : ι -> Set β} : (f 
+⁻¹' ⋂ i, s i) = ⋂ i, f ⁻¹' s i
 -/
-theorem ball_iInter {x : β} {V : ι -> Set (β × β)} : ball x (⋂ i, V i) = ⋂ i, ball x (V i) :=
+theorem ball_iInter {x : β} {V : ι → Set (β × β)} : ball x (⋂ i, V i) = ⋂ i, ball x (V i) :=
   preimage_iInter
-
-/--
-theorem `mem_ball_symmetry` / 定理 `mem_ball_symmetry`
-
-English:
-theorem mem_ball_symmetry
-  given: {V : SetRel β β} [V.IsSymm] {x y}
-  statement: x in ball y V ↔ y in ball x V
-  proof: V.comm
-
-中文:
-定理 mem_ball_symmetry
-  条件: {V : SetRel β β} [V.是Symm] {x y}
-  结论: x in ball y V ↔ y in ball x V
-  证明: V.comm
-
-Depends on / 依赖: V.comm
+/-
+**UniformSpace.mem_ball_symmetry** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpace`。
+形式化陈述：mem_ball_symmetry {V : SetRel β β} [V.IsSymm] {x y} : x in ball y V ↔ y in
+ ball x V
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetRel.comm`：∀ {α : Type u_1} (R : SetRel α α) {a b : α} [R.IsSymm], (a,
+ b) ∈ R ↔ (b, a) ∈ R
 -/
-theorem mem_ball_symmetry {V : SetRel β β} [V.IsSymm] {x y} : x in ball y V ↔ y in ball x V := V.comm
-
-/--
-theorem `ball_eq_of_symmetry` / 定理 `ball_eq_of_symmetry`
-
-English:
-theorem ball_eq_of_symmetry
-  given: {V : SetRel β β} [V.IsSymm] {x}
-  statement: ball x V = { y | (y, x) in V }
-  proof: by
+theorem mem_ball_symmetry {V : SetRel β β} [V.IsSymm] {x y} : x ∈ ball y V ↔ y ∈ ball x V := V.comm
+/-
+**UniformSpace.ball_eq_of_symmetry** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpace`。
+形式化陈述：ball_eq_of_symmetry {V : SetRel β β} [V.IsSymm] {x} : ball x V = { y | (y,
+ x) in V }
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UniformSpace.mem_ball_symmetry`：mem_ball_symmetry {V : SetRel β β} [V.Is
+Symm] {x y} : x in ball y V ↔ y in ball x V
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+-/
+theorem ball_eq_of_symmetry {V : SetRel β β} [V.IsSymm] {x} : ball x V = { y | (y, x) ∈ V } := by
   ext y
   rw [mem_ball_symmetry]
   exact Iff.rfl
-
-中文:
-定理 ball_eq_of_symmetry
-  条件: {V : SetRel β β} [V.是Symm] {x}
-  结论: ball x V = { y | (y, x) in V }
-  证明: by
-  ext y
-  rw [mem_ball_symmetry]
-  exact Iff.rfl
-
-Depends on / 依赖: Iff.rfl, mem_ball_symmetry
+/-
+**UniformSpace.mem_comp_of_mem_ball** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpace`。
+形式化陈述：mem_comp_of_mem_ball {V W : SetRel β β} {x y z : β} [V.IsSymm] (hx : x in 
+ball z V) (hy : y in ball z W) : (x, y) in V ○ W
+参数：hx : x in ball z V；hy : y in ball z W。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UniformSpace.mem_ball_symmetry`：mem_ball_symmetry {V : SetRel β β} [V.Is
+Symm] {x y} : x in ball y V ↔ y in ball x V
 -/
-theorem ball_eq_of_symmetry {V : SetRel β β} [V.IsSymm] {x} : ball x V = { y | (y, x) in V } := by
-  ext y
-  rw [mem_ball_symmetry]
-  exact Iff.rfl
-
-/--
-theorem `mem_comp_of_mem_ball` / 定理 `mem_comp_of_mem_ball`
-
-English:
-theorem mem_comp_of_mem_ball
-  statement: {V W : SetRel β β} {x y z : β} [V.IsSymm] (hx : x in ball z V)
-  proof: by
+theorem mem_comp_of_mem_ball {V W : SetRel β β} {x y z : β} [V.IsSymm] (hx : x ∈ ball z V)
+    (hy : y ∈ ball z W) : (x, y) ∈ V ○ W := by
   rw [mem_ball_symmetry] at hx
   exact ⟨z, hx, hy⟩
-
-中文:
-定理 mem_comp_of_mem_ball
-  结论: {V W : SetRel β β} {x y z : β} [V.是Symm] (hx : x in ball z V)
-  证明: by
-  rw [mem_ball_symmetry] at hx
-  exact ⟨z, hx, hy⟩
-
-Depends on / 依赖: mem_ball_symmetry
--/
-theorem mem_comp_of_mem_ball {V W : SetRel β β} {x y z : β} [V.IsSymm] (hx : x in ball z V)
-    (hy : y in ball z W) : (x, y) in V ○ W := by
-  rw [mem_ball_symmetry] at hx
-  exact ⟨z, hx, hy⟩
-
-/--
-theorem `mem_comp_comp` / 定理 `mem_comp_comp`
-
-English:
-theorem mem_comp_comp
-  given: {V W M : SetRel β β} [W.IsSymm] {p : β × β}
-  proof: by
-  obtain ⟨x, y⟩ := p
-  constructor
-  · rintro ⟨z, ⟨w, hpw, hwz⟩, hzy⟩
-    exact ⟨(w, z), ⟨hpw, by rwa [mem_ball_symmetry]⟩, hwz⟩
-  · rintro ⟨⟨w, z⟩, ⟨w_in, z_in⟩, hwz⟩
-    rw [mem_ball_symmetry] at z_in
-    exact ⟨z, ⟨w, w_in, hwz⟩, z_in⟩
-
-中文:
-定理 mem_comp_comp
-  条件: {V W M : SetRel β β} [W.是Symm] {p : β × β}
-  证明: by
-  obtain ⟨x, y⟩ := p
-  constructor
-  · rintro ⟨z, ⟨w, hpw, hwz⟩, hzy⟩
-    exact ⟨(w, z), ⟨hpw, by rwa [mem_ball_symmetry]⟩, hwz⟩
-  · rintro ⟨⟨w, z⟩, ⟨w_in, z_in⟩, hwz⟩
-    rw [mem_ball_symmetry] at z_in
-    exact ⟨z, ⟨w, w_in, hwz⟩, z_in⟩
-
-Depends on / 依赖: mem_ball_symmetry, w_in, z_in
+/-
+**UniformSpace.mem_comp_comp** 是 Mathlib 中的一个定理，位于命名空间 `UniformSpace`。
+形式化陈述：mem_comp_comp {V W M : SetRel β β} [W.IsSymm] {p : β × β} : p in V ○ M ○ W
+ ↔ (ball p.1 V ×ˢ ball p.2 W inter M).Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UniformSpace.mem_ball_symmetry`：mem_ball_symmetry {V : SetRel β β} [V.Is
+Symm] {x y} : x in ball y V ↔ y in ball x V
 -/
 theorem mem_comp_comp {V W M : SetRel β β} [W.IsSymm] {p : β × β} :
-    p in V ○ M ○ W ↔ (ball p.1 V ×ˢ ball p.2 W inter M).Nonempty := by
+    p ∈ V ○ M ○ W ↔ (ball p.1 V ×ˢ ball p.2 W ∩ M).Nonempty := by
   obtain ⟨x, y⟩ := p
   constructor
   · rintro ⟨z, ⟨w, hpw, hwz⟩, hzy⟩
@@ -1595,32 +1316,32 @@ theorem mem_comp_comp {V W M : SetRel β β} [W.IsSymm] {p : β × β} :
   · rintro ⟨⟨w, z⟩, ⟨w_in, z_in⟩, hwz⟩
     rw [mem_ball_symmetry] at z_in
     exact ⟨z, ⟨w, w_in, hwz⟩, z_in⟩
-
-/--
-lemma `isCover_iff_subset_iUnion_ball` / 引理 `isCover_iff_subset_iUnion_ball`
-
-English:
-lemma isCover_iff_subset_iUnion_ball
-  given: {U : SetRel β β} [U.IsSymm] {s N : Set β}
-  proof: by
-  simp [SetRel.IsCover, subset_def, ball, U.comm]
-
-alias ⟨_root_.SetRel.IsCover.subset_iUnion_ball, _root_.SetRel.IsCover.of_subset_iUnion_ball⟩ :=
-  isCover_iff_subset_iUnion_ball
-
-中文:
-引理 isCover_iff_subset_iUnion_ball
-  条件: {U : SetRel β β} [U.是Symm] {s N : 集合 β}
-  证明: by
-  simp [SetRel.IsCover, subset_def, ball, U.comm]
-
-alias ⟨_root_.SetRel.IsCover.subset_iUnion_ball, _root_.SetRel.IsCover.of_subset_iUnion_ball⟩ :=
-  isCover_iff_subset_iUnion_ball
-
-Depends on / 依赖: IsCover, SetRel, SetRel.IsCover, U.comm, subset_def
+/-
+**UniformSpace.isCover_iff_subset_iUnion_ball** 是 Mathlib 中的一个引理，位于命名空间 `Uniform
+Space`。
+形式化陈述：isCover_iff_subset_iUnion_ball {U : SetRel β β} [U.IsSymm] {s N : Set β} :
+ U.IsCover s N ↔ s subseteq ⋃ y in N, ball y U
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `SetRel.comm`：∀ {α : Type u_1} (R : SetRel α α) {a b : α} [R.IsSymm], (a,
+ b) ∈ R ↔ (b, a) ∈ R
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma isCover_iff_subset_iUnion_ball {U : SetRel β β} [U.IsSymm] {s N : Set β} :
-    U.IsCover s N ↔ s subseteq ⋃ y in N, ball y U := by
+    U.IsCover s N ↔ s ⊆ ⋃ y ∈ N, ball y U := by
   simp [SetRel.IsCover, subset_def, ball, U.comm]
 
 alias ⟨_root_.SetRel.IsCover.subset_iUnion_ball, _root_.SetRel.IsCover.of_subset_iUnion_ball⟩ :=
@@ -1634,291 +1355,247 @@ end UniformSpace
 
 open UniformSpace
 
-/--
-theorem `mem_nhds_uniformity_iff_right` / 定理 `mem_nhds_uniformity_iff_right`
-
-English:
-theorem mem_nhds_uniformity_iff_right
-  given: {x : α} {s : Set α}
-  proof: by
-  simp only [nhds_eq_comap_uniformity, mem_comap_prodMk]
-
-中文:
-定理 mem_nhds_uniformity_iff_right
-  条件: {x : α} {s : 集合 α}
-  证明: by
-  simp only [nhds_eq_comap_uniformity, mem_comap_prodMk]
-
-Depends on / 依赖: mem_comap_prodMk, nhds_eq_comap_uniformity
+/-
+**mem_nhds_uniformity_iff_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_nhds_uniformity_iff_right {x : α} {s : Set α} : s in 𝓝 x ↔ { p : α × α
+ | p.1 = x -> p.2 in s } in 𝓤 α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nhds_eq_comap_uniformity`：nhds_eq_comap_uniformity {x : α} : 𝓝 x = (𝓤 α)
+.comap (Prod.mk x)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem mem_nhds_uniformity_iff_right {x : α} {s : Set α} :
-    s in 𝓝 x ↔ { p : α × α | p.1 = x -> p.2 in s } in 𝓤 α := by
+    s ∈ 𝓝 x ↔ { p : α × α | p.1 = x → p.2 ∈ s } ∈ 𝓤 α := by
   simp only [nhds_eq_comap_uniformity, mem_comap_prodMk]
-
-/--
-theorem `mem_nhds_uniformity_iff_left` / 定理 `mem_nhds_uniformity_iff_left`
-
-English:
-theorem mem_nhds_uniformity_iff_left
-  given: {x : α} {s : Set α}
-  proof: by
-  rw [uniformity_eq_symm]; rw [mem_nhds_uniformity_iff_right]
-  simp only [mem_map, preimage_ofPred_eq, Prod.snd_swap, Prod.fst_swap]
-
-中文:
-定理 mem_nhds_uniformity_iff_left
-  条件: {x : α} {s : 集合 α}
-  证明: by
-  rw [uniformity_eq_symm]; rw [mem_nhds_uniformity_iff_right]
-  simp only [mem_map, preimage_ofPred_eq, Prod.snd_swap, Prod.fst_swap]
-
-Depends on / 依赖: Prod.fst_swap, Prod.snd_swap, fst_swap, mem_map, mem_nhds_uniformity_iff_right, preimage_ofPred_eq, snd_swap, uniformity_eq_symm
+/-
+**mem_nhds_uniformity_iff_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_nhds_uniformity_iff_left {x : α} {s : Set α} : s in 𝓝 x ↔ { p : α × α 
+| p.2 = x -> p.1 in s } in 𝓤 α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `uniformity_eq_symm`：uniformity_eq_symm : 𝓤 α = map Prod.swap (𝓤 α)
+· 使用定理 `mem_nhds_uniformity_iff_right`：mem_nhds_uniformity_iff_right {x : α} {s 
+: Set α} : s in 𝓝 x ↔ { p : α × α | p.1 = x -> p.2 in s } in 𝓤 α
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem mem_nhds_uniformity_iff_left {x : α} {s : Set α} :
-    s in 𝓝 x ↔ { p : α × α | p.2 = x -> p.1 in s } in 𝓤 α := by
-  rw [uniformity_eq_symm]; rw [mem_nhds_uniformity_iff_right]
+    s ∈ 𝓝 x ↔ { p : α × α | p.2 = x → p.1 ∈ s } ∈ 𝓤 α := by
+  rw [uniformity_eq_symm, mem_nhds_uniformity_iff_right]
   simp only [mem_map, preimage_ofPred_eq, Prod.snd_swap, Prod.fst_swap]
-
-/--
-theorem `nhdsWithin_eq_comap_uniformity_of_mem` / 定理 `nhdsWithin_eq_comap_uniformity_of_mem`
-
-English:
-theorem nhdsWithin_eq_comap_uniformity_of_mem
-  given: {x : α} {T : Set α} (hx : x in T) (S : Set α)
-  proof: by
-  simp [nhdsWithin, nhds_eq_comap_uniformity, hx]
-
-中文:
-定理 nhdsWithin_eq_comap_uniformity_of_mem
-  条件: {x : α} {T : 集合 α} (hx : x in T) (S : 集合 α)
-  证明: by
-  simp [nhdsWithin, nhds_eq_comap_uniformity, hx]
-
-Depends on / 依赖: nhdsWithin, nhds_eq_comap_uniformity
+/-
+**nhdsWithin_eq_comap_uniformity_of_mem** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nhdsWithin_eq_comap_uniformity_of_mem {x : α} {T : Set α} (hx : x in T) (S
+ : Set α) : 𝓝[S] x = (𝓤 α ⊓ 𝓟 (T ×ˢ S)).comap (Prod.mk x)
+参数：hx : x in T；S : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `nhds_eq_comap_uniformity`：nhds_eq_comap_uniformity {x : α} : 𝓝 x = (𝓤 α)
+.comap (Prod.mk x)
+· 使用定理 `Filter.comap_inf`：∀ {α : Type u_1} {β : Type u_2} {g₁ g₂ : Filter β} {m 
+: α → β},   Filter.comap m (g₁ ⊓ g₂) = Filter.comap m g₁ ⊓ Filter.comap m g₂
+· 使用定理 `Filter.comap_principal`：comap_principal {t : Set β} : comap m (𝓟 t) = 𝓟 
+(m ⁻¹' t)
+· 使用定理 `Set.mk_preimage_prod_right`：mk_preimage_prod_right (ha : a in s) : Prod.
+mk a ⁻¹' s ×ˢ t = t
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem nhdsWithin_eq_comap_uniformity_of_mem {x : α} {T : Set α} (hx : x in T) (S : Set α) :
+theorem nhdsWithin_eq_comap_uniformity_of_mem {x : α} {T : Set α} (hx : x ∈ T) (S : Set α) :
     𝓝[S] x = (𝓤 α ⊓ 𝓟 (T ×ˢ S)).comap (Prod.mk x) := by
   simp [nhdsWithin, nhds_eq_comap_uniformity, hx]
-
-/--
-theorem `nhdsWithin_eq_comap_uniformity` / 定理 `nhdsWithin_eq_comap_uniformity`
-
-English:
-theorem nhdsWithin_eq_comap_uniformity
-  given: {x : α} (S : Set α)
-  proof: nhdsWithin_eq_comap_uniformity_of_mem (mem_univ _) S
-
-中文:
-定理 nhdsWithin_eq_comap_uniformity
-  条件: {x : α} (S : 集合 α)
-  证明: nhdsWithin_eq_comap_uniformity_of_mem (mem_univ _) S
-
-Depends on / 依赖: mem_univ, nhdsWithin_eq_comap_uniformity_of_mem
+/-
+**nhdsWithin_eq_comap_uniformity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nhdsWithin_eq_comap_uniformity {x : α} (S : Set α) : 𝓝[S] x = (𝓤 α ⊓ 𝓟 (un
+iv ×ˢ S)).comap (Prod.mk x)
+参数：S : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `nhdsWithin_eq_comap_uniformity_of_mem`：nhdsWithin_eq_comap_uniformity_of
+_mem {x : α} {T : Set α} (hx : x in T) (S : Set α) : 𝓝[S] x = (𝓤 α ⊓ 𝓟 (T ×ˢ S))
+.comap (Prod.mk x)
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
 -/
 theorem nhdsWithin_eq_comap_uniformity {x : α} (S : Set α) :
     𝓝[S] x = (𝓤 α ⊓ 𝓟 (univ ×ˢ S)).comap (Prod.mk x) :=
   nhdsWithin_eq_comap_uniformity_of_mem (mem_univ _) S
 
-/--
-theorem `isOpen_iff_ball_subset` / 定理 `isOpen_iff_ball_subset`
+/-- See also `isOpen_iff_isOpen_ball_subset`. -/
+/-
+**isOpen_iff_ball_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isOpen_iff_ball_subset {s : Set α} : IsOpen s ↔ forall x in s, exists V in
+ 𝓤 α, ball x V subseteq s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `nhds_eq_comap_uniformity`：nhds_eq_comap_uniformity {x : α} : 𝓝 x = (𝓤 α)
+.comap (Prod.mk x)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem isOpen_iff_ball_subset
-  given: {s : Set α}
-  statement: IsOpen s ↔ forall x in s, exists V in 𝓤 α, ball x V subseteq s
-  proof: by
-  simp_rw [isOpen_iff_mem_nhds, nhds_eq_comap_uniformity, mem_comap, ball]
-
-中文:
-定理 isOpen_iff_ball_subset
-  条件: {s : 集合 α}
-  结论: 是开集 s ↔ 对任意 x in s, 存在 V in 𝓤 α, ball x V subseteq s
-  证明: by
-  simp_rw [isOpen_iff_mem_nhds, nhds_eq_comap_uniformity, mem_comap, ball]
-
-Depends on / 依赖: isOpen_iff_mem_nhds, mem_comap, nhds_eq_comap_uniformity, simp_rw
+--- 原说明 ---
+See also `isOpen_iff_isOpen_ball_subset`.
 -/
-theorem isOpen_iff_ball_subset {s : Set α} : IsOpen s ↔ forall x in s, exists V in 𝓤 α, ball x V subseteq s := by
+theorem isOpen_iff_ball_subset {s : Set α} : IsOpen s ↔ ∀ x ∈ s, ∃ V ∈ 𝓤 α, ball x V ⊆ s := by
   simp_rw [isOpen_iff_mem_nhds, nhds_eq_comap_uniformity, mem_comap, ball]
-
-/--
-theorem `nhds_basis_uniformity'` / 定理 `nhds_basis_uniformity'`
-
-English:
-theorem nhds_basis_uniformity'
-  statement: {p : ι -> Prop} {s : ι -> SetRel α α} (h : (𝓤 α).HasBasis p s)
-  proof: by
-  rw [nhds_eq_comap_uniformity]
-  exact h.comap (Prod.mk x)
-
-中文:
-定理 nhds_basis_uniformity'
-  结论: {p : ι -> 命题} {s : ι -> SetRel α α} (h : (𝓤 α).有基 p s)
-  证明: by
-  rw [nhds_eq_comap_uniformity]
-  exact h.comap (Prod.mk x)
-
-Depends on / 依赖: Prod.mk, h.comap, nhds_eq_comap_uniformity
+/-
+**nhds_basis_uniformity'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nhds_basis_uniformity' {p : ι -> Prop} {s : ι -> SetRel α α} (h : (𝓤 α).Ha
+sBasis p s) {x : α} : (𝓝 x).HasBasis p fun i => ball x (s i)
+参数：h : (𝓤 α).HasBasis p s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nhds_eq_comap_uniformity`：nhds_eq_comap_uniformity {x : α} : 𝓝 x = (𝓤 α)
+.comap (Prod.mk x)
+· 使用定理 `Filter.HasBasis.comap`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} {l
+ : Filter α} {p : ι → Prop} {s : ι → Set α} (f : β → α),   l.HasBasis p s → (Fil
+ter.comap f…
 -/
-theorem nhds_basis_uniformity' {p : ι -> Prop} {s : ι -> SetRel α α} (h : (𝓤 α).HasBasis p s)
+theorem nhds_basis_uniformity' {p : ι → Prop} {s : ι → SetRel α α} (h : (𝓤 α).HasBasis p s)
     {x : α} : (𝓝 x).HasBasis p fun i => ball x (s i) := by
   rw [nhds_eq_comap_uniformity]
   exact h.comap (Prod.mk x)
-
-/--
-theorem `nhds_basis_uniformity` / 定理 `nhds_basis_uniformity`
-
-English:
-theorem nhds_basis_uniformity
-  statement: {p : ι -> Prop} {s : ι -> SetRel α α} (h : (𝓤 α).HasBasis p s)
-  proof: by
-  replace h := h.comap Prod.swap
-  rw [comap_swap_uniformity] at h
-  exact nhds_basis_uniformity' h
-
-中文:
-定理 nhds_basis_uniformity
-  结论: {p : ι -> 命题} {s : ι -> SetRel α α} (h : (𝓤 α).有基 p s)
-  证明: by
-  replace h := h.comap Prod.swap
-  rw [comap_swap_uniformity] at h
-  exact nhds_basis_uniformity' h
-
-Depends on / 依赖: Prod.swap, comap_swap_uniformity, h.comap, nhds_basis_uniformity, replace
+/-
+**nhds_basis_uniformity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nhds_basis_uniformity {p : ι -> Prop} {s : ι -> SetRel α α} (h : (𝓤 α).Has
+Basis p s) {x : α} : (𝓝 x).HasBasis p fun i => { y | (y, x) in s i }
+参数：h : (𝓤 α).HasBasis p s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasBasis.comap`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} {l
+ : Filter α} {p : ι → Prop} {s : ι → Set α} (f : β → α),   l.HasBasis p s → (Fil
+ter.comap f…
+· 使用定理 `nhds_basis_uniformity'`：nhds_basis_uniformity' {p : ι -> Prop} {s : ι ->
+ SetRel α α} (h : (𝓤 α).HasBasis p s) {x : α} : (𝓝 x).HasBasis p fun i => ball x
+ (s i)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `comap_swap_uniformity`：comap_swap_uniformity : comap (@Prod.swap α α) (𝓤
+ α) = 𝓤 α
 -/
-theorem nhds_basis_uniformity {p : ι -> Prop} {s : ι -> SetRel α α} (h : (𝓤 α).HasBasis p s)
-    {x : α} : (𝓝 x).HasBasis p fun i => { y | (y, x) in s i } := by
+theorem nhds_basis_uniformity {p : ι → Prop} {s : ι → SetRel α α} (h : (𝓤 α).HasBasis p s)
+    {x : α} : (𝓝 x).HasBasis p fun i => { y | (y, x) ∈ s i } := by
   replace h := h.comap Prod.swap
   rw [comap_swap_uniformity] at h
   exact nhds_basis_uniformity' h
-
-/--
-theorem `nhds_eq_comap_uniformity'` / 定理 `nhds_eq_comap_uniformity'`
-
-English:
-theorem nhds_eq_comap_uniformity'
-  given: {x : α}
-  statement: 𝓝 x = (𝓤 α).comap fun y => (y, x)
-  proof: (nhds_basis_uniformity (𝓤 α).basis_sets).eq_of_same_basis (𝓤 α).basis_sets.comap _
-
-中文:
-定理 nhds_eq_comap_uniformity'
-  条件: {x : α}
-  结论: 𝓝 x = (𝓤 α).comap fun y => (y, x)
-  证明: (nhds_basis_uniformity (𝓤 α).basis_sets).eq_of_same_basis (𝓤 α).basis_sets.comap _
-
-Depends on / 依赖: basis_sets, basis_sets.comap, eq_of_same_basis, nhds_basis_uniformity
+/-
+**nhds_eq_comap_uniformity'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nhds_eq_comap_uniformity' {x : α} : 𝓝 x = (𝓤 α).comap fun y => (y, x)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasBasis.eq_of_same_basis`：∀ {α : Type u_1} {ι : Sort u_4} {l l' 
+: Filter α} {p : ι → Prop} {s : ι → Set α},   l.HasBasis p s → l'.HasBasis p s →
+ l = l'
+· 使用定理 `nhds_basis_uniformity`：nhds_basis_uniformity {p : ι -> Prop} {s : ι -> S
+etRel α α} (h : (𝓤 α).HasBasis p s) {x : α} : (𝓝 x).HasBasis p fun i => { y | (y
+, x) in s i…
+· 使用定理 `Filter.basis_sets`：basis_sets (l : Filter α) : l.HasBasis (fun s : Set α
+ => s in l) id
+· 使用定理 `Filter.HasBasis.comap`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u_4} {l
+ : Filter α} {p : ι → Prop} {s : ι → Set α} (f : β → α),   l.HasBasis p s → (Fil
+ter.comap f…
 -/
 theorem nhds_eq_comap_uniformity' {x : α} : 𝓝 x = (𝓤 α).comap fun y => (y, x) :=
-(nhds_basis_uniformity (𝓤 α).basis_sets).eq_of_same_basis (𝓤 α).basis_sets.comap _
-
-/--
-theorem `UniformSpace.mem_nhds_iff` / 定理 `UniformSpace.mem_nhds_iff`
-
-English:
-theorem UniformSpace.mem_nhds_iff
-  given: {x : α} {s : Set α}
-  statement: s in 𝓝 x ↔ exists V in 𝓤 α, ball x V subseteq s
-  proof: by
-  rw [nhds_eq_comap_uniformity]; rw [mem_comap]
-  simp_rw [ball]
-
-中文:
-定理 一致空间.mem_nhds_iff
-  条件: {x : α} {s : 集合 α}
-  结论: s in 𝓝 x ↔ 存在 V in 𝓤 α, ball x V subseteq s
-  证明: by
-  rw [nhds_eq_comap_uniformity]; rw [mem_comap]
-  simp_rw [ball]
-
-Depends on / 依赖: mem_comap, nhds_eq_comap_uniformity, simp_rw
+  (nhds_basis_uniformity (𝓤 α).basis_sets).eq_of_same_basis <| (𝓤 α).basis_sets.comap _
+/-
+**UniformSpace.mem_nhds_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：UniformSpace.mem_nhds_iff {x : α} {s : Set α} : s in 𝓝 x ↔ exists V in 𝓤 α
+, ball x V subseteq s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nhds_eq_comap_uniformity`：nhds_eq_comap_uniformity {x : α} : 𝓝 x = (𝓤 α)
+.comap (Prod.mk x)
+· 使用定理 `Filter.mem_comap`：∀ {α : Type u_1} {β : Type u_2} {g : Filter β} {m : α 
+→ β} {s : Set α}, s ∈ Filter.comap m g ↔ ∃ t ∈ g, m ⁻¹' t ⊆ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem UniformSpace.mem_nhds_iff {x : α} {s : Set α} : s in 𝓝 x ↔ exists V in 𝓤 α, ball x V subseteq s := by
-  rw [nhds_eq_comap_uniformity]; rw [mem_comap]
+theorem UniformSpace.mem_nhds_iff {x : α} {s : Set α} : s ∈ 𝓝 x ↔ ∃ V ∈ 𝓤 α, ball x V ⊆ s := by
+  rw [nhds_eq_comap_uniformity, mem_comap]
   simp_rw [ball]
-
-/--
-theorem `UniformSpace.ball_mem_nhds` / 定理 `UniformSpace.ball_mem_nhds`
-
-English:
-theorem UniformSpace.ball_mem_nhds
-  given: (x : α) ⦃V
-  statement: SetRel α α⦄ (V_in : V in 𝓤 α) : ball x V in 𝓝 x
-  proof: by
-  rw [UniformSpace.mem_nhds_iff]
-  exact ⟨V, V_in, Subset.rfl⟩
-
-中文:
-定理 一致空间.ball_mem_nhds
-  条件: (x : α) ⦃V
-  结论: SetRel α α⦄ (V_in : V in 𝓤 α) : ball x V in 𝓝 x
-  证明: by
-  rw [UniformSpace.mem_nhds_iff]
-  exact ⟨V, V_in, Subset.rfl⟩
-
-Depends on / 依赖: Subset, Subset.rfl, UniformSpace, UniformSpace.mem_nhds_iff, V_in, mem_nhds_iff
+/-
+**UniformSpace.ball_mem_nhds** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：UniformSpace.ball_mem_nhds (x : α) ⦃V : SetRel α α⦄ (V_in : V in 𝓤 α) : ba
+ll x V in 𝓝 x
+参数：x : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UniformSpace.mem_nhds_iff`：UniformSpace.mem_nhds_iff {x : α} {s : Set α}
+ : s in 𝓝 x ↔ exists V in 𝓤 α, ball x V subseteq s
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
 -/
-theorem UniformSpace.ball_mem_nhds (x : α) ⦃V : SetRel α α⦄ (V_in : V in 𝓤 α) : ball x V in 𝓝 x := by
+theorem UniformSpace.ball_mem_nhds (x : α) ⦃V : SetRel α α⦄ (V_in : V ∈ 𝓤 α) : ball x V ∈ 𝓝 x := by
   rw [UniformSpace.mem_nhds_iff]
   exact ⟨V, V_in, Subset.rfl⟩
-
-/--
-theorem `UniformSpace.ball_mem_nhdsWithin` / 定理 `UniformSpace.ball_mem_nhdsWithin`
-
-English:
-theorem UniformSpace.ball_mem_nhdsWithin
-  given: {x : α} {S : Set α} ⦃V
-  statement: SetRel α α⦄ (x_in : x in S)
-  proof: by
-  rw [nhdsWithin_eq_comap_uniformity_of_mem x_in]; rw [mem_comap]
-  exact ⟨V, V_in, Subset.rfl⟩
-
-中文:
-定理 一致空间.ball_mem_nhdsWithin
-  条件: {x : α} {S : 集合 α} ⦃V
-  结论: SetRel α α⦄ (x_in : x in S)
-  证明: by
-  rw [nhdsWithin_eq_comap_uniformity_of_mem x_in]; rw [mem_comap]
-  exact ⟨V, V_in, Subset.rfl⟩
-
-Depends on / 依赖: Subset, Subset.rfl, V_in, mem_comap, nhdsWithin_eq_comap_uniformity_of_mem, x_in
+/-
+**UniformSpace.ball_mem_nhdsWithin** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：UniformSpace.ball_mem_nhdsWithin {x : α} {S : Set α} ⦃V : SetRel α α⦄ (x_i
+n : x in S) (V_in : V in 𝓤 α ⊓ 𝓟 (S ×ˢ S)) : ball x V in 𝓝[S] x
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nhdsWithin_eq_comap_uniformity_of_mem`：nhdsWithin_eq_comap_uniformity_of
+_mem {x : α} {T : Set α} (hx : x in T) (S : Set α) : 𝓝[S] x = (𝓤 α ⊓ 𝓟 (T ×ˢ S))
+.comap (Prod.mk x)
+· 使用定理 `Filter.mem_comap`：∀ {α : Type u_1} {β : Type u_2} {g : Filter β} {m : α 
+→ β} {s : Set α}, s ∈ Filter.comap m g ↔ ∃ t ∈ g, m ⁻¹' t ⊆ s
+· 使用定理 `Set.Subset.rfl`：∀ {α : Type u} {s : Set α}, s ⊆ s
 -/
-theorem UniformSpace.ball_mem_nhdsWithin {x : α} {S : Set α} ⦃V : SetRel α α⦄ (x_in : x in S)
-    (V_in : V in 𝓤 α ⊓ 𝓟 (S ×ˢ S)) : ball x V in 𝓝[S] x := by
-  rw [nhdsWithin_eq_comap_uniformity_of_mem x_in]; rw [mem_comap]
+theorem UniformSpace.ball_mem_nhdsWithin {x : α} {S : Set α} ⦃V : SetRel α α⦄ (x_in : x ∈ S)
+    (V_in : V ∈ 𝓤 α ⊓ 𝓟 (S ×ˢ S)) : ball x V ∈ 𝓝[S] x := by
+  rw [nhdsWithin_eq_comap_uniformity_of_mem x_in, mem_comap]
   exact ⟨V, V_in, Subset.rfl⟩
-
-/--
-theorem `UniformSpace.mem_nhds_iff_symm` / 定理 `UniformSpace.mem_nhds_iff_symm`
-
-English:
-theorem UniformSpace.mem_nhds_iff_symm
-  given: {x : α} {s : Set α}
-  proof: by
-  rw [UniformSpace.mem_nhds_iff]
-  constructor
-  · rintro ⟨V, V_in, V_sub⟩
-    use SetRel.symmetrize V, symmetrize_mem_uniformity V_in, inferInstance
-    exact Subset.trans (ball_mono SetRel.symmetrize_subset_self x) V_sub
-  · rintro ⟨V, V_in, _, V_sub⟩
-    exact ⟨V, V_in, V_sub⟩
-
-中文:
-定理 一致空间.mem_nhds_iff_symm
-  条件: {x : α} {s : 集合 α}
-  证明: by
-  rw [UniformSpace.mem_nhds_iff]
-  constructor
-  · rintro ⟨V, V_in, V_sub⟩
-    use SetRel.symmetrize V, symmetrize_mem_uniformity V_in, inferInstance
-    exact Subset.trans (ball_mono SetRel.symmetrize_subset_self x) V_sub
-  · rintro ⟨V, V_in, _, V_sub⟩
-    exact ⟨V, V_in, V_sub⟩
-
-Depends on / 依赖: SetRel, SetRel.symmetrize, SetRel.symmetrize_subset_self, Subset, Subset.trans, UniformSpace, UniformSpace.mem_nhds_iff, V_in, V_sub, ball_mono, mem_nhds_iff, symmetrize, symmetrize_mem_uniformity, symmetrize_subset_self
+/-
+**UniformSpace.mem_nhds_iff_symm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：UniformSpace.mem_nhds_iff_symm {x : α} {s : Set α} : s in 𝓝 x ↔ exists V i
+n 𝓤 α, SetRel.IsSymm V ∧ ball x V subseteq s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UniformSpace.mem_nhds_iff`：UniformSpace.mem_nhds_iff {x : α} {s : Set α}
+ : s in 𝓝 x ↔ exists V in 𝓤 α, ball x V subseteq s
+· 使用定理 `symmetrize_mem_uniformity`：symmetrize_mem_uniformity {V : SetRel α α} (h
+ : V in 𝓤 α) : SetRel.symmetrize V in 𝓤 α
+· 使用定理 `Set.Subset.trans`：∀ {α : Type u} {a b c : Set α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `UniformSpace.ball_mono`：ball_mono {V W : Set (β × β)} (h : V subseteq W)
+ (x : β) : ball x V subseteq ball x W
+· 使用引理 `SetRel.symmetrize_subset_self`：symmetrize_subset_self : R.symmetrize sub
+seteq R
 -/
 theorem UniformSpace.mem_nhds_iff_symm {x : α} {s : Set α} :
-    s in 𝓝 x ↔ exists V in 𝓤 α, SetRel.IsSymm V ∧ ball x V subseteq s := by
+    s ∈ 𝓝 x ↔ ∃ V ∈ 𝓤 α, SetRel.IsSymm V ∧ ball x V ⊆ s := by
   rw [UniformSpace.mem_nhds_iff]
   constructor
   · rintro ⟨V, V_in, V_sub⟩
@@ -1926,349 +1603,316 @@ theorem UniformSpace.mem_nhds_iff_symm {x : α} {s : Set α} :
     exact Subset.trans (ball_mono SetRel.symmetrize_subset_self x) V_sub
   · rintro ⟨V, V_in, _, V_sub⟩
     exact ⟨V, V_in, V_sub⟩
-
-/--
-theorem `UniformSpace.hasBasis_nhds` / 定理 `UniformSpace.hasBasis_nhds`
-
-English:
-theorem UniformSpace.hasBasis_nhds
-  given: (x : α)
-  proof: ⟨fun t => by simp [UniformSpace.mem_nhds_iff_symm, and_assoc]⟩
-
-中文:
-定理 一致空间.hasBasis_nhds
-  条件: (x : α)
-  证明: ⟨fun t => by simp [UniformSpace.mem_nhds_iff_symm, and_assoc]⟩
-
-Depends on / 依赖: UniformSpace, UniformSpace.mem_nhds_iff_symm, and_assoc, mem_nhds_iff_symm
+/-
+**UniformSpace.hasBasis_nhds** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：UniformSpace.hasBasis_nhds (x : α) : HasBasis (𝓝 x) (fun s : SetRel α α =>
+ s in 𝓤 α ∧ SetRel.IsSymm s) fun s => ball x s
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem UniformSpace.hasBasis_nhds (x : α) :
-    HasBasis (𝓝 x) (fun s : SetRel α α => s in 𝓤 α ∧ SetRel.IsSymm s) fun s => ball x s :=
+    HasBasis (𝓝 x) (fun s : SetRel α α => s ∈ 𝓤 α ∧ SetRel.IsSymm s) fun s => ball x s :=
   ⟨fun t => by simp [UniformSpace.mem_nhds_iff_symm, and_assoc]⟩
 
 open UniformSpace
-
-/--
-theorem `UniformSpace.mem_closure_iff_symm_ball` / 定理 `UniformSpace.mem_closure_iff_symm_ball`
-
-English:
-theorem UniformSpace.mem_closure_iff_symm_ball
-  given: {s : Set α} {x}
-  proof: by
-  simp [mem_closure_iff_nhds_basis (hasBasis_nhds x), Set.Nonempty]
-
-中文:
-定理 一致空间.mem_closure_iff_symm_ball
-  条件: {s : 集合 α} {x}
-  证明: by
-  simp [mem_closure_iff_nhds_basis (hasBasis_nhds x), Set.Nonempty]
-
-Depends on / 依赖: Nonempty, Set.Nonempty, hasBasis_nhds, mem_closure_iff_nhds_basis
+/-
+**UniformSpace.mem_closure_iff_symm_ball** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：UniformSpace.mem_closure_iff_symm_ball {s : Set α} {x} : x in closure s ↔ 
+forall {V}, V in 𝓤 α -> SetRel.IsSymm V -> (s inter ball x V).Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mem_closure_iff_nhds_basis`：mem_closure_iff_nhds_basis {p : ι -> Prop} {
+s : ι -> Set X} (h : (𝓝 x).HasBasis p s) : x in closure t ↔ forall i, p i -> exi
+sts y in t, y in…
+· 使用定理 `UniformSpace.hasBasis_nhds`：UniformSpace.hasBasis_nhds (x : α) : HasBasi
+s (𝓝 x) (fun s : SetRel α α => s in 𝓤 α ∧ SetRel.IsSymm s) fun s => ball x s
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem UniformSpace.mem_closure_iff_symm_ball {s : Set α} {x} :
-    x in closure s ↔ forall {V}, V in 𝓤 α -> SetRel.IsSymm V -> (s inter ball x V).Nonempty := by
+    x ∈ closure s ↔ ∀ {V}, V ∈ 𝓤 α → SetRel.IsSymm V → (s ∩ ball x V).Nonempty := by
   simp [mem_closure_iff_nhds_basis (hasBasis_nhds x), Set.Nonempty]
-
-/--
-theorem `UniformSpace.mem_closure_iff_ball` / 定理 `UniformSpace.mem_closure_iff_ball`
-
-English:
-theorem UniformSpace.mem_closure_iff_ball
-  given: {s : Set α} {x}
-  proof: by
-  simp [mem_closure_iff_nhds_basis' (nhds_basis_uniformity' (𝓤 α).basis_sets)]
-
-中文:
-定理 一致空间.mem_closure_iff_ball
-  条件: {s : 集合 α} {x}
-  证明: by
-  simp [mem_closure_iff_nhds_basis' (nhds_basis_uniformity' (𝓤 α).basis_sets)]
-
-Depends on / 依赖: basis_sets, mem_closure_iff_nhds_basis, nhds_basis_uniformity
+/-
+**UniformSpace.mem_closure_iff_ball** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：UniformSpace.mem_closure_iff_ball {s : Set α} {x} : x in closure s ↔ foral
+l {V}, V in 𝓤 α -> (ball x V inter s).Nonempty
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mem_closure_iff_nhds_basis'`：mem_closure_iff_nhds_basis' {p : ι -> Prop}
+ {s : ι -> Set X} (h : (𝓝 x).HasBasis p s) : x in closure t ↔ forall i, p i -> (
+s i inter t).None…
+· 使用定理 `nhds_basis_uniformity'`：nhds_basis_uniformity' {p : ι -> Prop} {s : ι ->
+ SetRel α α} (h : (𝓤 α).HasBasis p s) {x : α} : (𝓝 x).HasBasis p fun i => ball x
+ (s i)
+· 使用定理 `Filter.basis_sets`：basis_sets (l : Filter α) : l.HasBasis (fun s : Set α
+ => s in l) id
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem UniformSpace.mem_closure_iff_ball {s : Set α} {x} :
-    x in closure s ↔ forall {V}, V in 𝓤 α -> (ball x V inter s).Nonempty := by
+    x ∈ closure s ↔ ∀ {V}, V ∈ 𝓤 α → (ball x V ∩ s).Nonempty := by
   simp [mem_closure_iff_nhds_basis' (nhds_basis_uniformity' (𝓤 α).basis_sets)]
-
-/--
-theorem `UniformSpace.closure_subset_preimage` / 定理 `UniformSpace.closure_subset_preimage`
-
-English:
-theorem UniformSpace.closure_subset_preimage
-  proof: by
-  intro x hx
-  obtain ⟨y, hxy, hy⟩ := mem_closure_iff_ball.mp hx hU
-  exact ⟨y, hy, hxy⟩
-
-中文:
-定理 一致空间.closure_subset_preimage
-  证明: by
-  intro x hx
-  obtain ⟨y, hxy, hy⟩ := mem_closure_iff_ball.mp hx hU
-  exact ⟨y, hy, hxy⟩
-
-Depends on / 依赖: mem_closure_iff_ball, mem_closure_iff_ball.mp
+/-
+**UniformSpace.closure_subset_preimage** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：UniformSpace.closure_subset_preimage {U : SetRel α α} (hU : U in 𝓤 α) (s :
+ Set α) : closure s subseteq U.preimage s
+参数：hU : U in 𝓤 α；s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `UniformSpace.mem_closure_iff_ball`：UniformSpace.mem_closure_iff_ball {s 
+: Set α} {x} : x in closure s ↔ forall {V}, V in 𝓤 α -> (ball x V inter s).Nonem
+pty
 -/
 theorem UniformSpace.closure_subset_preimage
-    {U : SetRel α α} (hU : U in 𝓤 α) (s : Set α) : closure s subseteq U.preimage s := by
+    {U : SetRel α α} (hU : U ∈ 𝓤 α) (s : Set α) : closure s ⊆ U.preimage s := by
   intro x hx
   obtain ⟨y, hxy, hy⟩ := mem_closure_iff_ball.mp hx hU
   exact ⟨y, hy, hxy⟩
-
-/--
-theorem `UniformSpace.closure_subset_image` / 定理 `UniformSpace.closure_subset_image`
-
-English:
-theorem UniformSpace.closure_subset_image
-  proof: closure_subset_preimage (symm_le_uniformity hU) s
-
-中文:
-定理 一致空间.closure_subset_image
-  证明: closure_subset_preimage (symm_le_uniformity hU) s
-
-Depends on / 依赖: closure_subset_preimage, symm_le_uniformity
+/-
+**UniformSpace.closure_subset_image** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：UniformSpace.closure_subset_image {U : SetRel α α} (hU : U in 𝓤 α) (s : Se
+t α) : closure s subseteq U.image s
+参数：hU : U in 𝓤 α；s : Set α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformSpace.closure_subset_preimage`：UniformSpace.closure_subset_preima
+ge {U : SetRel α α} (hU : U in 𝓤 α) (s : Set α) : closure s subseteq U.preimage 
+s
+· 使用定理 `symm_le_uniformity`：symm_le_uniformity : map (@Prod.swap α α) (𝓤 _) <= 𝓤
+ _
 -/
 theorem UniformSpace.closure_subset_image
-    {U : SetRel α α} (hU : U in 𝓤 α) (s : Set α) : closure s subseteq U.image s :=
+    {U : SetRel α α} (hU : U ∈ 𝓤 α) (s : Set α) : closure s ⊆ U.image s :=
   closure_subset_preimage (symm_le_uniformity hU) s
-
-/--
-theorem `nhds_eq_uniformity` / 定理 `nhds_eq_uniformity`
-
-English:
-theorem nhds_eq_uniformity
-  given: {x : α}
-  statement: 𝓝 x = (𝓤 α).lift' (ball x)
-  proof: (nhds_basis_uniformity' (𝓤 α).basis_sets).eq_biInf
-
-中文:
-定理 nhds_eq_uniformity
-  条件: {x : α}
-  结论: 𝓝 x = (𝓤 α).lift' (ball x)
-  证明: (nhds_basis_uniformity' (𝓤 α).basis_sets).eq_biInf
-
-Depends on / 依赖: basis_sets, eq_biInf, nhds_basis_uniformity
+/-
+**nhds_eq_uniformity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nhds_eq_uniformity {x : α} : 𝓝 x = (𝓤 α).lift' (ball x)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasBasis.eq_biInf`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter α}
+ {p : ι → Prop} {s : ι → Set α},   l.HasBasis p s → l = ⨅ i, ⨅ (_ : p i), Filter
+.principal (s …
+· 使用定理 `nhds_basis_uniformity'`：nhds_basis_uniformity' {p : ι -> Prop} {s : ι ->
+ SetRel α α} (h : (𝓤 α).HasBasis p s) {x : α} : (𝓝 x).HasBasis p fun i => ball x
+ (s i)
+· 使用定理 `Filter.basis_sets`：basis_sets (l : Filter α) : l.HasBasis (fun s : Set α
+ => s in l) id
 -/
 theorem nhds_eq_uniformity {x : α} : 𝓝 x = (𝓤 α).lift' (ball x) :=
   (nhds_basis_uniformity' (𝓤 α).basis_sets).eq_biInf
-
-/--
-theorem `nhds_eq_uniformity'` / 定理 `nhds_eq_uniformity'`
-
-English:
-theorem nhds_eq_uniformity'
-  given: {x : α}
-  statement: 𝓝 x = (𝓤 α).lift' fun s => { y | (y, x) in s }
-  proof: (nhds_basis_uniformity (𝓤 α).basis_sets).eq_biInf
-
-中文:
-定理 nhds_eq_uniformity'
-  条件: {x : α}
-  结论: 𝓝 x = (𝓤 α).lift' fun s => { y | (y, x) in s }
-  证明: (nhds_basis_uniformity (𝓤 α).basis_sets).eq_biInf
-
-Depends on / 依赖: basis_sets, eq_biInf, nhds_basis_uniformity
+/-
+**nhds_eq_uniformity'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nhds_eq_uniformity' {x : α} : 𝓝 x = (𝓤 α).lift' fun s => { y | (y, x) in s
+ }
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.HasBasis.eq_biInf`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter α}
+ {p : ι → Prop} {s : ι → Set α},   l.HasBasis p s → l = ⨅ i, ⨅ (_ : p i), Filter
+.principal (s …
+· 使用定理 `nhds_basis_uniformity`：nhds_basis_uniformity {p : ι -> Prop} {s : ι -> S
+etRel α α} (h : (𝓤 α).HasBasis p s) {x : α} : (𝓝 x).HasBasis p fun i => { y | (y
+, x) in s i…
+· 使用定理 `Filter.basis_sets`：basis_sets (l : Filter α) : l.HasBasis (fun s : Set α
+ => s in l) id
 -/
-theorem nhds_eq_uniformity' {x : α} : 𝓝 x = (𝓤 α).lift' fun s => { y | (y, x) in s } :=
+theorem nhds_eq_uniformity' {x : α} : 𝓝 x = (𝓤 α).lift' fun s => { y | (y, x) ∈ s } :=
   (nhds_basis_uniformity (𝓤 α).basis_sets).eq_biInf
-
-/--
-theorem `mem_nhds_left` / 定理 `mem_nhds_left`
-
-English:
-theorem mem_nhds_left
-  given: (x : α) {s : SetRel α α} (h : s in 𝓤 α)
-  statement: { y : α | (x, y) in s } in 𝓝 x
-  proof: ball_mem_nhds x h
-
-中文:
-定理 mem_nhds_left
-  条件: (x : α) {s : SetRel α α} (h : s in 𝓤 α)
-  结论: { y : α | (x, y) in s } in 𝓝 x
-  证明: ball_mem_nhds x h
-
-Depends on / 依赖: ball_mem_nhds
+/-
+**mem_nhds_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_nhds_left (x : α) {s : SetRel α α} (h : s in 𝓤 α) : { y : α | (x, y) i
+n s } in 𝓝 x
+参数：x : α；h : s in 𝓤 α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniformSpace.ball_mem_nhds`：UniformSpace.ball_mem_nhds (x : α) ⦃V : SetR
+el α α⦄ (V_in : V in 𝓤 α) : ball x V in 𝓝 x
 -/
-theorem mem_nhds_left (x : α) {s : SetRel α α} (h : s in 𝓤 α) : { y : α | (x, y) in s } in 𝓝 x :=
+theorem mem_nhds_left (x : α) {s : SetRel α α} (h : s ∈ 𝓤 α) : { y : α | (x, y) ∈ s } ∈ 𝓝 x :=
   ball_mem_nhds x h
-
-/--
-theorem `mem_nhds_right` / 定理 `mem_nhds_right`
-
-English:
-theorem mem_nhds_right
-  given: (y : α) {s : SetRel α α} (h : s in 𝓤 α)
-  statement: { x : α | (x, y) in s } in 𝓝 y
-  proof: mem_nhds_left _ (symm_le_uniformity h)
-
-中文:
-定理 mem_nhds_right
-  条件: (y : α) {s : SetRel α α} (h : s in 𝓤 α)
-  结论: { x : α | (x, y) in s } in 𝓝 y
-  证明: mem_nhds_left _ (symm_le_uniformity h)
-
-Depends on / 依赖: mem_nhds_left, symm_le_uniformity
+/-
+**mem_nhds_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mem_nhds_right (y : α) {s : SetRel α α} (h : s in 𝓤 α) : { x : α | (x, y) 
+in s } in 𝓝 y
+参数：y : α；h : s in 𝓤 α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mem_nhds_left`：mem_nhds_left (x : α) {s : SetRel α α} (h : s in 𝓤 α) : {
+ y : α | (x, y) in s } in 𝓝 x
+· 使用定理 `symm_le_uniformity`：symm_le_uniformity : map (@Prod.swap α α) (𝓤 _) <= 𝓤
+ _
 -/
-theorem mem_nhds_right (y : α) {s : SetRel α α} (h : s in 𝓤 α) : { x : α | (x, y) in s } in 𝓝 y :=
+theorem mem_nhds_right (y : α) {s : SetRel α α} (h : s ∈ 𝓤 α) : { x : α | (x, y) ∈ s } ∈ 𝓝 y :=
   mem_nhds_left _ (symm_le_uniformity h)
-
-/--
-theorem `exists_mem_nhds_ball_subset_of_mem_nhds` / 定理 `exists_mem_nhds_ball_subset_of_mem_nhds`
-
-English:
-theorem exists_mem_nhds_ball_subset_of_mem_nhds
-  given: {a : α} {U : Set α} (h : U in 𝓝 a)
-  proof: let ⟨t, ht, htU⟩ := comp_mem_uniformity_sets (mem_nhds_uniformity_iff_right.1 h)
-  ⟨_, mem_nhds_left a ht, t, ht, fun a₁ h₁ a₂ h₂ => @htU (a, a₂) ⟨a₁, h₁, h₂⟩ rfl⟩
-
-中文:
-定理 存在_mem_nhds_ball_subset_of_mem_nhds
-  条件: {a : α} {U : 集合 α} (h : U in 𝓝 a)
-  证明: let ⟨t, ht, htU⟩ := comp_mem_uniformity_sets (mem_nhds_uniformity_iff_right.1 h)
-  ⟨_, mem_nhds_left a ht, t, ht, fun a₁ h₁ a₂ h₂ => @htU (a, a₂) ⟨a₁, h₁, h₂⟩ rfl⟩
-
-Depends on / 依赖: comp_mem_uniformity_sets, mem_nhds_left, mem_nhds_uniformity_iff_right
+/-
+**exists_mem_nhds_ball_subset_of_mem_nhds** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：exists_mem_nhds_ball_subset_of_mem_nhds {a : α} {U : Set α} (h : U in 𝓝 a)
+ : exists V in 𝓝 a, exists t in 𝓤 α, forall a' in V, UniformSpace.ball a' t subs
+eteq U
+参数：h : U in 𝓝 a。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `comp_mem_uniformity_sets`：comp_mem_uniformity_sets {s : SetRel α α} (hs 
+: s in 𝓤 α) : exists t in 𝓤 α, t ○ t subseteq s
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `mem_nhds_uniformity_iff_right`：mem_nhds_uniformity_iff_right {x : α} {s 
+: Set α} : s in 𝓝 x ↔ { p : α × α | p.1 = x -> p.2 in s } in 𝓤 α
+· 使用定理 `mem_nhds_left`：mem_nhds_left (x : α) {s : SetRel α α} (h : s in 𝓤 α) : {
+ y : α | (x, y) in s } in 𝓝 x
 -/
-theorem exists_mem_nhds_ball_subset_of_mem_nhds {a : α} {U : Set α} (h : U in 𝓝 a) :
-    exists V in 𝓝 a, exists t in 𝓤 α, forall a' in V, UniformSpace.ball a' t subseteq U :=
+theorem exists_mem_nhds_ball_subset_of_mem_nhds {a : α} {U : Set α} (h : U ∈ 𝓝 a) :
+    ∃ V ∈ 𝓝 a, ∃ t ∈ 𝓤 α, ∀ a' ∈ V, UniformSpace.ball a' t ⊆ U :=
   let ⟨t, ht, htU⟩ := comp_mem_uniformity_sets (mem_nhds_uniformity_iff_right.1 h)
   ⟨_, mem_nhds_left a ht, t, ht, fun a₁ h₁ a₂ h₂ => @htU (a, a₂) ⟨a₁, h₁, h₂⟩ rfl⟩
-
-/--
-theorem `tendsto_right_nhds_uniformity` / 定理 `tendsto_right_nhds_uniformity`
-
-English:
-theorem tendsto_right_nhds_uniformity
-  given: {a : α}
-  statement: Tendsto (fun a' => (a', a)) (𝓝 a) (𝓤 α)
-  proof: fun _ =>
-  mem_nhds_right a
-
-中文:
-定理 tendsto_right_nhds_uniformity
-  条件: {a : α}
-  结论: 收敛 (fun a' => (a', a)) (𝓝 a) (𝓤 α)
-  证明: fun _ =>
-  mem_nhds_right a
+/-
+**tendsto_right_nhds_uniformity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tendsto_right_nhds_uniformity {a : α} : Tendsto (fun a' => (a', a)) (𝓝 a) 
+(𝓤 α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mem_nhds_right`：mem_nhds_right (y : α) {s : SetRel α α} (h : s in 𝓤 α) :
+ { x : α | (x, y) in s } in 𝓝 y
 -/
 theorem tendsto_right_nhds_uniformity {a : α} : Tendsto (fun a' => (a', a)) (𝓝 a) (𝓤 α) := fun _ =>
   mem_nhds_right a
-
-/--
-theorem `tendsto_left_nhds_uniformity` / 定理 `tendsto_left_nhds_uniformity`
-
-English:
-theorem tendsto_left_nhds_uniformity
-  given: {a : α}
-  statement: Tendsto (fun a' => (a, a')) (𝓝 a) (𝓤 α)
-  proof: fun _ =>
-  mem_nhds_left a
-
-中文:
-定理 tendsto_left_nhds_uniformity
-  条件: {a : α}
-  结论: 收敛 (fun a' => (a, a')) (𝓝 a) (𝓤 α)
-  证明: fun _ =>
-  mem_nhds_left a
+/-
+**tendsto_left_nhds_uniformity** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tendsto_left_nhds_uniformity {a : α} : Tendsto (fun a' => (a, a')) (𝓝 a) (
+𝓤 α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mem_nhds_left`：mem_nhds_left (x : α) {s : SetRel α α} (h : s in 𝓤 α) : {
+ y : α | (x, y) in s } in 𝓝 x
 -/
 theorem tendsto_left_nhds_uniformity {a : α} : Tendsto (fun a' => (a, a')) (𝓝 a) (𝓤 α) := fun _ =>
   mem_nhds_left a
-
-/--
-theorem `lift_nhds_left` / 定理 `lift_nhds_left`
-
-English:
-theorem lift_nhds_left
-  given: {x : α} {g : Set α -> Filter β} (hg : Monotone g)
-  proof: by
-  rw [nhds_eq_comap_uniformity]; rw [comap_lift_eq2 hg]
-  simp_rw [ball, Function.comp_def]
-
-中文:
-定理 lift_nhds_left
-  条件: {x : α} {g : 集合 α -> 滤子 β} (hg : 递增 g)
-  证明: by
-  rw [nhds_eq_comap_uniformity]; rw [comap_lift_eq2 hg]
-  simp_rw [ball, Function.comp_def]
-
-Depends on / 依赖: Function, Function.comp_def, comap_lift_eq2, comp_def, nhds_eq_comap_uniformity, simp_rw
+/-
+**lift_nhds_left** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lift_nhds_left {x : α} {g : Set α -> Filter β} (hg : Monotone g) : (𝓝 x).l
+ift g = (𝓤 α).lift fun s : SetRel α α => g (ball x s)
+参数：hg : Monotone g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nhds_eq_comap_uniformity`：nhds_eq_comap_uniformity {x : α} : 𝓝 x = (𝓤 α)
+.comap (Prod.mk x)
+· 使用定理 `Filter.comap_lift_eq2`：comap_lift_eq2 {m : β -> α} {g : Set β -> Filter 
+γ} (hg : Monotone g) : (comap m f).lift g = f.lift (g ∘ preimage m)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem lift_nhds_left {x : α} {g : Set α -> Filter β} (hg : Monotone g) :
+theorem lift_nhds_left {x : α} {g : Set α → Filter β} (hg : Monotone g) :
     (𝓝 x).lift g = (𝓤 α).lift fun s : SetRel α α => g (ball x s) := by
-  rw [nhds_eq_comap_uniformity]; rw [comap_lift_eq2 hg]
+  rw [nhds_eq_comap_uniformity, comap_lift_eq2 hg]
   simp_rw [ball, Function.comp_def]
-
-/--
-theorem `lift_nhds_right` / 定理 `lift_nhds_right`
-
-English:
-theorem lift_nhds_right
-  given: {x : α} {g : Set α -> Filter β} (hg : Monotone g)
-  proof: by
-  rw [nhds_eq_comap_uniformity']; rw [comap_lift_eq2 hg]
-  simp_rw [Function.comp_def, preimage]
-
-中文:
-定理 lift_nhds_right
-  条件: {x : α} {g : 集合 α -> 滤子 β} (hg : 递增 g)
-  证明: by
-  rw [nhds_eq_comap_uniformity']; rw [comap_lift_eq2 hg]
-  simp_rw [Function.comp_def, preimage]
-
-Depends on / 依赖: Function, Function.comp_def, comap_lift_eq2, comp_def, nhds_eq_comap_uniformity, preimage, simp_rw
+/-
+**lift_nhds_right** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lift_nhds_right {x : α} {g : Set α -> Filter β} (hg : Monotone g) : (𝓝 x).
+lift g = (𝓤 α).lift fun s : SetRel α α => g { y | (y, x) in s }
+参数：hg : Monotone g。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nhds_eq_comap_uniformity'`：nhds_eq_comap_uniformity' {x : α} : 𝓝 x = (𝓤 
+α).comap fun y => (y, x)
+· 使用定理 `Filter.comap_lift_eq2`：comap_lift_eq2 {m : β -> α} {g : Set β -> Filter 
+γ} (hg : Monotone g) : (comap m f).lift g = f.lift (g ∘ preimage m)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem lift_nhds_right {x : α} {g : Set α -> Filter β} (hg : Monotone g) :
-    (𝓝 x).lift g = (𝓤 α).lift fun s : SetRel α α => g { y | (y, x) in s } := by
-  rw [nhds_eq_comap_uniformity']; rw [comap_lift_eq2 hg]
+theorem lift_nhds_right {x : α} {g : Set α → Filter β} (hg : Monotone g) :
+    (𝓝 x).lift g = (𝓤 α).lift fun s : SetRel α α => g { y | (y, x) ∈ s } := by
+  rw [nhds_eq_comap_uniformity', comap_lift_eq2 hg]
   simp_rw [Function.comp_def, preimage]
-
-/--
-theorem `nhds_nhds_eq_uniformity_uniformity_prod` / 定理 `nhds_nhds_eq_uniformity_uniformity_prod`
-
-English:
-theorem nhds_nhds_eq_uniformity_uniformity_prod
-  given: {a b : α}
-  proof: by
-  rw [nhds_eq_uniformity']; rw [nhds_eq_uniformity]; rw [prod_lift'_lift']
-  exacts [rfl, monotone_preimage, monotone_preimage]
-
-中文:
-定理 nhds_nhds_eq_uniformity_uniformity_prod
-  条件: {a b : α}
-  证明: by
-  rw [nhds_eq_uniformity']; rw [nhds_eq_uniformity]; rw [prod_lift'_lift']
-  exacts [rfl, monotone_preimage, monotone_preimage]
-
-Depends on / 依赖: _lift, exacts, monotone_preimage, nhds_eq_uniformity, prod_lift
+/-
+**nhds_nhds_eq_uniformity_uniformity_prod** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：nhds_nhds_eq_uniformity_uniformity_prod {a b : α} : 𝓝 a ×ˢ 𝓝 b = (𝓤 α).lif
+t fun s : SetRel α α => (𝓤 α).lift' fun t => { y : α | (y, a) in s } ×ˢ { y : α 
+| (b, y) in t }
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.lift'`：lift'_top (h : Set α -> Set β) : (⊤ : Filter α).lift' h = 
+𝓟 (h univ)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nhds_eq_uniformity'`：nhds_eq_uniformity' {x : α} : 𝓝 x = (𝓤 α).lift' fun
+ s => { y | (y, x) in s }
+· 使用定理 `nhds_eq_uniformity`：nhds_eq_uniformity {x : α} : 𝓝 x = (𝓤 α).lift' (ball
+ x)
+· 使用定理 `Filter.prod_lift'_lift'`：∀ {α₁ : Type u_5} {α₂ : Type u_6} {β₁ : Type u_
+7} {β₂ : Type u_8} {f₁ : Filter α₁} {f₂ : Filter α₂}   {g₁ : Set α₁ → Set β₁} {g
+₂ : Set α₂ → …
+· 使用定理 `Set.monotone_preimage`：monotone_preimage {f : α -> β} : Monotone (preima
+ge f)
 -/
 theorem nhds_nhds_eq_uniformity_uniformity_prod {a b : α} :
     𝓝 a ×ˢ 𝓝 b = (𝓤 α).lift fun s : SetRel α α =>
-      (𝓤 α).lift' fun t => { y : α | (y, a) in s } ×ˢ { y : α | (b, y) in t } := by
-  rw [nhds_eq_uniformity']; rw [nhds_eq_uniformity]; rw [prod_lift'_lift']
+      (𝓤 α).lift' fun t => { y : α | (y, a) ∈ s } ×ˢ { y : α | (b, y) ∈ t } := by
+  rw [nhds_eq_uniformity', nhds_eq_uniformity, prod_lift'_lift']
   exacts [rfl, monotone_preimage, monotone_preimage]
-
-/--
-theorem `Filter.HasBasis.biInter_biUnion_ball` / 定理 `Filter.HasBasis.biInter_biUnion_ball`
-
-English:
-theorem Filter.HasBasis.biInter_biUnion_ball
-  statement: {p : ι -> Prop} {U : ι -> SetRel α α}
-  proof: by
-  ext x
-  simp [mem_closure_iff_nhds_basis (nhds_basis_uniformity h), ball]
-
-中文:
-定理 滤子.有基.bi整数er_biUnion_ball
-  结论: {p : ι -> 命题} {U : ι -> SetRel α α}
-  证明: by
-  ext x
-  simp [mem_closure_iff_nhds_basis (nhds_basis_uniformity h), ball]
-
-Depends on / 依赖: mem_closure_iff_nhds_basis, nhds_basis_uniformity
+/-
+**Filter.HasBasis.biInter_biUnion_ball** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Filter.HasBasis.biInter_biUnion_ball {p : ι -> Prop} {U : ι -> SetRel α α}
+ (h : HasBasis (𝓤 α) p U) (s : Set α) : (⋂ (i) (_ : p i), ⋃ x in s, ball x (U i)
+) = closure s
+参数：h : HasBasis (𝓤 α) p U；s : Set α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `exists_prop_congr`：∀ {p p' : Prop} {q q' : p → Prop}, (∀ (h : p), q h ↔ 
+q' h) → ∀ (hp : p ↔ p'), Exists q ↔ ∃ (h : p'), q' ⋯
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `mem_closure_iff_nhds_basis`：mem_closure_iff_nhds_basis {p : ι -> Prop} {
+s : ι -> Set X} (h : (𝓝 x).HasBasis p s) : x in closure t ↔ forall i, p i -> exi
+sts y in t, y in…
+· 使用定理 `nhds_basis_uniformity`：nhds_basis_uniformity {p : ι -> Prop} {s : ι -> S
+etRel α α} (h : (𝓤 α).HasBasis p s) {x : α} : (𝓝 x).HasBasis p fun i => { y | (y
+, x) in s i…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem Filter.HasBasis.biInter_biUnion_ball {p : ι -> Prop} {U : ι -> SetRel α α}
+theorem Filter.HasBasis.biInter_biUnion_ball {p : ι → Prop} {U : ι → SetRel α α}
     (h : HasBasis (𝓤 α) p U) (s : Set α) :
-    (⋂ (i) (_ : p i), ⋃ x in s, ball x (U i)) = closure s := by
+    (⋂ (i) (_ : p i), ⋃ x ∈ s, ball x (U i)) = closure s := by
   ext x
   simp [mem_closure_iff_nhds_basis (nhds_basis_uniformity h), ball]
 
@@ -2280,22 +1924,20 @@ variable [UniformSpace β]
 as `(x, y)` tends to the diagonal. In other words, if `x` is sufficiently close to `y`, then
 `f x` is close to `f y` no matter where `x` and `y` are located in `α`. -/
 @[fun_prop]
-/--
-Definition of `UniformContinuous` / `UniformContinuous` 的定义
+/-
+**UniformContinuous** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：UniformContinuous (f : α -> β)
+参数：f : α -> β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition UniformContinuous
-  signature: (f : α -> β)
-  body: Tendsto (fun x : α × α => (f x.1, f x.2)) (𝓤 α) (𝓤 β)
-
-中文:
-定义 一致连续
-  签名: (f : α -> β)
-  定义体: Tendsto (fun x : α × α => (f x.1, f x.2)) (𝓤 α) (𝓤 β)
-
-Depends on / 依赖: Tendsto
+--- 原说明 ---
+A function `f : α → β` is *uniformly continuous* if `(f x, f y)` tends to the di
+agonal
+as `(x, y)` tends to the diagonal. In other words, if `x` is sufficiently close 
+to `y`, then
+`f x` is close to `f y` no matter where `x` and `y` are located in `α`.
 -/
-def UniformContinuous (f : α -> β) :=
+def UniformContinuous (f : α → β) :=
   Tendsto (fun x : α × α => (f x.1, f x.2)) (𝓤 α) (𝓤 β)
 
 /-- Notation for uniform continuity with respect to non-standard `UniformSpace` instances. -/
@@ -2306,311 +1948,277 @@ the diagonal as `(x, y)` tends to the diagonal while remaining in `s ×ˢ s`.
 In other words, if `x` is sufficiently close to `y`, then `f x` is close to
 `f y` no matter where `x` and `y` are located in `s`. -/
 @[fun_prop]
-/--
-Definition of `UniformContinuousOn` / `UniformContinuousOn` 的定义
+/-
+**UniformContinuousOn** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：UniformContinuousOn (f : α -> β) (s : Set α) : Prop
+参数：f : α -> β；s : Set α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition UniformContinuousOn
-  signature: (f : α -> β) (s : Set α)
-  body: Tendsto (fun x : α × α => (f x.1, f x.2)) (𝓤 α ⊓ 𝓟 (s ×ˢ s)) (𝓤 β)
-
-中文:
-定义 UniformContinuousOn
-  签名: (f : α -> β) (s : 集合 α)
-  定义体: Tendsto (fun x : α × α => (f x.1, f x.2)) (𝓤 α ⊓ 𝓟 (s ×ˢ s)) (𝓤 β)
-
-Depends on / 依赖: Tendsto
+--- 原说明 ---
+A function `f : α → β` is *uniformly continuous* on `s : Set α` if `(f x, f y)` 
+tends to
+the diagonal as `(x, y)` tends to the diagonal while remaining in `s ×ˢ s`.
+In other words, if `x` is sufficiently close to `y`, then `f x` is close to
+`f y` no matter where `x` and `y` are located in `s`.
 -/
-def UniformContinuousOn (f : α -> β) (s : Set α) : Prop :=
+def UniformContinuousOn (f : α → β) (s : Set α) : Prop :=
   Tendsto (fun x : α × α => (f x.1, f x.2)) (𝓤 α ⊓ 𝓟 (s ×ˢ s)) (𝓤 β)
-
-/--
-theorem `uniformContinuous_def` / 定理 `uniformContinuous_def`
-
-English:
-theorem uniformContinuous_def
-  given: {f : α -> β}
-  proof: Iff.rfl
-
-中文:
-定理 uniformContinuous_def
-  条件: {f : α -> β}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**uniformContinuous_def** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：uniformContinuous_def {f : α -> β} : UniformContinuous f ↔ forall r in 𝓤 β
+, { x : α × α | (f x.1, f x.2) in r } in 𝓤 α
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem uniformContinuous_def {f : α -> β} :
-    UniformContinuous f ↔ forall r in 𝓤 β, { x : α × α | (f x.1, f x.2) in r } in 𝓤 α :=
+theorem uniformContinuous_def {f : α → β} :
+    UniformContinuous f ↔ ∀ r ∈ 𝓤 β, { x : α × α | (f x.1, f x.2) ∈ r } ∈ 𝓤 α :=
   Iff.rfl
-
-/--
-theorem `uniformContinuous_iff_eventually` / 定理 `uniformContinuous_iff_eventually`
-
-English:
-theorem uniformContinuous_iff_eventually
-  given: {f : α -> β}
-  proof: Iff.rfl
-
-中文:
-定理 uniformContinuous_iff_eventually
-  条件: {f : α -> β}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**uniformContinuous_iff_eventually** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：uniformContinuous_iff_eventually {f : α -> β} : UniformContinuous f ↔ fora
+ll r in 𝓤 β, forallᶠ x : α × α in 𝓤 α, (f x.1, f x.2) in r
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem uniformContinuous_iff_eventually {f : α -> β} :
-    UniformContinuous f ↔ forall r in 𝓤 β, forallᶠ x : α × α in 𝓤 α, (f x.1, f x.2) in r :=
+theorem uniformContinuous_iff_eventually {f : α → β} :
+    UniformContinuous f ↔ ∀ r ∈ 𝓤 β, ∀ᶠ x : α × α in 𝓤 α, (f x.1, f x.2) ∈ r :=
   Iff.rfl
-
-/--
-theorem `uniformContinuousOn_univ` / 定理 `uniformContinuousOn_univ`
-
-English:
-theorem uniformContinuousOn_univ
-  given: {f : α -> β}
-  proof: by
-  rw [UniformContinuousOn]; rw [UniformContinuous]; rw [univ_prod_univ]; rw [principal_univ]; rw [inf_top_eq]
-
-中文:
-定理 uniformContinuousOn_univ
-  条件: {f : α -> β}
-  证明: by
-  rw [UniformContinuousOn]; rw [UniformContinuous]; rw [univ_prod_univ]; rw [principal_univ]; rw [inf_top_eq]
-
-Depends on / 依赖: UniformContinuous, UniformContinuousOn, inf_top_eq, principal_univ, univ_prod_univ
+/-
+**uniformContinuousOn_univ** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：uniformContinuousOn_univ {f : α -> β} : UniformContinuousOn f univ ↔ Unifo
+rmContinuous f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `UniformContinuousOn.eq_1`：∀ {α : Type ua} {β : Type ub} [inst : UniformS
+pace α] [inst_1 : UniformSpace β] (f : α → β) (s : Set α),   UniformContinuousOn
+ f s =     Fil…
+· 使用定理 `UniformContinuous.eq_1`：∀ {α : Type ua} {β : Type ub} [inst : UniformSpa
+ce α] [inst_1 : UniformSpace β] (f : α → β),   UniformContinuous f = Filter.Tend
+sto (fun x =…
+· 使用定理 `Set.univ_prod_univ`：univ_prod_univ : @univ α ×ˢ @univ β = univ
+· 使用定理 `Filter.principal_univ`：∀ {α : Type u}, Filter.principal Set.univ = ⊤
+· 使用定理 `inf_top_eq`：∀ {α : Type u_1} [inst : SemilatticeInf α] [inst_1 : OrderTo
+p α] (a : α), a ⊓ ⊤ = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem uniformContinuousOn_univ {f : α -> β} :
+theorem uniformContinuousOn_univ {f : α → β} :
     UniformContinuousOn f univ ↔ UniformContinuous f := by
-  rw [UniformContinuousOn]; rw [UniformContinuous]; rw [univ_prod_univ]; rw [principal_univ]; rw [inf_top_eq]
-
-/--
-theorem `uniformContinuous_of_const` / 定理 `uniformContinuous_of_const`
-
-English:
-theorem uniformContinuous_of_const
-  given: {c : α -> β} (h : forall a b, c a = c b)
-  proof: have : (fun x : α × α => (c x.fst, c x.snd)) ⁻¹' SetRel.id = univ :=
-    eq_univ_iff_forall.2 fun ⟨a, b⟩ => h a b
-  le_trans (map_le_iff_le_comap.2 <| by simp [comap_principal, this]) refl_le_uniformity
-
-@[fun_prop]
-
-中文:
-定理 uniformContinuous_of_const
-  条件: {c : α -> β} (h : 对任意 a b, c a = c b)
-  证明: have : (fun x : α × α => (c x.fst, c x.snd)) ⁻¹' SetRel.id = univ :=
-    eq_univ_iff_forall.2 fun ⟨a, b⟩ => h a b
-  le_trans (map_le_iff_le_comap.2 <| by simp [comap_principal, this]) refl_le_uniformity
-
-@[fun_prop]
-
-Depends on / 依赖: SetRel, SetRel.id, comap_principal, eq_univ_iff_forall, le_trans, map_le_iff_le_comap, refl_le_uniformity, x.fst, x.snd
+  rw [UniformContinuousOn, UniformContinuous, univ_prod_univ, principal_univ, inf_top_eq]
+/-
+**uniformContinuous_of_const** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：uniformContinuous_of_const {c : α -> β} (h : forall a b, c a = c b) : Unif
+ormContinuous c
+参数：h : forall a b, c a = c b。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.eq_univ_iff_forall`：eq_univ_iff_forall {s : Set α} : s = univ ↔ fora
+ll x, x in s
+· 使用引理 `le_trans`：le_trans : a <= b -> b <= c -> a <= c
+· 使用定理 `Filter.map_le_iff_le_comap`：map_le_iff_le_comap : map m f <= g ↔ f <= co
+map m g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Filter.comap_principal`：comap_principal {t : Set β} : comap m (𝓟 t) = 𝓟 
+(m ⁻¹' t)
+· 使用定理 `Filter.principal_univ`：∀ {α : Type u}, Filter.principal Set.univ = ⊤
+· 使用定理 `refl_le_uniformity`：refl_le_uniformity : 𝓟 SetRel.id <= 𝓤 α
 -/
-theorem uniformContinuous_of_const {c : α -> β} (h : forall a b, c a = c b) :
+theorem uniformContinuous_of_const {c : α → β} (h : ∀ a b, c a = c b) :
     UniformContinuous c :=
   have : (fun x : α × α => (c x.fst, c x.snd)) ⁻¹' SetRel.id = univ :=
     eq_univ_iff_forall.2 fun ⟨a, b⟩ => h a b
   le_trans (map_le_iff_le_comap.2 <| by simp [comap_principal, this]) refl_le_uniformity
 
 @[fun_prop]
-/--
-theorem `uniformContinuous_id` / 定理 `uniformContinuous_id`
-
-English:
-theorem uniformContinuous_id
-  statement: UniformContinuous (@id α)
-  proof: tendsto_id
-
-@[fun_prop]
-
-中文:
-定理 uniformContinuous_id
-  结论: 一致连续 (@id α)
-  证明: tendsto_id
-
-@[fun_prop]
-
-Depends on / 依赖: tendsto_id
+/-
+**uniformContinuous_id** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：uniformContinuous_id : UniformContinuous (@id α)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.tendsto_id`：tendsto_id {x : Filter α} : Tendsto id x x
 -/
 theorem uniformContinuous_id : UniformContinuous (@id α) := tendsto_id
 
 @[fun_prop]
-/--
-theorem `uniformContinuous_const` / 定理 `uniformContinuous_const`
-
-English:
-theorem uniformContinuous_const
-  given: {b : β}
-  statement: UniformContinuous fun _ : α => b
-  proof: uniformContinuous_of_const fun _ _ => rfl
-
-@[fun_prop]
-nonrec theorem UniformContinuous.comp [UniformSpace γ] {g : β -> γ} {f : α -> β}
-    (hg : UniformContinuous g) (hf : UniformContinuous f) : UniformContinuous (g ∘ f) :=
-  hg.comp hf
-
-中文:
-定理 uniformContinuous_const
-  条件: {b : β}
-  结论: 一致连续 fun _ : α => b
-  证明: uniformContinuous_of_const fun _ _ => rfl
-
-@[fun_prop]
-nonrec theorem UniformContinuous.comp [UniformSpace γ] {g : β -> γ} {f : α -> β}
-    (hg : UniformContinuous g) (hf : UniformContinuous f) : UniformContinuous (g ∘ f) :=
-  hg.comp hf
-
-Depends on / 依赖: uniformContinuous_of_const
+/-
+**uniformContinuous_const** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：uniformContinuous_const {b : β} : UniformContinuous fun _ : α => b
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `uniformContinuous_of_const`：uniformContinuous_of_const {c : α -> β} (h :
+ forall a b, c a = c b) : UniformContinuous c
 -/
 theorem uniformContinuous_const {b : β} : UniformContinuous fun _ : α => b :=
   uniformContinuous_of_const fun _ _ => rfl
 
 @[fun_prop]
-nonrec theorem UniformContinuous.comp [UniformSpace γ] {g : β -> γ} {f : α -> β}
+nonrec theorem UniformContinuous.comp [UniformSpace γ] {g : β → γ} {f : α → β}
     (hg : UniformContinuous g) (hf : UniformContinuous f) : UniformContinuous (g ∘ f) :=
   hg.comp hf
 
 /-- If a function `T` is uniformly continuous in a uniform space `β`,
 then its `n`-th iterate `T^[n]` is also uniformly continuous. -/
 @[fun_prop]
-/--
-theorem `UniformContinuous.iterate` / 定理 `UniformContinuous.iterate`
+/-
+**UniformContinuous.iterate** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：UniformContinuous.iterate (T : β -> β) (n : Nat) (h : UniformContinuous T)
+ : UniformContinuous T^[n]
+参数：T : β -> β；n : Nat；h : UniformContinuous T。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `uniformContinuous_id`：uniformContinuous_id : UniformContinuous (@id α)
+· 使用定理 `UniformContinuous.comp`：∀ {α : Type ua} {β : Type ub} {γ : Type uc} [ins
+t : UniformSpace α] [inst_1 : UniformSpace β] [inst_2 : UniformSpace γ]   {g : β
+ → γ} {f : α…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.iterate_succ`：iterate_succ (n : Nat) : f^[n.succ] = f^[n] ∘ f
 
-English:
-theorem UniformContinuous.iterate
-  given: (T : β -> β) (n : Nat) (h : UniformContinuous T)
-  proof: by
-  induction n with
-  | zero => exact uniformContinuous_id
-  | succ n hn => exact Function.iterate_succ _ _ ▸ UniformContinuous.comp hn h
-
-中文:
-定理 一致连续.iterate
-  条件: (T : β -> β) (n : 自然数) (h : 一致连续 T)
-  证明: by
-  induction n with
-  | zero => exact uniformContinuous_id
-  | succ n hn => exact Function.iterate_succ _ _ ▸ UniformContinuous.comp hn h
-
-Depends on / 依赖: Function, Function.iterate_succ, UniformContinuous, UniformContinuous.comp, iterate_succ, uniformContinuous_id
+--- 原说明 ---
+If a function `T` is uniformly continuous in a uniform space `β`,
+then its `n`-th iterate `T^[n]` is also uniformly continuous.
 -/
-theorem UniformContinuous.iterate (T : β -> β) (n : Nat) (h : UniformContinuous T) :
+theorem UniformContinuous.iterate (T : β → β) (n : ℕ) (h : UniformContinuous T) :
     UniformContinuous T^[n] := by
   induction n with
   | zero => exact uniformContinuous_id
   | succ n hn => exact Function.iterate_succ _ _ ▸ UniformContinuous.comp hn h
-
-/--
-theorem `Filter.HasBasis.uniformContinuous_iff` / 定理 `Filter.HasBasis.uniformContinuous_iff`
-
-English:
-theorem Filter.HasBasis.uniformContinuous_iff
-  statement: {ι'} {p : ι -> Prop}
-  proof: (ha.tendsto_iff hb).trans by simp only [Prod.forall]
-
-中文:
-定理 滤子.有基.uniformContinuous_iff
-  结论: {ι'} {p : ι -> 命题}
-  证明: (ha.tendsto_iff hb).trans by simp only [Prod.forall]
-
-Depends on / 依赖: Prod.forall, ha.tendsto_iff, tendsto_iff
+/-
+**Filter.HasBasis.uniformContinuous_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Filter.HasBasis.uniformContinuous_iff {ι'} {p : ι -> Prop} {s : ι -> SetRe
+l α α} (ha : (𝓤 α).HasBasis p s) {q : ι' -> Prop} {t : ι' -> Set (β × β)} (hb : 
+(𝓤 β).HasBasis q t) {f : α -> β} : UniformContinuous f ↔ forall i, q i -> exists
+ j, p j ∧ forall x y, (x, y) in s j -> (f x, f y) in t i
+参数：ha : (𝓤 α).HasBasis p s；β × β；hb : (𝓤 β).HasBasis q t。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Filter.HasBasis.tendsto_iff`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u
+_4} {ι' : Sort u_5} {la : Filter α} {pa : ι → Prop} {sa : ι → Set α}   {lb : Fil
+ter β} {pb : ι' →…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem Filter.HasBasis.uniformContinuous_iff {ι'} {p : ι -> Prop}
-    {s : ι -> SetRel α α} (ha : (𝓤 α).HasBasis p s) {q : ι' -> Prop} {t : ι' -> Set (β × β)}
-    (hb : (𝓤 β).HasBasis q t) {f : α -> β} :
-    UniformContinuous f ↔ forall i, q i -> exists j, p j ∧ forall x y, (x, y) in s j -> (f x, f y) in t i :=
-(ha.tendsto_iff hb).trans by simp only [Prod.forall]
-
-/--
-theorem `Filter.HasBasis.uniformContinuousOn_iff` / 定理 `Filter.HasBasis.uniformContinuousOn_iff`
-
-English:
-theorem Filter.HasBasis.uniformContinuousOn_iff
-  statement: {ι'} {p : ι -> Prop}
-  proof: ((ha.inf_principal (S ×ˢ S)).tendsto_iff hb).trans by
-    simp_rw [Prod.forall, Set.inter_comm (s _), forall_mem_comm, mem_inter_iff, mem_prod, and_imp]
-
-中文:
-定理 滤子.有基.uniformContinuousOn_iff
-  结论: {ι'} {p : ι -> 命题}
-  证明: ((ha.inf_principal (S ×ˢ S)).tendsto_iff hb).trans by
-    simp_rw [Prod.forall, Set.inter_comm (s _), forall_mem_comm, mem_inter_iff, mem_prod, and_imp]
-
-Depends on / 依赖: Prod.forall, Set.inter_comm, and_imp, forall_mem_comm, ha.inf_principal, inf_principal, inter_comm, mem_inter_iff, mem_prod, simp_rw, tendsto_iff
+theorem Filter.HasBasis.uniformContinuous_iff {ι'} {p : ι → Prop}
+    {s : ι → SetRel α α} (ha : (𝓤 α).HasBasis p s) {q : ι' → Prop} {t : ι' → Set (β × β)}
+    (hb : (𝓤 β).HasBasis q t) {f : α → β} :
+    UniformContinuous f ↔ ∀ i, q i → ∃ j, p j ∧ ∀ x y, (x, y) ∈ s j → (f x, f y) ∈ t i :=
+  (ha.tendsto_iff hb).trans <| by simp only [Prod.forall]
+/-
+**Filter.HasBasis.uniformContinuousOn_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Filter.HasBasis.uniformContinuousOn_iff {ι'} {p : ι -> Prop} {s : ι -> Set
+Rel α α} (ha : (𝓤 α).HasBasis p s) {q : ι' -> Prop} {t : ι' -> Set (β × β)} (hb 
+: (𝓤 β).HasBasis q t) {f : α -> β} {S : Set α} : UniformContinuousOn f S ↔ foral
+l i, q i -> exists j, p j ∧ forall x, x in S -> forall y, y in S -> (x, y) in s 
+j -> (f x, f y) in t i
+参数：ha : (𝓤 α).HasBasis p s；β × β；hb : (𝓤 β).HasBasis q t。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.trans`：∀ {a b c : Prop}, (a ↔ b) → (b ↔ c) → (a ↔ c)
+· 使用定理 `Filter.HasBasis.tendsto_iff`：∀ {α : Type u_1} {β : Type u_2} {ι : Sort u
+_4} {ι' : Sort u_5} {la : Filter α} {pa : ι → Prop} {sa : ι → Set α}   {lb : Fil
+ter β} {pb : ι' →…
+· 使用定理 `Filter.HasBasis.inf_principal`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filt
+er α} {p : ι → Prop} {s : ι → Set α},   l.HasBasis p s → ∀ (s' : Set α), (l ⊓ Fi
+lter.principal s').…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.inter_comm`：inter_comm (a b : Set α) : a inter b = b inter a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem Filter.HasBasis.uniformContinuousOn_iff {ι'} {p : ι -> Prop}
-    {s : ι -> SetRel α α} (ha : (𝓤 α).HasBasis p s) {q : ι' -> Prop} {t : ι' -> Set (β × β)}
-    (hb : (𝓤 β).HasBasis q t) {f : α -> β} {S : Set α} :
+theorem Filter.HasBasis.uniformContinuousOn_iff {ι'} {p : ι → Prop}
+    {s : ι → SetRel α α} (ha : (𝓤 α).HasBasis p s) {q : ι' → Prop} {t : ι' → Set (β × β)}
+    (hb : (𝓤 β).HasBasis q t) {f : α → β} {S : Set α} :
     UniformContinuousOn f S ↔
-      forall i, q i -> exists j, p j ∧ forall x, x in S -> forall y, y in S -> (x, y) in s j -> (f x, f y) in t i :=
-((ha.inf_principal (S ×ˢ S)).tendsto_iff hb).trans by
+      ∀ i, q i → ∃ j, p j ∧ ∀ x, x ∈ S → ∀ y, y ∈ S → (x, y) ∈ s j → (f x, f y) ∈ t i :=
+  ((ha.inf_principal (S ×ˢ S)).tendsto_iff hb).trans <| by
     simp_rw [Prod.forall, Set.inter_comm (s _), forall_mem_comm, mem_inter_iff, mem_prod, and_imp]
 
 /-- A map `f : α → β` between uniform spaces is called *uniform inducing* if the uniformity filter
 on `α` is the pullback of the uniformity filter on `β` under `Prod.map f f`. If `α` is a separated
 space, then this implies that `f` is injective, hence it is a `IsUniformEmbedding`. -/
 @[mk_iff, fun_prop]
-/--
-Definition of `IsUniformInducing` / `IsUniformInducing` 的定义
+/-
+**IsUniformInducing** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{α : Type ua} → {β : Type ub} → [UniformSpace α] → [UniformSpace β] → (α →
+ β) → Prop
+参数：α → β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsUniformInducing
-  parameters: (f : α -> β)
-  axioms and operations (1):
-    - comap_uniformity : comap (fun x : α × α => (f x.1, f x.2)) (𝓤 β) = 𝓤 α
-
-中文:
-结构 是UniformInducing
-  参数: (f : α -> β)
-  公理与运算 (1 个):
-    - comap_uniformity : comap (fun x : α × α => (f x.1, f x.2)) (𝓤 β) = 𝓤 α
+--- 原说明 ---
+A map `f : α → β` between uniform spaces is called *uniform inducing* if the uni
+formity filter
+on `α` is the pullback of the uniformity filter on `β` under `Prod.map f f`. If 
+`α` is a separated
+space, then this implies that `f` is injective, hence it is a `IsUniformEmbeddin
+g`.
 -/
-structure IsUniformInducing (f : α -> β) : Prop where
+structure IsUniformInducing (f : α → β) : Prop where
   /-- The uniformity filter on the domain is the pullback of the uniformity filter on the codomain
   under `Prod.map f f`. -/
-  comap_uniformity : comap (fun x : α × α => (f x.1, f x.2)) (𝓤 β) = 𝓤 α
+  comap_uniformity : comap (fun x : α × α ↦ (f x.1, f x.2)) (𝓤 β) = 𝓤 α
 
 /-- A map `f : α → β` between uniform spaces is a *uniform embedding* if it is uniform inducing and
 injective. If `α` is a separated space, then the latter assumption follows from the former. -/
 @[mk_iff, fun_prop]
-/--
-Definition of `IsUniformEmbedding` / `IsUniformEmbedding` 的定义
+/-
+**IsUniformEmbedding** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：{α : Type ua} → {β : Type ub} → [UniformSpace α] → [UniformSpace β] → (α →
+ β) → Prop
+参数：α → β。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsUniformEmbedding
-  parameters: (f : α -> β)
-  extends: IsUniformInducing f
-  axioms and operations (1):
-    - injective : Function.Injective f
-
-中文:
-结构 是一致嵌入
-  参数: (f : α -> β)
-  继承: 是UniformInducing f
-  公理与运算 (1 个):
-    - injective : 函数.单射 f
+--- 原说明 ---
+A map `f : α → β` between uniform spaces is a *uniform embedding* if it is unifo
+rm inducing and
+injective. If `α` is a separated space, then the latter assumption follows from 
+the former.
 -/
-structure IsUniformEmbedding (f : α -> β) : Prop extends IsUniformInducing f where
+structure IsUniformEmbedding (f : α → β) : Prop extends IsUniformInducing f where
   /-- A uniform embedding is injective. -/
   injective : Function.Injective f
-
-/--
-lemma `IsUniformEmbedding.isUniformInducing` / 引理 `IsUniformEmbedding.isUniformInducing`
-
-English:
-lemma IsUniformEmbedding.isUniformInducing
-  given: {f : α -> β} (hf : IsUniformEmbedding f)
-  proof: hf.toIsUniformInducing
-
-中文:
-引理 是一致嵌入.isUniformInducing
-  条件: {f : α -> β} (hf : 是一致嵌入 f)
-  证明: hf.toIsUniformInducing
-
-Depends on / 依赖: hf.toIsUniformInducing, toIsUniformInducing
+/-
+**IsUniformEmbedding.isUniformInducing** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：IsUniformEmbedding.isUniformInducing {f : α -> β} (hf : IsUniformEmbedding
+ f) : IsUniformInducing f
+参数：hf : IsUniformEmbedding f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUniformEmbedding.toIsUniformInducing`：∀ {α : Type ua} {β : Type ub} [i
+nst : UniformSpace α] [inst_1 : UniformSpace β] {f : α → β},   IsUniformEmbeddin
+g f → IsUniformInducing f
 -/
-lemma IsUniformEmbedding.isUniformInducing {f : α -> β} (hf : IsUniformEmbedding f) :
+lemma IsUniformEmbedding.isUniformInducing {f : α → β} (hf : IsUniformEmbedding f) :
     IsUniformInducing f :=
   hf.toIsUniformInducing
 
 end UniformSpace
+

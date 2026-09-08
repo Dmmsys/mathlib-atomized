@@ -44,41 +44,24 @@ namespace IdealFilter
 
 /-- The additive-group filter basis whose sets are the ideals belonging to the ideal filter `F`. -/
 @[instance_reducible]
-/--
-Definition of `addGroupFilterBasis` / `addGroupFilterBasis` 的定义
+/-
+**IdealFilter.addGroupFilterBasis** 是 Mathlib 中的一个定义，位于命名空间 `IdealFilter`。
+形式化陈述：addGroupFilterBasis {A : Type*} [Ring A] (F : IdealFilter A) : AddGroupFil
+terBasis A where sets
+参数：F : IdealFilter A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition addGroupFilterBasis
-  signature: {A : Type*} [Ring A] (F : IdealFilter A)
-  body: {(I : Set A) | I in F}
-  nonempty := ⟨_, ⟨_, F.nonempty.choose_spec, rfl⟩⟩
-  inter_sets := by
-    rintro s t ⟨I, hI, rfl⟩ ⟨J, hJ, rfl⟩
-    exact ⟨I ⊓ J, ⟨I ⊓ J, Order.PFilter.inf_mem hI hJ, rfl⟩, fun _ h => h⟩
-  zero' := by aesop
-  add' := by aesop
-  neg' := by aesop
-  conj' := by aesop
-
-中文:
-定义 addGroupFilterBasis
-  签名: {A : 类型} [环 A] (F : IdealFilter A)
-  定义体: {(I : Set A) | I in F}
-  nonempty := ⟨_, ⟨_, F.nonempty.choose_spec, rfl⟩⟩
-  inter_sets := by
-    rintro s t ⟨I, hI, rfl⟩ ⟨J, hJ, rfl⟩
-    exact ⟨I ⊓ J, ⟨I ⊓ J, Order.PFilter.inf_mem hI hJ, rfl⟩, fun _ h => h⟩
-  zero' := by aesop
-  add' := by aesop
-  neg' := by aesop
-  conj' := by aesop
+--- 原说明 ---
+The additive-group filter basis whose sets are the ideals belonging to the ideal
+ filter `F`.
 -/
 def addGroupFilterBasis {A : Type*} [Ring A] (F : IdealFilter A) : AddGroupFilterBasis A where
-  sets := {(I : Set A) | I in F}
+  sets := {(I : Set A) | I ∈ F}
   nonempty := ⟨_, ⟨_, F.nonempty.choose_spec, rfl⟩⟩
   inter_sets := by
     rintro s t ⟨I, hI, rfl⟩ ⟨J, hJ, rfl⟩
-    exact ⟨I ⊓ J, ⟨I ⊓ J, Order.PFilter.inf_mem hI hJ, rfl⟩, fun _ h => h⟩
+    exact ⟨I ⊓ J, ⟨I ⊓ J, Order.PFilter.inf_mem hI hJ, rfl⟩, fun _ h ↦ h⟩
   zero' := by aesop
   add' := by aesop
   neg' := by aesop
@@ -86,106 +69,82 @@ def addGroupFilterBasis {A : Type*} [Ring A] (F : IdealFilter A) : AddGroupFilte
 
 /-- Under `[F.IsUniform]`, the ring filter basis obtained from `addGroupFilterBasis`. -/
 @[simps! -isSimp sets, instance_reducible]
-/--
-Definition of `ringFilterBasis` / `ringFilterBasis` 的定义
+/-
+**IdealFilter.ringFilterBasis** 是 Mathlib 中的一个定义，位于命名空间 `IdealFilter`。
+形式化陈述：ringFilterBasis {A : Type*} [Ring A] {F : IdealFilter A} [F.IsUniform] : R
+ingFilterBasis A where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ringFilterBasis
-  signature: {A : Type*} [Ring A] {F : IdealFilter A} [F.IsUniform]
-  body: F.addGroupFilterBasis
-  mul' := by
-    rintro U ⟨I, hI, rfl⟩
-    exact ⟨I, ⟨I, hI, rfl⟩, Set.mul_subset_iff.mpr fun _ h₁ _ h₂ => mul_mem h₁ h₂⟩
-  mul_left' := by
-    rintro x₀ U ⟨I, hI, rfl⟩
-    exact ⟨I, ⟨I, hI, rfl⟩, fun a ha => Ideal.mul_mem_left I x₀ ha⟩
-  mul_right' := by
-    rintro x₀ U ⟨I, hI, rfl⟩
-    refine ⟨I.colon {x₀}, ⟨I.colon {x₀}, IsUniform.colon_mem hI x₀, rfl⟩,
-      fun a ha => Set.mem_preimage.mpr (Submodule.mem_colon_singleton.mp ha)⟩
-
-中文:
-定义 ringFilterBasis
-  签名: {A : 类型} [环 A] {F : IdealFilter A} [F.是一致]
-  定义体: F.addGroupFilterBasis
-  mul' := by
-    rintro U ⟨I, hI, rfl⟩
-    exact ⟨I, ⟨I, hI, rfl⟩, Set.mul_subset_iff.mpr fun _ h₁ _ h₂ => mul_mem h₁ h₂⟩
-  mul_left' := by
-    rintro x₀ U ⟨I, hI, rfl⟩
-    exact ⟨I, ⟨I, hI, rfl⟩, fun a ha => Ideal.mul_mem_left I x₀ ha⟩
-  mul_right' := by
-    rintro x₀ U ⟨I, hI, rfl⟩
-    refine ⟨I.colon {x₀}, ⟨I.colon {x₀}, IsUniform.colon_mem hI x₀, rfl⟩,
-      fun a ha => Set.mem_preimage.mpr (Submodule.mem_colon_singleton.mp ha)⟩
-
-Depends on / 依赖: F.addGroupFilterBasis, addGroupFilterBasis
+--- 原说明 ---
+Under `[F.IsUniform]`, the ring filter basis obtained from `addGroupFilterBasis`
+.
 -/
 def ringFilterBasis {A : Type*} [Ring A] {F : IdealFilter A} [F.IsUniform] :
     RingFilterBasis A where
   __ := F.addGroupFilterBasis
   mul' := by
     rintro U ⟨I, hI, rfl⟩
-    exact ⟨I, ⟨I, hI, rfl⟩, Set.mul_subset_iff.mpr fun _ h₁ _ h₂ => mul_mem h₁ h₂⟩
+    exact ⟨I, ⟨I, hI, rfl⟩, Set.mul_subset_iff.mpr fun _ h₁ _ h₂ ↦ mul_mem h₁ h₂⟩
   mul_left' := by
     rintro x₀ U ⟨I, hI, rfl⟩
-    exact ⟨I, ⟨I, hI, rfl⟩, fun a ha => Ideal.mul_mem_left I x₀ ha⟩
+    exact ⟨I, ⟨I, hI, rfl⟩, fun a ha ↦ Ideal.mul_mem_left I x₀ ha⟩
   mul_right' := by
     rintro x₀ U ⟨I, hI, rfl⟩
     refine ⟨I.colon {x₀}, ⟨I.colon {x₀}, IsUniform.colon_mem hI x₀, rfl⟩,
-      fun a ha => Set.mem_preimage.mpr (Submodule.mem_colon_singleton.mp ha)⟩
+      fun a ha ↦ Set.mem_preimage.mpr (Submodule.mem_colon_singleton.mp ha)⟩
 
-/--
-theorem `isUniform_iff_exists_ringFilterBasis` / 定理 `isUniform_iff_exists_ringFilterBasis`
+/-- An `IdealFilter` on a ring `A` is uniform if and only if its ideals form a `RingFilterBasis`
+for `A`. -/
+/-
+**IdealFilter.isUniform_iff_exists_ringFilterBasis** 是 Mathlib 中的一个定理，位于命名空间 `Id
+ealFilter`。
+形式化陈述：isUniform_iff_exists_ringFilterBasis {A : Type*} [Ring A] {F : IdealFilter
+ A} : F.IsUniform ↔ exists B : RingFilterBasis A, B.sets = {(I : Set A) | I in F
+}
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingFilterBasis.mul_right`：mul_right (x₀ : R) {U : Set R} (hU : U in B) 
+: exists V in B, V subseteq (fun x => x * x₀) ⁻¹' U
+· 使用定理 `Eq.ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `Order.PFilter.mem_of_le`：mem_of_le {F : PFilter P} : x <= y -> x in F ->
+ y in F
 
-English:
-theorem isUniform_iff_exists_ringFilterBasis
-  given: {A : Type*} [Ring A] {F : IdealFilter A}
-  proof: by
-  refine ⟨fun _ => ⟨F.ringFilterBasis, rfl⟩, fun ⟨B, hB⟩ => ⟨fun {I} hI a => ?_⟩⟩
-  obtain ⟨V, hbasis, hsub⟩ := B.mul_right a (U := I) (hB.ge (by simpa))
-  obtain ⟨J, hJ, rfl⟩ := hB.le hbasis
-  exact Order.PFilter.mem_of_le (fun x hx => by simpa using (hsub hx)) hJ
-
-中文:
-定理 isUniform_iff_存在_ringFilterBasis
-  条件: {A : 类型} [环 A] {F : IdealFilter A}
-  证明: by
-  refine ⟨fun _ => ⟨F.ringFilterBasis, rfl⟩, fun ⟨B, hB⟩ => ⟨fun {I} hI a => ?_⟩⟩
-  obtain ⟨V, hbasis, hsub⟩ := B.mul_right a (U := I) (hB.ge (by simpa))
-  obtain ⟨J, hJ, rfl⟩ := hB.le hbasis
-  exact Order.PFilter.mem_of_le (fun x hx => by simpa using (hsub hx)) hJ
-
-Depends on / 依赖: B.mul_right, F.ringFilterBasis, Order.PFilter.mem_of_le, PFilter, hB.ge, hB.le, hbasis, mem_of_le, mul_right, ringFilterBasis
+--- 原说明 ---
+An `IdealFilter` on a ring `A` is uniform if and only if its ideals form a `Ring
+FilterBasis`
+for `A`.
 -/
 theorem isUniform_iff_exists_ringFilterBasis {A : Type*} [Ring A] {F : IdealFilter A} :
-    F.IsUniform ↔ exists B : RingFilterBasis A, B.sets = {(I : Set A) | I in F} := by
-  refine ⟨fun _ => ⟨F.ringFilterBasis, rfl⟩, fun ⟨B, hB⟩ => ⟨fun {I} hI a => ?_⟩⟩
+    F.IsUniform ↔ ∃ B : RingFilterBasis A, B.sets = {(I : Set A) | I ∈ F} := by
+  refine ⟨fun _ ↦ ⟨F.ringFilterBasis, rfl⟩, fun ⟨B, hB⟩ ↦ ⟨fun {I} hI a ↦ ?_⟩⟩
   obtain ⟨V, hbasis, hsub⟩ := B.mul_right a (U := I) (hB.ge (by simpa))
   obtain ⟨J, hJ, rfl⟩ := hB.le hbasis
-  exact Order.PFilter.mem_of_le (fun x hx => by simpa using (hsub hx)) hJ
+  exact Order.PFilter.mem_of_le (fun x hx ↦ by simpa using (hsub hx)) hJ
 
 end IdealFilter
 
 /-- Type synonym for a ring that depends on a choice of ideal filter. We use this to assign a
 topology generated by the ideal filter. -/
 @[nolint unusedArguments]
-/--
-Definition of `WithIdealFilter` / `WithIdealFilter` 的定义
+/-
+**WithIdealFilter** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：WithIdealFilter {A : Type*} [Ring A] : IdealFilter A -> Type _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WithIdealFilter
-  signature: {A : Type*} [Ring A]
-  body: fun _ => A
-deriving Ring
-
-中文:
-定义 WithIdealFilter
-  签名: {A : 类型} [环 A]
-  定义体: fun _ => A
-deriving Ring
+--- 原说明 ---
+Type synonym for a ring that depends on a choice of ideal filter. We use this to
+ assign a
+topology generated by the ideal filter.
 -/
-def WithIdealFilter {A : Type*} [Ring A] : IdealFilter A -> Type _ := fun _ => A
+def WithIdealFilter {A : Type*} [Ring A] : IdealFilter A → Type _ := fun _ => A
 deriving Ring
 
 namespace WithIdealFilter
@@ -194,90 +153,77 @@ open IdealFilter
 
 variable {A : Type*} [Ring A] {F : IdealFilter A}
 
-/--
-Definition of `idealSet` / `idealSet` 的定义
+/-- View an ideal of `A` as a subset of `WithIdealFilter F`. -/
+/-
+**WithIdealFilter.idealSet** 是 Mathlib 中的一个缩写定义，位于命名空间 `WithIdealFilter`。
+形式化陈述：idealSet (I : Ideal A) : Set (WithIdealFilter F)
+参数：I : Ideal A。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation idealSet
-  signature: (I : Ideal A)
-  body: (I : Set A)
-
-中文:
-缩写 idealSet
-  签名: (I : 理想 A)
-  定义体: (I : Set A)
+--- 原说明 ---
+View an ideal of `A` as a subset of `WithIdealFilter F`.
 -/
 abbrev idealSet (I : Ideal A) : Set (WithIdealFilter F) := (I : Set A)
 
-/--
-Instance `instTopologicalSpace` / 实例 `instTopologicalSpace`
+/-- The topology on `A` induced by `addGroupFilterBasis`. -/
+/-
+**WithIdealFilter.instTopologicalSpace** 是 Mathlib 中的一个实例，位于命名空间 `WithIdealFilte
+r`。
+形式化陈述：instTopologicalSpace : TopologicalSpace (WithIdealFilter F)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instTopologicalSpace
-  signature: : TopologicalSpace (WithIdealFilter F)
-  body: fast_instance% F.addGroupFilterBasis.topology
-
-中文:
-实例 instTopologicalSpace
-  签名: : 拓扑空间 (WithIdealFilter F)
-  定义体: fast_instance% F.addGroupFilterBasis.topology
-
-Depends on / 依赖: F.addGroupFilterBasis.topology, addGroupFilterBasis, fast_instance, topology
+--- 原说明 ---
+The topology on `A` induced by `addGroupFilterBasis`.
 -/
 instance instTopologicalSpace : TopologicalSpace (WithIdealFilter F) :=
   fast_instance% F.addGroupFilterBasis.topology
 
-/--
-Instance `instIsTopologicalAddGroup` / 实例 `instIsTopologicalAddGroup`
+/-- The topology `F.addGroupFilterBasis.topology` endows `A` with the structure of a topological
+additive group. -/
+/-
+**WithIdealFilter.instIsTopologicalAddGroup** 是 Mathlib 中的一个实例，位于命名空间 `WithIdeal
+Filter`。
+形式化陈述：instIsTopologicalAddGroup : IsTopologicalAddGroup (WithIdealFilter F)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddGroupFilterBasis.isTopologicalAddGroup`：∀ {G : Type u} [inst : AddGro
+up G] (B : AddGroupFilterBasis G), IsTopologicalAddGroup G
 
-English:
-instance instIsTopologicalAddGroup
-  signature: : IsTopologicalAddGroup (WithIdealFilter F)
-  body: F.addGroupFilterBasis.isTopologicalAddGroup
-
-中文:
-实例 instIsTopologicalAddGroup
-  签名: : 是拓扑加群 (WithIdealFilter F)
-  定义体: F.addGroupFilterBasis.isTopologicalAddGroup
-
-Depends on / 依赖: F.addGroupFilterBasis.isTopologicalAddGroup, addGroupFilterBasis, isTopologicalAddGroup
+--- 原说明 ---
+The topology `F.addGroupFilterBasis.topology` endows `A` with the structure of a
+ topological
+additive group.
 -/
 instance instIsTopologicalAddGroup : IsTopologicalAddGroup (WithIdealFilter F) :=
   F.addGroupFilterBasis.isTopologicalAddGroup
 
-/--
-lemma `mem_nhds_iff` / 引理 `mem_nhds_iff`
+/-- A set `s` is a neighbourhood of `a` iff it contains a left-additive coset of some ideal
+`I ∈ F`. -/
+/-
+**WithIdealFilter.mem_nhds_iff** 是 Mathlib 中的一个引理，位于命名空间 `WithIdealFilter`。
+形式化陈述：mem_nhds_iff {a : (WithIdealFilter F)} {s : Set (WithIdealFilter F)} : s i
+n 𝓝 a ↔ exists I in F, a +ᵥ idealSet I subseteq s
+参数：WithIdealFilter F；WithIdealFilter F。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Filter.HasBasis.mem_iff`：∀ {α : Type u_1} {ι : Sort u_4} {l : Filter α} 
+{p : ι → Prop} {s : ι → Set α} {t : Set α},   l.HasBasis p s → (t ∈ l ↔ ∃ i, p i
+ ∧ s i ⊆ t)
+· 使用定理 `AddGroupFilterBasis.nhds_hasBasis`：∀ {G : Type u} [inst : AddGroup G] (B
+ : AddGroupFilterBasis G) (x₀ : G),   (nhds x₀).HasBasis (fun V => V ∈ B) fun V 
+=> (fun y => x₀ + y) ''…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 
-English:
-lemma mem_nhds_iff
-  given: {a : (WithIdealFilter F)} {s : Set (WithIdealFilter F)}
-  proof: by
-  constructor
-  · intro hs
-    rcases ((F.addGroupFilterBasis).nhds_hasBasis a).mem_iff.1 hs with ⟨t, ht, hts⟩
-    rcases ht with ⟨I, hI, rfl⟩
-    exact ⟨I, hI, hts⟩
-  · rintro ⟨I, hI, hIs⟩
-    refine ((F.addGroupFilterBasis).nhds_hasBasis a).mem_iff.2 ?_
-    exact ⟨I, ⟨I, hI, rfl⟩, hIs⟩
-
-中文:
-引理 mem_nhds_iff
-  条件: {a : (WithIdealFilter F)} {s : 集合 (WithIdealFilter F)}
-  证明: by
-  constructor
-  · intro hs
-    rcases ((F.addGroupFilterBasis).nhds_hasBasis a).mem_iff.1 hs with ⟨t, ht, hts⟩
-    rcases ht with ⟨I, hI, rfl⟩
-    exact ⟨I, hI, hts⟩
-  · rintro ⟨I, hI, hIs⟩
-    refine ((F.addGroupFilterBasis).nhds_hasBasis a).mem_iff.2 ?_
-    exact ⟨I, ⟨I, hI, rfl⟩, hIs⟩
-
-Depends on / 依赖: F.addGroupFilterBasis, addGroupFilterBasis, mem_iff, nhds_hasBasis
+--- 原说明 ---
+A set `s` is a neighbourhood of `a` iff it contains a left-additive coset of som
+e ideal
+`I ∈ F`.
 -/
 lemma mem_nhds_iff {a : (WithIdealFilter F)} {s : Set (WithIdealFilter F)} :
-    s in 𝓝 a ↔ exists I in F, a +ᵥ idealSet I subseteq s := by
+    s ∈ 𝓝 a ↔ ∃ I ∈ F, a +ᵥ idealSet I ⊆ s := by
   constructor
   · intro hs
     rcases ((F.addGroupFilterBasis).nhds_hasBasis a).mem_iff.1 hs with ⟨t, ht, hts⟩
@@ -287,76 +233,75 @@ lemma mem_nhds_iff {a : (WithIdealFilter F)} {s : Set (WithIdealFilter F)} :
     refine ((F.addGroupFilterBasis).nhds_hasBasis a).mem_iff.2 ?_
     exact ⟨I, ⟨I, hI, rfl⟩, hIs⟩
 
-/--
-lemma `mem_nhds_zero_iff` / 引理 `mem_nhds_zero_iff`
+/-- A set `s` is a neighbourhood of `0` iff it contains an ideal belonging to `F`. -/
+/-
+**WithIdealFilter.mem_nhds_zero_iff** 是 Mathlib 中的一个引理，位于命名空间 `WithIdealFilter`。
+形式化陈述：mem_nhds_zero_iff {s : Set (WithIdealFilter F)} : s in 𝓝 0 ↔ exists I in F
+, idealSet I subseteq s
+参数：WithIdealFilter F。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `zero_vadd`：∀ (M : Type u_1) {α : Type u_5} [inst : AddMonoid M] [inst_1 
+: AddAction M α] (b : α), 0 +ᵥ b = b
+· 使用引理 `WithIdealFilter.mem_nhds_iff`：mem_nhds_iff {a : (WithIdealFilter F)} {s 
+: Set (WithIdealFilter F)} : s in 𝓝 a ↔ exists I in F, a +ᵥ idealSet I subseteq 
+s
 
-English:
-lemma mem_nhds_zero_iff
-  given: {s : Set (WithIdealFilter F)}
-  proof: by
-  simpa [zero_vadd] using mem_nhds_iff (a := 0) (s := s)
-
-中文:
-引理 mem_nhds_zero_iff
-  条件: {s : 集合 (WithIdealFilter F)}
-  证明: by
-  simpa [zero_vadd] using mem_nhds_iff (a := 0) (s := s)
-
-Depends on / 依赖: mem_nhds_iff, zero_vadd
+--- 原说明 ---
+A set `s` is a neighbourhood of `0` iff it contains an ideal belonging to `F`.
 -/
 lemma mem_nhds_zero_iff {s : Set (WithIdealFilter F)} :
-    s in 𝓝 0 ↔ exists I in F, idealSet I subseteq s := by
+    s ∈ 𝓝 0 ↔ ∃ I ∈ F, idealSet I ⊆ s := by
   simpa [zero_vadd] using mem_nhds_iff (a := 0) (s := s)
 
-/--
-Instance `instIsLinearTopology` / 实例 `instIsLinearTopology`
+/-- The topology is linear in the sense that `𝓝 0` has a basis of ideals. -/
+/-
+**WithIdealFilter.instIsLinearTopology** 是 Mathlib 中的一个实例，位于命名空间 `WithIdealFilte
+r`。
+形式化陈述：instIsLinearTopology : IsLinearTopology (WithIdealFilter F) (WithIdealFilt
+er F)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsLinearTopology.mk_of_hasBasis'`：mk_of_hasBasis' {ι : Sort*} {S : Type*
+} [SetLike S M] [AddSubmonoidClass S M] {p : ι -> Prop} {s : ι -> S} (h : (𝓝 0).
+HasBasis p (fun i => (…
+· 使用引理 `WithIdealFilter.mem_nhds_zero_iff`：mem_nhds_zero_iff {s : Set (WithIdeal
+Filter F)} : s in 𝓝 0 ↔ exists I in F, idealSet I subseteq s
+· 使用定理 `Submodule.smul_mem`：smul_mem (r : R) (h : x in p) : r • x in p
 
-English:
-instance instIsLinearTopology
-  signature: : IsLinearTopology (WithIdealFilter F) (WithIdealFilter F)
-  body: IsLinearTopology.mk_of_hasBasis' (R := (WithIdealFilter F))
-    (M := (WithIdealFilter F))
-    (ι := Ideal A) (S := Ideal A)
-    (p := fun I : Ideal A => I in F) (s := fun I : Ideal A => I)
-    ⟨fun _ => mem_nhds_zero_iff⟩
-    (fun I a _ hm => Submodule.smul_mem I a hm)
-
-中文:
-实例 instIsLinearTopology
-  签名: : 是线性拓扑 (WithIdealFilter F) (WithIdealFilter F)
-  定义体: IsLinearTopology.mk_of_hasBasis' (R := (WithIdealFilter F))
-    (M := (WithIdealFilter F))
-    (ι := Ideal A) (S := Ideal A)
-    (p := fun I : Ideal A => I in F) (s := fun I : Ideal A => I)
-    ⟨fun _ => mem_nhds_zero_iff⟩
-    (fun I a _ hm => Submodule.smul_mem I a hm)
-
-Depends on / 依赖: IsLinearTopology, IsLinearTopology.mk_of_hasBasis, Submodule, Submodule.smul_mem, WithIdealFilter, mem_nhds_zero_iff, mk_of_hasBasis, smul_mem
+--- 原说明 ---
+The topology is linear in the sense that `𝓝 0` has a basis of ideals.
 -/
 instance instIsLinearTopology : IsLinearTopology (WithIdealFilter F) (WithIdealFilter F) :=
   IsLinearTopology.mk_of_hasBasis' (R := (WithIdealFilter F))
     (M := (WithIdealFilter F))
     (ι := Ideal A) (S := Ideal A)
-    (p := fun I : Ideal A => I in F) (s := fun I : Ideal A => I)
-    ⟨fun _ => mem_nhds_zero_iff⟩
-    (fun I a _ hm => Submodule.smul_mem I a hm)
+    (p := fun I : Ideal A ↦ I ∈ F) (s := fun I : Ideal A ↦ I)
+    ⟨fun _ ↦ mem_nhds_zero_iff⟩
+    (fun I a _ hm ↦ Submodule.smul_mem I a hm)
 
-/--
-Instance `instIsTopologicalRing` / 实例 `instIsTopologicalRing`
+/-- Under `[F.IsUniform]`, `A` is a topological ring with the induced topology. -/
+/-
+**WithIdealFilter.instIsTopologicalRing** 是 Mathlib 中的一个实例，位于命名空间 `WithIdealFilt
+er`。
+形式化陈述：instIsTopologicalRing [F.IsUniform] : IsTopologicalRing (WithIdealFilter F
+)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingFilterBasis.isTopologicalRing`：∀ {R : Type u} [inst : Ring R] (B : R
+ingFilterBasis R), IsTopologicalRing R
 
-English:
-instance instIsTopologicalRing
-  signature: [F.IsUniform]
-  body: F.ringFilterBasis.isTopologicalRing
-
-中文:
-实例 instIsTopologicalRing
-  签名: [F.是一致]
-  定义体: F.ringFilterBasis.isTopologicalRing
-
-Depends on / 依赖: F.ringFilterBasis.isTopologicalRing, isTopologicalRing, ringFilterBasis
+--- 原说明 ---
+Under `[F.IsUniform]`, `A` is a topological ring with the induced topology.
 -/
 instance instIsTopologicalRing [F.IsUniform] : IsTopologicalRing (WithIdealFilter F) :=
   F.ringFilterBasis.isTopologicalRing
 
 end WithIdealFilter
+

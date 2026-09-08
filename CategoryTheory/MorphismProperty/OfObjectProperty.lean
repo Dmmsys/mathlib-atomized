@@ -22,178 +22,106 @@ namespace CategoryTheory.MorphismProperty
 
 variable {C : Type*} [Category* C]
 
-/--
-Definition of `ofObjectProperty` / `ofObjectProperty` 的定义
+/-- Given two object properties `P` and `Q`, the property of morphisms whose source
+satisfies `P` and target satisfies `Q`. -/
+/-
+**CategoryTheory.MorphismProperty.ofObjectProperty** 是 Mathlib 中的一个定义，位于命名空间 `Ca
+tegoryTheory.MorphismProperty`。
+形式化陈述：ofObjectProperty (P Q : ObjectProperty C) : MorphismProperty C
+参数：P Q : ObjectProperty C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofObjectProperty
-  signature: (P Q : ObjectProperty C)
-  body: fun X Y _ => P X ∧ Q Y
-
-中文:
-定义 ofObjectProperty
-  签名: (P Q : ObjectProperty C)
-  定义体: fun X Y _ => P X ∧ Q Y
+--- 原说明 ---
+Given two object properties `P` and `Q`, the property of morphisms whose source
+satisfies `P` and target satisfies `Q`.
 -/
 def ofObjectProperty (P Q : ObjectProperty C) : MorphismProperty C := fun X Y _ => P X ∧ Q Y
 
 variable (P Q : ObjectProperty C)
-
-/--
-lemma `ofObjectProperty_iff` / 引理 `ofObjectProperty_iff`
-
-English:
-lemma ofObjectProperty_iff
-  given: {X Y : C} (f : X ⟶ Y)
-  proof: Iff.rfl
-
-中文:
-引理 ofObjectProperty_iff
-  条件: {X Y : C} (f : X ⟶ Y)
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**CategoryTheory.MorphismProperty.ofObjectProperty_iff** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.MorphismProperty`。
+形式化陈述：ofObjectProperty_iff {X Y : C} (f : X ⟶ Y) : ofObjectProperty P Q f ↔ P X 
+∧ Q Y
+参数：f : X ⟶ Y。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma ofObjectProperty_iff {X Y : C} (f : X ⟶ Y) :
     ofObjectProperty P Q f ↔ P X ∧ Q Y := Iff.rfl
 
 variable {P} in
-/--
-lemma `monotone_ofObjectProperty_left` / 引理 `monotone_ofObjectProperty_left`
-
-English:
-lemma monotone_ofObjectProperty_left
-  given: {P' : ObjectProperty C} (h : P <= P')
-  proof: by
-  intro _ _ _ ⟨hX, hY⟩
-  exact ⟨h _ hX, hY⟩
-
-中文:
-引理 monotone_ofObjectProperty_left
-  条件: {P' : ObjectProperty C} (h : P <= P')
-  证明: by
-  intro _ _ _ ⟨hX, hY⟩
-  exact ⟨h _ hX, hY⟩
+/-
+**CategoryTheory.MorphismProperty.monotone_ofObjectProperty_left** 是 Mathlib 中的一
+个引理，位于命名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：monotone_ofObjectProperty_left {P' : ObjectProperty C} (h : P <= P') : ofO
+bjectProperty P Q <= ofObjectProperty P' Q
+参数：h : P <= P'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma monotone_ofObjectProperty_left {P' : ObjectProperty C} (h : P <= P') :
-    ofObjectProperty P Q <= ofObjectProperty P' Q := by
+lemma monotone_ofObjectProperty_left {P' : ObjectProperty C} (h : P ≤ P') :
+    ofObjectProperty P Q ≤ ofObjectProperty P' Q := by
   intro _ _ _ ⟨hX, hY⟩
   exact ⟨h _ hX, hY⟩
 
 variable {Q} in
-/--
-lemma `monotone_ofObjectProperty_right` / 引理 `monotone_ofObjectProperty_right`
-
-English:
-lemma monotone_ofObjectProperty_right
-  given: {Q' : ObjectProperty C} (h : Q <= Q')
-  proof: by
-  intro _ _ _ ⟨hX, hY⟩
-  exact ⟨hX, h _ hY⟩
-
-中文:
-引理 monotone_ofObjectProperty_right
-  条件: {Q' : ObjectProperty C} (h : Q <= Q')
-  证明: by
-  intro _ _ _ ⟨hX, hY⟩
-  exact ⟨hX, h _ hY⟩
+/-
+**CategoryTheory.MorphismProperty.monotone_ofObjectProperty_right** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：monotone_ofObjectProperty_right {Q' : ObjectProperty C} (h : Q <= Q') : of
+ObjectProperty P Q <= ofObjectProperty P Q'
+参数：h : Q <= Q'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma monotone_ofObjectProperty_right {Q' : ObjectProperty C} (h : Q <= Q') :
-    ofObjectProperty P Q <= ofObjectProperty P Q' := by
+lemma monotone_ofObjectProperty_right {Q' : ObjectProperty C} (h : Q ≤ Q') :
+    ofObjectProperty P Q ≤ ofObjectProperty P Q' := by
   intro _ _ _ ⟨hX, hY⟩
   exact ⟨hX, h _ hY⟩
-
-/--
-lemma `ofObjectProperty_inverseImage` / 引理 `ofObjectProperty_inverseImage`
-
-English:
-lemma ofObjectProperty_inverseImage
-  given: {D : Type*} [Category* D] (F : D ⥤ C)
-  proof: by
-  rfl
-
-中文:
-引理 ofObjectProperty_inverseImage
-  条件: {D : 类型} [范畴* D] (F : D ⥤ C)
-  证明: by
-  rfl
+/-
+**CategoryTheory.MorphismProperty.ofObjectProperty_inverseImage** 是 Mathlib 中的一个
+引理，位于命名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：ofObjectProperty_inverseImage {D : Type*} [Category* D] (F : D ⥤ C) : ofOb
+jectProperty (P.inverseImage F) (Q.inverseImage F) = (ofObjectProperty P Q).inve
+rseImage F
+参数：F : D ⥤ C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofObjectProperty_inverseImage {D : Type*} [Category* D] (F : D ⥤ C) :
     ofObjectProperty (P.inverseImage F) (Q.inverseImage F) =
     (ofObjectProperty P Q).inverseImage F := by
   rfl
-
-/--
-lemma `ofObjectProperty_map_le` / 引理 `ofObjectProperty_map_le`
-
-English:
-lemma ofObjectProperty_map_le
-  given: {D : Type*} [Category* D] (F : C ⥤ D)
-  proof: by
-  intro X Y f ⟨X', Y', f', ⟨hX', hY'⟩, ⟨i⟩⟩
-  exact ⟨⟨X', hX', ⟨Comma.leftIso i⟩⟩, ⟨Y', hY', ⟨Comma.rightIso i⟩⟩⟩
-
-中文:
-引理 ofObjectProperty_map_le
-  条件: {D : 类型} [范畴* D] (F : C ⥤ D)
-  证明: by
-  intro X Y f ⟨X', Y', f', ⟨hX', hY'⟩, ⟨i⟩⟩
-  exact ⟨⟨X', hX', ⟨Comma.leftIso i⟩⟩, ⟨Y', hY', ⟨Comma.rightIso i⟩⟩⟩
-
-Depends on / 依赖: Comma.leftIso, Comma.rightIso, leftIso, rightIso
+/-
+**CategoryTheory.MorphismProperty.ofObjectProperty_map_le** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.MorphismProperty`。
+形式化陈述：ofObjectProperty_map_le {D : Type*} [Category* D] (F : C ⥤ D) : (ofObjectP
+roperty P Q).map F <= ofObjectProperty (P.map F) (Q.map F)
+参数：F : C ⥤ D。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofObjectProperty_map_le {D : Type*} [Category* D] (F : C ⥤ D) :
-    (ofObjectProperty P Q).map F <= ofObjectProperty (P.map F) (Q.map F) := by
+    (ofObjectProperty P Q).map F ≤ ofObjectProperty (P.map F) (Q.map F) := by
   intro X Y f ⟨X', Y', f', ⟨hX', hY'⟩, ⟨i⟩⟩
   exact ⟨⟨X', hX', ⟨Comma.leftIso i⟩⟩, ⟨Y', hY', ⟨Comma.rightIso i⟩⟩⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P.IsClosedUnderIsomorphisms]
-  signature: : (ofObjectProperty P Q).RespectsLeft (isomorphisms C) where
-  body: by
-    intro X Y Z i hi f ⟨hY, hZ⟩
-    rw [isomorphisms.iff] at hi
-    exact ⟨(P.prop_iff_of_isIso i).mpr hY, hZ⟩
-
-中文:
-实例 [P.在同构下封闭]
-  签名: : (ofObjectProperty P Q).RespectsLeft (isomorphisms C) where
-  定义体: by
-    intro X Y Z i hi f ⟨hY, hZ⟩
-    rw [isomorphisms.iff] at hi
-    exact ⟨(P.prop_iff_of_isIso i).mpr hY, hZ⟩
-
-Depends on / 依赖: P.prop_iff_of_isIso, isomorphisms, isomorphisms.iff, prop_iff_of_isIso
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [P.IsClosedUnderIsomorphisms] : (ofObjectProperty P Q).RespectsLeft (isomorphisms C) where
   precomp := by
     intro X Y Z i hi f ⟨hY, hZ⟩
     rw [isomorphisms.iff] at hi
     exact ⟨(P.prop_iff_of_isIso i).mpr hY, hZ⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Q.IsClosedUnderIsomorphisms]
-  signature: : (ofObjectProperty P Q).RespectsRight (isomorphisms C) where
-  body: by
-    intro X Y Z i hi f ⟨hY, hZ⟩
-    rw [isomorphisms.iff] at hi
-    exact ⟨hY, (Q.prop_iff_of_isIso i).mp hZ⟩
-
-中文:
-实例 [Q.在同构下封闭]
-  签名: : (ofObjectProperty P Q).RespectsRight (isomorphisms C) where
-  定义体: by
-    intro X Y Z i hi f ⟨hY, hZ⟩
-    rw [isomorphisms.iff] at hi
-    exact ⟨hY, (Q.prop_iff_of_isIso i).mp hZ⟩
-
-Depends on / 依赖: Q.prop_iff_of_isIso, isomorphisms, isomorphisms.iff, prop_iff_of_isIso
+/-
+**CategoryTheory.MorphismProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Mor
+phismProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Q.IsClosedUnderIsomorphisms] : (ofObjectProperty P Q).RespectsRight (isomorphisms C) where
   postcomp := by
@@ -202,3 +130,4 @@ instance [Q.IsClosedUnderIsomorphisms] : (ofObjectProperty P Q).RespectsRight (i
     exact ⟨hY, (Q.prop_iff_of_isIso i).mp hZ⟩
 
 end CategoryTheory.MorphismProperty
+

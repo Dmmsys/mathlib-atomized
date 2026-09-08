@@ -32,24 +32,20 @@ namespace MaximalSpectrum
 
 open PrimeSpectrum Set
 
-/--
-theorem `toPrimeSpectrum_range` / 定理 `toPrimeSpectrum_range`
-
-English:
-theorem toPrimeSpectrum_range
-  proof: by
-  simp only [isClosed_singleton_iff_isMaximal]
-  ext ⟨x, _⟩
-  exact ⟨fun ⟨y, hy⟩ => hy ▸ y.isMaximal, fun hx => ⟨⟨x, hx⟩, rfl⟩⟩
-
-中文:
-定理 toPrimeSpectrum_range
-  证明: by
-  simp only [isClosed_singleton_iff_isMaximal]
-  ext ⟨x, _⟩
-  exact ⟨fun ⟨y, hy⟩ => hy ▸ y.isMaximal, fun hx => ⟨⟨x, hx⟩, rfl⟩⟩
-
-Depends on / 依赖: isClosed_singleton_iff_isMaximal, isMaximal, y.isMaximal
+/-
+**MaximalSpectrum.toPrimeSpectrum_range** 是 Mathlib 中的一个定理，位于命名空间 `MaximalSpectr
+um`。
+形式化陈述：toPrimeSpectrum_range : Set.range (@toPrimeSpectrum R _) = { x | IsClosed 
+({x} : Set <| PrimeSpectrum R) }
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `MaximalSpectrum.isMaximal`：∀ {R : Type u_1} [inst : CommSemiring R] (sel
+f : MaximalSpectrum R), self.asIdeal.IsMaximal
 -/
 theorem toPrimeSpectrum_range :
     Set.range (@toPrimeSpectrum R _) = { x | IsClosed ({x} : Set <| PrimeSpectrum R) } := by
@@ -57,64 +53,40 @@ theorem toPrimeSpectrum_range :
   ext ⟨x, _⟩
   exact ⟨fun ⟨y, hy⟩ => hy ▸ y.isMaximal, fun hx => ⟨⟨x, hx⟩, rfl⟩⟩
 
-/--
-Instance `zariskiTopology` / 实例 `zariskiTopology`
+/-- The Zariski topology on the maximal spectrum of a commutative ring is defined as the subspace
+topology induced by the natural inclusion into the prime spectrum. -/
+/-
+**MaximalSpectrum.zariskiTopology** 是 Mathlib 中的一个实例，位于命名空间 `MaximalSpectrum`。
+形式化陈述：zariskiTopology : TopologicalSpace MaximalSpectrum R
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance zariskiTopology
-  signature: : TopologicalSpace MaximalSpectrum R
-  body: PrimeSpectrum.zariskiTopology.induced toPrimeSpectrum
-
-中文:
-实例 zariskiTopology
-  签名: : 拓扑空间 极大谱 R
-  定义体: PrimeSpectrum.zariskiTopology.induced toPrimeSpectrum
-
-Depends on / 依赖: PrimeSpectrum, PrimeSpectrum.zariskiTopology.induced, induced, toPrimeSpectrum, zariskiTopology
+--- 原说明 ---
+The Zariski topology on the maximal spectrum of a commutative ring is defined as
+ the subspace
+topology induced by the natural inclusion into the prime spectrum.
 -/
-instance zariskiTopology : TopologicalSpace MaximalSpectrum R :=
+instance zariskiTopology : TopologicalSpace <| MaximalSpectrum R :=
   PrimeSpectrum.zariskiTopology.induced toPrimeSpectrum
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: T1Space MaximalSpectrum R
-  body: ⟨fun x => isClosed_induced_iff.mpr
-    ⟨{toPrimeSpectrum x}, (isClosed_singleton_iff_isMaximal _).mpr x.isMaximal, by
-      simpa only [← image_singleton] using preimage_image_eq {x} toPrimeSpectrum_injective⟩⟩
-
-中文:
-实例 :
-  签名: T1空间 极大谱 R
-  定义体: ⟨fun x => isClosed_induced_iff.mpr
-    ⟨{toPrimeSpectrum x}, (isClosed_singleton_iff_isMaximal _).mpr x.isMaximal, by
-      simpa only [← image_singleton] using preimage_image_eq {x} toPrimeSpectrum_injective⟩⟩
-
-Depends on / 依赖: image_singleton, isClosed_induced_iff, isClosed_induced_iff.mpr, isClosed_singleton_iff_isMaximal, isMaximal, preimage_image_eq, toPrimeSpectrum, toPrimeSpectrum_injective, x.isMaximal
+/-
+**MaximalSpectrum.** 是 Mathlib 中的一个实例，位于命名空间 `MaximalSpectrum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : T1Space MaximalSpectrum R :=
+instance : T1Space <| MaximalSpectrum R :=
   ⟨fun x => isClosed_induced_iff.mpr
     ⟨{toPrimeSpectrum x}, (isClosed_singleton_iff_isMaximal _).mpr x.isMaximal, by
       simpa only [← image_singleton] using preimage_image_eq {x} toPrimeSpectrum_injective⟩⟩
-
-/--
-theorem `toPrimeSpectrum_continuous` / 定理 `toPrimeSpectrum_continuous`
-
-English:
-theorem toPrimeSpectrum_continuous
-  statement: Continuous @toPrimeSpectrum R _
-  proof: continuous_induced_dom
-
-中文:
-定理 toPrimeSpectrum_continuous
-  结论: 连续 @toPrimeSpectrum R _
-  证明: continuous_induced_dom
-
-Depends on / 依赖: continuous_induced_dom
+/-
+**MaximalSpectrum.toPrimeSpectrum_continuous** 是 Mathlib 中的一个定理，位于命名空间 `MaximalS
+pectrum`。
+形式化陈述：toPrimeSpectrum_continuous : Continuous @toPrimeSpectrum R _
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_induced_dom`：continuous_induced_dom {t : TopologicalSpace β} 
+: Continuous[induced f t, t] f
 -/
-theorem toPrimeSpectrum_continuous : Continuous @toPrimeSpectrum R _ :=
+theorem toPrimeSpectrum_continuous : Continuous <| @toPrimeSpectrum R _ :=
   continuous_induced_dom
 
 end MaximalSpectrum
+

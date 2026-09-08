@@ -45,10 +45,10 @@ open scoped SzemerediRegularity.Positivity
 namespace SzemerediRegularity
 
 variable {α : Type*} [Fintype α] [DecidableEq α] {P : Finpartition (univ : Finset α)}
-  (hP : P.IsEquipartition) (G : SimpleGraph α) [DecidableRel G.Adj] (ε : Real) {U : Finset α}
-  (hU : U in P.parts) (V : Finset α)
+  (hP : P.IsEquipartition) (G : SimpleGraph α) [DecidableRel G.Adj] (ε : ℝ) {U : Finset α}
+  (hU : U ∈ P.parts) (V : Finset α)
 
-local notation3 "m" => (card α / stepBound #P.parts : Nat)
+local notation3 "m" => (card α / stepBound #P.parts : ℕ)
 
 /-!
 ### Definitions
@@ -58,176 +58,117 @@ contained in the corresponding witness of non-uniformity.
 -/
 
 
-/--
-Definition of `chunk` / `chunk` 的定义
+/-- The portion of `SzemerediRegularity.increment` which partitions `U`. -/
+/-
+**SzemerediRegularity.chunk** 是 Mathlib 中的一个定义，位于命名空间 `SzemerediRegularity`。
+形式化陈述：chunk : Finpartition U
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SzemerediRegularity.card_aux₁`：card_aux₁ (hucard : #u = m * 4 ^ #P.parts
+ + a) : (4 ^ #P.parts - a) * m + a * (m + 1) = #u
+· 使用定理 `SzemerediRegularity.card_aux₂`：card_aux₂ (hP : P.IsEquipartition) (hu : 
+u in P.parts) (hucard : #u != m * 4 ^ #P.parts + a) : (4 ^ #P.parts - (a + 1)) *
+ m + (a + 1) * (m +…
 
-English:
-definition chunk
-  signature: : Finpartition U
-  body: if hUcard : #U = m * 4 ^ #P.parts + (card α / #P.parts - m * 4 ^ #P.parts) then
-(atomise U <| P.nonuniformWitnesses G ε U).equitabilise card_aux₁ hUcard
-else (atomise U <| P.nonuniformWitnesses G ε U).equitabilise card_aux₂ hP hU hUcard
-
-中文:
-定义 chunk
-  签名: : 有限分拆 U
-  定义体: if hUcard : #U = m * 4 ^ #P.parts + (card α / #P.parts - m * 4 ^ #P.parts) then
-(atomise U <| P.nonuniformWitnesses G ε U).equitabilise card_aux₁ hUcard
-else (atomise U <| P.nonuniformWitnesses G ε U).equitabilise card_aux₂ hP hU hUcard
-
-Depends on / 依赖: P.nonuniformWitnesses, P.parts, atomise, equitabilise, hUcard, nonuniformWitnesses
+--- 原说明 ---
+The portion of `SzemerediRegularity.increment` which partitions `U`.
 -/
 noncomputable def chunk : Finpartition U :=
   if hUcard : #U = m * 4 ^ #P.parts + (card α / #P.parts - m * 4 ^ #P.parts) then
-(atomise U <| P.nonuniformWitnesses G ε U).equitabilise card_aux₁ hUcard
-else (atomise U <| P.nonuniformWitnesses G ε U).equitabilise card_aux₂ hP hU hUcard
+    (atomise U <| P.nonuniformWitnesses G ε U).equitabilise <| card_aux₁ hUcard
+  else (atomise U <| P.nonuniformWitnesses G ε U).equitabilise <| card_aux₂ hP hU hUcard
 
 -- `hP` and `hU` are used to get that `U` has size
 -- `m * 4 ^ #P.parts + a or m * 4 ^ #P.parts + a + 1`
-/--
-Definition of `star` / `star` 的定义
+/-- The portion of `SzemerediRegularity.chunk` which is contained in the witness of non-uniformity
+of `U` and `V`. -/
+/-
+**SzemerediRegularity.star** 是 Mathlib 中的一个定义，位于命名空间 `SzemerediRegularity`。
+形式化陈述：star (V : Finset α) : Finset (Finset α)
+参数：V : Finset α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition star
-  signature: (V : Finset α)
-  body: {A in (chunk hP G ε hU).parts | A subseteq G.nonuniformWitness ε U V}
-
-中文:
-定义 star
-  签名: (V : 有限集 α)
-  定义体: {A in (chunk hP G ε hU).parts | A subseteq G.nonuniformWitness ε U V}
-
-Depends on / 依赖: G.nonuniformWitness, nonuniformWitness, subseteq
+--- 原说明 ---
+The portion of `SzemerediRegularity.chunk` which is contained in the witness of 
+non-uniformity
+of `U` and `V`.
 -/
 noncomputable def star (V : Finset α) : Finset (Finset α) :=
-  {A in (chunk hP G ε hU).parts | A subseteq G.nonuniformWitness ε U V}
+  {A ∈ (chunk hP G ε hU).parts | A ⊆ G.nonuniformWitness ε U V}
+
+/-!
+### Density estimates
+
+We estimate the density between parts of `chunk`.
+-/
 
 
+/-
+**SzemerediRegularity.biUnion_star_subset_nonuniformWitness** 是 Mathlib 中的一个定理，位
+于命名空间 `SzemerediRegularity`。
+形式化陈述：biUnion_star_subset_nonuniformWitness : (star hP G ε hU V).biUnion id subs
+eteq G.nonuniformWitness ε U V
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Finset.biUnion_subset_iff_forall_subset`：biUnion_subset_iff_forall_subse
+t {α β : Type*} [DecidableEq β] {s : Finset α} {t : Finset β} {f : α -> Finset β
+} : s.biUnion f subseteq t ↔ …
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_filter`：∀ {α : Type u_1} {p : α → Prop} [inst : DecidablePred
+ p] {s : Finset α} {a : α}, a ∈ Finset.filter p s ↔ a ∈ s ∧ p a
 
-/--
-theorem `biUnion_star_subset_nonuniformWitness` / 定理 `biUnion_star_subset_nonuniformWitness`
+--- 原说明 ---
+### Density estimates
 
-English:
-theorem biUnion_star_subset_nonuniformWitness
-  proof: biUnion_subset_iff_forall_subset.2 fun _ hA => (mem_filter.1 hA).2
-
-中文:
-定理 biUnion_star_subset_nonuniformWitness
-  证明: biUnion_subset_iff_forall_subset.2 fun _ hA => (mem_filter.1 hA).2
-
-Depends on / 依赖: biUnion_subset_iff_forall_subset, mem_filter
+We estimate the density between parts of `chunk`.
 -/
 theorem biUnion_star_subset_nonuniformWitness :
-    (star hP G ε hU V).biUnion id subseteq G.nonuniformWitness ε U V :=
+    (star hP G ε hU V).biUnion id ⊆ G.nonuniformWitness ε U V :=
   biUnion_subset_iff_forall_subset.2 fun _ hA => (mem_filter.1 hA).2
 
 variable {hP G ε hU V} {𝒜 : Finset (Finset α)} {s : Finset α}
-
-/--
-theorem `star_subset_chunk` / 定理 `star_subset_chunk`
-
-English:
-theorem star_subset_chunk
-  statement: star hP G ε hU V subseteq (chunk hP G ε hU).parts
-  proof: filter_subset _ _
-
-中文:
-定理 star_subset_chunk
-  结论: star hP G ε hU V subseteq (chunk hP G ε hU).parts
-  证明: filter_subset _ _
-
-Depends on / 依赖: filter_subset
+/-
+**SzemerediRegularity.star_subset_chunk** 是 Mathlib 中的一个定理，位于命名空间 `SzemerediRegu
+larity`。
+形式化陈述：star_subset_chunk : star hP G ε hU V subseteq (chunk hP G ε hU).parts
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.filter_subset`：∀ {α : Type u_1} (p : α → Prop) [inst : DecidableP
+red p] (s : Finset α), Finset.filter p s ⊆ s
 -/
-theorem star_subset_chunk : star hP G ε hU V subseteq (chunk hP G ε hU).parts :=
+theorem star_subset_chunk : star hP G ε hU V ⊆ (chunk hP G ε hU).parts :=
   filter_subset _ _
-
-/--
-theorem `card_nonuniformWitness_sdiff_biUnion_star` / 定理 `card_nonuniformWitness_sdiff_biUnion_star`
-
-English:
-theorem card_nonuniformWitness_sdiff_biUnion_star
-  statement: (hV : V in P.parts) (hUV : U != V)
-  proof: by
-  have hX : G.nonuniformWitness ε U V in P.nonuniformWitnesses G ε U :=
-    nonuniformWitness_mem_nonuniformWitnesses h₂ hV hUV
-  have q : G.nonuniformWitness ε U V \ (star hP G ε hU V).biUnion id subseteq
-      {B in (atomise U <| P.nonuniformWitnesses G ε U).parts |
-        B subseteq G.nonuniformWitness ε U V ∧ B.Nonempty}.biUnion
-        fun B => B \ {A in (chunk hP G ε hU).parts | A subseteq B}.biUnion id := by
-    intro x hx
-    rw [← biUnion_filter_atomise hX (G.nonuniformWitness_subset h₂)]; rw [star]; rw [mem_sdiff]; rw [mem_biUnion] at hx
-    simp only [not_exists, mem_biUnion, and_imp, mem_filter,
-      not_and, mem_sdiff, id, mem_sdiff] at hx ⊢
-    obtain ⟨⟨B, hB₁, hB₂⟩, hx⟩ := hx
-exact ⟨B, hB₁, hB₂, fun A hA AB => hx A hA AB.trans hB₁.2.1⟩
-  apply (card_le_card q).trans (card_biUnion_le.trans _)
-  trans ∑ B in (atomise U <| P.nonuniformWitnesses G ε U).parts with
-    B subseteq G.nonuniformWitness ε U V ∧ B.Nonempty, m
-  · suffices forall B in (atomise U <| P.nonuniformWitnesses G ε U).parts,
-        #(B \ {A in (chunk hP G ε hU).parts | A subseteq B}.biUnion id) <= m by
-      gcongr with B hB
-exact this B filter_subset _ _ hB
-    intro B hB
-    unfold chunk
-    split_ifs with h₁
-    · convert! card_parts_equitabilise_subset_le _ (card_aux₁ h₁) hB
-    · convert! card_parts_equitabilise_subset_le _ (card_aux₂ hP hU h₁) hB
-  grw [sum_const, smul_eq_mul, card_filter_atomise_le_two_pow (s := U) hX,
-    Finpartition.card_nonuniformWitnesses_le, filter_subset] <;> simp
-
-中文:
-定理 card_nonuniformWitness_sdiff_biUnion_star
-  结论: (hV : V in P.parts) (hUV : U != V)
-  证明: by
-  have hX : G.nonuniformWitness ε U V in P.nonuniformWitnesses G ε U :=
-    nonuniformWitness_mem_nonuniformWitnesses h₂ hV hUV
-  have q : G.nonuniformWitness ε U V \ (star hP G ε hU V).biUnion id subseteq
-      {B in (atomise U <| P.nonuniformWitnesses G ε U).parts |
-        B subseteq G.nonuniformWitness ε U V ∧ B.Nonempty}.biUnion
-        fun B => B \ {A in (chunk hP G ε hU).parts | A subseteq B}.biUnion id := by
-    intro x hx
-    rw [← biUnion_filter_atomise hX (G.nonuniformWitness_subset h₂)]; rw [star]; rw [mem_sdiff]; rw [mem_biUnion] at hx
-    simp only [not_exists, mem_biUnion, and_imp, mem_filter,
-      not_and, mem_sdiff, id, mem_sdiff] at hx ⊢
-    obtain ⟨⟨B, hB₁, hB₂⟩, hx⟩ := hx
-exact ⟨B, hB₁, hB₂, fun A hA AB => hx A hA AB.trans hB₁.2.1⟩
-  apply (card_le_card q).trans (card_biUnion_le.trans _)
-  trans ∑ B in (atomise U <| P.nonuniformWitnesses G ε U).parts with
-    B subseteq G.nonuniformWitness ε U V ∧ B.Nonempty, m
-  · suffices forall B in (atomise U <| P.nonuniformWitnesses G ε U).parts,
-        #(B \ {A in (chunk hP G ε hU).parts | A subseteq B}.biUnion id) <= m by
-      gcongr with B hB
-exact this B filter_subset _ _ hB
-    intro B hB
-    unfold chunk
-    split_ifs with h₁
-    · convert! card_parts_equitabilise_subset_le _ (card_aux₁ h₁) hB
-    · convert! card_parts_equitabilise_subset_le _ (card_aux₂ hP hU h₁) hB
-  grw [sum_const, smul_eq_mul, card_filter_atomise_le_two_pow (s := U) hX,
-    Finpartition.card_nonuniformWitnesses_le, filter_subset] <;> simp
+/-
+**SzemerediRegularity.card_nonuniformWitness_sdiff_biUnion_star** 是 Mathlib 中的一个
+定理，位于命名空间 `SzemerediRegularity`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem card_nonuniformWitness_sdiff_biUnion_star (hV : V in P.parts) (hUV : U != V)
+private theorem card_nonuniformWitness_sdiff_biUnion_star (hV : V ∈ P.parts) (hUV : U ≠ V)
     (h₂ : ¬G.IsUniform ε U V) :
-    #(G.nonuniformWitness ε U V \ (star hP G ε hU V).biUnion id) <= 2 ^ (#P.parts - 1) * m := by
-  have hX : G.nonuniformWitness ε U V in P.nonuniformWitnesses G ε U :=
+    #(G.nonuniformWitness ε U V \ (star hP G ε hU V).biUnion id) ≤ 2 ^ (#P.parts - 1) * m := by
+  have hX : G.nonuniformWitness ε U V ∈ P.nonuniformWitnesses G ε U :=
     nonuniformWitness_mem_nonuniformWitnesses h₂ hV hUV
-  have q : G.nonuniformWitness ε U V \ (star hP G ε hU V).biUnion id subseteq
-      {B in (atomise U <| P.nonuniformWitnesses G ε U).parts |
-        B subseteq G.nonuniformWitness ε U V ∧ B.Nonempty}.biUnion
-        fun B => B \ {A in (chunk hP G ε hU).parts | A subseteq B}.biUnion id := by
+  have q : G.nonuniformWitness ε U V \ (star hP G ε hU V).biUnion id ⊆
+      {B ∈ (atomise U <| P.nonuniformWitnesses G ε U).parts |
+        B ⊆ G.nonuniformWitness ε U V ∧ B.Nonempty}.biUnion
+        fun B => B \ {A ∈ (chunk hP G ε hU).parts | A ⊆ B}.biUnion id := by
     intro x hx
-    rw [← biUnion_filter_atomise hX (G.nonuniformWitness_subset h₂)]; rw [star]; rw [mem_sdiff]; rw [mem_biUnion] at hx
+    rw [← biUnion_filter_atomise hX (G.nonuniformWitness_subset h₂), star, mem_sdiff,
+      mem_biUnion] at hx
     simp only [not_exists, mem_biUnion, and_imp, mem_filter,
       not_and, mem_sdiff, id, mem_sdiff] at hx ⊢
     obtain ⟨⟨B, hB₁, hB₂⟩, hx⟩ := hx
-exact ⟨B, hB₁, hB₂, fun A hA AB => hx A hA AB.trans hB₁.2.1⟩
+    exact ⟨B, hB₁, hB₂, fun A hA AB => hx A hA <| AB.trans hB₁.2.1⟩
   apply (card_le_card q).trans (card_biUnion_le.trans _)
-  trans ∑ B in (atomise U <| P.nonuniformWitnesses G ε U).parts with
-    B subseteq G.nonuniformWitness ε U V ∧ B.Nonempty, m
-  · suffices forall B in (atomise U <| P.nonuniformWitnesses G ε U).parts,
-        #(B \ {A in (chunk hP G ε hU).parts | A subseteq B}.biUnion id) <= m by
+  trans ∑ B ∈ (atomise U <| P.nonuniformWitnesses G ε U).parts with
+    B ⊆ G.nonuniformWitness ε U V ∧ B.Nonempty, m
+  · suffices ∀ B ∈ (atomise U <| P.nonuniformWitnesses G ε U).parts,
+        #(B \ {A ∈ (chunk hP G ε hU).parts | A ⊆ B}.biUnion id) ≤ m by
       gcongr with B hB
-exact this B filter_subset _ _ hB
+      exact this B <| filter_subset _ _ hB
     intro B hB
     unfold chunk
     split_ifs with h₁
@@ -235,776 +176,416 @@ exact this B filter_subset _ _ hB
     · convert! card_parts_equitabilise_subset_le _ (card_aux₂ hP hU h₁) hB
   grw [sum_const, smul_eq_mul, card_filter_atomise_le_two_pow (s := U) hX,
     Finpartition.card_nonuniformWitnesses_le, filter_subset] <;> simp
-
-/--
-theorem `one_sub_eps_mul_card_nonuniformWitness_le_card_star` / 定理 `one_sub_eps_mul_card_nonuniformWitness_le_card_star`
-
-English:
-theorem one_sub_eps_mul_card_nonuniformWitness_le_card_star
-  statement: (hV : V in P.parts)
-  proof: by
+/-
+**SzemerediRegularity.one_sub_eps_mul_card_nonuniformWitness_le_card_star** 是 Ma
+thlib 中的一个定理，位于命名空间 `SzemerediRegularity`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+private theorem one_sub_eps_mul_card_nonuniformWitness_le_card_star (hV : V ∈ P.parts)
+    (hUV : U ≠ V) (hunif : ¬G.IsUniform ε U V) (hPε : ↑100 ≤ ↑4 ^ #P.parts * ε ^ 5)
+    (hε₁ : ε ≤ 1) :
+    (1 - ε / 10) * #(G.nonuniformWitness ε U V) ≤ #((star hP G ε hU V).biUnion id) := by
   have hP₁ : 0 < #P.parts := Finset.card_pos.2 ⟨_, hU⟩
-  have : (↑2 ^ #P.parts : Real) * m / (#U * ε) <= ε / 10 := by
-    rw [← div_div]; rw [div_le_iff₀']
+  have : (↑2 ^ #P.parts : ℝ) * m / (#U * ε) ≤ ε / 10 := by
+    rw [← div_div, div_le_iff₀']
     swap
     · sz_positivity
     refine le_of_mul_le_mul_left ?_ (pow_pos zero_lt_two #P.parts)
     calc
-      ↑2 ^ #P.parts * ((↑2 ^ #P.parts * m : Real) / #U) =
-          ((2 : Real) * 2) ^ #P.parts * m / #U := by
-        rw [mul_pow]; rw [← mul_div_assoc]; rw [mul_assoc]
+      ↑2 ^ #P.parts * ((↑2 ^ #P.parts * m : ℝ) / #U) =
+          ((2 : ℝ) * 2) ^ #P.parts * m / #U := by
+        rw [mul_pow, ← mul_div_assoc, mul_assoc]
       _ = ↑4 ^ #P.parts * m / #U := by norm_num
-      _ <= 1 := div_le_one_of_le₀ (pow_mul_m_le_card_part hP hU) (cast_nonneg _)
-      _ <= ↑2 ^ #P.parts * ε ^ 2 / 10 := by
+      _ ≤ 1 := div_le_one_of_le₀ (pow_mul_m_le_card_part hP hU) (cast_nonneg _)
+      _ ≤ ↑2 ^ #P.parts * ε ^ 2 / 10 := by
         refine (one_le_sq_iff₀ <| by positivity).1 ?_
-        rw [div_pow]; rw [mul_pow]; rw [pow_right_comm]; rw [← pow_mul ε]; rw [one_le_div (by positivity)]
+        rw [div_pow, mul_pow, pow_right_comm, ← pow_mul ε, one_le_div (by positivity)]
         calc
           (↑10 ^ 2) = 100 := by norm_num
-          _ <= ↑4 ^ #P.parts * ε ^ 5 := hPε
-          _ <= ↑4 ^ #P.parts * ε ^ 4 := by
+          _ ≤ ↑4 ^ #P.parts * ε ^ 5 := hPε
+          _ ≤ ↑4 ^ #P.parts * ε ^ 4 := by
             gcongr _ * ?_
             exact pow_le_pow_of_le_one (by sz_positivity) hε₁ (by decide)
           _ = (↑2 ^ 2) ^ #P.parts * ε ^ (2 * 2) := by norm_num
       _ = ↑2 ^ #P.parts * (ε * (ε / 10)) := by rw [mul_div_assoc, sq, mul_div_assoc]
   calc
-    (↑1 - ε / 10) * #(G.nonuniformWitness ε U V) <=
+    (↑1 - ε / 10) * #(G.nonuniformWitness ε U V) ≤
         (↑1 - ↑2 ^ #P.parts * m / (#U * ε)) * #(G.nonuniformWitness ε U V) := by gcongr
     _ = #(G.nonuniformWitness ε U V) -
         ↑2 ^ #P.parts * m / (#U * ε) * #(G.nonuniformWitness ε U V) := by
-      rw [sub_mul]; rw [one_mul]
-    _ <= #(G.nonuniformWitness ε U V) - ↑2 ^ (#P.parts - 1) * m := by
+      rw [sub_mul, one_mul]
+    _ ≤ #(G.nonuniformWitness ε U V) - ↑2 ^ (#P.parts - 1) * m := by
       refine sub_le_sub_left ?_ _
-      have : (2 : Real) ^ #P.parts = ↑2 ^ (#P.parts - 1) * 2 := by
-        rw [← _root_.pow_succ]; rw [tsub_add_cancel_of_le (succ_le_iff.2 hP₁)]
-      rw [← mul_div_right_comm]; rw [this]; rw [mul_right_comm _ (2 : Real)]; rw [mul_assoc]; rw [le_div_iff₀]
+      have : (2 : ℝ) ^ #P.parts = ↑2 ^ (#P.parts - 1) * 2 := by
+        rw [← _root_.pow_succ, tsub_add_cancel_of_le (succ_le_iff.2 hP₁)]
+      rw [← mul_div_right_comm, this, mul_right_comm _ (2 : ℝ), mul_assoc, le_div_iff₀]
       · gcongr _ * ?_
         exact (G.le_card_nonuniformWitness hunif).trans
           (le_mul_of_one_le_left (cast_nonneg _) one_le_two)
       have := Finset.card_pos.mpr (P.nonempty_of_mem_parts hU)
       sz_positivity
-    _ <= #((star hP G ε hU V).biUnion id) := by
-      rw [sub_le_comm]; rw [←
-        cast_sub (card_le_card <| biUnion_star_subset_nonuniformWitness hP G ε hU V)]; rw [←
+    _ ≤ #((star hP G ε hU V).biUnion id) := by
+      rw [sub_le_comm, ←
+        cast_sub (card_le_card <| biUnion_star_subset_nonuniformWitness hP G ε hU V), ←
         card_sdiff_of_subset (biUnion_star_subset_nonuniformWitness hP G ε hU V)]
       exact mod_cast card_nonuniformWitness_sdiff_biUnion_star hV hUV hunif
 
-中文:
-定理 one_sub_eps_mul_card_nonuniformWitness_le_card_star
-  结论: (hV : V in P.parts)
-  证明: by
-  have hP₁ : 0 < #P.parts := Finset.card_pos.2 ⟨_, hU⟩
-  have : (↑2 ^ #P.parts : Real) * m / (#U * ε) <= ε / 10 := by
-    rw [← div_div]; rw [div_le_iff₀']
-    swap
-    · sz_positivity
-    refine le_of_mul_le_mul_left ?_ (pow_pos zero_lt_two #P.parts)
-    calc
-      ↑2 ^ #P.parts * ((↑2 ^ #P.parts * m : Real) / #U) =
-          ((2 : Real) * 2) ^ #P.parts * m / #U := by
-        rw [mul_pow]; rw [← mul_div_assoc]; rw [mul_assoc]
-      _ = ↑4 ^ #P.parts * m / #U := by norm_num
-      _ <= 1 := div_le_one_of_le₀ (pow_mul_m_le_card_part hP hU) (cast_nonneg _)
-      _ <= ↑2 ^ #P.parts * ε ^ 2 / 10 := by
-        refine (one_le_sq_iff₀ <| by positivity).1 ?_
-        rw [div_pow]; rw [mul_pow]; rw [pow_right_comm]; rw [← pow_mul ε]; rw [one_le_div (by positivity)]
-        calc
-          (↑10 ^ 2) = 100 := by norm_num
-          _ <= ↑4 ^ #P.parts * ε ^ 5 := hPε
-          _ <= ↑4 ^ #P.parts * ε ^ 4 := by
-            gcongr _ * ?_
-            exact pow_le_pow_of_le_one (by sz_positivity) hε₁ (by decide)
-          _ = (↑2 ^ 2) ^ #P.parts * ε ^ (2 * 2) := by norm_num
-      _ = ↑2 ^ #P.parts * (ε * (ε / 10)) := by rw [mul_div_assoc, sq, mul_div_assoc]
-  calc
-    (↑1 - ε / 10) * #(G.nonuniformWitness ε U V) <=
-        (↑1 - ↑2 ^ #P.parts * m / (#U * ε)) * #(G.nonuniformWitness ε U V) := by gcongr
-    _ = #(G.nonuniformWitness ε U V) -
-        ↑2 ^ #P.parts * m / (#U * ε) * #(G.nonuniformWitness ε U V) := by
-      rw [sub_mul]; rw [one_mul]
-    _ <= #(G.nonuniformWitness ε U V) - ↑2 ^ (#P.parts - 1) * m := by
-      refine sub_le_sub_left ?_ _
-      have : (2 : Real) ^ #P.parts = ↑2 ^ (#P.parts - 1) * 2 := by
-        rw [← _root_.pow_succ]; rw [tsub_add_cancel_of_le (succ_le_iff.2 hP₁)]
-      rw [← mul_div_right_comm]; rw [this]; rw [mul_right_comm _ (2 : Real)]; rw [mul_assoc]; rw [le_div_iff₀]
-      · gcongr _ * ?_
-        exact (G.le_card_nonuniformWitness hunif).trans
-          (le_mul_of_one_le_left (cast_nonneg _) one_le_two)
-      have := Finset.card_pos.mpr (P.nonempty_of_mem_parts hU)
-      sz_positivity
-    _ <= #((star hP G ε hU V).biUnion id) := by
-      rw [sub_le_comm]; rw [←
-        cast_sub (card_le_card <| biUnion_star_subset_nonuniformWitness hP G ε hU V)]; rw [←
-        card_sdiff_of_subset (biUnion_star_subset_nonuniformWitness hP G ε hU V)]
-      exact mod_cast card_nonuniformWitness_sdiff_biUnion_star hV hUV hunif
+/-! ### `chunk` -/
+
+
+/-
+**SzemerediRegularity.card_chunk** 是 Mathlib 中的一个定理，位于命名空间 `SzemerediRegularity`
+。
+形式化陈述：card_chunk (hm : m != 0) : #(chunk hP G ε hU).parts = 4 ^ #P.parts
+参数：hm : m != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SzemerediRegularity.card_aux₁`：card_aux₁ (hucard : #u = m * 4 ^ #P.parts
+ + a) : (4 ^ #P.parts - a) * m + a * (m + 1) = #u
+· 使用定理 `SzemerediRegularity.card_aux₂`：card_aux₂ (hP : P.IsEquipartition) (hu : 
+u in P.parts) (hucard : #u != m * 4 ^ #P.parts + a) : (4 ^ #P.parts - (a + 1)) *
+ m + (a + 1) * (m +…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `Finpartition.card_parts_equitabilise`：card_parts_equitabilise (hm : m !=
+ 0) : #(P.equitabilise h).parts = a + b
+· 使用定理 `tsub_add_cancel_of_le`：tsub_add_cancel_of_le (h : a <= b) : b - a + a = 
+b
+· 使用定理 `StarOrderedRing.toExistsAddOfLE`：∀ {R : Type u_1} [inst : NonUnitalSemir
+ing R] [inst_1 : PartialOrder R] [inst_2 : StarRing R] [StarOrderedRing R],   Ex
+istsAddOfLE R
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `SzemerediRegularity.a_add_one_le_four_pow_parts_card`：a_add_one_le_four_
+pow_parts_card : a + 1 <= 4 ^ #P.parts
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
+
+--- 原说明 ---
+### `chunk`
 -/
-private theorem one_sub_eps_mul_card_nonuniformWitness_le_card_star (hV : V in P.parts)
-    (hUV : U != V) (hunif : ¬G.IsUniform ε U V) (hPε : ↑100 <= ↑4 ^ #P.parts * ε ^ 5)
-    (hε₁ : ε <= 1) :
-    (1 - ε / 10) * #(G.nonuniformWitness ε U V) <= #((star hP G ε hU V).biUnion id) := by
-  have hP₁ : 0 < #P.parts := Finset.card_pos.2 ⟨_, hU⟩
-  have : (↑2 ^ #P.parts : Real) * m / (#U * ε) <= ε / 10 := by
-    rw [← div_div]; rw [div_le_iff₀']
-    swap
-    · sz_positivity
-    refine le_of_mul_le_mul_left ?_ (pow_pos zero_lt_two #P.parts)
-    calc
-      ↑2 ^ #P.parts * ((↑2 ^ #P.parts * m : Real) / #U) =
-          ((2 : Real) * 2) ^ #P.parts * m / #U := by
-        rw [mul_pow]; rw [← mul_div_assoc]; rw [mul_assoc]
-      _ = ↑4 ^ #P.parts * m / #U := by norm_num
-      _ <= 1 := div_le_one_of_le₀ (pow_mul_m_le_card_part hP hU) (cast_nonneg _)
-      _ <= ↑2 ^ #P.parts * ε ^ 2 / 10 := by
-        refine (one_le_sq_iff₀ <| by positivity).1 ?_
-        rw [div_pow]; rw [mul_pow]; rw [pow_right_comm]; rw [← pow_mul ε]; rw [one_le_div (by positivity)]
-        calc
-          (↑10 ^ 2) = 100 := by norm_num
-          _ <= ↑4 ^ #P.parts * ε ^ 5 := hPε
-          _ <= ↑4 ^ #P.parts * ε ^ 4 := by
-            gcongr _ * ?_
-            exact pow_le_pow_of_le_one (by sz_positivity) hε₁ (by decide)
-          _ = (↑2 ^ 2) ^ #P.parts * ε ^ (2 * 2) := by norm_num
-      _ = ↑2 ^ #P.parts * (ε * (ε / 10)) := by rw [mul_div_assoc, sq, mul_div_assoc]
-  calc
-    (↑1 - ε / 10) * #(G.nonuniformWitness ε U V) <=
-        (↑1 - ↑2 ^ #P.parts * m / (#U * ε)) * #(G.nonuniformWitness ε U V) := by gcongr
-    _ = #(G.nonuniformWitness ε U V) -
-        ↑2 ^ #P.parts * m / (#U * ε) * #(G.nonuniformWitness ε U V) := by
-      rw [sub_mul]; rw [one_mul]
-    _ <= #(G.nonuniformWitness ε U V) - ↑2 ^ (#P.parts - 1) * m := by
-      refine sub_le_sub_left ?_ _
-      have : (2 : Real) ^ #P.parts = ↑2 ^ (#P.parts - 1) * 2 := by
-        rw [← _root_.pow_succ]; rw [tsub_add_cancel_of_le (succ_le_iff.2 hP₁)]
-      rw [← mul_div_right_comm]; rw [this]; rw [mul_right_comm _ (2 : Real)]; rw [mul_assoc]; rw [le_div_iff₀]
-      · gcongr _ * ?_
-        exact (G.le_card_nonuniformWitness hunif).trans
-          (le_mul_of_one_le_left (cast_nonneg _) one_le_two)
-      have := Finset.card_pos.mpr (P.nonempty_of_mem_parts hU)
-      sz_positivity
-    _ <= #((star hP G ε hU V).biUnion id) := by
-      rw [sub_le_comm]; rw [←
-        cast_sub (card_le_card <| biUnion_star_subset_nonuniformWitness hP G ε hU V)]; rw [←
-        card_sdiff_of_subset (biUnion_star_subset_nonuniformWitness hP G ε hU V)]
-      exact mod_cast card_nonuniformWitness_sdiff_biUnion_star hV hUV hunif
-
-
-
-/--
-theorem `card_chunk` / 定理 `card_chunk`
-
-English:
-theorem card_chunk
-  given: (hm : m != 0)
-  statement: #(chunk hP G ε hU).parts = 4 ^ #P.parts
-  proof: by
+theorem card_chunk (hm : m ≠ 0) : #(chunk hP G ε hU).parts = 4 ^ #P.parts := by
   unfold chunk
   split_ifs
   · rw [card_parts_equitabilise _ _ hm, tsub_add_cancel_of_le]
     exact le_of_lt a_add_one_le_four_pow_parts_card
   · rw [card_parts_equitabilise _ _ hm, tsub_add_cancel_of_le a_add_one_le_four_pow_parts_card]
-
-中文:
-定理 card_chunk
-  条件: (hm : m != 0)
-  结论: #(chunk hP G ε hU).parts = 4 ^ #P.parts
-  证明: by
-  unfold chunk
-  split_ifs
-  · rw [card_parts_equitabilise _ _ hm, tsub_add_cancel_of_le]
-    exact le_of_lt a_add_one_le_four_pow_parts_card
-  · rw [card_parts_equitabilise _ _ hm, tsub_add_cancel_of_le a_add_one_le_four_pow_parts_card]
-
-Depends on / 依赖: a_add_one_le_four_pow_parts_card, card_parts_equitabilise, le_of_lt, split_ifs, tsub_add_cancel_of_le
+/-
+**SzemerediRegularity.card_eq_of_mem_parts_chunk** 是 Mathlib 中的一个定理，位于命名空间 `Szem
+erediRegularity`。
+形式化陈述：card_eq_of_mem_parts_chunk (hs : s in (chunk hP G ε hU).parts) : #s = m ∨ 
+#s = m + 1
+参数：hs : s in (chunk hP G ε hU).parts。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finpartition.card_eq_of_mem_parts_equitabilise`：card_eq_of_mem_parts_equ
+itabilise : t in (P.equitabilise h).parts -> #t = m ∨ #t = m + 1
+· 使用定理 `SzemerediRegularity.card_aux₁`：card_aux₁ (hucard : #u = m * 4 ^ #P.parts
+ + a) : (4 ^ #P.parts - a) * m + a * (m + 1) = #u
+· 使用定理 `SzemerediRegularity.card_aux₂`：card_aux₂ (hP : P.IsEquipartition) (hu : 
+u in P.parts) (hucard : #u != m * 4 ^ #P.parts + a) : (4 ^ #P.parts - (a + 1)) *
+ m + (a + 1) * (m +…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
 -/
-theorem card_chunk (hm : m != 0) : #(chunk hP G ε hU).parts = 4 ^ #P.parts := by
-  unfold chunk
-  split_ifs
-  · rw [card_parts_equitabilise _ _ hm, tsub_add_cancel_of_le]
-    exact le_of_lt a_add_one_le_four_pow_parts_card
-  · rw [card_parts_equitabilise _ _ hm, tsub_add_cancel_of_le a_add_one_le_four_pow_parts_card]
-
-/--
-theorem `card_eq_of_mem_parts_chunk` / 定理 `card_eq_of_mem_parts_chunk`
-
-English:
-theorem card_eq_of_mem_parts_chunk
-  given: (hs : s in (chunk hP G ε hU).parts)
-  proof: by
-  unfold chunk at hs
-  split_ifs at hs <;> exact card_eq_of_mem_parts_equitabilise hs
-
-中文:
-定理 card_eq_of_mem_parts_chunk
-  条件: (hs : s in (chunk hP G ε hU).parts)
-  证明: by
-  unfold chunk at hs
-  split_ifs at hs <;> exact card_eq_of_mem_parts_equitabilise hs
-
-Depends on / 依赖: card_eq_of_mem_parts_equitabilise, split_ifs
--/
-theorem card_eq_of_mem_parts_chunk (hs : s in (chunk hP G ε hU).parts) :
+theorem card_eq_of_mem_parts_chunk (hs : s ∈ (chunk hP G ε hU).parts) :
     #s = m ∨ #s = m + 1 := by
   unfold chunk at hs
   split_ifs at hs <;> exact card_eq_of_mem_parts_equitabilise hs
-
-/--
-theorem `m_le_card_of_mem_chunk_parts` / 定理 `m_le_card_of_mem_chunk_parts`
-
-English:
-theorem m_le_card_of_mem_chunk_parts
-  given: (hs : s in (chunk hP G ε hU).parts)
-  statement: m <= #s
-  proof: (card_eq_of_mem_parts_chunk hs).elim ge_of_eq fun i => by simp [i]
-
-中文:
-定理 m_le_card_of_mem_chunk_parts
-  条件: (hs : s in (chunk hP G ε hU).parts)
-  结论: m <= #s
-  证明: (card_eq_of_mem_parts_chunk hs).elim ge_of_eq fun i => by simp [i]
-
-Depends on / 依赖: card_eq_of_mem_parts_chunk, ge_of_eq
+/-
+**SzemerediRegularity.m_le_card_of_mem_chunk_parts** 是 Mathlib 中的一个定理，位于命名空间 `Sz
+emerediRegularity`。
+形式化陈述：m_le_card_of_mem_chunk_parts (hs : s in (chunk hP G ε hU).parts) : m <= #s
+参数：hs : s in (chunk hP G ε hU).parts。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `SzemerediRegularity.card_eq_of_mem_parts_chunk`：card_eq_of_mem_parts_chu
+nk (hs : s in (chunk hP G ε hU).parts) : #s = m ∨ #s = m + 1
+· 使用定理 `ge_of_eq`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → b ≤ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
 -/
-theorem m_le_card_of_mem_chunk_parts (hs : s in (chunk hP G ε hU).parts) : m <= #s :=
+theorem m_le_card_of_mem_chunk_parts (hs : s ∈ (chunk hP G ε hU).parts) : m ≤ #s :=
   (card_eq_of_mem_parts_chunk hs).elim ge_of_eq fun i => by simp [i]
-
-/--
-theorem `card_le_m_add_one_of_mem_chunk_parts` / 定理 `card_le_m_add_one_of_mem_chunk_parts`
-
-English:
-theorem card_le_m_add_one_of_mem_chunk_parts
-  given: (hs : s in (chunk hP G ε hU).parts)
-  statement: #s <= m + 1
-  proof: (card_eq_of_mem_parts_chunk hs).elim (fun i => by simp [i]) fun i => i.le
-
-中文:
-定理 card_le_m_add_one_of_mem_chunk_parts
-  条件: (hs : s in (chunk hP G ε hU).parts)
-  结论: #s <= m + 1
-  证明: (card_eq_of_mem_parts_chunk hs).elim (fun i => by simp [i]) fun i => i.le
-
-Depends on / 依赖: card_eq_of_mem_parts_chunk, i.le
+/-
+**SzemerediRegularity.card_le_m_add_one_of_mem_chunk_parts** 是 Mathlib 中的一个定理，位于
+命名空间 `SzemerediRegularity`。
+形式化陈述：card_le_m_add_one_of_mem_chunk_parts (hs : s in (chunk hP G ε hU).parts) :
+ #s <= m + 1
+参数：hs : s in (chunk hP G ε hU).parts。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Or.elim`：∀ {a b c : Prop}, a ∨ b → (a → c) → (b → c) → c
+· 使用定理 `SzemerediRegularity.card_eq_of_mem_parts_chunk`：card_eq_of_mem_parts_chu
+nk (hs : s in (chunk hP G ε hU).parts) : #s = m ∨ #s = m + 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `IsOrderedCancelAddMonoid.toAddLeftReflectLE`：∀ {α : Type u_2} [inst : Ad
+dCommMonoid α] [inst_1 : Preorder α] [IsOrderedCancelAddMonoid α], AddLeftReflec
+tLE α
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
 -/
-theorem card_le_m_add_one_of_mem_chunk_parts (hs : s in (chunk hP G ε hU).parts) : #s <= m + 1 :=
+theorem card_le_m_add_one_of_mem_chunk_parts (hs : s ∈ (chunk hP G ε hU).parts) : #s ≤ m + 1 :=
   (card_eq_of_mem_parts_chunk hs).elim (fun i => by simp [i]) fun i => i.le
-
-/--
-theorem `card_biUnion_star_le_m_add_one_card_star_mul` / 定理 `card_biUnion_star_le_m_add_one_card_star_mul`
-
-English:
-theorem card_biUnion_star_le_m_add_one_card_star_mul
-  proof: mod_cast card_biUnion_le_card_mul _ _ _ fun _ hs =>
-card_le_m_add_one_of_mem_chunk_parts star_subset_chunk hs
-
-中文:
-定理 card_biUnion_star_le_m_add_one_card_star_mul
-  证明: mod_cast card_biUnion_le_card_mul _ _ _ fun _ hs =>
-card_le_m_add_one_of_mem_chunk_parts star_subset_chunk hs
-
-Depends on / 依赖: card_biUnion_le_card_mul, card_le_m_add_one_of_mem_chunk_parts, mod_cast, star_subset_chunk
+/-
+**SzemerediRegularity.card_biUnion_star_le_m_add_one_card_star_mul** 是 Mathlib 中
+的一个定理，位于命名空间 `SzemerediRegularity`。
+形式化陈述：card_biUnion_star_le_m_add_one_card_star_mul : (#((star hP G ε hU V).biUni
+on id) : Real) <= #(star hP G ε hU V) * (m + 1)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Finset.card_biUnion_le_card_mul`：card_biUnion_le_card_mul [DecidableEq β
+] (s : Finset ι) (f : ι -> Finset β) (n : Nat) (h : forall a in s, #(f a) <= n) 
+: #(s.biUnion f) <= #…
+· 使用定理 `SzemerediRegularity.card_le_m_add_one_of_mem_chunk_parts`：card_le_m_add_
+one_of_mem_chunk_parts (hs : s in (chunk hP G ε hU).parts) : #s <= m + 1
+· 使用定理 `SzemerediRegularity.star_subset_chunk`：star_subset_chunk : star hP G ε h
+U V subseteq (chunk hP G ε hU).parts
 -/
 theorem card_biUnion_star_le_m_add_one_card_star_mul :
-    (#((star hP G ε hU V).biUnion id) : Real) <= #(star hP G ε hU V) * (m + 1) :=
+    (#((star hP G ε hU V).biUnion id) : ℝ) ≤ #(star hP G ε hU V) * (m + 1) :=
   mod_cast card_biUnion_le_card_mul _ _ _ fun _ hs =>
-card_le_m_add_one_of_mem_chunk_parts star_subset_chunk hs
-
-/--
-theorem `le_sum_card_subset_chunk_parts` / 定理 `le_sum_card_subset_chunk_parts`
-
-English:
-theorem le_sum_card_subset_chunk_parts
-  given: (h𝒜 : 𝒜 subseteq (chunk hP G ε hU).parts) (hs : s in 𝒜)
-  proof: by
-  rw [mul_div_assoc']; rw [div_le_iff₀ coe_m_add_one_pos]; rw [mul_right_comm]
-  gcongr
-  · rw [← (ofSubset _ h𝒜 rfl).sum_card_parts, ofSubset_parts, ← cast_mul, cast_le]
-exact card_nsmul_le_sum _ _ _ fun x hx => m_le_card_of_mem_chunk_parts h𝒜 hx
-  · exact mod_cast card_le_m_add_one_of_mem_chunk_parts (h𝒜 hs)
-
-中文:
-定理 le_sum_card_subset_chunk_parts
-  条件: (h𝒜 : 𝒜 subseteq (chunk hP G ε hU).parts) (hs : s in 𝒜)
-  证明: by
-  rw [mul_div_assoc']; rw [div_le_iff₀ coe_m_add_one_pos]; rw [mul_right_comm]
-  gcongr
-  · rw [← (ofSubset _ h𝒜 rfl).sum_card_parts, ofSubset_parts, ← cast_mul, cast_le]
-exact card_nsmul_le_sum _ _ _ fun x hx => m_le_card_of_mem_chunk_parts h𝒜 hx
-  · exact mod_cast card_le_m_add_one_of_mem_chunk_parts (h𝒜 hs)
+    card_le_m_add_one_of_mem_chunk_parts <| star_subset_chunk hs
+/-
+**SzemerediRegularity.le_sum_card_subset_chunk_parts** 是 Mathlib 中的一个定理，位于命名空间 `
+SzemerediRegularity`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem le_sum_card_subset_chunk_parts (h𝒜 : 𝒜 subseteq (chunk hP G ε hU).parts) (hs : s in 𝒜) :
-    (#𝒜 : Real) * #s * (m / (m + 1)) <= #(𝒜.sup id) := by
-  rw [mul_div_assoc']; rw [div_le_iff₀ coe_m_add_one_pos]; rw [mul_right_comm]
+private theorem le_sum_card_subset_chunk_parts (h𝒜 : 𝒜 ⊆ (chunk hP G ε hU).parts) (hs : s ∈ 𝒜) :
+    (#𝒜 : ℝ) * #s * (m / (m + 1)) ≤ #(𝒜.sup id) := by
+  rw [mul_div_assoc', div_le_iff₀ coe_m_add_one_pos, mul_right_comm]
   gcongr
   · rw [← (ofSubset _ h𝒜 rfl).sum_card_parts, ofSubset_parts, ← cast_mul, cast_le]
-exact card_nsmul_le_sum _ _ _ fun x hx => m_le_card_of_mem_chunk_parts h𝒜 hx
+    exact card_nsmul_le_sum _ _ _ fun x hx => m_le_card_of_mem_chunk_parts <| h𝒜 hx
   · exact mod_cast card_le_m_add_one_of_mem_chunk_parts (h𝒜 hs)
-
-/--
-theorem `sum_card_subset_chunk_parts_le` / 定理 `sum_card_subset_chunk_parts_le`
-
-English:
-theorem sum_card_subset_chunk_parts_le
-  statement: (m_pos : (0 : Real) < m)
-  proof: by
-  rw [sup_eq_biUnion]; rw [mul_div_assoc']; rw [le_div_iff₀ m_pos]; rw [mul_right_comm]
-  gcongr
-  · norm_cast
-    refine card_biUnion_le_card_mul _ _ _ fun x hx => ?_
-    apply card_le_m_add_one_of_mem_chunk_parts (h𝒜 hx)
-  · exact mod_cast m_le_card_of_mem_chunk_parts (h𝒜 hs)
-
-中文:
-定理 sum_card_subset_chunk_parts_le
-  结论: (m_pos : (0 : 实数) < m)
-  证明: by
-  rw [sup_eq_biUnion]; rw [mul_div_assoc']; rw [le_div_iff₀ m_pos]; rw [mul_right_comm]
-  gcongr
-  · norm_cast
-    refine card_biUnion_le_card_mul _ _ _ fun x hx => ?_
-    apply card_le_m_add_one_of_mem_chunk_parts (h𝒜 hx)
-  · exact mod_cast m_le_card_of_mem_chunk_parts (h𝒜 hs)
+/-
+**SzemerediRegularity.sum_card_subset_chunk_parts_le** 是 Mathlib 中的一个定理，位于命名空间 `
+SzemerediRegularity`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem sum_card_subset_chunk_parts_le (m_pos : (0 : Real) < m)
-    (h𝒜 : 𝒜 subseteq (chunk hP G ε hU).parts) (hs : s in 𝒜) :
-    (#(𝒜.sup id) : Real) <= #𝒜 * #s * ((m + 1) / m) := by
-  rw [sup_eq_biUnion]; rw [mul_div_assoc']; rw [le_div_iff₀ m_pos]; rw [mul_right_comm]
+private theorem sum_card_subset_chunk_parts_le (m_pos : (0 : ℝ) < m)
+    (h𝒜 : 𝒜 ⊆ (chunk hP G ε hU).parts) (hs : s ∈ 𝒜) :
+    (#(𝒜.sup id) : ℝ) ≤ #𝒜 * #s * ((m + 1) / m) := by
+  rw [sup_eq_biUnion, mul_div_assoc', le_div_iff₀ m_pos, mul_right_comm]
   gcongr
   · norm_cast
     refine card_biUnion_le_card_mul _ _ _ fun x hx => ?_
     apply card_le_m_add_one_of_mem_chunk_parts (h𝒜 hx)
   · exact mod_cast m_le_card_of_mem_chunk_parts (h𝒜 hs)
-
-/--
-theorem `one_sub_le_m_div_m_add_one_sq` / 定理 `one_sub_le_m_div_m_add_one_sq`
-
-English:
-theorem one_sub_le_m_div_m_add_one_sq
-  statement: [Nonempty α]
-  proof: by
-  have : (m : Real) / (m + 1) = 1 - 1 / (m + 1) := by
-    rw [one_sub_div coe_m_add_one_pos.ne']; rw [add_sub_cancel_right]
-  rw [this]; rw [sub_sq]; rw [one_pow]; rw [mul_one]
-  refine le_trans ?_ (le_add_of_nonneg_right <| sq_nonneg _)
-  rw [sub_le_sub_iff_left]; rw [← le_div_iff₀' (show (0 : Real) < 2 by simp)]; rw [div_div]; rw [one_div_le coe_m_add_one_pos]; rw [one_div_div]
-  · refine le_trans ?_ (le_add_of_nonneg_right zero_le_one)
-    norm_num
-    apply hundred_div_ε_pow_five_le_m hPα hPε
-  sz_positivity
-
-中文:
-定理 one_sub_le_m_div_m_add_one_sq
-  结论: [非空 α]
-  证明: by
-  have : (m : Real) / (m + 1) = 1 - 1 / (m + 1) := by
-    rw [one_sub_div coe_m_add_one_pos.ne']; rw [add_sub_cancel_right]
-  rw [this]; rw [sub_sq]; rw [one_pow]; rw [mul_one]
-  refine le_trans ?_ (le_add_of_nonneg_right <| sq_nonneg _)
-  rw [sub_le_sub_iff_left]; rw [← le_div_iff₀' (show (0 : Real) < 2 by simp)]; rw [div_div]; rw [one_div_le coe_m_add_one_pos]; rw [one_div_div]
-  · refine le_trans ?_ (le_add_of_nonneg_right zero_le_one)
-    norm_num
-    apply hundred_div_ε_pow_five_le_m hPα hPε
-  sz_positivity
+/-
+**SzemerediRegularity.one_sub_le_m_div_m_add_one_sq** 是 Mathlib 中的一个定理，位于命名空间 `S
+zemerediRegularity`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem one_sub_le_m_div_m_add_one_sq [Nonempty α]
-    (hPα : #P.parts * 16 ^ #P.parts <= card α) (hPε : ↑100 <= ↑4 ^ #P.parts * ε ^ 5) :
-    ↑1 - ε ^ 5 / ↑50 <= (m / (m + 1 : Real)) ^ 2 := by
-  have : (m : Real) / (m + 1) = 1 - 1 / (m + 1) := by
-    rw [one_sub_div coe_m_add_one_pos.ne']; rw [add_sub_cancel_right]
-  rw [this]; rw [sub_sq]; rw [one_pow]; rw [mul_one]
+    (hPα : #P.parts * 16 ^ #P.parts ≤ card α) (hPε : ↑100 ≤ ↑4 ^ #P.parts * ε ^ 5) :
+    ↑1 - ε ^ 5 / ↑50 ≤ (m / (m + 1 : ℝ)) ^ 2 := by
+  have : (m : ℝ) / (m + 1) = 1 - 1 / (m + 1) := by
+    rw [one_sub_div coe_m_add_one_pos.ne', add_sub_cancel_right]
+  rw [this, sub_sq, one_pow, mul_one]
   refine le_trans ?_ (le_add_of_nonneg_right <| sq_nonneg _)
-  rw [sub_le_sub_iff_left]; rw [← le_div_iff₀' (show (0 : Real) < 2 by simp)]; rw [div_div]; rw [one_div_le coe_m_add_one_pos]; rw [one_div_div]
+  rw [sub_le_sub_iff_left, ← le_div_iff₀' (show (0 : ℝ) < 2 by simp), div_div,
+    one_div_le coe_m_add_one_pos, one_div_div]
   · refine le_trans ?_ (le_add_of_nonneg_right zero_le_one)
     norm_num
     apply hundred_div_ε_pow_five_le_m hPα hPε
   sz_positivity
-
-/--
-theorem `m_add_one_div_m_le_one_add` / 定理 `m_add_one_div_m_le_one_add`
-
-English:
-theorem m_add_one_div_m_le_one_add
-  statement: [Nonempty α]
-  proof: by
-  have : 0 <= ε := by sz_positivity
-  rw [same_add_div (by sz_positivity)]
-  calc
-    _ <= (1 + ε ^ 5 / 100) ^ 2 := by
-      gcongr (1 + ?_) ^ 2
-      rw [← one_div_div (100 : Real)]
-      exact one_div_le_one_div_of_le (by sz_positivity) (hundred_div_ε_pow_five_le_m hPα hPε)
-    _ = 1 + ε ^ 5 * (50⁻¹ + ε ^ 5 / 10000) := by ring
-    _ <= 1 + ε ^ 5 * (50⁻¹ + 1 ^ 5 / 10000) := by gcongr
-    _ <= 1 + ε ^ 5 * 49⁻¹ := by gcongr; norm_num
-    _ = 1 + ε ^ 5 / 49 := by rw [div_eq_mul_inv]
-
-中文:
-定理 m_add_one_div_m_le_one_add
-  结论: [非空 α]
-  证明: by
-  have : 0 <= ε := by sz_positivity
-  rw [same_add_div (by sz_positivity)]
-  calc
-    _ <= (1 + ε ^ 5 / 100) ^ 2 := by
-      gcongr (1 + ?_) ^ 2
-      rw [← one_div_div (100 : Real)]
-      exact one_div_le_one_div_of_le (by sz_positivity) (hundred_div_ε_pow_five_le_m hPα hPε)
-    _ = 1 + ε ^ 5 * (50⁻¹ + ε ^ 5 / 10000) := by ring
-    _ <= 1 + ε ^ 5 * (50⁻¹ + 1 ^ 5 / 10000) := by gcongr
-    _ <= 1 + ε ^ 5 * 49⁻¹ := by gcongr; norm_num
-    _ = 1 + ε ^ 5 / 49 := by rw [div_eq_mul_inv]
+/-
+**SzemerediRegularity.m_add_one_div_m_le_one_add** 是 Mathlib 中的一个定理，位于命名空间 `Szem
+erediRegularity`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem m_add_one_div_m_le_one_add [Nonempty α]
-    (hPα : #P.parts * 16 ^ #P.parts <= card α) (hPε : ↑100 <= ↑4 ^ #P.parts * ε ^ 5) (hε₁ : ε <= 1) :
-    ((m + 1 : Real) / m) ^ 2 <= ↑1 + ε ^ 5 / 49 := by
-  have : 0 <= ε := by sz_positivity
+    (hPα : #P.parts * 16 ^ #P.parts ≤ card α) (hPε : ↑100 ≤ ↑4 ^ #P.parts * ε ^ 5) (hε₁ : ε ≤ 1) :
+    ((m + 1 : ℝ) / m) ^ 2 ≤ ↑1 + ε ^ 5 / 49 := by
+  have : 0 ≤ ε := by sz_positivity
   rw [same_add_div (by sz_positivity)]
   calc
-    _ <= (1 + ε ^ 5 / 100) ^ 2 := by
+    _ ≤ (1 + ε ^ 5 / 100) ^ 2 := by
       gcongr (1 + ?_) ^ 2
-      rw [← one_div_div (100 : Real)]
+      rw [← one_div_div (100 : ℝ)]
       exact one_div_le_one_div_of_le (by sz_positivity) (hundred_div_ε_pow_five_le_m hPα hPε)
     _ = 1 + ε ^ 5 * (50⁻¹ + ε ^ 5 / 10000) := by ring
-    _ <= 1 + ε ^ 5 * (50⁻¹ + 1 ^ 5 / 10000) := by gcongr
-    _ <= 1 + ε ^ 5 * 49⁻¹ := by gcongr; norm_num
+    _ ≤ 1 + ε ^ 5 * (50⁻¹ + 1 ^ 5 / 10000) := by gcongr
+    _ ≤ 1 + ε ^ 5 * 49⁻¹ := by gcongr; norm_num
     _ = 1 + ε ^ 5 / 49 := by rw [div_eq_mul_inv]
-
-/--
-theorem `density_sub_eps_le_sum_density_div_card` / 定理 `density_sub_eps_le_sum_density_div_card`
-
-English:
-theorem density_sub_eps_le_sum_density_div_card
-  statement: [Nonempty α]
-  proof: by
-  have : ↑(G.edgeDensity (A.biUnion id) (B.biUnion id)) - ε ^ 5 / ↑50 <=
-      (↑1 - ε ^ 5 / 50) * G.edgeDensity (A.biUnion id) (B.biUnion id) := by
-    rw [sub_mul]; rw [one_mul]; rw [sub_le_sub_iff_left]
-    refine mul_le_of_le_one_right (by sz_positivity) ?_
-    exact mod_cast G.edgeDensity_le_one _ _
-  refine this.trans ?_
-  conv_rhs => -- Porting note: LHS and RHS need separate treatment to get the desired form
-    simp only [SimpleGraph.edgeDensity_def, sum_div, Rat.cast_div, div_div]
-  conv_lhs =>
-    rw [SimpleGraph.edgeDensity_def]; rw [SimpleGraph.interedges]; rw [← sup_eq_biUnion]; rw [← sup_eq_biUnion]; rw [Rel.card_interedges_finpartition _ (ofSubset _ hA rfl) (ofSubset _ hB rfl)]; rw [ofSubset_parts]; rw [ofSubset_parts]
-    simp only [cast_sum, sum_div, mul_sum, Rat.cast_sum, Rat.cast_div,
-      mul_div_left_comm ((1 : Real) - _)]
-  push_cast
-  apply sum_le_sum
-  simp only [and_imp, Prod.forall, mem_product]
-  rintro x y hx hy
-  rw [mul_mul_mul_comm]; rw [mul_comm (#x : Real)]; rw [mul_comm (#y : Real)]; rw [le_div_iff₀]; rw [mul_assoc]
-  · refine mul_le_of_le_one_right (cast_nonneg _) ?_
-    rw [div_mul_eq_mul_div]; rw [← mul_assoc]; rw [mul_assoc]
-    refine div_le_one_of_le₀ ?_ (by positivity)
-    refine (mul_le_mul_of_nonneg_right (one_sub_le_m_div_m_add_one_sq hPα hPε) ?_).trans ?_
-    · exact_mod_cast _root_.zero_le
-    rw [sq]; rw [mul_mul_mul_comm]; rw [mul_comm ((m : Real) / _)]; rw [mul_comm ((m : Real) / _)]
-    gcongr
-    · apply le_sum_card_subset_chunk_parts hA hx
-    · apply le_sum_card_subset_chunk_parts hB hy
-  refine mul_pos (mul_pos ?_ ?_) (mul_pos ?_ ?_) <;> rw [cast_pos, Finset.card_pos]
-  exacts [⟨_, hx⟩, nonempty_of_mem_parts _ (hA hx), ⟨_, hy⟩, nonempty_of_mem_parts _ (hB hy)]
-
-中文:
-定理 density_sub_eps_le_sum_density_div_card
-  结论: [非空 α]
-  证明: by
-  have : ↑(G.edgeDensity (A.biUnion id) (B.biUnion id)) - ε ^ 5 / ↑50 <=
-      (↑1 - ε ^ 5 / 50) * G.edgeDensity (A.biUnion id) (B.biUnion id) := by
-    rw [sub_mul]; rw [one_mul]; rw [sub_le_sub_iff_left]
-    refine mul_le_of_le_one_right (by sz_positivity) ?_
-    exact mod_cast G.edgeDensity_le_one _ _
-  refine this.trans ?_
-  conv_rhs => -- Porting note: LHS and RHS need separate treatment to get the desired form
-    simp only [SimpleGraph.edgeDensity_def, sum_div, Rat.cast_div, div_div]
-  conv_lhs =>
-    rw [SimpleGraph.edgeDensity_def]; rw [SimpleGraph.interedges]; rw [← sup_eq_biUnion]; rw [← sup_eq_biUnion]; rw [Rel.card_interedges_finpartition _ (ofSubset _ hA rfl) (ofSubset _ hB rfl)]; rw [ofSubset_parts]; rw [ofSubset_parts]
-    simp only [cast_sum, sum_div, mul_sum, Rat.cast_sum, Rat.cast_div,
-      mul_div_left_comm ((1 : Real) - _)]
-  push_cast
-  apply sum_le_sum
-  simp only [and_imp, Prod.forall, mem_product]
-  rintro x y hx hy
-  rw [mul_mul_mul_comm]; rw [mul_comm (#x : Real)]; rw [mul_comm (#y : Real)]; rw [le_div_iff₀]; rw [mul_assoc]
-  · refine mul_le_of_le_one_right (cast_nonneg _) ?_
-    rw [div_mul_eq_mul_div]; rw [← mul_assoc]; rw [mul_assoc]
-    refine div_le_one_of_le₀ ?_ (by positivity)
-    refine (mul_le_mul_of_nonneg_right (one_sub_le_m_div_m_add_one_sq hPα hPε) ?_).trans ?_
-    · exact_mod_cast _root_.zero_le
-    rw [sq]; rw [mul_mul_mul_comm]; rw [mul_comm ((m : Real) / _)]; rw [mul_comm ((m : Real) / _)]
-    gcongr
-    · apply le_sum_card_subset_chunk_parts hA hx
-    · apply le_sum_card_subset_chunk_parts hB hy
-  refine mul_pos (mul_pos ?_ ?_) (mul_pos ?_ ?_) <;> rw [cast_pos, Finset.card_pos]
-  exacts [⟨_, hx⟩, nonempty_of_mem_parts _ (hA hx), ⟨_, hy⟩, nonempty_of_mem_parts _ (hB hy)]
+/-
+**SzemerediRegularity.density_sub_eps_le_sum_density_div_card** 是 Mathlib 中的一个定理
+，位于命名空间 `SzemerediRegularity`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem density_sub_eps_le_sum_density_div_card [Nonempty α]
-    (hPα : #P.parts * 16 ^ #P.parts <= card α) (hPε : ↑100 <= ↑4 ^ #P.parts * ε ^ 5)
-    {hU : U in P.parts} {hV : V in P.parts} {A B : Finset (Finset α)}
-    (hA : A subseteq (chunk hP G ε hU).parts) (hB : B subseteq (chunk hP G ε hV).parts) :
-    (G.edgeDensity (A.biUnion id) (B.biUnion id)) - ε ^ 5 / 50 <=
-    (∑ ab in A.product B, (G.edgeDensity ab.1 ab.2 : Real)) / (#A * #B) := by
-  have : ↑(G.edgeDensity (A.biUnion id) (B.biUnion id)) - ε ^ 5 / ↑50 <=
+    (hPα : #P.parts * 16 ^ #P.parts ≤ card α) (hPε : ↑100 ≤ ↑4 ^ #P.parts * ε ^ 5)
+    {hU : U ∈ P.parts} {hV : V ∈ P.parts} {A B : Finset (Finset α)}
+    (hA : A ⊆ (chunk hP G ε hU).parts) (hB : B ⊆ (chunk hP G ε hV).parts) :
+    (G.edgeDensity (A.biUnion id) (B.biUnion id)) - ε ^ 5 / 50 ≤
+    (∑ ab ∈ A.product B, (G.edgeDensity ab.1 ab.2 : ℝ)) / (#A * #B) := by
+  have : ↑(G.edgeDensity (A.biUnion id) (B.biUnion id)) - ε ^ 5 / ↑50 ≤
       (↑1 - ε ^ 5 / 50) * G.edgeDensity (A.biUnion id) (B.biUnion id) := by
-    rw [sub_mul]; rw [one_mul]; rw [sub_le_sub_iff_left]
+    rw [sub_mul, one_mul, sub_le_sub_iff_left]
     refine mul_le_of_le_one_right (by sz_positivity) ?_
     exact mod_cast G.edgeDensity_le_one _ _
   refine this.trans ?_
   conv_rhs => -- Porting note: LHS and RHS need separate treatment to get the desired form
     simp only [SimpleGraph.edgeDensity_def, sum_div, Rat.cast_div, div_div]
   conv_lhs =>
-    rw [SimpleGraph.edgeDensity_def]; rw [SimpleGraph.interedges]; rw [← sup_eq_biUnion]; rw [← sup_eq_biUnion]; rw [Rel.card_interedges_finpartition _ (ofSubset _ hA rfl) (ofSubset _ hB rfl)]; rw [ofSubset_parts]; rw [ofSubset_parts]
+    rw [SimpleGraph.edgeDensity_def, SimpleGraph.interedges, ← sup_eq_biUnion, ← sup_eq_biUnion,
+      Rel.card_interedges_finpartition _ (ofSubset _ hA rfl) (ofSubset _ hB rfl), ofSubset_parts,
+      ofSubset_parts]
     simp only [cast_sum, sum_div, mul_sum, Rat.cast_sum, Rat.cast_div,
-      mul_div_left_comm ((1 : Real) - _)]
+      mul_div_left_comm ((1 : ℝ) - _)]
   push_cast
   apply sum_le_sum
   simp only [and_imp, Prod.forall, mem_product]
   rintro x y hx hy
-  rw [mul_mul_mul_comm]; rw [mul_comm (#x : Real)]; rw [mul_comm (#y : Real)]; rw [le_div_iff₀]; rw [mul_assoc]
+  rw [mul_mul_mul_comm, mul_comm (#x : ℝ), mul_comm (#y : ℝ), le_div_iff₀, mul_assoc]
   · refine mul_le_of_le_one_right (cast_nonneg _) ?_
-    rw [div_mul_eq_mul_div]; rw [← mul_assoc]; rw [mul_assoc]
+    rw [div_mul_eq_mul_div, ← mul_assoc, mul_assoc]
     refine div_le_one_of_le₀ ?_ (by positivity)
     refine (mul_le_mul_of_nonneg_right (one_sub_le_m_div_m_add_one_sq hPα hPε) ?_).trans ?_
     · exact_mod_cast _root_.zero_le
-    rw [sq]; rw [mul_mul_mul_comm]; rw [mul_comm ((m : Real) / _)]; rw [mul_comm ((m : Real) / _)]
+    rw [sq, mul_mul_mul_comm, mul_comm ((m : ℝ) / _), mul_comm ((m : ℝ) / _)]
     gcongr
     · apply le_sum_card_subset_chunk_parts hA hx
     · apply le_sum_card_subset_chunk_parts hB hy
   refine mul_pos (mul_pos ?_ ?_) (mul_pos ?_ ?_) <;> rw [cast_pos, Finset.card_pos]
   exacts [⟨_, hx⟩, nonempty_of_mem_parts _ (hA hx), ⟨_, hy⟩, nonempty_of_mem_parts _ (hB hy)]
-
-/--
-theorem `sum_density_div_card_le_density_add_eps` / 定理 `sum_density_div_card_le_density_add_eps`
-
-English:
-theorem sum_density_div_card_le_density_add_eps
-  statement: [Nonempty α]
-  proof: by
-  have : (↑1 + ε ^ 5 / ↑49) * G.edgeDensity (A.biUnion id) (B.biUnion id) <=
-      G.edgeDensity (A.biUnion id) (B.biUnion id) + ε ^ 5 / 49 := by
-    rw [add_mul]; rw [one_mul]; rw [add_le_add_iff_left]
-    refine mul_le_of_le_one_right (by sz_positivity) ?_
-    exact mod_cast G.edgeDensity_le_one _ _
-  refine le_trans ?_ this
-  conv_lhs => -- Porting note: LHS and RHS need separate treatment to get the desired form
-    simp only [SimpleGraph.edgeDensity, edgeDensity, sum_div, Rat.cast_div, div_div]
-  conv_rhs =>
-    rw [SimpleGraph.edgeDensity]; rw [edgeDensity]; rw [← sup_eq_biUnion]; rw [← sup_eq_biUnion]; rw [Rel.card_interedges_finpartition _ (ofSubset _ hA rfl) (ofSubset _ hB rfl)]
-    simp only [cast_sum, mul_sum, sum_div, Rat.cast_sum, Rat.cast_div,
-      mul_div_left_comm ((1 : Real) + _)]
-  push_cast
-  apply sum_le_sum
-  simp only [and_imp, Prod.forall, mem_product, show A.product B = A ×ˢ B by rfl]
-  intro x y hx hy
-  rw [mul_mul_mul_comm]; rw [mul_comm (#x : Real)]; rw [mul_comm (#y : Real)]; rw [div_le_iff₀]; rw [mul_assoc]
-  · refine le_mul_of_one_le_right (cast_nonneg _) ?_
-    rw [div_mul_eq_mul_div]; rw [one_le_div]
-    · refine le_trans ?_ (mul_le_mul_of_nonneg_right (m_add_one_div_m_le_one_add hPα hPε hε₁) ?_)
-      · rw [sq, mul_mul_mul_comm, mul_comm (_ / (m : Real)), mul_comm (_ / (m : Real))]
-        gcongr
-        exacts [sum_card_subset_chunk_parts_le (by sz_positivity) hA hx,
-          sum_card_subset_chunk_parts_le (by sz_positivity) hB hy]
-      · exact_mod_cast _root_.zero_le
-    rw [← cast_mul]; rw [cast_pos]
-    apply mul_pos <;> rw [Finset.card_pos, sup_eq_biUnion, biUnion_nonempty]
-    · exact ⟨_, hx, nonempty_of_mem_parts _ (hA hx)⟩
-    · exact ⟨_, hy, nonempty_of_mem_parts _ (hB hy)⟩
-  refine mul_pos (mul_pos ?_ ?_) (mul_pos ?_ ?_) <;> rw [cast_pos, Finset.card_pos]
-  exacts [⟨_, hx⟩, nonempty_of_mem_parts _ (hA hx), ⟨_, hy⟩, nonempty_of_mem_parts _ (hB hy)]
-
-中文:
-定理 sum_density_div_card_le_density_add_eps
-  结论: [非空 α]
-  证明: by
-  have : (↑1 + ε ^ 5 / ↑49) * G.edgeDensity (A.biUnion id) (B.biUnion id) <=
-      G.edgeDensity (A.biUnion id) (B.biUnion id) + ε ^ 5 / 49 := by
-    rw [add_mul]; rw [one_mul]; rw [add_le_add_iff_left]
-    refine mul_le_of_le_one_right (by sz_positivity) ?_
-    exact mod_cast G.edgeDensity_le_one _ _
-  refine le_trans ?_ this
-  conv_lhs => -- Porting note: LHS and RHS need separate treatment to get the desired form
-    simp only [SimpleGraph.edgeDensity, edgeDensity, sum_div, Rat.cast_div, div_div]
-  conv_rhs =>
-    rw [SimpleGraph.edgeDensity]; rw [edgeDensity]; rw [← sup_eq_biUnion]; rw [← sup_eq_biUnion]; rw [Rel.card_interedges_finpartition _ (ofSubset _ hA rfl) (ofSubset _ hB rfl)]
-    simp only [cast_sum, mul_sum, sum_div, Rat.cast_sum, Rat.cast_div,
-      mul_div_left_comm ((1 : Real) + _)]
-  push_cast
-  apply sum_le_sum
-  simp only [and_imp, Prod.forall, mem_product, show A.product B = A ×ˢ B by rfl]
-  intro x y hx hy
-  rw [mul_mul_mul_comm]; rw [mul_comm (#x : Real)]; rw [mul_comm (#y : Real)]; rw [div_le_iff₀]; rw [mul_assoc]
-  · refine le_mul_of_one_le_right (cast_nonneg _) ?_
-    rw [div_mul_eq_mul_div]; rw [one_le_div]
-    · refine le_trans ?_ (mul_le_mul_of_nonneg_right (m_add_one_div_m_le_one_add hPα hPε hε₁) ?_)
-      · rw [sq, mul_mul_mul_comm, mul_comm (_ / (m : Real)), mul_comm (_ / (m : Real))]
-        gcongr
-        exacts [sum_card_subset_chunk_parts_le (by sz_positivity) hA hx,
-          sum_card_subset_chunk_parts_le (by sz_positivity) hB hy]
-      · exact_mod_cast _root_.zero_le
-    rw [← cast_mul]; rw [cast_pos]
-    apply mul_pos <;> rw [Finset.card_pos, sup_eq_biUnion, biUnion_nonempty]
-    · exact ⟨_, hx, nonempty_of_mem_parts _ (hA hx)⟩
-    · exact ⟨_, hy, nonempty_of_mem_parts _ (hB hy)⟩
-  refine mul_pos (mul_pos ?_ ?_) (mul_pos ?_ ?_) <;> rw [cast_pos, Finset.card_pos]
-  exacts [⟨_, hx⟩, nonempty_of_mem_parts _ (hA hx), ⟨_, hy⟩, nonempty_of_mem_parts _ (hB hy)]
+/-
+**SzemerediRegularity.sum_density_div_card_le_density_add_eps** 是 Mathlib 中的一个定理
+，位于命名空间 `SzemerediRegularity`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem sum_density_div_card_le_density_add_eps [Nonempty α]
-    (hPα : #P.parts * 16 ^ #P.parts <= card α) (hPε : ↑100 <= ↑4 ^ #P.parts * ε ^ 5)
-    (hε₁ : ε <= 1) {hU : U in P.parts} {hV : V in P.parts} {A B : Finset (Finset α)}
-    (hA : A subseteq (chunk hP G ε hU).parts) (hB : B subseteq (chunk hP G ε hV).parts) :
-    (∑ ab in A.product B, G.edgeDensity ab.1 ab.2 : Real) / (#A * #B) <=
+    (hPα : #P.parts * 16 ^ #P.parts ≤ card α) (hPε : ↑100 ≤ ↑4 ^ #P.parts * ε ^ 5)
+    (hε₁ : ε ≤ 1) {hU : U ∈ P.parts} {hV : V ∈ P.parts} {A B : Finset (Finset α)}
+    (hA : A ⊆ (chunk hP G ε hU).parts) (hB : B ⊆ (chunk hP G ε hV).parts) :
+    (∑ ab ∈ A.product B, G.edgeDensity ab.1 ab.2 : ℝ) / (#A * #B) ≤
     G.edgeDensity (A.biUnion id) (B.biUnion id) + ε ^ 5 / 49 := by
-  have : (↑1 + ε ^ 5 / ↑49) * G.edgeDensity (A.biUnion id) (B.biUnion id) <=
+  have : (↑1 + ε ^ 5 / ↑49) * G.edgeDensity (A.biUnion id) (B.biUnion id) ≤
       G.edgeDensity (A.biUnion id) (B.biUnion id) + ε ^ 5 / 49 := by
-    rw [add_mul]; rw [one_mul]; rw [add_le_add_iff_left]
+    rw [add_mul, one_mul, add_le_add_iff_left]
     refine mul_le_of_le_one_right (by sz_positivity) ?_
     exact mod_cast G.edgeDensity_le_one _ _
   refine le_trans ?_ this
   conv_lhs => -- Porting note: LHS and RHS need separate treatment to get the desired form
     simp only [SimpleGraph.edgeDensity, edgeDensity, sum_div, Rat.cast_div, div_div]
   conv_rhs =>
-    rw [SimpleGraph.edgeDensity]; rw [edgeDensity]; rw [← sup_eq_biUnion]; rw [← sup_eq_biUnion]; rw [Rel.card_interedges_finpartition _ (ofSubset _ hA rfl) (ofSubset _ hB rfl)]
+    rw [SimpleGraph.edgeDensity, edgeDensity, ← sup_eq_biUnion, ← sup_eq_biUnion,
+      Rel.card_interedges_finpartition _ (ofSubset _ hA rfl) (ofSubset _ hB rfl)]
     simp only [cast_sum, mul_sum, sum_div, Rat.cast_sum, Rat.cast_div,
-      mul_div_left_comm ((1 : Real) + _)]
+      mul_div_left_comm ((1 : ℝ) + _)]
   push_cast
   apply sum_le_sum
   simp only [and_imp, Prod.forall, mem_product, show A.product B = A ×ˢ B by rfl]
   intro x y hx hy
-  rw [mul_mul_mul_comm]; rw [mul_comm (#x : Real)]; rw [mul_comm (#y : Real)]; rw [div_le_iff₀]; rw [mul_assoc]
+  rw [mul_mul_mul_comm, mul_comm (#x : ℝ), mul_comm (#y : ℝ), div_le_iff₀, mul_assoc]
   · refine le_mul_of_one_le_right (cast_nonneg _) ?_
-    rw [div_mul_eq_mul_div]; rw [one_le_div]
+    rw [div_mul_eq_mul_div, one_le_div]
     · refine le_trans ?_ (mul_le_mul_of_nonneg_right (m_add_one_div_m_le_one_add hPα hPε hε₁) ?_)
-      · rw [sq, mul_mul_mul_comm, mul_comm (_ / (m : Real)), mul_comm (_ / (m : Real))]
+      · rw [sq, mul_mul_mul_comm, mul_comm (_ / (m : ℝ)), mul_comm (_ / (m : ℝ))]
         gcongr
         exacts [sum_card_subset_chunk_parts_le (by sz_positivity) hA hx,
           sum_card_subset_chunk_parts_le (by sz_positivity) hB hy]
       · exact_mod_cast _root_.zero_le
-    rw [← cast_mul]; rw [cast_pos]
+    rw [← cast_mul, cast_pos]
     apply mul_pos <;> rw [Finset.card_pos, sup_eq_biUnion, biUnion_nonempty]
     · exact ⟨_, hx, nonempty_of_mem_parts _ (hA hx)⟩
     · exact ⟨_, hy, nonempty_of_mem_parts _ (hB hy)⟩
   refine mul_pos (mul_pos ?_ ?_) (mul_pos ?_ ?_) <;> rw [cast_pos, Finset.card_pos]
   exacts [⟨_, hx⟩, nonempty_of_mem_parts _ (hA hx), ⟨_, hy⟩, nonempty_of_mem_parts _ (hB hy)]
-
-/--
-theorem `average_density_near_total_density` / 定理 `average_density_near_total_density`
-
-English:
-theorem average_density_near_total_density
-  statement: [Nonempty α]
-  proof: by
-  rw [abs_sub_le_iff]
-  constructor
-  · rw [sub_le_iff_le_add']
-    exact sum_density_div_card_le_density_add_eps hPα hPε hε₁ hA hB
-  suffices (G.edgeDensity (A.biUnion id) (B.biUnion id) : Real) -
-      (∑ ab in A.product B, (G.edgeDensity ab.1 ab.2 : Real)) / (#A * #B) <= ε ^ 5 / 50 by
-    apply this.trans
-    gcongr <;> [sz_positivity; norm_num]
-  rw [sub_le_iff_le_add]; rw [← sub_le_iff_le_add']
-  apply density_sub_eps_le_sum_density_div_card hPα hPε hA hB
-
-中文:
-定理 average_density_near_total_density
-  结论: [非空 α]
-  证明: by
-  rw [abs_sub_le_iff]
-  constructor
-  · rw [sub_le_iff_le_add']
-    exact sum_density_div_card_le_density_add_eps hPα hPε hε₁ hA hB
-  suffices (G.edgeDensity (A.biUnion id) (B.biUnion id) : Real) -
-      (∑ ab in A.product B, (G.edgeDensity ab.1 ab.2 : Real)) / (#A * #B) <= ε ^ 5 / 50 by
-    apply this.trans
-    gcongr <;> [sz_positivity; norm_num]
-  rw [sub_le_iff_le_add]; rw [← sub_le_iff_le_add']
-  apply density_sub_eps_le_sum_density_div_card hPα hPε hA hB
+/-
+**SzemerediRegularity.average_density_near_total_density** 是 Mathlib 中的一个定理，位于命名
+空间 `SzemerediRegularity`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem average_density_near_total_density [Nonempty α]
-    (hPα : #P.parts * 16 ^ #P.parts <= card α) (hPε : ↑100 <= ↑4 ^ #P.parts * ε ^ 5)
-    (hε₁ : ε <= 1) {hU : U in P.parts} {hV : V in P.parts} {A B : Finset (Finset α)}
-    (hA : A subseteq (chunk hP G ε hU).parts) (hB : B subseteq (chunk hP G ε hV).parts) :
-    |(∑ ab in A.product B, G.edgeDensity ab.1 ab.2 : Real) / (#A * #B) -
-      G.edgeDensity (A.biUnion id) (B.biUnion id)| <= ε ^ 5 / 49 := by
+    (hPα : #P.parts * 16 ^ #P.parts ≤ card α) (hPε : ↑100 ≤ ↑4 ^ #P.parts * ε ^ 5)
+    (hε₁ : ε ≤ 1) {hU : U ∈ P.parts} {hV : V ∈ P.parts} {A B : Finset (Finset α)}
+    (hA : A ⊆ (chunk hP G ε hU).parts) (hB : B ⊆ (chunk hP G ε hV).parts) :
+    |(∑ ab ∈ A.product B, G.edgeDensity ab.1 ab.2 : ℝ) / (#A * #B) -
+      G.edgeDensity (A.biUnion id) (B.biUnion id)| ≤ ε ^ 5 / 49 := by
   rw [abs_sub_le_iff]
   constructor
   · rw [sub_le_iff_le_add']
     exact sum_density_div_card_le_density_add_eps hPα hPε hε₁ hA hB
-  suffices (G.edgeDensity (A.biUnion id) (B.biUnion id) : Real) -
-      (∑ ab in A.product B, (G.edgeDensity ab.1 ab.2 : Real)) / (#A * #B) <= ε ^ 5 / 50 by
+  suffices (G.edgeDensity (A.biUnion id) (B.biUnion id) : ℝ) -
+      (∑ ab ∈ A.product B, (G.edgeDensity ab.1 ab.2 : ℝ)) / (#A * #B) ≤ ε ^ 5 / 50 by
     apply this.trans
     gcongr <;> [sz_positivity; norm_num]
-  rw [sub_le_iff_le_add]; rw [← sub_le_iff_le_add']
+  rw [sub_le_iff_le_add, ← sub_le_iff_le_add']
   apply density_sub_eps_le_sum_density_div_card hPα hPε hA hB
-
-/--
-theorem `edgeDensity_chunk_aux` / 定理 `edgeDensity_chunk_aux`
-
-English:
-theorem edgeDensity_chunk_aux
-  statement: [Nonempty α] (hP)
-  proof: by
-  obtain hGε | hGε := le_total (G.edgeDensity U V : Real) (ε ^ 5 / 50)
-  · refine (sub_nonpos_of_le <| (sq_le ?_ ?_).trans <| hGε.trans ?_).trans (sq_nonneg _)
-    · exact mod_cast G.edgeDensity_nonneg _ _
-    · exact mod_cast G.edgeDensity_le_one _ _
-    · exact div_le_div_of_nonneg_left (by sz_positivity) (by simp) (by norm_num)
-  rw [← sub_nonneg] at hGε
-  have : 0 <= ε := by sz_positivity
-  calc
-    _ = G.edgeDensity U V ^ 2 - 1 * ε ^ 5 / 25 + 0 ^ 10 / 2500 := by ring
-    _ <= G.edgeDensity U V ^ 2 - G.edgeDensity U V * ε ^ 5 / 25 + ε ^ 10 / 2500 := by
-      gcongr; exact mod_cast G.edgeDensity_le_one ..
-    _ = (G.edgeDensity U V - ε ^ 5 / 50) ^ 2 := by ring
-    _ <= _ := by
-      gcongr
-      have rflU := Subset.refl (chunk hP G ε hU).parts
-      have rflV := Subset.refl (chunk hP G ε hV).parts
-      refine (le_trans ?_ <| density_sub_eps_le_sum_density_div_card hPα hPε rflU rflV).trans ?_
-      · rw [biUnion_parts, biUnion_parts]
-      · rw [card_chunk (m_pos hPα).ne', card_chunk (m_pos hPα).ne', ← cast_mul, ← mul_pow, cast_pow]
-        norm_cast
-
-中文:
-定理 edgeDensity_chunk_aux
-  结论: [非空 α] (hP)
-  证明: by
-  obtain hGε | hGε := le_total (G.edgeDensity U V : Real) (ε ^ 5 / 50)
-  · refine (sub_nonpos_of_le <| (sq_le ?_ ?_).trans <| hGε.trans ?_).trans (sq_nonneg _)
-    · exact mod_cast G.edgeDensity_nonneg _ _
-    · exact mod_cast G.edgeDensity_le_one _ _
-    · exact div_le_div_of_nonneg_left (by sz_positivity) (by simp) (by norm_num)
-  rw [← sub_nonneg] at hGε
-  have : 0 <= ε := by sz_positivity
-  calc
-    _ = G.edgeDensity U V ^ 2 - 1 * ε ^ 5 / 25 + 0 ^ 10 / 2500 := by ring
-    _ <= G.edgeDensity U V ^ 2 - G.edgeDensity U V * ε ^ 5 / 25 + ε ^ 10 / 2500 := by
-      gcongr; exact mod_cast G.edgeDensity_le_one ..
-    _ = (G.edgeDensity U V - ε ^ 5 / 50) ^ 2 := by ring
-    _ <= _ := by
-      gcongr
-      have rflU := Subset.refl (chunk hP G ε hU).parts
-      have rflV := Subset.refl (chunk hP G ε hV).parts
-      refine (le_trans ?_ <| density_sub_eps_le_sum_density_div_card hPα hPε rflU rflV).trans ?_
-      · rw [biUnion_parts, biUnion_parts]
-      · rw [card_chunk (m_pos hPα).ne', card_chunk (m_pos hPα).ne', ← cast_mul, ← mul_pow, cast_pow]
-        norm_cast
+/-
+**SzemerediRegularity.edgeDensity_chunk_aux** 是 Mathlib 中的一个定理，位于命名空间 `Szemeredi
+Regularity`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private theorem edgeDensity_chunk_aux [Nonempty α] (hP)
-    (hPα : #P.parts * 16 ^ #P.parts <= card α) (hPε : ↑100 <= ↑4 ^ #P.parts * ε ^ 5)
-    (hU : U in P.parts) (hV : V in P.parts) :
-    (G.edgeDensity U V : Real) ^ 2 - ε ^ 5 / ↑25 <=
-    ((∑ ab in (chunk hP G ε hU).parts.product (chunk hP G ε hV).parts,
-      (G.edgeDensity ab.1 ab.2 : Real)) / ↑16 ^ #P.parts) ^ 2 := by
-  obtain hGε | hGε := le_total (G.edgeDensity U V : Real) (ε ^ 5 / 50)
+    (hPα : #P.parts * 16 ^ #P.parts ≤ card α) (hPε : ↑100 ≤ ↑4 ^ #P.parts * ε ^ 5)
+    (hU : U ∈ P.parts) (hV : V ∈ P.parts) :
+    (G.edgeDensity U V : ℝ) ^ 2 - ε ^ 5 / ↑25 ≤
+    ((∑ ab ∈ (chunk hP G ε hU).parts.product (chunk hP G ε hV).parts,
+      (G.edgeDensity ab.1 ab.2 : ℝ)) / ↑16 ^ #P.parts) ^ 2 := by
+  obtain hGε | hGε := le_total (G.edgeDensity U V : ℝ) (ε ^ 5 / 50)
   · refine (sub_nonpos_of_le <| (sq_le ?_ ?_).trans <| hGε.trans ?_).trans (sq_nonneg _)
     · exact mod_cast G.edgeDensity_nonneg _ _
     · exact mod_cast G.edgeDensity_le_one _ _
     · exact div_le_div_of_nonneg_left (by sz_positivity) (by simp) (by norm_num)
   rw [← sub_nonneg] at hGε
-  have : 0 <= ε := by sz_positivity
+  have : 0 ≤ ε := by sz_positivity
   calc
     _ = G.edgeDensity U V ^ 2 - 1 * ε ^ 5 / 25 + 0 ^ 10 / 2500 := by ring
-    _ <= G.edgeDensity U V ^ 2 - G.edgeDensity U V * ε ^ 5 / 25 + ε ^ 10 / 2500 := by
+    _ ≤ G.edgeDensity U V ^ 2 - G.edgeDensity U V * ε ^ 5 / 25 + ε ^ 10 / 2500 := by
       gcongr; exact mod_cast G.edgeDensity_le_one ..
     _ = (G.edgeDensity U V - ε ^ 5 / 50) ^ 2 := by ring
-    _ <= _ := by
+    _ ≤ _ := by
       gcongr
       have rflU := Subset.refl (chunk hP G ε hU).parts
       have rflV := Subset.refl (chunk hP G ε hV).parts
@@ -1012,40 +593,15 @@ private theorem edgeDensity_chunk_aux [Nonempty α] (hP)
       · rw [biUnion_parts, biUnion_parts]
       · rw [card_chunk (m_pos hPα).ne', card_chunk (m_pos hPα).ne', ← cast_mul, ← mul_pow, cast_pow]
         norm_cast
-
-/--
-theorem `abs_density_star_sub_density_le_eps` / 定理 `abs_density_star_sub_density_le_eps`
-
-English:
-theorem abs_density_star_sub_density_le_eps
-  statement: (hPε : ↑100 <= ↑4 ^ #P.parts * ε ^ 5)
-  proof: by
-  convert!
-    abs_edgeDensity_sub_edgeDensity_le_two_mul G.Adj
-      (biUnion_star_subset_nonuniformWitness hP G ε hU V)
-      (biUnion_star_subset_nonuniformWitness hP G ε hV U) (by sz_positivity)
-      (one_sub_eps_mul_card_nonuniformWitness_le_card_star hV hUV' hUV hPε hε₁)
-      (one_sub_eps_mul_card_nonuniformWitness_le_card_star hU hUV'.symm (fun hVU => hUV hVU.symm)
-        hPε hε₁) using 1
-  linarith
-
-中文:
-定理 abs_density_star_sub_density_le_eps
-  结论: (hPε : ↑100 <= ↑4 ^ #P.parts * ε ^ 5)
-  证明: by
-  convert!
-    abs_edgeDensity_sub_edgeDensity_le_two_mul G.Adj
-      (biUnion_star_subset_nonuniformWitness hP G ε hU V)
-      (biUnion_star_subset_nonuniformWitness hP G ε hV U) (by sz_positivity)
-      (one_sub_eps_mul_card_nonuniformWitness_le_card_star hV hUV' hUV hPε hε₁)
-      (one_sub_eps_mul_card_nonuniformWitness_le_card_star hU hUV'.symm (fun hVU => hUV hVU.symm)
-        hPε hε₁) using 1
-  linarith
+/-
+**SzemerediRegularity.abs_density_star_sub_density_le_eps** 是 Mathlib 中的一个定理，位于命
+名空间 `SzemerediRegularity`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem abs_density_star_sub_density_le_eps (hPε : ↑100 <= ↑4 ^ #P.parts * ε ^ 5)
-    (hε₁ : ε <= 1) {hU : U in P.parts} {hV : V in P.parts} (hUV' : U != V) (hUV : ¬G.IsUniform ε U V) :
-    |(G.edgeDensity ((star hP G ε hU V).biUnion id) ((star hP G ε hV U).biUnion id) : Real) -
-      G.edgeDensity (G.nonuniformWitness ε U V) (G.nonuniformWitness ε V U)| <= ε / 5 := by
+private theorem abs_density_star_sub_density_le_eps (hPε : ↑100 ≤ ↑4 ^ #P.parts * ε ^ 5)
+    (hε₁ : ε ≤ 1) {hU : U ∈ P.parts} {hV : V ∈ P.parts} (hUV' : U ≠ V) (hUV : ¬G.IsUniform ε U V) :
+    |(G.edgeDensity ((star hP G ε hU V).biUnion id) ((star hP G ε hV U).biUnion id) : ℝ) -
+      G.edgeDensity (G.nonuniformWitness ε U V) (G.nonuniformWitness ε V U)| ≤ ε / 5 := by
   convert!
     abs_edgeDensity_sub_edgeDensity_le_two_mul G.Adj
       (biUnion_star_subset_nonuniformWitness hP G ε hU V)
@@ -1054,110 +610,44 @@ private theorem abs_density_star_sub_density_le_eps (hPε : ↑100 <= ↑4 ^ #P.
       (one_sub_eps_mul_card_nonuniformWitness_le_card_star hU hUV'.symm (fun hVU => hUV hVU.symm)
         hPε hε₁) using 1
   linarith
-
-/--
-theorem `eps_le_card_star_div` / 定理 `eps_le_card_star_div`
-
-English:
-theorem eps_le_card_star_div
-  statement: [Nonempty α] (hPα : #P.parts * 16 ^ #P.parts <= card α)
-  proof: by
-  have hm : (0 : Real) <= 1 - (↑m)⁻¹ := sub_nonneg_of_le (inv_le_one_of_one_le₀ <| one_le_m_coe hPα)
-  have hε : 0 <= 1 - ε / 10 :=
-    sub_nonneg_of_le (div_le_one_of_le₀ (hε₁.trans <| by simp) <| by norm_num)
-  have hε₀ : 0 < ε := by sz_positivity
-  calc
-    4 / 5 * ε = (1 - 1 / 10) * (1 - 9⁻¹) * ε := by norm_num
-    _ <= (1 - ε / 10) * (1 - (↑m)⁻¹) * (#(G.nonuniformWitness ε U V) / #U) := by
-        gcongr
-        exacts [mod_cast (show 9 <= 100 by simp).trans (hundred_le_m hPα hPε hε₁),
-(le_div_iff₀' <| cast_pos.2 (P.nonempty_of_mem_parts hU).card_pos).2
-           G.le_card_nonuniformWitness hunif]
-    _ = (1 - ε / 10) * #(G.nonuniformWitness ε U V) * ((1 - (↑m)⁻¹) / #U) := by
-      rw [mul_assoc]; rw [mul_assoc]; rw [mul_div_left_comm]
-    _ <= #((star hP G ε hU V).biUnion id) * ((1 - (↑m)⁻¹) / #U) := by
-      gcongr
-      exact one_sub_eps_mul_card_nonuniformWitness_le_card_star hV hUV hunif hPε hε₁
-    _ <= #(star hP G ε hU V) * (m + 1) * ((1 - (↑m)⁻¹) / #U) := by
-      gcongr
-      exact card_biUnion_star_le_m_add_one_card_star_mul
-    _ <= #(star hP G ε hU V) * (m + ↑1) * ((↑1 - (↑m)⁻¹) / (↑4 ^ #P.parts * m)) := by
-      gcongr
-      · sz_positivity
-      · exact pow_mul_m_le_card_part hP hU
-    _ <= #(star hP G ε hU V) / ↑4 ^ #P.parts := by
-      rw [mul_assoc]; rw [mul_comm ((4 : Real) ^ #P.parts)]; rw [← div_div]; rw [← mul_div_assoc]; rw [← mul_comm_div]
-      refine mul_le_of_le_one_right (by positivity) ?_
-      have hm : (0 : Real) < m := by sz_positivity
-      rw [mul_div_assoc']; rw [div_le_one hm]; rw [← one_div]; rw [one_sub_div hm.ne']; rw [mul_div_assoc']; rw [div_le_iff₀ hm]
-      linarith
-
-中文:
-定理 eps_le_card_star_div
-  结论: [非空 α] (hPα : #P.parts * 16 ^ #P.parts <= card α)
-  证明: by
-  have hm : (0 : Real) <= 1 - (↑m)⁻¹ := sub_nonneg_of_le (inv_le_one_of_one_le₀ <| one_le_m_coe hPα)
-  have hε : 0 <= 1 - ε / 10 :=
-    sub_nonneg_of_le (div_le_one_of_le₀ (hε₁.trans <| by simp) <| by norm_num)
-  have hε₀ : 0 < ε := by sz_positivity
-  calc
-    4 / 5 * ε = (1 - 1 / 10) * (1 - 9⁻¹) * ε := by norm_num
-    _ <= (1 - ε / 10) * (1 - (↑m)⁻¹) * (#(G.nonuniformWitness ε U V) / #U) := by
-        gcongr
-        exacts [mod_cast (show 9 <= 100 by simp).trans (hundred_le_m hPα hPε hε₁),
-(le_div_iff₀' <| cast_pos.2 (P.nonempty_of_mem_parts hU).card_pos).2
-           G.le_card_nonuniformWitness hunif]
-    _ = (1 - ε / 10) * #(G.nonuniformWitness ε U V) * ((1 - (↑m)⁻¹) / #U) := by
-      rw [mul_assoc]; rw [mul_assoc]; rw [mul_div_left_comm]
-    _ <= #((star hP G ε hU V).biUnion id) * ((1 - (↑m)⁻¹) / #U) := by
-      gcongr
-      exact one_sub_eps_mul_card_nonuniformWitness_le_card_star hV hUV hunif hPε hε₁
-    _ <= #(star hP G ε hU V) * (m + 1) * ((1 - (↑m)⁻¹) / #U) := by
-      gcongr
-      exact card_biUnion_star_le_m_add_one_card_star_mul
-    _ <= #(star hP G ε hU V) * (m + ↑1) * ((↑1 - (↑m)⁻¹) / (↑4 ^ #P.parts * m)) := by
-      gcongr
-      · sz_positivity
-      · exact pow_mul_m_le_card_part hP hU
-    _ <= #(star hP G ε hU V) / ↑4 ^ #P.parts := by
-      rw [mul_assoc]; rw [mul_comm ((4 : Real) ^ #P.parts)]; rw [← div_div]; rw [← mul_div_assoc]; rw [← mul_comm_div]
-      refine mul_le_of_le_one_right (by positivity) ?_
-      have hm : (0 : Real) < m := by sz_positivity
-      rw [mul_div_assoc']; rw [div_le_one hm]; rw [← one_div]; rw [one_sub_div hm.ne']; rw [mul_div_assoc']; rw [div_le_iff₀ hm]
-      linarith
+/-
+**SzemerediRegularity.eps_le_card_star_div** 是 Mathlib 中的一个定理，位于命名空间 `SzemerediR
+egularity`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem eps_le_card_star_div [Nonempty α] (hPα : #P.parts * 16 ^ #P.parts <= card α)
-    (hPε : ↑100 <= ↑4 ^ #P.parts * ε ^ 5) (hε₁ : ε <= 1) (hU : U in P.parts) (hV : V in P.parts)
-    (hUV : U != V) (hunif : ¬G.IsUniform ε U V) :
-    ↑4 / ↑5 * ε <= #(star hP G ε hU V) / ↑4 ^ #P.parts := by
-  have hm : (0 : Real) <= 1 - (↑m)⁻¹ := sub_nonneg_of_le (inv_le_one_of_one_le₀ <| one_le_m_coe hPα)
-  have hε : 0 <= 1 - ε / 10 :=
+private theorem eps_le_card_star_div [Nonempty α] (hPα : #P.parts * 16 ^ #P.parts ≤ card α)
+    (hPε : ↑100 ≤ ↑4 ^ #P.parts * ε ^ 5) (hε₁ : ε ≤ 1) (hU : U ∈ P.parts) (hV : V ∈ P.parts)
+    (hUV : U ≠ V) (hunif : ¬G.IsUniform ε U V) :
+    ↑4 / ↑5 * ε ≤ #(star hP G ε hU V) / ↑4 ^ #P.parts := by
+  have hm : (0 : ℝ) ≤ 1 - (↑m)⁻¹ := sub_nonneg_of_le (inv_le_one_of_one_le₀ <| one_le_m_coe hPα)
+  have hε : 0 ≤ 1 - ε / 10 :=
     sub_nonneg_of_le (div_le_one_of_le₀ (hε₁.trans <| by simp) <| by norm_num)
   have hε₀ : 0 < ε := by sz_positivity
   calc
     4 / 5 * ε = (1 - 1 / 10) * (1 - 9⁻¹) * ε := by norm_num
-    _ <= (1 - ε / 10) * (1 - (↑m)⁻¹) * (#(G.nonuniformWitness ε U V) / #U) := by
+    _ ≤ (1 - ε / 10) * (1 - (↑m)⁻¹) * (#(G.nonuniformWitness ε U V) / #U) := by
         gcongr
-        exacts [mod_cast (show 9 <= 100 by simp).trans (hundred_le_m hPα hPε hε₁),
-(le_div_iff₀' <| cast_pos.2 (P.nonempty_of_mem_parts hU).card_pos).2
+        exacts [mod_cast (show 9 ≤ 100 by simp).trans (hundred_le_m hPα hPε hε₁),
+          (le_div_iff₀' <| cast_pos.2 (P.nonempty_of_mem_parts hU).card_pos).2 <|
            G.le_card_nonuniformWitness hunif]
     _ = (1 - ε / 10) * #(G.nonuniformWitness ε U V) * ((1 - (↑m)⁻¹) / #U) := by
-      rw [mul_assoc]; rw [mul_assoc]; rw [mul_div_left_comm]
-    _ <= #((star hP G ε hU V).biUnion id) * ((1 - (↑m)⁻¹) / #U) := by
+      rw [mul_assoc, mul_assoc, mul_div_left_comm]
+    _ ≤ #((star hP G ε hU V).biUnion id) * ((1 - (↑m)⁻¹) / #U) := by
       gcongr
       exact one_sub_eps_mul_card_nonuniformWitness_le_card_star hV hUV hunif hPε hε₁
-    _ <= #(star hP G ε hU V) * (m + 1) * ((1 - (↑m)⁻¹) / #U) := by
+    _ ≤ #(star hP G ε hU V) * (m + 1) * ((1 - (↑m)⁻¹) / #U) := by
       gcongr
       exact card_biUnion_star_le_m_add_one_card_star_mul
-    _ <= #(star hP G ε hU V) * (m + ↑1) * ((↑1 - (↑m)⁻¹) / (↑4 ^ #P.parts * m)) := by
+    _ ≤ #(star hP G ε hU V) * (m + ↑1) * ((↑1 - (↑m)⁻¹) / (↑4 ^ #P.parts * m)) := by
       gcongr
       · sz_positivity
       · exact pow_mul_m_le_card_part hP hU
-    _ <= #(star hP G ε hU V) / ↑4 ^ #P.parts := by
-      rw [mul_assoc]; rw [mul_comm ((4 : Real) ^ #P.parts)]; rw [← div_div]; rw [← mul_div_assoc]; rw [← mul_comm_div]
+    _ ≤ #(star hP G ε hU V) / ↑4 ^ #P.parts := by
+      rw [mul_assoc, mul_comm ((4 : ℝ) ^ #P.parts), ← div_div, ← mul_div_assoc, ← mul_comm_div]
       refine mul_le_of_le_one_right (by positivity) ?_
-      have hm : (0 : Real) < m := by sz_positivity
-      rw [mul_div_assoc']; rw [div_le_one hm]; rw [← one_div]; rw [one_sub_div hm.ne']; rw [mul_div_assoc']; rw [div_le_iff₀ hm]
+      have hm : (0 : ℝ) < m := by sz_positivity
+      rw [mul_div_assoc', div_le_one hm, ← one_div, one_sub_div hm.ne', mul_div_assoc',
+        div_le_iff₀ hm]
       linarith
 
 /-!
@@ -1167,210 +657,147 @@ Those inequalities are the end result of all this hard work.
 -/
 
 
-/--
-theorem `edgeDensity_star_not_uniform` / 定理 `edgeDensity_star_not_uniform`
+/-- Lower bound on the edge densities between non-uniform parts of `SzemerediRegularity.star`. -/
+/-
+**SzemerediRegularity.edgeDensity_star_not_uniform** 是 Mathlib 中的一个定理，位于命名空间 `Sz
+emerediRegularity`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem edgeDensity_star_not_uniform
-  statement: [Nonempty α]
-  proof: by
-  rw [show (16 : Real) = ↑4 ^ 2 by norm_num]; rw [pow_right_comm]; rw [sq ((4 : Real) ^ _)]
-  set p : Real :=
-    (∑ ab in (star hP G ε hU V).product (star hP G ε hV U), (G.edgeDensity ab.1 ab.2 : Real)) /
-      (#(star hP G ε hU V) * #(star hP G ε hV U))
-  set q : Real :=
-    (∑ ab in (chunk hP G ε hU).parts.product (chunk hP G ε hV).parts,
-      (G.edgeDensity ab.1 ab.2 : Real)) / (↑4 ^ #P.parts * ↑4 ^ #P.parts)
-  set r : Real := ↑(G.edgeDensity ((star hP G ε hU V).biUnion id) ((star hP G ε hV U).biUnion id))
-  set s : Real := ↑(G.edgeDensity (G.nonuniformWitness ε U V) (G.nonuniformWitness ε V U))
-  set t : Real := ↑(G.edgeDensity U V)
-  have hrs : |r - s| <= ε / 5 := abs_density_star_sub_density_le_eps hPε hε₁ hUVne hUV
-  have hst : ε <= |s - t| := by
-    -- After https://github.com/leanprover/lean4/pull/2734, we need to do the zeta reduction before `mod_cast`.
-    unfold s t
-    exact mod_cast G.nonuniformWitness_spec hUVne hUV
-  have hpr : |p - r| <= ε ^ 5 / 49 :=
-    average_density_near_total_density hPα hPε hε₁ star_subset_chunk star_subset_chunk
-  have hqt : |q - t| <= ε ^ 5 / 49 := by
-    have := average_density_near_total_density hPα hPε hε₁
-      (Subset.refl (chunk hP G ε hU).parts) (Subset.refl (chunk hP G ε hV).parts)
-    simpa [← sup_eq_biUnion, sup_parts, card_chunk (m_pos hPα).ne']
-  have hε' : ε ^ 5 <= ε := by
-    simpa using pow_le_pow_of_le_one (by sz_positivity) hε₁ (show 1 <= 5 by simp)
-  grind
-
-中文:
-定理 edgeDensity_star_not_uniform
-  结论: [非空 α]
-  证明: by
-  rw [show (16 : Real) = ↑4 ^ 2 by norm_num]; rw [pow_right_comm]; rw [sq ((4 : Real) ^ _)]
-  set p : Real :=
-    (∑ ab in (star hP G ε hU V).product (star hP G ε hV U), (G.edgeDensity ab.1 ab.2 : Real)) /
-      (#(star hP G ε hU V) * #(star hP G ε hV U))
-  set q : Real :=
-    (∑ ab in (chunk hP G ε hU).parts.product (chunk hP G ε hV).parts,
-      (G.edgeDensity ab.1 ab.2 : Real)) / (↑4 ^ #P.parts * ↑4 ^ #P.parts)
-  set r : Real := ↑(G.edgeDensity ((star hP G ε hU V).biUnion id) ((star hP G ε hV U).biUnion id))
-  set s : Real := ↑(G.edgeDensity (G.nonuniformWitness ε U V) (G.nonuniformWitness ε V U))
-  set t : Real := ↑(G.edgeDensity U V)
-  have hrs : |r - s| <= ε / 5 := abs_density_star_sub_density_le_eps hPε hε₁ hUVne hUV
-  have hst : ε <= |s - t| := by
-    -- After https://github.com/leanprover/lean4/pull/2734, we need to do the zeta reduction before `mod_cast`.
-    unfold s t
-    exact mod_cast G.nonuniformWitness_spec hUVne hUV
-  have hpr : |p - r| <= ε ^ 5 / 49 :=
-    average_density_near_total_density hPα hPε hε₁ star_subset_chunk star_subset_chunk
-  have hqt : |q - t| <= ε ^ 5 / 49 := by
-    have := average_density_near_total_density hPα hPε hε₁
-      (Subset.refl (chunk hP G ε hU).parts) (Subset.refl (chunk hP G ε hV).parts)
-    simpa [← sup_eq_biUnion, sup_parts, card_chunk (m_pos hPα).ne']
-  have hε' : ε ^ 5 <= ε := by
-    simpa using pow_le_pow_of_le_one (by sz_positivity) hε₁ (show 1 <= 5 by simp)
-  grind
+--- 原说明 ---
+Lower bound on the edge densities between non-uniform parts of `SzemerediRegular
+ity.star`.
 -/
 private theorem edgeDensity_star_not_uniform [Nonempty α]
-    (hPα : #P.parts * 16 ^ #P.parts <= card α) (hPε : ↑100 <= ↑4 ^ #P.parts * ε ^ 5)
-    (hε₁ : ε <= 1) {hU : U in P.parts} {hV : V in P.parts} (hUVne : U != V) (hUV : ¬G.IsUniform ε U V) :
-    ↑3 / ↑4 * ε <=
-    |(∑ ab in (star hP G ε hU V).product (star hP G ε hV U), (G.edgeDensity ab.1 ab.2 : Real)) /
+    (hPα : #P.parts * 16 ^ #P.parts ≤ card α) (hPε : ↑100 ≤ ↑4 ^ #P.parts * ε ^ 5)
+    (hε₁ : ε ≤ 1) {hU : U ∈ P.parts} {hV : V ∈ P.parts} (hUVne : U ≠ V) (hUV : ¬G.IsUniform ε U V) :
+    ↑3 / ↑4 * ε ≤
+    |(∑ ab ∈ (star hP G ε hU V).product (star hP G ε hV U), (G.edgeDensity ab.1 ab.2 : ℝ)) /
       (#(star hP G ε hU V) * #(star hP G ε hV U)) -
-        (∑ ab in (chunk hP G ε hU).parts.product (chunk hP G ε hV).parts,
-          (G.edgeDensity ab.1 ab.2 : Real)) / (16 : Real) ^ #P.parts| := by
-  rw [show (16 : Real) = ↑4 ^ 2 by norm_num]; rw [pow_right_comm]; rw [sq ((4 : Real) ^ _)]
-  set p : Real :=
-    (∑ ab in (star hP G ε hU V).product (star hP G ε hV U), (G.edgeDensity ab.1 ab.2 : Real)) /
+        (∑ ab ∈ (chunk hP G ε hU).parts.product (chunk hP G ε hV).parts,
+          (G.edgeDensity ab.1 ab.2 : ℝ)) / (16 : ℝ) ^ #P.parts| := by
+  rw [show (16 : ℝ) = ↑4 ^ 2 by norm_num, pow_right_comm, sq ((4 : ℝ) ^ _)]
+  set p : ℝ :=
+    (∑ ab ∈ (star hP G ε hU V).product (star hP G ε hV U), (G.edgeDensity ab.1 ab.2 : ℝ)) /
       (#(star hP G ε hU V) * #(star hP G ε hV U))
-  set q : Real :=
-    (∑ ab in (chunk hP G ε hU).parts.product (chunk hP G ε hV).parts,
-      (G.edgeDensity ab.1 ab.2 : Real)) / (↑4 ^ #P.parts * ↑4 ^ #P.parts)
-  set r : Real := ↑(G.edgeDensity ((star hP G ε hU V).biUnion id) ((star hP G ε hV U).biUnion id))
-  set s : Real := ↑(G.edgeDensity (G.nonuniformWitness ε U V) (G.nonuniformWitness ε V U))
-  set t : Real := ↑(G.edgeDensity U V)
-  have hrs : |r - s| <= ε / 5 := abs_density_star_sub_density_le_eps hPε hε₁ hUVne hUV
-  have hst : ε <= |s - t| := by
+  set q : ℝ :=
+    (∑ ab ∈ (chunk hP G ε hU).parts.product (chunk hP G ε hV).parts,
+      (G.edgeDensity ab.1 ab.2 : ℝ)) / (↑4 ^ #P.parts * ↑4 ^ #P.parts)
+  set r : ℝ := ↑(G.edgeDensity ((star hP G ε hU V).biUnion id) ((star hP G ε hV U).biUnion id))
+  set s : ℝ := ↑(G.edgeDensity (G.nonuniformWitness ε U V) (G.nonuniformWitness ε V U))
+  set t : ℝ := ↑(G.edgeDensity U V)
+  have hrs : |r - s| ≤ ε / 5 := abs_density_star_sub_density_le_eps hPε hε₁ hUVne hUV
+  have hst : ε ≤ |s - t| := by
     -- After https://github.com/leanprover/lean4/pull/2734, we need to do the zeta reduction before `mod_cast`.
     unfold s t
     exact mod_cast G.nonuniformWitness_spec hUVne hUV
-  have hpr : |p - r| <= ε ^ 5 / 49 :=
+  have hpr : |p - r| ≤ ε ^ 5 / 49 :=
     average_density_near_total_density hPα hPε hε₁ star_subset_chunk star_subset_chunk
-  have hqt : |q - t| <= ε ^ 5 / 49 := by
+  have hqt : |q - t| ≤ ε ^ 5 / 49 := by
     have := average_density_near_total_density hPα hPε hε₁
       (Subset.refl (chunk hP G ε hU).parts) (Subset.refl (chunk hP G ε hV).parts)
     simpa [← sup_eq_biUnion, sup_parts, card_chunk (m_pos hPα).ne']
-  have hε' : ε ^ 5 <= ε := by
-    simpa using pow_le_pow_of_le_one (by sz_positivity) hε₁ (show 1 <= 5 by simp)
+  have hε' : ε ^ 5 ≤ ε := by
+    simpa using pow_le_pow_of_le_one (by sz_positivity) hε₁ (show 1 ≤ 5 by simp)
   grind
 
-/--
-theorem `edgeDensity_chunk_not_uniform` / 定理 `edgeDensity_chunk_not_uniform`
-
-English:
-theorem edgeDensity_chunk_not_uniform
-  statement: [Nonempty α] (hPα : #P.parts * 16 ^ #P.parts <= card α)
-  proof: calc
-    ↑(G.edgeDensity U V) ^ 2 - ε ^ 5 / 25 + ε ^ 4 / ↑3 <= ↑(G.edgeDensity U V) ^ 2 - ε ^ 5 / ↑25 +
-        #(star hP G ε hU V) * #(star hP G ε hV U) / ↑16 ^ #P.parts *
-          (↑9 / ↑16) * ε ^ 2 := by
-      gcongr
-      have Ul : 4 / 5 * ε <= #(star hP G ε hU V) / _ :=
-        eps_le_card_star_div hPα hPε hε₁ hU hV hUVne hUV
-      have Vl : 4 / 5 * ε <= #(star hP G ε hV U) / _ :=
-        eps_le_card_star_div hPα hPε hε₁ hV hU hUVne.symm fun h => hUV h.symm
-      rw [show (16 : Real) = ↑4 ^ 2 by norm_num]; rw [pow_right_comm]; rw [sq ((4 : Real) ^ _)]; rw [←
-        _root_.div_mul_div_comm]; rw [mul_assoc]
-      have : 0 < ε := by sz_positivity
-      have UVl := mul_le_mul Ul Vl (by positivity) ?_
-      swap
-      · -- This seems faster than `exact div_nonneg (by positivity) (by positivity)` and *much*
-        -- (tens of seconds) faster than `positivity` on its own.
-        apply div_nonneg <;> positivity
-      refine le_trans ?_ (mul_le_mul_of_nonneg_right UVl ?_)
-      · norm_num
-        nlinarith
-      · simp [pow_two_nonneg]
-    _ <= (∑ ab in (chunk hP G ε hU).parts.product (chunk hP G ε hV).parts,
-        (G.edgeDensity ab.1 ab.2 : Real) ^ 2) / ↑16 ^ #P.parts := by
-      have t : (star hP G ε hU V).product (star hP G ε hV U) subseteq
-          (chunk hP G ε hU).parts.product (chunk hP G ε hV).parts :=
-        product_subset_product star_subset_chunk star_subset_chunk
-      have hε : 0 <= ε := by sz_positivity
-      have sp : forall (a b : Finset (Finset α)), a.product b = a ×ˢ b := fun a b => rfl
-      have := add_div_le_sum_sq_div_card t (fun x => (G.edgeDensity x.1 x.2 : Real))
-        ((G.edgeDensity U V : Real) ^ 2 - ε ^ 5 / ↑25) (show 0 <= 3 / 4 * ε by linarith) ?_ ?_
-      · simp_rw [sp, card_product, card_chunk (m_pos hPα).ne', ← mul_pow, cast_pow, mul_pow,
-          div_pow, ← mul_assoc] at this
-        norm_num at this
-        exact this
-      · simp_rw [sp, card_product, card_chunk (m_pos hPα).ne', ← mul_pow]
-        simpa using edgeDensity_star_not_uniform hPα hPε hε₁ hUVne hUV
-      · rw [sp, card_product]
-        apply (edgeDensity_chunk_aux hP hPα hPε hU hV).trans
-        · rw [card_chunk (m_pos hPα).ne', card_chunk (m_pos hPα).ne', ← mul_pow]
-          simp
-
-中文:
-定理 edgeDensity_chunk_not_uniform
-  结论: [非空 α] (hPα : #P.parts * 16 ^ #P.parts <= card α)
-  证明: calc
-    ↑(G.edgeDensity U V) ^ 2 - ε ^ 5 / 25 + ε ^ 4 / ↑3 <= ↑(G.edgeDensity U V) ^ 2 - ε ^ 5 / ↑25 +
-        #(star hP G ε hU V) * #(star hP G ε hV U) / ↑16 ^ #P.parts *
-          (↑9 / ↑16) * ε ^ 2 := by
-      gcongr
-      have Ul : 4 / 5 * ε <= #(star hP G ε hU V) / _ :=
-        eps_le_card_star_div hPα hPε hε₁ hU hV hUVne hUV
-      have Vl : 4 / 5 * ε <= #(star hP G ε hV U) / _ :=
-        eps_le_card_star_div hPα hPε hε₁ hV hU hUVne.symm fun h => hUV h.symm
-      rw [show (16 : Real) = ↑4 ^ 2 by norm_num]; rw [pow_right_comm]; rw [sq ((4 : Real) ^ _)]; rw [←
-        _root_.div_mul_div_comm]; rw [mul_assoc]
-      have : 0 < ε := by sz_positivity
-      have UVl := mul_le_mul Ul Vl (by positivity) ?_
-      swap
-      · -- This seems faster than `exact div_nonneg (by positivity) (by positivity)` and *much*
-        -- (tens of seconds) faster than `positivity` on its own.
-        apply div_nonneg <;> positivity
-      refine le_trans ?_ (mul_le_mul_of_nonneg_right UVl ?_)
-      · norm_num
-        nlinarith
-      · simp [pow_two_nonneg]
-    _ <= (∑ ab in (chunk hP G ε hU).parts.product (chunk hP G ε hV).parts,
-        (G.edgeDensity ab.1 ab.2 : Real) ^ 2) / ↑16 ^ #P.parts := by
-      have t : (star hP G ε hU V).product (star hP G ε hV U) subseteq
-          (chunk hP G ε hU).parts.product (chunk hP G ε hV).parts :=
-        product_subset_product star_subset_chunk star_subset_chunk
-      have hε : 0 <= ε := by sz_positivity
-      have sp : forall (a b : Finset (Finset α)), a.product b = a ×ˢ b := fun a b => rfl
-      have := add_div_le_sum_sq_div_card t (fun x => (G.edgeDensity x.1 x.2 : Real))
-        ((G.edgeDensity U V : Real) ^ 2 - ε ^ 5 / ↑25) (show 0 <= 3 / 4 * ε by linarith) ?_ ?_
-      · simp_rw [sp, card_product, card_chunk (m_pos hPα).ne', ← mul_pow, cast_pow, mul_pow,
-          div_pow, ← mul_assoc] at this
-        norm_num at this
-        exact this
-      · simp_rw [sp, card_product, card_chunk (m_pos hPα).ne', ← mul_pow]
-        simpa using edgeDensity_star_not_uniform hPα hPε hε₁ hUVne hUV
-      · rw [sp, card_product]
-        apply (edgeDensity_chunk_aux hP hPα hPε hU hV).trans
-        · rw [card_chunk (m_pos hPα).ne', card_chunk (m_pos hPα).ne', ← mul_pow]
-          simp
-
-Depends on / 依赖: G.edgeDensity, P.parts, edgeDensity, eps_le_card_star_div, h.symm, hUVne.symm, pow_right_comm
+/-- Lower bound on the edge densities between non-uniform parts of `SzemerediRegularity.increment`.
 -/
-theorem edgeDensity_chunk_not_uniform [Nonempty α] (hPα : #P.parts * 16 ^ #P.parts <= card α)
-    (hPε : ↑100 <= ↑4 ^ #P.parts * ε ^ 5) (hε₁ : ε <= 1) {hU : U in P.parts} {hV : V in P.parts}
-    (hUVne : U != V) (hUV : ¬G.IsUniform ε U V) :
-    (G.edgeDensity U V : Real) ^ 2 - ε ^ 5 / ↑25 + ε ^ 4 / ↑3 <=
-    (∑ ab in (chunk hP G ε hU).parts.product (chunk hP G ε hV).parts,
-      (G.edgeDensity ab.1 ab.2 : Real) ^ 2) / ↑16 ^ #P.parts :=
+/-
+**SzemerediRegularity.edgeDensity_chunk_not_uniform** 是 Mathlib 中的一个定理，位于命名空间 `S
+zemerediRegularity`。
+形式化陈述：edgeDensity_chunk_not_uniform [Nonempty α] (hPα : #P.parts * 16 ^ #P.parts
+ <= card α) (hPε : ↑100 <= ↑4 ^ #P.parts * ε ^ 5) (hε₁ : ε <= 1) {hU : U in P.pa
+rts} {hV : V in P.parts} (hUVne : U != V) (hUV : ¬G.IsUniform ε U V) : (G.edgeDe
+nsity U V : Real) ^ 2 - ε ^ 5 / ↑25 + ε ^ 4 / ↑3 <= (∑ ab in (chunk hP G ε hU).p
+arts.product (chunk hP G ε hV).parts, (G.edgeDensity ab.1 ab.2 : Real) ^ 2) / ↑1
+6 ^ #P.parts
+参数：hPα : #P.parts * 16 ^ #P.parts <= card α；hPε : ↑100 <= ↑4 ^ #P.parts * ε ^ 5；
+hε₁ : ε <= 1；hUVne : U != V；hUV : ¬G.IsUniform ε U V。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `add_le_add`：∀ {α : Type u_1} [inst : Add α] [inst_1 : Preorder α] [AddLe
+ftMono α] [AddRightMono α] {a b c d : α},   a ≤ b → c ≤ d → a + c ≤ b + d
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `_private.Mathlib.Combinatorics.SimpleGraph.Regularity.Chunk.0.SzemerediR
+egularity.eps_le_card_star_div`：∀ {α : Type u_1} [inst : Fintype α] [inst_1 : De
+cidableEq α] {P : Finpartition Finset.univ} {hP : P.IsEquipartition}   {G : Simp
+leGraph α} […
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
+· 使用定理 `SimpleGraph.IsUniform.symm`：∀ {α : Type u_1} {𝕜 : Type u_2} [inst : Fiel
+d 𝕜] [inst_1 : LinearOrder 𝕜] {G : SimpleGraph α}   [inst_2 : DecidableRel G.Adj
+] {ε : 𝕜} {s t :…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Mathlib.Meta.NormNum.isNat_eq_true`：∀ {α : Type u} [inst : AddMonoidWith
+One α] {a b : α} {c : ℕ},   Mathlib.Meta.NormNum.IsNat a c → Mathlib.Meta.NormNu
+m.IsNat b c → a = b
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用引理 `Mathlib.Meta.NormNum.instAtLeastTwo`：instAtLeastTwo (n : Nat) : Nat.AtLe
+astTwo (n + 2)
+· 使用定理 `Mathlib.Meta.NormNum.isNat_pow`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → ℕ → α} {a : α} {b a' b' c : ℕ},   f = HPow.hPow →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNatPowT.run`：∀ {a b c : ℕ}, Mathlib.Meta.NormNum.
+IsNatPowT (a.pow 1 = a) a b c → a.pow b = c
+· 使用定理 `Mathlib.Meta.NormNum.IsNatPowT.bit0`：∀ {a b c : ℕ}, Mathlib.Meta.NormNum
+.IsNatPowT (a.pow b = c) a (2 * b) (c.mul c)
+· 使用引理 `pow_right_comm`：pow_right_comm (a : M) (m n : Nat) : (a ^ m) ^ n = (a ^ 
+n) ^ m
+· 使用定理 `sq`：∀ {M : Type u_2} [inst : Monoid M] (a : M), a ^ 2 = a * a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `div_mul_div_comm`：div_mul_div_comm : a / b * (c / d) = a * c / (b * d)
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `_private.Mathlib.Combinatorics.SimpleGraph.Regularity.Bound.0.SzemerediR
+egularity.Positivity.m_pos`：∀ {α : Type u_1} [inst : DecidableEq α] [inst_1 : Fi
+ntype α] {P : Finpartition Finset.univ} [Nonempty α],   P.parts.card * 16 ^ P.pa
+rts.card…
+· 使用定理 `_private.Mathlib.Combinatorics.SimpleGraph.Regularity.Bound.0.SzemerediR
+egularity.Positivity.eps_pos`：∀ {ε : ℝ} {n : ℕ}, 100 ≤ 4 ^ n * ε ^ 5 → 0 < ε
+· 使用定理 `mul_le_mul`：∀ {α : Type u_1} [inst : Mul α] [inst_1 : Zero α] [inst_2 : 
+Preorder α] {a b c d : α} [PosMulMono α] [MulPosMono α],   a ≤ b → c ≤ d → 0 ≤ c
+…
+· 使用定理 `IsOrderedRing.toPosMulMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], PosMulMono R
+· 使用定理 `IsOrderedRing.toMulPosMono`：∀ {R : Type u_1} {inst : Semiring R} {inst_1
+ : PartialOrder R} [self : IsOrderedRing R], MulPosMono R
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `mul_pos`：∀ {α : Type u_1} [inst : MulZeroClass α] {a b : α} [inst_1 : Pr
+eorder α] [PosMulStrictMono α], 0 < a → 0 < b → 0 < a * b
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用引理 `div_pos`：div_pos (ha : 0 < a) (hb : 0 < b) : 0 < a / b
+（共 135 条，此处仅展示前 30 条）
+
+--- 原说明 ---
+Lower bound on the edge densities between non-uniform parts of `SzemerediRegular
+ity.increment`.
+-/
+theorem edgeDensity_chunk_not_uniform [Nonempty α] (hPα : #P.parts * 16 ^ #P.parts ≤ card α)
+    (hPε : ↑100 ≤ ↑4 ^ #P.parts * ε ^ 5) (hε₁ : ε ≤ 1) {hU : U ∈ P.parts} {hV : V ∈ P.parts}
+    (hUVne : U ≠ V) (hUV : ¬G.IsUniform ε U V) :
+    (G.edgeDensity U V : ℝ) ^ 2 - ε ^ 5 / ↑25 + ε ^ 4 / ↑3 ≤
+    (∑ ab ∈ (chunk hP G ε hU).parts.product (chunk hP G ε hV).parts,
+      (G.edgeDensity ab.1 ab.2 : ℝ) ^ 2) / ↑16 ^ #P.parts :=
   calc
-    ↑(G.edgeDensity U V) ^ 2 - ε ^ 5 / 25 + ε ^ 4 / ↑3 <= ↑(G.edgeDensity U V) ^ 2 - ε ^ 5 / ↑25 +
+    ↑(G.edgeDensity U V) ^ 2 - ε ^ 5 / 25 + ε ^ 4 / ↑3 ≤ ↑(G.edgeDensity U V) ^ 2 - ε ^ 5 / ↑25 +
         #(star hP G ε hU V) * #(star hP G ε hV U) / ↑16 ^ #P.parts *
           (↑9 / ↑16) * ε ^ 2 := by
       gcongr
-      have Ul : 4 / 5 * ε <= #(star hP G ε hU V) / _ :=
+      have Ul : 4 / 5 * ε ≤ #(star hP G ε hU V) / _ :=
         eps_le_card_star_div hPα hPε hε₁ hU hV hUVne hUV
-      have Vl : 4 / 5 * ε <= #(star hP G ε hV U) / _ :=
+      have Vl : 4 / 5 * ε ≤ #(star hP G ε hV U) / _ :=
         eps_le_card_star_div hPα hPε hε₁ hV hU hUVne.symm fun h => hUV h.symm
-      rw [show (16 : Real) = ↑4 ^ 2 by norm_num]; rw [pow_right_comm]; rw [sq ((4 : Real) ^ _)]; rw [←
-        _root_.div_mul_div_comm]; rw [mul_assoc]
+      rw [show (16 : ℝ) = ↑4 ^ 2 by norm_num, pow_right_comm, sq ((4 : ℝ) ^ _), ←
+        _root_.div_mul_div_comm, mul_assoc]
       have : 0 < ε := by sz_positivity
       have UVl := mul_le_mul Ul Vl (by positivity) ?_
       swap
@@ -1381,15 +808,15 @@ theorem edgeDensity_chunk_not_uniform [Nonempty α] (hPα : #P.parts * 16 ^ #P.p
       · norm_num
         nlinarith
       · simp [pow_two_nonneg]
-    _ <= (∑ ab in (chunk hP G ε hU).parts.product (chunk hP G ε hV).parts,
-        (G.edgeDensity ab.1 ab.2 : Real) ^ 2) / ↑16 ^ #P.parts := by
-      have t : (star hP G ε hU V).product (star hP G ε hV U) subseteq
+    _ ≤ (∑ ab ∈ (chunk hP G ε hU).parts.product (chunk hP G ε hV).parts,
+        (G.edgeDensity ab.1 ab.2 : ℝ) ^ 2) / ↑16 ^ #P.parts := by
+      have t : (star hP G ε hU V).product (star hP G ε hV U) ⊆
           (chunk hP G ε hU).parts.product (chunk hP G ε hV).parts :=
         product_subset_product star_subset_chunk star_subset_chunk
-      have hε : 0 <= ε := by sz_positivity
-      have sp : forall (a b : Finset (Finset α)), a.product b = a ×ˢ b := fun a b => rfl
-      have := add_div_le_sum_sq_div_card t (fun x => (G.edgeDensity x.1 x.2 : Real))
-        ((G.edgeDensity U V : Real) ^ 2 - ε ^ 5 / ↑25) (show 0 <= 3 / 4 * ε by linarith) ?_ ?_
+      have hε : 0 ≤ ε := by sz_positivity
+      have sp : ∀ (a b : Finset (Finset α)), a.product b = a ×ˢ b := fun a b => rfl
+      have := add_div_le_sum_sq_div_card t (fun x => (G.edgeDensity x.1 x.2 : ℝ))
+        ((G.edgeDensity U V : ℝ) ^ 2 - ε ^ 5 / ↑25) (show 0 ≤ 3 / 4 * ε by linarith) ?_ ?_
       · simp_rw [sp, card_product, card_chunk (m_pos hPα).ne', ← mul_pow, cast_pow, mul_pow,
           div_pow, ← mul_assoc] at this
         norm_num at this
@@ -1401,43 +828,71 @@ theorem edgeDensity_chunk_not_uniform [Nonempty α] (hPα : #P.parts * 16 ^ #P.p
         · rw [card_chunk (m_pos hPα).ne', card_chunk (m_pos hPα).ne', ← mul_pow]
           simp
 
-/--
-theorem `edgeDensity_chunk_uniform` / 定理 `edgeDensity_chunk_uniform`
+/-- Lower bound on the edge densities between parts of `SzemerediRegularity.increment`. This is the
+blanket lower bound used the uniform parts. -/
+/-
+**SzemerediRegularity.edgeDensity_chunk_uniform** 是 Mathlib 中的一个定理，位于命名空间 `Szeme
+rediRegularity`。
+形式化陈述：edgeDensity_chunk_uniform [Nonempty α] (hPα : #P.parts * 16 ^ #P.parts <= 
+card α) (hPε : ↑100 <= ↑4 ^ #P.parts * ε ^ 5) (hU : U in P.parts) (hV : V in P.p
+arts) : (G.edgeDensity U V : Real) ^ 2 - ε ^ 5 / ↑25 <= (∑ ab in (chunk hP G ε h
+U).parts.product (chunk hP G ε hV).parts, (G.edgeDensity ab.1 ab.2 : Real) ^ 2) 
+/ ↑16 ^ #P.parts
+参数：hPα : #P.parts * 16 ^ #P.parts <= card α；hPε : ↑100 <= ↑4 ^ #P.parts * ε ^ 5；
+hU : U in P.parts；hV : V in P.parts。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `_private.Mathlib.Combinatorics.SimpleGraph.Regularity.Chunk.0.SzemerediR
+egularity.edgeDensity_chunk_aux`：∀ {α : Type u_1} [inst : Fintype α] [inst_1 : D
+ecidableEq α] {P : Finpartition Finset.univ} {G : SimpleGraph α}   [inst_2 : Dec
+idableRel G.A…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.card_product`：card_product (s : Finset α) (t : Finset β) : card (
+s ×ˢ t) = card s * card t
+· 使用定理 `Nat.cast_mul`：∀ {α : Type u_1} [inst : NonAssocSemiring α] (m n : ℕ), ↑(
+m * n) = ↑m * ↑n
+· 使用定理 `SzemerediRegularity.card_chunk`：card_chunk (hm : m != 0) : #(chunk hP G 
+ε hU).parts = 4 ^ #P.parts
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `SzemerediRegularity.m_pos`：m_pos [Nonempty α] (hPα : #P.parts * 16 ^ #P.
+parts <= card α) : 0 < m
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_pow`：mul_pow {ea₁ b c₁ : Nat} {xa₁ : R} (_ : ea₁ * b = c₁) (_ : a₂ ^
+ b = c₂) : (xa₁ ^ ea₁ * a₂ : R) ^ b = xa₁ ^ c₁ * c₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `sum_div_card_sq_le_sum_sq_div_card`：sum_div_card_sq_le_sum_sq_div_card :
+ ((∑ i in s, f i) / #s) ^ 2 <= (∑ i in s, f i ^ 2) / #s
+· 使用定理 `AddGroup.existsAddOfLE`：∀ (α : Type u) [inst : AddGroup α] [inst_1 : LE 
+α], ExistsAddOfLE α
 
-English:
-theorem edgeDensity_chunk_uniform
-  statement: [Nonempty α] (hPα : #P.parts * 16 ^ #P.parts <= card α)
-  proof: by
-  apply (edgeDensity_chunk_aux (hP := hP) hPα hPε hU hV).trans
-  have key : (16 : Real) ^ #P.parts = #((chunk hP G ε hU).parts ×ˢ (chunk hP G ε hV).parts) := by
-    rw [card_product]; rw [cast_mul]; rw [card_chunk (m_pos hPα).ne']; rw [card_chunk (m_pos hPα).ne']; rw [←
-      cast_mul]; rw [← mul_pow]; norm_cast
-  simp_rw [key]
-  convert! sum_div_card_sq_le_sum_sq_div_card (α := Real)
-
-中文:
-定理 edgeDensity_chunk_uniform
-  结论: [非空 α] (hPα : #P.parts * 16 ^ #P.parts <= card α)
-  证明: by
-  apply (edgeDensity_chunk_aux (hP := hP) hPα hPε hU hV).trans
-  have key : (16 : Real) ^ #P.parts = #((chunk hP G ε hU).parts ×ˢ (chunk hP G ε hV).parts) := by
-    rw [card_product]; rw [cast_mul]; rw [card_chunk (m_pos hPα).ne']; rw [card_chunk (m_pos hPα).ne']; rw [←
-      cast_mul]; rw [← mul_pow]; norm_cast
-  simp_rw [key]
-  convert! sum_div_card_sq_le_sum_sq_div_card (α := Real)
-
-Depends on / 依赖: P.parts, card_chunk, card_product, cast_mul, convert, edgeDensity_chunk_aux, m_pos, mul_pow, simp_rw, sum_div_card_sq_le_sum_sq_div_card
+--- 原说明 ---
+Lower bound on the edge densities between parts of `SzemerediRegularity.incremen
+t`. This is the
+blanket lower bound used the uniform parts.
 -/
-theorem edgeDensity_chunk_uniform [Nonempty α] (hPα : #P.parts * 16 ^ #P.parts <= card α)
-    (hPε : ↑100 <= ↑4 ^ #P.parts * ε ^ 5) (hU : U in P.parts) (hV : V in P.parts) :
-    (G.edgeDensity U V : Real) ^ 2 - ε ^ 5 / ↑25 <=
-    (∑ ab in (chunk hP G ε hU).parts.product (chunk hP G ε hV).parts,
-      (G.edgeDensity ab.1 ab.2 : Real) ^ 2) / ↑16 ^ #P.parts := by
+theorem edgeDensity_chunk_uniform [Nonempty α] (hPα : #P.parts * 16 ^ #P.parts ≤ card α)
+    (hPε : ↑100 ≤ ↑4 ^ #P.parts * ε ^ 5) (hU : U ∈ P.parts) (hV : V ∈ P.parts) :
+    (G.edgeDensity U V : ℝ) ^ 2 - ε ^ 5 / ↑25 ≤
+    (∑ ab ∈ (chunk hP G ε hU).parts.product (chunk hP G ε hV).parts,
+      (G.edgeDensity ab.1 ab.2 : ℝ) ^ 2) / ↑16 ^ #P.parts := by
   apply (edgeDensity_chunk_aux (hP := hP) hPα hPε hU hV).trans
-  have key : (16 : Real) ^ #P.parts = #((chunk hP G ε hU).parts ×ˢ (chunk hP G ε hV).parts) := by
-    rw [card_product]; rw [cast_mul]; rw [card_chunk (m_pos hPα).ne']; rw [card_chunk (m_pos hPα).ne']; rw [←
-      cast_mul]; rw [← mul_pow]; norm_cast
+  have key : (16 : ℝ) ^ #P.parts = #((chunk hP G ε hU).parts ×ˢ (chunk hP G ε hV).parts) := by
+    rw [card_product, cast_mul, card_chunk (m_pos hPα).ne', card_chunk (m_pos hPα).ne', ←
+      cast_mul, ← mul_pow]; norm_cast
   simp_rw [key]
-  convert! sum_div_card_sq_le_sum_sq_div_card (α := Real)
+  convert! sum_div_card_sq_le_sum_sq_div_card (α := ℝ)
 
 end SzemerediRegularity
+

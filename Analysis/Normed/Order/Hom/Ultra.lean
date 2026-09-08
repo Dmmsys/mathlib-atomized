@@ -24,37 +24,44 @@ the argument is an autoparam that resolves by definitional equality when using t
 
 public section
 
-variable {F α : Type*} [FunLike F α Real]
+variable {F α : Type*} [FunLike F α ℝ]
 
-/--
-lemma `AddGroupSeminormClass.isUltrametricDist` / 引理 `AddGroupSeminormClass.isUltrametricDist`
+/-- Proves that when a `SeminormedAddGroup` structure is constructed from an
+`AddGroupSeminormClass` that satisfies `IsNonarchimedean`, the group has an `IsUltrametricDist`. -/
+/-
+**AddGroupSeminormClass.isUltrametricDist** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：AddGroupSeminormClass.isUltrametricDist [AddGroup α] [AddGroupSeminormClas
+s F α Real] [inst : Dist α] {f : F} (hna : IsNonarchimedean f) (hd : inst = (Add
+GroupSeminormClass.toSeminormedAddGroup f).toDist
+参数：hna : IsNonarchimedean f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dist_eq_norm_neg_add`：∀ {E : Type u_5} [inst : SeminormedAddGroup E] (a 
+b : E), dist a b = ‖-a + b‖
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `add_neg_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a + -a = 0
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
 
-English:
-lemma AddGroupSeminormClass.isUltrametricDist
-  statement: [AddGroup α] [AddGroupSeminormClass F α Real]
-  proof: ⟨fun x y z => by
-    simp +instances only [hd, dist_eq_norm_neg_add,
-      AddGroupSeminormClass.toSeminormedAddGroup_norm_eq]
-    convert! hna (-x + y) (-y + z) using 2
-    rw [add_assoc]; rw [← add_assoc y]; rw [add_neg_cancel]; rw [zero_add]⟩
-
-中文:
-引理 加法群半范数类.isUltrametricDist
-  结论: [加法群 α] [加法群半范数类 F α 实数]
-  证明: ⟨fun x y z => by
-    simp +instances only [hd, dist_eq_norm_neg_add,
-      AddGroupSeminormClass.toSeminormedAddGroup_norm_eq]
-    convert! hna (-x + y) (-y + z) using 2
-    rw [add_assoc]; rw [← add_assoc y]; rw [add_neg_cancel]; rw [zero_add]⟩
-
-Depends on / 依赖: AddGroupSeminormClass, AddGroupSeminormClass.toSeminormedAddGroup_norm_eq, IsUltrametricDist, add_assoc, add_neg_cancel, convert, dist_eq_norm_neg_add, instances, toSeminormedAddGroup_norm_eq, zero_add
+--- 原说明 ---
+Proves that when a `SeminormedAddGroup` structure is constructed from an
+`AddGroupSeminormClass` that satisfies `IsNonarchimedean`, the group has an `IsU
+ltrametricDist`.
 -/
-lemma AddGroupSeminormClass.isUltrametricDist [AddGroup α] [AddGroupSeminormClass F α Real]
+lemma AddGroupSeminormClass.isUltrametricDist [AddGroup α] [AddGroupSeminormClass F α ℝ]
     [inst : Dist α] {f : F} (hna : IsNonarchimedean f)
     (hd : inst = (AddGroupSeminormClass.toSeminormedAddGroup f).toDist := by rfl) :
     IsUltrametricDist α :=
-  ⟨fun x y z => by
+  ⟨fun x y z ↦ by
     simp +instances only [hd, dist_eq_norm_neg_add,
       AddGroupSeminormClass.toSeminormedAddGroup_norm_eq]
     convert! hna (-x + y) (-y + z) using 2
-    rw [add_assoc]; rw [← add_assoc y]; rw [add_neg_cancel]; rw [zero_add]⟩
+    rw [add_assoc, ← add_assoc y, add_neg_cancel, zero_add]⟩

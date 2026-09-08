@@ -45,31 +45,32 @@ public structure UnfoldBoundaries where
   deriving Inhabited
 
 /--
-Definition of `run` / `run` 的定义
+Set up the monadic context:
+- Set the transparency to `.all`, just like is done in `Meta.check`.
+- Use `withCanUnfoldPred` to not allow unfolding the constants for which we want to insert casts.
+- Set up the `SimpM` context so that `Simp.simp` will unfold constants from `b.unfolds`.
+-/
+/-
+**Mathlib.Tactic.UnfoldBoundary.run** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic.Un
+foldBoundary`。
+形式化陈述：run {α} (b : UnfoldBoundaries) (x : SimpM α) : MetaM α
+参数：b : UnfoldBoundaries；x : SimpM α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition run
-  signature: {α} (b : UnfoldBoundaries) (x : SimpM α)
-  body: withCanUnfoldPred (fun _ i => return !b.unfolds.contains i.name && !b.casts.contains i.name) do
-  withTransparency .all do
-  let ctx ← Simp.mkContext { Simp.neutralConfig with instances := true }
-.run' {} x (Simp.Methods.toMethodsRef { pre }) ctx
-
-中文:
-定义 run
-  签名: {α} (b : UnfoldBoundaries) (x : SimpM α)
-  定义体: withCanUnfoldPred (fun _ i => return !b.unfolds.contains i.name && !b.casts.contains i.name) do
-  withTransparency .all do
-  let ctx ← Simp.mkContext { Simp.neutralConfig with instances := true }
-.run' {} x (Simp.Methods.toMethodsRef { pre }) ctx
-
-Depends on / 依赖: Methods, Simp.Methods.toMethodsRef, Simp.mkContext, Simp.neutralConfig, b.casts.contains, b.unfolds.contains, contains, i.name, instances, mkContext, neutralConfig, return, toMethodsRef, unfolds, withCanUnfoldPred, withTransparency
+--- 原说明 ---
+Set up the monadic context:
+- Set the transparency to `.all`, just like is done in `Meta.check`.
+- Use `withCanUnfoldPred` to not allow unfolding the constants for which we want
+ to insert casts.
+- Set up the `SimpM` context so that `Simp.simp` will unfold constants from `b.u
+nfolds`.
 -/
 def run {α} (b : UnfoldBoundaries) (x : SimpM α) : MetaM α :=
   withCanUnfoldPred (fun _ i => return !b.unfolds.contains i.name && !b.casts.contains i.name) do
   withTransparency .all do
   let ctx ← Simp.mkContext { Simp.neutralConfig with instances := true }
-.run' {} x (Simp.Methods.toMethodsRef { pre }) ctx
+  x (Simp.Methods.toMethodsRef { pre }) ctx |>.run' {}
 where
   pre (e : Expr) : SimpM Simp.Step := do
     let .const c _ ← whnf e.getAppFn | return .continue
@@ -77,42 +78,14 @@ where
     let some r ← Simp.tryTheorem? e thm | return .continue
     return .visit r
 
-/--
-Definition of `unfoldConsts` / `unfoldConsts` 的定义
+/-- Given a term `e`, add casts to it to unfold constants appearing in it. -/
+/-
+**Mathlib.Tactic.UnfoldBoundary.unfoldConsts** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.UnfoldBoundary`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition unfoldConsts
-  signature: (b : UnfoldBoundaries) (e : Expr)
-  body: do
-  let eType ← inferType e
-  let e ← do
-    let { expr, proof? := some proof, .. } ← Simp.simp eType | pure e
-    trace[translate_detail] "unfoldConsts: added a cast from {eType} to {expr}"
-    mkAppOptM ``Eq.mp #[eType, expr, proof, e]
-  let eTypeWhnf ← whnf (← inferType e)
-  if let .const c us := eTypeWhnf.getAppFn then
-    if let some (cast, _) := b.casts.find? c then
-      let e := .app (mkAppN (.const cast us) eTypeWhnf.getAppArgs) e
-      trace[translate_detail] "unfoldConsts: created the cast {e} to unfold {.ofConstName c}"
-      return ← unfoldConsts b e
-  return e
-
-中文:
-定义 unfoldConsts
-  签名: (b : UnfoldBoundaries) (e : Expr)
-  定义体: do
-  let eType ← inferType e
-  let e ← do
-    let { expr, proof? := some proof, .. } ← Simp.simp eType | pure e
-    trace[translate_detail] "unfoldConsts: added a cast from {eType} to {expr}"
-    mkAppOptM ``Eq.mp #[eType, expr, proof, e]
-  let eTypeWhnf ← whnf (← inferType e)
-  if let .const c us := eTypeWhnf.getAppFn then
-    if let some (cast, _) := b.casts.find? c then
-      let e := .app (mkAppN (.const cast us) eTypeWhnf.getAppArgs) e
-      trace[translate_detail] "unfoldConsts: created the cast {e} to unfold {.ofConstName c}"
-      return ← unfoldConsts b e
-  return e
+--- 原说明 ---
+Given a term `e`, add casts to it to unfold constants appearing in it.
 -/
 partial def unfoldConsts (b : UnfoldBoundaries) (e : Expr) : SimpM Expr := do
   let eType ← inferType e
@@ -128,24 +101,17 @@ partial def unfoldConsts (b : UnfoldBoundaries) (e : Expr) : SimpM Expr := do
       return ← unfoldConsts b e
   return e
 
-/--
-Definition of `refoldConsts` / `refoldConsts` 的定义
+/-- Given a term `e` which we want to get to have type `expectedType`, return a term of type
+`expectedType` by adding cast to `e` that unfold constants in `expectedType`. -/
+/-
+**Mathlib.Tactic.UnfoldBoundary.refoldConsts** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.
+Tactic.UnfoldBoundary`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition refoldConsts
-  signature: (b : UnfoldBoundaries) (e expectedType : Expr)
-  body: do
-  let goal ← mkFreshExprMVar expectedType
-  go e goal.mvarId!
-  instantiateMVars goal
-
-中文:
-定义 refoldConsts
-  签名: (b : UnfoldBoundaries) (e expectedType : Expr)
-  定义体: do
-  let goal ← mkFreshExprMVar expectedType
-  go e goal.mvarId!
-  instantiateMVars goal
+--- 原说明 ---
+Given a term `e` which we want to get to have type `expectedType`, return a term
+ of type
+`expectedType` by adding cast to `e` that unfold constants in `expectedType`.
 -/
 partial def refoldConsts (b : UnfoldBoundaries) (e expectedType : Expr) : SimpM Expr := do
   let goal ← mkFreshExprMVar expectedType
@@ -166,32 +132,26 @@ where
           let .forallE _ α _ _ ← inferType cast | throwError "refoldConsts: not a function\n{cast}"
           let goal' ← mkFreshExprMVar α
           go (e.beta xs) goal'.mvarId!
-goal.assign ← mkLambdaFVars xs .app cast goal'
+          goal.assign <| ← mkLambdaFVars xs <| .app cast goal'
           return
       unless ← isDefEq (← goal.getType) (← inferType e) do
         throwError "{e} : {← inferType e} does not have type {← goal.getType}."
       goal.assign e
 
-/--
-Definition of `mkCast` / `mkCast` 的定义
+/-- Given an expression `e` with expected type `expectedType`, if `e` doesn't have that type,
+use a cast to turn `e` into that type. -/
+/-
+**Mathlib.Tactic.UnfoldBoundary.mkCast** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Tactic
+.UnfoldBoundary`。
+形式化陈述：mkCast (b : UnfoldBoundaries) (e expectedType : Expr) : SimpM Expr
+参数：b : UnfoldBoundaries；e expectedType : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkCast
-  signature: (b : UnfoldBoundaries) (e expectedType : Expr)
-  body: do
-  if ← isDefEq (← inferType e) expectedType then
-    return e
-  let e ← unfoldConsts b e
-  refoldConsts b e expectedType
-
-中文:
-定义 mkCast
-  签名: (b : UnfoldBoundaries) (e expectedType : Expr)
-  定义体: do
-  if ← isDefEq (← inferType e) expectedType then
-    return e
-  let e ← unfoldConsts b e
-  refoldConsts b e expectedType
+--- 原说明 ---
+Given an expression `e` with expected type `expectedType`, if `e` doesn't have t
+hat type,
+use a cast to turn `e` into that type.
 -/
 def mkCast (b : UnfoldBoundaries) (e expectedType : Expr) : SimpM Expr := do
   if ← isDefEq (← inferType e) expectedType then
@@ -199,32 +159,17 @@ def mkCast (b : UnfoldBoundaries) (e expectedType : Expr) : SimpM Expr := do
   let e ← unfoldConsts b e
   refoldConsts b e expectedType
 
-/--
-Definition of `mkAppWithCast` / `mkAppWithCast` 的定义
+/-- Create the application `.app f a`, inserting some casts if necessary. -/
+/-
+**Mathlib.Tactic.UnfoldBoundary.mkAppWithCast** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib
+.Tactic.UnfoldBoundary`。
+形式化陈述：mkAppWithCast (b : UnfoldBoundaries) (f a : Expr) : SimpM Expr
+参数：b : UnfoldBoundaries；f a : Expr。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mkAppWithCast
-  signature: (b : UnfoldBoundaries) (f a : Expr)
-  body: try
-    checkApp f a
-    return f.app a
-  catch _ =>
-    let f ← unfoldConsts b f
-    let .forallE _ d _ _ ← whnf (← inferType f) | throwFunctionExpected f
-    return f.app (← mkCast b a d)
-
-中文:
-定义 mkAppWithCast
-  签名: (b : UnfoldBoundaries) (f a : Expr)
-  定义体: try
-    checkApp f a
-    return f.app a
-  catch _ =>
-    let f ← unfoldConsts b f
-    let .forallE _ d _ _ ← whnf (← inferType f) | throwFunctionExpected f
-    return f.app (← mkCast b a d)
-
-Depends on / 依赖: checkApp, f.app, forallE, inferType, mkCast, return, throwFunctionExpected, unfoldConsts
+--- 原说明 ---
+Create the application `.app f a`, inserting some casts if necessary.
 -/
 def mkAppWithCast (b : UnfoldBoundaries) (f a : Expr) : SimpM Expr :=
   try
@@ -238,7 +183,7 @@ def mkAppWithCast (b : UnfoldBoundaries) (f a : Expr) : SimpM Expr :=
 /-- Modify `e` so that it has type `expectedType` if the constants in `b` cannot be unfolded. -/
 public def UnfoldBoundaries.cast (b : UnfoldBoundaries) (e expectedType : Expr) (attr : Name) :
     MetaM Expr :=
-run b
+  run b <|
   try
     mkCast b e expectedType
   catch ex =>
@@ -252,9 +197,9 @@ We don't make an effort to replace such constants.
 It seems that this approximation works well enough. -/
 public def UnfoldBoundaries.insertBoundaries (b : UnfoldBoundaries) (e : Expr) (attr : Name) :
     MetaM Expr :=
-run b Meta.transform e (post := fun e => e.withApp fun f args =>
+  run b <| Meta.transform e (post := fun e ↦ e.withApp fun f args =>
     try
-return .done ← args.foldlM (mkAppWithCast b) f
+      return .done <| ← args.foldlM (mkAppWithCast b) f
     catch ex =>
       throwError "@[{attr}] failed to insert a cast to make `{f}` applied to `{args.toList}` \
         well typed\n\n{ex.toMessageData}")
@@ -277,20 +222,12 @@ public inductive UnfoldEntry where
   | unfold (declName : Name) (unfold : Name)
   | cast (declName : Name) (unfold refold unfold' refold' : Name)
 
-/--
-Definition of `UnfoldBoundaries.insert` / `UnfoldBoundaries.insert` 的定义
-
-English:
-definition UnfoldBoundaries.insert
-  signature: (b : UnfoldBoundaries)
-
-中文:
-定义 UnfoldBoundaries.insert
-  签名: (b : UnfoldBoundaries)
-
-Depends on / 依赖: b.unfolds.insert, declName, insert, unfolds
+/-
+**Mathlib.Tactic.UnfoldBoundary.UnfoldBoundaries.insert** 是 Mathlib 中的一个定义，位于命名空
+间 `Mathlib.Tactic.UnfoldBoundary`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def UnfoldBoundaries.insert (b : UnfoldBoundaries) : UnfoldEntry -> UnfoldBoundaries
+def UnfoldBoundaries.insert (b : UnfoldBoundaries) : UnfoldEntry → UnfoldBoundaries
   | .unfold declName unfold => { b with
     unfolds := b.unfolds.insert declName
       { origin := .decl unfold, proof := mkConst unfold, rfl := false } }
@@ -309,3 +246,4 @@ public def registerUnfoldBoundaryExt : IO UnfoldBoundaryExt := do
   }
 
 end Mathlib.Tactic.UnfoldBoundary
+

@@ -36,22 +36,15 @@ universe u v
 
 open CategoryTheory
 
-/--
-Definition of `AddMagmaCat` / `AddMagmaCat` 的定义
+/-- The category of additive magmas and additive magma morphisms. -/
+/-
+**AddMagmaCat** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type (u + 1)
+参数：u + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure AddMagmaCat
-  parameters: : Type (u + 1) where
-  axioms and operations (2):
-    - (carrier : Type u)
-    - [str : Add carrier]
-
-中文:
-结构 加法原群范畴
-  参数: : 类型 (u + 1) where
-  公理与运算 (2 个):
-    - (carrier : 类型u)
-    - [str : 加法 carrier]
+--- 原说明 ---
+The category of additive magmas and additive magma morphisms.
 -/
 structure AddMagmaCat : Type (u + 1) where
   /-- The underlying additive magma. -/
@@ -60,22 +53,14 @@ structure AddMagmaCat : Type (u + 1) where
 
 /-- The category of magmas and magma morphisms. -/
 @[to_additive]
-/--
-Definition of `MagmaCat` / `MagmaCat` 的定义
+/-
+**MagmaCat** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type (u + 1)
+参数：u + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure MagmaCat
-  parameters: : Type (u + 1) where
-  axioms and operations (2):
-    - (carrier : Type u)
-    - [str : Mul carrier]
-
-中文:
-结构 原群范畴
-  参数: : 类型 (u + 1) where
-  公理与运算 (2 个):
-    - (carrier : 类型u)
-    - [str : 乘法 carrier]
+--- 原说明 ---
+The category of magmas and magma morphisms.
 -/
 structure MagmaCat : Type (u + 1) where
   /-- The underlying magma. -/
@@ -84,26 +69,15 @@ structure MagmaCat : Type (u + 1) where
 
 attribute [instance] AddMagmaCat.str MagmaCat.str
 
-initialize_simps_projections AddMagmaCat (carrier -> coe, -str)
-initialize_simps_projections MagmaCat (carrier -> coe, -str)
+initialize_simps_projections AddMagmaCat (carrier → coe, -str)
+initialize_simps_projections MagmaCat (carrier → coe, -str)
 
 namespace MagmaCat
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort MagmaCat (Type u)
-  body: ⟨MagmaCat.carrier⟩
-
-中文:
-实例 :
-  签名: CoeSort 原群范畴 (类型u)
-  定义体: ⟨MagmaCat.carrier⟩
-
-Depends on / 依赖: MagmaCat, MagmaCat.carrier, carrier
+/-
+**MagmaCat.** 是 Mathlib 中的一个实例，位于命名空间 `MagmaCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort MagmaCat (Type u) :=
   ⟨MagmaCat.carrier⟩
@@ -112,18 +86,15 @@ attribute [coe] AddMagmaCat.carrier MagmaCat.carrier
 
 /-- Construct a bundled `MagmaCat` from the underlying type and typeclass. -/
 @[to_additive /-- Construct a bundled `AddMagmaCat` from the underlying type and typeclass. -/]
-/--
-Definition of `of` / `of` 的定义
+/-
+**MagmaCat.of** 是 Mathlib 中的一个缩写定义，位于命名空间 `MagmaCat`。
+形式化陈述：of (M : Type u) [Mul M] : MagmaCat
+参数：M : Type u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation of
-  signature: (M : Type u) [Mul M]
-  body: ⟨M⟩
-
-中文:
-缩写 of
-  签名: (M : 类型u) [乘法 M]
-  定义体: ⟨M⟩
+--- 原说明 ---
+Construct a bundled `MagmaCat` from the underlying type and typeclass.
 -/
 abbrev of (M : Type u) [Mul M] : MagmaCat := ⟨M⟩
 
@@ -131,73 +102,42 @@ end MagmaCat
 
 /-- The type of morphisms in `AddMagmaCat R`. -/
 @[ext]
-/--
-Definition of `AddMagmaCat.Hom` / `AddMagmaCat.Hom` 的定义
+/-
+**AddMagmaCat.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `AddMagmaCat`。
+形式化陈述：AddMagmaCat → AddMagmaCat → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure AddMagmaCat.Hom
-  parameters: (A B : AddMagmaCat.{u})
-  axioms and operations (2):
-    - private(mk) : :
-    - hom' : A ->ₙ+ B
-
-中文:
-结构 加法原群范畴.态射
-  参数: (A B : 加法原群范畴.{u})
-  公理与运算 (2 个):
-    - private(mk) : :
-    - hom' : A ->ₙ+ B
+--- 原说明 ---
+The type of morphisms in `AddMagmaCat R`.
 -/
 structure AddMagmaCat.Hom (A B : AddMagmaCat.{u}) where
   private mk ::
   /-- The underlying `AddHom`. -/
-  hom' : A ->ₙ+ B
+  hom' : A →ₙ+ B
 
 /-- The type of morphisms in `MagmaCat R`. -/
 @[to_additive, ext]
-/--
-Definition of `MagmaCat.Hom` / `MagmaCat.Hom` 的定义
+/-
+**MagmaCat.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `MagmaCat`。
+形式化陈述：MagmaCat → MagmaCat → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure MagmaCat.Hom
-  parameters: (A B : MagmaCat.{u})
-  axioms and operations (2):
-    - private(mk) : :
-    - hom' : A ->ₙ* B
-
-中文:
-结构 原群范畴.态射
-  参数: (A B : 原群范畴.{u})
-  公理与运算 (2 个):
-    - private(mk) : :
-    - hom' : A ->ₙ* B
+--- 原说明 ---
+The type of morphisms in `MagmaCat R`.
 -/
 structure MagmaCat.Hom (A B : MagmaCat.{u}) where
   private mk ::
   /-- The underlying `MulHom`. -/
-  hom' : A ->ₙ* B
+  hom' : A →ₙ* B
 
 namespace MagmaCat
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category MagmaCat.{u}
-  body: Hom X Y
-  id X := ⟨MulHom.id X⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
-
-中文:
-实例 :
-  签名: 范畴 原群范畴.{u}
-  定义体: Hom X Y
-  id X := ⟨MulHom.id X⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
+/-
+**MagmaCat.** 是 Mathlib 中的一个实例，位于命名空间 `MagmaCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category MagmaCat.{u} where
   Hom X Y := Hom X Y
@@ -207,515 +147,323 @@ instance : Category MagmaCat.{u} where
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ConcreteCategory MagmaCat (· ->ₙ* ·)
-  body: Hom.hom'
-  ofHom := Hom.mk
-
-中文:
-实例 :
-  签名: 余ncrete范畴 原群范畴 (· ->ₙ* ·)
-  定义体: Hom.hom'
-  ofHom := Hom.mk
-
-Depends on / 依赖: Hom.hom
+/-
+**MagmaCat.** 是 Mathlib 中的一个实例，位于命名空间 `MagmaCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ConcreteCategory MagmaCat (· ->ₙ* ·) where
+instance : ConcreteCategory MagmaCat (· →ₙ* ·) where
   hom := Hom.hom'
   ofHom := Hom.mk
 
 /-- Turn a morphism in `MagmaCat` back into a `MulHom`. -/
 @[to_additive /-- Turn a morphism in `AddMagmaCat` back into an `AddHom`. -/]
-/--
-Definition of `Hom.hom` / `Hom.hom` 的定义
+/-
+**MagmaCat.Hom.hom** 是 Mathlib 中的一个定义，位于命名空间 `MagmaCat.Hom`。
+形式化陈述：{X Y : MagmaCat} → X.Hom Y → ↑X →ₙ* ↑Y
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.hom
-  signature: {X Y : MagmaCat.{u}} (f : Hom X Y)
-  body: ConcreteCategory.hom (C := MagmaCat) f
-
-中文:
-缩写 态射.hom
-  签名: {X Y : 原群范畴.{u}} (f : 态射 X Y)
-  定义体: ConcreteCategory.hom (C := MagmaCat) f
+--- 原说明 ---
+Turn a morphism in `MagmaCat` back into a `MulHom`.
 -/
 abbrev Hom.hom {X Y : MagmaCat.{u}} (f : Hom X Y) :=
   ConcreteCategory.hom (C := MagmaCat) f
 
 /-- Typecheck a `MulHom` as a morphism in `MagmaCat`. -/
 @[to_additive /-- Typecheck an `AddHom` as a morphism in `AddMagmaCat`. -/]
-/--
-Definition of `ofHom` / `ofHom` 的定义
+/-
+**MagmaCat.ofHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `MagmaCat`。
+形式化陈述：ofHom {X Y : Type u} [Mul X] [Mul Y] (f : X ->ₙ* Y) : of X ⟶ of Y
+参数：f : X ->ₙ* Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofHom
-  signature: {X Y : Type u} [Mul X] [Mul Y] (f : X ->ₙ* Y)
-  body: ConcreteCategory.ofHom (C := MagmaCat) f
-
-中文:
-缩写 ofHom
-  签名: {X Y : 类型u} [乘法 X] [乘法 Y] (f : X ->ₙ* Y)
-  定义体: ConcreteCategory.ofHom (C := MagmaCat) f
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, MagmaCat
+--- 原说明 ---
+Typecheck a `MulHom` as a morphism in `MagmaCat`.
 -/
-abbrev ofHom {X Y : Type u} [Mul X] [Mul Y] (f : X ->ₙ* Y) : of X ⟶ of Y :=
+abbrev ofHom {X Y : Type u} [Mul X] [Mul Y] (f : X →ₙ* Y) : of X ⟶ of Y :=
   ConcreteCategory.ofHom (C := MagmaCat) f
 
 variable {R} in
-/--
-Definition of `Hom.Simps.hom` / `Hom.Simps.hom` 的定义
+/-- Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas. -/
+/-
+**MagmaCat.Hom.Simps.hom** 是 Mathlib 中的一个定义，位于命名空间 `MagmaCat.Hom.Simps`。
+形式化陈述：(X Y : MagmaCat) → X.Hom Y → ↑X →ₙ* ↑Y
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.Simps.hom
-  signature: (X Y : MagmaCat.{u}) (f : Hom X Y)
-  body: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
-initialize_simps_projections AddMagmaCat.Hom (hom' -> hom)
-
-中文:
-定义 态射.Simps.hom
-  签名: (X Y : 原群范畴.{u}) (f : 态射 X Y)
-  定义体: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
-initialize_simps_projections AddMagmaCat.Hom (hom' -> hom)
+--- 原说明 ---
+Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas.
 -/
 def Hom.Simps.hom (X Y : MagmaCat.{u}) (f : Hom X Y) :=
   f.hom
 
-initialize_simps_projections Hom (hom' -> hom)
-initialize_simps_projections AddMagmaCat.Hom (hom' -> hom)
+initialize_simps_projections Hom (hom' → hom)
+initialize_simps_projections AddMagmaCat.Hom (hom' → hom)
 
 /-!
 The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep them for `dsimp`.
 -/
 
 @[to_additive (attr := simp)]
-/--
-lemma `coe_id` / 引理 `coe_id`
+/-
+**MagmaCat.coe_id** 是 Mathlib 中的一个引理，位于命名空间 `MagmaCat`。
+形式化陈述：coe_id {X : MagmaCat} : (𝟙 X : X -> X) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma coe_id
-  given: {X : MagmaCat}
-  statement: (𝟙 X : X -> X) = id
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 coe_id
-  条件: {X : 原群范畴}
-  结论: (𝟙 X : X -> X) = id
-  证明: rfl
-
-@[to_additive (attr := simp)]
+--- 原说明 ---
+The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep 
+them for `dsimp`.
 -/
-lemma coe_id {X : MagmaCat} : (𝟙 X : X -> X) = id := rfl
+lemma coe_id {X : MagmaCat} : (𝟙 X : X → X) = id := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `coe_comp` / 引理 `coe_comp`
-
-English:
-lemma coe_comp
-  given: {X Y Z : MagmaCat} {f : X ⟶ Y} {g : Y ⟶ Z}
-  statement: (f ≫ g : X -> Z) = g ∘ f
-  proof: rfl
+/-
+**MagmaCat.coe_comp** 是 Mathlib 中的一个引理，位于命名空间 `MagmaCat`。
+形式化陈述：coe_comp {X Y Z : MagmaCat} {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g : X -> Z) = g
+ ∘ f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+lemma coe_comp {X Y Z : MagmaCat} {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g : X → Z) = g ∘ f := rfl
 
 @[deprecated (since := "2026-02-10")] alias forget_map := ConcreteCategory.forget_map_eq_ofHom
 
 @[to_additive (attr := ext)]
-
-中文:
-引理 coe_comp
-  条件: {X Y Z : 原群范畴} {f : X ⟶ Y} {g : Y ⟶ Z}
-  结论: (f ≫ g : X -> Z) = g ∘ f
-  证明: rfl
-
-@[deprecated (since := "2026-02-10")] alias forget_map := ConcreteCategory.forget_map_eq_ofHom
-
-@[to_additive (attr := ext)]
+/-
+**MagmaCat.ext** 是 Mathlib 中的一个引理，位于命名空间 `MagmaCat`。
+形式化陈述：ext {X Y : MagmaCat} {f g : X ⟶ Y} (w : forall x : X, f x = g x) : f = g
+参数：w : forall x : X, f x = g x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ext`：hom_ext {X Y : C} (f g : X ⟶ Y)
+ (w : forall x, f x = g x) : f = g
 -/
-lemma coe_comp {X Y Z : MagmaCat} {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g : X -> Z) = g ∘ f := rfl
-
-@[deprecated (since := "2026-02-10")] alias forget_map := ConcreteCategory.forget_map_eq_ofHom
-
-@[to_additive (attr := ext)]
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: {X Y : MagmaCat} {f g : X ⟶ Y} (w : forall x : X, f x = g x)
-  statement: f = g
-  proof: ConcreteCategory.hom_ext _ _ w
-
-@[to_additive]
-
-中文:
-引理 ext
-  条件: {X Y : 原群范畴} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
-  结论: f = g
-  证明: ConcreteCategory.hom_ext _ _ w
-
-@[to_additive]
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ext, hom_ext
--/
-lemma ext {X Y : MagmaCat} {f g : X ⟶ Y} (w : forall x : X, f x = g x) : f = g :=
+lemma ext {X Y : MagmaCat} {f g : X ⟶ Y} (w : ∀ x : X, f x = g x) : f = g :=
   ConcreteCategory.hom_ext _ _ w
 
 @[to_additive]
 -- This is not `simp` to avoid rewriting in types of terms.
-/--
-theorem `coe_of` / 定理 `coe_of`
-
-English:
-theorem coe_of
-  given: (M : Type u) [Mul M]
-  statement: (MagmaCat.of M : Type u) = M
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 coe_of
-  条件: (M : 类型u) [乘法 M]
-  结论: (原群范畴.of M : 类型u) = M
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**MagmaCat.coe_of** 是 Mathlib 中的一个定理，位于命名空间 `MagmaCat`。
+形式化陈述：coe_of (M : Type u) [Mul M] : (MagmaCat.of M : Type u) = M
+参数：M : Type u。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_of (M : Type u) [Mul M] : (MagmaCat.of M : Type u) = M := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `hom_id` / 引理 `hom_id`
-
-English:
-lemma hom_id
-  given: {M : MagmaCat}
-  statement: (𝟙 M : M ⟶ M).hom = MulHom.id M
-  proof: rfl
-
-中文:
-引理 hom_id
-  条件: {M : 原群范畴}
-  结论: (𝟙 M : M ⟶ M).hom = 乘法半群态射.id M
-  证明: rfl
+/-
+**MagmaCat.hom_id** 是 Mathlib 中的一个引理，位于命名空间 `MagmaCat`。
+形式化陈述：hom_id {M : MagmaCat} : (𝟙 M : M ⟶ M).hom = MulHom.id M
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_id {M : MagmaCat} : (𝟙 M : M ⟶ M).hom = MulHom.id M := rfl
 
 /- Provided for rewriting. -/
 @[to_additive]
-/--
-lemma `id_apply` / 引理 `id_apply`
+/-
+**MagmaCat.id_apply** 是 Mathlib 中的一个引理，位于命名空间 `MagmaCat`。
+形式化陈述：id_apply (M : MagmaCat) (x : M) : (𝟙 M : M ⟶ M) x = x
+参数：M : MagmaCat；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulHom.id_apply`：∀ (M : Type u_10) [inst : Mul M] (x : M), (MulHom.id M)
+ x = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma id_apply
-  given: (M : MagmaCat) (x : M)
-  proof: by simp
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 id_apply
-  条件: (M : 原群范畴) (x : M)
-  证明: by simp
-
-@[to_additive (attr := simp)]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma id_apply (M : MagmaCat) (x : M) :
     (𝟙 M : M ⟶ M) x = x := by simp
 
 @[to_additive (attr := simp)]
-/--
-lemma `hom_comp` / 引理 `hom_comp`
-
-English:
-lemma hom_comp
-  given: {M N T : MagmaCat} (f : M ⟶ N) (g : N ⟶ T)
-  proof: rfl
-
-中文:
-引理 hom_comp
-  条件: {M N T : 原群范畴} (f : M ⟶ N) (g : N ⟶ T)
-  证明: rfl
+/-
+**MagmaCat.hom_comp** 是 Mathlib 中的一个引理，位于命名空间 `MagmaCat`。
+形式化陈述：hom_comp {M N T : MagmaCat} (f : M ⟶ N) (g : N ⟶ T) : (f ≫ g).hom = g.hom.
+comp f.hom
+参数：f : M ⟶ N；g : N ⟶ T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_comp {M N T : MagmaCat} (f : M ⟶ N) (g : N ⟶ T) :
     (f ≫ g).hom = g.hom.comp f.hom := rfl
 
 /- Provided for rewriting. -/
 @[to_additive]
-/--
-lemma `comp_apply` / 引理 `comp_apply`
+/-
+**MagmaCat.comp_apply** 是 Mathlib 中的一个引理，位于命名空间 `MagmaCat`。
+形式化陈述：comp_apply {M N T : MagmaCat} (f : M ⟶ N) (g : N ⟶ T) (x : M) : (f ≫ g) x 
+= g (f x)
+参数：f : M ⟶ N；g : N ⟶ T；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma comp_apply
-  given: {M N T : MagmaCat} (f : M ⟶ N) (g : N ⟶ T) (x : M)
-  proof: by simp
-
-@[to_additive (attr := ext)]
-
-中文:
-引理 comp_apply
-  条件: {M N T : 原群范畴} (f : M ⟶ N) (g : N ⟶ T) (x : M)
-  证明: by simp
-
-@[to_additive (attr := ext)]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma comp_apply {M N T : MagmaCat} (f : M ⟶ N) (g : N ⟶ T) (x : M) :
     (f ≫ g) x = g (f x) := by simp
 
 @[to_additive (attr := ext)]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {M N : MagmaCat} {f g : M ⟶ N} (hf : f.hom = g.hom)
-  statement: f = g
-  proof: Hom.ext hf
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 hom_ext
-  条件: {M N : 原群范畴} {f g : M ⟶ N} (hf : f.hom = g.hom)
-  结论: f = g
-  证明: Hom.ext hf
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Hom.ext
+/-
+**MagmaCat.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `MagmaCat`。
+形式化陈述：hom_ext {M N : MagmaCat} {f g : M ⟶ N} (hf : f.hom = g.hom) : f = g
+参数：hf : f.hom = g.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MagmaCat.Hom.ext`：∀ {A B : MagmaCat} {x y : A.Hom B}, x.hom' = y.hom' → 
+x = y
 -/
 lemma hom_ext {M N : MagmaCat} {f g : M ⟶ N} (hf : f.hom = g.hom) : f = g :=
   Hom.ext hf
 
 @[to_additive (attr := simp)]
-/--
-lemma `hom_ofHom` / 引理 `hom_ofHom`
-
-English:
-lemma hom_ofHom
-  given: {M N : Type u} [Mul M] [Mul N] (f : M ->ₙ* N)
-  statement: (ofHom f).hom = f
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 hom_ofHom
-  条件: {M N : 类型u} [乘法 M] [乘法 N] (f : M ->ₙ* N)
-  结论: (ofHom f).hom = f
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**MagmaCat.hom_ofHom** 是 Mathlib 中的一个引理，位于命名空间 `MagmaCat`。
+形式化陈述：hom_ofHom {M N : Type u} [Mul M] [Mul N] (f : M ->ₙ* N) : (ofHom f).hom = 
+f
+参数：f : M ->ₙ* N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma hom_ofHom {M N : Type u} [Mul M] [Mul N] (f : M ->ₙ* N) : (ofHom f).hom = f := rfl
+lemma hom_ofHom {M N : Type u} [Mul M] [Mul N] (f : M →ₙ* N) : (ofHom f).hom = f := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `ofHom_hom` / 引理 `ofHom_hom`
-
-English:
-lemma ofHom_hom
-  given: {M N : MagmaCat} (f : M ⟶ N)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 ofHom_hom
-  条件: {M N : 原群范畴} (f : M ⟶ N)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**MagmaCat.ofHom_hom** 是 Mathlib 中的一个引理，位于命名空间 `MagmaCat`。
+形式化陈述：ofHom_hom {M N : MagmaCat} (f : M ⟶ N) : ofHom (Hom.hom f) = f
+参数：f : M ⟶ N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_hom {M N : MagmaCat} (f : M ⟶ N) :
     ofHom (Hom.hom f) = f := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `ofHom_id` / 引理 `ofHom_id`
-
-English:
-lemma ofHom_id
-  given: {M : Type u} [Mul M]
-  statement: ofHom (MulHom.id M) = 𝟙 (of M)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 ofHom_id
-  条件: {M : 类型u} [乘法 M]
-  结论: ofHom (乘法半群态射.id M) = 𝟙 (of M)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**MagmaCat.ofHom_id** 是 Mathlib 中的一个引理，位于命名空间 `MagmaCat`。
+形式化陈述：ofHom_id {M : Type u} [Mul M] : ofHom (MulHom.id M) = 𝟙 (of M)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_id {M : Type u} [Mul M] : ofHom (MulHom.id M) = 𝟙 (of M) := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `ofHom_comp` / 引理 `ofHom_comp`
-
-English:
-lemma ofHom_comp
-  statement: {M N P : Type u} [Mul M] [Mul N] [Mul P]
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 ofHom_comp
-  结论: {M N P : 类型u} [乘法 M] [乘法 N] [乘法 P]
-  证明: rfl
-
-@[to_additive]
+/-
+**MagmaCat.ofHom_comp** 是 Mathlib 中的一个引理，位于命名空间 `MagmaCat`。
+形式化陈述：ofHom_comp {M N P : Type u} [Mul M] [Mul N] [Mul P] (f : M ->ₙ* N) (g : N 
+->ₙ* P) : ofHom (g.comp f) = ofHom f ≫ ofHom g
+参数：f : M ->ₙ* N；g : N ->ₙ* P。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_comp {M N P : Type u} [Mul M] [Mul N] [Mul P]
-    (f : M ->ₙ* N) (g : N ->ₙ* P) :
+    (f : M →ₙ* N) (g : N →ₙ* P) :
     ofHom (g.comp f) = ofHom f ≫ ofHom g :=
   rfl
 
 @[to_additive]
-/--
-lemma `ofHom_apply` / 引理 `ofHom_apply`
-
-English:
-lemma ofHom_apply
-  given: {X Y : Type u} [Mul X] [Mul Y] (f : X ->ₙ* Y) (x : X)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 ofHom_apply
-  条件: {X Y : 类型u} [乘法 X] [乘法 Y] (f : X ->ₙ* Y) (x : X)
-  证明: rfl
-
-@[to_additive]
+/-
+**MagmaCat.ofHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `MagmaCat`。
+形式化陈述：ofHom_apply {X Y : Type u} [Mul X] [Mul Y] (f : X ->ₙ* Y) (x : X) : (ofHom
+ f) x = f x
+参数：f : X ->ₙ* Y；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma ofHom_apply {X Y : Type u} [Mul X] [Mul Y] (f : X ->ₙ* Y) (x : X) :
+lemma ofHom_apply {X Y : Type u} [Mul X] [Mul Y] (f : X →ₙ* Y) (x : X) :
     (ofHom f) x = f x := rfl
 
 @[to_additive]
-/--
-lemma `inv_hom_apply` / 引理 `inv_hom_apply`
-
-English:
-lemma inv_hom_apply
-  given: {M N : MagmaCat} (e : M ≅ N) (x : M)
-  statement: e.inv (e.hom x) = x
-  proof: by
-  simp
-
-@[to_additive]
-
-中文:
-引理 inv_hom_apply
-  条件: {M N : 原群范畴} (e : M ≅ N) (x : M)
-  结论: e.inv (e.hom x) = x
-  证明: by
-  simp
-
-@[to_additive]
+/-
+**MagmaCat.inv_hom_apply** 是 Mathlib 中的一个引理，位于命名空间 `MagmaCat`。
+形式化陈述：inv_hom_apply {M N : MagmaCat} (e : M ≅ N) (x : M) : e.inv (e.hom x) = x
+参数：e : M ≅ N；x : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma inv_hom_apply {M N : MagmaCat} (e : M ≅ N) (x : M) : e.inv (e.hom x) = x := by
   simp
 
 @[to_additive]
-/--
-lemma `hom_inv_apply` / 引理 `hom_inv_apply`
-
-English:
-lemma hom_inv_apply
-  given: {M N : MagmaCat} (e : M ≅ N) (s : N)
-  statement: e.hom (e.inv s) = s
-  proof: by
-  simp
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 hom_inv_apply
-  条件: {M N : 原群范畴} (e : M ≅ N) (s : N)
-  结论: e.hom (e.inv s) = s
-  证明: by
-  simp
-
-@[to_additive (attr := simp)]
+/-
+**MagmaCat.hom_inv_apply** 是 Mathlib 中的一个引理，位于命名空间 `MagmaCat`。
+形式化陈述：hom_inv_apply {M N : MagmaCat} (e : M ≅ N) (s : N) : e.hom (e.inv s) = s
+参数：e : M ≅ N；s : N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma hom_inv_apply {M N : MagmaCat} (e : M ≅ N) (s : N) : e.hom (e.inv s) = s := by
   simp
 
 @[to_additive (attr := simp)]
-/--
-lemma `mulEquiv_coe_eq` / 引理 `mulEquiv_coe_eq`
-
-English:
-lemma mulEquiv_coe_eq
-  given: {X Y : Type _} [Mul X] [Mul Y] (e : X ≃* Y)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 mulEquiv_coe_eq
-  条件: {X Y : 类型 _} [乘法 X] [乘法 Y] (e : X ≃* Y)
-  证明: rfl
-
-@[to_additive]
+/-
+**MagmaCat.mulEquiv_coe_eq** 是 Mathlib 中的一个引理，位于命名空间 `MagmaCat`。
+形式化陈述：mulEquiv_coe_eq {X Y : Type _} [Mul X] [Mul Y] (e : X ≃* Y) : (ofHom (e : 
+X ->ₙ* Y)).hom = ↑e
+参数：e : X ≃* Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulEquivClass.instMulHomClass`：∀ {M : Type u_4} {N : Type u_5} (F : Type
+ u_9) [inst : Mul M] [inst_1 : Mul N] [inst_2 : EquivLike F M N]   [h : MulEquiv
+Class F M N], MulHo…
+· 使用定理 `MulEquiv.instMulEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul 
+M] [inst_1 : Mul N], MulEquivClass (M ≃* N) M N
 -/
 lemma mulEquiv_coe_eq {X Y : Type _} [Mul X] [Mul Y] (e : X ≃* Y) :
-    (ofHom (e : X ->ₙ* Y)).hom = ↑e :=
+    (ofHom (e : X →ₙ* Y)).hom = ↑e :=
   rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited MagmaCat
-  body: ⟨MagmaCat.of PEmpty⟩
-
-中文:
-实例 :
-  签名: 可居 原群范畴
-  定义体: ⟨MagmaCat.of PEmpty⟩
-
-Depends on / 依赖: MagmaCat, MagmaCat.of, PEmpty
+/-
+**MagmaCat.** 是 Mathlib 中的一个实例，位于命名空间 `MagmaCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited MagmaCat :=
   ⟨MagmaCat.of PEmpty⟩
 
 end MagmaCat
 
-/--
-Definition of `AddSemigrp` / `AddSemigrp` 的定义
+/-- The category of additive semigroups and semigroup morphisms. -/
+/-
+**AddSemigrp** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type (u + 1)
+参数：u + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure AddSemigrp
-  parameters: : Type (u + 1) where
-  axioms and operations (2):
-    - (carrier : Type u)
-    - [str : AddSemigroup carrier]
-
-中文:
-结构 加法半群
-  参数: : 类型 (u + 1) where
-  公理与运算 (2 个):
-    - (carrier : 类型u)
-    - [str : 加法半群 carrier]
+--- 原说明 ---
+The category of additive semigroups and semigroup morphisms.
 -/
 structure AddSemigrp : Type (u + 1) where
   /-- The underlying type. -/
@@ -724,22 +472,14 @@ structure AddSemigrp : Type (u + 1) where
 
 /-- The category of semigroups and semigroup morphisms. -/
 @[to_additive]
-/--
-Definition of `Semigrp` / `Semigrp` 的定义
+/-
+**Semigrp** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type (u + 1)
+参数：u + 1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Semigrp
-  parameters: : Type (u + 1) where
-  axioms and operations (2):
-    - (carrier : Type u)
-    - [str : Semigroup carrier]
-
-中文:
-结构 半群
-  参数: : 类型 (u + 1) where
-  公理与运算 (2 个):
-    - (carrier : 类型u)
-    - [str : 半群 carrier]
+--- 原说明 ---
+The category of semigroups and semigroup morphisms.
 -/
 structure Semigrp : Type (u + 1) where
   /-- The underlying type. -/
@@ -748,26 +488,15 @@ structure Semigrp : Type (u + 1) where
 
 attribute [instance] AddSemigrp.str Semigrp.str
 
-initialize_simps_projections AddSemigrp (carrier -> coe, -str)
-initialize_simps_projections Semigrp (carrier -> coe, -str)
+initialize_simps_projections AddSemigrp (carrier → coe, -str)
+initialize_simps_projections Semigrp (carrier → coe, -str)
 
 namespace Semigrp
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort Semigrp (Type u)
-  body: ⟨Semigrp.carrier⟩
-
-中文:
-实例 :
-  签名: CoeSort 半群 (类型u)
-  定义体: ⟨Semigrp.carrier⟩
-
-Depends on / 依赖: Semigrp, Semigrp.carrier, carrier
+/-
+**Semigrp.** 是 Mathlib 中的一个实例，位于命名空间 `Semigrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort Semigrp (Type u) :=
   ⟨Semigrp.carrier⟩
@@ -776,18 +505,15 @@ attribute [coe] AddSemigrp.carrier Semigrp.carrier
 
 /-- Construct a bundled `Semigrp` from the underlying type and typeclass. -/
 @[to_additive /-- Construct a bundled `AddSemigrp` from the underlying type and typeclass. -/]
-/--
-Definition of `of` / `of` 的定义
+/-
+**Semigrp.of** 是 Mathlib 中的一个缩写定义，位于命名空间 `Semigrp`。
+形式化陈述：of (M : Type u) [Semigroup M] : Semigrp
+参数：M : Type u。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation of
-  signature: (M : Type u) [Semigroup M]
-  body: ⟨M⟩
-
-中文:
-缩写 of
-  签名: (M : 类型u) [半群 M]
-  定义体: ⟨M⟩
+--- 原说明 ---
+Construct a bundled `Semigrp` from the underlying type and typeclass.
 -/
 abbrev of (M : Type u) [Semigroup M] : Semigrp := ⟨M⟩
 
@@ -795,73 +521,42 @@ end Semigrp
 
 /-- The type of morphisms in `AddSemigrp R`. -/
 @[ext]
-/--
-Definition of `AddSemigrp.Hom` / `AddSemigrp.Hom` 的定义
+/-
+**AddSemigrp.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `AddSemigrp`。
+形式化陈述：AddSemigrp → AddSemigrp → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure AddSemigrp.Hom
-  parameters: (A B : AddSemigrp.{u})
-  axioms and operations (2):
-    - private(mk) : :
-    - hom' : A ->ₙ+ B
-
-中文:
-结构 加法半群.态射
-  参数: (A B : 加法半群.{u})
-  公理与运算 (2 个):
-    - private(mk) : :
-    - hom' : A ->ₙ+ B
+--- 原说明 ---
+The type of morphisms in `AddSemigrp R`.
 -/
 structure AddSemigrp.Hom (A B : AddSemigrp.{u}) where
   private mk ::
   /-- The underlying `AddHom`. -/
-  hom' : A ->ₙ+ B
+  hom' : A →ₙ+ B
 
 /-- The type of morphisms in `Semigrp R`. -/
 @[to_additive, ext]
-/--
-Definition of `Semigrp.Hom` / `Semigrp.Hom` 的定义
+/-
+**Semigrp.Hom** 是 Mathlib 中的一个归纳类型，位于命名空间 `Semigrp`。
+形式化陈述：Semigrp → Semigrp → Type u
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Semigrp.Hom
-  parameters: (A B : Semigrp.{u})
-  axioms and operations (2):
-    - private(mk) : :
-    - hom' : A ->ₙ* B
-
-中文:
-结构 半群.态射
-  参数: (A B : 半群.{u})
-  公理与运算 (2 个):
-    - private(mk) : :
-    - hom' : A ->ₙ* B
+--- 原说明 ---
+The type of morphisms in `Semigrp R`.
 -/
 structure Semigrp.Hom (A B : Semigrp.{u}) where
   private mk ::
   /-- The underlying `MulHom`. -/
-  hom' : A ->ₙ* B
+  hom' : A →ₙ* B
 
 namespace Semigrp
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category Semigrp.{u}
-  body: Hom X Y
-  id X := ⟨MulHom.id X⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
-
-中文:
-实例 :
-  签名: 范畴 半群.{u}
-  定义体: Hom X Y
-  id X := ⟨MulHom.id X⟩
-  comp f g := ⟨g.hom'.comp f.hom'⟩
+/-
+**Semigrp.** 是 Mathlib 中的一个实例，位于命名空间 `Semigrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category Semigrp.{u} where
   Hom X Y := Hom X Y
@@ -871,521 +566,320 @@ instance : Category Semigrp.{u} where
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ConcreteCategory Semigrp (· ->ₙ* ·)
-  body: Hom.hom'
-  ofHom := Hom.mk
-
-中文:
-实例 :
-  签名: 余ncrete范畴 半群 (· ->ₙ* ·)
-  定义体: Hom.hom'
-  ofHom := Hom.mk
-
-Depends on / 依赖: Hom.hom
+/-
+**Semigrp.** 是 Mathlib 中的一个实例，位于命名空间 `Semigrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : ConcreteCategory Semigrp (· ->ₙ* ·) where
+instance : ConcreteCategory Semigrp (· →ₙ* ·) where
   hom := Hom.hom'
   ofHom := Hom.mk
 
 /-- Turn a morphism in `Semigrp` back into a `MulHom`. -/
 @[to_additive /-- Turn a morphism in `AddSemigrp` back into an `AddHom`. -/]
-/--
-Definition of `Hom.hom` / `Hom.hom` 的定义
+/-
+**Semigrp.Hom.hom** 是 Mathlib 中的一个定义，位于命名空间 `Semigrp.Hom`。
+形式化陈述：{X Y : Semigrp} → X.Hom Y → ↑X →ₙ* ↑Y
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Hom.hom
-  signature: {X Y : Semigrp.{u}} (f : Hom X Y)
-  body: ConcreteCategory.hom (C := Semigrp) f
-
-中文:
-缩写 态射.hom
-  签名: {X Y : 半群.{u}} (f : 态射 X Y)
-  定义体: ConcreteCategory.hom (C := Semigrp) f
+--- 原说明 ---
+Turn a morphism in `Semigrp` back into a `MulHom`.
 -/
 abbrev Hom.hom {X Y : Semigrp.{u}} (f : Hom X Y) :=
   ConcreteCategory.hom (C := Semigrp) f
 
 /-- Typecheck a `MulHom` as a morphism in `Semigrp`. -/
 @[to_additive /-- Typecheck an `AddHom` as a morphism in `AddSemigrp`. -/]
-/--
-Definition of `ofHom` / `ofHom` 的定义
+/-
+**Semigrp.ofHom** 是 Mathlib 中的一个缩写定义，位于命名空间 `Semigrp`。
+形式化陈述：ofHom {X Y : Type u} [Semigroup X] [Semigroup Y] (f : X ->ₙ* Y) : of X ⟶ o
+f Y
+参数：f : X ->ₙ* Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofHom
-  signature: {X Y : Type u} [Semigroup X] [Semigroup Y] (f : X ->ₙ* Y)
-  body: ConcreteCategory.ofHom (C := Semigrp) f
-
-中文:
-缩写 ofHom
-  签名: {X Y : 类型u} [半群 X] [半群 Y] (f : X ->ₙ* Y)
-  定义体: ConcreteCategory.ofHom (C := Semigrp) f
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, Semigrp
+--- 原说明 ---
+Typecheck a `MulHom` as a morphism in `Semigrp`.
 -/
-abbrev ofHom {X Y : Type u} [Semigroup X] [Semigroup Y] (f : X ->ₙ* Y) : of X ⟶ of Y :=
+abbrev ofHom {X Y : Type u} [Semigroup X] [Semigroup Y] (f : X →ₙ* Y) : of X ⟶ of Y :=
   ConcreteCategory.ofHom (C := Semigrp) f
 
 variable {R} in
-/--
-Definition of `Hom.Simps.hom` / `Hom.Simps.hom` 的定义
+/-- Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas. -/
+/-
+**Semigrp.Hom.Simps.hom** 是 Mathlib 中的一个定义，位于命名空间 `Semigrp.Hom.Simps`。
+形式化陈述：(X Y : Semigrp) → X.Hom Y → ↑X →ₙ* ↑Y
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom.Simps.hom
-  signature: (X Y : Semigrp.{u}) (f : Hom X Y)
-  body: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
-initialize_simps_projections AddSemigrp.Hom (hom' -> hom)
-
-中文:
-定义 态射.Simps.hom
-  签名: (X Y : 半群.{u}) (f : 态射 X Y)
-  定义体: f.hom
-
-initialize_simps_projections Hom (hom' -> hom)
-initialize_simps_projections AddSemigrp.Hom (hom' -> hom)
+--- 原说明 ---
+Use the `ConcreteCategory.hom` projection for `@[simps]` lemmas.
 -/
 def Hom.Simps.hom (X Y : Semigrp.{u}) (f : Hom X Y) :=
   f.hom
 
-initialize_simps_projections Hom (hom' -> hom)
-initialize_simps_projections AddSemigrp.Hom (hom' -> hom)
+initialize_simps_projections Hom (hom' → hom)
+initialize_simps_projections AddSemigrp.Hom (hom' → hom)
 
 /-!
 The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep them for `dsimp`.
 -/
 
 @[to_additive (attr := simp)]
-/--
-lemma `coe_id` / 引理 `coe_id`
+/-
+**Semigrp.coe_id** 是 Mathlib 中的一个引理，位于命名空间 `Semigrp`。
+形式化陈述：coe_id {X : Semigrp} : (𝟙 X : X -> X) = id
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma coe_id
-  given: {X : Semigrp}
-  statement: (𝟙 X : X -> X) = id
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 coe_id
-  条件: {X : 半群}
-  结论: (𝟙 X : X -> X) = id
-  证明: rfl
-
-@[to_additive (attr := simp)]
+--- 原说明 ---
+The results below duplicate the `ConcreteCategory` simp lemmas, but we can keep 
+them for `dsimp`.
 -/
-lemma coe_id {X : Semigrp} : (𝟙 X : X -> X) = id := rfl
+lemma coe_id {X : Semigrp} : (𝟙 X : X → X) = id := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `coe_comp` / 引理 `coe_comp`
-
-English:
-lemma coe_comp
-  given: {X Y Z : Semigrp} {f : X ⟶ Y} {g : Y ⟶ Z}
-  statement: (f ≫ g : X -> Z) = g ∘ f
-  proof: rfl
+/-
+**Semigrp.coe_comp** 是 Mathlib 中的一个引理，位于命名空间 `Semigrp`。
+形式化陈述：coe_comp {X Y Z : Semigrp} {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g : X -> Z) = g 
+∘ f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+lemma coe_comp {X Y Z : Semigrp} {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g : X → Z) = g ∘ f := rfl
 
 @[deprecated (since := "2026-02-10")] alias forget_map := ConcreteCategory.forget_map_eq_ofHom
 
 @[to_additive (attr := ext)]
-
-中文:
-引理 coe_comp
-  条件: {X Y Z : 半群} {f : X ⟶ Y} {g : Y ⟶ Z}
-  结论: (f ≫ g : X -> Z) = g ∘ f
-  证明: rfl
-
-@[deprecated (since := "2026-02-10")] alias forget_map := ConcreteCategory.forget_map_eq_ofHom
-
-@[to_additive (attr := ext)]
+/-
+**Semigrp.ext** 是 Mathlib 中的一个引理，位于命名空间 `Semigrp`。
+形式化陈述：ext {X Y : Semigrp} {f g : X ⟶ Y} (w : forall x : X, f x = g x) : f = g
+参数：w : forall x : X, f x = g x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ConcreteCategory.hom_ext`：hom_ext {X Y : C} (f g : X ⟶ Y)
+ (w : forall x, f x = g x) : f = g
 -/
-lemma coe_comp {X Y Z : Semigrp} {f : X ⟶ Y} {g : Y ⟶ Z} : (f ≫ g : X -> Z) = g ∘ f := rfl
-
-@[deprecated (since := "2026-02-10")] alias forget_map := ConcreteCategory.forget_map_eq_ofHom
-
-@[to_additive (attr := ext)]
-/--
-lemma `ext` / 引理 `ext`
-
-English:
-lemma ext
-  given: {X Y : Semigrp} {f g : X ⟶ Y} (w : forall x : X, f x = g x)
-  statement: f = g
-  proof: ConcreteCategory.hom_ext _ _ w
-
-@[to_additive]
-
-中文:
-引理 ext
-  条件: {X Y : 半群} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
-  结论: f = g
-  证明: ConcreteCategory.hom_ext _ _ w
-
-@[to_additive]
-
-Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom_ext, hom_ext
--/
-lemma ext {X Y : Semigrp} {f g : X ⟶ Y} (w : forall x : X, f x = g x) : f = g :=
+lemma ext {X Y : Semigrp} {f g : X ⟶ Y} (w : ∀ x : X, f x = g x) : f = g :=
   ConcreteCategory.hom_ext _ _ w
 
 @[to_additive]
 -- This is not `simp` to avoid rewriting in types of terms.
-/--
-theorem `coe_of` / 定理 `coe_of`
-
-English:
-theorem coe_of
-  given: (R : Type u) [Semigroup R]
-  statement: ↑(Semigrp.of R) = R
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 coe_of
-  条件: (R : 类型u) [半群 R]
-  结论: ↑(半群.of R) = R
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Semigrp.coe_of** 是 Mathlib 中的一个定理，位于命名空间 `Semigrp`。
+形式化陈述：coe_of (R : Type u) [Semigroup R] : ↑(Semigrp.of R) = R
+参数：R : Type u。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_of (R : Type u) [Semigroup R] : ↑(Semigrp.of R) = R :=
   rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `hom_id` / 引理 `hom_id`
-
-English:
-lemma hom_id
-  given: {X : Semigrp}
-  statement: (𝟙 X : X ⟶ X).hom = MulHom.id X
-  proof: rfl
-
-中文:
-引理 hom_id
-  条件: {X : 半群}
-  结论: (𝟙 X : X ⟶ X).hom = 乘法半群态射.id X
-  证明: rfl
+/-
+**Semigrp.hom_id** 是 Mathlib 中的一个引理，位于命名空间 `Semigrp`。
+形式化陈述：hom_id {X : Semigrp} : (𝟙 X : X ⟶ X).hom = MulHom.id X
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_id {X : Semigrp} : (𝟙 X : X ⟶ X).hom = MulHom.id X := rfl
 
 /- Provided for rewriting. -/
 @[to_additive]
-/--
-lemma `id_apply` / 引理 `id_apply`
+/-
+**Semigrp.id_apply** 是 Mathlib 中的一个引理，位于命名空间 `Semigrp`。
+形式化陈述：id_apply (X : Semigrp) (x : X) : (𝟙 X : X ⟶ X) x = x
+参数：X : Semigrp；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MulHom.id_apply`：∀ (M : Type u_10) [inst : Mul M] (x : M), (MulHom.id M)
+ x = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma id_apply
-  given: (X : Semigrp) (x : X)
-  proof: by simp
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 id_apply
-  条件: (X : 半群) (x : X)
-  证明: by simp
-
-@[to_additive (attr := simp)]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma id_apply (X : Semigrp) (x : X) :
     (𝟙 X : X ⟶ X) x = x := by simp
 
 @[to_additive (attr := simp)]
-/--
-lemma `hom_comp` / 引理 `hom_comp`
-
-English:
-lemma hom_comp
-  given: {X Y T : Semigrp} (f : X ⟶ Y) (g : Y ⟶ T)
-  proof: rfl
-
-中文:
-引理 hom_comp
-  条件: {X Y T : 半群} (f : X ⟶ Y) (g : Y ⟶ T)
-  证明: rfl
+/-
+**Semigrp.hom_comp** 是 Mathlib 中的一个引理，位于命名空间 `Semigrp`。
+形式化陈述：hom_comp {X Y T : Semigrp} (f : X ⟶ Y) (g : Y ⟶ T) : (f ≫ g).hom = g.hom.c
+omp f.hom
+参数：f : X ⟶ Y；g : Y ⟶ T。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hom_comp {X Y T : Semigrp} (f : X ⟶ Y) (g : Y ⟶ T) :
     (f ≫ g).hom = g.hom.comp f.hom := rfl
 
 /- Provided for rewriting. -/
 @[to_additive]
-/--
-lemma `comp_apply` / 引理 `comp_apply`
+/-
+**Semigrp.comp_apply** 是 Mathlib 中的一个引理，位于命名空间 `Semigrp`。
+形式化陈述：comp_apply {X Y T : Semigrp} (f : X ⟶ Y) (g : Y ⟶ T) (x : X) : (f ≫ g) x =
+ g (f x)
+参数：f : X ⟶ Y；g : Y ⟶ T；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-lemma comp_apply
-  given: {X Y T : Semigrp} (f : X ⟶ Y) (g : Y ⟶ T) (x : X)
-  proof: by simp
-
-@[to_additive (attr := ext)]
-
-中文:
-引理 comp_apply
-  条件: {X Y T : 半群} (f : X ⟶ Y) (g : Y ⟶ T) (x : X)
-  证明: by simp
-
-@[to_additive (attr := ext)]
+--- 原说明 ---
+Provided for rewriting.
 -/
 lemma comp_apply {X Y T : Semigrp} (f : X ⟶ Y) (g : Y ⟶ T) (x : X) :
     (f ≫ g) x = g (f x) := by simp
 
 @[to_additive (attr := ext)]
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {X Y : Semigrp} {f g : X ⟶ Y} (hf : f.hom = g.hom)
-  statement: f = g
-  proof: Hom.ext hf
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 hom_ext
-  条件: {X Y : 半群} {f g : X ⟶ Y} (hf : f.hom = g.hom)
-  结论: f = g
-  证明: Hom.ext hf
-
-@[to_additive (attr := simp)]
-
-Depends on / 依赖: Hom.ext
+/-
+**Semigrp.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `Semigrp`。
+形式化陈述：hom_ext {X Y : Semigrp} {f g : X ⟶ Y} (hf : f.hom = g.hom) : f = g
+参数：hf : f.hom = g.hom。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Semigrp.Hom.ext`：∀ {A B : Semigrp} {x y : A.Hom B}, x.hom' = y.hom' → x 
+= y
 -/
 lemma hom_ext {X Y : Semigrp} {f g : X ⟶ Y} (hf : f.hom = g.hom) : f = g :=
   Hom.ext hf
 
 @[to_additive (attr := simp)]
-/--
-lemma `hom_ofHom` / 引理 `hom_ofHom`
-
-English:
-lemma hom_ofHom
-  given: {X Y : Type u} [Semigroup X] [Semigroup Y] (f : X ->ₙ* Y)
-  statement: (ofHom f).hom = f
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 hom_ofHom
-  条件: {X Y : 类型u} [半群 X] [半群 Y] (f : X ->ₙ* Y)
-  结论: (ofHom f).hom = f
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Semigrp.hom_ofHom** 是 Mathlib 中的一个引理，位于命名空间 `Semigrp`。
+形式化陈述：hom_ofHom {X Y : Type u} [Semigroup X] [Semigroup Y] (f : X ->ₙ* Y) : (ofH
+om f).hom = f
+参数：f : X ->ₙ* Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma hom_ofHom {X Y : Type u} [Semigroup X] [Semigroup Y] (f : X ->ₙ* Y) : (ofHom f).hom = f := rfl
+lemma hom_ofHom {X Y : Type u} [Semigroup X] [Semigroup Y] (f : X →ₙ* Y) : (ofHom f).hom = f := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `ofHom_hom` / 引理 `ofHom_hom`
-
-English:
-lemma ofHom_hom
-  given: {X Y : Semigrp} (f : X ⟶ Y)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 ofHom_hom
-  条件: {X Y : 半群} (f : X ⟶ Y)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Semigrp.ofHom_hom** 是 Mathlib 中的一个引理，位于命名空间 `Semigrp`。
+形式化陈述：ofHom_hom {X Y : Semigrp} (f : X ⟶ Y) : ofHom (Hom.hom f) = f
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_hom {X Y : Semigrp} (f : X ⟶ Y) :
     ofHom (Hom.hom f) = f := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `ofHom_id` / 引理 `ofHom_id`
-
-English:
-lemma ofHom_id
-  given: {X : Type u} [Semigroup X]
-  statement: ofHom (MulHom.id X) = 𝟙 (of X)
-  proof: rfl
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 ofHom_id
-  条件: {X : 类型u} [半群 X]
-  结论: ofHom (乘法半群态射.id X) = 𝟙 (of X)
-  证明: rfl
-
-@[to_additive (attr := simp)]
+/-
+**Semigrp.ofHom_id** 是 Mathlib 中的一个引理，位于命名空间 `Semigrp`。
+形式化陈述：ofHom_id {X : Type u} [Semigroup X] : ofHom (MulHom.id X) = 𝟙 (of X)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_id {X : Type u} [Semigroup X] : ofHom (MulHom.id X) = 𝟙 (of X) := rfl
 
 @[to_additive (attr := simp)]
-/--
-lemma `ofHom_comp` / 引理 `ofHom_comp`
-
-English:
-lemma ofHom_comp
-  statement: {X Y Z : Type u} [Semigroup X] [Semigroup Y] [Semigroup Z]
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 ofHom_comp
-  结论: {X Y Z : 类型u} [半群 X] [半群 Y] [半群 Z]
-  证明: rfl
-
-@[to_additive]
-
-Depends on / 依赖: F.obj
+/-
+**Semigrp.ofHom_comp** 是 Mathlib 中的一个引理，位于命名空间 `Semigrp`。
+形式化陈述：ofHom_comp {X Y Z : Type u} [Semigroup X] [Semigroup Y] [Semigroup Z] (f :
+ X ->ₙ* Y) (g : Y ->ₙ* Z) : ofHom (g.comp f) = ofHom f ≫ ofHom g
+参数：f : X ->ₙ* Y；g : Y ->ₙ* Z。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ofHom_comp {X Y Z : Type u} [Semigroup X] [Semigroup Y] [Semigroup Z]
-    (f : X ->ₙ* Y) (g : Y ->ₙ* Z) :
+    (f : X →ₙ* Y) (g : Y →ₙ* Z) :
     ofHom (g.comp f) = ofHom f ≫ ofHom g :=
   rfl
 
 @[to_additive]
-/--
-lemma `ofHom_apply` / 引理 `ofHom_apply`
-
-English:
-lemma ofHom_apply
-  given: {X Y : Type u} [Semigroup X] [Semigroup Y] (f : X ->ₙ* Y) (x : X)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 ofHom_apply
-  条件: {X Y : 类型u} [半群 X] [半群 Y] (f : X ->ₙ* Y) (x : X)
-  证明: rfl
-
-@[to_additive]
+/-
+**Semigrp.ofHom_apply** 是 Mathlib 中的一个引理，位于命名空间 `Semigrp`。
+形式化陈述：ofHom_apply {X Y : Type u} [Semigroup X] [Semigroup Y] (f : X ->ₙ* Y) (x :
+ X) : (ofHom f) x = f x
+参数：f : X ->ₙ* Y；x : X。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma ofHom_apply {X Y : Type u} [Semigroup X] [Semigroup Y] (f : X ->ₙ* Y) (x : X) :
+lemma ofHom_apply {X Y : Type u} [Semigroup X] [Semigroup Y] (f : X →ₙ* Y) (x : X) :
     (ofHom f) x = f x := rfl
 
 @[to_additive]
-/--
-lemma `inv_hom_apply` / 引理 `inv_hom_apply`
-
-English:
-lemma inv_hom_apply
-  given: {X Y : Semigrp} (e : X ≅ Y) (x : X)
-  statement: e.inv (e.hom x) = x
-  proof: by
-  simp
-
-@[to_additive]
-
-中文:
-引理 inv_hom_apply
-  条件: {X Y : 半群} (e : X ≅ Y) (x : X)
-  结论: e.inv (e.hom x) = x
-  证明: by
-  simp
-
-@[to_additive]
+/-
+**Semigrp.inv_hom_apply** 是 Mathlib 中的一个引理，位于命名空间 `Semigrp`。
+形式化陈述：inv_hom_apply {X Y : Semigrp} (e : X ≅ Y) (x : X) : e.inv (e.hom x) = x
+参数：e : X ≅ Y；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.hom_inv_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma inv_hom_apply {X Y : Semigrp} (e : X ≅ Y) (x : X) : e.inv (e.hom x) = x := by
   simp
 
 @[to_additive]
-/--
-lemma `hom_inv_apply` / 引理 `hom_inv_apply`
-
-English:
-lemma hom_inv_apply
-  given: {X Y : Semigrp} (e : X ≅ Y) (s : Y)
-  statement: e.hom (e.inv s) = s
-  proof: by
-  simp
-
-@[to_additive (attr := simp)]
-
-中文:
-引理 hom_inv_apply
-  条件: {X Y : 半群} (e : X ≅ Y) (s : Y)
-  结论: e.hom (e.inv s) = s
-  证明: by
-  simp
-
-@[to_additive (attr := simp)]
+/-
+**Semigrp.hom_inv_apply** 是 Mathlib 中的一个引理，位于命名空间 `Semigrp`。
+形式化陈述：hom_inv_apply {X Y : Semigrp} (e : X ≅ Y) (s : Y) : e.hom (e.inv s) = s
+参数：e : X ≅ Y；s : Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Iso.inv_hom_id_apply`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {X Y : C} (self : X ≅ Y) {F : C → C → Type uF}   {carrier 
+: C → Type w} {instFunLik…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma hom_inv_apply {X Y : Semigrp} (e : X ≅ Y) (s : Y) : e.hom (e.inv s) = s := by
   simp
 
 @[to_additive (attr := simp)]
-/--
-lemma `mulEquiv_coe_eq` / 引理 `mulEquiv_coe_eq`
-
-English:
-lemma mulEquiv_coe_eq
-  given: {X Y : Type _} [Semigroup X] [Semigroup Y] (e : X ≃* Y)
-  proof: rfl
-
-@[to_additive]
-
-中文:
-引理 mulEquiv_coe_eq
-  条件: {X Y : 类型 _} [半群 X] [半群 Y] (e : X ≃* Y)
-  证明: rfl
-
-@[to_additive]
+/-
+**Semigrp.mulEquiv_coe_eq** 是 Mathlib 中的一个引理，位于命名空间 `Semigrp`。
+形式化陈述：mulEquiv_coe_eq {X Y : Type _} [Semigroup X] [Semigroup Y] (e : X ≃* Y) : 
+(ofHom (e : X ->ₙ* Y)).hom = ↑e
+参数：e : X ≃* Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulEquivClass.instMulHomClass`：∀ {M : Type u_4} {N : Type u_5} (F : Type
+ u_9) [inst : Mul M] [inst_1 : Mul N] [inst_2 : EquivLike F M N]   [h : MulEquiv
+Class F M N], MulHo…
+· 使用定理 `MulEquiv.instMulEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul 
+M] [inst_1 : Mul N], MulEquivClass (M ≃* N) M N
 -/
 lemma mulEquiv_coe_eq {X Y : Type _} [Semigroup X] [Semigroup Y] (e : X ≃* Y) :
-    (ofHom (e : X ->ₙ* Y)).hom = ↑e :=
+    (ofHom (e : X →ₙ* Y)).hom = ↑e :=
   rfl
 
 @[to_additive]
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited Semigrp
-  body: ⟨Semigrp.of PEmpty⟩
-
-@[to_additive]
-
-中文:
-实例 :
-  签名: 可居 半群
-  定义体: ⟨Semigrp.of PEmpty⟩
-
-@[to_additive]
-
-Depends on / 依赖: PEmpty, Semigrp, Semigrp.of
+/-
+**Semigrp.** 是 Mathlib 中的一个实例，位于命名空间 `Semigrp`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited Semigrp :=
   ⟨Semigrp.of PEmpty⟩
 
 @[to_additive]
-/--
-Instance `hasForgetToMagmaCat` / 实例 `hasForgetToMagmaCat`
-
-English:
-instance hasForgetToMagmaCat
-  signature: : HasForget₂ Semigrp MagmaCat where
-  body: { obj R := MagmaCat.of R
-      map f := MagmaCat.ofHom f.hom }
-
-中文:
-实例 hasForgetToMagmaCat
-  签名: : 有Forget₂ 半群 原群范畴 where
-  定义体: { obj R := MagmaCat.of R
-      map f := MagmaCat.ofHom f.hom }
-
-Depends on / 依赖: MagmaCat, MagmaCat.of, MagmaCat.ofHom, f.hom
+/-
+**Semigrp.hasForgetToMagmaCat** 是 Mathlib 中的一个实例，位于命名空间 `Semigrp`。
+形式化陈述：hasForgetToMagmaCat : HasForget₂ Semigrp MagmaCat where forget₂
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance hasForgetToMagmaCat : HasForget₂ Semigrp MagmaCat where
   forget₂ :=
@@ -1403,22 +897,13 @@ variable [Mul X] [Mul Y]
 /-- Build an isomorphism in the category `MagmaCat` from a `MulEquiv` between `Mul`s. -/
 @[to_additive (attr := simps)
       /-- Build an isomorphism in the category `AddMagmaCat` from an `AddEquiv` between `Add`s. -/]
-/--
-Definition of `MulEquiv.toMagmaCatIso` / `MulEquiv.toMagmaCatIso` 的定义
-
-English:
-definition MulEquiv.toMagmaCatIso
-  signature: (e : X ≃* Y)
-  body: MagmaCat.ofHom e.toMulHom
-  inv := MagmaCat.ofHom e.symm.toMulHom
-
-中文:
-定义 乘法等价.toMagmaCatIso
-  签名: (e : X ≃* Y)
-  定义体: MagmaCat.ofHom e.toMulHom
-  inv := MagmaCat.ofHom e.symm.toMulHom
-
-Depends on / 依赖: MagmaCat, MagmaCat.ofHom, e.toMulHom, toMulHom
+/-
+**MulEquiv.toMagmaCatIso** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：MulEquiv.toMagmaCatIso (e : X ≃* Y) : MagmaCat.of X ≅ MagmaCat.of Y where 
+hom
+参数：e : X ≃* Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def MulEquiv.toMagmaCatIso (e : X ≃* Y) : MagmaCat.of X ≅ MagmaCat.of Y where
   hom := MagmaCat.ofHom e.toMulHom
@@ -1434,22 +919,12 @@ variable [Semigroup X] [Semigroup Y]
 @[to_additive (attr := simps)
   /-- Build an isomorphism in the category
   `AddSemigroup` from an `AddEquiv` between `AddSemigroup`s. -/]
-/--
-Definition of `MulEquiv.toSemigrpIso` / `MulEquiv.toSemigrpIso` 的定义
-
-English:
-definition MulEquiv.toSemigrpIso
-  signature: (e : X ≃* Y)
-  body: Semigrp.ofHom e.toMulHom
-  inv := Semigrp.ofHom e.symm.toMulHom
-
-中文:
-定义 乘法等价.toSemigrpIso
-  签名: (e : X ≃* Y)
-  定义体: Semigrp.ofHom e.toMulHom
-  inv := Semigrp.ofHom e.symm.toMulHom
-
-Depends on / 依赖: Semigrp, Semigrp.ofHom, e.toMulHom, toMulHom
+/-
+**MulEquiv.toSemigrpIso** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：MulEquiv.toSemigrpIso (e : X ≃* Y) : Semigrp.of X ≅ Semigrp.of Y where hom
+参数：e : X ≃* Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def MulEquiv.toSemigrpIso (e : X ≃* Y) : Semigrp.of X ≅ Semigrp.of Y where
   hom := Semigrp.ofHom e.toMulHom
@@ -1462,20 +937,13 @@ namespace CategoryTheory.Iso
 /-- Build a `MulEquiv` from an isomorphism in the category `MagmaCat`. -/
 @[to_additive
       /-- Build an `AddEquiv` from an isomorphism in the category `AddMagmaCat`. -/]
-/--
-Definition of `magmaCatIsoToMulEquiv` / `magmaCatIsoToMulEquiv` 的定义
-
-English:
-definition magmaCatIsoToMulEquiv
-  signature: {X Y : MagmaCat} (i : X ≅ Y)
-  body: MulHom.toMulEquiv i.hom.hom i.inv.hom (by ext; simp) (by ext; simp)
-
-中文:
-定义 magmaCatIsoToMulEquiv
-  签名: {X Y : 原群范畴} (i : X ≅ Y)
-  定义体: MulHom.toMulEquiv i.hom.hom i.inv.hom (by ext; simp) (by ext; simp)
-
-Depends on / 依赖: MulHom, MulHom.toMulEquiv, i.hom.hom, i.inv.hom, toMulEquiv
+/-
+**CategoryTheory.Iso.magmaCatIsoToMulEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Iso`。
+形式化陈述：magmaCatIsoToMulEquiv {X Y : MagmaCat} (i : X ≅ Y) : X ≃* Y
+参数：i : X ≅ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def magmaCatIsoToMulEquiv {X Y : MagmaCat} (i : X ≅ Y) : X ≃* Y :=
   MulHom.toMulEquiv i.hom.hom i.inv.hom (by ext; simp) (by ext; simp)
@@ -1483,20 +951,13 @@ def magmaCatIsoToMulEquiv {X Y : MagmaCat} (i : X ≅ Y) : X ≃* Y :=
 /-- Build a `MulEquiv` from an isomorphism in the category `Semigroup`. -/
 @[to_additive
   /-- Build an `AddEquiv` from an isomorphism in the category `AddSemigroup`. -/]
-/--
-Definition of `semigrpIsoToMulEquiv` / `semigrpIsoToMulEquiv` 的定义
-
-English:
-definition semigrpIsoToMulEquiv
-  signature: {X Y : Semigrp} (i : X ≅ Y)
-  body: MulHom.toMulEquiv i.hom.hom i.inv.hom (by ext; simp) (by ext; simp)
-
-中文:
-定义 semigrpIsoToMulEquiv
-  签名: {X Y : 半群} (i : X ≅ Y)
-  定义体: MulHom.toMulEquiv i.hom.hom i.inv.hom (by ext; simp) (by ext; simp)
-
-Depends on / 依赖: MulHom, MulHom.toMulEquiv, i.hom.hom, i.inv.hom, toMulEquiv
+/-
+**CategoryTheory.Iso.semigrpIsoToMulEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.Iso`。
+形式化陈述：semigrpIsoToMulEquiv {X Y : Semigrp} (i : X ≅ Y) : X ≃* Y
+参数：i : X ≅ Y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def semigrpIsoToMulEquiv {X Y : Semigrp} (i : X ≅ Y) : X ≃* Y :=
   MulHom.toMulEquiv i.hom.hom i.inv.hom (by ext; simp) (by ext; simp)
@@ -1508,84 +969,51 @@ in `MagmaCat` -/
 @[to_additive
     /-- additive equivalences between `Add`s are the same
     as (isomorphic to) isomorphisms in `AddMagmaCat` -/]
-/--
-Definition of `mulEquivIsoMagmaIso` / `mulEquivIsoMagmaIso` 的定义
-
-English:
-definition mulEquivIsoMagmaIso
-  signature: {X Y : Type u} [Mul X] [Mul Y]
-  body: ↾fun e => e.toMagmaCatIso
-  inv := ↾fun i => i.magmaCatIsoToMulEquiv
-
-中文:
-定义 mulEquivIsoMagmaIso
-  签名: {X Y : 类型u} [乘法 X] [乘法 Y]
-  定义体: ↾fun e => e.toMagmaCatIso
-  inv := ↾fun i => i.magmaCatIsoToMulEquiv
-
-Depends on / 依赖: e.toMagmaCatIso, toMagmaCatIso
+/-
+**mulEquivIsoMagmaIso** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：mulEquivIsoMagmaIso {X Y : Type u} [Mul X] [Mul Y] : (X ≃* Y) ≅ (MagmaCat.
+of X ≅ MagmaCat.of Y) where hom
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def mulEquivIsoMagmaIso {X Y : Type u} [Mul X] [Mul Y] :
     (X ≃* Y) ≅ (MagmaCat.of X ≅ MagmaCat.of Y) where
-  hom := ↾fun e => e.toMagmaCatIso
-  inv := ↾fun i => i.magmaCatIsoToMulEquiv
+  hom := ↾fun e ↦ e.toMagmaCatIso
+  inv := ↾fun i ↦ i.magmaCatIsoToMulEquiv
 
 /-- multiplicative equivalences between `Semigroup`s are the same as (isomorphic to) isomorphisms
 in `Semigroup` -/
 @[to_additive
   /-- additive equivalences between `AddSemigroup`s are
   the same as (isomorphic to) isomorphisms in `AddSemigroup` -/]
-/--
-Definition of `mulEquivIsoSemigrpIso` / `mulEquivIsoSemigrpIso` 的定义
-
-English:
-definition mulEquivIsoSemigrpIso
-  signature: {X Y : Type u} [Semigroup X] [Semigroup Y]
-  body: ↾fun e => e.toSemigrpIso
-  inv := ↾fun i => i.semigrpIsoToMulEquiv
-
-@[to_additive]
-
-中文:
-定义 mulEquivIsoSemigrpIso
-  签名: {X Y : 类型u} [半群 X] [半群 Y]
-  定义体: ↾fun e => e.toSemigrpIso
-  inv := ↾fun i => i.semigrpIsoToMulEquiv
-
-@[to_additive]
-
-Depends on / 依赖: e.toSemigrpIso, toSemigrpIso
+/-
+**mulEquivIsoSemigrpIso** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：mulEquivIsoSemigrpIso {X Y : Type u} [Semigroup X] [Semigroup Y] : (X ≃* Y
+) ≅ (Semigrp.of X ≅ Semigrp.of Y) where hom
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def mulEquivIsoSemigrpIso {X Y : Type u} [Semigroup X] [Semigroup Y] :
     (X ≃* Y) ≅ (Semigrp.of X ≅ Semigrp.of Y) where
-  hom := ↾fun e => e.toSemigrpIso
-  inv := ↾fun i => i.semigrpIsoToMulEquiv
+  hom := ↾fun e ↦ e.toSemigrpIso
+  inv := ↾fun i ↦ i.semigrpIsoToMulEquiv
 
 @[to_additive]
-/--
-Instance `MagmaCat.forgetReflectsIsos` / 实例 `MagmaCat.forgetReflectsIsos`
-
-English:
-instance MagmaCat.forgetReflectsIsos
-  signature: : (forget MagmaCat.{u}).ReflectsIsomorphisms where
-  body: by
-    let i := asIso ((forget MagmaCat).map f)
-    let e : X ≃* Y := { f.hom, i.toEquiv with }
-    exact e.toMagmaCatIso.isIso_hom
-
-@[to_additive]
-
-中文:
-实例 原群范畴.forgetReflectsIsos
-  签名: : (forget 原群范畴.{u}).反映同构 where
-  定义体: by
-    let i := asIso ((forget MagmaCat).map f)
-    let e : X ≃* Y := { f.hom, i.toEquiv with }
-    exact e.toMagmaCatIso.isIso_hom
-
-@[to_additive]
-
-Depends on / 依赖: MagmaCat, coyonedaAdj, e.toMagmaCatIso.isIso_hom, f.hom, forget, i.toEquiv, isIso_hom, toEquiv, toMagmaCatIso
+/-
+**MagmaCat.forgetReflectsIsos** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：MagmaCat.forgetReflectsIsos : (forget MagmaCat.{u}).ReflectsIsomorphisms w
+here reflects {X Y} f _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
+· 使用定理 `MulHom.map_mul'`：∀ {M : Type u_10} {N : Type u_11} [inst : Mul M] [inst_
+1 : Mul N] (self : M →ₙ* N) (x y : M),   self.toFun (x * y) = self.toFun x * sel
+f.toF…
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 -/
 instance MagmaCat.forgetReflectsIsos : (forget MagmaCat.{u}).ReflectsIsomorphisms where
   reflects {X Y} f _ := by
@@ -1594,26 +1022,21 @@ instance MagmaCat.forgetReflectsIsos : (forget MagmaCat.{u}).ReflectsIsomorphism
     exact e.toMagmaCatIso.isIso_hom
 
 @[to_additive]
-/--
-Instance `Semigrp.forgetReflectsIsos` / 实例 `Semigrp.forgetReflectsIsos`
-
-English:
-instance Semigrp.forgetReflectsIsos
-  signature: : (forget Semigrp.{u}).ReflectsIsomorphisms where
-  body: by
-    let i := asIso ((forget Semigrp).map f)
-    let e : X ≃* Y := { f.hom, i.toEquiv with }
-    exact e.toSemigrpIso.isIso_hom
-
-中文:
-实例 半群.forgetReflectsIsos
-  签名: : (forget 半群.{u}).反映同构 where
-  定义体: by
-    let i := asIso ((forget Semigrp).map f)
-    let e : X ≃* Y := { f.hom, i.toEquiv with }
-    exact e.toSemigrpIso.isIso_hom
-
-Depends on / 依赖: Semigrp, e.toSemigrpIso.isIso_hom, f.hom, forget, i.toEquiv, isIso_hom, toEquiv, toSemigrpIso
+/-
+**Semigrp.forgetReflectsIsos** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Semigrp.forgetReflectsIsos : (forget Semigrp.{u}).ReflectsIsomorphisms whe
+re reflects {X Y} f _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.left_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Function
+.LeftInverse self.invFun self.toFun
+· 使用定理 `Equiv.right_inv`：∀ {α : Sort u_1} {β : Sort u_2} (self : α ≃ β), Functio
+n.RightInverse self.invFun self.toFun
+· 使用定理 `MulHom.map_mul'`：∀ {M : Type u_10} {N : Type u_11} [inst : Mul M] [inst_
+1 : Mul N] (self : M →ₙ* N) (x y : M),   self.toFun (x * y) = self.toFun x * sel
+f.toF…
+· 使用定理 `CategoryTheory.Iso.isIso_hom`：∀ {C : Type u} [inst : CategoryTheory.Cate
+gory.{v, u} C] {X Y : C} (e : X ≅ Y), CategoryTheory.IsIso e.hom
 -/
 instance Semigrp.forgetReflectsIsos : (forget Semigrp.{u}).ReflectsIsomorphisms where
   reflects {X Y} f _ := by
@@ -1624,20 +1047,9 @@ instance Semigrp.forgetReflectsIsos : (forget Semigrp.{u}).ReflectsIsomorphisms 
 /-- Ensure that `forget₂ CommMonCat MonCat` automatically reflects isomorphisms. -/
 @[to_additive /-- Ensure that `forget₂ AddCommMonCat AddMonCat` automatically reflects
 isomorphisms. -/]
-/--
-Instance `Semigrp.forget₂_full` / 实例 `Semigrp.forget₂_full`
-
-English:
-instance Semigrp.forget₂_full
-  signature: : (forget₂ Semigrp MagmaCat).Full where
-  body: ⟨ofHom f.hom, rfl⟩
-
-中文:
-实例 半群.forget₂_full
-  签名: : (forget₂ 半群 原群范畴).满 where
-  定义体: ⟨ofHom f.hom, rfl⟩
-
-Depends on / 依赖: f.hom
+/-
+**Semigrp.forget** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Semigrp.forget₂_full : (forget₂ Semigrp MagmaCat).Full where
   map_surjective f := ⟨ofHom f.hom, rfl⟩
@@ -1648,4 +1060,14 @@ we automatically obtain that the `forget₂` functors between our concrete categ
 reflect isomorphisms.
 -/
 
+/-
+**** 是 Mathlib 中的一个示例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Once we've shown that the forgetful functors to type reflect isomorphisms,
+we automatically obtain that the `forget₂` functors between our concrete categor
+ies
+reflect isomorphisms.
+-/
 example : (forget₂ Semigrp MagmaCat).ReflectsIsomorphisms := inferInstance

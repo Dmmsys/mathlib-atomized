@@ -21,169 +21,146 @@ and proves various lemmas about them.
 
 open Nat
 
-variable {n : Nat}
+variable {n : ℕ}
 
-/--
-Definition of `finRotate` / `finRotate` 的定义
+/-- Rotate `Fin n` one step to the right. -/
+/-
+**finRotate** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：(n : ℕ) → Equiv.Perm (Fin n)
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
 
-English:
-definition finRotate
-  signature: : forall n, Equiv.Perm (Fin n)
-
-中文:
-定义 finRotate
-  签名: : 对任意 n, 等价.置换 (有限集 n)
+--- 原说明 ---
+Rotate `Fin n` one step to the right.
 -/
-def finRotate : forall n, Equiv.Perm (Fin n)
+def finRotate : ∀ n, Equiv.Perm (Fin n)
   | 0 => Equiv.refl _
   | n + 1 => finAddFlip.trans (finCongr (Nat.add_comm 1 n))
-
-/--
-lemma `finRotate_zero` / 引理 `finRotate_zero`
-
-English:
-lemma finRotate_zero
-  statement: finRotate 0 = Equiv.refl _
-  proof: rfl
-
-中文:
-引理 finRotate_zero
-  结论: finRotate 0 = 等价.refl _
-  证明: rfl
-
-Depends on / 依赖: complEDS
+/-
+**finRotate_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finRotate 0 = Equiv.refl (Fin 0)
+参数：Fin 0。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 @[simp] lemma finRotate_zero : finRotate 0 = Equiv.refl _ := rfl
-
-/--
-lemma `finRotate_succ` / 引理 `finRotate_succ`
-
-English:
-lemma finRotate_succ
-  given: (n : Nat)
-  proof: rfl
-
-中文:
-引理 finRotate_succ
-  条件: (n : 自然数)
-  证明: rfl
-
-Depends on / 依赖: complEDS
+/-
+**finRotate_succ** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：finRotate_succ (n : Nat) : finRotate (n + 1) = finAddFlip.trans (finCongr 
+(Nat.add_comm 1 n))
+参数：n : Nat。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma finRotate_succ (n : Nat) :
+lemma finRotate_succ (n : ℕ) :
     finRotate (n + 1) = finAddFlip.trans (finCongr (Nat.add_comm 1 n)) := rfl
-
-/--
-theorem `finRotate_of_lt` / 定理 `finRotate_of_lt`
-
-English:
-theorem finRotate_of_lt
-  given: {k : Nat} (h : k < n)
-  proof: by
-  ext
-  dsimp [finRotate_succ]
-  simp [finAddFlip_apply_mk_left h, Nat.add_comm]
-
-中文:
-定理 finRotate_of_lt
-  条件: {k : 自然数} (h : k < n)
-  证明: by
-  ext
-  dsimp [finRotate_succ]
-  simp [finAddFlip_apply_mk_left h, Nat.add_comm]
-
-Depends on / 依赖: Nat.add_comm, Nat.cast_succ, add_comm, cast_succ, complEDS, dif_pos, even_two_mul, finAddFlip_apply_mk_left, finRotate_succ, m.mul_div_cancel_left, mul_div_cancel_left, two_pos
+/-
+**finRotate_of_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finRotate_of_lt {k : Nat} (h : k < n) : finRotate (n + 1) ⟨k, h.trans_le n
+.le_succ⟩ = ⟨k + 1, Nat.succ_lt_succ h⟩
+参数：h : k < n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fin.ext`：∀ {n : ℕ} {a b : Fin n}, ↑a = ↑b → a = b
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Nat.le_succ`：∀ (n : ℕ), n ≤ n.succ
+· 使用定理 `Nat.succ_lt_succ`：∀ {n m : ℕ}, n < m → n.succ < m.succ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.add_lt_add_left`：∀ {n m : ℕ}, n < m → ∀ (k : ℕ), k + n < k + m
+· 使用定理 `Nat.add_comm`：∀ (n m : ℕ), n + m = m + n
+· 使用定理 `Nat.lt_add_right`：∀ {a b : ℕ} (c : ℕ), a < b → a < b + c
+· 使用定理 `finAddFlip_apply_mk_left`：finAddFlip_apply_mk_left {k : Nat} (h : k < m)
+ (hk : k < m + n
+· 使用定理 `Fin.mk.congr_simp`：∀ {n : ℕ} (val val_1 : ℕ) (e_val : val = val_1) (isLt
+ : val < n), ⟨val, isLt⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem finRotate_of_lt {k : Nat} (h : k < n) :
+theorem finRotate_of_lt {k : ℕ} (h : k < n) :
     finRotate (n + 1) ⟨k, h.trans_le n.le_succ⟩ = ⟨k + 1, Nat.succ_lt_succ h⟩ := by
   ext
   dsimp [finRotate_succ]
   simp [finAddFlip_apply_mk_left h, Nat.add_comm]
-
-/--
-theorem `finRotate_last'` / 定理 `finRotate_last'`
-
-English:
-theorem finRotate_last'
-  statement: finRotate (n + 1) ⟨n, by lia⟩ = ⟨0, Nat.zero_lt_succ _⟩
-  proof: by
-  dsimp [finRotate_succ]
-  rw [finAddFlip_apply_mk_right le_rfl]
-  simp
-
-中文:
-定理 finRotate_last'
-  结论: finRotate (n + 1) ⟨n, by lia⟩ = ⟨0, 自然数.zero_lt_succ _⟩
-  证明: by
-  dsimp [finRotate_succ]
-  rw [finAddFlip_apply_mk_right le_rfl]
-  simp
-
-Depends on / 依赖: Nat.mul_add_div, add_assoc, complEDS, dif_neg, finAddFlip_apply_mk_right, finRotate_succ, le_rfl, m.not_even_two_mul_add_one, mul_add_div, not_even_two_mul_add_one, two_pos
+/-
+**finRotate_last'** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finRotate_last' : finRotate (n + 1) ⟨n, by lia⟩ = ⟨0, Nat.zero_lt_succ _⟩
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.zero_lt_succ`：∀ (n : ℕ), 0 < n.succ
+· 使用定理 `Nat.add_comm`：∀ (n m : ℕ), n + m = m + n
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `finAddFlip_apply_mk_right`：finAddFlip_apply_mk_right {k : Nat} (h₁ : m <
+= k) (h₂ : k < m + n) : finAddFlip (⟨k, h₂⟩ : Fin (m + n)) = ⟨k - m, by lia⟩
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `instNeZeroNatHAdd`：∀ {n m : ℕ} [h : NeZero n], NeZero (n + m)
+· 使用定理 `Fin.mk.congr_simp`：∀ {n : ℕ} (val val_1 : ℕ) (e_val : val = val_1) (isLt
+ : val < n), ⟨val, isLt⟩ = ⟨val_1, ⋯⟩
+· 使用定理 `Nat.sub_self`：∀ (n : ℕ), n - n = 0
+· 使用定理 `finCongr_apply`：∀ {n m : ℕ} (eq : n = m) (i : Fin n), (finCongr eq) i = 
+Fin.cast eq i
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem finRotate_last' : finRotate (n + 1) ⟨n, by lia⟩ = ⟨0, Nat.zero_lt_succ _⟩ := by
   dsimp [finRotate_succ]
   rw [finAddFlip_apply_mk_right le_rfl]
   simp
-
-/--
-theorem `finRotate_last` / 定理 `finRotate_last`
-
-English:
-theorem finRotate_last
-  statement: finRotate (n + 1) (Fin.last _) = 0
-  proof: finRotate_last'
-
-中文:
-定理 finRotate_last
-  结论: finRotate (n + 1) (有限集.last _) = 0
-  证明: finRotate_last'
-
-Depends on / 依赖: finRotate_last
+/-
+**finRotate_last** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finRotate_last : finRotate (n + 1) (Fin.last _) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `finRotate_last'`：finRotate_last' : finRotate (n + 1) ⟨n, by lia⟩ = ⟨0, N
+at.zero_lt_succ _⟩
 -/
 theorem finRotate_last : finRotate (n + 1) (Fin.last _) = 0 :=
   finRotate_last'
-
-/--
-theorem `Fin.snoc_eq_cons_rotate` / 定理 `Fin.snoc_eq_cons_rotate`
-
-English:
-theorem Fin.snoc_eq_cons_rotate
-  given: {α : Type*} (v : Fin n -> α) (a : α)
-  proof: by
-  ext ⟨i, h⟩
-  by_cases h' : i < n
-  · rw [finRotate_of_lt h', Fin.snoc, Fin.cons, dif_pos h']
-    rfl
-  · have h'' : n = i := by
-      simp only [not_lt] at h'
-      exact (Nat.eq_of_le_of_lt_succ h' h).symm
-    subst h''
-    rw [finRotate_last']; rw [Fin.snoc]; rw [Fin.cons]; rw [dif_neg (lt_irrefl _)]
-    rfl
-
-@[simp]
-
-中文:
-定理 有限集.snoc_eq_cons_rotate
-  条件: {α : 类型} (v : 有限集 n -> α) (a : α)
-  证明: by
-  ext ⟨i, h⟩
-  by_cases h' : i < n
-  · rw [finRotate_of_lt h', Fin.snoc, Fin.cons, dif_pos h']
-    rfl
-  · have h'' : n = i := by
-      simp only [not_lt] at h'
-      exact (Nat.eq_of_le_of_lt_succ h' h).symm
-    subst h''
-    rw [finRotate_last']; rw [Fin.snoc]; rw [Fin.cons]; rw [dif_neg (lt_irrefl _)]
-    rfl
-
-@[simp]
-
-Depends on / 依赖: Fin.cons, Fin.snoc, Nat.eq_of_le_of_lt_succ, dif_neg, dif_pos, eq_of_le_of_lt_succ, finRotate_last, finRotate_of_lt, lt_irrefl, not_lt
+/-
+**Fin.snoc_eq_cons_rotate** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Fin.snoc_eq_cons_rotate {α : Type*} (v : Fin n -> α) (a : α) : @Fin.snoc _
+ (fun _ => α) v a = fun i => @Fin.cons _ (fun _ => α) a v (finRotate _ i)
+参数：v : Fin n -> α；a : α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Nat.succ_lt_succ`：∀ {n m : ℕ}, n < m → n.succ < m.succ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Nat.le_succ`：∀ (n : ℕ), n ≤ n.succ
+· 使用定理 `finRotate_of_lt`：finRotate_of_lt {k : Nat} (h : k < n) : finRotate (n + 
+1) ⟨k, h.trans_le n.le_succ⟩ = ⟨k + 1, Nat.succ_lt_succ h⟩
+· 使用定理 `Fin.snoc.eq_1`：∀ {n : ℕ} {α : Fin (n + 1) → Sort u_1} (p : (i : Fin n) →
+ α i.castSucc) (x : α (Fin.last n)) (i : Fin (n + 1)),   Fin.snoc p x i = if h :
+ ↑i…
+· 使用定理 `Fin.cons.eq_1`：∀ {n : ℕ} {α : Fin (n + 1) → Sort u} (x : α 0) (p : (i : 
+Fin n) → α i.succ) (j : Fin (n + 1)),   Fin.cons x p j = Fin.cases x p j
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.eq_of_le_of_lt_succ`：∀ {n m : ℕ}, n ≤ m → m < n + 1 → m = n
+· 使用定理 `Nat.zero_lt_succ`：∀ (n : ℕ), 0 < n.succ
+· 使用定理 `finRotate_last'`：finRotate_last' : finRotate (n + 1) ⟨n, by lia⟩ = ⟨0, N
+at.zero_lt_succ _⟩
+· 使用引理 `lt_irrefl`：lt_irrefl (a : α) : ¬a < a
+· 使用定理 `dif_neg`：∀ {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t : c →
+ α} {e : ¬c → α}, dite c t e = e hnc
 -/
-theorem Fin.snoc_eq_cons_rotate {α : Type*} (v : Fin n -> α) (a : α) :
+theorem Fin.snoc_eq_cons_rotate {α : Type*} (v : Fin n → α) (a : α) :
     @Fin.snoc _ (fun _ => α) v a = fun i => @Fin.cons _ (fun _ => α) a v (finRotate _ i) := by
   ext ⟨i, h⟩
   by_cases h' : i < n
@@ -193,71 +170,57 @@ theorem Fin.snoc_eq_cons_rotate {α : Type*} (v : Fin n -> α) (a : α) :
       simp only [not_lt] at h'
       exact (Nat.eq_of_le_of_lt_succ h' h).symm
     subst h''
-    rw [finRotate_last']; rw [Fin.snoc]; rw [Fin.cons]; rw [dif_neg (lt_irrefl _)]
+    rw [finRotate_last', Fin.snoc, Fin.cons, dif_neg (lt_irrefl _)]
     rfl
 
 @[simp]
-/--
-theorem `finRotate_one` / 定理 `finRotate_one`
-
-English:
-theorem finRotate_one
-  statement: finRotate 1 = Equiv.refl _
-  proof: Subsingleton.elim _ _
-
-@[simp]
-
-中文:
-定理 finRotate_one
-  结论: finRotate 1 = 等价.refl _
-  证明: Subsingleton.elim _ _
-
-@[simp]
-
-Depends on / 依赖: Subsingleton, Subsingleton.elim
+/-
+**finRotate_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finRotate_one : finRotate 1 = Equiv.refl _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Fin.subsingleton_one`：Subsingleton (Fin 1)
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 -/
 theorem finRotate_one : finRotate 1 = Equiv.refl _ :=
   Subsingleton.elim _ _
 
 @[simp]
-/--
-theorem `finRotate_apply` / 定理 `finRotate_apply`
-
-English:
-theorem finRotate_apply
-  given: (i : Fin n)
-  statement: haveI
-  proof: i.neZero; finRotate n i = i + 1 := by
-  match n with
-  | 0 => exact i.elim0
-  | 1 => exact @Subsingleton.elim (Fin 1) _ _ _
-  | n + 2 =>
-    obtain rfl | h := Fin.eq_or_lt_of_le i.le_last
-    · simp [finRotate_last]
-    · cases i
-      simp only [Fin.lt_def, Fin.val_last] at h
-      simp [finRotate_of_lt h, Fin.add_def, Nat.mod_eq_of_lt (Nat.succ_lt_succ h)]
-
-@[deprecated finRotate_apply (since := "2026-03-29")]
-
-中文:
-定理 finRotate_apply
-  条件: (i : 有限集 n)
-  结论: haveI
-  证明: i.neZero; finRotate n i = i + 1 := by
-  match n with
-  | 0 => exact i.elim0
-  | 1 => exact @Subsingleton.elim (Fin 1) _ _ _
-  | n + 2 =>
-    obtain rfl | h := Fin.eq_or_lt_of_le i.le_last
-    · simp [finRotate_last]
-    · cases i
-      simp only [Fin.lt_def, Fin.val_last] at h
-      simp [finRotate_of_lt h, Fin.add_def, Nat.mod_eq_of_lt (Nat.succ_lt_succ h)]
-
-@[deprecated finRotate_apply (since := "2026-03-29")]
-
-Depends on / 依赖: Fin.add_def, Fin.eq_or_lt_of_le, Fin.lt_def, Fin.val_last, Nat.mod_eq_of_lt, Nat.succ_lt_succ, Subsingleton, Subsingleton.elim, add_def, eq_or_lt_of_le, finRotate, finRotate_last, finRotate_of_lt, i.elim0, i.le_last, i.neZero, le_last, lt_def, mod_eq_of_lt, neZero
+/-
+**finRotate_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finRotate_apply (i : Fin n) : haveI
+参数：i : Fin n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Fin.neZero`：neZero {n : Nat} (i : Fin n) : NeZero n
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Fin.subsingleton_one`：Subsingleton (Fin 1)
+· 使用定理 `Fin.eq_or_lt_of_le`：∀ {n : ℕ} {a b : Fin n}, a ≤ b → a = b ∨ a < b
+· 使用定理 `Fin.le_last`：∀ {n : ℕ} (i : Fin (n + 1)), i ≤ Fin.last n
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `finRotate_last`：finRotate_last : finRotate (n + 1) (Fin.last _) = 0
+· 使用定理 `Fin.last_add_one`：∀ (n : ℕ), Fin.last n + 1 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Nat.succ_lt_succ`：∀ {n m : ℕ}, n < m → n.succ < m.succ
+· 使用定理 `Nat.mod_lt`：∀ (x : ℕ) {y : ℕ}, 0 < y → x % y < y
+· 使用定理 `Fin.pos`：∀ {n : ℕ} (i : Fin n), 0 < n
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.one_mod`：∀ (n : ℕ), 1 % (n + 2) = 1
+· 使用定理 `Nat.mod_eq_of_lt`：∀ {a b : ℕ}, a < b → a % b = a
+· 使用定理 `finRotate_of_lt`：finRotate_of_lt {k : Nat} (h : k < n) : finRotate (n + 
+1) ⟨k, h.trans_le n.le_succ⟩ = ⟨k + 1, Nat.succ_lt_succ h⟩
+· 使用定理 `Fin.mk.congr_simp`：∀ {n : ℕ} (val val_1 : ℕ) (e_val : val = val_1) (isLt
+ : val < n), ⟨val, isLt⟩ = ⟨val_1, ⋯⟩
 -/
 theorem finRotate_apply (i : Fin n) : haveI := i.neZero; finRotate n i = i + 1 := by
   match n with
@@ -271,305 +234,285 @@ theorem finRotate_apply (i : Fin n) : haveI := i.neZero; finRotate n i = i + 1 :
       simp [finRotate_of_lt h, Fin.add_def, Nat.mod_eq_of_lt (Nat.succ_lt_succ h)]
 
 @[deprecated finRotate_apply (since := "2026-03-29")]
-/--
-theorem `finRotate_succ_apply` / 定理 `finRotate_succ_apply`
-
-English:
-theorem finRotate_succ_apply
-  given: (i : Fin (n + 1))
-  statement: finRotate (n + 1) i = i + 1
-  proof: by
-  simp
-
-中文:
-定理 finRotate_succ_apply
-  条件: (i : 有限集 (n + 1))
-  结论: finRotate (n + 1) i = i + 1
-  证明: by
-  simp
+/-
+**finRotate_succ_apply** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finRotate_succ_apply (i : Fin (n + 1)) : finRotate (n + 1) i = i + 1
+参数：i : Fin (n + 1)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Fin.neZero`：neZero {n : Nat} (i : Fin n) : NeZero n
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `finRotate_apply`：finRotate_apply (i : Fin n) : haveI
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem finRotate_succ_apply (i : Fin (n + 1)) : finRotate (n + 1) i = i + 1 := by
   simp
-
-/--
-theorem `finRotate_apply_zero` / 定理 `finRotate_apply_zero`
-
-English:
-theorem finRotate_apply_zero
-  statement: finRotate n.succ 0 = 1
-  proof: by
-  simp
-
-中文:
-定理 finRotate_apply_zero
-  结论: finRotate n.succ 0 = 1
-  证明: by
-  simp
+/-
+**finRotate_apply_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finRotate_apply_zero : finRotate n.succ 0 = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Fin.neZero`：neZero {n : Nat} (i : Fin n) : NeZero n
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `finRotate_apply`：finRotate_apply (i : Fin n) : haveI
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem finRotate_apply_zero : finRotate n.succ 0 = 1 := by
   simp
-
-/--
-theorem `coe_finRotate_of_ne_last` / 定理 `coe_finRotate_of_ne_last`
-
-English:
-theorem coe_finRotate_of_ne_last
-  given: {i : Fin n.succ} (h : i != Fin.last n)
-  proof: by
-  rw [finRotate_apply]
-  have : (i : Nat) < n := Fin.val_lt_last h
-  exact Fin.val_add_one_of_lt this
-
-中文:
-定理 coe_finRotate_of_ne_last
-  条件: {i : 有限集 n.succ} (h : i != 有限集.last n)
-  证明: by
-  rw [finRotate_apply]
-  have : (i : Nat) < n := Fin.val_lt_last h
-  exact Fin.val_add_one_of_lt this
-
-Depends on / 依赖: Fin.val_add_one_of_lt, Fin.val_lt_last, finRotate_apply, val_add_one_of_lt, val_lt_last
+/-
+**coe_finRotate_of_ne_last** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：coe_finRotate_of_ne_last {i : Fin n.succ} (h : i != Fin.last n) : (finRota
+te (n + 1) i : Nat) = i + 1
+参数：h : i != Fin.last n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Fin.neZero`：neZero {n : Nat} (i : Fin n) : NeZero n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `finRotate_apply`：finRotate_apply (i : Fin n) : haveI
+· 使用定理 `Fin.val_lt_last`：∀ {n : ℕ} {i : Fin (n + 1)}, i ≠ Fin.last n → ↑i < n
+· 使用定理 `Fin.val_add_one_of_lt`：∀ {n : ℕ} {i : Fin n.succ}, i < Fin.last n → ↑(i 
++ 1) = ↑i + 1
 -/
-theorem coe_finRotate_of_ne_last {i : Fin n.succ} (h : i != Fin.last n) :
-    (finRotate (n + 1) i : Nat) = i + 1 := by
+theorem coe_finRotate_of_ne_last {i : Fin n.succ} (h : i ≠ Fin.last n) :
+    (finRotate (n + 1) i : ℕ) = i + 1 := by
   rw [finRotate_apply]
-  have : (i : Nat) < n := Fin.val_lt_last h
+  have : (i : ℕ) < n := Fin.val_lt_last h
   exact Fin.val_add_one_of_lt this
-
-/--
-theorem `coe_finRotate` / 定理 `coe_finRotate`
-
-English:
-theorem coe_finRotate
-  given: (i : Fin n.succ)
-  proof: by
-  rw [finRotate_apply]; rw [Fin.val_add_one i]
-
-中文:
-定理 coe_finRotate
-  条件: (i : 有限集 n.succ)
-  证明: by
-  rw [finRotate_apply]; rw [Fin.val_add_one i]
-
-Depends on / 依赖: Fin.val_add_one, finRotate_apply, val_add_one
+/-
+**coe_finRotate** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：coe_finRotate (i : Fin n.succ) : (finRotate n.succ i : Nat) = if i = Fin.l
+ast n then (0 : Nat) else i + 1
+参数：i : Fin n.succ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Fin.neZero`：neZero {n : Nat} (i : Fin n) : NeZero n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `finRotate_apply`：finRotate_apply (i : Fin n) : haveI
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Fin.val_add_one`：∀ {n : ℕ} (i : Fin (n + 1)), ↑(i + 1) = if i = Fin.last
+ n then 0 else ↑i + 1
 -/
 theorem coe_finRotate (i : Fin n.succ) :
-    (finRotate n.succ i : Nat) = if i = Fin.last n then (0 : Nat) else i + 1 := by
-  rw [finRotate_apply]; rw [Fin.val_add_one i]
-
-/--
-theorem `lt_finRotate_iff_ne_last` / 定理 `lt_finRotate_iff_ne_last`
-
-English:
-theorem lt_finRotate_iff_ne_last
-  given: (i : Fin (n + 1))
-  proof: by
-  simpa using Fin.lt_last_iff_ne_last
-
-中文:
-定理 lt_finRotate_iff_ne_last
-  条件: (i : 有限集 (n + 1))
-  证明: by
-  simpa using Fin.lt_last_iff_ne_last
-
-Depends on / 依赖: Fin.lt_last_iff_ne_last, lt_last_iff_ne_last
+    (finRotate n.succ i : ℕ) = if i = Fin.last n then (0 : ℕ) else i + 1 := by
+  rw [finRotate_apply, Fin.val_add_one i]
+/-
+**lt_finRotate_iff_ne_last** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lt_finRotate_iff_ne_last (i : Fin (n + 1)) : i < finRotate _ i ↔ i != Fin.
+last n
+参数：i : Fin (n + 1)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Fin.neZero`：neZero {n : Nat} (i : Fin n) : NeZero n
+· 使用定理 `finRotate_apply`：finRotate_apply (i : Fin n) : haveI
+· 使用引理 `Fin.lt_last_iff_ne_last`：lt_last_iff_ne_last {a : Fin (n + 1)} : a < las
+t n ↔ a != last n
 -/
 theorem lt_finRotate_iff_ne_last (i : Fin (n + 1)) :
-    i < finRotate _ i ↔ i != Fin.last n := by
+    i < finRotate _ i ↔ i ≠ Fin.last n := by
   simpa using Fin.lt_last_iff_ne_last
-
-/--
-theorem `lt_finRotate_iff_ne_neg_one` / 定理 `lt_finRotate_iff_ne_neg_one`
-
-English:
-theorem lt_finRotate_iff_ne_neg_one
-  given: [NeZero n] (i : Fin n)
-  proof: by
-  obtain ⟨n, rfl⟩ := exists_eq_succ_of_ne_zero (NeZero.ne n)
-  rw [lt_finRotate_iff_ne_last]; rw [ne_eq]; rw [not_iff_not]; rw [← Fin.neg_last]; rw [neg_neg]
-
-@[simp]
-
-中文:
-定理 lt_finRotate_iff_ne_neg_one
-  条件: [NeZero n] (i : 有限集 n)
-  证明: by
-  obtain ⟨n, rfl⟩ := exists_eq_succ_of_ne_zero (NeZero.ne n)
-  rw [lt_finRotate_iff_ne_last]; rw [ne_eq]; rw [not_iff_not]; rw [← Fin.neg_last]; rw [neg_neg]
-
-@[simp]
-
-Depends on / 依赖: Fin.neg_last, NeZero, NeZero.ne, exists_eq_succ_of_ne_zero, lt_finRotate_iff_ne_last, ne_eq, neg_last, neg_neg, not_iff_not
+/-
+**lt_finRotate_iff_ne_neg_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：lt_finRotate_iff_ne_neg_one [NeZero n] (i : Fin n) : i < finRotate _ i ↔ i
+ != -1
+参数：i : Fin n。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.exists_eq_succ_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → ∃ k, n = k.succ
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `lt_finRotate_iff_ne_last`：lt_finRotate_iff_ne_last (i : Fin (n + 1)) : i
+ < finRotate _ i ↔ i != Fin.last n
+· 使用定理 `ne_eq`：∀ {α : Sort u_1} (a b : α), (a ≠ b) = ¬a = b
+· 使用定理 `not_iff_not`：not_iff_not : (¬a ↔ ¬b) ↔ (a ↔ b)
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Fin.neg_last`：∀ (n : ℕ), -Fin.last n = 1
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem lt_finRotate_iff_ne_neg_one [NeZero n] (i : Fin n) :
-    i < finRotate _ i ↔ i != -1 := by
+    i < finRotate _ i ↔ i ≠ -1 := by
   obtain ⟨n, rfl⟩ := exists_eq_succ_of_ne_zero (NeZero.ne n)
-  rw [lt_finRotate_iff_ne_last]; rw [ne_eq]; rw [not_iff_not]; rw [← Fin.neg_last]; rw [neg_neg]
+  rw [lt_finRotate_iff_ne_last, ne_eq, not_iff_not, ← Fin.neg_last, neg_neg]
 
 @[simp]
-/--
-lemma `finRotate_symm_apply` / 引理 `finRotate_symm_apply`
-
-English:
-lemma finRotate_symm_apply
-  given: (i : Fin n)
-  statement: haveI
-  proof: i.neZero; (finRotate _).symm i = i - 1 := by
-  obtain ⟨n, rfl⟩ := exists_eq_succ_of_ne_zero i.pos.ne'
-  apply (finRotate n.succ).symm_apply_eq.mpr
-  rw [finRotate_apply]; rw [sub_add_cancel]
-
-@[deprecated finRotate_symm_apply (since := "2026-03-29")]
-
-中文:
-引理 finRotate_symm_apply
-  条件: (i : 有限集 n)
-  结论: haveI
-  证明: i.neZero; (finRotate _).symm i = i - 1 := by
-  obtain ⟨n, rfl⟩ := exists_eq_succ_of_ne_zero i.pos.ne'
-  apply (finRotate n.succ).symm_apply_eq.mpr
-  rw [finRotate_apply]; rw [sub_add_cancel]
-
-@[deprecated finRotate_symm_apply (since := "2026-03-29")]
-
-Depends on / 依赖: exists_eq_succ_of_ne_zero, finRotate, finRotate_apply, i.neZero, i.pos.ne, n.succ, neZero, sub_add_cancel, symm_apply_eq, symm_apply_eq.mpr
+/-
+**finRotate_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：finRotate_symm_apply (i : Fin n) : haveI
+参数：i : Fin n。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用引理 `Fin.neZero`：neZero {n : Nat} (i : Fin n) : NeZero n
+· 使用定理 `Nat.exists_eq_succ_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → ∃ k, n = k.succ
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Fin.pos`：∀ {n : ℕ} (i : Fin n), 0 < n
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Equiv.symm_apply_eq`：symm_apply_eq {α β} (e : α ≃ β) {x y} : e.symm x = 
+y ↔ x = e y
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `finRotate_apply`：finRotate_apply (i : Fin n) : haveI
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma finRotate_symm_apply (i : Fin n) : haveI := i.neZero; (finRotate _).symm i = i - 1 := by
   obtain ⟨n, rfl⟩ := exists_eq_succ_of_ne_zero i.pos.ne'
   apply (finRotate n.succ).symm_apply_eq.mpr
-  rw [finRotate_apply]; rw [sub_add_cancel]
+  rw [finRotate_apply, sub_add_cancel]
 
 @[deprecated finRotate_symm_apply (since := "2026-03-29")]
-/--
-lemma `finRotate_succ_symm_apply` / 引理 `finRotate_succ_symm_apply`
-
-English:
-lemma finRotate_succ_symm_apply
-  given: [NeZero n] (i : Fin n)
-  statement: (finRotate _).symm i = i - 1
-  proof: by
-  simp
-
-中文:
-引理 finRotate_succ_symm_apply
-  条件: [NeZero n] (i : 有限集 n)
-  结论: (finRotate _).symm i = i - 1
-  证明: by
-  simp
+/-
+**finRotate_succ_symm_apply** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：finRotate_succ_symm_apply [NeZero n] (i : Fin n) : (finRotate _).symm i = 
+i - 1
+参数：i : Fin n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Fin.neZero`：neZero {n : Nat} (i : Fin n) : NeZero n
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `finRotate_symm_apply`：finRotate_symm_apply (i : Fin n) : haveI
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma finRotate_succ_symm_apply [NeZero n] (i : Fin n) : (finRotate _).symm i = i - 1 := by
   simp
-
-/--
-lemma `coe_finRotate_symm_of_ne_zero` / 引理 `coe_finRotate_symm_of_ne_zero`
-
-English:
-lemma coe_finRotate_symm_of_ne_zero
-  given: [NeZero n] {i : Fin n} (hi : i != 0)
-  proof: by
-  rwa [finRotate_symm_apply, Fin.val_sub_one_of_ne_zero]
-
-中文:
-引理 coe_finRotate_symm_of_ne_zero
-  条件: [NeZero n] {i : 有限集 n} (hi : i != 0)
-  证明: by
-  rwa [finRotate_symm_apply, Fin.val_sub_one_of_ne_zero]
-
-Depends on / 依赖: Fin.val_sub_one_of_ne_zero, finRotate_symm_apply, val_sub_one_of_ne_zero
+/-
+**coe_finRotate_symm_of_ne_zero** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：coe_finRotate_symm_of_ne_zero [NeZero n] {i : Fin n} (hi : i != 0) : ((fin
+Rotate _).symm i : Nat) = i - 1
+参数：hi : i != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用引理 `Fin.neZero`：neZero {n : Nat} (i : Fin n) : NeZero n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `finRotate_symm_apply`：finRotate_symm_apply (i : Fin n) : haveI
+· 使用引理 `Fin.val_sub_one_of_ne_zero`：val_sub_one_of_ne_zero {i : Fin n} : haveI
 -/
-lemma coe_finRotate_symm_of_ne_zero [NeZero n] {i : Fin n} (hi : i != 0) :
-    ((finRotate _).symm i : Nat) = i - 1 := by
+lemma coe_finRotate_symm_of_ne_zero [NeZero n] {i : Fin n} (hi : i ≠ 0) :
+    ((finRotate _).symm i : ℕ) = i - 1 := by
   rwa [finRotate_symm_apply, Fin.val_sub_one_of_ne_zero]
-
-/--
-theorem `finRotate_symm_lt_iff_ne_zero` / 定理 `finRotate_symm_lt_iff_ne_zero`
-
-English:
-theorem finRotate_symm_lt_iff_ne_zero
-  given: [NeZero n] (i : Fin n)
-  proof: by
-  obtain ⟨n, rfl⟩ := exists_eq_succ_of_ne_zero (NeZero.ne n)
-  refine ⟨ne_zero_of_lt, fun hi => ?_⟩
-  rw [Fin.lt_def]; rw [coe_finRotate_symm_of_ne_zero hi]
-  exact sub_lt (zero_lt_of_ne_zero <| Fin.val_ne_zero_iff.mpr hi) zero_lt_one
-
-中文:
-定理 finRotate_symm_lt_iff_ne_zero
-  条件: [NeZero n] (i : 有限集 n)
-  证明: by
-  obtain ⟨n, rfl⟩ := exists_eq_succ_of_ne_zero (NeZero.ne n)
-  refine ⟨ne_zero_of_lt, fun hi => ?_⟩
-  rw [Fin.lt_def]; rw [coe_finRotate_symm_of_ne_zero hi]
-  exact sub_lt (zero_lt_of_ne_zero <| Fin.val_ne_zero_iff.mpr hi) zero_lt_one
-
-Depends on / 依赖: Fin.lt_def, Fin.val_ne_zero_iff.mpr, NeZero, NeZero.ne, coe_finRotate_symm_of_ne_zero, exists_eq_succ_of_ne_zero, lt_def, ne_zero_of_lt, sub_lt, val_ne_zero_iff, zero_lt_of_ne_zero, zero_lt_one
+/-
+**finRotate_symm_lt_iff_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：finRotate_symm_lt_iff_ne_zero [NeZero n] (i : Fin n) : (finRotate _).symm 
+i < i ↔ i != 0
+参数：i : Fin n。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Nat.exists_eq_succ_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → ∃ k, n = k.succ
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
+· 使用定理 `ne_zero_of_lt`：∀ {α : Type u_1} {a b : α} [inst : Preorder α] [inst_1 : 
+Zero α] [IsBotZeroClass α], a < b → b ≠ 0
+· 使用定理 `Fin.instIsBotZeroClass`：∀ {n : ℕ} [inst : NeZero n], IsBotZeroClass (Fin
+ n)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fin.lt_def`：∀ {n : ℕ} {a b : Fin n}, a < b ↔ ↑a < ↑b
+· 使用引理 `coe_finRotate_symm_of_ne_zero`：coe_finRotate_symm_of_ne_zero [NeZero n] 
+{i : Fin n} (hi : i != 0) : ((finRotate _).symm i : Nat) = i - 1
+· 使用定理 `Nat.sub_lt`：∀ {n m : ℕ}, 0 < n → 0 < m → n - m < n
+· 使用定理 `Nat.zero_lt_of_ne_zero`：∀ {a : ℕ}, a ≠ 0 → 0 < a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Fin.val_ne_zero_iff`：∀ {n : ℕ} [inst : NeZero n] {a : Fin n}, ↑a ≠ 0 ↔ a
+ ≠ 0
+· 使用定理 `zero_lt_one`：∀ {α : Type u_1} [inst : Zero α] [inst_1 : One α] [inst_2 :
+ PartialOrder α] [ZeroLEOneClass α] [NeZero 1], 0 < 1
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem finRotate_symm_lt_iff_ne_zero [NeZero n] (i : Fin n) :
-    (finRotate _).symm i < i ↔ i != 0 := by
+    (finRotate _).symm i < i ↔ i ≠ 0 := by
   obtain ⟨n, rfl⟩ := exists_eq_succ_of_ne_zero (NeZero.ne n)
-  refine ⟨ne_zero_of_lt, fun hi => ?_⟩
-  rw [Fin.lt_def]; rw [coe_finRotate_symm_of_ne_zero hi]
+  refine ⟨ne_zero_of_lt, fun hi ↦ ?_⟩
+  rw [Fin.lt_def, coe_finRotate_symm_of_ne_zero hi]
   exact sub_lt (zero_lt_of_ne_zero <| Fin.val_ne_zero_iff.mpr hi) zero_lt_one
 
 /-- The permutation on `Fin n` that adds `k` to each number. -/
 @[simps]
-/--
-Definition of `finCycle` / `finCycle` 的定义
+/-
+**finCycle** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：finCycle (k : Fin n) : Equiv.Perm (Fin n) where toFun i
+参数：k : Fin n。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition finCycle
-  signature: (k : Fin n)
-  body: i + k
-  invFun i := i - k
-  left_inv i := by have := NeZero.of_pos k.pos; simp
-  right_inv i := by have := NeZero.of_pos k.pos; simp
-
-中文:
-定义 finCycle
-  签名: (k : 有限集 n)
-  定义体: i + k
-  invFun i := i - k
-  left_inv i := by have := NeZero.of_pos k.pos; simp
-  right_inv i := by have := NeZero.of_pos k.pos; simp
+--- 原说明 ---
+The permutation on `Fin n` that adds `k` to each number.
 -/
 def finCycle (k : Fin n) : Equiv.Perm (Fin n) where
   toFun i := i + k
   invFun i := i - k
   left_inv i := by have := NeZero.of_pos k.pos; simp
   right_inv i := by have := NeZero.of_pos k.pos; simp
-
-/--
-lemma `finCycle_eq_finRotate_iterate` / 引理 `finCycle_eq_finRotate_iterate`
-
-English:
-lemma finCycle_eq_finRotate_iterate
-  given: {k : Fin n}
-  statement: finCycle k = (finRotate n)^[k.1]
-  proof: by
-  match n with
-  | 0 => exact k.elim0
-  | n + 1 =>
-    ext i; induction k using Fin.induction with
-    | zero => simp
-    | succ k ih =>
-      rw [Fin.val_eq_val]; rw [Fin.val_castSucc] at ih
-      rw [Fin.val_succ]; rw [Function.iterate_succ']; rw [Function.comp_apply]; rw [← ih]; rw [finRotate_apply]; rw [finCycle_apply]; rw [finCycle_apply]; rw [add_assoc]; rw [Fin.coeSucc_eq_succ]
-
-中文:
-引理 finCycle_eq_finRotate_iterate
-  条件: {k : 有限集 n}
-  结论: finCycle k = (finRotate n)^[k.1]
-  证明: by
-  match n with
-  | 0 => exact k.elim0
-  | n + 1 =>
-    ext i; induction k using Fin.induction with
-    | zero => simp
-    | succ k ih =>
-      rw [Fin.val_eq_val]; rw [Fin.val_castSucc] at ih
-      rw [Fin.val_succ]; rw [Function.iterate_succ']; rw [Function.comp_apply]; rw [← ih]; rw [finRotate_apply]; rw [finCycle_apply]; rw [finCycle_apply]; rw [add_assoc]; rw [Fin.coeSucc_eq_succ]
-
-Depends on / 依赖: Fin.coeSucc_eq_succ, Fin.induction, Fin.val_castSucc, Fin.val_eq_val, Fin.val_succ, Function, Function.comp_apply, Function.iterate_succ, add_assoc, coeSucc_eq_succ, comp_apply, finCycle_apply, finRotate_apply, iterate_succ, k.elim0, val_castSucc, val_eq_val, val_succ
+/-
+**finCycle_eq_finRotate_iterate** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：finCycle_eq_finRotate_iterate {k : Fin n} : finCycle k = (finRotate n)^[k.
+1]
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Fin.ext`：∀ {n : ℕ} {a b : Fin n}, ↑a = ↑b → a = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `finCycle_apply`：∀ {n : ℕ} (k i : Fin n), (finCycle k) i = i + k
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Fin.val_succ`：∀ {n : ℕ} (j : Fin n), ↑j.succ = ↑j + 1
+· 使用定理 `Function.iterate_succ'`：iterate_succ' (n : Nat) : f^[n.succ] = f ∘ f^[n]
+· 使用定理 `Function.comp_apply`：∀ {β : Sort u_1} {δ : Sort u_2} {α : Sort u_3} {f :
+ β → δ} {g : α → β} {x : α}, (f ∘ g) x = f (g x)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Fin.val_castSucc`：∀ {n : ℕ} (i : Fin n), ↑i.castSucc = ↑i
+· 使用定理 `Fin.val_eq_val`：val_eq_val (a b : Fin n) : (a : Nat) = b ↔ a = b
+· 使用引理 `Fin.neZero`：neZero {n : Nat} (i : Fin n) : NeZero n
+· 使用定理 `finRotate_apply`：finRotate_apply (i : Fin n) : haveI
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `Fin.coeSucc_eq_succ`：∀ {n : ℕ} {a : Fin n}, a.castSucc + 1 = a.succ
 -/
 lemma finCycle_eq_finRotate_iterate {k : Fin n} : finCycle k = (finRotate n)^[k.1] := by
   match n with
@@ -578,5 +521,6 @@ lemma finCycle_eq_finRotate_iterate {k : Fin n} : finCycle k = (finRotate n)^[k.
     ext i; induction k using Fin.induction with
     | zero => simp
     | succ k ih =>
-      rw [Fin.val_eq_val]; rw [Fin.val_castSucc] at ih
-      rw [Fin.val_succ]; rw [Function.iterate_succ']; rw [Function.comp_apply]; rw [← ih]; rw [finRotate_apply]; rw [finCycle_apply]; rw [finCycle_apply]; rw [add_assoc]; rw [Fin.coeSucc_eq_succ]
+      rw [Fin.val_eq_val, Fin.val_castSucc] at ih
+      rw [Fin.val_succ, Function.iterate_succ', Function.comp_apply, ← ih, finRotate_apply,
+        finCycle_apply, finCycle_apply, add_assoc, Fin.coeSucc_eq_succ]

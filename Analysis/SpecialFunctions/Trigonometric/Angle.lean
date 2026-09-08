@@ -27,22 +27,15 @@ noncomputable section
 
 namespace Real
 
-/--
-Definition of `Angle` / `Angle` 的定义
+/-- The type of angles -/
+/-
+**Real.Angle** 是 Mathlib 中的一个定义，位于命名空间 `Real`。
+形式化陈述：Angle : Type
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Angle
-  signature: : Type
-  body: AddCircle (2 * π)
-deriving NormedAddCommGroup, Inhabited
-
-中文:
-定义 Angle
-  签名: : 类型
-  定义体: AddCircle (2 * π)
-deriving NormedAddCommGroup, Inhabited
-
-Depends on / 依赖: AddCircle
+--- 原说明 ---
+The type of angles
 -/
 def Angle : Type :=
   AddCircle (2 * π)
@@ -52,1471 +45,1173 @@ namespace Angle
 
 /-- The canonical map from `ℝ` to the quotient `Angle`. -/
 @[coe]
-/--
-Definition of `coe` / `coe` 的定义
+/-
+**Real.Angle.coe** 是 Mathlib 中的一个定义，位于命名空间 `Real.Angle`。
+形式化陈述：ℝ → Real.Angle
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coe
-  signature: (r : Real)
-  body: QuotientAddGroup.mk r
-
-中文:
-定义 coe
-  签名: (r : 实数)
-  定义体: QuotientAddGroup.mk r
+--- 原说明 ---
+The canonical map from `ℝ` to the quotient `Angle`.
 -/
-protected def coe (r : Real) : Angle := QuotientAddGroup.mk r
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Coe Real Angle
-  body: ⟨Angle.coe⟩
-
-中文:
-实例 :
-  签名: Coe 实数 Angle
-  定义体: ⟨Angle.coe⟩
-
-Depends on / 依赖: Angle.coe
+protected def coe (r : ℝ) : Angle := QuotientAddGroup.mk r
+/-
+**Real.Angle.** 是 Mathlib 中的一个实例，位于命名空间 `Real.Angle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : Coe Real Angle := ⟨Angle.coe⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CircularOrder Real.Angle
-  body: fast_instance% QuotientAddGroup.circularOrder (hp' := ⟨by simp [pi_pos]⟩)
-
-@[continuity, fun_prop]
-
-中文:
-实例 :
-  签名: Circular序 实数.Angle
-  定义体: fast_instance% QuotientAddGroup.circularOrder (hp' := ⟨by simp [pi_pos]⟩)
-
-@[continuity, fun_prop]
-
-Depends on / 依赖: QuotientAddGroup, QuotientAddGroup.circularOrder, circularOrder, fast_instance, pi_pos
+instance : Coe ℝ Angle := ⟨Angle.coe⟩
+/-
+**Real.Angle.** 是 Mathlib 中的一个实例，位于命名空间 `Real.Angle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CircularOrder Real.Angle :=
   fast_instance% QuotientAddGroup.circularOrder (hp' := ⟨by simp [pi_pos]⟩)
 
 @[continuity, fun_prop]
-/--
-theorem `continuous_coe` / 定理 `continuous_coe`
-
-English:
-theorem continuous_coe
-  statement: Continuous ((↑) : Real -> Angle)
-  proof: continuous_quotient_mk'
-
-中文:
-定理 continuous_coe
-  结论: 连续 ((↑) : 实数 -> Angle)
-  证明: continuous_quotient_mk'
-
-Depends on / 依赖: continuous_quotient_mk
+/-
+**Real.Angle.continuous_coe** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：continuous_coe : Continuous ((↑) : Real -> Angle)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_quotient_mk'`：continuous_quotient_mk' : Continuous (@Quotient
+.mk' X s)
 -/
-theorem continuous_coe : Continuous ((↑) : Real -> Angle) :=
+theorem continuous_coe : Continuous ((↑) : ℝ → Angle) :=
   continuous_quotient_mk'
 
-/--
-Definition of `coeHom` / `coeHom` 的定义
+/-- Coercion `ℝ → Angle` as an additive homomorphism. -/
+/-
+**Real.Angle.coeHom** 是 Mathlib 中的一个定义，位于命名空间 `Real.Angle`。
+形式化陈述：coeHom : Real ->+ Angle
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition coeHom
-  signature: : Real ->+ Angle
-  body: QuotientAddGroup.mk' _
-
-@[simp]
-
-中文:
-定义 coeHom
-  签名: : 实数 ->+ Angle
-  定义体: QuotientAddGroup.mk' _
-
-@[simp]
-
-Depends on / 依赖: QuotientAddGroup, QuotientAddGroup.mk
+--- 原说明 ---
+Coercion `ℝ → Angle` as an additive homomorphism.
 -/
-def coeHom : Real ->+ Angle :=
+def coeHom : ℝ →+ Angle :=
   QuotientAddGroup.mk' _
 
 @[simp]
-/--
-theorem `coe_coeHom` / 定理 `coe_coeHom`
-
-English:
-theorem coe_coeHom
-  statement: (coeHom : Real -> Angle) = ((↑) : Real -> Angle)
-  proof: rfl
-
-中文:
-定理 coe_coeHom
-  结论: (coeHom : 实数 -> Angle) = ((↑) : 实数 -> Angle)
-  证明: rfl
+/-
+**Real.Angle.coe_coeHom** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：coe_coeHom : (coeHom : Real -> Angle) = ((↑) : Real -> Angle)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_coeHom : (coeHom : Real -> Angle) = ((↑) : Real -> Angle) :=
+theorem coe_coeHom : (coeHom : ℝ → Angle) = ((↑) : ℝ → Angle) :=
   rfl
 
 /-- An induction principle to deduce results for `Angle` from those for `ℝ`, used with
 `induction θ using Real.Angle.induction_on`. -/
 @[elab_as_elim]
-/--
-theorem `induction_on` / 定理 `induction_on`
+/-
+**Real.Angle.induction_on** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：∀ {p : Real.Angle → Prop} (θ : Real.Angle), (∀ (x : ℝ), p ↑x) → p θ
+参数：θ : Real.Angle；∀ (x : ℝ), p ↑x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn'`：∀ {α : Sort u_1} {s₁ : Setoid α} {p : Quotient s₁
+ → Prop} (q : Quotient s₁), (∀ (a : α), p (Quotient.mk'' a)) → p q
 
-English:
-theorem induction_on
-  given: {p : Angle -> Prop} (θ : Angle) (h : forall x : Real, p x)
-  statement: p θ
-  proof: Quotient.inductionOn' θ h
-
-@[simp]
-
-中文:
-定理 induction_on
-  条件: {p : Angle -> 命题} (θ : Angle) (h : 对任意 x : 实数, p x)
-  结论: p θ
-  证明: Quotient.inductionOn' θ h
-
-@[simp]
+--- 原说明 ---
+An induction principle to deduce results for `Angle` from those for `ℝ`, used wi
+th
+`induction θ using Real.Angle.induction_on`.
 -/
-protected theorem induction_on {p : Angle -> Prop} (θ : Angle) (h : forall x : Real, p x) : p θ :=
+protected theorem induction_on {p : Angle → Prop} (θ : Angle) (h : ∀ x : ℝ, p x) : p θ :=
   Quotient.inductionOn' θ h
 
 @[simp]
-/--
-theorem `coe_zero` / 定理 `coe_zero`
-
-English:
-theorem coe_zero
-  statement: ↑(0 : Real) = (0 : Angle)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_zero
-  结论: ↑(0 : 实数) = (0 : Angle)
-  证明: rfl
-
-@[simp]
+/-
+**Real.Angle.coe_zero** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：coe_zero : ↑(0 : Real) = (0 : Angle)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_zero : ↑(0 : Real) = (0 : Angle) :=
+theorem coe_zero : ↑(0 : ℝ) = (0 : Angle) :=
   rfl
 
 @[simp]
-/--
-theorem `coe_add` / 定理 `coe_add`
-
-English:
-theorem coe_add
-  given: (x y : Real)
-  statement: ↑(x + y : Real) = (↑x + ↑y : Angle)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_add
-  条件: (x y : 实数)
-  结论: ↑(x + y : 实数) = (↑x + ↑y : Angle)
-  证明: rfl
-
-@[simp]
+/-
+**Real.Angle.coe_add** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：coe_add (x y : Real) : ↑(x + y : Real) = (↑x + ↑y : Angle)
+参数：x y : Real。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_add (x y : Real) : ↑(x + y : Real) = (↑x + ↑y : Angle) :=
+theorem coe_add (x y : ℝ) : ↑(x + y : ℝ) = (↑x + ↑y : Angle) :=
   rfl
 
 @[simp]
-/--
-theorem `coe_neg` / 定理 `coe_neg`
-
-English:
-theorem coe_neg
-  given: (x : Real)
-  statement: ↑(-x : Real) = -(↑x : Angle)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_neg
-  条件: (x : 实数)
-  结论: ↑(-x : 实数) = -(↑x : Angle)
-  证明: rfl
-
-@[simp]
+/-
+**Real.Angle.coe_neg** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：coe_neg (x : Real) : ↑(-x : Real) = -(↑x : Angle)
+参数：x : Real。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_neg (x : Real) : ↑(-x : Real) = -(↑x : Angle) :=
+theorem coe_neg (x : ℝ) : ↑(-x : ℝ) = -(↑x : Angle) :=
   rfl
 
 @[simp]
-/--
-theorem `coe_sub` / 定理 `coe_sub`
-
-English:
-theorem coe_sub
-  given: (x y : Real)
-  statement: ↑(x - y : Real) = (↑x - ↑y : Angle)
-  proof: rfl
-
-中文:
-定理 coe_sub
-  条件: (x y : 实数)
-  结论: ↑(x - y : 实数) = (↑x - ↑y : Angle)
-  证明: rfl
+/-
+**Real.Angle.coe_sub** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：coe_sub (x y : Real) : ↑(x - y : Real) = (↑x - ↑y : Angle)
+参数：x y : Real。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_sub (x y : Real) : ↑(x - y : Real) = (↑x - ↑y : Angle) :=
+theorem coe_sub (x y : ℝ) : ↑(x - y : ℝ) = (↑x - ↑y : Angle) :=
   rfl
-
-/--
-theorem `coe_nsmul` / 定理 `coe_nsmul`
-
-English:
-theorem coe_nsmul
-  given: (n : Nat) (x : Real)
-  statement: ↑(n • x : Real) = n • (↑x : Angle)
-  proof: rfl
-
-中文:
-定理 coe_nsmul
-  条件: (n : 自然数) (x : 实数)
-  结论: ↑(n • x : 实数) = n • (↑x : Angle)
-  证明: rfl
+/-
+**Real.Angle.coe_nsmul** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：coe_nsmul (n : Nat) (x : Real) : ↑(n • x : Real) = n • (↑x : Angle)
+参数：n : Nat；x : Real。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_nsmul (n : Nat) (x : Real) : ↑(n • x : Real) = n • (↑x : Angle) :=
+theorem coe_nsmul (n : ℕ) (x : ℝ) : ↑(n • x : ℝ) = n • (↑x : Angle) :=
   rfl
-
-/--
-theorem `coe_zsmul` / 定理 `coe_zsmul`
-
-English:
-theorem coe_zsmul
-  given: (z : Int) (x : Real)
-  statement: ↑(z • x : Real) = z • (↑x : Angle)
-  proof: rfl
-
-中文:
-定理 coe_zsmul
-  条件: (z : 整数) (x : 实数)
-  结论: ↑(z • x : 实数) = z • (↑x : Angle)
-  证明: rfl
+/-
+**Real.Angle.coe_zsmul** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：coe_zsmul (z : Int) (x : Real) : ↑(z • x : Real) = z • (↑x : Angle)
+参数：z : Int；x : Real。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_zsmul (z : Int) (x : Real) : ↑(z • x : Real) = z • (↑x : Angle) :=
+theorem coe_zsmul (z : ℤ) (x : ℝ) : ↑(z • x : ℝ) = z • (↑x : Angle) :=
   rfl
-
-/--
-theorem `coe_eq_zero_iff` / 定理 `coe_eq_zero_iff`
-
-English:
-theorem coe_eq_zero_iff
-  given: {x : Real}
-  statement: (x : Angle) = 0 ↔ exists n : Int, n • (2 * π) = x
-  proof: AddCircle.coe_eq_zero_iff (2 * π)
-
-@[simp, norm_cast]
-
-中文:
-定理 coe_eq_zero_iff
-  条件: {x : 实数}
-  结论: (x : Angle) = 0 ↔ 存在 n : 整数, n • (2 * π) = x
-  证明: AddCircle.coe_eq_zero_iff (2 * π)
-
-@[simp, norm_cast]
-
-Depends on / 依赖: AddCircle, AddCircle.coe_eq_zero_iff, coe_eq_zero_iff
+/-
+**Real.Angle.coe_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：coe_eq_zero_iff {x : Real} : (x : Angle) = 0 ↔ exists n : Int, n • (2 * π)
+ = x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddCircle.coe_eq_zero_iff`：coe_eq_zero_iff {x : 𝕜} : (x : AddCircle p) =
+ 0 ↔ exists n : Int, n • p = x
 -/
-theorem coe_eq_zero_iff {x : Real} : (x : Angle) = 0 ↔ exists n : Int, n • (2 * π) = x :=
+theorem coe_eq_zero_iff {x : ℝ} : (x : Angle) = 0 ↔ ∃ n : ℤ, n • (2 * π) = x :=
   AddCircle.coe_eq_zero_iff (2 * π)
 
 @[simp, norm_cast]
-/--
-theorem `natCast_mul_eq_nsmul` / 定理 `natCast_mul_eq_nsmul`
-
-English:
-theorem natCast_mul_eq_nsmul
-  given: (x : Real) (n : Nat)
-  statement: ↑((n : Real) * x) = n • (↑x : Angle)
-  proof: by
-  simpa only [nsmul_eq_mul] using! coeHom.map_nsmul n x
-
-@[simp, norm_cast]
-
-中文:
-定理 natCast_mul_eq_nsmul
-  条件: (x : 实数) (n : 自然数)
-  结论: ↑((n : 实数) * x) = n • (↑x : Angle)
-  证明: by
-  simpa only [nsmul_eq_mul] using! coeHom.map_nsmul n x
-
-@[simp, norm_cast]
-
-Depends on / 依赖: coeHom, coeHom.map_nsmul, map_nsmul, nsmul_eq_mul
+/-
+**Real.Angle.natCast_mul_eq_nsmul** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：natCast_mul_eq_nsmul (x : Real) (n : Nat) : ↑((n : Real) * x) = n • (↑x : 
+Angle)
+参数：x : Real；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nsmul_eq_mul`：∀ {α : Type u} [inst : NonAssocSemiring α] (n : ℕ) (a : α)
+, n • a = ↑n * a
+· 使用定理 `AddMonoidHom.map_nsmul`：∀ {M : Type u_4} {N : Type u_5} [inst : AddMonoi
+d M] [inst_1 : AddMonoid N] (f : M →+ N) (n : ℕ) (a : M),   f (n • a) = n • f a
 -/
-theorem natCast_mul_eq_nsmul (x : Real) (n : Nat) : ↑((n : Real) * x) = n • (↑x : Angle) := by
+theorem natCast_mul_eq_nsmul (x : ℝ) (n : ℕ) : ↑((n : ℝ) * x) = n • (↑x : Angle) := by
   simpa only [nsmul_eq_mul] using! coeHom.map_nsmul n x
 
 @[simp, norm_cast]
-/--
-theorem `intCast_mul_eq_zsmul` / 定理 `intCast_mul_eq_zsmul`
-
-English:
-theorem intCast_mul_eq_zsmul
-  given: (x : Real) (n : Int)
-  statement: ↑((n : Real) * x : Real) = n • (↑x : Angle)
-  proof: by
-  simpa only [zsmul_eq_mul] using! coeHom.map_zsmul n x
-
-中文:
-定理 intCast_mul_eq_zsmul
-  条件: (x : 实数) (n : 整数)
-  结论: ↑((n : 实数) * x : 实数) = n • (↑x : Angle)
-  证明: by
-  simpa only [zsmul_eq_mul] using! coeHom.map_zsmul n x
-
-Depends on / 依赖: coeHom, coeHom.map_zsmul, map_zsmul, zsmul_eq_mul
+/-
+**Real.Angle.intCast_mul_eq_zsmul** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：intCast_mul_eq_zsmul (x : Real) (n : Int) : ↑((n : Real) * x : Real) = n •
+ (↑x : Angle)
+参数：x : Real；n : Int。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `AddMonoidHom.map_zsmul`：∀ {α : Type u_2} {β : Type u_3} [inst : AddGroup
+ α] [inst_1 : SubtractionMonoid β] (f : α →+ β) (n : ℤ) (g : α),   f (n • g) = n
+ • f g
 -/
-theorem intCast_mul_eq_zsmul (x : Real) (n : Int) : ↑((n : Real) * x : Real) = n • (↑x : Angle) := by
+theorem intCast_mul_eq_zsmul (x : ℝ) (n : ℤ) : ↑((n : ℝ) * x : ℝ) = n • (↑x : Angle) := by
   simpa only [zsmul_eq_mul] using! coeHom.map_zsmul n x
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `angle_eq_iff_two_pi_dvd_sub` / 定理 `angle_eq_iff_two_pi_dvd_sub`
-
-English:
-theorem angle_eq_iff_two_pi_dvd_sub
-  given: {ψ θ : Real}
-  statement: (θ : Angle) = ψ ↔ exists k : Int, θ - ψ = 2 * π * k
-  proof: by
-  simp only [eq_comm]
-  rw [Angle.coe]; rw [Angle.coe]; rw [QuotientAddGroup.eq]
-  simp only [AddSubgroup.zmultiples_eq_closure,
-    AddSubgroup.mem_closure_singleton, zsmul_eq_mul', (sub_eq_neg_add _ _).symm, eq_comm]
-
-@[simp]
-
-中文:
-定理 angle_eq_iff_two_pi_dvd_sub
-  条件: {ψ θ : 实数}
-  结论: (θ : Angle) = ψ ↔ 存在 k : 整数, θ - ψ = 2 * π * k
-  证明: by
-  simp only [eq_comm]
-  rw [Angle.coe]; rw [Angle.coe]; rw [QuotientAddGroup.eq]
-  simp only [AddSubgroup.zmultiples_eq_closure,
-    AddSubgroup.mem_closure_singleton, zsmul_eq_mul', (sub_eq_neg_add _ _).symm, eq_comm]
-
-@[simp]
-
-Depends on / 依赖: AddSubgroup, AddSubgroup.mem_closure_singleton, AddSubgroup.zmultiples_eq_closure, Angle.coe, QuotientAddGroup, QuotientAddGroup.eq, eq_comm, mem_closure_singleton, sub_eq_neg_add, zmultiples_eq_closure, zsmul_eq_mul
+/-
+**Real.Angle.angle_eq_iff_two_pi_dvd_sub** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：angle_eq_iff_two_pi_dvd_sub {ψ θ : Real} : (θ : Angle) = ψ ↔ exists k : In
+t, θ - ψ = 2 * π * k
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.coe.eq_1`：∀ (r : ℝ), ↑r = ↑r
+· 使用定理 `QuotientAddGroup.eq`：∀ {α : Type u_1} [inst : AddGroup α] {s : AddSubgro
+up α} {a b : α}, ↑a = ↑b ↔ -a + b ∈ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `AddSubgroup.zmultiples_eq_closure`：∀ {G : Type u_1} [inst : AddGroup G] 
+(g : G), AddSubgroup.zmultiples g = AddSubgroup.closure {g}
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_eq_neg_add`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b :
+ α), a - b = -b + a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `zsmul_eq_mul'`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ),
+ n • a = a * ↑n
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem angle_eq_iff_two_pi_dvd_sub {ψ θ : Real} : (θ : Angle) = ψ ↔ exists k : Int, θ - ψ = 2 * π * k := by
+theorem angle_eq_iff_two_pi_dvd_sub {ψ θ : ℝ} : (θ : Angle) = ψ ↔ ∃ k : ℤ, θ - ψ = 2 * π * k := by
   simp only [eq_comm]
-  rw [Angle.coe]; rw [Angle.coe]; rw [QuotientAddGroup.eq]
+  rw [Angle.coe, Angle.coe, QuotientAddGroup.eq]
   simp only [AddSubgroup.zmultiples_eq_closure,
     AddSubgroup.mem_closure_singleton, zsmul_eq_mul', (sub_eq_neg_add _ _).symm, eq_comm]
 
 @[simp]
-/--
-theorem `coe_two_pi` / 定理 `coe_two_pi`
-
-English:
-theorem coe_two_pi
-  statement: ↑(2 * π : Real) = (0 : Angle)
-  proof: angle_eq_iff_two_pi_dvd_sub.2 ⟨1, by rw [sub_zero, Int.cast_one, mul_one]⟩
-
-@[simp]
-
-中文:
-定理 coe_two_pi
-  结论: ↑(2 * π : 实数) = (0 : Angle)
-  证明: angle_eq_iff_two_pi_dvd_sub.2 ⟨1, by rw [sub_zero, Int.cast_one, mul_one]⟩
-
-@[simp]
-
-Depends on / 依赖: Int.cast_one, angle_eq_iff_two_pi_dvd_sub, cast_one, mul_one, sub_zero
+/-
+**Real.Angle.coe_two_pi** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：coe_two_pi : ↑(2 * π : Real) = (0 : Angle)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Real.Angle.angle_eq_iff_two_pi_dvd_sub`：angle_eq_iff_two_pi_dvd_sub {ψ θ
+ : Real} : (θ : Angle) = ψ ↔ exists k : Int, θ - ψ = 2 * π * k
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `Int.cast_one`：cast_one : ((1 : Int) : R) = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
-theorem coe_two_pi : ↑(2 * π : Real) = (0 : Angle) :=
+theorem coe_two_pi : ↑(2 * π : ℝ) = (0 : Angle) :=
   angle_eq_iff_two_pi_dvd_sub.2 ⟨1, by rw [sub_zero, Int.cast_one, mul_one]⟩
 
 @[simp]
-/--
-theorem `neg_coe_pi` / 定理 `neg_coe_pi`
-
-English:
-theorem neg_coe_pi
-  statement: -(π : Angle) = π
-  proof: by
-  rw [← coe_neg]; rw [angle_eq_iff_two_pi_dvd_sub]
-  use -1
-  simp [two_mul, sub_eq_add_neg]
-
-@[simp]
-
-中文:
-定理 neg_coe_pi
-  结论: -(π : Angle) = π
-  证明: by
-  rw [← coe_neg]; rw [angle_eq_iff_two_pi_dvd_sub]
-  use -1
-  simp [two_mul, sub_eq_add_neg]
-
-@[simp]
-
-Depends on / 依赖: angle_eq_iff_two_pi_dvd_sub, coe_neg, sub_eq_add_neg, two_mul
+/-
+**Real.Angle.neg_coe_pi** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：neg_coe_pi : -(π : Angle) = π
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.coe_neg`：coe_neg (x : Real) : ↑(-x : Real) = -(↑x : Angle)
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Real.Angle.angle_eq_iff_two_pi_dvd_sub`：angle_eq_iff_two_pi_dvd_sub {ψ θ
+ : Real} : (θ : Angle) = ψ ↔ exists k : Int, θ - ψ = 2 * π * k
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `two_mul`：two_mul (n : α) : 2 * n = n + n
+· 使用定理 `Int.cast_neg`：∀ {R : Type u} [inst : AddGroupWithOne R] (n : ℤ), ↑(-n) =
+ -↑n
+· 使用定理 `Int.cast_one`：cast_one : ((1 : Int) : R) = 1
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `neg_add_rev`：∀ {G : Type u_1} [inst : SubtractionMonoid G] (a b : G), -(
+a + b) = -b + -a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem neg_coe_pi : -(π : Angle) = π := by
-  rw [← coe_neg]; rw [angle_eq_iff_two_pi_dvd_sub]
+  rw [← coe_neg, angle_eq_iff_two_pi_dvd_sub]
   use -1
   simp [two_mul, sub_eq_add_neg]
 
 @[simp]
-/--
-theorem `two_nsmul_coe_div_two` / 定理 `two_nsmul_coe_div_two`
-
-English:
-theorem two_nsmul_coe_div_two
-  given: (θ : Real)
-  statement: (2 : Nat) • (↑(θ / 2) : Angle) = θ
-  proof: by
-  rw [← coe_nsmul]; rw [two_nsmul]; rw [add_halves]
-
-@[simp]
-
-中文:
-定理 two_nsmul_coe_div_two
-  条件: (θ : 实数)
-  结论: (2 : 自然数) • (↑(θ / 2) : Angle) = θ
-  证明: by
-  rw [← coe_nsmul]; rw [two_nsmul]; rw [add_halves]
-
-@[simp]
-
-Depends on / 依赖: add_halves, coe_nsmul, two_nsmul
+/-
+**Real.Angle.two_nsmul_coe_div_two** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：two_nsmul_coe_div_two (θ : Real) : (2 : Nat) • (↑(θ / 2) : Angle) = θ
+参数：θ : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.coe_nsmul`：coe_nsmul (n : Nat) (x : Real) : ↑(n • x : Real) =
+ n • (↑x : Angle)
+· 使用定理 `two_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 2 • a = a + a
+· 使用定理 `add_halves`：∀ {K : Type u_1} [inst : DivisionSemiring K] [NeZero 2] (a :
+ K), a / 2 + a / 2 = a
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
 -/
-theorem two_nsmul_coe_div_two (θ : Real) : (2 : Nat) • (↑(θ / 2) : Angle) = θ := by
-  rw [← coe_nsmul]; rw [two_nsmul]; rw [add_halves]
+theorem two_nsmul_coe_div_two (θ : ℝ) : (2 : ℕ) • (↑(θ / 2) : Angle) = θ := by
+  rw [← coe_nsmul, two_nsmul, add_halves]
 
 @[simp]
-/--
-theorem `two_zsmul_coe_div_two` / 定理 `two_zsmul_coe_div_two`
-
-English:
-theorem two_zsmul_coe_div_two
-  given: (θ : Real)
-  statement: (2 : Int) • (↑(θ / 2) : Angle) = θ
-  proof: by
-  rw [← coe_zsmul]; rw [two_zsmul]; rw [add_halves]
-
-中文:
-定理 two_zsmul_coe_div_two
-  条件: (θ : 实数)
-  结论: (2 : 整数) • (↑(θ / 2) : Angle) = θ
-  证明: by
-  rw [← coe_zsmul]; rw [two_zsmul]; rw [add_halves]
-
-Depends on / 依赖: add_halves, coe_zsmul, two_zsmul
+/-
+**Real.Angle.two_zsmul_coe_div_two** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：two_zsmul_coe_div_two (θ : Real) : (2 : Int) • (↑(θ / 2) : Angle) = θ
+参数：θ : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.coe_zsmul`：coe_zsmul (z : Int) (x : Real) : ↑(z • x : Real) =
+ z • (↑x : Angle)
+· 使用定理 `two_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 2 • a = a +
+ a
+· 使用定理 `add_halves`：∀ {K : Type u_1} [inst : DivisionSemiring K] [NeZero 2] (a :
+ K), a / 2 + a / 2 = a
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
 -/
-theorem two_zsmul_coe_div_two (θ : Real) : (2 : Int) • (↑(θ / 2) : Angle) = θ := by
-  rw [← coe_zsmul]; rw [two_zsmul]; rw [add_halves]
-
-/--
-theorem `two_nsmul_neg_pi_div_two` / 定理 `two_nsmul_neg_pi_div_two`
-
-English:
-theorem two_nsmul_neg_pi_div_two
-  statement: (2 : Nat) • (↑(-π / 2) : Angle) = π
-  proof: by
-  rw [two_nsmul_coe_div_two]; rw [coe_neg]; rw [neg_coe_pi]
-
-中文:
-定理 two_nsmul_neg_pi_div_two
-  结论: (2 : 自然数) • (↑(-π / 2) : Angle) = π
-  证明: by
-  rw [two_nsmul_coe_div_two]; rw [coe_neg]; rw [neg_coe_pi]
-
-Depends on / 依赖: coe_neg, neg_coe_pi, two_nsmul_coe_div_two
+theorem two_zsmul_coe_div_two (θ : ℝ) : (2 : ℤ) • (↑(θ / 2) : Angle) = θ := by
+  rw [← coe_zsmul, two_zsmul, add_halves]
+/-
+**Real.Angle.two_nsmul_neg_pi_div_two** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：two_nsmul_neg_pi_div_two : (2 : Nat) • (↑(-π / 2) : Angle) = π
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.two_nsmul_coe_div_two`：two_nsmul_coe_div_two (θ : Real) : (2 
+: Nat) • (↑(θ / 2) : Angle) = θ
+· 使用定理 `Real.Angle.coe_neg`：coe_neg (x : Real) : ↑(-x : Real) = -(↑x : Angle)
+· 使用定理 `Real.Angle.neg_coe_pi`：neg_coe_pi : -(π : Angle) = π
 -/
-theorem two_nsmul_neg_pi_div_two : (2 : Nat) • (↑(-π / 2) : Angle) = π := by
-  rw [two_nsmul_coe_div_two]; rw [coe_neg]; rw [neg_coe_pi]
-
-/--
-theorem `two_zsmul_neg_pi_div_two` / 定理 `two_zsmul_neg_pi_div_two`
-
-English:
-theorem two_zsmul_neg_pi_div_two
-  statement: (2 : Int) • (↑(-π / 2) : Angle) = π
-  proof: by
-  rw [two_zsmul]; rw [← two_nsmul]; rw [two_nsmul_neg_pi_div_two]
-
-中文:
-定理 two_zsmul_neg_pi_div_two
-  结论: (2 : 整数) • (↑(-π / 2) : Angle) = π
-  证明: by
-  rw [two_zsmul]; rw [← two_nsmul]; rw [two_nsmul_neg_pi_div_two]
-
-Depends on / 依赖: two_nsmul, two_nsmul_neg_pi_div_two, two_zsmul
+theorem two_nsmul_neg_pi_div_two : (2 : ℕ) • (↑(-π / 2) : Angle) = π := by
+  rw [two_nsmul_coe_div_two, coe_neg, neg_coe_pi]
+/-
+**Real.Angle.two_zsmul_neg_pi_div_two** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：two_zsmul_neg_pi_div_two : (2 : Int) • (↑(-π / 2) : Angle) = π
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `two_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 2 • a = a +
+ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `two_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 2 • a = a + a
+· 使用定理 `Real.Angle.two_nsmul_neg_pi_div_two`：two_nsmul_neg_pi_div_two : (2 : Nat
+) • (↑(-π / 2) : Angle) = π
 -/
-theorem two_zsmul_neg_pi_div_two : (2 : Int) • (↑(-π / 2) : Angle) = π := by
-  rw [two_zsmul]; rw [← two_nsmul]; rw [two_nsmul_neg_pi_div_two]
-
-/--
-theorem `sub_coe_pi_eq_add_coe_pi` / 定理 `sub_coe_pi_eq_add_coe_pi`
-
-English:
-theorem sub_coe_pi_eq_add_coe_pi
-  given: (θ : Angle)
-  statement: θ - π = θ + π
-  proof: by
-  rw [sub_eq_add_neg]; rw [neg_coe_pi]
-
-@[simp]
-
-中文:
-定理 sub_coe_pi_eq_add_coe_pi
-  条件: (θ : Angle)
-  结论: θ - π = θ + π
-  证明: by
-  rw [sub_eq_add_neg]; rw [neg_coe_pi]
-
-@[simp]
-
-Depends on / 依赖: neg_coe_pi, sub_eq_add_neg
+theorem two_zsmul_neg_pi_div_two : (2 : ℤ) • (↑(-π / 2) : Angle) = π := by
+  rw [two_zsmul, ← two_nsmul, two_nsmul_neg_pi_div_two]
+/-
+**Real.Angle.sub_coe_pi_eq_add_coe_pi** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sub_coe_pi_eq_add_coe_pi (θ : Angle) : θ - π = θ + π
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `Real.Angle.neg_coe_pi`：neg_coe_pi : -(π : Angle) = π
 -/
 theorem sub_coe_pi_eq_add_coe_pi (θ : Angle) : θ - π = θ + π := by
-  rw [sub_eq_add_neg]; rw [neg_coe_pi]
+  rw [sub_eq_add_neg, neg_coe_pi]
 
 @[simp]
-/--
-theorem `two_nsmul_coe_pi` / 定理 `two_nsmul_coe_pi`
-
-English:
-theorem two_nsmul_coe_pi
-  statement: (2 : Nat) • (π : Angle) = 0
-  proof: by simp [← natCast_mul_eq_nsmul]
-
-@[simp]
-
-中文:
-定理 two_nsmul_coe_pi
-  结论: (2 : 自然数) • (π : Angle) = 0
-  证明: by simp [← natCast_mul_eq_nsmul]
-
-@[simp]
-
-Depends on / 依赖: natCast_mul_eq_nsmul
+/-
+**Real.Angle.two_nsmul_coe_pi** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：two_nsmul_coe_pi : (2 : Nat) • (π : Angle) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.coe_two_pi`：coe_two_pi : ↑(2 * π : Real) = (0 : Angle)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem two_nsmul_coe_pi : (2 : Nat) • (π : Angle) = 0 := by simp [← natCast_mul_eq_nsmul]
+theorem two_nsmul_coe_pi : (2 : ℕ) • (π : Angle) = 0 := by simp [← natCast_mul_eq_nsmul]
 
 @[simp]
-/--
-theorem `two_zsmul_coe_pi` / 定理 `two_zsmul_coe_pi`
-
-English:
-theorem two_zsmul_coe_pi
-  statement: (2 : Int) • (π : Angle) = 0
-  proof: by simp [← intCast_mul_eq_zsmul]
-
-@[simp, grind =]
-
-中文:
-定理 two_zsmul_coe_pi
-  结论: (2 : 整数) • (π : Angle) = 0
-  证明: by simp [← intCast_mul_eq_zsmul]
-
-@[simp, grind =]
-
-Depends on / 依赖: intCast_mul_eq_zsmul
+/-
+**Real.Angle.two_zsmul_coe_pi** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：two_zsmul_coe_pi : (2 : Int) • (π : Angle) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Int.cast_ofNat`：cast_ofNat (n : Nat) [n.AtLeastTwo] : ((ofNat(n) : Int) 
+: R) = ofNat(n)
+· 使用定理 `Real.Angle.coe_two_pi`：coe_two_pi : ↑(2 * π : Real) = (0 : Angle)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem two_zsmul_coe_pi : (2 : Int) • (π : Angle) = 0 := by simp [← intCast_mul_eq_zsmul]
+theorem two_zsmul_coe_pi : (2 : ℤ) • (π : Angle) = 0 := by simp [← intCast_mul_eq_zsmul]
 
 @[simp, grind =]
-/--
-theorem `coe_pi_add_coe_pi` / 定理 `coe_pi_add_coe_pi`
-
-English:
-theorem coe_pi_add_coe_pi
-  statement: (π : Real.Angle) + π = 0
-  proof: by rw [← two_nsmul, two_nsmul_coe_pi]
-
-中文:
-定理 coe_pi_add_coe_pi
-  结论: (π : 实数.Angle) + π = 0
-  证明: by rw [← two_nsmul, two_nsmul_coe_pi]
-
-Depends on / 依赖: two_nsmul, two_nsmul_coe_pi
+/-
+**Real.Angle.coe_pi_add_coe_pi** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：coe_pi_add_coe_pi : (π : Real.Angle) + π = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `two_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 2 • a = a + a
+· 使用定理 `Real.Angle.two_nsmul_coe_pi`：two_nsmul_coe_pi : (2 : Nat) • (π : Angle) 
+= 0
 -/
 theorem coe_pi_add_coe_pi : (π : Real.Angle) + π = 0 := by rw [← two_nsmul, two_nsmul_coe_pi]
-
-/--
-theorem `zsmul_eq_iff` / 定理 `zsmul_eq_iff`
-
-English:
-theorem zsmul_eq_iff
-  given: {ψ θ : Angle} {z : Int} (hz : z != 0)
-  proof: QuotientAddGroup.zmultiples_zsmul_eq_zsmul_iff hz
-
-中文:
-定理 zsmul_eq_iff
-  条件: {ψ θ : Angle} {z : 整数} (hz : z != 0)
-  证明: QuotientAddGroup.zmultiples_zsmul_eq_zsmul_iff hz
-
-Depends on / 依赖: QuotientAddGroup, QuotientAddGroup.zmultiples_zsmul_eq_zsmul_iff, zmultiples_zsmul_eq_zsmul_iff
+/-
+**Real.Angle.zsmul_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：zsmul_eq_iff {ψ θ : Angle} {z : Int} (hz : z != 0) : z • ψ = z • θ ↔ exist
+s k : Fin z.natAbs, ψ = θ + (k : Nat) • (2 * π / z : Real)
+参数：hz : z != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuotientAddGroup.zmultiples_zsmul_eq_zsmul_iff`：zmultiples_zsmul_eq_zsmu
+l_iff {ψ θ : R ⧸ AddSubgroup.zmultiples p} {z : Int} (hz : z != 0) : z • ψ = z •
+ θ ↔ exists k : Fin z.natAbs, ψ = θ …
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
 -/
-theorem zsmul_eq_iff {ψ θ : Angle} {z : Int} (hz : z != 0) :
-    z • ψ = z • θ ↔ exists k : Fin z.natAbs, ψ = θ + (k : Nat) • (2 * π / z : Real) :=
+theorem zsmul_eq_iff {ψ θ : Angle} {z : ℤ} (hz : z ≠ 0) :
+    z • ψ = z • θ ↔ ∃ k : Fin z.natAbs, ψ = θ + (k : ℕ) • (2 * π / z : ℝ) :=
   QuotientAddGroup.zmultiples_zsmul_eq_zsmul_iff hz
-
-/--
-theorem `nsmul_eq_iff` / 定理 `nsmul_eq_iff`
-
-English:
-theorem nsmul_eq_iff
-  given: {ψ θ : Angle} {n : Nat} (hz : n != 0)
-  proof: QuotientAddGroup.zmultiples_nsmul_eq_nsmul_iff hz
-
-中文:
-定理 nsmul_eq_iff
-  条件: {ψ θ : Angle} {n : 自然数} (hz : n != 0)
-  证明: QuotientAddGroup.zmultiples_nsmul_eq_nsmul_iff hz
-
-Depends on / 依赖: QuotientAddGroup, QuotientAddGroup.zmultiples_nsmul_eq_nsmul_iff, zmultiples_nsmul_eq_nsmul_iff
+/-
+**Real.Angle.nsmul_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：nsmul_eq_iff {ψ θ : Angle} {n : Nat} (hz : n != 0) : n • ψ = n • θ ↔ exist
+s k : Fin n, ψ = θ + (k : Nat) • (2 * π / n : Real)
+参数：hz : n != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `QuotientAddGroup.zmultiples_nsmul_eq_nsmul_iff`：zmultiples_nsmul_eq_nsmu
+l_iff {ψ θ : R ⧸ AddSubgroup.zmultiples p} {n : Nat} (hz : n != 0) : n • ψ = n •
+ θ ↔ exists k : Fin n, ψ = θ + (k : …
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
 -/
-theorem nsmul_eq_iff {ψ θ : Angle} {n : Nat} (hz : n != 0) :
-    n • ψ = n • θ ↔ exists k : Fin n, ψ = θ + (k : Nat) • (2 * π / n : Real) :=
+theorem nsmul_eq_iff {ψ θ : Angle} {n : ℕ} (hz : n ≠ 0) :
+    n • ψ = n • θ ↔ ∃ k : Fin n, ψ = θ + (k : ℕ) • (2 * π / n : ℝ) :=
   QuotientAddGroup.zmultiples_nsmul_eq_nsmul_iff hz
-
-/--
-theorem `two_zsmul_eq_iff` / 定理 `two_zsmul_eq_iff`
-
-English:
-theorem two_zsmul_eq_iff
-  given: {ψ θ : Angle}
-  statement: (2 : Int) • ψ = (2 : Int) • θ ↔ ψ = θ ∨ ψ = θ + ↑π
-  proof: by
+/-
+**Real.Angle.two_zsmul_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：two_zsmul_eq_iff {ψ θ : Angle} : (2 : Int) • ψ = (2 : Int) • θ ↔ ψ = θ ∨ ψ
+ = θ + ↑π
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.zsmul_eq_iff`：zsmul_eq_iff {ψ θ : Angle} {z : Int} (hz : z !=
+ 0) : z • ψ = z • θ ↔ exists k : Fin z.natAbs, ψ = θ + (k : Nat) • (2 * π / z : 
+Real)
+· 使用引理 `two_ne_zero`：two_ne_zero [OfNat α 2] [NeZero (2 : α)] : (2 : α) != 0
+· 使用定理 `Int.instNeZeroOfNatOfNat`：∀ {n : ℕ} [NeZero n], NeZero (OfNat.ofNat n)
+· 使用定理 `Fin.exists_fin_two`：∀ {p : Fin 2 → Prop}, (∃ i, p i) ↔ p 0 ∨ p 1
+· 使用定理 `Fin.val_zero`：∀ (n : ℕ) [inst : NeZero n], ↑0 = 0
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `Fin.val_one`：∀ (n : ℕ), ↑1 = 1
+· 使用定理 `zero_smul`：zero_smul (m : A) : (0 : M₀) • m = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用引理 `one_smul`：one_smul (b : α) : (1 : M) • b = b
+· 使用定理 `Int.cast_two`：cast_two : ((2 : Int) : R) = 2
+· 使用定理 `mul_div_cancel_left₀`：∀ {M₀ : Type u_1} [inst : CommMonoidWithZero M₀] [
+inst_1 : Div M₀] [MulDivCancelClass M₀] (b : M₀) {a : M₀},   a ≠ 0 → a * b / a =
+ b
+· 使用定理 `GroupWithZero.toMulDivCancelClass`：∀ {G₀ : Type u} [inst : GroupWithZero
+ G₀], MulDivCancelClass G₀
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+-/
+theorem two_zsmul_eq_iff {ψ θ : Angle} : (2 : ℤ) • ψ = (2 : ℤ) • θ ↔ ψ = θ ∨ ψ = θ + ↑π := by
   have : Int.natAbs 2 = 2 := rfl
-  rw [zsmul_eq_iff two_ne_zero]; rw [this]; rw [Fin.exists_fin_two]; rw [Fin.val_zero]; rw [Fin.val_one]; rw [zero_smul]; rw [add_zero]; rw [one_smul]; rw [Int.cast_two]; rw [mul_div_cancel_left₀ (_ : Real) two_ne_zero]
-
-中文:
-定理 two_zsmul_eq_iff
-  条件: {ψ θ : Angle}
-  结论: (2 : 整数) • ψ = (2 : 整数) • θ ↔ ψ = θ ∨ ψ = θ + ↑π
-  证明: by
-  have : Int.natAbs 2 = 2 := rfl
-  rw [zsmul_eq_iff two_ne_zero]; rw [this]; rw [Fin.exists_fin_two]; rw [Fin.val_zero]; rw [Fin.val_one]; rw [zero_smul]; rw [add_zero]; rw [one_smul]; rw [Int.cast_two]; rw [mul_div_cancel_left₀ (_ : Real) two_ne_zero]
-
-Depends on / 依赖: Fin.exists_fin_two, Fin.val_one, Fin.val_zero, Int.cast_two, Int.natAbs, add_zero, cast_two, exists_fin_two, natAbs, one_smul, two_ne_zero, val_one, val_zero, zero_smul, zsmul_eq_iff
+  rw [zsmul_eq_iff two_ne_zero, this, Fin.exists_fin_two, Fin.val_zero,
+    Fin.val_one, zero_smul, add_zero, one_smul, Int.cast_two,
+    mul_div_cancel_left₀ (_ : ℝ) two_ne_zero]
+/-
+**Real.Angle.two_nsmul_eq_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：two_nsmul_eq_iff {ψ θ : Angle} : (2 : Nat) • ψ = (2 : Nat) • θ ↔ ψ = θ ∨ ψ
+ = θ + ↑π
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem two_zsmul_eq_iff {ψ θ : Angle} : (2 : Int) • ψ = (2 : Int) • θ ↔ ψ = θ ∨ ψ = θ + ↑π := by
-  have : Int.natAbs 2 = 2 := rfl
-  rw [zsmul_eq_iff two_ne_zero]; rw [this]; rw [Fin.exists_fin_two]; rw [Fin.val_zero]; rw [Fin.val_one]; rw [zero_smul]; rw [add_zero]; rw [one_smul]; rw [Int.cast_two]; rw [mul_div_cancel_left₀ (_ : Real) two_ne_zero]
-
-/--
-theorem `two_nsmul_eq_iff` / 定理 `two_nsmul_eq_iff`
-
-English:
-theorem two_nsmul_eq_iff
-  given: {ψ θ : Angle}
-  statement: (2 : Nat) • ψ = (2 : Nat) • θ ↔ ψ = θ ∨ ψ = θ + ↑π
-  proof: by
+theorem two_nsmul_eq_iff {ψ θ : Angle} : (2 : ℕ) • ψ = (2 : ℕ) • θ ↔ ψ = θ ∨ ψ = θ + ↑π := by
   simp_rw [← natCast_zsmul, Nat.cast_ofNat, two_zsmul_eq_iff]
-
-中文:
-定理 two_nsmul_eq_iff
-  条件: {ψ θ : Angle}
-  结论: (2 : 自然数) • ψ = (2 : 自然数) • θ ↔ ψ = θ ∨ ψ = θ + ↑π
-  证明: by
-  simp_rw [← natCast_zsmul, Nat.cast_ofNat, two_zsmul_eq_iff]
-
-Depends on / 依赖: Nat.cast_ofNat, cast_ofNat, natCast_zsmul, simp_rw, two_zsmul_eq_iff
+/-
+**Real.Angle.two_nsmul_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：two_nsmul_eq_zero_iff {θ : Angle} : (2 : Nat) • θ = 0 ↔ θ = 0 ∨ θ = π
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `nsmul_zero`：∀ {M : Type u_2} [inst : AddMonoid M] (n : ℕ), n • 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Real.Angle.two_nsmul_eq_iff`：two_nsmul_eq_iff {ψ θ : Angle} : (2 : Nat) 
+• ψ = (2 : Nat) • θ ↔ ψ = θ ∨ ψ = θ + ↑π
 -/
-theorem two_nsmul_eq_iff {ψ θ : Angle} : (2 : Nat) • ψ = (2 : Nat) • θ ↔ ψ = θ ∨ ψ = θ + ↑π := by
-  simp_rw [← natCast_zsmul, Nat.cast_ofNat, two_zsmul_eq_iff]
-
-/--
-theorem `two_nsmul_eq_zero_iff` / 定理 `two_nsmul_eq_zero_iff`
-
-English:
-theorem two_nsmul_eq_zero_iff
-  given: {θ : Angle}
-  statement: (2 : Nat) • θ = 0 ↔ θ = 0 ∨ θ = π
-  proof: by
+theorem two_nsmul_eq_zero_iff {θ : Angle} : (2 : ℕ) • θ = 0 ↔ θ = 0 ∨ θ = π := by
   convert! two_nsmul_eq_iff <;> simp
-
-中文:
-定理 two_nsmul_eq_zero_iff
-  条件: {θ : Angle}
-  结论: (2 : 自然数) • θ = 0 ↔ θ = 0 ∨ θ = π
-  证明: by
-  convert! two_nsmul_eq_iff <;> simp
-
-Depends on / 依赖: convert, two_nsmul_eq_iff
+/-
+**Real.Angle.two_nsmul_ne_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：two_nsmul_ne_zero_iff {θ : Angle} : (2 : Nat) • θ != 0 ↔ θ != 0 ∧ θ != π
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_or`：∀ {p q : Prop}, ¬(p ∨ q) ↔ ¬p ∧ ¬q
+· 使用定理 `Real.Angle.two_nsmul_eq_zero_iff`：two_nsmul_eq_zero_iff {θ : Angle} : (2
+ : Nat) • θ = 0 ↔ θ = 0 ∨ θ = π
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem two_nsmul_eq_zero_iff {θ : Angle} : (2 : Nat) • θ = 0 ↔ θ = 0 ∨ θ = π := by
-  convert! two_nsmul_eq_iff <;> simp
-
-/--
-theorem `two_nsmul_ne_zero_iff` / 定理 `two_nsmul_ne_zero_iff`
-
-English:
-theorem two_nsmul_ne_zero_iff
-  given: {θ : Angle}
-  statement: (2 : Nat) • θ != 0 ↔ θ != 0 ∧ θ != π
-  proof: by
-  rw [← not_or]; rw [← two_nsmul_eq_zero_iff]
-
-中文:
-定理 two_nsmul_ne_zero_iff
-  条件: {θ : Angle}
-  结论: (2 : 自然数) • θ != 0 ↔ θ != 0 ∧ θ != π
-  证明: by
-  rw [← not_or]; rw [← two_nsmul_eq_zero_iff]
-
-Depends on / 依赖: not_or, two_nsmul_eq_zero_iff
+theorem two_nsmul_ne_zero_iff {θ : Angle} : (2 : ℕ) • θ ≠ 0 ↔ θ ≠ 0 ∧ θ ≠ π := by
+  rw [← not_or, ← two_nsmul_eq_zero_iff]
+/-
+**Real.Angle.two_zsmul_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：two_zsmul_eq_zero_iff {θ : Angle} : (2 : Int) • θ = 0 ↔ θ = 0 ∨ θ = π
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `two_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 2 • a = a +
+ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem two_nsmul_ne_zero_iff {θ : Angle} : (2 : Nat) • θ != 0 ↔ θ != 0 ∧ θ != π := by
-  rw [← not_or]; rw [← two_nsmul_eq_zero_iff]
-
-/--
-theorem `two_zsmul_eq_zero_iff` / 定理 `two_zsmul_eq_zero_iff`
-
-English:
-theorem two_zsmul_eq_zero_iff
-  given: {θ : Angle}
-  statement: (2 : Int) • θ = 0 ↔ θ = 0 ∨ θ = π
-  proof: by
+theorem two_zsmul_eq_zero_iff {θ : Angle} : (2 : ℤ) • θ = 0 ↔ θ = 0 ∨ θ = π := by
   simp_rw [two_zsmul, ← two_nsmul, two_nsmul_eq_zero_iff]
-
-中文:
-定理 two_zsmul_eq_zero_iff
-  条件: {θ : Angle}
-  结论: (2 : 整数) • θ = 0 ↔ θ = 0 ∨ θ = π
-  证明: by
-  simp_rw [two_zsmul, ← two_nsmul, two_nsmul_eq_zero_iff]
-
-Depends on / 依赖: simp_rw, two_nsmul, two_nsmul_eq_zero_iff, two_zsmul
+/-
+**Real.Angle.two_zsmul_ne_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：two_zsmul_ne_zero_iff {θ : Angle} : (2 : Int) • θ != 0 ↔ θ != 0 ∧ θ != π
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_or`：∀ {p q : Prop}, ¬(p ∨ q) ↔ ¬p ∧ ¬q
+· 使用定理 `Real.Angle.two_zsmul_eq_zero_iff`：two_zsmul_eq_zero_iff {θ : Angle} : (2
+ : Int) • θ = 0 ↔ θ = 0 ∨ θ = π
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem two_zsmul_eq_zero_iff {θ : Angle} : (2 : Int) • θ = 0 ↔ θ = 0 ∨ θ = π := by
-  simp_rw [two_zsmul, ← two_nsmul, two_nsmul_eq_zero_iff]
-
-/--
-theorem `two_zsmul_ne_zero_iff` / 定理 `two_zsmul_ne_zero_iff`
-
-English:
-theorem two_zsmul_ne_zero_iff
-  given: {θ : Angle}
-  statement: (2 : Int) • θ != 0 ↔ θ != 0 ∧ θ != π
-  proof: by
-  rw [← not_or]; rw [← two_zsmul_eq_zero_iff]
-
-中文:
-定理 two_zsmul_ne_zero_iff
-  条件: {θ : Angle}
-  结论: (2 : 整数) • θ != 0 ↔ θ != 0 ∧ θ != π
-  证明: by
-  rw [← not_or]; rw [← two_zsmul_eq_zero_iff]
-
-Depends on / 依赖: not_or, two_zsmul_eq_zero_iff
--/
-theorem two_zsmul_ne_zero_iff {θ : Angle} : (2 : Int) • θ != 0 ↔ θ != 0 ∧ θ != π := by
-  rw [← not_or]; rw [← two_zsmul_eq_zero_iff]
-
-/--
-theorem `eq_neg_self_iff` / 定理 `eq_neg_self_iff`
-
-English:
-theorem eq_neg_self_iff
-  given: {θ : Angle}
-  statement: θ = -θ ↔ θ = 0 ∨ θ = π
-  proof: by
-  rw [← add_eq_zero_iff_eq_neg]; rw [← two_nsmul]; rw [two_nsmul_eq_zero_iff]
-
-中文:
-定理 eq_neg_self_iff
-  条件: {θ : Angle}
-  结论: θ = -θ ↔ θ = 0 ∨ θ = π
-  证明: by
-  rw [← add_eq_zero_iff_eq_neg]; rw [← two_nsmul]; rw [two_nsmul_eq_zero_iff]
-
-Depends on / 依赖: add_eq_zero_iff_eq_neg, two_nsmul, two_nsmul_eq_zero_iff
+theorem two_zsmul_ne_zero_iff {θ : Angle} : (2 : ℤ) • θ ≠ 0 ↔ θ ≠ 0 ∧ θ ≠ π := by
+  rw [← not_or, ← two_zsmul_eq_zero_iff]
+/-
+**Real.Angle.eq_neg_self_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：eq_neg_self_iff {θ : Angle} : θ = -θ ↔ θ = 0 ∨ θ = π
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_eq_zero_iff_eq_neg`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, 
+a + b = 0 ↔ a = -b
+· 使用定理 `two_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 2 • a = a + a
+· 使用定理 `Real.Angle.two_nsmul_eq_zero_iff`：two_nsmul_eq_zero_iff {θ : Angle} : (2
+ : Nat) • θ = 0 ↔ θ = 0 ∨ θ = π
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem eq_neg_self_iff {θ : Angle} : θ = -θ ↔ θ = 0 ∨ θ = π := by
-  rw [← add_eq_zero_iff_eq_neg]; rw [← two_nsmul]; rw [two_nsmul_eq_zero_iff]
-
-/--
-theorem `ne_neg_self_iff` / 定理 `ne_neg_self_iff`
-
-English:
-theorem ne_neg_self_iff
-  given: {θ : Angle}
-  statement: θ != -θ ↔ θ != 0 ∧ θ != π
-  proof: by
-  rw [← not_or]; rw [← eq_neg_self_iff.not]
-
-中文:
-定理 ne_neg_self_iff
-  条件: {θ : Angle}
-  结论: θ != -θ ↔ θ != 0 ∧ θ != π
-  证明: by
-  rw [← not_or]; rw [← eq_neg_self_iff.not]
-
-Depends on / 依赖: eq_neg_self_iff, eq_neg_self_iff.not, not_or
+  rw [← add_eq_zero_iff_eq_neg, ← two_nsmul, two_nsmul_eq_zero_iff]
+/-
+**Real.Angle.ne_neg_self_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：ne_neg_self_iff {θ : Angle} : θ != -θ ↔ θ != 0 ∧ θ != π
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_or`：∀ {p q : Prop}, ¬(p ∨ q) ↔ ¬p ∧ ¬q
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Real.Angle.eq_neg_self_iff`：eq_neg_self_iff {θ : Angle} : θ = -θ ↔ θ = 0
+ ∨ θ = π
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem ne_neg_self_iff {θ : Angle} : θ != -θ ↔ θ != 0 ∧ θ != π := by
-  rw [← not_or]; rw [← eq_neg_self_iff.not]
-
-/--
-theorem `neg_eq_self_iff` / 定理 `neg_eq_self_iff`
-
-English:
-theorem neg_eq_self_iff
-  given: {θ : Angle}
-  statement: -θ = θ ↔ θ = 0 ∨ θ = π
-  proof: by rw [eq_comm, eq_neg_self_iff]
-
-中文:
-定理 neg_eq_self_iff
-  条件: {θ : Angle}
-  结论: -θ = θ ↔ θ = 0 ∨ θ = π
-  证明: by rw [eq_comm, eq_neg_self_iff]
-
-Depends on / 依赖: eq_comm, eq_neg_self_iff
+theorem ne_neg_self_iff {θ : Angle} : θ ≠ -θ ↔ θ ≠ 0 ∧ θ ≠ π := by
+  rw [← not_or, ← eq_neg_self_iff.not]
+/-
+**Real.Angle.neg_eq_self_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：neg_eq_self_iff {θ : Angle} : -θ = θ ↔ θ = 0 ∨ θ = π
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Real.Angle.eq_neg_self_iff`：eq_neg_self_iff {θ : Angle} : θ = -θ ↔ θ = 0
+ ∨ θ = π
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem neg_eq_self_iff {θ : Angle} : -θ = θ ↔ θ = 0 ∨ θ = π := by rw [eq_comm, eq_neg_self_iff]
-
-/--
-theorem `neg_ne_self_iff` / 定理 `neg_ne_self_iff`
-
-English:
-theorem neg_ne_self_iff
-  given: {θ : Angle}
-  statement: -θ != θ ↔ θ != 0 ∧ θ != π
-  proof: by
-  rw [← not_or]; rw [← neg_eq_self_iff.not]
-
-中文:
-定理 neg_ne_self_iff
-  条件: {θ : Angle}
-  结论: -θ != θ ↔ θ != 0 ∧ θ != π
-  证明: by
-  rw [← not_or]; rw [← neg_eq_self_iff.not]
-
-Depends on / 依赖: neg_eq_self_iff, neg_eq_self_iff.not, not_or
+/-
+**Real.Angle.neg_ne_self_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：neg_ne_self_iff {θ : Angle} : -θ != θ ↔ θ != 0 ∧ θ != π
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_or`：∀ {p q : Prop}, ¬(p ∨ q) ↔ ¬p ∧ ¬q
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Real.Angle.neg_eq_self_iff`：neg_eq_self_iff {θ : Angle} : -θ = θ ↔ θ = 0
+ ∨ θ = π
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem neg_ne_self_iff {θ : Angle} : -θ != θ ↔ θ != 0 ∧ θ != π := by
-  rw [← not_or]; rw [← neg_eq_self_iff.not]
-
-/--
-theorem `two_nsmul_eq_pi_iff` / 定理 `two_nsmul_eq_pi_iff`
-
-English:
-theorem two_nsmul_eq_pi_iff
-  given: {θ : Angle}
-  statement: (2 : Nat) • θ = π ↔ θ = (π / 2 : Real) ∨ θ = (-π / 2 : Real)
-  proof: by
-  have h : (π : Angle) = ((2 : Nat) • (π / 2 : Real) :) := by rw [two_nsmul, add_halves]
+theorem neg_ne_self_iff {θ : Angle} : -θ ≠ θ ↔ θ ≠ 0 ∧ θ ≠ π := by
+  rw [← not_or, ← neg_eq_self_iff.not]
+/-
+**Real.Angle.two_nsmul_eq_pi_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：two_nsmul_eq_pi_iff {θ : Angle} : (2 : Nat) • θ = π ↔ θ = (π / 2 : Real) ∨
+ θ = (-π / 2 : Real)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `two_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 2 • a = a + a
+· 使用定理 `add_halves`：∀ {K : Type u_1} [inst : DivisionSemiring K] [NeZero 2] (a :
+ K), a / 2 + a / 2 = a
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Real.Angle.coe_nsmul`：coe_nsmul (n : Nat) (x : Real) : ↑(n • x : Real) =
+ n • (↑x : Angle)
+· 使用定理 `Real.Angle.two_nsmul_eq_iff`：two_nsmul_eq_iff {ψ θ : Angle} : (2 : Nat) 
+• ψ = (2 : Nat) • θ ↔ ψ = θ ∨ ψ = θ + ↑π
+· 使用定理 `iff_of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.coe_add`：coe_add (x y : Real) : ↑(x + y : Real) = (↑x + ↑y : 
+Angle)
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `Real.Angle.coe_sub`：coe_sub (x y : Real) : ↑(x - y : Real) = (↑x - ↑y : 
+Angle)
+· 使用引理 `neg_div`：neg_div (a b : R) : -b / a = -(b / a)
+· 使用定理 `sub_neg_eq_add`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α),
+ a - -b = a + b
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `two_mul`：two_mul (n : α) : 2 * n = n + n
+· 使用定理 `Real.Angle.coe_two_pi`：coe_two_pi : ↑(2 * π : Real) = (0 : Angle)
+-/
+theorem two_nsmul_eq_pi_iff {θ : Angle} : (2 : ℕ) • θ = π ↔ θ = (π / 2 : ℝ) ∨ θ = (-π / 2 : ℝ) := by
+  have h : (π : Angle) = ((2 : ℕ) • (π / 2 : ℝ) :) := by rw [two_nsmul, add_halves]
   nth_rw 1 [h]
-  rw [coe_nsmul]; rw [two_nsmul_eq_iff]
+  rw [coe_nsmul, two_nsmul_eq_iff]
   apply iff_of_eq -- `congr` only works on `Eq`, so rewrite from `Iff` to `Eq`.
   congr
-  rw [add_comm]; rw [← coe_add]; rw [← sub_eq_zero]; rw [← coe_sub]; rw [neg_div]; rw [sub_neg_eq_add]; rw [add_assoc]; rw [add_halves]; rw [← two_mul]; rw [coe_two_pi]
-
-中文:
-定理 two_nsmul_eq_pi_iff
-  条件: {θ : Angle}
-  结论: (2 : 自然数) • θ = π ↔ θ = (π / 2 : 实数) ∨ θ = (-π / 2 : 实数)
-  证明: by
-  have h : (π : Angle) = ((2 : Nat) • (π / 2 : Real) :) := by rw [two_nsmul, add_halves]
-  nth_rw 1 [h]
-  rw [coe_nsmul]; rw [two_nsmul_eq_iff]
-  apply iff_of_eq -- `congr` only works on `Eq`, so rewrite from `Iff` to `Eq`.
-  congr
-  rw [add_comm]; rw [← coe_add]; rw [← sub_eq_zero]; rw [← coe_sub]; rw [neg_div]; rw [sub_neg_eq_add]; rw [add_assoc]; rw [add_halves]; rw [← two_mul]; rw [coe_two_pi]
-
-Depends on / 依赖: add_assoc, add_comm, add_halves, coe_add, coe_nsmul, coe_sub, coe_two_pi, iff_of_eq, neg_div, nth_rw, rewrite, sub_eq_zero, sub_neg_eq_add, two_mul, two_nsmul, two_nsmul_eq_iff
+  rw [add_comm, ← coe_add, ← sub_eq_zero, ← coe_sub, neg_div, sub_neg_eq_add, add_assoc,
+    add_halves, ← two_mul, coe_two_pi]
+/-
+**Real.Angle.two_zsmul_eq_pi_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：two_zsmul_eq_pi_iff {θ : Angle} : (2 : Int) • θ = π ↔ θ = (π / 2 : Real) ∨
+ θ = (-π / 2 : Real)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `two_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 2 • a = a +
+ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `two_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 2 • a = a + a
+· 使用定理 `Real.Angle.two_nsmul_eq_pi_iff`：two_nsmul_eq_pi_iff {θ : Angle} : (2 : N
+at) • θ = π ↔ θ = (π / 2 : Real) ∨ θ = (-π / 2 : Real)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem two_nsmul_eq_pi_iff {θ : Angle} : (2 : Nat) • θ = π ↔ θ = (π / 2 : Real) ∨ θ = (-π / 2 : Real) := by
-  have h : (π : Angle) = ((2 : Nat) • (π / 2 : Real) :) := by rw [two_nsmul, add_halves]
-  nth_rw 1 [h]
-  rw [coe_nsmul]; rw [two_nsmul_eq_iff]
-  apply iff_of_eq -- `congr` only works on `Eq`, so rewrite from `Iff` to `Eq`.
-  congr
-  rw [add_comm]; rw [← coe_add]; rw [← sub_eq_zero]; rw [← coe_sub]; rw [neg_div]; rw [sub_neg_eq_add]; rw [add_assoc]; rw [add_halves]; rw [← two_mul]; rw [coe_two_pi]
-
-/--
-theorem `two_zsmul_eq_pi_iff` / 定理 `two_zsmul_eq_pi_iff`
-
-English:
-theorem two_zsmul_eq_pi_iff
-  given: {θ : Angle}
-  statement: (2 : Int) • θ = π ↔ θ = (π / 2 : Real) ∨ θ = (-π / 2 : Real)
-  proof: by
-  rw [two_zsmul]; rw [← two_nsmul]; rw [two_nsmul_eq_pi_iff]
-
-中文:
-定理 two_zsmul_eq_pi_iff
-  条件: {θ : Angle}
-  结论: (2 : 整数) • θ = π ↔ θ = (π / 2 : 实数) ∨ θ = (-π / 2 : 实数)
-  证明: by
-  rw [two_zsmul]; rw [← two_nsmul]; rw [two_nsmul_eq_pi_iff]
-
-Depends on / 依赖: two_nsmul, two_nsmul_eq_pi_iff, two_zsmul
+theorem two_zsmul_eq_pi_iff {θ : Angle} : (2 : ℤ) • θ = π ↔ θ = (π / 2 : ℝ) ∨ θ = (-π / 2 : ℝ) := by
+  rw [two_zsmul, ← two_nsmul, two_nsmul_eq_pi_iff]
+/-
+**Real.Angle.cos_eq_iff_coe_eq_or_eq_neg** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：cos_eq_iff_coe_eq_or_eq_neg {θ ψ : Real} : cos θ = cos ψ ↔ (θ : Angle) = ψ
+ ∨ (θ : Angle) = -ψ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.sin_eq_zero_iff`：sin_eq_zero_iff {x : Real} : sin x = 0 ↔ exists n 
+: Int, (n : Real) * π = x
+· 使用定理 `false_or`：∀ (p : Prop), (False ∨ p) = p
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用引理 `two_ne_zero'`：two_ne_zero' [OfNat α 2] [NeZero (2 : α)] : (2 : α) != 0
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `neg_eq_zero`：∀ {α : Type u_1} [inst : SubtractionMonoid α] {a : α}, -a =
+ 0 ↔ a = 0
+· 使用定理 `mul_eq_zero`：mul_eq_zero : a * b = 0 ↔ a = 0 ∨ b = 0
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `Real.cos_sub_cos`：∀ (x y : ℝ), Real.cos x - Real.cos y = -2 * Real.sin (
+(x + y) / 2) * Real.sin ((x - y) / 2)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `sub_eq_iff_eq_add`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a -
+ b = c ↔ a = c + b
+· 使用引理 `eq_div_iff_mul_eq`：eq_div_iff_mul_eq (hc : c != 0) : a = b / c ↔ a * c =
+ b
+· 使用定理 `Real.Angle.coe_sub`：coe_sub (x y : Real) : ↑(x - y : Real) = (↑x - ↑y : 
+Angle)
+· 使用定理 `eq_neg_iff_add_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, 
+a = -b ↔ a + b = 0
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Real.Angle.intCast_mul_eq_zsmul`：intCast_mul_eq_zsmul (x : Real) (n : In
+t) : ↑((n : Real) * x : Real) = n • (↑x : Angle)
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Real.Angle.coe_two_pi`：coe_two_pi : ↑(2 * π : Real) = (0 : Angle)
+· 使用定理 `zsmul_zero`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (n : ℤ), n • 0
+ = 0
+· 使用定理 `eq_sub_iff_add_eq`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a =
+ b - c ↔ a + c = b
+· 使用定理 `Real.Angle.coe_add`：coe_add (x y : Real) : ↑(x + y : Real) = (↑x + ↑y : 
+Angle)
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `Real.Angle.angle_eq_iff_two_pi_dvd_sub`：angle_eq_iff_two_pi_dvd_sub {ψ θ
+ : Real} : (θ : Angle) = ψ ↔ exists k : Int, θ - ψ = 2 * π * k
+· 使用定理 `Real.Angle.coe_neg`：coe_neg (x : Real) : ↑(-x : Real) = -(↑x : Angle)
+· 使用定理 `mul_div_cancel_left₀`：∀ {M₀ : Type u_1} [inst : CommMonoidWithZero M₀] [
+inst_1 : Div M₀] [MulDivCancelClass M₀] (b : M₀) {a : M₀},   a ≠ 0 → a * b / a =
+ b
+（共 35 条，此处仅展示前 30 条）
 -/
-theorem two_zsmul_eq_pi_iff {θ : Angle} : (2 : Int) • θ = π ↔ θ = (π / 2 : Real) ∨ θ = (-π / 2 : Real) := by
-  rw [two_zsmul]; rw [← two_nsmul]; rw [two_nsmul_eq_pi_iff]
-
-/--
-theorem `cos_eq_iff_coe_eq_or_eq_neg` / 定理 `cos_eq_iff_coe_eq_or_eq_neg`
-
-English:
-theorem cos_eq_iff_coe_eq_or_eq_neg
-  given: {θ ψ : Real}
-  proof: by
-  constructor
-  · intro Hcos
-    rw [← sub_eq_zero]; rw [cos_sub_cos]; rw [mul_eq_zero]; rw [mul_eq_zero]; rw [neg_eq_zero]; rw [eq_false (two_ne_zero' Real)]; rw [false_or]; rw [sin_eq_zero_iff]; rw [sin_eq_zero_iff] at Hcos
-    rcases Hcos with (⟨n, hn⟩ | ⟨n, hn⟩)
-    · right
-      rw [eq_div_iff_mul_eq (two_ne_zero' Real)]; rw [← sub_eq_iff_eq_add] at hn
-      rw [← hn]; rw [coe_sub]; rw [eq_neg_iff_add_eq_zero]; rw [sub_add_cancel]; rw [mul_assoc]; rw [intCast_mul_eq_zsmul]; rw [mul_comm]; rw [coe_two_pi]; rw [zsmul_zero]
-    · left
-      rw [eq_div_iff_mul_eq (two_ne_zero' Real)]; rw [eq_sub_iff_add_eq] at hn
-      rw [← hn]; rw [coe_add]; rw [mul_assoc]; rw [intCast_mul_eq_zsmul]; rw [mul_comm]; rw [coe_two_pi]; rw [zsmul_zero]; rw [zero_add]
-  · rw [angle_eq_iff_two_pi_dvd_sub, ← coe_neg, angle_eq_iff_two_pi_dvd_sub]
-    rintro (⟨k, H⟩ | ⟨k, H⟩)
-    · rw [← sub_eq_zero, cos_sub_cos, H, mul_assoc 2 π k, mul_div_cancel_left₀ _ (two_ne_zero' Real),
-        mul_comm π _, sin_int_mul_pi, mul_zero]
-    rw [← sub_eq_zero]; rw [cos_sub_cos]; rw [← sub_neg_eq_add]; rw [H]; rw [mul_assoc 2 π k]; rw [mul_div_cancel_left₀ _ (two_ne_zero' Real)]; rw [mul_comm π _]; rw [sin_int_mul_pi]; rw [mul_zero]; rw [zero_mul]
-
-中文:
-定理 cos_eq_iff_coe_eq_or_eq_neg
-  条件: {θ ψ : 实数}
-  证明: by
-  constructor
-  · intro Hcos
-    rw [← sub_eq_zero]; rw [cos_sub_cos]; rw [mul_eq_zero]; rw [mul_eq_zero]; rw [neg_eq_zero]; rw [eq_false (two_ne_zero' Real)]; rw [false_or]; rw [sin_eq_zero_iff]; rw [sin_eq_zero_iff] at Hcos
-    rcases Hcos with (⟨n, hn⟩ | ⟨n, hn⟩)
-    · right
-      rw [eq_div_iff_mul_eq (two_ne_zero' Real)]; rw [← sub_eq_iff_eq_add] at hn
-      rw [← hn]; rw [coe_sub]; rw [eq_neg_iff_add_eq_zero]; rw [sub_add_cancel]; rw [mul_assoc]; rw [intCast_mul_eq_zsmul]; rw [mul_comm]; rw [coe_two_pi]; rw [zsmul_zero]
-    · left
-      rw [eq_div_iff_mul_eq (two_ne_zero' Real)]; rw [eq_sub_iff_add_eq] at hn
-      rw [← hn]; rw [coe_add]; rw [mul_assoc]; rw [intCast_mul_eq_zsmul]; rw [mul_comm]; rw [coe_two_pi]; rw [zsmul_zero]; rw [zero_add]
-  · rw [angle_eq_iff_two_pi_dvd_sub, ← coe_neg, angle_eq_iff_two_pi_dvd_sub]
-    rintro (⟨k, H⟩ | ⟨k, H⟩)
-    · rw [← sub_eq_zero, cos_sub_cos, H, mul_assoc 2 π k, mul_div_cancel_left₀ _ (two_ne_zero' Real),
-        mul_comm π _, sin_int_mul_pi, mul_zero]
-    rw [← sub_eq_zero]; rw [cos_sub_cos]; rw [← sub_neg_eq_add]; rw [H]; rw [mul_assoc 2 π k]; rw [mul_div_cancel_left₀ _ (two_ne_zero' Real)]; rw [mul_comm π _]; rw [sin_int_mul_pi]; rw [mul_zero]; rw [zero_mul]
-
-Depends on / 依赖: coe_sub, coe_two_pi, cos_sub_cos, eq_div_iff_mul_eq, eq_false, eq_neg_iff_add_eq_zero, false_or, intCast_mul_eq_zsmul, mul_assoc, mul_comm, mul_eq_zero, neg_eq_zero, sin_eq_zero_iff, sub_add_cancel, sub_eq_iff_eq_add, sub_eq_zero, two_ne_zero
--/
-theorem cos_eq_iff_coe_eq_or_eq_neg {θ ψ : Real} :
+theorem cos_eq_iff_coe_eq_or_eq_neg {θ ψ : ℝ} :
     cos θ = cos ψ ↔ (θ : Angle) = ψ ∨ (θ : Angle) = -ψ := by
   constructor
   · intro Hcos
-    rw [← sub_eq_zero]; rw [cos_sub_cos]; rw [mul_eq_zero]; rw [mul_eq_zero]; rw [neg_eq_zero]; rw [eq_false (two_ne_zero' Real)]; rw [false_or]; rw [sin_eq_zero_iff]; rw [sin_eq_zero_iff] at Hcos
+    rw [← sub_eq_zero, cos_sub_cos, mul_eq_zero, mul_eq_zero, neg_eq_zero,
+      eq_false (two_ne_zero' ℝ), false_or, sin_eq_zero_iff, sin_eq_zero_iff] at Hcos
     rcases Hcos with (⟨n, hn⟩ | ⟨n, hn⟩)
     · right
-      rw [eq_div_iff_mul_eq (two_ne_zero' Real)]; rw [← sub_eq_iff_eq_add] at hn
-      rw [← hn]; rw [coe_sub]; rw [eq_neg_iff_add_eq_zero]; rw [sub_add_cancel]; rw [mul_assoc]; rw [intCast_mul_eq_zsmul]; rw [mul_comm]; rw [coe_two_pi]; rw [zsmul_zero]
+      rw [eq_div_iff_mul_eq (two_ne_zero' ℝ), ← sub_eq_iff_eq_add] at hn
+      rw [← hn, coe_sub, eq_neg_iff_add_eq_zero, sub_add_cancel, mul_assoc, intCast_mul_eq_zsmul,
+        mul_comm, coe_two_pi, zsmul_zero]
     · left
-      rw [eq_div_iff_mul_eq (two_ne_zero' Real)]; rw [eq_sub_iff_add_eq] at hn
-      rw [← hn]; rw [coe_add]; rw [mul_assoc]; rw [intCast_mul_eq_zsmul]; rw [mul_comm]; rw [coe_two_pi]; rw [zsmul_zero]; rw [zero_add]
+      rw [eq_div_iff_mul_eq (two_ne_zero' ℝ), eq_sub_iff_add_eq] at hn
+      rw [← hn, coe_add, mul_assoc, intCast_mul_eq_zsmul, mul_comm, coe_two_pi, zsmul_zero,
+        zero_add]
   · rw [angle_eq_iff_two_pi_dvd_sub, ← coe_neg, angle_eq_iff_two_pi_dvd_sub]
     rintro (⟨k, H⟩ | ⟨k, H⟩)
-    · rw [← sub_eq_zero, cos_sub_cos, H, mul_assoc 2 π k, mul_div_cancel_left₀ _ (two_ne_zero' Real),
+    · rw [← sub_eq_zero, cos_sub_cos, H, mul_assoc 2 π k, mul_div_cancel_left₀ _ (two_ne_zero' ℝ),
         mul_comm π _, sin_int_mul_pi, mul_zero]
-    rw [← sub_eq_zero]; rw [cos_sub_cos]; rw [← sub_neg_eq_add]; rw [H]; rw [mul_assoc 2 π k]; rw [mul_div_cancel_left₀ _ (two_ne_zero' Real)]; rw [mul_comm π _]; rw [sin_int_mul_pi]; rw [mul_zero]; rw [zero_mul]
-
-/--
-theorem `sin_eq_iff_coe_eq_or_add_eq_pi` / 定理 `sin_eq_iff_coe_eq_or_add_eq_pi`
-
-English:
-theorem sin_eq_iff_coe_eq_or_add_eq_pi
-  given: {θ ψ : Real}
-  proof: by
-  constructor
-  · intro Hsin
-    rw [← cos_pi_div_two_sub]; rw [← cos_pi_div_two_sub] at Hsin
-    rcases cos_eq_iff_coe_eq_or_eq_neg.mp Hsin with h | h
-    · left
-      rw [coe_sub]; rw [coe_sub] at h
-      exact sub_right_inj.1 h
-    right
-    rw [coe_sub]; rw [coe_sub]; rw [eq_neg_iff_add_eq_zero]; rw [add_sub]; rw [sub_add_eq_add_sub]; rw [← coe_add]; rw [add_halves]; rw [sub_sub]; rw [sub_eq_zero] at h
-    exact h.symm
-  · rw [angle_eq_iff_two_pi_dvd_sub, ← eq_sub_iff_add_eq, ← coe_sub, angle_eq_iff_two_pi_dvd_sub]
-    rintro (⟨k, H⟩ | ⟨k, H⟩)
-    · rw [← sub_eq_zero, sin_sub_sin, H, mul_assoc 2 π k, mul_div_cancel_left₀ _ (two_ne_zero' Real),
-        mul_comm π _, sin_int_mul_pi, mul_zero, zero_mul]
-    have H' : θ + ψ = 2 * k * π + π := by
-      rwa [← sub_add, sub_add_eq_add_sub, sub_eq_iff_eq_add, mul_assoc, mul_comm π _, ←
-        mul_assoc] at H
-    rw [← sub_eq_zero]; rw [sin_sub_sin]; rw [H']; rw [add_div]; rw [mul_assoc 2 _ π]; rw [mul_div_cancel_left₀ _ (two_ne_zero' Real)]; rw [cos_add_pi_div_two]; rw [sin_int_mul_pi]; rw [neg_zero]; rw [mul_zero]
-
-中文:
-定理 sin_eq_iff_coe_eq_or_add_eq_pi
-  条件: {θ ψ : 实数}
-  证明: by
-  constructor
-  · intro Hsin
-    rw [← cos_pi_div_two_sub]; rw [← cos_pi_div_two_sub] at Hsin
-    rcases cos_eq_iff_coe_eq_or_eq_neg.mp Hsin with h | h
-    · left
-      rw [coe_sub]; rw [coe_sub] at h
-      exact sub_right_inj.1 h
-    right
-    rw [coe_sub]; rw [coe_sub]; rw [eq_neg_iff_add_eq_zero]; rw [add_sub]; rw [sub_add_eq_add_sub]; rw [← coe_add]; rw [add_halves]; rw [sub_sub]; rw [sub_eq_zero] at h
-    exact h.symm
-  · rw [angle_eq_iff_two_pi_dvd_sub, ← eq_sub_iff_add_eq, ← coe_sub, angle_eq_iff_two_pi_dvd_sub]
-    rintro (⟨k, H⟩ | ⟨k, H⟩)
-    · rw [← sub_eq_zero, sin_sub_sin, H, mul_assoc 2 π k, mul_div_cancel_left₀ _ (two_ne_zero' Real),
-        mul_comm π _, sin_int_mul_pi, mul_zero, zero_mul]
-    have H' : θ + ψ = 2 * k * π + π := by
-      rwa [← sub_add, sub_add_eq_add_sub, sub_eq_iff_eq_add, mul_assoc, mul_comm π _, ←
-        mul_assoc] at H
-    rw [← sub_eq_zero]; rw [sin_sub_sin]; rw [H']; rw [add_div]; rw [mul_assoc 2 _ π]; rw [mul_div_cancel_left₀ _ (two_ne_zero' Real)]; rw [cos_add_pi_div_two]; rw [sin_int_mul_pi]; rw [neg_zero]; rw [mul_zero]
-
-Depends on / 依赖: add_halves, add_sub, angle_eq_iff_two_pi_dvd_sub, coe_add, coe_sub, cos_eq_iff_coe_eq_or_eq_neg, cos_eq_iff_coe_eq_or_eq_neg.mp, cos_pi_div_two_sub, eq_neg_iff_add_eq_zero, eq_sub_iff_add_eq, h.symm, sub_add_eq_add_sub, sub_eq_zero, sub_right_inj, sub_sub
+    rw [← sub_eq_zero, cos_sub_cos, ← sub_neg_eq_add, H, mul_assoc 2 π k,
+      mul_div_cancel_left₀ _ (two_ne_zero' ℝ), mul_comm π _, sin_int_mul_pi, mul_zero,
+      zero_mul]
+/-
+**Real.Angle.sin_eq_iff_coe_eq_or_add_eq_pi** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angl
+e`。
+形式化陈述：sin_eq_iff_coe_eq_or_add_eq_pi {θ ψ : Real} : sin θ = sin ψ ↔ (θ : Angle) 
+= ψ ∨ (θ : Angle) + ψ = π
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Real.Angle.cos_eq_iff_coe_eq_or_eq_neg`：cos_eq_iff_coe_eq_or_eq_neg {θ ψ
+ : Real} : cos θ = cos ψ ↔ (θ : Angle) = ψ ∨ (θ : Angle) = -ψ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.cos_pi_div_two_sub`：cos_pi_div_two_sub (x : Real) : cos (π / 2 - x)
+ = sin x
+· 使用定理 `sub_right_inj`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a - b =
+ a - c ↔ b = c
+· 使用定理 `Real.Angle.coe_sub`：coe_sub (x y : Real) : ↑(x - y : Real) = (↑x - ↑y : 
+Angle)
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `sub_sub`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b c : α), 
+a - b - c = a - (b + c)
+· 使用定理 `add_halves`：∀ {K : Type u_1} [inst : DivisionSemiring K] [NeZero 2] (a :
+ K), a / 2 + a / 2 = a
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Real.Angle.coe_add`：coe_add (x y : Real) : ↑(x + y : Real) = (↑x + ↑y : 
+Angle)
+· 使用定理 `sub_add_eq_add_sub`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a
+ b c : α), a - b + c = a + c - b
+· 使用定理 `add_sub`：∀ {G : Type u_3} [inst : SubNegMonoid G] (a b c : G), a + (b - 
+c) = a + b - c
+· 使用定理 `eq_neg_iff_add_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, 
+a = -b ↔ a + b = 0
+· 使用定理 `Real.Angle.angle_eq_iff_two_pi_dvd_sub`：angle_eq_iff_two_pi_dvd_sub {ψ θ
+ : Real} : (θ : Angle) = ψ ↔ exists k : Int, θ - ψ = 2 * π * k
+· 使用定理 `eq_sub_iff_add_eq`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a =
+ b - c ↔ a + c = b
+· 使用定理 `Real.sin_sub_sin`：∀ (x y : ℝ), Real.sin x - Real.sin y = 2 * Real.sin ((
+x - y) / 2) * Real.cos ((x + y) / 2)
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `mul_div_cancel_left₀`：∀ {M₀ : Type u_1} [inst : CommMonoidWithZero M₀] [
+inst_1 : Div M₀] [MulDivCancelClass M₀] (b : M₀) {a : M₀},   a ≠ 0 → a * b / a =
+ b
+· 使用定理 `GroupWithZero.toMulDivCancelClass`：∀ {G₀ : Type u} [inst : GroupWithZero
+ G₀], MulDivCancelClass G₀
+· 使用引理 `two_ne_zero'`：two_ne_zero' [OfNat α 2] [NeZero (2 : α)] : (2 : α) != 0
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Real.sin_int_mul_pi`：sin_int_mul_pi (n : Int) : sin (n * π) = 0
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `sub_eq_iff_eq_add`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a -
+ b = c ↔ a = c + b
+· 使用定理 `sub_add`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b c : α), 
+a - b + c = a - (b - c)
+（共 33 条，此处仅展示前 30 条）
 -/
-theorem sin_eq_iff_coe_eq_or_add_eq_pi {θ ψ : Real} :
+theorem sin_eq_iff_coe_eq_or_add_eq_pi {θ ψ : ℝ} :
     sin θ = sin ψ ↔ (θ : Angle) = ψ ∨ (θ : Angle) + ψ = π := by
   constructor
   · intro Hsin
-    rw [← cos_pi_div_two_sub]; rw [← cos_pi_div_two_sub] at Hsin
+    rw [← cos_pi_div_two_sub, ← cos_pi_div_two_sub] at Hsin
     rcases cos_eq_iff_coe_eq_or_eq_neg.mp Hsin with h | h
     · left
-      rw [coe_sub]; rw [coe_sub] at h
+      rw [coe_sub, coe_sub] at h
       exact sub_right_inj.1 h
     right
-    rw [coe_sub]; rw [coe_sub]; rw [eq_neg_iff_add_eq_zero]; rw [add_sub]; rw [sub_add_eq_add_sub]; rw [← coe_add]; rw [add_halves]; rw [sub_sub]; rw [sub_eq_zero] at h
+    rw [coe_sub, coe_sub, eq_neg_iff_add_eq_zero, add_sub, sub_add_eq_add_sub, ← coe_add,
+      add_halves, sub_sub, sub_eq_zero] at h
     exact h.symm
   · rw [angle_eq_iff_two_pi_dvd_sub, ← eq_sub_iff_add_eq, ← coe_sub, angle_eq_iff_two_pi_dvd_sub]
     rintro (⟨k, H⟩ | ⟨k, H⟩)
-    · rw [← sub_eq_zero, sin_sub_sin, H, mul_assoc 2 π k, mul_div_cancel_left₀ _ (two_ne_zero' Real),
+    · rw [← sub_eq_zero, sin_sub_sin, H, mul_assoc 2 π k, mul_div_cancel_left₀ _ (two_ne_zero' ℝ),
         mul_comm π _, sin_int_mul_pi, mul_zero, zero_mul]
     have H' : θ + ψ = 2 * k * π + π := by
       rwa [← sub_add, sub_add_eq_add_sub, sub_eq_iff_eq_add, mul_assoc, mul_comm π _, ←
         mul_assoc] at H
-    rw [← sub_eq_zero]; rw [sin_sub_sin]; rw [H']; rw [add_div]; rw [mul_assoc 2 _ π]; rw [mul_div_cancel_left₀ _ (two_ne_zero' Real)]; rw [cos_add_pi_div_two]; rw [sin_int_mul_pi]; rw [neg_zero]; rw [mul_zero]
-
-/--
-theorem `cos_sin_inj` / 定理 `cos_sin_inj`
-
-English:
-theorem cos_sin_inj
-  given: {θ ψ : Real} (Hcos : cos θ = cos ψ) (Hsin : sin θ = sin ψ)
-  statement: (θ : Angle) = ψ
-  proof: by
-  rcases cos_eq_iff_coe_eq_or_eq_neg.mp Hcos with hc | hc; · exact hc
-  rcases sin_eq_iff_coe_eq_or_add_eq_pi.mp Hsin with hs | hs; · exact hs
-  rw [eq_neg_iff_add_eq_zero]; rw [hs] at hc
-  obtain ⟨n, hn⟩ : exists n, n • _ = _ := QuotientAddGroup.leftRel_apply.mp (Quotient.exact' hc)
-  rw [← neg_one_mul]; rw [add_zero]; rw [← sub_eq_zero]; rw [zsmul_eq_mul]; rw [← mul_assoc]; rw [← sub_mul]; rw [mul_eq_zero]; rw [eq_false (ne_of_gt pi_pos)]; rw [or_false]; rw [sub_neg_eq_add]; rw [← Int.cast_zero]; rw [← Int.cast_one]; rw [← Int.cast_ofNat]; rw [← Int.cast_mul]; rw [← Int.cast_add]; rw [Int.cast_inj] at hn
-  have : (n * 2 + 1) % (2 : Int) = 0 % (2 : Int) := congr_arg (· % (2 : Int)) hn
-  rw [add_comm]; rw [Int.add_mul_emod_self_right] at this
-  exact absurd this one_ne_zero
-
-中文:
-定理 cos_sin_inj
-  条件: {θ ψ : 实数} (Hcos : cos θ = cos ψ) (Hsin : sin θ = sin ψ)
-  结论: (θ : Angle) = ψ
-  证明: by
-  rcases cos_eq_iff_coe_eq_or_eq_neg.mp Hcos with hc | hc; · exact hc
-  rcases sin_eq_iff_coe_eq_or_add_eq_pi.mp Hsin with hs | hs; · exact hs
-  rw [eq_neg_iff_add_eq_zero]; rw [hs] at hc
-  obtain ⟨n, hn⟩ : exists n, n • _ = _ := QuotientAddGroup.leftRel_apply.mp (Quotient.exact' hc)
-  rw [← neg_one_mul]; rw [add_zero]; rw [← sub_eq_zero]; rw [zsmul_eq_mul]; rw [← mul_assoc]; rw [← sub_mul]; rw [mul_eq_zero]; rw [eq_false (ne_of_gt pi_pos)]; rw [or_false]; rw [sub_neg_eq_add]; rw [← Int.cast_zero]; rw [← Int.cast_one]; rw [← Int.cast_ofNat]; rw [← Int.cast_mul]; rw [← Int.cast_add]; rw [Int.cast_inj] at hn
-  have : (n * 2 + 1) % (2 : Int) = 0 % (2 : Int) := congr_arg (· % (2 : Int)) hn
-  rw [add_comm]; rw [Int.add_mul_emod_self_right] at this
-  exact absurd this one_ne_zero
-
-Depends on / 依赖: Int.cast_zero, Quotient, Quotient.exact, QuotientAddGroup, QuotientAddGroup.leftRel_apply.mp, add_zero, cast_zero, cos_eq_iff_coe_eq_or_eq_neg, cos_eq_iff_coe_eq_or_eq_neg.mp, eq_false, eq_neg_iff_add_eq_zero, leftRel_apply, mul_assoc, mul_eq_zero, ne_of_gt, neg_one_mul, or_false, pi_pos, sin_eq_iff_coe_eq_or_add_eq_pi, sin_eq_iff_coe_eq_or_add_eq_pi.mp
+    rw [← sub_eq_zero, sin_sub_sin, H', add_div, mul_assoc 2 _ π,
+      mul_div_cancel_left₀ _ (two_ne_zero' ℝ), cos_add_pi_div_two, sin_int_mul_pi, neg_zero,
+      mul_zero]
+/-
+**Real.Angle.cos_sin_inj** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：cos_sin_inj {θ ψ : Real} (Hcos : cos θ = cos ψ) (Hsin : sin θ = sin ψ) : (
+θ : Angle) = ψ
+参数：Hcos : cos θ = cos ψ；Hsin : sin θ = sin ψ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Real.Angle.cos_eq_iff_coe_eq_or_eq_neg`：cos_eq_iff_coe_eq_or_eq_neg {θ ψ
+ : Real} : cos θ = cos ψ ↔ (θ : Angle) = ψ ∨ (θ : Angle) = -ψ
+· 使用定理 `Real.Angle.sin_eq_iff_coe_eq_or_add_eq_pi`：sin_eq_iff_coe_eq_or_add_eq_p
+i {θ ψ : Real} : sin θ = sin ψ ↔ (θ : Angle) = ψ ∨ (θ : Angle) + ψ = π
+· 使用定理 `QuotientAddGroup.leftRel_apply`：∀ {α : Type u_1} [inst : AddGroup α] {s 
+: AddSubgroup α} {x y : α}, (QuotientAddGroup.leftRel s) x y ↔ -x + y ∈ s
+· 使用定理 `Quotient.exact'`：exact' {a b : α} : (Quotient.mk'' a : Quotient s₁) = Qu
+otient.mk'' b -> s₁ a b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_neg_iff_add_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, 
+a = -b ↔ a + b = 0
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用引理 `Int.cast_inj`：cast_inj : (m : α) = n ↔ m = n
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Int.cast_add`：∀ {R : Type u} [inst : AddGroupWithOne R] (m n : ℤ), ↑(m +
+ n) = ↑m + ↑n
+· 使用引理 `Int.cast_mul`：cast_mul {α : Type*} [NonAssocRing α] : forall m n, ((m * 
+n : Int) : α) = m * n
+· 使用定理 `Int.cast_ofNat`：cast_ofNat (n : Nat) [n.AtLeastTwo] : ((ofNat(n) : Int) 
+: R) = ofNat(n)
+· 使用定理 `Int.cast_one`：cast_one : ((1 : Int) : R) = 1
+· 使用定理 `Int.cast_zero`：cast_zero : ((0 : Int) : R) = 0
+· 使用定理 `sub_neg_eq_add`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α),
+ a - -b = a + b
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `ne_of_gt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `Real.pi_pos`：pi_pos : 0 < π
+· 使用定理 `mul_eq_zero`：mul_eq_zero : a * b = 0 ↔ a = 0 ∨ b = 0
+· 使用定理 `NormedDivisionRing.toNormMulClass`：∀ {α : Type u_2} [inst : NormedDivisi
+onRing α], NormMulClass α
+· 使用定理 `sub_mul`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), (a
+ - b) * c = a * c - b * c
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `sub_eq_zero`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, a - b = 0 ↔
+ a = b
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `neg_one_mul`：neg_one_mul (a : α) : -1 * a = -a
+· 使用定理 `Int.add_mul_emod_self_right`：∀ (a b c : ℤ), (a + b * c) % c = a % c
+（共 34 条，此处仅展示前 30 条）
 -/
-theorem cos_sin_inj {θ ψ : Real} (Hcos : cos θ = cos ψ) (Hsin : sin θ = sin ψ) : (θ : Angle) = ψ := by
+theorem cos_sin_inj {θ ψ : ℝ} (Hcos : cos θ = cos ψ) (Hsin : sin θ = sin ψ) : (θ : Angle) = ψ := by
   rcases cos_eq_iff_coe_eq_or_eq_neg.mp Hcos with hc | hc; · exact hc
   rcases sin_eq_iff_coe_eq_or_add_eq_pi.mp Hsin with hs | hs; · exact hs
-  rw [eq_neg_iff_add_eq_zero]; rw [hs] at hc
-  obtain ⟨n, hn⟩ : exists n, n • _ = _ := QuotientAddGroup.leftRel_apply.mp (Quotient.exact' hc)
-  rw [← neg_one_mul]; rw [add_zero]; rw [← sub_eq_zero]; rw [zsmul_eq_mul]; rw [← mul_assoc]; rw [← sub_mul]; rw [mul_eq_zero]; rw [eq_false (ne_of_gt pi_pos)]; rw [or_false]; rw [sub_neg_eq_add]; rw [← Int.cast_zero]; rw [← Int.cast_one]; rw [← Int.cast_ofNat]; rw [← Int.cast_mul]; rw [← Int.cast_add]; rw [Int.cast_inj] at hn
-  have : (n * 2 + 1) % (2 : Int) = 0 % (2 : Int) := congr_arg (· % (2 : Int)) hn
-  rw [add_comm]; rw [Int.add_mul_emod_self_right] at this
+  rw [eq_neg_iff_add_eq_zero, hs] at hc
+  obtain ⟨n, hn⟩ : ∃ n, n • _ = _ := QuotientAddGroup.leftRel_apply.mp (Quotient.exact' hc)
+  rw [← neg_one_mul, add_zero, ← sub_eq_zero, zsmul_eq_mul, ← mul_assoc, ← sub_mul, mul_eq_zero,
+    eq_false (ne_of_gt pi_pos), or_false, sub_neg_eq_add, ← Int.cast_zero, ← Int.cast_one,
+    ← Int.cast_ofNat, ← Int.cast_mul, ← Int.cast_add, Int.cast_inj] at hn
+  have : (n * 2 + 1) % (2 : ℤ) = 0 % (2 : ℤ) := congr_arg (· % (2 : ℤ)) hn
+  rw [add_comm, Int.add_mul_emod_self_right] at this
   exact absurd this one_ne_zero
 
-/--
-Definition of `sin` / `sin` 的定义
+/-- The sine of a `Real.Angle`. -/
+/-
+**Real.Angle.sin** 是 Mathlib 中的一个定义，位于命名空间 `Real.Angle`。
+形式化陈述：sin (θ : Angle) : Real
+参数：θ : Angle。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.sin_periodic`：sin_periodic : Function.Periodic sin (2 * π)
 
-English:
-definition sin
-  signature: (θ : Angle)
-  body: sin_periodic.lift θ
-
-@[simp]
-
-中文:
-定义 sin
-  签名: (θ : Angle)
-  定义体: sin_periodic.lift θ
-
-@[simp]
-
-Depends on / 依赖: sin_periodic, sin_periodic.lift
+--- 原说明 ---
+The sine of a `Real.Angle`.
 -/
-def sin (θ : Angle) : Real :=
+def sin (θ : Angle) : ℝ :=
   sin_periodic.lift θ
 
 @[simp]
-/--
-theorem `sin_coe` / 定理 `sin_coe`
-
-English:
-theorem sin_coe
-  given: (x : Real)
-  statement: sin (x : Angle) = Real.sin x
-  proof: rfl
-
-@[continuity]
-
-中文:
-定理 sin_coe
-  条件: (x : 实数)
-  结论: sin (x : Angle) = 实数.sin x
-  证明: rfl
-
-@[continuity]
+/-
+**Real.Angle.sin_coe** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sin_coe (x : Real) : sin (x : Angle) = Real.sin x
+参数：x : Real。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem sin_coe (x : Real) : sin (x : Angle) = Real.sin x :=
+theorem sin_coe (x : ℝ) : sin (x : Angle) = Real.sin x :=
   rfl
 
 @[continuity]
-/--
-theorem `continuous_sin` / 定理 `continuous_sin`
-
-English:
-theorem continuous_sin
-  statement: Continuous sin
-  proof: Real.continuous_sin.quotient_liftOn' _
-
-中文:
-定理 continuous_sin
-  结论: 连续 sin
-  证明: Real.continuous_sin.quotient_liftOn' _
-
-Depends on / 依赖: Real.continuous_sin.quotient_liftOn, continuous_sin, quotient_liftOn
+/-
+**Real.Angle.continuous_sin** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：continuous_sin : Continuous sin
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.quotient_liftOn'`：Continuous.quotient_liftOn' {f : X -> Y} (h
+ : Continuous f) (hs : forall a b, s a b -> f a = f b) : Continuous (fun x => Qu
+otient.liftOn' x …
+· 使用定理 `Real.continuous_sin`：continuous_sin : Continuous sin
+· 使用定理 `Real.sin_periodic`：sin_periodic : Function.Periodic sin (2 * π)
 -/
 theorem continuous_sin : Continuous sin :=
   Real.continuous_sin.quotient_liftOn' _
 
-/--
-Definition of `cos` / `cos` 的定义
+/-- The cosine of a `Real.Angle`. -/
+/-
+**Real.Angle.cos** 是 Mathlib 中的一个定义，位于命名空间 `Real.Angle`。
+形式化陈述：cos (θ : Angle) : Real
+参数：θ : Angle。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.cos_periodic`：cos_periodic : Function.Periodic cos (2 * π)
 
-English:
-definition cos
-  signature: (θ : Angle)
-  body: cos_periodic.lift θ
-
-@[simp]
-
-中文:
-定义 cos
-  签名: (θ : Angle)
-  定义体: cos_periodic.lift θ
-
-@[simp]
-
-Depends on / 依赖: cos_periodic, cos_periodic.lift
+--- 原说明 ---
+The cosine of a `Real.Angle`.
 -/
-def cos (θ : Angle) : Real :=
+def cos (θ : Angle) : ℝ :=
   cos_periodic.lift θ
 
 @[simp]
-/--
-theorem `cos_coe` / 定理 `cos_coe`
-
-English:
-theorem cos_coe
-  given: (x : Real)
-  statement: cos (x : Angle) = Real.cos x
-  proof: rfl
-
-@[continuity]
-
-中文:
-定理 cos_coe
-  条件: (x : 实数)
-  结论: cos (x : Angle) = 实数.cos x
-  证明: rfl
-
-@[continuity]
+/-
+**Real.Angle.cos_coe** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：cos_coe (x : Real) : cos (x : Angle) = Real.cos x
+参数：x : Real。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem cos_coe (x : Real) : cos (x : Angle) = Real.cos x :=
+theorem cos_coe (x : ℝ) : cos (x : Angle) = Real.cos x :=
   rfl
 
 @[continuity]
-/--
-theorem `continuous_cos` / 定理 `continuous_cos`
-
-English:
-theorem continuous_cos
-  statement: Continuous cos
-  proof: Real.continuous_cos.quotient_liftOn' _
-
-中文:
-定理 continuous_cos
-  结论: 连续 cos
-  证明: Real.continuous_cos.quotient_liftOn' _
-
-Depends on / 依赖: Real.continuous_cos.quotient_liftOn, continuous_cos, quotient_liftOn
+/-
+**Real.Angle.continuous_cos** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：continuous_cos : Continuous cos
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Continuous.quotient_liftOn'`：Continuous.quotient_liftOn' {f : X -> Y} (h
+ : Continuous f) (hs : forall a b, s a b -> f a = f b) : Continuous (fun x => Qu
+otient.liftOn' x …
+· 使用定理 `Real.continuous_cos`：continuous_cos : Continuous cos
+· 使用定理 `Real.cos_periodic`：cos_periodic : Function.Periodic cos (2 * π)
 -/
 theorem continuous_cos : Continuous cos :=
   Real.continuous_cos.quotient_liftOn' _
-
-/--
-theorem `cos_eq_real_cos_iff_eq_or_eq_neg` / 定理 `cos_eq_real_cos_iff_eq_or_eq_neg`
-
-English:
-theorem cos_eq_real_cos_iff_eq_or_eq_neg
-  given: {θ : Angle} {ψ : Real}
-  proof: by
-  induction θ using Real.Angle.induction_on
-  exact cos_eq_iff_coe_eq_or_eq_neg
-
-中文:
-定理 cos_eq_real_cos_iff_eq_or_eq_neg
-  条件: {θ : Angle} {ψ : 实数}
-  证明: by
-  induction θ using Real.Angle.induction_on
-  exact cos_eq_iff_coe_eq_or_eq_neg
-
-Depends on / 依赖: Real.Angle.induction_on, cos_eq_iff_coe_eq_or_eq_neg, induction_on
+/-
+**Real.Angle.cos_eq_real_cos_iff_eq_or_eq_neg** 是 Mathlib 中的一个定理，位于命名空间 `Real.An
+gle`。
+形式化陈述：cos_eq_real_cos_iff_eq_or_eq_neg {θ : Angle} {ψ : Real} : cos θ = Real.cos
+ ψ ↔ θ = ψ ∨ θ = -ψ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.induction_on`：∀ {p : Real.Angle → Prop} (θ : Real.Angle), (∀ 
+(x : ℝ), p ↑x) → p θ
+· 使用定理 `Real.Angle.cos_eq_iff_coe_eq_or_eq_neg`：cos_eq_iff_coe_eq_or_eq_neg {θ ψ
+ : Real} : cos θ = cos ψ ↔ (θ : Angle) = ψ ∨ (θ : Angle) = -ψ
 -/
-theorem cos_eq_real_cos_iff_eq_or_eq_neg {θ : Angle} {ψ : Real} :
+theorem cos_eq_real_cos_iff_eq_or_eq_neg {θ : Angle} {ψ : ℝ} :
     cos θ = Real.cos ψ ↔ θ = ψ ∨ θ = -ψ := by
   induction θ using Real.Angle.induction_on
   exact cos_eq_iff_coe_eq_or_eq_neg
-
-/--
-theorem `cos_eq_iff_eq_or_eq_neg` / 定理 `cos_eq_iff_eq_or_eq_neg`
-
-English:
-theorem cos_eq_iff_eq_or_eq_neg
-  given: {θ ψ : Angle}
-  statement: cos θ = cos ψ ↔ θ = ψ ∨ θ = -ψ
-  proof: by
-  induction ψ using Real.Angle.induction_on
-  exact cos_eq_real_cos_iff_eq_or_eq_neg
-
-中文:
-定理 cos_eq_iff_eq_or_eq_neg
-  条件: {θ ψ : Angle}
-  结论: cos θ = cos ψ ↔ θ = ψ ∨ θ = -ψ
-  证明: by
-  induction ψ using Real.Angle.induction_on
-  exact cos_eq_real_cos_iff_eq_or_eq_neg
-
-Depends on / 依赖: Real.Angle.induction_on, cos_eq_real_cos_iff_eq_or_eq_neg, induction_on
+/-
+**Real.Angle.cos_eq_iff_eq_or_eq_neg** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：cos_eq_iff_eq_or_eq_neg {θ ψ : Angle} : cos θ = cos ψ ↔ θ = ψ ∨ θ = -ψ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.induction_on`：∀ {p : Real.Angle → Prop} (θ : Real.Angle), (∀ 
+(x : ℝ), p ↑x) → p θ
+· 使用定理 `Real.Angle.cos_eq_real_cos_iff_eq_or_eq_neg`：cos_eq_real_cos_iff_eq_or_e
+q_neg {θ : Angle} {ψ : Real} : cos θ = Real.cos ψ ↔ θ = ψ ∨ θ = -ψ
 -/
 theorem cos_eq_iff_eq_or_eq_neg {θ ψ : Angle} : cos θ = cos ψ ↔ θ = ψ ∨ θ = -ψ := by
   induction ψ using Real.Angle.induction_on
   exact cos_eq_real_cos_iff_eq_or_eq_neg
-
-/--
-theorem `sin_eq_real_sin_iff_eq_or_add_eq_pi` / 定理 `sin_eq_real_sin_iff_eq_or_add_eq_pi`
-
-English:
-theorem sin_eq_real_sin_iff_eq_or_add_eq_pi
-  given: {θ : Angle} {ψ : Real}
-  proof: by
-  induction θ using Real.Angle.induction_on
-  exact sin_eq_iff_coe_eq_or_add_eq_pi
-
-中文:
-定理 sin_eq_real_sin_iff_eq_or_add_eq_pi
-  条件: {θ : Angle} {ψ : 实数}
-  证明: by
-  induction θ using Real.Angle.induction_on
-  exact sin_eq_iff_coe_eq_or_add_eq_pi
-
-Depends on / 依赖: Real.Angle.induction_on, induction_on, sin_eq_iff_coe_eq_or_add_eq_pi
+/-
+**Real.Angle.sin_eq_real_sin_iff_eq_or_add_eq_pi** 是 Mathlib 中的一个定理，位于命名空间 `Real
+.Angle`。
+形式化陈述：sin_eq_real_sin_iff_eq_or_add_eq_pi {θ : Angle} {ψ : Real} : sin θ = Real.
+sin ψ ↔ θ = ψ ∨ θ + ψ = π
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.induction_on`：∀ {p : Real.Angle → Prop} (θ : Real.Angle), (∀ 
+(x : ℝ), p ↑x) → p θ
+· 使用定理 `Real.Angle.sin_eq_iff_coe_eq_or_add_eq_pi`：sin_eq_iff_coe_eq_or_add_eq_p
+i {θ ψ : Real} : sin θ = sin ψ ↔ (θ : Angle) = ψ ∨ (θ : Angle) + ψ = π
 -/
-theorem sin_eq_real_sin_iff_eq_or_add_eq_pi {θ : Angle} {ψ : Real} :
+theorem sin_eq_real_sin_iff_eq_or_add_eq_pi {θ : Angle} {ψ : ℝ} :
     sin θ = Real.sin ψ ↔ θ = ψ ∨ θ + ψ = π := by
   induction θ using Real.Angle.induction_on
   exact sin_eq_iff_coe_eq_or_add_eq_pi
-
-/--
-theorem `sin_eq_iff_eq_or_add_eq_pi` / 定理 `sin_eq_iff_eq_or_add_eq_pi`
-
-English:
-theorem sin_eq_iff_eq_or_add_eq_pi
-  given: {θ ψ : Angle}
-  statement: sin θ = sin ψ ↔ θ = ψ ∨ θ + ψ = π
-  proof: by
-  induction ψ using Real.Angle.induction_on
-  exact sin_eq_real_sin_iff_eq_or_add_eq_pi
-
-@[simp]
-
-中文:
-定理 sin_eq_iff_eq_or_add_eq_pi
-  条件: {θ ψ : Angle}
-  结论: sin θ = sin ψ ↔ θ = ψ ∨ θ + ψ = π
-  证明: by
-  induction ψ using Real.Angle.induction_on
-  exact sin_eq_real_sin_iff_eq_or_add_eq_pi
-
-@[simp]
-
-Depends on / 依赖: Real.Angle.induction_on, induction_on, sin_eq_real_sin_iff_eq_or_add_eq_pi
+/-
+**Real.Angle.sin_eq_iff_eq_or_add_eq_pi** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sin_eq_iff_eq_or_add_eq_pi {θ ψ : Angle} : sin θ = sin ψ ↔ θ = ψ ∨ θ + ψ =
+ π
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.induction_on`：∀ {p : Real.Angle → Prop} (θ : Real.Angle), (∀ 
+(x : ℝ), p ↑x) → p θ
+· 使用定理 `Real.Angle.sin_eq_real_sin_iff_eq_or_add_eq_pi`：sin_eq_real_sin_iff_eq_o
+r_add_eq_pi {θ : Angle} {ψ : Real} : sin θ = Real.sin ψ ↔ θ = ψ ∨ θ + ψ = π
 -/
 theorem sin_eq_iff_eq_or_add_eq_pi {θ ψ : Angle} : sin θ = sin ψ ↔ θ = ψ ∨ θ + ψ = π := by
   induction ψ using Real.Angle.induction_on
   exact sin_eq_real_sin_iff_eq_or_add_eq_pi
 
 @[simp]
-/--
-theorem `sin_zero` / 定理 `sin_zero`
-
-English:
-theorem sin_zero
-  statement: sin (0 : Angle) = 0
-  proof: by rw [← coe_zero, sin_coe, Real.sin_zero]
-
-中文:
-定理 sin_zero
-  结论: sin (0 : Angle) = 0
-  证明: by rw [← coe_zero, sin_coe, Real.sin_zero]
-
-Depends on / 依赖: Real.sin_zero, coe_zero, sin_coe, sin_zero
+/-
+**Real.Angle.sin_zero** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sin_zero : sin (0 : Angle) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.coe_zero`：coe_zero : ↑(0 : Real) = (0 : Angle)
+· 使用定理 `Real.Angle.sin_coe`：sin_coe (x : Real) : sin (x : Angle) = Real.sin x
+· 使用定理 `Real.sin_zero`：sin_zero : sin 0 = 0
 -/
 theorem sin_zero : sin (0 : Angle) = 0 := by rw [← coe_zero, sin_coe, Real.sin_zero]
-
-/--
-theorem `sin_coe_pi` / 定理 `sin_coe_pi`
-
-English:
-theorem sin_coe_pi
-  statement: sin (π : Angle) = 0
-  proof: by rw [sin_coe, Real.sin_pi]
-
-中文:
-定理 sin_coe_pi
-  结论: sin (π : Angle) = 0
-  证明: by rw [sin_coe, Real.sin_pi]
-
-Depends on / 依赖: Real.sin_pi, sin_coe, sin_pi
+/-
+**Real.Angle.sin_coe_pi** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sin_coe_pi : sin (π : Angle) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.sin_coe`：sin_coe (x : Real) : sin (x : Angle) = Real.sin x
+· 使用定理 `Real.sin_pi`：sin_pi : sin π = 0
 -/
 theorem sin_coe_pi : sin (π : Angle) = 0 := by rw [sin_coe, Real.sin_pi]
-
-/--
-theorem `sin_eq_zero_iff` / 定理 `sin_eq_zero_iff`
-
-English:
-theorem sin_eq_zero_iff
-  given: {θ : Angle}
-  statement: sin θ = 0 ↔ θ = 0 ∨ θ = π
-  proof: by
-  nth_rw 1 [← sin_zero]
-  rw [sin_eq_iff_eq_or_add_eq_pi]
-  simp
-
-中文:
-定理 sin_eq_zero_iff
-  条件: {θ : Angle}
-  结论: sin θ = 0 ↔ θ = 0 ∨ θ = π
-  证明: by
-  nth_rw 1 [← sin_zero]
-  rw [sin_eq_iff_eq_or_add_eq_pi]
-  simp
-
-Depends on / 依赖: nth_rw, sin_eq_iff_eq_or_add_eq_pi, sin_zero
+/-
+**Real.Angle.sin_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sin_eq_zero_iff {θ : Angle} : sin θ = 0 ↔ θ = 0 ∨ θ = π
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.sin_zero`：sin_zero : sin (0 : Angle) = 0
+· 使用定理 `Real.Angle.sin_eq_iff_eq_or_add_eq_pi`：sin_eq_iff_eq_or_add_eq_pi {θ ψ :
+ Angle} : sin θ = sin ψ ↔ θ = ψ ∨ θ + ψ = π
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem sin_eq_zero_iff {θ : Angle} : sin θ = 0 ↔ θ = 0 ∨ θ = π := by
   nth_rw 1 [← sin_zero]
   rw [sin_eq_iff_eq_or_add_eq_pi]
   simp
-
-/--
-theorem `sin_ne_zero_iff` / 定理 `sin_ne_zero_iff`
-
-English:
-theorem sin_ne_zero_iff
-  given: {θ : Angle}
-  statement: sin θ != 0 ↔ θ != 0 ∧ θ != π
-  proof: by
-  rw [← not_or]; rw [← sin_eq_zero_iff]
-
-@[simp]
-
-中文:
-定理 sin_ne_zero_iff
-  条件: {θ : Angle}
-  结论: sin θ != 0 ↔ θ != 0 ∧ θ != π
-  证明: by
-  rw [← not_or]; rw [← sin_eq_zero_iff]
-
-@[simp]
-
-Depends on / 依赖: not_or, sin_eq_zero_iff
+/-
+**Real.Angle.sin_ne_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sin_ne_zero_iff {θ : Angle} : sin θ != 0 ↔ θ != 0 ∧ θ != π
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_or`：∀ {p q : Prop}, ¬(p ∨ q) ↔ ¬p ∧ ¬q
+· 使用定理 `Real.Angle.sin_eq_zero_iff`：sin_eq_zero_iff {θ : Angle} : sin θ = 0 ↔ θ 
+= 0 ∨ θ = π
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem sin_ne_zero_iff {θ : Angle} : sin θ != 0 ↔ θ != 0 ∧ θ != π := by
-  rw [← not_or]; rw [← sin_eq_zero_iff]
+theorem sin_ne_zero_iff {θ : Angle} : sin θ ≠ 0 ↔ θ ≠ 0 ∧ θ ≠ π := by
+  rw [← not_or, ← sin_eq_zero_iff]
 
 @[simp]
-/--
-theorem `sin_neg` / 定理 `sin_neg`
-
-English:
-theorem sin_neg
-  given: (θ : Angle)
-  statement: sin (-θ) = -sin θ
-  proof: by
-  induction θ using Real.Angle.induction_on
-  exact Real.sin_neg _
-
-中文:
-定理 sin_neg
-  条件: (θ : Angle)
-  结论: sin (-θ) = -sin θ
-  证明: by
-  induction θ using Real.Angle.induction_on
-  exact Real.sin_neg _
-
-Depends on / 依赖: Real.Angle.induction_on, Real.sin_neg, induction_on, sin_neg
+/-
+**Real.Angle.sin_neg** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sin_neg (θ : Angle) : sin (-θ) = -sin θ
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.induction_on`：∀ {p : Real.Angle → Prop} (θ : Real.Angle), (∀ 
+(x : ℝ), p ↑x) → p θ
+· 使用定理 `Real.sin_neg`：sin_neg : sin (-x) = -sin x
 -/
 theorem sin_neg (θ : Angle) : sin (-θ) = -sin θ := by
   induction θ using Real.Angle.induction_on
   exact Real.sin_neg _
-
-/--
-theorem `sin_antiperiodic` / 定理 `sin_antiperiodic`
-
-English:
-theorem sin_antiperiodic
-  statement: Function.Antiperiodic sin (π : Angle)
-  proof: by
-  intro θ
-  induction θ using Real.Angle.induction_on
-  exact Real.sin_antiperiodic _
-
-@[simp]
-
-中文:
-定理 sin_antiperiodic
-  结论: 函数.Antiperiodic sin (π : Angle)
-  证明: by
-  intro θ
-  induction θ using Real.Angle.induction_on
-  exact Real.sin_antiperiodic _
-
-@[simp]
-
-Depends on / 依赖: Real.Angle.induction_on, Real.sin_antiperiodic, induction_on, sin_antiperiodic
+/-
+**Real.Angle.sin_antiperiodic** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sin_antiperiodic : Function.Antiperiodic sin (π : Angle)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.induction_on`：∀ {p : Real.Angle → Prop} (θ : Real.Angle), (∀ 
+(x : ℝ), p ↑x) → p θ
+· 使用定理 `Real.sin_antiperiodic`：sin_antiperiodic : Function.Antiperiodic sin π
 -/
 theorem sin_antiperiodic : Function.Antiperiodic sin (π : Angle) := by
   intro θ
@@ -1524,144 +1219,82 @@ theorem sin_antiperiodic : Function.Antiperiodic sin (π : Angle) := by
   exact Real.sin_antiperiodic _
 
 @[simp]
-/--
-theorem `sin_add_pi` / 定理 `sin_add_pi`
-
-English:
-theorem sin_add_pi
-  given: (θ : Angle)
-  statement: sin (θ + π) = -sin θ
-  proof: sin_antiperiodic θ
-
-@[simp]
-
-中文:
-定理 sin_add_pi
-  条件: (θ : Angle)
-  结论: sin (θ + π) = -sin θ
-  证明: sin_antiperiodic θ
-
-@[simp]
-
-Depends on / 依赖: sin_antiperiodic
+/-
+**Real.Angle.sin_add_pi** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sin_add_pi (θ : Angle) : sin (θ + π) = -sin θ
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.sin_antiperiodic`：sin_antiperiodic : Function.Antiperiodic si
+n (π : Angle)
 -/
 theorem sin_add_pi (θ : Angle) : sin (θ + π) = -sin θ :=
   sin_antiperiodic θ
 
 @[simp]
-/--
-theorem `sin_sub_pi` / 定理 `sin_sub_pi`
-
-English:
-theorem sin_sub_pi
-  given: (θ : Angle)
-  statement: sin (θ - π) = -sin θ
-  proof: sin_antiperiodic.sub_eq θ
-
-@[simp]
-
-中文:
-定理 sin_sub_pi
-  条件: (θ : Angle)
-  结论: sin (θ - π) = -sin θ
-  证明: sin_antiperiodic.sub_eq θ
-
-@[simp]
-
-Depends on / 依赖: sin_antiperiodic, sin_antiperiodic.sub_eq, sub_eq
+/-
+**Real.Angle.sin_sub_pi** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sin_sub_pi (θ : Angle) : sin (θ - π) = -sin θ
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Antiperiodic.sub_eq`：∀ {α : Type u_1} {β : Type u_2} {f : α → β
+} {c : α} [inst : AddGroup α] [inst_1 : InvolutiveNeg β],   Function.Antiperiodi
+c f c → ∀ (x : α),…
+· 使用定理 `Real.Angle.sin_antiperiodic`：sin_antiperiodic : Function.Antiperiodic si
+n (π : Angle)
 -/
 theorem sin_sub_pi (θ : Angle) : sin (θ - π) = -sin θ :=
   sin_antiperiodic.sub_eq θ
 
 @[simp]
-/--
-theorem `cos_zero` / 定理 `cos_zero`
-
-English:
-theorem cos_zero
-  statement: cos (0 : Angle) = 1
-  proof: by rw [← coe_zero, cos_coe, Real.cos_zero]
-
-中文:
-定理 cos_zero
-  结论: cos (0 : Angle) = 1
-  证明: by rw [← coe_zero, cos_coe, Real.cos_zero]
-
-Depends on / 依赖: Real.cos_zero, coe_zero, cos_coe, cos_zero
+/-
+**Real.Angle.cos_zero** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：cos_zero : cos (0 : Angle) = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.coe_zero`：coe_zero : ↑(0 : Real) = (0 : Angle)
+· 使用定理 `Real.Angle.cos_coe`：cos_coe (x : Real) : cos (x : Angle) = Real.cos x
+· 使用定理 `Real.cos_zero`：cos_zero : cos 0 = 1
 -/
 theorem cos_zero : cos (0 : Angle) = 1 := by rw [← coe_zero, cos_coe, Real.cos_zero]
-
-/--
-theorem `cos_coe_pi` / 定理 `cos_coe_pi`
-
-English:
-theorem cos_coe_pi
-  statement: cos (π : Angle) = -1
-  proof: by rw [cos_coe, Real.cos_pi]
-
-@[simp]
-
-中文:
-定理 cos_coe_pi
-  结论: cos (π : Angle) = -1
-  证明: by rw [cos_coe, Real.cos_pi]
-
-@[simp]
-
-Depends on / 依赖: Real.cos_pi, cos_coe, cos_pi
+/-
+**Real.Angle.cos_coe_pi** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：cos_coe_pi : cos (π : Angle) = -1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.cos_coe`：cos_coe (x : Real) : cos (x : Angle) = Real.cos x
+· 使用定理 `Real.cos_pi`：cos_pi : cos π = -1
 -/
 theorem cos_coe_pi : cos (π : Angle) = -1 := by rw [cos_coe, Real.cos_pi]
 
 @[simp]
-/--
-theorem `cos_neg` / 定理 `cos_neg`
-
-English:
-theorem cos_neg
-  given: (θ : Angle)
-  statement: cos (-θ) = cos θ
-  proof: by
-  induction θ using Real.Angle.induction_on
-  exact Real.cos_neg _
-
-中文:
-定理 cos_neg
-  条件: (θ : Angle)
-  结论: cos (-θ) = cos θ
-  证明: by
-  induction θ using Real.Angle.induction_on
-  exact Real.cos_neg _
-
-Depends on / 依赖: Real.Angle.induction_on, Real.cos_neg, cos_neg, induction_on
+/-
+**Real.Angle.cos_neg** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：cos_neg (θ : Angle) : cos (-θ) = cos θ
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.induction_on`：∀ {p : Real.Angle → Prop} (θ : Real.Angle), (∀ 
+(x : ℝ), p ↑x) → p θ
+· 使用定理 `Real.cos_neg`：cos_neg : cos (-x) = cos x
 -/
 theorem cos_neg (θ : Angle) : cos (-θ) = cos θ := by
   induction θ using Real.Angle.induction_on
   exact Real.cos_neg _
-
-/--
-theorem `cos_antiperiodic` / 定理 `cos_antiperiodic`
-
-English:
-theorem cos_antiperiodic
-  statement: Function.Antiperiodic cos (π : Angle)
-  proof: by
-  intro θ
-  induction θ using Real.Angle.induction_on
-  exact Real.cos_antiperiodic _
-
-@[simp]
-
-中文:
-定理 cos_antiperiodic
-  结论: 函数.Antiperiodic cos (π : Angle)
-  证明: by
-  intro θ
-  induction θ using Real.Angle.induction_on
-  exact Real.cos_antiperiodic _
-
-@[simp]
-
-Depends on / 依赖: Real.Angle.induction_on, Real.cos_antiperiodic, cos_antiperiodic, induction_on
+/-
+**Real.Angle.cos_antiperiodic** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：cos_antiperiodic : Function.Antiperiodic cos (π : Angle)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.induction_on`：∀ {p : Real.Angle → Prop} (θ : Real.Angle), (∀ 
+(x : ℝ), p ↑x) → p θ
+· 使用定理 `Real.cos_antiperiodic`：cos_antiperiodic : Function.Antiperiodic cos π
 -/
 theorem cos_antiperiodic : Function.Antiperiodic cos (π : Angle) := by
   intro θ
@@ -1669,624 +1302,492 @@ theorem cos_antiperiodic : Function.Antiperiodic cos (π : Angle) := by
   exact Real.cos_antiperiodic _
 
 @[simp]
-/--
-theorem `cos_add_pi` / 定理 `cos_add_pi`
-
-English:
-theorem cos_add_pi
-  given: (θ : Angle)
-  statement: cos (θ + π) = -cos θ
-  proof: cos_antiperiodic θ
-
-@[simp]
-
-中文:
-定理 cos_add_pi
-  条件: (θ : Angle)
-  结论: cos (θ + π) = -cos θ
-  证明: cos_antiperiodic θ
-
-@[simp]
-
-Depends on / 依赖: cos_antiperiodic
+/-
+**Real.Angle.cos_add_pi** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：cos_add_pi (θ : Angle) : cos (θ + π) = -cos θ
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.cos_antiperiodic`：cos_antiperiodic : Function.Antiperiodic co
+s (π : Angle)
 -/
 theorem cos_add_pi (θ : Angle) : cos (θ + π) = -cos θ :=
   cos_antiperiodic θ
 
 @[simp]
-/--
-theorem `cos_sub_pi` / 定理 `cos_sub_pi`
-
-English:
-theorem cos_sub_pi
-  given: (θ : Angle)
-  statement: cos (θ - π) = -cos θ
-  proof: cos_antiperiodic.sub_eq θ
-
-中文:
-定理 cos_sub_pi
-  条件: (θ : Angle)
-  结论: cos (θ - π) = -cos θ
-  证明: cos_antiperiodic.sub_eq θ
-
-Depends on / 依赖: cos_antiperiodic, cos_antiperiodic.sub_eq, sub_eq
+/-
+**Real.Angle.cos_sub_pi** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：cos_sub_pi (θ : Angle) : cos (θ - π) = -cos θ
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Antiperiodic.sub_eq`：∀ {α : Type u_1} {β : Type u_2} {f : α → β
+} {c : α} [inst : AddGroup α] [inst_1 : InvolutiveNeg β],   Function.Antiperiodi
+c f c → ∀ (x : α),…
+· 使用定理 `Real.Angle.cos_antiperiodic`：cos_antiperiodic : Function.Antiperiodic co
+s (π : Angle)
 -/
 theorem cos_sub_pi (θ : Angle) : cos (θ - π) = -cos θ :=
   cos_antiperiodic.sub_eq θ
-
-/--
-theorem `cos_eq_zero_iff` / 定理 `cos_eq_zero_iff`
-
-English:
-theorem cos_eq_zero_iff
-  given: {θ : Angle}
-  statement: cos θ = 0 ↔ θ = (π / 2 : Real) ∨ θ = (-π / 2 : Real)
-  proof: by
-  rw [← cos_pi_div_two]; rw [← cos_coe]; rw [cos_eq_iff_eq_or_eq_neg]; rw [← coe_neg]; rw [← neg_div]
-
-中文:
-定理 cos_eq_zero_iff
-  条件: {θ : Angle}
-  结论: cos θ = 0 ↔ θ = (π / 2 : 实数) ∨ θ = (-π / 2 : 实数)
-  证明: by
-  rw [← cos_pi_div_two]; rw [← cos_coe]; rw [cos_eq_iff_eq_or_eq_neg]; rw [← coe_neg]; rw [← neg_div]
-
-Depends on / 依赖: coe_neg, cos_coe, cos_eq_iff_eq_or_eq_neg, cos_pi_div_two, neg_div
+/-
+**Real.Angle.cos_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：cos_eq_zero_iff {θ : Angle} : cos θ = 0 ↔ θ = (π / 2 : Real) ∨ θ = (-π / 2
+ : Real)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.cos_pi_div_two`：cos_pi_div_two : cos (π / 2) = 0
+· 使用定理 `Real.Angle.cos_coe`：cos_coe (x : Real) : cos (x : Angle) = Real.cos x
+· 使用定理 `Real.Angle.cos_eq_iff_eq_or_eq_neg`：cos_eq_iff_eq_or_eq_neg {θ ψ : Angle
+} : cos θ = cos ψ ↔ θ = ψ ∨ θ = -ψ
+· 使用定理 `Real.Angle.coe_neg`：coe_neg (x : Real) : ↑(-x : Real) = -(↑x : Angle)
+· 使用引理 `neg_div`：neg_div (a b : R) : -b / a = -(b / a)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem cos_eq_zero_iff {θ : Angle} : cos θ = 0 ↔ θ = (π / 2 : Real) ∨ θ = (-π / 2 : Real) := by
-  rw [← cos_pi_div_two]; rw [← cos_coe]; rw [cos_eq_iff_eq_or_eq_neg]; rw [← coe_neg]; rw [← neg_div]
-
-/--
-theorem `sin_add` / 定理 `sin_add`
-
-English:
-theorem sin_add
-  given: (θ₁ θ₂ : Real.Angle)
-  statement: sin (θ₁ + θ₂) = sin θ₁ * cos θ₂ + cos θ₁ * sin θ₂
-  proof: by
-  induction θ₁ using Real.Angle.induction_on
-  induction θ₂ using Real.Angle.induction_on
-  exact Real.sin_add _ _
-
-中文:
-定理 sin_add
-  条件: (θ₁ θ₂ : 实数.Angle)
-  结论: sin (θ₁ + θ₂) = sin θ₁ * cos θ₂ + cos θ₁ * sin θ₂
-  证明: by
-  induction θ₁ using Real.Angle.induction_on
-  induction θ₂ using Real.Angle.induction_on
-  exact Real.sin_add _ _
-
-Depends on / 依赖: Real.Angle.induction_on, Real.sin_add, induction_on, sin_add
+theorem cos_eq_zero_iff {θ : Angle} : cos θ = 0 ↔ θ = (π / 2 : ℝ) ∨ θ = (-π / 2 : ℝ) := by
+  rw [← cos_pi_div_two, ← cos_coe, cos_eq_iff_eq_or_eq_neg, ← coe_neg, ← neg_div]
+/-
+**Real.Angle.sin_add** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sin_add (θ₁ θ₂ : Real.Angle) : sin (θ₁ + θ₂) = sin θ₁ * cos θ₂ + cos θ₁ * 
+sin θ₂
+参数：θ₁ θ₂ : Real.Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.induction_on`：∀ {p : Real.Angle → Prop} (θ : Real.Angle), (∀ 
+(x : ℝ), p ↑x) → p θ
+· 使用定理 `Real.sin_add`：∀ (x y : ℝ), Real.sin (x + y) = Real.sin x * Real.cos y + 
+Real.cos x * Real.sin y
 -/
 theorem sin_add (θ₁ θ₂ : Real.Angle) : sin (θ₁ + θ₂) = sin θ₁ * cos θ₂ + cos θ₁ * sin θ₂ := by
   induction θ₁ using Real.Angle.induction_on
   induction θ₂ using Real.Angle.induction_on
   exact Real.sin_add _ _
-
-/--
-theorem `cos_add` / 定理 `cos_add`
-
-English:
-theorem cos_add
-  given: (θ₁ θ₂ : Real.Angle)
-  statement: cos (θ₁ + θ₂) = cos θ₁ * cos θ₂ - sin θ₁ * sin θ₂
-  proof: by
-  induction θ₂ using Real.Angle.induction_on
-  induction θ₁ using Real.Angle.induction_on
-  exact Real.cos_add _ _
-
-中文:
-定理 cos_add
-  条件: (θ₁ θ₂ : 实数.Angle)
-  结论: cos (θ₁ + θ₂) = cos θ₁ * cos θ₂ - sin θ₁ * sin θ₂
-  证明: by
-  induction θ₂ using Real.Angle.induction_on
-  induction θ₁ using Real.Angle.induction_on
-  exact Real.cos_add _ _
-
-Depends on / 依赖: Real.Angle.induction_on, Real.cos_add, cos_add, induction_on
+/-
+**Real.Angle.cos_add** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：cos_add (θ₁ θ₂ : Real.Angle) : cos (θ₁ + θ₂) = cos θ₁ * cos θ₂ - sin θ₁ * 
+sin θ₂
+参数：θ₁ θ₂ : Real.Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.induction_on`：∀ {p : Real.Angle → Prop} (θ : Real.Angle), (∀ 
+(x : ℝ), p ↑x) → p θ
+· 使用定理 `Real.cos_add`：∀ (x y : ℝ), Real.cos (x + y) = Real.cos x * Real.cos y - 
+Real.sin x * Real.sin y
 -/
 theorem cos_add (θ₁ θ₂ : Real.Angle) : cos (θ₁ + θ₂) = cos θ₁ * cos θ₂ - sin θ₁ * sin θ₂ := by
   induction θ₂ using Real.Angle.induction_on
   induction θ₁ using Real.Angle.induction_on
   exact Real.cos_add _ _
-
-/--
-theorem `sin_two_nsmul` / 定理 `sin_two_nsmul`
-
-English:
-theorem sin_two_nsmul
-  given: (θ : Angle)
-  statement: sin (2 • θ) = 2 • (sin θ * cos θ)
-  proof: by
-  simp [two_nsmul, two_mul, sin_add, mul_comm]
-
-@[simp]
-
-中文:
-定理 sin_two_nsmul
-  条件: (θ : Angle)
-  结论: sin (2 • θ) = 2 • (sin θ * cos θ)
-  证明: by
-  simp [two_nsmul, two_mul, sin_add, mul_comm]
-
-@[simp]
-
-Depends on / 依赖: mul_comm, sin_add, two_mul, two_nsmul
+/-
+**Real.Angle.sin_two_nsmul** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sin_two_nsmul (θ : Angle) : sin (2 • θ) = 2 • (sin θ * cos θ)
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `two_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 2 • a = a + a
+· 使用定理 `Real.Angle.sin_add`：sin_add (θ₁ θ₂ : Real.Angle) : sin (θ₁ + θ₂) = sin θ
+₁ * cos θ₂ + cos θ₁ * sin θ₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `nsmul_eq_mul`：∀ {α : Type u} [inst : NonAssocSemiring α] (n : ℕ) (a : α)
+, n • a = ↑n * a
+· 使用定理 `two_mul`：two_mul (n : α) : 2 * n = n + n
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem sin_two_nsmul (θ : Angle) : sin (2 • θ) = 2 • (sin θ * cos θ) := by
   simp [two_nsmul, two_mul, sin_add, mul_comm]
 
 @[simp]
-/--
-theorem `cos_sq_add_sin_sq` / 定理 `cos_sq_add_sin_sq`
-
-English:
-theorem cos_sq_add_sin_sq
-  given: (θ : Real.Angle)
-  statement: cos θ ^ 2 + sin θ ^ 2 = 1
-  proof: by
-  induction θ using Real.Angle.induction_on
-  exact Real.cos_sq_add_sin_sq _
-
-中文:
-定理 cos_sq_add_sin_sq
-  条件: (θ : 实数.Angle)
-  结论: cos θ ^ 2 + sin θ ^ 2 = 1
-  证明: by
-  induction θ using Real.Angle.induction_on
-  exact Real.cos_sq_add_sin_sq _
-
-Depends on / 依赖: Real.Angle.induction_on, Real.cos_sq_add_sin_sq, cos_sq_add_sin_sq, induction_on
+/-
+**Real.Angle.cos_sq_add_sin_sq** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：cos_sq_add_sin_sq (θ : Real.Angle) : cos θ ^ 2 + sin θ ^ 2 = 1
+参数：θ : Real.Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.induction_on`：∀ {p : Real.Angle → Prop} (θ : Real.Angle), (∀ 
+(x : ℝ), p ↑x) → p θ
+· 使用定理 `Real.cos_sq_add_sin_sq`：cos_sq_add_sin_sq : cos x ^ 2 + sin x ^ 2 = 1
 -/
 theorem cos_sq_add_sin_sq (θ : Real.Angle) : cos θ ^ 2 + sin θ ^ 2 = 1 := by
   induction θ using Real.Angle.induction_on
   exact Real.cos_sq_add_sin_sq _
-
-/--
-theorem `sin_add_pi_div_two` / 定理 `sin_add_pi_div_two`
-
-English:
-theorem sin_add_pi_div_two
-  given: (θ : Angle)
-  statement: sin (θ + ↑(π / 2)) = cos θ
-  proof: by
-  induction θ using Real.Angle.induction_on
-  exact Real.sin_add_pi_div_two _
-
-中文:
-定理 sin_add_pi_div_two
-  条件: (θ : Angle)
-  结论: sin (θ + ↑(π / 2)) = cos θ
-  证明: by
-  induction θ using Real.Angle.induction_on
-  exact Real.sin_add_pi_div_two _
-
-Depends on / 依赖: Real.Angle.induction_on, Real.sin_add_pi_div_two, induction_on, sin_add_pi_div_two
+/-
+**Real.Angle.sin_add_pi_div_two** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sin_add_pi_div_two (θ : Angle) : sin (θ + ↑(π / 2)) = cos θ
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.induction_on`：∀ {p : Real.Angle → Prop} (θ : Real.Angle), (∀ 
+(x : ℝ), p ↑x) → p θ
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Real.sin_add_pi_div_two`：sin_add_pi_div_two (x : Real) : sin (x + π / 2)
+ = cos x
 -/
 theorem sin_add_pi_div_two (θ : Angle) : sin (θ + ↑(π / 2)) = cos θ := by
   induction θ using Real.Angle.induction_on
   exact Real.sin_add_pi_div_two _
-
-/--
-theorem `sin_sub_pi_div_two` / 定理 `sin_sub_pi_div_two`
-
-English:
-theorem sin_sub_pi_div_two
-  given: (θ : Angle)
-  statement: sin (θ - ↑(π / 2)) = -cos θ
-  proof: by
-  induction θ using Real.Angle.induction_on
-  exact Real.sin_sub_pi_div_two _
-
-中文:
-定理 sin_sub_pi_div_two
-  条件: (θ : Angle)
-  结论: sin (θ - ↑(π / 2)) = -cos θ
-  证明: by
-  induction θ using Real.Angle.induction_on
-  exact Real.sin_sub_pi_div_two _
-
-Depends on / 依赖: Real.Angle.induction_on, Real.sin_sub_pi_div_two, induction_on, sin_sub_pi_div_two
+/-
+**Real.Angle.sin_sub_pi_div_two** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sin_sub_pi_div_two (θ : Angle) : sin (θ - ↑(π / 2)) = -cos θ
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.induction_on`：∀ {p : Real.Angle → Prop} (θ : Real.Angle), (∀ 
+(x : ℝ), p ↑x) → p θ
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Real.sin_sub_pi_div_two`：sin_sub_pi_div_two (x : Real) : sin (x - π / 2)
+ = -cos x
 -/
 theorem sin_sub_pi_div_two (θ : Angle) : sin (θ - ↑(π / 2)) = -cos θ := by
   induction θ using Real.Angle.induction_on
   exact Real.sin_sub_pi_div_two _
-
-/--
-theorem `sin_pi_div_two_sub` / 定理 `sin_pi_div_two_sub`
-
-English:
-theorem sin_pi_div_two_sub
-  given: (θ : Angle)
-  statement: sin (↑(π / 2) - θ) = cos θ
-  proof: by
-  induction θ using Real.Angle.induction_on
-  exact Real.sin_pi_div_two_sub _
-
-中文:
-定理 sin_pi_div_two_sub
-  条件: (θ : Angle)
-  结论: sin (↑(π / 2) - θ) = cos θ
-  证明: by
-  induction θ using Real.Angle.induction_on
-  exact Real.sin_pi_div_two_sub _
-
-Depends on / 依赖: Real.Angle.induction_on, Real.sin_pi_div_two_sub, induction_on, sin_pi_div_two_sub
+/-
+**Real.Angle.sin_pi_div_two_sub** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sin_pi_div_two_sub (θ : Angle) : sin (↑(π / 2) - θ) = cos θ
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.induction_on`：∀ {p : Real.Angle → Prop} (θ : Real.Angle), (∀ 
+(x : ℝ), p ↑x) → p θ
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Real.sin_pi_div_two_sub`：sin_pi_div_two_sub (x : Real) : sin (π / 2 - x)
+ = cos x
 -/
 theorem sin_pi_div_two_sub (θ : Angle) : sin (↑(π / 2) - θ) = cos θ := by
   induction θ using Real.Angle.induction_on
   exact Real.sin_pi_div_two_sub _
-
-/--
-theorem `cos_add_pi_div_two` / 定理 `cos_add_pi_div_two`
-
-English:
-theorem cos_add_pi_div_two
-  given: (θ : Angle)
-  statement: cos (θ + ↑(π / 2)) = -sin θ
-  proof: by
-  induction θ using Real.Angle.induction_on
-  exact Real.cos_add_pi_div_two _
-
-中文:
-定理 cos_add_pi_div_two
-  条件: (θ : Angle)
-  结论: cos (θ + ↑(π / 2)) = -sin θ
-  证明: by
-  induction θ using Real.Angle.induction_on
-  exact Real.cos_add_pi_div_two _
-
-Depends on / 依赖: Real.Angle.induction_on, Real.cos_add_pi_div_two, cos_add_pi_div_two, induction_on
+/-
+**Real.Angle.cos_add_pi_div_two** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：cos_add_pi_div_two (θ : Angle) : cos (θ + ↑(π / 2)) = -sin θ
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.induction_on`：∀ {p : Real.Angle → Prop} (θ : Real.Angle), (∀ 
+(x : ℝ), p ↑x) → p θ
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Real.cos_add_pi_div_two`：cos_add_pi_div_two (x : Real) : cos (x + π / 2)
+ = -sin x
 -/
 theorem cos_add_pi_div_two (θ : Angle) : cos (θ + ↑(π / 2)) = -sin θ := by
   induction θ using Real.Angle.induction_on
   exact Real.cos_add_pi_div_two _
-
-/--
-theorem `cos_sub_pi_div_two` / 定理 `cos_sub_pi_div_two`
-
-English:
-theorem cos_sub_pi_div_two
-  given: (θ : Angle)
-  statement: cos (θ - ↑(π / 2)) = sin θ
-  proof: by
-  induction θ using Real.Angle.induction_on
-  exact Real.cos_sub_pi_div_two _
-
-中文:
-定理 cos_sub_pi_div_two
-  条件: (θ : Angle)
-  结论: cos (θ - ↑(π / 2)) = sin θ
-  证明: by
-  induction θ using Real.Angle.induction_on
-  exact Real.cos_sub_pi_div_two _
-
-Depends on / 依赖: Real.Angle.induction_on, Real.cos_sub_pi_div_two, cos_sub_pi_div_two, induction_on
+/-
+**Real.Angle.cos_sub_pi_div_two** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：cos_sub_pi_div_two (θ : Angle) : cos (θ - ↑(π / 2)) = sin θ
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.induction_on`：∀ {p : Real.Angle → Prop} (θ : Real.Angle), (∀ 
+(x : ℝ), p ↑x) → p θ
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Real.cos_sub_pi_div_two`：cos_sub_pi_div_two (x : Real) : cos (x - π / 2)
+ = sin x
 -/
 theorem cos_sub_pi_div_two (θ : Angle) : cos (θ - ↑(π / 2)) = sin θ := by
   induction θ using Real.Angle.induction_on
   exact Real.cos_sub_pi_div_two _
-
-/--
-theorem `cos_pi_div_two_sub` / 定理 `cos_pi_div_two_sub`
-
-English:
-theorem cos_pi_div_two_sub
-  given: (θ : Angle)
-  statement: cos (↑(π / 2) - θ) = sin θ
-  proof: by
-  induction θ using Real.Angle.induction_on
-  exact Real.cos_pi_div_two_sub _
-
-中文:
-定理 cos_pi_div_two_sub
-  条件: (θ : Angle)
-  结论: cos (↑(π / 2) - θ) = sin θ
-  证明: by
-  induction θ using Real.Angle.induction_on
-  exact Real.cos_pi_div_two_sub _
-
-Depends on / 依赖: Real.Angle.induction_on, Real.cos_pi_div_two_sub, cos_pi_div_two_sub, induction_on
+/-
+**Real.Angle.cos_pi_div_two_sub** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：cos_pi_div_two_sub (θ : Angle) : cos (↑(π / 2) - θ) = sin θ
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.induction_on`：∀ {p : Real.Angle → Prop} (θ : Real.Angle), (∀ 
+(x : ℝ), p ↑x) → p θ
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Real.cos_pi_div_two_sub`：cos_pi_div_two_sub (x : Real) : cos (π / 2 - x)
+ = sin x
 -/
 theorem cos_pi_div_two_sub (θ : Angle) : cos (↑(π / 2) - θ) = sin θ := by
   induction θ using Real.Angle.induction_on
   exact Real.cos_pi_div_two_sub _
-
-/--
-theorem `abs_sin_eq_of_two_nsmul_eq` / 定理 `abs_sin_eq_of_two_nsmul_eq`
-
-English:
-theorem abs_sin_eq_of_two_nsmul_eq
-  given: {θ ψ : Angle} (h : (2 : Nat) • θ = (2 : Nat) • ψ)
-  proof: by
-  rw [two_nsmul_eq_iff] at h
-  rcases h with (rfl | rfl)
-  · rfl
-  · rw [sin_add_pi, abs_neg]
-
-中文:
-定理 abs_sin_eq_of_two_nsmul_eq
-  条件: {θ ψ : Angle} (h : (2 : 自然数) • θ = (2 : 自然数) • ψ)
-  证明: by
-  rw [two_nsmul_eq_iff] at h
-  rcases h with (rfl | rfl)
-  · rfl
-  · rw [sin_add_pi, abs_neg]
-
-Depends on / 依赖: abs_neg, sin_add_pi, two_nsmul_eq_iff
+/-
+**Real.Angle.abs_sin_eq_of_two_nsmul_eq** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：abs_sin_eq_of_two_nsmul_eq {θ ψ : Angle} (h : (2 : Nat) • θ = (2 : Nat) • 
+ψ) : |sin θ| = |sin ψ|
+参数：h : (2 : Nat) • θ = (2 : Nat) • ψ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.two_nsmul_eq_iff`：two_nsmul_eq_iff {ψ θ : Angle} : (2 : Nat) 
+• ψ = (2 : Nat) • θ ↔ ψ = θ ∨ ψ = θ + ↑π
+· 使用定理 `Real.Angle.sin_add_pi`：sin_add_pi (θ : Angle) : sin (θ + π) = -sin θ
+· 使用定理 `abs_neg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] (a : 
+α), |(-a)| = |a|
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem abs_sin_eq_of_two_nsmul_eq {θ ψ : Angle} (h : (2 : Nat) • θ = (2 : Nat) • ψ) :
+theorem abs_sin_eq_of_two_nsmul_eq {θ ψ : Angle} (h : (2 : ℕ) • θ = (2 : ℕ) • ψ) :
     |sin θ| = |sin ψ| := by
   rw [two_nsmul_eq_iff] at h
   rcases h with (rfl | rfl)
   · rfl
   · rw [sin_add_pi, abs_neg]
-
-/--
-theorem `abs_sin_eq_of_two_zsmul_eq` / 定理 `abs_sin_eq_of_two_zsmul_eq`
-
-English:
-theorem abs_sin_eq_of_two_zsmul_eq
-  given: {θ ψ : Angle} (h : (2 : Int) • θ = (2 : Int) • ψ)
-  proof: by
-  simp_rw [two_zsmul, ← two_nsmul] at h
-  exact abs_sin_eq_of_two_nsmul_eq h
-
-中文:
-定理 abs_sin_eq_of_two_zsmul_eq
-  条件: {θ ψ : Angle} (h : (2 : 整数) • θ = (2 : 整数) • ψ)
-  证明: by
-  simp_rw [two_zsmul, ← two_nsmul] at h
-  exact abs_sin_eq_of_two_nsmul_eq h
-
-Depends on / 依赖: abs_sin_eq_of_two_nsmul_eq, simp_rw, two_nsmul, two_zsmul
+/-
+**Real.Angle.abs_sin_eq_of_two_zsmul_eq** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：abs_sin_eq_of_two_zsmul_eq {θ ψ : Angle} (h : (2 : Int) • θ = (2 : Int) • 
+ψ) : |sin θ| = |sin ψ|
+参数：h : (2 : Int) • θ = (2 : Int) • ψ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.abs_sin_eq_of_two_nsmul_eq`：abs_sin_eq_of_two_nsmul_eq {θ ψ :
+ Angle} (h : (2 : Nat) • θ = (2 : Nat) • ψ) : |sin θ| = |sin ψ|
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `two_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 2 • a = a +
+ a
 -/
-theorem abs_sin_eq_of_two_zsmul_eq {θ ψ : Angle} (h : (2 : Int) • θ = (2 : Int) • ψ) :
+theorem abs_sin_eq_of_two_zsmul_eq {θ ψ : Angle} (h : (2 : ℤ) • θ = (2 : ℤ) • ψ) :
     |sin θ| = |sin ψ| := by
   simp_rw [two_zsmul, ← two_nsmul] at h
   exact abs_sin_eq_of_two_nsmul_eq h
-
-/--
-theorem `abs_cos_eq_of_two_nsmul_eq` / 定理 `abs_cos_eq_of_two_nsmul_eq`
-
-English:
-theorem abs_cos_eq_of_two_nsmul_eq
-  given: {θ ψ : Angle} (h : (2 : Nat) • θ = (2 : Nat) • ψ)
-  proof: by
-  rw [two_nsmul_eq_iff] at h
-  rcases h with (rfl | rfl)
-  · rfl
-  · rw [cos_add_pi, abs_neg]
-
-中文:
-定理 abs_cos_eq_of_two_nsmul_eq
-  条件: {θ ψ : Angle} (h : (2 : 自然数) • θ = (2 : 自然数) • ψ)
-  证明: by
-  rw [two_nsmul_eq_iff] at h
-  rcases h with (rfl | rfl)
-  · rfl
-  · rw [cos_add_pi, abs_neg]
-
-Depends on / 依赖: abs_neg, cos_add_pi, two_nsmul_eq_iff
+/-
+**Real.Angle.abs_cos_eq_of_two_nsmul_eq** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：abs_cos_eq_of_two_nsmul_eq {θ ψ : Angle} (h : (2 : Nat) • θ = (2 : Nat) • 
+ψ) : |cos θ| = |cos ψ|
+参数：h : (2 : Nat) • θ = (2 : Nat) • ψ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.two_nsmul_eq_iff`：two_nsmul_eq_iff {ψ θ : Angle} : (2 : Nat) 
+• ψ = (2 : Nat) • θ ↔ ψ = θ ∨ ψ = θ + ↑π
+· 使用定理 `Real.Angle.cos_add_pi`：cos_add_pi (θ : Angle) : cos (θ + π) = -cos θ
+· 使用定理 `abs_neg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] (a : 
+α), |(-a)| = |a|
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem abs_cos_eq_of_two_nsmul_eq {θ ψ : Angle} (h : (2 : Nat) • θ = (2 : Nat) • ψ) :
+theorem abs_cos_eq_of_two_nsmul_eq {θ ψ : Angle} (h : (2 : ℕ) • θ = (2 : ℕ) • ψ) :
     |cos θ| = |cos ψ| := by
   rw [two_nsmul_eq_iff] at h
   rcases h with (rfl | rfl)
   · rfl
   · rw [cos_add_pi, abs_neg]
-
-/--
-theorem `abs_cos_eq_of_two_zsmul_eq` / 定理 `abs_cos_eq_of_two_zsmul_eq`
-
-English:
-theorem abs_cos_eq_of_two_zsmul_eq
-  given: {θ ψ : Angle} (h : (2 : Int) • θ = (2 : Int) • ψ)
-  proof: by
-  simp_rw [two_zsmul, ← two_nsmul] at h
-  exact abs_cos_eq_of_two_nsmul_eq h
-
-@[simp]
-
-中文:
-定理 abs_cos_eq_of_two_zsmul_eq
-  条件: {θ ψ : Angle} (h : (2 : 整数) • θ = (2 : 整数) • ψ)
-  证明: by
-  simp_rw [two_zsmul, ← two_nsmul] at h
-  exact abs_cos_eq_of_two_nsmul_eq h
-
-@[simp]
-
-Depends on / 依赖: abs_cos_eq_of_two_nsmul_eq, simp_rw, two_nsmul, two_zsmul
+/-
+**Real.Angle.abs_cos_eq_of_two_zsmul_eq** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：abs_cos_eq_of_two_zsmul_eq {θ ψ : Angle} (h : (2 : Int) • θ = (2 : Int) • 
+ψ) : |cos θ| = |cos ψ|
+参数：h : (2 : Int) • θ = (2 : Int) • ψ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.abs_cos_eq_of_two_nsmul_eq`：abs_cos_eq_of_two_nsmul_eq {θ ψ :
+ Angle} (h : (2 : Nat) • θ = (2 : Nat) • ψ) : |cos θ| = |cos ψ|
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `two_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 2 • a = a +
+ a
 -/
-theorem abs_cos_eq_of_two_zsmul_eq {θ ψ : Angle} (h : (2 : Int) • θ = (2 : Int) • ψ) :
+theorem abs_cos_eq_of_two_zsmul_eq {θ ψ : Angle} (h : (2 : ℤ) • θ = (2 : ℤ) • ψ) :
     |cos θ| = |cos ψ| := by
   simp_rw [two_zsmul, ← two_nsmul] at h
   exact abs_cos_eq_of_two_nsmul_eq h
 
 @[simp]
-/--
-theorem `coe_toIcoMod` / 定理 `coe_toIcoMod`
-
-English:
-theorem coe_toIcoMod
-  given: (θ ψ : Real)
-  statement: ↑(toIcoMod two_pi_pos ψ θ) = (θ : Angle)
-  proof: by
+/-
+**Real.Angle.coe_toIcoMod** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：coe_toIcoMod (θ ψ : Real) : ↑(toIcoMod two_pi_pos ψ θ) = (θ : Angle)
+参数：θ ψ : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Real.two_pi_pos`：two_pi_pos : 0 < 2 * π
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.angle_eq_iff_two_pi_dvd_sub`：angle_eq_iff_two_pi_dvd_sub {ψ θ
+ : Real} : (θ : Angle) = ψ ↔ exists k : Int, θ - ψ = 2 * π * k
+· 使用定理 `toIcoMod_sub_self`：toIcoMod_sub_self (a b : α) : toIcoMod hp a b - b = -
+toIcoDiv hp a b • p
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+-/
+theorem coe_toIcoMod (θ ψ : ℝ) : ↑(toIcoMod two_pi_pos ψ θ) = (θ : Angle) := by
   rw [angle_eq_iff_two_pi_dvd_sub]
   refine ⟨-toIcoDiv two_pi_pos ψ θ, ?_⟩
-  rw [toIcoMod_sub_self]; rw [zsmul_eq_mul]; rw [mul_comm]
+  rw [toIcoMod_sub_self, zsmul_eq_mul, mul_comm]
 
 @[simp]
-
-中文:
-定理 coe_toIcoMod
-  条件: (θ ψ : 实数)
-  结论: ↑(toIcoMod two_pi_pos ψ θ) = (θ : Angle)
-  证明: by
-  rw [angle_eq_iff_two_pi_dvd_sub]
-  refine ⟨-toIcoDiv two_pi_pos ψ θ, ?_⟩
-  rw [toIcoMod_sub_self]; rw [zsmul_eq_mul]; rw [mul_comm]
-
-@[simp]
-
-Depends on / 依赖: angle_eq_iff_two_pi_dvd_sub, mul_comm, toIcoDiv, toIcoMod_sub_self, two_pi_pos, zsmul_eq_mul
+/-
+**Real.Angle.coe_toIocMod** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：coe_toIocMod (θ ψ : Real) : ↑(toIocMod two_pi_pos ψ θ) = (θ : Angle)
+参数：θ ψ : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Real.two_pi_pos`：two_pi_pos : 0 < 2 * π
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.angle_eq_iff_two_pi_dvd_sub`：angle_eq_iff_two_pi_dvd_sub {ψ θ
+ : Real} : (θ : Angle) = ψ ↔ exists k : Int, θ - ψ = 2 * π * k
+· 使用定理 `toIocMod_sub_self`：toIocMod_sub_self (a b : α) : toIocMod hp a b - b = -
+toIocDiv hp a b • p
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
-theorem coe_toIcoMod (θ ψ : Real) : ↑(toIcoMod two_pi_pos ψ θ) = (θ : Angle) := by
-  rw [angle_eq_iff_two_pi_dvd_sub]
-  refine ⟨-toIcoDiv two_pi_pos ψ θ, ?_⟩
-  rw [toIcoMod_sub_self]; rw [zsmul_eq_mul]; rw [mul_comm]
-
-@[simp]
-/--
-theorem `coe_toIocMod` / 定理 `coe_toIocMod`
-
-English:
-theorem coe_toIocMod
-  given: (θ ψ : Real)
-  statement: ↑(toIocMod two_pi_pos ψ θ) = (θ : Angle)
-  proof: by
+theorem coe_toIocMod (θ ψ : ℝ) : ↑(toIocMod two_pi_pos ψ θ) = (θ : Angle) := by
   rw [angle_eq_iff_two_pi_dvd_sub]
   refine ⟨-toIocDiv two_pi_pos ψ θ, ?_⟩
-  rw [toIocMod_sub_self]; rw [zsmul_eq_mul]; rw [mul_comm]
+  rw [toIocMod_sub_self, zsmul_eq_mul, mul_comm]
 
-中文:
-定理 coe_toIocMod
-  条件: (θ ψ : 实数)
-  结论: ↑(toIocMod two_pi_pos ψ θ) = (θ : Angle)
-  证明: by
-  rw [angle_eq_iff_two_pi_dvd_sub]
-  refine ⟨-toIocDiv two_pi_pos ψ θ, ?_⟩
-  rw [toIocMod_sub_self]; rw [zsmul_eq_mul]; rw [mul_comm]
+/-- Convert a `Real.Angle` to a real number in the interval `Ioc (-π) π`. -/
+/-
+**Real.Angle.toReal** 是 Mathlib 中的一个定义，位于命名空间 `Real.Angle`。
+形式化陈述：toReal (θ : Angle) : Real
+参数：θ : Angle。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.two_pi_pos`：two_pi_pos : 0 < 2 * π
 
-Depends on / 依赖: angle_eq_iff_two_pi_dvd_sub, mul_comm, toIocDiv, toIocMod_sub_self, two_pi_pos, zsmul_eq_mul
+--- 原说明 ---
+Convert a `Real.Angle` to a real number in the interval `Ioc (-π) π`.
 -/
-theorem coe_toIocMod (θ ψ : Real) : ↑(toIocMod two_pi_pos ψ θ) = (θ : Angle) := by
-  rw [angle_eq_iff_two_pi_dvd_sub]
-  refine ⟨-toIocDiv two_pi_pos ψ θ, ?_⟩
-  rw [toIocMod_sub_self]; rw [zsmul_eq_mul]; rw [mul_comm]
-
-/--
-Definition of `toReal` / `toReal` 的定义
-
-English:
-definition toReal
-  signature: (θ : Angle)
-  body: (toIocMod_periodic two_pi_pos (-π)).lift θ
-
-中文:
-定义 to实数
-  签名: (θ : Angle)
-  定义体: (toIocMod_periodic two_pi_pos (-π)).lift θ
-
-Depends on / 依赖: toIocMod_periodic, two_pi_pos
--/
-def toReal (θ : Angle) : Real :=
+def toReal (θ : Angle) : ℝ :=
   (toIocMod_periodic two_pi_pos (-π)).lift θ
-
-/--
-theorem `toReal_coe` / 定理 `toReal_coe`
-
-English:
-theorem toReal_coe
-  given: (θ : Real)
-  statement: (θ : Angle).toReal = toIocMod two_pi_pos (-π) θ
-  proof: rfl
-
-中文:
-定理 to实数_coe
-  条件: (θ : 实数)
-  结论: (θ : Angle).to实数 = toIocMod two_pi_pos (-π) θ
-  证明: rfl
+/-
+**Real.Angle.toReal_coe** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：toReal_coe (θ : Real) : (θ : Angle).toReal = toIocMod two_pi_pos (-π) θ
+参数：θ : Real。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem toReal_coe (θ : Real) : (θ : Angle).toReal = toIocMod two_pi_pos (-π) θ :=
+theorem toReal_coe (θ : ℝ) : (θ : Angle).toReal = toIocMod two_pi_pos (-π) θ :=
   rfl
-
-/--
-theorem `toReal_coe_eq_self_iff` / 定理 `toReal_coe_eq_self_iff`
-
-English:
-theorem toReal_coe_eq_self_iff
-  given: {θ : Real}
-  statement: (θ : Angle).toReal = θ ↔ -π < θ ∧ θ <= π
-  proof: by
-  rw [toReal_coe]; rw [toIocMod_eq_self two_pi_pos]
+/-
+**Real.Angle.toReal_coe_eq_self_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：toReal_coe_eq_self_iff {θ : Real} : (θ : Angle).toReal = θ ↔ -π < θ ∧ θ <=
+ π
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Real.two_pi_pos`：two_pi_pos : 0 < 2 * π
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.toReal_coe`：toReal_coe (θ : Real) : (θ : Angle).toReal = toIo
+cMod two_pi_pos (-π) θ
+· 使用定理 `toIocMod_eq_self`：toIocMod_eq_self : toIocMod hp a b = b ↔ b in Set.Ioc 
+a (a + p)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b : R}, a = a' → -a' = b → -a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_mul`：∀ {R : Type u_2} [inst : CommRing R]
+ (a₁ : R) (a₂ : ℕ) {a₃ b : R}, -a₃ = b → -(a₁ ^ a₂ * a₃) = a₁ ^ a₂ * b
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.cast_pos`：∀ {R : Type u_1} [inst : CommSemiring R] {
+a : R} {n : ℕ}, Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast + 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用引理 `Mathlib.Meta.NormNum.instAtLeastTwo`：instAtLeastTwo (n : Nat) : Nat.AtLe
+astTwo (n + 2)
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+（共 43 条，此处仅展示前 30 条）
+-/
+theorem toReal_coe_eq_self_iff {θ : ℝ} : (θ : Angle).toReal = θ ↔ -π < θ ∧ θ ≤ π := by
+  rw [toReal_coe, toIocMod_eq_self two_pi_pos]
   ring_nf
   rfl
-
-中文:
-定理 to实数_coe_eq_self_iff
-  条件: {θ : 实数}
-  结论: (θ : Angle).to实数 = θ ↔ -π < θ ∧ θ <= π
-  证明: by
-  rw [toReal_coe]; rw [toIocMod_eq_self two_pi_pos]
-  ring_nf
-  rfl
-
-Depends on / 依赖: ring_nf, toIocMod_eq_self, toReal_coe, two_pi_pos
+/-
+**Real.Angle.toReal_coe_eq_self_iff_mem_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angl
+e`。
+形式化陈述：toReal_coe_eq_self_iff_mem_Ioc {θ : Real} : (θ : Angle).toReal = θ ↔ θ in 
+Set.Ioc (-π) π
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.toReal_coe_eq_self_iff`：toReal_coe_eq_self_iff {θ : Real} : (
+θ : Angle).toReal = θ ↔ -π < θ ∧ θ <= π
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Set.mem_Ioc`：∀ {α : Type u_1} [inst : Preorder α] {a b x : α}, x ∈ Set.I
+oc a b ↔ a < x ∧ x ≤ b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem toReal_coe_eq_self_iff {θ : Real} : (θ : Angle).toReal = θ ↔ -π < θ ∧ θ <= π := by
-  rw [toReal_coe]; rw [toIocMod_eq_self two_pi_pos]
-  ring_nf
-  rfl
-
-/--
-theorem `toReal_coe_eq_self_iff_mem_Ioc` / 定理 `toReal_coe_eq_self_iff_mem_Ioc`
-
-English:
-theorem toReal_coe_eq_self_iff_mem_Ioc
-  given: {θ : Real}
-  statement: (θ : Angle).toReal = θ ↔ θ in Set.Ioc (-π) π
-  proof: by
-  rw [toReal_coe_eq_self_iff]; rw [← Set.mem_Ioc]
+theorem toReal_coe_eq_self_iff_mem_Ioc {θ : ℝ} : (θ : Angle).toReal = θ ↔ θ ∈ Set.Ioc (-π) π := by
+  rw [toReal_coe_eq_self_iff, ← Set.mem_Ioc]
 
 @[grind inj]
-
-中文:
-定理 to实数_coe_eq_self_iff_mem_Ioc
-  条件: {θ : 实数}
-  结论: (θ : Angle).to实数 = θ ↔ θ in 集合.左开右闭区间 (-π) π
-  证明: by
-  rw [toReal_coe_eq_self_iff]; rw [← Set.mem_Ioc]
-
-@[grind inj]
-
-Depends on / 依赖: Set.mem_Ioc, mem_Ioc, toReal_coe_eq_self_iff
--/
-theorem toReal_coe_eq_self_iff_mem_Ioc {θ : Real} : (θ : Angle).toReal = θ ↔ θ in Set.Ioc (-π) π := by
-  rw [toReal_coe_eq_self_iff]; rw [← Set.mem_Ioc]
-
-@[grind inj]
-/--
-theorem `toReal_injective` / 定理 `toReal_injective`
-
-English:
-theorem toReal_injective
-  statement: Function.Injective toReal
-  proof: by
-  intro θ ψ h
-  induction θ using Real.Angle.induction_on
-  induction ψ using Real.Angle.induction_on
-  simpa [toReal_coe, toIocMod_eq_toIocMod, zsmul_eq_mul, mul_comm _ (2 * π), ←
-    angle_eq_iff_two_pi_dvd_sub, eq_comm] using h
-
-@[simp]
-
-中文:
-定理 to实数_injective
-  结论: 函数.单射 to实数
-  证明: by
-  intro θ ψ h
-  induction θ using Real.Angle.induction_on
-  induction ψ using Real.Angle.induction_on
-  simpa [toReal_coe, toIocMod_eq_toIocMod, zsmul_eq_mul, mul_comm _ (2 * π), ←
-    angle_eq_iff_two_pi_dvd_sub, eq_comm] using h
-
-@[simp]
-
-Depends on / 依赖: Real.Angle.induction_on, angle_eq_iff_two_pi_dvd_sub, eq_comm, induction_on, mul_comm, toIocMod_eq_toIocMod, toReal_coe, zsmul_eq_mul
+/-
+**Real.Angle.toReal_injective** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：toReal_injective : Function.Injective toReal
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.induction_on`：∀ {p : Real.Angle → Prop} (θ : Real.Angle), (∀ 
+(x : ℝ), p ↑x) → p θ
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Real.two_pi_pos`：two_pi_pos : 0 < 2 * π
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
 -/
 theorem toReal_injective : Function.Injective toReal := by
   intro θ ψ h
@@ -2296,180 +1797,169 @@ theorem toReal_injective : Function.Injective toReal := by
     angle_eq_iff_two_pi_dvd_sub, eq_comm] using h
 
 @[simp]
-/--
-theorem `toReal_inj` / 定理 `toReal_inj`
-
-English:
-theorem toReal_inj
-  given: {θ ψ : Angle}
-  statement: θ.toReal = ψ.toReal ↔ θ = ψ
-  proof: toReal_injective.eq_iff
-
-@[simp, grind =]
-
-中文:
-定理 to实数_inj
-  条件: {θ ψ : Angle}
-  结论: θ.to实数 = ψ.to实数 ↔ θ = ψ
-  证明: toReal_injective.eq_iff
-
-@[simp, grind =]
-
-Depends on / 依赖: eq_iff, toReal_injective, toReal_injective.eq_iff
+/-
+**Real.Angle.toReal_inj** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：toReal_inj {θ ψ : Angle} : θ.toReal = ψ.toReal ↔ θ = ψ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Real.Angle.toReal_injective`：toReal_injective : Function.Injective toRea
+l
 -/
 theorem toReal_inj {θ ψ : Angle} : θ.toReal = ψ.toReal ↔ θ = ψ :=
   toReal_injective.eq_iff
 
 @[simp, grind =]
-/--
-theorem `coe_toReal` / 定理 `coe_toReal`
-
-English:
-theorem coe_toReal
-  given: (θ : Angle)
-  statement: (θ.toReal : Angle) = θ
-  proof: by
-  induction θ using Real.Angle.induction_on
-  exact coe_toIocMod _ _
-
-中文:
-定理 coe_to实数
-  条件: (θ : Angle)
-  结论: (θ.to实数 : Angle) = θ
-  证明: by
-  induction θ using Real.Angle.induction_on
-  exact coe_toIocMod _ _
-
-Depends on / 依赖: Real.Angle.induction_on, coe_toIocMod, induction_on
+/-
+**Real.Angle.coe_toReal** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：coe_toReal (θ : Angle) : (θ.toReal : Angle) = θ
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.induction_on`：∀ {p : Real.Angle → Prop} (θ : Real.Angle), (∀ 
+(x : ℝ), p ↑x) → p θ
+· 使用定理 `Real.Angle.coe_toIocMod`：coe_toIocMod (θ ψ : Real) : ↑(toIocMod two_pi_p
+os ψ θ) = (θ : Angle)
 -/
 theorem coe_toReal (θ : Angle) : (θ.toReal : Angle) = θ := by
   induction θ using Real.Angle.induction_on
   exact coe_toIocMod _ _
-
-/--
-theorem `neg_pi_lt_toReal` / 定理 `neg_pi_lt_toReal`
-
-English:
-theorem neg_pi_lt_toReal
-  given: (θ : Angle)
-  statement: -π < θ.toReal
-  proof: by
-  induction θ using Real.Angle.induction_on
-  exact left_lt_toIocMod _ _ _
-
-中文:
-定理 neg_pi_lt_to实数
-  条件: (θ : Angle)
-  结论: -π < θ.to实数
-  证明: by
-  induction θ using Real.Angle.induction_on
-  exact left_lt_toIocMod _ _ _
-
-Depends on / 依赖: Real.Angle.induction_on, induction_on, left_lt_toIocMod
+/-
+**Real.Angle.neg_pi_lt_toReal** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：neg_pi_lt_toReal (θ : Angle) : -π < θ.toReal
+参数：θ : Angle。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.induction_on`：∀ {p : Real.Angle → Prop} (θ : Real.Angle), (∀ 
+(x : ℝ), p ↑x) → p θ
+· 使用定理 `left_lt_toIocMod`：left_lt_toIocMod (a b : α) : a < toIocMod hp a b
+· 使用定理 `Real.two_pi_pos`：two_pi_pos : 0 < 2 * π
 -/
 theorem neg_pi_lt_toReal (θ : Angle) : -π < θ.toReal := by
   induction θ using Real.Angle.induction_on
   exact left_lt_toIocMod _ _ _
-
-/--
-theorem `toReal_le_pi` / 定理 `toReal_le_pi`
-
-English:
-theorem toReal_le_pi
-  given: (θ : Angle)
-  statement: θ.toReal <= π
-  proof: by
-  induction θ using Real.Angle.induction_on
-  convert! toIocMod_le_right two_pi_pos _ _
-  ring
-
-中文:
-定理 to实数_le_pi
-  条件: (θ : Angle)
-  结论: θ.to实数 <= π
-  证明: by
-  induction θ using Real.Angle.induction_on
-  convert! toIocMod_le_right two_pi_pos _ _
-  ring
-
-Depends on / 依赖: Real.Angle.induction_on, convert, induction_on, toIocMod_le_right, two_pi_pos
+/-
+**Real.Angle.toReal_le_pi** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：toReal_le_pi (θ : Angle) : θ.toReal <= π
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.induction_on`：∀ {p : Real.Angle → Prop} (θ : Real.Angle), (∀ 
+(x : ℝ), p ↑x) → p θ
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Real.two_pi_pos`：two_pi_pos : 0 < 2 * π
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b : R}, a = a' → -a' = b → -a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_mul`：∀ {R : Type u_2} [inst : CommRing R]
+ (a₁ : R) (a₂ : ℕ) {a₃ b : R}, -a₃ = b → -(a₁ ^ a₂ * a₃) = a₁ ^ a₂ * b
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.cast_pos`：∀ {R : Type u_1} [inst : CommSemiring R] {
+a : R} {n : ℕ}, Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast + 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用引理 `Mathlib.Meta.NormNum.instAtLeastTwo`：instAtLeastTwo (n : Nat) : Nat.AtLe
+astTwo (n + 2)
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
+（共 37 条，此处仅展示前 30 条）
 -/
-theorem toReal_le_pi (θ : Angle) : θ.toReal <= π := by
+theorem toReal_le_pi (θ : Angle) : θ.toReal ≤ π := by
   induction θ using Real.Angle.induction_on
   convert! toIocMod_le_right two_pi_pos _ _
   ring
-
-/--
-theorem `abs_toReal_le_pi` / 定理 `abs_toReal_le_pi`
-
-English:
-theorem abs_toReal_le_pi
-  given: (θ : Angle)
-  statement: |θ.toReal| <= π
-  proof: abs_le.2 ⟨(neg_pi_lt_toReal _).le, toReal_le_pi _⟩
-
-中文:
-定理 abs_to实数_le_pi
-  条件: (θ : Angle)
-  结论: |θ.to实数| <= π
-  证明: abs_le.2 ⟨(neg_pi_lt_toReal _).le, toReal_le_pi _⟩
-
-Depends on / 依赖: abs_le, neg_pi_lt_toReal, toReal_le_pi
+/-
+**Real.Angle.abs_toReal_le_pi** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：abs_toReal_le_pi (θ : Angle) : |θ.toReal| <= π
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `abs_le`：∀ {G : Type u_1} [inst : AddCommGroup G] [inst_1 : LinearOrder G
+] [IsOrderedAddMonoid G] {a b : G},   |a| ≤ b ↔ -b ≤ a ∧ a ≤ b
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Real.Angle.neg_pi_lt_toReal`：neg_pi_lt_toReal (θ : Angle) : -π < θ.toRea
+l
+· 使用定理 `Real.Angle.toReal_le_pi`：toReal_le_pi (θ : Angle) : θ.toReal <= π
 -/
-theorem abs_toReal_le_pi (θ : Angle) : |θ.toReal| <= π :=
+theorem abs_toReal_le_pi (θ : Angle) : |θ.toReal| ≤ π :=
   abs_le.2 ⟨(neg_pi_lt_toReal _).le, toReal_le_pi _⟩
-
-/--
-theorem `toReal_mem_Ioc` / 定理 `toReal_mem_Ioc`
-
-English:
-theorem toReal_mem_Ioc
-  given: (θ : Angle)
-  statement: θ.toReal in Set.Ioc (-π) π
-  proof: ⟨neg_pi_lt_toReal _, toReal_le_pi _⟩
-
-@[simp]
-
-中文:
-定理 to实数_mem_Ioc
-  条件: (θ : Angle)
-  结论: θ.to实数 in 集合.左开右闭区间 (-π) π
-  证明: ⟨neg_pi_lt_toReal _, toReal_le_pi _⟩
-
-@[simp]
-
-Depends on / 依赖: neg_pi_lt_toReal, toReal_le_pi
+/-
+**Real.Angle.toReal_mem_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：toReal_mem_Ioc (θ : Angle) : θ.toReal in Set.Ioc (-π) π
+参数：θ : Angle。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.neg_pi_lt_toReal`：neg_pi_lt_toReal (θ : Angle) : -π < θ.toRea
+l
+· 使用定理 `Real.Angle.toReal_le_pi`：toReal_le_pi (θ : Angle) : θ.toReal <= π
 -/
-theorem toReal_mem_Ioc (θ : Angle) : θ.toReal in Set.Ioc (-π) π :=
+theorem toReal_mem_Ioc (θ : Angle) : θ.toReal ∈ Set.Ioc (-π) π :=
   ⟨neg_pi_lt_toReal _, toReal_le_pi _⟩
 
 @[simp]
-/--
-theorem `toIocMod_toReal` / 定理 `toIocMod_toReal`
-
-English:
-theorem toIocMod_toReal
-  given: (θ : Angle)
-  statement: toIocMod two_pi_pos (-π) θ.toReal = θ.toReal
-  proof: by
-  induction θ using Real.Angle.induction_on
-  rw [toReal_coe]
-  exact toIocMod_toIocMod _ _ _ _
-
-@[simp, grind =]
-
-中文:
-定理 toIocMod_to实数
-  条件: (θ : Angle)
-  结论: toIocMod two_pi_pos (-π) θ.to实数 = θ.to实数
-  证明: by
-  induction θ using Real.Angle.induction_on
-  rw [toReal_coe]
-  exact toIocMod_toIocMod _ _ _ _
-
-@[simp, grind =]
-
-Depends on / 依赖: Real.Angle.induction_on, induction_on, toIocMod_toIocMod, toReal_coe
+/-
+**Real.Angle.toIocMod_toReal** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：toIocMod_toReal (θ : Angle) : toIocMod two_pi_pos (-π) θ.toReal = θ.toReal
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.induction_on`：∀ {p : Real.Angle → Prop} (θ : Real.Angle), (∀ 
+(x : ℝ), p ↑x) → p θ
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Real.two_pi_pos`：two_pi_pos : 0 < 2 * π
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.toReal_coe`：toReal_coe (θ : Real) : (θ : Angle).toReal = toIo
+cMod two_pi_pos (-π) θ
+· 使用定理 `toIocMod_toIocMod`：toIocMod_toIocMod (a₁ a₂ b : α) : toIocMod hp a₁ (toI
+ocMod hp a₂ b) = toIocMod hp a₁ b
 -/
 theorem toIocMod_toReal (θ : Angle) : toIocMod two_pi_pos (-π) θ.toReal = θ.toReal := by
   induction θ using Real.Angle.induction_on
@@ -2477,2031 +1967,2266 @@ theorem toIocMod_toReal (θ : Angle) : toIocMod two_pi_pos (-π) θ.toReal = θ.
   exact toIocMod_toIocMod _ _ _ _
 
 @[simp, grind =]
-/--
-theorem `toReal_zero` / 定理 `toReal_zero`
-
-English:
-theorem toReal_zero
-  statement: (0 : Angle).toReal = 0
-  proof: by
-  rw [← coe_zero]; rw [toReal_coe_eq_self_iff]
-  exact ⟨Left.neg_neg_iff.2 Real.pi_pos, Real.pi_pos.le⟩
-
-@[simp]
-
-中文:
-定理 to实数_zero
-  结论: (0 : Angle).to实数 = 0
-  证明: by
-  rw [← coe_zero]; rw [toReal_coe_eq_self_iff]
-  exact ⟨Left.neg_neg_iff.2 Real.pi_pos, Real.pi_pos.le⟩
-
-@[simp]
-
-Depends on / 依赖: Left.neg_neg_iff, Real.pi_pos, Real.pi_pos.le, coe_zero, neg_neg_iff, pi_pos, toReal_coe_eq_self_iff
+/-
+**Real.Angle.toReal_zero** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：toReal_zero : (0 : Angle).toReal = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.coe_zero`：coe_zero : ↑(0 : Real) = (0 : Angle)
+· 使用定理 `Real.Angle.toReal_coe_eq_self_iff`：toReal_coe_eq_self_iff {θ : Real} : (
+θ : Angle).toReal = θ ↔ -π < θ ∧ θ <= π
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Left.neg_neg_iff`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LT α] [Ad
+dLeftStrictMono α] {a : α}, -a < 0 ↔ 0 < a
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Real.pi_pos`：pi_pos : 0 < π
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
 -/
 theorem toReal_zero : (0 : Angle).toReal = 0 := by
-  rw [← coe_zero]; rw [toReal_coe_eq_self_iff]
+  rw [← coe_zero, toReal_coe_eq_self_iff]
   exact ⟨Left.neg_neg_iff.2 Real.pi_pos, Real.pi_pos.le⟩
 
 @[simp]
-/--
-theorem `toReal_eq_zero_iff` / 定理 `toReal_eq_zero_iff`
-
-English:
-theorem toReal_eq_zero_iff
-  given: {θ : Angle}
-  statement: θ.toReal = 0 ↔ θ = 0
-  proof: by
-  nth_rw 1 [← toReal_zero]
-  exact toReal_inj
-
-@[simp, grind =]
-
-中文:
-定理 to实数_eq_zero_iff
-  条件: {θ : Angle}
-  结论: θ.to实数 = 0 ↔ θ = 0
-  证明: by
-  nth_rw 1 [← toReal_zero]
-  exact toReal_inj
-
-@[simp, grind =]
-
-Depends on / 依赖: Faithful, Functor, Functor.Faithful.of_iso, nth_rw, of_iso, preLeftIso, toReal_inj, toReal_zero
+/-
+**Real.Angle.toReal_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：toReal_eq_zero_iff {θ : Angle} : θ.toReal = 0 ↔ θ = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.toReal_zero`：toReal_zero : (0 : Angle).toReal = 0
+· 使用定理 `Real.Angle.toReal_inj`：toReal_inj {θ ψ : Angle} : θ.toReal = ψ.toReal ↔ 
+θ = ψ
 -/
 theorem toReal_eq_zero_iff {θ : Angle} : θ.toReal = 0 ↔ θ = 0 := by
   nth_rw 1 [← toReal_zero]
   exact toReal_inj
 
 @[simp, grind =]
-/--
-theorem `toReal_pi` / 定理 `toReal_pi`
-
-English:
-theorem toReal_pi
-  statement: (π : Angle).toReal = π
-  proof: by
-  rw [toReal_coe_eq_self_iff]
-  exact ⟨Left.neg_lt_self Real.pi_pos, le_refl _⟩
-
-@[simp]
-
-中文:
-定理 to实数_pi
-  结论: (π : Angle).to实数 = π
-  证明: by
-  rw [toReal_coe_eq_self_iff]
-  exact ⟨Left.neg_lt_self Real.pi_pos, le_refl _⟩
-
-@[simp]
-
-Depends on / 依赖: Functor, Functor.Full.of_iso, Left.neg_lt_self, Real.pi_pos, le_refl, neg_lt_self, of_iso, pi_pos, preLeftIso, toReal_coe_eq_self_iff
+/-
+**Real.Angle.toReal_pi** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：toReal_pi : (π : Angle).toReal = π
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.toReal_coe_eq_self_iff`：toReal_coe_eq_self_iff {θ : Real} : (
+θ : Angle).toReal = θ ↔ -π < θ ∧ θ <= π
+· 使用定理 `Left.neg_lt_self`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : Preorder 
+α] [AddLeftStrictMono α] {a : α}, 0 < a → -a < a
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Real.pi_pos`：pi_pos : 0 < π
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
 theorem toReal_pi : (π : Angle).toReal = π := by
   rw [toReal_coe_eq_self_iff]
   exact ⟨Left.neg_lt_self Real.pi_pos, le_refl _⟩
 
 @[simp]
-/--
-theorem `toReal_eq_pi_iff` / 定理 `toReal_eq_pi_iff`
-
-English:
-theorem toReal_eq_pi_iff
-  given: {θ : Angle}
-  statement: θ.toReal = π ↔ θ = π
-  proof: by rw [← toReal_inj, toReal_pi]
-
-中文:
-定理 to实数_eq_pi_iff
-  条件: {θ : Angle}
-  结论: θ.to实数 = π ↔ θ = π
-  证明: by rw [← toReal_inj, toReal_pi]
-
-Depends on / 依赖: Functor, Functor.essSurj_of_iso, essSurj_of_iso, preLeftIso, toReal_inj, toReal_pi
+/-
+**Real.Angle.toReal_eq_pi_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：toReal_eq_pi_iff {θ : Angle} : θ.toReal = π ↔ θ = π
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.toReal_inj`：toReal_inj {θ ψ : Angle} : θ.toReal = ψ.toReal ↔ 
+θ = ψ
+· 使用定理 `Real.Angle.toReal_pi`：toReal_pi : (π : Angle).toReal = π
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem toReal_eq_pi_iff {θ : Angle} : θ.toReal = π ↔ θ = π := by rw [← toReal_inj, toReal_pi]
-
-/--
-lemma `toReal_neg_eq_neg_toReal_iff` / 引理 `toReal_neg_eq_neg_toReal_iff`
-
-English:
-lemma toReal_neg_eq_neg_toReal_iff
-  given: {θ : Angle}
-  statement: (-θ).toReal = -(θ.toReal) ↔ θ != π
-  proof: by
-  nth_rw 1 [← coe_toReal θ, ← coe_neg, toReal_coe_eq_self_iff]
-  constructor
-  · rintro ⟨h, h'⟩ rfl
-    simp at h
-  · intro h
-    rw [neg_lt_neg_iff]
-    have h' : θ.toReal != π := by simp [h]
-    exact ⟨(toReal_le_pi θ).lt_of_ne h', by linarith [neg_pi_lt_toReal θ]⟩
-
-中文:
-引理 to实数_neg_eq_neg_to实数_iff
-  条件: {θ : Angle}
-  结论: (-θ).to实数 = -(θ.to实数) ↔ θ != π
-  证明: by
-  nth_rw 1 [← coe_toReal θ, ← coe_neg, toReal_coe_eq_self_iff]
-  constructor
-  · rintro ⟨h, h'⟩ rfl
-    simp at h
-  · intro h
-    rw [neg_lt_neg_iff]
-    have h' : θ.toReal != π := by simp [h]
-    exact ⟨(toReal_le_pi θ).lt_of_ne h', by linarith [neg_pi_lt_toReal θ]⟩
-
-Depends on / 依赖: coe_neg, coe_toReal, lt_of_ne, neg_lt_neg_iff, neg_pi_lt_toReal, nth_rw, toReal, toReal_coe_eq_self_iff, toReal_le_pi
+/-
+**Real.Angle.toReal_neg_eq_neg_toReal_iff** 是 Mathlib 中的一个引理，位于命名空间 `Real.Angle`
+。
+形式化陈述：toReal_neg_eq_neg_toReal_iff {θ : Angle} : (-θ).toReal = -(θ.toReal) ↔ θ !
+= π
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.coe_toReal`：coe_toReal (θ : Angle) : (θ.toReal : Angle) = θ
+· 使用定理 `Real.Angle.coe_neg`：coe_neg (x : Real) : ↑(-x : Real) = -(↑x : Angle)
+· 使用定理 `Real.Angle.toReal_coe_eq_self_iff`：toReal_coe_eq_self_iff {θ : Real} : (
+θ : Angle).toReal = θ ↔ -π < θ ∧ θ <= π
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Real.Angle.toReal_pi`：toReal_pi : (π : Angle).toReal = π
+· 使用定理 `neg_lt_neg_iff`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LT α] [AddL
+eftStrictMono α] {a b : α} [AddRightStrictMono α],   -a < -b ↔ b < a
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `IsRightCancelAdd.addRightStrictMono_of_addRightMono`：∀ (N : Type u_2) [i
+nst : Add N] [IsRightCancelAdd N] [inst_2 : PartialOrder N] [AddRightMono N], Ad
+dRightStrictMono N
+· 使用定理 `instIsRightCancelAddOfAddRightReflectLE`：∀ {α : Type u_1} [inst : Add α]
+ [inst_1 : PartialOrder α] [AddRightReflectLE α], IsRightCancelAdd α
+· 使用定理 `addRightReflectLE_of_addLeftReflectLE`：∀ (N : Type u_2) [inst : AddCommS
+emigroup N] [inst_1 : LE N] [AddLeftReflectLE N], AddRightReflectLE N
+· 使用定理 `IsLeftCancelAdd.addLeftReflectLE_of_addLeftReflectLT`：∀ (N : Type u_2) [
+inst : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftReflectLT N]
+, AddLeftReflectLE N
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `LE.le.lt_of_ne`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a ≠ b → a < b
+· 使用定理 `Real.Angle.toReal_le_pi`：toReal_le_pi (θ : Angle) : θ.toReal <= π
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b : R}, a = a' → -a' = b → -a = b
+（共 52 条，此处仅展示前 30 条）
 -/
-lemma toReal_neg_eq_neg_toReal_iff {θ : Angle} : (-θ).toReal = -(θ.toReal) ↔ θ != π := by
+lemma toReal_neg_eq_neg_toReal_iff {θ : Angle} : (-θ).toReal = -(θ.toReal) ↔ θ ≠ π := by
   nth_rw 1 [← coe_toReal θ, ← coe_neg, toReal_coe_eq_self_iff]
   constructor
   · rintro ⟨h, h'⟩ rfl
     simp at h
   · intro h
     rw [neg_lt_neg_iff]
-    have h' : θ.toReal != π := by simp [h]
+    have h' : θ.toReal ≠ π := by simp [h]
     exact ⟨(toReal_le_pi θ).lt_of_ne h', by linarith [neg_pi_lt_toReal θ]⟩
-
-/--
-lemma `abs_toReal_neg` / 引理 `abs_toReal_neg`
-
-English:
-lemma abs_toReal_neg
-  given: (θ : Angle)
-  statement: |(-θ).toReal| = |θ.toReal|
-  proof: by
-  rcases eq_or_ne θ π with rfl | h
-  · simp
-  · simp [toReal_neg_eq_neg_toReal_iff.2 h]
-
-中文:
-引理 abs_to实数_neg
-  条件: (θ : Angle)
-  结论: |(-θ).to实数| = |θ.to实数|
-  证明: by
-  rcases eq_or_ne θ π with rfl | h
-  · simp
-  · simp [toReal_neg_eq_neg_toReal_iff.2 h]
+/-
+**Real.Angle.abs_toReal_neg** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：∀ (θ : Real.Angle), |(-θ).toReal| = |θ.toReal|
+参数：θ : Real.Angle；-θ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.neg_coe_pi`：neg_coe_pi : -(π : Angle) = π
+· 使用定理 `Real.Angle.toReal_pi`：toReal_pi : (π : Angle).toReal = π
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Real.Angle.toReal_neg_eq_neg_toReal_iff`：toReal_neg_eq_neg_toReal_iff {θ
+ : Angle} : (-θ).toReal = -(θ.toReal) ↔ θ != π
+· 使用定理 `abs_neg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] (a : 
+α), |(-a)| = |a|
 -/
 @[simp] lemma abs_toReal_neg (θ : Angle) : |(-θ).toReal| = |θ.toReal| := by
   rcases eq_or_ne θ π with rfl | h
   · simp
   · simp [toReal_neg_eq_neg_toReal_iff.2 h]
-
-/--
-theorem `pi_ne_zero` / 定理 `pi_ne_zero`
-
-English:
-theorem pi_ne_zero
-  statement: (π : Angle) != 0
-  proof: by
-  rw [← toReal_injective.ne_iff]; rw [toReal_pi]; rw [toReal_zero]
+/-
+**Real.Angle.pi_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：pi_ne_zero : (π : Angle) != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Injective.ne_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {x y : α}, f x ≠ f y ↔ x ≠ y
+· 使用定理 `Real.Angle.toReal_injective`：toReal_injective : Function.Injective toRea
+l
+· 使用定理 `Real.Angle.toReal_pi`：toReal_pi : (π : Angle).toReal = π
+· 使用定理 `Real.Angle.toReal_zero`：toReal_zero : (0 : Angle).toReal = 0
+· 使用定理 `Real.pi_ne_zero`：pi_ne_zero : π != 0
+-/
+theorem pi_ne_zero : (π : Angle) ≠ 0 := by
+  rw [← toReal_injective.ne_iff, toReal_pi, toReal_zero]
   exact Real.pi_ne_zero
 
 @[simp, grind =]
+/-
+**Real.Angle.toReal_pi_div_two** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：toReal_pi_div_two : ((π / 2 : Real) : Angle).toReal = π / 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Real.Angle.toReal_coe_eq_self_iff`：toReal_coe_eq_self_iff {θ : Real} : (
+θ : Angle).toReal = θ ↔ -π < θ ∧ θ <= π
+· 使用定理 `lt_of_not_ge`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬b ≤ a 
+→ a < b
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用引理 `Mathlib.Meta.NormNum.instAtLeastTwo`：instAtLeastTwo (n : Nat) : Nat.AtLe
+astTwo (n + 2)
+· 使用定理 `instNeZeroNatHAdd_1`：∀ {n m : ℕ} [h : NeZero m], NeZero (n + m)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.cast_pos`：∀ {R : Type u_1} [inst : CommSemiring R] {
+a : R} {n : ℕ}, Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast + 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b : R}, a = a' → -a' = b → -a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_mul`：∀ {R : Type u_2} [inst : CommRing R]
+ (a₁ : R) (a₂ : ℕ) {a₃ b : R}, -a₃ = b → -(a₁ ^ a₂ * a₃) = a₁ ^ a₂ * b
+（共 66 条，此处仅展示前 30 条）
+-/
+theorem toReal_pi_div_two : ((π / 2 : ℝ) : Angle).toReal = π / 2 :=
+  toReal_coe_eq_self_iff.2 <| by constructor <;> linarith [pi_pos]
 
-中文:
-定理 pi_ne_zero
-  结论: (π : Angle) != 0
-  证明: by
-  rw [← toReal_injective.ne_iff]; rw [toReal_pi]; rw [toReal_zero]
-  exact Real.pi_ne_zero
+@[simp]
+/-
+**Real.Angle.toReal_eq_pi_div_two_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：toReal_eq_pi_div_two_iff {θ : Angle} : θ.toReal = π / 2 ↔ θ = (π / 2 : Rea
+l)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.toReal_inj`：toReal_inj {θ ψ : Angle} : θ.toReal = ψ.toReal ↔ 
+θ = ψ
+· 使用定理 `Real.Angle.toReal_pi_div_two`：toReal_pi_div_two : ((π / 2 : Real) : Angl
+e).toReal = π / 2
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+-/
+theorem toReal_eq_pi_div_two_iff {θ : Angle} : θ.toReal = π / 2 ↔ θ = (π / 2 : ℝ) := by
+  rw [← toReal_inj, toReal_pi_div_two]
 
 @[simp, grind =]
-
-Depends on / 依赖: Faithful, Functor, Functor.Faithful.of_iso, Real.pi_ne_zero, ne_iff, of_iso, pi_ne_zero, postIso, toReal_injective, toReal_injective.ne_iff, toReal_pi, toReal_zero
+/-
+**Real.Angle.toReal_neg_pi_div_two** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：toReal_neg_pi_div_two : ((-π / 2 : Real) : Angle).toReal = -π / 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Real.Angle.toReal_coe_eq_self_iff`：toReal_coe_eq_self_iff {θ : Real} : (
+θ : Angle).toReal = θ ↔ -π < θ ∧ θ <= π
+· 使用定理 `lt_of_not_ge`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬b ≤ a 
+→ a < b
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用引理 `Mathlib.Meta.NormNum.instAtLeastTwo`：instAtLeastTwo (n : Nat) : Nat.AtLe
+astTwo (n + 2)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b : R}, a = a' → -a' = b → -a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.cast_pos`：∀ {R : Type u_1} [inst : CommSemiring R] {
+a : R} {n : ℕ}, Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast + 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_mul`：∀ {R : Type u_2} [inst : CommRing R]
+ (a₁ : R) (a₂ : ℕ) {a₃ b : R}, -a₃ = b → -(a₁ ^ a₂ * a₃) = a₁ ^ a₂ * b
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+（共 66 条，此处仅展示前 30 条）
 -/
-theorem pi_ne_zero : (π : Angle) != 0 := by
-  rw [← toReal_injective.ne_iff]; rw [toReal_pi]; rw [toReal_zero]
-  exact Real.pi_ne_zero
-
-@[simp, grind =]
-/--
-theorem `toReal_pi_div_two` / 定理 `toReal_pi_div_two`
-
-English:
-theorem toReal_pi_div_two
-  statement: ((π / 2 : Real) : Angle).toReal = π / 2
-  proof: toReal_coe_eq_self_iff.2 by constructor <;> linarith [pi_pos]
+theorem toReal_neg_pi_div_two : ((-π / 2 : ℝ) : Angle).toReal = -π / 2 :=
+  toReal_coe_eq_self_iff.2 <| by constructor <;> linarith [pi_pos]
 
 @[simp]
-
-中文:
-定理 to实数_pi_div_two
-  结论: ((π / 2 : 实数) : Angle).to实数 = π / 2
-  证明: toReal_coe_eq_self_iff.2 by constructor <;> linarith [pi_pos]
-
-@[simp]
-
-Depends on / 依赖: Functor, Functor.Full.of_iso, of_iso, pi_pos, postIso, toReal_coe_eq_self_iff
+/-
+**Real.Angle.toReal_eq_neg_pi_div_two_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`
+。
+形式化陈述：toReal_eq_neg_pi_div_two_iff {θ : Angle} : θ.toReal = -π / 2 ↔ θ = (-π / 2
+ : Real)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.toReal_inj`：toReal_inj {θ ψ : Angle} : θ.toReal = ψ.toReal ↔ 
+θ = ψ
+· 使用定理 `Real.Angle.toReal_neg_pi_div_two`：toReal_neg_pi_div_two : ((-π / 2 : Rea
+l) : Angle).toReal = -π / 2
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem toReal_pi_div_two : ((π / 2 : Real) : Angle).toReal = π / 2 :=
-toReal_coe_eq_self_iff.2 by constructor <;> linarith [pi_pos]
-
-@[simp]
-/--
-theorem `toReal_eq_pi_div_two_iff` / 定理 `toReal_eq_pi_div_two_iff`
-
-English:
-theorem toReal_eq_pi_div_two_iff
-  given: {θ : Angle}
-  statement: θ.toReal = π / 2 ↔ θ = (π / 2 : Real)
-  proof: by
-  rw [← toReal_inj]; rw [toReal_pi_div_two]
-
-@[simp, grind =]
-
-中文:
-定理 to实数_eq_pi_div_two_iff
-  条件: {θ : Angle}
-  结论: θ.to实数 = π / 2 ↔ θ = (π / 2 : 实数)
-  证明: by
-  rw [← toReal_inj]; rw [toReal_pi_div_two]
-
-@[simp, grind =]
-
-Depends on / 依赖: Functor, Functor.essSurj_of_iso, essSurj_of_iso, postIso, toReal_inj, toReal_pi_div_two
+theorem toReal_eq_neg_pi_div_two_iff {θ : Angle} : θ.toReal = -π / 2 ↔ θ = (-π / 2 : ℝ) := by
+  rw [← toReal_inj, toReal_neg_pi_div_two]
+/-
+**Real.Angle.pi_div_two_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：pi_div_two_ne_zero : ((π / 2 : Real) : Angle) != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Injective.ne_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {x y : α}, f x ≠ f y ↔ x ≠ y
+· 使用定理 `Real.Angle.toReal_injective`：toReal_injective : Function.Injective toRea
+l
+· 使用定理 `Real.Angle.toReal_pi_div_two`：toReal_pi_div_two : ((π / 2 : Real) : Angl
+e).toReal = π / 2
+· 使用定理 `Real.Angle.toReal_zero`：toReal_zero : (0 : Angle).toReal = 0
+· 使用定理 `div_ne_zero`：div_ne_zero (ha : a != 0) (hb : b != 0) : a / b != 0
+· 使用定理 `Real.pi_ne_zero`：pi_ne_zero : π != 0
+· 使用引理 `two_ne_zero`：two_ne_zero [OfNat α 2] [NeZero (2 : α)] : (2 : α) != 0
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
 -/
-theorem toReal_eq_pi_div_two_iff {θ : Angle} : θ.toReal = π / 2 ↔ θ = (π / 2 : Real) := by
-  rw [← toReal_inj]; rw [toReal_pi_div_two]
-
-@[simp, grind =]
-/--
-theorem `toReal_neg_pi_div_two` / 定理 `toReal_neg_pi_div_two`
-
-English:
-theorem toReal_neg_pi_div_two
-  statement: ((-π / 2 : Real) : Angle).toReal = -π / 2
-  proof: toReal_coe_eq_self_iff.2 by constructor <;> linarith [pi_pos]
-
-@[simp]
-
-中文:
-定理 to实数_neg_pi_div_two
-  结论: ((-π / 2 : 实数) : Angle).to实数 = -π / 2
-  证明: toReal_coe_eq_self_iff.2 by constructor <;> linarith [pi_pos]
-
-@[simp]
-
-Depends on / 依赖: pi_pos, toReal_coe_eq_self_iff
--/
-theorem toReal_neg_pi_div_two : ((-π / 2 : Real) : Angle).toReal = -π / 2 :=
-toReal_coe_eq_self_iff.2 by constructor <;> linarith [pi_pos]
-
-@[simp]
-/--
-theorem `toReal_eq_neg_pi_div_two_iff` / 定理 `toReal_eq_neg_pi_div_two_iff`
-
-English:
-theorem toReal_eq_neg_pi_div_two_iff
-  given: {θ : Angle}
-  statement: θ.toReal = -π / 2 ↔ θ = (-π / 2 : Real)
-  proof: by
-  rw [← toReal_inj]; rw [toReal_neg_pi_div_two]
-
-中文:
-定理 to实数_eq_neg_pi_div_two_iff
-  条件: {θ : Angle}
-  结论: θ.to实数 = -π / 2 ↔ θ = (-π / 2 : 实数)
-  证明: by
-  rw [← toReal_inj]; rw [toReal_neg_pi_div_two]
-
-Depends on / 依赖: toReal_inj, toReal_neg_pi_div_two
--/
-theorem toReal_eq_neg_pi_div_two_iff {θ : Angle} : θ.toReal = -π / 2 ↔ θ = (-π / 2 : Real) := by
-  rw [← toReal_inj]; rw [toReal_neg_pi_div_two]
-
-/--
-theorem `pi_div_two_ne_zero` / 定理 `pi_div_two_ne_zero`
-
-English:
-theorem pi_div_two_ne_zero
-  statement: ((π / 2 : Real) : Angle) != 0
-  proof: by
-  rw [← toReal_injective.ne_iff]; rw [toReal_pi_div_two]; rw [toReal_zero]
+theorem pi_div_two_ne_zero : ((π / 2 : ℝ) : Angle) ≠ 0 := by
+  rw [← toReal_injective.ne_iff, toReal_pi_div_two, toReal_zero]
   exact div_ne_zero Real.pi_ne_zero two_ne_zero
-
-中文:
-定理 pi_div_two_ne_zero
-  结论: ((π / 2 : 实数) : Angle) != 0
-  证明: by
-  rw [← toReal_injective.ne_iff]; rw [toReal_pi_div_two]; rw [toReal_zero]
-  exact div_ne_zero Real.pi_ne_zero two_ne_zero
-
-Depends on / 依赖: Real.pi_ne_zero, div_ne_zero, ne_iff, pi_ne_zero, toReal_injective, toReal_injective.ne_iff, toReal_pi_div_two, toReal_zero, two_ne_zero
+/-
+**Real.Angle.neg_pi_div_two_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：neg_pi_div_two_ne_zero : ((-π / 2 : Real) : Angle) != 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Injective.ne_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {x y : α}, f x ≠ f y ↔ x ≠ y
+· 使用定理 `Real.Angle.toReal_injective`：toReal_injective : Function.Injective toRea
+l
+· 使用定理 `Real.Angle.toReal_neg_pi_div_two`：toReal_neg_pi_div_two : ((-π / 2 : Rea
+l) : Angle).toReal = -π / 2
+· 使用定理 `Real.Angle.toReal_zero`：toReal_zero : (0 : Angle).toReal = 0
+· 使用定理 `div_ne_zero`：div_ne_zero (ha : a != 0) (hb : b != 0) : a / b != 0
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `neg_ne_zero`：∀ {α : Type u_1} [inst : SubtractionMonoid α] {a : α}, -a ≠
+ 0 ↔ a ≠ 0
+· 使用定理 `Real.pi_ne_zero`：pi_ne_zero : π != 0
+· 使用引理 `two_ne_zero`：two_ne_zero [OfNat α 2] [NeZero (2 : α)] : (2 : α) != 0
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
 -/
-theorem pi_div_two_ne_zero : ((π / 2 : Real) : Angle) != 0 := by
-  rw [← toReal_injective.ne_iff]; rw [toReal_pi_div_two]; rw [toReal_zero]
-  exact div_ne_zero Real.pi_ne_zero two_ne_zero
-
-/--
-theorem `neg_pi_div_two_ne_zero` / 定理 `neg_pi_div_two_ne_zero`
-
-English:
-theorem neg_pi_div_two_ne_zero
-  statement: ((-π / 2 : Real) : Angle) != 0
-  proof: by
-  rw [← toReal_injective.ne_iff]; rw [toReal_neg_pi_div_two]; rw [toReal_zero]
+theorem neg_pi_div_two_ne_zero : ((-π / 2 : ℝ) : Angle) ≠ 0 := by
+  rw [← toReal_injective.ne_iff, toReal_neg_pi_div_two, toReal_zero]
   exact div_ne_zero (neg_ne_zero.2 Real.pi_ne_zero) two_ne_zero
-
-中文:
-定理 neg_pi_div_two_ne_zero
-  结论: ((-π / 2 : 实数) : Angle) != 0
-  证明: by
-  rw [← toReal_injective.ne_iff]; rw [toReal_neg_pi_div_two]; rw [toReal_zero]
-  exact div_ne_zero (neg_ne_zero.2 Real.pi_ne_zero) two_ne_zero
-
-Depends on / 依赖: Real.pi_ne_zero, div_ne_zero, ne_iff, neg_ne_zero, pi_ne_zero, toReal_injective, toReal_injective.ne_iff, toReal_neg_pi_div_two, toReal_zero, two_ne_zero
+/-
+**Real.Angle.abs_toReal_coe_eq_self_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：abs_toReal_coe_eq_self_iff {θ : Real} : |(θ : Angle).toReal| = θ ↔ 0 <= θ 
+∧ θ <= π
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `abs_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] [A
+ddLeftMono α] [AddRightMono α] (a : α), 0 ≤ |a|
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `Real.Angle.abs_toReal_le_pi`：abs_toReal_le_pi (θ : Angle) : |θ.toReal| <
+= π
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `abs_eq_self`：∀ {G : Type u_1} [inst : AddCommGroup G] [inst_1 : LinearOr
+der G] [IsOrderedAddMonoid G] {a : G}, |a| = a ↔ 0 ≤ a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.toReal_coe_eq_self_iff`：toReal_coe_eq_self_iff {θ : Real} : (
+θ : Angle).toReal = θ ↔ -π < θ ∧ θ <= π
+· 使用定理 `LT.lt.trans_le`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a < b 
+→ b ≤ c → a < c
+· 使用定理 `Left.neg_neg_iff`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LT α] [Ad
+dLeftStrictMono α] {a : α}, -a < 0 ↔ 0 < a
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `Real.pi_pos`：pi_pos : 0 < π
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem neg_pi_div_two_ne_zero : ((-π / 2 : Real) : Angle) != 0 := by
-  rw [← toReal_injective.ne_iff]; rw [toReal_neg_pi_div_two]; rw [toReal_zero]
-  exact div_ne_zero (neg_ne_zero.2 Real.pi_ne_zero) two_ne_zero
-
-/--
-theorem `abs_toReal_coe_eq_self_iff` / 定理 `abs_toReal_coe_eq_self_iff`
-
-English:
-theorem abs_toReal_coe_eq_self_iff
-  given: {θ : Real}
-  statement: |(θ : Angle).toReal| = θ ↔ 0 <= θ ∧ θ <= π
-  proof: ⟨fun h => h ▸ ⟨abs_nonneg _, abs_toReal_le_pi _⟩, fun h =>
-    (toReal_coe_eq_self_iff.2 ⟨(Left.neg_neg_iff.2 Real.pi_pos).trans_le h.1, h.2⟩).symm ▸
-      abs_eq_self.2 h.1⟩
-
-中文:
-定理 abs_to实数_coe_eq_self_iff
-  条件: {θ : 实数}
-  结论: |(θ : Angle).to实数| = θ ↔ 0 <= θ ∧ θ <= π
-  证明: ⟨fun h => h ▸ ⟨abs_nonneg _, abs_toReal_le_pi _⟩, fun h =>
-    (toReal_coe_eq_self_iff.2 ⟨(Left.neg_neg_iff.2 Real.pi_pos).trans_le h.1, h.2⟩).symm ▸
-      abs_eq_self.2 h.1⟩
-
-Depends on / 依赖: Left.neg_neg_iff, Real.pi_pos, abs_eq_self, abs_nonneg, abs_toReal_le_pi, neg_neg_iff, pi_pos, toReal_coe_eq_self_iff, trans_le
--/
-theorem abs_toReal_coe_eq_self_iff {θ : Real} : |(θ : Angle).toReal| = θ ↔ 0 <= θ ∧ θ <= π :=
+theorem abs_toReal_coe_eq_self_iff {θ : ℝ} : |(θ : Angle).toReal| = θ ↔ 0 ≤ θ ∧ θ ≤ π :=
   ⟨fun h => h ▸ ⟨abs_nonneg _, abs_toReal_le_pi _⟩, fun h =>
     (toReal_coe_eq_self_iff.2 ⟨(Left.neg_neg_iff.2 Real.pi_pos).trans_le h.1, h.2⟩).symm ▸
       abs_eq_self.2 h.1⟩
-
-/--
-theorem `abs_toReal_neg_coe_eq_self_iff` / 定理 `abs_toReal_neg_coe_eq_self_iff`
-
-English:
-theorem abs_toReal_neg_coe_eq_self_iff
-  given: {θ : Real}
-  statement: |(-θ : Angle).toReal| = θ ↔ 0 <= θ ∧ θ <= π
-  proof: by
-  refine ⟨fun h => h ▸ ⟨abs_nonneg _, abs_toReal_le_pi _⟩, fun h => ?_⟩
-  by_cases hnegpi : θ = π; · simp [hnegpi, Real.pi_pos.le]
-  rw [← coe_neg]; rw [toReal_coe_eq_self_iff.2
-      ⟨neg_lt_neg (lt_of_le_of_ne h.2 hnegpi)]; rw [(neg_nonpos.2 h.1).trans Real.pi_pos.le⟩]; rw [abs_neg]; rw [abs_eq_self.2 h.1]
-
-中文:
-定理 abs_to实数_neg_coe_eq_self_iff
-  条件: {θ : 实数}
-  结论: |(-θ : Angle).to实数| = θ ↔ 0 <= θ ∧ θ <= π
-  证明: by
-  refine ⟨fun h => h ▸ ⟨abs_nonneg _, abs_toReal_le_pi _⟩, fun h => ?_⟩
-  by_cases hnegpi : θ = π; · simp [hnegpi, Real.pi_pos.le]
-  rw [← coe_neg]; rw [toReal_coe_eq_self_iff.2
-      ⟨neg_lt_neg (lt_of_le_of_ne h.2 hnegpi)]; rw [(neg_nonpos.2 h.1).trans Real.pi_pos.le⟩]; rw [abs_neg]; rw [abs_eq_self.2 h.1]
-
-Depends on / 依赖: Real.pi_pos.le, abs_eq_self, abs_neg, abs_nonneg, abs_toReal_le_pi, coe_neg, hnegpi, lt_of_le_of_ne, neg_lt_neg, neg_nonpos, pi_pos, toReal_coe_eq_self_iff
+/-
+**Real.Angle.abs_toReal_neg_coe_eq_self_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angl
+e`。
+形式化陈述：abs_toReal_neg_coe_eq_self_iff {θ : Real} : |(-θ : Angle).toReal| = θ ↔ 0 
+<= θ ∧ θ <= π
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `abs_nonneg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] [A
+ddLeftMono α] [AddRightMono α] (a : α), 0 ≤ |a|
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `covariant_swap_add_of_covariant_add`：∀ (N : Type u_2) (r : N → N → Prop)
+ [inst : AddCommSemigroup N] [CovariantClass N N (fun x1 x2 => x1 + x2) r],   Co
+variantClass N N (Functio…
+· 使用定理 `Real.Angle.abs_toReal_le_pi`：abs_toReal_le_pi (θ : Angle) : |θ.toReal| <
+= π
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.neg_coe_pi`：neg_coe_pi : -(π : Angle) = π
+· 使用定理 `Real.Angle.toReal_pi`：toReal_pi : (π : Angle).toReal = π
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Real.pi_pos`：pi_pos : 0 < π
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.coe_neg`：coe_neg (x : Real) : ↑(-x : Real) = -(↑x : Angle)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Real.Angle.toReal_coe_eq_self_iff`：toReal_coe_eq_self_iff {θ : Real} : (
+θ : Angle).toReal = θ ↔ -π < θ ∧ θ <= π
+· 使用定理 `neg_lt_neg`：∀ {α : Type u} [inst : AddCommGroup α] [inst_1 : PartialOrde
+r α] [IsOrderedAddMonoid α] {a b : α}, a < b → -b < -a
+· 使用引理 `lt_of_le_of_ne`：lt_of_le_of_ne : a <= b -> a != b -> a < b
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `neg_nonpos`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] [AddLeftM
+ono α] {a : α}, -a ≤ 0 ↔ 0 ≤ a
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `abs_neg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] (a : 
+α), |(-a)| = |a|
+· 使用定理 `abs_eq_self`：∀ {G : Type u_1} [inst : AddCommGroup G] [inst_1 : LinearOr
+der G] [IsOrderedAddMonoid G] {a : G}, |a| = a ↔ 0 ≤ a
 -/
-theorem abs_toReal_neg_coe_eq_self_iff {θ : Real} : |(-θ : Angle).toReal| = θ ↔ 0 <= θ ∧ θ <= π := by
+theorem abs_toReal_neg_coe_eq_self_iff {θ : ℝ} : |(-θ : Angle).toReal| = θ ↔ 0 ≤ θ ∧ θ ≤ π := by
   refine ⟨fun h => h ▸ ⟨abs_nonneg _, abs_toReal_le_pi _⟩, fun h => ?_⟩
   by_cases hnegpi : θ = π; · simp [hnegpi, Real.pi_pos.le]
-  rw [← coe_neg]; rw [toReal_coe_eq_self_iff.2
-      ⟨neg_lt_neg (lt_of_le_of_ne h.2 hnegpi)]; rw [(neg_nonpos.2 h.1).trans Real.pi_pos.le⟩]; rw [abs_neg]; rw [abs_eq_self.2 h.1]
-
-/--
-theorem `abs_toReal_eq_pi_div_two_iff` / 定理 `abs_toReal_eq_pi_div_two_iff`
-
-English:
-theorem abs_toReal_eq_pi_div_two_iff
-  given: {θ : Angle}
-  proof: by
-  rw [abs_eq (div_nonneg Real.pi_pos.le two_pos.le)]; rw [← neg_div]; rw [toReal_eq_pi_div_two_iff]; rw [toReal_eq_neg_pi_div_two_iff]
-
-中文:
-定理 abs_to实数_eq_pi_div_two_iff
-  条件: {θ : Angle}
-  证明: by
-  rw [abs_eq (div_nonneg Real.pi_pos.le two_pos.le)]; rw [← neg_div]; rw [toReal_eq_pi_div_two_iff]; rw [toReal_eq_neg_pi_div_two_iff]
-
-Depends on / 依赖: Real.pi_pos.le, abs_eq, div_nonneg, neg_div, pi_pos, toReal_eq_neg_pi_div_two_iff, toReal_eq_pi_div_two_iff, two_pos, two_pos.le
+  rw [← coe_neg,
+    toReal_coe_eq_self_iff.2
+      ⟨neg_lt_neg (lt_of_le_of_ne h.2 hnegpi), (neg_nonpos.2 h.1).trans Real.pi_pos.le⟩,
+    abs_neg, abs_eq_self.2 h.1]
+/-
+**Real.Angle.abs_toReal_eq_pi_div_two_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`
+。
+形式化陈述：abs_toReal_eq_pi_div_two_iff {θ : Angle} : |θ.toReal| = π / 2 ↔ θ = (π / 2
+ : Real) ∨ θ = (-π / 2 : Real)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `abs_eq`：∀ {G : Type u_1} [inst : AddCommGroup G] [inst_1 : LinearOrder G
+] [IsOrderedAddMonoid G] {a b : G},   0 ≤ b → (|a| = b ↔ a = b ∨ a = -b)
+· 使用引理 `div_nonneg`：div_nonneg (ha : 0 <= a) (hb : 0 <= b) : 0 <= a / b
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Real.pi_pos`：pi_pos : 0 < π
+· 使用定理 `two_pos`：∀ {α : Type u_1} [inst : AddMonoidWithOne α] [inst_1 : PartialO
+rder α] [ZeroLEOneClass α] [NeZero 1] [AddLeftMono α],   0 < 2
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `neg_div`：neg_div (a b : R) : -b / a = -(b / a)
+· 使用定理 `Real.Angle.toReal_eq_pi_div_two_iff`：toReal_eq_pi_div_two_iff {θ : Angle
+} : θ.toReal = π / 2 ↔ θ = (π / 2 : Real)
+· 使用定理 `Real.Angle.toReal_eq_neg_pi_div_two_iff`：toReal_eq_neg_pi_div_two_iff {θ
+ : Angle} : θ.toReal = -π / 2 ↔ θ = (-π / 2 : Real)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem abs_toReal_eq_pi_div_two_iff {θ : Angle} :
-    |θ.toReal| = π / 2 ↔ θ = (π / 2 : Real) ∨ θ = (-π / 2 : Real) := by
-  rw [abs_eq (div_nonneg Real.pi_pos.le two_pos.le)]; rw [← neg_div]; rw [toReal_eq_pi_div_two_iff]; rw [toReal_eq_neg_pi_div_two_iff]
-
-/--
-theorem `nsmul_toReal_eq_mul` / 定理 `nsmul_toReal_eq_mul`
-
-English:
-theorem nsmul_toReal_eq_mul
-  given: {n : Nat} (h : n != 0) {θ : Angle}
-  proof: by
-  nth_rw 1 [← coe_toReal θ]
-  have h' : 0 < (n : Real) := mod_cast Nat.pos_of_ne_zero h
-  rw [← coe_nsmul]; rw [nsmul_eq_mul]; rw [toReal_coe_eq_self_iff]; rw [Set.mem_Ioc]; rw [div_lt_iff₀' h']; rw [le_div_iff₀' h']
-
-中文:
-定理 nsmul_to实数_eq_mul
-  条件: {n : 自然数} (h : n != 0) {θ : Angle}
-  证明: by
-  nth_rw 1 [← coe_toReal θ]
-  have h' : 0 < (n : Real) := mod_cast Nat.pos_of_ne_zero h
-  rw [← coe_nsmul]; rw [nsmul_eq_mul]; rw [toReal_coe_eq_self_iff]; rw [Set.mem_Ioc]; rw [div_lt_iff₀' h']; rw [le_div_iff₀' h']
-
-Depends on / 依赖: Nat.pos_of_ne_zero, Set.mem_Ioc, coe_nsmul, coe_toReal, mem_Ioc, mod_cast, nsmul_eq_mul, nth_rw, pos_of_ne_zero, toReal_coe_eq_self_iff
+    |θ.toReal| = π / 2 ↔ θ = (π / 2 : ℝ) ∨ θ = (-π / 2 : ℝ) := by
+  rw [abs_eq (div_nonneg Real.pi_pos.le two_pos.le), ← neg_div, toReal_eq_pi_div_two_iff,
+    toReal_eq_neg_pi_div_two_iff]
+/-
+**Real.Angle.nsmul_toReal_eq_mul** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：nsmul_toReal_eq_mul {n : Nat} (h : n != 0) {θ : Angle} : (n • θ).toReal = 
+n * θ.toReal ↔ θ.toReal in Set.Ioc (-π / n) (π / n)
+参数：h : n != 0。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.coe_toReal`：coe_toReal (θ : Angle) : (θ.toReal : Angle) = θ
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `Nat.pos_of_ne_zero`：∀ {n : ℕ}, n ≠ 0 → 0 < n
+· 使用定理 `Real.Angle.coe_nsmul`：coe_nsmul (n : Nat) (x : Real) : ↑(n • x : Real) =
+ n • (↑x : Angle)
+· 使用定理 `nsmul_eq_mul`：∀ {α : Type u} [inst : NonAssocSemiring α] (n : ℕ) (a : α)
+, n • a = ↑n * a
+· 使用定理 `Real.Angle.toReal_coe_eq_self_iff`：toReal_coe_eq_self_iff {θ : Real} : (
+θ : Angle).toReal = θ ↔ -π < θ ∧ θ <= π
+· 使用定理 `Set.mem_Ioc`：∀ {α : Type u_1} [inst : Preorder α] {a b x : α}, x ∈ Set.I
+oc a b ↔ a < x ∧ x ≤ b
+· 使用引理 `div_lt_iff₀'`：div_lt_iff₀' (hc : 0 < c) : b / c < a ↔ b < c * a
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用引理 `le_div_iff₀'`：le_div_iff₀' (hc : 0 < c) : a <= b / c ↔ c * a <= b
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem nsmul_toReal_eq_mul {n : Nat} (h : n != 0) {θ : Angle} :
-    (n • θ).toReal = n * θ.toReal ↔ θ.toReal in Set.Ioc (-π / n) (π / n) := by
+theorem nsmul_toReal_eq_mul {n : ℕ} (h : n ≠ 0) {θ : Angle} :
+    (n • θ).toReal = n * θ.toReal ↔ θ.toReal ∈ Set.Ioc (-π / n) (π / n) := by
   nth_rw 1 [← coe_toReal θ]
-  have h' : 0 < (n : Real) := mod_cast Nat.pos_of_ne_zero h
-  rw [← coe_nsmul]; rw [nsmul_eq_mul]; rw [toReal_coe_eq_self_iff]; rw [Set.mem_Ioc]; rw [div_lt_iff₀' h']; rw [le_div_iff₀' h']
-
-/--
-theorem `two_nsmul_toReal_eq_two_mul` / 定理 `two_nsmul_toReal_eq_two_mul`
-
-English:
-theorem two_nsmul_toReal_eq_two_mul
-  given: {θ : Angle}
-  proof: mod_cast nsmul_toReal_eq_mul two_ne_zero
-
-中文:
-定理 two_nsmul_to实数_eq_two_mul
-  条件: {θ : Angle}
-  证明: mod_cast nsmul_toReal_eq_mul two_ne_zero
-
-Depends on / 依赖: mod_cast, nsmul_toReal_eq_mul, two_ne_zero
+  have h' : 0 < (n : ℝ) := mod_cast Nat.pos_of_ne_zero h
+  rw [← coe_nsmul, nsmul_eq_mul, toReal_coe_eq_self_iff, Set.mem_Ioc, div_lt_iff₀' h',
+    le_div_iff₀' h']
+/-
+**Real.Angle.two_nsmul_toReal_eq_two_mul** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：two_nsmul_toReal_eq_two_mul {θ : Angle} : ((2 : Nat) • θ).toReal = 2 * θ.t
+oReal ↔ θ.toReal in Set.Ioc (-π / 2) (π / 2)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Real.Angle.nsmul_toReal_eq_mul`：nsmul_toReal_eq_mul {n : Nat} (h : n != 
+0) {θ : Angle} : (n • θ).toReal = n * θ.toReal ↔ θ.toReal in Set.Ioc (-π / n) (π
+ / n)
+· 使用引理 `two_ne_zero`：two_ne_zero [OfNat α 2] [NeZero (2 : α)] : (2 : α) != 0
 -/
 theorem two_nsmul_toReal_eq_two_mul {θ : Angle} :
-    ((2 : Nat) • θ).toReal = 2 * θ.toReal ↔ θ.toReal in Set.Ioc (-π / 2) (π / 2) :=
+    ((2 : ℕ) • θ).toReal = 2 * θ.toReal ↔ θ.toReal ∈ Set.Ioc (-π / 2) (π / 2) :=
   mod_cast nsmul_toReal_eq_mul two_ne_zero
-
-/--
-theorem `two_zsmul_toReal_eq_two_mul` / 定理 `two_zsmul_toReal_eq_two_mul`
-
-English:
-theorem two_zsmul_toReal_eq_two_mul
-  given: {θ : Angle}
-  proof: by
-  rw [two_zsmul]; rw [← two_nsmul]; rw [two_nsmul_toReal_eq_two_mul]
-
-中文:
-定理 two_zsmul_to实数_eq_two_mul
-  条件: {θ : Angle}
-  证明: by
-  rw [two_zsmul]; rw [← two_nsmul]; rw [two_nsmul_toReal_eq_two_mul]
-
-Depends on / 依赖: two_nsmul, two_nsmul_toReal_eq_two_mul, two_zsmul
+/-
+**Real.Angle.two_zsmul_toReal_eq_two_mul** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：two_zsmul_toReal_eq_two_mul {θ : Angle} : ((2 : Int) • θ).toReal = 2 * θ.t
+oReal ↔ θ.toReal in Set.Ioc (-π / 2) (π / 2)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `two_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 2 • a = a +
+ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `two_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 2 • a = a + a
+· 使用定理 `Real.Angle.two_nsmul_toReal_eq_two_mul`：two_nsmul_toReal_eq_two_mul {θ :
+ Angle} : ((2 : Nat) • θ).toReal = 2 * θ.toReal ↔ θ.toReal in Set.Ioc (-π / 2) (
+π / 2)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem two_zsmul_toReal_eq_two_mul {θ : Angle} :
-    ((2 : Int) • θ).toReal = 2 * θ.toReal ↔ θ.toReal in Set.Ioc (-π / 2) (π / 2) := by
-  rw [two_zsmul]; rw [← two_nsmul]; rw [two_nsmul_toReal_eq_two_mul]
-
-/--
-theorem `toReal_coe_eq_self_sub_two_mul_int_mul_pi_iff` / 定理 `toReal_coe_eq_self_sub_two_mul_int_mul_pi_iff`
-
-English:
-theorem toReal_coe_eq_self_sub_two_mul_int_mul_pi_iff
-  given: {θ : Real} {k : Int}
-  proof: by
-  rw [← sub_zero (θ : Angle)]; rw [← zsmul_zero k]; rw [← coe_two_pi]; rw [← coe_zsmul]; rw [← coe_sub]; rw [zsmul_eq_mul]; rw [←
-    mul_assoc]; rw [mul_comm (k : Real)]; rw [toReal_coe_eq_self_iff]; rw [Set.mem_Ioc]
-  exact ⟨fun h => ⟨by linarith, by linarith⟩, fun h => ⟨by linarith, by linarith⟩⟩
-
-中文:
-定理 to实数_coe_eq_self_sub_two_mul_int_mul_pi_iff
-  条件: {θ : 实数} {k : 整数}
-  证明: by
-  rw [← sub_zero (θ : Angle)]; rw [← zsmul_zero k]; rw [← coe_two_pi]; rw [← coe_zsmul]; rw [← coe_sub]; rw [zsmul_eq_mul]; rw [←
-    mul_assoc]; rw [mul_comm (k : Real)]; rw [toReal_coe_eq_self_iff]; rw [Set.mem_Ioc]
-  exact ⟨fun h => ⟨by linarith, by linarith⟩, fun h => ⟨by linarith, by linarith⟩⟩
-
-Depends on / 依赖: Set.mem_Ioc, coe_sub, coe_two_pi, coe_zsmul, mem_Ioc, mul_assoc, mul_comm, sub_zero, toReal_coe_eq_self_iff, zsmul_eq_mul, zsmul_zero
+    ((2 : ℤ) • θ).toReal = 2 * θ.toReal ↔ θ.toReal ∈ Set.Ioc (-π / 2) (π / 2) := by
+  rw [two_zsmul, ← two_nsmul, two_nsmul_toReal_eq_two_mul]
+/-
+**Real.Angle.toReal_coe_eq_self_sub_two_mul_int_mul_pi_iff** 是 Mathlib 中的一个定理，位于
+命名空间 `Real.Angle`。
+形式化陈述：toReal_coe_eq_self_sub_two_mul_int_mul_pi_iff {θ : Real} {k : Int} : (θ : 
+Angle).toReal = θ - 2 * k * π ↔ θ in Set.Ioc ((2 * k - 1 : Real) * π) ((2 * k + 
+1) * π)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `zsmul_zero`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (n : ℤ), n • 0
+ = 0
+· 使用定理 `Real.Angle.coe_two_pi`：coe_two_pi : ↑(2 * π : Real) = (0 : Angle)
+· 使用定理 `Real.Angle.coe_zsmul`：coe_zsmul (z : Int) (x : Real) : ↑(z • x : Real) =
+ z • (↑x : Angle)
+· 使用定理 `Real.Angle.coe_sub`：coe_sub (x y : Real) : ↑(x - y : Real) = (↑x - ↑y : 
+Angle)
+· 使用定理 `zsmul_eq_mul`：∀ {α : Type u_3} [inst : NonAssocRing α] (a : α) (n : ℤ), 
+n • a = ↑n * a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Real.Angle.toReal_coe_eq_self_iff`：toReal_coe_eq_self_iff {θ : Real} : (
+θ : Angle).toReal = θ ↔ -π < θ ∧ θ <= π
+· 使用定理 `Set.mem_Ioc`：∀ {α : Type u_1} [inst : Preorder α] {a b x : α}, x ∈ Set.I
+oc a b ↔ a < x ∧ x ≤ b
+· 使用定理 `lt_of_not_ge`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬b ≤ a 
+→ a < b
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b : R}, a = a' → -a' = b → -a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_add`：∀ {R : Type u_2} [inst : CommRing R]
+ {a₁ a₂ b₁ b₂ : R}, -a₁ = b₁ → -a₂ = b₂ → -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_mul`：∀ {R : Type u_2} [inst : CommRing R]
+ (a₁ : R) (a₂ : ℕ) {a₃ b : R}, -a₃ = b → -(a₁ ^ a₂ * a₃) = a₁ ^ a₂ * b
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℤ} [in
+st : Ring α], Mathlib.Meta.NormNum.IsInt a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_zero`：∀ {R : Type u_2} [inst : CommRing R
+], -0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.cast_pos`：∀ {R : Type u_1} [inst : CommSemiring R] {
+a : R} {n : ℕ}, Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast + 0
+（共 61 条，此处仅展示前 30 条）
 -/
-theorem toReal_coe_eq_self_sub_two_mul_int_mul_pi_iff {θ : Real} {k : Int} :
-    (θ : Angle).toReal = θ - 2 * k * π ↔ θ in Set.Ioc ((2 * k - 1 : Real) * π) ((2 * k + 1) * π) := by
-  rw [← sub_zero (θ : Angle)]; rw [← zsmul_zero k]; rw [← coe_two_pi]; rw [← coe_zsmul]; rw [← coe_sub]; rw [zsmul_eq_mul]; rw [←
-    mul_assoc]; rw [mul_comm (k : Real)]; rw [toReal_coe_eq_self_iff]; rw [Set.mem_Ioc]
+theorem toReal_coe_eq_self_sub_two_mul_int_mul_pi_iff {θ : ℝ} {k : ℤ} :
+    (θ : Angle).toReal = θ - 2 * k * π ↔ θ ∈ Set.Ioc ((2 * k - 1 : ℝ) * π) ((2 * k + 1) * π) := by
+  rw [← sub_zero (θ : Angle), ← zsmul_zero k, ← coe_two_pi, ← coe_zsmul, ← coe_sub, zsmul_eq_mul, ←
+    mul_assoc, mul_comm (k : ℝ), toReal_coe_eq_self_iff, Set.mem_Ioc]
   exact ⟨fun h => ⟨by linarith, by linarith⟩, fun h => ⟨by linarith, by linarith⟩⟩
-
-/--
-theorem `toReal_coe_eq_self_sub_two_pi_iff` / 定理 `toReal_coe_eq_self_sub_two_pi_iff`
-
-English:
-theorem toReal_coe_eq_self_sub_two_pi_iff
-  given: {θ : Real}
-  proof: by
-  convert! @toReal_coe_eq_self_sub_two_mul_int_mul_pi_iff θ 1 <;> norm_num
-
-中文:
-定理 to实数_coe_eq_self_sub_two_pi_iff
-  条件: {θ : 实数}
-  证明: by
-  convert! @toReal_coe_eq_self_sub_two_mul_int_mul_pi_iff θ 1 <;> norm_num
-
-Depends on / 依赖: convert, toReal_coe_eq_self_sub_two_mul_int_mul_pi_iff
+/-
+**Real.Angle.toReal_coe_eq_self_sub_two_pi_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.A
+ngle`。
+形式化陈述：toReal_coe_eq_self_sub_two_pi_iff {θ : Real} : (θ : Angle).toReal = θ - 2 
+* π ↔ θ in Set.Ioc π (3 * π)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Meta.NormNum.isNat_eq_true`：∀ {α : Type u} [inst : AddMonoidWith
+One α] {a b : α} {c : ℕ},   Mathlib.Meta.NormNum.IsNat a c → Mathlib.Meta.NormNu
+m.IsNat b c → a = b
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用引理 `Mathlib.Meta.NormNum.instAtLeastTwo`：instAtLeastTwo (n : Nat) : Nat.AtLe
+astTwo (n + 2)
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.isNat_intCast`：isNat_intCast {R} [Ring R] (n : Int)
+ (m : Nat) : IsNat n m -> IsNat (n : R) m
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_eq`：∀ {α : Type u} [inst : AddMonoidWithOn
+e α] {n : ℕ} {a a' : α}, Mathlib.Meta.NormNum.IsNat a n → ↑n = a' → a = a'
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.to_isNat`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsInt a (Int.ofNat n) → Mathlib.Meta.NormN
+um.IsNat a n
+· 使用定理 `Mathlib.Meta.NormNum.isInt_sub`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α → α} {a b : α} {a' b' c : ℤ},   f = HSub.hSub →     Mathlib.Meta.NormNum.IsI
+nt a a' →       Math…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `Mathlib.Meta.NormNum.isNat_add`：∀ {α : Type u_1} [inst : AddMonoidWithOn
+e α] {f : α → α → α} {a b : α} {a' b' c : ℕ},   f = HAdd.hAdd →     Mathlib.Meta
+.NormNum.IsNat a a' …
+· 使用定理 `Real.Angle.toReal_coe_eq_self_sub_two_mul_int_mul_pi_iff`：toReal_coe_eq_
+self_sub_two_mul_int_mul_pi_iff {θ : Real} {k : Int} : (θ : Angle).toReal = θ - 
+2 * k * π ↔ θ in Set.Ioc ((2 * k - 1 : Real) *…
 -/
-theorem toReal_coe_eq_self_sub_two_pi_iff {θ : Real} :
-    (θ : Angle).toReal = θ - 2 * π ↔ θ in Set.Ioc π (3 * π) := by
+theorem toReal_coe_eq_self_sub_two_pi_iff {θ : ℝ} :
+    (θ : Angle).toReal = θ - 2 * π ↔ θ ∈ Set.Ioc π (3 * π) := by
   convert! @toReal_coe_eq_self_sub_two_mul_int_mul_pi_iff θ 1 <;> norm_num
-
-/--
-theorem `toReal_coe_eq_self_add_two_pi_iff` / 定理 `toReal_coe_eq_self_add_two_pi_iff`
-
-English:
-theorem toReal_coe_eq_self_add_two_pi_iff
-  given: {θ : Real}
-  proof: by
-  convert! @toReal_coe_eq_self_sub_two_mul_int_mul_pi_iff θ (-1) using 2 <;> norm_num
-
-中文:
-定理 to实数_coe_eq_self_add_two_pi_iff
-  条件: {θ : 实数}
-  证明: by
-  convert! @toReal_coe_eq_self_sub_two_mul_int_mul_pi_iff θ (-1) using 2 <;> norm_num
-
-Depends on / 依赖: convert, toReal_coe_eq_self_sub_two_mul_int_mul_pi_iff
+/-
+**Real.Angle.toReal_coe_eq_self_add_two_pi_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.A
+ngle`。
+形式化陈述：toReal_coe_eq_self_add_two_pi_iff {θ : Real} : (θ : Angle).toReal = θ + 2 
+* π ↔ θ in Set.Ioc (-3 * π) (-π)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Mathlib.Meta.NormNum.instAtLeastTwo`：instAtLeastTwo (n : Nat) : Nat.AtLe
+astTwo (n + 2)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Mathlib.Meta.NormNum.IsInt.neg_to_eq`：∀ {α : Type u_1} [inst : Ring α] {
+n : ℕ} {a a' : α}, Mathlib.Meta.NormNum.IsInt a (Int.negOfNat n) → ↑n = a' → a =
+ -a'
+· 使用定理 `Mathlib.Meta.NormNum.isInt_mul`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α → α} {a b : α} {a' b' c : ℤ},   f = HMul.hMul →     Mathlib.Meta.NormNum.IsI
+nt a a' →       Math…
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_isInt`：∀ {α : Type u_1} [inst : Ring α] {a
+ : α} {n : ℕ},   Mathlib.Meta.NormNum.IsNat a n → Mathlib.Meta.NormNum.IsInt a (
+Int.ofNat n)
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Mathlib.Meta.NormNum.isintCast`：isintCast {R} [Ring R] (n m : Int) : IsI
+nt n m -> IsInt (n : R) m
+· 使用定理 `Mathlib.Meta.NormNum.isInt_neg`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α} {a : α} {a' b : ℤ},   f = Neg.neg → Mathlib.Meta.NormNum.IsInt a a' → a'.ne
+g = b → Mathlib.Meta…
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `sub_neg_eq_add`：∀ {α : Type u_1} [inst : SubtractionMonoid α] (a b : α),
+ a - -b = a + b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Mathlib.Meta.NormNum.isInt_sub`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α → α} {a b : α} {a' b' c : ℤ},   f = HSub.hSub →     Mathlib.Meta.NormNum.IsI
+nt a a' →       Math…
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Mathlib.Meta.NormNum.isInt_add`：∀ {α : Type u_1} [inst : Ring α] {f : α 
+→ α → α} {a b : α} {a' b' c : ℤ},   f = HAdd.hAdd →     Mathlib.Meta.NormNum.IsI
+nt a a' →       Math…
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Real.Angle.toReal_coe_eq_self_sub_two_mul_int_mul_pi_iff`：toReal_coe_eq_
+self_sub_two_mul_int_mul_pi_iff {θ : Real} {k : Int} : (θ : Angle).toReal = θ - 
+2 * k * π ↔ θ in Set.Ioc ((2 * k - 1 : Real) *…
 -/
-theorem toReal_coe_eq_self_add_two_pi_iff {θ : Real} :
-    (θ : Angle).toReal = θ + 2 * π ↔ θ in Set.Ioc (-3 * π) (-π) := by
+theorem toReal_coe_eq_self_add_two_pi_iff {θ : ℝ} :
+    (θ : Angle).toReal = θ + 2 * π ↔ θ ∈ Set.Ioc (-3 * π) (-π) := by
   convert! @toReal_coe_eq_self_sub_two_mul_int_mul_pi_iff θ (-1) using 2 <;> norm_num
-
-/--
-theorem `two_nsmul_toReal_eq_two_mul_sub_two_pi` / 定理 `two_nsmul_toReal_eq_two_mul_sub_two_pi`
-
-English:
-theorem two_nsmul_toReal_eq_two_mul_sub_two_pi
-  given: {θ : Angle}
-  proof: by
-  nth_rw 1 [← coe_toReal θ]
-  rw [← coe_nsmul]; rw [two_nsmul]; rw [← two_mul]; rw [toReal_coe_eq_self_sub_two_pi_iff]; rw [Set.mem_Ioc]
-  exact
-    ⟨fun h => by linarith, fun h =>
-      ⟨(div_lt_iff₀' (zero_lt_two' Real)).1 h, by linarith [pi_pos, toReal_le_pi θ]⟩⟩
-
-中文:
-定理 two_nsmul_to实数_eq_two_mul_sub_two_pi
-  条件: {θ : Angle}
-  证明: by
-  nth_rw 1 [← coe_toReal θ]
-  rw [← coe_nsmul]; rw [two_nsmul]; rw [← two_mul]; rw [toReal_coe_eq_self_sub_two_pi_iff]; rw [Set.mem_Ioc]
-  exact
-    ⟨fun h => by linarith, fun h =>
-      ⟨(div_lt_iff₀' (zero_lt_two' Real)).1 h, by linarith [pi_pos, toReal_le_pi θ]⟩⟩
-
-Depends on / 依赖: Set.mem_Ioc, coe_nsmul, coe_toReal, mem_Ioc, nth_rw, pi_pos, toReal_coe_eq_self_sub_two_pi_iff, toReal_le_pi, two_mul, two_nsmul, zero_lt_two
+/-
+**Real.Angle.two_nsmul_toReal_eq_two_mul_sub_two_pi** 是 Mathlib 中的一个定理，位于命名空间 `R
+eal.Angle`。
+形式化陈述：two_nsmul_toReal_eq_two_mul_sub_two_pi {θ : Angle} : ((2 : Nat) • θ).toRea
+l = 2 * θ.toReal - 2 * π ↔ π / 2 < θ.toReal
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.coe_toReal`：coe_toReal (θ : Angle) : (θ.toReal : Angle) = θ
+· 使用定理 `Real.Angle.coe_nsmul`：coe_nsmul (n : Nat) (x : Real) : ↑(n • x : Real) =
+ n • (↑x : Angle)
+· 使用定理 `two_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 2 • a = a + a
+· 使用定理 `two_mul`：two_mul (n : α) : 2 * n = n + n
+· 使用定理 `Real.Angle.toReal_coe_eq_self_sub_two_pi_iff`：toReal_coe_eq_self_sub_two
+_pi_iff {θ : Real} : (θ : Angle).toReal = θ - 2 * π ↔ θ in Set.Ioc π (3 * π)
+· 使用定理 `Set.mem_Ioc`：∀ {α : Type u_1} [inst : Preorder α] {a b x : α}, x ∈ Set.I
+oc a b ↔ a < x ∧ x ≤ b
+· 使用定理 `lt_of_not_ge`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬b ≤ a 
+→ a < b
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用引理 `Mathlib.Meta.NormNum.instAtLeastTwo`：instAtLeastTwo (n : Nat) : Nat.AtLe
+astTwo (n + 2)
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.cast_pos`：∀ {R : Type u_1} [inst : CommSemiring R] {
+a : R} {n : ℕ}, Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast + 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_pf`：∀ {R : Type u_2} [inst : CommRing R] 
+{a b c d : R}, -b = c → a + c = d → a - b = d
+（共 77 条，此处仅展示前 30 条）
 -/
 theorem two_nsmul_toReal_eq_two_mul_sub_two_pi {θ : Angle} :
-    ((2 : Nat) • θ).toReal = 2 * θ.toReal - 2 * π ↔ π / 2 < θ.toReal := by
+    ((2 : ℕ) • θ).toReal = 2 * θ.toReal - 2 * π ↔ π / 2 < θ.toReal := by
   nth_rw 1 [← coe_toReal θ]
-  rw [← coe_nsmul]; rw [two_nsmul]; rw [← two_mul]; rw [toReal_coe_eq_self_sub_two_pi_iff]; rw [Set.mem_Ioc]
+  rw [← coe_nsmul, two_nsmul, ← two_mul, toReal_coe_eq_self_sub_two_pi_iff, Set.mem_Ioc]
   exact
     ⟨fun h => by linarith, fun h =>
-      ⟨(div_lt_iff₀' (zero_lt_two' Real)).1 h, by linarith [pi_pos, toReal_le_pi θ]⟩⟩
-
-/--
-theorem `two_zsmul_toReal_eq_two_mul_sub_two_pi` / 定理 `two_zsmul_toReal_eq_two_mul_sub_two_pi`
-
-English:
-theorem two_zsmul_toReal_eq_two_mul_sub_two_pi
-  given: {θ : Angle}
-  proof: by
-  rw [two_zsmul]; rw [← two_nsmul]; rw [two_nsmul_toReal_eq_two_mul_sub_two_pi]
-
-中文:
-定理 two_zsmul_to实数_eq_two_mul_sub_two_pi
-  条件: {θ : Angle}
-  证明: by
-  rw [two_zsmul]; rw [← two_nsmul]; rw [two_nsmul_toReal_eq_two_mul_sub_two_pi]
-
-Depends on / 依赖: two_nsmul, two_nsmul_toReal_eq_two_mul_sub_two_pi, two_zsmul
+      ⟨(div_lt_iff₀' (zero_lt_two' ℝ)).1 h, by linarith [pi_pos, toReal_le_pi θ]⟩⟩
+/-
+**Real.Angle.two_zsmul_toReal_eq_two_mul_sub_two_pi** 是 Mathlib 中的一个定理，位于命名空间 `R
+eal.Angle`。
+形式化陈述：two_zsmul_toReal_eq_two_mul_sub_two_pi {θ : Angle} : ((2 : Int) • θ).toRea
+l = 2 * θ.toReal - 2 * π ↔ π / 2 < θ.toReal
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `two_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 2 • a = a +
+ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `two_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 2 • a = a + a
+· 使用定理 `Real.Angle.two_nsmul_toReal_eq_two_mul_sub_two_pi`：two_nsmul_toReal_eq_t
+wo_mul_sub_two_pi {θ : Angle} : ((2 : Nat) • θ).toReal = 2 * θ.toReal - 2 * π ↔ 
+π / 2 < θ.toReal
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem two_zsmul_toReal_eq_two_mul_sub_two_pi {θ : Angle} :
-    ((2 : Int) • θ).toReal = 2 * θ.toReal - 2 * π ↔ π / 2 < θ.toReal := by
-  rw [two_zsmul]; rw [← two_nsmul]; rw [two_nsmul_toReal_eq_two_mul_sub_two_pi]
-
-/--
-theorem `two_nsmul_toReal_eq_two_mul_add_two_pi` / 定理 `two_nsmul_toReal_eq_two_mul_add_two_pi`
-
-English:
-theorem two_nsmul_toReal_eq_two_mul_add_two_pi
-  given: {θ : Angle}
-  proof: by
-  nth_rw 1 [← coe_toReal θ]
-  rw [← coe_nsmul]; rw [two_nsmul]; rw [← two_mul]; rw [toReal_coe_eq_self_add_two_pi_iff]; rw [Set.mem_Ioc]
-  refine
-    ⟨fun h => by linarith, fun h =>
-      ⟨by linarith [pi_pos, neg_pi_lt_toReal θ], (le_div_iff₀' (zero_lt_two' Real)).1 h⟩⟩
-
-中文:
-定理 two_nsmul_to实数_eq_two_mul_add_two_pi
-  条件: {θ : Angle}
-  证明: by
-  nth_rw 1 [← coe_toReal θ]
-  rw [← coe_nsmul]; rw [two_nsmul]; rw [← two_mul]; rw [toReal_coe_eq_self_add_two_pi_iff]; rw [Set.mem_Ioc]
-  refine
-    ⟨fun h => by linarith, fun h =>
-      ⟨by linarith [pi_pos, neg_pi_lt_toReal θ], (le_div_iff₀' (zero_lt_two' Real)).1 h⟩⟩
-
-Depends on / 依赖: Set.mem_Ioc, coe_nsmul, coe_toReal, mem_Ioc, neg_pi_lt_toReal, nth_rw, pi_pos, toReal_coe_eq_self_add_two_pi_iff, two_mul, two_nsmul, zero_lt_two
+    ((2 : ℤ) • θ).toReal = 2 * θ.toReal - 2 * π ↔ π / 2 < θ.toReal := by
+  rw [two_zsmul, ← two_nsmul, two_nsmul_toReal_eq_two_mul_sub_two_pi]
+/-
+**Real.Angle.two_nsmul_toReal_eq_two_mul_add_two_pi** 是 Mathlib 中的一个定理，位于命名空间 `R
+eal.Angle`。
+形式化陈述：two_nsmul_toReal_eq_two_mul_add_two_pi {θ : Angle} : ((2 : Nat) • θ).toRea
+l = 2 * θ.toReal + 2 * π ↔ θ.toReal <= -π / 2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.coe_toReal`：coe_toReal (θ : Angle) : (θ.toReal : Angle) = θ
+· 使用定理 `Real.Angle.coe_nsmul`：coe_nsmul (n : Nat) (x : Real) : ↑(n • x : Real) =
+ n • (↑x : Angle)
+· 使用定理 `two_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 2 • a = a + a
+· 使用定理 `two_mul`：two_mul (n : α) : 2 * n = n + n
+· 使用定理 `Real.Angle.toReal_coe_eq_self_add_two_pi_iff`：toReal_coe_eq_self_add_two
+_pi_iff {θ : Real} : (θ : Angle).toReal = θ + 2 * π ↔ θ in Set.Ioc (-3 * π) (-π)
+· 使用定理 `Set.mem_Ioc`：∀ {α : Type u_1} [inst : Preorder α] {a b x : α}, x ∈ Set.I
+oc a b ↔ a < x ∧ x ≤ b
+· 使用引理 `le_of_not_gt`：le_of_not_gt (h : ¬b < a) : a <= b
+· 使用定理 `Mathlib.Tactic.Linarith.lt_irrefl`：lt_irrefl {α : Type u} [Preorder α] {
+a : α} : ¬a < a
+· 使用引理 `Mathlib.Meta.NormNum.instAtLeastTwo`：instAtLeastTwo (n : Nat) : Nat.AtLe
+astTwo (n + 2)
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.sub_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b b' c : R}, a = a' → b = b' → a' - b' = c → a - b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' * b' = c → a * b = c
+· 使用定理 `Mathlib.Tactic.Ring.cast_pos`：∀ {R : Type u_1} [inst : CommSemiring R] {
+a : R} {n : ℕ}, Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast + 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_mul`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a₁ a₂ b c₁ c₂ d : R},   a₁ * b = c₁ → a₂ * b = c₂ → c₁ + c₂ = d → (a₁ + a₂
+) * b = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_add`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {a b₁ b₂ c₁ c₂ d : R},   a * b₁ = c₁ → a * b₂ = c₂ → c₁ + 0 + c₂ = d → a * 
+(b₁ + b₂) = d
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_pf_right`：∀ {R : Type u_1} [inst : CommSe
+miring R] {a b₃ c : R} (b₁ : R) (b₂ : ℕ), a * b₃ = c → a * (b₁ ^ b₂ * b₃) = b₁ ^
+ b₂ * c
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.to_raw_eq`：∀ {α : Type u} {a : α} {n : ℕ} [in
+st : AddMonoidWithOne α], Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast
+· 使用定理 `Mathlib.Meta.NormNum.isNat_mul`：∀ {α : Type u_1} [inst : Semiring α] {f 
+: α → α → α} {a b : α} {a' b' c : ℕ},   f = HMul.hMul →     Mathlib.Meta.NormNum
+.IsNat a a' →       …
+· 使用定理 `Mathlib.Meta.NormNum.IsNat.of_raw`：∀ (α : Type u_1) [inst : AddMonoidWit
+hOne α] (n : ℕ), Mathlib.Meta.NormNum.IsNat n.rawCast n
+· 使用定理 `Mathlib.Tactic.Ring.Common.mul_zero`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (a : R), a * 0 = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.zero_mul`：∀ {R : Type u_1} [inst : CommSemiri
+ng R] (b : R), 0 * b = 0
+· 使用定理 `Mathlib.Tactic.Ring.Common.neg_congr`：∀ {R : Type u_2} [inst : CommRing 
+R] {a a' b : R}, a = a' → -a' = b → -a = b
+（共 79 条，此处仅展示前 30 条）
 -/
 theorem two_nsmul_toReal_eq_two_mul_add_two_pi {θ : Angle} :
-    ((2 : Nat) • θ).toReal = 2 * θ.toReal + 2 * π ↔ θ.toReal <= -π / 2 := by
+    ((2 : ℕ) • θ).toReal = 2 * θ.toReal + 2 * π ↔ θ.toReal ≤ -π / 2 := by
   nth_rw 1 [← coe_toReal θ]
-  rw [← coe_nsmul]; rw [two_nsmul]; rw [← two_mul]; rw [toReal_coe_eq_self_add_two_pi_iff]; rw [Set.mem_Ioc]
+  rw [← coe_nsmul, two_nsmul, ← two_mul, toReal_coe_eq_self_add_two_pi_iff, Set.mem_Ioc]
   refine
     ⟨fun h => by linarith, fun h =>
-      ⟨by linarith [pi_pos, neg_pi_lt_toReal θ], (le_div_iff₀' (zero_lt_two' Real)).1 h⟩⟩
-
-/--
-theorem `two_zsmul_toReal_eq_two_mul_add_two_pi` / 定理 `two_zsmul_toReal_eq_two_mul_add_two_pi`
-
-English:
-theorem two_zsmul_toReal_eq_two_mul_add_two_pi
-  given: {θ : Angle}
-  proof: by
-  rw [two_zsmul]; rw [← two_nsmul]; rw [two_nsmul_toReal_eq_two_mul_add_two_pi]
-
-@[simp, grind =]
-
-中文:
-定理 two_zsmul_to实数_eq_two_mul_add_two_pi
-  条件: {θ : Angle}
-  证明: by
-  rw [two_zsmul]; rw [← two_nsmul]; rw [two_nsmul_toReal_eq_two_mul_add_two_pi]
-
-@[simp, grind =]
-
-Depends on / 依赖: two_nsmul, two_nsmul_toReal_eq_two_mul_add_two_pi, two_zsmul
+      ⟨by linarith [pi_pos, neg_pi_lt_toReal θ], (le_div_iff₀' (zero_lt_two' ℝ)).1 h⟩⟩
+/-
+**Real.Angle.two_zsmul_toReal_eq_two_mul_add_two_pi** 是 Mathlib 中的一个定理，位于命名空间 `R
+eal.Angle`。
+形式化陈述：two_zsmul_toReal_eq_two_mul_add_two_pi {θ : Angle} : ((2 : Int) • θ).toRea
+l = 2 * θ.toReal + 2 * π ↔ θ.toReal <= -π / 2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `two_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 2 • a = a +
+ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `two_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 2 • a = a + a
+· 使用定理 `Real.Angle.two_nsmul_toReal_eq_two_mul_add_two_pi`：two_nsmul_toReal_eq_t
+wo_mul_add_two_pi {θ : Angle} : ((2 : Nat) • θ).toReal = 2 * θ.toReal + 2 * π ↔ 
+θ.toReal <= -π / 2
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem two_zsmul_toReal_eq_two_mul_add_two_pi {θ : Angle} :
-    ((2 : Int) • θ).toReal = 2 * θ.toReal + 2 * π ↔ θ.toReal <= -π / 2 := by
-  rw [two_zsmul]; rw [← two_nsmul]; rw [two_nsmul_toReal_eq_two_mul_add_two_pi]
+    ((2 : ℤ) • θ).toReal = 2 * θ.toReal + 2 * π ↔ θ.toReal ≤ -π / 2 := by
+  rw [two_zsmul, ← two_nsmul, two_nsmul_toReal_eq_two_mul_add_two_pi]
 
 @[simp, grind =]
-/--
-theorem `sin_toReal` / 定理 `sin_toReal`
-
-English:
-theorem sin_toReal
-  given: (θ : Angle)
-  statement: Real.sin θ.toReal = sin θ
-  proof: by
-  conv_rhs => rw [← coe_toReal θ, sin_coe]
-
-@[simp, grind =]
-
-中文:
-定理 sin_to实数
-  条件: (θ : Angle)
-  结论: 实数.sin θ.to实数 = sin θ
-  证明: by
-  conv_rhs => rw [← coe_toReal θ, sin_coe]
-
-@[simp, grind =]
-
-Depends on / 依赖: coe_toReal, conv_rhs, sin_coe
+/-
+**Real.Angle.sin_toReal** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sin_toReal (θ : Angle) : Real.sin θ.toReal = sin θ
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.coe_toReal`：coe_toReal (θ : Angle) : (θ.toReal : Angle) = θ
+· 使用定理 `Real.Angle.sin_coe`：sin_coe (x : Real) : sin (x : Angle) = Real.sin x
 -/
 theorem sin_toReal (θ : Angle) : Real.sin θ.toReal = sin θ := by
   conv_rhs => rw [← coe_toReal θ, sin_coe]
 
 @[simp, grind =]
-/--
-theorem `cos_toReal` / 定理 `cos_toReal`
-
-English:
-theorem cos_toReal
-  given: (θ : Angle)
-  statement: Real.cos θ.toReal = cos θ
-  proof: by
-  conv_rhs => rw [← coe_toReal θ, cos_coe]
-
-中文:
-定理 cos_to实数
-  条件: (θ : Angle)
-  结论: 实数.cos θ.to实数 = cos θ
-  证明: by
-  conv_rhs => rw [← coe_toReal θ, cos_coe]
-
-Depends on / 依赖: Arrow.discreteEquiv, Finite, Finite.of_equiv, coe_toReal, conv_rhs, cos_coe, discreteEquiv, of_equiv
+/-
+**Real.Angle.cos_toReal** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：cos_toReal (θ : Angle) : Real.cos θ.toReal = cos θ
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.coe_toReal`：coe_toReal (θ : Angle) : (θ.toReal : Angle) = θ
+· 使用定理 `Real.Angle.cos_coe`：cos_coe (x : Real) : cos (x : Angle) = Real.cos x
 -/
 theorem cos_toReal (θ : Angle) : Real.cos θ.toReal = cos θ := by
   conv_rhs => rw [← coe_toReal θ, cos_coe]
-
-/--
-theorem `cos_nonneg_iff_abs_toReal_le_pi_div_two` / 定理 `cos_nonneg_iff_abs_toReal_le_pi_div_two`
-
-English:
-theorem cos_nonneg_iff_abs_toReal_le_pi_div_two
-  given: {θ : Angle}
-  statement: 0 <= cos θ ↔ |θ.toReal| <= π / 2
-  proof: by
-  have : 0 < π / 2 := by positivity
-  have := toReal_mem_Ioc θ
-  rw [← cos_toReal]; rw [← cos_abs]
-  grind [cos_neg_of_pi_div_two_lt_of_lt, cos_nonneg_of_mem_Icc]
-
-中文:
-定理 cos_nonneg_iff_abs_to实数_le_pi_div_two
-  条件: {θ : Angle}
-  结论: 0 <= cos θ ↔ |θ.to实数| <= π / 2
-  证明: by
-  have : 0 < π / 2 := by positivity
-  have := toReal_mem_Ioc θ
-  rw [← cos_toReal]; rw [← cos_abs]
-  grind [cos_neg_of_pi_div_two_lt_of_lt, cos_nonneg_of_mem_Icc]
-
-Depends on / 依赖: cos_abs, cos_neg_of_pi_div_two_lt_of_lt, cos_nonneg_of_mem_Icc, cos_toReal, toReal_mem_Ioc
+/-
+**Real.Angle.cos_nonneg_iff_abs_toReal_le_pi_div_two** 是 Mathlib 中的一个定理，位于命名空间 `
+Real.Angle`。
+形式化陈述：cos_nonneg_iff_abs_toReal_le_pi_div_two {θ : Angle} : 0 <= cos θ ↔ |θ.toRe
+al| <= π / 2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用引理 `div_pos`：div_pos (ha : 0 < a) (hb : 0 < b) : 0 < a / b
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Real.pi_pos`：pi_pos : 0 < π
+· 使用引理 `Mathlib.Meta.Positivity.pos_of_isNat`：pos_of_isNat {n : Nat} [Semiring A
+] [PartialOrder A] [IsOrderedRing A] [Nontrivial A] (h : NormNum.IsNat e n) (w :
+ Nat.ble 1 n = true) : 0 <…
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用引理 `Mathlib.Meta.NormNum.instAtLeastTwo`：instAtLeastTwo (n : Nat) : Nat.AtLe
+astTwo (n + 2)
+· 使用定理 `Real.Angle.toReal_mem_Ioc`：toReal_mem_Ioc (θ : Angle) : θ.toReal in Set.
+Ioc (-π) π
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.cos_toReal`：cos_toReal (θ : Angle) : Real.cos θ.toReal = cos 
+θ
+· 使用定理 `Real.cos_abs`：cos_abs : cos |x| = cos x
 -/
-theorem cos_nonneg_iff_abs_toReal_le_pi_div_two {θ : Angle} : 0 <= cos θ ↔ |θ.toReal| <= π / 2 := by
+theorem cos_nonneg_iff_abs_toReal_le_pi_div_two {θ : Angle} : 0 ≤ cos θ ↔ |θ.toReal| ≤ π / 2 := by
   have : 0 < π / 2 := by positivity
   have := toReal_mem_Ioc θ
-  rw [← cos_toReal]; rw [← cos_abs]
+  rw [← cos_toReal, ← cos_abs]
   grind [cos_neg_of_pi_div_two_lt_of_lt, cos_nonneg_of_mem_Icc]
-
-/--
-theorem `cos_pos_iff_abs_toReal_lt_pi_div_two` / 定理 `cos_pos_iff_abs_toReal_lt_pi_div_two`
-
-English:
-theorem cos_pos_iff_abs_toReal_lt_pi_div_two
-  given: {θ : Angle}
-  statement: 0 < cos θ ↔ |θ.toReal| < π / 2
-  proof: by
-  rw [lt_iff_le_and_ne]; rw [lt_iff_le_and_ne]; rw [cos_nonneg_iff_abs_toReal_le_pi_div_two]; rw [←
-    and_congr_right]
-  rintro -
-  contrapose
-  rw [@eq_comm Real 0]; rw [abs_toReal_eq_pi_div_two_iff]; rw [cos_eq_zero_iff]
-
-中文:
-定理 cos_pos_iff_abs_to实数_lt_pi_div_two
-  条件: {θ : Angle}
-  结论: 0 < cos θ ↔ |θ.to实数| < π / 2
-  证明: by
-  rw [lt_iff_le_and_ne]; rw [lt_iff_le_and_ne]; rw [cos_nonneg_iff_abs_toReal_le_pi_div_two]; rw [←
-    and_congr_right]
-  rintro -
-  contrapose
-  rw [@eq_comm Real 0]; rw [abs_toReal_eq_pi_div_two_iff]; rw [cos_eq_zero_iff]
-
-Depends on / 依赖: abs_toReal_eq_pi_div_two_iff, and_congr_right, contrapose, cos_eq_zero_iff, cos_nonneg_iff_abs_toReal_le_pi_div_two, eq_comm, lt_iff_le_and_ne
+/-
+**Real.Angle.cos_pos_iff_abs_toReal_lt_pi_div_two** 是 Mathlib 中的一个定理，位于命名空间 `Rea
+l.Angle`。
+形式化陈述：cos_pos_iff_abs_toReal_lt_pi_div_two {θ : Angle} : 0 < cos θ ↔ |θ.toReal| 
+< π / 2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `lt_iff_le_and_ne`：lt_iff_le_and_ne : a < b ↔ a <= b ∧ a != b
+· 使用定理 `Real.Angle.cos_nonneg_iff_abs_toReal_le_pi_div_two`：cos_nonneg_iff_abs_t
+oReal_le_pi_div_two {θ : Angle} : 0 <= cos θ ↔ |θ.toReal| <= π / 2
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `and_congr_right`：∀ {a b c : Prop}, (a → (b ↔ c)) → (a ∧ b ↔ a ∧ c)
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose_iff₄`：contrapose_iff₄ {p q : Prop} 
+: (p ↔ q) -> (¬ p ↔ ¬ q)
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Real.Angle.abs_toReal_eq_pi_div_two_iff`：abs_toReal_eq_pi_div_two_iff {θ
+ : Angle} : |θ.toReal| = π / 2 ↔ θ = (π / 2 : Real) ∨ θ = (-π / 2 : Real)
+· 使用定理 `Real.Angle.cos_eq_zero_iff`：cos_eq_zero_iff {θ : Angle} : cos θ = 0 ↔ θ 
+= (π / 2 : Real) ∨ θ = (-π / 2 : Real)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem cos_pos_iff_abs_toReal_lt_pi_div_two {θ : Angle} : 0 < cos θ ↔ |θ.toReal| < π / 2 := by
-  rw [lt_iff_le_and_ne]; rw [lt_iff_le_and_ne]; rw [cos_nonneg_iff_abs_toReal_le_pi_div_two]; rw [←
+  rw [lt_iff_le_and_ne, lt_iff_le_and_ne, cos_nonneg_iff_abs_toReal_le_pi_div_two, ←
     and_congr_right]
   rintro -
   contrapose
-  rw [@eq_comm Real 0]; rw [abs_toReal_eq_pi_div_two_iff]; rw [cos_eq_zero_iff]
-
-/--
-lemma `two_nsmul_eq_iff_eq_of_abs_toReal_lt_pi_div_two` / 引理 `two_nsmul_eq_iff_eq_of_abs_toReal_lt_pi_div_two`
-
-English:
-lemma two_nsmul_eq_iff_eq_of_abs_toReal_lt_pi_div_two
-  statement: {θ ψ : Angle} (hθ : |θ.toReal| < π / 2)
-  proof: by
-  suffices θ != ψ + π by simp [this, two_nsmul_eq_iff]
-  rintro rfl
-  simp only [← cos_pos_iff_abs_toReal_lt_pi_div_two, cos_add_pi] at hθ hψ
-  grind
-
-中文:
-引理 two_nsmul_eq_iff_eq_of_abs_to实数_lt_pi_div_two
-  结论: {θ ψ : Angle} (hθ : |θ.to实数| < π / 2)
-  证明: by
-  suffices θ != ψ + π by simp [this, two_nsmul_eq_iff]
-  rintro rfl
-  simp only [← cos_pos_iff_abs_toReal_lt_pi_div_two, cos_add_pi] at hθ hψ
-  grind
-
-Depends on / 依赖: cos_add_pi, cos_pos_iff_abs_toReal_lt_pi_div_two, two_nsmul_eq_iff
+  rw [@eq_comm ℝ 0, abs_toReal_eq_pi_div_two_iff, cos_eq_zero_iff]
+/-
+**Real.Angle.two_nsmul_eq_iff_eq_of_abs_toReal_lt_pi_div_two** 是 Mathlib 中的一个引理，
+位于命名空间 `Real.Angle`。
+形式化陈述：two_nsmul_eq_iff_eq_of_abs_toReal_lt_pi_div_two {θ ψ : Angle} (hθ : |θ.toR
+eal| < π / 2) (hψ : |ψ.toReal| < π / 2) : (2 : Nat) • θ = (2 : Nat) • ψ ↔ θ = ψ
+参数：hθ : |θ.toReal| < π / 2；hψ : |ψ.toReal| < π / 2。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.cos_add_pi`：cos_add_pi (θ : Angle) : cos (θ + π) = -cos θ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `or_false`：∀ (p : Prop), (p ∨ False) = p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma two_nsmul_eq_iff_eq_of_abs_toReal_lt_pi_div_two {θ ψ : Angle} (hθ : |θ.toReal| < π / 2)
-    (hψ : |ψ.toReal| < π / 2) : (2 : Nat) • θ = (2 : Nat) • ψ ↔ θ = ψ := by
-  suffices θ != ψ + π by simp [this, two_nsmul_eq_iff]
+    (hψ : |ψ.toReal| < π / 2) : (2 : ℕ) • θ = (2 : ℕ) • ψ ↔ θ = ψ := by
+  suffices θ ≠ ψ + π by simp [this, two_nsmul_eq_iff]
   rintro rfl
   simp only [← cos_pos_iff_abs_toReal_lt_pi_div_two, cos_add_pi] at hθ hψ
   grind
-
-/--
-lemma `two_zsmul_eq_iff_eq_of_abs_toReal_lt_pi_div_two` / 引理 `two_zsmul_eq_iff_eq_of_abs_toReal_lt_pi_div_two`
-
-English:
-lemma two_zsmul_eq_iff_eq_of_abs_toReal_lt_pi_div_two
-  statement: {θ ψ : Angle} (hθ : |θ.toReal| < π / 2)
-  proof: by
-  simp_rw [two_zsmul, ← two_nsmul, two_nsmul_eq_iff_eq_of_abs_toReal_lt_pi_div_two hθ hψ]
-
-中文:
-引理 two_zsmul_eq_iff_eq_of_abs_to实数_lt_pi_div_two
-  结论: {θ ψ : Angle} (hθ : |θ.to实数| < π / 2)
-  证明: by
-  simp_rw [two_zsmul, ← two_nsmul, two_nsmul_eq_iff_eq_of_abs_toReal_lt_pi_div_two hθ hψ]
-
-Depends on / 依赖: simp_rw, two_nsmul, two_nsmul_eq_iff_eq_of_abs_toReal_lt_pi_div_two, two_zsmul
+/-
+**Real.Angle.two_zsmul_eq_iff_eq_of_abs_toReal_lt_pi_div_two** 是 Mathlib 中的一个引理，
+位于命名空间 `Real.Angle`。
+形式化陈述：two_zsmul_eq_iff_eq_of_abs_toReal_lt_pi_div_two {θ ψ : Angle} (hθ : |θ.toR
+eal| < π / 2) (hψ : |ψ.toReal| < π / 2) : (2 : Int) • θ = (2 : Int) • ψ ↔ θ = ψ
+参数：hθ : |θ.toReal| < π / 2；hψ : |ψ.toReal| < π / 2。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `two_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 2 • a = a +
+ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `Real.Angle.two_nsmul_eq_iff_eq_of_abs_toReal_lt_pi_div_two`：two_nsmul_eq
+_iff_eq_of_abs_toReal_lt_pi_div_two {θ ψ : Angle} (hθ : |θ.toReal| < π / 2) (hψ 
+: |ψ.toReal| < π / 2) : (2 : Nat) • θ = (2 : Nat…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma two_zsmul_eq_iff_eq_of_abs_toReal_lt_pi_div_two {θ ψ : Angle} (hθ : |θ.toReal| < π / 2)
-    (hψ : |ψ.toReal| < π / 2) : (2 : Int) • θ = (2 : Int) • ψ ↔ θ = ψ := by
+    (hψ : |ψ.toReal| < π / 2) : (2 : ℤ) • θ = (2 : ℤ) • ψ ↔ θ = ψ := by
   simp_rw [two_zsmul, ← two_nsmul, two_nsmul_eq_iff_eq_of_abs_toReal_lt_pi_div_two hθ hψ]
-
-/--
-theorem `cos_neg_iff_pi_div_two_lt_abs_toReal` / 定理 `cos_neg_iff_pi_div_two_lt_abs_toReal`
-
-English:
-theorem cos_neg_iff_pi_div_two_lt_abs_toReal
-  given: {θ : Angle}
-  statement: cos θ < 0 ↔ π / 2 < |θ.toReal|
-  proof: by
-  contrapose!; exact cos_nonneg_iff_abs_toReal_le_pi_div_two
-
-中文:
-定理 cos_neg_iff_pi_div_two_lt_abs_to实数
-  条件: {θ : Angle}
-  结论: cos θ < 0 ↔ π / 2 < |θ.to实数|
-  证明: by
-  contrapose!; exact cos_nonneg_iff_abs_toReal_le_pi_div_two
-
-Depends on / 依赖: contrapose, cos_nonneg_iff_abs_toReal_le_pi_div_two
+/-
+**Real.Angle.cos_neg_iff_pi_div_two_lt_abs_toReal** 是 Mathlib 中的一个定理，位于命名空间 `Rea
+l.Angle`。
+形式化陈述：cos_neg_iff_pi_div_two_lt_abs_toReal {θ : Angle} : cos θ < 0 ↔ π / 2 < |θ.
+toReal|
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose_iff₁`：contrapose_iff₁ {p q : Prop} 
+: (¬ p ↔ ¬ q) -> (p ↔ q)
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.cos_nonneg_iff_abs_toReal_le_pi_div_two`：cos_nonneg_iff_abs_t
+oReal_le_pi_div_two {θ : Angle} : 0 <= cos θ ↔ |θ.toReal| <= π / 2
 -/
 theorem cos_neg_iff_pi_div_two_lt_abs_toReal {θ : Angle} : cos θ < 0 ↔ π / 2 < |θ.toReal| := by
   contrapose!; exact cos_nonneg_iff_abs_toReal_le_pi_div_two
-
-/--
-theorem `abs_cos_eq_abs_sin_of_two_nsmul_add_two_nsmul_eq_pi` / 定理 `abs_cos_eq_abs_sin_of_two_nsmul_add_two_nsmul_eq_pi`
-
-English:
-theorem abs_cos_eq_abs_sin_of_two_nsmul_add_two_nsmul_eq_pi
-  statement: {θ ψ : Angle}
-  proof: by
-  rw [← eq_sub_iff_add_eq]; rw [← two_nsmul_coe_div_two]; rw [← nsmul_sub]; rw [two_nsmul_eq_iff] at h
-  rcases h with (rfl | rfl) <;> simp [cos_pi_div_two_sub]
-
-中文:
-定理 abs_cos_eq_abs_sin_of_two_nsmul_add_two_nsmul_eq_pi
-  结论: {θ ψ : Angle}
-  证明: by
-  rw [← eq_sub_iff_add_eq]; rw [← two_nsmul_coe_div_two]; rw [← nsmul_sub]; rw [two_nsmul_eq_iff] at h
-  rcases h with (rfl | rfl) <;> simp [cos_pi_div_two_sub]
-
-Depends on / 依赖: cos_pi_div_two_sub, eq_sub_iff_add_eq, nsmul_sub, two_nsmul_coe_div_two, two_nsmul_eq_iff
+/-
+**Real.Angle.abs_cos_eq_abs_sin_of_two_nsmul_add_two_nsmul_eq_pi** 是 Mathlib 中的一
+个定理，位于命名空间 `Real.Angle`。
+形式化陈述：abs_cos_eq_abs_sin_of_two_nsmul_add_two_nsmul_eq_pi {θ ψ : Angle} (h : (2 
+: Nat) • θ + (2 : Nat) • ψ = π) : |cos θ| = |sin ψ|
+参数：h : (2 : Nat) • θ + (2 : Nat) • ψ = π。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.two_nsmul_eq_iff`：two_nsmul_eq_iff {ψ θ : Angle} : (2 : Nat) 
+• ψ = (2 : Nat) • θ ↔ ψ = θ ∨ ψ = θ + ↑π
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `nsmul_sub`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b : α) (
+n : ℕ), n • (a - b) = n • a - n • b
+· 使用定理 `Real.Angle.two_nsmul_coe_div_two`：two_nsmul_coe_div_two (θ : Real) : (2 
+: Nat) • (↑(θ / 2) : Angle) = θ
+· 使用定理 `eq_sub_iff_add_eq`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a =
+ b - c ↔ a + c = b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Real.Angle.cos_pi_div_two_sub`：cos_pi_div_two_sub (θ : Angle) : cos (↑(π
+ / 2) - θ) = sin θ
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Real.Angle.cos_add_pi`：cos_add_pi (θ : Angle) : cos (θ + π) = -cos θ
+· 使用定理 `abs_neg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] (a : 
+α), |(-a)| = |a|
 -/
 theorem abs_cos_eq_abs_sin_of_two_nsmul_add_two_nsmul_eq_pi {θ ψ : Angle}
-    (h : (2 : Nat) • θ + (2 : Nat) • ψ = π) : |cos θ| = |sin ψ| := by
-  rw [← eq_sub_iff_add_eq]; rw [← two_nsmul_coe_div_two]; rw [← nsmul_sub]; rw [two_nsmul_eq_iff] at h
+    (h : (2 : ℕ) • θ + (2 : ℕ) • ψ = π) : |cos θ| = |sin ψ| := by
+  rw [← eq_sub_iff_add_eq, ← two_nsmul_coe_div_two, ← nsmul_sub, two_nsmul_eq_iff] at h
   rcases h with (rfl | rfl) <;> simp [cos_pi_div_two_sub]
-
-/--
-theorem `abs_cos_eq_abs_sin_of_two_zsmul_add_two_zsmul_eq_pi` / 定理 `abs_cos_eq_abs_sin_of_two_zsmul_add_two_zsmul_eq_pi`
-
-English:
-theorem abs_cos_eq_abs_sin_of_two_zsmul_add_two_zsmul_eq_pi
-  statement: {θ ψ : Angle}
-  proof: by
-  simp_rw [two_zsmul, ← two_nsmul] at h
-  exact abs_cos_eq_abs_sin_of_two_nsmul_add_two_nsmul_eq_pi h
-
-中文:
-定理 abs_cos_eq_abs_sin_of_two_zsmul_add_two_zsmul_eq_pi
-  结论: {θ ψ : Angle}
-  证明: by
-  simp_rw [two_zsmul, ← two_nsmul] at h
-  exact abs_cos_eq_abs_sin_of_two_nsmul_add_two_nsmul_eq_pi h
-
-Depends on / 依赖: abs_cos_eq_abs_sin_of_two_nsmul_add_two_nsmul_eq_pi, simp_rw, two_nsmul, two_zsmul
+/-
+**Real.Angle.abs_cos_eq_abs_sin_of_two_zsmul_add_two_zsmul_eq_pi** 是 Mathlib 中的一
+个定理，位于命名空间 `Real.Angle`。
+形式化陈述：abs_cos_eq_abs_sin_of_two_zsmul_add_two_zsmul_eq_pi {θ ψ : Angle} (h : (2 
+: Int) • θ + (2 : Int) • ψ = π) : |cos θ| = |sin ψ|
+参数：h : (2 : Int) • θ + (2 : Int) • ψ = π。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.abs_cos_eq_abs_sin_of_two_nsmul_add_two_nsmul_eq_pi`：abs_cos_
+eq_abs_sin_of_two_nsmul_add_two_nsmul_eq_pi {θ ψ : Angle} (h : (2 : Nat) • θ + (
+2 : Nat) • ψ = π) : |cos θ| = |sin ψ|
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `two_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 2 • a = a +
+ a
 -/
 theorem abs_cos_eq_abs_sin_of_two_zsmul_add_two_zsmul_eq_pi {θ ψ : Angle}
-    (h : (2 : Int) • θ + (2 : Int) • ψ = π) : |cos θ| = |sin ψ| := by
+    (h : (2 : ℤ) • θ + (2 : ℤ) • ψ = π) : |cos θ| = |sin ψ| := by
   simp_rw [two_zsmul, ← two_nsmul] at h
   exact abs_cos_eq_abs_sin_of_two_nsmul_add_two_nsmul_eq_pi h
 
-/--
-Definition of `tan` / `tan` 的定义
+/-- The tangent of a `Real.Angle`. -/
+/-
+**Real.Angle.tan** 是 Mathlib 中的一个定义，位于命名空间 `Real.Angle`。
+形式化陈述：tan (θ : Angle) : Real
+参数：θ : Angle。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition tan
-  signature: (θ : Angle)
-  body: sin θ / cos θ
-
-中文:
-定义 tan
-  签名: (θ : Angle)
-  定义体: sin θ / cos θ
+--- 原说明 ---
+The tangent of a `Real.Angle`.
 -/
-def tan (θ : Angle) : Real :=
+def tan (θ : Angle) : ℝ :=
   sin θ / cos θ
-
-/--
-theorem `tan_eq_sin_div_cos` / 定理 `tan_eq_sin_div_cos`
-
-English:
-theorem tan_eq_sin_div_cos
-  given: (θ : Angle)
-  statement: tan θ = sin θ / cos θ
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 tan_eq_sin_div_cos
-  条件: (θ : Angle)
-  结论: tan θ = sin θ / cos θ
-  证明: rfl
-
-@[simp]
+/-
+**Real.Angle.tan_eq_sin_div_cos** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：tan_eq_sin_div_cos (θ : Angle) : tan θ = sin θ / cos θ
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem tan_eq_sin_div_cos (θ : Angle) : tan θ = sin θ / cos θ :=
   rfl
 
 @[simp]
-/--
-theorem `tan_coe` / 定理 `tan_coe`
-
-English:
-theorem tan_coe
-  given: (x : Real)
-  statement: tan (x : Angle) = Real.tan x
-  proof: by
-  rw [tan]; rw [sin_coe]; rw [cos_coe]; rw [Real.tan_eq_sin_div_cos]
-
-@[simp]
-
-中文:
-定理 tan_coe
-  条件: (x : 实数)
-  结论: tan (x : Angle) = 实数.tan x
-  证明: by
-  rw [tan]; rw [sin_coe]; rw [cos_coe]; rw [Real.tan_eq_sin_div_cos]
-
-@[simp]
-
-Depends on / 依赖: Real.tan_eq_sin_div_cos, cos_coe, sin_coe, tan_eq_sin_div_cos
+/-
+**Real.Angle.tan_coe** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：tan_coe (x : Real) : tan (x : Angle) = Real.tan x
+参数：x : Real。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.tan.eq_1`：∀ (θ : Real.Angle), θ.tan = θ.sin / θ.cos
+· 使用定理 `Real.Angle.sin_coe`：sin_coe (x : Real) : sin (x : Angle) = Real.sin x
+· 使用定理 `Real.Angle.cos_coe`：cos_coe (x : Real) : cos (x : Angle) = Real.cos x
+· 使用定理 `Real.tan_eq_sin_div_cos`：∀ (x : ℝ), Real.tan x = Real.sin x / Real.cos x
 -/
-theorem tan_coe (x : Real) : tan (x : Angle) = Real.tan x := by
-  rw [tan]; rw [sin_coe]; rw [cos_coe]; rw [Real.tan_eq_sin_div_cos]
+theorem tan_coe (x : ℝ) : tan (x : Angle) = Real.tan x := by
+  rw [tan, sin_coe, cos_coe, Real.tan_eq_sin_div_cos]
 
 @[simp]
-/--
-theorem `tan_zero` / 定理 `tan_zero`
-
-English:
-theorem tan_zero
-  statement: tan (0 : Angle) = 0
-  proof: by rw [← coe_zero, tan_coe, Real.tan_zero]
-
-中文:
-定理 tan_zero
-  结论: tan (0 : Angle) = 0
-  证明: by rw [← coe_zero, tan_coe, Real.tan_zero]
-
-Depends on / 依赖: Real.tan_zero, coe_zero, tan_coe, tan_zero
+/-
+**Real.Angle.tan_zero** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：tan_zero : tan (0 : Angle) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.coe_zero`：coe_zero : ↑(0 : Real) = (0 : Angle)
+· 使用定理 `Real.Angle.tan_coe`：tan_coe (x : Real) : tan (x : Angle) = Real.tan x
+· 使用定理 `Real.tan_zero`：tan_zero : tan 0 = 0
 -/
 theorem tan_zero : tan (0 : Angle) = 0 := by rw [← coe_zero, tan_coe, Real.tan_zero]
-
-/--
-theorem `tan_coe_pi` / 定理 `tan_coe_pi`
-
-English:
-theorem tan_coe_pi
-  statement: tan (π : Angle) = 0
-  proof: by rw [tan_coe, Real.tan_pi]
-
-中文:
-定理 tan_coe_pi
-  结论: tan (π : Angle) = 0
-  证明: by rw [tan_coe, Real.tan_pi]
-
-Depends on / 依赖: Real.tan_pi, tan_coe, tan_pi
+/-
+**Real.Angle.tan_coe_pi** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：tan_coe_pi : tan (π : Angle) = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.tan_coe`：tan_coe (x : Real) : tan (x : Angle) = Real.tan x
+· 使用定理 `Real.tan_pi`：tan_pi : tan π = 0
 -/
 theorem tan_coe_pi : tan (π : Angle) = 0 := by rw [tan_coe, Real.tan_pi]
-
-/--
-theorem `tan_periodic` / 定理 `tan_periodic`
-
-English:
-theorem tan_periodic
-  statement: Function.Periodic tan (π : Angle)
-  proof: by
-  intro θ
-  induction θ using Real.Angle.induction_on
-  rw [← coe_add]; rw [tan_coe]; rw [tan_coe]
-  exact Real.tan_periodic _
-
-@[simp]
-
-中文:
-定理 tan_periodic
-  结论: 函数.周期 tan (π : Angle)
-  证明: by
-  intro θ
-  induction θ using Real.Angle.induction_on
-  rw [← coe_add]; rw [tan_coe]; rw [tan_coe]
-  exact Real.tan_periodic _
-
-@[simp]
-
-Depends on / 依赖: Real.Angle.induction_on, Real.tan_periodic, coe_add, induction_on, tan_coe, tan_periodic
+/-
+**Real.Angle.tan_periodic** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：tan_periodic : Function.Periodic tan (π : Angle)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.induction_on`：∀ {p : Real.Angle → Prop} (θ : Real.Angle), (∀ 
+(x : ℝ), p ↑x) → p θ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.coe_add`：coe_add (x y : Real) : ↑(x + y : Real) = (↑x + ↑y : 
+Angle)
+· 使用定理 `Real.Angle.tan_coe`：tan_coe (x : Real) : tan (x : Angle) = Real.tan x
+· 使用定理 `Real.tan_periodic`：tan_periodic : Function.Periodic tan π
 -/
 theorem tan_periodic : Function.Periodic tan (π : Angle) := by
   intro θ
   induction θ using Real.Angle.induction_on
-  rw [← coe_add]; rw [tan_coe]; rw [tan_coe]
+  rw [← coe_add, tan_coe, tan_coe]
   exact Real.tan_periodic _
 
 @[simp]
-/--
-theorem `tan_add_pi` / 定理 `tan_add_pi`
-
-English:
-theorem tan_add_pi
-  given: (θ : Angle)
-  statement: tan (θ + π) = tan θ
-  proof: tan_periodic θ
-
-@[simp]
-
-中文:
-定理 tan_add_pi
-  条件: (θ : Angle)
-  结论: tan (θ + π) = tan θ
-  证明: tan_periodic θ
-
-@[simp]
-
-Depends on / 依赖: tan_periodic
+/-
+**Real.Angle.tan_add_pi** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：tan_add_pi (θ : Angle) : tan (θ + π) = tan θ
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.tan_periodic`：tan_periodic : Function.Periodic tan (π : Angle
+)
 -/
 theorem tan_add_pi (θ : Angle) : tan (θ + π) = tan θ :=
   tan_periodic θ
 
 @[simp]
-/--
-theorem `tan_sub_pi` / 定理 `tan_sub_pi`
-
-English:
-theorem tan_sub_pi
-  given: (θ : Angle)
-  statement: tan (θ - π) = tan θ
-  proof: tan_periodic.sub_eq θ
-
-@[simp]
-
-中文:
-定理 tan_sub_pi
-  条件: (θ : Angle)
-  结论: tan (θ - π) = tan θ
-  证明: tan_periodic.sub_eq θ
-
-@[simp]
-
-Depends on / 依赖: sub_eq, tan_periodic, tan_periodic.sub_eq
+/-
+**Real.Angle.tan_sub_pi** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：tan_sub_pi (θ : Angle) : tan (θ - π) = tan θ
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Periodic.sub_eq`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {c
+ : α} [inst : AddGroup α],   Function.Periodic f c → ∀ (x : α), f (x - c) = f x
+· 使用定理 `Real.Angle.tan_periodic`：tan_periodic : Function.Periodic tan (π : Angle
+)
 -/
 theorem tan_sub_pi (θ : Angle) : tan (θ - π) = tan θ :=
   tan_periodic.sub_eq θ
 
 @[simp]
-/--
-theorem `tan_toReal` / 定理 `tan_toReal`
-
-English:
-theorem tan_toReal
-  given: (θ : Angle)
-  statement: Real.tan θ.toReal = tan θ
-  proof: by
-  conv_rhs => rw [← coe_toReal θ, tan_coe]
-
-中文:
-定理 tan_to实数
-  条件: (θ : Angle)
-  结论: 实数.tan θ.to实数 = tan θ
-  证明: by
-  conv_rhs => rw [← coe_toReal θ, tan_coe]
-
-Depends on / 依赖: coe_toReal, conv_rhs, tan_coe
+/-
+**Real.Angle.tan_toReal** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：tan_toReal (θ : Angle) : Real.tan θ.toReal = tan θ
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.coe_toReal`：coe_toReal (θ : Angle) : (θ.toReal : Angle) = θ
+· 使用定理 `Real.Angle.tan_coe`：tan_coe (x : Real) : tan (x : Angle) = Real.tan x
 -/
 theorem tan_toReal (θ : Angle) : Real.tan θ.toReal = tan θ := by
   conv_rhs => rw [← coe_toReal θ, tan_coe]
-
-/--
-theorem `tan_eq_of_two_nsmul_eq` / 定理 `tan_eq_of_two_nsmul_eq`
-
-English:
-theorem tan_eq_of_two_nsmul_eq
-  given: {θ ψ : Angle} (h : (2 : Nat) • θ = (2 : Nat) • ψ)
-  statement: tan θ = tan ψ
-  proof: by
-  rw [two_nsmul_eq_iff] at h
-  rcases h with (rfl | rfl)
-  · rfl
-  · exact tan_add_pi _
-
-中文:
-定理 tan_eq_of_two_nsmul_eq
-  条件: {θ ψ : Angle} (h : (2 : 自然数) • θ = (2 : 自然数) • ψ)
-  结论: tan θ = tan ψ
-  证明: by
-  rw [two_nsmul_eq_iff] at h
-  rcases h with (rfl | rfl)
-  · rfl
-  · exact tan_add_pi _
-
-Depends on / 依赖: tan_add_pi, two_nsmul_eq_iff
+/-
+**Real.Angle.tan_eq_of_two_nsmul_eq** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：tan_eq_of_two_nsmul_eq {θ ψ : Angle} (h : (2 : Nat) • θ = (2 : Nat) • ψ) :
+ tan θ = tan ψ
+参数：h : (2 : Nat) • θ = (2 : Nat) • ψ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.two_nsmul_eq_iff`：two_nsmul_eq_iff {ψ θ : Angle} : (2 : Nat) 
+• ψ = (2 : Nat) • θ ↔ ψ = θ ∨ ψ = θ + ↑π
+· 使用定理 `Real.Angle.tan_add_pi`：tan_add_pi (θ : Angle) : tan (θ + π) = tan θ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem tan_eq_of_two_nsmul_eq {θ ψ : Angle} (h : (2 : Nat) • θ = (2 : Nat) • ψ) : tan θ = tan ψ := by
+theorem tan_eq_of_two_nsmul_eq {θ ψ : Angle} (h : (2 : ℕ) • θ = (2 : ℕ) • ψ) : tan θ = tan ψ := by
   rw [two_nsmul_eq_iff] at h
   rcases h with (rfl | rfl)
   · rfl
   · exact tan_add_pi _
-
-/--
-theorem `tan_eq_of_two_zsmul_eq` / 定理 `tan_eq_of_two_zsmul_eq`
-
-English:
-theorem tan_eq_of_two_zsmul_eq
-  given: {θ ψ : Angle} (h : (2 : Int) • θ = (2 : Int) • ψ)
-  statement: tan θ = tan ψ
-  proof: by
-  simp_rw [two_zsmul, ← two_nsmul] at h
-  exact tan_eq_of_two_nsmul_eq h
-
-中文:
-定理 tan_eq_of_two_zsmul_eq
-  条件: {θ ψ : Angle} (h : (2 : 整数) • θ = (2 : 整数) • ψ)
-  结论: tan θ = tan ψ
-  证明: by
-  simp_rw [two_zsmul, ← two_nsmul] at h
-  exact tan_eq_of_two_nsmul_eq h
-
-Depends on / 依赖: simp_rw, tan_eq_of_two_nsmul_eq, two_nsmul, two_zsmul
+/-
+**Real.Angle.tan_eq_of_two_zsmul_eq** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：tan_eq_of_two_zsmul_eq {θ ψ : Angle} (h : (2 : Int) • θ = (2 : Int) • ψ) :
+ tan θ = tan ψ
+参数：h : (2 : Int) • θ = (2 : Int) • ψ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.tan_eq_of_two_nsmul_eq`：tan_eq_of_two_nsmul_eq {θ ψ : Angle} 
+(h : (2 : Nat) • θ = (2 : Nat) • ψ) : tan θ = tan ψ
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `two_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 2 • a = a +
+ a
 -/
-theorem tan_eq_of_two_zsmul_eq {θ ψ : Angle} (h : (2 : Int) • θ = (2 : Int) • ψ) : tan θ = tan ψ := by
+theorem tan_eq_of_two_zsmul_eq {θ ψ : Angle} (h : (2 : ℤ) • θ = (2 : ℤ) • ψ) : tan θ = tan ψ := by
   simp_rw [two_zsmul, ← two_nsmul] at h
   exact tan_eq_of_two_nsmul_eq h
-
-/--
-theorem `tan_eq_inv_of_two_nsmul_add_two_nsmul_eq_pi` / 定理 `tan_eq_inv_of_two_nsmul_add_two_nsmul_eq_pi`
-
-English:
-theorem tan_eq_inv_of_two_nsmul_add_two_nsmul_eq_pi
-  statement: {θ ψ : Angle}
-  proof: by
-  induction θ using Real.Angle.induction_on
-  induction ψ using Real.Angle.induction_on
-  rw [← smul_add]; rw [← coe_add]; rw [← coe_nsmul]; rw [two_nsmul]; rw [← two_mul]; rw [angle_eq_iff_two_pi_dvd_sub] at h
-  rcases h with ⟨k, h⟩
-  rw [sub_eq_iff_eq_add]; rw [← mul_inv_cancel_left₀ two_ne_zero π]; rw [mul_assoc]; rw [← mul_add]; rw [mul_right_inj' (two_ne_zero' Real)]; rw [← eq_sub_iff_add_eq']; rw [mul_inv_cancel_left₀ two_ne_zero π]; rw [inv_mul_eq_div]; rw [mul_comm] at h
-  rw [tan_coe]; rw [tan_coe]; rw [← tan_pi_div_two_sub]; rw [h]; rw [add_sub_assoc]; rw [add_comm]
-  exact Real.tan_periodic.int_mul _ _
-
-中文:
-定理 tan_eq_inv_of_two_nsmul_add_two_nsmul_eq_pi
-  结论: {θ ψ : Angle}
-  证明: by
-  induction θ using Real.Angle.induction_on
-  induction ψ using Real.Angle.induction_on
-  rw [← smul_add]; rw [← coe_add]; rw [← coe_nsmul]; rw [two_nsmul]; rw [← two_mul]; rw [angle_eq_iff_two_pi_dvd_sub] at h
-  rcases h with ⟨k, h⟩
-  rw [sub_eq_iff_eq_add]; rw [← mul_inv_cancel_left₀ two_ne_zero π]; rw [mul_assoc]; rw [← mul_add]; rw [mul_right_inj' (two_ne_zero' Real)]; rw [← eq_sub_iff_add_eq']; rw [mul_inv_cancel_left₀ two_ne_zero π]; rw [inv_mul_eq_div]; rw [mul_comm] at h
-  rw [tan_coe]; rw [tan_coe]; rw [← tan_pi_div_two_sub]; rw [h]; rw [add_sub_assoc]; rw [add_comm]
-  exact Real.tan_periodic.int_mul _ _
-
-Depends on / 依赖: Real.Angle.induction_on, angle_eq_iff_two_pi_dvd_sub, coe_add, coe_nsmul, eq_sub_iff_add_eq, induction_on, inv_mul_eq_div, mul_add, mul_assoc, mul_comm, mul_right_inj, smul_add, sub_eq_iff_eq_add, tan_c, tan_coe, two_mul, two_ne_zero, two_nsmul
+/-
+**Real.Angle.tan_eq_inv_of_two_nsmul_add_two_nsmul_eq_pi** 是 Mathlib 中的一个定理，位于命名
+空间 `Real.Angle`。
+形式化陈述：tan_eq_inv_of_two_nsmul_add_two_nsmul_eq_pi {θ ψ : Angle} (h : (2 : Nat) •
+ θ + (2 : Nat) • ψ = π) : tan ψ = (tan θ)⁻¹
+参数：h : (2 : Nat) • θ + (2 : Nat) • ψ = π。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.induction_on`：∀ {p : Real.Angle → Prop} (θ : Real.Angle), (∀ 
+(x : ℝ), p ↑x) → p θ
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.angle_eq_iff_two_pi_dvd_sub`：angle_eq_iff_two_pi_dvd_sub {ψ θ
+ : Real} : (θ : Angle) = ψ ↔ exists k : Int, θ - ψ = 2 * π * k
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `two_mul`：two_mul (n : α) : 2 * n = n + n
+· 使用定理 `two_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 2 • a = a + a
+· 使用定理 `Real.Angle.coe_nsmul`：coe_nsmul (n : Nat) (x : Real) : ↑(n • x : Real) =
+ n • (↑x : Angle)
+· 使用定理 `Real.Angle.coe_add`：coe_add (x y : Real) : ↑(x + y : Real) = (↑x + ↑y : 
+Angle)
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用定理 `Real.Angle.tan_coe`：tan_coe (x : Real) : tan (x : Angle) = Real.tan x
+· 使用定理 `Real.tan_pi_div_two_sub`：tan_pi_div_two_sub (x : Real) : tan (π / 2 - x)
+ = (tan x)⁻¹
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `inv_mul_eq_div`：inv_mul_eq_div : a⁻¹ * b = b / a
+· 使用定理 `mul_inv_cancel_left₀`：mul_inv_cancel_left₀ (h : a != 0) (b : G₀) : a * (
+a⁻¹ * b) = b
+· 使用引理 `two_ne_zero`：two_ne_zero [OfNat α 2] [NeZero (2 : α)] : (2 : α) != 0
+· 使用定理 `FloorSemiring.instCharZero`：∀ {α : Type u_2} [inst : Semiring α] [inst_1
+ : PartialOrder α] [FloorSemiring α], CharZero α
+· 使用定理 `eq_sub_iff_add_eq'`：∀ {G : Type u_3} [inst : AddCommGroup G] {a b c : G}
+, a = b - c ↔ c + a = b
+· 使用引理 `mul_right_inj'`：mul_right_inj' (ha : a != 0) : a * b = a * c ↔ b = c
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `Real.instIsDomain`：IsDomain ℝ
+· 使用引理 `two_ne_zero'`：two_ne_zero' [OfNat α 2] [NeZero (2 : α)] : (2 : α) != 0
+· 使用定理 `mul_add`：mul_add {d : R} (_ : (a : R) * b₁ = c₁) (_ : a * b₂ = c₂) (_ : 
+c₁ + 0 + c₂ = d) : a * (b₁ + b₂) = d
+· 使用定理 `Distrib.leftDistribClass`：∀ (R : Type u_1) [inst : Distrib R], LeftDistr
+ibClass R
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `sub_eq_iff_eq_add`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a -
+ b = c ↔ a = c + b
+· 使用定理 `add_sub_assoc`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b c : G), a +
+ b - c = a + (b - c)
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+（共 32 条，此处仅展示前 30 条）
 -/
 theorem tan_eq_inv_of_two_nsmul_add_two_nsmul_eq_pi {θ ψ : Angle}
-    (h : (2 : Nat) • θ + (2 : Nat) • ψ = π) : tan ψ = (tan θ)⁻¹ := by
+    (h : (2 : ℕ) • θ + (2 : ℕ) • ψ = π) : tan ψ = (tan θ)⁻¹ := by
   induction θ using Real.Angle.induction_on
   induction ψ using Real.Angle.induction_on
-  rw [← smul_add]; rw [← coe_add]; rw [← coe_nsmul]; rw [two_nsmul]; rw [← two_mul]; rw [angle_eq_iff_two_pi_dvd_sub] at h
+  rw [← smul_add, ← coe_add, ← coe_nsmul, two_nsmul, ← two_mul, angle_eq_iff_two_pi_dvd_sub] at h
   rcases h with ⟨k, h⟩
-  rw [sub_eq_iff_eq_add]; rw [← mul_inv_cancel_left₀ two_ne_zero π]; rw [mul_assoc]; rw [← mul_add]; rw [mul_right_inj' (two_ne_zero' Real)]; rw [← eq_sub_iff_add_eq']; rw [mul_inv_cancel_left₀ two_ne_zero π]; rw [inv_mul_eq_div]; rw [mul_comm] at h
-  rw [tan_coe]; rw [tan_coe]; rw [← tan_pi_div_two_sub]; rw [h]; rw [add_sub_assoc]; rw [add_comm]
+  rw [sub_eq_iff_eq_add, ← mul_inv_cancel_left₀ two_ne_zero π, mul_assoc, ← mul_add,
+    mul_right_inj' (two_ne_zero' ℝ), ← eq_sub_iff_add_eq', mul_inv_cancel_left₀ two_ne_zero π,
+    inv_mul_eq_div, mul_comm] at h
+  rw [tan_coe, tan_coe, ← tan_pi_div_two_sub, h, add_sub_assoc, add_comm]
   exact Real.tan_periodic.int_mul _ _
-
-/--
-theorem `tan_eq_inv_of_two_zsmul_add_two_zsmul_eq_pi` / 定理 `tan_eq_inv_of_two_zsmul_add_two_zsmul_eq_pi`
-
-English:
-theorem tan_eq_inv_of_two_zsmul_add_two_zsmul_eq_pi
-  statement: {θ ψ : Angle}
-  proof: by
-  simp_rw [two_zsmul, ← two_nsmul] at h
-  exact tan_eq_inv_of_two_nsmul_add_two_nsmul_eq_pi h
-
-中文:
-定理 tan_eq_inv_of_two_zsmul_add_two_zsmul_eq_pi
-  结论: {θ ψ : Angle}
-  证明: by
-  simp_rw [two_zsmul, ← two_nsmul] at h
-  exact tan_eq_inv_of_two_nsmul_add_two_nsmul_eq_pi h
-
-Depends on / 依赖: simp_rw, tan_eq_inv_of_two_nsmul_add_two_nsmul_eq_pi, two_nsmul, two_zsmul
+/-
+**Real.Angle.tan_eq_inv_of_two_zsmul_add_two_zsmul_eq_pi** 是 Mathlib 中的一个定理，位于命名
+空间 `Real.Angle`。
+形式化陈述：tan_eq_inv_of_two_zsmul_add_two_zsmul_eq_pi {θ ψ : Angle} (h : (2 : Int) •
+ θ + (2 : Int) • ψ = π) : tan ψ = (tan θ)⁻¹
+参数：h : (2 : Int) • θ + (2 : Int) • ψ = π。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.tan_eq_inv_of_two_nsmul_add_two_nsmul_eq_pi`：tan_eq_inv_of_tw
+o_nsmul_add_two_nsmul_eq_pi {θ ψ : Angle} (h : (2 : Nat) • θ + (2 : Nat) • ψ = π
+) : tan ψ = (tan θ)⁻¹
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `two_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 2 • a = a +
+ a
 -/
 theorem tan_eq_inv_of_two_zsmul_add_two_zsmul_eq_pi {θ ψ : Angle}
-    (h : (2 : Int) • θ + (2 : Int) • ψ = π) : tan ψ = (tan θ)⁻¹ := by
+    (h : (2 : ℤ) • θ + (2 : ℤ) • ψ = π) : tan ψ = (tan θ)⁻¹ := by
   simp_rw [two_zsmul, ← two_nsmul] at h
   exact tan_eq_inv_of_two_nsmul_add_two_nsmul_eq_pi h
 
-/--
-Definition of `sign` / `sign` 的定义
+/-- The sign of a `Real.Angle` is `0` if the angle is `0` or `π`, `1` if the angle is strictly
+between `0` and `π` and `-1` is the angle is strictly between `-π` and `0`. It is defined as the
+sign of the sine of the angle. -/
+/-
+**Real.Angle.sign** 是 Mathlib 中的一个定义，位于命名空间 `Real.Angle`。
+形式化陈述：sign (θ : Angle) : SignType
+参数：θ : Angle。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sign
-  signature: (θ : Angle)
-  body: SignType.sign (sin θ)
-
-@[simp, grind =]
-
-中文:
-定义 sign
-  签名: (θ : Angle)
-  定义体: SignType.sign (sin θ)
-
-@[simp, grind =]
-
-Depends on / 依赖: SignType, SignType.sign
+--- 原说明 ---
+The sign of a `Real.Angle` is `0` if the angle is `0` or `π`, `1` if the angle i
+s strictly
+between `0` and `π` and `-1` is the angle is strictly between `-π` and `0`. It i
+s defined as the
+sign of the sine of the angle.
 -/
 def sign (θ : Angle) : SignType :=
   SignType.sign (sin θ)
 
 @[simp, grind =]
-/--
-theorem `sign_zero` / 定理 `sign_zero`
-
-English:
-theorem sign_zero
-  statement: (0 : Angle).sign = 0
-  proof: by
-  rw [sign]; rw [sin_zero]; rw [_root_.sign_zero]
-
-@[simp, grind =]
-
-中文:
-定理 sign_zero
-  结论: (0 : Angle).sign = 0
-  证明: by
-  rw [sign]; rw [sin_zero]; rw [_root_.sign_zero]
-
-@[simp, grind =]
-
-Depends on / 依赖: _root_, _root_.sign_zero, sign_zero, sin_zero
+/-
+**Real.Angle.sign_zero** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sign_zero : (0 : Angle).sign = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.sign.eq_1`：∀ (θ : Real.Angle), θ.sign = SignType.sign θ.sin
+· 使用定理 `Real.Angle.sin_zero`：sin_zero : sin (0 : Angle) = 0
+· 使用定理 `sign_zero`：sign_zero : sign (0 : α) = 0
 -/
 theorem sign_zero : (0 : Angle).sign = 0 := by
-  rw [sign]; rw [sin_zero]; rw [_root_.sign_zero]
+  rw [sign, sin_zero, _root_.sign_zero]
 
 @[simp, grind =]
-/--
-theorem `sign_coe_pi` / 定理 `sign_coe_pi`
-
-English:
-theorem sign_coe_pi
-  statement: (π : Angle).sign = 0
-  proof: by rw [sign, sin_coe_pi, _root_.sign_zero]
-
-@[simp, grind =]
-
-中文:
-定理 sign_coe_pi
-  结论: (π : Angle).sign = 0
-  证明: by rw [sign, sin_coe_pi, _root_.sign_zero]
-
-@[simp, grind =]
-
-Depends on / 依赖: _root_, _root_.sign_zero, sign_zero, sin_coe_pi
+/-
+**Real.Angle.sign_coe_pi** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sign_coe_pi : (π : Angle).sign = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.sign.eq_1`：∀ (θ : Real.Angle), θ.sign = SignType.sign θ.sin
+· 使用定理 `Real.Angle.sin_coe_pi`：sin_coe_pi : sin (π : Angle) = 0
+· 使用定理 `sign_zero`：sign_zero : sign (0 : α) = 0
 -/
 theorem sign_coe_pi : (π : Angle).sign = 0 := by rw [sign, sin_coe_pi, _root_.sign_zero]
 
 @[simp, grind =]
-/--
-theorem `sign_neg` / 定理 `sign_neg`
-
-English:
-theorem sign_neg
-  given: (θ : Angle)
-  statement: (-θ).sign = -θ.sign
-  proof: by
-  simp_rw [sign, sin_neg, Left.sign_neg]
-
-中文:
-定理 sign_neg
-  条件: (θ : Angle)
-  结论: (-θ).sign = -θ.sign
-  证明: by
-  simp_rw [sign, sin_neg, Left.sign_neg]
-
-Depends on / 依赖: Left.sign_neg, sign_neg, simp_rw, sin_neg
+/-
+**Real.Angle.sign_neg** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sign_neg (θ : Angle) : (-θ).sign = -θ.sign
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.sin_neg`：sin_neg (θ : Angle) : sin (-θ) = -sin θ
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Left.sign_neg`：Left.sign_neg [AddLeftStrictMono α] (a : α) : sign (-a) =
+ -sign a
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem sign_neg (θ : Angle) : (-θ).sign = -θ.sign := by
   simp_rw [sign, sin_neg, Left.sign_neg]
-
-/--
-theorem `sign_antiperiodic` / 定理 `sign_antiperiodic`
-
-English:
-theorem sign_antiperiodic
-  statement: Function.Antiperiodic sign (π : Angle)
-  proof: fun θ => by
-  rw [sign]; rw [sign]; rw [sin_add_pi]; rw [Left.sign_neg]
-
-@[simp, grind =]
-
-中文:
-定理 sign_antiperiodic
-  结论: 函数.Antiperiodic sign (π : Angle)
-  证明: fun θ => by
-  rw [sign]; rw [sign]; rw [sin_add_pi]; rw [Left.sign_neg]
-
-@[simp, grind =]
-
-Depends on / 依赖: Left.sign_neg, sign_neg, sin_add_pi
+/-
+**Real.Angle.sign_antiperiodic** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sign_antiperiodic : Function.Antiperiodic sign (π : Angle)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.sign.eq_1`：∀ (θ : Real.Angle), θ.sign = SignType.sign θ.sin
+· 使用定理 `Real.Angle.sin_add_pi`：sin_add_pi (θ : Angle) : sin (θ + π) = -sin θ
+· 使用定理 `Left.sign_neg`：Left.sign_neg [AddLeftStrictMono α] (a : α) : sign (-a) =
+ -sign a
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
 -/
 theorem sign_antiperiodic : Function.Antiperiodic sign (π : Angle) := fun θ => by
-  rw [sign]; rw [sign]; rw [sin_add_pi]; rw [Left.sign_neg]
+  rw [sign, sign, sin_add_pi, Left.sign_neg]
 
 @[simp, grind =]
-/--
-theorem `sign_add_pi` / 定理 `sign_add_pi`
-
-English:
-theorem sign_add_pi
-  given: (θ : Angle)
-  statement: (θ + π).sign = -θ.sign
-  proof: sign_antiperiodic θ
-
-@[simp, grind =]
-
-中文:
-定理 sign_add_pi
-  条件: (θ : Angle)
-  结论: (θ + π).sign = -θ.sign
-  证明: sign_antiperiodic θ
-
-@[simp, grind =]
-
-Depends on / 依赖: sign_antiperiodic
+/-
+**Real.Angle.sign_add_pi** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sign_add_pi (θ : Angle) : (θ + π).sign = -θ.sign
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Real.Angle.sign_antiperiodic`：sign_antiperiodic : Function.Antiperiodic 
+sign (π : Angle)
 -/
 theorem sign_add_pi (θ : Angle) : (θ + π).sign = -θ.sign :=
   sign_antiperiodic θ
 
 @[simp, grind =]
-/--
-theorem `sign_pi_add` / 定理 `sign_pi_add`
-
-English:
-theorem sign_pi_add
-  given: (θ : Angle)
-  statement: ((π : Angle) + θ).sign = -θ.sign
-  proof: by rw [add_comm, sign_add_pi]
-
-@[simp, grind =]
-
-中文:
-定理 sign_pi_add
-  条件: (θ : Angle)
-  结论: ((π : Angle) + θ).sign = -θ.sign
-  证明: by rw [add_comm, sign_add_pi]
-
-@[simp, grind =]
-
-Depends on / 依赖: add_comm, sign_add_pi
+/-
+**Real.Angle.sign_pi_add** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sign_pi_add (θ : Angle) : ((π : Angle) + θ).sign = -θ.sign
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Real.Angle.sign_add_pi`：sign_add_pi (θ : Angle) : (θ + π).sign = -θ.sign
 -/
 theorem sign_pi_add (θ : Angle) : ((π : Angle) + θ).sign = -θ.sign := by rw [add_comm, sign_add_pi]
 
 @[simp, grind =]
-/--
-theorem `sign_sub_pi` / 定理 `sign_sub_pi`
-
-English:
-theorem sign_sub_pi
-  given: (θ : Angle)
-  statement: (θ - π).sign = -θ.sign
-  proof: sign_antiperiodic.sub_eq θ
-
-@[simp, grind =]
-
-中文:
-定理 sign_sub_pi
-  条件: (θ : Angle)
-  结论: (θ - π).sign = -θ.sign
-  证明: sign_antiperiodic.sub_eq θ
-
-@[simp, grind =]
-
-Depends on / 依赖: sign_antiperiodic, sign_antiperiodic.sub_eq, sub_eq
+/-
+**Real.Angle.sign_sub_pi** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sign_sub_pi (θ : Angle) : (θ - π).sign = -θ.sign
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Antiperiodic.sub_eq`：∀ {α : Type u_1} {β : Type u_2} {f : α → β
+} {c : α} [inst : AddGroup α] [inst_1 : InvolutiveNeg β],   Function.Antiperiodi
+c f c → ∀ (x : α),…
+· 使用定理 `Real.Angle.sign_antiperiodic`：sign_antiperiodic : Function.Antiperiodic 
+sign (π : Angle)
 -/
 theorem sign_sub_pi (θ : Angle) : (θ - π).sign = -θ.sign :=
   sign_antiperiodic.sub_eq θ
 
 @[simp, grind =]
-/--
-theorem `sign_pi_sub` / 定理 `sign_pi_sub`
-
-English:
-theorem sign_pi_sub
-  given: (θ : Angle)
-  statement: ((π : Angle) - θ).sign = θ.sign
-  proof: by
-  simp [sign_antiperiodic.sub_eq']
-
-@[grind =]
-
-中文:
-定理 sign_pi_sub
-  条件: (θ : Angle)
-  结论: ((π : Angle) - θ).sign = θ.sign
-  证明: by
-  simp [sign_antiperiodic.sub_eq']
-
-@[grind =]
-
-Depends on / 依赖: sign_antiperiodic, sign_antiperiodic.sub_eq, sub_eq
+/-
+**Real.Angle.sign_pi_sub** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sign_pi_sub (θ : Angle) : ((π : Angle) - θ).sign = θ.sign
+参数：θ : Angle。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.Antiperiodic.sub_eq'`：∀ {α : Type u_1} {β : Type u_2} {f : α → 
+β} {c x : α} [inst : SubtractionCommMonoid α] [inst_1 : Neg β],   Function.Antip
+eriodic f c → f (c …
+· 使用定理 `Real.Angle.sign_antiperiodic`：sign_antiperiodic : Function.Antiperiodic 
+sign (π : Angle)
+· 使用定理 `Real.Angle.sign_neg`：sign_neg (θ : Angle) : (-θ).sign = -θ.sign
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem sign_pi_sub (θ : Angle) : ((π : Angle) - θ).sign = θ.sign := by
   simp [sign_antiperiodic.sub_eq']
 
 @[grind =]
-/--
-theorem `sign_eq_zero_iff` / 定理 `sign_eq_zero_iff`
-
-English:
-theorem sign_eq_zero_iff
-  given: {θ : Angle}
-  statement: θ.sign = 0 ↔ θ = 0 ∨ θ = π
-  proof: by
-  rw [sign]; rw [_root_.sign_eq_zero_iff]; rw [sin_eq_zero_iff]
-
-@[grind =]
-
-中文:
-定理 sign_eq_zero_iff
-  条件: {θ : Angle}
-  结论: θ.sign = 0 ↔ θ = 0 ∨ θ = π
-  证明: by
-  rw [sign]; rw [_root_.sign_eq_zero_iff]; rw [sin_eq_zero_iff]
-
-@[grind =]
-
-Depends on / 依赖: Over.Hom, _root_, _root_.sign_eq_zero_iff, sign_eq_zero_iff, sin_eq_zero_iff
+/-
+**Real.Angle.sign_eq_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sign_eq_zero_iff {θ : Angle} : θ.sign = 0 ↔ θ = 0 ∨ θ = π
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.sign.eq_1`：∀ (θ : Real.Angle), θ.sign = SignType.sign θ.sin
+· 使用定理 `sign_eq_zero_iff`：sign_eq_zero_iff : sign a = 0 ↔ a = 0
+· 使用定理 `Real.Angle.sin_eq_zero_iff`：sin_eq_zero_iff {θ : Angle} : sin θ = 0 ↔ θ 
+= 0 ∨ θ = π
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem sign_eq_zero_iff {θ : Angle} : θ.sign = 0 ↔ θ = 0 ∨ θ = π := by
-  rw [sign]; rw [_root_.sign_eq_zero_iff]; rw [sin_eq_zero_iff]
+  rw [sign, _root_.sign_eq_zero_iff, sin_eq_zero_iff]
 
 @[grind =]
-/--
-theorem `sign_ne_zero_iff` / 定理 `sign_ne_zero_iff`
-
-English:
-theorem sign_ne_zero_iff
-  given: {θ : Angle}
-  statement: θ.sign != 0 ↔ θ != 0 ∧ θ != π
-  proof: by
-  rw [← not_or]; rw [← sign_eq_zero_iff]
-
-中文:
-定理 sign_ne_zero_iff
-  条件: {θ : Angle}
-  结论: θ.sign != 0 ↔ θ != 0 ∧ θ != π
-  证明: by
-  rw [← not_or]; rw [← sign_eq_zero_iff]
-
-Depends on / 依赖: not_or, sign_eq_zero_iff
+/-
+**Real.Angle.sign_ne_zero_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sign_ne_zero_iff {θ : Angle} : θ.sign != 0 ↔ θ != 0 ∧ θ != π
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `not_or`：∀ {p q : Prop}, ¬(p ∨ q) ↔ ¬p ∧ ¬q
+· 使用定理 `Real.Angle.sign_eq_zero_iff`：sign_eq_zero_iff {θ : Angle} : θ.sign = 0 ↔
+ θ = 0 ∨ θ = π
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem sign_ne_zero_iff {θ : Angle} : θ.sign != 0 ↔ θ != 0 ∧ θ != π := by
-  rw [← not_or]; rw [← sign_eq_zero_iff]
-
-/--
-theorem `toReal_neg_iff_sign_neg` / 定理 `toReal_neg_iff_sign_neg`
-
-English:
-theorem toReal_neg_iff_sign_neg
-  given: {θ : Angle}
-  statement: θ.toReal < 0 ↔ θ.sign = -1
-  proof: by
-  rw [sign]; rw [← sin_toReal]; rw [sign_eq_neg_one_iff]
-  grind [sin_nonneg_of_nonneg_of_le_pi, sin_neg_of_neg_of_neg_pi_lt, toReal_mem_Ioc]
-
-中文:
-定理 to实数_neg_iff_sign_neg
-  条件: {θ : Angle}
-  结论: θ.to实数 < 0 ↔ θ.sign = -1
-  证明: by
-  rw [sign]; rw [← sin_toReal]; rw [sign_eq_neg_one_iff]
-  grind [sin_nonneg_of_nonneg_of_le_pi, sin_neg_of_neg_of_neg_pi_lt, toReal_mem_Ioc]
-
-Depends on / 依赖: sign_eq_neg_one_iff, sin_neg_of_neg_of_neg_pi_lt, sin_nonneg_of_nonneg_of_le_pi, sin_toReal, toReal_mem_Ioc
+theorem sign_ne_zero_iff {θ : Angle} : θ.sign ≠ 0 ↔ θ ≠ 0 ∧ θ ≠ π := by
+  rw [← not_or, ← sign_eq_zero_iff]
+/-
+**Real.Angle.toReal_neg_iff_sign_neg** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：toReal_neg_iff_sign_neg {θ : Angle} : θ.toReal < 0 ↔ θ.sign = -1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.sign.eq_1`：∀ (θ : Real.Angle), θ.sign = SignType.sign θ.sin
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.sin_toReal`：sin_toReal (θ : Angle) : Real.sin θ.toReal = sin 
+θ
+· 使用定理 `sign_eq_neg_one_iff`：sign_eq_neg_one_iff : sign a = -1 ↔ a < 0
 -/
 theorem toReal_neg_iff_sign_neg {θ : Angle} : θ.toReal < 0 ↔ θ.sign = -1 := by
-  rw [sign]; rw [← sin_toReal]; rw [sign_eq_neg_one_iff]
+  rw [sign, ← sin_toReal, sign_eq_neg_one_iff]
   grind [sin_nonneg_of_nonneg_of_le_pi, sin_neg_of_neg_of_neg_pi_lt, toReal_mem_Ioc]
-
-/--
-theorem `toReal_nonneg_iff_sign_nonneg` / 定理 `toReal_nonneg_iff_sign_nonneg`
-
-English:
-theorem toReal_nonneg_iff_sign_nonneg
-  given: {θ : Angle}
-  statement: 0 <= θ.toReal ↔ 0 <= θ.sign
-  proof: by
-  simp only [sign, ← sin_toReal, sign_nonneg_iff]
-  grind [sin_nonneg_of_nonneg_of_le_pi, sin_neg_of_neg_of_neg_pi_lt, toReal_mem_Ioc]
-
-@[simp]
-
-中文:
-定理 to实数_nonneg_iff_sign_nonneg
-  条件: {θ : Angle}
-  结论: 0 <= θ.to实数 ↔ 0 <= θ.sign
-  证明: by
-  simp only [sign, ← sin_toReal, sign_nonneg_iff]
-  grind [sin_nonneg_of_nonneg_of_le_pi, sin_neg_of_neg_of_neg_pi_lt, toReal_mem_Ioc]
-
-@[simp]
-
-Depends on / 依赖: sign_nonneg_iff, sin_neg_of_neg_of_neg_pi_lt, sin_nonneg_of_nonneg_of_le_pi, sin_toReal, toReal_mem_Ioc
+/-
+**Real.Angle.toReal_nonneg_iff_sign_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle
+`。
+形式化陈述：toReal_nonneg_iff_sign_nonneg {θ : Angle} : 0 <= θ.toReal ↔ 0 <= θ.sign
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
-theorem toReal_nonneg_iff_sign_nonneg {θ : Angle} : 0 <= θ.toReal ↔ 0 <= θ.sign := by
+theorem toReal_nonneg_iff_sign_nonneg {θ : Angle} : 0 ≤ θ.toReal ↔ 0 ≤ θ.sign := by
   simp only [sign, ← sin_toReal, sign_nonneg_iff]
   grind [sin_nonneg_of_nonneg_of_le_pi, sin_neg_of_neg_of_neg_pi_lt, toReal_mem_Ioc]
 
 @[simp]
-/--
-theorem `sign_toReal` / 定理 `sign_toReal`
-
-English:
-theorem sign_toReal
-  given: {θ : Angle} (h : θ != π)
-  statement: SignType.sign θ.toReal = θ.sign
-  proof: by
-  rcases lt_trichotomy θ.toReal 0 with (ht | ht | ht)
-  · simp [ht, toReal_neg_iff_sign_neg.1 ht]
-  · simp [sign, ht, ← sin_toReal]
-  · rw [sign, ← sin_toReal, sign_pos ht,
-      sign_pos
-        (sin_pos_of_pos_of_lt_pi ht ((toReal_le_pi θ).lt_of_ne (toReal_eq_pi_iff.not.2 h)))]
-
-中文:
-定理 sign_to实数
-  条件: {θ : Angle} (h : θ != π)
-  结论: SignType.sign θ.to实数 = θ.sign
-  证明: by
-  rcases lt_trichotomy θ.toReal 0 with (ht | ht | ht)
-  · simp [ht, toReal_neg_iff_sign_neg.1 ht]
-  · simp [sign, ht, ← sin_toReal]
-  · rw [sign, ← sin_toReal, sign_pos ht,
-      sign_pos
-        (sin_pos_of_pos_of_lt_pi ht ((toReal_le_pi θ).lt_of_ne (toReal_eq_pi_iff.not.2 h)))]
-
-Depends on / 依赖: CommaMorphism, CommaMorphism.left, lt_of_ne, lt_trichotomy, sign_pos, sin_pos_of_pos_of_lt_pi, sin_toReal, toReal, toReal_eq_pi_iff, toReal_eq_pi_iff.not, toReal_le_pi, toReal_neg_iff_sign_neg
+/-
+**Real.Angle.sign_toReal** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sign_toReal {θ : Angle} (h : θ != π) : SignType.sign θ.toReal = θ.sign
+参数：h : θ != π。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_trichotomy`：lt_trichotomy (a b : α) : a < b ∨ a = b ∨ b < a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sign_neg`：sign_neg (ha : a < 0) : sign a = -1
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Real.Angle.toReal_neg_iff_sign_neg`：toReal_neg_iff_sign_neg {θ : Angle} 
+: θ.toReal < 0 ↔ θ.sign = -1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `sign_zero`：sign_zero : sign (0 : α) = 0
+· 使用定理 `Real.sin_zero`：sin_zero : sin 0 = 0
+· 使用定理 `Real.Angle.sign.eq_1`：∀ (θ : Real.Angle), θ.sign = SignType.sign θ.sin
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.sin_toReal`：sin_toReal (θ : Angle) : Real.sin θ.toReal = sin 
+θ
+· 使用定理 `sign_pos`：sign_pos (ha : 0 < a) : sign a = 1
+· 使用定理 `Real.sin_pos_of_pos_of_lt_pi`：sin_pos_of_pos_of_lt_pi {x : Real} (h0x : 
+0 < x) (hxp : x < π) : 0 < sin x
+· 使用定理 `LE.le.lt_of_ne`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a ≠ b → a < b
+· 使用定理 `Real.Angle.toReal_le_pi`：toReal_le_pi (θ : Angle) : θ.toReal <= π
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Real.Angle.toReal_eq_pi_iff`：toReal_eq_pi_iff {θ : Angle} : θ.toReal = π
+ ↔ θ = π
 -/
-theorem sign_toReal {θ : Angle} (h : θ != π) : SignType.sign θ.toReal = θ.sign := by
+theorem sign_toReal {θ : Angle} (h : θ ≠ π) : SignType.sign θ.toReal = θ.sign := by
   rcases lt_trichotomy θ.toReal 0 with (ht | ht | ht)
   · simp [ht, toReal_neg_iff_sign_neg.1 ht]
   · simp [sign, ht, ← sin_toReal]
   · rw [sign, ← sin_toReal, sign_pos ht,
       sign_pos
         (sin_pos_of_pos_of_lt_pi ht ((toReal_le_pi θ).lt_of_ne (toReal_eq_pi_iff.not.2 h)))]
-
-/--
-lemma `toReal_mem_Ioo_iff_sign_pos` / 引理 `toReal_mem_Ioo_iff_sign_pos`
-
-English:
-lemma toReal_mem_Ioo_iff_sign_pos
-  given: {θ : Angle}
-  proof: by
-  rcases eq_or_ne θ π with rfl | h
-  · simp
-  · simp only [Set.mem_Ioo, ← sign_toReal h, sign_eq_one_iff, and_iff_left_iff_imp]
-    exact fun _ => (toReal_le_pi θ).lt_of_ne (toReal_eq_pi_iff.not.2 h)
-
-中文:
-引理 to实数_mem_Ioo_iff_sign_pos
-  条件: {θ : Angle}
-  证明: by
-  rcases eq_or_ne θ π with rfl | h
-  · simp
-  · simp only [Set.mem_Ioo, ← sign_toReal h, sign_eq_one_iff, and_iff_left_iff_imp]
-    exact fun _ => (toReal_le_pi θ).lt_of_ne (toReal_eq_pi_iff.not.2 h)
-
-Depends on / 依赖: Set.mem_Ioo, and_iff_left_iff_imp, eq_or_ne, lt_of_ne, mem_Ioo, sign_eq_one_iff, sign_toReal, toReal_eq_pi_iff, toReal_eq_pi_iff.not, toReal_le_pi
+/-
+**Real.Angle.toReal_mem_Ioo_iff_sign_pos** 是 Mathlib 中的一个引理，位于命名空间 `Real.Angle`。
+形式化陈述：toReal_mem_Ioo_iff_sign_pos {θ : Angle} : θ.toReal in Set.Ioo 0 π ↔ θ.sign
+ = 1
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.toReal_pi`：toReal_pi : (π : Angle).toReal = π
+· 使用定理 `and_false`：∀ (p : Prop), (p ∧ False) = False
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Real.Angle.sign_coe_pi`：sign_coe_pi : (π : Angle).sign = 0
+· 使用定理 `GroupWithZero.toNontrivial`：∀ {G₀ : Type u} [self : GroupWithZero G₀], N
+ontrivial G₀
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.sign_toReal`：sign_toReal {θ : Angle} (h : θ != π) : SignType.
+sign θ.toReal = θ.sign
+· 使用定理 `LE.le.lt_of_ne`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a ≠ b → a < b
+· 使用定理 `Real.Angle.toReal_le_pi`：toReal_le_pi (θ : Angle) : θ.toReal <= π
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `Real.Angle.toReal_eq_pi_iff`：toReal_eq_pi_iff {θ : Angle} : θ.toReal = π
+ ↔ θ = π
 -/
 lemma toReal_mem_Ioo_iff_sign_pos {θ : Angle} :
-    θ.toReal in Set.Ioo 0 π ↔ θ.sign = 1 := by
+    θ.toReal ∈ Set.Ioo 0 π ↔ θ.sign = 1 := by
   rcases eq_or_ne θ π with rfl | h
   · simp
   · simp only [Set.mem_Ioo, ← sign_toReal h, sign_eq_one_iff, and_iff_left_iff_imp]
-    exact fun _ => (toReal_le_pi θ).lt_of_ne (toReal_eq_pi_iff.not.2 h)
-
-/--
-theorem `coe_abs_toReal_of_sign_nonneg` / 定理 `coe_abs_toReal_of_sign_nonneg`
-
-English:
-theorem coe_abs_toReal_of_sign_nonneg
-  given: {θ : Angle} (h : 0 <= θ.sign)
-  statement: ↑|θ.toReal| = θ
-  proof: by
-  rw [abs_eq_self.2 (toReal_nonneg_iff_sign_nonneg.2 h)]; rw [coe_toReal]
-
-中文:
-定理 coe_abs_to实数_of_sign_nonneg
-  条件: {θ : Angle} (h : 0 <= θ.sign)
-  结论: ↑|θ.to实数| = θ
-  证明: by
-  rw [abs_eq_self.2 (toReal_nonneg_iff_sign_nonneg.2 h)]; rw [coe_toReal]
-
-Depends on / 依赖: abs_eq_self, coe_toReal, toReal_nonneg_iff_sign_nonneg
+    exact fun _ ↦ (toReal_le_pi θ).lt_of_ne (toReal_eq_pi_iff.not.2 h)
+/-
+**Real.Angle.coe_abs_toReal_of_sign_nonneg** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle
+`。
+形式化陈述：coe_abs_toReal_of_sign_nonneg {θ : Angle} (h : 0 <= θ.sign) : ↑|θ.toReal| 
+= θ
+参数：h : 0 <= θ.sign。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `abs_eq_self`：∀ {G : Type u_1} [inst : AddCommGroup G] [inst_1 : LinearOr
+der G] [IsOrderedAddMonoid G] {a : G}, |a| = a ↔ 0 ≤ a
+· 使用定理 `Real.Angle.toReal_nonneg_iff_sign_nonneg`：toReal_nonneg_iff_sign_nonneg 
+{θ : Angle} : 0 <= θ.toReal ↔ 0 <= θ.sign
+· 使用定理 `Real.Angle.coe_toReal`：coe_toReal (θ : Angle) : (θ.toReal : Angle) = θ
 -/
-theorem coe_abs_toReal_of_sign_nonneg {θ : Angle} (h : 0 <= θ.sign) : ↑|θ.toReal| = θ := by
-  rw [abs_eq_self.2 (toReal_nonneg_iff_sign_nonneg.2 h)]; rw [coe_toReal]
-
-/--
-theorem `neg_coe_abs_toReal_of_sign_nonpos` / 定理 `neg_coe_abs_toReal_of_sign_nonpos`
-
-English:
-theorem neg_coe_abs_toReal_of_sign_nonpos
-  given: {θ : Angle} (h : θ.sign <= 0)
-  statement: -↑|θ.toReal| = θ
-  proof: by
-  rw [SignType.nonpos_iff] at h
-  rcases h with (h | h)
-  · rw [abs_of_neg (toReal_neg_iff_sign_neg.2 h), coe_neg, neg_neg, coe_toReal]
-  · rw [sign_eq_zero_iff] at h
-    rcases h with (rfl | rfl) <;> simp [abs_of_pos Real.pi_pos]
-
-中文:
-定理 neg_coe_abs_to实数_of_sign_nonpos
-  条件: {θ : Angle} (h : θ.sign <= 0)
-  结论: -↑|θ.to实数| = θ
-  证明: by
-  rw [SignType.nonpos_iff] at h
-  rcases h with (h | h)
-  · rw [abs_of_neg (toReal_neg_iff_sign_neg.2 h), coe_neg, neg_neg, coe_toReal]
-  · rw [sign_eq_zero_iff] at h
-    rcases h with (rfl | rfl) <;> simp [abs_of_pos Real.pi_pos]
-
-Depends on / 依赖: Real.pi_pos, SignType, SignType.nonpos_iff, abs_of_neg, abs_of_pos, coe_neg, coe_toReal, neg_neg, nonpos_iff, pi_pos, sign_eq_zero_iff, toReal_neg_iff_sign_neg
+theorem coe_abs_toReal_of_sign_nonneg {θ : Angle} (h : 0 ≤ θ.sign) : ↑|θ.toReal| = θ := by
+  rw [abs_eq_self.2 (toReal_nonneg_iff_sign_nonneg.2 h), coe_toReal]
+/-
+**Real.Angle.neg_coe_abs_toReal_of_sign_nonpos** 是 Mathlib 中的一个定理，位于命名空间 `Real.A
+ngle`。
+形式化陈述：neg_coe_abs_toReal_of_sign_nonpos {θ : Angle} (h : θ.sign <= 0) : -↑|θ.toR
+eal| = θ
+参数：h : θ.sign <= 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SignType.nonpos_iff`：nonpos_iff {a : SignType} : a <= 0 ↔ a = -1 ∨ a = 0
+· 使用定理 `abs_of_neg`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] {a
+ : α} [AddLeftMono α], a < 0 → |a| = -a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Real.Angle.toReal_neg_iff_sign_neg`：toReal_neg_iff_sign_neg {θ : Angle} 
+: θ.toReal < 0 ↔ θ.sign = -1
+· 使用定理 `Real.Angle.coe_neg`：coe_neg (x : Real) : ↑(-x : Real) = -(↑x : Angle)
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `Real.Angle.coe_toReal`：coe_toReal (θ : Angle) : (θ.toReal : Angle) = θ
+· 使用定理 `Real.Angle.sign_eq_zero_iff`：sign_eq_zero_iff {θ : Angle} : θ.sign = 0 ↔
+ θ = 0 ∨ θ = π
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Real.Angle.toReal_zero`：toReal_zero : (0 : Angle).toReal = 0
+· 使用定理 `abs_zero`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] [Add
+LeftMono α], |0| = 0
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.toReal_pi`：toReal_pi : (π : Angle).toReal = π
+· 使用定理 `abs_of_pos`：∀ {α : Type u_1} [inst : Lattice α] [inst_1 : AddGroup α] {a
+ : α} [AddLeftMono α], 0 < a → |a| = a
+· 使用定理 `Real.pi_pos`：pi_pos : 0 < π
+· 使用定理 `Real.Angle.neg_coe_pi`：neg_coe_pi : -(π : Angle) = π
 -/
-theorem neg_coe_abs_toReal_of_sign_nonpos {θ : Angle} (h : θ.sign <= 0) : -↑|θ.toReal| = θ := by
+theorem neg_coe_abs_toReal_of_sign_nonpos {θ : Angle} (h : θ.sign ≤ 0) : -↑|θ.toReal| = θ := by
   rw [SignType.nonpos_iff] at h
   rcases h with (h | h)
   · rw [abs_of_neg (toReal_neg_iff_sign_neg.2 h), coe_neg, neg_neg, coe_toReal]
   · rw [sign_eq_zero_iff] at h
     rcases h with (rfl | rfl) <;> simp [abs_of_pos Real.pi_pos]
-
-/--
-theorem `eq_iff_sign_eq_and_abs_toReal_eq` / 定理 `eq_iff_sign_eq_and_abs_toReal_eq`
-
-English:
-theorem eq_iff_sign_eq_and_abs_toReal_eq
-  given: {θ ψ : Angle}
-  proof: by
-  grind [toReal_neg_iff_sign_neg]
-
-中文:
-定理 eq_iff_sign_eq_and_abs_to实数_eq
-  条件: {θ ψ : Angle}
-  证明: by
-  grind [toReal_neg_iff_sign_neg]
-
-Depends on / 依赖: toReal_neg_iff_sign_neg
+/-
+**Real.Angle.eq_iff_sign_eq_and_abs_toReal_eq** 是 Mathlib 中的一个定理，位于命名空间 `Real.An
+gle`。
+形式化陈述：eq_iff_sign_eq_and_abs_toReal_eq {θ ψ : Angle} : θ = ψ ↔ θ.sign = ψ.sign ∧
+ |θ.toReal| = |ψ.toReal|
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eq_iff_sign_eq_and_abs_toReal_eq {θ ψ : Angle} :
     θ = ψ ↔ θ.sign = ψ.sign ∧ |θ.toReal| = |ψ.toReal| := by
   grind [toReal_neg_iff_sign_neg]
-
-/--
-theorem `eq_iff_abs_toReal_eq_of_sign_eq` / 定理 `eq_iff_abs_toReal_eq_of_sign_eq`
-
-English:
-theorem eq_iff_abs_toReal_eq_of_sign_eq
-  given: {θ ψ : Angle} (h : θ.sign = ψ.sign)
-  proof: by simpa [h] using @eq_iff_sign_eq_and_abs_toReal_eq θ ψ
-
-@[simp]
-
-中文:
-定理 eq_iff_abs_to实数_eq_of_sign_eq
-  条件: {θ ψ : Angle} (h : θ.sign = ψ.sign)
-  证明: by simpa [h] using @eq_iff_sign_eq_and_abs_toReal_eq θ ψ
-
-@[simp]
-
-Depends on / 依赖: eq_iff_sign_eq_and_abs_toReal_eq
+/-
+**Real.Angle.eq_iff_abs_toReal_eq_of_sign_eq** 是 Mathlib 中的一个定理，位于命名空间 `Real.Ang
+le`。
+形式化陈述：eq_iff_abs_toReal_eq_of_sign_eq {θ ψ : Angle} (h : θ.sign = ψ.sign) : θ = 
+ψ ↔ |θ.toReal| = |ψ.toReal|
+参数：h : θ.sign = ψ.sign。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `true_and`：∀ (p : Prop), (True ∧ p) = p
+· 使用定理 `Real.Angle.eq_iff_sign_eq_and_abs_toReal_eq`：eq_iff_sign_eq_and_abs_toRe
+al_eq {θ ψ : Angle} : θ = ψ ↔ θ.sign = ψ.sign ∧ |θ.toReal| = |ψ.toReal|
 -/
 theorem eq_iff_abs_toReal_eq_of_sign_eq {θ ψ : Angle} (h : θ.sign = ψ.sign) :
     θ = ψ ↔ |θ.toReal| = |ψ.toReal| := by simpa [h] using @eq_iff_sign_eq_and_abs_toReal_eq θ ψ
 
 @[simp]
-/--
-theorem `sign_coe_pi_div_two` / 定理 `sign_coe_pi_div_two`
-
-English:
-theorem sign_coe_pi_div_two
-  statement: (↑(π / 2) : Angle).sign = 1
-  proof: by
-  rw [sign]; rw [sin_coe]; rw [sin_pi_div_two]; rw [sign_one]
-
-@[simp]
-
-中文:
-定理 sign_coe_pi_div_two
-  结论: (↑(π / 2) : Angle).sign = 1
-  证明: by
-  rw [sign]; rw [sin_coe]; rw [sin_pi_div_two]; rw [sign_one]
-
-@[simp]
-
-Depends on / 依赖: sign_one, sin_coe, sin_pi_div_two
+/-
+**Real.Angle.sign_coe_pi_div_two** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sign_coe_pi_div_two : (↑(π / 2) : Angle).sign = 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.sign.eq_1`：∀ (θ : Real.Angle), θ.sign = SignType.sign θ.sin
+· 使用定理 `Real.Angle.sin_coe`：sin_coe (x : Real) : sin (x : Angle) = Real.sin x
+· 使用定理 `Real.sin_pi_div_two`：sin_pi_div_two : sin (π / 2) = 1
+· 使用定理 `sign_one`：sign_one : sign (1 : α) = 1
 -/
 theorem sign_coe_pi_div_two : (↑(π / 2) : Angle).sign = 1 := by
-  rw [sign]; rw [sin_coe]; rw [sin_pi_div_two]; rw [sign_one]
+  rw [sign, sin_coe, sin_pi_div_two, sign_one]
 
 @[simp]
-/--
-theorem `sign_coe_neg_pi_div_two` / 定理 `sign_coe_neg_pi_div_two`
-
-English:
-theorem sign_coe_neg_pi_div_two
-  statement: (↑(-π / 2) : Angle).sign = -1
-  proof: by
-  rw [sign]; rw [sin_coe]; rw [neg_div]; rw [Real.sin_neg]; rw [sin_pi_div_two]; rw [Left.sign_neg]; rw [sign_one]
-
-中文:
-定理 sign_coe_neg_pi_div_two
-  结论: (↑(-π / 2) : Angle).sign = -1
-  证明: by
-  rw [sign]; rw [sin_coe]; rw [neg_div]; rw [Real.sin_neg]; rw [sin_pi_div_two]; rw [Left.sign_neg]; rw [sign_one]
-
-Depends on / 依赖: Left.sign_neg, Real.sin_neg, neg_div, sign_neg, sign_one, sin_coe, sin_neg, sin_pi_div_two
+/-
+**Real.Angle.sign_coe_neg_pi_div_two** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sign_coe_neg_pi_div_two : (↑(-π / 2) : Angle).sign = -1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.sign.eq_1`：∀ (θ : Real.Angle), θ.sign = SignType.sign θ.sin
+· 使用定理 `Real.Angle.sin_coe`：sin_coe (x : Real) : sin (x : Angle) = Real.sin x
+· 使用引理 `neg_div`：neg_div (a b : R) : -b / a = -(b / a)
+· 使用定理 `Real.sin_neg`：sin_neg : sin (-x) = -sin x
+· 使用定理 `Real.sin_pi_div_two`：sin_pi_div_two : sin (π / 2) = 1
+· 使用定理 `Left.sign_neg`：Left.sign_neg [AddLeftStrictMono α] (a : α) : sign (-a) =
+ -sign a
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `sign_one`：sign_one : sign (1 : α) = 1
 -/
 theorem sign_coe_neg_pi_div_two : (↑(-π / 2) : Angle).sign = -1 := by
-  rw [sign]; rw [sin_coe]; rw [neg_div]; rw [Real.sin_neg]; rw [sin_pi_div_two]; rw [Left.sign_neg]; rw [sign_one]
-
-/--
-theorem `sign_coe_nonneg_of_nonneg_of_le_pi` / 定理 `sign_coe_nonneg_of_nonneg_of_le_pi`
-
-English:
-theorem sign_coe_nonneg_of_nonneg_of_le_pi
-  given: {θ : Real} (h0 : 0 <= θ) (hpi : θ <= π)
-  proof: by
-  rw [sign]; rw [sign_nonneg_iff]
-  exact sin_nonneg_of_nonneg_of_le_pi h0 hpi
-
-中文:
-定理 sign_coe_nonneg_of_nonneg_of_le_pi
-  条件: {θ : 实数} (h0 : 0 <= θ) (hpi : θ <= π)
-  证明: by
-  rw [sign]; rw [sign_nonneg_iff]
-  exact sin_nonneg_of_nonneg_of_le_pi h0 hpi
-
-Depends on / 依赖: sign_nonneg_iff, sin_nonneg_of_nonneg_of_le_pi
+  rw [sign, sin_coe, neg_div, Real.sin_neg, sin_pi_div_two, Left.sign_neg, sign_one]
+/-
+**Real.Angle.sign_coe_nonneg_of_nonneg_of_le_pi** 是 Mathlib 中的一个定理，位于命名空间 `Real.
+Angle`。
+形式化陈述：sign_coe_nonneg_of_nonneg_of_le_pi {θ : Real} (h0 : 0 <= θ) (hpi : θ <= π)
+ : 0 <= (θ : Angle).sign
+参数：h0 : 0 <= θ；hpi : θ <= π。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.sign.eq_1`：∀ (θ : Real.Angle), θ.sign = SignType.sign θ.sin
+· 使用定理 `sign_nonneg_iff`：sign_nonneg_iff : 0 <= sign a ↔ 0 <= a
+· 使用定理 `Real.sin_nonneg_of_nonneg_of_le_pi`：sin_nonneg_of_nonneg_of_le_pi {x : R
+eal} (h0x : 0 <= x) (hxp : x <= π) : 0 <= sin x
 -/
-theorem sign_coe_nonneg_of_nonneg_of_le_pi {θ : Real} (h0 : 0 <= θ) (hpi : θ <= π) :
-    0 <= (θ : Angle).sign := by
-  rw [sign]; rw [sign_nonneg_iff]
+theorem sign_coe_nonneg_of_nonneg_of_le_pi {θ : ℝ} (h0 : 0 ≤ θ) (hpi : θ ≤ π) :
+    0 ≤ (θ : Angle).sign := by
+  rw [sign, sign_nonneg_iff]
   exact sin_nonneg_of_nonneg_of_le_pi h0 hpi
-
-/--
-theorem `sign_neg_coe_nonpos_of_nonneg_of_le_pi` / 定理 `sign_neg_coe_nonpos_of_nonneg_of_le_pi`
-
-English:
-theorem sign_neg_coe_nonpos_of_nonneg_of_le_pi
-  given: {θ : Real} (h0 : 0 <= θ) (hpi : θ <= π)
-  proof: by
-  rw [sign]; rw [sign_nonpos_iff]; rw [sin_neg]; rw [Left.neg_nonpos_iff]
-  exact sin_nonneg_of_nonneg_of_le_pi h0 hpi
-
-中文:
-定理 sign_neg_coe_nonpos_of_nonneg_of_le_pi
-  条件: {θ : 实数} (h0 : 0 <= θ) (hpi : θ <= π)
-  证明: by
-  rw [sign]; rw [sign_nonpos_iff]; rw [sin_neg]; rw [Left.neg_nonpos_iff]
-  exact sin_nonneg_of_nonneg_of_le_pi h0 hpi
-
-Depends on / 依赖: Left.neg_nonpos_iff, neg_nonpos_iff, sign_nonpos_iff, sin_neg, sin_nonneg_of_nonneg_of_le_pi
+/-
+**Real.Angle.sign_neg_coe_nonpos_of_nonneg_of_le_pi** 是 Mathlib 中的一个定理，位于命名空间 `R
+eal.Angle`。
+形式化陈述：sign_neg_coe_nonpos_of_nonneg_of_le_pi {θ : Real} (h0 : 0 <= θ) (hpi : θ <
+= π) : (-θ : Angle).sign <= 0
+参数：h0 : 0 <= θ；hpi : θ <= π。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.sign.eq_1`：∀ (θ : Real.Angle), θ.sign = SignType.sign θ.sin
+· 使用定理 `sign_nonpos_iff`：sign_nonpos_iff : sign a <= 0 ↔ a <= 0
+· 使用定理 `Real.Angle.sin_neg`：sin_neg (θ : Angle) : sin (-θ) = -sin θ
+· 使用定理 `Left.neg_nonpos_iff`：∀ {α : Type u} [inst : AddGroup α] [inst_1 : LE α] 
+[AddLeftMono α] {a : α}, -a ≤ 0 ↔ 0 ≤ a
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Real.sin_nonneg_of_nonneg_of_le_pi`：sin_nonneg_of_nonneg_of_le_pi {x : R
+eal} (h0x : 0 <= x) (hxp : x <= π) : 0 <= sin x
 -/
-theorem sign_neg_coe_nonpos_of_nonneg_of_le_pi {θ : Real} (h0 : 0 <= θ) (hpi : θ <= π) :
-    (-θ : Angle).sign <= 0 := by
-  rw [sign]; rw [sign_nonpos_iff]; rw [sin_neg]; rw [Left.neg_nonpos_iff]
+theorem sign_neg_coe_nonpos_of_nonneg_of_le_pi {θ : ℝ} (h0 : 0 ≤ θ) (hpi : θ ≤ π) :
+    (-θ : Angle).sign ≤ 0 := by
+  rw [sign, sign_nonpos_iff, sin_neg, Left.neg_nonpos_iff]
   exact sin_nonneg_of_nonneg_of_le_pi h0 hpi
-
-/--
-theorem `sign_two_nsmul_eq_sign_iff` / 定理 `sign_two_nsmul_eq_sign_iff`
-
-English:
-theorem sign_two_nsmul_eq_sign_iff
-  given: {θ : Angle}
-  proof: by
-  simp only [sign, sin_two_nsmul, nsmul_eq_mul, Nat.cast_ofNat, sign_mul, Nat.ofNat_pos, sign_pos,
-    one_mul, mul_right_eq_self₀, _root_.sign_eq_zero_iff, sign_eq_one_iff, sin_eq_zero_iff,
-    cos_pos_iff_abs_toReal_lt_pi_div_two]
-  have : 0 < π / 2 := by positivity
-  grind
-
-中文:
-定理 sign_two_nsmul_eq_sign_iff
-  条件: {θ : Angle}
-  证明: by
-  simp only [sign, sin_two_nsmul, nsmul_eq_mul, Nat.cast_ofNat, sign_mul, Nat.ofNat_pos, sign_pos,
-    one_mul, mul_right_eq_self₀, _root_.sign_eq_zero_iff, sign_eq_one_iff, sin_eq_zero_iff,
-    cos_pos_iff_abs_toReal_lt_pi_div_two]
-  have : 0 < π / 2 := by positivity
-  grind
-
-Depends on / 依赖: Nat.cast_ofNat, Nat.ofNat_pos, _root_, _root_.sign_eq_zero_iff, cast_ofNat, cos_pos_iff_abs_toReal_lt_pi_div_two, nsmul_eq_mul, ofNat_pos, one_mul, sign_eq_one_iff, sign_eq_zero_iff, sign_mul, sign_pos, sin_eq_zero_iff, sin_two_nsmul
+/-
+**Real.Angle.sign_two_nsmul_eq_sign_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sign_two_nsmul_eq_sign_iff {θ : Angle} : ((2 : Nat) • θ).sign = θ.sign ↔ θ
+ = π ∨ |θ.toReal| < π / 2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Real.Angle.sin_two_nsmul`：sin_two_nsmul (θ : Angle) : sin (2 • θ) = 2 • 
+(sin θ * cos θ)
+· 使用定理 `nsmul_eq_mul`：∀ {α : Type u} [inst : NonAssocSemiring α] (n : ℕ) (a : α)
+, n • a = ↑n * a
+· 使用定理 `sign_mul`：sign_mul (x y : α) : sign (x * y) = sign x * sign y
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `sign_pos`：sign_pos (ha : 0 < a) : sign a = 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `IsCancelMulZero.toIsLeftCancelMulZero`：∀ {M₀ : Type u} {inst : Mul M₀} {
+inst_1 : Zero M₀} [self : IsCancelMulZero M₀], IsLeftCancelMulZero M₀
+· 使用定理 `GCDMonoid.toIsCancelMulZero`：∀ {α : Type u_2} {inst : CommMonoidWithZero
+ α} [self : GCDMonoid α], IsCancelMulZero α
+· 使用引理 `div_pos`：div_pos (ha : 0 < a) (hb : 0 < b) : 0 < a / b
+· 使用定理 `PosMulReflectLE.toPosMulReflectLT`：∀ {α : Type u_1} [inst : MulZeroClass
+ α] [inst_1 : PartialOrder α] [PosMulReflectLE α], PosMulReflectLT α
+· 使用定理 `PosMulStrictMono.toPosMulReflectLE`：∀ {α : Type u_1} [inst : Mul α] [ins
+t_1 : Zero α] [inst_2 : LinearOrder α] [PosMulStrictMono α], PosMulReflectLE α
+· 使用定理 `IsStrictOrderedRing.toPosMulStrictMono`：∀ {R : Type u_1} {inst : Semirin
+g R} {inst_1 : PartialOrder R} [self : IsStrictOrderedRing R], PosMulStrictMono 
+R
+· 使用定理 `Real.pi_pos`：pi_pos : 0 < π
+· 使用引理 `Mathlib.Meta.Positivity.pos_of_isNat`：pos_of_isNat {n : Nat} [Semiring A
+] [PartialOrder A] [IsOrderedRing A] [Nontrivial A] (h : NormNum.IsNat e n) (w :
+ Nat.ble 1 n = true) : 0 <…
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用引理 `Mathlib.Meta.NormNum.instAtLeastTwo`：instAtLeastTwo (n : Nat) : Nat.AtLe
+astTwo (n + 2)
 -/
 theorem sign_two_nsmul_eq_sign_iff {θ : Angle} :
-    ((2 : Nat) • θ).sign = θ.sign ↔ θ = π ∨ |θ.toReal| < π / 2 := by
+    ((2 : ℕ) • θ).sign = θ.sign ↔ θ = π ∨ |θ.toReal| < π / 2 := by
   simp only [sign, sin_two_nsmul, nsmul_eq_mul, Nat.cast_ofNat, sign_mul, Nat.ofNat_pos, sign_pos,
     one_mul, mul_right_eq_self₀, _root_.sign_eq_zero_iff, sign_eq_one_iff, sin_eq_zero_iff,
     cos_pos_iff_abs_toReal_lt_pi_div_two]
   have : 0 < π / 2 := by positivity
   grind
-
-/--
-theorem `sign_two_zsmul_eq_sign_iff` / 定理 `sign_two_zsmul_eq_sign_iff`
-
-English:
-theorem sign_two_zsmul_eq_sign_iff
-  given: {θ : Angle}
-  proof: by
-  rw [two_zsmul]; rw [← two_nsmul]; rw [sign_two_nsmul_eq_sign_iff]
-
-中文:
-定理 sign_two_zsmul_eq_sign_iff
-  条件: {θ : Angle}
-  证明: by
-  rw [two_zsmul]; rw [← two_nsmul]; rw [sign_two_nsmul_eq_sign_iff]
-
-Depends on / 依赖: sign_two_nsmul_eq_sign_iff, two_nsmul, two_zsmul
+/-
+**Real.Angle.sign_two_zsmul_eq_sign_iff** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sign_two_zsmul_eq_sign_iff {θ : Angle} : ((2 : Int) • θ).sign = θ.sign ↔ θ
+ = π ∨ |θ.toReal| < π / 2
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `two_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 2 • a = a +
+ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `two_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 2 • a = a + a
+· 使用定理 `Real.Angle.sign_two_nsmul_eq_sign_iff`：sign_two_nsmul_eq_sign_iff {θ : A
+ngle} : ((2 : Nat) • θ).sign = θ.sign ↔ θ = π ∨ |θ.toReal| < π / 2
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem sign_two_zsmul_eq_sign_iff {θ : Angle} :
-    ((2 : Int) • θ).sign = θ.sign ↔ θ = π ∨ |θ.toReal| < π / 2 := by
-  rw [two_zsmul]; rw [← two_nsmul]; rw [sign_two_nsmul_eq_sign_iff]
-
-/--
-lemma `sign_two_nsmul_eq_neg_sign_iff` / 引理 `sign_two_nsmul_eq_neg_sign_iff`
-
-English:
-lemma sign_two_nsmul_eq_neg_sign_iff
-  given: {θ : Angle}
-  proof: by
-  simpa [← cos_pos_iff_abs_toReal_lt_pi_div_two, ← cos_neg_iff_pi_div_two_lt_abs_toReal]
-    using sign_two_nsmul_eq_sign_iff (θ := θ + π)
-
-中文:
-引理 sign_two_nsmul_eq_neg_sign_iff
-  条件: {θ : Angle}
-  证明: by
-  simpa [← cos_pos_iff_abs_toReal_lt_pi_div_two, ← cos_neg_iff_pi_div_two_lt_abs_toReal]
-    using sign_two_nsmul_eq_sign_iff (θ := θ + π)
-
-Depends on / 依赖: cos_neg_iff_pi_div_two_lt_abs_toReal, cos_pos_iff_abs_toReal_lt_pi_div_two, sign_two_nsmul_eq_sign_iff
+    ((2 : ℤ) • θ).sign = θ.sign ↔ θ = π ∨ |θ.toReal| < π / 2 := by
+  rw [two_zsmul, ← two_nsmul, sign_two_nsmul_eq_sign_iff]
+/-
+**Real.Angle.sign_two_nsmul_eq_neg_sign_iff** 是 Mathlib 中的一个引理，位于命名空间 `Real.Angl
+e`。
+形式化陈述：sign_two_nsmul_eq_neg_sign_iff {θ : Angle} : ((2 : Nat) • θ).sign = -θ.sig
+n ↔ θ = 0 ∨ π / 2 < |θ.toReal|
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `smul_add`：smul_add (a : M) (b₁ b₂ : A) : a • (b₁ + b₂) = a • b₁ + a • b₂
+· 使用定理 `Real.Angle.two_nsmul_coe_pi`：two_nsmul_coe_pi : (2 : Nat) • (π : Angle) 
+= 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Real.Angle.sign_add_pi`：sign_add_pi (θ : Angle) : (θ + π).sign = -θ.sign
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `Real.Angle.cos_add_pi`：cos_add_pi (θ : Angle) : cos (θ + π) = -cos θ
+· 使用定理 `IsLeftCancelAdd.addLeftStrictMono_of_addLeftMono`：∀ (N : Type u_2) [inst
+ : Add N] [IsLeftCancelAdd N] [inst_2 : PartialOrder N] [AddLeftMono N], AddLeft
+StrictMono N
+· 使用定理 `instIsLeftCancelAddOfAddLeftReflectLE`：∀ {α : Type u_1} [inst : Add α] [
+inst_1 : PartialOrder α] [AddLeftReflectLE α], IsLeftCancelAdd α
+· 使用定理 `AddGroup.addLeftReflectLE_of_addLeftMono`：∀ {N : Type u_2} [inst : AddGr
+oup N] [inst_1 : LE N] [AddLeftMono N], AddLeftReflectLE N
+· 使用定理 `IsOrderedAddMonoid.toAddLeftMono`：∀ {α : Type u_1} [inst : AddCommMonoid
+ α] [inst_1 : Preorder α] [IsOrderedAddMonoid α], AddLeftMono α
+· 使用定理 `Real.Angle.sign_two_nsmul_eq_sign_iff`：sign_two_nsmul_eq_sign_iff {θ : A
+ngle} : ((2 : Nat) • θ).sign = θ.sign ↔ θ = π ∨ |θ.toReal| < π / 2
 -/
 lemma sign_two_nsmul_eq_neg_sign_iff {θ : Angle} :
-    ((2 : Nat) • θ).sign = -θ.sign ↔ θ = 0 ∨ π / 2 < |θ.toReal| := by
+    ((2 : ℕ) • θ).sign = -θ.sign ↔ θ = 0 ∨ π / 2 < |θ.toReal| := by
   simpa [← cos_pos_iff_abs_toReal_lt_pi_div_two, ← cos_neg_iff_pi_div_two_lt_abs_toReal]
     using sign_two_nsmul_eq_sign_iff (θ := θ + π)
-
-/--
-lemma `sign_two_zsmul_eq_neg_sign_iff` / 引理 `sign_two_zsmul_eq_neg_sign_iff`
-
-English:
-lemma sign_two_zsmul_eq_neg_sign_iff
-  given: {θ : Angle}
-  proof: by
-  rw [two_zsmul]; rw [← two_nsmul]; rw [sign_two_nsmul_eq_neg_sign_iff]
-
-中文:
-引理 sign_two_zsmul_eq_neg_sign_iff
-  条件: {θ : Angle}
-  证明: by
-  rw [two_zsmul]; rw [← two_nsmul]; rw [sign_two_nsmul_eq_neg_sign_iff]
-
-Depends on / 依赖: sign_two_nsmul_eq_neg_sign_iff, two_nsmul, two_zsmul
+/-
+**Real.Angle.sign_two_zsmul_eq_neg_sign_iff** 是 Mathlib 中的一个引理，位于命名空间 `Real.Angl
+e`。
+形式化陈述：sign_two_zsmul_eq_neg_sign_iff {θ : Angle} : ((2 : Int) • θ).sign = -θ.sig
+n ↔ θ = 0 ∨ π / 2 < |θ.toReal|
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `two_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 2 • a = a +
+ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `two_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 2 • a = a + a
+· 使用引理 `Real.Angle.sign_two_nsmul_eq_neg_sign_iff`：sign_two_nsmul_eq_neg_sign_if
+f {θ : Angle} : ((2 : Nat) • θ).sign = -θ.sign ↔ θ = 0 ∨ π / 2 < |θ.toReal|
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma sign_two_zsmul_eq_neg_sign_iff {θ : Angle} :
-    ((2 : Int) • θ).sign = -θ.sign ↔ θ = 0 ∨ π / 2 < |θ.toReal| := by
-  rw [two_zsmul]; rw [← two_nsmul]; rw [sign_two_nsmul_eq_neg_sign_iff]
-
-/--
-theorem `eq_add_pi_of_two_zsmul_eq_of_sign_eq_neg` / 定理 `eq_add_pi_of_two_zsmul_eq_of_sign_eq_neg`
-
-English:
-theorem eq_add_pi_of_two_zsmul_eq_of_sign_eq_neg
-  statement: (a b : Real.Angle) (h : (2 : Int) • a = (2 : Int) • b)
-  proof: by
-  have h1 := Real.Angle.two_zsmul_eq_iff.mp h
-  refine h1.resolve_left ?_
-  rintro rfl
-  simp only [SignType.self_eq_neg_iff] at h_sign
-  rw [h_sign] at h_ne
-  contradiction
-
-中文:
-定理 eq_add_pi_of_two_zsmul_eq_of_sign_eq_neg
-  结论: (a b : 实数.Angle) (h : (2 : 整数) • a = (2 : 整数) • b)
-  证明: by
-  have h1 := Real.Angle.two_zsmul_eq_iff.mp h
-  refine h1.resolve_left ?_
-  rintro rfl
-  simp only [SignType.self_eq_neg_iff] at h_sign
-  rw [h_sign] at h_ne
-  contradiction
-
-Depends on / 依赖: Real.Angle.two_zsmul_eq_iff.mp, SignType, SignType.self_eq_neg_iff, h1.resolve_left, h_ne, h_sign, resolve_left, self_eq_neg_iff, two_zsmul_eq_iff
+    ((2 : ℤ) • θ).sign = -θ.sign ↔ θ = 0 ∨ π / 2 < |θ.toReal| := by
+  rw [two_zsmul, ← two_nsmul, sign_two_nsmul_eq_neg_sign_iff]
+/-
+**Real.Angle.eq_add_pi_of_two_zsmul_eq_of_sign_eq_neg** 是 Mathlib 中的一个定理，位于命名空间 
+`Real.Angle`。
+形式化陈述：eq_add_pi_of_two_zsmul_eq_of_sign_eq_neg (a b : Real.Angle) (h : (2 : Int)
+ • a = (2 : Int) • b) (h_sign : a.sign = -b.sign) (h_ne : b.sign != 0) : a = b +
+ π
+参数：a b : Real.Angle；h : (2 : Int) • a = (2 : Int) • b；h_sign : a.sign = -b.sign；
+h_ne : b.sign != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Real.Angle.two_zsmul_eq_iff`：two_zsmul_eq_iff {ψ θ : Angle} : (2 : Int) 
+• ψ = (2 : Int) • θ ↔ ψ = θ ∨ ψ = θ + ↑π
+· 使用定理 `Or.resolve_left`：∀ {a b : Prop}, a ∨ b → ¬a → b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-theorem eq_add_pi_of_two_zsmul_eq_of_sign_eq_neg (a b : Real.Angle) (h : (2 : Int) • a = (2 : Int) • b)
-    (h_sign : a.sign = -b.sign) (h_ne : b.sign != 0) : a = b + π := by
+theorem eq_add_pi_of_two_zsmul_eq_of_sign_eq_neg (a b : Real.Angle) (h : (2 : ℤ) • a = (2 : ℤ) • b)
+    (h_sign : a.sign = -b.sign) (h_ne : b.sign ≠ 0) : a = b + π := by
   have h1 := Real.Angle.two_zsmul_eq_iff.mp h
   refine h1.resolve_left ?_
   rintro rfl
   simp only [SignType.self_eq_neg_iff] at h_sign
   rw [h_sign] at h_ne
   contradiction
-
-/--
-theorem `sub_ne_pi_of_sign_eq_of_sign_ne_zero` / 定理 `sub_ne_pi_of_sign_eq_of_sign_ne_zero`
-
-English:
-theorem sub_ne_pi_of_sign_eq_of_sign_ne_zero
-  statement: (a b : Real.Angle) (h_sign : a.sign = b.sign)
-  proof: by
-  intro h
-  have h' : a = b + π := by
-    simp [← h]
-  have h_sign' := h_sign
-  rw [h']; rw [Real.Angle.sign_add_pi] at h_sign'
-  simp only [SignType.neg_eq_self_iff] at h_sign'
-  contradiction
-
-中文:
-定理 sub_ne_pi_of_sign_eq_of_sign_ne_zero
-  结论: (a b : 实数.Angle) (h_sign : a.sign = b.sign)
-  证明: by
-  intro h
-  have h' : a = b + π := by
-    simp [← h]
-  have h_sign' := h_sign
-  rw [h']; rw [Real.Angle.sign_add_pi] at h_sign'
-  simp only [SignType.neg_eq_self_iff] at h_sign'
-  contradiction
-
-Depends on / 依赖: Real.Angle.sign_add_pi, SignType, SignType.neg_eq_self_iff, h_sign, neg_eq_self_iff, sign_add_pi
+/-
+**Real.Angle.sub_ne_pi_of_sign_eq_of_sign_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `Rea
+l.Angle`。
+形式化陈述：sub_ne_pi_of_sign_eq_of_sign_ne_zero (a b : Real.Angle) (h_sign : a.sign =
+ b.sign) (h_ne : b.sign != 0) : a - b != π
+参数：a b : Real.Angle；h_sign : a.sign = b.sign；h_ne : b.sign != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `add_sub_cancel`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G), a + 
+(b - a) = b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Real.Angle.sign_add_pi`：sign_add_pi (θ : Angle) : (θ + π).sign = -θ.sign
 -/
 theorem sub_ne_pi_of_sign_eq_of_sign_ne_zero (a b : Real.Angle) (h_sign : a.sign = b.sign)
-    (h_ne : b.sign != 0) : a - b != π := by
+    (h_ne : b.sign ≠ 0) : a - b ≠ π := by
   intro h
   have h' : a = b + π := by
     simp [← h]
   have h_sign' := h_sign
-  rw [h']; rw [Real.Angle.sign_add_pi] at h_sign'
+  rw [h', Real.Angle.sign_add_pi] at h_sign'
   simp only [SignType.neg_eq_self_iff] at h_sign'
   contradiction
-
-/--
-theorem `two_zsmul_eq_iff_eq` / 定理 `two_zsmul_eq_iff_eq`
-
-English:
-theorem two_zsmul_eq_iff_eq
-  given: {a b : Real.Angle} (ha : a.sign != 0) (h : a.sign = b.sign)
-  proof: by
-  rw [Real.Angle.two_zsmul_eq_iff]
-  constructor
-  · intro h
-    rcases h with h1 | h2
-    · exact h1
-    · have : a.sign = (b + π).sign := by aesop
-      rw [Real.Angle.sign_add_pi] at this
-      have := congr_arg (· = b.sign) this
-      aesop
-  · intro h
-    aesop
-
-中文:
-定理 two_zsmul_eq_iff_eq
-  条件: {a b : 实数.Angle} (ha : a.sign != 0) (h : a.sign = b.sign)
-  证明: by
-  rw [Real.Angle.two_zsmul_eq_iff]
-  constructor
-  · intro h
-    rcases h with h1 | h2
-    · exact h1
-    · have : a.sign = (b + π).sign := by aesop
-      rw [Real.Angle.sign_add_pi] at this
-      have := congr_arg (· = b.sign) this
-      aesop
-  · intro h
-    aesop
-
-Depends on / 依赖: Real.Angle.sign_add_pi, Real.Angle.two_zsmul_eq_iff, a.sign, b.sign, congr_arg, sign_add_pi, two_zsmul_eq_iff
+/-
+**Real.Angle.two_zsmul_eq_iff_eq** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：two_zsmul_eq_iff_eq {a b : Real.Angle} (ha : a.sign != 0) (h : a.sign = b.
+sign) : (2 : Int) • a = (2 : Int) • b ↔ a = b
+参数：ha : a.sign != 0；h : a.sign = b.sign。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.two_zsmul_eq_iff`：two_zsmul_eq_iff {ψ θ : Angle} : (2 : Int) 
+• ψ = (2 : Int) • θ ↔ ψ = θ ∨ ψ = θ + ↑π
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Real.Angle.sign_add_pi`：sign_add_pi (θ : Angle) : (θ + π).sign = -θ.sign
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `AddLeftCancelSemigroup.toIsLeftCancelAdd`：∀ {G : Type u} [self : AddLeft
+CancelSemigroup G], IsLeftCancelAdd G
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
 -/
-theorem two_zsmul_eq_iff_eq {a b : Real.Angle} (ha : a.sign != 0) (h : a.sign = b.sign) :
-    (2 : Int) • a = (2 : Int) • b ↔ a = b := by
+theorem two_zsmul_eq_iff_eq {a b : Real.Angle} (ha : a.sign ≠ 0) (h : a.sign = b.sign) :
+    (2 : ℤ) • a = (2 : ℤ) • b ↔ a = b := by
   rw [Real.Angle.two_zsmul_eq_iff]
   constructor
   · intro h
@@ -4513,340 +4238,321 @@ theorem two_zsmul_eq_iff_eq {a b : Real.Angle} (ha : a.sign != 0) (h : a.sign = 
       aesop
   · intro h
     aesop
-
-/--
-lemma `abs_toReal_add_abs_toReal_eq_pi_of_two_nsmul_add_eq_zero_of_sign_eq` / 引理 `abs_toReal_add_abs_toReal_eq_pi_of_two_nsmul_add_eq_zero_of_sign_eq`
-
-English:
-lemma abs_toReal_add_abs_toReal_eq_pi_of_two_nsmul_add_eq_zero_of_sign_eq
-  statement: {θ ψ : Angle}
-  proof: by
-  rcases two_nsmul_eq_zero_iff.mp h with h | h
-  · simp_all [add_eq_zero_iff_eq_neg.mp h]
-  rw [← coe_toReal θ]; rw [← coe_toReal ψ]; rw [← coe_add] at h
-  suffices |θ.toReal + ψ.toReal| = π by grind [toReal_neg_iff_sign_neg, abs_add_eq_add_abs_iff]
-  rw [abs_eq pi_nonneg]
-  rcases angle_eq_iff_two_pi_dvd_sub.mp h with ⟨k, hk⟩
-  rw [sub_eq_iff_eq_add] at hk
-  have : k in Finset.Icc (-1) 0 :=
-IsStrictOrderedRing.int_mem_Icc_of_mul_mem_Ioo two_pi_pos by grind [toReal_mem_Ioc]
-  fin_cases this
-  all_goals simp at hk; grind
-
-中文:
-引理 abs_to实数_add_abs_to实数_eq_pi_of_two_nsmul_add_eq_zero_of_sign_eq
-  结论: {θ ψ : Angle}
-  证明: by
-  rcases two_nsmul_eq_zero_iff.mp h with h | h
-  · simp_all [add_eq_zero_iff_eq_neg.mp h]
-  rw [← coe_toReal θ]; rw [← coe_toReal ψ]; rw [← coe_add] at h
-  suffices |θ.toReal + ψ.toReal| = π by grind [toReal_neg_iff_sign_neg, abs_add_eq_add_abs_iff]
-  rw [abs_eq pi_nonneg]
-  rcases angle_eq_iff_two_pi_dvd_sub.mp h with ⟨k, hk⟩
-  rw [sub_eq_iff_eq_add] at hk
-  have : k in Finset.Icc (-1) 0 :=
-IsStrictOrderedRing.int_mem_Icc_of_mul_mem_Ioo two_pi_pos by grind [toReal_mem_Ioc]
-  fin_cases this
-  all_goals simp at hk; grind
-
-Depends on / 依赖: Finset, Finset.Icc, IsStrictOrderedRing, IsStrictOrderedRing.int_mem_Icc_of_mul_mem_Ioo, abs_add_eq_add_abs_iff, abs_eq, add_eq_zero_iff_eq_neg, add_eq_zero_iff_eq_neg.mp, all_goals, angle_eq_iff_two_pi_dvd_sub, angle_eq_iff_two_pi_dvd_sub.mp, coe_add, coe_toReal, fin_cases, int_mem_Icc_of_mul_mem_Ioo, pi_nonneg, sub_eq_iff_eq_add, toReal, toReal_mem_Ioc, toReal_neg_iff_sign_neg
+/-
+**Real.Angle.abs_toReal_add_abs_toReal_eq_pi_of_two_nsmul_add_eq_zero_of_sign_eq
+** 是 Mathlib 中的一个引理，位于命名空间 `Real.Angle`。
+形式化陈述：abs_toReal_add_abs_toReal_eq_pi_of_two_nsmul_add_eq_zero_of_sign_eq {θ ψ :
+ Angle} (h : (2 : Nat) • (θ + ψ) = 0) (hs : θ.sign = ψ.sign) (h0 : θ.sign != 0) 
+: |θ.toReal| + |ψ.toReal| = π
+参数：h : (2 : Nat) • (θ + ψ) = 0；hs : θ.sign = ψ.sign；h0 : θ.sign != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Real.Angle.two_nsmul_eq_zero_iff`：two_nsmul_eq_zero_iff {θ : Angle} : (2
+ : Nat) • θ = 0 ↔ θ = 0 ∨ θ = π
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_eq_zero_iff_eq_neg`：∀ {G : Type u_3} [inst : AddGroup G] {a b : G}, 
+a + b = 0 ↔ a = -b
+· 使用定理 `Real.Angle.sign_neg`：sign_neg (θ : Angle) : (-θ).sign = -θ.sign
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `abs_eq`：∀ {G : Type u_1} [inst : AddCommGroup G] [inst_1 : LinearOrder G
+] [IsOrderedAddMonoid G] {a b : G},   0 ≤ b → (|a| = b ↔ a = b ∨ a = -b)
+· 使用定理 `Real.pi_nonneg`：pi_nonneg : 0 <= π
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `Real.Angle.angle_eq_iff_two_pi_dvd_sub`：angle_eq_iff_two_pi_dvd_sub {ψ θ
+ : Real} : (θ : Angle) = ψ ↔ exists k : Int, θ - ψ = 2 * π * k
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.coe_add`：coe_add (x y : Real) : ↑(x + y : Real) = (↑x + ↑y : 
+Angle)
+· 使用定理 `Real.Angle.coe_toReal`：coe_toReal (θ : Angle) : (θ.toReal : Angle) = θ
+· 使用引理 `IsStrictOrderedRing.int_mem_Icc_of_mul_mem_Ioo`：IsStrictOrderedRing.int_
+mem_Icc_of_mul_mem_Ioo {r : R} (hr : 0 < r) {k m n : Int} (h : r * k in Set.Ioo 
+(r * (m - 1 : Int)) (r * (n + 1 : In…
+· 使用定理 `Real.two_pi_pos`：two_pi_pos : 0 < 2 * π
+· 使用定理 `sub_eq_iff_eq_add`：∀ {G : Type u_3} [inst : AddGroup G] {a b c : G}, a -
+ b = c ↔ a = c + b
+· 使用定理 `Function.Embedding.trans_apply`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sor
+t u_3} (f : α ↪ β) (g : β ↪ γ) (a : α), (f.trans g) a = g (f a)
+· 使用定理 `Nat.castEmbedding_apply`：∀ {R : Type u_2} [inst : AddMonoidWithOne R] [i
+nst_1 : CharZero R] (a : ℕ), Nat.castEmbedding a = ↑a
+· 使用定理 `CharP.cast_eq_zero`：∀ (R : Type u_1) [inst : AddMonoidWithOne R] (p : ℕ)
+ [CharP R p], ↑p = 0
+· 使用定理 `addLeftEmbedding_apply`：∀ {G : Type u_1} [inst : Add G] [inst_1 : IsLeft
+CancelAdd G] (g h : G), (addLeftEmbedding g) h = g + h
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `Int.cast_neg`：∀ {R : Type u} [inst : AddGroupWithOne R] (n : ℤ), ↑(-n) =
+ -↑n
+· 使用定理 `Int.cast_one`：cast_one : ((1 : Int) : R) = 1
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+（共 37 条，此处仅展示前 30 条）
 -/
 lemma abs_toReal_add_abs_toReal_eq_pi_of_two_nsmul_add_eq_zero_of_sign_eq {θ ψ : Angle}
-    (h : (2 : Nat) • (θ + ψ) = 0) (hs : θ.sign = ψ.sign) (h0 : θ.sign != 0) :
+    (h : (2 : ℕ) • (θ + ψ) = 0) (hs : θ.sign = ψ.sign) (h0 : θ.sign ≠ 0) :
     |θ.toReal| + |ψ.toReal| = π := by
   rcases two_nsmul_eq_zero_iff.mp h with h | h
   · simp_all [add_eq_zero_iff_eq_neg.mp h]
-  rw [← coe_toReal θ]; rw [← coe_toReal ψ]; rw [← coe_add] at h
+  rw [← coe_toReal θ, ← coe_toReal ψ, ← coe_add] at h
   suffices |θ.toReal + ψ.toReal| = π by grind [toReal_neg_iff_sign_neg, abs_add_eq_add_abs_iff]
   rw [abs_eq pi_nonneg]
   rcases angle_eq_iff_two_pi_dvd_sub.mp h with ⟨k, hk⟩
   rw [sub_eq_iff_eq_add] at hk
-  have : k in Finset.Icc (-1) 0 :=
-IsStrictOrderedRing.int_mem_Icc_of_mul_mem_Ioo two_pi_pos by grind [toReal_mem_Ioc]
+  have : k ∈ Finset.Icc (-1) 0 :=
+    IsStrictOrderedRing.int_mem_Icc_of_mul_mem_Ioo two_pi_pos <| by grind [toReal_mem_Ioc]
   fin_cases this
   all_goals simp at hk; grind
-
-/--
-lemma `abs_toReal_add_abs_toReal_eq_pi_of_two_zsmul_add_eq_zero_of_sign_eq` / 引理 `abs_toReal_add_abs_toReal_eq_pi_of_two_zsmul_add_eq_zero_of_sign_eq`
-
-English:
-lemma abs_toReal_add_abs_toReal_eq_pi_of_two_zsmul_add_eq_zero_of_sign_eq
-  statement: {θ ψ : Angle}
-  proof: by
-  rw [two_zsmul]; rw [← two_nsmul] at h
-  exact abs_toReal_add_abs_toReal_eq_pi_of_two_nsmul_add_eq_zero_of_sign_eq h hs h0
-
-中文:
-引理 abs_to实数_add_abs_to实数_eq_pi_of_two_zsmul_add_eq_zero_of_sign_eq
-  结论: {θ ψ : Angle}
-  证明: by
-  rw [two_zsmul]; rw [← two_nsmul] at h
-  exact abs_toReal_add_abs_toReal_eq_pi_of_two_nsmul_add_eq_zero_of_sign_eq h hs h0
-
-Depends on / 依赖: abs_toReal_add_abs_toReal_eq_pi_of_two_nsmul_add_eq_zero_of_sign_eq, two_nsmul, two_zsmul
+/-
+**Real.Angle.abs_toReal_add_abs_toReal_eq_pi_of_two_zsmul_add_eq_zero_of_sign_eq
+** 是 Mathlib 中的一个引理，位于命名空间 `Real.Angle`。
+形式化陈述：abs_toReal_add_abs_toReal_eq_pi_of_two_zsmul_add_eq_zero_of_sign_eq {θ ψ :
+ Angle} (h : (2 : Int) • (θ + ψ) = 0) (hs : θ.sign = ψ.sign) (h0 : θ.sign != 0) 
+: |θ.toReal| + |ψ.toReal| = π
+参数：h : (2 : Int) • (θ + ψ) = 0；hs : θ.sign = ψ.sign；h0 : θ.sign != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Real.Angle.abs_toReal_add_abs_toReal_eq_pi_of_two_nsmul_add_eq_zero_of_s
+ign_eq`：abs_toReal_add_abs_toReal_eq_pi_of_two_nsmul_add_eq_zero_of_sign_eq {θ ψ
+ : Angle} (h : (2 : Nat) • (θ + ψ) = 0) (hs : θ.sign = ψ.sign) (h0 :…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `two_nsmul`：∀ {M : Type u_2} [inst : AddMonoid M] (a : M), 2 • a = a + a
+· 使用定理 `two_zsmul`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a : G), 2 • a = a +
+ a
 -/
 lemma abs_toReal_add_abs_toReal_eq_pi_of_two_zsmul_add_eq_zero_of_sign_eq {θ ψ : Angle}
-    (h : (2 : Int) • (θ + ψ) = 0) (hs : θ.sign = ψ.sign) (h0 : θ.sign != 0) :
+    (h : (2 : ℤ) • (θ + ψ) = 0) (hs : θ.sign = ψ.sign) (h0 : θ.sign ≠ 0) :
     |θ.toReal| + |ψ.toReal| = π := by
-  rw [two_zsmul]; rw [← two_nsmul] at h
+  rw [two_zsmul, ← two_nsmul] at h
   exact abs_toReal_add_abs_toReal_eq_pi_of_two_nsmul_add_eq_zero_of_sign_eq h hs h0
-
-/--
-lemma `toReal_add_of_sign_pos_sign_neg` / 引理 `toReal_add_of_sign_pos_sign_neg`
-
-English:
-lemma toReal_add_of_sign_pos_sign_neg
-  statement: {θ ψ : Angle}
-  proof: by
-  suffices ((θ.toReal + ψ.toReal : Real) : Angle).toReal = θ.toReal + ψ.toReal by simpa using this
-  rw [toReal_coe_eq_self_iff]
-  grind [toReal_mem_Ioc, toReal_neg_iff_sign_neg, toReal_mem_Ioo_iff_sign_pos]
-
-中文:
-引理 to实数_add_of_sign_pos_sign_neg
-  结论: {θ ψ : Angle}
-  证明: by
-  suffices ((θ.toReal + ψ.toReal : Real) : Angle).toReal = θ.toReal + ψ.toReal by simpa using this
-  rw [toReal_coe_eq_self_iff]
-  grind [toReal_mem_Ioc, toReal_neg_iff_sign_neg, toReal_mem_Ioo_iff_sign_pos]
-
-Depends on / 依赖: toReal, toReal_coe_eq_self_iff, toReal_mem_Ioc, toReal_mem_Ioo_iff_sign_pos, toReal_neg_iff_sign_neg
+/-
+**Real.Angle.toReal_add_of_sign_pos_sign_neg** 是 Mathlib 中的一个引理，位于命名空间 `Real.Ang
+le`。
+形式化陈述：toReal_add_of_sign_pos_sign_neg {θ ψ : Angle} (hθ : θ.sign = 1) (hψ : ψ.si
+gn = -1) : (θ + ψ).toReal = θ.toReal + ψ.toReal
+参数：hθ : θ.sign = 1；hψ : ψ.sign = -1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Real.Angle.toReal_coe_eq_self_iff`：toReal_coe_eq_self_iff {θ : Real} : (
+θ : Angle).toReal = θ ↔ -π < θ ∧ θ <= π
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Real.Angle.coe_toReal`：coe_toReal (θ : Angle) : (θ.toReal : Angle) = θ
 -/
 lemma toReal_add_of_sign_pos_sign_neg {θ ψ : Angle}
     (hθ : θ.sign = 1) (hψ : ψ.sign = -1) : (θ + ψ).toReal = θ.toReal + ψ.toReal := by
-  suffices ((θ.toReal + ψ.toReal : Real) : Angle).toReal = θ.toReal + ψ.toReal by simpa using this
+  suffices ((θ.toReal + ψ.toReal : ℝ) : Angle).toReal = θ.toReal + ψ.toReal by simpa using this
   rw [toReal_coe_eq_self_iff]
   grind [toReal_mem_Ioc, toReal_neg_iff_sign_neg, toReal_mem_Ioo_iff_sign_pos]
-
-/--
-lemma `toReal_add_of_sign_eq_neg_sign` / 引理 `toReal_add_of_sign_eq_neg_sign`
-
-English:
-lemma toReal_add_of_sign_eq_neg_sign
-  statement: {θ ψ : Angle} (hψ : θ != π ∨ ψ != π)
-  proof: by
-  obtain (h | h | h) := ψ.sign.trichotomy
-  all_goals grind [neg_neg, add_comm, toReal_add_of_sign_pos_sign_neg]
-
-中文:
-引理 to实数_add_of_sign_eq_neg_sign
-  结论: {θ ψ : Angle} (hψ : θ != π ∨ ψ != π)
-  证明: by
-  obtain (h | h | h) := ψ.sign.trichotomy
-  all_goals grind [neg_neg, add_comm, toReal_add_of_sign_pos_sign_neg]
-
-Depends on / 依赖: add_comm, all_goals, neg_neg, sign.trichotomy, toReal_add_of_sign_pos_sign_neg, trichotomy
+/-
+**Real.Angle.toReal_add_of_sign_eq_neg_sign** 是 Mathlib 中的一个引理，位于命名空间 `Real.Angl
+e`。
+形式化陈述：toReal_add_of_sign_eq_neg_sign {θ ψ : Angle} (hψ : θ != π ∨ ψ != π) (hs : 
+θ.sign = -ψ.sign) : (θ + ψ).toReal = θ.toReal + ψ.toReal
+参数：hψ : θ != π ∨ ψ != π；hs : θ.sign = -ψ.sign。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SignType.trichotomy`：trichotomy (a : SignType) : a = -1 ∨ a = 0 ∨ a = 1
 -/
-lemma toReal_add_of_sign_eq_neg_sign {θ ψ : Angle} (hψ : θ != π ∨ ψ != π)
+lemma toReal_add_of_sign_eq_neg_sign {θ ψ : Angle} (hψ : θ ≠ π ∨ ψ ≠ π)
     (hs : θ.sign = -ψ.sign) : (θ + ψ).toReal = θ.toReal + ψ.toReal := by
   obtain (h | h | h) := ψ.sign.trichotomy
   all_goals grind [neg_neg, add_comm, toReal_add_of_sign_pos_sign_neg]
-
-/--
-lemma `toReal_add_eq_toReal_add_toReal` / 引理 `toReal_add_eq_toReal_add_toReal`
-
-English:
-lemma toReal_add_eq_toReal_add_toReal
-  statement: {θ ψ : Angle} (hθ : θ != π) (hψ : ψ != π)
-  proof: by
-  obtain (hs | hs) := hs
-  · obtain (h | h | h) := ψ.sign.trichotomy <;> obtain (h | h | h) := θ.sign.trichotomy
-    all_goals grind [add_comm, toReal_add_of_sign_pos_sign_neg, sign_eq_zero_iff]
-  · rw [← neg_neg θ.sign, ← sign_neg] at hs
-    have := toReal_add_of_sign_eq_neg_sign (.inr <| by simpa [neg_eq_iff_eq_neg]) hs.symm
-    simpa [toReal_neg_eq_neg_toReal_iff.mpr, hθ, ← sub_eq_add_neg, eq_sub_iff_add_eq', eq_comm]
-
-中文:
-引理 to实数_add_eq_to实数_add_to实数
-  结论: {θ ψ : Angle} (hθ : θ != π) (hψ : ψ != π)
-  证明: by
-  obtain (hs | hs) := hs
-  · obtain (h | h | h) := ψ.sign.trichotomy <;> obtain (h | h | h) := θ.sign.trichotomy
-    all_goals grind [add_comm, toReal_add_of_sign_pos_sign_neg, sign_eq_zero_iff]
-  · rw [← neg_neg θ.sign, ← sign_neg] at hs
-    have := toReal_add_of_sign_eq_neg_sign (.inr <| by simpa [neg_eq_iff_eq_neg]) hs.symm
-    simpa [toReal_neg_eq_neg_toReal_iff.mpr, hθ, ← sub_eq_add_neg, eq_sub_iff_add_eq', eq_comm]
-
-Depends on / 依赖: add_comm, all_goals, eq_comm, eq_sub_iff_add_eq, hs.symm, neg_eq_iff_eq_neg, neg_neg, sign.trichotomy, sign_eq_zero_iff, sign_neg, sub_eq_add_neg, toReal_add_of_sign_eq_neg_sign, toReal_add_of_sign_pos_sign_neg, toReal_neg_eq_neg_toReal_iff, toReal_neg_eq_neg_toReal_iff.mpr, trichotomy
+/-
+**Real.Angle.toReal_add_eq_toReal_add_toReal** 是 Mathlib 中的一个引理，位于命名空间 `Real.Ang
+le`。
+形式化陈述：toReal_add_eq_toReal_add_toReal {θ ψ : Angle} (hθ : θ != π) (hψ : ψ != π) 
+(hs : θ.sign != ψ.sign ∨ θ.sign = (θ + ψ).sign) : (θ + ψ).toReal = θ.toReal + ψ.
+toReal
+参数：hθ : θ != π；hψ : ψ != π；hs : θ.sign != ψ.sign ∨ θ.sign = (θ + ψ).sign。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SignType.trichotomy`：trichotomy (a : SignType) : a = -1 ∨ a = 0 ∨ a = 1
+· 使用引理 `Real.Angle.toReal_add_of_sign_eq_neg_sign`：toReal_add_of_sign_eq_neg_sig
+n {θ ψ : Angle} (hψ : θ != π ∨ ψ != π) (hs : θ.sign = -ψ.sign) : (θ + ψ).toReal 
+= θ.toReal + ψ.toReal
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Real.Angle.neg_coe_pi`：neg_coe_pi : -(π : Angle) = π
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Real.Angle.sign_neg`：sign_neg (θ : Angle) : (-θ).sign = -θ.sign
+· 使用定理 `neg_neg`：∀ {G : Type u_1} [inst : InvolutiveNeg G] (a : G), - -a = a
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `add_sub_cancel_left`：∀ {G : Type u_3} [inst : AddCommGroup G] (a b : G),
+ a + b - a = b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Real.Angle.toReal_neg_eq_neg_toReal_iff`：toReal_neg_eq_neg_toReal_iff {θ
+ : Angle} : (-θ).toReal = -(θ.toReal) ↔ θ != π
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `not_false_eq_true`：(¬False) = True
 -/
-lemma toReal_add_eq_toReal_add_toReal {θ ψ : Angle} (hθ : θ != π) (hψ : ψ != π)
-    (hs : θ.sign != ψ.sign ∨ θ.sign = (θ + ψ).sign) : (θ + ψ).toReal = θ.toReal + ψ.toReal := by
+lemma toReal_add_eq_toReal_add_toReal {θ ψ : Angle} (hθ : θ ≠ π) (hψ : ψ ≠ π)
+    (hs : θ.sign ≠ ψ.sign ∨ θ.sign = (θ + ψ).sign) : (θ + ψ).toReal = θ.toReal + ψ.toReal := by
   obtain (hs | hs) := hs
   · obtain (h | h | h) := ψ.sign.trichotomy <;> obtain (h | h | h) := θ.sign.trichotomy
     all_goals grind [add_comm, toReal_add_of_sign_pos_sign_neg, sign_eq_zero_iff]
   · rw [← neg_neg θ.sign, ← sign_neg] at hs
     have := toReal_add_of_sign_eq_neg_sign (.inr <| by simpa [neg_eq_iff_eq_neg]) hs.symm
     simpa [toReal_neg_eq_neg_toReal_iff.mpr, hθ, ← sub_eq_add_neg, eq_sub_iff_add_eq', eq_comm]
-
-/--
-lemma `abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal_aux` / 引理 `abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal_aux`
-
-English:
-lemma abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal_aux
-  statement: {θ ψ : Angle}
-  proof: by
-  rw [← toReal_mem_Ioo_iff_sign_pos] at hθs hψs
-  have : ((θ + ψ).toReal : Angle) = ↑(θ.toReal + ψ.toReal) := by simp
-  obtain ⟨k, hk⟩ := angle_eq_iff_two_pi_dvd_sub.mp this
-  obtain (h | h) : (θ + ψ).toReal <= 0 ∨ θ + ψ = π := by
-    have := (θ + ψ).sign.trichotomy
-    grind [sign_eq_zero_iff, toReal_eq_zero_iff, toReal_neg_iff_sign_neg]
-· obtain rfl : k = -1 := IsStrictOrderedRing.int_eq_of_mul_mem_Ioo two_pi_pos by
-      grind [toReal_mem_Ioc]
-    grind [abs_of_nonpos]
-  · simp_all only [sign_coe_pi, ne_eq, zero_ne_one, not_false_eq_true, toReal_pi, coe_add,
-      coe_toReal, pi_pos, abs_of_pos]
-    obtain rfl : k = 0 := IsStrictOrderedRing.int_eq_of_mul_mem_Ioo two_pi_pos (by grind)
-    grind
-
-中文:
-引理 abs_to实数_add_eq_two_pi_sub_abs_to实数_add_abs_to实数_aux
-  结论: {θ ψ : Angle}
-  证明: by
-  rw [← toReal_mem_Ioo_iff_sign_pos] at hθs hψs
-  have : ((θ + ψ).toReal : Angle) = ↑(θ.toReal + ψ.toReal) := by simp
-  obtain ⟨k, hk⟩ := angle_eq_iff_two_pi_dvd_sub.mp this
-  obtain (h | h) : (θ + ψ).toReal <= 0 ∨ θ + ψ = π := by
-    have := (θ + ψ).sign.trichotomy
-    grind [sign_eq_zero_iff, toReal_eq_zero_iff, toReal_neg_iff_sign_neg]
-· obtain rfl : k = -1 := IsStrictOrderedRing.int_eq_of_mul_mem_Ioo two_pi_pos by
-      grind [toReal_mem_Ioc]
-    grind [abs_of_nonpos]
-  · simp_all only [sign_coe_pi, ne_eq, zero_ne_one, not_false_eq_true, toReal_pi, coe_add,
-      coe_toReal, pi_pos, abs_of_pos]
-    obtain rfl : k = 0 := IsStrictOrderedRing.int_eq_of_mul_mem_Ioo two_pi_pos (by grind)
-    grind
+/-
+**Real.Angle.abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal_aux** 是 Math
+lib 中的一个引理，位于命名空间 `Real.Angle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal_aux {θ ψ : Angle}
     (hθs : θ.sign = 1) (hψs : ψ.sign = 1)
-    (hsa : (θ + ψ).sign != 1) : |(θ + ψ).toReal| = 2 * π - (|θ.toReal| + |ψ.toReal|) := by
+    (hsa : (θ + ψ).sign ≠ 1) : |(θ + ψ).toReal| = 2 * π - (|θ.toReal| + |ψ.toReal|) := by
   rw [← toReal_mem_Ioo_iff_sign_pos] at hθs hψs
   have : ((θ + ψ).toReal : Angle) = ↑(θ.toReal + ψ.toReal) := by simp
   obtain ⟨k, hk⟩ := angle_eq_iff_two_pi_dvd_sub.mp this
-  obtain (h | h) : (θ + ψ).toReal <= 0 ∨ θ + ψ = π := by
+  obtain (h | h) : (θ + ψ).toReal ≤ 0 ∨ θ + ψ = π := by
     have := (θ + ψ).sign.trichotomy
     grind [sign_eq_zero_iff, toReal_eq_zero_iff, toReal_neg_iff_sign_neg]
-· obtain rfl : k = -1 := IsStrictOrderedRing.int_eq_of_mul_mem_Ioo two_pi_pos by
+  · obtain rfl : k = -1 := IsStrictOrderedRing.int_eq_of_mul_mem_Ioo two_pi_pos <| by
       grind [toReal_mem_Ioc]
     grind [abs_of_nonpos]
   · simp_all only [sign_coe_pi, ne_eq, zero_ne_one, not_false_eq_true, toReal_pi, coe_add,
       coe_toReal, pi_pos, abs_of_pos]
     obtain rfl : k = 0 := IsStrictOrderedRing.int_eq_of_mul_mem_Ioo two_pi_pos (by grind)
     grind
-
-/--
-lemma `abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal` / 引理 `abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal`
-
-English:
-lemma abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal
-  statement: {θ ψ : Angle} (hs : θ.sign = ψ.sign)
-  proof: by
-  obtain h | h | h := θ.sign.trichotomy
-  · obtain ⟨hθ', hψ'⟩ : (-θ).sign = 1 ∧ (-ψ).sign = 1 := by grind [sign_neg, neg_neg]
-    have hsa' : (-θ + -ψ).sign != 1 := by
-      rwa [← hθ', ne_comm, ← neg_add, sign_neg, sign_neg, neg_injective.ne_iff]
-    convert! abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal_aux hθ' hψ' hsa' using 1
-    all_goals simp [-neg_add_rev, ← neg_add, abs_toReal_neg]
-  · grind [sign_eq_zero_iff, coe_pi_add_coe_pi]
-  · exact abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal_aux h (hs ▸ h) (h ▸ hsa.symm)
-
-中文:
-引理 abs_to实数_add_eq_two_pi_sub_abs_to实数_add_abs_to实数
-  结论: {θ ψ : Angle} (hs : θ.sign = ψ.sign)
-  证明: by
-  obtain h | h | h := θ.sign.trichotomy
-  · obtain ⟨hθ', hψ'⟩ : (-θ).sign = 1 ∧ (-ψ).sign = 1 := by grind [sign_neg, neg_neg]
-    have hsa' : (-θ + -ψ).sign != 1 := by
-      rwa [← hθ', ne_comm, ← neg_add, sign_neg, sign_neg, neg_injective.ne_iff]
-    convert! abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal_aux hθ' hψ' hsa' using 1
-    all_goals simp [-neg_add_rev, ← neg_add, abs_toReal_neg]
-  · grind [sign_eq_zero_iff, coe_pi_add_coe_pi]
-  · exact abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal_aux h (hs ▸ h) (h ▸ hsa.symm)
-
-Depends on / 依赖: abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal_aux, abs_toReal_neg, all_goals, coe_pi_add_coe_pi, convert, ne_comm, ne_iff, neg_add, neg_add_rev, neg_injective, neg_injective.ne_iff, neg_neg, sign.trichotomy, sign_eq_zero_iff, sign_neg, trichotomy
+/-
+**Real.Angle.abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal** 是 Mathlib 
+中的一个引理，位于命名空间 `Real.Angle`。
+形式化陈述：abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal {θ ψ : Angle} (hs :
+ θ.sign = ψ.sign) (hsa : θ.sign != (θ + ψ).sign) : |(θ + ψ).toReal| = 2 * π - (|
+θ.toReal| + |ψ.toReal|)
+参数：hs : θ.sign = ψ.sign；hsa : θ.sign != (θ + ψ).sign。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.instAtLeastTwoHAddOfNat`：∀ (n : ℕ) [NeZero n], (n + 1).AtLeastTwo
+· 使用定理 `Nat.instNeZeroSucc`：∀ {n : ℕ}, NeZero (n + 1)
+· 使用定理 `SignType.trichotomy`：trichotomy (a : SignType) : a = -1 ∨ a = 0 ∨ a = 1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ne_comm`：∀ {α : Sort u_1} {a b : α}, a ≠ b ↔ b ≠ a
+· 使用定理 `neg_add`：neg_add {R} [CommRing R] {a₁ a₂ b₁ b₂ : R} (_ : -a₁ = b₁) (_ : 
+-a₂ = b₂) : -(a₁ + a₂) = b₁ + b₂
+· 使用定理 `Real.Angle.sign_neg`：sign_neg (θ : Angle) : (-θ).sign = -θ.sign
+· 使用定理 `Function.Injective.ne_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {x y : α}, f x ≠ f y ↔ x ≠ y
+· 使用定理 `neg_injective`：∀ {G : Type u_3} [inst : InvolutiveNeg G], Function.Injec
+tive Neg.neg
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Real.Angle.abs_toReal_neg`：∀ (θ : Real.Angle), |(-θ).toReal| = |θ.toReal
+|
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `_private.Mathlib.Analysis.SpecialFunctions.Trigonometric.Angle.0.Real.An
+gle.abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal_aux`：∀ {θ ψ : Real.An
+gle},   θ.sign = 1 → ψ.sign = 1 → (θ + ψ).sign ≠ 1 → |(θ + ψ).toReal| = 2 * Real
+.pi - (|θ.toReal| + |ψ.toReal|)
+· 使用定理 `Ne.symm`：∀ {α : Sort u} {a b : α}, a ≠ b → b ≠ a
 -/
 lemma abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal {θ ψ : Angle} (hs : θ.sign = ψ.sign)
-    (hsa : θ.sign != (θ + ψ).sign) : |(θ + ψ).toReal| = 2 * π - (|θ.toReal| + |ψ.toReal|) := by
+    (hsa : θ.sign ≠ (θ + ψ).sign) : |(θ + ψ).toReal| = 2 * π - (|θ.toReal| + |ψ.toReal|) := by
   obtain h | h | h := θ.sign.trichotomy
   · obtain ⟨hθ', hψ'⟩ : (-θ).sign = 1 ∧ (-ψ).sign = 1 := by grind [sign_neg, neg_neg]
-    have hsa' : (-θ + -ψ).sign != 1 := by
+    have hsa' : (-θ + -ψ).sign ≠ 1 := by
       rwa [← hθ', ne_comm, ← neg_add, sign_neg, sign_neg, neg_injective.ne_iff]
     convert! abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal_aux hθ' hψ' hsa' using 1
     all_goals simp [-neg_add_rev, ← neg_add, abs_toReal_neg]
   · grind [sign_eq_zero_iff, coe_pi_add_coe_pi]
   · exact abs_toReal_add_eq_two_pi_sub_abs_toReal_add_abs_toReal_aux h (hs ▸ h) (h ▸ hsa.symm)
-
-/--
-theorem `continuousAt_sign` / 定理 `continuousAt_sign`
-
-English:
-theorem continuousAt_sign
-  given: {θ : Angle} (h0 : θ != 0) (hpi : θ != π)
-  statement: ContinuousAt sign θ
-  proof: (continuousAt_sign_of_ne_zero (sin_ne_zero_iff.2 ⟨h0, hpi⟩)).comp continuous_sin.continuousAt
-
-中文:
-定理 continuousAt_sign
-  条件: {θ : Angle} (h0 : θ != 0) (hpi : θ != π)
-  结论: ContinuousAt sign θ
-  证明: (continuousAt_sign_of_ne_zero (sin_ne_zero_iff.2 ⟨h0, hpi⟩)).comp continuous_sin.continuousAt
-
-Depends on / 依赖: continuousAt, continuousAt_sign_of_ne_zero, continuous_sin, continuous_sin.continuousAt, sin_ne_zero_iff
+/-
+**Real.Angle.continuousAt_sign** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：continuousAt_sign {θ : Angle} (h0 : θ != 0) (hpi : θ != π) : ContinuousAt 
+sign θ
+参数：h0 : θ != 0；hpi : θ != π。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousAt.comp`：∀ {X : Type u_1} {Y : Type u_2} {Z : Type u_3} [inst 
+: TopologicalSpace X] [inst_1 : TopologicalSpace Y]   [inst_2 : TopologicalSpace
+ Z] {f …
+· 使用定理 `continuousAt_sign_of_ne_zero`：continuousAt_sign_of_ne_zero {a : α} (h : 
+a != 0) : ContinuousAt SignType.sign a
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Real.Angle.sin_ne_zero_iff`：sin_ne_zero_iff {θ : Angle} : sin θ != 0 ↔ θ
+ != 0 ∧ θ != π
+· 使用定理 `Continuous.continuousAt`：Continuous.continuousAt (h : Continuous f) : Co
+ntinuousAt f x
+· 使用定理 `Real.Angle.continuous_sin`：continuous_sin : Continuous sin
 -/
-theorem continuousAt_sign {θ : Angle} (h0 : θ != 0) (hpi : θ != π) : ContinuousAt sign θ :=
+theorem continuousAt_sign {θ : Angle} (h0 : θ ≠ 0) (hpi : θ ≠ π) : ContinuousAt sign θ :=
   (continuousAt_sign_of_ne_zero (sin_ne_zero_iff.2 ⟨h0, hpi⟩)).comp continuous_sin.continuousAt
-
-/--
-theorem `_root_.ContinuousOn.angle_sign_comp` / 定理 `_root_.ContinuousOn.angle_sign_comp`
-
-English:
-theorem _root_.ContinuousOn.angle_sign_comp
-  statement: {α : Type*} [TopologicalSpace α] {f : α -> Angle}
-  proof: by
-  refine (continuousOn_of_forall_continuousAt fun θ hθ => ?_).comp hf (Set.mapsTo_image f s)
-  obtain ⟨z, hz, rfl⟩ := hθ
-  exact continuousAt_sign (hs _ hz).1 (hs _ hz).2
-
-中文:
-定理 _root_.ContinuousOn.angle_sign_comp
-  结论: {α : 类型} [拓扑空间 α] {f : α -> Angle}
-  证明: by
-  refine (continuousOn_of_forall_continuousAt fun θ hθ => ?_).comp hf (Set.mapsTo_image f s)
-  obtain ⟨z, hz, rfl⟩ := hθ
-  exact continuousAt_sign (hs _ hz).1 (hs _ hz).2
-
-Depends on / 依赖: Set.mapsTo_image, continuousAt_sign, continuousOn_of_forall_continuousAt, mapsTo_image
+/-
+**Real.Angle._root_.ContinuousOn.angle_sign_comp** 是 Mathlib 中的一个定理，位于命名空间 `Real
+.Angle`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem _root_.ContinuousOn.angle_sign_comp {α : Type*} [TopologicalSpace α] {f : α -> Angle}
-    {s : Set α} (hf : ContinuousOn f s) (hs : forall z in s, f z != 0 ∧ f z != π) :
+theorem _root_.ContinuousOn.angle_sign_comp {α : Type*} [TopologicalSpace α] {f : α → Angle}
+    {s : Set α} (hf : ContinuousOn f s) (hs : ∀ z ∈ s, f z ≠ 0 ∧ f z ≠ π) :
     ContinuousOn (sign ∘ f) s := by
   refine (continuousOn_of_forall_continuousAt fun θ hθ => ?_).comp hf (Set.mapsTo_image f s)
   obtain ⟨z, hz, rfl⟩ := hθ
   exact continuousAt_sign (hs _ hz).1 (hs _ hz).2
 
-/--
-theorem `sign_eq_of_continuousOn` / 定理 `sign_eq_of_continuousOn`
+/-- Suppose a function to angles is continuous on a connected set and never takes the values `0`
+or `π` on that set. Then the values of the function on that set all have the same sign. -/
+/-
+**Real.Angle.sign_eq_of_continuousOn** 是 Mathlib 中的一个定理，位于命名空间 `Real.Angle`。
+形式化陈述：sign_eq_of_continuousOn {α : Type*} [TopologicalSpace α] {f : α -> Angle} 
+{s : Set α} {x y : α} (hc : IsConnected s) (hf : ContinuousOn f s) (hs : forall 
+z in s, f z != 0 ∧ f z != π) (hx : x in s) (hy : y in s) : (f y).sign = (f x).si
+gn
+参数：hc : IsConnected s；hf : ContinuousOn f s；hs : forall z in s, f z != 0 ∧ f z !
+= π；hx : x in s；hy : y in s。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsPreconnected.subsingleton`：IsPreconnected.subsingleton [TotallyDisconn
+ectedSpace α] {s : Set α} (h : IsPreconnected s) : s.Subsingleton
+· 使用定理 `TotallySeparatedSpace.totallyDisconnectedSpace`：∀ (α : Type u) [inst : T
+opologicalSpace α] [TotallySeparatedSpace α], TotallyDisconnectedSpace α
+· 使用定理 `TotallySeparatedSpace.of_discrete`：∀ (α : Type u_3) [inst : TopologicalS
+pace α] [DiscreteTopology α], TotallySeparatedSpace α
+· 使用定理 `instDiscreteTopologySignType`：DiscreteTopology SignType
+· 使用定理 `IsConnected.isPreconnected`：IsConnected.isPreconnected {s : Set α} (h : 
+IsConnected s) : IsPreconnected s
+· 使用定理 `IsConnected.image`：∀ {α : Type u} {β : Type v} [inst : TopologicalSpace 
+α] [inst_1 : TopologicalSpace β] {s : Set α},   IsConnected s → ∀ (f : α → β), C
+ontinuo…
+· 使用定理 `ContinuousOn.angle_sign_comp`：∀ {α : Type u_1} [inst : TopologicalSpace 
+α] {f : α → Real.Angle} {s : Set α},   ContinuousOn f s → (∀ z ∈ s, f z ≠ 0 ∧ f 
+z ≠ ↑Real.pi) → Co…
+· 使用定理 `Set.mem_image_of_mem`：mem_image_of_mem (f : α -> β) {x : α} {a : Set α} 
+(h : x in a) : f x in f '' a
 
-English:
-theorem sign_eq_of_continuousOn
-  statement: {α : Type*} [TopologicalSpace α] {f : α -> Angle} {s : Set α}
-  proof: (hc.image _ (hf.angle_sign_comp hs)).isPreconnected.subsingleton (Set.mem_image_of_mem _ hy)
-    (Set.mem_image_of_mem _ hx)
-
-中文:
-定理 sign_eq_of_continuousOn
-  结论: {α : 类型} [拓扑空间 α] {f : α -> Angle} {s : 集合 α}
-  证明: (hc.image _ (hf.angle_sign_comp hs)).isPreconnected.subsingleton (Set.mem_image_of_mem _ hy)
-    (Set.mem_image_of_mem _ hx)
-
-Depends on / 依赖: Set.mem_image_of_mem, angle_sign_comp, hc.image, hf.angle_sign_comp, isPreconnected, isPreconnected.subsingleton, mem_image_of_mem, subsingleton
+--- 原说明 ---
+Suppose a function to angles is continuous on a connected set and never takes th
+e values `0`
+or `π` on that set. Then the values of the function on that set all have the sam
+e sign.
 -/
-theorem sign_eq_of_continuousOn {α : Type*} [TopologicalSpace α] {f : α -> Angle} {s : Set α}
-    {x y : α} (hc : IsConnected s) (hf : ContinuousOn f s) (hs : forall z in s, f z != 0 ∧ f z != π)
-    (hx : x in s) (hy : y in s) : (f y).sign = (f x).sign :=
+theorem sign_eq_of_continuousOn {α : Type*} [TopologicalSpace α] {f : α → Angle} {s : Set α}
+    {x y : α} (hc : IsConnected s) (hf : ContinuousOn f s) (hs : ∀ z ∈ s, f z ≠ 0 ∧ f z ≠ π)
+    (hx : x ∈ s) (hy : y ∈ s) : (f y).sign = (f x).sign :=
   (hc.image _ (hf.angle_sign_comp hs)).isPreconnected.subsingleton (Set.mem_image_of_mem _ hy)
     (Set.mem_image_of_mem _ hx)
 
 end Angle
 
 end Real
+

@@ -30,51 +30,45 @@ universe u
 
 namespace CategoryTheory.Limits.FintypeCat
 
+/-
+**CategoryTheory.Limits.FintypeCat.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Li
+mits.FintypeCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {J : Type} [SmallCategory J] (K : J ⥤ FintypeCat.{u}) (j : J) :
     Finite ((K ⋙ FintypeCat.incl.{u}).obj j) := by
   simp only [comp_obj, FintypeCat.incl_obj]
   infer_instance
 
-/--
-Instance `finiteLimitOfFiniteDiagram` / 实例 `finiteLimitOfFiniteDiagram`
+/-- Any functor from a finite category to `Type*` that only involves finite objects,
+has a finite limit. -/
+/-
+**CategoryTheory.Limits.FintypeCat.finiteLimitOfFiniteDiagram** 是 Mathlib 中的一个实例
+，位于命名空间 `CategoryTheory.Limits.FintypeCat`。
+形式化陈述：finiteLimitOfFiniteDiagram {J : Type} [SmallCategory J] [FinCategory J] (K
+ : J ⥤ Type*) [forall j, Finite (K.obj j)] : Fintype (limit K)
+参数：K : J ⥤ Type*；K.obj j。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-instance finiteLimitOfFiniteDiagram
-  signature: {J : Type} [SmallCategory J] [FinCategory J]
-  body: by
-  have : Fintype (sections K) := Fintype.ofFinite (sections K)
-  exact Fintype.ofEquiv (sections K) (Types.limitEquivSections K).symm
-
-中文:
-实例 finiteLimitOfFiniteDiagram
-  签名: {J : 类型} [小范畴 J] [有限范畴 J]
-  定义体: by
-  have : Fintype (sections K) := Fintype.ofFinite (sections K)
-  exact Fintype.ofEquiv (sections K) (Types.limitEquivSections K).symm
-
-Depends on / 依赖: Fintype, Fintype.ofEquiv, Fintype.ofFinite, Types.limitEquivSections, limitEquivSections, ofEquiv, ofFinite, sections
+--- 原说明 ---
+Any functor from a finite category to `Type*` that only involves finite objects,
+has a finite limit.
 -/
 noncomputable instance finiteLimitOfFiniteDiagram {J : Type} [SmallCategory J] [FinCategory J]
-    (K : J ⥤ Type*) [forall j, Finite (K.obj j)] : Fintype (limit K) := by
+    (K : J ⥤ Type*) [∀ j, Finite (K.obj j)] : Fintype (limit K) := by
   have : Fintype (sections K) := Fintype.ofFinite (sections K)
   exact Fintype.ofEquiv (sections K) (Types.limitEquivSections K).symm
-
-/--
-Instance `inclusionCreatesFiniteLimits` / 实例 `inclusionCreatesFiniteLimits`
-
-English:
-instance inclusionCreatesFiniteLimits
-  signature: {J : Type} [SmallCategory J] [FinCategory J]
-  body: createsLimitOfFullyFaithfulOfIso
-    (FintypeCat.of <| limit <| K ⋙ FintypeCat.incl) (Iso.refl _)
-
-中文:
-实例 inclusionCreatesFiniteLimits
-  签名: {J : 类型} [小范畴 J] [有限范畴 J]
-  定义体: createsLimitOfFullyFaithfulOfIso
-    (FintypeCat.of <| limit <| K ⋙ FintypeCat.incl) (Iso.refl _)
-
-Depends on / 依赖: createsLimitOfFullyFaithfulOfIso
+/-
+**CategoryTheory.Limits.FintypeCat.inclusionCreatesFiniteLimits** 是 Mathlib 中的一个
+实例，位于命名空间 `CategoryTheory.Limits.FintypeCat`。
+形式化陈述：inclusionCreatesFiniteLimits {J : Type} [SmallCategory J] [FinCategory J] 
+: CreatesLimitsOfShape J FintypeCat.incl.{u} where CreatesLimit {K}
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `FintypeCat.instFullIncl`：FintypeCat.incl.Full
+· 使用定理 `FintypeCat.instFaithfulIncl`：FintypeCat.incl.Faithful
 -/
 noncomputable instance inclusionCreatesFiniteLimits {J : Type} [SmallCategory J] [FinCategory J] :
     CreatesLimitsOfShape J FintypeCat.incl.{u} where
@@ -82,260 +76,251 @@ noncomputable instance inclusionCreatesFiniteLimits {J : Type} [SmallCategory J]
     (FintypeCat.of <| limit <| K ⋙ FintypeCat.incl) (Iso.refl _)
 
 /-- Help typeclass inference to infer creation of finite limits for the forgetful functor. -/
+/-
+**CategoryTheory.Limits.FintypeCat.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Li
+mits.FintypeCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Help typeclass inference to infer creation of finite limits for the forgetful fu
+nctor.
+-/
 noncomputable instance {J : Type} [SmallCategory J] [FinCategory J] :
     CreatesLimitsOfShape J (forget FintypeCat) :=
   FintypeCat.inclusionCreatesFiniteLimits
-
+/-
+**CategoryTheory.Limits.FintypeCat.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Li
+mits.FintypeCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {J : Type} [SmallCategory J] [FinCategory J] : HasLimitsOfShape J FintypeCat.{u} where
   has_limit F := hasLimit_of_created F FintypeCat.incl
-
-/--
-Instance `hasFiniteLimits` / 实例 `hasFiniteLimits`
-
-English:
-instance hasFiniteLimits
-  signature: : HasFiniteLimits FintypeCat.{u} where
-  body: inferInstance
-
-中文:
-实例 hasFiniteLimits
-  签名: : 有有限极限 FintypeCat.{u} where
-  定义体: inferInstance
+/-
+**CategoryTheory.Limits.FintypeCat.hasFiniteLimits** 是 Mathlib 中的一个实例，位于命名空间 `Ca
+tegoryTheory.Limits.FintypeCat`。
+形式化陈述：hasFiniteLimits : HasFiniteLimits FintypeCat.{u} where out _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.FintypeCat.instHasLimitsOfShapeFintypeCatOfFinCate
+gory`：∀ {J : Type} [inst : CategoryTheory.SmallCategory J] [CategoryTheory.FinCa
+tegory J],   CategoryTheory.Limits.HasLimitsOfShape J FintypeCat
 -/
 instance hasFiniteLimits : HasFiniteLimits FintypeCat.{u} where
   out _ := inferInstance
-
-/--
-Instance `inclusion_preservesFiniteLimits` / 实例 `inclusion_preservesFiniteLimits`
-
-English:
-instance inclusion_preservesFiniteLimits
-  signature: :
-  body: preservesLimitOfShape_of_createsLimitsOfShape_and_hasLimitsOfShape FintypeCat.incl
-
-中文:
-实例 inclusion_preservesFiniteLimits
-  签名: :
-  定义体: preservesLimitOfShape_of_createsLimitsOfShape_and_hasLimitsOfShape FintypeCat.incl
-
-Depends on / 依赖: FintypeCat, FintypeCat.incl, cancel_epi, comp_smul, congr_arg, preservesLimitOfShape_of_createsLimitsOfShape_and_hasLimitsOfShape, smul_comp, smul_smul
+/-
+**CategoryTheory.Limits.FintypeCat.inclusion_preservesFiniteLimits** 是 Mathlib 中
+的一个实例，位于命名空间 `CategoryTheory.Limits.FintypeCat`。
+形式化陈述：inclusion_preservesFiniteLimits : PreservesFiniteLimits FintypeCat.incl.{u
+} where preservesFiniteLimits _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.preservesLimitOfShape_of_createsLimitsOfShape_and_hasLimi
+tsOfShape`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type
+ u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.Limits.Types.hasLimitsOfShape`：∀ {J : Type v} [inst : Cat
+egoryTheory.Category.{w, v} J] [Small.{u, v} J],   CategoryTheory.Limits.HasLimi
+tsOfShape J (Type u)
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
 -/
 noncomputable instance inclusion_preservesFiniteLimits :
     PreservesFiniteLimits FintypeCat.incl.{u} where
   preservesFiniteLimits _ :=
     preservesLimitOfShape_of_createsLimitsOfShape_and_hasLimitsOfShape FintypeCat.incl
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Help typeclass inference to infer preservation of finite limits for the forgetful functor. -/
+/-
+**CategoryTheory.Limits.FintypeCat.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Li
+mits.FintypeCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: PreservesFiniteLimits (forget FintypeCat)
-  body: FintypeCat.inclusion_preservesFiniteLimits
-
-中文:
-实例 :
-  签名: 保持FiniteLimits (forget FintypeCat)
-  定义体: FintypeCat.inclusion_preservesFiniteLimits
-
-Depends on / 依赖: FintypeCat, FintypeCat.inclusion_preservesFiniteLimits, cancel_mono, comp_smul, congr_arg, inclusion_preservesFiniteLimits, smul_comp, smul_smul
+--- 原说明 ---
+Help typeclass inference to infer preservation of finite limits for the forgetfu
+l functor.
 -/
 noncomputable instance : PreservesFiniteLimits (forget FintypeCat) :=
   FintypeCat.inclusion_preservesFiniteLimits
 
-/--
-Definition of `productEquiv` / `productEquiv` 的定义
+/-- The categorical product of a finite family in `FintypeCat` is equivalent to the product
+as types. -/
+/-
+**CategoryTheory.Limits.FintypeCat.productEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Limits.FintypeCat`。
+形式化陈述：productEquiv {ι : Type*} [Finite ι] (X : ι -> FintypeCat.{u}) : (∏ᶜ X : Fi
+ntypeCat) ≃ forall i, X i
+参数：X : ι -> FintypeCat.{u}。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition productEquiv
-  signature: {ι : Type*} [Finite ι] (X : ι -> FintypeCat.{u})
-  body: have : Fintype ι := Fintype.ofFinite _
-  haveI : Small.{u} ι :=
-    ⟨ULift (Fin (Fintype.card ι)), ⟨(Fintype.equivFin ι).trans Equiv.ulift.symm⟩⟩
-  let is₁ : FintypeCat.incl.obj (∏ᶜ fun i => X i) ≅ (∏ᶜ fun i => X i) :=
-    PreservesProduct.iso FintypeCat.incl (fun i => X i)
-  let is₂ : (∏ᶜ fun i => X i : Type _) ≅ (Shrink.{u} (forall i, X i)) :=
-    Types.Small.productIso (fun i => X i)
-  let e : (forall i, X i) ≃ Shrink.{u} (forall i, X i) := equivShrink _
-  (equivEquivIso.symm is₁).trans ((equivEquivIso.symm is₂).trans e.symm)
-
-中文:
-定义 productEquiv
-  签名: {ι : 类型} [有限 ι] (X : ι -> FintypeCat.{u})
-  定义体: have : Fintype ι := Fintype.ofFinite _
-  haveI : Small.{u} ι :=
-    ⟨ULift (Fin (Fintype.card ι)), ⟨(Fintype.equivFin ι).trans Equiv.ulift.symm⟩⟩
-  let is₁ : FintypeCat.incl.obj (∏ᶜ fun i => X i) ≅ (∏ᶜ fun i => X i) :=
-    PreservesProduct.iso FintypeCat.incl (fun i => X i)
-  let is₂ : (∏ᶜ fun i => X i : Type _) ≅ (Shrink.{u} (forall i, X i)) :=
-    Types.Small.productIso (fun i => X i)
-  let e : (forall i, X i) ≃ Shrink.{u} (forall i, X i) := equivShrink _
-  (equivEquivIso.symm is₁).trans ((equivEquivIso.symm is₂).trans e.symm)
-
-Depends on / 依赖: Equiv.ulift.symm, Fintype, Fintype.card, Fintype.equivFin, Fintype.ofFinite, FintypeCat, FintypeCat.incl, FintypeCat.incl.obj, PreservesProduct, PreservesProduct.iso, Shrink, Types.Small.productIso, equivEquivIso, equivEquivIso.symm, equivFin, equivShrink, ofFinite, productIso
+--- 原说明 ---
+The categorical product of a finite family in `FintypeCat` is equivalent to the 
+product
+as types.
 -/
-noncomputable def productEquiv {ι : Type*} [Finite ι] (X : ι -> FintypeCat.{u}) :
-    (∏ᶜ X : FintypeCat) ≃ forall i, X i :=
+noncomputable def productEquiv {ι : Type*} [Finite ι] (X : ι → FintypeCat.{u}) :
+    (∏ᶜ X : FintypeCat) ≃ ∀ i, X i :=
   have : Fintype ι := Fintype.ofFinite _
   haveI : Small.{u} ι :=
     ⟨ULift (Fin (Fintype.card ι)), ⟨(Fintype.equivFin ι).trans Equiv.ulift.symm⟩⟩
-  let is₁ : FintypeCat.incl.obj (∏ᶜ fun i => X i) ≅ (∏ᶜ fun i => X i) :=
-    PreservesProduct.iso FintypeCat.incl (fun i => X i)
-  let is₂ : (∏ᶜ fun i => X i : Type _) ≅ (Shrink.{u} (forall i, X i)) :=
-    Types.Small.productIso (fun i => X i)
-  let e : (forall i, X i) ≃ Shrink.{u} (forall i, X i) := equivShrink _
+  let is₁ : FintypeCat.incl.obj (∏ᶜ fun i ↦ X i) ≅ (∏ᶜ fun i ↦ X i) :=
+    PreservesProduct.iso FintypeCat.incl (fun i ↦ X i)
+  let is₂ : (∏ᶜ fun i ↦ X i : Type _) ≅ (Shrink.{u} (∀ i, X i)) :=
+    Types.Small.productIso (fun i ↦ X i)
+  let e : (∀ i, X i) ≃ Shrink.{u} (∀ i, X i) := equivShrink _
   (equivEquivIso.symm is₁).trans ((equivEquivIso.symm is₂).trans e.symm)
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-lemma `productEquiv_apply` / 引理 `productEquiv_apply`
-
-English:
-lemma productEquiv_apply
-  statement: {ι : Type*} [Finite ι] (X : ι -> FintypeCat.{u})
-  proof: by
-  simpa [productEquiv, equivEquivIso, equivIsoIso, Iso.toEquiv] using!
-    piComparison_comp_π_apply FintypeCat.incl X i x
-
-@[simp]
-
-中文:
-引理 productEquiv_apply
-  结论: {ι : 类型} [有限 ι] (X : ι -> FintypeCat.{u})
-  证明: by
-  simpa [productEquiv, equivEquivIso, equivIsoIso, Iso.toEquiv] using!
-    piComparison_comp_π_apply FintypeCat.incl X i x
-
-@[simp]
-
-Depends on / 依赖: FintypeCat, FintypeCat.incl, Iso.toEquiv, equivEquivIso, equivIsoIso, productEquiv, toEquiv
+/-
+**CategoryTheory.Limits.FintypeCat.productEquiv_apply** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Limits.FintypeCat`。
+形式化陈述：productEquiv_apply {ι : Type*} [Finite ι] (X : ι -> FintypeCat.{u}) (x : (
+∏ᶜ X : FintypeCat)) (i : ι) : productEquiv X x i = Pi.π X i x
+参数：X : ι -> FintypeCat.{u}；x : (∏ᶜ X : FintypeCat)；i : ι。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.hasFiniteProducts_of_hasFiniteLimits`：∀ (C : Type 
+u) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFiniteLim
+its C],   CategoryTheory.Limits.HasFiniteProduct…
+· 使用定理 `CategoryTheory.instSmallDiscrete`：∀ (C : Type u) [Small.{w, u} C], Small
+.{w, u} (CategoryTheory.Discrete C)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Limits.Types.Small.productIso_hom_comp_eval_apply`：∀ {J :
+ Type v} (F : J → Type u) [inst : Small.{u, v} J] (j : J) (x : ∏ᶜ F),   (equivSh
+rink ((j : J) → F j)).symm       ((CategoryTheory.Conc…
+· 使用定理 `CategoryTheory.Limits.piComparison_comp_π_apply`：∀ {β : Type w} {C : Typ
+e u} [inst : CategoryTheory.Category.{v, u} C] {D : Type u₂}   [inst_1 : Categor
+yTheory.Category.{v₂, u₂} D] (G : Cat…
+· 使用定理 `CategoryTheory.Limits.hasFiniteLimits_of_hasLimits`：∀ (C : Type u) [inst
+ : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasLimits C],   Cate
+goryTheory.Limits.HasFiniteLimits C
+· 使用定理 `CategoryTheory.Limits.Types.hasLimitsOfSize`：∀ [UnivLE.{v, u}], Category
+Theory.Limits.HasLimitsOfSize.{w, v, u, u + 1} (Type u)
 -/
-lemma productEquiv_apply {ι : Type*} [Finite ι] (X : ι -> FintypeCat.{u})
+lemma productEquiv_apply {ι : Type*} [Finite ι] (X : ι → FintypeCat.{u})
     (x : (∏ᶜ X : FintypeCat)) (i : ι) : productEquiv X x i = Pi.π X i x := by
   simpa [productEquiv, equivEquivIso, equivIsoIso, Iso.toEquiv] using!
     piComparison_comp_π_apply FintypeCat.incl X i x
 
 @[simp]
-/--
-lemma `productEquiv_symm_comp_π_apply` / 引理 `productEquiv_symm_comp_π_apply`
-
-English:
-lemma productEquiv_symm_comp_π_apply
-  statement: {ι : Type*} [Finite ι] (X : ι -> FintypeCat.{u})
-  proof: by
-  rw [← productEquiv_apply]; rw [Equiv.apply_symm_apply]
-
-中文:
-引理 productEquiv_symm_comp_π_apply
-  结论: {ι : 类型} [有限 ι] (X : ι -> FintypeCat.{u})
-  证明: by
-  rw [← productEquiv_apply]; rw [Equiv.apply_symm_apply]
-
-Depends on / 依赖: Equiv.apply_symm_apply, apply_symm_apply, productEquiv_apply
+/-
+**CategoryTheory.Limits.FintypeCat.productEquiv_symm_comp_** 是 Mathlib 中的一个引理，位于
+命名空间 `CategoryTheory.Limits.FintypeCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma productEquiv_symm_comp_π_apply {ι : Type*} [Finite ι] (X : ι -> FintypeCat.{u})
-    (x : forall i, X i) (i : ι) : Pi.π X i ((productEquiv X).symm x) = x i := by
-  rw [← productEquiv_apply]; rw [Equiv.apply_symm_apply]
-
-/--
-Instance `nonempty_pi_of_nonempty` / 实例 `nonempty_pi_of_nonempty`
-
-English:
-instance nonempty_pi_of_nonempty
-  signature: {ι : Type*} [Finite ι] (X : ι -> FintypeCat.{u})
-  body: (Equiv.nonempty_congr <| productEquiv X).mpr inferInstance
-
-中文:
-实例 nonempty_pi_of_nonempty
-  签名: {ι : 类型} [有限 ι] (X : ι -> FintypeCat.{u})
-  定义体: (Equiv.nonempty_congr <| productEquiv X).mpr inferInstance
-
-Depends on / 依赖: Equiv.nonempty_congr, nonempty_congr, productEquiv
+lemma productEquiv_symm_comp_π_apply {ι : Type*} [Finite ι] (X : ι → FintypeCat.{u})
+    (x : ∀ i, X i) (i : ι) : Pi.π X i ((productEquiv X).symm x) = x i := by
+  rw [← productEquiv_apply, Equiv.apply_symm_apply]
+/-
+**CategoryTheory.Limits.FintypeCat.nonempty_pi_of_nonempty** 是 Mathlib 中的一个实例，位于
+命名空间 `CategoryTheory.Limits.FintypeCat`。
+形式化陈述：nonempty_pi_of_nonempty {ι : Type*} [Finite ι] (X : ι -> FintypeCat.{u}) [
+forall i, Nonempty (X i)] : Nonempty (∏ᶜ X : FintypeCat.{u})
+参数：X : ι -> FintypeCat.{u}；X i。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `CategoryTheory.Limits.instHasLimitOfHasLimitsOfShape`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] {J : Type u₁} [inst_1 : CategoryTheory.Ca
+tegory.{v₁, u₁} J]   [CategoryTheory.Limit…
+· 使用定理 `CategoryTheory.Limits.hasFiniteProducts_of_hasFiniteLimits`：∀ (C : Type 
+u) [inst : CategoryTheory.Category.{v, u} C] [CategoryTheory.Limits.HasFiniteLim
+its C],   CategoryTheory.Limits.HasFiniteProduct…
+· 使用定理 `Equiv.nonempty_congr`：nonempty_congr (e : α ≃ β) : Nonempty α ↔ Nonempty
+ β
+· 使用定理 `Pi.instNonempty`：∀ {α : Sort u} {β : α → Sort v} [∀ (a : α), Nonempty (β
+ a)], Nonempty ((a : α) → β a)
 -/
-instance nonempty_pi_of_nonempty {ι : Type*} [Finite ι] (X : ι -> FintypeCat.{u})
-    [forall i, Nonempty (X i)] : Nonempty (∏ᶜ X : FintypeCat.{u}) :=
+instance nonempty_pi_of_nonempty {ι : Type*} [Finite ι] (X : ι → FintypeCat.{u})
+    [∀ i, Nonempty (X i)] : Nonempty (∏ᶜ X : FintypeCat.{u}) :=
   (Equiv.nonempty_congr <| productEquiv X).mpr inferInstance
 
-/--
-Instance `finite_colimitType` / 实例 `finite_colimitType`
+/-- The colimit type of a functor from a finite category to Types that only
+involves finite objects is finite. -/
+/-
+**CategoryTheory.Limits.FintypeCat.finite_colimitType** 是 Mathlib 中的一个实例，位于命名空间 
+`CategoryTheory.Limits.FintypeCat`。
+形式化陈述：finite_colimitType {J : Type*} [SmallCategory J] [FinCategory J] (K : J ⥤ 
+Type u) [forall j, Finite (K.obj j)] : Finite K.ColimitType
+参数：K : J ⥤ Type u；K.obj j。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.instSigma`：∀ {α : Type u_1} {β : α → Type u_2} [Finite α] [∀ (a :
+ α), Finite (β a)], Finite ((a : α) × β a)
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
 
-English:
-instance finite_colimitType
-  signature: {J : Type*} [SmallCategory J] [FinCategory J]
-  body: Quot.finite _
-
-中文:
-实例 finite_colimitType
-  签名: {J : 类型} [小范畴 J] [有限范畴 J]
-  定义体: Quot.finite _
-
-Depends on / 依赖: Quot.finite, finite
+--- 原说明 ---
+The colimit type of a functor from a finite category to Types that only
+involves finite objects is finite.
 -/
 instance finite_colimitType {J : Type*} [SmallCategory J] [FinCategory J]
-    (K : J ⥤ Type u) [forall j, Finite (K.obj j)] : Finite K.ColimitType :=
+    (K : J ⥤ Type u) [∀ j, Finite (K.obj j)] : Finite K.ColimitType :=
   Quot.finite _
 
-/--
-lemma `finite_of_isColimit` / 引理 `finite_of_isColimit`
+/-- Any functor from a finite category to `Type*` that only involves finite objects,
+has a finite colimit. -/
+/-
+**CategoryTheory.Limits.FintypeCat.finite_of_isColimit** 是 Mathlib 中的一个引理，位于命名空间
+ `CategoryTheory.Limits.FintypeCat`。
+形式化陈述：finite_of_isColimit {J : Type*} [SmallCategory J] [FinCategory J] {K : J ⥤
+ Type u} [forall j, Finite (K.obj j)] {c : Cocone K} (hc : IsColimit c) : Finite
+ c.pt
+参数：K.obj j；hc : IsColimit c。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_equiv`：Finite.of_equiv (α : Sort*) [h : Finite α] (f : α ≃ β) 
+: Finite β
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.Limits.Types.isColimit_iff_coconeTypesIsColimit`：isColimi
+t_iff_coconeTypesIsColimit {F : J ⥤ Type u} (c : Cocone F) : Nonempty (IsColimit
+ c) ↔ (F.coconeTypesEquiv.symm c).IsColimit
 
-English:
-lemma finite_of_isColimit
-  statement: {J : Type*} [SmallCategory J] [FinCategory J]
-  proof: Finite.of_equiv _ ((Types.isColimit_iff_coconeTypesIsColimit c).1 ⟨hc⟩).equiv
-
-中文:
-引理 finite_of_isColimit
-  结论: {J : 类型} [小范畴 J] [有限范畴 J]
-  证明: Finite.of_equiv _ ((Types.isColimit_iff_coconeTypesIsColimit c).1 ⟨hc⟩).equiv
-
-Depends on / 依赖: Finite, Finite.of_equiv, Types.isColimit_iff_coconeTypesIsColimit, isColimit_iff_coconeTypesIsColimit, of_equiv
+--- 原说明 ---
+Any functor from a finite category to `Type*` that only involves finite objects,
+has a finite colimit.
 -/
 lemma finite_of_isColimit {J : Type*} [SmallCategory J] [FinCategory J]
-    {K : J ⥤ Type u} [forall j, Finite (K.obj j)] {c : Cocone K} (hc : IsColimit c) :
+    {K : J ⥤ Type u} [∀ j, Finite (K.obj j)] {c : Cocone K} (hc : IsColimit c) :
     Finite c.pt :=
   Finite.of_equiv _ ((Types.isColimit_iff_coconeTypesIsColimit c).1 ⟨hc⟩).equiv
 
-/--
-Instance `finiteColimitOfFiniteDiagram` / 实例 `finiteColimitOfFiniteDiagram`
+/-- Any functor from a finite category to `Type*` that only involves finite objects,
+has a finite colimit. -/
+/-
+**CategoryTheory.Limits.FintypeCat.finiteColimitOfFiniteDiagram** 是 Mathlib 中的一个
+实例，位于命名空间 `CategoryTheory.Limits.FintypeCat`。
+形式化陈述：finiteColimitOfFiniteDiagram {J : Type} [SmallCategory J] [FinCategory J] 
+(K : J ⥤ Type*) [forall j, Finite (K.obj j)] : Fintype (colimit K)
+参数：K : J ⥤ Type*；K.obj j。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance finiteColimitOfFiniteDiagram
-  signature: {J : Type} [SmallCategory J] [FinCategory J]
-  body: by
-  have : Finite (colimit K) := finite_of_isColimit (colimit.isColimit K)
-  apply Fintype.ofFinite
-
-中文:
-实例 finiteColimitOfFiniteDiagram
-  签名: {J : 类型} [小范畴 J] [有限范畴 J]
-  定义体: by
-  have : Finite (colimit K) := finite_of_isColimit (colimit.isColimit K)
-  apply Fintype.ofFinite
-
-Depends on / 依赖: Finite, Fintype, Fintype.ofFinite, colimit, colimit.isColimit, finite_of_isColimit, isColimit, ofFinite
+--- 原说明 ---
+Any functor from a finite category to `Type*` that only involves finite objects,
+has a finite colimit.
 -/
 noncomputable instance finiteColimitOfFiniteDiagram {J : Type} [SmallCategory J] [FinCategory J]
-    (K : J ⥤ Type*) [forall j, Finite (K.obj j)] : Fintype (colimit K) := by
+    (K : J ⥤ Type*) [∀ j, Finite (K.obj j)] : Fintype (colimit K) := by
   have : Finite (colimit K) := finite_of_isColimit (colimit.isColimit K)
   apply Fintype.ofFinite
-
-/--
-Instance `inclusionCreatesFiniteColimits` / 实例 `inclusionCreatesFiniteColimits`
-
-English:
-instance inclusionCreatesFiniteColimits
-  signature: {J : Type} [SmallCategory J] [FinCategory J]
-  body: createsColimitOfFullyFaithfulOfIso
-    (FintypeCat.of <| colimit <| K ⋙ FintypeCat.incl) (Iso.refl _)
-
-中文:
-实例 inclusionCreatesFiniteColimits
-  签名: {J : 类型} [小范畴 J] [有限范畴 J]
-  定义体: createsColimitOfFullyFaithfulOfIso
-    (FintypeCat.of <| colimit <| K ⋙ FintypeCat.incl) (Iso.refl _)
-
-Depends on / 依赖: createsColimitOfFullyFaithfulOfIso
+/-
+**CategoryTheory.Limits.FintypeCat.inclusionCreatesFiniteColimits** 是 Mathlib 中的
+一个实例，位于命名空间 `CategoryTheory.Limits.FintypeCat`。
+形式化陈述：inclusionCreatesFiniteColimits {J : Type} [SmallCategory J] [FinCategory J
+] : CreatesColimitsOfShape J FintypeCat.incl.{u} where CreatesColimit {K}
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `FintypeCat.instFullIncl`：FintypeCat.incl.Full
+· 使用定理 `FintypeCat.instFaithfulIncl`：FintypeCat.incl.Faithful
 -/
 noncomputable instance inclusionCreatesFiniteColimits {J : Type} [SmallCategory J] [FinCategory J] :
     CreatesColimitsOfShape J FintypeCat.incl.{u} where
@@ -343,88 +328,93 @@ noncomputable instance inclusionCreatesFiniteColimits {J : Type} [SmallCategory 
     (FintypeCat.of <| colimit <| K ⋙ FintypeCat.incl) (Iso.refl _)
 
 /-- Help typeclass inference to infer creation of finite colimits for the forgetful functor. -/
+/-
+**CategoryTheory.Limits.FintypeCat.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Li
+mits.FintypeCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Help typeclass inference to infer creation of finite colimits for the forgetful 
+functor.
+-/
 noncomputable instance {J : Type} [SmallCategory J] [FinCategory J] :
     CreatesColimitsOfShape J (forget FintypeCat) :=
   FintypeCat.inclusionCreatesFiniteColimits
-
+/-
+**CategoryTheory.Limits.FintypeCat.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Li
+mits.FintypeCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {J : Type} [SmallCategory J] [FinCategory J] : HasColimitsOfShape J FintypeCat.{u} where
   has_colimit F := hasColimit_of_created F FintypeCat.incl
-
-/--
-Instance `hasFiniteColimits` / 实例 `hasFiniteColimits`
-
-English:
-instance hasFiniteColimits
-  signature: : HasFiniteColimits FintypeCat.{u} where
-  body: inferInstance
-
-中文:
-实例 hasFiniteColimits
-  签名: : 有有限余极限 FintypeCat.{u} where
-  定义体: inferInstance
+/-
+**CategoryTheory.Limits.FintypeCat.hasFiniteColimits** 是 Mathlib 中的一个实例，位于命名空间 `
+CategoryTheory.Limits.FintypeCat`。
+形式化陈述：hasFiniteColimits : HasFiniteColimits FintypeCat.{u} where out _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.FintypeCat.instHasColimitsOfShapeFintypeCatOfFinCa
+tegory`：∀ {J : Type} [inst : CategoryTheory.SmallCategory J] [CategoryTheory.Fin
+Category J],   CategoryTheory.Limits.HasColimitsOfShape J FintypeCat
 -/
 instance hasFiniteColimits : HasFiniteColimits FintypeCat.{u} where
   out _ := inferInstance
-
-/--
-Instance `inclusion_preservesFiniteColimits` / 实例 `inclusion_preservesFiniteColimits`
-
-English:
-instance inclusion_preservesFiniteColimits
-  signature: :
-  body: preservesColimitOfShape_of_createsColimitsOfShape_and_hasColimitsOfShape FintypeCat.incl
-
-中文:
-实例 inclusion_preservesFiniteColimits
-  签名: :
-  定义体: preservesColimitOfShape_of_createsColimitsOfShape_and_hasColimitsOfShape FintypeCat.incl
-
-Depends on / 依赖: FintypeCat, FintypeCat.incl, preservesColimitOfShape_of_createsColimitsOfShape_and_hasColimitsOfShape
+/-
+**CategoryTheory.Limits.FintypeCat.inclusion_preservesFiniteColimits** 是 Mathlib
+ 中的一个实例，位于命名空间 `CategoryTheory.Limits.FintypeCat`。
+形式化陈述：inclusion_preservesFiniteColimits : PreservesFiniteColimits FintypeCat.inc
+l.{u} where preservesFiniteColimits _
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.preservesColimitOfShape_of_createsColimitsOfShape_and_has
+ColimitsOfShape`：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D 
+: Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]   {J : Type w} [inst…
+· 使用定理 `CategoryTheory.Limits.Types.hasColimitsOfShape`：∀ {J : Type v} [inst : C
+ategoryTheory.Category.{w, v} J] [Small.{u, v} J],   CategoryTheory.Limits.HasCo
+limitsOfShape J (Type u)
+· 使用定理 `UnivLE.small`：∀ [self : UnivLE.{u, v}] (α : Type u), Small.{v, u} α
 -/
 noncomputable instance inclusion_preservesFiniteColimits :
     PreservesFiniteColimits FintypeCat.incl.{u} where
   preservesFiniteColimits _ :=
     preservesColimitOfShape_of_createsColimitsOfShape_and_hasColimitsOfShape FintypeCat.incl
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Help typeclass inference to infer preservation of finite colimits for the forgetful functor. -/
+/-
+**CategoryTheory.Limits.FintypeCat.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Li
+mits.FintypeCat`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: PreservesFiniteColimits (forget FintypeCat)
-  body: FintypeCat.inclusion_preservesFiniteColimits
-
-中文:
-实例 :
-  签名: 保持FiniteColimits (forget FintypeCat)
-  定义体: FintypeCat.inclusion_preservesFiniteColimits
-
-Depends on / 依赖: FintypeCat, FintypeCat.inclusion_preservesFiniteColimits, inclusion_preservesFiniteColimits
+--- 原说明 ---
+Help typeclass inference to infer preservation of finite colimits for the forget
+ful functor.
 -/
 noncomputable instance : PreservesFiniteColimits (forget FintypeCat) :=
   FintypeCat.inclusion_preservesFiniteColimits
-
-/--
-lemma `jointly_surjective` / 引理 `jointly_surjective`
-
-English:
-lemma jointly_surjective
-  statement: {J : Type*} [SmallCategory J] [FinCategory J]
-  proof: let hs := isColimitOfPreserves FintypeCat.incl.{u} h
-  Types.jointly_surjective (F ⋙ FintypeCat.incl) hs x
-
-中文:
-引理 jointly_surjective
-  结论: {J : 类型} [小范畴 J] [有限范畴 J]
-  证明: let hs := isColimitOfPreserves FintypeCat.incl.{u} h
-  Types.jointly_surjective (F ⋙ FintypeCat.incl) hs x
-
-Depends on / 依赖: FintypeCat, FintypeCat.incl, Types.jointly_surjective, isColimitOfPreserves, jointly_surjective
+/-
+**CategoryTheory.Limits.FintypeCat.jointly_surjective** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Limits.FintypeCat`。
+形式化陈述：jointly_surjective {J : Type*} [SmallCategory J] [FinCategory J] (F : J ⥤ 
+FintypeCat.{u}) (t : Cocone F) (h : IsColimit t) (x : t.pt) : exists j y, t.ι.ap
+p j y = x
+参数：F : J ⥤ FintypeCat.{u}；t : Cocone F；h : IsColimit t；x : t.pt。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.PreservesColimitsOfShape.preservesColimit`：∀ {C : 
+Type u₁} {inst : CategoryTheory.Category.{v₁, u₁} C} {D : Type u₂} {inst_1 : Cat
+egoryTheory.Category.{v₂, u₂} D}   {J : Type w} {inst…
+· 使用定理 `CategoryTheory.Limits.preservesColimitsOfShapeOfPreservesFiniteColimits`
+：∀ {C : Type u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst
+_1 : CategoryTheory.Category.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Limits.Types.jointly_surjective`：jointly_surjective (F : 
+J ⥤ Type u) {t : Cocone F} (h : IsColimit t) (x : t.pt) : exists (j : J) (y : F.
+obj j), t.ι.app j y = x
 -/
 lemma jointly_surjective {J : Type*} [SmallCategory J] [FinCategory J]
     (F : J ⥤ FintypeCat.{u}) (t : Cocone F) (h : IsColimit t) (x : t.pt) :
-    exists j y, t.ι.app j y = x :=
+    ∃ j y, t.ι.app j y = x :=
   let hs := isColimitOfPreserves FintypeCat.incl.{u} h
   Types.jointly_surjective (F ⋙ FintypeCat.incl) hs x
 
 end CategoryTheory.Limits.FintypeCat
+

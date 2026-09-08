@@ -31,46 +31,57 @@ namespace Metric
 variable {x : γ} {s : Set γ}
 
 -- see Note [lower instance priority]
-instance (priority := 100) _root_.MetricSpace.instT0Space : T0Space γ where
-t0 _ _ h := eq_of_dist_eq_zero Metric.inseparable_iff.1 h
-
-/--
-theorem `isUniformEmbedding_iff'` / 定理 `isUniformEmbedding_iff'`
-
-English:
-theorem isUniformEmbedding_iff'
-  given: [PseudoMetricSpace β] {f : γ -> β}
-  proof: by
-  rw [isUniformEmbedding_iff_isUniformInducing]; rw [isUniformInducing_iff]; rw [uniformContinuous_iff]
-
-中文:
-定理 isUniformEmbedding_iff'
-  条件: [伪度量空间 β] {f : γ -> β}
-  证明: by
-  rw [isUniformEmbedding_iff_isUniformInducing]; rw [isUniformInducing_iff]; rw [uniformContinuous_iff]
-
-Depends on / 依赖: isUniformEmbedding_iff_isUniformInducing, isUniformInducing_iff, uniformContinuous_iff
+/-
+**Metric.** 是 Mathlib 中的一个实例，位于命名空间 `Metric`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem isUniformEmbedding_iff' [PseudoMetricSpace β] {f : γ -> β} :
+instance (priority := 100) _root_.MetricSpace.instT0Space : T0Space γ where
+  t0 _ _ h := eq_of_dist_eq_zero <| Metric.inseparable_iff.1 h
+
+/-- A map between metric spaces is a uniform embedding if and only if the distance between `f x`
+and `f y` is controlled in terms of the distance between `x` and `y` and conversely. -/
+/-
+**Metric.isUniformEmbedding_iff'** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：isUniformEmbedding_iff' [PseudoMetricSpace β] {f : γ -> β} : IsUniformEmbe
+dding f ↔ (forall ε > 0, exists δ > 0, forall {a b : γ}, dist a b < δ -> dist (f
+ a) (f b) < ε) ∧ forall δ > 0, exists ε > 0, forall {a b : γ}, dist (f a) (f b) 
+< ε -> dist a b < δ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `isUniformEmbedding_iff_isUniformInducing`：isUniformEmbedding_iff_isUnifo
+rmInducing [T0Space α] {f : α -> β} : IsUniformEmbedding f ↔ IsUniformInducing f
+· 使用定理 `MetricSpace.instT0Space`：∀ {γ : Type w} [inst : MetricSpace γ], T0Space 
+γ
+· 使用定理 `Metric.isUniformInducing_iff`：∀ {α : Type u} {β : Type v} [inst : Pseudo
+MetricSpace α] [inst_1 : PseudoMetricSpace β] {f : α → β},   IsUniformInducing f
+ ↔ UniformContinuo…
+· 使用定理 `Metric.uniformContinuous_iff`：uniformContinuous_iff [PseudoMetricSpace β
+] {f : α -> β} : UniformContinuous f ↔ forall ε > 0, exists δ > 0, forall ⦃a b :
+ α⦄, dist a b < δ …
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
+
+--- 原说明 ---
+A map between metric spaces is a uniform embedding if and only if the distance b
+etween `f x`
+and `f y` is controlled in terms of the distance between `x` and `y` and convers
+ely.
+-/
+theorem isUniformEmbedding_iff' [PseudoMetricSpace β] {f : γ → β} :
     IsUniformEmbedding f ↔
-      (forall ε > 0, exists δ > 0, forall {a b : γ}, dist a b < δ -> dist (f a) (f b) < ε) ∧
-        forall δ > 0, exists ε > 0, forall {a b : γ}, dist (f a) (f b) < ε -> dist a b < δ := by
-  rw [isUniformEmbedding_iff_isUniformInducing]; rw [isUniformInducing_iff]; rw [uniformContinuous_iff]
+      (∀ ε > 0, ∃ δ > 0, ∀ {a b : γ}, dist a b < δ → dist (f a) (f b) < ε) ∧
+        ∀ δ > 0, ∃ ε > 0, ∀ {a b : γ}, dist (f a) (f b) < ε → dist a b < δ := by
+  rw [isUniformEmbedding_iff_isUniformInducing, isUniformInducing_iff, uniformContinuous_iff]
 
-/--
-Definition of `_root_.MetricSpace.ofT0PseudoMetricSpace` / `_root_.MetricSpace.ofT0PseudoMetricSpace` 的定义
+/-- If a `PseudoMetricSpace` is a T₀ space, then it is a `MetricSpace`. -/
+/-
+**Metric._root_.MetricSpace.ofT0PseudoMetricSpace** 是 Mathlib 中的一个缩写定义，位于命名空间 `M
+etric`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation _root_.MetricSpace.ofT0PseudoMetricSpace
-  signature: (α : Type*) [PseudoMetricSpace α] [T0Space α]
-  body: ‹_›
-  eq_of_dist_eq_zero hdist := (Metric.inseparable_iff.2 hdist).eq
-
-中文:
-缩写 _root_.度量空间.ofT0PseudoMetricSpace
-  签名: (α : 类型) [伪度量空间 α] [T0空间 α]
-  定义体: ‹_›
-  eq_of_dist_eq_zero hdist := (Metric.inseparable_iff.2 hdist).eq
+--- 原说明 ---
+If a `PseudoMetricSpace` is a T₀ space, then it is a `MetricSpace`.
 -/
 abbrev _root_.MetricSpace.ofT0PseudoMetricSpace (α : Type*) [PseudoMetricSpace α] [T0Space α] :
     MetricSpace α where
@@ -79,343 +90,313 @@ abbrev _root_.MetricSpace.ofT0PseudoMetricSpace (α : Type*) [PseudoMetricSpace 
 
 -- see Note [lower instance priority]
 /-- A metric space induces an emetric space -/
+/-
+**Metric.** 是 Mathlib 中的一个实例，位于命名空间 `Metric`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+A metric space induces an emetric space
+-/
 instance (priority := 100) _root_.MetricSpace.toEMetricSpace : EMetricSpace γ :=
   .ofT0PseudoEMetricSpace γ
-
-/--
-theorem `isClosed_of_pairwise_le_dist` / 定理 `isClosed_of_pairwise_le_dist`
-
-English:
-theorem isClosed_of_pairwise_le_dist
-  statement: {s : Set γ} {ε : Real} (hε : 0 < ε)
-  proof: isClosed_of_spaced_out (dist_mem_uniformity hε) by simpa using hs
-
-中文:
-定理 isClosed_of_pairwise_le_dist
-  结论: {s : 集合 γ} {ε : 实数} (hε : 0 < ε)
-  证明: isClosed_of_spaced_out (dist_mem_uniformity hε) by simpa using hs
-
-Depends on / 依赖: dist_mem_uniformity, isClosed_of_spaced_out
+/-
+**Metric.isClosed_of_pairwise_le_dist** 是 Mathlib 中的一个定理，位于命名空间 `Metric`。
+形式化陈述：isClosed_of_pairwise_le_dist {s : Set γ} {ε : Real} (hε : 0 < ε) (hs : s.P
+airwise fun x y => ε <= dist x y) : IsClosed s
+参数：hε : 0 < ε；hs : s.Pairwise fun x y => ε <= dist x y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isClosed_of_spaced_out`：isClosed_of_spaced_out [T0Space α] {V₀ : Set (α 
+× α)} (V₀_in : V₀ in 𝓤 α) {s : Set α} (hs : s.Pairwise fun x y => (x, y) ∉ V₀) :
+ IsClosed s
+· 使用定理 `MetricSpace.instT0Space`：∀ {γ : Type w} [inst : MetricSpace γ], T0Space 
+γ
+· 使用定理 `Metric.dist_mem_uniformity`：dist_mem_uniformity {ε : Real} (ε0 : 0 < ε) 
+: { p : α × α | dist p.1 p.2 < ε } in 𝓤 α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
-theorem isClosed_of_pairwise_le_dist {s : Set γ} {ε : Real} (hε : 0 < ε)
-    (hs : s.Pairwise fun x y => ε <= dist x y) : IsClosed s :=
-isClosed_of_spaced_out (dist_mem_uniformity hε) by simpa using hs
-
-/--
-theorem `isClosedEmbedding_of_pairwise_le_dist` / 定理 `isClosedEmbedding_of_pairwise_le_dist`
-
-English:
-theorem isClosedEmbedding_of_pairwise_le_dist
-  statement: {α : Type*} [TopologicalSpace α] [DiscreteTopology α]
-  proof: isClosedEmbedding_of_spaced_out (dist_mem_uniformity hε) by simpa using hf
-
-中文:
-定理 isClosedEmbedding_of_pairwise_le_dist
-  结论: {α : 类型} [拓扑空间 α] [离散拓扑 α]
-  证明: isClosedEmbedding_of_spaced_out (dist_mem_uniformity hε) by simpa using hf
-
-Depends on / 依赖: dist_mem_uniformity, isClosedEmbedding_of_spaced_out
+theorem isClosed_of_pairwise_le_dist {s : Set γ} {ε : ℝ} (hε : 0 < ε)
+    (hs : s.Pairwise fun x y => ε ≤ dist x y) : IsClosed s :=
+  isClosed_of_spaced_out (dist_mem_uniformity hε) <| by simpa using hs
+/-
+**Metric.isClosedEmbedding_of_pairwise_le_dist** 是 Mathlib 中的一个定理，位于命名空间 `Metric
+`。
+形式化陈述：isClosedEmbedding_of_pairwise_le_dist {α : Type*} [TopologicalSpace α] [Di
+screteTopology α] {ε : Real} (hε : 0 < ε) {f : α -> γ} (hf : Pairwise fun x y =>
+ ε <= dist (f x) (f y)) : IsClosedEmbedding f
+参数：hε : 0 < ε；hf : Pairwise fun x y => ε <= dist (f x) (f y)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isClosedEmbedding_of_spaced_out`：isClosedEmbedding_of_spaced_out {α} [To
+pologicalSpace α] [DiscreteTopology α] [T0Space β] {f : α -> β} {s : Set (β × β)
+} (hs : s in 𝓤 β) (hf…
+· 使用定理 `MetricSpace.instT0Space`：∀ {γ : Type w} [inst : MetricSpace γ], T0Space 
+γ
+· 使用定理 `Metric.dist_mem_uniformity`：dist_mem_uniformity {ε : Real} (ε0 : 0 < ε) 
+: { p : α × α | dist p.1 p.2 < ε } in 𝓤 α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 -/
 theorem isClosedEmbedding_of_pairwise_le_dist {α : Type*} [TopologicalSpace α] [DiscreteTopology α]
-    {ε : Real} (hε : 0 < ε) {f : α -> γ} (hf : Pairwise fun x y => ε <= dist (f x) (f y)) :
+    {ε : ℝ} (hε : 0 < ε) {f : α → γ} (hf : Pairwise fun x y => ε ≤ dist (f x) (f y)) :
     IsClosedEmbedding f :=
-isClosedEmbedding_of_spaced_out (dist_mem_uniformity hε) by simpa using hf
+  isClosedEmbedding_of_spaced_out (dist_mem_uniformity hε) <| by simpa using hf
 
-/--
-theorem `isUniformEmbedding_bot_of_pairwise_le_dist` / 定理 `isUniformEmbedding_bot_of_pairwise_le_dist`
+/-- If `f : β → α` sends any two distinct points to points at distance at least `ε > 0`, then
+`f` is a uniform embedding with respect to the discrete uniformity on `β`. -/
+/-
+**Metric.isUniformEmbedding_bot_of_pairwise_le_dist** 是 Mathlib 中的一个定理，位于命名空间 `M
+etric`。
+形式化陈述：isUniformEmbedding_bot_of_pairwise_le_dist {β : Type*} {ε : Real} (hε : 0 
+< ε) {f : β -> α} (hf : Pairwise fun x y => ε <= dist (f x) (f y)) : @IsUniformE
+mbedding _ _ ⊥ (by infer_instance) f
+参数：hε : 0 < ε；hf : Pairwise fun x y => ε <= dist (f x) (f y)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isUniformEmbedding_of_spaced_out`：isUniformEmbedding_of_spaced_out {α} {
+f : α -> β} {s : Set (β × β)} (hs : s in 𝓤 β) (hf : Pairwise fun x y => (f x, f 
+y) ∉ s) : @IsUniformEm…
+· 使用定理 `Metric.dist_mem_uniformity`：dist_mem_uniformity {ε : Real} (ε0 : 0 < ε) 
+: { p : α × α | dist p.1 p.2 < ε } in 𝓤 α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
 
-English:
-theorem isUniformEmbedding_bot_of_pairwise_le_dist
-  statement: {β : Type*} {ε : Real} (hε : 0 < ε) {f : β -> α}
-  proof: isUniformEmbedding_of_spaced_out (dist_mem_uniformity hε) by simpa using hf
-
-中文:
-定理 isUniformEmbedding_bot_of_pairwise_le_dist
-  结论: {β : 类型} {ε : 实数} (hε : 0 < ε) {f : β -> α}
-  证明: isUniformEmbedding_of_spaced_out (dist_mem_uniformity hε) by simpa using hf
-
-Depends on / 依赖: dist_mem_uniformity, isUniformEmbedding_of_spaced_out
+--- 原说明 ---
+If `f : β → α` sends any two distinct points to points at distance at least `ε >
+ 0`, then
+`f` is a uniform embedding with respect to the discrete uniformity on `β`.
 -/
-theorem isUniformEmbedding_bot_of_pairwise_le_dist {β : Type*} {ε : Real} (hε : 0 < ε) {f : β -> α}
-    (hf : Pairwise fun x y => ε <= dist (f x) (f y)) :
+theorem isUniformEmbedding_bot_of_pairwise_le_dist {β : Type*} {ε : ℝ} (hε : 0 < ε) {f : β → α}
+    (hf : Pairwise fun x y => ε ≤ dist (f x) (f y)) :
     @IsUniformEmbedding _ _ ⊥ (by infer_instance) f :=
-isUniformEmbedding_of_spaced_out (dist_mem_uniformity hε) by simpa using hf
+  isUniformEmbedding_of_spaced_out (dist_mem_uniformity hε) <| by simpa using hf
 
 end Metric
 
-/--
-Definition of `EMetricSpace.toMetricSpaceOfDist` / `EMetricSpace.toMetricSpaceOfDist` 的定义
+/-- One gets a metric space from an emetric space if the edistance
+is everywhere finite, by pushing the edistance to reals. We set it up so that the edist and the
+uniformity are defeq in the metric space and the emetric space. In this definition, the distance
+is given separately, to be able to prescribe some expression which is not defeq to the push-forward
+of the edistance to reals. -/
+/-
+**EMetricSpace.toMetricSpaceOfDist** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：EMetricSpace.toMetricSpaceOfDist {α : Type u} [EMetricSpace α] (dist : α -
+> α -> Real) (dist_nonneg : forall x y, 0 <= dist x y) (h : forall x y, edist x 
+y = .ofReal (dist x y)) : MetricSpace α
+参数：dist : α -> α -> Real；dist_nonneg : forall x y, 0 <= dist x y；h : forall x y,
+ edist x y = .ofReal (dist x y)。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `EMetricSpace.instT0Space`：∀ {γ : Type w} [inst : EMetricSpace γ], T0Spac
+e γ
 
-English:
-abbreviation EMetricSpace.toMetricSpaceOfDist
-  signature: {α : Type u} [EMetricSpace α] (dist : α -> α -> Real)
-  body: letI := PseudoEMetricSpace.toPseudoMetricSpaceOfDist dist dist_nonneg h
-  MetricSpace.ofT0PseudoMetricSpace _
-
-中文:
-缩写 广义度量空间.toMetricSpaceOfDist
-  签名: {α : 类型u} [广义度量空间 α] (dist : α -> α -> 实数)
-  定义体: letI := PseudoEMetricSpace.toPseudoMetricSpaceOfDist dist dist_nonneg h
-  MetricSpace.ofT0PseudoMetricSpace _
-
-Depends on / 依赖: MetricSpace, MetricSpace.ofT0PseudoMetricSpace, PseudoEMetricSpace, PseudoEMetricSpace.toPseudoMetricSpaceOfDist, dist_nonneg, ofT0PseudoMetricSpace, toPseudoMetricSpaceOfDist
+--- 原说明 ---
+One gets a metric space from an emetric space if the edistance
+is everywhere finite, by pushing the edistance to reals. We set it up so that th
+e edist and the
+uniformity are defeq in the metric space and the emetric space. In this definiti
+on, the distance
+is given separately, to be able to prescribe some expression which is not defeq 
+to the push-forward
+of the edistance to reals.
 -/
-abbrev EMetricSpace.toMetricSpaceOfDist {α : Type u} [EMetricSpace α] (dist : α -> α -> Real)
-    (dist_nonneg : forall x y, 0 <= dist x y) (h : forall x y, edist x y = .ofReal (dist x y)) :
+abbrev EMetricSpace.toMetricSpaceOfDist {α : Type u} [EMetricSpace α] (dist : α → α → ℝ)
+    (dist_nonneg : ∀ x y, 0 ≤ dist x y) (h : ∀ x y, edist x y = .ofReal (dist x y)) :
     MetricSpace α :=
   letI := PseudoEMetricSpace.toPseudoMetricSpaceOfDist dist dist_nonneg h
   MetricSpace.ofT0PseudoMetricSpace _
 
-/--
-Definition of `EMetricSpace.toMetricSpace` / `EMetricSpace.toMetricSpace` 的定义
+/-- One gets a metric space from an emetric space if the edistance
+is everywhere finite, by pushing the edistance to reals. We set it up so that the edist and the
+uniformity are defeq in the metric space and the emetric space. -/
+/-
+**EMetricSpace.toMetricSpace** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：EMetricSpace.toMetricSpace {α : Type u} [EMetricSpace α] (h : forall x y :
+ α, edist x y != ⊤) : MetricSpace α
+参数：h : forall x y : α, edist x y != ⊤。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation EMetricSpace.toMetricSpace
-  signature: {α : Type u} [EMetricSpace α] (h : forall x y : α, edist x y != ⊤)
-  body: EMetricSpace.toMetricSpaceOfDist (ENNReal.toReal <| edist · ·) (by simp) (by simp [h])
-
-中文:
-缩写 广义度量空间.toMetricSpace
-  签名: {α : 类型u} [广义度量空间 α] (h : 对任意 x y : α, edist x y != ⊤)
-  定义体: EMetricSpace.toMetricSpaceOfDist (ENNReal.toReal <| edist · ·) (by simp) (by simp [h])
-
-Depends on / 依赖: EMetricSpace, EMetricSpace.toMetricSpaceOfDist, ENNReal, ENNReal.toReal, toMetricSpaceOfDist, toReal
+--- 原说明 ---
+One gets a metric space from an emetric space if the edistance
+is everywhere finite, by pushing the edistance to reals. We set it up so that th
+e edist and the
+uniformity are defeq in the metric space and the emetric space.
 -/
-abbrev EMetricSpace.toMetricSpace {α : Type u} [EMetricSpace α] (h : forall x y : α, edist x y != ⊤) :
+abbrev EMetricSpace.toMetricSpace {α : Type u} [EMetricSpace α] (h : ∀ x y : α, edist x y ≠ ⊤) :
     MetricSpace α :=
   EMetricSpace.toMetricSpaceOfDist (ENNReal.toReal <| edist · ·) (by simp) (by simp [h])
 
-/--
-Definition of `MetricSpace.induced` / `MetricSpace.induced` 的定义
+/-- Metric space structure pulled back by an injective function. Injectivity is necessary to
+ensure that `dist x y = 0` only if `x = y`. -/
+/-
+**MetricSpace.induced** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：MetricSpace.induced {γ β} (f : γ -> β) (hf : Function.Injective f) (m : Me
+tricSpace β) : MetricSpace γ
+参数：f : γ -> β；hf : Function.Injective f；m : MetricSpace β。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation MetricSpace.induced
-  signature: {γ β} (f : γ -> β) (hf : Function.Injective f) (m : MetricSpace β)
-  body: { PseudoMetricSpace.induced f m.toPseudoMetricSpace with
-    eq_of_dist_eq_zero := fun h => hf (dist_eq_zero.1 h) }
-
-中文:
-缩写 度量空间.induced
-  签名: {γ β} (f : γ -> β) (hf : 函数.单射 f) (m : 度量空间 β)
-  定义体: { PseudoMetricSpace.induced f m.toPseudoMetricSpace with
-    eq_of_dist_eq_zero := fun h => hf (dist_eq_zero.1 h) }
-
-Depends on / 依赖: PseudoMetricSpace, PseudoMetricSpace.induced, dist_eq_zero, eq_of_dist_eq_zero, induced, m.toPseudoMetricSpace, toPseudoMetricSpace
+--- 原说明 ---
+Metric space structure pulled back by an injective function. Injectivity is nece
+ssary to
+ensure that `dist x y = 0` only if `x = y`.
 -/
-abbrev MetricSpace.induced {γ β} (f : γ -> β) (hf : Function.Injective f) (m : MetricSpace β) :
+abbrev MetricSpace.induced {γ β} (f : γ → β) (hf : Function.Injective f) (m : MetricSpace β) :
     MetricSpace γ :=
   { PseudoMetricSpace.induced f m.toPseudoMetricSpace with
     eq_of_dist_eq_zero := fun h => hf (dist_eq_zero.1 h) }
 
-/--
-Definition of `IsUniformEmbedding.comapMetricSpace` / `IsUniformEmbedding.comapMetricSpace` 的定义
+/-- Pull back a metric space structure by a uniform embedding. This is a version of
+`MetricSpace.induced` useful in case if the domain already has a `UniformSpace` structure. -/
+/-
+**IsUniformEmbedding.comapMetricSpace** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：IsUniformEmbedding.comapMetricSpace {α β} [UniformSpace α] [m : MetricSpac
+e β] (f : α -> β) (h : IsUniformEmbedding f) : MetricSpace α
+参数：f : α -> β；h : IsUniformEmbedding f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsUniformEmbedding.comapMetricSpace
-  signature: {α β} [UniformSpace α] [m : MetricSpace β] (f : α -> β)
-  body: .replaceUniformity (.induced f h.injective m) h.comap_uniformity.symm
-
-中文:
-缩写 是一致嵌入.comapMetricSpace
-  签名: {α β} [一致空间 α] [m : 度量空间 β] (f : α -> β)
-  定义体: .replaceUniformity (.induced f h.injective m) h.comap_uniformity.symm
-
-Depends on / 依赖: comap_uniformity, h.comap_uniformity.symm, h.injective, induced, injective, replaceUniformity
+--- 原说明 ---
+Pull back a metric space structure by a uniform embedding. This is a version of
+`MetricSpace.induced` useful in case if the domain already has a `UniformSpace` 
+structure.
 -/
-abbrev IsUniformEmbedding.comapMetricSpace {α β} [UniformSpace α] [m : MetricSpace β] (f : α -> β)
+abbrev IsUniformEmbedding.comapMetricSpace {α β} [UniformSpace α] [m : MetricSpace β] (f : α → β)
     (h : IsUniformEmbedding f) : MetricSpace α :=
   .replaceUniformity (.induced f h.injective m) h.comap_uniformity.symm
 
-/--
-Definition of `Topology.IsEmbedding.comapMetricSpace` / `Topology.IsEmbedding.comapMetricSpace` 的定义
+/-- Pull back a metric space structure by an embedding. This is a version of
+`MetricSpace.induced` useful in case if the domain already has a `TopologicalSpace` structure. -/
+/-
+**Topology.IsEmbedding.comapMetricSpace** 是 Mathlib 中的一个缩写定义，位于命名空间 ``。
+形式化陈述：Topology.IsEmbedding.comapMetricSpace {α β} [TopologicalSpace α] [m : Metr
+icSpace β] (f : α -> β) (h : IsEmbedding f) : MetricSpace α
+参数：f : α -> β；h : IsEmbedding f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Topology.IsEmbedding.comapMetricSpace
-  signature: {α β} [TopologicalSpace α] [m : MetricSpace β]
-  body: .replaceTopology (.induced f h.injective m) h.eq_induced
-
-中文:
-缩写 拓扑.是嵌入.comapMetricSpace
-  签名: {α β} [拓扑空间 α] [m : 度量空间 β]
-  定义体: .replaceTopology (.induced f h.injective m) h.eq_induced
-
-Depends on / 依赖: eq_induced, h.eq_induced, h.injective, induced, injective, replaceTopology
+--- 原说明 ---
+Pull back a metric space structure by an embedding. This is a version of
+`MetricSpace.induced` useful in case if the domain already has a `TopologicalSpa
+ce` structure.
 -/
 abbrev Topology.IsEmbedding.comapMetricSpace {α β} [TopologicalSpace α] [m : MetricSpace β]
-    (f : α -> β) (h : IsEmbedding f) : MetricSpace α :=
+    (f : α → β) (h : IsEmbedding f) : MetricSpace α :=
   .replaceTopology (.induced f h.injective m) h.eq_induced
-
-/--
-Instance `Subtype.metricSpace` / 实例 `Subtype.metricSpace`
-
-English:
-instance Subtype.metricSpace
-  signature: {α : Type*} {p : α -> Prop} [MetricSpace α]
-  body: .induced Subtype.val Subtype.coe_injective ‹_›
-
-@[to_additive]
-
-中文:
-实例 子类型.metricSpace
-  签名: {α : 类型} {p : α -> 命题} [度量空间 α]
-  定义体: .induced Subtype.val Subtype.coe_injective ‹_›
-
-@[to_additive]
-
-Depends on / 依赖: Subtype, Subtype.coe_injective, Subtype.val, coe_injective, induced
+/-
+**Subtype.metricSpace** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Subtype.metricSpace {α : Type*} {p : α -> Prop} [MetricSpace α] : MetricSp
+ace (Subtype p)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subtype.coe_injective`：coe_injective : Injective (fun (a : Subtype p) =>
+ (a : α))
 -/
-instance Subtype.metricSpace {α : Type*} {p : α -> Prop} [MetricSpace α] :
+instance Subtype.metricSpace {α : Type*} {p : α → Prop} [MetricSpace α] :
     MetricSpace (Subtype p) :=
   .induced Subtype.val Subtype.coe_injective ‹_›
 
 @[to_additive]
-/--
-Instance `MulOpposite.instMetricSpace` / 实例 `MulOpposite.instMetricSpace`
-
-English:
-instance MulOpposite.instMetricSpace
-  signature: {α : Type*} [MetricSpace α]
-  body: MetricSpace.induced MulOpposite.unop MulOpposite.unop_injective ‹_›
-
-中文:
-实例 MulOpposite.instMetricSpace
-  签名: {α : 类型} [度量空间 α]
-  定义体: MetricSpace.induced MulOpposite.unop MulOpposite.unop_injective ‹_›
-
-Depends on / 依赖: MetricSpace, MetricSpace.induced, MulOpposite, MulOpposite.unop, MulOpposite.unop_injective, induced, unop_injective
+/-
+**MulOpposite.instMetricSpace** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：MulOpposite.instMetricSpace {α : Type*} [MetricSpace α] : MetricSpace αᵐᵒᵖ
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `MulOpposite.unop_injective`：unop_injective : Injective (unop : αᵐᵒᵖ -> α
+)
 -/
 instance MulOpposite.instMetricSpace {α : Type*} [MetricSpace α] : MetricSpace αᵐᵒᵖ :=
   MetricSpace.induced MulOpposite.unop MulOpposite.unop_injective ‹_›
 
 section Real
 
-/--
-Instance `Real.metricSpace` / 实例 `Real.metricSpace`
+/-- Instantiate the reals as a metric space. -/
+/-
+**Real.metricSpace** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Real.metricSpace : MetricSpace Real
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance Real.metricSpace
-  signature: : MetricSpace Real
-  body: .ofT0PseudoMetricSpace Real
-
-中文:
-实例 实数.metricSpace
-  签名: : 度量空间 实数
-  定义体: .ofT0PseudoMetricSpace Real
-
-Depends on / 依赖: ofT0PseudoMetricSpace
+--- 原说明 ---
+Instantiate the reals as a metric space.
 -/
-instance Real.metricSpace : MetricSpace Real := .ofT0PseudoMetricSpace Real
+instance Real.metricSpace : MetricSpace ℝ := .ofT0PseudoMetricSpace ℝ
 
 end Real
 
 section NNReal
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MetricSpace Real>=0
-  body: inferInstanceAs MetricSpace (Subtype _)
-
-中文:
-实例 :
-  签名: 度量空间 实数>=0
-  定义体: inferInstanceAs MetricSpace (Subtype _)
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : MetricSpace Real>=0 :=
-inferInstanceAs MetricSpace (Subtype _)
-
-/--
-theorem `NNReal.isUniformEmbedding_coe` / 定理 `NNReal.isUniformEmbedding_coe`
-
-English:
-theorem NNReal.isUniformEmbedding_coe
-  statement: IsUniformEmbedding NNReal.toReal
-  proof: isUniformEmbedding_subtype_val
-
-中文:
-定理 非负实数.isUniformEmbedding_coe
-  结论: 是一致嵌入 非负实数.to实数
-  证明: isUniformEmbedding_subtype_val
-
-Depends on / 依赖: isUniformEmbedding_subtype_val
+instance : MetricSpace ℝ≥0 :=
+  inferInstanceAs <| MetricSpace (Subtype _)
+/-
+**NNReal.isUniformEmbedding_coe** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：NNReal.isUniformEmbedding_coe : IsUniformEmbedding NNReal.toReal
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isUniformEmbedding_subtype_val`：isUniformEmbedding_subtype_val {p : α ->
+ Prop} : IsUniformEmbedding (Subtype.val : Subtype p -> α)
 -/
 theorem NNReal.isUniformEmbedding_coe : IsUniformEmbedding NNReal.toReal :=
   isUniformEmbedding_subtype_val
-
-/--
-theorem `NNReal.isEmbedding_coe` / 定理 `NNReal.isEmbedding_coe`
-
-English:
-theorem NNReal.isEmbedding_coe
-  statement: Topology.IsEmbedding NNReal.toReal
-  proof: isUniformEmbedding_coe.isEmbedding
-
-中文:
-定理 非负实数.isEmbedding_coe
-  结论: 拓扑.是嵌入 非负实数.to实数
-  证明: isUniformEmbedding_coe.isEmbedding
-
-Depends on / 依赖: isEmbedding, isUniformEmbedding_coe, isUniformEmbedding_coe.isEmbedding
+/-
+**NNReal.isEmbedding_coe** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：NNReal.isEmbedding_coe : Topology.IsEmbedding NNReal.toReal
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUniformEmbedding.isEmbedding`：∀ {α : Type u} {β : Type v} [inst : Unif
+ormSpace α] [inst_1 : UniformSpace β] {f : α → β},   IsUniformEmbedding f → Topo
+logy.IsEmbedding f
+· 使用定理 `NNReal.isUniformEmbedding_coe`：NNReal.isUniformEmbedding_coe : IsUniform
+Embedding NNReal.toReal
 -/
 theorem NNReal.isEmbedding_coe : Topology.IsEmbedding NNReal.toReal :=
   isUniformEmbedding_coe.isEmbedding
-
-/--
-theorem `NNReal.isClosedEmbedding_coe` / 定理 `NNReal.isClosedEmbedding_coe`
-
-English:
-theorem NNReal.isClosedEmbedding_coe
-  statement: Topology.IsClosedEmbedding NNReal.toReal
-  proof: isClosed_Ici.isClosedEmbedding_subtypeVal
-
-中文:
-定理 非负实数.isClosedEmbedding_coe
-  结论: 拓扑.是闭嵌入 非负实数.to实数
-  证明: isClosed_Ici.isClosedEmbedding_subtypeVal
-
-Depends on / 依赖: isClosedEmbedding_subtypeVal, isClosed_Ici, isClosed_Ici.isClosedEmbedding_subtypeVal
+/-
+**NNReal.isClosedEmbedding_coe** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：NNReal.isClosedEmbedding_coe : Topology.IsClosedEmbedding NNReal.toReal
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `IsClosed.isClosedEmbedding_subtypeVal`：IsClosed.isClosedEmbedding_subtyp
+eVal {s : Set X} (hs : IsClosed s) : IsClosedEmbedding ((↑) : s -> X)
+· 使用定理 `isClosed_Ici`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_1 : Preor
+der α] [ClosedIciTopology α] {a : α}, IsClosed (Set.Ici a)
+· 使用定理 `instClosedIciTopology`：∀ {α : Type u} [inst : TopologicalSpace α] [inst_
+1 : Preorder α] [t : OrderClosedTopology α], ClosedIciTopology α
+· 使用定理 `OrderTopology.to_orderClosedTopology`：∀ {α : Type u} [inst : Topological
+Space α] [inst_1 : LinearOrder α] [OrderTopology α], OrderClosedTopology α
+· 使用定理 `instOrderTopologyReal`：OrderTopology ℝ
 -/
 theorem NNReal.isClosedEmbedding_coe : Topology.IsClosedEmbedding NNReal.toReal :=
   isClosed_Ici.isClosedEmbedding_subtypeVal
 
 end NNReal
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [MetricSpace
-  signature: β] : MetricSpace (ULift β)
-  body: fast_instance% MetricSpace.induced ULift.down ULift.down_injective ‹_›
-
-中文:
-实例 [度量空间
-  签名: β] : 度量空间 (类型层提升 β)
-  定义体: fast_instance% MetricSpace.induced ULift.down ULift.down_injective ‹_›
-
-Depends on / 依赖: MetricSpace, MetricSpace.induced, ULift.down, ULift.down_injective, down_injective, fast_instance, induced
+/-
+**** 是 Mathlib 中的一个实例，位于命名空间 ``。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [MetricSpace β] : MetricSpace (ULift β) :=
   fast_instance% MetricSpace.induced ULift.down ULift.down_injective ‹_›
 
 section Prod
 
-/--
-Instance `Prod.metricSpaceMax` / 实例 `Prod.metricSpaceMax`
-
-English:
-instance Prod.metricSpaceMax
-  signature: [MetricSpace β]
-  body: .ofT0PseudoMetricSpace _
-
-中文:
-实例 积类型.metricSpaceMax
-  签名: [度量空间 β]
-  定义体: .ofT0PseudoMetricSpace _
-
-Depends on / 依赖: ofT0PseudoMetricSpace
+/-
+**Prod.metricSpaceMax** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Prod.metricSpaceMax [MetricSpace β] : MetricSpace (γ × β)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Prod.metricSpaceMax [MetricSpace β] : MetricSpace (γ × β) :=
   .ofT0PseudoMetricSpace _
@@ -426,24 +407,19 @@ section Pi
 
 open Finset
 
-variable {X : β -> Type*} [Fintype β] [forall b, MetricSpace (X b)]
+variable {X : β → Type*} [Fintype β] [∀ b, MetricSpace (X b)]
 
-/--
-Instance `metricSpacePi` / 实例 `metricSpacePi`
+/-- A finite product of metric spaces is a metric space, with the sup distance. -/
+/-
+**metricSpacePi** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：metricSpacePi : MetricSpace (forall b, X b)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance metricSpacePi
-  signature: : MetricSpace (forall b, X b)
-  body: .ofT0PseudoMetricSpace _
-
-中文:
-实例 metricSpacePi
-  签名: : 度量空间 (对任意 b, X b)
-  定义体: .ofT0PseudoMetricSpace _
-
-Depends on / 依赖: ofT0PseudoMetricSpace
+--- 原说明 ---
+A finite product of metric spaces is a metric space, with the sup distance.
 -/
-instance metricSpacePi : MetricSpace (forall b, X b) := .ofT0PseudoMetricSpace _
+instance metricSpacePi : MetricSpace (∀ b, X b) := .ofT0PseudoMetricSpace _
 
 end Pi
 
@@ -454,38 +430,39 @@ section SecondCountable
 open TopologicalSpace
 
 -- TODO: use `Countable` instead of `Encodable`
-/--
-theorem `secondCountable_of_countable_discretization` / 定理 `secondCountable_of_countable_discretization`
+/-- A metric space is second countable if one can reconstruct up to any `ε>0` any element of the
+space from countably many data. -/
+/-
+**Metric.secondCountable_of_countable_discretization** 是 Mathlib 中的一个定理，位于命名空间 `
+Metric`。
+形式化陈述：secondCountable_of_countable_discretization {α : Type u} [PseudoMetricSpac
+e α] (H : forall ε > (0 : Real), exists (β : Type*) (_ : Encodable β) (F : α -> 
+β), forall x y, F x = F y -> dist x y <= ε) : SecondCountableTopology α
+参数：H : forall ε > (0 : Real), exists (β : Type*) (_ : Encodable β) (F : α -> β),
+ forall x y, F x = F y -> dist x y <= ε。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Metric.secondCountable_of_almost_dense_set`：secondCountable_of_almost_de
+nse_set (H : forall ε > (0 : Real), exists s : Set α, s.Countable ∧ forall x, ex
+ists y in s, dist x y <= ε) : Se…
+· 使用定理 `Set.countable_range`：countable_range [Countable ι] (f : ι -> β) : (range
+ f).Countable
+· 使用定理 `SetCoe.countable`：∀ {α : Type u} [Countable α] (s : Set α), Countable ↑s
+· 使用定理 `Encodable.countable`：∀ {α : Type u_1} [Encodable α], Countable α
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
+· 使用定理 `Set.apply_rangeSplitting`：apply_rangeSplitting (f : α -> β) (x : range f
+) : f (rangeSplitting f x) = x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem secondCountable_of_countable_discretization
-  statement: {α : Type u} [PseudoMetricSpace α]
-  proof: by
-  refine secondCountable_of_almost_dense_set fun ε ε0 => ?_
-  rcases H ε ε0 with ⟨β, fβ, F, hF⟩
-  let Finv := rangeSplitting F
-  refine ⟨range Finv, ⟨countable_range _, fun x => ?_⟩⟩
-  let x' := Finv ⟨F x, mem_range_self _⟩
-  have : F x' = F x := apply_rangeSplitting F _
-  exact ⟨x', mem_range_self _, hF _ _ this.symm⟩
-
-中文:
-定理 secondCountable_of_countable_discretization
-  结论: {α : 类型u} [伪度量空间 α]
-  证明: by
-  refine secondCountable_of_almost_dense_set fun ε ε0 => ?_
-  rcases H ε ε0 with ⟨β, fβ, F, hF⟩
-  let Finv := rangeSplitting F
-  refine ⟨range Finv, ⟨countable_range _, fun x => ?_⟩⟩
-  let x' := Finv ⟨F x, mem_range_self _⟩
-  have : F x' = F x := apply_rangeSplitting F _
-  exact ⟨x', mem_range_self _, hF _ _ this.symm⟩
-
-Depends on / 依赖: apply_rangeSplitting, countable_range, mem_range_self, rangeSplitting, secondCountable_of_almost_dense_set, this.symm
+--- 原说明 ---
+A metric space is second countable if one can reconstruct up to any `ε>0` any el
+ement of the
+space from countably many data.
 -/
 theorem secondCountable_of_countable_discretization {α : Type u} [PseudoMetricSpace α]
-    (H : forall ε > (0 : Real), exists (β : Type*) (_ : Encodable β) (F : α -> β),
-      forall x y, F x = F y -> dist x y <= ε) :
+    (H : ∀ ε > (0 : ℝ), ∃ (β : Type*) (_ : Encodable β) (F : α → β),
+      ∀ x y, F x = F y → dist x y ≤ ε) :
     SecondCountableTopology α := by
   refine secondCountable_of_almost_dense_set fun ε ε0 => ?_
   rcases H ε ε0 with ⟨β, fβ, F, hF⟩
@@ -502,65 +479,38 @@ end Metric
 section EqRel
 
 -- TODO: add `dist_congr` similar to `edist_congr`?
-/--
-Instance `SeparationQuotient.instDist` / 实例 `SeparationQuotient.instDist`
-
-English:
-instance SeparationQuotient.instDist
-  signature: {α : Type u} [PseudoMetricSpace α]
-  body: lift₂ dist fun x y x' y' hx hy => by rw [dist_edist, dist_edist, ← edist_mk x,
-    ← edist_mk x', mk_eq_mk.2 hx, mk_eq_mk.2 hy]
-
-中文:
-实例 SeparationQuotient.instDist
-  签名: {α : 类型u} [伪度量空间 α]
-  定义体: lift₂ dist fun x y x' y' hx hy => by rw [dist_edist, dist_edist, ← edist_mk x,
-    ← edist_mk x', mk_eq_mk.2 hx, mk_eq_mk.2 hy]
-
-Depends on / 依赖: dist_edist, edist_mk
+/-
+**SeparationQuotient.instDist** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：SeparationQuotient.instDist {α : Type u} [PseudoMetricSpace α] : Dist (Sep
+arationQuotient α) where dist
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance SeparationQuotient.instDist {α : Type u} [PseudoMetricSpace α] :
     Dist (SeparationQuotient α) where
-  dist := lift₂ dist fun x y x' y' hx hy => by rw [dist_edist, dist_edist, ← edist_mk x,
+  dist := lift₂ dist fun x y x' y' hx hy ↦ by rw [dist_edist, dist_edist, ← edist_mk x,
     ← edist_mk x', mk_eq_mk.2 hx, mk_eq_mk.2 hy]
-
-/--
-theorem `SeparationQuotient.dist_mk` / 定理 `SeparationQuotient.dist_mk`
-
-English:
-theorem SeparationQuotient.dist_mk
-  given: {α : Type u} [PseudoMetricSpace α] (p q : α)
-  proof: rfl
-
-中文:
-定理 SeparationQuotient.dist_mk
-  条件: {α : 类型u} [伪度量空间 α] (p q : α)
-  证明: rfl
+/-
+**SeparationQuotient.dist_mk** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：SeparationQuotient.dist_mk {α : Type u} [PseudoMetricSpace α] (p q : α) : 
+dist (mk p) (mk q) = dist p q
+参数：p q : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem SeparationQuotient.dist_mk {α : Type u} [PseudoMetricSpace α] (p q : α) :
     dist (mk p) (mk q) = dist p q :=
   rfl
-
-/--
-Instance `SeparationQuotient.instMetricSpace` / 实例 `SeparationQuotient.instMetricSpace`
-
-English:
-instance SeparationQuotient.instMetricSpace
-  signature: {α : Type u} [PseudoMetricSpace α]
-  body: EMetricSpace.toMetricSpaceOfDist dist (surjective_mk.forall₂.2 fun _ _ => dist_nonneg)
-    surjective_mk.forall₂.2 edist_dist
-
-中文:
-实例 SeparationQuotient.instMetricSpace
-  签名: {α : 类型u} [伪度量空间 α]
-  定义体: EMetricSpace.toMetricSpaceOfDist dist (surjective_mk.forall₂.2 fun _ _ => dist_nonneg)
-    surjective_mk.forall₂.2 edist_dist
-
-Depends on / 依赖: EMetricSpace, EMetricSpace.toMetricSpaceOfDist, dist_nonneg, edist_dist, surjective_mk, surjective_mk.forall, toMetricSpaceOfDist
+/-
+**SeparationQuotient.instMetricSpace** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：SeparationQuotient.instMetricSpace {α : Type u} [PseudoMetricSpace α] : Me
+tricSpace (SeparationQuotient α)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance SeparationQuotient.instMetricSpace {α : Type u} [PseudoMetricSpace α] :
     MetricSpace (SeparationQuotient α) :=
-EMetricSpace.toMetricSpaceOfDist dist (surjective_mk.forall₂.2 fun _ _ => dist_nonneg)
+  EMetricSpace.toMetricSpaceOfDist dist (surjective_mk.forall₂.2 fun _ _ ↦ dist_nonneg) <|
     surjective_mk.forall₂.2 edist_dist
 
 end EqRel
@@ -569,32 +519,19 @@ namespace PseudoEMetricSpace
 
 open ENNReal
 
-variable {X : Type*} (m : PseudoEMetricSpace X) (d : X -> X -> Real>=0∞) (hd : d = edist)
+variable {X : Type*} (m : PseudoEMetricSpace X) (d : X → X → ℝ≥0∞) (hd : d = edist)
 
+/-- Build new pseudoemetric space from an old one where the edistance is provably (but typically
+non-definitionally) equal to some given edistance. We also provide convenience versions for
+PseudoMetric, Emetric and Metric spaces. -/
 -- See note [forgetful inheritance]
 -- See note [reducible non-instances]
-/--
-Definition of `replaceEDist` / `replaceEDist` 的定义
-
-English:
-abbreviation replaceEDist
-  signature: : PseudoEMetricSpace X where
-  body: d
-  edist_self := by simp [hd]
-  edist_comm := by simp [hd, edist_comm]
-  edist_triangle := by simp [hd, edist_triangle]
-  uniformity_edist := by simp [hd, uniformity_edist]
-  __ := m
-
-中文:
-缩写 replaceEDist
-  签名: : PseudoEMetric空间 X where
-  定义体: d
-  edist_self := by simp [hd]
-  edist_comm := by simp [hd, edist_comm]
-  edist_triangle := by simp [hd, edist_triangle]
-  uniformity_edist := by simp [hd, uniformity_edist]
-  __ := m
+/-
+**PseudoEMetricSpace.replaceEDist** 是 Mathlib 中的一个缩写定义，位于命名空间 `PseudoEMetricSpac
+e`。
+形式化陈述：replaceEDist : PseudoEMetricSpace X where edist
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev replaceEDist : PseudoEMetricSpace X where
   edist := d
@@ -603,59 +540,41 @@ abbrev replaceEDist : PseudoEMetricSpace X where
   edist_triangle := by simp [hd, edist_triangle]
   uniformity_edist := by simp [hd, uniformity_edist]
   __ := m
-
-/--
-lemma `replaceEDist_eq` / 引理 `replaceEDist_eq`
-
-English:
-lemma replaceEDist_eq
-  statement: m.replaceEDist d hd = m
-  proof: by ext : 2; exact hd
-
-中文:
-引理 replaceEDist_eq
-  结论: m.replaceEDist d hd = m
-  证明: by ext : 2; exact hd
+/-
+**PseudoEMetricSpace.replaceEDist_eq** 是 Mathlib 中的一个引理，位于命名空间 `PseudoEMetricSpa
+ce`。
+形式化陈述：replaceEDist_eq : m.replaceEDist d hd = m
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PseudoEMetricSpace.ext`：∀ {α : Type u_2} {m m' : PseudoEMetricSpace α}, 
+m.toEDist = m'.toEDist → m = m'
+· 使用定理 `EDist.ext`：∀ {α : Type u_2} {x y : EDist α}, edist = edist → x = y
 -/
 lemma replaceEDist_eq : m.replaceEDist d hd = m := by ext : 2; exact hd
 
 -- Check uniformity is unchanged
+/-
+**PseudoEMetricSpace.** 是 Mathlib 中的一个示例，位于命名空间 `PseudoEMetricSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : (replaceEDist m d hd).toUniformSpace = m.toUniformSpace := by
   dsimp +instances [replaceEDist]
 
 end PseudoEMetricSpace
 
 namespace PseudoMetricSpace
-variable {X : Type*} (m : PseudoMetricSpace X) (d : X -> X -> Real) (hd : d = dist)
+variable {X : Type*} (m : PseudoMetricSpace X) (d : X → X → ℝ) (hd : d = dist)
 
+/-- Build new pseudometric space from an old one where the distance is provably (but typically
+non-definitionally) equal to some given distance. We also provide convenience versions for
+PseudoEMetric, Emetric and Metric spaces. -/
 -- See note [forgetful inheritance]
 -- See note [reducible non-instances]
-/--
-Definition of `replaceDist` / `replaceDist` 的定义
-
-English:
-abbreviation replaceDist
-  signature: : PseudoMetricSpace X where
-  body: d
-  dist_self := by simp [hd]
-  dist_comm := by simp [hd, dist_comm]
-  dist_triangle := by simp [hd, dist_triangle]
-  edist_dist := by simp [hd, edist_dist]
-  uniformity_dist := by simp [hd, uniformity_dist]
-  cobounded_sets := by simp [hd, cobounded_sets]
-  __ := m
-
-中文:
-缩写 replaceDist
-  签名: : 伪度量空间 X where
-  定义体: d
-  dist_self := by simp [hd]
-  dist_comm := by simp [hd, dist_comm]
-  dist_triangle := by simp [hd, dist_triangle]
-  edist_dist := by simp [hd, edist_dist]
-  uniformity_dist := by simp [hd, uniformity_dist]
-  cobounded_sets := by simp [hd, cobounded_sets]
-  __ := m
+/-
+**PseudoMetricSpace.replaceDist** 是 Mathlib 中的一个缩写定义，位于命名空间 `PseudoMetricSpace`。
+形式化陈述：replaceDist : PseudoMetricSpace X where dist
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev replaceDist : PseudoMetricSpace X where
   dist := d
@@ -666,27 +585,31 @@ abbrev replaceDist : PseudoMetricSpace X where
   uniformity_dist := by simp [hd, uniformity_dist]
   cobounded_sets := by simp [hd, cobounded_sets]
   __ := m
-
-/--
-lemma `replaceDist_eq` / 引理 `replaceDist_eq`
-
-English:
-lemma replaceDist_eq
-  statement: m.replaceDist d hd = m
-  proof: by ext : 2; exact hd
-
-中文:
-引理 replaceDist_eq
-  结论: m.replaceDist d hd = m
-  证明: by ext : 2; exact hd
+/-
+**PseudoMetricSpace.replaceDist_eq** 是 Mathlib 中的一个引理，位于命名空间 `PseudoMetricSpace`
+。
+形式化陈述：replaceDist_eq : m.replaceDist d hd = m
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `PseudoMetricSpace.ext`：PseudoMetricSpace.ext {α : Type*} {m m' : PseudoM
+etricSpace α} (h : m.toDist = m'.toDist) : m = m'
+· 使用定理 `Dist.ext`：∀ {α : Type u_3} {x y : Dist α}, dist = dist → x = y
 -/
 lemma replaceDist_eq : m.replaceDist d hd = m := by ext : 2; exact hd
 
 -- Check uniformity is unchanged
+/-
+**PseudoMetricSpace.** 是 Mathlib 中的一个示例，位于命名空间 `PseudoMetricSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : (replaceDist m d hd).toUniformSpace = m.toUniformSpace := by
   dsimp +instances [replaceDist]
 
 -- Check Bornology is unchanged
+/-
+**PseudoMetricSpace.** 是 Mathlib 中的一个示例，位于命名空间 `PseudoMetricSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : (replaceDist m d hd).toBornology = m.toBornology := by
   dsimp +instances [replaceDist]
 
@@ -696,30 +619,18 @@ namespace EMetricSpace
 
 open ENNReal
 
-variable {X : Type*} (m : EMetricSpace X) (d : X -> X -> Real>=0∞) (hd : d = edist)
+variable {X : Type*} (m : EMetricSpace X) (d : X → X → ℝ≥0∞) (hd : d = edist)
 
+/-- Build new emetric space from an old one where the edistance is provably (but typically
+non-definitionally) equal to some given edistance. We also provide convenience versions for
+PseudoEMetric, PseudoMetric and Metric spaces. -/
 -- See note [forgetful inheritance]
 -- See note [reducible non-instances]
-/--
-Definition of `replaceEDist` / `replaceEDist` 的定义
-
-English:
-abbreviation replaceEDist
-  signature: : EMetricSpace X where
-  body: d
-  edist_self := by simp [hd]
-  edist_comm := by simp [hd, edist_comm]
-  edist_triangle := by simp [hd, edist_triangle]
-  eq_of_edist_eq_zero := by simp [hd]
-
-中文:
-缩写 replaceEDist
-  签名: : 广义度量空间 X where
-  定义体: d
-  edist_self := by simp [hd]
-  edist_comm := by simp [hd, edist_comm]
-  edist_triangle := by simp [hd, edist_triangle]
-  eq_of_edist_eq_zero := by simp [hd]
+/-
+**EMetricSpace.replaceEDist** 是 Mathlib 中的一个缩写定义，位于命名空间 `EMetricSpace`。
+形式化陈述：replaceEDist : EMetricSpace X where edist
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable abbrev replaceEDist : EMetricSpace X where
   edist := d
@@ -727,53 +638,40 @@ noncomputable abbrev replaceEDist : EMetricSpace X where
   edist_comm := by simp [hd, edist_comm]
   edist_triangle := by simp [hd, edist_triangle]
   eq_of_edist_eq_zero := by simp [hd]
-
-/--
-lemma `replaceEDist_eq` / 引理 `replaceEDist_eq`
-
-English:
-lemma replaceEDist_eq
-  statement: m.replaceEDist d hd = m
-  proof: by ext : 2; exact hd
-
-中文:
-引理 replaceEDist_eq
-  结论: m.replaceEDist d hd = m
-  证明: by ext : 2; exact hd
+/-
+**EMetricSpace.replaceEDist_eq** 是 Mathlib 中的一个引理，位于命名空间 `EMetricSpace`。
+形式化陈述：replaceEDist_eq : m.replaceEDist d hd = m
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `EMetricSpace.ext`：∀ {α : Type u_2} {m m' : EMetricSpace α}, m.toEDist = 
+m'.toEDist → m = m'
+· 使用定理 `EDist.ext`：∀ {α : Type u_2} {x y : EDist α}, edist = edist → x = y
 -/
 lemma replaceEDist_eq : m.replaceEDist d hd = m := by ext : 2; exact hd
 
 -- Check uniformity is unchanged
+/-
+**EMetricSpace.** 是 Mathlib 中的一个示例，位于命名空间 `EMetricSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : (replaceEDist m d hd).toUniformSpace = m.toUniformSpace := by
   simp +instances [replaceEDist_eq]
 
 end EMetricSpace
 
 namespace MetricSpace
-variable {X : Type*} (m : MetricSpace X) (d : X -> X -> Real) (hd : d = dist)
+variable {X : Type*} (m : MetricSpace X) (d : X → X → ℝ) (hd : d = dist)
 
+/-- Build new metric space from an old one where the distance is provably (but typically
+non-definitionally) equal to some given distance. We also provide convenience versions for
+PseudoEMetric, PseudoMatric and EMetric spaces. -/
 -- See note [forgetful inheritance]
 -- See note [reducible non-instances]
-/--
-Definition of `replaceDist` / `replaceDist` 的定义
-
-English:
-abbreviation replaceDist
-  signature: : MetricSpace X where
-  body: d
-  dist_self := by simp [hd]
-  dist_comm := by simp [hd, dist_comm]
-  dist_triangle := by simp [hd, dist_triangle]
-  eq_of_dist_eq_zero := by simp [hd]
-
-中文:
-缩写 replaceDist
-  签名: : 度量空间 X where
-  定义体: d
-  dist_self := by simp [hd]
-  dist_comm := by simp [hd, dist_comm]
-  dist_triangle := by simp [hd, dist_triangle]
-  eq_of_dist_eq_zero := by simp [hd]
+/-
+**MetricSpace.replaceDist** 是 Mathlib 中的一个缩写定义，位于命名空间 `MetricSpace`。
+形式化陈述：replaceDist : MetricSpace X where dist
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 abbrev replaceDist : MetricSpace X where
   dist := d
@@ -781,28 +679,32 @@ abbrev replaceDist : MetricSpace X where
   dist_comm := by simp [hd, dist_comm]
   dist_triangle := by simp [hd, dist_triangle]
   eq_of_dist_eq_zero := by simp [hd]
-
-/--
-lemma `replaceDist_eq` / 引理 `replaceDist_eq`
-
-English:
-lemma replaceDist_eq
-  statement: m.replaceDist d hd = m
-  proof: by ext : 2; exact hd
-
-中文:
-引理 replaceDist_eq
-  结论: m.replaceDist d hd = m
-  证明: by ext : 2; exact hd
+/-
+**MetricSpace.replaceDist_eq** 是 Mathlib 中的一个引理，位于命名空间 `MetricSpace`。
+形式化陈述：replaceDist_eq : m.replaceDist d hd = m
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MetricSpace.ext`：MetricSpace.ext {α : Type*} {m m' : MetricSpace α} (h :
+ m.toDist = m'.toDist) : m = m'
+· 使用定理 `Dist.ext`：∀ {α : Type u_3} {x y : Dist α}, dist = dist → x = y
 -/
 lemma replaceDist_eq : m.replaceDist d hd = m := by ext : 2; exact hd
 
 -- Check uniformity is unchanged
+/-
+**MetricSpace.** 是 Mathlib 中的一个示例，位于命名空间 `MetricSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : (replaceDist m d hd).toUniformSpace = m.toUniformSpace := by
   simp +instances [replaceDist_eq]
 
 -- Check Bornology is unchanged
+/-
+**MetricSpace.** 是 Mathlib 中的一个示例，位于命名空间 `MetricSpace`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 example : (replaceDist m d hd).toBornology = m.toBornology := by
   simp +instances [replaceDist_eq]
 
 end MetricSpace
+

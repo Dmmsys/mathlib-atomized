@@ -24,96 +24,78 @@ universe w v u
 namespace CategoryTheory.Limits
 
 variable {C : Type u} [Category.{v} C]
-  {ι : Type w} {B : C} {objs : ι -> C}
-  (arrows : (j : ι) -> objs j ⟶ B)
+  {ι : Type w} {B : C} {objs : ι → C}
+  (arrows : (j : ι) → objs j ⟶ B)
 
 namespace WidePullbackCone
 
-/--
-Definition of `toFan` / `toFan` 的定义
+/-- The fan that is induced by a wide pullback cone. -/
+/-
+**CategoryTheory.Limits.WidePullbackCone.toFan** 是 Mathlib 中的一个缩写定义，位于命名空间 `Cate
+goryTheory.Limits.WidePullbackCone`。
+形式化陈述：toFan (s : WidePullbackCone arrows) : Fan objs
+参数：s : WidePullbackCone arrows。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation toFan
-  signature: (s : WidePullbackCone arrows)
-  body: Fan.mk _ s.π
-
-中文:
-缩写 toFan
-  签名: (s : WidePullbackCone arrows)
-  定义体: Fan.mk _ s.π
-
-Depends on / 依赖: Fan.mk
+--- 原说明 ---
+The fan that is induced by a wide pullback cone.
 -/
 abbrev toFan (s : WidePullbackCone arrows) : Fan objs :=
   Fan.mk _ s.π
 
 variable (c : Fan objs)
 
-/--
-Definition of `ofFan` / `ofFan` 的定义
+/-- The wide pullback cone given by a fan, when the base object is terminal. -/
+/-
+**CategoryTheory.Limits.WidePullbackCone.ofFan** 是 Mathlib 中的一个缩写定义，位于命名空间 `Cate
+goryTheory.Limits.WidePullbackCone`。
+形式化陈述：ofFan (hB : IsTerminal B) : WidePullbackCone arrows
+参数：hB : IsTerminal B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation ofFan
-  signature: (hB : IsTerminal B)
-  body: WidePullbackCone.mk (hB.from _) c.proj (fun _ => hB.hom_ext _ _)
-
-中文:
-缩写 ofFan
-  签名: (hB : 是终止 B)
-  定义体: WidePullbackCone.mk (hB.from _) c.proj (fun _ => hB.hom_ext _ _)
-
-Depends on / 依赖: WidePullbackCone, WidePullbackCone.mk, c.proj, hB.from, hB.hom_ext, hom_ext
+--- 原说明 ---
+The wide pullback cone given by a fan, when the base object is terminal.
 -/
 abbrev ofFan (hB : IsTerminal B) : WidePullbackCone arrows :=
-  WidePullbackCone.mk (hB.from _) c.proj (fun _ => hB.hom_ext _ _)
+  WidePullbackCone.mk (hB.from _) c.proj (fun _ ↦ hB.hom_ext _ _)
 
 set_option backward.isDefEq.respectTransparency false in
 variable {c} in
-/--
-Definition of `isLimitOfFan` / `isLimitOfFan` 的定义
+/-- When the base object is terminal, a limit wide pullback cone can be obtained
+from a limit fan. -/
+/-
+**CategoryTheory.Limits.WidePullbackCone.isLimitOfFan** 是 Mathlib 中的一个定义，位于命名空间 
+`CategoryTheory.Limits.WidePullbackCone`。
+形式化陈述：isLimitOfFan (hc : IsLimit c) (hB : IsTerminal B) : IsLimit (ofFan arrows 
+c hB)
+参数：hc : IsLimit c；hB : IsTerminal B。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isLimitOfFan
-  signature: (hc : IsLimit c) (hB : IsTerminal B)
-  body: IsLimit.mk _
-    (fun s => hc.lift s.toFan)
-    (fun s => hB.hom_ext _ _)
-    (fun s i => hc.fac s.toFan (.mk i))
-    (fun s m _ hm => hc.hom_ext (fun ⟨i⟩ => by simpa using! hm i))
-
-中文:
-定义 isLimitOfFan
-  签名: (hc : 是极限 c) (hB : 是终止 B)
-  定义体: IsLimit.mk _
-    (fun s => hc.lift s.toFan)
-    (fun s => hB.hom_ext _ _)
-    (fun s i => hc.fac s.toFan (.mk i))
-    (fun s m _ hm => hc.hom_ext (fun ⟨i⟩ => by simpa using! hm i))
-
-Depends on / 依赖: IsLimit, IsLimit.mk, hB.hom_ext, hc.fac, hc.hom_ext, hc.lift, hom_ext, s.toFan
+--- 原说明 ---
+When the base object is terminal, a limit wide pullback cone can be obtained
+from a limit fan.
 -/
 def isLimitOfFan (hc : IsLimit c) (hB : IsTerminal B) :
     IsLimit (ofFan arrows c hB) :=
   IsLimit.mk _
-    (fun s => hc.lift s.toFan)
-    (fun s => hB.hom_ext _ _)
-    (fun s i => hc.fac s.toFan (.mk i))
-    (fun s m _ hm => hc.hom_ext (fun ⟨i⟩ => by simpa using! hm i))
+    (fun s ↦ hc.lift s.toFan)
+    (fun s ↦ hB.hom_ext _ _)
+    (fun s i ↦ hc.fac s.toFan (.mk i))
+    (fun s m _ hm ↦ hc.hom_ext (fun ⟨i⟩ ↦ by simpa using! hm i))
 
 end WidePullbackCone
 
-/--
-lemma `hasWidePullback_of_isTerminal` / 引理 `hasWidePullback_of_isTerminal`
-
-English:
-lemma hasWidePullback_of_isTerminal
-  proof: ⟨_, WidePullbackCone.isLimitOfFan (arrows := arrows) (limit.isLimit _) hB⟩
-
-中文:
-引理 hasWidePullback_of_isTerminal
-  证明: ⟨_, WidePullbackCone.isLimitOfFan (arrows := arrows) (limit.isLimit _) hB⟩
-
-Depends on / 依赖: WidePullbackCone, WidePullbackCone.isLimitOfFan, arrows, isLimit, isLimitOfFan, limit.isLimit
+/-
+**CategoryTheory.Limits.hasWidePullback_of_isTerminal** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.Limits`。
+形式化陈述：hasWidePullback_of_isTerminal [HasProduct objs] (hB : IsTerminal B) : HasW
+idePullback B objs arrows where exists_limit
+参数：hB : IsTerminal B。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hasWidePullback_of_isTerminal
     [HasProduct objs] (hB : IsTerminal B) :
@@ -122,3 +104,4 @@ lemma hasWidePullback_of_isTerminal
     ⟨_, WidePullbackCone.isLimitOfFan (arrows := arrows) (limit.isLimit _) hB⟩
 
 end CategoryTheory.Limits
+

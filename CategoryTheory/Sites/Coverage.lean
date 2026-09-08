@@ -61,44 +61,51 @@ open Limits
 namespace Presieve
 
 /--
-Definition of `FactorsThruAlong` / `FactorsThruAlong` 的定义
+Given a morphism `f : Y ⟶ X`, a presieve `S` on `Y` and presieve `T` on `X`,
+we say that *`S` factors through `T` along `f`*, written `S.FactorsThruAlong T f`,
+provided that for any morphism `g : Z ⟶ Y` in `S`, there exists some
+morphism `e : W ⟶ X` in `T` and some morphism `i : Z ⟶ W` such that the obvious
+square commutes: `i ≫ e = g ≫ f`.
 
-English:
-definition FactorsThruAlong
-  signature: {X Y : C} (S : Presieve Y) (T : Presieve X) (f : Y ⟶ X)
-  body: forall ⦃Z : C⦄ ⦃g : Z ⟶ Y⦄, S g ->
-  exists (W : C) (i : Z ⟶ W) (e : W ⟶ X), T e ∧ i ≫ e = g ≫ f
+This is used in the definition of a coverage.
+-/
+/-
+**CategoryTheory.Presieve.FactorsThruAlong** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Presieve`。
+形式化陈述：FactorsThruAlong {X Y : C} (S : Presieve Y) (T : Presieve X) (f : Y ⟶ X) :
+ Prop
+参数：S : Presieve Y；T : Presieve X；f : Y ⟶ X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 FactorsThruAlong
-  签名: {X Y : C} (S : Presieve Y) (T : Presieve X) (f : Y ⟶ X)
-  定义体: forall ⦃Z : C⦄ ⦃g : Z ⟶ Y⦄, S g ->
-  exists (W : C) (i : Z ⟶ W) (e : W ⟶ X), T e ∧ i ≫ e = g ≫ f
+--- 原说明 ---
+Given a morphism `f : Y ⟶ X`, a presieve `S` on `Y` and presieve `T` on `X`,
+we say that *`S` factors through `T` along `f`*, written `S.FactorsThruAlong T f
+`,
+provided that for any morphism `g : Z ⟶ Y` in `S`, there exists some
+morphism `e : W ⟶ X` in `T` and some morphism `i : Z ⟶ W` such that the obvious
+square commutes: `i ≫ e = g ≫ f`.
+
+This is used in the definition of a coverage.
 -/
 def FactorsThruAlong {X Y : C} (S : Presieve Y) (T : Presieve X) (f : Y ⟶ X) : Prop :=
-  forall ⦃Z : C⦄ ⦃g : Z ⟶ Y⦄, S g ->
-  exists (W : C) (i : Z ⟶ W) (e : W ⟶ X), T e ∧ i ≫ e = g ≫ f
-
-/--
-lemma `FactorsThruAlong.pullbackArrows` / 引理 `FactorsThruAlong.pullbackArrows`
-
-English:
-lemma FactorsThruAlong.pullbackArrows
-  statement: {X Y : C} (f : X ⟶ Y)
-  proof: by
-  intro Z g ⟨W, b, hb⟩
-  have := R.hasPullback f hb
-  refine ⟨_, pullback.fst _ _, b, hb, pullback.condition⟩
-
-中文:
-引理 FactorsThruAlong.pullbackArrows
-  结论: {X Y : C} (f : X ⟶ Y)
-  证明: by
-  intro Z g ⟨W, b, hb⟩
-  have := R.hasPullback f hb
-  refine ⟨_, pullback.fst _ _, b, hb, pullback.condition⟩
-
-Depends on / 依赖: R.hasPullback, condition, hasPullback, pullback, pullback.condition, pullback.fst
+  ∀ ⦃Z : C⦄ ⦃g : Z ⟶ Y⦄, S g →
+  ∃ (W : C) (i : Z ⟶ W) (e : W ⟶ X), T e ∧ i ≫ e = g ≫ f
+/-
+**CategoryTheory.Presieve.FactorsThruAlong.pullbackArrows** 是 Mathlib 中的一个定理，位于命
+名空间 `CategoryTheory.Presieve.FactorsThruAlong`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {X Y : C} (
+f : X ⟶ Y) (R : CategoryTheory.Presieve Y)   [inst_1 : R.HasPullbacks f], (Categ
+oryTheory.Presieve.pullbackArrows f R).FactorsThruAlong R f
+参数：f : X ⟶ Y；R : CategoryTheory.Presieve Y；CategoryTheory.Presieve.pullbackArrow
+s f R。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Presieve.hasPullback`：∀ {C : Type u₁} {inst : CategoryThe
+ory.Category.{v₁, u₁} C} {X : C} {R : CategoryTheory.Presieve X} {Y : C} (f : Y 
+⟶ X)   [self : R.HasPullb…
+· 使用定理 `CategoryTheory.Limits.pullback.condition`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z}   [inst_1 : Categ
+oryTheory.Limits.HasPullback f…
 -/
 lemma FactorsThruAlong.pullbackArrows {X Y : C} (f : X ⟶ Y)
     (R : Presieve Y) [R.HasPullbacks f] :
@@ -108,174 +115,164 @@ lemma FactorsThruAlong.pullbackArrows {X Y : C} (f : X ⟶ Y)
   refine ⟨_, pullback.fst _ _, b, hb, pullback.condition⟩
 
 /--
-Definition of `FactorsThru` / `FactorsThru` 的定义
+Given `S T : Presieve X`, we say that `S` factors through `T` if any morphism in `S`
+factors through some morphism in `T`.
 
-English:
-definition FactorsThru
-  signature: {X : C} (S T : Presieve X)
-  body: forall ⦃Z : C⦄ ⦃g : Z ⟶ X⦄, S g ->
-  exists (W : C) (i : Z ⟶ W) (e : W ⟶ X), T e ∧ i ≫ e = g
+The lemma `Presieve.isSheafFor_of_factorsThru` gives a *sufficient* condition for a
+presheaf to be a sheaf for a presieve `T`, in terms of `S.FactorsThru T`, provided
+that the presheaf is a sheaf for `S`.
+-/
+/-
+**CategoryTheory.Presieve.FactorsThru** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+Presieve`。
+形式化陈述：FactorsThru {X : C} (S T : Presieve X) : Prop
+参数：S T : Presieve X。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-@[simp]
+--- 原说明 ---
+Given `S T : Presieve X`, we say that `S` factors through `T` if any morphism in
+ `S`
+factors through some morphism in `T`.
 
-中文:
-定义 FactorsThru
-  签名: {X : C} (S T : Presieve X)
-  定义体: forall ⦃Z : C⦄ ⦃g : Z ⟶ X⦄, S g ->
-  exists (W : C) (i : Z ⟶ W) (e : W ⟶ X), T e ∧ i ≫ e = g
-
-@[simp]
+The lemma `Presieve.isSheafFor_of_factorsThru` gives a *sufficient* condition fo
+r a
+presheaf to be a sheaf for a presieve `T`, in terms of `S.FactorsThru T`, provid
+ed
+that the presheaf is a sheaf for `S`.
 -/
 def FactorsThru {X : C} (S T : Presieve X) : Prop :=
-  forall ⦃Z : C⦄ ⦃g : Z ⟶ X⦄, S g ->
-  exists (W : C) (i : Z ⟶ W) (e : W ⟶ X), T e ∧ i ≫ e = g
+  ∀ ⦃Z : C⦄ ⦃g : Z ⟶ X⦄, S g →
+  ∃ (W : C) (i : Z ⟶ W) (e : W ⟶ X), T e ∧ i ≫ e = g
 
 @[simp]
-/--
-lemma `factorsThruAlong_id` / 引理 `factorsThruAlong_id`
-
-English:
-lemma factorsThruAlong_id
-  given: {X : C} (S T : Presieve X)
-  proof: by
-  simp [FactorsThruAlong, FactorsThru]
-
-中文:
-引理 factorsThruAlong_id
-  条件: {X : C} (S T : Presieve X)
-  证明: by
-  simp [FactorsThruAlong, FactorsThru]
-
-Depends on / 依赖: FactorsThru, FactorsThruAlong
+/-
+**CategoryTheory.Presieve.factorsThruAlong_id** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Presieve`。
+形式化陈述：factorsThruAlong_id {X : C} (S T : Presieve X) : S.FactorsThruAlong T (𝟙 X
+) ↔ S.FactorsThru T
+参数：S T : Presieve X。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma factorsThruAlong_id {X : C} (S T : Presieve X) :
     S.FactorsThruAlong T (𝟙 X) ↔ S.FactorsThru T := by
   simp [FactorsThruAlong, FactorsThru]
-
-/--
-lemma `factorsThru_of_le` / 引理 `factorsThru_of_le`
-
-English:
-lemma factorsThru_of_le
-  given: {X : C} (S T : Presieve X) (h : S <= T)
-  proof: fun Y g hg => ⟨Y, 𝟙 _, g, h _ _ hg, by simp⟩
-
-中文:
-引理 factorsThru_of_le
-  条件: {X : C} (S T : Presieve X) (h : S <= T)
-  证明: fun Y g hg => ⟨Y, 𝟙 _, g, h _ _ hg, by simp⟩
+/-
+**CategoryTheory.Presieve.factorsThru_of_le** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.Presieve`。
+形式化陈述：factorsThru_of_le {X : C} (S T : Presieve X) (h : S <= T) : S.FactorsThru 
+T
+参数：S T : Presieve X；h : S <= T。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma factorsThru_of_le {X : C} (S T : Presieve X) (h : S <= T) :
+lemma factorsThru_of_le {X : C} (S T : Presieve X) (h : S ≤ T) :
     S.FactorsThru T :=
   fun Y g hg => ⟨Y, 𝟙 _, g, h _ _ hg, by simp⟩
-
-/--
-lemma `le_of_factorsThru_sieve` / 引理 `le_of_factorsThru_sieve`
-
-English:
-lemma le_of_factorsThru_sieve
-  given: {X : C} (S : Presieve X) (T : Sieve X) (h : S.FactorsThru T)
-  proof: by
-  rintro Y f hf
-  obtain ⟨W, i, e, h1, rfl⟩ := h hf
-  exact T.downward_closed h1 _
-
-中文:
-引理 le_of_factorsThru_sieve
-  条件: {X : C} (S : Presieve X) (T : 筛 X) (h : S.FactorsThru T)
-  证明: by
-  rintro Y f hf
-  obtain ⟨W, i, e, h1, rfl⟩ := h hf
-  exact T.downward_closed h1 _
-
-Depends on / 依赖: T.downward_closed, downward_closed
+/-
+**CategoryTheory.Presieve.le_of_factorsThru_sieve** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.Presieve`。
+形式化陈述：le_of_factorsThru_sieve {X : C} (S : Presieve X) (T : Sieve X) (h : S.Fact
+orsThru T) : S <= T
+参数：S : Presieve X；T : Sieve X；h : S.FactorsThru T。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Sieve.downward_closed`：∀ {C : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} C] {X : C} (self : CategoryTheory.Sieve X) {Y Z : C}   {f
+ : Y ⟶ X}, self.arrows f →…
 -/
 lemma le_of_factorsThru_sieve {X : C} (S : Presieve X) (T : Sieve X) (h : S.FactorsThru T) :
-    S <= T := by
+    S ≤ T := by
   rintro Y f hf
   obtain ⟨W, i, e, h1, rfl⟩ := h hf
   exact T.downward_closed h1 _
-
-/--
-lemma `factorsThru_top` / 引理 `factorsThru_top`
-
-English:
-lemma factorsThru_top
-  given: {X : C} (S : Presieve X)
-  statement: S.FactorsThru ⊤
-  proof: factorsThru_of_le _ _ le_top
-
-中文:
-引理 factorsThru_top
-  条件: {X : C} (S : Presieve X)
-  结论: S.FactorsThru ⊤
-  证明: factorsThru_of_le _ _ le_top
-
-Depends on / 依赖: factorsThru_of_le, le_top
+/-
+**CategoryTheory.Presieve.factorsThru_top** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Presieve`。
+形式化陈述：factorsThru_top {X : C} (S : Presieve X) : S.FactorsThru ⊤
+参数：S : Presieve X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Presieve.factorsThru_of_le`：factorsThru_of_le {X : C} (S 
+T : Presieve X) (h : S <= T) : S.FactorsThru T
+· 使用定理 `le_top`：le_top : a <= ⊤
 -/
 lemma factorsThru_top {X : C} (S : Presieve X) : S.FactorsThru ⊤ :=
   factorsThru_of_le _ _ le_top
-
-/--
-lemma `isSheafFor_of_factorsThru` / 引理 `isSheafFor_of_factorsThru`
-
-English:
-lemma isSheafFor_of_factorsThru
-  proof: by
-  simp only [← Presieve.isSeparatedFor_and_exists_isAmalgamation_iff_isSheafFor] at *
-  choose W i e h1 h2 using H
-  refine ⟨?_, fun x hx => ?_⟩
-  · intro x y₁ y₂ h₁ h₂
-    refine hS.1.ext (fun Y g hg => ?_)
-    simp only [← h2 hg, op_comp, P.map_comp, types_comp_apply, h₁ _ (h1 _), h₂ _ (h1 _)]
-  let y : S.FamilyOfElements P := fun Y g hg => P.map (i _).op (x (e hg) (h1 _))
-  have hy : y.Compatible := by
-    intro Y₁ Y₂ Z g₁ g₂ f₁ f₂ h₁ h₂ h
-    rw [← types_comp_apply (P.map (i h₁).op) (P.map g₁.op)]; rw [← types_comp_apply (P.map (i h₂).op) (P.map g₂.op)]; rw [← P.map_comp]; rw [← op_comp]; rw [← P.map_comp]; rw [← op_comp]
-    apply hx
-    simp only [h2, h, Category.assoc]
-  let ⟨_, h2'⟩ := hS
-  obtain ⟨z, hz⟩ := h2' y hy
-  refine ⟨z, fun Y g hg => ?_⟩
-  obtain ⟨R, hR1, hR2⟩ := h hg
-  choose WW ii ee hh1 hh2 using hR2
-  refine hR1.ext (fun Q t ht => ?_)
-  rw [← types_comp_apply (P.map g.op) (P.map t.op)]; rw [← P.map_comp]; rw [← op_comp]; rw [← hh2 ht]; rw [op_comp]; rw [P.map_comp]; rw [types_comp_apply]; rw [hz _ (hh1 _)]; rw [← types_comp_apply _ (P.map (ii ht).op)]; rw [← P.map_comp]; rw [← op_comp]
-  apply hx
-  simp only [Category.assoc, h2, hh2]
-
-中文:
-引理 isSheafFor_of_factorsThru
-  证明: by
-  simp only [← Presieve.isSeparatedFor_and_exists_isAmalgamation_iff_isSheafFor] at *
-  choose W i e h1 h2 using H
-  refine ⟨?_, fun x hx => ?_⟩
-  · intro x y₁ y₂ h₁ h₂
-    refine hS.1.ext (fun Y g hg => ?_)
-    simp only [← h2 hg, op_comp, P.map_comp, types_comp_apply, h₁ _ (h1 _), h₂ _ (h1 _)]
-  let y : S.FamilyOfElements P := fun Y g hg => P.map (i _).op (x (e hg) (h1 _))
-  have hy : y.Compatible := by
-    intro Y₁ Y₂ Z g₁ g₂ f₁ f₂ h₁ h₂ h
-    rw [← types_comp_apply (P.map (i h₁).op) (P.map g₁.op)]; rw [← types_comp_apply (P.map (i h₂).op) (P.map g₂.op)]; rw [← P.map_comp]; rw [← op_comp]; rw [← P.map_comp]; rw [← op_comp]
-    apply hx
-    simp only [h2, h, Category.assoc]
-  let ⟨_, h2'⟩ := hS
-  obtain ⟨z, hz⟩ := h2' y hy
-  refine ⟨z, fun Y g hg => ?_⟩
-  obtain ⟨R, hR1, hR2⟩ := h hg
-  choose WW ii ee hh1 hh2 using hR2
-  refine hR1.ext (fun Q t ht => ?_)
-  rw [← types_comp_apply (P.map g.op) (P.map t.op)]; rw [← P.map_comp]; rw [← op_comp]; rw [← hh2 ht]; rw [op_comp]; rw [P.map_comp]; rw [types_comp_apply]; rw [hz _ (hh1 _)]; rw [← types_comp_apply _ (P.map (ii ht).op)]; rw [← P.map_comp]; rw [← op_comp]
-  apply hx
-  simp only [Category.assoc, h2, hh2]
-
-Depends on / 依赖: Compatible, FamilyOfElements, P.map, P.map_comp, Presieve, Presieve.isSeparatedFor_and_exists_isAmalgamation_iff_isSheafFor, S.FamilyOfElements, isSeparatedFor_and_exists_isAmalgamation_iff_isSheafFor, map_comp, op_comp, types_comp_, types_comp_apply, y.Compatible
+/-
+**CategoryTheory.Presieve.isSheafFor_of_factorsThru** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Presieve`。
+形式化陈述：isSheafFor_of_factorsThru {X : C} {S T : Presieve X} (P : Cᵒᵖ ⥤ Type*) (H 
+: S.FactorsThru T) (hS : S.IsSheafFor P) (h : forall ⦃Y : C⦄ ⦃f : Y ⟶ X⦄, T f ->
+ exists (R : Presieve Y), R.IsSeparatedFor P ∧ R.FactorsThruAlong S f) : T.IsShe
+afFor P
+参数：P : Cᵒᵖ ⥤ Type*；H : S.FactorsThru T；hS : S.IsSheafFor P；h : forall ⦃Y : C⦄ ⦃f
+ : Y ⟶ X⦄, T f -> exists (R : Presieve Y), R.IsSeparatedFor P ∧ R.FactorsThruAlo
+ng S f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Presieve.IsSeparatedFor.ext`：∀ {C : Type u₁} [inst : Cate
+goryTheory.Category.{v₁, u₁} C] {P : CategoryTheory.Functor Cᵒᵖ (Type w)} {X : C
+}   {R : CategoryTheory.Presieve…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.types_congr_hom`：types_congr_hom {X Y : Type u} {f g : X 
+⟶ Y} (h : f = g) (x : X) : f x = g x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `CategoryTheory.Functor.map_comp`：∀ {C : Type u₁} [inst : CategoryTheory.
+Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Category.{v₂, u₂} D]
+   (self : CategoryTh…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.types_comp_apply`：types_comp_apply {X Y Z : Type u} (f : 
+X ⟶ Y) (g : Y ⟶ Z) (x : X) : (f ≫ g) x = g (f x)
+· 使用定理 `CategoryTheory.op_comp`：op_comp {X Y Z : C} {f : X ⟶ Y} {g : Y ⟶ Z} : (f
+ ≫ g).op = g.op ≫ f.op
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
 lemma isSheafFor_of_factorsThru
     {X : C} {S T : Presieve X}
     (P : Cᵒᵖ ⥤ Type*)
     (H : S.FactorsThru T) (hS : S.IsSheafFor P)
-    (h : forall ⦃Y : C⦄ ⦃f : Y ⟶ X⦄, T f -> exists (R : Presieve Y),
+    (h : ∀ ⦃Y : C⦄ ⦃f : Y ⟶ X⦄, T f → ∃ (R : Presieve Y),
       R.IsSeparatedFor P ∧ R.FactorsThruAlong S f) :
     T.IsSheafFor P := by
   simp only [← Presieve.isSeparatedFor_and_exists_isAmalgamation_iff_isSheafFor] at *
@@ -287,7 +284,9 @@ lemma isSheafFor_of_factorsThru
   let y : S.FamilyOfElements P := fun Y g hg => P.map (i _).op (x (e hg) (h1 _))
   have hy : y.Compatible := by
     intro Y₁ Y₂ Z g₁ g₂ f₁ f₂ h₁ h₂ h
-    rw [← types_comp_apply (P.map (i h₁).op) (P.map g₁.op)]; rw [← types_comp_apply (P.map (i h₂).op) (P.map g₂.op)]; rw [← P.map_comp]; rw [← op_comp]; rw [← P.map_comp]; rw [← op_comp]
+    rw [← types_comp_apply (P.map (i h₁).op) (P.map g₁.op),
+      ← types_comp_apply (P.map (i h₂).op) (P.map g₂.op),
+      ← P.map_comp, ← op_comp, ← P.map_comp, ← op_comp]
     apply hx
     simp only [h2, h, Category.assoc]
   let ⟨_, h2'⟩ := hS
@@ -296,7 +295,9 @@ lemma isSheafFor_of_factorsThru
   obtain ⟨R, hR1, hR2⟩ := h hg
   choose WW ii ee hh1 hh2 using hR2
   refine hR1.ext (fun Q t ht => ?_)
-  rw [← types_comp_apply (P.map g.op) (P.map t.op)]; rw [← P.map_comp]; rw [← op_comp]; rw [← hh2 ht]; rw [op_comp]; rw [P.map_comp]; rw [types_comp_apply]; rw [hz _ (hh1 _)]; rw [← types_comp_apply _ (P.map (ii ht).op)]; rw [← P.map_comp]; rw [← op_comp]
+  rw [← types_comp_apply (P.map g.op) (P.map t.op), ← P.map_comp, ← op_comp, ← hh2 ht,
+    op_comp, P.map_comp, types_comp_apply, hz _ (hh1 _),
+    ← types_comp_apply _ (P.map (ii ht).op), ← P.map_comp, ← op_comp]
   apply hx
   simp only [Category.assoc, h2, hh2]
 
@@ -313,198 +314,151 @@ Explicitly, this condition says that whenever `S` is a covering presieve for `X`
 such that `T` factors through `S` along `f`.
 -/
 @[ext]
-/--
-Definition of `Coverage` / `Coverage` 的定义
+/-
+**CategoryTheory.Coverage** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory`。
+形式化陈述：(C : Type u_1) → [CategoryTheory.Category.{v_1, u_1} C] → Type (max u_1 v_
+1)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Coverage
-  parameters: extends Precoverage C
-  extends: Precoverage C
-  axioms and operations (1):
-    - pullback : forall ⦃X Y : C⦄ (f : Y ⟶ X) (S : Presieve X) (_ : S in coverings X), exists (T : Presieve Y), T in coverings Y ∧ T.FactorsThruAlong S f
-
-中文:
-结构 余verage
-  参数: extends Precoverage C
-  继承: Precoverage C
-  公理与运算 (1 个):
-    - pullback : 对任意 ⦃X Y : C⦄ (f : Y ⟶ X) (S : Presieve X) (_ : S in coverings X), 存在 (T : Presieve Y), T in coverings Y ∧ T.FactorsThruAlong S f
+--- 原说明 ---
+The type `Coverage C` of coverages on `C`.
+A coverage is a collection of *covering* presieves on every object `X : C`,
+which satisfies a *pullback compatibility* condition.
+Explicitly, this condition says that whenever `S` is a covering presieve for `X`
+ and
+`f : Y ⟶ X` is a morphism, then there exists some covering presieve `T` for `Y`
+such that `T` factors through `S` along `f`.
 -/
 structure Coverage extends Precoverage C where
   /-- Given any covering sieve `S` on `X` and a morphism `f : Y ⟶ X`, there exists
   some covering sieve `T` on `Y` such that `T` factors through `S` along `f`. -/
-  pullback : forall ⦃X Y : C⦄ (f : Y ⟶ X) (S : Presieve X) (_ : S in coverings X),
-    exists (T : Presieve Y), T in coverings Y ∧ T.FactorsThruAlong S f
+  pullback : ∀ ⦃X Y : C⦄ (f : Y ⟶ X) (S : Presieve X) (_ : S ∈ coverings X),
+    ∃ (T : Presieve Y), T ∈ coverings Y ∧ T.FactorsThruAlong S f
 
 namespace Coverage
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeFun (Coverage C) (fun _ => (X : C) -> Set (Presieve X))
-  body: J.coverings
-
-中文:
-实例 :
-  签名: CoeFun (余verage C) (fun _ => (X : C) -> 集合 (Presieve X))
-  定义体: J.coverings
-
-Depends on / 依赖: J.coverings, coverings
+/-
+**CategoryTheory.Coverage.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Coverage`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : CoeFun (Coverage C) (fun _ => (X : C) -> Set (Presieve X)) where
+instance : CoeFun (Coverage C) (fun _ => (X : C) → Set (Presieve X)) where
   coe J := J.coverings
 
 end Coverage
 
 /--
-Definition of `GrothendieckTopology.toCoverage` / `GrothendieckTopology.toCoverage` 的定义
+Associate a coverage to any Grothendieck topology.
+If `J` is a Grothendieck topology, and `K` is the associated coverage, then a presieve
+`S` is a covering presieve for `K` if and only if the sieve that it generates is a
+covering sieve for `J`.
+-/
+/-
+**CategoryTheory.GrothendieckTopology.toCoverage** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory.GrothendieckTopology`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] → Categor
+yTheory.GrothendieckTopology C → CategoryTheory.Coverage C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition GrothendieckTopology.toCoverage
-  signature: (J : GrothendieckTopology C)
-  body: { S | Sieve.generate S in J X }
-  pullback := by
-    intro X Y f S (hS : Sieve.generate S in J X)
-    refine ⟨(Sieve.generate S).pullback f, ?_, fun Z g h => h⟩
-    dsimp
-    rw [Sieve.generate_sieve]
-    exact J.pullback_stable _ hS
-
-中文:
-定义 Grothendieck拓扑.toCoverage
-  签名: (J : Grothendieck拓扑 C)
-  定义体: { S | Sieve.generate S in J X }
-  pullback := by
-    intro X Y f S (hS : Sieve.generate S in J X)
-    refine ⟨(Sieve.generate S).pullback f, ?_, fun Z g h => h⟩
-    dsimp
-    rw [Sieve.generate_sieve]
-    exact J.pullback_stable _ hS
-
-Depends on / 依赖: Sieve.generate, generate
+--- 原说明 ---
+Associate a coverage to any Grothendieck topology.
+If `J` is a Grothendieck topology, and `K` is the associated coverage, then a pr
+esieve
+`S` is a covering presieve for `K` if and only if the sieve that it generates is
+ a
+covering sieve for `J`.
 -/
 def GrothendieckTopology.toCoverage (J : GrothendieckTopology C) : Coverage C where
-  coverings X := { S | Sieve.generate S in J X }
+  coverings X := { S | Sieve.generate S ∈ J X }
   pullback := by
-    intro X Y f S (hS : Sieve.generate S in J X)
+    intro X Y f S (hS : Sieve.generate S ∈ J X)
     refine ⟨(Sieve.generate S).pullback f, ?_, fun Z g h => h⟩
     dsimp
     rw [Sieve.generate_sieve]
     exact J.pullback_stable _ hS
-
-/--
-lemma `GrothendieckTopology.mem_toCoverage_iff` / 引理 `GrothendieckTopology.mem_toCoverage_iff`
-
-English:
-lemma GrothendieckTopology.mem_toCoverage_iff
-  statement: {X : C} {S : Presieve X}
-  proof: Iff.rfl
-
-中文:
-引理 Grothendieck拓扑.mem_toCoverage_iff
-  结论: {X : C} {S : Presieve X}
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**CategoryTheory.GrothendieckTopology.mem_toCoverage_iff** 是 Mathlib 中的一个定理，位于命名
+空间 `CategoryTheory.GrothendieckTopology`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {X : C} {S 
+: CategoryTheory.Presieve X}   (J : CategoryTheory.GrothendieckTopology C), S ∈ 
+J.toCoverage.coverings X ↔ CategoryTheory.Sieve.generate S ∈ J X
+参数：J : CategoryTheory.GrothendieckTopology C。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma GrothendieckTopology.mem_toCoverage_iff {X : C} {S : Presieve X}
     (J : GrothendieckTopology C) :
-    S in J.toCoverage X ↔ Sieve.generate S in J X := Iff.rfl
+    S ∈ J.toCoverage X ↔ Sieve.generate S ∈ J X := Iff.rfl
 
 namespace Coverage
 
 /--
-Inductive type `Saturate` / 归纳类型 `Saturate`
-
-English:
-inductive Saturate
-  parameters: (K : Coverage C)
-  constructors (3):
-    - of: (X : C) (S : Presieve X) (hS : S in K X) : Saturate K X (Sieve.generate S)
-    - top: (X : C) : Saturate K X ⊤
-    - transitive: (X : C) (R S : Sieve X) : Saturate K X R -> (forall ⦃Y : C⦄ ⦃f : Y ⟶ X⦄, R f -> Saturate K Y (S.pullback f)) -> Saturate K X S
-
-中文:
-归纳类型 Saturate
-  参数: (K : 余verage C)
-  构造子 (3 个):
-    - of: (X : C) (S : Presieve X) (hS : S in K X) : Saturate K X (筛.generate S)
-    - top: (X : C) : Saturate K X ⊤
-    - transitive: (X : C) (R S : 筛 X) : Saturate K X R -> (对任意 ⦃Y : C⦄ ⦃f : Y ⟶ X⦄, R f -> Saturate K Y (S.pullback f)) -> Saturate K X S
+An auxiliary definition used to define the Grothendieck topology associated to a
+coverage. See `Coverage.toGrothendieck`.
 -/
-inductive Saturate (K : Coverage C) : (X : C) -> Sieve X -> Prop where
-  | of (X : C) (S : Presieve X) (hS : S in K X) : Saturate K X (Sieve.generate S)
+/-
+**CategoryTheory.Coverage.Saturate** 是 Mathlib 中的一个归纳类型，位于命名空间 `CategoryTheory.C
+overage`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] → Categor
+yTheory.Coverage C → (X : C) → CategoryTheory.Sieve X → Prop
+参数：X : C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+An auxiliary definition used to define the Grothendieck topology associated to a
+coverage. See `Coverage.toGrothendieck`.
+-/
+inductive Saturate (K : Coverage C) : (X : C) → Sieve X → Prop where
+  | of (X : C) (S : Presieve X) (hS : S ∈ K X) : Saturate K X (Sieve.generate S)
   | top (X : C) : Saturate K X ⊤
   | transitive (X : C) (R S : Sieve X) :
-    Saturate K X R ->
-    (forall ⦃Y : C⦄ ⦃f : Y ⟶ X⦄, R f -> Saturate K Y (S.pullback f)) ->
+    Saturate K X R →
+    (∀ ⦃Y : C⦄ ⦃f : Y ⟶ X⦄, R f → Saturate K Y (S.pullback f)) →
     Saturate K X S
-
-/--
-lemma `eq_top_pullback` / 引理 `eq_top_pullback`
-
-English:
-lemma eq_top_pullback
-  given: {X Y : C} {S T : Sieve X} (h : S <= T) (f : Y ⟶ X) (hf : S f)
-  proof: by
-  ext Z g
-  simp only [Sieve.pullback_apply, Sieve.top_apply, iff_true]
-  apply h
-  apply S.downward_closed
-  exact hf
-
-中文:
-引理 eq_top_pullback
-  条件: {X Y : C} {S T : 筛 X} (h : S <= T) (f : Y ⟶ X) (hf : S f)
-  证明: by
-  ext Z g
-  simp only [Sieve.pullback_apply, Sieve.top_apply, iff_true]
-  apply h
-  apply S.downward_closed
-  exact hf
-
-Depends on / 依赖: S.downward_closed, Sieve.pullback_apply, Sieve.top_apply, downward_closed, iff_true, pullback_apply, top_apply
+/-
+**CategoryTheory.Coverage.eq_top_pullback** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory.Coverage`。
+形式化陈述：eq_top_pullback {X Y : C} {S T : Sieve X} (h : S <= T) (f : Y ⟶ X) (hf : S
+ f) : T.pullback f = ⊤
+参数：h : S <= T；f : Y ⟶ X；hf : S f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Sieve.ext`：∀ {C : Type u₁} [inst : CategoryTheory.Categor
+y.{v₁, u₁} C] {X : C} {R S : CategoryTheory.Sieve X},   (∀ ⦃Y : C⦄ (f : Y ⟶ X), 
+R.arrows f ↔ S…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Sieve.pullback_apply`：∀ {C : Type u₁} [inst : CategoryThe
+ory.Category.{v₁, u₁} C] {X Y : C} (h : Y ⟶ X) (S : CategoryTheory.Sieve X) (x :
+ C)   (sl : x ⟶ Y), (Cate…
+· 使用定理 `iff_true`：∀ (p : Prop), (p ↔ True) = p
+· 使用定理 `CategoryTheory.Sieve.downward_closed`：∀ {C : Type u₁} [inst : CategoryTh
+eory.Category.{v₁, u₁} C] {X : C} (self : CategoryTheory.Sieve X) {Y Z : C}   {f
+ : Y ⟶ X}, self.arrows f →…
 -/
-lemma eq_top_pullback {X Y : C} {S T : Sieve X} (h : S <= T) (f : Y ⟶ X) (hf : S f) :
+lemma eq_top_pullback {X Y : C} {S T : Sieve X} (h : S ≤ T) (f : Y ⟶ X) (hf : S f) :
     T.pullback f = ⊤ := by
   ext Z g
   simp only [Sieve.pullback_apply, Sieve.top_apply, iff_true]
   apply h
   apply S.downward_closed
   exact hf
-
-/--
-lemma `saturate_of_superset` / 引理 `saturate_of_superset`
-
-English:
-lemma saturate_of_superset
-  statement: (K : Coverage C) {X : C} {S T : Sieve X} (h : S <= T)
-  proof: by
-  apply Saturate.transitive _ _ _ hS
-  intro Y g hg
-  rw [eq_top_pullback (h := h)]
-  · apply Saturate.top
-  · assumption
-
-@[grind .]
-
-中文:
-引理 saturate_of_superset
-  结论: (K : 余verage C) {X : C} {S T : 筛 X} (h : S <= T)
-  证明: by
-  apply Saturate.transitive _ _ _ hS
-  intro Y g hg
-  rw [eq_top_pullback (h := h)]
-  · apply Saturate.top
-  · assumption
-
-@[grind .]
-
-Depends on / 依赖: Saturate, Saturate.top, Saturate.transitive, eq_top_pullback, transitive
+/-
+**CategoryTheory.Coverage.saturate_of_superset** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.Coverage`。
+形式化陈述：saturate_of_superset (K : Coverage C) {X : C} {S T : Sieve X} (h : S <= T)
+ (hS : Saturate K X S) : Saturate K X T
+参数：K : Coverage C；h : S <= T；hS : Saturate K X S。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Coverage.eq_top_pullback`：eq_top_pullback {X Y : C} {S T 
+: Sieve X} (h : S <= T) (f : Y ⟶ X) (hf : S f) : T.pullback f = ⊤
 -/
-lemma saturate_of_superset (K : Coverage C) {X : C} {S T : Sieve X} (h : S <= T)
+lemma saturate_of_superset (K : Coverage C) {X : C} {S T : Sieve X} (h : S ≤ T)
     (hS : Saturate K X S) : Saturate K X T := by
   apply Saturate.transitive _ _ _ hS
   intro Y g hg
@@ -513,55 +467,44 @@ lemma saturate_of_superset (K : Coverage C) {X : C} {S T : Sieve X} (h : S <= T)
   · assumption
 
 @[grind .]
-/--
-lemma `Saturate.pullback` / 引理 `Saturate.pullback`
-
-English:
-lemma Saturate.pullback
-  statement: (K : Coverage C) {X Y : C} (f : Y ⟶ X) {S : Sieve X}
-  proof: by
-  induction h with
-  | of X S hS =>
-    obtain ⟨R, hR1, hR2⟩ := K.pullback f S hS
-    suffices Sieve.generate R <= (Sieve.generate S).pullback f from
-      saturate_of_superset _ this (Saturate.of _ _ hR1)
-    intro Z g ⟨W, i, e, h1, h2⟩
-    obtain ⟨WW, ii, ee, hh1, hh2⟩ := hR2 h1
-    refine ⟨WW, i ≫ ii, ee, hh1, ?_⟩
-    simp [hh2, reassoc_of% h2]
-  | top X => exact .top _
-  | transitive X R S _ hS H1 _ =>
-    refine (H1 f).transitive _ _ _ fun Z g hg => ?_
-    rw [← Sieve.pullback_comp]
-    exact hS hg
-
-中文:
-引理 Saturate.pullback
-  结论: (K : 余verage C) {X Y : C} (f : Y ⟶ X) {S : 筛 X}
-  证明: by
-  induction h with
-  | of X S hS =>
-    obtain ⟨R, hR1, hR2⟩ := K.pullback f S hS
-    suffices Sieve.generate R <= (Sieve.generate S).pullback f from
-      saturate_of_superset _ this (Saturate.of _ _ hR1)
-    intro Z g ⟨W, i, e, h1, h2⟩
-    obtain ⟨WW, ii, ee, hh1, hh2⟩ := hR2 h1
-    refine ⟨WW, i ≫ ii, ee, hh1, ?_⟩
-    simp [hh2, reassoc_of% h2]
-  | top X => exact .top _
-  | transitive X R S _ hS H1 _ =>
-    refine (H1 f).transitive _ _ _ fun Z g hg => ?_
-    rw [← Sieve.pullback_comp]
-    exact hS hg
-
-Depends on / 依赖: K.pullback, Saturate, Saturate.of, Sieve.generate, Sieve.pullback_comp, generate, pullback, pullback_comp, reassoc_of, saturate_of_superset, transitive
+/-
+**CategoryTheory.Coverage.Saturate.pullback** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Coverage.Saturate`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (K : Catego
+ryTheory.Coverage C) {X Y : C} (f : Y ⟶ X)   {S : CategoryTheory.Sieve X}, K.Sat
+urate X S → K.Saturate Y (CategoryTheory.Sieve.pullback f S)
+参数：K : CategoryTheory.Coverage C；f : Y ⟶ X；CategoryTheory.Sieve.pullback f S。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Coverage.pullback`：∀ {C : Type u_1} [inst : CategoryTheor
+y.Category.{v_1, u_1} C] (self : CategoryTheory.Coverage C) ⦃X Y : C⦄ (f : Y ⟶ X
+),   ∀ S ∈ self.coveri…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Reassoc.eq_whisker'`：eq_whisker' {C : Type*} [Category* C
+] {X Y : C} {f g : X ⟶ Y} (w : f = g) {Z : C} (h : Y ⟶ Z) : f ≫ h = g ≫ h
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用引理 `CategoryTheory.Coverage.saturate_of_superset`：saturate_of_superset (K : 
+Coverage C) {X : C} {S T : Sieve X} (h : S <= T) (hS : Saturate K X S) : Saturat
+e K X T
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Sieve.pullback_comp`：pullback_comp {f : Y ⟶ X} {g : Z ⟶ Y
+} (S : Sieve X) : S.pullback (g ≫ f) = (S.pullback f).pullback g
 -/
 lemma Saturate.pullback (K : Coverage C) {X Y : C} (f : Y ⟶ X) {S : Sieve X}
     (h : Saturate K X S) : Saturate K Y (S.pullback f) := by
   induction h with
   | of X S hS =>
     obtain ⟨R, hR1, hR2⟩ := K.pullback f S hS
-    suffices Sieve.generate R <= (Sieve.generate S).pullback f from
+    suffices Sieve.generate R ≤ (Sieve.generate S).pullback f from
       saturate_of_superset _ this (Saturate.of _ _ hR1)
     intro Z g ⟨W, i, e, h1, h2⟩
     obtain ⟨WW, ii, ee, hh1, hh2⟩ := hR2 h1
@@ -569,30 +512,17 @@ lemma Saturate.pullback (K : Coverage C) {X Y : C} (f : Y ⟶ X) {S : Sieve X}
     simp [hh2, reassoc_of% h2]
   | top X => exact .top _
   | transitive X R S _ hS H1 _ =>
-    refine (H1 f).transitive _ _ _ fun Z g hg => ?_
+    refine (H1 f).transitive _ _ _ fun Z g hg ↦ ?_
     rw [← Sieve.pullback_comp]
     exact hS hg
-
-/--
-lemma `saturate_iff_saturate_toPrecoverage` / 引理 `saturate_iff_saturate_toPrecoverage`
-
-English:
-lemma saturate_iff_saturate_toPrecoverage
-  given: (K : Coverage C) {X : C} {S : Sieve X}
-  proof: by
-  constructor <;> intro hS
-  · induction hS <;> grind [Precoverage.Saturate]
-  · induction hS <;> grind [Saturate]
-
-中文:
-引理 saturate_iff_saturate_toPrecoverage
-  条件: (K : 余verage C) {X : C} {S : 筛 X}
-  证明: by
-  constructor <;> intro hS
-  · induction hS <;> grind [Precoverage.Saturate]
-  · induction hS <;> grind [Saturate]
-
-Depends on / 依赖: Precoverage, Precoverage.Saturate, Saturate
+/-
+**CategoryTheory.Coverage.saturate_iff_saturate_toPrecoverage** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.Coverage`。
+形式化陈述：saturate_iff_saturate_toPrecoverage (K : Coverage C) {X : C} {S : Sieve X}
+ : K.Saturate X S ↔ K.toPrecoverage.Saturate X S
+参数：K : Coverage C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma saturate_iff_saturate_toPrecoverage (K : Coverage C) {X : C} {S : Sieve X} :
     K.Saturate X S ↔ K.toPrecoverage.Saturate X S := by
@@ -601,120 +531,82 @@ lemma saturate_iff_saturate_toPrecoverage (K : Coverage C) {X : C} {S : Sieve X}
   · induction hS <;> grind [Saturate]
 
 /--
-Definition of `toGrothendieck` / `toGrothendieck` 的定义
+The Grothendieck topology associated to a coverage `K`.
+It is defined *inductively* as follows:
+1. If `S` is a covering presieve for `K`, then the sieve generated by `S` is a covering
+  sieve for the associated Grothendieck topology.
+2. The top sieves are in the associated Grothendieck topology.
+3. Add all sieves required by the *local character* axiom of a Grothendieck topology.
 
-English:
-definition toGrothendieck
-  signature: (K : Coverage C)
-  body: K.toPrecoverage.toGrothendieck.copy (fun X => Set.ofPred (K.Saturate X)) by
-    ext
-    exact K.saturate_iff_saturate_toPrecoverage.symm
+The pullback compatibility condition for a coverage ensures that the
+associated Grothendieck topology is pullback stable, and so an additional constructor
+in the inductive construction is not needed.
+-/
+/-
+**CategoryTheory.Coverage.toGrothendieck** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry.Coverage`。
+形式化陈述：toGrothendieck (K : Coverage C) : GrothendieckTopology C
+参数：K : Coverage C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 toGrothendieck
-  签名: (K : 余verage C)
-  定义体: K.toPrecoverage.toGrothendieck.copy (fun X => Set.ofPred (K.Saturate X)) by
-    ext
-    exact K.saturate_iff_saturate_toPrecoverage.symm
+--- 原说明 ---
+The Grothendieck topology associated to a coverage `K`.
+It is defined *inductively* as follows:
+1. If `S` is a covering presieve for `K`, then the sieve generated by `S` is a c
+overing
+  sieve for the associated Grothendieck topology.
+2. The top sieves are in the associated Grothendieck topology.
+3. Add all sieves required by the *local character* axiom of a Grothendieck topo
+logy.
 
-Depends on / 依赖: K.Saturate, K.saturate_iff_saturate_toPrecoverage.symm, K.toPrecoverage.toGrothendieck.copy, Saturate, Set.ofPred, ofPred, saturate_iff_saturate_toPrecoverage, toGrothendieck, toPrecoverage
+The pullback compatibility condition for a coverage ensures that the
+associated Grothendieck topology is pullback stable, and so an additional constr
+uctor
+in the inductive construction is not needed.
 -/
 def toGrothendieck (K : Coverage C) : GrothendieckTopology C :=
-K.toPrecoverage.toGrothendieck.copy (fun X => Set.ofPred (K.Saturate X)) by
+  K.toPrecoverage.toGrothendieck.copy (fun X ↦ Set.ofPred (K.Saturate X)) <| by
     ext
     exact K.saturate_iff_saturate_toPrecoverage.symm
-
-/--
-lemma `mem_toGrothendieck` / 引理 `mem_toGrothendieck`
-
-English:
-lemma mem_toGrothendieck
-  given: {K : Coverage C} {X : C} {S : Sieve X}
-  proof: .rfl
-
-中文:
-引理 mem_toGrothendieck
-  条件: {K : 余verage C} {X : C} {S : 筛 X}
-  证明: .rfl
+/-
+**CategoryTheory.Coverage.mem_toGrothendieck** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.Coverage`。
+形式化陈述：mem_toGrothendieck {K : Coverage C} {X : C} {S : Sieve X} : S in K.toGroth
+endieck X ↔ Saturate K X S
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma mem_toGrothendieck {K : Coverage C} {X : C} {S : Sieve X} :
-    S in K.toGrothendieck X ↔ Saturate K X S := .rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: PartialOrder (Coverage C)
-  body: A.coverings <= B.coverings
-  le_refl _ _ := le_refl _
-  le_trans _ _ _ h1 h2 X := le_trans (h1 X) (h2 X)
-le_antisymm _ _ h1 h2 := Coverage.ext funext
-    fun X => le_antisymm (h1 X) (h2 X)
-
-中文:
-实例 :
-  签名: 偏序 (余verage C)
-  定义体: A.coverings <= B.coverings
-  le_refl _ _ := le_refl _
-  le_trans _ _ _ h1 h2 X := le_trans (h1 X) (h2 X)
-le_antisymm _ _ h1 h2 := Coverage.ext funext
-    fun X => le_antisymm (h1 X) (h2 X)
-
-Depends on / 依赖: A.coverings, B.coverings, coverings
+    S ∈ K.toGrothendieck X ↔ Saturate K X S := .rfl
+/-
+**CategoryTheory.Coverage.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Coverage`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : PartialOrder (Coverage C) where
-  le A B := A.coverings <= B.coverings
+  le A B := A.coverings ≤ B.coverings
   le_refl _ _ := le_refl _
   le_trans _ _ _ h1 h2 X := le_trans (h1 X) (h2 X)
-le_antisymm _ _ h1 h2 := Coverage.ext funext
+  le_antisymm _ _ h1 h2 := Coverage.ext <| funext <|
     fun X => le_antisymm (h1 X) (h2 X)
 
 variable (C) in
 /--
-Definition of `gi` / `gi` 的定义
+The two constructions `Coverage.toGrothendieck` and `Coverage.ofGrothendieck` form
+a Galois insertion.
+-/
+/-
+**CategoryTheory.Coverage.gi** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.Coverage`
+。
+形式化陈述：gi : GaloisInsertion (toGrothendieck (C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition gi
-  signature: : GaloisInsertion (toGrothendieck (C := C)) (GrothendieckTopology.toCoverage (C := C)) where
-  body: toGrothendieck K
-  choice_eq := fun _ _ => rfl
-  le_l_u J X S hS := by
-    rw [← Sieve.generate_sieve S]
-    apply Saturate.of
-    dsimp [GrothendieckTopology.toCoverage]
-    rwa [Sieve.generate_sieve S]
-  gc K J := by
-    constructor
-    · intro H X S hS
-exact H _ Saturate.of _ _ hS
-    · intro H X S hS
-      induction hS with
-      | of X S hS => exact H _ hS
-      | top => apply J.top_mem
-      | transitive X R S _ _ H1 H2 => exact J.transitive H1 _ H2
-
-中文:
-定义 gi
-  签名: : Galois嵌入 (toGrothendieck (C := C)) (Grothendieck拓扑.toCoverage (C := C)) where
-  定义体: toGrothendieck K
-  choice_eq := fun _ _ => rfl
-  le_l_u J X S hS := by
-    rw [← Sieve.generate_sieve S]
-    apply Saturate.of
-    dsimp [GrothendieckTopology.toCoverage]
-    rwa [Sieve.generate_sieve S]
-  gc K J := by
-    constructor
-    · intro H X S hS
-exact H _ Saturate.of _ _ hS
-    · intro H X S hS
-      induction hS with
-      | of X S hS => exact H _ hS
-      | top => apply J.top_mem
-      | transitive X R S _ _ H1 H2 => exact J.transitive H1 _ H2
-
-Depends on / 依赖: GrothendieckTopology, GrothendieckTopology.toCoverage, toCoverage
+--- 原说明 ---
+The two constructions `Coverage.toGrothendieck` and `Coverage.ofGrothendieck` fo
+rm
+a Galois insertion.
 -/
 def gi : GaloisInsertion (toGrothendieck (C := C)) (GrothendieckTopology.toCoverage (C := C)) where
   choice K _ := toGrothendieck K
@@ -727,7 +619,7 @@ def gi : GaloisInsertion (toGrothendieck (C := C)) (GrothendieckTopology.toCover
   gc K J := by
     constructor
     · intro H X S hS
-exact H _ Saturate.of _ _ hS
+      exact H _ <| Saturate.of _ _ hS
     · intro H X S hS
       induction hS with
       | of X S hS => exact H _ hS
@@ -735,44 +627,35 @@ exact H _ Saturate.of _ _ hS
       | transitive X R S _ _ H1 H2 => exact J.transitive H1 _ H2
 
 /--
-theorem `toGrothendieck_eq_sInf` / 定理 `toGrothendieck_eq_sInf`
+An alternative characterization of the Grothendieck topology associated to a coverage `K`:
+it is the infimum of all Grothendieck topologies whose associated coverage contains `K`.
+-/
+/-
+**CategoryTheory.Coverage.toGrothendieck_eq_sInf** 是 Mathlib 中的一个定理，位于命名空间 `Cate
+goryTheory.Coverage`。
+形式化陈述：toGrothendieck_eq_sInf (K : Coverage C) : toGrothendieck K = sInf {J | K <
+= J.toCoverage }
+参数：K : Coverage C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `le_sInf`：∀ {α : Type u_1} [inst : CompleteSemilatticeInf α] {s : Set α} 
+{a : α}, (∀ b ∈ s, a ≤ b) → a ≤ sInf s
+· 使用定理 `CategoryTheory.GrothendieckTopology.top_mem`：top_mem (X : C) : ⊤ in J X
+· 使用定理 `CategoryTheory.GrothendieckTopology.transitive`：transitive (hS : S in J 
+X) (R : Sieve X) (h : forall ⦃Y⦄ ⦃f : Y ⟶ X⦄, S f -> R.pullback f in J Y) : R in
+ J X
+· 使用定理 `sInf_le`：∀ {α : Type u_1} [inst : CompleteSemilatticeInf α] {s : Set α} 
+{a : α}, a ∈ s → sInf s ≤ a
 
-English:
-theorem toGrothendieck_eq_sInf
-  given: (K : Coverage C)
-  statement: toGrothendieck K =
-  proof: by
-  apply le_antisymm
-  · apply le_sInf
-    intro J hJ X S hS
-    induction hS with
-    | of X S hS => apply hJ; assumption
-    | top => apply J.top_mem
-    | transitive X R S _ _ H1 H2 => exact J.transitive H1 _ H2
-  · apply sInf_le
-    intro X S hS
-    apply Saturate.of _ _ hS
-
-中文:
-定理 toGrothendieck_eq_sInf
-  条件: (K : 余verage C)
-  结论: toGrothendieck K =
-  证明: by
-  apply le_antisymm
-  · apply le_sInf
-    intro J hJ X S hS
-    induction hS with
-    | of X S hS => apply hJ; assumption
-    | top => apply J.top_mem
-    | transitive X R S _ _ H1 H2 => exact J.transitive H1 _ H2
-  · apply sInf_le
-    intro X S hS
-    apply Saturate.of _ _ hS
-
-Depends on / 依赖: J.top_mem, J.transitive, Saturate, Saturate.of, le_antisymm, le_sInf, sInf_le, top_mem, transitive
+--- 原说明 ---
+An alternative characterization of the Grothendieck topology associated to a cov
+erage `K`:
+it is the infimum of all Grothendieck topologies whose associated coverage conta
+ins `K`.
 -/
 theorem toGrothendieck_eq_sInf (K : Coverage C) : toGrothendieck K =
-    sInf {J | K <= J.toCoverage } := by
+    sInf {J | K ≤ J.toCoverage } := by
   apply le_antisymm
   · apply le_sInf
     intro J hJ X S hS
@@ -783,49 +666,13 @@ theorem toGrothendieck_eq_sInf (K : Coverage C) : toGrothendieck K =
   · apply sInf_le
     intro X S hS
     apply Saturate.of _ _ hS
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SemilatticeSup (Coverage C)
-  body: { coverings := fun B => x B union y B
-    pullback := by
-      rintro X Y f S (hx | hy)
-      · obtain ⟨T, hT⟩ := x.pullback f S hx
-        exact ⟨T, Or.inl hT.1, hT.2⟩
-      · obtain ⟨T, hT⟩ := y.pullback f S hy
-        exact ⟨T, Or.inr hT.1, hT.2⟩ }
-  toPartialOrder := inferInstance
-  le_sup_left _ _ _ := Set.subset_union_left
-  le_sup_right _ _ _ := Set.subset_union_right
-  sup_le _ _ _ hx hy X := Set.union_subset_iff.mpr ⟨hx X, hy X⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: SemilatticeSup (余verage C)
-  定义体: { coverings := fun B => x B union y B
-    pullback := by
-      rintro X Y f S (hx | hy)
-      · obtain ⟨T, hT⟩ := x.pullback f S hx
-        exact ⟨T, Or.inl hT.1, hT.2⟩
-      · obtain ⟨T, hT⟩ := y.pullback f S hy
-        exact ⟨T, Or.inr hT.1, hT.2⟩ }
-  toPartialOrder := inferInstance
-  le_sup_left _ _ _ := Set.subset_union_left
-  le_sup_right _ _ _ := Set.subset_union_right
-  sup_le _ _ _ hx hy X := Set.union_subset_iff.mpr ⟨hx X, hy X⟩
-
-@[simp]
-
-Depends on / 依赖: Or.inl, Or.inr, Set.subset_union_left, Set.subset_union_right, Set.union_subset_iff.mpr, coverings, le_sup_left, le_sup_right, pullback, subset_union_left, subset_union_right, sup_le, toPartialOrder, union_subset_iff, x.pullback, y.pullback
+/-
+**CategoryTheory.Coverage.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Coverage`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SemilatticeSup (Coverage C) where
   sup x y :=
-  { coverings := fun B => x B union y B
+  { coverings := fun B ↦ x B ∪ y B
     pullback := by
       rintro X Y f S (hx | hy)
       · obtain ⟨T, hT⟩ := x.pullback f S hx
@@ -838,142 +685,130 @@ instance : SemilatticeSup (Coverage C) where
   sup_le _ _ _ hx hy X := Set.union_subset_iff.mpr ⟨hx X, hy X⟩
 
 @[simp]
-/--
-lemma `sup_covering` / 引理 `sup_covering`
-
-English:
-lemma sup_covering
-  given: (x y : Coverage C) (B : C)
-  proof: rfl
-
-中文:
-引理 sup_covering
-  条件: (x y : 余verage C) (B : C)
-  证明: rfl
+/-
+**CategoryTheory.Coverage.sup_covering** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+.Coverage`。
+形式化陈述：sup_covering (x y : Coverage C) (B : C) : (x ⊔ y) B = x B union y B
+参数：x y : Coverage C；B : C。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma sup_covering (x y : Coverage C) (B : C) :
-    (x ⊔ y) B = x B union y B :=
+    (x ⊔ y) B = x B ∪ y B :=
   rfl
 
 /--
-theorem `mem_toGrothendieck_sieves_of_superset` / 定理 `mem_toGrothendieck_sieves_of_superset`
+Any sieve that contains a covering presieve for a coverage is a covering sieve for the associated
+Grothendieck topology.
+-/
+/-
+**CategoryTheory.Coverage.mem_toGrothendieck_sieves_of_superset** 是 Mathlib 中的一个
+定理，位于命名空间 `CategoryTheory.Coverage`。
+形式化陈述：mem_toGrothendieck_sieves_of_superset (K : Coverage C) {X : C} {S : Sieve 
+X} {R : Presieve X} (h : R <= S) (hR : R in K X) : S in K.toGrothendieck X
+参数：K : Coverage C；h : R <= S；hR : R in K X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Coverage.saturate_of_superset`：saturate_of_superset (K : 
+Coverage C) {X : C} {S T : Sieve X} (h : S <= T) (hS : Saturate K X S) : Saturat
+e K X T
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `CategoryTheory.Sieve.generate_le_iff`：generate_le_iff (R : Presieve X) (
+S : Sieve X) : generate R <= S ↔ R <= S
 
-English:
-theorem mem_toGrothendieck_sieves_of_superset
-  statement: (K : Coverage C) {X : C} {S : Sieve X}
-  proof: K.saturate_of_superset ((Sieve.generate_le_iff _ _).mpr h) (Coverage.Saturate.of X _ hR)
-
-中文:
-定理 mem_toGrothendieck_sieves_of_superset
-  结论: (K : 余verage C) {X : C} {S : 筛 X}
-  证明: K.saturate_of_superset ((Sieve.generate_le_iff _ _).mpr h) (Coverage.Saturate.of X _ hR)
-
-Depends on / 依赖: Coverage, Coverage.Saturate.of, K.saturate_of_superset, Saturate, Sieve.generate_le_iff, generate_le_iff, saturate_of_superset
+--- 原说明 ---
+Any sieve that contains a covering presieve for a coverage is a covering sieve f
+or the associated
+Grothendieck topology.
 -/
 theorem mem_toGrothendieck_sieves_of_superset (K : Coverage C) {X : C} {S : Sieve X}
-    {R : Presieve X} (h : R <= S) (hR : R in K X) : S in K.toGrothendieck X :=
+    {R : Presieve X} (h : R ≤ S) (hR : R ∈ K X) : S ∈ K.toGrothendieck X :=
   K.saturate_of_superset ((Sieve.generate_le_iff _ _).mpr h) (Coverage.Saturate.of X _ hR)
 
 end Coverage
 
-/--
-Definition of `Pretopology.toCoverage` / `Pretopology.toCoverage` 的定义
+/-- Any pretopology is a coverage. -/
+/-
+**CategoryTheory.Pretopology.toCoverage** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Pretopology`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     [in
+st_1 : CategoryTheory.Limits.HasPullbacks C] → CategoryTheory.Pretopology C → Ca
+tegoryTheory.Coverage C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Pretopology.toCoverage
-  signature: [HasPullbacks C] (J : Pretopology C)
-  body: J
-  pullback _ _ f R hR := ⟨R.pullbackArrows f, J.pullbacks _ _ hR, .pullbackArrows f R⟩
-
-@[simp]
-
-中文:
-定义 Pretopology.toCoverage
-  签名: [有Pullbacks C] (J : Pretopology C)
-  定义体: J
-  pullback _ _ f R hR := ⟨R.pullbackArrows f, J.pullbacks _ _ hR, .pullbackArrows f R⟩
-
-@[simp]
+--- 原说明 ---
+Any pretopology is a coverage.
 -/
 def Pretopology.toCoverage [HasPullbacks C] (J : Pretopology C) : Coverage C where
   coverings := J
   pullback _ _ f R hR := ⟨R.pullbackArrows f, J.pullbacks _ _ hR, .pullbackArrows f R⟩
 
 @[simp]
-/--
-lemma `Pretopology.mem_toCoverage` / 引理 `Pretopology.mem_toCoverage`
-
-English:
-lemma Pretopology.mem_toCoverage
-  given: [HasPullbacks C] (J : Pretopology C) {X : C} (S : Presieve X)
-  proof: .rfl
-
-中文:
-引理 Pretopology.mem_toCoverage
-  条件: [有Pullbacks C] (J : Pretopology C) {X : C} (S : Presieve X)
-  证明: .rfl
+/-
+**CategoryTheory.Pretopology.mem_toCoverage** 是 Mathlib 中的一个定理，位于命名空间 `CategoryT
+heory.Pretopology`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : C
+ategoryTheory.Limits.HasPullbacks C]   (J : CategoryTheory.Pretopology C) {X : C
+} (S : CategoryTheory.Presieve X),   S ∈ J.toCoverage.coverings X ↔ S ∈ J.coveri
+ngs X
+参数：J : CategoryTheory.Pretopology C；S : CategoryTheory.Presieve X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma Pretopology.mem_toCoverage [HasPullbacks C] (J : Pretopology C) {X : C} (S : Presieve X) :
-    S in J.toCoverage X ↔ S in J X := .rfl
-
-/--
-lemma `Pretopology.toGrothendieck_toCoverage` / 引理 `Pretopology.toGrothendieck_toCoverage`
-
-English:
-lemma Pretopology.toGrothendieck_toCoverage
-  given: [HasPullbacks C] (J : Pretopology C)
-  proof: by
-  ext T S
-  rw [mem_toGrothendieck]; rw [Coverage.mem_toGrothendieck]
-  refine ⟨fun h => ?_, fun ⟨R, hR, hle⟩ => ?_⟩
-  · induction h with
-    | of X S hS => use S, hS, Sieve.le_generate S
-    | top X => use Presieve.singleton (𝟙 X), J.has_isos (𝟙 X), le_top
-    | transitive X R S hR hRS hle hfS =>
-        obtain ⟨R', hR', hle⟩ := hle
-        choose S' hS' hS'le using hfS
-        refine ⟨Presieve.bind R' (fun Y f hf => S' (hle _ _ hf)), ?_, fun Z u hu => ?_⟩
-        · exact J.transitive R' (fun Y f hf => S' (hle Y _ hf)) hR' fun Y f H => hS' (hle Y _ H)
-        · obtain ⟨W, g, w, hw, hg, rfl⟩ := hu
-          exact hS'le _ _ _ hg
-  · refine Coverage.saturate_of_superset _ ?_ (.of _ _ hR)
-    rwa [Sieve.generate_le_iff]
-
-中文:
-引理 Pretopology.toGrothendieck_toCoverage
-  条件: [有Pullbacks C] (J : Pretopology C)
-  证明: by
-  ext T S
-  rw [mem_toGrothendieck]; rw [Coverage.mem_toGrothendieck]
-  refine ⟨fun h => ?_, fun ⟨R, hR, hle⟩ => ?_⟩
-  · induction h with
-    | of X S hS => use S, hS, Sieve.le_generate S
-    | top X => use Presieve.singleton (𝟙 X), J.has_isos (𝟙 X), le_top
-    | transitive X R S hR hRS hle hfS =>
-        obtain ⟨R', hR', hle⟩ := hle
-        choose S' hS' hS'le using hfS
-        refine ⟨Presieve.bind R' (fun Y f hf => S' (hle _ _ hf)), ?_, fun Z u hu => ?_⟩
-        · exact J.transitive R' (fun Y f hf => S' (hle Y _ hf)) hR' fun Y f H => hS' (hle Y _ H)
-        · obtain ⟨W, g, w, hw, hg, rfl⟩ := hu
-          exact hS'le _ _ _ hg
-  · refine Coverage.saturate_of_superset _ ?_ (.of _ _ hR)
-    rwa [Sieve.generate_le_iff]
-
-Depends on / 依赖: Coverage, Coverage.mem_toGrothendieck, J.has_isos, J.transitive, Presieve, Presieve.bind, Presieve.singleton, Sieve.le_generate, has_isos, le_generate, le_top, mem_toGrothendieck, singleton, transitive
+    S ∈ J.toCoverage X ↔ S ∈ J X := .rfl
+/-
+**CategoryTheory.Pretopology.toGrothendieck_toCoverage** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Pretopology`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] [inst_1 : C
+ategoryTheory.Limits.HasPullbacks C]   (J : CategoryTheory.Pretopology C), J.toC
+overage.toGrothendieck = J.toGrothendieck
+参数：J : CategoryTheory.Pretopology C。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.GrothendieckTopology.ext`：ext {J₁ J₂ : GrothendieckTopolo
+gy C} (h : (J₁ : forall X : C, Set (Sieve X)) = J₂) : J₁ = J₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Pretopology.mem_toGrothendieck`：mem_toGrothendieck (K : P
+retopology C) (X S) : S in toGrothendieck K X ↔ exists R in K X, R <= (S : Presi
+eve X)
+· 使用引理 `CategoryTheory.Coverage.mem_toGrothendieck`：mem_toGrothendieck {K : Cove
+rage C} {X : C} {S : Sieve X} : S in K.toGrothendieck X ↔ Saturate K X S
+· 使用定理 `CategoryTheory.Sieve.le_generate`：le_generate (R : Presieve X) : R <= ge
+nerate R
+· 使用定理 `CategoryTheory.Pretopology.has_isos`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasPullbacks C]   (self : 
+CategoryTheory.Pretopolog…
+· 使用定理 `le_top`：le_top : a <= ⊤
+· 使用定理 `CategoryTheory.Pretopology.transitive`：∀ {C : Type u} [inst : CategoryTh
+eory.Category.{v, u} C] [inst_1 : CategoryTheory.Limits.HasPullbacks C]   (self 
+: CategoryTheory.Pretopolog…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
+· 使用引理 `CategoryTheory.Coverage.saturate_of_superset`：saturate_of_superset (K : 
+Coverage C) {X : C} {S T : Sieve X} (h : S <= T) (hS : Saturate K X S) : Saturat
+e K X T
+· 使用定理 `CategoryTheory.Sieve.generate_le_iff`：generate_le_iff (R : Presieve X) (
+S : Sieve X) : generate R <= S ↔ R <= S
 -/
 lemma Pretopology.toGrothendieck_toCoverage [HasPullbacks C] (J : Pretopology C) :
     J.toCoverage.toGrothendieck = J.toGrothendieck := by
   ext T S
-  rw [mem_toGrothendieck]; rw [Coverage.mem_toGrothendieck]
-  refine ⟨fun h => ?_, fun ⟨R, hR, hle⟩ => ?_⟩
+  rw [mem_toGrothendieck, Coverage.mem_toGrothendieck]
+  refine ⟨fun h ↦ ?_, fun ⟨R, hR, hle⟩ ↦ ?_⟩
   · induction h with
     | of X S hS => use S, hS, Sieve.le_generate S
     | top X => use Presieve.singleton (𝟙 X), J.has_isos (𝟙 X), le_top
     | transitive X R S hR hRS hle hfS =>
         obtain ⟨R', hR', hle⟩ := hle
         choose S' hS' hS'le using hfS
-        refine ⟨Presieve.bind R' (fun Y f hf => S' (hle _ _ hf)), ?_, fun Z u hu => ?_⟩
-        · exact J.transitive R' (fun Y f hf => S' (hle Y _ hf)) hR' fun Y f H => hS' (hle Y _ H)
+        refine ⟨Presieve.bind R' (fun Y f hf ↦ S' (hle _ _ hf)), ?_, fun Z u hu ↦ ?_⟩
+        · exact J.transitive R' (fun Y f hf ↦ S' (hle Y _ hf)) hR' fun Y f H ↦ hS' (hle Y _ H)
         · obtain ⟨W, g, w, hw, hg, rfl⟩ := hu
           exact hS'le _ _ _ hg
   · refine Coverage.saturate_of_superset _ ?_ (.of _ _ hR)
@@ -981,26 +816,17 @@ lemma Pretopology.toGrothendieck_toCoverage [HasPullbacks C] (J : Pretopology C)
 
 /-- A precoverage with pullbacks defines a coverage. -/
 @[simps toPrecoverage]
-/--
-Definition of `Precoverage.toCoverage` / `Precoverage.toCoverage` 的定义
+/-
+**CategoryTheory.Precoverage.toCoverage** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Precoverage`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     (J 
+: CategoryTheory.Precoverage C) → [J.HasPullbacks] → [J.IsStableUnderBaseChange]
+ → CategoryTheory.Coverage C
+参数：J : CategoryTheory.Precoverage C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Precoverage.toCoverage
-  signature: (J : Precoverage C) [J.HasPullbacks] [J.IsStableUnderBaseChange]
-  body: J
-  pullback X Y f S hS := by
-    have : S.HasPullbacks f := J.hasPullbacks_of_mem _ hS
-    exact ⟨S.pullbackArrows f, J.pullbackArrows_mem _ hS,
-      Presieve.FactorsThruAlong.pullbackArrows f S⟩
-
-中文:
-定义 Precoverage.toCoverage
-  签名: (J : Precoverage C) [J.有Pullbacks] [J.是StableUnderBaseChange]
-  定义体: J
-  pullback X Y f S hS := by
-    have : S.HasPullbacks f := J.hasPullbacks_of_mem _ hS
-    exact ⟨S.pullbackArrows f, J.pullbackArrows_mem _ hS,
-      Presieve.FactorsThruAlong.pullbackArrows f S⟩
+--- 原说明 ---
+A precoverage with pullbacks defines a coverage.
 -/
 def Precoverage.toCoverage (J : Precoverage C) [J.HasPullbacks] [J.IsStableUnderBaseChange] :
     Coverage C where
@@ -1009,122 +835,109 @@ def Precoverage.toCoverage (J : Precoverage C) [J.HasPullbacks] [J.IsStableUnder
     have : S.HasPullbacks f := J.hasPullbacks_of_mem _ hS
     exact ⟨S.pullbackArrows f, J.pullbackArrows_mem _ hS,
       Presieve.FactorsThruAlong.pullbackArrows f S⟩
-
-/--
-lemma `Precoverage.toCoverage_le_toCoverage` / 引理 `Precoverage.toCoverage_le_toCoverage`
-
-English:
-lemma Precoverage.toCoverage_le_toCoverage
-  statement: {J : Precoverage C} [J.HasPullbacks]
-  proof: rfl
-
-中文:
-引理 Precoverage.toCoverage_le_toCoverage
-  结论: {J : Precoverage C} [J.有Pullbacks]
-  证明: rfl
+/-
+**CategoryTheory.Precoverage.toCoverage_le_toCoverage** 是 Mathlib 中的一个定理，位于命名空间 
+`CategoryTheory.Precoverage`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {J : Catego
+ryTheory.Precoverage C}   [inst_1 : J.HasPullbacks] [inst_2 : J.IsStableUnderBas
+eChange] (K : CategoryTheory.GrothendieckTopology C),   (J.toCoverage ≤ K.toCove
+rage) = ∀ ⦃X : C⦄, ∀ S ∈ J.coverings X, CategoryTheory.Sieve.generate S ∈ K X
+参数：K : CategoryTheory.GrothendieckTopology C；J.toCoverage ≤ K.toCoverage。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Precoverage.toCoverage_le_toCoverage {J : Precoverage C} [J.HasPullbacks]
     [J.IsStableUnderBaseChange] (K : GrothendieckTopology C) :
-    (J.toCoverage <= K.toCoverage) =
-      (forall ⦃X : C⦄, forall S in J.coverings X, Sieve.generate S in K X) := rfl
-
-/--
-lemma `Precoverage.toGrothendieck_toCoverage` / 引理 `Precoverage.toGrothendieck_toCoverage`
-
-English:
-lemma Precoverage.toGrothendieck_toCoverage
-  statement: {J : Precoverage C} [J.HasPullbacks]
-  proof: by
-  grind [toGrothendieck_eq_sInf, Coverage.toGrothendieck_eq_sInf,
-    Precoverage.toCoverage_le_toCoverage]
-
-中文:
-引理 Precoverage.toGrothendieck_toCoverage
-  结论: {J : Precoverage C} [J.有Pullbacks]
-  证明: by
-  grind [toGrothendieck_eq_sInf, Coverage.toGrothendieck_eq_sInf,
-    Precoverage.toCoverage_le_toCoverage]
-
-Depends on / 依赖: Coverage, Coverage.toGrothendieck_eq_sInf, Precoverage, Precoverage.toCoverage_le_toCoverage, RankFinite, finite, hI.isBase_restrict.finite, isBase_restrict, toCoverage_le_toCoverage, toGrothendieck_eq_sInf
+    (J.toCoverage ≤ K.toCoverage) =
+      (∀ ⦃X : C⦄, ∀ S ∈ J.coverings X, Sieve.generate S ∈ K X) := rfl
+/-
+**CategoryTheory.Precoverage.toGrothendieck_toCoverage** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Precoverage`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {J : Catego
+ryTheory.Precoverage C}   [inst_1 : J.HasPullbacks] [inst_2 : J.IsStableUnderBas
+eChange], J.toCoverage.toGrothendieck = J.toGrothendieck
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma Precoverage.toGrothendieck_toCoverage {J : Precoverage C} [J.HasPullbacks]
     [J.IsStableUnderBaseChange] :
     J.toCoverage.toGrothendieck = J.toGrothendieck := by
   grind [toGrothendieck_eq_sInf, Coverage.toGrothendieck_eq_sInf,
     Precoverage.toCoverage_le_toCoverage]
-
-/--
-lemma `Coverage.toGrothendieck_toPrecoverage` / 引理 `Coverage.toGrothendieck_toPrecoverage`
-
-English:
-lemma Coverage.toGrothendieck_toPrecoverage
-  given: (J : Coverage C)
-  proof: by
-  rw [Coverage.toGrothendieck]; rw [GrothendieckTopology.copy_eq]
-
-中文:
-引理 余verage.toGrothendieck_toPrecoverage
-  条件: (J : 余verage C)
-  证明: by
-  rw [Coverage.toGrothendieck]; rw [GrothendieckTopology.copy_eq]
-
-Depends on / 依赖: Coverage, Coverage.toGrothendieck, GrothendieckTopology, GrothendieckTopology.copy_eq, copy_eq, toGrothendieck
+/-
+**CategoryTheory.Coverage.toGrothendieck_toPrecoverage** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Coverage`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (J : Catego
+ryTheory.Coverage C),   J.toGrothendieck = J.toGrothendieck
+参数：J : CategoryTheory.Coverage C。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Coverage.toGrothendieck.eq_1`：∀ {C : Type u_1} [inst : Ca
+tegoryTheory.Category.{v_1, u_1} C] (K : CategoryTheory.Coverage C),   K.toGroth
+endieck = K.toGrothendieck.copy (…
+· 使用定理 `CategoryTheory.GrothendieckTopology.copy_eq`：copy_eq {J : GrothendieckTo
+pology C} {s : forall X : C, Set (Sieve X)} {h : J.sieves = s} : J.copy s h = J
 -/
 lemma Coverage.toGrothendieck_toPrecoverage (J : Coverage C) :
     J.toPrecoverage.toGrothendieck = J.toGrothendieck := by
-  rw [Coverage.toGrothendieck]; rw [GrothendieckTopology.copy_eq]
+  rw [Coverage.toGrothendieck, GrothendieckTopology.copy_eq]
 
 open Coverage
 
 namespace Presieve
 
 /--
-theorem `isSheaf_coverage` / 定理 `isSheaf_coverage`
+The main theorem of this file: Given a coverage `K` on `C`,
+a `Type*`-valued presheaf on `C` is a sheaf for `K` if and only if it is a sheaf for
+the associated Grothendieck topology.
+-/
+/-
+**CategoryTheory.Presieve.isSheaf_coverage** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTh
+eory.Presieve`。
+形式化陈述：isSheaf_coverage (K : Coverage C) (P : Cᵒᵖ ⥤ Type*) : Presieve.IsSheaf K.t
+oGrothendieck P ↔ (forall {X : C} (R : Presieve X), R in K X -> Presieve.IsSheaf
+For P R)
+参数：K : Coverage C；P : Cᵒᵖ ⥤ Type*。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Coverage.toGrothendieck_toPrecoverage`：∀ {C : Type u_1} [
+inst : CategoryTheory.Category.{v_1, u_1} C] (J : CategoryTheory.Coverage C),   
+J.toGrothendieck = J.toGrothendieck
+· 使用定理 `CategoryTheory.Precoverage.isSheaf_toGrothendieck_iff`：isSheaf_toGrothen
+dieck_iff (P : Cᵒᵖ ⥤ Type*) : Presieve.IsSheaf J.toGrothendieck P ↔ (forall {X Y
+ : C} {f : Y ⟶ X} (R : Presieve X), R in J …
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `CategoryTheory.Sieve.pullback_id`：pullback_id : S.pullback (𝟙 _) = S
+· 使用定理 `CategoryTheory.Coverage.pullback`：∀ {C : Type u_1} [inst : CategoryTheor
+y.Category.{v_1, u_1} C] (self : CategoryTheory.Coverage C) ⦃X Y : C⦄ (f : Y ⟶ X
+),   ∀ S ∈ self.coveri…
+· 使用引理 `CategoryTheory.Presieve.isSheafFor_of_factorsThru`：isSheafFor_of_factors
+Thru {X : C} {S T : Presieve X} (P : Cᵒᵖ ⥤ Type*) (H : S.FactorsThru T) (hS : S.
+IsSheafFor P) (h : forall ⦃Y : C⦄ ⦃f : …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `CategoryTheory.Presieve.IsSheafFor.isSeparatedFor`：∀ {C : Type u₁} [inst
+ : CategoryTheory.Category.{v₁, u₁} C] {P : CategoryTheory.Functor Cᵒᵖ (Type w)}
+ {X : C}   {R : CategoryTheory.Presieve…
 
-English:
-theorem isSheaf_coverage
-  given: (K : Coverage C) (P : Cᵒᵖ ⥤ Type*)
-  proof: by
-  rw [← toGrothendieck_toPrecoverage]; rw [Precoverage.isSheaf_toGrothendieck_iff]
-  constructor
-  · intro H X S hS
-    simpa [← Presieve.isSheafFor_iff_generate] using H (f := 𝟙 X) S hS
-  · intro H X Y f S hS
-    obtain ⟨T, hT1, hT2⟩ := K.pullback f S hS
-    apply Presieve.isSheafFor_of_factorsThru (S := T)
-    · intro Z g hg
-      obtain ⟨W, i, e, h1, h2⟩ := hT2 hg
-      exact ⟨Z, 𝟙 _, g, ⟨W, i, e, h1, h2⟩, by simp⟩
-    · apply H; assumption
-    · intro Z g _
-      obtain ⟨R, hR1, hR2⟩ := K.pullback g _ hT1
-      exact ⟨R, (H _ hR1).isSeparatedFor, hR2⟩
-
-中文:
-定理 isSheaf_coverage
-  条件: (K : 余verage C) (P : Cᵒᵖ ⥤ 类型)
-  证明: by
-  rw [← toGrothendieck_toPrecoverage]; rw [Precoverage.isSheaf_toGrothendieck_iff]
-  constructor
-  · intro H X S hS
-    simpa [← Presieve.isSheafFor_iff_generate] using H (f := 𝟙 X) S hS
-  · intro H X Y f S hS
-    obtain ⟨T, hT1, hT2⟩ := K.pullback f S hS
-    apply Presieve.isSheafFor_of_factorsThru (S := T)
-    · intro Z g hg
-      obtain ⟨W, i, e, h1, h2⟩ := hT2 hg
-      exact ⟨Z, 𝟙 _, g, ⟨W, i, e, h1, h2⟩, by simp⟩
-    · apply H; assumption
-    · intro Z g _
-      obtain ⟨R, hR1, hR2⟩ := K.pullback g _ hT1
-      exact ⟨R, (H _ hR1).isSeparatedFor, hR2⟩
-
-Depends on / 依赖: K.pullback, Precoverage, Precoverage.isSheaf_toGrothendieck_iff, Presieve, Presieve.isSheafFor_iff_generate, Presieve.isSheafFor_of_factorsThru, isSeparatedF, isSheafFor_iff_generate, isSheafFor_of_factorsThru, isSheaf_toGrothendieck_iff, pullback, toGrothendieck_toPrecoverage
+--- 原说明 ---
+The main theorem of this file: Given a coverage `K` on `C`,
+a `Type*`-valued presheaf on `C` is a sheaf for `K` if and only if it is a sheaf
+ for
+the associated Grothendieck topology.
 -/
 theorem isSheaf_coverage (K : Coverage C) (P : Cᵒᵖ ⥤ Type*) :
     Presieve.IsSheaf K.toGrothendieck P ↔
-    (forall {X : C} (R : Presieve X), R in K X -> Presieve.IsSheafFor P R) := by
-  rw [← toGrothendieck_toPrecoverage]; rw [Precoverage.isSheaf_toGrothendieck_iff]
+    (∀ {X : C} (R : Presieve X), R ∈ K X → Presieve.IsSheafFor P R) := by
+  rw [← toGrothendieck_toPrecoverage, Precoverage.isSheaf_toGrothendieck_iff]
   constructor
   · intro H X S hS
     simpa [← Presieve.isSheafFor_iff_generate] using H (f := 𝟙 X) S hS
@@ -1140,42 +953,47 @@ theorem isSheaf_coverage (K : Coverage C) (P : Cᵒᵖ ⥤ Type*) :
       exact ⟨R, (H _ hR1).isSeparatedFor, hR2⟩
 
 /--
-theorem `isSheaf_sup` / 定理 `isSheaf_sup`
+A presheaf is a sheaf for the Grothendieck topology generated by a union of coverages iff it is a
+sheaf for the Grothendieck topology generated by each coverage separately.
+-/
+/-
+**CategoryTheory.Presieve.isSheaf_sup** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Presieve`。
+形式化陈述：isSheaf_sup (K L : Coverage C) (P : Cᵒᵖ ⥤ Type*) : (Presieve.IsSheaf (K ⊔ 
+L).toGrothendieck) P ↔ (Presieve.IsSheaf K.toGrothendieck) P ∧ (Presieve.IsSheaf
+ L.toGrothendieck) P
+参数：K L : Coverage C；P : Cᵒᵖ ⥤ Type*。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Presieve.isSheaf_of_le`：isSheaf_of_le (P : Cᵒᵖ ⥤ Type w) 
+{J₁ J₂ : GrothendieckTopology C} : J₁ <= J₂ -> IsSheaf J₂ P -> IsSheaf J₁ P
+· 使用定理 `GaloisConnection.monotone_l`：∀ {α : Type u} {β : Type v} [inst : Preorde
+r α] [inst_1 : Preorder β] {u : α → β} {l : β → α},   GaloisConnection l u → Mon
+otone l
+· 使用定理 `GaloisInsertion.gc`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] 
+[inst_1 : Preorder β] {l : α → β} {u : β → α}   (self : GaloisInsertion l u), Ga
+loisConn…
+· 使用定理 `le_sup_left`：le_sup_left : a <= a ⊔ b
+· 使用定理 `le_sup_right`：le_sup_right : b <= a ⊔ b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Presieve.isSheaf_coverage`：isSheaf_coverage (K : Coverage
+ C) (P : Cᵒᵖ ⥤ Type*) : Presieve.IsSheaf K.toGrothendieck P ↔ (forall {X : C} (R
+ : Presieve X), R in K X -> Pr…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 
-English:
-theorem isSheaf_sup
-  given: (K L : Coverage C) (P : Cᵒᵖ ⥤ Type*)
-  proof: by
-  refine ⟨fun h => ⟨Presieve.isSheaf_of_le _ ((gi C).gc.monotone_l le_sup_left) h,
-      Presieve.isSheaf_of_le _ ((gi C).gc.monotone_l le_sup_right) h⟩, fun h => ?_⟩
-  rw [isSheaf_coverage]; rw [isSheaf_coverage] at h
-  rw [isSheaf_coverage]
-  intro X R hR
-  rcases hR with hR | hR
-  · exact h.1 R hR
-  · exact h.2 R hR
-
-中文:
-定理 isSheaf_sup
-  条件: (K L : 余verage C) (P : Cᵒᵖ ⥤ 类型)
-  证明: by
-  refine ⟨fun h => ⟨Presieve.isSheaf_of_le _ ((gi C).gc.monotone_l le_sup_left) h,
-      Presieve.isSheaf_of_le _ ((gi C).gc.monotone_l le_sup_right) h⟩, fun h => ?_⟩
-  rw [isSheaf_coverage]; rw [isSheaf_coverage] at h
-  rw [isSheaf_coverage]
-  intro X R hR
-  rcases hR with hR | hR
-  · exact h.1 R hR
-  · exact h.2 R hR
-
-Depends on / 依赖: Presieve, Presieve.isSheaf_of_le, gc.monotone_l, isSheaf_coverage, isSheaf_of_le, le_sup_left, le_sup_right, monotone_l
+--- 原说明 ---
+A presheaf is a sheaf for the Grothendieck topology generated by a union of cove
+rages iff it is a
+sheaf for the Grothendieck topology generated by each coverage separately.
 -/
 theorem isSheaf_sup (K L : Coverage C) (P : Cᵒᵖ ⥤ Type*) :
     (Presieve.IsSheaf (K ⊔ L).toGrothendieck) P ↔
     (Presieve.IsSheaf K.toGrothendieck) P ∧ (Presieve.IsSheaf L.toGrothendieck) P := by
-  refine ⟨fun h => ⟨Presieve.isSheaf_of_le _ ((gi C).gc.monotone_l le_sup_left) h,
-      Presieve.isSheaf_of_le _ ((gi C).gc.monotone_l le_sup_right) h⟩, fun h => ?_⟩
-  rw [isSheaf_coverage]; rw [isSheaf_coverage] at h
+  refine ⟨fun h ↦ ⟨Presieve.isSheaf_of_le _ ((gi C).gc.monotone_l le_sup_left) h,
+      Presieve.isSheaf_of_le _ ((gi C).gc.monotone_l le_sup_right) h⟩, fun h ↦ ?_⟩
+  rw [isSheaf_coverage, isSheaf_coverage] at h
   rw [isSheaf_coverage]
   intro X R hR
   rcases hR with hR | hR
@@ -1184,70 +1002,102 @@ theorem isSheaf_sup (K L : Coverage C) (P : Cᵒᵖ ⥤ Type*) :
 
 end Presieve
 
-/--
-lemma `Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange` / 引理 `Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange`
-
-English:
-lemma Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange
-  proof: by
-  rw [← J.toCoverage_toPrecoverage]; rw [Coverage.toGrothendieck_toPrecoverage]; rw [Presieve.isSheaf_coverage]
-
-中文:
-引理 Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange
-  证明: by
-  rw [← J.toCoverage_toPrecoverage]; rw [Coverage.toGrothendieck_toPrecoverage]; rw [Presieve.isSheaf_coverage]
-
-Depends on / 依赖: Coverage, Coverage.toGrothendieck_toPrecoverage, J.toCoverage_toPrecoverage, Presieve, Presieve.isSheaf_coverage, isSheaf_coverage, toCoverage_toPrecoverage, toGrothendieck_toPrecoverage
+/-
+**CategoryTheory.Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChan
+ge** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Precoverage`。
+形式化陈述：∀ {C : Type u_2} [inst : CategoryTheory.Category.{v_1, u_2} C] {J : Catego
+ryTheory.Precoverage C} [J.HasPullbacks]   [J.IsStableUnderBaseChange] (P : Cate
+goryTheory.Functor Cᵒᵖ (Type u_1)),   CategoryTheory.Presieve.IsSheaf J.toGrothe
+ndieck P ↔     ∀ ⦃X : C⦄, ∀ R ∈ J.coverings X, CategoryTheory.Presieve.IsSheafFo
+r P R
+参数：P : CategoryTheory.Functor Cᵒᵖ (Type u_1)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Precoverage.toCoverage_toPrecoverage`：∀ {C : Type u_1} [i
+nst : CategoryTheory.Category.{v_1, u_1} C] (J : CategoryTheory.Precoverage C)  
+ [inst_1 : J.HasPullbacks] [inst_2 : J.Is…
+· 使用定理 `CategoryTheory.Coverage.toGrothendieck_toPrecoverage`：∀ {C : Type u_1} [
+inst : CategoryTheory.Category.{v_1, u_1} C] (J : CategoryTheory.Coverage C),   
+J.toGrothendieck = J.toGrothendieck
+· 使用定理 `CategoryTheory.Presieve.isSheaf_coverage`：isSheaf_coverage (K : Coverage
+ C) (P : Cᵒᵖ ⥤ Type*) : Presieve.IsSheaf K.toGrothendieck P ↔ (forall {X : C} (R
+ : Presieve X), R in K X -> Pr…
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange
     {J : Precoverage C} [J.HasPullbacks] [J.IsStableUnderBaseChange] (P : Cᵒᵖ ⥤ Type*) :
-    Presieve.IsSheaf J.toGrothendieck P ↔ forall ⦃X : C⦄ (R : Presieve X),
-      R in J X -> Presieve.IsSheafFor P R := by
-  rw [← J.toCoverage_toPrecoverage]; rw [Coverage.toGrothendieck_toPrecoverage]; rw [Presieve.isSheaf_coverage]
-
-/--
-lemma `Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange_of_small` / 引理 `Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange_of_small`
-
-English:
-lemma Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange_of_small
-  statement: {J : Precoverage C}
-  proof: by
-  rw [Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange]
-  refine ⟨fun h X E => h _ E.mem₀, fun h X R hR => ?_⟩
-  obtain ⟨E₀, rfl⟩ := R.exists_eq_preZeroHypercover
-  rw [Presieve.isSheafFor_iff_generate]
-  let E : ZeroHypercover J X := ⟨E₀, hR⟩
-  apply Presieve.isSheafFor_subsieve
-      (S := .generate <| (ZeroHypercover.restrictIndexOfSmall.{w} E).presieve₀)
-  · exact Sieve.generate_mono (by simp [E])
-  · intro Y f
-    rw [← Sieve.pullbackArrows_comm]; rw [← Presieve.isSheafFor_iff_generate]; rw [← PreZeroHypercover.presieve₀_pullback₁]; rw [← ZeroHypercover.pullback₂_toPreZeroHypercover]
-    apply h
-
-中文:
-引理 Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange_of_small
-  结论: {J : Precoverage C}
-  证明: by
-  rw [Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange]
-  refine ⟨fun h X E => h _ E.mem₀, fun h X R hR => ?_⟩
-  obtain ⟨E₀, rfl⟩ := R.exists_eq_preZeroHypercover
-  rw [Presieve.isSheafFor_iff_generate]
-  let E : ZeroHypercover J X := ⟨E₀, hR⟩
-  apply Presieve.isSheafFor_subsieve
-      (S := .generate <| (ZeroHypercover.restrictIndexOfSmall.{w} E).presieve₀)
-  · exact Sieve.generate_mono (by simp [E])
-  · intro Y f
-    rw [← Sieve.pullbackArrows_comm]; rw [← Presieve.isSheafFor_iff_generate]; rw [← PreZeroHypercover.presieve₀_pullback₁]; rw [← ZeroHypercover.pullback₂_toPreZeroHypercover]
-    apply h
-
-Depends on / 依赖: E.mem, Precoverage, Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange, Presieve, Presieve.isSheafFor_iff_generate, Presieve.isSheafFor_subsieve, R.exists_eq_preZeroHypercover, Sieve.generate_mono, Sieve.pullbackArrows_comm, ZeroHypercover, ZeroHypercover.restrictIndexOfSmall, exists_eq_preZeroHypercover, generate, generate_mono, isSheafFor_iff_generate, isSheafFor_subsieve, isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange, pullbackArrows_comm, restrictIndexOfSmall
+    Presieve.IsSheaf J.toGrothendieck P ↔ ∀ ⦃X : C⦄ (R : Presieve X),
+      R ∈ J X → Presieve.IsSheafFor P R := by
+  rw [← J.toCoverage_toPrecoverage, Coverage.toGrothendieck_toPrecoverage,
+    Presieve.isSheaf_coverage]
+/-
+**CategoryTheory.Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChan
+ge_of_small** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.Precoverage`。
+形式化陈述：∀ {C : Type u_2} [inst : CategoryTheory.Category.{v_1, u_2} C] {J : Catego
+ryTheory.Precoverage C}   [J.IsStableUnderBaseChange] [J.HasPullbacks] [J.Small]
+ (P : CategoryTheory.Functor Cᵒᵖ (Type u_1)),   CategoryTheory.Presieve.IsSheaf 
+J.toGrothendieck P ↔     ∀ ⦃X : C⦄ (E : J.ZeroHypercover X), CategoryTheory.Pres
+ieve.IsSheafFor P E.presieve₀
+参数：P : CategoryTheory.Functor Cᵒᵖ (Type u_1)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBa
+seChange`：∀ {C : Type u_2} [inst : CategoryTheory.Category.{v_1, u_2} C] {J : Ca
+tegoryTheory.Precoverage C} [J.HasPullbacks]   [J.IsStableUnderBaseCha…
+· 使用定理 `CategoryTheory.Precoverage.ZeroHypercover.mem₀`：∀ {C : Type u} [inst : C
+ategoryTheory.Category.{v, u} C] {J : CategoryTheory.Precoverage C} {S : C}   (s
+elf : J.ZeroHypercover S), self.pres…
+· 使用定理 `CategoryTheory.Presieve.exists_eq_preZeroHypercover`：∀ {C : Type u} [ins
+t : CategoryTheory.Category.{v, u} C] {S : C} (R : CategoryTheory.Presieve S), ∃
+ E, R = E.presieve₀
+· 使用定理 `CategoryTheory.Presieve.isSheafFor_iff_generate`：isSheafFor_iff_generate
+ (R : Presieve X) : IsSheafFor P R ↔ IsSheafFor P (generate R : Presieve X)
+· 使用定理 `CategoryTheory.Presieve.isSheafFor_subsieve`：isSheafFor_subsieve (P : Cᵒ
+ᵖ ⥤ Type w) {S : Sieve X} {R : Presieve X} (h : (S : Presieve X) <= R) (trans : 
+forall ⦃Y⦄ (f : Y ⟶ X), IsSheafFo…
+· 使用定理 `CategoryTheory.Precoverage.instSmallOfSmall`：∀ {C : Type u} [inst : Cate
+goryTheory.Category.{v, u} C] (J : CategoryTheory.Precoverage C) [J.Small] {S : 
+C}   (E : J.ZeroHypercover S), E.…
+· 使用定理 `CategoryTheory.Sieve.generate_mono`：generate_mono : Monotone (generate :
+ Presieve X -> Sieve X)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Precoverage.ZeroHypercover.restrictIndexOfSmall_toPreZero
+Hypercover`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {J : Catego
+ryTheory.Precoverage C} {S : C}   (E : J.ZeroHypercover S) [inst_1 : E.S…
+· 使用定理 `CategoryTheory.Precoverage.ZeroHypercover.instHasPullbacksPresieve₀OfHas
+Pullbacks`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] (K : Categor
+yTheory.Precoverage C) [K.HasPullbacks] {X Y : C}   (E : K.ZeroHypercov…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Sieve.pullbackArrows_comm`：pullbackArrows_comm {X Y : C} 
+(f : Y ⟶ X) (R : Presieve X) [R.HasPullbacks f] : Sieve.generate (R.pullbackArro
+ws f) = (Sieve.generate R).pul…
+· 使用定理 `CategoryTheory.Precoverage.ZeroHypercover.instHasPullbackFOfHasPullbacks
+Presieve₀`：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {X Y : C} (E
+ : CategoryTheory.PreZeroHypercover X) (f : Y ⟶ X)   [E.presieve₀.HasPu…
+· 使用定理 `CategoryTheory.Presieve.instHasPullbacksOfArrowsOfHasPullback`：∀ {C : Ty
+pe u₁} [inst : CategoryTheory.Category.{v₁, u₁} C] {X Y : C} (f : Y ⟶ X) {ι : Ty
+pe u_1} (Z : ι → C)   (g : (i : ι) → Z i ⟶ X) [∀ (i…
+· 使用引理 `CategoryTheory.PreZeroHypercover.presieve₀_pullback₁`：presieve₀_pullback
+₁ (f : S ⟶ T) (E : PreZeroHypercover.{w} T) [forall i, HasPullback (E.f i) f] : 
+presieve₀ (E.pullback₂ f) = E.presieve₀.pu…
+· 使用定理 `CategoryTheory.Precoverage.ZeroHypercover.pullback₂_toPreZeroHypercover`
+：∀ {C : Type u} [inst : CategoryTheory.Category.{v, u} C] {J : CategoryTheory.Pr
+ecoverage C} {S T : C}   [inst_1 : J.IsStableUnderBaseChange]…
 -/
 lemma Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange_of_small {J : Precoverage C}
     [J.IsStableUnderBaseChange] [J.HasPullbacks] [Small.{w} J] (P : Cᵒᵖ ⥤ Type*) :
     Presieve.IsSheaf J.toGrothendieck P ↔
-      forall ⦃X : C⦄ (E : ZeroHypercover.{w} J X), Presieve.IsSheafFor P E.presieve₀ := by
+      ∀ ⦃X : C⦄ (E : ZeroHypercover.{w} J X), Presieve.IsSheafFor P E.presieve₀ := by
   rw [Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange]
-  refine ⟨fun h X E => h _ E.mem₀, fun h X R hR => ?_⟩
+  refine ⟨fun h X E ↦ h _ E.mem₀, fun h X R hR ↦ ?_⟩
   obtain ⟨E₀, rfl⟩ := R.exists_eq_preZeroHypercover
   rw [Presieve.isSheafFor_iff_generate]
   let E : ZeroHypercover J X := ⟨E₀, hR⟩
@@ -1255,66 +1105,64 @@ lemma Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange_of_small
       (S := .generate <| (ZeroHypercover.restrictIndexOfSmall.{w} E).presieve₀)
   · exact Sieve.generate_mono (by simp [E])
   · intro Y f
-    rw [← Sieve.pullbackArrows_comm]; rw [← Presieve.isSheafFor_iff_generate]; rw [← PreZeroHypercover.presieve₀_pullback₁]; rw [← ZeroHypercover.pullback₂_toPreZeroHypercover]
+    rw [← Sieve.pullbackArrows_comm, ← Presieve.isSheafFor_iff_generate,
+      ← PreZeroHypercover.presieve₀_pullback₁, ← ZeroHypercover.pullback₂_toPreZeroHypercover]
     apply h
 
 namespace Presheaf
 
-/--
-theorem `isSheaf_iff_isLimit_coverage` / 定理 `isSheaf_iff_isLimit_coverage`
-
-English:
-theorem isSheaf_iff_isLimit_coverage
-  given: (K : Coverage C) (P : Cᵒᵖ ⥤ D)
-  proof: by
-  simp only [Presheaf.IsSheaf, Presieve.isSheaf_coverage, isLimit_iff_isSheafFor,
-    ← Presieve.isSheafFor_iff_generate]
-  aesop
-
-中文:
-定理 isSheaf_iff_isLimit_coverage
-  条件: (K : 余verage C) (P : Cᵒᵖ ⥤ D)
-  证明: by
-  simp only [Presheaf.IsSheaf, Presieve.isSheaf_coverage, isLimit_iff_isSheafFor,
-    ← Presieve.isSheafFor_iff_generate]
-  aesop
-
-Depends on / 依赖: IsSheaf, Presheaf, Presheaf.IsSheaf, Presieve, Presieve.isSheafFor_iff_generate, Presieve.isSheaf_coverage, isLimit_iff_isSheafFor, isSheafFor_iff_generate, isSheaf_coverage
+/-
+**CategoryTheory.Presheaf.isSheaf_iff_isLimit_coverage** 是 Mathlib 中的一个定理，位于命名空间
+ `CategoryTheory.Presheaf`。
+形式化陈述：isSheaf_iff_isLimit_coverage (K : Coverage C) (P : Cᵒᵖ ⥤ D) : Presheaf.IsS
+heaf K.toGrothendieck P ↔ forall ⦃X : C⦄ (R : Presieve X), R in K X -> Nonempty 
+(IsLimit (P.mapCone (Sieve.generate R).arrows.cocone.op))
+参数：K : Coverage C；P : Cᵒᵖ ⥤ D。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
 -/
 theorem isSheaf_iff_isLimit_coverage (K : Coverage C) (P : Cᵒᵖ ⥤ D) :
-    Presheaf.IsSheaf K.toGrothendieck P ↔ forall ⦃X : C⦄ (R : Presieve X),
-      R in K X ->
+    Presheaf.IsSheaf K.toGrothendieck P ↔ ∀ ⦃X : C⦄ (R : Presieve X),
+      R ∈ K X →
         Nonempty (IsLimit (P.mapCone (Sieve.generate R).arrows.cocone.op)) := by
   simp only [Presheaf.IsSheaf, Presieve.isSheaf_coverage, isLimit_iff_isSheafFor,
     ← Presieve.isSheafFor_iff_generate]
   aesop
-
-/--
-theorem `isSheaf_sup` / 定理 `isSheaf_sup`
-
-English:
-theorem isSheaf_sup
-  given: (K L : Coverage C) (P : Cᵒᵖ ⥤ D)
-  proof: ⟨fun h => ⟨fun E => ((Presieve.isSheaf_sup K L _).mp (h E)).1, fun E =>
-    ((Presieve.isSheaf_sup K L _).mp (h E)).2⟩,
-      fun ⟨h₁, h₂⟩ E => (Presieve.isSheaf_sup K L _).mpr ⟨h₁ E, h₂ E⟩⟩
-
-中文:
-定理 isSheaf_sup
-  条件: (K L : 余verage C) (P : Cᵒᵖ ⥤ D)
-  证明: ⟨fun h => ⟨fun E => ((Presieve.isSheaf_sup K L _).mp (h E)).1, fun E =>
-    ((Presieve.isSheaf_sup K L _).mp (h E)).2⟩,
-      fun ⟨h₁, h₂⟩ E => (Presieve.isSheaf_sup K L _).mpr ⟨h₁ E, h₂ E⟩⟩
-
-Depends on / 依赖: Presieve, Presieve.isSheaf_sup, isSheaf_sup
+/-
+**CategoryTheory.Presheaf.isSheaf_sup** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory.
+Presheaf`。
+形式化陈述：isSheaf_sup (K L : Coverage C) (P : Cᵒᵖ ⥤ D) : (IsSheaf (K ⊔ L).toGrothend
+ieck) P ↔ (IsSheaf K.toGrothendieck) P ∧ (IsSheaf L.toGrothendieck) P
+参数：K L : Coverage C；P : Cᵒᵖ ⥤ D。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `CategoryTheory.Presieve.isSheaf_sup`：isSheaf_sup (K L : Coverage C) (P :
+ Cᵒᵖ ⥤ Type*) : (Presieve.IsSheaf (K ⊔ L).toGrothendieck) P ↔ (Presieve.IsSheaf 
+K.toGrothendieck) P ∧ (Pr…
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 -/
 theorem isSheaf_sup (K L : Coverage C) (P : Cᵒᵖ ⥤ D) :
     (IsSheaf (K ⊔ L).toGrothendieck) P ↔
     (IsSheaf K.toGrothendieck) P ∧ (IsSheaf L.toGrothendieck) P :=
-  ⟨fun h => ⟨fun E => ((Presieve.isSheaf_sup K L _).mp (h E)).1, fun E =>
+  ⟨fun h ↦ ⟨fun E ↦ ((Presieve.isSheaf_sup K L _).mp (h E)).1, fun E ↦
     ((Presieve.isSheaf_sup K L _).mp (h E)).2⟩,
-      fun ⟨h₁, h₂⟩ E => (Presieve.isSheaf_sup K L _).mpr ⟨h₁ E, h₂ E⟩⟩
+      fun ⟨h₁, h₂⟩ E ↦ (Presieve.isSheaf_sup K L _).mpr ⟨h₁ E, h₂ E⟩⟩
 
 end Presheaf
 
 end CategoryTheory
+

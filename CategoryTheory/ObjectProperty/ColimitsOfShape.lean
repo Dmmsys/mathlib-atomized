@@ -58,73 +58,54 @@ variable {C D : Type*} [Category* C] [Category* D] (P : ObjectProperty C)
   (J : Type u') [Category.{v'} J]
   {J' : Type u''} [Category.{v''} J']
 
-/--
-Inductive type `strictColimitsOfShape` / 归纳类型 `strictColimitsOfShape`
+/-- The property of objects that are *equal* to `colimit F` for some
+functor `F : J ⥤ C` where all `F.obj j` satisfy `P`. -/
+/-
+**CategoryTheory.ObjectProperty.strictColimitsOfShape** 是 Mathlib 中的一个归纳类型，位于命名空
+间 `CategoryTheory.ObjectProperty`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     Cat
+egoryTheory.ObjectProperty C →       (J : Type u') → [CategoryTheory.Category.{v
+', u'} J] → CategoryTheory.ObjectProperty C
+参数：J : Type u'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-inductive strictColimitsOfShape
-  parameters: : ObjectProperty C
-  constructors (1):
-    - colimit: (F : J ⥤ C) [HasColimit F] (hF : forall j, P (F.obj j)) : strictColimitsOfShape (colimit F)
-
-中文:
-归纳类型 strictColimitsOfShape
-  参数: : ObjectProperty C
-  构造子 (1 个):
-    - colimit: (F : J ⥤ C) [有余极限 F] (hF : 对任意 j, P (F.obj j)) : strictColimitsOfShape (colimit F)
+--- 原说明 ---
+The property of objects that are *equal* to `colimit F` for some
+functor `F : J ⥤ C` where all `F.obj j` satisfy `P`.
 -/
 inductive strictColimitsOfShape : ObjectProperty C
-  | colimit (F : J ⥤ C) [HasColimit F] (hF : forall j, P (F.obj j)) :
+  | colimit (F : J ⥤ C) [HasColimit F] (hF : ∀ j, P (F.obj j)) :
     strictColimitsOfShape (colimit F)
 
 variable {P} in
-/--
-lemma `strictColimitsOfShape_monotone` / 引理 `strictColimitsOfShape_monotone`
-
-English:
-lemma strictColimitsOfShape_monotone
-  given: {Q : ObjectProperty C} (h : P <= Q)
-  proof: by
-  rintro _ ⟨F, hF⟩
-  exact ⟨F, fun j => h _ (hF j)⟩
-
-@[simp]
-
-中文:
-引理 strictColimitsOfShape_monotone
-  条件: {Q : ObjectProperty C} (h : P <= Q)
-  证明: by
-  rintro _ ⟨F, hF⟩
-  exact ⟨F, fun j => h _ (hF j)⟩
-
-@[simp]
+/-
+**CategoryTheory.ObjectProperty.strictColimitsOfShape_monotone** 是 Mathlib 中的一个引
+理，位于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：strictColimitsOfShape_monotone {Q : ObjectProperty C} (h : P <= Q) : P.str
+ictColimitsOfShape J <= Q.strictColimitsOfShape J
+参数：h : P <= Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma strictColimitsOfShape_monotone {Q : ObjectProperty C} (h : P <= Q) :
-    P.strictColimitsOfShape J <= Q.strictColimitsOfShape J := by
+lemma strictColimitsOfShape_monotone {Q : ObjectProperty C} (h : P ≤ Q) :
+    P.strictColimitsOfShape J ≤ Q.strictColimitsOfShape J := by
   rintro _ ⟨F, hF⟩
-  exact ⟨F, fun j => h _ (hF j)⟩
+  exact ⟨F, fun j ↦ h _ (hF j)⟩
 
 @[simp]
-/--
-lemma `strictColimitsOfShape_bot` / 引理 `strictColimitsOfShape_bot`
-
-English:
-lemma strictColimitsOfShape_bot
-  given: [Nonempty J]
-  proof: by
-  rw [eq_bot_iff]
-  rintro _ ⟨_, h⟩
-  exact h (Classical.arbitrary J)
-
-中文:
-引理 strictColimitsOfShape_bot
-  条件: [非空 J]
-  证明: by
-  rw [eq_bot_iff]
-  rintro _ ⟨_, h⟩
-  exact h (Classical.arbitrary J)
-
-Depends on / 依赖: Classical, Classical.arbitrary, arbitrary, eq_bot_iff
+/-
+**CategoryTheory.ObjectProperty.strictColimitsOfShape_bot** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：strictColimitsOfShape_bot [Nonempty J] : strictColimitsOfShape (⊥ : Object
+Property C) J = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a = ⊥ ↔ a ≤ ⊥
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma strictColimitsOfShape_bot [Nonempty J] :
     strictColimitsOfShape (⊥ : ObjectProperty C) J = ⊥ := by
@@ -132,24 +113,20 @@ lemma strictColimitsOfShape_bot [Nonempty J] :
   rintro _ ⟨_, h⟩
   exact h (Classical.arbitrary J)
 
-/--
-Definition of `ColimitOfShape` / `ColimitOfShape` 的定义
+/-- A structure expressing that `X : C` is the colimit of a functor
+`diag : J ⥤ C` such that `P (diag.obj j)` holds for all `j`. -/
+/-
+**CategoryTheory.ObjectProperty.ColimitOfShape** 是 Mathlib 中的一个归纳类型，位于命名空间 `Cate
+goryTheory.ObjectProperty`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     Cat
+egoryTheory.ObjectProperty C →       (J : Type u') → [CategoryTheory.Category.{v
+', u'} J] → C → Type (max (max (max u' u_1) v') v_1)
+参数：J : Type u'；max (max (max u' u_1) v') v_1。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure ColimitOfShape
-  parameters: (X : C)
-  extends: ColimitPresentation J X
-  axioms and operations (1):
-    - prop_diag_obj((j : J)) : P (diag.obj j)
-
-中文:
-结构 余limitOfShape
-  参数: (X : C)
-  继承: 余limitPresentation J X
-  公理与运算 (1 个):
-    - prop_diag_obj((j : J)) : P (diag.obj j)
-
-Depends on / 依赖: infer_instance, truncLE
+--- 原说明 ---
+A structure expressing that `X : C` is the colimit of a functor
+`diag : J ⥤ C` such that `P (diag.obj j)` holds for all `j`.
 -/
 structure ColimitOfShape (X : C) extends ColimitPresentation J X where
   prop_diag_obj (j : J) : P (diag.obj j)
@@ -162,24 +139,22 @@ variable {P J}
 `F.obj j` satisfies a property `P`, then this structure expresses that `colimit F`
 is indeed a colimit of objects satisfying `P`. -/
 @[simps toColimitPresentation]
-/--
-Definition of `colimit` / `colimit` 的定义
+/-
+**CategoryTheory.ObjectProperty.ColimitOfShape.colimit** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.ObjectProperty.ColimitOfShape`。
+形式化陈述：colimit (F : J ⥤ C) [HasColimit F] (hF : forall j, P (F.obj j)) : P.Colimi
+tOfShape J (colimit F) where toColimitPresentation
+参数：F : J ⥤ C；hF : forall j, P (F.obj j)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition colimit
-  signature: (F : J ⥤ C) [HasColimit F] (hF : forall j, P (F.obj j))
-  body: .colimit F
-  prop_diag_obj := hF
-
-中文:
-定义 colimit
-  签名: (F : J ⥤ C) [有余极限 F] (hF : 对任意 j, P (F.obj j))
-  定义体: .colimit F
-  prop_diag_obj := hF
-
-Depends on / 依赖: colimit, infer_instance, truncGT
+--- 原说明 ---
+If `F : J ⥤ C` is a functor that has a colimit and is such that for all `j`,
+`F.obj j` satisfies a property `P`, then this structure expresses that `colimit 
+F`
+is indeed a colimit of objects satisfying `P`.
 -/
-noncomputable def colimit (F : J ⥤ C) [HasColimit F] (hF : forall j, P (F.obj j)) :
+noncomputable def colimit (F : J ⥤ C) [HasColimit F] (hF : ∀ j, P (F.obj j)) :
     P.ColimitOfShape J (colimit F) where
   toColimitPresentation := .colimit F
   prop_diag_obj := hF
@@ -187,22 +162,21 @@ noncomputable def colimit (F : J ⥤ C) [HasColimit F] (hF : forall j, P (F.obj 
 /-- If `X` is a colimit indexed by `J` of objects satisfying a property `P`, then
 any object that is isomorphic to `X` also is. -/
 @[simps toColimitPresentation]
-/--
-Definition of `ofIso` / `ofIso` 的定义
+/-
+**CategoryTheory.ObjectProperty.ColimitOfShape.ofIso** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.ObjectProperty.ColimitOfShape`。
+形式化陈述：ofIso {X : C} (h : P.ColimitOfShape J X) {Y : C} (e : X ≅ Y) : P.ColimitOf
+Shape J Y where toColimitPresentation
+参数：h : P.ColimitOfShape J X；e : X ≅ Y。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.ColimitOfShape.prop_diag_obj`：∀ {C : Type 
+u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {P : CategoryTheory.ObjectPro
+perty C} {J : Type u'}   [inst_1 : CategoryTheor…
 
-English:
-definition ofIso
-  signature: {X : C} (h : P.ColimitOfShape J X) {Y : C} (e : X ≅ Y)
-  body: .ofIso h.toColimitPresentation e
-  prop_diag_obj := h.prop_diag_obj
-
-中文:
-定义 ofIso
-  签名: {X : C} (h : P.余limitOfShape J X) {Y : C} (e : X ≅ Y)
-  定义体: .ofIso h.toColimitPresentation e
-  prop_diag_obj := h.prop_diag_obj
-
-Depends on / 依赖: h.toColimitPresentation, infer_instance, toColimitPresentation, truncLE
+--- 原说明 ---
+If `X` is a colimit indexed by `J` of objects satisfying a property `P`, then
+any object that is isomorphic to `X` also is.
 -/
 def ofIso {X : C} (h : P.ColimitOfShape J X) {Y : C} (e : X ≅ Y) :
     P.ColimitOfShape J Y where
@@ -212,46 +186,37 @@ def ofIso {X : C} (h : P.ColimitOfShape J X) {Y : C} (e : X ≅ Y) :
 /-- If `X` is a colimit indexed by `J` of objects satisfying a property `P`,
 it is also a colimit indexed by `J` of objects satisfying `Q` if `P ≤ Q`. -/
 @[simps toColimitPresentation]
-/--
-Definition of `ofLE` / `ofLE` 的定义
+/-
+**CategoryTheory.ObjectProperty.ColimitOfShape.ofLE** 是 Mathlib 中的一个定义，位于命名空间 `C
+ategoryTheory.ObjectProperty.ColimitOfShape`。
+形式化陈述：ofLE {X : C} (h : P.ColimitOfShape J X) {Q : ObjectProperty C} (hPQ : P <=
+ Q) : Q.ColimitOfShape J X where toColimitPresentation
+参数：h : P.ColimitOfShape J X；hPQ : P <= Q。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofLE
-  signature: {X : C} (h : P.ColimitOfShape J X) {Q : ObjectProperty C} (hPQ : P <= Q)
-  body: h.toColimitPresentation
-  prop_diag_obj j := hPQ _ (h.prop_diag_obj j)
-
-中文:
-定义 ofLE
-  签名: {X : C} (h : P.余limitOfShape J X) {Q : ObjectProperty C} (hPQ : P <= Q)
-  定义体: h.toColimitPresentation
-  prop_diag_obj j := hPQ _ (h.prop_diag_obj j)
-
-Depends on / 依赖: h.toColimitPresentation, infer_instance, toColimitPresentation
+--- 原说明 ---
+If `X` is a colimit indexed by `J` of objects satisfying a property `P`,
+it is also a colimit indexed by `J` of objects satisfying `Q` if `P ≤ Q`.
 -/
-def ofLE {X : C} (h : P.ColimitOfShape J X) {Q : ObjectProperty C} (hPQ : P <= Q) :
+def ofLE {X : C} (h : P.ColimitOfShape J X) {Q : ObjectProperty C} (hPQ : P ≤ Q) :
     Q.ColimitOfShape J X where
   toColimitPresentation := h.toColimitPresentation
   prop_diag_obj j := hPQ _ (h.prop_diag_obj j)
 
 /-- Change the index category for `ObjectProperty.ColimitOfShape`. -/
 @[simps toColimitPresentation]
-/--
-Definition of `reindex` / `reindex` 的定义
+/-
+**CategoryTheory.ObjectProperty.ColimitOfShape.reindex** 是 Mathlib 中的一个定义，位于命名空间
+ `CategoryTheory.ObjectProperty.ColimitOfShape`。
+形式化陈述：reindex {X : C} (h : P.ColimitOfShape J X) (G : J' ⥤ J) [G.Final] : P.Coli
+mitOfShape J' X where toColimitPresentation
+参数：h : P.ColimitOfShape J X；G : J' ⥤ J。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition reindex
-  signature: {X : C} (h : P.ColimitOfShape J X) (G : J' ⥤ J) [G.Final]
-  body: h.toColimitPresentation.reindex G
-  prop_diag_obj _ := h.prop_diag_obj _
-
-中文:
-定义 reindex
-  签名: {X : C} (h : P.余limitOfShape J X) (G : J' ⥤ J) [G.终]
-  定义体: h.toColimitPresentation.reindex G
-  prop_diag_obj _ := h.prop_diag_obj _
-
-Depends on / 依赖: h.toColimitPresentation.reindex, reindex, toColimitPresentation
+--- 原说明 ---
+Change the index category for `ObjectProperty.ColimitOfShape`.
 -/
 noncomputable def reindex {X : C} (h : P.ColimitOfShape J X) (G : J' ⥤ J) [G.Final] :
     P.ColimitOfShape J' X where
@@ -263,20 +228,21 @@ set_option backward.isDefEq.respectTransparency false in
 /-- Given `P : ObjectProperty C`, and a presentation `P.ColimitOfShape J X`
 of an object `X : C`, this is the induced functor `J ⥤ CostructuredArrow P.ι X`. -/
 @[simps]
-/--
-Definition of `toCostructuredArrow` / `toCostructuredArrow` 的定义
+/-
+**CategoryTheory.ObjectProperty.ColimitOfShape.toCostructuredArrow** 是 Mathlib 中
+的一个定义，位于命名空间 `CategoryTheory.ObjectProperty.ColimitOfShape`。
+形式化陈述：toCostructuredArrow {X : C} (p : P.ColimitOfShape J X) : J ⥤ CostructuredA
+rrow P.ι X where obj j
+参数：p : P.ColimitOfShape J X。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.ColimitOfShape.prop_diag_obj`：∀ {C : Type 
+u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {P : CategoryTheory.ObjectPro
+perty C} {J : Type u'}   [inst_1 : CategoryTheor…
 
-English:
-definition toCostructuredArrow
-  body: CostructuredArrow.mk (Y := ⟨_, p.prop_diag_obj j⟩) (by exact p.ι.app j)
-  map f := CostructuredArrow.homMk (ObjectProperty.homMk (by exact p.diag.map f))
-
-中文:
-定义 toCostructuredArrow
-  定义体: CostructuredArrow.mk (Y := ⟨_, p.prop_diag_obj j⟩) (by exact p.ι.app j)
-  map f := CostructuredArrow.homMk (ObjectProperty.homMk (by exact p.diag.map f))
-
-Depends on / 依赖: CostructuredArrow, CostructuredArrow.mk, p.prop_diag_obj, prop_diag_obj
+--- 原说明 ---
+Given `P : ObjectProperty C`, and a presentation `P.ColimitOfShape J X`
+of an object `X : C`, this is the induced functor `J ⥤ CostructuredArrow P.ι X`.
 -/
 def toCostructuredArrow
     {X : C} (p : P.ColimitOfShape J X) :
@@ -286,146 +252,98 @@ def toCostructuredArrow
 
 end ColimitOfShape
 
-/--
-Definition of `colimitsOfShape` / `colimitsOfShape` 的定义
+/-- The property of objects that are the point of a colimit cocone for a
+functor `F : J ⥤ C` where all objects `F.obj j` satisfy `P`. -/
+/-
+**CategoryTheory.ObjectProperty.colimitsOfShape** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.ObjectProperty`。
+形式化陈述：colimitsOfShape : ObjectProperty C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition colimitsOfShape
-  signature: : ObjectProperty C
-  body: fun X => Nonempty (P.ColimitOfShape J X)
-
-中文:
-定义 colimitsOfShape
-  签名: : ObjectProperty C
-  定义体: fun X => Nonempty (P.ColimitOfShape J X)
-
-Depends on / 依赖: ColimitOfShape, Nonempty, P.ColimitOfShape, t.isIso_truncLE_map_truncLE
+--- 原说明 ---
+The property of objects that are the point of a colimit cocone for a
+functor `F : J ⥤ C` where all objects `F.obj j` satisfy `P`.
 -/
 def colimitsOfShape : ObjectProperty C :=
-  fun X => Nonempty (P.ColimitOfShape J X)
+  fun X ↦ Nonempty (P.ColimitOfShape J X)
 
 variable {P J} in
-/--
-lemma `ColimitOfShape.colimitsOfShape` / 引理 `ColimitOfShape.colimitsOfShape`
-
-English:
-lemma ColimitOfShape.colimitsOfShape
-  given: {X : C} (h : P.ColimitOfShape J X)
-  proof: ⟨h⟩
-
-中文:
-引理 余limitOfShape.colimitsOfShape
-  条件: {X : C} (h : P.余limitOfShape J X)
-  证明: ⟨h⟩
+/-
+**CategoryTheory.ObjectProperty.ColimitOfShape.colimitsOfShape** 是 Mathlib 中的一个定
+理，位于命名空间 `CategoryTheory.ObjectProperty.ColimitOfShape`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {P : Catego
+ryTheory.ObjectProperty C} {J : Type u'}   [inst_1 : CategoryTheory.Category.{v'
+, u'} J] {X : C} (h : P.ColimitOfShape J X), P.colimitsOfShape J X
+参数：h : P.ColimitOfShape J X。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma ColimitOfShape.colimitsOfShape {X : C} (h : P.ColimitOfShape J X) :
     P.colimitsOfShape J X :=
   ⟨h⟩
-
-/--
-lemma `strictColimitsOfShape_le_colimitsOfShape` / 引理 `strictColimitsOfShape_le_colimitsOfShape`
-
-English:
-lemma strictColimitsOfShape_le_colimitsOfShape
-  proof: by
-  rintro X ⟨F, hF⟩
-  exact ⟨.colimit F hF⟩
-
-@[simp]
-
-中文:
-引理 strictColimitsOfShape_le_colimitsOfShape
-  证明: by
-  rintro X ⟨F, hF⟩
-  exact ⟨.colimit F hF⟩
-
-@[simp]
-
-Depends on / 依赖: colimit
+/-
+**CategoryTheory.ObjectProperty.strictColimitsOfShape_le_colimitsOfShape** 是 Mat
+hlib 中的一个引理，位于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：strictColimitsOfShape_le_colimitsOfShape : P.strictColimitsOfShape J <= P.
+colimitsOfShape J
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 lemma strictColimitsOfShape_le_colimitsOfShape :
-    P.strictColimitsOfShape J <= P.colimitsOfShape J := by
+    P.strictColimitsOfShape J ≤ P.colimitsOfShape J := by
   rintro X ⟨F, hF⟩
   exact ⟨.colimit F hF⟩
 
 @[simp]
-/--
-lemma `colimitsOfShape_bot` / 引理 `colimitsOfShape_bot`
-
-English:
-lemma colimitsOfShape_bot
-  given: [Nonempty J]
-  statement: colimitsOfShape (⊥ : ObjectProperty C) J = ⊥
-  proof: by
-  rw [eq_bot_iff]
-  rintro X ⟨⟨_, h⟩⟩
-  exact h (Classical.arbitrary J)
-
-中文:
-引理 colimitsOfShape_bot
-  条件: [非空 J]
-  结论: colimitsOfShape (⊥ : ObjectProperty C) J = ⊥
-  证明: by
-  rw [eq_bot_iff]
-  rintro X ⟨⟨_, h⟩⟩
-  exact h (Classical.arbitrary J)
-
-Depends on / 依赖: Classical, Classical.arbitrary, arbitrary, eq_bot_iff
+/-
+**CategoryTheory.ObjectProperty.colimitsOfShape_bot** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.ObjectProperty`。
+形式化陈述：colimitsOfShape_bot [Nonempty J] : colimitsOfShape (⊥ : ObjectProperty C) 
+J = ⊥
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_bot_iff`：∀ {α : Type u} [inst : PartialOrder α] [inst_1 : OrderBot α]
+ {a : α}, a = ⊥ ↔ a ≤ ⊥
 -/
 lemma colimitsOfShape_bot [Nonempty J] : colimitsOfShape (⊥ : ObjectProperty C) J = ⊥ := by
   rw [eq_bot_iff]
   rintro X ⟨⟨_, h⟩⟩
   exact h (Classical.arbitrary J)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (P.colimitsOfShape J).IsClosedUnderIsomorphisms
-  body: by rintro _ _ e ⟨h⟩; exact ⟨h.ofIso e⟩
-
-@[simp]
-
-中文:
-实例 :
-  签名: (P.colimitsOfShape J).在同构下封闭
-  定义体: by rintro _ _ e ⟨h⟩; exact ⟨h.ofIso e⟩
-
-@[simp]
-
-Depends on / 依赖: h.ofIso
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (P.colimitsOfShape J).IsClosedUnderIsomorphisms where
   of_iso := by rintro _ _ e ⟨h⟩; exact ⟨h.ofIso e⟩
 
 @[simp]
-/--
-lemma `isoClosure_strictColimitsOfShape` / 引理 `isoClosure_strictColimitsOfShape`
-
-English:
-lemma isoClosure_strictColimitsOfShape
-  proof: by
-  refine le_antisymm ?_ ?_
-  · rw [isoClosure_le_iff]
-    apply strictColimitsOfShape_le_colimitsOfShape
-  · intro X ⟨h⟩
-    have := h.hasColimit
-    exact ⟨colimit h.diag, strictColimitsOfShape.colimit h.diag h.prop_diag_obj,
-      ⟨h.isColimit.coconePointUniqueUpToIso (colimit.isColimit _)⟩⟩
-
-中文:
-引理 isoClosure_strictColimitsOfShape
-  证明: by
-  refine le_antisymm ?_ ?_
-  · rw [isoClosure_le_iff]
-    apply strictColimitsOfShape_le_colimitsOfShape
-  · intro X ⟨h⟩
-    have := h.hasColimit
-    exact ⟨colimit h.diag, strictColimitsOfShape.colimit h.diag h.prop_diag_obj,
-      ⟨h.isColimit.coconePointUniqueUpToIso (colimit.isColimit _)⟩⟩
-
-Depends on / 依赖: coconePointUniqueUpToIso, colimit, colimit.isColimit, h.diag, h.hasColimit, h.isColimit.coconePointUniqueUpToIso, h.prop_diag_obj, hasColimit, isColimit, isoClosure_le_iff, le_antisymm, prop_diag_obj, strictColimitsOfShape, strictColimitsOfShape.colimit, strictColimitsOfShape_le_colimitsOfShape
+/-
+**CategoryTheory.ObjectProperty.isoClosure_strictColimitsOfShape** 是 Mathlib 中的一
+个引理，位于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：isoClosure_strictColimitsOfShape : (P.strictColimitsOfShape J).isoClosure 
+= P.colimitsOfShape J
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.ObjectProperty.isoClosure_le_iff`：isoClosure_le_iff [IsCl
+osedUnderIsomorphisms Q] : isoClosure P <= Q ↔ P <= Q
+· 使用定理 `CategoryTheory.ObjectProperty.instIsClosedUnderIsomorphismsColimitsOfSha
+pe`：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (P : Category
+Theory.ObjectProperty C) (J : Type u')   [inst_1 : CategoryTheor…
+· 使用引理 `CategoryTheory.ObjectProperty.strictColimitsOfShape_le_colimitsOfShape`：
+strictColimitsOfShape_le_colimitsOfShape : P.strictColimitsOfShape J <= P.colimi
+tsOfShape J
+· 使用引理 `CategoryTheory.Limits.ColimitPresentation.hasColimit`：hasColimit (pres :
+ ColimitPresentation J X) : HasColimit pres.diag
+· 使用定理 `CategoryTheory.ObjectProperty.ColimitOfShape.prop_diag_obj`：∀ {C : Type 
+u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {P : CategoryTheory.ObjectPro
+perty C} {J : Type u'}   [inst_1 : CategoryTheor…
 -/
 lemma isoClosure_strictColimitsOfShape :
     (P.strictColimitsOfShape J).isoClosure = P.colimitsOfShape J := by
@@ -438,59 +356,39 @@ lemma isoClosure_strictColimitsOfShape :
       ⟨h.isColimit.coconePointUniqueUpToIso (colimit.isColimit _)⟩⟩
 
 variable {P} in
-/--
-lemma `colimitsOfShape_monotone` / 引理 `colimitsOfShape_monotone`
-
-English:
-lemma colimitsOfShape_monotone
-  given: {Q : ObjectProperty C} (hPQ : P <= Q)
-  proof: by
-  intro X ⟨h⟩
-  exact ⟨h.ofLE hPQ⟩
-
-@[simp]
-
-中文:
-引理 colimitsOfShape_monotone
-  条件: {Q : ObjectProperty C} (hPQ : P <= Q)
-  证明: by
-  intro X ⟨h⟩
-  exact ⟨h.ofLE hPQ⟩
-
-@[simp]
-
-Depends on / 依赖: h.ofLE
+/-
+**CategoryTheory.ObjectProperty.colimitsOfShape_monotone** 是 Mathlib 中的一个引理，位于命名
+空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：colimitsOfShape_monotone {Q : ObjectProperty C} (hPQ : P <= Q) : P.colimit
+sOfShape J <= Q.colimitsOfShape J
+参数：hPQ : P <= Q。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma colimitsOfShape_monotone {Q : ObjectProperty C} (hPQ : P <= Q) :
-    P.colimitsOfShape J <= Q.colimitsOfShape J := by
+lemma colimitsOfShape_monotone {Q : ObjectProperty C} (hPQ : P ≤ Q) :
+    P.colimitsOfShape J ≤ Q.colimitsOfShape J := by
   intro X ⟨h⟩
   exact ⟨h.ofLE hPQ⟩
 
 @[simp]
-/--
-lemma `colimitsOfShape_isoClosure` / 引理 `colimitsOfShape_isoClosure`
-
-English:
-lemma colimitsOfShape_isoClosure
-  proof: by
-  refine le_antisymm ?_ (colimitsOfShape_monotone _ (P.le_isoClosure))
-  intro X ⟨h⟩
-  choose obj h₁ h₂ using h.prop_diag_obj
-  exact
-   ⟨{ toColimitPresentation := h.changeDiag (h.diag.isoCopyObj obj (fun j => (h₂ j).some)).symm
-      prop_diag_obj := h₁ }⟩
-
-中文:
-引理 colimitsOfShape_isoClosure
-  证明: by
-  refine le_antisymm ?_ (colimitsOfShape_monotone _ (P.le_isoClosure))
-  intro X ⟨h⟩
-  choose obj h₁ h₂ using h.prop_diag_obj
-  exact
-   ⟨{ toColimitPresentation := h.changeDiag (h.diag.isoCopyObj obj (fun j => (h₂ j).some)).symm
-      prop_diag_obj := h₁ }⟩
-
-Depends on / 依赖: P.le_isoClosure, changeDiag, colimitsOfShape_monotone, h.changeDiag, h.diag.isoCopyObj, h.prop_diag_obj, isoCopyObj, le_antisymm, le_isoClosure, prop_diag_obj, toColimitPresentation
+/-
+**CategoryTheory.ObjectProperty.colimitsOfShape_isoClosure** 是 Mathlib 中的一个引理，位于
+命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：colimitsOfShape_isoClosure : P.isoClosure.colimitsOfShape J = P.colimitsOf
+Shape J
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
+· 使用定理 `CategoryTheory.ObjectProperty.ColimitOfShape.prop_diag_obj`：∀ {C : Type 
+u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {P : CategoryTheory.ObjectPro
+perty C} {J : Type u'}   [inst_1 : CategoryTheor…
+· 使用引理 `CategoryTheory.ObjectProperty.colimitsOfShape_monotone`：colimitsOfShape_
+monotone {Q : ObjectProperty C} (hPQ : P <= Q) : P.colimitsOfShape J <= Q.colimi
+tsOfShape J
+· 使用引理 `CategoryTheory.ObjectProperty.le_isoClosure`：le_isoClosure : P <= isoClo
+sure P
 -/
 lemma colimitsOfShape_isoClosure :
     P.isoClosure.colimitsOfShape J = P.colimitsOfShape J := by
@@ -498,123 +396,79 @@ lemma colimitsOfShape_isoClosure :
   intro X ⟨h⟩
   choose obj h₁ h₂ using h.prop_diag_obj
   exact
-   ⟨{ toColimitPresentation := h.changeDiag (h.diag.isoCopyObj obj (fun j => (h₂ j).some)).symm
+   ⟨{ toColimitPresentation := h.changeDiag (h.diag.isoCopyObj obj (fun j ↦ (h₂ j).some)).symm
       prop_diag_obj := h₁ }⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [ObjectProperty.Small.{w}
-  signature: P] [LocallySmall.{w} C] [Small.{w} J] [LocallySmall.{w} J] :
-  body: by
-  refine small_of_surjective
-    (f := fun (F : { F : J ⥤ P.FullSubcategory // HasColimit (F ⋙ P.ι) }) =>
-      (⟨_, letI := F.2; ⟨F.1 ⋙ P.ι, fun j => (F.1.obj j).2⟩⟩)) ?_
-  rintro ⟨_, ⟨F, hF⟩⟩
-  exact ⟨⟨P.lift F hF, by assumption⟩, rfl⟩
-
-中文:
-实例 [ObjectProperty.Small.{w}
-  签名: P] [LocallySmall.{w} C] [Small.{w} J] [LocallySmall.{w} J] :
-  定义体: by
-  refine small_of_surjective
-    (f := fun (F : { F : J ⥤ P.FullSubcategory // HasColimit (F ⋙ P.ι) }) =>
-      (⟨_, letI := F.2; ⟨F.1 ⋙ P.ι, fun j => (F.1.obj j).2⟩⟩)) ?_
-  rintro ⟨_, ⟨F, hF⟩⟩
-  exact ⟨⟨P.lift F hF, by assumption⟩, rfl⟩
-
-Depends on / 依赖: FullSubcategory, HasColimit, P.FullSubcategory, P.lift, small_of_surjective
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [ObjectProperty.Small.{w} P] [LocallySmall.{w} C] [Small.{w} J] [LocallySmall.{w} J] :
     ObjectProperty.Small.{w} (P.strictColimitsOfShape J) := by
   refine small_of_surjective
-    (f := fun (F : { F : J ⥤ P.FullSubcategory // HasColimit (F ⋙ P.ι) }) =>
-      (⟨_, letI := F.2; ⟨F.1 ⋙ P.ι, fun j => (F.1.obj j).2⟩⟩)) ?_
+    (f := fun (F : { F : J ⥤ P.FullSubcategory // HasColimit (F ⋙ P.ι) }) ↦
+      (⟨_, letI := F.2; ⟨F.1 ⋙ P.ι, fun j ↦ (F.1.obj j).2⟩⟩)) ?_
   rintro ⟨_, ⟨F, hF⟩⟩
   exact ⟨⟨P.lift F hF, by assumption⟩, rfl⟩
 
 /-- A property of objects satisfies `P.IsClosedUnderColimitsOfShape J` if it
 is stable by colimits of shape `J`. -/
 @[mk_iff]
-/--
-Definition of `IsClosedUnderColimitsOfShape` / `IsClosedUnderColimitsOfShape` 的定义
+/-
+**CategoryTheory.ObjectProperty.IsClosedUnderColimitsOfShape** 是 Mathlib 中的一个归纳类
+型，位于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：{C : Type u_1} →   [inst : CategoryTheory.Category.{v_1, u_1} C] →     Cat
+egoryTheory.ObjectProperty C → (J : Type u') → [CategoryTheory.Category.{v', u'}
+ J] → Prop
+参数：J : Type u'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsClosedUnderColimitsOfShape
-  parameters: (P : ObjectProperty C) (J : Type u') [Category.{v'} J]
-  axioms and operations (1):
-    - colimitsOfShape_le((P J)) : P.colimitsOfShape J <= P
-
-中文:
-类 是ClosedUnderColimitsOfShape
-  参数: (P : ObjectProperty C) (J : 类型u') [范畴.{v'} J]
-  公理与运算 (1 个):
-    - colimitsOfShape_le((P J)) : P.colimitsOfShape J <= P
+--- 原说明 ---
+A property of objects satisfies `P.IsClosedUnderColimitsOfShape J` if it
+is stable by colimits of shape `J`.
 -/
 class IsClosedUnderColimitsOfShape (P : ObjectProperty C) (J : Type u') [Category.{v'} J] where
-  colimitsOfShape_le (P J) : P.colimitsOfShape J <= P
+  colimitsOfShape_le (P J) : P.colimitsOfShape J ≤ P
 
 variable {P J} in
-/--
-lemma `IsClosedUnderColimitsOfShape.mk'` / 引理 `IsClosedUnderColimitsOfShape.mk'`
-
-English:
-lemma IsClosedUnderColimitsOfShape.mk'
-  statement: [P.IsClosedUnderIsomorphisms]
-  proof: by
-    conv_rhs => rw [← P.isoClosure_eq_self]
-    rw [← isoClosure_strictColimitsOfShape]
-    exact monotone_isoClosure h
-
-中文:
-引理 是ClosedUnderColimitsOfShape.mk'
-  结论: [P.在同构下封闭]
-  证明: by
-    conv_rhs => rw [← P.isoClosure_eq_self]
-    rw [← isoClosure_strictColimitsOfShape]
-    exact monotone_isoClosure h
-
-Depends on / 依赖: P.isoClosure_eq_self, conv_rhs, isoClosure_eq_self, isoClosure_strictColimitsOfShape, monotone_isoClosure
+/-
+**CategoryTheory.ObjectProperty.IsClosedUnderColimitsOfShape.mk'** 是 Mathlib 中的一
+个定理，位于命名空间 `CategoryTheory.ObjectProperty.IsClosedUnderColimitsOfShape`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {P : Catego
+ryTheory.ObjectProperty C} {J : Type u'}   [inst_1 : CategoryTheory.Category.{v'
+, u'} J] [P.IsClosedUnderIsomorphisms],   P.strictColimitsOfShape J ≤ P → P.IsCl
+osedUnderColimitsOfShape J
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.ObjectProperty.isoClosure_eq_self`：isoClosure_eq_self [Is
+ClosedUnderIsomorphisms P] : isoClosure P = P
+· 使用引理 `CategoryTheory.ObjectProperty.isoClosure_strictColimitsOfShape`：isoClosu
+re_strictColimitsOfShape : (P.strictColimitsOfShape J).isoClosure = P.colimitsOf
+Shape J
+· 使用引理 `CategoryTheory.ObjectProperty.monotone_isoClosure`：monotone_isoClosure (
+h : P <= Q) : isoClosure P <= isoClosure Q
 -/
 lemma IsClosedUnderColimitsOfShape.mk' [P.IsClosedUnderIsomorphisms]
-    (h : P.strictColimitsOfShape J <= P) :
+    (h : P.strictColimitsOfShape J ≤ P) :
     P.IsClosedUnderColimitsOfShape J where
   colimitsOfShape_le := by
     conv_rhs => rw [← P.isoClosure_eq_self]
     rw [← isoClosure_strictColimitsOfShape]
     exact monotone_isoClosure h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Nonempty
-  signature: J] : IsClosedUnderColimitsOfShape (⊥
-  body: by rw [colimitsOfShape_bot]
-
-中文:
-实例 [非空
-  签名: J] : 是ClosedUnderColimitsOfShape (⊥
-  定义体: by rw [colimitsOfShape_bot]
-
-Depends on / 依赖: colimitsOfShape_bot
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Nonempty J] : IsClosedUnderColimitsOfShape (⊥ : ObjectProperty C) J where
   colimitsOfShape_le := by rw [colimitsOfShape_bot]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsClosedUnderColimitsOfShape (⊤ : ObjectProperty C) J
-  body: by trivial
-
-中文:
-实例 :
-  签名: 是ClosedUnderColimitsOfShape (⊤ : ObjectProperty C) J
-  定义体: by trivial
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : IsClosedUnderColimitsOfShape (⊤ : ObjectProperty C) J where
   colimitsOfShape_le _ _ := by trivial
@@ -626,103 +480,93 @@ section
 variable {J} [P.IsClosedUnderColimitsOfShape J]
 
 variable {P} in
-/--
-lemma `ColimitOfShape.prop` / 引理 `ColimitOfShape.prop`
-
-English:
-lemma ColimitOfShape.prop
-  given: {X : C} (h : P.ColimitOfShape J X)
-  statement: P X
-  proof: P.colimitsOfShape_le J _ ⟨h⟩
-
-中文:
-引理 余limitOfShape.prop
-  条件: {X : C} (h : P.余limitOfShape J X)
-  结论: P X
-  证明: P.colimitsOfShape_le J _ ⟨h⟩
-
-Depends on / 依赖: P.colimitsOfShape_le, colimitsOfShape_le
+/-
+**CategoryTheory.ObjectProperty.ColimitOfShape.prop** 是 Mathlib 中的一个定理，位于命名空间 `C
+ategoryTheory.ObjectProperty.ColimitOfShape`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {P : Catego
+ryTheory.ObjectProperty C} {J : Type u'}   [inst_1 : CategoryTheory.Category.{v'
+, u'} J] [P.IsClosedUnderColimitsOfShape J] {X : C} (h : P.ColimitOfShape J X), 
+  P X
+参数：h : P.ColimitOfShape J X。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.IsClosedUnderColimitsOfShape.colimitsOfSha
+pe_le`：∀ {C : Type u_1} {inst : CategoryTheory.Category.{v_1, u_1} C} (P : Categ
+oryTheory.ObjectProperty C) (J : Type u')   {inst_1 : CategoryTheor…
 -/
 lemma ColimitOfShape.prop {X : C} (h : P.ColimitOfShape J X) : P X :=
   P.colimitsOfShape_le J _ ⟨h⟩
-
-/--
-lemma `prop_of_isColimit` / 引理 `prop_of_isColimit`
-
-English:
-lemma prop_of_isColimit
-  statement: {F : J ⥤ C} {c : Cocone F} (hc : IsColimit c)
-  proof: P.colimitsOfShape_le J _ ⟨{ diag := _, ι := _, isColimit := hc, prop_diag_obj := hF }⟩
-
-中文:
-引理 prop_of_isColimit
-  结论: {F : J ⥤ C} {c : 余锥 F} (hc : 是余极限 c)
-  证明: P.colimitsOfShape_le J _ ⟨{ diag := _, ι := _, isColimit := hc, prop_diag_obj := hF }⟩
-
-Depends on / 依赖: P.colimitsOfShape_le, colimitsOfShape_le, isColimit, prop_diag_obj
+/-
+**CategoryTheory.ObjectProperty.prop_of_isColimit** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.ObjectProperty`。
+形式化陈述：prop_of_isColimit {F : J ⥤ C} {c : Cocone F} (hc : IsColimit c) (hF : fora
+ll (j : J), P (F.obj j)) : P c.pt
+参数：hc : IsColimit c；hF : forall (j : J), P (F.obj j)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.IsClosedUnderColimitsOfShape.colimitsOfSha
+pe_le`：∀ {C : Type u_1} {inst : CategoryTheory.Category.{v_1, u_1} C} (P : Categ
+oryTheory.ObjectProperty C) (J : Type u')   {inst_1 : CategoryTheor…
 -/
 lemma prop_of_isColimit {F : J ⥤ C} {c : Cocone F} (hc : IsColimit c)
-    (hF : forall (j : J), P (F.obj j)) : P c.pt :=
+    (hF : ∀ (j : J), P (F.obj j)) : P c.pt :=
   P.colimitsOfShape_le J _ ⟨{ diag := _, ι := _, isColimit := hc, prop_diag_obj := hF }⟩
-
-/--
-lemma `prop_colimit` / 引理 `prop_colimit`
-
-English:
-lemma prop_colimit
-  given: (F : J ⥤ C) [HasColimit F] (hF : forall (j : J), P (F.obj j))
-  proof: P.prop_of_isColimit (colimit.isColimit F) hF
-
-中文:
-引理 prop_colimit
-  条件: (F : J ⥤ C) [有余极限 F] (hF : 对任意 (j : J), P (F.obj j))
-  证明: P.prop_of_isColimit (colimit.isColimit F) hF
-
-Depends on / 依赖: P.prop_of_isColimit, colimit, colimit.isColimit, isColimit, prop_of_isColimit
+/-
+**CategoryTheory.ObjectProperty.prop_colimit** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.ObjectProperty`。
+形式化陈述：prop_colimit (F : J ⥤ C) [HasColimit F] (hF : forall (j : J), P (F.obj j))
+ : P (colimit F)
+参数：F : J ⥤ C；hF : forall (j : J), P (F.obj j)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.ObjectProperty.prop_of_isColimit`：prop_of_isColimit {F : 
+J ⥤ C} {c : Cocone F} (hc : IsColimit c) (hF : forall (j : J), P (F.obj j)) : P 
+c.pt
 -/
-lemma prop_colimit (F : J ⥤ C) [HasColimit F] (hF : forall (j : J), P (F.obj j)) :
+lemma prop_colimit (F : J ⥤ C) [HasColimit F] (hF : ∀ (j : J), P (F.obj j)) :
     P (colimit F) :=
   P.prop_of_isColimit (colimit.isColimit F) hF
 
 end
 
 variable {J} in
-/--
-lemma `colimitsOfShape_le_of_final` / 引理 `colimitsOfShape_le_of_final`
-
-English:
-lemma colimitsOfShape_le_of_final
-  given: (G : J ⥤ J') [G.Final]
-  proof: fun _h ⟨h⟩ => ⟨h.reindex G⟩
-
-中文:
-引理 colimitsOfShape_le_of_final
-  条件: (G : J ⥤ J') [G.终]
-  证明: fun _h ⟨h⟩ => ⟨h.reindex G⟩
-
-Depends on / 依赖: h.reindex, reindex
+/-
+**CategoryTheory.ObjectProperty.colimitsOfShape_le_of_final** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：colimitsOfShape_le_of_final (G : J ⥤ J') [G.Final] : P.colimitsOfShape J' 
+<= P.colimitsOfShape J
+参数：G : J ⥤ J'。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma colimitsOfShape_le_of_final (G : J ⥤ J') [G.Final] :
-    P.colimitsOfShape J' <= P.colimitsOfShape J :=
-  fun _h ⟨h⟩ => ⟨h.reindex G⟩
+    P.colimitsOfShape J' ≤ P.colimitsOfShape J :=
+  fun _h ⟨h⟩ ↦ ⟨h.reindex G⟩
 
 variable {J} in
-/--
-lemma `colimitsOfShape_congr` / 引理 `colimitsOfShape_congr`
-
-English:
-lemma colimitsOfShape_congr
-  given: (e : J ≌ J')
-  proof: le_antisymm (P.colimitsOfShape_le_of_final e.inverse)
-    (P.colimitsOfShape_le_of_final e.functor)
-
-中文:
-引理 colimitsOfShape_congr
-  条件: (e : J ≌ J')
-  证明: le_antisymm (P.colimitsOfShape_le_of_final e.inverse)
-    (P.colimitsOfShape_le_of_final e.functor)
-
-Depends on / 依赖: P.colimitsOfShape_le_of_final, colimitsOfShape_le_of_final, e.functor, e.inverse, functor, inverse, le_antisymm
+/-
+**CategoryTheory.ObjectProperty.colimitsOfShape_congr** 是 Mathlib 中的一个引理，位于命名空间 
+`CategoryTheory.ObjectProperty`。
+形式化陈述：colimitsOfShape_congr (e : J ≌ J') : P.colimitsOfShape J = P.colimitsOfSha
+pe J'
+参数：e : J ≌ J'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_antisymm`：le_antisymm : a <= b -> b <= a -> a = b
+· 使用引理 `CategoryTheory.ObjectProperty.colimitsOfShape_le_of_final`：colimitsOfSha
+pe_le_of_final (G : J ⥤ J') [G.Final] : P.colimitsOfShape J' <= P.colimitsOfShap
+e J
+· 使用定理 `CategoryTheory.Functor.final_of_isRightAdjoint`：∀ {C : Type u₁} [inst : 
+CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Categ
+ory.{v₂, u₂} D]   (F : CategoryTheor…
+· 使用定理 `CategoryTheory.Functor.isRightAdjoint_of_isEquivalence`：∀ {C : Type u₁} 
+[inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheo
+ry.Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_inverse`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.inv…
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_functor`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.fun…
 -/
 lemma colimitsOfShape_congr (e : J ≌ J') :
     P.colimitsOfShape J = P.colimitsOfShape J' :=
@@ -730,22 +574,25 @@ lemma colimitsOfShape_congr (e : J ≌ J') :
     (P.colimitsOfShape_le_of_final e.functor)
 
 variable {J} in
-/--
-lemma `isClosedUnderColimitsOfShape_iff_of_equivalence` / 引理 `isClosedUnderColimitsOfShape_iff_of_equivalence`
-
-English:
-lemma isClosedUnderColimitsOfShape_iff_of_equivalence
-  given: (e : J ≌ J')
-  proof: by
-  simp [isClosedUnderColimitsOfShape_iff, P.colimitsOfShape_congr e]
-
-中文:
-引理 isClosedUnderColimitsOfShape_iff_of_equivalence
-  条件: (e : J ≌ J')
-  证明: by
-  simp [isClosedUnderColimitsOfShape_iff, P.colimitsOfShape_congr e]
-
-Depends on / 依赖: Functor, Functor.comp_map, Functor.map_add, P.colimitsOfShape_congr, colimitsOfShape_congr, comp_map, isClosedUnderColimitsOfShape_iff, map_add, truncLT
+/-
+**CategoryTheory.ObjectProperty.isClosedUnderColimitsOfShape_iff_of_equivalence*
+* 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：isClosedUnderColimitsOfShape_iff_of_equivalence (e : J ≌ J') : P.IsClosedU
+nderColimitsOfShape J ↔ P.IsClosedUnderColimitsOfShape J'
+参数：e : J ≌ J'。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `CategoryTheory.ObjectProperty.colimitsOfShape_congr`：colimitsOfShape_con
+gr (e : J ≌ J') : P.colimitsOfShape J = P.colimitsOfShape J'
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma isClosedUnderColimitsOfShape_iff_of_equivalence (e : J ≌ J') :
     P.IsClosedUnderColimitsOfShape J ↔
@@ -753,120 +600,107 @@ lemma isClosedUnderColimitsOfShape_iff_of_equivalence (e : J ≌ J') :
   simp [isClosedUnderColimitsOfShape_iff, P.colimitsOfShape_congr e]
 
 variable {P J} in
-/--
-lemma `IsClosedUnderColimitsOfShape.of_equivalence` / 引理 `IsClosedUnderColimitsOfShape.of_equivalence`
-
-English:
-lemma IsClosedUnderColimitsOfShape.of_equivalence
-  statement: (e : J ≌ J')
-  proof: by
-  rwa [← P.isClosedUnderColimitsOfShape_iff_of_equivalence e]
-
-中文:
-引理 是ClosedUnderColimitsOfShape.of_equivalence
-  结论: (e : J ≌ J')
-  证明: by
-  rwa [← P.isClosedUnderColimitsOfShape_iff_of_equivalence e]
-
-Depends on / 依赖: P.isClosedUnderColimitsOfShape_iff_of_equivalence, isClosedUnderColimitsOfShape_iff_of_equivalence
+/-
+**CategoryTheory.ObjectProperty.IsClosedUnderColimitsOfShape.of_equivalence** 是 
+Mathlib 中的一个定理，位于命名空间 `CategoryTheory.ObjectProperty.IsClosedUnderColimitsOfShap
+e`。
+形式化陈述：∀ {C : Type u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {P : Catego
+ryTheory.ObjectProperty C} {J : Type u'}   [inst_1 : CategoryTheory.Category.{v'
+, u'} J] {J' : Type u''} [inst_2 : CategoryTheory.Category.{v'', u''} J']   (e :
+ J ≌ J') [P.IsClosedUnderColimitsOfShape J], P.IsClosedUnderColimitsOfShape J'
+参数：e : J ≌ J'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.ObjectProperty.isClosedUnderColimitsOfShape_iff_of_equiva
+lence`：isClosedUnderColimitsOfShape_iff_of_equivalence (e : J ≌ J') : P.IsClosed
+UnderColimitsOfShape J ↔ P.IsClosedUnderColimitsOfShape J'
 -/
 lemma IsClosedUnderColimitsOfShape.of_equivalence (e : J ≌ J')
     [P.IsClosedUnderColimitsOfShape J] :
     P.IsClosedUnderColimitsOfShape J' := by
   rwa [← P.isClosedUnderColimitsOfShape_iff_of_equivalence e]
-
-/--
-Instance `IsClosedUnderColimitsOfShape.inverseImage` / 实例 `IsClosedUnderColimitsOfShape.inverseImage`
-
-English:
-instance IsClosedUnderColimitsOfShape.inverseImage
-  body: ⟨fun _ ⟨c, H⟩ => ColimitOfShape.prop (P := P) ⟨c.map F, H⟩⟩
-
-中文:
-实例 是ClosedUnderColimitsOfShape.inverseImage
-  定义体: ⟨fun _ ⟨c, H⟩ => ColimitOfShape.prop (P := P) ⟨c.map F, H⟩⟩
-
-Depends on / 依赖: ColimitOfShape, ColimitOfShape.prop, c.map
+/-
+**CategoryTheory.ObjectProperty.IsClosedUnderColimitsOfShape.inverseImage** 是 Ma
+thlib 中的一个定理，位于命名空间 `CategoryTheory.ObjectProperty.IsClosedUnderColimitsOfShape`
+。
+形式化陈述：∀ {C : Type u_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1}
+ C]   [inst_1 : CategoryTheory.Category.{v_2, u_2} D] (J : Type u') [inst_2 : Ca
+tegoryTheory.Category.{v', u'} J]   (P : CategoryTheory.ObjectProperty D) (F : C
+ategoryTheory.Functor C D) [P.IsClosedUnderColimitsOfShape J]   [CategoryTheory.
+Limits.PreservesColimitsOfShape J F], (P.inverseImage F).IsClosedUnderColimitsOf
+Shape J
+参数：J : Type u'；P : CategoryTheory.ObjectProperty D；F : CategoryTheory.Functor C 
+D；P.inverseImage F。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.ObjectProperty.ColimitOfShape.prop`：∀ {C : Type u_1} [ins
+t : CategoryTheory.Category.{v_1, u_1} C] {P : CategoryTheory.ObjectProperty C} 
+{J : Type u'}   [inst_1 : CategoryTheor…
 -/
 instance IsClosedUnderColimitsOfShape.inverseImage
     (P : ObjectProperty D) (F : C ⥤ D) [P.IsClosedUnderColimitsOfShape J]
     [PreservesColimitsOfShape J F] : (P.inverseImage F).IsClosedUnderColimitsOfShape J :=
-  ⟨fun _ ⟨c, H⟩ => ColimitOfShape.prop (P := P) ⟨c.map F, H⟩⟩
-
-/--
-lemma `isClosedUnderColimitsOfShape_inverseImage_iff` / 引理 `isClosedUnderColimitsOfShape_inverseImage_iff`
-
-English:
-lemma isClosedUnderColimitsOfShape_inverseImage_iff
-  statement: (P : ObjectProperty D)
-  proof: by
-  refine ⟨fun H => ?_, fun _ => inferInstance⟩
-  convert!
-    (inferInstance :
-      ((P.inverseImage e.functor).inverseImage e.inverse).IsClosedUnderColimitsOfShape J)
-  ext X
-  simpa using P.prop_iff_of_iso (e.counitIso.app X).symm
-
-中文:
-引理 isClosedUnderColimitsOfShape_inverseImage_iff
-  结论: (P : ObjectProperty D)
-  证明: by
-  refine ⟨fun H => ?_, fun _ => inferInstance⟩
-  convert!
-    (inferInstance :
-      ((P.inverseImage e.functor).inverseImage e.inverse).IsClosedUnderColimitsOfShape J)
-  ext X
-  simpa using P.prop_iff_of_iso (e.counitIso.app X).symm
-
-Depends on / 依赖: Functor, Functor.comp_map, Functor.map_add, IsClosedUnderColimitsOfShape, P.inverseImage, P.prop_iff_of_iso, comp_map, convert, counitIso, e.counitIso.app, e.functor, e.inverse, functor, inverse, inverseImage, map_add, prop_iff_of_iso, truncGE
+  ⟨fun _ ⟨c, H⟩ ↦ ColimitOfShape.prop (P := P) ⟨c.map F, H⟩⟩
+/-
+**CategoryTheory.ObjectProperty.isClosedUnderColimitsOfShape_inverseImage_iff** 
+是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：isClosedUnderColimitsOfShape_inverseImage_iff (P : ObjectProperty D) [P.Is
+ClosedUnderIsomorphisms] (e : C ≌ D) : (P.inverseImage e.functor).IsClosedUnderC
+olimitsOfShape J ↔ P.IsClosedUnderColimitsOfShape J
+参数：P : ObjectProperty D；e : C ≌ D。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用引理 `CategoryTheory.ObjectProperty.prop_iff_of_iso`：prop_iff_of_iso [IsClosed
+UnderIsomorphisms P] {X Y : C} (e : X ≅ Y) : P X ↔ P Y
+· 使用定理 `CategoryTheory.ObjectProperty.IsClosedUnderColimitsOfShape.inverseImage`
+：∀ {C : Type u_1} {D : Type u_2} [inst : CategoryTheory.Category.{v_1, u_1} C]  
+ [inst_1 : CategoryTheory.Category.{v_2, u_2} D] (J : Type u'…
+· 使用定理 `CategoryTheory.Functor.instPreservesColimitsOfShapeOfIsLeftAdjoint`：∀ {J
+ : Type u_1} {C : Type u_2} {D : Type u_3} [inst : CategoryTheory.Category.{v_1,
+ u_1} J]   [inst_1 : CategoryTheory.Category.{v_2, u_2} …
+· 使用定理 `CategoryTheory.Functor.isLeftAdjoint_of_isEquivalence`：∀ {C : Type u₁} [
+inst : CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheor
+y.Category.{v₂, u₂} D]   {F : CategoryTheor…
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_inverse`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.inv…
+· 使用定理 `CategoryTheory.Equivalence.isEquivalence_functor`：∀ {C : Type u₁} [inst 
+: CategoryTheory.Category.{v₁, u₁} C] {D : Type u₂} [inst_1 : CategoryTheory.Cat
+egory.{v₂, u₂} D]   (F : C ≌ D), F.fun…
 -/
 lemma isClosedUnderColimitsOfShape_inverseImage_iff (P : ObjectProperty D)
     [P.IsClosedUnderIsomorphisms] (e : C ≌ D) :
     (P.inverseImage e.functor).IsClosedUnderColimitsOfShape J ↔
       P.IsClosedUnderColimitsOfShape J := by
-  refine ⟨fun H => ?_, fun _ => inferInstance⟩
+  refine ⟨fun H ↦ ?_, fun _ ↦ inferInstance⟩
   convert!
     (inferInstance :
       ((P.inverseImage e.functor).inverseImage e.inverse).IsClosedUnderColimitsOfShape J)
   ext X
   simpa using P.prop_iff_of_iso (e.counitIso.app X).symm
-
-/--
-lemma `colimitsOfShape_eq_unop_limitsOfShape` / 引理 `colimitsOfShape_eq_unop_limitsOfShape`
-
-English:
-lemma colimitsOfShape_eq_unop_limitsOfShape
-  proof: by
-  ext X
-  refine ⟨fun ⟨h⟩ => ⟨?_⟩, fun ⟨h⟩ => ⟨?_⟩⟩
-  · exact
-      { diag := h.diag.op
-        π := NatTrans.op h.ι
-        isLimit := isLimitOfUnop h.isColimit
-        prop_diag_obj _ := h.prop_diag_obj _ }
-  · exact
-      { diag := h.diag.unop
-        ι := NatTrans.unop h.π
-        isColimit := isColimitOfOp h.isLimit
-        prop_diag_obj _ := h.prop_diag_obj _ }
-
-中文:
-引理 colimitsOfShape_eq_unop_limitsOfShape
-  证明: by
-  ext X
-  refine ⟨fun ⟨h⟩ => ⟨?_⟩, fun ⟨h⟩ => ⟨?_⟩⟩
-  · exact
-      { diag := h.diag.op
-        π := NatTrans.op h.ι
-        isLimit := isLimitOfUnop h.isColimit
-        prop_diag_obj _ := h.prop_diag_obj _ }
-  · exact
-      { diag := h.diag.unop
-        ι := NatTrans.unop h.π
-        isColimit := isColimitOfOp h.isLimit
-        prop_diag_obj _ := h.prop_diag_obj _ }
-
-Depends on / 依赖: NatTrans, NatTrans.op, NatTrans.unop, h.diag.op, h.diag.unop, h.isColimit, h.isLimit, h.prop_diag_obj, isColimit, isColimitOfOp, isLimit, isLimitOfUnop, prop_diag_obj
+/-
+**CategoryTheory.ObjectProperty.colimitsOfShape_eq_unop_limitsOfShape** 是 Mathli
+b 中的一个引理，位于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：colimitsOfShape_eq_unop_limitsOfShape : P.colimitsOfShape J = (P.op.limits
+OfShape Jᵒᵖ).unop
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.ObjectProperty.ColimitOfShape.prop_diag_obj`：∀ {C : Type 
+u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {P : CategoryTheory.ObjectPro
+perty C} {J : Type u'}   [inst_1 : CategoryTheor…
+· 使用定理 `CategoryTheory.ObjectProperty.LimitOfShape.prop_diag_obj`：∀ {C : Type u_
+1} [inst : CategoryTheory.Category.{v_1, u_1} C] {P : CategoryTheory.ObjectPrope
+rty C} {J : Type u'}   [inst_1 : CategoryTheor…
 -/
 lemma colimitsOfShape_eq_unop_limitsOfShape :
     P.colimitsOfShape J = (P.op.limitsOfShape Jᵒᵖ).unop := by
@@ -882,43 +716,21 @@ lemma colimitsOfShape_eq_unop_limitsOfShape :
         ι := NatTrans.unop h.π
         isColimit := isColimitOfOp h.isLimit
         prop_diag_obj _ := h.prop_diag_obj _ }
-
-/--
-lemma `limitsOfShape_eq_unop_colimitsOfShape` / 引理 `limitsOfShape_eq_unop_colimitsOfShape`
-
-English:
-lemma limitsOfShape_eq_unop_colimitsOfShape
-  proof: by
-  ext X
-  refine ⟨fun ⟨h⟩ => ⟨?_⟩, fun ⟨h⟩ => ⟨?_⟩⟩
-  · exact
-      { diag := h.diag.op
-        ι := NatTrans.op h.π
-        isColimit := isColimitOfUnop h.isLimit
-        prop_diag_obj _ := h.prop_diag_obj _ }
-  · exact
-      { diag := h.diag.unop
-        π := NatTrans.unop h.ι
-        isLimit := isLimitOfOp h.isColimit
-        prop_diag_obj _ := h.prop_diag_obj _ }
-
-中文:
-引理 limitsOfShape_eq_unop_colimitsOfShape
-  证明: by
-  ext X
-  refine ⟨fun ⟨h⟩ => ⟨?_⟩, fun ⟨h⟩ => ⟨?_⟩⟩
-  · exact
-      { diag := h.diag.op
-        ι := NatTrans.op h.π
-        isColimit := isColimitOfUnop h.isLimit
-        prop_diag_obj _ := h.prop_diag_obj _ }
-  · exact
-      { diag := h.diag.unop
-        π := NatTrans.unop h.ι
-        isLimit := isLimitOfOp h.isColimit
-        prop_diag_obj _ := h.prop_diag_obj _ }
-
-Depends on / 依赖: NatTrans, NatTrans.op, NatTrans.unop, h.diag.op, h.diag.unop, h.isColimit, h.isLimit, h.prop_diag_obj, isColimit, isColimitOfUnop, isLimit, isLimitOfOp, prop_diag_obj
+/-
+**CategoryTheory.ObjectProperty.limitsOfShape_eq_unop_colimitsOfShape** 是 Mathli
+b 中的一个引理，位于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：limitsOfShape_eq_unop_colimitsOfShape : P.limitsOfShape J = (P.op.colimits
+OfShape Jᵒᵖ).unop
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.ObjectProperty.LimitOfShape.prop_diag_obj`：∀ {C : Type u_
+1} [inst : CategoryTheory.Category.{v_1, u_1} C] {P : CategoryTheory.ObjectPrope
+rty C} {J : Type u'}   [inst_1 : CategoryTheor…
+· 使用定理 `CategoryTheory.ObjectProperty.ColimitOfShape.prop_diag_obj`：∀ {C : Type 
+u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] {P : CategoryTheory.ObjectPro
+perty C} {J : Type u'}   [inst_1 : CategoryTheor…
 -/
 lemma limitsOfShape_eq_unop_colimitsOfShape :
     P.limitsOfShape J = (P.op.colimitsOfShape Jᵒᵖ).unop := by
@@ -934,204 +746,186 @@ lemma limitsOfShape_eq_unop_colimitsOfShape :
         π := NatTrans.unop h.ι
         isLimit := isLimitOfOp h.isColimit
         prop_diag_obj _ := h.prop_diag_obj _ }
-
-/--
-lemma `limitsOfShape_op` / 引理 `limitsOfShape_op`
-
-English:
-lemma limitsOfShape_op
-  proof: by
-  rw [colimitsOfShape_eq_unop_limitsOfShape]; rw [op_unop]; rw [P.op.limitsOfShape_congr (opOpEquivalence J)]
-
-中文:
-引理 limitsOfShape_op
-  证明: by
-  rw [colimitsOfShape_eq_unop_limitsOfShape]; rw [op_unop]; rw [P.op.limitsOfShape_congr (opOpEquivalence J)]
-
-Depends on / 依赖: P.op.limitsOfShape_congr, colimitsOfShape_eq_unop_limitsOfShape, limitsOfShape_congr, opOpEquivalence, op_unop
+/-
+**CategoryTheory.ObjectProperty.limitsOfShape_op** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.ObjectProperty`。
+形式化陈述：limitsOfShape_op : P.op.limitsOfShape J = (P.colimitsOfShape Jᵒᵖ).op
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.ObjectProperty.colimitsOfShape_eq_unop_limitsOfShape`：col
+imitsOfShape_eq_unop_limitsOfShape : P.colimitsOfShape J = (P.op.limitsOfShape J
+ᵒᵖ).unop
+· 使用引理 `CategoryTheory.ObjectProperty.op_unop`：op_unop (P : ObjectProperty Cᵒᵖ) 
+: P.unop.op = P
+· 使用引理 `CategoryTheory.ObjectProperty.limitsOfShape_congr`：limitsOfShape_congr (
+e : J ≌ J') : P.limitsOfShape J = P.limitsOfShape J'
 -/
 lemma limitsOfShape_op :
     P.op.limitsOfShape J = (P.colimitsOfShape Jᵒᵖ).op := by
-  rw [colimitsOfShape_eq_unop_limitsOfShape]; rw [op_unop]; rw [P.op.limitsOfShape_congr (opOpEquivalence J)]
-
-/--
-lemma `colimitsOfShape_op` / 引理 `colimitsOfShape_op`
-
-English:
-lemma colimitsOfShape_op
-  proof: by
-  rw [limitsOfShape_eq_unop_colimitsOfShape]; rw [op_unop]; rw [P.op.colimitsOfShape_congr (opOpEquivalence J)]
-
-中文:
-引理 colimitsOfShape_op
-  证明: by
-  rw [limitsOfShape_eq_unop_colimitsOfShape]; rw [op_unop]; rw [P.op.colimitsOfShape_congr (opOpEquivalence J)]
-
-Depends on / 依赖: P.op.colimitsOfShape_congr, colimitsOfShape_congr, isLE_truncLT_obj, limitsOfShape_eq_unop_colimitsOfShape, opOpEquivalence, op_unop, t.isLE_truncLT_obj
+  rw [colimitsOfShape_eq_unop_limitsOfShape, op_unop,
+    P.op.limitsOfShape_congr (opOpEquivalence J)]
+/-
+**CategoryTheory.ObjectProperty.colimitsOfShape_op** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory.ObjectProperty`。
+形式化陈述：colimitsOfShape_op : P.op.colimitsOfShape J = (P.limitsOfShape Jᵒᵖ).op
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.ObjectProperty.limitsOfShape_eq_unop_colimitsOfShape`：lim
+itsOfShape_eq_unop_colimitsOfShape : P.limitsOfShape J = (P.op.colimitsOfShape J
+ᵒᵖ).unop
+· 使用引理 `CategoryTheory.ObjectProperty.op_unop`：op_unop (P : ObjectProperty Cᵒᵖ) 
+: P.unop.op = P
+· 使用引理 `CategoryTheory.ObjectProperty.colimitsOfShape_congr`：colimitsOfShape_con
+gr (e : J ≌ J') : P.colimitsOfShape J = P.colimitsOfShape J'
 -/
 lemma colimitsOfShape_op :
     P.op.colimitsOfShape J = (P.limitsOfShape Jᵒᵖ).op := by
-  rw [limitsOfShape_eq_unop_colimitsOfShape]; rw [op_unop]; rw [P.op.colimitsOfShape_congr (opOpEquivalence J)]
-
-/--
-lemma `isClosedUnderColimitsOfShape_iff_op` / 引理 `isClosedUnderColimitsOfShape_iff_op`
-
-English:
-lemma isClosedUnderColimitsOfShape_iff_op
-  proof: by
-  rw [isClosedUnderColimitsOfShape_iff]; rw [isClosedUnderLimitsOfShape_iff]; rw [colimitsOfShape_eq_unop_limitsOfShape]; rw [← op_monotone_iff]; rw [op_unop]
-
-中文:
-引理 isClosedUnderColimitsOfShape_iff_op
-  证明: by
-  rw [isClosedUnderColimitsOfShape_iff]; rw [isClosedUnderLimitsOfShape_iff]; rw [colimitsOfShape_eq_unop_limitsOfShape]; rw [← op_monotone_iff]; rw [op_unop]
-
-Depends on / 依赖: colimitsOfShape_eq_unop_limitsOfShape, isClosedUnderColimitsOfShape_iff, isClosedUnderLimitsOfShape_iff, isLE_truncLT_obj, op_monotone_iff, op_unop, t.isLE_truncLT_obj
+  rw [limitsOfShape_eq_unop_colimitsOfShape, op_unop,
+    P.op.colimitsOfShape_congr (opOpEquivalence J)]
+/-
+**CategoryTheory.ObjectProperty.isClosedUnderColimitsOfShape_iff_op** 是 Mathlib 
+中的一个引理，位于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：isClosedUnderColimitsOfShape_iff_op : P.IsClosedUnderColimitsOfShape J ↔ P
+.op.IsClosedUnderLimitsOfShape Jᵒᵖ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.ObjectProperty.isClosedUnderColimitsOfShape_iff`：∀ {C : T
+ype u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (P : CategoryTheory.Objec
+tProperty C) (J : Type u')   [inst_1 : CategoryTheor…
+· 使用定理 `CategoryTheory.ObjectProperty.isClosedUnderLimitsOfShape_iff`：∀ {C : Typ
+e u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (P : CategoryTheory.ObjectP
+roperty C) (J : Type u')   [inst_1 : CategoryTheor…
+· 使用引理 `CategoryTheory.ObjectProperty.colimitsOfShape_eq_unop_limitsOfShape`：col
+imitsOfShape_eq_unop_limitsOfShape : P.colimitsOfShape J = (P.op.limitsOfShape J
+ᵒᵖ).unop
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.ObjectProperty.op_monotone_iff`：op_monotone_iff {P Q : Ob
+jectProperty C} : P.op <= Q.op ↔ P <= Q
+· 使用引理 `CategoryTheory.ObjectProperty.op_unop`：op_unop (P : ObjectProperty Cᵒᵖ) 
+: P.unop.op = P
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isClosedUnderColimitsOfShape_iff_op :
     P.IsClosedUnderColimitsOfShape J ↔
       P.op.IsClosedUnderLimitsOfShape Jᵒᵖ := by
-  rw [isClosedUnderColimitsOfShape_iff]; rw [isClosedUnderLimitsOfShape_iff]; rw [colimitsOfShape_eq_unop_limitsOfShape]; rw [← op_monotone_iff]; rw [op_unop]
-
-/--
-lemma `isClosedUnderLimitsOfShape_iff_op` / 引理 `isClosedUnderLimitsOfShape_iff_op`
-
-English:
-lemma isClosedUnderLimitsOfShape_iff_op
-  proof: by
-  rw [isClosedUnderColimitsOfShape_iff]; rw [isClosedUnderLimitsOfShape_iff]; rw [limitsOfShape_eq_unop_colimitsOfShape]; rw [← op_monotone_iff]; rw [op_unop]
-
-中文:
-引理 isClosedUnderLimitsOfShape_iff_op
-  证明: by
-  rw [isClosedUnderColimitsOfShape_iff]; rw [isClosedUnderLimitsOfShape_iff]; rw [limitsOfShape_eq_unop_colimitsOfShape]; rw [← op_monotone_iff]; rw [op_unop]
-
-Depends on / 依赖: isClosedUnderColimitsOfShape_iff, isClosedUnderLimitsOfShape_iff, limitsOfShape_eq_unop_colimitsOfShape, op_monotone_iff, op_unop
+  rw [isClosedUnderColimitsOfShape_iff, isClosedUnderLimitsOfShape_iff,
+    colimitsOfShape_eq_unop_limitsOfShape, ← op_monotone_iff, op_unop]
+/-
+**CategoryTheory.ObjectProperty.isClosedUnderLimitsOfShape_iff_op** 是 Mathlib 中的
+一个引理，位于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：isClosedUnderLimitsOfShape_iff_op : P.IsClosedUnderLimitsOfShape J ↔ P.op.
+IsClosedUnderColimitsOfShape Jᵒᵖ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.ObjectProperty.isClosedUnderColimitsOfShape_iff`：∀ {C : T
+ype u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (P : CategoryTheory.Objec
+tProperty C) (J : Type u')   [inst_1 : CategoryTheor…
+· 使用定理 `CategoryTheory.ObjectProperty.isClosedUnderLimitsOfShape_iff`：∀ {C : Typ
+e u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (P : CategoryTheory.ObjectP
+roperty C) (J : Type u')   [inst_1 : CategoryTheor…
+· 使用引理 `CategoryTheory.ObjectProperty.limitsOfShape_eq_unop_colimitsOfShape`：lim
+itsOfShape_eq_unop_colimitsOfShape : P.limitsOfShape J = (P.op.colimitsOfShape J
+ᵒᵖ).unop
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.ObjectProperty.op_monotone_iff`：op_monotone_iff {P Q : Ob
+jectProperty C} : P.op <= Q.op ↔ P <= Q
+· 使用引理 `CategoryTheory.ObjectProperty.op_unop`：op_unop (P : ObjectProperty Cᵒᵖ) 
+: P.unop.op = P
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isClosedUnderLimitsOfShape_iff_op :
     P.IsClosedUnderLimitsOfShape J ↔
       P.op.IsClosedUnderColimitsOfShape Jᵒᵖ := by
-  rw [isClosedUnderColimitsOfShape_iff]; rw [isClosedUnderLimitsOfShape_iff]; rw [limitsOfShape_eq_unop_colimitsOfShape]; rw [← op_monotone_iff]; rw [op_unop]
-
-/--
-lemma `isClosedUnderColimitsOfShape_op_iff_op` / 引理 `isClosedUnderColimitsOfShape_op_iff_op`
-
-English:
-lemma isClosedUnderColimitsOfShape_op_iff_op
-  proof: by
-  rw [isClosedUnderColimitsOfShape_iff]; rw [isClosedUnderLimitsOfShape_iff]; rw [limitsOfShape_op]; rw [op_monotone_iff]
-
-中文:
-引理 isClosedUnderColimitsOfShape_op_iff_op
-  证明: by
-  rw [isClosedUnderColimitsOfShape_iff]; rw [isClosedUnderLimitsOfShape_iff]; rw [limitsOfShape_op]; rw [op_monotone_iff]
-
-Depends on / 依赖: isClosedUnderColimitsOfShape_iff, isClosedUnderLimitsOfShape_iff, isGE_truncGE_obj, limitsOfShape_op, op_monotone_iff, t.isGE_truncGE_obj
+  rw [isClosedUnderColimitsOfShape_iff, isClosedUnderLimitsOfShape_iff,
+    limitsOfShape_eq_unop_colimitsOfShape, ← op_monotone_iff, op_unop]
+/-
+**CategoryTheory.ObjectProperty.isClosedUnderColimitsOfShape_op_iff_op** 是 Mathl
+ib 中的一个引理，位于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：isClosedUnderColimitsOfShape_op_iff_op : P.IsClosedUnderColimitsOfShape Jᵒ
+ᵖ ↔ P.op.IsClosedUnderLimitsOfShape J
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.ObjectProperty.isClosedUnderColimitsOfShape_iff`：∀ {C : T
+ype u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (P : CategoryTheory.Objec
+tProperty C) (J : Type u')   [inst_1 : CategoryTheor…
+· 使用定理 `CategoryTheory.ObjectProperty.isClosedUnderLimitsOfShape_iff`：∀ {C : Typ
+e u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (P : CategoryTheory.ObjectP
+roperty C) (J : Type u')   [inst_1 : CategoryTheor…
+· 使用引理 `CategoryTheory.ObjectProperty.limitsOfShape_op`：limitsOfShape_op : P.op.
+limitsOfShape J = (P.colimitsOfShape Jᵒᵖ).op
+· 使用引理 `CategoryTheory.ObjectProperty.op_monotone_iff`：op_monotone_iff {P Q : Ob
+jectProperty C} : P.op <= Q.op ↔ P <= Q
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isClosedUnderColimitsOfShape_op_iff_op :
     P.IsClosedUnderColimitsOfShape Jᵒᵖ ↔
       P.op.IsClosedUnderLimitsOfShape J := by
-  rw [isClosedUnderColimitsOfShape_iff]; rw [isClosedUnderLimitsOfShape_iff]; rw [limitsOfShape_op]; rw [op_monotone_iff]
-
-/--
-lemma `isClosedUnderLimitsOfShape_op_iff_op` / 引理 `isClosedUnderLimitsOfShape_op_iff_op`
-
-English:
-lemma isClosedUnderLimitsOfShape_op_iff_op
-  proof: by
-  rw [isClosedUnderColimitsOfShape_iff]; rw [isClosedUnderLimitsOfShape_iff]; rw [colimitsOfShape_op]; rw [op_monotone_iff]
-
-中文:
-引理 isClosedUnderLimitsOfShape_op_iff_op
-  证明: by
-  rw [isClosedUnderColimitsOfShape_iff]; rw [isClosedUnderLimitsOfShape_iff]; rw [colimitsOfShape_op]; rw [op_monotone_iff]
-
-Depends on / 依赖: colimitsOfShape_op, isClosedUnderColimitsOfShape_iff, isClosedUnderLimitsOfShape_iff, op_monotone_iff
+  rw [isClosedUnderColimitsOfShape_iff, isClosedUnderLimitsOfShape_iff,
+    limitsOfShape_op, op_monotone_iff]
+/-
+**CategoryTheory.ObjectProperty.isClosedUnderLimitsOfShape_op_iff_op** 是 Mathlib
+ 中的一个引理，位于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：isClosedUnderLimitsOfShape_op_iff_op : P.IsClosedUnderLimitsOfShape Jᵒᵖ ↔ 
+P.op.IsClosedUnderColimitsOfShape J
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.ObjectProperty.isClosedUnderColimitsOfShape_iff`：∀ {C : T
+ype u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (P : CategoryTheory.Objec
+tProperty C) (J : Type u')   [inst_1 : CategoryTheor…
+· 使用定理 `CategoryTheory.ObjectProperty.isClosedUnderLimitsOfShape_iff`：∀ {C : Typ
+e u_1} [inst : CategoryTheory.Category.{v_1, u_1} C] (P : CategoryTheory.ObjectP
+roperty C) (J : Type u')   [inst_1 : CategoryTheor…
+· 使用引理 `CategoryTheory.ObjectProperty.colimitsOfShape_op`：colimitsOfShape_op : P
+.op.colimitsOfShape J = (P.limitsOfShape Jᵒᵖ).op
+· 使用引理 `CategoryTheory.ObjectProperty.op_monotone_iff`：op_monotone_iff {P Q : Ob
+jectProperty C} : P.op <= Q.op ↔ P <= Q
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 lemma isClosedUnderLimitsOfShape_op_iff_op :
     P.IsClosedUnderLimitsOfShape Jᵒᵖ ↔
       P.op.IsClosedUnderColimitsOfShape J := by
-  rw [isClosedUnderColimitsOfShape_iff]; rw [isClosedUnderLimitsOfShape_iff]; rw [colimitsOfShape_op]; rw [op_monotone_iff]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P.IsClosedUnderColimitsOfShape
-  signature: J] :
-  body: by
-  rwa [← isClosedUnderColimitsOfShape_iff_op]
-
-中文:
-实例 [P.是ClosedUnderColimitsOfShape
-  签名: J] :
-  定义体: by
-  rwa [← isClosedUnderColimitsOfShape_iff_op]
-
-Depends on / 依赖: isClosedUnderColimitsOfShape_iff_op
+  rw [isClosedUnderColimitsOfShape_iff, isClosedUnderLimitsOfShape_iff,
+    colimitsOfShape_op, op_monotone_iff]
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [P.IsClosedUnderColimitsOfShape J] :
     P.op.IsClosedUnderLimitsOfShape Jᵒᵖ := by
   rwa [← isClosedUnderColimitsOfShape_iff_op]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P.IsClosedUnderLimitsOfShape
-  signature: J] :
-  body: by
-  rwa [← isClosedUnderLimitsOfShape_iff_op]
-
-中文:
-实例 [P.是ClosedUnderLimitsOfShape
-  签名: J] :
-  定义体: by
-  rwa [← isClosedUnderLimitsOfShape_iff_op]
-
-Depends on / 依赖: isClosedUnderLimitsOfShape_iff_op
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [P.IsClosedUnderLimitsOfShape J] :
     P.op.IsClosedUnderColimitsOfShape Jᵒᵖ := by
   rwa [← isClosedUnderLimitsOfShape_iff_op]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P.IsClosedUnderColimitsOfShape
-  signature: Jᵒᵖ] :
-  body: by
-  rwa [← isClosedUnderColimitsOfShape_op_iff_op]
-
-中文:
-实例 [P.是ClosedUnderColimitsOfShape
-  签名: Jᵒᵖ] :
-  定义体: by
-  rwa [← isClosedUnderColimitsOfShape_op_iff_op]
-
-Depends on / 依赖: infer_instance, isClosedUnderColimitsOfShape_op_iff_op
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [P.IsClosedUnderColimitsOfShape Jᵒᵖ] :
     P.op.IsClosedUnderLimitsOfShape J := by
   rwa [← isClosedUnderColimitsOfShape_op_iff_op]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P.IsClosedUnderLimitsOfShape
-  signature: Jᵒᵖ] :
-  body: by
-  rwa [← isClosedUnderLimitsOfShape_op_iff_op]
-
-中文:
-实例 [P.是ClosedUnderLimitsOfShape
-  签名: Jᵒᵖ] :
-  定义体: by
-  rwa [← isClosedUnderLimitsOfShape_op_iff_op]
-
-Depends on / 依赖: infer_instance, isClosedUnderLimitsOfShape_op_iff_op
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [P.IsClosedUnderLimitsOfShape Jᵒᵖ] :
     P.op.IsClosedUnderColimitsOfShape J := by
@@ -1141,157 +935,98 @@ section
 
 variable (Q : ObjectProperty Cᵒᵖ)
 
-/--
-lemma `isClosedUnderColimitsOfShape_iff_unop` / 引理 `isClosedUnderColimitsOfShape_iff_unop`
-
-English:
-lemma isClosedUnderColimitsOfShape_iff_unop
-  proof: (Q.unop.isClosedUnderLimitsOfShape_op_iff_op J).symm
-
-中文:
-引理 isClosedUnderColimitsOfShape_iff_unop
-  证明: (Q.unop.isClosedUnderLimitsOfShape_op_iff_op J).symm
-
-Depends on / 依赖: Q.unop.isClosedUnderLimitsOfShape_op_iff_op, isClosedUnderLimitsOfShape_op_iff_op
+/-
+**CategoryTheory.ObjectProperty.isClosedUnderColimitsOfShape_iff_unop** 是 Mathli
+b 中的一个引理，位于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：isClosedUnderColimitsOfShape_iff_unop : Q.IsClosedUnderColimitsOfShape J ↔
+ Q.unop.IsClosedUnderLimitsOfShape Jᵒᵖ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用引理 `CategoryTheory.ObjectProperty.isClosedUnderLimitsOfShape_op_iff_op`：isCl
+osedUnderLimitsOfShape_op_iff_op : P.IsClosedUnderLimitsOfShape Jᵒᵖ ↔ P.op.IsClo
+sedUnderColimitsOfShape J
 -/
 lemma isClosedUnderColimitsOfShape_iff_unop :
     Q.IsClosedUnderColimitsOfShape J ↔
       Q.unop.IsClosedUnderLimitsOfShape Jᵒᵖ :=
   (Q.unop.isClosedUnderLimitsOfShape_op_iff_op J).symm
-
-/--
-lemma `isClosedUnderLimitsOfShape_iff_unop` / 引理 `isClosedUnderLimitsOfShape_iff_unop`
-
-English:
-lemma isClosedUnderLimitsOfShape_iff_unop
-  proof: (Q.unop.isClosedUnderColimitsOfShape_op_iff_op J).symm
-
-中文:
-引理 isClosedUnderLimitsOfShape_iff_unop
-  证明: (Q.unop.isClosedUnderColimitsOfShape_op_iff_op J).symm
-
-Depends on / 依赖: Q.unop.isClosedUnderColimitsOfShape_op_iff_op, isClosedUnderColimitsOfShape_op_iff_op
+/-
+**CategoryTheory.ObjectProperty.isClosedUnderLimitsOfShape_iff_unop** 是 Mathlib 
+中的一个引理，位于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：isClosedUnderLimitsOfShape_iff_unop : Q.IsClosedUnderLimitsOfShape J ↔ Q.u
+nop.IsClosedUnderColimitsOfShape Jᵒᵖ
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用引理 `CategoryTheory.ObjectProperty.isClosedUnderColimitsOfShape_op_iff_op`：is
+ClosedUnderColimitsOfShape_op_iff_op : P.IsClosedUnderColimitsOfShape Jᵒᵖ ↔ P.op
+.IsClosedUnderLimitsOfShape J
 -/
 lemma isClosedUnderLimitsOfShape_iff_unop :
     Q.IsClosedUnderLimitsOfShape J ↔
       Q.unop.IsClosedUnderColimitsOfShape Jᵒᵖ :=
   (Q.unop.isClosedUnderColimitsOfShape_op_iff_op J).symm
-
-/--
-lemma `isClosedUnderColimitsOfShape_op_iff_unop` / 引理 `isClosedUnderColimitsOfShape_op_iff_unop`
-
-English:
-lemma isClosedUnderColimitsOfShape_op_iff_unop
-  proof: (Q.unop.isClosedUnderLimitsOfShape_iff_op J).symm
-
-中文:
-引理 isClosedUnderColimitsOfShape_op_iff_unop
-  证明: (Q.unop.isClosedUnderLimitsOfShape_iff_op J).symm
-
-Depends on / 依赖: Q.unop.isClosedUnderLimitsOfShape_iff_op, isClosedUnderLimitsOfShape_iff_op
+/-
+**CategoryTheory.ObjectProperty.isClosedUnderColimitsOfShape_op_iff_unop** 是 Mat
+hlib 中的一个引理，位于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：isClosedUnderColimitsOfShape_op_iff_unop : Q.IsClosedUnderColimitsOfShape 
+Jᵒᵖ ↔ Q.unop.IsClosedUnderLimitsOfShape J
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用引理 `CategoryTheory.ObjectProperty.isClosedUnderLimitsOfShape_iff_op`：isClose
+dUnderLimitsOfShape_iff_op : P.IsClosedUnderLimitsOfShape J ↔ P.op.IsClosedUnder
+ColimitsOfShape Jᵒᵖ
 -/
 lemma isClosedUnderColimitsOfShape_op_iff_unop :
     Q.IsClosedUnderColimitsOfShape Jᵒᵖ ↔
       Q.unop.IsClosedUnderLimitsOfShape J :=
   (Q.unop.isClosedUnderLimitsOfShape_iff_op J).symm
-
-/--
-lemma `isClosedUnderLimitsOfShape_op_iff_unop` / 引理 `isClosedUnderLimitsOfShape_op_iff_unop`
-
-English:
-lemma isClosedUnderLimitsOfShape_op_iff_unop
-  proof: (Q.unop.isClosedUnderColimitsOfShape_iff_op J).symm
-
-中文:
-引理 isClosedUnderLimitsOfShape_op_iff_unop
-  证明: (Q.unop.isClosedUnderColimitsOfShape_iff_op J).symm
-
-Depends on / 依赖: Q.unop.isClosedUnderColimitsOfShape_iff_op, isClosedUnderColimitsOfShape_iff_op
+/-
+**CategoryTheory.ObjectProperty.isClosedUnderLimitsOfShape_op_iff_unop** 是 Mathl
+ib 中的一个引理，位于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：isClosedUnderLimitsOfShape_op_iff_unop : Q.IsClosedUnderLimitsOfShape Jᵒᵖ 
+↔ Q.unop.IsClosedUnderColimitsOfShape J
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.symm`：∀ {a b : Prop}, (a ↔ b) → (b ↔ a)
+· 使用引理 `CategoryTheory.ObjectProperty.isClosedUnderColimitsOfShape_iff_op`：isClo
+sedUnderColimitsOfShape_iff_op : P.IsClosedUnderColimitsOfShape J ↔ P.op.IsClose
+dUnderLimitsOfShape Jᵒᵖ
 -/
 lemma isClosedUnderLimitsOfShape_op_iff_unop :
     Q.IsClosedUnderLimitsOfShape Jᵒᵖ ↔
       Q.unop.IsClosedUnderColimitsOfShape J :=
   (Q.unop.isClosedUnderColimitsOfShape_iff_op J).symm
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Q.IsClosedUnderColimitsOfShape
-  signature: J] :
-  body: by
-  rwa [← isClosedUnderColimitsOfShape_iff_unop]
-
-中文:
-实例 [Q.是ClosedUnderColimitsOfShape
-  签名: J] :
-  定义体: by
-  rwa [← isClosedUnderColimitsOfShape_iff_unop]
-
-Depends on / 依赖: isClosedUnderColimitsOfShape_iff_unop
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Q.IsClosedUnderColimitsOfShape J] :
     Q.unop.IsClosedUnderLimitsOfShape Jᵒᵖ := by
   rwa [← isClosedUnderColimitsOfShape_iff_unop]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Q.IsClosedUnderLimitsOfShape
-  signature: J] :
-  body: by
-  rwa [← isClosedUnderLimitsOfShape_iff_unop]
-
-中文:
-实例 [Q.是ClosedUnderLimitsOfShape
-  签名: J] :
-  定义体: by
-  rwa [← isClosedUnderLimitsOfShape_iff_unop]
-
-Depends on / 依赖: isClosedUnderLimitsOfShape_iff_unop
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Q.IsClosedUnderLimitsOfShape J] :
     Q.unop.IsClosedUnderColimitsOfShape Jᵒᵖ := by
   rwa [← isClosedUnderLimitsOfShape_iff_unop]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Q.IsClosedUnderColimitsOfShape
-  signature: Jᵒᵖ] :
-  body: by
-  rwa [← isClosedUnderColimitsOfShape_op_iff_unop]
-
-中文:
-实例 [Q.是ClosedUnderColimitsOfShape
-  签名: Jᵒᵖ] :
-  定义体: by
-  rwa [← isClosedUnderColimitsOfShape_op_iff_unop]
-
-Depends on / 依赖: isClosedUnderColimitsOfShape_op_iff_unop
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Q.IsClosedUnderColimitsOfShape Jᵒᵖ] :
     Q.unop.IsClosedUnderLimitsOfShape J := by
   rwa [← isClosedUnderColimitsOfShape_op_iff_unop]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Q.IsClosedUnderLimitsOfShape
-  signature: Jᵒᵖ] :
-  body: by
-  rwa [← isClosedUnderLimitsOfShape_op_iff_unop]
-
-中文:
-实例 [Q.是ClosedUnderLimitsOfShape
-  签名: Jᵒᵖ] :
-  定义体: by
-  rwa [← isClosedUnderLimitsOfShape_op_iff_unop]
-
-Depends on / 依赖: isClosedUnderLimitsOfShape_op_iff_unop
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Q.IsClosedUnderLimitsOfShape Jᵒᵖ] :
     Q.unop.IsClosedUnderColimitsOfShape J := by
@@ -1299,87 +1034,52 @@ instance [Q.IsClosedUnderLimitsOfShape Jᵒᵖ] :
 
 end
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [P.IsClosedUnderColimitsOfShape
-  signature: WalkingParallelPair] :
-  body: by
-    let c : Cofork (h.r ≫ h.i) (𝟙 Y) := Cofork.ofπ h.r (by simp)
-    have hc : IsColimit c :=
-      Cofork.IsColimit.mk _ (fun s => h.i ≫ s.π)
-        (fun s => by simpa using! s.condition)
-        (fun s m hm => by dsimp [c] at hm; simp [← hm])
-    exact P.prop_of_isColimit hc (by rintro (_ | _) <;> exact hY)
-
-中文:
-实例 [P.是ClosedUnderColimitsOfShape
-  签名: WalkingParallelPair] :
-  定义体: by
-    let c : Cofork (h.r ≫ h.i) (𝟙 Y) := Cofork.ofπ h.r (by simp)
-    have hc : IsColimit c :=
-      Cofork.IsColimit.mk _ (fun s => h.i ≫ s.π)
-        (fun s => by simpa using! s.condition)
-        (fun s m hm => by dsimp [c] at hm; simp [← hm])
-    exact P.prop_of_isColimit hc (by rintro (_ | _) <;> exact hY)
-
-Depends on / 依赖: Cofork, Cofork.IsColimit.mk, Cofork.of, IsColimit, P.prop_of_isColimit, condition, prop_of_isColimit, s.condition
+/-
+**CategoryTheory.ObjectProperty.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory.Objec
+tProperty`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [P.IsClosedUnderColimitsOfShape WalkingParallelPair] :
     P.IsStableUnderRetracts where
   of_retract {X Y} h hY := by
     let c : Cofork (h.r ≫ h.i) (𝟙 Y) := Cofork.ofπ h.r (by simp)
     have hc : IsColimit c :=
-      Cofork.IsColimit.mk _ (fun s => h.i ≫ s.π)
-        (fun s => by simpa using! s.condition)
-        (fun s m hm => by dsimp [c] at hm; simp [← hm])
+      Cofork.IsColimit.mk _ (fun s ↦ h.i ≫ s.π)
+        (fun s ↦ by simpa using! s.condition)
+        (fun s m hm ↦ by dsimp [c] at hm; simp [← hm])
     exact P.prop_of_isColimit hc (by rintro (_ | _) <;> exact hY)
-
-/--
-lemma `limitsOfShape_isEmpty_iff` / 引理 `limitsOfShape_isEmpty_iff`
-
-English:
-lemma limitsOfShape_isEmpty_iff
-  given: [IsEmpty J] (X : C)
-  proof: ⟨fun ⟨⟨f, p, q⟩, d⟩ => .intro isLimitEquivIsTerminalOfIsEmpty _ _ q, fun ⟨h⟩ =>
-    ⟨⟨(Functor.const _).obj X, 𝟙 _, (isLimitEquivIsTerminalOfIsEmpty _ _).symm h⟩, by simp⟩⟩
-
-中文:
-引理 limitsOfShape_isEmpty_iff
-  条件: [是空 J] (X : C)
-  证明: ⟨fun ⟨⟨f, p, q⟩, d⟩ => .intro isLimitEquivIsTerminalOfIsEmpty _ _ q, fun ⟨h⟩ =>
-    ⟨⟨(Functor.const _).obj X, 𝟙 _, (isLimitEquivIsTerminalOfIsEmpty _ _).symm h⟩, by simp⟩⟩
-
-Depends on / 依赖: Functor, Functor.const, isLimitEquivIsTerminalOfIsEmpty
+/-
+**CategoryTheory.ObjectProperty.limitsOfShape_isEmpty_iff** 是 Mathlib 中的一个引理，位于命
+名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：limitsOfShape_isEmpty_iff [IsEmpty J] (X : C) : P.limitsOfShape J X ↔ None
+mpty (IsTerminal X)
+参数：X : C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 -/
 lemma limitsOfShape_isEmpty_iff [IsEmpty J] (X : C) :
     P.limitsOfShape J X ↔ Nonempty (IsTerminal X) :=
-⟨fun ⟨⟨f, p, q⟩, d⟩ => .intro isLimitEquivIsTerminalOfIsEmpty _ _ q, fun ⟨h⟩ =>
+  ⟨fun ⟨⟨f, p, q⟩, d⟩ ↦ .intro <| isLimitEquivIsTerminalOfIsEmpty _ _ q, fun ⟨h⟩ ↦
     ⟨⟨(Functor.const _).obj X, 𝟙 _, (isLimitEquivIsTerminalOfIsEmpty _ _).symm h⟩, by simp⟩⟩
-
-/--
-lemma `colimitsOfShape_isEmpty_iff` / 引理 `colimitsOfShape_isEmpty_iff`
-
-English:
-lemma colimitsOfShape_isEmpty_iff
-  given: [IsEmpty J] (X : C)
-  proof: ⟨fun ⟨⟨f, p, q⟩, d⟩ => .intro isColimitEquivIsInitialOfIsEmpty _ _ q, fun ⟨h⟩ =>
-    ⟨⟨(Functor.const _).obj X, 𝟙 _, (isColimitEquivIsInitialOfIsEmpty _ _).symm h⟩, by simp⟩⟩
-
-中文:
-引理 colimitsOfShape_isEmpty_iff
-  条件: [是空 J] (X : C)
-  证明: ⟨fun ⟨⟨f, p, q⟩, d⟩ => .intro isColimitEquivIsInitialOfIsEmpty _ _ q, fun ⟨h⟩ =>
-    ⟨⟨(Functor.const _).obj X, 𝟙 _, (isColimitEquivIsInitialOfIsEmpty _ _).symm h⟩, by simp⟩⟩
-
-Depends on / 依赖: Functor, Functor.const, isColimitEquivIsInitialOfIsEmpty
+/-
+**CategoryTheory.ObjectProperty.colimitsOfShape_isEmpty_iff** 是 Mathlib 中的一个引理，位
+于命名空间 `CategoryTheory.ObjectProperty`。
+形式化陈述：colimitsOfShape_isEmpty_iff [IsEmpty J] (X : C) : P.colimitsOfShape J X ↔ 
+Nonempty (IsInitial X)
+参数：X : C。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
 -/
 lemma colimitsOfShape_isEmpty_iff [IsEmpty J] (X : C) :
     P.colimitsOfShape J X ↔ Nonempty (IsInitial X) :=
-⟨fun ⟨⟨f, p, q⟩, d⟩ => .intro isColimitEquivIsInitialOfIsEmpty _ _ q, fun ⟨h⟩ =>
+  ⟨fun ⟨⟨f, p, q⟩, d⟩ ↦ .intro <| isColimitEquivIsInitialOfIsEmpty _ _ q, fun ⟨h⟩ ↦
     ⟨⟨(Functor.const _).obj X, 𝟙 _, (isColimitEquivIsInitialOfIsEmpty _ _).symm h⟩, by simp⟩⟩
 
 end ObjectProperty
 
 end CategoryTheory
+

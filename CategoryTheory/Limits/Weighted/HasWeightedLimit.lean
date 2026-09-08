@@ -33,38 +33,37 @@ namespace Limits
 
 variable {J : Type u} [Category.{v} J] {C : Type u'} [Category.{v'} C]
 
-/--
-Definition of `WeightedCone` / `WeightedCone` 的定义
+/-- Given `W : J ⥤ Type w` and `F : J ⥤ C`, this is the type of cones for
+the functor `CategoryOfElements.π W ⋙ F : W.Elements ⥤ C`. -/
+/-
+**CategoryTheory.Limits.WeightedCone** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory
+.Limits`。
+形式化陈述：WeightedCone (W : J ⥤ Type w) (F : J ⥤ C)
+参数：W : J ⥤ Type w；F : J ⥤ C。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation WeightedCone
-  signature: (W : J ⥤ Type w) (F : J ⥤ C)
-  body: Cone (CategoryOfElements.π W ⋙ F)
-
-中文:
-缩写 WeightedCone
-  签名: (W : J ⥤ 类型 w) (F : J ⥤ C)
-  定义体: Cone (CategoryOfElements.π W ⋙ F)
-
-Depends on / 依赖: CategoryOfElements, CoconePt, Limits, Limits.CoconePt.isCardinalFiltered_pt, Limits.isColimitCocone, PartOrdEmb, coconePointUniqueUpToIso, colimit, colimit.isColimit, forget, isCardinalFiltered, isCardinalFiltered_iff, isCardinalFiltered_pt, isColimit, isColimitCocone, isFiltered_of_isCardinalFiltered, p.diag, p.isColimit.coconePointUniqueUpToIso, p.prop_diag_obj, prop_diag_obj
+--- 原说明 ---
+Given `W : J ⥤ Type w` and `F : J ⥤ C`, this is the type of cones for
+the functor `CategoryOfElements.π W ⋙ F : W.Elements ⥤ C`.
 -/
 abbrev WeightedCone (W : J ⥤ Type w) (F : J ⥤ C) :=
   Cone (CategoryOfElements.π W ⋙ F)
 
-/--
-Definition of `HasWeightedLimit` / `HasWeightedLimit` 的定义
+/-- Given a weight `W : J ⥤ Type w` and `F : J ⥤ C`, we say that
+the `W`-weighted limit of `F` exists if the functor
+`CategoryOfElements.π W ⋙ F : W.Elements ⥤ C` has a limit. -/
+/-
+**CategoryTheory.Limits.HasWeightedLimit** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTh
+eory.Limits`。
+形式化陈述：HasWeightedLimit (W : J ⥤ Type w) (F : J ⥤ C) : Prop
+参数：W : J ⥤ Type w；F : J ⥤ C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HasWeightedLimit
-  signature: (W : J ⥤ Type w) (F : J ⥤ C)
-  body: HasLimit (CategoryOfElements.π W ⋙ F)
-
-中文:
-缩写 HasWeightedLimit
-  签名: (W : J ⥤ 类型 w) (F : J ⥤ C)
-  定义体: HasLimit (CategoryOfElements.π W ⋙ F)
-
-Depends on / 依赖: CategoryOfElements, HasLimit
+--- 原说明 ---
+Given a weight `W : J ⥤ Type w` and `F : J ⥤ C`, we say that
+the `W`-weighted limit of `F` exists if the functor
+`CategoryOfElements.π W ⋙ F : W.Elements ⥤ C` has a limit.
 -/
 abbrev HasWeightedLimit (W : J ⥤ Type w) (F : J ⥤ C) : Prop :=
   HasLimit (CategoryOfElements.π W ⋙ F)
@@ -73,75 +72,58 @@ namespace WeightedCone
 
 variable {W : J ⥤ Type w} {F : J ⥤ C}
 
-/--
-Definition of `π` / `π` 的定义
+/-- The projection `c.pt ⟶ F.obj j` for `c : WeightedCone W F`
+and `x : W.obj j`. -/
+/-
+**CategoryTheory.Limits.WeightedCone.** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheor
+y.Limits.WeightedCone`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation π
-  signature: (c : WeightedCone W F) {j : J} (x : W.obj j)
-  body: (Cone.π c).app (Functor.elementsMk _ _ x)
-
-@[reassoc (attr := simp)]
-
-中文:
-缩写 π
-  签名: (c : WeightedCone W F) {j : J} (x : W.obj j)
-  定义体: (Cone.π c).app (Functor.elementsMk _ _ x)
-
-@[reassoc (attr := simp)]
+--- 原说明 ---
+The projection `c.pt ⟶ F.obj j` for `c : WeightedCone W F`
+and `x : W.obj j`.
 -/
 protected abbrev π (c : WeightedCone W F) {j : J} (x : W.obj j) :
     c.pt ⟶ F.obj j :=
   (Cone.π c).app (Functor.elementsMk _ _ x)
 
 @[reassoc (attr := simp)]
-/--
-lemma `w` / 引理 `w`
-
-English:
-lemma w
-  given: (c : WeightedCone W F) {i j : J} (x : W.obj i) (f : i ⟶ j)
-  proof: Cone.w c (CategoryOfElements.homMk (Functor.elementsMk _ _ x)
-    (Functor.elementsMk _ _ (W.map f x)) f rfl)
-
-中文:
-引理 w
-  条件: (c : WeightedCone W F) {i j : J} (x : W.obj i) (f : i ⟶ j)
-  证明: Cone.w c (CategoryOfElements.homMk (Functor.elementsMk _ _ x)
-    (Functor.elementsMk _ _ (W.map f x)) f rfl)
+/-
+**CategoryTheory.Limits.WeightedCone.w** 是 Mathlib 中的一个定理，位于命名空间 `CategoryTheory
+.Limits.WeightedCone`。
+形式化陈述：∀ {J : Type u} [inst : CategoryTheory.Category.{v, u} J] {C : Type u'} [in
+st_1 : CategoryTheory.Category.{v', u'} C]   {W : CategoryTheory.Functor J (Type
+ w)} {F : CategoryTheory.Functor J C} (c : CategoryTheory.Limits.WeightedCone W 
+F)   {i j : J} (x : W.obj i) (f : i ⟶ j),   CategoryTheory.CategoryStruct.comp (
+c.π x) (F.map f) = c.π ((CategoryTheory.ConcreteCategory.hom (W.map f)) x)
+参数：Type w；c : CategoryTheory.Limits.WeightedCone W F；x : W.obj i；f : i ⟶ j；c.π x
+；F.map f；(CategoryTheory.ConcreteCategory.hom (W.map f)) x。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.Cone.w`：∀ {J : Type u₁} [inst : CategoryTheory.Cat
+egory.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} C]   
+{F : CategoryTheor…
 -/
 protected lemma w (c : WeightedCone W F) {i j : J} (x : W.obj i) (f : i ⟶ j) :
     c.π x ≫ F.map f = c.π (W.map f x) :=
   Cone.w c (CategoryOfElements.homMk (Functor.elementsMk _ _ x)
     (Functor.elementsMk _ _ (W.map f x)) f rfl)
 
-variable (pt : C) (π : forall ⦃j : J⦄ (_ : W.obj j), pt ⟶ F.obj j)
-  (hπ : forall ⦃j₁ j₂ : J⦄ (x : W.obj j₁) (f : j₁ ⟶ j₂),
+variable (pt : C) (π : ∀ ⦃j : J⦄ (_ : W.obj j), pt ⟶ F.obj j)
+  (hπ : ∀ ⦃j₁ j₂ : J⦄ (x : W.obj j₁) (f : j₁ ⟶ j₂),
     π x ≫ F.map f = π (W.map f x))
 
 set_option backward.defeqAttrib.useBackward true in
 /-- Constructor for weighted cones. -/
 @[simps pt]
-/--
-Definition of `mk` / `mk` 的定义
+/-
+**CategoryTheory.Limits.WeightedCone.mk** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheor
+y.Limits.WeightedCone`。
+形式化陈述：mk : WeightedCone W F where pt
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk
-  signature: : WeightedCone W F where
-  body: pt
-  π.app x := π x.snd
-  π.naturality x₁ x₂ f := by simpa using (hπ x₁.snd f.val).symm
-
-@[simp]
-
-中文:
-定义 mk
-  签名: : WeightedCone W F where
-  定义体: pt
-  π.app x := π x.snd
-  π.naturality x₁ x₂ f := by simpa using (hπ x₁.snd f.val).symm
-
-@[simp]
+--- 原说明 ---
+Constructor for weighted cones.
 -/
 def mk : WeightedCone W F where
   pt := pt
@@ -149,36 +131,29 @@ def mk : WeightedCone W F where
   π.naturality x₁ x₂ f := by simpa using (hπ x₁.snd f.val).symm
 
 @[simp]
-/--
-lemma `mk_π` / 引理 `mk_π`
-
-English:
-lemma mk_π
-  given: {j : J} (x : W.obj j)
-  proof: rfl
-
-中文:
-引理 mk_π
-  条件: {j : J} (x : W.obj j)
-  证明: rfl
+/-
+**CategoryTheory.Limits.WeightedCone.mk_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry.Limits.WeightedCone`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma mk_π {j : J} (x : W.obj j) :
     (mk pt π hπ).π x = π x := rfl
 
-/--
-Definition of `IsLimit` / `IsLimit` 的定义
+/-- A weighted cone `c : WeightedCone W F` is a limit if it is so
+as a cone of `CategoryOfElements.π W ⋙ F : W.Elements ⥤ C`. -/
+/-
+**CategoryTheory.Limits.WeightedCone.IsLimit** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory.Limits.WeightedCone`。
+形式化陈述：{J : Type u} →   [inst : CategoryTheory.Category.{v, u} J] →     {C : Type
+ u'} →       [inst_1 : CategoryTheory.Category.{v', u'} C] →         {W : Catego
+ryTheory.Functor J (Type w)} →           {F : CategoryTheory.Functor J C} → Cate
+goryTheory.Limits.WeightedCone W F → Type (max (max (max u w) u') v')
+参数：Type w；max (max (max u w) u') v'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation IsLimit
-  signature: (c : WeightedCone W F)
-  body: Limits.IsLimit c
-
-中文:
-缩写 是极限
-  签名: (c : WeightedCone W F)
-  定义体: Limits.IsLimit c
-
-Depends on / 依赖: J.property, property
+--- 原说明 ---
+A weighted cone `c : WeightedCone W F` is a limit if it is so
+as a cone of `CategoryOfElements.π W ⋙ F : W.Elements ⥤ C`.
 -/
 protected abbrev IsLimit (c : WeightedCone W F) := Limits.IsLimit c
 
@@ -187,67 +162,47 @@ namespace IsLimit
 variable {c : WeightedCone W F} (hc : c.IsLimit) {Z : C}
 
 include hc in
-/--
-lemma `hasWeightedLimit` / 引理 `hasWeightedLimit`
-
-English:
-lemma hasWeightedLimit
-  statement: HasWeightedLimit W F
-  proof: ⟨_, hc⟩
-
-中文:
-引理 hasWeightedLimit
-  结论: HasWeightedLimit W F
-  证明: ⟨_, hc⟩
-
-Depends on / 依赖: isFiltered_of_isCardinalFiltered
+/-
+**CategoryTheory.Limits.WeightedCone.IsLimit.hasWeightedLimit** 是 Mathlib 中的一个引理
+，位于命名空间 `CategoryTheory.Limits.WeightedCone.IsLimit`。
+形式化陈述：hasWeightedLimit : HasWeightedLimit W F
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma hasWeightedLimit : HasWeightedLimit W F := ⟨_, hc⟩
 
 section
 
 variable
-  (π : forall ⦃j : J⦄ (_ : W.obj j), Z ⟶ F.obj j)
-  (hπ : forall ⦃j₁ j₂ : J⦄ (x : W.obj j₁) (f : j₁ ⟶ j₂),
+  (π : ∀ ⦃j : J⦄ (_ : W.obj j), Z ⟶ F.obj j)
+  (hπ : ∀ ⦃j₁ j₂ : J⦄ (x : W.obj j₁) (f : j₁ ⟶ j₂),
     π x ≫ F.map f = π (W.map f x))
 
-/--
-Definition of `lift` / `lift` 的定义
+/-- Constructor for morphisms from the point of a limit weighted cone. -/
+/-
+**CategoryTheory.Limits.WeightedCone.IsLimit.lift** 是 Mathlib 中的一个定义，位于命名空间 `Cat
+egoryTheory.Limits.WeightedCone.IsLimit`。
+形式化陈述：lift : Z ⟶ c.pt
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition lift
-  signature: : Z ⟶ c.pt
-  body: Limits.IsLimit.lift hc (WeightedCone.mk Z π hπ)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 lift
-  签名: : Z ⟶ c.pt
-  定义体: Limits.IsLimit.lift hc (WeightedCone.mk Z π hπ)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsFiltered, IsFiltered.nonempty, IsLimit, Limits, Limits.IsLimit.lift, WeightedCone, WeightedCone.mk, nonempty
+--- 原说明 ---
+Constructor for morphisms from the point of a limit weighted cone.
 -/
 def lift : Z ⟶ c.pt :=
   Limits.IsLimit.lift hc (WeightedCone.mk Z π hπ)
 
 @[reassoc (attr := simp)]
-/--
-lemma `fac` / 引理 `fac`
-
-English:
-lemma fac
-  given: {j : J} (x : W.obj j)
-  proof: Limits.IsLimit.fac hc (WeightedCone.mk Z π hπ) (Functor.elementsMk _ _ x)
-
-中文:
-引理 fac
-  条件: {j : J} (x : W.obj j)
-  证明: Limits.IsLimit.fac hc (WeightedCone.mk Z π hπ) (Functor.elementsMk _ _ x)
-
-Depends on / 依赖: Functor, Functor.elementsMk, IsLimit, Limits, Limits.IsLimit.fac, WeightedCone, WeightedCone.mk, elementsMk
+/-
+**CategoryTheory.Limits.WeightedCone.IsLimit.fac** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory.Limits.WeightedCone.IsLimit`。
+形式化陈述：fac {j : J} (x : W.obj j) : hc.lift π hπ ≫ c.π x = π x
+参数：x : W.obj j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.fac`：∀ {J : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} J] {C : Type u₃} [inst_1 : CategoryTheory.Category.{v₃, u₃} 
+C]   {F : CategoryTheor…
 -/
 lemma fac {j : J} (x : W.obj j) :
     hc.lift π hπ ≫ c.π x = π x :=
@@ -256,24 +211,20 @@ lemma fac {j : J} (x : W.obj j) :
 end
 
 include hc in
-/--
-lemma `hom_ext` / 引理 `hom_ext`
-
-English:
-lemma hom_ext
-  given: {f g : Z ⟶ c.pt} (h : forall {j : J} (x : W.obj j), f ≫ c.π x = g ≫ c.π x)
-  proof: Limits.IsLimit.hom_ext hc (fun _ => h _)
-
-中文:
-引理 hom_ext
-  条件: {f g : Z ⟶ c.pt} (h : 对任意 {j : J} (x : W.obj j), f ≫ c.π x = g ≫ c.π x)
-  证明: Limits.IsLimit.hom_ext hc (fun _ => h _)
-
-Depends on / 依赖: CardinalDirectedPoset, IsLimit, Limits, Limits.IsLimit.hom_ext, PreservesColimitsOfShape, forget, hom_ext, infer_instance, isFiltered_of_isCardinalFiltered
+/-
+**CategoryTheory.Limits.WeightedCone.IsLimit.hom_ext** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory.Limits.WeightedCone.IsLimit`。
+形式化陈述：hom_ext {f g : Z ⟶ c.pt} (h : forall {j : J} (x : W.obj j), f ≫ c.π x = g 
+≫ c.π x) : f = g
+参数：h : forall {j : J} (x : W.obj j), f ≫ c.π x = g ≫ c.π x。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.IsLimit.hom_ext`：hom_ext (h : IsLimit t) {W : C} {
+f f' : W ⟶ t.pt} (w : forall j, f ≫ t.π.app j = f' ≫ t.π.app j) : f = f'
 -/
-lemma hom_ext {f g : Z ⟶ c.pt} (h : forall {j : J} (x : W.obj j), f ≫ c.π x = g ≫ c.π x) :
+lemma hom_ext {f g : Z ⟶ c.pt} (h : ∀ {j : J} (x : W.obj j), f ≫ c.π x = g ≫ c.π x) :
     f = g :=
-  Limits.IsLimit.hom_ext hc (fun _ => h _)
+  Limits.IsLimit.hom_ext hc (fun _ ↦ h _)
 
 end IsLimit
 
@@ -282,24 +233,20 @@ set_option backward.defeqAttrib.useBackward true in
 /-- If the weight is `coyoneda.obj (op j) : J ⥤ Type _`, this is the limit
 weighted cone for `F : J ⥤ C` with point `F.obj j`. -/
 @[simps]
-/--
-Definition of `coyoneda` / `coyoneda` 的定义
+/-
+**CategoryTheory.Limits.WeightedCone.coyoneda** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory.Limits.WeightedCone`。
+形式化陈述：{J : Type u} →   [inst : CategoryTheory.Category.{v, u} J] →     {C : Type
+ u'} →       [inst_1 : CategoryTheory.Category.{v', u'} C] →         (F : Catego
+ryTheory.Functor J C) →           (j : J) → CategoryTheory.Limits.WeightedCone (
+CategoryTheory.coyoneda.obj (Opposite.op j)) F
+参数：F : CategoryTheory.Functor J C；j : J；CategoryTheory.coyoneda.obj (Opposite.op
+ j)。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation coyoneda
-  signature: (F : J ⥤ C) (j : J)
-  body: F.obj j
-  π.app u := F.map u.snd
-  π.naturality _ _ f := by simp [← Functor.map_comp, Category.id_comp, f.prop.symm]
-
-中文:
-缩写 coyoneda
-  签名: (F : J ⥤ C) (j : J)
-  定义体: F.obj j
-  π.app u := F.map u.snd
-  π.naturality _ _ f := by simp [← Functor.map_comp, Category.id_comp, f.prop.symm]
-
-Depends on / 依赖: isCardinalFiltered_of_hasTerminal
+--- 原说明 ---
+If the weight is `coyoneda.obj (op j) : J ⥤ Type _`, this is the limit
+weighted cone for `F : J ⥤ C` with point `F.obj j`.
 -/
 protected abbrev coyoneda (F : J ⥤ C) (j : J) :
     WeightedCone (coyoneda.obj (op j)) F where
@@ -308,28 +255,18 @@ protected abbrev coyoneda (F : J ⥤ C) (j : J) :
   π.naturality _ _ f := by simp [← Functor.map_comp, Category.id_comp, f.prop.symm]
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `isLimitCoyoneda` / `isLimitCoyoneda` 的定义
+/-- The weighted limit of `F` for the weight `coyoneda.obj (op j)` is `F.obj j`. -/
+/-
+**CategoryTheory.Limits.WeightedCone.isLimitCoyoneda** 是 Mathlib 中的一个定义，位于命名空间 `
+CategoryTheory.Limits.WeightedCone`。
+形式化陈述：isLimitCoyoneda (F : J ⥤ C) (j : J) : (WeightedCone.coyoneda F j).IsLimit 
+where lift s
+参数：F : J ⥤ C；j : J。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isLimitCoyoneda
-  signature: (F : J ⥤ C) (j : J)
-  body: WeightedCone.π s (𝟙 j)
-  fac s x := by
-    simpa using s.w (CategoryOfElements.homMk (Functor.elementsMk _ j (𝟙 j)) x x.snd (by simp))
-  uniq s m hm := by
-    simpa using hm (Functor.elementsMk _ j (𝟙 j))
-
-中文:
-定义 isLimitCoyoneda
-  签名: (F : J ⥤ C) (j : J)
-  定义体: WeightedCone.π s (𝟙 j)
-  fac s x := by
-    simpa using s.w (CategoryOfElements.homMk (Functor.elementsMk _ j (𝟙 j)) x x.snd (by simp))
-  uniq s m hm := by
-    simpa using hm (Functor.elementsMk _ j (𝟙 j))
-
-Depends on / 依赖: WeightedCone
+--- 原说明 ---
+The weighted limit of `F` for the weight `coyoneda.obj (op j)` is `F.obj j`.
 -/
 def isLimitCoyoneda (F : J ⥤ C) (j : J) : (WeightedCone.coyoneda F j).IsLimit where
   lift s := WeightedCone.π s (𝟙 j)
@@ -350,70 +287,49 @@ variable {J : Type u} [Category.{v} J] {C : Type u'} [Category.{v'} C]
   (W W' W'' : J ⥤ Type w) (g : W ⟶ W') (g' : W' ⟶ W'') (F : J ⥤ C)
   [HasWeightedLimit W F] [HasWeightedLimit W' F] [HasWeightedLimit W'' F]
 
-/--
-Definition of `weightedLimObjObj` / `weightedLimObjObj` 的定义
+/-- Given a weight `W : J ⥤ Type w` and `F : J ⥤ C`, this is the `W`-weighted
+limit of `F`. -/
+/-
+**CategoryTheory.Functor.weightedLimObjObj** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Functor`。
+形式化陈述：weightedLimObjObj : C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition weightedLimObjObj
-  signature: : C
-  body: limit (CategoryOfElements.π W ⋙ F)
-
-中文:
-定义 weightedLimObjObj
-  签名: : C
-  定义体: limit (CategoryOfElements.π W ⋙ F)
-
-Depends on / 依赖: CategoryOfElements
+--- 原说明 ---
+Given a weight `W : J ⥤ Type w` and `F : J ⥤ C`, this is the `W`-weighted
+limit of `F`.
 -/
 noncomputable def weightedLimObjObj : C :=
   limit (CategoryOfElements.π W ⋙ F)
 
 /-- The projections from the weighted limit. -/
 @[no_expose]
-/--
-Definition of `weightedLimObjObjπ` / `weightedLimObjObjπ` 的定义
+/-
+**CategoryTheory.Functor.weightedLimObjObj** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Functor`。
+形式化陈述：weightedLimObjObj : C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition weightedLimObjObjπ
-  signature: ⦃j
-  body: limit.π (CategoryOfElements.π W ⋙ F) (Functor.elementsMk _ _ x)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 weightedLimObjObjπ
-  签名: ⦃j
-  定义体: limit.π (CategoryOfElements.π W ⋙ F) (Functor.elementsMk _ _ x)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: CategoryOfElements, Functor, Functor.elementsMk, elementsMk
+--- 原说明 ---
+The projections from the weighted limit.
 -/
 noncomputable def weightedLimObjObjπ ⦃j : J⦄ (x : W.obj j) :
     W.weightedLimObjObj F ⟶ F.obj j :=
   limit.π (CategoryOfElements.π W ⋙ F) (Functor.elementsMk _ _ x)
 
 @[reassoc (attr := simp)]
-/--
-lemma `weightedLimObjObj_w` / 引理 `weightedLimObjObj_w`
-
-English:
-lemma weightedLimObjObj_w
-  given: ⦃j₁ j₂
-  statement: J⦄ (x : W.obj j₁)
-  proof: limit.w (CategoryOfElements.π W ⋙ F)
-    (CategoryOfElements.homMk (Functor.elementsMk _ _ x) (Functor.elementsMk _ _
-      (W.map f x)) f rfl)
-
-中文:
-引理 weightedLimObjObj_w
-  条件: ⦃j₁ j₂
-  结论: J⦄ (x : W.obj j₁)
-  证明: limit.w (CategoryOfElements.π W ⋙ F)
-    (CategoryOfElements.homMk (Functor.elementsMk _ _ x) (Functor.elementsMk _ _
-      (W.map f x)) f rfl)
-
-Depends on / 依赖: CategoryOfElements, CategoryOfElements.homMk, Functor, Functor.elementsMk, W.map, elementsMk, limit.w
+/-
+**CategoryTheory.Functor.weightedLimObjObj_w** 是 Mathlib 中的一个引理，位于命名空间 `Category
+Theory.Functor`。
+形式化陈述：weightedLimObjObj_w ⦃j₁ j₂ : J⦄ (x : W.obj j₁) (f : j₁ ⟶ j₂) : W.weightedL
+imObjObjπ F x ≫ F.map f = W.weightedLimObjObjπ F (W.map f x)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Limits.limit.w`：∀ {J : Type u₁} [inst : CategoryTheory.Ca
+tegory.{v₁, u₁} J] {C : Type u} [inst_1 : CategoryTheory.Category.{v, u} C]   (F
+ : CategoryTheory.F…
 -/
 lemma weightedLimObjObj_w ⦃j₁ j₂ : J⦄ (x : W.obj j₁)
     (f : j₁ ⟶ j₂) :
@@ -423,73 +339,50 @@ lemma weightedLimObjObj_w ⦃j₁ j₂ : J⦄ (x : W.obj j₁)
     (CategoryOfElements.homMk (Functor.elementsMk _ _ x) (Functor.elementsMk _ _
       (W.map f x)) f rfl)
 
-/--
-Definition of `weightedLimCone` / `weightedLimCone` 的定义
+/-- A choice of limit weighted cone. -/
+/-
+**CategoryTheory.Functor.weightedLimCone** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTh
+eory.Functor`。
+形式化陈述：weightedLimCone : WeightedCone W F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation weightedLimCone
-  signature: :
-  body: WeightedCone.mk (W.weightedLimObjObj F)
-    (fun j x => W.weightedLimObjObjπ F x)
-    (fun j₁ j₂ x f => by simp)
-
-中文:
-缩写 weightedLimCone
-  签名: :
-  定义体: WeightedCone.mk (W.weightedLimObjObj F)
-    (fun j x => W.weightedLimObjObjπ F x)
-    (fun j₁ j₂ x f => by simp)
-
-Depends on / 依赖: W.weightedLimObjObj, WeightedCone, WeightedCone.mk, weightedLimObjObj
+--- 原说明 ---
+A choice of limit weighted cone.
 -/
 noncomputable abbrev weightedLimCone :
     WeightedCone W F :=
   WeightedCone.mk (W.weightedLimObjObj F)
-    (fun j x => W.weightedLimObjObjπ F x)
-    (fun j₁ j₂ x f => by simp)
+    (fun j x ↦ W.weightedLimObjObjπ F x)
+    (fun j₁ j₂ x f ↦ by simp)
 
 /-- The weighted cone `W.weightedLimCone F` is a limit. -/
 @[no_expose]
-/--
-Definition of `isLimitWeightedLimCone` / `isLimitWeightedLimCone` 的定义
+/-
+**CategoryTheory.Functor.isLimitWeightedLimCone** 是 Mathlib 中的一个定义，位于命名空间 `Categ
+oryTheory.Functor`。
+形式化陈述：isLimitWeightedLimCone : (W.weightedLimCone F).IsLimit
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isLimitWeightedLimCone
-  signature: :
-  body: limit.isLimit _
-
-@[reassoc, simp] -- `simp` can prove the `reassoc` version
-
-中文:
-定义 isLimitWeightedLimCone
-  签名: :
-  定义体: limit.isLimit _
-
-@[reassoc, simp] -- `simp` can prove the `reassoc` version
-
-Depends on / 依赖: isLimit, limit.isLimit
+--- 原说明 ---
+The weighted cone `W.weightedLimCone F` is a limit.
 -/
 noncomputable def isLimitWeightedLimCone :
     (W.weightedLimCone F).IsLimit :=
   limit.isLimit _
 
 @[reassoc, simp] -- `simp` can prove the `reassoc` version
-/--
-lemma `isLimitWeightedLimCone_fac` / 引理 `isLimitWeightedLimCone_fac`
-
-English:
-lemma isLimitWeightedLimCone_fac
-  given: {Z} (π) (hπ) ⦃j
-  statement: J⦄ (x : W.obj j) :
-  proof: (W.isLimitWeightedLimCone F).fac ..
-
-中文:
-引理 isLimitWeightedLimCone_fac
-  条件: {Z} (π) (hπ) ⦃j
-  结论: J⦄ (x : W.obj j) :
-  证明: (W.isLimitWeightedLimCone F).fac ..
-
-Depends on / 依赖: W.weightedLimObjObj
+/-
+**CategoryTheory.Functor.isLimitWeightedLimCone_fac** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Functor`。
+形式化陈述：isLimitWeightedLimCone_fac {Z} (π) (hπ) ⦃j : J⦄ (x : W.obj j) : (W.isLimit
+WeightedLimCone F).lift (Z
+参数：π；hπ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.WeightedCone.IsLimit.fac`：fac {j : J} (x : W.obj j
+) : hc.lift π hπ ≫ c.π x = π x
 -/
 lemma isLimitWeightedLimCone_fac {Z} (π) (hπ) ⦃j : J⦄ (x : W.obj j) :
     (W.isLimitWeightedLimCone F).lift (Z := Z) π hπ ≫ W.weightedLimObjObjπ F x = π x :=
@@ -497,23 +390,25 @@ lemma isLimitWeightedLimCone_fac {Z} (π) (hπ) ⦃j : J⦄ (x : W.obj j) :
 
 variable {W F} in
 @[ext]
-/--
-lemma `weightedLimObjObj.hom_ext` / 引理 `weightedLimObjObj.hom_ext`
-
-English:
-lemma weightedLimObjObj.hom_ext
-  statement: {Z : C} {f g : Z ⟶ W.weightedLimObjObj F}
-  proof: (W.isLimitWeightedLimCone F).hom_ext h
-
-中文:
-引理 weightedLimObjObj.hom_ext
-  结论: {Z : C} {f g : Z ⟶ W.weightedLimObjObj F}
-  证明: (W.isLimitWeightedLimCone F).hom_ext h
-
-Depends on / 依赖: W.isLimitWeightedLimCone, hom_ext, isLimitWeightedLimCone
+/-
+**CategoryTheory.Functor.weightedLimObjObj.hom_ext** 是 Mathlib 中的一个定理，位于命名空间 `Ca
+tegoryTheory.Functor.weightedLimObjObj`。
+形式化陈述：∀ {J : Type u} [inst : CategoryTheory.Category.{v, u} J] {C : Type u'} [in
+st_1 : CategoryTheory.Category.{v', u'} C]   {W : CategoryTheory.Functor J (Type
+ w)} {F : CategoryTheory.Functor J C}   [inst_2 : CategoryTheory.Limits.HasWeigh
+tedLimit W F] {Z : C} {f g : Z ⟶ W.weightedLimObjObj F},   (∀ {j : J} (x : W.obj
+ j),       CategoryTheory.CategoryStruct.comp f (W.weightedLimObjObjπ F x) =    
+     CategoryTheory.CategoryStruct.comp g (W.weightedLimObjObjπ F x)) →     f = 
+g
+参数：Type w；∀ {j : J} (x : W.obj j),       CategoryTheory.CategoryStruct.comp f (W
+.weightedLimObjObjπ F x) =         CategoryTheory.CategoryStruct.comp g (W.weigh
+tedLimObjObjπ F x)。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.Limits.WeightedCone.IsLimit.hom_ext`：hom_ext {f g : Z ⟶ c
+.pt} (h : forall {j : J} (x : W.obj j), f ≫ c.π x = g ≫ c.π x) : f = g
 -/
 lemma weightedLimObjObj.hom_ext {Z : C} {f g : Z ⟶ W.weightedLimObjObj F}
-    (h : forall {j : J} (x : W.obj j),
+    (h : ∀ {j : J} (x : W.obj j),
       f ≫ W.weightedLimObjObjπ F x = g ≫ W.weightedLimObjObjπ F x) :
     f = g :=
   (W.isLimitWeightedLimCone F).hom_ext h
@@ -521,24 +416,18 @@ lemma weightedLimObjObj.hom_ext {Z : C} {f g : Z ⟶ W.weightedLimObjObj F}
 /-- Functoriality of the weighted limits with fixed weight `W : J ⥤ Type w`
 with respect to the functor in `J ⥤ C`. -/
 @[no_expose]
-/--
-Definition of `weightedLimObjMap` / `weightedLimObjMap` 的定义
+/-
+**CategoryTheory.Functor.weightedLimObjMap** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory.Functor`。
+形式化陈述：weightedLimObjMap {F₁ F₂ : J ⥤ C} [HasWeightedLimit W F₁] [HasWeightedLimi
+t W F₂] (f : F₁ ⟶ F₂) : W.weightedLimObjObj F₁ ⟶ W.weightedLimObjObj F₂
+参数：f : F₁ ⟶ F₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition weightedLimObjMap
-  signature: {F₁ F₂ : J ⥤ C}
-  body: limMap (whiskerLeft _ f)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 weightedLimObjMap
-  签名: {F₁ F₂ : J ⥤ C}
-  定义体: limMap (whiskerLeft _ f)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: IsTerminal, IsTerminal.hasTerminal, IsTerminal.ofUniqueHom, Subtype, Subtype.mk_le_mk, hasTerminal, homOfLE, le_top, limMap, mk_le_mk, ofUniqueHom, whiskerLeft
+--- 原说明 ---
+Functoriality of the weighted limits with fixed weight `W : J ⥤ Type w`
+with respect to the functor in `J ⥤ C`.
 -/
 noncomputable def weightedLimObjMap {F₁ F₂ : J ⥤ C}
     [HasWeightedLimit W F₁] [HasWeightedLimit W F₂] (f : F₁ ⟶ F₂) :
@@ -546,24 +435,10 @@ noncomputable def weightedLimObjMap {F₁ F₂ : J ⥤ C}
   limMap (whiskerLeft _ f)
 
 @[reassoc (attr := simp)]
-/--
-lemma `weightedLimObjMap_π` / 引理 `weightedLimObjMap_π`
-
-English:
-lemma weightedLimObjMap_π
-  statement: {F₁ F₂ : J ⥤ C}
-  proof: limit.lift_π ..
-
-@[simp]
-
-中文:
-引理 weightedLimObjMap_π
-  结论: {F₁ F₂ : J ⥤ C}
-  证明: limit.lift_π ..
-
-@[simp]
-
-Depends on / 依赖: isCardinalFiltered_of_hasTerminal, limit.lift_
+/-
+**CategoryTheory.Functor.weightedLimObjMap_** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma weightedLimObjMap_π {F₁ F₂ : J ⥤ C}
     [HasWeightedLimit W F₁] [HasWeightedLimit W F₂] (f : F₁ ⟶ F₂)
@@ -573,48 +448,67 @@ lemma weightedLimObjMap_π {F₁ F₂ : J ⥤ C}
   limit.lift_π ..
 
 @[simp]
-/--
-lemma `weightedLimObjMap_id` / 引理 `weightedLimObjMap_id`
-
-English:
-lemma weightedLimObjMap_id
-  given: (F : J ⥤ C) [HasWeightedLimit W F]
-  proof: by
-  cat_disch
-
-@[reassoc]
-
-中文:
-引理 weightedLimObjMap_id
-  条件: (F : J ⥤ C) [HasWeightedLimit W F]
-  证明: by
-  cat_disch
-
-@[reassoc]
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Functor.weightedLimObjMap_id** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory.Functor`。
+形式化陈述：weightedLimObjMap_id (F : J ⥤ C) [HasWeightedLimit W F] : W.weightedLimObj
+Map (𝟙 F) = 𝟙 _
+参数：F : J ⥤ C。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.weightedLimObjObj.hom_ext`：∀ {J : Type u} [inst :
+ CategoryTheory.Category.{v, u} J] {C : Type u'} [inst_1 : CategoryTheory.Catego
+ry.{v', u'} C]   {W : CategoryTheory.F…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Functor.weightedLimObjMap_π`：weightedLimObjMap_π {F₁ F₂ :
+ J ⥤ C} [HasWeightedLimit W F₁] [HasWeightedLimit W F₂] (f : F₁ ⟶ F₂) ⦃j : J⦄ (x
+ : W.obj j) : W.weightedLimObjMa…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma weightedLimObjMap_id (F : J ⥤ C) [HasWeightedLimit W F] :
     W.weightedLimObjMap (𝟙 F) = 𝟙 _ := by
   cat_disch
 
 @[reassoc]
-/--
-lemma `weightedLimObjMap_comp` / 引理 `weightedLimObjMap_comp`
-
-English:
-lemma weightedLimObjMap_comp
-  statement: {F₁ F₂ F₃ : J ⥤ C}
-  proof: by
-  cat_disch
-
-中文:
-引理 weightedLimObjMap_comp
-  结论: {F₁ F₂ F₃ : J ⥤ C}
-  证明: by
-  cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Functor.weightedLimObjMap_comp** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory.Functor`。
+形式化陈述：weightedLimObjMap_comp {F₁ F₂ F₃ : J ⥤ C} [HasWeightedLimit W F₁] [HasWeig
+htedLimit W F₂] [HasWeightedLimit W F₃] (f : F₁ ⟶ F₂) (g : F₂ ⟶ F₃) : W.weighted
+LimObjMap (f ≫ g) = W.weightedLimObjMap f ≫ W.weightedLimObjMap g
+参数：f : F₁ ⟶ F₂；g : F₂ ⟶ F₃。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.weightedLimObjObj.hom_ext`：∀ {J : Type u} [inst :
+ CategoryTheory.Category.{v, u} J] {C : Type u'} [inst_1 : CategoryTheory.Catego
+ry.{v', u'} C]   {W : CategoryTheory.F…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Functor.weightedLimObjMap_π`：weightedLimObjMap_π {F₁ F₂ :
+ J ⥤ C} [HasWeightedLimit W F₁] [HasWeightedLimit W F₂] (f : F₁ ⟶ F₂) ⦃j : J⦄ (x
+ : W.obj j) : W.weightedLimObjMa…
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用定理 `CategoryTheory.Functor.weightedLimObjMap_π_assoc`：∀ {J : Type u} [inst :
+ CategoryTheory.Category.{v, u} J] {C : Type u'} [inst_1 : CategoryTheory.Catego
+ry.{v', u'} C]   (W : CategoryTheory.F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma weightedLimObjMap_comp {F₁ F₂ F₃ : J ⥤ C}
     [HasWeightedLimit W F₁] [HasWeightedLimit W F₂] [HasWeightedLimit W F₃]
@@ -626,53 +520,27 @@ section
 
 variable {W W' W''}
 
-/--
-Definition of `weightedLimFlipObjMap` / `weightedLimFlipObjMap` 的定义
+/-- The (contravariant) functoriality of weighted limits with respect to the weight. -/
+/-
+**CategoryTheory.Functor.weightedLimFlipObjMap** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory.Functor`。
+形式化陈述：weightedLimFlipObjMap : W'.weightedLimObjObj F ⟶ W.weightedLimObjObj F
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition weightedLimFlipObjMap
-  signature: :
-  body: (W.isLimitWeightedLimCone F).lift
-    (fun j x => W'.weightedLimObjObjπ F (g.app j x)) (by simp)
-
-@[reassoc (attr := simp)]
-
-中文:
-定义 weightedLimFlipObjMap
-  签名: :
-  定义体: (W.isLimitWeightedLimCone F).lift
-    (fun j x => W'.weightedLimObjObjπ F (g.app j x)) (by simp)
-
-@[reassoc (attr := simp)]
-
-Depends on / 依赖: W.isLimitWeightedLimCone, g.app, isLimitWeightedLimCone
+--- 原说明 ---
+The (contravariant) functoriality of weighted limits with respect to the weight.
 -/
 noncomputable def weightedLimFlipObjMap :
     W'.weightedLimObjObj F ⟶ W.weightedLimObjObj F :=
   (W.isLimitWeightedLimCone F).lift
-    (fun j x => W'.weightedLimObjObjπ F (g.app j x)) (by simp)
+    (fun j x ↦ W'.weightedLimObjObjπ F (g.app j x)) (by simp)
 
 @[reassoc (attr := simp)]
-/--
-lemma `weightedLimObjObjMap_π` / 引理 `weightedLimObjObjMap_π`
-
-English:
-lemma weightedLimObjObjMap_π
-  given: ⦃j
-  statement: J⦄ (x : W.obj j) :
-  proof: (W.isLimitWeightedLimCone F).fac ..
-
-@[simp]
-
-中文:
-引理 weightedLimObjObjMap_π
-  条件: ⦃j
-  结论: J⦄ (x : W.obj j) :
-  证明: (W.isLimitWeightedLimCone F).fac ..
-
-@[simp]
-
-Depends on / 依赖: W.isLimitWeightedLimCone, isLimitWeightedLimCone
+/-
+**CategoryTheory.Functor.weightedLimObjObjMap_** 是 Mathlib 中的一个引理，位于命名空间 `Catego
+ryTheory.Functor`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma weightedLimObjObjMap_π ⦃j : J⦄ (x : W.obj j) :
     weightedLimFlipObjMap g F ≫ W.weightedLimObjObjπ F x =
@@ -680,44 +548,63 @@ lemma weightedLimObjObjMap_π ⦃j : J⦄ (x : W.obj j) :
   (W.isLimitWeightedLimCone F).fac ..
 
 @[simp]
-/--
-lemma `weightedLimFlipObjMap_id` / 引理 `weightedLimFlipObjMap_id`
-
-English:
-lemma weightedLimFlipObjMap_id
-  proof: by
-  cat_disch
-
-@[reassoc]
-
-中文:
-引理 weightedLimFlipObjMap_id
-  证明: by
-  cat_disch
-
-@[reassoc]
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Functor.weightedLimFlipObjMap_id** 是 Mathlib 中的一个引理，位于命名空间 `Cat
+egoryTheory.Functor`。
+形式化陈述：weightedLimFlipObjMap_id : weightedLimFlipObjMap (𝟙 W) F = 𝟙 _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.weightedLimObjObj.hom_ext`：∀ {J : Type u} [inst :
+ CategoryTheory.Category.{v, u} J] {C : Type u'} [inst_1 : CategoryTheory.Catego
+ry.{v', u'} C]   {W : CategoryTheory.F…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.Functor.weightedLimObjObjMap_π`：weightedLimObjObjMap_π ⦃j
+ : J⦄ (x : W.obj j) : weightedLimFlipObjMap g F ≫ W.weightedLimObjObjπ F x = W'.
+weightedLimObjObjπ F (g.app j x)
+· 使用定理 `CategoryTheory.id_apply`：∀ {C : Type u} [inst : CategoryTheory.Category.
+{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → FunL
+ike (FC X Y) …
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma weightedLimFlipObjMap_id :
     weightedLimFlipObjMap (𝟙 W) F = 𝟙 _ := by
   cat_disch
 
 @[reassoc]
-/--
-lemma `weightedLimFlipObjMap_comp` / 引理 `weightedLimFlipObjMap_comp`
-
-English:
-lemma weightedLimFlipObjMap_comp
-  proof: by
-  cat_disch
-
-中文:
-引理 weightedLimFlipObjMap_comp
-  证明: by
-  cat_disch
-
-Depends on / 依赖: cat_disch
+/-
+**CategoryTheory.Functor.weightedLimFlipObjMap_comp** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory.Functor`。
+形式化陈述：weightedLimFlipObjMap_comp : weightedLimFlipObjMap g' F ≫ weightedLimFlipO
+bjMap g F = weightedLimFlipObjMap (g ≫ g') F
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Functor.weightedLimObjObj.hom_ext`：∀ {J : Type u} [inst :
+ CategoryTheory.Category.{v, u} J] {C : Type u'} [inst_1 : CategoryTheory.Catego
+ry.{v', u'} C]   {W : CategoryTheory.F…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Category.assoc`：∀ {obj : Type u} [self : CategoryTheory.C
+ategory.{v, u} obj] {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z),   Categ
+oryTheory.CategoryS…
+· 使用引理 `CategoryTheory.Functor.weightedLimObjObjMap_π`：weightedLimObjObjMap_π ⦃j
+ : J⦄ (x : W.obj j) : weightedLimFlipObjMap g F ≫ W.weightedLimObjObjπ F x = W'.
+weightedLimObjObjπ F (g.app j x)
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma weightedLimFlipObjMap_comp :
     weightedLimFlipObjMap g' F ≫ weightedLimFlipObjMap g F =
@@ -731,3 +618,4 @@ end
 end Functor
 
 end CategoryTheory
+

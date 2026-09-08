@@ -49,123 +49,252 @@ namespace IsCyclotomicExtension.Rat
 
 open NumberField IsCyclotomicExtension
 
-variable (n : Nat) [NeZero n] (K : Type*) [Field K] [NumberField K]
-  [hK : IsCyclotomicExtension {n} Rat K]
+variable (n : ℕ) [NeZero n] (K : Type*) [Field K] [NumberField K]
+  [hK : IsCyclotomicExtension {n} ℚ K]
 
 include hK in
 /--
-Definition of `galEquivZMod` / `galEquivZMod` 的定义
-
-English:
-abbreviation galEquivZMod
-  signature: : Gal(K/Rat) ≃* (ZMod n)ˣ
-  body: IsCyclotomicExtension.autEquivPow K Polynomial.cyclotomic.irreducible_rat (NeZero.pos n)
-
-中文:
-缩写 galEquivZMod
-  签名: : Gal(K/有理数) ≃* (ZMod n)ˣ
-  定义体: IsCyclotomicExtension.autEquivPow K Polynomial.cyclotomic.irreducible_rat (NeZero.pos n)
-
-Depends on / 依赖: IsCyclotomicExtension, IsCyclotomicExtension.autEquivPow, NeZero, NeZero.pos, Polynomial, Polynomial.cyclotomic.irreducible_rat, autEquivPow, cyclotomic, irreducible_rat
+The isomorphism between `Gal(ℚ(ζₙ)/ℚ)` and `(ℤ/nℤ)ˣ` that sends `σ` to the class `a` such that
+`σ (ζₙ) = ζₙ ^ a`.
 -/
-noncomputable abbrev galEquivZMod : Gal(K/Rat) ≃* (ZMod n)ˣ :=
-IsCyclotomicExtension.autEquivPow K Polynomial.cyclotomic.irreducible_rat (NeZero.pos n)
+/-
+**IsCyclotomicExtension.Rat.galEquivZMod** 是 Mathlib 中的一个缩写定义，位于命名空间 `IsCyclotom
+icExtension.Rat`。
+形式化陈述：galEquivZMod : Gal(K/Rat) ≃* (ZMod n)ˣ
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
 
-/--
-theorem `galEquivZMod_apply_of_pow_eq` / 定理 `galEquivZMod_apply_of_pow_eq`
-
-English:
-theorem galEquivZMod_apply_of_pow_eq
-  given: (σ : Gal(K/Rat)) {x : K} (hx : x ^ n = 1)
-  proof: by
-  obtain ⟨a, -, rfl⟩ := (zeta_spec n Rat K).eq_pow_of_pow_eq_one hx
-  rw [map_pow]; rw [pow_right_comm]; rw [galEquivZMod]; rw [autEquivPow_apply]; rw [OneHom.toFun_eq_coe]; rw [MonoidHom.toOneHom_coe]; rw [IsPrimitiveRoot.autToPow_spec]
-
-中文:
-定理 galEquivZMod_apply_of_pow_eq
-  条件: (σ : Gal(K/有理数)) {x : K} (hx : x ^ n = 1)
-  证明: by
-  obtain ⟨a, -, rfl⟩ := (zeta_spec n Rat K).eq_pow_of_pow_eq_one hx
-  rw [map_pow]; rw [pow_right_comm]; rw [galEquivZMod]; rw [autEquivPow_apply]; rw [OneHom.toFun_eq_coe]; rw [MonoidHom.toOneHom_coe]; rw [IsPrimitiveRoot.autToPow_spec]
-
-Depends on / 依赖: IsPrimitiveRoot, IsPrimitiveRoot.autToPow_spec, MonoidHom, MonoidHom.toOneHom_coe, OneHom, OneHom.toFun_eq_coe, autEquivPow_apply, autToPow_spec, eq_pow_of_pow_eq_one, galEquivZMod, map_pow, pow_right_comm, toFun_eq_coe, toOneHom_coe, zeta_spec
+--- 原说明 ---
+The isomorphism between `Gal(ℚ(ζₙ)/ℚ)` and `(ℤ/nℤ)ˣ` that sends `σ` to the class
+ `a` such that
+`σ (ζₙ) = ζₙ ^ a`.
 -/
-theorem galEquivZMod_apply_of_pow_eq (σ : Gal(K/Rat)) {x : K} (hx : x ^ n = 1) :
+noncomputable abbrev galEquivZMod : Gal(K/ℚ) ≃* (ZMod n)ˣ :=
+  IsCyclotomicExtension.autEquivPow K <| Polynomial.cyclotomic.irreducible_rat (NeZero.pos n)
+/-
+**IsCyclotomicExtension.Rat.galEquivZMod_apply_of_pow_eq** 是 Mathlib 中的一个定理，位于命名
+空间 `IsCyclotomicExtension.Rat`。
+形式化陈述：galEquivZMod_apply_of_pow_eq (σ : Gal(K/Rat)) {x : K} (hx : x ^ n = 1) : σ
+ x = x ^ (galEquivZMod n K σ).val.val
+参数：σ : Gal(K/Rat)；hx : x ^ n = 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `IsPrimitiveRoot.eq_pow_of_pow_eq_one`：eq_pow_of_pow_eq_one {k : Nat} [Ne
+Zero k] {ζ ξ : R} (h : IsPrimitiveRoot ζ k) (hξ : ξ ^ k = 1) : exists i < k, ζ ^
+ i = ξ
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `IsCyclotomicExtension.zeta_spec`：zeta_spec : IsPrimitiveRoot (zeta n A B
+) n
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `AlgEquivClass.toAlgHomClass`：∀ (F : Type u_1) (R : Type u_2) (A : Type u
+_3) (B : Type u_4) [inst : CommSemiring R] [inst_1 : Semiring A]   [inst_2 : Sem
+iring B] [inst_3 …
+· 使用定理 `AlgEquiv.instAlgEquivClass`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type u
+A₂} [inst : CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [ins
+t_3 : Algebra R …
+· 使用引理 `pow_right_comm`：pow_right_comm (a : M) (m n : Nat) : (a ^ m) ^ n = (a ^ 
+n) ^ m
+· 使用定理 `IsCyclotomicExtension.Rat.galEquivZMod.eq_1`：∀ (n : ℕ) [inst : NeZero n]
+ (K : Type u_1) [inst_1 : Field K] [inst_2 : NumberField K]   [hK : IsCyclotomic
+Extension {n} ℚ K],   IsCyclotomi…
+· 使用定理 `IsCyclotomicExtension.autEquivPow_apply`：∀ {n : ℕ} [inst : NeZero n] {K 
+: Type u_1} [inst_1 : Field K] (L : Type u_2) [inst_2 : CommRing L] [inst_3 : Is
+Domain L]   [inst_4 : Algebra…
+· 使用定理 `OneHom.toFun_eq_coe`：OneHom.toFun_eq_coe [One M] [One N] (f : OneHom M N
+) : f.toFun = f
+· 使用定理 `MonoidHom.toOneHom_coe`：MonoidHom.toOneHom_coe [MulOne M] [MulOne N] (f 
+: M ->* N) : (f.toOneHom : M -> N) = f
+· 使用定理 `IsPrimitiveRoot.autToPow_spec`：autToPow_spec [NeZero n] (f : S ≃ₐ[R] S) 
+: μ ^ (hμ.autToPow R f : ZMod n).val = f μ
+-/
+theorem galEquivZMod_apply_of_pow_eq (σ : Gal(K/ℚ)) {x : K} (hx : x ^ n = 1) :
     σ x = x ^ (galEquivZMod n K σ).val.val := by
-  obtain ⟨a, -, rfl⟩ := (zeta_spec n Rat K).eq_pow_of_pow_eq_one hx
-  rw [map_pow]; rw [pow_right_comm]; rw [galEquivZMod]; rw [autEquivPow_apply]; rw [OneHom.toFun_eq_coe]; rw [MonoidHom.toOneHom_coe]; rw [IsPrimitiveRoot.autToPow_spec]
+  obtain ⟨a, -, rfl⟩ := (zeta_spec n ℚ K).eq_pow_of_pow_eq_one hx
+  rw [map_pow, pow_right_comm, galEquivZMod, autEquivPow_apply, OneHom.toFun_eq_coe,
+    MonoidHom.toOneHom_coe, IsPrimitiveRoot.autToPow_spec]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `galEquivZMod_smul_of_pow_eq` / 定理 `galEquivZMod_smul_of_pow_eq`
-
-English:
-theorem galEquivZMod_smul_of_pow_eq
-  given: (σ : Gal(K/Rat)) {x : 𝓞 K} (hx : x ^ n = 1)
-  proof: by
-  apply FaithfulSMul.algebraMap_injective (𝓞 K) K
-apply galEquivZMod_apply_of_pow_eq n K σ by rw [← Subalgebra.coe_pow, hx, OneMemClass.coe_one]
-
-中文:
-定理 galEquivZMod_smul_of_pow_eq
-  条件: (σ : Gal(K/有理数)) {x : 𝓞 K} (hx : x ^ n = 1)
-  证明: by
-  apply FaithfulSMul.algebraMap_injective (𝓞 K) K
-apply galEquivZMod_apply_of_pow_eq n K σ by rw [← Subalgebra.coe_pow, hx, OneMemClass.coe_one]
-
-Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, OneMemClass, OneMemClass.coe_one, Subalgebra, Subalgebra.coe_pow, algebraMap_injective, coe_one, coe_pow, galEquivZMod_apply_of_pow_eq
+/-
+**IsCyclotomicExtension.Rat.galEquivZMod_smul_of_pow_eq** 是 Mathlib 中的一个定理，位于命名空
+间 `IsCyclotomicExtension.Rat`。
+形式化陈述：galEquivZMod_smul_of_pow_eq (σ : Gal(K/Rat)) {x : 𝓞 K} (hx : x ^ n = 1) : 
+σ • x = x ^ (galEquivZMod n K σ).val.val
+参数：σ : Gal(K/Rat)；hx : x ^ n = 1。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用引理 `FaithfulSMul.algebraMap_injective`：algebraMap_injective : Injective (alg
+ebraMap R A)
+· 使用定理 `Module.IsTorsionFree.to_faithfulSMul`：∀ {R : Type u_1} {A : Type u_2} [i
+nst : CommRing R] [inst_1 : Ring A] [inst_2 : Algebra R A] [IsCancelMulZero R]  
+ [Nontrivial A] [Module.Is…
+· 使用定理 `IsDomain.toIsCancelMulZero`：∀ {α : Type u} {inst : Semiring α} [self : I
+sDomain α], IsCancelMulZero α
+· 使用定理 `NumberField.instIsDomainRingOfIntegers`：∀ (K : Type u_1) [inst : Field K
+], IsDomain (NumberField.RingOfIntegers K)
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `NumberField.RingOfIntegers.instIsTorsionFree_2`：∀ (K : Type u_4) (L : Ty
+pe u_5) [inst : Field K] [inst_1 : Field L] [inst_2 : Algebra K L],   Module.IsT
+orsionFree (NumberField.RingOfIntege…
+· 使用定理 `IsCyclotomicExtension.Rat.galEquivZMod_apply_of_pow_eq`：galEquivZMod_app
+ly_of_pow_eq (σ : Gal(K/Rat)) {x : K} (hx : x ^ n = 1) : σ x = x ^ (galEquivZMod
+ n K σ).val.val
+· 使用定理 `SubsemiringClass.toSubmonoidClass`：∀ {S : Type u_1} {R : outParam (Type 
+u)} {inst : NonAssocSemiring R} {inst_1 : SetLike S R}   [self : SubsemiringClas
+s S R], SubmonoidClass …
+· 使用定理 `Subalgebra.instSubsemiringClass`：∀ {R : Type u} {A : Type v} [inst : Com
+mSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SubsemiringClass (S
+ubalgebra R A) A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subalgebra.coe_pow`：∀ {R : Type u} {A : Type v} [inst : CommSemiring R] 
+[inst_1 : Semiring A] [inst_2 : Algebra R A] (S : Subalgebra R A)   (x : ↥S) (n 
+: ℕ), ↑(…
+· 使用定理 `AddSubmonoidWithOneClass.toOneMemClass`：∀ {S : Type u_1} {R : outParam (
+Type u_2)} {inst : AddMonoidWithOne R} {inst_1 : SetLike S R}   [self : AddSubmo
+noidWithOneClass S R], OneMe…
+· 使用定理 `SubsemiringClass.addSubmonoidWithOneClass`：∀ (S : Type u_1) (R : Type u)
+ {x : NonAssocSemiring R} [inst : SetLike S R] [h : SubsemiringClass S R],   Add
+SubmonoidWithOneClass S R
+· 使用定理 `OneMemClass.coe_one`：coe_one : ((1 : S') : M₁) = 1
 -/
-theorem galEquivZMod_smul_of_pow_eq (σ : Gal(K/Rat)) {x : 𝓞 K} (hx : x ^ n = 1) :
+theorem galEquivZMod_smul_of_pow_eq (σ : Gal(K/ℚ)) {x : 𝓞 K} (hx : x ^ n = 1) :
     σ • x = x ^ (galEquivZMod n K σ).val.val := by
   apply FaithfulSMul.algebraMap_injective (𝓞 K) K
-apply galEquivZMod_apply_of_pow_eq n K σ by rw [← Subalgebra.coe_pow, hx, OneMemClass.coe_one]
+  apply galEquivZMod_apply_of_pow_eq n K σ <| by rw [← Subalgebra.coe_pow, hx, OneMemClass.coe_one]
 
 section restrict
 
-variable {m : Nat} [NeZero m] (F : Type*) [Field F] [NumberField F]
-  [hF : IsCyclotomicExtension {m} Rat F] [Algebra F K] [IsGalois Rat F]
+variable {m : ℕ} [NeZero m] (F : Type*) [Field F] [NumberField F]
+  [hF : IsCyclotomicExtension {m} ℚ F] [Algebra F K] [IsGalois ℚ F]
 
 /--
-theorem `galEquivZMod_restrictNormal_apply` / 定理 `galEquivZMod_restrictNormal_apply`
-
-English:
-theorem galEquivZMod_restrictNormal_apply
-  given: (h : m ∣ n) (σ : Gal(K/Rat))
-  proof: by
-  have hζ := IsCyclotomicExtension.zeta_spec m Rat F
-  let ζ := IsCyclotomicExtension.zeta m Rat F
-  suffices ζ ^ (galEquivZMod m F (σ.restrictNormal F)).val.val = ζ ^ (galEquivZMod n K σ).val.val by
-    rw [(hζ.isOfFinOrder (NeZero.ne _)).pow_inj_mod]; rw [← hζ.eq_orderOf]; rw [← ZMod.natCast_eq_natCast_iff']; rw [ZMod.natCast_val]; rw [ZMod.natCast_val]; rw [ZMod.cast_id] at this
-    rwa [Units.ext_iff]
-  apply FaithfulSMul.algebraMap_injective F K
-  rw [map_pow]; rw [map_pow]; rw [← galEquivZMod_apply_of_pow_eq]; rw [← AlgEquiv.restrictNormal_commutes]; rw [galEquivZMod_apply_of_pow_eq m _ _ hζ.pow_eq_one]; rw [map_pow]
-  rw [← map_pow]; rw [(hζ.pow_eq_one_iff_dvd _).mpr h]; rw [map_one]
-
-中文:
-定理 galEquivZMod_restrictNormal_apply
-  条件: (h : m ∣ n) (σ : Gal(K/有理数))
-  证明: by
-  have hζ := IsCyclotomicExtension.zeta_spec m Rat F
-  let ζ := IsCyclotomicExtension.zeta m Rat F
-  suffices ζ ^ (galEquivZMod m F (σ.restrictNormal F)).val.val = ζ ^ (galEquivZMod n K σ).val.val by
-    rw [(hζ.isOfFinOrder (NeZero.ne _)).pow_inj_mod]; rw [← hζ.eq_orderOf]; rw [← ZMod.natCast_eq_natCast_iff']; rw [ZMod.natCast_val]; rw [ZMod.natCast_val]; rw [ZMod.cast_id] at this
-    rwa [Units.ext_iff]
-  apply FaithfulSMul.algebraMap_injective F K
-  rw [map_pow]; rw [map_pow]; rw [← galEquivZMod_apply_of_pow_eq]; rw [← AlgEquiv.restrictNormal_commutes]; rw [galEquivZMod_apply_of_pow_eq m _ _ hζ.pow_eq_one]; rw [map_pow]
-  rw [← map_pow]; rw [(hζ.pow_eq_one_iff_dvd _).mpr h]; rw [map_one]
-
-Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, IsCyclotomicExtension, IsCyclotomicExtension.zeta, IsCyclotomicExtension.zeta_spec, NeZero, NeZero.ne, Units.ext_iff, ZMod.cast_id, ZMod.natCast_eq_natCast_iff, ZMod.natCast_val, algebraMap_injective, cast_id, eq_orderOf, ext_iff, galEquivZMod, galEquivZMod_apply_of_po, isOfFinOrder, map_pow, natCast_eq_natCast_iff
+Let `m ∣ n`. Then, the following diagram commutes:
+Gal(ℚ(ζₙ)/ℚ) → (ℤ/nℤ)ˣ
+  ↓              ↓
+Gal(ℚ(ζₘ)/ℚ) → (ℤ/mℤ)ˣ
+where the horizontal maps are `galEquivZMod`, the left map is the restriction map and the right map
+is the natural map.
 -/
-theorem galEquivZMod_restrictNormal_apply (h : m ∣ n) (σ : Gal(K/Rat)) :
+/-
+**IsCyclotomicExtension.Rat.galEquivZMod_restrictNormal_apply** 是 Mathlib 中的一个定理
+，位于命名空间 `IsCyclotomicExtension.Rat`。
+形式化陈述：galEquivZMod_restrictNormal_apply (h : m ∣ n) (σ : Gal(K/Rat)) : galEquivZ
+Mod m F (σ.restrictNormal F) = ZMod.unitsMap h (galEquivZMod n K σ)
+参数：h : m ∣ n；σ : Gal(K/Rat)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `IsCyclotomicExtension.zeta_spec`：zeta_spec : IsPrimitiveRoot (zeta n A B
+) n
+· 使用定理 `IsGalois.to_normal`：∀ {F : Type u_1} {inst : Field F} {E : Type u_2} {in
+st_1 : Field E} {inst_2 : Algebra F E} [self : IsGalois F E],   Normal F E
+· 使用引理 `FaithfulSMul.algebraMap_injective`：algebraMap_injective : Injective (alg
+ebraMap R A)
+· 使用定理 `instIsDomain`：∀ {R : Type u} [inst : Semifield R], IsDomain R
+· 使用定理 `Module.Flat.instOfIsDedekindDomainOfIsTorsionFree`：∀ {R : Type u_1} {M :
+ Type u_2} [inst : CommRing R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module
+ R M]   [IsDedekindDomain R] [Module.Is…
+· 使用定理 `IsPrincipalIdealRing.isDedekindDomain`：∀ (A : Type u_2) [inst : CommRing
+ A] [IsDomain A] [IsPrincipalIdealRing A], IsDedekindDomain A
+· 使用定理 `instIsPrincipalIdealRingOfIsSemisimpleRing`：∀ {R : Type u_2} [inst : Rin
+g R] [IsSemisimpleRing R], IsPrincipalIdealRing R
+· 使用定理 `instIsSemisimpleModuleOfIsSimpleModule`：∀ (R : Type u_2) [inst : Ring R]
+ (M : Type u_4) [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M]   [IsSimp
+leModule R M], IsSemisimpleM…
+· 使用定理 `instIsSimpleModule`：∀ (R : Type u_5) [inst : DivisionRing R], IsSimpleMo
+dule R R
+· 使用定理 `Module.FaithfullyFlat.toFlat`：∀ {R : Type u} {M : Type v} {inst : CommRi
+ng R} {inst_1 : AddCommGroup M} {inst_2 : _root_.Module R M}   [self : Module.Fa
+ithfullyFlat R M],…
+· 使用定理 `Module.FaithfullyFlat.instOfNontrivialOfFree`：∀ (R : Type u) (M : Type v
+) [inst : CommRing R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module R M] [No
+ntrivial M]   [Module.Free R M], M…
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `Module.Free.of_divisionRing`：∀ (K : Type u_3) (V : Type u_4) [inst : Div
+isionRing K] [inst_1 : AddCommGroup V] [inst_2 : _root_.Module K V],   Module.Fr
+ee K V
+· 使用定理 `Algebra.IsAlgebraic.isIntegral`：∀ {K : Type u} {A : Type v} [inst : Fiel
+d K] [inst_1 : Ring A] [inst_2 : Algebra K A] [Algebra.IsAlgebraic K A],   Algeb
+ra.IsIntegral K A
+· 使用定理 `Algebra.IsSeparable.of_integral`：∀ (F : Type u_1) [inst : Field F] (K : 
+Type u_2) [inst_1 : Ring K] [inst_2 : Algebra F K] [IsDomain K]   [Algebra.IsInt
+egral F K] [CharZero …
+· 使用定理 `NumberField.instFiniteDimensional`：∀ (K : Type u_1) (L : Type u_2) [inst
+ : Field K] [inst_1 : Field L] [NumberField K] [NumberField L]   [inst_4 : Algeb
+ra K L], FiniteDimensio…
+· 使用定理 `instFaithfulSMul_1`：∀ (R : Type u_1) (A : Type u_2) [inst : CommRing R] 
+[inst_1 : Semiring A] [inst_2 : Algebra R A] [IsSimpleRing R]   [Nontrivial A], 
+Faithful…
+· 使用定理 `DivisionRing.isSimpleRing`：∀ (A : Type u_2) [inst : DivisionRing A], IsS
+impleRing A
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_pow`：∀ {G : Type u_7} {H : Type u_8} {F : Type u_9} [inst : FunLike 
+F G H] [inst_1 : Monoid G] [inst_2 : Monoid H]   [MonoidHomClass F G H] (f : …
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `IsCyclotomicExtension.Rat.galEquivZMod_apply_of_pow_eq`：galEquivZMod_app
+ly_of_pow_eq (σ : Gal(K/Rat)) {x : K} (hx : x ^ n = 1) : σ x = x ^ (galEquivZMod
+ n K σ).val.val
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `IsPrimitiveRoot.pow_eq_one_iff_dvd`：pow_eq_one_iff_dvd (h : IsPrimitiveR
+oot ζ k) (l : Nat) : ζ ^ l = 1 ↔ k ∣ l
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+（共 40 条，此处仅展示前 30 条）
+
+--- 原说明 ---
+Let `m ∣ n`. Then, the following diagram commutes:
+Gal(ℚ(ζₙ)/ℚ) → (ℤ/nℤ)ˣ
+  ↓              ↓
+Gal(ℚ(ζₘ)/ℚ) → (ℤ/mℤ)ˣ
+where the horizontal maps are `galEquivZMod`, the left map is the restriction ma
+p and the right map
+is the natural map.
+-/
+theorem galEquivZMod_restrictNormal_apply (h : m ∣ n) (σ : Gal(K/ℚ)) :
     galEquivZMod m F (σ.restrictNormal F) = ZMod.unitsMap h (galEquivZMod n K σ) := by
-  have hζ := IsCyclotomicExtension.zeta_spec m Rat F
-  let ζ := IsCyclotomicExtension.zeta m Rat F
+  have hζ := IsCyclotomicExtension.zeta_spec m ℚ F
+  let ζ := IsCyclotomicExtension.zeta m ℚ F
   suffices ζ ^ (galEquivZMod m F (σ.restrictNormal F)).val.val = ζ ^ (galEquivZMod n K σ).val.val by
-    rw [(hζ.isOfFinOrder (NeZero.ne _)).pow_inj_mod]; rw [← hζ.eq_orderOf]; rw [← ZMod.natCast_eq_natCast_iff']; rw [ZMod.natCast_val]; rw [ZMod.natCast_val]; rw [ZMod.cast_id] at this
+    rw [(hζ.isOfFinOrder (NeZero.ne _)).pow_inj_mod, ← hζ.eq_orderOf,
+      ← ZMod.natCast_eq_natCast_iff', ZMod.natCast_val, ZMod.natCast_val, ZMod.cast_id] at this
     rwa [Units.ext_iff]
   apply FaithfulSMul.algebraMap_injective F K
-  rw [map_pow]; rw [map_pow]; rw [← galEquivZMod_apply_of_pow_eq]; rw [← AlgEquiv.restrictNormal_commutes]; rw [galEquivZMod_apply_of_pow_eq m _ _ hζ.pow_eq_one]; rw [map_pow]
-  rw [← map_pow]; rw [(hζ.pow_eq_one_iff_dvd _).mpr h]; rw [map_one]
+  rw [map_pow, map_pow, ← galEquivZMod_apply_of_pow_eq, ← AlgEquiv.restrictNormal_commutes,
+      galEquivZMod_apply_of_pow_eq m _ _ hζ.pow_eq_one, map_pow]
+  rw [← map_pow, (hζ.pow_eq_one_iff_dvd _).mpr h, map_one]
 
 end restrict
 
@@ -174,135 +303,191 @@ section stabilizer
 open scoped Pointwise
 open MulAction Ideal
 
-variable (p : Nat) [hp : Fact (Nat.Prime p)] (P : Ideal (𝓞 K)) [P.IsMaximal]
-  [P.LiesOver (Ideal.span {(p : Int)})] (hn : p.Coprime n)
+variable (p : ℕ) [hp : Fact (Nat.Prime p)] (P : Ideal (𝓞 K)) [P.IsMaximal]
+  [P.LiesOver (Ideal.span {(p : ℤ)})] (hn : p.Coprime n)
 
 attribute [local instance] Ideal.Quotient.field
 
-/--
-theorem `mem_zpowers_galEquivZMod_of_mem_stabilizer` / 定理 `mem_zpowers_galEquivZMod_of_mem_stabilizer`
-
-English:
-theorem mem_zpowers_galEquivZMod_of_mem_stabilizer
-  given: {σ : Gal(K/Rat)} (hσ : σ in stabilizer Gal(K/Rat) P)
-  proof: by
-  have hζ := IsCyclotomicExtension.zeta_spec n Rat K
-  let τ := IsFractionRing.stabilizerHom Gal(K/Rat) (Ideal.span {(p : Int)}) P
-     (Int ⧸ span {(p : Int)}) (𝓞 K ⧸ P) ⟨σ, hσ⟩
-have : CharP (Int ⧸ span {(p : Int)}) p := ringChar.of_eq Int.ringChar_idealQuot p
-  have : Finite (𝓞 K ⧸ P) := Ring.HasFiniteQuotients.finiteQuotient (NeZero.ne P)
-  obtain ⟨i, hi⟩ := FiniteField.exists_forall_apply_eq_pow (Int ⧸ span {(p : Int)}) p (𝓞 K ⧸ P) τ
-  refine ⟨i, ?_⟩
-  have h₀ : IsPrimitiveRoot (Ideal.Quotient.mk P hζ.toInteger) n := by
-    refine hζ.toInteger_isPrimitiveRoot.idealQuotient_mk
-      (by simpa using IsMaximal.ne_top inferInstance) ?_
-    rw [← pow_inertiaDeg p]
-    exact Nat.Coprime.pow_left _ hn
-  have h₁ := IsFractionRing.stabilizerHom_apply_apply_mk Gal(K/Rat) (Ideal.span {(p : Int)}) P
-      (Int ⧸ span {(p : Int)}) (𝓞 K ⧸ P) ⟨σ, hσ⟩ hζ.toInteger
-  simp only [Algebra.algebraMap_self, RingHomCompTriple.comp_apply] at h₁
-  specialize hi (Ideal.Quotient.mk P hζ.toInteger)
-  rwa [h₁, Int.card_ideal_quot, galEquivZMod_smul_of_pow_eq n _ _
-    (hζ.toInteger_isPrimitiveRoot.pow_eq_one), map_pow, (h₀.isOfFinOrder (NeZero.ne _)).pow_inj_mod,
-    ← h₀.eq_orderOf, ← ZMod.natCast_eq_natCast_iff', Nat.cast_pow, ← ZMod.coe_unitOfCoprime p hn,
-    ← Units.val_pow_eq_pow_val, ZMod.natCast_zmod_val, ← Units.ext_iff, eq_comm] at hi
-
-中文:
-定理 mem_zpowers_galEquivZMod_of_mem_stabilizer
-  条件: {σ : Gal(K/有理数)} (hσ : σ in stabilizer Gal(K/有理数) P)
-  证明: by
-  have hζ := IsCyclotomicExtension.zeta_spec n Rat K
-  let τ := IsFractionRing.stabilizerHom Gal(K/Rat) (Ideal.span {(p : Int)}) P
-     (Int ⧸ span {(p : Int)}) (𝓞 K ⧸ P) ⟨σ, hσ⟩
-have : CharP (Int ⧸ span {(p : Int)}) p := ringChar.of_eq Int.ringChar_idealQuot p
-  have : Finite (𝓞 K ⧸ P) := Ring.HasFiniteQuotients.finiteQuotient (NeZero.ne P)
-  obtain ⟨i, hi⟩ := FiniteField.exists_forall_apply_eq_pow (Int ⧸ span {(p : Int)}) p (𝓞 K ⧸ P) τ
-  refine ⟨i, ?_⟩
-  have h₀ : IsPrimitiveRoot (Ideal.Quotient.mk P hζ.toInteger) n := by
-    refine hζ.toInteger_isPrimitiveRoot.idealQuotient_mk
-      (by simpa using IsMaximal.ne_top inferInstance) ?_
-    rw [← pow_inertiaDeg p]
-    exact Nat.Coprime.pow_left _ hn
-  have h₁ := IsFractionRing.stabilizerHom_apply_apply_mk Gal(K/Rat) (Ideal.span {(p : Int)}) P
-      (Int ⧸ span {(p : Int)}) (𝓞 K ⧸ P) ⟨σ, hσ⟩ hζ.toInteger
-  simp only [Algebra.algebraMap_self, RingHomCompTriple.comp_apply] at h₁
-  specialize hi (Ideal.Quotient.mk P hζ.toInteger)
-  rwa [h₁, Int.card_ideal_quot, galEquivZMod_smul_of_pow_eq n _ _
-    (hζ.toInteger_isPrimitiveRoot.pow_eq_one), map_pow, (h₀.isOfFinOrder (NeZero.ne _)).pow_inj_mod,
-    ← h₀.eq_orderOf, ← ZMod.natCast_eq_natCast_iff', Nat.cast_pow, ← ZMod.coe_unitOfCoprime p hn,
-    ← Units.val_pow_eq_pow_val, ZMod.natCast_zmod_val, ← Units.ext_iff, eq_comm] at hi
-
-Depends on / 依赖: Finite, FiniteField, FiniteField.exists_forall_apply_eq_pow, HasFiniteQuotients, Ideal.Quotient.mk, Ideal.span, Int.ringChar_idealQuot, IsCyclotomicExtension, IsCyclotomicExtension.zeta_spec, IsFractionRing, IsFractionRing.stabilizerHom, IsPrimitiveRoot, NeZero, NeZero.ne, Quotient, Ring.HasFiniteQuotients.finiteQuotient, exists_forall_apply_eq_pow, finiteQuotient, of_eq, ringChar
+/-
+**IsCyclotomicExtension.Rat.mem_zpowers_galEquivZMod_of_mem_stabilizer** 是 Mathl
+ib 中的一个定理，位于命名空间 `IsCyclotomicExtension.Rat`。
+形式化陈述：mem_zpowers_galEquivZMod_of_mem_stabilizer {σ : Gal(K/Rat)} (hσ : σ in sta
+bilizer Gal(K/Rat) P) : galEquivZMod n K σ in Subgroup.zpowers (ZMod.unitOfCopri
+me p hn)
+参数：K/Rat；hσ : σ in stabilizer Gal(K/Rat) P。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `IsCyclotomicExtension.zeta_spec`：zeta_spec : IsPrimitiveRoot (zeta n A B
+) n
+· 使用定理 `IsScalarTower.right`：∀ {R : Type u} {A : Type w} [inst : CommSemiring R]
+ [inst_1 : Semiring A] [inst_2 : Algebra R A], IsScalarTower R A A
+· 使用定理 `instIsFractionRing`：∀ {R : Type u_6} [inst : Field R], IsFractionRing R 
+R
+· 使用引理 `ringChar.of_eq`：of_eq {p : Nat} (h : ringChar R = p) : CharP R p
+· 使用定理 `Int.ringChar_idealQuot`：Int.ringChar_idealQuot (n : Nat) : ringChar (Int
+ ⧸ Ideal.span {(n : Int)}) = n
+· 使用定理 `Ring.HasFiniteQuotients.finiteQuotient`：∀ {R : Type u_1} {inst : CommRin
+g R} [self : Ring.HasFiniteQuotients R] {I : Ideal R}, I ≠ ⊥ → Finite (R ⧸ I)
+· 使用定理 `Ring.HasFiniteQuotients.instOfIsDomainOfFiniteInt`：∀ {R : Type u_1} [ins
+t : CommRing R] [IsDomain R] [Module.Finite ℤ R], Ring.HasFiniteQuotients R
+· 使用定理 `NumberField.instIsDomainRingOfIntegers`：∀ (K : Type u_1) [inst : Field K
+], IsDomain (NumberField.RingOfIntegers K)
+· 使用定理 `AddMonoid.fg_of_addGroup_fg`：∀ {G : Type u_3} [inst : AddGroup G] [AddGr
+oup.FG G], AddMonoid.FG G
+· 使用定理 `NumberField.RingOfIntegers.instFG`：∀ (K : Type u_1) [inst : Field K] [Nu
+mberField K], AddGroup.FG (NumberField.RingOfIntegers K)
+· 使用定理 `NeZero.ne`：∀ {R : Type u_1} [inst : Zero R] (n : R) [h : NeZero n], n ≠ 
+0
+· 使用定理 `NumberField.RingOfIntegers.instNeZeroIdealOfIsMaximal`：∀ (K : Type u_1) 
+[inst : Field K] [NumberField K] {I : Ideal (NumberField.RingOfIntegers K)} [hI 
+: I.IsMaximal],   NeZero I
+· 使用定理 `FiniteField.exists_forall_apply_eq_pow`：exists_forall_apply_eq_pow (l : 
+Type*) [Field l] [Algebra k l] [Finite l] (g : Gal(l/k)) : exists i, forall x, g
+ x = x ^ (Nat.card k ^ i)
+· 使用定理 `Int.instFiniteQuotientIdealSpanSingletonSetOfNeZero`：∀ {n : ℤ} [NeZero n
+], Finite (ℤ ⧸ Ideal.span {n})
+· 使用定理 `Int.instNeZeroCastOfNat`：∀ {n : ℕ} [NeZero n], NeZero ↑n
+· 使用定理 `NeZero.of_gt'`：∀ {α : Type u_1} {a : α} [inst : Zero α] [inst_1 : Preord
+er α] [IsBotZeroClass α] [inst_3 : One α] [Fact (1 < a)],   NeZero a
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `Nat.Prime.one_lt'`：∀ (p : ℕ) [hp : Fact (Nat.Prime p)], Fact (1 < p)
+· 使用定理 `Ideal.instIsTwoSided_1`：∀ {α : Type u_1} [inst : CommRing α] (I : Ideal 
+α), I.IsTwoSided
+· 使用定理 `IsPrimitiveRoot.idealQuotient_mk`：IsPrimitiveRoot.idealQuotient_mk {n : 
+Nat} [NeZero n] {ζ : (𝓞 K)} (hζ : IsPrimitiveRoot ζ n) (hI₁ : absNorm I != 1) (h
+I₂ : (absNorm I).Copri…
+· 使用引理 `IsPrimitiveRoot.toInteger_isPrimitiveRoot`：toInteger_isPrimitiveRoot {k 
+: Nat} [NeZero k] (hζ : IsPrimitiveRoot ζ k) : IsPrimitiveRoot hζ.toInteger k
+· 使用定理 `NumberField.RingOfIntegers.instIsDedekindDomain`：∀ (K : Type u_1) [inst 
+: Field K] [NumberField K], IsDedekindDomain (NumberField.RingOfIntegers K)
+· 使用定理 `NumberField.RingOfIntegers.instFreeInt`：∀ (K : Type u_1) [inst : Field K
+] [NumberField K], Module.Free ℤ (NumberField.RingOfIntegers K)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ideal.IsMaximal.ne_top`：∀ {α : Type u} [inst : Semiring α] {I : Ideal α}
+, I.IsMaximal → I ≠ ⊤
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ideal.pow_inertiaDeg`：pow_inertiaDeg [IsDedekindDomain R] [Module.Free I
+nt R] [Module.Finite Int R] (p : Nat) (P : Ideal R) [P.IsPrime] [P.LiesOver (spa
+n {(p : In…
+· 使用定理 `Ideal.IsMaximal.isPrime'`：∀ {α : Type u} [inst : CommSemiring α] (I : Id
+eal α) [_H : I.IsMaximal], I.IsPrime
+· 使用定理 `Nat.Coprime.pow_left`：∀ {m k : ℕ} (n : ℕ), m.Coprime k → (m ^ n).Coprime
+ k
+（共 49 条，此处仅展示前 30 条）
 -/
-theorem mem_zpowers_galEquivZMod_of_mem_stabilizer {σ : Gal(K/Rat)} (hσ : σ in stabilizer Gal(K/Rat) P) :
-    galEquivZMod n K σ in Subgroup.zpowers (ZMod.unitOfCoprime p hn) := by
-  have hζ := IsCyclotomicExtension.zeta_spec n Rat K
-  let τ := IsFractionRing.stabilizerHom Gal(K/Rat) (Ideal.span {(p : Int)}) P
-     (Int ⧸ span {(p : Int)}) (𝓞 K ⧸ P) ⟨σ, hσ⟩
-have : CharP (Int ⧸ span {(p : Int)}) p := ringChar.of_eq Int.ringChar_idealQuot p
+theorem mem_zpowers_galEquivZMod_of_mem_stabilizer {σ : Gal(K/ℚ)} (hσ : σ ∈ stabilizer Gal(K/ℚ) P) :
+    galEquivZMod n K σ ∈ Subgroup.zpowers (ZMod.unitOfCoprime p hn) := by
+  have hζ := IsCyclotomicExtension.zeta_spec n ℚ K
+  let τ := IsFractionRing.stabilizerHom Gal(K/ℚ) (Ideal.span {(p : ℤ)}) P
+     (ℤ ⧸ span {(p : ℤ)}) (𝓞 K ⧸ P) ⟨σ, hσ⟩
+  have : CharP (ℤ ⧸ span {(p : ℤ)}) p := ringChar.of_eq <| Int.ringChar_idealQuot p
   have : Finite (𝓞 K ⧸ P) := Ring.HasFiniteQuotients.finiteQuotient (NeZero.ne P)
-  obtain ⟨i, hi⟩ := FiniteField.exists_forall_apply_eq_pow (Int ⧸ span {(p : Int)}) p (𝓞 K ⧸ P) τ
+  obtain ⟨i, hi⟩ := FiniteField.exists_forall_apply_eq_pow (ℤ ⧸ span {(p : ℤ)}) p (𝓞 K ⧸ P) τ
   refine ⟨i, ?_⟩
   have h₀ : IsPrimitiveRoot (Ideal.Quotient.mk P hζ.toInteger) n := by
     refine hζ.toInteger_isPrimitiveRoot.idealQuotient_mk
       (by simpa using IsMaximal.ne_top inferInstance) ?_
     rw [← pow_inertiaDeg p]
     exact Nat.Coprime.pow_left _ hn
-  have h₁ := IsFractionRing.stabilizerHom_apply_apply_mk Gal(K/Rat) (Ideal.span {(p : Int)}) P
-      (Int ⧸ span {(p : Int)}) (𝓞 K ⧸ P) ⟨σ, hσ⟩ hζ.toInteger
+  have h₁ := IsFractionRing.stabilizerHom_apply_apply_mk Gal(K/ℚ) (Ideal.span {(p : ℤ)}) P
+      (ℤ ⧸ span {(p : ℤ)}) (𝓞 K ⧸ P) ⟨σ, hσ⟩ hζ.toInteger
   simp only [Algebra.algebraMap_self, RingHomCompTriple.comp_apply] at h₁
   specialize hi (Ideal.Quotient.mk P hζ.toInteger)
   rwa [h₁, Int.card_ideal_quot, galEquivZMod_smul_of_pow_eq n _ _
     (hζ.toInteger_isPrimitiveRoot.pow_eq_one), map_pow, (h₀.isOfFinOrder (NeZero.ne _)).pow_inj_mod,
     ← h₀.eq_orderOf, ← ZMod.natCast_eq_natCast_iff', Nat.cast_pow, ← ZMod.coe_unitOfCoprime p hn,
     ← Units.val_pow_eq_pow_val, ZMod.natCast_zmod_val, ← Units.ext_iff, eq_comm] at hi
-
-/--
-theorem `galEquivZMod_stabilizer` / 定理 `galEquivZMod_stabilizer`
-
-English:
-theorem galEquivZMod_stabilizer
-  proof: by
-  classical
-  have : IsGalois Rat K := IsCyclotomicExtension.isGalois {n} Rat K
-  apply SetLike.ext'
-  refine Set.eq_of_subset_of_card_le ?_ ?_
-  · rintro _ ⟨σ, hσ, rfl⟩
-    exact mem_zpowers_galEquivZMod_of_mem_stabilizer n K p P hn hσ
-  · replace hn : ¬ p ∣ n := (Nat.Prime.coprime_iff_not_dvd hp.out).mp hn
-    rw [Fintype.card_eq_nat_card]; rw [Fintype.card_eq_nat_card]; rw [SetLike.coe_sort_coe]; rw [Nat.card_zpowers]; rw [MulEquiv.mapSubgroup_apply]; rw [Subgroup.coe_map]
-    change _ <= Nat.card ((galEquivZMod n K).toEquiv '' _)
-    rw [Nat.card_image_equiv]; rw [SetLike.coe_sort_coe]; rw [Ideal.card_stabilizer_eq (span {(p : Int)})]; rw [ramificationIdxIn_eq_of_not_dvd p K hn]; rw [one_mul]; rw [← orderOf_injective _ Units.coeHom_injective]; rw [Units.coeHom_apply]; rw [ZMod.coe_unitOfCoprime]; rw [inertiaDegIn_eq_of_not_dvd p K hn]
-
-中文:
-定理 galEquivZMod_stabilizer
-  证明: by
-  classical
-  have : IsGalois Rat K := IsCyclotomicExtension.isGalois {n} Rat K
-  apply SetLike.ext'
-  refine Set.eq_of_subset_of_card_le ?_ ?_
-  · rintro _ ⟨σ, hσ, rfl⟩
-    exact mem_zpowers_galEquivZMod_of_mem_stabilizer n K p P hn hσ
-  · replace hn : ¬ p ∣ n := (Nat.Prime.coprime_iff_not_dvd hp.out).mp hn
-    rw [Fintype.card_eq_nat_card]; rw [Fintype.card_eq_nat_card]; rw [SetLike.coe_sort_coe]; rw [Nat.card_zpowers]; rw [MulEquiv.mapSubgroup_apply]; rw [Subgroup.coe_map]
-    change _ <= Nat.card ((galEquivZMod n K).toEquiv '' _)
-    rw [Nat.card_image_equiv]; rw [SetLike.coe_sort_coe]; rw [Ideal.card_stabilizer_eq (span {(p : Int)})]; rw [ramificationIdxIn_eq_of_not_dvd p K hn]; rw [one_mul]; rw [← orderOf_injective _ Units.coeHom_injective]; rw [Units.coeHom_apply]; rw [ZMod.coe_unitOfCoprime]; rw [inertiaDegIn_eq_of_not_dvd p K hn]
-
-Depends on / 依赖: Fintype, Fintype.card_eq_nat_card, IsCyclotomicExtension, IsCyclotomicExtension.isGalois, IsGalois, MulEquiv, MulEquiv.mapSubgroup_apply, Nat.Prime.coprime_iff_not_dvd, Nat.card, Nat.card_zpowers, Set.eq_of_subset_of_card_le, SetLike, SetLike.coe_sort_coe, SetLike.ext, Subgroup, Subgroup.coe_map, card_eq_nat_card, card_zpowers, classical, coe_map
+/-
+**IsCyclotomicExtension.Rat.galEquivZMod_stabilizer** 是 Mathlib 中的一个定理，位于命名空间 `I
+sCyclotomicExtension.Rat`。
+形式化陈述：galEquivZMod_stabilizer : (galEquivZMod n K).mapSubgroup (stabilizer Gal(K
+/Rat) P) = Subgroup.zpowers (ZMod.unitOfCoprime p hn)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `IsCyclotomicExtension.isGalois`：isGalois [IsCyclotomicExtension S K L] :
+ IsGalois K L
+· 使用定理 `SetLike.ext'`：ext' (h : (p : Set B) = q) : p = q
+· 使用定理 `Set.eq_of_subset_of_card_le`：eq_of_subset_of_card_le {s t : Set α} [Fint
+ype s] [Fintype t] (hsub : s subseteq t) (hcard : Fintype.card t <= Fintype.card
+ s) : s = t
+· 使用定理 `IsCyclotomicExtension.Rat.mem_zpowers_galEquivZMod_of_mem_stabilizer`：me
+m_zpowers_galEquivZMod_of_mem_stabilizer {σ : Gal(K/Rat)} (hσ : σ in stabilizer 
+Gal(K/Rat) P) : galEquivZMod n K σ in Subgroup.zpowers (ZM…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Nat.Prime.coprime_iff_not_dvd`：∀ {p n : ℕ}, Nat.Prime p → (p.Coprime n ↔
+ ¬p ∣ n)
+· 使用定理 `Fact.out`：∀ {p : Prop} [self : Fact p], p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Fintype.card_eq_nat_card`：∀ {α : Type u_1} {x : Fintype α}, Fintype.card
+ α = Nat.card α
+· 使用定理 `SetLike.coe_sort_coe`：coe_sort_coe : ((p : Set B) : Type _) = p
+· 使用定理 `Nat.card_zpowers`：Nat.card_zpowers : Nat.card (zpowers a) = orderOf a
+· 使用定理 `MulEquiv.mapSubgroup_apply`：∀ {G : Type u_1} [inst : Group G] {H : Type 
+u_6} [inst_1 : Group H] (f : G ≃* H) (H_1 : Subgroup G),   f.mapSubgroup H_1 = S
+ubgroup.map (↑f)…
+· 使用定理 `Subgroup.coe_map`：coe_map (f : G ->* N) (K : Subgroup G) : (K.map f : Se
+t N) = f '' K
+· 使用引理 `Nat.card_image_equiv`：card_image_equiv (e : α ≃ β) : Nat.card (e '' s) =
+ Nat.card s
+· 使用引理 `Ideal.card_stabilizer_eq`：card_stabilizer_eq [IsDomain R] [IsDomain S] [
+Module.Finite R S] [Flat R S] (p : Ideal R) (P : Ideal S) [P.LiesOver p] [p.IsPr
+ime] [P.IsPrim…
+· 使用定理 `instIsGaloisGroupIntRingOfIntegersOfRat`：∀ (L : Type u_1) [inst : Field 
+L] [inst_1 : NumberField L] (G : Type u_2) [inst_2 : Group G]   [inst_3 : MulSem
+iringAction G L] [IsGaloisGro…
+· 使用定理 `Finite.algEquiv`：∀ {R : Type uR} {A₁ : Type uA₁} {A₂ : Type uA₂} [inst :
+ CommSemiring R] [inst_1 : Semiring A₁] [inst_2 : Semiring A₂]   [inst_3 : Algeb
+ra R …
+· 使用定理 `instFiniteAlgHomOfFinite`：∀ (R : Type u_1) [inst : CommSemiring R] (K : 
+Type u_2) [inst_1 : Field K] [inst_2 : Algebra R K] (S : Type u_3)   [inst_3 : S
+emiring S] [in…
+· 使用定理 `NumberField.to_finiteDimensional`：∀ {K : Type u_1} {inst : Field K} [sel
+f : NumberField K], FiniteDimensional ℚ K
+· 使用定理 `Int.instIsDomain`：IsDomain ℤ
+· 使用定理 `NumberField.instIsDomainRingOfIntegers`：∀ (K : Type u_1) [inst : Field K
+], IsDomain (NumberField.RingOfIntegers K)
+· 使用定理 `AddMonoid.fg_of_addGroup_fg`：∀ {G : Type u_3} [inst : AddGroup G] [AddGr
+oup.FG G], AddMonoid.FG G
+· 使用定理 `NumberField.RingOfIntegers.instFG`：∀ (K : Type u_1) [inst : Field K] [Nu
+mberField K], AddGroup.FG (NumberField.RingOfIntegers K)
+· 使用定理 `Module.Flat.instOfIsDedekindDomainOfIsTorsionFree`：∀ {R : Type u_1} {M :
+ Type u_2} [inst : CommRing R] [inst_1 : AddCommGroup M] [inst_2 : _root_.Module
+ R M]   [IsDedekindDomain R] [Module.Is…
+· 使用定理 `IsPrincipalIdealRing.isDedekindDomain`：∀ (A : Type u_2) [inst : CommRing
+ A] [IsDomain A] [IsPrincipalIdealRing A], IsDedekindDomain A
+· 使用定理 `EuclideanDomain.to_principal_ideal_domain`：∀ {R : Type u} [inst : Euclid
+eanDomain R], IsPrincipalIdealRing R
+· 使用定理 `instIsTorsionFreeIntOfIsAddTorsionFree`：∀ {M : Type u_3} [inst : AddComm
+Group M] [IsAddTorsionFree M], Module.IsTorsionFree ℤ M
+· 使用定理 `IsAddTorsionFree.of_isCancelMulZero_charZero`：∀ {R : Type u_2} [inst : S
+emiring R] [CharZero R] [IsCancelMulZero R], IsAddTorsionFree R
+· 使用定理 `NumberField.RingOfIntegers.instCharZero_1`：∀ (K : Type u_1) [inst : Fiel
+d K] [CharZero K], CharZero (NumberField.RingOfIntegers K)
+（共 43 条，此处仅展示前 30 条）
 -/
 theorem galEquivZMod_stabilizer :
-    (galEquivZMod n K).mapSubgroup (stabilizer Gal(K/Rat) P) =
+    (galEquivZMod n K).mapSubgroup (stabilizer Gal(K/ℚ) P) =
       Subgroup.zpowers (ZMod.unitOfCoprime p hn) := by
   classical
-  have : IsGalois Rat K := IsCyclotomicExtension.isGalois {n} Rat K
+  have : IsGalois ℚ K := IsCyclotomicExtension.isGalois {n} ℚ K
   apply SetLike.ext'
   refine Set.eq_of_subset_of_card_le ?_ ?_
   · rintro _ ⟨σ, hσ, rfl⟩
     exact mem_zpowers_galEquivZMod_of_mem_stabilizer n K p P hn hσ
   · replace hn : ¬ p ∣ n := (Nat.Prime.coprime_iff_not_dvd hp.out).mp hn
-    rw [Fintype.card_eq_nat_card]; rw [Fintype.card_eq_nat_card]; rw [SetLike.coe_sort_coe]; rw [Nat.card_zpowers]; rw [MulEquiv.mapSubgroup_apply]; rw [Subgroup.coe_map]
-    change _ <= Nat.card ((galEquivZMod n K).toEquiv '' _)
-    rw [Nat.card_image_equiv]; rw [SetLike.coe_sort_coe]; rw [Ideal.card_stabilizer_eq (span {(p : Int)})]; rw [ramificationIdxIn_eq_of_not_dvd p K hn]; rw [one_mul]; rw [← orderOf_injective _ Units.coeHom_injective]; rw [Units.coeHom_apply]; rw [ZMod.coe_unitOfCoprime]; rw [inertiaDegIn_eq_of_not_dvd p K hn]
+    rw [Fintype.card_eq_nat_card, Fintype.card_eq_nat_card, SetLike.coe_sort_coe, Nat.card_zpowers,
+      MulEquiv.mapSubgroup_apply, Subgroup.coe_map]
+    change _ ≤ Nat.card ((galEquivZMod n K).toEquiv '' _)
+    rw [Nat.card_image_equiv, SetLike.coe_sort_coe, Ideal.card_stabilizer_eq (span {(p : ℤ)}),
+      ramificationIdxIn_eq_of_not_dvd p K hn, one_mul, ← orderOf_injective _ Units.coeHom_injective,
+      Units.coeHom_apply, ZMod.coe_unitOfCoprime, inertiaDegIn_eq_of_not_dvd p K hn]
 
 end stabilizer
 
@@ -311,219 +496,321 @@ open MulChar DirichletCharacter IntermediateField
 variable (R : Type*) [CommRing R] [HasEnoughRootsOfUnity R (Monoid.exponent (ZMod n)ˣ)]
 
 /--
-Definition of `subgroupGalEquivSubgroupChar` / `subgroupGalEquivSubgroupChar` 的定义
+The bijection between the subgroups of `Gal(ℚ(ζₙ)/ℚ)` and the subgroups of the group
+of Dirichlet characters of level `n`.
+-/
+/-
+**IsCyclotomicExtension.Rat.subgroupGalEquivSubgroupChar** 是 Mathlib 中的一个定义，位于命名
+空间 `IsCyclotomicExtension.Rat`。
+形式化陈述：subgroupGalEquivSubgroupChar : Subgroup Gal(K/Rat) ≃o (Subgroup (Dirichlet
+Character R n))ᵒᵈ
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
 
-English:
-definition subgroupGalEquivSubgroupChar
-  signature: :
-  body: (galEquivZMod n K).mapSubgroup.trans subgroupOrderIsoSubgroupMulChar (ZMod n) R
-
-@[simp]
-
-中文:
-定义 subgroupGalEquivSubgroupChar
-  签名: :
-  定义体: (galEquivZMod n K).mapSubgroup.trans subgroupOrderIsoSubgroupMulChar (ZMod n) R
-
-@[simp]
-
-Depends on / 依赖: galEquivZMod, mapSubgroup, mapSubgroup.trans, subgroupOrderIsoSubgroupMulChar
+--- 原说明 ---
+The bijection between the subgroups of `Gal(ℚ(ζₙ)/ℚ)` and the subgroups of the g
+roup
+of Dirichlet characters of level `n`.
 -/
 noncomputable def subgroupGalEquivSubgroupChar :
-    Subgroup Gal(K/Rat) ≃o (Subgroup (DirichletCharacter R n))ᵒᵈ :=
-(galEquivZMod n K).mapSubgroup.trans subgroupOrderIsoSubgroupMulChar (ZMod n) R
+    Subgroup Gal(K/ℚ) ≃o (Subgroup (DirichletCharacter R n))ᵒᵈ :=
+  (galEquivZMod n K).mapSubgroup.trans <| subgroupOrderIsoSubgroupMulChar (ZMod n) R
 
 @[simp]
-/--
-theorem `mem_subgroupGalEquivSubgroupChar_iff` / 定理 `mem_subgroupGalEquivSubgroupChar_iff`
-
-English:
-theorem mem_subgroupGalEquivSubgroupChar_iff
-  given: (χ : DirichletCharacter R n) (H : Subgroup Gal(K/Rat))
-  proof: by
-  simp [subgroupGalEquivSubgroupChar]
-
-@[simp]
-
-中文:
-定理 mem_subgroupGalEquivSubgroupChar_iff
-  条件: (χ : DirichletCharacter R n) (H : 子群 Gal(K/有理数))
-  证明: by
-  simp [subgroupGalEquivSubgroupChar]
-
-@[simp]
-
-Depends on / 依赖: subgroupGalEquivSubgroupChar
+/-
+**IsCyclotomicExtension.Rat.mem_subgroupGalEquivSubgroupChar_iff** 是 Mathlib 中的一
+个定理，位于命名空间 `IsCyclotomicExtension.Rat`。
+形式化陈述：mem_subgroupGalEquivSubgroupChar_iff (χ : DirichletCharacter R n) (H : Sub
+group Gal(K/Rat)) : χ in (subgroupGalEquivSubgroupChar n K R H).ofDual ↔ forall 
+σ in H, χ (galEquivZMod n K σ) = 1
+参数：χ : DirichletCharacter R n；H : Subgroup Gal(K/Rat)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MulEquiv.mapSubgroup_apply`：∀ {G : Type u_1} [inst : Group G] {H : Type 
+u_6} [inst_1 : Group H] (f : G ≃* H) (H_1 : Subgroup G),   f.mapSubgroup H_1 = S
+ubgroup.map (↑f)…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `IsCyclotomicExtension.autEquivPow_apply`：∀ {n : ℕ} [inst : NeZero n] {K 
+: Type u_1} [inst_1 : Field K] (L : Type u_2) [inst_2 : CommRing L] [inst_3 : Is
+Domain L]   [inst_4 : Algebra…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_subgroupGalEquivSubgroupChar_iff (χ : DirichletCharacter R n) (H : Subgroup Gal(K/Rat)) :
-    χ in (subgroupGalEquivSubgroupChar n K R H).ofDual ↔
-      forall σ in H, χ (galEquivZMod n K σ) = 1 := by
+theorem mem_subgroupGalEquivSubgroupChar_iff (χ : DirichletCharacter R n) (H : Subgroup Gal(K/ℚ)) :
+    χ ∈ (subgroupGalEquivSubgroupChar n K R H).ofDual ↔
+      ∀ σ ∈ H, χ (galEquivZMod n K σ) = 1 := by
   simp [subgroupGalEquivSubgroupChar]
 
 @[simp]
-/--
-theorem `mem_subgroupGalEquivSubgroupChar_symm_iff` / 定理 `mem_subgroupGalEquivSubgroupChar_symm_iff`
-
-English:
-theorem mem_subgroupGalEquivSubgroupChar_symm_iff
-  statement: (σ : Gal(K/Rat))
-  proof: by
-  simp only [subgroupGalEquivSubgroupChar, OrderIso.symm_trans_apply, MulEquiv.symm_mapSubgroup,
-    MulEquiv.coe_mapSubgroup, Subgroup.mem_map_equiv, MulEquiv.symm_symm,
-    mem_subgroupOrderIsoSubgroupMulChar_symm_iff]
-
-中文:
-定理 mem_subgroupGalEquivSubgroupChar_symm_iff
-  结论: (σ : Gal(K/有理数))
-  证明: by
-  simp only [subgroupGalEquivSubgroupChar, OrderIso.symm_trans_apply, MulEquiv.symm_mapSubgroup,
-    MulEquiv.coe_mapSubgroup, Subgroup.mem_map_equiv, MulEquiv.symm_symm,
-    mem_subgroupOrderIsoSubgroupMulChar_symm_iff]
-
-Depends on / 依赖: MulEquiv, MulEquiv.coe_mapSubgroup, MulEquiv.symm_mapSubgroup, MulEquiv.symm_symm, OrderIso, OrderIso.symm_trans_apply, Subgroup, Subgroup.mem_map_equiv, coe_mapSubgroup, mem_map_equiv, mem_subgroupOrderIsoSubgroupMulChar_symm_iff, subgroupGalEquivSubgroupChar, symm_mapSubgroup, symm_symm, symm_trans_apply
+/-
+**IsCyclotomicExtension.Rat.mem_subgroupGalEquivSubgroupChar_symm_iff** 是 Mathli
+b 中的一个定理，位于命名空间 `IsCyclotomicExtension.Rat`。
+形式化陈述：mem_subgroupGalEquivSubgroupChar_symm_iff (σ : Gal(K/Rat)) (Y : Subgroup (
+DirichletCharacter R n)) : σ in (subgroupGalEquivSubgroupChar n K R).symm (Order
+Dual.toDual Y) ↔ forall χ in Y, χ (galEquivZMod n K σ) = 1
+参数：σ : Gal(K/Rat)；Y : Subgroup (DirichletCharacter R n)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_subgroupGalEquivSubgroupChar_symm_iff (σ : Gal(K/Rat))
+theorem mem_subgroupGalEquivSubgroupChar_symm_iff (σ : Gal(K/ℚ))
     (Y : Subgroup (DirichletCharacter R n)) :
-    σ in (subgroupGalEquivSubgroupChar n K R).symm (OrderDual.toDual Y) ↔
-      forall χ in Y, χ (galEquivZMod n K σ) = 1 := by
+    σ ∈ (subgroupGalEquivSubgroupChar n K R).symm (OrderDual.toDual Y) ↔
+      ∀ χ ∈ Y, χ (galEquivZMod n K σ) = 1 := by
   simp only [subgroupGalEquivSubgroupChar, OrderIso.symm_trans_apply, MulEquiv.symm_mapSubgroup,
     MulEquiv.coe_mapSubgroup, Subgroup.mem_map_equiv, MulEquiv.symm_symm,
     mem_subgroupOrderIsoSubgroupMulChar_symm_iff]
-
-/--
-theorem `card_subgroupGalEquivSubgroupChar` / 定理 `card_subgroupGalEquivSubgroupChar`
-
-English:
-theorem card_subgroupGalEquivSubgroupChar
-  given: [IsMulCommutative Gal(K/Rat)] (H : Subgroup Gal(K/Rat))
-  proof: by
-  rw [subgroupGalEquivSubgroupChar]; rw [OrderIso.trans_apply]; rw [card_subgroupOrderIsoSubgroupMulChar]
-  exact Nat.card_congr (QuotientGroup.congr _ _ (galEquivZMod n K) rfl).symm.toEquiv
-
-中文:
-定理 card_subgroupGalEquivSubgroupChar
-  条件: [是MulCommutative Gal(K/有理数)] (H : 子群 Gal(K/有理数))
-  证明: by
-  rw [subgroupGalEquivSubgroupChar]; rw [OrderIso.trans_apply]; rw [card_subgroupOrderIsoSubgroupMulChar]
-  exact Nat.card_congr (QuotientGroup.congr _ _ (galEquivZMod n K) rfl).symm.toEquiv
-
-Depends on / 依赖: Nat.card_congr, OrderIso, OrderIso.trans_apply, QuotientGroup, QuotientGroup.congr, card_congr, card_subgroupOrderIsoSubgroupMulChar, galEquivZMod, subgroupGalEquivSubgroupChar, symm.toEquiv, toEquiv, trans_apply
+/-
+**IsCyclotomicExtension.Rat.card_subgroupGalEquivSubgroupChar** 是 Mathlib 中的一个定理
+，位于命名空间 `IsCyclotomicExtension.Rat`。
+形式化陈述：card_subgroupGalEquivSubgroupChar [IsMulCommutative Gal(K/Rat)] (H : Subgr
+oup Gal(K/Rat)) : Nat.card (subgroupGalEquivSubgroupChar n K R H).ofDual = Nat.c
+ard (Gal(K/Rat) ⧸ H)
+参数：K/Rat；H : Subgroup Gal(K/Rat)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `IsCyclotomicExtension.Rat.subgroupGalEquivSubgroupChar.eq_1`：∀ (n : ℕ) [
+inst : NeZero n] (K : Type u_1) [inst_1 : Field K] [inst_2 : NumberField K]   [h
+K : IsCyclotomicExtension {n} ℚ K] (R : Type u_2)…
+· 使用定理 `OrderIso.trans_apply`：trans_apply (e : α ≃o β) (e' : β ≃o γ) (x : α) : e
+.trans e' x = e' (e x)
+· 使用定理 `MulChar.card_subgroupOrderIsoSubgroupMulChar`：card_subgroupOrderIsoSubgr
+oupMulChar {H : Subgroup Mˣ} : Nat.card (subgroupOrderIsoSubgroupMulChar M R H).
+ofDual = Nat.card (Mˣ ⧸ H)
+· 使用定理 `Nat.card_congr`：card_congr (f : α ≃ β) : Nat.card α = Nat.card β
+· 使用定理 `MulEquivClass.instMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N : T
+ype u_5} [inst : EquivLike F M N] [inst_1 : MulOneClass M]   [inst_2 : MulOneCla
+ss N] [MulEquivClass F…
+· 使用定理 `MulEquiv.instMulEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul 
+M] [inst_1 : Mul N], MulEquivClass (M ≃* N) M N
+· 使用定理 `Subgroup.normal_of_isMulCommutative`：∀ {G : Type u_1} [inst : Group G] [
+IsMulCommutative G] (H : Subgroup G), H.Normal
 -/
-theorem card_subgroupGalEquivSubgroupChar [IsMulCommutative Gal(K/Rat)] (H : Subgroup Gal(K/Rat)) :
-    Nat.card (subgroupGalEquivSubgroupChar n K R H).ofDual = Nat.card (Gal(K/Rat) ⧸ H) := by
-  rw [subgroupGalEquivSubgroupChar]; rw [OrderIso.trans_apply]; rw [card_subgroupOrderIsoSubgroupMulChar]
+theorem card_subgroupGalEquivSubgroupChar [IsMulCommutative Gal(K/ℚ)] (H : Subgroup Gal(K/ℚ)) :
+    Nat.card (subgroupGalEquivSubgroupChar n K R H).ofDual = Nat.card (Gal(K/ℚ) ⧸ H) := by
+  rw [subgroupGalEquivSubgroupChar, OrderIso.trans_apply, card_subgroupOrderIsoSubgroupMulChar]
   exact Nat.card_congr (QuotientGroup.congr _ _ (galEquivZMod n K) rfl).symm.toEquiv
 
-variable [IsAbelianGalois Rat K]
+variable [IsAbelianGalois ℚ K]
 
 /--
-Definition of `intermediateFieldEquivSubgroupChar` / `intermediateFieldEquivSubgroupChar` 的定义
+The bijection between the intermediate fields of `ℚ(ζₙ)/ℚ` and the subgroups of the group
+of Dirichlet characters of level `n`.
+-/
+/-
+**IsCyclotomicExtension.Rat.intermediateFieldEquivSubgroupChar** 是 Mathlib 中的一个定
+义，位于命名空间 `IsCyclotomicExtension.Rat`。
+形式化陈述：intermediateFieldEquivSubgroupChar : IntermediateField Rat K ≃o Subgroup (
+DirichletCharacter R n)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `NumberField.to_finiteDimensional`：∀ {K : Type u_1} {inst : Field K} [sel
+f : NumberField K], FiniteDimensional ℚ K
 
-English:
-definition intermediateFieldEquivSubgroupChar
-  signature: :
-  body: IsGalois.intermediateFieldEquivSubgroup.trans
-      (subgroupGalEquivSubgroupChar n K R).dual.trans (OrderIso.dualDual _).symm
-
-中文:
-定义 intermediateFieldEquivSubgroupChar
-  签名: :
-  定义体: IsGalois.intermediateFieldEquivSubgroup.trans
-      (subgroupGalEquivSubgroupChar n K R).dual.trans (OrderIso.dualDual _).symm
-
-Depends on / 依赖: IsGalois, IsGalois.intermediateFieldEquivSubgroup.trans, OrderIso, OrderIso.dualDual, dual.trans, dualDual, intermediateFieldEquivSubgroup, subgroupGalEquivSubgroupChar
+--- 原说明 ---
+The bijection between the intermediate fields of `ℚ(ζₙ)/ℚ` and the subgroups of 
+the group
+of Dirichlet characters of level `n`.
 -/
 noncomputable def intermediateFieldEquivSubgroupChar :
-    IntermediateField Rat K ≃o Subgroup (DirichletCharacter R n) :=
-IsGalois.intermediateFieldEquivSubgroup.trans
+    IntermediateField ℚ K ≃o Subgroup (DirichletCharacter R n) :=
+  IsGalois.intermediateFieldEquivSubgroup.trans <|
       (subgroupGalEquivSubgroupChar n K R).dual.trans (OrderIso.dualDual _).symm
 
-/--
-theorem `card_intermediateFieldEquivSubgroupChar` / 定理 `card_intermediateFieldEquivSubgroupChar`
+/-- The cardinality of the subgroup of Dirichlet characters of level `n` associated to an
+intermediate field `F` of `ℚ(ζₙ)/ℚ` equals the degree `[F : ℚ]`. -/
+/-
+**IsCyclotomicExtension.Rat.card_intermediateFieldEquivSubgroupChar** 是 Mathlib 
+中的一个定理，位于命名空间 `IsCyclotomicExtension.Rat`。
+形式化陈述：card_intermediateFieldEquivSubgroupChar (F : IntermediateField Rat K) : Na
+t.card (intermediateFieldEquivSubgroupChar n K R F) = Module.finrank Rat F
+参数：F : IntermediateField Rat K。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `NumberField.to_finiteDimensional`：∀ {K : Type u_1} {inst : Field K} [sel
+f : NumberField K], FiniteDimensional ℚ K
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `OrderIso.trans_apply`：trans_apply (e : α ≃o β) (e' : β ≃o γ) (x : α) : e
+.trans e' x = e' (e x)
+· 使用定理 `OrderIso.dualDual_symm_apply`：dualDual_symm_apply (a : αᵒᵈᵒᵈ) : (dualDua
+l α).symm a = ofDual (ofDual a)
+· 使用定理 `IsGalois.intermediateFieldEquivSubgroup_apply`：∀ {F : Type u_1} [inst : 
+Field F] {E : Type u_2} [inst_1 : Field E] [inst_2 : Algebra F E]   [inst_3 : Fi
+niteDimensional F E] [inst_4 : IsGa…
+· 使用定理 `OrderIso.dual_apply`：∀ {α : Type u_2} {β : Type u_3} [inst : LE α] [inst
+_1 : LE β] (f : α ≃o β) (x : αᵒᵈ),   f.dual x = OrderDual.toDual (f (OrderDual.o
+fDual x))
+· 使用定理 `OrderDual.ofDual_toDual`：∀ {α : Type u_1} (a : α), OrderDual.ofDual (Ord
+erDual.toDual a) = a
+· 使用定理 `IsCyclotomicExtension.Rat.card_subgroupGalEquivSubgroupChar`：card_subgro
+upGalEquivSubgroupChar [IsMulCommutative Gal(K/Rat)] (H : Subgroup Gal(K/Rat)) :
+ Nat.card (subgroupGalEquivSubgroupChar n K R H).…
+· 使用定理 `IsAbelianGalois.toIsMulCommutative`：∀ {K : Type u_4} {L : Type u_5} {ins
+t : Field K} {inst_1 : Field L} {inst_2 : Algebra K L} [self : IsAbelianGalois K
+ L],   IsMulCommutative …
+· 使用定理 `IntermediateField.finrank_eq_fixingSubgroup_index`：finrank_eq_fixingSubg
+roup_index (L : IntermediateField F E') [IsGalois F E'] : Module.finrank F L = L
+.fixingSubgroup.index
+· 使用定理 `IsAbelianGalois.toIsGalois`：∀ {K : Type u_4} {L : Type u_5} {inst : Fiel
+d K} {inst_1 : Field L} {inst_2 : Algebra K L} [self : IsAbelianGalois K L],   I
+sGalois K L
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Subgroup.index_eq_card`：index_eq_card : H.index = Nat.card (G ⧸ H)
 
-English:
-theorem card_intermediateFieldEquivSubgroupChar
-  given: (F : IntermediateField Rat K)
-  proof: by
-  unfold intermediateFieldEquivSubgroupChar
-  rw [OrderIso.trans_apply]; rw [OrderIso.trans_apply]; rw [OrderIso.dualDual_symm_apply]; rw [IsGalois.intermediateFieldEquivSubgroup_apply]; rw [OrderIso.dual_apply]; rw [OrderDual.ofDual_toDual]; rw [OrderDual.ofDual_toDual]; rw [card_subgroupGalEquivSubgroupChar]; rw [finrank_eq_fixingSubgroup_index]; rw [← Subgroup.index_eq_card]
-
-@[simp]
-
-中文:
-定理 card_intermediateFieldEquivSubgroupChar
-  条件: (F : 中间域 有理数 K)
-  证明: by
-  unfold intermediateFieldEquivSubgroupChar
-  rw [OrderIso.trans_apply]; rw [OrderIso.trans_apply]; rw [OrderIso.dualDual_symm_apply]; rw [IsGalois.intermediateFieldEquivSubgroup_apply]; rw [OrderIso.dual_apply]; rw [OrderDual.ofDual_toDual]; rw [OrderDual.ofDual_toDual]; rw [card_subgroupGalEquivSubgroupChar]; rw [finrank_eq_fixingSubgroup_index]; rw [← Subgroup.index_eq_card]
-
-@[simp]
-
-Depends on / 依赖: IsGalois, IsGalois.intermediateFieldEquivSubgroup_apply, OrderDual, OrderDual.ofDual_toDual, OrderIso, OrderIso.dualDual_symm_apply, OrderIso.dual_apply, OrderIso.trans_apply, Subgroup, Subgroup.index_eq_card, card_subgroupGalEquivSubgroupChar, dualDual_symm_apply, dual_apply, finrank_eq_fixingSubgroup_index, index_eq_card, intermediateFieldEquivSubgroupChar, intermediateFieldEquivSubgroup_apply, ofDual_toDual, trans_apply
+--- 原说明 ---
+The cardinality of the subgroup of Dirichlet characters of level `n` associated 
+to an
+intermediate field `F` of `ℚ(ζₙ)/ℚ` equals the degree `[F : ℚ]`.
 -/
-theorem card_intermediateFieldEquivSubgroupChar (F : IntermediateField Rat K) :
-    Nat.card (intermediateFieldEquivSubgroupChar n K R F) = Module.finrank Rat F := by
+theorem card_intermediateFieldEquivSubgroupChar (F : IntermediateField ℚ K) :
+    Nat.card (intermediateFieldEquivSubgroupChar n K R F) = Module.finrank ℚ F := by
   unfold intermediateFieldEquivSubgroupChar
-  rw [OrderIso.trans_apply]; rw [OrderIso.trans_apply]; rw [OrderIso.dualDual_symm_apply]; rw [IsGalois.intermediateFieldEquivSubgroup_apply]; rw [OrderIso.dual_apply]; rw [OrderDual.ofDual_toDual]; rw [OrderDual.ofDual_toDual]; rw [card_subgroupGalEquivSubgroupChar]; rw [finrank_eq_fixingSubgroup_index]; rw [← Subgroup.index_eq_card]
+  rw [OrderIso.trans_apply, OrderIso.trans_apply, OrderIso.dualDual_symm_apply,
+    IsGalois.intermediateFieldEquivSubgroup_apply, OrderIso.dual_apply, OrderDual.ofDual_toDual,
+    OrderDual.ofDual_toDual, card_subgroupGalEquivSubgroupChar, finrank_eq_fixingSubgroup_index,
+    ← Subgroup.index_eq_card]
 
 @[simp]
-/--
-theorem `mem_intermediateFieldEquivSubgroupChar_iff` / 定理 `mem_intermediateFieldEquivSubgroupChar_iff`
-
-English:
-theorem mem_intermediateFieldEquivSubgroupChar_iff
-  statement: (F : IntermediateField Rat K)
-  proof: by
-  simp [intermediateFieldEquivSubgroupChar]
-
-中文:
-定理 mem_intermediateFieldEquivSubgroupChar_iff
-  结论: (F : 中间域 有理数 K)
-  证明: by
-  simp [intermediateFieldEquivSubgroupChar]
-
-Depends on / 依赖: intermediateFieldEquivSubgroupChar
+/-
+**IsCyclotomicExtension.Rat.mem_intermediateFieldEquivSubgroupChar_iff** 是 Mathl
+ib 中的一个定理，位于命名空间 `IsCyclotomicExtension.Rat`。
+形式化陈述：mem_intermediateFieldEquivSubgroupChar_iff (F : IntermediateField Rat K) (
+χ : DirichletCharacter R n) : χ in intermediateFieldEquivSubgroupChar n K R F ↔ 
+forall σ : Gal(K/Rat), σ in F.fixingSubgroup -> χ (galEquivZMod n K σ) = 1
+参数：F : IntermediateField Rat K；χ : DirichletCharacter R n。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `NumberField.to_finiteDimensional`：∀ {K : Type u_1} {inst : Field K} [sel
+f : NumberField K], FiniteDimensional ℚ K
+· 使用定理 `IsGalois.intermediateFieldEquivSubgroup_apply`：∀ {F : Type u_1} [inst : 
+Field F] {E : Type u_2} [inst_1 : Field E] [inst_2 : Algebra F E]   [inst_3 : Fi
+niteDimensional F E] [inst_4 : IsGa…
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `IsCyclotomicExtension.autEquivPow_apply`：∀ {n : ℕ} [inst : NeZero n] {K 
+: Type u_1} [inst_1 : Field K] (L : Type u_2) [inst_2 : CommRing L] [inst_3 : Is
+Domain L]   [inst_4 : Algebra…
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_intermediateFieldEquivSubgroupChar_iff (F : IntermediateField Rat K)
+theorem mem_intermediateFieldEquivSubgroupChar_iff (F : IntermediateField ℚ K)
     (χ : DirichletCharacter R n) :
-    χ in intermediateFieldEquivSubgroupChar n K R F ↔
-      forall σ : Gal(K/Rat), σ in F.fixingSubgroup -> χ (galEquivZMod n K σ) = 1 := by
+    χ ∈ intermediateFieldEquivSubgroupChar n K R F ↔
+      ∀ σ : Gal(K/ℚ), σ ∈ F.fixingSubgroup → χ (galEquivZMod n K σ) = 1 := by
   simp [intermediateFieldEquivSubgroupChar]
 
 set_option backward.isDefEq.respectTransparency false in
 /--
-theorem `mem_intermediateFieldEquivSubgroupChar_iff_conductor_dvd` / 定理 `mem_intermediateFieldEquivSubgroupChar_iff_conductor_dvd`
-
-English:
-theorem mem_intermediateFieldEquivSubgroupChar_iff_conductor_dvd
-  statement: (F : IntermediateField Rat K)
-  proof: by
-  simp_rw [← χ.mem_conductorSet_iff_conductor_dvd hdiv, χ.mem_conductorSet_iff,
-    factorsThrough_iff_ker_unitsMap hdiv, mem_intermediateFieldEquivSubgroupChar_iff,
-    SetLike.le_def, ← (galEquivZMod n K).forall_congr_right, MonoidHom.mem_ker,
-    MulEquiv.toEquiv_eq_coe, EquivLike.coe_coe, ← (galEquivZMod_restrictNormal_apply n K F hdiv _),
-    EmbeddingLike.map_eq_one_iff, AlgEquiv.restrictNormal_eq_one_iff,
-    IntermediateField.mem_fixingSubgroup_iff, Units.ext_iff, toUnitHom_eq, coe_equivToUnitHom,
-    Units.val_one]
-
-中文:
-定理 mem_intermediateFieldEquivSubgroupChar_iff_conductor_dvd
-  结论: (F : 中间域 有理数 K)
-  证明: by
-  simp_rw [← χ.mem_conductorSet_iff_conductor_dvd hdiv, χ.mem_conductorSet_iff,
-    factorsThrough_iff_ker_unitsMap hdiv, mem_intermediateFieldEquivSubgroupChar_iff,
-    SetLike.le_def, ← (galEquivZMod n K).forall_congr_right, MonoidHom.mem_ker,
-    MulEquiv.toEquiv_eq_coe, EquivLike.coe_coe, ← (galEquivZMod_restrictNormal_apply n K F hdiv _),
-    EmbeddingLike.map_eq_one_iff, AlgEquiv.restrictNormal_eq_one_iff,
-    IntermediateField.mem_fixingSubgroup_iff, Units.ext_iff, toUnitHom_eq, coe_equivToUnitHom,
-    Units.val_one]
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.restrictNormal_eq_one_iff, EmbeddingLike, EmbeddingLike.map_eq_one_iff, EquivLike, EquivLike.coe_coe, IntermediateField, IntermediateField.mem_fixingSubgroup_iff, MonoidHom, MonoidHom.mem_ker, MulEquiv, MulEquiv.toEquiv_eq_coe, SetLike, SetLike.le_def, Units.ext_iff, Units.va, coe_coe, coe_equivToUnitHom, ext_iff, factorsThrough_iff_ker_unitsMap
+Assume that `m ∣ n`, then the image of `ℚ(ζₘ) ⊆ ℚ(ζₙ)` by `intermediateFieldEquivSubgroupChar` is
+the set of characters whose conductor divides `m`.
 -/
-theorem mem_intermediateFieldEquivSubgroupChar_iff_conductor_dvd (F : IntermediateField Rat K)
-    {m : Nat} [NeZero m] [IsGalois Rat F] [IsCyclotomicExtension {m} Rat F] (hdiv : m ∣ n)
+/-
+**IsCyclotomicExtension.Rat.mem_intermediateFieldEquivSubgroupChar_iff_conductor
+_dvd** 是 Mathlib 中的一个定理，位于命名空间 `IsCyclotomicExtension.Rat`。
+形式化陈述：mem_intermediateFieldEquivSubgroupChar_iff_conductor_dvd (F : Intermediate
+Field Rat K) {m : Nat} [NeZero m] [IsGalois Rat F] [IsCyclotomicExtension {m} Ra
+t F] (hdiv : m ∣ n) (χ : DirichletCharacter R n) : χ in intermediateFieldEquivSu
+bgroupChar n K R F ↔ χ.conductor ∣ m
+参数：F : IntermediateField Rat K；hdiv : m ∣ n；χ : DirichletCharacter R n。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `NumberField.to_charZero`：∀ {K : Type u_1} {inst : Field K} [self : Numbe
+rField K], CharZero K
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `DirichletCharacter.mem_conductorSet_iff_conductor_dvd`：mem_conductorSet_
+iff_conductor_dvd {d : Nat} [NeZero n] (hd : d ∣ n) : d in χ.conductorSet ↔ χ.co
+nductor ∣ d
+· 使用引理 `DirichletCharacter.mem_conductorSet_iff`：mem_conductorSet_iff {x : Nat} 
+: x in conductorSet χ ↔ FactorsThrough χ x
+· 使用引理 `DirichletCharacter.factorsThrough_iff_ker_unitsMap`：factorsThrough_iff_k
+er_unitsMap {d : Nat} [NeZero n] (hd : d ∣ n) : FactorsThrough χ d ↔ (ZMod.units
+Map hd).ker <= χ.toUnitHom.ker
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `instIsConcreteLE`：∀ (A : Type u_1) (B : Type u_2) [inst : SetLike A B], 
+IsConcreteLE A B
+· 使用定理 `Equiv.forall_congr_right`：∀ {α : Sort u} {β : Sort v} {q : β → Prop} (e 
+: α ≃ β), (∀ (a : α), q (e a)) ↔ ∀ (b : β), q b
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Rat.numberField`：NumberField ℚ
+· 使用定理 `IsGalois.to_normal`：∀ {F : Type u_1} {inst : Field F} {E : Type u_2} {in
+st_1 : Field E} {inst_2 : Algebra F E} [self : IsGalois F E],   Normal F E
+· 使用定理 `IsCyclotomicExtension.Rat.galEquivZMod_restrictNormal_apply`：galEquivZMo
+d_restrictNormal_apply (h : m ∣ n) (σ : Gal(K/Rat)) : galEquivZMod m F (σ.restri
+ctNormal F) = ZMod.unitsMap h (galEquivZMod n K σ…
+· 使用定理 `EquivLike.toEmbeddingLike`：∀ {E : Sort u_1} {α : Sort u_3} {β : Sort u_4
+} [inst : EquivLike E α β], EmbeddingLike E α β
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MulEquivClass.instMonoidHomClass`：∀ (F : Type u_1) {M : Type u_4} {N : T
+ype u_5} [inst : EquivLike F M N] [inst_1 : MulOneClass M]   [inst_2 : MulOneCla
+ss N] [MulEquivClass F…
+· 使用定理 `MulEquiv.instMulEquivClass`：∀ {M : Type u_4} {N : Type u_5} [inst : Mul 
+M] [inst_1 : Mul N], MulEquivClass (M ≃* N) M N
+· 使用定理 `MulChar.coe_equivToUnitHom`：coe_equivToUnitHom (χ : MulChar R R') (a : R
+ˣ) : ↑(equivToUnitHom χ a) = χ a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+
+--- 原说明 ---
+Assume that `m ∣ n`, then the image of `ℚ(ζₘ) ⊆ ℚ(ζₙ)` by `intermediateFieldEqui
+vSubgroupChar` is
+the set of characters whose conductor divides `m`.
+-/
+theorem mem_intermediateFieldEquivSubgroupChar_iff_conductor_dvd (F : IntermediateField ℚ K)
+    {m : ℕ} [NeZero m] [IsGalois ℚ F] [IsCyclotomicExtension {m} ℚ F] (hdiv : m ∣ n)
     (χ : DirichletCharacter R n) :
-    χ in intermediateFieldEquivSubgroupChar n K R F ↔ χ.conductor ∣ m := by
+    χ ∈ intermediateFieldEquivSubgroupChar n K R F ↔ χ.conductor ∣ m := by
   simp_rw [← χ.mem_conductorSet_iff_conductor_dvd hdiv, χ.mem_conductorSet_iff,
     factorsThrough_iff_ker_unitsMap hdiv, mem_intermediateFieldEquivSubgroupChar_iff,
     SetLike.le_def, ← (galEquivZMod n K).forall_congr_right, MonoidHom.mem_ker,
@@ -533,3 +820,4 @@ theorem mem_intermediateFieldEquivSubgroupChar_iff_conductor_dvd (F : Intermedia
     Units.val_one]
 
 end IsCyclotomicExtension.Rat
+

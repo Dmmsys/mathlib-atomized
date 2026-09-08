@@ -39,186 +39,185 @@ namespace Multiset
 
 variable [DecidableEq α] (s t : Multiset α)
 
-/--
-Instance `instLocallyFiniteOrder` / 实例 `instLocallyFiniteOrder`
-
-English:
-instance instLocallyFiniteOrder
-  signature: : LocallyFiniteOrder (Multiset α)
-  body: LocallyFiniteOrder.ofIcc (Multiset α)
-    (fun s t => (Finset.Icc (toDFinsupp s) (toDFinsupp t)).map
-      Multiset.equivDFinsupp.toEquiv.symm.toEmbedding)
-    fun s t x => by simp
-
-中文:
-实例 instLocallyFiniteOrder
-  签名: : 局部有限序 (Multiset α)
-  定义体: LocallyFiniteOrder.ofIcc (Multiset α)
-    (fun s t => (Finset.Icc (toDFinsupp s) (toDFinsupp t)).map
-      Multiset.equivDFinsupp.toEquiv.symm.toEmbedding)
-    fun s t x => by simp
-
-Depends on / 依赖: Finset, Finset.Icc, LocallyFiniteOrder, LocallyFiniteOrder.ofIcc, Multiset, Multiset.equivDFinsupp.toEquiv.symm.toEmbedding, equivDFinsupp, toDFinsupp, toEmbedding, toEquiv
+/-
+**Multiset.instLocallyFiniteOrder** 是 Mathlib 中的一个实例，位于命名空间 `Multiset`。
+形式化陈述：instLocallyFiniteOrder : LocallyFiniteOrder (Multiset α)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 instance instLocallyFiniteOrder : LocallyFiniteOrder (Multiset α) :=
   LocallyFiniteOrder.ofIcc (Multiset α)
     (fun s t => (Finset.Icc (toDFinsupp s) (toDFinsupp t)).map
       Multiset.equivDFinsupp.toEquiv.symm.toEmbedding)
     fun s t x => by simp
-
-/--
-theorem `Icc_eq` / 定理 `Icc_eq`
-
-English:
-theorem Icc_eq
-  proof: rfl
-
-中文:
-定理 Icc_eq
-  证明: rfl
+/-
+**Multiset.Icc_eq** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：Icc_eq : Finset.Icc s t = (Finset.Icc (toDFinsupp s) (toDFinsupp t)).map M
+ultiset.equivDFinsupp.toEquiv.symm.toEmbedding
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem Icc_eq :
     Finset.Icc s t = (Finset.Icc (toDFinsupp s) (toDFinsupp t)).map
       Multiset.equivDFinsupp.toEquiv.symm.toEmbedding :=
   rfl
-
-/--
-theorem `uIcc_eq` / 定理 `uIcc_eq`
-
-English:
-theorem uIcc_eq
-  proof: (Icc_eq _ _).trans by simp [uIcc]
-
-中文:
-定理 uIcc_eq
-  证明: (Icc_eq _ _).trans by simp [uIcc]
-
-Depends on / 依赖: Icc_eq
+/-
+**Multiset.uIcc_eq** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：uIcc_eq : uIcc s t = (uIcc (toDFinsupp s) (toDFinsupp t)).map Multiset.equ
+ivDFinsupp.toEquiv.symm.toEmbedding
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Multiset.Icc_eq`：Icc_eq : Finset.Icc s t = (Finset.Icc (toDFinsupp s) (t
+oDFinsupp t)).map Multiset.equivDFinsupp.toEquiv.symm.toEmbedding
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Multiset.toDFinsupp_inter`：toDFinsupp_inter (s t : Multiset α) : toDFins
+upp (s inter t) = toDFinsupp s ⊓ toDFinsupp t
+· 使用定理 `Multiset.toDFinsupp_union`：toDFinsupp_union (s t : Multiset α) : toDFins
+upp (s union t) = toDFinsupp s ⊔ toDFinsupp t
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem uIcc_eq :
     uIcc s t =
       (uIcc (toDFinsupp s) (toDFinsupp t)).map Multiset.equivDFinsupp.toEquiv.symm.toEmbedding :=
-(Icc_eq _ _).trans by simp [uIcc]
-
-/--
-theorem `card_Icc` / 定理 `card_Icc`
-
-English:
-theorem card_Icc
-  proof: by
-  simp_rw [Icc_eq, Finset.card_map, DFinsupp.card_Icc, Nat.card_Icc, Multiset.toDFinsupp_apply,
-    toDFinsupp_support]
-
-中文:
-定理 card_Icc
-  证明: by
-  simp_rw [Icc_eq, Finset.card_map, DFinsupp.card_Icc, Nat.card_Icc, Multiset.toDFinsupp_apply,
-    toDFinsupp_support]
-
-Depends on / 依赖: DFinsupp, DFinsupp.card_Icc, Finset, Finset.card_map, Icc_eq, Multiset, Multiset.toDFinsupp_apply, Nat.card_Icc, card_Icc, card_map, simp_rw, toDFinsupp_apply, toDFinsupp_support
+  (Icc_eq _ _).trans <| by simp [uIcc]
+/-
+**Multiset.card_Icc** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：card_Icc : #(Finset.Icc s t) = ∏ i in s.toFinset union t.toFinset, (t.coun
+t i + 1 - s.count i)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.card_map`：card_map (f : α ↪ β) : #(s.map f) = #s
+· 使用引理 `DFinsupp.card_Icc`：card_Icc : #(Icc f g) = ∏ i in f.support union g.supp
+ort, #(Icc (f i) (g i))
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `Nat.card_Icc`：∀ (a b : ℕ), (Finset.Icc a b).card = b + 1 - a
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Multiset.toDFinsupp_support`：toDFinsupp_support (s : Multiset α) : s.toD
+Finsupp.support = s.toFinset
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem card_Icc :
-    #(Finset.Icc s t) = ∏ i in s.toFinset union t.toFinset, (t.count i + 1 - s.count i) := by
+    #(Finset.Icc s t) = ∏ i ∈ s.toFinset ∪ t.toFinset, (t.count i + 1 - s.count i) := by
   simp_rw [Icc_eq, Finset.card_map, DFinsupp.card_Icc, Nat.card_Icc, Multiset.toDFinsupp_apply,
     toDFinsupp_support]
-
-/--
-theorem `card_Ico` / 定理 `card_Ico`
-
-English:
-theorem card_Ico
-  proof: by
-  rw [Finset.card_Ico_eq_card_Icc_sub_one]; rw [card_Icc]
-
-中文:
-定理 card_Ico
-  证明: by
-  rw [Finset.card_Ico_eq_card_Icc_sub_one]; rw [card_Icc]
-
-Depends on / 依赖: Finset, Finset.card_Ico_eq_card_Icc_sub_one, card_Icc, card_Ico_eq_card_Icc_sub_one
+/-
+**Multiset.card_Ico** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：card_Ico : #(Finset.Ico s t) = ∏ i in s.toFinset union t.toFinset, (t.coun
+t i + 1 - s.count i) - 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.card_Ico_eq_card_Icc_sub_one`：card_Ico_eq_card_Icc_sub_one (a b :
+ α) : #(Ico a b) = #(Icc a b) - 1
+· 使用定理 `Multiset.card_Icc`：card_Icc : #(Finset.Icc s t) = ∏ i in s.toFinset unio
+n t.toFinset, (t.count i + 1 - s.count i)
 -/
 theorem card_Ico :
-    #(Finset.Ico s t) = ∏ i in s.toFinset union t.toFinset, (t.count i + 1 - s.count i) - 1 := by
-  rw [Finset.card_Ico_eq_card_Icc_sub_one]; rw [card_Icc]
-
-/--
-theorem `card_Ioc` / 定理 `card_Ioc`
-
-English:
-theorem card_Ioc
-  proof: by
-  rw [Finset.card_Ioc_eq_card_Icc_sub_one]; rw [card_Icc]
-
-中文:
-定理 card_Ioc
-  证明: by
-  rw [Finset.card_Ioc_eq_card_Icc_sub_one]; rw [card_Icc]
-
-Depends on / 依赖: Finset, Finset.card_Ioc_eq_card_Icc_sub_one, card_Icc, card_Ioc_eq_card_Icc_sub_one
+    #(Finset.Ico s t) = ∏ i ∈ s.toFinset ∪ t.toFinset, (t.count i + 1 - s.count i) - 1 := by
+  rw [Finset.card_Ico_eq_card_Icc_sub_one, card_Icc]
+/-
+**Multiset.card_Ioc** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：card_Ioc : #(Finset.Ioc s t) = ∏ i in s.toFinset union t.toFinset, (t.coun
+t i + 1 - s.count i) - 1
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.card_Ioc_eq_card_Icc_sub_one`：card_Ioc_eq_card_Icc_sub_one (a b :
+ α) : #(Ioc a b) = #(Icc a b) - 1
+· 使用定理 `Multiset.card_Icc`：card_Icc : #(Finset.Icc s t) = ∏ i in s.toFinset unio
+n t.toFinset, (t.count i + 1 - s.count i)
 -/
 theorem card_Ioc :
-    #(Finset.Ioc s t) = ∏ i in s.toFinset union t.toFinset, (t.count i + 1 - s.count i) - 1 := by
-  rw [Finset.card_Ioc_eq_card_Icc_sub_one]; rw [card_Icc]
-
-/--
-theorem `card_Ioo` / 定理 `card_Ioo`
-
-English:
-theorem card_Ioo
-  proof: by
-  rw [Finset.card_Ioo_eq_card_Icc_sub_two]; rw [card_Icc]
-
-中文:
-定理 card_Ioo
-  证明: by
-  rw [Finset.card_Ioo_eq_card_Icc_sub_two]; rw [card_Icc]
-
-Depends on / 依赖: Finset, Finset.card_Ioo_eq_card_Icc_sub_two, card_Icc, card_Ioo_eq_card_Icc_sub_two
+    #(Finset.Ioc s t) = ∏ i ∈ s.toFinset ∪ t.toFinset, (t.count i + 1 - s.count i) - 1 := by
+  rw [Finset.card_Ioc_eq_card_Icc_sub_one, card_Icc]
+/-
+**Multiset.card_Ioo** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：card_Ioo : #(Finset.Ioo s t) = ∏ i in s.toFinset union t.toFinset, (t.coun
+t i + 1 - s.count i) - 2
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.card_Ioo_eq_card_Icc_sub_two`：card_Ioo_eq_card_Icc_sub_two (a b :
+ α) : #(Ioo a b) = #(Icc a b) - 2
+· 使用定理 `Multiset.card_Icc`：card_Icc : #(Finset.Icc s t) = ∏ i in s.toFinset unio
+n t.toFinset, (t.count i + 1 - s.count i)
 -/
 theorem card_Ioo :
-    #(Finset.Ioo s t) = ∏ i in s.toFinset union t.toFinset, (t.count i + 1 - s.count i) - 2 := by
-  rw [Finset.card_Ioo_eq_card_Icc_sub_two]; rw [card_Icc]
-
-/--
-theorem `card_uIcc` / 定理 `card_uIcc`
-
-English:
-theorem card_uIcc
-  proof: by
-  simp_rw [uIcc_eq, Finset.card_map, DFinsupp.card_uIcc, Nat.card_uIcc, Multiset.toDFinsupp_apply,
-    toDFinsupp_support]
-
-中文:
-定理 card_uIcc
-  证明: by
-  simp_rw [uIcc_eq, Finset.card_map, DFinsupp.card_uIcc, Nat.card_uIcc, Multiset.toDFinsupp_apply,
-    toDFinsupp_support]
-
-Depends on / 依赖: DFinsupp, DFinsupp.card_uIcc, Finset, Finset.card_map, Multiset, Multiset.toDFinsupp_apply, Nat.card_uIcc, card_map, card_uIcc, simp_rw, toDFinsupp_apply, toDFinsupp_support, uIcc_eq
+    #(Finset.Ioo s t) = ∏ i ∈ s.toFinset ∪ t.toFinset, (t.count i + 1 - s.count i) - 2 := by
+  rw [Finset.card_Ioo_eq_card_Icc_sub_two, card_Icc]
+/-
+**Multiset.card_uIcc** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：card_uIcc : (uIcc s t).card = ∏ i in s.toFinset union t.toFinset, ((t.coun
+t i - s.count i : Int).natAbs + 1)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.uIcc_eq`：uIcc_eq : uIcc s t = (uIcc (toDFinsupp s) (toDFinsupp 
+t)).map Multiset.equivDFinsupp.toEquiv.symm.toEmbedding
+· 使用定理 `Finset.card_map`：card_map (f : α ↪ β) : #(s.map f) = #s
+· 使用引理 `DFinsupp.card_uIcc`：card_uIcc : #(uIcc f g) = ∏ i in f.support union g.s
+upport, #(uIcc (f i) (g i))
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `Nat.card_uIcc`：card_uIcc : #(uIcc a b) = (b - a : Int).natAbs + 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Multiset.toDFinsupp_support`：toDFinsupp_support (s : Multiset α) : s.toD
+Finsupp.support = s.toFinset
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem card_uIcc :
-    (uIcc s t).card = ∏ i in s.toFinset union t.toFinset, ((t.count i - s.count i : Int).natAbs + 1) := by
+    (uIcc s t).card = ∏ i ∈ s.toFinset ∪ t.toFinset, ((t.count i - s.count i : ℤ).natAbs + 1) := by
   simp_rw [uIcc_eq, Finset.card_map, DFinsupp.card_uIcc, Nat.card_uIcc, Multiset.toDFinsupp_apply,
     toDFinsupp_support]
-
-/--
-theorem `card_Iic` / 定理 `card_Iic`
-
-English:
-theorem card_Iic
-  statement: (Finset.Iic s).card = ∏ i in s.toFinset, (s.count i + 1)
-  proof: by
-  simp_rw [Iic_eq_Icc, card_Icc, bot_eq_zero, toFinset_zero, empty_union, count_zero, tsub_zero]
-
-中文:
-定理 card_Iic
-  结论: (有限集.左无界右闭区间 s).card = ∏ i in s.toFinset, (s.count i + 1)
-  证明: by
-  simp_rw [Iic_eq_Icc, card_Icc, bot_eq_zero, toFinset_zero, empty_union, count_zero, tsub_zero]
-
-Depends on / 依赖: Iic_eq_Icc, bot_eq_zero, card_Icc, count_zero, empty_union, simp_rw, toFinset_zero, tsub_zero
+/-
+**Multiset.card_Iic** 是 Mathlib 中的一个定理，位于命名空间 `Multiset`。
+形式化陈述：card_Iic : (Finset.Iic s).card = ∏ i in s.toFinset, (s.count i + 1)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Multiset.card_Icc`：card_Icc : #(Finset.Icc s t) = ∏ i in s.toFinset unio
+n t.toFinset, (t.count i + 1 - s.count i)
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `Finset.empty_union`：empty_union (s : Finset α) : ∅ union s = s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `tsub_zero`：tsub_zero (a : α) : a - 0 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem card_Iic : (Finset.Iic s).card = ∏ i in s.toFinset, (s.count i + 1) := by
+theorem card_Iic : (Finset.Iic s).card = ∏ i ∈ s.toFinset, (s.count i + 1) := by
   simp_rw [Iic_eq_Icc, card_Icc, bot_eq_zero, toFinset_zero, empty_union, count_zero, tsub_zero]
 
 end Multiset
+

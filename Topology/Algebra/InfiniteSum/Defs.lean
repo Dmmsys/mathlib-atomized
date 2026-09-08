@@ -103,69 +103,43 @@ convergent with respect to the conditional summation filter is in fact unconditi
 For the definition and many statements, `α` does not need to be a topological additive monoid,
 only an additive monoid with a topology (i.e. the addition is not assumed to be continuous). We
 only add this assumption later, for the lemmas where it is relevant. -/]
-/--
-Definition of `HasProd` / `HasProd` 的定义
-
-English:
-definition HasProd
-  signature: (f : β -> α) (a : α) (L := unconditional β)
-  body: Tendsto (fun s : Finset β => ∏ b in s, f b) L.filter (𝓝 a)
-
-中文:
-定义 有积类型
-  签名: (f : β -> α) (a : α) (L := unconditional β)
-  定义体: Tendsto (fun s : Finset β => ∏ b in s, f b) L.filter (𝓝 a)
-
-Depends on / 依赖: unconditional
+/-
+**HasProd** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：HasProd (f : β -> α) (a : α) (L
+参数：f : β -> α；a : α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def HasProd (f : β -> α) (a : α) (L := unconditional β) : Prop :=
-  Tendsto (fun s : Finset β => ∏ b in s, f b) L.filter (𝓝 a)
+def HasProd (f : β → α) (a : α) (L := unconditional β) : Prop :=
+  Tendsto (fun s : Finset β ↦ ∏ b ∈ s, f b) L.filter (𝓝 a)
 
 /-- `Multipliable f` means that `f` has some (infinite) product with respect to `L`. Use `tprod` to
 get the value. -/
 @[to_additive
 /-- `Summable f` means that `f` has some (infinite) sum with respect to `L`. Use `tsum` to get the
 value. -/]
-/--
-Definition of `Multipliable` / `Multipliable` 的定义
-
-English:
-definition Multipliable
-  signature: (f : β -> α) (L := unconditional β)
-  body: exists a, HasProd f a L
-
-@[to_additive]
-
-中文:
-定义 Multipliable
-  签名: (f : β -> α) (L := unconditional β)
-  定义体: exists a, HasProd f a L
-
-@[to_additive]
-
-Depends on / 依赖: unconditional
+/-
+**Multipliable** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Multipliable (f : β -> α) (L
+参数：f : β -> α。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-def Multipliable (f : β -> α) (L := unconditional β) : Prop :=
-  exists a, HasProd f a L
+def Multipliable (f : β → α) (L := unconditional β) : Prop :=
+  ∃ a, HasProd f a L
 
 @[to_additive]
-/--
-lemma `Multipliable.mono_filter` / 引理 `Multipliable.mono_filter`
-
-English:
-lemma Multipliable.mono_filter
-  statement: {f : β -> α} {L₁ L₂ : SummationFilter β}
-  proof: match hf with | ⟨a, ha⟩ => ⟨a, ha.mono_left h⟩
-
-中文:
-引理 Multipliable.mono_filter
-  结论: {f : β -> α} {L₁ L₂ : SummationFilter β}
-  证明: match hf with | ⟨a, ha⟩ => ⟨a, ha.mono_left h⟩
-
-Depends on / 依赖: ha.mono_left, mono_left
+/-
+**Multipliable.mono_filter** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Multipliable.mono_filter {f : β -> α} {L₁ L₂ : SummationFilter β} (hf : Mu
+ltipliable f L₂) (h : L₁.filter <= L₂.filter) : Multipliable f L₁
+参数：hf : Multipliable f L₂；h : L₁.filter <= L₂.filter。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.mono_left`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {x
+ y : Filter α} {z : Filter β},   Filter.Tendsto f x z → y ≤ x → Filter.Tendsto f
+ y z
 -/
-lemma Multipliable.mono_filter {f : β -> α} {L₁ L₂ : SummationFilter β}
-    (hf : Multipliable f L₂) (h : L₁.filter <= L₂.filter) : Multipliable f L₁ :=
+lemma Multipliable.mono_filter {f : β → α} {L₁ L₂ : SummationFilter β}
+    (hf : Multipliable f L₂) (h : L₁.filter ≤ L₂.filter) : Multipliable f L₁ :=
   match hf with | ⟨a, ha⟩ => ⟨a, ha.mono_left h⟩
 
 open scoped Classical in
@@ -188,9 +162,9 @@ separated. When the support of `f` is finite, we make the most reasonable choice
 over the support. Otherwise, we choose arbitrarily an `a` satisfying `HasSum f a`. Similar remarks
 apply to more general summation filters.)
 -/]
-noncomputable irreducible_def tprod (f : β -> α) (L := unconditional β) :=
+noncomputable irreducible_def tprod (f : β → α) (L := unconditional β) :=
   if h : Multipliable f L then
-    if L.HasSupport ∧ (mulSupport f inter L.support).Finite then finprod (L.support.mulIndicator f)
+    if L.HasSupport ∧ (mulSupport f ∩ L.support).Finite then finprod (L.support.mulIndicator f)
     else if HasProd f 1 L then 1
     else h.choose
   else 1
@@ -209,54 +183,41 @@ notation3 "∏' "(...)", "r:67:(scoped f => tprod f (unconditional _)) => r
 notation3 "∑' "(...)", "r:67:(scoped f => tsum f (unconditional _)) => r
 
 @[to_additive]
-/--
-lemma `hasProd_bot` / 引理 `hasProd_bot`
-
-English:
-lemma hasProd_bot
-  given: (hL : ¬L.NeBot) (f : β -> α) (a : α)
-  proof: by
-  have : L.filter = ⊥ := by contrapose! hL; exact ⟨hL⟩
-  rw [HasProd]; rw [this]
-  exact tendsto_bot
-
-@[to_additive]
-
-中文:
-引理 hasProd_bot
-  条件: (hL : ¬L.NeBot) (f : β -> α) (a : α)
-  证明: by
-  have : L.filter = ⊥ := by contrapose! hL; exact ⟨hL⟩
-  rw [HasProd]; rw [this]
-  exact tendsto_bot
-
-@[to_additive]
-
-Depends on / 依赖: HasProd, L.filter, contrapose, filter, tendsto_bot
+/-
+**hasProd_bot** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：hasProd_bot (hL : ¬L.NeBot) (f : β -> α) (a : α) : HasProd f a L
+参数：hL : ¬L.NeBot；f : β -> α；a : α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₂`：contrapose₂ {p q : Prop} : (¬ q -
+> p) -> (¬ p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `HasProd.eq_1`：∀ {α : Type u_1} {β : Type u_2} [inst : CommMonoid α] [ins
+t_1 : TopologicalSpace α] (f : β → α) (a : α)   (L : SummationFilter β), HasProd
+ f…
+· 使用定理 `Filter.tendsto_bot`：tendsto_bot {f : α -> β} {l : Filter β} : Tendsto f 
+⊥ l
 -/
-lemma hasProd_bot (hL : ¬L.NeBot) (f : β -> α) (a : α) :
+lemma hasProd_bot (hL : ¬L.NeBot) (f : β → α) (a : α) :
     HasProd f a L := by
   have : L.filter = ⊥ := by contrapose! hL; exact ⟨hL⟩
-  rw [HasProd]; rw [this]
+  rw [HasProd, this]
   exact tendsto_bot
 
 @[to_additive]
-/--
-lemma `multipliable_bot` / 引理 `multipliable_bot`
-
-English:
-lemma multipliable_bot
-  given: (hL : ¬L.NeBot) (f : β -> α)
-  proof: ⟨1, hasProd_bot hL ..⟩
-
-中文:
-引理 multipliable_bot
-  条件: (hL : ¬L.NeBot) (f : β -> α)
-  证明: ⟨1, hasProd_bot hL ..⟩
-
-Depends on / 依赖: hasProd_bot
+/-
+**multipliable_bot** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：multipliable_bot (hL : ¬L.NeBot) (f : β -> α) : Multipliable f L
+参数：hL : ¬L.NeBot；f : β -> α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `hasProd_bot`：hasProd_bot (hL : ¬L.NeBot) (f : β -> α) (a : α) : HasProd 
+f a L
 -/
-lemma multipliable_bot (hL : ¬L.NeBot) (f : β -> α) :
+lemma multipliable_bot (hL : ¬L.NeBot) (f : β → α) :
     Multipliable f L :=
   ⟨1, hasProd_bot hL ..⟩
 
@@ -270,447 +231,465 @@ equal to the finite sum (which is taken to be 1 if the support of `f` is infinit
 
 Note that in this case `HasSum f a` is satisfied for *every* element `a` of the target, so the
 value assigned to the `tsum` is a question of conventions. -/]
-/--
-lemma `tprod_bot` / 引理 `tprod_bot`
-
-English:
-lemma tprod_bot
-  given: (hL : ¬L.NeBot) (f : β -> α)
-  statement: ∏'[L] b, f b = ∏ᶠ b, f b
-  proof: by
-  simp only [tprod_def, dif_pos (multipliable_bot hL f)]
-  have : L.LeAtTop := L.leAtTop_of_not_NeBot hL
-  rw [L.support_eq_univ]; rw [Set.inter_univ]; rw [Set.mulIndicator_univ]
-  by_cases hf : (mulSupport f).Finite
-  · rw [eq_true_intro hf, if_pos]
-    simp only [and_true]
-    infer_instance
-  · rwa [if_neg (by tauto), if_pos (hasProd_bot hL _ _), finprod_of_infinite_mulSupport]
-
-中文:
-引理 tprod_bot
-  条件: (hL : ¬L.NeBot) (f : β -> α)
-  结论: ∏'[L] b, f b = ∏ᶠ b, f b
-  证明: by
-  simp only [tprod_def, dif_pos (multipliable_bot hL f)]
-  have : L.LeAtTop := L.leAtTop_of_not_NeBot hL
-  rw [L.support_eq_univ]; rw [Set.inter_univ]; rw [Set.mulIndicator_univ]
-  by_cases hf : (mulSupport f).Finite
-  · rw [eq_true_intro hf, if_pos]
-    simp only [and_true]
-    infer_instance
-  · rwa [if_neg (by tauto), if_pos (hasProd_bot hL _ _), finprod_of_infinite_mulSupport]
-
-Depends on / 依赖: Finite, L.LeAtTop, L.leAtTop_of_not_NeBot, L.support_eq_univ, LeAtTop, Set.inter_univ, Set.mulIndicator_univ, and_true, dif_pos, eq_true_intro, finprod_of_infinite_mulSupport, hasProd_bot, if_neg, if_pos, infer_instance, inter_univ, leAtTop_of_not_NeBot, mulIndicator_univ, mulSupport, multipliable_bot
+/-
+**tprod_bot** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：tprod_bot (hL : ¬L.NeBot) (f : β -> α) : ∏'[L] b, f b = ∏ᶠ b, f b
+参数：hL : ¬L.NeBot；f : β -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `multipliable_bot`：multipliable_bot (hL : ¬L.NeBot) (f : β -> α) : Multip
+liable f L
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `tprod_def`：∀ {α : Type u_4} {β : Type u_5} [inst : CommMonoid α] [inst_1
+ : TopologicalSpace α] (f : β → α) (L : SummationFilter β),   tprod f L =     i…
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用引理 `SummationFilter.leAtTop_of_not_NeBot`：leAtTop_of_not_NeBot (L : Summatio
+nFilter β) (hL : ¬L.NeBot) : L.LeAtTop
+· 使用定理 `SummationFilter.support_eq_univ`：∀ {β : Type u_2} (L : SummationFilter β
+) [L.LeAtTop], L.support = Set.univ
+· 使用定理 `Set.inter_univ`：inter_univ (a : Set α) : a inter univ = a
+· 使用引理 `Set.mulIndicator_univ`：mulIndicator_univ (f : α -> M) : mulIndicator (un
+iv : Set α) f = f
+· 使用引理 `eq_true_intro`：eq_true_intro {a : Prop} (h : a) : a = True
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `and_true`：∀ (p : Prop), (p ∧ True) = p
+· 使用定理 `SummationFilter.instHasSupportOfLeAtTop`：∀ {β : Type u_2} (L : Summation
+Filter β) [L.LeAtTop], L.HasSupport
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用引理 `hasProd_bot`：hasProd_bot (hL : ¬L.NeBot) (f : β -> α) (a : α) : HasProd 
+f a L
+· 使用定理 `finprod_of_infinite_mulSupport`：finprod_of_infinite_mulSupport {f : α ->
+ M} (hf : (mulSupport f).Infinite) : ∏ᶠ i, f i = 1
 -/
-lemma tprod_bot (hL : ¬L.NeBot) (f : β -> α) : ∏'[L] b, f b = ∏ᶠ b, f b := by
+lemma tprod_bot (hL : ¬L.NeBot) (f : β → α) : ∏'[L] b, f b = ∏ᶠ b, f b := by
   simp only [tprod_def, dif_pos (multipliable_bot hL f)]
   have : L.LeAtTop := L.leAtTop_of_not_NeBot hL
-  rw [L.support_eq_univ]; rw [Set.inter_univ]; rw [Set.mulIndicator_univ]
+  rw [L.support_eq_univ, Set.inter_univ, Set.mulIndicator_univ]
   by_cases hf : (mulSupport f).Finite
   · rw [eq_true_intro hf, if_pos]
     simp only [and_true]
     infer_instance
   · rwa [if_neg (by tauto), if_pos (hasProd_bot hL _ _), finprod_of_infinite_mulSupport]
 
-variable {f : β -> α} {a : α} {s : Finset β}
+variable {f : β → α} {a : α} {s : Finset β}
 
 @[to_additive]
-/--
-theorem `HasProd.multipliable` / 定理 `HasProd.multipliable`
-
-English:
-theorem HasProd.multipliable
-  given: (h : HasProd f a L)
-  statement: Multipliable f L
-  proof: ⟨a, h⟩
-
-@[to_additive]
-
-中文:
-定理 有积类型.multipliable
-  条件: (h : 有积类型 f a L)
-  结论: Multipliable f L
-  证明: ⟨a, h⟩
-
-@[to_additive]
+/-
+**HasProd.multipliable** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasProd.multipliable (h : HasProd f a L) : Multipliable f L
+参数：h : HasProd f a L。
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem HasProd.multipliable (h : HasProd f a L) : Multipliable f L :=
   ⟨a, h⟩
 
 @[to_additive]
-/--
-theorem `tprod_eq_one_of_not_multipliable` / 定理 `tprod_eq_one_of_not_multipliable`
-
-English:
-theorem tprod_eq_one_of_not_multipliable
-  given: (h : ¬Multipliable f L)
-  statement: ∏'[L] b, f b = 1
-  proof: by
-  simp [tprod_def, h]
-
-@[to_additive]
-
-中文:
-定理 tprod_eq_one_of_not_multipliable
-  条件: (h : ¬Multipliable f L)
-  结论: ∏'[L] b, f b = 1
-  证明: by
-  simp [tprod_def, h]
-
-@[to_additive]
-
-Depends on / 依赖: tprod_def
+/-
+**tprod_eq_one_of_not_multipliable** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tprod_eq_one_of_not_multipliable (h : ¬Multipliable f L) : ∏'[L] b, f b = 
+1
+参数：h : ¬Multipliable f L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `tprod_def`：∀ {α : Type u_4} {β : Type u_5} [inst : CommMonoid α] [inst_1
+ : TopologicalSpace α] (f : β → α) (L : SummationFilter β),   tprod f L =     i…
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem tprod_eq_one_of_not_multipliable (h : ¬Multipliable f L) : ∏'[L] b, f b = 1 := by
   simp [tprod_def, h]
 
 @[to_additive]
-/--
-theorem `Function.Injective.hasProd_map_iff` / 定理 `Function.Injective.hasProd_map_iff`
-
-English:
-theorem Function.Injective.hasProd_map_iff
-  given: {L : SummationFilter γ} {g : γ -> β} (hg : Injective g)
-  proof: by
-  simp [HasProd, Function.comp_def]
-
-@[to_additive]
-
-中文:
-定理 函数.单射.hasProd_map_iff
-  条件: {L : SummationFilter γ} {g : γ -> β} (hg : 单射 g)
-  证明: by
-  simp [HasProd, Function.comp_def]
-
-@[to_additive]
-
-Depends on / 依赖: Function, Function.comp_def, HasProd, comp_def
+/-
+**Function.Injective.hasProd_map_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Function.Injective.hasProd_map_iff {L : SummationFilter γ} {g : γ -> β} (h
+g : Injective g) : HasProd f a (L.map ⟨g, hg⟩) ↔ HasProd (f ∘ g) a L
+参数：hg : Injective g。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `SummationFilter.map_filter`：∀ {β : Type u_2} {γ : Type u_3} (L : Summati
+onFilter β) (f : β ↪ γ),   (L.map f).filter = Filter.map (Finset.map f) L.filter
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Finset.prod_map`：prod_map (s : Finset ι) (e : ι ↪ κ) (f : κ -> M) : ∏ x 
+in s.map e, f x = ∏ x in s, f (e x)
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem Function.Injective.hasProd_map_iff {L : SummationFilter γ} {g : γ -> β} (hg : Injective g) :
+theorem Function.Injective.hasProd_map_iff {L : SummationFilter γ} {g : γ → β} (hg : Injective g) :
     HasProd f a (L.map ⟨g, hg⟩) ↔ HasProd (f ∘ g) a L := by
   simp [HasProd, Function.comp_def]
 
 @[to_additive]
-/--
-theorem `Function.Injective.hasProd_comap_iff_of_hasSupport` / 定理 `Function.Injective.hasProd_comap_iff_of_hasSupport`
-
-English:
-theorem Function.Injective.hasProd_comap_iff_of_hasSupport
-  statement: [L.HasSupport] {g : γ -> β}
-  proof: by
-  simp only [HasProd, SummationFilter.comap_filter, tendsto_map'_iff, comp_apply,
-    Embedding.coeFn_mk, Function.comp_def]
-  refine tendsto_congr' ?_
-  filter_upwards [L.eventually_le_support] with s hs
-  rw [s.prod_preimage]
-  exact fun x h h' => hf x (hs h) h'
-
-@[to_additive]
-
-中文:
-定理 函数.单射.hasProd_comap_iff_of_hasSupport
-  结论: [L.有Support] {g : γ -> β}
-  证明: by
-  simp only [HasProd, SummationFilter.comap_filter, tendsto_map'_iff, comp_apply,
-    Embedding.coeFn_mk, Function.comp_def]
-  refine tendsto_congr' ?_
-  filter_upwards [L.eventually_le_support] with s hs
-  rw [s.prod_preimage]
-  exact fun x h h' => hf x (hs h) h'
-
-@[to_additive]
-
-Depends on / 依赖: Embedding, Embedding.coeFn_mk, Function, Function.comp_def, HasProd, L.eventually_le_support, SummationFilter, SummationFilter.comap_filter, _iff, coeFn_mk, comap_filter, comp_apply, comp_def, eventually_le_support, filter_upwards, prod_preimage, s.prod_preimage, tendsto_congr, tendsto_map
+/-
+**Function.Injective.hasProd_comap_iff_of_hasSupport** 是 Mathlib 中的一个定理，位于命名空间 `
+`。
+形式化陈述：Function.Injective.hasProd_comap_iff_of_hasSupport [L.HasSupport] {g : γ -
+> β} (hg : Injective g) (hf : forall x in L.support, x ∉ Set.range g -> f x = 1)
+ : HasProd (f ∘ g) a (L.comap ⟨g, hg⟩) ↔ HasProd f a L
+参数：hg : Injective g；hf : forall x in L.support, x ∉ Set.range g -> f x = 1。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `SummationFilter.comap_filter`：∀ {β : Type u_2} {γ : Type u_3} (L : Summa
+tionFilter β) (f : γ ↪ β),   (L.comap f).filter = Filter.map (fun s => s.preimag
+e ⇑f ⋯) L.filter
+· 使用定理 `Filter.tendsto_congr'`：tendsto_congr' {f₁ f₂ : α -> β} {l₁ : Filter α} {
+l₂ : Filter β} (hl : f₁ =ᶠ[l₁] f₂) : Tendsto f₁ l₁ l₂ ↔ Tendsto f₂ l₁ l₂
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `SummationFilter.HasSupport.eventually_le_support`：∀ {β : Type u_2} {L : 
+SummationFilter β} [self : L.HasSupport], ∀ᶠ (s : Finset β) in L.filter, ↑s ⊆ L.
+support
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用引理 `Finset.prod_preimage`：prod_preimage (f : ι -> κ) (s : Finset κ) (hf) (g 
+: κ -> β) (hg : forall x in s, x ∉ Set.range f -> g x = 1) : ∏ x in s.preimage f
+ hf, g (f …
 -/
-theorem Function.Injective.hasProd_comap_iff_of_hasSupport [L.HasSupport] {g : γ -> β}
-    (hg : Injective g) (hf : forall x in L.support, x ∉ Set.range g -> f x = 1) :
+theorem Function.Injective.hasProd_comap_iff_of_hasSupport [L.HasSupport] {g : γ → β}
+    (hg : Injective g) (hf : ∀ x ∈ L.support, x ∉ Set.range g → f x = 1) :
     HasProd (f ∘ g) a (L.comap ⟨g, hg⟩) ↔ HasProd f a L := by
   simp only [HasProd, SummationFilter.comap_filter, tendsto_map'_iff, comp_apply,
     Embedding.coeFn_mk, Function.comp_def]
   refine tendsto_congr' ?_
   filter_upwards [L.eventually_le_support] with s hs
   rw [s.prod_preimage]
-  exact fun x h h' => hf x (hs h) h'
+  exact fun x h h' ↦ hf x (hs h) h'
 
 @[to_additive]
-/--
-theorem `Function.Injective.hasProd_comap_iff` / 定理 `Function.Injective.hasProd_comap_iff`
-
-English:
-theorem Function.Injective.hasProd_comap_iff
-  statement: {g : γ -> β} (hg : Injective g)
-  proof: by
-  simp only [HasProd, SummationFilter.comap_filter, tendsto_map'_iff, comp_apply,
-    Embedding.coeFn_mk, Function.comp_def]
-  refine tendsto_congr fun s => ?_
-  rw [s.prod_preimage]
-  exact fun x _ h => hf x h
-
-@[to_additive]
-
-中文:
-定理 函数.单射.hasProd_comap_iff
-  结论: {g : γ -> β} (hg : 单射 g)
-  证明: by
-  simp only [HasProd, SummationFilter.comap_filter, tendsto_map'_iff, comp_apply,
-    Embedding.coeFn_mk, Function.comp_def]
-  refine tendsto_congr fun s => ?_
-  rw [s.prod_preimage]
-  exact fun x _ h => hf x h
-
-@[to_additive]
-
-Depends on / 依赖: Embedding, Embedding.coeFn_mk, Function, Function.comp_def, HasProd, SummationFilter, SummationFilter.comap_filter, _iff, coeFn_mk, comap_filter, comp_apply, comp_def, prod_preimage, s.prod_preimage, tendsto_congr, tendsto_map
+/-
+**Function.Injective.hasProd_comap_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Function.Injective.hasProd_comap_iff {g : γ -> β} (hg : Injective g) (hf :
+ forall x, x ∉ Set.range g -> f x = 1) : HasProd (f ∘ g) a (L.comap ⟨g, hg⟩) ↔ H
+asProd f a L
+参数：hg : Injective g；hf : forall x, x ∉ Set.range g -> f x = 1。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `SummationFilter.comap_filter`：∀ {β : Type u_2} {γ : Type u_3} (L : Summa
+tionFilter β) (f : γ ↪ β),   (L.comap f).filter = Filter.map (fun s => s.preimag
+e ⇑f ⋯) L.filter
+· 使用定理 `Filter.tendsto_congr`：tendsto_congr {f₁ f₂ : α -> β} {l₁ : Filter α} {l₂
+ : Filter β} (h : forall x, f₁ x = f₂ x) : Tendsto f₁ l₁ l₂ ↔ Tendsto f₂ l₁ l₂
+· 使用引理 `Finset.prod_preimage`：prod_preimage (f : ι -> κ) (s : Finset κ) (hf) (g 
+: κ -> β) (hg : forall x in s, x ∉ Set.range f -> g x = 1) : ∏ x in s.preimage f
+ hf, g (f …
 -/
-theorem Function.Injective.hasProd_comap_iff {g : γ -> β} (hg : Injective g)
-    (hf : forall x, x ∉ Set.range g -> f x = 1) :
+theorem Function.Injective.hasProd_comap_iff {g : γ → β} (hg : Injective g)
+    (hf : ∀ x, x ∉ Set.range g → f x = 1) :
     HasProd (f ∘ g) a (L.comap ⟨g, hg⟩) ↔ HasProd f a L := by
   simp only [HasProd, SummationFilter.comap_filter, tendsto_map'_iff, comp_apply,
     Embedding.coeFn_mk, Function.comp_def]
-  refine tendsto_congr fun s => ?_
+  refine tendsto_congr fun s ↦ ?_
   rw [s.prod_preimage]
-  exact fun x _ h => hf x h
+  exact fun x _ h ↦ hf x h
 
 @[to_additive]
-/--
-theorem `Function.Injective.hasProd_iff` / 定理 `Function.Injective.hasProd_iff`
-
-English:
-theorem Function.Injective.hasProd_iff
-  statement: {g : γ -> β} (hg : Injective g)
-  proof: by
-  rw [← hg.hasProd_comap_iff hf]; rw [SummationFilter.comap_unconditional]
-
-@[to_additive]
-
-中文:
-定理 函数.单射.hasProd_iff
-  结论: {g : γ -> β} (hg : 单射 g)
-  证明: by
-  rw [← hg.hasProd_comap_iff hf]; rw [SummationFilter.comap_unconditional]
-
-@[to_additive]
-
-Depends on / 依赖: SummationFilter, SummationFilter.comap_unconditional, comap_unconditional, hasProd_comap_iff, hg.hasProd_comap_iff
+/-
+**Function.Injective.hasProd_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Function.Injective.hasProd_iff {g : γ -> β} (hg : Injective g) (hf : foral
+l x, x ∉ Set.range g -> f x = 1) : HasProd (f ∘ g) a ↔ HasProd f a
+参数：hg : Injective g；hf : forall x, x ∉ Set.range g -> f x = 1。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Injective.hasProd_comap_iff`：Function.Injective.hasProd_comap_i
+ff {g : γ -> β} (hg : Injective g) (hf : forall x, x ∉ Set.range g -> f x = 1) :
+ HasProd (f ∘ g) a (L.coma…
+· 使用定理 `SummationFilter.comap_unconditional`：∀ {γ : Type u_3} {β : Type u_4} (f 
+: γ ↪ β), (SummationFilter.unconditional β).comap f = SummationFilter.unconditio
+nal γ
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem Function.Injective.hasProd_iff {g : γ -> β} (hg : Injective g)
-    (hf : forall x, x ∉ Set.range g -> f x = 1) :
+theorem Function.Injective.hasProd_iff {g : γ → β} (hg : Injective g)
+    (hf : ∀ x, x ∉ Set.range g → f x = 1) :
     HasProd (f ∘ g) a ↔ HasProd f a := by
-  rw [← hg.hasProd_comap_iff hf]; rw [SummationFilter.comap_unconditional]
+  rw [← hg.hasProd_comap_iff hf, SummationFilter.comap_unconditional]
 
 @[to_additive]
-/--
-theorem `hasProd_subtype_comap_iff_of_mulSupport_subset` / 定理 `hasProd_subtype_comap_iff_of_mulSupport_subset`
-
-English:
-theorem hasProd_subtype_comap_iff_of_mulSupport_subset
-  given: {s : Set β} (hf : mulSupport f subseteq s)
-  proof: Subtype.coe_injective.hasProd_comap_iff by simpa using mulSupport_subset_iff'.1 hf
-
-@[to_additive]
-
-中文:
-定理 hasProd_subtype_comap_iff_of_mulSupport_subset
-  条件: {s : 集合 β} (hf : mulSupport f subseteq s)
-  证明: Subtype.coe_injective.hasProd_comap_iff by simpa using mulSupport_subset_iff'.1 hf
-
-@[to_additive]
-
-Depends on / 依赖: Subtype, Subtype.coe_injective.hasProd_comap_iff, coe_injective, hasProd_comap_iff, mulSupport_subset_iff
+/-
+**hasProd_subtype_comap_iff_of_mulSupport_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasProd_subtype_comap_iff_of_mulSupport_subset {s : Set β} (hf : mulSuppor
+t f subseteq s) : HasProd (f ∘ (↑) : s -> α) a (L.comap <| Embedding.subtype _) 
+↔ HasProd f a L
+参数：hf : mulSupport f subseteq s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.hasProd_comap_iff`：Function.Injective.hasProd_comap_i
+ff {g : γ -> β} (hg : Injective g) (hf : forall x, x ∉ Set.range g -> f x = 1) :
+ HasProd (f ∘ g) a (L.coma…
+· 使用定理 `Subtype.coe_injective`：coe_injective : Injective (fun (a : Subtype p) =>
+ (a : α))
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Subtype.range_coe_subtype`：range_coe_subtype {p : α -> Prop} : range ((↑
+) : Subtype p -> α) = { x | p x }
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用引理 `Function.mulSupport_subset_iff'`：mulSupport_subset_iff' : mulSupport f s
+ubseteq s ↔ forall x ∉ s, f x = 1
 -/
-theorem hasProd_subtype_comap_iff_of_mulSupport_subset {s : Set β} (hf : mulSupport f subseteq s) :
-    HasProd (f ∘ (↑) : s -> α) a (L.comap <| Embedding.subtype _) ↔ HasProd f a L :=
-Subtype.coe_injective.hasProd_comap_iff by simpa using mulSupport_subset_iff'.1 hf
+theorem hasProd_subtype_comap_iff_of_mulSupport_subset {s : Set β} (hf : mulSupport f ⊆ s) :
+    HasProd (f ∘ (↑) : s → α) a (L.comap <| Embedding.subtype _) ↔ HasProd f a L :=
+  Subtype.coe_injective.hasProd_comap_iff <| by simpa using mulSupport_subset_iff'.1 hf
 
 @[to_additive]
-/--
-theorem `hasProd_subtype_iff_of_mulSupport_subset` / 定理 `hasProd_subtype_iff_of_mulSupport_subset`
-
-English:
-theorem hasProd_subtype_iff_of_mulSupport_subset
-  given: {s : Set β} (hf : mulSupport f subseteq s)
-  proof: by
-  simpa using hasProd_subtype_comap_iff_of_mulSupport_subset hf (L := unconditional _)
-
-@[to_additive]
-
-中文:
-定理 hasProd_subtype_iff_of_mulSupport_subset
-  条件: {s : 集合 β} (hf : mulSupport f subseteq s)
-  证明: by
-  simpa using hasProd_subtype_comap_iff_of_mulSupport_subset hf (L := unconditional _)
-
-@[to_additive]
-
-Depends on / 依赖: hasProd_subtype_comap_iff_of_mulSupport_subset, unconditional
+/-
+**hasProd_subtype_iff_of_mulSupport_subset** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasProd_subtype_iff_of_mulSupport_subset {s : Set β} (hf : mulSupport f su
+bseteq s) : HasProd (f ∘ (↑) : s -> α) a ↔ HasProd f a
+参数：hf : mulSupport f subseteq s。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `SummationFilter.comap_unconditional`：∀ {γ : Type u_3} {β : Type u_4} (f 
+: γ ↪ β), (SummationFilter.unconditional β).comap f = SummationFilter.unconditio
+nal γ
+· 使用定理 `hasProd_subtype_comap_iff_of_mulSupport_subset`：hasProd_subtype_comap_if
+f_of_mulSupport_subset {s : Set β} (hf : mulSupport f subseteq s) : HasProd (f ∘
+ (↑) : s -> α) a (L.comap <| Embeddi…
 -/
-theorem hasProd_subtype_iff_of_mulSupport_subset {s : Set β} (hf : mulSupport f subseteq s) :
-    HasProd (f ∘ (↑) : s -> α) a ↔ HasProd f a := by
+theorem hasProd_subtype_iff_of_mulSupport_subset {s : Set β} (hf : mulSupport f ⊆ s) :
+    HasProd (f ∘ (↑) : s → α) a ↔ HasProd f a := by
   simpa using hasProd_subtype_comap_iff_of_mulSupport_subset hf (L := unconditional _)
 
 @[to_additive]
-/--
-theorem `hasProd_fintype_support` / 定理 `hasProd_fintype_support`
-
-English:
-theorem hasProd_fintype_support
-  statement: [Fintype β] (f : β -> α) (L : SummationFilter β) [L.HasSupport]
-  proof: by
+/-
+**hasProd_fintype_support** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasProd_fintype_support [Fintype β] (f : β -> α) (L : SummationFilter β) [
+L.HasSupport] [DecidablePred (· in L.support)] : HasProd f (∏ b in L.support, f 
+b) L
+参数：f : β -> α；L : SummationFilter β；· in L.support。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `tendsto_nhds_of_eventually_eq`：tendsto_nhds_of_eventually_eq {l : Filter
+ α} {f : α -> X} (h : forallᶠ x' in l, f x' = x) : Tendsto f l (𝓝 x)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.biInter_mem`：biInter_mem {β : Type v} {s : β -> Set α} {is : Set 
+β} (hf : is.Finite) : (⋂ i in is, s i) in f ↔ forall i in is, s i in f
+· 使用定理 `Set.toFinite`：toFinite (s : Set α) [Finite s] : s.Finite
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Or.resolve_left`：∀ {a b : Prop}, a ∨ b → ¬a → b
+· 使用引理 `SummationFilter.eventually_mem_or_not_mem`：eventually_mem_or_not_mem (L 
+: SummationFilter β) [HasSupport L] (b : β) : (forallᶠ s in L.filter, b in s) ∨ 
+(forallᶠ s in L.filter, b ∉ s)
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Set.iInter_congr_Prop`：iInter_congr_Prop {p q : Prop} {f₁ : p -> Set α} 
+{f₂ : q -> Set α} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iInter f₁ 
+= iInter f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+-/
+theorem hasProd_fintype_support [Fintype β] (f : β → α) (L : SummationFilter β) [L.HasSupport]
+    [DecidablePred (· ∈ L.support)] : HasProd f (∏ b ∈ L.support, f b) L := by
   apply tendsto_nhds_of_eventually_eq
-  have h1 : ⋂ b in L.support, {s | b in s} in L.filter :=
+  have h1 : ⋂ b ∈ L.support, {s | b ∈ s} ∈ L.filter :=
     (L.filter.biInter_mem L.support.toFinite).mpr (by tauto)
-  have h2 : ⋂ b in L.supportᶜ, {s | b ∉ s} in L.filter :=
+  have h2 : ⋂ b ∈ L.supportᶜ, {s | b ∉ s} ∈ L.filter :=
     (L.filter.biInter_mem L.supportᶜ.toFinite).mpr
-      (fun b hb => (L.eventually_mem_or_not_mem b).resolve_left hb)
+      (fun b hb ↦ (L.eventually_mem_or_not_mem b).resolve_left hb)
   filter_upwards [h1, h2] with s hs hs'
   congr 1
   simp only [Set.mem_iInter, Set.mem_ofPred_eq, Set.mem_compl_iff] at hs hs'
   grind
 
 @[to_additive]
-
-中文:
-定理 hasProd_fintype_support
-  结论: [有限类型 β] (f : β -> α) (L : SummationFilter β) [L.有Support]
-  证明: by
-  apply tendsto_nhds_of_eventually_eq
-  have h1 : ⋂ b in L.support, {s | b in s} in L.filter :=
-    (L.filter.biInter_mem L.support.toFinite).mpr (by tauto)
-  have h2 : ⋂ b in L.supportᶜ, {s | b ∉ s} in L.filter :=
-    (L.filter.biInter_mem L.supportᶜ.toFinite).mpr
-      (fun b hb => (L.eventually_mem_or_not_mem b).resolve_left hb)
-  filter_upwards [h1, h2] with s hs hs'
-  congr 1
-  simp only [Set.mem_iInter, Set.mem_ofPred_eq, Set.mem_compl_iff] at hs hs'
-  grind
-
-@[to_additive]
-
-Depends on / 依赖: L.eventually_mem_or_not_mem, L.filter, L.filter.biInter_mem, L.support, L.support.toFinite, Set.mem_compl_iff, Set.mem_iInter, Set.mem_ofPred_eq, biInter_mem, eventually_mem_or_not_mem, filter, filter_upwards, mem_compl_iff, mem_iInter, mem_ofPred_eq, resolve_left, support, tendsto_nhds_of_eventually_eq, toFinite
+/-
+**hasProd_fintype** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasProd_fintype [Fintype β] (f : β -> α) (L
+参数：f : β -> α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.toFinset_congr`：toFinset_congr {s t : Set α} [Fintype s] [Fintype t]
+ (h : s = t) : toFinset s = toFinset t
+· 使用定理 `SummationFilter.support_eq_univ`：∀ {β : Type u_2} (L : SummationFilter β
+) [L.LeAtTop], L.support = Set.univ
+· 使用定理 `Set.toFinset_univ`：toFinset_univ [Fintype α] [Fintype (Set.univ : Set α)
+] : (Set.univ : Set α).toFinset = Finset.univ
+· 使用定理 `hasProd_fintype_support`：hasProd_fintype_support [Fintype β] (f : β -> α
+) (L : SummationFilter β) [L.HasSupport] [DecidablePred (· in L.support)] : HasP
+rod f (∏ b in…
+· 使用定理 `SummationFilter.instHasSupportOfLeAtTop`：∀ {β : Type u_2} (L : Summation
+Filter β) [L.LeAtTop], L.HasSupport
 -/
-theorem hasProd_fintype_support [Fintype β] (f : β -> α) (L : SummationFilter β) [L.HasSupport]
-    [DecidablePred (· in L.support)] : HasProd f (∏ b in L.support, f b) L := by
-  apply tendsto_nhds_of_eventually_eq
-  have h1 : ⋂ b in L.support, {s | b in s} in L.filter :=
-    (L.filter.biInter_mem L.support.toFinite).mpr (by tauto)
-  have h2 : ⋂ b in L.supportᶜ, {s | b ∉ s} in L.filter :=
-    (L.filter.biInter_mem L.supportᶜ.toFinite).mpr
-      (fun b hb => (L.eventually_mem_or_not_mem b).resolve_left hb)
-  filter_upwards [h1, h2] with s hs hs'
-  congr 1
-  simp only [Set.mem_iInter, Set.mem_ofPred_eq, Set.mem_compl_iff] at hs hs'
-  grind
-
-@[to_additive]
-/--
-theorem `hasProd_fintype` / 定理 `hasProd_fintype`
-
-English:
-theorem hasProd_fintype
-  given: [Fintype β] (f : β -> α) (L := unconditional β) [L.LeAtTop]
-  proof: by
-  simpa using hasProd_fintype_support f L
-
-@[to_additive]
-
-中文:
-定理 hasProd_fintype
-  条件: [有限类型 β] (f : β -> α) (L := unconditional β) [L.LeAtTop]
-  证明: by
-  simpa using hasProd_fintype_support f L
-
-@[to_additive]
-
-Depends on / 依赖: L.LeAtTop, LeAtTop, unconditional
--/
-theorem hasProd_fintype [Fintype β] (f : β -> α) (L := unconditional β) [L.LeAtTop] :
+theorem hasProd_fintype [Fintype β] (f : β → α) (L := unconditional β) [L.LeAtTop] :
     HasProd f (∏ b, f b) L := by
   simpa using hasProd_fintype_support f L
 
 @[to_additive]
-/--
-theorem `Finset.hasProd_support` / 定理 `Finset.hasProd_support`
-
-English:
-theorem Finset.hasProd_support
-  statement: (s : Finset β) (f : β -> α) (L := unconditional (s : Set β))
-  proof: by
-  simpa [prod_attach] using hasProd_fintype_support (f ∘ Subtype.val) L
-
-中文:
-定理 有限集.hasProd_support
-  结论: (s : 有限集 β) (f : β -> α) (L := unconditional (s : 集合 β))
-  证明: by
-  simpa [prod_attach] using hasProd_fintype_support (f ∘ Subtype.val) L
-
-Depends on / 依赖: unconditional
+/-
+**Finset.hasProd_support** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Finset.hasProd_support (s : Finset β) (f : β -> α) (L
+参数：s : Finset β；f : β -> α。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.prod_map`：prod_map (s : Finset ι) (e : ι ↪ κ) (f : κ -> M) : ∏ x 
+in s.map e, f x = ∏ x in s, f (e x)
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `hasProd_fintype_support`：hasProd_fintype_support [Fintype β] (f : β -> α
+) (L : SummationFilter β) [L.HasSupport] [DecidablePred (· in L.support)] : HasP
+rod f (∏ b in…
 -/
-theorem Finset.hasProd_support (s : Finset β) (f : β -> α) (L := unconditional (s : Set β))
-    [L.HasSupport] [DecidablePred (· in L.support)] :
-    HasProd (f ∘ (↑) : (↑s : Set β) -> α)
-      (∏ b in (L.support.toFinset.map <| Embedding.subtype _), f b) L := by
+theorem Finset.hasProd_support (s : Finset β) (f : β → α) (L := unconditional (s : Set β))
+    [L.HasSupport] [DecidablePred (· ∈ L.support)] :
+    HasProd (f ∘ (↑) : (↑s : Set β) → α)
+      (∏ b ∈ (L.support.toFinset.map <| Embedding.subtype _), f b) L := by
   simpa [prod_attach] using hasProd_fintype_support (f ∘ Subtype.val) L
 
 set_option backward.isDefEq.respectTransparency false in
 -- note this is not deduced from `Finset.hasProd_support` to avoid needing `[DecidableEq β]`
 @[to_additive]
-/--
-theorem `Finset.hasProd` / 定理 `Finset.hasProd`
-
-English:
-theorem Finset.hasProd
-  statement: (s : Finset β) (f : β -> α)
-  proof: by
-  simpa [prod_attach, Embedding.subtype] using Finset.hasProd_support s f L
-
-中文:
-定理 有限集.hasProd
-  结论: (s : 有限集 β) (f : β -> α)
-  证明: by
-  simpa [prod_attach, Embedding.subtype] using Finset.hasProd_support s f L
+/-
+**Finset.hasProd** 是 Mathlib 中的一个定理，位于命名空间 `Finset`。
+形式化陈述：∀ {α : Type u_1} {β : Type u_2} [inst : CommMonoid α] [inst_1 : Topologica
+lSpace α] (s : Finset β) (f : β → α)   (L : optParam (SummationFilter ↑↑s) (Summ
+ationFilter.unconditional ↑↑s)) [L.LeAtTop],   HasProd (f ∘ Subtype.val) (∏ b ∈ 
+s, f b) L
+参数：s : Finset β；f : β → α；L : optParam (SummationFilter ↑↑s) (SummationFilter.un
+conditional ↑↑s)；f ∘ Subtype.val；∏ b ∈ s, f b。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Subtype.ext`：∀ {α : Sort u} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 =
+ ↑a2 → a1 = a2
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `Set.toFinset_congr`：toFinset_congr {s t : Set α} [Fintype s] [Fintype t]
+ (h : s = t) : toFinset s = toFinset t
+· 使用定理 `SummationFilter.support_eq_univ`：∀ {β : Type u_2} (L : SummationFilter β
+) [L.LeAtTop], L.support = Set.univ
+· 使用定理 `Set.toFinset_univ`：toFinset_univ [Fintype α] [Fintype (Set.univ : Set α)
+] : (Set.univ : Set α).toFinset = Finset.univ
+· 使用定理 `Finset.prod_map`：prod_map (s : Finset ι) (e : ι ↪ κ) (f : κ -> M) : ∏ x 
+in s.map e, f x = ∏ x in s, f (e x)
+· 使用引理 `Finset.prod_attach`：prod_attach (s : Finset ι) (f : ι -> M) : ∏ x in s.a
+ttach, f x = ∏ x in s, f x
+· 使用定理 `Finset.hasProd_support`：Finset.hasProd_support (s : Finset β) (f : β -> 
+α) (L
+· 使用定理 `SummationFilter.instHasSupportOfLeAtTop`：∀ {β : Type u_2} (L : Summation
+Filter β) [L.LeAtTop], L.HasSupport
 -/
-protected theorem Finset.hasProd (s : Finset β) (f : β -> α)
+protected theorem Finset.hasProd (s : Finset β) (f : β → α)
     (L := unconditional (s : Set β)) [L.LeAtTop] :
-    HasProd (f ∘ (↑) : (↑s : Set β) -> α) (∏ b in s, f b) L := by
+    HasProd (f ∘ (↑) : (↑s : Set β) → α) (∏ b ∈ s, f b) L := by
   simpa [prod_attach, Embedding.subtype] using Finset.hasProd_support s f L
 
 /-- If a function `f` is `1` outside of a finite set `s`, then it `HasProd` `∏ b ∈ s, f b`. -/
 @[to_additive /-- If a function `f` vanishes outside of a finite set `s`, then it `HasSum`
 `∑ b ∈ s, f b`. -/]
-/--
-theorem `hasProd_prod_support_of_ne_finset_one` / 定理 `hasProd_prod_support_of_ne_finset_one`
-
-English:
-theorem hasProd_prod_support_of_ne_finset_one
-  statement: (hf : forall b in L.support, b ∉ s -> f b = 1)
-  proof: by
-  apply tendsto_nhds_of_eventually_eq
-  have h1 : ⋂ b in (↑s inter L.support), {s | b in s} in L.filter :=
-    (L.filter.biInter_mem (Set.toFinite _)).mpr (fun b hb => hb.2)
-  filter_upwards [h1, L.eventually_le_support] with t ht ht'
-  simp only [Set.mem_iInter] at ht
-  apply Finset.prod_congr_of_eq_on_inter <;> grind
-
-中文:
-定理 hasProd_prod_support_of_ne_finset_one
-  结论: (hf : 对任意 b in L.support, b ∉ s -> f b = 1)
-  证明: by
-  apply tendsto_nhds_of_eventually_eq
-  have h1 : ⋂ b in (↑s inter L.support), {s | b in s} in L.filter :=
-    (L.filter.biInter_mem (Set.toFinite _)).mpr (fun b hb => hb.2)
-  filter_upwards [h1, L.eventually_le_support] with t ht ht'
-  simp only [Set.mem_iInter] at ht
-  apply Finset.prod_congr_of_eq_on_inter <;> grind
-
-Depends on / 依赖: Finset, Finset.prod_congr_of_eq_on_inter, L.eventually_le_support, L.filter, L.filter.biInter_mem, L.support, Set.mem_iInter, Set.toFinite, biInter_mem, eventually_le_support, filter, filter_upwards, mem_iInter, prod_congr_of_eq_on_inter, support, tendsto_nhds_of_eventually_eq, toFinite
+/-
+**hasProd_prod_support_of_ne_finset_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasProd_prod_support_of_ne_finset_one (hf : forall b in L.support, b ∉ s -
+> f b = 1) [L.HasSupport] [DecidablePred (· in L.support)] : HasProd f (∏ b in (
+↑s inter L.support).toFinset, f b) L
+参数：hf : forall b in L.support, b ∉ s -> f b = 1；· in L.support。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `tendsto_nhds_of_eventually_eq`：tendsto_nhds_of_eventually_eq {l : Filter
+ α} {f : α -> X} (h : forallᶠ x' in l, f x' = x) : Tendsto f l (𝓝 x)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Filter.biInter_mem`：biInter_mem {β : Type v} {s : β -> Set α} {is : Set 
+β} (hf : is.Finite) : (⋂ i in is, s i) in f ↔ forall i in is, s i in f
+· 使用定理 `Set.toFinite`：toFinite (s : Set α) [Finite s] : s.Finite
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Filter.mp_mem`：mp_mem (hs : s in f) (h : { x | x in s -> x in t } in f) 
+: t in f
+· 使用定理 `SummationFilter.HasSupport.eventually_le_support`：∀ {β : Type u_2} {L : 
+SummationFilter β} [self : L.HasSupport], ∀ᶠ (s : Finset β) in L.filter, ↑s ⊆ L.
+support
+· 使用定理 `Filter.univ_mem'`：univ_mem' (h : forall a, a in s) : s in f
+· 使用引理 `Finset.prod_congr_of_eq_on_inter`：prod_congr_of_eq_on_inter {ι M : Type*
+} {s₁ s₂ : Finset ι} {f g : ι -> M} [CommMonoid M] (h₁ : forall a in s₁, a ∉ s₂ 
+-> f a = 1) (h₂ : fora…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
 -/
-theorem hasProd_prod_support_of_ne_finset_one (hf : forall b in L.support, b ∉ s -> f b = 1)
-    [L.HasSupport] [DecidablePred (· in L.support)] :
-    HasProd f (∏ b in (↑s inter L.support).toFinset, f b) L := by
+theorem hasProd_prod_support_of_ne_finset_one (hf : ∀ b ∈ L.support, b ∉ s → f b = 1)
+    [L.HasSupport] [DecidablePred (· ∈ L.support)] :
+    HasProd f (∏ b ∈ (↑s ∩ L.support).toFinset, f b) L := by
   apply tendsto_nhds_of_eventually_eq
-  have h1 : ⋂ b in (↑s inter L.support), {s | b in s} in L.filter :=
-    (L.filter.biInter_mem (Set.toFinite _)).mpr (fun b hb => hb.2)
+  have h1 : ⋂ b ∈ (↑s ∩ L.support), {s | b ∈ s} ∈ L.filter :=
+    (L.filter.biInter_mem (Set.toFinite _)).mpr (fun b hb ↦ hb.2)
   filter_upwards [h1, L.eventually_le_support] with t ht ht'
   simp only [Set.mem_iInter] at ht
   apply Finset.prod_congr_of_eq_on_inter <;> grind
@@ -718,112 +697,119 @@ theorem hasProd_prod_support_of_ne_finset_one (hf : forall b in L.support, b ∉
 /-- If a function `f` is `1` outside of a finite set `s`, then it `HasProd` `∏ b ∈ s, f b`. -/
 @[to_additive /-- If a function `f` vanishes outside of a finite set `s`, then it `HasSum`
 `∑ b ∈ s, f b`. -/]
-/--
-theorem `hasProd_prod_of_ne_finset_one` / 定理 `hasProd_prod_of_ne_finset_one`
-
-English:
-theorem hasProd_prod_of_ne_finset_one
-  given: (hf : forall b ∉ s, f b = 1) [L.LeAtTop]
-  proof: ((hasProd_subtype_iff_of_mulSupport_subset <| mulSupport_subset_iff'.2 hf).1 <| s.hasProd f)
-.mono_left L.le_atTop
-
-@[to_additive]
-
-中文:
-定理 hasProd_prod_of_ne_finset_one
-  条件: (hf : 对任意 b ∉ s, f b = 1) [L.LeAtTop]
-  证明: ((hasProd_subtype_iff_of_mulSupport_subset <| mulSupport_subset_iff'.2 hf).1 <| s.hasProd f)
-.mono_left L.le_atTop
-
-@[to_additive]
-
-Depends on / 依赖: L.le_atTop, hasProd, hasProd_subtype_iff_of_mulSupport_subset, le_atTop, mono_left, mulSupport_subset_iff, s.hasProd
+/-
+**hasProd_prod_of_ne_finset_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasProd_prod_of_ne_finset_one (hf : forall b ∉ s, f b = 1) [L.LeAtTop] : H
+asProd f (∏ b in s, f b) L
+参数：hf : forall b ∉ s, f b = 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Filter.Tendsto.mono_left`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {x
+ y : Filter α} {z : Filter β},   Filter.Tendsto f x z → y ≤ x → Filter.Tendsto f
+ y z
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `hasProd_subtype_iff_of_mulSupport_subset`：hasProd_subtype_iff_of_mulSupp
+ort_subset {s : Set β} (hf : mulSupport f subseteq s) : HasProd (f ∘ (↑) : s -> 
+α) a ↔ HasProd f a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用引理 `Function.mulSupport_subset_iff'`：mulSupport_subset_iff' : mulSupport f s
+ubseteq s ↔ forall x ∉ s, f x = 1
+· 使用定理 `Finset.hasProd`：∀ {α : Type u_1} {β : Type u_2} [inst : CommMonoid α] [i
+nst_1 : TopologicalSpace α] (s : Finset β) (f : β → α)   (L : optParam (Summatio
+nFil…
+· 使用定理 `SummationFilter.instLeAtTopUnconditional`：∀ (β : Type u_2), (SummationFi
+lter.unconditional β).LeAtTop
+· 使用定理 `SummationFilter.LeAtTop.le_atTop`：∀ {β : Type u_2} {L : SummationFilter 
+β} [self : L.LeAtTop], L.filter ≤ Filter.atTop
 -/
-theorem hasProd_prod_of_ne_finset_one (hf : forall b ∉ s, f b = 1) [L.LeAtTop] :
-    HasProd f (∏ b in s, f b) L :=
+theorem hasProd_prod_of_ne_finset_one (hf : ∀ b ∉ s, f b = 1) [L.LeAtTop] :
+    HasProd f (∏ b ∈ s, f b) L :=
   ((hasProd_subtype_iff_of_mulSupport_subset <| mulSupport_subset_iff'.2 hf).1 <| s.hasProd f)
-.mono_left L.le_atTop
+    |>.mono_left L.le_atTop
 
 @[to_additive]
-/--
-theorem `multipliable_of_ne_finset_one` / 定理 `multipliable_of_ne_finset_one`
-
-English:
-theorem multipliable_of_ne_finset_one
-  given: (hf : forall b ∉ s, f b = 1) [L.HasSupport]
-  proof: by
-  classical
-  exact (hasProd_prod_support_of_ne_finset_one (fun b _ hb => hf b hb)).multipliable
-
-@[to_additive]
-
-中文:
-定理 multipliable_of_ne_finset_one
-  条件: (hf : 对任意 b ∉ s, f b = 1) [L.有Support]
-  证明: by
-  classical
-  exact (hasProd_prod_support_of_ne_finset_one (fun b _ hb => hf b hb)).multipliable
-
-@[to_additive]
-
-Depends on / 依赖: classical, hasProd_prod_support_of_ne_finset_one, multipliable
+/-
+**multipliable_of_ne_finset_one** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：multipliable_of_ne_finset_one (hf : forall b ∉ s, f b = 1) [L.HasSupport] 
+: Multipliable f L
+参数：hf : forall b ∉ s, f b = 1。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasProd.multipliable`：HasProd.multipliable (h : HasProd f a L) : Multipl
+iable f L
+· 使用定理 `hasProd_prod_support_of_ne_finset_one`：hasProd_prod_support_of_ne_finset
+_one (hf : forall b in L.support, b ∉ s -> f b = 1) [L.HasSupport] [DecidablePre
+d (· in L.support)] : HasPr…
 -/
-theorem multipliable_of_ne_finset_one (hf : forall b ∉ s, f b = 1) [L.HasSupport] :
+theorem multipliable_of_ne_finset_one (hf : ∀ b ∉ s, f b = 1) [L.HasSupport] :
     Multipliable f L := by
   classical
-  exact (hasProd_prod_support_of_ne_finset_one (fun b _ hb => hf b hb)).multipliable
+  exact (hasProd_prod_support_of_ne_finset_one (fun b _ hb ↦ hf b hb)).multipliable
 
 @[to_additive]
-/--
-theorem `Multipliable.hasProd` / 定理 `Multipliable.hasProd`
-
-English:
-theorem Multipliable.hasProd
-  given: (ha : Multipliable f L)
-  statement: HasProd f (∏'[L] b, f b) L
-  proof: by
-  -- This is quite delicate because of the fiddly special-casing for finite products.
-  classical
-  rw [tprod_def]; rw [dif_pos ha]
-  split_ifs with h h'
-  · convert! hasProd_prod_support_of_ne_finset_one (s := h.2.toFinset) (L := L) _ using 2
-    · simp only [Set.inter_eq_left.mpr (show ↑h.2.toFinset subseteq L.support by simp)]
-      simp only [Set.Finite.coe_toFinset, Finset.toFinset_coe]
-      rw [finprod_eq_prod_of_mulSupport_subset (s := h.2.toFinset)]
-      · exact Finset.prod_congr rfl (by simp_all)
-      · simp
-    · grind [Set.Finite.mem_toFinset, mem_mulSupport]
-    · exact h.1
-  · exact h'
-  · exact ha.choose_spec
-
-中文:
-定理 Multipliable.hasProd
-  条件: (ha : Multipliable f L)
-  结论: 有积类型 f (∏'[L] b, f b) L
-  证明: by
-  -- This is quite delicate because of the fiddly special-casing for finite products.
-  classical
-  rw [tprod_def]; rw [dif_pos ha]
-  split_ifs with h h'
-  · convert! hasProd_prod_support_of_ne_finset_one (s := h.2.toFinset) (L := L) _ using 2
-    · simp only [Set.inter_eq_left.mpr (show ↑h.2.toFinset subseteq L.support by simp)]
-      simp only [Set.Finite.coe_toFinset, Finset.toFinset_coe]
-      rw [finprod_eq_prod_of_mulSupport_subset (s := h.2.toFinset)]
-      · exact Finset.prod_congr rfl (by simp_all)
-      · simp
-    · grind [Set.Finite.mem_toFinset, mem_mulSupport]
-    · exact h.1
-  · exact h'
-  · exact ha.choose_spec
+/-
+**Multipliable.hasProd** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Multipliable.hasProd (ha : Multipliable f L) : HasProd f (∏'[L] b, f b) L
+参数：ha : Multipliable f L。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `tprod_def`：∀ {α : Type u_4} {β : Type u_5} [inst : CommMonoid α] [inst_1
+ : TopologicalSpace α] (f : β → α) (L : SummationFilter β),   tprod f L =     i…
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.prod_congr`：prod_congr (h : s₁ = s₂) : (forall x in s₂, f x = g x
+) -> s₁.prod f = s₂.prod g
+· 使用定理 `Set.toFinset_congr`：toFinset_congr {s t : Set α} [Fintype s] [Fintype t]
+ (h : s = t) : toFinset s = toFinset t
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.inter_eq_left`：∀ {α : Type u} {s t : Set α}, s ∩ t = s ↔ s ⊆ t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.Finite.coe_toFinset`：∀ {α : Type u} {s : Set α} (hs : s.Finite), ↑hs
+.toFinset = s
+· 使用定理 `Finset.toFinset_coe`：Finset.toFinset_coe (s : Finset α) [Fintype (s : Se
+t α)] : (s : Set α).toFinset = s
+· 使用定理 `finprod_eq_prod_of_mulSupport_subset`：finprod_eq_prod_of_mulSupport_subs
+et (f : α -> M) {s : Finset α} (h : mulSupport f subseteq s) : ∏ᶠ i, f i = ∏ i i
+n s, f i
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用引理 `Set.mulSupport_mulIndicator`：mulSupport_mulIndicator : Function.mulSuppo
+rt (s.mulIndicator f) = s inter Function.mulSupport f
+· 使用定理 `and_self`：∀ (p : Prop), (p ∧ p) = p
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用引理 `Set.mulIndicator_of_mem`：mulIndicator_of_mem (h : a in s) (f : α -> M) :
+ mulIndicator s f a = f a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `hasProd_prod_support_of_ne_finset_one`：hasProd_prod_support_of_ne_finset
+_one (hf : forall b in L.support, b ∉ s -> f b = 1) [L.HasSupport] [DecidablePre
+d (· in L.support)] : HasPr…
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Exists.choose_spec`：∀ {α : Sort u_1} {p : α → Prop} (P : ∃ a, p a), p P.
+choose
 -/
 theorem Multipliable.hasProd (ha : Multipliable f L) : HasProd f (∏'[L] b, f b) L := by
   -- This is quite delicate because of the fiddly special-casing for finite products.
   classical
-  rw [tprod_def]; rw [dif_pos ha]
+  rw [tprod_def, dif_pos ha]
   split_ifs with h h'
   · convert! hasProd_prod_support_of_ne_finset_one (s := h.2.toFinset) (L := L) _ using 2
-    · simp only [Set.inter_eq_left.mpr (show ↑h.2.toFinset subseteq L.support by simp)]
+    · simp only [Set.inter_eq_left.mpr (show ↑h.2.toFinset ⊆ L.support by simp)]
       simp only [Set.Finite.coe_toFinset, Finset.toFinset_coe]
       rw [finprod_eq_prod_of_mulSupport_subset (s := h.2.toFinset)]
       · exact Finset.prod_congr rfl (by simp_all)
@@ -836,122 +822,94 @@ theorem Multipliable.hasProd (ha : Multipliable f L) : HasProd f (∏'[L] b, f b
 variable [T2Space α] [L.NeBot]
 
 @[to_additive]
-/--
-theorem `HasProd.unique` / 定理 `HasProd.unique`
-
-English:
-theorem HasProd.unique
-  given: {a₁ a₂ : α}
-  proof: by
-  exact tendsto_nhds_unique
-
-@[to_additive]
-
-中文:
-定理 有积类型.unique
-  条件: {a₁ a₂ : α}
-  证明: by
-  exact tendsto_nhds_unique
-
-@[to_additive]
-
-Depends on / 依赖: tendsto_nhds_unique
+/-
+**HasProd.unique** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasProd.unique {a₁ a₂ : α} : HasProd f a₁ L -> HasProd f a₂ L -> a₁ = a₂
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `tendsto_nhds_unique`：tendsto_nhds_unique [T2Space X] {f : Y -> X} {l : F
+ilter Y} {a b : X} [NeBot l] (ha : Tendsto f l (𝓝 a)) (hb : Tendsto f l (𝓝 b)) :
+ a = b
+· 使用定理 `SummationFilter.instNeBotFinsetFilterOfNeBot`：∀ {β : Type u_2} (L : Summ
+ationFilter β) [L.NeBot], L.filter.NeBot
 -/
 theorem HasProd.unique {a₁ a₂ : α} :
-    HasProd f a₁ L -> HasProd f a₂ L -> a₁ = a₂ := by
+    HasProd f a₁ L → HasProd f a₂ L → a₁ = a₂ := by
   exact tendsto_nhds_unique
 
 @[to_additive]
-/--
-theorem `HasProd.tprod_eq` / 定理 `HasProd.tprod_eq`
-
-English:
-theorem HasProd.tprod_eq
-  given: (ha : HasProd f a L)
-  statement: ∏'[L] b, f b = a
-  proof: (Multipliable.hasProd ⟨a, ha⟩).unique ha
-
-@[to_additive]
-
-中文:
-定理 有积类型.tprod_eq
-  条件: (ha : 有积类型 f a L)
-  结论: ∏'[L] b, f b = a
-  证明: (Multipliable.hasProd ⟨a, ha⟩).unique ha
-
-@[to_additive]
-
-Depends on / 依赖: Multipliable, Multipliable.hasProd, hasProd, unique
+/-
+**HasProd.tprod_eq** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：HasProd.tprod_eq (ha : HasProd f a L) : ∏'[L] b, f b = a
+参数：ha : HasProd f a L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasProd.unique`：HasProd.unique {a₁ a₂ : α} : HasProd f a₁ L -> HasProd f
+ a₂ L -> a₁ = a₂
+· 使用定理 `Multipliable.hasProd`：Multipliable.hasProd (ha : Multipliable f L) : Has
+Prod f (∏'[L] b, f b) L
 -/
 theorem HasProd.tprod_eq (ha : HasProd f a L) : ∏'[L] b, f b = a :=
   (Multipliable.hasProd ⟨a, ha⟩).unique ha
 
 @[to_additive]
-/--
-theorem `Multipliable.hasProd_iff` / 定理 `Multipliable.hasProd_iff`
-
-English:
-theorem Multipliable.hasProd_iff
-  given: (h : Multipliable f L)
-  proof: Iff.intro HasProd.tprod_eq fun eq => eq ▸ h.hasProd
-
-@[to_additive]
-
-中文:
-定理 Multipliable.hasProd_iff
-  条件: (h : Multipliable f L)
-  证明: Iff.intro HasProd.tprod_eq fun eq => eq ▸ h.hasProd
-
-@[to_additive]
-
-Depends on / 依赖: HasProd, HasProd.tprod_eq, Iff.intro, h.hasProd, hasProd, tprod_eq
+/-
+**Multipliable.hasProd_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Multipliable.hasProd_iff (h : Multipliable f L) : HasProd f a L ↔ ∏'[L] b,
+ f b = a
+参数：h : Multipliable f L。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `HasProd.tprod_eq`：HasProd.tprod_eq (ha : HasProd f a L) : ∏'[L] b, f b =
+ a
+· 使用定理 `Multipliable.hasProd`：Multipliable.hasProd (ha : Multipliable f L) : Has
+Prod f (∏'[L] b, f b) L
 -/
 theorem Multipliable.hasProd_iff (h : Multipliable f L) :
     HasProd f a L ↔ ∏'[L] b, f b = a :=
-  Iff.intro HasProd.tprod_eq fun eq => eq ▸ h.hasProd
+  Iff.intro HasProd.tprod_eq fun eq ↦ eq ▸ h.hasProd
 
 @[to_additive]
-/--
-theorem `tprod_eq_of_filter_le` / 定理 `tprod_eq_of_filter_le`
-
-English:
-theorem tprod_eq_of_filter_le
-  statement: {L₁ L₂ : SummationFilter β} [L₁.NeBot]
-  proof: (hf.mono_filter h).hasProd_iff.mp (hf.hasProd.mono_left h)
-
-@[to_additive]
-
-中文:
-定理 tprod_eq_of_filter_le
-  结论: {L₁ L₂ : SummationFilter β} [L₁.NeBot]
-  证明: (hf.mono_filter h).hasProd_iff.mp (hf.hasProd.mono_left h)
-
-@[to_additive]
-
-Depends on / 依赖: hasProd, hasProd_iff, hasProd_iff.mp, hf.hasProd.mono_left, hf.mono_filter, mono_filter, mono_left
+/-
+**tprod_eq_of_filter_le** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tprod_eq_of_filter_le {L₁ L₂ : SummationFilter β} [L₁.NeBot] (h : L₁.filte
+r <= L₂.filter) (hf : Multipliable f L₂) : ∏'[L₁] b, f b = ∏'[L₂] b, f b
+参数：h : L₁.filter <= L₂.filter；hf : Multipliable f L₂。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Multipliable.hasProd_iff`：Multipliable.hasProd_iff (h : Multipliable f L
+) : HasProd f a L ↔ ∏'[L] b, f b = a
+· 使用引理 `Multipliable.mono_filter`：Multipliable.mono_filter {f : β -> α} {L₁ L₂ :
+ SummationFilter β} (hf : Multipliable f L₂) (h : L₁.filter <= L₂.filter) : Mult
+ipliable f L₁
+· 使用定理 `Filter.Tendsto.mono_left`：∀ {α : Type u_1} {β : Type u_2} {f : α → β} {x
+ y : Filter α} {z : Filter β},   Filter.Tendsto f x z → y ≤ x → Filter.Tendsto f
+ y z
+· 使用定理 `Multipliable.hasProd`：Multipliable.hasProd (ha : Multipliable f L) : Has
+Prod f (∏'[L] b, f b) L
 -/
 theorem tprod_eq_of_filter_le {L₁ L₂ : SummationFilter β} [L₁.NeBot]
-    (h : L₁.filter <= L₂.filter) (hf : Multipliable f L₂) : ∏'[L₁] b, f b = ∏'[L₂] b, f b :=
+    (h : L₁.filter ≤ L₂.filter) (hf : Multipliable f L₂) : ∏'[L₁] b, f b = ∏'[L₂] b, f b :=
   (hf.mono_filter h).hasProd_iff.mp (hf.hasProd.mono_left h)
 
 @[to_additive]
-/--
-theorem `tprod_eq_of_multipliable_unconditional` / 定理 `tprod_eq_of_multipliable_unconditional`
-
-English:
-theorem tprod_eq_of_multipliable_unconditional
-  given: [L.LeAtTop] (hf : Multipliable f)
-  proof: tprod_eq_of_filter_le L.le_atTop hf
-
-中文:
-定理 tprod_eq_of_multipliable_unconditional
-  条件: [L.LeAtTop] (hf : Multipliable f)
-  证明: tprod_eq_of_filter_le L.le_atTop hf
-
-Depends on / 依赖: L.le_atTop, le_atTop, tprod_eq_of_filter_le
+/-
+**tprod_eq_of_multipliable_unconditional** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tprod_eq_of_multipliable_unconditional [L.LeAtTop] (hf : Multipliable f) :
+ ∏'[L] b, f b = ∏' b, f b
+参数：hf : Multipliable f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `tprod_eq_of_filter_le`：tprod_eq_of_filter_le {L₁ L₂ : SummationFilter β}
+ [L₁.NeBot] (h : L₁.filter <= L₂.filter) (hf : Multipliable f L₂) : ∏'[L₁] b, f 
+b = ∏'[L₂] …
+· 使用定理 `SummationFilter.LeAtTop.le_atTop`：∀ {β : Type u_2} {L : SummationFilter 
+β} [self : L.LeAtTop], L.filter ≤ Filter.atTop
 -/
 theorem tprod_eq_of_multipliable_unconditional [L.LeAtTop] (hf : Multipliable f) :
      ∏'[L] b, f b = ∏' b, f b :=
   tprod_eq_of_filter_le L.le_atTop hf
 
 end HasProd
+

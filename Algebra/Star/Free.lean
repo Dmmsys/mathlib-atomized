@@ -25,28 +25,9 @@ namespace FreeMonoid
 
 variable {α : Type*}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: StarMul (FreeMonoid α)
-  body: List.reverse
-  star_involutive := List.reverse_reverse
-  star_mul := fun _ _ => List.reverse_append
-
-@[simp]
-
-中文:
-实例 :
-  签名: StarMul (自由幺半群 α)
-  定义体: List.reverse
-  star_involutive := List.reverse_reverse
-  star_mul := fun _ _ => List.reverse_append
-
-@[simp]
-
-Depends on / 依赖: List.reverse, reverse
+/-
+**FreeMonoid.** 是 Mathlib 中的一个实例，位于命名空间 `FreeMonoid`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : StarMul (FreeMonoid α) where
   star := List.reverse
@@ -54,38 +35,27 @@ instance : StarMul (FreeMonoid α) where
   star_mul := fun _ _ => List.reverse_append
 
 @[simp]
-/--
-theorem `star_of` / 定理 `star_of`
-
-English:
-theorem star_of
-  given: (x : α)
-  statement: star (of x) = of x
-  proof: rfl
-
-中文:
-定理 star_of
-  条件: (x : α)
-  结论: star (of x) = of x
-  证明: rfl
+/-
+**FreeMonoid.star_of** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：star_of (x : α) : star (of x) = of x
+参数：x : α。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem star_of (x : α) : star (of x) = of x :=
   rfl
 
 /-- Note that `star_one` is already a global simp lemma, but this one works with dsimp too -/
 @[simp]
-/--
-theorem `star_one` / 定理 `star_one`
+/-
+**FreeMonoid.star_one** 是 Mathlib 中的一个定理，位于命名空间 `FreeMonoid`。
+形式化陈述：star_one : star (1 : FreeMonoid α) = 1
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-theorem star_one
-  statement: star (1 : FreeMonoid α) = 1
-  proof: rfl
-
-中文:
-定理 star_one
-  结论: star (1 : 自由幺半群 α) = 1
-  证明: rfl
+--- 原说明 ---
+Note that `star_one` is already a global simp lemma, but this one works with dsi
+mp too
 -/
 theorem star_one : star (1 : FreeMonoid α) = 1 :=
   rfl
@@ -96,59 +66,20 @@ namespace FreeAlgebra
 
 variable {R : Type*} [CommSemiring R] {X : Type*}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The star ring formed by reversing the elements of products -/
+/-
+**FreeAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `FreeAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: StarRing (FreeAlgebra R X)
-  body: MulOpposite.unop ∘ lift R (MulOpposite.op ∘ ι R)
-  star_involutive x := by
-    simp only [Function.comp_apply]
-    let y := lift R (X := X) (MulOpposite.op ∘ ι R)
-    refine induction (motive := fun x => (y (y x).unop).unop = x) _ _ ?_ ?_ ?_ ?_ x
-    · intros
-      simp only [AlgHom.commutes, MulOpposite.algebraMap_apply, MulOpposite.unop_op]
-    · intros
-      simp only [y, lift_ι_apply, Function.comp_apply, MulOpposite.unop_op]
-    · intros
-      simp only [*, map_mul, MulOpposite.unop_mul]
-    · intros
-      simp only [*, map_add, MulOpposite.unop_add]
-  star_mul a b := by simp only [Function.comp_apply, map_mul, MulOpposite.unop_mul]
-  star_add a b := by simp only [Function.comp_apply, map_add, MulOpposite.unop_add]
-
-@[simp]
-
-中文:
-实例 :
-  签名: 对合环 (FreeAlgebra R X)
-  定义体: MulOpposite.unop ∘ lift R (MulOpposite.op ∘ ι R)
-  star_involutive x := by
-    simp only [Function.comp_apply]
-    let y := lift R (X := X) (MulOpposite.op ∘ ι R)
-    refine induction (motive := fun x => (y (y x).unop).unop = x) _ _ ?_ ?_ ?_ ?_ x
-    · intros
-      simp only [AlgHom.commutes, MulOpposite.algebraMap_apply, MulOpposite.unop_op]
-    · intros
-      simp only [y, lift_ι_apply, Function.comp_apply, MulOpposite.unop_op]
-    · intros
-      simp only [*, map_mul, MulOpposite.unop_mul]
-    · intros
-      simp only [*, map_add, MulOpposite.unop_add]
-  star_mul a b := by simp only [Function.comp_apply, map_mul, MulOpposite.unop_mul]
-  star_add a b := by simp only [Function.comp_apply, map_add, MulOpposite.unop_add]
-
-@[simp]
-
-Depends on / 依赖: MulOpposite, MulOpposite.op, MulOpposite.unop
+--- 原说明 ---
+The star ring formed by reversing the elements of products
 -/
 instance : StarRing (FreeAlgebra R X) where
   star := MulOpposite.unop ∘ lift R (MulOpposite.op ∘ ι R)
   star_involutive x := by
     simp only [Function.comp_apply]
     let y := lift R (X := X) (MulOpposite.op ∘ ι R)
-    refine induction (motive := fun x => (y (y x).unop).unop = x) _ _ ?_ ?_ ?_ ?_ x
+    refine induction (motive := fun x ↦ (y (y x).unop).unop = x) _ _ ?_ ?_ ?_ ?_ x
     · intros
       simp only [AlgHom.commutes, MulOpposite.algebraMap_apply, MulOpposite.unop_op]
     · intros
@@ -161,68 +92,45 @@ instance : StarRing (FreeAlgebra R X) where
   star_add a b := by simp only [Function.comp_apply, map_add, MulOpposite.unop_add]
 
 @[simp]
-/--
-theorem `star_ι` / 定理 `star_ι`
-
-English:
-theorem star_ι
-  given: (x : X)
-  statement: star (ι R x) = ι R x
-  proof: by simp [star, Star.star]
-
-@[simp]
-
-中文:
-定理 star_ι
-  条件: (x : X)
-  结论: star (ι R x) = ι R x
-  证明: by simp [star, Star.star]
-
-@[simp]
-
-Depends on / 依赖: Star.star
+/-
+**FreeAlgebra.star_** 是 Mathlib 中的一个定理，位于命名空间 `FreeAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem star_ι (x : X) : star (ι R x) = ι R x := by simp [star, Star.star]
 
 @[simp]
-/--
-theorem `star_algebraMap` / 定理 `star_algebraMap`
-
-English:
-theorem star_algebraMap
-  given: (r : R)
-  statement: star (algebraMap R (FreeAlgebra R X) r) = algebraMap R _ r
-  proof: by
-  simp [star, Star.star]
-
-中文:
-定理 star_algebraMap
-  条件: (r : R)
-  结论: star (algebraMap R (FreeAlgebra R X) r) = algebraMap R _ r
-  证明: by
-  simp [star, Star.star]
-
-Depends on / 依赖: Star.star
+/-
+**FreeAlgebra.star_algebraMap** 是 Mathlib 中的一个定理，位于命名空间 `FreeAlgebra`。
+形式化陈述：star_algebraMap (r : R) : star (algebraMap R (FreeAlgebra R X) r) = algebr
+aMap R _ r
+参数：r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AlgHom.commutes`：commutes (r : R) : φ (algebraMap R A r) = algebraMap R 
+B r
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem star_algebraMap (r : R) : star (algebraMap R (FreeAlgebra R X) r) = algebraMap R _ r := by
   simp [star, Star.star]
 
-/--
-Definition of `starHom` / `starHom` 的定义
+/-- `star` as an `AlgEquiv` -/
+/-
+**FreeAlgebra.starHom** 是 Mathlib 中的一个定义，位于命名空间 `FreeAlgebra`。
+形式化陈述：starHom : FreeAlgebra R X ≃ₐ[R] (FreeAlgebra R X)ᵐᵒᵖ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition starHom
-  signature: : FreeAlgebra R X ≃ₐ[R] (FreeAlgebra R X)ᵐᵒᵖ
-  body: { starRingEquiv with commutes' := fun r => by simp [star_algebraMap] }
-
-中文:
-定义 starHom
-  签名: : FreeAlgebra R X ≃ₐ[R] (FreeAlgebra R X)ᵐᵒᵖ
-  定义体: { starRingEquiv with commutes' := fun r => by simp [star_algebraMap] }
-
-Depends on / 依赖: commutes, starRingEquiv, star_algebraMap
+--- 原说明 ---
+`star` as an `AlgEquiv`
 -/
 def starHom : FreeAlgebra R X ≃ₐ[R] (FreeAlgebra R X)ᵐᵒᵖ :=
   { starRingEquiv with commutes' := fun r => by simp [star_algebraMap] }
 
 end FreeAlgebra
+

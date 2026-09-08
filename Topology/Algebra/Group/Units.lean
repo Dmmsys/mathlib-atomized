@@ -26,20 +26,20 @@ open Units
 of the units of the monoid. -/
 @[to_additive /-- If a submonoid is open in a topological additive monoid,
 then its additive units form an open subset of the additive units of the monoid. -/]
-/--
-lemma `Submonoid.isOpen_units` / 引理 `Submonoid.isOpen_units`
-
-English:
-lemma Submonoid.isOpen_units
-  statement: {M : Type*} [TopologicalSpace M] [Monoid M]
-  proof: (hU.preimage Units.continuous_val).inter (hU.preimage Units.continuous_coe_inv)
-
-中文:
-引理 子幺半群.isOpen_units
-  结论: {M : 类型} [拓扑空间 M] [幺半群 M]
-  证明: (hU.preimage Units.continuous_val).inter (hU.preimage Units.continuous_coe_inv)
-
-Depends on / 依赖: Units.continuous_coe_inv, Units.continuous_val, continuous_coe_inv, continuous_val, hU.preimage, preimage
+/-
+**Submonoid.isOpen_units** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：Submonoid.isOpen_units {M : Type*} [TopologicalSpace M] [Monoid M] {U : Su
+bmonoid M} (hU : IsOpen (U : Set M)) : IsOpen (U.units : Set Mˣ)
+参数：hU : IsOpen (U : Set M)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOpen.inter`：IsOpen.inter (s t : Set α) : IsOpen α s -> IsOpen α t -> I
+sOpen α (s inter t)
+· 使用定理 `IsOpen.preimage`：IsOpen.preimage (hf : Continuous f) {t : Set Y} (h : Is
+Open t) : IsOpen (f ⁻¹' t)
+· 使用定理 `Units.continuous_val`：continuous_val : Continuous ((↑) : Mˣ -> M)
+· 使用定理 `Units.continuous_coe_inv`：continuous_coe_inv : Continuous (fun u => ↑u⁻¹
+ : Mˣ -> M)
 -/
 lemma Submonoid.isOpen_units {M : Type*} [TopologicalSpace M] [Monoid M]
     {U : Submonoid M} (hU : IsOpen (U : Set M)) : IsOpen (U.units : Set Mˣ) :=
@@ -49,43 +49,25 @@ lemma Submonoid.isOpen_units {M : Type*} [TopologicalSpace M] [Monoid M]
 the product of the units. -/
 @[to_additive /-- The isomorphism of topological additive groups between the additive units of a
 product and the product of the additive units. -/]
-/--
-Definition of `ContinuousMulEquiv.piUnits` / `ContinuousMulEquiv.piUnits` 的定义
-
-English:
-definition ContinuousMulEquiv.piUnits
-  signature: {ι : Type*}
-  body: MulEquiv.piUnits
-  continuous_toFun := continuous_pi fun _ => Units.continuous_iff.mpr
-.comp Units.continuous_val, ⟨continuous_apply _
-.comp Units.continuous_coe_inv⟩ continuous_apply _
-  continuous_invFun := Units.continuous_iff.mpr
-⟨continuous_pi fun _ => Units.continuous_val.comp continuous_apply _,
-continuous_pi fun _ => Units.continuous_coe_inv.comp continuous_apply _⟩
-
-中文:
-定义 连续乘法等价.piUnits
-  签名: {ι : 类型}
-  定义体: MulEquiv.piUnits
-  continuous_toFun := continuous_pi fun _ => Units.continuous_iff.mpr
-.comp Units.continuous_val, ⟨continuous_apply _
-.comp Units.continuous_coe_inv⟩ continuous_apply _
-  continuous_invFun := Units.continuous_iff.mpr
-⟨continuous_pi fun _ => Units.continuous_val.comp continuous_apply _,
-continuous_pi fun _ => Units.continuous_coe_inv.comp continuous_apply _⟩
-
-Depends on / 依赖: MulEquiv, MulEquiv.piUnits, piUnits
+/-
+**ContinuousMulEquiv.piUnits** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：ContinuousMulEquiv.piUnits {ι : Type*} {M : ι -> Type*} [(i : ι) -> Monoid
+ (M i)] [(i : ι) -> TopologicalSpace (M i)] : (Π i, M i)ˣ ≃ₜ* Π i, (M i)ˣ where 
+__
+参数：i : ι；M i；i : ι；M i。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 def ContinuousMulEquiv.piUnits {ι : Type*}
-    {M : ι -> Type*} [(i : ι) -> Monoid (M i)] [(i : ι) -> TopologicalSpace (M i)] :
+    {M : ι → Type*} [(i : ι) → Monoid (M i)] [(i : ι) → TopologicalSpace (M i)] :
     (Π i, M i)ˣ ≃ₜ* Π i, (M i)ˣ where
   __ := MulEquiv.piUnits
-  continuous_toFun := continuous_pi fun _ => Units.continuous_iff.mpr
-.comp Units.continuous_val, ⟨continuous_apply _
-.comp Units.continuous_coe_inv⟩ continuous_apply _
+  continuous_toFun := continuous_pi fun _ ↦ Units.continuous_iff.mpr
+    ⟨continuous_apply _ |>.comp Units.continuous_val,
+      continuous_apply _ |>.comp Units.continuous_coe_inv⟩
   continuous_invFun := Units.continuous_iff.mpr
-⟨continuous_pi fun _ => Units.continuous_val.comp continuous_apply _,
-continuous_pi fun _ => Units.continuous_coe_inv.comp continuous_apply _⟩
+    ⟨continuous_pi fun _ ↦ Units.continuous_val.comp <| continuous_apply _,
+      continuous_pi fun _ ↦ Units.continuous_coe_inv.comp <| continuous_apply _⟩
 
 namespace Units
 
@@ -93,28 +75,15 @@ variable {M N : Type*} [TopologicalSpace M] [TopologicalSpace N] [Monoid M] [Mon
 
 /-- Any `ContinuousMulEquiv` induces a `ContinuousMulEquiv` on units. -/
 @[simps! apply]
-/--
-Definition of `mapContinuousMulEquiv` / `mapContinuousMulEquiv` 的定义
+/-
+**Units.mapContinuousMulEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Units`。
+形式化陈述：mapContinuousMulEquiv (f : M ≃ₜ* N) : Mˣ ≃ₜ* Nˣ
+参数：f : M ≃ₜ* N。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mapContinuousMulEquiv
-  signature: (f : M ≃ₜ* N)
-  body: { __ := Units.mapEquiv f
-    continuous_toFun := f.continuous.units_map _
-    continuous_invFun := f.symm.continuous.units_map _ }
-
-@[simp]
-
-中文:
-定义 mapContinuousMulEquiv
-  签名: (f : M ≃ₜ* N)
-  定义体: { __ := Units.mapEquiv f
-    continuous_toFun := f.continuous.units_map _
-    continuous_invFun := f.symm.continuous.units_map _ }
-
-@[simp]
-
-Depends on / 依赖: Units.mapEquiv, continuous, continuous_invFun, continuous_toFun, f.continuous.units_map, f.symm.continuous.units_map, mapEquiv, units_map
+--- 原说明 ---
+Any `ContinuousMulEquiv` induces a `ContinuousMulEquiv` on units.
 -/
 def mapContinuousMulEquiv (f : M ≃ₜ* N) : Mˣ ≃ₜ* Nˣ :=
   { __ := Units.mapEquiv f
@@ -122,41 +91,31 @@ def mapContinuousMulEquiv (f : M ≃ₜ* N) : Mˣ ≃ₜ* Nˣ :=
     continuous_invFun := f.symm.continuous.units_map _ }
 
 @[simp]
-/--
-theorem `symm_mapContinuousMulEquiv` / 定理 `symm_mapContinuousMulEquiv`
-
-English:
-theorem symm_mapContinuousMulEquiv
-  given: (f : M ≃ₜ* N)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 symm_mapContinuousMulEquiv
-  条件: (f : M ≃ₜ* N)
-  证明: rfl
-
-@[simp]
+/-
+**Units.symm_mapContinuousMulEquiv** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：symm_mapContinuousMulEquiv (f : M ≃ₜ* N) : (mapContinuousMulEquiv f).symm 
+= mapContinuousMulEquiv f.symm
+参数：f : M ≃ₜ* N。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem symm_mapContinuousMulEquiv (f : M ≃ₜ* N) :
     (mapContinuousMulEquiv f).symm = mapContinuousMulEquiv f.symm := rfl
 
 @[simp]
-/--
-theorem `toMulEquiv_mapContinuousMulEquiv` / 定理 `toMulEquiv_mapContinuousMulEquiv`
-
-English:
-theorem toMulEquiv_mapContinuousMulEquiv
-  given: (f : M ≃ₜ* N)
-  proof: rfl
-
-中文:
-定理 toMulEquiv_mapContinuousMulEquiv
-  条件: (f : M ≃ₜ* N)
-  证明: rfl
+/-
+**Units.toMulEquiv_mapContinuousMulEquiv** 是 Mathlib 中的一个定理，位于命名空间 `Units`。
+形式化陈述：toMulEquiv_mapContinuousMulEquiv (f : M ≃ₜ* N) : (mapContinuousMulEquiv f 
+: Mˣ ≃* Nˣ) = mapEquiv f
+参数：f : M ≃ₜ* N。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMulEquiv.instMulEquivClass`：∀ {M : Type u_1} {N : Type u_2} [i
+nst : TopologicalSpace M] [inst_1 : TopologicalSpace N] [inst_2 : Mul M]   [inst
+_3 : Mul N], MulEquivClass…
 -/
 theorem toMulEquiv_mapContinuousMulEquiv (f : M ≃ₜ* N) :
     (mapContinuousMulEquiv f : Mˣ ≃* Nˣ) = mapEquiv f := rfl
 
 end Units
+

@@ -32,40 +32,36 @@ namespace FunctorToTypes
 /-- A functor to types `F : C ⥤ Type w'` is `w`-small if for any `X : C`,
 the type `F.obj X` is `w`-small. -/
 @[pp_with_univ]
-/--
-Definition of `Small` / `Small` 的定义
+/-
+**CategoryTheory.FunctorToTypes.Small** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory.
+FunctorToTypes`。
+形式化陈述：{C : Type u} → [inst : CategoryTheory.Category.{v, u} C] → CategoryTheory.
+Functor C (Type w') → Prop
+参数：Type w'。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation Small
-  signature: (F : C ⥤ Type w')
-  body: forall (X : C), _root_.Small.{w} (F.obj X)
-
-中文:
-缩写 Small
-  签名: (F : C ⥤ 类型 w')
-  定义体: forall (X : C), _root_.Small.{w} (F.obj X)
+--- 原说明 ---
+A functor to types `F : C ⥤ Type w'` is `w`-small if for any `X : C`,
+the type `F.obj X` is `w`-small.
 -/
-protected abbrev Small (F : C ⥤ Type w') := forall (X : C), _root_.Small.{w} (F.obj X)
+protected abbrev Small (F : C ⥤ Type w') := ∀ (X : C), _root_.Small.{w} (F.obj X)
 
 /-- If a functor `F : C ⥤ Type w'` is `w`-small, this is the functor `C ⥤ Type w`
 obtained by shrinking `F.obj X` for all `X : C`. -/
 @[implicit_reducible, simps obj map, pp_with_univ]
-/--
-Definition of `shrink` / `shrink` 的定义
+/-
+**CategoryTheory.FunctorToTypes.shrink** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+.FunctorToTypes`。
+形式化陈述：shrink (F : C ⥤ Type w') [FunctorToTypes.Small.{w} F] : C ⥤ Type w where o
+bj X
+参数：F : C ⥤ Type w'。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition shrink
-  signature: (F : C ⥤ Type w') [FunctorToTypes.Small.{w} F]
-  body: Shrink.{w} (F.obj X)
-  map f := ↾(equivShrink.{w} _ ∘ F.map f ∘ (equivShrink.{w} _).symm)
-
-中文:
-定义 shrink
-  签名: (F : C ⥤ 类型 w') [FunctorToTypes.Small.{w} F]
-  定义体: Shrink.{w} (F.obj X)
-  map f := ↾(equivShrink.{w} _ ∘ F.map f ∘ (equivShrink.{w} _).symm)
-
-Depends on / 依赖: F.obj, Shrink
+--- 原说明 ---
+If a functor `F : C ⥤ Type w'` is `w`-small, this is the functor `C ⥤ Type w`
+obtained by shrinking `F.obj X` for all `X : C`.
 -/
 noncomputable def shrink (F : C ⥤ Type w') [FunctorToTypes.Small.{w} F] :
     C ⥤ Type w where
@@ -75,20 +71,19 @@ noncomputable def shrink (F : C ⥤ Type w') [FunctorToTypes.Small.{w} F] :
 /-- The natural transformation `shrink.{w} F ⟶ shrink.{w} G` induces by a natural
 transformation `τ : F ⟶ G` between `w`-small functors to types. -/
 @[implicit_reducible, simps]
-/--
-Definition of `shrinkMap` / `shrinkMap` 的定义
+/-
+**CategoryTheory.FunctorToTypes.shrinkMap** 是 Mathlib 中的一个定义，位于命名空间 `CategoryThe
+ory.FunctorToTypes`。
+形式化陈述：shrinkMap {F G : C ⥤ Type w'} (τ : F ⟶ G) [FunctorToTypes.Small.{w} F] [Fu
+nctorToTypes.Small.{w} G] : shrink.{w} F ⟶ shrink.{w} G where app X
+参数：τ : F ⟶ G。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition shrinkMap
-  signature: {F G : C ⥤ Type w'} (τ : F ⟶ G) [FunctorToTypes.Small.{w} F]
-  body: ↾(equivShrink.{w} _ ∘ τ.app X ∘ (equivShrink.{w} _).symm)
-
-中文:
-定义 shrinkMap
-  签名: {F G : C ⥤ 类型 w'} (τ : F ⟶ G) [FunctorToTypes.Small.{w} F]
-  定义体: ↾(equivShrink.{w} _ ∘ τ.app X ∘ (equivShrink.{w} _).symm)
-
-Depends on / 依赖: equivShrink
+--- 原说明 ---
+The natural transformation `shrink.{w} F ⟶ shrink.{w} G` induces by a natural
+transformation `τ : F ⟶ G` between `w`-small functors to types.
 -/
 noncomputable def shrinkMap {F G : C ⥤ Type w'} (τ : F ⟶ G) [FunctorToTypes.Small.{w} F]
     [FunctorToTypes.Small.{w} G] :
@@ -100,34 +95,24 @@ set_option backward.defeqAttrib.useBackward true in
 `Type (max w w')`. -/
 @[simps! hom_app inv_app]
 noncomputable
-/--
-Definition of `shrinkCompUliftFunctorIso` / `shrinkCompUliftFunctorIso` 的定义
-
-English:
-definition shrinkCompUliftFunctorIso
-  signature: (F : C ⥤ Type w') [FunctorToTypes.Small.{w} F]
-  body: NatIso.ofComponents
-    (fun X => Equiv.toIso ((Equiv.ulift.trans (equivShrink _).symm).trans (equivShrink _)))
-
-unif_hint (F : C ⥤ Type w') [FunctorToTypes.Small.{w} F] (X : C) where ⊢
-  Shrink (F.obj X) ≟ (FunctorToTypes.shrink F).obj X
-
-中文:
-定义 shrinkCompUliftFunctorIso
-  签名: (F : C ⥤ 类型 w') [FunctorToTypes.Small.{w} F]
-  定义体: NatIso.ofComponents
-    (fun X => Equiv.toIso ((Equiv.ulift.trans (equivShrink _).symm).trans (equivShrink _)))
-
-unif_hint (F : C ⥤ Type w') [FunctorToTypes.Small.{w} F] (X : C) where ⊢
-  Shrink (F.obj X) ≟ (FunctorToTypes.shrink F).obj X
-
-Depends on / 依赖: Equiv.toIso, Equiv.ulift.trans, NatIso, NatIso.ofComponents, equivShrink, ofComponents
+/-
+**CategoryTheory.FunctorToTypes.shrinkCompUliftFunctorIso** 是 Mathlib 中的一个定义，位于命
+名空间 `CategoryTheory.FunctorToTypes`。
+形式化陈述：shrinkCompUliftFunctorIso (F : C ⥤ Type w') [FunctorToTypes.Small.{w} F] [
+FunctorToTypes.Small.{max w w''} F] : shrink.{w} F ⋙ uliftFunctor.{w'', w} ≅ shr
+ink.{max w w''} F
+参数：F : C ⥤ Type w'。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 def shrinkCompUliftFunctorIso (F : C ⥤ Type w') [FunctorToTypes.Small.{w} F]
     [FunctorToTypes.Small.{max w w''} F] :
     shrink.{w} F ⋙ uliftFunctor.{w'', w} ≅ shrink.{max w w''} F :=
   NatIso.ofComponents
-    (fun X => Equiv.toIso ((Equiv.ulift.trans (equivShrink _).symm).trans (equivShrink _)))
+    (fun X ↦ Equiv.toIso ((Equiv.ulift.trans (equivShrink _).symm).trans (equivShrink _)))
 
 unif_hint (F : C ⥤ Type w') [FunctorToTypes.Small.{w} F] (X : C) where ⊢
   Shrink (F.obj X) ≟ (FunctorToTypes.shrink F).obj X
@@ -139,27 +124,26 @@ variable [LocallySmall.{w} C]
 section Yoneda
 
 set_option backward.defeqAttrib.useBackward true in
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : C) : FunctorToTypes.Small.{w} (yoneda.obj X) :=
-  fun _ => by dsimp; infer_instance
+  fun _ ↦ by dsimp; infer_instance
 
 /-- The Yoneda embedding `C ⥤ Cᵒᵖ ⥤ Type w` for a locally `w`-small category `C`. -/
 @[simps -isSimp obj map, pp_with_univ]
-/--
-Definition of `shrinkYoneda` / `shrinkYoneda` 的定义
+/-
+**CategoryTheory.shrinkYoneda** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：shrinkYoneda : C ⥤ Cᵒᵖ ⥤ Type w where obj X
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instSmallOppositeObjFunctorTypeYoneda`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] [CategoryTheory.LocallySmall.{w, v, u} C]
+ (X : C),   CategoryTheory.FunctorToTypes.…
 
-English:
-definition shrinkYoneda
-  signature: :
-  body: FunctorToTypes.shrink (yoneda.obj X)
-  map f := FunctorToTypes.shrinkMap (yoneda.map f)
-
-中文:
-定义 shrinkYoneda
-  签名: :
-  定义体: FunctorToTypes.shrink (yoneda.obj X)
-  map f := FunctorToTypes.shrinkMap (yoneda.map f)
-
-Depends on / 依赖: FunctorToTypes, FunctorToTypes.shrink, shrink, yoneda, yoneda.obj
+--- 原说明 ---
+The Yoneda embedding `C ⥤ Cᵒᵖ ⥤ Type w` for a locally `w`-small category `C`.
 -/
 noncomputable def shrinkYoneda :
     C ⥤ Cᵒᵖ ⥤ Type w where
@@ -167,78 +151,75 @@ noncomputable def shrinkYoneda :
   map f := FunctorToTypes.shrinkMap (yoneda.map f)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `shrinkYonedaObjObjEquiv` / `shrinkYonedaObjObjEquiv` 的定义
+/-- The type `(shrinkYoneda.obj X).obj Y` is equivalent to `Y.unop ⟶ X`. -/
+/-
+**CategoryTheory.shrinkYonedaObjObjEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheo
+ry`。
+形式化陈述：shrinkYonedaObjObjEquiv {X : C} {Y : Cᵒᵖ} : ((shrinkYoneda.{w}.obj X).obj 
+Y) ≃ (Y.unop ⟶ X)
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition shrinkYonedaObjObjEquiv
-  signature: {X : C} {Y : Cᵒᵖ}
-  body: (equivShrink _).symm
-
-中文:
-定义 shrinkYonedaObjObjEquiv
-  签名: {X : C} {Y : Cᵒᵖ}
-  定义体: (equivShrink _).symm
-
-Depends on / 依赖: equivShrink
+--- 原说明 ---
+The type `(shrinkYoneda.obj X).obj Y` is equivalent to `Y.unop ⟶ X`.
 -/
 noncomputable def shrinkYonedaObjObjEquiv {X : C} {Y : Cᵒᵖ} :
     ((shrinkYoneda.{w}.obj X).obj Y) ≃ (Y.unop ⟶ X) :=
   (equivShrink _).symm
-
-/--
-lemma `shrinkYoneda_obj_map` / 引理 `shrinkYoneda_obj_map`
-
-English:
-lemma shrinkYoneda_obj_map
-  given: {X : C} {Y Y' : Cᵒᵖ} (g : Y ⟶ Y') (f : (shrinkYoneda.obj X).obj Y)
-  proof: rfl
-
-中文:
-引理 shrinkYoneda_obj_map
-  条件: {X : C} {Y Y' : Cᵒᵖ} (g : Y ⟶ Y') (f : (shrinkYoneda.obj X).obj Y)
-  证明: rfl
+/-
+**CategoryTheory.shrinkYoneda_obj_map** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`
+。
+形式化陈述：shrinkYoneda_obj_map {X : C} {Y Y' : Cᵒᵖ} (g : Y ⟶ Y') (f : (shrinkYoneda.
+obj X).obj Y) : (shrinkYoneda.obj _).map g f = shrinkYonedaObjObjEquiv.symm (g.u
+nop ≫ shrinkYonedaObjObjEquiv f)
+参数：g : Y ⟶ Y'；f : (shrinkYoneda.obj X).obj Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma shrinkYoneda_obj_map {X : C} {Y Y' : Cᵒᵖ} (g : Y ⟶ Y') (f : (shrinkYoneda.obj X).obj Y) :
     (shrinkYoneda.obj _).map g f =
       shrinkYonedaObjObjEquiv.symm (g.unop ≫ shrinkYonedaObjObjEquiv f) :=
   rfl
-
-/--
-lemma `shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm` / 引理 `shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm`
-
-English:
-lemma shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm
-  proof: by
-  simp [shrinkYoneda_obj_map]
-
-中文:
-引理 shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm
-  证明: by
-  simp [shrinkYoneda_obj_map]
-
-Depends on / 依赖: shrinkYoneda_obj_map
+/-
+**CategoryTheory.shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm** 是 Mathlib 中
+的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm {X : C} {Y Y' : Cᵒᵖ} (g 
+: Y ⟶ Y') (f : Y.unop ⟶ X) : (shrinkYoneda.obj _).map g (shrinkYonedaObjObjEquiv
+.symm f) = shrinkYonedaObjObjEquiv.symm (g.unop ≫ f)
+参数：g : Y ⟶ Y'；f : Y.unop ⟶ X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm
     {X : C} {Y Y' : Cᵒᵖ} (g : Y ⟶ Y') (f : Y.unop ⟶ X) :
     (shrinkYoneda.obj _).map g (shrinkYonedaObjObjEquiv.symm f) =
       shrinkYonedaObjObjEquiv.symm (g.unop ≫ f) := by
   simp [shrinkYoneda_obj_map]
-
-/--
-lemma `shrinkYonedaObjObjEquiv_symm_comp` / 引理 `shrinkYonedaObjObjEquiv_symm_comp`
-
-English:
-lemma shrinkYonedaObjObjEquiv_symm_comp
-  given: {X Y Y' : C} (g : Y' ⟶ Y) (f : Y ⟶ X)
-  proof: (shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm g.op f).symm
-
-中文:
-引理 shrinkYonedaObjObjEquiv_symm_comp
-  条件: {X Y Y' : C} (g : Y' ⟶ Y) (f : Y ⟶ X)
-  证明: (shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm g.op f).symm
-
-Depends on / 依赖: g.op, shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm
+/-
+**CategoryTheory.shrinkYonedaObjObjEquiv_symm_comp** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory`。
+形式化陈述：shrinkYonedaObjObjEquiv_symm_comp {X Y Y' : C} (g : Y' ⟶ Y) (f : Y ⟶ X) : 
+shrinkYonedaObjObjEquiv.symm (g ≫ f) = (shrinkYoneda.obj _).map g.op (shrinkYone
+daObjObjEquiv.symm f)
+参数：g : Y' ⟶ Y；f : Y ⟶ X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用引理 `CategoryTheory.shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm`：shrink
+Yoneda_obj_map_shrinkYonedaObjObjEquiv_symm {X : C} {Y Y' : Cᵒᵖ} (g : Y ⟶ Y') (f
+ : Y.unop ⟶ X) : (shrinkYoneda.obj _).map g (shrinkYon…
 -/
 lemma shrinkYonedaObjObjEquiv_symm_comp {X Y Y' : C} (g : Y' ⟶ Y) (f : Y ⟶ X) :
     shrinkYonedaObjObjEquiv.symm (g ≫ f) =
@@ -247,20 +228,28 @@ lemma shrinkYonedaObjObjEquiv_symm_comp {X Y Y' : C} (g : Y' ⟶ Y) (f : Y ⟶ X
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm` / 引理 `shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm`
-
-English:
-lemma shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm
-  proof: by
-  simp [shrinkYoneda, shrinkYonedaObjObjEquiv]
-
-中文:
-引理 shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm
-  证明: by
-  simp [shrinkYoneda, shrinkYonedaObjObjEquiv]
-
-Depends on / 依赖: shrinkYoneda, shrinkYonedaObjObjEquiv
+/-
+**CategoryTheory.shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm** 是 Mathlib 中
+的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm {X X' : C} {Y : Cᵒᵖ} (f 
+: Y.unop ⟶ X) (g : X ⟶ X') : (shrinkYoneda.map g).app _ (shrinkYonedaObjObjEquiv
+.symm f) = shrinkYonedaObjObjEquiv.symm (f ≫ g)
+参数：f : Y.unop ⟶ X；g : X ⟶ X'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `CategoryTheory.instSmallOppositeObjFunctorTypeYoneda`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] [CategoryTheory.LocallySmall.{w, v, u} C]
+ (X : C),   CategoryTheory.FunctorToTypes.…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm
     {X X' : C} {Y : Cᵒᵖ} (f : Y.unop ⟶ X) (g : X ⟶ X') :
@@ -271,20 +260,28 @@ lemma shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `shrinkYonedaObjObjEquiv_map_app` / 引理 `shrinkYonedaObjObjEquiv_map_app`
-
-English:
-lemma shrinkYonedaObjObjEquiv_map_app
-  proof: by
-  simp [shrinkYoneda, shrinkYonedaObjObjEquiv]
-
-中文:
-引理 shrinkYonedaObjObjEquiv_map_app
-  证明: by
-  simp [shrinkYoneda, shrinkYonedaObjObjEquiv]
-
-Depends on / 依赖: shrinkYoneda, shrinkYonedaObjObjEquiv
+/-
+**CategoryTheory.shrinkYonedaObjObjEquiv_map_app** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory`。
+形式化陈述：shrinkYonedaObjObjEquiv_map_app {X X' : C} {Y : Cᵒᵖ} (f : (shrinkYoneda.{w
+, v, u}.obj X).obj Y) (g : X ⟶ X') : shrinkYonedaObjObjEquiv ((shrinkYoneda.map 
+g).app Y f) = shrinkYonedaObjObjEquiv f ≫ g
+参数：f : (shrinkYoneda.{w, v, u}.obj X).obj Y；g : X ⟶ X'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.instSmallOppositeObjFunctorTypeYoneda`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] [CategoryTheory.LocallySmall.{w, v, u} C]
+ (X : C),   CategoryTheory.FunctorToTypes.…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shrinkYonedaObjObjEquiv_map_app
     {X X' : C} {Y : Cᵒᵖ} (f : (shrinkYoneda.{w, v, u}.obj X).obj Y) (g : X ⟶ X') :
@@ -295,22 +292,28 @@ lemma shrinkYonedaObjObjEquiv_map_app
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
 @[reassoc]
-/--
-lemma `shrinkYonedaObjObjEquiv_obj_map` / 引理 `shrinkYonedaObjObjEquiv_obj_map`
-
-English:
-lemma shrinkYonedaObjObjEquiv_obj_map
-  statement: {X : C} {Y Y' : Cᵒᵖ} (g : Y ⟶ Y')
-  proof: by
-  simp [shrinkYonedaObjObjEquiv, shrinkYoneda]
-
-中文:
-引理 shrinkYonedaObjObjEquiv_obj_map
-  结论: {X : C} {Y Y' : Cᵒᵖ} (g : Y ⟶ Y')
-  证明: by
-  simp [shrinkYonedaObjObjEquiv, shrinkYoneda]
-
-Depends on / 依赖: shrinkYoneda, shrinkYonedaObjObjEquiv
+/-
+**CategoryTheory.shrinkYonedaObjObjEquiv_obj_map** 是 Mathlib 中的一个引理，位于命名空间 `Cate
+goryTheory`。
+形式化陈述：shrinkYonedaObjObjEquiv_obj_map {X : C} {Y Y' : Cᵒᵖ} (g : Y ⟶ Y') (f : (sh
+rinkYoneda.{w}.obj X).obj Y) : shrinkYonedaObjObjEquiv ((shrinkYoneda.{w}.obj X)
+.map g f) = g.unop ≫ shrinkYonedaObjObjEquiv f
+参数：g : Y ⟶ Y'；f : (shrinkYoneda.{w}.obj X).obj Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.instSmallOppositeObjFunctorTypeYoneda`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] [CategoryTheory.LocallySmall.{w, v, u} C]
+ (X : C),   CategoryTheory.FunctorToTypes.…
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shrinkYonedaObjObjEquiv_obj_map {X : C} {Y Y' : Cᵒᵖ} (g : Y ⟶ Y')
     (f : (shrinkYoneda.{w}.obj X).obj Y) :
@@ -319,42 +322,25 @@ lemma shrinkYonedaObjObjEquiv_obj_map {X : C} {Y Y' : Cᵒᵖ} (g : Y ⟶ Y')
   simp [shrinkYonedaObjObjEquiv, shrinkYoneda]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `shrinkYonedaEquiv` / `shrinkYonedaEquiv` 的定义
+/-- The type of natural transformations `shrinkYoneda.{w}.obj X ⟶ P`
+with `X : C` and `P : Cᵒᵖ ⥤ Type w` is equivalent to `P.obj (op X)`. -/
+/-
+**CategoryTheory.shrinkYonedaEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：shrinkYonedaEquiv {X : C} {P : Cᵒᵖ ⥤ Type w} : (shrinkYoneda.{w}.obj X ⟶ P
+) ≃ P.obj (op X) where toFun τ
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition shrinkYonedaEquiv
-  signature: {X : C} {P : Cᵒᵖ ⥤ Type w}
-  body: τ.app _ (equivShrink.{w} _ (𝟙 X))
-  invFun x :=
-    { app Y := ↾fun f => P.map ((equivShrink.{w} _).symm f).op x
-      naturality Y Z g := by ext; simp [shrinkYoneda] }
-  left_inv τ := by
-    ext Y f
-    obtain ⟨f, rfl⟩ := (equivShrink _).surjective f
-    simpa [shrinkYoneda] using ((τ.naturality_apply f.op) (equivShrink _ (𝟙 X))).symm
-  right_inv x := by simp
-
-中文:
-定义 shrinkYonedaEquiv
-  签名: {X : C} {P : Cᵒᵖ ⥤ 类型 w}
-  定义体: τ.app _ (equivShrink.{w} _ (𝟙 X))
-  invFun x :=
-    { app Y := ↾fun f => P.map ((equivShrink.{w} _).symm f).op x
-      naturality Y Z g := by ext; simp [shrinkYoneda] }
-  left_inv τ := by
-    ext Y f
-    obtain ⟨f, rfl⟩ := (equivShrink _).surjective f
-    simpa [shrinkYoneda] using ((τ.naturality_apply f.op) (equivShrink _ (𝟙 X))).symm
-  right_inv x := by simp
-
-Depends on / 依赖: equivShrink
+--- 原说明 ---
+The type of natural transformations `shrinkYoneda.{w}.obj X ⟶ P`
+with `X : C` and `P : Cᵒᵖ ⥤ Type w` is equivalent to `P.obj (op X)`.
 -/
 noncomputable def shrinkYonedaEquiv {X : C} {P : Cᵒᵖ ⥤ Type w} :
     (shrinkYoneda.{w}.obj X ⟶ P) ≃ P.obj (op X) where
   toFun τ := τ.app _ (equivShrink.{w} _ (𝟙 X))
   invFun x :=
-    { app Y := ↾fun f => P.map ((equivShrink.{w} _).symm f).op x
+    { app Y := ↾fun f ↦ P.map ((equivShrink.{w} _).symm f).op x
       naturality Y Z g := by ext; simp [shrinkYoneda] }
   left_inv τ := by
     ext Y f
@@ -364,24 +350,33 @@ noncomputable def shrinkYonedaEquiv {X : C} {P : Cᵒᵖ ⥤ Type w} :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `map_shrinkYonedaEquiv` / 引理 `map_shrinkYonedaEquiv`
-
-English:
-lemma map_shrinkYonedaEquiv
-  statement: {X Y : C} {P : Cᵒᵖ ⥤ Type w} (f : shrinkYoneda.obj X ⟶ P)
-  proof: by
-  simp [shrinkYonedaObjObjEquiv, shrinkYonedaEquiv, shrinkYoneda,
-    ← comp_apply, ← NatTrans.naturality]
-
-中文:
-引理 map_shrinkYonedaEquiv
-  结论: {X Y : C} {P : Cᵒᵖ ⥤ 类型 w} (f : shrinkYoneda.obj X ⟶ P)
-  证明: by
-  simp [shrinkYonedaObjObjEquiv, shrinkYonedaEquiv, shrinkYoneda,
-    ← comp_apply, ← NatTrans.naturality]
-
-Depends on / 依赖: NatTrans, NatTrans.naturality, comp_apply, naturality, shrinkYoneda, shrinkYonedaEquiv, shrinkYonedaObjObjEquiv
+/-
+**CategoryTheory.map_shrinkYonedaEquiv** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory
+`。
+形式化陈述：map_shrinkYonedaEquiv {X Y : C} {P : Cᵒᵖ ⥤ Type w} (f : shrinkYoneda.obj X
+ ⟶ P) (g : Y ⟶ X) : P.map g.op (shrinkYonedaEquiv f) = f.app (op Y) (shrinkYoned
+aObjObjEquiv.symm g)
+参数：f : shrinkYoneda.obj X ⟶ P；g : Y ⟶ X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.instSmallOppositeObjFunctorTypeYoneda`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] [CategoryTheory.LocallySmall.{w, v, u} C]
+ (X : C),   CategoryTheory.FunctorToTypes.…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用引理 `CategoryTheory.types_congr_hom`：types_congr_hom {X Y : Type u} {f g : X 
+⟶ Y} (h : f = g) (x : X) : f x = g x
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma map_shrinkYonedaEquiv {X Y : C} {P : Cᵒᵖ ⥤ Type w} (f : shrinkYoneda.obj X ⟶ P)
     (g : Y ⟶ X) : P.map g.op (shrinkYonedaEquiv f) =
@@ -391,44 +386,54 @@ lemma map_shrinkYonedaEquiv {X Y : C} {P : Cᵒᵖ ⥤ Type w} (f : shrinkYoneda
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `shrinkYonedaEquiv_shrinkYoneda_map` / 引理 `shrinkYonedaEquiv_shrinkYoneda_map`
-
-English:
-lemma shrinkYonedaEquiv_shrinkYoneda_map
-  given: {X Y : C} (f : X ⟶ Y)
-  proof: by
-  simp [shrinkYonedaEquiv, shrinkYoneda, shrinkYonedaObjObjEquiv]
-
-中文:
-引理 shrinkYonedaEquiv_shrinkYoneda_map
-  条件: {X Y : C} (f : X ⟶ Y)
-  证明: by
-  simp [shrinkYonedaEquiv, shrinkYoneda, shrinkYonedaObjObjEquiv]
-
-Depends on / 依赖: shrinkYoneda, shrinkYonedaEquiv, shrinkYonedaObjObjEquiv
+/-
+**CategoryTheory.shrinkYonedaEquiv_shrinkYoneda_map** 是 Mathlib 中的一个引理，位于命名空间 `C
+ategoryTheory`。
+形式化陈述：shrinkYonedaEquiv_shrinkYoneda_map {X Y : C} (f : X ⟶ Y) : shrinkYonedaEqu
+iv (shrinkYoneda.{w}.map f) = shrinkYonedaObjObjEquiv.symm f
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.instSmallOppositeObjFunctorTypeYoneda`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] [CategoryTheory.LocallySmall.{w, v, u} C]
+ (X : C),   CategoryTheory.FunctorToTypes.…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shrinkYonedaEquiv_shrinkYoneda_map {X Y : C} (f : X ⟶ Y) :
     shrinkYonedaEquiv (shrinkYoneda.{w}.map f) = shrinkYonedaObjObjEquiv.symm f := by
   simp [shrinkYonedaEquiv, shrinkYoneda, shrinkYonedaObjObjEquiv]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `shrinkYonedaEquiv_comp` / 引理 `shrinkYonedaEquiv_comp`
-
-English:
-lemma shrinkYonedaEquiv_comp
-  statement: {X : C} {P Q : Cᵒᵖ ⥤ Type w} (α : shrinkYoneda.obj X ⟶ P)
-  proof: by
-  simp [shrinkYonedaEquiv]
-
-中文:
-引理 shrinkYonedaEquiv_comp
-  结论: {X : C} {P Q : Cᵒᵖ ⥤ 类型 w} (α : shrinkYoneda.obj X ⟶ P)
-  证明: by
-  simp [shrinkYonedaEquiv]
-
-Depends on / 依赖: shrinkYonedaEquiv
+/-
+**CategoryTheory.shrinkYonedaEquiv_comp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y`。
+形式化陈述：shrinkYonedaEquiv_comp {X : C} {P Q : Cᵒᵖ ⥤ Type w} (α : shrinkYoneda.obj 
+X ⟶ P) (β : P ⟶ Q) : shrinkYonedaEquiv (α ≫ β) = β.app _ (shrinkYonedaEquiv α)
+参数：α : shrinkYoneda.obj X ⟶ P；β : P ⟶ Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shrinkYonedaEquiv_comp {X : C} {P Q : Cᵒᵖ ⥤ Type w} (α : shrinkYoneda.obj X ⟶ P)
     (β : P ⟶ Q) :
@@ -436,28 +441,39 @@ lemma shrinkYonedaEquiv_comp {X : C} {P Q : Cᵒᵖ ⥤ Type w} (α : shrinkYone
   simp [shrinkYonedaEquiv]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `shrinkYonedaEquiv_naturality` / 引理 `shrinkYonedaEquiv_naturality`
-
-English:
-lemma shrinkYonedaEquiv_naturality
-  statement: {X Y : C} {P : Cᵒᵖ ⥤ Type w}
-  proof: by
-  simpa [shrinkYonedaEquiv, shrinkYoneda]
-    using (f.naturality_apply g.op ((equivShrink _) (𝟙 _))).symm
-
-@[reassoc]
-
-中文:
-引理 shrinkYonedaEquiv_naturality
-  结论: {X Y : C} {P : Cᵒᵖ ⥤ 类型 w}
-  证明: by
-  simpa [shrinkYonedaEquiv, shrinkYoneda]
-    using (f.naturality_apply g.op ((equivShrink _) (𝟙 _))).symm
-
-@[reassoc]
-
-Depends on / 依赖: equivShrink, f.naturality_apply, g.op, naturality_apply, shrinkYoneda, shrinkYonedaEquiv
+/-
+**CategoryTheory.shrinkYonedaEquiv_naturality** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory`。
+形式化陈述：shrinkYonedaEquiv_naturality {X Y : C} {P : Cᵒᵖ ⥤ Type w} (f : shrinkYoned
+a.obj X ⟶ P) (g : Y ⟶ X) : P.map g.op (shrinkYonedaEquiv f) = shrinkYonedaEquiv 
+(shrinkYoneda.map g ≫ f)
+参数：f : shrinkYoneda.obj X ⟶ P；g : Y ⟶ X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instSmallOppositeObjFunctorTypeYoneda`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] [CategoryTheory.LocallySmall.{w, v, u} C]
+ (X : C),   CategoryTheory.FunctorToTypes.…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.NatTrans.naturality_apply`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {D : Type u_1} [inst_1 : CategoryTheory.Category.{v_1
+, u_1} D]   {FD : outParam (D …
 -/
 lemma shrinkYonedaEquiv_naturality {X Y : C} {P : Cᵒᵖ ⥤ Type w}
     (f : shrinkYoneda.obj X ⟶ P) (g : Y ⟶ X) :
@@ -466,26 +482,35 @@ lemma shrinkYonedaEquiv_naturality {X Y : C} {P : Cᵒᵖ ⥤ Type w}
     using (f.naturality_apply g.op ((equivShrink _) (𝟙 _))).symm
 
 @[reassoc]
-/--
-lemma `shrinkYonedaEquiv_symm_map` / 引理 `shrinkYonedaEquiv_symm_map`
-
-English:
-lemma shrinkYonedaEquiv_symm_map
-  given: {X Y : Cᵒᵖ} (f : X ⟶ Y) {P : Cᵒᵖ ⥤ Type w} (t : P.obj X)
-  proof: shrinkYonedaEquiv.injective (by
-    obtain ⟨t, rfl⟩ := shrinkYonedaEquiv.surjective t
-    rw [← shrinkYonedaEquiv_naturality]
-    simp)
-
-中文:
-引理 shrinkYonedaEquiv_symm_map
-  条件: {X Y : Cᵒᵖ} (f : X ⟶ Y) {P : Cᵒᵖ ⥤ 类型 w} (t : P.obj X)
-  证明: shrinkYonedaEquiv.injective (by
-    obtain ⟨t, rfl⟩ := shrinkYonedaEquiv.surjective t
-    rw [← shrinkYonedaEquiv_naturality]
-    simp)
-
-Depends on / 依赖: injective, shrinkYonedaEquiv, shrinkYonedaEquiv.injective, shrinkYonedaEquiv.surjective, shrinkYonedaEquiv_naturality, surjective
+/-
+**CategoryTheory.shrinkYonedaEquiv_symm_map** 是 Mathlib 中的一个引理，位于命名空间 `CategoryT
+heory`。
+形式化陈述：shrinkYonedaEquiv_symm_map {X Y : Cᵒᵖ} (f : X ⟶ Y) {P : Cᵒᵖ ⥤ Type w} (t :
+ P.obj X) : shrinkYonedaEquiv.symm (P.map f t) = shrinkYoneda.map f.unop ≫ shrin
+kYonedaEquiv.symm t
+参数：f : X ⟶ Y；t : P.obj X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.shrinkYonedaEquiv_naturality`：shrinkYonedaEquiv_naturalit
+y {X Y : C} {P : Cᵒᵖ ⥤ Type w} (f : shrinkYoneda.obj X ⟶ P) (g : Y ⟶ X) : P.map 
+g.op (shrinkYonedaEquiv f) = shri…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shrinkYonedaEquiv_symm_map {X Y : Cᵒᵖ} (f : X ⟶ Y) {P : Cᵒᵖ ⥤ Type w} (t : P.obj X) :
     shrinkYonedaEquiv.symm (P.map f t) =
@@ -494,25 +519,34 @@ lemma shrinkYonedaEquiv_symm_map {X Y : Cᵒᵖ} (f : X ⟶ Y) {P : Cᵒᵖ ⥤ 
     obtain ⟨t, rfl⟩ := shrinkYonedaEquiv.surjective t
     rw [← shrinkYonedaEquiv_naturality]
     simp)
-
-/--
-lemma `shrinkYonedaEquiv_symm_app_shrinkYonedaObjObjEquiv_symm` / 引理 `shrinkYonedaEquiv_symm_app_shrinkYonedaObjObjEquiv_symm`
-
-English:
-lemma shrinkYonedaEquiv_symm_app_shrinkYonedaObjObjEquiv_symm
-  statement: {X : C} {P : Cᵒᵖ ⥤ Type w}
-  proof: by
-  obtain ⟨g, rfl⟩ := shrinkYonedaEquiv.surjective s
-  simp [map_shrinkYonedaEquiv]
-
-中文:
-引理 shrinkYonedaEquiv_symm_app_shrinkYonedaObjObjEquiv_symm
-  结论: {X : C} {P : Cᵒᵖ ⥤ 类型 w}
-  证明: by
-  obtain ⟨g, rfl⟩ := shrinkYonedaEquiv.surjective s
-  simp [map_shrinkYonedaEquiv]
-
-Depends on / 依赖: map_shrinkYonedaEquiv, shrinkYonedaEquiv, shrinkYonedaEquiv.surjective, surjective
+/-
+**CategoryTheory.shrinkYonedaEquiv_symm_app_shrinkYonedaObjObjEquiv_symm** 是 Mat
+hlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：shrinkYonedaEquiv_symm_app_shrinkYonedaObjObjEquiv_symm {X : C} {P : Cᵒᵖ ⥤
+ Type w} (s : P.obj (op X)) {Y : C} (f : Y ⟶ X) : (shrinkYonedaEquiv.symm s).app
+ (op Y) (shrinkYonedaObjObjEquiv.symm f) = P.map f.op s
+参数：s : P.obj (op X)；f : Y ⟶ X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.types_congr_hom`：types_congr_hom {X Y : Type u} {f g : X 
+⟶ Y} (h : f = g) (x : X) : f x = g x
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用引理 `CategoryTheory.map_shrinkYonedaEquiv`：map_shrinkYonedaEquiv {X Y : C} {P
+ : Cᵒᵖ ⥤ Type w} (f : shrinkYoneda.obj X ⟶ P) (g : Y ⟶ X) : P.map g.op (shrinkYo
+nedaEquiv f) = f.app (op Y…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shrinkYonedaEquiv_symm_app_shrinkYonedaObjObjEquiv_symm {X : C} {P : Cᵒᵖ ⥤ Type w}
     (s : P.obj (op X)) {Y : C} (f : Y ⟶ X) :
@@ -523,28 +557,19 @@ lemma shrinkYonedaEquiv_symm_app_shrinkYonedaObjObjEquiv_symm {X : C} {P : Cᵒ�
 
 set_option backward.isDefEq.respectTransparency.types false in
 variable (C) in
-/--
-Definition of `fullyFaithfulShrinkYoneda` / `fullyFaithfulShrinkYoneda` 的定义
+/-- The functor `shrinkYoneda : C ⥤ Cᵒᵖ ⥤ Type w` for a locally `w`-small category `C`
+is fully faithful. -/
+/-
+**CategoryTheory.fullyFaithfulShrinkYoneda** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory`。
+形式化陈述：fullyFaithfulShrinkYoneda : (shrinkYoneda.{w} (C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithfulShrinkYoneda
-  signature: :
-  body: shrinkYonedaObjObjEquiv (shrinkYonedaEquiv f)
-  map_preimage f := by
-    obtain ⟨f, rfl⟩ := shrinkYonedaEquiv.symm.surjective f
-    cat_disch
-  preimage_map f := by simp [shrinkYonedaEquiv_shrinkYoneda_map]
-
-中文:
-定义 fullyFaithfulShrinkYoneda
-  签名: :
-  定义体: shrinkYonedaObjObjEquiv (shrinkYonedaEquiv f)
-  map_preimage f := by
-    obtain ⟨f, rfl⟩ := shrinkYonedaEquiv.symm.surjective f
-    cat_disch
-  preimage_map f := by simp [shrinkYonedaEquiv_shrinkYoneda_map]
-
-Depends on / 依赖: FullyFaithful
+--- 原说明 ---
+The functor `shrinkYoneda : C ⥤ Cᵒᵖ ⥤ Type w` for a locally `w`-small category `
+C`
+is fully faithful.
 -/
 noncomputable def fullyFaithfulShrinkYoneda :
     (shrinkYoneda.{w} (C := C)).FullyFaithful where
@@ -553,38 +578,14 @@ noncomputable def fullyFaithfulShrinkYoneda :
     obtain ⟨f, rfl⟩ := shrinkYonedaEquiv.symm.surjective f
     cat_disch
   preimage_map f := by simp [shrinkYonedaEquiv_shrinkYoneda_map]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (shrinkYoneda.{w} (C := C)).Faithful
-  body: (fullyFaithfulShrinkYoneda C).faithful
-
-中文:
-实例 :
-  签名: (shrinkYoneda.{w} (C := C)).忠实
-  定义体: (fullyFaithfulShrinkYoneda C).faithful
-
-Depends on / 依赖: Faithful, faithful, fullyFaithfulShrinkYoneda
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (shrinkYoneda.{w} (C := C)).Faithful := (fullyFaithfulShrinkYoneda C).faithful
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (shrinkYoneda.{w} (C := C)).Full
-  body: (fullyFaithfulShrinkYoneda C).full
-
-中文:
-实例 :
-  签名: (shrinkYoneda.{w} (C := C)).满
-  定义体: (fullyFaithfulShrinkYoneda C).full
-
-Depends on / 依赖: fullyFaithfulShrinkYoneda
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (shrinkYoneda.{w} (C := C)).Full := (fullyFaithfulShrinkYoneda C).full
 
@@ -592,28 +593,18 @@ set_option backward.defeqAttrib.useBackward true in
 /-- `shrinkYoneda` at the morphism universe level is `yoneda`. -/
 @[simps! hom_app inv_app]
 noncomputable
-/--
-Definition of `shrinkYonedaIsoYoneda` / `shrinkYonedaIsoYoneda` 的定义
-
-English:
-definition shrinkYonedaIsoYoneda
-  signature: : shrinkYoneda.{v} ≅ yoneda (C := C)
-  body: NatIso.ofComponents
-    (fun X => NatIso.ofComponents (fun Y => shrinkYonedaObjObjEquiv.toIso)
-      (by intros; ext; simp [shrinkYonedaObjObjEquiv_obj_map]))
-    (by intros; ext; simp [shrinkYonedaObjObjEquiv_map_app])
-
-中文:
-定义 shrinkYonedaIsoYoneda
-  签名: : shrinkYoneda.{v} ≅ yoneda (C := C)
-  定义体: NatIso.ofComponents
-    (fun X => NatIso.ofComponents (fun Y => shrinkYonedaObjObjEquiv.toIso)
-      (by intros; ext; simp [shrinkYonedaObjObjEquiv_obj_map]))
-    (by intros; ext; simp [shrinkYonedaObjObjEquiv_map_app])
+/-
+**CategoryTheory.shrinkYonedaIsoYoneda** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory
+`。
+形式化陈述：shrinkYonedaIsoYoneda : shrinkYoneda.{v} ≅ yoneda (C
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.locallySmall_of_univLE`：∀ (C : Type u) [inst : CategoryTh
+eory.Category.{v, u} C] [UnivLE.{v, w}], CategoryTheory.LocallySmall.{w, v, u} C
 -/
 def shrinkYonedaIsoYoneda : shrinkYoneda.{v} ≅ yoneda (C := C) :=
   NatIso.ofComponents
-    (fun X => NatIso.ofComponents (fun Y => shrinkYonedaObjObjEquiv.toIso)
+    (fun X ↦ NatIso.ofComponents (fun Y ↦ shrinkYonedaObjObjEquiv.toIso)
       (by intros; ext; simp [shrinkYonedaObjObjEquiv_obj_map]))
     (by intros; ext; simp [shrinkYonedaObjObjEquiv_map_app])
 
@@ -621,95 +612,74 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- `shrinkYoneda` is compatible with `uliftFunctor`. -/
 noncomputable
-/--
-Definition of `shrinkYonedaUliftFunctorIso` / `shrinkYonedaUliftFunctorIso` 的定义
-
-English:
-definition shrinkYonedaUliftFunctorIso
-  signature: [LocallySmall.{max w w'} C]
-  body: NatIso.ofComponents
-    (fun X => FunctorToTypes.shrinkCompUliftFunctorIso.{w, v} (yoneda.obj X))
-    fun _ => by ext; simp [shrinkYoneda]
-
-中文:
-定义 shrinkYonedaUliftFunctorIso
-  签名: [LocallySmall.{最大值 w w'} C]
-  定义体: NatIso.ofComponents
-    (fun X => FunctorToTypes.shrinkCompUliftFunctorIso.{w, v} (yoneda.obj X))
-    fun _ => by ext; simp [shrinkYoneda]
-
-Depends on / 依赖: FunctorToTypes, FunctorToTypes.shrinkCompUliftFunctorIso, NatIso, NatIso.ofComponents, ofComponents, shrinkCompUliftFunctorIso, shrinkYoneda, yoneda, yoneda.obj
+/-
+**CategoryTheory.shrinkYonedaUliftFunctorIso** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory`。
+形式化陈述：shrinkYonedaUliftFunctorIso [LocallySmall.{max w w'} C] : shrinkYoneda.{w}
+ ⋙ (Functor.whiskeringRight Cᵒᵖ _ _).obj uliftFunctor.{w', w} ≅ shrinkYoneda
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instSmallOppositeObjFunctorTypeYoneda`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] [CategoryTheory.LocallySmall.{w, v, u} C]
+ (X : C),   CategoryTheory.FunctorToTypes.…
 -/
 def shrinkYonedaUliftFunctorIso [LocallySmall.{max w w'} C] :
     shrinkYoneda.{w} ⋙ (Functor.whiskeringRight Cᵒᵖ _ _).obj uliftFunctor.{w', w} ≅
       shrinkYoneda :=
   NatIso.ofComponents
-    (fun X => FunctorToTypes.shrinkCompUliftFunctorIso.{w, v} (yoneda.obj X))
-    fun _ => by ext; simp [shrinkYoneda]
+    (fun X ↦ FunctorToTypes.shrinkCompUliftFunctorIso.{w, v} (yoneda.obj X))
+    fun _ ↦ by ext; simp [shrinkYoneda]
 
-/--
-Definition of `uliftYonedaIsoShrinkYoneda` / `uliftYonedaIsoShrinkYoneda` 的定义
+/-- `uliftYoneda` identifies to `shrinkYoneda`. -/
+/-
+**CategoryTheory.uliftYonedaIsoShrinkYoneda** 是 Mathlib 中的一个定义，位于命名空间 `CategoryT
+heory`。
+形式化陈述：uliftYonedaIsoShrinkYoneda : uliftYoneda.{w'} (C
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition uliftYonedaIsoShrinkYoneda
-  signature: :
-  body: NatIso.ofComponents (fun X => NatIso.ofComponents
-    (fun Y => (Equiv.ulift.trans shrinkYonedaObjObjEquiv.symm).toIso) (fun f => by
-      ext
-      exact (shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm _ _).symm)) (fun g => by
-      ext
-      exact (shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm _ _).symm)
-
-中文:
-定义 uliftYonedaIsoShrinkYoneda
-  签名: :
-  定义体: NatIso.ofComponents (fun X => NatIso.ofComponents
-    (fun Y => (Equiv.ulift.trans shrinkYonedaObjObjEquiv.symm).toIso) (fun f => by
-      ext
-      exact (shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm _ _).symm)) (fun g => by
-      ext
-      exact (shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm _ _).symm)
-
-Depends on / 依赖: shrinkYoneda
+--- 原说明 ---
+`uliftYoneda` identifies to `shrinkYoneda`.
 -/
 noncomputable def uliftYonedaIsoShrinkYoneda :
     uliftYoneda.{w'} (C := C) ≅ shrinkYoneda.{max w' v} :=
-  NatIso.ofComponents (fun X => NatIso.ofComponents
-    (fun Y => (Equiv.ulift.trans shrinkYonedaObjObjEquiv.symm).toIso) (fun f => by
+  NatIso.ofComponents (fun X ↦ NatIso.ofComponents
+    (fun Y ↦ (Equiv.ulift.trans shrinkYonedaObjObjEquiv.symm).toIso) (fun f ↦ by
       ext
-      exact (shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm _ _).symm)) (fun g => by
+      exact (shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm _ _).symm)) (fun g ↦ by
       ext
       exact (shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm _ _).symm)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `shrinkYonedaCompEvaluationCompUliftFunctorIsoUliftFunctor` / `shrinkYonedaCompEvaluationCompUliftFunctorIsoUliftFunctor` 的定义
+/-- The functor `shrinkYoneda.{w}` followed by the evaluation
+at `Y : Cᵒᵖ` and `uliftFunctor.{v}` identifies to `coyoneda.obj Y` followed
+by `uliftFunctor.{w}`. -/
+/-
+**CategoryTheory.shrinkYonedaCompEvaluationCompUliftFunctorIsoUliftFunctor** 是 M
+athlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：shrinkYonedaCompEvaluationCompUliftFunctorIsoUliftFunctor (Y : Cᵒᵖ) : shri
+nkYoneda.{w} ⋙ (evaluation Cᵒᵖ _).obj Y ⋙ uliftFunctor.{v} ≅ coyoneda.obj Y ⋙ ul
+iftFunctor.{w}
+参数：Y : Cᵒᵖ。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition shrinkYonedaCompEvaluationCompUliftFunctorIsoUliftFunctor
-  signature: (Y : Cᵒᵖ)
-  body: NatIso.ofComponents (fun X => (Equiv.ulift.trans
-    (shrinkYonedaObjObjEquiv.trans Equiv.ulift.symm)).toIso) (fun f => by
-      ext ⟨g⟩
-      obtain ⟨g, rfl⟩ := shrinkYonedaObjObjEquiv.symm.surjective g
-      simp [shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm])
-
-中文:
-定义 shrinkYonedaCompEvaluationCompUliftFunctorIsoUliftFunctor
-  签名: (Y : Cᵒᵖ)
-  定义体: NatIso.ofComponents (fun X => (Equiv.ulift.trans
-    (shrinkYonedaObjObjEquiv.trans Equiv.ulift.symm)).toIso) (fun f => by
-      ext ⟨g⟩
-      obtain ⟨g, rfl⟩ := shrinkYonedaObjObjEquiv.symm.surjective g
-      simp [shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm])
-
-Depends on / 依赖: Equiv.ulift.symm, Equiv.ulift.trans, NatIso, NatIso.ofComponents, ofComponents, shrinkYonedaObjObjEquiv, shrinkYonedaObjObjEquiv.symm.surjective, shrinkYonedaObjObjEquiv.trans, shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm, surjective
+--- 原说明 ---
+The functor `shrinkYoneda.{w}` followed by the evaluation
+at `Y : Cᵒᵖ` and `uliftFunctor.{v}` identifies to `coyoneda.obj Y` followed
+by `uliftFunctor.{w}`.
 -/
 noncomputable def shrinkYonedaCompEvaluationCompUliftFunctorIsoUliftFunctor (Y : Cᵒᵖ) :
     shrinkYoneda.{w} ⋙ (evaluation Cᵒᵖ _).obj Y ⋙ uliftFunctor.{v} ≅
       coyoneda.obj Y ⋙ uliftFunctor.{w} :=
-  NatIso.ofComponents (fun X => (Equiv.ulift.trans
-    (shrinkYonedaObjObjEquiv.trans Equiv.ulift.symm)).toIso) (fun f => by
+  NatIso.ofComponents (fun X ↦ (Equiv.ulift.trans
+    (shrinkYonedaObjObjEquiv.trans Equiv.ulift.symm)).toIso) (fun f ↦ by
       ext ⟨g⟩
       obtain ⟨g, rfl⟩ := shrinkYonedaObjObjEquiv.symm.surjective g
       simp [shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm])
@@ -717,27 +687,26 @@ noncomputable def shrinkYonedaCompEvaluationCompUliftFunctorIsoUliftFunctor (Y :
 /-- `shrinkYoneda.obj X` is represented by `X`. -/
 @[simps]
 noncomputable
-/--
-Definition of `shrinkYonedaRepresentableBy` / `shrinkYonedaRepresentableBy` 的定义
-
-English:
-definition shrinkYonedaRepresentableBy
-  signature: (X : C)
-  body: shrinkYonedaObjObjEquiv.symm
-  homEquiv_comp := shrinkYonedaObjObjEquiv_symm_comp
-
-中文:
-定义 shrinkYonedaRepresentableBy
-  签名: (X : C)
-  定义体: shrinkYonedaObjObjEquiv.symm
-  homEquiv_comp := shrinkYonedaObjObjEquiv_symm_comp
-
-Depends on / 依赖: shrinkYonedaObjObjEquiv, shrinkYonedaObjObjEquiv.symm
+/-
+**CategoryTheory.shrinkYonedaRepresentableBy** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory`。
+形式化陈述：shrinkYonedaRepresentableBy (X : C) : (shrinkYoneda.{w}.obj X).Representab
+leBy X where homEquiv
+参数：X : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用引理 `CategoryTheory.shrinkYonedaObjObjEquiv_symm_comp`：shrinkYonedaObjObjEqui
+v_symm_comp {X Y Y' : C} (g : Y' ⟶ Y) (f : Y ⟶ X) : shrinkYonedaObjObjEquiv.symm
+ (g ≫ f) = (shrinkYoneda.obj _).map g.…
 -/
 def shrinkYonedaRepresentableBy (X : C) : (shrinkYoneda.{w}.obj X).RepresentableBy X where
   homEquiv := shrinkYonedaObjObjEquiv.symm
   homEquiv_comp := shrinkYonedaObjObjEquiv_symm_comp
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : C) : (shrinkYoneda.{w}.obj X).IsRepresentable :=
   (shrinkYonedaRepresentableBy X).isRepresentable
 
@@ -746,152 +715,122 @@ end Yoneda
 section Coyoneda
 
 set_option backward.defeqAttrib.useBackward true in
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : Cᵒᵖ) : FunctorToTypes.Small.{w} (coyoneda.obj X) :=
-  fun _ => by dsimp; infer_instance
+  fun _ ↦ by dsimp; infer_instance
 
 /-- The co-Yoneda embedding `Cᵒᵖ ⥤ C ⥤ Type w` for a locally `w`-small category `C`. -/
 @[pp_with_univ]
-/--
-Definition of `shrinkCoyoneda` / `shrinkCoyoneda` 的定义
+/-
+**CategoryTheory.shrinkCoyoneda** 是 Mathlib 中的一个缩写定义，位于命名空间 `CategoryTheory`。
+形式化陈述：shrinkCoyoneda : Cᵒᵖ ⥤ C ⥤ Type w
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation shrinkCoyoneda
-  signature: : Cᵒᵖ ⥤ C ⥤ Type w
-  body: shrinkYoneda.flip
-
-中文:
-缩写 shrinkCoyoneda
-  签名: : Cᵒᵖ ⥤ C ⥤ 类型 w
-  定义体: shrinkYoneda.flip
-
-Depends on / 依赖: shrinkYoneda, shrinkYoneda.flip
+--- 原说明 ---
+The co-Yoneda embedding `Cᵒᵖ ⥤ C ⥤ Type w` for a locally `w`-small category `C`.
 -/
 noncomputable abbrev shrinkCoyoneda : Cᵒᵖ ⥤ C ⥤ Type w := shrinkYoneda.flip
-
-/--
-lemma `shrinkCoyoneda_obj` / 引理 `shrinkCoyoneda_obj`
-
-English:
-lemma shrinkCoyoneda_obj
-  given: {X : Cᵒᵖ}
-  proof: rfl
-
-中文:
-引理 shrinkCoyoneda_obj
-  条件: {X : Cᵒᵖ}
-  证明: rfl
+/-
+**CategoryTheory.shrinkCoyoneda_obj** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：shrinkCoyoneda_obj {X : Cᵒᵖ} : shrinkCoyoneda.obj X = FunctorToTypes.shrin
+k (coyoneda.obj X)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma shrinkCoyoneda_obj {X : Cᵒᵖ} :
     shrinkCoyoneda.obj X = FunctorToTypes.shrink (coyoneda.obj X) := rfl
-
-/--
-lemma `shrinkCoyoneda_map` / 引理 `shrinkCoyoneda_map`
-
-English:
-lemma shrinkCoyoneda_map
-  given: {X Y : Cᵒᵖ} {f : X ⟶ Y}
-  proof: rfl
-
-中文:
-引理 shrinkCoyoneda_map
-  条件: {X Y : Cᵒᵖ} {f : X ⟶ Y}
-  证明: rfl
+/-
+**CategoryTheory.shrinkCoyoneda_map** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：shrinkCoyoneda_map {X Y : Cᵒᵖ} {f : X ⟶ Y} : shrinkCoyoneda.map f = Functo
+rToTypes.shrinkMap (coyoneda.map f)
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma shrinkCoyoneda_map {X Y : Cᵒᵖ} {f : X ⟶ Y} :
     shrinkCoyoneda.map f = FunctorToTypes.shrinkMap (coyoneda.map f) := rfl
 
-/--
-Definition of `shrinkCoyonedaObjObjEquiv` / `shrinkCoyonedaObjObjEquiv` 的定义
+/-- The type `(shrinkCoyoneda.obj X).obj Y` is equivalent to `X.unop ⟶ Y`. -/
+/-
+**CategoryTheory.shrinkCoyonedaObjObjEquiv** 是 Mathlib 中的一个缩写定义，位于命名空间 `Category
+Theory`。
+形式化陈述：shrinkCoyonedaObjObjEquiv {X : Cᵒᵖ} {Y : C} : ((shrinkCoyoneda.{w}.obj X).
+obj Y) ≃ (X.unop ⟶ Y)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation shrinkCoyonedaObjObjEquiv
-  signature: {X : Cᵒᵖ} {Y : C}
-  body: shrinkYonedaObjObjEquiv
-
-中文:
-缩写 shrinkCoyonedaObjObjEquiv
-  签名: {X : Cᵒᵖ} {Y : C}
-  定义体: shrinkYonedaObjObjEquiv
-
-Depends on / 依赖: shrinkYonedaObjObjEquiv
+--- 原说明 ---
+The type `(shrinkCoyoneda.obj X).obj Y` is equivalent to `X.unop ⟶ Y`.
 -/
 noncomputable abbrev shrinkCoyonedaObjObjEquiv {X : Cᵒᵖ} {Y : C} :
     ((shrinkCoyoneda.{w}.obj X).obj Y) ≃ (X.unop ⟶ Y) :=
   shrinkYonedaObjObjEquiv
-
-/--
-lemma `shrinkCoyoneda_obj_map` / 引理 `shrinkCoyoneda_obj_map`
-
-English:
-lemma shrinkCoyoneda_obj_map
-  given: {X : Cᵒᵖ} {Y Y' : C} (g : Y ⟶ Y') (f : (shrinkCoyoneda.obj X).obj Y)
-  proof: rfl
-
-中文:
-引理 shrinkCoyoneda_obj_map
-  条件: {X : Cᵒᵖ} {Y Y' : C} (g : Y ⟶ Y') (f : (shrinkCoyoneda.obj X).obj Y)
-  证明: rfl
+/-
+**CategoryTheory.shrinkCoyoneda_obj_map** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheor
+y`。
+形式化陈述：shrinkCoyoneda_obj_map {X : Cᵒᵖ} {Y Y' : C} (g : Y ⟶ Y') (f : (shrinkCoyon
+eda.obj X).obj Y) : (shrinkCoyoneda.obj _).map g f = shrinkCoyonedaObjObjEquiv.s
+ymm (shrinkCoyonedaObjObjEquiv f ≫ g)
+参数：g : Y ⟶ Y'；f : (shrinkCoyoneda.obj X).obj Y。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma shrinkCoyoneda_obj_map {X : Cᵒᵖ} {Y Y' : C} (g : Y ⟶ Y') (f : (shrinkCoyoneda.obj X).obj Y) :
     (shrinkCoyoneda.obj _).map g f =
       shrinkCoyonedaObjObjEquiv.symm (shrinkCoyonedaObjObjEquiv f ≫ g) :=
   rfl
-
-/--
-lemma `shrinkCoyoneda_obj_map_shrinkCoyonedaObjObjEquiv_symm` / 引理 `shrinkCoyoneda_obj_map_shrinkCoyonedaObjObjEquiv_symm`
-
-English:
-lemma shrinkCoyoneda_obj_map_shrinkCoyonedaObjObjEquiv_symm
-  proof: shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm f g
-
-中文:
-引理 shrinkCoyoneda_obj_map_shrinkCoyonedaObjObjEquiv_symm
-  证明: shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm f g
-
-Depends on / 依赖: shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm
+/-
+**CategoryTheory.shrinkCoyoneda_obj_map_shrinkCoyonedaObjObjEquiv_symm** 是 Mathl
+ib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：shrinkCoyoneda_obj_map_shrinkCoyonedaObjObjEquiv_symm {X : Cᵒᵖ} {Y Y' : C}
+ (g : Y ⟶ Y') (f : X.unop ⟶ Y) : (shrinkCoyoneda.obj _).map g (shrinkCoyonedaObj
+ObjEquiv.symm f) = shrinkCoyonedaObjObjEquiv.symm (f ≫ g)
+参数：g : Y ⟶ Y'；f : X.unop ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm`：shrink
+Yoneda_map_app_shrinkYonedaObjObjEquiv_symm {X X' : C} {Y : Cᵒᵖ} (f : Y.unop ⟶ X
+) (g : X ⟶ X') : (shrinkYoneda.map g).app _ (shrinkYon…
 -/
 lemma shrinkCoyoneda_obj_map_shrinkCoyonedaObjObjEquiv_symm
     {X : Cᵒᵖ} {Y Y' : C} (g : Y ⟶ Y') (f : X.unop ⟶ Y) :
     (shrinkCoyoneda.obj _).map g (shrinkCoyonedaObjObjEquiv.symm f) =
       shrinkCoyonedaObjObjEquiv.symm (f ≫ g) :=
   shrinkYoneda_map_app_shrinkYonedaObjObjEquiv_symm f g
-
-/--
-lemma `shrinkCoyonedaObjObjEquiv_symm_comp` / 引理 `shrinkCoyonedaObjObjEquiv_symm_comp`
-
-English:
-lemma shrinkCoyonedaObjObjEquiv_symm_comp
-  given: {X Y Y' : C} (g : Y' ⟶ Y) (f : Y ⟶ X)
-  proof: (shrinkCoyoneda_obj_map_shrinkCoyonedaObjObjEquiv_symm f g).symm
-
-中文:
-引理 shrinkCoyonedaObjObjEquiv_symm_comp
-  条件: {X Y Y' : C} (g : Y' ⟶ Y) (f : Y ⟶ X)
-  证明: (shrinkCoyoneda_obj_map_shrinkCoyonedaObjObjEquiv_symm f g).symm
-
-Depends on / 依赖: shrinkCoyoneda_obj_map_shrinkCoyonedaObjObjEquiv_symm
+/-
+**CategoryTheory.shrinkCoyonedaObjObjEquiv_symm_comp** 是 Mathlib 中的一个引理，位于命名空间 `
+CategoryTheory`。
+形式化陈述：shrinkCoyonedaObjObjEquiv_symm_comp {X Y Y' : C} (g : Y' ⟶ Y) (f : Y ⟶ X) 
+: shrinkCoyonedaObjObjEquiv.symm (g ≫ f) = (shrinkCoyoneda.obj _).map f (shrinkC
+oyonedaObjObjEquiv.symm g)
+参数：g : Y' ⟶ Y；f : Y ⟶ X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用引理 `CategoryTheory.shrinkCoyoneda_obj_map_shrinkCoyonedaObjObjEquiv_symm`：sh
+rinkCoyoneda_obj_map_shrinkCoyonedaObjObjEquiv_symm {X : Cᵒᵖ} {Y Y' : C} (g : Y 
+⟶ Y') (f : X.unop ⟶ Y) : (shrinkCoyoneda.obj _).map g (shr…
 -/
 lemma shrinkCoyonedaObjObjEquiv_symm_comp {X Y Y' : C} (g : Y' ⟶ Y) (f : Y ⟶ X) :
     shrinkCoyonedaObjObjEquiv.symm (g ≫ f) =
     (shrinkCoyoneda.obj _).map f (shrinkCoyonedaObjObjEquiv.symm g) :=
   (shrinkCoyoneda_obj_map_shrinkCoyonedaObjObjEquiv_symm f g).symm
-
-/--
-lemma `shrinkCoyoneda_map_app_shrinkCoyonedaObjObjEquiv_symm` / 引理 `shrinkCoyoneda_map_app_shrinkCoyonedaObjObjEquiv_symm`
-
-English:
-lemma shrinkCoyoneda_map_app_shrinkCoyonedaObjObjEquiv_symm
-  proof: shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm g f
-
-@[reassoc]
-
-中文:
-引理 shrinkCoyoneda_map_app_shrinkCoyonedaObjObjEquiv_symm
-  证明: shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm g f
-
-@[reassoc]
-
-Depends on / 依赖: shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm
+/-
+**CategoryTheory.shrinkCoyoneda_map_app_shrinkCoyonedaObjObjEquiv_symm** 是 Mathl
+ib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：shrinkCoyoneda_map_app_shrinkCoyonedaObjObjEquiv_symm {X X' : Cᵒᵖ} {Y : C}
+ (f : X.unop ⟶ Y) (g : X ⟶ X') : (shrinkCoyoneda.map g).app _ (shrinkCoyonedaObj
+ObjEquiv.symm f) = shrinkCoyonedaObjObjEquiv.symm (g.unop ≫ f)
+参数：f : X.unop ⟶ Y；g : X ⟶ X'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm`：shrink
+Yoneda_obj_map_shrinkYonedaObjObjEquiv_symm {X : C} {Y Y' : Cᵒᵖ} (g : Y ⟶ Y') (f
+ : Y.unop ⟶ X) : (shrinkYoneda.obj _).map g (shrinkYon…
 -/
 lemma shrinkCoyoneda_map_app_shrinkCoyonedaObjObjEquiv_symm
     {X X' : Cᵒᵖ} {Y : C} (f : X.unop ⟶ Y) (g : X ⟶ X') :
@@ -900,22 +839,18 @@ lemma shrinkCoyoneda_map_app_shrinkCoyonedaObjObjEquiv_symm
   shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm g f
 
 @[reassoc]
-/--
-lemma `shrinkCoyonedaObjObjEquiv_map_app` / 引理 `shrinkCoyonedaObjObjEquiv_map_app`
-
-English:
-lemma shrinkCoyonedaObjObjEquiv_map_app
-  proof: shrinkYonedaObjObjEquiv_obj_map g f
-
-@[reassoc]
-
-中文:
-引理 shrinkCoyonedaObjObjEquiv_map_app
-  证明: shrinkYonedaObjObjEquiv_obj_map g f
-
-@[reassoc]
-
-Depends on / 依赖: shrinkYonedaObjObjEquiv_obj_map
+/-
+**CategoryTheory.shrinkCoyonedaObjObjEquiv_map_app** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory`。
+形式化陈述：shrinkCoyonedaObjObjEquiv_map_app {X X' : Cᵒᵖ} {Y : C} (f : (shrinkCoyoned
+a.{w, v, u}.obj X).obj Y) (g : X ⟶ X') : shrinkCoyonedaObjObjEquiv ((shrinkCoyon
+eda.map g).app Y f) = g.unop ≫ shrinkCoyonedaObjObjEquiv f
+参数：f : (shrinkCoyoneda.{w, v, u}.obj X).obj Y；g : X ⟶ X'。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.shrinkYonedaObjObjEquiv_obj_map`：shrinkYonedaObjObjEquiv_
+obj_map {X : C} {Y Y' : Cᵒᵖ} (g : Y ⟶ Y') (f : (shrinkYoneda.{w}.obj X).obj Y) :
+ shrinkYonedaObjObjEquiv ((shrinkYon…
 -/
 lemma shrinkCoyonedaObjObjEquiv_map_app
     {X X' : Cᵒᵖ} {Y : C} (f : (shrinkCoyoneda.{w, v, u}.obj X).obj Y) (g : X ⟶ X') :
@@ -924,20 +859,18 @@ lemma shrinkCoyonedaObjObjEquiv_map_app
   shrinkYonedaObjObjEquiv_obj_map g f
 
 @[reassoc]
-/--
-lemma `shrinkCoyonedaObjObjEquiv_obj_map` / 引理 `shrinkCoyonedaObjObjEquiv_obj_map`
-
-English:
-lemma shrinkCoyonedaObjObjEquiv_obj_map
-  statement: {X : Cᵒᵖ} {Y Y' : C} (g : Y ⟶ Y')
-  proof: shrinkYonedaObjObjEquiv_map_app f g
-
-中文:
-引理 shrinkCoyonedaObjObjEquiv_obj_map
-  结论: {X : Cᵒᵖ} {Y Y' : C} (g : Y ⟶ Y')
-  证明: shrinkYonedaObjObjEquiv_map_app f g
-
-Depends on / 依赖: shrinkYonedaObjObjEquiv_map_app
+/-
+**CategoryTheory.shrinkCoyonedaObjObjEquiv_obj_map** 是 Mathlib 中的一个引理，位于命名空间 `Ca
+tegoryTheory`。
+形式化陈述：shrinkCoyonedaObjObjEquiv_obj_map {X : Cᵒᵖ} {Y Y' : C} (g : Y ⟶ Y') (f : (
+shrinkCoyoneda.{w}.obj X).obj Y) : shrinkCoyonedaObjObjEquiv ((shrinkCoyoneda.{w
+}.obj X).map g f) = shrinkCoyonedaObjObjEquiv f ≫ g
+参数：g : Y ⟶ Y'；f : (shrinkCoyoneda.{w}.obj X).obj Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `CategoryTheory.shrinkYonedaObjObjEquiv_map_app`：shrinkYonedaObjObjEquiv_
+map_app {X X' : C} {Y : Cᵒᵖ} (f : (shrinkYoneda.{w, v, u}.obj X).obj Y) (g : X ⟶
+ X') : shrinkYonedaObjObjEquiv ((shr…
 -/
 lemma shrinkCoyonedaObjObjEquiv_obj_map {X : Cᵒᵖ} {Y Y' : C} (g : Y ⟶ Y')
     (f : (shrinkCoyoneda.{w}.obj X).obj Y) :
@@ -946,42 +879,25 @@ lemma shrinkCoyonedaObjObjEquiv_obj_map {X : Cᵒᵖ} {Y Y' : C} (g : Y ⟶ Y')
   shrinkYonedaObjObjEquiv_map_app f g
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `shrinkCoyonedaEquiv` / `shrinkCoyonedaEquiv` 的定义
+/-- The type of natural transformations `shrinkCoyoneda.{w}.obj X ⟶ P`
+with `X : Cᵒᵖ` and `P : C ⥤ Type w` is equivalent to `P.obj (op X)`. -/
+/-
+**CategoryTheory.shrinkCoyonedaEquiv** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：shrinkCoyonedaEquiv {X : Cᵒᵖ} {P : C ⥤ Type w} : (shrinkCoyoneda.{w}.obj X
+ ⟶ P) ≃ P.obj X.unop where toFun τ
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition shrinkCoyonedaEquiv
-  signature: {X : Cᵒᵖ} {P : C ⥤ Type w}
-  body: τ.app _ (equivShrink.{w} _ (𝟙 X.unop))
-  invFun x :=
-    { app Y := ↾fun f => P.map ((equivShrink.{w} _).symm f) x
-      naturality Y Z g := by ext; simp [shrinkYoneda] }
-  left_inv τ := by
-    ext Y f
-    obtain ⟨f, rfl⟩ := (equivShrink _).surjective f
-    simpa [shrinkYoneda] using ((τ.naturality_apply f) (equivShrink _ (𝟙 X.unop))).symm
-  right_inv x := by simp
-
-中文:
-定义 shrinkCoyonedaEquiv
-  签名: {X : Cᵒᵖ} {P : C ⥤ 类型 w}
-  定义体: τ.app _ (equivShrink.{w} _ (𝟙 X.unop))
-  invFun x :=
-    { app Y := ↾fun f => P.map ((equivShrink.{w} _).symm f) x
-      naturality Y Z g := by ext; simp [shrinkYoneda] }
-  left_inv τ := by
-    ext Y f
-    obtain ⟨f, rfl⟩ := (equivShrink _).surjective f
-    simpa [shrinkYoneda] using ((τ.naturality_apply f) (equivShrink _ (𝟙 X.unop))).symm
-  right_inv x := by simp
-
-Depends on / 依赖: X.unop, equivShrink
+--- 原说明 ---
+The type of natural transformations `shrinkCoyoneda.{w}.obj X ⟶ P`
+with `X : Cᵒᵖ` and `P : C ⥤ Type w` is equivalent to `P.obj (op X)`.
 -/
 noncomputable def shrinkCoyonedaEquiv {X : Cᵒᵖ} {P : C ⥤ Type w} :
     (shrinkCoyoneda.{w}.obj X ⟶ P) ≃ P.obj X.unop where
   toFun τ := τ.app _ (equivShrink.{w} _ (𝟙 X.unop))
   invFun x :=
-    { app Y := ↾fun f => P.map ((equivShrink.{w} _).symm f) x
+    { app Y := ↾fun f ↦ P.map ((equivShrink.{w} _).symm f) x
       naturality Y Z g := by ext; simp [shrinkYoneda] }
   left_inv τ := by
     ext Y f
@@ -991,24 +907,33 @@ noncomputable def shrinkCoyonedaEquiv {X : Cᵒᵖ} {P : C ⥤ Type w} :
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `map_shrinkCoyonedaEquiv` / 引理 `map_shrinkCoyonedaEquiv`
-
-English:
-lemma map_shrinkCoyonedaEquiv
-  statement: {X Y : Cᵒᵖ} {P : C ⥤ Type w} (f : shrinkCoyoneda.obj X ⟶ P)
-  proof: by
-  simp [shrinkYonedaObjObjEquiv, shrinkCoyonedaEquiv, shrinkYoneda,
-    ← comp_apply, ← NatTrans.naturality]
-
-中文:
-引理 map_shrinkCoyonedaEquiv
-  结论: {X Y : Cᵒᵖ} {P : C ⥤ 类型 w} (f : shrinkCoyoneda.obj X ⟶ P)
-  证明: by
-  simp [shrinkYonedaObjObjEquiv, shrinkCoyonedaEquiv, shrinkYoneda,
-    ← comp_apply, ← NatTrans.naturality]
-
-Depends on / 依赖: NatTrans, NatTrans.naturality, comp_apply, naturality, shrinkCoyonedaEquiv, shrinkYoneda, shrinkYonedaObjObjEquiv
+/-
+**CategoryTheory.map_shrinkCoyonedaEquiv** 是 Mathlib 中的一个引理，位于命名空间 `CategoryTheo
+ry`。
+形式化陈述：map_shrinkCoyonedaEquiv {X Y : Cᵒᵖ} {P : C ⥤ Type w} (f : shrinkCoyoneda.o
+bj X ⟶ P) (g : Y ⟶ X) : P.map g.unop (shrinkCoyonedaEquiv f) = f.app Y.unop (shr
+inkCoyonedaObjObjEquiv.symm g.unop)
+参数：f : shrinkCoyoneda.obj X ⟶ P；g : Y ⟶ X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.instSmallOppositeObjFunctorTypeYoneda`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] [CategoryTheory.LocallySmall.{w, v, u} C]
+ (X : C),   CategoryTheory.FunctorToTypes.…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用引理 `CategoryTheory.types_congr_hom`：types_congr_hom {X Y : Type u} {f g : X 
+⟶ Y} (h : f = g) (x : X) : f x = g x
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma map_shrinkCoyonedaEquiv {X Y : Cᵒᵖ} {P : C ⥤ Type w} (f : shrinkCoyoneda.obj X ⟶ P)
     (g : Y ⟶ X) : P.map g.unop (shrinkCoyonedaEquiv f) =
@@ -1018,44 +943,55 @@ lemma map_shrinkCoyonedaEquiv {X Y : Cᵒᵖ} {P : C ⥤ Type w} (f : shrinkCoyo
 
 set_option backward.defeqAttrib.useBackward true in
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `shrinkCoyonedaEquiv_shrinkCoyoneda_map` / 引理 `shrinkCoyonedaEquiv_shrinkCoyoneda_map`
-
-English:
-lemma shrinkCoyonedaEquiv_shrinkCoyoneda_map
-  given: {X Y : Cᵒᵖ} (f : X ⟶ Y)
-  proof: by
-  simp [shrinkCoyonedaEquiv, shrinkYoneda, shrinkYonedaObjObjEquiv]
-
-中文:
-引理 shrinkCoyonedaEquiv_shrinkCoyoneda_map
-  条件: {X Y : Cᵒᵖ} (f : X ⟶ Y)
-  证明: by
-  simp [shrinkCoyonedaEquiv, shrinkYoneda, shrinkYonedaObjObjEquiv]
-
-Depends on / 依赖: shrinkCoyonedaEquiv, shrinkYoneda, shrinkYonedaObjObjEquiv
+/-
+**CategoryTheory.shrinkCoyonedaEquiv_shrinkCoyoneda_map** 是 Mathlib 中的一个引理，位于命名空
+间 `CategoryTheory`。
+形式化陈述：shrinkCoyonedaEquiv_shrinkCoyoneda_map {X Y : Cᵒᵖ} (f : X ⟶ Y) : shrinkCoy
+onedaEquiv (shrinkCoyoneda.{w}.map f) = shrinkCoyonedaObjObjEquiv.symm f.unop
+参数：f : X ⟶ Y。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `CategoryTheory.instSmallOppositeObjFunctorTypeYoneda`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] [CategoryTheory.LocallySmall.{w, v, u} C]
+ (X : C),   CategoryTheory.FunctorToTypes.…
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shrinkCoyonedaEquiv_shrinkCoyoneda_map {X Y : Cᵒᵖ} (f : X ⟶ Y) :
     shrinkCoyonedaEquiv (shrinkCoyoneda.{w}.map f) = shrinkCoyonedaObjObjEquiv.symm f.unop := by
   simp [shrinkCoyonedaEquiv, shrinkYoneda, shrinkYonedaObjObjEquiv]
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-lemma `shrinkCoyonedaEquiv_comp` / 引理 `shrinkCoyonedaEquiv_comp`
-
-English:
-lemma shrinkCoyonedaEquiv_comp
-  statement: {X : Cᵒᵖ} {P Q : C ⥤ Type w} (α : shrinkCoyoneda.obj X ⟶ P)
-  proof: by
-  simp [shrinkCoyonedaEquiv]
-
-中文:
-引理 shrinkCoyonedaEquiv_comp
-  结论: {X : Cᵒᵖ} {P Q : C ⥤ 类型 w} (α : shrinkCoyoneda.obj X ⟶ P)
-  证明: by
-  simp [shrinkCoyonedaEquiv]
-
-Depends on / 依赖: shrinkCoyonedaEquiv
+/-
+**CategoryTheory.shrinkCoyonedaEquiv_comp** 是 Mathlib 中的一个引理，位于命名空间 `CategoryThe
+ory`。
+形式化陈述：shrinkCoyonedaEquiv_comp {X : Cᵒᵖ} {P Q : C ⥤ Type w} (α : shrinkCoyoneda.
+obj X ⟶ P) (β : P ⟶ Q) : shrinkCoyonedaEquiv (α ≫ β) = β.app _ (shrinkCoyonedaEq
+uiv α)
+参数：α : shrinkCoyoneda.obj X ⟶ P；β : P ⟶ Q。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shrinkCoyonedaEquiv_comp {X : Cᵒᵖ} {P Q : C ⥤ Type w} (α : shrinkCoyoneda.obj X ⟶ P)
     (β : P ⟶ Q) :
@@ -1063,28 +999,39 @@ lemma shrinkCoyonedaEquiv_comp {X : Cᵒᵖ} {P Q : C ⥤ Type w} (α : shrinkCo
   simp [shrinkCoyonedaEquiv]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-lemma `shrinkCoyonedaEquiv_naturality` / 引理 `shrinkCoyonedaEquiv_naturality`
-
-English:
-lemma shrinkCoyonedaEquiv_naturality
-  statement: {X Y : Cᵒᵖ} {P : C ⥤ Type w}
-  proof: by
-  simpa [shrinkCoyonedaEquiv, shrinkYoneda]
-    using (f.naturality_apply g.unop ((equivShrink _) (𝟙 _))).symm
-
-@[reassoc]
-
-中文:
-引理 shrinkCoyonedaEquiv_naturality
-  结论: {X Y : Cᵒᵖ} {P : C ⥤ 类型 w}
-  证明: by
-  simpa [shrinkCoyonedaEquiv, shrinkYoneda]
-    using (f.naturality_apply g.unop ((equivShrink _) (𝟙 _))).symm
-
-@[reassoc]
-
-Depends on / 依赖: equivShrink, f.naturality_apply, g.unop, naturality_apply, shrinkCoyonedaEquiv, shrinkYoneda
+/-
+**CategoryTheory.shrinkCoyonedaEquiv_naturality** 是 Mathlib 中的一个引理，位于命名空间 `Categ
+oryTheory`。
+形式化陈述：shrinkCoyonedaEquiv_naturality {X Y : Cᵒᵖ} {P : C ⥤ Type w} (f : shrinkCoy
+oneda.obj X ⟶ P) (g : Y ⟶ X) : P.map g.unop (shrinkCoyonedaEquiv f) = shrinkCoyo
+nedaEquiv (shrinkCoyoneda.map g ≫ f)
+参数：f : shrinkCoyoneda.obj X ⟶ P；g : Y ⟶ X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instSmallOppositeObjFunctorTypeYoneda`：∀ {C : Type u} [in
+st : CategoryTheory.Category.{v, u} C] [CategoryTheory.LocallySmall.{w, v, u} C]
+ (X : C),   CategoryTheory.FunctorToTypes.…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `CategoryTheory.comp_apply`：∀ {C : Type u} [inst : CategoryTheory.Categor
+y.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y : C) → Fu
+nLike (FC X Y) …
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `CategoryTheory.Category.comp_id`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp f (CategoryTheory…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `CategoryTheory.Category.id_comp`：∀ {obj : Type u} [self : CategoryTheory
+.Category.{v, u} obj] {X Y : obj} (f : X ⟶ Y),   CategoryTheory.CategoryStruct.c
+omp (CategoryTheory.C…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.NatTrans.naturality_apply`：∀ {C : Type u} [inst : Categor
+yTheory.Category.{v, u} C] {D : Type u_1} [inst_1 : CategoryTheory.Category.{v_1
+, u_1} D]   {FD : outParam (D …
 -/
 lemma shrinkCoyonedaEquiv_naturality {X Y : Cᵒᵖ} {P : C ⥤ Type w}
     (f : shrinkCoyoneda.obj X ⟶ P) (g : Y ⟶ X) :
@@ -1093,26 +1040,35 @@ lemma shrinkCoyonedaEquiv_naturality {X Y : Cᵒᵖ} {P : C ⥤ Type w}
     using (f.naturality_apply g.unop ((equivShrink _) (𝟙 _))).symm
 
 @[reassoc]
-/--
-lemma `shrinkCoyonedaEquiv_symm_map` / 引理 `shrinkCoyonedaEquiv_symm_map`
-
-English:
-lemma shrinkCoyonedaEquiv_symm_map
-  given: {X Y : C} (f : X ⟶ Y) {P : C ⥤ Type w} (t : P.obj X)
-  proof: shrinkCoyonedaEquiv.injective (by
-    obtain ⟨t, rfl⟩ := shrinkCoyonedaEquiv.surjective t
-    rw [← shrinkCoyonedaEquiv_naturality]
-    simp)
-
-中文:
-引理 shrinkCoyonedaEquiv_symm_map
-  条件: {X Y : C} (f : X ⟶ Y) {P : C ⥤ 类型 w} (t : P.obj X)
-  证明: shrinkCoyonedaEquiv.injective (by
-    obtain ⟨t, rfl⟩ := shrinkCoyonedaEquiv.surjective t
-    rw [← shrinkCoyonedaEquiv_naturality]
-    simp)
-
-Depends on / 依赖: injective, shrinkCoyonedaEquiv, shrinkCoyonedaEquiv.injective, shrinkCoyonedaEquiv.surjective, shrinkCoyonedaEquiv_naturality, surjective
+/-
+**CategoryTheory.shrinkCoyonedaEquiv_symm_map** 是 Mathlib 中的一个引理，位于命名空间 `Categor
+yTheory`。
+形式化陈述：shrinkCoyonedaEquiv_symm_map {X Y : C} (f : X ⟶ Y) {P : C ⥤ Type w} (t : P
+.obj X) : shrinkCoyonedaEquiv.symm (P.map f t) = shrinkCoyoneda.map f.op ≫ shrin
+kCoyonedaEquiv.symm t
+参数：f : X ⟶ Y；t : P.obj X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `CategoryTheory.shrinkCoyonedaEquiv_naturality`：shrinkCoyonedaEquiv_natur
+ality {X Y : Cᵒᵖ} {P : C ⥤ Type w} (f : shrinkCoyoneda.obj X ⟶ P) (g : Y ⟶ X) : 
+P.map g.unop (shrinkCoyonedaEquiv f…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shrinkCoyonedaEquiv_symm_map {X Y : C} (f : X ⟶ Y) {P : C ⥤ Type w} (t : P.obj X) :
     shrinkCoyonedaEquiv.symm (P.map f t) =
@@ -1121,25 +1077,34 @@ lemma shrinkCoyonedaEquiv_symm_map {X Y : C} (f : X ⟶ Y) {P : C ⥤ Type w} (t
     obtain ⟨t, rfl⟩ := shrinkCoyonedaEquiv.surjective t
     rw [← shrinkCoyonedaEquiv_naturality]
     simp)
-
-/--
-lemma `shrinkCoyonedaEquiv_symm_app_shrinkCoyonedaObjObjEquiv_symm` / 引理 `shrinkCoyonedaEquiv_symm_app_shrinkCoyonedaObjObjEquiv_symm`
-
-English:
-lemma shrinkCoyonedaEquiv_symm_app_shrinkCoyonedaObjObjEquiv_symm
-  statement: {X : Cᵒᵖ} {P : C ⥤ Type w}
-  proof: by
-  obtain ⟨g, rfl⟩ := shrinkCoyonedaEquiv.surjective s
-  simp [map_shrinkCoyonedaEquiv]
-
-中文:
-引理 shrinkCoyonedaEquiv_symm_app_shrinkCoyonedaObjObjEquiv_symm
-  结论: {X : Cᵒᵖ} {P : C ⥤ 类型 w}
-  证明: by
-  obtain ⟨g, rfl⟩ := shrinkCoyonedaEquiv.surjective s
-  simp [map_shrinkCoyonedaEquiv]
-
-Depends on / 依赖: map_shrinkCoyonedaEquiv, shrinkCoyonedaEquiv, shrinkCoyonedaEquiv.surjective, surjective
+/-
+**CategoryTheory.shrinkCoyonedaEquiv_symm_app_shrinkCoyonedaObjObjEquiv_symm** 是
+ Mathlib 中的一个引理，位于命名空间 `CategoryTheory`。
+形式化陈述：shrinkCoyonedaEquiv_symm_app_shrinkCoyonedaObjObjEquiv_symm {X : Cᵒᵖ} {P :
+ C ⥤ Type w} (s : P.obj X.unop) {Y : Cᵒᵖ} (f : Y ⟶ X) : (shrinkCoyonedaEquiv.sym
+m s).app Y.unop (shrinkCoyonedaObjObjEquiv.symm f.unop) = P.map f.unop s
+参数：s : P.obj X.unop；f : Y ⟶ X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `CategoryTheory.types_congr_hom`：types_congr_hom {X Y : Type u} {f g : X 
+⟶ Y} (h : f = g) (x : X) : f x = g x
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用引理 `CategoryTheory.map_shrinkCoyonedaEquiv`：map_shrinkCoyonedaEquiv {X Y : C
+ᵒᵖ} {P : C ⥤ Type w} (f : shrinkCoyoneda.obj X ⟶ P) (g : Y ⟶ X) : P.map g.unop (
+shrinkCoyonedaEquiv f) = f.a…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma shrinkCoyonedaEquiv_symm_app_shrinkCoyonedaObjObjEquiv_symm {X : Cᵒᵖ} {P : C ⥤ Type w}
     (s : P.obj X.unop) {Y : Cᵒᵖ} (f : Y ⟶ X) :
@@ -1149,30 +1114,19 @@ lemma shrinkCoyonedaEquiv_symm_app_shrinkCoyonedaObjObjEquiv_symm {X : Cᵒᵖ} 
   simp [map_shrinkCoyonedaEquiv]
 
 variable (C) in
-/--
-Definition of `fullyFaithfulShrinkCoyoneda` / `fullyFaithfulShrinkCoyoneda` 的定义
+/-- The functor `shrinkCoyoneda : Cᵒᵖ ⥤ C ⥤ Type w` for a locally `w`-small category `C`
+is fully faithful. -/
+/-
+**CategoryTheory.fullyFaithfulShrinkCoyoneda** 是 Mathlib 中的一个定义，位于命名空间 `Category
+Theory`。
+形式化陈述：fullyFaithfulShrinkCoyoneda : (shrinkCoyoneda.{w} (C
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fullyFaithfulShrinkCoyoneda
-  signature: :
-  body: (shrinkCoyonedaObjObjEquiv (shrinkCoyonedaEquiv f)).op
-  map_preimage f := by
-    obtain ⟨f, rfl⟩ := shrinkCoyonedaEquiv.symm.surjective f
-    cat_disch
-  preimage_map f := by
-    simp [shrinkCoyonedaEquiv_shrinkCoyoneda_map f]
-
-中文:
-定义 fullyFaithfulShrinkCoyoneda
-  签名: :
-  定义体: (shrinkCoyonedaObjObjEquiv (shrinkCoyonedaEquiv f)).op
-  map_preimage f := by
-    obtain ⟨f, rfl⟩ := shrinkCoyonedaEquiv.symm.surjective f
-    cat_disch
-  preimage_map f := by
-    simp [shrinkCoyonedaEquiv_shrinkCoyoneda_map f]
-
-Depends on / 依赖: FullyFaithful
+--- 原说明 ---
+The functor `shrinkCoyoneda : Cᵒᵖ ⥤ C ⥤ Type w` for a locally `w`-small category
+ `C`
+is fully faithful.
 -/
 noncomputable def fullyFaithfulShrinkCoyoneda :
     (shrinkCoyoneda.{w} (C := C)).FullyFaithful where
@@ -1182,38 +1136,14 @@ noncomputable def fullyFaithfulShrinkCoyoneda :
     cat_disch
   preimage_map f := by
     simp [shrinkCoyonedaEquiv_shrinkCoyoneda_map f]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (shrinkCoyoneda.{w} (C := C)).Faithful
-  body: (fullyFaithfulShrinkCoyoneda C).faithful
-
-中文:
-实例 :
-  签名: (shrinkCoyoneda.{w} (C := C)).忠实
-  定义体: (fullyFaithfulShrinkCoyoneda C).faithful
-
-Depends on / 依赖: Faithful, faithful, fullyFaithfulShrinkCoyoneda
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (shrinkCoyoneda.{w} (C := C)).Faithful := (fullyFaithfulShrinkCoyoneda C).faithful
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: (shrinkCoyoneda.{w} (C := C)).Full
-  body: (fullyFaithfulShrinkCoyoneda C).full
-
-中文:
-实例 :
-  签名: (shrinkCoyoneda.{w} (C := C)).满
-  定义体: (fullyFaithfulShrinkCoyoneda C).full
-
-Depends on / 依赖: fullyFaithfulShrinkCoyoneda
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : (shrinkCoyoneda.{w} (C := C)).Full := (fullyFaithfulShrinkCoyoneda C).full
 
@@ -1222,28 +1152,18 @@ set_option backward.defeqAttrib.useBackward true in
 /-- `shrinkCoyoneda` at the morphism universe level is `coyoneda`. -/
 @[simps! hom_app inv_app]
 noncomputable
-/--
-Definition of `shrinkCoyonedaIsoCoyoneda` / `shrinkCoyonedaIsoCoyoneda` 的定义
-
-English:
-definition shrinkCoyonedaIsoCoyoneda
-  signature: : shrinkCoyoneda.{v} ≅ coyoneda (C := C)
-  body: NatIso.ofComponents
-    (fun X => NatIso.ofComponents (fun Y => shrinkCoyonedaObjObjEquiv.toIso)
-      (by intros; ext; simp [shrinkYonedaObjObjEquiv_map_app]))
-    (by intros; ext; simp [shrinkYonedaObjObjEquiv_obj_map])
-
-中文:
-定义 shrinkCoyonedaIsoCoyoneda
-  签名: : shrinkCoyoneda.{v} ≅ coyoneda (C := C)
-  定义体: NatIso.ofComponents
-    (fun X => NatIso.ofComponents (fun Y => shrinkCoyonedaObjObjEquiv.toIso)
-      (by intros; ext; simp [shrinkYonedaObjObjEquiv_map_app]))
-    (by intros; ext; simp [shrinkYonedaObjObjEquiv_obj_map])
+/-
+**CategoryTheory.shrinkCoyonedaIsoCoyoneda** 是 Mathlib 中的一个定义，位于命名空间 `CategoryTh
+eory`。
+形式化陈述：shrinkCoyonedaIsoCoyoneda : shrinkCoyoneda.{v} ≅ coyoneda (C
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.locallySmall_of_univLE`：∀ (C : Type u) [inst : CategoryTh
+eory.Category.{v, u} C] [UnivLE.{v, w}], CategoryTheory.LocallySmall.{w, v, u} C
 -/
 def shrinkCoyonedaIsoCoyoneda : shrinkCoyoneda.{v} ≅ coyoneda (C := C) :=
   NatIso.ofComponents
-    (fun X => NatIso.ofComponents (fun Y => shrinkCoyonedaObjObjEquiv.toIso)
+    (fun X ↦ NatIso.ofComponents (fun Y ↦ shrinkCoyonedaObjObjEquiv.toIso)
       (by intros; ext; simp [shrinkYonedaObjObjEquiv_map_app]))
     (by intros; ext; simp [shrinkYonedaObjObjEquiv_obj_map])
 
@@ -1251,95 +1171,75 @@ set_option backward.isDefEq.respectTransparency.types false in
 set_option backward.defeqAttrib.useBackward true in
 /-- `shrinkCoyoneda` is compatible with `uliftFunctor`. -/
 noncomputable
-/--
-Definition of `shrinkCoyonedaUliftFunctorIso` / `shrinkCoyonedaUliftFunctorIso` 的定义
-
-English:
-definition shrinkCoyonedaUliftFunctorIso
-  signature: [LocallySmall.{max w w'} C]
-  body: NatIso.ofComponents
-    (fun X => FunctorToTypes.shrinkCompUliftFunctorIso.{w, v} (coyoneda.obj X))
-    fun _ => by ext; simp [shrinkYoneda]
-
-中文:
-定义 shrinkCoyonedaUliftFunctorIso
-  签名: [LocallySmall.{最大值 w w'} C]
-  定义体: NatIso.ofComponents
-    (fun X => FunctorToTypes.shrinkCompUliftFunctorIso.{w, v} (coyoneda.obj X))
-    fun _ => by ext; simp [shrinkYoneda]
-
-Depends on / 依赖: FunctorToTypes, FunctorToTypes.shrinkCompUliftFunctorIso, NatIso, NatIso.ofComponents, coyoneda, coyoneda.obj, ofComponents, shrinkCompUliftFunctorIso, shrinkYoneda
+/-
+**CategoryTheory.shrinkCoyonedaUliftFunctorIso** 是 Mathlib 中的一个定义，位于命名空间 `Catego
+ryTheory`。
+形式化陈述：shrinkCoyonedaUliftFunctorIso [LocallySmall.{max w w'} C] : shrinkCoyoneda
+.{w} ⋙ (Functor.whiskeringRight Cᵒᵖ _ _).obj uliftFunctor.{w', w} ≅ shrinkCoyone
+da
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.instLocallySmallOpposite`：∀ (C : Type u) [inst : Category
+Theory.Category.{v, u} C] [CategoryTheory.LocallySmall.{w, v, u} C],   CategoryT
+heory.LocallySmall.{w, v, u} …
 -/
 def shrinkCoyonedaUliftFunctorIso [LocallySmall.{max w w'} C] :
     shrinkCoyoneda.{w} ⋙ (Functor.whiskeringRight Cᵒᵖ _ _).obj uliftFunctor.{w', w} ≅
       shrinkCoyoneda :=
   NatIso.ofComponents
-    (fun X => FunctorToTypes.shrinkCompUliftFunctorIso.{w, v} (coyoneda.obj X))
-    fun _ => by ext; simp [shrinkYoneda]
+    (fun X ↦ FunctorToTypes.shrinkCompUliftFunctorIso.{w, v} (coyoneda.obj X))
+    fun _ ↦ by ext; simp [shrinkYoneda]
 
-/--
-Definition of `uliftYonedaIsoShrinkCoyoneda` / `uliftYonedaIsoShrinkCoyoneda` 的定义
+/-- `uliftCoyoneda` identifies to `shrinkCoyoneda`. -/
+/-
+**CategoryTheory.uliftYonedaIsoShrinkCoyoneda** 是 Mathlib 中的一个定义，位于命名空间 `Categor
+yTheory`。
+形式化陈述：uliftYonedaIsoShrinkCoyoneda : uliftCoyoneda.{w'} (C
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition uliftYonedaIsoShrinkCoyoneda
-  signature: :
-  body: NatIso.ofComponents (fun X => NatIso.ofComponents
-    (fun Y => (Equiv.ulift.trans shrinkCoyonedaObjObjEquiv.symm).toIso) (fun f => by
-      ext
-      exact (shrinkCoyoneda_obj_map_shrinkCoyonedaObjObjEquiv_symm _ _).symm)) (fun g => by
-      ext
-      exact (shrinkCoyoneda_map_app_shrinkCoyonedaObjObjEquiv_symm _ _).symm)
-
-中文:
-定义 uliftYonedaIsoShrinkCoyoneda
-  签名: :
-  定义体: NatIso.ofComponents (fun X => NatIso.ofComponents
-    (fun Y => (Equiv.ulift.trans shrinkCoyonedaObjObjEquiv.symm).toIso) (fun f => by
-      ext
-      exact (shrinkCoyoneda_obj_map_shrinkCoyonedaObjObjEquiv_symm _ _).symm)) (fun g => by
-      ext
-      exact (shrinkCoyoneda_map_app_shrinkCoyonedaObjObjEquiv_symm _ _).symm)
-
-Depends on / 依赖: shrinkCoyoneda
+--- 原说明 ---
+`uliftCoyoneda` identifies to `shrinkCoyoneda`.
 -/
 noncomputable def uliftYonedaIsoShrinkCoyoneda :
     uliftCoyoneda.{w'} (C := C) ≅ shrinkCoyoneda.{max w' v} :=
-  NatIso.ofComponents (fun X => NatIso.ofComponents
-    (fun Y => (Equiv.ulift.trans shrinkCoyonedaObjObjEquiv.symm).toIso) (fun f => by
+  NatIso.ofComponents (fun X ↦ NatIso.ofComponents
+    (fun Y ↦ (Equiv.ulift.trans shrinkCoyonedaObjObjEquiv.symm).toIso) (fun f ↦ by
       ext
-      exact (shrinkCoyoneda_obj_map_shrinkCoyonedaObjObjEquiv_symm _ _).symm)) (fun g => by
+      exact (shrinkCoyoneda_obj_map_shrinkCoyonedaObjObjEquiv_symm _ _).symm)) (fun g ↦ by
       ext
       exact (shrinkCoyoneda_map_app_shrinkCoyonedaObjObjEquiv_symm _ _).symm)
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-Definition of `shrinkCoyonedaCompEvaluationCompUliftFunctorIsoUliftFunctor` / `shrinkCoyonedaCompEvaluationCompUliftFunctorIsoUliftFunctor` 的定义
+/-- The functor `shrinkCoyoneda.{w}` followed by the evaluation
+at `Y : C` and `uliftFunctor.{v}` identifies to `yoneda.obj Y` followed
+by `uliftFunctor.{w}`. -/
+/-
+**CategoryTheory.shrinkCoyonedaCompEvaluationCompUliftFunctorIsoUliftFunctor** 是
+ Mathlib 中的一个定义，位于命名空间 `CategoryTheory`。
+形式化陈述：shrinkCoyonedaCompEvaluationCompUliftFunctorIsoUliftFunctor (Y : C) : shri
+nkCoyoneda.{w} ⋙ (evaluation C _).obj Y ⋙ uliftFunctor.{v} ≅ yoneda.obj Y ⋙ ulif
+tFunctor.{w}
+参数：Y : C。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition shrinkCoyonedaCompEvaluationCompUliftFunctorIsoUliftFunctor
-  signature: (Y : C)
-  body: NatIso.ofComponents (fun X => (Equiv.ulift.trans
-    (shrinkCoyonedaObjObjEquiv.trans Equiv.ulift.symm)).toIso) (fun f => by
-      ext ⟨g⟩
-      obtain ⟨g, rfl⟩ := shrinkCoyonedaObjObjEquiv.symm.surjective g
-      simp [shrinkYoneda, shrinkYonedaObjObjEquiv])
-
-中文:
-定义 shrinkCoyonedaCompEvaluationCompUliftFunctorIsoUliftFunctor
-  签名: (Y : C)
-  定义体: NatIso.ofComponents (fun X => (Equiv.ulift.trans
-    (shrinkCoyonedaObjObjEquiv.trans Equiv.ulift.symm)).toIso) (fun f => by
-      ext ⟨g⟩
-      obtain ⟨g, rfl⟩ := shrinkCoyonedaObjObjEquiv.symm.surjective g
-      simp [shrinkYoneda, shrinkYonedaObjObjEquiv])
-
-Depends on / 依赖: Equiv.ulift.symm, Equiv.ulift.trans, NatIso, NatIso.ofComponents, ofComponents, shrinkCoyonedaObjObjEquiv, shrinkCoyonedaObjObjEquiv.symm.surjective, shrinkCoyonedaObjObjEquiv.trans, shrinkYoneda, shrinkYonedaObjObjEquiv, surjective
+--- 原说明 ---
+The functor `shrinkCoyoneda.{w}` followed by the evaluation
+at `Y : C` and `uliftFunctor.{v}` identifies to `yoneda.obj Y` followed
+by `uliftFunctor.{w}`.
 -/
 noncomputable def shrinkCoyonedaCompEvaluationCompUliftFunctorIsoUliftFunctor (Y : C) :
     shrinkCoyoneda.{w} ⋙ (evaluation C _).obj Y ⋙ uliftFunctor.{v} ≅
       yoneda.obj Y ⋙ uliftFunctor.{w} :=
-  NatIso.ofComponents (fun X => (Equiv.ulift.trans
-    (shrinkCoyonedaObjObjEquiv.trans Equiv.ulift.symm)).toIso) (fun f => by
+  NatIso.ofComponents (fun X ↦ (Equiv.ulift.trans
+    (shrinkCoyonedaObjObjEquiv.trans Equiv.ulift.symm)).toIso) (fun f ↦ by
       ext ⟨g⟩
       obtain ⟨g, rfl⟩ := shrinkCoyonedaObjObjEquiv.symm.surjective g
       simp [shrinkYoneda, shrinkYonedaObjObjEquiv])
@@ -1347,31 +1247,28 @@ noncomputable def shrinkCoyonedaCompEvaluationCompUliftFunctorIsoUliftFunctor (Y
 /-- `shrinkCoyoneda.obj X` is corepresented by `X`. -/
 @[simps]
 noncomputable
-/--
-Definition of `shrinkCoyonedaCorepresentableBy` / `shrinkCoyonedaCorepresentableBy` 的定义
-
-English:
-definition shrinkCoyonedaCorepresentableBy
-  signature: (X : Cᵒᵖ)
-  body: shrinkCoyonedaObjObjEquiv.symm
-  homEquiv_comp f g := shrinkCoyonedaObjObjEquiv_symm_comp g f
-
-中文:
-定义 shrinkCoyonedaCorepresentableBy
-  签名: (X : Cᵒᵖ)
-  定义体: shrinkCoyonedaObjObjEquiv.symm
-  homEquiv_comp f g := shrinkCoyonedaObjObjEquiv_symm_comp g f
-
-Depends on / 依赖: shrinkCoyonedaObjObjEquiv, shrinkCoyonedaObjObjEquiv.symm
+/-
+**CategoryTheory.shrinkCoyonedaCorepresentableBy** 是 Mathlib 中的一个定义，位于命名空间 `Cate
+goryTheory`。
+形式化陈述：shrinkCoyonedaCorepresentableBy (X : Cᵒᵖ) : (shrinkCoyoneda.{w}.obj X).Cor
+epresentableBy X.unop where homEquiv
+参数：X : Cᵒᵖ。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 -/
 def shrinkCoyonedaCorepresentableBy (X : Cᵒᵖ) :
     (shrinkCoyoneda.{w}.obj X).CorepresentableBy X.unop where
   homEquiv := shrinkCoyonedaObjObjEquiv.symm
   homEquiv_comp f g := shrinkCoyonedaObjObjEquiv_symm_comp g f
-
+/-
+**CategoryTheory.** 是 Mathlib 中的一个实例，位于命名空间 `CategoryTheory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance (X : Cᵒᵖ) : (shrinkCoyoneda.{w}.obj X).IsCorepresentable :=
   (shrinkCoyonedaCorepresentableBy X).isCorepresentable
 
 end Coyoneda
 
 end CategoryTheory
+

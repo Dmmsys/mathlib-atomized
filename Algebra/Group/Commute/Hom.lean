@@ -22,137 +22,116 @@ section Commute
 variable {F M N : Type*} [Mul M] [Mul N] {a x y : M} [FunLike F M N]
 
 @[to_additive (attr := simp)]
-/--
-theorem `SemiconjBy.map` / 定理 `SemiconjBy.map`
-
-English:
-theorem SemiconjBy.map
-  given: [MulHomClass F M N] (h : SemiconjBy a x y) (f : F)
-  proof: by simpa only [SemiconjBy, map_mul] using congr_arg f h
-
-@[to_additive (attr := simp)]
-
-中文:
-定理 SemiconjBy.map
-  条件: [乘法态射类 F M N] (h : SemiconjBy a x y) (f : F)
-  证明: by simpa only [SemiconjBy, map_mul] using congr_arg f h
-
-@[to_additive (attr := simp)]
+/-
+**SemiconjBy.map** 是 Mathlib 中的一个定理，位于命名空间 `SemiconjBy`。
+形式化陈述：∀ {F : Type u_1} {M : Type u_2} {N : Type u_3} [inst : Mul M] [inst_1 : Mu
+l N] {a x y : M} [inst_2 : FunLike F M N]   [MulHomClass F M N], SemiconjBy a x 
+y → ∀ (f : F), SemiconjBy (f a) (f x) (f y)
+参数：f : F；f a；f x；f y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
 protected theorem SemiconjBy.map [MulHomClass F M N] (h : SemiconjBy a x y) (f : F) :
     SemiconjBy (f a) (f x) (f y) := by simpa only [SemiconjBy, map_mul] using congr_arg f h
 
 @[to_additive (attr := simp)]
-/--
-theorem `Commute.map` / 定理 `Commute.map`
-
-English:
-theorem Commute.map
-  given: [MulHomClass F M N] (h : Commute x y) (f : F)
-  statement: Commute (f x) (f y)
-  proof: SemiconjBy.map h f
-
-@[to_additive]
-
-中文:
-定理 Commute.map
-  条件: [乘法态射类 F M N] (h : Commute x y) (f : F)
-  结论: Commute (f x) (f y)
-  证明: SemiconjBy.map h f
-
-@[to_additive]
+/-
+**Commute.map** 是 Mathlib 中的一个定理，位于命名空间 `Commute`。
+形式化陈述：∀ {F : Type u_1} {M : Type u_2} {N : Type u_3} [inst : Mul M] [inst_1 : Mu
+l N] {x y : M} [inst_2 : FunLike F M N]   [MulHomClass F M N], Commute x y → ∀ (
+f : F), Commute (f x) (f y)
+参数：f : F；f x；f y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SemiconjBy.map`：∀ {F : Type u_1} {M : Type u_2} {N : Type u_3} [inst : M
+ul M] [inst_1 : Mul N] {a x y : M} [inst_2 : FunLike F M N]   [MulHomClass F M N
+], S…
 -/
 protected theorem Commute.map [MulHomClass F M N] (h : Commute x y) (f : F) : Commute (f x) (f y) :=
   SemiconjBy.map h f
 
 @[to_additive]
-/--
-theorem `SemiconjBy.of_map` / 定理 `SemiconjBy.of_map`
-
-English:
-theorem SemiconjBy.of_map
-  statement: [MulHomClass F M N] {f : F} (hf : Function.Injective f)
-  proof: hf (by simpa only [SemiconjBy, map_mul] using h)
-
-@[to_additive]
-
-中文:
-定理 SemiconjBy.of_map
-  结论: [乘法态射类 F M N] {f : F} (hf : 函数.单射 f)
-  证明: hf (by simpa only [SemiconjBy, map_mul] using h)
-
-@[to_additive]
+/-
+**SemiconjBy.of_map** 是 Mathlib 中的一个定理，位于命名空间 `SemiconjBy`。
+形式化陈述：∀ {F : Type u_1} {M : Type u_2} {N : Type u_3} [inst : Mul M] [inst_1 : Mu
+l N] {a x y : M} [inst_2 : FunLike F M N]   [MulHomClass F M N] {f : F}, Functio
+n.Injective ⇑f → SemiconjBy (f a) (f x) (f y) → SemiconjBy a x y
+参数：f a；f x；f y。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
 -/
 protected theorem SemiconjBy.of_map [MulHomClass F M N] {f : F} (hf : Function.Injective f)
     (h : SemiconjBy (f a) (f x) (f y)) : SemiconjBy a x y :=
   hf (by simpa only [SemiconjBy, map_mul] using h)
 
 @[to_additive]
-/--
-theorem `Commute.of_map` / 定理 `Commute.of_map`
-
-English:
-theorem Commute.of_map
-  statement: [MulHomClass F M N] {f : F} (hf : Function.Injective f)
-  proof: hf (by simpa only [map_mul] using h.eq)
-
-@[to_additive]
-
-中文:
-定理 Commute.of_map
-  结论: [乘法态射类 F M N] {f : F} (hf : 函数.单射 f)
-  证明: hf (by simpa only [map_mul] using h.eq)
-
-@[to_additive]
-
-Depends on / 依赖: h.eq, map_mul
+/-
+**Commute.of_map** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Commute.of_map [MulHomClass F M N] {f : F} (hf : Function.Injective f) (h 
+: Commute (f x) (f y)) : Commute x y
+参数：hf : Function.Injective f；h : Commute (f x) (f y)。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `Commute.eq`：∀ {S : Type u_3} [inst : Mul S] {a b : S}, Commute a b → a *
+ b = b * a
 -/
 theorem Commute.of_map [MulHomClass F M N] {f : F} (hf : Function.Injective f)
     (h : Commute (f x) (f y)) : Commute x y :=
   hf (by simpa only [map_mul] using h.eq)
 
 @[to_additive]
-/--
-theorem `semiconjBy_map_iff` / 定理 `semiconjBy_map_iff`
-
-English:
-theorem semiconjBy_map_iff
-  given: [MulHomClass F M N] {f : F} (hf : Function.Injective f) {x y : M}
-  proof: ⟨.of_map hf, (.map · f)⟩
-
-@[to_additive]
-
-中文:
-定理 semiconjBy_map_iff
-  条件: [乘法态射类 F M N] {f : F} (hf : 函数.单射 f) {x y : M}
-  证明: ⟨.of_map hf, (.map · f)⟩
-
-@[to_additive]
-
-Depends on / 依赖: of_map
+/-
+**semiconjBy_map_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：semiconjBy_map_iff [MulHomClass F M N] {f : F} (hf : Function.Injective f)
+ {x y : M} : SemiconjBy (f a) (f x) (f y) ↔ SemiconjBy a x y
+参数：hf : Function.Injective f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SemiconjBy.of_map`：∀ {F : Type u_1} {M : Type u_2} {N : Type u_3} [inst 
+: Mul M] [inst_1 : Mul N] {a x y : M} [inst_2 : FunLike F M N]   [MulHomClass F 
+M N] {f…
+· 使用定理 `SemiconjBy.map`：∀ {F : Type u_1} {M : Type u_2} {N : Type u_3} [inst : M
+ul M] [inst_1 : Mul N] {a x y : M} [inst_2 : FunLike F M N]   [MulHomClass F M N
+], S…
 -/
 theorem semiconjBy_map_iff [MulHomClass F M N] {f : F} (hf : Function.Injective f) {x y : M} :
     SemiconjBy (f a) (f x) (f y) ↔ SemiconjBy a x y :=
   ⟨.of_map hf, (.map · f)⟩
 
 @[to_additive]
-/--
-theorem `commute_map_iff` / 定理 `commute_map_iff`
-
-English:
-theorem commute_map_iff
-  given: [MulHomClass F M N] {f : F} (hf : Function.Injective f) {x y : M}
-  proof: ⟨.of_map hf, (.map · f)⟩
-
-中文:
-定理 commute_map_iff
-  条件: [乘法态射类 F M N] {f : F} (hf : 函数.单射 f) {x y : M}
-  证明: ⟨.of_map hf, (.map · f)⟩
-
-Depends on / 依赖: of_map
+/-
+**commute_map_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：commute_map_iff [MulHomClass F M N] {f : F} (hf : Function.Injective f) {x
+ y : M} : Commute (f x) (f y) ↔ Commute x y
+参数：hf : Function.Injective f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Commute.of_map`：Commute.of_map [MulHomClass F M N] {f : F} (hf : Functio
+n.Injective f) (h : Commute (f x) (f y)) : Commute x y
+· 使用定理 `Commute.map`：∀ {F : Type u_1} {M : Type u_2} {N : Type u_3} [inst : Mul 
+M] [inst_1 : Mul N] {x y : M} [inst_2 : FunLike F M N]   [MulHomClass F M N], Co
+m…
 -/
 theorem commute_map_iff [MulHomClass F M N] {f : F} (hf : Function.Injective f) {x y : M} :
     Commute (f x) (f y) ↔ Commute x y :=
   ⟨.of_map hf, (.map · f)⟩
 
 end Commute
+

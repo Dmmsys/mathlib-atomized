@@ -19,44 +19,25 @@ public section
 
 open DirectSum
 
-variable {R ι : Type*} [Semiring R] [Finite ι] (M : ι -> Type*)
-  [forall i : ι, AddCommMonoid (M i)] [forall i : ι, Module R (M i)] [forall (i : ι), Module.Finite R (M i)]
+variable {R ι : Type*} [Semiring R] [Finite ι] (M : ι → Type*)
+  [∀ i : ι, AddCommMonoid (M i)] [∀ i : ι, Module R (M i)] [∀ (i : ι), Module.Finite R (M i)]
 
-/--
-Instance `Module.Finite.instDFinsupp` / 实例 `Module.Finite.instDFinsupp`
-
-English:
-instance Module.Finite.instDFinsupp
-  signature: : Module.Finite R (Π₀ (i : ι), M i)
-  body: letI : Fintype ι := Fintype.ofFinite _
-  Module.Finite.equiv DFinsupp.linearEquivFunOnFintype.symm
-
-中文:
-实例 模.有限.instDFinsupp
-  签名: : 模.有限 R (Π₀ (i : ι), M i)
-  定义体: letI : Fintype ι := Fintype.ofFinite _
-  Module.Finite.equiv DFinsupp.linearEquivFunOnFintype.symm
-
-Depends on / 依赖: DFinsupp, DFinsupp.linearEquivFunOnFintype.symm, Finite, Fintype, Fintype.ofFinite, Module, Module.Finite.equiv, linearEquivFunOnFintype, ofFinite
+/-
+**Module.Finite.instDFinsupp** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Module.Finite.instDFinsupp : Module.Finite R (Π₀ (i : ι), M i)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Module.Finite.equiv`：equiv [Module.Finite R M] (e : M ≃ₗ[R] N) : Module.
+Finite R N
 -/
 instance Module.Finite.instDFinsupp : Module.Finite R (Π₀ (i : ι), M i) :=
   letI : Fintype ι := Fintype.ofFinite _
   Module.Finite.equiv DFinsupp.linearEquivFunOnFintype.symm
-
-/--
-Instance `Module.Finite.instDirectSum` / 实例 `Module.Finite.instDirectSum`
-
-English:
-instance Module.Finite.instDirectSum
-  signature: : Module.Finite R (⨁ i, M i)
-  body: Module.Finite.instDFinsupp M
-
-中文:
-实例 模.有限.instDirectSum
-  签名: : 模.有限 R (⨁ i, M i)
-  定义体: Module.Finite.instDFinsupp M
-
-Depends on / 依赖: Finite, Module, Module.Finite.instDFinsupp, instDFinsupp
+/-
+**Module.Finite.instDirectSum** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Module.Finite.instDirectSum : Module.Finite R (⨁ i, M i)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance Module.Finite.instDirectSum : Module.Finite R (⨁ i, M i) :=
   Module.Finite.instDFinsupp M

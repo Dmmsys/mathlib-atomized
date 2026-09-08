@@ -40,87 +40,74 @@ open Finset Nat Function Polynomial
 variable {M G : Type*} [AddCommMonoid M] [AddCommGroup G] (h : M)
 
 /--
-Definition of `fwdDiff` / `fwdDiff` 的定义
-
-English:
-definition fwdDiff
-  signature: (h : M) (f : M -> G)
-  body: fun n => f (n + h) - f n
-
-@[inherit_doc] scoped[fwdDiff] notation "Δ_[" h "]" => fwdDiff h
-
-中文:
-定义 fwdDiff
-  签名: (h : M) (f : M -> G)
-  定义体: fun n => f (n + h) - f n
-
-@[inherit_doc] scoped[fwdDiff] notation "Δ_[" h "]" => fwdDiff h
+Forward difference operator, `fwdDiff h f n = f (n + h) - f n`. The notation `Δ_[h]` for this
+operator is available in the `fwdDiff` namespace.
 -/
-def fwdDiff (h : M) (f : M -> G) : M -> G := fun n => f (n + h) - f n
+/-
+**fwdDiff** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：fwdDiff (h : M) (f : M -> G) : M -> G
+参数：h : M；f : M -> G。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Forward difference operator, `fwdDiff h f n = f (n + h) - f n`. The notation `Δ_
+[h]` for this
+operator is available in the `fwdDiff` namespace.
+-/
+def fwdDiff (h : M) (f : M → G) : M → G := fun n ↦ f (n + h) - f n
 
 @[inherit_doc] scoped[fwdDiff] notation "Δ_[" h "]" => fwdDiff h
 
 open fwdDiff
-
-/--
-lemma `fwdDiff_add` / 引理 `fwdDiff_add`
-
-English:
-lemma fwdDiff_add
-  given: (h : M) (f g : M -> G)
-  proof: add_sub_add_comm ..
-
-中文:
-引理 fwdDiff_add
-  条件: (h : M) (f g : M -> G)
-  证明: add_sub_add_comm ..
+/-
+**fwdDiff_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {M : Type u_1} {G : Type u_2} [inst : AddCommMonoid M] [inst_1 : AddComm
+Group G] (h : M) (f g : M → G),   fwdDiff h (f + g) = fwdDiff h f + fwdDiff h g
+参数：h : M；f g : M → G；f + g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `add_sub_add_comm`：∀ {α : Type u_1} [inst : SubtractionCommMonoid α] (a b
+ c d : α), a + b - (c + d) = a - c + (b - d)
 -/
-@[simp] lemma fwdDiff_add (h : M) (f g : M -> G) :
+@[simp] lemma fwdDiff_add (h : M) (f g : M → G) :
     Δ_[h] (f + g) = Δ_[h] f + Δ_[h] g :=
   add_sub_add_comm ..
-
-/--
-lemma `fwdDiff_const` / 引理 `fwdDiff_const`
-
-English:
-lemma fwdDiff_const
-  given: (g : G)
-  statement: Δ_[h] (fun _ => g : M -> G) = fun _ => 0
-  proof: funext fun _ => sub_self g
-
-中文:
-引理 fwdDiff_const
-  条件: (g : G)
-  结论: Δ_[h] (fun _ => g : M -> G) = fun _ => 0
-  证明: funext fun _ => sub_self g
+/-
+**fwdDiff_const** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {M : Type u_1} {G : Type u_2} [inst : AddCommMonoid M] [inst_1 : AddComm
+Group G] (h : M) (g : G),   (fwdDiff h fun x => g) = fun x => 0
+参数：h : M；g : G；fwdDiff h fun x => g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `sub_self`：∀ {G : Type u_1} [inst : AddGroup G] (a : G), a - a = 0
 -/
-@[simp] lemma fwdDiff_const (g : G) : Δ_[h] (fun _ => g : M -> G) = fun _ => 0 :=
-  funext fun _ => sub_self g
+@[simp] lemma fwdDiff_const (g : G) : Δ_[h] (fun _ ↦ g : M → G) = fun _ ↦ 0 :=
+  funext fun _ ↦ sub_self g
 
 section smul
 
-/--
-lemma `fwdDiff_smul` / 引理 `fwdDiff_smul`
-
-English:
-lemma fwdDiff_smul
-  given: {R : Type*} [Ring R] [Module R G] (f : M -> R) (g : M -> G)
-  proof: by
-  ext y
-  simp only [fwdDiff, Pi.smul_apply', Pi.add_apply, smul_sub, sub_smul]
-  abel
-
-中文:
-引理 fwdDiff_smul
-  条件: {R : 类型} [环 R] [模 R G] (f : M -> R) (g : M -> G)
-  证明: by
-  ext y
-  simp only [fwdDiff, Pi.smul_apply', Pi.add_apply, smul_sub, sub_smul]
-  abel
-
-Depends on / 依赖: Pi.add_apply, Pi.smul_apply, add_apply, fwdDiff, smul_apply, smul_sub, sub_smul
+/-
+**fwdDiff_smul** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：fwdDiff_smul {R : Type*} [Ring R] [Module R G] (f : M -> R) (g : M -> G) :
+ Δ_[h] (f • g) = Δ_[h] f • g + f • Δ_[h] g + Δ_[h] f • Δ_[h] g
+参数：f : M -> R；g : M -> G。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `sub_smul`：sub_smul (r s : R) (y : M) : (r - s) • y = r • y - s • y
+· 使用定理 `smul_sub`：smul_sub (r : M) (x y : A) : r • (x - y) = r • x - r • y
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `_private.Mathlib.Algebra.Group.ForwardDiff.0.fwdDiff_smul._abel_1_2`：∀ {
+M : Type u_3} {G : Type u_1} [inst : AddCommMonoid M] [inst_1 : AddCommGroup G] 
+(h : M) {R : Type u_2}   [inst_2 : Ring R] [inst_3 : _roo…
 -/
-lemma fwdDiff_smul {R : Type*} [Ring R] [Module R G] (f : M -> R) (g : M -> G) :
+lemma fwdDiff_smul {R : Type*} [Ring R] [Module R G] (f : M → R) (g : M → G) :
     Δ_[h] (f • g) = Δ_[h] f • g + f • Δ_[h] g + Δ_[h] f • Δ_[h] g := by
   ext y
   simp only [fwdDiff, Pi.smul_apply', Pi.add_apply, smul_sub, sub_smul]
@@ -128,44 +115,39 @@ lemma fwdDiff_smul {R : Type*} [Ring R] [Module R G] (f : M -> R) (g : M -> G) :
 
 -- Note `fwdDiff_const_smul` is more general than `fwdDiff_smul` since it allows `R` to be a
 -- semiring, rather than a ring; in particular `R = ℕ` is allowed.
-/--
-lemma `fwdDiff_const_smul` / 引理 `fwdDiff_const_smul`
-
-English:
-lemma fwdDiff_const_smul
-  given: {R : Type*} [Monoid R] [DistribMulAction R G] (r : R) (f : M -> G)
-  proof: funext fun _ => (smul_sub ..).symm
-
-中文:
-引理 fwdDiff_const_smul
-  条件: {R : 类型} [幺半群 R] [分配乘法作用 R G] (r : R) (f : M -> G)
-  证明: funext fun _ => (smul_sub ..).symm
+/-
+**fwdDiff_const_smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {M : Type u_1} {G : Type u_2} [inst : AddCommMonoid M] [inst_1 : AddComm
+Group G] (h : M) {R : Type u_3}   [inst_2 : Monoid R] [inst_3 : DistribMulAction
+ R G] (r : R) (f : M → G), fwdDiff h (r • f) = r • fwdDiff h f
+参数：h : M；r : R；f : M → G；r • f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `smul_sub`：smul_sub (r : M) (x y : A) : r • (x - y) = r • x - r • y
 -/
-@[simp] lemma fwdDiff_const_smul {R : Type*} [Monoid R] [DistribMulAction R G] (r : R) (f : M -> G) :
+@[simp] lemma fwdDiff_const_smul {R : Type*} [Monoid R] [DistribMulAction R G] (r : R) (f : M → G) :
     Δ_[h] (r • f) = r • Δ_[h] f :=
-  funext fun _ => (smul_sub ..).symm
-
-/--
-lemma `fwdDiff_smul_const` / 引理 `fwdDiff_smul_const`
-
-English:
-lemma fwdDiff_smul_const
-  given: {R : Type*} [Ring R] [Module R G] (f : M -> R) (g : G)
-  proof: by
-  ext y
-  simp only [fwdDiff, Pi.smul_apply', sub_smul]
-
-中文:
-引理 fwdDiff_smul_const
-  条件: {R : 类型} [环 R] [模 R G] (f : M -> R) (g : G)
-  证明: by
-  ext y
-  simp only [fwdDiff, Pi.smul_apply', sub_smul]
-
-Depends on / 依赖: MulHom, MulHom.map_mul, map_mul
+  funext fun _ ↦ (smul_sub ..).symm
+/-
+**fwdDiff_smul_const** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {M : Type u_1} {G : Type u_2} [inst : AddCommMonoid M] [inst_1 : AddComm
+Group G] (h : M) {R : Type u_3}   [inst_2 : Ring R] [inst_3 : _root_.Module R G]
+ (f : M → R) (g : G),   (fwdDiff h fun y => f y • g) = fwdDiff h f • fun x => g
+参数：h : M；f : M → R；g : G；fwdDiff h fun y => f y • g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sub_smul`：sub_smul (r s : R) (y : M) : (r - s) • y = r • y - s • y
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-@[simp] lemma fwdDiff_smul_const {R : Type*} [Ring R] [Module R G] (f : M -> R) (g : G) :
-    Δ_[h] (fun y => f y • g) = Δ_[h] f • fun _ => g := by
+@[simp] lemma fwdDiff_smul_const {R : Type*} [Ring R] [Module R G] (f : M → R) (g : G) :
+    Δ_[h] (fun y ↦ f y • g) = Δ_[h] f • fun _ ↦ g := by
   ext y
   simp only [fwdDiff, Pi.smul_apply', sub_smul]
 
@@ -185,126 +167,49 @@ version.
 variable (M G) in
 /-- Linear-endomorphism version of the forward difference operator. -/
 @[simps]
-/--
-Definition of `fwdDiffₗ` / `fwdDiffₗ` 的定义
+/-
+**fwdDiff_aux.fwdDiff** 是 Mathlib 中的一个定义，位于命名空间 `fwdDiff_aux`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition fwdDiffₗ
-  signature: : Module.End Int (M -> G) where
-  body: fwdDiff h
-  map_add' := fwdDiff_add h
-  map_smul' := fwdDiff_const_smul h
-
-中文:
-定义 fwdDiffₗ
-  签名: : 模.End 整数 (M -> G) where
-  定义体: fwdDiff h
-  map_add' := fwdDiff_add h
-  map_smul' := fwdDiff_const_smul h
-
-Depends on / 依赖: MulHom, MulHom.map_mul, fwdDiff, map_mul
+--- 原说明 ---
+Linear-endomorphism version of the forward difference operator.
 -/
-def fwdDiffₗ : Module.End Int (M -> G) where
+def fwdDiffₗ : Module.End ℤ (M → G) where
   toFun := fwdDiff h
   map_add' := fwdDiff_add h
   map_smul' := fwdDiff_const_smul h
-
-/--
-lemma `coe_fwdDiffₗ` / 引理 `coe_fwdDiffₗ`
-
-English:
-lemma coe_fwdDiffₗ
-  statement: ↑(fwdDiffₗ M G h) = fwdDiff h
-  proof: rfl
-
-中文:
-引理 coe_fwdDiffₗ
-  结论: ↑(fwdDiffₗ M G h) = fwdDiff h
-  证明: rfl
+/-
+**fwdDiff_aux.coe_fwdDiff** 是 Mathlib 中的一个引理，位于命名空间 `fwdDiff_aux`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 lemma coe_fwdDiffₗ : ↑(fwdDiffₗ M G h) = fwdDiff h := rfl
-
-/--
-lemma `coe_fwdDiffₗ_pow` / 引理 `coe_fwdDiffₗ_pow`
-
-English:
-lemma coe_fwdDiffₗ_pow
-  given: (n : Nat)
-  statement: ↑(fwdDiffₗ M G h ^ n) = (fwdDiff h)^[n]
-  proof: by
-  ext; rw [Module.End.pow_apply, coe_fwdDiffₗ]
-
-中文:
-引理 coe_fwdDiffₗ_pow
-  条件: (n : 自然数)
-  结论: ↑(fwdDiffₗ M G h ^ n) = (fwdDiff h)^[n]
-  证明: by
-  ext; rw [Module.End.pow_apply, coe_fwdDiffₗ]
-
-Depends on / 依赖: Module, Module.End.pow_apply, pow_apply
+/-
+**fwdDiff_aux.coe_fwdDiff** 是 Mathlib 中的一个引理，位于命名空间 `fwdDiff_aux`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma coe_fwdDiffₗ_pow (n : Nat) : ↑(fwdDiffₗ M G h ^ n) = (fwdDiff h)^[n] := by
+lemma coe_fwdDiffₗ_pow (n : ℕ) : ↑(fwdDiffₗ M G h ^ n) = (fwdDiff h)^[n] := by
   ext; rw [Module.End.pow_apply, coe_fwdDiffₗ]
 
 variable (M G) in
-/--
-Definition of `shiftₗ` / `shiftₗ` 的定义
+/-- Linear-endomorphism version of the shift-by-1 operator. -/
+/-
+**fwdDiff_aux.shift** 是 Mathlib 中的一个定义，位于命名空间 `fwdDiff_aux`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition shiftₗ
-  signature: : Module.End Int (M -> G)
-  body: fwdDiffₗ M G h + 1
-
-中文:
-定义 shiftₗ
-  签名: : 模.End 整数 (M -> G)
-  定义体: fwdDiffₗ M G h + 1
+--- 原说明 ---
+Linear-endomorphism version of the shift-by-1 operator.
 -/
-def shiftₗ : Module.End Int (M -> G) := fwdDiffₗ M G h + 1
-
-/--
-lemma `shiftₗ_apply` / 引理 `shiftₗ_apply`
-
-English:
-lemma shiftₗ_apply
-  given: (f : M -> G) (y : M)
-  statement: shiftₗ M G h f y = f (y + h)
-  proof: by simp [shiftₗ, fwdDiff]
-
-中文:
-引理 shiftₗ_apply
-  条件: (f : M -> G) (y : M)
-  结论: shiftₗ M G h f y = f (y + h)
-  证明: by simp [shiftₗ, fwdDiff]
-
-Depends on / 依赖: fwdDiff
+def shiftₗ : Module.End ℤ (M → G) := fwdDiffₗ M G h + 1
+/-
+**fwdDiff_aux.shift** 是 Mathlib 中的一个引理，位于命名空间 `fwdDiff_aux`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma shiftₗ_apply (f : M -> G) (y : M) : shiftₗ M G h f y = f (y + h) := by simp [shiftₗ, fwdDiff]
-
-/--
-lemma `shiftₗ_pow_apply` / 引理 `shiftₗ_pow_apply`
-
-English:
-lemma shiftₗ_pow_apply
-  given: (f : M -> G) (k : Nat) (y : M)
-  statement: (shiftₗ M G h ^ k) f y = f (y + k • h)
-  proof: by
-  induction k generalizing f with
-  | zero => simp
-  | succ k IH => simp [pow_add, IH (shiftₗ M G h f), shiftₗ_apply, add_assoc, add_nsmul]
-
-中文:
-引理 shiftₗ_pow_apply
-  条件: (f : M -> G) (k : 自然数) (y : M)
-  结论: (shiftₗ M G h ^ k) f y = f (y + k • h)
-  证明: by
-  induction k generalizing f with
-  | zero => simp
-  | succ k IH => simp [pow_add, IH (shiftₗ M G h f), shiftₗ_apply, add_assoc, add_nsmul]
-
-Depends on / 依赖: add_assoc, add_nsmul, generalizing, pow_add
+lemma shiftₗ_apply (f : M → G) (y : M) : shiftₗ M G h f y = f (y + h) := by simp [shiftₗ, fwdDiff]
+/-
+**fwdDiff_aux.shift** 是 Mathlib 中的一个引理，位于命名空间 `fwdDiff_aux`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-lemma shiftₗ_pow_apply (f : M -> G) (k : Nat) (y : M) : (shiftₗ M G h ^ k) f y = f (y + k • h) := by
+lemma shiftₗ_pow_apply (f : M → G) (k : ℕ) (y : M) : (shiftₗ M G h ^ k) f y = f (y + k • h) := by
   induction k generalizing f with
   | zero => simp
   | succ k IH => simp [pow_add, IH (shiftₗ M G h f), shiftₗ_apply, add_assoc, add_nsmul]
@@ -313,94 +218,104 @@ end fwdDiff_aux
 
 open fwdDiff_aux
 
-/--
-lemma `fwdDiff_finsetSum` / 引理 `fwdDiff_finsetSum`
-
-English:
-lemma fwdDiff_finsetSum
-  given: {α : Type*} (s : Finset α) (f : α -> M -> G)
-  proof: map_sum (fwdDiffₗ M G h) f s
-
-@[deprecated (since := "2026-04-08")] alias fwdDiff_finset_sum := fwdDiff_finsetSum
-
-中文:
-引理 fwdDiff_finsetSum
-  条件: {α : 类型} (s : 有限集 α) (f : α -> M -> G)
-  证明: map_sum (fwdDiffₗ M G h) f s
-
-@[deprecated (since := "2026-04-08")] alias fwdDiff_finset_sum := fwdDiff_finsetSum
+/-
+**fwdDiff_finsetSum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {M : Type u_1} {G : Type u_2} [inst : AddCommMonoid M] [inst_1 : AddComm
+Group G] (h : M) {α : Type u_3} (s : Finset α)   (f : α → M → G), fwdDiff h (∑ k
+ ∈ s, f k) = ∑ k ∈ s, fwdDiff h (f k)
+参数：h : M；s : Finset α；f : α → M → G；∑ k ∈ s, f k；f k。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
 -/
-@[simp] lemma fwdDiff_finsetSum {α : Type*} (s : Finset α) (f : α -> M -> G) :
-    Δ_[h] (∑ k in s, f k) = ∑ k in s, Δ_[h] (f k) :=
+@[simp] lemma fwdDiff_finsetSum {α : Type*} (s : Finset α) (f : α → M → G) :
+    Δ_[h] (∑ k ∈ s, f k) = ∑ k ∈ s, Δ_[h] (f k) :=
   map_sum (fwdDiffₗ M G h) f s
 
 @[deprecated (since := "2026-04-08")] alias fwdDiff_finset_sum := fwdDiff_finsetSum
-
-/--
-lemma `fwdDiff_iter_add` / 引理 `fwdDiff_iter_add`
-
-English:
-lemma fwdDiff_iter_add
-  given: (f g : M -> G) (n : Nat)
-  proof: by
-  simpa only [coe_fwdDiffₗ_pow] using map_add (fwdDiffₗ M G h ^ n) f g
-
-中文:
-引理 fwdDiff_iter_add
-  条件: (f g : M -> G) (n : 自然数)
-  证明: by
-  simpa only [coe_fwdDiffₗ_pow] using map_add (fwdDiffₗ M G h ^ n) f g
+/-
+**fwdDiff_iter_add** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {M : Type u_1} {G : Type u_2} [inst : AddCommMonoid M] [inst_1 : AddComm
+Group G] (h : M) (f g : M → G) (n : ℕ),   (fwdDiff h)^[n] (f + g) = (fwdDiff h)^
+[n] f + (fwdDiff h)^[n] g
+参数：h : M；f g : M → G；n : ℕ；fwdDiff h；f + g；fwdDiff h；fwdDiff h。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `fwdDiff_aux.coe_fwdDiffₗ_pow`：coe_fwdDiffₗ_pow (n : Nat) : ↑(fwdDiffₗ M 
+G h ^ n) = (fwdDiff h)^[n]
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
 -/
-@[simp] lemma fwdDiff_iter_add (f g : M -> G) (n : Nat) :
+@[simp] lemma fwdDiff_iter_add (f g : M → G) (n : ℕ) :
     Δ_[h]^[n] (f + g) = Δ_[h]^[n] f + Δ_[h]^[n] g := by
   simpa only [coe_fwdDiffₗ_pow] using map_add (fwdDiffₗ M G h ^ n) f g
-
-/--
-lemma `fwdDiff_iter_const_smul` / 引理 `fwdDiff_iter_const_smul`
-
-English:
-lemma fwdDiff_iter_const_smul
-  statement: {R : Type*} [Monoid R] [DistribMulAction R G]
-  proof: by
-  induction n generalizing f with
-  | zero => simp only [iterate_zero, id_eq]
-  | succ n IH => simp only [iterate_succ_apply, fwdDiff_const_smul, IH]
-
-中文:
-引理 fwdDiff_iter_const_smul
-  结论: {R : 类型} [幺半群 R] [分配乘法作用 R G]
-  证明: by
-  induction n generalizing f with
-  | zero => simp only [iterate_zero, id_eq]
-  | succ n IH => simp only [iterate_succ_apply, fwdDiff_const_smul, IH]
+/-
+**fwdDiff_iter_const_smul** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {M : Type u_1} {G : Type u_2} [inst : AddCommMonoid M] [inst_1 : AddComm
+Group G] (h : M) {R : Type u_3}   [inst_2 : Monoid R] [inst_3 : DistribMulAction
+ R G] (r : R) (f : M → G) (n : ℕ),   (fwdDiff h)^[n] (r • f) = r • (fwdDiff h)^[
+n] f
+参数：h : M；r : R；f : M → G；n : ℕ；fwdDiff h；r • f；fwdDiff h。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `fwdDiff_const_smul`：∀ {M : Type u_1} {G : Type u_2} [inst : AddCommMonoi
+d M] [inst_1 : AddCommGroup G] (h : M) {R : Type u_3}   [inst_2 : Monoid R] [ins
+t_3 : Di…
 -/
 @[simp] lemma fwdDiff_iter_const_smul {R : Type*} [Monoid R] [DistribMulAction R G]
-    (r : R) (f : M -> G) (n : Nat) : Δ_[h]^[n] (r • f) = r • Δ_[h]^[n] f := by
+    (r : R) (f : M → G) (n : ℕ) : Δ_[h]^[n] (r • f) = r • Δ_[h]^[n] f := by
   induction n generalizing f with
   | zero => simp only [iterate_zero, id_eq]
   | succ n IH => simp only [iterate_succ_apply, fwdDiff_const_smul, IH]
-
-/--
-lemma `fwdDiff_iter_finsetSum` / 引理 `fwdDiff_iter_finsetSum`
-
-English:
-lemma fwdDiff_iter_finsetSum
-  given: {α : Type*} (s : Finset α) (f : α -> M -> G) (n : Nat)
-  proof: by
-  simpa only [coe_fwdDiffₗ_pow] using map_sum (fwdDiffₗ M G h ^ n) f s
-
-@[deprecated (since := "2026-04-08")] alias fwdDiff_iter_finset_sum := fwdDiff_iter_finsetSum
-
-中文:
-引理 fwdDiff_iter_finsetSum
-  条件: {α : 类型} (s : 有限集 α) (f : α -> M -> G) (n : 自然数)
-  证明: by
-  simpa only [coe_fwdDiffₗ_pow] using map_sum (fwdDiffₗ M G h ^ n) f s
-
-@[deprecated (since := "2026-04-08")] alias fwdDiff_iter_finset_sum := fwdDiff_iter_finsetSum
+/-
+**fwdDiff_iter_finsetSum** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：∀ {M : Type u_1} {G : Type u_2} [inst : AddCommMonoid M] [inst_1 : AddComm
+Group G] (h : M) {α : Type u_3} (s : Finset α)   (f : α → M → G) (n : ℕ), (fwdDi
+ff h)^[n] (∑ k ∈ s, f k) = ∑ k ∈ s, (fwdDiff h)^[n] (f k)
+参数：h : M；s : Finset α；f : α → M → G；n : ℕ；fwdDiff h；∑ k ∈ s, f k；fwdDiff h；f k。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用引理 `fwdDiff_aux.coe_fwdDiffₗ_pow`：coe_fwdDiffₗ_pow (n : Nat) : ↑(fwdDiffₗ M 
+G h ^ n) = (fwdDiff h)^[n]
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `map_sum`：∀ {ι : Type u_1} {M : Type u_3} {N : Type u_4} [inst : AddCommM
+onoid M] [inst_1 : AddCommMonoid N] {G : Type u_7}   [inst_2 : FunLike G M N]…
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
 -/
-@[simp] lemma fwdDiff_iter_finsetSum {α : Type*} (s : Finset α) (f : α -> M -> G) (n : Nat) :
-    Δ_[h]^[n] (∑ k in s, f k) = ∑ k in s, Δ_[h]^[n] (f k) := by
+@[simp] lemma fwdDiff_iter_finsetSum {α : Type*} (s : Finset α) (f : α → M → G) (n : ℕ) :
+    Δ_[h]^[n] (∑ k ∈ s, f k) = ∑ k ∈ s, Δ_[h]^[n] (f k) := by
   simpa only [coe_fwdDiffₗ_pow] using map_sum (fwdDiffₗ M G h ^ n) f s
 
 @[deprecated (since := "2026-04-08")] alias fwdDiff_iter_finset_sum := fwdDiff_iter_finsetSum
@@ -408,122 +323,189 @@ lemma fwdDiff_iter_finsetSum
 section newton_formulae
 
 /--
-theorem `fwdDiff_iter_eq_sum_shift` / 定理 `fwdDiff_iter_eq_sum_shift`
+Express the `n`-th forward difference of `f` at `y` in terms of the values `f (y + k)`, for
+`0 ≤ k ≤ n`.
+-/
+/-
+**fwdDiff_iter_eq_sum_shift** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：fwdDiff_iter_eq_sum_shift (f : M -> G) (n : Nat) (y : M) : Δ_[h]^[n] f y =
+ ∑ k in range (n + 1), ((-1 : Int) ^ (n - k) * n.choose k) • f (y + k • h)
+参数：f : M -> G；n : Nat；y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_sub_cancel_right`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a 
++ b - b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `fwdDiff_aux.coe_fwdDiffₗ`：coe_fwdDiffₗ : ↑(fwdDiffₗ M G h) = fwdDiff h
+· 使用定理 `Module.End.pow_apply`：pow_apply (f : End R M) (n : Nat) (m : M) : (f ^ n
+) m = f^[n] m
+· 使用定理 `Commute.neg_right`：neg_right : Commute a b -> Commute a (-b)
+· 使用定理 `Commute.one_right`：one_right (a : M) : Commute a 1
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+· 使用定理 `LinearMap.sum_apply`：sum_apply (t : Finset ι) (f : ι -> M ->ₛₗ[σ₁₂] M₂) 
+(b : M) : (∑ d in t, f d) b = ∑ d in t, f d b
+· 使用定理 `Finset.sum_apply`：∀ {ι : Type u_1} {α : Type u_7} {M : α → Type u_8} [in
+st : (a : α) → AddCommMonoid (M a)] (a : α) (s : Finset ι)   (g : ι → (a : α) → 
+M a), …
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `Int.cast_natCast`：cast_natCast (n : Nat) : ((n : Int) : R) = n
+· 使用引理 `Int.cast_mul`：cast_mul {α : Type*} [NonAssocRing α] : forall m n, ((m * 
+n : Int) : α) = m * n
+· 使用定理 `Int.cast_pow`：∀ {R : Type u_1} [inst : Ring R] (n : ℤ) (m : ℕ), ↑(n ^ m)
+ = ↑n ^ m
+· 使用定理 `Int.cast_neg`：∀ {R : Type u} [inst : AddGroupWithOne R] (n : ℤ), ↑(-n) =
+ -↑n
+· 使用定理 `Int.cast_one`：cast_one : ((1 : Int) : R) = 1
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `Module.End.mul_apply`：mul_apply (f g : Module.End R M) (x : M) : (f * g)
+ x = f (g x)
+· 使用定理 `Module.End.intCast_apply`：intCast_apply (z : Int) (m : N₁) : (z : Module
+.End R N₁) m = z • m
+· 使用定理 `map_smul`：map_smul {F M X Y : Type*} [SMul M X] [SMul M Y] [FunLike F X 
+Y] [MulActionHomClass F M X Y] (f : F) (c : M) (x : X) : f (c • x) = c • f x
+· 使用定理 `SemilinearMapClass.toMulActionSemiHomClass`：∀ {F : Type u_14} {R : outPa
+ram (Type u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiri
+ng S}   {σ : outParam (R →+* S)}…
+· 使用定理 `Pi.smul_apply`：∀ {ι : Type u_1} {α : Type u_2} {M : ι → Type u_5} [inst 
+: (i : ι) → SMul α (M i)] (a : α) (f : (i : ι) → M i) (i : ι),   (a • f) i = a •
+ f …
+· 使用引理 `fwdDiff_aux.shiftₗ_pow_apply`：shiftₗ_pow_apply (f : M -> G) (k : Nat) (y
+ : M) : (shiftₗ M G h ^ k) f y = f (y + k • h)
+（共 33 条，此处仅展示前 30 条）
 
-English:
-theorem fwdDiff_iter_eq_sum_shift
-  given: (f : M -> G) (n : Nat) (y : M)
-  proof: by
+--- 原说明 ---
+Express the `n`-th forward difference of `f` at `y` in terms of the values `f (y
+ + k)`, for
+`0 ≤ k ≤ n`.
+-/
+theorem fwdDiff_iter_eq_sum_shift (f : M → G) (n : ℕ) (y : M) :
+    Δ_[h]^[n] f y = ∑ k ∈ range (n + 1), ((-1 : ℤ) ^ (n - k) * n.choose k) • f (y + k • h) := by
   -- rewrite in terms of `(shiftₗ - 1) ^ n`
   have : fwdDiffₗ M G h = shiftₗ M G h - 1 := by simp only [shiftₗ, add_sub_cancel_right]
-  rw [← coe_fwdDiffₗ]; rw [this]; rw [← Module.End.pow_apply]
+  rw [← coe_fwdDiffₗ, this, ← Module.End.pow_apply]
   -- use binomial theorem `Commute.add_pow` to expand this
   have : Commute (shiftₗ M G h) (-1) := (Commute.one_right _).neg_right
   convert congr_fun (LinearMap.congr_fun (this.add_pow n) f) y
   · simp only [sub_eq_add_neg]
   · rw [LinearMap.sum_apply, sum_apply]
     congr 1 with k
-    have : ((-1) ^ (n - k) * n.choose k : Module.End Int (M -> G))
-              = ↑((-1) ^ (n - k) * n.choose k : Int) := by norm_cast
-    rw [mul_assoc]; rw [Module.End.mul_apply]; rw [this]; rw [Module.End.intCast_apply]; rw [map_smul]; rw [Pi.smul_apply]; rw [shiftₗ_pow_apply]
-
-中文:
-定理 fwdDiff_iter_eq_sum_shift
-  条件: (f : M -> G) (n : 自然数) (y : M)
-  证明: by
-  -- rewrite in terms of `(shiftₗ - 1) ^ n`
-  have : fwdDiffₗ M G h = shiftₗ M G h - 1 := by simp only [shiftₗ, add_sub_cancel_right]
-  rw [← coe_fwdDiffₗ]; rw [this]; rw [← Module.End.pow_apply]
-  -- use binomial theorem `Commute.add_pow` to expand this
-  have : Commute (shiftₗ M G h) (-1) := (Commute.one_right _).neg_right
-  convert congr_fun (LinearMap.congr_fun (this.add_pow n) f) y
-  · simp only [sub_eq_add_neg]
-  · rw [LinearMap.sum_apply, sum_apply]
-    congr 1 with k
-    have : ((-1) ^ (n - k) * n.choose k : Module.End Int (M -> G))
-              = ↑((-1) ^ (n - k) * n.choose k : Int) := by norm_cast
-    rw [mul_assoc]; rw [Module.End.mul_apply]; rw [this]; rw [Module.End.intCast_apply]; rw [map_smul]; rw [Pi.smul_apply]; rw [shiftₗ_pow_apply]
+    have : ((-1) ^ (n - k) * n.choose k : Module.End ℤ (M → G))
+              = ↑((-1) ^ (n - k) * n.choose k : ℤ) := by norm_cast
+    rw [mul_assoc, Module.End.mul_apply, this, Module.End.intCast_apply, map_smul,
+      Pi.smul_apply, shiftₗ_pow_apply]
+/-
+**fwdDiff_iter_comp_add** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：fwdDiff_iter_comp_add (f : M -> G) (m : M) (n : Nat) (y : M) : Δ_[h]^[n] (
+fun r => f (r + m)) y = (Δ_[h]^[n] f) (y + m)
+参数：f : M -> G；m : M；n : Nat；y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `fwdDiff_iter_eq_sum_shift`：fwdDiff_iter_eq_sum_shift (f : M -> G) (n : N
+at) (y : M) : Δ_[h]^[n] f y = ∑ k in range (n + 1), ((-1 : Int) ^ (n - k) * n.ch
+oose k) • f (y …
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `add_right_comm`：∀ {G : Type u_3} [inst : AddCommSemigroup G] (a b c : G)
+, a + b + c = a + c + b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem fwdDiff_iter_eq_sum_shift (f : M -> G) (n : Nat) (y : M) :
-    Δ_[h]^[n] f y = ∑ k in range (n + 1), ((-1 : Int) ^ (n - k) * n.choose k) • f (y + k • h) := by
-  -- rewrite in terms of `(shiftₗ - 1) ^ n`
-  have : fwdDiffₗ M G h = shiftₗ M G h - 1 := by simp only [shiftₗ, add_sub_cancel_right]
-  rw [← coe_fwdDiffₗ]; rw [this]; rw [← Module.End.pow_apply]
-  -- use binomial theorem `Commute.add_pow` to expand this
-  have : Commute (shiftₗ M G h) (-1) := (Commute.one_right _).neg_right
-  convert congr_fun (LinearMap.congr_fun (this.add_pow n) f) y
-  · simp only [sub_eq_add_neg]
-  · rw [LinearMap.sum_apply, sum_apply]
-    congr 1 with k
-    have : ((-1) ^ (n - k) * n.choose k : Module.End Int (M -> G))
-              = ↑((-1) ^ (n - k) * n.choose k : Int) := by norm_cast
-    rw [mul_assoc]; rw [Module.End.mul_apply]; rw [this]; rw [Module.End.intCast_apply]; rw [map_smul]; rw [Pi.smul_apply]; rw [shiftₗ_pow_apply]
-
-/--
-lemma `fwdDiff_iter_comp_add` / 引理 `fwdDiff_iter_comp_add`
-
-English:
-lemma fwdDiff_iter_comp_add
-  given: (f : M -> G) (m : M) (n : Nat) (y : M)
-  proof: by
+lemma fwdDiff_iter_comp_add (f : M → G) (m : M) (n : ℕ) (y : M) :
+    Δ_[h]^[n] (fun r ↦ f (r + m)) y = (Δ_[h]^[n] f) (y + m) := by
   simp [fwdDiff_iter_eq_sum_shift, add_right_comm]
-
-中文:
-引理 fwdDiff_iter_comp_add
-  条件: (f : M -> G) (m : M) (n : 自然数) (y : M)
-  证明: by
-  simp [fwdDiff_iter_eq_sum_shift, add_right_comm]
-
-Depends on / 依赖: add_right_comm, fwdDiff_iter_eq_sum_shift
+/-
+**fwdDiff_comp_add** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：fwdDiff_comp_add (f : M -> G) (m : M) (y : M) : Δ_[h] (fun r => f (r + m))
+ y = (Δ_[h] f) (y + m)
+参数：f : M -> G；m : M；y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `fwdDiff_iter_comp_add`：fwdDiff_iter_comp_add (f : M -> G) (m : M) (n : N
+at) (y : M) : Δ_[h]^[n] (fun r => f (r + m)) y = (Δ_[h]^[n] f) (y + m)
 -/
-lemma fwdDiff_iter_comp_add (f : M -> G) (m : M) (n : Nat) (y : M) :
-    Δ_[h]^[n] (fun r => f (r + m)) y = (Δ_[h]^[n] f) (y + m) := by
-  simp [fwdDiff_iter_eq_sum_shift, add_right_comm]
-
-/--
-lemma `fwdDiff_comp_add` / 引理 `fwdDiff_comp_add`
-
-English:
-lemma fwdDiff_comp_add
-  given: (f : M -> G) (m : M) (y : M)
-  proof: fwdDiff_iter_comp_add h f m 1 y
-
-中文:
-引理 fwdDiff_comp_add
-  条件: (f : M -> G) (m : M) (y : M)
-  证明: fwdDiff_iter_comp_add h f m 1 y
-
-Depends on / 依赖: fwdDiff_iter_comp_add
--/
-lemma fwdDiff_comp_add (f : M -> G) (m : M) (y : M) :
-    Δ_[h] (fun r => f (r + m)) y = (Δ_[h] f) (y + m) :=
+lemma fwdDiff_comp_add (f : M → G) (m : M) (y : M) :
+    Δ_[h] (fun r ↦ f (r + m)) y = (Δ_[h] f) (y + m) :=
   fwdDiff_iter_comp_add h f m 1 y
 
 /--
-theorem `shift_eq_sum_fwdDiff_iter` / 定理 `shift_eq_sum_fwdDiff_iter`
-
-English:
-theorem shift_eq_sum_fwdDiff_iter
-  given: (f : M -> G) (n : Nat) (y : M)
-  proof: by
-  convert!
-    congr_fun (LinearMap.congr_fun ((Commute.one_right (fwdDiffₗ M G h)).add_pow n) f) y using 1
-  · rw [← shiftₗ_pow_apply h f, shiftₗ]
-  · simp [Module.End.pow_apply, coe_fwdDiffₗ]
-
-中文:
-定理 shift_eq_sum_fwdDiff_iter
-  条件: (f : M -> G) (n : 自然数) (y : M)
-  证明: by
-  convert!
-    congr_fun (LinearMap.congr_fun ((Commute.one_right (fwdDiffₗ M G h)).add_pow n) f) y using 1
-  · rw [← shiftₗ_pow_apply h f, shiftₗ]
-  · simp [Module.End.pow_apply, coe_fwdDiffₗ]
-
-Depends on / 依赖: Commute, Commute.one_right, LinearMap, LinearMap.congr_fun, Module, Module.End.pow_apply, add_pow, congr_fun, convert, one_right, pow_apply
+**Gregory-Newton formula** expressing `f (y + n • h)` in terms of the iterated forward differences
+of `f` at `y`.
 -/
-theorem shift_eq_sum_fwdDiff_iter (f : M -> G) (n : Nat) (y : M) :
-    f (y + n • h) = ∑ k in range (n + 1), n.choose k • Δ_[h]^[k] f y := by
+/-
+**shift_eq_sum_fwdDiff_iter** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：shift_eq_sum_fwdDiff_iter (f : M -> G) (n : Nat) (y : M) : f (y + n • h) =
+ ∑ k in range (n + 1), n.choose k • Δ_[h]^[k] f y
+参数：f : M -> G；n : Nat；y : M。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `fwdDiff_aux.shiftₗ_pow_apply`：shiftₗ_pow_apply (f : M -> G) (k : Nat) (y
+ : M) : (shiftₗ M G h ^ k) f y = f (y + k • h)
+· 使用定理 `fwdDiff_aux.shiftₗ.eq_1`：∀ (M : Type u_1) (G : Type u_2) [inst : AddComm
+Monoid M] [inst_1 : AddCommGroup G] (h : M),   fwdDiff_aux.shiftₗ M G h = fwdDif
+f_aux.fwdDiff…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `LinearMap.coe_sum`：coe_sum {ι : Type*} (t : Finset ι) (f : ι -> M ->ₛₗ[σ
+₁₂] M₂) : ⇑(∑ i in t, f i) = ∑ i in t, (f i : M -> M₂)
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Finset.sum_apply`：∀ {ι : Type u_1} {α : Type u_7} {M : α → Type u_8} [in
+st : (a : α) → AddCommMonoid (M a)] (a : α) (s : Finset ι)   (g : ι → (a : α) → 
+M a), …
+· 使用定理 `LinearMap.map_smul_of_tower`：map_smul_of_tower [CompatibleSMul M M₂ R S]
+ (fₗ : M ->ₗ[S] M₂) (c : R) (x : M) : fₗ (c • x) = c • fₗ x
+· 使用定理 `LinearMap.IsScalarTower.compatibleSMul`：∀ {M : Type u_8} {M₂ : Type u_10
+} [inst : AddCommMonoid M] [inst_1 : AddCommMonoid M₂] {R : Type u_14} {S : Type
+ u_15}   [inst_2 : Semiring …
+· 使用定理 `Module.End.pow_apply`：pow_apply (f : End R M) (n : Nat) (m : M) : (f ^ n
+) m = f^[n] m
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr_fun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g 
+→ ∀ (a : α), f a = g a
+· 使用定理 `LinearMap.congr_fun`：∀ {R : Type u_1} {S : Type u_5} {M : Type u_8} {M₃ 
+: Type u_11} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoid
+ M] [inst…
+· 使用定理 `Commute.add_pow`：add_pow (h : Commute x y) (n : Nat) : (x + y) ^ n = ∑ m
+ in range (n + 1), x ^ m * y ^ (n - m) * n.choose m
+· 使用定理 `Commute.one_right`：one_right (a : M) : Commute a 1
+
+--- 原说明 ---
+**Gregory-Newton formula** expressing `f (y + n • h)` in terms of the iterated f
+orward differences
+of `f` at `y`.
+-/
+theorem shift_eq_sum_fwdDiff_iter (f : M → G) (n : ℕ) (y : M) :
+    f (y + n • h) = ∑ k ∈ range (n + 1), n.choose k • Δ_[h]^[k] f y := by
   convert!
     congr_fun (LinearMap.congr_fun ((Commute.one_right (fwdDiffₗ M G h)).add_pow n) f) y using 1
   · rw [← shiftₗ_pow_apply h f, shiftₗ]
@@ -533,94 +515,125 @@ end newton_formulae
 
 section choose
 
-/--
-lemma `fwdDiff_choose` / 引理 `fwdDiff_choose`
-
-English:
-lemma fwdDiff_choose
-  given: (j : Nat)
-  statement: Δ_[1] (fun x => x.choose (j + 1) : Nat -> Int) = fun x => x.choose j
-  proof: by
-  ext n
-  simp only [fwdDiff, choose_succ_succ' n j, cast_add, add_sub_cancel_right]
-
-中文:
-引理 fwdDiff_choose
-  条件: (j : 自然数)
-  结论: Δ_[1] (fun x => x.choose (j + 1) : 自然数 -> 整数) = fun x => x.choose j
-  证明: by
-  ext n
-  simp only [fwdDiff, choose_succ_succ' n j, cast_add, add_sub_cancel_right]
-
-Depends on / 依赖: add_sub_cancel_right, cast_add, choose_succ_succ, fwdDiff
+/-
+**fwdDiff_choose** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：fwdDiff_choose (j : Nat) : Δ_[1] (fun x => x.choose (j + 1) : Nat -> Int) 
+= fun x => x.choose j
+参数：j : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `add_sub_cancel_right`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a 
++ b - b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma fwdDiff_choose (j : Nat) : Δ_[1] (fun x => x.choose (j + 1) : Nat -> Int) = fun x => x.choose j := by
+lemma fwdDiff_choose (j : ℕ) : Δ_[1] (fun x ↦ x.choose (j + 1) : ℕ → ℤ) = fun x ↦ x.choose j := by
   ext n
   simp only [fwdDiff, choose_succ_succ' n j, cast_add, add_sub_cancel_right]
-
-/--
-lemma `fwdDiff_iter_choose` / 引理 `fwdDiff_iter_choose`
-
-English:
-lemma fwdDiff_iter_choose
-  given: (j k : Nat)
-  proof: by
+/-
+**fwdDiff_iter_choose** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：fwdDiff_iter_choose (j k : Nat) : Δ_[1]^[k] (fun x => x.choose (k + j) : N
+at -> Int) = fun x => x.choose j
+参数：j k : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Function.iterate_succ_apply'`：iterate_succ_apply' (n : Nat) (x : α) : f^
+[n.succ] x = f (f^[n] x)
+· 使用引理 `fwdDiff_choose`：fwdDiff_choose (j : Nat) : Δ_[1] (fun x => x.choose (j +
+ 1) : Nat -> Int) = fun x => x.choose j
+-/
+lemma fwdDiff_iter_choose (j k : ℕ) :
+    Δ_[1]^[k] (fun x ↦ x.choose (k + j) : ℕ → ℤ) = fun x ↦ x.choose j := by
   induction k generalizing j with
   | zero => simp only [zero_add, iterate_zero, id_eq]
   | succ k IH =>
     simp only [iterate_succ_apply', add_assoc, add_comm 1 j, IH, fwdDiff_choose]
-
-中文:
-引理 fwdDiff_iter_choose
-  条件: (j k : 自然数)
-  证明: by
-  induction k generalizing j with
-  | zero => simp only [zero_add, iterate_zero, id_eq]
-  | succ k IH =>
-    simp only [iterate_succ_apply', add_assoc, add_comm 1 j, IH, fwdDiff_choose]
-
-Depends on / 依赖: add_assoc, add_comm, fwdDiff_choose, generalizing, id_eq, iterate_succ_apply, iterate_zero, zero_add
+/-
+**fwdDiff_iter_choose_zero** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：fwdDiff_iter_choose_zero (m n : Nat) : Δ_[1]^[n] (fun x => x.choose m : Na
+t -> Int) 0 = if n = m then 1 else 0
+参数：m n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `lt_trichotomy`：lt_trichotomy (a b : α) : a < b ∨ a = b ∨ b < a
+· 使用定理 `Nat.exists_eq_add_of_lt`：∀ {m n : ℕ}, m < n → ∃ k, n = m + k + 1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `LT.lt.ne'`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, b < a → a ≠ b
+· 使用定理 `if_false`：∀ {α : Sort u_1} {x : Decidable False} (t e : α), (if False th
+en t else e) = e
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Mathlib.Tactic.Ring.of_eq`：∀ {α : Sort u_2} {a b c : α}, a = c → b = c →
+ a = b
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_congr`：∀ {R : Type u_1} [inst : CommSemir
+ing R] {a a' b b' c : R}, a = a' → b = b' → a' + b' = c → a + b = c
+· 使用定理 `Mathlib.Tactic.Ring.Common.atom_pf`：∀ {R : Type u_1} [inst : CommSemirin
+g R] {b : R} (a : R) {e : ℕ},   Nat.rawCast 1 = e → a ^ e * Nat.rawCast 1 = b → 
+a = b + 0
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_lt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a₂ b c : R} (a₁ : R), a₂ + b = c → a₁ + a₂ + b = a₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_zero_add`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (b : R), 0 + b = b
+· 使用定理 `Mathlib.Tactic.Ring.cast_pos`：∀ {R : Type u_1} [inst : CommSemiring R] {
+a : R} {n : ℕ}, Mathlib.Meta.NormNum.IsNat a n → a = n.rawCast + 0
+· 使用定理 `Mathlib.Meta.NormNum.isNat_ofNat`：isNat_ofNat (α : Type u) [AddMonoidWit
+hOne α] {a : α} {n : Nat} (h : n = a) : IsNat a n
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_gt`：∀ {R : Type u_1} [inst : CommS
+emiring R] {a b₂ c : R} (b₁ : R), a + b₂ = c → a + (b₁ + b₂) = b₁ + c
+· 使用定理 `Mathlib.Tactic.Ring.Common.add_pf_add_zero`：∀ {R : Type u_1} [inst : Com
+mSemiring R] (a : R), a + 0 = a
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Function.iterate_add_apply`：iterate_add_apply (m n : Nat) (x : α) : f^[m
+ + n] x = f^[m] (f^[n] x)
+· 使用引理 `fwdDiff_iter_choose`：fwdDiff_iter_choose (j k : Nat) : Δ_[1]^[k] (fun x 
+=> x.choose (k + j) : Nat -> Int) = fun x => x.choose j
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Nat.choose_zero_right`：choose_zero_right (n : Nat) : choose n 0 = 1
+· 使用定理 `Function.iterate_one`：iterate_one : f^[1] = f
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `fwdDiff_const`：∀ {M : Type u_1} {G : Type u_2} [inst : AddCommMonoid M] 
+[inst_1 : AddCommGroup G] (h : M) (g : G),   (fwdDiff h fun x => g) = fun x => 0
+· 使用定理 `fwdDiff_iter_eq_sum_shift`：fwdDiff_iter_eq_sum_shift (f : M -> G) (n : N
+at) (y : M) : Δ_[h]^[n] f y = ∑ k in range (n + 1), ((-1 : Int) ^ (n - k) * n.ch
+oose k) • f (y …
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+（共 39 条，此处仅展示前 30 条）
 -/
-lemma fwdDiff_iter_choose (j k : Nat) :
-    Δ_[1]^[k] (fun x => x.choose (k + j) : Nat -> Int) = fun x => x.choose j := by
-  induction k generalizing j with
-  | zero => simp only [zero_add, iterate_zero, id_eq]
-  | succ k IH =>
-    simp only [iterate_succ_apply', add_assoc, add_comm 1 j, IH, fwdDiff_choose]
-
-/--
-lemma `fwdDiff_iter_choose_zero` / 引理 `fwdDiff_iter_choose_zero`
-
-English:
-lemma fwdDiff_iter_choose_zero
-  given: (m n : Nat)
-  proof: by
-  rcases lt_trichotomy m n with hmn | rfl | hnm
-  · rcases Nat.exists_eq_add_of_lt hmn with ⟨k, rfl⟩
-    simp_rw [hmn.ne', if_false, (by ring : m + k + 1 = k + 1 + m), iterate_add_apply,
-      add_zero m ▸ fwdDiff_iter_choose 0 m, choose_zero_right, iterate_one, cast_one, fwdDiff_const,
-      fwdDiff_iter_eq_sum_shift, smul_zero, sum_const_zero]
-  · simp only [if_true, add_zero m ▸ fwdDiff_iter_choose 0 m, choose_zero_right, cast_one]
-  · rcases Nat.exists_eq_add_of_lt hnm with ⟨k, rfl⟩
-    simp_rw [hnm.ne, if_false, add_assoc n k 1, fwdDiff_iter_choose, choose_zero_succ, cast_zero]
-
-中文:
-引理 fwdDiff_iter_choose_zero
-  条件: (m n : 自然数)
-  证明: by
-  rcases lt_trichotomy m n with hmn | rfl | hnm
-  · rcases Nat.exists_eq_add_of_lt hmn with ⟨k, rfl⟩
-    simp_rw [hmn.ne', if_false, (by ring : m + k + 1 = k + 1 + m), iterate_add_apply,
-      add_zero m ▸ fwdDiff_iter_choose 0 m, choose_zero_right, iterate_one, cast_one, fwdDiff_const,
-      fwdDiff_iter_eq_sum_shift, smul_zero, sum_const_zero]
-  · simp only [if_true, add_zero m ▸ fwdDiff_iter_choose 0 m, choose_zero_right, cast_one]
-  · rcases Nat.exists_eq_add_of_lt hnm with ⟨k, rfl⟩
-    simp_rw [hnm.ne, if_false, add_assoc n k 1, fwdDiff_iter_choose, choose_zero_succ, cast_zero]
-
-Depends on / 依赖: Nat.exists_eq_add_of_lt, add_zero, cast_one, choose_zero_right, exists_eq_add_of_lt, fwdDiff_const, fwdDiff_iter_choose, fwdDiff_iter_eq_sum_shift, hmn.ne, hnm.ne, if_false, if_true, iterate_add_apply, iterate_one, lt_trichotomy, simp_rw, smul_zero, sum_const_zero
--/
-lemma fwdDiff_iter_choose_zero (m n : Nat) :
-    Δ_[1]^[n] (fun x => x.choose m : Nat -> Int) 0 = if n = m then 1 else 0 := by
+lemma fwdDiff_iter_choose_zero (m n : ℕ) :
+    Δ_[1]^[n] (fun x ↦ x.choose m : ℕ → ℤ) 0 = if n = m then 1 else 0 := by
   rcases lt_trichotomy m n with hmn | rfl | hnm
   · rcases Nat.exists_eq_add_of_lt hmn with ⟨k, rfl⟩
     simp_rw [hmn.ne', if_false, (by ring : m + k + 1 = k + 1 + m), iterate_add_apply,
@@ -632,38 +645,45 @@ lemma fwdDiff_iter_choose_zero (m n : Nat) :
 
 end choose
 
-/--
-lemma `fwdDiff_addChar_eq` / 引理 `fwdDiff_addChar_eq`
-
-English:
-lemma fwdDiff_addChar_eq
-  statement: {M R : Type*} [AddCommMonoid M] [Ring R]
-  proof: by
-  induction n generalizing x with
-  | zero => simp
-  | succ n IH =>
-    simp only [pow_succ, iterate_succ_apply', fwdDiff, IH, ← mul_sub, mul_assoc]
-    rw [sub_mul]; rw [← AddChar.map_add_eq_mul]; rw [add_comm h x]; rw [one_mul]
-
-中文:
-引理 fwdDiff_addChar_eq
-  结论: {M R : 类型} [加法交换幺半群 M] [环 R]
-  证明: by
-  induction n generalizing x with
-  | zero => simp
-  | succ n IH =>
-    simp only [pow_succ, iterate_succ_apply', fwdDiff, IH, ← mul_sub, mul_assoc]
-    rw [sub_mul]; rw [← AddChar.map_add_eq_mul]; rw [add_comm h x]; rw [one_mul]
-
-Depends on / 依赖: AddChar, AddChar.map_add_eq_mul, add_comm, fwdDiff, generalizing, iterate_succ_apply, map_add_eq_mul, mul_assoc, mul_sub, one_mul, pow_succ, sub_mul
+/-
+**fwdDiff_addChar_eq** 是 Mathlib 中的一个引理，位于命名空间 ``。
+形式化陈述：fwdDiff_addChar_eq {M R : Type*} [AddCommMonoid M] [Ring R] (φ : AddChar M
+ R) (x h : M) (n : Nat) : Δ_[h]^[n] φ x = (φ h - 1) ^ n * φ x
+参数：φ : AddChar M R；x h : M；n : Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Function.iterate_succ_apply'`：iterate_succ_apply' (n : Nat) (x : α) : f^
+[n.succ] x = f (f^[n] x)
+· 使用定理 `pow_succ`：pow_succ (a : M) (n : Nat) : a ^ (n + 1) = a ^ n * a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `sub_mul`：∀ {α : Type u} [inst : NonUnitalNonAssocRing α] (a b c : α), (a
+ - b) * c = a * c - b * c
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `AddChar.map_add_eq_mul`：map_add_eq_mul (ψ : AddChar A M) (x y : A) : ψ (
+x + y) = ψ x * ψ y
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
 -/
 lemma fwdDiff_addChar_eq {M R : Type*} [AddCommMonoid M] [Ring R]
-    (φ : AddChar M R) (x h : M) (n : Nat) : Δ_[h]^[n] φ x = (φ h - 1) ^ n * φ x := by
+    (φ : AddChar M R) (x h : M) (n : ℕ) : Δ_[h]^[n] φ x = (φ h - 1) ^ n * φ x := by
   induction n generalizing x with
   | zero => simp
   | succ n IH =>
     simp only [pow_succ, iterate_succ_apply', fwdDiff, IH, ← mul_sub, mul_assoc]
-    rw [sub_mul]; rw [← AddChar.map_add_eq_mul]; rw [add_comm h x]; rw [one_mul]
+    rw [sub_mul, ← AddChar.map_add_eq_mul, add_comm h x, one_mul]
 
 /-!
 ## Forward differences of polynomials
@@ -682,176 +702,278 @@ We prove formulae about the forward difference operator applied to polynomials:
 variable {R : Type*} [CommRing R]
 
 /--
-theorem `fwdDiff_iter_pow_eq_zero_of_lt` / 定理 `fwdDiff_iter_pow_eq_zero_of_lt`
-
-English:
-theorem fwdDiff_iter_pow_eq_zero_of_lt
-  given: {j n : Nat} (h : j < n)
-  proof: by
-  induction n generalizing j with
-  | zero => aesop
-  | succ n ih =>
-    have : (Δ_[1] fun (r : R) => r ^ j) = ∑ i in range j, j.choose i • fun r => r ^ i := by
-      ext x
-      simp [nsmul_eq_mul, fwdDiff, add_pow, sum_range_succ, mul_comm]
-    rw [iterate_succ_apply]; rw [this]; rw [fwdDiff_iter_finsetSum]
-    exact sum_eq_zero fun i hi => by
-      rw [fwdDiff_iter_const_smul]; rw [ih (by have := mem_range.1 hi; lia)]; rw [nsmul_zero]
-
-中文:
-定理 fwdDiff_iter_pow_eq_zero_of_lt
-  条件: {j n : 自然数} (h : j < n)
-  证明: by
-  induction n generalizing j with
-  | zero => aesop
-  | succ n ih =>
-    have : (Δ_[1] fun (r : R) => r ^ j) = ∑ i in range j, j.choose i • fun r => r ^ i := by
-      ext x
-      simp [nsmul_eq_mul, fwdDiff, add_pow, sum_range_succ, mul_comm]
-    rw [iterate_succ_apply]; rw [this]; rw [fwdDiff_iter_finsetSum]
-    exact sum_eq_zero fun i hi => by
-      rw [fwdDiff_iter_const_smul]; rw [ih (by have := mem_range.1 hi; lia)]; rw [nsmul_zero]
-
-Depends on / 依赖: add_pow, fwdDiff, fwdDiff_iter_const_smul, fwdDiff_iter_finsetSum, generalizing, iterate_succ_apply, j.choose, mem_range, mul_comm, nsmul_eq_mul, nsmul_zero, sum_eq_zero, sum_range_succ
+The `n`-th forward difference of the function `x ↦ x^j` is zero if `j < n`.
 -/
-theorem fwdDiff_iter_pow_eq_zero_of_lt {j n : Nat} (h : j < n) :
-    Δ_[1]^[n] (fun (r : R) => r ^ j) = 0 := by
+/-
+**fwdDiff_iter_pow_eq_zero_of_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：fwdDiff_iter_pow_eq_zero_of_lt {j n : Nat} (h : j < n) : Δ_[1]^[n] (fun (r
+ : R) => r ^ j) = 0
+参数：h : j < n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearOrderedCommMonoidWithZero.toIsBotZeroClass`：∀ {α : Type u_3} [self
+ : LinearOrderedCommMonoidWithZero α], IsBotZeroClass α
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `add_pow`：add_pow [CommSemiring R] (x y : R) (n : Nat) : (x + y) ^ n = ∑ 
+m in range (n + 1), x ^ m * y ^ (n - m) * n.choose m
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Finset.sum_range_succ`：∀ {M : Type u_4} [inst : AddCommMonoid M] (f : ℕ 
+→ M) (n : ℕ),   ∑ x ∈ Finset.range (n + 1), f x = ∑ x ∈ Finset.range n, f x + f 
+n
+· 使用定理 `Nat.choose_self`：choose_self (n : Nat) : choose n n = 1
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `add_sub_cancel_right`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a 
++ b - b = a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `nsmul_eq_mul`：∀ {α : Type u} [inst : NonAssocSemiring α] (n : ℕ) (a : α)
+, n • a = ↑n * a
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `Finset.sum_apply`：∀ {ι : Type u_1} {α : Type u_7} {M : α → Type u_8} [in
+st : (a : α) → AddCommMonoid (M a)] (a : α) (s : Finset ι)   (g : ι → (a : α) → 
+M a), …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Function.iterate_succ_apply`：iterate_succ_apply (n : Nat) (x : α) : f^[n
+.succ] x = f^[n] (f x)
+· 使用定理 `fwdDiff_iter_finsetSum`：∀ {M : Type u_1} {G : Type u_2} [inst : AddCommM
+onoid M] [inst_1 : AddCommGroup G] (h : M) {α : Type u_3} (s : Finset α)   (f : 
+α → M → G) (…
+· 使用定理 `Finset.sum_eq_zero`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst
+ : AddCommMonoid M] {f : ι → M},   (∀ x ∈ s, f x = 0) → ∑ x ∈ s, f x = 0
+· 使用定理 `fwdDiff_iter_const_smul`：∀ {M : Type u_1} {G : Type u_2} [inst : AddComm
+Monoid M] [inst_1 : AddCommGroup G] (h : M) {R : Type u_3}   [inst_2 : Monoid R]
+ [inst_3 : Di…
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_range`：mem_range : m in range n ↔ m < n
+· 使用定理 `nsmul_zero`：∀ {M : Type u_2} [inst : AddMonoid M] (n : ℕ), n • 0 = 0
+
+--- 原说明 ---
+The `n`-th forward difference of the function `x ↦ x^j` is zero if `j < n`.
+-/
+theorem fwdDiff_iter_pow_eq_zero_of_lt {j n : ℕ} (h : j < n) :
+    Δ_[1]^[n] (fun (r : R) ↦ r ^ j) = 0 := by
   induction n generalizing j with
   | zero => aesop
   | succ n ih =>
-    have : (Δ_[1] fun (r : R) => r ^ j) = ∑ i in range j, j.choose i • fun r => r ^ i := by
+    have : (Δ_[1] fun (r : R) ↦ r ^ j) = ∑ i ∈ range j, j.choose i • fun r ↦ r ^ i := by
       ext x
       simp [nsmul_eq_mul, fwdDiff, add_pow, sum_range_succ, mul_comm]
-    rw [iterate_succ_apply]; rw [this]; rw [fwdDiff_iter_finsetSum]
-    exact sum_eq_zero fun i hi => by
-      rw [fwdDiff_iter_const_smul]; rw [ih (by have := mem_range.1 hi; lia)]; rw [nsmul_zero]
+    rw [iterate_succ_apply, this, fwdDiff_iter_finsetSum]
+    exact sum_eq_zero fun i hi ↦ by
+      rw [fwdDiff_iter_const_smul, ih (by have := mem_range.1 hi; lia), nsmul_zero]
 
 /--
-theorem `fwdDiff_iter_eq_factorial` / 定理 `fwdDiff_iter_eq_factorial`
-
-English:
-theorem fwdDiff_iter_eq_factorial
-  given: {n : Nat}
-  proof: by
-  induction n with
-  | zero => aesop
-  | succ n IH =>
-    have : (Δ_[1] fun (r : R) => r ^ (n + 1)) =
-      ∑ i in range (n + 1), (n + 1).choose i • fun r => r ^ i := by
-      ext x
-      simp [nsmul_eq_mul, fwdDiff, add_pow, sum_range_succ, mul_comm]
-    simp_rw [iterate_succ_apply, this, fwdDiff_iter_finsetSum, fwdDiff_iter_const_smul,
-       sum_range_succ]
-    simpa [IH, factorial_succ] using sum_eq_zero fun i hi => by
-      rw [fwdDiff_iter_pow_eq_zero_of_lt (by have := mem_range.1 hi; lia)]; rw [mul_zero]
-
-中文:
-定理 fwdDiff_iter_eq_factorial
-  条件: {n : 自然数}
-  证明: by
-  induction n with
-  | zero => aesop
-  | succ n IH =>
-    have : (Δ_[1] fun (r : R) => r ^ (n + 1)) =
-      ∑ i in range (n + 1), (n + 1).choose i • fun r => r ^ i := by
-      ext x
-      simp [nsmul_eq_mul, fwdDiff, add_pow, sum_range_succ, mul_comm]
-    simp_rw [iterate_succ_apply, this, fwdDiff_iter_finsetSum, fwdDiff_iter_const_smul,
-       sum_range_succ]
-    simpa [IH, factorial_succ] using sum_eq_zero fun i hi => by
-      rw [fwdDiff_iter_pow_eq_zero_of_lt (by have := mem_range.1 hi; lia)]; rw [mul_zero]
-
-Depends on / 依赖: add_pow, factorial_succ, fwdDiff, fwdDiff_iter_const_smul, fwdDiff_iter_finsetSum, fwdDiff_iter_pow_eq_zero_of_lt, iterate_succ_apply, mem_range, mul_comm, mul_zero, nsmul_eq_mul, simp_rw, sum_eq_zero, sum_range_succ
+The `n`-th forward difference of `x ↦ x^n` is the constant function `n!`.
 -/
-theorem fwdDiff_iter_eq_factorial {n : Nat} :
-    Δ_[1]^[n] (fun (r : R) => r ^ n) = n ! := by
+/-
+**fwdDiff_iter_eq_factorial** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：fwdDiff_iter_eq_factorial {n : Nat} : Δ_[1]^[n] (fun (r : R) => r ^ n) = n
+ !
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `pow_zero`：pow_zero (a : M) : a ^ 0 = 1
+· 使用定理 `Nat.cast_one`：cast_one : ((1 : Nat) : R) = 1
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `add_pow`：add_pow [CommSemiring R] (x y : R) (n : Nat) : (x + y) ^ n = ∑ 
+m in range (n + 1), x ^ m * y ^ (n - m) * n.choose m
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `one_pow`：one_pow {a : R} (b : Nat) (ha : IsNat a 1) : a ^ b = a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `Finset.sum_range_succ`：∀ {M : Type u_4} [inst : AddCommMonoid M] (f : ℕ 
+→ M) (n : ℕ),   ∑ x ∈ Finset.range (n + 1), f x = ∑ x ∈ Finset.range n, f x + f 
+n
+· 使用定理 `Nat.choose_succ_self_right`：∀ (n : ℕ), (n + 1).choose n = n + 1
+· 使用定理 `Nat.cast_add`：cast_add (m n : Nat) : ((m + n : Nat) : R) = m + n
+· 使用定理 `Nat.choose_self`：choose_self (n : Nat) : choose n n = 1
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `add_sub_cancel_right`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a 
++ b - b = a
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `nsmul_eq_mul`：∀ {α : Type u} [inst : NonAssocSemiring α] (n : ℕ) (a : α)
+, n • a = ↑n * a
+· 使用定理 `Finset.sum_apply`：∀ {ι : Type u_1} {α : Type u_7} {M : α → Type u_8} [in
+st : (a : α) → AddCommMonoid (M a)] (a : α) (s : Finset ι)   (g : ι → (a : α) → 
+M a), …
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `fwdDiff_iter_finsetSum`：∀ {M : Type u_1} {G : Type u_2} [inst : AddCommM
+onoid M] [inst_1 : AddCommGroup G] (h : M) {α : Type u_3} (s : Finset α)   (f : 
+α → M → G) (…
+· 使用定理 `fwdDiff_iter_const_smul`：∀ {M : Type u_1} {G : Type u_2} [inst : AddComm
+Monoid M] [inst_1 : AddCommGroup G] (h : M) {R : Type u_3}   [inst_2 : Monoid R]
+ [inst_3 : Di…
+· 使用定理 `Nat.cast_mul`：∀ {α : Type u_1} [inst : NonAssocSemiring α] (m n : ℕ), ↑(
+m * n) = ↑m * ↑n
+· 使用定理 `Pi.instIsRightCancelAdd`：∀ {I : Type u} {f : I → Type v₁} [inst : (i : I
+) → Add (f i)] [∀ (i : I), IsRightCancelAdd (f i)],   IsRightCancelAdd ((i : I) 
+→ f i)
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `Finset.sum_eq_zero`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst
+ : AddCommMonoid M] {f : ι → M},   (∀ x ∈ s, f x = 0) → ∑ x ∈ s, f x = 0
+· 使用定理 `fwdDiff_iter_pow_eq_zero_of_lt`：fwdDiff_iter_pow_eq_zero_of_lt {j n : Na
+t} (h : j < n) : Δ_[1]^[n] (fun (r : R) => r ^ j) = 0
+（共 33 条，此处仅展示前 30 条）
+
+--- 原说明 ---
+The `n`-th forward difference of `x ↦ x^n` is the constant function `n!`.
+-/
+theorem fwdDiff_iter_eq_factorial {n : ℕ} :
+    Δ_[1]^[n] (fun (r : R) ↦ r ^ n) = n ! := by
   induction n with
   | zero => aesop
   | succ n IH =>
-    have : (Δ_[1] fun (r : R) => r ^ (n + 1)) =
-      ∑ i in range (n + 1), (n + 1).choose i • fun r => r ^ i := by
+    have : (Δ_[1] fun (r : R) ↦ r ^ (n + 1)) =
+      ∑ i ∈ range (n + 1), (n + 1).choose i • fun r ↦ r ^ i := by
       ext x
       simp [nsmul_eq_mul, fwdDiff, add_pow, sum_range_succ, mul_comm]
     simp_rw [iterate_succ_apply, this, fwdDiff_iter_finsetSum, fwdDiff_iter_const_smul,
        sum_range_succ]
-    simpa [IH, factorial_succ] using sum_eq_zero fun i hi => by
-      rw [fwdDiff_iter_pow_eq_zero_of_lt (by have := mem_range.1 hi; lia)]; rw [mul_zero]
-
-/--
-theorem `Polynomial.fwdDiff_iter_degree_eq_factorial` / 定理 `Polynomial.fwdDiff_iter_degree_eq_factorial`
-
-English:
-theorem Polynomial.fwdDiff_iter_degree_eq_factorial
-  given: (P : R[X])
-  proof: funext fun x => by
-  simp_rw [P.eval_eq_sum_range, ← sum_apply _ _ (fun i x => P.coeff i * x ^ i),
-    fwdDiff_iter_finsetSum, ← smul_eq_mul, ← Pi.smul_def, fwdDiff_iter_const_smul, Pi.smul_apply]
-  rw [sum_apply]; rw [sum_range_succ]; rw [sum_eq_zero (fun i hi => ?_)]; rw [zero_add]; rw [fwdDiff_iter_eq_factorial]; rw [leadingCoeff]; rw [Pi.smul_apply]
-  rw [fwdDiff_iter_pow_eq_zero_of_lt (mem_range.mp hi)]; rw [smul_zero]; rw [Pi.zero_apply]
-
-中文:
-定理 多项式.fwdDiff_iter_degree_eq_factorial
-  条件: (P : R[X])
-  证明: funext fun x => by
-  simp_rw [P.eval_eq_sum_range, ← sum_apply _ _ (fun i x => P.coeff i * x ^ i),
-    fwdDiff_iter_finsetSum, ← smul_eq_mul, ← Pi.smul_def, fwdDiff_iter_const_smul, Pi.smul_apply]
-  rw [sum_apply]; rw [sum_range_succ]; rw [sum_eq_zero (fun i hi => ?_)]; rw [zero_add]; rw [fwdDiff_iter_eq_factorial]; rw [leadingCoeff]; rw [Pi.smul_apply]
-  rw [fwdDiff_iter_pow_eq_zero_of_lt (mem_range.mp hi)]; rw [smul_zero]; rw [Pi.zero_apply]
-
-Depends on / 依赖: P.coeff, P.eval_eq_sum_range, Pi.smul_apply, Pi.smul_def, Pi.zero_apply, eval_eq_sum_range, fwdDiff_iter_const_smul, fwdDiff_iter_eq_factorial, fwdDiff_iter_finsetSum, fwdDiff_iter_pow_eq_zero_of_lt, leadingCoeff, mem_range, mem_range.mp, simp_rw, smul_apply, smul_def, smul_eq_mul, smul_zero, sum_apply, sum_eq_zero
+    simpa [IH, factorial_succ] using sum_eq_zero fun i hi ↦ by
+      rw [fwdDiff_iter_pow_eq_zero_of_lt (by have := mem_range.1 hi; lia), mul_zero]
+/-
+**Polynomial.fwdDiff_iter_degree_eq_factorial** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Polynomial.fwdDiff_iter_degree_eq_factorial (P : R[X]) : Δ_[1]^[P.natDegre
+e] P.eval = P.leadingCoeff • P.natDegree !
+参数：P : R[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Polynomial.eval_eq_sum_range`：eval_eq_sum_range {p : R[X]} (x : R) : p.e
+val x = ∑ i in Finset.range (p.natDegree + 1), p.coeff i * x ^ i
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sum_apply`：∀ {ι : Type u_1} {α : Type u_7} {M : α → Type u_8} [in
+st : (a : α) → AddCommMonoid (M a)] (a : α) (s : Finset ι)   (g : ι → (a : α) → 
+M a), …
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `fwdDiff_iter_finsetSum`：∀ {M : Type u_1} {G : Type u_2} [inst : AddCommM
+onoid M] [inst_1 : AddCommGroup G] (h : M) {α : Type u_3} (s : Finset α)   (f : 
+α → M → G) (…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `fwdDiff_iter_const_smul`：∀ {M : Type u_1} {G : Type u_2} [inst : AddComm
+Monoid M] [inst_1 : AddCommGroup G] (h : M) {R : Type u_3}   [inst_2 : Monoid R]
+ [inst_3 : Di…
+· 使用定理 `Finset.sum_range_succ`：∀ {M : Type u_4} [inst : AddCommMonoid M] (f : ℕ 
+→ M) (n : ℕ),   ∑ x ∈ Finset.range (n + 1), f x = ∑ x ∈ Finset.range n, f x + f 
+n
+· 使用定理 `Finset.sum_eq_zero`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst
+ : AddCommMonoid M] {f : ι → M},   (∀ x ∈ s, f x = 0) → ∑ x ∈ s, f x = 0
+· 使用定理 `fwdDiff_iter_pow_eq_zero_of_lt`：fwdDiff_iter_pow_eq_zero_of_lt {j n : Na
+t} (h : j < n) : Δ_[1]^[n] (fun (r : R) => r ^ j) = 0
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_range`：mem_range : m in range n ↔ m < n
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `Pi.zero_apply`：∀ {ι : Type u_1} {M : ι → Type u_5} [inst : (i : ι) → Zer
+o (M i)] (i : ι), 0 i = 0
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `fwdDiff_iter_eq_factorial`：fwdDiff_iter_eq_factorial {n : Nat} : Δ_[1]^[
+n] (fun (r : R) => r ^ n) = n !
+· 使用定理 `Polynomial.leadingCoeff.eq_1`：∀ {R : Type u} [inst : Semiring R] (p : Po
+lynomial R), p.leadingCoeff = p.coeff p.natDegree
+· 使用定理 `Pi.smul_apply`：∀ {ι : Type u_1} {α : Type u_2} {M : ι → Type u_5} [inst 
+: (i : ι) → SMul α (M i)] (a : α) (f : (i : ι) → M i) (i : ι),   (a • f) i = a •
+ f …
 -/
 theorem Polynomial.fwdDiff_iter_degree_eq_factorial (P : R[X]) :
-    Δ_[1]^[P.natDegree] P.eval = P.leadingCoeff • P.natDegree ! := funext fun x => by
-  simp_rw [P.eval_eq_sum_range, ← sum_apply _ _ (fun i x => P.coeff i * x ^ i),
+    Δ_[1]^[P.natDegree] P.eval = P.leadingCoeff • P.natDegree ! := funext fun x ↦ by
+  simp_rw [P.eval_eq_sum_range, ← sum_apply _ _ (fun i x ↦ P.coeff i * x ^ i),
     fwdDiff_iter_finsetSum, ← smul_eq_mul, ← Pi.smul_def, fwdDiff_iter_const_smul, Pi.smul_apply]
-  rw [sum_apply]; rw [sum_range_succ]; rw [sum_eq_zero (fun i hi => ?_)]; rw [zero_add]; rw [fwdDiff_iter_eq_factorial]; rw [leadingCoeff]; rw [Pi.smul_apply]
-  rw [fwdDiff_iter_pow_eq_zero_of_lt (mem_range.mp hi)]; rw [smul_zero]; rw [Pi.zero_apply]
-
-/--
-theorem `Polynomial.fwdDiff_iter_eq_zero_of_degree_lt` / 定理 `Polynomial.fwdDiff_iter_eq_zero_of_degree_lt`
-
-English:
-theorem Polynomial.fwdDiff_iter_eq_zero_of_degree_lt
-  given: {P : R[X]} {n : Nat} (hP : P.natDegree < n)
-  proof: funext fun x => by
-  obtain ⟨j, rfl⟩ := Nat.exists_eq_add_of_lt hP
-  rw [add_assoc]; rw [add_comm]; rw [Function.iterate_add_apply]; rw [Function.iterate_succ_apply]; rw [P.fwdDiff_iter_degree_eq_factorial]; rw [Pi.smul_def]
-  simp [fwdDiff_iter_eq_sum_shift]
-
-中文:
-定理 多项式.fwdDiff_iter_eq_zero_of_degree_lt
-  条件: {P : R[X]} {n : 自然数} (hP : P.natDegree < n)
-  证明: funext fun x => by
-  obtain ⟨j, rfl⟩ := Nat.exists_eq_add_of_lt hP
-  rw [add_assoc]; rw [add_comm]; rw [Function.iterate_add_apply]; rw [Function.iterate_succ_apply]; rw [P.fwdDiff_iter_degree_eq_factorial]; rw [Pi.smul_def]
-  simp [fwdDiff_iter_eq_sum_shift]
-
-Depends on / 依赖: Function, Function.iterate_add_apply, Function.iterate_succ_apply, Nat.exists_eq_add_of_lt, P.fwdDiff_iter_degree_eq_factorial, Pi.smul_def, add_assoc, add_comm, exists_eq_add_of_lt, fwdDiff_iter_degree_eq_factorial, fwdDiff_iter_eq_sum_shift, iterate_add_apply, iterate_succ_apply, smul_def
+  rw [sum_apply, sum_range_succ, sum_eq_zero (fun i hi ↦ ?_), zero_add,
+    fwdDiff_iter_eq_factorial, leadingCoeff, Pi.smul_apply]
+  rw [fwdDiff_iter_pow_eq_zero_of_lt (mem_range.mp hi), smul_zero, Pi.zero_apply]
+/-
+**Polynomial.fwdDiff_iter_eq_zero_of_degree_lt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Polynomial.fwdDiff_iter_eq_zero_of_degree_lt {P : R[X]} {n : Nat} (hP : P.
+natDegree < n) : Δ_[1]^[n] P.eval = 0
+参数：hP : P.natDegree < n。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Nat.exists_eq_add_of_lt`：∀ {m n : ℕ}, m < n → ∃ k, n = m + k + 1
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `add_assoc`：∀ {G : Type u_1} [inst : AddSemigroup G] (a b c : G), a + b +
+ c = a + (b + c)
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `Function.iterate_add_apply`：iterate_add_apply (m n : Nat) (x : α) : f^[m
+ + n] x = f^[m] (f^[n] x)
+· 使用定理 `Function.iterate_succ_apply`：iterate_succ_apply (n : Nat) (x : α) : f^[n
+.succ] x = f^[n] (f x)
+· 使用定理 `Polynomial.fwdDiff_iter_degree_eq_factorial`：Polynomial.fwdDiff_iter_deg
+ree_eq_factorial (P : R[X]) : Δ_[1]^[P.natDegree] P.eval = P.leadingCoeff • P.na
+tDegree !
+· 使用定理 `Pi.smul_def`：∀ {ι : Type u_1} {α : Type u_2} {M : ι → Type u_5} [inst : 
+(i : ι) → SMul α (M i)] (a : α) (f : (i : ι) → M i),   a • f = fun i => a • f i
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `fwdDiff_const`：∀ {M : Type u_1} {G : Type u_2} [inst : AddCommMonoid M] 
+[inst_1 : AddCommGroup G] (h : M) (g : G),   (fwdDiff h fun x => g) = fun x => 0
+· 使用定理 `fwdDiff_iter_eq_sum_shift`：fwdDiff_iter_eq_sum_shift (f : M -> G) (n : N
+at) (y : M) : Δ_[h]^[n] f y = ∑ k in range (n + 1), ((-1 : Int) ^ (n - k) * n.ch
+oose k) • f (y …
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `smul_zero`：smul_zero (a : M) : a • (0 : A) = 0
+· 使用定理 `Finset.sum_const_zero`：∀ {ι : Type u_1} {M : Type u_3} {s : Finset ι} [i
+nst : AddCommMonoid M], ∑ _x ∈ s, 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem Polynomial.fwdDiff_iter_eq_zero_of_degree_lt {P : R[X]} {n : Nat} (hP : P.natDegree < n) :
-    Δ_[1]^[n] P.eval = 0 := funext fun x => by
+theorem Polynomial.fwdDiff_iter_eq_zero_of_degree_lt {P : R[X]} {n : ℕ} (hP : P.natDegree < n) :
+    Δ_[1]^[n] P.eval = 0 := funext fun x ↦ by
   obtain ⟨j, rfl⟩ := Nat.exists_eq_add_of_lt hP
-  rw [add_assoc]; rw [add_comm]; rw [Function.iterate_add_apply]; rw [Function.iterate_succ_apply]; rw [P.fwdDiff_iter_degree_eq_factorial]; rw [Pi.smul_def]
+  rw [add_assoc, add_comm, Function.iterate_add_apply, Function.iterate_succ_apply,
+    P.fwdDiff_iter_degree_eq_factorial, Pi.smul_def]
   simp [fwdDiff_iter_eq_sum_shift]
-
-/--
-theorem `Polynomial.fwdDiff_iter_degree_add_one_eq_zero` / 定理 `Polynomial.fwdDiff_iter_degree_add_one_eq_zero`
-
-English:
-theorem Polynomial.fwdDiff_iter_degree_add_one_eq_zero
-  given: (P : R[X])
-  proof: by
-  have hP : P.natDegree < P.natDegree + 1 := Nat.lt_succ_self P.natDegree
-  exact Polynomial.fwdDiff_iter_eq_zero_of_degree_lt hP
-
-中文:
-定理 多项式.fwdDiff_iter_degree_add_one_eq_zero
-  条件: (P : R[X])
-  证明: by
-  have hP : P.natDegree < P.natDegree + 1 := Nat.lt_succ_self P.natDegree
-  exact Polynomial.fwdDiff_iter_eq_zero_of_degree_lt hP
-
-Depends on / 依赖: Nat.lt_succ_self, P.natDegree, Polynomial, Polynomial.fwdDiff_iter_eq_zero_of_degree_lt, fwdDiff_iter_eq_zero_of_degree_lt, lt_succ_self, natDegree
+/-
+**Polynomial.fwdDiff_iter_degree_add_one_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Polynomial.fwdDiff_iter_degree_add_one_eq_zero (P : R[X]) : Δ_[1]^[P.natDe
+gree + 1] P.eval = 0
+参数：P : R[X]。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Nat.lt_succ_self`：∀ (n : ℕ), n < n.succ
+· 使用定理 `Polynomial.fwdDiff_iter_eq_zero_of_degree_lt`：Polynomial.fwdDiff_iter_eq
+_zero_of_degree_lt {P : R[X]} {n : Nat} (hP : P.natDegree < n) : Δ_[1]^[n] P.eva
+l = 0
 -/
 theorem Polynomial.fwdDiff_iter_degree_add_one_eq_zero (P : R[X]) :
     Δ_[1]^[P.natDegree + 1] P.eval = 0 := by
@@ -859,31 +981,57 @@ theorem Polynomial.fwdDiff_iter_degree_add_one_eq_zero (P : R[X]) :
   exact Polynomial.fwdDiff_iter_eq_zero_of_degree_lt hP
 
 /--
-theorem `fwdDiff_iter_sum_mul_pow_eq_zero` / 定理 `fwdDiff_iter_sum_mul_pow_eq_zero`
-
-English:
-theorem fwdDiff_iter_sum_mul_pow_eq_zero
-  given: {n : Nat} (P : Nat -> R)
-  proof: by
-  simp_rw [← sum_apply _ _ (fun i x => P i * x ^ i), fwdDiff_iter_finsetSum, sum_fn, ← smul_eq_mul,
-    ← Pi.smul_def, fwdDiff_iter_const_smul, ← sum_fn]
-exact sum_eq_zero fun i hi => smul_eq_zero_of_right _ fwdDiff_iter_pow_eq_zero_of_lt
- mem_range.mp hi
-
-中文:
-定理 fwdDiff_iter_sum_mul_pow_eq_zero
-  条件: {n : 自然数} (P : 自然数 -> R)
-  证明: by
-  simp_rw [← sum_apply _ _ (fun i x => P i * x ^ i), fwdDiff_iter_finsetSum, sum_fn, ← smul_eq_mul,
-    ← Pi.smul_def, fwdDiff_iter_const_smul, ← sum_fn]
-exact sum_eq_zero fun i hi => smul_eq_zero_of_right _ fwdDiff_iter_pow_eq_zero_of_lt
- mem_range.mp hi
-
-Depends on / 依赖: Pi.smul_def, fwdDiff_iter_const_smul, fwdDiff_iter_finsetSum, fwdDiff_iter_pow_eq_zero_of_lt, mem_range, mem_range.mp, simp_rw, smul_def, smul_eq_mul, smul_eq_zero_of_right, sum_apply, sum_eq_zero, sum_fn
+The `n`-th forward difference of a polynomial of degree `< n` is zero (formulated using explicit
+sums over `range n`).
 -/
-theorem fwdDiff_iter_sum_mul_pow_eq_zero {n : Nat} (P : Nat -> R) :
-    Δ_[1]^[n] (fun r : R => ∑ k in range n, P k * r ^ k) = 0 := by
-  simp_rw [← sum_apply _ _ (fun i x => P i * x ^ i), fwdDiff_iter_finsetSum, sum_fn, ← smul_eq_mul,
+/-
+**fwdDiff_iter_sum_mul_pow_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：fwdDiff_iter_sum_mul_pow_eq_zero {n : Nat} (P : Nat -> R) : Δ_[1]^[n] (fun
+ r : R => ∑ k in range n, P k * r ^ k) = 0
+参数：P : Nat -> R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.sum_apply`：∀ {ι : Type u_1} {α : Type u_7} {M : α → Type u_8} [in
+st : (a : α) → AddCommMonoid (M a)] (a : α) (s : Finset ι)   (g : ι → (a : α) → 
+M a), …
+· 使用定理 `fwdDiff_iter_finsetSum`：∀ {M : Type u_1} {G : Type u_2} [inst : AddCommM
+onoid M] [inst_1 : AddCommGroup G] (h : M) {α : Type u_3} (s : Finset α)   (f : 
+α → M → G) (…
+· 使用定理 `Finset.sum_fn`：∀ {α : Type u_7} {M : α → Type u_8} {ι : Type u_9} [inst 
+: (a : α) → AddCommMonoid (M a)] (s : Finset ι)   (g : ι → (a : α) → M a), ∑ c ∈
+ s,…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `fwdDiff_iter_const_smul`：∀ {M : Type u_1} {G : Type u_2} [inst : AddComm
+Monoid M] [inst_1 : AddCommGroup G] (h : M) {R : Type u_3}   [inst_2 : Monoid R]
+ [inst_3 : Di…
+· 使用定理 `Finset.sum_eq_zero`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} [inst
+ : AddCommMonoid M] {f : ι → M},   (∀ x ∈ s, f x = 0) → ∑ x ∈ s, f x = 0
+· 使用引理 `smul_eq_zero_of_right`：smul_eq_zero_of_right (a : M) {b : A} (h : b = 0)
+ : a • b = 0
+· 使用定理 `fwdDiff_iter_pow_eq_zero_of_lt`：fwdDiff_iter_pow_eq_zero_of_lt {j n : Na
+t} (h : j < n) : Δ_[1]^[n] (fun (r : R) => r ^ j) = 0
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finset.mem_range`：mem_range : m in range n ↔ m < n
+
+--- 原说明 ---
+The `n`-th forward difference of a polynomial of degree `< n` is zero (formulate
+d using explicit
+sums over `range n`).
+-/
+theorem fwdDiff_iter_sum_mul_pow_eq_zero {n : ℕ} (P : ℕ → R) :
+    Δ_[1]^[n] (fun r : R ↦ ∑ k ∈ range n, P k * r ^ k) = 0 := by
+  simp_rw [← sum_apply _ _ (fun i x ↦ P i * x ^ i), fwdDiff_iter_finsetSum, sum_fn, ← smul_eq_mul,
     ← Pi.smul_def, fwdDiff_iter_const_smul, ← sum_fn]
-exact sum_eq_zero fun i hi => smul_eq_zero_of_right _ fwdDiff_iter_pow_eq_zero_of_lt
- mem_range.mp hi
+  exact sum_eq_zero fun i hi ↦ smul_eq_zero_of_right _ <| fwdDiff_iter_pow_eq_zero_of_lt
+    <| mem_range.mp hi

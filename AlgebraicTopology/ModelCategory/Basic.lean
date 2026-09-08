@@ -43,46 +43,20 @@ open CategoryTheory Limits
 
 variable (C : Type u) [Category.{v} C]
 
-/--
-Definition of `ModelCategory` / `ModelCategory` 的定义
+/-- A model category is a category equipped with classes of morphisms named cofibrations,
+fibrations and weak equivalences which satisfy the axioms CM1/CM2/CM3/CM4/CM5
+of (closed) model categories. -/
+/-
+**HomotopicalAlgebra.ModelCategory** 是 Mathlib 中的一个类，位于命名空间 `HomotopicalAlgebra`
+。
+形式化陈述：ModelCategory where categoryWithFibrations : CategoryWithFibrations C
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class ModelCategory
-  parameters: where
-  axioms and operations (13):
-    - categoryWithFibrations : CategoryWithFibrations C  [default: by infer_instance]
-    - categoryWithCofibrations : CategoryWithCofibrations C  [default: by infer_instance]
-    - categoryWithWeakEquivalences : CategoryWithWeakEquivalences C  [default: by infer_instance]
-    - cm1a : HasFiniteLimits C  [default: by infer_instance]
-    - cm1b : HasFiniteColimits C  [default: by infer_instance]
-    - cm2 : (weakEquivalences C).HasTwoOutOfThreeProperty  [default: by infer_instance]
-    - cm3a : (weakEquivalences C).IsStableUnderRetracts  [default: by infer_instance]
-    - cm3b : (fibrations C).IsStableUnderRetracts  [default: by infer_instance]
-    - cm3c : (cofibrations C).IsStableUnderRetracts  [default: by infer_instance]
-    - cm4a({A B X Y : C} (i : A ⟶ B) (p : X ⟶ Y) [Cofibration i] [WeakEquivalence i] [Fibration p]) : HasLiftingProperty i p  [default: by intros; infer_instance]
-    - cm4b({A B X Y : C} (i : A ⟶ B) (p : X ⟶ Y) [Cofibration i] [Fibration p] [WeakEquivalence p]) : HasLiftingProperty i p  [default: by intros; infer_instance]
-    - cm5a : MorphismProperty.HasFactorization (trivialCofibrations C) (fibrations C)  [default: by infer_instance]
-    - cm5b : MorphismProperty.HasFactorization (cofibrations C) (trivialFibrations C)  [default: by infer_instance]
-
-中文:
-类 模型范畴
-  参数: where
-  公理与运算 (13 个):
-    - categoryWithFibrations : 带纤维化范畴 C  [默认: by infer_instance]
-    - categoryWithCofibrations : 带余纤维化范畴 C  [默认: by infer_instance]
-    - categoryWithWeakEquivalences : 带弱等价范畴 C  [默认: by infer_instance]
-    - cm1a : 有有限极限 C  [默认: by infer_instance]
-    - cm1b : 有有限余极限 C  [默认: by infer_instance]
-    - cm2 : (weakEquivalences C).有TwoOutOfThreeProperty  [默认: by infer_instance]
-    - cm3a : (weakEquivalences C).是StableUnderRetracts  [默认: by infer_instance]
-    - cm3b : (fibrations C).是StableUnderRetracts  [默认: by infer_instance]
-    - cm3c : (cofibrations C).是StableUnderRetracts  [默认: by infer_instance]
-    - cm4a({A B X Y : C} (i : A ⟶ B) (p : X ⟶ Y) [余纤维化 i] [弱等价 i] [纤维化 p]) : 有LiftingProperty i p  [默认: by intros; infer_instance]
-    - cm4b({A B X Y : C} (i : A ⟶ B) (p : X ⟶ Y) [余纤维化 i] [纤维化 p] [弱等价 p]) : 有LiftingProperty i p  [默认: by intros; infer_instance]
-    - cm5a : MorphismProperty.有分解 (trivialCofibrations C) (fibrations C)  [默认: by infer_instance]
-    - cm5b : MorphismProperty.有分解 (cofibrations C) (trivialFibrations C)  [默认: by infer_instance]
-
-Depends on / 依赖: CategoryWithCofibrations, CategoryWithWeakEquivalences, HasFiniteColimits, HasFiniteLimits, HasTwoOutOfThreeProperty, IsStableUnderRetracts, categoryWithCofibrations, categoryWithWeakEquivalences, cofibrations, fibrations, infer_instance, weakEquivalences
+--- 原说明 ---
+A model category is a category equipped with classes of morphisms named cofibrat
+ions,
+fibrations and weak equivalences which satisfy the axioms CM1/CM2/CM3/CM4/CM5
+of (closed) model categories.
 -/
 class ModelCategory where
   categoryWithFibrations : CategoryWithFibrations C := by infer_instance
@@ -114,60 +88,23 @@ section
 
 variable [ModelCategory C]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MorphismProperty.IsWeakFactorizationSystem (trivialCofibrations C) (fibrations C)
-  body: MorphismProperty.IsWeakFactorizationSystem.mk' _ _ (fun {A B X Y} i p hi hp => by
-.mp hi obtain ⟨_, _⟩ := mem_trivialCofibrations_iff i
-    rw [← fibration_iff] at hp
-    infer_instance)
-
-中文:
-实例 :
-  签名: MorphismProperty.是WeakFactorizationSystem (trivialCofibrations C) (fibrations C)
-  定义体: MorphismProperty.IsWeakFactorizationSystem.mk' _ _ (fun {A B X Y} i p hi hp => by
-.mp hi obtain ⟨_, _⟩ := mem_trivialCofibrations_iff i
-    rw [← fibration_iff] at hp
-    infer_instance)
-
-Depends on / 依赖: IsWeakFactorizationSystem, MorphismProperty, MorphismProperty.IsWeakFactorizationSystem.mk, fibration_iff, infer_instance, mem_trivialCofibrations_iff
+/-
+**HomotopicalAlgebra.ModelCategory.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebr
+a.ModelCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MorphismProperty.IsWeakFactorizationSystem (trivialCofibrations C) (fibrations C) :=
-  MorphismProperty.IsWeakFactorizationSystem.mk' _ _ (fun {A B X Y} i p hi hp => by
-.mp hi obtain ⟨_, _⟩ := mem_trivialCofibrations_iff i
+  MorphismProperty.IsWeakFactorizationSystem.mk' _ _ (fun {A B X Y} i p hi hp ↦ by
+    obtain ⟨_, _⟩ := mem_trivialCofibrations_iff i |>.mp hi
     rw [← fibration_iff] at hp
     infer_instance)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: MorphismProperty.IsWeakFactorizationSystem (cofibrations C) (trivialFibrations C)
-  body: MorphismProperty.IsWeakFactorizationSystem.mk' _ _ (fun {A B X Y} i p hi hp => by
-    rw [mem_trivialFibrations_iff] at hp
-    rw [← cofibration_iff] at hi
-    have := hp.1
-    have := hp.2
-    infer_instance)
-
-中文:
-实例 :
-  签名: MorphismProperty.是WeakFactorizationSystem (cofibrations C) (trivialFibrations C)
-  定义体: MorphismProperty.IsWeakFactorizationSystem.mk' _ _ (fun {A B X Y} i p hi hp => by
-    rw [mem_trivialFibrations_iff] at hp
-    rw [← cofibration_iff] at hi
-    have := hp.1
-    have := hp.2
-    infer_instance)
-
-Depends on / 依赖: IsWeakFactorizationSystem, MorphismProperty, MorphismProperty.IsWeakFactorizationSystem.mk, cofibration_iff, infer_instance, mem_trivialFibrations_iff
+/-
+**HomotopicalAlgebra.ModelCategory.** 是 Mathlib 中的一个实例，位于命名空间 `HomotopicalAlgebr
+a.ModelCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : MorphismProperty.IsWeakFactorizationSystem (cofibrations C) (trivialFibrations C) :=
-  MorphismProperty.IsWeakFactorizationSystem.mk' _ _ (fun {A B X Y} i p hi hp => by
+  MorphismProperty.IsWeakFactorizationSystem.mk' _ _ (fun {A B X Y} i p hi hp ↦ by
     rw [mem_trivialFibrations_iff] at hp
     rw [← cofibration_iff] at hi
     have := hp.1
@@ -182,44 +119,10 @@ open MorphismProperty
 
 set_option backward.isDefEq.respectTransparency false in
 variable {C} in
-/--
-lemma `mk'.cm3a_aux` / 引理 `mk'.cm3a_aux`
-
-English:
-lemma mk'.cm3a_aux
-  statement: [CategoryWithFibrations C] [CategoryWithCofibrations C]
-  proof: by
-  have hw := factorizationData (trivialCofibrations C) (fibrations C) w
-  have : (trivialFibrations C).IsStableUnderRetracts := by
-    rw [← cofibrations_rlp]
-    infer_instance
-  have sq : CommSq h.r.left hw.i f (hw.p ≫ h.r.right) := ⟨by simp⟩
-  have hf : fibrations C f := by rwa [← fibration_iff]
-  have : HasLiftingProperty hw.i f := hasLiftingProperty_of_wfs _ _ hw.hi hf
-  have : RetractArrow f hw.p :=
-    { i := Arrow.homMk (h.i.left ≫ hw.i) h.i.right
-      r := Arrow.homMk sq.lift h.r.right }
-  have h' : trivialFibrations C hw.p :=
-    ⟨hw.hp, (weakEquivalence_iff _).1 (weakEquivalence_of_precomp_of_fac hw.fac)⟩
-  simpa only [weakEquivalence_iff] using (of_retract this h').2
-
-中文:
-引理 mk'.cm3a_aux
-  结论: [带纤维化范畴 C] [带余纤维化范畴 C]
-  证明: by
-  have hw := factorizationData (trivialCofibrations C) (fibrations C) w
-  have : (trivialFibrations C).IsStableUnderRetracts := by
-    rw [← cofibrations_rlp]
-    infer_instance
-  have sq : CommSq h.r.left hw.i f (hw.p ≫ h.r.right) := ⟨by simp⟩
-  have hf : fibrations C f := by rwa [← fibration_iff]
-  have : HasLiftingProperty hw.i f := hasLiftingProperty_of_wfs _ _ hw.hi hf
-  have : RetractArrow f hw.p :=
-    { i := Arrow.homMk (h.i.left ≫ hw.i) h.i.right
-      r := Arrow.homMk sq.lift h.r.right }
-  have h' : trivialFibrations C hw.p :=
-    ⟨hw.hp, (weakEquivalence_iff _).1 (weakEquivalence_of_precomp_of_fac hw.fac)⟩
-  simpa only [weakEquivalence_iff] using (of_retract this h').2
+/-
+**HomotopicalAlgebra.ModelCategory.mk'.cm3a_aux** 是 Mathlib 中的一个引理，位于命名空间 `Homot
+opicalAlgebra.ModelCategory`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 private lemma mk'.cm3a_aux [CategoryWithFibrations C] [CategoryWithCofibrations C]
     [CategoryWithWeakEquivalences C]
@@ -247,70 +150,22 @@ set_option backward.isDefEq.respectTransparency false in
 /-- Constructor for `ModelCategory C` which assumes a formulation of axioms
 using weak factorization systems. -/
 @[instance_reducible]
-/--
-Definition of `mk'` / `mk'` 的定义
+/-
+**HomotopicalAlgebra.ModelCategory.mk'** 是 Mathlib 中的一个定义，位于命名空间 `HomotopicalAlg
+ebra.ModelCategory`。
+形式化陈述：mk' [CategoryWithFibrations C] [CategoryWithCofibrations C] [CategoryWithW
+eakEquivalences C] [HasFiniteLimits C] [HasFiniteColimits C] [(weakEquivalences 
+C).HasTwoOutOfThreeProperty] [IsWeakFactorizationSystem (cofibrations C) (trivia
+lFibrations C)] [IsWeakFactorizationSystem (trivialCofibrations C) (fibrations C
+)] : ModelCategory C where cm3a
+参数：weakEquivalences C；cofibrations C；trivialFibrations C；trivialCofibrations C；f
+ibrations C。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition mk'
-  signature: [CategoryWithFibrations C] [CategoryWithCofibrations C]
-  body: ⟨fun {A B X Y f w h hw} => by
-    rw [← weakEquivalence_iff] at hw
-    have hf := factorizationData (trivialCofibrations C) (fibrations C) f
-    have : Cofibration hf.i := by
-      simpa only [cofibration_iff] using hf.hi.1
-    have : WeakEquivalence hf.i := by
-      simpa only [weakEquivalence_iff] using hf.hi.2
-    let φ : pushout hf.i h.i.left ⟶ Y :=
-      pushout.desc (hf.p ≫ h.i.right) w (by simp)
-    have : Fibration hf.p := by simpa only [fibration_iff] using hf.hp
-    have : WeakEquivalence (pushout.inr _ _ ≫ φ) := by simpa [φ]
-    have := weakEquivalence_of_precomp (pushout.inr _ _) φ
-    have hp : RetractArrow hf.p φ :=
-      { i := Arrow.homMk (pushout.inl _ _) h.i.right
-        r := Arrow.homMk (pushout.desc (𝟙 _) (h.r.left ≫ hf.i) (by simp)) h.r.right }
-    have := mk'.cm3a_aux hp
-    rw [← weakEquivalence_iff]; rw [← hf.fac]
-    infer_instance⟩
-  cm3b := by
-    rw [← rlp_eq_of_wfs (trivialCofibrations C) (fibrations C)]
-    infer_instance
-  cm3c := by
-    rw [← llp_eq_of_wfs (cofibrations C) (trivialFibrations C)]
-    infer_instance
-  cm4a i p _ _ _ := hasLiftingProperty_of_wfs i p (mem_trivialCofibrations i) (mem_fibrations p)
-  cm4b i p _ _ _ := hasLiftingProperty_of_wfs i p (mem_cofibrations i) (mem_trivialFibrations p)
-
-中文:
-定义 mk'
-  签名: [带纤维化范畴 C] [带余纤维化范畴 C]
-  定义体: ⟨fun {A B X Y f w h hw} => by
-    rw [← weakEquivalence_iff] at hw
-    have hf := factorizationData (trivialCofibrations C) (fibrations C) f
-    have : Cofibration hf.i := by
-      simpa only [cofibration_iff] using hf.hi.1
-    have : WeakEquivalence hf.i := by
-      simpa only [weakEquivalence_iff] using hf.hi.2
-    let φ : pushout hf.i h.i.left ⟶ Y :=
-      pushout.desc (hf.p ≫ h.i.right) w (by simp)
-    have : Fibration hf.p := by simpa only [fibration_iff] using hf.hp
-    have : WeakEquivalence (pushout.inr _ _ ≫ φ) := by simpa [φ]
-    have := weakEquivalence_of_precomp (pushout.inr _ _) φ
-    have hp : RetractArrow hf.p φ :=
-      { i := Arrow.homMk (pushout.inl _ _) h.i.right
-        r := Arrow.homMk (pushout.desc (𝟙 _) (h.r.left ≫ hf.i) (by simp)) h.r.right }
-    have := mk'.cm3a_aux hp
-    rw [← weakEquivalence_iff]; rw [← hf.fac]
-    infer_instance⟩
-  cm3b := by
-    rw [← rlp_eq_of_wfs (trivialCofibrations C) (fibrations C)]
-    infer_instance
-  cm3c := by
-    rw [← llp_eq_of_wfs (cofibrations C) (trivialFibrations C)]
-    infer_instance
-  cm4a i p _ _ _ := hasLiftingProperty_of_wfs i p (mem_trivialCofibrations i) (mem_fibrations p)
-  cm4b i p _ _ _ := hasLiftingProperty_of_wfs i p (mem_cofibrations i) (mem_trivialFibrations p)
-
-Depends on / 依赖: Cofibration, Fibration, WeakEquivalence, cofibration_iff, factorizationData, fibration_iff, fibrations, h.i.left, h.i.right, hf.hi, hf.hp, hf.i, hf.p, pushout, pushout.desc, pushout.inr, trivialCofibrations, weakEquivalence_iff
+--- 原说明 ---
+Constructor for `ModelCategory C` which assumes a formulation of axioms
+using weak factorization systems.
 -/
 def mk' [CategoryWithFibrations C] [CategoryWithCofibrations C]
     [CategoryWithWeakEquivalences C] [HasFiniteLimits C] [HasFiniteColimits C]
@@ -318,7 +173,7 @@ def mk' [CategoryWithFibrations C] [CategoryWithCofibrations C]
     [IsWeakFactorizationSystem (cofibrations C) (trivialFibrations C)]
     [IsWeakFactorizationSystem (trivialCofibrations C) (fibrations C)] :
     ModelCategory C where
-  cm3a := ⟨fun {A B X Y f w h hw} => by
+  cm3a := ⟨fun {A B X Y f w h hw} ↦ by
     rw [← weakEquivalence_iff] at hw
     have hf := factorizationData (trivialCofibrations C) (fibrations C) f
     have : Cofibration hf.i := by
@@ -334,7 +189,7 @@ def mk' [CategoryWithFibrations C] [CategoryWithCofibrations C]
       { i := Arrow.homMk (pushout.inl _ _) h.i.right
         r := Arrow.homMk (pushout.desc (𝟙 _) (h.r.left ≫ hf.i) (by simp)) h.r.right }
     have := mk'.cm3a_aux hp
-    rw [← weakEquivalence_iff]; rw [← hf.fac]
+    rw [← weakEquivalence_iff, ← hf.fac]
     infer_instance⟩
   cm3b := by
     rw [← rlp_eq_of_wfs (trivialCofibrations C) (fibrations C)]
@@ -350,3 +205,4 @@ end mk'
 end ModelCategory
 
 end HomotopicalAlgebra
+

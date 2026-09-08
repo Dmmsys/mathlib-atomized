@@ -42,77 +42,64 @@ namespace Embedding
 
 variable {ι ι' : Type*} {c : ComplexShape ι} {c' : ComplexShape ι'} (e : Embedding c c')
 
-/--
-Definition of `BoundaryGE` / `BoundaryGE` 的定义
+/-- The lower boundary of an embedding `e : Embedding c c'`, as a predicate on `ι`.
+It is satisfied by `j : ι` when there exists `i' : ι'` not in the image of `e.f`
+such that `c'.Rel i' (e.f j)`. -/
+/-
+**ComplexShape.Embedding.BoundaryGE** 是 Mathlib 中的一个定义，位于命名空间 `ComplexShape.Embe
+dding`。
+形式化陈述：BoundaryGE (j : ι) : Prop
+参数：j : ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition BoundaryGE
-  signature: (j : ι)
-  body: c'.Rel (c'.prev (e.f j)) (e.f j) ∧ forall i, ¬c'.Rel (e.f i) (e.f j)
-
-中文:
-定义 BoundaryGE
-  签名: (j : ι)
-  定义体: c'.Rel (c'.prev (e.f j)) (e.f j) ∧ forall i, ¬c'.Rel (e.f i) (e.f j)
+--- 原说明 ---
+The lower boundary of an embedding `e : Embedding c c'`, as a predicate on `ι`.
+It is satisfied by `j : ι` when there exists `i' : ι'` not in the image of `e.f`
+such that `c'.Rel i' (e.f j)`.
 -/
 def BoundaryGE (j : ι) : Prop :=
-  c'.Rel (c'.prev (e.f j)) (e.f j) ∧ forall i, ¬c'.Rel (e.f i) (e.f j)
-
-/--
-lemma `boundaryGE` / 引理 `boundaryGE`
-
-English:
-lemma boundaryGE
-  given: {i' : ι'} {j : ι} (hj : c'.Rel i' (e.f j)) (hi' : forall i, e.f i != i')
-  proof: by
-  constructor
-  · simpa only [c'.prev_eq' hj] using hj
-  · intro i hi
-    apply hi' i
-    rw [← c'.prev_eq' hj]; rw [c'.prev_eq' hi]
-
-中文:
-引理 boundaryGE
-  条件: {i' : ι'} {j : ι} (hj : c'.关系 i' (e.f j)) (hi' : 对任意 i, e.f i != i')
-  证明: by
-  constructor
-  · simpa only [c'.prev_eq' hj] using hj
-  · intro i hi
-    apply hi' i
-    rw [← c'.prev_eq' hj]; rw [c'.prev_eq' hi]
-
-Depends on / 依赖: prev_eq
+  c'.Rel (c'.prev (e.f j)) (e.f j) ∧ ∀ i, ¬c'.Rel (e.f i) (e.f j)
+/-
+**ComplexShape.Embedding.boundaryGE** 是 Mathlib 中的一个引理，位于命名空间 `ComplexShape.Embe
+dding`。
+形式化陈述：boundaryGE {i' : ι'} {j : ι} (hj : c'.Rel i' (e.f j)) (hi' : forall i, e.f
+ i != i') : e.BoundaryGE j
+参数：hj : c'.Rel i' (e.f j)；hi' : forall i, e.f i != i'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ComplexShape.prev_eq'`：∀ {ι : Type u_1} (c : ComplexShape ι) {i j : ι}, 
+c.Rel j i → c.prev i = j
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma boundaryGE {i' : ι'} {j : ι} (hj : c'.Rel i' (e.f j)) (hi' : forall i, e.f i != i') :
+lemma boundaryGE {i' : ι'} {j : ι} (hj : c'.Rel i' (e.f j)) (hi' : ∀ i, e.f i ≠ i') :
     e.BoundaryGE j := by
   constructor
   · simpa only [c'.prev_eq' hj] using hj
   · intro i hi
     apply hi' i
-    rw [← c'.prev_eq' hj]; rw [c'.prev_eq' hi]
-
-/--
-lemma `not_boundaryGE_next` / 引理 `not_boundaryGE_next`
-
-English:
-lemma not_boundaryGE_next
-  given: [e.IsRelIff] {j k : ι} (hk : c.Rel j k)
-  proof: by
-  dsimp [BoundaryGE]
-  simp only [not_and, not_forall, not_not]
-  intro
-  exact ⟨j, by simpa only [e.rel_iff] using hk⟩
-
-中文:
-引理 not_boundaryGE_next
-  条件: [e.是RelIff] {j k : ι} (hk : c.关系 j k)
-  证明: by
-  dsimp [BoundaryGE]
-  simp only [not_and, not_forall, not_not]
-  intro
-  exact ⟨j, by simpa only [e.rel_iff] using hk⟩
-
-Depends on / 依赖: BoundaryGE, e.rel_iff, not_and, not_forall, not_not, rel_iff
+    rw [← c'.prev_eq' hj, c'.prev_eq' hi]
+/-
+**ComplexShape.Embedding.not_boundaryGE_next** 是 Mathlib 中的一个引理，位于命名空间 `ComplexS
+hape.Embedding`。
+形式化陈述：not_boundaryGE_next [e.IsRelIff] {j k : ι} (hk : c.Rel j k) : ¬ e.Boundary
+GE k
+参数：hk : c.Rel j k。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `ComplexShape.Embedding.rel_iff`：rel_iff [e.IsRelIff] (i₁ i₂ : ι) : c'.Re
+l (e.f i₁) (e.f i₂) ↔ c.Rel i₁ i₂
 -/
 lemma not_boundaryGE_next [e.IsRelIff] {j k : ι} (hk : c.Rel j k) :
     ¬ e.BoundaryGE k := by
@@ -120,29 +107,20 @@ lemma not_boundaryGE_next [e.IsRelIff] {j k : ι} (hk : c.Rel j k) :
   simp only [not_and, not_forall, not_not]
   intro
   exact ⟨j, by simpa only [e.rel_iff] using hk⟩
-
-/--
-lemma `not_boundaryGE_next'` / 引理 `not_boundaryGE_next'`
-
-English:
-lemma not_boundaryGE_next'
-  given: [e.IsRelIff] {j k : ι} (hj : ¬ e.BoundaryGE j) (hk : c.next j = k)
-  proof: by
-  by_cases hjk : c.Rel j k
-  · exact e.not_boundaryGE_next hjk
-  · subst hk
-    simpa only [c.next_eq_self j hjk] using hj
-
-中文:
-引理 not_boundaryGE_next'
-  条件: [e.是RelIff] {j k : ι} (hj : ¬ e.BoundaryGE j) (hk : c.next j = k)
-  证明: by
-  by_cases hjk : c.Rel j k
-  · exact e.not_boundaryGE_next hjk
-  · subst hk
-    simpa only [c.next_eq_self j hjk] using hj
-
-Depends on / 依赖: K.isZero_X_of_isStrictlySupported, K.stupidTruncXIso, c.Rel, c.next_eq_self, e.not_boundaryGE_next, isZero_X_of_isStrictlySupported, isZero_stupidTrunc_X, next_eq_self, not_boundaryGE_next, of_iso, stupidTruncXIso
+/-
+**ComplexShape.Embedding.not_boundaryGE_next'** 是 Mathlib 中的一个引理，位于命名空间 `Complex
+Shape.Embedding`。
+形式化陈述：not_boundaryGE_next' [e.IsRelIff] {j k : ι} (hj : ¬ e.BoundaryGE j) (hk : 
+c.next j = k) : ¬ e.BoundaryGE k
+参数：hj : ¬ e.BoundaryGE j；hk : c.next j = k。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ComplexShape.Embedding.not_boundaryGE_next`：not_boundaryGE_next [e.IsRel
+Iff] {j k : ι} (hk : c.Rel j k) : ¬ e.BoundaryGE k
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `ComplexShape.next_eq_self`：next_eq_self (c : ComplexShape ι) (j : ι) (hj
+ : ¬c.Rel j (c.next j)) : c.next j = j
 -/
 lemma not_boundaryGE_next' [e.IsRelIff] {j k : ι} (hj : ¬ e.BoundaryGE j) (hk : c.next j = k) :
     ¬ e.BoundaryGE k := by
@@ -152,61 +130,46 @@ lemma not_boundaryGE_next' [e.IsRelIff] {j k : ι} (hj : ¬ e.BoundaryGE j) (hk 
     simpa only [c.next_eq_self j hjk] using hj
 
 variable {e} in
-/--
-lemma `BoundaryGE.notMem` / 引理 `BoundaryGE.notMem`
-
-English:
-lemma BoundaryGE.notMem
-  statement: {j : ι} (hj : e.BoundaryGE j) {i' : ι'} (hi' : c'.Rel i' (e.f j))
-  proof: fun ha =>
-  hj.2 a (by simpa only [ha] using hi')
-
-中文:
-引理 BoundaryGE.notMem
-  结论: {j : ι} (hj : e.BoundaryGE j) {i' : ι'} (hi' : c'.关系 i' (e.f j))
-  证明: fun ha =>
-  hj.2 a (by simpa only [ha] using hi')
+/-
+**ComplexShape.Embedding.BoundaryGE.notMem** 是 Mathlib 中的一个定理，位于命名空间 `ComplexSha
+pe.Embedding.BoundaryGE`。
+形式化陈述：∀ {ι : Type u_1} {ι' : Type u_2} {c : ComplexShape ι} {c' : ComplexShape ι
+'} {e : c.Embedding c'} {j : ι},   e.BoundaryGE j → ∀ {i' : ι'}, c'.Rel i' (e.f 
+j) → ∀ (a : ι), e.f a ≠ i'
+参数：e.f j；a : ι。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 lemma BoundaryGE.notMem {j : ι} (hj : e.BoundaryGE j) {i' : ι'} (hi' : c'.Rel i' (e.f j))
-    (a : ι) : e.f a != i' := fun ha =>
+    (a : ι) : e.f a ≠ i' := fun ha =>
   hj.2 a (by simpa only [ha] using hi')
-
-/--
-lemma `prev_f_of_not_boundaryGE` / 引理 `prev_f_of_not_boundaryGE`
-
-English:
-lemma prev_f_of_not_boundaryGE
-  statement: [e.IsRelIff] {i j : ι} (hij : c.prev j = i)
-  proof: by
-  by_cases hij' : c.Rel i j
-  · exact c'.prev_eq' (by simpa only [e.rel_iff] using hij')
-  · obtain rfl : j = i := by
-      simpa only [c.prev_eq_self j (by simpa only [hij] using hij')] using hij
-    apply c'.prev_eq_self
-    intro hj'
-    simp only [BoundaryGE, not_and, not_forall, not_not] at hj
-    obtain ⟨i, hi⟩ := hj hj'
-    rw [e.rel_iff] at hi
-    rw [c.prev_eq' hi] at hij
-    exact hij' (by simpa only [hij] using hi)
-
-中文:
-引理 prev_f_of_not_boundaryGE
-  结论: [e.是RelIff] {i j : ι} (hij : c.prev j = i)
-  证明: by
-  by_cases hij' : c.Rel i j
-  · exact c'.prev_eq' (by simpa only [e.rel_iff] using hij')
-  · obtain rfl : j = i := by
-      simpa only [c.prev_eq_self j (by simpa only [hij] using hij')] using hij
-    apply c'.prev_eq_self
-    intro hj'
-    simp only [BoundaryGE, not_and, not_forall, not_not] at hj
-    obtain ⟨i, hi⟩ := hj hj'
-    rw [e.rel_iff] at hi
-    rw [c.prev_eq' hi] at hij
-    exact hij' (by simpa only [hij] using hi)
-
-Depends on / 依赖: BoundaryGE, c.Rel, c.prev_eq, c.prev_eq_self, e.rel_iff, not_and, not_forall, not_not, prev_eq, prev_eq_self, rel_iff
+/-
+**ComplexShape.Embedding.prev_f_of_not_boundaryGE** 是 Mathlib 中的一个引理，位于命名空间 `Com
+plexShape.Embedding`。
+形式化陈述：prev_f_of_not_boundaryGE [e.IsRelIff] {i j : ι} (hij : c.prev j = i) (hj :
+ ¬ e.BoundaryGE j) : c'.prev (e.f j) = e.f i
+参数：hij : c.prev j = i；hj : ¬ e.BoundaryGE j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplexShape.prev_eq'`：∀ {ι : Type u_1} (c : ComplexShape ι) {i j : ι}, 
+c.Rel j i → c.prev i = j
+· 使用引理 `ComplexShape.Embedding.rel_iff`：rel_iff [e.IsRelIff] (i₁ i₂ : ι) : c'.Re
+l (e.f i₁) (e.f i₂) ↔ c.Rel i₁ i₂
+· 使用定理 `ComplexShape.prev_eq_self`：∀ {ι : Type u_1} (c : ComplexShape ι) (j : ι)
+, ¬c.Rel (c.prev j) j → c.prev j = j
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
 lemma prev_f_of_not_boundaryGE [e.IsRelIff] {i j : ι} (hij : c.prev j = i)
     (hj : ¬ e.BoundaryGE j) :
@@ -224,102 +187,81 @@ lemma prev_f_of_not_boundaryGE [e.IsRelIff] {i j : ι} (hij : c.prev j = i)
     exact hij' (by simpa only [hij] using hi)
 
 variable {e} in
-/--
-lemma `BoundaryGE.false_of_isTruncLE` / 引理 `BoundaryGE.false_of_isTruncLE`
-
-English:
-lemma BoundaryGE.false_of_isTruncLE
-  given: {j : ι} (hj : e.BoundaryGE j) [e.IsTruncLE]
-  statement: False
-  proof: by
-  obtain ⟨i, hi⟩ := e.mem_prev hj.1
-  exact hj.2 i (by simpa only [hi] using hj.1)
-
-中文:
-引理 BoundaryGE.false_of_isTruncLE
-  条件: {j : ι} (hj : e.BoundaryGE j) [e.是TruncLE]
-  结论: 假
-  证明: by
-  obtain ⟨i, hi⟩ := e.mem_prev hj.1
-  exact hj.2 i (by simpa only [hi] using hj.1)
-
-Depends on / 依赖: e.mem_prev, mem_prev
+/-
+**ComplexShape.Embedding.BoundaryGE.false_of_isTruncLE** 是 Mathlib 中的一个定理，位于命名空间
+ `ComplexShape.Embedding.BoundaryGE`。
+形式化陈述：∀ {ι : Type u_1} {ι' : Type u_2} {c : ComplexShape ι} {c' : ComplexShape ι
+'} {e : c.Embedding c'} {j : ι},   e.BoundaryGE j → ∀ [e.IsTruncLE], False
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ComplexShape.Embedding.mem_prev`：mem_prev [e.IsTruncLE] {i' : ι'} {j : ι
+} (h : c'.Rel i' (e.f j)) : exists i, e.f i = i'
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 lemma BoundaryGE.false_of_isTruncLE {j : ι} (hj : e.BoundaryGE j) [e.IsTruncLE] : False := by
   obtain ⟨i, hi⟩ := e.mem_prev hj.1
   exact hj.2 i (by simpa only [hi] using hj.1)
 
-/--
-Definition of `BoundaryLE` / `BoundaryLE` 的定义
+/-- The upper boundary of an embedding `e : Embedding c c'`, as a predicate on `ι`.
+It is satisfied by `j : ι` when there exists `k' : ι'` not in the image of `e.f`
+such that `c'.Rel (e.f j) k'`. -/
+/-
+**ComplexShape.Embedding.BoundaryLE** 是 Mathlib 中的一个定义，位于命名空间 `ComplexShape.Embe
+dding`。
+形式化陈述：BoundaryLE (j : ι) : Prop
+参数：j : ι。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition BoundaryLE
-  signature: (j : ι)
-  body: c'.Rel (e.f j) (c'.next (e.f j)) ∧ forall k, ¬c'.Rel (e.f j) (e.f k)
-
-中文:
-定义 BoundaryLE
-  签名: (j : ι)
-  定义体: c'.Rel (e.f j) (c'.next (e.f j)) ∧ forall k, ¬c'.Rel (e.f j) (e.f k)
+--- 原说明 ---
+The upper boundary of an embedding `e : Embedding c c'`, as a predicate on `ι`.
+It is satisfied by `j : ι` when there exists `k' : ι'` not in the image of `e.f`
+such that `c'.Rel (e.f j) k'`.
 -/
 def BoundaryLE (j : ι) : Prop :=
-  c'.Rel (e.f j) (c'.next (e.f j)) ∧ forall k, ¬c'.Rel (e.f j) (e.f k)
-
-/--
-lemma `boundaryLE` / 引理 `boundaryLE`
-
-English:
-lemma boundaryLE
-  given: {k' : ι'} {j : ι} (hj : c'.Rel (e.f j) k') (hk' : forall i, e.f i != k')
-  proof: by
-  constructor
-  · simpa only [c'.next_eq' hj] using hj
-  · intro k hk
-    apply hk' k
-    rw [← c'.next_eq' hj]; rw [c'.next_eq' hk]
-
-中文:
-引理 boundaryLE
-  条件: {k' : ι'} {j : ι} (hj : c'.关系 (e.f j) k') (hk' : 对任意 i, e.f i != k')
-  证明: by
-  constructor
-  · simpa only [c'.next_eq' hj] using hj
-  · intro k hk
-    apply hk' k
-    rw [← c'.next_eq' hj]; rw [c'.next_eq' hk]
-
-Depends on / 依赖: next_eq
+  c'.Rel (e.f j) (c'.next (e.f j)) ∧ ∀ k, ¬c'.Rel (e.f j) (e.f k)
+/-
+**ComplexShape.Embedding.boundaryLE** 是 Mathlib 中的一个引理，位于命名空间 `ComplexShape.Embe
+dding`。
+形式化陈述：boundaryLE {k' : ι'} {j : ι} (hj : c'.Rel (e.f j) k') (hk' : forall i, e.f
+ i != k') : e.BoundaryLE j
+参数：hj : c'.Rel (e.f j) k'；hk' : forall i, e.f i != k'。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ComplexShape.next_eq'`：next_eq' (c : ComplexShape ι) {i j : ι} (h : c.Re
+l i j) : c.next i = j
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma boundaryLE {k' : ι'} {j : ι} (hj : c'.Rel (e.f j) k') (hk' : forall i, e.f i != k') :
+lemma boundaryLE {k' : ι'} {j : ι} (hj : c'.Rel (e.f j) k') (hk' : ∀ i, e.f i ≠ k') :
     e.BoundaryLE j := by
   constructor
   · simpa only [c'.next_eq' hj] using hj
   · intro k hk
     apply hk' k
-    rw [← c'.next_eq' hj]; rw [c'.next_eq' hk]
-
-/--
-lemma `not_boundaryLE_prev` / 引理 `not_boundaryLE_prev`
-
-English:
-lemma not_boundaryLE_prev
-  given: [e.IsRelIff] {i j : ι} (hi : c.Rel i j)
-  proof: by
-  dsimp [BoundaryLE]
-  simp only [not_and, not_forall, not_not]
-  intro
-  exact ⟨j, by simpa only [e.rel_iff] using hi⟩
-
-中文:
-引理 not_boundaryLE_prev
-  条件: [e.是RelIff] {i j : ι} (hi : c.关系 i j)
-  证明: by
-  dsimp [BoundaryLE]
-  simp only [not_and, not_forall, not_not]
-  intro
-  exact ⟨j, by simpa only [e.rel_iff] using hi⟩
-
-Depends on / 依赖: BoundaryLE, e.rel_iff, not_and, not_forall, not_not, rel_iff
+    rw [← c'.next_eq' hj, c'.next_eq' hk]
+/-
+**ComplexShape.Embedding.not_boundaryLE_prev** 是 Mathlib 中的一个引理，位于命名空间 `ComplexS
+hape.Embedding`。
+形式化陈述：not_boundaryLE_prev [e.IsRelIff] {i j : ι} (hi : c.Rel i j) : ¬ e.Boundary
+LE i
+参数：hi : c.Rel i j。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用引理 `ComplexShape.Embedding.rel_iff`：rel_iff [e.IsRelIff] (i₁ i₂ : ι) : c'.Re
+l (e.f i₁) (e.f i₂) ↔ c.Rel i₁ i₂
 -/
 lemma not_boundaryLE_prev [e.IsRelIff] {i j : ι} (hi : c.Rel i j) :
     ¬ e.BoundaryLE i := by
@@ -327,29 +269,20 @@ lemma not_boundaryLE_prev [e.IsRelIff] {i j : ι} (hi : c.Rel i j) :
   simp only [not_and, not_forall, not_not]
   intro
   exact ⟨j, by simpa only [e.rel_iff] using hi⟩
-
-/--
-lemma `not_boundaryLE_prev'` / 引理 `not_boundaryLE_prev'`
-
-English:
-lemma not_boundaryLE_prev'
-  given: [e.IsRelIff] {i j : ι} (hj : ¬ e.BoundaryLE j) (hk : c.prev j = i)
-  proof: by
-  by_cases hij : c.Rel i j
-  · exact e.not_boundaryLE_prev hij
-  · subst hk
-    simpa only [c.prev_eq_self j hij] using hj
-
-中文:
-引理 not_boundaryLE_prev'
-  条件: [e.是RelIff] {i j : ι} (hj : ¬ e.BoundaryLE j) (hk : c.prev j = i)
-  证明: by
-  by_cases hij : c.Rel i j
-  · exact e.not_boundaryLE_prev hij
-  · subst hk
-    simpa only [c.prev_eq_self j hij] using hj
-
-Depends on / 依赖: c.Rel, c.prev_eq_self, e.not_boundaryLE_prev, not_boundaryLE_prev, prev_eq_self
+/-
+**ComplexShape.Embedding.not_boundaryLE_prev'** 是 Mathlib 中的一个引理，位于命名空间 `Complex
+Shape.Embedding`。
+形式化陈述：not_boundaryLE_prev' [e.IsRelIff] {i j : ι} (hj : ¬ e.BoundaryLE j) (hk : 
+c.prev j = i) : ¬ e.BoundaryLE i
+参数：hj : ¬ e.BoundaryLE j；hk : c.prev j = i。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ComplexShape.Embedding.not_boundaryLE_prev`：not_boundaryLE_prev [e.IsRel
+Iff] {i j : ι} (hi : c.Rel i j) : ¬ e.BoundaryLE i
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ComplexShape.prev_eq_self`：∀ {ι : Type u_1} (c : ComplexShape ι) (j : ι)
+, ¬c.Rel (c.prev j) j → c.prev j = j
 -/
 lemma not_boundaryLE_prev' [e.IsRelIff] {i j : ι} (hj : ¬ e.BoundaryLE j) (hk : c.prev j = i) :
     ¬ e.BoundaryLE i := by
@@ -359,61 +292,44 @@ lemma not_boundaryLE_prev' [e.IsRelIff] {i j : ι} (hj : ¬ e.BoundaryLE j) (hk 
     simpa only [c.prev_eq_self j hij] using hj
 
 variable {e} in
-/--
-lemma `BoundaryLE.notMem` / 引理 `BoundaryLE.notMem`
-
-English:
-lemma BoundaryLE.notMem
-  statement: {j : ι} (hj : e.BoundaryLE j) {k' : ι'} (hk' : c'.Rel (e.f j) k')
-  proof: fun ha =>
-  hj.2 a (by simpa only [ha] using hk')
-
-中文:
-引理 BoundaryLE.notMem
-  结论: {j : ι} (hj : e.BoundaryLE j) {k' : ι'} (hk' : c'.关系 (e.f j) k')
-  证明: fun ha =>
-  hj.2 a (by simpa only [ha] using hk')
+/-
+**ComplexShape.Embedding.BoundaryLE.notMem** 是 Mathlib 中的一个定理，位于命名空间 `ComplexSha
+pe.Embedding.BoundaryLE`。
+形式化陈述：∀ {ι : Type u_1} {ι' : Type u_2} {c : ComplexShape ι} {c' : ComplexShape ι
+'} {e : c.Embedding c'} {j : ι},   e.BoundaryLE j → ∀ {k' : ι'}, c'.Rel (e.f j) 
+k' → ∀ (a : ι), e.f a ≠ k'
+参数：e.f j；a : ι。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 lemma BoundaryLE.notMem {j : ι} (hj : e.BoundaryLE j) {k' : ι'} (hk' : c'.Rel (e.f j) k')
-    (a : ι) : e.f a != k' := fun ha =>
+    (a : ι) : e.f a ≠ k' := fun ha =>
   hj.2 a (by simpa only [ha] using hk')
-
-/--
-lemma `next_f_of_not_boundaryLE` / 引理 `next_f_of_not_boundaryLE`
-
-English:
-lemma next_f_of_not_boundaryLE
-  statement: [e.IsRelIff] {j k : ι} (hjk : c.next j = k)
-  proof: by
-  by_cases hjk' : c.Rel j k
-  · exact c'.next_eq' (by simpa only [e.rel_iff] using hjk')
-  · obtain rfl : j = k := by
-      simpa only [c.next_eq_self j (by simpa only [hjk] using hjk')] using hjk
-    apply c'.next_eq_self
-    intro hj'
-    simp only [BoundaryLE, not_and, not_forall, not_not] at hj
-    obtain ⟨k, hk⟩ := hj hj'
-    rw [e.rel_iff] at hk
-    rw [c.next_eq' hk] at hjk
-    exact hjk' (by simpa only [hjk] using hk)
-
-中文:
-引理 next_f_of_not_boundaryLE
-  结论: [e.是RelIff] {j k : ι} (hjk : c.next j = k)
-  证明: by
-  by_cases hjk' : c.Rel j k
-  · exact c'.next_eq' (by simpa only [e.rel_iff] using hjk')
-  · obtain rfl : j = k := by
-      simpa only [c.next_eq_self j (by simpa only [hjk] using hjk')] using hjk
-    apply c'.next_eq_self
-    intro hj'
-    simp only [BoundaryLE, not_and, not_forall, not_not] at hj
-    obtain ⟨k, hk⟩ := hj hj'
-    rw [e.rel_iff] at hk
-    rw [c.next_eq' hk] at hjk
-    exact hjk' (by simpa only [hjk] using hk)
-
-Depends on / 依赖: BoundaryLE, c.Rel, c.next_eq, c.next_eq_self, e.rel_iff, next_eq, next_eq_self, not_and, not_forall, not_not, rel_iff
+/-
+**ComplexShape.Embedding.next_f_of_not_boundaryLE** 是 Mathlib 中的一个引理，位于命名空间 `Com
+plexShape.Embedding`。
+形式化陈述：next_f_of_not_boundaryLE [e.IsRelIff] {j k : ι} (hjk : c.next j = k) (hj :
+ ¬ e.BoundaryLE j) : c'.next (e.f j) = e.f k
+参数：hjk : c.next j = k；hj : ¬ e.BoundaryLE j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `ComplexShape.next_eq'`：next_eq' (c : ComplexShape ι) {i j : ι} (h : c.Re
+l i j) : c.next i = j
+· 使用引理 `ComplexShape.Embedding.rel_iff`：rel_iff [e.IsRelIff] (i₁ i₂ : ι) : c'.Re
+l (e.f i₁) (e.f i₂) ↔ c.Rel i₁ i₂
+· 使用引理 `ComplexShape.next_eq_self`：next_eq_self (c : ComplexShape ι) (j : ι) (hj
+ : ¬c.Rel j (c.next j)) : c.next j = j
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
 -/
 lemma next_f_of_not_boundaryLE [e.IsRelIff] {j k : ι} (hjk : c.next j = k)
     (hj : ¬ e.BoundaryLE j) :
@@ -429,181 +345,126 @@ lemma next_f_of_not_boundaryLE [e.IsRelIff] {j k : ι} (hjk : c.next j = k)
     rw [e.rel_iff] at hk
     rw [c.next_eq' hk] at hjk
     exact hjk' (by simpa only [hjk] using hk)
-
-/--
-lemma `next_f` / 引理 `next_f`
-
-English:
-lemma next_f
-  given: [e.IsTruncGE] {j k : ι} (hjk : c.next j = k)
-  statement: c'.next (e.f j) = e.f k
-  proof: by
-  by_cases hj : c'.Rel (e.f j) (c'.next (e.f j))
-  · obtain ⟨k', hk'⟩ := e.mem_next hj
-    rw [← hk']; rw [e.rel_iff] at hj
-    rw [← hk']; rw [← c.next_eq' hj]; rw [hjk]
-  · rw [c'.next_eq_self _ hj, ← hjk, c.next_eq_self j]
-    intro hj'
-    apply hj
-    rw [← e.rel_iff] at hj'
-    simpa only [c'.next_eq' hj'] using hj'
-
-中文:
-引理 next_f
-  条件: [e.是TruncGE] {j k : ι} (hjk : c.next j = k)
-  结论: c'.next (e.f j) = e.f k
-  证明: by
-  by_cases hj : c'.Rel (e.f j) (c'.next (e.f j))
-  · obtain ⟨k', hk'⟩ := e.mem_next hj
-    rw [← hk']; rw [e.rel_iff] at hj
-    rw [← hk']; rw [← c.next_eq' hj]; rw [hjk]
-  · rw [c'.next_eq_self _ hj, ← hjk, c.next_eq_self j]
-    intro hj'
-    apply hj
-    rw [← e.rel_iff] at hj'
-    simpa only [c'.next_eq' hj'] using hj'
-
-Depends on / 依赖: c.next_eq, c.next_eq_self, e.mem_next, e.rel_iff, mem_next, next_eq, next_eq_self, rel_iff
+/-
+**ComplexShape.Embedding.next_f** 是 Mathlib 中的一个引理，位于命名空间 `ComplexShape.Embeddin
+g`。
+形式化陈述：next_f [e.IsTruncGE] {j k : ι} (hjk : c.next j = k) : c'.next (e.f j) = e.
+f k
+参数：hjk : c.next j = k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ComplexShape.Embedding.mem_next`：mem_next [e.IsTruncGE] {j : ι} {k' : ι'
+} (h : c'.Rel (e.f j) k') : exists k, e.f k = k'
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ComplexShape.next_eq'`：next_eq' (c : ComplexShape ι) {i j : ι} (h : c.Re
+l i j) : c.next i = j
+· 使用引理 `ComplexShape.Embedding.rel_iff`：rel_iff [e.IsRelIff] (i₁ i₂ : ι) : c'.Re
+l (e.f i₁) (e.f i₂) ↔ c.Rel i₁ i₂
+· 使用定理 `ComplexShape.Embedding.IsTruncGE.toIsRelIff`：∀ {ι : Type u_1} {ι' : Type
+ u_2} {c : ComplexShape ι} {c' : ComplexShape ι'} {e : c.Embedding c'} [self : e
+.IsTruncGE],   e.IsRelIff
+· 使用引理 `ComplexShape.next_eq_self`：next_eq_self (c : ComplexShape ι) (j : ι) (hj
+ : ¬c.Rel j (c.next j)) : c.next j = j
 -/
 lemma next_f [e.IsTruncGE] {j k : ι} (hjk : c.next j = k) : c'.next (e.f j) = e.f k := by
   by_cases hj : c'.Rel (e.f j) (c'.next (e.f j))
   · obtain ⟨k', hk'⟩ := e.mem_next hj
-    rw [← hk']; rw [e.rel_iff] at hj
-    rw [← hk']; rw [← c.next_eq' hj]; rw [hjk]
+    rw [← hk', e.rel_iff] at hj
+    rw [← hk', ← c.next_eq' hj, hjk]
   · rw [c'.next_eq_self _ hj, ← hjk, c.next_eq_self j]
     intro hj'
     apply hj
     rw [← e.rel_iff] at hj'
     simpa only [c'.next_eq' hj'] using hj'
-
-/--
-lemma `prev_f` / 引理 `prev_f`
-
-English:
-lemma prev_f
-  given: [e.IsTruncLE] {i j : ι} (hij : c.prev j = i)
-  statement: c'.prev (e.f j) = e.f i
-  proof: e.op.next_f hij
-
-中文:
-引理 prev_f
-  条件: [e.是TruncLE] {i j : ι} (hij : c.prev j = i)
-  结论: c'.prev (e.f j) = e.f i
-  证明: e.op.next_f hij
-
-Depends on / 依赖: e.op.next_f, next_f
+/-
+**ComplexShape.Embedding.prev_f** 是 Mathlib 中的一个引理，位于命名空间 `ComplexShape.Embeddin
+g`。
+形式化陈述：prev_f [e.IsTruncLE] {i j : ι} (hij : c.prev j = i) : c'.prev (e.f j) = e.
+f i
+参数：hij : c.prev j = i。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ComplexShape.Embedding.next_f`：next_f [e.IsTruncGE] {j k : ι} (hjk : c.n
+ext j = k) : c'.next (e.f j) = e.f k
+· 使用定理 `ComplexShape.Embedding.instIsTruncGEOpOfIsTruncLE`：∀ {ι : Type u_1} {ι' 
+: Type u_2} {c : ComplexShape ι} {c' : ComplexShape ι'} (e : c.Embedding c') [e.
+IsTruncLE],   e.op.IsTruncGE
 -/
 lemma prev_f [e.IsTruncLE] {i j : ι} (hij : c.prev j = i) : c'.prev (e.f j) = e.f i :=
   e.op.next_f hij
 
 variable {e} in
-/--
-lemma `BoundaryLE.false_of_isTruncGE` / 引理 `BoundaryLE.false_of_isTruncGE`
-
-English:
-lemma BoundaryLE.false_of_isTruncGE
-  given: {j : ι} (hj : e.BoundaryLE j) [e.IsTruncGE]
-  statement: False
-  proof: by
-  obtain ⟨k, hk⟩ := e.mem_next hj.1
-  exact hj.2 k (by simpa only [hk] using hj.1)
-
-中文:
-引理 BoundaryLE.false_of_isTruncGE
-  条件: {j : ι} (hj : e.BoundaryLE j) [e.是TruncGE]
-  结论: 假
-  证明: by
-  obtain ⟨k, hk⟩ := e.mem_next hj.1
-  exact hj.2 k (by simpa only [hk] using hj.1)
-
-Depends on / 依赖: e.mem_next, mem_next
+/-
+**ComplexShape.Embedding.BoundaryLE.false_of_isTruncGE** 是 Mathlib 中的一个定理，位于命名空间
+ `ComplexShape.Embedding.BoundaryLE`。
+形式化陈述：∀ {ι : Type u_1} {ι' : Type u_2} {c : ComplexShape ι} {c' : ComplexShape ι
+'} {e : c.Embedding c'} {j : ι},   e.BoundaryLE j → ∀ [e.IsTruncGE], False
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `ComplexShape.Embedding.mem_next`：mem_next [e.IsTruncGE] {j : ι} {k' : ι'
+} (h : c'.Rel (e.f j) k') : exists k, e.f k = k'
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
 lemma BoundaryLE.false_of_isTruncGE {j : ι} (hj : e.BoundaryLE j) [e.IsTruncGE] : False := by
   obtain ⟨k, hk⟩ := e.mem_next hj.1
   exact hj.2 k (by simpa only [hk] using hj.1)
-
-/--
-lemma `op_boundaryLE_iff` / 引理 `op_boundaryLE_iff`
-
-English:
-lemma op_boundaryLE_iff
-  given: {j : ι}
-  statement: e.op.BoundaryLE j ↔ e.BoundaryGE j
-  proof: by rfl
-
-中文:
-引理 op_boundaryLE_iff
-  条件: {j : ι}
-  结论: e.op.BoundaryLE j ↔ e.BoundaryGE j
-  证明: by rfl
-
-Depends on / 依赖: eqToIso, truncGE
+/-
+**ComplexShape.Embedding.op_boundaryLE_iff** 是 Mathlib 中的一个定理，位于命名空间 `ComplexSha
+pe.Embedding`。
+形式化陈述：∀ {ι : Type u_1} {ι' : Type u_2} {c : ComplexShape ι} {c' : ComplexShape ι
+'} (e : c.Embedding c') {j : ι},   e.op.BoundaryLE j ↔ e.BoundaryGE j
+参数：e : c.Embedding c'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma op_boundaryLE_iff {j : ι} : e.op.BoundaryLE j ↔ e.BoundaryGE j := by rfl
-/--
-lemma `op_boundaryGE_iff` / 引理 `op_boundaryGE_iff`
-
-English:
-lemma op_boundaryGE_iff
-  given: {j : ι}
-  statement: e.op.BoundaryGE j ↔ e.BoundaryLE j
-  proof: by rfl
-
-中文:
-引理 op_boundaryGE_iff
-  条件: {j : ι}
-  结论: e.op.BoundaryGE j ↔ e.BoundaryLE j
-  证明: by rfl
-
-Depends on / 依赖: XIsoOpcycles, eqToIso, truncGE
+/-
+**ComplexShape.Embedding.op_boundaryGE_iff** 是 Mathlib 中的一个定理，位于命名空间 `ComplexSha
+pe.Embedding`。
+形式化陈述：∀ {ι : Type u_1} {ι' : Type u_2} {c : ComplexShape ι} {c' : ComplexShape ι
+'} (e : c.Embedding c') {j : ι},   e.op.BoundaryGE j ↔ e.BoundaryLE j
+参数：e : c.Embedding c'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 @[simp] lemma op_boundaryGE_iff {j : ι} : e.op.BoundaryGE j ↔ e.BoundaryLE j := by rfl
 
 end Embedding
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `boundaryGE_embeddingUpIntGE_iff` / 引理 `boundaryGE_embeddingUpIntGE_iff`
-
-English:
-lemma boundaryGE_embeddingUpIntGE_iff
-  given: (p : Int) (n : Nat)
-  proof: by
-  constructor
-  · intro h
-    obtain _ | n := n
-    · rfl
-    · have := h.2 n
-      dsimp at this
-      lia
-  · rintro rfl
-    constructor
-    · simp
-    · intro i hi
-      dsimp at hi
-      lia
-
-中文:
-引理 boundaryGE_embeddingUp整数GE_iff
-  条件: (p : 整数) (n : 自然数)
-  证明: by
-  constructor
-  · intro h
-    obtain _ | n := n
-    · rfl
-    · have := h.2 n
-      dsimp at this
-      lia
-  · rintro rfl
-    constructor
-    · simp
-    · intro i hi
-      dsimp at hi
-      lia
-
-Depends on / 依赖: dif_neg, dif_pos, truncGE
+/-
+**ComplexShape.boundaryGE_embeddingUpIntGE_iff** 是 Mathlib 中的一个引理，位于命名空间 `Comple
+xShape`。
+形式化陈述：boundaryGE_embeddingUpIntGE_iff (p : Int) (n : Nat) : (embeddingUpIntGE p)
+.BoundaryGE n ↔ n = 0
+参数：p : Int；n : Nat。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `add_zero`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), a + 0 = a
+· 使用定理 `CochainComplex.prev`：prev (α : Type*) [AddGroup α] [One α] (i : α) : (Co
+mplexShape.up α).prev i = i - 1
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `sub_add_cancel`：∀ {G : Type u_1} [inst : AddGroup G] (a b : G), a - b + 
+b = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma boundaryGE_embeddingUpIntGE_iff (p : Int) (n : Nat) :
+lemma boundaryGE_embeddingUpIntGE_iff (p : ℤ) (n : ℕ) :
     (embeddingUpIntGE p).BoundaryGE n ↔ n = 0 := by
   constructor
   · intro h
@@ -620,48 +481,32 @@ lemma boundaryGE_embeddingUpIntGE_iff (p : Int) (n : Nat) :
       lia
 
 set_option backward.defeqAttrib.useBackward true in
-/--
-lemma `boundaryLE_embeddingUpIntLE_iff` / 引理 `boundaryLE_embeddingUpIntLE_iff`
-
-English:
-lemma boundaryLE_embeddingUpIntLE_iff
-  given: (p : Int) (n : Nat)
-  proof: by
-  constructor
-  · intro h
-    obtain _ | n := n
-    · rfl
-    · have := h.2 n
-      dsimp at this
-      lia
-  · rintro rfl
-    constructor
-    · simp
-    · intro i hi
-      dsimp at hi
-      lia
-
-中文:
-引理 boundaryLE_embeddingUp整数LE_iff
-  条件: (p : 整数) (n : 自然数)
-  证明: by
-  constructor
-  · intro h
-    obtain _ | n := n
-    · rfl
-    · have := h.2 n
-      dsimp at this
-      lia
-  · rintro rfl
-    constructor
-    · simp
-    · intro i hi
-      dsimp at hi
-      lia
-
-Depends on / 依赖: XIsoOpcycles, dif_pos, truncGE
+/-
+**ComplexShape.boundaryLE_embeddingUpIntLE_iff** 是 Mathlib 中的一个引理，位于命名空间 `Comple
+xShape`。
+形式化陈述：boundaryLE_embeddingUpIntLE_iff (p : Int) (n : Nat) : (embeddingUpIntLE p)
+.BoundaryLE n ↔ n = 0
+参数：p : Int；n : Nat。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddRightCancelSemigroup.toIsRightCancelAdd`：∀ {G : Type u} [self : AddRi
+ghtCancelSemigroup G], IsRightCancelAdd G
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Nat.cast_zero`：cast_zero : ((0 : Nat) : R) = 0
+· 使用定理 `sub_zero`：∀ {G : Type u_3} [inst : SubNegZeroMonoid G] (a : G), a - 0 = 
+a
+· 使用定理 `CochainComplex.next`：next (α : Type*) [AddRightCancelSemigroup α] [One α
+] (i : α) : (ComplexShape.up α).next i = i + 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-lemma boundaryLE_embeddingUpIntLE_iff (p : Int) (n : Nat) :
+lemma boundaryLE_embeddingUpIntLE_iff (p : ℤ) (n : ℕ) :
     (embeddingUpIntLE p).BoundaryLE n ↔ n = 0 := by
   constructor
   · intro h
@@ -678,3 +523,4 @@ lemma boundaryLE_embeddingUpIntLE_iff (p : Int) (n : Nat) :
       lia
 
 end ComplexShape
+

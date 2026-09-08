@@ -58,28 +58,21 @@ variable [Ring R]
 The inverse of a multivariate formal power series is defined by
 well-founded recursion on the coefficients of the inverse.
 -/
-/--
-Definition of `noncomputable` / `noncomputable` 的定义
+/-- Auxiliary definition that unifies
+the totalised inverse formal power series `(_)⁻¹` and
+the inverse formal power series that depends on
+an inverse of the constant coefficient `invOfUnit`. -/
+/-
+**MvPowerSeries.inv.aux** 是 Mathlib 中的一个定义，位于命名空间 `MvPowerSeries.inv`。
+形式化陈述：{σ : Type u_1} → {R : Type u_2} → [Ring R] → R → MvPowerSeries σ R → MvPow
+erSeries σ R
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition noncomputable
-  signature: def inv.aux (a : R) (φ : MvPowerSeries σ R)
-  body: Classical.decEq σ
-    if n = 0 then a
-    else
-      -a *
-        ∑ x in antidiagonal n, if _ : x.2 < n then coeff x.1 φ * inv.aux a φ x.2 else 0
-termination_by n => n
-
-中文:
-定义 noncomputable
-  签名: def inv.aux (a : R) (φ : MvPowerSeries σ R)
-  定义体: Classical.decEq σ
-    if n = 0 then a
-    else
-      -a *
-        ∑ x in antidiagonal n, if _ : x.2 < n then coeff x.1 φ * inv.aux a φ x.2 else 0
-termination_by n => n
+--- 原说明 ---
+Auxiliary definition that unifies
+the totalised inverse formal power series `(_)⁻¹` and
+the inverse formal power series that depends on
+an inverse of the constant coefficient `invOfUnit`.
 -/
 protected noncomputable def inv.aux (a : R) (φ : MvPowerSeries σ R) : MvPowerSeries σ R
   | n =>
@@ -87,240 +80,250 @@ protected noncomputable def inv.aux (a : R) (φ : MvPowerSeries σ R) : MvPowerS
     if n = 0 then a
     else
       -a *
-        ∑ x in antidiagonal n, if _ : x.2 < n then coeff x.1 φ * inv.aux a φ x.2 else 0
+        ∑ x ∈ antidiagonal n, if _ : x.2 < n then coeff x.1 φ * inv.aux a φ x.2 else 0
 termination_by n => n
-
-/--
-theorem `coeff_inv_aux` / 定理 `coeff_inv_aux`
-
-English:
-theorem coeff_inv_aux
-  given: [DecidableEq σ] (n : σ ->₀ Nat) (a : R) (φ : MvPowerSeries σ R)
-  proof: show inv.aux a φ n = _ by
-    cases Subsingleton.elim ‹DecidableEq σ› (Classical.decEq σ)
-    rw [inv.aux]
-    rfl
-
-中文:
-定理 coeff_inv_aux
-  条件: [DecidableEq σ] (n : σ ->₀ 自然数) (a : R) (φ : MvPowerSeries σ R)
-  证明: show inv.aux a φ n = _ by
-    cases Subsingleton.elim ‹DecidableEq σ› (Classical.decEq σ)
-    rw [inv.aux]
-    rfl
-
-Depends on / 依赖: Classical, Classical.decEq, DecidableEq, Subsingleton, Subsingleton.elim, inv.aux
+/-
+**MvPowerSeries.coeff_inv_aux** 是 Mathlib 中的一个定理，位于命名空间 `MvPowerSeries`。
+形式化陈述：coeff_inv_aux [DecidableEq σ] (n : σ ->₀ Nat) (a : R) (φ : MvPowerSeries σ
+ R) : coeff n (inv.aux a φ) = if n = 0 then a else -a * ∑ x in antidiagonal n, i
+f x.2 < n then coeff x.1 φ * coeff x.2 (inv.aux a φ) else 0
+参数：n : σ ->₀ Nat；a : R；φ : MvPowerSeries σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `Pi.instSubsingleton`：∀ {α : Sort u} {β : α → Sort v} [∀ (a : α), Subsing
+leton (β a)], Subsingleton ((a : α) → β a)
+· 使用定理 `instSubsingletonDecidable`：∀ (p : Prop), Subsingleton (Decidable p)
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPowerSeries.inv.aux.eq_1`：∀ {σ : Type u_1} {R : Type u_2} [inst : Ring
+ R] (a : R) (φ : MvPowerSeries σ R) (x : σ →₀ ℕ),   MvPowerSeries.inv.aux a φ x 
+=     if x = 0 t…
 -/
-theorem coeff_inv_aux [DecidableEq σ] (n : σ ->₀ Nat) (a : R) (φ : MvPowerSeries σ R) :
+theorem coeff_inv_aux [DecidableEq σ] (n : σ →₀ ℕ) (a : R) (φ : MvPowerSeries σ R) :
     coeff n (inv.aux a φ) =
       if n = 0 then a
       else
         -a *
-          ∑ x in antidiagonal n, if x.2 < n then coeff x.1 φ * coeff x.2 (inv.aux a φ) else 0 :=
+          ∑ x ∈ antidiagonal n, if x.2 < n then coeff x.1 φ * coeff x.2 (inv.aux a φ) else 0 :=
   show inv.aux a φ n = _ by
     cases Subsingleton.elim ‹DecidableEq σ› (Classical.decEq σ)
     rw [inv.aux]
     rfl
 
-/--
-Definition of `invOfUnit` / `invOfUnit` 的定义
+/-- A multivariate formal power series is invertible if the constant coefficient is invertible. -/
+/-
+**MvPowerSeries.invOfUnit** 是 Mathlib 中的一个定义，位于命名空间 `MvPowerSeries`。
+形式化陈述：invOfUnit (φ : MvPowerSeries σ R) (u : Rˣ) : MvPowerSeries σ R
+参数：φ : MvPowerSeries σ R；u : Rˣ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition invOfUnit
-  signature: (φ : MvPowerSeries σ R) (u : Rˣ)
-  body: inv.aux (↑u⁻¹) φ
-
-中文:
-定义 invOfUnit
-  签名: (φ : MvPowerSeries σ R) (u : Rˣ)
-  定义体: inv.aux (↑u⁻¹) φ
-
-Depends on / 依赖: inv.aux
+--- 原说明 ---
+A multivariate formal power series is invertible if the constant coefficient is 
+invertible.
 -/
 def invOfUnit (φ : MvPowerSeries σ R) (u : Rˣ) : MvPowerSeries σ R :=
   inv.aux (↑u⁻¹) φ
-
-/--
-theorem `coeff_invOfUnit` / 定理 `coeff_invOfUnit`
-
-English:
-theorem coeff_invOfUnit
-  given: [DecidableEq σ] (n : σ ->₀ Nat) (φ : MvPowerSeries σ R) (u : Rˣ)
-  proof: by
-  convert! coeff_inv_aux n (↑u⁻¹) φ
-
-@[simp]
-
-中文:
-定理 coeff_invOfUnit
-  条件: [DecidableEq σ] (n : σ ->₀ 自然数) (φ : MvPowerSeries σ R) (u : Rˣ)
-  证明: by
-  convert! coeff_inv_aux n (↑u⁻¹) φ
-
-@[simp]
-
-Depends on / 依赖: coeff_inv_aux, convert
+/-
+**MvPowerSeries.coeff_invOfUnit** 是 Mathlib 中的一个定理，位于命名空间 `MvPowerSeries`。
+形式化陈述：coeff_invOfUnit [DecidableEq σ] (n : σ ->₀ Nat) (φ : MvPowerSeries σ R) (u
+ : Rˣ) : coeff n (invOfUnit φ u) = if n = 0 then ↑u⁻¹ else -↑u⁻¹ * ∑ x in antidi
+agonal n, if x.2 < n then coeff x.1 φ * coeff x.2 (invOfUnit φ u) else 0
+参数：n : σ ->₀ Nat；φ : MvPowerSeries σ R；u : Rˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `Finset.sum_congr`：∀ {ι : Type u_1} {M : Type u_4} {s₁ s₂ : Finset ι} [in
+st : AddCommMonoid M] {f g : ι → M},   s₁ = s₂ → (∀ x ∈ s₂, f x = g x) → s₁.sum 
+f = s₂…
+· 使用定理 `MvPowerSeries.coeff_inv_aux`：coeff_inv_aux [DecidableEq σ] (n : σ ->₀ Na
+t) (a : R) (φ : MvPowerSeries σ R) : coeff n (inv.aux a φ) = if n = 0 then a els
+e -a * ∑ x in ant…
 -/
-theorem coeff_invOfUnit [DecidableEq σ] (n : σ ->₀ Nat) (φ : MvPowerSeries σ R) (u : Rˣ) :
+theorem coeff_invOfUnit [DecidableEq σ] (n : σ →₀ ℕ) (φ : MvPowerSeries σ R) (u : Rˣ) :
     coeff n (invOfUnit φ u) =
       if n = 0 then ↑u⁻¹
       else
         -↑u⁻¹ *
-          ∑ x in antidiagonal n,
+          ∑ x ∈ antidiagonal n,
             if x.2 < n then coeff x.1 φ * coeff x.2 (invOfUnit φ u) else 0 := by
   convert! coeff_inv_aux n (↑u⁻¹) φ
 
 @[simp]
-/--
-theorem `constantCoeff_invOfUnit` / 定理 `constantCoeff_invOfUnit`
-
-English:
-theorem constantCoeff_invOfUnit
-  given: (φ : MvPowerSeries σ R) (u : Rˣ)
-  proof: by
-  classical
-  rw [← coeff_zero_eq_constantCoeff_apply]; rw [coeff_invOfUnit]; rw [if_pos rfl]
-
-@[simp]
-
-中文:
-定理 constantCoeff_invOfUnit
-  条件: (φ : MvPowerSeries σ R) (u : Rˣ)
-  证明: by
-  classical
-  rw [← coeff_zero_eq_constantCoeff_apply]; rw [coeff_invOfUnit]; rw [if_pos rfl]
-
-@[simp]
-
-Depends on / 依赖: classical, coeff_invOfUnit, coeff_zero_eq_constantCoeff_apply, if_pos
+/-
+**MvPowerSeries.constantCoeff_invOfUnit** 是 Mathlib 中的一个定理，位于命名空间 `MvPowerSeries
+`。
+形式化陈述：constantCoeff_invOfUnit (φ : MvPowerSeries σ R) (u : Rˣ) : constantCoeff (
+invOfUnit φ u) = ↑u⁻¹
+参数：φ : MvPowerSeries σ R；u : Rˣ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MvPowerSeries.coeff_zero_eq_constantCoeff_apply`：coeff_zero_eq_constantC
+oeff_apply (φ : MvPowerSeries σ R) : coeff (0 : σ ->₀ Nat) φ = constantCoeff φ
+· 使用定理 `MvPowerSeries.coeff_invOfUnit`：coeff_invOfUnit [DecidableEq σ] (n : σ ->
+₀ Nat) (φ : MvPowerSeries σ R) (u : Rˣ) : coeff n (invOfUnit φ u) = if n = 0 the
+n ↑u⁻¹ else -↑u⁻¹ *…
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
 theorem constantCoeff_invOfUnit (φ : MvPowerSeries σ R) (u : Rˣ) :
     constantCoeff (invOfUnit φ u) = ↑u⁻¹ := by
   classical
-  rw [← coeff_zero_eq_constantCoeff_apply]; rw [coeff_invOfUnit]; rw [if_pos rfl]
+  rw [← coeff_zero_eq_constantCoeff_apply, coeff_invOfUnit, if_pos rfl]
 
 @[simp]
-/--
-theorem `mul_invOfUnit` / 定理 `mul_invOfUnit`
-
-English:
-theorem mul_invOfUnit
-  given: (φ : MvPowerSeries σ R) (u : Rˣ) (h : constantCoeff φ = u)
-  proof: ext fun n =>
-    letI := Classical.decEq (σ ->₀ Nat)
-    if H : n = 0 then by
-      rw [H]
-      simp [h]
-    else by
-      classical
-      have : ((0 : σ ->₀ Nat), n) in antidiagonal n := by rw [mem_antidiagonal, zero_add]
-      rw [coeff_one]; rw [if_neg H]; rw [coeff_mul]; rw [← Finset.insert_erase this]; rw [Finset.sum_insert (Finset.notMem_erase _ _)]; rw [coeff_zero_eq_constantCoeff_apply]; rw [h]; rw [coeff_invOfUnit]; rw [if_neg H]; rw [neg_mul]; rw [mul_neg]; rw [Units.mul_inv_cancel_left]; rw [←
-        Finset.insert_erase this]; rw [Finset.sum_insert (Finset.notMem_erase _ _)]; rw [Finset.insert_erase this]; rw [if_neg (not_lt_of_ge <| le_rfl)]; rw [zero_add]; rw [add_comm]; rw [←
-        sub_eq_add_neg]; rw [sub_eq_zero]; rw [Finset.sum_congr rfl]
-      rintro ⟨i, j⟩ hij
-      rw [Finset.mem_erase]; rw [mem_antidiagonal] at hij
-      obtain ⟨h₁, rfl⟩ := hij
-      rw [if_pos]
-refine lt_add_of_pos_left _ pos_iff_ne_zero.2 ?_
-      rintro rfl
-      simp at h₁
-
-中文:
-定理 mul_invOfUnit
-  条件: (φ : MvPowerSeries σ R) (u : Rˣ) (h : constantCoeff φ = u)
-  证明: ext fun n =>
-    letI := Classical.decEq (σ ->₀ Nat)
-    if H : n = 0 then by
-      rw [H]
-      simp [h]
-    else by
-      classical
-      have : ((0 : σ ->₀ Nat), n) in antidiagonal n := by rw [mem_antidiagonal, zero_add]
-      rw [coeff_one]; rw [if_neg H]; rw [coeff_mul]; rw [← Finset.insert_erase this]; rw [Finset.sum_insert (Finset.notMem_erase _ _)]; rw [coeff_zero_eq_constantCoeff_apply]; rw [h]; rw [coeff_invOfUnit]; rw [if_neg H]; rw [neg_mul]; rw [mul_neg]; rw [Units.mul_inv_cancel_left]; rw [←
-        Finset.insert_erase this]; rw [Finset.sum_insert (Finset.notMem_erase _ _)]; rw [Finset.insert_erase this]; rw [if_neg (not_lt_of_ge <| le_rfl)]; rw [zero_add]; rw [add_comm]; rw [←
-        sub_eq_add_neg]; rw [sub_eq_zero]; rw [Finset.sum_congr rfl]
-      rintro ⟨i, j⟩ hij
-      rw [Finset.mem_erase]; rw [mem_antidiagonal] at hij
-      obtain ⟨h₁, rfl⟩ := hij
-      rw [if_pos]
-refine lt_add_of_pos_left _ pos_iff_ne_zero.2 ?_
-      rintro rfl
-      simp at h₁
-
-Depends on / 依赖: Classical, Classical.decEq, Finset, Finset.insert_erase, Finset.notMem_erase, Finset.sum_insert, Units.mul_inv_cancel_left, antidiagonal, classical, coeff_invOfUnit, coeff_mul, coeff_one, coeff_zero_eq_constantCoeff_apply, if_neg, insert_erase, mem_antidiagonal, mul_inv_cancel_left, mul_neg, neg_mul, notMem_erase
+/-
+**MvPowerSeries.mul_invOfUnit** 是 Mathlib 中的一个定理，位于命名空间 `MvPowerSeries`。
+形式化陈述：mul_invOfUnit (φ : MvPowerSeries σ R) (u : Rˣ) (h : constantCoeff φ = u) :
+ φ * invOfUnit φ u = 1
+参数：φ : MvPowerSeries σ R；u : Rˣ；h : constantCoeff φ = u。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.ext`：ext {φ ψ : MvPowerSeries σ R} (h : forall n : σ ->₀ N
+at, coeff n φ = coeff n ψ) : φ = ψ
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MvPowerSeries.constantCoeff_invOfUnit`：constantCoeff_invOfUnit (φ : MvPo
+werSeries σ R) (u : Rˣ) : constantCoeff (invOfUnit φ u) = ↑u⁻¹
+· 使用定理 `Units.mul_inv`：mul_inv : (a * ↑a⁻¹ : α) = 1
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Finset.HasAntidiagonal.mem_antidiagonal`：∀ {A : Type u_1} {inst : AddMon
+oid A} [self : Finset.HasAntidiagonal A] {n : A} {a : A × A},   a ∈ Finset.HasAn
+tidiagonal.antidiagonal n ↔ a…
+· 使用定理 `zero_add`：∀ {M : Type u} [inst : AddZeroClass M] (a : M), 0 + a = a
+· 使用定理 `MvPowerSeries.coeff_one`：coeff_one [DecidableEq σ] : coeff n (1 : MvPowe
+rSeries σ R) = if n = 0 then 1 else 0
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `MvPowerSeries.coeff_mul`：coeff_mul [DecidableEq σ] : coeff n (φ * ψ) = ∑
+ p in antidiagonal n, coeff p.1 φ * coeff p.2 ψ
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.insert_erase`：∀ {α : Type u_1} [inst : DecidableEq α] {s : Finset
+ α} {a : α}, a ∈ s → insert a (s.erase a) = s
+· 使用定理 `Finset.sum_insert`：∀ {ι : Type u_1} {M : Type u_4} {s : Finset ι} {a : ι
+} [inst : AddCommMonoid M] {f : ι → M} [inst_1 : DecidableEq ι],   a ∉ s → ∑ x ∈
+ insert…
+· 使用定理 `Finset.notMem_erase`：notMem_erase (a : α) (s : Finset α) : a ∉ erase s a
+· 使用定理 `MvPowerSeries.coeff_zero_eq_constantCoeff_apply`：coeff_zero_eq_constantC
+oeff_apply (φ : MvPowerSeries σ R) : coeff (0 : σ ->₀ Nat) φ = constantCoeff φ
+· 使用定理 `MvPowerSeries.coeff_invOfUnit`：coeff_invOfUnit [DecidableEq σ] (n : σ ->
+₀ Nat) (φ : MvPowerSeries σ R) (u : Rˣ) : coeff n (invOfUnit φ u) = if n = 0 the
+n ↑u⁻¹ else -↑u⁻¹ *…
+· 使用定理 `neg_mul`：neg_mul (a b : α) : -a * b = -(a * b)
+· 使用定理 `mul_neg`：mul_neg (a b : α) : a * -b = -(a * b)
+· 使用定理 `Units.mul_inv_cancel_left`：mul_inv_cancel_left (a : αˣ) (b : α) : (a : α
+) * (↑a⁻¹ * b) = b
+· 使用定理 `not_lt_of_ge`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a ≤ b → ¬b
+ < a
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `add_comm`：∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b 
++ a
+· 使用定理 `sub_eq_add_neg`：∀ {G : Type u_1} [inst : SubNegMonoid G] (a b : G), a - 
+b = a + -b
+（共 47 条，此处仅展示前 30 条）
 -/
 theorem mul_invOfUnit (φ : MvPowerSeries σ R) (u : Rˣ) (h : constantCoeff φ = u) :
     φ * invOfUnit φ u = 1 :=
   ext fun n =>
-    letI := Classical.decEq (σ ->₀ Nat)
+    letI := Classical.decEq (σ →₀ ℕ)
     if H : n = 0 then by
       rw [H]
       simp [h]
     else by
       classical
-      have : ((0 : σ ->₀ Nat), n) in antidiagonal n := by rw [mem_antidiagonal, zero_add]
-      rw [coeff_one]; rw [if_neg H]; rw [coeff_mul]; rw [← Finset.insert_erase this]; rw [Finset.sum_insert (Finset.notMem_erase _ _)]; rw [coeff_zero_eq_constantCoeff_apply]; rw [h]; rw [coeff_invOfUnit]; rw [if_neg H]; rw [neg_mul]; rw [mul_neg]; rw [Units.mul_inv_cancel_left]; rw [←
-        Finset.insert_erase this]; rw [Finset.sum_insert (Finset.notMem_erase _ _)]; rw [Finset.insert_erase this]; rw [if_neg (not_lt_of_ge <| le_rfl)]; rw [zero_add]; rw [add_comm]; rw [←
-        sub_eq_add_neg]; rw [sub_eq_zero]; rw [Finset.sum_congr rfl]
+      have : ((0 : σ →₀ ℕ), n) ∈ antidiagonal n := by rw [mem_antidiagonal, zero_add]
+      rw [coeff_one, if_neg H, coeff_mul, ← Finset.insert_erase this,
+        Finset.sum_insert (Finset.notMem_erase _ _), coeff_zero_eq_constantCoeff_apply, h,
+        coeff_invOfUnit, if_neg H, neg_mul, mul_neg, Units.mul_inv_cancel_left, ←
+        Finset.insert_erase this, Finset.sum_insert (Finset.notMem_erase _ _),
+        Finset.insert_erase this, if_neg (not_lt_of_ge <| le_rfl), zero_add, add_comm, ←
+        sub_eq_add_neg, sub_eq_zero, Finset.sum_congr rfl]
       rintro ⟨i, j⟩ hij
-      rw [Finset.mem_erase]; rw [mem_antidiagonal] at hij
+      rw [Finset.mem_erase, mem_antidiagonal] at hij
       obtain ⟨h₁, rfl⟩ := hij
       rw [if_pos]
-refine lt_add_of_pos_left _ pos_iff_ne_zero.2 ?_
+      refine lt_add_of_pos_left _ <| pos_iff_ne_zero.2 ?_
       rintro rfl
       simp at h₁
 
 -- TODO : can one prove equivalence?
 @[simp]
-/--
-theorem `invOfUnit_mul` / 定理 `invOfUnit_mul`
-
-English:
-theorem invOfUnit_mul
-  given: (φ : MvPowerSeries σ R) (u : Rˣ) (h : constantCoeff φ = u)
-  proof: by
-  rw [← mul_cancel_right_mem_nonZeroDivisors (r := φ.invOfUnit u)]; rw [mul_assoc]; rw [one_mul]; rw [mul_invOfUnit _ _ h]; rw [mul_one]
-  apply mem_nonZeroDivisors_of_constantCoeff
-  simp only [constantCoeff_invOfUnit, IsUnit.mem_nonZeroDivisors (Units.isUnit u⁻¹)]
-
-中文:
-定理 invOfUnit_mul
-  条件: (φ : MvPowerSeries σ R) (u : Rˣ) (h : constantCoeff φ = u)
-  证明: by
-  rw [← mul_cancel_right_mem_nonZeroDivisors (r := φ.invOfUnit u)]; rw [mul_assoc]; rw [one_mul]; rw [mul_invOfUnit _ _ h]; rw [mul_one]
-  apply mem_nonZeroDivisors_of_constantCoeff
-  simp only [constantCoeff_invOfUnit, IsUnit.mem_nonZeroDivisors (Units.isUnit u⁻¹)]
-
-Depends on / 依赖: IsUnit, IsUnit.mem_nonZeroDivisors, Units.isUnit, constantCoeff_invOfUnit, invOfUnit, isUnit, mem_nonZeroDivisors, mem_nonZeroDivisors_of_constantCoeff, mul_assoc, mul_cancel_right_mem_nonZeroDivisors, mul_invOfUnit, mul_one, one_mul
+/-
+**MvPowerSeries.invOfUnit_mul** 是 Mathlib 中的一个定理，位于命名空间 `MvPowerSeries`。
+形式化陈述：invOfUnit_mul (φ : MvPowerSeries σ R) (u : Rˣ) (h : constantCoeff φ = u) :
+ invOfUnit φ u * φ = 1
+参数：φ : MvPowerSeries σ R；u : Rˣ；h : constantCoeff φ = u。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `mul_cancel_right_mem_nonZeroDivisors`：mul_cancel_right_mem_nonZeroDiviso
+rs (hr : r in R⁰) : x * r = y * r ↔ x = y
+· 使用定理 `MvPowerSeries.mem_nonZeroDivisors_of_constantCoeff`：mem_nonZeroDivisors_
+of_constantCoeff {φ : MvPowerSeries σ R} (hφ : constantCoeff φ in R⁰) : φ in (Mv
+PowerSeries σ R)⁰
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `MvPowerSeries.constantCoeff_invOfUnit`：constantCoeff_invOfUnit (φ : MvPo
+werSeries σ R) (u : Rˣ) : constantCoeff (invOfUnit φ u) = ↑u⁻¹
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用引理 `IsUnit.mem_nonZeroDivisors`：IsUnit.mem_nonZeroDivisors (hx : IsUnit x) :
+ x in M₀⁰
+· 使用定理 `Units.isUnit`：∀ {M : Type u_1} [inst : Monoid M] (u : Mˣ), IsUnit ↑u
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `MvPowerSeries.mul_invOfUnit`：mul_invOfUnit (φ : MvPowerSeries σ R) (u : 
+Rˣ) (h : constantCoeff φ = u) : φ * invOfUnit φ u = 1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
 -/
 theorem invOfUnit_mul (φ : MvPowerSeries σ R) (u : Rˣ) (h : constantCoeff φ = u) :
     invOfUnit φ u * φ = 1 := by
-  rw [← mul_cancel_right_mem_nonZeroDivisors (r := φ.invOfUnit u)]; rw [mul_assoc]; rw [one_mul]; rw [mul_invOfUnit _ _ h]; rw [mul_one]
+  rw [← mul_cancel_right_mem_nonZeroDivisors (r := φ.invOfUnit u), mul_assoc, one_mul,
+    mul_invOfUnit _ _ h, mul_one]
   apply mem_nonZeroDivisors_of_constantCoeff
   simp only [constantCoeff_invOfUnit, IsUnit.mem_nonZeroDivisors (Units.isUnit u⁻¹)]
-
-/--
-theorem `isUnit_iff_constantCoeff` / 定理 `isUnit_iff_constantCoeff`
-
-English:
-theorem isUnit_iff_constantCoeff
-  given: {φ : MvPowerSeries σ R}
-  proof: by
-  constructor
-  · exact IsUnit.map _
-  · intro ⟨u, hu⟩
-    exact ⟨⟨_, φ.invOfUnit u, mul_invOfUnit φ u hu.symm, invOfUnit_mul φ u hu.symm⟩, rfl⟩
-
-中文:
-定理 isUnit_iff_constantCoeff
-  条件: {φ : MvPowerSeries σ R}
-  证明: by
-  constructor
-  · exact IsUnit.map _
-  · intro ⟨u, hu⟩
-    exact ⟨⟨_, φ.invOfUnit u, mul_invOfUnit φ u hu.symm, invOfUnit_mul φ u hu.symm⟩, rfl⟩
-
-Depends on / 依赖: IsUnit, IsUnit.map, hu.symm, invOfUnit, invOfUnit_mul, mul_invOfUnit
+/-
+**MvPowerSeries.isUnit_iff_constantCoeff** 是 Mathlib 中的一个定理，位于命名空间 `MvPowerSerie
+s`。
+形式化陈述：isUnit_iff_constantCoeff {φ : MvPowerSeries σ R} : IsUnit φ ↔ IsUnit (cons
+tantCoeff φ)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsUnit.map`：map [MonoidHomClass F M N] (f : F) {x : M} (h : IsUnit x) : 
+IsUnit (f x)
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `MvPowerSeries.mul_invOfUnit`：mul_invOfUnit (φ : MvPowerSeries σ R) (u : 
+Rˣ) (h : constantCoeff φ = u) : φ * invOfUnit φ u = 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MvPowerSeries.invOfUnit_mul`：invOfUnit_mul (φ : MvPowerSeries σ R) (u : 
+Rˣ) (h : constantCoeff φ = u) : invOfUnit φ u * φ = 1
 -/
 theorem isUnit_iff_constantCoeff {φ : MvPowerSeries σ R} :
     IsUnit φ ↔ IsUnit (constantCoeff φ) := by
@@ -335,33 +338,16 @@ section CommRing
 
 variable [CommRing R]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Multivariate formal power series over a local ring form a local ring. -/
+/-
+**MvPowerSeries.** 是 Mathlib 中的一个实例，位于命名空间 `MvPowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance [IsLocalRing
-  signature: R] : IsLocalRing (MvPowerSeries σ R)
-  body: IsLocalRing.of_isUnit_or_isUnit_one_sub_self by
-    intro φ
-    obtain ⟨u, h⟩ | ⟨u, h⟩ := IsLocalRing.isUnit_or_isUnit_one_sub_self (constantCoeff φ) <;>
-        [left; right] <;>
-      · refine .of_mul_eq_one _ (mul_invOfUnit _ u ?_)
-        simpa using h.symm
-
-中文:
-实例 [是局部环
-  签名: R] : 是局部环 (MvPowerSeries σ R)
-  定义体: IsLocalRing.of_isUnit_or_isUnit_one_sub_self by
-    intro φ
-    obtain ⟨u, h⟩ | ⟨u, h⟩ := IsLocalRing.isUnit_or_isUnit_one_sub_self (constantCoeff φ) <;>
-        [left; right] <;>
-      · refine .of_mul_eq_one _ (mul_invOfUnit _ u ?_)
-        simpa using h.symm
-
-Depends on / 依赖: IsLocalRing, IsLocalRing.isUnit_or_isUnit_one_sub_self, IsLocalRing.of_isUnit_or_isUnit_one_sub_self, constantCoeff, h.symm, isUnit_or_isUnit_one_sub_self, mul_invOfUnit, of_isUnit_or_isUnit_one_sub_self, of_mul_eq_one
+--- 原说明 ---
+Multivariate formal power series over a local ring form a local ring.
 -/
 instance [IsLocalRing R] : IsLocalRing (MvPowerSeries σ R) :=
-IsLocalRing.of_isUnit_or_isUnit_one_sub_self by
+  IsLocalRing.of_isUnit_or_isUnit_one_sub_self <| by
     intro φ
     obtain ⟨u, h⟩ | ⟨u, h⟩ := IsLocalRing.isUnit_or_isUnit_one_sub_self (constantCoeff φ) <;>
         [left; right] <;>
@@ -373,39 +359,42 @@ end CommRing
 
 section IsLocalRing
 
-variable {S : Type*} [CommRing R] [CommRing S] (f : R ->+* S) [IsLocalHom f]
+variable {S : Type*} [CommRing R] [CommRing S] (f : R →+* S) [IsLocalHom f]
 
 -- Thanks to the linter for informing us that this instance does
 -- not actually need R and S to be local rings!
 /-- The map between multivariate formal power series over the same indexing set
 induced by a local ring hom `A → B` is local -/
 @[instance]
-/--
-theorem `map.isLocalHom` / 定理 `map.isLocalHom`
+/-
+**MvPowerSeries.map.isLocalHom** 是 Mathlib 中的一个定理，位于命名空间 `MvPowerSeries.map`。
+形式化陈述：∀ {σ : Type u_1} {R : Type u_2} {S : Type u_3} [inst : CommRing R] [inst_1
+ : CommRing S] (f : R →+* S) [IsLocalHom f],   IsLocalHom (MvPowerSeries.map f)
+参数：f : R →+* S；MvPowerSeries.map f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `MvPowerSeries.isUnit_constantCoeff`：isUnit_constantCoeff (φ : MvPowerSer
+ies σ R) (h : IsUnit φ) : IsUnit (constantCoeff φ)
+· 使用定理 `Units.isUnit`：∀ {M : Type u_1} [inst : Monoid M] (u : Mˣ), IsUnit ↑u
+· 使用定理 `isUnit_of_map_unit`：∀ {R : Type u_2} {S : Type u_3} {F : Type u_5} [inst
+ : Monoid R] [inst_1 : Monoid S] [inst_2 : FunLike F R S] (f : F)   [IsLocalHom 
+f] (a : …
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPowerSeries.constantCoeff_map`：constantCoeff_map (φ : MvPowerSeries σ 
+R) : constantCoeff (map f φ) = f (constantCoeff φ)
+· 使用定理 `IsUnit.of_mul_eq_one`：IsUnit.of_mul_eq_one [Monoid M] [IsDedekindFiniteM
+onoid M] {a : M} (b : M) (h : a * b = 1) : IsUnit a
+· 使用定理 `instIsDedekindFiniteMonoid`：∀ (M : Type u_2) [inst : CommMonoid M], IsDe
+dekindFiniteMonoid M
+· 使用定理 `MvPowerSeries.mul_invOfUnit`：mul_invOfUnit (φ : MvPowerSeries σ R) (u : 
+Rˣ) (h : constantCoeff φ = u) : φ * invOfUnit φ u = 1
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 
-English:
-theorem map.isLocalHom
-  statement: IsLocalHom (map (σ := σ) f)
-  proof: ⟨by
-    rintro φ ⟨ψ, h⟩
-    replace h := congr_arg constantCoeff h
-    rw [constantCoeff_map] at h
-    have : IsUnit (constantCoeff ψ.val) := isUnit_constantCoeff _ ψ.isUnit
-    rw [h] at this
-    rcases isUnit_of_map_unit f _ this with ⟨c, hc⟩
-    exact .of_mul_eq_one (invOfUnit φ c) (mul_invOfUnit φ c hc.symm)⟩
-
-中文:
-定理 map.isLocalHom
-  结论: 是Local态射 (map (σ := σ) f)
-  证明: ⟨by
-    rintro φ ⟨ψ, h⟩
-    replace h := congr_arg constantCoeff h
-    rw [constantCoeff_map] at h
-    have : IsUnit (constantCoeff ψ.val) := isUnit_constantCoeff _ ψ.isUnit
-    rw [h] at this
-    rcases isUnit_of_map_unit f _ this with ⟨c, hc⟩
-    exact .of_mul_eq_one (invOfUnit φ c) (mul_invOfUnit φ c hc.symm)⟩
+--- 原说明 ---
+The map between multivariate formal power series over the same indexing set
+induced by a local ring hom `A → B` is local
 -/
 theorem map.isLocalHom : IsLocalHom (map (σ := σ) f) :=
   ⟨by
@@ -425,122 +414,109 @@ open MvPowerSeries
 
 variable {k : Type*} [Field k]
 
-/--
-Definition of `inv` / `inv` 的定义
+/-- The inverse `1/f` of a multivariable power series `f` over a field -/
+/-
+**MvPowerSeries.inv** 是 Mathlib 中的一个定义，位于命名空间 `MvPowerSeries`。
+形式化陈述：{σ : Type u_1} → {k : Type u_3} → [Field k] → MvPowerSeries σ k → MvPowerS
+eries σ k
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition inv
-  signature: (φ : MvPowerSeries σ k)
-  body: inv.aux (constantCoeff φ)⁻¹ φ
-
-中文:
-定义 inv
-  签名: (φ : MvPowerSeries σ k)
-  定义体: inv.aux (constantCoeff φ)⁻¹ φ
+--- 原说明 ---
+The inverse `1/f` of a multivariable power series `f` over a field
 -/
 protected def inv (φ : MvPowerSeries σ k) : MvPowerSeries σ k :=
   inv.aux (constantCoeff φ)⁻¹ φ
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inv (MvPowerSeries σ k)
-  body: ⟨MvPowerSeries.inv⟩
-
-中文:
-实例 :
-  签名: 取逆 (MvPowerSeries σ k)
-  定义体: ⟨MvPowerSeries.inv⟩
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.inv
+/-
+**MvPowerSeries.** 是 Mathlib 中的一个实例，位于命名空间 `MvPowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inv (MvPowerSeries σ k) :=
   ⟨MvPowerSeries.inv⟩
-
-/--
-theorem `coeff_inv` / 定理 `coeff_inv`
-
-English:
-theorem coeff_inv
-  given: [DecidableEq σ] (n : σ ->₀ Nat) (φ : MvPowerSeries σ k)
-  proof: coeff_inv_aux n _ φ
-
-@[simp]
-
-中文:
-定理 coeff_inv
-  条件: [DecidableEq σ] (n : σ ->₀ 自然数) (φ : MvPowerSeries σ k)
-  证明: coeff_inv_aux n _ φ
-
-@[simp]
-
-Depends on / 依赖: coeff_inv_aux
+/-
+**MvPowerSeries.coeff_inv** 是 Mathlib 中的一个定理，位于命名空间 `MvPowerSeries`。
+形式化陈述：coeff_inv [DecidableEq σ] (n : σ ->₀ Nat) (φ : MvPowerSeries σ k) : coeff 
+n φ⁻¹ = if n = 0 then (constantCoeff φ)⁻¹ else -(constantCoeff φ)⁻¹ * ∑ x in ant
+idiagonal n, if x.2 < n then coeff x.1 φ * coeff x.2 φ⁻¹ else 0
+参数：n : σ ->₀ Nat；φ : MvPowerSeries σ k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPowerSeries.coeff_inv_aux`：coeff_inv_aux [DecidableEq σ] (n : σ ->₀ Na
+t) (a : R) (φ : MvPowerSeries σ R) : coeff n (inv.aux a φ) = if n = 0 then a els
+e -a * ∑ x in ant…
 -/
-theorem coeff_inv [DecidableEq σ] (n : σ ->₀ Nat) (φ : MvPowerSeries σ k) :
+theorem coeff_inv [DecidableEq σ] (n : σ →₀ ℕ) (φ : MvPowerSeries σ k) :
     coeff n φ⁻¹ =
       if n = 0 then (constantCoeff φ)⁻¹
       else
         -(constantCoeff φ)⁻¹ *
-          ∑ x in antidiagonal n, if x.2 < n then coeff x.1 φ * coeff x.2 φ⁻¹ else 0 :=
+          ∑ x ∈ antidiagonal n, if x.2 < n then coeff x.1 φ * coeff x.2 φ⁻¹ else 0 :=
   coeff_inv_aux n _ φ
 
 @[simp]
-/--
-theorem `constantCoeff_inv` / 定理 `constantCoeff_inv`
-
-English:
-theorem constantCoeff_inv
-  given: (φ : MvPowerSeries σ k)
-  proof: by
-  classical
-  rw [← coeff_zero_eq_constantCoeff_apply]; rw [coeff_inv]; rw [if_pos rfl]
-
-中文:
-定理 constantCoeff_inv
-  条件: (φ : MvPowerSeries σ k)
-  证明: by
-  classical
-  rw [← coeff_zero_eq_constantCoeff_apply]; rw [coeff_inv]; rw [if_pos rfl]
-
-Depends on / 依赖: classical, coeff_inv, coeff_zero_eq_constantCoeff_apply, if_pos
+/-
+**MvPowerSeries.constantCoeff_inv** 是 Mathlib 中的一个定理，位于命名空间 `MvPowerSeries`。
+形式化陈述：constantCoeff_inv (φ : MvPowerSeries σ k) : constantCoeff φ⁻¹ = (constantC
+oeff φ)⁻¹
+参数：φ : MvPowerSeries σ k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MvPowerSeries.coeff_zero_eq_constantCoeff_apply`：coeff_zero_eq_constantC
+oeff_apply (φ : MvPowerSeries σ R) : coeff (0 : σ ->₀ Nat) φ = constantCoeff φ
+· 使用定理 `MvPowerSeries.coeff_inv`：coeff_inv [DecidableEq σ] (n : σ ->₀ Nat) (φ : 
+MvPowerSeries σ k) : coeff n φ⁻¹ = if n = 0 then (constantCoeff φ)⁻¹ else -(cons
+tantCoeff φ)⁻…
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
 -/
 theorem constantCoeff_inv (φ : MvPowerSeries σ k) :
     constantCoeff φ⁻¹ = (constantCoeff φ)⁻¹ := by
   classical
-  rw [← coeff_zero_eq_constantCoeff_apply]; rw [coeff_inv]; rw [if_pos rfl]
-
-/--
-theorem `inv_eq_zero` / 定理 `inv_eq_zero`
-
-English:
-theorem inv_eq_zero
-  given: {φ : MvPowerSeries σ k}
-  statement: φ⁻¹ = 0 ↔ constantCoeff φ = 0
-  proof: ⟨fun h => by simpa using congr_arg constantCoeff h, fun h =>
-    ext fun n => by
-      classical
-      rw [coeff_inv]
-      split_ifs <;>
-        simp only [h, map_zero, zero_mul, inv_zero, neg_zero]⟩
-
-@[simp]
-
-中文:
-定理 inv_eq_zero
-  条件: {φ : MvPowerSeries σ k}
-  结论: φ⁻¹ = 0 ↔ constantCoeff φ = 0
-  证明: ⟨fun h => by simpa using congr_arg constantCoeff h, fun h =>
-    ext fun n => by
-      classical
-      rw [coeff_inv]
-      split_ifs <;>
-        simp only [h, map_zero, zero_mul, inv_zero, neg_zero]⟩
-
-@[simp]
-
-Depends on / 依赖: classical, coeff_inv, congr_arg, constantCoeff, inv_zero, map_zero, neg_zero, split_ifs, zero_mul
+  rw [← coeff_zero_eq_constantCoeff_apply, coeff_inv, if_pos rfl]
+/-
+**MvPowerSeries.inv_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `MvPowerSeries`。
+形式化陈述：inv_eq_zero {φ : MvPowerSeries σ k} : φ⁻¹ = 0 ↔ constantCoeff φ = 0
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPowerSeries.constantCoeff_inv`：constantCoeff_inv (φ : MvPowerSeries σ 
+k) : constantCoeff φ⁻¹ = (constantCoeff φ)⁻¹
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
+· 使用定理 `MvPowerSeries.ext`：ext {φ ψ : MvPowerSeries σ R} (h : forall n : σ ->₀ N
+at, coeff n φ = coeff n ψ) : φ = ψ
+· 使用定理 `MvPowerSeries.coeff_inv`：coeff_inv [DecidableEq σ] (n : σ ->₀ Nat) (φ : 
+MvPowerSeries σ k) : coeff n φ⁻¹ = if n = 0 then (constantCoeff φ)⁻¹ else -(cons
+tantCoeff φ)⁻…
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `inv_zero`：∀ {G₀ : Type u} [inst : GroupWithZero G₀], 0⁻¹ = 0
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `AddMonoidHomClass.toZeroHomClass`：∀ {F : Type u_10} {M : outParam (Type 
+u_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {ins
+t_2 : FunLike F M N} […
+· 使用定理 `DistribMulActionSemiHomClass.toAddMonoidHomClass`：∀ {F : Type u_10} {M :
+ outParam (Type u_11)} {N : outParam (Type u_12)} {φ : outParam (M → N)}   {A : 
+outParam (Type u_13)} {B : outParam (T…
+· 使用定理 `SemilinearMapClass.distribMulActionSemiHomClass`：∀ {R : Type u_1} {S : T
+ype u_5} {M : Type u_8} {M₃ : Type u_11} (F : Type u_14) [inst : Semiring R]   [
+inst_1 : Semiring S] [inst_2 : AddCom…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `neg_zero`：neg_zero {R} [CommRing R] : -(0 : R) = 0
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
 -/
 theorem inv_eq_zero {φ : MvPowerSeries σ k} : φ⁻¹ = 0 ↔ constantCoeff φ = 0 :=
   ⟨fun h => by simpa using congr_arg constantCoeff h, fun h =>
@@ -551,79 +527,53 @@ theorem inv_eq_zero {φ : MvPowerSeries σ k} : φ⁻¹ = 0 ↔ constantCoeff φ
         simp only [h, map_zero, zero_mul, inv_zero, neg_zero]⟩
 
 @[simp]
-/--
-theorem `zero_inv` / 定理 `zero_inv`
-
-English:
-theorem zero_inv
-  statement: (0 : MvPowerSeries σ k)⁻¹ = 0
-  proof: by
-  rw [inv_eq_zero]; rw [constantCoeff_zero]
-
-@[simp]
-
-中文:
-定理 zero_inv
-  结论: (0 : MvPowerSeries σ k)⁻¹ = 0
-  证明: by
-  rw [inv_eq_zero]; rw [constantCoeff_zero]
-
-@[simp]
-
-Depends on / 依赖: constantCoeff_zero, inv_eq_zero
+/-
+**MvPowerSeries.zero_inv** 是 Mathlib 中的一个定理，位于命名空间 `MvPowerSeries`。
+形式化陈述：zero_inv : (0 : MvPowerSeries σ k)⁻¹ = 0
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPowerSeries.inv_eq_zero`：inv_eq_zero {φ : MvPowerSeries σ k} : φ⁻¹ = 0
+ ↔ constantCoeff φ = 0
+· 使用定理 `MvPowerSeries.constantCoeff_zero`：constantCoeff_zero : constantCoeff (0 
+: MvPowerSeries σ R) = 0
 -/
 theorem zero_inv : (0 : MvPowerSeries σ k)⁻¹ = 0 := by
-  rw [inv_eq_zero]; rw [constantCoeff_zero]
+  rw [inv_eq_zero, constantCoeff_zero]
 
 @[simp]
-/--
-theorem `invOfUnit_eq` / 定理 `invOfUnit_eq`
-
-English:
-theorem invOfUnit_eq
-  given: (φ : MvPowerSeries σ k) (h : constantCoeff φ != 0)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 invOfUnit_eq
-  条件: (φ : MvPowerSeries σ k) (h : constantCoeff φ != 0)
-  证明: rfl
-
-@[simp]
+/-
+**MvPowerSeries.invOfUnit_eq** 是 Mathlib 中的一个定理，位于命名空间 `MvPowerSeries`。
+形式化陈述：invOfUnit_eq (φ : MvPowerSeries σ k) (h : constantCoeff φ != 0) : invOfUni
+t φ (Units.mk0 _ h) = φ⁻¹
+参数：φ : MvPowerSeries σ k；h : constantCoeff φ != 0。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem invOfUnit_eq (φ : MvPowerSeries σ k) (h : constantCoeff φ != 0) :
+theorem invOfUnit_eq (φ : MvPowerSeries σ k) (h : constantCoeff φ ≠ 0) :
     invOfUnit φ (Units.mk0 _ h) = φ⁻¹ :=
   rfl
 
 @[simp]
-/--
-theorem `invOfUnit_eq'` / 定理 `invOfUnit_eq'`
-
-English:
-theorem invOfUnit_eq'
-  given: (φ : MvPowerSeries σ k) (u : Units k) (h : constantCoeff φ = u)
-  proof: by
-  rw [← invOfUnit_eq φ (h.symm ▸ u.ne_zero)]
-  apply congrArg (invOfUnit φ)
-  rw [Units.ext_iff]
-  exact h.symm
-
-@[simp]
-
-中文:
-定理 invOfUnit_eq'
-  条件: (φ : MvPowerSeries σ k) (u : 单位群 k) (h : constantCoeff φ = u)
-  证明: by
-  rw [← invOfUnit_eq φ (h.symm ▸ u.ne_zero)]
-  apply congrArg (invOfUnit φ)
-  rw [Units.ext_iff]
-  exact h.symm
-
-@[simp]
-
-Depends on / 依赖: Units.ext_iff, ext_iff, h.symm, invOfUnit, invOfUnit_eq, ne_zero, u.ne_zero
+/-
+**MvPowerSeries.invOfUnit_eq'** 是 Mathlib 中的一个定理，位于命名空间 `MvPowerSeries`。
+形式化陈述：invOfUnit_eq' (φ : MvPowerSeries σ k) (u : Units k) (h : constantCoeff φ =
+ u) : invOfUnit φ u = φ⁻¹
+参数：φ : MvPowerSeries σ k；u : Units k；h : constantCoeff φ = u。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Units.ne_zero`：ne_zero [Nontrivial M₀] (u : M₀ˣ) : (u : M₀) != 0
+· 使用定理 `IsLocalRing.toNontrivial`：∀ {R : Type u_1} {inst : Semiring R} [self : I
+sLocalRing R], Nontrivial R
+· 使用定理 `Field.instIsLocalRing`：∀ (K : Type u_3) [inst : Field K], IsLocalRing K
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPowerSeries.invOfUnit_eq`：invOfUnit_eq (φ : MvPowerSeries σ k) (h : co
+nstantCoeff φ != 0) : invOfUnit φ (Units.mk0 _ h) = φ⁻¹
+· 使用定理 `Units.ext_iff`：∀ {α : Type u} [inst : Monoid α] {u v : αˣ}, u = v ↔ ↑u =
+ ↑v
 -/
 theorem invOfUnit_eq' (φ : MvPowerSeries σ k) (u : Units k) (h : constantCoeff φ = u) :
     invOfUnit φ u = φ⁻¹ := by
@@ -633,128 +583,143 @@ theorem invOfUnit_eq' (φ : MvPowerSeries σ k) (u : Units k) (h : constantCoeff
   exact h.symm
 
 @[simp]
-/--
-theorem `mul_inv_cancel` / 定理 `mul_inv_cancel`
-
-English:
-theorem mul_inv_cancel
-  given: (φ : MvPowerSeries σ k) (h : constantCoeff φ != 0)
-  proof: by rw [← invOfUnit_eq φ h, mul_invOfUnit φ (Units.mk0 _ h) rfl]
-
-@[simp]
-
-中文:
-定理 mul_inv_cancel
-  条件: (φ : MvPowerSeries σ k) (h : constantCoeff φ != 0)
-  证明: by rw [← invOfUnit_eq φ h, mul_invOfUnit φ (Units.mk0 _ h) rfl]
-
-@[simp]
+/-
+**MvPowerSeries.mul_inv_cancel** 是 Mathlib 中的一个定理，位于命名空间 `MvPowerSeries`。
+形式化陈述：∀ {σ : Type u_1} {k : Type u_3} [inst : Field k] (φ : MvPowerSeries σ k), 
+  MvPowerSeries.constantCoeff φ ≠ 0 → φ * φ⁻¹ = 1
+参数：φ : MvPowerSeries σ k。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MvPowerSeries.invOfUnit_eq`：invOfUnit_eq (φ : MvPowerSeries σ k) (h : co
+nstantCoeff φ != 0) : invOfUnit φ (Units.mk0 _ h) = φ⁻¹
+· 使用定理 `MvPowerSeries.mul_invOfUnit`：mul_invOfUnit (φ : MvPowerSeries σ R) (u : 
+Rˣ) (h : constantCoeff φ = u) : φ * invOfUnit φ u = 1
 -/
-protected theorem mul_inv_cancel (φ : MvPowerSeries σ k) (h : constantCoeff φ != 0) :
+protected theorem mul_inv_cancel (φ : MvPowerSeries σ k) (h : constantCoeff φ ≠ 0) :
     φ * φ⁻¹ = 1 := by rw [← invOfUnit_eq φ h, mul_invOfUnit φ (Units.mk0 _ h) rfl]
 
 @[simp]
-/--
-theorem `inv_mul_cancel` / 定理 `inv_mul_cancel`
-
-English:
-theorem inv_mul_cancel
-  given: (φ : MvPowerSeries σ k) (h : constantCoeff φ != 0)
-  proof: by rw [mul_comm, φ.mul_inv_cancel h]
-
-中文:
-定理 inv_mul_cancel
-  条件: (φ : MvPowerSeries σ k) (h : constantCoeff φ != 0)
-  证明: by rw [mul_comm, φ.mul_inv_cancel h]
+/-
+**MvPowerSeries.inv_mul_cancel** 是 Mathlib 中的一个定理，位于命名空间 `MvPowerSeries`。
+形式化陈述：∀ {σ : Type u_1} {k : Type u_3} [inst : Field k] (φ : MvPowerSeries σ k), 
+  MvPowerSeries.constantCoeff φ ≠ 0 → φ⁻¹ * φ = 1
+参数：φ : MvPowerSeries σ k。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `MvPowerSeries.mul_inv_cancel`：∀ {σ : Type u_1} {k : Type u_3} [inst : Fi
+eld k] (φ : MvPowerSeries σ k),   MvPowerSeries.constantCoeff φ ≠ 0 → φ * φ⁻¹ = 
+1
 -/
-protected theorem inv_mul_cancel (φ : MvPowerSeries σ k) (h : constantCoeff φ != 0) :
+protected theorem inv_mul_cancel (φ : MvPowerSeries σ k) (h : constantCoeff φ ≠ 0) :
     φ⁻¹ * φ = 1 := by rw [mul_comm, φ.mul_inv_cancel h]
-
-/--
-theorem `eq_mul_inv_iff_mul_eq` / 定理 `eq_mul_inv_iff_mul_eq`
-
-English:
-theorem eq_mul_inv_iff_mul_eq
-  statement: {φ₁ φ₂ φ₃ : MvPowerSeries σ k}
-  proof: ⟨fun k => by simp [k, mul_assoc, MvPowerSeries.inv_mul_cancel _ h], fun k => by
-    simp [← k, mul_assoc, MvPowerSeries.mul_inv_cancel _ h]⟩
-
-中文:
-定理 eq_mul_inv_iff_mul_eq
-  结论: {φ₁ φ₂ φ₃ : MvPowerSeries σ k}
-  证明: ⟨fun k => by simp [k, mul_assoc, MvPowerSeries.inv_mul_cancel _ h], fun k => by
-    simp [← k, mul_assoc, MvPowerSeries.mul_inv_cancel _ h]⟩
+/-
+**MvPowerSeries.eq_mul_inv_iff_mul_eq** 是 Mathlib 中的一个定理，位于命名空间 `MvPowerSeries`。
+形式化陈述：∀ {σ : Type u_1} {k : Type u_3} [inst : Field k] {φ₁ φ₂ φ₃ : MvPowerSeries
+ σ k},   MvPowerSeries.constantCoeff φ₃ ≠ 0 → (φ₁ = φ₂ * φ₃⁻¹ ↔ φ₁ * φ₃ = φ₂)
+参数：φ₁ = φ₂ * φ₃⁻¹ ↔ φ₁ * φ₃ = φ₂。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `MvPowerSeries.inv_mul_cancel`：∀ {σ : Type u_1} {k : Type u_3} [inst : Fi
+eld k] (φ : MvPowerSeries σ k),   MvPowerSeries.constantCoeff φ ≠ 0 → φ⁻¹ * φ = 
+1
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MvPowerSeries.mul_inv_cancel`：∀ {σ : Type u_1} {k : Type u_3} [inst : Fi
+eld k] (φ : MvPowerSeries σ k),   MvPowerSeries.constantCoeff φ ≠ 0 → φ * φ⁻¹ = 
+1
 -/
 protected theorem eq_mul_inv_iff_mul_eq {φ₁ φ₂ φ₃ : MvPowerSeries σ k}
-    (h : constantCoeff φ₃ != 0) : φ₁ = φ₂ * φ₃⁻¹ ↔ φ₁ * φ₃ = φ₂ :=
+    (h : constantCoeff φ₃ ≠ 0) : φ₁ = φ₂ * φ₃⁻¹ ↔ φ₁ * φ₃ = φ₂ :=
   ⟨fun k => by simp [k, mul_assoc, MvPowerSeries.inv_mul_cancel _ h], fun k => by
     simp [← k, mul_assoc, MvPowerSeries.mul_inv_cancel _ h]⟩
-
-/--
-theorem `eq_inv_iff_mul_eq_one` / 定理 `eq_inv_iff_mul_eq_one`
-
-English:
-theorem eq_inv_iff_mul_eq_one
-  given: {φ ψ : MvPowerSeries σ k} (h : constantCoeff ψ != 0)
-  proof: by rw [← MvPowerSeries.eq_mul_inv_iff_mul_eq h, one_mul]
-
-中文:
-定理 eq_inv_iff_mul_eq_one
-  条件: {φ ψ : MvPowerSeries σ k} (h : constantCoeff ψ != 0)
-  证明: by rw [← MvPowerSeries.eq_mul_inv_iff_mul_eq h, one_mul]
+/-
+**MvPowerSeries.eq_inv_iff_mul_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `MvPowerSeries`。
+形式化陈述：∀ {σ : Type u_1} {k : Type u_3} [inst : Field k] {φ ψ : MvPowerSeries σ k}
+,   MvPowerSeries.constantCoeff ψ ≠ 0 → (φ = ψ⁻¹ ↔ φ * ψ = 1)
+参数：φ = ψ⁻¹ ↔ φ * ψ = 1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MvPowerSeries.eq_mul_inv_iff_mul_eq`：∀ {σ : Type u_1} {k : Type u_3} [in
+st : Field k] {φ₁ φ₂ φ₃ : MvPowerSeries σ k},   MvPowerSeries.constantCoeff φ₃ ≠
+ 0 → (φ₁ = φ₂ * φ₃⁻¹ ↔ φ₁…
+· 使用定理 `one_mul`：one_mul : forall a : M, 1 * a = a
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-protected theorem eq_inv_iff_mul_eq_one {φ ψ : MvPowerSeries σ k} (h : constantCoeff ψ != 0) :
+protected theorem eq_inv_iff_mul_eq_one {φ ψ : MvPowerSeries σ k} (h : constantCoeff ψ ≠ 0) :
     φ = ψ⁻¹ ↔ φ * ψ = 1 := by rw [← MvPowerSeries.eq_mul_inv_iff_mul_eq h, one_mul]
-
-/--
-theorem `inv_eq_iff_mul_eq_one` / 定理 `inv_eq_iff_mul_eq_one`
-
-English:
-theorem inv_eq_iff_mul_eq_one
-  given: {φ ψ : MvPowerSeries σ k} (h : constantCoeff ψ != 0)
-  proof: by rw [eq_comm, MvPowerSeries.eq_inv_iff_mul_eq_one h]
-
-@[simp]
-
-中文:
-定理 inv_eq_iff_mul_eq_one
-  条件: {φ ψ : MvPowerSeries σ k} (h : constantCoeff ψ != 0)
-  证明: by rw [eq_comm, MvPowerSeries.eq_inv_iff_mul_eq_one h]
-
-@[simp]
+/-
+**MvPowerSeries.inv_eq_iff_mul_eq_one** 是 Mathlib 中的一个定理，位于命名空间 `MvPowerSeries`。
+形式化陈述：∀ {σ : Type u_1} {k : Type u_3} [inst : Field k] {φ ψ : MvPowerSeries σ k}
+,   MvPowerSeries.constantCoeff ψ ≠ 0 → (ψ⁻¹ = φ ↔ φ * ψ = 1)
+参数：ψ⁻¹ = φ ↔ φ * ψ = 1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `MvPowerSeries.eq_inv_iff_mul_eq_one`：∀ {σ : Type u_1} {k : Type u_3} [in
+st : Field k] {φ ψ : MvPowerSeries σ k},   MvPowerSeries.constantCoeff ψ ≠ 0 → (
+φ = ψ⁻¹ ↔ φ * ψ = 1)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-protected theorem inv_eq_iff_mul_eq_one {φ ψ : MvPowerSeries σ k} (h : constantCoeff ψ != 0) :
+protected theorem inv_eq_iff_mul_eq_one {φ ψ : MvPowerSeries σ k} (h : constantCoeff ψ ≠ 0) :
     ψ⁻¹ = φ ↔ φ * ψ = 1 := by rw [eq_comm, MvPowerSeries.eq_inv_iff_mul_eq_one h]
 
 @[simp]
-/--
-theorem `mul_inv_rev` / 定理 `mul_inv_rev`
-
-English:
-theorem mul_inv_rev
-  given: (φ ψ : MvPowerSeries σ k)
-  proof: by
-  by_cases h : constantCoeff (φ * ψ) = 0
-  · rw [inv_eq_zero.mpr h]
-    simp only [map_mul, mul_eq_zero] at h
-    -- we don't have `NoZeroDivisors (MvPowerSeries σ k)` yet,
-    rcases h with h | h <;> simp [inv_eq_zero.mpr h]
-  · rw [MvPowerSeries.inv_eq_iff_mul_eq_one h]
-    simp only [not_or, map_mul, mul_eq_zero] at h
-    rw [← mul_assoc]; rw [mul_assoc _⁻¹]; rw [MvPowerSeries.inv_mul_cancel _ h.left]; rw [mul_one]; rw [MvPowerSeries.inv_mul_cancel _ h.right]
-
-中文:
-定理 mul_inv_rev
-  条件: (φ ψ : MvPowerSeries σ k)
-  证明: by
-  by_cases h : constantCoeff (φ * ψ) = 0
-  · rw [inv_eq_zero.mpr h]
-    simp only [map_mul, mul_eq_zero] at h
-    -- we don't have `NoZeroDivisors (MvPowerSeries σ k)` yet,
-    rcases h with h | h <;> simp [inv_eq_zero.mpr h]
-  · rw [MvPowerSeries.inv_eq_iff_mul_eq_one h]
-    simp only [not_or, map_mul, mul_eq_zero] at h
-    rw [← mul_assoc]; rw [mul_assoc _⁻¹]; rw [MvPowerSeries.inv_mul_cancel _ h.left]; rw [mul_one]; rw [MvPowerSeries.inv_mul_cancel _ h.right]
+/-
+**MvPowerSeries.mul_inv_rev** 是 Mathlib 中的一个定理，位于命名空间 `MvPowerSeries`。
+形式化陈述：∀ {σ : Type u_1} {k : Type u_3} [inst : Field k] (φ ψ : MvPowerSeries σ k)
+, (φ * ψ)⁻¹ = ψ⁻¹ * φ⁻¹
+参数：φ ψ : MvPowerSeries σ k；φ * ψ。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `MvPowerSeries.inv_eq_zero`：inv_eq_zero {φ : MvPowerSeries σ k} : φ⁻¹ = 0
+ ↔ constantCoeff φ = 0
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `IsDomain.to_noZeroDivisors`：∀ (α : Type u_3) [inst : Semiring α] [IsDoma
+in α], NoZeroDivisors α
+· 使用定理 `Field.isDomain`：∀ {K : Type u_1} [inst : Field K], IsDomain K
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `MulZeroClass.mul_zero`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, a * 0 = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `MulZeroClass.zero_mul`：∀ {M₀ : Type u} [self : MulZeroClass M₀] (a : M₀)
+, 0 * a = 0
+· 使用定理 `MvPowerSeries.inv_eq_iff_mul_eq_one`：∀ {σ : Type u_1} {k : Type u_3} [in
+st : Field k] {φ ψ : MvPowerSeries σ k},   MvPowerSeries.constantCoeff ψ ≠ 0 → (
+ψ⁻¹ = φ ↔ φ * ψ = 1)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mul_assoc`：mul_assoc : forall a b c : G, a * b * c = a * (b * c)
+· 使用定理 `MvPowerSeries.inv_mul_cancel`：∀ {σ : Type u_1} {k : Type u_3} [inst : Fi
+eld k] (φ : MvPowerSeries σ k),   MvPowerSeries.constantCoeff φ ≠ 0 → φ⁻¹ * φ = 
+1
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `mul_one`：mul_one : forall a : M, a * 1 = a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
 protected theorem mul_inv_rev (φ ψ : MvPowerSeries σ k) :
     (φ * ψ)⁻¹ = ψ⁻¹ * φ⁻¹ := by
@@ -765,124 +730,110 @@ protected theorem mul_inv_rev (φ ψ : MvPowerSeries σ k) :
     rcases h with h | h <;> simp [inv_eq_zero.mpr h]
   · rw [MvPowerSeries.inv_eq_iff_mul_eq_one h]
     simp only [not_or, map_mul, mul_eq_zero] at h
-    rw [← mul_assoc]; rw [mul_assoc _⁻¹]; rw [MvPowerSeries.inv_mul_cancel _ h.left]; rw [mul_one]; rw [MvPowerSeries.inv_mul_cancel _ h.right]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: InvOneClass (MvPowerSeries σ k)
-  body: { (inferInstance : One (MvPowerSeries σ k)),
-    (inferInstance : Inv (MvPowerSeries σ k)) with
-    inv_one := by
-      rw [MvPowerSeries.inv_eq_iff_mul_eq_one]; rw [mul_one]
-      simp }
-
-@[simp]
-
-中文:
-实例 :
-  签名: InvOne类 (MvPowerSeries σ k)
-  定义体: { (inferInstance : One (MvPowerSeries σ k)),
-    (inferInstance : Inv (MvPowerSeries σ k)) with
-    inv_one := by
-      rw [MvPowerSeries.inv_eq_iff_mul_eq_one]; rw [mul_one]
-      simp }
-
-@[simp]
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.inv_eq_iff_mul_eq_one, inv_eq_iff_mul_eq_one, inv_one, mul_one
+    rw [← mul_assoc, mul_assoc _⁻¹, MvPowerSeries.inv_mul_cancel _ h.left, mul_one,
+      MvPowerSeries.inv_mul_cancel _ h.right]
+/-
+**MvPowerSeries.** 是 Mathlib 中的一个实例，位于命名空间 `MvPowerSeries`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : InvOneClass (MvPowerSeries σ k) :=
   { (inferInstance : One (MvPowerSeries σ k)),
     (inferInstance : Inv (MvPowerSeries σ k)) with
     inv_one := by
-      rw [MvPowerSeries.inv_eq_iff_mul_eq_one]; rw [mul_one]
+      rw [MvPowerSeries.inv_eq_iff_mul_eq_one, mul_one]
       simp }
 
 @[simp]
-/--
-theorem `C_inv` / 定理 `C_inv`
-
-English:
-theorem C_inv
-  given: (r : k)
-  statement: (C (σ := σ) r)⁻¹ = C r⁻¹
-  proof: by
-  rcases eq_or_ne r 0 with (rfl | hr)
-  · simp
-  rw [MvPowerSeries.inv_eq_iff_mul_eq_one]; rw [← map_mul]; rw [inv_mul_cancel₀ hr]; rw [map_one]
-  simpa using hr
-
-@[simp]
-
-中文:
-定理 C_inv
-  条件: (r : k)
-  结论: (C (σ := σ) r)⁻¹ = C r⁻¹
-  证明: by
-  rcases eq_or_ne r 0 with (rfl | hr)
-  · simp
-  rw [MvPowerSeries.inv_eq_iff_mul_eq_one]; rw [← map_mul]; rw [inv_mul_cancel₀ hr]; rw [map_one]
-  simpa using hr
-
-@[simp]
-
-Depends on / 依赖: MvPowerSeries, MvPowerSeries.inv_eq_iff_mul_eq_one, eq_or_ne, inv_eq_iff_mul_eq_one, map_mul, map_one
+/-
+**MvPowerSeries.C_inv** 是 Mathlib 中的一个定理，位于命名空间 `MvPowerSeries`。
+形式化陈述：C_inv (r : k) : (C (σ
+参数：r : k。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `eq_or_ne`：eq_or_ne {α : Sort*} (x y : α) : x = y ∨ x != y
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
+· 使用定理 `MvPowerSeries.zero_inv`：zero_inv : (0 : MvPowerSeries σ k)⁻¹ = 0
+· 使用定理 `inv_zero`：∀ {G₀ : Type u} [inst : GroupWithZero G₀], 0⁻¹ = 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MvPowerSeries.inv_eq_iff_mul_eq_one`：∀ {σ : Type u_1} {k : Type u_3} [in
+st : Field k] {φ ψ : MvPowerSeries σ k},   MvPowerSeries.constantCoeff ψ ≠ 0 → (
+ψ⁻¹ = φ ↔ φ * ψ = 1)
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `inv_mul_cancel₀`：inv_mul_cancel₀ (h : a != 0) : a⁻¹ * a = 1
+· 使用定理 `map_one`：map_one [OneHomClass F M N] (f : F) : f 1 = 1
+· 使用定理 `MonoidHomClass.toOneHomClass`：∀ {F : Type u_10} {M : outParam (Type u_11
+)} {N : outParam (Type u_12)} {inst : MulOne M} {inst_1 : MulOne N}   {inst_2 : 
+FunLike F M N} [se…
+· 使用定理 `MonoidWithZeroHomClass.toMonoidHomClass`：∀ {F : Type u_7} {α : outParam 
+(Type u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : Mul
+ZeroOneClass β} {inst_2 : Fun…
 -/
 theorem C_inv (r : k) : (C (σ := σ) r)⁻¹ = C r⁻¹ := by
   rcases eq_or_ne r 0 with (rfl | hr)
   · simp
-  rw [MvPowerSeries.inv_eq_iff_mul_eq_one]; rw [← map_mul]; rw [inv_mul_cancel₀ hr]; rw [map_one]
+  rw [MvPowerSeries.inv_eq_iff_mul_eq_one, ← map_mul, inv_mul_cancel₀ hr, map_one]
   simpa using hr
 
 @[simp]
-/--
-theorem `X_inv` / 定理 `X_inv`
-
-English:
-theorem X_inv
-  given: (s : σ)
-  statement: (X s : MvPowerSeries σ k)⁻¹ = 0
-  proof: by
-  rw [inv_eq_zero]; rw [constantCoeff_X]
-
-@[simp]
-
-中文:
-定理 X_inv
-  条件: (s : σ)
-  结论: (X s : MvPowerSeries σ k)⁻¹ = 0
-  证明: by
-  rw [inv_eq_zero]; rw [constantCoeff_X]
-
-@[simp]
-
-Depends on / 依赖: constantCoeff_X, inv_eq_zero
+/-
+**MvPowerSeries.X_inv** 是 Mathlib 中的一个定理，位于命名空间 `MvPowerSeries`。
+形式化陈述：X_inv (s : σ) : (X s : MvPowerSeries σ k)⁻¹ = 0
+参数：s : σ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPowerSeries.inv_eq_zero`：inv_eq_zero {φ : MvPowerSeries σ k} : φ⁻¹ = 0
+ ↔ constantCoeff φ = 0
+· 使用定理 `MvPowerSeries.constantCoeff_X`：constantCoeff_X (s : σ) : constantCoeff (
+R
 -/
 theorem X_inv (s : σ) : (X s : MvPowerSeries σ k)⁻¹ = 0 := by
-  rw [inv_eq_zero]; rw [constantCoeff_X]
+  rw [inv_eq_zero, constantCoeff_X]
 
 @[simp]
-/--
-theorem `smul_inv` / 定理 `smul_inv`
-
-English:
-theorem smul_inv
-  given: (r : k) (φ : MvPowerSeries σ k)
-  statement: (r • φ)⁻¹ = r⁻¹ • φ⁻¹
-  proof: by
-  simp [smul_eq_C_mul, mul_comm]
-
-中文:
-定理 smul_inv
-  条件: (r : k) (φ : MvPowerSeries σ k)
-  结论: (r • φ)⁻¹ = r⁻¹ • φ⁻¹
-  证明: by
-  simp [smul_eq_C_mul, mul_comm]
-
-Depends on / 依赖: mul_comm, smul_eq_C_mul
+/-
+**MvPowerSeries.smul_inv** 是 Mathlib 中的一个定理，位于命名空间 `MvPowerSeries`。
+形式化陈述：smul_inv (r : k) (φ : MvPowerSeries σ k) : (r • φ)⁻¹ = r⁻¹ • φ⁻¹
+参数：r : k；φ : MvPowerSeries σ k。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPowerSeries.smul_eq_C_mul`：smul_eq_C_mul (f : MvPowerSeries σ R) (a : 
+R) : a • f = C a * f
+· 使用定理 `mul_comm`：mul_comm : forall a b : G, a * b = b * a
+· 使用定理 `MvPowerSeries.mul_inv_rev`：∀ {σ : Type u_1} {k : Type u_3} [inst : Field
+ k] (φ ψ : MvPowerSeries σ k), (φ * ψ)⁻¹ = ψ⁻¹ * φ⁻¹
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `MvPowerSeries.C_inv`：C_inv (r : k) : (C (σ
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem smul_inv (r : k) (φ : MvPowerSeries σ k) : (r • φ)⁻¹ = r⁻¹ • φ⁻¹ := by
   simp [smul_eq_C_mul, mul_comm]
@@ -892,3 +843,4 @@ end Field
 end MvPowerSeries
 
 end
+

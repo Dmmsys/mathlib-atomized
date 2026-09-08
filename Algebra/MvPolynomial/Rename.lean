@@ -50,677 +50,739 @@ namespace MvPolynomial
 
 section Rename
 
-/--
-Definition of `rename` / `rename` 的定义
+/-- Rename all the variables in a multivariable polynomial. -/
+/-
+**MvPolynomial.rename** 是 Mathlib 中的一个定义，位于命名空间 `MvPolynomial`。
+形式化陈述：rename (f : σ -> τ) : MvPolynomial σ R ->ₐ[R] MvPolynomial τ R
+参数：f : σ -> τ。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition rename
-  signature: (f : σ -> τ)
-  body: AddMonoidAlgebra.mapDomainAlgHom _ _ (mapDomain.addMonoidHom f)
-
-中文:
-定义 rename
-  签名: (f : σ -> τ)
-  定义体: AddMonoidAlgebra.mapDomainAlgHom _ _ (mapDomain.addMonoidHom f)
-
-Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.mapDomainAlgHom, addMonoidHom, mapDomain, mapDomain.addMonoidHom, mapDomainAlgHom
+--- 原说明 ---
+Rename all the variables in a multivariable polynomial.
 -/
-def rename (f : σ -> τ) : MvPolynomial σ R ->ₐ[R] MvPolynomial τ R :=
+def rename (f : σ → τ) : MvPolynomial σ R →ₐ[R] MvPolynomial τ R :=
   AddMonoidAlgebra.mapDomainAlgHom _ _ (mapDomain.addMonoidHom f)
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `rename_C` / 定理 `rename_C`
-
-English:
-theorem rename_C
-  given: (f : σ -> τ) (r : R)
-  statement: rename f (C r) = C r
-  proof: by
+/-
+**MvPolynomial.rename_C** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：rename_C (f : σ -> τ) (r : R) : rename f (C r) = C r
+参数：f : σ -> τ；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddMonoidAlgebra.mapDomainAlgHom_apply`：∀ (R : Type u_1) (A : Type u_4) 
+{M : Type u_7} {N : Type u_8} [inst : CommSemiring R] [inst_1 : Semiring A]   [i
+nst_2 : Algebra R A] [inst_3…
+· 使用定理 `AddMonoidAlgebra.mapDomain_single`：∀ {R : Type u_3} {M : Type u_6} {N : 
+Type u_7} [inst : Semiring R] {f : M → N} {a : M} {r : R},   AddMonoidAlgebra.ma
+pDomain f (AddMonoidAlg…
+· 使用定理 `Finsupp.mapDomain.addMonoidHom_apply`：∀ {α : Type u_1} {β : Type u_2} {M
+ : Type u_5} [inst : AddCommMonoid M] (f : α → β) (v : α →₀ M),   (Finsupp.mapDo
+main.addMonoidHom f) v = F…
+· 使用定理 `Finsupp.mapDomain_zero`：mapDomain_zero {f : α -> β} : mapDomain f (0 : α
+ ->₀ M) = (0 : β ->₀ M)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+-/
+theorem rename_C (f : σ → τ) (r : R) : rename f (C r) = C r := by
   unfold rename C monomial MvPolynomial; simp
 
 @[simp]
-
-中文:
-定理 rename_C
-  条件: (f : σ -> τ) (r : R)
-  结论: rename f (C r) = C r
-  证明: by
-  unfold rename C monomial MvPolynomial; simp
-
-@[simp]
-
-Depends on / 依赖: MvPolynomial, monomial
+/-
+**MvPolynomial.rename_X** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：rename_X (f : σ -> τ) (i : σ) : rename f (X i : MvPolynomial σ R) = X (f i
+)
+参数：f : σ -> τ；i : σ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddMonoidAlgebra.mapDomainAlgHom_apply`：∀ (R : Type u_1) (A : Type u_4) 
+{M : Type u_7} {N : Type u_8} [inst : CommSemiring R] [inst_1 : Semiring A]   [i
+nst_2 : Algebra R A] [inst_3…
+· 使用定理 `AddMonoidAlgebra.mapDomain_single`：∀ {R : Type u_3} {M : Type u_6} {N : 
+Type u_7} [inst : Semiring R] {f : M → N} {a : M} {r : R},   AddMonoidAlgebra.ma
+pDomain f (AddMonoidAlg…
+· 使用定理 `Finsupp.mapDomain.addMonoidHom_apply`：∀ {α : Type u_1} {β : Type u_2} {M
+ : Type u_5} [inst : AddCommMonoid M] (f : α → β) (v : α →₀ M),   (Finsupp.mapDo
+main.addMonoidHom f) v = F…
+· 使用定理 `Finsupp.mapDomain_single`：mapDomain_single {f : α -> β} {a : α} {b : M} 
+: mapDomain f (single a b) = single (f a) b
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem rename_C (f : σ -> τ) (r : R) : rename f (C r) = C r := by
-  unfold rename C monomial MvPolynomial; simp
-
-@[simp]
-/--
-theorem `rename_X` / 定理 `rename_X`
-
-English:
-theorem rename_X
-  given: (f : σ -> τ) (i : σ)
-  statement: rename f (X i : MvPolynomial σ R) = X (f i)
-  proof: by
+theorem rename_X (f : σ → τ) (i : σ) : rename f (X i : MvPolynomial σ R) = X (f i) := by
   simp [MvPolynomial, rename, X, monomial]
 
 @[simp]
-
-中文:
-定理 rename_X
-  条件: (f : σ -> τ) (i : σ)
-  结论: rename f (X i : 多元多项式 σ R) = X (f i)
-  证明: by
-  simp [MvPolynomial, rename, X, monomial]
-
-@[simp]
-
-Depends on / 依赖: MvPolynomial, monomial
+/-
+**MvPolynomial.rename_zero** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial`。
+形式化陈述：rename_zero (f : σ -> τ) : (0 : MvPolynomial σ R).rename f = 0
+参数：f : σ -> τ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem rename_X (f : σ -> τ) (i : σ) : rename f (X i : MvPolynomial σ R) = X (f i) := by
-  simp [MvPolynomial, rename, X, monomial]
-
-@[simp]
-/--
-lemma `rename_zero` / 引理 `rename_zero`
-
-English:
-lemma rename_zero
-  given: (f : σ -> τ)
-  statement: (0 : MvPolynomial σ R).rename f = 0
-  proof: rfl
-
-中文:
-引理 rename_zero
-  条件: (f : σ -> τ)
-  结论: (0 : 多元多项式 σ R).rename f = 0
-  证明: rfl
+lemma rename_zero (f : σ → τ) : (0 : MvPolynomial σ R).rename f = 0 := rfl
+/-
+**MvPolynomial.map_rename** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：map_rename (f : R ->+* S) (g : σ -> τ) (p : MvPolynomial σ R) : map f (ren
+ame g p) = rename g (map f p)
+参数：f : R ->+* S；g : σ -> τ；p : MvPolynomial σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.induction_on`：induction_on {motive : MvPolynomial σ R -> Pr
+op} (p : MvPolynomial σ R) (C : forall a, motive (C a)) (add : forall p q, motiv
+e p -> motive q…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.rename_C`：rename_C (f : σ -> τ) (r : R) : rename f (C r) = 
+C r
+· 使用定理 `MvPolynomial.map_C`：map_C : forall a : R, map f (C a : MvPolynomial σ R)
+ = C (f a)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `MvPolynomial.rename_X`：rename_X (f : σ -> τ) (i : σ) : rename f (X i : M
+vPolynomial σ R) = X (f i)
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `MvPolynomial.map_X`：map_X (n : σ) : map f (X n : MvPolynomial σ R) = X n
 -/
-lemma rename_zero (f : σ -> τ) : (0 : MvPolynomial σ R).rename f = 0 := rfl
-
-/--
-theorem `map_rename` / 定理 `map_rename`
-
-English:
-theorem map_rename
-  given: (f : R ->+* S) (g : σ -> τ) (p : MvPolynomial σ R)
-  proof: by
-  apply MvPolynomial.induction_on p
-    (fun a => by simp only [map_C, rename_C])
-    (fun p q hp hq => by simp only [hp, hq, map_add]) fun p n hp => by
-    simp only [hp, rename_X, map_X, map_mul]
-
-中文:
-定理 map_rename
-  条件: (f : R ->+* S) (g : σ -> τ) (p : 多元多项式 σ R)
-  证明: by
-  apply MvPolynomial.induction_on p
-    (fun a => by simp only [map_C, rename_C])
-    (fun p q hp hq => by simp only [hp, hq, map_add]) fun p n hp => by
-    simp only [hp, rename_X, map_X, map_mul]
-
-Depends on / 依赖: MvPolynomial, MvPolynomial.induction_on, induction_on, map_C, map_X, map_add, map_mul, rename_C, rename_X
--/
-theorem map_rename (f : R ->+* S) (g : σ -> τ) (p : MvPolynomial σ R) :
+theorem map_rename (f : R →+* S) (g : σ → τ) (p : MvPolynomial σ R) :
     map f (rename g p) = rename g (map f p) := by
   apply MvPolynomial.induction_on p
     (fun a => by simp only [map_C, rename_C])
     (fun p q hp hq => by simp only [hp, hq, map_add]) fun p n hp => by
     simp only [hp, rename_X, map_X, map_mul]
-
-/--
-lemma `map_comp_rename` / 引理 `map_comp_rename`
-
-English:
-lemma map_comp_rename
-  given: (f : R ->+* S) (g : σ -> τ)
-  proof: RingHom.ext fun p => map_rename f g p
-
-@[simp]
-
-中文:
-引理 map_comp_rename
-  条件: (f : R ->+* S) (g : σ -> τ)
-  证明: RingHom.ext fun p => map_rename f g p
-
-@[simp]
-
-Depends on / 依赖: RingHom, RingHom.ext, map_rename
+/-
+**MvPolynomial.map_comp_rename** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial`。
+形式化陈述：map_comp_rename (f : R ->+* S) (g : σ -> τ) : (map f).comp (rename g).toRi
+ngHom = (rename g).toRingHom.comp (map f)
+参数：f : R ->+* S；g : σ -> τ。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `MvPolynomial.map_rename`：map_rename (f : R ->+* S) (g : σ -> τ) (p : MvP
+olynomial σ R) : map f (rename g p) = rename g (map f p)
 -/
-lemma map_comp_rename (f : R ->+* S) (g : σ -> τ) :
+lemma map_comp_rename (f : R →+* S) (g : σ → τ) :
     (map f).comp (rename g).toRingHom = (rename g).toRingHom.comp (map f) :=
-  RingHom.ext fun p => map_rename f g p
+  RingHom.ext fun p ↦ map_rename f g p
 
 @[simp]
-/--
-theorem `rename_rename` / 定理 `rename_rename`
-
-English:
-theorem rename_rename
-  given: (f : σ -> τ) (g : τ -> α) (p : MvPolynomial σ R)
-  proof: by
-  simp [MvPolynomial, rename, mapDomain.addMonoidHom_comp]
-
-中文:
-定理 rename_rename
-  条件: (f : σ -> τ) (g : τ -> α) (p : 多元多项式 σ R)
-  证明: by
-  simp [MvPolynomial, rename, mapDomain.addMonoidHom_comp]
-
-Depends on / 依赖: MvPolynomial, addMonoidHom_comp, mapDomain, mapDomain.addMonoidHom_comp
+/-
+**MvPolynomial.rename_rename** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：rename_rename (f : σ -> τ) (g : τ -> α) (p : MvPolynomial σ R) : rename g 
+(rename f p) = rename (g ∘ f) p
+参数：f : σ -> τ；g : τ -> α；p : MvPolynomial σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddMonoidAlgebra.mapDomainAlgHom_apply`：∀ (R : Type u_1) (A : Type u_4) 
+{M : Type u_7} {N : Type u_8} [inst : CommSemiring R] [inst_1 : Semiring A]   [i
+nst_2 : Algebra R A] [inst_3…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Finsupp.mapDomain.addMonoidHom_comp`：∀ {α : Type u_1} {β : Type u_2} {γ 
+: Type u_3} {M : Type u_5} [inst : AddCommMonoid M] (f : β → γ) (g : α → β),   F
+insupp.mapDomain.addMonoi…
+· 使用定理 `AddMonoidAlgebra.mapDomainAlgHom_comp`：∀ {R : Type u_1} {A : Type u_4} {
+M : Type u_7} {N : Type u_8} {O : Type u_9} [inst : CommSemiring R]   [inst_1 : 
+Semiring A] [inst_2 : Algeb…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem rename_rename (f : σ -> τ) (g : τ -> α) (p : MvPolynomial σ R) :
+theorem rename_rename (f : σ → τ) (g : τ → α) (p : MvPolynomial σ R) :
     rename g (rename f p) = rename (g ∘ f) p := by
   simp [MvPolynomial, rename, mapDomain.addMonoidHom_comp]
-
-/--
-lemma `rename_comp_rename` / 引理 `rename_comp_rename`
-
-English:
-lemma rename_comp_rename
-  given: (f : σ -> τ) (g : τ -> α)
-  proof: AlgHom.ext fun p => rename_rename f g p
-
-@[simp]
-
-中文:
-引理 rename_comp_rename
-  条件: (f : σ -> τ) (g : τ -> α)
-  证明: AlgHom.ext fun p => rename_rename f g p
-
-@[simp]
+/-
+**MvPolynomial.rename_comp_rename** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial`。
+形式化陈述：rename_comp_rename (f : σ -> τ) (g : τ -> α) : (rename (R
+参数：f : σ -> τ；g : τ -> α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.ext`：ext {φ₁ φ₂ : A ->ₐ[R] B} (H : forall x, φ₁ x = φ₂ x) : φ₁ = 
+φ₂
+· 使用定理 `MvPolynomial.rename_rename`：rename_rename (f : σ -> τ) (g : τ -> α) (p :
+ MvPolynomial σ R) : rename g (rename f p) = rename (g ∘ f) p
 -/
-lemma rename_comp_rename (f : σ -> τ) (g : τ -> α) :
+lemma rename_comp_rename (f : σ → τ) (g : τ → α) :
     (rename (R := R) g).comp (rename f) = rename (g ∘ f) :=
-  AlgHom.ext fun p => rename_rename f g p
+  AlgHom.ext fun p ↦ rename_rename f g p
 
 @[simp]
-/--
-theorem `rename_id` / 定理 `rename_id`
-
-English:
-theorem rename_id
-  statement: rename id = AlgHom.id R (MvPolynomial σ R)
-  proof: by simp [MvPolynomial, rename]
-
-中文:
-定理 rename_id
-  结论: rename id = 代数态射.id R (多元多项式 σ R)
-  证明: by simp [MvPolynomial, rename]
-
-Depends on / 依赖: MvPolynomial
+/-
+**MvPolynomial.rename_id** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：rename_id : rename id = AlgHom.id R (MvPolynomial σ R)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.mapDomain.addMonoidHom_id`：∀ {α : Type u_1} {M : Type u_5} [inst
+ : AddCommMonoid M], Finsupp.mapDomain.addMonoidHom id = AddMonoidHom.id (α →₀ M
+)
+· 使用定理 `AddMonoidAlgebra.mapDomainAlgHom_id`：∀ {R : Type u_1} {A : Type u_4} {M 
+: Type u_7} [inst : CommSemiring R] [inst_1 : Semiring A] [inst_2 : Algebra R A]
+   [inst_3 : AddMonoid M]…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 theorem rename_id : rename id = AlgHom.id R (MvPolynomial σ R) := by simp [MvPolynomial, rename]
-
-/--
-lemma `rename_id_apply` / 引理 `rename_id_apply`
-
-English:
-lemma rename_id_apply
-  given: (p : MvPolynomial σ R)
-  statement: rename id p = p
-  proof: by
-  simp
-
-中文:
-引理 rename_id_apply
-  条件: (p : 多元多项式 σ R)
-  结论: rename id p = p
-  证明: by
-  simp
+/-
+**MvPolynomial.rename_id_apply** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial`。
+形式化陈述：rename_id_apply (p : MvPolynomial σ R) : rename id p = p
+参数：p : MvPolynomial σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.rename_id`：rename_id : rename id = AlgHom.id R (MvPolynomia
+l σ R)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
 lemma rename_id_apply (p : MvPolynomial σ R) : rename id p = p := by
   simp
-
-/--
-theorem `rename_monomial` / 定理 `rename_monomial`
-
-English:
-theorem rename_monomial
-  given: (f : σ -> τ) (d : σ ->₀ Nat) (r : R)
-  proof: by
-  simp [MvPolynomial, rename, monomial]
-
-中文:
-定理 rename_monomial
-  条件: (f : σ -> τ) (d : σ ->₀ 自然数) (r : R)
-  证明: by
-  simp [MvPolynomial, rename, monomial]
-
-Depends on / 依赖: MvPolynomial, monomial
+/-
+**MvPolynomial.rename_monomial** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：rename_monomial (f : σ -> τ) (d : σ ->₀ Nat) (r : R) : rename f (monomial 
+d r) = monomial (d.mapDomain f) r
+参数：f : σ -> τ；d : σ ->₀ Nat；r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `AddMonoidAlgebra.mapDomainAlgHom_apply`：∀ (R : Type u_1) (A : Type u_4) 
+{M : Type u_7} {N : Type u_8} [inst : CommSemiring R] [inst_1 : Semiring A]   [i
+nst_2 : Algebra R A] [inst_3…
+· 使用定理 `AddMonoidAlgebra.mapDomain_single`：∀ {R : Type u_3} {M : Type u_6} {N : 
+Type u_7} [inst : Semiring R] {f : M → N} {a : M} {r : R},   AddMonoidAlgebra.ma
+pDomain f (AddMonoidAlg…
+· 使用定理 `Finsupp.mapDomain.addMonoidHom_apply`：∀ {α : Type u_1} {β : Type u_2} {M
+ : Type u_5} [inst : AddCommMonoid M] (f : α → β) (v : α →₀ M),   (Finsupp.mapDo
+main.addMonoidHom f) v = F…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem rename_monomial (f : σ -> τ) (d : σ ->₀ Nat) (r : R) :
+theorem rename_monomial (f : σ → τ) (d : σ →₀ ℕ) (r : R) :
     rename f (monomial d r) = monomial (d.mapDomain f) r := by
   simp [MvPolynomial, rename, monomial]
-
-/--
-lemma `rename_eq_aeval` / 引理 `rename_eq_aeval`
-
-English:
-lemma rename_eq_aeval
-  given: (f : σ -> τ)
-  statement: rename (R := R) f = aeval (X ∘ f)
-  proof: by ext; simp
-
-@[deprecated (since := "2026-06-18")] alias rename_eq := rename_eq_aeval
-
-中文:
-引理 rename_eq_aeval
-  条件: (f : σ -> τ)
-  结论: rename (R := R) f = aeval (X ∘ f)
-  证明: by ext; simp
-
-@[deprecated (since := "2026-06-18")] alias rename_eq := rename_eq_aeval
+/-
+**MvPolynomial.rename_eq_aeval** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial`。
+形式化陈述：rename_eq_aeval (f : σ -> τ) : rename (R
+参数：f : σ -> τ。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.algHom_ext`：algHom_ext {A : Type*} [Semiring A] [Algebra R 
+A] {f g : MvPolynomial σ R ->ₐ[R] A} (hf : forall i : σ, f (X i) = g (X i)) : f 
+= g
+· 使用定理 `MvPolynomial.ext`：ext (p q : MvPolynomial σ R) : (forall m, coeff m p = 
+coeff m q) -> p = q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.rename_X`：rename_X (f : σ -> τ) (i : σ) : rename f (X i : M
+vPolynomial σ R) = X (f i)
+· 使用定理 `MvPolynomial.aeval_X`：aeval_X (s : σ) : aeval f (X s : MvPolynomial σ R)
+ = f s
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma rename_eq_aeval (f : σ -> τ) : rename (R := R) f = aeval (X ∘ f) := by ext; simp
+lemma rename_eq_aeval (f : σ → τ) : rename (R := R) f = aeval (X ∘ f) := by ext; simp
 
 @[deprecated (since := "2026-06-18")] alias rename_eq := rename_eq_aeval
-
-/--
-theorem `rename_injective` / 定理 `rename_injective`
-
-English:
-theorem rename_injective
-  given: (f : σ -> τ) (hf : Function.Injective f)
-  proof: AddMonoidAlgebra.mapDomain_injective (Finsupp.mapDomain_injective hf)
-
-@[simp]
-
-中文:
-定理 rename_injective
-  条件: (f : σ -> τ) (hf : 函数.单射 f)
-  证明: AddMonoidAlgebra.mapDomain_injective (Finsupp.mapDomain_injective hf)
-
-@[simp]
-
-Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.mapDomain_injective, Finsupp, Finsupp.mapDomain_injective, mapDomain_injective
+/-
+**MvPolynomial.rename_injective** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：rename_injective (f : σ -> τ) (hf : Function.Injective f) : Function.Injec
+tive (rename f : MvPolynomial σ R -> MvPolynomial τ R)
+参数：f : σ -> τ；hf : Function.Injective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AddMonoidAlgebra.mapDomain_injective`：∀ {R : Type u_3} {M : Type u_6} {N
+ : Type u_7} [inst : Semiring R] {f : M → N},   Function.Injective f → Function.
+Injective (AddMonoidAlgebr…
+· 使用定理 `Finsupp.mapDomain_injective`：mapDomain_injective {f : α -> β} (hf : Func
+tion.Injective f) : Function.Injective (mapDomain f : (α ->₀ M) -> β ->₀ M)
 -/
-theorem rename_injective (f : σ -> τ) (hf : Function.Injective f) :
-    Function.Injective (rename f : MvPolynomial σ R -> MvPolynomial τ R) :=
+theorem rename_injective (f : σ → τ) (hf : Function.Injective f) :
+    Function.Injective (rename f : MvPolynomial σ R → MvPolynomial τ R) :=
   AddMonoidAlgebra.mapDomain_injective (Finsupp.mapDomain_injective hf)
 
 @[simp]
-/--
-lemma `rename_eq_zero_iff_of_injective` / 引理 `rename_eq_zero_iff_of_injective`
-
-English:
-lemma rename_eq_zero_iff_of_injective
-  statement: (p : MvPolynomial σ R) {f : σ -> τ}
-  proof: by
-  rw [← rename_zero f]; rw [(MvPolynomial.rename_injective _ hf).eq_iff]
-
-中文:
-引理 rename_eq_zero_iff_of_injective
-  结论: (p : 多元多项式 σ R) {f : σ -> τ}
-  证明: by
-  rw [← rename_zero f]; rw [(MvPolynomial.rename_injective _ hf).eq_iff]
-
-Depends on / 依赖: MvPolynomial, MvPolynomial.rename_injective, eq_iff, rename_injective, rename_zero
+/-
+**MvPolynomial.rename_eq_zero_iff_of_injective** 是 Mathlib 中的一个引理，位于命名空间 `MvPoly
+nomial`。
+形式化陈述：rename_eq_zero_iff_of_injective (p : MvPolynomial σ R) {f : σ -> τ} (hf : 
+f.Injective) : p.rename f = 0 ↔ p = 0
+参数：p : MvPolynomial σ R；hf : f.Injective。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用引理 `MvPolynomial.rename_zero`：rename_zero (f : σ -> τ) : (0 : MvPolynomial σ
+ R).rename f = 0
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `MvPolynomial.rename_injective`：rename_injective (f : σ -> τ) (hf : Funct
+ion.Injective f) : Function.Injective (rename f : MvPolynomial σ R -> MvPolynomi
+al τ R)
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-lemma rename_eq_zero_iff_of_injective (p : MvPolynomial σ R) {f : σ -> τ}
+lemma rename_eq_zero_iff_of_injective (p : MvPolynomial σ R) {f : σ → τ}
     (hf : f.Injective) : p.rename f = 0 ↔ p = 0 := by
-  rw [← rename_zero f]; rw [(MvPolynomial.rename_injective _ hf).eq_iff]
-
-/--
-theorem `rename_leftInverse` / 定理 `rename_leftInverse`
-
-English:
-theorem rename_leftInverse
-  given: {f : σ -> τ} {g : τ -> σ} (hf : Function.LeftInverse f g)
-  proof: by
-  intro x
-  simp [hf.comp_eq_id]
-
-中文:
-定理 rename_leftInverse
-  条件: {f : σ -> τ} {g : τ -> σ} (hf : 函数.左逆 f g)
-  证明: by
-  intro x
-  simp [hf.comp_eq_id]
-
-Depends on / 依赖: comp_eq_id, hf.comp_eq_id
+  rw [← rename_zero f, (MvPolynomial.rename_injective _ hf).eq_iff]
+/-
+**MvPolynomial.rename_leftInverse** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：rename_leftInverse {f : σ -> τ} {g : τ -> σ} (hf : Function.LeftInverse f 
+g) : Function.LeftInverse (rename f : MvPolynomial σ R -> MvPolynomial τ R) (ren
+ame g)
+参数：hf : Function.LeftInverse f g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.rename_rename`：rename_rename (f : σ -> τ) (g : τ -> α) (p :
+ MvPolynomial σ R) : rename g (rename f p) = rename (g ∘ f) p
+· 使用定理 `Function.LeftInverse.comp_eq_id`：∀ {α : Sort u_1} {β : Sort u_2} {f : α 
+→ β} {g : β → α}, Function.LeftInverse f g → f ∘ g = id
+· 使用定理 `MvPolynomial.rename_id`：rename_id : rename id = AlgHom.id R (MvPolynomia
+l σ R)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem rename_leftInverse {f : σ -> τ} {g : τ -> σ} (hf : Function.LeftInverse f g) :
-    Function.LeftInverse (rename f : MvPolynomial σ R -> MvPolynomial τ R) (rename g) := by
+theorem rename_leftInverse {f : σ → τ} {g : τ → σ} (hf : Function.LeftInverse f g) :
+    Function.LeftInverse (rename f : MvPolynomial σ R → MvPolynomial τ R) (rename g) := by
   intro x
   simp [hf.comp_eq_id]
-
-/--
-theorem `rename_rightInverse` / 定理 `rename_rightInverse`
-
-English:
-theorem rename_rightInverse
-  given: {f : σ -> τ} {g : τ -> σ} (hf : Function.RightInverse f g)
-  proof: rename_leftInverse hf
-
-中文:
-定理 rename_rightInverse
-  条件: {f : σ -> τ} {g : τ -> σ} (hf : 函数.右逆 f g)
-  证明: rename_leftInverse hf
-
-Depends on / 依赖: rename_leftInverse
+/-
+**MvPolynomial.rename_rightInverse** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：rename_rightInverse {f : σ -> τ} {g : τ -> σ} (hf : Function.RightInverse 
+f g) : Function.RightInverse (rename f : MvPolynomial σ R -> MvPolynomial τ R) (
+rename g)
+参数：hf : Function.RightInverse f g。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.rename_leftInverse`：rename_leftInverse {f : σ -> τ} {g : τ 
+-> σ} (hf : Function.LeftInverse f g) : Function.LeftInverse (rename f : MvPolyn
+omial σ R -> MvPolyno…
 -/
-theorem rename_rightInverse {f : σ -> τ} {g : τ -> σ} (hf : Function.RightInverse f g) :
-    Function.RightInverse (rename f : MvPolynomial σ R -> MvPolynomial τ R) (rename g) :=
+theorem rename_rightInverse {f : σ → τ} {g : τ → σ} (hf : Function.RightInverse f g) :
+    Function.RightInverse (rename f : MvPolynomial σ R → MvPolynomial τ R) (rename g) :=
   rename_leftInverse hf
-
-/--
-theorem `rename_surjective` / 定理 `rename_surjective`
-
-English:
-theorem rename_surjective
-  given: (f : σ -> τ) (hf : Function.Surjective f)
-  proof: .surjective let ⟨_, hf⟩ := hf.hasRightInverse; rename_rightInverse hf
-
-中文:
-定理 rename_surjective
-  条件: (f : σ -> τ) (hf : 函数.满射 f)
-  证明: .surjective let ⟨_, hf⟩ := hf.hasRightInverse; rename_rightInverse hf
-
-Depends on / 依赖: hasRightInverse, hf.hasRightInverse, rename_rightInverse, surjective
+/-
+**MvPolynomial.rename_surjective** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：rename_surjective (f : σ -> τ) (hf : Function.Surjective f) : Function.Sur
+jective (rename f : MvPolynomial σ R -> MvPolynomial τ R)
+参数：f : σ -> τ；hf : Function.Surjective f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Surjective.hasRightInverse`：∀ {α : Sort u} {β : Sort v} {f : α 
+→ β}, Function.Surjective f → Function.HasRightInverse f
+· 使用定理 `Function.RightInverse.surjective`：∀ {α : Sort u_1} {β : Sort u_2} {f : α
+ → β} {g : β → α}, Function.RightInverse g f → Function.Surjective f
+· 使用定理 `MvPolynomial.rename_rightInverse`：rename_rightInverse {f : σ -> τ} {g : 
+τ -> σ} (hf : Function.RightInverse f g) : Function.RightInverse (rename f : MvP
+olynomial σ R -> MvPol…
 -/
-theorem rename_surjective (f : σ -> τ) (hf : Function.Surjective f) :
-    Function.Surjective (rename f : MvPolynomial σ R -> MvPolynomial τ R) :=
-.surjective let ⟨_, hf⟩ := hf.hasRightInverse; rename_rightInverse hf
+theorem rename_surjective (f : σ → τ) (hf : Function.Surjective f) :
+    Function.Surjective (rename f : MvPolynomial σ R → MvPolynomial τ R) :=
+  let ⟨_, hf⟩ := hf.hasRightInverse; rename_rightInverse hf |>.surjective
 
 section
 
-variable {f : σ -> τ} (hf : Function.Injective f) {p q : MvPolynomial τ R}
+variable {f : σ → τ} (hf : Function.Injective f) {p q : MvPolynomial τ R}
 
 open scoped Classical in
-/--
-Definition of `killCompl` / `killCompl` 的定义
+/-- Given a function between sets of variables `f : σ → τ` that is injective with proof `hf`,
+  `MvPolynomial.killCompl hf` is the `AlgHom` from `R[τ]` to `R[σ]` that is left inverse to
+  `rename f : R[σ] → R[τ]` and sends the variables in the complement of the range of `f` to `0`. -/
+/-
+**MvPolynomial.killCompl** 是 Mathlib 中的一个定义，位于命名空间 `MvPolynomial`。
+形式化陈述：killCompl : MvPolynomial τ R ->ₐ[R] MvPolynomial σ R
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition killCompl
-  signature: : MvPolynomial τ R ->ₐ[R] MvPolynomial σ R
-  body: aeval fun i => if h : i in Set.range f then X (Equiv.ofInjective f hf).symm ⟨i, h⟩ else 0
-
-中文:
-定义 killCompl
-  签名: : 多元多项式 τ R ->ₐ[R] 多元多项式 σ R
-  定义体: aeval fun i => if h : i in Set.range f then X (Equiv.ofInjective f hf).symm ⟨i, h⟩ else 0
-
-Depends on / 依赖: Equiv.ofInjective, Set.range, ofInjective
+--- 原说明 ---
+Given a function between sets of variables `f : σ → τ` that is injective with pr
+oof `hf`,
+  `MvPolynomial.killCompl hf` is the `AlgHom` from `R[τ]` to `R[σ]` that is left
+ inverse to
+  `rename f : R[σ] → R[τ]` and sends the variables in the complement of the rang
+e of `f` to `0`.
 -/
-def killCompl : MvPolynomial τ R ->ₐ[R] MvPolynomial σ R :=
-aeval fun i => if h : i in Set.range f then X (Equiv.ofInjective f hf).symm ⟨i, h⟩ else 0
-
-/--
-theorem `killCompl_C` / 定理 `killCompl_C`
-
-English:
-theorem killCompl_C
-  given: (r : R)
-  statement: killCompl hf (C r) = C r
-  proof: algHom_C _ _
-
-中文:
-定理 killCompl_C
-  条件: (r : R)
-  结论: killCompl hf (C r) = C r
-  证明: algHom_C _ _
-
-Depends on / 依赖: algHom_C
+def killCompl : MvPolynomial τ R →ₐ[R] MvPolynomial σ R :=
+  aeval fun i => if h : i ∈ Set.range f then X <| (Equiv.ofInjective f hf).symm ⟨i, h⟩ else 0
+/-
+**MvPolynomial.killCompl_C** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：killCompl_C (r : R) : killCompl hf (C r) = C r
+参数：r : R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.algHom_C`：algHom_C {A : Type*} [Semiring A] [Algebra R A] (
+f : MvPolynomial σ R ->ₐ[R] A) (r : R) : f (C r) = algebraMap R A r
 -/
 theorem killCompl_C (r : R) : killCompl hf (C r) = C r := algHom_C _ _
-
-/--
-theorem `killCompl_comp_rename` / 定理 `killCompl_comp_rename`
-
-English:
-theorem killCompl_comp_rename
-  statement: (killCompl hf).comp (rename f) = AlgHom.id R _
-  proof: algHom_ext fun i => by
-    dsimp
-    rw [rename_X]; rw [killCompl]; rw [aeval_X]; rw [dif_pos ⟨i]; rw [rfl⟩]; rw [Equiv.ofInjective_symm_apply]
-
-@[simp]
-
-中文:
-定理 killCompl_comp_rename
-  结论: (killCompl hf).comp (rename f) = 代数态射.id R _
-  证明: algHom_ext fun i => by
-    dsimp
-    rw [rename_X]; rw [killCompl]; rw [aeval_X]; rw [dif_pos ⟨i]; rw [rfl⟩]; rw [Equiv.ofInjective_symm_apply]
-
-@[simp]
-
-Depends on / 依赖: Equiv.ofInjective_symm_apply, aeval_X, algHom_ext, dif_pos, killCompl, ofInjective_symm_apply, rename_X
+/-
+**MvPolynomial.killCompl_comp_rename** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：killCompl_comp_rename : (killCompl hf).comp (rename f) = AlgHom.id R _
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.algHom_ext`：algHom_ext {A : Type*} [Semiring A] [Algebra R 
+A] {f g : MvPolynomial σ R ->ₐ[R] A} (hf : forall i : σ, f (X i) = g (X i)) : f 
+= g
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.rename_X`：rename_X (f : σ -> τ) (i : σ) : rename f (X i : M
+vPolynomial σ R) = X (f i)
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `MvPolynomial.killCompl.eq_1`：∀ {σ : Type u_1} {τ : Type u_2} {R : Type u
+_4} [inst : CommSemiring R] {f : σ → τ} (hf : Function.Injective f),   MvPolynom
+ial.killCompl hf …
+· 使用定理 `MvPolynomial.aeval_X`：aeval_X (s : σ) : aeval f (X s : MvPolynomial σ R)
+ = f s
+· 使用定理 `dif_pos`：∀ {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t : c → α
+} {e : ¬c → α}, dite c t e = t hc
+· 使用定理 `Equiv.ofInjective_symm_apply`：ofInjective_symm_apply {α β} {f : α -> β} 
+(hf : Injective f) (a : α) : (ofInjective f hf).symm ⟨f a, ⟨a, rfl⟩⟩ = a
 -/
 theorem killCompl_comp_rename : (killCompl hf).comp (rename f) = AlgHom.id R _ :=
   algHom_ext fun i => by
     dsimp
-    rw [rename_X]; rw [killCompl]; rw [aeval_X]; rw [dif_pos ⟨i]; rw [rfl⟩]; rw [Equiv.ofInjective_symm_apply]
+    rw [rename_X, killCompl, aeval_X, dif_pos ⟨i, rfl⟩, Equiv.ofInjective_symm_apply]
 
 @[simp]
-/--
-theorem `killCompl_rename_app` / 定理 `killCompl_rename_app`
-
-English:
-theorem killCompl_rename_app
-  given: (p : MvPolynomial σ R)
-  statement: killCompl hf (rename f p) = p
-  proof: AlgHom.congr_fun (killCompl_comp_rename hf) p
-
-中文:
-定理 killCompl_rename_app
-  条件: (p : 多元多项式 σ R)
-  结论: killCompl hf (rename f p) = p
-  证明: AlgHom.congr_fun (killCompl_comp_rename hf) p
-
-Depends on / 依赖: AlgHom, AlgHom.congr_fun, congr_fun, killCompl_comp_rename
+/-
+**MvPolynomial.killCompl_rename_app** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：killCompl_rename_app (p : MvPolynomial σ R) : killCompl hf (rename f p) = 
+p
+参数：p : MvPolynomial σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.congr_fun`：∀ {R : Type u} {A : Type v} {B : Type w} [inst : CommS
+emiring R] [inst_1 : Semiring A] [inst_2 : Semiring B]   [inst_3 : Algebra R A] 
+[inst_…
+· 使用定理 `MvPolynomial.killCompl_comp_rename`：killCompl_comp_rename : (killCompl h
+f).comp (rename f) = AlgHom.id R _
 -/
 theorem killCompl_rename_app (p : MvPolynomial σ R) : killCompl hf (rename f p) = p :=
   AlgHom.congr_fun (killCompl_comp_rename hf) p
-
-/--
-lemma `killCompl_map` / 引理 `killCompl_map`
-
-English:
-lemma killCompl_map
-  given: (φ : R ->+* S) (p : MvPolynomial τ R)
-  proof: by
-  simp only [← AlgHom.coe_toRingHom, ← RingHom.comp_apply]
-  congr
-  ext i n
-  · simp
-  · by_cases h : i in Set.range f <;> simp [killCompl, h]
-
-@[simp]
-
-中文:
-引理 killCompl_map
-  条件: (φ : R ->+* S) (p : 多元多项式 τ R)
-  证明: by
-  simp only [← AlgHom.coe_toRingHom, ← RingHom.comp_apply]
-  congr
-  ext i n
-  · simp
-  · by_cases h : i in Set.range f <;> simp [killCompl, h]
-
-@[simp]
-
-Depends on / 依赖: AlgHom, AlgHom.coe_toRingHom, RingHom, RingHom.comp_apply, Set.range, coe_toRingHom, comp_apply, killCompl
+/-
+**MvPolynomial.killCompl_map** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial`。
+形式化陈述：killCompl_map (φ : R ->+* S) (p : MvPolynomial τ R) : (p.map φ).killCompl 
+hf = (p.killCompl hf).map φ
+参数：φ : R ->+* S；p : MvPolynomial τ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHomClass.toRingHomClass`：∀ {F : Type u_1} {R : outParam (Type u_2)} {
+A : outParam (Type u_3)} {B : outParam (Type u_4)} {inst : CommSemiring R}   {in
+st_1 : Semiring …
+· 使用定理 `MvPolynomial.ringHom_ext'`：ringHom_ext' {A : Type*} [Semiring A] {f g : 
+MvPolynomial σ R ->+* A} (hC : f.comp C = g.comp C) (hX : forall i, f (X i) = g 
+(X i)) : f = g
+· 使用定理 `RingHom.ext`：ext ⦃f g : α ->+* β⦄ : (forall x, f x = g x) -> f = g
+· 使用定理 `MvPolynomial.ext`：ext (p q : MvPolynomial σ R) : (forall m, coeff m p = 
+coeff m q) -> p = q
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.map_C`：map_C : forall a : R, map f (C a : MvPolynomial σ R)
+ = C (f a)
+· 使用定理 `MvPolynomial.algHom_C`：algHom_C {A : Type*} [Semiring A] [Algebra R A] (
+f : MvPolynomial σ R ->ₐ[R] A) (r : R) : f (C r) = algebraMap R A r
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `MvPolynomial.map_X`：map_X (n : σ) : map f (X n : MvPolynomial σ R) = X n
+· 使用定理 `MvPolynomial.aeval_X`：aeval_X (s : σ) : aeval f (X s : MvPolynomial σ R)
+ = f s
+· 使用定理 `dite_cond_eq_true`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c → 
+α} {e : ¬c → α} (h : c = True), dite c t e = t ⋯
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `map_zero`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Zero M]
+ [inst_1 : Zero N] [inst_2 : FunLike F M N]   [ZeroHomClass F M N] (f : F), f …
+· 使用定理 `MonoidWithZeroHomClass.toZeroHomClass`：∀ {F : Type u_7} {α : outParam (T
+ype u_8)} {β : outParam (Type u_9)} {inst : MulZeroOneClass α}   {inst_1 : MulZe
+roOneClass β} {inst_2 : Fun…
+· 使用定理 `RingHomClass.toMonoidWithZeroHomClass`：∀ {F : Type u_5} {α : outParam (T
+ype u_6)} {β : outParam (Type u_7)} [inst : NonAssocSemiring α]   [inst_1 : NonA
+ssocSemiring β] [inst_2 : F…
 -/
-lemma killCompl_map (φ : R ->+* S) (p : MvPolynomial τ R) :
+lemma killCompl_map (φ : R →+* S) (p : MvPolynomial τ R) :
     (p.map φ).killCompl hf = (p.killCompl hf).map φ := by
   simp only [← AlgHom.coe_toRingHom, ← RingHom.comp_apply]
   congr
   ext i n
   · simp
-  · by_cases h : i in Set.range f <;> simp [killCompl, h]
+  · by_cases h : i ∈ Set.range f <;> simp [killCompl, h]
 
 @[simp]
-/--
-lemma `killCompl_monomial_mapDomain` / 引理 `killCompl_monomial_mapDomain`
-
-English:
-lemma killCompl_monomial_mapDomain
-  given: {s : σ ->₀ Nat} {c : R}
-  proof: by
-  simp [← rename_monomial]
-
-中文:
-引理 killCompl_monomial_mapDomain
-  条件: {s : σ ->₀ 自然数} {c : R}
-  证明: by
-  simp [← rename_monomial]
-
-Depends on / 依赖: DenselyOrdered, LinearOrderedSemiField, LinearOrderedSemiField.toDenselyOrdered, rename_monomial, toDenselyOrdered
+/-
+**MvPolynomial.killCompl_monomial_mapDomain** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynom
+ial`。
+形式化陈述：killCompl_monomial_mapDomain {s : σ ->₀ Nat} {c : R} : (monomial (s.mapDom
+ain f) c).killCompl hf = monomial s c
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.killCompl_rename_app`：killCompl_rename_app (p : MvPolynomia
+l σ R) : killCompl hf (rename f p) = p
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma killCompl_monomial_mapDomain {s : σ ->₀ Nat} {c : R} :
+lemma killCompl_monomial_mapDomain {s : σ →₀ ℕ} {c : R} :
     (monomial (s.mapDomain f) c).killCompl hf = monomial s c := by
   simp [← rename_monomial]
-
-/--
-lemma `killCompl_monomial_eq_zero_of_notMem_range` / 引理 `killCompl_monomial_eq_zero_of_notMem_range`
-
-English:
-lemma killCompl_monomial_eq_zero_of_notMem_range
-  statement: {s : τ ->₀ Nat} (c : R)
-  proof: by
-  rw [killCompl]; rw [aeval_monomial]; rw [Finsupp.prod]
-  apply mul_eq_zero_of_right
-  apply Finset.prod_eq_zero ha
-  simp [hs, zero_pow (Finsupp.mem_support_iff.mp ha)]
-
-中文:
-引理 killCompl_monomial_eq_zero_of_notMem_range
-  结论: {s : τ ->₀ 自然数} (c : R)
-  证明: by
-  rw [killCompl]; rw [aeval_monomial]; rw [Finsupp.prod]
-  apply mul_eq_zero_of_right
-  apply Finset.prod_eq_zero ha
-  simp [hs, zero_pow (Finsupp.mem_support_iff.mp ha)]
-
-Depends on / 依赖: Finset, Finset.prod_eq_zero, Finsupp, Finsupp.mem_support_iff.mp, Finsupp.prod, aeval_monomial, killCompl, mem_support_iff, mul_eq_zero_of_right, prod_eq_zero, zero_pow
+/-
+**MvPolynomial.killCompl_monomial_eq_zero_of_notMem_range** 是 Mathlib 中的一个引理，位于命
+名空间 `MvPolynomial`。
+形式化陈述：killCompl_monomial_eq_zero_of_notMem_range {s : τ ->₀ Nat} (c : R) {a : τ}
+ (ha : a in s.support) (hs : a ∉ Set.range f) : (monomial s c).killCompl hf = 0
+参数：c : R；ha : a in s.support；hs : a ∉ Set.range f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.killCompl.eq_1`：∀ {σ : Type u_1} {τ : Type u_2} {R : Type u
+_4} [inst : CommSemiring R] {f : σ → τ} (hf : Function.Injective f),   MvPolynom
+ial.killCompl hf …
+· 使用定理 `MvPolynomial.aeval_monomial`：aeval_monomial (g : σ -> S₁) (d : σ ->₀ Nat
+) (r : R) : aeval g (monomial d r) = algebraMap _ _ r * d.prod fun i k => g i ^ 
+k
+· 使用定理 `Finsupp.prod.eq_1`：∀ {α : Type u_1} {M : Type u_8} {N : Type u_10} [inst
+ : Zero M] [inst_1 : CommMonoid N] (f : α →₀ M) (g : α → M → N),   f.prod g = ∏ 
+a ∈ f.s…
+· 使用定理 `mul_eq_zero_of_right`：mul_eq_zero_of_right (a : M₀) {b : M₀} (h : b = 0)
+ : a * b = 0
+· 使用引理 `Finset.prod_eq_zero`：prod_eq_zero (hi : i in s) (h : f i = 0) : ∏ j in s
+, f j = 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `dite_cond_eq_false`：∀ {α : Sort u} {c : Prop} {x : Decidable c} {t : c →
+ α} {e : ¬c → α} (h : c = False), dite c t e = e ⋯
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `zero_pow`：zero_pow {b : Nat} (_ : 0 < b) : (0 : R) ^ b = 0
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Finsupp.mem_support_iff`：mem_support_iff {f : α ->₀ M} : forall {a : α},
+ a in f.support ↔ f a != 0
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-lemma killCompl_monomial_eq_zero_of_notMem_range {s : τ ->₀ Nat} (c : R)
-    {a : τ} (ha : a in s.support) (hs : a ∉ Set.range f) :
+lemma killCompl_monomial_eq_zero_of_notMem_range {s : τ →₀ ℕ} (c : R)
+    {a : τ} (ha : a ∈ s.support) (hs : a ∉ Set.range f) :
     (monomial s c).killCompl hf = 0 := by
-  rw [killCompl]; rw [aeval_monomial]; rw [Finsupp.prod]
+  rw [killCompl, aeval_monomial, Finsupp.prod]
   apply mul_eq_zero_of_right
   apply Finset.prod_eq_zero ha
   simp [hs, zero_pow (Finsupp.mem_support_iff.mp ha)]
-
-/--
-lemma `killCompl_monomial_eq_zero_of_not_subset` / 引理 `killCompl_monomial_eq_zero_of_not_subset`
-
-English:
-lemma killCompl_monomial_eq_zero_of_not_subset
-  statement: {s : τ ->₀ Nat} (c : R)
-  proof: have ⟨_, ha, hs⟩ := Set.not_subset.mp hs
-  killCompl_monomial_eq_zero_of_notMem_range hf c ha hs
-
-中文:
-引理 killCompl_monomial_eq_zero_of_not_subset
-  结论: {s : τ ->₀ 自然数} (c : R)
-  证明: have ⟨_, ha, hs⟩ := Set.not_subset.mp hs
-  killCompl_monomial_eq_zero_of_notMem_range hf c ha hs
-
-Depends on / 依赖: Set.not_subset.mp, killCompl_monomial_eq_zero_of_notMem_range, not_subset
+/-
+**MvPolynomial.killCompl_monomial_eq_zero_of_not_subset** 是 Mathlib 中的一个引理，位于命名空
+间 `MvPolynomial`。
+形式化陈述：killCompl_monomial_eq_zero_of_not_subset {s : τ ->₀ Nat} (c : R) (hs : ¬ ↑
+s.support subseteq Set.range f) : (monomial s c).killCompl hf = 0
+参数：c : R；hs : ¬ ↑s.support subseteq Set.range f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Set.not_subset`：not_subset : ¬s subseteq t ↔ exists a in s, a ∉ t
+· 使用引理 `MvPolynomial.killCompl_monomial_eq_zero_of_notMem_range`：killCompl_monom
+ial_eq_zero_of_notMem_range {s : τ ->₀ Nat} (c : R) {a : τ} (ha : a in s.support
+) (hs : a ∉ Set.range f) : (monomial s c).kil…
 -/
-lemma killCompl_monomial_eq_zero_of_not_subset {s : τ ->₀ Nat} (c : R)
-    (hs : ¬ ↑s.support subseteq Set.range f) : (monomial s c).killCompl hf = 0 :=
+lemma killCompl_monomial_eq_zero_of_not_subset {s : τ →₀ ℕ} (c : R)
+    (hs : ¬ ↑s.support ⊆ Set.range f) : (monomial s c).killCompl hf = 0 :=
   have ⟨_, ha, hs⟩ := Set.not_subset.mp hs
   killCompl_monomial_eq_zero_of_notMem_range hf c ha hs
-
-/--
-lemma `killCompl_monomial_eq_monomial_comapDomain_of_subset` / 引理 `killCompl_monomial_eq_monomial_comapDomain_of_subset`
-
-English:
-lemma killCompl_monomial_eq_monomial_comapDomain_of_subset
-  statement: {s : τ ->₀ Nat} (c : R)
-  proof: by
-  nth_rw 1 [← s.mapDomain_comapDomain f hf hs, killCompl_monomial_mapDomain]
-
-中文:
-引理 killCompl_monomial_eq_monomial_comapDomain_of_subset
-  结论: {s : τ ->₀ 自然数} (c : R)
-  证明: by
-  nth_rw 1 [← s.mapDomain_comapDomain f hf hs, killCompl_monomial_mapDomain]
-
-Depends on / 依赖: killCompl_monomial_mapDomain, mapDomain_comapDomain, nth_rw, s.mapDomain_comapDomain
+/-
+**MvPolynomial.killCompl_monomial_eq_monomial_comapDomain_of_subset** 是 Mathlib 
+中的一个引理，位于命名空间 `MvPolynomial`。
+形式化陈述：killCompl_monomial_eq_monomial_comapDomain_of_subset {s : τ ->₀ Nat} (c : 
+R) (hs : ↑s.support subseteq Set.range f) : (monomial s c).killCompl hf = monomi
+al (s.comapDomain f hf.injOn) c
+参数：c : R；hs : ↑s.support subseteq Set.range f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finsupp.mapDomain_comapDomain`：mapDomain_comapDomain (hf : Function.Inje
+ctive f) (l : β ->₀ M) (hl : ↑l.support subseteq Set.range f) : mapDomain f (com
+apDomain f l hf.inj…
+· 使用引理 `MvPolynomial.killCompl_monomial_mapDomain`：killCompl_monomial_mapDomain 
+{s : σ ->₀ Nat} {c : R} : (monomial (s.mapDomain f) c).killCompl hf = monomial s
+ c
 -/
-lemma killCompl_monomial_eq_monomial_comapDomain_of_subset {s : τ ->₀ Nat} (c : R)
-    (hs : ↑s.support subseteq Set.range f) :
+lemma killCompl_monomial_eq_monomial_comapDomain_of_subset {s : τ →₀ ℕ} (c : R)
+    (hs : ↑s.support ⊆ Set.range f) :
     (monomial s c).killCompl hf = monomial (s.comapDomain f hf.injOn) c := by
   nth_rw 1 [← s.mapDomain_comapDomain f hf hs, killCompl_monomial_mapDomain]
-
-/--
-lemma `killCompl_monomial` / 引理 `killCompl_monomial`
-
-English:
-lemma killCompl_monomial
-  given: {s} {c : R} [Decidable (↑s.support subseteq Set.range f)]
-  proof: by
-  split_ifs with h
-  · exact killCompl_monomial_eq_monomial_comapDomain_of_subset hf c h
-  · exact killCompl_monomial_eq_zero_of_not_subset hf c h
-
-中文:
-引理 killCompl_monomial
-  条件: {s} {c : R} [可判定 (↑s.support subseteq 集合.range f)]
-  证明: by
-  split_ifs with h
-  · exact killCompl_monomial_eq_monomial_comapDomain_of_subset hf c h
-  · exact killCompl_monomial_eq_zero_of_not_subset hf c h
-
-Depends on / 依赖: killCompl_monomial_eq_monomial_comapDomain_of_subset, killCompl_monomial_eq_zero_of_not_subset, split_ifs
+/-
+**MvPolynomial.killCompl_monomial** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial`。
+形式化陈述：killCompl_monomial {s} {c : R} [Decidable (↑s.support subseteq Set.range f
+)] : (monomial s c).killCompl hf = if ↑s.support subseteq Set.range f then monom
+ial (s.comapDomain f hf.injOn) c else 0
+参数：↑s.support subseteq Set.range f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用引理 `MvPolynomial.killCompl_monomial_eq_monomial_comapDomain_of_subset`：killC
+ompl_monomial_eq_monomial_comapDomain_of_subset {s : τ ->₀ Nat} (c : R) (hs : ↑s
+.support subseteq Set.range f) : (monomial s c).killCom…
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用引理 `MvPolynomial.killCompl_monomial_eq_zero_of_not_subset`：killCompl_monomia
+l_eq_zero_of_not_subset {s : τ ->₀ Nat} (c : R) (hs : ¬ ↑s.support subseteq Set.
+range f) : (monomial s c).killCompl hf = 0
 -/
-lemma killCompl_monomial {s} {c : R} [Decidable (↑s.support subseteq Set.range f)] :
+lemma killCompl_monomial {s} {c : R} [Decidable (↑s.support ⊆ Set.range f)] :
     (monomial s c).killCompl hf =
-      if ↑s.support subseteq Set.range f then monomial (s.comapDomain f hf.injOn) c else 0 := by
+      if ↑s.support ⊆ Set.range f then monomial (s.comapDomain f hf.injOn) c else 0 := by
   split_ifs with h
   · exact killCompl_monomial_eq_monomial_comapDomain_of_subset hf c h
   · exact killCompl_monomial_eq_zero_of_not_subset hf c h
-
-/--
-lemma `coeff_killCompl` / 引理 `coeff_killCompl`
-
-English:
-lemma coeff_killCompl
-  given: {s}
-  proof: by
-  classical
-  apply p.induction_on' (P := fun p => (p.killCompl hf).coeff s = p.coeff (s.mapDomain f))
-  · intro u r
-    rw [killCompl_monomial]
-    split_ifs with h
-    · simp [← (Finsupp.mapDomain_injective hf).eq_iff, u.mapDomain_comapDomain _ hf h]
-    · simp? says simp only [coeff_zero, coeff_monomial, right_eq_ite_iff]
-      intro rfl
-      contrapose! h
-apply subset_trans SetLike.coe_subset_coe.mpr Finsupp.mapDomain_support
-      simp
-  · simp_intro ..
-
-中文:
-引理 coeff_killCompl
-  条件: {s}
-  证明: by
-  classical
-  apply p.induction_on' (P := fun p => (p.killCompl hf).coeff s = p.coeff (s.mapDomain f))
-  · intro u r
-    rw [killCompl_monomial]
-    split_ifs with h
-    · simp [← (Finsupp.mapDomain_injective hf).eq_iff, u.mapDomain_comapDomain _ hf h]
-    · simp? says simp only [coeff_zero, coeff_monomial, right_eq_ite_iff]
-      intro rfl
-      contrapose! h
-apply subset_trans SetLike.coe_subset_coe.mpr Finsupp.mapDomain_support
-      simp
-  · simp_intro ..
-
-Depends on / 依赖: Finsupp, Finsupp.mapDomain_injective, Finsupp.mapDomain_support, SetLike, SetLike.coe_subset_coe.mpr, classical, coe_subset_coe, coeff_monomial, coeff_zero, contrapose, eq_iff, induction_on, killCompl, killCompl_monomial, mapDomain, mapDomain_comapDomain, mapDomain_injective, mapDomain_support, p.coeff, p.induction_on
+/-
+**MvPolynomial.coeff_killCompl** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial`。
+形式化陈述：coeff_killCompl {s} : (p.killCompl hf).coeff s = p.coeff (s.mapDomain f)
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.induction_on'`：induction_on' {P : MvPolynomial σ R -> Prop}
+ (p : MvPolynomial σ R) (monomial : forall (u : σ ->₀ Nat) (a : R), P (monomial 
+u a)) (add : for…
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用引理 `MvPolynomial.killCompl_monomial`：killCompl_monomial {s} {c : R} [Decidab
+le (↑s.support subseteq Set.range f)] : (monomial s c).killCompl hf = if ↑s.supp
+ort subseteq Set.rang…
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MvPolynomial.coeff_monomial`：coeff_monomial [DecidableEq σ] (m n) (a) : 
+coeff m (monomial n a : MvPolynomial σ R) = if n = m then a else 0
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Finsupp.mapDomain_injective`：mapDomain_injective {f : α -> β} (hf : Func
+tion.Injective f) : Function.Injective (mapDomain f : (α ->₀ M) -> β ->₀ M)
+· 使用定理 `Finsupp.mapDomain_comapDomain`：mapDomain_comapDomain (hf : Function.Inje
+ctive f) (l : β ->₀ M) (hl : ↑l.support subseteq Set.range f) : mapDomain f (com
+apDomain f l hf.inj…
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₂`：contrapose₂ {p q : Prop} : (¬ q -
+> p) -> (¬ p -> q)
+· 使用定理 `subset_trans`：∀ {α : Type u_1} [UsesSetNotationForOrder α] [inst : Preor
+der α] {a b c : α}, a ⊆ b → b ⊆ c → a ⊆ c
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `SetLike.coe_subset_coe`：∀ {A : Type u_1} {B : Type u_2} [inst : SetLike 
+A B] [inst_1 : LE A] [IsConcreteLE A B] {S T : A}, ↑S ⊆ ↑T ↔ S ≤ T
+· 使用定理 `instIsConcreteLE`：∀ (A : Type u_1) (B : Type u_2) [inst : SetLike A B], 
+IsConcreteLE A B
+· 使用定理 `Finsupp.mapDomain_support`：mapDomain_support [DecidableEq β] {f : α -> β
+} {s : α ->₀ M} : (s.mapDomain f).support subseteq s.support.image f
+· 使用定理 `Finset.coe_image`：coe_image : ↑(s.image f) = f '' ↑s
+· 使用定理 `Set.preimage_range`：preimage_range (f : α -> β) : f ⁻¹' range f = univ
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `MvPolynomial.coeff_add`：coeff_add (m : σ ->₀ Nat) (p q : MvPolynomial σ 
+R) : coeff m (p + q) = coeff m p + coeff m q
 -/
 lemma coeff_killCompl {s} :
     (p.killCompl hf).coeff s = p.coeff (s.mapDomain f) := by
   classical
-  apply p.induction_on' (P := fun p => (p.killCompl hf).coeff s = p.coeff (s.mapDomain f))
+  apply p.induction_on' (P := fun p ↦ (p.killCompl hf).coeff s = p.coeff (s.mapDomain f))
   · intro u r
     rw [killCompl_monomial]
     split_ifs with h
@@ -728,28 +790,32 @@ lemma coeff_killCompl {s} :
     · simp? says simp only [coeff_zero, coeff_monomial, right_eq_ite_iff]
       intro rfl
       contrapose! h
-apply subset_trans SetLike.coe_subset_coe.mpr Finsupp.mapDomain_support
+      apply subset_trans <| SetLike.coe_subset_coe.mpr <| Finsupp.mapDomain_support
       simp
   · simp_intro ..
-
-/--
-lemma `support_killCompl` / 引理 `support_killCompl`
-
-English:
-lemma support_killCompl
-  given: {p : MvPolynomial τ R}
-  proof: by
-  ext x
-  simp [coeff_killCompl]
-
-中文:
-引理 support_killCompl
-  条件: {p : 多元多项式 τ R}
-  证明: by
-  ext x
-  simp [coeff_killCompl]
-
-Depends on / 依赖: coeff_killCompl
+/-
+**MvPolynomial.support_killCompl** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial`。
+形式化陈述：support_killCompl {p : MvPolynomial τ R} : (p.killCompl hf).support = p.su
+pport.preimage (Finsupp.mapDomain f) (Finsupp.mapDomain_injective hf).injOn
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.ext`：ext {s₁ s₂ : Finset α} (h : forall a, a in s₁ ↔ a in s₂) : s
+₁ = s₂
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `Finsupp.mapDomain_injective`：mapDomain_injective {f : α -> β} (hf : Func
+tion.Injective f) : Function.Injective (mapDomain f : (α ->₀ M) -> β ->₀ M)
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用引理 `MvPolynomial.coeff_killCompl`：coeff_killCompl {s} : (p.killCompl hf).coe
+ff s = p.coeff (s.mapDomain f)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 lemma support_killCompl {p : MvPolynomial τ R} :
     (p.killCompl hf).support =
@@ -765,32 +831,16 @@ variable (R)
 
 /-- `MvPolynomial.rename e` is an equivalence when `e` is. -/
 @[simps apply]
-/--
-Definition of `renameEquiv` / `renameEquiv` 的定义
+/-
+**MvPolynomial.renameEquiv** 是 Mathlib 中的一个定义，位于命名空间 `MvPolynomial`。
+形式化陈述：renameEquiv (f : σ ≃ τ) : MvPolynomial σ R ≃ₐ[R] MvPolynomial τ R
+参数：f : σ ≃ τ。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition renameEquiv
-  signature: (f : σ ≃ τ)
-  body: { rename f with
-    toFun := rename f
-    invFun := rename f.symm
-    left_inv := fun p => by rw [rename_rename, f.symm_comp_self, rename_id_apply]
-    right_inv := fun p => by rw [rename_rename, f.self_comp_symm, rename_id_apply] }
-
-@[simp]
-
-中文:
-定义 renameEquiv
-  签名: (f : σ ≃ τ)
-  定义体: { rename f with
-    toFun := rename f
-    invFun := rename f.symm
-    left_inv := fun p => by rw [rename_rename, f.symm_comp_self, rename_id_apply]
-    right_inv := fun p => by rw [rename_rename, f.self_comp_symm, rename_id_apply] }
-
-@[simp]
-
-Depends on / 依赖: f.self_comp_symm, f.symm, f.symm_comp_self, invFun, left_inv, rename_id_apply, rename_rename, right_inv, self_comp_symm, symm_comp_self
+--- 原说明 ---
+`MvPolynomial.rename e` is an equivalence when `e` is.
 -/
 def renameEquiv (f : σ ≃ τ) : MvPolynomial σ R ≃ₐ[R] MvPolynomial τ R :=
   { rename f with
@@ -800,66 +850,57 @@ def renameEquiv (f : σ ≃ τ) : MvPolynomial σ R ≃ₐ[R] MvPolynomial τ R 
     right_inv := fun p => by rw [rename_rename, f.self_comp_symm, rename_id_apply] }
 
 @[simp]
-/--
-theorem `renameEquiv_refl` / 定理 `renameEquiv_refl`
-
-English:
-theorem renameEquiv_refl
-  statement: renameEquiv R (Equiv.refl σ) = AlgEquiv.refl
-  proof: AlgEquiv.ext (by simp)
-
-@[simp]
-
-中文:
-定理 renameEquiv_refl
-  结论: renameEquiv R (等价.refl σ) = 代数等价.refl
-  证明: AlgEquiv.ext (by simp)
-
-@[simp]
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.ext
+/-
+**MvPolynomial.renameEquiv_refl** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：renameEquiv_refl : renameEquiv R (Equiv.refl σ) = AlgEquiv.refl
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.ext`：ext {f g : A₁ ≃ₐ[R] A₂} (h : forall a, f a = g a) : f = g
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.renameEquiv_apply`：∀ {σ : Type u_1} {τ : Type u_2} (R : Typ
+e u_4) [inst : CommSemiring R] (f : σ ≃ τ) (a : MvPolynomial σ R),   (MvPolynomi
+al.renameEquiv R f) …
+· 使用定理 `MvPolynomial.rename_id`：rename_id : rename id = AlgHom.id R (MvPolynomia
+l σ R)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
 -/
 theorem renameEquiv_refl : renameEquiv R (Equiv.refl σ) = AlgEquiv.refl :=
   AlgEquiv.ext (by simp)
 
 @[simp]
-/--
-theorem `renameEquiv_symm` / 定理 `renameEquiv_symm`
-
-English:
-theorem renameEquiv_symm
-  given: (f : σ ≃ τ)
-  statement: (renameEquiv R f).symm = renameEquiv R f.symm
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 renameEquiv_symm
-  条件: (f : σ ≃ τ)
-  结论: (renameEquiv R f).symm = renameEquiv R f.symm
-  证明: rfl
-
-@[simp]
+/-
+**MvPolynomial.renameEquiv_symm** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：renameEquiv_symm (f : σ ≃ τ) : (renameEquiv R f).symm = renameEquiv R f.sy
+mm
+参数：f : σ ≃ τ。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem renameEquiv_symm (f : σ ≃ τ) : (renameEquiv R f).symm = renameEquiv R f.symm :=
   rfl
 
 @[simp]
-/--
-theorem `renameEquiv_trans` / 定理 `renameEquiv_trans`
-
-English:
-theorem renameEquiv_trans
-  given: (e : σ ≃ τ) (f : τ ≃ α)
-  proof: AlgEquiv.ext (rename_rename e f)
-
-中文:
-定理 renameEquiv_trans
-  条件: (e : σ ≃ τ) (f : τ ≃ α)
-  证明: AlgEquiv.ext (rename_rename e f)
-
-Depends on / 依赖: AlgEquiv, AlgEquiv.ext, rename_rename
+/-
+**MvPolynomial.renameEquiv_trans** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：renameEquiv_trans (e : σ ≃ τ) (f : τ ≃ α) : (renameEquiv R e).trans (renam
+eEquiv R f) = renameEquiv R (e.trans f)
+参数：e : σ ≃ τ；f : τ ≃ α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgEquiv.ext`：ext {f g : A₁ ≃ₐ[R] A₂} (h : forall a, f a = g a) : f = g
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `MvPolynomial.rename_rename`：rename_rename (f : σ -> τ) (g : τ -> α) (p :
+ MvPolynomial σ R) : rename g (rename f p) = rename (g ∘ f) p
 -/
 theorem renameEquiv_trans (e : σ ≃ τ) (f : τ ≃ α) :
     (renameEquiv R e).trans (renameEquiv R f) = renameEquiv R (e.trans f) :=
@@ -869,264 +910,173 @@ end
 
 section
 
-variable (f : R ->+* S) (k : σ -> τ) (g : τ -> S) (p : MvPolynomial σ R)
+variable (f : R →+* S) (k : σ → τ) (g : τ → S) (p : MvPolynomial σ R)
 
-/--
-theorem `eval₂_rename` / 定理 `eval₂_rename`
-
-English:
-theorem eval₂_rename
-  statement: (rename k p).eval₂ f g = p.eval₂ f (g ∘ k)
-  proof: by
-  apply MvPolynomial.induction_on p <;>
-    · intros
-      simp [*]
-
-中文:
-定理 eval₂_rename
-  结论: (rename k p).eval₂ f g = p.eval₂ f (g ∘ k)
-  证明: by
-  apply MvPolynomial.induction_on p <;>
-    · intros
-      simp [*]
-
-Depends on / 依赖: MvPolynomial, MvPolynomial.induction_on, induction_on, intros
+/-
+**MvPolynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `MvPolynomial`。
+形式化陈述：eval (f : σ -> R) : MvPolynomial σ R ->+* R
+参数：f : σ -> R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval₂_rename : (rename k p).eval₂ f g = p.eval₂ f (g ∘ k) := by
   apply MvPolynomial.induction_on p <;>
     · intros
       simp [*]
-
-/--
-theorem `eval_rename` / 定理 `eval_rename`
-
-English:
-theorem eval_rename
-  given: (g : τ -> R) (p : MvPolynomial σ R)
-  statement: eval g (rename k p) = eval (g ∘ k) p
-  proof: eval₂_rename _ _ _ _
-
-中文:
-定理 eval_rename
-  条件: (g : τ -> R) (p : 多元多项式 σ R)
-  结论: eval g (rename k p) = eval (g ∘ k) p
-  证明: eval₂_rename _ _ _ _
+/-
+**MvPolynomial.eval_rename** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：eval_rename (g : τ -> R) (p : MvPolynomial σ R) : eval g (rename k p) = ev
+al (g ∘ k) p
+参数：g : τ -> R；p : MvPolynomial σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.eval₂_rename`：eval₂_rename : (rename k p).eval₂ f g = p.eva
+l₂ f (g ∘ k)
 -/
-theorem eval_rename (g : τ -> R) (p : MvPolynomial σ R) : eval g (rename k p) = eval (g ∘ k) p :=
+theorem eval_rename (g : τ → R) (p : MvPolynomial σ R) : eval g (rename k p) = eval (g ∘ k) p :=
   eval₂_rename _ _ _ _
-
-/--
-theorem `eval₂Hom_rename` / 定理 `eval₂Hom_rename`
-
-English:
-theorem eval₂Hom_rename
-  statement: eval₂Hom f g (rename k p) = eval₂Hom f (g ∘ k) p
-  proof: eval₂_rename _ _ _ _
-
-中文:
-定理 eval₂Hom_rename
-  结论: eval₂Hom f g (rename k p) = eval₂Hom f (g ∘ k) p
-  证明: eval₂_rename _ _ _ _
+/-
+**MvPolynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `MvPolynomial`。
+形式化陈述：eval (f : σ -> R) : MvPolynomial σ R ->+* R
+参数：f : σ -> R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem eval₂Hom_rename : eval₂Hom f g (rename k p) = eval₂Hom f (g ∘ k) p :=
   eval₂_rename _ _ _ _
-
-/--
-theorem `aeval_rename` / 定理 `aeval_rename`
-
-English:
-theorem aeval_rename
-  given: [Algebra R S]
-  statement: aeval g (rename k p) = aeval (g ∘ k) p
-  proof: eval₂Hom_rename _ _ _ _
-
-中文:
-定理 aeval_rename
-  条件: [代数 R S]
-  结论: aeval g (rename k p) = aeval (g ∘ k) p
-  证明: eval₂Hom_rename _ _ _ _
+/-
+**MvPolynomial.aeval_rename** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：aeval_rename [Algebra R S] : aeval g (rename k p) = aeval (g ∘ k) p
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.eval₂Hom_rename`：eval₂Hom_rename : eval₂Hom f g (rename k p
+) = eval₂Hom f (g ∘ k) p
 -/
 theorem aeval_rename [Algebra R S] : aeval g (rename k p) = aeval (g ∘ k) p :=
   eval₂Hom_rename _ _ _ _
-
-/--
-lemma `aeval_comp_rename` / 引理 `aeval_comp_rename`
-
-English:
-lemma aeval_comp_rename
-  given: [Algebra R S]
-  proof: AlgHom.ext fun p => aeval_rename k g p
-
-中文:
-引理 aeval_comp_rename
-  条件: [代数 R S]
-  证明: AlgHom.ext fun p => aeval_rename k g p
-
-Depends on / 依赖: MvPolynomial, MvPolynomial.aeval
+/-
+**MvPolynomial.aeval_comp_rename** 是 Mathlib 中的一个引理，位于命名空间 `MvPolynomial`。
+形式化陈述：aeval_comp_rename [Algebra R S] : (aeval (R
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `AlgHom.ext`：ext {φ₁ φ₂ : A ->ₐ[R] B} (H : forall x, φ₁ x = φ₂ x) : φ₁ = 
+φ₂
+· 使用定理 `MvPolynomial.aeval_rename`：aeval_rename [Algebra R S] : aeval g (rename 
+k p) = aeval (g ∘ k) p
 -/
 lemma aeval_comp_rename [Algebra R S] :
     (aeval (R := R) g).comp (rename k) = MvPolynomial.aeval (g ∘ k) :=
-  AlgHom.ext fun p => aeval_rename k g p
-
-/--
-theorem `rename_eval₂` / 定理 `rename_eval₂`
-
-English:
-theorem rename_eval₂
-  given: (g : τ -> MvPolynomial σ R)
-  proof: by
-  apply MvPolynomial.induction_on p <;>
-    · intros
-      simp [*]
-
-中文:
-定理 rename_eval₂
-  条件: (g : τ -> 多元多项式 σ R)
-  证明: by
-  apply MvPolynomial.induction_on p <;>
-    · intros
-      simp [*]
-
-Depends on / 依赖: MvPolynomial, MvPolynomial.induction_on, induction_on, intros
+  AlgHom.ext fun p ↦ aeval_rename k g p
+/-
+**MvPolynomial.rename_eval** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem rename_eval₂ (g : τ -> MvPolynomial σ R) :
+theorem rename_eval₂ (g : τ → MvPolynomial σ R) :
     rename k (p.eval₂ C (g ∘ k)) = (rename k p).eval₂ C (rename k ∘ g) := by
   apply MvPolynomial.induction_on p <;>
     · intros
       simp [*]
-
-/--
-theorem `rename_prod_mk_eval₂` / 定理 `rename_prod_mk_eval₂`
-
-English:
-theorem rename_prod_mk_eval₂
-  given: (j : τ) (g : σ -> MvPolynomial σ R)
-  proof: by
-  apply MvPolynomial.induction_on p <;>
-    · intros
-      simp [*]
-
-中文:
-定理 rename_prod_mk_eval₂
-  条件: (j : τ) (g : σ -> 多元多项式 σ R)
-  证明: by
-  apply MvPolynomial.induction_on p <;>
-    · intros
-      simp [*]
-
-Depends on / 依赖: MvPolynomial, MvPolynomial.induction_on, induction_on, intros
+/-
+**MvPolynomial.rename_prod_mk_eval** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem rename_prod_mk_eval₂ (j : τ) (g : σ -> MvPolynomial σ R) :
+theorem rename_prod_mk_eval₂ (j : τ) (g : σ → MvPolynomial σ R) :
     rename (Prod.mk j) (p.eval₂ C g) = p.eval₂ C fun x => rename (Prod.mk j) (g x) := by
   apply MvPolynomial.induction_on p <;>
     · intros
       simp [*]
-
-/--
-theorem `eval₂_rename_prod_mk` / 定理 `eval₂_rename_prod_mk`
-
-English:
-theorem eval₂_rename_prod_mk
-  given: (g : σ × τ -> S) (i : σ) (p : MvPolynomial τ R)
-  proof: by
-  apply MvPolynomial.induction_on p <;>
-    · intros
-      simp [*]
-
-中文:
-定理 eval₂_rename_prod_mk
-  条件: (g : σ × τ -> S) (i : σ) (p : 多元多项式 τ R)
-  证明: by
-  apply MvPolynomial.induction_on p <;>
-    · intros
-      simp [*]
-
-Depends on / 依赖: MvPolynomial, MvPolynomial.induction_on, induction_on, intros
+/-
+**MvPolynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `MvPolynomial`。
+形式化陈述：eval (f : σ -> R) : MvPolynomial σ R ->+* R
+参数：f : σ -> R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eval₂_rename_prod_mk (g : σ × τ -> S) (i : σ) (p : MvPolynomial τ R) :
+theorem eval₂_rename_prod_mk (g : σ × τ → S) (i : σ) (p : MvPolynomial τ R) :
     (rename (Prod.mk i) p).eval₂ f g = eval₂ f (fun j => g (i, j)) p := by
   apply MvPolynomial.induction_on p <;>
     · intros
       simp [*]
-
-/--
-theorem `eval_rename_prod_mk` / 定理 `eval_rename_prod_mk`
-
-English:
-theorem eval_rename_prod_mk
-  given: (g : σ × τ -> R) (i : σ) (p : MvPolynomial τ R)
-  proof: eval₂_rename_prod_mk (RingHom.id _) _ _ _
-
-中文:
-定理 eval_rename_prod_mk
-  条件: (g : σ × τ -> R) (i : σ) (p : 多元多项式 τ R)
-  证明: eval₂_rename_prod_mk (RingHom.id _) _ _ _
-
-Depends on / 依赖: RingHom, RingHom.id
+/-
+**MvPolynomial.eval_rename_prod_mk** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：eval_rename_prod_mk (g : σ × τ -> R) (i : σ) (p : MvPolynomial τ R) : eval
+ g (rename (Prod.mk i) p) = eval (fun j => g (i, j)) p
+参数：g : σ × τ -> R；i : σ；p : MvPolynomial τ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.eval₂_rename_prod_mk`：eval₂_rename_prod_mk (g : σ × τ -> S)
+ (i : σ) (p : MvPolynomial τ R) : (rename (Prod.mk i) p).eval₂ f g = eval₂ f (fu
+n j => g (i, j)) p
 -/
-theorem eval_rename_prod_mk (g : σ × τ -> R) (i : σ) (p : MvPolynomial τ R) :
+theorem eval_rename_prod_mk (g : σ × τ → R) (i : σ) (p : MvPolynomial τ R) :
     eval g (rename (Prod.mk i) p) = eval (fun j => g (i, j)) p :=
   eval₂_rename_prod_mk (RingHom.id _) _ _ _
 
 end
 
-/--
-theorem `exists_finset_rename` / 定理 `exists_finset_rename`
+/-- Every polynomial is a polynomial in finitely many variables. -/
+/-
+**MvPolynomial.exists_finset_rename** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：exists_finset_rename (p : MvPolynomial σ R) : exists (s : Finset σ) (q : M
+vPolynomial { x // x in s } R), p = rename (↑) q
+参数：p : MvPolynomial σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.induction_on`：induction_on {motive : MvPolynomial σ R -> Pr
+op} (p : MvPolynomial σ R) (C : forall a, motive (C a)) (add : forall p q, motiv
+e p -> motive q…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.rename_C`：rename_C (f : σ -> τ) (r : R) : rename f (C r) = 
+C r
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MvPolynomial.rename_rename`：rename_rename (f : σ -> τ) (g : τ -> α) (p :
+ MvPolynomial σ R) : rename g (rename f p) = rename (g ∘ f) p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.mem_insert_self`：mem_insert_self (a : α) (s : Finset α) : a in in
+sert a s
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `MvPolynomial.rename_X`：rename_X (f : σ -> τ) (i : σ) : rename f (X i : M
+vPolynomial σ R) = X (f i)
 
-English:
-theorem exists_finset_rename
-  given: (p : MvPolynomial σ R)
-  proof: by
-  classical
-  apply induction_on p
-  · intro r
-    exact ⟨∅, C r, by rw [rename_C]⟩
-  · rintro p q ⟨s, p, rfl⟩ ⟨t, q, rfl⟩
-    refine ⟨s union t, ⟨?_, ?_⟩⟩
-    · refine rename (Subtype.map id ?_) p + rename (Subtype.map id ?_) q <;>
-        simp +contextual only [id, true_or, or_true,
-          Finset.mem_union, forall_true_iff]
-    · simp only [rename_rename, map_add]
-      rfl
-  · rintro p n ⟨s, p, rfl⟩
-    refine ⟨insert n s, ⟨?_, ?_⟩⟩
-    · refine rename (Subtype.map id ?_) p * X ⟨n, s.mem_insert_self n⟩
-      simp +contextual only [id, or_true, Finset.mem_insert, forall_true_iff]
-    · simp only [rename_rename, rename_X, map_mul]
-      rfl
-
-中文:
-定理 存在_finset_rename
-  条件: (p : 多元多项式 σ R)
-  证明: by
-  classical
-  apply induction_on p
-  · intro r
-    exact ⟨∅, C r, by rw [rename_C]⟩
-  · rintro p q ⟨s, p, rfl⟩ ⟨t, q, rfl⟩
-    refine ⟨s union t, ⟨?_, ?_⟩⟩
-    · refine rename (Subtype.map id ?_) p + rename (Subtype.map id ?_) q <;>
-        simp +contextual only [id, true_or, or_true,
-          Finset.mem_union, forall_true_iff]
-    · simp only [rename_rename, map_add]
-      rfl
-  · rintro p n ⟨s, p, rfl⟩
-    refine ⟨insert n s, ⟨?_, ?_⟩⟩
-    · refine rename (Subtype.map id ?_) p * X ⟨n, s.mem_insert_self n⟩
-      simp +contextual only [id, or_true, Finset.mem_insert, forall_true_iff]
-    · simp only [rename_rename, rename_X, map_mul]
-      rfl
-
-Depends on / 依赖: Finset, Finset.mem_union, Subtype, Subtype.map, classical, contextual, forall_true_iff, induction_on, insert, map_add, mem_insert_self, mem_union, or_true, rename_C, rename_rename, s.mem_insert_self, true_or
+--- 原说明 ---
+Every polynomial is a polynomial in finitely many variables.
 -/
 theorem exists_finset_rename (p : MvPolynomial σ R) :
-    exists (s : Finset σ) (q : MvPolynomial { x // x in s } R), p = rename (↑) q := by
+    ∃ (s : Finset σ) (q : MvPolynomial { x // x ∈ s } R), p = rename (↑) q := by
   classical
   apply induction_on p
   · intro r
     exact ⟨∅, C r, by rw [rename_C]⟩
   · rintro p q ⟨s, p, rfl⟩ ⟨t, q, rfl⟩
-    refine ⟨s union t, ⟨?_, ?_⟩⟩
+    refine ⟨s ∪ t, ⟨?_, ?_⟩⟩
     · refine rename (Subtype.map id ?_) p + rename (Subtype.map id ?_) q <;>
         simp +contextual only [id, true_or, or_true,
           Finset.mem_union, forall_true_iff]
@@ -1139,175 +1089,239 @@ theorem exists_finset_rename (p : MvPolynomial σ R) :
     · simp only [rename_rename, rename_X, map_mul]
       rfl
 
-/--
-theorem `exists_finset_rename₂` / 定理 `exists_finset_rename₂`
+/-- `exists_finset_rename` for two polynomials at once: for any two polynomials `p₁`, `p₂` in a
+  polynomial semiring `R[σ]` of possibly infinitely many variables, `exists_finset_rename₂` yields
+  a finite subset `s` of `σ` such that both `p₁` and `p₂` are contained in the polynomial semiring
+  `R[s]` of finitely many variables. -/
+/-
+**MvPolynomial.exists_finset_rename** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：exists_finset_rename (p : MvPolynomial σ R) : exists (s : Finset σ) (q : M
+vPolynomial { x // x in s } R), p = rename (↑) q
+参数：p : MvPolynomial σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.induction_on`：induction_on {motive : MvPolynomial σ R -> Pr
+op} (p : MvPolynomial σ R) (C : forall a, motive (C a)) (add : forall p q, motiv
+e p -> motive q…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.rename_C`：rename_C (f : σ -> τ) (r : R) : rename f (C r) = 
+C r
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr_ctx`：∀ {p₁ p₂ q₁ q₂ : Prop}, p₁ = p₂ → (p₂ → q₁ = q₂) → (p
+₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `true_or`：∀ (p : Prop), (True ∨ p) = True
+· 使用定理 `or_true`：∀ (p : Prop), (p ∨ True) = True
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `MvPolynomial.rename_rename`：rename_rename (f : σ -> τ) (g : τ -> α) (p :
+ MvPolynomial σ R) : rename g (rename f p) = rename (g ∘ f) p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Finset.mem_insert_self`：mem_insert_self (a : α) (s : Finset α) : a in in
+sert a s
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `MvPolynomial.rename_X`：rename_X (f : σ -> τ) (i : σ) : rename f (X i : M
+vPolynomial σ R) = X (f i)
 
-English:
-theorem exists_finset_rename₂
-  given: (p₁ p₂ : MvPolynomial σ R)
-  proof: by
-  obtain ⟨s₁, q₁, rfl⟩ := exists_finset_rename p₁
-  obtain ⟨s₂, q₂, rfl⟩ := exists_finset_rename p₂
-  classical
-    use s₁ union s₂
-    use rename (fun x => ⟨x, Finset.subset_union_left x.2⟩) q₁
-    use rename (fun x => ⟨x, Finset.subset_union_right x.2⟩) q₂
-    constructor <;> simp [Function.comp_def]
-
-中文:
-定理 存在_finset_rename₂
-  条件: (p₁ p₂ : 多元多项式 σ R)
-  证明: by
-  obtain ⟨s₁, q₁, rfl⟩ := exists_finset_rename p₁
-  obtain ⟨s₂, q₂, rfl⟩ := exists_finset_rename p₂
-  classical
-    use s₁ union s₂
-    use rename (fun x => ⟨x, Finset.subset_union_left x.2⟩) q₁
-    use rename (fun x => ⟨x, Finset.subset_union_right x.2⟩) q₂
-    constructor <;> simp [Function.comp_def]
-
-Depends on / 依赖: Finset, Finset.subset_union_left, Finset.subset_union_right, Function, Function.comp_def, classical, comp_def, exists_finset_rename, subset_union_left, subset_union_right
+--- 原说明 ---
+`exists_finset_rename` for two polynomials at once: for any two polynomials `p₁`
+, `p₂` in a
+  polynomial semiring `R[σ]` of possibly infinitely many variables, `exists_fins
+et_rename₂` yields
+  a finite subset `s` of `σ` such that both `p₁` and `p₂` are contained in the p
+olynomial semiring
+  `R[s]` of finitely many variables.
 -/
 theorem exists_finset_rename₂ (p₁ p₂ : MvPolynomial σ R) :
-    exists (s : Finset σ) (q₁ q₂ : MvPolynomial s R), p₁ = rename (↑) q₁ ∧ p₂ = rename (↑) q₂ := by
+    ∃ (s : Finset σ) (q₁ q₂ : MvPolynomial s R), p₁ = rename (↑) q₁ ∧ p₂ = rename (↑) q₂ := by
   obtain ⟨s₁, q₁, rfl⟩ := exists_finset_rename p₁
   obtain ⟨s₂, q₂, rfl⟩ := exists_finset_rename p₂
   classical
-    use s₁ union s₂
-    use rename (fun x => ⟨x, Finset.subset_union_left x.2⟩) q₁
-    use rename (fun x => ⟨x, Finset.subset_union_right x.2⟩) q₂
+    use s₁ ∪ s₂
+    use rename (fun x ↦ ⟨x, Finset.subset_union_left x.2⟩) q₁
+    use rename (fun x ↦ ⟨x, Finset.subset_union_right x.2⟩) q₂
     constructor <;> simp [Function.comp_def]
 
-/--
-theorem `exists_fin_rename` / 定理 `exists_fin_rename`
+/-- Every polynomial is a polynomial in finitely many variables. -/
+/-
+**MvPolynomial.exists_fin_rename** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：exists_fin_rename (p : MvPolynomial σ R) : exists (n : Nat) (f : Fin n -> 
+σ) (_hf : Injective f) (q : MvPolynomial (Fin n) R), p = rename f q
+参数：p : MvPolynomial σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.exists_finset_rename`：exists_finset_rename (p : MvPolynomia
+l σ R) : exists (s : Finset σ) (q : MvPolynomial { x // x in s } R), p = rename 
+(↑) q
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Function.Injective.comp`：∀ {α : Sort u_1} {β : Sort u_2} {γ : Sort u_3} 
+{g : β → γ} {f : α → β},   Function.Injective g → Function.Injective f → Functio
+n.Injective (…
+· 使用定理 `Subtype.val_injective`：∀ {α : Sort u_1} {p : α → Prop}, Function.Injecti
+ve Subtype.val
+· 使用定理 `Equiv.injective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Injec
+tive ⇑e
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MvPolynomial.rename_rename`：rename_rename (f : σ -> τ) (g : τ -> α) (p :
+ MvPolynomial σ R) : rename g (rename f p) = rename (g ∘ f) p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `Equiv.symm_apply_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : α),
+ e.symm (e x) = x
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 
-English:
-theorem exists_fin_rename
-  given: (p : MvPolynomial σ R)
-  proof: by
-  obtain ⟨s, q, rfl⟩ := exists_finset_rename p
-  let n := Fintype.card { x // x in s }
-  let e := Fintype.equivFin { x // x in s }
-  refine ⟨n, (↑) ∘ e.symm, Subtype.val_injective.comp e.symm.injective, rename e q, ?_⟩
-  rw [← rename_rename]; rw [rename_rename e]
-  simp only [Function.comp_def, Equiv.symm_apply_apply, rename_rename]
-
-中文:
-定理 存在_fin_rename
-  条件: (p : 多元多项式 σ R)
-  证明: by
-  obtain ⟨s, q, rfl⟩ := exists_finset_rename p
-  let n := Fintype.card { x // x in s }
-  let e := Fintype.equivFin { x // x in s }
-  refine ⟨n, (↑) ∘ e.symm, Subtype.val_injective.comp e.symm.injective, rename e q, ?_⟩
-  rw [← rename_rename]; rw [rename_rename e]
-  simp only [Function.comp_def, Equiv.symm_apply_apply, rename_rename]
-
-Depends on / 依赖: Equiv.symm_apply_apply, Fintype, Fintype.card, Fintype.equivFin, Function, Function.comp_def, Subtype, Subtype.val_injective.comp, comp_def, e.symm, e.symm.injective, equivFin, exists_finset_rename, injective, rename_rename, symm_apply_apply, val_injective
+--- 原说明 ---
+Every polynomial is a polynomial in finitely many variables.
 -/
 theorem exists_fin_rename (p : MvPolynomial σ R) :
-    exists (n : Nat) (f : Fin n -> σ) (_hf : Injective f) (q : MvPolynomial (Fin n) R), p = rename f q := by
+    ∃ (n : ℕ) (f : Fin n → σ) (_hf : Injective f) (q : MvPolynomial (Fin n) R), p = rename f q := by
   obtain ⟨s, q, rfl⟩ := exists_finset_rename p
-  let n := Fintype.card { x // x in s }
-  let e := Fintype.equivFin { x // x in s }
+  let n := Fintype.card { x // x ∈ s }
+  let e := Fintype.equivFin { x // x ∈ s }
   refine ⟨n, (↑) ∘ e.symm, Subtype.val_injective.comp e.symm.injective, rename e q, ?_⟩
-  rw [← rename_rename]; rw [rename_rename e]
+  rw [← rename_rename, rename_rename e]
   simp only [Function.comp_def, Equiv.symm_apply_apply, rename_rename]
 
 end Rename
 
-/--
-theorem `eval₂_cast_comp` / 定理 `eval₂_cast_comp`
-
-English:
-theorem eval₂_cast_comp
-  given: (f : σ -> τ) (c : Int ->+* R) (g : τ -> R) (p : MvPolynomial σ Int)
-  proof: (eval₂_rename c f g p).symm
-
-中文:
-定理 eval₂_cast_comp
-  条件: (f : σ -> τ) (c : 整数 ->+* R) (g : τ -> R) (p : 多元多项式 σ 整数)
-  证明: (eval₂_rename c f g p).symm
+/-
+**MvPolynomial.eval** 是 Mathlib 中的一个定义，位于命名空间 `MvPolynomial`。
+形式化陈述：eval (f : σ -> R) : MvPolynomial σ R ->+* R
+参数：f : σ -> R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem eval₂_cast_comp (f : σ -> τ) (c : Int ->+* R) (g : τ -> R) (p : MvPolynomial σ Int) :
+theorem eval₂_cast_comp (f : σ → τ) (c : ℤ →+* R) (g : τ → R) (p : MvPolynomial σ ℤ) :
     eval₂ c (g ∘ f) p = eval₂ c g (rename f p) := (eval₂_rename c f g p).symm
 
 section Coeff
 
 @[simp]
-/--
-theorem `coeff_rename_mapDomain` / 定理 `coeff_rename_mapDomain`
-
-English:
-theorem coeff_rename_mapDomain
-  given: (f : σ -> τ) (hf : Injective f) (φ : MvPolynomial σ R) (d : σ ->₀ Nat)
-  proof: by
-  classical
-  induction φ using MvPolynomial.induction_on' with
-  | monomial u r =>
-    rw [rename_monomial]; rw [coeff_monomial]; rw [coeff_monomial]
-    simp only [(Finsupp.mapDomain_injective hf).eq_iff]
-  | add =>
-    simp only [*, map_add, coeff_add]
-
-@[simp]
-
-中文:
-定理 coeff_rename_mapDomain
-  条件: (f : σ -> τ) (hf : 单射 f) (φ : 多元多项式 σ R) (d : σ ->₀ 自然数)
-  证明: by
-  classical
-  induction φ using MvPolynomial.induction_on' with
-  | monomial u r =>
-    rw [rename_monomial]; rw [coeff_monomial]; rw [coeff_monomial]
-    simp only [(Finsupp.mapDomain_injective hf).eq_iff]
-  | add =>
-    simp only [*, map_add, coeff_add]
-
-@[simp]
-
-Depends on / 依赖: Finsupp, Finsupp.mapDomain_injective, MvPolynomial, MvPolynomial.induction_on, classical, coeff_add, coeff_monomial, eq_iff, induction_on, mapDomain_injective, map_add, monomial, rename_monomial
+/-
+**MvPolynomial.coeff_rename_mapDomain** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：coeff_rename_mapDomain (f : σ -> τ) (hf : Injective f) (φ : MvPolynomial σ
+ R) (d : σ ->₀ Nat) : (rename f φ).coeff (d.mapDomain f) = φ.coeff d
+参数：f : σ -> τ；hf : Injective f；φ : MvPolynomial σ R；d : σ ->₀ Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.induction_on'`：induction_on' {P : MvPolynomial σ R -> Prop}
+ (p : MvPolynomial σ R) (monomial : forall (u : σ ->₀ Nat) (a : R), P (monomial 
+u a)) (add : for…
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.rename_monomial`：rename_monomial (f : σ -> τ) (d : σ ->₀ Na
+t) (r : R) : rename f (monomial d r) = monomial (d.mapDomain f) r
+· 使用定理 `MvPolynomial.coeff_monomial`：coeff_monomial [DecidableEq σ] (m n) (a) : 
+coeff m (monomial n a : MvPolynomial σ R) = if n = m then a else 0
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Finsupp.mapDomain_injective`：mapDomain_injective {f : α -> β} (hf : Func
+tion.Injective f) : Function.Injective (mapDomain f : (α ->₀ M) -> β ->₀ M)
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `MvPolynomial.coeff_add`：coeff_add (m : σ ->₀ Nat) (p q : MvPolynomial σ 
+R) : coeff m (p + q) = coeff m p + coeff m q
 -/
-theorem coeff_rename_mapDomain (f : σ -> τ) (hf : Injective f) (φ : MvPolynomial σ R) (d : σ ->₀ Nat) :
+theorem coeff_rename_mapDomain (f : σ → τ) (hf : Injective f) (φ : MvPolynomial σ R) (d : σ →₀ ℕ) :
     (rename f φ).coeff (d.mapDomain f) = φ.coeff d := by
   classical
   induction φ using MvPolynomial.induction_on' with
   | monomial u r =>
-    rw [rename_monomial]; rw [coeff_monomial]; rw [coeff_monomial]
+    rw [rename_monomial, coeff_monomial, coeff_monomial]
     simp only [(Finsupp.mapDomain_injective hf).eq_iff]
   | add =>
     simp only [*, map_add, coeff_add]
 
 @[simp]
-/--
-theorem `coeff_rename_embDomain` / 定理 `coeff_rename_embDomain`
-
-English:
-theorem coeff_rename_embDomain
-  given: (f : σ ↪ τ) (φ : MvPolynomial σ R) (d : σ ->₀ Nat)
-  proof: by
-  rw [Finsupp.embDomain_eq_mapDomain f]; rw [coeff_rename_mapDomain f f.injective]
-
-中文:
-定理 coeff_rename_embDomain
-  条件: (f : σ ↪ τ) (φ : 多元多项式 σ R) (d : σ ->₀ 自然数)
-  证明: by
-  rw [Finsupp.embDomain_eq_mapDomain f]; rw [coeff_rename_mapDomain f f.injective]
-
-Depends on / 依赖: Finsupp, Finsupp.embDomain_eq_mapDomain, coeff_rename_mapDomain, embDomain_eq_mapDomain, f.injective, injective
+/-
+**MvPolynomial.coeff_rename_embDomain** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：coeff_rename_embDomain (f : σ ↪ τ) (φ : MvPolynomial σ R) (d : σ ->₀ Nat) 
+: (rename f φ).coeff (d.embDomain f) = φ.coeff d
+参数：f : σ ↪ τ；φ : MvPolynomial σ R；d : σ ->₀ Nat。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finsupp.embDomain_eq_mapDomain`：embDomain_eq_mapDomain (f : α ↪ β) (v : 
+α ->₀ M) : embDomain f v = mapDomain f v
+· 使用定理 `MvPolynomial.coeff_rename_mapDomain`：coeff_rename_mapDomain (f : σ -> τ)
+ (hf : Injective f) (φ : MvPolynomial σ R) (d : σ ->₀ Nat) : (rename f φ).coeff 
+(d.mapDomain f) = φ.coeff…
+· 使用定理 `Function.Embedding.injective`：∀ {α : Sort u_1} {β : Sort u_2} (f : α ↪ β
+), Function.Injective ⇑f
 -/
-theorem coeff_rename_embDomain (f : σ ↪ τ) (φ : MvPolynomial σ R) (d : σ ->₀ Nat) :
+theorem coeff_rename_embDomain (f : σ ↪ τ) (φ : MvPolynomial σ R) (d : σ →₀ ℕ) :
     (rename f φ).coeff (d.embDomain f) = φ.coeff d := by
-  rw [Finsupp.embDomain_eq_mapDomain f]; rw [coeff_rename_mapDomain f f.injective]
+  rw [Finsupp.embDomain_eq_mapDomain f, coeff_rename_mapDomain f f.injective]
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `coeff_rename_eq_zero` / 定理 `coeff_rename_eq_zero`
-
-English:
-theorem coeff_rename_eq_zero
-  statement: (f : σ -> τ) (φ : MvPolynomial σ R) (d : τ ->₀ Nat)
-  proof: by
+/-
+**MvPolynomial.coeff_rename_eq_zero** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：coeff_rename_eq_zero (f : σ -> τ) (φ : MvPolynomial σ R) (d : τ ->₀ Nat) (
+h : forall u : σ ->₀ Nat, u.mapDomain f = d -> φ.coeff u = 0) : (rename f φ).coe
+ff d = 0
+参数：f : σ -> τ；φ : MvPolynomial σ R；d : τ ->₀ Nat；h : forall u : σ ->₀ Nat, u.map
+Domain f = d -> φ.coeff u = 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `MvPolynomial.notMem_support_iff`：notMem_support_iff {p : MvPolynomial σ 
+R} {m : σ ->₀ Nat} : m ∉ p.support ↔ p.coeff m = 0
+· 使用定理 `Finsupp.mapDomain_support`：mapDomain_support [DecidableEq β] {f : α -> β
+} {s : α ->₀ M} : (s.mapDomain f).support subseteq s.support.image f
+· 使用定理 `Finset.mem_image`：mem_image : b in s.image f ↔ exists a in s, f a = b
+· 使用定理 `Finsupp.mem_support_iff`：mem_support_iff {f : α ->₀ M} : forall {a : α},
+ a in f.support ↔ f a != 0
+-/
+theorem coeff_rename_eq_zero (f : σ → τ) (φ : MvPolynomial σ R) (d : τ →₀ ℕ)
+    (h : ∀ u : σ →₀ ℕ, u.mapDomain f = d → φ.coeff u = 0) : (rename f φ).coeff d = 0 := by
   classical
   rw [← notMem_support_iff]
   intro H
@@ -1317,94 +1331,87 @@ theorem coeff_rename_eq_zero
   specialize h u rfl
   rw [Finsupp.mem_support_iff] at hu
   contradiction
-
-中文:
-定理 coeff_rename_eq_zero
-  结论: (f : σ -> τ) (φ : 多元多项式 σ R) (d : τ ->₀ 自然数)
-  证明: by
-  classical
-  rw [← notMem_support_iff]
-  intro H
-  replace H := mapDomain_support H
-  rw [Finset.mem_image] at H
-  obtain ⟨u, hu, rfl⟩ := H
-  specialize h u rfl
-  rw [Finsupp.mem_support_iff] at hu
-  contradiction
-
-Depends on / 依赖: Finset, Finset.mem_image, Finsupp, Finsupp.mem_support_iff, classical, mapDomain_support, mem_image, mem_support_iff, notMem_support_iff, replace, specialize
+/-
+**MvPolynomial.coeff_rename_ne_zero** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：coeff_rename_ne_zero (f : σ -> τ) (φ : MvPolynomial σ R) (d : τ ->₀ Nat) (
+h : (rename f φ).coeff d != 0) : exists u : σ ->₀ Nat, u.mapDomain f = d ∧ φ.coe
+ff u != 0
+参数：f : σ -> τ；φ : MvPolynomial σ R；d : τ ->₀ Nat；h : (rename f φ).coeff d != 0。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₂`：contrapose₂ {p q : Prop} : (¬ q -
+> p) -> (¬ p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Push.not_and_eq`：not_and_eq : (¬ (p ∧ q)) = (p -> ¬ q)
+· 使用定理 `MvPolynomial.coeff_rename_eq_zero`：coeff_rename_eq_zero (f : σ -> τ) (φ 
+: MvPolynomial σ R) (d : τ ->₀ Nat) (h : forall u : σ ->₀ Nat, u.mapDomain f = d
+ -> φ.coeff u = 0) : (r…
 -/
-theorem coeff_rename_eq_zero (f : σ -> τ) (φ : MvPolynomial σ R) (d : τ ->₀ Nat)
-    (h : forall u : σ ->₀ Nat, u.mapDomain f = d -> φ.coeff u = 0) : (rename f φ).coeff d = 0 := by
-  classical
-  rw [← notMem_support_iff]
-  intro H
-  replace H := mapDomain_support H
-  rw [Finset.mem_image] at H
-  obtain ⟨u, hu, rfl⟩ := H
-  specialize h u rfl
-  rw [Finsupp.mem_support_iff] at hu
-  contradiction
-
-/--
-theorem `coeff_rename_ne_zero` / 定理 `coeff_rename_ne_zero`
-
-English:
-theorem coeff_rename_ne_zero
-  statement: (f : σ -> τ) (φ : MvPolynomial σ R) (d : τ ->₀ Nat)
-  proof: by
+theorem coeff_rename_ne_zero (f : σ → τ) (φ : MvPolynomial σ R) (d : τ →₀ ℕ)
+    (h : (rename f φ).coeff d ≠ 0) : ∃ u : σ →₀ ℕ, u.mapDomain f = d ∧ φ.coeff u ≠ 0 := by
   contrapose! h
   apply coeff_rename_eq_zero _ _ _ h
 
 @[simp]
-
-中文:
-定理 coeff_rename_ne_zero
-  结论: (f : σ -> τ) (φ : 多元多项式 σ R) (d : τ ->₀ 自然数)
-  证明: by
-  contrapose! h
-  apply coeff_rename_eq_zero _ _ _ h
-
-@[simp]
-
-Depends on / 依赖: coeff_rename_eq_zero, contrapose
+/-
+**MvPolynomial.constantCoeff_rename** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomial`。
+形式化陈述：constantCoeff_rename {τ : Type*} (f : σ -> τ) (φ : MvPolynomial σ R) : con
+stantCoeff (rename f φ) = constantCoeff φ
+参数：f : σ -> τ；φ : MvPolynomial σ R。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `MvPolynomial.induction_on`：induction_on {motive : MvPolynomial σ R -> Pr
+op} (p : MvPolynomial σ R) (C : forall a, motive (C a)) (add : forall p q, motiv
+e p -> motive q…
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.rename_C`：rename_C (f : σ -> τ) (r : R) : rename f (C r) = 
+C r
+· 使用定理 `MvPolynomial.constantCoeff_C`：constantCoeff_C (r : R) : constantCoeff (C
+ r : MvPolynomial σ R) = r
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `map_add`：∀ {M : Type u_4} {N : Type u_5} {F : Type u_9} [inst : Add M] [
+inst_1 : Add N] [inst_2 : FunLike F M N]   [AddHomClass F M N] (f : F) (x y :…
+· 使用定理 `SemilinearMapClass.toAddHomClass`：∀ {F : Type u_14} {R : outParam (Type 
+u_15)} {S : outParam (Type u_16)} {inst : Semiring R} {inst_1 : Semiring S}   {σ
+ : outParam (R →+* S)}…
+· 使用定理 `NonUnitalAlgHomClass.instLinearMapClass`：∀ {R : Type u} [inst : Semiring
+ R] {A : Type u_1} {B : Type u_2} [inst_1 : NonUnitalNonAssocSemiring A]   [inst
+_2 : _root_.Module R A] [inst…
+· 使用定理 `AlgHom.instNonUnitalAlgHomClassOfAlgHomClass`：∀ {F : Type u_1} {R : Type
+ u_2} [inst : CommSemiring R] {A : Type u_3} {B : Type u_4} [inst_1 : Semiring A
+]   [inst_2 : Semiring B] [inst_3 …
+· 使用定理 `AddMonoidHomClass.toAddHomClass`：∀ {F : Type u_10} {M : outParam (Type u
+_11)} {N : outParam (Type u_12)} {inst : AddZero M} {inst_1 : AddZero N}   {inst
+_2 : FunLike F M N} […
+· 使用定理 `RingHomClass.toAddMonoidHomClass`：∀ {F : Type u_5} {α : outParam (Type u
+_6)} {β : outParam (Type u_7)} {inst : NonAssocSemiring α}   {inst_1 : NonAssocS
+emiring β} {inst_2 : F…
+· 使用定理 `map_mul`：map_mul [MulHomClass F M N] (f : F) (x y : M) : f (x * y) = f x
+ * f y
+· 使用定理 `NonUnitalAlgSemiHomClass.toMulHomClass`：∀ {F : Type u_1} {R : outParam (
+Type u_2)} {S : outParam (Type u_3)} {inst : Monoid R} {inst_1 : Monoid S}   {φ 
+: outParam (R →* S)} {A : ou…
+· 使用定理 `MvPolynomial.rename_X`：rename_X (f : σ -> τ) (i : σ) : rename f (X i : M
+vPolynomial σ R) = X (f i)
+· 使用定理 `NonUnitalRingHomClass.toMulHomClass`：∀ {F : Type u_5} {α : outParam (Typ
+e u_6)} {β : outParam (Type u_7)} {inst : NonUnitalNonAssocSemiring α}   {inst_1
+ : NonUnitalNonAssocSemir…
+· 使用定理 `RingHomClass.toNonUnitalRingHomClass`：∀ {F : Type u_1} {α : Type u_2} {β
+ : Type u_3} [inst : FunLike F α β] {x : NonAssocSemiring α}   {x_1 : NonAssocSe
+miring β} [RingHomClass F …
+· 使用定理 `MvPolynomial.constantCoeff_X`：constantCoeff_X (i : σ) : constantCoeff (X
+ i : MvPolynomial σ R) = 0
 -/
-theorem coeff_rename_ne_zero (f : σ -> τ) (φ : MvPolynomial σ R) (d : τ ->₀ Nat)
-    (h : (rename f φ).coeff d != 0) : exists u : σ ->₀ Nat, u.mapDomain f = d ∧ φ.coeff u != 0 := by
-  contrapose! h
-  apply coeff_rename_eq_zero _ _ _ h
-
-@[simp]
-/--
-theorem `constantCoeff_rename` / 定理 `constantCoeff_rename`
-
-English:
-theorem constantCoeff_rename
-  given: {τ : Type*} (f : σ -> τ) (φ : MvPolynomial σ R)
-  proof: by
-  apply φ.induction_on
-  · intro a
-    simp only [constantCoeff_C, rename_C]
-  · intro p q hp hq
-    simp only [hp, hq, map_add]
-  · intro p n hp
-    simp only [hp, rename_X, constantCoeff_X, map_mul]
-
-中文:
-定理 constantCoeff_rename
-  条件: {τ : 类型} (f : σ -> τ) (φ : 多元多项式 σ R)
-  证明: by
-  apply φ.induction_on
-  · intro a
-    simp only [constantCoeff_C, rename_C]
-  · intro p q hp hq
-    simp only [hp, hq, map_add]
-  · intro p n hp
-    simp only [hp, rename_X, constantCoeff_X, map_mul]
-
-Depends on / 依赖: constantCoeff_C, constantCoeff_X, induction_on, map_add, map_mul, rename_C, rename_X
--/
-theorem constantCoeff_rename {τ : Type*} (f : σ -> τ) (φ : MvPolynomial σ R) :
+theorem constantCoeff_rename {τ : Type*} (f : σ → τ) (φ : MvPolynomial σ R) :
     constantCoeff (rename f φ) = constantCoeff φ := by
   apply φ.induction_on
   · intro a
@@ -1418,53 +1425,58 @@ end Coeff
 
 section Support
 
-/--
-theorem `support_rename_of_injective` / 定理 `support_rename_of_injective`
-
-English:
-theorem support_rename_of_injective
-  statement: {p : MvPolynomial σ R} {f : σ -> τ} [DecidableEq τ]
-  proof: Finsupp.mapDomain_support_of_injective (Finsupp.mapDomain_injective h) _
-
-中文:
-定理 support_rename_of_injective
-  结论: {p : 多元多项式 σ R} {f : σ -> τ} [DecidableEq τ]
-  证明: Finsupp.mapDomain_support_of_injective (Finsupp.mapDomain_injective h) _
-
-Depends on / 依赖: Finsupp, Finsupp.mapDomain_injective, Finsupp.mapDomain_support_of_injective, mapDomain_injective, mapDomain_support_of_injective
+/-
+**MvPolynomial.support_rename_of_injective** 是 Mathlib 中的一个定理，位于命名空间 `MvPolynomi
+al`。
+形式化陈述：support_rename_of_injective {p : MvPolynomial σ R} {f : σ -> τ} [Decidable
+Eq τ] (h : Function.Injective f) : (rename f p).support = Finset.image (Finsupp.
+mapDomain f) p.support
+参数：h : Function.Injective f。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finsupp.mapDomain_support_of_injective`：mapDomain_support_of_injective [
+DecidableEq β] {f : α -> β} (hf : Function.Injective f) (s : α ->₀ M) : (mapDoma
+in f s).support = Finset.ima…
+· 使用定理 `Finsupp.mapDomain_injective`：mapDomain_injective {f : α -> β} (hf : Func
+tion.Injective f) : Function.Injective (mapDomain f : (α ->₀ M) -> β ->₀ M)
 -/
-theorem support_rename_of_injective {p : MvPolynomial σ R} {f : σ -> τ} [DecidableEq τ]
+theorem support_rename_of_injective {p : MvPolynomial σ R} {f : σ → τ} [DecidableEq τ]
     (h : Function.Injective f) :
     (rename f p).support = Finset.image (Finsupp.mapDomain f) p.support :=
   Finsupp.mapDomain_support_of_injective (Finsupp.mapDomain_injective h) _
-
-/--
-lemma `support_rename_killCompl_subset` / 引理 `support_rename_killCompl_subset`
-
-English:
-lemma support_rename_killCompl_subset
-  given: {p : MvPolynomial τ R} {f : σ -> τ} (hf : f.Injective)
-  proof: by
-  classical
-  rw [MvPolynomial.support_rename_of_injective hf]; rw [support_killCompl]; rw [Finset.image_preimage]
-  exact Finset.filter_subset ..
-
-中文:
-引理 support_rename_killCompl_subset
-  条件: {p : 多元多项式 τ R} {f : σ -> τ} (hf : f.单射)
-  证明: by
-  classical
-  rw [MvPolynomial.support_rename_of_injective hf]; rw [support_killCompl]; rw [Finset.image_preimage]
-  exact Finset.filter_subset ..
-
-Depends on / 依赖: Finset, Finset.filter_subset, Finset.image_preimage, MvPolynomial, MvPolynomial.support_rename_of_injective, classical, filter_subset, image_preimage, support_killCompl, support_rename_of_injective
+/-
+**MvPolynomial.support_rename_killCompl_subset** 是 Mathlib 中的一个引理，位于命名空间 `MvPoly
+nomial`。
+形式化陈述：support_rename_killCompl_subset {p : MvPolynomial τ R} {f : σ -> τ} (hf : 
+f.Injective) : ((p.killCompl hf).rename f).support subseteq p.support
+参数：hf : f.Injective。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `MvPolynomial.support_rename_of_injective`：support_rename_of_injective {p
+ : MvPolynomial σ R} {f : σ -> τ} [DecidableEq τ] (h : Function.Injective f) : (
+rename f p).support = Finset.i…
+· 使用定理 `Function.Injective.injOn`：∀ {α : Type u_1} {β : Type u_2} {f : α → β}, F
+unction.Injective f → ∀ {s : Set α}, Set.InjOn f s
+· 使用定理 `Finsupp.mapDomain_injective`：mapDomain_injective {f : α -> β} (hf : Func
+tion.Injective f) : Function.Injective (mapDomain f : (α ->₀ M) -> β ->₀ M)
+· 使用引理 `MvPolynomial.support_killCompl`：support_killCompl {p : MvPolynomial τ R}
+ : (p.killCompl hf).support = p.support.preimage (Finsupp.mapDomain f) (Finsupp.
+mapDomain_injective …
+· 使用定理 `Finset.image_preimage`：image_preimage [DecidableEq β] (f : α -> β) (s : 
+Finset β) [forall x, Decidable (x in Set.range f)] (hf : Set.InjOn f (f ⁻¹' ↑s))
+ : image f …
+· 使用定理 `Finset.filter_subset`：∀ {α : Type u_1} (p : α → Prop) [inst : DecidableP
+red p] (s : Finset α), Finset.filter p s ⊆ s
 -/
-lemma support_rename_killCompl_subset {p : MvPolynomial τ R} {f : σ -> τ} (hf : f.Injective) :
-    ((p.killCompl hf).rename f).support subseteq p.support := by
+lemma support_rename_killCompl_subset {p : MvPolynomial τ R} {f : σ → τ} (hf : f.Injective) :
+    ((p.killCompl hf).rename f).support ⊆ p.support := by
   classical
-  rw [MvPolynomial.support_rename_of_injective hf]; rw [support_killCompl]; rw [Finset.image_preimage]
+  rw [MvPolynomial.support_rename_of_injective hf, support_killCompl, Finset.image_preimage]
   exact Finset.filter_subset ..
 
 end Support
 
 end MvPolynomial
+

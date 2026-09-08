@@ -23,32 +23,30 @@ noncomputable section
 open scoped Manifold
 
 variable {𝕜 : Type*} [NontriviallyNormedField 𝕜] {E : Type*} [NormedAddCommGroup E]
-  [NormedSpace 𝕜 E] {E' : Type*} [NormedAddCommGroup E'] [NormedSpace 𝕜 E'] {f : E -> E'}
+  [NormedSpace 𝕜 E] {E' : Type*} [NormedAddCommGroup E'] [NormedSpace 𝕜 E'] {f : E → E'}
   {s : Set E} {x : E}
 
 section MFDerivFDeriv
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `uniqueMDiffWithinAt_iff_uniqueDiffWithinAt` / 定理 `uniqueMDiffWithinAt_iff_uniqueDiffWithinAt`
-
-English:
-theorem uniqueMDiffWithinAt_iff_uniqueDiffWithinAt
-  proof: by
-  simp only [UniqueMDiffWithinAt, mfld_simps]
-
-alias ⟨UniqueMDiffWithinAt.uniqueDiffWithinAt, UniqueDiffWithinAt.uniqueMDiffWithinAt⟩ :=
-  uniqueMDiffWithinAt_iff_uniqueDiffWithinAt
-
-中文:
-定理 uniqueMDiffWithinAt_iff_uniqueDiffWithinAt
-  证明: by
-  simp only [UniqueMDiffWithinAt, mfld_simps]
-
-alias ⟨UniqueMDiffWithinAt.uniqueDiffWithinAt, UniqueDiffWithinAt.uniqueMDiffWithinAt⟩ :=
-  uniqueMDiffWithinAt_iff_uniqueDiffWithinAt
-
-Depends on / 依赖: UniqueMDiffWithinAt, mfld_simps
+/-
+**uniqueMDiffWithinAt_iff_uniqueDiffWithinAt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：uniqueMDiffWithinAt_iff_uniqueDiffWithinAt : UniqueMDiffAt[s] x ↔ UniqueDi
+ffWithinAt 𝕜 s x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `PartialEquiv.trans_refl`：trans_refl : e.trans (PartialEquiv.refl β) = e
+· 使用定理 `Set.range_id`：range_id : range (@id α) = univ
+· 使用定理 `Set.inter_univ`：inter_univ (a : Set α) : a inter univ = a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem uniqueMDiffWithinAt_iff_uniqueDiffWithinAt :
     UniqueMDiffAt[s] x ↔ UniqueDiffWithinAt 𝕜 s x := by
@@ -56,98 +54,85 @@ theorem uniqueMDiffWithinAt_iff_uniqueDiffWithinAt :
 
 alias ⟨UniqueMDiffWithinAt.uniqueDiffWithinAt, UniqueDiffWithinAt.uniqueMDiffWithinAt⟩ :=
   uniqueMDiffWithinAt_iff_uniqueDiffWithinAt
-
-/--
-theorem `uniqueMDiffOn_iff_uniqueDiffOn` / 定理 `uniqueMDiffOn_iff_uniqueDiffOn`
-
-English:
-theorem uniqueMDiffOn_iff_uniqueDiffOn
-  statement: UniqueMDiff[s] ↔ UniqueDiffOn 𝕜 s
-  proof: by
-  simp [UniqueMDiffOn, UniqueDiffOn, uniqueMDiffWithinAt_iff_uniqueDiffWithinAt]
-
-alias ⟨UniqueMDiffOn.uniqueDiffOn, UniqueDiffOn.uniqueMDiffOn⟩ := uniqueMDiffOn_iff_uniqueDiffOn
-
-中文:
-定理 uniqueMDiffOn_iff_uniqueDiffOn
-  结论: UniqueMDiff[s] ↔ UniqueDiffOn 𝕜 s
-  证明: by
-  simp [UniqueMDiffOn, UniqueDiffOn, uniqueMDiffWithinAt_iff_uniqueDiffWithinAt]
-
-alias ⟨UniqueMDiffOn.uniqueDiffOn, UniqueDiffOn.uniqueMDiffOn⟩ := uniqueMDiffOn_iff_uniqueDiffOn
-
-Depends on / 依赖: UniqueDiffOn, UniqueMDiffOn, uniqueMDiffWithinAt_iff_uniqueDiffWithinAt
+/-
+**uniqueMDiffOn_iff_uniqueDiffOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：uniqueMDiffOn_iff_uniqueDiffOn : UniqueMDiff[s] ↔ UniqueDiffOn 𝕜 s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
 theorem uniqueMDiffOn_iff_uniqueDiffOn : UniqueMDiff[s] ↔ UniqueDiffOn 𝕜 s := by
   simp [UniqueMDiffOn, UniqueDiffOn, uniqueMDiffWithinAt_iff_uniqueDiffWithinAt]
 
 alias ⟨UniqueMDiffOn.uniqueDiffOn, UniqueDiffOn.uniqueMDiffOn⟩ := uniqueMDiffOn_iff_uniqueDiffOn
-
-/--
-theorem `ModelWithCorners.uniqueMDiffOn` / 定理 `ModelWithCorners.uniqueMDiffOn`
-
-English:
-theorem ModelWithCorners.uniqueMDiffOn
-  statement: {H : Type*} [TopologicalSpace H]
-  proof: I.uniqueDiffOn.uniqueMDiffOn
-
-@[simp, mfld_simps]
-
-中文:
-定理 带角模型.uniqueMDiffOn
-  结论: {H : 类型} [拓扑空间 H]
-  证明: I.uniqueDiffOn.uniqueMDiffOn
-
-@[simp, mfld_simps]
-
-Depends on / 依赖: I.uniqueDiffOn.uniqueMDiffOn, uniqueDiffOn, uniqueMDiffOn
+/-
+**ModelWithCorners.uniqueMDiffOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：ModelWithCorners.uniqueMDiffOn {H : Type*} [TopologicalSpace H] (I : Model
+WithCorners 𝕜 E H) : UniqueMDiff[Set.range I]
+参数：I : ModelWithCorners 𝕜 E H。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `UniqueDiffOn.uniqueMDiffOn`：∀ {𝕜 : Type u_1} [inst : NontriviallyNormedF
+ield 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpace 𝕜
+ E] {s : Set E},…
+· 使用定理 `ModelWithCorners.uniqueDiffOn`：∀ {𝕜 : Type u_1} [inst : NontriviallyNorm
+edField 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]   [inst_2 : NormedSpac
+e 𝕜 E] {H : Type u_…
 -/
 theorem ModelWithCorners.uniqueMDiffOn {H : Type*} [TopologicalSpace H]
     (I : ModelWithCorners 𝕜 E H) : UniqueMDiff[Set.range I] :=
   I.uniqueDiffOn.uniqueMDiffOn
 
 @[simp, mfld_simps]
-/--
-theorem `writtenInExtChartAt_model_space` / 定理 `writtenInExtChartAt_model_space`
-
-English:
-theorem writtenInExtChartAt_model_space
-  statement: writtenInExtChartAt 𝓘(𝕜, E) 𝓘(𝕜, E') x f = f
-  proof: rfl
-
-中文:
-定理 writtenInExtChartAt_model_space
-  结论: writtenInExtChartAt 𝓘(𝕜, E) 𝓘(𝕜, E') x f = f
-  证明: rfl
+/-
+**writtenInExtChartAt_model_space** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：writtenInExtChartAt_model_space : writtenInExtChartAt 𝓘(𝕜, E) 𝓘(𝕜, E') x f
+ = f
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem writtenInExtChartAt_model_space : writtenInExtChartAt 𝓘(𝕜, E) 𝓘(𝕜, E') x f = f :=
   rfl
 
-variable {f' : TangentSpace 𝓘(𝕜, E) x ->L[𝕜] TangentSpace 𝓘(𝕜, E') (f x)}
+variable {f' : TangentSpace 𝓘(𝕜, E) x →L[𝕜] TangentSpace 𝓘(𝕜, E') (f x)}
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `hasMFDerivWithinAt_iff_hasFDerivWithinAt` / 定理 `hasMFDerivWithinAt_iff_hasFDerivWithinAt`
-
-English:
-theorem hasMFDerivWithinAt_iff_hasFDerivWithinAt
-  proof: by
-  simpa only [HasMFDerivWithinAt, and_iff_right_iff_imp, mfld_simps] using
-    HasFDerivWithinAt.continuousWithinAt
-
-alias ⟨HasMFDerivWithinAt.hasFDerivWithinAt, HasFDerivWithinAt.hasMFDerivWithinAt⟩ :=
-  hasMFDerivWithinAt_iff_hasFDerivWithinAt
-
-中文:
-定理 hasMFDerivWithinAt_iff_hasFDerivWithinAt
-  证明: by
-  simpa only [HasMFDerivWithinAt, and_iff_right_iff_imp, mfld_simps] using
-    HasFDerivWithinAt.continuousWithinAt
-
-alias ⟨HasMFDerivWithinAt.hasFDerivWithinAt, HasFDerivWithinAt.hasMFDerivWithinAt⟩ :=
-  hasMFDerivWithinAt_iff_hasFDerivWithinAt
-
-Depends on / 依赖: HasFDerivWithinAt, HasFDerivWithinAt.continuousWithinAt, HasMFDerivWithinAt, and_iff_right_iff_imp, continuousWithinAt, mfld_simps
+/-
+**hasMFDerivWithinAt_iff_hasFDerivWithinAt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasMFDerivWithinAt_iff_hasFDerivWithinAt : HasMFDerivAt[s] f x f' ↔ HasFDe
+rivWithinAt f f' s x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `PartialEquiv.trans_refl`：trans_refl : e.trans (PartialEquiv.refl β) = e
+· 使用定理 `Set.range_id`：range_id : range (@id α) = univ
+· 使用定理 `Set.inter_univ`：inter_univ (a : Set α) : a inter univ = a
+· 使用定理 `HasFDerivWithinAt.continuousWithinAt`：HasFDerivWithinAt.continuousWithin
+At (h : HasFDerivWithinAt f f' s x) : ContinuousWithinAt f s x
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
 -/
 theorem hasMFDerivWithinAt_iff_hasFDerivWithinAt :
     HasMFDerivAt[s] f x f' ↔ HasFDerivWithinAt f f' s x := by
@@ -158,56 +143,62 @@ alias ⟨HasMFDerivWithinAt.hasFDerivWithinAt, HasFDerivWithinAt.hasMFDerivWithi
   hasMFDerivWithinAt_iff_hasFDerivWithinAt
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-theorem `hasMFDerivAt_iff_hasFDerivAt` / 定理 `hasMFDerivAt_iff_hasFDerivAt`
-
-English:
-theorem hasMFDerivAt_iff_hasFDerivAt
-  statement: HasMFDerivAt% f x f' ↔ HasFDerivAt f f' x
-  proof: by
-  rw [← hasMFDerivWithinAt_univ]; rw [hasMFDerivWithinAt_iff_hasFDerivWithinAt]; rw [hasFDerivWithinAt_univ]
-
-alias ⟨HasMFDerivAt.hasFDerivAt, HasFDerivAt.hasMFDerivAt⟩ := hasMFDerivAt_iff_hasFDerivAt
-
-中文:
-定理 hasMFDerivAt_iff_hasFDerivAt
-  结论: HasMFDerivAt% f x f' ↔ 在点处Fréchet可导 f f' x
-  证明: by
-  rw [← hasMFDerivWithinAt_univ]; rw [hasMFDerivWithinAt_iff_hasFDerivWithinAt]; rw [hasFDerivWithinAt_univ]
-
-alias ⟨HasMFDerivAt.hasFDerivAt, HasFDerivAt.hasMFDerivAt⟩ := hasMFDerivAt_iff_hasFDerivAt
-
-Depends on / 依赖: hasFDerivWithinAt_univ, hasMFDerivWithinAt_iff_hasFDerivWithinAt, hasMFDerivWithinAt_univ
+/-
+**hasMFDerivAt_iff_hasFDerivAt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：hasMFDerivAt_iff_hasFDerivAt : HasMFDerivAt% f x f' ↔ HasFDerivAt f f' x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `hasMFDerivWithinAt_univ`：hasMFDerivWithinAt_univ : HasMFDerivAt[univ] f 
+x f' ↔ HasMFDerivAt% f x f'
+· 使用定理 `hasMFDerivWithinAt_iff_hasFDerivWithinAt`：hasMFDerivWithinAt_iff_hasFDer
+ivWithinAt : HasMFDerivAt[s] f x f' ↔ HasFDerivWithinAt f f' s x
+· 使用定理 `hasFDerivWithinAt_univ`：hasFDerivWithinAt_univ : HasFDerivWithinAt f f' 
+univ x ↔ HasFDerivAt f f' x
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem hasMFDerivAt_iff_hasFDerivAt : HasMFDerivAt% f x f' ↔ HasFDerivAt f f' x := by
-  rw [← hasMFDerivWithinAt_univ]; rw [hasMFDerivWithinAt_iff_hasFDerivWithinAt]; rw [hasFDerivWithinAt_univ]
+  rw [← hasMFDerivWithinAt_univ, hasMFDerivWithinAt_iff_hasFDerivWithinAt, hasFDerivWithinAt_univ]
 
 alias ⟨HasMFDerivAt.hasFDerivAt, HasFDerivAt.hasMFDerivAt⟩ := hasMFDerivAt_iff_hasFDerivAt
 
-/--
-theorem `mdifferentiableWithinAt_iff_differentiableWithinAt` / 定理 `mdifferentiableWithinAt_iff_differentiableWithinAt`
+/-- For maps between vector spaces, `MDifferentiableWithinAt` and `DifferentiableWithinAt`
+coincide -/
+/-
+**mdifferentiableWithinAt_iff_differentiableWithinAt** 是 Mathlib 中的一个定理，位于命名空间 `
+`。
+形式化陈述：mdifferentiableWithinAt_iff_differentiableWithinAt : MDiffAt[s] f x ↔ Diff
+erentiableWithinAt 𝕜 f s x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `PartialEquiv.trans_refl`：trans_refl : e.trans (PartialEquiv.refl β) = e
+· 使用定理 `Set.range_id`：range_id : range (@id α) = univ
+· 使用定理 `Set.inter_univ`：inter_univ (a : Set α) : a inter univ = a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `DifferentiableWithinAt.continuousWithinAt`：DifferentiableWithinAt.contin
+uousWithinAt (h : DifferentiableWithinAt 𝕜 f s x) : ContinuousWithinAt f s x
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
 
-English:
-theorem mdifferentiableWithinAt_iff_differentiableWithinAt
-  proof: by
-  simp only [mdifferentiableWithinAt_iff', mfld_simps]
-  exact ⟨fun H => H.2, fun H => ⟨H.continuousWithinAt, H⟩⟩
-
-alias ⟨MDifferentiableWithinAt.differentiableWithinAt,
-    DifferentiableWithinAt.mdifferentiableWithinAt⟩ :=
-  mdifferentiableWithinAt_iff_differentiableWithinAt
-
-中文:
-定理 mdifferentiableWithinAt_iff_differentiableWithinAt
-  证明: by
-  simp only [mdifferentiableWithinAt_iff', mfld_simps]
-  exact ⟨fun H => H.2, fun H => ⟨H.continuousWithinAt, H⟩⟩
-
-alias ⟨MDifferentiableWithinAt.differentiableWithinAt,
-    DifferentiableWithinAt.mdifferentiableWithinAt⟩ :=
-  mdifferentiableWithinAt_iff_differentiableWithinAt
-
-Depends on / 依赖: H.continuousWithinAt, continuousWithinAt, mdifferentiableWithinAt_iff, mfld_simps
+--- 原说明 ---
+For maps between vector spaces, `MDifferentiableWithinAt` and `DifferentiableWit
+hinAt`
+coincide
 -/
 theorem mdifferentiableWithinAt_iff_differentiableWithinAt :
     MDiffAt[s] f x ↔ DifferentiableWithinAt 𝕜 f s x := by
@@ -218,28 +209,37 @@ alias ⟨MDifferentiableWithinAt.differentiableWithinAt,
     DifferentiableWithinAt.mdifferentiableWithinAt⟩ :=
   mdifferentiableWithinAt_iff_differentiableWithinAt
 
-/--
-theorem `mdifferentiableAt_iff_differentiableAt` / 定理 `mdifferentiableAt_iff_differentiableAt`
+/-- For maps between vector spaces, `MDifferentiableAt` and `DifferentiableAt` coincide -/
+/-
+**mdifferentiableAt_iff_differentiableAt** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mdifferentiableAt_iff_differentiableAt : MDiffAt f x ↔ DifferentiableAt 𝕜 
+f x
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `PartialEquiv.trans_refl`：trans_refl : e.trans (PartialEquiv.refl β) = e
+· 使用定理 `Set.range_id`：range_id : range (@id α) = univ
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `DifferentiableAt.continuousAt`：DifferentiableAt.continuousAt (h : Differ
+entiableAt 𝕜 f x) : ContinuousAt f x
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
+· 使用定理 `SeminormedAddCommGroup.toIsTopologicalAddGroup`：∀ {E : Type u_2} [inst :
+ SeminormedAddCommGroup E], IsTopologicalAddGroup E
+· 使用定理 `IsBoundedSMul.continuousSMul`：∀ {α : Type u_1} {β : Type u_2} [inst : Ps
+eudoMetricSpace α] [inst_1 : PseudoMetricSpace β] [inst_2 : Zero α]   [inst_3 : 
+Zero β] [inst_4 : …
 
-English:
-theorem mdifferentiableAt_iff_differentiableAt
-  proof: by
-  simp only [mdifferentiableAt_iff, differentiableWithinAt_univ, mfld_simps]
-  exact ⟨fun H => H.2, fun H => ⟨H.continuousAt, H⟩⟩
-
-alias ⟨MDifferentiableAt.differentiableAt, DifferentiableAt.mdifferentiableAt⟩ :=
-  mdifferentiableAt_iff_differentiableAt
-
-中文:
-定理 mdifferentiableAt_iff_differentiableAt
-  证明: by
-  simp only [mdifferentiableAt_iff, differentiableWithinAt_univ, mfld_simps]
-  exact ⟨fun H => H.2, fun H => ⟨H.continuousAt, H⟩⟩
-
-alias ⟨MDifferentiableAt.differentiableAt, DifferentiableAt.mdifferentiableAt⟩ :=
-  mdifferentiableAt_iff_differentiableAt
-
-Depends on / 依赖: H.continuousAt, continuousAt, differentiableWithinAt_univ, mdifferentiableAt_iff, mfld_simps
+--- 原说明 ---
+For maps between vector spaces, `MDifferentiableAt` and `DifferentiableAt` coinc
+ide
 -/
 theorem mdifferentiableAt_iff_differentiableAt :
     MDiffAt f x ↔ DifferentiableAt 𝕜 f x := by
@@ -249,28 +249,28 @@ theorem mdifferentiableAt_iff_differentiableAt :
 alias ⟨MDifferentiableAt.differentiableAt, DifferentiableAt.mdifferentiableAt⟩ :=
   mdifferentiableAt_iff_differentiableAt
 
-/--
-theorem `mdifferentiableOn_iff_differentiableOn` / 定理 `mdifferentiableOn_iff_differentiableOn`
+/-- For maps between vector spaces, `MDifferentiableOn` and `DifferentiableOn` coincide -/
+/-
+**mdifferentiableOn_iff_differentiableOn** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mdifferentiableOn_iff_differentiableOn : MDiff[s] f ↔ DifferentiableOn 𝕜 f
+ s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem mdifferentiableOn_iff_differentiableOn
-  proof: by
-  simp only [MDifferentiableOn, DifferentiableOn,
-    mdifferentiableWithinAt_iff_differentiableWithinAt]
-
-alias ⟨MDifferentiableOn.differentiableOn, DifferentiableOn.mdifferentiableOn⟩ :=
-  mdifferentiableOn_iff_differentiableOn
-
-中文:
-定理 mdifferentiableOn_iff_differentiableOn
-  证明: by
-  simp only [MDifferentiableOn, DifferentiableOn,
-    mdifferentiableWithinAt_iff_differentiableWithinAt]
-
-alias ⟨MDifferentiableOn.differentiableOn, DifferentiableOn.mdifferentiableOn⟩ :=
-  mdifferentiableOn_iff_differentiableOn
-
-Depends on / 依赖: DifferentiableOn, MDifferentiableOn, mdifferentiableWithinAt_iff_differentiableWithinAt
+--- 原说明 ---
+For maps between vector spaces, `MDifferentiableOn` and `DifferentiableOn` coinc
+ide
 -/
 theorem mdifferentiableOn_iff_differentiableOn :
     MDiff[s] f ↔ DifferentiableOn 𝕜 f s := by
@@ -280,28 +280,24 @@ theorem mdifferentiableOn_iff_differentiableOn :
 alias ⟨MDifferentiableOn.differentiableOn, DifferentiableOn.mdifferentiableOn⟩ :=
   mdifferentiableOn_iff_differentiableOn
 
-/--
-theorem `mdifferentiable_iff_differentiable` / 定理 `mdifferentiable_iff_differentiable`
+/-- For maps between vector spaces, `MDifferentiable` and `Differentiable` coincide -/
+/-
+**mdifferentiable_iff_differentiable** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mdifferentiable_iff_differentiable : MDiff f ↔ Differentiable 𝕜 f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 
-English:
-theorem mdifferentiable_iff_differentiable
-  statement: MDiff f ↔ Differentiable 𝕜 f
-  proof: by
-  simp only [MDifferentiable, Differentiable, mdifferentiableAt_iff_differentiableAt]
-
-alias ⟨MDifferentiable.differentiable, Differentiable.mdifferentiable⟩ :=
-  mdifferentiable_iff_differentiable
-
-中文:
-定理 mdifferentiable_iff_differentiable
-  结论: MDiff f ↔ 可微 𝕜 f
-  证明: by
-  simp only [MDifferentiable, Differentiable, mdifferentiableAt_iff_differentiableAt]
-
-alias ⟨MDifferentiable.differentiable, Differentiable.mdifferentiable⟩ :=
-  mdifferentiable_iff_differentiable
-
-Depends on / 依赖: Differentiable, MDifferentiable, mdifferentiableAt_iff_differentiableAt
+--- 原说明 ---
+For maps between vector spaces, `MDifferentiable` and `Differentiable` coincide
 -/
 theorem mdifferentiable_iff_differentiable : MDiff f ↔ Differentiable 𝕜 f := by
   simp only [MDifferentiable, Differentiable, mdifferentiableAt_iff_differentiableAt]
@@ -312,28 +308,40 @@ alias ⟨MDifferentiable.differentiable, Differentiable.mdifferentiable⟩ :=
 set_option backward.isDefEq.respectTransparency false in
 /-- For maps between vector spaces, `mfderivWithin` and `fderivWithin` coincide -/
 @[simp]
-/--
-theorem `mfderivWithin_eq_fderivWithin` / 定理 `mfderivWithin_eq_fderivWithin`
+/-
+**mfderivWithin_eq_fderivWithin** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mfderivWithin_eq_fderivWithin : mfderiv[s] f x = fderivWithin 𝕜 f s x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `ite_congr`：∀ {α : Sort u_1} {b c : Prop} {x y u v : α} {s : Decidable b}
+ [inst : Decidable c],   b = c → (c → x = u) → (¬c → y = v) → (if b then x else…
+· 使用定理 `eq_true`：∀ {p : Prop}, p → p = True
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `PartialEquiv.trans_refl`：trans_refl : e.trans (PartialEquiv.refl β) = e
+· 使用定理 `Set.range_id`：range_id : range (@id α) = univ
+· 使用定理 `Set.inter_univ`：inter_univ (a : Set α) : a inter univ = a
+· 使用定理 `if_pos`：∀ {c : Prop} {h : Decidable c}, c → ∀ {α : Sort u} {t e : α}, (i
+f c then t else e) = t
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `eq_false`：∀ {p : Prop}, ¬p → p = False
+· 使用定理 `if_neg`：∀ {c : Prop} {h : Decidable c}, ¬c → ∀ {α : Sort u} {t e : α}, (
+if c then t else e) = e
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `fderivWithin_zero_of_not_differentiableWithinAt`：fderivWithin_zero_of_no
+t_differentiableWithinAt (h : ¬DifferentiableWithinAt 𝕜 f s x) : fderivWithin 𝕜 
+f s x = 0
+· 使用定理 `mdifferentiableWithinAt_iff_differentiableWithinAt`：mdifferentiableWithi
+nAt_iff_differentiableWithinAt : MDiffAt[s] f x ↔ DifferentiableWithinAt 𝕜 f s x
 
-English:
-theorem mfderivWithin_eq_fderivWithin
-  proof: by
-  by_cases h : MDiffAt[s] f x
-  · simp only [mfderivWithin, h, if_pos, mfld_simps]
-  · simp only [mfderivWithin, h, if_neg, not_false_iff]
-    rw [mdifferentiableWithinAt_iff_differentiableWithinAt] at h
-    exact (fderivWithin_zero_of_not_differentiableWithinAt h).symm
-
-中文:
-定理 mfderivWithin_eq_fderivWithin
-  证明: by
-  by_cases h : MDiffAt[s] f x
-  · simp only [mfderivWithin, h, if_pos, mfld_simps]
-  · simp only [mfderivWithin, h, if_neg, not_false_iff]
-    rw [mdifferentiableWithinAt_iff_differentiableWithinAt] at h
-    exact (fderivWithin_zero_of_not_differentiableWithinAt h).symm
-
-Depends on / 依赖: MDiffAt, fderivWithin_zero_of_not_differentiableWithinAt, if_neg, if_pos, mdifferentiableWithinAt_iff_differentiableWithinAt, mfderivWithin, mfld_simps, not_false_iff
+--- 原说明 ---
+For maps between vector spaces, `mfderivWithin` and `fderivWithin` coincide
 -/
 theorem mfderivWithin_eq_fderivWithin :
     mfderiv[s] f x = fderivWithin 𝕜 f s x := by
@@ -345,27 +353,26 @@ theorem mfderivWithin_eq_fderivWithin :
 
 /-- For maps between vector spaces, `mfderiv` and `fderiv` coincide -/
 @[simp]
-/--
-theorem `mfderiv_eq_fderiv` / 定理 `mfderiv_eq_fderiv`
+/-
+**mfderiv_eq_fderiv** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：mfderiv_eq_fderiv : mfderiv% f x = fderiv 𝕜 f x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `mfderivWithin_univ`：mfderivWithin_univ : mfderiv[univ] f = mfderiv% f
+· 使用定理 `fderivWithin_univ`：fderivWithin_univ : fderivWithin 𝕜 f univ = fderiv 𝕜 
+f
+· 使用定理 `mfderivWithin_eq_fderivWithin`：mfderivWithin_eq_fderivWithin : mfderiv[s
+] f x = fderivWithin 𝕜 f s x
 
-English:
-theorem mfderiv_eq_fderiv
-  statement: mfderiv% f x = fderiv 𝕜 f x
-  proof: by
-  rw [← mfderivWithin_univ]; rw [← fderivWithin_univ]
-  exact mfderivWithin_eq_fderivWithin
-
-中文:
-定理 mfderiv_eq_fderiv
-  结论: mfderiv% f x = fderiv 𝕜 f x
-  证明: by
-  rw [← mfderivWithin_univ]; rw [← fderivWithin_univ]
-  exact mfderivWithin_eq_fderivWithin
-
-Depends on / 依赖: fderivWithin_univ, mfderivWithin_eq_fderivWithin, mfderivWithin_univ
+--- 原说明 ---
+For maps between vector spaces, `mfderiv` and `fderiv` coincide
 -/
 theorem mfderiv_eq_fderiv : mfderiv% f x = fderiv 𝕜 f x := by
-  rw [← mfderivWithin_univ]; rw [← fderivWithin_univ]
+  rw [← mfderivWithin_univ, ← fderivWithin_univ]
   exact mfderivWithin_eq_fderivWithin
 
 end MFDerivFDeriv
+

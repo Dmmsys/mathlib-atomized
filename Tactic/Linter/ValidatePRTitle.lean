@@ -20,36 +20,18 @@ verify whether the title or body are written in present imperative tense.
 
 open Std.Internal.Parsec String
 
-/--
-Definition of `prTitle` / `prTitle` 的定义
+/-- Basic parser for PR titles: given a title `kind(scope): main title` or `kind: title`,
+extracts the `kind`, `scope` and `main title` components. -/
+/-
+**prTitle** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：prTitle : Parser (String × Option String × String)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition prTitle
-  signature: : Parser (String × Option String × String)
-  body: do
-  let kind ←
-    ["feat", "chore", "perf", "refactor", "style", "fix", "doc", "test", "ci"].firstM pstring
-  let scope ← (
-      (skipString "(" *> some <$> manyChars (notFollowedBy (skipString "):") *> any)
-        <* skipString "):" <* ws)
- > (skipString ":" *> ws *> pure none)
-    )
-  let mainTitle ← manyChars any
-  return (kind, scope, mainTitle)
-
-中文:
-定义 prTitle
-  签名: : Parser (String × 选项类型 String × String)
-  定义体: do
-  let kind ←
-    ["feat", "chore", "perf", "refactor", "style", "fix", "doc", "test", "ci"].firstM pstring
-  let scope ← (
-      (skipString "(" *> some <$> manyChars (notFollowedBy (skipString "):") *> any)
-        <* skipString "):" <* ws)
- > (skipString ":" *> ws *> pure none)
-    )
-  let mainTitle ← manyChars any
-  return (kind, scope, mainTitle)
+--- 原说明 ---
+Basic parser for PR titles: given a title `kind(scope): main title` or `kind: ti
+tle`,
+extracts the `kind`, `scope` and `main title` components.
 -/
 def prTitle : Parser (String × Option String × String) := do
   let kind ←
@@ -57,7 +39,7 @@ def prTitle : Parser (String × Option String × String) := do
   let scope ← (
       (skipString "(" *> some <$> manyChars (notFollowedBy (skipString "):") *> any)
         <* skipString "):" <* ws)
- > (skipString ":" *> ws *> pure none)
+      <|> (skipString ":" *> ws *> pure none)
     )
   let mainTitle ← manyChars any
   return (kind, scope, mainTitle)
@@ -100,19 +82,17 @@ def prTitle : Parser (String × Option String × String) := do
 #eval Parser.run prTitle "chore: test"
 
 /--
-Definition of `isAbbreviation` / `isAbbreviation` 的定义
+Check if `word` looks like an abbreviation, like `JSON` or `E2` or `W3C`.
+-/
+/-
+**isAbbreviation** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：isAbbreviation (word : String.Slice) : Bool
+参数：word : String.Slice。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition isAbbreviation
-  signature: (word : String.Slice)
-  body: word.all (fun c => c.isUpper || c.isDigit) && word.chars.length != 1
-
-中文:
-定义 isAbbreviation
-  签名: (word : String.Slice)
-  定义体: word.all (fun c => c.isUpper || c.isDigit) && word.chars.length != 1
-
-Depends on / 依赖: c.isDigit, c.isUpper, isDigit, isUpper, length, word.all, word.chars.length
+--- 原说明 ---
+Check if `word` looks like an abbreviation, like `JSON` or `E2` or `W3C`.
 -/
 def isAbbreviation (word : String.Slice) : Bool :=
   word.all (fun c => c.isUpper || c.isDigit) && word.chars.length != 1
@@ -139,8 +119,8 @@ public def validateTitle (title : String) : Array String := Id.run do
   let knownKinds := ["feat", "chore", "perf", "refactor", "style", "fix", "doc", "test", "ci"]
   match Parser.run prTitle title.trimAsciiStart.copy with
   | Except.error _ =>
-    return errors.push s!"error: the PR title should be of the form\n kind: subject\n\
-      or\n kind(scope): subject\nAllowed values for `kind` are {knownKinds}"
+    return errors.push s!"error: the PR title should be of the form\n  kind: subject\n\
+      or\n  kind(scope): subject\nAllowed values for `kind` are {knownKinds}"
   | Except.ok (_kind, scope?, subject) =>
     if subject.isEmpty then
       errors := errors.push s!"error: the PR title should not be empty"
@@ -175,7 +155,7 @@ public def validateTitle (title : String) : Array String := Id.run do
       errors := errors.push "error: the PR title should not end with a full stop"
     else if subject.endsWith " " then
       errors := errors.push "error: the PR title should not end with a space"
-    if title.contains " " then
+    if title.contains "  " then
       errors := errors.push
         "error: the PR title contains multiple consecutive spaces; please add just one"
     if title.contains "\t" then
@@ -183,10 +163,11 @@ public def validateTitle (title : String) : Array String := Id.run do
         "error: the PR title contains a tab; please use single spaces instead"
     -- Check for unicode characters which are not allowed: we don't want direction-changing
     -- characters, invisible spaces or so (for example). We re-use the code in the Unicode linter.
-    let badChars := title.chars.filter (fun c => !UnicodeLinter.isAllowedCharacter c && c != '\t')
+    let badChars := title.chars.filter (fun c ↦ !UnicodeLinter.isAllowedCharacter c && c != '\t')
     if !badChars.isEmpty then
-let err := ", ".intercalate badChars.map
-.toList (fun c => s!"'{c}' ({UnicodeLinter.Char.printCodepointHex c}).")
+      let err := ", ".intercalate <| badChars.map
+        (fun c ↦ s!"'{c}' ({UnicodeLinter.Char.printCodepointHex c}).")|>.toList
       errors := errors.push s!"error: the PR contains {badChars.length} Unicode characters \
         which are not allowed: {err}"
     return errors
+

@@ -47,22 +47,15 @@ public section
 /-- `LeftPreLieRing`s are `NonUnitalNonAssocRing`s such that the `associator` is symmetric in the
 first two variables. -/
 @[ext]
-/--
-Definition of `LeftPreLieRing` / `LeftPreLieRing` 的定义
+/-
+**LeftPreLieRing** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class LeftPreLieRing
-  parameters: (L : Type*)
-  extends: NonUnitalNonAssocRing L
-  axioms and operations (1):
-    - assoc_symm'((x y z : L)) : associator x y z = associator y x z
-
-中文:
-类 LeftPreLie环
-  参数: (L : 类型)
-  继承: 非幺非结合环 L
-  公理与运算 (1 个):
-    - assoc_symm'((x y z : L)) : associator x y z = associator y x z
+--- 原说明 ---
+`LeftPreLieRing`s are `NonUnitalNonAssocRing`s such that the `associator` is sym
+metric in the
+first two variables.
 -/
 class LeftPreLieRing (L : Type*) extends NonUnitalNonAssocRing L where
   assoc_symm' (x y z : L) : associator x y z = associator y x z
@@ -70,22 +63,15 @@ class LeftPreLieRing (L : Type*) extends NonUnitalNonAssocRing L where
 /-- `RightPreLieRing`s are `NonUnitalNonAssocRing`s such that the `associator` is symmetric in the
 last two variables. -/
 @[ext]
-/--
-Definition of `RightPreLieRing` / `RightPreLieRing` 的定义
+/-
+**RightPreLieRing** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：Type u_1 → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class RightPreLieRing
-  parameters: (L : Type*)
-  extends: NonUnitalNonAssocRing L
-  axioms and operations (1):
-    - assoc_symm'((x y z : L)) : associator x y z = associator x z y
-
-中文:
-类 RightPreLie环
-  参数: (L : 类型)
-  继承: 非幺非结合环 L
-  公理与运算 (1 个):
-    - assoc_symm'((x y z : L)) : associator x y z = associator x z y
+--- 原说明 ---
+`RightPreLieRing`s are `NonUnitalNonAssocRing`s such that the `associator` is sy
+mmetric in the
+last two variables.
 -/
 class RightPreLieRing (L : Type*) extends NonUnitalNonAssocRing L where
   assoc_symm' (x y z : L) : associator x y z = associator x z y
@@ -97,18 +83,16 @@ variable (R : Type*) [CommRing R]
 /-- A `LeftPreLieAlgebra` is a `LeftPreLieRing` with an action of a `CommRing` satisfying
 `r • x * y = r • (x * y)` and ` x * (r • y) = r • (x * y)`. -/
 @[ext]
-/--
-Definition of `LeftPreLieAlgebra` / `LeftPreLieAlgebra` 的定义
+/-
+**LeftPreLieAlgebra** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_1) → [CommRing R] → (L : Type u_2) → [LeftPreLieRing L] → Type
+ (max u_1 u_2)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class LeftPreLieAlgebra
-  parameters: (L : Type*) [LeftPreLieRing L]
-  (no additional axioms)
-
-中文:
-类 LeftPreLie代数
-  参数: (L : 类型) [LeftPreLie环 L]
-  (无附加公理)
+--- 原说明 ---
+A `LeftPreLieAlgebra` is a `LeftPreLieRing` with an action of a `CommRing` satis
+fying
+`r • x * y = r • (x * y)` and ` x * (r • y) = r • (x * y)`.
 -/
 class LeftPreLieAlgebra (L : Type*) [LeftPreLieRing L] : Type _ extends
   Module R L, IsScalarTower R L L, SMulCommClass R L L
@@ -116,18 +100,16 @@ class LeftPreLieAlgebra (L : Type*) [LeftPreLieRing L] : Type _ extends
 /-- A `RightPreLieAlgebra` is a `RightPreLieRing` with an action of a `CommRing` satisfying
 `r • x * y = r • (x * y)` and ` x * (r • y) = r • (x * y)`. -/
 @[ext]
-/--
-Definition of `RightPreLieAlgebra` / `RightPreLieAlgebra` 的定义
+/-
+**RightPreLieAlgebra** 是 Mathlib 中的一个归纳类型，位于命名空间 ``。
+形式化陈述：(R : Type u_1) → [CommRing R] → (L : Type u_2) → [RightPreLieRing L] → Typ
+e (max u_1 u_2)
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class RightPreLieAlgebra
-  parameters: (L : Type*) [RightPreLieRing L]
-  (no additional axioms)
-
-中文:
-类 RightPreLie代数
-  参数: (L : 类型) [RightPreLie环 L]
-  (无附加公理)
+--- 原说明 ---
+A `RightPreLieAlgebra` is a `RightPreLieRing` with an action of a `CommRing` sat
+isfying
+`r • x * y = r • (x * y)` and ` x * (r • y) = r • (x * y)`.
 -/
 class RightPreLieAlgebra (L : Type*) [RightPreLieRing L] : Type _ extends
   Module R L, IsScalarTower R L L, SMulCommClass R L L
@@ -140,40 +122,25 @@ namespace LeftPreLieRing
 
 variable [LeftPreLieRing L]
 
-/--
-theorem `assoc_symm` / 定理 `assoc_symm`
-
-English:
-theorem assoc_symm
-  given: (x y z : L)
-  proof: LeftPreLieRing.assoc_symm' x y z
-
-中文:
-定理 assoc_symm
-  条件: (x y z : L)
-  证明: LeftPreLieRing.assoc_symm' x y z
-
-Depends on / 依赖: LeftPreLieRing, LeftPreLieRing.assoc_symm, assoc_symm
+/-
+**LeftPreLieRing.assoc_symm** 是 Mathlib 中的一个定理，位于命名空间 `LeftPreLieRing`。
+形式化陈述：assoc_symm (x y z : L) : associator x y z = associator y x z
+参数：x y z : L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LeftPreLieRing.assoc_symm'`：∀ {L : Type u_1} [self : LeftPreLieRing L] (
+x y z : L), associator x y z = associator y x z
 -/
 theorem assoc_symm (x y z : L) :
     associator x y z = associator y x z := LeftPreLieRing.assoc_symm' x y z
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Every left pre-Lie ring is a right pre-Lie ring with the opposite multiplication -/
+/-
+**LeftPreLieRing.** 是 Mathlib 中的一个实例，位于命名空间 `LeftPreLieRing`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: RightPreLieRing Lᵐᵒᵖ
-  body: by
-    simp [assoc_symm]
-
-中文:
-实例 :
-  签名: RightPreLie环 Lᵐᵒᵖ
-  定义体: by
-    simp [assoc_symm]
-
-Depends on / 依赖: assoc_symm
+--- 原说明 ---
+Every left pre-Lie ring is a right pre-Lie ring with the opposite multiplication
 -/
 instance : RightPreLieRing Lᵐᵒᵖ where
   assoc_symm' x y z := by
@@ -185,16 +152,14 @@ namespace LeftPreLieAlgebra
 
 variable [LeftPreLieRing L] [LeftPreLieAlgebra R L]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Every left pre-Lie algebra is a right pre-Lie algebra with the opposite multiplication -/
+/-
+**LeftPreLieAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `LeftPreLieAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: RightPreLieAlgebra R Lᵐᵒᵖ
-
-中文:
-实例 :
-  签名: RightPreLie代数 R Lᵐᵒᵖ
+--- 原说明 ---
+Every left pre-Lie algebra is a right pre-Lie algebra with the opposite multipli
+cation
 -/
 instance : RightPreLieAlgebra R Lᵐᵒᵖ where
 
@@ -204,40 +169,25 @@ namespace RightPreLieRing
 
 variable [RightPreLieRing L]
 
-/--
-theorem `assoc_symm` / 定理 `assoc_symm`
-
-English:
-theorem assoc_symm
-  given: (x y z : L)
-  proof: RightPreLieRing.assoc_symm' x y z
-
-中文:
-定理 assoc_symm
-  条件: (x y z : L)
-  证明: RightPreLieRing.assoc_symm' x y z
-
-Depends on / 依赖: RightPreLieRing, RightPreLieRing.assoc_symm, assoc_symm
+/-
+**RightPreLieRing.assoc_symm** 是 Mathlib 中的一个定理，位于命名空间 `RightPreLieRing`。
+形式化陈述：assoc_symm (x y z : L) : associator x y z = associator x z y
+参数：x y z : L。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `RightPreLieRing.assoc_symm'`：∀ {L : Type u_1} [self : RightPreLieRing L]
+ (x y z : L), associator x y z = associator x z y
 -/
 theorem assoc_symm (x y z : L) :
     associator x y z = associator x z y := RightPreLieRing.assoc_symm' x y z
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Every left pre-Lie ring is a right pre-Lie ring with the opposite multiplication -/
+/-
+**RightPreLieRing.** 是 Mathlib 中的一个实例，位于命名空间 `RightPreLieRing`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: LeftPreLieRing Lᵐᵒᵖ
-  body: by
-    simp [assoc_symm]
-
-中文:
-实例 :
-  签名: LeftPreLie环 Lᵐᵒᵖ
-  定义体: by
-    simp [assoc_symm]
-
-Depends on / 依赖: assoc_symm
+--- 原说明 ---
+Every left pre-Lie ring is a right pre-Lie ring with the opposite multiplication
 -/
 instance : LeftPreLieRing Lᵐᵒᵖ where
   assoc_symm' x y z := by
@@ -249,17 +199,16 @@ namespace RightPreLieAlgebra
 
 variable [RightPreLieRing L] [RightPreLieAlgebra R L]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- Every left pre-Lie algebra is a right pre-Lie algebra with the opposite multiplication -/
+/-
+**RightPreLieAlgebra.** 是 Mathlib 中的一个实例，位于命名空间 `RightPreLieAlgebra`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: LeftPreLieAlgebra R Lᵐᵒᵖ
-
-中文:
-实例 :
-  签名: LeftPreLie代数 R Lᵐᵒᵖ
+--- 原说明 ---
+Every left pre-Lie algebra is a right pre-Lie algebra with the opposite multipli
+cation
 -/
 instance : LeftPreLieAlgebra R Lᵐᵒᵖ where
 
 end RightPreLieAlgebra
+

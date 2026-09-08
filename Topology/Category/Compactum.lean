@@ -82,249 +82,157 @@ open scoped Topology
 
 local notation "β" => ofTypeMonad Ultrafilter
 
-/--
-Definition of `Compactum` / `Compactum` 的定义
+/-- The type `Compactum` of Compacta, defined as algebras for the ultrafilter monad. -/
+/-
+**Compactum** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：Compactum
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Compactum
-  body: Monad.Algebra β deriving Category, Inhabited
-
-中文:
-定义 Compactum
-  定义体: Monad.Algebra β deriving Category, Inhabited
-
-Depends on / 依赖: Algebra, Category, Inhabited, Monad.Algebra, deriving
+--- 原说明 ---
+The type `Compactum` of Compacta, defined as algebras for the ultrafilter monad.
 -/
 def Compactum :=
   Monad.Algebra β deriving Category, Inhabited
 
 namespace Compactum
 
-/--
-Definition of `forget` / `forget` 的定义
+/-- The forgetful functor to TypeCat -/
+/-
+**Compactum.forget** 是 Mathlib 中的一个定义，位于命名空间 `Compactum`。
+形式化陈述：forget : Compactum ⥤ Type _
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition forget
-  signature: : Compactum ⥤ Type _
-  body: Monad.forget _
-
-中文:
-定义 forget
-  签名: : Compactum ⥤ 类型 _
-  定义体: Monad.forget _
-
-Depends on / 依赖: Monad.forget, forget
+--- 原说明 ---
+The forgetful functor to TypeCat
 -/
 def forget : Compactum ⥤ Type _ :=
   Monad.forget _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: forget.Faithful
-  body: show (Monad.forget _).Faithful from inferInstance
-
-中文:
-实例 :
-  签名: forget.忠实
-  定义体: show (Monad.forget _).Faithful from inferInstance
-
-Depends on / 依赖: Faithful, Monad.forget, forget
+/-
+**Compactum.** 是 Mathlib 中的一个实例，位于命名空间 `Compactum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : forget.Faithful :=
   show (Monad.forget _).Faithful from inferInstance
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CreatesLimits forget
-  body: show CreatesLimits Monad.forget _ from inferInstance
-
-中文:
-实例 :
-  签名: CreatesLimits forget
-  定义体: show CreatesLimits Monad.forget _ from inferInstance
-
-Depends on / 依赖: CreatesLimits, Monad.forget, forget
+/-
+**Compactum.** 是 Mathlib 中的一个实例，位于命名空间 `Compactum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance : CreatesLimits forget :=
-show CreatesLimits Monad.forget _ from inferInstance
+  show CreatesLimits <| Monad.forget _ from inferInstance
 
-/--
-Definition of `free` / `free` 的定义
+/-- The "free" Compactum functor. -/
+/-
+**Compactum.free** 是 Mathlib 中的一个定义，位于命名空间 `Compactum`。
+形式化陈述：free : Type _ ⥤ Compactum
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition free
-  signature: : Type _ ⥤ Compactum
-  body: Monad.free _
-
-中文:
-定义 free
-  签名: : 类型 _ ⥤ Compactum
-  定义体: Monad.free _
-
-Depends on / 依赖: Monad.free
+--- 原说明 ---
+The "free" Compactum functor.
 -/
 def free : Type _ ⥤ Compactum :=
   Monad.free _
 
-/--
-Definition of `adj` / `adj` 的定义
+/-- The adjunction between `free` and `forget`. -/
+/-
+**Compactum.adj** 是 Mathlib 中的一个定义，位于命名空间 `Compactum`。
+形式化陈述：adj : free ⊣ forget
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition adj
-  signature: : free ⊣ forget
-  body: Monad.adj _
-
-中文:
-定义 adj
-  签名: : free ⊣ forget
-  定义体: Monad.adj _
-
-Depends on / 依赖: Monad.adj
+--- 原说明 ---
+The adjunction between `free` and `forget`.
 -/
 def adj : free ⊣ forget :=
   Monad.adj _
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CoeSort Compactum Type*
-  body: ⟨fun X => X.A⟩
-
-中文:
-实例 :
-  签名: CoeSort Compactum 类型
-  定义体: ⟨fun X => X.A⟩
+/-
+**Compactum.** 是 Mathlib 中的一个实例，位于命名空间 `Compactum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CoeSort Compactum Type* :=
   ⟨fun X => X.A⟩
 
 set_option backward.isDefEq.respectTransparency.types false in
+/-
+**Compactum.** 是 Mathlib 中的一个实例，位于命名空间 `Compactum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X Y : Compactum} : FunLike (X ⟶ Y) X Y where
   coe f := f.f
   coe_injective _ _ h := (Monad.forget_faithful β).map_injective (by aesop)
 
 -- Basic instances
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: ConcreteCategory Compactum (· ⟶ ·)
-  body: f
-  ofHom f := f
-
-中文:
-实例 :
-  签名: 余ncrete范畴 Compactum (· ⟶ ·)
-  定义体: f
-  ofHom f := f
+/-
+**Compactum.** 是 Mathlib 中的一个实例，位于命名空间 `Compactum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : ConcreteCategory Compactum (· ⟶ ·) where
   hom f := f
   ofHom f := f
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: HasLimits Compactum
-  body: hasLimits_of_hasLimits_createsLimits forget
-
-中文:
-实例 :
-  签名: 有极限 Compactum
-  定义体: hasLimits_of_hasLimits_createsLimits forget
-
-Depends on / 依赖: forget, hasLimits_of_hasLimits_createsLimits
+/-
+**Compactum.** 是 Mathlib 中的一个实例，位于命名空间 `Compactum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : HasLimits Compactum :=
   hasLimits_of_hasLimits_createsLimits forget
 
-/--
-Definition of `str` / `str` 的定义
+/-- The structure map for a compactum, essentially sending an ultrafilter to its limit. -/
+/-
+**Compactum.str** 是 Mathlib 中的一个定义，位于命名空间 `Compactum`。
+形式化陈述：str (X : Compactum) : Ultrafilter X -> X
+参数：X : Compactum。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition str
-  signature: (X : Compactum)
-  body: X.a
-
-中文:
-定义 str
-  签名: (X : Compactum)
-  定义体: X.a
+--- 原说明 ---
+The structure map for a compactum, essentially sending an ultrafilter to its lim
+it.
 -/
-def str (X : Compactum) : Ultrafilter X -> X :=
+def str (X : Compactum) : Ultrafilter X → X :=
   X.a
 
-/--
-Definition of `join` / `join` 的定义
+/-- The monadic join. -/
+/-
+**Compactum.join** 是 Mathlib 中的一个定义，位于命名空间 `Compactum`。
+形式化陈述：join (X : Compactum) : Ultrafilter (Ultrafilter X) -> Ultrafilter X
+参数：X : Compactum。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition join
-  signature: (X : Compactum)
-  body: (β).μ.app _
-
-中文:
-定义 join
-  签名: (X : Compactum)
-  定义体: (β).μ.app _
+--- 原说明 ---
+The monadic join.
 -/
-def join (X : Compactum) : Ultrafilter (Ultrafilter X) -> Ultrafilter X :=
+def join (X : Compactum) : Ultrafilter (Ultrafilter X) → Ultrafilter X :=
   (β).μ.app _
 
-/--
-Definition of `incl` / `incl` 的定义
+/-- The inclusion of `X` into `Ultrafilter X`. -/
+/-
+**Compactum.incl** 是 Mathlib 中的一个定义，位于命名空间 `Compactum`。
+形式化陈述：incl (X : Compactum) : X -> Ultrafilter X
+参数：X : Compactum。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition incl
-  signature: (X : Compactum)
-  body: (β).η.app _
-
-中文:
-定义 incl
-  签名: (X : Compactum)
-  定义体: (β).η.app _
+--- 原说明 ---
+The inclusion of `X` into `Ultrafilter X`.
 -/
-def incl (X : Compactum) : X -> Ultrafilter X :=
+def incl (X : Compactum) : X → Ultrafilter X :=
   (β).η.app _
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `str_incl` / 定理 `str_incl`
-
-English:
-theorem str_incl
-  given: (X : Compactum) (x : X)
-  statement: X.str (X.incl x) = x
-  proof: by
-  change ((β).η.app _ ≫ X.a) _ = _
-  rw [Monad.Algebra.unit]
-  rfl
-
-#adaptation_note
-
-中文:
-定理 str_incl
-  条件: (X : Compactum) (x : X)
-  结论: X.str (X.incl x) = x
-  证明: by
-  change ((β).η.app _ ≫ X.a) _ = _
-  rw [Monad.Algebra.unit]
-  rfl
-
-#adaptation_note
-
-Depends on / 依赖: Algebra, Monad.Algebra.unit
+/-
+**Compactum.str_incl** 是 Mathlib 中的一个定理，位于命名空间 `Compactum`。
+形式化陈述：str_incl (X : Compactum) (x : X) : X.str (X.incl x) = x
+参数：X : Compactum；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Monad.Algebra.unit`：∀ {C : Type u₁} [inst : CategoryTheor
+y.Category.{v₁, u₁} C] {T : CategoryTheory.Monad C} (self : T.Algebra),   Catego
+ryTheory.CategoryStruct…
 -/
 theorem str_incl (X : Compactum) (x : X) : X.str (X.incl x) = x := by
   change ((β).η.app _ ≫ X.a) _ = _
@@ -335,24 +243,22 @@ theorem str_incl (X : Compactum) (x : X) : X.str (X.incl x) = x := by
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `str_hom_commute` / 定理 `str_hom_commute`
+/-
+**Compactum.str_hom_commute** 是 Mathlib 中的一个定理，位于命名空间 `Compactum`。
+形式化陈述：str_hom_commute (X Y : Compactum) (f : X ⟶ Y) (xs : Ultrafilter X) : f (X.
+str xs) = Y.str (map f xs)
+参数：X Y : Compactum；f : X ⟶ Y；xs : Ultrafilter X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `CategoryTheory.Monad.Algebra.Hom.h`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {T : CategoryTheory.Monad C} {A B : T.Algebra}   (self :
+ A.Hom B),   CategoryThe…
 
-English:
-theorem str_hom_commute
-  given: (X Y : Compactum) (f : X ⟶ Y) (xs : Ultrafilter X)
-  proof: by
-  change (X.a ≫ f.f) _ = _
-  rw [← f.h]
-  rfl
-
-中文:
-定理 str_hom_commute
-  条件: (X Y : Compactum) (f : X ⟶ Y) (xs : Ultrafilter X)
-  证明: by
-  change (X.a ≫ f.f) _ = _
-  rw [← f.h]
-  rfl
+--- 原说明 ---
+`respectTransparency.types true` changes the auto-generated lemmas' signature
 -/
 theorem str_hom_commute (X Y : Compactum) (f : X ⟶ Y) (xs : Ultrafilter X) :
     f (X.str xs) = Y.str (map f xs) := by
@@ -362,79 +268,53 @@ theorem str_hom_commute (X Y : Compactum) (f : X ⟶ Y) (xs : Ultrafilter X) :
 
 set_option backward.isDefEq.respectTransparency.types false in
 @[simp]
-/--
-theorem `join_distrib` / 定理 `join_distrib`
-
-English:
-theorem join_distrib
-  given: (X : Compactum) (uux : Ultrafilter (Ultrafilter X))
-  proof: by
-  change ((β).μ.app _ ≫ X.a) _ = _
-  rw [Monad.Algebra.assoc]
-  rfl
-
-中文:
-定理 join_distrib
-  条件: (X : Compactum) (uux : Ultrafilter (Ultrafilter X))
-  证明: by
-  change ((β).μ.app _ ≫ X.a) _ = _
-  rw [Monad.Algebra.assoc]
-  rfl
-
-Depends on / 依赖: Algebra, Monad.Algebra.assoc
+/-
+**Compactum.join_distrib** 是 Mathlib 中的一个定理，位于命名空间 `Compactum`。
+形式化陈述：join_distrib (X : Compactum) (uux : Ultrafilter (Ultrafilter X)) : X.str (
+X.join uux) = X.str (map X.str uux)
+参数：X : Compactum；uux : Ultrafilter (Ultrafilter X)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `CategoryTheory.Monad.Algebra.assoc`：∀ {C : Type u₁} [inst : CategoryTheo
+ry.Category.{v₁, u₁} C] {T : CategoryTheory.Monad C} (self : T.Algebra),   Categ
+oryTheory.CategoryStruct…
 -/
 theorem join_distrib (X : Compactum) (uux : Ultrafilter (Ultrafilter X)) :
     X.str (X.join uux) = X.str (map X.str uux) := by
   change ((β).μ.app _ ≫ X.a) _ = _
   rw [Monad.Algebra.assoc]
   rfl
-
+/-
+**Compactum.** 是 Mathlib 中的一个实例，位于命名空间 `Compactum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X : Compactum} : TopologicalSpace X where
-  IsOpen U := forall F : Ultrafilter X, X.str F in U -> U in F
+  IsOpen U := ∀ F : Ultrafilter X, X.str F ∈ U → U ∈ F
   isOpen_univ _ _ := Filter.univ_sets _
   isOpen_inter _ _ h3 h4 _ h6 := Filter.inter_sets _ (h3 _ h6.1) (h4 _ h6.2)
   isOpen_sUnion := fun _ h1 _ ⟨T, hT, h2⟩ =>
     mem_of_superset (h1 T hT _ h2) (Set.subset_sUnion_of_mem hT)
-
-/--
-theorem `isClosed_iff` / 定理 `isClosed_iff`
-
-English:
-theorem isClosed_iff
-  given: {X : Compactum} (S : Set X)
-  proof: by
-  rw [← isOpen_compl_iff]
-  constructor
-  · intro cond F h
-    by_contra c
-    specialize cond F c
-    rw [compl_mem_iff_notMem] at cond
-    contradiction
-  · intro h1 F h2
-    specialize h1 F
-    rcases F.mem_or_compl_mem S with h | h
-    exacts [absurd (h1 h) h2, h]
-
-中文:
-定理 isClosed_iff
-  条件: {X : Compactum} (S : 集合 X)
-  证明: by
-  rw [← isOpen_compl_iff]
-  constructor
-  · intro cond F h
-    by_contra c
-    specialize cond F c
-    rw [compl_mem_iff_notMem] at cond
-    contradiction
-  · intro h1 F h2
-    specialize h1 F
-    rcases F.mem_or_compl_mem S with h | h
-    exacts [absurd (h1 h) h2, h]
-
-Depends on / 依赖: F.mem_or_compl_mem, absurd, compl_mem_iff_notMem, exacts, isOpen_compl_iff, mem_or_compl_mem, specialize
+/-
+**Compactum.isClosed_iff** 是 Mathlib 中的一个定理，位于命名空间 `Compactum`。
+形式化陈述：isClosed_iff {X : Compactum} (S : Set X) : IsClosed S ↔ forall F : Ultrafi
+lter X, S in F -> X.str F in S
+参数：S : Set X。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `isOpen_compl_iff`：∀ {X : Type u} {s : Set X} [inst : TopologicalSpace X]
+, IsOpen sᶜ ↔ IsClosed s
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `Ultrafilter.compl_mem_iff_notMem`：compl_mem_iff_notMem : sᶜ in f ↔ s ∉ f
+· 使用定理 `Ultrafilter.mem_or_compl_mem`：mem_or_compl_mem (f : Ultrafilter α) (s : 
+Set α) : s in f ∨ sᶜ in f
 -/
 theorem isClosed_iff {X : Compactum} (S : Set X) :
-    IsClosed S ↔ forall F : Ultrafilter X, S in F -> X.str F in S := by
+    IsClosed S ↔ ∀ F : Ultrafilter X, S ∈ F → X.str F ∈ S := by
   rw [← isOpen_compl_iff]
   constructor
   · intro cond F h
@@ -446,7 +326,10 @@ theorem isClosed_iff {X : Compactum} (S : Set X) :
     specialize h1 F
     rcases F.mem_or_compl_mem S with h | h
     exacts [absurd (h1 h) h2, h]
-
+/-
+**Compactum.** 是 Mathlib 中的一个实例，位于命名空间 `Compactum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X : Compactum} : CompactSpace X := by
   constructor
   rw [isCompact_iff_ultrafilter_le_nhds]
@@ -456,69 +339,33 @@ instance {X : Compactum} : CompactSpace X := by
   intro S h1 h2
   exact h2 F h1
 
-/--
-Definition of `basic` / `basic` 的定义
+/-- A local definition used only in the proofs. -/
+/-
+**Compactum.basic** 是 Mathlib 中的一个定义，位于命名空间 `Compactum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition basic
-  signature: {X : Compactum} (A : Set X)
-  body: { F | A in F }
-
-中文:
-定义 basic
-  签名: {X : Compactum} (A : 集合 X)
-  定义体: { F | A in F }
+--- 原说明 ---
+A local definition used only in the proofs.
 -/
 private def basic {X : Compactum} (A : Set X) : Set (Ultrafilter X) :=
-  { F | A in F }
+  { F | A ∈ F }
 
 set_option backward.privateInPublic true in
-/--
-Definition of `cl` / `cl` 的定义
+/-- A local definition used only in the proofs. -/
+/-
+**Compactum.cl** 是 Mathlib 中的一个定义，位于命名空间 `Compactum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition cl
-  signature: {X : Compactum} (A : Set X)
-  body: X.str '' basic A
-
-中文:
-定义 cl
-  签名: {X : Compactum} (A : 集合 X)
-  定义体: X.str '' basic A
+--- 原说明 ---
+A local definition used only in the proofs.
 -/
 private def cl {X : Compactum} (A : Set X) : Set X :=
   X.str '' basic A
-
-/--
-theorem `basic_inter` / 定理 `basic_inter`
-
-English:
-theorem basic_inter
-  given: {X : Compactum} (A B : Set X)
-  statement: basic (A inter B) = basic A inter basic B
-  proof: by
-  ext G
-  constructor
-  · intro hG
-    constructor <;> filter_upwards [hG] with _
-    exacts [And.left, And.right]
-  · rintro ⟨h1, h2⟩
-    exact inter_mem h1 h2
-
-中文:
-定理 basic_inter
-  条件: {X : Compactum} (A B : 集合 X)
-  结论: basic (A inter B) = basic A inter basic B
-  证明: by
-  ext G
-  constructor
-  · intro hG
-    constructor <;> filter_upwards [hG] with _
-    exacts [And.left, And.right]
-  · rintro ⟨h1, h2⟩
-    exact inter_mem h1 h2
+/-
+**Compactum.basic_inter** 是 Mathlib 中的一个定理，位于命名空间 `Compactum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem basic_inter {X : Compactum} (A B : Set X) : basic (A inter B) = basic A inter basic B := by
+private theorem basic_inter {X : Compactum} (A B : Set X) : basic (A ∩ B) = basic A ∩ basic B := by
   ext G
   constructor
   · intro hG
@@ -526,78 +373,60 @@ private theorem basic_inter {X : Compactum} (A B : Set X) : basic (A inter B) = 
     exacts [And.left, And.right]
   · rintro ⟨h1, h2⟩
     exact inter_mem h1 h2
-
-/--
-theorem `subset_cl` / 定理 `subset_cl`
-
-English:
-theorem subset_cl
-  given: {X : Compactum} (A : Set X)
-  statement: A subseteq cl A
-  proof: fun a ha =>
-  ⟨X.incl a, ha, by simp⟩
-
-中文:
-定理 subset_cl
-  条件: {X : Compactum} (A : 集合 X)
-  结论: A subseteq cl A
-  证明: fun a ha =>
-  ⟨X.incl a, ha, by simp⟩
+/-
+**Compactum.subset_cl** 是 Mathlib 中的一个定理，位于命名空间 `Compactum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-private theorem subset_cl {X : Compactum} (A : Set X) : A subseteq cl A := fun a ha =>
+private theorem subset_cl {X : Compactum} (A : Set X) : A ⊆ cl A := fun a ha =>
   ⟨X.incl a, ha, by simp⟩
-
-/--
-theorem `cl_cl` / 定理 `cl_cl`
-
-English:
-theorem cl_cl
-  given: {X : Compactum} (A : Set X)
-  statement: cl (cl A) subseteq cl A
-  proof: by
+/-
+**Compactum.cl_cl** 是 Mathlib 中的一个定理，位于命名空间 `Compactum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
+private theorem cl_cl {X : Compactum} (A : Set X) : cl (cl A) ⊆ cl A := by
   rintro _ ⟨F, hF, rfl⟩
   -- Notation to be used in this proof.
   let fsu := Finset (Set (Ultrafilter X))
   let ssu := Set (Set (Ultrafilter X))
-  let ι : fsu -> ssu := fun x => ↑x
-  let C0 : ssu := { Z | exists B in F, X.str ⁻¹' B = Z }
-  let AA := { G : Ultrafilter X | A in G }
+  let ι : fsu → ssu := fun x ↦ ↑x
+  let C0 : ssu := { Z | ∃ B ∈ F, X.str ⁻¹' B = Z }
+  let AA := { G : Ultrafilter X | A ∈ G }
   let C1 := insert AA C0
   let C2 := finiteInterClosure C1
   -- C0 is closed under intersections.
-  have claim1 : forall (B) (_ : B in C0) (C) (_ : C in C0), B inter C in C0 := by
+  have claim1 : ∀ (B) (_ : B ∈ C0) (C) (_ : C ∈ C0), B ∩ C ∈ C0 := by
     rintro B ⟨Q, hQ, rfl⟩ C ⟨R, hR, rfl⟩
-    use Q inter R
+    use Q ∩ R
     simp only [and_true, Set.preimage_inter]
     exact inter_sets _ hQ hR
   -- All sets in C0 are nonempty.
-  have claim2 : forall B in C0, Set.Nonempty B := by
+  have claim2 : ∀ B ∈ C0, Set.Nonempty B := by
     rintro B ⟨Q, hQ, rfl⟩
     obtain ⟨q⟩ := Filter.nonempty_of_mem hQ
     use X.incl q
     simpa
   -- The intersection of AA with every set in C0 is nonempty.
-  have claim3 : forall B in C0, (AA inter B).Nonempty := by
+  have claim3 : ∀ B ∈ C0, (AA ∩ B).Nonempty := by
     rintro B ⟨Q, hQ, rfl⟩
-    have : (Q inter cl A).Nonempty := Filter.nonempty_of_mem (inter_mem hQ hF)
+    have : (Q ∩ cl A).Nonempty := Filter.nonempty_of_mem (inter_mem hQ hF)
     rcases this with ⟨q, hq1, P, hq2, hq3⟩
     refine ⟨P, hq2, ?_⟩
     rw [← hq3] at hq1
     simpa
   -- Suffices to show that the intersection of any finite subcollection of C1 is nonempty.
-  suffices forall T : fsu, ι T subseteq C1 -> (⋂₀ ι T).Nonempty by
+  suffices ∀ T : fsu, ι T ⊆ C1 → (⋂₀ ι T).Nonempty by
     obtain ⟨G, h1⟩ := exists_ultrafilter_of_finite_inter_nonempty _ this
     use X.join G
     have : G.map X.str = F := Ultrafilter.coe_le_coe.1 fun S hS => h1 (Or.inr ⟨S, hS, rfl⟩)
-    rw [join_distrib]; rw [this]
+    rw [join_distrib, this]
     exact ⟨h1 (Or.inl rfl), rfl⟩
   -- C2 is closed under finite intersections (by construction!).
   have claim4 := finiteInterClosure_finiteInter C1
   -- C0 is closed under finite intersections by claim1.
   have claim5 : FiniteInter C0 := ⟨⟨_, univ_mem, Set.preimage_univ⟩, claim1⟩
   -- Every element of C2 is nonempty.
-  have claim6 : forall P in C2, (P : Set (Ultrafilter X)).Nonempty := by
-    suffices forall P in C2, P in C0 ∨ exists Q in C0, P = AA inter Q by
+  have claim6 : ∀ P ∈ C2, (P : Set (Ultrafilter X)).Nonempty := by
+    suffices ∀ P ∈ C2, P ∈ C0 ∨ ∃ Q ∈ C0, P = AA ∩ Q by
       intro P hP
       rcases this P hP with h | h
       · exact claim2 _ h
@@ -607,129 +436,7 @@ theorem cl_cl
     exact claim5.finiteInterClosure_insert _ hP
   intro T hT
   -- Suffices to show that the intersection of the T's is contained in C2.
-  suffices ⋂₀ ι T in C2 by exact claim6 _ this
-  -- Finish
-  apply claim4.finiteInter_mem T
-  intro t ht
-  exact finiteInterClosure.basic (@hT t ht)
-
-中文:
-定理 cl_cl
-  条件: {X : Compactum} (A : 集合 X)
-  结论: cl (cl A) subseteq cl A
-  证明: by
-  rintro _ ⟨F, hF, rfl⟩
-  -- Notation to be used in this proof.
-  let fsu := Finset (Set (Ultrafilter X))
-  let ssu := Set (Set (Ultrafilter X))
-  let ι : fsu -> ssu := fun x => ↑x
-  let C0 : ssu := { Z | exists B in F, X.str ⁻¹' B = Z }
-  let AA := { G : Ultrafilter X | A in G }
-  let C1 := insert AA C0
-  let C2 := finiteInterClosure C1
-  -- C0 is closed under intersections.
-  have claim1 : forall (B) (_ : B in C0) (C) (_ : C in C0), B inter C in C0 := by
-    rintro B ⟨Q, hQ, rfl⟩ C ⟨R, hR, rfl⟩
-    use Q inter R
-    simp only [and_true, Set.preimage_inter]
-    exact inter_sets _ hQ hR
-  -- All sets in C0 are nonempty.
-  have claim2 : forall B in C0, Set.Nonempty B := by
-    rintro B ⟨Q, hQ, rfl⟩
-    obtain ⟨q⟩ := Filter.nonempty_of_mem hQ
-    use X.incl q
-    simpa
-  -- The intersection of AA with every set in C0 is nonempty.
-  have claim3 : forall B in C0, (AA inter B).Nonempty := by
-    rintro B ⟨Q, hQ, rfl⟩
-    have : (Q inter cl A).Nonempty := Filter.nonempty_of_mem (inter_mem hQ hF)
-    rcases this with ⟨q, hq1, P, hq2, hq3⟩
-    refine ⟨P, hq2, ?_⟩
-    rw [← hq3] at hq1
-    simpa
-  -- Suffices to show that the intersection of any finite subcollection of C1 is nonempty.
-  suffices forall T : fsu, ι T subseteq C1 -> (⋂₀ ι T).Nonempty by
-    obtain ⟨G, h1⟩ := exists_ultrafilter_of_finite_inter_nonempty _ this
-    use X.join G
-    have : G.map X.str = F := Ultrafilter.coe_le_coe.1 fun S hS => h1 (Or.inr ⟨S, hS, rfl⟩)
-    rw [join_distrib]; rw [this]
-    exact ⟨h1 (Or.inl rfl), rfl⟩
-  -- C2 is closed under finite intersections (by construction!).
-  have claim4 := finiteInterClosure_finiteInter C1
-  -- C0 is closed under finite intersections by claim1.
-  have claim5 : FiniteInter C0 := ⟨⟨_, univ_mem, Set.preimage_univ⟩, claim1⟩
-  -- Every element of C2 is nonempty.
-  have claim6 : forall P in C2, (P : Set (Ultrafilter X)).Nonempty := by
-    suffices forall P in C2, P in C0 ∨ exists Q in C0, P = AA inter Q by
-      intro P hP
-      rcases this P hP with h | h
-      · exact claim2 _ h
-      · rcases h with ⟨Q, hQ, rfl⟩
-        exact claim3 _ hQ
-    intro P hP
-    exact claim5.finiteInterClosure_insert _ hP
-  intro T hT
-  -- Suffices to show that the intersection of the T's is contained in C2.
-  suffices ⋂₀ ι T in C2 by exact claim6 _ this
-  -- Finish
-  apply claim4.finiteInter_mem T
-  intro t ht
-  exact finiteInterClosure.basic (@hT t ht)
--/
-private theorem cl_cl {X : Compactum} (A : Set X) : cl (cl A) subseteq cl A := by
-  rintro _ ⟨F, hF, rfl⟩
-  -- Notation to be used in this proof.
-  let fsu := Finset (Set (Ultrafilter X))
-  let ssu := Set (Set (Ultrafilter X))
-  let ι : fsu -> ssu := fun x => ↑x
-  let C0 : ssu := { Z | exists B in F, X.str ⁻¹' B = Z }
-  let AA := { G : Ultrafilter X | A in G }
-  let C1 := insert AA C0
-  let C2 := finiteInterClosure C1
-  -- C0 is closed under intersections.
-  have claim1 : forall (B) (_ : B in C0) (C) (_ : C in C0), B inter C in C0 := by
-    rintro B ⟨Q, hQ, rfl⟩ C ⟨R, hR, rfl⟩
-    use Q inter R
-    simp only [and_true, Set.preimage_inter]
-    exact inter_sets _ hQ hR
-  -- All sets in C0 are nonempty.
-  have claim2 : forall B in C0, Set.Nonempty B := by
-    rintro B ⟨Q, hQ, rfl⟩
-    obtain ⟨q⟩ := Filter.nonempty_of_mem hQ
-    use X.incl q
-    simpa
-  -- The intersection of AA with every set in C0 is nonempty.
-  have claim3 : forall B in C0, (AA inter B).Nonempty := by
-    rintro B ⟨Q, hQ, rfl⟩
-    have : (Q inter cl A).Nonempty := Filter.nonempty_of_mem (inter_mem hQ hF)
-    rcases this with ⟨q, hq1, P, hq2, hq3⟩
-    refine ⟨P, hq2, ?_⟩
-    rw [← hq3] at hq1
-    simpa
-  -- Suffices to show that the intersection of any finite subcollection of C1 is nonempty.
-  suffices forall T : fsu, ι T subseteq C1 -> (⋂₀ ι T).Nonempty by
-    obtain ⟨G, h1⟩ := exists_ultrafilter_of_finite_inter_nonempty _ this
-    use X.join G
-    have : G.map X.str = F := Ultrafilter.coe_le_coe.1 fun S hS => h1 (Or.inr ⟨S, hS, rfl⟩)
-    rw [join_distrib]; rw [this]
-    exact ⟨h1 (Or.inl rfl), rfl⟩
-  -- C2 is closed under finite intersections (by construction!).
-  have claim4 := finiteInterClosure_finiteInter C1
-  -- C0 is closed under finite intersections by claim1.
-  have claim5 : FiniteInter C0 := ⟨⟨_, univ_mem, Set.preimage_univ⟩, claim1⟩
-  -- Every element of C2 is nonempty.
-  have claim6 : forall P in C2, (P : Set (Ultrafilter X)).Nonempty := by
-    suffices forall P in C2, P in C0 ∨ exists Q in C0, P = AA inter Q by
-      intro P hP
-      rcases this P hP with h | h
-      · exact claim2 _ h
-      · rcases h with ⟨Q, hQ, rfl⟩
-        exact claim3 _ hQ
-    intro P hP
-    exact claim5.finiteInterClosure_insert _ hP
-  intro T hT
-  -- Suffices to show that the intersection of the T's is contained in C2.
-  suffices ⋂₀ ι T in C2 by exact claim6 _ this
+  suffices ⋂₀ ι T ∈ C2 by exact claim6 _ this
   -- Finish
   apply claim4.finiteInter_mem T
   intro t ht
@@ -737,223 +444,115 @@ private theorem cl_cl {X : Compactum} (A : Set X) : cl (cl A) subseteq cl A := b
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-theorem `isClosed_cl` / 定理 `isClosed_cl`
-
-English:
-theorem isClosed_cl
-  given: {X : Compactum} (A : Set X)
-  statement: IsClosed (cl A)
-  proof: by
-  rw [isClosed_iff]
-  intro F hF
-  exact cl_cl _ ⟨F, hF, rfl⟩
-
-中文:
-定理 isClosed_cl
-  条件: {X : Compactum} (A : 集合 X)
-  结论: 是闭集 (cl A)
-  证明: by
-  rw [isClosed_iff]
-  intro F hF
-  exact cl_cl _ ⟨F, hF, rfl⟩
-
-Depends on / 依赖: cl_cl, isClosed_iff
+/-
+**Compactum.isClosed_cl** 是 Mathlib 中的一个定理，位于命名空间 `Compactum`。
+形式化陈述：isClosed_cl {X : Compactum} (A : Set X) : IsClosed (cl A)
+参数：A : Set X。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Compactum.isClosed_iff`：isClosed_iff {X : Compactum} (S : Set X) : IsClo
+sed S ↔ forall F : Ultrafilter X, S in F -> X.str F in S
+· 使用定理 `_private.Mathlib.Topology.Category.Compactum.0.Compactum.cl_cl`：∀ {X : C
+ompactum} (A : Set X.A), Compactum.cl✝ (Compactum.cl✝ A) ⊆ Compactum.cl✝ A
 -/
 theorem isClosed_cl {X : Compactum} (A : Set X) : IsClosed (cl A) := by
   rw [isClosed_iff]
   intro F hF
   exact cl_cl _ ⟨F, hF, rfl⟩
-
-/--
-theorem `str_eq_of_le_nhds` / 定理 `str_eq_of_le_nhds`
-
-English:
-theorem str_eq_of_le_nhds
-  given: {X : Compactum} (F : Ultrafilter X) (x : X)
-  statement: ↑F <= 𝓝 x -> X.str F = x
-  proof: by
-  -- Notation to be used in this proof.
-  let fsu := Finset (Set (Ultrafilter X))
-  let ssu := Set (Set (Ultrafilter X))
-  let ι : fsu -> ssu := fun x => ↑x
-  let T0 : ssu := { S | exists A in F, S = basic A }
-  let AA := X.str ⁻¹' {x}
-  let T1 := insert AA T0
-  let T2 := finiteInterClosure T1
-  intro cond
-  -- If F contains a closed set A, then x is contained in A.
-  have claim1 : forall A : Set X, IsClosed A -> A in F -> x in A := by
-    intro A hA h
-    by_contra H
-    rw [le_nhds_iff] at cond
-    specialize cond Aᶜ H hA.isOpen_compl
-    rw [Ultrafilter.mem_coe]; rw [Ultrafilter.compl_mem_iff_notMem] at cond
-    contradiction
-  -- If A ∈ F, then x ∈ cl A.
-  have claim2 : forall A : Set X, A in F -> x in cl A := by
-    intro A hA
-    exact claim1 (cl A) (isClosed_cl A) (mem_of_superset hA (subset_cl A))
-  -- T0 is closed under intersections.
-  have claim3 : forall (S1) (_ : S1 in T0) (S2) (_ : S2 in T0), S1 inter S2 in T0 := by
-    rintro S1 ⟨S1, hS1, rfl⟩ S2 ⟨S2, hS2, rfl⟩
-    exact ⟨S1 inter S2, inter_mem hS1 hS2, by simp [basic_inter]⟩
-  -- For every S ∈ T0, the intersection AA ∩ S is nonempty.
-  have claim4 : forall S in T0, (AA inter S).Nonempty := by
-    rintro S ⟨S, hS, rfl⟩
-    rcases claim2 _ hS with ⟨G, hG, hG2⟩
-    exact ⟨G, hG2, hG⟩
-  -- Every element of T0 is nonempty.
-  have claim5 : forall S in T0, Set.Nonempty S := by
-    rintro S ⟨S, hS, rfl⟩
-    exact ⟨F, hS⟩
-  -- Every element of T2 is nonempty.
-  have claim6 : forall S in T2, Set.Nonempty S := by
-    suffices forall S in T2, S in T0 ∨ exists Q in T0, S = AA inter Q by
-      intro S hS
-      rcases this _ hS with h | h
-      · exact claim5 S h
-      · rcases h with ⟨Q, hQ, rfl⟩
-        exact claim4 Q hQ
-    intro S hS
-    apply finiteInterClosure_insert
-    · constructor
-      · use Set.univ
-        refine ⟨Filter.univ_sets _, ?_⟩
-        ext
-        refine ⟨?_, by tauto⟩
-        · intro
-          apply Filter.univ_sets
-      · exact claim3
-    · exact hS
-  -- It suffices to show that the intersection of any finite subset of T1 is nonempty.
-  suffices forall F : fsu, ↑F subseteq T1 -> (⋂₀ ι F).Nonempty by
-    obtain ⟨G, h1⟩ := Ultrafilter.exists_ultrafilter_of_finite_inter_nonempty _ this
-    have c1 : X.join G = F := Ultrafilter.coe_le_coe.1 fun P hP => h1 (Or.inr ⟨P, hP, rfl⟩)
-    have c2 : G.map X.str = X.incl x := by
-      refine Ultrafilter.coe_le_coe.1 fun P hP => ?_
-      apply mem_of_superset (h1 (Or.inl rfl))
-      rintro x ⟨rfl⟩
-      exact hP
-    simp [← c1, c2]
-  -- Finish...
-  intro T hT
-  refine claim6 _ (finiteInter_mem (.finiteInterClosure_finiteInter _) _ ?_)
-  intro t ht
-  exact finiteInterClosure.basic (@hT t ht)
-
-中文:
-定理 str_eq_of_le_nhds
-  条件: {X : Compactum} (F : Ultrafilter X) (x : X)
-  结论: ↑F <= 𝓝 x -> X.str F = x
-  证明: by
-  -- Notation to be used in this proof.
-  let fsu := Finset (Set (Ultrafilter X))
-  let ssu := Set (Set (Ultrafilter X))
-  let ι : fsu -> ssu := fun x => ↑x
-  let T0 : ssu := { S | exists A in F, S = basic A }
-  let AA := X.str ⁻¹' {x}
-  let T1 := insert AA T0
-  let T2 := finiteInterClosure T1
-  intro cond
-  -- If F contains a closed set A, then x is contained in A.
-  have claim1 : forall A : Set X, IsClosed A -> A in F -> x in A := by
-    intro A hA h
-    by_contra H
-    rw [le_nhds_iff] at cond
-    specialize cond Aᶜ H hA.isOpen_compl
-    rw [Ultrafilter.mem_coe]; rw [Ultrafilter.compl_mem_iff_notMem] at cond
-    contradiction
-  -- If A ∈ F, then x ∈ cl A.
-  have claim2 : forall A : Set X, A in F -> x in cl A := by
-    intro A hA
-    exact claim1 (cl A) (isClosed_cl A) (mem_of_superset hA (subset_cl A))
-  -- T0 is closed under intersections.
-  have claim3 : forall (S1) (_ : S1 in T0) (S2) (_ : S2 in T0), S1 inter S2 in T0 := by
-    rintro S1 ⟨S1, hS1, rfl⟩ S2 ⟨S2, hS2, rfl⟩
-    exact ⟨S1 inter S2, inter_mem hS1 hS2, by simp [basic_inter]⟩
-  -- For every S ∈ T0, the intersection AA ∩ S is nonempty.
-  have claim4 : forall S in T0, (AA inter S).Nonempty := by
-    rintro S ⟨S, hS, rfl⟩
-    rcases claim2 _ hS with ⟨G, hG, hG2⟩
-    exact ⟨G, hG2, hG⟩
-  -- Every element of T0 is nonempty.
-  have claim5 : forall S in T0, Set.Nonempty S := by
-    rintro S ⟨S, hS, rfl⟩
-    exact ⟨F, hS⟩
-  -- Every element of T2 is nonempty.
-  have claim6 : forall S in T2, Set.Nonempty S := by
-    suffices forall S in T2, S in T0 ∨ exists Q in T0, S = AA inter Q by
-      intro S hS
-      rcases this _ hS with h | h
-      · exact claim5 S h
-      · rcases h with ⟨Q, hQ, rfl⟩
-        exact claim4 Q hQ
-    intro S hS
-    apply finiteInterClosure_insert
-    · constructor
-      · use Set.univ
-        refine ⟨Filter.univ_sets _, ?_⟩
-        ext
-        refine ⟨?_, by tauto⟩
-        · intro
-          apply Filter.univ_sets
-      · exact claim3
-    · exact hS
-  -- It suffices to show that the intersection of any finite subset of T1 is nonempty.
-  suffices forall F : fsu, ↑F subseteq T1 -> (⋂₀ ι F).Nonempty by
-    obtain ⟨G, h1⟩ := Ultrafilter.exists_ultrafilter_of_finite_inter_nonempty _ this
-    have c1 : X.join G = F := Ultrafilter.coe_le_coe.1 fun P hP => h1 (Or.inr ⟨P, hP, rfl⟩)
-    have c2 : G.map X.str = X.incl x := by
-      refine Ultrafilter.coe_le_coe.1 fun P hP => ?_
-      apply mem_of_superset (h1 (Or.inl rfl))
-      rintro x ⟨rfl⟩
-      exact hP
-    simp [← c1, c2]
-  -- Finish...
-  intro T hT
-  refine claim6 _ (finiteInter_mem (.finiteInterClosure_finiteInter _) _ ?_)
-  intro t ht
-  exact finiteInterClosure.basic (@hT t ht)
+/-
+**Compactum.str_eq_of_le_nhds** 是 Mathlib 中的一个定理，位于命名空间 `Compactum`。
+形式化陈述：str_eq_of_le_nhds {X : Compactum} (F : Ultrafilter X) (x : X) : ↑F <= 𝓝 x 
+-> X.str F = x
+参数：F : Ultrafilter X；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Classical.byContradiction`：∀ {p : Prop}, (¬p → False) → p
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ultrafilter.compl_mem_iff_notMem`：compl_mem_iff_notMem : sᶜ in f ↔ s ∉ f
+· 使用定理 `Ultrafilter.mem_coe`：mem_coe : s in (f : Filter α) ↔ s in f
+· 使用定理 `le_nhds_iff`：le_nhds_iff {f} : f <= 𝓝 x ↔ forall s : Set X, x in s -> Is
+Open s -> s in f
+· 使用定理 `IsClosed.isOpen_compl`：∀ {X : Type u} {inst : TopologicalSpace X} {s : S
+et X} [self : IsClosed s], IsOpen sᶜ
+· 使用定理 `Compactum.isClosed_cl`：isClosed_cl {X : Compactum} (A : Set X) : IsClose
+d (cl A)
+· 使用定理 `Filter.mem_of_superset`：mem_of_superset {x y : Set α} (hx : x in f) (hxy
+ : x subseteq y) : y in f
+· 使用定理 `_private.Mathlib.Topology.Category.Compactum.0.Compactum.subset_cl`：∀ {X
+ : Compactum} (A : Set X.A), A ⊆ Compactum.cl✝ A
+· 使用定理 `Filter.inter_mem`：inter_mem (hs : s in f) (ht : t in f) : s inter t in f
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `_private.Mathlib.Topology.Category.Compactum.0.Compactum.basic_inter`：∀ 
+{X : Compactum} (A B : Set X.A), Compactum.basic✝ (A ∩ B) = Compactum.basic✝ A ∩
+ Compactum.basic✝ B
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `FiniteInter.finiteInterClosure_insert`：finiteInterClosure_insert {A : Se
+t α} (cond : FiniteInter S) (P) (H : P in finiteInterClosure (insert A S)) : P i
+n S ∨ exists Q in S, P = A …
+· 使用定理 `Filter.univ_sets`：∀ {α : Type u_1} (self : Filter α), Set.univ ∈ self.se
+ts
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `trivial`：True
+· 使用定理 `FiniteInter.finiteInter_mem`：finiteInter_mem (cond : FiniteInter S) (F :
+ Finset (Set α)) : ↑F subseteq S -> ⋂₀ (↑F : Set (Set α)) in S
+· 使用定理 `FiniteInter.finiteInterClosure_finiteInter`：finiteInterClosure_finiteInt
+er : FiniteInter (finiteInterClosure S)
+· 使用定理 `Ultrafilter.exists_ultrafilter_of_finite_inter_nonempty`：exists_ultrafil
+ter_of_finite_inter_nonempty (S : Set (Set α)) (cond : forall T : Finset (Set α)
+, (↑T : Set (Set α)) subseteq S -> (⋂₀ (↑T : …
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Ultrafilter.coe_le_coe`：coe_le_coe {f g : Ultrafilter α} : (f : Filter α
+) <= g ↔ f = g
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Compactum.join_distrib`：join_distrib (X : Compactum) (uux : Ultrafilter 
+(Ultrafilter X)) : X.str (X.join uux) = X.str (map X.str uux)
+· 使用定理 `Compactum.str_incl`：str_incl (X : Compactum) (x : X) : X.str (X.incl x) 
+= x
 -/
-theorem str_eq_of_le_nhds {X : Compactum} (F : Ultrafilter X) (x : X) : ↑F <= 𝓝 x -> X.str F = x := by
+theorem str_eq_of_le_nhds {X : Compactum} (F : Ultrafilter X) (x : X) : ↑F ≤ 𝓝 x → X.str F = x := by
   -- Notation to be used in this proof.
   let fsu := Finset (Set (Ultrafilter X))
   let ssu := Set (Set (Ultrafilter X))
-  let ι : fsu -> ssu := fun x => ↑x
-  let T0 : ssu := { S | exists A in F, S = basic A }
+  let ι : fsu → ssu := fun x ↦ ↑x
+  let T0 : ssu := { S | ∃ A ∈ F, S = basic A }
   let AA := X.str ⁻¹' {x}
   let T1 := insert AA T0
   let T2 := finiteInterClosure T1
   intro cond
   -- If F contains a closed set A, then x is contained in A.
-  have claim1 : forall A : Set X, IsClosed A -> A in F -> x in A := by
+  have claim1 : ∀ A : Set X, IsClosed A → A ∈ F → x ∈ A := by
     intro A hA h
     by_contra H
     rw [le_nhds_iff] at cond
     specialize cond Aᶜ H hA.isOpen_compl
-    rw [Ultrafilter.mem_coe]; rw [Ultrafilter.compl_mem_iff_notMem] at cond
+    rw [Ultrafilter.mem_coe, Ultrafilter.compl_mem_iff_notMem] at cond
     contradiction
   -- If A ∈ F, then x ∈ cl A.
-  have claim2 : forall A : Set X, A in F -> x in cl A := by
+  have claim2 : ∀ A : Set X, A ∈ F → x ∈ cl A := by
     intro A hA
     exact claim1 (cl A) (isClosed_cl A) (mem_of_superset hA (subset_cl A))
   -- T0 is closed under intersections.
-  have claim3 : forall (S1) (_ : S1 in T0) (S2) (_ : S2 in T0), S1 inter S2 in T0 := by
+  have claim3 : ∀ (S1) (_ : S1 ∈ T0) (S2) (_ : S2 ∈ T0), S1 ∩ S2 ∈ T0 := by
     rintro S1 ⟨S1, hS1, rfl⟩ S2 ⟨S2, hS2, rfl⟩
-    exact ⟨S1 inter S2, inter_mem hS1 hS2, by simp [basic_inter]⟩
+    exact ⟨S1 ∩ S2, inter_mem hS1 hS2, by simp [basic_inter]⟩
   -- For every S ∈ T0, the intersection AA ∩ S is nonempty.
-  have claim4 : forall S in T0, (AA inter S).Nonempty := by
+  have claim4 : ∀ S ∈ T0, (AA ∩ S).Nonempty := by
     rintro S ⟨S, hS, rfl⟩
     rcases claim2 _ hS with ⟨G, hG, hG2⟩
     exact ⟨G, hG2, hG⟩
   -- Every element of T0 is nonempty.
-  have claim5 : forall S in T0, Set.Nonempty S := by
+  have claim5 : ∀ S ∈ T0, Set.Nonempty S := by
     rintro S ⟨S, hS, rfl⟩
     exact ⟨F, hS⟩
   -- Every element of T2 is nonempty.
-  have claim6 : forall S in T2, Set.Nonempty S := by
-    suffices forall S in T2, S in T0 ∨ exists Q in T0, S = AA inter Q by
+  have claim6 : ∀ S ∈ T2, Set.Nonempty S := by
+    suffices ∀ S ∈ T2, S ∈ T0 ∨ ∃ Q ∈ T0, S = AA ∩ Q by
       intro S hS
       rcases this _ hS with h | h
       · exact claim5 S h
@@ -971,7 +570,7 @@ theorem str_eq_of_le_nhds {X : Compactum} (F : Ultrafilter X) (x : X) : ↑F <= 
       · exact claim3
     · exact hS
   -- It suffices to show that the intersection of any finite subset of T1 is nonempty.
-  suffices forall F : fsu, ↑F subseteq T1 -> (⋂₀ ι F).Nonempty by
+  suffices ∀ F : fsu, ↑F ⊆ T1 → (⋂₀ ι F).Nonempty by
     obtain ⟨G, h1⟩ := Ultrafilter.exists_ultrafilter_of_finite_inter_nonempty _ this
     have c1 : X.join G = F := Ultrafilter.coe_le_coe.1 fun P hP => h1 (Or.inr ⟨P, hP, rfl⟩)
     have c2 : G.map X.str = X.incl x := by
@@ -985,94 +584,72 @@ theorem str_eq_of_le_nhds {X : Compactum} (F : Ultrafilter X) (x : X) : ↑F <= 
   refine claim6 _ (finiteInter_mem (.finiteInterClosure_finiteInter _) _ ?_)
   intro t ht
   exact finiteInterClosure.basic (@hT t ht)
-
-/--
-theorem `le_nhds_of_str_eq` / 定理 `le_nhds_of_str_eq`
-
-English:
-theorem le_nhds_of_str_eq
-  given: {X : Compactum} (F : Ultrafilter X) (x : X)
-  statement: X.str F = x -> ↑F <= 𝓝 x
-  proof: fun h => le_nhds_iff.mpr fun s hx hs => hs _ by rwa [h]
-
-中文:
-定理 le_nhds_of_str_eq
-  条件: {X : Compactum} (F : Ultrafilter X) (x : X)
-  结论: X.str F = x -> ↑F <= 𝓝 x
-  证明: fun h => le_nhds_iff.mpr fun s hx hs => hs _ by rwa [h]
-
-Depends on / 依赖: le_nhds_iff, le_nhds_iff.mpr
+/-
+**Compactum.le_nhds_of_str_eq** 是 Mathlib 中的一个定理，位于命名空间 `Compactum`。
+形式化陈述：le_nhds_of_str_eq {X : Compactum} (F : Ultrafilter X) (x : X) : X.str F = 
+x -> ↑F <= 𝓝 x
+参数：F : Ultrafilter X；x : X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `le_nhds_iff`：le_nhds_iff {f} : f <= 𝓝 x ↔ forall s : Set X, x in s -> Is
+Open s -> s in f
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
 -/
-theorem le_nhds_of_str_eq {X : Compactum} (F : Ultrafilter X) (x : X) : X.str F = x -> ↑F <= 𝓝 x :=
-fun h => le_nhds_iff.mpr fun s hx hs => hs _ by rwa [h]
+theorem le_nhds_of_str_eq {X : Compactum} (F : Ultrafilter X) (x : X) : X.str F = x → ↑F ≤ 𝓝 x :=
+  fun h => le_nhds_iff.mpr fun s hx hs => hs _ <| by rwa [h]
 
 -- All the hard work above boils down to this `T2Space` instance.
+/-
+**Compactum.** 是 Mathlib 中的一个实例，位于命名空间 `Compactum`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+-/
 instance {X : Compactum} : T2Space X := by
   rw [t2_iff_ultrafilter]
   intro _ _ F hx hy
-  rw [← str_eq_of_le_nhds _ _ hx]; rw [← str_eq_of_le_nhds _ _ hy]
+  rw [← str_eq_of_le_nhds _ _ hx, ← str_eq_of_le_nhds _ _ hy]
 
-/--
-theorem `lim_eq_str` / 定理 `lim_eq_str`
+/-- The structure map of a compactum actually computes limits. -/
+/-
+**Compactum.lim_eq_str** 是 Mathlib 中的一个定理，位于命名空间 `Compactum`。
+形式化陈述：lim_eq_str {X : Compactum} (F : Ultrafilter X) : F.lim = X.str F
+参数：F : Ultrafilter X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Ultrafilter.lim_eq_iff_le_nhds`：Ultrafilter.lim_eq_iff_le_nhds [CompactS
+pace X] {x : X} {F : Ultrafilter X} : F.lim = x ↔ ↑F <= 𝓝 x
+· 使用定理 `Compactum.instT2SpaceA`：∀ {X : Compactum}, T2Space X.A
+· 使用定理 `Compactum.instCompactSpaceA`：∀ {X : Compactum}, CompactSpace X.A
+· 使用定理 `le_nhds_iff`：le_nhds_iff {f} : f <= 𝓝 x ↔ forall s : Set X, x in s -> Is
+Open s -> s in f
 
-English:
-theorem lim_eq_str
-  given: {X : Compactum} (F : Ultrafilter X)
-  statement: F.lim = X.str F
-  proof: by
-  rw [Ultrafilter.lim_eq_iff_le_nhds]; rw [le_nhds_iff]
-  tauto
-
-中文:
-定理 lim_eq_str
-  条件: {X : Compactum} (F : Ultrafilter X)
-  结论: F.lim = X.str F
-  证明: by
-  rw [Ultrafilter.lim_eq_iff_le_nhds]; rw [le_nhds_iff]
-  tauto
-
-Depends on / 依赖: Ultrafilter, Ultrafilter.lim_eq_iff_le_nhds, le_nhds_iff, lim_eq_iff_le_nhds
+--- 原说明 ---
+The structure map of a compactum actually computes limits.
 -/
 theorem lim_eq_str {X : Compactum} (F : Ultrafilter X) : F.lim = X.str F := by
-  rw [Ultrafilter.lim_eq_iff_le_nhds]; rw [le_nhds_iff]
+  rw [Ultrafilter.lim_eq_iff_le_nhds, le_nhds_iff]
   tauto
 
 set_option backward.privateInPublic true in
 set_option backward.privateInPublic.warn false in
-/--
-theorem `cl_eq_closure` / 定理 `cl_eq_closure`
-
-English:
-theorem cl_eq_closure
-  given: {X : Compactum} (A : Set X)
-  statement: cl A = closure A
-  proof: by
-  ext
-  rw [mem_closure_iff_ultrafilter]
-  constructor
-  · rintro ⟨F, h1, h2⟩
-    exact ⟨F, h1, le_nhds_of_str_eq _ _ h2⟩
-  · rintro ⟨F, h1, h2⟩
-    exact ⟨F, h1, str_eq_of_le_nhds _ _ h2⟩
-
-#adaptation_note
-
-中文:
-定理 cl_eq_closure
-  条件: {X : Compactum} (A : 集合 X)
-  结论: cl A = closure A
-  证明: by
-  ext
-  rw [mem_closure_iff_ultrafilter]
-  constructor
-  · rintro ⟨F, h1, h2⟩
-    exact ⟨F, h1, le_nhds_of_str_eq _ _ h2⟩
-  · rintro ⟨F, h1, h2⟩
-    exact ⟨F, h1, str_eq_of_le_nhds _ _ h2⟩
-
-#adaptation_note
-
-Depends on / 依赖: le_nhds_of_str_eq, mem_closure_iff_ultrafilter, str_eq_of_le_nhds
+/-
+**Compactum.cl_eq_closure** 是 Mathlib 中的一个定理，位于命名空间 `Compactum`。
+形式化陈述：cl_eq_closure {X : Compactum} (A : Set X) : cl A = closure A
+参数：A : Set X。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `mem_closure_iff_ultrafilter`：mem_closure_iff_ultrafilter : x in closure 
+s ↔ exists u : Ultrafilter X, s in u ∧ ↑u <= 𝓝 x
+· 使用定理 `Compactum.le_nhds_of_str_eq`：le_nhds_of_str_eq {X : Compactum} (F : Ultr
+afilter X) (x : X) : X.str F = x -> ↑F <= 𝓝 x
+· 使用定理 `Compactum.str_eq_of_le_nhds`：str_eq_of_le_nhds {X : Compactum} (F : Ultr
+afilter X) (x : X) : ↑F <= 𝓝 x -> X.str F = x
 -/
 theorem cl_eq_closure {X : Compactum} (A : Set X) : cl A = closure A := by
   ext
@@ -1086,106 +663,52 @@ theorem cl_eq_closure {X : Compactum} (A : Set X) : cl A = closure A := by
 #adaptation_note
 /-- `respectTransparency.types true` changes the auto-generated lemmas' signature -/
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-theorem `continuous_of_hom` / 定理 `continuous_of_hom`
+/-- Any morphism of compacta is continuous. -/
+/-
+**Compactum.continuous_of_hom** 是 Mathlib 中的一个定理，位于命名空间 `Compactum`。
+形式化陈述：continuous_of_hom {X Y : Compactum} (f : X ⟶ Y) : Continuous f
+参数：f : X ⟶ Y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `continuous_iff_ultrafilter`：continuous_iff_ultrafilter : Continuous f ↔ 
+forall (x) (g : Ultrafilter X), ↑g <= 𝓝 x -> Tendsto f g (𝓝 (f x))
+· 使用定理 `Filter.Tendsto.eq_1`：∀ {α : Type u_1} {β : Type u_2} (f : α → β) (l₁ : F
+ilter α) (l₂ : Filter β),   Filter.Tendsto f l₁ l₂ = (Filter.map f l₁ ≤ l₂)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Ultrafilter.coe_map`：coe_map (m : α -> β) (f : Ultrafilter α) : (map m f
+ : Filter β) = Filter.map m ↑f
+· 使用定理 `Compactum.le_nhds_of_str_eq`：le_nhds_of_str_eq {X : Compactum} (F : Ultr
+afilter X) (x : X) : X.str F = x -> ↑F <= 𝓝 x
+· 使用定理 `Compactum.str_hom_commute`：str_hom_commute (X Y : Compactum) (f : X ⟶ Y)
+ (xs : Ultrafilter X) : f (X.str xs) = Y.str (map f xs)
+· 使用定理 `Compactum.str_eq_of_le_nhds`：str_eq_of_le_nhds {X : Compactum} (F : Ultr
+afilter X) (x : X) : ↑F <= 𝓝 x -> X.str F = x
 
-English:
-theorem continuous_of_hom
-  given: {X Y : Compactum} (f : X ⟶ Y)
-  statement: Continuous f
-  proof: by
-  rw [continuous_iff_ultrafilter]
-  intro x g h
-  rw [Tendsto]; rw [← coe_map]
-  apply le_nhds_of_str_eq
-  rw [← str_hom_commute]; rw [str_eq_of_le_nhds _ x _]
-  apply h
-
-中文:
-定理 continuous_of_hom
-  条件: {X Y : Compactum} (f : X ⟶ Y)
-  结论: 连续 f
-  证明: by
-  rw [continuous_iff_ultrafilter]
-  intro x g h
-  rw [Tendsto]; rw [← coe_map]
-  apply le_nhds_of_str_eq
-  rw [← str_hom_commute]; rw [str_eq_of_le_nhds _ x _]
-  apply h
-
-Depends on / 依赖: Tendsto, coe_map, continuous_iff_ultrafilter, le_nhds_of_str_eq, str_eq_of_le_nhds, str_hom_commute
+--- 原说明 ---
+Any morphism of compacta is continuous.
 -/
 theorem continuous_of_hom {X Y : Compactum} (f : X ⟶ Y) : Continuous f := by
   rw [continuous_iff_ultrafilter]
   intro x g h
-  rw [Tendsto]; rw [← coe_map]
+  rw [Tendsto, ← coe_map]
   apply le_nhds_of_str_eq
-  rw [← str_hom_commute]; rw [str_eq_of_le_nhds _ x _]
+  rw [← str_hom_commute, str_eq_of_le_nhds _ x _]
   apply h
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `ofTopologicalSpace` / `ofTopologicalSpace` 的定义
+/-- Given any compact Hausdorff space, we construct a Compactum. -/
+/-
+**Compactum.ofTopologicalSpace** 是 Mathlib 中的一个定义，位于命名空间 `Compactum`。
+形式化陈述：ofTopologicalSpace (X : Type*) [TopologicalSpace X] [CompactSpace X] [T2Sp
+ace X] : Compactum where A
+参数：X : Type*。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition ofTopologicalSpace
-  signature: (X : Type*) [TopologicalSpace X] [CompactSpace X]
-  body: X
-  a := ↾Ultrafilter.lim
-  unit := by
-    ext x
-    exact lim_eq (pure_le_nhds _)
-  assoc := by
-    ext FF
-    change Ultrafilter (Ultrafilter X) at FF
-    set x := (Ultrafilter.map Ultrafilter.lim FF).lim with c1
-    have c2 : forall (U : Set X) (F : Ultrafilter X), F.lim in U -> IsOpen U -> U in F := by
-      intro U F h1 hU
-      exact isOpen_iff_ultrafilter.mp hU _ h1 _ (Ultrafilter.le_nhds_lim _)
-    have c3 : ↑(Ultrafilter.map Ultrafilter.lim FF) <= 𝓝 x := by
-      rw [le_nhds_iff]
-      intro U hx hU
-      exact mem_coe.2 (c2 _ _ (by rwa [← c1]) hU)
-    have c4 : forall U : Set X, x in U -> IsOpen U -> { G : Ultrafilter X | U in G } in FF := by
-      intro U hx hU
-      suffices Ultrafilter.lim ⁻¹' U in FF by
-        apply mem_of_superset this
-        intro P hP
-        exact c2 U P hP hU
-      exact @c3 U (IsOpen.mem_nhds hU hx)
-    apply lim_eq
-    rw [le_nhds_iff]
-    exact c4
-
-中文:
-定义 ofTopologicalSpace
-  签名: (X : 类型) [拓扑空间 X] [紧空间 X]
-  定义体: X
-  a := ↾Ultrafilter.lim
-  unit := by
-    ext x
-    exact lim_eq (pure_le_nhds _)
-  assoc := by
-    ext FF
-    change Ultrafilter (Ultrafilter X) at FF
-    set x := (Ultrafilter.map Ultrafilter.lim FF).lim with c1
-    have c2 : forall (U : Set X) (F : Ultrafilter X), F.lim in U -> IsOpen U -> U in F := by
-      intro U F h1 hU
-      exact isOpen_iff_ultrafilter.mp hU _ h1 _ (Ultrafilter.le_nhds_lim _)
-    have c3 : ↑(Ultrafilter.map Ultrafilter.lim FF) <= 𝓝 x := by
-      rw [le_nhds_iff]
-      intro U hx hU
-      exact mem_coe.2 (c2 _ _ (by rwa [← c1]) hU)
-    have c4 : forall U : Set X, x in U -> IsOpen U -> { G : Ultrafilter X | U in G } in FF := by
-      intro U hx hU
-      suffices Ultrafilter.lim ⁻¹' U in FF by
-        apply mem_of_superset this
-        intro P hP
-        exact c2 U P hP hU
-      exact @c3 U (IsOpen.mem_nhds hU hx)
-    apply lim_eq
-    rw [le_nhds_iff]
-    exact c4
+--- 原说明 ---
+Given any compact Hausdorff space, we construct a Compactum.
 -/
 noncomputable def ofTopologicalSpace (X : Type*) [TopologicalSpace X] [CompactSpace X]
     [T2Space X] : Compactum where
@@ -1198,16 +721,16 @@ noncomputable def ofTopologicalSpace (X : Type*) [TopologicalSpace X] [CompactSp
     ext FF
     change Ultrafilter (Ultrafilter X) at FF
     set x := (Ultrafilter.map Ultrafilter.lim FF).lim with c1
-    have c2 : forall (U : Set X) (F : Ultrafilter X), F.lim in U -> IsOpen U -> U in F := by
+    have c2 : ∀ (U : Set X) (F : Ultrafilter X), F.lim ∈ U → IsOpen U → U ∈ F := by
       intro U F h1 hU
       exact isOpen_iff_ultrafilter.mp hU _ h1 _ (Ultrafilter.le_nhds_lim _)
-    have c3 : ↑(Ultrafilter.map Ultrafilter.lim FF) <= 𝓝 x := by
+    have c3 : ↑(Ultrafilter.map Ultrafilter.lim FF) ≤ 𝓝 x := by
       rw [le_nhds_iff]
       intro U hx hU
       exact mem_coe.2 (c2 _ _ (by rwa [← c1]) hU)
-    have c4 : forall U : Set X, x in U -> IsOpen U -> { G : Ultrafilter X | U in G } in FF := by
+    have c4 : ∀ U : Set X, x ∈ U → IsOpen U → { G : Ultrafilter X | U ∈ G } ∈ FF := by
       intro U hx hU
-      suffices Ultrafilter.lim ⁻¹' U in FF by
+      suffices Ultrafilter.lim ⁻¹' U ∈ FF by
         apply mem_of_superset this
         intro P hP
         exact c2 U P hP hU
@@ -1216,32 +739,19 @@ noncomputable def ofTopologicalSpace (X : Type*) [TopologicalSpace X] [CompactSp
     rw [le_nhds_iff]
     exact c4
 
-/--
-Definition of `homOfContinuous` / `homOfContinuous` 的定义
+/-- Any continuous map between Compacta is a morphism of compacta. -/
+/-
+**Compactum.homOfContinuous** 是 Mathlib 中的一个定义，位于命名空间 `Compactum`。
+形式化陈述：homOfContinuous {X Y : Compactum} (f : X -> Y) (cont : Continuous f) : X ⟶
+ Y
+参数：f : X -> Y；cont : Continuous f。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homOfContinuous
-  signature: {X Y : Compactum} (f : X -> Y) (cont : Continuous f)
-  body: { f := ↾f
-    h := by
-      rw [continuous_iff_ultrafilter] at cont
-      ext (F : Ultrafilter X)
-      specialize cont (X.str F) F (le_nhds_of_str_eq F (X.str F) rfl)
-      simpa using! str_eq_of_le_nhds (Ultrafilter.map f F) _ cont }
-
-中文:
-定义 homOfContinuous
-  签名: {X Y : Compactum} (f : X -> Y) (cont : 连续 f)
-  定义体: { f := ↾f
-    h := by
-      rw [continuous_iff_ultrafilter] at cont
-      ext (F : Ultrafilter X)
-      specialize cont (X.str F) F (le_nhds_of_str_eq F (X.str F) rfl)
-      simpa using! str_eq_of_le_nhds (Ultrafilter.map f F) _ cont }
-
-Depends on / 依赖: Ultrafilter, Ultrafilter.map, X.str, continuous_iff_ultrafilter, le_nhds_of_str_eq, specialize, str_eq_of_le_nhds
+--- 原说明 ---
+Any continuous map between Compacta is a morphism of compacta.
 -/
-def homOfContinuous {X Y : Compactum} (f : X -> Y) (cont : Continuous f) : X ⟶ Y :=
+def homOfContinuous {X Y : Compactum} (f : X → Y) (cont : Continuous f) : X ⟶ Y :=
   { f := ↾f
     h := by
       rw [continuous_iff_ultrafilter] at cont
@@ -1251,26 +761,20 @@ def homOfContinuous {X Y : Compactum} (f : X -> Y) (cont : Continuous f) : X ⟶
 
 end Compactum
 
-/--
-Definition of `compactumToCompHaus` / `compactumToCompHaus` 的定义
+/-- The functor from Compactum to CompHaus. -/
+/-
+**compactumToCompHaus** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：compactumToCompHaus : Compactum ⥤ CompHaus where obj X
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Compactum.instCompactSpaceA`：∀ {X : Compactum}, CompactSpace X.A
+· 使用定理 `Compactum.instT2SpaceA`：∀ {X : Compactum}, T2Space X.A
+· 使用定理 `trivial`：True
+· 使用定理 `Compactum.continuous_of_hom`：continuous_of_hom {X Y : Compactum} (f : X 
+⟶ Y) : Continuous f
 
-English:
-definition compactumToCompHaus
-  signature: : Compactum ⥤ CompHaus where
-  body: { toTop := TopCat.of X, prop := trivial }
-  map := fun f => CompHausLike.ofHom _
-    { toFun := f
-      continuous_toFun := Compactum.continuous_of_hom _ }
-
-中文:
-定义 compactumToCompHaus
-  签名: : Compactum ⥤ CompHaus where
-  定义体: { toTop := TopCat.of X, prop := trivial }
-  map := fun f => CompHausLike.ofHom _
-    { toFun := f
-      continuous_toFun := Compactum.continuous_of_hom _ }
-
-Depends on / 依赖: TopCat, TopCat.of
+--- 原说明 ---
+The functor from Compactum to CompHaus.
 -/
 def compactumToCompHaus : Compactum ⥤ CompHaus where
   obj X := { toTop := TopCat.of X, prop := trivial }
@@ -1280,46 +784,44 @@ def compactumToCompHaus : Compactum ⥤ CompHaus where
 
 namespace compactumToCompHaus
 
-/--
-Instance `full` / 实例 `full`
+/-- The functor `compactumToCompHaus` is full. -/
+/-
+**compactumToCompHaus.full** 是 Mathlib 中的一个实例，位于命名空间 `compactumToCompHaus`。
+形式化陈述：full : compactumToCompHaus.{u}.Full where map_surjective f
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousMap.continuous_toFun`：∀ {X : Type u_1} {Y : Type u_2} [inst : 
+TopologicalSpace X] [inst_1 : TopologicalSpace Y] (self : C(X, Y)),   Continuous
+ self.toFun
 
-English:
-instance full
-  signature: : compactumToCompHaus.{u}.Full where
-  body: ⟨Compactum.homOfContinuous f.1 f.hom.hom.2, rfl⟩
-
-中文:
-实例 full
-  签名: : compactumToCompHaus.{u}.满 where
-  定义体: ⟨Compactum.homOfContinuous f.1 f.hom.hom.2, rfl⟩
-
-Depends on / 依赖: Compactum, Compactum.homOfContinuous, f.hom.hom, homOfContinuous
+--- 原说明 ---
+The functor `compactumToCompHaus` is full.
 -/
 instance full : compactumToCompHaus.{u}.Full where
   map_surjective f := ⟨Compactum.homOfContinuous f.1 f.hom.hom.2, rfl⟩
 
-/--
-Instance `faithful` / 实例 `faithful`
+/-- The functor `compactumToCompHaus` is faithful. -/
+/-
+**compactumToCompHaus.faithful** 是 Mathlib 中的一个实例，位于命名空间 `compactumToCompHaus`。
+形式化陈述：faithful : compactumToCompHaus.Faithful where -- Porting note: this used t
+o be obviously (though it consumed a bit of memory) map_injective
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CategoryTheory.Monad.Algebra.Hom.ext`：∀ {C : Type u₁} {inst : CategoryTh
+eory.Category.{v₁, u₁} C} {T : CategoryTheory.Monad C} {A B : T.Algebra}   {x y 
+: A.Hom B}, x.f = y.f → x …
+· 使用定理 `CategoryTheory.ConcreteCategory.ext`：∀ {C : Type u} [inst : CategoryTheo
+ry.Category.{v, u} C] {FC : C → C → Type u_1} {CC : C → Type w}   [inst_1 : (X Y
+ : C) → FunLike (FC X Y) …
+· 使用定理 `TypeCat.Fun.ext`：∀ {X : Type u_1} {Y : Type u_2} {x y : TypeCat.Fun X Y}
+, x.toFun = y.toFun → x = y
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `CategoryTheory.ConcreteCategory.congr_hom`：congr_hom {X Y : C} {f g : X 
+⟶ Y} (h : f = g) (x : ToType X) : f x = g x
 
-English:
-instance faithful
-  signature: : compactumToCompHaus.Faithful where
-  body: by
-    intro _ _ _ _ h
-    -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` gets confused by coercion using forget.
-    apply Monad.Algebra.Hom.ext
-    ext
-    simpa using! ConcreteCategory.congr_hom h _
-
-中文:
-实例 faithful
-  签名: : compactumToCompHaus.忠实 where
-  定义体: by
-    intro _ _ _ _ h
-    -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): `ext` gets confused by coercion using forget.
-    apply Monad.Algebra.Hom.ext
-    ext
-    simpa using! ConcreteCategory.congr_hom h _
+--- 原说明 ---
+The functor `compactumToCompHaus` is faithful.
 -/
 instance faithful : compactumToCompHaus.Faithful where
   -- Porting note: this used to be obviously (though it consumed a bit of memory)
@@ -1331,44 +833,21 @@ instance faithful : compactumToCompHaus.Faithful where
     simpa using! ConcreteCategory.congr_hom h _
 
 set_option backward.isDefEq.respectTransparency.types false in
-/--
-Definition of `isoOfTopologicalSpace` / `isoOfTopologicalSpace` 的定义
+/-- This definition is used to prove essential surjectivity of `compactumToCompHaus`. -/
+/-
+**compactumToCompHaus.isoOfTopologicalSpace** 是 Mathlib 中的一个定义，位于命名空间 `compactum
+ToCompHaus`。
+形式化陈述：isoOfTopologicalSpace {D : CompHaus} : compactumToCompHaus.obj (Compactum.
+ofTopologicalSpace D) ≅ D where hom
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `CompHaus.instCompactSpaceCarrierToTopTrue`：∀ {X : CompHaus}, CompactSpac
+e ↑X.toTop
+· 使用定理 `CompHaus.instT2SpaceCarrierToTopTrue`：∀ {X : CompHaus}, T2Space ↑X.toTop
 
-English:
-definition isoOfTopologicalSpace
-  signature: {D : CompHaus}
-  body: CompHausLike.ofHom _
-    { toFun := id
-      continuous_toFun :=
-        continuous_def.2 fun _ h => by
-          rw [isOpen_iff_ultrafilter'] at h
-          exact h }
-  inv := CompHausLike.ofHom _
-    { toFun := id
-      continuous_toFun :=
-        continuous_def.2 fun _ h1 => by
-          rw [isOpen_iff_ultrafilter']
-          intro _ h2
-          exact h1 _ h2 }
-
-中文:
-定义 isoOfTopologicalSpace
-  签名: {D : CompHaus}
-  定义体: CompHausLike.ofHom _
-    { toFun := id
-      continuous_toFun :=
-        continuous_def.2 fun _ h => by
-          rw [isOpen_iff_ultrafilter'] at h
-          exact h }
-  inv := CompHausLike.ofHom _
-    { toFun := id
-      continuous_toFun :=
-        continuous_def.2 fun _ h1 => by
-          rw [isOpen_iff_ultrafilter']
-          intro _ h2
-          exact h1 _ h2 }
-
-Depends on / 依赖: CompHausLike, CompHausLike.ofHom
+--- 原说明 ---
+This definition is used to prove essential surjectivity of `compactumToCompHaus`
+.
 -/
 noncomputable def isoOfTopologicalSpace {D : CompHaus} :
     compactumToCompHaus.obj (Compactum.ofTopologicalSpace D) ≅ D where
@@ -1386,87 +865,74 @@ noncomputable def isoOfTopologicalSpace {D : CompHaus} :
           intro _ h2
           exact h1 _ h2 }
 
-/--
-Instance `essSurj` / 实例 `essSurj`
+/-- The functor `compactumToCompHaus` is essentially surjective. -/
+/-
+**compactumToCompHaus.essSurj** 是 Mathlib 中的一个实例，位于命名空间 `compactumToCompHaus`。
+形式化陈述：essSurj : compactumToCompHaus.EssSurj
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `CompHaus.instCompactSpaceCarrierToTopTrue`：∀ {X : CompHaus}, CompactSpac
+e ↑X.toTop
+· 使用定理 `CompHaus.instT2SpaceCarrierToTopTrue`：∀ {X : CompHaus}, T2Space ↑X.toTop
 
-English:
-instance essSurj
-  signature: : compactumToCompHaus.EssSurj
-  body: { mem_essImage := fun X => ⟨Compactum.ofTopologicalSpace X,
-      ⟨isoOfTopologicalSpace⟩⟩ }
-
-中文:
-实例 essSurj
-  签名: : compactumToCompHaus.本质满射
-  定义体: { mem_essImage := fun X => ⟨Compactum.ofTopologicalSpace X,
-      ⟨isoOfTopologicalSpace⟩⟩ }
-
-Depends on / 依赖: Compactum, Compactum.ofTopologicalSpace, isoOfTopologicalSpace, mem_essImage, ofTopologicalSpace
+--- 原说明 ---
+The functor `compactumToCompHaus` is essentially surjective.
 -/
 instance essSurj : compactumToCompHaus.EssSurj :=
   { mem_essImage := fun X => ⟨Compactum.ofTopologicalSpace X,
       ⟨isoOfTopologicalSpace⟩⟩ }
 
-/--
-Instance `isEquivalence` / 实例 `isEquivalence`
+/-- The functor `compactumToCompHaus` is an equivalence of categories. -/
+/-
+**compactumToCompHaus.isEquivalence** 是 Mathlib 中的一个定理，位于命名空间 `compactumToCompHa
+us`。
+形式化陈述：compactumToCompHaus.IsEquivalence
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance isEquivalence
-  signature: : compactumToCompHaus.IsEquivalence where
-
-中文:
-实例 isEquivalence
-  签名: : compactumToCompHaus.是等价 where
+--- 原说明 ---
+The functor `compactumToCompHaus` is an equivalence of categories.
 -/
 instance isEquivalence : compactumToCompHaus.IsEquivalence where
 
 end compactumToCompHaus
 
-/--
-Definition of `compactumToCompHausCompForget` / `compactumToCompHausCompForget` 的定义
+/-- The forgetful functors of `Compactum` and `CompHaus` are compatible via
+`compactumToCompHaus`. -/
+/-
+**compactumToCompHausCompForget** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：compactumToCompHausCompForget : compactumToCompHaus ⋙ CategoryTheory.forge
+t CompHaus ≅ Compactum.forget
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition compactumToCompHausCompForget
-  signature: :
-  body: NatIso.ofComponents fun _ => eqToIso rfl
-
-中文:
-定义 compactumToCompHausCompForget
-  签名: :
-  定义体: NatIso.ofComponents fun _ => eqToIso rfl
-
-Depends on / 依赖: NatIso, NatIso.ofComponents, eqToIso, ofComponents
+--- 原说明 ---
+The forgetful functors of `Compactum` and `CompHaus` are compatible via
+`compactumToCompHaus`.
 -/
 def compactumToCompHausCompForget :
     compactumToCompHaus ⋙ CategoryTheory.forget CompHaus ≅ Compactum.forget :=
   NatIso.ofComponents fun _ => eqToIso rfl
 
-/--
-Instance `CompHaus.forgetCreatesLimits` / 实例 `CompHaus.forgetCreatesLimits`
+/-
+TODO: `forget CompHaus` is monadic, as it is isomorphic to the composition
+of an equivalence with the monadic functor `forget Compactum`.
+Once we have the API to transfer monadicity of functors along such isomorphisms,
+the instance `CreatesLimits (forget CompHaus)` can be deduced from this
+monadicity.
+-/
+/-
+**CompHaus.forgetCreatesLimits** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：CompHaus.forgetCreatesLimits : CreatesLimits (forget CompHaus)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `compactumToCompHaus.isEquivalence`：compactumToCompHaus.IsEquivalence
 
-English:
-instance CompHaus.forgetCreatesLimits
-  signature: : CreatesLimits (forget CompHaus)
-  body: by
-  let e : forget CompHaus ≅ compactumToCompHaus.inv ⋙ Compactum.forget :=
-    (((forget CompHaus).leftUnitor.symm ≪≫
-    Functor.isoWhiskerRight compactumToCompHaus.asEquivalence.symm.unitIso (forget CompHaus)) ≪≫
-    compactumToCompHaus.inv.associator compactumToCompHaus (forget CompHaus)) ≪≫
-    Functor.isoWhiskerLeft _ compactumToCompHausCompForget
-  exact createsLimitsOfNatIso e.symm
-
-中文:
-实例 CompHaus.forgetCreatesLimits
-  签名: : CreatesLimits (forget CompHaus)
-  定义体: by
-  let e : forget CompHaus ≅ compactumToCompHaus.inv ⋙ Compactum.forget :=
-    (((forget CompHaus).leftUnitor.symm ≪≫
-    Functor.isoWhiskerRight compactumToCompHaus.asEquivalence.symm.unitIso (forget CompHaus)) ≪≫
-    compactumToCompHaus.inv.associator compactumToCompHaus (forget CompHaus)) ≪≫
-    Functor.isoWhiskerLeft _ compactumToCompHausCompForget
-  exact createsLimitsOfNatIso e.symm
-
-Depends on / 依赖: CompHaus, Compactum, Compactum.forget, Functor, Functor.isoWhiskerLeft, Functor.isoWhiskerRight, asEquivalence, associator, compactumToCompHaus, compactumToCompHaus.asEquivalence.symm.unitIso, compactumToCompHaus.inv, compactumToCompHaus.inv.associator, compactumToCompHausCompForget, createsLimitsOfNatIso, e.symm, forget, isoWhiskerLeft, isoWhiskerRight, leftUnitor, leftUnitor.symm
+--- 原说明 ---
+TODO: `forget CompHaus` is monadic, as it is isomorphic to the composition
+of an equivalence with the monadic functor `forget Compactum`.
+Once we have the API to transfer monadicity of functors along such isomorphisms,
+the instance `CreatesLimits (forget CompHaus)` can be deduced from this
+monadicity.
 -/
 noncomputable instance CompHaus.forgetCreatesLimits : CreatesLimits (forget CompHaus) := by
   let e : forget CompHaus ≅ compactumToCompHaus.inv ⋙ Compactum.forget :=
@@ -1475,25 +941,11 @@ noncomputable instance CompHaus.forgetCreatesLimits : CreatesLimits (forget Comp
     compactumToCompHaus.inv.associator compactumToCompHaus (forget CompHaus)) ≪≫
     Functor.isoWhiskerLeft _ compactumToCompHausCompForget
   exact createsLimitsOfNatIso e.symm
-
-/--
-Instance `Profinite.forgetCreatesLimits` / 实例 `Profinite.forgetCreatesLimits`
-
-English:
-instance Profinite.forgetCreatesLimits
-  signature: : CreatesLimits (forget Profinite)
-  body: by
-  change CreatesLimits (profiniteToCompHaus ⋙ forget _)
-  infer_instance
-
-中文:
-实例 Profinite.forgetCreatesLimits
-  签名: : CreatesLimits (forget Profinite)
-  定义体: by
-  change CreatesLimits (profiniteToCompHaus ⋙ forget _)
-  infer_instance
-
-Depends on / 依赖: CreatesLimits, forget, infer_instance, profiniteToCompHaus
+/-
+**Profinite.forgetCreatesLimits** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：Profinite.forgetCreatesLimits : CreatesLimits (forget Profinite)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance Profinite.forgetCreatesLimits : CreatesLimits (forget Profinite) := by
   change CreatesLimits (profiniteToCompHaus ⋙ forget _)

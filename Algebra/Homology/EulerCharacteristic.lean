@@ -51,175 +51,96 @@ namespace ComplexShape
 
 variable {ι : Type*} (c : ComplexShape ι)
 
-/--
-Definition of `EulerCharSigns` / `EulerCharSigns` 的定义
+/-- Signs for terms of Euler characteristic on complexes. -/
+/-
+**ComplexShape.EulerCharSigns** 是 Mathlib 中的一个归纳类型，位于命名空间 `ComplexShape`。
+形式化陈述：{ι : Type u_1} → ComplexShape ι → Type u_1
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class EulerCharSigns
-  parameters: where
-  axioms and operations (2):
-    - χ : ι -> Intˣ
-    - χ_next({i j : ι} (h : c.Rel i j)) : χ j = - χ i
-
-中文:
-类 EulerCharSigns
-  参数: where
-  公理与运算 (2 个):
-    - χ : ι -> 整数ˣ
-    - χ_next({i j : ι} (h : c.关系 i j)) : χ j = - χ i
+--- 原说明 ---
+Signs for terms of Euler characteristic on complexes.
 -/
 class EulerCharSigns where
   /-- The sign for each index -/
-  χ : ι -> Intˣ
+  χ : ι → ℤˣ
   /-- Signs alternate along relations in the complex shape -/
   χ_next {i j : ι} (h : c.Rel i j) : χ j = - χ i
 
 variable [c.EulerCharSigns]
 
-/--
-Definition of `χ` / `χ` 的定义
+/-- The sign at index `i` for Euler characteristic computations. -/
+/-
+**ComplexShape.** 是 Mathlib 中的一个缩写定义，位于命名空间 `ComplexShape`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation χ
-  signature: : ι -> Intˣ
-  body: EulerCharSigns.χ c
-
-中文:
-缩写 χ
-  签名: : ι -> 整数ˣ
-  定义体: EulerCharSigns.χ c
-
-Depends on / 依赖: EulerCharSigns
+--- 原说明 ---
+The sign at index `i` for Euler characteristic computations.
 -/
-abbrev χ : ι -> Intˣ := EulerCharSigns.χ c
+abbrev χ : ι → ℤˣ := EulerCharSigns.χ c
 
-/--
-lemma `χ_next` / 引理 `χ_next`
+/-- Signs alternate in the forward direction of the complex shape. -/
+/-
+**ComplexShape.** 是 Mathlib 中的一个引理，位于命名空间 `ComplexShape`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma χ_next
-  given: {i j : ι} (h : c.Rel i j)
-  statement: c.χ j = - c.χ i
-  proof: EulerCharSigns.χ_next h
-
-中文:
-引理 χ_next
-  条件: {i j : ι} (h : c.关系 i j)
-  结论: c.χ j = - c.χ i
-  证明: EulerCharSigns.χ_next h
-
-Depends on / 依赖: EulerCharSigns
+--- 原说明 ---
+Signs alternate in the forward direction of the complex shape.
 -/
 lemma χ_next {i j : ι} (h : c.Rel i j) : c.χ j = - c.χ i := EulerCharSigns.χ_next h
 
-/--
-lemma `χ_prev` / 引理 `χ_prev`
+/-- Signs alternate in the backward direction of the complex shape. -/
+/-
+**ComplexShape.** 是 Mathlib 中的一个引理，位于命名空间 `ComplexShape`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma χ_prev
-  given: {i j : ι} (h : c.Rel i j)
-  statement: c.χ i = - c.χ j
-  proof: by simp [c.χ_next h]
-
-@[simps]
-
-中文:
-引理 χ_prev
-  条件: {i j : ι} (h : c.关系 i j)
-  结论: c.χ i = - c.χ j
-  证明: by simp [c.χ_next h]
-
-@[simps]
+--- 原说明 ---
+Signs alternate in the backward direction of the complex shape.
 -/
 lemma χ_prev {i j : ι} (h : c.Rel i j) : c.χ i = - c.χ j := by simp [c.χ_next h]
 
 @[simps]
-/--
-Instance `eulerCharSignsUpInt` / 实例 `eulerCharSignsUpInt`
-
-English:
-instance eulerCharSignsUpInt
-  signature: : (up Int).EulerCharSigns where
-  body: Int.negOnePow
-  χ_next := by rintro _ _ rfl; rw [Int.negOnePow_succ]
-
-@[simps]
-
-中文:
-实例 eulerCharSignsUp整数
-  签名: : (up 整数).EulerCharSigns where
-  定义体: Int.negOnePow
-  χ_next := by rintro _ _ rfl; rw [Int.negOnePow_succ]
-
-@[simps]
-
-Depends on / 依赖: Int.negOnePow, negOnePow
+/-
+**ComplexShape.eulerCharSignsUpInt** 是 Mathlib 中的一个实例，位于命名空间 `ComplexShape`。
+形式化陈述：eulerCharSignsUpInt : (up Int).EulerCharSigns where χ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance eulerCharSignsUpInt : (up Int).EulerCharSigns where
+instance eulerCharSignsUpInt : (up ℤ).EulerCharSigns where
   χ := Int.negOnePow
   χ_next := by rintro _ _ rfl; rw [Int.negOnePow_succ]
 
 @[simps]
-/--
-Instance `eulerCharSignsDownInt` / 实例 `eulerCharSignsDownInt`
-
-English:
-instance eulerCharSignsDownInt
-  signature: : (down Int).EulerCharSigns where
-  body: Int.negOnePow
-  χ_next := by rintro _ _ rfl; simp [Int.negOnePow_succ]
-
-中文:
-实例 eulerCharSignsDown整数
-  签名: : (down 整数).EulerCharSigns where
-  定义体: Int.negOnePow
-  χ_next := by rintro _ _ rfl; simp [Int.negOnePow_succ]
-
-Depends on / 依赖: Int.negOnePow, negOnePow
+/-
+**ComplexShape.eulerCharSignsDownInt** 是 Mathlib 中的一个实例，位于命名空间 `ComplexShape`。
+形式化陈述：eulerCharSignsDownInt : (down Int).EulerCharSigns where χ
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance eulerCharSignsDownInt : (down Int).EulerCharSigns where
+instance eulerCharSignsDownInt : (down ℤ).EulerCharSigns where
   χ := Int.negOnePow
   χ_next := by rintro _ _ rfl; simp [Int.negOnePow_succ]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simps]
-/--
-Instance `eulerCharSignsUpNat` / 实例 `eulerCharSignsUpNat`
-
-English:
-instance eulerCharSignsUpNat
-  signature: : (up Nat).EulerCharSigns where
-  body: (-1) ^ n
-  χ_next := by rintro _ _ rfl; simp [pow_add]
-
-中文:
-实例 eulerCharSignsUp自然数
-  签名: : (up 自然数).EulerCharSigns where
-  定义体: (-1) ^ n
-  χ_next := by rintro _ _ rfl; simp [pow_add]
+/-
+**ComplexShape.eulerCharSignsUpNat** 是 Mathlib 中的一个实例，位于命名空间 `ComplexShape`。
+形式化陈述：eulerCharSignsUpNat : (up Nat).EulerCharSigns where χ n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance eulerCharSignsUpNat : (up Nat).EulerCharSigns where
+instance eulerCharSignsUpNat : (up ℕ).EulerCharSigns where
   χ n := (-1) ^ n
   χ_next := by rintro _ _ rfl; simp [pow_add]
 
 set_option backward.isDefEq.respectTransparency false in
 @[simps]
-/--
-Instance `eulerCharSignsDownNat` / 实例 `eulerCharSignsDownNat`
-
-English:
-instance eulerCharSignsDownNat
-  signature: : (down Nat).EulerCharSigns where
-  body: (-1) ^ n
-  χ_next := by rintro _ _ rfl; simp [pow_add]
-
-中文:
-实例 eulerCharSignsDown自然数
-  签名: : (down 自然数).EulerCharSigns where
-  定义体: (-1) ^ n
-  χ_next := by rintro _ _ rfl; simp [pow_add]
+/-
+**ComplexShape.eulerCharSignsDownNat** 是 Mathlib 中的一个实例，位于命名空间 `ComplexShape`。
+形式化陈述：eulerCharSignsDownNat : (down Nat).EulerCharSigns where χ n
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance eulerCharSignsDownNat : (down Nat).EulerCharSigns where
+instance eulerCharSignsDownNat : (down ℕ).EulerCharSigns where
   χ n := (-1) ^ n
   χ_next := by rintro _ _ rfl; simp [pow_add]
 
@@ -233,108 +154,109 @@ namespace GradedObject
 
 variable (c : ComplexShape ι) [c.EulerCharSigns]
 
+/-- The support of a graded object with respect to finite rank:
+the set of indices where the rank is nonzero. -/
 -- Note: `Set` has no computational content, but Lean still attempts to compile it.
 -- See https://github.com/leanprover/lean4/issues/14084.
-/--
-Definition of `finrankSupport` / `finrankSupport` 的定义
-
-English:
-definition finrankSupport
-  signature: (X : CategoryTheory.GradedObject ι (ModuleCat R))
-  body: Function.support (fun i => Module.finrank R (X i))
-
-中文:
-定义 finrankSupport
-  签名: (X : 范畴论.GradedObject ι (模范畴 R))
-  定义体: Function.support (fun i => Module.finrank R (X i))
-
-Depends on / 依赖: Function, Function.support, Module, Module.finrank, finrank, support
+/-
+**GradedObject.finrankSupport** 是 Mathlib 中的一个定义，位于命名空间 `GradedObject`。
+形式化陈述：finrankSupport (X : CategoryTheory.GradedObject ι (ModuleCat R)) : Set ι
+参数：X : CategoryTheory.GradedObject ι (ModuleCat R)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable def finrankSupport (X : CategoryTheory.GradedObject ι (ModuleCat R)) : Set ι :=
   Function.support (fun i => Module.finrank R (X i))
 
-/--
-lemma `finrankSupport_subset_iff` / 引理 `finrankSupport_subset_iff`
+/-- The finite rank support is contained in a set if and only if
+the rank vanishes outside that set. -/
+/-
+**GradedObject.finrankSupport_subset_iff** 是 Mathlib 中的一个引理，位于命名空间 `GradedObject
+`。
+形式化陈述：finrankSupport_subset_iff (X : CategoryTheory.GradedObject ι (ModuleCat R)
+) (s : Set ι) : finrankSupport X subseteq s ↔ forall i ∉ s, Module.finrank R (X 
+i) = 0
+参数：X : CategoryTheory.GradedObject ι (ModuleCat R)；s : Set ι。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.support_subset_iff'`：∀ {ι : Type u_1} {M : Type u_3} [inst : Ze
+ro M] {f : ι → M} {s : Set ι}, Function.support f ⊆ s ↔ ∀ x ∉ s, f x = 0
 
-English:
-lemma finrankSupport_subset_iff
-  given: (X : CategoryTheory.GradedObject ι (ModuleCat R)) (s : Set ι)
-  proof: Function.support_subset_iff'
-
-中文:
-引理 finrankSupport_subset_iff
-  条件: (X : 范畴论.GradedObject ι (模范畴 R)) (s : 集合 ι)
-  证明: Function.support_subset_iff'
-
-Depends on / 依赖: Function, Function.support_subset_iff, support_subset_iff
+--- 原说明 ---
+The finite rank support is contained in a set if and only if
+the rank vanishes outside that set.
 -/
 lemma finrankSupport_subset_iff (X : CategoryTheory.GradedObject ι (ModuleCat R)) (s : Set ι) :
-    finrankSupport X subseteq s ↔ forall i ∉ s, Module.finrank R (X i) = 0 :=
+    finrankSupport X ⊆ s ↔ ∀ i ∉ s, Module.finrank R (X i) = 0 :=
   Function.support_subset_iff'
 
-/--
-Definition of `eulerChar` / `eulerChar` 的定义
+/-- The Euler characteristic of a graded object as a sum over all indices.
+The sign at each index is determined by the `ComplexShape.EulerCharSigns` instance.
+Defaults to 0 if the support of the ranks of the objects of `X` is infinite. -/
+/-
+**GradedObject.eulerChar** 是 Mathlib 中的一个定义，位于命名空间 `GradedObject`。
+形式化陈述：eulerChar (X : CategoryTheory.GradedObject ι (ModuleCat R)) : Int
+参数：X : CategoryTheory.GradedObject ι (ModuleCat R)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition eulerChar
-  signature: (X : CategoryTheory.GradedObject ι (ModuleCat R))
-  body: ∑ᶠ i : ι, (c.χ i : Int) * Module.finrank R (X i)
-
-中文:
-定义 eulerChar
-  签名: (X : 范畴论.GradedObject ι (模范畴 R))
-  定义体: ∑ᶠ i : ι, (c.χ i : Int) * Module.finrank R (X i)
-
-Depends on / 依赖: Module, Module.finrank, finrank
+--- 原说明 ---
+The Euler characteristic of a graded object as a sum over all indices.
+The sign at each index is determined by the `ComplexShape.EulerCharSigns` instan
+ce.
+Defaults to 0 if the support of the ranks of the objects of `X` is infinite.
 -/
-noncomputable def eulerChar (X : CategoryTheory.GradedObject ι (ModuleCat R)) : Int :=
-  ∑ᶠ i : ι, (c.χ i : Int) * Module.finrank R (X i)
+noncomputable def eulerChar (X : CategoryTheory.GradedObject ι (ModuleCat R)) : ℤ :=
+  ∑ᶠ i : ι, (c.χ i : ℤ) * Module.finrank R (X i)
 
-/--
-lemma `support_eulerChar_summand` / 引理 `support_eulerChar_summand`
+/-- The support of the Euler characteristic summand equals the finite rank support,
+because the sign `c.χ i` is always nonzero (it's a unit). -/
+/-
+**GradedObject.support_eulerChar_summand** 是 Mathlib 中的一个引理，位于命名空间 `GradedObject
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma support_eulerChar_summand
-  given: (X : CategoryTheory.GradedObject ι (ModuleCat R))
-  proof: by
-  simp only [finrankSupport, Function.support_mul_of_ne_zero_left (fun i => Units.ne_zero (c.χ i))]
-  ext i; simp [Function.mem_support]
-
-中文:
-引理 support_eulerChar_summand
-  条件: (X : 范畴论.GradedObject ι (模范畴 R))
-  证明: by
-  simp only [finrankSupport, Function.support_mul_of_ne_zero_left (fun i => Units.ne_zero (c.χ i))]
-  ext i; simp [Function.mem_support]
+--- 原说明 ---
+The support of the Euler characteristic summand equals the finite rank support,
+because the sign `c.χ i` is always nonzero (it's a unit).
 -/
 private lemma support_eulerChar_summand (X : CategoryTheory.GradedObject ι (ModuleCat R)) :
-    Function.support (fun i => (c.χ i : Int) * Module.finrank R (X i)) = finrankSupport X := by
+    Function.support (fun i => (c.χ i : ℤ) * Module.finrank R (X i)) = finrankSupport X := by
   simp only [finrankSupport, Function.support_mul_of_ne_zero_left (fun i => Units.ne_zero (c.χ i))]
   ext i; simp [Function.mem_support]
 
-/--
-theorem `eulerChar_eq_sum_finSet_of_finrankSupport_subset` / 定理 `eulerChar_eq_sum_finSet_of_finrankSupport_subset`
+/-- If a graded object has finite rank support contained in a finite set,
+the `finsum` Euler characteristic equals the finite sum over that set. -/
+/-
+**GradedObject.eulerChar_eq_sum_finSet_of_finrankSupport_subset** 是 Mathlib 中的一个
+定理，位于命名空间 `GradedObject`。
+形式化陈述：eulerChar_eq_sum_finSet_of_finrankSupport_subset (X : CategoryTheory.Grade
+dObject ι (ModuleCat R)) (indices : Finset ι) (h_support : finrankSupport X subs
+eteq indices) : eulerChar c X = ∑ i in indices, (c.χ i : Int) * Module.finrank R
+ (X i)
+参数：X : CategoryTheory.GradedObject ι (ModuleCat R)；indices : Finset ι；h_support 
+: finrankSupport X subseteq indices。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `finsum_eq_sum_of_support_subset`：∀ {α : Type u_1} {M : Type u_5} [inst :
+ AddCommMonoid M] (f : α → M) {s : Finset α},   Function.support f ⊆ ↑s → ∑ᶠ (i 
+: α), f i = ∑ i ∈ s, …
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `_private.Mathlib.Algebra.Homology.EulerCharacteristic.0.GradedObject.sup
+port_eulerChar_summand`：∀ {R : Type u_1} [inst : Ring R] {ι : Type u_2} (c : Com
+plexShape ι) [inst_1 : c.EulerCharSigns]   (X : CategoryTheory.GradedObject ι (M
+odul…
 
-English:
-theorem eulerChar_eq_sum_finSet_of_finrankSupport_subset
-  proof: by
-  simp only [eulerChar]
-  rw [finsum_eq_sum_of_support_subset]
-  exact (support_eulerChar_summand c X).symm ▸ h_support
-
-中文:
-定理 eulerChar_eq_sum_finSet_of_finrankSupport_subset
-  证明: by
-  simp only [eulerChar]
-  rw [finsum_eq_sum_of_support_subset]
-  exact (support_eulerChar_summand c X).symm ▸ h_support
-
-Depends on / 依赖: eulerChar, finsum_eq_sum_of_support_subset, h_support, support_eulerChar_summand
+--- 原说明 ---
+If a graded object has finite rank support contained in a finite set,
+the `finsum` Euler characteristic equals the finite sum over that set.
 -/
 theorem eulerChar_eq_sum_finSet_of_finrankSupport_subset
     (X : CategoryTheory.GradedObject ι (ModuleCat R)) (indices : Finset ι)
-    (h_support : finrankSupport X subseteq indices) :
-    eulerChar c X = ∑ i in indices, (c.χ i : Int) * Module.finrank R (X i) := by
+    (h_support : finrankSupport X ⊆ indices) :
+    eulerChar c X = ∑ i ∈ indices, (c.χ i : ℤ) * Module.finrank R (X i) := by
   simp only [eulerChar]
   rw [finsum_eq_sum_of_support_subset]
   exact (support_eulerChar_summand c X).symm ▸ h_support
@@ -345,84 +267,103 @@ namespace HomologicalComplex
 
 variable {c : ComplexShape ι} [c.EulerCharSigns]
 
-/--
-Definition of `eulerChar` / `eulerChar` 的定义
+/-- The Euler characteristic of a homological complex as a sum over all indices using `finsum`.
+The sign at each index is determined by the `ComplexShape.EulerCharSigns` instance.
+Defaults to 0 if the support of the ranks is infinite. -/
+/-
+**HomologicalComplex.eulerChar** 是 Mathlib 中的一个缩写定义，位于命名空间 `HomologicalComplex`。
+形式化陈述：eulerChar (C : HomologicalComplex (ModuleCat R) c) : Int
+参数：C : HomologicalComplex (ModuleCat R) c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation eulerChar
-  signature: (C : HomologicalComplex (ModuleCat R) c)
-  body: GradedObject.eulerChar c C.X
-
-中文:
-缩写 eulerChar
-  签名: (C : 同调复形 (模范畴 R) c)
-  定义体: GradedObject.eulerChar c C.X
-
-Depends on / 依赖: GradedObject, GradedObject.eulerChar, eulerChar
+--- 原说明 ---
+The Euler characteristic of a homological complex as a sum over all indices usin
+g `finsum`.
+The sign at each index is determined by the `ComplexShape.EulerCharSigns` instan
+ce.
+Defaults to 0 if the support of the ranks is infinite.
 -/
-noncomputable abbrev eulerChar (C : HomologicalComplex (ModuleCat R) c) : Int :=
+noncomputable abbrev eulerChar (C : HomologicalComplex (ModuleCat R) c) : ℤ :=
   GradedObject.eulerChar c C.X
 
-/--
-Definition of `homologyEulerChar` / `homologyEulerChar` 的定义
+/-- The homological Euler characteristic as a sum over all indices using `finsum`.
+This is the Euler characteristic computed from the homology groups rather than
+the original complex. Defaults to 0 if the support of the ranks is infinite. -/
+/-
+**HomologicalComplex.homologyEulerChar** 是 Mathlib 中的一个缩写定义，位于命名空间 `HomologicalC
+omplex`。
+形式化陈述：homologyEulerChar (C : HomologicalComplex (ModuleCat R) c) [forall i : ι, 
+C.HasHomology i] : Int
+参数：C : HomologicalComplex (ModuleCat R) c。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation homologyEulerChar
-  signature: (C : HomologicalComplex (ModuleCat R) c)
-  body: GradedObject.eulerChar c (fun i => C.homology i)
-
-中文:
-缩写 homologyEulerChar
-  签名: (C : 同调复形 (模范畴 R) c)
-  定义体: GradedObject.eulerChar c (fun i => C.homology i)
-
-Depends on / 依赖: C.homology, GradedObject, GradedObject.eulerChar, eulerChar, homology
+--- 原说明 ---
+The homological Euler characteristic as a sum over all indices using `finsum`.
+This is the Euler characteristic computed from the homology groups rather than
+the original complex. Defaults to 0 if the support of the ranks is infinite.
 -/
 noncomputable abbrev homologyEulerChar (C : HomologicalComplex (ModuleCat R) c)
-    [forall i : ι, C.HasHomology i] : Int :=
+    [∀ i : ι, C.HasHomology i] : ℤ :=
   GradedObject.eulerChar c (fun i => C.homology i)
 
-/--
-theorem `eulerChar_eq_sum_finSet_of_finrankSupport_subset` / 定理 `eulerChar_eq_sum_finSet_of_finrankSupport_subset`
+/-- If a complex has finite rank support contained in a finite set,
+the `finsum` Euler characteristic equals the finite sum over that set. -/
+/-
+**HomologicalComplex.eulerChar_eq_sum_finSet_of_finrankSupport_subset** 是 Mathli
+b 中的一个定理，位于命名空间 `HomologicalComplex`。
+形式化陈述：eulerChar_eq_sum_finSet_of_finrankSupport_subset (C : HomologicalComplex (
+ModuleCat R) c) (indices : Finset ι) (h_support : GradedObject.finrankSupport C.
+X subseteq indices) : eulerChar C = ∑ i in indices, (c.χ i : Int) * Module.finra
+nk R (C.X i)
+参数：C : HomologicalComplex (ModuleCat R) c；indices : Finset ι；h_support : GradedO
+bject.finrankSupport C.X subseteq indices。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GradedObject.eulerChar_eq_sum_finSet_of_finrankSupport_subset`：eulerChar
+_eq_sum_finSet_of_finrankSupport_subset (X : CategoryTheory.GradedObject ι (Modu
+leCat R)) (indices : Finset ι) (h_support : finrank…
 
-English:
-theorem eulerChar_eq_sum_finSet_of_finrankSupport_subset
-  statement: (C : HomologicalComplex (ModuleCat R) c)
-  proof: GradedObject.eulerChar_eq_sum_finSet_of_finrankSupport_subset c C.X indices h_support
-
-中文:
-定理 eulerChar_eq_sum_finSet_of_finrankSupport_subset
-  结论: (C : 同调复形 (模范畴 R) c)
-  证明: GradedObject.eulerChar_eq_sum_finSet_of_finrankSupport_subset c C.X indices h_support
-
-Depends on / 依赖: GradedObject, GradedObject.eulerChar_eq_sum_finSet_of_finrankSupport_subset, eulerChar_eq_sum_finSet_of_finrankSupport_subset, h_support, indices
+--- 原说明 ---
+If a complex has finite rank support contained in a finite set,
+the `finsum` Euler characteristic equals the finite sum over that set.
 -/
 theorem eulerChar_eq_sum_finSet_of_finrankSupport_subset (C : HomologicalComplex (ModuleCat R) c)
     (indices : Finset ι)
-    (h_support : GradedObject.finrankSupport C.X subseteq indices) :
-    eulerChar C = ∑ i in indices, (c.χ i : Int) * Module.finrank R (C.X i) :=
+    (h_support : GradedObject.finrankSupport C.X ⊆ indices) :
+    eulerChar C = ∑ i ∈ indices, (c.χ i : ℤ) * Module.finrank R (C.X i) :=
   GradedObject.eulerChar_eq_sum_finSet_of_finrankSupport_subset c C.X indices h_support
 
-/--
-theorem `homologyEulerChar_eq_sum_finSet_of_finrankSupport_subset` / 定理 `homologyEulerChar_eq_sum_finSet_of_finrankSupport_subset`
+/-- If homology has finite rank support contained in a finite set,
+the `finsum` homological Euler characteristic equals the finite sum over that set. -/
+/-
+**HomologicalComplex.homologyEulerChar_eq_sum_finSet_of_finrankSupport_subset** 
+是 Mathlib 中的一个定理，位于命名空间 `HomologicalComplex`。
+形式化陈述：homologyEulerChar_eq_sum_finSet_of_finrankSupport_subset (C : HomologicalC
+omplex (ModuleCat R) c) [forall i : ι, C.HasHomology i] (indices : Finset ι) (h_
+support : GradedObject.finrankSupport (fun i => C.homology i) subseteq indices) 
+: homologyEulerChar C = ∑ i in indices, (c.χ i : Int) * Module.finrank R (C.homo
+logy i)
+参数：C : HomologicalComplex (ModuleCat R) c；indices : Finset ι；h_support : GradedO
+bject.finrankSupport (fun i => C.homology i) subseteq indices。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `GradedObject.eulerChar_eq_sum_finSet_of_finrankSupport_subset`：eulerChar
+_eq_sum_finSet_of_finrankSupport_subset (X : CategoryTheory.GradedObject ι (Modu
+leCat R)) (indices : Finset ι) (h_support : finrank…
 
-English:
-theorem homologyEulerChar_eq_sum_finSet_of_finrankSupport_subset
-  proof: GradedObject.eulerChar_eq_sum_finSet_of_finrankSupport_subset c
-    (fun i => C.homology i) indices h_support
-
-中文:
-定理 homologyEulerChar_eq_sum_finSet_of_finrankSupport_subset
-  证明: GradedObject.eulerChar_eq_sum_finSet_of_finrankSupport_subset c
-    (fun i => C.homology i) indices h_support
-
-Depends on / 依赖: C.homology, GradedObject, GradedObject.eulerChar_eq_sum_finSet_of_finrankSupport_subset, eulerChar_eq_sum_finSet_of_finrankSupport_subset, h_support, homology, indices
+--- 原说明 ---
+If homology has finite rank support contained in a finite set,
+the `finsum` homological Euler characteristic equals the finite sum over that se
+t.
 -/
 theorem homologyEulerChar_eq_sum_finSet_of_finrankSupport_subset
-    (C : HomologicalComplex (ModuleCat R) c) [forall i : ι, C.HasHomology i] (indices : Finset ι)
-    (h_support : GradedObject.finrankSupport (fun i => C.homology i) subseteq indices) :
-    homologyEulerChar C = ∑ i in indices, (c.χ i : Int) * Module.finrank R (C.homology i) :=
+    (C : HomologicalComplex (ModuleCat R) c) [∀ i : ι, C.HasHomology i] (indices : Finset ι)
+    (h_support : GradedObject.finrankSupport (fun i => C.homology i) ⊆ indices) :
+    homologyEulerChar C = ∑ i ∈ indices, (c.χ i : ℤ) * Module.finrank R (C.homology i) :=
   GradedObject.eulerChar_eq_sum_finSet_of_finrankSupport_subset c
     (fun i => C.homology i) indices h_support
 
 end HomologicalComplex
+

@@ -32,75 +32,68 @@ This file provides an API for doing so, with the sorted `n`-tuple given by
 
 namespace Tuple
 
-variable {n : Nat}
+variable {n : ℕ}
 variable {α : Type*} [LinearOrder α]
 
-/--
-Definition of `graph` / `graph` 的定义
-
-English:
-definition graph
-  signature: (f : Fin n -> α)
-  body: Finset.univ.image fun i => (f i, i)
-
-中文:
-定义 graph
-  签名: (f : 有限集 n -> α)
-  定义体: Finset.univ.image fun i => (f i, i)
-
-Depends on / 依赖: Finset, Finset.univ.image
+/-- `graph f` produces the finset of pairs `(f i, i)`
+equipped with the lexicographic order.
 -/
-def graph (f : Fin n -> α) : Finset (α ×ₗ Fin n) :=
+/-
+**Tuple.graph** 是 Mathlib 中的一个定义，位于命名空间 `Tuple`。
+形式化陈述：graph (f : Fin n -> α) : Finset (α ×ₗ Fin n)
+参数：f : Fin n -> α。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`graph f` produces the finset of pairs `(f i, i)`
+equipped with the lexicographic order.
+-/
+def graph (f : Fin n → α) : Finset (α ×ₗ Fin n) :=
   Finset.univ.image fun i => (f i, i)
 
-/--
-Definition of `graph.proj` / `graph.proj` 的定义
-
-English:
-definition graph.proj
-  signature: {f : Fin n -> α}
-  body: fun p => p.1.1
-
-中文:
-定义 graph.proj
-  签名: {f : 有限集 n -> α}
-  定义体: fun p => p.1.1
+/-- Given `p : α ×ₗ (Fin n) := (f i, i)` with `p ∈ graph f`,
+`graph.proj p` is defined to be `f i`.
 -/
-def graph.proj {f : Fin n -> α} : graph f -> α := fun p => p.1.1
+/-
+**Tuple.graph.proj** 是 Mathlib 中的一个定义，位于命名空间 `Tuple.graph`。
+形式化陈述：{n : ℕ} → {α : Type u_1} → [inst : LinearOrder α] → {f : Fin n → α} → ↥(Tu
+ple.graph f) → α
+参数：Tuple.graph f。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+Given `p : α ×ₗ (Fin n) := (f i, i)` with `p ∈ graph f`,
+`graph.proj p` is defined to be `f i`.
+-/
+def graph.proj {f : Fin n → α} : graph f → α := fun p => p.1.1
 
 set_option backward.isDefEq.respectTransparency false in
 @[simp]
-/--
-theorem `graph.card` / 定理 `graph.card`
-
-English:
-theorem graph.card
-  given: (f : Fin n -> α)
-  statement: (graph f).card = n
-  proof: by
-  rw [graph]; rw [Finset.card_image_of_injective]
-  · exact Finset.card_fin _
-  · intro _ _
-    -- Porting note: proof was `simp`
-    rw [Prod.ext_iff]
-    simp
-
-中文:
-定理 graph.card
-  条件: (f : 有限集 n -> α)
-  结论: (graph f).card = n
-  证明: by
-  rw [graph]; rw [Finset.card_image_of_injective]
-  · exact Finset.card_fin _
-  · intro _ _
-    -- Porting note: proof was `simp`
-    rw [Prod.ext_iff]
-    simp
-
-Depends on / 依赖: Finset, Finset.card_fin, Finset.card_image_of_injective, card_fin, card_image_of_injective
+/-
+**Tuple.graph.card** 是 Mathlib 中的一个定理，位于命名空间 `Tuple.graph`。
+形式化陈述：∀ {n : ℕ} {α : Type u_1} [inst : LinearOrder α] (f : Fin n → α), (Tuple.gr
+aph f).card = n
+参数：f : Fin n → α；Tuple.graph f。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Tuple.graph.eq_1`：∀ {n : ℕ} {α : Type u_1} [inst : LinearOrder α] (f : F
+in n → α),   Tuple.graph f = Finset.image (fun i => (f i, i)) Finset.univ
+· 使用定理 `Finset.card_image_of_injective`：card_image_of_injective [DecidableEq β] 
+(s : Finset α) (H : Injective f) : #(s.image f) = #s
+· 使用定理 `Prod.ext_iff`：∀ {α : Type u} {β : Type v} {x y : α × β}, x = y ↔ x.1 = y
+.1 ∧ x.2 = y.2
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `Finset.card_fin`：Finset.card_fin (n : Nat) : #(univ : Finset (Fin n)) = 
+n
 -/
-theorem graph.card (f : Fin n -> α) : (graph f).card = n := by
-  rw [graph]; rw [Finset.card_image_of_injective]
+theorem graph.card (f : Fin n → α) : (graph f).card = n := by
+  rw [graph, Finset.card_image_of_injective]
   · exact Finset.card_fin _
   · intro _ _
     -- Porting note: proof was `simp`
@@ -108,32 +101,17 @@ theorem graph.card (f : Fin n -> α) : (graph f).card = n := by
     simp
 
 set_option backward.isDefEq.respectTransparency false in
-/--
-Definition of `graphEquiv₁` / `graphEquiv₁` 的定义
+/-- `graphEquiv₁ f` is the natural equivalence between `Fin n` and `graph f`,
+mapping `i` to `(f i, i)`. -/
+/-
+**Tuple.graphEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Tuple`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition graphEquiv₁
-  signature: (f : Fin n -> α)
-  body: ⟨(f i, i), by simp [graph]⟩
-  invFun p := p.1.2
-  left_inv i := by simp
-  right_inv := fun ⟨⟨x, i⟩, h⟩ => by
-    simpa [graph, eq_comm, eqComm] using h
-
-@[simp]
-
-中文:
-定义 graphEquiv₁
-  签名: (f : 有限集 n -> α)
-  定义体: ⟨(f i, i), by simp [graph]⟩
-  invFun p := p.1.2
-  left_inv i := by simp
-  right_inv := fun ⟨⟨x, i⟩, h⟩ => by
-    simpa [graph, eq_comm, eqComm] using h
-
-@[simp]
+--- 原说明 ---
+`graphEquiv₁ f` is the natural equivalence between `Fin n` and `graph f`,
+mapping `i` to `(f i, i)`.
 -/
-def graphEquiv₁ (f : Fin n -> α) : Fin n ≃ graph f where
+def graphEquiv₁ (f : Fin n → α) : Fin n ≃ graph f where
   toFun i := ⟨(f i, i), by simp [graph]⟩
   invFun p := p.1.2
   left_inv i := by simp
@@ -141,149 +119,103 @@ def graphEquiv₁ (f : Fin n -> α) : Fin n ≃ graph f where
     simpa [graph, eq_comm, eqComm] using h
 
 @[simp]
-/--
-theorem `proj_equiv₁'` / 定理 `proj_equiv₁'`
-
-English:
-theorem proj_equiv₁'
-  given: (f : Fin n -> α)
-  statement: graph.proj ∘ graphEquiv₁ f = f
-  proof: rfl
-
-中文:
-定理 proj_equiv₁'
-  条件: (f : 有限集 n -> α)
-  结论: graph.proj ∘ graphEquiv₁ f = f
-  证明: rfl
+/-
+**Tuple.proj_equiv** 是 Mathlib 中的一个定理，位于命名空间 `Tuple`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem proj_equiv₁' (f : Fin n -> α) : graph.proj ∘ graphEquiv₁ f = f :=
+theorem proj_equiv₁' (f : Fin n → α) : graph.proj ∘ graphEquiv₁ f = f :=
   rfl
 
-/--
-Definition of `graphEquiv₂` / `graphEquiv₂` 的定义
-
-English:
-definition graphEquiv₂
-  signature: (f : Fin n -> α)
-  body: Finset.orderIsoOfFin _ (by simp)
-
-中文:
-定义 graphEquiv₂
-  签名: (f : 有限集 n -> α)
-  定义体: Finset.orderIsoOfFin _ (by simp)
-
-Depends on / 依赖: Finset, Finset.orderIsoOfFin, orderIsoOfFin
+/-- `graphEquiv₂ f` is an equivalence between `Fin n` and `graph f` that respects the order.
 -/
-def graphEquiv₂ (f : Fin n -> α) : Fin n ≃o graph f :=
+/-
+**Tuple.graphEquiv** 是 Mathlib 中的一个定义，位于命名空间 `Tuple`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+`graphEquiv₂ f` is an equivalence between `Fin n` and `graph f` that respects th
+e order.
+-/
+def graphEquiv₂ (f : Fin n → α) : Fin n ≃o graph f :=
   Finset.orderIsoOfFin _ (by simp)
 
-/--
-Definition of `sort` / `sort` 的定义
+/-- `sort f` is the permutation that orders `Fin n` according to the order of the outputs of `f`. -/
+/-
+**Tuple.sort** 是 Mathlib 中的一个定义，位于命名空间 `Tuple`。
+形式化陈述：sort (f : Fin n -> α) : Equiv.Perm (Fin n)
+参数：f : Fin n -> α。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
 
-English:
-definition sort
-  signature: (f : Fin n -> α)
-  body: (graphEquiv₂ f).toEquiv.trans (graphEquiv₁ f).symm
-
-中文:
-定义 sort
-  签名: (f : 有限集 n -> α)
-  定义体: (graphEquiv₂ f).toEquiv.trans (graphEquiv₁ f).symm
-
-Depends on / 依赖: toEquiv, toEquiv.trans
+--- 原说明 ---
+`sort f` is the permutation that orders `Fin n` according to the order of the ou
+tputs of `f`.
 -/
-def sort (f : Fin n -> α) : Equiv.Perm (Fin n) :=
+def sort (f : Fin n → α) : Equiv.Perm (Fin n) :=
   (graphEquiv₂ f).toEquiv.trans (graphEquiv₁ f).symm
-
-/--
-theorem `graphEquiv₂_apply` / 定理 `graphEquiv₂_apply`
-
-English:
-theorem graphEquiv₂_apply
-  given: (f : Fin n -> α) (i : Fin n)
-  proof: ((graphEquiv₁ f).apply_symm_apply _).symm
-
-中文:
-定理 graphEquiv₂_apply
-  条件: (f : 有限集 n -> α) (i : 有限集 n)
-  证明: ((graphEquiv₁ f).apply_symm_apply _).symm
-
-Depends on / 依赖: apply_symm_apply
+/-
+**Tuple.graphEquiv** 是 Mathlib 中的一个定理，位于命名空间 `Tuple`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem graphEquiv₂_apply (f : Fin n -> α) (i : Fin n) :
+theorem graphEquiv₂_apply (f : Fin n → α) (i : Fin n) :
     graphEquiv₂ f i = graphEquiv₁ f (sort f i) :=
   ((graphEquiv₁ f).apply_symm_apply _).symm
-
-/--
-theorem `self_comp_sort` / 定理 `self_comp_sort`
-
-English:
-theorem self_comp_sort
-  given: (f : Fin n -> α)
-  statement: f ∘ sort f = graph.proj ∘ graphEquiv₂ f
-  proof: show graph.proj ∘ (graphEquiv₁ f ∘ (graphEquiv₁ f).symm) ∘ (graphEquiv₂ f).toEquiv = _ by simp
-
-中文:
-定理 self_comp_sort
-  条件: (f : 有限集 n -> α)
-  结论: f ∘ sort f = graph.proj ∘ graphEquiv₂ f
-  证明: show graph.proj ∘ (graphEquiv₁ f ∘ (graphEquiv₁ f).symm) ∘ (graphEquiv₂ f).toEquiv = _ by simp
-
-Depends on / 依赖: graph.proj, toEquiv
+/-
+**Tuple.self_comp_sort** 是 Mathlib 中的一个定理，位于命名空间 `Tuple`。
+形式化陈述：self_comp_sort (f : Fin n -> α) : f ∘ sort f = graph.proj ∘ graphEquiv₂ f
+参数：f : Fin n -> α。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.self_comp_symm`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), ⇑e ∘ ⇑e.s
+ymm = id
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
 -/
-theorem self_comp_sort (f : Fin n -> α) : f ∘ sort f = graph.proj ∘ graphEquiv₂ f :=
+theorem self_comp_sort (f : Fin n → α) : f ∘ sort f = graph.proj ∘ graphEquiv₂ f :=
   show graph.proj ∘ (graphEquiv₁ f ∘ (graphEquiv₁ f).symm) ∘ (graphEquiv₂ f).toEquiv = _ by simp
-
-/--
-theorem `monotone_proj` / 定理 `monotone_proj`
-
-English:
-theorem monotone_proj
-  given: (f : Fin n -> α)
-  statement: Monotone (graph.proj : graph f -> α)
-  proof: by
-  rintro ⟨⟨x, i⟩, hx⟩ ⟨⟨y, j⟩, hy⟩ (_ | h)
-  · exact le_of_lt ‹_›
-  · simp [graph.proj]
-
-中文:
-定理 monotone_proj
-  条件: (f : 有限集 n -> α)
-  结论: 递增 (graph.proj : graph f -> α)
-  证明: by
-  rintro ⟨⟨x, i⟩, hx⟩ ⟨⟨y, j⟩, hy⟩ (_ | h)
-  · exact le_of_lt ‹_›
-  · simp [graph.proj]
-
-Depends on / 依赖: graph.proj, le_of_lt
+/-
+**Tuple.monotone_proj** 是 Mathlib 中的一个定理，位于命名空间 `Tuple`。
+形式化陈述：monotone_proj (f : Fin n -> α) : Monotone (graph.proj : graph f -> α)
+参数：f : Fin n -> α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `le_of_lt`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `eq_of_heq`：∀ {α : Sort u} {a a' : α}, a ≍ a' → a = a'
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem monotone_proj (f : Fin n -> α) : Monotone (graph.proj : graph f -> α) := by
+theorem monotone_proj (f : Fin n → α) : Monotone (graph.proj : graph f → α) := by
   rintro ⟨⟨x, i⟩, hx⟩ ⟨⟨y, j⟩, hy⟩ (_ | h)
   · exact le_of_lt ‹_›
   · simp [graph.proj]
-
-/--
-theorem `monotone_sort` / 定理 `monotone_sort`
-
-English:
-theorem monotone_sort
-  given: (f : Fin n -> α)
-  statement: Monotone (f ∘ sort f)
-  proof: by
-  rw [self_comp_sort]
-  exact (monotone_proj f).comp (graphEquiv₂ f).monotone
-
-中文:
-定理 monotone_sort
-  条件: (f : 有限集 n -> α)
-  结论: 递增 (f ∘ sort f)
-  证明: by
-  rw [self_comp_sort]
-  exact (monotone_proj f).comp (graphEquiv₂ f).monotone
-
-Depends on / 依赖: monotone, monotone_proj, self_comp_sort
+/-
+**Tuple.monotone_sort** 是 Mathlib 中的一个定理，位于命名空间 `Tuple`。
+形式化陈述：monotone_sort (f : Fin n -> α) : Monotone (f ∘ sort f)
+参数：f : Fin n -> α。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Tuple.self_comp_sort`：self_comp_sort (f : Fin n -> α) : f ∘ sort f = gra
+ph.proj ∘ graphEquiv₂ f
+· 使用定理 `Monotone.comp`：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preorder
+ α] [inst_1 : Preorder β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β}, Monot
+one…
+· 使用定理 `Tuple.monotone_proj`：monotone_proj (f : Fin n -> α) : Monotone (graph.pr
+oj : graph f -> α)
+· 使用定理 `OrderIso.monotone`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α] [
+inst_1 : Preorder β] (e : α ≃o β), Monotone ⇑e
 -/
-theorem monotone_sort (f : Fin n -> α) : Monotone (f ∘ sort f) := by
+theorem monotone_sort (f : Fin n → α) : Monotone (f ∘ sort f) := by
   rw [self_comp_sort]
   exact (monotone_proj f).comp (graphEquiv₂ f).monotone
 
@@ -293,85 +225,73 @@ namespace Tuple
 
 open List
 
-variable {n : Nat} {α : Type*}
+variable {n : ℕ} {α : Type*}
 
 section
 
 open Finset
 
-variable {j : Fin n} {f : Fin n -> α} [Preorder α] {a : α}
+variable {j : Fin n} {f : Fin n → α} [Preorder α] {a : α}
 
-/--
-theorem `lt_card_le_iff_apply_le_of_monotone` / 定理 `lt_card_le_iff_apply_le_of_monotone`
+/-- If `f₀ ≤ f₁ ≤ f₂ ≤ ⋯` is a sorted `n`-tuple of elements of `α`, then for any `j : Fin n` and
+`a : α` we have `j < #{i | fᵢ ≤ a}` iff `fⱼ ≤ a`. -/
+/-
+**Tuple.lt_card_le_iff_apply_le_of_monotone** 是 Mathlib 中的一个定理，位于命名空间 `Tuple`。
+形式化陈述：lt_card_le_iff_apply_le_of_monotone [DecidableLE α] (h_sorted : Monotone f
+) : j < #{i | f i <= a} ↔ f j <= a
+参数：h_sorted : Monotone f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fin.lt_card_filter_univ_iff_apply_of_imp`：lt_card_filter_univ_iff_apply_
+of_imp {j : Fin n} (p : Fin n -> Prop) [DecidablePred p] (hp : forall i j, j <= 
+i -> p i -> p j) : j < #{i | p…
 
-English:
-theorem lt_card_le_iff_apply_le_of_monotone
-  given: [DecidableLE α] (h_sorted : Monotone f)
-  proof: Fin.lt_card_filter_univ_iff_apply_of_imp (f · <= a) (by grind [Monotone])
-
-中文:
-定理 lt_card_le_iff_apply_le_of_monotone
-  条件: [DecidableLE α] (h_sorted : 递增 f)
-  证明: Fin.lt_card_filter_univ_iff_apply_of_imp (f · <= a) (by grind [Monotone])
-
-Depends on / 依赖: Fin.lt_card_filter_univ_iff_apply_of_imp, Monotone, lt_card_filter_univ_iff_apply_of_imp
+--- 原说明 ---
+If `f₀ ≤ f₁ ≤ f₂ ≤ ⋯` is a sorted `n`-tuple of elements of `α`, then for any `j 
+: Fin n` and
+`a : α` we have `j < #{i | fᵢ ≤ a}` iff `fⱼ ≤ a`.
 -/
 theorem lt_card_le_iff_apply_le_of_monotone [DecidableLE α] (h_sorted : Monotone f) :
-    j < #{i | f i <= a} ↔ f j <= a :=
-  Fin.lt_card_filter_univ_iff_apply_of_imp (f · <= a) (by grind [Monotone])
-
-/--
-theorem `lt_card_ge_iff_apply_ge_of_antitone` / 定理 `lt_card_ge_iff_apply_ge_of_antitone`
-
-English:
-theorem lt_card_ge_iff_apply_ge_of_antitone
-  given: [DecidableLE α] (h_sorted : Antitone f)
-  proof: Fin.lt_card_filter_univ_iff_apply_of_imp (a <= f ·) (by grind [Antitone])
-
-中文:
-定理 lt_card_ge_iff_apply_ge_of_antitone
-  条件: [DecidableLE α] (h_sorted : 递减 f)
-  证明: Fin.lt_card_filter_univ_iff_apply_of_imp (a <= f ·) (by grind [Antitone])
-
-Depends on / 依赖: Antitone, Fin.lt_card_filter_univ_iff_apply_of_imp, lt_card_filter_univ_iff_apply_of_imp
+    j < #{i | f i ≤ a} ↔ f j ≤ a :=
+  Fin.lt_card_filter_univ_iff_apply_of_imp (f · ≤ a) (by grind [Monotone])
+/-
+**Tuple.lt_card_ge_iff_apply_ge_of_antitone** 是 Mathlib 中的一个定理，位于命名空间 `Tuple`。
+形式化陈述：lt_card_ge_iff_apply_ge_of_antitone [DecidableLE α] (h_sorted : Antitone f
+) : j < #{i | a <= f i} ↔ a <= f j
+参数：h_sorted : Antitone f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fin.lt_card_filter_univ_iff_apply_of_imp`：lt_card_filter_univ_iff_apply_
+of_imp {j : Fin n} (p : Fin n -> Prop) [DecidablePred p] (hp : forall i j, j <= 
+i -> p i -> p j) : j < #{i | p…
 -/
 theorem lt_card_ge_iff_apply_ge_of_antitone [DecidableLE α] (h_sorted : Antitone f) :
-    j < #{i | a <= f i} ↔ a <= f j :=
-  Fin.lt_card_filter_univ_iff_apply_of_imp (a <= f ·) (by grind [Antitone])
-
-/--
-theorem `lt_card_lt_iff_apply_lt_of_monotone` / 定理 `lt_card_lt_iff_apply_lt_of_monotone`
-
-English:
-theorem lt_card_lt_iff_apply_lt_of_monotone
-  given: [DecidableLT α] (h_sorted : Monotone f)
-  proof: Fin.lt_card_filter_univ_iff_apply_of_imp (f · < a) (by grind [Monotone])
-
-中文:
-定理 lt_card_lt_iff_apply_lt_of_monotone
-  条件: [DecidableLT α] (h_sorted : 递增 f)
-  证明: Fin.lt_card_filter_univ_iff_apply_of_imp (f · < a) (by grind [Monotone])
-
-Depends on / 依赖: Fin.lt_card_filter_univ_iff_apply_of_imp, Monotone, lt_card_filter_univ_iff_apply_of_imp
+    j < #{i | a ≤ f i} ↔ a ≤ f j :=
+  Fin.lt_card_filter_univ_iff_apply_of_imp (a ≤ f ·) (by grind [Antitone])
+/-
+**Tuple.lt_card_lt_iff_apply_lt_of_monotone** 是 Mathlib 中的一个定理，位于命名空间 `Tuple`。
+形式化陈述：lt_card_lt_iff_apply_lt_of_monotone [DecidableLT α] (h_sorted : Monotone f
+) : j < #{i | f i < a} ↔ f j < a
+参数：h_sorted : Monotone f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fin.lt_card_filter_univ_iff_apply_of_imp`：lt_card_filter_univ_iff_apply_
+of_imp {j : Fin n} (p : Fin n -> Prop) [DecidablePred p] (hp : forall i j, j <= 
+i -> p i -> p j) : j < #{i | p…
 -/
 theorem lt_card_lt_iff_apply_lt_of_monotone [DecidableLT α] (h_sorted : Monotone f) :
     j < #{i | f i < a} ↔ f j < a :=
   Fin.lt_card_filter_univ_iff_apply_of_imp (f · < a) (by grind [Monotone])
-
-/--
-theorem `lt_card_gt_iff_apply_gt_of_antitone` / 定理 `lt_card_gt_iff_apply_gt_of_antitone`
-
-English:
-theorem lt_card_gt_iff_apply_gt_of_antitone
-  given: [DecidableLT α] (h_sorted : Antitone f)
-  proof: Fin.lt_card_filter_univ_iff_apply_of_imp (a < f ·) (by grind [Antitone])
-
-中文:
-定理 lt_card_gt_iff_apply_gt_of_antitone
-  条件: [DecidableLT α] (h_sorted : 递减 f)
-  证明: Fin.lt_card_filter_univ_iff_apply_of_imp (a < f ·) (by grind [Antitone])
-
-Depends on / 依赖: Antitone, Fin.lt_card_filter_univ_iff_apply_of_imp, lt_card_filter_univ_iff_apply_of_imp
+/-
+**Tuple.lt_card_gt_iff_apply_gt_of_antitone** 是 Mathlib 中的一个定理，位于命名空间 `Tuple`。
+形式化陈述：lt_card_gt_iff_apply_gt_of_antitone [DecidableLT α] (h_sorted : Antitone f
+) : j < #{i | a < f i} ↔ a < f j
+参数：h_sorted : Antitone f。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Fin.lt_card_filter_univ_iff_apply_of_imp`：lt_card_filter_univ_iff_apply_
+of_imp {j : Fin n} (p : Fin n -> Prop) [DecidablePred p] (hp : forall i j, j <= 
+i -> p i -> p j) : j < #{i | p…
 -/
 theorem lt_card_gt_iff_apply_gt_of_antitone [DecidableLT α] (h_sorted : Antitone f) :
     j < #{i | a < f i} ↔ a < f j :=
@@ -379,84 +299,116 @@ theorem lt_card_gt_iff_apply_gt_of_antitone [DecidableLT α] (h_sorted : Antiton
 
 end
 
-/--
-theorem `unique_monotone` / 定理 `unique_monotone`
+/-- If two permutations of a tuple `f` are both monotone, then they are equal. -/
+/-
+**Tuple.unique_monotone** 是 Mathlib 中的一个定理，位于命名空间 `Tuple`。
+形式化陈述：unique_monotone [PartialOrder α] {f : Fin n -> α} {σ τ : Equiv.Perm (Fin n
+)} (hfσ : Monotone (f ∘ σ)) (hfτ : Monotone (f ∘ τ)) : f ∘ σ = f ∘ τ
+参数：Fin n；hfσ : Monotone (f ∘ σ)；hfτ : Monotone (f ∘ τ)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.ofFn_injective`：ofFn_injective {n : Nat} : Function.Injective (ofFn
+ : (Fin n -> α) -> List α)
+· 使用定理 `List.Perm.eq_of_pairwise'`：∀ {α : Type u_1} {r : α → α → Prop} [Std.Anti
+symm r] {l₁ l₂ : List α},   List.Pairwise r l₁ → List.Pairwise r l₂ → l₁.Perm l₂
+ → l₁ = l₂
+· 使用定理 `List.SortedLE.pairwise`：∀ {α : Type u_1} {l : List α} [inst : Preorder α
+], l.SortedLE → List.Pairwise (fun x1 x2 => x1 ≤ x2) l
+· 使用定理 `Monotone.sortedLE_ofFn`：∀ {α : Type u_1} [inst : Preorder α] {n : ℕ} {f 
+: Fin n → α}, Monotone f → (List.ofFn f).SortedLE
+· 使用定理 `Equiv.Perm.ofFn_comp_perm`：Equiv.Perm.ofFn_comp_perm {n : Nat} {α : Type
+ u} (σ : Equiv.Perm (Fin n)) (f : Fin n -> α) : ofFn (f ∘ σ) ~ ofFn f
+· 使用定理 `List.Perm.symm`：∀ {α : Type u_1} {l₁ l₂ : List α}, l₁.Perm l₂ → l₂.Perm 
+l₁
 
-English:
-theorem unique_monotone
-  statement: [PartialOrder α] {f : Fin n -> α} {σ τ : Equiv.Perm (Fin n)}
-  proof: ofFn_injective
-    ((σ.ofFn_comp_perm f).trans (τ.ofFn_comp_perm f).symm).eq_of_pairwise'
-      hfσ.sortedLE_ofFn.pairwise hfτ.sortedLE_ofFn.pairwise
-
-中文:
-定理 unique_monotone
-  结论: [偏序 α] {f : 有限集 n -> α} {σ τ : 等价.置换 (有限集 n)}
-  证明: ofFn_injective
-    ((σ.ofFn_comp_perm f).trans (τ.ofFn_comp_perm f).symm).eq_of_pairwise'
-      hfσ.sortedLE_ofFn.pairwise hfτ.sortedLE_ofFn.pairwise
-
-Depends on / 依赖: eq_of_pairwise, ofFn_comp_perm, ofFn_injective, pairwise, sortedLE_ofFn, sortedLE_ofFn.pairwise
+--- 原说明 ---
+If two permutations of a tuple `f` are both monotone, then they are equal.
 -/
-theorem unique_monotone [PartialOrder α] {f : Fin n -> α} {σ τ : Equiv.Perm (Fin n)}
+theorem unique_monotone [PartialOrder α] {f : Fin n → α} {σ τ : Equiv.Perm (Fin n)}
     (hfσ : Monotone (f ∘ σ)) (hfτ : Monotone (f ∘ τ)) : f ∘ σ = f ∘ τ :=
-ofFn_injective
+  ofFn_injective <|
     ((σ.ofFn_comp_perm f).trans (τ.ofFn_comp_perm f).symm).eq_of_pairwise'
       hfσ.sortedLE_ofFn.pairwise hfτ.sortedLE_ofFn.pairwise
 
-/--
-theorem `unique_antitone` / 定理 `unique_antitone`
+/-- If two permutations of a tuple `f` are both antitone, then they are equal. -/
+/-
+**Tuple.unique_antitone** 是 Mathlib 中的一个定理，位于命名空间 `Tuple`。
+形式化陈述：unique_antitone [PartialOrder α] {f : Fin n -> α} {σ τ : Equiv.Perm (Fin n
+)} (hfσ : Antitone (f ∘ σ)) (hfτ : Antitone (f ∘ τ)) : f ∘ σ = f ∘ τ
+参数：Fin n；hfσ : Antitone (f ∘ σ)；hfτ : Antitone (f ∘ τ)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.ofFn_injective`：ofFn_injective {n : Nat} : Function.Injective (ofFn
+ : (Fin n -> α) -> List α)
+· 使用定理 `List.Perm.eq_of_pairwise'`：∀ {α : Type u_1} {r : α → α → Prop} [Std.Anti
+symm r] {l₁ l₂ : List α},   List.Pairwise r l₁ → List.Pairwise r l₂ → l₁.Perm l₂
+ → l₁ = l₂
+· 使用定理 `instAntisymmGe`：∀ {α : Type u} [inst : PartialOrder α], Std.Antisymm fun
+ x1 x2 => x2 ≤ x1
+· 使用定理 `List.SortedGE.pairwise`：∀ {α : Type u_1} {l : List α} [inst : Preorder α
+], l.SortedGE → List.Pairwise (fun x1 x2 => x1 ≥ x2) l
+· 使用定理 `Antitone.sortedGE_ofFn`：∀ {α : Type u_1} [inst : Preorder α] {n : ℕ} {f 
+: Fin n → α}, Antitone f → (List.ofFn f).SortedGE
+· 使用定理 `Equiv.Perm.ofFn_comp_perm`：Equiv.Perm.ofFn_comp_perm {n : Nat} {α : Type
+ u} (σ : Equiv.Perm (Fin n)) (f : Fin n -> α) : ofFn (f ∘ σ) ~ ofFn f
+· 使用定理 `List.Perm.symm`：∀ {α : Type u_1} {l₁ l₂ : List α}, l₁.Perm l₂ → l₂.Perm 
+l₁
 
-English:
-theorem unique_antitone
-  statement: [PartialOrder α] {f : Fin n -> α} {σ τ : Equiv.Perm (Fin n)}
-  proof: ofFn_injective
-    ((σ.ofFn_comp_perm f).trans (τ.ofFn_comp_perm f).symm).eq_of_pairwise'
-      hfσ.sortedGE_ofFn.pairwise hfτ.sortedGE_ofFn.pairwise
-
-中文:
-定理 unique_antitone
-  结论: [偏序 α] {f : 有限集 n -> α} {σ τ : 等价.置换 (有限集 n)}
-  证明: ofFn_injective
-    ((σ.ofFn_comp_perm f).trans (τ.ofFn_comp_perm f).symm).eq_of_pairwise'
-      hfσ.sortedGE_ofFn.pairwise hfτ.sortedGE_ofFn.pairwise
-
-Depends on / 依赖: eq_of_pairwise, ofFn_comp_perm, ofFn_injective, pairwise, sortedGE_ofFn, sortedGE_ofFn.pairwise
+--- 原说明 ---
+If two permutations of a tuple `f` are both antitone, then they are equal.
 -/
-theorem unique_antitone [PartialOrder α] {f : Fin n -> α} {σ τ : Equiv.Perm (Fin n)}
+theorem unique_antitone [PartialOrder α] {f : Fin n → α} {σ τ : Equiv.Perm (Fin n)}
     (hfσ : Antitone (f ∘ σ)) (hfτ : Antitone (f ∘ τ)) : f ∘ σ = f ∘ τ :=
-ofFn_injective
+  ofFn_injective <|
     ((σ.ofFn_comp_perm f).trans (τ.ofFn_comp_perm f).symm).eq_of_pairwise'
       hfσ.sortedGE_ofFn.pairwise hfτ.sortedGE_ofFn.pairwise
 
-variable [LinearOrder α] {f : Fin n -> α} {σ : Equiv.Perm (Fin n)}
+variable [LinearOrder α] {f : Fin n → α} {σ : Equiv.Perm (Fin n)}
 
-/--
-theorem `eq_sort_iff'` / 定理 `eq_sort_iff'`
+/-- A permutation `σ` equals `sort f` if and only if the map `i ↦ (f (σ i), σ i)` is
+strictly monotone (w.r.t. the lexicographic ordering on the target). -/
+/-
+**Tuple.eq_sort_iff'** 是 Mathlib 中的一个定理，位于命名空间 `Tuple`。
+形式化陈述：eq_sort_iff' : σ = sort f ↔ StrictMono (σ.trans <| graphEquiv₁ f)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Tuple.sort.eq_1`：∀ {n : ℕ} {α : Type u_1} [inst : LinearOrder α] (f : Fi
+n n → α),   Tuple.sort f = (Tuple.graphEquiv₂ f).trans (Tuple.graphEquiv₁ f).sym
+m
+· 使用定理 `Equiv.trans_assoc`：trans_assoc {δ} (ab : α ≃ β) (bc : β ≃ γ) (cd : γ ≃ δ
+) : (ab.trans bc).trans cd = ab.trans (bc.trans cd)
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `Equiv.symm_trans_self`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), e.symm.t
+rans e = Equiv.refl β
+· 使用定理 `OrderIso.strictMono`：∀ {α : Type u_2} {β : Type u_3} [inst : Preorder α]
+ [inst_1 : Preorder β] (e : α ≃o β), StrictMono ⇑e
+· 使用定理 `Equiv.surjective`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), Function.Surj
+ective ⇑e
+· 使用定理 `Subsingleton.elim`：∀ {α : Sort u} [h : Subsingleton α] (a b : α), a = b
+· 使用定理 `IsWellOrder.toIsWellFounded`：∀ {α : Type u} {r : α → α → Prop} [self : I
+sWellOrder α r], IsWellFounded α r
+· 使用定理 `isWellOrder_gt`：∀ {α : Type u} [inst : LinearOrder α] [WellFoundedGT α],
+ IsWellOrder α fun x1 x2 => x2 < x1
+· 使用定理 `Finite.to_wellFoundedGT`：∀ {α : Type u_1} [Finite α] [inst : Preorder α]
+, WellFoundedGT α
+· 使用定理 `Finite.of_fintype`：∀ (α : Type u_4) [Fintype α], Finite α
+· 使用定理 `Equiv.Perm.ext`：∀ {α : Sort u} {σ τ : Equiv.Perm α}, (∀ (x : α), σ x = τ
+ x) → σ = τ
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Equiv.eq_symm_apply`：eq_symm_apply {α β} (e : α ≃ β) {x y} : y = e.symm 
+x ↔ e y = x
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `DFunLike.congr_fun`：∀ {F : Sort u_1} {α : Sort u_2} {β : α → Sort u_3} [
+i : DFunLike F α β] {f g : F}, f = g → ∀ (x : α), f x = g x
 
-English:
-theorem eq_sort_iff'
-  statement: σ = sort f ↔ StrictMono (σ.trans <| graphEquiv₁ f)
-  proof: by
-  constructor <;> intro h
-  · rw [h, sort, Equiv.trans_assoc, Equiv.symm_trans_self]
-    exact (graphEquiv₂ f).strictMono
-  · have := Subsingleton.elim (graphEquiv₂ f) (h.orderIsoOfSurjective _ <| Equiv.surjective _)
-    ext1 x
-    exact (graphEquiv₁ f).eq_symm_apply.2 (DFunLike.congr_fun this x).symm
-
-中文:
-定理 eq_sort_iff'
-  结论: σ = sort f ↔ 严格递增 (σ.trans <| graphEquiv₁ f)
-  证明: by
-  constructor <;> intro h
-  · rw [h, sort, Equiv.trans_assoc, Equiv.symm_trans_self]
-    exact (graphEquiv₂ f).strictMono
-  · have := Subsingleton.elim (graphEquiv₂ f) (h.orderIsoOfSurjective _ <| Equiv.surjective _)
-    ext1 x
-    exact (graphEquiv₁ f).eq_symm_apply.2 (DFunLike.congr_fun this x).symm
-
-Depends on / 依赖: DFunLike, DFunLike.congr_fun, Equiv.surjective, Equiv.symm_trans_self, Equiv.trans_assoc, Subsingleton, Subsingleton.elim, congr_fun, eq_symm_apply, h.orderIsoOfSurjective, orderIsoOfSurjective, strictMono, surjective, symm_trans_self, trans_assoc
+--- 原说明 ---
+A permutation `σ` equals `sort f` if and only if the map `i ↦ (f (σ i), σ i)` is
+strictly monotone (w.r.t. the lexicographic ordering on the target).
 -/
 theorem eq_sort_iff' : σ = sort f ↔ StrictMono (σ.trans <| graphEquiv₁ f) := by
   constructor <;> intro h
@@ -466,172 +418,204 @@ theorem eq_sort_iff' : σ = sort f ↔ StrictMono (σ.trans <| graphEquiv₁ f) 
     ext1 x
     exact (graphEquiv₁ f).eq_symm_apply.2 (DFunLike.congr_fun this x).symm
 
-/--
-theorem `eq_sort_iff` / 定理 `eq_sort_iff`
+/-- A permutation `σ` equals `sort f` if and only if `f ∘ σ` is monotone and whenever `i < j`
+and `f (σ i) = f (σ j)`, then `σ i < σ j`. This means that `sort f` is the lexicographically
+smallest permutation `σ` such that `f ∘ σ` is monotone. -/
+/-
+**Tuple.eq_sort_iff** 是 Mathlib 中的一个定理，位于命名空间 `Tuple`。
+形式化陈述：eq_sort_iff : σ = sort f ↔ Monotone (f ∘ σ) ∧ forall i j, i < j -> f (σ i)
+ = f (σ j) -> σ i < σ j
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.trans`：Equiv.trans {s t u : Computation α} : s ~ t -> t ~ u -> s ~
+ u
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Tuple.eq_sort_iff'`：eq_sort_iff' : σ = sort f ↔ StrictMono (σ.trans <| g
+raphEquiv₁ f)
+· 使用定理 `Monotone.comp`：∀ {α : Type u} {β : Type v} {γ : Type w} [inst : Preorder
+ α] [inst_1 : Preorder β] [inst_2 : Preorder γ] {g : β → γ}   {f : α → β}, Monot
+one…
+· 使用定理 `Tuple.monotone_proj`：monotone_proj (f : Fin n -> α) : Monotone (graph.pr
+oj : graph f -> α)
+· 使用定理 `StrictMono.monotone`：∀ {α : Type u} {β : Type v} [inst : PartialOrder α]
+ [inst_1 : Preorder β] {f : α → β}, StrictMono f → Monotone f
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Or.resolve_left`：∀ {a b : Prop}, a ∨ b → ¬a → b
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Prod.Lex.toLex_lt_toLex`：toLex_lt_toLex [LT α] [LT β] {x y : α × β} : to
+Lex x < toLex y ↔ x.1 < y.1 ∨ x.1 = y.1 ∧ x.2 < y.2
+· 使用定理 `Eq.not_lt`：∀ {α : Type u_2} [inst : Preorder α] {a b : α}, a = b → ¬a < 
+b
+· 使用定理 `LE.le.eq_or_lt`：∀ {α : Type u_2} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a = b ∨ a < b
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
 
-English:
-theorem eq_sort_iff
-  proof: by
-  rw [eq_sort_iff']
-  refine ⟨fun h => ⟨(monotone_proj f).comp h.monotone, fun i j hij hfij => ?_⟩, fun h i j hij => ?_⟩
-  · exact ((Prod.Lex.toLex_lt_toLex.1 <| h hij).resolve_left hfij.not_lt).2
-  · obtain he | hl := (h.1 hij.le).eq_or_lt <;> apply Prod.Lex.toLex_lt_toLex.2
-    exacts [Or.inr ⟨he, h.2 i j hij he⟩, Or.inl hl]
-
-中文:
-定理 eq_sort_iff
-  证明: by
-  rw [eq_sort_iff']
-  refine ⟨fun h => ⟨(monotone_proj f).comp h.monotone, fun i j hij hfij => ?_⟩, fun h i j hij => ?_⟩
-  · exact ((Prod.Lex.toLex_lt_toLex.1 <| h hij).resolve_left hfij.not_lt).2
-  · obtain he | hl := (h.1 hij.le).eq_or_lt <;> apply Prod.Lex.toLex_lt_toLex.2
-    exacts [Or.inr ⟨he, h.2 i j hij he⟩, Or.inl hl]
-
-Depends on / 依赖: Or.inl, Or.inr, Prod.Lex.toLex_lt_toLex, eq_or_lt, eq_sort_iff, exacts, h.monotone, hfij.not_lt, hij.le, monotone, monotone_proj, not_lt, resolve_left, toLex_lt_toLex
+--- 原说明 ---
+A permutation `σ` equals `sort f` if and only if `f ∘ σ` is monotone and wheneve
+r `i < j`
+and `f (σ i) = f (σ j)`, then `σ i < σ j`. This means that `sort f` is the lexic
+ographically
+smallest permutation `σ` such that `f ∘ σ` is monotone.
 -/
 theorem eq_sort_iff :
-    σ = sort f ↔ Monotone (f ∘ σ) ∧ forall i j, i < j -> f (σ i) = f (σ j) -> σ i < σ j := by
+    σ = sort f ↔ Monotone (f ∘ σ) ∧ ∀ i j, i < j → f (σ i) = f (σ j) → σ i < σ j := by
   rw [eq_sort_iff']
   refine ⟨fun h => ⟨(monotone_proj f).comp h.monotone, fun i j hij hfij => ?_⟩, fun h i j hij => ?_⟩
   · exact ((Prod.Lex.toLex_lt_toLex.1 <| h hij).resolve_left hfij.not_lt).2
   · obtain he | hl := (h.1 hij.le).eq_or_lt <;> apply Prod.Lex.toLex_lt_toLex.2
     exacts [Or.inr ⟨he, h.2 i j hij he⟩, Or.inl hl]
 
-/--
-theorem `sort_eq_refl_iff_monotone` / 定理 `sort_eq_refl_iff_monotone`
+/-- The permutation that sorts `f` is the identity if and only if `f` is monotone. -/
+/-
+**Tuple.sort_eq_refl_iff_monotone** 是 Mathlib 中的一个定理，位于命名空间 `Tuple`。
+形式化陈述：sort_eq_refl_iff_monotone : sort f = Equiv.refl _ ↔ Monotone f
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_comm`：∀ {α : Sort u_1} {a b : α}, a = b ↔ b = a
+· 使用定理 `Tuple.eq_sort_iff`：eq_sort_iff : σ = sort f ↔ Monotone (f ∘ σ) ∧ forall 
+i j, i < j -> f (σ i) = f (σ j) -> σ i < σ j
+· 使用定理 `Equiv.coe_refl`：∀ {α : Sort u}, ⇑(Equiv.refl α) = id
+· 使用定理 `Function.comp_id`：∀ {α : Sort u_1} {β : Sort u_2} (f : α → β), f ∘ id = 
+f
 
-English:
-theorem sort_eq_refl_iff_monotone
-  statement: sort f = Equiv.refl _ ↔ Monotone f
-  proof: by
-  rw [eq_comm]; rw [eq_sort_iff]; rw [Equiv.coe_refl]; rw [Function.comp_id]
-  simp only [id, and_iff_left_iff_imp]
-  exact fun _ _ _ hij _ => hij
-
-中文:
-定理 sort_eq_refl_iff_monotone
-  结论: sort f = 等价.refl _ ↔ 递增 f
-  证明: by
-  rw [eq_comm]; rw [eq_sort_iff]; rw [Equiv.coe_refl]; rw [Function.comp_id]
-  simp only [id, and_iff_left_iff_imp]
-  exact fun _ _ _ hij _ => hij
-
-Depends on / 依赖: Equiv.coe_refl, Function, Function.comp_id, and_iff_left_iff_imp, coe_refl, comp_id, eq_comm, eq_sort_iff
+--- 原说明 ---
+The permutation that sorts `f` is the identity if and only if `f` is monotone.
 -/
 theorem sort_eq_refl_iff_monotone : sort f = Equiv.refl _ ↔ Monotone f := by
-  rw [eq_comm]; rw [eq_sort_iff]; rw [Equiv.coe_refl]; rw [Function.comp_id]
+  rw [eq_comm, eq_sort_iff, Equiv.coe_refl, Function.comp_id]
   simp only [id, and_iff_left_iff_imp]
   exact fun _ _ _ hij _ => hij
 
-/--
-theorem `comp_sort_eq_comp_iff_monotone` / 定理 `comp_sort_eq_comp_iff_monotone`
+/-- A permutation of a tuple `f` is `f` sorted if and only if it is monotone. -/
+/-
+**Tuple.comp_sort_eq_comp_iff_monotone** 是 Mathlib 中的一个定理，位于命名空间 `Tuple`。
+形式化陈述：comp_sort_eq_comp_iff_monotone : f ∘ σ = f ∘ sort f ↔ Monotone (f ∘ σ)
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Tuple.monotone_sort`：monotone_sort (f : Fin n -> α) : Monotone (f ∘ sort
+ f)
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Tuple.unique_monotone`：unique_monotone [PartialOrder α] {f : Fin n -> α}
+ {σ τ : Equiv.Perm (Fin n)} (hfσ : Monotone (f ∘ σ)) (hfτ : Monotone (f ∘ τ)) : 
+f ∘ σ = f ∘…
 
-English:
-theorem comp_sort_eq_comp_iff_monotone
-  statement: f ∘ σ = f ∘ sort f ↔ Monotone (f ∘ σ)
-  proof: ⟨fun h => h.symm ▸ monotone_sort f, fun h => unique_monotone h (monotone_sort f)⟩
-
-中文:
-定理 comp_sort_eq_comp_iff_monotone
-  结论: f ∘ σ = f ∘ sort f ↔ 递增 (f ∘ σ)
-  证明: ⟨fun h => h.symm ▸ monotone_sort f, fun h => unique_monotone h (monotone_sort f)⟩
-
-Depends on / 依赖: h.symm, monotone_sort, unique_monotone
+--- 原说明 ---
+A permutation of a tuple `f` is `f` sorted if and only if it is monotone.
 -/
 theorem comp_sort_eq_comp_iff_monotone : f ∘ σ = f ∘ sort f ↔ Monotone (f ∘ σ) :=
   ⟨fun h => h.symm ▸ monotone_sort f, fun h => unique_monotone h (monotone_sort f)⟩
 
-/--
-theorem `comp_perm_comp_sort_eq_comp_sort` / 定理 `comp_perm_comp_sort_eq_comp_sort`
+/-- The sorted versions of a tuple `f` and of any permutation of `f` agree. -/
+/-
+**Tuple.comp_perm_comp_sort_eq_comp_sort** 是 Mathlib 中的一个定理，位于命名空间 `Tuple`。
+形式化陈述：comp_perm_comp_sort_eq_comp_sort : (f ∘ σ) ∘ sort (f ∘ σ) = f ∘ sort f
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Function.comp_assoc`：comp_assoc (f : φ -> δ) (g : β -> φ) (h : α -> β) :
+ (f ∘ g) ∘ h = f ∘ g ∘ h
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.Perm.coe_mul`：∀ {α : Type u_4} (f g : Equiv.Perm α), ⇑(f * g) = ⇑f
+ ∘ ⇑g
+· 使用定理 `Tuple.unique_monotone`：unique_monotone [PartialOrder α] {f : Fin n -> α}
+ {σ τ : Equiv.Perm (Fin n)} (hfσ : Monotone (f ∘ σ)) (hfτ : Monotone (f ∘ τ)) : 
+f ∘ σ = f ∘…
+· 使用定理 `Tuple.monotone_sort`：monotone_sort (f : Fin n -> α) : Monotone (f ∘ sort
+ f)
 
-English:
-theorem comp_perm_comp_sort_eq_comp_sort
-  statement: (f ∘ σ) ∘ sort (f ∘ σ) = f ∘ sort f
-  proof: by
-  rw [Function.comp_assoc]; rw [← Equiv.Perm.coe_mul]
-  exact unique_monotone (monotone_sort (f ∘ σ)) (monotone_sort f)
-
-中文:
-定理 comp_perm_comp_sort_eq_comp_sort
-  结论: (f ∘ σ) ∘ sort (f ∘ σ) = f ∘ sort f
-  证明: by
-  rw [Function.comp_assoc]; rw [← Equiv.Perm.coe_mul]
-  exact unique_monotone (monotone_sort (f ∘ σ)) (monotone_sort f)
-
-Depends on / 依赖: Equiv.Perm.coe_mul, Function, Function.comp_assoc, coe_mul, comp_assoc, monotone_sort, unique_monotone
+--- 原说明 ---
+The sorted versions of a tuple `f` and of any permutation of `f` agree.
 -/
 theorem comp_perm_comp_sort_eq_comp_sort : (f ∘ σ) ∘ sort (f ∘ σ) = f ∘ sort f := by
-  rw [Function.comp_assoc]; rw [← Equiv.Perm.coe_mul]
+  rw [Function.comp_assoc, ← Equiv.Perm.coe_mul]
   exact unique_monotone (monotone_sort (f ∘ σ)) (monotone_sort f)
 
-/--
-theorem `antitone_pair_of_not_sorted'` / 定理 `antitone_pair_of_not_sorted'`
+/-- If a permutation `f ∘ σ` of the tuple `f` is not the same as `f ∘ sort f`, then `f ∘ σ`
+has a pair of strictly decreasing entries. -/
+/-
+**Tuple.antitone_pair_of_not_sorted'** 是 Mathlib 中的一个定理，位于命名空间 `Tuple`。
+形式化陈述：antitone_pair_of_not_sorted' (h : f ∘ σ != f ∘ sort f) : exists i j, i < j
+ ∧ (f ∘ σ) j < (f ∘ σ) i
+参数：h : f ∘ σ != f ∘ sort f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose₂`：contrapose₂ {p q : Prop} : (¬ q -
+> p) -> (¬ p -> q)
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `Mathlib.Tactic.Push.not_and_eq`：not_and_eq : (¬ (p ∧ q)) = (p -> ¬ q)
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Tuple.comp_sort_eq_comp_iff_monotone`：comp_sort_eq_comp_iff_monotone : f
+ ∘ σ = f ∘ sort f ↔ Monotone (f ∘ σ)
+· 使用定理 `monotone_iff_forall_lt`：monotone_iff_forall_lt : Monotone f ↔ forall ⦃a 
+b⦄, a < b -> f a <= f b
 
-English:
-theorem antitone_pair_of_not_sorted'
-  given: (h : f ∘ σ != f ∘ sort f)
-  proof: by
-  contrapose! h
-  exact comp_sort_eq_comp_iff_monotone.mpr (monotone_iff_forall_lt.mpr h)
-
-中文:
-定理 antitone_pair_of_not_sorted'
-  条件: (h : f ∘ σ != f ∘ sort f)
-  证明: by
-  contrapose! h
-  exact comp_sort_eq_comp_iff_monotone.mpr (monotone_iff_forall_lt.mpr h)
-
-Depends on / 依赖: comp_sort_eq_comp_iff_monotone, comp_sort_eq_comp_iff_monotone.mpr, contrapose, monotone_iff_forall_lt, monotone_iff_forall_lt.mpr
+--- 原说明 ---
+If a permutation `f ∘ σ` of the tuple `f` is not the same as `f ∘ sort f`, then 
+`f ∘ σ`
+has a pair of strictly decreasing entries.
 -/
-theorem antitone_pair_of_not_sorted' (h : f ∘ σ != f ∘ sort f) :
-    exists i j, i < j ∧ (f ∘ σ) j < (f ∘ σ) i := by
+theorem antitone_pair_of_not_sorted' (h : f ∘ σ ≠ f ∘ sort f) :
+    ∃ i j, i < j ∧ (f ∘ σ) j < (f ∘ σ) i := by
   contrapose! h
   exact comp_sort_eq_comp_iff_monotone.mpr (monotone_iff_forall_lt.mpr h)
 
-/--
-theorem `antitone_pair_of_not_sorted` / 定理 `antitone_pair_of_not_sorted`
+/-- If the tuple `f` is not the same as `f ∘ sort f`, then `f` has a pair of strictly decreasing
+entries. -/
+/-
+**Tuple.antitone_pair_of_not_sorted** 是 Mathlib 中的一个定理，位于命名空间 `Tuple`。
+形式化陈述：antitone_pair_of_not_sorted (h : f != f ∘ sort f) : exists i j, i < j ∧ f 
+j < f i
+参数：h : f != f ∘ sort f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Tuple.antitone_pair_of_not_sorted'`：antitone_pair_of_not_sorted' (h : f 
+∘ σ != f ∘ sort f) : exists i j, i < j ∧ (f ∘ σ) j < (f ∘ σ) i
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
 
-English:
-theorem antitone_pair_of_not_sorted
-  given: (h : f != f ∘ sort f)
-  statement: exists i j, i < j ∧ f j < f i
-  proof: antitone_pair_of_not_sorted' (id h : f ∘ Equiv.refl _ != _)
-
-中文:
-定理 antitone_pair_of_not_sorted
-  条件: (h : f != f ∘ sort f)
-  结论: 存在 i j, i < j ∧ f j < f i
-  证明: antitone_pair_of_not_sorted' (id h : f ∘ Equiv.refl _ != _)
-
-Depends on / 依赖: Equiv.refl, antitone_pair_of_not_sorted
+--- 原说明 ---
+If the tuple `f` is not the same as `f ∘ sort f`, then `f` has a pair of strictl
+y decreasing
+entries.
 -/
-theorem antitone_pair_of_not_sorted (h : f != f ∘ sort f) : exists i j, i < j ∧ f j < f i :=
-  antitone_pair_of_not_sorted' (id h : f ∘ Equiv.refl _ != _)
+theorem antitone_pair_of_not_sorted (h : f ≠ f ∘ sort f) : ∃ i j, i < j ∧ f j < f i :=
+  antitone_pair_of_not_sorted' (id h : f ∘ Equiv.refl _ ≠ _)
 
 /-- The sorted version of a permutation `σ` is its inverse `σ⁻¹`. -/
 @[simp]
-/--
-theorem `sort_perm` / 定理 `sort_perm`
+/-
+**Tuple.sort_perm** 是 Mathlib 中的一个定理，位于命名空间 `Tuple`。
+形式化陈述：sort_perm (σ : Equiv.Perm (Fin n)) : sort σ = σ⁻¹
+参数：σ : Equiv.Perm (Fin n)。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Tuple.eq_sort_iff`：eq_sort_iff : σ = sort f ↔ Monotone (f ∘ σ) ∧ forall 
+i j, i < j -> f (σ i) = f (σ j) -> σ i < σ j
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Equiv.self_comp_symm`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β), ⇑e ∘ ⇑e.s
+ymm = id
+· 使用定理 `monotone_id`：monotone_id [Preorder α] : Monotone (id : α -> α)
+· 使用定理 `LT.lt.ne`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≠ b
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `Equiv.apply_symm_apply`：∀ {α : Sort u} {β : Sort v} (e : α ≃ β) (x : β),
+ e (e.symm x) = x
 
-English:
-theorem sort_perm
-  given: (σ : Equiv.Perm (Fin n))
-  proof: by
-  apply (eq_sort_iff.2 ⟨?_ , ?_⟩).symm
-  · simpa using monotone_id
-  · intro _ _ hij h
-    exact (hij.ne (by simpa using h)).elim
-
-中文:
-定理 sort_perm
-  条件: (σ : 等价.置换 (有限集 n))
-  证明: by
-  apply (eq_sort_iff.2 ⟨?_ , ?_⟩).symm
-  · simpa using monotone_id
-  · intro _ _ hij h
-    exact (hij.ne (by simpa using h)).elim
-
-Depends on / 依赖: eq_sort_iff, hij.ne, monotone_id
+--- 原说明 ---
+The sorted version of a permutation `σ` is its inverse `σ⁻¹`.
 -/
 theorem sort_perm (σ : Equiv.Perm (Fin n)) :
     sort σ = σ⁻¹ := by
@@ -642,23 +626,23 @@ theorem sort_perm (σ : Equiv.Perm (Fin n)) :
 
 end Tuple
 
-/--
-theorem `Equiv.Perm.monotone_iff` / 定理 `Equiv.Perm.monotone_iff`
-
-English:
-theorem Equiv.Perm.monotone_iff
-  given: {n : Nat} (σ : Perm (Fin n))
-  proof: by
-  rw [← Tuple.sort_eq_refl_iff_monotone]; rw [Tuple.sort_perm]; rw [← inv_eq_one]; rw [one_def]
-
-中文:
-定理 等价.置换.monotone_iff
-  条件: {n : 自然数} (σ : 置换 (有限集 n))
-  证明: by
-  rw [← Tuple.sort_eq_refl_iff_monotone]; rw [Tuple.sort_perm]; rw [← inv_eq_one]; rw [one_def]
-
-Depends on / 依赖: Tuple.sort_eq_refl_iff_monotone, Tuple.sort_perm, inv_eq_one, one_def, sort_eq_refl_iff_monotone, sort_perm
+/-
+**Equiv.Perm.monotone_iff** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Equiv.Perm.monotone_iff {n : Nat} (σ : Perm (Fin n)) : Monotone σ ↔ σ = 1
+参数：σ : Perm (Fin n)。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Equiv.refl`：Equiv.refl (s : Computation α) : s ~ s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Tuple.sort_eq_refl_iff_monotone`：sort_eq_refl_iff_monotone : sort f = Eq
+uiv.refl _ ↔ Monotone f
+· 使用定理 `Tuple.sort_perm`：sort_perm (σ : Equiv.Perm (Fin n)) : sort σ = σ⁻¹
+· 使用定理 `inv_eq_one`：inv_eq_one : a⁻¹ = 1 ↔ a = 1
+· 使用定理 `Equiv.Perm.one_def`：one_def : (1 : Perm α) = Equiv.refl α
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem Equiv.Perm.monotone_iff {n : Nat} (σ : Perm (Fin n)) :
+theorem Equiv.Perm.monotone_iff {n : ℕ} (σ : Perm (Fin n)) :
     Monotone σ ↔ σ = 1 := by
-  rw [← Tuple.sort_eq_refl_iff_monotone]; rw [Tuple.sort_perm]; rw [← inv_eq_one]; rw [one_def]
+  rw [← Tuple.sort_eq_refl_iff_monotone, Tuple.sort_perm, ← inv_eq_one, one_def]

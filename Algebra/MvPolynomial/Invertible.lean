@@ -20,40 +20,37 @@ public section
 
 open MvPolynomial
 
-/--
-Instance `MvPolynomial.invertibleC` / 实例 `MvPolynomial.invertibleC`
-
-English:
-instance MvPolynomial.invertibleC
-  signature: (σ : Type*) {R : Type*} [CommSemiring R] (r : R)
-  body: Invertible.map (C : R ->+* MvPolynomial σ R) _
-
-中文:
-实例 多元多项式.invertibleC
-  签名: (σ : 类型) {R : 类型} [交换半环 R] (r : R)
-  定义体: Invertible.map (C : R ->+* MvPolynomial σ R) _
-
-Depends on / 依赖: Invertible, Invertible.map, MvPolynomial
+/-
+**MvPolynomial.invertibleC** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：MvPolynomial.invertibleC (σ : Type*) {R : Type*} [CommSemiring R] (r : R) 
+[Invertible r] : Invertible (C r : MvPolynomial σ R)
+参数：σ : Type*；r : R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance MvPolynomial.invertibleC (σ : Type*) {R : Type*} [CommSemiring R] (r : R)
     [Invertible r] : Invertible (C r : MvPolynomial σ R) :=
-  Invertible.map (C : R ->+* MvPolynomial σ R) _
+  Invertible.map (C : R →+* MvPolynomial σ R) _
 
-/--
-Instance `MvPolynomial.invertibleCoeNat` / 实例 `MvPolynomial.invertibleCoeNat`
+/-- A natural number that is invertible when coerced to a commutative semiring `R`
+is also invertible when coerced to any polynomial ring with rational coefficients.
 
-English:
-instance MvPolynomial.invertibleCoeNat
-  signature: (σ R : Type*) (p : Nat) [CommSemiring R]
-  body: IsScalarTower.invertibleAlgebraCoeNat R _ _
+Short-cut for typeclass resolution. -/
+/-
+**MvPolynomial.invertibleCoeNat** 是 Mathlib 中的一个实例，位于命名空间 ``。
+形式化陈述：MvPolynomial.invertibleCoeNat (σ R : Type*) (p : Nat) [CommSemiring R] [In
+vertible (p : R)] : Invertible (p : MvPolynomial σ R)
+参数：σ R : Type*；p : Nat；p : R。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-实例 多元多项式.invertibleCoe自然数
-  签名: (σ R : 类型) (p : 自然数) [交换半环 R]
-  定义体: IsScalarTower.invertibleAlgebraCoeNat R _ _
+--- 原说明 ---
+A natural number that is invertible when coerced to a commutative semiring `R`
+is also invertible when coerced to any polynomial ring with rational coefficient
+s.
 
-Depends on / 依赖: IsScalarTower, IsScalarTower.invertibleAlgebraCoeNat, invertibleAlgebraCoeNat
+Short-cut for typeclass resolution.
 -/
-noncomputable instance MvPolynomial.invertibleCoeNat (σ R : Type*) (p : Nat) [CommSemiring R]
+noncomputable instance MvPolynomial.invertibleCoeNat (σ R : Type*) (p : ℕ) [CommSemiring R]
     [Invertible (p : R)] : Invertible (p : MvPolynomial σ R) :=
   IsScalarTower.invertibleAlgebraCoeNat R _ _

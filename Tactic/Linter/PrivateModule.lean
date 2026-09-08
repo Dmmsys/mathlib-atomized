@@ -9,7 +9,7 @@ public meta import Lean.Elab.Command
 public import Lean.Environment
 -- Import this linter explicitly to ensure that
 -- this file has a valid copyright header and module docstring.
-public import Mathlib.Tactic.Linter.Header -- shake: keep
+public import Mathlib.Tactic.Linter.Header  -- shake: keep
 
 /-!
 # Private module linter
@@ -67,55 +67,26 @@ public register_option linter.privateModule : Bool := {
 }
 
 /--
-Definition of `privateModule` / `privateModule` 的定义
+The `privateModule` linter lints against nonempty modules that have only private declarations,
+and suggests adding `@[expose] public section` to the top.
 
-English:
-definition privateModule
-  signature: : Linter where run stx
-  body: do
-  if stx.isOfKind ``Parser.Command.eoi then
-    unless getLinterValue linter.privateModule (← getLinterOptions) do
-      return
-    if (← getEnv).header.isModule
-      -- If there are new initializers, this module has a downstream effect and is not private.
-      && (regularInitAttr.ext.getState (← getEnv)).1.isEmpty
-      -- Don't lint an imports-only module:
-      && !(← getEnv).constants.map₂.isEmpty
-    then
-      -- Exit if any declaration from the current module is public:
-      for (decl, _) in (← getEnv).constants.map₂ do
-        -- Ignore both private and reserved names; see implementation notes
-        if !isPrivateName decl && !isReservedName (← getEnv) decl then return
-      -- Lint if all names are private:
-      let topOfFileRef := Syntax.atom (.synthetic ⟨0⟩ ⟨0⟩) ""
-      logLint linter.privateModule topOfFileRef
-        "The current module only contains private declarations.\n\n\
-        Consider adding `@[expose] public section` at the beginning of the module, \
-        or selectively marking declarations as `public`."
+This linter only acts on the end-of-input `Parser.Command.eoi` token, and ignores all other syntax.
+It logs its message at the top of the file.
+-/
+/-
+**Mathlib.Linter.privateModule** 是 Mathlib 中的一个定义，位于命名空间 `Mathlib.Linter`。
+形式化陈述：privateModule : Linter where run stx
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 privateModule
-  签名: : Linter where run stx
-  定义体: do
-  if stx.isOfKind ``Parser.Command.eoi then
-    unless getLinterValue linter.privateModule (← getLinterOptions) do
-      return
-    if (← getEnv).header.isModule
-      -- If there are new initializers, this module has a downstream effect and is not private.
-      && (regularInitAttr.ext.getState (← getEnv)).1.isEmpty
-      -- Don't lint an imports-only module:
-      && !(← getEnv).constants.map₂.isEmpty
-    then
-      -- Exit if any declaration from the current module is public:
-      for (decl, _) in (← getEnv).constants.map₂ do
-        -- Ignore both private and reserved names; see implementation notes
-        if !isPrivateName decl && !isReservedName (← getEnv) decl then return
-      -- Lint if all names are private:
-      let topOfFileRef := Syntax.atom (.synthetic ⟨0⟩ ⟨0⟩) ""
-      logLint linter.privateModule topOfFileRef
-        "The current module only contains private declarations.\n\n\
-        Consider adding `@[expose] public section` at the beginning of the module, \
-        or selectively marking declarations as `public`."
+--- 原说明 ---
+The `privateModule` linter lints against nonempty modules that have only private
+ declarations,
+and suggests adding `@[expose] public section` to the top.
+
+This linter only acts on the end-of-input `Parser.Command.eoi` token, and ignore
+s all other syntax.
+It logs its message at the top of the file.
 -/
 def privateModule : Linter where run stx := do
   if stx.isOfKind ``Parser.Command.eoi then
@@ -141,3 +112,4 @@ def privateModule : Linter where run stx := do
 initialize addLinter privateModule
 
 end Mathlib.Linter
+

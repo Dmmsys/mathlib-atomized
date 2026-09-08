@@ -47,18 +47,25 @@ open CategoryTheory Finsupp TensorProduct Rep Representation
 
 variable {k G : Type u} [CommRing k] [Group G] (S : Subgroup G) (A : Rep k S)
 
-/--
-Definition of `coinvariantsTensorResProjectiveResolutionIso` / `coinvariantsTensorResProjectiveResolutionIso` 的定义
+/-- Given a projective resolution `P` of `k` as a `k`-linear `G`-representation, a subgroup
+`S ≤ G`, and a `k`-linear `S`-representation `A`, this is an isomorphism of complexes
+`(A ⊗ Res(S)(P))_S ≅ (Ind_S^G(A) ⊗ P)_G`. -/
+/-
+**groupHomology.coinvariantsTensorResProjectiveResolutionIso** 是 Mathlib 中的一个缩写定
+义，位于命名空间 `groupHomology`。
+形式化陈述：coinvariantsTensorResProjectiveResolutionIso (P : ProjectiveResolution (Re
+p.trivial k G k)) : ((resFunctor S.subtype).mapProjectiveResolution P).complex.c
+oinvariantsTensorObj A ≅ P.complex.coinvariantsTensorObj (ind S.subtype A)
+参数：P : ProjectiveResolution (Rep.trivial k G k)。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation coinvariantsTensorResProjectiveResolutionIso
-  body: (NatIso.mapHomologicalComplex (coinvariantsTensorIndNatIso S.subtype A).symm _).app _
-
-中文:
-缩写 coinvariantsTensorResProjectiveResolutionIso
-  定义体: (NatIso.mapHomologicalComplex (coinvariantsTensorIndNatIso S.subtype A).symm _).app _
-
-Depends on / 依赖: NatIso, NatIso.mapHomologicalComplex, S.subtype, coinvariantsTensorIndNatIso, mapHomologicalComplex, subtype
+--- 原说明 ---
+Given a projective resolution `P` of `k` as a `k`-linear `G`-representation, a s
+ubgroup
+`S ≤ G`, and a `k`-linear `S`-representation `A`, this is an isomorphism of comp
+lexes
+`(A ⊗ Res(S)(P))_S ≅ (Ind_S^G(A) ⊗ P)_G`.
 -/
 noncomputable abbrev coinvariantsTensorResProjectiveResolutionIso
     (P : ProjectiveResolution (Rep.trivial k G k)) :
@@ -71,35 +78,30 @@ noncomputable abbrev coinvariantsTensorResProjectiveResolutionIso
 -- unification issues.
 -- Similarly, replacing `resFunctor.{u}` with `resFunctor` works but makes the proof
 -- three times as slow.
-/--
-Definition of `indIso` / `indIso` 的定义
+/-- Shapiro's lemma: given a subgroup `S ≤ G` and an `S`-representation `A`, we have
+`Hₙ(G, Ind_S^G(A)) ≅ Hₙ(S, A).` -/
+/-
+**groupHomology.indIso** 是 Mathlib 中的一个定义，位于命名空间 `groupHomology`。
+形式化陈述：indIso [DecidableEq G] (A : Rep.{u} k S) (n : Nat) : groupHomology (ind S.
+subtype A) n ≅ groupHomology A n
+参数：A : Rep.{u} k S；n : Nat。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Rep.instPreservesProjectiveObjectsSubtypeMemSubgroupResFunctorSubtype`：∀
+ {k : Type u} [inst : CommRing k] {G : Type w} [inst_1 : Group G] (S : Subgroup 
+G),   (Rep.resFunctor S.subtype).PreservesProjectiveObjects
 
-English:
-definition indIso
-  signature: [DecidableEq G] (A : Rep.{u} k S) (n : Nat)
-  body: (HomologicalComplex.homologyFunctor (ModuleCat k) (ComplexShape.down Nat) n).mapIso
-  (inhomogeneousChainsIso (ind S.subtype A :) ≪≫
-    (coinvariantsTensorResProjectiveResolutionIso S A (barResolution k G)).symm) ≪≫
-  (groupHomologyIso A n ((resFunctor.{u} S.subtype).mapProjectiveResolution <|
-    barResolution k G)).symm
-
-中文:
-定义 indIso
-  签名: [DecidableEq G] (A : Rep.{u} k S) (n : 自然数)
-  定义体: (HomologicalComplex.homologyFunctor (ModuleCat k) (ComplexShape.down Nat) n).mapIso
-  (inhomogeneousChainsIso (ind S.subtype A :) ≪≫
-    (coinvariantsTensorResProjectiveResolutionIso S A (barResolution k G)).symm) ≪≫
-  (groupHomologyIso A n ((resFunctor.{u} S.subtype).mapProjectiveResolution <|
-    barResolution k G)).symm
-
-Depends on / 依赖: ComplexShape, ComplexShape.down, HomologicalComplex, HomologicalComplex.homologyFunctor, ModuleCat, S.subtype, barResolution, coinvariantsTensorResProjectiveResolutionIso, groupHomologyIso, homologyFunctor, inhomogeneousChainsIso, mapIso, mapProjectiveResolution, resFunctor, subtype
+--- 原说明 ---
+Shapiro's lemma: given a subgroup `S ≤ G` and an `S`-representation `A`, we have
+`Hₙ(G, Ind_S^G(A)) ≅ Hₙ(S, A).`
 -/
-noncomputable def indIso [DecidableEq G] (A : Rep.{u} k S) (n : Nat) :
+noncomputable def indIso [DecidableEq G] (A : Rep.{u} k S) (n : ℕ) :
     groupHomology (ind S.subtype A) n ≅ groupHomology A n :=
-  (HomologicalComplex.homologyFunctor (ModuleCat k) (ComplexShape.down Nat) n).mapIso
+  (HomologicalComplex.homologyFunctor (ModuleCat k) (ComplexShape.down ℕ) n).mapIso
   (inhomogeneousChainsIso (ind S.subtype A :) ≪≫
     (coinvariantsTensorResProjectiveResolutionIso S A (barResolution k G)).symm) ≪≫
   (groupHomologyIso A n ((resFunctor.{u} S.subtype).mapProjectiveResolution <|
     barResolution k G)).symm
 
 end groupHomology
+

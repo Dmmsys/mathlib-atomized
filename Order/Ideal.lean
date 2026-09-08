@@ -59,30 +59,28 @@ namespace Order
 
 variable {P : Type*}
 
-/--
-Definition of `Ideal` / `Ideal` 的定义
+/-- An ideal on an order `P` is a subset of `P` that is
+  - nonempty
+  - upward directed (any pair of elements in the ideal has an upper bound in the ideal)
+  - downward closed (any element less than an element of the ideal is in the ideal). -/
+/-
+**Order.Ideal** 是 Mathlib 中的一个归纳类型，位于命名空间 `Order`。
+形式化陈述：(P : Type u_2) → [LE P] → Type u_2
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Ideal
-  parameters: (P) [LE P]
-  extends: LowerSet P
-  axioms and operations (2):
-    - nonempty' : carrier.Nonempty
-    - directed' : DirectedOn (· <= ·) carrier
-
-中文:
-结构 理想
-  参数: (P) [LE P]
-  继承: 下集 P
-  公理与运算 (2 个):
-    - nonempty' : carrier.非空
-    - directed' : DirectedOn (· <= ·) carrier
+--- 原说明 ---
+An ideal on an order `P` is a subset of `P` that is
+  - nonempty
+  - upward directed (any pair of elements in the ideal has an upper bound in the
+ ideal)
+  - downward closed (any element less than an element of the ideal is in the ide
+al).
 -/
 structure Ideal (P) [LE P] extends LowerSet P where
   /-- The ideal is nonempty. -/
   nonempty' : carrier.Nonempty
   /-- The ideal is upward directed. -/
-  directed' : DirectedOn (· <= ·) carrier
+  directed' : DirectedOn (· ≤ ·) carrier
 
 -- TODO: remove this configuration and use the default configuration.
 -- We keep this to be consistent with Lean 3.
@@ -93,24 +91,18 @@ initialize_simps_projections Ideal (+toLowerSet, -carrier)
   - upward directed (any pair of elements in the ideal has an upper bound in the ideal)
   - downward closed (any element less than an element of the ideal is in the ideal). -/
 @[mk_iff]
-/--
-Definition of `IsIdeal` / `IsIdeal` 的定义
+/-
+**Order.IsIdeal** 是 Mathlib 中的一个归纳类型，位于命名空间 `Order`。
+形式化陈述：{P : Type u_2} → [LE P] → Set P → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure IsIdeal
-  parameters: {P} [LE P] (I : Set P)
-  axioms and operations (3):
-    - IsLowerSet : IsLowerSet I
-    - Nonempty : I.Nonempty
-    - Directed : DirectedOn (· <= ·) I
-
-中文:
-结构 Is理想
-  参数: {P} [LE P] (I : 集合 P)
-  公理与运算 (3 个):
-    - IsLowerSet : 是下集 I
-    - Nonempty : I.非空
-    - Directed : DirectedOn (· <= ·) I
+--- 原说明 ---
+A subset of a preorder `P` is an ideal if it is
+  - nonempty
+  - upward directed (any pair of elements in the ideal has an upper bound in the
+ ideal)
+  - downward closed (any element less than an element of the ideal is in the ide
+al).
 -/
 structure IsIdeal {P} [LE P] (I : Set P) : Prop where
   /-- The ideal is downward closed. -/
@@ -118,22 +110,25 @@ structure IsIdeal {P} [LE P] (I : Set P) : Prop where
   /-- The ideal is nonempty. -/
   Nonempty : I.Nonempty
   /-- The ideal is upward directed. -/
-  Directed : DirectedOn (· <= ·) I
+  Directed : DirectedOn (· ≤ ·) I
 
-/--
-Definition of `IsIdeal.toIdeal` / `IsIdeal.toIdeal` 的定义
+/-- Create an element of type `Order.Ideal` from a set satisfying the predicate
+`Order.IsIdeal`. -/
+/-
+**Order.IsIdeal.toIdeal** 是 Mathlib 中的一个定义，位于命名空间 `Order.IsIdeal`。
+形式化陈述：{P : Type u_1} → [inst : LE P] → {I : Set P} → Order.IsIdeal I → Order.Ide
+al P
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.IsIdeal.IsLowerSet`：∀ {P : Type u_2} [inst : LE P] {I : Set P}, Or
+der.IsIdeal I → IsLowerSet I
+· 使用定理 `Order.IsIdeal.Nonempty`：∀ {P : Type u_2} [inst : LE P] {I : Set P}, Orde
+r.IsIdeal I → I.Nonempty
+· 使用定理 `Order.IsIdeal.Directed`：∀ {P : Type u_2} [inst : LE P] {I : Set P}, Orde
+r.IsIdeal I → DirectedOn (fun x1 x2 => x1 ≤ x2) I
 
-English:
-definition IsIdeal.toIdeal
-  signature: [LE P] {I : Set P} (h : IsIdeal I)
-  body: ⟨⟨I, h.IsLowerSet⟩, h.Nonempty, h.Directed⟩
-
-中文:
-定义 Is理想.toIdeal
-  签名: [LE P] {I : 集合 P} (h : Is理想 I)
-  定义体: ⟨⟨I, h.IsLowerSet⟩, h.Nonempty, h.Directed⟩
-
-Depends on / 依赖: Directed, IsLowerSet, Nonempty, h.Directed, h.IsLowerSet, h.Nonempty
+--- 原说明 ---
+Create an element of type `Order.Ideal` from a set satisfying the predicate
+`Order.IsIdeal`.
 -/
 def IsIdeal.toIdeal [LE P] {I : Set P} (h : IsIdeal I) : Ideal P :=
   ⟨⟨I, h.IsLowerSet⟩, h.Nonempty, h.Directed⟩
@@ -148,443 +143,234 @@ section
 
 variable {I s t : Ideal P} {x : P}
 
-/--
-theorem `toLowerSet_injective` / 定理 `toLowerSet_injective`
-
-English:
-theorem toLowerSet_injective
-  statement: Injective (toLowerSet : Ideal P -> LowerSet P)
-  proof: fun s t _ => by
-  cases s
-  cases t
-  congr
-
-中文:
-定理 toLowerSet_injective
-  结论: 单射 (toLowerSet : 理想 P -> 下集 P)
-  证明: fun s t _ => by
-  cases s
-  cases t
-  congr
+/-
+**Order.Ideal.toLowerSet_injective** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：toLowerSet_injective : Injective (toLowerSet : Ideal P -> LowerSet P)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem toLowerSet_injective : Injective (toLowerSet : Ideal P -> LowerSet P) := fun s t _ => by
+theorem toLowerSet_injective : Injective (toLowerSet : Ideal P → LowerSet P) := fun s t _ ↦ by
   cases s
   cases t
   congr
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: SetLike (Ideal P) P
-  body: s.carrier
-coe_injective _ _ h := toLowerSet_injective SetLike.coe_injective h
-
-中文:
-实例 :
-  签名: 集合状 (理想 P) P
-  定义体: s.carrier
-coe_injective _ _ h := toLowerSet_injective SetLike.coe_injective h
-
-Depends on / 依赖: carrier, s.carrier
+/-
+**Order.Ideal.** 是 Mathlib 中的一个实例，位于命名空间 `Order.Ideal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : SetLike (Ideal P) P where
   coe s := s.carrier
-coe_injective _ _ h := toLowerSet_injective SetLike.coe_injective h
+  coe_injective _ _ h := toLowerSet_injective <| SetLike.coe_injective h
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The partial ordering by subset inclusion, inherited from `Set P`. -/
+/-
+**Order.Ideal.** 是 Mathlib 中的一个实例，位于命名空间 `Order.Ideal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: PartialOrder (Ideal P)
-  body: .ofSetLike (Ideal P) P
-
-@[deprecated (since := "2026-04-01")] alias instPartialOrderIdeal := Order.Ideal.instPartialOrder
-
-@[ext]
-
-中文:
-实例 :
-  签名: 偏序 (理想 P)
-  定义体: .ofSetLike (Ideal P) P
-
-@[deprecated (since := "2026-04-01")] alias instPartialOrderIdeal := Order.Ideal.instPartialOrder
-
-@[ext]
-
-Depends on / 依赖: ofSetLike
+--- 原说明 ---
+The partial ordering by subset inclusion, inherited from `Set P`.
 -/
 instance : PartialOrder (Ideal P) := .ofSetLike (Ideal P) P
 
 @[deprecated (since := "2026-04-01")] alias instPartialOrderIdeal := Order.Ideal.instPartialOrder
 
 @[ext]
-/--
-theorem `ext` / 定理 `ext`
-
-English:
-theorem ext
-  given: {s t : Ideal P}
-  statement: (s : Set P) = t -> s = t
-  proof: SetLike.ext'
-
-@[simp]
-
-中文:
-定理 ext
-  条件: {s t : 理想 P}
-  结论: (s : 集合 P) = t -> s = t
-  证明: SetLike.ext'
-
-@[simp]
-
-Depends on / 依赖: SetLike, SetLike.ext
+/-
+**Order.Ideal.ext** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：ext {s t : Ideal P} : (s : Set P) = t -> s = t
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SetLike.ext'`：ext' (h : (p : Set B) = q) : p = q
 -/
-theorem ext {s t : Ideal P} : (s : Set P) = t -> s = t :=
+theorem ext {s t : Ideal P} : (s : Set P) = t → s = t :=
   SetLike.ext'
 
 @[simp]
-/--
-theorem `carrier_eq_coe` / 定理 `carrier_eq_coe`
-
-English:
-theorem carrier_eq_coe
-  given: (s : Ideal P)
-  statement: s.carrier = s
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 carrier_eq_coe
-  条件: (s : 理想 P)
-  结论: s.carrier = s
-  证明: rfl
-
-@[simp]
+/-
+**Order.Ideal.carrier_eq_coe** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：carrier_eq_coe (s : Ideal P) : s.carrier = s
+参数：s : Ideal P。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem carrier_eq_coe (s : Ideal P) : s.carrier = s :=
   rfl
 
 @[simp]
-/--
-theorem `coe_toLowerSet` / 定理 `coe_toLowerSet`
-
-English:
-theorem coe_toLowerSet
-  given: (s : Ideal P)
-  statement: (s.toLowerSet : Set P) = s
-  proof: rfl
-
-中文:
-定理 coe_toLowerSet
-  条件: (s : 理想 P)
-  结论: (s.toLowerSet : 集合 P) = s
-  证明: rfl
+/-
+**Order.Ideal.coe_toLowerSet** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：coe_toLowerSet (s : Ideal P) : (s.toLowerSet : Set P) = s
+参数：s : Ideal P。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toLowerSet (s : Ideal P) : (s.toLowerSet : Set P) = s :=
   rfl
-
-/--
-theorem `lower` / 定理 `lower`
-
-English:
-theorem lower
-  given: (s : Ideal P)
-  statement: IsLowerSet (s : Set P)
-  proof: s.lower'
-
-中文:
-定理 lower
-  条件: (s : 理想 P)
-  结论: 是下集 (s : 集合 P)
-  证明: s.lower'
+/-
+**Order.Ideal.lower** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：∀ {P : Type u_1} [inst : LE P] (s : Order.Ideal P), IsLowerSet ↑s
+参数：s : Order.Ideal P。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LowerSet.lower'`：∀ {α : Type u_1} [inst : LE α] (self : LowerSet α), IsL
+owerSet self.carrier
 -/
 protected theorem lower (s : Ideal P) : IsLowerSet (s : Set P) :=
   s.lower'
-
-/--
-theorem `nonempty` / 定理 `nonempty`
-
-English:
-theorem nonempty
-  given: (s : Ideal P)
-  statement: (s : Set P).Nonempty
-  proof: s.nonempty'
-
-中文:
-定理 nonempty
-  条件: (s : 理想 P)
-  结论: (s : 集合 P).非空
-  证明: s.nonempty'
+/-
+**Order.Ideal.nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：∀ {P : Type u_1} [inst : LE P] (s : Order.Ideal P), (↑s).Nonempty
+参数：s : Order.Ideal P；↑s。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.Ideal.nonempty'`：∀ {P : Type u_2} [inst : LE P] (self : Order.Idea
+l P), self.carrier.Nonempty
 -/
 protected theorem nonempty (s : Ideal P) : (s : Set P).Nonempty :=
   s.nonempty'
-
-/--
-theorem `directed` / 定理 `directed`
-
-English:
-theorem directed
-  given: (s : Ideal P)
-  statement: DirectedOn (· <= ·) (s : Set P)
-  proof: s.directed'
-
-中文:
-定理 directed
-  条件: (s : 理想 P)
-  结论: DirectedOn (· <= ·) (s : 集合 P)
-  证明: s.directed'
+/-
+**Order.Ideal.directed** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：∀ {P : Type u_1} [inst : LE P] (s : Order.Ideal P), DirectedOn (fun x1 x2 
+=> x1 ≤ x2) ↑s
+参数：s : Order.Ideal P；fun x1 x2 => x1 ≤ x2。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.Ideal.directed'`：∀ {P : Type u_2} [inst : LE P] (self : Order.Idea
+l P), DirectedOn (fun x1 x2 => x1 ≤ x2) self.carrier
 -/
-protected theorem directed (s : Ideal P) : DirectedOn (· <= ·) (s : Set P) :=
+protected theorem directed (s : Ideal P) : DirectedOn (· ≤ ·) (s : Set P) :=
   s.directed'
-
-/--
-theorem `isIdeal` / 定理 `isIdeal`
-
-English:
-theorem isIdeal
-  given: (s : Ideal P)
-  statement: IsIdeal (s : Set P)
-  proof: ⟨s.lower, s.nonempty, s.directed⟩
-
-中文:
-定理 isIdeal
-  条件: (s : 理想 P)
-  结论: Is理想 (s : 集合 P)
-  证明: ⟨s.lower, s.nonempty, s.directed⟩
+/-
+**Order.Ideal.isIdeal** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：∀ {P : Type u_1} [inst : LE P] (s : Order.Ideal P), Order.IsIdeal ↑s
+参数：s : Order.Ideal P。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.Ideal.lower`：∀ {P : Type u_1} [inst : LE P] (s : Order.Ideal P), I
+sLowerSet ↑s
+· 使用定理 `Order.Ideal.nonempty`：∀ {P : Type u_1} [inst : LE P] (s : Order.Ideal P)
+, (↑s).Nonempty
+· 使用定理 `Order.Ideal.directed`：∀ {P : Type u_1} [inst : LE P] (s : Order.Ideal P)
+, DirectedOn (fun x1 x2 => x1 ≤ x2) ↑s
 -/
 protected theorem isIdeal (s : Ideal P) : IsIdeal (s : Set P) :=
   ⟨s.lower, s.nonempty, s.directed⟩
-
-/--
-theorem `mem_compl_of_ge` / 定理 `mem_compl_of_ge`
-
-English:
-theorem mem_compl_of_ge
-  given: {x y : P}
-  statement: x <= y -> x in (I : Set P)ᶜ -> y in (I : Set P)ᶜ
-  proof: fun h =>
-mt I.lower h
-
-中文:
-定理 mem_compl_of_ge
-  条件: {x y : P}
-  结论: x <= y -> x in (I : 集合 P)ᶜ -> y in (I : 集合 P)ᶜ
-  证明: fun h =>
-mt I.lower h
+/-
+**Order.Ideal.mem_compl_of_ge** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：mem_compl_of_ge {x y : P} : x <= y -> x in (I : Set P)ᶜ -> y in (I : Set P
+)ᶜ
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `mt`：∀ {a b : Prop}, (a → b) → ¬b → ¬a
+· 使用定理 `Order.Ideal.lower`：∀ {P : Type u_1} [inst : LE P] (s : Order.Ideal P), I
+sLowerSet ↑s
 -/
-theorem mem_compl_of_ge {x y : P} : x <= y -> x in (I : Set P)ᶜ -> y in (I : Set P)ᶜ := fun h =>
-mt I.lower h
-
-/--
-theorem `coe_subset_coe` / 定理 `coe_subset_coe`
-
-English:
-theorem coe_subset_coe
-  statement: (s : Set P) subseteq t ↔ s <= t
-  proof: Iff.rfl
-
-中文:
-定理 coe_subset_coe
-  结论: (s : 集合 P) subseteq t ↔ s <= t
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+theorem mem_compl_of_ge {x y : P} : x ≤ y → x ∈ (I : Set P)ᶜ → y ∈ (I : Set P)ᶜ := fun h ↦
+  mt <| I.lower h
+/-
+**Order.Ideal.coe_subset_coe** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：coe_subset_coe : (s : Set P) subseteq t ↔ s <= t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem coe_subset_coe : (s : Set P) subseteq t ↔ s <= t :=
+theorem coe_subset_coe : (s : Set P) ⊆ t ↔ s ≤ t :=
   Iff.rfl
-
-/--
-theorem `coe_ssubset_coe` / 定理 `coe_ssubset_coe`
-
-English:
-theorem coe_ssubset_coe
-  statement: (s : Set P) ⊂ t ↔ s < t
-  proof: Iff.rfl
-
-@[trans]
-
-中文:
-定理 coe_ssubset_coe
-  结论: (s : 集合 P) ⊂ t ↔ s < t
-  证明: Iff.rfl
-
-@[trans]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Order.Ideal.coe_ssubset_coe** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：coe_ssubset_coe : (s : Set P) ⊂ t ↔ s < t
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem coe_ssubset_coe : (s : Set P) ⊂ t ↔ s < t :=
   Iff.rfl
 
 @[trans]
-/--
-theorem `mem_of_mem_of_le` / 定理 `mem_of_mem_of_le`
-
-English:
-theorem mem_of_mem_of_le
-  given: {x : P} {I J : Ideal P}
-  statement: x in I -> I <= J -> x in J
-  proof: @Set.mem_of_mem_of_subset P x I J
-
-@[simp]
-
-中文:
-定理 mem_of_mem_of_le
-  条件: {x : P} {I J : 理想 P}
-  结论: x in I -> I <= J -> x in J
-  证明: @Set.mem_of_mem_of_subset P x I J
-
-@[simp]
-
-Depends on / 依赖: Set.mem_of_mem_of_subset, mem_of_mem_of_subset
+/-
+**Order.Ideal.mem_of_mem_of_le** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：mem_of_mem_of_le {x : P} {I J : Ideal P} : x in I -> I <= J -> x in J
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_of_mem_of_subset`：mem_of_mem_of_subset {x : α} {s t : Set α} (hx
+ : x in s) (h : s subseteq t) : x in t
 -/
-theorem mem_of_mem_of_le {x : P} {I J : Ideal P} : x in I -> I <= J -> x in J :=
+theorem mem_of_mem_of_le {x : P} {I J : Ideal P} : x ∈ I → I ≤ J → x ∈ J :=
   @Set.mem_of_mem_of_subset P x I J
 
 @[simp]
-/--
-theorem `mem_toIdeal` / 定理 `mem_toIdeal`
-
-English:
-theorem mem_toIdeal
-  given: {I : Set P} (h : IsIdeal I) {a : P}
-  statement: a in h.toIdeal ↔ a in I
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 mem_toIdeal
-  条件: {I : 集合 P} (h : Is理想 I) {a : P}
-  结论: a in h.toIdeal ↔ a in I
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Order.Ideal.mem_toIdeal** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：mem_toIdeal {I : Set P} (h : IsIdeal I) {a : P} : a in h.toIdeal ↔ a in I
+参数：h : IsIdeal I。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_toIdeal {I : Set P} (h : IsIdeal I) {a : P} : a in h.toIdeal ↔ a in I :=
+theorem mem_toIdeal {I : Set P} (h : IsIdeal I) {a : P} : a ∈ h.toIdeal ↔ a ∈ I :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `coe_toIdeal` / 定理 `coe_toIdeal`
-
-English:
-theorem coe_toIdeal
-  given: {I : Set P} (h : IsIdeal I)
-  statement: (h.toIdeal : Set P) = I
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_toIdeal
-  条件: {I : 集合 P} (h : Is理想 I)
-  结论: (h.toIdeal : 集合 P) = I
-  证明: rfl
-
-@[simp]
+/-
+**Order.Ideal.coe_toIdeal** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：coe_toIdeal {I : Set P} (h : IsIdeal I) : (h.toIdeal : Set P) = I
+参数：h : IsIdeal I。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_toIdeal {I : Set P} (h : IsIdeal I) : (h.toIdeal : Set P) = I :=
   rfl
 
 @[simp]
-/--
-theorem `toIdeal_le` / 定理 `toIdeal_le`
-
-English:
-theorem toIdeal_le
-  given: {I : Set P} (h : IsIdeal I) {J : Ideal P}
-  statement: h.toIdeal <= J ↔ I subseteq J
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 toIdeal_le
-  条件: {I : 集合 P} (h : Is理想 I) {J : 理想 P}
-  结论: h.toIdeal <= J ↔ I subseteq J
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Order.Ideal.toIdeal_le** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：toIdeal_le {I : Set P} (h : IsIdeal I) {J : Ideal P} : h.toIdeal <= J ↔ I 
+subseteq J
+参数：h : IsIdeal I。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem toIdeal_le {I : Set P} (h : IsIdeal I) {J : Ideal P} : h.toIdeal <= J ↔ I subseteq J :=
+theorem toIdeal_le {I : Set P} (h : IsIdeal I) {J : Ideal P} : h.toIdeal ≤ J ↔ I ⊆ J :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `le_toIdeal` / 定理 `le_toIdeal`
-
-English:
-theorem le_toIdeal
-  given: {I : Set P} (h : IsIdeal I) {J : Ideal P}
-  statement: J <= h.toIdeal ↔ (J : Set P) subseteq I
-  proof: Iff.rfl
-
-中文:
-定理 le_toIdeal
-  条件: {I : 集合 P} (h : Is理想 I) {J : 理想 P}
-  结论: J <= h.toIdeal ↔ (J : 集合 P) subseteq I
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Order.Ideal.le_toIdeal** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：le_toIdeal {I : Set P} (h : IsIdeal I) {J : Ideal P} : J <= h.toIdeal ↔ (J
+ : Set P) subseteq I
+参数：h : IsIdeal I。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem le_toIdeal {I : Set P} (h : IsIdeal I) {J : Ideal P} : J <= h.toIdeal ↔ (J : Set P) subseteq I :=
+theorem le_toIdeal {I : Set P} (h : IsIdeal I) {J : Ideal P} : J ≤ h.toIdeal ↔ (J : Set P) ⊆ I :=
   Iff.rfl
 
 /-- A proper ideal is one that is not the whole set.
 Note that the whole set might not be an ideal. -/
 @[mk_iff]
-/--
-Definition of `IsProper` / `IsProper` 的定义
+/-
+**Order.Ideal.IsProper** 是 Mathlib 中的一个归纳类型，位于命名空间 `Order.Ideal`。
+形式化陈述：{P : Type u_1} → [inst : LE P] → Order.Ideal P → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsProper
-  parameters: (I : Ideal P)
-  axioms and operations (1):
-    - ne_univ : (I : Set P) != univ
-
-中文:
-类 是真
-  参数: (I : 理想 P)
-  公理与运算 (1 个):
-    - ne_univ : (I : 集合 P) != univ
+--- 原说明 ---
+A proper ideal is one that is not the whole set.
+Note that the whole set might not be an ideal.
 -/
 class IsProper (I : Ideal P) : Prop where
   /-- This ideal is not the whole set. -/
-  ne_univ : (I : Set P) != univ
-
-/--
-theorem `isProper_of_notMem` / 定理 `isProper_of_notMem`
-
-English:
-theorem isProper_of_notMem
-  given: {I : Ideal P} {p : P} (notMem : p ∉ I)
-  statement: IsProper I
-  proof: ⟨fun hp => by
-    have := mem_univ p
-    rw [← hp] at this
-    exact notMem this⟩
-
-中文:
-定理 isProper_of_notMem
-  条件: {I : 理想 P} {p : P} (notMem : p ∉ I)
-  结论: 是真 I
-  证明: ⟨fun hp => by
-    have := mem_univ p
-    rw [← hp] at this
-    exact notMem this⟩
-
-Depends on / 依赖: mem_univ, notMem
+  ne_univ : (I : Set P) ≠ univ
+/-
+**Order.Ideal.isProper_of_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：isProper_of_notMem {I : Ideal P} {p : P} (notMem : p ∉ I) : IsProper I
+参数：notMem : p ∉ I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem isProper_of_notMem {I : Ideal P} {p : P} (notMem : p ∉ I) : IsProper I :=
-  ⟨fun hp => by
+  ⟨fun hp ↦ by
     have := mem_univ p
     rw [← hp] at this
     exact notMem this⟩
@@ -594,53 +380,36 @@ theorem isProper_of_notMem {I : Ideal P} {p : P} (notMem : p ∉ I) : IsProper I
 Note that `IsCoatom` is less general because ideals only have a top element when `P` is directed
 and nonempty. -/
 @[mk_iff]
-/--
-Definition of `IsMaximal` / `IsMaximal` 的定义
+/-
+**Order.Ideal.IsMaximal** 是 Mathlib 中的一个归纳类型，位于命名空间 `Order.Ideal`。
+形式化陈述：{P : Type u_1} → [inst : LE P] → Order.Ideal P → Prop
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class IsMaximal
-  parameters: (I : Ideal P)
-  extends: IsProper I
-  axioms and operations (1):
-    - maximal_proper : forall ⦃J : Ideal P⦄, I < J -> (J : Set P) = univ
+--- 原说明 ---
+An ideal is maximal if it is maximal in the collection of proper ideals.
 
-中文:
-类 是极大
-  参数: (I : 理想 P)
-  继承: 是真 I
-  公理与运算 (1 个):
-    - maximal_proper : 对任意 ⦃J : 理想 P⦄, I < J -> (J : 集合 P) = univ
+Note that `IsCoatom` is less general because ideals only have a top element when
+ `P` is directed
+and nonempty.
 -/
 class IsMaximal (I : Ideal P) : Prop extends IsProper I where
   /-- This ideal is maximal in the collection of proper ideals. -/
-  maximal_proper : forall ⦃J : Ideal P⦄, I < J -> (J : Set P) = univ
-
-/--
-theorem `inter_nonempty` / 定理 `inter_nonempty`
-
-English:
-theorem inter_nonempty
-  given: [IsCodirectedOrder P] (I J : Ideal P)
-  statement: (I inter J : Set P).Nonempty
-  proof: by
-  obtain ⟨a, ha⟩ := I.nonempty
-  obtain ⟨b, hb⟩ := J.nonempty
-  obtain ⟨c, hac, hbc⟩ := exists_le_le a b
-  exact ⟨c, I.lower hac ha, J.lower hbc hb⟩
-
-中文:
-定理 inter_nonempty
-  条件: [IsCodirectedOrder P] (I J : 理想 P)
-  结论: (I inter J : 集合 P).非空
-  证明: by
-  obtain ⟨a, ha⟩ := I.nonempty
-  obtain ⟨b, hb⟩ := J.nonempty
-  obtain ⟨c, hac, hbc⟩ := exists_le_le a b
-  exact ⟨c, I.lower hac ha, J.lower hbc hb⟩
-
-Depends on / 依赖: I.lower, I.nonempty, J.lower, J.nonempty, exists_le_le, nonempty
+  maximal_proper : ∀ ⦃J : Ideal P⦄, I < J → (J : Set P) = univ
+/-
+**Order.Ideal.inter_nonempty** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：inter_nonempty [IsCodirectedOrder P] (I J : Ideal P) : (I inter J : Set P)
+.Nonempty
+参数：I J : Ideal P。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.Ideal.nonempty`：∀ {P : Type u_1} [inst : LE P] (s : Order.Ideal P)
+, (↑s).Nonempty
+· 使用定理 `exists_le_le`：∀ {α : Type u_1} [inst : LE α] [IsCodirectedOrder α] (a b 
+: α), ∃ c ≤ a, c ≤ b
+· 使用定理 `Order.Ideal.lower`：∀ {P : Type u_1} [inst : LE P] (s : Order.Ideal P), I
+sLowerSet ↑s
 -/
-theorem inter_nonempty [IsCodirectedOrder P] (I J : Ideal P) : (I inter J : Set P).Nonempty := by
+theorem inter_nonempty [IsCodirectedOrder P] (I J : Ideal P) : (I ∩ J : Set P).Nonempty := by
   obtain ⟨a, ha⟩ := I.nonempty
   obtain ⟨b, hb⟩ := J.nonempty
   obtain ⟨c, hac, hbc⟩ := exists_le_le a b
@@ -652,224 +421,124 @@ section Directed
 
 variable [IsDirectedOrder P] [Nonempty P] {I : Ideal P}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- In a directed and nonempty order, the top ideal is `univ`. -/
+/-
+**Order.Ideal.** 是 Mathlib 中的一个实例，位于命名空间 `Order.Ideal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: OrderTop (Ideal P)
-  body: ⟨⊤, univ_nonempty, directedOn_univ⟩
-  le_top _ _ _ := LowerSet.mem_top
-
-@[simp]
-
-中文:
-实例 :
-  签名: 有顶序 (理想 P)
-  定义体: ⟨⊤, univ_nonempty, directedOn_univ⟩
-  le_top _ _ _ := LowerSet.mem_top
-
-@[simp]
-
-Depends on / 依赖: directedOn_univ, univ_nonempty
+--- 原说明 ---
+In a directed and nonempty order, the top ideal is `univ`.
 -/
 instance : OrderTop (Ideal P) where
   top := ⟨⊤, univ_nonempty, directedOn_univ⟩
   le_top _ _ _ := LowerSet.mem_top
 
 @[simp]
-/--
-theorem `top_toLowerSet` / 定理 `top_toLowerSet`
-
-English:
-theorem top_toLowerSet
-  statement: (⊤ : Ideal P).toLowerSet = ⊤
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 top_toLowerSet
-  结论: (⊤ : 理想 P).toLowerSet = ⊤
-  证明: rfl
-
-@[simp]
+/-
+**Order.Ideal.top_toLowerSet** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：top_toLowerSet : (⊤ : Ideal P).toLowerSet = ⊤
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem top_toLowerSet : (⊤ : Ideal P).toLowerSet = ⊤ :=
   rfl
 
 @[simp]
-/--
-theorem `coe_top` / 定理 `coe_top`
-
-English:
-theorem coe_top
-  statement: ((⊤ : Ideal P) : Set P) = univ
-  proof: rfl
-
-中文:
-定理 coe_top
-  结论: ((⊤ : 理想 P) : 集合 P) = univ
-  证明: rfl
+/-
+**Order.Ideal.coe_top** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：coe_top : ((⊤ : Ideal P) : Set P) = univ
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem coe_top : ((⊤ : Ideal P) : Set P) = univ :=
   rfl
-
-/--
-theorem `isProper_of_ne_top` / 定理 `isProper_of_ne_top`
-
-English:
-theorem isProper_of_ne_top
-  given: (ne_top : I != ⊤)
-  statement: IsProper I
-  proof: ⟨fun h => ne_top ext h⟩
-
-中文:
-定理 isProper_of_ne_top
-  条件: (ne_top : I != ⊤)
-  结论: 是真 I
-  证明: ⟨fun h => ne_top ext h⟩
-
-Depends on / 依赖: ne_top
+/-
+**Order.Ideal.isProper_of_ne_top** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：isProper_of_ne_top (ne_top : I != ⊤) : IsProper I
+参数：ne_top : I != ⊤。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.Ideal.ext`：ext {s t : Ideal P} : (s : Set P) = t -> s = t
 -/
-theorem isProper_of_ne_top (ne_top : I != ⊤) : IsProper I :=
-⟨fun h => ne_top ext h⟩
-
-/--
-theorem `IsProper.ne_top` / 定理 `IsProper.ne_top`
-
-English:
-theorem IsProper.ne_top
-  given: (_ : IsProper I)
-  statement: I != ⊤
-  proof: fun h => IsProper.ne_univ congr_arg SetLike.coe h
-
-中文:
-定理 是真.ne_top
-  条件: (_ : 是真 I)
-  结论: I != ⊤
-  证明: fun h => IsProper.ne_univ congr_arg SetLike.coe h
-
-Depends on / 依赖: IsProper, IsProper.ne_univ, SetLike, SetLike.coe, congr_arg, ne_univ
+theorem isProper_of_ne_top (ne_top : I ≠ ⊤) : IsProper I :=
+  ⟨fun h ↦ ne_top <| ext h⟩
+/-
+**Order.Ideal.IsProper.ne_top** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal.IsProper`。
+形式化陈述：∀ {P : Type u_1} [inst : LE P] [inst_1 : IsDirectedOrder P] [inst_2 : None
+mpty P] {I : Order.Ideal P},   I.IsProper → I ≠ ⊤
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.Ideal.IsProper.ne_univ`：∀ {P : Type u_1} {inst : LE P} {I : Order.
+Ideal P} [self : I.IsProper], ↑I ≠ Set.univ
+· 使用定理 `congr_arg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ 
+→ f a₁ = f a₂
 -/
-theorem IsProper.ne_top (_ : IsProper I) : I != ⊤ :=
-fun h => IsProper.ne_univ congr_arg SetLike.coe h
-
-/--
-theorem `_root_.IsCoatom.isProper` / 定理 `_root_.IsCoatom.isProper`
-
-English:
-theorem _root_.IsCoatom.isProper
-  given: (hI : IsCoatom I)
-  statement: IsProper I
-  proof: isProper_of_ne_top hI.1
-
-中文:
-定理 _root_.IsCoatom.isProper
-  条件: (hI : IsCoatom I)
-  结论: 是真 I
-  证明: isProper_of_ne_top hI.1
-
-Depends on / 依赖: isProper_of_ne_top
+theorem IsProper.ne_top (_ : IsProper I) : I ≠ ⊤ :=
+  fun h ↦ IsProper.ne_univ <| congr_arg SetLike.coe h
+/-
+**Order.Ideal._root_.IsCoatom.isProper** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.IsCoatom.isProper (hI : IsCoatom I) : IsProper I :=
   isProper_of_ne_top hI.1
-
-/--
-theorem `isProper_iff_ne_top` / 定理 `isProper_iff_ne_top`
-
-English:
-theorem isProper_iff_ne_top
-  statement: IsProper I ↔ I != ⊤
-  proof: ⟨fun h => h.ne_top, fun h => isProper_of_ne_top h⟩
-
-中文:
-定理 isProper_iff_ne_top
-  结论: 是真 I ↔ I != ⊤
-  证明: ⟨fun h => h.ne_top, fun h => isProper_of_ne_top h⟩
-
-Depends on / 依赖: h.ne_top, isProper_of_ne_top, ne_top
+/-
+**Order.Ideal.isProper_iff_ne_top** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：isProper_iff_ne_top : IsProper I ↔ I != ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.Ideal.IsProper.ne_top`：∀ {P : Type u_1} [inst : LE P] [inst_1 : Is
+DirectedOrder P] [inst_2 : Nonempty P] {I : Order.Ideal P},   I.IsProper → I ≠ ⊤
+· 使用定理 `Order.Ideal.isProper_of_ne_top`：isProper_of_ne_top (ne_top : I != ⊤) : I
+sProper I
 -/
-theorem isProper_iff_ne_top : IsProper I ↔ I != ⊤ :=
-  ⟨fun h => h.ne_top, fun h => isProper_of_ne_top h⟩
-
-/--
-theorem `IsMaximal.isCoatom` / 定理 `IsMaximal.isCoatom`
-
-English:
-theorem IsMaximal.isCoatom
-  given: (_ : IsMaximal I)
-  statement: IsCoatom I
-  proof: ⟨IsMaximal.toIsProper.ne_top, fun _ h => ext IsMaximal.maximal_proper h⟩
-
-中文:
-定理 是极大.isCoatom
-  条件: (_ : 是极大 I)
-  结论: IsCoatom I
-  证明: ⟨IsMaximal.toIsProper.ne_top, fun _ h => ext IsMaximal.maximal_proper h⟩
-
-Depends on / 依赖: IsMaximal, IsMaximal.maximal_proper, IsMaximal.toIsProper.ne_top, IsScalarTower, IsScalarTower.algebraMap_apply, IsScalarTower.of_algebraMap_eq, P.Ring, algebraMap, algebraMap_apply, algebraMap_toRingHom, f.algebraMap_toRingHom, f.toAlgHom.toAlgebra, maximal_proper, ne_top, of_algebraMap_eq, toAlgHom, toAlgebra, toIsProper
+theorem isProper_iff_ne_top : IsProper I ↔ I ≠ ⊤ :=
+  ⟨fun h ↦ h.ne_top, fun h ↦ isProper_of_ne_top h⟩
+/-
+**Order.Ideal.IsMaximal.isCoatom** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal.IsMaxima
+l`。
+形式化陈述：∀ {P : Type u_1} [inst : LE P] [inst_1 : IsDirectedOrder P] [inst_2 : None
+mpty P] {I : Order.Ideal P},   I.IsMaximal → IsCoatom I
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.Ideal.IsProper.ne_top`：∀ {P : Type u_1} [inst : LE P] [inst_1 : Is
+DirectedOrder P] [inst_2 : Nonempty P] {I : Order.Ideal P},   I.IsProper → I ≠ ⊤
+· 使用定理 `Order.Ideal.IsMaximal.toIsProper`：∀ {P : Type u_1} {inst : LE P} {I : Or
+der.Ideal P} [self : I.IsMaximal], I.IsProper
+· 使用定理 `Order.Ideal.ext`：ext {s t : Ideal P} : (s : Set P) = t -> s = t
+· 使用定理 `Order.Ideal.IsMaximal.maximal_proper`：∀ {P : Type u_1} {inst : LE P} {I 
+: Order.Ideal P} [self : I.IsMaximal] ⦃J : Order.Ideal P⦄, I < J → ↑J = Set.univ
 -/
 theorem IsMaximal.isCoatom (_ : IsMaximal I) : IsCoatom I :=
-⟨IsMaximal.toIsProper.ne_top, fun _ h => ext IsMaximal.maximal_proper h⟩
-
-/--
-theorem `IsMaximal.isCoatom'` / 定理 `IsMaximal.isCoatom'`
-
-English:
-theorem IsMaximal.isCoatom'
-  given: [IsMaximal I]
-  statement: IsCoatom I
-  proof: IsMaximal.isCoatom ‹_›
-
-中文:
-定理 是极大.isCoatom'
-  条件: [是极大 I]
-  结论: IsCoatom I
-  证明: IsMaximal.isCoatom ‹_›
-
-Depends on / 依赖: IsMaximal, IsMaximal.isCoatom, isCoatom
+  ⟨IsMaximal.toIsProper.ne_top, fun _ h ↦ ext <| IsMaximal.maximal_proper h⟩
+/-
+**Order.Ideal.IsMaximal.isCoatom'** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal.IsMaxim
+al`。
+形式化陈述：∀ {P : Type u_1} [inst : LE P] [inst_1 : IsDirectedOrder P] [inst_2 : None
+mpty P] {I : Order.Ideal P} [I.IsMaximal],   IsCoatom I
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.Ideal.IsMaximal.isCoatom`：∀ {P : Type u_1} [inst : LE P] [inst_1 :
+ IsDirectedOrder P] [inst_2 : Nonempty P] {I : Order.Ideal P},   I.IsMaximal → I
+sCoatom I
 -/
 theorem IsMaximal.isCoatom' [IsMaximal I] : IsCoatom I :=
   IsMaximal.isCoatom ‹_›
-
-/--
-theorem `_root_.IsCoatom.isMaximal` / 定理 `_root_.IsCoatom.isMaximal`
-
-English:
-theorem _root_.IsCoatom.isMaximal
-  given: (hI : IsCoatom I)
-  statement: IsMaximal I
-  proof: { IsCoatom.isProper hI with maximal_proper := fun _ hJ => by simp [hI.2 _ hJ] }
-
-中文:
-定理 _root_.IsCoatom.isMaximal
-  条件: (hI : IsCoatom I)
-  结论: 是极大 I
-  证明: { IsCoatom.isProper hI with maximal_proper := fun _ hJ => by simp [hI.2 _ hJ] }
-
-Depends on / 依赖: IsCoatom, IsCoatom.isProper, isProper, maximal_proper
+/-
+**Order.Ideal._root_.IsCoatom.isMaximal** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.IsCoatom.isMaximal (hI : IsCoatom I) : IsMaximal I :=
-  { IsCoatom.isProper hI with maximal_proper := fun _ hJ => by simp [hI.2 _ hJ] }
-
-/--
-theorem `isMaximal_iff_isCoatom` / 定理 `isMaximal_iff_isCoatom`
-
-English:
-theorem isMaximal_iff_isCoatom
-  statement: IsMaximal I ↔ IsCoatom I
-  proof: ⟨fun h => h.isCoatom, fun h => IsCoatom.isMaximal h⟩
-
-中文:
-定理 isMaximal_iff_isCoatom
-  结论: 是极大 I ↔ IsCoatom I
-  证明: ⟨fun h => h.isCoatom, fun h => IsCoatom.isMaximal h⟩
-
-Depends on / 依赖: IsCoatom, IsCoatom.isMaximal, h.isCoatom, isCoatom, isMaximal
+  { IsCoatom.isProper hI with maximal_proper := fun _ hJ ↦ by simp [hI.2 _ hJ] }
+/-
+**Order.Ideal.isMaximal_iff_isCoatom** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：isMaximal_iff_isCoatom : IsMaximal I ↔ IsCoatom I
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.Ideal.IsMaximal.isCoatom`：∀ {P : Type u_1} [inst : LE P] [inst_1 :
+ IsDirectedOrder P] [inst_2 : Nonempty P] {I : Order.Ideal P},   I.IsMaximal → I
+sCoatom I
+· 使用定理 `IsCoatom.isMaximal`：∀ {P : Type u_1} [inst : LE P] [inst_1 : IsDirectedO
+rder P] [inst_2 : Nonempty P] {I : Order.Ideal P},   IsCoatom I → I.IsMaximal
 -/
 theorem isMaximal_iff_isCoatom : IsMaximal I ↔ IsCoatom I :=
-  ⟨fun h => h.isCoatom, fun h => IsCoatom.isMaximal h⟩
+  ⟨fun h ↦ h.isCoatom, fun h ↦ IsCoatom.isMaximal h⟩
 
 end Directed
 
@@ -878,24 +547,22 @@ section OrderBot
 variable [OrderBot P]
 
 @[simp]
-/--
-theorem `bot_mem` / 定理 `bot_mem`
-
-English:
-theorem bot_mem
-  given: (s : Ideal P)
-  statement: ⊥ in s
-  proof: s.lower bot_le s.nonempty'.some_mem
-
-中文:
-定理 bot_mem
-  条件: (s : 理想 P)
-  结论: ⊥ in s
-  证明: s.lower bot_le s.nonempty'.some_mem
-
-Depends on / 依赖: bot_le, nonempty, s.lower, s.nonempty, some_mem
+/-
+**Order.Ideal.bot_mem** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：bot_mem (s : Ideal P) : ⊥ in s
+参数：s : Ideal P。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.Ideal.lower`：∀ {P : Type u_1} [inst : LE P] (s : Order.Ideal P), I
+sLowerSet ↑s
+· 使用定理 `Order.Ideal.nonempty'`：∀ {P : Type u_2} [inst : LE P] (self : Order.Idea
+l P), self.carrier.Nonempty
+· 使用定理 `bot_le`：∀ {α : Type u} [inst : LE α] [inst_1 : OrderBot α] {a : α}, ⊥ ≤ 
+a
+· 使用定理 `Set.Nonempty.some_mem`：∀ {α : Type u} {s : Set α} (h : s.Nonempty), h.so
+me ∈ s
 -/
-theorem bot_mem (s : Ideal P) : ⊥ in s :=
+theorem bot_mem (s : Ideal P) : ⊥ ∈ s :=
   s.lower bot_le s.nonempty'.some_mem
 
 end OrderBot
@@ -904,67 +571,55 @@ section OrderTop
 
 variable [OrderTop P] {I : Ideal P}
 
-/--
-theorem `top_mem_iff_eq_top` / 定理 `top_mem_iff_eq_top`
-
-English:
-theorem top_mem_iff_eq_top
-  statement: ⊤ in I ↔ I = ⊤
-  proof: ⟨fun h => SetLike.ext fun _ => iff_of_true (I.lower le_top h) ⟨⟩, fun h => h ▸ mem_univ _⟩
-
-中文:
-定理 top_mem_iff_eq_top
-  结论: ⊤ in I ↔ I = ⊤
-  证明: ⟨fun h => SetLike.ext fun _ => iff_of_true (I.lower le_top h) ⟨⟩, fun h => h ▸ mem_univ _⟩
-
-Depends on / 依赖: I.lower, SetLike, SetLike.ext, iff_of_true, le_top, mem_univ
+/-
+**Order.Ideal.top_mem_iff_eq_top** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：top_mem_iff_eq_top : ⊤ in I ↔ I = ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderTop.instIsDirectedOrder`：∀ {α : Type u_1} [inst : LE α] [OrderTop α
+], IsDirectedOrder α
+· 使用定理 `top_nonempty`：∀ (α : Type u_1) [Top α], Nonempty α
+· 使用定理 `SetLike.ext`：ext (h : forall x, x in p ↔ x in q) : p = q
+· 使用定理 `iff_of_true`：∀ {a b : Prop}, a → b → (a ↔ b)
+· 使用定理 `Order.Ideal.lower`：∀ {P : Type u_1} [inst : LE P] (s : Order.Ideal P), I
+sLowerSet ↑s
+· 使用定理 `le_top`：le_top : a <= ⊤
+· 使用定理 `Set.mem_univ`：mem_univ (x : α) : x in @univ α
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
-theorem top_mem_iff_eq_top : ⊤ in I ↔ I = ⊤ :=
+theorem top_mem_iff_eq_top : ⊤ ∈ I ↔ I = ⊤ :=
   ⟨fun h => SetLike.ext fun _ => iff_of_true (I.lower le_top h) ⟨⟩, fun h => h ▸ mem_univ _⟩
-
-/--
-theorem `top_notMem_iff_ne_top` / 定理 `top_notMem_iff_ne_top`
-
-English:
-theorem top_notMem_iff_ne_top
-  statement: ⊤ ∉ I ↔ I != ⊤
-  proof: top_mem_iff_eq_top.not
-
-中文:
-定理 top_notMem_iff_ne_top
-  结论: ⊤ ∉ I ↔ I != ⊤
-  证明: top_mem_iff_eq_top.not
-
-Depends on / 依赖: top_mem_iff_eq_top, top_mem_iff_eq_top.not
+/-
+**Order.Ideal.top_notMem_iff_ne_top** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：top_notMem_iff_ne_top : ⊤ ∉ I ↔ I != ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.not`：∀ {a b : Prop}, (a ↔ b) → (¬a ↔ ¬b)
+· 使用定理 `OrderTop.instIsDirectedOrder`：∀ {α : Type u_1} [inst : LE α] [OrderTop α
+], IsDirectedOrder α
+· 使用定理 `top_nonempty`：∀ (α : Type u_1) [Top α], Nonempty α
+· 使用定理 `Order.Ideal.top_mem_iff_eq_top`：top_mem_iff_eq_top : ⊤ in I ↔ I = ⊤
 -/
-theorem top_notMem_iff_ne_top : ⊤ ∉ I ↔ I != ⊤ :=
+theorem top_notMem_iff_ne_top : ⊤ ∉ I ↔ I ≠ ⊤ :=
   top_mem_iff_eq_top.not
-
-/--
-theorem `isProper_iff_top_notMem` / 定理 `isProper_iff_top_notMem`
-
-English:
-theorem isProper_iff_top_notMem
-  statement: I.IsProper ↔ ⊤ ∉ I
-  proof: by
-  rw [isProper_iff_ne_top]; rw [ne_eq]; rw [top_mem_iff_eq_top]
-
-alias ⟨top_of_top_mem, _⟩ := top_mem_iff_eq_top
-alias ⟨IsProper.top_notMem, _⟩ := isProper_iff_top_notMem
-
-中文:
-定理 isProper_iff_top_notMem
-  结论: I.是真 ↔ ⊤ ∉ I
-  证明: by
-  rw [isProper_iff_ne_top]; rw [ne_eq]; rw [top_mem_iff_eq_top]
-
-alias ⟨top_of_top_mem, _⟩ := top_mem_iff_eq_top
-alias ⟨IsProper.top_notMem, _⟩ := isProper_iff_top_notMem
-
-Depends on / 依赖: isProper_iff_ne_top, ne_eq, top_mem_iff_eq_top
+/-
+**Order.Ideal.isProper_iff_top_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：isProper_iff_top_notMem : I.IsProper ↔ ⊤ ∉ I
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderTop.instIsDirectedOrder`：∀ {α : Type u_1} [inst : LE α] [OrderTop α
+], IsDirectedOrder α
+· 使用定理 `top_nonempty`：∀ (α : Type u_1) [Top α], Nonempty α
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Order.Ideal.isProper_iff_ne_top`：isProper_iff_ne_top : IsProper I ↔ I !=
+ ⊤
+· 使用定理 `ne_eq`：∀ {α : Sort u_1} (a b : α), (a ≠ b) = ¬a = b
+· 使用定理 `Order.Ideal.top_mem_iff_eq_top`：top_mem_iff_eq_top : ⊤ in I ↔ I = ⊤
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem isProper_iff_top_notMem : I.IsProper ↔ ⊤ ∉ I := by
-  rw [isProper_iff_ne_top]; rw [ne_eq]; rw [top_mem_iff_eq_top]
+  rw [isProper_iff_ne_top, ne_eq, top_mem_iff_eq_top]
 
 alias ⟨top_of_top_mem, _⟩ := top_mem_iff_eq_top
 alias ⟨IsProper.top_notMem, _⟩ := isProper_iff_top_notMem
@@ -983,110 +638,61 @@ variable {I : Ideal P} {x y : P}
 
 /-- The smallest ideal containing a given element. -/
 @[simps]
-/--
-Definition of `principal` / `principal` 的定义
+/-
+**Order.Ideal.principal** 是 Mathlib 中的一个定义，位于命名空间 `Order.Ideal`。
+形式化陈述：principal (p : P) : Ideal P where toLowerSet
+参数：p : P。
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.nonempty_Iic`：nonempty_Iic : (Iic a).Nonempty
 
-English:
-definition principal
-  signature: (p : P)
-  body: LowerSet.Iic p
-  nonempty' := nonempty_Iic
-  directed' _ hx _ hy := ⟨p, le_rfl, hx, hy⟩
-
-中文:
-定义 principal
-  签名: (p : P)
-  定义体: LowerSet.Iic p
-  nonempty' := nonempty_Iic
-  directed' _ hx _ hy := ⟨p, le_rfl, hx, hy⟩
-
-Depends on / 依赖: IsScalarTower, LinearMap, LinearMap.ker, LowerSet, LowerSet.Iic
+--- 原说明 ---
+The smallest ideal containing a given element.
 -/
 def principal (p : P) : Ideal P where
   toLowerSet := LowerSet.Iic p
   nonempty' := nonempty_Iic
   directed' _ hx _ hy := ⟨p, le_rfl, hx, hy⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [Inhabited
-  signature: P] : Inhabited (Ideal P)
-  body: ⟨Ideal.principal default⟩
-
-@[simp]
-
-中文:
-实例 [可居
-  签名: P] : 可居 (理想 P)
-  定义体: ⟨Ideal.principal default⟩
-
-@[simp]
-
-Depends on / 依赖: Ideal.principal, principal
+/-
+**Order.Ideal.** 是 Mathlib 中的一个实例，位于命名空间 `Order.Ideal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [Inhabited P] : Inhabited (Ideal P) :=
   ⟨Ideal.principal default⟩
 
 @[simp]
-/--
-theorem `principal_le_iff` / 定理 `principal_le_iff`
-
-English:
-theorem principal_le_iff
-  statement: principal x <= I ↔ x in I
-  proof: ⟨fun h => h le_rfl, fun hx _ hy => I.lower hy hx⟩
-
-@[simp]
-
-中文:
-定理 principal_le_iff
-  结论: principal x <= I ↔ x in I
-  证明: ⟨fun h => h le_rfl, fun hx _ hy => I.lower hy hx⟩
-
-@[simp]
-
-Depends on / 依赖: I.lower, le_rfl
+/-
+**Order.Ideal.principal_le_iff** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：principal_le_iff : principal x <= I ↔ x in I
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_rfl`：le_rfl : a <= a
+· 使用定理 `Order.Ideal.lower`：∀ {P : Type u_1} [inst : LE P] (s : Order.Ideal P), I
+sLowerSet ↑s
 -/
-theorem principal_le_iff : principal x <= I ↔ x in I :=
-  ⟨fun h => h le_rfl, fun hx _ hy => I.lower hy hx⟩
+theorem principal_le_iff : principal x ≤ I ↔ x ∈ I :=
+  ⟨fun h ↦ h le_rfl, fun hx _ hy ↦ I.lower hy hx⟩
 
 @[simp]
-/--
-theorem `mem_principal` / 定理 `mem_principal`
-
-English:
-theorem mem_principal
-  statement: x in principal y ↔ x <= y
-  proof: Iff.rfl
-
-中文:
-定理 mem_principal
-  结论: x in principal y ↔ x <= y
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Order.Ideal.mem_principal** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：mem_principal : x in principal y ↔ x <= y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_principal : x in principal y ↔ x <= y :=
+theorem mem_principal : x ∈ principal y ↔ x ≤ y :=
   Iff.rfl
-
-/--
-lemma `mem_principal_self` / 引理 `mem_principal_self`
-
-English:
-lemma mem_principal_self
-  statement: x in principal x
-  proof: mem_principal.2 (le_refl x)
-
-中文:
-引理 mem_principal_self
-  结论: x in principal x
-  证明: mem_principal.2 (le_refl x)
-
-Depends on / 依赖: le_refl, mem_principal
+/-
+**Order.Ideal.mem_principal_self** 是 Mathlib 中的一个引理，位于命名空间 `Order.Ideal`。
+形式化陈述：mem_principal_self : x in principal x
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Order.Ideal.mem_principal`：mem_principal : x in principal y ↔ x <= y
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
 -/
-lemma mem_principal_self : x in principal x :=
+lemma mem_principal_self : x ∈ principal x :=
   mem_principal.2 (le_refl x)
 
 end
@@ -1095,44 +701,24 @@ section OrderBot
 
 variable [OrderBot P]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- There is a bottom ideal when `P` has a bottom element. -/
+/-
+**Order.Ideal.** 是 Mathlib 中的一个实例，位于命名空间 `Order.Ideal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: OrderBot (Ideal P)
-  body: principal ⊥
-  bot_le := by simp
-
-@[simp]
-
-中文:
-实例 :
-  签名: 有底序 (理想 P)
-  定义体: principal ⊥
-  bot_le := by simp
-
-@[simp]
-
-Depends on / 依赖: principal
+--- 原说明 ---
+There is a bottom ideal when `P` has a bottom element.
 -/
 instance : OrderBot (Ideal P) where
   bot := principal ⊥
   bot_le := by simp
 
 @[simp]
-/--
-theorem `principal_bot` / 定理 `principal_bot`
-
-English:
-theorem principal_bot
-  statement: principal (⊥ : P) = ⊥
-  proof: rfl
-
-中文:
-定理 principal_bot
-  结论: principal (⊥ : P) = ⊥
-  证明: rfl
+/-
+**Order.Ideal.principal_bot** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：principal_bot : principal (⊥ : P) = ⊥
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem principal_bot : principal (⊥ : P) = ⊥ :=
   rfl
@@ -1144,127 +730,118 @@ section OrderTop
 variable [OrderTop P]
 
 @[simp]
-/--
-theorem `principal_top` / 定理 `principal_top`
-
-English:
-theorem principal_top
-  statement: principal (⊤ : P) = ⊤
-  proof: toLowerSet_injective LowerSet.Iic_top
-
-中文:
-定理 principal_top
-  结论: principal (⊤ : P) = ⊤
-  证明: toLowerSet_injective LowerSet.Iic_top
-
-Depends on / 依赖: Iic_top, LowerSet, LowerSet.Iic_top, toLowerSet_injective
+/-
+**Order.Ideal.principal_top** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：principal_top : principal (⊤ : P) = ⊤
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.Ideal.toLowerSet_injective`：toLowerSet_injective : Injective (toLo
+werSet : Ideal P -> LowerSet P)
+· 使用定理 `OrderTop.instIsDirectedOrder`：∀ {α : Type u_1} [inst : LE α] [OrderTop α
+], IsDirectedOrder α
+· 使用定理 `top_nonempty`：∀ (α : Type u_1) [Top α], Nonempty α
+· 使用定理 `LowerSet.Iic_top`：∀ {α : Type u_1} [inst : Preorder α] [inst_1 : OrderTo
+p α], LowerSet.Iic ⊤ = ⊤
 -/
 theorem principal_top : principal (⊤ : P) = ⊤ :=
-toLowerSet_injective LowerSet.Iic_top
+  toLowerSet_injective <| LowerSet.Iic_top
 
 end OrderTop
 
 end Preorder
 
 @[simp]
-/--
-theorem `isProper_principal_iff` / 定理 `isProper_principal_iff`
-
-English:
-theorem isProper_principal_iff
-  given: [PartialOrder P] [OrderTop P] {a : P}
-  proof: by
-  rw [isProper_iff_top_notMem]; rw [mem_principal]; rw [top_le_iff]
-
-中文:
-定理 isProper_principal_iff
-  条件: [偏序 P] [有顶序 P] {a : P}
-  证明: by
-  rw [isProper_iff_top_notMem]; rw [mem_principal]; rw [top_le_iff]
-
-Depends on / 依赖: isProper_iff_top_notMem, mem_principal, top_le_iff
+/-
+**Order.Ideal.isProper_principal_iff** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：isProper_principal_iff [PartialOrder P] [OrderTop P] {a : P} : (principal 
+a).IsProper ↔ a != ⊤
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Order.Ideal.isProper_iff_top_notMem`：isProper_iff_top_notMem : I.IsPrope
+r ↔ ⊤ ∉ I
+· 使用定理 `Order.Ideal.mem_principal`：mem_principal : x in principal y ↔ x <= y
+· 使用定理 `top_le_iff`：top_le_iff : ⊤ <= a ↔ a = ⊤
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem isProper_principal_iff [PartialOrder P] [OrderTop P] {a : P} :
-    (principal a).IsProper ↔ a != ⊤ := by
-  rw [isProper_iff_top_notMem]; rw [mem_principal]; rw [top_le_iff]
+    (principal a).IsProper ↔ a ≠ ⊤ := by
+  rw [isProper_iff_top_notMem, mem_principal, top_le_iff]
 
 section SemilatticeSup
 
 variable [SemilatticeSup P] {x y : P} {I s : Ideal P}
 
-/--
-theorem `sup_mem` / 定理 `sup_mem`
+/-- A specific witness of `I.directed` when `P` has joins. -/
+/-
+**Order.Ideal.sup_mem** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：sup_mem (hx : x in s) (hy : y in s) : x ⊔ y in s
+参数：hx : x in s；hy : y in s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.Ideal.directed`：∀ {P : Type u_1} [inst : LE P] (s : Order.Ideal P)
+, DirectedOn (fun x1 x2 => x1 ≤ x2) ↑s
+· 使用定理 `Order.Ideal.lower`：∀ {P : Type u_1} [inst : LE P] (s : Order.Ideal P), I
+sLowerSet ↑s
+· 使用定理 `sup_le`：sup_le : a <= c -> b <= c -> a ⊔ b <= c
 
-English:
-theorem sup_mem
-  given: (hx : x in s) (hy : y in s)
-  statement: x ⊔ y in s
-  proof: let ⟨_, hz, hx, hy⟩ := s.directed x hx y hy
-  s.lower (sup_le hx hy) hz
-
-@[simp]
-
-中文:
-定理 sup_mem
-  条件: (hx : x in s) (hy : y in s)
-  结论: x ⊔ y in s
-  证明: let ⟨_, hz, hx, hy⟩ := s.directed x hx y hy
-  s.lower (sup_le hx hy) hz
-
-@[simp]
-
-Depends on / 依赖: directed, s.directed, s.lower, sup_le
+--- 原说明 ---
+A specific witness of `I.directed` when `P` has joins.
 -/
-theorem sup_mem (hx : x in s) (hy : y in s) : x ⊔ y in s :=
+theorem sup_mem (hx : x ∈ s) (hy : y ∈ s) : x ⊔ y ∈ s :=
   let ⟨_, hz, hx, hy⟩ := s.directed x hx y hy
   s.lower (sup_le hx hy) hz
 
 @[simp]
-/--
-theorem `sup_mem_iff` / 定理 `sup_mem_iff`
-
-English:
-theorem sup_mem_iff
-  statement: x ⊔ y in I ↔ x in I ∧ y in I
-  proof: ⟨fun h => ⟨I.lower le_sup_left h, I.lower le_sup_right h⟩, fun h => sup_mem h.1 h.2⟩
-
-@[simp]
-
-中文:
-定理 sup_mem_iff
-  结论: x ⊔ y in I ↔ x in I ∧ y in I
-  证明: ⟨fun h => ⟨I.lower le_sup_left h, I.lower le_sup_right h⟩, fun h => sup_mem h.1 h.2⟩
-
-@[simp]
-
-Depends on / 依赖: I.lower, le_sup_left, le_sup_right, sup_mem
+/-
+**Order.Ideal.sup_mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：sup_mem_iff : x ⊔ y in I ↔ x in I ∧ y in I
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.Ideal.lower`：∀ {P : Type u_1} [inst : LE P] (s : Order.Ideal P), I
+sLowerSet ↑s
+· 使用定理 `le_sup_left`：le_sup_left : a <= a ⊔ b
+· 使用定理 `le_sup_right`：le_sup_right : b <= a ⊔ b
+· 使用定理 `Order.Ideal.sup_mem`：sup_mem (hx : x in s) (hy : y in s) : x ⊔ y in s
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
 -/
-theorem sup_mem_iff : x ⊔ y in I ↔ x in I ∧ y in I :=
-  ⟨fun h => ⟨I.lower le_sup_left h, I.lower le_sup_right h⟩, fun h => sup_mem h.1 h.2⟩
+theorem sup_mem_iff : x ⊔ y ∈ I ↔ x ∈ I ∧ y ∈ I :=
+  ⟨fun h ↦ ⟨I.lower le_sup_left h, I.lower le_sup_right h⟩, fun h ↦ sup_mem h.1 h.2⟩
 
 @[simp]
-/--
-lemma `finsetSup_mem_iff` / 引理 `finsetSup_mem_iff`
-
-English:
-lemma finsetSup_mem_iff
-  statement: {P : Type*} [SemilatticeSup P] [OrderBot P]
-  proof: by
-  classical
-  induction s using Finset.induction_on <;> simp [*]
-
-中文:
-引理 finsetSup_mem_iff
-  结论: {P : 类型} [SemilatticeSup P] [有底序 P]
-  证明: by
-  classical
-  induction s using Finset.induction_on <;> simp [*]
-
-Depends on / 依赖: Finset, Finset.induction_on, classical, induction_on
+/-
+**Order.Ideal.finsetSup_mem_iff** 是 Mathlib 中的一个引理，位于命名空间 `Order.Ideal`。
+形式化陈述：finsetSup_mem_iff {P : Type*} [SemilatticeSup P] [OrderBot P] (t : Ideal P
+) {ι : Type*} {f : ι -> P} {s : Finset ι} : s.sup f in t ↔ forall i in s, f i in
+ t
+参数：t : Ideal P。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finset.induction_on`：∀ {α : Type u_3} {motive : Finset α → Prop} [inst :
+ DecidableEq α] (s : Finset α),   motive ∅ → (∀ (a : α) (s : Finset α), a ∉ s → 
+motive s …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Finset.sup_empty`：sup_empty : (∅ : Finset β).sup f = ⊥
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `Finset.sup_insert`：sup_insert [DecidableEq β] {b : β} : (insert b s : Fi
+nset β).sup f = f b ⊔ s.sup f
 -/
 lemma finsetSup_mem_iff {P : Type*} [SemilatticeSup P] [OrderBot P]
     (t : Ideal P) {ι : Type*}
-    {f : ι -> P} {s : Finset ι} : s.sup f in t ↔ forall i in s, f i in t := by
+    {f : ι → P} {s : Finset ι} : s.sup f ∈ t ↔ ∀ i ∈ s, f i ∈ t := by
   classical
   induction s using Finset.induction_on <;> simp [*]
 
@@ -1274,257 +851,122 @@ section SemilatticeSupDirected
 
 variable [SemilatticeSup P] [IsCodirectedOrder P] {x : P} {I J s t : Ideal P}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The infimum of two ideals of a co-directed order is their intersection. -/
+/-
+**Order.Ideal.** 是 Mathlib 中的一个实例，位于命名空间 `Order.Ideal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Min (Ideal P)
-  body: ⟨fun I J =>
-    { toLowerSet := I.toLowerSet ⊓ J.toLowerSet
-      nonempty' := inter_nonempty I J
-      directed' := fun x hx y hy => ⟨x ⊔ y, ⟨sup_mem hx.1 hy.1, sup_mem hx.2 hy.2⟩, by simp⟩ }⟩
-
-中文:
-实例 :
-  签名: 最小值 (理想 P)
-  定义体: ⟨fun I J =>
-    { toLowerSet := I.toLowerSet ⊓ J.toLowerSet
-      nonempty' := inter_nonempty I J
-      directed' := fun x hx y hy => ⟨x ⊔ y, ⟨sup_mem hx.1 hy.1, sup_mem hx.2 hy.2⟩, by simp⟩ }⟩
-
-Depends on / 依赖: I.toLowerSet, J.toLowerSet, directed, inter_nonempty, nonempty, sup_mem, toLowerSet
+--- 原说明 ---
+The infimum of two ideals of a co-directed order is their intersection.
 -/
 instance : Min (Ideal P) :=
-  ⟨fun I J =>
+  ⟨fun I J ↦
     { toLowerSet := I.toLowerSet ⊓ J.toLowerSet
       nonempty' := inter_nonempty I J
-      directed' := fun x hx y hy => ⟨x ⊔ y, ⟨sup_mem hx.1 hy.1, sup_mem hx.2 hy.2⟩, by simp⟩ }⟩
+      directed' := fun x hx y hy ↦ ⟨x ⊔ y, ⟨sup_mem hx.1 hy.1, sup_mem hx.2 hy.2⟩, by simp⟩ }⟩
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
+/-- The supremum of two ideals of a co-directed order is the union of the down sets of the pointwise
+supremum of `I` and `J`. -/
+/-
+**Order.Ideal.** 是 Mathlib 中的一个实例，位于命名空间 `Order.Ideal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance :
-  signature: Max (Ideal P)
-  body: ⟨fun I J =>
-    { carrier := { x | exists i in I, exists j in J, x <= i ⊔ j }
-      nonempty' := by
-        obtain ⟨w, h⟩ := inter_nonempty I J
-        exact ⟨w, w, h.1, w, h.2, le_sup_left⟩
-      directed' := fun x ⟨xi, _, xj, _, _⟩ y ⟨yi, _, yj, _, _⟩ =>
-        ⟨x ⊔ y, ⟨xi ⊔ yi, sup_mem ‹_› ‹_›, xj ⊔ yj, sup_mem ‹_› ‹_›,
-            sup_le
-              (calc
-                x <= xi ⊔ xj := ‹_›
-                _ <= xi ⊔ yi ⊔ (xj ⊔ yj) := sup_le_sup le_sup_left le_sup_left)
-              (calc
-                y <= yi ⊔ yj := ‹_›
-                _ <= xi ⊔ yi ⊔ (xj ⊔ yj) := sup_le_sup le_sup_right le_sup_right)⟩,
-          le_sup_left, le_sup_right⟩
-      lower' := fun _ _ h ⟨yi, hi, yj, hj, hxy⟩ => ⟨yi, hi, yj, hj, h.trans hxy⟩ }⟩
-
-中文:
-实例 :
-  签名: 最大值 (理想 P)
-  定义体: ⟨fun I J =>
-    { carrier := { x | exists i in I, exists j in J, x <= i ⊔ j }
-      nonempty' := by
-        obtain ⟨w, h⟩ := inter_nonempty I J
-        exact ⟨w, w, h.1, w, h.2, le_sup_left⟩
-      directed' := fun x ⟨xi, _, xj, _, _⟩ y ⟨yi, _, yj, _, _⟩ =>
-        ⟨x ⊔ y, ⟨xi ⊔ yi, sup_mem ‹_› ‹_›, xj ⊔ yj, sup_mem ‹_› ‹_›,
-            sup_le
-              (calc
-                x <= xi ⊔ xj := ‹_›
-                _ <= xi ⊔ yi ⊔ (xj ⊔ yj) := sup_le_sup le_sup_left le_sup_left)
-              (calc
-                y <= yi ⊔ yj := ‹_›
-                _ <= xi ⊔ yi ⊔ (xj ⊔ yj) := sup_le_sup le_sup_right le_sup_right)⟩,
-          le_sup_left, le_sup_right⟩
-      lower' := fun _ _ h ⟨yi, hi, yj, hj, hxy⟩ => ⟨yi, hi, yj, hj, h.trans hxy⟩ }⟩
-
-Depends on / 依赖: carrier, directed, inter_nonempty, le_sup_left, le_sup_rig, le_sup_right, nonempty, sup_le, sup_le_sup, sup_mem
+--- 原说明 ---
+The supremum of two ideals of a co-directed order is the union of the down sets 
+of the pointwise
+supremum of `I` and `J`.
 -/
 instance : Max (Ideal P) :=
-  ⟨fun I J =>
-    { carrier := { x | exists i in I, exists j in J, x <= i ⊔ j }
+  ⟨fun I J ↦
+    { carrier := { x | ∃ i ∈ I, ∃ j ∈ J, x ≤ i ⊔ j }
       nonempty' := by
         obtain ⟨w, h⟩ := inter_nonempty I J
         exact ⟨w, w, h.1, w, h.2, le_sup_left⟩
-      directed' := fun x ⟨xi, _, xj, _, _⟩ y ⟨yi, _, yj, _, _⟩ =>
+      directed' := fun x ⟨xi, _, xj, _, _⟩ y ⟨yi, _, yj, _, _⟩ ↦
         ⟨x ⊔ y, ⟨xi ⊔ yi, sup_mem ‹_› ‹_›, xj ⊔ yj, sup_mem ‹_› ‹_›,
             sup_le
               (calc
-                x <= xi ⊔ xj := ‹_›
-                _ <= xi ⊔ yi ⊔ (xj ⊔ yj) := sup_le_sup le_sup_left le_sup_left)
+                x ≤ xi ⊔ xj := ‹_›
+                _ ≤ xi ⊔ yi ⊔ (xj ⊔ yj) := sup_le_sup le_sup_left le_sup_left)
               (calc
-                y <= yi ⊔ yj := ‹_›
-                _ <= xi ⊔ yi ⊔ (xj ⊔ yj) := sup_le_sup le_sup_right le_sup_right)⟩,
+                y ≤ yi ⊔ yj := ‹_›
+                _ ≤ xi ⊔ yi ⊔ (xj ⊔ yj) := sup_le_sup le_sup_right le_sup_right)⟩,
           le_sup_left, le_sup_right⟩
-      lower' := fun _ _ h ⟨yi, hi, yj, hj, hxy⟩ => ⟨yi, hi, yj, hj, h.trans hxy⟩ }⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Lattice (Ideal P)
-  body: (· ⊔ ·)
-  le_sup_left := fun _ J i hi =>
-    let ⟨w, hw⟩ := J.nonempty
-    ⟨i, hi, w, hw, le_sup_left⟩
-  le_sup_right := fun I _ j hj =>
-    let ⟨w, hw⟩ := I.nonempty
-    ⟨w, hw, j, hj, le_sup_right⟩
-  sup_le := fun _ _ K hIK hJK _ ⟨_, hi, _, hj, ha⟩ =>
-K.lower ha sup_mem (mem_of_mem_of_le hi hIK) (mem_of_mem_of_le hj hJK)
-  inf := (· ⊓ ·)
-  inf_le_left := fun _ _ => inter_subset_left
-  inf_le_right := fun _ _ => inter_subset_right
-  le_inf := fun _ _ _ => subset_inter
-
-@[simp]
-
-中文:
-实例 :
-  签名: 格 (理想 P)
-  定义体: (· ⊔ ·)
-  le_sup_left := fun _ J i hi =>
-    let ⟨w, hw⟩ := J.nonempty
-    ⟨i, hi, w, hw, le_sup_left⟩
-  le_sup_right := fun I _ j hj =>
-    let ⟨w, hw⟩ := I.nonempty
-    ⟨w, hw, j, hj, le_sup_right⟩
-  sup_le := fun _ _ K hIK hJK _ ⟨_, hi, _, hj, ha⟩ =>
-K.lower ha sup_mem (mem_of_mem_of_le hi hIK) (mem_of_mem_of_le hj hJK)
-  inf := (· ⊓ ·)
-  inf_le_left := fun _ _ => inter_subset_left
-  inf_le_right := fun _ _ => inter_subset_right
-  le_inf := fun _ _ _ => subset_inter
-
-@[simp]
-
-Depends on / 依赖: P.cotangentSpaceBasis, cotangentSpaceBasis, of_basis
+      lower' := fun _ _ h ⟨yi, hi, yj, hj, hxy⟩ ↦ ⟨yi, hi, yj, hj, h.trans hxy⟩ }⟩
+/-
+**Order.Ideal.** 是 Mathlib 中的一个实例，位于命名空间 `Order.Ideal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Lattice (Ideal P) where
   sup := (· ⊔ ·)
-  le_sup_left := fun _ J i hi =>
+  le_sup_left := fun _ J i hi ↦
     let ⟨w, hw⟩ := J.nonempty
     ⟨i, hi, w, hw, le_sup_left⟩
-  le_sup_right := fun I _ j hj =>
+  le_sup_right := fun I _ j hj ↦
     let ⟨w, hw⟩ := I.nonempty
     ⟨w, hw, j, hj, le_sup_right⟩
-  sup_le := fun _ _ K hIK hJK _ ⟨_, hi, _, hj, ha⟩ =>
-K.lower ha sup_mem (mem_of_mem_of_le hi hIK) (mem_of_mem_of_le hj hJK)
+  sup_le := fun _ _ K hIK hJK _ ⟨_, hi, _, hj, ha⟩ ↦
+    K.lower ha <| sup_mem (mem_of_mem_of_le hi hIK) (mem_of_mem_of_le hj hJK)
   inf := (· ⊓ ·)
-  inf_le_left := fun _ _ => inter_subset_left
-  inf_le_right := fun _ _ => inter_subset_right
-  le_inf := fun _ _ _ => subset_inter
+  inf_le_left := fun _ _ ↦ inter_subset_left
+  inf_le_right := fun _ _ ↦ inter_subset_right
+  le_inf := fun _ _ _ ↦ subset_inter
 
 @[simp]
-/--
-theorem `coe_sup` / 定理 `coe_sup`
-
-English:
-theorem coe_sup
-  statement: ↑(s ⊔ t) = { x | exists a in s, exists b in t, x <= a ⊔ b }
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_sup
-  结论: ↑(s ⊔ t) = { x | 存在 a in s, 存在 b in t, x <= a ⊔ b }
-  证明: rfl
-
-@[simp]
+/-
+**Order.Ideal.coe_sup** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：coe_sup : ↑(s ⊔ t) = { x | exists a in s, exists b in t, x <= a ⊔ b }
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_sup : ↑(s ⊔ t) = { x | exists a in s, exists b in t, x <= a ⊔ b } :=
+theorem coe_sup : ↑(s ⊔ t) = { x | ∃ a ∈ s, ∃ b ∈ t, x ≤ a ⊔ b } :=
   rfl
 
 @[simp]
-/--
-theorem `coe_inf` / 定理 `coe_inf`
-
-English:
-theorem coe_inf
-  statement: (↑(s ⊓ t) : Set P) = ↑s inter ↑t
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_inf
-  结论: (↑(s ⊓ t) : 集合 P) = ↑s inter ↑t
-  证明: rfl
-
-@[simp]
+/-
+**Order.Ideal.coe_inf** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：coe_inf : (↑(s ⊓ t) : Set P) = ↑s inter ↑t
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_inf : (↑(s ⊓ t) : Set P) = ↑s inter ↑t :=
+theorem coe_inf : (↑(s ⊓ t) : Set P) = ↑s ∩ ↑t :=
   rfl
 
 @[simp]
-/--
-theorem `mem_inf` / 定理 `mem_inf`
-
-English:
-theorem mem_inf
-  statement: x in I ⊓ J ↔ x in I ∧ x in J
-  proof: Iff.rfl
-
-@[simp]
-
-中文:
-定理 mem_inf
-  结论: x in I ⊓ J ↔ x in I ∧ x in J
-  证明: Iff.rfl
-
-@[simp]
-
-Depends on / 依赖: Iff.rfl
+/-
+**Order.Ideal.mem_inf** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：mem_inf : x in I ⊓ J ↔ x in I ∧ x in J
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_inf : x in I ⊓ J ↔ x in I ∧ x in J :=
+theorem mem_inf : x ∈ I ⊓ J ↔ x ∈ I ∧ x ∈ J :=
   Iff.rfl
 
 @[simp]
-/--
-theorem `mem_sup` / 定理 `mem_sup`
-
-English:
-theorem mem_sup
-  statement: x in I ⊔ J ↔ exists i in I, exists j in J, x <= i ⊔ j
-  proof: Iff.rfl
-
-中文:
-定理 mem_sup
-  结论: x in I ⊔ J ↔ 存在 i in I, 存在 j in J, x <= i ⊔ j
-  证明: Iff.rfl
-
-Depends on / 依赖: Iff.rfl
+/-
+**Order.Ideal.mem_sup** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：mem_sup : x in I ⊔ J ↔ exists i in I, exists j in J, x <= i ⊔ j
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
-theorem mem_sup : x in I ⊔ J ↔ exists i in I, exists j in J, x <= i ⊔ j :=
+theorem mem_sup : x ∈ I ⊔ J ↔ ∃ i ∈ I, ∃ j ∈ J, x ≤ i ⊔ j :=
   Iff.rfl
-
-/--
-theorem `lt_sup_principal_of_notMem` / 定理 `lt_sup_principal_of_notMem`
-
-English:
-theorem lt_sup_principal_of_notMem
-  given: (hx : x ∉ I)
-  statement: I < I ⊔ principal x
-  proof: le_sup_left.lt_of_ne fun h => hx by simpa only [left_eq_sup, principal_le_iff] using h
-
-中文:
-定理 lt_sup_principal_of_notMem
-  条件: (hx : x ∉ I)
-  结论: I < I ⊔ principal x
-  证明: le_sup_left.lt_of_ne fun h => hx by simpa only [left_eq_sup, principal_le_iff] using h
-
-Depends on / 依赖: le_sup_left, le_sup_left.lt_of_ne, left_eq_sup, lt_of_ne, principal_le_iff
+/-
+**Order.Ideal.lt_sup_principal_of_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`
+。
+形式化陈述：lt_sup_principal_of_notMem (hx : x ∉ I) : I < I ⊔ principal x
+参数：hx : x ∉ I。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LE.le.lt_of_ne`：∀ {α : Type u_1} [inst : PartialOrder α] {a b : α}, a ≤ 
+b → a ≠ b → a < b
+· 使用定理 `le_sup_left`：le_sup_left : a <= a ⊔ b
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
 -/
 theorem lt_sup_principal_of_notMem (hx : x ∉ I) : I < I ⊔ principal x :=
-le_sup_left.lt_of_ne fun h => hx by simpa only [left_eq_sup, principal_le_iff] using h
+  le_sup_left.lt_of_ne fun h ↦ hx <| by simpa only [left_eq_sup, principal_le_iff] using h
 
 end SemilatticeSupDirected
 
@@ -1532,134 +974,72 @@ section SemilatticeSupOrderBot
 
 variable [SemilatticeSup P] [OrderBot P] {x : P}
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: InfSet (Ideal P)
-  body: ⟨fun S =>
-    { toLowerSet := ⨅ s in S, toLowerSet s
-      nonempty' :=
-        ⟨⊥, by
-          rw [LowerSet.carrier_eq_coe]; rw [LowerSet.coe_iInf₂]; rw [Set.mem_iInter₂]
-          exact fun s _ => s.bot_mem⟩
-      directed' := fun a ha b hb =>
-        ⟨a ⊔ b,
-          ⟨by
-            rw [LowerSet.carrier_eq_coe]; rw [LowerSet.coe_iInf₂]; rw [Set.mem_iInter₂] at ha hb ⊢
-            exact fun s hs => sup_mem (ha _ hs) (hb _ hs), le_sup_left, le_sup_right⟩⟩ }⟩
-
-中文:
-实例 :
-  签名: 下确界集 (理想 P)
-  定义体: ⟨fun S =>
-    { toLowerSet := ⨅ s in S, toLowerSet s
-      nonempty' :=
-        ⟨⊥, by
-          rw [LowerSet.carrier_eq_coe]; rw [LowerSet.coe_iInf₂]; rw [Set.mem_iInter₂]
-          exact fun s _ => s.bot_mem⟩
-      directed' := fun a ha b hb =>
-        ⟨a ⊔ b,
-          ⟨by
-            rw [LowerSet.carrier_eq_coe]; rw [LowerSet.coe_iInf₂]; rw [Set.mem_iInter₂] at ha hb ⊢
-            exact fun s hs => sup_mem (ha _ hs) (hb _ hs), le_sup_left, le_sup_right⟩⟩ }⟩
-
-Depends on / 依赖: LowerSet, LowerSet.carrier_eq_coe, LowerSet.coe_iInf, Set.mem_iInter, bot_mem, carrier_eq_coe, directed, le_sup_left, le_sup_right, nonempty, s.bot_mem, sup_mem, toLowerSet
+/-
+**Order.Ideal.** 是 Mathlib 中的一个实例，位于命名空间 `Order.Ideal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : InfSet (Ideal P) :=
-  ⟨fun S =>
-    { toLowerSet := ⨅ s in S, toLowerSet s
+  ⟨fun S ↦
+    { toLowerSet := ⨅ s ∈ S, toLowerSet s
       nonempty' :=
         ⟨⊥, by
-          rw [LowerSet.carrier_eq_coe]; rw [LowerSet.coe_iInf₂]; rw [Set.mem_iInter₂]
-          exact fun s _ => s.bot_mem⟩
-      directed' := fun a ha b hb =>
+          rw [LowerSet.carrier_eq_coe, LowerSet.coe_iInf₂, Set.mem_iInter₂]
+          exact fun s _ ↦ s.bot_mem⟩
+      directed' := fun a ha b hb ↦
         ⟨a ⊔ b,
           ⟨by
-            rw [LowerSet.carrier_eq_coe]; rw [LowerSet.coe_iInf₂]; rw [Set.mem_iInter₂] at ha hb ⊢
-            exact fun s hs => sup_mem (ha _ hs) (hb _ hs), le_sup_left, le_sup_right⟩⟩ }⟩
+            rw [LowerSet.carrier_eq_coe, LowerSet.coe_iInf₂, Set.mem_iInter₂] at ha hb ⊢
+            exact fun s hs ↦ sup_mem (ha _ hs) (hb _ hs), le_sup_left, le_sup_right⟩⟩ }⟩
 
 variable {S : Set (Ideal P)}
 
 @[simp]
-/--
-theorem `coe_sInf` / 定理 `coe_sInf`
-
-English:
-theorem coe_sInf
-  statement: (↑(sInf S) : Set P) = ⋂ s in S, ↑s
-  proof: LowerSet.coe_iInf₂ _
-
-@[simp]
-
-中文:
-定理 coe_sInf
-  结论: (↑(sInf S) : 集合 P) = ⋂ s in S, ↑s
-  证明: LowerSet.coe_iInf₂ _
-
-@[simp]
-
-Depends on / 依赖: LowerSet, LowerSet.coe_iInf
+/-
+**Order.Ideal.coe_sInf** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：coe_sInf : (↑(sInf S) : Set P) = ⋂ s in S, ↑s
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LowerSet.coe_iInf₂`：∀ {α : Type u_1} {ι : Sort u_4} {κ : ι → Sort u_5} [
+inst : LE α] (f : (i : ι) → κ i → LowerSet α),   ↑(⨅ i, ⨅ j, f i j) = ⋂ i, ⋂ j, 
+↑(f i j)
 -/
-theorem coe_sInf : (↑(sInf S) : Set P) = ⋂ s in S, ↑s :=
+theorem coe_sInf : (↑(sInf S) : Set P) = ⋂ s ∈ S, ↑s :=
   LowerSet.coe_iInf₂ _
 
 @[simp]
-/--
-theorem `mem_sInf` / 定理 `mem_sInf`
-
-English:
-theorem mem_sInf
-  statement: x in sInf S ↔ forall s in S, x in s
-  proof: by
-  simp_rw [← SetLike.mem_coe, coe_sInf, mem_iInter₂]
-
-中文:
-定理 mem_sInf
-  结论: x in sInf S ↔ 对任意 s in S, x in s
-  证明: by
-  simp_rw [← SetLike.mem_coe, coe_sInf, mem_iInter₂]
-
-Depends on / 依赖: SetLike, SetLike.mem_coe, coe_sInf, mem_coe, simp_rw
+/-
+**Order.Ideal.mem_sInf** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：mem_sInf : x in sInf S ↔ forall s in S, x in s
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `congrFun'`：∀ {α : Sort u} {β : Sort v} {f g : α → β}, f = g → ∀ (a : α),
+ f a = g a
+· 使用定理 `Order.Ideal.coe_sInf`：coe_sInf : (↑(sInf S) : Set P) = ⋂ s in S, ↑s
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
 -/
-theorem mem_sInf : x in sInf S ↔ forall s in S, x in s := by
+theorem mem_sInf : x ∈ sInf S ↔ ∀ s ∈ S, x ∈ s := by
   simp_rw [← SetLike.mem_coe, coe_sInf, mem_iInter₂]
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CompleteLattice (Ideal P)
-  body: (inferInstance : Lattice (Ideal P))
-  __ := (inferInstance : OrderTop (Ideal P))
-  __ := (inferInstance : OrderBot (Ideal P))
-  __ := completeLatticeOfInf (Ideal P) fun S => by
-      refine ⟨fun s hs => ?_, fun s hs => by rwa [← coe_subset_coe, coe_sInf, subset_iInter₂_iff]⟩
-      rw [← coe_subset_coe]; rw [coe_sInf]
-      exact biInter_subset_of_mem hs
-
-中文:
-实例 :
-  签名: 完备格 (理想 P)
-  定义体: (inferInstance : Lattice (Ideal P))
-  __ := (inferInstance : OrderTop (Ideal P))
-  __ := (inferInstance : OrderBot (Ideal P))
-  __ := completeLatticeOfInf (Ideal P) fun S => by
-      refine ⟨fun s hs => ?_, fun s hs => by rwa [← coe_subset_coe, coe_sInf, subset_iInter₂_iff]⟩
-      rw [← coe_subset_coe]; rw [coe_sInf]
-      exact biInter_subset_of_mem hs
-
-Depends on / 依赖: Extension, Extension.H1Cotangent.map, Generators, Generators.defaultHom, H1Cotangent, Lattice, defaultHom, toExtensionHom
+/-
+**Order.Ideal.** 是 Mathlib 中的一个实例，位于命名空间 `Order.Ideal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CompleteLattice (Ideal P) where
   __ := (inferInstance : Lattice (Ideal P))
   __ := (inferInstance : OrderTop (Ideal P))
   __ := (inferInstance : OrderBot (Ideal P))
-  __ := completeLatticeOfInf (Ideal P) fun S => by
-      refine ⟨fun s hs => ?_, fun s hs => by rwa [← coe_subset_coe, coe_sInf, subset_iInter₂_iff]⟩
-      rw [← coe_subset_coe]; rw [coe_sInf]
+  __ := completeLatticeOfInf (Ideal P) fun S ↦ by
+      refine ⟨fun s hs ↦ ?_, fun s hs ↦ by rwa [← coe_subset_coe, coe_sInf, subset_iInter₂_iff]⟩
+      rw [← coe_subset_coe, coe_sInf]
       exact biInter_subset_of_mem hs
 
 end SemilatticeSupOrderBot
@@ -1669,58 +1049,43 @@ section DistribLattice
 variable [DistribLattice P]
 variable {I J : Ideal P}
 
-/--
-theorem `eq_sup_of_le_sup` / 定理 `eq_sup_of_le_sup`
-
-English:
-theorem eq_sup_of_le_sup
-  given: {x i j : P} (hi : i in I) (hj : j in J) (hx : x <= i ⊔ j)
-  proof: by
-  refine ⟨x ⊓ i, I.lower inf_le_right hi, x ⊓ j, J.lower inf_le_right hj, ?_⟩
-  calc
-    x = x ⊓ (i ⊔ j) := left_eq_inf.mpr hx
-    _ = x ⊓ i ⊔ x ⊓ j := inf_sup_left _ _ _
-
-中文:
-定理 eq_sup_of_le_sup
-  条件: {x i j : P} (hi : i in I) (hj : j in J) (hx : x <= i ⊔ j)
-  证明: by
-  refine ⟨x ⊓ i, I.lower inf_le_right hi, x ⊓ j, J.lower inf_le_right hj, ?_⟩
-  calc
-    x = x ⊓ (i ⊔ j) := left_eq_inf.mpr hx
-    _ = x ⊓ i ⊔ x ⊓ j := inf_sup_left _ _ _
-
-Depends on / 依赖: I.lower, J.lower, inf_le_right, inf_sup_left, left_eq_inf, left_eq_inf.mpr
+/-
+**Order.Ideal.eq_sup_of_le_sup** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：eq_sup_of_le_sup {x i j : P} (hi : i in I) (hj : j in J) (hx : x <= i ⊔ j)
+ : exists i' in I, exists j' in J, x = i' ⊔ j'
+参数：hi : i in I；hj : j in J；hx : x <= i ⊔ j。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.Ideal.lower`：∀ {P : Type u_1} [inst : LE P] (s : Order.Ideal P), I
+sLowerSet ↑s
+· 使用定理 `inf_le_right`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a ⊓ b 
+≤ b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `left_eq_inf`：∀ {α : Type u} [inst : SemilatticeInf α] {a b : α}, a = a ⊓
+ b ↔ a ≤ b
+· 使用定理 `inf_sup_left`：inf_sup_left (a b c : α) : a ⊓ (b ⊔ c) = a ⊓ b ⊔ a ⊓ c
 -/
-theorem eq_sup_of_le_sup {x i j : P} (hi : i in I) (hj : j in J) (hx : x <= i ⊔ j) :
-    exists i' in I, exists j' in J, x = i' ⊔ j' := by
+theorem eq_sup_of_le_sup {x i j : P} (hi : i ∈ I) (hj : j ∈ J) (hx : x ≤ i ⊔ j) :
+    ∃ i' ∈ I, ∃ j' ∈ J, x = i' ⊔ j' := by
   refine ⟨x ⊓ i, I.lower inf_le_right hi, x ⊓ j, J.lower inf_le_right hj, ?_⟩
   calc
     x = x ⊓ (i ⊔ j) := left_eq_inf.mpr hx
     _ = x ⊓ i ⊔ x ⊓ j := inf_sup_left _ _ _
-
-/--
-theorem `coe_sup_eq` / 定理 `coe_sup_eq`
-
-English:
-theorem coe_sup_eq
-  statement: ↑(I ⊔ J) = { x | exists i in I, exists j in J, x = i ⊔ j }
-  proof: Set.ext fun _ =>
-    ⟨fun ⟨_, _, _, _, _⟩ => eq_sup_of_le_sup ‹_› ‹_› ‹_›, fun ⟨i, _, j, _, _⟩ =>
-      ⟨i, ‹_›, j, ‹_›, le_of_eq ‹_›⟩⟩
-
-中文:
-定理 coe_sup_eq
-  结论: ↑(I ⊔ J) = { x | 存在 i in I, 存在 j in J, x = i ⊔ j }
-  证明: Set.ext fun _ =>
-    ⟨fun ⟨_, _, _, _, _⟩ => eq_sup_of_le_sup ‹_› ‹_› ‹_›, fun ⟨i, _, j, _, _⟩ =>
-      ⟨i, ‹_›, j, ‹_›, le_of_eq ‹_›⟩⟩
-
-Depends on / 依赖: Set.ext, eq_sup_of_le_sup, le_of_eq
+/-
+**Order.Ideal.coe_sup_eq** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：coe_sup_eq : ↑(I ⊔ J) = { x | exists i in I, exists j in J, x = i ⊔ j }
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.ext`：ext {a b : Set α} (h : forall (x : α), x in a ↔ x in b) : a = b
+· 使用定理 `SemilatticeInf.instIsCodirectedOrder`：∀ {α : Type u_1} [inst : Semilatti
+ceInf α], IsCodirectedOrder α
+· 使用定理 `Order.Ideal.eq_sup_of_le_sup`：eq_sup_of_le_sup {x i j : P} (hi : i in I)
+ (hj : j in J) (hx : x <= i ⊔ j) : exists i' in I, exists j' in J, x = i' ⊔ j'
+· 使用定理 `le_of_eq`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
 -/
-theorem coe_sup_eq : ↑(I ⊔ J) = { x | exists i in I, exists j in J, x = i ⊔ j } :=
-  Set.ext fun _ =>
-    ⟨fun ⟨_, _, _, _, _⟩ => eq_sup_of_le_sup ‹_› ‹_› ‹_›, fun ⟨i, _, j, _, _⟩ =>
+theorem coe_sup_eq : ↑(I ⊔ J) = { x | ∃ i ∈ I, ∃ j ∈ J, x = i ⊔ j } :=
+  Set.ext fun _ ↦
+    ⟨fun ⟨_, _, _, _, _⟩ ↦ eq_sup_of_le_sup ‹_› ‹_› ‹_›, fun ⟨i, _, j, _, _⟩ ↦
       ⟨i, ‹_›, j, ‹_›, le_of_eq ‹_›⟩⟩
 
 end DistribLattice
@@ -1729,60 +1094,39 @@ section BooleanAlgebra
 
 variable [BooleanAlgebra P] {x : P} {I : Ideal P}
 
-/--
-theorem `IsProper.notMem_of_compl_mem` / 定理 `IsProper.notMem_of_compl_mem`
-
-English:
-theorem IsProper.notMem_of_compl_mem
-  given: (hI : IsProper I) (hxc : xᶜ in I)
-  statement: x ∉ I
-  proof: by
-  intro hx
-  apply hI.top_notMem
-  have ht : x ⊔ xᶜ in I := sup_mem ‹_› ‹_›
-  rwa [sup_compl_eq_top] at ht
-
-中文:
-定理 是真.notMem_of_compl_mem
-  条件: (hI : 是真 I) (hxc : xᶜ in I)
-  结论: x ∉ I
-  证明: by
-  intro hx
-  apply hI.top_notMem
-  have ht : x ⊔ xᶜ in I := sup_mem ‹_› ‹_›
-  rwa [sup_compl_eq_top] at ht
-
-Depends on / 依赖: hI.top_notMem, sup_compl_eq_top, sup_mem, top_notMem
+/-
+**Order.Ideal.IsProper.notMem_of_compl_mem** 是 Mathlib 中的一个定理，位于命名空间 `Order.Idea
+l.IsProper`。
+形式化陈述：∀ {P : Type u_1} [inst : BooleanAlgebra P] {x : P} {I : Order.Ideal P}, I.
+IsProper → xᶜ ∈ I → x ∉ I
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.Ideal.IsProper.top_notMem`：∀ {P : Type u_1} [inst : LE P] [inst_1 
+: OrderTop P] {I : Order.Ideal P}, I.IsProper → ⊤ ∉ I
+· 使用定理 `Order.Ideal.sup_mem`：sup_mem (hx : x in s) (hy : y in s) : x ⊔ y in s
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `sup_compl_eq_top`：sup_compl_eq_top : x ⊔ xᶜ = ⊤
 -/
-theorem IsProper.notMem_of_compl_mem (hI : IsProper I) (hxc : xᶜ in I) : x ∉ I := by
+theorem IsProper.notMem_of_compl_mem (hI : IsProper I) (hxc : xᶜ ∈ I) : x ∉ I := by
   intro hx
   apply hI.top_notMem
-  have ht : x ⊔ xᶜ in I := sup_mem ‹_› ‹_›
+  have ht : x ⊔ xᶜ ∈ I := sup_mem ‹_› ‹_›
   rwa [sup_compl_eq_top] at ht
-
-/--
-theorem `IsProper.notMem_or_compl_notMem` / 定理 `IsProper.notMem_or_compl_notMem`
-
-English:
-theorem IsProper.notMem_or_compl_notMem
-  given: (hI : IsProper I)
-  statement: x ∉ I ∨ xᶜ ∉ I
-  proof: by
-  have h : xᶜ in I -> x ∉ I := hI.notMem_of_compl_mem
-  tauto
-
-中文:
-定理 是真.notMem_or_compl_notMem
-  条件: (hI : 是真 I)
-  结论: x ∉ I ∨ xᶜ ∉ I
-  证明: by
-  have h : xᶜ in I -> x ∉ I := hI.notMem_of_compl_mem
-  tauto
-
-Depends on / 依赖: hI.notMem_of_compl_mem, notMem_of_compl_mem
+/-
+**Order.Ideal.IsProper.notMem_or_compl_notMem** 是 Mathlib 中的一个定理，位于命名空间 `Order.I
+deal.IsProper`。
+形式化陈述：∀ {P : Type u_1} [inst : BooleanAlgebra P] {x : P} {I : Order.Ideal P}, I.
+IsProper → x ∉ I ∨ xᶜ ∉ I
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.Ideal.IsProper.notMem_of_compl_mem`：∀ {P : Type u_1} [inst : Boole
+anAlgebra P] {x : P} {I : Order.Ideal P}, I.IsProper → xᶜ ∈ I → x ∉ I
+· 使用定理 `Decidable.not_or_of_imp`：∀ {a b : Prop} [Decidable a], (a → b) → ¬a ∨ b
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Classical.or_iff_not_imp_left`：∀ {a b : Prop}, a ∨ b ↔ ¬a → b
+· 使用定理 `Decidable.of_not_not`：∀ {p : Prop} [Decidable p], ¬¬p → p
 -/
 theorem IsProper.notMem_or_compl_notMem (hI : IsProper I) : x ∉ I ∨ xᶜ ∉ I := by
-  have h : xᶜ in I -> x ∉ I := hI.notMem_of_compl_mem
+  have h : xᶜ ∈ I → x ∉ I := hI.notMem_of_compl_mem
   tauto
 
 end BooleanAlgebra
@@ -1792,86 +1136,99 @@ section CompleteLattice
 variable [CompleteLattice P] {I : Ideal P}
 
 @[simp]
-/--
-theorem `biSup_mem_iff` / 定理 `biSup_mem_iff`
-
-English:
-theorem biSup_mem_iff
-  given: {α : Type*} {f : α -> P} {s : Set α} (hs : s.Finite)
-  proof: by
-  induction s, hs using Finite.induction_on with simp [↓iSup_insert, sup_mem_iff, *]
-
-@[simp]
-
-中文:
-定理 biSup_mem_iff
-  条件: {α : 类型} {f : α -> P} {s : 集合 α} (hs : s.有限)
-  证明: by
-  induction s, hs using Finite.induction_on with simp [↓iSup_insert, sup_mem_iff, *]
-
-@[simp]
-
-Depends on / 依赖: Finite, Finite.induction_on, iSup_insert, induction_on, sup_mem_iff
+/-
+**Order.Ideal.biSup_mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：biSup_mem_iff {α : Type*} {f : α -> P} {s : Set α} (hs : s.Finite) : ⨆ i i
+n s, f i in I ↔ forall i in s, f i in I
+参数：hs : s.Finite。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Set.Finite.induction_on`：∀ {α : Type u} {motive : (s : Set α) → s.Finite
+ → Prop} (s : Set α) (hs : s.Finite),   motive ∅ ⋯ → (∀ {a : α} {s : Set α}, a ∉
+ s → ∀ (hs : …
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iSup_congr_Prop`：iSup_congr_Prop {p q : Prop} {f₁ : p -> α} {f₂ : q -> α
+} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iSup f₁ = iSup f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iSup_neg`：iSup_neg {p : Prop} {f : p -> α} (hp : ¬p) : ⨆ h : p, f h = ⊥
+· 使用定理 `not_false_eq_true`：(¬False) = True
+· 使用定理 `iSup_bot`：iSup_bot : (⨆ _ : ι, ⊥ : α) = ⊥
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instIsEmptyFalse`：IsEmpty False
+· 使用定理 `implies_true`：∀ (α : Sort u), (∀ (a : α), True) = True
+· 使用定理 `iff_self`：∀ (p : Prop), (p ↔ p) = True
+· 使用定理 `iSup_insert`：iSup_insert {f : β -> α} {s : Set β} {b : β} : ⨆ x in inser
+t b s, f x = f b ⊔ ⨆ x in s, f x
 -/
-theorem biSup_mem_iff {α : Type*} {f : α -> P} {s : Set α} (hs : s.Finite) :
-    ⨆ i in s, f i in I ↔ forall i in s, f i in I := by
+theorem biSup_mem_iff {α : Type*} {f : α → P} {s : Set α} (hs : s.Finite) :
+    ⨆ i ∈ s, f i ∈ I ↔ ∀ i ∈ s, f i ∈ I := by
   induction s, hs using Finite.induction_on with simp [↓iSup_insert, sup_mem_iff, *]
 
 @[simp]
-/--
-theorem `biSup_finset_mem_iff` / 定理 `biSup_finset_mem_iff`
-
-English:
-theorem biSup_finset_mem_iff
-  given: {α : Type*} {f : α -> P} {s : Finset α}
-  proof: biSup_mem_iff s.finite_toSet
-
-@[simp]
-
-中文:
-定理 biSup_finset_mem_iff
-  条件: {α : 类型} {f : α -> P} {s : 有限集 α}
-  证明: biSup_mem_iff s.finite_toSet
-
-@[simp]
-
-Depends on / 依赖: biSup_mem_iff, finite_toSet, s.finite_toSet
+/-
+**Order.Ideal.biSup_finset_mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：biSup_finset_mem_iff {α : Type*} {f : α -> P} {s : Finset α} : ⨆ i in s, f
+ i in I ↔ forall i in s, f i in I
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.Ideal.biSup_mem_iff`：biSup_mem_iff {α : Type*} {f : α -> P} {s : S
+et α} (hs : s.Finite) : ⨆ i in s, f i in I ↔ forall i in s, f i in I
+· 使用定理 `Finset.finite_toSet`：finite_toSet (s : Finset α) : (s : Set α).Finite
 -/
-theorem biSup_finset_mem_iff {α : Type*} {f : α -> P} {s : Finset α} :
-    ⨆ i in s, f i in I ↔ forall i in s, f i in I :=
+theorem biSup_finset_mem_iff {α : Type*} {f : α → P} {s : Finset α} :
+    ⨆ i ∈ s, f i ∈ I ↔ ∀ i ∈ s, f i ∈ I :=
   biSup_mem_iff s.finite_toSet
 
 @[simp]
-/--
-theorem `iSup_mem_iff` / 定理 `iSup_mem_iff`
-
-English:
-theorem iSup_mem_iff
-  given: {α : Sort*} [Finite α] {f : α -> P}
-  statement: ⨆ i, f i in I ↔ forall i, f i in I
-  proof: by
-  simpa [← Equiv.plift.symm.iSup_comp, Equiv.plift.forall_congr_left]
-    using biSup_mem_iff (f := f ∘ PLift.down) Set.finite_univ
-
-alias ⟨_, biSup_mem⟩ := biSup_mem_iff
-alias ⟨_, biSup_finset_mem⟩ := biSup_finset_mem_iff
-alias ⟨_, iSup_mem⟩ := iSup_mem_iff
-
-中文:
-定理 iSup_mem_iff
-  条件: {α : 类型层*} [有限 α] {f : α -> P}
-  结论: ⨆ i, f i in I ↔ 对任意 i, f i in I
-  证明: by
-  simpa [← Equiv.plift.symm.iSup_comp, Equiv.plift.forall_congr_left]
-    using biSup_mem_iff (f := f ∘ PLift.down) Set.finite_univ
-
-alias ⟨_, biSup_mem⟩ := biSup_mem_iff
-alias ⟨_, biSup_finset_mem⟩ := biSup_finset_mem_iff
-alias ⟨_, iSup_mem⟩ := iSup_mem_iff
-
-Depends on / 依赖: Equiv.plift.forall_congr_left, Equiv.plift.symm.iSup_comp, PLift.down, Set.finite_univ, biSup_mem_iff, finite_univ, forall_congr_left, iSup_comp
+/-
+**Order.Ideal.iSup_mem_iff** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：iSup_mem_iff {α : Sort*} [Finite α] {f : α -> P} : ⨆ i, f i in I ↔ forall 
+i, f i in I
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `funext`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, (∀ (x : α
+), f x = g x) → f = g
+· 使用定理 `iSup_congr_Prop`：iSup_congr_Prop {p q : Prop} {f₁ : p -> α} {f₂ : q -> α
+} (pq : p ↔ q) (f : forall x, f₁ (pq.mpr x) = f₂ x) : iSup f₁ = iSup f₂
+· 使用定理 `Iff.of_eq`：∀ {a b : Prop}, a = b → (a ↔ b)
+· 使用定理 `iSup_pos`：iSup_pos {p : Prop} {f : p -> α} (hp : p) : ⨆ h : p, f h = f h
+p
+· 使用定理 `of_eq_true`：∀ {p : Prop}, p = True → p
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Equiv.iSup_comp`：Equiv.iSup_comp {g : ι' -> α} (e : ι ≃ ι') : ⨆ x, g (e 
+x) = ⨆ y, g y
+· 使用定理 `congrFun`：∀ {α : Sort u} {β : α → Sort v} {f g : (x : α) → β x}, f = g →
+ ∀ (a : α), f a = g a
+· 使用定理 `Equiv.plift_symm_apply`：∀ {α : Sort u}, ⇑Equiv.plift.symm = PLift.up
+· 使用定理 `forall_congr`：∀ {α : Sort u} {p q : α → Prop}, (∀ (a : α), p a = q a) → 
+(∀ (a : α), p a) = ∀ (a : α), q a
+· 使用定理 `implies_congr`：∀ {p₁ p₂ : Sort u} {q₁ q₂ : Sort v}, p₁ = p₂ → q₁ = q₂ → 
+(p₁ → q₁) = (p₂ → q₂)
+· 使用定理 `instNonemptyOfInhabited`：∀ {α : Sort u} [Inhabited α], Nonempty α
+· 使用定理 `Equiv.forall_congr_left`：∀ {α : Sort u} {β : Sort v} {p : α → Prop} (e :
+ α ≃ β), (∀ (a : α), p a) ↔ ∀ (b : β), p (e.symm b)
+· 使用定理 `Order.Ideal.biSup_mem_iff`：biSup_mem_iff {α : Type*} {f : α -> P} {s : S
+et α} (hs : s.Finite) : ⨆ i in s, f i in I ↔ forall i in s, f i in I
+· 使用定理 `Set.finite_univ`：∀ {α : Type u} [Finite α], Set.univ.Finite
+· 使用定理 `instFinitePLift`：∀ {α : Sort u_1} [Finite α], Finite (PLift α)
 -/
-theorem iSup_mem_iff {α : Sort*} [Finite α] {f : α -> P} : ⨆ i, f i in I ↔ forall i, f i in I := by
+theorem iSup_mem_iff {α : Sort*} [Finite α] {f : α → P} : ⨆ i, f i ∈ I ↔ ∀ i, f i ∈ I := by
   simpa [← Equiv.plift.symm.iSup_comp, Equiv.plift.forall_congr_left]
     using biSup_mem_iff (f := f ∘ PLift.down) Set.finite_univ
 
@@ -1883,22 +1240,18 @@ end CompleteLattice
 
 end Ideal
 
-/--
-Definition of `Cofinal` / `Cofinal` 的定义
+/-- For a preorder `P`, `Cofinal P` is the type of subsets of `P`
+  containing arbitrarily large elements. They are the dense sets in
+  the topology whose open sets are terminal segments. -/
+/-
+**Order.Cofinal** 是 Mathlib 中的一个归纳类型，位于命名空间 `Order`。
+形式化陈述：(P : Type u_2) → [Preorder P] → Type u_2
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure Cofinal
-  parameters: (P) [Preorder P]
-  axioms and operations (2):
-    - carrier : Set P
-    - isCofinal : IsCofinal carrier
-
-中文:
-结构 余终
-  参数: (P) [预序 P]
-  公理与运算 (2 个):
-    - carrier : 集合 P
-    - isCofinal : IsCofinal carrier
+--- 原说明 ---
+For a preorder `P`, `Cofinal P` is the type of subsets of `P`
+  containing arbitrarily large elements. They are the dense sets in
+  the topology whose open sets are terminal segments.
 -/
 structure Cofinal (P) [Preorder P] where
   /-- The carrier of a `Cofinal` is the underlying set. -/
@@ -1910,146 +1263,99 @@ namespace Cofinal
 
 variable [Preorder P]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Inhabited (Cofinal P)
-  body: ⟨_, .univ⟩
-
-中文:
-实例 :
-  签名: 可居 (余终 P)
-  定义体: ⟨_, .univ⟩
+/-
+**Order.Cofinal.** 是 Mathlib 中的一个实例，位于命名空间 `Order.Cofinal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Inhabited (Cofinal P) :=
   ⟨_, .univ⟩
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Membership P (Cofinal P)
-  body: ⟨fun D x => x in D.carrier⟩
-
-中文:
-实例 :
-  签名: Membership P (余终 P)
-  定义体: ⟨fun D x => x in D.carrier⟩
-
-Depends on / 依赖: D.carrier, carrier
+/-
+**Order.Cofinal.** 是 Mathlib 中的一个实例，位于命名空间 `Order.Cofinal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Membership P (Cofinal P) :=
-  ⟨fun D x => x in D.carrier⟩
+  ⟨fun D x ↦ x ∈ D.carrier⟩
 
 variable (D : Cofinal P) (x : P)
 
-/--
-Definition of `above` / `above` 的定义
+/-- A (noncomputable) element of a cofinal set lying above a given element. -/
+/-
+**Order.Cofinal.above** 是 Mathlib 中的一个定义，位于命名空间 `Order.Cofinal`。
+形式化陈述：above : P
+该定义给出了上述对象。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.Cofinal.isCofinal`：∀ {P : Type u_2} [inst : Preorder P] (self : Or
+der.Cofinal P), IsCofinal self.carrier
 
-English:
-definition above
-  signature: : P
-  body: Classical.choose D.isCofinal x
-
-中文:
-定义 above
-  签名: : P
-  定义体: Classical.choose D.isCofinal x
-
-Depends on / 依赖: Classical, Classical.choose, D.isCofinal, isCofinal
+--- 原说明 ---
+A (noncomputable) element of a cofinal set lying above a given element.
 -/
 noncomputable def above : P :=
-Classical.choose D.isCofinal x
-
-/--
-theorem `above_mem` / 定理 `above_mem`
-
-English:
-theorem above_mem
-  statement: D.above x in D
-  proof: (Classical.choose_spec <| D.isCofinal x).1
-
-中文:
-定理 above_mem
-  结论: D.above x in D
-  证明: (Classical.choose_spec <| D.isCofinal x).1
-
-Depends on / 依赖: Classical, Classical.choose_spec, D.isCofinal, choose_spec, isCofinal
+  Classical.choose <| D.isCofinal x
+/-
+**Order.Cofinal.above_mem** 是 Mathlib 中的一个定理，位于命名空间 `Order.Cofinal`。
+形式化陈述：above_mem : D.above x in D
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Order.Cofinal.isCofinal`：∀ {P : Type u_2} [inst : Preorder P] (self : Or
+der.Cofinal P), IsCofinal self.carrier
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
-theorem above_mem : D.above x in D :=
+theorem above_mem : D.above x ∈ D :=
   (Classical.choose_spec <| D.isCofinal x).1
-
-/--
-theorem `le_above` / 定理 `le_above`
-
-English:
-theorem le_above
-  statement: x <= D.above x
-  proof: (Classical.choose_spec <| D.isCofinal x).2
-
-中文:
-定理 le_above
-  结论: x <= D.above x
-  证明: (Classical.choose_spec <| D.isCofinal x).2
-
-Depends on / 依赖: Classical, Classical.choose_spec, D.isCofinal, choose_spec, isCofinal
+/-
+**Order.Cofinal.le_above** 是 Mathlib 中的一个定理，位于命名空间 `Order.Cofinal`。
+形式化陈述：le_above : x <= D.above x
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.right`：∀ {a b : Prop}, a ∧ b → b
+· 使用定理 `Order.Cofinal.isCofinal`：∀ {P : Type u_2} [inst : Preorder P] (self : Or
+der.Cofinal P), IsCofinal self.carrier
+· 使用定理 `Classical.choose_spec`：∀ {α : Sort u} {p : α → Prop} (h : ∃ x, p x), p (
+Classical.choose h)
 -/
-theorem le_above : x <= D.above x :=
+theorem le_above : x ≤ D.above x :=
   (Classical.choose_spec <| D.isCofinal x).2
 
 end Cofinal
 
 section IdealOfCofinals
 
-variable [Preorder P] (p : P) {ι : Type*} [Encodable ι] (𝒟 : ι -> Cofinal P)
+variable [Preorder P] (p : P) {ι : Type*} [Encodable ι] (𝒟 : ι → Cofinal P)
 
-/--
-Definition of `sequenceOfCofinals` / `sequenceOfCofinals` 的定义
+/-- Given a starting point, and a countable family of cofinal sets,
+  this is an increasing sequence that intersects each cofinal set. -/
+/-
+**Order.sequenceOfCofinals** 是 Mathlib 中的一个定义，位于命名空间 `Order`。
+形式化陈述：{P : Type u_1} → [inst : Preorder P] → P → {ι : Type u_2} → [Encodable ι] 
+→ (ι → Order.Cofinal P) → ℕ → P
+参数：ι → Order.Cofinal P。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition sequenceOfCofinals
-  signature: : Nat -> P
-
-中文:
-定义 sequenceOfCofinals
-  签名: : 自然数 -> P
+--- 原说明 ---
+Given a starting point, and a countable family of cofinal sets,
+  this is an increasing sequence that intersects each cofinal set.
 -/
-noncomputable def sequenceOfCofinals : Nat -> P
+noncomputable def sequenceOfCofinals : ℕ → P
   | 0 => p
   | n + 1 =>
     match Encodable.decode n with
     | none => sequenceOfCofinals n
     | some i => (𝒟 i).above (sequenceOfCofinals n)
-
-/--
-theorem `sequenceOfCofinals.monotone` / 定理 `sequenceOfCofinals.monotone`
-
-English:
-theorem sequenceOfCofinals.monotone
-  statement: Monotone (sequenceOfCofinals p 𝒟)
-  proof: by
-  apply monotone_nat_of_le_succ
-  intro n
-  dsimp only [sequenceOfCofinals, Nat.add]
-  cases (Encodable.decode n : Option ι)
-  · rfl
-  · apply Cofinal.le_above
-
-中文:
-定理 sequenceOfCofinals.monotone
-  结论: 递增 (sequenceOfCofinals p 𝒟)
-  证明: by
-  apply monotone_nat_of_le_succ
-  intro n
-  dsimp only [sequenceOfCofinals, Nat.add]
-  cases (Encodable.decode n : Option ι)
-  · rfl
-  · apply Cofinal.le_above
-
-Depends on / 依赖: Cofinal, Cofinal.le_above, Encodable, Encodable.decode, Nat.add, decode, le_above, monotone_nat_of_le_succ, sequenceOfCofinals
+/-
+**Order.sequenceOfCofinals.monotone** 是 Mathlib 中的一个定理，位于命名空间 `Order.sequenceOfC
+ofinals`。
+形式化陈述：∀ {P : Type u_1} [inst : Preorder P] (p : P) {ι : Type u_2} [inst_1 : Enco
+dable ι] (𝒟 : ι → Order.Cofinal P),   Monotone (Order.sequenceOfCofinals p 𝒟)
+参数：p : P；𝒟 : ι → Order.Cofinal P；Order.sequenceOfCofinals p 𝒟。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `monotone_nat_of_le_succ`：monotone_nat_of_le_succ {f : Nat -> α} (hf : fo
+rall n, f n <= f (n + 1)) : Monotone f
+· 使用定理 `le_refl`：∀ {α : Type u_1} [inst : Preorder α] (a : α), a ≤ a
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.Cofinal.le_above`：le_above : x <= D.above x
 -/
 theorem sequenceOfCofinals.monotone : Monotone (sequenceOfCofinals p 𝒟) := by
   apply monotone_nat_of_le_succ
@@ -2058,103 +1364,81 @@ theorem sequenceOfCofinals.monotone : Monotone (sequenceOfCofinals p 𝒟) := by
   cases (Encodable.decode n : Option ι)
   · rfl
   · apply Cofinal.le_above
-
-/--
-theorem `sequenceOfCofinals.encode_mem` / 定理 `sequenceOfCofinals.encode_mem`
-
-English:
-theorem sequenceOfCofinals.encode_mem
-  given: (i : ι)
-  proof: by
-  dsimp only [sequenceOfCofinals, Nat.add]
-  rw [Encodable.encodek]
-  apply Cofinal.above_mem
-
-中文:
-定理 sequenceOfCofinals.encode_mem
-  条件: (i : ι)
-  证明: by
-  dsimp only [sequenceOfCofinals, Nat.add]
-  rw [Encodable.encodek]
-  apply Cofinal.above_mem
-
-Depends on / 依赖: Cofinal, Cofinal.above_mem, Encodable, Encodable.encodek, Nat.add, above_mem, encodek, sequenceOfCofinals
+/-
+**Order.sequenceOfCofinals.encode_mem** 是 Mathlib 中的一个定理，位于命名空间 `Order.sequenceO
+fCofinals`。
+形式化陈述：∀ {P : Type u_1} [inst : Preorder P] (p : P) {ι : Type u_2} [inst_1 : Enco
+dable ι] (𝒟 : ι → Order.Cofinal P) (i : ι),   Order.sequenceOfCofinals p 𝒟 (Enco
+dable.encode i + 1) ∈ 𝒟 i
+参数：p : P；𝒟 : ι → Order.Cofinal P；i : ι；Encodable.encode i + 1。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Encodable.encodek`：∀ {α : Type u_1} [self : Encodable α] (a : α), Encoda
+ble.decode (Encodable.encode a) = some a
+· 使用定理 `Order.Cofinal.above_mem`：above_mem : D.above x in D
 -/
 theorem sequenceOfCofinals.encode_mem (i : ι) :
-    sequenceOfCofinals p 𝒟 (Encodable.encode i + 1) in 𝒟 i := by
+    sequenceOfCofinals p 𝒟 (Encodable.encode i + 1) ∈ 𝒟 i := by
   dsimp only [sequenceOfCofinals, Nat.add]
   rw [Encodable.encodek]
   apply Cofinal.above_mem
 
-/--
-Definition of `idealOfCofinals` / `idealOfCofinals` 的定义
+/-- Given an element `p : P` and a family `𝒟` of cofinal subsets of a preorder `P`,
+  indexed by a countable type, `idealOfCofinals p 𝒟` is an ideal in `P` which
+  - contains `p`, according to `mem_idealOfCofinals p 𝒟`, and
+  - intersects every set in `𝒟`, according to `cofinal_meets_idealOfCofinals p 𝒟`.
 
-English:
-definition idealOfCofinals
-  signature: : Ideal P where
-  body: { x : P | exists n, x <= sequenceOfCofinals p 𝒟 n }
-  lower' := fun _ _ hxy ⟨n, hn⟩ => ⟨n, le_trans hxy hn⟩
-  nonempty' := ⟨p, 0, le_rfl⟩
-  directed' := fun _ ⟨n, hn⟩ _ ⟨m, hm⟩ =>
-⟨_, ⟨max n m, le_rfl⟩, le_trans hn sequenceOfCofinals.monotone p 𝒟 (le_max_left _ _),
-le_trans hm sequenceOfCofinals.monotone p 𝒟 (le_max_right _ _)⟩
+  This proves the Rasiowa–Sikorski lemma. -/
+/-
+**Order.idealOfCofinals** 是 Mathlib 中的一个定义，位于命名空间 `Order`。
+形式化陈述：idealOfCofinals : Ideal P where carrier
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-中文:
-定义 idealOfCofinals
-  签名: : 理想 P where
-  定义体: { x : P | exists n, x <= sequenceOfCofinals p 𝒟 n }
-  lower' := fun _ _ hxy ⟨n, hn⟩ => ⟨n, le_trans hxy hn⟩
-  nonempty' := ⟨p, 0, le_rfl⟩
-  directed' := fun _ ⟨n, hn⟩ _ ⟨m, hm⟩ =>
-⟨_, ⟨max n m, le_rfl⟩, le_trans hn sequenceOfCofinals.monotone p 𝒟 (le_max_left _ _),
-le_trans hm sequenceOfCofinals.monotone p 𝒟 (le_max_right _ _)⟩
+--- 原说明 ---
+Given an element `p : P` and a family `𝒟` of cofinal subsets of a preorder `P`,
+  indexed by a countable type, `idealOfCofinals p 𝒟` is an ideal in `P` which
+  - contains `p`, according to `mem_idealOfCofinals p 𝒟`, and
+  - intersects every set in `𝒟`, according to `cofinal_meets_idealOfCofinals p 𝒟
+`.
 
-Depends on / 依赖: sequenceOfCofinals
+  This proves the Rasiowa–Sikorski lemma.
 -/
 def idealOfCofinals : Ideal P where
-  carrier := { x : P | exists n, x <= sequenceOfCofinals p 𝒟 n }
-  lower' := fun _ _ hxy ⟨n, hn⟩ => ⟨n, le_trans hxy hn⟩
+  carrier := { x : P | ∃ n, x ≤ sequenceOfCofinals p 𝒟 n }
+  lower' := fun _ _ hxy ⟨n, hn⟩ ↦ ⟨n, le_trans hxy hn⟩
   nonempty' := ⟨p, 0, le_rfl⟩
-  directed' := fun _ ⟨n, hn⟩ _ ⟨m, hm⟩ =>
-⟨_, ⟨max n m, le_rfl⟩, le_trans hn sequenceOfCofinals.monotone p 𝒟 (le_max_left _ _),
-le_trans hm sequenceOfCofinals.monotone p 𝒟 (le_max_right _ _)⟩
-
-/--
-theorem `mem_idealOfCofinals` / 定理 `mem_idealOfCofinals`
-
-English:
-theorem mem_idealOfCofinals
-  statement: p in idealOfCofinals p 𝒟
-  proof: ⟨0, le_rfl⟩
-
-中文:
-定理 mem_idealOfCofinals
-  结论: p in idealOfCofinals p 𝒟
-  证明: ⟨0, le_rfl⟩
-
-Depends on / 依赖: le_rfl
+  directed' := fun _ ⟨n, hn⟩ _ ⟨m, hm⟩ ↦
+    ⟨_, ⟨max n m, le_rfl⟩, le_trans hn <| sequenceOfCofinals.monotone p 𝒟 (le_max_left _ _),
+      le_trans hm <| sequenceOfCofinals.monotone p 𝒟 (le_max_right _ _)⟩
+/-
+**Order.mem_idealOfCofinals** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：mem_idealOfCofinals : p in idealOfCofinals p 𝒟
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `le_rfl`：le_rfl : a <= a
 -/
-theorem mem_idealOfCofinals : p in idealOfCofinals p 𝒟 :=
+theorem mem_idealOfCofinals : p ∈ idealOfCofinals p 𝒟 :=
   ⟨0, le_rfl⟩
 
-/--
-theorem `cofinal_meets_idealOfCofinals` / 定理 `cofinal_meets_idealOfCofinals`
+/-- `idealOfCofinals p 𝒟` is `𝒟`-generic. -/
+/-
+**Order.cofinal_meets_idealOfCofinals** 是 Mathlib 中的一个定理，位于命名空间 `Order`。
+形式化陈述：cofinal_meets_idealOfCofinals (i : ι) : exists x : P, x in 𝒟 i ∧ x in idea
+lOfCofinals p 𝒟
+参数：i : ι。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Order.sequenceOfCofinals.encode_mem`：∀ {P : Type u_1} [inst : Preorder P
+] (p : P) {ι : Type u_2} [inst_1 : Encodable ι] (𝒟 : ι → Order.Cofinal P) (i : ι
+),   Order.sequenceOfCofi…
+· 使用引理 `le_rfl`：le_rfl : a <= a
 
-English:
-theorem cofinal_meets_idealOfCofinals
-  given: (i : ι)
-  statement: exists x : P, x in 𝒟 i ∧ x in idealOfCofinals p 𝒟
-  proof: ⟨_, sequenceOfCofinals.encode_mem p 𝒟 i, _, le_rfl⟩
-
-中文:
-定理 cofinal_meets_idealOfCofinals
-  条件: (i : ι)
-  结论: 存在 x : P, x in 𝒟 i ∧ x in idealOfCofinals p 𝒟
-  证明: ⟨_, sequenceOfCofinals.encode_mem p 𝒟 i, _, le_rfl⟩
-
-Depends on / 依赖: encode_mem, le_rfl, sequenceOfCofinals, sequenceOfCofinals.encode_mem
+--- 原说明 ---
+`idealOfCofinals p 𝒟` is `𝒟`-generic.
 -/
-theorem cofinal_meets_idealOfCofinals (i : ι) : exists x : P, x in 𝒟 i ∧ x in idealOfCofinals p 𝒟 :=
+theorem cofinal_meets_idealOfCofinals (i : ι) : ∃ x : P, x ∈ 𝒟 i ∧ x ∈ idealOfCofinals p 𝒟 :=
   ⟨_, sequenceOfCofinals.encode_mem p 𝒟 i, _, le_rfl⟩
 
 end IdealOfCofinals
@@ -2163,96 +1447,74 @@ section sUnion
 
 variable [LE P]
 
-/--
-lemma `isIdeal_sUnion_of_directedOn` / 引理 `isIdeal_sUnion_of_directedOn`
+/-- A non-empty directed union of ideals of sets in a preorder is an ideal. -/
+/-
+**Order.isIdeal_sUnion_of_directedOn** 是 Mathlib 中的一个引理，位于命名空间 `Order`。
+形式化陈述：isIdeal_sUnion_of_directedOn {C : Set (Set P)} (hidl : forall I in C, IsId
+eal I) (hD : DirectedOn (· subseteq ·) C) (hNe : C.Nonempty) : IsIdeal C.sUnion
+参数：Set P；hidl : forall I in C, IsIdeal I；hD : DirectedOn (· subseteq ·) C；hNe : 
+C.Nonempty。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `isLowerSet_sUnion`：∀ {α : Type u_1} [inst : LE α] {S : Set (Set α)}, (∀ 
+s ∈ S, IsLowerSet s) → IsLowerSet (⋃₀ S)
+· 使用定理 `Order.IsIdeal.IsLowerSet`：∀ {P : Type u_2} [inst : LE P] {I : Set P}, Or
+der.IsIdeal I → IsLowerSet I
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Set.nonempty_sUnion`：nonempty_sUnion {S : Set (Set α)} : (⋃₀ S).Nonempty
+ ↔ exists s in S, Set.Nonempty s
+· 使用定理 `Order.IsIdeal.Nonempty`：∀ {P : Type u_2} [inst : LE P] {I : Set P}, Orde
+r.IsIdeal I → I.Nonempty
+· 使用定理 `Set.directedOn_sUnion`：directedOn_sUnion {r} {S : Set (Set α)} (hd : Dir
+ectedOn (· subseteq ·) S) (h : forall x in S, DirectedOn r x) : DirectedOn r (⋃₀
+ S)
+· 使用定理 `Order.IsIdeal.Directed`：∀ {P : Type u_2} [inst : LE P] {I : Set P}, Orde
+r.IsIdeal I → DirectedOn (fun x1 x2 => x1 ≤ x2) I
 
-English:
-lemma isIdeal_sUnion_of_directedOn
-  statement: {C : Set (Set P)} (hidl : forall I in C, IsIdeal I)
-  proof: by
-  refine ⟨isLowerSet_sUnion (fun I hI => (hidl I hI).1), Set.nonempty_sUnion.2 ?_,
-    directedOn_sUnion hD (fun J hJ => (hidl J hJ).3)⟩
-  let ⟨I, hI⟩ := hNe
-  exact ⟨I, ⟨hI, (hidl I hI).2⟩⟩
-
-中文:
-引理 isIdeal_sUnion_of_directedOn
-  结论: {C : 集合 (集合 P)} (hidl : 对任意 I in C, Is理想 I)
-  证明: by
-  refine ⟨isLowerSet_sUnion (fun I hI => (hidl I hI).1), Set.nonempty_sUnion.2 ?_,
-    directedOn_sUnion hD (fun J hJ => (hidl J hJ).3)⟩
-  let ⟨I, hI⟩ := hNe
-  exact ⟨I, ⟨hI, (hidl I hI).2⟩⟩
-
-Depends on / 依赖: Set.nonempty_sUnion, directedOn_sUnion, isLowerSet_sUnion, nonempty_sUnion
+--- 原说明 ---
+A non-empty directed union of ideals of sets in a preorder is an ideal.
 -/
-lemma isIdeal_sUnion_of_directedOn {C : Set (Set P)} (hidl : forall I in C, IsIdeal I)
-    (hD : DirectedOn (· subseteq ·) C) (hNe : C.Nonempty) : IsIdeal C.sUnion := by
-  refine ⟨isLowerSet_sUnion (fun I hI => (hidl I hI).1), Set.nonempty_sUnion.2 ?_,
+lemma isIdeal_sUnion_of_directedOn {C : Set (Set P)} (hidl : ∀ I ∈ C, IsIdeal I)
+    (hD : DirectedOn (· ⊆ ·) C) (hNe : C.Nonempty) : IsIdeal C.sUnion := by
+  refine ⟨isLowerSet_sUnion (fun I hI ↦ (hidl I hI).1), Set.nonempty_sUnion.2 ?_,
     directedOn_sUnion hD (fun J hJ => (hidl J hJ).3)⟩
   let ⟨I, hI⟩ := hNe
   exact ⟨I, ⟨hI, (hidl I hI).2⟩⟩
 
-/--
-lemma `isIdeal_sUnion_of_isChain` / 引理 `isIdeal_sUnion_of_isChain`
+/-- A union of a nonempty chain of ideals of sets is an ideal. -/
+/-
+**Order.isIdeal_sUnion_of_isChain** 是 Mathlib 中的一个引理，位于命名空间 `Order`。
+形式化陈述：isIdeal_sUnion_of_isChain {C : Set (Set P)} (hidl : forall I in C, IsIdeal
+ I) (hC : IsChain (· subseteq ·) C) (hNe : C.Nonempty) : IsIdeal C.sUnion
+参数：Set P；hidl : forall I in C, IsIdeal I；hC : IsChain (· subseteq ·) C；hNe : C.N
+onempty。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Order.isIdeal_sUnion_of_directedOn`：isIdeal_sUnion_of_directedOn {C : Se
+t (Set P)} (hidl : forall I in C, IsIdeal I) (hD : DirectedOn (· subseteq ·) C) 
+(hNe : C.Nonempty) : IsI…
+· 使用定理 `IsChain.directedOn`：IsChain.directedOn (H : IsChain r s) : DirectedOn r 
+s
 
-English:
-lemma isIdeal_sUnion_of_isChain
-  statement: {C : Set (Set P)} (hidl : forall I in C, IsIdeal I)
-  proof: isIdeal_sUnion_of_directedOn hidl hC.directedOn hNe
-
-中文:
-引理 isIdeal_sUnion_of_isChain
-  结论: {C : 集合 (集合 P)} (hidl : 对任意 I in C, Is理想 I)
-  证明: isIdeal_sUnion_of_directedOn hidl hC.directedOn hNe
-
-Depends on / 依赖: directedOn, hC.directedOn, isIdeal_sUnion_of_directedOn
+--- 原说明 ---
+A union of a nonempty chain of ideals of sets is an ideal.
 -/
-lemma isIdeal_sUnion_of_isChain {C : Set (Set P)} (hidl : forall I in C, IsIdeal I)
-    (hC : IsChain (· subseteq ·) C) (hNe : C.Nonempty) : IsIdeal C.sUnion :=
+lemma isIdeal_sUnion_of_isChain {C : Set (Set P)} (hidl : ∀ I ∈ C, IsIdeal I)
+    (hC : IsChain (· ⊆ ·) C) (hNe : C.Nonempty) : IsIdeal C.sUnion :=
   isIdeal_sUnion_of_directedOn hidl hC.directedOn hNe
 
 end sUnion
 
 namespace Ideal
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [LE
-  signature: P] [OrderTop P] : IsCoatomic (Ideal P)
-  body: by
-  apply IsCoatomic.of_isChain_bounded
-  intro S hS₁ hS₂ hS₃
-refine ⟨IsIdeal.toIdeal isIdeal_sUnion_of_isChain (C := SetLike.coe '' S) ?_
-    (hS₁.image_of_map_rel _ _ _ ?_) (hS₂.image _), ?_, ?_⟩
-  · simp [Ideal.isIdeal]
-  · simp
-  · simpa [top_notMem_iff, lt_top_iff_ne_top, ← top_mem_iff_eq_top] using hS₃
-  · intro J hJ
-    simpa [le_toIdeal] using Set.subset_biUnion_of_mem hJ
-
-中文:
-实例 [LE
-  签名: P] [有顶序 P] : 是余原子的 (理想 P)
-  定义体: by
-  apply IsCoatomic.of_isChain_bounded
-  intro S hS₁ hS₂ hS₃
-refine ⟨IsIdeal.toIdeal isIdeal_sUnion_of_isChain (C := SetLike.coe '' S) ?_
-    (hS₁.image_of_map_rel _ _ _ ?_) (hS₂.image _), ?_, ?_⟩
-  · simp [Ideal.isIdeal]
-  · simp
-  · simpa [top_notMem_iff, lt_top_iff_ne_top, ← top_mem_iff_eq_top] using hS₃
-  · intro J hJ
-    simpa [le_toIdeal] using Set.subset_biUnion_of_mem hJ
-
-Depends on / 依赖: Ideal.isIdeal, IsCoatomic, IsCoatomic.of_isChain_bounded, IsIdeal, IsIdeal.toIdeal, Set.subset_biUnion_of_mem, SetLike, SetLike.coe, image_of_map_rel, isIdeal, isIdeal_sUnion_of_isChain, le_toIdeal, lt_top_iff_ne_top, of_isChain_bounded, subset_biUnion_of_mem, toIdeal, top_mem_iff_eq_top, top_notMem_iff
+/-
+**Order.Ideal.** 是 Mathlib 中的一个实例，位于命名空间 `Order.Ideal`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance [LE P] [OrderTop P] : IsCoatomic (Ideal P) := by
   apply IsCoatomic.of_isChain_bounded
   intro S hS₁ hS₂ hS₃
-refine ⟨IsIdeal.toIdeal isIdeal_sUnion_of_isChain (C := SetLike.coe '' S) ?_
+  refine ⟨IsIdeal.toIdeal <| isIdeal_sUnion_of_isChain (C := SetLike.coe '' S) ?_
     (hS₁.image_of_map_rel _ _ _ ?_) (hS₂.image _), ?_, ?_⟩
   · simp [Ideal.isIdeal]
   · simp
@@ -2260,58 +1522,56 @@ refine ⟨IsIdeal.toIdeal isIdeal_sUnion_of_isChain (C := SetLike.coe '' S) ?_
   · intro J hJ
     simpa [le_toIdeal] using Set.subset_biUnion_of_mem hJ
 
-/--
-theorem `IsProper.exists_le_maximal` / 定理 `IsProper.exists_le_maximal`
+/-- Every proper ideal is contained in some maximal ideal. -/
+/-
+**Order.Ideal.IsProper.exists_le_maximal** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal.
+IsProper`。
+形式化陈述：∀ {P : Type u_1} [inst : LE P] [OrderTop P] {I : Order.Ideal P}, I.IsPrope
+r → ∃ J, I ≤ J ∧ J.IsMaximal
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `OrderTop.instIsDirectedOrder`：∀ {α : Type u_1} [inst : LE α] [OrderTop α
+], IsDirectedOrder α
+· 使用定理 `top_nonempty`：∀ (α : Type u_1) [Top α], Nonempty α
+· 使用定理 `IsCoatomic.eq_top_or_exists_le_coatom`：∀ {α : Type u_2} {inst : PartialO
+rder α} {inst_1 : OrderTop α} [self : IsCoatomic α] (b : α),   b = ⊤ ∨ ∃ a, IsCo
+atom a ∧ b ≤ a
+· 使用定理 `Order.Ideal.instIsCoatomic`：∀ {P : Type u_1} [inst : LE P] [inst_1 : Ord
+erTop P], IsCoatomic (Order.Ideal P)
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `eq_self`：∀ {α : Sort u_1} (a : α), (a = a) = True
+· 使用定理 `not_true_eq_false`：(¬True) = False
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `Order.Ideal.isMaximal_iff_isCoatom`：isMaximal_iff_isCoatom : IsMaximal I
+ ↔ IsCoatom I
 
-English:
-theorem IsProper.exists_le_maximal
-  given: [LE P] [OrderTop P] {I : Ideal P} (hI : I.IsProper)
-  proof: by
-  rcases IsCoatomic.eq_top_or_exists_le_coatom I with rfl | ⟨J, hJ, hJ'⟩
-  · simp [isProper_iff_ne_top] at hI
-  · exact ⟨J, hJ', isMaximal_iff_isCoatom.2 hJ⟩
-
-中文:
-定理 是真.存在_le_maximal
-  条件: [LE P] [有顶序 P] {I : 理想 P} (hI : I.是真)
-  证明: by
-  rcases IsCoatomic.eq_top_or_exists_le_coatom I with rfl | ⟨J, hJ, hJ'⟩
-  · simp [isProper_iff_ne_top] at hI
-  · exact ⟨J, hJ', isMaximal_iff_isCoatom.2 hJ⟩
-
-Depends on / 依赖: IsCoatomic, IsCoatomic.eq_top_or_exists_le_coatom, eq_top_or_exists_le_coatom, isMaximal_iff_isCoatom, isProper_iff_ne_top
+--- 原说明 ---
+Every proper ideal is contained in some maximal ideal.
 -/
 theorem IsProper.exists_le_maximal [LE P] [OrderTop P] {I : Ideal P} (hI : I.IsProper) :
-    exists J, I <= J ∧ J.IsMaximal := by
+    ∃ J, I ≤ J ∧ J.IsMaximal := by
   rcases IsCoatomic.eq_top_or_exists_le_coatom I with rfl | ⟨J, hJ, hJ'⟩
   · simp [isProper_iff_ne_top] at hI
   · exact ⟨J, hJ', isMaximal_iff_isCoatom.2 hJ⟩
-
-/--
-theorem `exists_maximal` / 定理 `exists_maximal`
-
-English:
-theorem exists_maximal
-  given: [PartialOrder P] [OrderTop P] [Nontrivial P]
-  proof: by
-  rcases exists_ne (⊤ : P) with ⟨a, ha⟩
-  rw [← isProper_principal_iff] at ha
-  rcases ha.exists_le_maximal with ⟨I, -, hI⟩
-  exact ⟨I, hI⟩
-
-中文:
-定理 存在_maximal
-  条件: [偏序 P] [有顶序 P] [非平凡 P]
-  证明: by
-  rcases exists_ne (⊤ : P) with ⟨a, ha⟩
-  rw [← isProper_principal_iff] at ha
-  rcases ha.exists_le_maximal with ⟨I, -, hI⟩
-  exact ⟨I, hI⟩
-
-Depends on / 依赖: exists_le_maximal, exists_ne, ha.exists_le_maximal, isProper_principal_iff
+/-
+**Order.Ideal.exists_maximal** 是 Mathlib 中的一个定理，位于命名空间 `Order.Ideal`。
+形式化陈述：exists_maximal [PartialOrder P] [OrderTop P] [Nontrivial P] : exists (I : 
+Ideal P), I.IsMaximal
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `exists_ne`：exists_ne [Nontrivial α] (x : α) : exists y, y != x
+· 使用定理 `Order.Ideal.IsProper.exists_le_maximal`：∀ {P : Type u_1} [inst : LE P] [
+OrderTop P] {I : Order.Ideal P}, I.IsProper → ∃ J, I ≤ J ∧ J.IsMaximal
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `Order.Ideal.isProper_principal_iff`：isProper_principal_iff [PartialOrder
+ P] [OrderTop P] {a : P} : (principal a).IsProper ↔ a != ⊤
 -/
 theorem exists_maximal [PartialOrder P] [OrderTop P] [Nontrivial P] :
-    exists (I : Ideal P), I.IsMaximal := by
+    ∃ (I : Ideal P), I.IsMaximal := by
   rcases exists_ne (⊤ : P) with ⟨a, ha⟩
   rw [← isProper_principal_iff] at ha
   rcases ha.exists_le_maximal with ⟨I, -, hI⟩
@@ -2320,3 +1580,4 @@ theorem exists_maximal [PartialOrder P] [OrderTop P] [Nontrivial P] :
 end Ideal
 
 end Order
+

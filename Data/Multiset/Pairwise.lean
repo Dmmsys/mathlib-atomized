@@ -19,26 +19,23 @@ public section
 
 namespace Multiset
 
-variable {α : Type*} {r : α -> α -> Prop} {s : Multiset α}
+variable {α : Type*} {r : α → α → Prop} {s : Multiset α}
 
-/--
-theorem `Pairwise.forall` / 定理 `Pairwise.forall`
-
-English:
-theorem Pairwise.forall
-  given: [Std.Symm r] (hs : Pairwise r s)
-  proof: let ⟨_, hl₁, hl₂⟩ := hs
-  hl₁.symm ▸ hl₂.forall
-
-中文:
-定理 两两.对任意
-  条件: [Std.Symm r] (hs : 两两 r s)
-  证明: let ⟨_, hl₁, hl₂⟩ := hs
-  hl₁.symm ▸ hl₂.forall
+/-
+**Multiset.Pairwise.forall** 是 Mathlib 中的一个定理，位于命名空间 `Multiset.Pairwise`。
+形式化陈述：∀ {α : Type u_1} {r : α → α → Prop} {s : Multiset α} [Std.Symm r],   Multi
+set.Pairwise r s → ∀ ⦃a : α⦄, a ∈ s → ∀ ⦃b : α⦄, b ∈ s → a ≠ b → r a b
+该定理/引理表达了一个蕴含关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `List.Pairwise.forall`：∀ {α : Type u_1} {R : α → α → Prop} {l : List α} [
+Std.Symm R],   List.Pairwise R l → ∀ ⦃a : α⦄, a ∈ l → ∀ ⦃b : α⦄, b ∈ l → a ≠ b →
+ R a b
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
 -/
 theorem Pairwise.forall [Std.Symm r] (hs : Pairwise r s) :
-    forall ⦃a⦄, a in s -> forall ⦃b⦄, b in s -> a != b -> r a b :=
+    ∀ ⦃a⦄, a ∈ s → ∀ ⦃b⦄, b ∈ s → a ≠ b → r a b :=
   let ⟨_, hl₁, hl₂⟩ := hs
   hl₁.symm ▸ hl₂.forall
 
 end Multiset
+

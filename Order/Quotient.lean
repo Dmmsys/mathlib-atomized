@@ -30,152 +30,57 @@ namespace Quotient
 section LE
 variable [LE α]
 
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: LE (Quotient s)
-  body: Quotient.lift₂ (Relation.TransGen fun x y => x <= y ∨ x ≈ y) by
-    refine fun x₁ x₂ y₁ y₂ hx hy => propext ⟨?_, ?_⟩ <;> intro h
-· exact .trans (.single <| .inr (symm hx)) .trans h (.single <| .inr hy)
-· exact .trans (.single <| .inr hx) .trans h (.single <| .inr (symm hy))
-
-中文:
-实例 :
-  签名: LE (商 s)
-  定义体: Quotient.lift₂ (Relation.TransGen fun x y => x <= y ∨ x ≈ y) by
-    refine fun x₁ x₂ y₁ y₂ hx hy => propext ⟨?_, ?_⟩ <;> intro h
-· exact .trans (.single <| .inr (symm hx)) .trans h (.single <| .inr hy)
-· exact .trans (.single <| .inr hx) .trans h (.single <| .inr (symm hy))
-
-Depends on / 依赖: Quotient, Quotient.lift, Relation, Relation.TransGen, TransGen, propext, single
+/-
+**Quotient.** 是 Mathlib 中的一个实例，位于命名空间 `Quotient`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : LE (Quotient s) where
-le := Quotient.lift₂ (Relation.TransGen fun x y => x <= y ∨ x ≈ y) by
-    refine fun x₁ x₂ y₁ y₂ hx hy => propext ⟨?_, ?_⟩ <;> intro h
-· exact .trans (.single <| .inr (symm hx)) .trans h (.single <| .inr hy)
-· exact .trans (.single <| .inr hx) .trans h (.single <| .inr (symm hy))
-
-/--
-theorem `le_def` / 定理 `le_def`
-
-English:
-theorem le_def
-  given: {x y : α}
-  proof: .rfl
-
-中文:
-定理 le_def
-  条件: {x y : α}
-  证明: .rfl
-
-Depends on / 依赖: _spec, lift_mk, toLocalizationMap
+  le := Quotient.lift₂ (Relation.TransGen fun x y ↦ x ≤ y ∨ x ≈ y) <| by
+    refine fun x₁ x₂ y₁ y₂ hx hy ↦ propext ⟨?_, ?_⟩ <;> intro h
+    · exact .trans (.single <| .inr (symm hx)) <| .trans h (.single <| .inr hy)
+    · exact .trans (.single <| .inr hx) <| .trans h (.single <| .inr (symm hy))
+/-
+**Quotient.le_def** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：le_def {x y : α} : Quotient.mk s x <= Quotient.mk s y ↔ Relation.TransGen 
+(fun x y => x <= y ∨ x ≈ y) x y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem le_def {x y : α} :
-    Quotient.mk s x <= Quotient.mk s y ↔ Relation.TransGen (fun x y => x <= y ∨ x ≈ y) x y := .rfl
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: @Std.Refl (Quotient s) (· <= ·)
-  body: by
-    induction x using Quotient.inductionOn with | h x
-exact .single .inr (refl x)
-
-中文:
-实例 :
-  签名: @Std.Refl (商 s) (· <= ·)
-  定义体: by
-    induction x using Quotient.inductionOn with | h x
-exact .single .inr (refl x)
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn, single
+    Quotient.mk s x ≤ Quotient.mk s y ↔ Relation.TransGen (fun x y ↦ x ≤ y ∨ x ≈ y) x y := .rfl
+/-
+**Quotient.** 是 Mathlib 中的一个实例，位于命名空间 `Quotient`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : @Std.Refl (Quotient s) (· <= ·) where
+instance : @Std.Refl (Quotient s) (· ≤ ·) where
   refl x := by
     induction x using Quotient.inductionOn with | h x
-exact .single .inr (refl x)
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: IsTrans (Quotient s) (· <= ·)
-  body: by
-    induction x using Quotient.inductionOn with | h x
-    induction y using Quotient.inductionOn with | h y
-    induction z using Quotient.inductionOn with | h z
-    exact Relation.TransGen.trans h₁ h₂
-
-中文:
-实例 :
-  签名: 是Trans (商 s) (· <= ·)
-  定义体: by
-    induction x using Quotient.inductionOn with | h x
-    induction y using Quotient.inductionOn with | h y
-    induction z using Quotient.inductionOn with | h z
-    exact Relation.TransGen.trans h₁ h₂
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, Relation, Relation.TransGen.trans, TransGen, inductionOn
+    exact .single <| .inr (refl x)
+/-
+**Quotient.** 是 Mathlib 中的一个实例，位于命名空间 `Quotient`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance : IsTrans (Quotient s) (· <= ·) where
+instance : IsTrans (Quotient s) (· ≤ ·) where
   trans x y z h₁ h₂ := by
     induction x using Quotient.inductionOn with | h x
     induction y using Quotient.inductionOn with | h y
     induction z using Quotient.inductionOn with | h z
     exact Relation.TransGen.trans h₁ h₂
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance [@Std.Total
-  signature: α (· <= ·)] : @Std.Total (Quotient s) (· <= ·) where
-  body: by
-    induction x using Quotient.inductionOn with | h x
-    induction y using Quotient.inductionOn with | h y
-    obtain h | h := total_of (· <= ·) x y
-· exact .inl .single .inl h
-· exact .inr .single .inl h
-
-中文:
-实例 [@Std.全
-  签名: α (· <= ·)] : @Std.全 (商 s) (· <= ·) where
-  定义体: by
-    induction x using Quotient.inductionOn with | h x
-    induction y using Quotient.inductionOn with | h y
-    obtain h | h := total_of (· <= ·) x y
-· exact .inl .single .inl h
-· exact .inr .single .inl h
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn, single, total_of
+/-
+**Quotient.** 是 Mathlib 中的一个实例，位于命名空间 `Quotient`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-instance [@Std.Total α (· <= ·)] : @Std.Total (Quotient s) (· <= ·) where
+instance [@Std.Total α (· ≤ ·)] : @Std.Total (Quotient s) (· ≤ ·) where
   total x y := by
     induction x using Quotient.inductionOn with | h x
     induction y using Quotient.inductionOn with | h y
-    obtain h | h := total_of (· <= ·) x y
-· exact .inl .single .inl h
-· exact .inr .single .inl h
-
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Preorder (Quotient s)
-  body: refl
-  le_trans _ _ _ := _root_.trans
-
-中文:
-实例 :
-  签名: 预序 (商 s)
-  定义体: refl
-  le_trans _ _ _ := _root_.trans
+    obtain h | h := total_of (· ≤ ·) x y
+    · exact .inl <| .single <| .inl h
+    · exact .inr <| .single <| .inl h
+/-
+**Quotient.** 是 Mathlib 中的一个实例，位于命名空间 `Quotient`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Preorder (Quotient s) where
   le_refl := refl
@@ -186,61 +91,30 @@ end LE
 section Preorder
 variable [Preorder α]
 
-/--
-theorem `mk_monotone` / 定理 `mk_monotone`
-
-English:
-theorem mk_monotone
-  statement: Monotone (Quotient.mk s)
-  proof: fun _ _ h => .single (.inl h)
-
-中文:
-定理 mk_monotone
-  结论: 递增 (商.mk s)
-  证明: fun _ _ h => .single (.inl h)
-
-Depends on / 依赖: single
+/-
+**Quotient.mk_monotone** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：mk_monotone : Monotone (Quotient.mk s)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem mk_monotone : Monotone (Quotient.mk s) :=
-  fun _ _ h => .single (.inl h)
-
-/--
-theorem `lift_monotone` / 定理 `lift_monotone`
-
-English:
-theorem lift_monotone
-  statement: {α β : Type*} [Preorder α] {s : Setoid α} [Preorder β]
-  proof: by
-  intro x y h
-  induction x using Quotient.inductionOn with | h x
-  induction y using Quotient.inductionOn with | h y
-  induction h
-  on_goal 2 => rename_i IH; apply IH.trans
-  all_goals
-    rename_i h
-    cases h with
-    | inl h => exact hf h
-    | inr h => exact (H _ _ h).le
-
-中文:
-定理 lift_monotone
-  结论: {α β : 类型} [预序 α] {s : 集合等价关系 α} [预序 β]
-  证明: by
-  intro x y h
-  induction x using Quotient.inductionOn with | h x
-  induction y using Quotient.inductionOn with | h y
-  induction h
-  on_goal 2 => rename_i IH; apply IH.trans
-  all_goals
-    rename_i h
-    cases h with
-    | inl h => exact hf h
-    | inr h => exact (H _ _ h).le
-
-Depends on / 依赖: IH.trans, Quotient, Quotient.inductionOn, all_goals, inductionOn, on_goal, rename_i
+  fun _ _ h ↦ .single (.inl h)
+/-
+**Quotient.lift_monotone** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：lift_monotone {α β : Type*} [Preorder α] {s : Setoid α} [Preorder β] (f : 
+α -> β) (hf : Monotone f) (H : forall x₁ x₂, x₁ ≈ x₂ -> f x₁ = f x₂) : Monotone 
+(Quotient.lift f H)
+参数：f : α -> β；hf : Monotone f；H : forall x₁ x₂, x₁ ≈ x₂ -> f x₁ = f x₂。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.inductionOn`：∀ {α : Sort u} {s : Setoid α} {motive : Quotient s
+ → Prop} (q : Quotient s), (∀ (a : α), motive ⟦a⟧) → motive q
+· 使用定理 `Eq.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a = b → a ≤ b
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
 -/
 theorem lift_monotone {α β : Type*} [Preorder α] {s : Setoid α} [Preorder β]
-    (f : α -> β) (hf : Monotone f) (H : forall x₁ x₂, x₁ ≈ x₂ -> f x₁ = f x₂) :
+    (f : α → β) (hf : Monotone f) (H : ∀ x₁ x₂, x₁ ≈ x₂ → f x₁ = f x₂) :
     Monotone (Quotient.lift f H) := by
   intro x y h
   induction x using Quotient.inductionOn with | h x
@@ -256,101 +130,64 @@ theorem lift_monotone {α β : Type*} [Preorder α] {s : Setoid α} [Preorder β
 end Preorder
 
 section LinearOrder
-variable [LinearOrder α] [H : forall x, OrdConnected (Quotient.mk s ⁻¹' {x})]
+variable [LinearOrder α] [H : ∀ x, OrdConnected (Quotient.mk s ⁻¹' {x})]
 
-/--
-theorem `mk_le_mk` / 定理 `mk_le_mk`
-
-English:
-theorem mk_le_mk
-  given: {x y : α}
-  statement: Quotient.mk s x <= Quotient.mk s y ↔ x <= y ∨ x ≈ y
-  proof: by
-  rw [← propext_iff]
-  revert x y
-apply congrFun₂ @Relation.transGen_eq_self α _ ⟨fun x y z h₁ h₂ => ?_⟩
-  cases h₁ <;> cases h₂ <;> rename_i h₁ h₂
-· exact .inl h₁.trans h₂
-  · rw [or_iff_not_imp_left, not_le]
-    rw [← Quotient.eq_iff_equiv] at *
-    exact fun h => ((H _).out h₂.symm rfl ⟨h.le, h₁⟩).trans h₂
-  · rw [or_iff_not_imp_left, not_le]
-    rw [← Quotient.eq_iff_equiv] at *
-    exact fun h => ((H _).out h₁.symm rfl ⟨h₂, h.le⟩).symm
-  · exact .inr (_root_.trans h₁ h₂)
-
-中文:
-定理 mk_le_mk
-  条件: {x y : α}
-  结论: 商.mk s x <= 商.mk s y ↔ x <= y ∨ x ≈ y
-  证明: by
-  rw [← propext_iff]
-  revert x y
-apply congrFun₂ @Relation.transGen_eq_self α _ ⟨fun x y z h₁ h₂ => ?_⟩
-  cases h₁ <;> cases h₂ <;> rename_i h₁ h₂
-· exact .inl h₁.trans h₂
-  · rw [or_iff_not_imp_left, not_le]
-    rw [← Quotient.eq_iff_equiv] at *
-    exact fun h => ((H _).out h₂.symm rfl ⟨h.le, h₁⟩).trans h₂
-  · rw [or_iff_not_imp_left, not_le]
-    rw [← Quotient.eq_iff_equiv] at *
-    exact fun h => ((H _).out h₁.symm rfl ⟨h₂, h.le⟩).symm
-  · exact .inr (_root_.trans h₁ h₂)
-
-Depends on / 依赖: Quotient, Quotient.eq_iff_equiv, Relation, Relation.transGen_eq_self, _root_, _root_.trans, eq_iff_equiv, h.le, not_le, or_iff_not_imp_left, propext_iff, rename_i, revert, transGen_eq_self
+/-
+**Quotient.mk_le_mk** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：mk_le_mk {x y : α} : Quotient.mk s x <= Quotient.mk s y ↔ x <= y ∨ x ≈ y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.symm`：∀ {α : Sort u} {a b : α}, a = b → b = a
+· 使用定理 `propext_iff`：∀ {a b : Prop}, a = b ↔ (a ↔ b)
+· 使用定理 `congrFun₂`：∀ {α : Sort u_1} {β : α → Sort u_2} {γ : (a : α) → β a → Sort
+ u_3} {f g : (a : α) → (b : β a) → γ a b},   f = g → ∀ (a : α) (b : β a), f a b…
+· 使用定理 `Relation.transGen_eq_self`：transGen_eq_self [IsTrans α r] : TransGen r =
+ r
+· 使用定理 `LE.le.trans`：∀ {α : Type u_1} [inst : Preorder α] {a b c : α}, a ≤ b → b
+ ≤ c → a ≤ c
+· 使用定理 `Classical.or_iff_not_imp_left`：∀ {a b : Prop}, a ∨ b ↔ ¬a → b
+· 使用定理 `not_le`：∀ {α : Type u_1} [inst : LinearOrder α] {a b : α}, ¬a ≤ b ↔ b < 
+a
+· 使用定理 `Quotient.eq_iff_equiv`：Quotient.eq_iff_equiv {r : Setoid α} {x y : α} : 
+Quotient.mk r x = ⟦y⟧ ↔ x ≈ y
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.OrdConnected.out`：∀ {α : Type u_1} [inst : Preorder α] {s : Set α}, 
+s.OrdConnected → ∀ ⦃x : α⦄, x ∈ s → ∀ ⦃y : α⦄, y ∈ s → Set.Icc x y ⊆ s
+· 使用定理 `LT.lt.le`：∀ {α : Type u_1} [inst : Preorder α] {a b : α}, a < b → a ≤ b
+· 使用引理 `trans`：trans [IsTrans α r] : a ≺ b -> b ≺ c -> a ≺ c
+· 使用定理 `IsPreorder.toIsTrans`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsPreo
+rder α r], IsTrans α r
+· 使用定理 `IsEquiv.toIsPreorder`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsEqui
+v α r], IsPreorder α r
+· 使用定理 `Quotient.instIsEquivEquiv`：∀ {α : Type u_4} [inst : Setoid α], IsEquiv α
+ fun x1 x2 => x1 ≈ x2
 -/
-theorem mk_le_mk {x y : α} : Quotient.mk s x <= Quotient.mk s y ↔ x <= y ∨ x ≈ y := by
+theorem mk_le_mk {x y : α} : Quotient.mk s x ≤ Quotient.mk s y ↔ x ≤ y ∨ x ≈ y := by
   rw [← propext_iff]
   revert x y
-apply congrFun₂ @Relation.transGen_eq_self α _ ⟨fun x y z h₁ h₂ => ?_⟩
+  apply congrFun₂ <| @Relation.transGen_eq_self α _ ⟨fun x y z h₁ h₂ ↦ ?_⟩
   cases h₁ <;> cases h₂ <;> rename_i h₁ h₂
-· exact .inl h₁.trans h₂
+  · exact .inl <| h₁.trans h₂
   · rw [or_iff_not_imp_left, not_le]
     rw [← Quotient.eq_iff_equiv] at *
-    exact fun h => ((H _).out h₂.symm rfl ⟨h.le, h₁⟩).trans h₂
+    exact fun h ↦ ((H _).out h₂.symm rfl ⟨h.le, h₁⟩).trans h₂
   · rw [or_iff_not_imp_left, not_le]
     rw [← Quotient.eq_iff_equiv] at *
-    exact fun h => ((H _).out h₁.symm rfl ⟨h₂, h.le⟩).symm
+    exact fun h ↦ ((H _).out h₁.symm rfl ⟨h₂, h.le⟩).symm
   · exact .inr (_root_.trans h₁ h₂)
-
-/--
-Instance `instLinearOrder` / 实例 `instLinearOrder`
-
-English:
-instance instLinearOrder
-  signature: [DecidableRel (· ≈ · : α -> α -> Prop)]
-  body: by
-    induction x using Quotient.inductionOn with | h x
-    induction y using Quotient.inductionOn with | h y
-    rw [mk_le_mk] at h₁ h₂
-    cases h₁ with
-    | inr h => exact Quotient.sound h
-    | inl h₁ =>
-      cases h₂ with
-      | inr h => exact (Quotient.sound h).symm
-      | inl h₂ => exact congrArg _ (h₁.antisymm h₂)
-  le_total := total_of _
-  toDecidableLE x y := Quotient.recOnSubsingleton₂ x y fun x y => decidable_of_iff' _ mk_le_mk
-
-中文:
-实例 instLinearOrder
-  签名: [DecidableRel (· ≈ · : α -> α -> 命题)]
-  定义体: by
-    induction x using Quotient.inductionOn with | h x
-    induction y using Quotient.inductionOn with | h y
-    rw [mk_le_mk] at h₁ h₂
-    cases h₁ with
-    | inr h => exact Quotient.sound h
-    | inl h₁ =>
-      cases h₂ with
-      | inr h => exact (Quotient.sound h).symm
-      | inl h₂ => exact congrArg _ (h₁.antisymm h₂)
-  le_total := total_of _
-  toDecidableLE x y := Quotient.recOnSubsingleton₂ x y fun x y => decidable_of_iff' _ mk_le_mk
-
-Depends on / 依赖: Quotient, Quotient.inductionOn, Quotient.recOnSubsingleton, Quotient.sound, antisymm, decidable_of_iff, inductionOn, le_total, mk_le_mk, toDecidableLE, total_of
+/-
+**Quotient.instLinearOrder** 是 Mathlib 中的一个实例，位于命名空间 `Quotient`。
+形式化陈述：instLinearOrder [DecidableRel (· ≈ · : α -> α -> Prop)] : LinearOrder (Quo
+tient s) where le_antisymm x y h₁ h₂
+参数：· ≈ · : α -> α -> Prop。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk_le_mk`：mk_le_mk {x y : α} : Quotient.mk s x <= Quotient.mk s
+ y ↔ x <= y ∨ x ≈ y
 -/
-instance instLinearOrder [DecidableRel (· ≈ · : α -> α -> Prop)] : LinearOrder (Quotient s) where
+instance instLinearOrder [DecidableRel (· ≈ · : α → α → Prop)] : LinearOrder (Quotient s) where
   le_antisymm x y h₁ h₂ := by
     induction x using Quotient.inductionOn with | h x
     induction y using Quotient.inductionOn with | h y
@@ -362,55 +199,49 @@ instance instLinearOrder [DecidableRel (· ≈ · : α -> α -> Prop)] : LinearO
       | inr h => exact (Quotient.sound h).symm
       | inl h₂ => exact congrArg _ (h₁.antisymm h₂)
   le_total := total_of _
-  toDecidableLE x y := Quotient.recOnSubsingleton₂ x y fun x y => decidable_of_iff' _ mk_le_mk
-
-/--
-theorem `mk_lt_mk` / 定理 `mk_lt_mk`
-
-English:
-theorem mk_lt_mk
-  given: {x y : α}
-  statement: Quotient.mk s x < Quotient.mk s y ↔ x < y ∧ ¬ x ≈ y
-  proof: by
-  classical
-  contrapose! +distrib
-  rw [mk_le_mk]; rw [comm_of (· ≈ ·)]
-
-中文:
-定理 mk_lt_mk
-  条件: {x y : α}
-  结论: 商.mk s x < 商.mk s y ↔ x < y ∧ ¬ x ≈ y
-  证明: by
-  classical
-  contrapose! +distrib
-  rw [mk_le_mk]; rw [comm_of (· ≈ ·)]
-
-Depends on / 依赖: classical, comm_of, contrapose, distrib, mk_le_mk
+  toDecidableLE x y := Quotient.recOnSubsingleton₂ x y fun x y ↦ decidable_of_iff' _ mk_le_mk
+/-
+**Quotient.mk_lt_mk** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：mk_lt_mk {x y : α} : Quotient.mk s x < Quotient.mk s y ↔ x < y ∧ ¬ x ≈ y
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用引理 `Mathlib.Tactic.Contrapose.contrapose_iff₁`：contrapose_iff₁ {p q : Prop} 
+: (¬ p ↔ ¬ q) -> (p ↔ q)
+· 使用定理 `congr`：∀ {α : Sort u} {β : Sort v} {f₁ f₂ : α → β} {a₁ a₂ : α}, f₁ = f₂ 
+→ a₁ = a₂ → f₁ a₁ = f₂ a₂
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Mathlib.Tactic.Push.not_and_or_eq`：not_and_or_eq : (¬ (p ∧ q)) = (¬ p ∨ 
+¬ q)
+· 使用定理 `Quotient.mk_le_mk`：mk_le_mk {x y : α} : Quotient.mk s x <= Quotient.mk s
+ y ↔ x <= y ∨ x ≈ y
+· 使用定理 `comm_of`：comm_of (r : α -> α -> Prop) [Std.Symm r] {a b : α} : r a b ↔ r
+ b a
+· 使用定理 `IsEquiv.toSymm`：∀ {α : Sort u_1} {r : α → α → Prop} [self : IsEquiv α r]
+, Std.Symm r
+· 使用定理 `Quotient.instIsEquivEquiv`：∀ {α : Type u_4} [inst : Setoid α], IsEquiv α
+ fun x1 x2 => x1 ≈ x2
+· 使用定理 `Iff.rfl`：∀ {a : Prop}, a ↔ a
 -/
 theorem mk_lt_mk {x y : α} : Quotient.mk s x < Quotient.mk s y ↔ x < y ∧ ¬ x ≈ y := by
   classical
   contrapose! +distrib
-  rw [mk_le_mk]; rw [comm_of (· ≈ ·)]
-
-/--
-theorem `lt_of_mk_lt_mk` / 定理 `lt_of_mk_lt_mk`
-
-English:
-theorem lt_of_mk_lt_mk
-  given: {x y : α} (h : Quotient.mk s x < Quotient.mk s y)
-  statement: x < y
-  proof: (mk_lt_mk.1 h).1
-
-中文:
-定理 lt_of_mk_lt_mk
-  条件: {x y : α} (h : 商.mk s x < 商.mk s y)
-  结论: x < y
-  证明: (mk_lt_mk.1 h).1
-
-Depends on / 依赖: mk_lt_mk
+  rw [mk_le_mk, comm_of (· ≈ ·)]
+/-
+**Quotient.lt_of_mk_lt_mk** 是 Mathlib 中的一个定理，位于命名空间 `Quotient`。
+形式化陈述：lt_of_mk_lt_mk {x y : α} (h : Quotient.mk s x < Quotient.mk s y) : x < y
+参数：h : Quotient.mk s x < Quotient.mk s y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `And.left`：∀ {a b : Prop}, a ∧ b → a
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `Quotient.mk_lt_mk`：mk_lt_mk {x y : α} : Quotient.mk s x < Quotient.mk s 
+y ↔ x < y ∧ ¬ x ≈ y
 -/
 theorem lt_of_mk_lt_mk {x y : α} (h : Quotient.mk s x < Quotient.mk s y) : x < y :=
   (mk_lt_mk.1 h).1
 
 end LinearOrder
 end Quotient
+

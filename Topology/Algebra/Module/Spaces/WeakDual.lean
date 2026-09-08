@@ -56,22 +56,20 @@ open Topology
 
 variable {α 𝕜 𝕝 E F : Type*}
 
-/--
-Definition of `WeakDual` / `WeakDual` 的定义
+/-- The weak star topology is the topology coarsest topology on `E →L[𝕜] 𝕜` such that all
+functionals `fun v => v x` are continuous. -/
+/-
+**WeakDual** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：WeakDual (𝕜 E : Type*) [CommSemiring 𝕜] [TopologicalSpace 𝕜] [ContinuousAd
+d 𝕜] [ContinuousConstSMul 𝕜 𝕜] [AddCommMonoid E] [Module 𝕜 E] [TopologicalSpace 
+E]
+参数：𝕜 E : Type*。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WeakDual
-  signature: (𝕜 E : Type*) [CommSemiring 𝕜] [TopologicalSpace 𝕜] [ContinuousAdd 𝕜]
-  body: WeakBilin (topDualPairing 𝕜 E)
-deriving TopologicalSpace, Inhabited, FunLike, ContinuousLinearMapClass
-
-中文:
-定义 WeakDual
-  签名: (𝕜 E : 类型) [交换半环 𝕜] [拓扑空间 𝕜] [连续加法 𝕜]
-  定义体: WeakBilin (topDualPairing 𝕜 E)
-deriving TopologicalSpace, Inhabited, FunLike, ContinuousLinearMapClass
-
-Depends on / 依赖: WeakBilin, topDualPairing
+--- 原说明 ---
+The weak star topology is the topology coarsest topology on `E →L[𝕜] 𝕜` such tha
+t all
+functionals `fun v => v x` are continuous.
 -/
 def WeakDual (𝕜 E : Type*) [CommSemiring 𝕜] [TopologicalSpace 𝕜] [ContinuousAdd 𝕜]
     [ContinuousConstSMul 𝕜 𝕜] [AddCommMonoid E] [Module 𝕜 E] [TopologicalSpace E] :=
@@ -83,113 +81,133 @@ namespace WeakDual
 variable [CommSemiring 𝕜] [TopologicalSpace 𝕜] [ContinuousAdd 𝕜]
 variable [ContinuousConstSMul 𝕜 𝕜] [AddCommMonoid E] [Module 𝕜 E] [TopologicalSpace E]
 
-/--
-Instance `instMulAction` / 实例 `instMulAction`
+/-- If a monoid `M` distributively continuously acts on `𝕜` and this action commutes with
+multiplication on `𝕜`, then it acts on `WeakDual 𝕜 E`. -/
+/-
+**WeakDual.instMulAction** 是 Mathlib 中的一个实例，位于命名空间 `WeakDual`。
+形式化陈述：instMulAction (M) [Monoid M] [DistribMulAction M 𝕜] [SMulCommClass 𝕜 M 𝕜] 
+[ContinuousConstSMul M 𝕜] : MulAction M (WeakDual 𝕜 E)
+参数：M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instMulAction
-  signature: (M) [Monoid M] [DistribMulAction M 𝕜] [SMulCommClass 𝕜 M 𝕜]
-  body: inferInstanceAs MulAction M (E ->L[𝕜] 𝕜)
-
-deriving instance AddCommMonoid, ContinuousAdd for WeakDual
-
-中文:
-实例 instMulAction
-  签名: (M) [幺半群 M] [分配乘法作用 M 𝕜] [标量交换类 𝕜 M 𝕜]
-  定义体: inferInstanceAs MulAction M (E ->L[𝕜] 𝕜)
-
-deriving instance AddCommMonoid, ContinuousAdd for WeakDual
-
-Depends on / 依赖: MulAction
+--- 原说明 ---
+If a monoid `M` distributively continuously acts on `𝕜` and this action commutes
+ with
+multiplication on `𝕜`, then it acts on `WeakDual 𝕜 E`.
 -/
 instance instMulAction (M) [Monoid M] [DistribMulAction M 𝕜] [SMulCommClass 𝕜 M 𝕜]
     [ContinuousConstSMul M 𝕜] : MulAction M (WeakDual 𝕜 E) :=
-inferInstanceAs MulAction M (E ->L[𝕜] 𝕜)
+  inferInstanceAs <| MulAction M (E →L[𝕜] 𝕜)
 
 deriving instance AddCommMonoid, ContinuousAdd for WeakDual
 
-/--
-Instance `instDistribMulAction` / 实例 `instDistribMulAction`
+/-- If a monoid `M` distributively continuously acts on `𝕜` and this action commutes with
+multiplication on `𝕜`, then it acts distributively on `WeakDual 𝕜 E`. -/
+/-
+**WeakDual.instDistribMulAction** 是 Mathlib 中的一个实例，位于命名空间 `WeakDual`。
+形式化陈述：instDistribMulAction (M) [Monoid M] [DistribMulAction M 𝕜] [SMulCommClass 
+𝕜 M 𝕜] [ContinuousConstSMul M 𝕜] : DistribMulAction M (WeakDual 𝕜 E)
+参数：M。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instDistribMulAction
-  signature: (M) [Monoid M] [DistribMulAction M 𝕜] [SMulCommClass 𝕜 M 𝕜]
-  body: inferInstanceAs DistribMulAction M (E ->L[𝕜] 𝕜)
-
-中文:
-实例 instDistribMulAction
-  签名: (M) [幺半群 M] [分配乘法作用 M 𝕜] [标量交换类 𝕜 M 𝕜]
-  定义体: inferInstanceAs DistribMulAction M (E ->L[𝕜] 𝕜)
-
-Depends on / 依赖: DistribMulAction
+--- 原说明 ---
+If a monoid `M` distributively continuously acts on `𝕜` and this action commutes
+ with
+multiplication on `𝕜`, then it acts distributively on `WeakDual 𝕜 E`.
 -/
 instance instDistribMulAction (M) [Monoid M] [DistribMulAction M 𝕜] [SMulCommClass 𝕜 M 𝕜]
     [ContinuousConstSMul M 𝕜] : DistribMulAction M (WeakDual 𝕜 E) :=
-inferInstanceAs DistribMulAction M (E ->L[𝕜] 𝕜)
-
-/--
-Instance `instContinuousConstSMul` / 实例 `instContinuousConstSMul`
-
-English:
-instance instContinuousConstSMul
-  signature: (M) [Monoid M] [DistribMulAction M 𝕜] [SMulCommClass 𝕜 M 𝕜]
-  body: ⟨fun m =>
-continuous_induced_rng.2 (WeakBilin.coeFn_continuous (topDualPairing 𝕜 E)).const_smul m⟩
-
-中文:
-实例 instContinuousConstSMul
-  签名: (M) [幺半群 M] [分配乘法作用 M 𝕜] [标量交换类 𝕜 M 𝕜]
-  定义体: ⟨fun m =>
-continuous_induced_rng.2 (WeakBilin.coeFn_continuous (topDualPairing 𝕜 E)).const_smul m⟩
-
-Depends on / 依赖: WeakBilin, WeakBilin.coeFn_continuous, coeFn_continuous, const_smul, continuous_induced_rng, topDualPairing
+  inferInstanceAs <| DistribMulAction M (E →L[𝕜] 𝕜)
+/-
+**WeakDual.instContinuousConstSMul** 是 Mathlib 中的一个实例，位于命名空间 `WeakDual`。
+形式化陈述：instContinuousConstSMul (M) [Monoid M] [DistribMulAction M 𝕜] [SMulCommCla
+ss 𝕜 M 𝕜] [ContinuousConstSMul M 𝕜] : ContinuousConstSMul M (WeakDual 𝕜 E)
+参数：M。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `continuous_induced_rng`：continuous_induced_rng {g : γ -> α} {t₂ : Topolo
+gicalSpace β} {t₁ : TopologicalSpace γ} : Continuous[t₁, induced f t₂] g ↔ Conti
+nuous[t₁, t₂…
+· 使用定理 `Continuous.const_smul`：Continuous.const_smul (hg : Continuous g) (c : M)
+ : Continuous (c • g)
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `instContinuousConstSMulForall`：∀ {M : Type u_1} {ι : Type u_4} {γ : ι → 
+Type u_5} [inst : (i : ι) → TopologicalSpace (γ i)]   [inst_1 : (i : ι) → SMul M
+ (γ i)] [∀ (i : ι),…
+· 使用定理 `WeakBilin.coeFn_continuous`：coeFn_continuous : Continuous fun (x : WeakB
+ilin B) y => B x y
 -/
 instance instContinuousConstSMul (M) [Monoid M] [DistribMulAction M 𝕜] [SMulCommClass 𝕜 M 𝕜]
     [ContinuousConstSMul M 𝕜] : ContinuousConstSMul M (WeakDual 𝕜 E) :=
   ⟨fun m =>
-continuous_induced_rng.2 (WeakBilin.coeFn_continuous (topDualPairing 𝕜 E)).const_smul m⟩
+    continuous_induced_rng.2 <| (WeakBilin.coeFn_continuous (topDualPairing 𝕜 E)).const_smul m⟩
 
-/--
-Instance `instContinuousSMul` / 实例 `instContinuousSMul`
+/-- If a monoid `M` distributively continuously acts on `𝕜` and this action commutes with
+multiplication on `𝕜`, then it continuously acts on `WeakDual 𝕜 E`. -/
+/-
+**WeakDual.instContinuousSMul** 是 Mathlib 中的一个实例，位于命名空间 `WeakDual`。
+形式化陈述：instContinuousSMul (M) [Monoid M] [DistribMulAction M 𝕜] [SMulCommClass 𝕜 
+M 𝕜] [TopologicalSpace M] [ContinuousSMul M 𝕜] : ContinuousSMul M (WeakDual 𝕜 E)
+参数：M。
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `ContinuousSMul.continuousConstSMul`：∀ {M : Type u_1} {X : Type u_2} [ins
+t : TopologicalSpace M] [inst_1 : TopologicalSpace X] [inst_2 : SMul M X]   [Con
+tinuousSMul M X], Contin…
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `continuous_induced_rng`：continuous_induced_rng {g : γ -> α} {t₂ : Topolo
+gicalSpace β} {t₁ : TopologicalSpace γ} : Continuous[t₁, induced f t₂] g ↔ Conti
+nuous[t₁, t₂…
+· 使用定理 `Continuous.smul`：Continuous.smul (hf : Continuous f) (hg : Continuous g)
+ : Continuous (f • g)
+· 使用定理 `instContinuousSMulForall`：∀ {M : Type u_1} [inst : TopologicalSpace M] {
+ι : Type u_5} {γ : ι → Type u_6}   [inst_1 : (i : ι) → TopologicalSpace (γ i)] [
+inst_2 : (i : …
+· 使用定理 `continuous_fst`：continuous_fst (f : X → Y × Z) (hf : Continuous f) : Con
+tinuous (fun x ↦ (f x).fst)
+· 使用定理 `Continuous.comp`：Continuous.comp {g : Y -> Z} (hg : Continuous g) (hf : 
+Continuous f) : Continuous (g ∘ f)
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `WeakBilin.coeFn_continuous`：coeFn_continuous : Continuous fun (x : WeakB
+ilin B) y => B x y
+· 使用定理 `continuous_snd`：continuous_snd (f : X → Y × Z) (hf : Continuous f) : Con
+tinuous (fun x ↦ (f x).snd)
 
-English:
-instance instContinuousSMul
-  signature: (M) [Monoid M] [DistribMulAction M 𝕜] [SMulCommClass 𝕜 M 𝕜]
-  body: ⟨continuous_induced_rng.2
-      continuous_fst.smul ((WeakBilin.coeFn_continuous (topDualPairing 𝕜 E)).comp continuous_snd)⟩
-
-中文:
-实例 instContinuousSMul
-  签名: (M) [幺半群 M] [分配乘法作用 M 𝕜] [标量交换类 𝕜 M 𝕜]
-  定义体: ⟨continuous_induced_rng.2
-      continuous_fst.smul ((WeakBilin.coeFn_continuous (topDualPairing 𝕜 E)).comp continuous_snd)⟩
-
-Depends on / 依赖: WeakBilin, WeakBilin.coeFn_continuous, coeFn_continuous, continuous_fst, continuous_fst.smul, continuous_induced_rng, continuous_snd, topDualPairing
+--- 原说明 ---
+If a monoid `M` distributively continuously acts on `𝕜` and this action commutes
+ with
+multiplication on `𝕜`, then it continuously acts on `WeakDual 𝕜 E`.
 -/
 instance instContinuousSMul (M) [Monoid M] [DistribMulAction M 𝕜] [SMulCommClass 𝕜 M 𝕜]
     [TopologicalSpace M] [ContinuousSMul M 𝕜] : ContinuousSMul M (WeakDual 𝕜 E) :=
-⟨continuous_induced_rng.2
+  ⟨continuous_induced_rng.2 <|
       continuous_fst.smul ((WeakBilin.coeFn_continuous (topDualPairing 𝕜 E)).comp continuous_snd)⟩
 
 /-- If `𝕜` is a topological module over a semiring `R` and scalar multiplication commutes with the
 multiplication on `𝕜`, then `WeakDual 𝕜 E` is a module over `R`. -/
+/-
+**WeakDual.** 是 Mathlib 中的一个实例，位于命名空间 `WeakDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+If `𝕜` is a topological module over a semiring `R` and scalar multiplication com
+mutes with the
+multiplication on `𝕜`, then `WeakDual 𝕜 E` is a module over `R`.
+-/
 instance (priority := 950) instModule'
     (R : Type*) [Semiring R] [Module R 𝕜] [SMulCommClass 𝕜 R 𝕜] [ContinuousConstSMul R 𝕜] :
     Module R (WeakDual 𝕜 E) :=
-inferInstanceAs Module R (E ->L[𝕜] 𝕜)
-
-/--
-Instance `instModule` / 实例 `instModule`
-
-English:
-instance instModule
-  signature: : Module 𝕜 (WeakDual 𝕜 E)
-  body: inferInstance
-
-中文:
-实例 instModule
-  签名: : 模 𝕜 (WeakDual 𝕜 E)
-  定义体: inferInstance
+  inferInstanceAs <| Module R (E →L[𝕜] 𝕜)
+/-
+**WeakDual.instModule** 是 Mathlib 中的一个实例，位于命名空间 `WeakDual`。
+形式化陈述：instModule : Module 𝕜 (WeakDual 𝕜 E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instModule : Module 𝕜 (WeakDual 𝕜 E) := inferInstance
 
@@ -200,79 +218,57 @@ namespace StrongDual
 variable [CommSemiring 𝕜] [TopologicalSpace 𝕜] [ContinuousAdd 𝕜]
 variable [ContinuousConstSMul 𝕜 𝕜] [AddCommMonoid E] [Module 𝕜 E] [TopologicalSpace E]
 
-/--
-Definition of `toWeakDual` / `toWeakDual` 的定义
+/-- For vector spaces `E`, there is a canonical map `StrongDual 𝕜 E → WeakDual 𝕜 E` (the "identity"
+mapping). It is a linear equivalence. -/
+/-
+**StrongDual.toWeakDual** 是 Mathlib 中的一个定义，位于命名空间 `StrongDual`。
+形式化陈述：toWeakDual : StrongDual 𝕜 E ≃ₗ[𝕜] WeakDual 𝕜 E
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toWeakDual
-  signature: : StrongDual 𝕜 E ≃ₗ[𝕜] WeakDual 𝕜 E
-  body: LinearEquiv.refl 𝕜 (StrongDual 𝕜 E)
-
-中文:
-定义 toWeakDual
-  签名: : StrongDual 𝕜 E ≃ₗ[𝕜] WeakDual 𝕜 E
-  定义体: LinearEquiv.refl 𝕜 (StrongDual 𝕜 E)
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.refl, StrongDual
+--- 原说明 ---
+For vector spaces `E`, there is a canonical map `StrongDual 𝕜 E → WeakDual 𝕜 E` 
+(the "identity"
+mapping). It is a linear equivalence.
 -/
 def toWeakDual : StrongDual 𝕜 E ≃ₗ[𝕜] WeakDual 𝕜 E :=
   LinearEquiv.refl 𝕜 (StrongDual 𝕜 E)
-
-/--
-theorem `coe_toWeakDual` / 定理 `coe_toWeakDual`
-
-English:
-theorem coe_toWeakDual
-  given: (x' : StrongDual 𝕜 E)
-  statement: (toWeakDual x' : E -> 𝕜) = x'
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 coe_toWeakDual
-  条件: (x' : StrongDual 𝕜 E)
-  结论: (toWeakDual x' : E -> 𝕜) = x'
-  证明: rfl
-
-@[simp]
+/-
+**StrongDual.coe_toWeakDual** 是 Mathlib 中的一个定理，位于命名空间 `StrongDual`。
+形式化陈述：coe_toWeakDual (x' : StrongDual 𝕜 E) : (toWeakDual x' : E -> 𝕜) = x'
+参数：x' : StrongDual 𝕜 E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
-theorem coe_toWeakDual (x' : StrongDual 𝕜 E) : (toWeakDual x' : E -> 𝕜) = x' := rfl
+theorem coe_toWeakDual (x' : StrongDual 𝕜 E) : (toWeakDual x' : E → 𝕜) = x' := rfl
 
 @[simp]
-/--
-theorem `toWeakDual_apply` / 定理 `toWeakDual_apply`
-
-English:
-theorem toWeakDual_apply
-  given: (x' : StrongDual 𝕜 E) (y : E)
-  statement: (toWeakDual x') y = x' y
-  proof: rfl
-
-中文:
-定理 toWeakDual_apply
-  条件: (x' : StrongDual 𝕜 E) (y : E)
-  结论: (toWeakDual x') y = x' y
-  证明: rfl
+/-
+**StrongDual.toWeakDual_apply** 是 Mathlib 中的一个定理，位于命名空间 `StrongDual`。
+形式化陈述：toWeakDual_apply (x' : StrongDual 𝕜 E) (y : E) : (toWeakDual x') y = x' y
+参数：x' : StrongDual 𝕜 E；y : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 theorem toWeakDual_apply (x' : StrongDual 𝕜 E) (y : E) : (toWeakDual x') y = x' y := rfl
-
-/--
-theorem `toWeakDual_inj` / 定理 `toWeakDual_inj`
-
-English:
-theorem toWeakDual_inj
-  given: (x' y' : StrongDual 𝕜 E)
-  statement: toWeakDual x' = toWeakDual y' ↔ x' = y'
-  proof: (LinearEquiv.injective toWeakDual).eq_iff
-
-中文:
-定理 toWeakDual_inj
-  条件: (x' y' : StrongDual 𝕜 E)
-  结论: toWeakDual x' = toWeakDual y' ↔ x' = y'
-  证明: (LinearEquiv.injective toWeakDual).eq_iff
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.injective, eq_iff, injective, toWeakDual
+/-
+**StrongDual.toWeakDual_inj** 是 Mathlib 中的一个定理，位于命名空间 `StrongDual`。
+形式化陈述：toWeakDual_inj (x' y' : StrongDual 𝕜 E) : toWeakDual x' = toWeakDual y' ↔ 
+x' = y'
+参数：x' y' : StrongDual 𝕜 E。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LinearEquiv.injective`：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {M
+₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoi
+d M] [inst_…
 -/
 theorem toWeakDual_inj (x' y' : StrongDual 𝕜 E) : toWeakDual x' = toWeakDual y' ↔ x' = y' :=
   (LinearEquiv.injective toWeakDual).eq_iff
@@ -286,244 +282,163 @@ section Semiring
 variable [CommSemiring 𝕜] [TopologicalSpace 𝕜] [ContinuousAdd 𝕜]
 variable [ContinuousConstSMul 𝕜 𝕜] [AddCommMonoid E] [Module 𝕜 E] [TopologicalSpace E]
 
-/--
-Definition of `toStrongDual` / `toStrongDual` 的定义
+/-- For vector spaces `E`, there is a canonical map `WeakDual 𝕜 E → StrongDual 𝕜 E` (the "identity"
+mapping). It is a linear equivalence. Here it is implemented as the inverse of the linear
+equivalence `StrongDual.toWeakDual` in the other direction. -/
+/-
+**WeakDual.toStrongDual** 是 Mathlib 中的一个定义，位于命名空间 `WeakDual`。
+形式化陈述：toStrongDual : WeakDual 𝕜 E ≃ₗ[𝕜] StrongDual 𝕜 E
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toStrongDual
-  signature: : WeakDual 𝕜 E ≃ₗ[𝕜] StrongDual 𝕜 E
-  body: StrongDual.toWeakDual.symm
-
-@[simp]
-
-中文:
-定义 toStrongDual
-  签名: : WeakDual 𝕜 E ≃ₗ[𝕜] StrongDual 𝕜 E
-  定义体: StrongDual.toWeakDual.symm
-
-@[simp]
-
-Depends on / 依赖: StrongDual, StrongDual.toWeakDual.symm, toWeakDual
+--- 原说明 ---
+For vector spaces `E`, there is a canonical map `WeakDual 𝕜 E → StrongDual 𝕜 E` 
+(the "identity"
+mapping). It is a linear equivalence. Here it is implemented as the inverse of t
+he linear
+equivalence `StrongDual.toWeakDual` in the other direction.
 -/
 def toStrongDual : WeakDual 𝕜 E ≃ₗ[𝕜] StrongDual 𝕜 E :=
   StrongDual.toWeakDual.symm
 
 @[simp]
-/--
-theorem `symm_toStrongDual` / 定理 `symm_toStrongDual`
-
-English:
-theorem symm_toStrongDual
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 symm_toStrongDual
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: StrongDual, StrongDual.toWeakDual, toWeakDual
+/-
+**WeakDual.symm_toStrongDual** 是 Mathlib 中的一个定理，位于命名空间 `WeakDual`。
+形式化陈述：symm_toStrongDual : (toStrongDual (𝕜
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 theorem symm_toStrongDual :
     (toStrongDual (𝕜 := 𝕜) (E := E)).symm = StrongDual.toWeakDual :=
   rfl
 
 @[simp]
-/--
-theorem `_root_.StrongDual.symm_toWeakDual` / 定理 `_root_.StrongDual.symm_toWeakDual`
-
-English:
-theorem _root_.StrongDual.symm_toWeakDual
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 _root_.StrongDual.symm_toWeakDual
-  证明: rfl
-
-@[simp]
-
-Depends on / 依赖: toStrongDual
+/-
+**WeakDual._root_.StrongDual.symm_toWeakDual** 是 Mathlib 中的一个定理，位于命名空间 `WeakDual
+`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.StrongDual.symm_toWeakDual :
     (StrongDual.toWeakDual (𝕜 := 𝕜) (E := E)).symm = toStrongDual :=
   rfl
 
 @[simp]
-/--
-theorem `_root_.StrongDual.toStrongDual_toWeakDual` / 定理 `_root_.StrongDual.toStrongDual_toWeakDual`
-
-English:
-theorem _root_.StrongDual.toStrongDual_toWeakDual
-  given: (x : StrongDual 𝕜 E)
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 _root_.StrongDual.toStrongDual_toWeakDual
-  条件: (x : StrongDual 𝕜 E)
-  证明: rfl
-
-@[simp]
+/-
+**WeakDual._root_.StrongDual.toStrongDual_toWeakDual** 是 Mathlib 中的一个定理，位于命名空间 `
+WeakDual`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem _root_.StrongDual.toStrongDual_toWeakDual (x : StrongDual 𝕜 E) :
     x.toWeakDual.toStrongDual = x :=
   rfl
 
 @[simp]
-/--
-theorem `toWeakDual_toStrongDual` / 定理 `toWeakDual_toStrongDual`
-
-English:
-theorem toWeakDual_toStrongDual
-  given: (x : WeakDual 𝕜 E)
-  statement: x.toStrongDual.toWeakDual = x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 toWeakDual_toStrongDual
-  条件: (x : WeakDual 𝕜 E)
-  结论: x.toStrongDual.toWeakDual = x
-  证明: rfl
-
-@[simp]
+/-
+**WeakDual.toWeakDual_toStrongDual** 是 Mathlib 中的一个定理，位于命名空间 `WeakDual`。
+形式化陈述：toWeakDual_toStrongDual (x : WeakDual 𝕜 E) : x.toStrongDual.toWeakDual = x
+参数：x : WeakDual 𝕜 E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 theorem toWeakDual_toStrongDual (x : WeakDual 𝕜 E) : x.toStrongDual.toWeakDual = x :=
   rfl
 
 @[simp]
-/--
-theorem `toStrongDual_apply` / 定理 `toStrongDual_apply`
-
-English:
-theorem toStrongDual_apply
-  given: (x : WeakDual 𝕜 E) (y : E)
-  statement: (toStrongDual x) y = x y
-  proof: rfl
-
-中文:
-定理 toStrongDual_apply
-  条件: (x : WeakDual 𝕜 E) (y : E)
-  结论: (toStrongDual x) y = x y
-  证明: rfl
+/-
+**WeakDual.toStrongDual_apply** 是 Mathlib 中的一个定理，位于命名空间 `WeakDual`。
+形式化陈述：toStrongDual_apply (x : WeakDual 𝕜 E) (y : E) : (toStrongDual x) y = x y
+参数：x : WeakDual 𝕜 E；y : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 theorem toStrongDual_apply (x : WeakDual 𝕜 E) (y : E) : (toStrongDual x) y = x y := rfl
-
-/--
-theorem `coe_toStrongDual` / 定理 `coe_toStrongDual`
-
-English:
-theorem coe_toStrongDual
-  given: (x' : WeakDual 𝕜 E)
-  statement: (toStrongDual x' : E -> 𝕜) = x'
-  proof: rfl
-
-中文:
-定理 coe_toStrongDual
-  条件: (x' : WeakDual 𝕜 E)
-  结论: (toStrongDual x' : E -> 𝕜) = x'
-  证明: rfl
+/-
+**WeakDual.coe_toStrongDual** 是 Mathlib 中的一个定理，位于命名空间 `WeakDual`。
+形式化陈述：coe_toStrongDual (x' : WeakDual 𝕜 E) : (toStrongDual x' : E -> 𝕜) = x'
+参数：x' : WeakDual 𝕜 E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
-theorem coe_toStrongDual (x' : WeakDual 𝕜 E) : (toStrongDual x' : E -> 𝕜) = x' := rfl
-
-/--
-theorem `toStrongDual_inj` / 定理 `toStrongDual_inj`
-
-English:
-theorem toStrongDual_inj
-  given: (x' y' : WeakDual 𝕜 E)
-  statement: toStrongDual x' = toStrongDual y' ↔ x' = y'
-  proof: (LinearEquiv.injective toStrongDual).eq_iff
-
-中文:
-定理 toStrongDual_inj
-  条件: (x' y' : WeakDual 𝕜 E)
-  结论: toStrongDual x' = toStrongDual y' ↔ x' = y'
-  证明: (LinearEquiv.injective toStrongDual).eq_iff
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.injective, eq_iff, injective, toStrongDual
+theorem coe_toStrongDual (x' : WeakDual 𝕜 E) : (toStrongDual x' : E → 𝕜) = x' := rfl
+/-
+**WeakDual.toStrongDual_inj** 是 Mathlib 中的一个定理，位于命名空间 `WeakDual`。
+形式化陈述：toStrongDual_inj (x' y' : WeakDual 𝕜 E) : toStrongDual x' = toStrongDual y
+' ↔ x' = y'
+参数：x' y' : WeakDual 𝕜 E。
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Function.Injective.eq_iff`：∀ {α : Sort u_1} {β : Sort u_2} {f : α → β}, 
+Function.Injective f → ∀ {a b : α}, f a = f b ↔ a = b
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `LinearEquiv.injective`：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {M
+₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoi
+d M] [inst_…
 -/
 theorem toStrongDual_inj (x' y' : WeakDual 𝕜 E) : toStrongDual x' = toStrongDual y' ↔ x' = y' :=
   (LinearEquiv.injective toStrongDual).eq_iff
-
-
-/--
-theorem `coeFn_continuous` / 定理 `coeFn_continuous`
-
-English:
-theorem coeFn_continuous
-  statement: Continuous fun (x : WeakDual 𝕜 E) y => x y
-  proof: continuous_induced_dom
-
-中文:
-定理 coeFn_continuous
-  结论: 连续 fun (x : WeakDual 𝕜 E) y => x y
-  证明: continuous_induced_dom
-
-Depends on / 依赖: continuous_induced_dom
+/-
+**WeakDual.coeFn_continuous** 是 Mathlib 中的一个定理，位于命名空间 `WeakDual`。
+形式化陈述：coeFn_continuous : Continuous fun (x : WeakDual 𝕜 E) y => x y
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `continuous_induced_dom`：continuous_induced_dom {t : TopologicalSpace β} 
+: Continuous[induced f t, t] f
 -/
 theorem coeFn_continuous : Continuous fun (x : WeakDual 𝕜 E) y => x y :=
   continuous_induced_dom
-
-/--
-theorem `eval_continuous` / 定理 `eval_continuous`
-
-English:
-theorem eval_continuous
-  given: (y : E)
-  statement: Continuous fun x : WeakDual 𝕜 E => x y
-  proof: continuous_pi_iff.mp coeFn_continuous y
-
-中文:
-定理 eval_continuous
-  条件: (y : E)
-  结论: 连续 fun x : WeakDual 𝕜 E => x y
-  证明: continuous_pi_iff.mp coeFn_continuous y
-
-Depends on / 依赖: coeFn_continuous, continuous_pi_iff, continuous_pi_iff.mp
+/-
+**WeakDual.eval_continuous** 是 Mathlib 中的一个定理，位于命名空间 `WeakDual`。
+形式化陈述：eval_continuous (y : E) : Continuous fun x : WeakDual 𝕜 E => x y
+参数：y : E。
+该定理/引理给出了一组等式。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mp`：∀ {a b : Prop}, (a ↔ b) → a → b
+· 使用定理 `continuous_pi_iff`：continuous_pi_iff : Continuous f ↔ forall i, Continuo
+us fun a => f a i
+· 使用定理 `WeakDual.coeFn_continuous`：coeFn_continuous : Continuous fun (x : WeakDu
+al 𝕜 E) y => x y
 -/
 theorem eval_continuous (y : E) : Continuous fun x : WeakDual 𝕜 E => x y :=
   continuous_pi_iff.mp coeFn_continuous y
-
-/--
-theorem `continuous_of_continuous_eval` / 定理 `continuous_of_continuous_eval`
-
-English:
-theorem continuous_of_continuous_eval
-  statement: [TopologicalSpace α] {g : α -> WeakDual 𝕜 E}
-  proof: continuous_induced_rng.2 (continuous_pi_iff.mpr h)
-
-中文:
-定理 continuous_of_continuous_eval
-  结论: [拓扑空间 α] {g : α -> WeakDual 𝕜 E}
-  证明: continuous_induced_rng.2 (continuous_pi_iff.mpr h)
-
-Depends on / 依赖: continuous_induced_rng, continuous_pi_iff, continuous_pi_iff.mpr
+/-
+**WeakDual.continuous_of_continuous_eval** 是 Mathlib 中的一个定理，位于命名空间 `WeakDual`。
+形式化陈述：continuous_of_continuous_eval [TopologicalSpace α] {g : α -> WeakDual 𝕜 E}
+ (h : forall y, Continuous fun a => (g a) y) : Continuous g
+参数：h : forall y, Continuous fun a => (g a) y。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Iff.mpr`：∀ {a b : Prop}, (a ↔ b) → b → a
+· 使用定理 `continuous_induced_rng`：continuous_induced_rng {g : γ -> α} {t₂ : Topolo
+gicalSpace β} {t₁ : TopologicalSpace γ} : Continuous[t₁, induced f t₂] g ↔ Conti
+nuous[t₁, t₂…
+· 使用定理 `continuous_pi_iff`：continuous_pi_iff : Continuous f ↔ forall i, Continuo
+us fun a => f a i
 -/
-theorem continuous_of_continuous_eval [TopologicalSpace α] {g : α -> WeakDual 𝕜 E}
-    (h : forall y, Continuous fun a => (g a) y) : Continuous g :=
+theorem continuous_of_continuous_eval [TopologicalSpace α] {g : α → WeakDual 𝕜 E}
+    (h : ∀ y, Continuous fun a => (g a) y) : Continuous g :=
   continuous_induced_rng.2 (continuous_pi_iff.mpr h)
-
-/--
-Instance `instT2Space` / 实例 `instT2Space`
-
-English:
-instance instT2Space
-  signature: [T2Space 𝕜]
-  body: (WeakBilin.isEmbedding ContinuousLinearMap.coe_injective).t2Space
-
-中文:
-实例 instT2Space
-  签名: [T2空间 𝕜]
-  定义体: (WeakBilin.isEmbedding ContinuousLinearMap.coe_injective).t2Space
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.coe_injective, WeakBilin, WeakBilin.isEmbedding, coe_injective, isEmbedding, t2Space
+/-
+**WeakDual.instT2Space** 是 Mathlib 中的一个实例，位于命名空间 `WeakDual`。
+形式化陈述：instT2Space [T2Space 𝕜] : T2Space (WeakDual 𝕜 E)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Topology.IsEmbedding.t2Space`：Topology.IsEmbedding.t2Space [TopologicalS
+pace Y] [T2Space Y] {f : X -> Y} (hf : IsEmbedding f) : T2Space X
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `WeakBilin.isEmbedding`：isEmbedding {B : E ->ₗ[𝕜] F ->ₗ[𝕜] 𝕜} (hB : Funct
+ion.Injective B) : IsEmbedding fun (x : WeakBilin B) y => B x y
+· 使用定理 `ContinuousLinearMap.coe_injective`：coe_injective : Function.Injective ((
+↑) : (M₁ ->SL[σ₁₂] M₂) -> M₁ ->ₛₗ[σ₁₂] M₂)
 -/
 instance instT2Space [T2Space 𝕜] : T2Space (WeakDual 𝕜 E) :=
   (WeakBilin.isEmbedding ContinuousLinearMap.coe_injective).t2Space
@@ -535,38 +450,24 @@ section Ring
 variable [CommRing 𝕜] [TopologicalSpace 𝕜] [IsTopologicalAddGroup 𝕜] [ContinuousConstSMul 𝕜 𝕜]
 variable [AddCommGroup E] [Module 𝕜 E] [TopologicalSpace E] [IsTopologicalAddGroup E]
 
-/--
-Instance `instAddCommGroup` / 实例 `instAddCommGroup`
-
-English:
-instance instAddCommGroup
-  signature: : AddCommGroup (WeakDual 𝕜 E)
-  body: inferInstanceAs AddCommGroup (WeakBilin (topDualPairing 𝕜 E))
-
-中文:
-实例 instAddCommGroup
-  签名: : 加法交换群 (WeakDual 𝕜 E)
-  定义体: inferInstanceAs AddCommGroup (WeakBilin (topDualPairing 𝕜 E))
-
-Depends on / 依赖: AddCommGroup, WeakBilin, topDualPairing
+/-
+**WeakDual.instAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `WeakDual`。
+形式化陈述：instAddCommGroup : AddCommGroup (WeakDual 𝕜 E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddCommGroup : AddCommGroup (WeakDual 𝕜 E) :=
-inferInstanceAs AddCommGroup (WeakBilin (topDualPairing 𝕜 E))
-
-/--
-Instance `instIsTopologicalAddGroup` / 实例 `instIsTopologicalAddGroup`
-
-English:
-instance instIsTopologicalAddGroup
-  signature: : IsTopologicalAddGroup (WeakDual 𝕜 E)
-  body: WeakBilin.instIsTopologicalAddGroup (topDualPairing 𝕜 E)
-
-中文:
-实例 instIsTopologicalAddGroup
-  签名: : 是拓扑加群 (WeakDual 𝕜 E)
-  定义体: WeakBilin.instIsTopologicalAddGroup (topDualPairing 𝕜 E)
-
-Depends on / 依赖: WeakBilin, WeakBilin.instIsTopologicalAddGroup, instIsTopologicalAddGroup, topDualPairing
+  inferInstanceAs <| AddCommGroup (WeakBilin (topDualPairing 𝕜 E))
+/-
+**WeakDual.instIsTopologicalAddGroup** 是 Mathlib 中的一个实例，位于命名空间 `WeakDual`。
+形式化陈述：instIsTopologicalAddGroup : IsTopologicalAddGroup (WeakDual 𝕜 E)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
 -/
 instance instIsTopologicalAddGroup : IsTopologicalAddGroup (WeakDual 𝕜 E) :=
   WeakBilin.instIsTopologicalAddGroup (topDualPairing 𝕜 E)
@@ -575,22 +476,18 @@ end Ring
 
 end WeakDual
 
-/--
-Definition of `WeakSpace` / `WeakSpace` 的定义
+/-- The weak topology is the coarsest topology on `E` such that all functionals
+`fun x => v x` are continuous. -/
+/-
+**WeakSpace** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：WeakSpace (𝕜 E) [CommSemiring 𝕜] [TopologicalSpace 𝕜] [ContinuousAdd 𝕜] [C
+ontinuousConstSMul 𝕜 𝕜] [AddCommMonoid E] [Module 𝕜 E] [TopologicalSpace E]
+参数：𝕜 E。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition WeakSpace
-  signature: (𝕜 E) [CommSemiring 𝕜] [TopologicalSpace 𝕜] [ContinuousAdd 𝕜]
-  body: WeakBilin (topDualPairing 𝕜 E).flip
-deriving TopologicalSpace
-
-中文:
-定义 WeakSpace
-  签名: (𝕜 E) [交换半环 𝕜] [拓扑空间 𝕜] [连续加法 𝕜]
-  定义体: WeakBilin (topDualPairing 𝕜 E).flip
-deriving TopologicalSpace
-
-Depends on / 依赖: WeakBilin, topDualPairing
+--- 原说明 ---
+The weak topology is the coarsest topology on `E` such that all functionals
+`fun x => v x` are continuous.
 -/
 def WeakSpace (𝕜 E) [CommSemiring 𝕜] [TopologicalSpace 𝕜] [ContinuousAdd 𝕜]
     [ContinuousConstSMul 𝕜 𝕜] [AddCommMonoid E] [Module 𝕜 E] [TopologicalSpace E] :=
@@ -611,186 +508,115 @@ deriving instance AddCommMonoid, ContinuousAdd for WeakSpace
 
 namespace WeakSpace
 
-/--
-Instance `instModule'` / 实例 `instModule'`
-
-English:
-instance instModule'
-  signature: [CommSemiring 𝕝] [Module 𝕝 E]
-  body: inferInstanceAs Module 𝕝 (WeakBilin (topDualPairing 𝕜 E).flip)
-
-中文:
-实例 instModule'
-  签名: [交换半环 𝕝] [模 𝕝 E]
-  定义体: inferInstanceAs Module 𝕝 (WeakBilin (topDualPairing 𝕜 E).flip)
-
-Depends on / 依赖: Module, WeakBilin, topDualPairing
+/-
+**WeakSpace.instModule'** 是 Mathlib 中的一个实例，位于命名空间 `WeakSpace`。
+形式化陈述：instModule' [CommSemiring 𝕝] [Module 𝕝 E] : Module 𝕝 (WeakSpace 𝕜 E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instModule' [CommSemiring 𝕝] [Module 𝕝 E] : Module 𝕝 (WeakSpace 𝕜 E) :=
-inferInstanceAs Module 𝕝 (WeakBilin (topDualPairing 𝕜 E).flip)
-
-/--
-Instance `instModule` / 实例 `instModule`
-
-English:
-instance instModule
-  signature: : Module 𝕜 (WeakSpace 𝕜 E)
-  body: inferInstance
-
-中文:
-实例 instModule
-  签名: : 模 𝕜 (WeakSpace 𝕜 E)
-  定义体: inferInstance
+  inferInstanceAs <| Module 𝕝 (WeakBilin (topDualPairing 𝕜 E).flip)
+/-
+**WeakSpace.instModule** 是 Mathlib 中的一个实例，位于命名空间 `WeakSpace`。
+形式化陈述：instModule : Module 𝕜 (WeakSpace 𝕜 E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instModule : Module 𝕜 (WeakSpace 𝕜 E) := inferInstance
-
-/--
-Instance `instIsScalarTower` / 实例 `instIsScalarTower`
-
-English:
-instance instIsScalarTower
-  signature: [CommSemiring 𝕝] [Module 𝕝 𝕜] [Module 𝕝 E] [IsScalarTower 𝕝 𝕜 E]
-  body: WeakBilin.instIsScalarTower (topDualPairing 𝕜 E).flip
-
-中文:
-实例 instIsScalarTower
-  签名: [交换半环 𝕝] [模 𝕝 𝕜] [模 𝕝 E] [标量塔 𝕝 𝕜 E]
-  定义体: WeakBilin.instIsScalarTower (topDualPairing 𝕜 E).flip
-
-Depends on / 依赖: WeakBilin, WeakBilin.instIsScalarTower, instIsScalarTower, topDualPairing
+/-
+**WeakSpace.instIsScalarTower** 是 Mathlib 中的一个实例，位于命名空间 `WeakSpace`。
+形式化陈述：instIsScalarTower [CommSemiring 𝕝] [Module 𝕝 𝕜] [Module 𝕝 E] [IsScalarTowe
+r 𝕝 𝕜 E] : IsScalarTower 𝕝 𝕜 (WeakSpace 𝕜 E)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
 -/
 instance instIsScalarTower [CommSemiring 𝕝] [Module 𝕝 𝕜] [Module 𝕝 E] [IsScalarTower 𝕝 𝕜 E] :
     IsScalarTower 𝕝 𝕜 (WeakSpace 𝕜 E) :=
   WeakBilin.instIsScalarTower (topDualPairing 𝕜 E).flip
-
-/--
-Instance `instContinuousSMul` / 实例 `instContinuousSMul`
-
-English:
-instance instContinuousSMul
-  signature: [ContinuousSMul 𝕜 𝕜]
-  body: WeakBilin.instContinuousSMul _
-
-中文:
-实例 instContinuousSMul
-  签名: [连续标量乘法 𝕜 𝕜]
-  定义体: WeakBilin.instContinuousSMul _
-
-Depends on / 依赖: WeakBilin, WeakBilin.instContinuousSMul, instContinuousSMul
+/-
+**WeakSpace.instContinuousSMul** 是 Mathlib 中的一个实例，位于命名空间 `WeakSpace`。
+形式化陈述：instContinuousSMul [ContinuousSMul 𝕜 𝕜] : ContinuousSMul 𝕜 (WeakSpace 𝕜 E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instContinuousSMul [ContinuousSMul 𝕜 𝕜] : ContinuousSMul 𝕜 (WeakSpace 𝕜 E) :=
   WeakBilin.instContinuousSMul _
 
 variable [AddCommMonoid F] [Module 𝕜 F] [TopologicalSpace F]
 
-/--
-Definition of `map` / `map` 的定义
+/-- A continuous linear map from `E` to `F` is still continuous when `E` and `F` are equipped with
+their weak topologies. -/
+/-
+**WeakSpace.map** 是 Mathlib 中的一个定义，位于命名空间 `WeakSpace`。
+形式化陈述：map (f : E ->L[𝕜] F) : WeakSpace 𝕜 E ->L[𝕜] WeakSpace 𝕜 F
+参数：f : E ->L[𝕜] F。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition map
-  signature: (f : E ->L[𝕜] F)
-  body: { f with
-    cont :=
-      WeakBilin.continuous_of_continuous_eval _ fun l => WeakBilin.eval_continuous _ (l ∘L f) }
-
-中文:
-定义 map
-  签名: (f : E ->L[𝕜] F)
-  定义体: { f with
-    cont :=
-      WeakBilin.continuous_of_continuous_eval _ fun l => WeakBilin.eval_continuous _ (l ∘L f) }
-
-Depends on / 依赖: WeakBilin, WeakBilin.continuous_of_continuous_eval, WeakBilin.eval_continuous, continuous_of_continuous_eval, eval_continuous
+--- 原说明 ---
+A continuous linear map from `E` to `F` is still continuous when `E` and `F` are
+ equipped with
+their weak topologies.
 -/
-def map (f : E ->L[𝕜] F) : WeakSpace 𝕜 E ->L[𝕜] WeakSpace 𝕜 F :=
+def map (f : E →L[𝕜] F) : WeakSpace 𝕜 E →L[𝕜] WeakSpace 𝕜 F :=
   { f with
     cont :=
       WeakBilin.continuous_of_continuous_eval _ fun l => WeakBilin.eval_continuous _ (l ∘L f) }
-
-/--
-theorem `map_apply` / 定理 `map_apply`
-
-English:
-theorem map_apply
-  given: (f : E ->L[𝕜] F) (x : E)
-  statement: WeakSpace.map f x = f x
-  proof: rfl
-
-@[simp]
-
-中文:
-定理 map_apply
-  条件: (f : E ->L[𝕜] F) (x : E)
-  结论: WeakSpace.map f x = f x
-  证明: rfl
-
-@[simp]
+/-
+**WeakSpace.map_apply** 是 Mathlib 中的一个定理，位于命名空间 `WeakSpace`。
+形式化陈述：map_apply (f : E ->L[𝕜] F) (x : E) : WeakSpace.map f x = f x
+参数：f : E ->L[𝕜] F；x : E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem map_apply (f : E ->L[𝕜] F) (x : E) : WeakSpace.map f x = f x :=
+theorem map_apply (f : E →L[𝕜] F) (x : E) : WeakSpace.map f x = f x :=
   rfl
 
 @[simp]
-/--
-theorem `coe_map` / 定理 `coe_map`
-
-English:
-theorem coe_map
-  given: (f : E ->L[𝕜] F)
-  statement: (WeakSpace.map f : E -> F) = f
-  proof: rfl
-
-中文:
-定理 coe_map
-  条件: (f : E ->L[𝕜] F)
-  结论: (WeakSpace.map f : E -> F) = f
-  证明: rfl
+/-
+**WeakSpace.coe_map** 是 Mathlib 中的一个定理，位于命名空间 `WeakSpace`。
+形式化陈述：coe_map (f : E ->L[𝕜] F) : (WeakSpace.map f : E -> F) = f
+参数：f : E ->L[𝕜] F。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
-theorem coe_map (f : E ->L[𝕜] F) : (WeakSpace.map f : E -> F) = f :=
+theorem coe_map (f : E →L[𝕜] F) : (WeakSpace.map f : E → F) = f :=
   rfl
 
 end WeakSpace
 
 variable (𝕜 E) in
-/--
-Definition of `toWeakSpace` / `toWeakSpace` 的定义
+/-- There is a canonical map `E → WeakSpace 𝕜 E` (the "identity"
+mapping). It is a linear equivalence. -/
+/-
+**toWeakSpace** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：toWeakSpace : E ≃ₗ[𝕜] WeakSpace 𝕜 E
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toWeakSpace
-  signature: : E ≃ₗ[𝕜] WeakSpace 𝕜 E
-  body: LinearEquiv.refl 𝕜 E
-
-中文:
-定义 toWeakSpace
-  签名: : E ≃ₗ[𝕜] WeakSpace 𝕜 E
-  定义体: LinearEquiv.refl 𝕜 E
-
-Depends on / 依赖: LinearEquiv, LinearEquiv.refl
+--- 原说明 ---
+There is a canonical map `E → WeakSpace 𝕜 E` (the "identity"
+mapping). It is a linear equivalence.
 -/
 def toWeakSpace : E ≃ₗ[𝕜] WeakSpace 𝕜 E := LinearEquiv.refl 𝕜 E
 
 variable (𝕜 E) in
-/--
-Definition of `toWeakSpaceCLM` / `toWeakSpaceCLM` 的定义
+/-- For a topological vector space `E`, "identity mapping" `E → WeakSpace 𝕜 E` is continuous.
+This definition implements it as a continuous linear map. -/
+/-
+**toWeakSpaceCLM** 是 Mathlib 中的一个定义，位于命名空间 ``。
+形式化陈述：toWeakSpaceCLM : E ->L[𝕜] WeakSpace 𝕜 E where __
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition toWeakSpaceCLM
-  signature: : E ->L[𝕜] WeakSpace 𝕜 E where
-  body: toWeakSpace 𝕜 E
-  cont := by
-    apply WeakBilin.continuous_of_continuous_eval
-    exact ContinuousLinearMap.continuous
-
-中文:
-定义 toWeakSpaceCLM
-  签名: : E ->L[𝕜] WeakSpace 𝕜 E where
-  定义体: toWeakSpace 𝕜 E
-  cont := by
-    apply WeakBilin.continuous_of_continuous_eval
-    exact ContinuousLinearMap.continuous
-
-Depends on / 依赖: toWeakSpace
+--- 原说明 ---
+For a topological vector space `E`, "identity mapping" `E → WeakSpace 𝕜 E` is co
+ntinuous.
+This definition implements it as a continuous linear map.
 -/
-def toWeakSpaceCLM : E ->L[𝕜] WeakSpace 𝕜 E where
+def toWeakSpaceCLM : E →L[𝕜] WeakSpace 𝕜 E where
   __ := toWeakSpace 𝕜 E
   cont := by
     apply WeakBilin.continuous_of_continuous_eval
@@ -798,100 +624,101 @@ def toWeakSpaceCLM : E ->L[𝕜] WeakSpace 𝕜 E where
 
 variable (𝕜 E) in
 @[simp]
-/--
-theorem `toWeakSpaceCLM_eq_toWeakSpace` / 定理 `toWeakSpaceCLM_eq_toWeakSpace`
-
-English:
-theorem toWeakSpaceCLM_eq_toWeakSpace
-  given: (x : E)
-  proof: by rfl
-
-中文:
-定理 toWeakSpaceCLM_eq_toWeakSpace
-  条件: (x : E)
-  证明: by rfl
+/-
+**toWeakSpaceCLM_eq_toWeakSpace** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toWeakSpaceCLM_eq_toWeakSpace (x : E) : toWeakSpaceCLM 𝕜 E x = toWeakSpace
+ 𝕜 E x
+参数：x : E。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 theorem toWeakSpaceCLM_eq_toWeakSpace (x : E) :
     toWeakSpaceCLM 𝕜 E x = toWeakSpace 𝕜 E x := by rfl
-
-/--
-theorem `toWeakSpaceCLM_bijective` / 定理 `toWeakSpaceCLM_bijective`
-
-English:
-theorem toWeakSpaceCLM_bijective
-  proof: (toWeakSpace 𝕜 E).bijective
-
-中文:
-定理 toWeakSpaceCLM_bijective
-  证明: (toWeakSpace 𝕜 E).bijective
-
-Depends on / 依赖: bijective, toWeakSpace
+/-
+**toWeakSpaceCLM_bijective** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：toWeakSpaceCLM_bijective : Function.Bijective (toWeakSpaceCLM 𝕜 E)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `LinearEquiv.bijective`：∀ {R : Type u_1} {S : Type u_6} {M : Type u_7} {M
+₂ : Type u_9} [inst : Semiring R] [inst_1 : Semiring S]   [inst_2 : AddCommMonoi
+d M] [inst_…
 -/
 theorem toWeakSpaceCLM_bijective :
     Function.Bijective (toWeakSpaceCLM 𝕜 E) :=
   (toWeakSpace 𝕜 E).bijective
 
-/--
-theorem `isOpenMap_toWeakSpace_symm` / 定理 `isOpenMap_toWeakSpace_symm`
+/-- The canonical map from `WeakSpace 𝕜 E` to `E` is an open map. -/
+/-
+**isOpenMap_toWeakSpace_symm** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：isOpenMap_toWeakSpace_symm : IsOpenMap (toWeakSpace 𝕜 E).symm
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `IsOpenMap.of_inverse`：∀ {X : Type u_1} {Y : Type u_2} {f : X → Y} [inst 
+: TopologicalSpace X] [inst_1 : TopologicalSpace Y] {f' : Y → X},   Continuous f
+' → Functi…
+· 使用定理 `ContinuousLinearMap.cont`：∀ {R : Type u_1} {S : Type u_2} [inst : Semiri
+ng R] [inst_1 : Semiring S] {σ : R →+* S} {M : Type u_3}   [inst_2 : Topological
+Space M] [inst…
+· 使用定理 `LinearEquiv.left_inv`：∀ {R : Type u_14} {S : Type u_15} [inst : Semiring
+ R] [inst_1 : Semiring S] {σ : R →+* S} {σ' : S →+* R}   [inst_2 : RingHomInvPai
+r σ σ'] [i…
+· 使用定理 `LinearEquiv.right_inv`：∀ {R : Type u_14} {S : Type u_15} [inst : Semirin
+g R] [inst_1 : Semiring S] {σ : R →+* S} {σ' : S →+* R}   [inst_2 : RingHomInvPa
+ir σ σ'] [i…
 
-English:
-theorem isOpenMap_toWeakSpace_symm
-  statement: IsOpenMap (toWeakSpace 𝕜 E).symm
-  proof: IsOpenMap.of_inverse (toWeakSpaceCLM 𝕜 E).cont
-    (toWeakSpace 𝕜 E).left_inv (toWeakSpace 𝕜 E).right_inv
-
-中文:
-定理 isOpenMap_toWeakSpace_symm
-  结论: 是开映射 (toWeakSpace 𝕜 E).symm
-  证明: IsOpenMap.of_inverse (toWeakSpaceCLM 𝕜 E).cont
-    (toWeakSpace 𝕜 E).left_inv (toWeakSpace 𝕜 E).right_inv
-
-Depends on / 依赖: IsOpenMap, IsOpenMap.of_inverse, left_inv, of_inverse, right_inv, toWeakSpace, toWeakSpaceCLM
+--- 原说明 ---
+The canonical map from `WeakSpace 𝕜 E` to `E` is an open map.
 -/
 theorem isOpenMap_toWeakSpace_symm : IsOpenMap (toWeakSpace 𝕜 E).symm :=
   IsOpenMap.of_inverse (toWeakSpaceCLM 𝕜 E).cont
     (toWeakSpace 𝕜 E).left_inv (toWeakSpace 𝕜 E).right_inv
 
-/--
-theorem `WeakSpace.isOpen_of_isOpen` / 定理 `WeakSpace.isOpen_of_isOpen`
+/-- A set in `E` which is open in the weak topology is open. -/
+/-
+**WeakSpace.isOpen_of_isOpen** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：WeakSpace.isOpen_of_isOpen (V : Set E) (hV : IsOpen ((toWeakSpaceCLM 𝕜 E) 
+'' V : Set (WeakSpace 𝕜 E))) : IsOpen V
+参数：V : Set E；hV : IsOpen ((toWeakSpaceCLM 𝕜 E) '' V : Set (WeakSpace 𝕜 E))。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `congrArg`：∀ {α : Sort u} {β : Sort v} {a₁ a₂ : α} (f : α → β), a₁ = a₂ →
+ f a₁ = f a₂
+· 使用定理 `Eq.trans`：∀ {α : Sort u} {a b c : α}, a = b → b = c → a = c
+· 使用定理 `Set.image_congr`：image_congr {f g : α -> β} {s : Set α} (h : forall a in
+ s, f a = g a) : f '' s = g '' s
+· 使用定理 `toWeakSpaceCLM_eq_toWeakSpace`：toWeakSpaceCLM_eq_toWeakSpace (x : E) : t
+oWeakSpaceCLM 𝕜 E x = toWeakSpace 𝕜 E x
+· 使用定理 `Set.image_image`：image_image (g : β -> γ) (f : α -> β) (s : Set α) : g '
+' f '' s = (fun x => g (f x)) '' s
+· 使用定理 `LinearEquiv.symm_apply_apply`：symm_apply_apply (b : M) : e.symm (e b) = 
+b
+· 使用定理 `Set.image_id'`：image_id' (s : Set α) : (fun x => x) '' s = s
+· 使用定理 `isOpenMap_toWeakSpace_symm`：isOpenMap_toWeakSpace_symm : IsOpenMap (toWe
+akSpace 𝕜 E).symm
 
-English:
-theorem WeakSpace.isOpen_of_isOpen
-  statement: (V : Set E)
-  proof: by
-  simpa [Set.image_image] using isOpenMap_toWeakSpace_symm _ hV
-
-中文:
-定理 WeakSpace.isOpen_of_isOpen
-  结论: (V : 集合 E)
-  证明: by
-  simpa [Set.image_image] using isOpenMap_toWeakSpace_symm _ hV
-
-Depends on / 依赖: Set.image_image, image_image, isOpenMap_toWeakSpace_symm
+--- 原说明 ---
+A set in `E` which is open in the weak topology is open.
 -/
 theorem WeakSpace.isOpen_of_isOpen (V : Set E)
     (hV : IsOpen ((toWeakSpaceCLM 𝕜 E) '' V : Set (WeakSpace 𝕜 E))) : IsOpen V := by
   simpa [Set.image_image] using isOpenMap_toWeakSpace_symm _ hV
-
-/--
-theorem `tendsto_iff_forall_eval_tendsto_topDualPairing` / 定理 `tendsto_iff_forall_eval_tendsto_topDualPairing`
-
-English:
-theorem tendsto_iff_forall_eval_tendsto_topDualPairing
-  statement: {l : Filter α} {f : α -> WeakDual 𝕜 E}
-  proof: WeakBilin.tendsto_iff_forall_eval_tendsto _ ContinuousLinearMap.coe_injective
-
-中文:
-定理 tendsto_iff_对任意_eval_tendsto_topDualPairing
-  结论: {l : 滤子 α} {f : α -> WeakDual 𝕜 E}
-  证明: WeakBilin.tendsto_iff_forall_eval_tendsto _ ContinuousLinearMap.coe_injective
-
-Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.coe_injective, WeakBilin, WeakBilin.tendsto_iff_forall_eval_tendsto, coe_injective, tendsto_iff_forall_eval_tendsto
+/-
+**tendsto_iff_forall_eval_tendsto_topDualPairing** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：tendsto_iff_forall_eval_tendsto_topDualPairing {l : Filter α} {f : α -> We
+akDual 𝕜 E} {x : WeakDual 𝕜 E} : Tendsto f l (𝓝 x) ↔ forall y, Tendsto (fun i =>
+ topDualPairing 𝕜 E (f i) y) l (𝓝 (topDualPairing 𝕜 E x y))
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `WeakBilin.tendsto_iff_forall_eval_tendsto`：tendsto_iff_forall_eval_tends
+to {l : Filter α} {f : α -> WeakBilin B} {x : WeakBilin B} (hB : Function.Inject
+ive B) : Tendsto f l (𝓝 x) ↔ fo…
+· 使用定理 `ContinuousLinearMap.coe_injective`：coe_injective : Function.Injective ((
+↑) : (M₁ ->SL[σ₁₂] M₂) -> M₁ ->ₛₗ[σ₁₂] M₂)
 -/
-theorem tendsto_iff_forall_eval_tendsto_topDualPairing {l : Filter α} {f : α -> WeakDual 𝕜 E}
+theorem tendsto_iff_forall_eval_tendsto_topDualPairing {l : Filter α} {f : α → WeakDual 𝕜 E}
     {x : WeakDual 𝕜 E} :
     Tendsto f l (𝓝 x) ↔
-      forall y, Tendsto (fun i => topDualPairing 𝕜 E (f i) y) l (𝓝 (topDualPairing 𝕜 E x y)) :=
+      ∀ y, Tendsto (fun i => topDualPairing 𝕜 E (f i) y) l (𝓝 (topDualPairing 𝕜 E x y)) :=
   WeakBilin.tendsto_iff_forall_eval_tendsto _ ContinuousLinearMap.coe_injective
 
 end Semiring
@@ -903,38 +730,24 @@ namespace WeakSpace
 variable [CommRing 𝕜] [TopologicalSpace 𝕜] [IsTopologicalAddGroup 𝕜] [ContinuousConstSMul 𝕜 𝕜]
 variable [AddCommGroup E] [Module 𝕜 E] [TopologicalSpace E] [IsTopologicalAddGroup E]
 
-/--
-Instance `instAddCommGroup` / 实例 `instAddCommGroup`
-
-English:
-instance instAddCommGroup
-  signature: : AddCommGroup (WeakSpace 𝕜 E)
-  body: inferInstanceAs AddCommGroup (WeakBilin (topDualPairing 𝕜 E).flip)
-
-中文:
-实例 instAddCommGroup
-  签名: : 加法交换群 (WeakSpace 𝕜 E)
-  定义体: inferInstanceAs AddCommGroup (WeakBilin (topDualPairing 𝕜 E).flip)
-
-Depends on / 依赖: AddCommGroup, WeakBilin, topDualPairing
+/-
+**WeakSpace.instAddCommGroup** 是 Mathlib 中的一个实例，位于命名空间 `WeakSpace`。
+形式化陈述：instAddCommGroup : AddCommGroup (WeakSpace 𝕜 E)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance instAddCommGroup : AddCommGroup (WeakSpace 𝕜 E) :=
-inferInstanceAs AddCommGroup (WeakBilin (topDualPairing 𝕜 E).flip)
-
-/--
-Instance `instIsTopologicalAddGroup` / 实例 `instIsTopologicalAddGroup`
-
-English:
-instance instIsTopologicalAddGroup
-  signature: : IsTopologicalAddGroup (WeakSpace 𝕜 E)
-  body: WeakBilin.instIsTopologicalAddGroup (topDualPairing 𝕜 E).flip
-
-中文:
-实例 instIsTopologicalAddGroup
-  签名: : 是拓扑加群 (WeakSpace 𝕜 E)
-  定义体: WeakBilin.instIsTopologicalAddGroup (topDualPairing 𝕜 E).flip
-
-Depends on / 依赖: WeakBilin, WeakBilin.instIsTopologicalAddGroup, instIsTopologicalAddGroup, topDualPairing
+  inferInstanceAs <| AddCommGroup (WeakBilin (topDualPairing 𝕜 E).flip)
+/-
+**WeakSpace.instIsTopologicalAddGroup** 是 Mathlib 中的一个实例，位于命名空间 `WeakSpace`。
+形式化陈述：instIsTopologicalAddGroup : IsTopologicalAddGroup (WeakSpace 𝕜 E)
+该定义给出了上述对象。
+本声明引用了以下数学事实（定理与引理）：
+· 使用定理 `Algebra.to_smulCommClass`：∀ {R : Type u_4} {A : Type u_5} [inst : CommSe
+miring R] [inst_1 : Semiring A] [inst_2 : Algebra R A],   SMulCommClass R A A
+· 使用定理 `IsTopologicalAddGroup.toContinuousAdd`：∀ {G : Type u} {inst : Topologica
+lSpace G} {inst_1 : AddGroup G} [self : IsTopologicalAddGroup G], ContinuousAdd 
+G
 -/
 instance instIsTopologicalAddGroup : IsTopologicalAddGroup (WeakSpace 𝕜 E) :=
   WeakBilin.instIsTopologicalAddGroup (topDualPairing 𝕜 E).flip
@@ -942,3 +755,4 @@ instance instIsTopologicalAddGroup : IsTopologicalAddGroup (WeakSpace 𝕜 E) :=
 end WeakSpace
 
 end Ring
+

@@ -26,40 +26,42 @@ universe u v w
 
 variable {α : Type u} {β : Type v} {ι : Sort w}
 
-/--
-theorem `Finite.Set.finite_of_finite_image` / 定理 `Finite.Set.finite_of_finite_image`
-
-English:
-theorem Finite.Set.finite_of_finite_image
-  statement: (s : Set α) {f : α -> β} (h : s.InjOn f)
-  proof: Finite.of_equiv _ (Equiv.ofBijective _ h.bijOn_image.bijective).symm
-
-中文:
-定理 有限.集合.finite_of_finite_image
-  结论: (s : 集合 α) {f : α -> β} (h : s.单射限制 f)
-  证明: Finite.of_equiv _ (Equiv.ofBijective _ h.bijOn_image.bijective).symm
-
-Depends on / 依赖: Equiv.ofBijective, Finite, Finite.of_equiv, bijOn_image, bijective, h.bijOn_image.bijective, ofBijective, of_equiv
+/-
+**Finite.Set.finite_of_finite_image** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Finite.Set.finite_of_finite_image (s : Set α) {f : α -> β} (h : s.InjOn f)
+ [Finite (f '' s)] : Finite s
+参数：s : Set α；h : s.InjOn f；f '' s。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_equiv`：Finite.of_equiv (α : Sort*) [h : Finite α] (f : α ≃ β) 
+: Finite β
+· 使用定理 `Equiv.symm`：Equiv.symm {s t : Computation α} : s ~ t -> t ~ s
+· 使用定理 `Set.BijOn.mapsTo`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Set β
+} {f : α → β}, Set.BijOn f s t → Set.MapsTo f s t
+· 使用定理 `Set.InjOn.bijOn_image`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {f : 
+α → β}, Set.InjOn f s → Set.BijOn f s (f '' s)
+· 使用定理 `Set.BijOn.bijective`：∀ {α : Type u_1} {β : Type u_2} {s : Set α} {t : Se
+t β} {f : α → β} (h : Set.BijOn f s t),   Function.Bijective (Set.MapsTo.restric
+t f s t ⋯…
 -/
-theorem Finite.Set.finite_of_finite_image (s : Set α) {f : α -> β} (h : s.InjOn f)
+theorem Finite.Set.finite_of_finite_image (s : Set α) {f : α → β} (h : s.InjOn f)
     [Finite (f '' s)] : Finite s :=
   Finite.of_equiv _ (Equiv.ofBijective _ h.bijOn_image.bijective).symm
-
-/--
-theorem `Finite.of_injective_finite_range` / 定理 `Finite.of_injective_finite_range`
-
-English:
-theorem Finite.of_injective_finite_range
-  statement: {f : ι -> α} (hf : Function.Injective f)
-  proof: Finite.of_injective (Set.rangeFactorization f) (hf.codRestrict _)
-
-中文:
-定理 有限.of_injective_finite_range
-  结论: {f : ι -> α} (hf : 函数.单射 f)
-  证明: Finite.of_injective (Set.rangeFactorization f) (hf.codRestrict _)
-
-Depends on / 依赖: Finite, Finite.of_injective, Set.rangeFactorization, codRestrict, hf.codRestrict, of_injective, rangeFactorization
+/-
+**Finite.of_injective_finite_range** 是 Mathlib 中的一个定理，位于命名空间 ``。
+形式化陈述：Finite.of_injective_finite_range {f : ι -> α} (hf : Function.Injective f) 
+[Finite (range f)] : Finite ι
+参数：hf : Function.Injective f；range f。
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Finite.of_injective`：Finite.of_injective {α β : Sort*} [Finite β] (f : α
+ -> β) (H : Injective f) : Finite α
+· 使用定理 `Function.Injective.codRestrict`：∀ {α : Type u_1} {ι : Sort u_5} {f : ι →
+ α} {s : Set α} (h : ∀ (x : ι), f x ∈ s),   Function.Injective f → Function.Inje
+ctive (Set.codRestri…
+· 使用定理 `Set.mem_range_self`：∀ {α : Type u} {ι : Sort u_1} {f : ι → α} (i : ι), f
+ i ∈ Set.range f
 -/
-theorem Finite.of_injective_finite_range {f : ι -> α} (hf : Function.Injective f)
+theorem Finite.of_injective_finite_range {f : ι → α} (hf : Function.Injective f)
     [Finite (range f)] : Finite ι :=
   Finite.of_injective (Set.rangeFactorization f) (hf.codRestrict _)

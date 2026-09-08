@@ -35,38 +35,16 @@ open CategoryTheory Coalgebra
 open scoped TensorProduct MonoidalCategory
 
 @[simps]
-/--
-Instance `instMonoidalCategoryStruct` / 实例 `instMonoidalCategoryStruct`
-
-English:
-instance instMonoidalCategoryStruct
-  signature: :
-  body: of R (X otimes[R] Y)
-  whiskerLeft X _ _ f := ofHom (f.1.lTensor X)
-  whiskerRight f X := ofHom (f.1.rTensor X)
-  tensorHom f g := ofHom (Coalgebra.TensorProduct.map f.1 g.1)
-  tensorUnit := CoalgCat.of R R
-  associator X Y Z := (Coalgebra.TensorProduct.assoc R R X Y Z).toCoalgIso
-  leftUnitor X := (Coalgebra.TensorProduct.lid R X).toCoalgIso
-  rightUnitor X := (Coalgebra.TensorProduct.rid R R X).toCoalgIso
-
-中文:
-实例 instMonoidalCategoryStruct
-  签名: :
-  定义体: of R (X otimes[R] Y)
-  whiskerLeft X _ _ f := ofHom (f.1.lTensor X)
-  whiskerRight f X := ofHom (f.1.rTensor X)
-  tensorHom f g := ofHom (Coalgebra.TensorProduct.map f.1 g.1)
-  tensorUnit := CoalgCat.of R R
-  associator X Y Z := (Coalgebra.TensorProduct.assoc R R X Y Z).toCoalgIso
-  leftUnitor X := (Coalgebra.TensorProduct.lid R X).toCoalgIso
-  rightUnitor X := (Coalgebra.TensorProduct.rid R R X).toCoalgIso
-
-Depends on / 依赖: otimes
+/-
+**CoalgCat.instMonoidalCategoryStruct** 是 Mathlib 中的一个实例，位于命名空间 `CoalgCat`。
+形式化陈述：instMonoidalCategoryStruct : MonoidalCategoryStruct.{u} (CoalgCat R) where
+ tensorObj X Y
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance instMonoidalCategoryStruct :
     MonoidalCategoryStruct.{u} (CoalgCat R) where
-  tensorObj X Y := of R (X otimes[R] Y)
+  tensorObj X Y := of R (X ⊗[R] Y)
   whiskerLeft X _ _ f := ofHom (f.1.lTensor X)
   whiskerRight f X := ofHom (f.1.rTensor X)
   tensorHom f g := ofHom (Coalgebra.TensorProduct.map f.1 g.1)
@@ -78,32 +56,17 @@ noncomputable instance instMonoidalCategoryStruct :
 /-- The data needed to induce a `MonoidalCategory` structure via
 `CoalgCat.instMonoidalCategoryStruct` and the forgetful functor to modules. -/
 @[simps]
-/--
-Definition of `MonoidalCategory.inducingFunctorData` / `MonoidalCategory.inducingFunctorData` 的定义
+/-
+**CoalgCat.MonoidalCategory.inducingFunctorData** 是 Mathlib 中的一个定义，位于命名空间 `Coalg
+Cat.MonoidalCategory`。
+形式化陈述：(R : Type u) →   [inst : CommRing R] → CategoryTheory.Monoidal.InducingFun
+ctorData (CategoryTheory.forget₂ (CoalgCat R) (ModuleCat R))
+参数：CoalgCat R；ModuleCat R。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition MonoidalCategory.inducingFunctorData
-  signature: :
-  body: Iso.refl _
-  whiskerLeft_eq X Y Z f := by ext; rfl
-  whiskerRight_eq X f := by ext; rfl
-  tensorHom_eq f g := by ext; rfl
-  εIso := Iso.refl _
-associator_eq X Y Z := ModuleCat.hom_ext TensorProduct.ext TensorProduct.ext by ext; rfl
-leftUnitor_eq X := ModuleCat.hom_ext TensorProduct.ext by ext; rfl
-rightUnitor_eq X := ModuleCat.hom_ext TensorProduct.ext by ext; rfl
-
-中文:
-定义 幺半群范畴.inducingFunctorData
-  签名: :
-  定义体: Iso.refl _
-  whiskerLeft_eq X Y Z f := by ext; rfl
-  whiskerRight_eq X f := by ext; rfl
-  tensorHom_eq f g := by ext; rfl
-  εIso := Iso.refl _
-associator_eq X Y Z := ModuleCat.hom_ext TensorProduct.ext TensorProduct.ext by ext; rfl
-leftUnitor_eq X := ModuleCat.hom_ext TensorProduct.ext by ext; rfl
-rightUnitor_eq X := ModuleCat.hom_ext TensorProduct.ext by ext; rfl
+--- 原说明 ---
+The data needed to induce a `MonoidalCategory` structure via
+`CoalgCat.instMonoidalCategoryStruct` and the forgetful functor to modules.
 -/
 noncomputable def MonoidalCategory.inducingFunctorData :
     Monoidal.InducingFunctorData (forget₂ (CoalgCat R) (ModuleCat R)) where
@@ -112,26 +75,17 @@ noncomputable def MonoidalCategory.inducingFunctorData :
   whiskerRight_eq X f := by ext; rfl
   tensorHom_eq f g := by ext; rfl
   εIso := Iso.refl _
-associator_eq X Y Z := ModuleCat.hom_ext TensorProduct.ext TensorProduct.ext by ext; rfl
-leftUnitor_eq X := ModuleCat.hom_ext TensorProduct.ext by ext; rfl
-rightUnitor_eq X := ModuleCat.hom_ext TensorProduct.ext by ext; rfl
-
-/--
-Instance `instMonoidalCategory` / 实例 `instMonoidalCategory`
-
-English:
-instance instMonoidalCategory
-  signature: : MonoidalCategory (CoalgCat R)
-  body: Monoidal.induced (forget₂ _ (ModuleCat R)) (MonoidalCategory.inducingFunctorData R)
-
-中文:
-实例 instMonoidalCategory
-  签名: : 幺半群范畴 (余alg范畴 R)
-  定义体: Monoidal.induced (forget₂ _ (ModuleCat R)) (MonoidalCategory.inducingFunctorData R)
-
-Depends on / 依赖: ModuleCat, Monoidal, Monoidal.induced, MonoidalCategory, MonoidalCategory.inducingFunctorData, induced, inducingFunctorData
+  associator_eq X Y Z := ModuleCat.hom_ext <| TensorProduct.ext <| TensorProduct.ext <| by ext; rfl
+  leftUnitor_eq X := ModuleCat.hom_ext <| TensorProduct.ext <| by ext; rfl
+  rightUnitor_eq X := ModuleCat.hom_ext <| TensorProduct.ext <| by ext; rfl
+/-
+**CoalgCat.instMonoidalCategory** 是 Mathlib 中的一个实例，位于命名空间 `CoalgCat`。
+形式化陈述：instMonoidalCategory : MonoidalCategory (CoalgCat R)
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 noncomputable instance instMonoidalCategory : MonoidalCategory (CoalgCat R) :=
   Monoidal.induced (forget₂ _ (ModuleCat R)) (MonoidalCategory.inducingFunctorData R)
 
 end CoalgCat
+

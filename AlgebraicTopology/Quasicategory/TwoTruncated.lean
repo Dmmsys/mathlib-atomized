@@ -41,23 +41,33 @@ namespace SSet.Truncated
 open Edge CompStruct
 
 /--
-Definition of `Quasicategory₂` / `Quasicategory₂` 的定义
+A 2-truncated quasicategory is a 2-truncated simplicial set with the properties:
+* (2, 1)-filling: given two consecutive `Edge`s `e₀₁` and `e₁₂`, there exists a `CompStruct`
+  with (0, 1)-edge `e₀₁` and (0, 2)-edge `e₁₂`.
+* (3, 1)-filling: given three `CompStruct`s `f₃`, `f₀` and `f₂` which form a (3, 1)-horn,
+  there exists a fourth `CompStruct` such that the four faces form the boundary
+  ∂Δ[3] of a 3-simplex.
+* (3, 2)-filling: given three `CompStruct`s `f₃`, `f₀` and `f₁` which form a (3, 2)-horn,
+  there exists a fourth `CompStruct` such that the four faces form the boundary
+  ∂Δ[3] of a 3-simplex.
+-/
+/-
+**SSet.Truncated.Quasicategory** 是 Mathlib 中的一个类，位于命名空间 `SSet.Truncated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-class Quasicategory₂
-  parameters: (X : Truncated 2)
-  axioms and operations (3):
-    - fill21({x₀ x₁ x₂ : X _⦋0⦌₂} (e₀₁ : Edge x₀ x₁) (e₁₂ : Edge x₁ x₂)) : Nonempty (Σ e₀₂ : Edge x₀ x₂, CompStruct e₀₁ e₁₂ e₀₂)
-    - fill31({x₀ x₁ x₂ x₃ : X _⦋0⦌₂} {e₀₁ : Edge x₀ x₁} {e₁₂ : Edge x₁ x₂} {e₂₃ : Edge x₂ x₃} {e₀₂ : Edge x₀ x₂} {e₁₃ : Edge x₁ x₃} {e₀₃ : Edge x₀ x₃} (f₃ : CompStruct e₀₁ e₁₂ e₀₂) (f₀ : CompStruct e₁₂ e₂₃ e₁₃) (f₂ : CompStruct e₀₁ e₁₃ e₀₃)) : Nonempty (CompStruct e₀₂ e₂₃ e₀₃)
-    - fill32({x₀ x₁ x₂ x₃ : X _⦋0⦌₂} {e₀₁ : Edge x₀ x₁} {e₁₂ : Edge x₁ x₂} {e₂₃ : Edge x₂ x₃} {e₀₂ : Edge x₀ x₂} {e₁₃ : Edge x₁ x₃} {e₀₃ : Edge x₀ x₃} (f₃ : CompStruct e₀₁ e₁₂ e₀₂) (f₀ : CompStruct e₁₂ e₂₃ e₁₃) (f₁ : CompStruct e₀₂ e₂₃ e₀₃)) : Nonempty (CompStruct e₀₁ e₁₃ e₀₃)
-
-中文:
-类 Quasicategory₂
-  参数: (X : Truncated 2)
-  公理与运算 (3 个):
-    - fill21({x₀ x₁ x₂ : X _⦋0⦌₂} (e₀₁ : 边 x₀ x₁) (e₁₂ : 边 x₁ x₂)) : 非空 (Σ e₀₂ : 边 x₀ x₂, 余mpStruct e₀₁ e₁₂ e₀₂)
-    - fill31({x₀ x₁ x₂ x₃ : X _⦋0⦌₂} {e₀₁ : 边 x₀ x₁} {e₁₂ : 边 x₁ x₂} {e₂₃ : 边 x₂ x₃} {e₀₂ : 边 x₀ x₂} {e₁₃ : 边 x₁ x₃} {e₀₃ : 边 x₀ x₃} (f₃ : 余mpStruct e₀₁ e₁₂ e₀₂) (f₀ : 余mpStruct e₁₂ e₂₃ e₁₃) (f₂ : 余mpStruct e₀₁ e₁₃ e₀₃)) : 非空 (余mpStruct e₀₂ e₂₃ e₀₃)
-    - fill32({x₀ x₁ x₂ x₃ : X _⦋0⦌₂} {e₀₁ : 边 x₀ x₁} {e₁₂ : 边 x₁ x₂} {e₂₃ : 边 x₂ x₃} {e₀₂ : 边 x₀ x₂} {e₁₃ : 边 x₁ x₃} {e₀₃ : 边 x₀ x₃} (f₃ : 余mpStruct e₀₁ e₁₂ e₀₂) (f₀ : 余mpStruct e₁₂ e₂₃ e₁₃) (f₁ : 余mpStruct e₀₂ e₂₃ e₀₃)) : 非空 (余mpStruct e₀₁ e₁₃ e₀₃)
+--- 原说明 ---
+A 2-truncated quasicategory is a 2-truncated simplicial set with the properties:
+* (2, 1)-filling: given two consecutive `Edge`s `e₀₁` and `e₁₂`, there exists a 
+`CompStruct`
+  with (0, 1)-edge `e₀₁` and (0, 2)-edge `e₁₂`.
+* (3, 1)-filling: given three `CompStruct`s `f₃`, `f₀` and `f₂` which form a (3,
+ 1)-horn,
+  there exists a fourth `CompStruct` such that the four faces form the boundary
+  ∂Δ[3] of a 3-simplex.
+* (3, 2)-filling: given three `CompStruct`s `f₃`, `f₀` and `f₁` which form a (3,
+ 2)-horn,
+  there exists a fourth `CompStruct` such that the four faces form the boundary
+  ∂Δ[3] of a 3-simplex.
 -/
 class Quasicategory₂ (X : Truncated 2) where
   fill21 {x₀ x₁ x₂ : X _⦋0⦌₂}
@@ -79,37 +89,40 @@ class Quasicategory₂ (X : Truncated 2) where
       Nonempty (CompStruct e₀₁ e₁₃ e₀₃)
 
 /--
-Definition of `HomotopicL` / `HomotopicL` 的定义
+Two edges `f` and `g` are left homotopic if there is a `CompStruct` with
+(0, 1)-edge `f`, (1, 2)-edge `Edge.id` and (0, 2)-edge `g`. We use `Nonempty` to
+have a `Prop` valued `HomotopicL`.
+-/
+/-
+**SSet.Truncated.HomotopicL** 是 Mathlib 中的一个缩写定义，位于命名空间 `SSet.Truncated`。
+形式化陈述：HomotopicL {X : Truncated 2} {x y : X _⦋0⦌₂} (f g : Edge x y)
+参数：f g : Edge x y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HomotopicL
-  signature: {X : Truncated 2} {x y : X _⦋0⦌₂} (f g : Edge x y)
-  body: Nonempty (CompStruct f (id y) g)
-
-中文:
-缩写 HomotopicL
-  签名: {X : Truncated 2} {x y : X _⦋0⦌₂} (f g : 边 x y)
-  定义体: Nonempty (CompStruct f (id y) g)
-
-Depends on / 依赖: CompStruct, Nonempty
+--- 原说明 ---
+Two edges `f` and `g` are left homotopic if there is a `CompStruct` with
+(0, 1)-edge `f`, (1, 2)-edge `Edge.id` and (0, 2)-edge `g`. We use `Nonempty` to
+have a `Prop` valued `HomotopicL`.
 -/
 abbrev HomotopicL {X : Truncated 2} {x y : X _⦋0⦌₂} (f g : Edge x y) :=
   Nonempty (CompStruct f (id y) g)
 
 /--
-Definition of `HomotopicR` / `HomotopicR` 的定义
+Two edges `f` and `g` are right homotopic if there is a `CompStruct` with
+(0, 1)-edge `Edge.id`, (1, 2)-edge `f`, and (0, 2)-edge `g`. We use `Nonempty` to
+have a `Prop` valued `HomotopicR`.
+-/
+/-
+**SSet.Truncated.HomotopicR** 是 Mathlib 中的一个缩写定义，位于命名空间 `SSet.Truncated`。
+形式化陈述：HomotopicR {X : Truncated 2} {x y : X _⦋0⦌₂} (f g : Edge x y)
+参数：f g : Edge x y。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-abbreviation HomotopicR
-  signature: {X : Truncated 2} {x y : X _⦋0⦌₂} (f g : Edge x y)
-  body: Nonempty (CompStruct (id x) f g)
-
-中文:
-缩写 HomotopicR
-  签名: {X : Truncated 2} {x y : X _⦋0⦌₂} (f g : 边 x y)
-  定义体: Nonempty (CompStruct (id x) f g)
-
-Depends on / 依赖: CompStruct, Nonempty
+--- 原说明 ---
+Two edges `f` and `g` are right homotopic if there is a `CompStruct` with
+(0, 1)-edge `Edge.id`, (1, 2)-edge `f`, and (0, 2)-edge `g`. We use `Nonempty` t
+o
+have a `Prop` valued `HomotopicR`.
 -/
 abbrev HomotopicR {X : Truncated 2} {x y : X _⦋0⦌₂} (f g : Edge x y) :=
   Nonempty (CompStruct (id x) f g)
@@ -118,42 +131,42 @@ section homotopy_eqrel
 variable {X : Truncated 2}
 
 /--
-lemma `HomotopicL.refl` / 引理 `HomotopicL.refl`
+The left homotopy relation is reflexive.
+-/
+/-
+**SSet.Truncated.HomotopicL.refl** 是 Mathlib 中的一个定理，位于命名空间 `SSet.Truncated.Homot
+opicL`。
+形式化陈述：∀ {X : SSet.Truncated 2}   {x y : X.obj (Opposite.op { obj := { len := 0 }
+, property := SSet.Truncated.Quasicategory₂._proof_1 })}   {f : SSet.Truncated.E
+dge x y}, SSet.Truncated.HomotopicL f f
+参数：Opposite.op { obj := { len := 0 }, property := SSet.Truncated.Quasicategory₂.
+_proof_1 }。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma HomotopicL.refl
-  given: {x y : X _⦋0⦌₂} {f : Edge x y}
-  statement: HomotopicL f f
-  proof: ⟨compId f⟩
-
-中文:
-引理 HomotopicL.refl
-  条件: {x y : X _⦋0⦌₂} {f : 边 x y}
-  结论: HomotopicL f f
-  证明: ⟨compId f⟩
-
-Depends on / 依赖: compId
+--- 原说明 ---
+The left homotopy relation is reflexive.
 -/
 lemma HomotopicL.refl {x y : X _⦋0⦌₂} {f : Edge x y} : HomotopicL f f := ⟨compId f⟩
 
 /--
-lemma `HomotopicL.symm` / 引理 `HomotopicL.symm`
+The left homotopy relation is symmetric.
+-/
+/-
+**SSet.Truncated.HomotopicL.symm** 是 Mathlib 中的一个定理，位于命名空间 `SSet.Truncated.Homot
+opicL`。
+形式化陈述：∀ {X : SSet.Truncated 2} [X.Quasicategory₂]   {x y : X.obj (Opposite.op { 
+obj := { len := 0 }, property := SSet.Truncated.Quasicategory₂._proof_1 })}   {f
+ g : SSet.Truncated.Edge x y}, SSet.Truncated.HomotopicL f g → SSet.Truncated.Ho
+motopicL g f
+参数：Opposite.op { obj := { len := 0 }, property := SSet.Truncated.Quasicategory₂.
+_proof_1 }。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SSet.Truncated.Quasicategory₂.fill31`：∀ {X : SSet.Truncated 2} [self : X
+.Quasicategory₂]   {x₀ x₁ x₂ x₃ : X.obj (Opposite.op { obj := { len := 0 }, prop
+erty := SSet.Truncated.Qua…
 
-English:
-lemma HomotopicL.symm
-  given: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : Edge x y} (hfg : HomotopicL f g)
-  proof: by
-  rcases hfg with ⟨hfg⟩
-  exact Quasicategory₂.fill31 hfg (idComp (id y)) (compId f)
-
-中文:
-引理 HomotopicL.symm
-  条件: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : 边 x y} (hfg : HomotopicL f g)
-  证明: by
-  rcases hfg with ⟨hfg⟩
-  exact Quasicategory₂.fill31 hfg (idComp (id y)) (compId f)
-
-Depends on / 依赖: compId, fill31, idComp
+--- 原说明 ---
+The left homotopy relation is symmetric.
 -/
 lemma HomotopicL.symm [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : Edge x y} (hfg : HomotopicL f g) :
     HomotopicL g f := by
@@ -161,25 +174,24 @@ lemma HomotopicL.symm [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : Edge x y
   exact Quasicategory₂.fill31 hfg (idComp (id y)) (compId f)
 
 /--
-lemma `HomotopicL.trans` / 引理 `HomotopicL.trans`
+The left homotopy relation is transitive.
+-/
+/-
+**SSet.Truncated.HomotopicL.trans** 是 Mathlib 中的一个定理，位于命名空间 `SSet.Truncated.Homo
+topicL`。
+形式化陈述：∀ {X : SSet.Truncated 2} [X.Quasicategory₂]   {x y : X.obj (Opposite.op { 
+obj := { len := 0 }, property := SSet.Truncated.Quasicategory₂._proof_1 })}   {f
+ g h : SSet.Truncated.Edge x y},   SSet.Truncated.HomotopicL f g → SSet.Truncate
+d.HomotopicL g h → SSet.Truncated.HomotopicL f h
+参数：Opposite.op { obj := { len := 0 }, property := SSet.Truncated.Quasicategory₂.
+_proof_1 }。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SSet.Truncated.Quasicategory₂.fill32`：∀ {X : SSet.Truncated 2} [self : X
+.Quasicategory₂]   {x₀ x₁ x₂ x₃ : X.obj (Opposite.op { obj := { len := 0 }, prop
+erty := SSet.Truncated.Qua…
 
-English:
-lemma HomotopicL.trans
-  statement: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g h : Edge x y} (hfg : HomotopicL f g)
-  proof: by
-  rcases hfg with ⟨hfg⟩
-  rcases hgh with ⟨hgh⟩
-  exact Quasicategory₂.fill32 hfg (idComp (id y)) hgh
-
-中文:
-引理 HomotopicL.trans
-  结论: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g h : 边 x y} (hfg : HomotopicL f g)
-  证明: by
-  rcases hfg with ⟨hfg⟩
-  rcases hgh with ⟨hgh⟩
-  exact Quasicategory₂.fill32 hfg (idComp (id y)) hgh
-
-Depends on / 依赖: fill32, idComp
+--- 原说明 ---
+The left homotopy relation is transitive.
 -/
 lemma HomotopicL.trans [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g h : Edge x y} (hfg : HomotopicL f g)
     (hgh : HomotopicL g h) : HomotopicL f h := by
@@ -188,42 +200,42 @@ lemma HomotopicL.trans [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g h : Edge 
   exact Quasicategory₂.fill32 hfg (idComp (id y)) hgh
 
 /--
-lemma `HomotopicR.refl` / 引理 `HomotopicR.refl`
+The right homotopy relation is reflexive.
+-/
+/-
+**SSet.Truncated.HomotopicR.refl** 是 Mathlib 中的一个定理，位于命名空间 `SSet.Truncated.Homot
+opicR`。
+形式化陈述：∀ {X : SSet.Truncated 2}   {x y : X.obj (Opposite.op { obj := { len := 0 }
+, property := SSet.Truncated.Quasicategory₂._proof_1 })}   {f : SSet.Truncated.E
+dge x y}, SSet.Truncated.HomotopicR f f
+参数：Opposite.op { obj := { len := 0 }, property := SSet.Truncated.Quasicategory₂.
+_proof_1 }。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma HomotopicR.refl
-  given: {x y : X _⦋0⦌₂} {f : Edge x y}
-  statement: HomotopicR f f
-  proof: ⟨idComp f⟩
-
-中文:
-引理 HomotopicR.refl
-  条件: {x y : X _⦋0⦌₂} {f : 边 x y}
-  结论: HomotopicR f f
-  证明: ⟨idComp f⟩
-
-Depends on / 依赖: idComp
+--- 原说明 ---
+The right homotopy relation is reflexive.
 -/
 lemma HomotopicR.refl {x y : X _⦋0⦌₂} {f : Edge x y} : HomotopicR f f := ⟨idComp f⟩
 
 /--
-lemma `HomotopicR.symm` / 引理 `HomotopicR.symm`
+The right homotopy relation is symmetric.
+-/
+/-
+**SSet.Truncated.HomotopicR.symm** 是 Mathlib 中的一个定理，位于命名空间 `SSet.Truncated.Homot
+opicR`。
+形式化陈述：∀ {X : SSet.Truncated 2} [X.Quasicategory₂]   {x y : X.obj (Opposite.op { 
+obj := { len := 0 }, property := SSet.Truncated.Quasicategory₂._proof_1 })}   {f
+ g : SSet.Truncated.Edge x y}, SSet.Truncated.HomotopicR f g → SSet.Truncated.Ho
+motopicR g f
+参数：Opposite.op { obj := { len := 0 }, property := SSet.Truncated.Quasicategory₂.
+_proof_1 }。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SSet.Truncated.Quasicategory₂.fill32`：∀ {X : SSet.Truncated 2} [self : X
+.Quasicategory₂]   {x₀ x₁ x₂ x₃ : X.obj (Opposite.op { obj := { len := 0 }, prop
+erty := SSet.Truncated.Qua…
 
-English:
-lemma HomotopicR.symm
-  given: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : Edge x y} (hfg : HomotopicR f g)
-  proof: by
-  rcases hfg with ⟨hfg⟩
-  exact Quasicategory₂.fill32 (idComp (id x)) hfg (idComp f)
-
-中文:
-引理 HomotopicR.symm
-  条件: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : 边 x y} (hfg : HomotopicR f g)
-  证明: by
-  rcases hfg with ⟨hfg⟩
-  exact Quasicategory₂.fill32 (idComp (id x)) hfg (idComp f)
-
-Depends on / 依赖: fill32, idComp
+--- 原说明 ---
+The right homotopy relation is symmetric.
 -/
 lemma HomotopicR.symm [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : Edge x y} (hfg : HomotopicR f g) :
     HomotopicR g f := by
@@ -231,25 +243,24 @@ lemma HomotopicR.symm [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : Edge x y
   exact Quasicategory₂.fill32 (idComp (id x)) hfg (idComp f)
 
 /--
-lemma `HomotopicR.trans` / 引理 `HomotopicR.trans`
+The right homotopy relation is transitive.
+-/
+/-
+**SSet.Truncated.HomotopicR.trans** 是 Mathlib 中的一个定理，位于命名空间 `SSet.Truncated.Homo
+topicR`。
+形式化陈述：∀ {X : SSet.Truncated 2} [X.Quasicategory₂]   {x y : X.obj (Opposite.op { 
+obj := { len := 0 }, property := SSet.Truncated.Quasicategory₂._proof_1 })}   {f
+ g h : SSet.Truncated.Edge x y},   SSet.Truncated.HomotopicR f g → SSet.Truncate
+d.HomotopicR g h → SSet.Truncated.HomotopicR f h
+参数：Opposite.op { obj := { len := 0 }, property := SSet.Truncated.Quasicategory₂.
+_proof_1 }。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SSet.Truncated.Quasicategory₂.fill31`：∀ {X : SSet.Truncated 2} [self : X
+.Quasicategory₂]   {x₀ x₁ x₂ x₃ : X.obj (Opposite.op { obj := { len := 0 }, prop
+erty := SSet.Truncated.Qua…
 
-English:
-lemma HomotopicR.trans
-  statement: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g h : Edge x y} (hfg : HomotopicR f g)
-  proof: by
-  rcases hfg with ⟨hfg⟩
-  rcases hgh with ⟨hgh⟩
-  exact Quasicategory₂.fill31 (idComp (id x)) hfg hgh
-
-中文:
-引理 HomotopicR.trans
-  结论: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g h : 边 x y} (hfg : HomotopicR f g)
-  证明: by
-  rcases hfg with ⟨hfg⟩
-  rcases hgh with ⟨hgh⟩
-  exact Quasicategory₂.fill31 (idComp (id x)) hfg hgh
-
-Depends on / 依赖: fill31, idComp
+--- 原说明 ---
+The right homotopy relation is transitive.
 -/
 lemma HomotopicR.trans [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g h : Edge x y} (hfg : HomotopicR f g)
     (hgh : HomotopicR g h) : HomotopicR f h := by
@@ -258,23 +269,24 @@ lemma HomotopicR.trans [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g h : Edge 
   exact Quasicategory₂.fill31 (idComp (id x)) hfg hgh
 
 /--
-lemma `HomotopicL.homotopicR` / 引理 `HomotopicL.homotopicR`
+In a 2-truncated quasicategory, left homotopy implies right homotopy.
+-/
+/-
+**SSet.Truncated.HomotopicL.homotopicR** 是 Mathlib 中的一个定理，位于命名空间 `SSet.Truncated
+.HomotopicL`。
+形式化陈述：∀ {X : SSet.Truncated 2} [X.Quasicategory₂]   {x y : X.obj (Opposite.op { 
+obj := { len := 0 }, property := SSet.Truncated.Quasicategory₂._proof_1 })}   {f
+ g : SSet.Truncated.Edge x y}, SSet.Truncated.HomotopicL f g → SSet.Truncated.Ho
+motopicR f g
+参数：Opposite.op { obj := { len := 0 }, property := SSet.Truncated.Quasicategory₂.
+_proof_1 }。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SSet.Truncated.Quasicategory₂.fill32`：∀ {X : SSet.Truncated 2} [self : X
+.Quasicategory₂]   {x₀ x₁ x₂ x₃ : X.obj (Opposite.op { obj := { len := 0 }, prop
+erty := SSet.Truncated.Qua…
 
-English:
-lemma HomotopicL.homotopicR
-  statement: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : Edge x y}
-  proof: by
-  rcases h with ⟨h⟩
-  exact Quasicategory₂.fill32 (idComp f) (compId f) h
-
-中文:
-引理 HomotopicL.homotopicR
-  结论: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : 边 x y}
-  证明: by
-  rcases h with ⟨h⟩
-  exact Quasicategory₂.fill32 (idComp f) (compId f) h
-
-Depends on / 依赖: compId, fill32, idComp
+--- 原说明 ---
+In a 2-truncated quasicategory, left homotopy implies right homotopy.
 -/
 lemma HomotopicL.homotopicR [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : Edge x y}
     (h : HomotopicL f g) : HomotopicR f g := by
@@ -282,23 +294,24 @@ lemma HomotopicL.homotopicR [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : Ed
   exact Quasicategory₂.fill32 (idComp f) (compId f) h
 
 /--
-lemma `HomotopicR.homotopicL` / 引理 `HomotopicR.homotopicL`
+In a 2-truncated quasicategory, right homotopy implies left homotopy.
+-/
+/-
+**SSet.Truncated.HomotopicR.homotopicL** 是 Mathlib 中的一个定理，位于命名空间 `SSet.Truncated
+.HomotopicR`。
+形式化陈述：∀ {X : SSet.Truncated 2} [X.Quasicategory₂]   {x y : X.obj (Opposite.op { 
+obj := { len := 0 }, property := SSet.Truncated.Quasicategory₂._proof_1 })}   {f
+ g : SSet.Truncated.Edge x y}, SSet.Truncated.HomotopicR f g → SSet.Truncated.Ho
+motopicL f g
+参数：Opposite.op { obj := { len := 0 }, property := SSet.Truncated.Quasicategory₂.
+_proof_1 }。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SSet.Truncated.Quasicategory₂.fill31`：∀ {X : SSet.Truncated 2} [self : X
+.Quasicategory₂]   {x₀ x₁ x₂ x₃ : X.obj (Opposite.op { obj := { len := 0 }, prop
+erty := SSet.Truncated.Qua…
 
-English:
-lemma HomotopicR.homotopicL
-  statement: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : Edge x y}
-  proof: by
-  rcases h with ⟨h⟩
-  exact Quasicategory₂.fill31 (idComp f) (compId f) h
-
-中文:
-引理 HomotopicR.homotopicL
-  结论: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : 边 x y}
-  证明: by
-  rcases h with ⟨h⟩
-  exact Quasicategory₂.fill31 (idComp f) (compId f) h
-
-Depends on / 依赖: compId, fill31, idComp
+--- 原说明 ---
+In a 2-truncated quasicategory, right homotopy implies left homotopy.
 -/
 lemma HomotopicR.homotopicL [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : Edge x y}
     (h : HomotopicR f g) : HomotopicL f g := by
@@ -306,19 +319,24 @@ lemma HomotopicR.homotopicL [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : Ed
   exact Quasicategory₂.fill31 (idComp f) (compId f) h
 
 /--
-theorem `homotopicL_iff_homotopicR` / 定理 `homotopicL_iff_homotopicR`
+In a 2-truncated quasicategory, the right and left homotopy relations coincide.
+-/
+/-
+**SSet.Truncated.homotopicL_iff_homotopicR** 是 Mathlib 中的一个定理，位于命名空间 `SSet.Trunc
+ated`。
+形式化陈述：homotopicL_iff_homotopicR [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : Edge x
+ y} : HomotopicL f g ↔ HomotopicR f g
+该定理/引理刻画了左右两侧的等价关系。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SSet.Truncated.HomotopicL.homotopicR`：∀ {X : SSet.Truncated 2} [X.Quasic
+ategory₂]   {x y : X.obj (Opposite.op { obj := { len := 0 }, property := SSet.Tr
+uncated.Quasicategory₂._pr…
+· 使用定理 `SSet.Truncated.HomotopicR.homotopicL`：∀ {X : SSet.Truncated 2} [X.Quasic
+ategory₂]   {x y : X.obj (Opposite.op { obj := { len := 0 }, property := SSet.Tr
+uncated.Quasicategory₂._pr…
 
-English:
-theorem homotopicL_iff_homotopicR
-  given: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : Edge x y}
-  proof: ⟨HomotopicL.homotopicR, HomotopicR.homotopicL⟩
-
-中文:
-定理 homotopicL_iff_homotopicR
-  条件: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : 边 x y}
-  证明: ⟨HomotopicL.homotopicR, HomotopicR.homotopicL⟩
-
-Depends on / 依赖: HomotopicL, HomotopicL.homotopicR, HomotopicR, HomotopicR.homotopicL, homotopicL, homotopicR
+--- 原说明 ---
+In a 2-truncated quasicategory, the right and left homotopy relations coincide.
 -/
 theorem homotopicL_iff_homotopicR [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : Edge x y} :
     HomotopicL f g ↔ HomotopicR f g :=
@@ -331,29 +349,36 @@ section homotopy_category
 variable {A : Truncated 2} [Quasicategory₂ A] {x y z : A _⦋0⦌₂}
 
 /--
-lemma `Edge.CompStruct.comp_unique` / 引理 `Edge.CompStruct.comp_unique`
+Given `CompStruct f g h` and `CompStruct f' g' h'` with the same vertices and edges such
+that `f` ≃ `f'` and `g` ≃ `g'`, then the long diagonal edges `h` and `h'` are also homotopic.
+-/
+/-
+**SSet.Truncated.Edge.CompStruct.comp_unique** 是 Mathlib 中的一个定理，位于命名空间 `SSet.Tru
+ncated.Edge.CompStruct`。
+形式化陈述：∀ {A : SSet.Truncated 2} [A.Quasicategory₂]   {x y z : A.obj (Opposite.op 
+{ obj := { len := 0 }, property := SSet.Truncated.Quasicategory₂._proof_1 })}   
+{f f' : SSet.Truncated.Edge x y} {g g' : SSet.Truncated.Edge y z} {h h' : SSet.T
+runcated.Edge x z}   (s : f.CompStruct g h) (s' : f'.CompStruct g' h'),   SSet.T
+runcated.HomotopicL f f' → SSet.Truncated.HomotopicL g g' → SSet.Truncated.Homot
+opicL h h'
+参数：Opposite.op { obj := { len := 0 }, property := SSet.Truncated.Quasicategory₂.
+_proof_1 }；s : f.CompStruct g h；s' : f'.CompStruct g' h'。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SSet.Truncated.HomotopicL.homotopicR`：∀ {X : SSet.Truncated 2} [X.Quasic
+ategory₂]   {x y : X.obj (Opposite.op { obj := { len := 0 }, property := SSet.Tr
+uncated.Quasicategory₂._pr…
+· 使用定理 `SSet.Truncated.Quasicategory₂.fill32`：∀ {X : SSet.Truncated 2} [self : X
+.Quasicategory₂]   {x₀ x₁ x₂ x₃ : X.obj (Opposite.op { obj := { len := 0 }, prop
+erty := SSet.Truncated.Qua…
+· 使用定理 `SSet.Truncated.Quasicategory₂.fill31`：∀ {X : SSet.Truncated 2} [self : X
+.Quasicategory₂]   {x₀ x₁ x₂ x₃ : X.obj (Opposite.op { obj := { len := 0 }, prop
+erty := SSet.Truncated.Qua…
 
-English:
-lemma Edge.CompStruct.comp_unique
-  statement: {f f' : Edge x y} {g g' : Edge y z} {h h' : Edge x z}
-  proof: by
-  rcases hg.homotopicR with ⟨hg⟩
-  rcases hf with ⟨hf⟩
-  let ⟨s₁⟩ := Quasicategory₂.fill32 hf (idComp g') s'
-  let ⟨s₂⟩ := Quasicategory₂.fill31 (compId f) hg s₁
-  exact Quasicategory₂.fill31 s (compId g) s₂
-
-中文:
-引理 边.余mpStruct.comp_unique
-  结论: {f f' : 边 x y} {g g' : 边 y z} {h h' : 边 x z}
-  证明: by
-  rcases hg.homotopicR with ⟨hg⟩
-  rcases hf with ⟨hf⟩
-  let ⟨s₁⟩ := Quasicategory₂.fill32 hf (idComp g') s'
-  let ⟨s₂⟩ := Quasicategory₂.fill31 (compId f) hg s₁
-  exact Quasicategory₂.fill31 s (compId g) s₂
-
-Depends on / 依赖: compId, fill31, fill32, hg.homotopicR, homotopicR, idComp
+--- 原说明 ---
+Given `CompStruct f g h` and `CompStruct f' g' h'` with the same vertices and ed
+ges such
+that `f` ≃ `f'` and `g` ≃ `g'`, then the long diagonal edges `h` and `h'` are al
+so homotopic.
 -/
 lemma Edge.CompStruct.comp_unique {f f' : Edge x y} {g g' : Edge y z} {h h' : Edge x z}
     (s : CompStruct f g h) (s' : CompStruct f' g' h')
@@ -365,97 +390,110 @@ lemma Edge.CompStruct.comp_unique {f f' : Edge x y} {g g' : Edge y z} {h h' : Ed
   exact Quasicategory₂.fill31 s (compId g) s₂
 
 /--
-Definition of `Edge.comp` / `Edge.comp` 的定义
+Given two consecutive edges `f`, `g`  in a 2-truncated quasicategory, nonconstructively choose
+an edge that is the diagonal of a 2-simplex with spine given by `f` and `g`. The `CompStruct`
+witnessing this property is given by `Edge.composeStruct`.
+-/
+/-
+**SSet.Truncated.Edge.comp** 是 Mathlib 中的一个定义，位于命名空间 `SSet.Truncated.Edge`。
+形式化陈述：{A : SSet.Truncated 2} →   [A.Quasicategory₂] →     {x y z : A.obj (Opposi
+te.op { obj := { len := 0 }, property := SSet.Truncated.Quasicategory₂._proof_1 
+})} →       SSet.Truncated.Edge x y → SSet.Truncated.Edge y z → SSet.Truncated.E
+dge x z
+参数：Opposite.op { obj := { len := 0 }, property := SSet.Truncated.Quasicategory₂.
+_proof_1 }。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SSet.Truncated.Quasicategory₂.fill21`：∀ {X : SSet.Truncated 2} [self : X
+.Quasicategory₂]   {x₀ x₁ x₂ : X.obj (Opposite.op { obj := { len := 0 }, propert
+y := SSet.Truncated.Quasic…
 
-English:
-definition Edge.comp
-  signature: (f : Edge x y) (g : Edge y z)
-  body: (Quasicategory₂.fill21 f g).some.1
-
-中文:
-定义 边.comp
-  签名: (f : 边 x y) (g : 边 y z)
-  定义体: (Quasicategory₂.fill21 f g).some.1
-
-Depends on / 依赖: fill21
+--- 原说明 ---
+Given two consecutive edges `f`, `g`  in a 2-truncated quasicategory, nonconstru
+ctively choose
+an edge that is the diagonal of a 2-simplex with spine given by `f` and `g`. The
+ `CompStruct`
+witnessing this property is given by `Edge.composeStruct`.
 -/
 noncomputable def Edge.comp (f : Edge x y) (g : Edge y z) : Edge x z :=
   (Quasicategory₂.fill21 f g).some.1
 
 /--
-Definition of `Edge.compStruct` / `Edge.compStruct` 的定义
+See `Edge.comp`
+-/
+/-
+**SSet.Truncated.Edge.compStruct** 是 Mathlib 中的一个定义，位于命名空间 `SSet.Truncated.Edge`
+。
+形式化陈述：{A : SSet.Truncated 2} →   [inst : A.Quasicategory₂] →     {x y z : A.obj 
+(Opposite.op { obj := { len := 0 }, property := SSet.Truncated.Quasicategory₂._p
+roof_1 })} →       (f : SSet.Truncated.Edge x y) → (g : SSet.Truncated.Edge y z)
+ → f.CompStruct g (f.comp g)
+参数：Opposite.op { obj := { len := 0 }, property := SSet.Truncated.Quasicategory₂.
+_proof_1 }；f : SSet.Truncated.Edge x y；g : SSet.Truncated.Edge y z；f.comp g。
+本定义的构造引用了以下数学事实（定理与引理）：
+· 使用定理 `SSet.Truncated.Quasicategory₂.fill21`：∀ {X : SSet.Truncated 2} [self : X
+.Quasicategory₂]   {x₀ x₁ x₂ : X.obj (Opposite.op { obj := { len := 0 }, propert
+y := SSet.Truncated.Quasic…
 
-English:
-definition Edge.compStruct
-  signature: (f : Edge x y) (g : Edge y z)
-  body: (Quasicategory₂.fill21 f g).some.2
-
-中文:
-定义 边.compStruct
-  签名: (f : 边 x y) (g : 边 y z)
-  定义体: (Quasicategory₂.fill21 f g).some.2
-
-Depends on / 依赖: fill21
+--- 原说明 ---
+See `Edge.comp`
 -/
 noncomputable def Edge.compStruct (f : Edge x y) (g : Edge y z) : CompStruct f g (f.comp g) :=
   (Quasicategory₂.fill21 f g).some.2
 
 /--
-Definition of `HomotopyCategory₂` / `HomotopyCategory₂` 的定义
+The homotopy category of a 2-truncated quasicategory `A` has as objects the vertices of `A`
+-/
+/-
+**SSet.Truncated.HomotopyCategory** 是 Mathlib 中的一个定义，位于命名空间 `SSet.Truncated`。
+形式化陈述：HomotopyCategory : Type u
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-structure HomotopyCategory₂
-  parameters: (A : Truncated 2)
-  axioms and operations (1):
-    - pt : A _⦋0⦌₂
-
-中文:
-结构 HomotopyCategory₂
-  参数: (A : Truncated 2)
-  公理与运算 (1 个):
-    - pt : A _⦋0⦌₂
+--- 原说明 ---
+The homotopy category of a 2-truncated quasicategory `A` has as objects the vert
+ices of `A`
 -/
 structure HomotopyCategory₂ (A : Truncated 2) where
   /-- An object of the homotopy category is a vertex of `A`. -/
   pt : A _⦋0⦌₂
 
 /--
-Instance `instSetoidEdge` / 实例 `instSetoidEdge`
+Left homotopy is an equivalence relation on the edges of `A`.
+Remark: We could have equivalently chosen right homotopy, as shown by `homotopicL_iff_homotopicR`.
+-/
+/-
+**SSet.Truncated.instSetoidEdge** 是 Mathlib 中的一个实例，位于命名空间 `SSet.Truncated`。
+形式化陈述：instSetoidEdge (x y : A _⦋0⦌₂) : Setoid (Edge x y) where r
+参数：x y : A _⦋0⦌₂。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-instance instSetoidEdge
-  signature: (x y : A _⦋0⦌₂)
-  body: HomotopicL
-  iseqv := ⟨fun _ => HomotopicL.refl, HomotopicL.symm, HomotopicL.trans⟩
-
-中文:
-实例 instSetoidEdge
-  签名: (x y : A _⦋0⦌₂)
-  定义体: HomotopicL
-  iseqv := ⟨fun _ => HomotopicL.refl, HomotopicL.symm, HomotopicL.trans⟩
-
-Depends on / 依赖: HomotopicL
+--- 原说明 ---
+Left homotopy is an equivalence relation on the edges of `A`.
+Remark: We could have equivalently chosen right homotopy, as shown by `homotopic
+L_iff_homotopicR`.
 -/
 instance instSetoidEdge (x y : A _⦋0⦌₂) : Setoid (Edge x y) where
   r := HomotopicL
-  iseqv := ⟨fun _ => HomotopicL.refl, HomotopicL.symm, HomotopicL.trans⟩
+  iseqv := ⟨fun _ ↦ HomotopicL.refl, HomotopicL.symm, HomotopicL.trans⟩
 
 namespace HomotopyCategory₂
 
 /--
-Definition of `Hom` / `Hom` 的定义
+The morphisms between two vertices `x`, `y` in `HomotopyCategory₂ A` are homotopy classes
+of edges between `x` and `y`.
+-/
+/-
+**SSet.Truncated.HomotopyCategory₂.Hom** 是 Mathlib 中的一个定义，位于命名空间 `SSet.Truncated
+.HomotopyCategory₂`。
+形式化陈述：Hom (x y : HomotopyCategory₂ A)
+参数：x y : HomotopyCategory₂ A。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Hom
-  signature: (x y : HomotopyCategory₂ A)
-  body: Quotient (instSetoidEdge x.pt y.pt)
-
-中文:
-定义 态射
-  签名: (x y : HomotopyCategory₂ A)
-  定义体: Quotient (instSetoidEdge x.pt y.pt)
-
-Depends on / 依赖: Quotient, instSetoidEdge, x.pt, y.pt
+--- 原说明 ---
+The morphisms between two vertices `x`, `y` in `HomotopyCategory₂ A` are homotop
+y classes
+of edges between `x` and `y`.
 -/
 def Hom (x y : HomotopyCategory₂ A) := Quotient (instSetoidEdge x.pt y.pt)
 
@@ -464,106 +502,93 @@ Composition of morphisms in `HomotopyCategory₂ A` is given by lifting the edge
 chosen by `composeEdges`.
 -/
 noncomputable
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: CategoryStruct (HomotopyCategory₂ A)
-  body: Hom x y
-  id x := Quotient.mk' (Edge.id x.pt)
-  comp := Quotient.lift₂ (fun f g => ⟦comp f g⟧)
-    (fun _ _ _ _ hf hg => Quotient.sound
-      (Edge.CompStruct.comp_unique (compStruct _ _) (compStruct _ _) hf hg))
-
-omit [A.Quasicategory₂] in
-
-中文:
-实例 :
-  签名: CategoryStruct (HomotopyCategory₂ A)
-  定义体: Hom x y
-  id x := Quotient.mk' (Edge.id x.pt)
-  comp := Quotient.lift₂ (fun f g => ⟦comp f g⟧)
-    (fun _ _ _ _ hf hg => Quotient.sound
-      (Edge.CompStruct.comp_unique (compStruct _ _) (compStruct _ _) hf hg))
-
-omit [A.Quasicategory₂] in
+/-
+**SSet.Truncated.HomotopyCategory₂.** 是 Mathlib 中的一个实例，位于命名空间 `SSet.Truncated.Ho
+motopyCategory₂`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : CategoryStruct (HomotopyCategory₂ A) where
   Hom x y := Hom x y
   id x := Quotient.mk' (Edge.id x.pt)
-  comp := Quotient.lift₂ (fun f g => ⟦comp f g⟧)
-    (fun _ _ _ _ hf hg => Quotient.sound
+  comp := Quotient.lift₂ (fun f g ↦ ⟦comp f g⟧)
+    (fun _ _ _ _ hf hg ↦ Quotient.sound
       (Edge.CompStruct.comp_unique (compStruct _ _) (compStruct _ _) hf hg))
 
 omit [A.Quasicategory₂] in
 /--
-lemma `mk_surjective` / 引理 `mk_surjective`
-
-English:
-lemma mk_surjective
-  statement: Function.Surjective (mk : A _⦋0⦌₂ -> _)
-  proof: fun ⟨x⟩ => ⟨x, rfl⟩
-
-中文:
-引理 mk_surjective
-  结论: 函数.满射 (mk : A _⦋0⦌₂ -> _)
-  证明: fun ⟨x⟩ => ⟨x, rfl⟩
+The function `HomotopyCategory₂.mk` taking a vertex of `A` and sending it to the corresponding
+object of `HomotopyCategory₂ A` is surjective.
 -/
-lemma mk_surjective : Function.Surjective (mk : A _⦋0⦌₂ -> _) :=
-  fun ⟨x⟩ => ⟨x, rfl⟩
+/-
+**SSet.Truncated.HomotopyCategory₂.mk_surjective** 是 Mathlib 中的一个引理，位于命名空间 `SSet
+.Truncated.HomotopyCategory₂`。
+形式化陈述：mk_surjective : Function.Surjective (mk : A _⦋0⦌₂ -> _)
+该定理/引理描述了相关对象所满足的性质。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
+
+--- 原说明 ---
+The function `HomotopyCategory₂.mk` taking a vertex of `A` and sending it to the
+ corresponding
+object of `HomotopyCategory₂ A` is surjective.
+-/
+lemma mk_surjective : Function.Surjective (mk : A _⦋0⦌₂ → _) :=
+  fun ⟨x⟩ ↦ ⟨x, rfl⟩
 
 /--
-Definition of `homMk` / `homMk` 的定义
+Any edge in the 2-truncated simplicial set `A` defines a morphism in the homotopy category
+by taking its equivalence class.
+-/
+/-
+**SSet.Truncated.HomotopyCategory₂.homMk** 是 Mathlib 中的一个定义，位于命名空间 `SSet.Truncat
+ed.HomotopyCategory₂`。
+形式化陈述：homMk (f : Edge x y) : mk x ⟶ mk y
+参数：f : Edge x y。
+该定义给出了上述对象。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition homMk
-  signature: (f : Edge x y)
-  body: ⟦f⟧
-
-中文:
-定义 homMk
-  签名: (f : 边 x y)
-  定义体: ⟦f⟧
+--- 原说明 ---
+Any edge in the 2-truncated simplicial set `A` defines a morphism in the homotop
+y category
+by taking its equivalence class.
 -/
 def homMk (f : Edge x y) : mk x ⟶ mk y := ⟦f⟧
 
 /--
-lemma `homMk_surjective` / 引理 `homMk_surjective`
-
-English:
-lemma homMk_surjective
-  statement: Function.Surjective (homMk : Edge x y -> _)
-  proof: Quotient.mk_surjective
-
-中文:
-引理 homMk_surjective
-  结论: 函数.满射 (homMk : 边 x y -> _)
-  证明: Quotient.mk_surjective
-
-Depends on / 依赖: Quotient, Quotient.mk_surjective, mk_surjective
+Every morphism in the homotopy category `HomotopyCategory₂ A` is the equivalence class of
+an edge of `A`.
 -/
-lemma homMk_surjective : Function.Surjective (homMk : Edge x y -> _) := Quotient.mk_surjective
+/-
+**SSet.Truncated.HomotopyCategory₂.homMk_surjective** 是 Mathlib 中的一个引理，位于命名空间 `S
+Set.Truncated.HomotopyCategory₂`。
+形式化陈述：homMk_surjective : Function.Surjective (homMk : Edge x y -> _)
+该定理/引理描述了相关对象所满足的性质。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `Quotient.mk_surjective`：Quotient.mk_surjective {s : Setoid α} : Function
+.Surjective (Quotient.mk s)
+
+--- 原说明 ---
+Every morphism in the homotopy category `HomotopyCategory₂ A` is the equivalence
+ class of
+an edge of `A`.
+-/
+lemma homMk_surjective : Function.Surjective (homMk : Edge x y → _) := Quotient.mk_surjective
 
 /--
 The trivial (degenerate) edge at a vertex `x` is a representative for the
 identity morphism `x ⟶ x`.
 -/
 @[simp]
-/--
-lemma `homMk_id` / 引理 `homMk_id`
+/-
+**SSet.Truncated.HomotopyCategory₂.homMk_id** 是 Mathlib 中的一个引理，位于命名空间 `SSet.Trun
+cated.HomotopyCategory₂`。
+形式化陈述：homMk_id (x : HomotopyCategory₂ A) : homMk (Edge.id x.pt) = 𝟙 x
+参数：x : HomotopyCategory₂ A。
+该定理/引理给出了一组等式。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma homMk_id
-  given: (x : HomotopyCategory₂ A)
-  statement: homMk (Edge.id x.pt) = 𝟙 x
-  proof: rfl
-
-中文:
-引理 homMk_id
-  条件: (x : HomotopyCategory₂ A)
-  结论: homMk (边.id x.pt) = 𝟙 x
-  证明: rfl
+--- 原说明 ---
+The trivial (degenerate) edge at a vertex `x` is a representative for the
+identity morphism `x ⟶ x`.
 -/
 lemma homMk_id (x : HomotopyCategory₂ A) : homMk (Edge.id x.pt) = 𝟙 x := rfl
 
@@ -572,55 +597,45 @@ end HomotopyCategory₂
 open HomotopyCategory₂
 
 /--
-lemma `HomotopicL.congr_homotopyCategory₂HomMk` / 引理 `HomotopicL.congr_homotopyCategory₂HomMk`
+Left homotopic edges represent the same morphism in the homotopy category.
+-/
+/-
+**SSet.Truncated.HomotopicL.congr_homotopyCategory** 是 Mathlib 中的一个引理，位于命名空间 `SS
+et.Truncated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma HomotopicL.congr_homotopyCategory₂HomMk
-  given: {f g : Edge x y} (h : HomotopicL f g)
-  proof: Quotient.sound h
-
-中文:
-引理 HomotopicL.congr_homotopyCategory₂HomMk
-  条件: {f g : 边 x y} (h : HomotopicL f g)
-  证明: Quotient.sound h
-
-Depends on / 依赖: Quotient, Quotient.sound
+--- 原说明 ---
+Left homotopic edges represent the same morphism in the homotopy category.
 -/
 lemma HomotopicL.congr_homotopyCategory₂HomMk {f g : Edge x y} (h : HomotopicL f g) :
     homMk f = homMk g := Quotient.sound h
 
 /--
-lemma `HomotopicR.congr_homotopyCategory₂HomMk` / 引理 `HomotopicR.congr_homotopyCategory₂HomMk`
+Right homotopic edges represent the same morphism in the homotopy category.
+-/
+/-
+**SSet.Truncated.HomotopicR.congr_homotopyCategory** 是 Mathlib 中的一个引理，位于命名空间 `SS
+et.Truncated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma HomotopicR.congr_homotopyCategory₂HomMk
-  given: {f g : Edge x y} (h : HomotopicR f g)
-  proof: Quotient.sound h.homotopicL
-
-中文:
-引理 HomotopicR.congr_homotopyCategory₂HomMk
-  条件: {f g : 边 x y} (h : HomotopicR f g)
-  证明: Quotient.sound h.homotopicL
-
-Depends on / 依赖: Quotient, Quotient.sound, h.homotopicL, homotopicL
+--- 原说明 ---
+Right homotopic edges represent the same morphism in the homotopy category.
 -/
 lemma HomotopicR.congr_homotopyCategory₂HomMk {f g : Edge x y} (h : HomotopicR f g) :
     homMk f = homMk g := Quotient.sound h.homotopicL
 
 /--
-lemma `Edge.CompStruct.homotopyCategory₂_fac` / 引理 `Edge.CompStruct.homotopyCategory₂_fac`
+A `CompStruct f g h` is a witness for the fact that the morphisms represented by
+`f` and `g` compose to the morphism represented by `h`.
+-/
+/-
+**SSet.Truncated.Edge.CompStruct.homotopyCategory** 是 Mathlib 中的一个引理，位于命名空间 `SSe
+t.Truncated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-lemma Edge.CompStruct.homotopyCategory₂_fac
-  statement: {f : Edge x y} {g : Edge y z} {h : Edge x z}
-  proof: (comp_unique (compStruct _ _) s .refl .refl).congr_homotopyCategory₂HomMk
-
-中文:
-引理 边.余mpStruct.homotopyCategory₂_fac
-  结论: {f : 边 x y} {g : 边 y z} {h : 边 x z}
-  证明: (comp_unique (compStruct _ _) s .refl .refl).congr_homotopyCategory₂HomMk
-
-Depends on / 依赖: compStruct, comp_unique
+--- 原说明 ---
+A `CompStruct f g h` is a witness for the fact that the morphisms represented by
+`f` and `g` compose to the morphism represented by `h`.
 -/
 lemma Edge.CompStruct.homotopyCategory₂_fac {f : Edge x y} {g : Edge y z} {h : Edge x z}
     (s : CompStruct f g h) : homMk f ≫ homMk g = homMk h :=
@@ -628,23 +643,17 @@ lemma Edge.CompStruct.homotopyCategory₂_fac {f : Edge x y} {g : Edge y z} {h :
 
 set_option backward.isDefEq.respectTransparency false in
 /--
-Definition of `Edge.CompStruct.ofHomotopyCategory₂Fac` / `Edge.CompStruct.ofHomotopyCategory₂Fac` 的定义
+If we have a factorization `homMk f ≫ homMk g = homMk h`, this is the choice
+of a structure `CompStruct f g h`.
+-/
+/-
+**SSet.Truncated.Edge.CompStruct.ofHomotopyCategory** 是 Mathlib 中的一个定义，位于命名空间 `S
+Set.Truncated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 
-English:
-definition Edge.CompStruct.ofHomotopyCategory₂Fac
-  body: by
-  dsimp [homMk, CategoryStruct.comp] at fac
-  rw [Quotient.eq_iff_equiv] at fac
-  exact (Quasicategory₂.fill32 (compStruct f g) (compId g) fac.some).some
-
-中文:
-定义 边.余mpStruct.ofHomotopyCategory₂Fac
-  定义体: by
-  dsimp [homMk, CategoryStruct.comp] at fac
-  rw [Quotient.eq_iff_equiv] at fac
-  exact (Quasicategory₂.fill32 (compStruct f g) (compId g) fac.some).some
-
-Depends on / 依赖: CategoryStruct, CategoryStruct.comp, Quotient, Quotient.eq_iff_equiv, compId, compStruct, eq_iff_equiv, fac.some, fill32
+--- 原说明 ---
+If we have a factorization `homMk f ≫ homMk g = homMk h`, this is the choice
+of a structure `CompStruct f g h`.
 -/
 noncomputable def Edge.CompStruct.ofHomotopyCategory₂Fac
     {f : Edge x y} {g : Edge y z} {h : Edge x z}
@@ -654,61 +663,40 @@ noncomputable def Edge.CompStruct.ofHomotopyCategory₂Fac
   exact (Quasicategory₂.fill32 (compStruct f g) (compId g) fac.some).some
 
 /--
-lemma `Edge.CompStruct.nonempty_iff` / 引理 `Edge.CompStruct.nonempty_iff`
+Given edges `f`, `g` and `h` of a `2`-truncated quasicategory,
+there exists a structure `CompStruct f g h` iff
+`homMk f ≫ homMk g = homMk h` holds in the homotopy category.
+-/
+/-
+**SSet.Truncated.Edge.CompStruct.nonempty_iff** 是 Mathlib 中的一个定理，位于命名空间 `SSet.Tr
+uncated.Edge.CompStruct`。
+形式化陈述：∀ {A : SSet.Truncated 2} [inst : A.Quasicategory₂]   {x y z : A.obj (Oppos
+ite.op { obj := { len := 0 }, property := SSet.Truncated.Quasicategory₂._proof_1
+ })}   {f : SSet.Truncated.Edge x y} {g : SSet.Truncated.Edge y z} {h : SSet.Tru
+ncated.Edge x z},   Nonempty (f.CompStruct g h) ↔     CategoryTheory.CategoryStr
+uct.comp (SSet.Truncated.HomotopyCategory₂.homMk f)         (SSet.Truncated.Homo
+topyCategory₂.homMk g) =       SSet.Truncated.HomotopyCategory₂.homMk h
+参数：Opposite.op { obj := { len := 0 }, property := SSet.Truncated.Quasicategory₂.
+_proof_1 }；f.CompStruct g h；SSet.Truncated.HomotopyCategory₂.homMk f；SSet.Trunca
+ted.HomotopyCategory₂.homMk g。
+黑盒证明引用了以下数学事实（定理与引理）：
+· 使用定理 `SSet.Truncated.Edge.CompStruct.homotopyCategory₂_fac`：∀ {A : SSet.Trunca
+ted 2} [inst : A.Quasicategory₂]   {x y z : A.obj (Opposite.op { obj := { len :=
+ 0 }, property := SSet.Truncated.Quasicate…
 
-English:
-lemma Edge.CompStruct.nonempty_iff
-  given: {f : Edge x y} {g : Edge y z} {h : Edge x z}
-  proof: ⟨fun ⟨h⟩ => h.homotopyCategory₂_fac, fun h => ⟨.ofHomotopyCategory₂Fac h⟩⟩
-
-noncomputable
-
-中文:
-引理 边.余mpStruct.nonempty_iff
-  条件: {f : 边 x y} {g : 边 y z} {h : 边 x z}
-  证明: ⟨fun ⟨h⟩ => h.homotopyCategory₂_fac, fun h => ⟨.ofHomotopyCategory₂Fac h⟩⟩
-
-noncomputable
-
-Depends on / 依赖: h.homotopyCategory
+--- 原说明 ---
+Given edges `f`, `g` and `h` of a `2`-truncated quasicategory,
+there exists a structure `CompStruct f g h` iff
+`homMk f ≫ homMk g = homMk h` holds in the homotopy category.
 -/
 lemma Edge.CompStruct.nonempty_iff {f : Edge x y} {g : Edge y z} {h : Edge x z} :
     Nonempty (CompStruct f g h) ↔ homMk f ≫ homMk g = homMk h :=
-  ⟨fun ⟨h⟩ => h.homotopyCategory₂_fac, fun h => ⟨.ofHomotopyCategory₂Fac h⟩⟩
+  ⟨fun ⟨h⟩ ↦ h.homotopyCategory₂_fac, fun h ↦ ⟨.ofHomotopyCategory₂Fac h⟩⟩
 
 noncomputable
-/--
-Instance `_anonymous_` / 实例 `_anonymous_`
-
-English:
-instance :
-  signature: Category (HomotopyCategory₂ A)
-  body: by
-    rintro _ _ ⟨f⟩
-    exact ((compStruct _ f).comp_unique (idComp _) .refl .refl).congr_homotopyCategory₂HomMk
-  comp_id := by
-    rintro _ _ ⟨f⟩
-    exact ((compStruct _ _).comp_unique (compId _) .refl .refl).congr_homotopyCategory₂HomMk
-  assoc := by
-    rintro _ _ _ _ ⟨f⟩ ⟨g⟩ ⟨h⟩
-    exact (Quasicategory₂.fill31 (compStruct f g) (compStruct g h)
-      (compStruct _ _)).some.homotopyCategory₂_fac
-
-中文:
-实例 :
-  签名: 范畴 (HomotopyCategory₂ A)
-  定义体: by
-    rintro _ _ ⟨f⟩
-    exact ((compStruct _ f).comp_unique (idComp _) .refl .refl).congr_homotopyCategory₂HomMk
-  comp_id := by
-    rintro _ _ ⟨f⟩
-    exact ((compStruct _ _).comp_unique (compId _) .refl .refl).congr_homotopyCategory₂HomMk
-  assoc := by
-    rintro _ _ _ _ ⟨f⟩ ⟨g⟩ ⟨h⟩
-    exact (Quasicategory₂.fill31 (compStruct f g) (compStruct g h)
-      (compStruct _ _)).some.homotopyCategory₂_fac
-
-Depends on / 依赖: compId, compStruct, comp_id, comp_unique, fill31, idComp, some.homotopyCategory
+/-
+**SSet.Truncated.** 是 Mathlib 中的一个实例，位于命名空间 `SSet.Truncated`。
+黑盒内容：本声明未引用其他定理/引理；其成立仅依赖定义、结构与类型类实例。
 -/
 instance : Category (HomotopyCategory₂ A) where
   id_comp := by
@@ -725,3 +713,4 @@ instance : Category (HomotopyCategory₂ A) where
 end homotopy_category
 
 end SSet.Truncated
+
